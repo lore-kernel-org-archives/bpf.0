@@ -1,164 +1,99 @@
-Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-174.mta0.migadu.com (out-174.mta0.migadu.com [91.218.175.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D96CA155A59;
-	Wed,  3 Apr 2024 20:39:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E19A15538C
+	for <bpf@vger.kernel.org>; Wed,  3 Apr 2024 20:52:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712176779; cv=none; b=DvnR0jCyeSr9C7gOL3NVB32pLrKdXhF69gocubZeAt2Z21N09u7287ZPk2tKCWgI8pajGUQg7ZZQEevAfouiJYH3kBxknEmXfcImNwupwq0BnthxOn11+7Z1LAwAyk8vNGEGY4Xg6e/Rnb3KdRrL/JWZnGNGwnUdtNEBilYjO14=
+	t=1712177557; cv=none; b=XggkgijWNgQlA+nrxv+fvlAcS3ccwYfbx56E1iZFhpuPACfs1JMvBe6MIaZ7hYZRfC7ibbkq8jvYFMi9JvXfjdvKWg3y2OxhzY6E8oSS0BLHJueOWJNv+2d1tTqPHUVJ031lx+/T8MqiKtZ5ojdh/LzwqSYojGTycVPFnnqZnRM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712176779; c=relaxed/simple;
-	bh=i333Dhp8hwrDT8umafLwzG1JBHjU5KHx9vR1MnRS9s4=;
-	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 Mime-Version:Content-Type; b=AUWlB+p+bgA4qZhFp8I+sN9n1jUpr494T217V26z9k5zerENLRywiSvIJC0dnTf/sP1N82zXEDLmzY6f6HGFeI5lUgrlhIEY0A3VTyVNXi5NV3FGERiWDK3Kv2M4Jl4x9JQ9CLerQzkhkWoyUOAExbVZUyI5C3FQNrbH+hW8P30=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WorHCMwr; arc=none smtp.client-ip=209.85.216.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1712177557; c=relaxed/simple;
+	bh=dE/BIZPjqFOuf/Ljx3h0naaNfGl0fTvRoa1pt/v5/uc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=cK1wWYzurX8cJshqwavcR00haBHQmB3wXI/6OCiMOyXBpEdRBxZBHcYR4whWYOgYFdCHLq1MsJdwPEaYfR/LPHmqYxvteKlP3kAhnPFYBDvc0UMoGeBOY7JRmOzFZMte65BPClJGOY8mF3lAwjYX2lLWbZp0cIaJaSXq2d/6OIg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ECwswlPL; arc=none smtp.client-ip=91.218.175.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WorHCMwr"
-Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-2a27ba3b1f3so153064a91.3;
-        Wed, 03 Apr 2024 13:39:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1712176777; x=1712781577; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=i333Dhp8hwrDT8umafLwzG1JBHjU5KHx9vR1MnRS9s4=;
-        b=WorHCMwrw1GmIFUAT/2Iboiy1avmgpx/6JdHu4QilNfWiezYMmTOspPRAg3yPB738A
-         gfN3Sv4AVBCNLWiT1A5NTnjmrVTGETNjJiu2KDb6dh5s3RazuedAidHlmxQ6xFz1hibG
-         cnH24e+wRec2gjcm1x/zbwrZ4tjRVIoy7uRE6Oa16S8/MuL7vgxicyQnyPjlNjKVEX2e
-         MZEsF3QVvWSdbMb6118raPdd+yHsvV+WOjwe4h2pQ/pP4ZF1Fwwa871U/TpwrLur5SZD
-         t+v7U6VYspPfnb7O6nrE+qcblq+etbEClJB0Hk3dAFIDXMZBYH5zR9XMknlKEg93+OvG
-         RXvw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712176777; x=1712781577;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=i333Dhp8hwrDT8umafLwzG1JBHjU5KHx9vR1MnRS9s4=;
-        b=JXF9vHwmU6DhfdaGRpOG9mDjHCIAXCNwY/5JhTHlxCzIKu7WIA+2kak18ps0b/F9Rd
-         88dPJaR4Z6jChqRdYMNxL8T1ed3xmyQkzTB23E6xp93PwzRRuLai4arJsLfWhQySdL+2
-         lcBKTcSWi7tRc35LlR3AM8NkszEu+S0+DB0n0OKAFnN2DKGDIumdwQN936odZG/1DsF5
-         zXq/Hd23svcHhf9v9B+ke1dNDLG/Is2qPZ3qdGDadkeJ9OtYgoTQ9OFJGDGTe4/kGZfX
-         e2++vbziGmVZBuTFKGCIMppKxDPuVBrrIdy0dRRI8x7Ax/IuMq93Dhs5ywGmBUbbnhSR
-         iV0w==
-X-Forwarded-Encrypted: i=1; AJvYcCUWwwjOaKgYZp4CBnjqHIaBClVdGTeeZEsVoAwz10MA1k27yPtGxChlRXF/pSonTrc+530no+9kkVdPINhFOuNqHKl2i8VEDdbZUBxVpKdlBxNGmDmP3n/y9awR
-X-Gm-Message-State: AOJu0YzFhaPPwBWjG4aF2Nb7tfdqehVqmkxU4zjMdl2y7/2nNS/fkAFx
-	fpp8w3WKtV3Vs7opSDZZoKHpAs6NfFHzNPcJhJnSzAsdCbh3hdLz
-X-Google-Smtp-Source: AGHT+IFG3GCAIdaoZ1d2VbXCvFNA9/5zeRvvPYodQX+ZYf7CZ5dXKh/vDbrAlRmZS0OmUCzmo9Cbeg==
-X-Received: by 2002:a17:90b:1081:b0:29b:b5a4:c040 with SMTP id gj1-20020a17090b108100b0029bb5a4c040mr582680pjb.46.1712176776993;
-        Wed, 03 Apr 2024 13:39:36 -0700 (PDT)
-Received: from localhost ([98.97.36.54])
-        by smtp.gmail.com with ESMTPSA id nk7-20020a17090b194700b002a253b251fasm123836pjb.30.2024.04.03.13.39.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 Apr 2024 13:39:36 -0700 (PDT)
-Date: Wed, 03 Apr 2024 13:39:35 -0700
-From: John Fastabend <john.fastabend@gmail.com>
-To: Alexander Lobakin <aleksander.lobakin@intel.com>, 
- =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>
-Cc: Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, 
- Andrii Nakryiko <andrii@kernel.org>, 
- Martin KaFai Lau <martin.lau@linux.dev>, 
- Eduard Zingerman <eddyz87@gmail.com>, 
- Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, 
- John Fastabend <john.fastabend@gmail.com>, 
- KP Singh <kpsingh@kernel.org>, 
- Stanislav Fomichev <sdf@google.com>, 
- Hao Luo <haoluo@google.com>, 
- Jiri Olsa <jolsa@kernel.org>, 
- "David S. Miller" <davem@davemloft.net>, 
- Jakub Kicinski <kuba@kernel.org>, 
- Jesper Dangaard Brouer <hawk@kernel.org>, 
- Eric Dumazet <edumazet@google.com>, 
- Paolo Abeni <pabeni@redhat.com>, 
- bpf@vger.kernel.org, 
- netdev@vger.kernel.org
-Message-ID: <660dbe87d8797_1cf6b2083c@john.notmuch>
-In-Reply-To: <2746b1d9-2e1f-4e66-89ed-19949a189a92@intel.com>
-References: <20240220210342.40267-1-toke@redhat.com>
- <20240220210342.40267-3-toke@redhat.com>
- <2746b1d9-2e1f-4e66-89ed-19949a189a92@intel.com>
-Subject: Re: [PATCH net-next v2 2/4] bpf: test_run: Use system page pool for
- XDP live frame mode
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ECwswlPL"
+Message-ID: <ed6929e4-cf8f-43cc-869a-d79b0158c9ea@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1712177552;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=+rEsiX38OraMKU95npmigr9VLrgmVG7+RZfgYibBmQA=;
+	b=ECwswlPLHjQGRVru5pJUStIAX2w8AVhV17IwzEk+nkngNpDRY2mnso5HRcd60nmxYi1TQd
+	yWrpuUgoXi/xVD7cIIDWHJOxx2gxGAteAzaR6CRZfcgGWrPCzlnPRJWsT56ClVIHtwuZUZ
+	aRTdEbqtMNfqo7eCWSKJ5cer5ORv/ZY=
+Date: Wed, 3 Apr 2024 13:52:24 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+Subject: Re: [PATCH bpf-next] selftests/bpf: Make sure libbpf doesn't enforce
+ the signature of a func pointer.
+To: Kui-Feng Lee <sinquersw@gmail.com>
+Cc: kuifeng@meta.com, John Fastabend <john.fastabend@gmail.com>,
+ Kui-Feng Lee <thinker.li@gmail.com>, bpf@vger.kernel.org, ast@kernel.org,
+ song@kernel.org, kernel-team@meta.com, andrii@kernel.org
+References: <20240401223058.1503400-1-thinker.li@gmail.com>
+ <660b62aed55f5_801520863@john.notmuch>
+ <cf7c6aaa-123b-43b2-8c7b-2c1e2b2dcb67@gmail.com>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Martin KaFai Lau <martin.lau@linux.dev>
+In-Reply-To: <cf7c6aaa-123b-43b2-8c7b-2c1e2b2dcb67@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-Alexander Lobakin wrote:
-> From: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
-> Date: Tue, 20 Feb 2024 22:03:39 +0100
-> =
+On 4/2/24 10:00 AM, Kui-Feng Lee wrote:
+> 
+> 
+> 
+> On 4/1/24 18:43, John Fastabend wrote:
+>> Kui-Feng Lee wrote:
+>>> The verifier in the kernel checks the signatures of struct_ops
+>>> operators. Libbpf should not verify it in order to allow flexibility in
 
-> > The BPF_TEST_RUN code in XDP live frame mode creates a new page pool
-> > each time it is called and uses that to allocate the frames used for =
-the
-> > XDP run. This works well if the syscall is used with a high repetitio=
-ns
-> > number, as it allows for efficient page recycling. However, if used w=
-ith
-> > a small number of repetitions, the overhead of creating and tearing d=
-own
-> > the page pool is significant, and can even lead to system stalls if t=
-he
-> > syscall is called in a tight loop.
-> > =
+This description probably is not accurate. iirc, the verifier does not check the 
+function signature either. The verifier rejects only when the struct_ops prog 
+tries to access something invalid. e.g. reading a function argument that does 
+not exist in the running kernel.
 
-> > Now that we have a persistent system page pool instance, it becomes
-> > pretty straight forward to change the test_run code to use it. The on=
-ly
-> > wrinkle is that we can no longer rely on a custom page init callback
-> > from page_pool itself; instead, we change the test_run code to write =
-a
-> > random cookie value to the beginning of the page as an indicator that=
+>>> loading different implementations of an operator with different signatures
+>>> to try to comply with the kernel, even if the signature defined in the BPF
+>>> programs does not match with the implementations and the kernel.
 
-> > the page has been initialised and can be re-used without copying the
-> > initial data again.
-> > =
+>>> This feature enables user space applications to manage the variations
+>>> between different versions of the kernel by attempting various
+>>> implementations of an operator.
+>>
+>> What is the utility of this? I'm missing what difference it would be
+>> if libbpf rejected vs kernel rejecting it? For backwards compat the
+>> kernel will fail or libbpf might throw an error and user will have to
+>> fixup signature regardless right? Why not get the error as early as
+>> possible.
+> 
+> The check described here is that libbpf compares BTF types of functions
+> and function pointers in struct_ops types in BPF programs, which may
+> differ from kernel definitions.
+> 
+> A scenario here is a struct_ops type that includes an operator op_A with
+> different versions depending on the kernel. All other fields in the
+> struct_ops type have the same types. The application has only one
+> definition for this struct_ops type, but the implementation of op_A is
+> done separately for each version.
+> 
+> The application can try variations by assigning implementations to the
+> op_A field until one is accepted by the kernel if libbpf doesn’t enforce
 
-> > The cookie is a random 128-bit value, which means the probability tha=
-t
-> > we will get accidental collisions (which would lead to recycling the
-> > wrong page values and reading garbage) is on the order of 2^-128. Thi=
-s
-> > is in the "won't happen before the heat death of the universe" range,=
- so
-> > this marking is safe for the intended usage.
-> > =
+It probably would be clearer if the test actually does the retry. e.g. Try to 
+load a struct_ops prog which reads an extra arg that is not supported by the 
+running kernel and gets rejected by verifier. Then assigns an older struct_ops 
+prog to the skel->struct_ops...->fn and loads successfully by the verifier.
 
-> > Reviewed-by: Alexander Lobakin <aleksander.lobakin@intel.com>
-> > Tested-by: Alexander Lobakin <aleksander.lobakin@intel.com>
-> > Signed-off-by: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
-> =
-
-> Hey,
-> =
-
-> What's the status of this series, now that the window is open?
-> =
-
-> Thanks,
-> Olek
-
-Hi Toke,
-
-I read the thread from top to bottom so seems someone else notices the
-2^128 is unique numbers not the collision probability. Anywaays I'm still=
-
-a bit confused, whats the use case here? Maybe I need to understand
-what this XDP live frame mode is better?
-
-Could another solution be to avoid calling BPF_TEST_RUN multiple times
-in a row? Or perhaps have a BPF_SETUP_RUN that does the config and lets
-BPF_TEST_RUN skip the page allocation? Another idea just have the first
-run of BPF_TEST_RUN init a page pool and not destroy it.
-
-Thanks,
-John=
