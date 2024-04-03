@@ -1,130 +1,104 @@
-Received: from mail-lj1-f180.google.com (mail-lj1-f180.google.com [209.85.208.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F937145B2A
-	for <bpf@vger.kernel.org>; Wed,  3 Apr 2024 12:11:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E087146A75;
+	Wed,  3 Apr 2024 12:29:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712146283; cv=none; b=k+uAMmSIy+Kqtl1vS/bXXVtEaLuIvrPsEc1oLI3sZm6p5K7F4ZTfw/gMX6JXdcpkptJvVmu8GyqAxy+BpB2M3S/QYRXIVZyJ8TWU5I6yvA4eAllCA9KG3OQ6tmp7khywNJameoomTok3/lvVR21UcL+INV50rrsQ3dQLxuMsPy0=
+	t=1712147396; cv=none; b=UiwPJD4pUcjnnn6UYPkT4tm5Lo3xDh9MvhQcZ/ZXiUIqag09nwgWW60JKBvuV+A9bQyFFOenqH003tGOWBCvFE2j0x4f4oerujMjkzrVY/XhYw3ZsA9f3I2bvjU6DubR+1tIyt4wEr3gX8W8TeojkHOhDJ4KxUT19VqWoRVWHXQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712146283; c=relaxed/simple;
-	bh=KWr9TMPovk/8n3uu6M5XQ5h5IV9QUs202qfvEewr0is=;
-	h=References:From:To:Cc:Subject:Date:In-reply-to:Message-ID:
-	 MIME-Version:Content-Type; b=CMpG78+36AcwfPdNTOwxH1/onglmlsABLFmWkE1HB0ZsRjEb03qbgMdW3sygr8Xb77vojIHQa5gGyVwT0tw/cgs9N3E6+qwkPzO3s3rht6hkv+OTqI7HEDlISVcMXZU3npskh66znd/B+cA5eUwS71VXkMBmLb2lFNGOrrlaTUg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=GimEpVd9; arc=none smtp.client-ip=209.85.208.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
+	s=arc-20240116; t=1712147396; c=relaxed/simple;
+	bh=17nw4mBwdw7o/BMzv+AdA/BNvdIhvtEGu58LPXIywWE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=cwH9n4L7HexI9umLXjC7J399QCp/q9ebOxMQulGFht0/2Mh4+j42a/GLKHeocMy7phKoNt+fNqX9H+GOTkUfHWjTAYaeeyzpjXvnSegOu2C9cRAkuoFjRT9zT22z+QaGDMQcMGMpczZyZ/5cuWMt+AxHA7s60WD4tQQSXZo1tDc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qxDTG0Y0; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="GimEpVd9"
-Received: by mail-lj1-f180.google.com with SMTP id 38308e7fff4ca-2d700beb60bso104838461fa.1
-        for <bpf@vger.kernel.org>; Wed, 03 Apr 2024 05:11:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google09082023; t=1712146280; x=1712751080; darn=vger.kernel.org;
-        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
-         :user-agent:references:from:to:cc:subject:date:message-id:reply-to;
-        bh=E/6jutSMH9HOi65qZAuauoWMsdofEyugP9Pw6B07T3Q=;
-        b=GimEpVd9c1l1jDR7Qs2J05ofaan9X+ByknwyhehPYVYRO8HZQAp4eTM36ju1EtzJfz
-         XYXM9vn6ulZmmWIHUTpI4j09rUddq8GqSYCFIcUDbJMw0kU9wvqpTqobnQrwhVAaWMGf
-         T3o3xSvJCRozSFKohzDzWRMt59q61g34yIbqvnzgKMYE1gYJ+seta65i4i0kzSkcAa6A
-         WxTUh/wHyXvKl4S2MlKH0YygT+di3KK9yVkHw1xLuy3NczetuU+OeyWWsc6NdfO/YSvt
-         ML1Gl3xy8yEu3WizVGdp7ZBvk4I/M5SN4lRZIb2NLgkHO8ngvB5NaXWe3gCea6DMXrkU
-         67Ag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712146280; x=1712751080;
-        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
-         :user-agent:references:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=E/6jutSMH9HOi65qZAuauoWMsdofEyugP9Pw6B07T3Q=;
-        b=V2FKN6HBGaDZ+Xu9fyK1MBgqHtfavj76438osspECRlHZmuPcsNFI+Ms4M1jyCL3XB
-         dSUpPDcSC9wHsuREov1jj9QDC+/2ZCvXb6epWKP9Dx9UQ0BIkYyBXF4XI+rWGGcUwcSe
-         cPgkpfXgyv4v5QcFipQITicmkhNnQL+gaij6NHNeANwj+7Rl1I0feCEiUeAVt04Ri0co
-         wuLagbONEduaCN2HhVjA3tL9xaRM7z9E2nsAUqlHXPfMlzD+b+IMmxSQG8HwfukobpbR
-         9gnRCD3i82yH2/u8JfGyTeHULohpygUtNe8Zzk/A7ZOlZajKQjlbBs16AQHFhCLn9XEv
-         10jw==
-X-Forwarded-Encrypted: i=1; AJvYcCVF6icJeReHAgHZW9lCGVlx5/hEhjfP46QVPRP9NmjRImDSXRfv6ED+npaMx2ShTPc886eEpsHBjcsi11z61ZH1sRSR
-X-Gm-Message-State: AOJu0Yy+sK3Zk/KPVkMu/kwNWjiv6Ml1oBGhqWe0kdiANl0iRDwNxUwU
-	cSj+5n8UCSZJlL4u42dJ9s/NHYl0DWTb/bVacmBgBcWR2Wgp3z8kAwptUTBoVxA=
-X-Google-Smtp-Source: AGHT+IGkm3/n0mQbHm6UaH2L78GSMSCfKZoZ8m257TT2XTg51wvJGKb4jYOo5jokHdvhLRoeyalb5A==
-X-Received: by 2002:a05:651c:83:b0:2d6:c749:17bc with SMTP id 3-20020a05651c008300b002d6c74917bcmr3711259ljq.31.1712146279752;
-        Wed, 03 Apr 2024 05:11:19 -0700 (PDT)
-Received: from cloudflare.com ([2a09:bac5:5064:2dc::49:158])
-        by smtp.gmail.com with ESMTPSA id gy16-20020a170906f25000b00a45f2dc6795sm7666878ejb.137.2024.04.03.05.11.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 Apr 2024 05:11:19 -0700 (PDT)
-References: <b67101632c6858d281f105b5d4e1bc62dd6b7d27.1712133039.git.tanggeliang@kylinos.cn>
-User-agent: mu4e 1.6.10; emacs 29.2
-From: Jakub Sitnicki <jakub@cloudflare.com>
-To: Geliang Tang <geliang@kernel.org>
-Cc: Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman
- <eddyz87@gmail.com>, Mykola Lysenko <mykolal@fb.com>, Alexei Starovoitov
- <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai Lau
- <martin.lau@linux.dev>, Song Liu <song@kernel.org>, Yonghong Song
- <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, KP
- Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo
- <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, Shuah Khan
- <shuah@kernel.org>, Geliang Tang <tanggeliang@kylinos.cn>,
- bpf@vger.kernel.org, mptcp@lists.linux.dev,
- linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH bpf-next] selftests/bpf: Add F_SETFL for fcntl
-Date: Wed, 03 Apr 2024 14:05:41 +0200
-In-reply-to: <b67101632c6858d281f105b5d4e1bc62dd6b7d27.1712133039.git.tanggeliang@kylinos.cn>
-Message-ID: <878r1ubq8q.fsf@cloudflare.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qxDTG0Y0"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A76B4C433C7;
+	Wed,  3 Apr 2024 12:29:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1712147395;
+	bh=17nw4mBwdw7o/BMzv+AdA/BNvdIhvtEGu58LPXIywWE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=qxDTG0Y0ZNLCTZsOVSyrxsIBoEhpVmvIMmny1/TM2qgOH0VUnoowjDsDOGICA1yDJ
+	 vIxUahUjS5hea8LZwB7N5FHram9vFUY1yOw8WfIfDY3ZyUsSH+dfhuBSCE2BBTDRKK
+	 NGfjCFkSaIXRNMGo09Wjp7bssxBcX9/R2tCyOO2IPgnDSY5BWibcVcd/HKiJuhvOA4
+	 ZZig2iKJjHbD1PToatsm37Hphwp7ZpogsP0qbnjOixphkNOVc1xnNMGLBCCPUiyP3j
+	 nJ47aCz+q6A4QxmnhxZHXLUghr/D6qNLW8vZmu7Gdv5lRESsRepHg61+99gv/OBWgN
+	 Zx+NK3JJAdIog==
+Date: Wed, 3 Apr 2024 13:29:49 +0100
+From: Conor Dooley <conor@kernel.org>
+To: Pu Lehui <pulehui@huaweicloud.com>
+Cc: =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>,
+	Stefan O'Rear <sorear@fastmail.com>, bpf@vger.kernel.org,
+	linux-riscv@lists.infradead.org, netdev@vger.kernel.org,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yhs@fb.com>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
+	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+	Mykola Lysenko <mykolal@fb.com>, Manu Bretelle <chantr4@gmail.com>,
+	Pu Lehui <pulehui@huawei.com>
+Subject: Re: [PATCH bpf-next 2/5] riscv, bpf: Relax restrictions on Zbb
+ instructions
+Message-ID: <20240403-clanking-undress-b18346aa4cef@spud>
+References: <20240328124916.293173-1-pulehui@huaweicloud.com>
+ <20240328124916.293173-3-pulehui@huaweicloud.com>
+ <3ed9fe94-2610-41eb-8a00-a9f37fcf2b1a@app.fastmail.com>
+ <20240328-ferocity-repose-c554f75a676c@spud>
+ <ed3debc9-f2a9-41fb-9cf9-dc6419de5c01@huaweicloud.com>
+ <87cyr7rgdn.fsf@all.your.base.are.belong.to.us>
+ <20240402-ample-preview-c84edb69db1b@spud>
+ <871q7nr3mq.fsf@all.your.base.are.belong.to.us>
+ <20240403-gander-parting-a47c56401716@spud>
+ <d6eae62b-60fd-4f3c-92e4-7ea5f1c4fc68@huaweicloud.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="sTVykUQukqcz7+L4"
+Content-Disposition: inline
+In-Reply-To: <d6eae62b-60fd-4f3c-92e4-7ea5f1c4fc68@huaweicloud.com>
 
-Hi Geliang,
 
-On Wed, Apr 03, 2024 at 04:32 PM +08, Geliang Tang wrote:
-> From: Geliang Tang <tanggeliang@kylinos.cn>
->
-> Incorrect arguments are passed to fcntl() in test_sockmap.c when invoking
-> it to set file status flags. If O_NONBLOCK is used as 2nd argument and
-> passed into fcntl, -EINVAL will be returned (See do_fcntl() in fs/fcntl.c).
-> The correct approach is to use F_SETFL as 2nd argument, and O_NONBLOCK as
-> 3rd one.
->
-> Fixes: 16962b2404ac ("bpf: sockmap, add selftests")
-> Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
-> ---
->  tools/testing/selftests/bpf/test_sockmap.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/tools/testing/selftests/bpf/test_sockmap.c b/tools/testing/selftests/bpf/test_sockmap.c
-> index 024a0faafb3b..34d6a1e6f664 100644
-> --- a/tools/testing/selftests/bpf/test_sockmap.c
-> +++ b/tools/testing/selftests/bpf/test_sockmap.c
-> @@ -603,7 +603,7 @@ static int msg_loop(int fd, int iov_count, int iov_length, int cnt,
->  		struct timeval timeout;
->  		fd_set w;
->  
-> -		fcntl(fd, fd_flags);
-> +		fcntl(fd, F_SETFL, fd_flags);
->  		/* Account for pop bytes noting each iteration of apply will
->  		 * call msg_pop_data helper so we need to account for this
->  		 * by calculating the number of apply iterations. Note user
+--sTVykUQukqcz7+L4
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Good catch. But we also need to figure out why some tests failing with
-this patch applied and fix them in one go:
+On Wed, Apr 03, 2024 at 06:05:38PM +0800, Pu Lehui wrote:
+> Hi Conor and Bj=C3=B6rn,
+>=20
+> Thanks for your explanation. I totally agree with what you said,
+> "CONFIG_RISCV_ISA_ZBB only controls whether optimizations for Zbb are bui=
+lt
+> so that if Zbb is detected they can be used.".
+>=20
+> Since the instructions emited by bpf jit are in kernel space, they should
+> indeed be aligned in this regard.
+>=20
+> PS: It's a bit difficult to understand this,=F0=9F=98=85 if I'm wrong ple=
+ase don't
+> hesitate to tell me.
 
-# 6/ 7  sockmap::txmsg test skb:FAIL
-#21/ 7 sockhash::txmsg test skb:FAIL
-#36/ 7 sockhash:ktls:txmsg test skb:FAIL
-Pass: 42 Fail: 3
+I think your understanding is correct. Sorry if I confused you at all!
 
-I'm seeing this error message when running `test_sockmap`:
+--sTVykUQukqcz7+L4
+Content-Type: application/pgp-signature; name="signature.asc"
 
-detected skb data error with skb ingress update @iov[0]:0 "00 00 00 00" != "PASS"
-data verify msg failed: Unknown error -5
-rx thread exited with err 1.
+-----BEGIN PGP SIGNATURE-----
 
-I'd also:
-- add an error check for fnctl, so we don't regress,
-- get rid of fd_flags, pass O_NONBLOCK flag directly to fnctl.
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZg1LvQAKCRB4tDGHoIJi
+0mlqAQCxxkdbSEap3IEfCOExj7NWGtaUdUrEOON0RDSxpdgCYQEAtp5IpMEHfa9u
+V7IQVi50lwcIe+Z0M4FzSa+afLjRWgI=
+=AuOI
+-----END PGP SIGNATURE-----
 
-Thanks,
--jkbs
+--sTVykUQukqcz7+L4--
