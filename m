@@ -1,106 +1,260 @@
-Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B08C5674A;
-	Wed,  3 Apr 2024 07:19:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CCCD5788B;
+	Wed,  3 Apr 2024 07:26:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712128753; cv=none; b=aDVdBdnZI8T4tJya2Q1dqNtjpGzkfGzWXP2EBLyyt2XR9Tsmc1pYoFISt6RxCvYO8JahYBM3ZEKLKdfcbdRYgIzFppeO6daJlPqL4Fwuxa8vr6rbTKELPAmhrTKA4pFp5w3+fFU5GHiooXigtEcQa68PxAoj1nlTQC2LqsO2zS8=
+	t=1712129176; cv=none; b=PK4hoRLSb+bEnFIyMb1tLWznmRVM1U3BaFAgO6dimSk59KuPBA0cEy3fcNKRrWz9NjKhNAX0zVbaSgiSFPQqJJ2TpxEkCRTbKpwNB3zs/fGI+Z0Syv0UrMMrsdcGQIPDo8IX9+AIdoSusTNQTGcv5aJ6QwlK/WZEcXBDrqJ1gaY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712128753; c=relaxed/simple;
-	bh=v45mk+BONJ/8h3rercxajOQAQulxAi8eA/hXvztu0wI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Yq7Wqhw63DapHrQ+c9mgh5fXy6nA3ZamYMMzLSdGuEA7qfOCikPtN+bijPhWVhzcPAc9YEFBv4UZrsh1ctee6gg5iasnE0qg1D6w3wCuOBkymGHjOa0GaQNETLy9W3Ujc3tcDLA4SqGB39+NZsft2SfbNbCbdgNW/APV2n1Lmxc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kdYQY1D0; arc=none smtp.client-ip=209.85.208.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kdYQY1D0"
-Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-56b8e4f38a2so7257957a12.3;
-        Wed, 03 Apr 2024 00:19:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1712128750; x=1712733550; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=s49hobKIVDPzW8tIlZcGSj9ukdWmgD47R+ziOoaqb7g=;
-        b=kdYQY1D0c4319EjHZk44Z0l5yU5T+bGDnW9eEZci7rHQtjA8JiSExxA4HTCxGFZSA9
-         5VnHGV9wt9BfuG40d88WCWLKS/i5EwfAUqb4rKbC0h8oilKM1OmFfmaDaAQB130HnthE
-         c9dE2pegUHFslonnt2Z58ftedPsLLizIiQd8TSMrI3dukYZzntElikwvmxn5JXu94496
-         sST3Oq3iVfh79a4Mg5ce2sELTASZucYEpS/ij5XQHE1U95VRAudfjxVHvUxK6Ae/iBC3
-         ND8zR8PP5vclehYFqxY/2HKg+1CEdmKnTwE6YDu3zmvzu6JFp4Vmw0aZwwvH0J2G+Zxk
-         WRVQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712128750; x=1712733550;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=s49hobKIVDPzW8tIlZcGSj9ukdWmgD47R+ziOoaqb7g=;
-        b=udyu5JH9ADrubMFCgXJjUnMezV3PtvO7dFZTiPJFbWOa+Xl6fd9GZrPgyo6qzsFUQM
-         nfLwvh2rI7aft07aSVmOkgf72+wAAzp9DMpTIunnULbJECJr2h8p1n68OvyQkYKVIQEI
-         nQ+ZtEHnyVEzM2yzjfF/nhfXauWMnVJ5zc9s4uVZm9cpVJVVORRbcN51mVG6s1dXj6h3
-         ATfdupJpXZXn/VwxbVWwCzQKgCo9y2+fpNVXMw7L/sgvbr8Hu9tXXBMkPLzunYCMfSZG
-         9BO3JL7aTAFsTKqHpzj4tfRBf2JkRQHvmEpFjDpNOmPgJ4GwhUDbuU0ss/c3u+FwiaMS
-         94+w==
-X-Forwarded-Encrypted: i=1; AJvYcCXegg74n7lm1zMdpPDZApKxyEW69up5TQRbieeyJhedM0bUsJOqkoNbPDQ0rVAZ0UsDhcJdyKdvpWJVw0Mkf+YcP1HvCC1mjgZbV21XOGdQ43pJuR3prxZJ24iE4nXcTGyO
-X-Gm-Message-State: AOJu0YxR7JIbyID2u0xnBkCWSr+kemZ6TCMNvieOk978nfT/KVbQbXWE
-	+ycOlMC7KZceTJXnRZGYQTDpIy7SH/e1AZ49NFQKTRYg53OkAvdC
-X-Google-Smtp-Source: AGHT+IFOOTlq1IngqRA0M95hMD8uxq5iSAvx1IvOr2GQEqZym+R28ZYiv8aSmkUnY0d6JnsCIHsh/g==
-X-Received: by 2002:a50:c346:0:b0:56b:7e43:a3f6 with SMTP id q6-20020a50c346000000b0056b7e43a3f6mr1026460edb.40.1712128749359;
-        Wed, 03 Apr 2024 00:19:09 -0700 (PDT)
-Received: from gmail.com (84-236-113-97.pool.digikabel.hu. [84.236.113.97])
-        by smtp.gmail.com with ESMTPSA id r17-20020a056402019100b0056c4a0ccaacsm7639454edv.83.2024.04.03.00.19.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 Apr 2024 00:19:08 -0700 (PDT)
-Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
-Date: Wed, 3 Apr 2024 09:19:06 +0200
-From: Ingo Molnar <mingo@kernel.org>
-To: Andrii Nakryiko <andrii@kernel.org>
-Cc: x86@kernel.org, peterz@infradead.org, mingo@redhat.com,
-	tglx@linutronix.de, bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org, jolsa@kernel.org, song@kernel.org,
-	kernel-team@meta.com
-Subject: Re: [PATCH v5 0/4] perf/x86/amd: add LBR capture support outside of
- hardware events
-Message-ID: <Zg0C6j2HO19O0HMG@gmail.com>
-References: <20240402022118.1046049-1-andrii@kernel.org>
+	s=arc-20240116; t=1712129176; c=relaxed/simple;
+	bh=TgfH9Jl+6MRhgbG0+tHBR2+Mtqe5D+c6XHR6VYv3C9k=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=PRzzSKNdynz6sJEb64cIzDQQbFUleIGakFIqWCbsZD2WWd3TiucpkgiYQTW25MZY1AjlFrGa4G2Hv0nDMriQz814BcLX1Q2gzHYZfU/lR/li3ZDxbXq2AZFahXTP93o7xpywiQTekdZru8ceZz18D29jqFrYdT8Bo4BGBeyBQCE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.235])
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4V8brm38fPz4f3nJd;
+	Wed,  3 Apr 2024 15:26:00 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.252])
+	by mail.maildlp.com (Postfix) with ESMTP id C921E1A0572;
+	Wed,  3 Apr 2024 15:26:08 +0800 (CST)
+Received: from [10.67.109.184] (unknown [10.67.109.184])
+	by APP3 (Coremail) with SMTP id _Ch0CgB3OKCLBA1mSLIeIw--.49947S2;
+	Wed, 03 Apr 2024 15:26:05 +0800 (CST)
+Message-ID: <ea97fb1b-be81-4a18-b505-cab08617ece8@huaweicloud.com>
+Date: Wed, 3 Apr 2024 15:26:03 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240402022118.1046049-1-andrii@kernel.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v2 1/2] riscv, bpf: Add 12-argument support for
+ RV64 bpf trampoline
+Content-Language: en-US
+To: bpf@vger.kernel.org, linux-riscv@lists.infradead.org,
+ netdev@vger.kernel.org
+Cc: =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
+ <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
+ Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
+ Pu Lehui <pulehui@huawei.com>
+References: <20240403041710.1416369-1-pulehui@huaweicloud.com>
+ <20240403041710.1416369-2-pulehui@huaweicloud.com>
+From: Pu Lehui <pulehui@huaweicloud.com>
+In-Reply-To: <20240403041710.1416369-2-pulehui@huaweicloud.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:_Ch0CgB3OKCLBA1mSLIeIw--.49947S2
+X-Coremail-Antispam: 1UD129KBjvJXoW3GF45ur4rWrykuF15ZFyrZwb_yoWxCw1Up3
+	WDKanxAF9YqF47Jayvqa1UXF13Aan0va43CFW7Gas5uFWYqryDGayrKF1jyry5Crn5Aw4f
+	Ars0vF90k3W7JrDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUkYb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
+	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+	6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+	Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxAIw28IcxkI
+	7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxV
+	Cjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY
+	6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6x
+	AIw20EY4v20xvaj40_Wr1j6rW3Jr1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280
+	aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU13rcDUUUUU==
+X-CM-SenderInfo: psxovxtxl6x35dzhxuhorxvhhfrp/
 
 
-* Andrii Nakryiko <andrii@kernel.org> wrote:
+On 2024/4/3 12:17, Pu Lehui wrote:
+> From: Pu Lehui <pulehui@huawei.com>
+> 
+> This patch adds 12 function arguments support for riscv64 bpf
+> trampoline. The current bpf trampoline supports <= sizeof(u64) bytes
+> scalar arguments [0] and <= 16 bytes struct arguments [1]. Therefore, we
+> focus on the situation where scalars are at most XLEN bits and
+> aggregates whose total size does not exceed 2×XLEN bits in the riscv
+> calling convention [2].
+> 
+> Link: https://elixir.bootlin.com/linux/v6.8/source/kernel/bpf/btf.c#L6184 [0]
+> Link: https://elixir.bootlin.com/linux/v6.8/source/kernel/bpf/btf.c#L6769 [1]
+> Link: https://github.com/riscv-non-isa/riscv-elf-psabi-doc/releases/download/draft-20230929-e5c800e661a53efe3c2678d71a306323b60eb13b/riscv-abi.pdf [2]
+> Signed-off-by: Pu Lehui <pulehui@huawei.com>
+> Acked-by: Björn Töpel <bjorn@kernel.org>
+> Reviewed-by: Björn Töpel <bjorn@rivosinc.com>
+> ---
+>   arch/riscv/net/bpf_jit_comp64.c | 65 +++++++++++++++++++++++----------
+>   1 file changed, 46 insertions(+), 19 deletions(-)
+> 
+> diff --git a/arch/riscv/net/bpf_jit_comp64.c b/arch/riscv/net/bpf_jit_comp64.c
+> index 77ea306452d4..7e2d6e8c60c2 100644
+> --- a/arch/riscv/net/bpf_jit_comp64.c
+> +++ b/arch/riscv/net/bpf_jit_comp64.c
+> @@ -14,6 +14,7 @@
+>   #include <asm/cfi.h>
+>   #include "bpf_jit.h"
+>   
+> +#define RV_MAX_ARGS_REG 8
 
-> Add AMD-specific implementation of perf_snapshot_branch_stack static call that
-> allows LBR capture from arbitrary points in the kernel. This is utilized by
-> BPF programs. See patch #3 for all the details.
-> 
-> Patches #1 and #2 are preparatory steps to ensure LBR freezing is completely
-> inlined and have no branches, to minimize LBR snapshot contamination.
-> 
-> Patch #4 removes an artificial restriction on perf events with LBR enabled.
-> 
-> v4->v5:
->   - rebased on top of perf/urgent branch to resolve conflicts with
->     598c2fafc06f ("perf/x86/amd/lbr: Use freeze based on availability").
-> 
-> Andrii Nakryiko (4):
->   perf/x86/amd: ensure amd_pmu_core_disable_all() is always inlined
->   perf/x86/amd: avoid taking branches before disabling LBR
->   perf/x86/amd: support capturing LBR from software events
->   perf/x86/amd: don't reject non-sampling events with configured LBR
-> 
->  arch/x86/events/amd/core.c   | 37 +++++++++++++++++++++++++++++++++++-
->  arch/x86/events/amd/lbr.c    | 13 +------------
->  arch/x86/events/perf_event.h | 13 +++++++++++++
->  3 files changed, 50 insertions(+), 13 deletions(-)
+Sorry for the noise. The macro and variable names look really weird. I 
+will send new patch for the name alignment:
 
-Applied to tip:perf/core for a v6.10 merge, thanks a lot Andrii!
+nr_reg_args: number of args in reg
+nr_stack_args: number of args on stack
+RV_MAX_REG_ARGS: macro for riscv max args in reg
 
-	Ingo
+>   #define RV_FENTRY_NINSNS 2
+>   
+>   #define RV_REG_TCC RV_REG_A6
+> @@ -688,26 +689,44 @@ int bpf_arch_text_poke(void *ip, enum bpf_text_poke_type poke_type,
+>   	return ret;
+>   }
+>   
+> -static void store_args(int nregs, int args_off, struct rv_jit_context *ctx)
+> +static void store_args(int nr_arg_slots, int args_off, struct rv_jit_context *ctx)
+>   {
+>   	int i;
+>   
+> -	for (i = 0; i < nregs; i++) {
+> -		emit_sd(RV_REG_FP, -args_off, RV_REG_A0 + i, ctx);
+> +	for (i = 0; i < nr_arg_slots; i++) {
+> +		if (i < RV_MAX_ARGS_REG) {
+> +			emit_sd(RV_REG_FP, -args_off, RV_REG_A0 + i, ctx);
+> +		} else {
+> +			/* skip slots for T0 and FP of traced function */
+> +			emit_ld(RV_REG_T1, 16 + (i - RV_MAX_ARGS_REG) * 8, RV_REG_FP, ctx);
+> +			emit_sd(RV_REG_FP, -args_off, RV_REG_T1, ctx);
+> +		}
+>   		args_off -= 8;
+>   	}
+>   }
+>   
+> -static void restore_args(int nregs, int args_off, struct rv_jit_context *ctx)
+> +static void restore_args(int nr_args_reg, int args_off, struct rv_jit_context *ctx)
+>   {
+>   	int i;
+>   
+> -	for (i = 0; i < nregs; i++) {
+> +	for (i = 0; i < nr_args_reg; i++) {
+>   		emit_ld(RV_REG_A0 + i, -args_off, RV_REG_FP, ctx);
+>   		args_off -= 8;
+>   	}
+>   }
+>   
+> +static void restore_stack_args(int nr_args_stack, int args_off, int stk_arg_off, struct rv_jit_context *ctx)
+> +{
+> +	int i;
+> +
+> +	for (i = 0; i < nr_args_stack; i++) {
+> +		emit_ld(RV_REG_T1, -(args_off - RV_MAX_ARGS_REG * 8), RV_REG_FP, ctx);
+> +		emit_sd(RV_REG_FP, -stk_arg_off, RV_REG_T1, ctx);
+> +		args_off -= 8;
+> +		stk_arg_off -= 8;
+> +	}
+> +}
+> +
+>   static int invoke_bpf_prog(struct bpf_tramp_link *l, int args_off, int retval_off,
+>   			   int run_ctx_off, bool save_ret, struct rv_jit_context *ctx)
+>   {
+> @@ -780,8 +799,8 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tramp_image *im,
+>   {
+>   	int i, ret, offset;
+>   	int *branches_off = NULL;
+> -	int stack_size = 0, nregs = m->nr_args;
+> -	int retval_off, args_off, nregs_off, ip_off, run_ctx_off, sreg_off;
+> +	int stack_size = 0, nr_arg_slots = 0;
+> +	int retval_off, args_off, nregs_off, ip_off, run_ctx_off, sreg_off, stk_arg_off;
+>   	struct bpf_tramp_links *fentry = &tlinks[BPF_TRAMP_FENTRY];
+>   	struct bpf_tramp_links *fexit = &tlinks[BPF_TRAMP_FEXIT];
+>   	struct bpf_tramp_links *fmod_ret = &tlinks[BPF_TRAMP_MODIFY_RETURN];
+> @@ -827,20 +846,21 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tramp_image *im,
+>   	 * FP - sreg_off    [ callee saved reg	]
+>   	 *
+>   	 *		    [ pads              ] pads for 16 bytes alignment
+> +	 *
+> +	 *		    [ stack_argN        ]
+> +	 *		    [ ...               ]
+> +	 * FP - stk_arg_off [ stack_arg1        ] BPF_TRAMP_F_CALL_ORIG
+>   	 */
+>   
+>   	if (flags & (BPF_TRAMP_F_ORIG_STACK | BPF_TRAMP_F_SHARE_IPMODIFY))
+>   		return -ENOTSUPP;
+>   
+> -	/* extra regiters for struct arguments */
+> -	for (i = 0; i < m->nr_args; i++)
+> -		if (m->arg_flags[i] & BTF_FMODEL_STRUCT_ARG)
+> -			nregs += round_up(m->arg_size[i], 8) / 8 - 1;
+> -
+> -	/* 8 arguments passed by registers */
+> -	if (nregs > 8)
+> +	if (m->nr_args > MAX_BPF_FUNC_ARGS)
+>   		return -ENOTSUPP;
+>   
+> +	for (i = 0; i < m->nr_args; i++)
+> +		nr_arg_slots += round_up(m->arg_size[i], 8) / 8;
+> +
+>   	/* room of trampoline frame to store return address and frame pointer */
+>   	stack_size += 16;
+>   
+> @@ -850,7 +870,7 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tramp_image *im,
+>   		retval_off = stack_size;
+>   	}
+>   
+> -	stack_size += nregs * 8;
+> +	stack_size += nr_arg_slots * 8;
+>   	args_off = stack_size;
+>   
+>   	stack_size += 8;
+> @@ -867,8 +887,14 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tramp_image *im,
+>   	stack_size += 8;
+>   	sreg_off = stack_size;
+>   
+> +	if (nr_arg_slots - RV_MAX_ARGS_REG > 0)
+> +		stack_size += (nr_arg_slots - RV_MAX_ARGS_REG) * 8;
+> +
+>   	stack_size = round_up(stack_size, 16);
+>   
+> +	/* room for args on stack must be at the top of stack*/
+> +	stk_arg_off = stack_size;
+> +
+>   	if (!is_struct_ops) {
+>   		/* For the trampoline called from function entry,
+>   		 * the frame of traced function and the frame of
+> @@ -904,10 +930,10 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tramp_image *im,
+>   		emit_sd(RV_REG_FP, -ip_off, RV_REG_T1, ctx);
+>   	}
+>   
+> -	emit_li(RV_REG_T1, nregs, ctx);
+> +	emit_li(RV_REG_T1, nr_arg_slots, ctx);
+>   	emit_sd(RV_REG_FP, -nregs_off, RV_REG_T1, ctx);
+>   
+> -	store_args(nregs, args_off, ctx);
+> +	store_args(nr_arg_slots, args_off, ctx);
+>   
+>   	/* skip to actual body of traced function */
+>   	if (flags & BPF_TRAMP_F_SKIP_FRAME)
+> @@ -947,7 +973,8 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tramp_image *im,
+>   	}
+>   
+>   	if (flags & BPF_TRAMP_F_CALL_ORIG) {
+> -		restore_args(nregs, args_off, ctx);
+> +		restore_args(min_t(int, nr_arg_slots, RV_MAX_ARGS_REG), args_off, ctx);
+> +		restore_stack_args(nr_arg_slots - RV_MAX_ARGS_REG, args_off, stk_arg_off, ctx);
+>   		ret = emit_call((const u64)orig_call, true, ctx);
+>   		if (ret)
+>   			goto out;
+> @@ -982,7 +1009,7 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tramp_image *im,
+>   	}
+>   
+>   	if (flags & BPF_TRAMP_F_RESTORE_REGS)
+> -		restore_args(nregs, args_off, ctx);
+> +		restore_args(min_t(int, nr_arg_slots, RV_MAX_ARGS_REG), args_off, ctx);
+>   
+>   	if (save_ret) {
+>   		emit_ld(RV_REG_A0, -retval_off, RV_REG_FP, ctx);
+
