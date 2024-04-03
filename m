@@ -1,151 +1,110 @@
-Received: from mail-il1-f182.google.com (mail-il1-f182.google.com [209.85.166.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from wfhigh7-smtp.messagingengine.com (wfhigh7-smtp.messagingengine.com [64.147.123.158])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78E6215696E;
-	Wed,  3 Apr 2024 22:29:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12AEA139D
+	for <bpf@vger.kernel.org>; Wed,  3 Apr 2024 22:32:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=64.147.123.158
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712183351; cv=none; b=PKJrwRGnXXNR+Y3gY7fO5ZYxyfSRps47jE33QQVLhzxDndwdXUB9gFiBs3LTmgcbJ15D5kXsHDYcZ4f8sHTWAr+Pu3jMrKzTMbPXWI/7VyfKcWWNERoVIFzMzQ27N0wpBOK0XF3HxcW50FxBjGuhBSYXDjF9rQ6P9iy5yare2Vc=
+	t=1712183524; cv=none; b=bH7gIR4yE8DzIKdnJ1woCWJkL2FFXiCM/FCHAT0ncZ7GADUpKzAc0t0JLS+0/C1xMAJQSxLEPFUjgM5lBuyg928+Au4pkWb0r2dzQz26JwqFKNnbPu/P30XtdCTXkSo8A3axnKg5A6kWscEYgkNtzQuP9f30WbbXa6tqC0AoSv8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712183351; c=relaxed/simple;
-	bh=4aLkd10Lo2WhHC9i/1cfAE1l2UBmEvaje1UIW+so6jc=;
-	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 Mime-Version:Content-Type; b=p1NRLUPde2eLFWGSpeJUix8J0sCkR8w6G2eioL7R2rjPY4CHCdNfojMZkowFqm+Iu1ccQj3oSD/s07yr8iNhcUj9586i0UBMgcESJGDAldYSsH4EWrFsiaXzyM3ktEjSxadQB8uPBkc+xSZy99iCXFEsbvmYl6/FqRFT0PwU5DA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RbZUkI8B; arc=none smtp.client-ip=209.85.166.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1712183524; c=relaxed/simple;
+	bh=fYne05NcVt1ZjcM3VQ9bQyQoFVp9fgKsPt8hYpx4QQ4=;
+	h=MIME-Version:Message-Id:In-Reply-To:References:Date:From:To:Cc:
+	 Subject:Content-Type; b=pfYXHL43KBxGhVaBOjSnNxiYNvb5MaXXH6oVatw2VAHlOGsTtUHKMTQJGgdLEoAHppLsy2XFyMTiCkXgp+6Y8l7ttP3zUJatjf0jROxNfLp5cQjaMAm75D49eVfZO2u3JramjOZIL4xu+sMjZnFHo+5VUc5I4SqA7CH/Nz4LM+w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=NTNLcZEh; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=pQuErzwA; arc=none smtp.client-ip=64.147.123.158
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RbZUkI8B"
-Received: by mail-il1-f182.google.com with SMTP id e9e14a558f8ab-369f0e324adso1388745ab.3;
-        Wed, 03 Apr 2024 15:29:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1712183348; x=1712788148; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+yLZU73RnPM4fYtVO+QurfgtkvmbTz6ysxGe01JcUXk=;
-        b=RbZUkI8B3k+TqKQCtEoEyvTQROUL7TX/r6uLAzmNV79Ei+/xXwqYNJCootsUQLaBna
-         83yxjzYODxZisos2kNL/6QQIX7Yva9Py9VRgINZsY7sEMB8ucNOg/jz3DO25o/dw4jQI
-         eU0FjEp78MuMgCt41XIrDIp3hulTEzp+mwTWOYtyrh5KsIfZtRO35n1aXNRyLDDCPCpd
-         oZEDtNSku2ZJm1O6iaoB3WvxAsxVk/Bt4GgzG2hWiBOvS7/KWywS+n0ox29BbMBGhMQK
-         85m1XHcMhyk6HzTBS3/KWbUmKVvuSQHdvpTo0D0T5zc7zHGh332UNTmEDv4iTqJcxVaK
-         aXdA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712183348; x=1712788148;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=+yLZU73RnPM4fYtVO+QurfgtkvmbTz6ysxGe01JcUXk=;
-        b=UAerGv4ZeOqC1w+OSA6LomruywNrROH8dmVq0NJFM3jyw6CH02VoevqWhfMii+2x+7
-         RbXQfBFANnlw4xS4yY61PqGW4UVbqMFaa+eEckAcXgyI6lI8QJQ1ajoI50SCai6klC6h
-         Bo8Lv5ytBUv0FuI9FUGaU42fuetMZjZGIE4uoUasRzyfOM9BG5/r2OZFMgd9JVtyTn0z
-         gqOW0Z4Ep+C3p4+J/Uo4ajOTTIA/zfhqRfG2yIj9RdGPzW5pj4MzX847yTzt3GfzTyma
-         uRlDwPOazqt1H9Uf+Z3qQ0QH2ab2FYedAFfMaKH23joJ0NNPfy8WO7PIiiygEV5Rj5/0
-         uGew==
-X-Forwarded-Encrypted: i=1; AJvYcCVrcnRcKMRybp4X7cQGDPDwXL/DRNv6S2x0s29Ewj4xnc6yaOBMM6Odqe+DGdqtuqtif8VY0J5N9cynhXlFsOfkgYnf0+2579EOJxzIop3GqGycZNYosYEjd6YDvIXYucCw3fak
-X-Gm-Message-State: AOJu0YzOVXqDA2PaXmSr5k6/bubfpxEtUrnTPVDMWyEyCJB7XS/gx+L/
-	8tPYFB1kmu2rwdcj3h5FgDap3PbcAKob3Z04EyeTH++YPqhPGcmr
-X-Google-Smtp-Source: AGHT+IGQ239+0H7dF1jVYOz+dq1I6fdbYYS0G35Vn3uTj/gsplQWSsBrOhDL3zzDweZlTcToq0cBrg==
-X-Received: by 2002:a92:c241:0:b0:369:aa8f:c199 with SMTP id k1-20020a92c241000000b00369aa8fc199mr1292301ilo.2.1712183348446;
-        Wed, 03 Apr 2024 15:29:08 -0700 (PDT)
-Received: from localhost ([98.97.36.54])
-        by smtp.gmail.com with ESMTPSA id k14-20020a635a4e000000b005dc832ed816sm12163575pgm.59.2024.04.03.15.29.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 Apr 2024 15:29:07 -0700 (PDT)
-Date: Wed, 03 Apr 2024 15:29:07 -0700
-From: John Fastabend <john.fastabend@gmail.com>
-To: Jakub Sitnicki <jakub@cloudflare.com>, 
- Geliang Tang <geliang@kernel.org>
-Cc: Andrii Nakryiko <andrii@kernel.org>, 
- Eduard Zingerman <eddyz87@gmail.com>, 
- Mykola Lysenko <mykolal@fb.com>, 
- Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, 
- Martin KaFai Lau <martin.lau@linux.dev>, 
- Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, 
- John Fastabend <john.fastabend@gmail.com>, 
- KP Singh <kpsingh@kernel.org>, 
- Stanislav Fomichev <sdf@google.com>, 
- Hao Luo <haoluo@google.com>, 
- Jiri Olsa <jolsa@kernel.org>, 
- Shuah Khan <shuah@kernel.org>, 
- Geliang Tang <tanggeliang@kylinos.cn>, 
- bpf@vger.kernel.org, 
- mptcp@lists.linux.dev, 
- linux-kselftest@vger.kernel.org
-Message-ID: <660dd833358bd_2144820881@john.notmuch>
-In-Reply-To: <878r1ubq8q.fsf@cloudflare.com>
-References: <b67101632c6858d281f105b5d4e1bc62dd6b7d27.1712133039.git.tanggeliang@kylinos.cn>
- <878r1ubq8q.fsf@cloudflare.com>
-Subject: Re: [PATCH bpf-next] selftests/bpf: Add F_SETFL for fcntl
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="NTNLcZEh";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="pQuErzwA"
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+	by mailfhigh.west.internal (Postfix) with ESMTP id 3F11A180006D;
+	Wed,  3 Apr 2024 18:32:01 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute5.internal (MEProxy); Wed, 03 Apr 2024 18:32:02 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-type:content-type:date:date:from:from:in-reply-to
+	:in-reply-to:message-id:mime-version:references:reply-to:subject
+	:subject:to:to; s=fm1; t=1712183520; x=1712269920; bh=ZKU8QnPFpk
+	fIAfHhZDM9ha1A7ABYqkBBOaVhR2yPGZY=; b=NTNLcZEhZ9JnLzvi9+Lwq9mdAQ
+	7nvL3OfJQ9FerzQm1G8Soi14xIqJa6ZyDjkoELuflFRWoDtvceGl7QnZcoTIKG0D
+	xjGAjexLCR/+qs9Fu/Tkiidc6xyFUdQvcrX5ljTZKie7s4qB8XoRknkQg971FQGH
+	lk3FSL9B7mpnP8H6H9CzMxzIM74D6vEP7S4bRBdHf0IrO7Smtt5Y8Eqji6FS12c1
+	jU3FbNchNexP2yTVWF2ovDIrH1JdsbOuKpOIYNTOakIMc8+ax+17bVmf+X4imrkV
+	9QmWMx5lpMr3X4tgiXSy4gPyvW/rVytrc8KdrnHU55omNTyzRkV9ZPgKVLEA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+	fm2; t=1712183520; x=1712269920; bh=ZKU8QnPFpkfIAfHhZDM9ha1A7ABY
+	qkBBOaVhR2yPGZY=; b=pQuErzwAS6eBywKRZBgX1izos6WpQ62pM2gLslV0jqbO
+	cc8rz6SKvMX/M1xKJDX9jEthSi3zqkyfxPnsMy9my4buPEICpibGlkRK5QKd6MU9
+	1xwjHmXIQ2L/1yX8vZcfuHGZt9jc51x2CMSCkyVYSb5EICrvOLKQHW5wZlIJW1lk
+	aimAc1ruzM9bOtFxUBQ6DxMc1vTgrukIeYtpj2S24u/g7ublF7yYJeXjW/UZYyIM
+	R665A1SwDHC47Rb/USODz7WtQJmmaeAPlVkWKNyHyZx6+UVN+HT7UpBAXW7dA7xi
+	zucy8U0D3MvcE6m1ug7pb0JU2DlAVxRCYojmlhv1Bg==
+X-ME-Sender: <xms:4NgNZonINgTmut4pgUoxTOURHzZUHqUHNeQZwF3MMFiAGQ9jkH_XNw>
+    <xme:4NgNZn2UwPeQE_UpfRsHnTE3ANE03oVTMnU_-v4WlKjy5KlqyNg_q94uLgsqdAerp
+    3vQPLnLAqOG5X7sbOg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrudefjedguddvucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:4NgNZmrfA8Pyh0mpX1fjWtQENldbIOd9sew76u7qNXyAE_kxs-7Jpw>
+    <xmx:4NgNZknI-qkT_s-YicWH8wUd-ghZvwF2K0QL4WhIoCsZXAffmITX_A>
+    <xmx:4NgNZm2hSN2Ncsky83BH_7YJgpydD-FD2RO-14KFwwkWAtFohUzVaQ>
+    <xmx:4NgNZrtFV1C9IbXXMtuTiXMSc7je6f6PtqUtMMUagHTcIljpmoxXNg>
+    <xmx:4NgNZvtoflbYBm3s8jmZ5xz08sG3q9c5wX2p8h8hvInEIHAcPO3xO2uV>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id 03EC5B6008D; Wed,  3 Apr 2024 18:31:59 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.11.0-alpha0-333-gbfea15422e-fm-20240327.001-gbfea1542
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Message-Id: <1c3d3079-e1f7-4420-b542-c3c451038963@app.fastmail.com>
+In-Reply-To: <728951fe-ccd5-49d2-1584-fc97e2c2266e@iogearbox.net>
+References: <20240403123303.1452184-1-aspsk@isovalent.com>
+ <18d8417d-835c-4279-9f84-abdc56fa19fb@app.fastmail.com>
+ <728951fe-ccd5-49d2-1584-fc97e2c2266e@iogearbox.net>
+Date: Thu, 04 Apr 2024 00:31:38 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Daniel Borkmann" <daniel@iogearbox.net>,
+ "Anton Protopopov" <aspsk@isovalent.com>,
+ "Alexei Starovoitov" <ast@kernel.org>, "Andrii Nakryiko" <andrii@kernel.org>,
+ "Jiri Olsa" <jolsa@kernel.org>, "Martin KaFai Lau" <martin.lau@linux.dev>,
+ "Stanislav Fomichev" <sdf@google.com>, bpf@vger.kernel.org
+Cc: "Alexander Lobakin" <aleksander.lobakin@intel.com>,
+ "Naresh Kamboju" <naresh.kamboju@linaro.org>
+Subject: Re: [PATCH bpf-next] bpf: pack struct bpf_fib_lookup
+Content-Type: text/plain
 
-Jakub Sitnicki wrote:
-> Hi Geliang,
-> 
-> On Wed, Apr 03, 2024 at 04:32 PM +08, Geliang Tang wrote:
-> > From: Geliang Tang <tanggeliang@kylinos.cn>
-> >
-> > Incorrect arguments are passed to fcntl() in test_sockmap.c when invoking
-> > it to set file status flags. If O_NONBLOCK is used as 2nd argument and
-> > passed into fcntl, -EINVAL will be returned (See do_fcntl() in fs/fcntl.c).
-> > The correct approach is to use F_SETFL as 2nd argument, and O_NONBLOCK as
-> > 3rd one.
-> >
-> > Fixes: 16962b2404ac ("bpf: sockmap, add selftests")
-> > Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
-> > ---
-> >  tools/testing/selftests/bpf/test_sockmap.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/tools/testing/selftests/bpf/test_sockmap.c b/tools/testing/selftests/bpf/test_sockmap.c
-> > index 024a0faafb3b..34d6a1e6f664 100644
-> > --- a/tools/testing/selftests/bpf/test_sockmap.c
-> > +++ b/tools/testing/selftests/bpf/test_sockmap.c
-> > @@ -603,7 +603,7 @@ static int msg_loop(int fd, int iov_count, int iov_length, int cnt,
-> >  		struct timeval timeout;
-> >  		fd_set w;
-> >  
-> > -		fcntl(fd, fd_flags);
-> > +		fcntl(fd, F_SETFL, fd_flags);
-> >  		/* Account for pop bytes noting each iteration of apply will
-> >  		 * call msg_pop_data helper so we need to account for this
-> >  		 * by calculating the number of apply iterations. Note user
-> 
-> Good catch. But we also need to figure out why some tests failing with
-> this patch applied and fix them in one go:
-> 
-> # 6/ 7  sockmap::txmsg test skb:FAIL
-> #21/ 7 sockhash::txmsg test skb:FAIL
-> #36/ 7 sockhash:ktls:txmsg test skb:FAIL
-> Pass: 42 Fail: 3
-> 
-> I'm seeing this error message when running `test_sockmap`:
-> 
-> detected skb data error with skb ingress update @iov[0]:0 "00 00 00 00" != "PASS"
-> data verify msg failed: Unknown error -5
-> rx thread exited with err 1.
+On Wed, Apr 3, 2024, at 23:00, Daniel Borkmann wrote:
+> On 4/3/24 10:09 PM, Arnd Bergmann wrote:
+>> On Wed, Apr 3, 2024, at 14:33, Anton Protopopov wrote:
+>>>
+>>> Declare this inner union as __attribute__((packed, aligned(2))) such
+>>> that it always is of size 2 and is aligned to 16 bits.
+>> 
+>> I think you probably want 32-bit alignment for the structure,
+>> to keep the ABI unchanged on all other architectures.
+>
+> Fwiw, on x86 nothing should change on this regard, see below pahole dump
+> before/after. I think similar might be true for other archs as otherwise
+> we should have seen a kbuild bot complaint on hitting the size assert.
 
-I have a theory this is a real bug in the SK_SKB_STREAM_PARSER which has an
-issue with wakup logic. Maybe we wakeup the poll/select logic before the
-data is copied and because the recv() is actually nonblocking now we get
-the error.
+It's not the structure layout that changes, just its alignment.
+Of course this is unlikely to cause actual bugs, but if there there
+is no real need to change it, I would leave the alignment the same
+as before.
 
-> 
-> I'd also:
-> - add an error check for fnctl, so we don't regress,
-> - get rid of fd_flags, pass O_NONBLOCK flag directly to fnctl.
-> 
-> Thanks,
-> -jkbs
-
-
+        Arnd
