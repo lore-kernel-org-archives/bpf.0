@@ -1,104 +1,134 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E087146A75;
-	Wed,  3 Apr 2024 12:29:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5593B1C683
+	for <bpf@vger.kernel.org>; Wed,  3 Apr 2024 12:33:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712147396; cv=none; b=UiwPJD4pUcjnnn6UYPkT4tm5Lo3xDh9MvhQcZ/ZXiUIqag09nwgWW60JKBvuV+A9bQyFFOenqH003tGOWBCvFE2j0x4f4oerujMjkzrVY/XhYw3ZsA9f3I2bvjU6DubR+1tIyt4wEr3gX8W8TeojkHOhDJ4KxUT19VqWoRVWHXQ=
+	t=1712147595; cv=none; b=jrXFGUAzTIl8KN6WVboVXkrZffmiKB+aP3q/XRJ1jtwlz7g9oEurXqsjLqc+ciSOHF5s1Z9pxW4a4UK1H5bCVT5IalzEk4pyZw/DZtX5oeDrF+k0WdoZzYtli52MB2hKzFBzUALFIQwO9Np30NDdw2crvMO8dYjukS2OOEwHRWE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712147396; c=relaxed/simple;
-	bh=17nw4mBwdw7o/BMzv+AdA/BNvdIhvtEGu58LPXIywWE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cwH9n4L7HexI9umLXjC7J399QCp/q9ebOxMQulGFht0/2Mh4+j42a/GLKHeocMy7phKoNt+fNqX9H+GOTkUfHWjTAYaeeyzpjXvnSegOu2C9cRAkuoFjRT9zT22z+QaGDMQcMGMpczZyZ/5cuWMt+AxHA7s60WD4tQQSXZo1tDc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qxDTG0Y0; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1712147595; c=relaxed/simple;
+	bh=Q/ltXT+BpwFO/h0wqGFU0jolcLTzV3uFIe9qgC3XJZ8=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=mzeNNhEfMEJtxAP/fhVMgaJsZqn3enXUSvF5XQ2ouMtLX4rSJB5ua4ancaKZkA7xg0YASUMJfZ0RDXprXj/iuz/3yOi27zVvZx3SmYfbIreUDTJlN59d9h5w7yOyGCjPwAATGRK/5ldorrj8SN5Odtyd8Xcz4zmCToo/DJEGnwA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=isovalent.com; spf=pass smtp.mailfrom=isovalent.com; dkim=pass (2048-bit key) header.d=isovalent.com header.i=@isovalent.com header.b=CHoF4EB1; arc=none smtp.client-ip=209.85.218.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=isovalent.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=isovalent.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qxDTG0Y0"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A76B4C433C7;
-	Wed,  3 Apr 2024 12:29:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712147395;
-	bh=17nw4mBwdw7o/BMzv+AdA/BNvdIhvtEGu58LPXIywWE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=qxDTG0Y0ZNLCTZsOVSyrxsIBoEhpVmvIMmny1/TM2qgOH0VUnoowjDsDOGICA1yDJ
-	 vIxUahUjS5hea8LZwB7N5FHram9vFUY1yOw8WfIfDY3ZyUsSH+dfhuBSCE2BBTDRKK
-	 NGfjCFkSaIXRNMGo09Wjp7bssxBcX9/R2tCyOO2IPgnDSY5BWibcVcd/HKiJuhvOA4
-	 ZZig2iKJjHbD1PToatsm37Hphwp7ZpogsP0qbnjOixphkNOVc1xnNMGLBCCPUiyP3j
-	 nJ47aCz+q6A4QxmnhxZHXLUghr/D6qNLW8vZmu7Gdv5lRESsRepHg61+99gv/OBWgN
-	 Zx+NK3JJAdIog==
-Date: Wed, 3 Apr 2024 13:29:49 +0100
-From: Conor Dooley <conor@kernel.org>
-To: Pu Lehui <pulehui@huaweicloud.com>
-Cc: =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>,
-	Stefan O'Rear <sorear@fastmail.com>, bpf@vger.kernel.org,
-	linux-riscv@lists.infradead.org, netdev@vger.kernel.org,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
+	dkim=pass (2048-bit key) header.d=isovalent.com header.i=@isovalent.com header.b="CHoF4EB1"
+Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-a4e60a64abcso148353766b.1
+        for <bpf@vger.kernel.org>; Wed, 03 Apr 2024 05:33:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=isovalent.com; s=google; t=1712147592; x=1712752392; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=nWZYj7rCEid76Wcm9RKbiLWZ/1nR7cWjb24KGQVqXkk=;
+        b=CHoF4EB12P13LGirzUsBqNd4j+ojJ4xdwv2mf9FJLWLjgpkwzDR9zYoTOFWaEb1Nl+
+         mOmRympP73cGaS4N9gT3/Y08iTOtckZWzrtaZ4e1/UteDfqSN0ugCV4N14oblEURUaCo
+         E3B5blVYICvhGm6r+h4Q5JFFkMaQSp2z4J7+eifu9RiVZYCntqRHx/F+sMwR+6kKD49f
+         5vjp6WTrlHjoEmn0PJjBnZtnLIoKHPe9Xpk4n/NwE0rBhbr5/I/Us9bp0T9hoJ0iSpNZ
+         BQHcSguL0HSBjFyQmoqHyQMCY1Nh28ZPPnIeII6qlWfyB/7t8IAZYEa00d3rG46cVTwQ
+         4zMg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1712147592; x=1712752392;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=nWZYj7rCEid76Wcm9RKbiLWZ/1nR7cWjb24KGQVqXkk=;
+        b=owuLK/IIM3isO8otikpV3xGJQyYBvdsIF/WUcbklVzmiSVBl6U5YvVT5kfc2ZXBeaC
+         tvJI7XnGc2SEtBGG/mm5pSLq7ZDXl3Eca8HYp3LDIFBZyZqDzHrHJnrIUcLomIXblFyP
+         /0Lg018dGaTR85U+ozfYT8muywJLglwT64du4rwZn43rk5rhH4g9F88EtRxIcR6UKskB
+         TKII301jHVpSmedtcckQ71uIotiTTcPARPLkRCdYNzxurcpCh14XIIl3N0/vO7W/BIca
+         rNK+l6owwUn0W/DKtWedadZ3HHF0zY45hB0PVlBaU1gpD1uHvPIQ2AxU1IFOjG7lfyq1
+         jc4g==
+X-Forwarded-Encrypted: i=1; AJvYcCWu2/xF/BNG7kXWQUsAk4XSe9nqRooJEe7HZRPTF/XJhMdrA74WXRfM2Zmaf2SWal2kgkSqBPW0PHQnhOfPFuDkBKTZ
+X-Gm-Message-State: AOJu0YySeD6M0I1ZQ+CvgqRCCtlsIpJRb8e6BziGwC07GO1aMW7S8a/5
+	TOEqTkokQUPklzlybJN/INLtOkd59iqmjpcPJH4CRwPM0keXumw1WqpWCb/kjW4=
+X-Google-Smtp-Source: AGHT+IGCJKnLv9iC2SM5hjXIBJiQ2UzBRBbriqY3loIDfjTvCjWOUqXXwXCfGtmqsroQjqDsvbKsaQ==
+X-Received: by 2002:a17:907:7243:b0:a4a:36e4:c3f9 with SMTP id ds3-20020a170907724300b00a4a36e4c3f9mr2773424ejc.7.1712147591693;
+        Wed, 03 Apr 2024 05:33:11 -0700 (PDT)
+Received: from lavr.home ([2a02:168:f656:0:c6fe:aab8:1c7d:aaee])
+        by smtp.gmail.com with ESMTPSA id w20-20020a170906d21400b00a4750705a07sm7700949ejz.190.2024.04.03.05.33.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 03 Apr 2024 05:33:10 -0700 (PDT)
+From: Anton Protopopov <aspsk@isovalent.com>
+To: Alexei Starovoitov <ast@kernel.org>,
 	Andrii Nakryiko <andrii@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Jiri Olsa <jolsa@kernel.org>,
 	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yhs@fb.com>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
-	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-	Mykola Lysenko <mykolal@fb.com>, Manu Bretelle <chantr4@gmail.com>,
-	Pu Lehui <pulehui@huawei.com>
-Subject: Re: [PATCH bpf-next 2/5] riscv, bpf: Relax restrictions on Zbb
- instructions
-Message-ID: <20240403-clanking-undress-b18346aa4cef@spud>
-References: <20240328124916.293173-1-pulehui@huaweicloud.com>
- <20240328124916.293173-3-pulehui@huaweicloud.com>
- <3ed9fe94-2610-41eb-8a00-a9f37fcf2b1a@app.fastmail.com>
- <20240328-ferocity-repose-c554f75a676c@spud>
- <ed3debc9-f2a9-41fb-9cf9-dc6419de5c01@huaweicloud.com>
- <87cyr7rgdn.fsf@all.your.base.are.belong.to.us>
- <20240402-ample-preview-c84edb69db1b@spud>
- <871q7nr3mq.fsf@all.your.base.are.belong.to.us>
- <20240403-gander-parting-a47c56401716@spud>
- <d6eae62b-60fd-4f3c-92e4-7ea5f1c4fc68@huaweicloud.com>
+	Stanislav Fomichev <sdf@google.com>,
+	bpf@vger.kernel.org
+Cc: Anton Protopopov <aspsk@isovalent.com>,
+	Alexander Lobakin <aleksander.lobakin@intel.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Naresh Kamboju <naresh.kamboju@linaro.org>
+Subject: [PATCH bpf-next] bpf: pack struct bpf_fib_lookup
+Date: Wed,  3 Apr 2024 14:33:03 +0200
+Message-Id: <20240403123303.1452184-1-aspsk@isovalent.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="sTVykUQukqcz7+L4"
-Content-Disposition: inline
-In-Reply-To: <d6eae62b-60fd-4f3c-92e4-7ea5f1c4fc68@huaweicloud.com>
+Content-Transfer-Encoding: 8bit
 
+The struct bpf_fib_lookup is supposed to be of size 64. A recent commit
+59b418c7063d ("bpf: Add a check for struct bpf_fib_lookup size") added
+a static assertion to check this property so that future changes to the
+structure will not accidentally break this assumption.
 
---sTVykUQukqcz7+L4
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+As it immediately turned out, on some 32-bit arm systems, when AEABI=n,
+the total size of the structure was equal to 68, see [1]. This happened
+because the bpf_fib_lookup structure contains a union of two 16-bit
+fields:
 
-On Wed, Apr 03, 2024 at 06:05:38PM +0800, Pu Lehui wrote:
-> Hi Conor and Bj=C3=B6rn,
->=20
-> Thanks for your explanation. I totally agree with what you said,
-> "CONFIG_RISCV_ISA_ZBB only controls whether optimizations for Zbb are bui=
-lt
-> so that if Zbb is detected they can be used.".
->=20
-> Since the instructions emited by bpf jit are in kernel space, they should
-> indeed be aligned in this regard.
->=20
-> PS: It's a bit difficult to understand this,=F0=9F=98=85 if I'm wrong ple=
-ase don't
-> hesitate to tell me.
+    union {
+            __u16 tot_len;
+            __u16 mtu_result;
+    };
 
-I think your understanding is correct. Sorry if I confused you at all!
+which was supposed to compile to a 16-bit-aligned 16-bit field. On the
+aforementioned setups it was instead both aligned and padded to 32-bits.
 
---sTVykUQukqcz7+L4
-Content-Type: application/pgp-signature; name="signature.asc"
+Declare this inner union as __attribute__((packed, aligned(2))) such
+that it always is of size 2 and is aligned to 16 bits.
 
------BEGIN PGP SIGNATURE-----
+  [1] https://lore.kernel.org/all/CA+G9fYtsoP51f-oP_Sp5MOq-Ffv8La2RztNpwvE6+R1VtFiLrw@mail.gmail.com/#t
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZg1LvQAKCRB4tDGHoIJi
-0mlqAQCxxkdbSEap3IEfCOExj7NWGtaUdUrEOON0RDSxpdgCYQEAtp5IpMEHfa9u
-V7IQVi50lwcIe+Z0M4FzSa+afLjRWgI=
-=AuOI
------END PGP SIGNATURE-----
+Signed-off-by: Anton Protopopov <aspsk@isovalent.com>
+---
+ include/uapi/linux/bpf.h       | 2 +-
+ tools/include/uapi/linux/bpf.h | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
---sTVykUQukqcz7+L4--
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index 79c548276b6b..6fe9f11c8abe 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -7157,7 +7157,7 @@ struct bpf_fib_lookup {
+ 
+ 		/* output: MTU value */
+ 		__u16	mtu_result;
+-	};
++	} __attribute__((packed, aligned(2)));
+ 	/* input: L3 device index for lookup
+ 	 * output: device index from FIB lookup
+ 	 */
+diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
+index 79c548276b6b..6fe9f11c8abe 100644
+--- a/tools/include/uapi/linux/bpf.h
++++ b/tools/include/uapi/linux/bpf.h
+@@ -7157,7 +7157,7 @@ struct bpf_fib_lookup {
+ 
+ 		/* output: MTU value */
+ 		__u16	mtu_result;
+-	};
++	} __attribute__((packed, aligned(2)));
+ 	/* input: L3 device index for lookup
+ 	 * output: device index from FIB lookup
+ 	 */
+-- 
+2.34.1
+
