@@ -1,169 +1,79 @@
-Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com [209.85.219.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7761B286A6
-	for <bpf@vger.kernel.org>; Thu,  4 Apr 2024 22:59:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 751046F099
+	for <bpf@vger.kernel.org>; Thu,  4 Apr 2024 23:00:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712271588; cv=none; b=Wkq+Btb/UWwRxxI01WDRuhHHq6fR/LyIQ1kHWYjILe2W6IOt6exiT1+oirmTjORFNZsKpdSIEluIwn6nRQDifVak4Bn4bggkupjk13Z9pNAhmDM3hdiZ8kdJLSynYlATtBOl3VA09K0Kf+4L/5y60BtYRZa1r2r24+U6MoHfgpw=
+	t=1712271643; cv=none; b=NsOBbX6TRfw/FO6FOaKG37Zn1BgDNWOU0TqJS5dQU97lXHJGKaJOpQIEmLazOufMZ9J5JgUZmXnO+SDKJco7+Ba4qy/ObBMmCLqmxcebcQsY55BEH38TtMJuZi2dQAIdCb3YrQST9dCeczN7J2ObPfAmReaO+T4l95tih8rKWWk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712271588; c=relaxed/simple;
-	bh=3KfHzzVqCenEpli7+i2AT5/sHR3mXvJ+MXge6MSdt5s=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=qgSR8eeuTbNJOB1PZFoMFNEyDVu9cZLSWB6UAVZWINNA7z/One9w0aR3ZOPD+abK8heHq5VDOwGA1Ua8sqaT2v1fgg3JbqdR0PjPgOnJI7TSceZ9McB85A0LuVEoTHFRI4hjVSDrQ4OXoMDiBTSvdXDeP3sJUQPdCMWuIYInRG4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mojatatu.com; spf=none smtp.mailfrom=mojatatu.com; dkim=pass (2048-bit key) header.d=mojatatu-com.20230601.gappssmtp.com header.i=@mojatatu-com.20230601.gappssmtp.com header.b=bjOQuwrG; arc=none smtp.client-ip=209.85.219.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mojatatu.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=mojatatu.com
+	s=arc-20240116; t=1712271643; c=relaxed/simple;
+	bh=hKHWKqizuS2TSJUJJbOoFVXVv76kgP0+LLRt+/VHptU=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=jBKpGfcOcCiFeQcZ0KN8mfoGsqfjecLZLC8yI9hm0/9rPeXCpRJwIVxmYnHXdpurjQcoMLav1/mTwYMiPUILP2Dga9wP+v0qJIIdu+Hp6uC3LnIyBMKqfxn/qLqqWC39vrQG056uy+gpxn3Y5r8H9cLZYB+rU73Ma+Oo3y6u+UY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XxgFHW0o; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=mojatatu-com.20230601.gappssmtp.com header.i=@mojatatu-com.20230601.gappssmtp.com header.b="bjOQuwrG"
-Received: by mail-yb1-f172.google.com with SMTP id 3f1490d57ef6-dde0b30ebe2so1525149276.0
-        for <bpf@vger.kernel.org>; Thu, 04 Apr 2024 15:59:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=mojatatu-com.20230601.gappssmtp.com; s=20230601; t=1712271585; x=1712876385; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3KfHzzVqCenEpli7+i2AT5/sHR3mXvJ+MXge6MSdt5s=;
-        b=bjOQuwrGoarfwpwE5TAZWUSWmboHd6g+mMokeaRLELNCMUrRQPjv0Dwu05bZNqDVcO
-         Xh/LKJgIBUhrABQBAKdZfcCg+UdP7NusN9KTE8YqwuDswQlwLX489XHmhkudAlfsFw4a
-         6uSYOoKa7AMjmZo6UZIEkY+4nFjz/Am7aTgmQGhHWO1wzfEzulAdstAlyK/UGTj19bWQ
-         uJmEKx5LdhHwelOiheyanMfUlmHxSWyH0CzCr5vdMa0Ceuz2QdJ2jVR6ZA4bl74rsxtf
-         nfFhY3r0vqi0n2wrzx5xKiXCXKsFFXddBZz7mvs1+64nUUgVUWaCujzj3QpIAqnqMRzI
-         DMuA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712271585; x=1712876385;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=3KfHzzVqCenEpli7+i2AT5/sHR3mXvJ+MXge6MSdt5s=;
-        b=VlAnBC/sYY5O0bESQ2t5IPQriT286Zz1Nj5OZmwOOgwZtnUcSBFe2nAo0xkzxyRxbG
-         5Yymx2VHZ4NZg5h6qrpdOyrxPLbgI7qup8tQ1B1COEvxbj+dr+Gqmy8RQAPcMjlJgX/K
-         84dPnN5SP/OAGFrXqfRH3wSwevv8pfYQ/gtqlUUWsXG6ojrEUhWpOA/Ac7U+Py+DQiHO
-         MfAaH5HTYLLXAlI4Z05Rh6h3r/pbmBqHNVIVrPE/tl8I6iTBcjpnbpmnlsItTuKuMql/
-         TStG+mQzFVzg9h/T42Ttu/iW1Xt1N/nxEBoMsbGt0GZjTr9PvcRhj9/rmrktuEulsksU
-         wu8Q==
-X-Forwarded-Encrypted: i=1; AJvYcCUNf+Zp/kwjswYZViSm0m4MEIfZ/dsHxm9YZh8vslCsBEDNVsDbEHqlrAkrZ46MG0slhzfwUL2GZ+QrqXrBZNeMy6Cz
-X-Gm-Message-State: AOJu0YzPDphVATyb87JqvEfgkkLgVMo9Fvu/eodLfspWMCNsKYWKZMnA
-	nZMqssGnfmomUq8wC3UuRW4mdbwqA0f002nJT+GTKl3ZXWdyUTP06wmTz97vlSWHSOrKX8iEG0P
-	rNFnUrdGFcxf94J7/WjOmqTVZV98k8tn3u23c
-X-Google-Smtp-Source: AGHT+IHLYSIJJn5ZiLgss5d1MGDVMo1TD0IPyPLYXbC8xwTw5TvM3TyTgIuW4IFiESXjSKc+lhbxKbeE7yxzTfVhEGE=
-X-Received: by 2002:a5b:64d:0:b0:dc6:3610:c344 with SMTP id
- o13-20020a5b064d000000b00dc63610c344mr903126ybq.13.1712271585426; Thu, 04 Apr
- 2024 15:59:45 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XxgFHW0o"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 4C714C43390;
+	Thu,  4 Apr 2024 23:00:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1712271643;
+	bh=hKHWKqizuS2TSJUJJbOoFVXVv76kgP0+LLRt+/VHptU=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=XxgFHW0ozIqkqOwDp+wWXiPKwFD2sEAw8sSpQmpB2ajBZjvmVaOLjR/MZbvQhZgcE
+	 zuVByLrySNAI4HK8sHQ68CffXX7YIzenGRgaE1viPK88UpBkL/sczdIIwtgL9+OwI1
+	 44cZ6nCo1jQMqkg9G9PtacF0/FV4wXgqY+vbG44uZFw513vkYyPtLF1kIxeD5ftW2z
+	 q1FI2KBo7CojDDXg1e9rum5473cGBQDduxgmxUbqE3DV7/Qq4Cp8Q9nlSQHk84sSpU
+	 V5kejGq7kB3Ml1P/WTZ8vsq1tydief/tYgCkEQat/TuG2t6AjK1jwVZExKdF99uRUo
+	 rq97yB5VNlaWg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 3AB5DD84BAB;
+	Thu,  4 Apr 2024 23:00:43 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240404122338.372945-1-jhs@mojatatu.com> <20240404122338.372945-15-jhs@mojatatu.com>
- <CAADnVQLw1FRkvYJX0=6WMDoR7rQaWSVPnparErh4soDtKjc73w@mail.gmail.com>
-In-Reply-To: <CAADnVQLw1FRkvYJX0=6WMDoR7rQaWSVPnparErh4soDtKjc73w@mail.gmail.com>
-From: Jamal Hadi Salim <jhs@mojatatu.com>
-Date: Thu, 4 Apr 2024 18:59:33 -0400
-Message-ID: <CAM0EoM=SyHR-f7z8YVRknXrUsKALgx96eH-hBudo40NyeaxuoA@mail.gmail.com>
-Subject: Re: [PATCH net-next v14 14/15] p4tc: add set of P4TC table kfuncs
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Network Development <netdev@vger.kernel.org>, deb.chatterjee@intel.com, 
-	Anjali Singhai Jain <anjali.singhai@intel.com>, namrata.limaye@intel.com, tom@sipanda.io, 
-	Marcelo Ricardo Leitner <mleitner@redhat.com>, Mahesh.Shirshyad@amd.com, Vipin.Jain@amd.com, 
-	tomasz.osinski@intel.com, Jiri Pirko <jiri@resnulli.us>, 
-	Cong Wang <xiyou.wangcong@gmail.com>, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Vlad Buslov <vladbu@nvidia.com>, Simon Horman <horms@kernel.org>, khalidm@nvidia.com, 
-	=?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai Lau <martin.lau@linux.dev>, victor@mojatatu.com, 
-	Pedro Tammela <pctammela@mojatatu.com>, bpf <bpf@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next] bpf: pack struct bpf_fib_lookup
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <171227164323.30433.13590004188099763511.git-patchwork-notify@kernel.org>
+Date: Thu, 04 Apr 2024 23:00:43 +0000
+References: <20240403123303.1452184-1-aspsk@isovalent.com>
+In-Reply-To: <20240403123303.1452184-1-aspsk@isovalent.com>
+To: Anton Protopopov <aspsk@isovalent.com>
+Cc: ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net, jolsa@kernel.org,
+ martin.lau@linux.dev, sdf@google.com, bpf@vger.kernel.org,
+ aleksander.lobakin@intel.com, arnd@arndb.de, naresh.kamboju@linaro.org
 
-On Thu, Apr 4, 2024 at 6:07=E2=80=AFPM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> On Thu, Apr 4, 2024 at 5:48=E2=80=AFAM Jamal Hadi Salim <jhs@mojatatu.com=
-> wrote:
-> >
-> > We add an initial set of kfuncs to allow interactions from eBPF program=
-s
-> > to the P4TC domain.
->
-> ...
->
-> > Note:
-> > All P4 objects are owned and reside on the P4TC side. IOW, they are
-> > controlled via TC netlink interfaces and their resources are managed
-> > (created, updated, freed, etc) by the TC side. As an example, the struc=
-ture
-> > p4tc_table_entry_act is returned to the ebpf side on table lookup. On t=
-he
-> > TC side that struct is wrapped around p4tc_table_entry_act_bpf_kern.
-> > A multitude of these structure p4tc_table_entry_act_bpf_kern are
-> > preallocated (to match the P4 architecture, patch #9 describes some of
-> > the subtleties involved) by the P4TC control plane and put in a kernel
-> > pool. Their purpose is to hold the action parameters for either a table
-> > entry, a global per-table "miss" and "hit" action, etc - which are
-> > instantiated and updated via netlink per runtime requests. An instance =
-of
-> > the p4tc_table_entry_act_bpf_kern.p4tc_table_entry_act is returned
-> > to ebpf when there is a un/successful table lookup depending on how the
-> > P4 program is written. When the table entry is deleted the instance of
-> > the struct p4tc_table_entry_act_bpf_kern is recycled to the pool to be
-> > reused for a future table entry. The only time the pool memory is relea=
-sed
-> > is when the pipeline is deleted.
->
-> TLDR:
-> Nacked-by: Alexei Starovoitov <ast@kernel.org>
->
-> Please drop this patch (all p4tc kfuncs) then I can lift
-> the nack and the rest will be up to Kuba/Dave to decide.
-> I agree with earlier comments from John and Daniel that
-> p4tc is duplicating existing logic and doesn't provide
-> any additional value to the kernel, but TC has a bunch
-> of code already that no one is using, so
-> another 13k lines of such stuff doesn't make it much worse.
->
-> What I cannot tolerate is this p4tc <-> bpf integration.
-> It breaks all the normal layering and programming from bpf pov.
-> Martin explained this earlier. You cannot introduce new
-> objects that are instantiated by TC, yet read/write-able
-> from xdp and act_bpf that act like a bpf map, but not being a map.
-> Performance overhead of these kfuncs is too high.
-> It's not what the XDP community is used to.
-> We cannot give users such a footgun.
->
-> Furthermore, act_bpf is something that we added during early
-> days and it turned out to be useless. It's still
-> there, it's working and supported, but it's out of place
-> and in the wrong spot in the pipeline to be useful
-> beyond simple examples.
-> Yet, p4tc tries to integrate with act_bpf. It's a red flag
-> and a sign that that none of this code saw any practical
-> application beyond demo code.
-> We made our fair share of design mistakes. We learned our lessons
-> and not going to repeat the same ones. This one is obvious.
->
+Hello:
 
-It's the same old aggression from you "if you dont do it the way i
-would have done it then it is wrong". Maybe it's how Meta or Cilium do
-things, but that imposition on other people is just plain rude.
-I have heard you shit on tc many times and it's not just tc everything
-else sucks if it is not from you. It's your prerogative. Sorry, we are
-not going to use tcx because it doesnt suit our goals. We are going to
-use tc actions and filters. You do you, we'll do us.
+This patch was applied to bpf/bpf-next.git (master)
+by Andrii Nakryiko <andrii@kernel.org>:
 
-You've been going around telling people they dont have to post any
-kfunc to the ebpf mailing but it is still preferred to upstream.
-That's what we are doing.
-You do realize we can make this kfunc an out of tree kernel module but
-we opted to share with the community.
- We initially posted a solution that didnt use ebpf and the push back
-was to use ebpf. I know you act like ebpf is your property but it is
-not. We will use ebpf/xdp/kfuncs whenever they make sense to us. Sigh.
-This community is getting more political by the day. Open source is
-about scratching your itch - this is our itch.
+On Wed,  3 Apr 2024 14:33:03 +0200 you wrote:
+> The struct bpf_fib_lookup is supposed to be of size 64. A recent commit
+> 59b418c7063d ("bpf: Add a check for struct bpf_fib_lookup size") added
+> a static assertion to check this property so that future changes to the
+> structure will not accidentally break this assumption.
+> 
+> As it immediately turned out, on some 32-bit arm systems, when AEABI=n,
+> the total size of the structure was equal to 68, see [1]. This happened
+> because the bpf_fib_lookup structure contains a union of two 16-bit
+> fields:
+> 
+> [...]
 
-cheers,
-jamal
+Here is the summary with links:
+  - [bpf-next] bpf: pack struct bpf_fib_lookup
+    https://git.kernel.org/bpf/bpf-next/c/f91717007217
 
-> So please drop all bpf integration and focus on pure p4tc.
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
