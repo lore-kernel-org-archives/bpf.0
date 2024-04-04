@@ -1,167 +1,151 @@
-Received: from mail-yb1-f178.google.com (mail-yb1-f178.google.com [209.85.219.178])
+Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A71D12CDA8
-	for <bpf@vger.kernel.org>; Thu,  4 Apr 2024 17:08:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58A1812AAE7
+	for <bpf@vger.kernel.org>; Thu,  4 Apr 2024 17:09:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712250540; cv=none; b=d1s4ZPTVuvX4uAOuNBJSQ20j5G2gUtwaNI0etiy5uPXYRviGrCpUGDYl0hF3G4mitkkf4ns902iotn5NYtywt2RRUWzB7GvtWWGZYbBzBsPMOmM/cNo2sxYD7wCtF4Bqc51xug+KSvf9OWCarhzmijAwGh7VYh6TVus/VFgKweE=
+	t=1712250546; cv=none; b=oHbrGprS2thdY9cIEYm1l9bnWwRChXOYXthFcDZhiZRKN8lLAVSmYN+9uVzeC+m6pZeDaku8X2ryXSQhOMXNcjUJs3JQ/UoASGZjVs6uxH27Ub+IIzbEn20bL1/nQtyyn7HUqWkoAnMs+GU3HHHHvwmySi970ZR0Z1YvQxSpn3Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712250540; c=relaxed/simple;
-	bh=qIeHxQSzEKN+T+ZMX5PFicsmdKmy6EfcZQYdz44LOBA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=NHsfchi5b6VDua5UATgKU2mvU6j5hTtwAx6+TDgf5/5DqM8SQkTCHMyAltm7ML0QpPUdac8jjLNY0QkveScHKkd5PwJGZAKh9lWw8J3V9cTRPmUhF7rsxjaxSyzOQUisIRpkjK33djwUfpBAHKC4QwJATLD8Mct5W+7VMtZN8I8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=jC5EaRQM; arc=none smtp.client-ip=209.85.219.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1712250546; c=relaxed/simple;
+	bh=WaOvUncTjCn8T5oJ6JRCqB8SSpkY4S6OhMdnaT1WRes=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=LZX6hEYP84hTcWTcelcmvxQW6NEsY9HcGdTNqidayhEZ3UBrw6GrtZRAA7dJr0miQhVu/499oUoioth5o1jTHuCZH6aGg5mBvyGtA9/Q46c9p+jFqZ09srFMGdlkhiL/jjvyqaAv/JPFZfCytsqJ4KLgqVvQpLkX30vJpYQTIZQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=networkplumber.org; spf=pass smtp.mailfrom=networkplumber.org; dkim=pass (2048-bit key) header.d=networkplumber-org.20230601.gappssmtp.com header.i=@networkplumber-org.20230601.gappssmtp.com header.b=kvp410ai; arc=none smtp.client-ip=209.85.215.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=networkplumber.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=networkplumber.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="jC5EaRQM"
-Received: by mail-yb1-f178.google.com with SMTP id 3f1490d57ef6-dcd9e34430cso1467227276.1
-        for <bpf@vger.kernel.org>; Thu, 04 Apr 2024 10:08:57 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=networkplumber-org.20230601.gappssmtp.com header.i=@networkplumber-org.20230601.gappssmtp.com header.b="kvp410ai"
+Received: by mail-pg1-f172.google.com with SMTP id 41be03b00d2f7-5dbcfa0eb5dso1058308a12.3
+        for <bpf@vger.kernel.org>; Thu, 04 Apr 2024 10:09:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1712250536; x=1712855336; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KuDs1drwJi9Z+z9OuWkhK3ckPKS9r4/p1uVUkFqevFk=;
-        b=jC5EaRQMXoWxXcT/PNqSjrcsftwnvseB5AtKBg2vqgAyyLVQgp20SRegZq7YLIrdO/
-         HTQWScQM/DW37R2IYh+dwMOL2ayL0pQIQzYyP1lXQTLRA97VQiYJ9PHXRyMfJ/Z9ZvVJ
-         oFpUWCWEB1bSpDEyqEQ7RCqnI1td28ZhCzX2yYyMeaCp+6hQUqHZ6EtZjij0pKovvOgy
-         stCx6Jb+d1gT/UvnialtOoZLUIi5qkRs+J/dXYzAxsZr67uO7BH+bPTh4Ub09lLJuNIn
-         17mjFsnILx+0qC4dxBW5VMWwIa7xznM4mAxRt/Jwv9KrNYGo+0DSWcP592JJrWie/m+S
-         e2vQ==
+        d=networkplumber-org.20230601.gappssmtp.com; s=20230601; t=1712250543; x=1712855343; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:subject:cc:to
+         :from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=4DyyWv5I8a4FTIJsGj3htzy5SyG2P3r2f3ShqutFtzk=;
+        b=kvp410aiccO3R8OzwwXTtPuSnSeEz6uyiFC5WyZl4rOl1RoupRfohr1p4bEQRePWrN
+         DZH9dyVXCtJOeji634pGx7zRk/MwZXT36CgugC7sLPvgcV7oWnmYL6FcacCKODIVXmC+
+         b2jlCpmpq+CMXDGqhNyRhBxC+Snq64YxBTZQ3Ti/jZcgv1qbEj3Q1YUZqqGgQa1/qSl9
+         aeYMRkHBtMqUM0rhQKwueO8HacxRDbTUXYfAU9HIxGfM/ViBdK4eYf6VSXHfR6rr3XJZ
+         7OyAFiROMjkh9Qq326vCUhUiRcagjcijLQP75mrPMoiQmPjT0yAR8a/nJR2B6yqKYGOL
+         yy6Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712250536; x=1712855336;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=KuDs1drwJi9Z+z9OuWkhK3ckPKS9r4/p1uVUkFqevFk=;
-        b=KVkLQq30975M5iAazX0RWU9LEMQPipsNJ/cTd9BSoqj1NgXSXrm3YEDM1vDcExlsBP
-         I7WHjTBkNdPAu2yGSgOTu9/QeRaSYAm6+zAmxF4g4UYAMtgKfDSjr+KXsk6OqItkJHZA
-         7NnzEK2HJRlPu9azmeookEa2G6BvmeSnZzeqY4Sl2fTxHqWqsWrcXpMGAyp2DPuD8R0b
-         wKvUSPccG9zszi9bcWRJDWhfMqjlJn4pSpOGp4dwsLr4wYtK2HV+tL2T/sShPx1DNTl4
-         Fst2GhlKCp+KzJ10FcZMHHq/iP0ECB8sxTmVIbqV+VE37Ku1upiWGqTurNQ77gCBmu1o
-         GUCg==
-X-Forwarded-Encrypted: i=1; AJvYcCV0uFrzMZxEkUfy3VGgG6Ya8ioGqtVoHYKUT5olER7CegBxGXzPa3khqadVGjtyoapIFXOYf177DpZuVE3lFLmmY/P0
-X-Gm-Message-State: AOJu0YzcVKnXeXBUkim2ScFLQx1cKwjl6pOd7GuQsQBOsh+G9HN2H4Km
-	TWZ8jk+AX8cwzAKfUDY360/EVe064A6fBQjdKOIRlIwJLuKFWkR0YZJwz8P1IU5NJfz10K4NpP3
-	hg2z1+Lb/fO3JLgf1OQzIEPclby88qSt9y9kE
-X-Google-Smtp-Source: AGHT+IFt2ASldzAexjX0sPM2NMrH0Lqtd66mUXGVX9ZgF2XSVZKC+BEFwLxb4crFlAjVgX0qYdICDkkyaJeo+de/1Hw=
-X-Received: by 2002:a25:ac19:0:b0:dcb:b072:82d5 with SMTP id
- w25-20020a25ac19000000b00dcbb07282d5mr3065164ybi.64.1712250536330; Thu, 04
- Apr 2024 10:08:56 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1712250543; x=1712855343;
+        h=content-transfer-encoding:mime-version:message-id:subject:cc:to
+         :from:date:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=4DyyWv5I8a4FTIJsGj3htzy5SyG2P3r2f3ShqutFtzk=;
+        b=WtHVzqDx4UADNBgGBNNk3ujuxWd2VALFQzYXBtL0oKY+zrqI2Lx2RJ2d48I/yfIWsW
+         vXlrP1/XrNtKaj+cNIRfEUtmd5zHtHla1ywMvN4KBU9cQu/GOixtvzq3md+Qg+vr8xRE
+         pEoh87gZCCpNaqaql8qY9Aj4u6pFt1Rq0CrAAupKjw42YP7/pSYWn5IZ6T+kIGUA5R3E
+         oQZn9CFreT1uxuEldsmrm2Zb83v/EvrVPjjaQcJWPaK4N1Ah2liucSvasx2ZxPZplOCe
+         tJ/Q6e99sNyUiKBULROfSg0REioKyshypXBUC0XCk3+yUuzr8jv2DGzSbZEzN18scN9J
+         ueFg==
+X-Gm-Message-State: AOJu0YyygIRziPpZ5iFwD7Z6T16q3TAGRtxP4q9EXCZ2atcK/znuQRrM
+	j0b+xFYaPdwp60dbJVUy4xLkXq4FhkEHdwGAsXX0Kzob+Vuan06gbclLiSRFZlc=
+X-Google-Smtp-Source: AGHT+IExNcrsP4RuisMnyd6WugSPb4sJeEvCgLW1ylWCIzKoKLmdGMyOX4awk4dgqVMDf3OyWxKpbA==
+X-Received: by 2002:a17:90b:1993:b0:2a2:b2e2:da14 with SMTP id mv19-20020a17090b199300b002a2b2e2da14mr3025223pjb.30.1712250543647;
+        Thu, 04 Apr 2024 10:09:03 -0700 (PDT)
+Received: from hermes.local (204-195-96-226.wavecable.com. [204.195.96.226])
+        by smtp.gmail.com with ESMTPSA id qn3-20020a17090b3d4300b002a0383de8cfsm1778376pjb.38.2024.04.04.10.09.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 04 Apr 2024 10:09:03 -0700 (PDT)
+Date: Thu, 4 Apr 2024 10:09:01 -0700
+From: Stephen Hemminger <stephen@networkplumber.org>
+To: Luca Boccassi <bluca@debian.org>, daniel@iogearbox.net, ast@kernel.org,
+ andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com
+Cc: bpf@vger.kernel.org
+Subject: vmlinux.h overlap/conflict with network protocol definitions
+Message-ID: <20240404100901.7d6bc10f@hermes.local>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240404165404.3805498-1-surenb@google.com> <Zg7dmp5VJkm1nLRM@casper.infradead.org>
-In-Reply-To: <Zg7dmp5VJkm1nLRM@casper.infradead.org>
-From: Suren Baghdasaryan <surenb@google.com>
-Date: Thu, 4 Apr 2024 10:08:45 -0700
-Message-ID: <CAJuCfpHbTCwDERz+Hh+aLZzNdtSFKA+Q7sW-xzvmFmtyHCqROg@mail.gmail.com>
-Subject: Re: [PATCH 1/1] mm: change inlined allocation helpers to account at
- the call site
-To: Matthew Wilcox <willy@infradead.org>
-Cc: akpm@linux-foundation.org, joro@8bytes.org, will@kernel.org, 
-	trond.myklebust@hammerspace.com, anna@kernel.org, arnd@arndb.de, 
-	herbert@gondor.apana.org.au, davem@davemloft.net, jikos@kernel.org, 
-	benjamin.tissoires@redhat.com, tytso@mit.edu, jack@suse.com, 
-	dennis@kernel.org, tj@kernel.org, cl@linux.com, jakub@cloudflare.com, 
-	penberg@kernel.org, rientjes@google.com, iamjoonsoo.kim@lge.com, 
-	vbabka@suse.cz, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, 
-	iommu@lists.linux.dev, linux-kernel@vger.kernel.org, 
-	linux-nfs@vger.kernel.org, linux-acpi@vger.kernel.org, 
-	acpica-devel@lists.linux.dev, linux-arch@vger.kernel.org, 
-	linux-crypto@vger.kernel.org, bpf@vger.kernel.org, 
-	linux-input@vger.kernel.org, linux-ext4@vger.kernel.org, linux-mm@kvack.org, 
-	netdev@vger.kernel.org, linux-security-module@vger.kernel.org, 
-	kent.overstreet@linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Thu, Apr 4, 2024 at 10:04=E2=80=AFAM Matthew Wilcox <willy@infradead.org=
-> wrote:
->
-> On Thu, Apr 04, 2024 at 09:54:04AM -0700, Suren Baghdasaryan wrote:
-> > +++ b/include/linux/dma-fence-chain.h
-> > @@ -86,10 +86,7 @@ dma_fence_chain_contained(struct dma_fence *fence)
-> >   *
-> >   * Returns a new struct dma_fence_chain object or NULL on failure.
-> >   */
-> > -static inline struct dma_fence_chain *dma_fence_chain_alloc(void)
-> > -{
-> > -     return kmalloc(sizeof(struct dma_fence_chain), GFP_KERNEL);
-> > -};
-> > +#define dma_fence_chain_alloc()      kmalloc(sizeof(struct dma_fence_c=
-hain), GFP_KERNEL)
->
-> You've removed some typesafety here.  Before, if I wrote:
->
->         struct page *page =3D dma_fence_chain_alloc();
->
-> the compiler would warn me that I've done something stupid.  Now it
-> can't tell.  Suggest perhaps:
->
-> #define dma_fence_chain_alloc()                                          =
- \
->         (struct dma_fence_chain *)kmalloc(sizeof(struct dma_fence_chain),=
- \
->                                                 GFP_KERNEL)
->
-> but maybe there's a better way of doing that.  There are a few other
-> occurrences of the same problem in this monster patch.
+I am fixing the use of TC BPF in DPDK to use libbpf and bpftool.
+Luca recommended using vmlinux.h to address possible build and
+CO:RE issues. But it won't work.
 
-Got your point.
+There are missing pieces such as definitions of IPV6 next header
+fields (in linux/ipv6.h) and TC actions.
 
->
-> > +++ b/include/linux/hid_bpf.h
-> > @@ -149,10 +149,7 @@ static inline int hid_bpf_connect_device(struct hi=
-d_device *hdev) { return 0; }
-> >  static inline void hid_bpf_disconnect_device(struct hid_device *hdev) =
-{}
-> >  static inline void hid_bpf_destroy_device(struct hid_device *hid) {}
-> >  static inline void hid_bpf_device_init(struct hid_device *hid) {}
-> > -static inline u8 *call_hid_bpf_rdesc_fixup(struct hid_device *hdev, u8=
- *rdesc, unsigned int *size)
-> > -{
-> > -     return kmemdup(rdesc, *size, GFP_KERNEL);
-> > -}
-> > +#define call_hid_bpf_rdesc_fixup(_hdev, _rdesc, _size) kmemdup(_rdesc,=
- *(_size), GFP_KERNEL)
->
-> here
->
-> > -static inline handle_t *jbd2_alloc_handle(gfp_t gfp_flags)
-> > -{
-> > -     return kmem_cache_zalloc(jbd2_handle_cache, gfp_flags);
-> > -}
-> > +#define jbd2_alloc_handle(_gfp_flags)        kmem_cache_zalloc(jbd2_ha=
-ndle_cache, _gfp_flags)
->
-> here
->
-> > +++ b/include/linux/skmsg.h
-> > @@ -410,11 +410,8 @@ void sk_psock_stop_verdict(struct sock *sk, struct=
- sk_psock *psock);
-> >  int sk_psock_msg_verdict(struct sock *sk, struct sk_psock *psock,
-> >                        struct sk_msg *msg);
-> >
-> > -static inline struct sk_psock_link *sk_psock_init_link(void)
-> > -{
-> > -     return kzalloc(sizeof(struct sk_psock_link),
-> > -                    GFP_ATOMIC | __GFP_NOWARN);
-> > -}
-> > +#define sk_psock_init_link() \
-> > +             kzalloc(sizeof(struct sk_psock_link), GFP_ATOMIC | __GFP_=
-NOWARN)
->
-> here
->
-> ... I kind of gave up at this point.  You'll want to audit for yourself
-> anyway ;-)
+Without major hack surgery, not possible to use vmlinux.h instead.
+Since vmlinux.h defines may things that overlap with other headers.
 
-Yes, I'll go over it and will make the required changes. Thanks for
-looking into it!
-Suren.
+Using:
+
+$ /usr/sbin/bpftool -V
+bpftool v7.3.0
+using libbpf v1.3
+features:
+
+$ uname -r
+6.6.15-amd64
+
+The change to BPF program to use vmlinux is:
+
+diff --git a/drivers/net/tap/bpf/tap_rss.c b/drivers/net/tap/bpf/tap_rss.c
+index 888b3bdc24..79f4ee31a1 100644
+--- a/drivers/net/tap/bpf/tap_rss.c
++++ b/drivers/net/tap/bpf/tap_rss.c
+@@ -2,12 +2,7 @@
+  * Copyright 2017 Mellanox Technologies, Ltd
+  */
+ 
+-#include <linux/in.h>
+-#include <linux/if_ether.h>
+-#include <linux/ip.h>
+-#include <linux/ipv6.h>
+-#include <linux/pkt_cls.h>
+-#include <linux/bpf.h>
++#include "vmlinux.h"
+ 
+ #include <bpf/bpf_helpers.h>
+ #include <bpf/bpf_endian.h>
+
+Resulting build failure is:
+
+
+~/DPDK/tap $ ninja -C build
+ninja: Entering directory `build'
+[1/33] Generating drivers/net/tap/bpf/tap_rss.bpf.o with a custom command
+FAILED: drivers/net/tap/bpf/tap_rss.o 
+/usr/bin/clang -O2 -Wall -Wextra -DTAP_MAX_QUEUES=16 -target bpf -g -c -idirafter /usr/include -idirafter /usr/include/x86_64-linux-gnu ../drivers/net/tap/bpf/tap_rss.c -o drivers/net/tap/bpf/tap_rss.o
+../drivers/net/tap/bpf/tap_rss.c:116:8: error: use of undeclared identifier 'IPPROTO_HOPOPTS'
+                case IPPROTO_HOPOPTS:
+                     ^
+../drivers/net/tap/bpf/tap_rss.c:117:8: error: use of undeclared identifier 'IPPROTO_ROUTING'
+                case IPPROTO_ROUTING:
+                     ^
+../drivers/net/tap/bpf/tap_rss.c:118:8: error: use of undeclared identifier 'IPPROTO_DSTOPTS'
+                case IPPROTO_DSTOPTS:
+                     ^
+../drivers/net/tap/bpf/tap_rss.c:126:8: error: use of undeclared identifier 'IPPROTO_FRAGMENT'
+                case IPPROTO_FRAGMENT:
+                     ^
+../drivers/net/tap/bpf/tap_rss.c:210:33: error: use of undeclared identifier 'ETH_P_IP'
+        if (skb->protocol == bpf_htons(ETH_P_IP))
+                                       ^
+../drivers/net/tap/bpf/tap_rss.c:210:33: error: use of undeclared identifier 'ETH_P_IP'
+../drivers/net/tap/bpf/tap_rss.c:210:33: error: use of undeclared identifier 'ETH_P_IP'
+../drivers/net/tap/bpf/tap_rss.c:210:33: error: use of undeclared identifier 'ETH_P_IP'
+../drivers/net/tap/bpf/tap_rss.c:212:38: error: use of undeclared identifier 'ETH_P_IPV6'
+        else if (skb->protocol == bpf_htons(ETH_P_IPV6))
+                                            ^
+../drivers/net/tap/bpf/tap_rss.c:212:38: error: use of undeclared identifier 'ETH_P_IPV6'
+../drivers/net/tap/bpf/tap_rss.c:212:38: error: use of undeclared identifier 'ETH_P_IPV6'
+../drivers/net/tap/bpf/tap_rss.c:212:38: error: use of undeclared identifier 'ETH_P_IPV6'
+../drivers/net/tap/bpf/tap_rss.c:248:10: error: use of undeclared identifier 'TC_ACT_OK'
+                return TC_ACT_OK;
+                       ^
+../drivers/net/tap/bpf/tap_rss.c:252:10: error: use of undeclared identifier 'TC_ACT_OK'
+                return TC_ACT_OK;
+                       ^
+../drivers/net/tap/bpf/tap_rss.c:256:9: error: use of undeclared identifier 'TC_ACT_PIPE'
+        return TC_ACT_PIPE;
+               ^
+15 errors generated.
+ninja: build stopped: subcommand failed.
