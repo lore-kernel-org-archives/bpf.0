@@ -1,290 +1,131 @@
-Received: from mail-io1-f44.google.com (mail-io1-f44.google.com [209.85.166.44])
+Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 686A69474;
-	Thu,  4 Apr 2024 01:03:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0B724C9F
+	for <bpf@vger.kernel.org>; Thu,  4 Apr 2024 01:11:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712192609; cv=none; b=GqPyffPBYmeoi9XjkUlEVR5WQ37DYvP3Iv1iWn/ahETeZ420p0L7001Q+R6Bz1SC0x0mPizJaZy3Sy/kSUc6s/gpZ4IxIt2Rrkng6zM05M1L2BtVlcp07qhHBTP07wQSfzWY1OhDvJj4Q4hV9yLLUtPAgNUju0ZbnafQO0kZHn0=
+	t=1712193075; cv=none; b=NkZ1/WAhrpt66tBuCekVlUqdEQ9xWVTsd6DoItlbI9GJs14Y4gCeIvug8+xi1eo9PtWUhfXGTXGW+eLuMafuRfMw0JZe+O4cdV8wluIwOc67vlYN8Agka/c73hQ9+T6It6tM9LOspYtWMgIuCGad8xqWFhGkDqT1FRiuf9Ym2hA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712192609; c=relaxed/simple;
-	bh=hw0ZgXnZn633Jb7sa9cehqutZWFVRlRXEoTD2rY1i0E=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=b+foPIIJBI4zsh/9JD7Yc7QMCNZd2+2eejNmZQe/oxLRSNGjBu0/tSmMWlsgCJa6f5LovTHUVs/POV3w2hK5Bps11jZkx59lWzIZ2vXniFE7ojy9DGftCnIXJ0AjYlTbWAsNBrjBADzOo8DNuW5bjTECXqPlYdDukgYbHMkh1nk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=manifault.com; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.166.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=manifault.com
+	s=arc-20240116; t=1712193075; c=relaxed/simple;
+	bh=8qAxV+HRLVd9tpuK/VHTwTO0kGdAvx5FAUgsICd4NSE=;
+	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
+	 Mime-Version:Content-Type; b=O9N51ZMgyM7V9JpfMWTJKhE9k4PYqmCBwZuf8IDlVIqXUaFYmxEqeORwaxlJtgWVSJC1/ckcmwyUgsW87mtO3Wz0fOX6tniXdYlV5gmFbLoYHZtLVnFSLi48skrJCYHp/sFsoSBq+oTuDTUF5H0Bg8RtS6N1qB1Ix/x8/7tWF6k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CToEiavX; arc=none smtp.client-ip=209.85.214.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-io1-f44.google.com with SMTP id ca18e2360f4ac-7cc0e0dba0fso21125339f.3;
-        Wed, 03 Apr 2024 18:03:26 -0700 (PDT)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CToEiavX"
+Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-1e0bec01232so3814345ad.3
+        for <bpf@vger.kernel.org>; Wed, 03 Apr 2024 18:11:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1712193073; x=1712797873; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/6TLwQwb4gPGALGCRubv48VmueuDJg3TiY2D3GohhFA=;
+        b=CToEiavXmghn6rA0ETaii2MxFS4OmFZ5p7jXK7+3janUflgeVj+2LCaTZnBFcA0zO/
+         SizkG8MGRYe5BZU02KaAPcqfpEz9SJCXOp9FRrgaqScDe2u1MKSM55MgMZMkB6iIYKWz
+         FMx9a4kFmxyaU/H2ydD9+Hp42uAMnUlfVgnxAAlRmikfCVAkmgzVaKlsZXdqpOKQ1uUz
+         kgpdbyu9rNMM48h5NFCJ61wXwiBtZh+Qy+SBUMEU1rwa+I1HxEzQRDF4GnwglG7ag2pX
+         M9aaOr2QGVOxMGuqXLkU28JPDJD78a0ikoI4NwfKOUFWkfaah+QMxHgMcptiRc8T2R8D
+         cg9A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712192605; x=1712797405;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=TqgkjiLPZEySCieINTLvJdfXgLnfsvtRLoK1+mECOEQ=;
-        b=M7LNpv/yPcsXt689mWRoQSq6/xFyqphYTiP3CJcEkbQzCdgbq5V2RgA35iv0EE4eUY
-         xmYJDA23pxR9D4DTbx7f1szfwn4Entjt13yTbMK4YufdombQZ/w079NuGp5HsDMK33wG
-         Tr7DcRbjylYGPtQj4yLmFh1YZvIKxvMiEyj96+K18omzxe42iHhNAsGw+nrZbRC6B54S
-         8KfZI2t/skJHfr2LiYWSkKHYk+fZyIQL2osiEUNp5PJwDzoMcDvP7I7ntYK8F3zX03I+
-         hbLOjm4XaJgy16Ema4DMEz4xkr1+XktddMpPDsvJ0BHAoSX8GrDIhdtmSk8GmaFeX2A1
-         fS0g==
-X-Forwarded-Encrypted: i=1; AJvYcCUQgn0+noBhZr6amEmG0dPU0dOx5T4Pg7F+NrA/RjpnbCldAXcNaBuRlIWG8IiJA1Fn5g6cuyOrJLzc6PKUVWsaeen5ynzAbMqLaLJn
-X-Gm-Message-State: AOJu0YzITkIrNfth85FECVXp1Qvf46AvqppYqNZ3zbBGUMU+CGDakyPH
-	sBclQw7yLbyrlqvq6VjQ+aAIZDNGp6kJLphx6iWkJK41EoJz4V7tO1OcRls3/jw=
-X-Google-Smtp-Source: AGHT+IH5qzIJzadOeB7Uvs69Zd8gU3gaydcPSSV5dE3jL/hxKR+3djzl2v+BvXIVEXLmhoY9l42eXA==
-X-Received: by 2002:a6b:cf18:0:b0:7d0:85c7:dd61 with SMTP id o24-20020a6bcf18000000b007d085c7dd61mr1416699ioa.7.1712192605140;
-        Wed, 03 Apr 2024 18:03:25 -0700 (PDT)
-Received: from localhost (c-76-136-75-40.hsd1.il.comcast.net. [76.136.75.40])
-        by smtp.gmail.com with ESMTPSA id ay19-20020a056638411300b0047f48f10459sm39881jab.100.2024.04.03.18.03.24
+        d=1e100.net; s=20230601; t=1712193073; x=1712797873;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=/6TLwQwb4gPGALGCRubv48VmueuDJg3TiY2D3GohhFA=;
+        b=IhQhBvH6c8jWRMJk0nzfkzYkBbitKFMR8t7vKozmUGnxDX/LdRKe0RFsbKJ7gYOvSU
+         H4JGTPXflL+mOhAiWXkzBRmMRpjPT/iSdv9bQ5+qJAqifQt94h+xiJ4FIfpeNnNrolv3
+         grBHBPN0oPN3nV+TF3+wnUdPaIH7GskcHsbVy2jORvzcAutLW8jpQVU+Bdbb9UvfsavA
+         6uH4nvQz5uc/izXpQoDOUY4+5UH4lg02JZ4V7WAtvtI+cgbTg9zr4BU56+mYbx4BitcH
+         PYoBfFZkO744RVvUK56W5DUKJpgcmgJE38Tk/eYl5iLJCZmvJp+hiytJMpVvUfOJfCgQ
+         nmGw==
+X-Gm-Message-State: AOJu0YyLiYo+RnEviG99F27f3HeyfvAswjbexffPf3L31WvYXgL2jRhi
+	I5knbEjw8/n4Nf5P9uByja6m2r7PbFfusgX+HcjWmnzoth8N1JyC
+X-Google-Smtp-Source: AGHT+IHVmJmNW53ngwnX+5QedZjwhdkOgLzeK127bRDPldoDt4RS70tPeL1zROU57/ZwD6SD5zlx+g==
+X-Received: by 2002:a17:902:7c16:b0:1dd:a912:2db3 with SMTP id x22-20020a1709027c1600b001dda9122db3mr894001pll.17.1712193073043;
+        Wed, 03 Apr 2024 18:11:13 -0700 (PDT)
+Received: from localhost ([98.97.36.54])
+        by smtp.gmail.com with ESMTPSA id c5-20020a170902c1c500b001e2882b0637sm3180523plc.255.2024.04.03.18.11.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 Apr 2024 18:03:24 -0700 (PDT)
-From: David Vernet <void@manifault.com>
-To: bpf@vger.kernel.org
-Cc: ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	martin.lau@linux.dev,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	john.fastabend@gmail.com,
-	kpsingh@kernel.org,
-	sdf@google.com,
-	haoluo@google.com,
-	jolsa@kernel.org,
-	linux-kernel@vger.kernel.org,
-	kernel-team@meta.com
-Subject: [PATCH bpf-next 2/2] selftests/bpf: Verify calling core kfuncs from BPF_PROG_TYPE_SYCALL
-Date: Wed,  3 Apr 2024 20:03:08 -0500
-Message-ID: <20240404010308.334604-2-void@manifault.com>
-X-Mailer: git-send-email 2.44.0
-In-Reply-To: <20240404010308.334604-1-void@manifault.com>
-References: <20240404010308.334604-1-void@manifault.com>
+        Wed, 03 Apr 2024 18:11:12 -0700 (PDT)
+Date: Wed, 03 Apr 2024 18:11:11 -0700
+From: John Fastabend <john.fastabend@gmail.com>
+To: Martin KaFai Lau <martin.lau@linux.dev>, 
+ John Fastabend <john.fastabend@gmail.com>
+Cc: bpf@vger.kernel.org, 
+ Alexei Starovoitov <ast@kernel.org>, 
+ Andrii Nakryiko <andrii@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, 
+ Jakub Sitnicki <jakub@cloudflare.com>, 
+ kernel-team@fb.com, 
+ Martin KaFai Lau <martin.lau@kernel.org>, 
+ Andrii Nakryiko <andrii.nakryiko@gmail.com>, 
+ Yonghong Song <yonghong.song@linux.dev>
+Message-ID: <660dfe2f46769_24afa20845@john.notmuch>
+In-Reply-To: <e49ccf43-ae90-4df1-bc10-5ee180ec47ec@linux.dev>
+References: <20240326022153.656006-1-yonghong.song@linux.dev>
+ <20240326022158.656285-1-yonghong.song@linux.dev>
+ <CAEf4BzbkcKFVEWaHSavbRi9+9VQMbqCgP36p9fzk6Hai2v2izA@mail.gmail.com>
+ <27046774-e3d6-40c2-b3e3-ae6e64ecd33b@linux.dev>
+ <CAEf4BzaYh6q_0TUUARd8m0eK+5RBxWQJ8=-n84vdayPPh4Z61g@mail.gmail.com>
+ <660d964a1444b_1cf6b20885@john.notmuch>
+ <e49ccf43-ae90-4df1-bc10-5ee180ec47ec@linux.dev>
+Subject: RE: run bpf prog w/o sockmap [was: bpf: Add bpf_link support for
+ sk_msg and sk_skb progs]
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: 7bit
 
-Now that we can call some kfuncs from BPF_PROG_TYPE_SYSCALL progs, let's
-add some selftests that verify as much. As a bonus, let's also verify
-that we can't call the progs from raw tracepoints.
+Martin KaFai Lau wrote:
+> On 4/3/24 10:47 AM, John Fastabend wrote:
+> > on my todo list, I want
+> > to just remove the map notion and bind progs to socks directly.
+> 
+> Run the bpf prog without the sockmap? +1, it would be nice.
 
-Signed-off-by: David Vernet <void@manifault.com>
----
- .../selftests/bpf/prog_tests/cgrp_kfunc.c     |  1 +
- .../selftests/bpf/prog_tests/task_kfunc.c     |  1 +
- .../selftests/bpf/progs/cgrp_kfunc_common.h   | 21 +++++++++++++++++++
- .../selftests/bpf/progs/cgrp_kfunc_failure.c  |  4 ++++
- .../selftests/bpf/progs/cgrp_kfunc_success.c  |  4 ++++
- .../selftests/bpf/progs/cpumask_common.h      | 19 +++++++++++++++++
- .../selftests/bpf/progs/cpumask_failure.c     |  4 ++++
- .../selftests/bpf/progs/cpumask_success.c     |  3 +++
- .../selftests/bpf/progs/task_kfunc_common.h   | 18 ++++++++++++++++
- .../selftests/bpf/progs/task_kfunc_failure.c  |  4 ++++
- .../selftests/bpf/progs/task_kfunc_success.c  |  4 ++++
- 11 files changed, 83 insertions(+)
+Part of my motivation for doing this is almost all the bugs syzbot and
+others find are related to removing sockets from the map. We never
+do this in any of our code. Once a socket is in the map (added at
+accept time) it stays there until TCP stack closes it.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/cgrp_kfunc.c b/tools/testing/selftests/bpf/prog_tests/cgrp_kfunc.c
-index adda85f97058..73f0ec4f4eb7 100644
---- a/tools/testing/selftests/bpf/prog_tests/cgrp_kfunc.c
-+++ b/tools/testing/selftests/bpf/prog_tests/cgrp_kfunc.c
-@@ -102,6 +102,7 @@ void test_cgrp_kfunc(void)
- 		run_success_test(success_tests[i]);
- 	}
- 
-+	RUN_TESTS(cgrp_kfunc_success);
- 	RUN_TESTS(cgrp_kfunc_failure);
- 
- cleanup:
-diff --git a/tools/testing/selftests/bpf/prog_tests/task_kfunc.c b/tools/testing/selftests/bpf/prog_tests/task_kfunc.c
-index d4579f735398..3db4c8601b70 100644
---- a/tools/testing/selftests/bpf/prog_tests/task_kfunc.c
-+++ b/tools/testing/selftests/bpf/prog_tests/task_kfunc.c
-@@ -94,5 +94,6 @@ void test_task_kfunc(void)
- 		run_success_test(success_tests[i]);
- 	}
- 
-+	RUN_TESTS(task_kfunc_success);
- 	RUN_TESTS(task_kfunc_failure);
- }
-diff --git a/tools/testing/selftests/bpf/progs/cgrp_kfunc_common.h b/tools/testing/selftests/bpf/progs/cgrp_kfunc_common.h
-index 22914a70db54..b9972ce4e4dc 100644
---- a/tools/testing/selftests/bpf/progs/cgrp_kfunc_common.h
-+++ b/tools/testing/selftests/bpf/progs/cgrp_kfunc_common.h
-@@ -27,6 +27,27 @@ struct cgroup *bpf_cgroup_from_id(u64 cgid) __ksym;
- void bpf_rcu_read_lock(void) __ksym;
- void bpf_rcu_read_unlock(void) __ksym;
- 
-+#define CGRP_KFUNC_LOAD_TEST(__name)		\
-+int BPF_PROG(cgroup_kfunc_load_test_##__name)	\
-+{						\
-+	struct cgroup *cgrp, *ref;		\
-+						\
-+	cgrp = bpf_cgroup_from_id(0);		\
-+	if (!cgrp)				\
-+		return 0;			\
-+	ref = bpf_cgroup_acquire(cgrp);		\
-+	if (!ref) {				\
-+		bpf_cgroup_release(cgrp);	\
-+		return 0;			\
-+	}					\
-+						\
-+	bpf_cgroup_release(ref);		\
-+	bpf_cgroup_release(cgrp);		\
-+						\
-+	return 0;				\
-+}
-+
-+
- static inline struct __cgrps_kfunc_map_value *cgrps_kfunc_map_value_lookup(struct cgroup *cgrp)
- {
- 	s32 id;
-diff --git a/tools/testing/selftests/bpf/progs/cgrp_kfunc_failure.c b/tools/testing/selftests/bpf/progs/cgrp_kfunc_failure.c
-index 9fe9c4a4e8f6..ff67d4632dfa 100644
---- a/tools/testing/selftests/bpf/progs/cgrp_kfunc_failure.c
-+++ b/tools/testing/selftests/bpf/progs/cgrp_kfunc_failure.c
-@@ -245,3 +245,7 @@ int BPF_PROG(cgrp_kfunc_release_unacquired, struct cgroup *cgrp, const char *pat
- 
- 	return 0;
- }
-+
-+SEC("raw_tp")
-+__failure __msg("calling kernel function")
-+CGRP_KFUNC_LOAD_TEST(raw_tp)
-diff --git a/tools/testing/selftests/bpf/progs/cgrp_kfunc_success.c b/tools/testing/selftests/bpf/progs/cgrp_kfunc_success.c
-index 5354455a01be..ff1beb29f3f5 100644
---- a/tools/testing/selftests/bpf/progs/cgrp_kfunc_success.c
-+++ b/tools/testing/selftests/bpf/progs/cgrp_kfunc_success.c
-@@ -5,6 +5,7 @@
- #include <bpf/bpf_tracing.h>
- #include <bpf/bpf_helpers.h>
- 
-+#include "bpf_misc.h"
- #include "cgrp_kfunc_common.h"
- 
- char _license[] SEC("license") = "GPL";
-@@ -221,3 +222,6 @@ int BPF_PROG(test_cgrp_from_id, struct cgroup *cgrp, const char *path)
- 
- 	return 0;
- }
-+
-+SEC("syscall") __success
-+CGRP_KFUNC_LOAD_TEST(syscall)
-diff --git a/tools/testing/selftests/bpf/progs/cpumask_common.h b/tools/testing/selftests/bpf/progs/cpumask_common.h
-index c705d8112a35..5178d62c5c9f 100644
---- a/tools/testing/selftests/bpf/progs/cpumask_common.h
-+++ b/tools/testing/selftests/bpf/progs/cpumask_common.h
-@@ -60,6 +60,25 @@ u32 bpf_cpumask_weight(const struct cpumask *cpumask) __ksym __weak;
- void bpf_rcu_read_lock(void) __ksym __weak;
- void bpf_rcu_read_unlock(void) __ksym __weak;
- 
-+#define CPUMASK_KFUNC_LOAD_TEST(__name)				\
-+int BPF_PROG(cpumask_kfunc_load_test_##__name)			\
-+{								\
-+	struct bpf_cpumask *alloc, *ref;			\
-+								\
-+	alloc = bpf_cpumask_create();				\
-+	if (!alloc)						\
-+		return 0;					\
-+								\
-+	ref = bpf_cpumask_acquire(alloc);			\
-+	if (ref)						\
-+		bpf_cpumask_release(ref);			\
-+	bpf_cpumask_set_cpu(0, alloc);				\
-+	bpf_cpumask_test_cpu(0, (const struct cpumask *)alloc);	\
-+	bpf_cpumask_release(alloc);				\
-+								\
-+	return 0;						\
-+}
-+
- static inline const struct cpumask *cast(struct bpf_cpumask *cpumask)
- {
- 	return (const struct cpumask *)cpumask;
-diff --git a/tools/testing/selftests/bpf/progs/cpumask_failure.c b/tools/testing/selftests/bpf/progs/cpumask_failure.c
-index a9bf6ea336cf..55815df8000f 100644
---- a/tools/testing/selftests/bpf/progs/cpumask_failure.c
-+++ b/tools/testing/selftests/bpf/progs/cpumask_failure.c
-@@ -190,3 +190,7 @@ int BPF_PROG(test_global_mask_rcu_no_null_check, struct task_struct *task, u64 c
- 
- 	return 0;
- }
-+
-+SEC("raw_tp")
-+__failure __msg("calling kernel function")
-+CPUMASK_KFUNC_LOAD_TEST(raw_tp)
-diff --git a/tools/testing/selftests/bpf/progs/cpumask_success.c b/tools/testing/selftests/bpf/progs/cpumask_success.c
-index 7a1e64c6c065..a4f32a5a26d1 100644
---- a/tools/testing/selftests/bpf/progs/cpumask_success.c
-+++ b/tools/testing/selftests/bpf/progs/cpumask_success.c
-@@ -525,3 +525,6 @@ int BPF_PROG(test_refcount_null_tracking, struct task_struct *task, u64 clone_fl
- 		bpf_cpumask_release(mask2);
- 	return 0;
- }
-+
-+SEC("syscall") __success
-+CPUMASK_KFUNC_LOAD_TEST(syscall)
-diff --git a/tools/testing/selftests/bpf/progs/task_kfunc_common.h b/tools/testing/selftests/bpf/progs/task_kfunc_common.h
-index 41f2d44f49cb..2278325ca902 100644
---- a/tools/testing/selftests/bpf/progs/task_kfunc_common.h
-+++ b/tools/testing/selftests/bpf/progs/task_kfunc_common.h
-@@ -26,6 +26,24 @@ struct task_struct *bpf_task_from_pid(s32 pid) __ksym;
- void bpf_rcu_read_lock(void) __ksym;
- void bpf_rcu_read_unlock(void) __ksym;
- 
-+#define TASK_KFUNC_LOAD_TEST(__name)			\
-+int BPF_PROG(task_kfunc_load_test_##__name)		\
-+{							\
-+	struct task_struct *current, *ref_1, *ref_2;	\
-+							\
-+	current = bpf_get_current_task_btf();		\
-+	ref_1 = bpf_task_from_pid(current->pid);	\
-+	if (!ref_1)					\
-+		return 0;				\
-+							\
-+	ref_2 = bpf_task_acquire(ref_1);		\
-+	if (ref_2)					\
-+		bpf_task_release(ref_2);		\
-+	bpf_task_release(ref_1);			\
-+							\
-+	return 0;					\
-+}
-+
- static inline struct __tasks_kfunc_map_value *tasks_kfunc_map_value_lookup(struct task_struct *p)
- {
- 	s32 pid;
-diff --git a/tools/testing/selftests/bpf/progs/task_kfunc_failure.c b/tools/testing/selftests/bpf/progs/task_kfunc_failure.c
-index ad88a3796ddf..57ec25463d80 100644
---- a/tools/testing/selftests/bpf/progs/task_kfunc_failure.c
-+++ b/tools/testing/selftests/bpf/progs/task_kfunc_failure.c
-@@ -324,3 +324,7 @@ int BPF_PROG(task_kfunc_release_in_map, struct task_struct *task, u64 clone_flag
- 
- 	return 0;
- }
-+
-+SEC("raw_tp")
-+__failure __msg("calling kernel function")
-+TASK_KFUNC_LOAD_TEST(raw_tp)
-diff --git a/tools/testing/selftests/bpf/progs/task_kfunc_success.c b/tools/testing/selftests/bpf/progs/task_kfunc_success.c
-index 70df695312dc..203ff461a92c 100644
---- a/tools/testing/selftests/bpf/progs/task_kfunc_success.c
-+++ b/tools/testing/selftests/bpf/progs/task_kfunc_success.c
-@@ -5,6 +5,7 @@
- #include <bpf/bpf_tracing.h>
- #include <bpf/bpf_helpers.h>
- 
-+#include "bpf_misc.h"
- #include "task_kfunc_common.h"
- 
- char _license[] SEC("license") = "GPL";
-@@ -314,3 +315,6 @@ int BPF_PROG(task_kfunc_acquire_trusted_walked, struct task_struct *task, u64 cl
- 
- 	return 0;
- }
-+
-+SEC("syscall") __success
-+TASK_KFUNC_LOAD_TEST(syscall)
--- 
-2.44.0
+Also we have to make up some size for the map that somehow looks like
+max number of concurrent sessions for the application. For many
+server applicatoins (nginx, httpd, ...) we know this, but is a bit
+artifically derived.
 
+> 
+> > but other than quick hacks I've never built such a thing nor ran it 
+> > in production. 
+> 
+> How do you see the interface will look like (e.g. attaching the bpf prog to a sk) ?
+
+I would propse doing it directly with a helper/kfunc from the sockops
+programs.
+
+  attach_sk_msg_prog(sk, sk_msg_prog)
+  attach_sk_skb_prog(sk, sk_skb_prog)
+
+> 
+> It will be nice if the whole function (e.g. sk->sk_data_ready or may be some of 
+> the sk->sk_prot) can be implemented completely in bpf. I don't have a concrete 
+> use case for now but I think it will be powerful.
+
+Perhaps a data_ready prog could also replace the ops?
+
+  attach_sk_data_ready(sk, sk_msg_data_ready)
+
+The attach_sk_data_ready could use pretty much the logic we have for
+creating psocks but only replace the sk_data_ready callback.
+
+> 
+> [ It is orthogonal to what Yonghong is doing, so the title changed ]
+> 
