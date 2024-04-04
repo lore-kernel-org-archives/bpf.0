@@ -1,89 +1,102 @@
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0031A3D96B;
-	Thu,  4 Apr 2024 08:58:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.165.32
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F5221E86F;
+	Thu,  4 Apr 2024 09:09:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=198.175.65.10
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712221109; cv=fail; b=po6U08UOowcNczey/JEXn3c33hrzK3ion9dt80KPolchOrCX1f6Gy5jruqgFDH04fdcjcgGPkvjZhyI3Wiz8dKp9XKq7SPDm1UFrRk08qGS2IV1oKJfO8KFRXFgjiwZa39xIyFRxjxBeziuaq1qGrCkoc9mMzfyJPnDf7dWcSvM=
+	t=1712221788; cv=fail; b=WaUGyPohVTX+S0vt2v9s7r4wudLwWzXEJC1NE9M/NPNL7Zl7IX6kvarAFX0YrB9C4FxPsY4v6McWI2tWhdB9XrFm0uoioCnTqOkJ2cpUte1HW8Q8Cw53DXnZvm1nNaYfy0ruOnJvYnj3NvrRioRqqXdSCyIoeCF5+w+eZLKAG/4=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712221109; c=relaxed/simple;
-	bh=aB48HkxppCflrReZyV8o4LQ/3kgSAMOgeop3UvIP2NY=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=hRSs1WQN/GAqVyNEeDVy84Ui1qkuTM/gBuACIwdCBGWDShehxwb91gEJxfc+ziYfB0BbCwq1V80MCxIhAUrGxz522cTxJ93H8e4rd7acMP0X535yLA2VP0zmdBgi4IUT66c9EAJcfVZEI2TPDAevb8fIrPqjlSylPMqM4Fha5k0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=A2+l/4jm; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=uIEllP6o; arc=fail smtp.client-ip=205.220.165.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+	s=arc-20240116; t=1712221788; c=relaxed/simple;
+	bh=s82c1Rr6FsaH3WUJNL/pPzipMLA+nknWENZ0SgOzq64=;
+	h=Message-ID:Date:Subject:To:CC:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=n8BPHrk6i59Lah3xgpoM8X42vTsNAEyGt4mIHnK7J/U9pnO4j+EkVkvdlooh2uVLHlequbsaEQX7efc0lmdVIFs0yy2R2X6qkHreqab5uoxfRSmGIDiQaMFhRb0t3UXNUFk/Pfnv3+lIkA3POHmubg42YHiqHlAXZZslZsVNQSA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PxalPTgM; arc=fail smtp.client-ip=198.175.65.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="A2+l/4jm";
-	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="uIEllP6o"
-Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 4348iorX023780;
-	Thu, 4 Apr 2024 08:58:20 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=corp-2023-11-20;
- bh=AXIlUpkW/LZyOrXqHaUmMTz5CvWZpcu6kJlGl95vhp8=;
- b=A2+l/4jmf2CuEKDIeuv1BHBHw+Be4d6D/8rBFTlXvCeAGGJ5p0ZAVRalvcMlIglpxBBJ
- M9u7tMyyOUJk9TnvWrXEws+BRXEa3McFz0G44dW9ciih0pXXBf6ifqIlcG9k7iILGtRT
- W5Uf7nPBAc5krGokhbEyddI3HDmRG+FuoktosKRUHhL2LVx7M6nZUXmy9bh3DUyRNyyM
- QpqEzRc1IEQnoIJrSlSODwtBroljBSkhQpEPJByO6NX03cYovw2ESr18kw3Z4B7iXiGs
- LdV1jWe54wBGNrskH1V9csHxDB+6mfSlbEjUZEgcMwJb/Ekvili+dX484peUIKPF7cgc zQ== 
-Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3x9evyrs67-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 04 Apr 2024 08:58:20 +0000
-Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 4347n7Q8009241;
-	Thu, 4 Apr 2024 08:58:19 GMT
-Received: from nam12-dm6-obe.outbound.protection.outlook.com (mail-dm6nam12lp2169.outbound.protection.outlook.com [104.47.59.169])
-	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3x9emkdkaw-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 04 Apr 2024 08:58:19 +0000
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PxalPTgM"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1712221785; x=1743757785;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=s82c1Rr6FsaH3WUJNL/pPzipMLA+nknWENZ0SgOzq64=;
+  b=PxalPTgMZZmmvbkZIw4LmUGaVvRJQQ07fwFGHgiAuIU/VYqHsig/+vfZ
+   hL6GKvuiu9P2hlj9upv8qyqs36QUkNRLO9lBbIXOc9m8ojFJsm0F590H9
+   RP8WecbQT/QaFlQkZ8A/vqCUuM7JQ9ih4CYeDxD1qP1PdJ1IVKVHgbIoV
+   xOIvznGFC5Zb/BIB8pxOCq0CrH4UI9iTvzbF7TUPxUOdrv8qB6Men3std
+   dD/UW4d9ACK7rO4sInBN/dygqvIhIfQEExnWSN4ot+jIJzjw1OdUd2wwH
+   vOLy+CBsNcz37JRlBjB/SXKHMsHysRHRdTAIYEt/XEOIkedfhlRtRpcJt
+   A==;
+X-CSE-ConnectionGUID: BsdDA4eqQyyOV0e/uHGmRg==
+X-CSE-MsgGUID: z7ZP6cPnS7y4I3ay6l3AIQ==
+X-IronPort-AV: E=McAfee;i="6600,9927,11033"; a="24948083"
+X-IronPort-AV: E=Sophos;i="6.07,179,1708416000"; 
+   d="scan'208";a="24948083"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2024 02:09:44 -0700
+X-CSE-ConnectionGUID: /Z3iAKLkR/u0hoOsorBPAQ==
+X-CSE-MsgGUID: 1BcNNrZAR3anXMxMEtYIhQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,179,1708416000"; 
+   d="scan'208";a="41888071"
+Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
+  by fmviesa002.fm.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 04 Apr 2024 02:09:43 -0700
+Received: from orsmsx601.amr.corp.intel.com (10.22.229.14) by
+ ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.35; Thu, 4 Apr 2024 02:09:42 -0700
+Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
+ orsmsx601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.35 via Frontend Transport; Thu, 4 Apr 2024 02:09:42 -0700
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (104.47.55.101)
+ by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.35; Thu, 4 Apr 2024 02:09:42 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=HxzadvNirdzWDfyS7jydvw1jSvSmknPq+2IuuImz7Hle2VXZpXK1r9OJUvIQ2hId/HLghBf2Th0DPPnDvtu2cx4Aie2dN8IP6Z8GRbdpfQIZf65fvbXr7M3PHXh4ruph6DD5xN97CGyCluMakMS6YZE09eovAg0OoJBSuA/kTz1cGeMTw0sk39OhtQNWypkQUKtshH64FE5J1QXvvXgLyFsw8gqxmzZSqPYXJC0SJ9L/9Pa2j/syqkgl1Qk54D+XiegmZYlt5k7F6flcebG8rrKfZgzRV1mxweFVFXL5gCcXJHKLVi/LrvGp+OQWNhZuqbbuRB+QpIiBaEDsia4/1g==
+ b=X+urr8oMZWt7uQFCUmoBgUslEyDDo/40vAKdJC01mWmMp4hP0Bdje54IKwqS2Fj8QLQXWgyYoe1DQFATAfsSHAfocBplzJhkzUV1qERJ3IOTLHDYWFbpTvApXammtyY5v8fSbTQiun6YrtWNN9sSzXbWO774gCselOR3CmClBAByOJWBgjZb9zAPaYxi5/RIVobKMsu7HaSuBhjaGekKm48cwczaSSVfbiZyfbC2goduNuypSDBzr/BKS13UNdmQD7TcjQhFc/UHVWFr/8mwdiRjchBwxiSIMPDyC+fNV5ZDGjNUkTkmNR9aCwjbbtNYHl/JP1gJ4abf2fsmUuBpJA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=AXIlUpkW/LZyOrXqHaUmMTz5CvWZpcu6kJlGl95vhp8=;
- b=UumEtxuS2g6qWpusQGYHBRqjYr4pWvlczlN/VKlF2papcc/cMB+9fkVw4uXaBRB8k7egUJc/AsxBxJM0oQ9yovDoHIzSZIjIBfwnJCMT/h3GgHrVKW2Zm0lv6NtWHrsv10kQz1v1R9dESbjrgbvYB1YlAQcaWl12Rof/uTSYGI3JgpsUgv0+vM9DFr5UUokDxjxiEd8EpFOhF089x3p2fZaERYDAPVUvfg185wnRZk+S4w1SU92ZNPpxswNKNXMyZWCjg/X4vwbKR3TvnbAmFLUhAHOL9+BS6W+npzHNYJYFoZa12hPzsx5UtRBpIRvcpU4FDzslc+Oc/03zAofnJg==
+ bh=OVGmFdYaPKUxySzv1cIRiXVtor6PMcrV10ZYVc8cZpY=;
+ b=U/CYjl33anMdLDQkPwzW3GetiY1nTsTQ+o59JYbX45ms6hEYH9y9BiEKScfNskMOT2xzCzYs+BNtRQfgZ5cWJTiAw1nXPUlOV3540BuahEmWY9UQE8J1gppdpH8RP1dxKDtZrGKrhsezoPES9seDRqhpNtBucuwRm2r0m5F+KVEcRSaxu4HgU8SnGsbzKtiy3VU/58Bgj9c0/hLu2DXqqQ3he/ENg8QygIx7JyIhaEXV2f36fifnzZayiiK0At5DBUWa5MwwjDZ7XERp2++q4rP4hOiwgC54qWg0BRkEEb88V5qNO2QFzJRMITrirsLijHIAau+wySIae4nYoXJ5yw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=AXIlUpkW/LZyOrXqHaUmMTz5CvWZpcu6kJlGl95vhp8=;
- b=uIEllP6o+5xI7XRIfT96atAlfnVe5amhJ5inuRpulbthr9tc0oo+/OpP+EVrrJGiwj1SOqNmtRQk0Dnvax6EONsL23vzonohHxUj+BP80EC0hugqgR50Ht9HWuGOir/1DQSoXRTJO5XGM22SJ14kHg2Cyuic9q+kLao9OuZFAfA=
-Received: from BLAPR10MB5267.namprd10.prod.outlook.com (2603:10b6:208:30e::22)
- by DS0PR10MB7319.namprd10.prod.outlook.com (2603:10b6:8:fd::15) with
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from DS0PR11MB8718.namprd11.prod.outlook.com (2603:10b6:8:1b9::20)
+ by DM4PR11MB6453.namprd11.prod.outlook.com (2603:10b6:8:b6::16) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7409.46; Thu, 4 Apr
- 2024 08:58:17 +0000
-Received: from BLAPR10MB5267.namprd10.prod.outlook.com
- ([fe80::372c:5fce:57c3:6a03]) by BLAPR10MB5267.namprd10.prod.outlook.com
- ([fe80::372c:5fce:57c3:6a03%4]) with mapi id 15.20.7409.042; Thu, 4 Apr 2024
- 08:58:17 +0000
-Message-ID: <d9ebf954-bfac-4819-993b-bbf59c69285a@oracle.com>
-Date: Thu, 4 Apr 2024 09:58:13 +0100
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7452.26; Thu, 4 Apr
+ 2024 09:09:33 +0000
+Received: from DS0PR11MB8718.namprd11.prod.outlook.com
+ ([fe80::654c:d66a:ec8e:45e9]) by DS0PR11MB8718.namprd11.prod.outlook.com
+ ([fe80::654c:d66a:ec8e:45e9%6]) with mapi id 15.20.7452.019; Thu, 4 Apr 2024
+ 09:09:32 +0000
+Message-ID: <2ac91d55-377a-4d07-8d13-b7fa9ee46302@intel.com>
+Date: Thu, 4 Apr 2024 11:08:14 +0200
 User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC/PATCHES 00/12] pahole: Reproducible parallel DWARF
- loading/serial BTF encoding
-Content-Language: en-GB
-To: Arnaldo Carvalho de Melo <acme@kernel.org>, dwarves@vger.kernel.org
-Cc: Jiri Olsa <jolsa@kernel.org>, Clark Williams <williams@redhat.com>,
-        Kate Carcia <kcarcia@redhat.com>, bpf@vger.kernel.org,
-        Kui-Feng Lee <kuifeng@fb.com>,
-        =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?=
- <linux@weissschuh.net>
-References: <20240402193945.17327-1-acme@kernel.org>
-From: Alan Maguire <alan.maguire@oracle.com>
-In-Reply-To: <20240402193945.17327-1-acme@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: AM0PR04CA0097.eurprd04.prod.outlook.com
- (2603:10a6:208:be::38) To BLAPR10MB5267.namprd10.prod.outlook.com
- (2603:10b6:208:30e::22)
+Subject: Re: [PATCH net-next v2 1/4] net: Register system page pool as an XDP
+ memory model
+To: John Fastabend <john.fastabend@gmail.com>,
+	=?UTF-8?Q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>, "David S.
+ Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, "Jakub
+ Kicinski" <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, "Alexei
+ Starovoitov" <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+	"Jesper Dangaard Brouer" <hawk@kernel.org>
+CC: <netdev@vger.kernel.org>, <bpf@vger.kernel.org>
+References: <20240220210342.40267-1-toke@redhat.com>
+ <20240220210342.40267-2-toke@redhat.com>
+ <660dba106f0ed_1cf6b208ad@john.notmuch>
+From: Alexander Lobakin <aleksander.lobakin@intel.com>
+Content-Language: en-US
+In-Reply-To: <660dba106f0ed_1cf6b208ad@john.notmuch>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: WA0P291CA0023.POLP291.PROD.OUTLOOK.COM
+ (2603:10a6:1d0:1::10) To DS0PR11MB8718.namprd11.prod.outlook.com
+ (2603:10b6:8:1b9::20)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -91,218 +104,153 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BLAPR10MB5267:EE_|DS0PR10MB7319:EE_
+X-MS-TrafficTypeDiagnostic: DS0PR11MB8718:EE_|DM4PR11MB6453:EE_
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 
-	ctPSGM8KamLBnkaNBPBbSTx6crkpcw+jJCn2rnqejuDnBJETEc+Tv3kKDP4QzY1TDK2vVa7m6lmPTxK1rMSupOUEF03aT/xGzyEP58BLfFAipprFlgV69KvNhfB1XF8qmy3lISfNyZesr2uhbB05d7pjcAIJ8zErn3RShuwMhp41VDvSW2i1S3Ng46KeTbjnh8dt1Orh9JcBVF3UOCIFucvJf2S7YYZHsGbZhKPlioXDWV+hEjKdPQZ190eDph491/2PRWtT/gzdvgpUW7DdKBFFDtd6uLBxaAwtwbPRgE32adLYjq7KAGl7jqJ/iaoCpT1JOiYFwD32sFFw43DmAi4p/3DtEdydVJHK1g/KWha6KY/Ux/5l7DHRV5CEKblVkYBTDirhHR20Ue2ktfbAL9zWL69EAaNn7Hw44+KPQ5FJu6NUF2gEueCmt2HzJPs+zOVhNS+/PHgG2jJN9dQQl/XLnacwsJdrmXPTphwCftW+iM5O1XZmAd48nZ7R5+B7qDpWsamtm/Q4/k602v4bqyx6GmX42rk4gpIJSpzAdApvxJ1DgfUOe2BXmFkBjDysRyEZdeZYTUqX3oX514OEj1Mdwrq2q5DtZsOPDjqqMXoJabZDS5mA3s3MRRhIMw4k
-X-Forefront-Antispam-Report: 
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BLAPR10MB5267.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(376005)(366007)(1800799015);DIR:OUT;SFP:1102;
+X-Microsoft-Antispam-Message-Info: yqAow0C11jA7o6or9j2nzFpuOWwvye80R/1M5/2GPHRCLynOeZ470W3YanM4BIHHtPbvKgPUOwXVrNNhcBNYFFNjiibJAibuKEZJnzSP86L+OkIjPYG+dsXyYd11Jy0qCwnLJLauHA/YoNqT2uXO8ZBXXe/sv5MzH4jHdXnvQm6C80L2giIQFFwtZf77wSOgTSJpvYz5WhIEntUjJntruSWiqEupj1jEgPkKpT38bcYTPdG8cQdKk+jbhhSIg9UhtT/c18zF7YNmSgK3YKmQMvO3XFe/AKEGVC96CN4PkZu0wcTzHPtEJTREC12M262fWhr5CeAYkqN8qIYyI5bTMezXm9uUS9LEFuvONjtpmdcwOW1ekbbv32OsQvHoXBZz8CwkKVYW6tIYRfYgNJuO4pMc0lNQBL/lYT5J1516p7hpTXMfGR9iOm7yhwCOxvDOD3LJb3I4hm005OhSM5YOYHBRcdloKZ9imznXOq5li0Df0srY0UkzpR1rXiYw40KnEq68v3659fCizBWQuCjidqLkE9z3TJ5hp5U610r+IymLfi+VGGXHsbZuLB+cPSq+1rVNJ6FwPpHwbSykGL4/noWLmTZLvGvxLbfxdl7lAVk09OdG71ivndAeWyrB94zhVXUc/JqAEq4ME8G/kwnatIt3exfyOsgtYfcHg+V/DW8=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR11MB8718.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(366007)(7416005)(376005)(1800799015);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: 
-	=?utf-8?B?Tm1VaGhITktrK1R3bFVTcldEMUZQaHp4elJ6dWpONnV3dTcrZ29nNEN5VkRV?=
- =?utf-8?B?SDBPTFBOWmVPMG11U0xBYk5nK0M5eitKTDBlYW4wRTJpV2IrdVhmelZ6ZTdw?=
- =?utf-8?B?MmU2REZnN2U3bFFJZGo0allwRHVnRFJTaXNZTGoyNDhMTk92RWJkblhXSnRH?=
- =?utf-8?B?SUJHUlZxUENuQWo1OTFKeXd4YmErNy9FMzYzWTJqUElZN0VjOTEzdXNqUUhI?=
- =?utf-8?B?Y2htY29aaG9GblZ2S0d6ZWdvYWp4L0kxenVrcEs5ZFZuTFVxb2Y5RUtUNUZh?=
- =?utf-8?B?M3BUNE5GMFgrRU14QWdhcTdOVGpMc2FUMS83aW9QU0ZuUG91aGdUUkh5ZkpB?=
- =?utf-8?B?dHZTVlBlSFYrRTAwSVdXalZJclZxWnRaMFl1dm1UemFtckVNdGdjSFNUZk9o?=
- =?utf-8?B?SFZqVm44cHlncG82T0JreE55K3lNVXFmcS9JYzBhZ0tuck5YYVpOS1BHbGd5?=
- =?utf-8?B?eGt3SFAyelRIOWZCM3JOZUZUSkxTZUdLRTJvSmtaeHhJbmpiS0kwNTlKUkJ0?=
- =?utf-8?B?MmRmTlNhcytEMVJuMStFTzU1NG91WjFqTlRaaHVTWGVwWDBWQ21qQmZ3UXhU?=
- =?utf-8?B?dGd5Y2xtNTRUcHY0ZzhKS2crMXNyVFNhdkkwV0lDczdpKzdTOTI2M2NuL3U1?=
- =?utf-8?B?ZTBVOUJjVnlobUJiMlJXWmE1V1FtQzRjUWJTU25lZW5lSTZ6Qng5cUQ3MHEy?=
- =?utf-8?B?cjlkd0srMG1xVlUyMGdZT3JlS3dVeDFkQzlSU1Z0MSt3Y3YyNkdsVkN6bnRH?=
- =?utf-8?B?U0xmbFpocy85dzVRSkhaenJ6RENtTStpTVZkMG5aenA0eXBWaEpMckFkNVo0?=
- =?utf-8?B?eWtZNGloOU9tT1U5WlZOTmZLLzVTRkFCMGRuWFpHZ0VQMkFhYytxM0FxTFVQ?=
- =?utf-8?B?VE5BRVc0disvdEhIZEJsd054ZDlKVHRYblFXMUk5akRUOWlGcUFmT1kydjF4?=
- =?utf-8?B?VFZrUnFnT1VWcVNkbTdDYU5BdElqcTQ2cDljWjNmRkQvK0xpOXJxR2ZEMHFq?=
- =?utf-8?B?M0NaYm9QaXJxNmtpc29TcU1IN0JDKy9sWW1sRFJDak9DZ08wdEFyKzloT2F2?=
- =?utf-8?B?YlRBeWc4ckM3RjN1WlBwSENhZGhpN2hJQkppRjE2ZjJHR2hEVFlMV2ZaeTFZ?=
- =?utf-8?B?WHNaa1JmR1VoY0dpUEozVXdlMkFLcFVCcHNtOHZhc29jY1VHOGJ6RjVjcmdM?=
- =?utf-8?B?TThqSXFOdUtrd3MvajNHSlR4aStLU3FMNHlxcDBKL294dUU5T1pBQ2k5SHl0?=
- =?utf-8?B?cXpvM0R3eDZBV2ZRVmN5YWZmL0NkVW42a0ZxTEU3VlZEQng0TzZ4UFhtQ1BX?=
- =?utf-8?B?Rm1hUEtTbHZjZXpOSEhMVE1KcmduM29VWDZGL3Z2Y2pPMGdtUW1CQTZtemov?=
- =?utf-8?B?UG9PcjJIMHdSejUvUnlVVjBFVEJ1aGk0MVJ4dXJZRGpyYXByWlJDem04Zk9C?=
- =?utf-8?B?d085Zy9TS2Z4b283R2ZqQ1hYRFRDUFFta2lFaGhWQjM3SnI1RCtkL3VPdkhS?=
- =?utf-8?B?bnQ5bW9DUHF0a3I3eTZ6Q2pDdXh1SytLUnFFYVlFZldocW1OZ3Z4Z0JFRTda?=
- =?utf-8?B?eWQyREZyeXdiVkR5UHhpTFlQb2VySjBtaEtra3Vkcm1aTzh3OFpYMFRKcG11?=
- =?utf-8?B?eHhyZ3JQdlY0Q0tKUHZ1Kzk0K29OdlZpYWI4ZWZEclVqZExkK0JKSTVKUU9Y?=
- =?utf-8?B?eDFzanpGSzZoYWl5K08zN3h1bzV2ZEZ6K0pqTjVBdmcvNWJYR2NOZmt4dlNT?=
- =?utf-8?B?eVFwcFBkMlBUTy9uOVFFRFo0RGt6b1dabjFuNUFFRWlQZXozZk5hWGY5SUFE?=
- =?utf-8?B?QWhrL3BpTDV6QXF6VjJFNUdZMUtKeVZoTUlTQmpmZHFtakp5UVdjMHBkVFo0?=
- =?utf-8?B?UStTd2hjMXdnK0NTYmZIQXlvRlRWa1ZVVFBnRFRWbXhNM1B2U09wbGRRZTJN?=
- =?utf-8?B?ZGcyeCtHK3dMd0R3WWFDVTBPaHp5Vk1vM3VFZHI5Z25vQUMyWmtVbjJNY1g1?=
- =?utf-8?B?aXNQZVlKQTRucE53M3VGWkRkNEU0dC9tU0cxZmRheFRHN0x5WUVqeUdvU2Jo?=
- =?utf-8?B?ZVVJd0Z6UE5iYjBPMDYzRlFTT0p4S203aTVPOHNQUm83ZlNiVUFqNk45SkdL?=
- =?utf-8?B?VEdMSWlWNGM1allVS3h4SmdaeGJ5ai9NQURhWFRRY21vT05jWFFUK2kxdmRx?=
- =?utf-8?Q?fsy9tmEGZKxzXOEQPP7zLdQ=3D?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: 
-	FtRVF/mKP1KVwQzrmNM5p3hwBqIwsxVFVRp3nal6Ceo/XmcSMu03DYG1fIG/YQIZBem3F65A/7iqoKKM7ozDQ6z6/araSWAfv6Zz7K1mYaSaAGMtWB8ff8OEYybP2HFSedO1FAk+jjozNjB6PpDRMKzrlCUlNsfm/6NxtLRYZYdFQuHvImHJ4bxuG1rVk6SzuyP4n7ymahPkTH621XsjgsFjxtl5X/4kT5T3nbyWN6EyY7Q7vSnAF3CejwkfXv0tQ7TioMpoFSJw6X5owGbcQFhl5Yql2lDM77hRdORIAtBcIPj7P3/MO7y6WxxcfoQRoRI46TvvZQiR5QOmnxsWQ0L5vuA225PBWPjmre/mtQdi0XZVzURIxEhMS8/zq/y/6E+CcLVZmo57jXGMS2C1ZToNJnUjwN/EY3BO3GaZaPz6QlNXzNMb+aP+EiEG4Ksp6+54TTfqGhxaqp9/Bl41FFAm7/y1b3BOtPp83UYEhZCAWVei9zt2YgCDUfK0grIv2H4i+3COhD+DRx93r0lr4xIuB194fB/RjAl+Z8Wi8IJ4uyPUogD5k+xkhbYIFgAMNM36UJVdHoBb4oKxOCmrnMvQ+fs8XcJe8cW/KJEn3qs=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 787b61d4-8f9f-405e-6ea3-08dc54855e84
-X-MS-Exchange-CrossTenant-AuthSource: BLAPR10MB5267.namprd10.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?cDNYM0ExL0poYkQvQWN0S1d6Tk9pNFBwanNVbDBCOGxzYXhXbTZhY3BJVlVu?=
+ =?utf-8?B?U2MyaFhXY3NiOXpsZWFoczV2ZGNlWi9ibmpMRU14MWpKR3I4Z2NkVmFNREV3?=
+ =?utf-8?B?QlRDem4vbkVLcGFxTmxpcGdhRnFyTzRIRUdwdVQxVVZLRHIvQ3ZGQTl5azJn?=
+ =?utf-8?B?TThuQ1RNdzdJVDBZMUdsb1lWOVM0VUxPUDRZRWVPZFUyWVY0a2Y1dXlMUTE4?=
+ =?utf-8?B?eGE5ZlR1OU50OExEVzU1d0drcXBaMEVFU3dtSE5FWDRxclZ4aEFNRW55WUdM?=
+ =?utf-8?B?aWRBQXNyV0JPV1lwNFhicHkyZzRnY3BzYk5tSUwweVAvMGt1OUcwUnlJS0pY?=
+ =?utf-8?B?T3Nac0hLU0hqY1BpejJrcEVpWEFHL3o4VjFOTGVJZG9LbVZmeW9TVkR0dnJC?=
+ =?utf-8?B?QW5sSkhSZEErRFJsV2E0ekZxcFlkUk5EekNNeDhrc1drNnh2Uk9EUWRTQWNz?=
+ =?utf-8?B?ZWpyeGtuSndVREFrWGVoM1MveTJ4Y1ZKMncyd1VmVmp1WloyZGZtUEYyL29R?=
+ =?utf-8?B?MXVqS2ZGQ2JEYUE2TlpYWmFCam9rcVBMRkJCU0Nmd3BCSGdMTTNEQjlOSUl0?=
+ =?utf-8?B?Znk0OUVLSDc2T3Z3SU5aYWVNRlcrUXhsS1psRitkNVBMSG5RS1R5RFZLbmNy?=
+ =?utf-8?B?MEUxczhkRWl6a09jZ01hUDBOZTc1aFBJWUhzdUNramZhOTgwVGJuWmFKYThE?=
+ =?utf-8?B?ZkFmRlpnR1pBWEY5dlh0bS9vWmdiYWc3SWNVTDlWblMzMnkycHptbmpKaTVR?=
+ =?utf-8?B?Smg2SkdCV3NqTVdXcjh4UXNRS2tZSHUyMmlZZXZPcDhQTmV2VHNNcWI0akVK?=
+ =?utf-8?B?SHd6ZTZjNEhxVThSZjJkUGtpd3dtQllwYk1mdmgyNElEaTVMUTV1bGhCS1cx?=
+ =?utf-8?B?b3BBSUtxb25JTFFWM1dmbldEREZFakE1c0NsakFaNWZ4MUJtdWl5d0E2Zmxu?=
+ =?utf-8?B?akVveVNtQTVOWVNOQS9CVGorV0tLd2s2OUhnUk1XMXlPU1RnOVEya3JwK1Ew?=
+ =?utf-8?B?L2V3Z1I2SjV4K1p2TlcxSk5uaGhvUENQdHdESGdSTEppTDlCVGErSlFseU5D?=
+ =?utf-8?B?UmpNOWNtSU1sY0Zjc1F3d1hCUXpNaGdqbDZzK0pUVXRaK1dqMzJxU3FJYXZH?=
+ =?utf-8?B?Q2wyYXVBdmoydzRkU1cyVURXNlh6NmhsZUcrMDBJY244Qktka29CdWdoNUlp?=
+ =?utf-8?B?aS92M2puNWsvN3VSUWV2R1ErY29RcWl2YWRHc0x4OGNMYXNRRWtQVDJCQjV3?=
+ =?utf-8?B?WFdVb3NsamhQTzd1cWswVyt0dURCdFNjMHZtY0FjK0NlckJUMFFrTXVoNDNV?=
+ =?utf-8?B?RG5JNzBFanM5TFN5T2VyWmpxa0MyMFlLUEhla2VQWjlNbThCM0dlNVZodnU0?=
+ =?utf-8?B?ZzdGTG1YNkUyc20vUlVidTk3UXEzemlFbEtxVHpLWnhVdTRwVDQ0ZTlPSHBk?=
+ =?utf-8?B?czIvT29qQmJoTXd4RFFIUktHNVowenZ4Q2hOcVhNeEoxMFFldVd0dzlqNGNa?=
+ =?utf-8?B?SEJjN0RMcFFMd1dSK0J6NmdLKzY0Y0E2TkFhWFBWMEVRanFURG1vNlFzL0FP?=
+ =?utf-8?B?REsyUkU2eW9aYnM0Z3RrcXA0bXp0NVI4TGI4V1I0T050L1Q3YVdQUG0zVWl0?=
+ =?utf-8?B?MFpDdHVhZXpOdFNOY3NPQ01RODVYMzF1MjFzMzMvR0V1QXBFU3hWcUQ0SVpx?=
+ =?utf-8?B?d3NkTWR2VDhrcE1qL05tb2pDMTdrNHErYnpxRnFmRS9IV2tTUWh5OEptK05h?=
+ =?utf-8?B?OE1FK3ZGc2swTUtqWHRiZVZUZENWNVVxbHROdStZNnl3bTNFd2J2ejdmdHlS?=
+ =?utf-8?B?T05kRHMyMGl1Yk5xRUYzT0h4ZTJFZzdaUHJkT3F5MFBkYVZ4a0xubW0wd1R4?=
+ =?utf-8?B?NXVJUFcvQ25hajVuOHZMMkY5dHdmbEFwcVJmZ2N6VmFSTXRsc05HUm5wSkJx?=
+ =?utf-8?B?YjZjSXhHM01oZm4wQ0wyWXJBKzhWRzd6NmZpakdkcGtDakxqUFEvRUNvUkJH?=
+ =?utf-8?B?Y0xwdmtkbUpZTlcrSXFRaldNdHlHYmtweFZ3RTlRZ0FqUlBZTURCcDlDT01K?=
+ =?utf-8?B?VWxDTHorSUNUMkdSbmpqTzdTdFpYWGN0dWQxU2tTMlhXSko3VlNBOUkrYmtO?=
+ =?utf-8?B?Z3ZFd1NPOGhnWkhjRm92cFdlejFvVkxlTUZRWUpSU0o5UUw2bnA3Z2pDSHhQ?=
+ =?utf-8?B?SFE9PQ==?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 16447348-baeb-44fd-6a9f-08dc5486f115
+X-MS-Exchange-CrossTenant-AuthSource: DS0PR11MB8718.namprd11.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Apr 2024 08:58:17.4351
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Apr 2024 09:09:32.8852
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: He4pQ1EiFyFWRJ/M6b1TlwYf49FilhUYB2nYBEqVzBoktL8u0D3NbhM6oBjhWpID7tft1cn92xO+mO++N14few==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR10MB7319
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-04-04_05,2024-04-04_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 malwarescore=0
- suspectscore=0 adultscore=0 mlxscore=0 spamscore=0 bulkscore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2404010000 definitions=main-2404040059
-X-Proofpoint-GUID: sL2kyqxVr1g3pTODznrGSk5TqPW2r4jR
-X-Proofpoint-ORIG-GUID: sL2kyqxVr1g3pTODznrGSk5TqPW2r4jR
+X-MS-Exchange-CrossTenant-UserPrincipalName: 3cx7WmWONx+gSH9kcyCrZjCxTurLrMlMUO3TlQzX5qRbmocI/8VujbDnpPqg5H1ePvRLnJ4mibYaH9xiAMbo5+URs/59rY0/tunKYzBHeZ8=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR11MB6453
+X-OriginatorOrg: intel.com
 
-On 02/04/2024 20:39, Arnaldo Carvalho de Melo wrote:
-> Hi,
-> 
-> 	This allows us to have reproducible builds while keeping the
-> DWARF loading phase in parallel, achieving a noticeable speedup as
-> showed in the commit log messages:
-> 
-> On a:
-> 
->   model name    : Intel(R) Core(TM) i7-14700K
-> 
->   8 performance cores (16 threads), 12 efficiency cores.
-> 
-> Serial encoding:
-> 
->   $ perf stat -e cycles -r5 pahole --btf_encode_detached=vmlinux.btf.serial vmlinux
->              5.18276 +- 0.00952 seconds time elapsed  ( +-  0.18% )
-> 
-> Parallel, but non-reproducible:
-> 
->   $ perf stat -e cycles -r5 pahole -j --btf_encode_detached=vmlinux.btf.parallel vmlinux
->               1.8529 +- 0.0159 seconds time elapsed  ( +-  0.86% )
-> 
-> reproducible build done using parallel DWARF loading + CUs-ordered-as-in-vmlinux serial BTF encoding:
-> 
->   $ perf stat -e cycles -r5 pahole -j --reproducible_build --btf_encode_detached=vmlinux.btf.parallel.reproducible_build vmlinux
->               2.3632 +- 0.0164 seconds time elapsed  ( +-  0.69% )
-> 
-> Please take a look, its in the 'next' branch at:
-> 
->   https://git.kernel.org/pub/scm/devel/pahole/pahole.git
->   https://git.kernel.org/pub/scm/devel/pahole/pahole.git/log/?h=next
-> 
-> There is a new tool to do regression testing on this feature:
-> 
->   https://git.kernel.org/pub/scm/devel/pahole/pahole.git/commit/?h=next&id=c751214c19bf8591bf8e4abdc677cbadee08f630
->   
-> And here a more detailed set of tests using it:
-> 
->   https://git.kernel.org/pub/scm/devel/pahole/pahole.git/commit/?h=next&id=4451467ca16a6e31834f6f98661c63587ce556f7
-> 
-> Working on libbpf to allow for parallel reproducible BTF encoding is the
-> next step.
-> 
-> Thanks a lot,
-> 
+From: John Fastabend <john.fastabend@gmail.com>
+Date: Wed, 03 Apr 2024 13:20:32 -0700
 
-Hey Arnaldo
-
-In testing this series I've hit a segmentation fault:
-
-Using host libthread_db library "/usr/lib64/libthread_db.so.1".
-Core was generated by `pahole -J --btf_features=all --reproducible_build
--j vmlinux'.
-Program terminated with signal SIGSEGV, Segmentation fault.
-#0  0x00007f8c8260a58c in ptr_table__entry (pt=0x7f8c60001e70, id=77)
-    at /home/almagui/src/dwarves/dwarves.c:612
-612		return id >= pt->nr_entries ? NULL : pt->entries[id];
-[Current thread is 1 (Thread 0x7f8c65400700 (LWP 624441))]
-(gdb) bt
-#0  0x00007f8c8260a58c in ptr_table__entry (pt=0x7f8c60001e70, id=77)
-    at /home/almagui/src/dwarves/dwarves.c:612
-#1  0x00007f8c8260ada2 in cu__type (cu=0x7f8c60001e40, id=77)
-    at /home/almagui/src/dwarves/dwarves.c:806
-#2  0x00007f8c8261342c in ftype__fprintf (ftype=0x7f8c60272f30,
-    cu=0x7f8c60001e40, name=0x0, inlined=0, is_pointer=0, type_spacing=0,
-    is_prototype=true, conf=0x7f8c653ff930, fp=0x7f8c3804bc90)
-    at /home/almagui/src/dwarves/dwarves_fprintf.c:1388
-#3  0x00007f8c8261289d in function__prototype_conf (func=0x7f8c60272f30,
-    cu=0x7f8c60001e40, conf=0x7f8c653ff930, bf=0x7f8c27225dad "", len=512)
-    at /home/almagui/src/dwarves/dwarves_fprintf.c:1183
-#4  0x00007f8c8261b52b in proto__get (func=0x7f8c60272f30,
-    proto=0x7f8c27225dad "", len=512)
-    at /home/almagui/src/dwarves/btf_encoder.c:811
-#5  0x00007f8c8261b665 in funcs__match (encoder=0x7f8c28023220,
-    func=0x7f8c27225d88, f2=0x7f8c5805c560)
-    at /home/almagui/src/dwarves/btf_encoder.c:839
-#6  0x00007f8c8261b7fc in btf_encoder__save_func (encoder=0x7f8c28023220,
-    fn=0x7f8c5805c560, func=0x7f8c27225d88)
-    at /home/almagui/src/dwarves/btf_encoder.c:871
-#7  0x00007f8c8261e361 in btf_encoder__encode_cu (encoder=0x7f8c28023220,
-    cu=0x7f8c58001e20, conf_load=0x412400 <conf_load>)
-    at /home/almagui/src/dwarves/btf_encoder.c:1888
-#8  0x000000000040a36c in pahole_stealer (cu=0x7f8c58001e20,
-    conf_load=0x412400 <conf_load>, thr_data=0x0)
-    at /home/almagui/src/dwarves/pahole.c:3342
-#9  0x00007f8c8262672c in cu__finalize (cu=0x7f8c38001e20, cus=0x21412a0,
-    conf=0x412400 <conf_load>, thr_data=0x0)
-    at /home/almagui/src/dwarves/dwarf_loader.c:3029
-#10 0x00007f8c82626765 in cus__finalize (cus=0x21412a0, cu=0x7f8c38001e20,
-    conf=0x412400 <conf_load>, thr_data=0x0)
-    at /home/almagui/src/dwarves/dwarf_loader.c:3036
-#11 0x00007f8c82626e9b in dwarf_cus__process_cu (dcus=0x7ffd71eaf0d0,
-    cu_die=0x7f8c653ffeb0, cu=0x7f8c38001e20, thr_data=0x0)
-    at /home/almagui/src/dwarves/dwarf_loader.c:3243
-#12 0x00007f8c826270d2 in dwarf_cus__process_cu_thread (arg=0x7ffd71eaef50)
-    at /home/almagui/src/dwarves/dwarf_loader.c:3313
-#13 0x00007f8c816081da in start_thread () from /usr/lib64/libpthread.so.0
-#14 0x00007f8c81239e73 in clone () from /usr/lib64/libc.so.6
-
-So for conf_load->skip_encoding_btf_inconsistent_proto (enabled as part
-of "all" and enabled for vmlinux/module BTF), we use dwarves_fprintf()
-to write prototypes to check for inconsistent definitions.
-
-Program terminated with signal SIGSEGV, Segmentation fault.
-#0  0x00007f8c8260a58c in ptr_table__entry (pt=0x7f8c60001e70, id=77)
-    at /home/almagui/src/dwarves/dwarves.c:612
-612		return id >= pt->nr_entries ? NULL : pt->entries[id];
-[Current thread is 1 (Thread 0x7f8c65400700 (LWP 624441))]
-(gdb) print *(struct ptr_table *)0x7f8c60001e70
-$1 = {entries = 0x0, nr_entries = 2979, allocated_entries = 4096}
-(gdb)
-
-So it looks like the ptr_table has 2979 entries but entries is NULL;
-could there be an issue where CU initialization is not yet complete
-for some threads (it also happens very early in processing)? Can you
-reproduce this failure at your end? Thanks!
-
-Alan
-
-> - Arnaldo
+> Toke Høiland-Jørgensen wrote:
+>> To make the system page pool usable as a source for allocating XDP
+>> frames, we need to register it with xdp_reg_mem_model(), so that page
+>> return works correctly. This is done in preparation for using the system
+>> page pool for the XDP live frame mode in BPF_TEST_RUN; for the same
+>> reason, make the per-cpu variable non-static so we can access it from
+>> the test_run code as well.
+>>
+>> Reviewed-by: Alexander Lobakin <aleksander.lobakin@intel.com>
+>> Tested-by: Alexander Lobakin <aleksander.lobakin@intel.com>
+>> Signed-off-by: Toke Høiland-Jørgensen <toke@redhat.com>
+>> ---
+>>  include/linux/netdevice.h |  1 +
+>>  net/core/dev.c            | 13 ++++++++++++-
+>>  2 files changed, 13 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
+>> index c541550b0e6e..e1dfdf0c4075 100644
+>> --- a/include/linux/netdevice.h
+>> +++ b/include/linux/netdevice.h
+>> @@ -3345,6 +3345,7 @@ static inline void input_queue_tail_incr_save(struct softnet_data *sd,
+>>  }
+>>  
+>>  DECLARE_PER_CPU_ALIGNED(struct softnet_data, softnet_data);
+>> +DECLARE_PER_CPU_ALIGNED(struct page_pool *, system_page_pool);
+>>  
+>>  static inline int dev_recursion_level(void)
+>>  {
+>> diff --git a/net/core/dev.c b/net/core/dev.c
+>> index d8dd293a7a27..cdb916a647e7 100644
+>> --- a/net/core/dev.c
+>> +++ b/net/core/dev.c
+>> @@ -428,7 +428,7 @@ EXPORT_PER_CPU_SYMBOL(softnet_data);
+>>   * PP consumers must pay attention to run APIs in the appropriate context
+>>   * (e.g. NAPI context).
+>>   */
+>> -static DEFINE_PER_CPU_ALIGNED(struct page_pool *, system_page_pool);
+>> +DEFINE_PER_CPU_ALIGNED(struct page_pool *, system_page_pool);
+>>  
+>>  #ifdef CONFIG_LOCKDEP
+>>  /*
+>> @@ -11739,12 +11739,20 @@ static int net_page_pool_create(int cpuid)
+>>  		.pool_size = SYSTEM_PERCPU_PAGE_POOL_SIZE,
+>>  		.nid = NUMA_NO_NODE,
+>>  	};
+>> +	struct xdp_mem_info info;
+>>  	struct page_pool *pp_ptr;
+>> +	int err;
+>>  
+>>  	pp_ptr = page_pool_create_percpu(&page_pool_params, cpuid);
+>>  	if (IS_ERR(pp_ptr))
+>>  		return -ENOMEM;
+>>  
+>> +	err = xdp_reg_mem_model(&info, MEM_TYPE_PAGE_POOL, pp_ptr);
+>> +	if (err) {
+>> +		page_pool_destroy(pp_ptr);
+>> +		return err;
+>> +	}
+>> +
+>>  	per_cpu(system_page_pool, cpuid) = pp_ptr;
+>>  #endif
+>>  	return 0;
+>> @@ -11834,12 +11842,15 @@ static int __init net_dev_init(void)
+>>  out:
+>>  	if (rc < 0) {
+>>  		for_each_possible_cpu(i) {
+>> +			struct xdp_mem_info mem = { .type = MEM_TYPE_PAGE_POOL };
+>>  			struct page_pool *pp_ptr;
+>>  
+>>  			pp_ptr = per_cpu(system_page_pool, i);
+>>  			if (!pp_ptr)
+>>  				continue;
+>>  
+>> +			mem.id = pp_ptr->xdp_mem_id;
+>> +			xdp_unreg_mem_model(&mem);
 > 
-> Arnaldo Carvalho de Melo (12):
->   core: Allow asking for a reproducible build
->   pahole: Disable BTF multithreaded encoded when doing reproducible builds
->   dwarf_loader: Separate creating the cu/dcu pair from processing it
->   dwarf_loader: Introduce dwarf_cus__process_cu()
->   dwarf_loader: Create the cu/dcu pair in dwarf_cus__nextcu()
->   dwarf_loader: Remove unused 'thr_data' arg from dwarf_cus__create_and_process_cu()
->   core: Add unlocked cus__add() variant
->   core: Add cus__remove(), counterpart of cus__add()
->   dwarf_loader: Add the cu to the cus list early, remove on LSK_DELETE
->   core/dwarf_loader: Add functions to set state of CU processing
->   pahole: Encode BTF serially in a reproducible build
->   tests: Add a BTF reproducible generation test
+> Take it or leave it, a net_page_pool_destroy(int cpuid) would be
+> symmetric here.
 > 
->  dwarf_loader.c              | 73 +++++++++++++++++++++++---------
->  dwarves.c                   | 58 ++++++++++++++++++++++++-
->  dwarves.h                   | 17 ++++++++
->  pahole.c                    | 84 +++++++++++++++++++++++++++++++++++--
->  tests/reproducible_build.sh | 56 +++++++++++++++++++++++++
->  5 files changed, 264 insertions(+), 24 deletions(-)
->  create mode 100755 tests/reproducible_build.sh
+>>  			page_pool_destroy(pp_ptr);
+
+I believe it's better to remove this page_pool_destroy() and let
+xdp_unreg_mem_model() destroy it.
+
+>>  			per_cpu(system_page_pool, i) = NULL;
+>>  		}
 > 
+> Acked-by: John Fastabend <john.fastabend@gmail.com>
+
+Thanks,
+Olek
