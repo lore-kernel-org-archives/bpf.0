@@ -1,178 +1,145 @@
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 165DA1C6A7
-	for <bpf@vger.kernel.org>; Thu,  4 Apr 2024 18:31:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 221AA1CA82;
+	Thu,  4 Apr 2024 18:33:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712255502; cv=none; b=Ya1A6qwSpXihV1oMt5PBhjg49R26k55eMeuV1kzSZBkKEe6mbTizE5rwk0pafHaLtguRDJ3wDrLaRL0lF/cXlm7mk3Y0GKJ7iUgZCaGVOeuOrhUlV62kQoWJAd6jwGkoXuIgIlf1u1pONtZK+2bmAMPfwsJqIyigDm9XByQCYWg=
+	t=1712255586; cv=none; b=odimAWRGuYoYupmKNqJQ6Uxh6Nuw1f2XMaMBLLJa9AIEJgVBJ+lc8defiSP0ScunvOedl4kE795iTVp5kIhXnBC7X8QJeZLc/bKr3Fx6W6+ZuHYNWwzJSvq38lz7AJgPHehBtcDlJ3PM7/lrU8ljbKKzRXWbQtNK/MziDA7c0mI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712255502; c=relaxed/simple;
-	bh=8ze2z4SWxAgfp5spNxfdnzXxa74gZuolYVOEXd8zJ70=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Cy4kIPA/dGWAUQDBX4FbJdlquxBFlRtuGhU+3cJwR49i4T97IfcH0QhDRYyccewue+4rsMCXhbPaqUmMMH+LcmpWhtsSpF6Jje8NyV1wFYiKHRFHD9pWLfYhH/Ri3qDOrakw2Y59TYydhyNb3zwLyy8GCLhpAcWAwm3ay0KpS1o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gTOpBpFi; arc=none smtp.client-ip=209.85.128.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1712255586; c=relaxed/simple;
+	bh=qKJhLJ+OkI9jevLl4q88CLgM+UHJJ8Zp4B1Ddbf8k5o=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=cl4Oy9kSAw9vqH3kEy9oS9Xt31gvSBq7uolclcNuTyLyDjlmKKVHwb1PtNRUEyLuQ3311c6RJDybklyoFj7yRFHSK0QG8aeOc17p6ZtxuKN85R82ZCc50mFcm2/wqLv4GXdVn9z1sxQZEIxE9zedXsSkvx+Fw1Xhz0sTnAKKMjc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=ENLR582i; arc=none smtp.client-ip=213.133.104.62
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gTOpBpFi"
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-4162b5ba2bbso6083605e9.1
-        for <bpf@vger.kernel.org>; Thu, 04 Apr 2024 11:31:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1712255499; x=1712860299; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9BdbUxfjLmAjKQj6utRAWQE3Jq/J+ZaMsti61l/TrVQ=;
-        b=gTOpBpFi3WLTC5PajeRQuNp67Utnq/r/d+rOWj3O/LaCGiILzp6OutAWgb4kmH0KsK
-         8PAHisZZXgsolcpCEowN+PDUO1O4iUf6Za7xs8UWU+MgWQRMzu3UTCcr10m1oyBEIkrc
-         pU5DQ1jV80vlToqGYbnNSCnDYJA1/RPJJWk2rdB6Zin50UFQXAzaMsXB5RxZ2mxEEv8/
-         fgO3boqQ2JbwdiltgHVKJnWXQabsCgNXj0g9Cv1cBpGOJgT6Gkl/Lv0WCXJy9eIDp2mU
-         Uh26L6Nz52fuK7oaLLcs2SWyKzMjHoK1audgyaKCZRHMJqKN95V+Kb3MtxR1+yXgym6Y
-         gfMA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712255499; x=1712860299;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=9BdbUxfjLmAjKQj6utRAWQE3Jq/J+ZaMsti61l/TrVQ=;
-        b=Y5Y9e70MILjaGLDzqvJ6YEAiuKIERIYB7ol1P5yI3dA41PnJ1sVspsyERoRnHhQuDF
-         yh8Zq+voGgl32JPuQO2L3+Q2tFFU+F10jBVK0gN8rOqDzH/qRo4lsckvQW/4T6CxZbBJ
-         2ioIthXXHnuwdsmWjzFiY1k6nyzYemPqGqjfBB5e00NNxJDl/sgtOF/fsSNrH/Y2pxP+
-         wqh4VSO8qmm+A+e5EDb1mfirH+XCZ8UzTVuZ+hxhnNw23E+xjVrgVVsZrxxwAi3dfI+l
-         CK5X8h4lBluztdFWRJ6mQn12b2Wa/DxUg8f9tJrh2VhPtCHGrd2K2k20yM7VrbYW4bik
-         Mb4Q==
-X-Forwarded-Encrypted: i=1; AJvYcCVm44Ba3+SRtIEB5w6594lXahYxOZETT+XxZ7WOSxwLWTqre1voYjHHdk+8zTxps5VODd9W8eBLlZsUI8lzF0d9IW2x
-X-Gm-Message-State: AOJu0YxFpuF9yzo5uekhg/MrCLXte9GDZpVmAMk1l0EGa4R87ufAOJBG
-	cQrfgpm9gR2ZsOMH6gOp4vVahWz2tiLxvfwhiBGGFRK1qHbxezO9/Y1wnVGFbeEjYGkf40N8FYI
-	rbOpN4KB+LPFu/c+lM/QaZrZobBg=
-X-Google-Smtp-Source: AGHT+IEBC5J9WGzCyRxeRn5VDa2PNT8jqr2LTyDJYjTvlaQDiHF1wzkl/8byeHpVi8YJLAA9HY8c6GJVrjsNUeJVReE=
-X-Received: by 2002:adf:ee89:0:b0:343:34a9:12bc with SMTP id
- b9-20020adfee89000000b0034334a912bcmr2027609wro.51.1712255499405; Thu, 04 Apr
- 2024 11:31:39 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="ENLR582i"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
+	MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:In-Reply-To:References;
+	bh=yNm7dbP3edq4ZSXrfjFFZl6GVvZvEhPMYhCjZZw9nBc=; b=ENLR582iq5Oe/tbUYQbbHTH3qF
+	0oRBcjtIQUlTMUfaBH1dtP7/dg53Mp1zuK1qFM1b3Dgzz0hkwMs3RkAfgnJo5L+fA6FoS81iLNAeG
+	7snwXJ3f2LAYCN6Tm6tQl/p8b7dZmwvhw4TBiVUOUoFkw2Xl48RUmmeLFtgsw+i0wNY5FLCoVfXQc
+	eFFCMXhfdqhB3seWdLTerkNB30Fl/uHLdDCcVoT3c/Nq1Dl9jtLyHEh41S1p5Oh0AOuKzTZWP2kMR
+	HVF1wxXSqay7duP/3JgD3vTpwdlEmL+6YJFHpRg9zgDbZ2TcdDFhz5TDuWstW46tuONuSvL6+4pqO
+	L1AZlZDA==;
+Received: from 14.248.197.178.dynamic.dsl-lte-bonding.zhbmb00p-msn.res.cust.swisscom.ch ([178.197.248.14] helo=localhost)
+	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1rsRtT-0001iz-G4; Thu, 04 Apr 2024 20:32:59 +0200
+From: Daniel Borkmann <daniel@iogearbox.net>
+To: davem@davemloft.net
+Cc: kuba@kernel.org,
+	pabeni@redhat.com,
+	edumazet@google.com,
+	daniel@iogearbox.net,
+	ast@kernel.org,
+	andrii@kernel.org,
+	martin.lau@linux.dev,
+	netdev@vger.kernel.org,
+	bpf@vger.kernel.org
+Subject: pull-request: bpf 2024-04-04
+Date: Thu,  4 Apr 2024 20:32:58 +0200
+Message-Id: <20240404183258.4401-1-daniel@iogearbox.net>
+X-Mailer: git-send-email 2.21.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240404002640.1774210-1-andrii@kernel.org> <20240404002640.1774210-3-andrii@kernel.org>
- <CAADnVQKc9QgOxvru-tqii0GO7H5+QD_=_v3O7_ant4BU1cNmKw@mail.gmail.com> <936229b3-ba4a-4c46-8042-977e5f069800@linux.dev>
-In-Reply-To: <936229b3-ba4a-4c46-8042-977e5f069800@linux.dev>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Thu, 4 Apr 2024 11:31:28 -0700
-Message-ID: <CAADnVQJUOLZys=caUdHOA5JKwnmM8==P6JUYOLQ659+PbNayfQ@mail.gmail.com>
-Subject: Re: [PATCH v3 bpf-next 2/2] bpf: inline bpf_get_branch_snapshot() helper
-To: Yonghong Song <yonghong.song@linux.dev>
-Cc: Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Martin KaFai Lau <martin.lau@kernel.org>, Kernel Team <kernel-team@meta.com>, 
-	John Fastabend <john.fastabend@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.103.10/27235/Thu Apr  4 10:24:59 2024)
 
-On Thu, Apr 4, 2024 at 11:28=E2=80=AFAM Yonghong Song <yonghong.song@linux.=
-dev> wrote:
->
->
-> On 4/4/24 11:14 AM, Alexei Starovoitov wrote:
-> > On Wed, Apr 3, 2024 at 5:27=E2=80=AFPM Andrii Nakryiko <andrii@kernel.o=
-rg> wrote:
-> >> Inline bpf_get_branch_snapshot() helper using architecture-agnostic
-> >> inline BPF code which calls directly into underlying callback of
-> >> perf_snapshot_branch_stack static call. This callback is set early
-> >> during kernel initialization and is never updated or reset, so it's ok
-> >> to fetch actual implementation using static_call_query() and call
-> >> directly into it.
-> >>
-> >> This change eliminates a full function call and saves one LBR entry
-> >> in PERF_SAMPLE_BRANCH_ANY LBR mode.
-> >>
-> >> Acked-by: John Fastabend <john.fastabend@gmail.com>
-> >> Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
-> >> ---
-> >>   kernel/bpf/verifier.c | 55 +++++++++++++++++++++++++++++++++++++++++=
-++
-> >>   1 file changed, 55 insertions(+)
-> >>
-> >> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> >> index 17c06f1505e4..2cb5db317a5e 100644
-> >> --- a/kernel/bpf/verifier.c
-> >> +++ b/kernel/bpf/verifier.c
-> >> @@ -20181,6 +20181,61 @@ static int do_misc_fixups(struct bpf_verifier=
-_env *env)
-> >>                          goto next_insn;
-> >>                  }
-> >>
-> >> +               /* Implement bpf_get_branch_snapshot inline. */
-> >> +               if (prog->jit_requested && BITS_PER_LONG =3D=3D 64 &&
-> >> +                   insn->imm =3D=3D BPF_FUNC_get_branch_snapshot) {
-> >> +                       /* We are dealing with the following func prot=
-os:
-> >> +                        * u64 bpf_get_branch_snapshot(void *buf, u32 =
-size, u64 flags);
-> >> +                        * int perf_snapshot_branch_stack(struct perf_=
-branch_entry *entries, u32 cnt);
-> >> +                        */
-> >> +                       const u32 br_entry_size =3D sizeof(struct perf=
-_branch_entry);
-> >> +
-> >> +                       /* struct perf_branch_entry is part of UAPI an=
-d is
-> >> +                        * used as an array element, so extremely unli=
-kely to
-> >> +                        * ever grow or shrink
-> >> +                        */
-> >> +                       BUILD_BUG_ON(br_entry_size !=3D 24);
-> >> +
-> >> +                       /* if (unlikely(flags)) return -EINVAL */
-> >> +                       insn_buf[0] =3D BPF_JMP_IMM(BPF_JNE, BPF_REG_3=
-, 0, 7);
-> >> +
-> >> +                       /* Transform size (bytes) into number of entri=
-es (cnt =3D size / 24).
-> >> +                        * But to avoid expensive division instruction=
-, we implement
-> >> +                        * divide-by-3 through multiplication, followe=
-d by further
-> >> +                        * division by 8 through 3-bit right shift.
-> >> +                        * Refer to book "Hacker's Delight, 2nd ed." b=
-y Henry S. Warren, Jr.,
-> >> +                        * p. 227, chapter "Unsigned Divison by 3" for=
- details and proofs.
-> >> +                        *
-> >> +                        * N / 3 <=3D> M * N / 2^33, where M =3D (2^33=
- + 1) / 3 =3D 0xaaaaaaab.
-> >> +                        */
-> >> +                       insn_buf[1] =3D BPF_MOV32_IMM(BPF_REG_0, 0xaaa=
-aaaab);
-> >> +                       insn_buf[2] =3D BPF_ALU64_REG(BPF_MUL, BPF_REG=
-_2, BPF_REG_0);
-> >> +                       insn_buf[3] =3D BPF_ALU64_IMM(BPF_RSH, BPF_REG=
-_2, 36);
-> >> +
-> >> +                       /* call perf_snapshot_branch_stack implementat=
-ion */
-> >> +                       insn_buf[4] =3D BPF_EMIT_CALL(static_call_quer=
-y(perf_snapshot_branch_stack));
-> > How will this work on non-x86 ?
-> > I tried to grep the code and looks like only x86 does:
-> > static_call_update(perf_snapshot_branch_stack,...)
-> >
-> > so on other arch-s static_call_query() will return zero/einval?
-> > And above will crash?
->
-> Patch 1 will give the answer.In events/core.c, we have the following:
-> DEFINE_STATIC_CALL_RET0(perf_snapshot_branch_stack,
-> perf_snapshot_branch_stack_t); #define DEFINE_STATIC_CALL_RET0(name,
-> _func) \ DECLARE_STATIC_CALL(name, _func); \ struct static_call_key
-> STATIC_CALL_KEY(name) =3D { \ .func =3D __static_call_return0, \ .type =
-=3D 1,
-> \ }; \ ARCH_DEFINE_STATIC_CALL_RET0_TRAMP(name) So the default value for
-> perf_snapshot_branch_stack  is
-> __static_call_return0.
->
-> In static_call.c, long __static_call_return0(void) { return 0; }
-> EXPORT_SYMBOL_GPL(__static_call_return0); So we should be fine.
+Hi David, hi Jakub, hi Paolo, hi Eric,
 
-I see. Thanks for explaining.
+The following pull-request contains BPF updates for your *net* tree.
+
+We've added 7 non-merge commits during the last 5 day(s) which contain
+a total of 9 files changed, 75 insertions(+), 24 deletions(-).
+
+The main changes are:
+
+1) Fix x86 BPF JIT under retbleed=stuff which causes kernel panics due to
+   incorrect destination IP calculation and incorrect IP for relocations,
+   from Uros Bizjak and Joan Bruguera Micó.
+
+2) Fix BPF arena file descriptor leaks in the verifier, from Anton Protopopov.
+
+3) Defer bpf_link deallocation to after RCU grace period as currently running
+   multi-{kprobes,uprobes} programs might still access cookie information from
+   the link, from Andrii Nakryiko.
+
+4) Fix a BPF sockmap lock inversion deadlock in map_delete_elem reported
+   by syzkaller, from Jakub Sitnicki.
+
+5) Fix resolve_btfids build with musl libc due to missing linux/types.h
+   include, from Natanael Copa.
+
+Please consider pulling these changes from:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git tags/for-netdev
+
+Thanks a lot!
+
+Also thanks to reporters, reviewers and testers of commits in this pull-request:
+
+Greg Thelen, Ingo Molnar, Jiri Olsa, John Fastabend, Shung-Hsi Yu, Uros 
+Bizjak, xingwei lee, Yonghong Song, yue sun
+
+----------------------------------------------------------------
+
+The following changes since commit 037965402a010898d34f4e35327d22c0a95cd51f:
+
+  xen-netfront: Add missing skb_mark_for_recycle (2024-03-28 18:28:12 -0700)
+
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git tags/for-netdev
+
+for you to fetch changes up to ff91059932401894e6c86341915615c5eb0eca48:
+
+  bpf, sockmap: Prevent lock inversion deadlock in map delete elem (2024-04-02 16:31:05 +0200)
+
+----------------------------------------------------------------
+bpf-for-netdev
+
+----------------------------------------------------------------
+Alexei Starovoitov (1):
+      Merge branch 'x86-bpf-fixes-for-the-bpf-jit-with-retbleed-stuff'
+
+Andrii Nakryiko (2):
+      bpf: put uprobe link's path and task in release callback
+      bpf: support deferring bpf_link dealloc to after RCU grace period
+
+Anton Protopopov (1):
+      bpf: fix possible file descriptor leaks in verifier
+
+Jakub Sitnicki (1):
+      bpf, sockmap: Prevent lock inversion deadlock in map delete elem
+
+Joan Bruguera Micó (1):
+      x86/bpf: Fix IP for relocating call depth accounting
+
+Natanael Copa (1):
+      tools/resolve_btfids: fix build with musl libc
+
+Uros Bizjak (1):
+      x86/bpf: Fix IP after emitting call depth accounting
+
+ arch/x86/include/asm/alternative.h |  4 ++--
+ arch/x86/kernel/callthunks.c       |  4 ++--
+ arch/x86/net/bpf_jit_comp.c        | 19 ++++++++-----------
+ include/linux/bpf.h                | 16 +++++++++++++++-
+ kernel/bpf/syscall.c               | 35 ++++++++++++++++++++++++++++++++---
+ kernel/bpf/verifier.c              |  3 +++
+ kernel/trace/bpf_trace.c           | 10 +++++-----
+ net/core/sock_map.c                |  6 ++++++
+ tools/include/linux/btf_ids.h      |  2 ++
+ 9 files changed, 75 insertions(+), 24 deletions(-)
