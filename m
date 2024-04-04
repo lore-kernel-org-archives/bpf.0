@@ -1,30 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 973BF366
-	for <bpf@vger.kernel.org>; Thu,  4 Apr 2024 00:26:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE1F8ED9
+	for <bpf@vger.kernel.org>; Thu,  4 Apr 2024 00:27:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712190417; cv=none; b=tTIbXxNG3CwCozkKojS24NROrMwNzlNcmVSiYTUbCAyllPbqM6V1HPiU+Y5LmGMYgFh3g9T1q5ntFZ2HXHVOgKP8sUphvHeIXCN/gVVcANuM2ZiVK1Y346hmG6uiN+COgFCWakENU0t5N2tbfoiMLykuCv5oCrCsD2CNcfGIkB4=
+	t=1712190420; cv=none; b=OJs/vZvocKM/FcDJ4WsbQ0/3f7ZcGKvh1xaHT9kvO9plJNeCiIWBxJOWLiFuWX6e4OqK8slpi5gbOs0qJO5tXKs3vSDt3OBvFcFqwHtCFmtx9EFQ4c6n4na6nZIVVxcgCwbgy1zKXTJGWi22z0JDB5M9YXTQ5Xn3qhYp7HR/4zQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712190417; c=relaxed/simple;
-	bh=J2cJVREpMd0J6pYYq5Qen9CfrkiKoC3VyVuCmbEiNpU=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=jhXyKJQf4w5fmS3Jo3AqqfrI+lOMMAUZpvbWkMHgZ7rWjcVtCxnFDJnatUi0nu72uAQoSkj8nWcYjHWu0BzhWhqR4GkLtgb8yLLaByjDKV1NmRQDL0f0zSDf+sIpdjJQNIXXfRi9yylMcZ8CSzJT4GLrNRw2Lq6WZyRjSxm3vv8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=r1qdhpoX; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1712190420; c=relaxed/simple;
+	bh=Bq5GtDX2NfdJoulQ8qKd9NtH5r4prbQ3HbS+d9W/xAc=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=DCWpO/idA8+tJLzMpcfePxstok0ia31ZAOO2Se2Z4HWmT7ORxGygfh5iZwOuXfhCHef7/zPhlMyFTLWwoFK2uXb1pzZL30O9qfjy/hDXyKKWjaAsXWpYEEPmulGkwq8Yrbb98MmDhzem3P1bg7zYV/Hcr0FJA/0JsTkHROVpmcQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Y9Tdegru; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="r1qdhpoX"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 016A0C433F1;
-	Thu,  4 Apr 2024 00:26:56 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Y9Tdegru"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22A4EC433C7;
+	Thu,  4 Apr 2024 00:27:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712190417;
-	bh=J2cJVREpMd0J6pYYq5Qen9CfrkiKoC3VyVuCmbEiNpU=;
-	h=From:To:Cc:Subject:Date:From;
-	b=r1qdhpoXkhQok2ZPufjdKrQYyAfdGzx0jWQEXfxS+oRvBBhsAyes47ozOLugT0KbP
-	 AWHp7PCRFAPGw2jEyCqwh8VwNiU+TFVexP9hS3mlqp/a93YbeQNmTw8a38dV1WCln/
-	 CLe1lih2DwM3mpFa6GPLKq6jcIAiz2eWtwQ+Qo3jnkmtDewn2OgCGAXi2EaMpBfBFP
-	 uM+lMCwjM4tla3CBt4sDeLvdwP5LpUrS3ASrc0BeTfSAXESQQuPyhxlofmeaE+JHJq
-	 lHeV+O/b7Oy5DNrj8rAt5dC0a6WjJ8ZgojvgnnJlpgh5tOWMD9Vj8kLIHKeAPpXDEq
-	 mzhCPJi23RuZw==
+	s=k20201202; t=1712190420;
+	bh=Bq5GtDX2NfdJoulQ8qKd9NtH5r4prbQ3HbS+d9W/xAc=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=Y9TdegrugXsvvTs4j6RR8icilFQWHh/YvdewPSll6djYpxQcx9xD24So4202M6PVe
+	 3jn/UViyGBIN2kA0le6U1nZwF4qMybQm7Lc8rnnB6em9QdFkV9HHj2JMxYadEHEwWl
+	 PjvXvFrD+jMBh0OQdxZcQjyvFLvBqIG22rz69ui9uMWDDLf4EJA38xqHfvhNQJugxC
+	 C7UUBa/TU0dpi3znXsiUfEZzFLDfN6oM7zxjptBS34VhcuYftPmBnynUBi0VWLVGDD
+	 fb3IkKe/afZemyECgHjKj5f24KgbnhehPUclv0VYdsg5H+gxRGJyolzoE+WVH3+8t7
+	 zyLJamZxfJn8w==
 From: Andrii Nakryiko <andrii@kernel.org>
 To: bpf@vger.kernel.org,
 	ast@kernel.org,
@@ -32,10 +33,12 @@ To: bpf@vger.kernel.org,
 	martin.lau@kernel.org
 Cc: andrii@kernel.org,
 	kernel-team@meta.com
-Subject: [PATCH v3 bpf-next 0/2] Inline bpf_get_branch_snapshot() BPF helper
-Date: Wed,  3 Apr 2024 17:26:38 -0700
-Message-ID: <20240404002640.1774210-1-andrii@kernel.org>
+Subject: [PATCH v3 bpf-next 1/2] bpf: make bpf_get_branch_snapshot() architecture-agnostic
+Date: Wed,  3 Apr 2024 17:26:39 -0700
+Message-ID: <20240404002640.1774210-2-andrii@kernel.org>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20240404002640.1774210-1-andrii@kernel.org>
+References: <20240404002640.1774210-1-andrii@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -44,35 +47,45 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Implement inlining of bpf_get_branch_snapshot() BPF helper using generic BPF
-assembly approach. This allows to reduce LBR record usage right before LBR
-records are captured from inside BPF program.
+perf_snapshot_branch_stack is set up in an architecture-agnostic way, so
+there is no reason for BPF subsystem to keep track of which
+architectures do support LBR or not. E.g., it looks like ARM64 might soon
+get support for BRBE ([0]), which (with proper integration) should be
+possible to utilize using this BPF helper.
 
-See v1 cover letter ([0]) for some visual examples. I dropped them from v2
-because there are multiple independent changes landing and being reviewed, all
-of which remove different parts of LBR record waste, so presenting final state
-of LBR "waste" gets more complicated until all of the pieces land.
+perf_snapshot_branch_stack static call will point to
+__static_call_return0() by default, which just returns zero, which will
+lead to -ENOENT, as expected. So no need to guard anything here.
 
-  [0] https://lore.kernel.org/bpf/20240321180501.734779-1-andrii@kernel.org/
+  [0] https://lore.kernel.org/linux-arm-kernel/20240125094119.2542332-1-anshuman.khandual@arm.com/
 
-v2->v3:
-  - fix BPF_MUL instruction definition;
-v1->v2:
-  - inlining of bpf_get_smp_processor_id() split out into a separate patch set
-    implementing internal per-CPU BPF instruction;
-  - add efficient divide-by-24 through multiplication logic, and leave
-    comments to explain the idea behind it; this way inlined version of
-    bpf_get_branch_snapshot() has no compromises compared to non-inlined
-    version of the helper  (Alexei).
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+---
+ kernel/trace/bpf_trace.c | 4 ----
+ 1 file changed, 4 deletions(-)
 
-Andrii Nakryiko (2):
-  bpf: make bpf_get_branch_snapshot() architecture-agnostic
-  bpf: inline bpf_get_branch_snapshot() helper
-
- kernel/bpf/verifier.c    | 55 ++++++++++++++++++++++++++++++++++++++++
- kernel/trace/bpf_trace.c |  4 ---
- 2 files changed, 55 insertions(+), 4 deletions(-)
-
+diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+index 6d0c95638e1b..afb232b1d7c2 100644
+--- a/kernel/trace/bpf_trace.c
++++ b/kernel/trace/bpf_trace.c
+@@ -1188,9 +1188,6 @@ static const struct bpf_func_proto bpf_get_attach_cookie_proto_tracing = {
+ 
+ BPF_CALL_3(bpf_get_branch_snapshot, void *, buf, u32, size, u64, flags)
+ {
+-#ifndef CONFIG_X86
+-	return -ENOENT;
+-#else
+ 	static const u32 br_entry_size = sizeof(struct perf_branch_entry);
+ 	u32 entry_cnt = size / br_entry_size;
+ 
+@@ -1203,7 +1200,6 @@ BPF_CALL_3(bpf_get_branch_snapshot, void *, buf, u32, size, u64, flags)
+ 		return -ENOENT;
+ 
+ 	return entry_cnt * br_entry_size;
+-#endif
+ }
+ 
+ static const struct bpf_func_proto bpf_get_branch_snapshot_proto = {
 -- 
 2.43.0
 
