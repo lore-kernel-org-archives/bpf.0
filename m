@@ -1,88 +1,182 @@
-Received: from out-177.mta0.migadu.com (out-177.mta0.migadu.com [91.218.175.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f169.google.com (mail-pg1-f169.google.com [209.85.215.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B53C13AD22
-	for <bpf@vger.kernel.org>; Thu,  4 Apr 2024 22:15:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F38893D76;
+	Thu,  4 Apr 2024 22:17:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712268918; cv=none; b=DREjZ1EFL+nLeIhq5TZKLJWNrnIxi6fVt6NTDPgwrpGr022vdc4M+3WhaWCFmHf+Lv/Vlea4fQ2ZZLO0S3mVogOmP/84inWflnCxUtJLmmMOvhjmbab6LkphkupV5BAXKhM5G1Cq4vDvcO75EJSpooOFOOhyBTSSBtYO1ejb+s0=
+	t=1712269047; cv=none; b=kgG9WFC9MaierUp2nvsBGLrUb0YWQMpH1SxfsznLEsOgYCFaN9s9Er1y5YI6o2qt3uEIrZLsnkOUGjhHKnqQdDsRM6LPeO1czGE2Wx9Q7HNqBgOC7oIfuqhcjtIBXaUVTMA0sX/mlNw4T7hRQfY2RzT03qlHhHj+qBc+KVSSucc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712268918; c=relaxed/simple;
-	bh=j1OE1V6ZL0SPLFqZKNScSmCLy87eL0mNLvEcwUI4AHY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=pvBkbGIjOx1jxITYAjuHDzTQVZnE7uwWZxOzk/72gYOshx3xXhugvivqJRU+l/DXLjzJ2uGJEWfGs0QGwm6n6+ZR4HWKzedxKS3ItImzvwrmTPwPX8SyU8jrmMCifQE9TZHrG3r/sjVaRpXOQfpcuqGQzSz3DOOt/D2uo6i9D5w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=jbX5uh20; arc=none smtp.client-ip=91.218.175.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1712269047; c=relaxed/simple;
+	bh=jP34MhqFFnOsapC2W1n3vR81oVx3qa/yHXS4isuKsXQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=FQZ7/v3cyojmOwVvA2iZMdlrW4etePLYceoMXuZQgJ88r4kqRuMOooRS8zwS9/l+f9GUS2kVs0z5SVHtpYV1AQKVEsknNcLn81S17g+U/rJNDrfDD5x0Z5SavuHYda5A4+pkBHiT7KlWYBWoMKKEYyAu7tLk+wllulXUp9lwqOk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QsjVPcO9; arc=none smtp.client-ip=209.85.215.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="jbX5uh20"
-Message-ID: <2814f3b7-1254-4031-8c57-682963f1e6d1@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1712268914;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=p+i7TKxwkPX4j+zPOgvQXMrvAFSuTCkEGqAnVMfC0mg=;
-	b=jbX5uh20QIyc+Ttm8wn12fMiEwu+h8CSx52iMpYvcBS3M/viHXNjL+jRRfxnzoHO7yGbsY
-	lF0LQzi2VNlre+T9uMBiJ0yoYn0riplISGbCHByLJ4vFQq7Eq9GLQYBVXGdYps0nOtaUbW
-	5HFMI1CxvcUC01YjNOvO2lLGIv7REVw=
-Date: Thu, 4 Apr 2024 15:15:06 -0700
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QsjVPcO9"
+Received: by mail-pg1-f169.google.com with SMTP id 41be03b00d2f7-53fbf2c42bfso1204605a12.3;
+        Thu, 04 Apr 2024 15:17:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1712269045; x=1712873845; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0S9AzfKyXXro6/KcESb4RixjJwGuwM+I6fIK3FdfbMw=;
+        b=QsjVPcO9WehwHAiP38lNJeq9kmeyTFw1U2NMGwOOOAE2dfcn9DqcIIaxK0NSUVvzAg
+         4n8WwFiOl0z7JDDufLyJdWOugj7JPAG3X6uVJyVhx6yZEaNIoepcuLRtF0gyc6SgFnyG
+         0alKMadvdAP0SK3nMBfKCKMAbgDWM/t4BgaO1Gw+eMODVg/onia0t1UW9PaMQv/3ULUz
+         VsbLVdMNPK57gEO5LzFbzSqaOkEk6yhx5PJvie4yiBN+f5Et4pfVikwJoNJEWUWGkdvM
+         hRWhQREyZDFCneSYPXhIrq5vUfrv8lKZXDdwNLx3FOG40KNogDhMQn77X0q99C+8NH4e
+         TaiQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1712269045; x=1712873845;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=0S9AzfKyXXro6/KcESb4RixjJwGuwM+I6fIK3FdfbMw=;
+        b=dGl/gaLArP0pxAn4oOiiPtJX5C1zi9t4hC52PQfp+pHs/XaTFDIQ1scyGjQrI32E4k
+         1LIuEvMWZG0aNxSVqK9DbZMhDu761ENKhqa/Z3TqxNEhUPfwKzqrmpbDS+LRPNz6apSt
+         QRffjFH0cwFyrMv9hVkpHVwuE8+EUZcIyB3GIoT1vHA9aijnX6aX/q5FUzgwwEA6/NQM
+         8iWgViQL/X092HOFlsrTPjTx2DtbZMR+xIyFn53ZQab1L3LmrjmmDm5VsNaMGYOfysiE
+         cB6hUZm3lJAyJOAQrIIH5VApn/T2ngAnyBeXtKMyDEw8KJ63EdkF1ez8Kgy25FS0Rgbk
+         tjbw==
+X-Forwarded-Encrypted: i=1; AJvYcCX+x1GmBUj2n7YHFu69kYQzeEgJk8q3jr3MCrTQTMFAnt/fB+pCAY1Q5/1gnF1luFP3pzCfWla7G5aJSxju8naNRULbif5tKYcnDagHjjcLBfeF+LIYArlgY31fzy2D09R2
+X-Gm-Message-State: AOJu0YzbI+YL52V9xPCr6nsaFJCAPBm8yLJp5QZ+Iksi7ciFIuC1qLmU
+	4uM81d2pX0nfhAxAAiY/XOhSZc6LSH57qO9Sn59bWaB4eIGMNSG8pZ9bQw4atgJTig9BsQ1wX+E
+	MxjlqTe6Jiy2QtGKfTBt1k/i+VgE=
+X-Google-Smtp-Source: AGHT+IEhHqqPCiJKMvRzHHiNPR93glELvuoH2VAtNzMJK6uoUINTY9an9ck6wceOm3Y81pn0CohR7AD7YQ64ozaEZ1c=
+X-Received: by 2002:a17:90a:d809:b0:2a2:73e9:c3bf with SMTP id
+ a9-20020a17090ad80900b002a273e9c3bfmr3897030pjv.20.1712269045344; Thu, 04 Apr
+ 2024 15:17:25 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next 2/3] bpf: allow invoking bpf_for_each_map_elem
- with different maps
-Content-Language: en-GB
-To: Philo Lu <lulie@linux.alibaba.com>, bpf@vger.kernel.org
-Cc: ast@kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com,
- andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
- kpsingh@kernel.org, sdf@google.com, haoluo@google.com, jolsa@kernel.org,
- mykolal@fb.com, shuah@kernel.org, xuanzhuo@linux.alibaba.com
-References: <20240402061615.48894-1-lulie@linux.alibaba.com>
- <20240402061615.48894-3-lulie@linux.alibaba.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <20240402061615.48894-3-lulie@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+References: <20240404010308.334604-1-void@manifault.com> <20240404010308.334604-2-void@manifault.com>
+ <36bb0747-bff4-4fad-93ca-dae406f14099@linux.dev> <20240404163316.GA385240@maniforge>
+In-Reply-To: <20240404163316.GA385240@maniforge>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Thu, 4 Apr 2024 15:16:56 -0700
+Message-ID: <CAEf4Bza3rGMh=S7yb_Crf8v_SBTrp+NiKn0_frZnWpEi30DkPg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 2/2] selftests/bpf: Verify calling core kfuncs
+ from BPF_PROG_TYPE_SYCALL
+To: David Vernet <void@manifault.com>
+Cc: Yonghong Song <yonghong.song@linux.dev>, ast@kernel.org, daniel@iogearbox.net, 
+	andrii@kernel.org, martin.lau@linux.dev, song@kernel.org, 
+	john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com, 
+	haoluo@google.com, jolsa@kernel.org, linux-kernel@vger.kernel.org, 
+	kernel-team@meta.com, bpf <bpf@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-
-On 4/1/24 11:16 PM, Philo Lu wrote:
-> Taking different maps within a single bpf_for_each_map_elem call is not
-> allowed before, because from the second map,
-> bpf_insn_aux_data->map_ptr_state will be marked as *poison*. In fact
-> both map_ptr and state are needed to support this use case: map_ptr is
-> used by set_map_elem_callback_state() while poison state is needed to
-> determine whether to use direct call.
+On Thu, Apr 4, 2024 at 9:33=E2=80=AFAM David Vernet <void@manifault.com> wr=
+ote:
 >
-> Signed-off-by: Philo Lu <lulie@linux.alibaba.com>
-> ---
->   kernel/bpf/verifier.c | 6 +-----
->   1 file changed, 1 insertion(+), 5 deletions(-)
+> On Thu, Apr 04, 2024 at 09:04:19AM -0700, Yonghong Song wrote:
+> >
+> > On 4/3/24 6:03 PM, David Vernet wrote:
+> > > Now that we can call some kfuncs from BPF_PROG_TYPE_SYSCALL progs, le=
+t's
+> > > add some selftests that verify as much. As a bonus, let's also verify
+> > > that we can't call the progs from raw tracepoints.
+> > >
+> > > Signed-off-by: David Vernet <void@manifault.com>
+> >
+> > Ack with some comments below.
+> >
+> > Acked-by: Yonghong Song <yonghong.song@linux.dev>
 >
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 515ac6165ab1..f0a33f7c2604 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -9649,11 +9649,7 @@ static int set_map_elem_callback_state(struct bpf_verifier_env *env,
->   	struct bpf_map *map;
->   	int err;
->   
-> -	if (bpf_map_ptr_poisoned(insn_aux)) {
-> -		verbose(env, "tail_call abusing map_ptr\n");
-> -		return -EINVAL;
-> -	}
-> -
-> +	/* should not check poison */
+> Thanks for the review. It looks like accidentally replied directly to
+> me, so I'll re-add the missing cc's.
+>
 
-Maybe change comments to below?
-	/* valid map_ptr and poison value does not matter */
+And dropped bpf@vger :) adding back
 
->   	map = insn_aux->map_ptr_state.map_ptr;
->   	if (!map->ops->map_set_for_each_callback_args ||
->   	    !map->ops->map_for_each_callback) {
+> >
+> > > ---
+> > >   .../selftests/bpf/prog_tests/cgrp_kfunc.c     |  1 +
+> > >   .../selftests/bpf/prog_tests/task_kfunc.c     |  1 +
+> > >   .../selftests/bpf/progs/cgrp_kfunc_common.h   | 21 ++++++++++++++++=
++++
+> > >   .../selftests/bpf/progs/cgrp_kfunc_failure.c  |  4 ++++
+> > >   .../selftests/bpf/progs/cgrp_kfunc_success.c  |  4 ++++
+> > >   .../selftests/bpf/progs/cpumask_common.h      | 19 ++++++++++++++++=
++
+> > >   .../selftests/bpf/progs/cpumask_failure.c     |  4 ++++
+> > >   .../selftests/bpf/progs/cpumask_success.c     |  3 +++
+> > >   .../selftests/bpf/progs/task_kfunc_common.h   | 18 ++++++++++++++++
+> > >   .../selftests/bpf/progs/task_kfunc_failure.c  |  4 ++++
+> > >   .../selftests/bpf/progs/task_kfunc_success.c  |  4 ++++
+> > >   11 files changed, 83 insertions(+)
+> > >
+> > > diff --git a/tools/testing/selftests/bpf/prog_tests/cgrp_kfunc.c b/to=
+ols/testing/selftests/bpf/prog_tests/cgrp_kfunc.c
+> > > index adda85f97058..73f0ec4f4eb7 100644
+> > > --- a/tools/testing/selftests/bpf/prog_tests/cgrp_kfunc.c
+> > > +++ b/tools/testing/selftests/bpf/prog_tests/cgrp_kfunc.c
+> > > @@ -102,6 +102,7 @@ void test_cgrp_kfunc(void)
+> > >             run_success_test(success_tests[i]);
+> > >     }
+> > > +   RUN_TESTS(cgrp_kfunc_success);
+> > >     RUN_TESTS(cgrp_kfunc_failure);
+> > >   cleanup:
+> > > diff --git a/tools/testing/selftests/bpf/prog_tests/task_kfunc.c b/to=
+ols/testing/selftests/bpf/prog_tests/task_kfunc.c
+> > > index d4579f735398..3db4c8601b70 100644
+> > > --- a/tools/testing/selftests/bpf/prog_tests/task_kfunc.c
+> > > +++ b/tools/testing/selftests/bpf/prog_tests/task_kfunc.c
+> > > @@ -94,5 +94,6 @@ void test_task_kfunc(void)
+> > >             run_success_test(success_tests[i]);
+> > >     }
+> > > +   RUN_TESTS(task_kfunc_success);
+> > >     RUN_TESTS(task_kfunc_failure);
+> > >   }
+> >
+> > The above RUN_TESTS(cgrp_kfunc_success) and RUN_TESTS(task_kfunc_succes=
+s)
+> > will do duplicate work for *existing* bpf programs in their respective
+> > files. I think we still prefer to have cgrp_kfunc_success tests
+> > in cgrp_kfunc.c to make it easy to cross check. But in order to
+> > remove duplicate work, one option is to make other non-RUN_TESTS
+> > programs in those files not auto-loaded and their corresponding
+> > prog_tests/*.c file need to explicitly enable loading the problem.
+>
+> Good point, and yes I agree with that approach of not auto-loading
+> non-RUN_TESTS programs. Considering that we have a  __success BTF tag to
+> say, "this prog should successfully load", it seems odd that we'd also
+> automatically load and validate progs that _didn't_ specify that tag as
+> well. At that point, I'm not sure what value the tag is bringing. Also,
+
+Just more explicitness (if desired). Normally __success would be
+augmented by __msg() or __retval(). I'd feel uncomfortable just
+silently skipping programs that are not marked with __success, as it
+would be too easy to accidentally forget to add it and not know that
+the BPF program is not tested.
+
+I'd say that RUN_TESTS-based programs should be kept separate from any
+other BPF programs that have a custom user-space testing part, though.
+
+About the patch itself. I don't really see much point in adding
+*_KFUNC_LOAD_TEST macros. They are used once or twice in total, while
+obscuring *what* is actually being tested. Unless you expect to add 5+
+more copies of them, I'd just inline them explicitly.
+
+> that was the expected behavior before RUN_TESTS() was introduced, so it
+> hopefully shouldn't cause much if any churn.
+>
+> > Maybe the current patch is okay even with duplicated work as it
+> > should not take much time to verify those tiny problems.
+>
+> IMO it should be fine for now as the overhead for validating and loading
+> these progs is low, but it'd definitely be good to address this problem
+> in a follow-up. I don't think it should take too much effort -- AFAICT
+> we'd just have to mark a test spec as invalid if it didn't have any BTF
+> test tags. Ideally I'd like to separate that from this patch set, but I
+> can do it here if folks want.
+>
+> Thanks,
+> David
