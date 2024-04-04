@@ -1,255 +1,138 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0E84126F3A;
-	Thu,  4 Apr 2024 13:11:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=198.175.65.19
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712236280; cv=fail; b=mq4F0Wb2qrvKwLtX5yw4nNhd7bZWNH2LEOILdlSNjatAisZygRuQH0jXBirOwFLjreTG+hQsxVmM9CTjKcSSNeZYbU9qe65eGNsqiCdt1LE5XhQwB2sCucOFH+Q0OBL0MRrzX3c+olinkraY6/jNiv6JwK/2g6gTl16qSJw3Xq4=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712236280; c=relaxed/simple;
-	bh=IeQn+BBAwi+w6JF6nEbl7EZMv5dGuqkfGKrod7MH1es=;
-	h=Message-ID:Date:Subject:To:CC:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=bLBG7e18+1CKhQlbTfxcCYRbMV9v59CRtayzZ0+heh5ieBipVqeEYtEraR+u5m32/jFNaTydNAO7RsasBtFB2vYMaJXe41rB3Pp9FKX5twFSDlHd9/zvsszoe8IIAqZGIUvZutz1lfN1JWJe4+eCLmd7qtFJuerEM0t2dznJZe0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Ercya/Ga; arc=fail smtp.client-ip=198.175.65.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 868B31272BB
+	for <bpf@vger.kernel.org>; Thu,  4 Apr 2024 13:34:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1712237674; cv=none; b=TppJekv0J2svGG++koYH77gOUGm7pq1JaLfeHu8NzpmRzO9fIEzydSXb9bsnmpjtoeUgnWqypIba+GztalDY2NqJMgKBC/+4Ozh1PGZW52aAmF6yKn5/mDTWu88NIu+xfei6HV8byuw1dEr6PCJU4dJ8zOxvkPX4kab1tl2iaCE=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1712237674; c=relaxed/simple;
+	bh=hDcbBQeU+B7GEainBaRPFeI/b7BXaSqcsO17ALzCtg0=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=NKwphnAAx6ii4djp0pe19jBlj7GLxAQoPcjDxZ349o2SDofivu0byaAT/oeBGzjhinVOcsuTGrAdGYOTdvkWXXbKl8iLTnXI6uWO+U4T0nply82LXOX0SWhxzT6wmEgfH8m8XM3INbsjbenRTWO1XkoINBvHa6IqlaTUOlF2T0A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ACRgZXIK; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Ercya/Ga"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1712236279; x=1743772279;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=IeQn+BBAwi+w6JF6nEbl7EZMv5dGuqkfGKrod7MH1es=;
-  b=Ercya/GavbdlQxbCie5mIoEg6zzH42/gewTo1d2wO0rdm4aLAxMVz0B8
-   LkO89fBXgA5os+z2dtkMbSdKnMHcLblGWlmqkADC3FJa+awvbA0h57wHQ
-   xZReTQdVmG8+ZRMW1YJzNnjgC8c7pRbrMQgR4UKQQ2Lf4hCeHrz/bqO8R
-   INGiDSiR8EM4s5v0smIZIXyt7fPjsLdTSUWDgKrDTRUYzwUhZOshNj57j
-   Lkv0bmcM51qJ4aBwPECc1J9zWn4zRaRxjT2B6U/+WkIEm0QPEF2IpwzyW
-   MOPQKJIwuNPWVMH/FmCGiOZ9uRPyUfvda3UXWaHtnDdogr8Tt5/8Vc57w
-   Q==;
-X-CSE-ConnectionGUID: izzioVBfQaeBwQrzmwZaFQ==
-X-CSE-MsgGUID: O57FJA35SWq38QMexnfObg==
-X-IronPort-AV: E=McAfee;i="6600,9927,11033"; a="7366585"
-X-IronPort-AV: E=Sophos;i="6.07,179,1708416000"; 
-   d="scan'208";a="7366585"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2024 06:11:19 -0700
-X-CSE-ConnectionGUID: psOC78s4Qe+Krx7BVMneGw==
-X-CSE-MsgGUID: 2j8v6NuvQxqi+/N8MqzyCg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,179,1708416000"; 
-   d="scan'208";a="56235759"
-Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
-  by orviesa001.jf.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 04 Apr 2024 06:11:19 -0700
-Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
- ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35; Thu, 4 Apr 2024 06:11:17 -0700
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35; Thu, 4 Apr 2024 06:11:17 -0700
-Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
- orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35 via Frontend Transport; Thu, 4 Apr 2024 06:11:17 -0700
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (104.47.55.168)
- by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.35; Thu, 4 Apr 2024 06:11:17 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=LyEkZTVvqdTByJd7IYw+csumlBFvjuBNxGRBk3pgunwokfC8TALSM9T0r6cipsR6YL4OVDnbQNHxw/Fy/4y+qxHzjUTgY6CK1VWjOi7kxjV2HJQThnhyv0gs+N8oUCnX3HCiXglvb74vHP6KE2FcRe6Mlq9K4f0ZZN37HXNF1nqC4m71Bx9P2aaRzJnObzA8nfluyDkHV67zwX7gWaZeb3PaqYhSwF6OoLc47F/NB314AxpUhP0q1DgfdDF+jOSsNs4sYMWullrxHg4UsR5NM28C3s0ltUyZSjvK/Q3eFkGd/K7p79RZZZCvHmIWXohggkmpIiTP7LNdcZ9nVkzB5g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=u+PBr2UB4HSmK79eTJdS8uf4zEcbwN4lSNvRxVrKCXY=;
- b=UuQYFqvJF1xqh+8yiDd3xWVf6v+eCKKOg/5S40Y+pdcAw+8ppyumjEXpSDGTK4UHm1TReCvIDz4T5/iqeHsdVSZBQkv8C9pUF8VWvKYsJCEHkIHLBisXfdE9tamO8OvOMMgr4+lCA57p4vPi1HvVIufa4TbAEvKBpixQigBDPK1BYzIm2yszx758K9DcXToQyX4yF6CJelbe7voMb9urncVovHK1jXvdpCv7GZ71k/T+/2fEqn/VWIAQNZE1v3Z4zdCZVyW8UOtUNRGlyncc1LkGeg42JUT8ABPq+HUmD6RPT80fIDuHjtWf4X6QoaTZJg9Jg2ycl1bFP4cPceAvCg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from DS0PR11MB8718.namprd11.prod.outlook.com (2603:10b6:8:1b9::20)
- by SA2PR11MB5209.namprd11.prod.outlook.com (2603:10b6:806:110::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7452.26; Thu, 4 Apr
- 2024 13:11:15 +0000
-Received: from DS0PR11MB8718.namprd11.prod.outlook.com
- ([fe80::654c:d66a:ec8e:45e9]) by DS0PR11MB8718.namprd11.prod.outlook.com
- ([fe80::654c:d66a:ec8e:45e9%6]) with mapi id 15.20.7452.019; Thu, 4 Apr 2024
- 13:11:15 +0000
-Message-ID: <ef853ce2-4e44-4a07-8dfd-6b8a2d48ad62@intel.com>
-Date: Thu, 4 Apr 2024 15:09:52 +0200
-User-Agent: Mozilla Thunderbird
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ACRgZXIK"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1712237671;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=hDcbBQeU+B7GEainBaRPFeI/b7BXaSqcsO17ALzCtg0=;
+	b=ACRgZXIK8jrD0SkvfchYEScrKsLR4Ismx4yJxnOjYeVQgpE4fA/I9f/3IwK/o6g5N7ItpI
+	tZ52WQ6VKJquiVZiBHiricYN389lfHFFo4TNlPauLagGPlzhD1xfRcTxbEWpWt21T8ztBH
+	t90y4GyJcY9+cIO8tUvTfgYkAwfPa0I=
+Received: from mail-lj1-f200.google.com (mail-lj1-f200.google.com
+ [209.85.208.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-613-Hb7_QMGmPXai7_i7Oqy6Hw-1; Thu, 04 Apr 2024 09:34:28 -0400
+X-MC-Unique: Hb7_QMGmPXai7_i7Oqy6Hw-1
+Received: by mail-lj1-f200.google.com with SMTP id 38308e7fff4ca-2d835fe0b39so8312151fa.3
+        for <bpf@vger.kernel.org>; Thu, 04 Apr 2024 06:34:27 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1712237666; x=1712842466;
+        h=content-transfer-encoding:mime-version:message-id:date:references
+         :in-reply-to:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=hDcbBQeU+B7GEainBaRPFeI/b7BXaSqcsO17ALzCtg0=;
+        b=MQTqch+WWr8+wfC+btnA5VmhUkP1UxyQaCvAuOvI390gjK7yGOkxT98P/cvF+1jnn7
+         kD+u2Xfeh1qlQUIOCQYz65rKV+LUVCnmwvty1ZAjcOURQW7FlfPcaArAlgo6DEJCF5DL
+         JozP8Ik427R2T6w4YsbiZXJipqYx/Wi75FMosCLlDSVS+Gj250MBH6S54WsLOmB7vysG
+         joxoyVVTCdm3vQW+bLncUa/dZFsKqdSF6YCn6kk7MfsH9Jd64paErUsc5ngbsQ0WgHh8
+         fG1Z3sRG/Gq8ct7CdPUyRTgRjAVhKk77Cg9pWSPQrxvp60DM9Bdn8+d7Iq0tX2MgYiZY
+         5wXw==
+X-Forwarded-Encrypted: i=1; AJvYcCUxQGT9ZtNu6j0WZYu6KMp4WHlfC3VcualUzqTfZsYr7NEiMnRyjsZC0N+M03TzWZlr4LFp5lR5F7xonEqwSptgMwKI
+X-Gm-Message-State: AOJu0YyUTA1kXB9xdTRPMglr1j3nkORtwFG0t9rNBMncoim/tr6hGqe/
+	f386041i3vn6w7yfcE2Db+oCIwEUGSb9X/dqVrbcMJFW8pkxWAptnUgtjVLNc/p+FEbEEDvR3VF
+	GlQQKFg7dGlwKC9Q1UBpl887uUvKORiamryCljK+gCngr0f5A+Q==
+X-Received: by 2002:a2e:9956:0:b0:2d8:45ff:d606 with SMTP id r22-20020a2e9956000000b002d845ffd606mr1555589ljj.50.1712237666388;
+        Thu, 04 Apr 2024 06:34:26 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IESL8vxfsypVflX/j6u+Cw899PN0WfevQKEzyUxQ+EmPi+UIru9k+mXs48fuOAKEtxSigt8lg==
+X-Received: by 2002:a2e:9956:0:b0:2d8:45ff:d606 with SMTP id r22-20020a2e9956000000b002d845ffd606mr1555560ljj.50.1712237665975;
+        Thu, 04 Apr 2024 06:34:25 -0700 (PDT)
+Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
+        by smtp.gmail.com with ESMTPSA id s14-20020a05600c45ce00b0041487f70d9fsm2691247wmo.21.2024.04.04.06.34.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 04 Apr 2024 06:34:24 -0700 (PDT)
+Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
+	id 52B0F11A25F5; Thu,  4 Apr 2024 15:34:24 +0200 (CEST)
+From: Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+To: Jesper Dangaard Brouer <hawk@kernel.org>, Alexei Starovoitov
+ <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko
+ <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, Eduard
+ Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, Yonghong Song
+ <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, KP
+ Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo
+ <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, "David S. Miller"
+ <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>
+Cc: Alexander Lobakin <aleksander.lobakin@intel.com>, Eric Dumazet
+ <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
+ bpf@vger.kernel.org, netdev@vger.kernel.org
 Subject: Re: [PATCH net-next v2 2/4] bpf: test_run: Use system page pool for
  XDP live frame mode
-To: Jesper Dangaard Brouer <hawk@kernel.org>
-CC: John Fastabend <john.fastabend@gmail.com>,
-	=?UTF-8?Q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>, "Alexei
- Starovoitov" <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Andrii
- Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, Eduard
- Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, Yonghong Song
-	<yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, Stanislav Fomichev
-	<sdf@google.com>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-	"David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
-	<bpf@vger.kernel.org>, <netdev@vger.kernel.org>
+In-Reply-To: <5a0db8a6-6d73-48a6-8824-3191657ff11a@kernel.org>
 References: <20240220210342.40267-1-toke@redhat.com>
- <20240220210342.40267-3-toke@redhat.com>
- <2746b1d9-2e1f-4e66-89ed-19949a189a92@intel.com>
- <660dbe87d8797_1cf6b2083c@john.notmuch>
- <f53e02ef-ee33-4cd0-b045-a3efe7f0fae4@kernel.org>
-From: Alexander Lobakin <aleksander.lobakin@intel.com>
-Content-Language: en-US
-In-Reply-To: <f53e02ef-ee33-4cd0-b045-a3efe7f0fae4@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: MI1P293CA0026.ITAP293.PROD.OUTLOOK.COM
- (2603:10a6:290:3::10) To DS0PR11MB8718.namprd11.prod.outlook.com
- (2603:10b6:8:1b9::20)
+ <20240220210342.40267-3-toke@redhat.com> <87sf1lzxdb.fsf@toke.dk>
+ <5a0db8a6-6d73-48a6-8824-3191657ff11a@kernel.org>
+X-Clacks-Overhead: GNU Terry Pratchett
+Date: Thu, 04 Apr 2024 15:34:24 +0200
+Message-ID: <87sf01l09r.fsf@toke.dk>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS0PR11MB8718:EE_|SA2PR11MB5209:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: idir/u7oYb6t6v8cDynDVGkjBXy5nsf0RLmAZlkoHYyCSmC1t9+/8/+YA/VgGx3ACLakdhKu2bwgVs90J/ENPOtd6636es4evqoni38k7YDNMOBbTNNA3/gp+E1b0j15FndLuWXqiXsgpAK09tcnChmdCATSy8ckO7UxXmz43YrjbEM32+4vLVj6mO7AUTSlA+RTse/2RxKTdGfiRrtmODFR7PYMekrRDcwkmcLTDIY3JcHJviXm64LnoF9SEZCsrVHuhThkKeKDeoHMQM9/rpN6Bn1b/0m2YzjzLO6bIanCsaNyf5xTiXFjYYEd64KcYWEoYAivIvcvQKDoU9DghGvX4geihWc6sOltc+TGrtNAlDfnWHZN5YwR2K8bs+LHr56dj58NS+H8L+fuVd1kNVWT12fT7dgj4yR/6G1hG+bQzJDX/F1bB8yncP8xhotod74MvUNebcLDZqsw2vv64D6OSf9Iws8TWg6TfEIPkuA/U5EV36nQc9CHhgirQBuhEz3RiFVs0CJ3dFDEY91szP6RNrR2WCUZ22sTDGGJ5zvW7JpOngTAEtSORgjHm9xxv8yQze4BhAW/Q2yEZ8KcPcO1A4f4ULAlDZtUox10mfiYziOIYfKxyvo//kjBFrmd9HzAKKnjPri8LiZDBBU5QciRxws13DRyjLj8ZrCmVAk=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR11MB8718.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(1800799015)(7416005)(376005)(366007);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?R0w5NVN0WHMvdlhMMW9lMmVVaWpoTExNcEJnK0NvWUd0WVQ0WDA5RWxiTnkv?=
- =?utf-8?B?d2Z3eC9HTFZaOXNGNEJBUExuUnBtbis2bmJueGV4OGlBemMwQUVkT3dlZkJ1?=
- =?utf-8?B?VlJ0MjNVY2NKdmpwVS9YNVdudUxic3I3ZHZsWExudTBxUXc4dERJTDNVYUda?=
- =?utf-8?B?blVrUjc2UnhTMkFYa3ZpNzNPSkRlN1kxVC9TOXhHZ0dDbjVjQURjZGxUeWRj?=
- =?utf-8?B?VnRsWS9YTXloOVJudVdzcDBBT2lxMzRLVmN2Q3k0TEs4K0pPTGljWmRBcFgz?=
- =?utf-8?B?WG9lRk81MWN1cWZUdUJZMzBZMXdRNGd0VEVtN0IxV2o3OTE5UC91SkNGcjVG?=
- =?utf-8?B?OElCZmtXZXEvSXF5dzJ2ZGFhUjg1bXRJcU85MEYwOG5HY2lhSEMyTWtNbnFa?=
- =?utf-8?B?NGQzc1BvRUZQUGFhRnRTVkd1SEFzbjRnYnF3L2FRWUxxOTNwV25rUm5FRmpn?=
- =?utf-8?B?TzhUVzhkVkdlVWQ1Smo4dG8wN3A4L045R3Y5RWs5ZEFKWHhvLzBIdUxRUk5y?=
- =?utf-8?B?KytSN2NCeTNMMklGN3RmbTNLSTQvbmRsMVR0dWZJL3VIYm1vMnArd1BVY2U3?=
- =?utf-8?B?a0lqcVByMEFhL2tFOWk5aVVyMUdtR051eDNKbDVqUFkyalZKamJ2UlJLWkNq?=
- =?utf-8?B?RVpMKytQbFZWVGhkQjFGM1BuUm9saEUwcUhiVVhNd3ZuTHlUcTh5blFWdHJY?=
- =?utf-8?B?M0M5V2JBcUFnUlNKR3RFTXc1cFpxc1hvWXh3SUowVXB1SlpldE1FV3FtckEv?=
- =?utf-8?B?VHBYQVFZKytEM0k3UkhwMDRvU1lXaGlzOUZIV3JCRitYVkpCZGFaNnpoRVc0?=
- =?utf-8?B?WjI4bHRIQVFVdGJ0bzNJSHJGa3BlNkRtRmlVTzNwcHZXc2ZhUFZ6ZU1ibzFK?=
- =?utf-8?B?Y3ZGRklaYVRuZTYwL0dUbVBOOTR5cU13aCt3SVV4SFJCYU1HTFBiWDdQaXF2?=
- =?utf-8?B?bzZheEl4cTdqTC9oV1hGSk5uUkRVLzZ2YktyM2xaN05Leno2M1hKUk1GRVN6?=
- =?utf-8?B?cUVNZVRtVUFwM2V5dEJqNEg0WWJ4S2x3UXdyZDNXS29YN2tKN2t6ZkRHeWw5?=
- =?utf-8?B?STQ4U0s0TndvTGNmUGZnT0VZOXhxd3BOdmNrNVdrV0QwNmxXN0xKcWx5R0V1?=
- =?utf-8?B?YXlYU1pVR205OTlPbnpJUXJEdXdJM1BVUk5FbjIxbXBRZERCQTJHRmtabVJw?=
- =?utf-8?B?YkhCVEdZUDRUSEdJazZIVXU4MHZFTEdEdlFEU05jVXB1QXFSWUhGTFJMTmQ4?=
- =?utf-8?B?Z0dtaHFkSUxQbERyeStCRWpTMVYrcVRoWVJJSTQxc29lZGc5aGs2Smx4NVNh?=
- =?utf-8?B?SEw1dXZFd0NnNFYzQU1TZ1B3Ujd4RUtjaVNtbkhmeFF5WnRkR3hGbHVJRWRx?=
- =?utf-8?B?WVA1dW1SZjVuaWZOMWNGSXpPMUVlMVk1OVJPTlhrZG13Zjh6SW1aSExsNFJH?=
- =?utf-8?B?ZmxCMXFjQTFyQUsxR0pEU1Q2QnZXa1hXWGgrTjd5OENud0ZoT1o1UDhFZzhP?=
- =?utf-8?B?YzFjM3FJb0dYOTByUmMzZ045YythTm1MQWxzRDFlWCtyaFhrUHNnZ3g3RTNF?=
- =?utf-8?B?dG9FVTllS2hsNnl5RGxmQWx0TlFyZHpVQUZaSUJxaWgvOUhhY1pnQjJkSDFZ?=
- =?utf-8?B?cm9pNWlPRWJ5dXQxMmZzcmVCbEV3d04xRVdXWjkvVnFiRlprdVgvVUFPVEtN?=
- =?utf-8?B?SnljWVZMWTVqQi9QbVlQV05wQ1FJODNDdWtYTXFhOGZpK2ZYODZScWo2L1I5?=
- =?utf-8?B?eUY5SDZrd2FDa3RzTjhzZVZNbDdYNDY3K3E2aWZZMDFvcjB6YlFOc1RCSHVW?=
- =?utf-8?B?YlhLTHFVRUs4MDJMUXQzd0lKWG8yWFk4Z2NkQVpKR1BXanV5L2tIb1J0Uk1s?=
- =?utf-8?B?ZzdkU1lzbkNkQTJLbFlxSzczLytQaDY0eExxQUFmcGUxUkwvbk9hUDlycnNa?=
- =?utf-8?B?WUh0V2xqWStPa09EQlA4YVRhaFFFOWlUUlBXU3NMNUU3OWI5ZEhGMG0wdm1N?=
- =?utf-8?B?cWdQb3NVYkdLWFRwY2hQYkJmTTFNbkYrSUJXdWhvQU5sb21xUHVYQ0FLNkpF?=
- =?utf-8?B?NCtMbmpCOGU5MmdxWmFtTlA3Z0RYYjM3dmxrYy8vei9RUW16VWU2SXBHNFF1?=
- =?utf-8?B?dDV4N0hSL0t1MHJyakhuSTU2VDZ3QjlYNGlnYWlzREFjVXg0OEc1QzYzcFI1?=
- =?utf-8?B?Umc9PQ==?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4d48c8fd-68f3-46d7-17b5-08dc54a8b500
-X-MS-Exchange-CrossTenant-AuthSource: DS0PR11MB8718.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Apr 2024 13:11:15.0363
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 3Tsqc/iOFaAiy5zJwfGP44r460589YJohY8qzlaa/o4+83zclsCKWeW6DbeOIxYZwWFH0YoGsZLg/AS7oLVFTKYFcjJsPYtiuIlj91SYE7c=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA2PR11MB5209
-X-OriginatorOrg: intel.com
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-From: Jesper Dangaard Brouer <hawk@kernel.org>
-Date: Thu, 4 Apr 2024 13:43:12 +0200
+Jesper Dangaard Brouer <hawk@kernel.org> writes:
 
-> 
-> 
-> On 03/04/2024 22.39, John Fastabend wrote:
->> Alexander Lobakin wrote:
->>> From: Toke Høiland-Jørgensen <toke@redhat.com>
->>> Date: Tue, 20 Feb 2024 22:03:39 +0100
->>>
->>>> The BPF_TEST_RUN code in XDP live frame mode creates a new page pool
->>>> each time it is called and uses that to allocate the frames used for
->>>> the
->>>> XDP run. This works well if the syscall is used with a high repetitions
->>>> number, as it allows for efficient page recycling. However, if used
->>>> with
->>>> a small number of repetitions, the overhead of creating and tearing
->>>> down
->>>> the page pool is significant, and can even lead to system stalls if the
->>>> syscall is called in a tight loop.
->>>>
->>>> Now that we have a persistent system page pool instance, it becomes
->>>> pretty straight forward to change the test_run code to use it. The only
->>>> wrinkle is that we can no longer rely on a custom page init callback
->>>> from page_pool itself; instead, we change the test_run code to write a
->>>> random cookie value to the beginning of the page as an indicator that
->>>> the page has been initialised and can be re-used without copying the
->>>> initial data again.
->>>>
->>>> The cookie is a random 128-bit value, which means the probability that
->>>> we will get accidental collisions (which would lead to recycling the
->>>> wrong page values and reading garbage) is on the order of 2^-128. This
->>>> is in the "won't happen before the heat death of the universe"
->>>> range, so
->>>> this marking is safe for the intended usage.
->>>>
->>>> Reviewed-by: Alexander Lobakin <aleksander.lobakin@intel.com>
->>>> Tested-by: Alexander Lobakin <aleksander.lobakin@intel.com>
->>>> Signed-off-by: Toke Høiland-Jørgensen <toke@redhat.com>
->>>
->>> Hey,
->>>
->>> What's the status of this series, now that the window is open?
->>>
->>> Thanks,
->>> Olek
->>
->> Hi Toke,
->>
->> I read the thread from top to bottom so seems someone else notices the
->> 2^128 is unique numbers not the collision probability. Anywaays I'm still
->> a bit confused, whats the use case here? Maybe I need to understand
->> what this XDP live frame mode is better?
->>
->> Could another solution be to avoid calling BPF_TEST_RUN multiple times
->> in a row? Or perhaps have a BPF_SETUP_RUN that does the config and lets
->> BPF_TEST_RUN skip the page allocation? Another idea just have the first
->> run of BPF_TEST_RUN init a page pool and not destroy it.
->>
-> 
-> I like John's idea of "the first run of BPF_TEST_RUN init a page pool
-> and not destroy it".  On exit we could start a work-queue that tried to
-> "destroy" the PP (in the future) if it's not in use.
-> 
-> Page pool (PP) performance comes from having an association with a
-> SINGLE RX-queue, which means no synchronization is needed then
-> "allocating" new pages (from the alloc cache array).
-> 
-> Thus, IMHO each BPF_TEST_RUN should gets it's own PP instance, as then
-> lockless PP scheme works (and we don't have to depend on NAPI /
-> BH-disable).  This still works with John's idea, as we could simply have
-> a list of PP instances that can be reused.
+> On 21/02/2024 15.48, Toke H=C3=B8iland-J=C3=B8rgensen wrote:
+>> Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com> writes:
+>>=20
+>>> The cookie is a random 128-bit value, which means the probability that
+>>> we will get accidental collisions (which would lead to recycling the
+>>> wrong page values and reading garbage) is on the order of 2^-128. This
+>>> is in the "won't happen before the heat death of the universe" range, so
+>>> this marking is safe for the intended usage.
+>>=20
+>> Alright, got a second opinion on this from someone better at security
+>> than me; I'll go try out some different ideas :)
+>
+> It is a general security concern for me that BPF test_run gets access to
+> memory used by 'system page pool', with the concern of leaking data
+> (from real traffic) to an attacker than can inject a BPF test_run
+> program via e.g. a CI pipeline.
+>
+> I'm not saying we leaking data today in BPF/XDP progs, but there is a
+> potential, because to gain performance in XDP and page_pool we don't
+> clear memory to avoid cache line performance issues.
+> I guess today, I could BPF tail extend and read packet data from older
+> frames, in this way, if I get access to 'system page pool'.
 
-Lockless PP scheme works for percpu PPs as well via page_pool::cpuid,
-seems like you missed this change?
-Percpu page_pool is CPU-local, which means it absolutely can't be
-accessed from several threads simultaneously.
+I agree that the leak concern is non-trivial (also of the secret cookie
+value), so I am not planning to re-submit with that approach. I got
+half-way revising the patches to use the system PP but always
+re-initialise the pages before the merge window. This comes with a ~7%
+overhead on small packets and probably more with big frames (due to the
+memcpy() of the payload data).
 
-> 
-> --Jesper
+Due to this, my current plan is to take a hybrid approach, depending on
+the 'repetitions' parameter: for low repetition counts, just
+pre-allocate a bunch of pages from the system PP at setup time,
+initialise them, and don't bother with recycling. And for large
+repetition counts, keep the current approach of allocating a separate PP
+for each syscall invocation. The threshold for when something is a "low"
+number is the kicker here, of course, but probably some static value can
+be set as a threshold; I'll play around with this and see what makes
+sense.
 
-Thanks,
-Olek
+WDYT about this?
+
+-Toke
+
