@@ -1,176 +1,134 @@
-Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-183.mta1.migadu.com (out-183.mta1.migadu.com [95.215.58.183])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0CEA130485
-	for <bpf@vger.kernel.org>; Thu,  4 Apr 2024 18:27:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2FCE12CD9C
+	for <bpf@vger.kernel.org>; Thu,  4 Apr 2024 18:28:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.183
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712255236; cv=none; b=HH/GSR5HiLY2M73YBcO1YV6cVlRrxeWS70eGehPcNuLfpsIJhsiuGjshHmC6csEPwyuOL6W0SF8FLQ3i/NcyfeQ8V4cjW+ZrKv6odqsw5XKDVTKAnDXIYPQNg9ZBowuzm0RK8s+05HEoXcMrVDrgEbFZUFOTWPSY5NcBQfeWuRo=
+	t=1712255326; cv=none; b=kjwJErv39jMWegf4pQ+ZBh6xhZL87Su4i9T48ZCuoo4PUVSX5ODcDfxyV/kwyi1xkLtEj5vQt+dqlScX6JJZtUfypcsKmdwJRnEzy5/t+R3isbL0O+tAa2+a9JC2tUvTzGuOmaj3gIhoj9fGqMdUMBpT6DMrxBCKDsH6i1TizfE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712255236; c=relaxed/simple;
-	bh=fqjowcnx153YNfDrLfPJo6OP4+8bZ+DarJ9suHW8oqI=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ncbjmaMdR9H7BnJRvRlIWka//Z4HsuXvDkl6R4BgW2jz8+9aM2ooIH1aRpcHGm6ysv1bTixQS13rXZ8LX/oD1+E1UH38kuBxDa7cNlgvej5KYsPJQ7OhVQdr5jLlfC6WeYEdU11vZpp3vEkX4+Yqi+nDyn5HzGqdHGmfWVcMoJI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=networkplumber.org; spf=pass smtp.mailfrom=networkplumber.org; dkim=pass (2048-bit key) header.d=networkplumber-org.20230601.gappssmtp.com header.i=@networkplumber-org.20230601.gappssmtp.com header.b=WTyHV6H7; arc=none smtp.client-ip=209.85.214.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=networkplumber.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=networkplumber.org
+	s=arc-20240116; t=1712255326; c=relaxed/simple;
+	bh=u+kQooBlZ4MiYDuSFf99+F5LvhAGenBM2gcRtO/aHD0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=l4MM8Ep6bAeg7QPnZd6l9TKPTleh8OrA+vBbRZgH2cLWQJjkKqoHzJbWQ/s9aiZ/EjfTWyd7JlVlh+PwXhZl0rfOLU9IlBzrl+Xn5NG3UMn1lWIIOFLBBIsGrlrwDyjDFFARZU+LD/OrOnKnmAxv9KCfz4lL5GSdYx81G2rofu4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=pMqtNQZI; arc=none smtp.client-ip=95.215.58.183
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=networkplumber-org.20230601.gappssmtp.com header.i=@networkplumber-org.20230601.gappssmtp.com header.b="WTyHV6H7"
-Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-1e0fa980d55so10628795ad.3
-        for <bpf@vger.kernel.org>; Thu, 04 Apr 2024 11:27:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=networkplumber-org.20230601.gappssmtp.com; s=20230601; t=1712255234; x=1712860034; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=F4JiPL6I1aAxuHWxuu1AizOquC6OCNRn7bz4WD6eKOs=;
-        b=WTyHV6H72cWzy00s9b3JwNu8bRkcOYWb4ujcTtW2fhCwwVZj4LQnm0opAY9X4sqsqo
-         DA0P5IzcD96KCe5ltLYrhQE47qlyFnMD9CsouGcEvuvIvAQHM8mywmNBD6YUfWjhA14U
-         uhiI5OsiP6jtMKubSCy5eyew1l/bow/zBmw8991mlOFXlm5hijUqX8zFe0ofNida1HgI
-         AKGXReN6376uhmk8tcjg849kZR0Jh1tRLUT+5yahtkbdKPYH0NI+RYBSvJrqsAnJ4uV2
-         1KGDCkqm5GVCvg1vcogx7vfekbxbZDQfehZZS7oqvgTBt56HVfq7+nkz7lLs89d2hNaD
-         pmjw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712255234; x=1712860034;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=F4JiPL6I1aAxuHWxuu1AizOquC6OCNRn7bz4WD6eKOs=;
-        b=ZcxnvFCtvvmFvbVODVYFgdwCzfZfF/jCXM7lFIVIS1V3Q2F50QZK7ylDtx9rqLByia
-         9WJAmFWmacfQaL75ut7SrXv1E497jbbgJQclXhPb4FZN+6tnBvItvNydB2i3PByxOEfz
-         lVDCogwSp1kDHkoBoV7lyhdo2oHF9OGwRnJfwoxlazDcohut2WmK24GICgI9s00c8iIf
-         MU/FUU9V+Mfp5qxjyjJiA86Jpl/AYt5k8S0p/NGrRFzDzqJwJTOYdm4i5gHuvxh6N1kS
-         ls+R9QVZ4zRvJSbro4NrCBGQCmay17j5xZFmsU0ljQye1pKCMTcsGM2fHz2T0eNvT8aj
-         BCqQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU6gnX8C5Kif/mrMyZPsDIhT6uFs/CZqD+u4UNEbQeZ//IhiiKqEgx218nn328aUMITiXxnj3Kxq/ztiXNzdiIbxzQh
-X-Gm-Message-State: AOJu0YxzE94thZL4RDlw+Vk0eioNq2tHAmEAIW6oljEqmh0NufOnYvXg
-	LgdWaQW3IaYjeIhApGtRGhx4frFyqSTxW+kEJo5ckNkOYq66MNcFBExtdG3lScY=
-X-Google-Smtp-Source: AGHT+IGOMuDK+oKihVS/AKKsvvVi0EKz4LNZ6lVKbWSnfhCekLuquPo8IVCkbXMn0mcDfEDNnLXFBQ==
-X-Received: by 2002:a17:902:d2c8:b0:1e0:f473:fd8b with SMTP id n8-20020a170902d2c800b001e0f473fd8bmr3559341plc.9.1712255233815;
-        Thu, 04 Apr 2024 11:27:13 -0700 (PDT)
-Received: from hermes.local (204-195-96-226.wavecable.com. [204.195.96.226])
-        by smtp.gmail.com with ESMTPSA id s8-20020a170902ea0800b001dc3916853csm15699882plg.73.2024.04.04.11.27.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 Apr 2024 11:27:13 -0700 (PDT)
-Date: Thu, 4 Apr 2024 11:27:10 -0700
-From: Stephen Hemminger <stephen@networkplumber.org>
-To: Yonghong Song <yonghong.song@linux.dev>
-Cc: Luca Boccassi <bluca@debian.org>, daniel@iogearbox.net, ast@kernel.org,
- andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com,
- bpf@vger.kernel.org
-Subject: Re: vmlinux.h overlap/conflict with network protocol definitions
-Message-ID: <20240404112710.25d4e99d@hermes.local>
-In-Reply-To: <3ae7e58f-e62f-4d53-8b39-6e3fe1810014@linux.dev>
-References: <20240404100901.7d6bc10f@hermes.local>
-	<3ae7e58f-e62f-4d53-8b39-6e3fe1810014@linux.dev>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="pMqtNQZI"
+Message-ID: <936229b3-ba4a-4c46-8042-977e5f069800@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1712255321;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=yeN6ktp3klWYakAXqC9ZclmVOuipiffJCEuydbZZdko=;
+	b=pMqtNQZIfCVlqyopa3QOVOBsFk/6I0WiOfrhrmR4pgEU0C4Y0HDcIHXHj88PvMS0LF4m30
+	3udVbY9U8Atg1X302tRwzfcWSRoBjTu4NcrmW0dXfG5K6+pqPvYlnwA2t597ASn8h4aAul
+	HFEHKPpIlPO3DFw0MrFzhUl0zSYnidw=
+Date: Thu, 4 Apr 2024 11:28:37 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-
-On Thu, 4 Apr 2024 11:16:32 -0700
-Yonghong Song <yonghong.song@linux.dev> wrote:
-
-> On 4/4/24 10:09 AM, Stephen Hemminger wrote:
-> > I am fixing the use of TC BPF in DPDK to use libbpf and bpftool.
-> > Luca recommended using vmlinux.h to address possible build and
-> > CO:RE issues. But it won't work.
-> >
-> > There are missing pieces such as definitions of IPV6 next header
-> > fields (in linux/ipv6.h) and TC actions.
-> >
-> > Without major hack surgery, not possible to use vmlinux.h instead.
-> > Since vmlinux.h defines may things that overlap with other headers.
-> >
-> > Using:
-> >
-> > $ /usr/sbin/bpftool -V
-> > bpftool v7.3.0
-> > using libbpf v1.3
-> > features:
-> >
-> > $ uname -r
-> > 6.6.15-amd64
-> >
-> > The change to BPF program to use vmlinux is:
-> >
-> > diff --git a/drivers/net/tap/bpf/tap_rss.c b/drivers/net/tap/bpf/tap_rss.c
-> > index 888b3bdc24..79f4ee31a1 100644
-> > --- a/drivers/net/tap/bpf/tap_rss.c
-> > +++ b/drivers/net/tap/bpf/tap_rss.c
-> > @@ -2,12 +2,7 @@
-> >    * Copyright 2017 Mellanox Technologies, Ltd
-> >    */
-> >   
-> > -#include <linux/in.h>
-> > -#include <linux/if_ether.h>
-> > -#include <linux/ip.h>
-> > -#include <linux/ipv6.h>
-> > -#include <linux/pkt_cls.h>
-> > -#include <linux/bpf.h>
-> > +#include "vmlinux.h"
-> >   
-> >   #include <bpf/bpf_helpers.h>
-> >   #include <bpf/bpf_endian.h>
-> >
-> > Resulting build failure is:
-> >
-> >
-> > ~/DPDK/tap $ ninja -C build
-> > ninja: Entering directory `build'
-> > [1/33] Generating drivers/net/tap/bpf/tap_rss.bpf.o with a custom command
-> > FAILED: drivers/net/tap/bpf/tap_rss.o
-> > /usr/bin/clang -O2 -Wall -Wextra -DTAP_MAX_QUEUES=16 -target bpf -g -c -idirafter /usr/include -idirafter /usr/include/x86_64-linux-gnu ../drivers/net/tap/bpf/tap_rss.c -o drivers/net/tap/bpf/tap_rss.o
-> > ../drivers/net/tap/bpf/tap_rss.c:116:8: error: use of undeclared identifier 'IPPROTO_HOPOPTS'
-> >                  case IPPROTO_HOPOPTS:
-> >                       ^
-> > ../drivers/net/tap/bpf/tap_rss.c:117:8: error: use of undeclared identifier 'IPPROTO_ROUTING'
-> >                  case IPPROTO_ROUTING:
-> >                       ^
-> > ../drivers/net/tap/bpf/tap_rss.c:118:8: error: use of undeclared identifier 'IPPROTO_DSTOPTS'
-> >                  case IPPROTO_DSTOPTS:
-> >                       ^
-> > ../drivers/net/tap/bpf/tap_rss.c:126:8: error: use of undeclared identifier 'IPPROTO_FRAGMENT'
-> >                  case IPPROTO_FRAGMENT:
-> >                       ^
-> > ../drivers/net/tap/bpf/tap_rss.c:210:33: error: use of undeclared identifier 'ETH_P_IP'
-> >          if (skb->protocol == bpf_htons(ETH_P_IP))
-> >                                         ^
-> > ../drivers/net/tap/bpf/tap_rss.c:210:33: error: use of undeclared identifier 'ETH_P_IP'
-> > ../drivers/net/tap/bpf/tap_rss.c:210:33: error: use of undeclared identifier 'ETH_P_IP'
-> > ../drivers/net/tap/bpf/tap_rss.c:210:33: error: use of undeclared identifier 'ETH_P_IP'
-> > ../drivers/net/tap/bpf/tap_rss.c:212:38: error: use of undeclared identifier 'ETH_P_IPV6'
-> >          else if (skb->protocol == bpf_htons(ETH_P_IPV6))
-> >                                              ^
-> > ../drivers/net/tap/bpf/tap_rss.c:212:38: error: use of undeclared identifier 'ETH_P_IPV6'
-> > ../drivers/net/tap/bpf/tap_rss.c:212:38: error: use of undeclared identifier 'ETH_P_IPV6'
-> > ../drivers/net/tap/bpf/tap_rss.c:212:38: error: use of undeclared identifier 'ETH_P_IPV6'
-> > ../drivers/net/tap/bpf/tap_rss.c:248:10: error: use of undeclared identifier 'TC_ACT_OK'
-> >                  return TC_ACT_OK;
-> >                         ^
-> > ../drivers/net/tap/bpf/tap_rss.c:252:10: error: use of undeclared identifier 'TC_ACT_OK'
-> >                  return TC_ACT_OK;
-> >                         ^
-> > ../drivers/net/tap/bpf/tap_rss.c:256:9: error: use of undeclared identifier 'TC_ACT_PIPE'
-> >          return TC_ACT_PIPE;
-> >                 ^
-> > 15 errors generated.
-> > ninja: build stopped: subcommand failed.  
-> 
-> This is a known issue as currently vmlinux.h does not support macros. 
-> There are some efforts by Edward Zingerman to support this but this has 
-> not done yet. At the same time, you could have a trivial header file 
-> like 
-> https://github.com/torvalds/linux/blob/master/tools/testing/selftests/bpf/progs/bpf_tracing_net.h 
-> to be used for bpf program and then your bpf program with vmlinux.h can 
-> have much easier CORE support.
+Subject: Re: [PATCH v3 bpf-next 2/2] bpf: inline bpf_get_branch_snapshot()
+ helper
+Content-Language: en-GB
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+ Andrii Nakryiko <andrii@kernel.org>
+Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>,
+ Martin KaFai Lau <martin.lau@kernel.org>, Kernel Team
+ <kernel-team@meta.com>, John Fastabend <john.fastabend@gmail.com>
+References: <20240404002640.1774210-1-andrii@kernel.org>
+ <20240404002640.1774210-3-andrii@kernel.org>
+ <CAADnVQKc9QgOxvru-tqii0GO7H5+QD_=_v3O7_ant4BU1cNmKw@mail.gmail.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <CAADnVQKc9QgOxvru-tqii0GO7H5+QD_=_v3O7_ant4BU1cNmKw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
 
-That is an example of header surgery which I would rather avoid having to carry
-as long term technical debt baggage.
+On 4/4/24 11:14 AM, Alexei Starovoitov wrote:
+> On Wed, Apr 3, 2024 at 5:27 PM Andrii Nakryiko <andrii@kernel.org> wrote:
+>> Inline bpf_get_branch_snapshot() helper using architecture-agnostic
+>> inline BPF code which calls directly into underlying callback of
+>> perf_snapshot_branch_stack static call. This callback is set early
+>> during kernel initialization and is never updated or reset, so it's ok
+>> to fetch actual implementation using static_call_query() and call
+>> directly into it.
+>>
+>> This change eliminates a full function call and saves one LBR entry
+>> in PERF_SAMPLE_BRANCH_ANY LBR mode.
+>>
+>> Acked-by: John Fastabend <john.fastabend@gmail.com>
+>> Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+>> ---
+>>   kernel/bpf/verifier.c | 55 +++++++++++++++++++++++++++++++++++++++++++
+>>   1 file changed, 55 insertions(+)
+>>
+>> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+>> index 17c06f1505e4..2cb5db317a5e 100644
+>> --- a/kernel/bpf/verifier.c
+>> +++ b/kernel/bpf/verifier.c
+>> @@ -20181,6 +20181,61 @@ static int do_misc_fixups(struct bpf_verifier_env *env)
+>>                          goto next_insn;
+>>                  }
+>>
+>> +               /* Implement bpf_get_branch_snapshot inline. */
+>> +               if (prog->jit_requested && BITS_PER_LONG == 64 &&
+>> +                   insn->imm == BPF_FUNC_get_branch_snapshot) {
+>> +                       /* We are dealing with the following func protos:
+>> +                        * u64 bpf_get_branch_snapshot(void *buf, u32 size, u64 flags);
+>> +                        * int perf_snapshot_branch_stack(struct perf_branch_entry *entries, u32 cnt);
+>> +                        */
+>> +                       const u32 br_entry_size = sizeof(struct perf_branch_entry);
+>> +
+>> +                       /* struct perf_branch_entry is part of UAPI and is
+>> +                        * used as an array element, so extremely unlikely to
+>> +                        * ever grow or shrink
+>> +                        */
+>> +                       BUILD_BUG_ON(br_entry_size != 24);
+>> +
+>> +                       /* if (unlikely(flags)) return -EINVAL */
+>> +                       insn_buf[0] = BPF_JMP_IMM(BPF_JNE, BPF_REG_3, 0, 7);
+>> +
+>> +                       /* Transform size (bytes) into number of entries (cnt = size / 24).
+>> +                        * But to avoid expensive division instruction, we implement
+>> +                        * divide-by-3 through multiplication, followed by further
+>> +                        * division by 8 through 3-bit right shift.
+>> +                        * Refer to book "Hacker's Delight, 2nd ed." by Henry S. Warren, Jr.,
+>> +                        * p. 227, chapter "Unsigned Divison by 3" for details and proofs.
+>> +                        *
+>> +                        * N / 3 <=> M * N / 2^33, where M = (2^33 + 1) / 3 = 0xaaaaaaab.
+>> +                        */
+>> +                       insn_buf[1] = BPF_MOV32_IMM(BPF_REG_0, 0xaaaaaaab);
+>> +                       insn_buf[2] = BPF_ALU64_REG(BPF_MUL, BPF_REG_2, BPF_REG_0);
+>> +                       insn_buf[3] = BPF_ALU64_IMM(BPF_RSH, BPF_REG_2, 36);
+>> +
+>> +                       /* call perf_snapshot_branch_stack implementation */
+>> +                       insn_buf[4] = BPF_EMIT_CALL(static_call_query(perf_snapshot_branch_stack));
+> How will this work on non-x86 ?
+> I tried to grep the code and looks like only x86 does:
+> static_call_update(perf_snapshot_branch_stack,...)
+>
+> so on other arch-s static_call_query() will return zero/einval?
+> And above will crash?
 
+Patch 1 will give the answer.In events/core.c, we have the following: 
+DEFINE_STATIC_CALL_RET0(perf_snapshot_branch_stack, 
+perf_snapshot_branch_stack_t); #define DEFINE_STATIC_CALL_RET0(name, 
+_func) \ DECLARE_STATIC_CALL(name, _func); \ struct static_call_key 
+STATIC_CALL_KEY(name) = { \ .func = __static_call_return0, \ .type = 1, 
+\ }; \ ARCH_DEFINE_STATIC_CALL_RET0_TRAMP(name) So the default value for 
+perf_snapshot_branch_stack  is
+__static_call_return0.
+
+In static_call.c, long __static_call_return0(void) { return 0; } 
+EXPORT_SYMBOL_GPL(__static_call_return0); So we should be fine.
 
