@@ -1,210 +1,170 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com [209.85.215.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 397AA1BC46;
-	Thu,  4 Apr 2024 16:06:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCCA812AAE4
+	for <bpf@vger.kernel.org>; Thu,  4 Apr 2024 16:12:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712246769; cv=none; b=t9AIG/wWdU2k49tF/s4A2vE5iXGTgK8mJ9RNJprZ9ogeIQN6v2JI/AAr19nav6o8AQ8I3hp3BlNv85cVKOS3FiHWqcplhW34MaTf0xs8DNAJX1szjDtSno0Wnit6YQnEYA7wtSad/cC4FsbGGI6GZXN1qirp5J0lOlJrPRueoqY=
+	t=1712247162; cv=none; b=tvwHXy+37YbWB76zjHuqSqnIVptUlE/EE2hRAroitiheL+ppmSU+76E9l+Ha4kua6RZcwqs7fWz7kSU0ovElwQoB9yG6QKclYb6i2nryfa6EqUJevKtLdX//bsNMy7DLkPA1s45tsvzdKNbdbE56J3Rq1hlLaNnFWVGEJGp0zeg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712246769; c=relaxed/simple;
-	bh=+5n1opxFvTrkkm7rzpBmiqYFvlJrF7IWFtBu70bBigs=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=p6fT5hf2KqnF2T/RpHCCuL875l2tRM6PEc1eDJH9wOWbL2o86g32ZunSQu/LFx62qFhVxINayH4ENrpEJtMQEB58mx5QIGOJeas6HFmfZP5NEbO8WrE2M17rVQSn0C1vbUF6cGIWxgAMb46TNqwlrM/bi3BgRTAUFP12Qyti3Xs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=g+9LmoP/; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1712247162; c=relaxed/simple;
+	bh=BIRK2tUdxHpNKH7i5AgkS00bhiJ1q4Qx/MLqW673wK4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=rkjwwnBeHGPKs5iOF7VYzDCGqjOmK9H9Qutty6Hv/mPGCEVqJIXtciugfi3LCQeXCUzv/f3Okylkx8Spv15TGeJ3IXLT/2X1Melr6RFKOHXswSv9XuQgCtoYSsDco2XUsf8qRQA73zIzCO+rlwYeiXEkW8spCiTzNDLaEym9hFg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jnk+Y19G; arc=none smtp.client-ip=209.85.215.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="g+9LmoP/"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79270C43390;
-	Thu,  4 Apr 2024 16:06:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712246768;
-	bh=+5n1opxFvTrkkm7rzpBmiqYFvlJrF7IWFtBu70bBigs=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=g+9LmoP/qNM5Fayaerz57GtxMTmBUXsjnSbxebbCkQxULEi3MCu4hJBJzVmLZzcVh
-	 7jQ+YkTF0SnkK3uxx0dZGfgkxjvD7VvUIHQlTi3B/79sofEimfUjezt5UQZeOBDcEv
-	 a3QRqDuXvPUbMBA9RcjPB4i4jHeB0A49dVYhg10xQzGOsr512khahosuoZi1iUgXF2
-	 Ks0sl41DeIUiGVxyRGEW56kdBnFRb0AvRTsViKdufvUhNiMyfrV+L/vXWfTmPCDW2j
-	 yipFk6iA39YdQpVPb8z83KsbJdxVev2nrESqvgGMIA8SsxCGFVtPtPfJIlOefQw+XB
-	 MUE8BKBXFw8nQ==
-Date: Fri, 5 Apr 2024 01:06:03 +0900
-From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To: Jiri Olsa <olsajiri@gmail.com>
-Cc: Andrii Nakryiko <andrii.nakryiko@gmail.com>, Masami Hiramatsu
- <mhiramat@kernel.org>, Steven Rostedt <rostedt@goodmis.org>,
- linux-api@vger.kernel.org, Oleg Nesterov <oleg@redhat.com>, Alexei
- Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>, linux-kernel@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org, Song Liu
- <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>, John Fastabend
- <john.fastabend@gmail.com>, Peter Zijlstra <peterz@infradead.org>, Thomas
- Gleixner <tglx@linutronix.de>, "Borislav Petkov (AMD)" <bp@alien8.de>,
- x86@kernel.org
-Subject: Re: [PATCHv2 1/3] uprobe: Add uretprobe syscall to speed up return
- probe
-Message-Id: <20240405010603.58bd96cdf56d456103844e65@kernel.org>
-In-Reply-To: <Zg6V8y2-OP_9at2l@krava>
-References: <20240402093302.2416467-1-jolsa@kernel.org>
-	<20240402093302.2416467-2-jolsa@kernel.org>
-	<20240403100708.233575a8ac2a5bac2192d180@kernel.org>
-	<Zg0lvUIB4WdRUGw_@krava>
-	<20240403230937.c3bd47ee47c102cd89713ee8@kernel.org>
-	<CAEf4BzZ2RFfz8PNgJ4ENZ0us4uX=DWhYFimXdtWms-VvGXOjgQ@mail.gmail.com>
-	<20240404095829.ec5db177f29cd29e849169fa@kernel.org>
-	<CAEf4BzYH60TwvBipHWB_kUqZZ6D-iUVnnFsBv06imRikK3o-bg@mail.gmail.com>
-	<Zg6V8y2-OP_9at2l@krava>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jnk+Y19G"
+Received: by mail-pg1-f174.google.com with SMTP id 41be03b00d2f7-5f034b4dcecso857324a12.1
+        for <bpf@vger.kernel.org>; Thu, 04 Apr 2024 09:12:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1712247160; x=1712851960; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=iDovgBtz7HDihfoLoqYrxcZz/wJyec5Jnx11DKmVr90=;
+        b=jnk+Y19GM+EoEMlhsyIajJ7ywKARfhYQmkxFq3h4R4vSY1LxdC17tfohe33VAsjYus
+         yoqCHOFY8RUJ3q9IcGjiVYnKjA+om8/a3eNeKUkpLfR9kVroOQpGorAIcqznVAUSZoQ8
+         XxlJhsLOVVwGaIyeGy+7wfB2ZjF44QBfwGAaRsksi20bnFopT6OWOhP5yw05naIyd08G
+         FBIBZOU+vgFgy9H9yuEm49V19vcaquRzmjd+bIzFELTW0hzUbaZ5eig27VAfqidkJe11
+         5x5tVc2TPvXhFxof+IFRmbhYFkhFpv2GkzU/XKlW/lGYltGlrL49Z9RAtltEEax5k4aJ
+         U2zg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1712247160; x=1712851960;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=iDovgBtz7HDihfoLoqYrxcZz/wJyec5Jnx11DKmVr90=;
+        b=EUDKMn3kPVv3DrCv1aZbLry0Ye2JCeTtLd0Nq0MBVx+4tSHT8AdXjdX0NbGaUXdZQf
+         sYV2ft0A+M4SWJs9kA3esZ6X2R+FNBhuAlSkkxwraaVT++5yGltoosOHiILJE7L3SzgM
+         bKUlHu3Malt1v7TDXiePGT3pHk5bV4sRCMJak2MgYtTMbVoBZqEbJLD4oIQuCEOoC4eU
+         qYTqiYx3UJaTHH6BegKorYEht4ytkE9CtXGG4fZjxIIpZ/xMqnkMybsQhC6VPwEsriu2
+         KmMrWMqy0w1O5lOipg1Mezz1oJKfgOEvqClpHreLBTcdqpMAsuX7oVwbkB8ndgN2QGWJ
+         s7Mg==
+X-Gm-Message-State: AOJu0YyK9YkvsSUYRKmIgVZ3dAbL/bmMc92TK5EnmjVqMNORXSIPmUN3
+	HQXEg0J478bfcktGsFu8l4hXRRpU5VZF4cI5DXf+yXQgO+07oVk6FNRLXGdNq/XbOQ7xu2/qAPA
+	fCY5IzRUrKrho2GkW8fSxxoIKyK0=
+X-Google-Smtp-Source: AGHT+IFHMN9ZX5m2FUjODZJHRveHORWRUcgM89nbXc1fV8hIAJBcCfl1iSmisSOcZzR39+sjKxLyC8Wx6QD5UIgctCc=
+X-Received: by 2002:a17:90b:192:b0:2a2:9e5d:9bf9 with SMTP id
+ t18-20020a17090b019200b002a29e5d9bf9mr75017pjs.8.1712247159953; Thu, 04 Apr
+ 2024 09:12:39 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+References: <20240402021307.1012571-1-andrii@kernel.org>
+In-Reply-To: <20240402021307.1012571-1-andrii@kernel.org>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Thu, 4 Apr 2024 09:12:27 -0700
+Message-ID: <CAEf4BzbQrZ5XpSTv-0NXLRcb3g4VZRymar66zs2QyCVBmB1Mpw@mail.gmail.com>
+Subject: Re: [PATCH v2 bpf-next 0/4] Add internal-only BPF per-CPU instruction
+To: Andrii Nakryiko <andrii@kernel.org>, Pu Lehui <pulehui@huawei.com>, 
+	Puranjay Mohan <puranjay12@gmail.com>
+Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net, 
+	martin.lau@kernel.org, kernel-team@meta.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, 4 Apr 2024 13:58:43 +0200
-Jiri Olsa <olsajiri@gmail.com> wrote:
+On Mon, Apr 1, 2024 at 7:13=E2=80=AFPM Andrii Nakryiko <andrii@kernel.org> =
+wrote:
+>
+> Add a new BPF instruction for resolving per-CPU memory addresses.
+>
+> New instruction is a special form of BPF_ALU64 | BPF_MOV | BPF_DW, with
+> insns->off set to BPF_ADDR_PERCPU (=3D=3D -1). It resolves provided per-C=
+PU offset
+> to an absolute address where per-CPU data resides for "this" CPU.
+>
+> This patch set implements support for it in x86-64 BPF JIT only.
+>
+> Using the new instruction, we also implement inlining for three cases:
+>   - bpf_get_smp_processor_id(), which allows to avoid unnecessary trivial
+>     function call, saving a bit of performance and also not polluting LBR
+>     records with unnecessary function call/return records;
+>   - PERCPU_ARRAY's bpf_map_lookup_elem() is completely inlined, bringing =
+its
+>     performance to implementing per-CPU data structures using global vari=
+ables
+>     in BPF (which is an awesome improvement, see benchmarks below);
+>   - PERCPU_HASH's bpf_map_lookup_elem() is partially inlined, just like t=
+he
+>     same for non-PERCPU HASH map; this still saves a bit of overhead.
+>
+> To validate performance benefits, I hacked together a tiny benchmark doin=
+g
+> only bpf_map_lookup_elem() and incrementing the value by 1 for PERCPU_ARR=
+AY
+> (arr-inc benchmark below) and PERCPU_HASH (hash-inc benchmark below) maps=
+. To
+> establish a baseline, I also implemented logic similar to PERCPU_ARRAY ba=
+sed
+> on global variable array using bpf_get_smp_processor_id() to index array =
+for
+> current CPU (glob-arr-inc benchmark below).
+>
+> BEFORE
+> =3D=3D=3D=3D=3D=3D
+> glob-arr-inc   :  163.685 =C2=B1 0.092M/s
+> arr-inc        :  138.096 =C2=B1 0.160M/s
+> hash-inc       :   66.855 =C2=B1 0.123M/s
+>
+> AFTER
+> =3D=3D=3D=3D=3D
+> glob-arr-inc   :  173.921 =C2=B1 0.039M/s (+6%)
+> arr-inc        :  170.729 =C2=B1 0.210M/s (+23.7%)
+> hash-inc       :   68.673 =C2=B1 0.070M/s (+2.7%)
+>
+> As can be seen, PERCPU_HASH gets a modest +2.7% improvement, while global
+> array-based gets a nice +6% due to inlining of bpf_get_smp_processor_id()=
+.
+>
+> But what's really important is that arr-inc benchmark basically catches u=
+p
+> with glob-arr-inc, resulting in +23.7% improvement. This means that in
+> practice it won't be necessary to avoid PERCPU_ARRAY anymore if performan=
+ce is
+> critical (e.g., high-frequent stats collection, which is often a practica=
+l use
+> for PERCPU_ARRAY today).
+>
+> v1->v2:
+>   - use BPF_ALU64 | BPF_MOV instruction instead of LDX (Alexei);
+>   - dropped the direct per-CPU memory read instruction, it can always be =
+added
+>     back, if necessary;
+>   - guarded bpf_get_smp_processor_id() behind x86-64 check (Alexei);
+>   - switched all per-cpu addr casts to (unsigned long) to avoid sparse
+>     warnings.
+>
+> Andrii Nakryiko (4):
+>   bpf: add special internal-only MOV instruction to resolve per-CPU
+>     addrs
+>   bpf: inline bpf_get_smp_processor_id() helper
+>   bpf: inline bpf_map_lookup_elem() for PERCPU_ARRAY maps
+>   bpf: inline bpf_map_lookup_elem() helper for PERCPU_HASH map
+>
+>  arch/x86/net/bpf_jit_comp.c | 16 ++++++++++++++++
+>  include/linux/filter.h      | 20 ++++++++++++++++++++
+>  kernel/bpf/arraymap.c       | 33 +++++++++++++++++++++++++++++++++
+>  kernel/bpf/core.c           |  5 +++++
+>  kernel/bpf/disasm.c         | 14 ++++++++++++++
+>  kernel/bpf/hashtab.c        | 21 +++++++++++++++++++++
+>  kernel/bpf/verifier.c       | 24 ++++++++++++++++++++++++
+>  7 files changed, 133 insertions(+)
+>
+> --
+> 2.43.0
+>
 
-> On Wed, Apr 03, 2024 at 07:00:07PM -0700, Andrii Nakryiko wrote:
-> 
-> SNIP
-> 
-> > Check rt_sigreturn syscall (manpage at [0], for example).
-> > 
-> >        sigreturn() exists only to allow the implementation of signal
-> >        handlers.  It should never be called directly.  (Indeed, a simple
-> >        sigreturn() wrapper in the GNU C library simply returns -1, with
-> >        errno set to ENOSYS.)  Details of the arguments (if any) passed
-> >        to sigreturn() vary depending on the architecture.  (On some
-> >        architectures, such as x86-64, sigreturn() takes no arguments,
-> >        since all of the information that it requires is available in the
-> >        stack frame that was previously created by the kernel on the
-> >        user-space stack.)
-> > 
-> > This is a very similar use case. Also, check its source code in
-> > arch/x86/kernel/signal_64.c. It sends SIGSEGV to the calling process
-> > on any sign of something not being right. It's exactly the same with
-> > sys_uretprobe.
-> > 
-> >   [0] https://man7.org/linux/man-pages/man2/sigreturn.2.html
-> > 
-> > > And the number of syscalls are limited resource.
-> > 
-> > We have almost 500 of them, it didn't seems like adding 1-2 for good
-> > reasons would be a problem. Can you please point to where the limits
-> > on syscalls as a resource are described? I'm curious to learn.
-> > 
-> > >
-> > > I'm actually not sure how much we need to care of it, but adding a new
-> > > syscall is worth to be discussed carefully because all of them are
-> > > user-space compatibility.
-> > 
-> > Absolutely, it's a good discussion to have.
-> > 
-> > >
-> > > > > > > Also, we should run syzkaller on this syscall. And if uretprobe is
-> > > > > >
-> > > > > > right, I'll check on syzkaller
-> > > > > >
-> > > > > > > set in the user function, what happen if the user function directly
-> > > > > > > calls this syscall? (maybe it consumes shadow stack?)
-> > > > > >
-> > > > > > the process should receive SIGILL if there's no pending uretprobe for
-> > > > > > the current task, or it will trigger uretprobe if there's one pending
-> > > > >
-> > > > > No, that is too aggressive and not safe. Since the syscall is exposed to
-> > > > > user program, it should return appropriate error code instead of SIGILL.
-> > > > >
-> > > >
-> > > > This is the way it is today with uretprobes even through interrupt.
-> > >
-> > > I doubt that the interrupt (exception) and syscall should be handled
-> > > differently. Especially, this exception is injected by uprobes but
-> > > syscall will be caused by itself. But syscall can be called from user
-> > > program (of couse this works as sys_kill(self, SIGILL)).
-> > 
-> > Yep, I'd keep the behavior the same between uretprobes implemented
-> > through int3 and sys_uretprobe.
-> 
-> +1 
-> 
-> > 
-> > >
-> > > > E.g., it could happen that user process is using fibers and is
-> > > > replacing stack pointer without kernel realizing this, which will
-> > > > trigger some defensive checks in uretprobe handling code and kernel
-> > > > will send SIGILL because it can't support such cases. This is
-> > > > happening today already, and it works fine in practice (except for
-> > > > applications that manually change stack pointer, too bad, you can't
-> > > > trace them with uretprobes, unfortunately).
-> > >
-> > > OK, we at least need to document it.
-> > 
-> > +1, yep
-> > 
-> > >
-> > > >
-> > > > So I think it's absolutely adequate to have this behavior if the user
-> > > > process is *intentionally* abusing this API.
-> > >
-> > > Of course user expected that it is abusing. So at least we need to
-> > > add a document that this syscall number is reserved to uprobes and
-> > > user program must not use it.
-> > >
-> > 
-> > Totally agree about documenting this.
-> 
-> ok there's map page on sigreturn.. do you think we should add man page
-> for uretprobe or you can think of some other place to document it?
+Puranjay, Pu,
 
-I think it is better to have a man-page. Anyway, to discuss and explain
-this syscall, the man-page is a good format to describe it.
+Is this something you guys can help implement for ARM64 and RISC-V
+architectures as well? I'm lacking the knowledge of the specifics of
+this architecture to be able to do this by myself, but it is a nice
+improvement for BPF applications, so it would be nice to get wide
+architecture support.
 
-> 
-> > 
-> > > >
-> > > > > >
-> > > > > > but we could limit the syscall to be executed just from the trampoline,
-> > > > > > that should prevent all the user space use cases, I'll do that in next
-> > > > > > version and add more tests for that
-> > > > >
-> > > > > Why not limit? :) The uprobe_handle_trampoline() expects it is called
-> > > > > only from the trampoline, so it is natural to check the caller address.
-> > > > > (and uprobe should know where is the trampoline)
-> > > > >
-> > > > > Since the syscall is always exposed to the user program, it should
-> > > > > - Do nothing and return an error unless it is properly called.
-> > > > > - check the prerequisites for operation strictly.
-> > > > > I concern that new system calls introduce vulnerabilities.
-> > > > >
-> > > >
-> > > > As Oleg and Jiri mentioned, this syscall can't harm kernel or other
-> > > > processes, only the process that is abusing the API. So any extra
-> > > > checks that would slow down this approach is an unnecessary overhead
-> > > > and complication that will never be useful in practice.
-> > >
-> > > I think at least it should check the caller address to ensure the
-> > > address is in the trampoline.
-> > > But anyway, uprobes itself can break the target process, so no one
-> > > might care if this system call breaks the process now.
-> > 
-> > If we already have an expected range of addresses, then I think it's
-> > fine to do a quick unlikely() check. I'd be more concerned if we need
-> > to do another lookup or search to just validate this. I'm sure Jiri
-> > will figure it out.
-> 
-> Oleg mentioned the trampoline address check could race with another
-> thread's mremap call, however trap is using that check as well, it
-> still seems like good idea to do it also in the uretprobe syscall
-
-Yeah, and also, can we add a stack pointer check if the trampoline is
-shared with other probe points?
-
-Thank you,
-
-> 
-> jirka
-
-
--- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Thank you!
