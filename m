@@ -1,102 +1,85 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A766D286A6
-	for <bpf@vger.kernel.org>; Thu,  4 Apr 2024 22:32:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D73EE286A6;
+	Thu,  4 Apr 2024 22:33:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712269939; cv=none; b=AnwWab7i1cS5WMHb5+QcMB80gF2C8Ol7ycLTp51OIjVTfq+wQa17h2CUHL2FDPWnDRETs9Hcghbl8qJfu/1yeORxfu2772U5Pzs/rEw96NeYp8R0OLIlmT9gpHiHEvPif06clS8w6VCoZsWHJV8YbPJiakm1BZbcQ8uxGOLpIXk=
+	t=1712270021; cv=none; b=h7W6eM99xtrLLTEpNVKaYbmB7AOOftNStPdl94cGBofa4R29drDFTJqTdbImjnb6aFxSA8wpucP1kVuDwQRDLmapxcdv4eO2JqLei83gEcqVZzHnPlA50ou99ZDWiMfEKYerZUGUVaSle0W0PTPFcCtgsAc7iIccmrCas8RKnyw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712269939; c=relaxed/simple;
-	bh=ibl465D/PMeJpb5Kyew2Z+ikA2cB192NomKfeWDEmwo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Ye/QWYNlVH76jsBv09bfSRs+U2CTnR2HWwAEiq3Bb7s2rjRrW+ug4I+J/rHHfUPhk8ugRdGmUOtbieQCFkas7i40mL702tyCarTMRrnHgQVBxdEsczBFMjYu4rFl6ZmSbdd/4Vm06vI2Ob++05qJ33iF3xSCRLa493dvARBo/CY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RUocg1I8; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1712270021; c=relaxed/simple;
+	bh=32pXzlKjGDShLM9eqF5c6ZAKQrHUUZ/CsdUkSBn4u7E=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=UlhU497iuICZW26p38Wfh3PwjF9fLFdM9jBMDkrJ9vIFpaWPShAZqQ48ArSa1R9z+rr0hEIbIavFfsDtOyZ2v+n1AKPjmjeIM8Uxr/pOLNUVFsoKOesEWV8ZvjDawwYc2MkZJZ04AqGIkm7CreduXAUVu0GAHg0AEbeg6aej50w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=Te+feZmU; arc=none smtp.client-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RUocg1I8"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5068C433F1;
-	Thu,  4 Apr 2024 22:32:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712269939;
-	bh=ibl465D/PMeJpb5Kyew2Z+ikA2cB192NomKfeWDEmwo=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=RUocg1I8SloRDeob59nuZOXjOFqONEj1OVpbmS9AS+MjwqFcN4orjOeWR4KV5+USY
-	 hEsrfMgHug7zpltzDDK336v64Zp5ugLX+ljjeqXzF4jS07GeJOyc7FK5+QvEsAftI9
-	 RUsIBoXi6O5CeySmg7jhFZFr9tQo4uUKds+emduVSDNoiLpeqlhci2nZr0+NLtkZCj
-	 vQ/DgrN4v7Rv69o4IlkfmOsiOsaXcySzw1bI68w7C/o3nb8qmh/pFcHvgHlMKmxDN2
-	 3bC7h6jV5APNt0Su5wxfADlrRysm6Vbj5cqYXBknS/Nsf8kSPCfXvQsrTLyBQX/pHl
-	 IgBaSwXQWyJNg==
-Message-ID: <7de85056-b15e-4c4a-a2f5-a450eaadfab1@kernel.org>
-Date: Thu, 4 Apr 2024 23:32:14 +0100
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="Te+feZmU"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=75VsQ8F7/H5KCW5vqBNrslkQ11lt96phTDSmVee/O9I=; b=Te+feZmUkMzP94t2sItXjVWR5n
+	UxqmPQpg1gH24py6VHZcp2Yzrj1xtO40Oy9nQUk/SjHo1dw0m+owjkqZGpr4mxYxKmnwmdMjKSARP
+	PbPDBDjLGS/fO1KlJ/O15LF6KM0e1lNhDFdxUyeNlYmLmMRyZYt3Sb8nM6EsEN6Jb1ESmpoOUy/w7
+	zYZHPZ18PCnhDFfTlWkNlW8ibXtgOZvrCOq9ZiP8ZQw4feDaJphjSp942UnkuWrE0lUuvtUoTrRXN
+	0PeZviuO5MSV5ayE1r4TbxsnAojnzcKvwsJPAUPxosKblk92mi9rZW5UXmhFVDP1h8SdLCPdpocoQ
+	pKS100xA==;
+Received: from willy by casper.infradead.org with local (Exim 4.97.1 #2 (Red Hat Linux))
+	id 1rsVe6-000000092fK-1nQF;
+	Thu, 04 Apr 2024 22:33:22 +0000
+Date: Thu, 4 Apr 2024 23:33:22 +0100
+From: Matthew Wilcox <willy@infradead.org>
+To: Suren Baghdasaryan <surenb@google.com>
+Cc: akpm@linux-foundation.org, joro@8bytes.org, will@kernel.org,
+	trond.myklebust@hammerspace.com, anna@kernel.org, arnd@arndb.de,
+	herbert@gondor.apana.org.au, davem@davemloft.net, jikos@kernel.org,
+	benjamin.tissoires@redhat.com, tytso@mit.edu, jack@suse.com,
+	dennis@kernel.org, tj@kernel.org, cl@linux.com,
+	jakub@cloudflare.com, penberg@kernel.org, rientjes@google.com,
+	iamjoonsoo.kim@lge.com, vbabka@suse.cz, edumazet@google.com,
+	kuba@kernel.org, pabeni@redhat.com, iommu@lists.linux.dev,
+	linux-kernel@vger.kernel.org, linux-nfs@vger.kernel.org,
+	linux-acpi@vger.kernel.org, acpica-devel@lists.linux.dev,
+	linux-arch@vger.kernel.org, linux-crypto@vger.kernel.org,
+	bpf@vger.kernel.org, linux-input@vger.kernel.org,
+	linux-ext4@vger.kernel.org, linux-mm@kvack.org,
+	netdev@vger.kernel.org, linux-security-module@vger.kernel.org,
+	kent.overstreet@linux.dev
+Subject: Re: [PATCH 1/1] mm: change inlined allocation helpers to account at
+ the call site
+Message-ID: <Zg8qstJNfK07siNn@casper.infradead.org>
+References: <20240404165404.3805498-1-surenb@google.com>
+ <Zg7dmp5VJkm1nLRM@casper.infradead.org>
+ <CAJuCfpHbTCwDERz+Hh+aLZzNdtSFKA+Q7sW-xzvmFmtyHCqROg@mail.gmail.com>
+ <CAJuCfpHy5Xo76S7h9rEuA3cQ1pVqurL=wmtQ2cx9-xN1aa_C_A@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird Beta
-Subject: Re: [PATCH bpf-next v5] bpftool: Mount bpffs on provided dir instead
- of parent dir
-To: Sahil Siddiq <icegambit91@gmail.com>, ast@kernel.org,
- daniel@iogearbox.net, andrii@kernel.org
-Cc: martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
- yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
- sdf@google.com, haoluo@google.com, jolsa@kernel.org, bpf@vger.kernel.org
-References: <20240404192219.52373-1-icegambit91@gmail.com>
-From: Quentin Monnet <qmo@kernel.org>
-Content-Language: en-GB
-In-Reply-To: <20240404192219.52373-1-icegambit91@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJuCfpHy5Xo76S7h9rEuA3cQ1pVqurL=wmtQ2cx9-xN1aa_C_A@mail.gmail.com>
 
-On 04/04/2024 20:22, Sahil Siddiq wrote:
-> When pinning programs/objects under PATH (eg: during "bpftool prog
-> loadall") the bpffs is mounted on the parent dir of PATH in the
-> following situations:
-> - the given dir exists but it is not bpffs.
-> - the given dir doesn't exist and the parent dir is not bpffs.
+On Thu, Apr 04, 2024 at 03:17:43PM -0700, Suren Baghdasaryan wrote:
+> Ironically, checkpatch generates warnings for these type casts:
 > 
-> Mounting on the parent dir can also have the unintentional side-
-> effect of hiding other files located under the parent dir.
+> WARNING: unnecessary cast may hide bugs, see
+> http://c-faq.com/malloc/mallocnocast.html
+> #425: FILE: include/linux/dma-fence-chain.h:90:
+> + ((struct dma_fence_chain *)kmalloc(sizeof(struct dma_fence_chain),
+> GFP_KERNEL))
 > 
-> If the given dir exists but is not bpffs, then the bpffs should
-> be mounted on the given dir and not its parent dir.
-> 
-> Similarly, if the given dir doesn't exist and its parent dir is not
-> bpffs, then the given dir should be created and the bpffs should be
-> mounted on this new dir.
-> 
-> Link: https://lore.kernel.org/bpf/2da44d24-74ae-a564-1764-afccf395eeec@isovalent.com/T/#t
-> Closes: https://github.com/libbpf/bpftool/issues/100
-> Fixes: 2a36c26fe3b8 ("bpftool: Support bpffs mountpoint as pin path for prog loadall")
-> 
-> Changes since v1:
->  - Split "mount_bpffs_for_pin" into two functions.
->    This is done to improve maintainability and readability.
-> 
-> Changes since v2:
-> - mount_bpffs_for_pin: rename to "create_and_mount_bpffs_dir".
-> - mount_bpffs_given_file: rename to "mount_bpffs_given_file".
-> - create_and_mount_bpffs_dir:
->   - introduce "dir_exists" boolean.
->   - remove new dir if "mnt_fs" fails.
-> - improve error handling and error messages.
-> 
-> Changes since v3:
-> - Rectify function name.
-> - Improve error messages and formatting.
-> - mount_bpffs_for_file:
->   - Check if dir exists before block_mount check.
-> 
-> Changes since v4:
-> - Use strdup instead of strcpy.
-> - create_and_mount_bpffs_dir:
->   - Use S_IRWXU instead of 0700.
-> - Improve error handling and formatting.
-> 
-> Signed-off-by: Sahil Siddiq <icegambit91@gmail.com>
+> I guess I can safely ignore them in this case (since we cast to the
+> expected type)?
 
-Tested-by: Quentin Monnet <qmo@kernel.org>
-Reviewed-by: Quentin Monnet <qmo@kernel.org>
+I find ignoring checkpatch to be a solid move 99% of the time.
 
-Thank you!
+I really don't like the codetags.  This is so much churn, and it could
+all be avoided by just passing in _RET_IP_ or _THIS_IP_ depending on
+whether we wanted to profile this function or its caller.  vmalloc
+has done it this way since 2008 (OK, using __builtin_return_address())
+and lockdep has used _THIS_IP_ / _RET_IP_ since 2006.
