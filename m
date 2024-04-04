@@ -1,57 +1,57 @@
-Received: from mail-oi1-f175.google.com (mail-oi1-f175.google.com [209.85.167.175])
+Received: from mail-ot1-f48.google.com (mail-ot1-f48.google.com [209.85.210.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 770E5128372
-	for <bpf@vger.kernel.org>; Thu,  4 Apr 2024 12:23:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F13DB12839D
+	for <bpf@vger.kernel.org>; Thu,  4 Apr 2024 12:23:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712233430; cv=none; b=R74sZHuhrrd3WB1lmy4Auvk7R2Em8z2neAzqAmpCzKtZx4QFcJpkLXiS81jor+BPSpHYIthX38o3GfwUiINccAyZrIo6FlpJoc2N14RCPm9wL7Ij/viPr97Q5dRrp7NBceFslMClLBml7n03A0TSTTLGLsYVeMK1CCcaDwHe7MQ=
+	t=1712233432; cv=none; b=mryOLOpP9MB+XdPD1BlbAI5hwaJf2cG2B8OWC+4G1+0etQjVPmnuBl6hNAqU61NP3ElWd6IIT7qXbHwTLfISq/H77Ajo5n7l/JYoGHkd2NGUvviTC0tEZjsxiphpiF9G/g9wYY9gi17XJMEitacuzX2dGnrCB0LXQGH322IuzH8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712233430; c=relaxed/simple;
-	bh=b8bptETvG84oiXi8WEQCccf8XZFYg83kzkS/2d51CA0=;
+	s=arc-20240116; t=1712233432; c=relaxed/simple;
+	bh=C2FiznAokHafKMnRKcGAsHw+ewWJ1IeGQDjGY2qWF3A=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=lQG8TDz5Lg0/FVryDTS4mQ7hOlUPP3XYzD182jeEHdYuY0t/r2i2SNsXI5bRbyIoXOq/NRt6pE1CvzyM8tFZPn1suCPPnDniQFDIGTlfTKNbLuGMn/IDfGAonp+hIupe7qChEUZLbEQ45QMv3Ebj6Kv5GbNSYh5p/GyNHeLIPmA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mojatatu.com; spf=none smtp.mailfrom=mojatatu.com; dkim=pass (2048-bit key) header.d=mojatatu-com.20230601.gappssmtp.com header.i=@mojatatu-com.20230601.gappssmtp.com header.b=eJof1qYX; arc=none smtp.client-ip=209.85.167.175
+	 MIME-Version:Content-Type; b=ZYme0gX4qZLf/2j1hk+4aUofFHzJOYfGcc1tI394hCg+9tLR7RCMfkiJ0QVPKBW6NJ7T/Jm0Ro48YwxgMKZtemW8gcRYCBMmiU47z+XOOthVqFDaE7bTihblQmPlm3q0l1a9gX2JixeA4/0jD2NcT1sLeA8bfjWC0rJlFNEswQc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mojatatu.com; spf=none smtp.mailfrom=mojatatu.com; dkim=pass (2048-bit key) header.d=mojatatu-com.20230601.gappssmtp.com header.i=@mojatatu-com.20230601.gappssmtp.com header.b=EDDXubS0; arc=none smtp.client-ip=209.85.210.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mojatatu.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=mojatatu.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=mojatatu-com.20230601.gappssmtp.com header.i=@mojatatu-com.20230601.gappssmtp.com header.b="eJof1qYX"
-Received: by mail-oi1-f175.google.com with SMTP id 5614622812f47-3c3aeef1385so634951b6e.3
-        for <bpf@vger.kernel.org>; Thu, 04 Apr 2024 05:23:49 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=mojatatu-com.20230601.gappssmtp.com header.i=@mojatatu-com.20230601.gappssmtp.com header.b="EDDXubS0"
+Received: by mail-ot1-f48.google.com with SMTP id 46e09a7af769-6e9de355513so393164a34.1
+        for <bpf@vger.kernel.org>; Thu, 04 Apr 2024 05:23:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=mojatatu-com.20230601.gappssmtp.com; s=20230601; t=1712233428; x=1712838228; darn=vger.kernel.org;
+        d=mojatatu-com.20230601.gappssmtp.com; s=20230601; t=1712233430; x=1712838230; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=2Ayqzmg/dq1ZxpnFUTOb8nK1tSXrGpGgrmAqxDfILoE=;
-        b=eJof1qYXcVwf6Zf86TWt/vsshpLhtV84rsP7pyxuiok7ilDDHZHSvcdDJMO/rjX5sB
-         +WTKPIwWUP7x+51s/DaDNwacDXOSDTtzwtome4/wKySxeu+T2EobyLm8xIzimdSwC2VP
-         WW8R5f3CixnxEGEH/FeMETrBVGpSU5ktYH5mtLICwbD7JWaau0ual3D4wx3E3OX3sevB
-         wHAX/3XnsZgINDPgbujewGN1v6mp/n//MPqaralM/4iO4M1n1VCHosg83kGlpuNzNdDt
-         P8OMj2kpAfxIzdxCK6YaXy5pEDocXKgHa5xWgtBqZq9q6zErImkXfWO8aEHC/gvnh1qs
-         72Og==
+        bh=oRQhanqCBHyIjv6W8GJWrsQMvle3yyNC4FbzfmOuurM=;
+        b=EDDXubS00qUGp3q4eUBpCYF4B3xsG2wDptnPNxVsHq8m/I/q8C3AvsxQ9wwKzA6pCJ
+         iXEmqIvQ24UqjrtlJcblBnCCCgN4DXWpmvwNWpI9C+9GF6FI508v+fNQVnVliuc5AlwE
+         umftpCGMGdXMD43/pLCqXG7WeMVzlgeLq/grNt+5ksZkAnICwagmFyZR0NRrimFVw+C1
+         Wicm03qgJBb98hUnZEnoKrKT8GnYIp4gvjDbwFG+HI9u87a3G0026n3gygiputBCfFtM
+         i5zIx7XSIvd1l23blE2H87vT9u+RZOH/bHThssUvpz4Fs2MauoBvtWC/qRKFZ50T2HGf
+         06/w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712233428; x=1712838228;
+        d=1e100.net; s=20230601; t=1712233430; x=1712838230;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=2Ayqzmg/dq1ZxpnFUTOb8nK1tSXrGpGgrmAqxDfILoE=;
-        b=qmjhfKxpscGkM0MzRHvD83/gVHjCGssIdrV+SLoCtjlf8hJI134XX1KjB6CJRu0bPt
-         wnPkpb0CQwVjJcGV3mAPnV58sfnoBe6uc35sV+t14Q5av0mkWfyxUn5MY8joqhzC5rBv
-         Rlkljg2yJI8xk1ybWdSEXxLf8rhi7Ewu+YAwAGANGE1fhTJUJh/XFB08IlJmW7j8fseh
-         bcn3ihYpV7flGttKh6PAUWSfNR9iU77xUmrJj5+FmsQkNDB87EfBoHf66MDZ74sJdcfa
-         mJenm6vl3hOx4OtupSyHhrwX+A/vPaWUIB6+5HdFBxslKstoWWVKP1IonlA0fuxPJyal
-         rJYQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVa9y/SBVOjBmFrw4B7DxQDxAEll01XUVSBSGqwZQronLexv+UVlwCcwGGgaFHV309uurK1DasiUTWWaqri3AF0aQM5
-X-Gm-Message-State: AOJu0Yz+2B4s561B6gksQ9L2UhsEUOw0QkMw7U0R1NWl1O3GKgHbOTBY
-	BzG9vMI+t8IO/mXGUsLA6BGH8JtXC6TuTb27C+IIFnkNCUglWfgVCeUrFm3eaw==
-X-Google-Smtp-Source: AGHT+IHWBCwoTzqRECXiQ8oetTuXFAjlVIj4lwfLZn9CbSrt05E081JoGio/ZtBDJxcZlO7m5KFJXw==
-X-Received: by 2002:a05:6808:250:b0:3c1:7eac:a8a8 with SMTP id m16-20020a056808025000b003c17eaca8a8mr1876878oie.26.1712233428486;
-        Thu, 04 Apr 2024 05:23:48 -0700 (PDT)
+        bh=oRQhanqCBHyIjv6W8GJWrsQMvle3yyNC4FbzfmOuurM=;
+        b=ZyuRmmamyVoDKlmSieS44t5+VZkH4SRERcIRY7jOWgtrNWowVHQUfRGn04O1+/4YVT
+         463RTzzFJe+qF6tVr0fTjXhbgW30D4pUKlrEdomzCz8l4skxDDbtyAX5sqxobILij9x8
+         XM3KahowvIsY2RHrzzFW33/CGftob1fWC4HGTp0KGyxXSliVe5euDm+Mu8hazKGMN4UP
+         7DKTdautgoucQkEwJGVaA0pRTy++5fhHhnwFUatGvG4+IMvc09wBZTtSB5C/WewS5V79
+         Ct1mQdk7moTqGQeA7MMhiGnc1edb+vUktnQa1wBoFV7u9uljRnV/V1IXK2jyYzIxYWeY
+         JYxg==
+X-Forwarded-Encrypted: i=1; AJvYcCVzyP2CEKAVhE2JUjZSE+CjU46oUzxbaB72xFbt/Y7T3d/dJLlwu5kIGFrN4l5gqo/3el2uYY5maNjN7exxqFRRsgOu
+X-Gm-Message-State: AOJu0YwcAbK7unMHl9mDV4/KjFqh5ka8gskchQQ0sa0Swtc66s2iGRGk
+	tGGwgJ9+l+U1kx7RgZz+tyD8jX/V0N8GqWEu5r5ptWI/kotuZ0FRVxL5ymSbqg==
+X-Google-Smtp-Source: AGHT+IEs0+2BZ9AEsieyfzmScoQgzHGptRIRYXJ3PPDXcXzy82I9P5B8F8fV+esAmErKfa3phDxLgg==
+X-Received: by 2002:a05:6830:4783:b0:6e6:9783:bba9 with SMTP id df3-20020a056830478300b006e69783bba9mr2099640otb.22.1712233429956;
+        Thu, 04 Apr 2024 05:23:49 -0700 (PDT)
 Received: from majuu.waya (bras-base-kntaon1621w-grc-19-174-94-28-98.dsl.bell.ca. [174.94.28.98])
-        by smtp.gmail.com with ESMTPSA id bb19-20020a05622a1b1300b00434508cfb62sm584945qtb.79.2024.04.04.05.23.46
+        by smtp.gmail.com with ESMTPSA id bb19-20020a05622a1b1300b00434508cfb62sm584945qtb.79.2024.04.04.05.23.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 Apr 2024 05:23:47 -0700 (PDT)
+        Thu, 04 Apr 2024 05:23:49 -0700 (PDT)
 From: Jamal Hadi Salim <jhs@mojatatu.com>
 To: netdev@vger.kernel.org
 Cc: deb.chatterjee@intel.com,
@@ -76,9 +76,9 @@ Cc: deb.chatterjee@intel.com,
 	victor@mojatatu.com,
 	pctammela@mojatatu.com,
 	bpf@vger.kernel.org
-Subject: [PATCH net-next v14  04/15] net/sched: act_api: add struct p4tc_action_ops as a parameter to lookup callback
-Date: Thu,  4 Apr 2024 08:23:27 -0400
-Message-Id: <20240404122338.372945-5-jhs@mojatatu.com>
+Subject: [PATCH net-next v14  05/15] net: sched: act_api: Add support for preallocated P4 action instances
+Date: Thu,  4 Apr 2024 08:23:28 -0400
+Message-Id: <20240404122338.372945-6-jhs@mojatatu.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20240404122338.372945-1-jhs@mojatatu.com>
 References: <20240404122338.372945-1-jhs@mojatatu.com>
@@ -91,9 +91,109 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-For P4 actions, we require information from struct tc_action_ops,
-specifically the action kind, to find and locate the P4 action information
-for the lookup operation.
+In P4, actions are assumed to pre exist and have an upper bound number of
+instances. Typically if you a table defined with 1M table entries you want
+to allocate enough action instances to cover the 1M entries. However, this
+is a big waste of memory if the action instances are not in use. So for
+our case, we allow the user to specify a minimal amount of actions in the
+template and then if more P4 action instances are needed then they will be
+added on demand as in the current approach with tc filter-action
+relationship.
+
+Add the necessary code to preallocate actions instances for P4
+actions.
+
+We add 2 new actions flags:
+- TCA_ACT_FLAGS_PREALLOC: Indicates the action instance is a P4 action
+  and was preallocated for future use the templating phase of P4TC
+- TCA_ACT_FLAGS_UNREFERENCED: Indicates the action instance was
+  preallocated and is currently not being referenced by any other object.
+  Which means it won't show up in an action instance dump.
+
+Once an action instance is created we don't free it when the last table
+entry referring to it is deleted.
+Instead we add it to the pool/cache of action instances for that specific
+action kind i.e it counts as if it is preallocated.
+Preallocated actions can't be deleted by the tc actions runtime commands
+and a dump or a get will only show preallocated actions instances which are
+being used (i.e TCA_ACT_FLAGS_UNREFERENCED == false).
+
+The preallocated actions will be deleted once the pipeline is deleted
+(which will purge the P4 action kind and its instances).
+
+For example, if we were to create a P4 action that preallocates 128
+elements and dumped:
+
+$ tc -j p4template get action/myprog/send_nh | jq .
+
+We'd see the following:
+
+[
+  {
+    "obj": "action template",
+    "pname": "myprog",
+    "pipeid": 1
+  },
+  {
+    "templates": [
+      {
+        "aname": "myprog/send_nh",
+        "actid": 1,
+        "params": [
+          {
+            "name": "port",
+            "type": "dev",
+            "id": 1
+          }
+        ],
+        "prealloc": 128
+      }
+    ]
+  }
+]
+
+If we try to dump the P4 action instances, we won't see any:
+
+$ tc -j actions ls action myprog/send_nh | jq .
+
+[]
+
+However, if we create a table entry which references this action kind:
+
+$ tc p4ctrl create myprog/table/cb/FDB \
+   dstAddr d2:96:91:5d:02:86 action myprog/send_nh \
+   param port type dev dummy0
+
+Dumping the action instance will now show this one instance which is
+associated with the table entry:
+
+$ tc -j actions ls action myprog/send_nh | jq .
+
+[
+  {
+    "total acts": 1
+  },
+  {
+    "actions": [
+      {
+        "order": 0,
+        "kind": "myprog/send_nh",
+        "index": 1,
+        "ref": 1,
+        "bind": 1,
+        "params": [
+          {
+            "name": "port",
+            "type": "dev",
+            "value": "dummy0",
+            "id": 1
+          }
+        ],
+        "not_in_hw": true
+      }
+    ]
+  }
+]
 
 Co-developed-by: Victor Nogueira <victor@mojatatu.com>
 Signed-off-by: Victor Nogueira <victor@mojatatu.com>
@@ -104,37 +204,121 @@ Reviewed-by: Vlad Buslov <vladbu@nvidia.com>
 Reviewed-by: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
 Acked-by: Toke Høiland-Jørgensen <toke@redhat.com>
 ---
- include/net/act_api.h | 3 ++-
- net/sched/act_api.c   | 2 +-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ include/net/act_api.h |  3 +++
+ net/sched/act_api.c   | 45 +++++++++++++++++++++++++++++++++++--------
+ 2 files changed, 40 insertions(+), 8 deletions(-)
 
 diff --git a/include/net/act_api.h b/include/net/act_api.h
-index 59f62c2a6e..52aab6dd8a 100644
+index 52aab6dd8a..5dfb26f692 100644
 --- a/include/net/act_api.h
 +++ b/include/net/act_api.h
-@@ -115,7 +115,8 @@ struct tc_action_ops {
- 		       struct tcf_result *); /* called under RCU BH lock*/
- 	int     (*dump)(struct sk_buff *, struct tc_action *, int, int);
- 	void	(*cleanup)(struct tc_action *);
--	int     (*lookup)(struct net *net, struct tc_action **a, u32 index);
-+	int     (*lookup)(struct net *net, const struct tc_action_ops *ops,
-+			  struct tc_action **a, u32 index);
- 	int     (*init)(struct net *net, struct nlattr *nla,
- 			struct nlattr *est, struct tc_action **act,
- 			struct tcf_proto *tp,
+@@ -68,6 +68,8 @@ struct tc_action {
+ #define TCA_ACT_FLAGS_REPLACE	(1U << (TCA_ACT_FLAGS_USER_BITS + 2))
+ #define TCA_ACT_FLAGS_NO_RTNL	(1U << (TCA_ACT_FLAGS_USER_BITS + 3))
+ #define TCA_ACT_FLAGS_AT_INGRESS	(1U << (TCA_ACT_FLAGS_USER_BITS + 4))
++#define TCA_ACT_FLAGS_PREALLOC	(1U << (TCA_ACT_FLAGS_USER_BITS + 5))
++#define TCA_ACT_FLAGS_UNREFERENCED	(1U << (TCA_ACT_FLAGS_USER_BITS + 6))
+ 
+ /* Update lastuse only if needed, to avoid dirtying a cache line.
+  * We use a temp variable to avoid fetching jiffies twice.
+@@ -201,6 +203,7 @@ int tcf_idr_create_from_flags(struct tc_action_net *tn, u32 index,
+ 			      const struct tc_action_ops *ops, int bind,
+ 			      u32 flags);
+ void tcf_idr_insert_many(struct tc_action *actions[], int init_res[]);
++void tcf_idr_insert_n(struct tc_action *actions[], const u32 n);
+ void tcf_idr_cleanup(struct tc_action_net *tn, u32 index);
+ int tcf_idr_check_alloc(struct tc_action_net *tn, u32 *index,
+ 			struct tc_action **a, int bind);
 diff --git a/net/sched/act_api.c b/net/sched/act_api.c
-index c094a57ab7..87b6d30077 100644
+index 87b6d30077..4ee01c76c2 100644
 --- a/net/sched/act_api.c
 +++ b/net/sched/act_api.c
-@@ -726,7 +726,7 @@ static int __tcf_idr_search(struct net *net,
- 	struct tc_action_net *tn = net_generic(net, ops->net_id);
+@@ -560,6 +560,8 @@ static int tcf_dump_walker(struct tcf_idrinfo *idrinfo, struct sk_buff *skb,
+ 			continue;
+ 		if (IS_ERR(p))
+ 			continue;
++		if (p->tcfa_flags & TCA_ACT_FLAGS_UNREFERENCED)
++			continue;
  
- 	if (unlikely(ops->lookup))
--		return ops->lookup(net, a, index);
-+		return ops->lookup(net, ops, a, index);
+ 		if (jiffy_since &&
+ 		    time_after(jiffy_since,
+@@ -640,6 +642,9 @@ static int tcf_del_walker(struct tcf_idrinfo *idrinfo, struct sk_buff *skb,
+ 	idr_for_each_entry_ul(idr, p, tmp, id) {
+ 		if (IS_ERR(p))
+ 			continue;
++		if (p->tcfa_flags & TCA_ACT_FLAGS_PREALLOC)
++			continue;
++
+ 		ret = tcf_idr_release_unsafe(p);
+ 		if (ret == ACT_P_DELETED)
+ 			module_put(ops->owner);
+@@ -1398,25 +1403,40 @@ static const struct nla_policy tcf_action_policy[TCA_ACT_MAX + 1] = {
+ 	[TCA_ACT_HW_STATS]	= NLA_POLICY_BITFIELD32(TCA_ACT_HW_STATS_ANY),
+ };
  
- 	return tcf_idr_search(tn, a, index);
++static void tcf_idr_insert_1(struct tc_action *a)
++{
++	struct tcf_idrinfo *idrinfo;
++
++	idrinfo = a->idrinfo;
++	mutex_lock(&idrinfo->lock);
++	/* Replace ERR_PTR(-EBUSY) allocated by tcf_idr_check_alloc if
++	 * it is just created, otherwise this is just a nop.
++	 */
++	idr_replace(&idrinfo->action_idr, a, a->tcfa_index);
++	mutex_unlock(&idrinfo->lock);
++}
++
+ void tcf_idr_insert_many(struct tc_action *actions[], int init_res[])
+ {
+ 	struct tc_action *a;
+ 	int i;
+ 
+ 	tcf_act_for_each_action(i, a, actions) {
+-		struct tcf_idrinfo *idrinfo;
+-
+ 		if (init_res[i] == ACT_P_BOUND)
+ 			continue;
+ 
+-		idrinfo = a->idrinfo;
+-		mutex_lock(&idrinfo->lock);
+-		/* Replace ERR_PTR(-EBUSY) allocated by tcf_idr_check_alloc */
+-		idr_replace(&idrinfo->action_idr, a, a->tcfa_index);
+-		mutex_unlock(&idrinfo->lock);
++		tcf_idr_insert_1(a);
+ 	}
  }
+ 
++void tcf_idr_insert_n(struct tc_action *actions[], const u32 n)
++{
++	int i;
++
++	for (i = 0; i < n; i++)
++		tcf_idr_insert_1(actions[i]);
++}
++
+ struct tc_action_ops *
+ tc_action_load_ops(struct net *net, struct nlattr *nla,
+ 		   u32 flags, struct netlink_ext_ack *extack)
+@@ -2092,8 +2112,17 @@ tca_action_gd(struct net *net, struct nlattr *nla, struct nlmsghdr *n,
+ 			ret = PTR_ERR(act);
+ 			goto err;
+ 		}
+-		attr_size += tcf_action_fill_size(act);
+ 		actions[i - 1] = act;
++
++		if (event == RTM_DELACTION &&
++		    act->tcfa_flags & TCA_ACT_FLAGS_PREALLOC) {
++			ret = -EINVAL;
++			NL_SET_ERR_MSG_FMT(extack,
++					   "Unable to delete preallocated action %s",
++					   act->ops->kind);
++			goto err;
++		}
++		attr_size += tcf_action_fill_size(act);
+ 	}
+ 
+ 	attr_size = tcf_action_full_attrs_size(attr_size);
 -- 
 2.34.1
 
