@@ -1,41 +1,42 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE1F8ED9
-	for <bpf@vger.kernel.org>; Thu,  4 Apr 2024 00:27:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FD41139E
+	for <bpf@vger.kernel.org>; Thu,  4 Apr 2024 00:27:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712190420; cv=none; b=OJs/vZvocKM/FcDJ4WsbQ0/3f7ZcGKvh1xaHT9kvO9plJNeCiIWBxJOWLiFuWX6e4OqK8slpi5gbOs0qJO5tXKs3vSDt3OBvFcFqwHtCFmtx9EFQ4c6n4na6nZIVVxcgCwbgy1zKXTJGWi22z0JDB5M9YXTQ5Xn3qhYp7HR/4zQ=
+	t=1712190423; cv=none; b=kXDO+0zVyDU6Ydo4HKru3hJ9uKdN2CjwgUzjqONQHWEH+7g8tzUUR2aWe0QB4xtCx5opPgp5Fp+FdrnSkDlcGmLamhMEQokxmWgjbz94VX/KRJdBRCnBqBHl+aLfvLFW7QXpi/Wq2N6CI56UY7p8uN34URzuSR41NmqsmAB4FJY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712190420; c=relaxed/simple;
-	bh=Bq5GtDX2NfdJoulQ8qKd9NtH5r4prbQ3HbS+d9W/xAc=;
+	s=arc-20240116; t=1712190423; c=relaxed/simple;
+	bh=GouJUfQiVXFwLl8zWZh6Ah9pxPeN9Nt9znZaT5FuTTY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=DCWpO/idA8+tJLzMpcfePxstok0ia31ZAOO2Se2Z4HWmT7ORxGygfh5iZwOuXfhCHef7/zPhlMyFTLWwoFK2uXb1pzZL30O9qfjy/hDXyKKWjaAsXWpYEEPmulGkwq8Yrbb98MmDhzem3P1bg7zYV/Hcr0FJA/0JsTkHROVpmcQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Y9Tdegru; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=OTOeXx6ZqfQQavKeTQhG5x/anVlwDhPe2pPcG9R3aWCj1PJCK7N4Yz5PyGZAbwZ9+eJhxiZQE1wsAZzqeDT3BIb+ZOnF901kJibhyhSghBdV/E6t3v+mjgf1SCLfH/WfCcM3CV1IfSyVNhRc4+piU3Ux4y52JWxXTZyrB5vNDqY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WZwB9mlp; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Y9Tdegru"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22A4EC433C7;
-	Thu,  4 Apr 2024 00:27:00 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WZwB9mlp"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45F22C433C7;
+	Thu,  4 Apr 2024 00:27:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712190420;
-	bh=Bq5GtDX2NfdJoulQ8qKd9NtH5r4prbQ3HbS+d9W/xAc=;
+	s=k20201202; t=1712190423;
+	bh=GouJUfQiVXFwLl8zWZh6Ah9pxPeN9Nt9znZaT5FuTTY=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Y9TdegrugXsvvTs4j6RR8icilFQWHh/YvdewPSll6djYpxQcx9xD24So4202M6PVe
-	 3jn/UViyGBIN2kA0le6U1nZwF4qMybQm7Lc8rnnB6em9QdFkV9HHj2JMxYadEHEwWl
-	 PjvXvFrD+jMBh0OQdxZcQjyvFLvBqIG22rz69ui9uMWDDLf4EJA38xqHfvhNQJugxC
-	 C7UUBa/TU0dpi3znXsiUfEZzFLDfN6oM7zxjptBS34VhcuYftPmBnynUBi0VWLVGDD
-	 fb3IkKe/afZemyECgHjKj5f24KgbnhehPUclv0VYdsg5H+gxRGJyolzoE+WVH3+8t7
-	 zyLJamZxfJn8w==
+	b=WZwB9mlp35d/duOfi5UD+vCqxyJ9Yb+1AGvvYPJDIqWAlYOrfr21a0WzeNotOqctV
+	 Ix+gxV4ZFRMiiucDCARqzilyRlz3iCRyRxrF+AYSwL7agXxaOpGtQKTEtRbu2OKhOj
+	 P9IKFrLqM2ytKUH/VaIWnPciEFfUaJeFXOXwPomEikVl7rXCmkhE8c/fR14GEiM0IL
+	 Asvli+9SOJuISPKhg8uBBeHl3br0sqvTPnIhNigNpW14yqyGsyZ8ZlHp4mX4z2p8y0
+	 N7lNPsr2XLOYlEebRai2LAb/gXTvppKB1pVGDDdUqK6PI/HXTROL6gobHMd2DX+5gf
+	 KoCPIPxFvS6JQ==
 From: Andrii Nakryiko <andrii@kernel.org>
 To: bpf@vger.kernel.org,
 	ast@kernel.org,
 	daniel@iogearbox.net,
 	martin.lau@kernel.org
 Cc: andrii@kernel.org,
-	kernel-team@meta.com
-Subject: [PATCH v3 bpf-next 1/2] bpf: make bpf_get_branch_snapshot() architecture-agnostic
-Date: Wed,  3 Apr 2024 17:26:39 -0700
-Message-ID: <20240404002640.1774210-2-andrii@kernel.org>
+	kernel-team@meta.com,
+	John Fastabend <john.fastabend@gmail.com>
+Subject: [PATCH v3 bpf-next 2/2] bpf: inline bpf_get_branch_snapshot() helper
+Date: Wed,  3 Apr 2024 17:26:40 -0700
+Message-ID: <20240404002640.1774210-3-andrii@kernel.org>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240404002640.1774210-1-andrii@kernel.org>
 References: <20240404002640.1774210-1-andrii@kernel.org>
@@ -47,45 +48,88 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-perf_snapshot_branch_stack is set up in an architecture-agnostic way, so
-there is no reason for BPF subsystem to keep track of which
-architectures do support LBR or not. E.g., it looks like ARM64 might soon
-get support for BRBE ([0]), which (with proper integration) should be
-possible to utilize using this BPF helper.
+Inline bpf_get_branch_snapshot() helper using architecture-agnostic
+inline BPF code which calls directly into underlying callback of
+perf_snapshot_branch_stack static call. This callback is set early
+during kernel initialization and is never updated or reset, so it's ok
+to fetch actual implementation using static_call_query() and call
+directly into it.
 
-perf_snapshot_branch_stack static call will point to
-__static_call_return0() by default, which just returns zero, which will
-lead to -ENOENT, as expected. So no need to guard anything here.
+This change eliminates a full function call and saves one LBR entry
+in PERF_SAMPLE_BRANCH_ANY LBR mode.
 
-  [0] https://lore.kernel.org/linux-arm-kernel/20240125094119.2542332-1-anshuman.khandual@arm.com/
-
+Acked-by: John Fastabend <john.fastabend@gmail.com>
 Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- kernel/trace/bpf_trace.c | 4 ----
- 1 file changed, 4 deletions(-)
+ kernel/bpf/verifier.c | 55 +++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 55 insertions(+)
 
-diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-index 6d0c95638e1b..afb232b1d7c2 100644
---- a/kernel/trace/bpf_trace.c
-+++ b/kernel/trace/bpf_trace.c
-@@ -1188,9 +1188,6 @@ static const struct bpf_func_proto bpf_get_attach_cookie_proto_tracing = {
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 17c06f1505e4..2cb5db317a5e 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -20181,6 +20181,61 @@ static int do_misc_fixups(struct bpf_verifier_env *env)
+ 			goto next_insn;
+ 		}
  
- BPF_CALL_3(bpf_get_branch_snapshot, void *, buf, u32, size, u64, flags)
- {
--#ifndef CONFIG_X86
--	return -ENOENT;
--#else
- 	static const u32 br_entry_size = sizeof(struct perf_branch_entry);
- 	u32 entry_cnt = size / br_entry_size;
- 
-@@ -1203,7 +1200,6 @@ BPF_CALL_3(bpf_get_branch_snapshot, void *, buf, u32, size, u64, flags)
- 		return -ENOENT;
- 
- 	return entry_cnt * br_entry_size;
--#endif
- }
- 
- static const struct bpf_func_proto bpf_get_branch_snapshot_proto = {
++		/* Implement bpf_get_branch_snapshot inline. */
++		if (prog->jit_requested && BITS_PER_LONG == 64 &&
++		    insn->imm == BPF_FUNC_get_branch_snapshot) {
++			/* We are dealing with the following func protos:
++			 * u64 bpf_get_branch_snapshot(void *buf, u32 size, u64 flags);
++			 * int perf_snapshot_branch_stack(struct perf_branch_entry *entries, u32 cnt);
++			 */
++			const u32 br_entry_size = sizeof(struct perf_branch_entry);
++
++			/* struct perf_branch_entry is part of UAPI and is
++			 * used as an array element, so extremely unlikely to
++			 * ever grow or shrink
++			 */
++			BUILD_BUG_ON(br_entry_size != 24);
++
++			/* if (unlikely(flags)) return -EINVAL */
++			insn_buf[0] = BPF_JMP_IMM(BPF_JNE, BPF_REG_3, 0, 7);
++
++			/* Transform size (bytes) into number of entries (cnt = size / 24).
++			 * But to avoid expensive division instruction, we implement
++			 * divide-by-3 through multiplication, followed by further
++			 * division by 8 through 3-bit right shift.
++			 * Refer to book "Hacker's Delight, 2nd ed." by Henry S. Warren, Jr.,
++			 * p. 227, chapter "Unsigned Divison by 3" for details and proofs.
++			 *
++			 * N / 3 <=> M * N / 2^33, where M = (2^33 + 1) / 3 = 0xaaaaaaab.
++			 */
++			insn_buf[1] = BPF_MOV32_IMM(BPF_REG_0, 0xaaaaaaab);
++			insn_buf[2] = BPF_ALU64_REG(BPF_MUL, BPF_REG_2, BPF_REG_0);
++			insn_buf[3] = BPF_ALU64_IMM(BPF_RSH, BPF_REG_2, 36);
++
++			/* call perf_snapshot_branch_stack implementation */
++			insn_buf[4] = BPF_EMIT_CALL(static_call_query(perf_snapshot_branch_stack));
++			/* if (entry_cnt == 0) return -ENOENT */
++			insn_buf[5] = BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 0, 4);
++			/* return entry_cnt * sizeof(struct perf_branch_entry) */
++			insn_buf[6] = BPF_ALU32_IMM(BPF_MUL, BPF_REG_0, br_entry_size);
++			insn_buf[7] = BPF_JMP_A(3);
++			/* return -EINVAL; */
++			insn_buf[8] = BPF_MOV64_IMM(BPF_REG_0, -EINVAL);
++			insn_buf[9] = BPF_JMP_A(1);
++			/* return -ENOENT; */
++			insn_buf[10] = BPF_MOV64_IMM(BPF_REG_0, -ENOENT);
++			cnt = 11;
++
++			new_prog = bpf_patch_insn_data(env, i + delta, insn_buf, cnt);
++			if (!new_prog)
++				return -ENOMEM;
++
++			delta    += cnt - 1;
++			env->prog = prog = new_prog;
++			insn      = new_prog->insnsi + i + delta;
++			continue;
++		}
++
+ 		/* Implement bpf_kptr_xchg inline */
+ 		if (prog->jit_requested && BITS_PER_LONG == 64 &&
+ 		    insn->imm == BPF_FUNC_kptr_xchg &&
 -- 
 2.43.0
 
