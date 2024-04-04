@@ -1,236 +1,168 @@
-Received: from mail-pg1-f171.google.com (mail-pg1-f171.google.com [209.85.215.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-187.mta0.migadu.com (out-187.mta0.migadu.com [91.218.175.187])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 860E96A01E;
-	Thu,  4 Apr 2024 22:35:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32EF96F07D
+	for <bpf@vger.kernel.org>; Thu,  4 Apr 2024 22:36:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.187
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712270147; cv=none; b=KK2PhWyi95ErrfVO09B0EKamVFlyjTuiZnY495RaI+wyfqUMn3N2ckoVEx1iIU7g+d3ePKzJ/5lIZzcjXs/+DZkllD77YVyQzgW0QykABVwjuChQyG4Hi6elB/c9ORiFAg3EPhFMdjRYV4dnj/QoIafrlBBBfzGRf28igi8Tkv8=
+	t=1712270168; cv=none; b=esLhmqouB//XQGRpDQV5Z8jFE7iyiyfVYXmS05pLAnJl2aOhUENY592PRkcBo9iTJgk3h0aE2cVdOCDGnditVz9nkUMEzTCyEzCPXouI34Q/uhmAKMcrjFm2oKp2H/EVEvGipItfWxBRBAmJTpBYAYvnFghI91lChMyKgxUaY6k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712270147; c=relaxed/simple;
-	bh=ccLFujs4PtuZ7Yv9sb1yvfzq72uiKClGnMerPWoLGHY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=DOD316zdUKMlPMdAt0cND+zWmZMOQjKtb3NhJvbqXs8CumgSqqJR9IwB7mnEadHj7Hw2qwSPnI6xXLMH/nT8cVVtA7dId80kG4c4FcsH1jnS7r3XVMUxEsL/hU4/M1fIZJMiWNtHmUe2SGna8Gfe+ITLuIB0yQYnSCkfW49usU0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PDXNqQ1S; arc=none smtp.client-ip=209.85.215.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1712270168; c=relaxed/simple;
+	bh=jljRRkU4o2XG2vV2VhgVhPe5RtoHBNNJGYuUc6pKd84=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=erllijCmlCC+j2K74ZaMmnNoPkoHZFm7+jx0/eAlYzqQSzOYcgOE8rIlmkAXknwuDTKH0kAB7xjWXIxd8l9IezvTaLVIi6UWydntEIPC5YJwBWZYROzUbnjQKTSBE281z7pLDJour4G3k/odwGLBfJPiBYauJ/wsxNyu1ipvkMA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=dr2YSzDT; arc=none smtp.client-ip=91.218.175.187
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PDXNqQ1S"
-Received: by mail-pg1-f171.google.com with SMTP id 41be03b00d2f7-5d3907ff128so1302517a12.3;
-        Thu, 04 Apr 2024 15:35:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1712270145; x=1712874945; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3QfrsL32H/XuBg1IEnWa21H1f1JloPGE0S+M20H3dGg=;
-        b=PDXNqQ1SWtJLTLtLsznzJrVX1FFZAfKpY25eHVtyj8lcWgYXSWljLQKVI8mGsSu/f6
-         E6znBlKKKe20k7SvRjNFkXYh1LN8y0AmpAUyKaTxkfLQkuauxSXRbRQcHWdR39Zbmdcb
-         IH8rtkjyPKqiTkkSptN3hxg1xT6gNtD4rPsDF9AQzJE1pJYjxztUjmU+dQkqEQiT2uGU
-         0K1nB3GWM+1QTwYa4NaqJLN9NjPIK2QfLolnuglV77+R3hHoeeKmlJX7yNzXKVUiuh8p
-         otND8CqjxGd5w2al67sZbcO8vHlOtx2qeHnydrxqTmPTE10Nl53e296kAoyg6rXIMOoV
-         ovGQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712270145; x=1712874945;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=3QfrsL32H/XuBg1IEnWa21H1f1JloPGE0S+M20H3dGg=;
-        b=RKR24lAZ5Px1Gt02iiame6zDJsF959p5nhz5HsMCiHvnOFmtwsuCnVh24SHktS+0xG
-         dM2jFOa5DeMDRvU/8spGiLo8hu7YI79okfd/c2AmiuCFmqYCrGZ1w+MCogqCgxvPcymu
-         xFtaqmkD5N+A+1rC0thr/xO97eXQsfoALDijKnpB+RWHM3QRQwleHx9/AGekPI0oOu6q
-         FjBjEN1lk59sLvJIrasBM+DoQ75O9NBxOqaDfAF3HeRIlyccvfZY90ozjEk9xKr9C/3T
-         G8J774+W4u+ksEvUT+LYPwYgBurBLiM0yzBQFEbwXhl3j2IJC1nilqQTzNKC+PIKxNxq
-         Kv3Q==
-X-Forwarded-Encrypted: i=1; AJvYcCUaOXEqU2tPVRFgX/QPmf4SLvGzT7iW6Kttyjg4k+F4dYbdfmAZT1w+gqmpU8+/i0EcQSLHMym/MLqqj/+kDvjgp9LsI5pt8aKMLIHa+GMpooZRtsEpfJn8QKRTSTTZ83Q+
-X-Gm-Message-State: AOJu0Yy9TSIbSrCrwxve4Uf/zTX6/J/Dbc6E1rq8UBvHzkuL/+VCjCU+
-	NOoUXp9YMXvssO3e9LTHkdI/ivndK1VGp6/mjY3NGZceziu6NJ/D7FVQLpwKJxx4AMQ9pcIVJHh
-	3ni0kaI/APGm9rl5l0c50QuPTLQaYh3tr
-X-Google-Smtp-Source: AGHT+IFDz7sIojwWiODLHqBbMy/7fZFlticgaZBRGuiUUsACTuMf5avJks8JyJgHcCJH2K1JXk+gB2oG3XwMvvGiWwU=
-X-Received: by 2002:a17:90a:9a81:b0:2a2:21a7:48bf with SMTP id
- e1-20020a17090a9a8100b002a221a748bfmr1130335pjp.14.1712270144739; Thu, 04 Apr
- 2024 15:35:44 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="dr2YSzDT"
+Message-ID: <b1a41645-6002-4c78-99b7-0df3be2611e5@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1712270165;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=P0YAvO/jWY9SAfod0YLdhPl5jh1As9xjrBHzP1as5AM=;
+	b=dr2YSzDTp3os69HQVlqryA2e8aBfCz7k7yGfb3iBT7KzSDdho8eAeXzXhxdI6bj7uaqvVc
+	70lVIh3C3fBQph7wkJQSsan/R4xldpSJBYRobmILHlQxFxCF4VUYF/H9yY+HmnkJ0dvFo7
+	SUJjcJlSOqaT6j8JklWC22EhWgOMoDU=
+Date: Thu, 4 Apr 2024 15:35:58 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240404010308.334604-1-void@manifault.com> <20240404010308.334604-2-void@manifault.com>
- <36bb0747-bff4-4fad-93ca-dae406f14099@linux.dev> <20240404163316.GA385240@maniforge>
- <CAEf4Bza3rGMh=S7yb_Crf8v_SBTrp+NiKn0_frZnWpEi30DkPg@mail.gmail.com> <20240404223044.GA521321@maniforge>
-In-Reply-To: <20240404223044.GA521321@maniforge>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Thu, 4 Apr 2024 15:35:32 -0700
-Message-ID: <CAEf4BzbnG8QufsLmsvwHFG2JKjUCNtbKtU8c5Cb56rWR+s8UBg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 2/2] selftests/bpf: Verify calling core kfuncs
- from BPF_PROG_TYPE_SYCALL
-To: David Vernet <void@manifault.com>
-Cc: Yonghong Song <yonghong.song@linux.dev>, ast@kernel.org, daniel@iogearbox.net, 
-	andrii@kernel.org, martin.lau@linux.dev, song@kernel.org, 
-	john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com, 
-	haoluo@google.com, jolsa@kernel.org, linux-kernel@vger.kernel.org, 
-	kernel-team@meta.com, bpf <bpf@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH bpf-next 3/3] selftests/bpf: add test for
+ bpf_for_each_map_elem() with different maps
+Content-Language: en-GB
+To: Philo Lu <lulie@linux.alibaba.com>, bpf@vger.kernel.org
+Cc: ast@kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com,
+ andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
+ kpsingh@kernel.org, sdf@google.com, haoluo@google.com, jolsa@kernel.org,
+ mykolal@fb.com, shuah@kernel.org, xuanzhuo@linux.alibaba.com
+References: <20240402061615.48894-1-lulie@linux.alibaba.com>
+ <20240402061615.48894-4-lulie@linux.alibaba.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <20240402061615.48894-4-lulie@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-On Thu, Apr 4, 2024 at 3:30=E2=80=AFPM David Vernet <void@manifault.com> wr=
-ote:
->
-> On Thu, Apr 04, 2024 at 03:16:56PM -0700, Andrii Nakryiko wrote:
-> > On Thu, Apr 4, 2024 at 9:33=E2=80=AFAM David Vernet <void@manifault.com=
-> wrote:
-> > >
-> > > On Thu, Apr 04, 2024 at 09:04:19AM -0700, Yonghong Song wrote:
-> > > >
-> > > > On 4/3/24 6:03 PM, David Vernet wrote:
-> > > > > Now that we can call some kfuncs from BPF_PROG_TYPE_SYSCALL progs=
-, let's
-> > > > > add some selftests that verify as much. As a bonus, let's also ve=
-rify
-> > > > > that we can't call the progs from raw tracepoints.
-> > > > >
-> > > > > Signed-off-by: David Vernet <void@manifault.com>
-> > > >
-> > > > Ack with some comments below.
-> > > >
-> > > > Acked-by: Yonghong Song <yonghong.song@linux.dev>
-> > >
-> > > Thanks for the review. It looks like accidentally replied directly to
-> > > me, so I'll re-add the missing cc's.
-> > >
-> >
-> > And dropped bpf@vger :) adding back
->
-> *facepalm*, thanks!
->
-> >
-> > > >
-> > > > > ---
-> > > > >   .../selftests/bpf/prog_tests/cgrp_kfunc.c     |  1 +
-> > > > >   .../selftests/bpf/prog_tests/task_kfunc.c     |  1 +
-> > > > >   .../selftests/bpf/progs/cgrp_kfunc_common.h   | 21 ++++++++++++=
-+++++++
-> > > > >   .../selftests/bpf/progs/cgrp_kfunc_failure.c  |  4 ++++
-> > > > >   .../selftests/bpf/progs/cgrp_kfunc_success.c  |  4 ++++
-> > > > >   .../selftests/bpf/progs/cpumask_common.h      | 19 ++++++++++++=
-+++++
-> > > > >   .../selftests/bpf/progs/cpumask_failure.c     |  4 ++++
-> > > > >   .../selftests/bpf/progs/cpumask_success.c     |  3 +++
-> > > > >   .../selftests/bpf/progs/task_kfunc_common.h   | 18 ++++++++++++=
-++++
-> > > > >   .../selftests/bpf/progs/task_kfunc_failure.c  |  4 ++++
-> > > > >   .../selftests/bpf/progs/task_kfunc_success.c  |  4 ++++
-> > > > >   11 files changed, 83 insertions(+)
-> > > > >
-> > > > > diff --git a/tools/testing/selftests/bpf/prog_tests/cgrp_kfunc.c =
-b/tools/testing/selftests/bpf/prog_tests/cgrp_kfunc.c
-> > > > > index adda85f97058..73f0ec4f4eb7 100644
-> > > > > --- a/tools/testing/selftests/bpf/prog_tests/cgrp_kfunc.c
-> > > > > +++ b/tools/testing/selftests/bpf/prog_tests/cgrp_kfunc.c
-> > > > > @@ -102,6 +102,7 @@ void test_cgrp_kfunc(void)
-> > > > >             run_success_test(success_tests[i]);
-> > > > >     }
-> > > > > +   RUN_TESTS(cgrp_kfunc_success);
-> > > > >     RUN_TESTS(cgrp_kfunc_failure);
-> > > > >   cleanup:
-> > > > > diff --git a/tools/testing/selftests/bpf/prog_tests/task_kfunc.c =
-b/tools/testing/selftests/bpf/prog_tests/task_kfunc.c
-> > > > > index d4579f735398..3db4c8601b70 100644
-> > > > > --- a/tools/testing/selftests/bpf/prog_tests/task_kfunc.c
-> > > > > +++ b/tools/testing/selftests/bpf/prog_tests/task_kfunc.c
-> > > > > @@ -94,5 +94,6 @@ void test_task_kfunc(void)
-> > > > >             run_success_test(success_tests[i]);
-> > > > >     }
-> > > > > +   RUN_TESTS(task_kfunc_success);
-> > > > >     RUN_TESTS(task_kfunc_failure);
-> > > > >   }
-> > > >
-> > > > The above RUN_TESTS(cgrp_kfunc_success) and RUN_TESTS(task_kfunc_su=
-ccess)
-> > > > will do duplicate work for *existing* bpf programs in their respect=
-ive
-> > > > files. I think we still prefer to have cgrp_kfunc_success tests
-> > > > in cgrp_kfunc.c to make it easy to cross check. But in order to
-> > > > remove duplicate work, one option is to make other non-RUN_TESTS
-> > > > programs in those files not auto-loaded and their corresponding
-> > > > prog_tests/*.c file need to explicitly enable loading the problem.
-> > >
-> > > Good point, and yes I agree with that approach of not auto-loading
-> > > non-RUN_TESTS programs. Considering that we have a  __success BTF tag=
- to
-> > > say, "this prog should successfully load", it seems odd that we'd als=
-o
-> > > automatically load and validate progs that _didn't_ specify that tag =
-as
-> > > well. At that point, I'm not sure what value the tag is bringing. Als=
-o,
-> >
-> > Just more explicitness (if desired). Normally __success would be
-> > augmented by __msg() or __retval(). I'd feel uncomfortable just
->
-> But __success really has no actual purpose, right? Isn't it identical to
-> if it's just left off? You don't need __success to specify __msg() or
-> __retval() right?
 
-right, it's just a more explicit documentation-like annotation, if you will
-
+On 4/1/24 11:16 PM, Philo Lu wrote:
+> A test is added for bpf_for_each_map_elem() with either an arraymap or a
+> hashmap.
+> $ tools/testing/selftests/bpf/test_progs -t for_each
+>   #93/1    for_each/hash_map:OK
+>   #93/2    for_each/array_map:OK
+>   #93/3    for_each/write_map_key:OK
+>   #93/4    for_each/multi_maps:OK
+>   #93      for_each:OK
+> Summary: 1/4 PASSED, 0 SKIPPED, 0 FAILED
 >
-> > silently skipping programs that are not marked with __success, as it
-> > would be too easy to accidentally forget to add it and not know that
-> > the BPF program is not tested.
-> >
-> > I'd say that RUN_TESTS-based programs should be kept separate from any
-> > other BPF programs that have a custom user-space testing part, though.
+> Signed-off-by: Philo Lu <lulie@linux.alibaba.com>
+> ---
+>   .../selftests/bpf/prog_tests/for_each.c       | 67 +++++++++++++++++++
+>   .../selftests/bpf/progs/for_each_multi_maps.c | 49 ++++++++++++++
+>   2 files changed, 116 insertions(+)
+>   create mode 100644 tools/testing/selftests/bpf/progs/for_each_multi_maps.c
 >
-> IF we do go this way, maybe just a __skip or something tag would be
-> sufficient?
+> diff --git a/tools/testing/selftests/bpf/prog_tests/for_each.c b/tools/testing/selftests/bpf/prog_tests/for_each.c
+> index 8963f8a549f2..61c5e064f89c 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/for_each.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/for_each.c
+> @@ -5,6 +5,7 @@
+>   #include "for_each_hash_map_elem.skel.h"
+>   #include "for_each_array_map_elem.skel.h"
+>   #include "for_each_map_elem_write_key.skel.h"
+> +#include "for_each_multi_maps.skel.h"
+>   
+>   static unsigned int duration;
+>   
+> @@ -143,6 +144,70 @@ static void test_write_map_key(void)
+>   		for_each_map_elem_write_key__destroy(skel);
+>   }
+>   
+> +static void test_multi_maps(void)
+> +{
+> +	struct for_each_multi_maps *skel;
+> +	__u64 val, array_total, hash_total;
+> +	__u32 key, max_entries;
+> +	int i, err;
+> +
+> +	LIBBPF_OPTS(bpf_test_run_opts, topts,
+> +		.data_in = &pkt_v4,
+> +		.data_size_in = sizeof(pkt_v4),
+> +		.repeat = 1,
+> +	);
+> +
+> +	skel = for_each_multi_maps__open_and_load();
+> +	if (!ASSERT_OK_PTR(skel, "for_each_multi_maps__open_and_load"))
+> +		return;
+> +
+> +	array_total = 0;
+> +	/* left last element as empty */
+> +	max_entries = bpf_map__max_entries(skel->maps.arraymap) - 1;
 
-if we go this way we wouldn't need __skip, but if we do not go, then
-sure, why not. But in general, __skip makes sense either way, I guess,
-I have no problem with it.
+Any particular reason you skip the last element?
 
->
-> > About the patch itself. I don't really see much point in adding
-> > *_KFUNC_LOAD_TEST macros. They are used once or twice in total, while
-> > obscuring *what* is actually being tested. Unless you expect to add 5+
-> > more copies of them, I'd just inline them explicitly.
->
-> It's not really important what's in the actual prog though -- the point
-> is that we're verifying we can invoke some kfuncs in a certain prog
-> type. But yes, it does obscure what's there, and I'm fine with
-> copy-pasting them if that's your preference. The reason I went with a
-> macro was to make it easy for us to quickly test new prog types as we
-> add support for them, or to add other negative testcases for unsafe prog
-> types. Right now we're just testing tracing progs.
+> +	for (i = 0; i < max_entries; i++) {
+> +		key = i;
+> +		val = i + 1;
+> +		array_total += val;
+> +		err = bpf_map__update_elem(skel->maps.arraymap, &key, sizeof(key),
+> +					   &val, sizeof(val), BPF_ANY);
+> +		if (!ASSERT_OK(err, "array_map_update"))
+> +			goto out;
+> +	}
+> +
+> +	hash_total = 0;
+> +	max_entries = bpf_map__max_entries(skel->maps.hashmap) - 1;
 
-I'm always for less macro usage, if possible :)
+ditto.
 
-For the use case you are describing I'd just add static subprog that
-exercises all the kfuncs of interest, and then call this subprog from
-all the (explicitly defined) main entry program of desired program
-types
+> +	for (i = 0; i < max_entries; i++) {
+> +		key = i + 100;
+> +		val = i + 1;
+> +		hash_total += val;
+> +		err = bpf_map__update_elem(skel->maps.hashmap, &key, sizeof(key),
+> +					   &val, sizeof(val), BPF_ANY);
+> +		if (!ASSERT_OK(err, "hash_map_update"))
+> +			goto out;
+> +	}
+> +
+> +	skel->bss->data_output = 0;
+> +	skel->bss->use_array = 1;
+> +	err = bpf_prog_test_run_opts(bpf_program__fd(skel->progs.test_pkt_access), &topts);
+> +	if (CHECK(err || topts.retval, "ipv4", "err %d errno %d retval %d\n",
+> +		  err, errno, topts.retval))
+> +		goto out;
 
->
-> >
-> > > that was the expected behavior before RUN_TESTS() was introduced, so =
-it
-> > > hopefully shouldn't cause much if any churn.
-> > >
-> > > > Maybe the current patch is okay even with duplicated work as it
-> > > > should not take much time to verify those tiny problems.
-> > >
-> > > IMO it should be fine for now as the overhead for validating and load=
-ing
-> > > these progs is low, but it'd definitely be good to address this probl=
-em
-> > > in a follow-up. I don't think it should take too much effort -- AFAIC=
-T
-> > > we'd just have to mark a test spec as invalid if it didn't have any B=
-TF
-> > > test tags. Ideally I'd like to separate that from this patch set, but=
- I
-> > > can do it here if folks want.
-> > >
-> > > Thanks,
-> > > David
+Let us use ASSERT_* macros here. In this case, you can do
+	ASSERT_OK(err, "bpf_prog_test_run_opts");
+	ASSERT_OK(opts.retval, "retval");
+There is no need to goto out, we can continue testing below.
+
+> +
+> +	ASSERT_EQ(skel->bss->data_output, array_total, "array output");
+> +
+> +	skel->bss->data_output = 0;
+> +	skel->bss->use_array = 0;
+> +	err = bpf_prog_test_run_opts(bpf_program__fd(skel->progs.test_pkt_access), &topts);
+> +	if (CHECK(err || topts.retval, "ipv4", "err %d errno %d retval %d\n",
+> +		  err, errno, topts.retval))
+> +		goto out;
+
+Do two ASSERT_OK similar to the above.
+
+> +
+> +	ASSERT_EQ(skel->bss->data_output, hash_total, "hash output");
+> +
+> +out:
+> +	for_each_multi_maps__destroy(skel);
+> +}
+> +
+> [...]
