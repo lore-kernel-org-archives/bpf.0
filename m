@@ -1,334 +1,165 @@
-Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-170.mta0.migadu.com (out-170.mta0.migadu.com [91.218.175.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E476F133426
-	for <bpf@vger.kernel.org>; Thu,  4 Apr 2024 19:22:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EE5C13443F
+	for <bpf@vger.kernel.org>; Thu,  4 Apr 2024 20:07:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712258556; cv=none; b=Xpm+F4plw8VzN/hVgHqjc8lnoQdblbPSvd6Cllab0sd31rpkOkZ5muwzwPubKCgBSKBEDjqaluG3m+OAfDkQpJg2VGYZuabgGcNgxBJUWcvFTX2L766ytVAA6prOje4ouKbPTKl9tpxhU7xHrtOS+TUNAnNC80DkG+EOYd2GA7o=
+	t=1712261222; cv=none; b=VGnY8R9DLyIAj+Ld2zHGn7VXEV22B1c+ky/CIU/e+jlbZ7UUqK1uQORl70TZ2bRZQB8qprDH/GCJkvBi2ScGQh/nL9a2ekbYeHnnZvgNLl56oWO3G1xcyrudbh5b4McWLbvU2C3CFUlAiqltgTunlsUxPAU8DnFQIrHk0on1MaY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712258556; c=relaxed/simple;
-	bh=ZkIQPsz6PGxLjM1b2ssyddl6G+RJibszQR1V25OlZD8=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=SaJ2+yyGr/5IY/8wsOVZ0V457yYSii1EgSGUIIbMFx8UhVeZayhKUWuftC24vdJgHo+jloVsuP9XzCbSR18w3QBtJuf/L/C3p02gsCzRzEvmKHnlumVaHOMlBMD7AHn9r4kcEQCaepH07qLp/A//K+/lN1WJXCokDCfn5srzs+I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mEGoOUDW; arc=none smtp.client-ip=209.85.215.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1712261222; c=relaxed/simple;
+	bh=DuFa4hmd+yyQJc4kdYQczPH/6uJpnYrciswo6eFuxBs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=KJj6H+FFVHcK1+g92TwjAAhKSSCWOvpmp5VHzYFm0aOX3YjzP5tnt+v4bq/BomUjh0isrYKpXwZMbj+xD0t2MCjyloKo0tZsLYwr8BdY4f0UdVGyA8ItdS6X1tArU7jPH3oxWhgR2Bze4ZGzFNZKqaXzKxdhOtcQNeh7JbGMtCM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=OkBoT7cB; arc=none smtp.client-ip=91.218.175.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mEGoOUDW"
-Received: by mail-pg1-f177.google.com with SMTP id 41be03b00d2f7-5c66b093b86so1936726a12.0
-        for <bpf@vger.kernel.org>; Thu, 04 Apr 2024 12:22:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1712258554; x=1712863354; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=1dZBLjG3sLYaCNu66so30vyYYjIFhpip65JSkNnOU1E=;
-        b=mEGoOUDWFO+IJw2FjyY6YZwUvmYxmVHKUpRDA0lBWkIj5AGN3dtYEFfhgpw4ixk7rg
-         V9TUm793owEJgnl1di6KkOrF705IBvAYbuanFEadBCCjukju1HlEIuEa1lW47xAgIfN1
-         zy7pdJl5CZ+FUoqAHGghYt9cazf1rReJMIoXekYZMHnn3bFSh7SLM/Oxgz1mBtoU1kYR
-         23P6+JQ24850iyQH+HBYwugyvSgsQOPskHHibdaFpOm4YNnLJXSUDDQK0UJXbEmm39Ut
-         Wge6LPxLJ7xklTQfzEGXdVFUKqJBkWfFUmfXNn3QWH/woBHonXYUSGVq3y7XIEUl6YVw
-         YyyQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712258554; x=1712863354;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=1dZBLjG3sLYaCNu66so30vyYYjIFhpip65JSkNnOU1E=;
-        b=sNry97bA07NO51ntdZL39qRJXSuJnQAMrF9cN1/EdzBDXtwQzPtJAqhOD1FXZts2Po
-         NVZf8tVVqifzp1c2xeVQRSol+1DeS2DUVkbgOtpt7N/DIxAfR0Wm0GLOhfG7bFtrscne
-         WiuH3BSniYZflIbRIEs07TO/la/2YE5uPQ36BPt3hBoPu6QV5cjTlNSTnHgKwpepirsR
-         hRI2G89LhjqDF73sZ2DXh2a1ZYh7R+TbdIwiUKj/wiVgkMb1fUbK0v0esGOqKPEc042Z
-         OFiqU20zT2AIHwRxENvqe2cuPesJNDEVlzj8SerE1ZhRRkhV9YQYPb6/s/4SHRWkvWbl
-         LYXA==
-X-Forwarded-Encrypted: i=1; AJvYcCUHZTskuvgkEkAOu7RehbyxC+v0dpvyhsUAVEFSogcvRkibMH0e6j9msM1fN34xADnfD4+4RpdMTsyptFZO++TqsUCy
-X-Gm-Message-State: AOJu0Yz0ADwIj9HH9Gqsk1rUdhmESyQxNafZScL2dy7TNYKsQqbG5fyM
-	ca8ORzBHPQFRq1YVX0JEYDjy91tHxWZfAR4AAoAYe6F9CZDiQSsi
-X-Google-Smtp-Source: AGHT+IEp581PRzLwoLZXmicEbzKlmyPTJ0ipZseM+2QHoJVo1PKcwI74/x1lZhwgZ6/1Atiwbdk+Tg==
-X-Received: by 2002:a17:90a:3885:b0:2a2:da08:67db with SMTP id x5-20020a17090a388500b002a2da0867dbmr597746pjb.6.1712258554100;
-        Thu, 04 Apr 2024 12:22:34 -0700 (PDT)
-Received: from valdaarhun.. ([223.233.80.57])
-        by smtp.gmail.com with ESMTPSA id d12-20020a17090a498c00b002a04eef22c5sm53265pjh.44.2024.04.04.12.22.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 Apr 2024 12:22:33 -0700 (PDT)
-From: Sahil Siddiq <icegambit91@gmail.com>
-To: quentin@isovalent.com,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org
-Cc: martin.lau@linux.dev,
-	eddyz87@gmail.com,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	john.fastabend@gmail.com,
-	kpsingh@kernel.org,
-	sdf@google.com,
-	haoluo@google.com,
-	jolsa@kernel.org,
-	bpf@vger.kernel.org,
-	Sahil Siddiq <icegambit91@gmail.com>
-Subject: [PATCH bpf-next v5] bpftool: Mount bpffs on provided dir instead of parent dir
-Date: Fri,  5 Apr 2024 00:52:19 +0530
-Message-ID: <20240404192219.52373-1-icegambit91@gmail.com>
-X-Mailer: git-send-email 2.44.0
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="OkBoT7cB"
+Message-ID: <ff36e8fa-14f4-42a6-8210-cec24a7779a0@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1712261218;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=n1SLGajoYfkd/BVU/Z4IP2IUlKcHDqf4f4XKLUjAyXc=;
+	b=OkBoT7cBI9fR/9QKUis94AcIOB+rQcO8qjNPV0qOlGiPE5LTyG+5KtIv8xohW7d0i6xBKt
+	kwcOrQMKMzqDBJYkhbkF/4eud9cKIrLoQhoOeLGM+QwTREYPdvRzBYZ41PrIvo+FsdQJz0
+	7B3SnsMQ3UNpaUeJPZccXW1/xWvKcZQ=
+Date: Thu, 4 Apr 2024 13:06:50 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Subject: Re: [PATCH bpf-next v3] selftests/bpf: Move test_dev_cgroup to
+ prog_tests
+Content-Language: en-GB
+To: Muhammad Usama Anjum <usama.anjum@collabora.com>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
+ <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
+ Song Liu <song@kernel.org>, John Fastabend <john.fastabend@gmail.com>,
+ KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
+ Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+ Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>
+Cc: kernel@collabora.com, linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <20240401123455.1377896-1-usama.anjum@collabora.com>
+ <92e1cce6-5f26-4a49-86b6-81e1e80d1aaa@linux.dev>
+ <cfecd6ea-8fa3-477f-bd32-4087aefee2af@collabora.com>
+ <0ff5c7d0-d5c5-4b61-ba89-8e7f9f775935@linux.dev>
+ <0973bc93-7a8d-451c-9944-d91a77d68755@collabora.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <0973bc93-7a8d-451c-9944-d91a77d68755@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-When pinning programs/objects under PATH (eg: during "bpftool prog
-loadall") the bpffs is mounted on the parent dir of PATH in the
-following situations:
-- the given dir exists but it is not bpffs.
-- the given dir doesn't exist and the parent dir is not bpffs.
 
-Mounting on the parent dir can also have the unintentional side-
-effect of hiding other files located under the parent dir.
+On 4/3/24 5:03 AM, Muhammad Usama Anjum wrote:
+> On 4/3/24 7:36 AM, Yonghong Song wrote:
+>> On 4/2/24 8:16 AM, Muhammad Usama Anjum wrote:
+>>> Yonghong Song,
+>>>
+>>> Thank you so much for replying. I was missing how to run pipeline manually.
+>>> Thanks a ton.
+>>>
+>>> On 4/1/24 11:53 PM, Yonghong Song wrote:
+>>>> On 4/1/24 5:34 AM, Muhammad Usama Anjum wrote:
+>>>>> Move test_dev_cgroup.c to prog_tests/dev_cgroup.c to be able to run it
+>>>>> with test_progs. Replace dev_cgroup.bpf.o with skel header file,
+>>>>> dev_cgroup.skel.h and load program from it accourdingly.
+>>>>>
+>>>>>      ./test_progs -t dev_cgroup
+>>>>>      mknod: /tmp/test_dev_cgroup_null: Operation not permitted
+>>>>>      64+0 records in
+>>>>>      64+0 records out
+>>>>>      32768 bytes (33 kB, 32 KiB) copied, 0.000856684 s, 38.2 MB/s
+>>>>>      dd: failed to open '/dev/full': Operation not permitted
+>>>>>      dd: failed to open '/dev/random': Operation not permitted
+>>>>>      #72     test_dev_cgroup:OK
+>>>>>      Summary: 1/0 PASSED, 0 SKIPPED, 0 FAILED
+>>>>> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+>>>>> ---
+>>>>> Changes since v2:
+>>>>> - Replace test_dev_cgroup with serial_test_dev_cgroup as there is
+>>>>>      probability that the test is racing against another cgroup test
+>>>>> - Minor changes to the commit message above
+>>>>>
+>>>>> I've tested the patch with vmtest.sh on bpf-next/for-next and linux
+>>>>> next. It is passing on both. Not sure why it was failed on BPFCI.
+>>>>> Test run with vmtest.h:
+>>>>> sudo LDLIBS=-static PKG_CONFIG='pkg-config --static' ./vmtest.sh
+>>>>> ./test_progs -t dev_cgroup
+>>>>> ./test_progs -t dev_cgroup
+>>>>> mknod: /tmp/test_dev_cgroup_null: Operation not permitted
+>>>>> 64+0 records in
+>>>>> 64+0 records out
+>>>>> 32768 bytes (33 kB, 32 KiB) copied, 0.000403432 s, 81.2 MB/s
+>>>>> dd: failed to open '/dev/full': Operation not permitted
+>>>>> dd: failed to open '/dev/random': Operation not permitted
+>>>>>     #69      dev_cgroup:OK
+>>>>> Summary: 1/0 PASSED, 0 SKIPPED, 0 FAILED
+>>>> The CI failure:
+>>>>
+>>>>
+>>>> Error: #72 dev_cgroup
+>>>> serial_test_dev_cgroup:PASS:skel_open_and_load 0 nsec
+>>>> serial_test_dev_cgroup:PASS:cgroup_setup_and_join 0 nsec
+>>>> serial_test_dev_cgroup:PASS:bpf_attach 0 nsec
+>>>> serial_test_dev_cgroup:PASS:bpf_query 0 nsec
+>>>> serial_test_dev_cgroup:PASS:bpf_query 0 nsec
+>>>> serial_test_dev_cgroup:PASS:rm 0 nsec
+>>>> serial_test_dev_cgroup:PASS:mknod 0 nsec
+>>>> serial_test_dev_cgroup:PASS:rm 0 nsec
+>>>> serial_test_dev_cgroup:PASS:rm 0 nsec
+>>>> serial_test_dev_cgroup:FAIL:mknod unexpected mknod: actual 256 !=
+>>>> expected 0
+>>>> serial_test_dev_cgroup:PASS:rm 0 nsec
+>>>> serial_test_dev_cgroup:PASS:dd 0 nsec
+>>>> serial_test_dev_cgroup:PASS:dd 0 nsec
+>>>> serial_test_dev_cgroup:PASS:dd 0 nsec
+>>>>
+>>>> (cgroup_helpers.c:353: errno: Device or resource busy) umount cgroup2
+>>>>
+>>>> The error code 256 means mknod execution has some issues. Maybe you need to
+>>>> find specific errno to find out what is going on. I think you can do ci
+>>>> on-demanding test to debug.
+>>> errno is 2 --> No such file or directory
+>>>
+>>> Locally I'm unable to reproduce it until I don't remove
+>>> rm -f /tmp/test_dev_cgroup_zero such that the /tmp/test_dev_cgroup_zero
+>>> node is present before test execution. The error code is 256 with errno 2.
+>>> I'm debugging by placing system("ls /tmp 1>&2"); to find out which files
+>>> are already present in /tmp. But ls's output doesn't appear on the CI logs.
+>> errno 2 means ENOENT.
+>>  From mknod man page (https://linux.die.net/man/2/mknod), it means
+>>    A directory component in/pathname/  does not exist or is a dangling
+>> symbolic link.
+>>
+>> It means /tmp does not exist or a dangling symbolic link.
+>> It is indeed very strange. To make the test robust, maybe creating a temp
+>> directory with mkdtemp and use it as the path? The temp directory
+>> creation should be done before bpf prog attach.
+> I've tried following but still no luck:
+> * /tmp is already present. Then I thought maybe the desired file is already
+> present. I've verified that there isn't file of same name is present inside
+> /tmp.
+> * I thought maybe mknod isn't present in the system. But mknod --help succeeds.
+> * I switched from /tmp to current directory to create the mknod. But the
+> result is same error.
+> * I've tried to use the same kernel config as the BPF CI is using. I'm not
+> able to reproduce it.
+>
+> Not sure which edge case or what's going on. The problem is appearing
+> because of some limitation in the rootfs.
 
-If the given dir exists but is not bpffs, then the bpffs should
-be mounted on the given dir and not its parent dir.
-
-Similarly, if the given dir doesn't exist and its parent dir is not
-bpffs, then the given dir should be created and the bpffs should be
-mounted on this new dir.
-
-Link: https://lore.kernel.org/bpf/2da44d24-74ae-a564-1764-afccf395eeec@isovalent.com/T/#t
-Closes: https://github.com/libbpf/bpftool/issues/100
-Fixes: 2a36c26fe3b8 ("bpftool: Support bpffs mountpoint as pin path for prog loadall")
-
-Changes since v1:
- - Split "mount_bpffs_for_pin" into two functions.
-   This is done to improve maintainability and readability.
-
-Changes since v2:
-- mount_bpffs_for_pin: rename to "create_and_mount_bpffs_dir".
-- mount_bpffs_given_file: rename to "mount_bpffs_given_file".
-- create_and_mount_bpffs_dir:
-  - introduce "dir_exists" boolean.
-  - remove new dir if "mnt_fs" fails.
-- improve error handling and error messages.
-
-Changes since v3:
-- Rectify function name.
-- Improve error messages and formatting.
-- mount_bpffs_for_file:
-  - Check if dir exists before block_mount check.
-
-Changes since v4:
-- Use strdup instead of strcpy.
-- create_and_mount_bpffs_dir:
-  - Use S_IRWXU instead of 0700.
-- Improve error handling and formatting.
-
-Signed-off-by: Sahil Siddiq <icegambit91@gmail.com>
----
-I should mention that running checkpatch.pl --strict gave
-a warning suggesting that 0700 be used in place of S_IRWXU.
-
- tools/bpf/bpftool/common.c     | 96 +++++++++++++++++++++++++++++-----
- tools/bpf/bpftool/iter.c       |  2 +-
- tools/bpf/bpftool/main.h       |  3 +-
- tools/bpf/bpftool/prog.c       |  5 +-
- tools/bpf/bpftool/struct_ops.c |  2 +-
- 5 files changed, 92 insertions(+), 16 deletions(-)
-
-diff --git a/tools/bpf/bpftool/common.c b/tools/bpf/bpftool/common.c
-index cc6e6aae2447..958e92acca8e 100644
---- a/tools/bpf/bpftool/common.c
-+++ b/tools/bpf/bpftool/common.c
-@@ -244,29 +244,101 @@ int open_obj_pinned_any(const char *path, enum bpf_obj_type exp_type)
- 	return fd;
- }
- 
--int mount_bpffs_for_pin(const char *name, bool is_dir)
-+int create_and_mount_bpffs_dir(const char *dir_name)
- {
- 	char err_str[ERR_MAX_LEN];
--	char *file;
--	char *dir;
-+	bool dir_exists;
- 	int err = 0;
- 
--	if (is_dir && is_bpffs(name))
-+	if (is_bpffs(dir_name))
- 		return err;
- 
--	file = malloc(strlen(name) + 1);
--	if (!file) {
-+	dir_exists = access(dir_name, F_OK) == 0;
-+
-+	if (!dir_exists) {
-+		char *temp_name;
-+		char *parent_name;
-+
-+		temp_name = strdup(dir_name);
-+		if (!temp_name) {
-+			p_err("mem alloc failed");
-+			return -1;
-+		}
-+
-+		parent_name = dirname(temp_name);
-+
-+		if (is_bpffs(parent_name)) {
-+			/* nothing to do if already mounted */
-+			free(temp_name);
-+			return err;
-+		}
-+
-+		if (access(parent_name, F_OK) == -1) {
-+			p_err("can't create dir '%s' to pin BPF object: parent dir '%s' doesn't exist",
-+			      dir_name, parent_name);
-+			free(temp_name);
-+			return -1;
-+		}
-+
-+		free(temp_name);
-+	}
-+
-+	if (block_mount) {
-+		p_err("no BPF file system found, not mounting it due to --nomount option");
-+		return -1;
-+	}
-+
-+	if (!dir_exists) {
-+		err = mkdir(dir_name, S_IRWXU);
-+		if (err) {
-+			p_err("failed to create dir '%s': %s", dir_name, strerror(errno));
-+			return err;
-+		}
-+	}
-+
-+	err = mnt_fs(dir_name, "bpf", err_str, ERR_MAX_LEN);
-+	if (err) {
-+		err_str[ERR_MAX_LEN - 1] = '\0';
-+		p_err("can't mount BPF file system on given dir '%s': %s",
-+		      dir_name, err_str);
-+
-+		if (!dir_exists)
-+			rmdir(dir_name);
-+	}
-+
-+	return err;
-+}
-+
-+int mount_bpffs_for_file(const char *file_name)
-+{
-+	char err_str[ERR_MAX_LEN];
-+	char *temp_name;
-+	char *dir;
-+	int err = 0;
-+
-+	if (access(file_name, F_OK) != -1) {
-+		p_err("can't pin BPF object: path '%s' already exists", file_name);
-+		return -1;
-+	}
-+
-+	temp_name = strdup(file_name);
-+	if (!temp_name) {
- 		p_err("mem alloc failed");
- 		return -1;
- 	}
- 
--	strcpy(file, name);
--	dir = dirname(file);
-+	dir = dirname(temp_name);
- 
- 	if (is_bpffs(dir))
- 		/* nothing to do if already mounted */
- 		goto out_free;
- 
-+	if (access(dir, F_OK) == -1) {
-+		p_err("can't pin BPF object: dir '%s' doesn't exist", dir);
-+		err = -1;
-+		goto out_free;
-+	}
-+
- 	if (block_mount) {
- 		p_err("no BPF file system found, not mounting it due to --nomount option");
- 		err = -1;
-@@ -276,12 +348,12 @@ int mount_bpffs_for_pin(const char *name, bool is_dir)
- 	err = mnt_fs(dir, "bpf", err_str, ERR_MAX_LEN);
- 	if (err) {
- 		err_str[ERR_MAX_LEN - 1] = '\0';
--		p_err("can't mount BPF file system to pin the object (%s): %s",
--		      name, err_str);
-+		p_err("can't mount BPF file system to pin the object '%s': %s",
-+		      file_name, err_str);
- 	}
- 
- out_free:
--	free(file);
-+	free(temp_name);
- 	return err;
- }
- 
-@@ -289,7 +361,7 @@ int do_pin_fd(int fd, const char *name)
- {
- 	int err;
- 
--	err = mount_bpffs_for_pin(name, false);
-+	err = mount_bpffs_for_file(name);
- 	if (err)
- 		return err;
- 
-diff --git a/tools/bpf/bpftool/iter.c b/tools/bpf/bpftool/iter.c
-index 6b0e5202ca7a..5c39c2ed36a2 100644
---- a/tools/bpf/bpftool/iter.c
-+++ b/tools/bpf/bpftool/iter.c
-@@ -76,7 +76,7 @@ static int do_pin(int argc, char **argv)
- 		goto close_obj;
- 	}
- 
--	err = mount_bpffs_for_pin(path, false);
-+	err = mount_bpffs_for_file(path);
- 	if (err)
- 		goto close_link;
- 
-diff --git a/tools/bpf/bpftool/main.h b/tools/bpf/bpftool/main.h
-index b8bb08d10dec..9eb764fe4cc8 100644
---- a/tools/bpf/bpftool/main.h
-+++ b/tools/bpf/bpftool/main.h
-@@ -142,7 +142,8 @@ const char *get_fd_type_name(enum bpf_obj_type type);
- char *get_fdinfo(int fd, const char *key);
- int open_obj_pinned(const char *path, bool quiet);
- int open_obj_pinned_any(const char *path, enum bpf_obj_type exp_type);
--int mount_bpffs_for_pin(const char *name, bool is_dir);
-+int mount_bpffs_for_file(const char *file_name);
-+int create_and_mount_bpffs_dir(const char *dir_name);
- int do_pin_any(int argc, char **argv, int (*get_fd_by_id)(int *, char ***));
- int do_pin_fd(int fd, const char *name);
- 
-diff --git a/tools/bpf/bpftool/prog.c b/tools/bpf/bpftool/prog.c
-index 9cb42a3366c0..4c4cf16a40ba 100644
---- a/tools/bpf/bpftool/prog.c
-+++ b/tools/bpf/bpftool/prog.c
-@@ -1778,7 +1778,10 @@ static int load_with_options(int argc, char **argv, bool first_prog_only)
- 		goto err_close_obj;
- 	}
- 
--	err = mount_bpffs_for_pin(pinfile, !first_prog_only);
-+	if (first_prog_only)
-+		err = mount_bpffs_for_file(pinfile);
-+	else
-+		err = create_and_mount_bpffs_dir(pinfile);
- 	if (err)
- 		goto err_close_obj;
- 
-diff --git a/tools/bpf/bpftool/struct_ops.c b/tools/bpf/bpftool/struct_ops.c
-index d573f2640d8e..aa43dead249c 100644
---- a/tools/bpf/bpftool/struct_ops.c
-+++ b/tools/bpf/bpftool/struct_ops.c
-@@ -515,7 +515,7 @@ static int do_register(int argc, char **argv)
- 	if (argc == 1)
- 		linkdir = GET_ARG();
- 
--	if (linkdir && mount_bpffs_for_pin(linkdir, true)) {
-+	if (linkdir && create_and_mount_bpffs_dir(linkdir)) {
- 		p_err("can't mount bpffs for pinning");
- 		return -1;
- 	}
--- 
-2.44.0
+Maybe you could collect /tmp mount options to see whether anything is
+suspicious? In my vm, I have
+   tmpfs on /tmp type tmpfs (rw,nosuid,nodev,size=3501540k,nr_inodes=1048576)
+and the test works fine.
 
