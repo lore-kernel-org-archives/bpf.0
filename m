@@ -1,396 +1,135 @@
-Received: from 69-171-232-180.mail-mxout.facebook.com (69-171-232-180.mail-mxout.facebook.com [69.171.232.180])
+Received: from mail-vk1-f169.google.com (mail-vk1-f169.google.com [209.85.221.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECC251CD3C
-	for <bpf@vger.kernel.org>; Thu,  4 Apr 2024 02:53:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=69.171.232.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 610971CD2D;
+	Thu,  4 Apr 2024 03:05:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712199217; cv=none; b=HEqZzd5tge27ogyy8fvZiItO0QDOjR3xCLp7ohDP2w29p9voz1rrjPTG19N0T75R9DTH2BdRCz+YRjb9ekyxuCivYX1LBuJaZK83gixs91jQz1ww9ZcDRRuqjIrMPQFEEFHgTsY3Nj8kdzIJotpqVzD+GSgjZay2bamjx66IHmk=
+	t=1712199914; cv=none; b=izmZ0GwHYYrZSF6jUEANmUbp1TtzHtfymk1nXxpTXWltxIN60LDzRCm/heHWbEf3oJ4YwlCW0OsDhWjXAxJgqqs03QFh9DeWzaLDPMgWmDDV9/Z4AWCJvHjK9PB0/CTT8e0F825hX83OWh4phMtUuImQT9d8alkIxTbW1p+1STo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712199217; c=relaxed/simple;
-	bh=h3E8uNaixvau9mMw37mlAKgAo9qBoA6MkJpIGNmVI9Q=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=PsQdJGhpx/DFVrfjODeGldlD4ZBpcdRbGJraZ1osYAqFXgeQ1qqWuQ3aX0jGCcK/LNYey//TFXfTC133L6xc5DM6vVgZV5zRt/iWh042wXEUF+v5ELz2z5r8biF1NSqkuQ4pbydmSnBY7wYTaejijtYyxJ4HXGhv2hBWJDUjg1k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=69.171.232.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
-Received: by devbig309.ftw3.facebook.com (Postfix, from userid 128203)
-	id 55BA029CEB74; Wed,  3 Apr 2024 19:53:31 -0700 (PDT)
-From: Yonghong Song <yonghong.song@linux.dev>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Jakub Sitnicki <jakub@cloudflare.com>,
-	John Fastabend <john.fastabend@gmail.com>,
-	kernel-team@fb.com,
-	Martin KaFai Lau <martin.lau@kernel.org>
-Subject: [PATCH bpf-next v4 5/5] selftests/bpf: Add some tests with new bpf_program__attach_sockmap() APIs
-Date: Wed,  3 Apr 2024 19:53:31 -0700
-Message-ID: <20240404025331.2213097-1-yonghong.song@linux.dev>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240404025305.2210999-1-yonghong.song@linux.dev>
-References: <20240404025305.2210999-1-yonghong.song@linux.dev>
+	s=arc-20240116; t=1712199914; c=relaxed/simple;
+	bh=n1Gy12ii5bN7QHH1APM2opNVzrdc9BSnxwogwL1EV3Y=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=DlaywooWi/JxBG+AX9HE7Ajc/uZw6i5IPxZIXkex9PF5ObvygFgEcv2+jM6bwvXqE1VotW+6YWoisskDfmN5UuB152e3cSBmoYoID6e7JT1bWNJ2ifRwhNgL18TXOrkEG264txU/LonX14s1NV/Xa2fn7k6UP8qkm59kDUkyZnI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=O6saht0A; arc=none smtp.client-ip=209.85.221.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="O6saht0A"
+Received: by mail-vk1-f169.google.com with SMTP id 71dfb90a1353d-4d8e4d0b267so205403e0c.1;
+        Wed, 03 Apr 2024 20:05:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1712199911; x=1712804711; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=DjHDnpA7O0SA2pBDBfzfbp7mcVeAfKFEgK+y0xJV6BU=;
+        b=O6saht0AfkgGFQz75gv8Yshb/5uBD623GjwjhDBVSOPs+T3zaVdCMkM1EZAEAJPBgE
+         iRwUbeRjKNgzuGUJEjwhVJWPfGNtFsEnY97PbEePnaW6v0eg0Cv0xW5ttQu6GV37W8Q7
+         WzN6qqyvwS8mX29ybSlGM86pXGvBtvp2RutkbD6nJYAmfPrO9U9WH0k2Aj4qlhD9695m
+         TQZZbKKkLfl2RRmswmEVYM8Du2uAXs60xGmGXtOicBEGqklI0qWbb84uZmmT42YVO8Rt
+         563iQtAEYcG0bTpXkhVOMxN8OvYd3R9Qy6l1Dk9MZpHaJI8sy2JIEuJGttQDRSA6KCq3
+         CibQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1712199911; x=1712804711;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=DjHDnpA7O0SA2pBDBfzfbp7mcVeAfKFEgK+y0xJV6BU=;
+        b=hpAUwtKL2qjBZTSggDX7JxjrVtGO6ahjbiJ96WinQMoP1b7LFWaY6yGEngfOhnUAWp
+         od4H98SEZcba6hE6qMPpdNmzsglMlUbbjT15o08Oh6icz/weGvRklCQZJDpKXlmfylSC
+         8f8kdje8sDQ2VaQCaRXxbzO6QZEBMD9ZuEpckmYiqwqGQh2ICunpKfTHAL4foiAKAub3
+         K4DK2SuLNqRvtpEnX8mL2cWSHAx/BReVs7NHAKEhvkh8u6ZM1ANn3HhZ+1P3HIzDHkXF
+         zENU5Br4AVTZwrRPMs5kNqmF3erhUerRbSwRcgcpwamSGhjYYKh+Uy/etZZ+/THk4nuH
+         Ns/w==
+X-Forwarded-Encrypted: i=1; AJvYcCXqUhExbMG8Jn4cbkJWRlMWbcIiLgpzMAGqN8lCJ2JShVbsmp9IvU5QP9XVIPYhpEMSzOYK2KmPtBaAOKf7R5MyPZam1xhRUiPxHe68e5u4nrvOvuQsmp3mBMZFf2ikIJk+
+X-Gm-Message-State: AOJu0YyrfUY3aj5+ySdfFNFtrebLqPwKZu23a7egNu3keaul0BVSaC6S
+	vqDwiI8VvrgvqJhyVDMAj1p6fEO3VNQbl2SFqTkFRIgTHMZ7Ucak3VVV9bFlZB/YURxT7b0PtFh
+	Ygwh0M5gNkIWkOPcO/Xg89A/0lIN+7bq4nBo=
+X-Google-Smtp-Source: AGHT+IE154OEEZxkmPiDJ5tY4+FxOYu0pDdm/usOrWPODO/EvEflbVdQTWMgWeImARWWbnYhdtJpp718LuJO136gPK8=
+X-Received: by 2002:a05:6122:468c:b0:4da:9aa1:dd5e with SMTP id
+ di12-20020a056122468c00b004da9aa1dd5emr1437503vkb.10.1712199911102; Wed, 03
+ Apr 2024 20:05:11 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+References: <20240402212039.51815-1-harishankar.vishwanathan@gmail.com> <82892691-a48f-ad06-7005-5bbd7d0757eb@iogearbox.net>
+In-Reply-To: <82892691-a48f-ad06-7005-5bbd7d0757eb@iogearbox.net>
+From: Harishankar Vishwanathan <harishankar.vishwanathan@gmail.com>
+Date: Wed, 3 Apr 2024 23:05:00 -0400
+Message-ID: <CAM=Ch045iUe1vHy+h9FSURbffj1GD_WDhcFJ2W7_amVx-BQATw@mail.gmail.com>
+Subject: Re: [PATCH v2 bpf-next] bpf: Fix latent unsoundness in and/or/xor
+ value tracking
+To: Daniel Borkmann <daniel@iogearbox.net>
+Cc: ast@kernel.org, harishankar.vishwanathan@rutgers.edu, paul@isovalent.com, 
+	Matan Shachnai <m.shachnai@rutgers.edu>, Srinivas Narayana <srinivas.narayana@rutgers.edu>, 
+	Santosh Nagarakatte <santosh.nagarakatte@rutgers.edu>, John Fastabend <john.fastabend@gmail.com>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
+	Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Edward Cree <ecree@solarflare.com>, "David S. Miller" <davem@davemloft.net>, bpf@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Add a few more tests in sockmap_basic.c and sockmap_listen.c to
-test bpf_link based APIs for SK_MSG and SK_SKB programs.
-Link attach/detach/update are all tested.
+On Wed, Apr 3, 2024 at 5:09=E2=80=AFAM Daniel Borkmann <daniel@iogearbox.ne=
+t> wrote:
+>
+> On 4/2/24 11:20 PM, Harishankar Vishwanathan wrote:
+> [...]
+> > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> > index fcb62300f407..a7404a7d690f 100644
+> > --- a/kernel/bpf/verifier.c
+> > +++ b/kernel/bpf/verifier.c
+> > @@ -13326,23 +13326,21 @@ static void scalar32_min_max_and(struct bpf_r=
+eg_state *dst_reg,
+> >               return;
+> >       }
+> >
+> > -     /* We get our minimum from the var_off, since that's inherently
+> > +     /* We get our minimum from the var32_off, since that's inherently
+> >        * bitwise.  Our maximum is the minimum of the operands' maxima.
+> >        */
+> >       dst_reg->u32_min_value =3D var32_off.value;
+> >       dst_reg->u32_max_value =3D min(dst_reg->u32_max_value, umax_val);
+> > -     if (dst_reg->s32_min_value < 0 || smin_val < 0) {
+>
+> The smin_val is now unused, triggering the following warnings :
+>
+> ../kernel/bpf/verifier.c:13321:6: warning: unused variable 'smin_val' [-W=
+unused-variable]
+>   13321 |         s32 smin_val =3D src_reg->s32_min_value;
+>         |             ^~~~~~~~
+> ../kernel/bpf/verifier.c:13352:6: warning: unused variable 'smin_val' [-W=
+unused-variable]
+>   13352 |         s64 smin_val =3D src_reg->smin_value;
+>         |             ^~~~~~~~
+> ../kernel/bpf/verifier.c:13386:6: warning: unused variable 'smin_val' [-W=
+unused-variable]
+>   13386 |         s32 smin_val =3D src_reg->s32_min_value;
+>         |             ^~~~~~~~
+> ../kernel/bpf/verifier.c:13417:6: warning: unused variable 'smin_val' [-W=
+unused-variable]
+>   13417 |         s64 smin_val =3D src_reg->smin_value;
+>         |             ^~~~~~~~
+> ../kernel/bpf/verifier.c:13451:6: warning: unused variable 'smin_val' [-W=
+unused-variable]
+>   13451 |         s32 smin_val =3D src_reg->s32_min_value;
+>         |             ^~~~~~~~
+> ../kernel/bpf/verifier.c:13479:6: warning: unused variable 'smin_val' [-W=
+unused-variable]
+>   13479 |         s64 smin_val =3D src_reg->smin_value;
+>         |             ^~~~~~~~
+>
+> Removing these builds fine then, please follow-up with a v3.
 
-All tests are passed.
+Apologies. Yes, these smin_vals are not required anymore. I'll remove
+them when sending
+the v3.
 
-Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
----
- .../selftests/bpf/prog_tests/sockmap_basic.c  | 133 ++++++++++++++++++
- .../selftests/bpf/prog_tests/sockmap_listen.c |  38 +++++
- .../bpf/progs/test_skmsg_load_helpers.c       |  18 +++
- .../bpf/progs/test_sockmap_pass_prog.c        |  17 ++-
- .../progs/test_sockmap_skb_verdict_attach.c   |   2 +-
- 5 files changed, 206 insertions(+), 2 deletions(-)
-
-diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c b/too=
-ls/testing/selftests/bpf/prog_tests/sockmap_basic.c
-index 63fb2da7930a..1337153eb0ad 100644
---- a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
-+++ b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
-@@ -131,6 +131,65 @@ static void test_skmsg_helpers(enum bpf_map_type map=
-_type)
- 	test_skmsg_load_helpers__destroy(skel);
- }
-=20
-+static void test_skmsg_helpers_with_link(enum bpf_map_type map_type)
-+{
-+	struct bpf_program *prog, *prog_clone, *prog_clone2;
-+	DECLARE_LIBBPF_OPTS(bpf_link_update_opts, opts);
-+	struct test_skmsg_load_helpers *skel;
-+	struct bpf_link *link, *link2;
-+	int err, map;
-+
-+	skel =3D test_skmsg_load_helpers__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "test_skmsg_load_helpers__open_and_load"))
-+		return;
-+
-+	prog =3D skel->progs.prog_msg_verdict;
-+	prog_clone =3D skel->progs.prog_msg_verdict_clone;
-+	prog_clone2 =3D skel->progs.prog_msg_verdict_clone2;
-+	map =3D bpf_map__fd(skel->maps.sock_map);
-+
-+	link =3D bpf_program__attach_sockmap(prog, map);
-+	if (!ASSERT_OK_PTR(link, "bpf_program__attach_sockmap"))
-+		goto out;
-+
-+	/* Fail since bpf_link for the same prog has been created. */
-+	err =3D bpf_prog_attach(bpf_program__fd(prog), map, BPF_SK_MSG_VERDICT,=
- 0);
-+	if (!ASSERT_ERR(err, "bpf_prog_attach"))
-+		goto out;
-+
-+	/* Fail since bpf_link for the same prog type has been created. */
-+	link2 =3D bpf_program__attach_sockmap(prog_clone, map);
-+	if (!ASSERT_ERR_PTR(link2, "bpf_program__attach_sockmap")) {
-+		bpf_link__detach(link2);
-+		goto out;
-+	}
-+
-+	err =3D bpf_link__update_program(link, prog_clone);
-+	if (!ASSERT_OK(err, "bpf_link__update_program"))
-+		goto out;
-+
-+	/* Fail since a prog with different type attempts to do update. */
-+	err =3D bpf_link__update_program(link, skel->progs.prog_skb_verdict);
-+	if (!ASSERT_ERR(err, "bpf_link__update_program"))
-+		goto out;
-+
-+	/* Fail since the old prog does not match the one in the kernel. */
-+	opts.old_prog_fd =3D bpf_program__fd(prog_clone2);
-+	opts.flags =3D BPF_F_REPLACE;
-+	err =3D bpf_link_update(bpf_link__fd(link), bpf_program__fd(prog), &opt=
-s);
-+	if (!ASSERT_ERR(err, "bpf_link_update"))
-+		goto out;
-+
-+	opts.old_prog_fd =3D bpf_program__fd(prog_clone);
-+	opts.flags =3D BPF_F_REPLACE;
-+	err =3D bpf_link_update(bpf_link__fd(link), bpf_program__fd(prog), &opt=
-s);
-+	if (!ASSERT_OK(err, "bpf_link_update"))
-+		goto out;
-+out:
-+	bpf_link__detach(link);
-+	test_skmsg_load_helpers__destroy(skel);
-+}
-+
- static void test_sockmap_update(enum bpf_map_type map_type)
- {
- 	int err, prog, src;
-@@ -298,6 +357,40 @@ static void test_sockmap_skb_verdict_attach(enum bpf=
-_attach_type first,
- 	test_sockmap_skb_verdict_attach__destroy(skel);
- }
-=20
-+static void test_sockmap_skb_verdict_attach_with_link(void)
-+{
-+	struct test_sockmap_skb_verdict_attach *skel;
-+	struct bpf_program *prog;
-+	struct bpf_link *link;
-+	int err, map;
-+
-+	skel =3D test_sockmap_skb_verdict_attach__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "open_and_load"))
-+		return;
-+	prog =3D skel->progs.prog_skb_verdict;
-+	map =3D bpf_map__fd(skel->maps.sock_map);
-+	link =3D bpf_program__attach_sockmap(prog, map);
-+	if (!ASSERT_OK_PTR(link, "bpf_program__attach_sockmap"))
-+		goto out;
-+
-+	bpf_link__detach(link);
-+
-+	err =3D bpf_prog_attach(bpf_program__fd(prog), map, BPF_SK_SKB_STREAM_V=
-ERDICT, 0);
-+	if (!ASSERT_OK(err, "bpf_prog_attach"))
-+		goto out;
-+
-+	/* Fail since attaching with the same prog/map has been done. */
-+	link =3D bpf_program__attach_sockmap(prog, map);
-+	if (!ASSERT_ERR_PTR(link, "bpf_program__attach_sockmap"))
-+		bpf_link__detach(link);
-+
-+	err =3D bpf_prog_detach2(bpf_program__fd(prog), map, BPF_SK_SKB_STREAM_=
-VERDICT);
-+	if (!ASSERT_OK(err, "bpf_prog_detach2"))
-+		goto out;
-+out:
-+	test_sockmap_skb_verdict_attach__destroy(skel);
-+}
-+
- static __u32 query_prog_id(int prog_fd)
- {
- 	struct bpf_prog_info info =3D {};
-@@ -532,6 +625,38 @@ static void test_sockmap_skb_verdict_peek(void)
- 	test_sockmap_pass_prog__destroy(pass);
- }
-=20
-+static void test_sockmap_skb_verdict_peek_with_link(void)
-+{
-+	struct test_sockmap_pass_prog *pass;
-+	struct bpf_program *prog;
-+	struct bpf_link *link;
-+	int err, map;
-+
-+	pass =3D test_sockmap_pass_prog__open_and_load();
-+	if (!ASSERT_OK_PTR(pass, "open_and_load"))
-+		return;
-+	prog =3D pass->progs.prog_skb_verdict;
-+	map =3D bpf_map__fd(pass->maps.sock_map_rx);
-+	link =3D bpf_program__attach_sockmap(prog, map);
-+	if (!ASSERT_OK_PTR(link, "bpf_program__attach_sockmap"))
-+		goto out;
-+
-+	err =3D bpf_link__update_program(link, pass->progs.prog_skb_verdict_clo=
-ne);
-+	if (!ASSERT_OK(err, "bpf_link__update_program"))
-+		goto out;
-+
-+	/* Fail since a prog with different attach type attempts to do update. =
-*/
-+	err =3D bpf_link__update_program(link, pass->progs.prog_skb_parser);
-+	if (!ASSERT_ERR(err, "bpf_link__update_program"))
-+		goto out;
-+
-+	test_sockmap_skb_verdict_peek_helper(map);
-+	ASSERT_EQ(pass->bss->clone_called, 1, "clone_called");
-+out:
-+	bpf_link__detach(link);
-+	test_sockmap_pass_prog__destroy(pass);
-+}
-+
- static void test_sockmap_unconnected_unix(void)
- {
- 	int err, map, stream =3D 0, dgram =3D 0, zero =3D 0;
-@@ -796,6 +921,8 @@ void test_sockmap_basic(void)
- 		test_sockmap_skb_verdict_attach(BPF_SK_SKB_STREAM_VERDICT,
- 						BPF_SK_SKB_VERDICT);
- 	}
-+	if (test__start_subtest("sockmap skb_verdict attach_with_link"))
-+		test_sockmap_skb_verdict_attach_with_link();
- 	if (test__start_subtest("sockmap msg_verdict progs query"))
- 		test_sockmap_progs_query(BPF_SK_MSG_VERDICT);
- 	if (test__start_subtest("sockmap stream_parser progs query"))
-@@ -812,6 +939,8 @@ void test_sockmap_basic(void)
- 		test_sockmap_skb_verdict_fionread(false);
- 	if (test__start_subtest("sockmap skb_verdict msg_f_peek"))
- 		test_sockmap_skb_verdict_peek();
-+	if (test__start_subtest("sockmap skb_verdict msg_f_peek with link"))
-+		test_sockmap_skb_verdict_peek_with_link();
- 	if (test__start_subtest("sockmap unconnected af_unix"))
- 		test_sockmap_unconnected_unix();
- 	if (test__start_subtest("sockmap one socket to many map entries"))
-@@ -820,4 +949,8 @@ void test_sockmap_basic(void)
- 		test_sockmap_many_maps();
- 	if (test__start_subtest("sockmap same socket replace"))
- 		test_sockmap_same_sock();
-+	if (test__start_subtest("sockmap sk_msg attach sockmap helpers with lin=
-k"))
-+		test_skmsg_helpers_with_link(BPF_MAP_TYPE_SOCKMAP);
-+	if (test__start_subtest("sockhash sk_msg attach sockhash helpers with l=
-ink"))
-+		test_skmsg_helpers_with_link(BPF_MAP_TYPE_SOCKHASH);
- }
-diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c b/to=
-ols/testing/selftests/bpf/prog_tests/sockmap_listen.c
-index a92807bfcd13..54c93eee1808 100644
---- a/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c
-+++ b/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c
-@@ -767,6 +767,24 @@ static void test_msg_redir_to_connected(struct test_=
-sockmap_listen *skel,
- 	xbpf_prog_detach2(verdict, sock_map, BPF_SK_MSG_VERDICT);
- }
-=20
-+static void test_msg_redir_to_connected_with_link(struct test_sockmap_li=
-sten *skel,
-+						  struct bpf_map *inner_map, int family,
-+						  int sotype)
-+{
-+	struct bpf_program *verdict =3D skel->progs.prog_msg_verdict;
-+	int verdict_map =3D bpf_map__fd(skel->maps.verdict_map);
-+	int sock_map =3D bpf_map__fd(inner_map);
-+	struct bpf_link *link;
-+
-+	link =3D bpf_program__attach_sockmap(verdict, sock_map);
-+	if (!ASSERT_OK_PTR(link, "bpf_program__attach_sockmap"))
-+		return;
-+
-+	redir_to_connected(family, sotype, sock_map, verdict_map, REDIR_EGRESS)=
-;
-+
-+	bpf_link__detach(link);
-+}
-+
- static void redir_to_listening(int family, int sotype, int sock_mapfd,
- 			       int verd_mapfd, enum redir_mode mode)
- {
-@@ -869,6 +887,24 @@ static void test_msg_redir_to_listening(struct test_=
-sockmap_listen *skel,
- 	xbpf_prog_detach2(verdict, sock_map, BPF_SK_MSG_VERDICT);
- }
-=20
-+static void test_msg_redir_to_listening_with_link(struct test_sockmap_li=
-sten *skel,
-+						  struct bpf_map *inner_map, int family,
-+						  int sotype)
-+{
-+	struct bpf_program *verdict =3D skel->progs.prog_msg_verdict;
-+	int verdict_map =3D bpf_map__fd(skel->maps.verdict_map);
-+	int sock_map =3D bpf_map__fd(inner_map);
-+	struct bpf_link *link;
-+
-+	link =3D bpf_program__attach_sockmap(verdict, sock_map);
-+	if (!ASSERT_OK_PTR(link, "bpf_program__attach_sockmap"))
-+		return;
-+
-+	redir_to_listening(family, sotype, sock_map, verdict_map, REDIR_EGRESS)=
-;
-+
-+	bpf_link__detach(link);
-+}
-+
- static void redir_partial(int family, int sotype, int sock_map, int pars=
-er_map)
- {
- 	int s, c0 =3D -1, c1 =3D -1, p0 =3D -1, p1 =3D -1;
-@@ -1316,7 +1352,9 @@ static void test_redir(struct test_sockmap_listen *=
-skel, struct bpf_map *map,
- 		TEST(test_skb_redir_to_listening),
- 		TEST(test_skb_redir_partial),
- 		TEST(test_msg_redir_to_connected),
-+		TEST(test_msg_redir_to_connected_with_link),
- 		TEST(test_msg_redir_to_listening),
-+		TEST(test_msg_redir_to_listening_with_link),
- 	};
- 	const char *family_name, *map_name;
- 	const struct redir_test *t;
-diff --git a/tools/testing/selftests/bpf/progs/test_skmsg_load_helpers.c =
-b/tools/testing/selftests/bpf/progs/test_skmsg_load_helpers.c
-index b753672f04c9..996b177324ba 100644
---- a/tools/testing/selftests/bpf/progs/test_skmsg_load_helpers.c
-+++ b/tools/testing/selftests/bpf/progs/test_skmsg_load_helpers.c
-@@ -49,4 +49,22 @@ int prog_msg_verdict(struct sk_msg_md *msg)
- 	return prog_msg_verdict_common(msg);
- }
-=20
-+SEC("sk_msg")
-+int prog_msg_verdict_clone(struct sk_msg_md *msg)
-+{
-+	return prog_msg_verdict_common(msg);
-+}
-+
-+SEC("sk_msg")
-+int prog_msg_verdict_clone2(struct sk_msg_md *msg)
-+{
-+	return prog_msg_verdict_common(msg);
-+}
-+
-+SEC("sk_skb/stream_verdict")
-+int prog_skb_verdict(struct __sk_buff *skb)
-+{
-+	return SK_PASS;
-+}
-+
- char _license[] SEC("license") =3D "GPL";
-diff --git a/tools/testing/selftests/bpf/progs/test_sockmap_pass_prog.c b=
-/tools/testing/selftests/bpf/progs/test_sockmap_pass_prog.c
-index 1d86a717a290..69aacc96db36 100644
---- a/tools/testing/selftests/bpf/progs/test_sockmap_pass_prog.c
-+++ b/tools/testing/selftests/bpf/progs/test_sockmap_pass_prog.c
-@@ -23,10 +23,25 @@ struct {
- 	__type(value, int);
- } sock_map_msg SEC(".maps");
-=20
--SEC("sk_skb")
-+SEC("sk_skb/stream_verdict")
- int prog_skb_verdict(struct __sk_buff *skb)
- {
- 	return SK_PASS;
- }
-=20
-+int clone_called;
-+
-+SEC("sk_skb/stream_verdict")
-+int prog_skb_verdict_clone(struct __sk_buff *skb)
-+{
-+	clone_called =3D 1;
-+	return SK_PASS;
-+}
-+
-+SEC("sk_skb/stream_parser")
-+int prog_skb_parser(struct __sk_buff *skb)
-+{
-+	return SK_PASS;
-+}
-+
- char _license[] SEC("license") =3D "GPL";
-diff --git a/tools/testing/selftests/bpf/progs/test_sockmap_skb_verdict_a=
-ttach.c b/tools/testing/selftests/bpf/progs/test_sockmap_skb_verdict_atta=
-ch.c
-index 3c69aa971738..d25b0bb30fc0 100644
---- a/tools/testing/selftests/bpf/progs/test_sockmap_skb_verdict_attach.c
-+++ b/tools/testing/selftests/bpf/progs/test_sockmap_skb_verdict_attach.c
-@@ -9,7 +9,7 @@ struct {
- 	__type(value, __u64);
- } sock_map SEC(".maps");
-=20
--SEC("sk_skb")
-+SEC("sk_skb/verdict")
- int prog_skb_verdict(struct __sk_buff *skb)
- {
- 	return SK_DROP;
---=20
-2.43.0
-
+> Thanks,
+> Daniel
