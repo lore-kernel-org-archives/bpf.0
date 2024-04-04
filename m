@@ -1,171 +1,158 @@
-Received: from mail-ot1-f53.google.com (mail-ot1-f53.google.com [209.85.210.53])
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71E43134418
-	for <bpf@vger.kernel.org>; Thu,  4 Apr 2024 23:23:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40625134418;
+	Thu,  4 Apr 2024 23:23:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712273027; cv=none; b=TILBP/68TTGJV3HntR/Uok0af4zQ0n95bvh94dxvF3NM291WRKSHKNZc8vfVUxsyinWfAQYxnp8MMF6+WvU5Qvbvl0leSnI3lgPNj0nbLhOJE6u0yskN4a101zrKdHPgK9PdnfBRMXBVRaGnPHMHcmlrBf/GYKjB4yEzdmqdiOM=
+	t=1712273039; cv=none; b=JlNQUWhgpv2Oxc89/3ZJqkahZdI7j/igBgJuFSyEWEVt3x7fXyr14FyDr5wZ/yoAeSLveq4T0ga25vLqobJcNqu2gZt9YytHCKOxNFPbeVA7bCoEjPrxOG0Vv4O7ATzqp7fchsbgPKeEXO912TeG5z4uF64sXDRmuyAyDsN04tE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712273027; c=relaxed/simple;
-	bh=UM8v47oYGRPLOMYjH/GCnZr9Up5sMCyq4KGxiBGPzms=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Df3eO5/etSNc+uNYln4iVk5KA5NR7RhvuqzqRtG2MKcbkGCG3uKSqyTmYI84qSsniNNf6bvb08MjYMniLRv13BW9OMkJxTos8g4R89JYLu5RfD11FFsufKUHRUqD1frcDedte/7T6NsEhh7GDYc7K+6KUbJf2OUd3wFNFj5zHlc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=W/9Uy722; arc=none smtp.client-ip=209.85.210.53
+	s=arc-20240116; t=1712273039; c=relaxed/simple;
+	bh=Do963hSdPrLX5zfMcrNn6SbYrENL0NCjWtgD8cm98Nk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ow5zyCK1HIpaAL3AXasXvCcp4rc9v11YbGbdCTsdh15aSq6/hI5D33vdL5ZYeVjrYtOhkh7lgA1w1oujCxc3DLn586A9ZSTwMOuIlA/ipm9AEI9WFlw6Xsq9FwKLjWFYQyeC3uuvn4dd7D8kx3M38xeh8pveRrtpnfsOyvDCn/4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gmgz4EL6; arc=none smtp.client-ip=209.85.128.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="W/9Uy722"
-Received: by mail-ot1-f53.google.com with SMTP id 46e09a7af769-6e9ee593e76so467656a34.0
-        for <bpf@vger.kernel.org>; Thu, 04 Apr 2024 16:23:46 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gmgz4EL6"
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-4162aca8746so8000305e9.1;
+        Thu, 04 Apr 2024 16:23:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1712273025; x=1712877825; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=ueU0LC5vV0lMu5ycK7BP+JE8GTTD+XC5Xfal6W8yhhU=;
-        b=W/9Uy722FCH5MQOeoS76CdNxNNpfoZ1NlRO5xyp9OWEk7tw9Ab6CKBEIyjmNeL3UXY
-         fHjqmIEIhycSDWVOTas5ZuySCawCEzvTa/AnkyRW93/u789RH2c9ALFWsfZ/je+5U7T8
-         etH5UoTKgQOl1QiG/Smgue0SrQkMxOziqYCyJBmJ5suMQkF2efofov3VQjrDLgRJq2m1
-         3Lph7VAfwrVXUS036Jkk8rIq80WZtBQ1vUXX24fpjRnfRIIC6XtYDRtISHJ2p58Xej4N
-         VQ4153rAk7ujOdeyvELgA6qYS7zED941QinooNtyb+OvL3vjfcRZYkh9JSf0D6QlJlW1
-         cUxQ==
+        d=gmail.com; s=20230601; t=1712273035; x=1712877835; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lXnwmQPrl07FZAiqD50mf42e3pDAJdibA7+5v+qAN78=;
+        b=gmgz4EL6/ZPvZ5Yhb+G4QxtHAhWjGLbn3SAmMLTUp1Kp8QDZuqhEv39zjg3ekORSGg
+         Q3tnizMdq7UIHHgthc5GH6ADzInaYj80fzspJlX21IQCGLQsOiOzhmkp5nFO+moygwYo
+         JuEt+3wT+JnF9zXHskwN+7/si/sW9/hNlR+rrFO1i2sXHdVZhgMVr9Zd0FSa6GppYrar
+         JQVN+Cl730iMFMY62Fq2IqWzFGXa5sadyfmr4I6LwNZ9W+dyQfP5yHD3mA1bBpjyuDzJ
+         JNW3faNP1gBmhBoKKxzUvJ+NYlZaZqlfeT6eg/d47a2xBA9yw++bhVwDvu7Cy30FQZjn
+         y3hw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712273025; x=1712877825;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ueU0LC5vV0lMu5ycK7BP+JE8GTTD+XC5Xfal6W8yhhU=;
-        b=SYRbvpIjEvYqRuwR55EJc41/QryUprgOMgfJh1xQsIKEDjXUO4kpRLcV4jZz4n3Gq9
-         sT6lhg5FwF+lxI4ER8plUuoOVLb7KVz0YAJacArmYz1yeM9h53ValmykV5HUXOR5fm+R
-         OjJUh/yWy40BtkvrcPiRoaKeyMNGMW9PjmnhKyRet4bWIDSI2vmZL24d7bPUu89/RFp5
-         iYHL4AYeopaohIOp+HURIFdCijqhStGvubP+JPzTv8Q/t8HWw1QeO3x+jztwnzBDPsfn
-         7iDZDB9gWVDM2bv4koRVQAPvJDjep87Nw+OuYbVVRhVFRc3StyrRtZtPRSvnbeZR1+3o
-         1Dtw==
-X-Gm-Message-State: AOJu0Ywh2+fgDOSYlBqKXOgkIELqsAkULs5+GfKsF7Mpgr4FxelYubbk
-	bBZW2KDDY9XYKaeIS6hACUfl6O95iznJ+sDwPCfxHBLSSmhIJbtC8N0Xvufz
-X-Google-Smtp-Source: AGHT+IFQI8HmPnCgo3JshxRx9D7smqxWGEzCDuWr6w/b5NNNrTBHCiSHBJGdlG2WBT5pj7Eg+8xYZQ==
-X-Received: by 2002:a05:6830:93:b0:6e6:c48c:1010 with SMTP id a19-20020a056830009300b006e6c48c1010mr1297766oto.22.1712273025325;
-        Thu, 04 Apr 2024 16:23:45 -0700 (PDT)
-Received: from kickker.attlocal.net ([2600:1700:6cf8:1240:f392:66db:d394:7da8])
-        by smtp.gmail.com with ESMTPSA id h20-20020a9d6a54000000b006e676df1a6asm76665otn.80.2024.04.04.16.23.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 Apr 2024 16:23:44 -0700 (PDT)
-From: Kui-Feng Lee <thinker.li@gmail.com>
-To: bpf@vger.kernel.org,
-	ast@kernel.org,
-	martin.lau@linux.dev,
-	song@kernel.org,
-	kernel-team@meta.com,
-	andrii@kernel.org,
-	john.fastabend@gmail.com
-Cc: sinquersw@gmail.com,
-	kuifeng@meta.com,
-	Kui-Feng Lee <thinker.li@gmail.com>
-Subject: [PATCH bpf-next v2] selftests/bpf: Make sure libbpf doesn't enforce the signature of a func pointer.
-Date: Thu,  4 Apr 2024 16:23:42 -0700
-Message-Id: <20240404232342.991414-1-thinker.li@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        d=1e100.net; s=20230601; t=1712273035; x=1712877835;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=lXnwmQPrl07FZAiqD50mf42e3pDAJdibA7+5v+qAN78=;
+        b=wn3/YWpkU0FJMOTgbpF+4YqplvJveYzrLTRTLVJMSqDKhyfehGlX6s5A0QNt3GeEXu
+         +2IfMw5Jya2J2glpdlc+m4Q//nA4PceIm+lKxM/VfqarlHMQbJaEsuxYUIVQqKh7fwSr
+         dlJc7QR60KooWd5v9w0dQvZOqIjNv4NFyv77Kto9WvRKjG5hu7IDaJDhk9DHL7AfC+Cj
+         p9AM77WCCx33gZP56++fdc5RTCE9JsBtZJ28Y4AnIBw/Z55qs+b1U6UeIz0WGPNtaYQ8
+         AfetziDIH/P459J7KIEDQF/A/04tJVXIYHStc+PITeq5prHZeU3oqfcxaq62YfhATFnF
+         81Pw==
+X-Forwarded-Encrypted: i=1; AJvYcCXEuWOiNM92JyRmXkVqWYlxQahc1pYaopXnYhZc69ftUEhe8Bl7kUl2dtkuWqmxxTkswGrRtPLi2GzQ1uQtHEHbEjbf417b1Nb0oyMHxcqHjecb9M9qnTRGi5Yj7pdKaV19Xml+akl11Bd+rHbjlbwehtBzLoHJzprAh1wS/VPi602HSGv9P60bL6BmB0C4NtG0JSvir1T/ldm4TUqRtKVs
+X-Gm-Message-State: AOJu0YykxXiHNkkDM5sPalsEnbHGiC5j+fj8M5ci/XyQ+WE+//r9vZ8o
+	9iKbtq2cmM/aQA+U6VNkXh+zWSzShkEjCBzkRWnajNBnrFfsmPgz96MOTHcbLih722sxtRxoNCN
+	XwgGxLPV/ovKmEl1JxDd2EDz2tQc=
+X-Google-Smtp-Source: AGHT+IELDycs8Tmz4kVIWaOz90pVFimzN/8PHU3NEjxswWqigqc6Fh/8ut+n0sVFLjVwXD8RlCLctsIME6xMLay3jPc=
+X-Received: by 2002:a05:600c:3b08:b0:414:12f6:a105 with SMTP id
+ m8-20020a05600c3b0800b0041412f6a105mr2948928wms.5.1712273035487; Thu, 04 Apr
+ 2024 16:23:55 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20240404190146.1898103-1-elver@google.com>
+In-Reply-To: <20240404190146.1898103-1-elver@google.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Thu, 4 Apr 2024 16:23:44 -0700
+Message-ID: <CAADnVQKc+Z39k9wbU2MHf-fPFma+9QsyOugmmmGq3ynQCTVfCw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 1/2] bpf: Introduce bpf_probe_write_user_registered()
+To: Marco Elver <elver@google.com>
+Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Dmitry Vyukov <dvyukov@google.com>, 
+	Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>, 
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, bpf <bpf@vger.kernel.org>, 
+	"open list:DOCUMENTATION" <linux-doc@vger.kernel.org>, linux-trace-kernel@vger.kernel.org, 
+	LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-The verifier in the kernel ensures that the struct_ops operators behave
-correctly by checking that they access parameters and context
-appropriately. The verifier will approve a program as long as it correctly
-accesses the context/parameters, regardless of its function signature. In
-contrast, libbpf should not verify the signature of function pointers and
-functions to enable flexibility in loading various implementations of an
-operator even if the signature of the function pointer does not match those
-in the implementations or the kernel.
+On Thu, Apr 4, 2024 at 12:02=E2=80=AFPM Marco Elver <elver@google.com> wrot=
+e:
+>
+> With all the known caveats, tracing BPF programs may directly write to
+> user-space memory with the bpf_probe_write_user() helper. Memory safety
+> is an obvious problem when using this helper, since it is too easy to
+> overwrite memory across all running processes that user space did not
+> expect to be touched (neither the verifier nor the kernel knows what may
+> be touched). While it is possible to come up with mechanisms to safely
+> communicate to the BPF program which memory region may be written to,
+> there are no built-in guarantees of safety. For this reason, the helper
+> produces a warning in the kernel log, and in newer kernels it is
+> possible to disallow use of the helper since 51e1bb9eeaf7 ("bpf: Add
+> lockdown check for probe_write_user helper").
 
-With this flexibility, user space applications can adapt to different
-kernel versions by loading a specific implementation of an operator based
-on feature detection.
+So is it a fix or a feature?
 
-This is a follow-up of the commit c911fc61a7ce ("libbpf: Skip zeroed or
-null fields if not found in the kernel type.")
+> Nevertheless, direct user-space memory writes from BPF programs can be
+> useful to efficiently manipulate and communicate with cooperating user
+> space processes.
 
-Signed-off-by: Kui-Feng Lee <thinker.li@gmail.com>
+But there are many different ways for bpf to communicate with user space:
+perf ringbuf, bpf ringbug, various maps including mmap-ed array and arena.
+The commit log doesn't explain why we need another one.
 
----
-Major changes from v1:
+> For example, one of our use cases are for events that happen relatively
+> frequently in the kernel (e.g. specific scheduler events), but a set of
+> user space threads want to check for such events in very hot code paths
+> to make more optimal decisions (the cost of such a check can be no more
+> than a load and compare). The types of events and heuristics used may
+> change based on system environment and application, and a BPF program
+> provides the best trade-offs in terms of performance and deployment.
 
-  - Rephrase commit logs to remove the description of trial-and-error
-    approach.
+and the tasks can use mmaped array shared across all or unique to each
+process.
+And both bpf and user space can read/write them with a single instruction.
 
-  - Fix imprecise description of the verifier. It checks the behavior of
-    the bpf programs in accessing the context/parameters, not signatures.
+>
+> To achieve better safety, introduce tagged user writable regions, that
+> must explicitly be registered before tracing BPF programs may use them:
+>
+>  1. The prctl() option PR_BPF_REGISTER_WRITABLE allows any user space
+>     process (that is allowed to use prctl()) to register tagged writable
+>     memory regions for the current thread.
+>
+>  2. Conversely, the prctl() option PR_BPF_UNREGISTER_WRITABLE allows a
+>     user space process to unregister a writable memory region that was
+>     previously registered from the current thread. This must be done
+>     before freeing memory if the thread that registered a region is
+>     still running.
+>
+>  3. Tracing BPF programs may write to any registered region in the
+>     current thread with bpf_probe_write_user_registered(). If the memory
+>     region has been tagged with a non-zero value, the BPF program must
+>     provide a matching tag.
+>
+> Admin capabilities are still required to attach BPF programs that use
+> the new bpf_probe_write_user_registered() helper.
 
-v1: https://lore.kernel.org/all/20240401223058.1503400-1-thinker.li@gmail.com/
----
- .../bpf/prog_tests/test_struct_ops_module.c   | 24 +++++++++++++++++++
- .../selftests/bpf/progs/struct_ops_module.c   | 13 ++++++++++
- 2 files changed, 37 insertions(+)
+We stopped adding new helpers ~2 years ago.
+Only new kfuncs are allowed.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/test_struct_ops_module.c b/tools/testing/selftests/bpf/prog_tests/test_struct_ops_module.c
-index 098776d00ab4..7cf2b9ddd3e1 100644
---- a/tools/testing/selftests/bpf/prog_tests/test_struct_ops_module.c
-+++ b/tools/testing/selftests/bpf/prog_tests/test_struct_ops_module.c
-@@ -138,11 +138,35 @@ static void test_struct_ops_not_zeroed(void)
- 	struct_ops_module__destroy(skel);
- }
- 
-+/* The signature of an implementation might not match the signature of the
-+ * function pointer prototype defined in the BPF program. This mismatch
-+ * should be allowed as long as the behavior of the operator program
-+ * adheres to the signature in the kernel. Libbpf should not enforce the
-+ * signature; rather, let the kernel verifier handle the enforcement.
-+ */
-+static void test_struct_ops_incompatible(void)
-+{
-+	struct struct_ops_module *skel;
-+	struct bpf_link *link;
-+
-+	skel = struct_ops_module__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "open_and_load"))
-+		return;
-+
-+	link = bpf_map__attach_struct_ops(skel->maps.testmod_incompatible);
-+	if (ASSERT_OK_PTR(link, "attach_struct_ops"))
-+		bpf_link__destroy(link);
-+
-+	struct_ops_module__destroy(skel);
-+}
-+
- void serial_test_struct_ops_module(void)
- {
- 	if (test__start_subtest("test_struct_ops_load"))
- 		test_struct_ops_load();
- 	if (test__start_subtest("test_struct_ops_not_zeroed"))
- 		test_struct_ops_not_zeroed();
-+	if (test__start_subtest("test_struct_ops_incompatible"))
-+		test_struct_ops_incompatible();
- }
- 
-diff --git a/tools/testing/selftests/bpf/progs/struct_ops_module.c b/tools/testing/selftests/bpf/progs/struct_ops_module.c
-index 86e1e50c5531..63b065dae002 100644
---- a/tools/testing/selftests/bpf/progs/struct_ops_module.c
-+++ b/tools/testing/selftests/bpf/progs/struct_ops_module.c
-@@ -68,3 +68,16 @@ struct bpf_testmod_ops___zeroed testmod_zeroed = {
- 	.test_1 = (void *)test_1,
- 	.test_2 = (void *)test_2_v2,
- };
-+
-+struct bpf_testmod_ops___incompatible {
-+	int (*test_1)(void);
-+	void (*test_2)(int *a);
-+	int data;
-+};
-+
-+SEC(".struct_ops.link")
-+struct bpf_testmod_ops___incompatible testmod_incompatible = {
-+	.test_1 = (void *)test_1,
-+	.test_2 = (void *)test_2,
-+	.data = 3,
-+};
--- 
-2.34.1
+>
+> With this interface, user space threads are guaranteed that no writes
+> happen to regions that they did not explicitly register. Tagging can be
+> used to associate additional semantics with the memory region.
+>
+> A note on tag allocation: Since such programs can only be installed by
+> the local system administrator, tag allocation may be done by the system
+> administrator. For example, by providing headers with tag definitions,
+> or a central service to distribute tags to the BPF program loader and to
+> user applications.
 
+Not clear how that's achieved in practice.
+To do prctl(REGSISTER, ... tag)
+the process will just pass this u32 tag.
+There is no way for the admin or other process to enforce certain
+tag usage.
+Since there is no way to enforce extra tag seems like a weak
+protection against something? What in particular?
