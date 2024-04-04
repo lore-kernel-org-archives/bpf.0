@@ -1,236 +1,155 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE245CA62
-	for <bpf@vger.kernel.org>; Thu,  4 Apr 2024 17:56:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9451F125B9
+	for <bpf@vger.kernel.org>; Thu,  4 Apr 2024 18:14:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712253417; cv=none; b=KfalmzXH5ymRJU/1aoYQTOy+a0i56ISE3i6tChH8VyRvhVAOuoT4iajWhhyNRUyLxndymhsPHzSNYDuASvPlDj6Nb9xyjvCEefJaNIPi7Gf6JGSzxEz6BPLL8UITO7I65UgB3vzB28E0mjmllVF9Krg0+sDahM69AYDSdwNfcI8=
+	t=1712254474; cv=none; b=CgmdIJyEsJR9okZoHqy5pKPl/Sk3cm6fRIHvZxNlZLUiIRwIOBsJxl6MxHpXT2ZKQE1bi7l00g3rBPXyZuFjENKL4xxbOD9kgPsID7ZO8nQRNVNkjkdVaYRtwuq4rUfI6h0FdmwbzATHrOGHnrtgzzYAjbLeWfU4fkW37YNNSOo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712253417; c=relaxed/simple;
-	bh=L5Z1KtHeSyCWra/ak3cQEWjMPwF+P9JaVwq4yTb9K4U=;
+	s=arc-20240116; t=1712254474; c=relaxed/simple;
+	bh=xC+znJRCv2fngTk9Bp1e8cykr7DSs4zI7DcasUpfn2c=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=HLjQKWryOaOHDGS4hp7wmMUzdcNG5HFAnBqyUCdrcfMbftmjH8GDlZdGZQ0KR9rJ5fXJ5UXIfSxugOSiGv9gPvVFR/NCIfZ6cBZbBzsAgQpnaemny7+a8bq54MUq3QMO4Vu/bmQl9yt4MPAny7qm5IhFS6YRy6uXDz3uMdZ4kMo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Z3OqqtAz; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	 To:Cc:Content-Type; b=sMvKIcGlPG/+csBHua9xm7IaAxyoxkBm4dCODOr0C7YZmBE3OV0F0/VUqV4D9iC4aLuO9aAoyKT9bM+MEzHgcEPN/kvXIzQMByfnn4SND0ss9E69USlIIkawlegDDYDL0vWYBhUh9K1SefxguG31cy4Qgj+iTprwoLEaFS5r84w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TDjlutJD; arc=none smtp.client-ip=209.85.221.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Z3OqqtAz"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1712253414;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=q+nUddKgnGzsUpVaJmj75uqcQku+cMdBtxn5p2n0yuI=;
-	b=Z3OqqtAzpW87POjFtgxtZPqpnoF8L384dgy5ntB0EERVePGWlWwKdmh+s08h/kGq+HmudO
-	S7yTAt9hizRzFrrX3EUGQXkUMJ2ixKRQV6OkcUkb2h7mvSGa8/2iASB+GHcOF56WXA5zpu
-	prrkcU57huGKzu2tnuJMLW7tzc8dLwI=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-212-Zb5jRAthOBuFYoylgyf72Q-1; Thu, 04 Apr 2024 13:56:53 -0400
-X-MC-Unique: Zb5jRAthOBuFYoylgyf72Q-1
-Received: by mail-ed1-f70.google.com with SMTP id 4fb4d7f45d1cf-56c3dc8d331so901972a12.2
-        for <bpf@vger.kernel.org>; Thu, 04 Apr 2024 10:56:53 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TDjlutJD"
+Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-3438d7a05aaso820383f8f.0
+        for <bpf@vger.kernel.org>; Thu, 04 Apr 2024 11:14:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1712254471; x=1712859271; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=yItK4Eh+A2kj0Xu5d7eP9bqGVKHTs1G/+wxDBOt6iR8=;
+        b=TDjlutJDzED+axKHKKwNjEMb4cQiX/vtfDk9/aZpMlyI1CqsocKOx6Kikerzk1n7Gt
+         jovH3F348B3b4hSzlKxktP+/81oYixYJd7lwCLlam1Ky9LqdLpUpUikROZtmYrniZC9p
+         FxiZl57iO/hZ2mTwMnC3X70IGLA/LEVeVYfIaAF42mblECcEOeezmwCs/EadCCj0BV1H
+         hb0hucIWdYV40nTGl7notW4Pa1B3bH+VWVKmc9BF38b3lvIydJl/WBnjamwSh5PWN/Hr
+         RzeaYx4bgkBJ1E5pLoiOaPWlb4RMWEqpAFNAxU+bJnCzKnnW2vKl3qhgoqVJfoN7HBI4
+         n/Mg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712253412; x=1712858212;
+        d=1e100.net; s=20230601; t=1712254471; x=1712859271;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=q+nUddKgnGzsUpVaJmj75uqcQku+cMdBtxn5p2n0yuI=;
-        b=ecrsAsjwgqdhHIK4vEy/ff/lhvrGTLVn8KSvL/jZKztfEeUDzRri0eLvRj3DygOxOL
-         L16xdLoVd24cdUaqj2RxWPPyBkAAVoGZAgpjpcslXWkanjlqLJVbyr7TLNUwcQAYzfcp
-         M+nTDgoXbCTGcQ6cwvbyL+98un5Tz/pLjw6Li8UNMj61A+Cycq4bZQixvB6MsdMEwXPP
-         V2Zteh9jtJiFxGIu11oemYQdb2689ATFBVZVSh4RSHQXy+RQxuK/EuyiHu/7aCogOdJU
-         yNTli1fClofFrhoGwa7AC1FJNzo+3EZtocxSg5hFOKkCMCkJhNYX1jXOTcJB4erXv6cE
-         WJgg==
-X-Forwarded-Encrypted: i=1; AJvYcCXcv87dgHmJLZGGiYyjVG3FaWLn9G8ThoTUb7jjFj4LVtQrjn5talRPxwFzbi9niHR7wRorofsIXOXfrs7xZVDDw80K
-X-Gm-Message-State: AOJu0Yxp4wW4xRx3AuuDeM/yUYaKSt2nyMNWFmgqd403TbSHLIN2RIcJ
-	HNMYcY3K89osZQioEj28SICMBwuMWL3lKP+L2kDEnm4I9Yv7wZsUBKNcXHCDmJwr6eNK+yykjSO
-	p3EQo1ZQaGl3M/jcK6di4CPa2FduLcA7S59BkDtFLNFi4oLyKsIwi4ZeMdwiShb6cgSL6Eaw3Va
-	R35+aaQxx1nOLyIovrlaedsFAZ
-X-Received: by 2002:a50:9507:0:b0:568:be6d:e5e5 with SMTP id u7-20020a509507000000b00568be6de5e5mr333057eda.37.1712253412427;
-        Thu, 04 Apr 2024 10:56:52 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IHuz2mJfdvVKG6SKd8f9ftw27WMcaZq7NnSkL5KWH2HoMuzr3TqXfYdrtJVmeNRE9cwC4MBtAopilPOb6UUhTw=
-X-Received: by 2002:a50:9507:0:b0:568:be6d:e5e5 with SMTP id
- u7-20020a509507000000b00568be6de5e5mr333045eda.37.1712253412054; Thu, 04 Apr
- 2024 10:56:52 -0700 (PDT)
+        bh=yItK4Eh+A2kj0Xu5d7eP9bqGVKHTs1G/+wxDBOt6iR8=;
+        b=rEw7qQ3TOm+M4XVAHfDiwg90uWkxG/MlXqBH7bjamIVnUXL0sHjbmjS1oNeceeiYBB
+         EqS0kwQDolgQLEcuKqRAgnMAt7cBjuhFGGuTEnYDYEcDMMSx0hatuZJrT658khZTT/nK
+         DuT1G7ObXu738EjZzWmpPwTxKbHceLIn+6ankUGI/ZelnxF4Y6a26uyDyQa35U+dEeHy
+         TyIsNfGCaxqnlu+kuRcSMusZb/IxTG9ptAXFV3h1aF+tY29fIs6/Xt+fb1GDOFPFh5y0
+         E0b5PDiH+BA7BtBAFZ7pGVjK4p3uiFmCC20toOeJ3SKy/sNT04AnDK3ijchUXCsj1N5G
+         a5JQ==
+X-Gm-Message-State: AOJu0Ywv92tyxTcvoY78+BNXiyM/j3erBu8O5fpAmUf1uAIMCUHkJJ+H
+	Pe/Pfo5/KiOnIXovhgTS7lOCLPK5erSJA+exGHHlX35GewmC2dgjrwzTIAkpJfrtg4dFIKZWHV8
+	Hkd40D4C4t+SI0ddXtCq3Wa0u7Xs=
+X-Google-Smtp-Source: AGHT+IF+6AO+QszYKoEN2viIxkS4wHtmzYKItAv4OsDVYBR8YMLN8j/HOd/qGqJf/28GP29WEHrBohAdCwgGMaB7sF0=
+X-Received: by 2002:adf:f9c7:0:b0:33e:c91b:9083 with SMTP id
+ w7-20020adff9c7000000b0033ec91b9083mr197721wrr.16.1712254470778; Thu, 04 Apr
+ 2024 11:14:30 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240322-hid-bpf-sleepable-v5-0-179c7b59eaaa@kernel.org>
- <20240322-hid-bpf-sleepable-v5-1-179c7b59eaaa@kernel.org> <CAADnVQJdm7+7tbJC8yhPqDUijE0DTD9UG4LOQmNRCWchQ3uGsg@mail.gmail.com>
- <CAO-hwJKVVjhg6_0tAM75HGJL0WcERotyJc+7oBVvDiTGJAqTfw@mail.gmail.com>
- <CAADnVQ+5NqjqyeFS3XgDU0OCFgt1Y9bmTbHOPv6ekw1sJasyaA@mail.gmail.com>
- <CAADnVQJm7bi=iFtWj1XCmEdyDwb64KjxeP5RFo57paG3-zZo_g@mail.gmail.com>
- <CAADnVQKSwdpfx8EoqURvzFymYNr1evkB3+4dRt_coPOZhW2LTw@mail.gmail.com>
- <CAO-hwJLDuGHDNLRAJit7+5Dh7MRmwmWNt0+rreMyjf7P6UpAYg@mail.gmail.com> <CAADnVQ+gikPakTuYpD4-oxS6yS5-Dd_HanfqyNnGW-nk7=eXNg@mail.gmail.com>
-In-Reply-To: <CAADnVQ+gikPakTuYpD4-oxS6yS5-Dd_HanfqyNnGW-nk7=eXNg@mail.gmail.com>
-From: Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Date: Thu, 4 Apr 2024 19:56:39 +0200
-Message-ID: <CAO-hwJLz4ET8Rba-_8icR+7t9T63BPnf97JrSFjviJWG+i8dVQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v5 1/6] bpf/helpers: introduce sleepable bpf_timers
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Benjamin Tissoires <bentiss@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>, 
-	bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
+References: <20240404002640.1774210-1-andrii@kernel.org> <20240404002640.1774210-3-andrii@kernel.org>
+In-Reply-To: <20240404002640.1774210-3-andrii@kernel.org>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Thu, 4 Apr 2024 11:14:19 -0700
+Message-ID: <CAADnVQKc9QgOxvru-tqii0GO7H5+QD_=_v3O7_ant4BU1cNmKw@mail.gmail.com>
+Subject: Re: [PATCH v3 bpf-next 2/2] bpf: inline bpf_get_branch_snapshot() helper
+To: Andrii Nakryiko <andrii@kernel.org>
+Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai Lau <martin.lau@kernel.org>, 
+	Kernel Team <kernel-team@meta.com>, John Fastabend <john.fastabend@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Apr 4, 2024 at 6:41=E2=80=AFPM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
+On Wed, Apr 3, 2024 at 5:27=E2=80=AFPM Andrii Nakryiko <andrii@kernel.org> =
+wrote:
 >
-> On Thu, Apr 4, 2024 at 8:27=E2=80=AFAM Benjamin Tissoires
-> <benjamin.tissoires@redhat.com> wrote:
-> >
-> >
-> > >
-> > > So we need something like:
-> > >
-> > > struct bpf_hrtimer {
-> > >   union {
-> > >     struct hrtimer timer;
-> > > +   struct work_struct work;
-> > >   };
-> > >   struct bpf_map *map;
-> > >   struct bpf_prog *prog;
-> > >   void __rcu *callback_fn;
-> > >   void *value;
-> > >   union {
-> >
-> > Are you sure we need an union here? If we get to call kfree_rcu() we
-> > need to have both struct rcu_head and sync_work, not one or the other.
+> Inline bpf_get_branch_snapshot() helper using architecture-agnostic
+> inline BPF code which calls directly into underlying callback of
+> perf_snapshot_branch_stack static call. This callback is set early
+> during kernel initialization and is never updated or reset, so it's ok
+> to fetch actual implementation using static_call_query() and call
+> directly into it.
 >
-> why? with an extra flag it's one or the other.
-> In bpf_timer_cancel_and_free()
-> if (flag & SLEEPABLE) {
->     schedule_work() to cancel_work_sync + kfree_rcu
-> } else {
->    hrtimer_cancel
->    kfree_rcu
-> }
-
-I thought kfree_rcu required struct rcu_head, and given that we need
-to initialize sync_work it will be poisoned...
-
+> This change eliminates a full function call and saves one LBR entry
+> in PERF_SAMPLE_BRANCH_ANY LBR mode.
 >
-> > >     struct rcu_head rcu;
-> > > +   struct work_struct sync_work;
-> > >   };
-> > > + u64 flags; // bpf_timer_init() will require BPF_F_TIMER_SLEEPABLE
-> >
-> > If I understand, you want BPF_F_TIMER_SLEEPABLE in bpf_timer_init()
-> > (like in my v2 or v3 IIRC). But that means that once a timer is
-> > initialized it needs to be of one or the other type (especially true
-> > with the first union in this struct).
+> Acked-by: John Fastabend <john.fastabend@gmail.com>
+> Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+> ---
+>  kernel/bpf/verifier.c | 55 +++++++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 55 insertions(+)
 >
-> yes. That's an idea.
-> The code to support wq vs timer seems to be diverging more
-> than what we expected initially.
-> It seems cleaner to set it as init time and enforce in
-> other helpers.
-
-OK, works for me.
-
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 17c06f1505e4..2cb5db317a5e 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -20181,6 +20181,61 @@ static int do_misc_fixups(struct bpf_verifier_en=
+v *env)
+>                         goto next_insn;
+>                 }
 >
-> Also with two work_struct-s we're pushing the sizeof(bpf_hrtimer)
-> too far.
-> It's already at 112 bytes and some people use bpf_timer per flow.
-> So potentially millions of such timers.
-> Adding extra sizeof(struct work_struct)=3D32 * 2 that won't be
-> used is too much.
-> Note that sizeof(struct hrtimer)=3D64, so unions make everything
-> fit nicely.
+> +               /* Implement bpf_get_branch_snapshot inline. */
+> +               if (prog->jit_requested && BITS_PER_LONG =3D=3D 64 &&
+> +                   insn->imm =3D=3D BPF_FUNC_get_branch_snapshot) {
+> +                       /* We are dealing with the following func protos:
+> +                        * u64 bpf_get_branch_snapshot(void *buf, u32 siz=
+e, u64 flags);
+> +                        * int perf_snapshot_branch_stack(struct perf_bra=
+nch_entry *entries, u32 cnt);
+> +                        */
+> +                       const u32 br_entry_size =3D sizeof(struct perf_br=
+anch_entry);
+> +
+> +                       /* struct perf_branch_entry is part of UAPI and i=
+s
+> +                        * used as an array element, so extremely unlikel=
+y to
+> +                        * ever grow or shrink
+> +                        */
+> +                       BUILD_BUG_ON(br_entry_size !=3D 24);
+> +
+> +                       /* if (unlikely(flags)) return -EINVAL */
+> +                       insn_buf[0] =3D BPF_JMP_IMM(BPF_JNE, BPF_REG_3, 0=
+, 7);
+> +
+> +                       /* Transform size (bytes) into number of entries =
+(cnt =3D size / 24).
+> +                        * But to avoid expensive division instruction, w=
+e implement
+> +                        * divide-by-3 through multiplication, followed b=
+y further
+> +                        * division by 8 through 3-bit right shift.
+> +                        * Refer to book "Hacker's Delight, 2nd ed." by H=
+enry S. Warren, Jr.,
+> +                        * p. 227, chapter "Unsigned Divison by 3" for de=
+tails and proofs.
+> +                        *
+> +                        * N / 3 <=3D> M * N / 2^33, where M =3D (2^33 + =
+1) / 3 =3D 0xaaaaaaab.
+> +                        */
+> +                       insn_buf[1] =3D BPF_MOV32_IMM(BPF_REG_0, 0xaaaaaa=
+ab);
+> +                       insn_buf[2] =3D BPF_ALU64_REG(BPF_MUL, BPF_REG_2,=
+ BPF_REG_0);
+> +                       insn_buf[3] =3D BPF_ALU64_IMM(BPF_RSH, BPF_REG_2,=
+ 36);
+> +
+> +                       /* call perf_snapshot_branch_stack implementation=
+ */
+> +                       insn_buf[4] =3D BPF_EMIT_CALL(static_call_query(p=
+erf_snapshot_branch_stack));
 
-Maybe we should do
-union {
-  struct hrtimer timer;
-  struct {
-    struct work_struct work;
-    struct work_struct sync_work;
-  }
-}
+How will this work on non-x86 ?
+I tried to grep the code and looks like only x86 does:
+static_call_update(perf_snapshot_branch_stack,...)
 
-(not nice to read but at least we don't change the size at the beginning)
-
->
-> > So should we reject during run time bpf_timer_set_callback() for
-> > sleepable timers and only allow bpf_timer_set_sleepable_cb() for
-> > those? (and the invert in the other case).
->
-> yes.
->
-> > This version of the patch allows for one timer to be used as softIRQ
-> > or WQ, depending on the timer_set_callback that is used. But it might
-> > be simpler for the kfree_rcu race to define the bpf_timer to be of one
-> > kind, so we are sure to call the correct kfree method.
->
-> I think one or another simplifies the code and makes it easier
-> to think through combinations.
->
-> I'm still contemplating adding new "struct bpf_wq" and new kfuncs
-> to completely separate wq vs timer.
-> The code reuse seems to be relatively small.
-
-There is some code reuse in the verifier, but it can be factored out I thin=
-k.
-
-Though the biggest reuse might be in the map portion of bpf_timer,
-which I haven't looked much TBH.
-
-> We can potentially factor out internals of bpf_timer_* into smaller
-> helpers and use them from bpf_timer_* and from new bpf_wq_* kfuncs.
-
-Yeah, also, given that we are going to enforce delay =3D=3D 0 for
-sleepable timers (wq), the user api would be much cleaner if we can
-have a dedicated bpf_wq (and it would make the flags of bpf_timer_init
-easier to deal with).
-
->
-> One more thing.
-> bpf_timer_cancel() api turned out to be troublesome.
-> Not only it cancels the timer, but drops callback too.
-> It was a surprising behavior for people familiar with
-> kernel timer api-s.
-> We should not repeat this mistake with wq.
->
-> We can try to fix bpf_timer_cancel() too.
-> If we drop drop_prog_refcnt() from it it shouldn't affect
-> existing bpf_timer users who are forced to do:
-> bpf_timer_cancel()
-> bpf_timer_set_callback()
-> bpf_timer_start()
-> all the time.
-> If/when bpf_timer_cancel() stops dropping the callback
-> such bpf prog won't be affected. So low chance of breaking any prog.
-> wdyt?
->
-
-How would a program know set_callback() is not required after a
-cancel() because the kernel kept it around? It seems that it's going
-to be hard for them to know that (unless by trying first a start()),
-and it will add more code.
-
-timer_cancel() would be hard to change but we can always do the change
-and add a new kfunc timer_cancel_no_drop() which would clearly allow
-for new programs to know that set_callback() is not required to be
-called. In a few kernel releases we could remove it and say that
-timer_cancel() is the same (and replaced by a #define)
-
-Anyway, the more I think of it, the more I think the best API would be
-a dedicated wq API. It's probably going to need a little bit more
-work, but it'll be more or less this work plus the new bpf_wq type in
-the map.
-
-Cheers,
-Benjamin
-
+so on other arch-s static_call_query() will return zero/einval?
+And above will crash?
