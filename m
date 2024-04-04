@@ -1,128 +1,129 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C06B7580B;
-	Thu,  4 Apr 2024 11:43:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9843B8286B;
+	Thu,  4 Apr 2024 11:49:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712230998; cv=none; b=tBDxl3lcpJLht01KdCq5DOqgTudv5Jo75pJakBIAEdGP4RCuuiVOGlfGa84X2p6PF1Myv3MaY7hU+lU4NKZtRmlIMnnxpNgbg+TMlrqBpksXTuSSkz5l1ncolRL/P/EZ6MRh0bK9KK7qqgEFgVKCtgqX59sKjaiJhOKvpfMwNwA=
+	t=1712231392; cv=none; b=gAP5/rvzDj5AA9srmplkrKpS2niN/TZLbmUzckufIYrA7w+NDo+zLQQiB2E8gVjNd0lY1h2F7nBx3F6pzu7RZ9ry/otLco6swSWX12MpE5nwltbYpQLbTgUeaqWk9b4C6aRSP8YA/42RiaXrvf6Lu/8yh9gm8CoMOKL9E1f/umk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712230998; c=relaxed/simple;
-	bh=uVry49fJjUe2Hhm3zKZ5KK+niiiH19A39/dh9Eyy/CM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=eAE4o6IT4KbmdFjl8XRDrOoAcCmkWbjtCrMLVYsvqxw651LIWEn5giwCiBD14VhXOs9TyptbYxhaxdvVmOT8r7jTIypzOCPrM32KVek7hPKX1JbDfXlyjqDGVlNMsY5dYhwyYLZt5bftHrX1uqWUDXVVyPu/dMtMptelyUVxPpE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RLrsLtWI; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RLrsLtWI"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87B19C433C7;
-	Thu,  4 Apr 2024 11:43:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712230998;
-	bh=uVry49fJjUe2Hhm3zKZ5KK+niiiH19A39/dh9Eyy/CM=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=RLrsLtWI/kmBxf3hd/4sqZYNqNzie/9EaBUioqizw2uD9sOyEFnYdcBYOx512wJdZ
-	 l/C1Ro37u0SchiJ6Sy2NZ2U5rCDf2jVAuHHcS+q6oaWk8KBLehH+Urdsbslamiktsa
-	 uHCx+ZIA7eHeIaBQPt1w6DyH8HRbEBwJzLc3siIrf2kU9gv30sl3bidv+DQxvU73Lk
-	 YgImWrhQNCdbpzS3t4da9/5vfo2VqhwFu0vrSmnyiLniJsaNFGev+ei54NUT80tzGr
-	 cl1nknCrJC2XMXnNOF97BlO/tEfgjGpKOEwaCXE3p9agnWwx/xpdSsMdvR12BemfD7
-	 oiaSKiUgCemZA==
-Message-ID: <f53e02ef-ee33-4cd0-b045-a3efe7f0fae4@kernel.org>
-Date: Thu, 4 Apr 2024 13:43:12 +0200
+	s=arc-20240116; t=1712231392; c=relaxed/simple;
+	bh=rWbrqNP2jyNIuW4GC9x5L1VtJAk70ZYdmbHoBKNEOUo=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=qJjR1tn3kLTiCXpJ2lXmBhbszfDGvMGajE3Q47GrC+aaUMEWZvWer4UiBtXXiFrJlQwOLcVx8D5kpJ69D0Aqy7z/oycGZpJKQ54sueTmZmxS/aOw7pISBWm6h6jWKzyZNvtUgJap286yOTf4F5hK6rGpbh32bocxRckDWQ+47ls=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.218.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-a450bedffdfso119451166b.3;
+        Thu, 04 Apr 2024 04:49:50 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1712231389; x=1712836189;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=mM0VRkY4R/s+2RZMIGBjXivRb+LhyFR0UNjBp7WG/2w=;
+        b=KOQTvE+ndRr4+2qUIpAQeB4QGHK5iS3nsuQQVnWQOnVLYgw+/1EottMxa/aAWv9lW9
+         Dwk91soPBJ/tBwN342jpxAoOWFPtXgzhTW5QaSTFbdlhC2/uE0dIQ7dgDjZ7LaJAPjih
+         NxjA7WYSNko6LjBuEm2TfJ8QgK7znhcps+2u6+ouDphH3GpWPS6504KJXDaNVYVB+BoS
+         vDW4p69EMY4+6q6a12JHNxK68wark7PM2WNbB6MBoJXZenIen/tjHSuVO3Fit3EMOPK/
+         fNIrBCkTvE9+n8n6pTrv7gb3ZfI+bb+pE+69YZfo4XX1US2vq3KPkM3BpSRvc5Y46jug
+         GOUg==
+X-Forwarded-Encrypted: i=1; AJvYcCXwaKVOJno07lPaA/VMC6e0VZ/0wejsPLGrp42R8Vk1niDCJjCkBBpzar3h5L1HdtBBjWRdwiijjrsDbHIc0MmB6zBXmODiskMzmi2h/5aXCvzGVguB6Z9Wm/GgvvurlsL/zP+XN2cg9EOkoFf2fUn9Mk+2+AvP+P9G
+X-Gm-Message-State: AOJu0YzWJ8v5lj8sXhM0aWbxyb2An/omlQjRp5VyzdAvrJxp240nE/M/
+	xPxS+R8SS08nA6AaH5BLczLY82j8LZ1/nhTANAuXJECDkhgG8B8j
+X-Google-Smtp-Source: AGHT+IFDNnBaWKjKBUScMyD1XxsRGzjVdkpYifMEFEBvLKEwHf4ElIsvpdnvFDl4eaA7HXmhAU+ciQ==
+X-Received: by 2002:a17:907:9807:b0:a4e:539d:2183 with SMTP id ji7-20020a170907980700b00a4e539d2183mr1768927ejc.73.1712231388672;
+        Thu, 04 Apr 2024 04:49:48 -0700 (PDT)
+Received: from localhost (fwdproxy-lla-118.fbsv.net. [2a03:2880:30ff:76::face:b00c])
+        by smtp.gmail.com with ESMTPSA id xj7-20020a170906db0700b00a4e379ac57fsm7640946ejb.30.2024.04.04.04.49.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 04 Apr 2024 04:49:48 -0700 (PDT)
+From: Breno Leitao <leitao@debian.org>
+To: aleksander.lobakin@intel.com,
+	kuba@kernel.org,
+	davem@davemloft.net,
+	pabeni@redhat.com,
+	edumazet@google.com,
+	elder@kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org,
+	nbd@nbd.name,
+	sean.wang@mediatek.com,
+	Mark-MC.Lee@mediatek.com,
+	lorenzo@kernel.org,
+	taras.chornyi@plvision.eu,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Cc: quic_jjohnson@quicinc.com,
+	kvalo@kernel.org,
+	leon@kernel.org,
+	dennis.dalessandro@cornelisnetworks.com,
+	linux-kernel@vger.kernel.org,
+	netdev@vger.kernel.org,
+	bpf@vger.kernel.org
+Subject: [PATCH net-next v3 0/5] allocate dummy device dynamically
+Date: Thu,  4 Apr 2024 04:48:40 -0700
+Message-ID: <20240404114854.2498663-1-leitao@debian.org>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v2 2/4] bpf: test_run: Use system page pool for
- XDP live frame mode
-To: John Fastabend <john.fastabend@gmail.com>,
- Alexander Lobakin <aleksander.lobakin@intel.com>,
- =?UTF-8?Q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-Cc: Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
- <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, "David S. Miller" <davem@davemloft.net>,
- Jakub Kicinski <kuba@kernel.org>, Eric Dumazet <edumazet@google.com>,
- Paolo Abeni <pabeni@redhat.com>, bpf@vger.kernel.org, netdev@vger.kernel.org
-References: <20240220210342.40267-1-toke@redhat.com>
- <20240220210342.40267-3-toke@redhat.com>
- <2746b1d9-2e1f-4e66-89ed-19949a189a92@intel.com>
- <660dbe87d8797_1cf6b2083c@john.notmuch>
-Content-Language: en-US
-From: Jesper Dangaard Brouer <hawk@kernel.org>
-In-Reply-To: <660dbe87d8797_1cf6b2083c@john.notmuch>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
+struct net_device shouldn't be embedded into any structure, instead,
+the owner should use the private space to embed their state into
+net_device.
 
+But, in some cases the net_device is embedded inside the private
+structure, which blocks the usage of zero-length arrays inside
+net_device.
 
-On 03/04/2024 22.39, John Fastabend wrote:
-> Alexander Lobakin wrote:
->> From: Toke Høiland-Jørgensen <toke@redhat.com>
->> Date: Tue, 20 Feb 2024 22:03:39 +0100
->>
->>> The BPF_TEST_RUN code in XDP live frame mode creates a new page pool
->>> each time it is called and uses that to allocate the frames used for the
->>> XDP run. This works well if the syscall is used with a high repetitions
->>> number, as it allows for efficient page recycling. However, if used with
->>> a small number of repetitions, the overhead of creating and tearing down
->>> the page pool is significant, and can even lead to system stalls if the
->>> syscall is called in a tight loop.
->>>
->>> Now that we have a persistent system page pool instance, it becomes
->>> pretty straight forward to change the test_run code to use it. The only
->>> wrinkle is that we can no longer rely on a custom page init callback
->>> from page_pool itself; instead, we change the test_run code to write a
->>> random cookie value to the beginning of the page as an indicator that
->>> the page has been initialised and can be re-used without copying the
->>> initial data again.
->>>
->>> The cookie is a random 128-bit value, which means the probability that
->>> we will get accidental collisions (which would lead to recycling the
->>> wrong page values and reading garbage) is on the order of 2^-128. This
->>> is in the "won't happen before the heat death of the universe" range, so
->>> this marking is safe for the intended usage.
->>>
->>> Reviewed-by: Alexander Lobakin <aleksander.lobakin@intel.com>
->>> Tested-by: Alexander Lobakin <aleksander.lobakin@intel.com>
->>> Signed-off-by: Toke Høiland-Jørgensen <toke@redhat.com>
->>
->> Hey,
->>
->> What's the status of this series, now that the window is open?
->>
->> Thanks,
->> Olek
-> 
-> Hi Toke,
-> 
-> I read the thread from top to bottom so seems someone else notices the
-> 2^128 is unique numbers not the collision probability. Anywaays I'm still
-> a bit confused, whats the use case here? Maybe I need to understand
-> what this XDP live frame mode is better?
-> 
-> Could another solution be to avoid calling BPF_TEST_RUN multiple times
-> in a row? Or perhaps have a BPF_SETUP_RUN that does the config and lets
-> BPF_TEST_RUN skip the page allocation? Another idea just have the first
-> run of BPF_TEST_RUN init a page pool and not destroy it.
-> 
+Create a helper to allocate a dummy device at dynamically runtime, and
+move the Ethernet devices to use it, instead of embedding the dummy
+device inside the private structure.
 
-I like John's idea of "the first run of BPF_TEST_RUN init a page pool
-and not destroy it".  On exit we could start a work-queue that tried to
-"destroy" the PP (in the future) if it's not in use.
+This fixes all the network cases except for wireless drivers.
 
-Page pool (PP) performance comes from having an association with a
-SINGLE RX-queue, which means no synchronization is needed then
-"allocating" new pages (from the alloc cache array).
+PS: Due to lack of hardware, unfortunately all these patches are
+compiled tested only.
 
-Thus, IMHO each BPF_TEST_RUN should gets it's own PP instance, as then
-lockless PP scheme works (and we don't have to depend on NAPI /
-BH-disable).  This still works with John's idea, as we could simply have
-a list of PP instances that can be reused.
+---
+Changelog:
 
---Jesper
+v1:
+	* https://lore.kernel.org/all/20240327200809.512867-1-leitao@debian.org/
+
+v2:
+	* Patch 1: Use a pre-defined name ("dummy#") for the dummy
+	  net_devices.
+	* Patch 2-5: Added users for the new helper.
+v3:
+	* Use free_netdev() instead of kfree() as suggested by Jakub.
+	* Change the free_netdev() place in ipa driver, as suggested by
+	  Alex Elder.
+	* Set err in the error path in the Marvell driver, as suggested
+	  by Simon Horman.
+
+Breno Leitao (5):
+  net: create a dummy net_device allocator
+  net: marvell: prestera: allocate dummy net_device dynamically
+  net: mediatek: mtk_eth_sock: allocate dummy net_device dynamically
+  net: ipa: allocate dummy net_device dynamically
+  net: ibm/emac: allocate dummy net_device dynamically
+
+ drivers/net/ethernet/ibm/emac/mal.c           | 13 +++--
+ drivers/net/ethernet/ibm/emac/mal.h           |  2 +-
+ .../ethernet/marvell/prestera/prestera_rxtx.c | 15 ++++--
+ drivers/net/ethernet/mediatek/mtk_eth_soc.c   | 17 ++++--
+ drivers/net/ethernet/mediatek/mtk_eth_soc.h   |  2 +-
+ drivers/net/ipa/gsi.c                         | 12 +++--
+ drivers/net/ipa/gsi.h                         |  2 +-
+ include/linux/netdevice.h                     |  3 ++
+ net/core/dev.c                                | 54 ++++++++++++-------
+ 9 files changed, 85 insertions(+), 35 deletions(-)
+
+-- 
+2.43.0
+
