@@ -1,145 +1,114 @@
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+Received: from out-183.mta0.migadu.com (out-183.mta0.migadu.com [91.218.175.183])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 221AA1CA82;
-	Thu,  4 Apr 2024 18:33:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A59015EA6
+	for <bpf@vger.kernel.org>; Thu,  4 Apr 2024 18:48:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.183
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712255586; cv=none; b=odimAWRGuYoYupmKNqJQ6Uxh6Nuw1f2XMaMBLLJa9AIEJgVBJ+lc8defiSP0ScunvOedl4kE795iTVp5kIhXnBC7X8QJeZLc/bKr3Fx6W6+ZuHYNWwzJSvq38lz7AJgPHehBtcDlJ3PM7/lrU8ljbKKzRXWbQtNK/MziDA7c0mI=
+	t=1712256494; cv=none; b=Dhs74yaeFpoQhItogfHGSEi6+OaIh3LBCWVIkdgKtNZMTGahJaib14cXcpaHOuDWB2fTZq5nefCC/kmi0sJHbYY6COkWXzLCFkkb8MHAPagVww8zjzotxpIjk0SPbsJfyLd8OuUqottR+1VFsc+G3iUpWsuQ+BYdoWjoVGa5/eU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712255586; c=relaxed/simple;
-	bh=qKJhLJ+OkI9jevLl4q88CLgM+UHJJ8Zp4B1Ddbf8k5o=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=cl4Oy9kSAw9vqH3kEy9oS9Xt31gvSBq7uolclcNuTyLyDjlmKKVHwb1PtNRUEyLuQ3311c6RJDybklyoFj7yRFHSK0QG8aeOc17p6ZtxuKN85R82ZCc50mFcm2/wqLv4GXdVn9z1sxQZEIxE9zedXsSkvx+Fw1Xhz0sTnAKKMjc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=ENLR582i; arc=none smtp.client-ip=213.133.104.62
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
+	s=arc-20240116; t=1712256494; c=relaxed/simple;
+	bh=dtR4R7QvWovKbxiN/MIE45D+GZdyBvto3z8T3F+MqCg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=emtao7YJwhYmaqi+2PDVUVX9xJS7O03Vy/dxWjD1A4lG6YzDo0pl3e1hFwlAGY+K4prACQFdL5Jlc8QsJ9KfwrBsOkNY0/k/N5B/pd3CjreGtwg6wDmGnjWfuMPCm2BhgTjJdp8o+Y1Gz9vg5ASPVxgq5ePJqUo+cMFtNBtRO5g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=CbCkAWgG; arc=none smtp.client-ip=91.218.175.183
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="ENLR582i"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
-	MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:In-Reply-To:References;
-	bh=yNm7dbP3edq4ZSXrfjFFZl6GVvZvEhPMYhCjZZw9nBc=; b=ENLR582iq5Oe/tbUYQbbHTH3qF
-	0oRBcjtIQUlTMUfaBH1dtP7/dg53Mp1zuK1qFM1b3Dgzz0hkwMs3RkAfgnJo5L+fA6FoS81iLNAeG
-	7snwXJ3f2LAYCN6Tm6tQl/p8b7dZmwvhw4TBiVUOUoFkw2Xl48RUmmeLFtgsw+i0wNY5FLCoVfXQc
-	eFFCMXhfdqhB3seWdLTerkNB30Fl/uHLdDCcVoT3c/Nq1Dl9jtLyHEh41S1p5Oh0AOuKzTZWP2kMR
-	HVF1wxXSqay7duP/3JgD3vTpwdlEmL+6YJFHpRg9zgDbZ2TcdDFhz5TDuWstW46tuONuSvL6+4pqO
-	L1AZlZDA==;
-Received: from 14.248.197.178.dynamic.dsl-lte-bonding.zhbmb00p-msn.res.cust.swisscom.ch ([178.197.248.14] helo=localhost)
-	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1rsRtT-0001iz-G4; Thu, 04 Apr 2024 20:32:59 +0200
-From: Daniel Borkmann <daniel@iogearbox.net>
-To: davem@davemloft.net
-Cc: kuba@kernel.org,
-	pabeni@redhat.com,
-	edumazet@google.com,
-	daniel@iogearbox.net,
-	ast@kernel.org,
-	andrii@kernel.org,
-	martin.lau@linux.dev,
-	netdev@vger.kernel.org,
-	bpf@vger.kernel.org
-Subject: pull-request: bpf 2024-04-04
-Date: Thu,  4 Apr 2024 20:32:58 +0200
-Message-Id: <20240404183258.4401-1-daniel@iogearbox.net>
-X-Mailer: git-send-email 2.21.0
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="CbCkAWgG"
+Message-ID: <791f362c-cdf1-4cd7-8fa2-95d05a4f4b22@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1712256489;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ROY1p2JCrGa9quAk0jxouG1RPIL1tr1voDY3CxBRVAc=;
+	b=CbCkAWgGtmQkjt7iKBIjqVwm2Ewpt76RqFVnsDs66xzKWbkSsbha0EmTWjsofCClF3ncmn
+	kCdZ7v70P8qPap8GlGR+fqbHgF1s9jwiSdP6MWa82jVm8isL8kYTAfZQaS39mPGEJRINXz
+	pEL49++Vv5gOcXsI0Wbjjyzn6ZcRf4Y=
+Date: Thu, 4 Apr 2024 11:48:04 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Subject: Re: [PATCH bpf-next 2/2] selftests/bpf: add fp-leaking precise
+ subprog result tests
+Content-Language: en-GB
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+ Andrii Nakryiko <andrii@kernel.org>
+Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+ martin.lau@kernel.org, kernel-team@meta.com,
+ syzbot+148110ee7cf72f39f33e@syzkaller.appspotmail.com
+References: <20240402225020.2582397-1-andrii@kernel.org>
+ <20240402225020.2582397-2-andrii@kernel.org>
+ <CAEf4Bza0QLa8m_iW4Rk_6+8tuJgvhF7gjk-p4HVHTRq2LJgPVg@mail.gmail.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <CAEf4Bza0QLa8m_iW4Rk_6+8tuJgvhF7gjk-p4HVHTRq2LJgPVg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.10/27235/Thu Apr  4 10:24:59 2024)
+X-Migadu-Flow: FLOW_OUT
 
-Hi David, hi Jakub, hi Paolo, hi Eric,
 
-The following pull-request contains BPF updates for your *net* tree.
+On 4/2/24 4:26 PM, Andrii Nakryiko wrote:
+> On Tue, Apr 2, 2024 at 3:50 PM Andrii Nakryiko <andrii@kernel.org> wrote:
+>> Add selftests validating that BPF verifier handles precision marking
+>> for SCALAR registers derived from r10 (fp) register correctly.
+>>
+>> Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+>> ---
+>>   .../bpf/progs/verifier_subprog_precision.c    | 86 +++++++++++++++++++
+>>   1 file changed, 86 insertions(+)
+>>
+>> diff --git a/tools/testing/selftests/bpf/progs/verifier_subprog_precision.c b/tools/testing/selftests/bpf/progs/verifier_subprog_precision.c
+>> index 6f5d19665cf6..e1a8f107f0a7 100644
+>> --- a/tools/testing/selftests/bpf/progs/verifier_subprog_precision.c
+>> +++ b/tools/testing/selftests/bpf/progs/verifier_subprog_precision.c
+>> @@ -76,6 +76,92 @@ __naked int subprog_result_precise(void)
+>>          );
+>>   }
+>>
+>> +__naked __noinline __used
+>> +static unsigned long fp_leaking_subprog()
+>> +{
+>> +       asm volatile (
+>> +               "r0 = (s8)r10;"
+> Our CI's clang doesn't like this instruction. I guess I'll have to
+> encode it in binary form :(
 
-We've added 7 non-merge commits during the last 5 day(s) which contain
-a total of 9 files changed, 75 insertions(+), 24 deletions(-).
+This patch disappeared from CI so I am not able to check the result.
 
-The main changes are:
+But I tried with the following small example.
 
-1) Fix x86 BPF JIT under retbleed=stuff which causes kernel panics due to
-   incorrect destination IP calculation and incorrect IP for relocations,
-   from Uros Bizjak and Joan Bruguera Micó.
+$ cat t.c
+__attribute__((naked)) unsigned long t(void)
+{
+         asm volatile("r0 = (s8)r10;"
+                      "exit;"
+                     );
+}
 
-2) Fix BPF arena file descriptor leaks in the verifier, from Anton Protopopov.
+$ clang --target=bpf -O2 -mcpu=v2 -g -c t.c && llvm-objdump -d t.o
 
-3) Defer bpf_link deallocation to after RCU grace period as currently running
-   multi-{kprobes,uprobes} programs might still access cookie information from
-   the link, from Andrii Nakryiko.
+t.o:    file format elf64-bpf
 
-4) Fix a BPF sockmap lock inversion deadlock in map_delete_elem reported
-   by syzkaller, from Jakub Sitnicki.
+Disassembly of section .text:
 
-5) Fix resolve_btfids build with musl libc due to missing linux/types.h
-   include, from Natanael Copa.
+0000000000000000 <t>:
+        0:       bf a0 08 00 00 00 00 00 r0 = (s8)r10
+        1:       95 00 00 00 00 00 00 00 exit
 
-Please consider pulling these changes from:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git tags/for-netdev
+-mcpu=v3/v4 has the same result.
+Not sure what clang complains.
 
-Thanks a lot!
-
-Also thanks to reporters, reviewers and testers of commits in this pull-request:
-
-Greg Thelen, Ingo Molnar, Jiri Olsa, John Fastabend, Shung-Hsi Yu, Uros 
-Bizjak, xingwei lee, Yonghong Song, yue sun
-
-----------------------------------------------------------------
-
-The following changes since commit 037965402a010898d34f4e35327d22c0a95cd51f:
-
-  xen-netfront: Add missing skb_mark_for_recycle (2024-03-28 18:28:12 -0700)
-
-are available in the Git repository at:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git tags/for-netdev
-
-for you to fetch changes up to ff91059932401894e6c86341915615c5eb0eca48:
-
-  bpf, sockmap: Prevent lock inversion deadlock in map delete elem (2024-04-02 16:31:05 +0200)
-
-----------------------------------------------------------------
-bpf-for-netdev
-
-----------------------------------------------------------------
-Alexei Starovoitov (1):
-      Merge branch 'x86-bpf-fixes-for-the-bpf-jit-with-retbleed-stuff'
-
-Andrii Nakryiko (2):
-      bpf: put uprobe link's path and task in release callback
-      bpf: support deferring bpf_link dealloc to after RCU grace period
-
-Anton Protopopov (1):
-      bpf: fix possible file descriptor leaks in verifier
-
-Jakub Sitnicki (1):
-      bpf, sockmap: Prevent lock inversion deadlock in map delete elem
-
-Joan Bruguera Micó (1):
-      x86/bpf: Fix IP for relocating call depth accounting
-
-Natanael Copa (1):
-      tools/resolve_btfids: fix build with musl libc
-
-Uros Bizjak (1):
-      x86/bpf: Fix IP after emitting call depth accounting
-
- arch/x86/include/asm/alternative.h |  4 ++--
- arch/x86/kernel/callthunks.c       |  4 ++--
- arch/x86/net/bpf_jit_comp.c        | 19 ++++++++-----------
- include/linux/bpf.h                | 16 +++++++++++++++-
- kernel/bpf/syscall.c               | 35 ++++++++++++++++++++++++++++++++---
- kernel/bpf/verifier.c              |  3 +++
- kernel/trace/bpf_trace.c           | 10 +++++-----
- net/core/sock_map.c                |  6 ++++++
- tools/include/linux/btf_ids.h      |  2 ++
- 9 files changed, 75 insertions(+), 24 deletions(-)
+>
+>> +               "exit;"
+>> +       );
+>> +}
+>> +
+> [...]
+>
