@@ -1,219 +1,194 @@
-Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D67F6BE40;
-	Thu,  4 Apr 2024 01:26:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1A17C8CE;
+	Thu,  4 Apr 2024 01:41:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712193968; cv=none; b=GSFYVXRJXRyAzLinOB/PZVADMoxp7oD4+gFfRzr5PGasoFJN4wRHEeufSufLTe7zglJ+40nREN85E3QUCJZf+vZ09AePYgOFs6bYegtz/5mYWiIjsHIDJe8quqwXFvu48vBuveu7VbUOIFGAIculOTvKZ/oyeAX+DpeDGRGd4Qc=
+	t=1712194910; cv=none; b=lOn9Nyg3y+5Yq+j3cTegwUKXLLlgyOc/AixMdZuDv8NfbaOqJYQ1Mh/wKemZxYfaGlB5uFo35De+AUi0CktUkSXaC/1W+3uCJi6TPOR1U62gbq1hON0DX1+kdEVRHM63Qe5r2Z8Oe1kShbM/zIv4IRBegnrlfvfYAr9qMpFyBfs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712193968; c=relaxed/simple;
-	bh=Xj/UxtB9OZgBXNePHN21urrLY77r1gVxBSO1k4lUddE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ubAP3GOvyvx9UxuUWewIuVuMOWpBsWXtr04tg8QPt/dF42I9/Hsky/2oM3yS6BAxXAW/Nzi+LOqwPAnOhykDJjjf6syyNFGg515XIyRLNqI5MemkIYh66Hd8lnGcfKHf2GDtrs7pRQkqs9xme4TG69Nqdk+0Qs3DC5Bnsh4QzFs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RNOtVy85; arc=none smtp.client-ip=209.85.208.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1712194910; c=relaxed/simple;
+	bh=ylInIXpWYxspOA+arDridzM2mP4aLj5cNS91iql7lps=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=G1/e4gzNubulFyWr5j6TSlDwbg0vy9mgXpH9s8XIbGVytkkZhWIWvxpMpjev1pHGe2JsCiWqdpd6AvzfOwef20NbK2N5wXQN0vTram34RWQUcJJElmswFuFR6L0s2vk/TwXL4uTHG9mIlbyTAy+EYVwwmbhtI2OQURvXiVOxj7k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=WR/7BzB2; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RNOtVy85"
-Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-56e05fc2421so2271372a12.0;
-        Wed, 03 Apr 2024 18:26:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1712193965; x=1712798765; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hjAqpWqnjs/8BQsJbWvblhIpXQr9Er7vm0Pw2QY3tEs=;
-        b=RNOtVy85UeRii2ssJFIBHBDKgLp/fal5aYL9JgImsCZCtP+zjX6bXxLLpGShceP/jX
-         rMrbsVnm1MZYYDS0ILgVUSaTv1prh6aKv5XNQHgOpqRqJADFjExRTVQca6oSRvLPBbL9
-         4857t9JE4Df0TKoJw9aY8REwjZMpeHu2eAaI25ljxSKJOxggdiOPLn8H8r14QeG4DUvU
-         fxMqvxLyqT+te82PUhQBjxc6xFTMqt7I3lO1sidgsIPUUJwPx2y58d7yn26Qwm3lfU5u
-         6DCVlzxkYtNFdNWE1PsFpFbHAk8IkCTsc5sEVvpuB64utM9jwb/hEPfJ6OV8PtwrCq4p
-         uYog==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712193965; x=1712798765;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=hjAqpWqnjs/8BQsJbWvblhIpXQr9Er7vm0Pw2QY3tEs=;
-        b=We6PaheWqqYPtB2kY80D8eQqYFEnqTp0bnD+L7Ci4mI+sXvCMpvZBcMYDJRVGtHMnE
-         8Gmc+mh9PC9g1Yb5V+lH/CG+fDrlOASB/7V6KwXwSVkqzvFf0xf/LM+rwN7n8QFnX5pF
-         cs/Mpi1i1IPYeDU5lea0pnW+HX7DwvwGXahmpswWWtAXNRn2BQ4pbMyc3//m9XuTLymd
-         kLJurERGRaK4qlS8475x93bTFB0JH8TsRCrI0JoirpO9zrdAoP1tNTkJfcUBXuobRAu5
-         HIGJkCK78O6ZtgIPlyQTcwy7btsyZAzDodDZV3i5WWVsh2vMdzgCFzV6T8vY4pYW6Xrx
-         /kZw==
-X-Forwarded-Encrypted: i=1; AJvYcCWVMhLy2K4B4YyPPWT4m1v/FjdqIA+cROWa0Gu5gQJvDGKRowfXRBsaL7VZhOZTK01HyaB1FVeq9CMQpjgGl/sirCi2Oi/TupFEWiO8+VICotpSUz/lv50YqJyk
-X-Gm-Message-State: AOJu0YyEzTXWUsuqt5KT3wzv2eJbD/pF5RABSI6b5TZS2Xyp10Zw+Zc0
-	Yqs0HNsflbJSSViXqGbRyH7GUh9OT9vYn8uuLgCjI5N9xP8W4TlIGL7ET199OdG4vyQmRMNzawI
-	vg2yZcBzDkfqJWi3t9z1JiJmLiWw=
-X-Google-Smtp-Source: AGHT+IGruOHSiKSijdMXGgplXIddOZL2drwZ0yXKSOW6IZniESk2neqljptiD7+fI8IV/ZfY5TZbTWQSI4ypA531GI4=
-X-Received: by 2002:a17:906:230d:b0:a4e:9e7d:6588 with SMTP id
- l13-20020a170906230d00b00a4e9e7d6588mr3292957eja.27.1712193965048; Wed, 03
- Apr 2024 18:26:05 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="WR/7BzB2"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02DA7C433F1;
+	Thu,  4 Apr 2024 01:41:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+	s=korg; t=1712194910;
+	bh=ylInIXpWYxspOA+arDridzM2mP4aLj5cNS91iql7lps=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=WR/7BzB22gfYpT0J+vW8f17cYjbvunU6667wcTS4ODH1KJb/paKvjAjfhuX4dAA2U
+	 OGcIcmrpXdFljOUp98V8zDrNGu7mR04VThVVdKj6T5YFKondQH+9xSA9I/7cnzniVj
+	 RMeCFRgjfifPns5s48udP0Oyljucj+r5E3Ov1rOQ=
+Date: Wed, 3 Apr 2024 18:41:49 -0700
+From: Andrew Morton <akpm@linux-foundation.org>
+To: syzbot <syzbot+186522670e6722692d86@syzkaller.appspotmail.com>
+Cc: linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+ syzkaller-bugs@googlegroups.com, bpf@vger.kernel.org
+Subject: Re: [syzbot] [mm?] BUG: unable to handle kernel paging request in
+ copy_from_kernel_nofault (2)
+Message-Id: <20240403184149.0847a9d614f11b249529fd02@linux-foundation.org>
+In-Reply-To: <000000000000e9a8d80615163f2a@google.com>
+References: <000000000000e9a8d80615163f2a@google.com>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20240329134037.92124-1-kerneljasonxing@gmail.com> <660dfbcb45cfc_23f4720810@john.notmuch>
-In-Reply-To: <660dfbcb45cfc_23f4720810@john.notmuch>
-From: Jason Xing <kerneljasonxing@gmail.com>
-Date: Thu, 4 Apr 2024 09:25:28 +0800
-Message-ID: <CAL+tcoAE7AC3-jP3NYL1SXPHbC3KCRj_VOvd1=T2e0YTk8R5+g@mail.gmail.com>
-Subject: Re: [PATCH net] bpf, skmsg: fix NULL pointer dereference in sk_psock_skb_ingress_enqueue
-To: John Fastabend <john.fastabend@gmail.com>
-Cc: edumazet@google.com, jakub@cloudflare.com, davem@davemloft.net, 
-	kuba@kernel.org, pabeni@redhat.com, daniel@iogearbox.net, ast@kernel.org, 
-	netdev@vger.kernel.org, bpf@vger.kernel.org, 
-	Jason Xing <kernelxing@tencent.com>, 
-	syzbot+aa8c8ec2538929f18f2d@syzkaller.appspotmail.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Hello John,
+On Mon, 01 Apr 2024 22:19:25 -0700 syzbot <syzbot+186522670e6722692d86@syzkaller.appspotmail.com> wrote:
 
-On Thu, Apr 4, 2024 at 9:01=E2=80=AFAM John Fastabend <john.fastabend@gmail=
-.com> wrote:
->
-> Jason Xing wrote:
-> > From: Jason Xing <kernelxing@tencent.com>
-> >
-> > Fix NULL pointer data-races in sk_psock_skb_ingress_enqueue() which
-> > syzbot reported [1].
-> >
-> > [1]
-> > BUG: KCSAN: data-race in sk_psock_drop / sk_psock_skb_ingress_enqueue
-> >
-> > write to 0xffff88814b3278b8 of 8 bytes by task 10724 on cpu 1:
-> >  sk_psock_stop_verdict net/core/skmsg.c:1257 [inline]
-> >  sk_psock_drop+0x13e/0x1f0 net/core/skmsg.c:843
-> >  sk_psock_put include/linux/skmsg.h:459 [inline]
-> >  sock_map_close+0x1a7/0x260 net/core/sock_map.c:1648
-> >  unix_release+0x4b/0x80 net/unix/af_unix.c:1048
-> >  __sock_release net/socket.c:659 [inline]
-> >  sock_close+0x68/0x150 net/socket.c:1421
-> >  __fput+0x2c1/0x660 fs/file_table.c:422
-> >  __fput_sync+0x44/0x60 fs/file_table.c:507
-> >  __do_sys_close fs/open.c:1556 [inline]
-> >  __se_sys_close+0x101/0x1b0 fs/open.c:1541
-> >  __x64_sys_close+0x1f/0x30 fs/open.c:1541
-> >  do_syscall_64+0xd3/0x1d0
-> >  entry_SYSCALL_64_after_hwframe+0x6d/0x75
-> >
-> > read to 0xffff88814b3278b8 of 8 bytes by task 10713 on cpu 0:
-> >  sk_psock_data_ready include/linux/skmsg.h:464 [inline]
-> >  sk_psock_skb_ingress_enqueue+0x32d/0x390 net/core/skmsg.c:555
-> >  sk_psock_skb_ingress_self+0x185/0x1e0 net/core/skmsg.c:606
-> >  sk_psock_verdict_apply net/core/skmsg.c:1008 [inline]
-> >  sk_psock_verdict_recv+0x3e4/0x4a0 net/core/skmsg.c:1202
-> >  unix_read_skb net/unix/af_unix.c:2546 [inline]
-> >  unix_stream_read_skb+0x9e/0xf0 net/unix/af_unix.c:2682
-> >  sk_psock_verdict_data_ready+0x77/0x220 net/core/skmsg.c:1223
-> >  unix_stream_sendmsg+0x527/0x860 net/unix/af_unix.c:2339
-> >  sock_sendmsg_nosec net/socket.c:730 [inline]
-> >  __sock_sendmsg+0x140/0x180 net/socket.c:745
-> >  ____sys_sendmsg+0x312/0x410 net/socket.c:2584
-> >  ___sys_sendmsg net/socket.c:2638 [inline]
-> >  __sys_sendmsg+0x1e9/0x280 net/socket.c:2667
-> >  __do_sys_sendmsg net/socket.c:2676 [inline]
-> >  __se_sys_sendmsg net/socket.c:2674 [inline]
-> >  __x64_sys_sendmsg+0x46/0x50 net/socket.c:2674
-> >  do_syscall_64+0xd3/0x1d0
-> >  entry_SYSCALL_64_after_hwframe+0x6d/0x75
-> >
-> > value changed: 0xffffffff83d7feb0 -> 0x0000000000000000
-> >
-> > Reported by Kernel Concurrency Sanitizer on:
-> > CPU: 0 PID: 10713 Comm: syz-executor.4 Tainted: G        W          6.8=
-.0-syzkaller-08951-gfe46a7dd189e #0
-> > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS=
- Google 02/29/2024
-> >
-> > Prior to this, commit 4cd12c6065df ("bpf, sockmap: Fix NULL pointer
-> > dereference in sk_psock_verdict_data_ready()") fixed one NULL pointer
-> > similarly due to no protection of saved_data_ready. Here is another
-> > different caller causing the same issue because of the same reason. So
-> > we should protect it with sk_callback_lock read lock because the writer
-> > side in the sk_psock_drop() uses "write_lock_bh(&sk->sk_callback_lock);=
-".
-> >
-> > Fixes: 604326b41a6f ("bpf, sockmap: convert to generic sk_msg interface=
-")
-> > Reported-by: syzbot+aa8c8ec2538929f18f2d@syzkaller.appspotmail.com
-> > Closes: https://syzkaller.appspot.com/bug?extid=3Daa8c8ec2538929f18f2d
-> > Signed-off-by: Jason Xing <kernelxing@tencent.com>
-> > ---
-> >  net/core/skmsg.c | 2 ++
-> >  1 file changed, 2 insertions(+)
-> >
-> > diff --git a/net/core/skmsg.c b/net/core/skmsg.c
-> > index 4d75ef9d24bf..67c4c01c5235 100644
-> > --- a/net/core/skmsg.c
-> > +++ b/net/core/skmsg.c
-> > @@ -552,7 +552,9 @@ static int sk_psock_skb_ingress_enqueue(struct sk_b=
-uff *skb,
-> >       msg->skb =3D skb;
-> >
-> >       sk_psock_queue_msg(psock, msg);
-> > +     read_lock_bh(&sk->sk_callback_lock);
-> >       sk_psock_data_ready(sk, psock);
-> > +     read_unlock_bh(&sk->sk_callback_lock);
-> >       return copied;
-> >  }
->
-> The problem is the check and then usage presumably it is already set
-> to NULL:
->
->  static inline void sk_psock_data_ready(struct sock *sk, struct sk_psock =
-*psock)
->  {
->         if (psock->saved_data_ready)
->                 psock->saved_data_ready(sk);
+> Hello,
 
-Yes.
+Thanks.  Cc: bpf@vger.kernel.org
 
->
->
-> I'm thinking we might be able to get away with just a READ_ONCE here with
-> similar WRITE_ONCE on other side. Something like this,
-
-The simple fix that popped into my mind at the beginning is the same
-as you: adding the READ_ONCE/WRITE_ONCE pair.
-
->
->   sk_psock_data_ready(struct sock *sk, struct sk_psock *psock)
->   {
->        saved_data_ready =3D READ_ONCE(psock->saved_data_ready)
->
->        if (saved_data_ready)
->              saved_data_ready(sk)
->        ....
->
-> And then in sk_psock_stop_verdict,
->
->         WRITE_ONCE(sk->sk_data_ready, psock->saved_data_ready);
->         WRITE_ONCE(psock->saved_data_ready, NULL);
->
-> And because we don't actually release the sock until a RCU grace period w=
-e
-> should be OK. The TCP stack manages to work correctly without wrapping
-> tcp_data_ready in locks like this. But nice thing there is you don't chan=
-ge
-> this callback on live sockets.
->
-> I think at least to keep backport simply above patch is ok, but lets move
-> the read_lock_bh()/unlock_bh() into the sk_psock_data_ready() call and th=
-en
-> we don't duplicate this error again. Does that make sense?
-
-Thanks for your quick response and such detailed analysis:)
-
-It makes sense. I will move it into the sk_psock_data_ready(), then
-three callers for now and possible callers in future would never go
-wrong.
-
->
-> Thanks,
-> John
->
+> syzbot found the following issue on:
+> 
+> HEAD commit:    317c7bc0ef03 Merge tag 'mmc-v6.9-rc1' of git://git.kernel...
+> git tree:       upstream
+> console output: https://syzkaller.appspot.com/x/log.txt?x=1060bd41180000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=43f1e0cbdb852271
+> dashboard link: https://syzkaller.appspot.com/bug?extid=186522670e6722692d86
+> compiler:       arm-linux-gnueabi-gcc (Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40
+> userspace arch: arm
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15751129180000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10136341180000
+> 
+> Downloadable assets:
+> disk image (non-bootable): https://storage.googleapis.com/syzbot-assets/8ead8862021c/non_bootable_disk-317c7bc0.raw.xz
+> vmlinux: https://storage.googleapis.com/syzbot-assets/49458dc4ddf2/vmlinux-317c7bc0.xz
+> kernel image: https://storage.googleapis.com/syzbot-assets/031f516e5544/zImage-317c7bc0.xz
+> 
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+186522670e6722692d86@syzkaller.appspotmail.com
+> 
+> 8<--- cut here ---
+> Unable to handle kernel paging request at virtual address ffffffe9 when write
+> [ffffffe9] *pgd=80000080007003, *pmd=deffd003, *pte=00000000
+> Internal error: Oops: a07 [#1] PREEMPT SMP ARM
+> Modules linked in:
+> CPU: 1 PID: 3001 Comm: syz-executor291 Not tainted 6.9.0-rc1-syzkaller #0
+> Hardware name: ARM-Versatile Express
+> PC is at copy_from_kernel_nofault mm/maccess.c:38 [inline]
+> PC is at copy_from_kernel_nofault+0xb8/0x12c mm/maccess.c:24
+> LR is at copy_from_kernel_nofault+0x24/0x12c mm/maccess.c:31
+> pc : [<804361f0>]    lr : [<8043615c>]    psr: a0000013
+> sp : df96dc90  ip : df96dc90  fp : df96dcac
+> r10: 00000000  r9 : df96dd40  r8 : ffffffe9
+> r7 : 83d33c00  r6 : 00000005  r5 : ffffffe9  r4 : ffffffe9
+> r3 : fffffff2  r2 : 00000000  r1 : 00000005  r0 : 00000001
+> Flags: NzCv  IRQs on  FIQs on  Mode SVC_32  ISA ARM  Segment none
+> Control: 30c5387d  Table: 8434d080  DAC: 00000000
+> Register r0 information: non-paged memory
+> Register r1 information: non-paged memory
+> Register r2 information: NULL pointer
+> Register r3 information: non-paged memory
+> Register r4 information: non-paged memory
+> Register r5 information: non-paged memory
+> Register r6 information: non-paged memory
+> Register r7 information: slab task_struct start 83d33c00 pointer offset 0 size 3072
+> Register r8 information: non-paged memory
+> Register r9 information: 2-page vmalloc region starting at 0xdf96c000 allocated at kernel_clone+0xac/0x3cc kernel/fork.c:2796
+> Register r10 information: NULL pointer
+> Register r11 information: 2-page vmalloc region starting at 0xdf96c000 allocated at kernel_clone+0xac/0x3cc kernel/fork.c:2796
+> Register r12 information: 2-page vmalloc region starting at 0xdf96c000 allocated at kernel_clone+0xac/0x3cc kernel/fork.c:2796
+> Process syz-executor291 (pid: 3001, stack limit = 0xdf96c000)
+> Stack: (0xdf96dc90 to 0xdf96e000)
+> dc80:                                     df96ddb8 ffffffe9 00000005 ffffffff
+> dca0: df96dccc df96dcb0 8037c428 80436144 df96ddb8 00000000 8037c40c ffffffff
+> dcc0: df96dd64 df96dcd0 7f011aa0 8037c418 ffffffe9 df96dd40 802ff648 81182b54
+> dce0: df96dd64 df96dd30 35702575 00000000 828c0a94 40000013 00000000 00000000
+> dd00: df96dcf0 00000000 df96dd74 df96dd18 df96dd2c df96dd20 81182b64 81898a78
+> dd20: df96dd64 df96dd30 802ff648 81182b54 ffffffe9 df96dd40 00000005 00000000
+> dd40: df96ddb8 00000000 df969000 842879c0 df969030 df96de30 df96ddfc df96dd68
+> dd60: 8149c734 7f011a00 804d0184 8089c164 00000000 83d33c00 804b4cdc 804d0124
+> dd80: 8260ca3c df96de30 00000001 df96de2c 80468494 00000000 df96ddb8 00000000
+> dda0: 00000001 00000000 19df2b20 00000014 00000000 00000000 df969000 00000000
+> ddc0: 00000000 00000000 84497800 f655f23e df96ddfc 842879c0 00000000 df96dec0
+> dde0: 83f79c00 84497800 00000000 0000000e df96de64 df96de00 8149d6a0 8149c5d0
+> de00: df96de30 00000000 00000000 df96de98 20000080 00000000 df969000 00000000
+> de20: 828ffe80 82fe0000 8051cdd4 00000000 00000000 f655f23e 80395130 df969000
+> de40: 00000028 df96de98 0000000a 20000080 00000028 00000000 df96df8c df96de68
+> de60: 8039c858 8149d388 81c66394 84342c0c fcd9275f 00a00000 20000000 83d33c00
+> de80: df96dee0 df96dfb0 df96dea4 df96de98 8089c348 df96dee0 20000080 00000000
+> dea0: 83d33c00 df96ded0 00000008 00000000 00000008 80426e10 df96deec df96dec8
+> dec0: 00000003 02000000 0000000e 00000055 20000140 00000000 20000380 00000000
+> dee0: 00000000 04000000 00000000 00000000 00000000 00000000 00000000 00000000
+> df00: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+> df20: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+> df40: 00000000 00000000 00000000 00000000 00000000 00000000 20000000 f655f23e
+> df60: 80216078 ffffffff 00000000 0008e050 00000182 80200288 83d33c00 00000182
+> df80: df96dfa4 df96df90 8039dd98 8039b934 20000080 00000000 00000000 df96dfa8
+> dfa0: 80200060 8039dd78 ffffffff 00000000 0000000a 20000080 00000028 00000000
+> dfc0: ffffffff 00000000 0008e050 00000182 20000100 00000000 00000001 00003a97
+> dfe0: 7ec66c70 7ec66c60 00010748 0002e890 00000010 0000000a 00000000 00000000
+> Call trace: 
+> [<80436138>] (copy_from_kernel_nofault) from [<8037c428>] (bpf_probe_read_kernel_common include/linux/bpf.h:2909 [inline])
+> [<80436138>] (copy_from_kernel_nofault) from [<8037c428>] (____bpf_probe_read_kernel kernel/trace/bpf_trace.c:240 [inline])
+> [<80436138>] (copy_from_kernel_nofault) from [<8037c428>] (bpf_probe_read_kernel+0x1c/0x44 kernel/trace/bpf_trace.c:237)
+>  r7:ffffffff r6:00000005 r5:ffffffe9 r4:df96ddb8
+> [<8037c40c>] (bpf_probe_read_kernel) from [<7f011aa0>] (bpf_prog_244768d4818575ac+0xac/0xc0)
+>  r7:ffffffff r6:8037c40c r5:00000000 r4:df96ddb8
+> [<7f0119f4>] (bpf_prog_244768d4818575ac) from [<8149c734>] (bpf_dispatcher_nop_func include/linux/bpf.h:1234 [inline])
+> [<7f0119f4>] (bpf_prog_244768d4818575ac) from [<8149c734>] (__bpf_prog_run include/linux/filter.h:657 [inline])
+> [<7f0119f4>] (bpf_prog_244768d4818575ac) from [<8149c734>] (bpf_prog_run include/linux/filter.h:664 [inline])
+> [<7f0119f4>] (bpf_prog_244768d4818575ac) from [<8149c734>] (bpf_test_run+0x170/0x388 net/bpf/test_run.c:425)
+>  r9:df96de30 r8:df969030 r7:842879c0 r6:df969000 r5:00000000 r4:df96ddb8
+> [<8149c5c4>] (bpf_test_run) from [<8149d6a0>] (bpf_prog_test_run_skb+0x324/0x6cc net/bpf/test_run.c:1058)
+>  r10:0000000e r9:00000000 r8:84497800 r7:83f79c00 r6:df96dec0 r5:00000000
+>  r4:842879c0
+> [<8149d37c>] (bpf_prog_test_run_skb) from [<8039c858>] (bpf_prog_test_run kernel/bpf/syscall.c:4240 [inline])
+> [<8149d37c>] (bpf_prog_test_run_skb) from [<8039c858>] (__sys_bpf+0xf30/0x1ef0 kernel/bpf/syscall.c:5649)
+>  r10:00000000 r9:00000028 r8:20000080 r7:0000000a r6:df96de98 r5:00000028
+>  r4:df969000
+> [<8039b928>] (__sys_bpf) from [<8039dd98>] (__do_sys_bpf kernel/bpf/syscall.c:5738 [inline])
+> [<8039b928>] (__sys_bpf) from [<8039dd98>] (sys_bpf+0x2c/0x48 kernel/bpf/syscall.c:5736)
+>  r10:00000182 r9:83d33c00 r8:80200288 r7:00000182 r6:0008e050 r5:00000000
+>  r4:ffffffff
+> [<8039dd6c>] (sys_bpf) from [<80200060>] (ret_fast_syscall+0x0/0x1c arch/arm/mm/proc-v7.S:66)
+> Exception stack(0xdf96dfa8 to 0xdf96dff0)
+> dfa0:                   ffffffff 00000000 0000000a 20000080 00000028 00000000
+> dfc0: ffffffff 00000000 0008e050 00000182 20000100 00000000 00000001 00003a97
+> dfe0: 7ec66c70 7ec66c60 00010748 0002e890
+> Code: 9a000007 e3a03000 e4942000 e3530000 (e5852000) 
+> ---[ end trace 0000000000000000 ]---
+> ----------------
+> Code disassembly (best guess):
+>    0:	9a000007 	bls	0x24
+>    4:	e3a03000 	mov	r3, #0
+>    8:	e4942000 	ldr	r2, [r4], #0
+>    c:	e3530000 	cmp	r3, #0
+> * 10:	e5852000 	str	r2, [r5] <-- trapping instruction
+> 
+> 
+> ---
+> This report is generated by a bot. It may contain errors.
+> See https://goo.gl/tpsmEJ for more information about syzbot.
+> syzbot engineers can be reached at syzkaller@googlegroups.com.
+> 
+> syzbot will keep track of this issue. See:
+> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+> 
+> If the report is already addressed, let syzbot know by replying with:
+> #syz fix: exact-commit-title
+> 
+> If you want syzbot to run the reproducer, reply with:
+> #syz test: git://repo/address.git branch-or-commit-hash
+> If you attach or paste a git patch, syzbot will apply it before testing.
+> 
+> If you want to overwrite report's subsystems, reply with:
+> #syz set subsystems: new-subsystem
+> (See the list of subsystem names on the web dashboard)
+> 
+> If the report is a duplicate of another one, reply with:
+> #syz dup: exact-subject-of-another-report
+> 
+> If you want to undo deduplication, reply with:
+> #syz undup
