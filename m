@@ -1,245 +1,200 @@
-Received: from mail-yb1-f201.google.com (mail-yb1-f201.google.com [209.85.219.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00C5D6D1AB
-	for <bpf@vger.kernel.org>; Thu,  4 Apr 2024 20:27:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A4D213A25E;
+	Thu,  4 Apr 2024 21:02:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712262462; cv=none; b=bRxFxfp92Xq+VsxYkHEbKAKP3t2rs84cCrQF2zJ/CAwfigtffoa+zg8LZcSFzaK2TGhfA5HpL3pDX/1XSkpqOnG+7B0WC9bZuYx/ge/hnSbwiFg4xkWD7XF7ZROCDSdKbCoTAjCGvCyw5s2Ax7i8QykEB+UFDbNcdcOy3Gs+Ohs=
+	t=1712264565; cv=none; b=JoRUlVNGa8gAwLWjbiahHswRjwQw9foHd/RcnRiUSsgdphENHPpo8hYFoG/7xDl2fG19i66HwIVi2kNmj/VEuc099c9IRT4ZwVt5jBK3rhSvYY0u5Erc76eRJvAFK/Pyw64eiwFFb5PR1KwHoyeGdTITH0L5S7jYHqfsdVHduQE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712262462; c=relaxed/simple;
-	bh=jnYnc9fQiqTmQLr667aj2yTZQgalzNe6PFEVgGL4JCw=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=ouLz74MaJJiL00bl7umk3J9gLCCYYC/QABkMIwfw1JIsEDbYsL7kVB0yzoQL3W7DJkCRALWB/djfw+Wj2hUVvvJ9NMUgnviHdRTgrobtl1SONXiPezfUmSlAxnJoxIzLfhgDhIjzxHYSeyqewe5pytb26I2zqY9AZAft0HDfveU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--edumazet.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=jeGXMVLb; arc=none smtp.client-ip=209.85.219.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--edumazet.bounces.google.com
+	s=arc-20240116; t=1712264565; c=relaxed/simple;
+	bh=IocwTc2n6PDZ1lao94gOXZf6NlYKBoVi1KDrUF6GK10=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=pq52gJSbtuu0KkmyqATawDwdVznLPPWHs09VTZJWm07Cl/F+k5nmTHEfQHj4pYkU48TH+qZvhO5GngkH6jCNBMAffe+yx+broxdNCgtPnL8qXmwhpvaxJ3VAyfmr2KkzJokcKUk7XMUwgwapuSjv7yDxJZ8p+/UlmlieEy/sR5s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aUlDpJZt; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="jeGXMVLb"
-Received: by mail-yb1-f201.google.com with SMTP id 3f1490d57ef6-dd944567b6cso2018350276.2
-        for <bpf@vger.kernel.org>; Thu, 04 Apr 2024 13:27:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1712262460; x=1712867260; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:from:subject:message-id
-         :mime-version:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=HS7xvLLouAUDC8YTZsz0MgD+VCfep0tJs8jMsbn1Dc4=;
-        b=jeGXMVLboLz7qkAEQhkiX98uhNb/VMA/c+tFaCbyk7gigMiVKFRoiu06TPr8rFBPSi
-         rZU5bJGn+t8QEahjYy+veGgaXr8lsM3nq6KnC7BtVst9kg5lzRcRRh0NdMPZNG0pmR7p
-         tf2YnwTzBK00aWzoKCqNGtO4D+h7fMP37fGjQypcDZCxQD+lTSGPy3jLG1Q2JkUdtJQE
-         bwqaRfxiX6wGxeAQ1qT7yODQ5WFPbnQnculH36WhJX1iV1mw699AtF6daKtgI76Z9N1g
-         qebkD33Z7ne+6CM9DmErw19+jQ6xkBfCpnrxvCgxTUx0lHdK/WNyPgX3Gj+Cx3ASi5vF
-         6DdA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712262460; x=1712867260;
-        h=content-transfer-encoding:cc:to:from:subject:message-id
-         :mime-version:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HS7xvLLouAUDC8YTZsz0MgD+VCfep0tJs8jMsbn1Dc4=;
-        b=Y1wM+ObV7PDRnSz64EtUufQgoV4EBY8uqhNe7ddkEVuvf2h/bOSSK4CChzXKVNpl6u
-         xZvbhnCjcjnDrxNdbgGxq33Mce/hIkjqzJ4406UBwe6tmc6IWjjMjv7oEaAlRfcq513G
-         FGX0KqIfNOrxeVf4rpTDy9ZsxvOY1Bm9B+w9cbBJMHFiQzzFCVifa6ig1+Ql/tT6bHMH
-         iqbyMI0hoDWJao71lPNgA9f1G9I6gSHtsvNMzoWnF/IvDQq9DJTzZCRxfVxgNKGW5gkA
-         83Gl+4ifsNWTIRMHovS6k1Hopl/01V+Jw6EsuVJGeHa3MYbeyrk4MrlGRZv+FFepPt8V
-         BQlg==
-X-Forwarded-Encrypted: i=1; AJvYcCV3Y6fhfEFPdPLujS2Zdf0UoX9rEA9QHcslxootdVTC7SU8hH0VEdAXKw8S6lrV17z9vYz+FsflAlwU6nU+9tQbv1Zt
-X-Gm-Message-State: AOJu0YyiwUuiW6i0XBOqhdCuP1B6BSb+9VeLxZ06+BOFMxZLYyNZlSFT
-	4SBnXaxlIYAmjAla4K+d7rSXSwu0Lq4d6YcCfhNBKNa3pG7b15YiZB2F4vO4bMmgZv/acsXZfXJ
-	90CBkIkniLg==
-X-Google-Smtp-Source: AGHT+IHkvbcMA+i+fihLFGd/m7QttznHQJmzRO+onCACyZBH1ypC1tLYy6/t/7kmcDLQAVOOMScsdLLYVnZL/A==
-X-Received: from edumazet1.c.googlers.com ([fda3:e722:ac3:cc00:2b:7d90:c0a8:395a])
- (user=edumazet job=sendgmr) by 2002:a05:6902:18c4:b0:dc6:d1d7:d03e with SMTP
- id ck4-20020a05690218c400b00dc6d1d7d03emr68019ybb.8.1712262460096; Thu, 04
- Apr 2024 13:27:40 -0700 (PDT)
-Date: Thu,  4 Apr 2024 20:27:38 +0000
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aUlDpJZt"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA9FEC433F1;
+	Thu,  4 Apr 2024 21:02:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1712264565;
+	bh=IocwTc2n6PDZ1lao94gOXZf6NlYKBoVi1KDrUF6GK10=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+	b=aUlDpJZt6t7hbDWuIWp0XWFa/7IyE/lFPpaxl/ZpRd4eyS4j4vLl3FNzU1gUudDVJ
+	 nGnzQ+QW7LqeiTTnAmPVy/AnYgEzYwSUnEr3USabup9LpctynykMgS7bS1DX3udt1P
+	 w/ZVHZ47dljo7qnVWrjr3bbE0PmGylpDheC+ni56yBjGk32yhUw3u/8hAIx7enrg1w
+	 CCHCATMYx+zyUhiEo1YGM//c1Zn9TP4Mv6pf/gE03mF4i5B4qLTSc3BuYuIiYdGHVp
+	 2BH7fnIEj4QlqNCkmE0KPujDvLIu1vGhFPjpBll/gXCgPQV/LZhNVWJAcL8CnT+WfM
+	 KuJX+Jx9eiyeQ==
+Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
+	id 8B1C011A2696; Thu,  4 Apr 2024 23:02:42 +0200 (CEST)
+From: Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@kernel.org>
+To: Jesper Dangaard Brouer <hawk@kernel.org>, Edward Adam Davis
+ <eadavis@qq.com>, syzbot+af9492708df9797198d6@syzkaller.appspotmail.com
+Cc: andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
+ daniel@iogearbox.net, davem@davemloft.net, eddyz87@gmail.com,
+ haoluo@google.com, john.fastabend@gmail.com, jolsa@kernel.org,
+ kpsingh@kernel.org, kuba@kernel.org, linux-kernel@vger.kernel.org,
+ martin.lau@linux.dev, netdev@vger.kernel.org, sdf@google.com,
+ song@kernel.org, syzkaller-bugs@googlegroups.com, yonghong.song@linux.dev
+Subject: Re: [PATCH] bpf: fix null ptr deref in dev_map_enqueue
+In-Reply-To: <f45ad3e1-4433-422e-be28-17deaba4ade1@kernel.org>
+References: <00000000000069ee1a06149ff00c@google.com>
+ <tencent_EF4FAF8DF125F00D8D9237DDCC5DE9990307@qq.com>
+ <f45ad3e1-4433-422e-be28-17deaba4ade1@kernel.org>
+X-Clacks-Overhead: GNU Terry Pratchett
+Date: Thu, 04 Apr 2024 23:02:42 +0200
+Message-ID: <87plv4kfil.fsf@toke.dk>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.44.0.478.gd926399ef9-goog
-Message-ID: <20240404202738.3634547-1-edumazet@google.com>
-Subject: [PATCH net] xsk: validate user input for XDP_{UMEM|COMPLETION}_FILL_RING
-From: Eric Dumazet <edumazet@google.com>
-To: "David S . Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, 
-	Paolo Abeni <pabeni@redhat.com>
-Cc: netdev@vger.kernel.org, eric.dumazet@gmail.com, 
-	Eric Dumazet <edumazet@google.com>, syzbot <syzkaller@googlegroups.com>, 
-	"=?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?=" <bjorn@kernel.org>, Magnus Karlsson <magnus.karlsson@intel.com>, 
-	Maciej Fijalkowski <maciej.fijalkowski@intel.com>, Jonathan Lemon <jonathan.lemon@gmail.com>, 
-	bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+Content-Type: text/plain
 
-syzbot reported an illegal copy in xsk_setsockopt() [1]
+Jesper Dangaard Brouer <hawk@kernel.org> writes:
 
-Make sure to validate setsockopt() @optlen parameter.
+> On 31/03/2024 11.08, Edward Adam Davis wrote:
+>> [Syzbot reported]
+>> general protection fault, probably for non-canonical address 0xdffffc0000000000: 0000 [#1] PREEMPT SMP KASAN PTI
+>> KASAN: null-ptr-deref in range [0x0000000000000000-0x0000000000000007]
+>> CPU: 0 PID: 5179 Comm: syz-executor120 Not tainted 6.8.0-syzkaller-05271-gf99c5f563c17 #0
+>> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 02/29/2024
+>> RIP: 0010:dev_map_enqueue+0x31/0x3e0 kernel/bpf/devmap.c:539
+>> Code: 41 56 41 55 41 54 53 48 83 ec 18 49 89 d4 49 89 f5 48 89 fd 49 be 00 00 00 00 00 fc ff df e8 e6 45 d8 ff 48 89 e8 48 c1 e8 03 <42> 80 3c 30 00 74 08 48 89 ef e8 d0 8b 3b 00 4c 8b 7d 00 48 83 c5
+>> RSP: 0018:ffffc90003b0f688 EFLAGS: 00010246
+>> RAX: 0000000000000000 RBX: 0000000000000000 RCX: ffff888025258000
+>> RDX: 0000000000000000 RSI: ffff888024035070 RDI: 0000000000000000
+>> RBP: 0000000000000000 R08: 0000000000000005 R09: ffffffff894ff55e
+>> R10: 0000000000000004 R11: ffff888025258000 R12: ffff8880157d8000
+>> R13: ffff888024035070 R14: dffffc0000000000 R15: ffff8880b943c088
+>> FS:  00007fd0098e46c0(0000) GS:ffff8880b9400000(0000) knlGS:0000000000000000
+>> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+>> CR2: 00000000200009c0 CR3: 0000000025314000 CR4: 00000000003506f0
+>> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+>> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+>> Call Trace:
+>>   <TASK>
+>>   __xdp_do_redirect_frame net/core/filter.c:4384 [inline]
+>>   xdp_do_redirect_frame+0x20d/0x4d0 net/core/filter.c:4438
+>>   xdp_test_run_batch net/bpf/test_run.c:336 [inline]
+>>   bpf_test_run_xdp_live+0xe8a/0x1e90 net/bpf/test_run.c:384
+>>   bpf_prog_test_run_xdp+0x813/0x11b0 net/bpf/test_run.c:1267
+>>   bpf_prog_test_run+0x33a/0x3b0 kernel/bpf/syscall.c:4240
+>>   __sys_bpf+0x48d/0x810 kernel/bpf/syscall.c:5649
+>>   __do_sys_bpf kernel/bpf/syscall.c:5738 [inline]
+>>   __se_sys_bpf kernel/bpf/syscall.c:5736 [inline]
+>>   __x64_sys_bpf+0x7c/0x90 kernel/bpf/syscall.c:5736
+>>   do_syscall_64+0xfb/0x240
+>>   entry_SYSCALL_64_after_hwframe+0x6d/0x75
+>> RIP: 0033:0x7fd00992a0d9
+>> Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 81 18 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b0 ff ff ff f7 d8 64 89 01 48
+>> RSP: 002b:00007fd0098e4238 EFLAGS: 00000246 ORIG_RAX: 0000000000000141
+>> RAX: ffffffffffffffda RBX: 00007fd0099b43e8 RCX: 00007fd00992a0d9
+>> RDX: 0000000000000050 RSI: 0000000020000240 RDI: 000000000000000a
+>> RBP: 00007fd0099b43e0 R08: 00007fd0098e46c0 R09: 00007fd0098e46c0
+>> R10: 00007fd0098e46c0 R11: 0000000000000246 R12: 00007fd009981060
+>> R13: 0000000000000016 R14: 00007fffcb70c160 R15: 00007fffcb70c248
+>>   </TASK>
+>> [Fix]
+>> On the execution path of bpf_prog_test_run(), due to ri->map being NULL,
+>> ri->tgtvalue was not set correctly.
+>> 
+>> Reported-and-tested-by: syzbot+af9492708df9797198d6@syzkaller.appspotmail.com
+>> Signed-off-by: Edward Adam Davis <eadavis@qq.com>
+>> ---
+>>   kernel/bpf/devmap.c | 6 +++++-
+>>   1 file changed, 5 insertions(+), 1 deletion(-)
+>> 
+>> diff --git a/kernel/bpf/devmap.c b/kernel/bpf/devmap.c
+>> index 4e2cdbb5629f..ef20de14154a 100644
+>> --- a/kernel/bpf/devmap.c
+>> +++ b/kernel/bpf/devmap.c
+>> @@ -86,6 +86,7 @@ struct bpf_dtab {
+>>   static DEFINE_PER_CPU(struct list_head, dev_flush_list);
+>>   static DEFINE_SPINLOCK(dev_map_lock);
+>>   static LIST_HEAD(dev_map_list);
+>> +static bool is_valid_dst(struct bpf_dtab_netdev *obj, struct xdp_frame *xdpf);
+>>   
+>>   static struct hlist_head *dev_map_create_hash(unsigned int entries,
+>>   					      int numa_node)
+>> @@ -536,7 +537,10 @@ int dev_xdp_enqueue(struct net_device *dev, struct xdp_frame *xdpf,
+>>   int dev_map_enqueue(struct bpf_dtab_netdev *dst, struct xdp_frame *xdpf,
+>>   		    struct net_device *dev_rx)
+>>   {
+>> -	struct net_device *dev = dst->dev;
+>> +	struct net_device *dev;
+>> +	if (!is_valid_dst(dst, xdpf))
+>
+> This is overkill, because __xdp_enqueue() already contains most of the
+> checks in is_valid_dst().
+>
+> Why not:
+>
+>   if (!dst)
+> 	return -EINVAL;
+>
+>
+>> +		return -EINVAL;
+>> +	dev = dst->dev;
+>>   
+>>   	return __xdp_enqueue(dev, xdpf, dev_rx, dst->xdp_prog);
+>>   }
+>
+>
+> Is this fix pampering over another issue?
+>
+> To repeat myself:
+> I think something is wrong in xdp_test_run_batch().
 
-[1]
+I did spot a bug in the test_run code related to XDP_TX, but I don't
+really see how that particular issue could trigger this bug, since
+AFAICT the reproducer doesn't return XDP_TX. It looks like the program
+is setting the BROADCAST flag, but I don't see how that can lead to
+dev_map_enqueue() being run.
 
- BUG: KASAN: slab-out-of-bounds in copy_from_sockptr_offset include/linux/s=
-ockptr.h:49 [inline]
- BUG: KASAN: slab-out-of-bounds in copy_from_sockptr include/linux/sockptr.=
-h:55 [inline]
- BUG: KASAN: slab-out-of-bounds in xsk_setsockopt+0x909/0xa40 net/xdp/xsk.c=
-:1420
-Read of size 4 at addr ffff888028c6cde3 by task syz-executor.0/7549
+> The `ri->tgt_value` is being set in __bpf_xdp_redirect_map(), but I
+> cannot see __bpf_xdp_redirect_map() being used in xdp_test_run_batch().
 
-CPU: 0 PID: 7549 Comm: syz-executor.0 Not tainted 6.8.0-syzkaller-08951-gfe=
-46a7dd189e #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Goo=
-gle 03/27/2024
-Call Trace:
- <TASK>
-  __dump_stack lib/dump_stack.c:88 [inline]
-  dump_stack_lvl+0x241/0x360 lib/dump_stack.c:114
-  print_address_description mm/kasan/report.c:377 [inline]
-  print_report+0x169/0x550 mm/kasan/report.c:488
-  kasan_report+0x143/0x180 mm/kasan/report.c:601
-  copy_from_sockptr_offset include/linux/sockptr.h:49 [inline]
-  copy_from_sockptr include/linux/sockptr.h:55 [inline]
-  xsk_setsockopt+0x909/0xa40 net/xdp/xsk.c:1420
-  do_sock_setsockopt+0x3af/0x720 net/socket.c:2311
-  __sys_setsockopt+0x1ae/0x250 net/socket.c:2334
-  __do_sys_setsockopt net/socket.c:2343 [inline]
-  __se_sys_setsockopt net/socket.c:2340 [inline]
-  __x64_sys_setsockopt+0xb5/0xd0 net/socket.c:2340
- do_syscall_64+0xfb/0x240
- entry_SYSCALL_64_after_hwframe+0x6d/0x75
-RIP: 0033:0x7fb40587de69
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 e1 20 00 00 90 48 89 f8 48 89 f7 =
-48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff f=
-f 73 01 c3 48 c7 c1 b0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007fb40665a0c8 EFLAGS: 00000246 ORIG_RAX: 0000000000000036
-RAX: ffffffffffffffda RBX: 00007fb4059abf80 RCX: 00007fb40587de69
-RDX: 0000000000000005 RSI: 000000000000011b RDI: 0000000000000006
-RBP: 00007fb4058ca47a R08: 0000000000000002 R09: 0000000000000000
-R10: 0000000020001980 R11: 0000000000000246 R12: 0000000000000000
-R13: 000000000000000b R14: 00007fb4059abf80 R15: 00007fff57ee4d08
- </TASK>
+__bpf_xdp_redirect_map() is always being called from inside the BPF
+programs (through the bpf_redirect_map()). I don't really think we have
+a way of ensuring that we always follow such a call with an XDP_REDIRECT
+return, so we're kinda relying on the XDP program to do the right thing,
+or we could risk stale data being left in bpf_redirect_info, no? I am
+not sure if that is what's going on here, though.
 
-Allocated by task 7549:
-  kasan_save_stack mm/kasan/common.c:47 [inline]
-  kasan_save_track+0x3f/0x80 mm/kasan/common.c:68
-  poison_kmalloc_redzone mm/kasan/common.c:370 [inline]
-  __kasan_kmalloc+0x98/0xb0 mm/kasan/common.c:387
-  kasan_kmalloc include/linux/kasan.h:211 [inline]
-  __do_kmalloc_node mm/slub.c:3966 [inline]
-  __kmalloc+0x233/0x4a0 mm/slub.c:3979
-  kmalloc include/linux/slab.h:632 [inline]
-  __cgroup_bpf_run_filter_setsockopt+0xd2f/0x1040 kernel/bpf/cgroup.c:1869
-  do_sock_setsockopt+0x6b4/0x720 net/socket.c:2293
-  __sys_setsockopt+0x1ae/0x250 net/socket.c:2334
-  __do_sys_setsockopt net/socket.c:2343 [inline]
-  __se_sys_setsockopt net/socket.c:2340 [inline]
-  __x64_sys_setsockopt+0xb5/0xd0 net/socket.c:2340
- do_syscall_64+0xfb/0x240
- entry_SYSCALL_64_after_hwframe+0x6d/0x75
+> Is this a case of XDP program returning XDP_REDIRECT without having
+> called the BPF helper for redirect?
 
-The buggy address belongs to the object at ffff888028c6cde0
- which belongs to the cache kmalloc-8 of size 8
-The buggy address is located 1 bytes to the right of
- allocated 2-byte region [ffff888028c6cde0, ffff888028c6cde2)
+From trying to run the reproducer, I don't *think* that is the case, but
+cf the above I don't think that is the case in this instance.
 
-The buggy address belongs to the physical page:
-page:ffffea0000a31b00 refcount:1 mapcount:0 mapping:0000000000000000 index:=
-0xffff888028c6c9c0 pfn:0x28c6c
-anon flags: 0xfff00000000800(slab|node=3D0|zone=3D1|lastcpupid=3D0x7ff)
-page_type: 0xffffffff()
-raw: 00fff00000000800 ffff888014c41280 0000000000000000 dead000000000001
-raw: ffff888028c6c9c0 0000000080800057 00000001ffffffff 0000000000000000
-page dumped because: kasan: bad access detected
-page_owner tracks the page as allocated
-page last allocated via order 0, migratetype Unmovable, gfp_mask 0x112cc0(G=
-FP_USER|__GFP_NOWARN|__GFP_NORETRY), pid 6648, tgid 6644 (syz-executor.0), =
-ts 133906047828, free_ts 133859922223
-  set_page_owner include/linux/page_owner.h:31 [inline]
-  post_alloc_hook+0x1ea/0x210 mm/page_alloc.c:1533
-  prep_new_page mm/page_alloc.c:1540 [inline]
-  get_page_from_freelist+0x33ea/0x3580 mm/page_alloc.c:3311
-  __alloc_pages+0x256/0x680 mm/page_alloc.c:4569
-  __alloc_pages_node include/linux/gfp.h:238 [inline]
-  alloc_pages_node include/linux/gfp.h:261 [inline]
-  alloc_slab_page+0x5f/0x160 mm/slub.c:2175
-  allocate_slab mm/slub.c:2338 [inline]
-  new_slab+0x84/0x2f0 mm/slub.c:2391
-  ___slab_alloc+0xc73/0x1260 mm/slub.c:3525
-  __slab_alloc mm/slub.c:3610 [inline]
-  __slab_alloc_node mm/slub.c:3663 [inline]
-  slab_alloc_node mm/slub.c:3835 [inline]
-  __do_kmalloc_node mm/slub.c:3965 [inline]
-  __kmalloc_node+0x2db/0x4e0 mm/slub.c:3973
-  kmalloc_node include/linux/slab.h:648 [inline]
-  __vmalloc_area_node mm/vmalloc.c:3197 [inline]
-  __vmalloc_node_range+0x5f9/0x14a0 mm/vmalloc.c:3392
-  __vmalloc_node mm/vmalloc.c:3457 [inline]
-  vzalloc+0x79/0x90 mm/vmalloc.c:3530
-  bpf_check+0x260/0x19010 kernel/bpf/verifier.c:21162
-  bpf_prog_load+0x1667/0x20f0 kernel/bpf/syscall.c:2895
-  __sys_bpf+0x4ee/0x810 kernel/bpf/syscall.c:5631
-  __do_sys_bpf kernel/bpf/syscall.c:5738 [inline]
-  __se_sys_bpf kernel/bpf/syscall.c:5736 [inline]
-  __x64_sys_bpf+0x7c/0x90 kernel/bpf/syscall.c:5736
- do_syscall_64+0xfb/0x240
- entry_SYSCALL_64_after_hwframe+0x6d/0x75
-page last free pid 6650 tgid 6647 stack trace:
-  reset_page_owner include/linux/page_owner.h:24 [inline]
-  free_pages_prepare mm/page_alloc.c:1140 [inline]
-  free_unref_page_prepare+0x95d/0xa80 mm/page_alloc.c:2346
-  free_unref_page_list+0x5a3/0x850 mm/page_alloc.c:2532
-  release_pages+0x2117/0x2400 mm/swap.c:1042
-  tlb_batch_pages_flush mm/mmu_gather.c:98 [inline]
-  tlb_flush_mmu_free mm/mmu_gather.c:293 [inline]
-  tlb_flush_mmu+0x34d/0x4e0 mm/mmu_gather.c:300
-  tlb_finish_mmu+0xd4/0x200 mm/mmu_gather.c:392
-  exit_mmap+0x4b6/0xd40 mm/mmap.c:3300
-  __mmput+0x115/0x3c0 kernel/fork.c:1345
-  exit_mm+0x220/0x310 kernel/exit.c:569
-  do_exit+0x99e/0x27e0 kernel/exit.c:865
-  do_group_exit+0x207/0x2c0 kernel/exit.c:1027
-  get_signal+0x176e/0x1850 kernel/signal.c:2907
-  arch_do_signal_or_restart+0x96/0x860 arch/x86/kernel/signal.c:310
-  exit_to_user_mode_loop kernel/entry/common.c:105 [inline]
-  exit_to_user_mode_prepare include/linux/entry-common.h:328 [inline]
-  __syscall_exit_to_user_mode_work kernel/entry/common.c:201 [inline]
-  syscall_exit_to_user_mode+0xc9/0x360 kernel/entry/common.c:212
-  do_syscall_64+0x10a/0x240 arch/x86/entry/common.c:89
- entry_SYSCALL_64_after_hwframe+0x6d/0x75
+Anyway, let's see if I can get syzbot to test the fix to
+xdp_test_run_batch():
 
-Memory state around the buggy address:
- ffff888028c6cc80: fa fc fc fc fa fc fc fc fa fc fc fc fa fc fc fc
- ffff888028c6cd00: fa fc fc fc fa fc fc fc 00 fc fc fc 06 fc fc fc
->ffff888028c6cd80: fa fc fc fc fa fc fc fc fa fc fc fc 02 fc fc fc
-                                                       ^
- ffff888028c6ce00: fa fc fc fc fa fc fc fc fa fc fc fc fa fc fc fc
- ffff888028c6ce80: fa fc fc fc fa fc fc fc fa fc fc fc fa fc fc fc
+#syz test
 
-Fixes: 423f38329d26 ("xsk: add umem fill queue support and mmap")
-Reported-by: syzbot <syzkaller@googlegroups.com>
-Signed-off-by: Eric Dumazet <edumazet@google.com>
-Cc: "Bj=C3=B6rn T=C3=B6pel" <bjorn@kernel.org>
-Cc: Magnus Karlsson <magnus.karlsson@intel.com>
-Cc: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Cc: Jonathan Lemon <jonathan.lemon@gmail.com>
-Cc: bpf@vger.kernel.org
----
- net/xdp/xsk.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
-index 3404d076a8a3e6a9f43dfca301d3e00078afb934..727aa20be4bde8dc63a544a44a5=
-cdeb19cac7dcb 100644
---- a/net/xdp/xsk.c
-+++ b/net/xdp/xsk.c
-@@ -1417,6 +1417,8 @@ static int xsk_setsockopt(struct socket *sock, int le=
-vel, int optname,
- 		struct xsk_queue **q;
- 		int entries;
-=20
-+		if (optlen < sizeof(entries))
-+			return -EINVAL;
- 		if (copy_from_sockptr(&entries, optval, sizeof(entries)))
- 			return -EFAULT;
-=20
---=20
-2.44.0.478.gd926399ef9-goog
-
+diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
+index dfd919374017..a3f24486829e 100644
+--- a/net/bpf/test_run.c
++++ b/net/bpf/test_run.c
+@@ -281,9 +281,9 @@ static int xdp_recv_frames(struct xdp_frame **frames, int nframes,
+ static int xdp_test_run_batch(struct xdp_test_data *xdp, struct bpf_prog *prog,
+                              u32 repeat)
+ {
+-       struct bpf_redirect_info *ri = this_cpu_ptr(&bpf_redirect_info);
+        int err = 0, act, ret, i, nframes = 0, batch_sz;
+        struct xdp_frame **frames = xdp->frames;
++       struct bpf_redirect_info *ri;
+        struct xdp_page_head *head;
+        struct xdp_frame *frm;
+        bool redirect = false;
+@@ -294,6 +294,7 @@ static int xdp_test_run_batch(struct xdp_test_data *xdp, struct bpf_prog *prog,
+ 
+        local_bh_disable();
+        xdp_set_return_frame_no_direct();
++       ri = this_cpu_ptr(&bpf_redirect_info);
+ 
+        for (i = 0; i < batch_sz; i++) {
+                page = page_pool_dev_alloc_pages(xdp->pp);
