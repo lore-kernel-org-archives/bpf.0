@@ -1,21 +1,21 @@
 Received: from 66-220-155-179.mail-mxout.facebook.com (66-220-155-179.mail-mxout.facebook.com [66.220.155.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14C051CD11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14BD51CD02
 	for <bpf@vger.kernel.org>; Thu,  4 Apr 2024 02:53:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.155.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712199214; cv=none; b=QDLNQ8SRRtP54BBAFwPIeWSQPxItRW96vmrGIShUdOgjmcGM1gkiA1nuwTTNukr1h7Abbrj6oVPOleDVvqBpGDsaB6uxM+wQkZtUPLW2mXyuymopGc7NcRfTSodp1ZYsRpJugUC/rm0g1eK0dW1fM8cKIdDlXmnzaFe4sBiazSA=
+	t=1712199214; cv=none; b=sGfFYFZipiwC+N6fPuFNyZYc0h6EW7eFS1wr/TmxepRe1scGajHxkPi7QQrlpDLo/KRfyZvZKKiIuxiNk8yJP8IacVCSawhofkgs+AL0HvmpR6DafEKF2h82MfUzq6DqQU/9hpuCe7L3JebtXu20RlMfyB5E6jpaGKJeVnvlRAM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1712199214; c=relaxed/simple;
-	bh=l8rEoPkB1+h0LNhwpUrsB/U1oTm/EksW1YX8ynsn2so=;
+	bh=nY8pBElFEy6hCPr0s9CDd+phX6TK3x8PwkJXgmgXP8Y=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=dR4m2gq/uij26D420H8D+LBBKTLuM3KQAddI4jSqb9C5r7CG3blPG48pWfmKfVXVQa780M1BJFG26jVv0QHvPswo+qTpLtbJyE2H4f4/q/11ieYsRgypLgEwSa3RPjfeHqRHDjMCF1FS4Fcm+oe8HQtJP0mnr29N1ZrMayJcSF8=
+	 MIME-Version; b=lsVq9UW2sPs1+4D476gXmnlfr/+KTFWQNbDPu3w/ZWY0rOnccBkP5l2XJ9x1xyujc0+2B9KbM8+jfvUBFjrVSIaHOIRt1Q3SOuMNhG68dIB2tDnr4Xwe2IPouf094QmI6Pt1l3iKB+0JEfqSiBEZ9ldJGuQD9R7M91OkchoMfW4=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.155.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
 Received: by devbig309.ftw3.facebook.com (Postfix, from userid 128203)
-	id 24AB029CEB37; Wed,  3 Apr 2024 19:53:21 -0700 (PDT)
+	id 3D8FD29CEB58; Wed,  3 Apr 2024 19:53:26 -0700 (PDT)
 From: Yonghong Song <yonghong.song@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -25,10 +25,10 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	John Fastabend <john.fastabend@gmail.com>,
 	kernel-team@fb.com,
 	Martin KaFai Lau <martin.lau@kernel.org>,
-	Quentin Monnet <qmo@kernel.org>
-Subject: [PATCH bpf-next v4 3/5] bpftool: Add link dump support for BPF_LINK_TYPE_SOCKMAP
-Date: Wed,  3 Apr 2024 19:53:21 -0700
-Message-ID: <20240404025321.2212492-1-yonghong.song@linux.dev>
+	Eduard Zingerman <eddyz87@gmail.com>
+Subject: [PATCH bpf-next v4 4/5] selftests/bpf: Refactor out helper functions for a few tests
+Date: Wed,  3 Apr 2024 19:53:26 -0700
+Message-ID: <20240404025326.2212865-1-yonghong.song@linux.dev>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240404025305.2210999-1-yonghong.song@linux.dev>
 References: <20240404025305.2210999-1-yonghong.song@linux.dev>
@@ -40,53 +40,110 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 
-An example output looks like:
-  $ bpftool link
-    1776: sk_skb  prog 49730
-            map_id 0  attach_type sk_skb_verdict
-            pids test_progs(8424)
-    1777: sk_skb  prog 49755
-            map_id 0  attach_type sk_skb_stream_verdict
-            pids test_progs(8424)
-    1778: sk_msg  prog 49770
-            map_id 8208  attach_type sk_msg_verdict
-            pids test_progs(8424)
+These helper functions will be used later new tests as well.
+There are no functionality change.
 
-Reviewed-by: Quentin Monnet <qmo@kernel.org>
+Acked-by: Eduard Zingerman <eddyz87@gmail.com>
 Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
 ---
- tools/bpf/bpftool/link.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ .../selftests/bpf/prog_tests/sockmap_basic.c  | 38 +++++++++++--------
+ .../bpf/progs/test_skmsg_load_helpers.c       |  9 ++++-
+ 2 files changed, 30 insertions(+), 17 deletions(-)
 
-diff --git a/tools/bpf/bpftool/link.c b/tools/bpf/bpftool/link.c
-index afde9d0c2ea1..5cd503b763d7 100644
---- a/tools/bpf/bpftool/link.c
-+++ b/tools/bpf/bpftool/link.c
-@@ -526,6 +526,10 @@ static int show_link_close_json(int fd, struct bpf_l=
-ink_info *info)
- 		show_link_ifindex_json(info->netkit.ifindex, json_wtr);
- 		show_link_attach_type_json(info->netkit.attach_type, json_wtr);
- 		break;
-+	case BPF_LINK_TYPE_SOCKMAP:
-+		jsonw_uint_field(json_wtr, "map_id", info->sockmap.map_id);
-+		show_link_attach_type_json(info->sockmap.attach_type, json_wtr);
-+		break;
- 	case BPF_LINK_TYPE_XDP:
- 		show_link_ifindex_json(info->xdp.ifindex, json_wtr);
- 		break;
-@@ -915,6 +919,11 @@ static int show_link_close_plain(int fd, struct bpf_=
-link_info *info)
- 		show_link_ifindex_plain(info->netkit.ifindex);
- 		show_link_attach_type_plain(info->netkit.attach_type);
- 		break;
-+	case BPF_LINK_TYPE_SOCKMAP:
-+		printf("\n\t");
-+		printf("map_id %u  ", info->sockmap.map_id);
-+		show_link_attach_type_plain(info->sockmap.attach_type);
-+		break;
- 	case BPF_LINK_TYPE_XDP:
- 		printf("\n\t");
- 		show_link_ifindex_plain(info->xdp.ifindex);
+diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c b/too=
+ls/testing/selftests/bpf/prog_tests/sockmap_basic.c
+index 77e26ecffa9d..63fb2da7930a 100644
+--- a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
++++ b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
+@@ -475,30 +475,19 @@ static void test_sockmap_skb_verdict_fionread(bool =
+pass_prog)
+ 		test_sockmap_drop_prog__destroy(drop);
+ }
+=20
+-static void test_sockmap_skb_verdict_peek(void)
++static void test_sockmap_skb_verdict_peek_helper(int map)
+ {
+-	int err, map, verdict, s, c1, p1, zero =3D 0, sent, recvd, avail;
+-	struct test_sockmap_pass_prog *pass;
++	int err, s, c1, p1, zero =3D 0, sent, recvd, avail;
+ 	char snd[256] =3D "0123456789";
+ 	char rcv[256] =3D "0";
+=20
+-	pass =3D test_sockmap_pass_prog__open_and_load();
+-	if (!ASSERT_OK_PTR(pass, "open_and_load"))
+-		return;
+-	verdict =3D bpf_program__fd(pass->progs.prog_skb_verdict);
+-	map =3D bpf_map__fd(pass->maps.sock_map_rx);
+-
+-	err =3D bpf_prog_attach(verdict, map, BPF_SK_SKB_STREAM_VERDICT, 0);
+-	if (!ASSERT_OK(err, "bpf_prog_attach"))
+-		goto out;
+-
+ 	s =3D socket_loopback(AF_INET, SOCK_STREAM);
+ 	if (!ASSERT_GT(s, -1, "socket_loopback(s)"))
+-		goto out;
++		return;
+=20
+ 	err =3D create_pair(s, AF_INET, SOCK_STREAM, &c1, &p1);
+ 	if (!ASSERT_OK(err, "create_pairs(s)"))
+-		goto out;
++		return;
+=20
+ 	err =3D bpf_map_update_elem(map, &zero, &c1, BPF_NOEXIST);
+ 	if (!ASSERT_OK(err, "bpf_map_update_elem(c1)"))
+@@ -520,6 +509,25 @@ static void test_sockmap_skb_verdict_peek(void)
+ out_close:
+ 	close(c1);
+ 	close(p1);
++}
++
++static void test_sockmap_skb_verdict_peek(void)
++{
++	struct test_sockmap_pass_prog *pass;
++	int err, map, verdict;
++
++	pass =3D test_sockmap_pass_prog__open_and_load();
++	if (!ASSERT_OK_PTR(pass, "open_and_load"))
++		return;
++	verdict =3D bpf_program__fd(pass->progs.prog_skb_verdict);
++	map =3D bpf_map__fd(pass->maps.sock_map_rx);
++
++	err =3D bpf_prog_attach(verdict, map, BPF_SK_SKB_STREAM_VERDICT, 0);
++	if (!ASSERT_OK(err, "bpf_prog_attach"))
++		goto out;
++
++	test_sockmap_skb_verdict_peek_helper(map);
++
+ out:
+ 	test_sockmap_pass_prog__destroy(pass);
+ }
+diff --git a/tools/testing/selftests/bpf/progs/test_skmsg_load_helpers.c =
+b/tools/testing/selftests/bpf/progs/test_skmsg_load_helpers.c
+index 45e8fc75a739..b753672f04c9 100644
+--- a/tools/testing/selftests/bpf/progs/test_skmsg_load_helpers.c
++++ b/tools/testing/selftests/bpf/progs/test_skmsg_load_helpers.c
+@@ -24,8 +24,7 @@ struct {
+ 	__type(value, __u64);
+ } socket_storage SEC(".maps");
+=20
+-SEC("sk_msg")
+-int prog_msg_verdict(struct sk_msg_md *msg)
++static int prog_msg_verdict_common(struct sk_msg_md *msg)
+ {
+ 	struct task_struct *task =3D (struct task_struct *)bpf_get_current_task=
+();
+ 	int verdict =3D SK_PASS;
+@@ -44,4 +43,10 @@ int prog_msg_verdict(struct sk_msg_md *msg)
+ 	return verdict;
+ }
+=20
++SEC("sk_msg")
++int prog_msg_verdict(struct sk_msg_md *msg)
++{
++	return prog_msg_verdict_common(msg);
++}
++
+ char _license[] SEC("license") =3D "GPL";
 --=20
 2.43.0
 
