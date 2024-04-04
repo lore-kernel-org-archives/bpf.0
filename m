@@ -1,110 +1,218 @@
-Received: from out-189.mta0.migadu.com (out-189.mta0.migadu.com [91.218.175.189])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f49.google.com (mail-io1-f49.google.com [209.85.166.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DCA513C3E3;
-	Thu,  4 Apr 2024 22:28:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.189
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48BD612E71;
+	Thu,  4 Apr 2024 22:30:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712269734; cv=none; b=hANRIifNB+HXylYHuvET0X97q9/GQHeui2+Eyp2nbvGbCjyRmSCIOZZJATaZKxIl/iyMfcTHMy8YbVs3xMmUqkrPQ2BCpsaa8JiQKLPGc9Mx/5ot5effze349o9vKHAQIzjS+fO4F3Vo3cMcM017IaD5vxs4W7mM/gfgptkLT30=
+	t=1712269850; cv=none; b=a8xkraMS8oYTBFzMhaMU0yaYHdA3zNfMN/C5KcpkifU/+y3oFl6DLpDis8GFsjrE4g7JIb0ielqzs0hXYTZLM4Vr0xi7dPR1qclpOALBBUOR+qKBWoE1JcdHkImyIjJNLgeEFFiOKnYEpRUlpjQTsDVymxLumoXHSJ/GojbBH6k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712269734; c=relaxed/simple;
-	bh=RxUgTHy6Q08KN0jBS41CMT9Ci5RsJ+C8p9GGt3Gfp6o=;
+	s=arc-20240116; t=1712269850; c=relaxed/simple;
+	bh=RsAcx9Znss3UI/v6xG0a1+3qv8k0leUxOrv/V5dBbsc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Mh1BbqtBN2L8XTewRgd7Ph4tuUeSTYKLrZVt+dlUUInGYTmtkm2VJLg0AjD19+bpma3ONgEitDbYW8d6gCRE5SMV2c5ElHw/RImYrmE7gxFmbflAJRB56tiTlNFA44g4J3kp2BYAJGvQdVeeTecLXQNZHIrSmt3Dk/KfiuMq6XY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=MRSqA7hR; arc=none smtp.client-ip=91.218.175.189
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="MRSqA7hR"
-Date: Thu, 4 Apr 2024 18:28:43 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1712269730;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=cfxyCzvtzmWi1KSrX/XZIalfQOEPT3xbF6m5fU6kp1Y=;
-	b=MRSqA7hRXbZz0tmIJVXahqUTpqENt47k4TugvBcfJSyR0Cm1gh2WA4N6yRjmSx7aVgCNTP
-	AtxKikLCy/Cnvx95nkww4y4oLedWDdmjqq1jSIM2X6aubg8cqXD8PoPTacuEpfuX2MFiLW
-	VByPFt5v8rdJJuUvwqP0pi7SRB4TFpA=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Kent Overstreet <kent.overstreet@linux.dev>
-To: Suren Baghdasaryan <surenb@google.com>
-Cc: Matthew Wilcox <willy@infradead.org>, akpm@linux-foundation.org, 
-	joro@8bytes.org, will@kernel.org, trond.myklebust@hammerspace.com, 
-	anna@kernel.org, arnd@arndb.de, herbert@gondor.apana.org.au, davem@davemloft.net, 
-	jikos@kernel.org, benjamin.tissoires@redhat.com, tytso@mit.edu, jack@suse.com, 
-	dennis@kernel.org, tj@kernel.org, cl@linux.com, jakub@cloudflare.com, 
-	penberg@kernel.org, rientjes@google.com, iamjoonsoo.kim@lge.com, vbabka@suse.cz, 
-	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, iommu@lists.linux.dev, 
-	linux-kernel@vger.kernel.org, linux-nfs@vger.kernel.org, linux-acpi@vger.kernel.org, 
-	acpica-devel@lists.linux.dev, linux-arch@vger.kernel.org, linux-crypto@vger.kernel.org, 
-	bpf@vger.kernel.org, linux-input@vger.kernel.org, linux-ext4@vger.kernel.org, 
-	linux-mm@kvack.org, netdev@vger.kernel.org, linux-security-module@vger.kernel.org
-Subject: Re: [PATCH 1/1] mm: change inlined allocation helpers to account at
- the call site
-Message-ID: <qwwylzjcezfdyznm25epghmynvybgnzw2cmwahsyvwtqjrptsl@xdag7w65kn7b>
-References: <20240404165404.3805498-1-surenb@google.com>
- <Zg7dmp5VJkm1nLRM@casper.infradead.org>
- <CAJuCfpHbTCwDERz+Hh+aLZzNdtSFKA+Q7sW-xzvmFmtyHCqROg@mail.gmail.com>
- <CAJuCfpHy5Xo76S7h9rEuA3cQ1pVqurL=wmtQ2cx9-xN1aa_C_A@mail.gmail.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=Im8iB6czzszi+42rn7m7W/6NfkwvJRr+vWZEzMfwdhSjU1YIy+zUU+OkTntlkSNcNYwS2vUsy3JarqPfqfC5So9rM16DjjW+LNXj6a6aKWGrrcM5HxZu2/2vzjeZ0BkwGnKomlrucqQtEeGpyOA0eDKPziA8lI3z5gmOGa7ozew=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=manifault.com; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.166.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=manifault.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-io1-f49.google.com with SMTP id ca18e2360f4ac-7d33ccdb531so71802339f.0;
+        Thu, 04 Apr 2024 15:30:48 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1712269847; x=1712874647;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=XSelu9ePRHzAjK8EEcbffo/jkUgtGSViK/2Yc47Rxng=;
+        b=OOozQlFT2VVa/upWXgeXVbFkuzQuNz0Q0NsM5dWO92cdUT24zQdSqSJ3/3CdEPtGCt
+         eVhIMtL5FdnCaKFpi3EmCmB7CqAKhDqOKI2jY9DvYMUQacXZQSyLf00jA2aCz/+fX9BZ
+         pkXxaggdiZ1asvVk3Z5Jg0xvfnJNAYVGfXRBAtprZGjkJsN87q00p4GxxWo/Ics1Z+y/
+         Bsg2NHPtDNb3g/h07IkuNosfDel7V26JZEkgvUr2sEPys6s2+Bv2burNHpbqpQV5t2Ku
+         sUHvdKHJnZ6FzUrLdkwlqlFwMGQFMDyU2DbpPXL9fvMHymMYmSFkJ3QhrCxtDwtzERyn
+         VJ1A==
+X-Forwarded-Encrypted: i=1; AJvYcCWb/WXRORMXMD2f6eKTNt1+4JEKGrC1psjsXTHD3SICM4e/hYsxJZapX73hfi719VScG84v9gSbuPY5mpnCAleNYfp+kXGD4z+Ibglwz3pnE+oMzyOeS+1mEUfUFCENQ4iM
+X-Gm-Message-State: AOJu0YyLSNjpQoEN+6j7BiRF31oU1Z92tzrP/fvnRzTveuuyyficFKPN
+	IFI5Mg7AID2dhSouLh5w/wCygWt5qYzk1dhx1P2B9NUq2hkCkDt0
+X-Google-Smtp-Source: AGHT+IHDfIj9WduqsuFaIpAxWueppSRPhBG4XE9lUWx32V6VPsLztuw1hNNDOs3b+KeHbIsOWrryYQ==
+X-Received: by 2002:a6b:e20c:0:b0:7d0:5034:855a with SMTP id z12-20020a6be20c000000b007d05034855amr4667567ioc.17.1712269847280;
+        Thu, 04 Apr 2024 15:30:47 -0700 (PDT)
+Received: from maniforge (c-76-136-75-40.hsd1.il.comcast.net. [76.136.75.40])
+        by smtp.gmail.com with ESMTPSA id m35-20020a05663840a300b0047a3ac10c62sm183042jam.25.2024.04.04.15.30.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 04 Apr 2024 15:30:46 -0700 (PDT)
+Date: Thu, 4 Apr 2024 17:30:44 -0500
+From: David Vernet <void@manifault.com>
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: Yonghong Song <yonghong.song@linux.dev>, ast@kernel.org,
+	daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev,
+	song@kernel.org, john.fastabend@gmail.com, kpsingh@kernel.org,
+	sdf@google.com, haoluo@google.com, jolsa@kernel.org,
+	linux-kernel@vger.kernel.org, kernel-team@meta.com,
+	bpf <bpf@vger.kernel.org>
+Subject: Re: [PATCH bpf-next 2/2] selftests/bpf: Verify calling core kfuncs
+ from BPF_PROG_TYPE_SYCALL
+Message-ID: <20240404223044.GA521321@maniforge>
+References: <20240404010308.334604-1-void@manifault.com>
+ <20240404010308.334604-2-void@manifault.com>
+ <36bb0747-bff4-4fad-93ca-dae406f14099@linux.dev>
+ <20240404163316.GA385240@maniforge>
+ <CAEf4Bza3rGMh=S7yb_Crf8v_SBTrp+NiKn0_frZnWpEi30DkPg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="k5MxFGT/d2mJJJzb"
+Content-Disposition: inline
+In-Reply-To: <CAEf4Bza3rGMh=S7yb_Crf8v_SBTrp+NiKn0_frZnWpEi30DkPg@mail.gmail.com>
+User-Agent: Mutt/2.2.13 (2024-03-09)
+
+
+--k5MxFGT/d2mJJJzb
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJuCfpHy5Xo76S7h9rEuA3cQ1pVqurL=wmtQ2cx9-xN1aa_C_A@mail.gmail.com>
-X-Migadu-Flow: FLOW_OUT
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Apr 04, 2024 at 03:17:43PM -0700, Suren Baghdasaryan wrote:
-> On Thu, Apr 4, 2024 at 10:08 AM Suren Baghdasaryan <surenb@google.com> wrote:
+On Thu, Apr 04, 2024 at 03:16:56PM -0700, Andrii Nakryiko wrote:
+> On Thu, Apr 4, 2024 at 9:33=E2=80=AFAM David Vernet <void@manifault.com> =
+wrote:
 > >
-> > On Thu, Apr 4, 2024 at 10:04 AM Matthew Wilcox <willy@infradead.org> wrote:
+> > On Thu, Apr 04, 2024 at 09:04:19AM -0700, Yonghong Song wrote:
 > > >
-> > > On Thu, Apr 04, 2024 at 09:54:04AM -0700, Suren Baghdasaryan wrote:
-> > > > +++ b/include/linux/dma-fence-chain.h
-> > > > @@ -86,10 +86,7 @@ dma_fence_chain_contained(struct dma_fence *fence)
-> > > >   *
-> > > >   * Returns a new struct dma_fence_chain object or NULL on failure.
-> > > >   */
-> > > > -static inline struct dma_fence_chain *dma_fence_chain_alloc(void)
-> > > > -{
-> > > > -     return kmalloc(sizeof(struct dma_fence_chain), GFP_KERNEL);
-> > > > -};
-> > > > +#define dma_fence_chain_alloc()      kmalloc(sizeof(struct dma_fence_chain), GFP_KERNEL)
+> > > On 4/3/24 6:03 PM, David Vernet wrote:
+> > > > Now that we can call some kfuncs from BPF_PROG_TYPE_SYSCALL progs, =
+let's
+> > > > add some selftests that verify as much. As a bonus, let's also veri=
+fy
+> > > > that we can't call the progs from raw tracepoints.
+> > > >
+> > > > Signed-off-by: David Vernet <void@manifault.com>
 > > >
-> > > You've removed some typesafety here.  Before, if I wrote:
+> > > Ack with some comments below.
 > > >
-> > >         struct page *page = dma_fence_chain_alloc();
-> > >
-> > > the compiler would warn me that I've done something stupid.  Now it
-> > > can't tell.  Suggest perhaps:
-> > >
-> > > #define dma_fence_chain_alloc()                                           \
-> > >         (struct dma_fence_chain *)kmalloc(sizeof(struct dma_fence_chain), \
-> > >                                                 GFP_KERNEL)
-> > >
-> > > but maybe there's a better way of doing that.  There are a few other
-> > > occurrences of the same problem in this monster patch.
+> > > Acked-by: Yonghong Song <yonghong.song@linux.dev>
 > >
-> > Got your point.
-> 
-> Ironically, checkpatch generates warnings for these type casts:
-> 
-> WARNING: unnecessary cast may hide bugs, see
-> http://c-faq.com/malloc/mallocnocast.html
-> #425: FILE: include/linux/dma-fence-chain.h:90:
-> + ((struct dma_fence_chain *)kmalloc(sizeof(struct dma_fence_chain),
-> GFP_KERNEL))
-> 
-> I guess I can safely ignore them in this case (since we cast to the
-> expected type)?
+> > Thanks for the review. It looks like accidentally replied directly to
+> > me, so I'll re-add the missing cc's.
+> >
+>=20
+> And dropped bpf@vger :) adding back
 
-Correct, it's not hiding bugs in this case, it's adding type safety.
+*facepalm*, thanks!
 
-checkpatch is definitely not authoritative, you really have to use your
-own judgement with it
+>=20
+> > >
+> > > > ---
+> > > >   .../selftests/bpf/prog_tests/cgrp_kfunc.c     |  1 +
+> > > >   .../selftests/bpf/prog_tests/task_kfunc.c     |  1 +
+> > > >   .../selftests/bpf/progs/cgrp_kfunc_common.h   | 21 ++++++++++++++=
++++++
+> > > >   .../selftests/bpf/progs/cgrp_kfunc_failure.c  |  4 ++++
+> > > >   .../selftests/bpf/progs/cgrp_kfunc_success.c  |  4 ++++
+> > > >   .../selftests/bpf/progs/cpumask_common.h      | 19 ++++++++++++++=
++++
+> > > >   .../selftests/bpf/progs/cpumask_failure.c     |  4 ++++
+> > > >   .../selftests/bpf/progs/cpumask_success.c     |  3 +++
+> > > >   .../selftests/bpf/progs/task_kfunc_common.h   | 18 ++++++++++++++=
+++
+> > > >   .../selftests/bpf/progs/task_kfunc_failure.c  |  4 ++++
+> > > >   .../selftests/bpf/progs/task_kfunc_success.c  |  4 ++++
+> > > >   11 files changed, 83 insertions(+)
+> > > >
+> > > > diff --git a/tools/testing/selftests/bpf/prog_tests/cgrp_kfunc.c b/=
+tools/testing/selftests/bpf/prog_tests/cgrp_kfunc.c
+> > > > index adda85f97058..73f0ec4f4eb7 100644
+> > > > --- a/tools/testing/selftests/bpf/prog_tests/cgrp_kfunc.c
+> > > > +++ b/tools/testing/selftests/bpf/prog_tests/cgrp_kfunc.c
+> > > > @@ -102,6 +102,7 @@ void test_cgrp_kfunc(void)
+> > > >             run_success_test(success_tests[i]);
+> > > >     }
+> > > > +   RUN_TESTS(cgrp_kfunc_success);
+> > > >     RUN_TESTS(cgrp_kfunc_failure);
+> > > >   cleanup:
+> > > > diff --git a/tools/testing/selftests/bpf/prog_tests/task_kfunc.c b/=
+tools/testing/selftests/bpf/prog_tests/task_kfunc.c
+> > > > index d4579f735398..3db4c8601b70 100644
+> > > > --- a/tools/testing/selftests/bpf/prog_tests/task_kfunc.c
+> > > > +++ b/tools/testing/selftests/bpf/prog_tests/task_kfunc.c
+> > > > @@ -94,5 +94,6 @@ void test_task_kfunc(void)
+> > > >             run_success_test(success_tests[i]);
+> > > >     }
+> > > > +   RUN_TESTS(task_kfunc_success);
+> > > >     RUN_TESTS(task_kfunc_failure);
+> > > >   }
+> > >
+> > > The above RUN_TESTS(cgrp_kfunc_success) and RUN_TESTS(task_kfunc_succ=
+ess)
+> > > will do duplicate work for *existing* bpf programs in their respective
+> > > files. I think we still prefer to have cgrp_kfunc_success tests
+> > > in cgrp_kfunc.c to make it easy to cross check. But in order to
+> > > remove duplicate work, one option is to make other non-RUN_TESTS
+> > > programs in those files not auto-loaded and their corresponding
+> > > prog_tests/*.c file need to explicitly enable loading the problem.
+> >
+> > Good point, and yes I agree with that approach of not auto-loading
+> > non-RUN_TESTS programs. Considering that we have a  __success BTF tag to
+> > say, "this prog should successfully load", it seems odd that we'd also
+> > automatically load and validate progs that _didn't_ specify that tag as
+> > well. At that point, I'm not sure what value the tag is bringing. Also,
+>=20
+> Just more explicitness (if desired). Normally __success would be
+> augmented by __msg() or __retval(). I'd feel uncomfortable just
+
+But __success really has no actual purpose, right? Isn't it identical to
+if it's just left off? You don't need __success to specify __msg() or
+__retval() right?
+
+> silently skipping programs that are not marked with __success, as it
+> would be too easy to accidentally forget to add it and not know that
+> the BPF program is not tested.
+>
+> I'd say that RUN_TESTS-based programs should be kept separate from any
+> other BPF programs that have a custom user-space testing part, though.
+
+IF we do go this way, maybe just a __skip or something tag would be
+sufficient?
+
+> About the patch itself. I don't really see much point in adding
+> *_KFUNC_LOAD_TEST macros. They are used once or twice in total, while
+> obscuring *what* is actually being tested. Unless you expect to add 5+
+> more copies of them, I'd just inline them explicitly.
+
+It's not really important what's in the actual prog though -- the point
+is that we're verifying we can invoke some kfuncs in a certain prog
+type. But yes, it does obscure what's there, and I'm fine with
+copy-pasting them if that's your preference. The reason I went with a
+macro was to make it easy for us to quickly test new prog types as we
+add support for them, or to add other negative testcases for unsafe prog
+types. Right now we're just testing tracing progs.
+
+>=20
+> > that was the expected behavior before RUN_TESTS() was introduced, so it
+> > hopefully shouldn't cause much if any churn.
+> >
+> > > Maybe the current patch is okay even with duplicated work as it
+> > > should not take much time to verify those tiny problems.
+> >
+> > IMO it should be fine for now as the overhead for validating and loading
+> > these progs is low, but it'd definitely be good to address this problem
+> > in a follow-up. I don't think it should take too much effort -- AFAICT
+> > we'd just have to mark a test spec as invalid if it didn't have any BTF
+> > test tags. Ideally I'd like to separate that from this patch set, but I
+> > can do it here if folks want.
+> >
+> > Thanks,
+> > David
+
+--k5MxFGT/d2mJJJzb
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEARYKAB0WIQRBxU1So5MTLwphjdFZ5LhpZcTzZAUCZg8qFAAKCRBZ5LhpZcTz
+ZNKkAQD6mUZSIrtesSlM70yQ4aRp1xVkW/8MPgSzIVKKz60XCwD9EZI5Hh0d/3gE
+EYbdUZbeI9eaNobZQv99U2afSKWFNQc=
+=mXpL
+-----END PGP SIGNATURE-----
+
+--k5MxFGT/d2mJJJzb--
