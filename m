@@ -1,260 +1,842 @@
-Received: from mx0b-0016f401.pphosted.com (mx0a-0016f401.pphosted.com [67.231.148.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0240684FC8;
-	Thu,  4 Apr 2024 12:00:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=67.231.148.174
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712232024; cv=fail; b=AFSoxk+NXERk5SAm2zCpcma/0clzoehfeYZq0LKGpu6IHex3plOJ2zhOcSLANAJ2cLdumtUScu/GwmL/aVUJVhjaI2huvABa9tf73fKMZk8aQE5z7kLdZS0CFVnorH4H3gy7faYXSj1Bhj6NZkOIl17aq82XJ6AaRlHdmeraZXk=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712232024; c=relaxed/simple;
-	bh=InlPW5xXIyT7uBQBYqXWC+yKGeFrc8qL7XTwHMM8AKM=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=VJjcRVMqWICfxJNsGUg/RUsAGr0g+Y28YxOYXidVAg4Iw0h8Ua4nV7EVJyrdCY2TEt/J3gwLkhXFfP2sDeOpke1Pl2dbR9K58YlMWq+xamRfAtbxChwTEmwMqtZ9UuDiIuhBF2WplNgWSfR9Gi0qv4MP5g4dkZZxiFILZ4M9q6w=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marvell.com; spf=pass smtp.mailfrom=marvell.com; dkim=pass (1024-bit key) header.d=marvell.com header.i=@marvell.com header.b=Dy6V8SpL; arc=fail smtp.client-ip=67.231.148.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marvell.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=marvell.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67110126F3B
+	for <bpf@vger.kernel.org>; Thu,  4 Apr 2024 12:23:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.177
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1712233425; cv=none; b=sGq5SxPwFixbSLC/XgSLyhi966NR0e/QxqlDI6XKd08yvg2kQtAQs/z3Is6lNCX2Y+BLzqwHhcm1V5rCnJSj09CTx7bB73DEpP+idxToqFBHww6t7sbJgpUz3eqC3DXk2oeVKmc0rRHCnJUX4sq0o7/sTusTASMLb2hBZovic80=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1712233425; c=relaxed/simple;
+	bh=XycvVAPEa//Al8jp4OQJ/CPR7f6Sv2UdXdSwT/4677Y=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=fNeug/zFzZXZDOpNB3AOQKNAMU8c+X/m2ZJ5YxRLaqjz1Q57Eob9kfYosFTVWH0O/lSFOtRpFbRmIpKD3N3HGgUcIOxhIMmBoHBKpjZ3E5RNeuMTXWPtGOIiICnRtxYBnxDD4qOmPG8uzHO9xB4L5wYwX9ObEZczDhNFD4U2yWY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mojatatu.com; spf=none smtp.mailfrom=mojatatu.com; dkim=pass (2048-bit key) header.d=mojatatu-com.20230601.gappssmtp.com header.i=@mojatatu-com.20230601.gappssmtp.com header.b=b/IDg055; arc=none smtp.client-ip=209.85.160.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mojatatu.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=mojatatu.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=marvell.com header.i=@marvell.com header.b="Dy6V8SpL"
-Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
-	by mx0a-0016f401.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 434B5MWu025088;
-	Thu, 4 Apr 2024 04:59:41 -0700
-Received: from nam12-bn8-obe.outbound.protection.outlook.com (mail-bn8nam12lp2168.outbound.protection.outlook.com [104.47.55.168])
-	by mx0a-0016f401.pphosted.com (PPS) with ESMTPS id 3x9em4j3st-2
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 04 Apr 2024 04:59:40 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=SMjT+Tid+E7C3F7BEdzq27N4brtaFXdMlOJcJXNWj7ajOBF5RLQRE0Lm1LzNKQU4TttGBRlqIx2hG3pTbnWgyUPKqI50UllEux81guntgIEr53ht4BJP3i9YsZLVVLsfyqpKbFXbUpDWhhL1639K2gzkVs0kpe9XsD2UDwKKX8uLWsZ5kV5Hu0luArTp648oGDHqrHOxy6jAObq/PZR+j27lYlTP0r/1skquM7fvOmXwyFqlCVMzcTtSmjL4XcPEBLh5/mMt8dFaNO5C1qtepGH/nXXyBpxCzxdlJ/IRhLExHzlT+YlCNCi6qleDF7Mz6wpRY2y99V5du1JfVuurCw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=IDPSAWSwfnTZArYexH9zq1yU9vYAepXw2UrgkkRuNpw=;
- b=Zbje2aGBKFYKOl75Z2rbd+v3jKVRHfqaBSrhbt0f8NXuu1qdGYwxzY+0P6eFo56fxQixxF5bJT0AQRkfBHI0TWjoVOamGN6BYeWpQeOCaT6lF48XLOeDlZ/yJvRhw33d5XU47ydm26XfPW/fYwdIJBxnFmDEADP+zB/DvCuUG12vFUgLCRZYy0obi85eICKVX6WBlyPGw/esFPTyrJsVGPvUySyIdyZPXOoHlx5rkIhs7FH5Buc7iEcAdf+U0yez3FSIBSUUtDPk7mRyq2zsUiefJJX01f6/eVyBEcML0gvg9FStokbxNexm9zTZxjC5vjD7L5vaeb8P1475R9O5Dg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=marvell.com; dmarc=pass action=none header.from=marvell.com;
- dkim=pass header.d=marvell.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=IDPSAWSwfnTZArYexH9zq1yU9vYAepXw2UrgkkRuNpw=;
- b=Dy6V8SpL4dv1VDPd5q990XczeAUWw2nyNhVNClFGZ1m15UpBafCEj5WrJU7MIhhf7yAuhLRLwzTXloLc/N43EsOAYF7YH9caI+yUxFlcUwMdh44M8gpiqkdSR9N9s65OfCmBiCX/htHdvBUpNtNgStnu+8ISdNHq73Z3dsQL4pQ=
-Received: from BL1PR18MB4248.namprd18.prod.outlook.com (2603:10b6:208:311::15)
- by DM4PR18MB5449.namprd18.prod.outlook.com (2603:10b6:8:180::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7409.46; Thu, 4 Apr
- 2024 11:59:35 +0000
-Received: from BL1PR18MB4248.namprd18.prod.outlook.com
- ([fe80::1aec:98f1:125e:8fbb]) by BL1PR18MB4248.namprd18.prod.outlook.com
- ([fe80::1aec:98f1:125e:8fbb%2]) with mapi id 15.20.7409.042; Thu, 4 Apr 2024
- 11:59:35 +0000
-From: Elad Nachman <enachman@marvell.com>
-To: Breno Leitao <leitao@debian.org>,
-        "aleksander.lobakin@intel.com"
-	<aleksander.lobakin@intel.com>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "pabeni@redhat.com"
-	<pabeni@redhat.com>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "elder@kernel.org" <elder@kernel.org>,
-        "linux-arm-kernel@lists.infradead.org"
-	<linux-arm-kernel@lists.infradead.org>,
-        "linux-mediatek@lists.infradead.org"
-	<linux-mediatek@lists.infradead.org>,
-        "nbd@nbd.name" <nbd@nbd.name>,
-        "sean.wang@mediatek.com" <sean.wang@mediatek.com>,
-        "Mark-MC.Lee@mediatek.com"
-	<Mark-MC.Lee@mediatek.com>,
-        "lorenzo@kernel.org" <lorenzo@kernel.org>,
-        Taras
- Chornyi <taras.chornyi@plvision.eu>
-CC: "quic_jjohnson@quicinc.com" <quic_jjohnson@quicinc.com>,
-        "kvalo@kernel.org" <kvalo@kernel.org>,
-        "leon@kernel.org" <leon@kernel.org>,
-        "dennis.dalessandro@cornelisnetworks.com"
-	<dennis.dalessandro@cornelisnetworks.com>,
-        "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>,
-        "netdev@vger.kernel.org"
-	<netdev@vger.kernel.org>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>
-Subject: RE: [EXTERNAL] [PATCH net-next v3 2/5] net: marvell: prestera:
- allocate dummy net_device dynamically
-Thread-Topic: [EXTERNAL] [PATCH net-next v3 2/5] net: marvell: prestera:
- allocate dummy net_device dynamically
-Thread-Index: AQHahoZqP8FVQ8wG0EWJ9wkRDreQkrFYAftg
-Date: Thu, 4 Apr 2024 11:59:35 +0000
-Message-ID: 
- <BL1PR18MB42485B5BE1D65A5E4BFFAD66DB3C2@BL1PR18MB4248.namprd18.prod.outlook.com>
-References: <20240404114854.2498663-1-leitao@debian.org>
- <20240404114854.2498663-3-leitao@debian.org>
-In-Reply-To: <20240404114854.2498663-3-leitao@debian.org>
-Accept-Language: he-IL, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BL1PR18MB4248:EE_|DM4PR18MB5449:EE_
-x-ld-processed: 70e1fb47-1155-421d-87fc-2e58f638b6e0,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 
- YkO/3RaYjgXQeU2sHefCYtrBpZYmIP4KXBznzZjEhhbi0hd/uY7Q4dgIzOGWDWBC2QicSuYb2DqAIPFhNIqQD0yPK5yrSHJvWPdVsXJplPaNa6c/8smtMzrcu7BmHwNvWgnzMWHeEBCN4f76VItHa1p2U6JmSnzUR62UiyZDRqa/AkMi65l0AyMpPXkG/UGpg88GNW9cBCrs6xxcg1FtU8HYOHlOW7472hRCTmLlgKjILEbtw6KQHhsUKaUsmMx+X8KLYIcz0e0S1pyzDBK0BtA1pNF1pYw7Yw4k09uP9yNB/LWiY6giICfeamPd3wFMKUuBR87d5lo77P+rSN162fweO5L14xZqwwpOIror8LZKDRFvieUPzE2jt/tKDKwvrp8l6BL1oE0fMrK/9naTlBZsOkd4ZLJOnYzGQa7yjXXXFG5ay0KM+azsnixsm8O2ky+B0i2ck2OQiiwlsbw6T2qNO5CSTBYrZ8Ti+/NIvK5SoS99zqea0/JYzpPsdj5bw9TpiV0q6lioUkU36xNgvQ+Rr6TtfuHYfh2yC2wJExrwIYgXl6vJHNfuPmKAUr1tJqrpjiuF3RBG+VROurlwsEmz1GAFG+IaPZ3XBHf4N6r5W6V+RLsYgf1CtYxRbOOKR1qja4yXtHV+H8EYhBqojQ==
-x-forefront-antispam-report: 
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR18MB4248.namprd18.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(366007)(376005)(7416005)(1800799015)(921011);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: 
- =?us-ascii?Q?bm6xj5h0/eB2hBqqtFqpNizBrGt8vWDGLOO9sQ7jDEv0VF/3FI4QOWH+0g23?=
- =?us-ascii?Q?6Z2rGtljgvODKWmOYloBWwSb+G8cHfvh80QitNpgNsILEij3eKYDZGbgQT+H?=
- =?us-ascii?Q?jZAx5vjvrn+Nm80LIUyjLL70b2w6koaDNwTEv0DQx2HKLpRukJU3hsdpOT72?=
- =?us-ascii?Q?ZM3X2Ycb7TlGYN+nlu7hGqAxp+v/3Z9FC55QtQOqYk1Jm3M7DntuY+IUEkT6?=
- =?us-ascii?Q?VSQMvRb2lTXbpgzBpPLBMt2pXb51xgUz2xR3F7L6/dJPjsf6WDzlVBZAssKG?=
- =?us-ascii?Q?dvb72zeCCyMM3gExPbqufBUWJVw5QdkiIYrhUBJfVDav0SKiTbXqbh7SVNNJ?=
- =?us-ascii?Q?jECA9GWYwxD1q/1HdUmx7CIiePA6CCImVH2pikXhdXTN8rz8Rcypzl9p2QTL?=
- =?us-ascii?Q?zyT6ybYLb4gEIpwm1CiqJDx+fkFT+8TA6NlTcuPT4p0rbnyuo1HbmBC8QEhT?=
- =?us-ascii?Q?G/yCNJEM2j00ucceFUNvwluuWKA0U9cx3BwvmzWspcnM4Z4ZBnkd7/qjscVy?=
- =?us-ascii?Q?n/QT1M70U77KUsa0Bj5LHARzOJQMgHJ4ZeiP9yD3FjThLlV2p553VAbcgZDy?=
- =?us-ascii?Q?7eamCetGp68vGwtC+HzXTaD/viO6/oBJdEmAg/3lHKKkNHC0CjAR/mfXLEGW?=
- =?us-ascii?Q?2euY/5OMzrfRFFQzugvdicQG0wzM7DQd8BMpmpnfv5KbGltDpcogXlM7f6+B?=
- =?us-ascii?Q?yxK4x0wXNeQXit/wj6rOe7chTZ7PWEW8MNTJuIPwLixINsg51/4K1RHk+ue4?=
- =?us-ascii?Q?E/PBMCNGFM3092+JOrvvJll66T1Aci5Pez3cVtXXqDl/iJlrGVAo8QYSExGO?=
- =?us-ascii?Q?Qur5C3hjeYeoY8rT00CGAAjTfAlSszWbp6KLvECopSTqQr7NCqVxvEi1x0N0?=
- =?us-ascii?Q?7Aa2+0wdyvdxNuiSqBe2RmWtThRQLPr8okT5aDl6xDFaz4H3+6NQuTFFdv6u?=
- =?us-ascii?Q?HAXNlGu2prfGNOBWnlxZHlKFOs5wtmDbPsWvvp5xXkuaPyXi04dOHAQd7We1?=
- =?us-ascii?Q?jUSJd1uJO8Te9NzoMSHxXvmnOTpQMfIQQTEPJnn9Yx2zPYKi9X/8QDqxQdcV?=
- =?us-ascii?Q?2Y2YrYaoTw2a9dgSUU/sF05g4Kcpa5fRpNgwjMQIFiO87AN5MxZR4LFgyoz/?=
- =?us-ascii?Q?pNqzh6qGkNemviEFQ2JWfz8VzW8sobX/nEM42Q50Eq1ZuOiJgQwO/ITny49g?=
- =?us-ascii?Q?xNJuP2W/adRBGtbvSYiIX9q0mlJTXl0KtP86MBd7xLlSupsvtTnJJeUNmRAC?=
- =?us-ascii?Q?US5dpNtUBzRTiOazlSjDlZbDSyaER2LiUGN4DX6X5bde68pOre57ZPyHxODm?=
- =?us-ascii?Q?btM71aFJagrZOletp200VmjbAeeu1rRBhmSLqApfih85iQpbWzW6hG1wfV4N?=
- =?us-ascii?Q?3NFhnCvbOwnDhftoiycHFF/+jFiO5wl7SdG3CgbWYQjXVzae27Q4FOGXDwMR?=
- =?us-ascii?Q?wtbOJ0S0w03V18sZZ9obnHx5IbM3QC1h9B8zSnTlZXxsVmxlyokEMZJZZ/1i?=
- =?us-ascii?Q?tfvBcFn25B7TK5MBlF/Z3+JTT3s+QFE+AeD5cJCvOAidVH7GaDcwb9uoZRo+?=
- =?us-ascii?Q?7IT+oRq00U3/dDzbUMoq1DKICo4QSPRC0a8JrOaHS0Foko+Ia918vQKPtayW?=
- =?us-ascii?Q?6d8COoqOnC36x7ve7ihrOEV7upVDUvVdMq8n2eduk5kO?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+	dkim=pass (2048-bit key) header.d=mojatatu-com.20230601.gappssmtp.com header.i=@mojatatu-com.20230601.gappssmtp.com header.b="b/IDg055"
+Received: by mail-qt1-f177.google.com with SMTP id d75a77b69052e-432b72c706cso6811431cf.1
+        for <bpf@vger.kernel.org>; Thu, 04 Apr 2024 05:23:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=mojatatu-com.20230601.gappssmtp.com; s=20230601; t=1712233421; x=1712838221; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=+yeB7fh1ZRcdfippY6yrVEa8408v7Y4hCxVuOPEc98A=;
+        b=b/IDg055I7pJ/ZB4ZS6W8lVIO3CwQW5JUOJDR+08ntgVmhnL7aWD/gEQMaCn2IJpL3
+         ulxv5IzvNG96GQ0icFKY9wrixWzUfGStJ8rdUbxVsq0yRQKbTLYze9yvW5KO/eTjR1S+
+         3CPiuydS36D2iPNcky1MjtDbb7ow54QhlVh58Wm3+/viZaBXSvDC06RNR0l0yE6Wyt/N
+         lYW+cE/vvACA8/7WfGLtWKj7UkhcrHsfRETSIRmm7ikom+Jugr9W6Q/7Z0BlVzlGWup1
+         s+e91m45lPMsTf9tTjBW/29aD1GkC/iDuiNvcbH47Z4T4CPVuobnH++Iv7oa14V6xRPC
+         AtOA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1712233421; x=1712838221;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+yeB7fh1ZRcdfippY6yrVEa8408v7Y4hCxVuOPEc98A=;
+        b=HV4sYsA8OQ53YPiNXMhlg17kyitImft/+HtFrQP5IavnDjt2TXzW9E8C4MMw+TWZJb
+         QBCKq1ofn5D/leL9fWeE++0pWVeS1vdssjzg7v24tMLE0vxL1RAaT7OdBgL99swYRL6B
+         t9ZNzdCvXk138VkSsZlzY7nQOysHHwPLIkbQg3s4M5mgahlhlzlqYPOp1bTSutKtZDWH
+         LA3SCu2IoJgj/7VIQ+J9a6XW8/yJ8ws/vejwcGKl+VHfqLbBIxLJsZOJQPkNUCkA/oeD
+         aAS+f01UZbMOjqAKAdWHn0C3cxOmym5xZecl2e9Z+jnVVaJtrJU/9COLxrm91m3pqiTo
+         sH7Q==
+X-Forwarded-Encrypted: i=1; AJvYcCWE1lkSGErQ6QdgZVm7MmS+O0tkDsL9SgaVQGdjwPyGpzcA0GvYWl4vC+VVmyI/R2fBkgnP//4Lrujux4Ec9nfv9zFl
+X-Gm-Message-State: AOJu0YwNTlHeR9FZFfgIEyh0EzYCO3HZU/VVv7FCujzTFmrbdgTYhVNk
+	XsCVWhvWlPZqVE9392NEOXRyOq4Ycp6zSb6v4iFid11p9AbBs01J+ngk5CW5Qw==
+X-Google-Smtp-Source: AGHT+IHl1C1P3X/kxOKC9n5M60PadInqxkZ0yxdrApZ52jlO63PjjuNCfBdCRhrh1taJdbkIUNJXPA==
+X-Received: by 2002:a05:622a:1a11:b0:432:b560:41fa with SMTP id f17-20020a05622a1a1100b00432b56041famr4089839qtb.34.1712233420537;
+        Thu, 04 Apr 2024 05:23:40 -0700 (PDT)
+Received: from majuu.waya (bras-base-kntaon1621w-grc-19-174-94-28-98.dsl.bell.ca. [174.94.28.98])
+        by smtp.gmail.com with ESMTPSA id bb19-20020a05622a1b1300b00434508cfb62sm584945qtb.79.2024.04.04.05.23.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 04 Apr 2024 05:23:39 -0700 (PDT)
+From: Jamal Hadi Salim <jhs@mojatatu.com>
+To: netdev@vger.kernel.org
+Cc: deb.chatterjee@intel.com,
+	anjali.singhai@intel.com,
+	namrata.limaye@intel.com,
+	tom@sipanda.io,
+	mleitner@redhat.com,
+	Mahesh.Shirshyad@amd.com,
+	Vipin.Jain@amd.com,
+	tomasz.osinski@intel.com,
+	jiri@resnulli.us,
+	xiyou.wangcong@gmail.com,
+	davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	vladbu@nvidia.com,
+	dan.daly@intel.com,
+	andy.fingerhut@gmail.com,
+	chris.sommers@keysight.com,
+	mattyk@nvidia.com,
+	horms@kernel.org,
+	khalidm@nvidia.com,
+	toke@redhat.com,
+	daniel@iogearbox.net,
+	victor@mojatatu.com,
+	pctammela@mojatatu.com,
+	bpf@vger.kernel.org
+Subject: [PATCH net-next v14  00/15] Introducing P4TC (series 1)
+Date: Thu,  4 Apr 2024 08:23:23 -0400
+Message-Id: <20240404122338.372945-1-jhs@mojatatu.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: marvell.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BL1PR18MB4248.namprd18.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3fc65f80-31cf-439f-3411-08dc549eb244
-X-MS-Exchange-CrossTenant-originalarrivaltime: 04 Apr 2024 11:59:35.1707
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 70e1fb47-1155-421d-87fc-2e58f638b6e0
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: Ha22FzKSmSDhfu5WB4jv4fXuWk3yKFq1gY6pchfdavoYKfwpoRWharb0QevipPb91Geo87D1oBexLt8/nlXhJg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR18MB5449
-X-Proofpoint-ORIG-GUID: OYo3Zh_de3VvhoORAxnAbfcn4934T1cO
-X-Proofpoint-GUID: OYo3Zh_de3VvhoORAxnAbfcn4934T1cO
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-04-04_08,2024-04-04_01,2023-05-22_02
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
 
+This is the first patchset of two. In this patch we are submitting 15 which
+cover the minimal viable P4 PNA architecture.
+Please, if you want to discuss a slightly tangential subject like offload
+or even your politics then start another thread with a different subject
+line.  The way you do it is to change the subject line to for example
+"<Your New Subject here> (WAS: <original subject line here>)".
 
-> -----Original Message-----
-> From: Breno Leitao <leitao@debian.org>
-> Sent: Thursday, April 4, 2024 2:49 PM
-> To: aleksander.lobakin@intel.com; kuba@kernel.org; davem@davemloft.net;
-> pabeni@redhat.com; edumazet@google.com; elder@kernel.org; linux-arm-
-> kernel@lists.infradead.org; linux-mediatek@lists.infradead.org;
-> nbd@nbd.name; sean.wang@mediatek.com; Mark-MC.Lee@mediatek.com;
-> lorenzo@kernel.org; Taras Chornyi <taras.chornyi@plvision.eu>
-> Cc: quic_jjohnson@quicinc.com; kvalo@kernel.org; leon@kernel.org;
-> dennis.dalessandro@cornelisnetworks.com; linux-kernel@vger.kernel.org;
-> netdev@vger.kernel.org; bpf@vger.kernel.org
-> Subject: [EXTERNAL] [PATCH net-next v3 2/5] net: marvell: prestera: alloc=
-ate
-> dummy net_device dynamically
->=20
-> Prioritize security for external emails: Confirm sender and content safet=
-y
-> before clicking links or opening attachments
->=20
-> ----------------------------------------------------------------------
-> Embedding net_device into structures prohibits the usage of flexible arra=
-ys in
-> the net_device structure. For more details, see the discussion at [1].
->=20
-> Un-embed the net_device from the private struct by converting it into a
-> pointer. Then use the leverage the new alloc_netdev_dummy() helper to
-> allocate and initialize dummy devices.
->=20
-> [1] https://urldefense.proofpoint.com/v2/url?u=3Dhttps-
-> 3A__lore.kernel.org_all_20240229225910.79e224cf-
-> 40kernel.org_&d=3DDwIDAg&c=3DnKjWec2b6R0mOyPaz7xtfQ&r=3DeTeNTLEK5-
-> TxXczjOcKPhANIFtlB9pP4lq9qhdlFrwQ&m=3D8Fqw_UUg1WoXjQcCjAtMa9J6QAd
-> lmUzCuk3nWriMXtYMbgBqNpdDSO4rBUanJDxw&s=3DlXBodHe9jPOjWAOTFCjnZ
-> 2ZDZYoF79OGsWN38gbxhTE&e=3D
->=20
-> Signed-off-by: Breno Leitao <leitao@debian.org>
-> ---
->  .../net/ethernet/marvell/prestera/prestera_rxtx.c | 15 ++++++++++++---
->  1 file changed, 12 insertions(+), 3 deletions(-)
->=20
-> diff --git a/drivers/net/ethernet/marvell/prestera/prestera_rxtx.c
-> b/drivers/net/ethernet/marvell/prestera/prestera_rxtx.c
-> index cc2a9ae794be..39d9bf82c115 100644
-> --- a/drivers/net/ethernet/marvell/prestera/prestera_rxtx.c
-> +++ b/drivers/net/ethernet/marvell/prestera/prestera_rxtx.c
-> @@ -96,7 +96,7 @@ struct prestera_sdma {
->  	struct dma_pool *desc_pool;
->  	struct work_struct tx_work;
->  	struct napi_struct rx_napi;
-> -	struct net_device napi_dev;
-> +	struct net_device *napi_dev;
->  	u32 map_addr;
->  	u64 dma_mask;
->  	/* protect SDMA with concurrent access from multiple CPUs */ @@ -
-> 654,13 +654,21 @@ static int prestera_sdma_switch_init(struct
-> prestera_switch *sw)
->  	if (err)
->  		goto err_evt_register;
->=20
-> -	init_dummy_netdev(&sdma->napi_dev);
-> +	sdma->napi_dev =3D alloc_netdev_dummy(0);
-> +	if (!sdma->napi_dev) {
-> +		dev_err(dev, "not able to initialize dummy device\n");
-> +		err =3D -ENOMEM;
-> +		goto err_alloc_dummy;
-> +	}
->=20
-> -	netif_napi_add(&sdma->napi_dev, &sdma->rx_napi,
-> prestera_sdma_rx_poll);
-> +	netif_napi_add(sdma->napi_dev, &sdma->rx_napi,
-> prestera_sdma_rx_poll);
->  	napi_enable(&sdma->rx_napi);
->=20
->  	return 0;
->=20
-> +err_alloc_dummy:
-> +	prestera_hw_event_handler_unregister(sw,
-> PRESTERA_EVENT_TYPE_RXTX,
-> +					     prestera_rxtx_handle_event);
->  err_evt_register:
->  err_tx_init:
->  	prestera_sdma_tx_fini(sdma);
-> @@ -677,6 +685,7 @@ static void prestera_sdma_switch_fini(struct
-> prestera_switch *sw)
->=20
->  	napi_disable(&sdma->rx_napi);
->  	netif_napi_del(&sdma->rx_napi);
-> +	free_netdev(sdma->napi_dev);
->  	prestera_hw_event_handler_unregister(sw,
-> PRESTERA_EVENT_TYPE_RXTX,
->  					     prestera_rxtx_handle_event);
->  	prestera_sdma_tx_fini(sdma);
-> --
-> 2.43.0
->=20
+In this cover letter i am restoring text i took out in V10 which stated
+"our requirements".
 
-Acked-by: Elad Nachman <enachman@marvell.com>
+Martin, please look at patch 14 again. The bpf selftests for kfuncs is
+sloted for series 2. Paolo, please take a look at 1, 3, 6 for the changes
+you suggested. Marcelo, because we made changes to patch 14, I have
+removed your reviewed-by. Can you please take another look at that patch?
+
+__Description of these Patches__
+
+These Patches are constrained entirely within the TC domain with very tiny
+changes made in patch 1-5. eBPF is used as an infrastructure component for
+the software datapath and no changes are made to any eBPF code, only kfuncs
+are introduced in patch 14.
+
+Patch #1 adds infrastructure for per-netns P4 actions that can be created on
+as need basis for the P4 program requirement. This patch makes a small
+incision into act_api. Patches 2-4 are minimalist enablers for P4TC and have
+no effect on the classical tc action (example patch#2 just increases the size
+of the action names from 16->64B).
+Patch 5 adds infrastructure support for preallocation of dynamic actions
+needed for P4.
+
+The core P4TC code implements several P4 objects.
+1) Patch #6 introduces P4 data types which are consumed by the rest of the
+   code
+2) Patch #7 introduces the templating API. i.e. CRUD commands for templates
+3) Patch #8 introduces the concept of templating Pipelines. i.e CRUD
+   commands for P4 pipelines.
+4) Patch #9 introduces the action templates and associated CRUD commands.
+5) Patch #10 introduce the action runtime infrastructure.
+6) Patch #11 introduces the concept of P4 table templates and associated
+   CRUD commands for tables.
+7) Patch #12 introduces runtime table entry infra and associated CU
+   commands.
+8) Patch #13 introduces runtime table entry infra and associated RD
+   commands.
+9) Patch #14 introduces interaction of eBPF to P4TC tables via kfunc.
+10) Patch #15 introduces the TC classifier P4 used at runtime.
+
+There are a few more patches not in this patchset that deal with externs,
+test cases, etc.
+
+What is P4?
+-----------
+
+The Programming Protocol-independent Packet Processors (P4) is an open
+source, domain-specific programming language for specifying data plane
+behavior.
+
+The current P4 landscape includes an extensive range of deployments,
+products, projects and services, etc[9][12]. Two major NIC vendors,
+Intel[10] and AMD[11] currently offer P4-native NICs. P4 is currently
+curated by the Linux Foundation[9].
+
+A lot more on why P4 - see small treatise here:[4].
+
+What is P4TC?
+-------------
+
+P4TC is a net-namespace aware P4 implementation over TC; meaning, a P4
+program and its associated objects and state are attachend to a kernel
+_netns_ structure.
+IOW, if we had two programs across netns' or within a netns they have no
+visibility to each others objects (unlike for example TC actions whose
+kinds are "global" in nature or eBPF maps visavis bpftool).
+
+P4TC builds on top of many years of Linux TC experiences of a netlink
+control path interface coupled with a software datapath with an equivalent
+offloadable hardware datapath. In this patch series we are focussing only
+on the s/w datapath. The s/w and h/w path equivalence that TC provides is
+relevant for a primary use case of P4 where some (currently) large consumers
+of NICs provide vendors their datapath specs in P4. In such a case one could
+generate specified datapaths in s/w and test/validate the requirements
+before hardware acquisition(example [12]).
+
+Unlike other approaches such as TC Flower which require kernel and user
+space changes when new datapath objects like packet headers are introduced
+P4TC requires zero kernel or user space changes. We refer to this as:
+_kernel and user space code change independence_.
+Meaning:
+A P4 program describes headers, how to parse, etc alongside prescribing
+the datapath processing logic; the compiler uses the P4 program as input
+and generates several artifacts which are then loaded into the kernel to
+manifest the intended datapath. In addition to the generated datapath,
+control path constructs are generated. The process is described further
+below in "P4TC Workflow".
+
+Some History
+------------
+
+There have been many discussions and meetings within the community since
+about 2015 in regards to P4 over TC[2] and we are finally proving to the
+naysayers that we do get stuff done!
+
+A lot more of the P4TC motivation is captured at:
+https://github.com/p4tc-dev/docs/blob/main/why-p4tc.md
+
+__P4TC Architecture__
+
+The current architecture was described at netdevconf 0x17[14] and if you
+prefer academic conference papers, a short paper is available here[15].
+
+There are 4 parts:
+
+1) A Template CRUD provisioning API for manifesting a P4 program and its
+associated objects in the kernel. The template provisioning API uses
+netlink.  See patch in part 2.
+
+2) A Runtime CRUD+ API code which is used for controlling the different
+runtime behavior of the P4 objects. The runtime API uses netlink. See notes
+further down. See patch descriptions...
+
+3) P4 objects and their control interfaces: tables, actions, externs, etc.
+Any object that requires control plane interaction resides in the TC domain
+and is subject to the CRUD runtime API.  The intended goal is to make use
+of the tc semantics of skip_sw/hw to target P4 program objects either in s/w
+or h/w.
+
+4) S/W Datapath code hooks. The s/w datapath is eBPF based and is generated
+by a compiler based on the P4 spec. When accessing any P4 object that
+requires control plane interfaces, the eBPF code accesses the P4TC side
+from #3 above using kfuncs.
+
+The generated eBPF code is derived from [13] with enhancements and fixes to
+meet our requirements.
+
+__P4TC Workflow__
+
+The Development and instantiation workflow for P4TC is as follows:
+
+  A) A developer writes a P4 program, "myprog"
+
+  B) Compiles it using the P4C compiler[8]. The compiler generates 3
+     outputs:
+
+     a) A shell script which form template definitions for the different P4
+        objects "myprog" utilizes (tables, externs, actions etc). See #1
+        above
+
+     b) The parser and the rest of the datapath are generated as eBPF and
+        need to be compiled into binaries. At the moment the parser and the
+        main control block are generated as separate eBPF program but this
+        could change in the future (without affecting any kernel code).
+        See #4 above.
+
+     c) A json introspection file used for the control plane
+        (by iproute2/tc).
+
+  C) At this point the artifacts from #1,#4 could be handed to an operator
+     (the operator could be the same person as the developer from #A, #B).
+
+     i) For the eBPF part, either the operator is handed an ebpf binary or
+     source which they compile at this point into a binary.
+     The operator executes the shell script(s) to manifest the functional
+     "myprog" into the kernel.
+
+     ii) The operator instantiates "myprog" pipeline via the tc P4 filter
+     to ingress/egress (depending on P4 arch) of one or more netdevs/ports
+     (illustrated below as "block 22").
+
+     Example instantion where the parser is a separate action:
+       "tc filter add block 22 ingress protocol all prio 10 \
+        p4 pname myprog \
+        action bpf obj $PARSER.o section p4tc/parse \
+        action bpf obj $PROGNAME.o section p4tc/main"
+
+See individual patches in partc for more examples tc vs xdp etc. Also see
+section on "challenges" (further below on this cover letter).
+
+Once "myprog" P4 program is instantiated one can start performing operations
+on table entries and/or actions at runtime as described below.
+
+__P4TC Runtime Control Path__
+
+The control interface builds on past tc experience and tries to get things
+right from the beginning (example filtering is separated from depending
+on existing object TLVs and made generic); also the code is written in
+such a way it is mostly lockless.
+
+The P4TC control interface, using netlink, provides what we call a CRUDPS
+abstraction which stands for: Create, Read(get), Update, Delete, Subscribe,
+Publish.  From a high level PoV the following describes a conformant high
+level API (both on netlink data model and code level):
+
+	Create(</path/to/object, DATA>+)
+	Read(</path/to/object>, [optional filter])
+	Update(</path/to/object>, DATA>+)
+	Delete(</path/to/object>, [optional filter])
+	Subscribe(</path/to/object>, [optional filter])
+
+Note, we _dont_ treat "dump" or "flush" as speacial. If "path/to/object"
+points to a table then a "Delete" implies "flush" and a "Read" implies dump
+but if it points to an entry (by specifying a key) then "Delete" implies
+deleting and entry and "Read" implies reading that single entry. It should
+be noted that both "Delete" and "Read" take an optional filter parameter.
+The filter can define further refinements to what the control plane wants
+read or deleted.
+"Subscribe" uses built in netlink event management. It, as well, takes a
+filter which can further refine what events get generated to the control
+plane (taken out of this patchset, to be re-added with consideration of
+[16]).
+
+Lets show some runtime samples:
+
+..create an entry, if we match ip address 10.0.1.2 send packet out eno1
+  tc p4ctrl create myprog/table/mytable \
+   dstAddr 10.0.1.2/32 action send_to_port param port eno1
+
+..Batch create entries
+  tc p4ctrl create myprog/table/mytable \
+  entry dstAddr 10.1.1.2/32  action send_to_port param port eno1 \
+  entry dstAddr 10.1.10.2/32  action send_to_port param port eno10 \
+  entry dstAddr 10.0.2.2/32  action send_to_port param port eno2
+
+..Get an entry (note "read" is interchangeably used as "get" which is a
+common semantic in tc):
+  tc p4ctrl read myprog/table/mytable \
+   dstAddr 10.0.2.2/32
+
+..dump mytable
+  tc p4ctrl read myprog/table/mytable
+
+..dump mytable for all entries whose key fits within 10.1.0.0/16
+  tc p4ctrl read myprog/table/mytable \
+  filter key/myprog/mytable/dstAddr = 10.1.0.0/16
+
+..dump all mytable entries which have an action send_to_port with param "eno1"
+  tc p4ctrl get myprog/table/mytable \
+  filter param/act/myprog/send_to_port/port = "eno1"
+
+The filter expression is powerful, f.e you could say:
+
+  tc p4ctrl get myprog/table/mytable \
+  filter param/act/myprog/send_to_port/port = "eno1" && \
+         key/myprog/mytable/dstAddr = 10.1.0.0/16
+
+It also works on built in metadata, example in the following case dumping
+entries from mytable that have seen activity in the last 10 secs:
+  tc p4ctrl get myprog/table/mytable \
+  filter msecs_since < 10000
+
+Delete follows the same syntax as get/read, so for sake of brevity we won't
+show more example than how to flush mytable:
+
+  tc p4ctrl delete myprog/table/mytable
+
+Mystery question: How do we achieve iproute2-kernel independence and
+how does "tc p4ctrl" as a cli know how to program the kernel given an
+arbitrary command line as shown above? Answer(s): It queries the
+compiler generated json file in "P4TC Workflow" #B.c above. The json file
+has enough details to figure out that we have a program called "myprog"
+which has a table "mytable" that has a key name "dstAddr" which happens to
+be type ipv4 address prefix. The json file also provides details to show
+that the table "mytable" supports an action called "send_to_port" which
+accepts a parameter "port" of type netdev (see the types patch for all
+supported P4 data types).
+All P4 components have names, IDs, and types - so this makes it very easy
+to map into netlink.
+Once user space tc/p4ctrl validates the human command input, it creates
+standard binary netlink structures (TLVs etc) which are sent to the kernel.
+See the runtime table entry patch for more details.
+
+__P4TC Datapath__
+
+The P4TC s/w datapath execution is generated as eBPF. Any objects that
+require control interfacing reside in the "P4TC domain" and are controlled
+via netlink as described above. Per packet execution and state and even
+objects that do not require control interfacing (like the P4 parser) are
+generated as eBPF.
+
+A packet arriving on s/w ingress of any of the ports on block 22
+(illustrated in section "P4TC Workflow" above will first be exercised via
+the (generated eBPF) parser component to extract the headers (the ip
+destination address labeled "dstAddr" above in section "P4TC Runtime
+Control Path"). The datapath then proceeds to use "dstAddr", table ID
+and pipeline ID as a key to do a lookup in myprog's "mytable" which returns
+the action params which are then used to execute the action in the eBPF
+datapath (eventually sending out packets to eno1).
+On a table miss, mytable's default miss action (not described) is executed.
+
+__Testing__
+
+Speaking of testing - we have 2-300 tdc test cases (which will be in the
+second patchset).
+These tests are run on our CICD system on pull requests and after commits
+are approved. The CICD does a lot of other tests (more since v2, thanks to
+Simon's input)including:
+checkpatch, sparse, smatch, coccinelle, 32 bit and 64 bit builds tested on
+both X86, ARM 64 and emulated BE via qemu s390. We trigger performance
+testing in the CICD to catch performance regressions (currently only on
+the control path, but in the future for the datapath).
+Syzkaller runs 24/7 on dedicated hardware, originally we focussed only on
+memory sanitizer but recently added support for concurrency sanitizer.
+Before main releases we ensure each patch will compile on its own to help
+in git bisect and run the xmas tree tool. We eventually put the code via
+coverity.
+
+In addition we are working on enabling a tool that will take a P4 program,
+run it through the compiler, and generate permutations of traffic patterns
+via symbolic execution that will test both positive and negative datapath
+code paths. The test generator tool integration is still work in progress.
+Also: We have other code that test parallelization etc which we are trying
+to find a fit for in the kernel tree's testing infra.
+
+__Restating Our Requirements__
+
+Given this code is not intrusive at all because it only touches TC.
+We would like to emphasize that we see eBPF as _infrastructure tooling
+available to us and not the end goal_. Please help us with technical input
+on for example how we can do better kfuncs, etc. If you want to critique,
+then our requirements should be your guide and please be considerate that
+this is about P4, not eBPF. IOW:
+We would appreciate technical commentary instead of bikeshedding on how
+_you_ would have implemented this probably with more eBPF or some other
+clever tricks. It is sad to see there was zero input from anyone in the eBPF
+world for 7 RFC postings (in a period of 9 months).
+If i am ranting here is because we have spent over a year now on this
+topic - we have taken the initial input and have given you eBPF. So lets
+make progress please.
+
+The initial release was presented in October 2022[20] and RFC in January
+2023 had a "scriptable" datapath (the idea built on the u32 classifier[17]
+and pedit action[18] approach. Post RFC V1, we made changes to fit the
+feedback to integrate eBPF to replace the "scriptable" software datapath.
+On our part, the goal for the change was to meet folks in the middle as a
+compromise.
+No regrets on the journey since after all the effort because we ended
+getting XDP which was not in the original picture. Some of our efforts are
+captured at [1][3] and in the patch history.
+
+In this section we review the original scriptable version against the
+current implementation which uses eBPF and in the process re-enumerate our
+requirements.
+
+To be very clear: Our intention for P4TC is to target _the TC crowd_.
+Essentially developers and ops people already familiar and deploying TC
+based infra.
+More importantly the original intent for P4TC was to enable _ops folks_
+more than devs (given code is being generated and doesn't need humans to
+write it).
+
+With TC, we gain the whole "familiar" package of match-action pipeline
+abstraction++, meaning from the control plane(see discussion above) all
+the way to the tooling infra, i.e iproute2/tc cli, netlink infra interface
+(request/response, event subscribe/multicast-publish, congestion control
+etc), s/w and h/w symbiosis, the autonomous kernel control, etc.
+The main advantage over vendor specific implementations(which is the current
+alternative) is: with P4TC we have a singular vendor-neutral interface via
+the kernel using well understood mechanisms that have gained learnings from
+deployment experience.
+
+So lets list some of these requirements and compare whether moving to eBPF
+affected us or gave us an advantage.
+
+0) Understood Control Plane semantics
+
+This requirement is unaffected.
+The control plane remains as netlink and therefore we get the classical
+multi-user CRUD+Publish/subscribe APIs built in.
+
+1) Must support SW/HW equivalence
+
+This requirement is unaffected. The control plane is netlink. Any semantics
+to select between sw and hw via skip_sw/hw semantics is maintained.
+
+2) Supporting expressibility of the universe set of P4 progs
+
+It is a must to support 100% of all possible P4 programs. In the past the
+eBPF verifier, for example in [13], had to be worked around and even then
+there are cases where we couldnt avoid path explosion when branching isi
+involved and failed to run. So we were skeptical about using eBPF to begin
+with.
+Kfuncs changed our minds. Note, there are still challenges running all
+potential P4 programs at the XDP level - but the pipeline could be split
+between XDP and TC in such cases. The compiler can be told to generate
+pieces that run on XDP and other on TC (see examples).
+Summary: This requirement is unaffected.
+
+3) Operational usability
+
+By maintaining the TC control plane (even in presence of eBPF datapath)
+runtime aspects remain unchanged. So for our target audience of folks
+who have deployed tc, including offloads, the comfort zone is unchanged.
+
+There is some loss in operational usability because we now have more knobs:
+the extra compilation, loading and syncing of ebpf binaries, etc.
+IOW, I can no longer just ship someone a shell script(ascii) in an email to
+someone and say "go run this and "myprog" will just work".
+
+4) Operational and development Debuggability
+
+If something goes wrong, the tc craftsperson is now required to have
+additional knowledge of eBPF code and process.
+Our intent is to compensate this challenge with debug tools that ease the
+craftperson's debugging.
+
+5) Opportunity for rapid prototyping of new ideas
+
+This is not exactly a requirement but something that became a useful
+feature during the P4TC development phase. When the compiler was lagging
+behind in features was to often handcode the template scripts.
+Then you would dump back the template from the kernel and do a diff to
+ensure the kernel didn't get something wrong. Essentially, this was a nice
+debug feature. During development, we wrote scripts that covered a range of
+P4 architectures(PSA, V1, etc) which required no kernel code changes.
+
+Over time the debug feature morphed into: a) start by handcoding scripts
+then b) read it back and then c) generate the P4 code.
+It means one could start with the template scripts outside of the
+constraints of a P4 architecture spec(PNA/PSA) or even within a P4
+architecture then test some ideas and eventually feed back the concepts to
+the compiler authors or modify or create a new P4 architecture and share
+with the P4 standards folks.
+
+To summarize in presence of eBPF: The debugging idea is probably still
+alive.  One could dump, with proper tooling(bpftool for example), the
+loaded eBPF code and be able to check for differences. But this is not the
+interesting part.
+The concept of going back from whats in the kernel to P4 is a lot more
+difficult to implement mostly due to scoping of DSL vs general purpose. It
+may be lost.  We have been discussing ways to use BTF and embedding
+annotations in the eBPF code and binary but more thought is required and we
+welcome suggestions.
+
+6) Supporting per namespace program
+
+In P4TC every program and its associated objects have unique IDs which are
+generated by the compiler. Multiple or the same P4 program(s) can run
+independently in different namespaces alongside their appropriate state and
+object instance parameterization (despite name or ID collission).
+This requirement is still met (by virtue of keeping P4 program control
+objects within the TC domain and attaching to a netns).
+
+__References__
+
+[1]https://github.com/p4tc-dev/docs/blob/main/p4-conference-2023/2023P4WorkshopP4TC.pdf
+[2]https://github.com/p4tc-dev/docs/blob/main/why-p4tc.md#historical-perspective-for-p4tc
+[3]https://2023p4workshop.sched.com/event/1KsAe/p4tc-linux-kernel-p4-implementation-approaches-and-evaluation
+[4]https://github.com/p4tc-dev/docs/blob/main/why-p4tc.md#so-why-p4-and-how-does-p4-help-here
+[5]https://lore.kernel.org/netdev/20230517110232.29349-3-jhs@mojatatu.com/T/#mf59be7abc5df3473cff3879c8cc3e2369c0640a6
+[6]https://lore.kernel.org/netdev/20230517110232.29349-3-jhs@mojatatu.com/T/#m783cfd79e9d755cf0e7afc1a7d5404635a5b1919
+[7]https://lore.kernel.org/netdev/20230517110232.29349-3-jhs@mojatatu.com/T/#ma8c84df0f7043d17b98f3d67aab0f4904c600469
+[8]https://github.com/p4lang/p4c/tree/main/backends/tc
+[9]https://p4.org/
+[10]https://www.intel.com/content/www/us/en/products/details/network-io/ipu/e2000-asic.html
+[11]https://www.amd.com/en/accelerators/pensando
+[12]https://github.com/sonic-net/DASH/tree/main
+[13]https://github.com/p4lang/p4c/tree/main/backends/ebpf
+[14]https://netdevconf.info/0x17/sessions/talk/integrating-ebpf-into-the-p4tc-datapath.html
+[15]https://dl.acm.org/doi/10.1145/3630047.3630193
+[16]https://lore.kernel.org/netdev/20231216123001.1293639-1-jiri@resnulli.us/
+[17.a]https://netdevconf.info/0x13/session.html?talk-tc-u-classifier
+[17.b]man tc-u32
+[18]man tc-pedit
+[19] https://lore.kernel.org/netdev/20231219181623.3845083-6-victor@mojatatu.com/T/#m86e71743d1d83b728bb29d5b877797cb4942e835
+[20.a] https://netdevconf.info/0x16/sessions/talk/your-network-datapath-will-be-p4-scripted.html
+[20.b] https://netdevconf.info/0x16/sessions/workshop/p4tc-workshop.html
+
+--------
+HISTORY
+--------
+
+Changes in Version 14
+----------------------
+1) #UNDEF HWRITE/HREAD and remove unnecessary checks (Paolo)
+2) Remove const cast added in v13 as a result of changes suggested
+   suggested by Paolo (Marcelo)
+3) Introduce type validate for s8 caught as a result of audit from #1
+4) S/GFP_KERNEL/GFP_KERNEL_ACCOUNT for types and runtime objects (Paolo)
+5) Syzkaller caught an invalid netlink attribute bug that has existed
+   since v5! As noted in patch0 we've been running syzkaller for months.
+6) Add Marcelo's reviewed-by for patch 14 and Toke's ACK to the series.
+
+Changes in Version 13
+----------------------
+
+1) Remove ops->print() from p4 types (Paolo).
+
+2) Use mutex instead of rwlock for dynamic actions since rwlock is
+   discouraged these days(Paolo).
+
+3) Constify action init_ops() ops parameter (Paolo).
+
+4) Use struct sk_buff in kfunc instead of struct __sk_buff (Martin)
+   Use struct xdp_buff in kfunc instead of struct xdp_md (Martin)
+
+5) Replace BTF_SET8_START with BTF_KFUNCS_START and replace
+   BTF_SET8_END with BTF_KFUNCS_END (Martin)
+
+6) Add params__sz argument to all kfuncs to guard against future change
+   to parameter structures being passed between bpf and tc. For kfunc
+   xdp/bpf_p4tc_entry_create() we already had the max(5) allowed number of
+   of parameters. To work around this we had to merge two structs together
+   in order to maintain the number of params to 5 (Martin).
+
+7) Add more info on commit log to explain the relation between the kfuncs
+   and TC for patch #14 (Martin).
+
+Changes in Version 12
+----------------------
+
+0) Introduce back 15 patches (v11 had 5)
+
+1) From discussions with Daniel:
+   i) Remove the XDP programs association alltogether. No refcounting. nothing.
+   ii) Remove prog type tc - everything is now an ebpf tc action.
+
+2) s/PAD0/__pad0/g. Thanks to Marcelo.
+
+3) Add extack to specify how many entries (N of M) specified in a batch for
+   any of requested Create/Update/Delete succeeded. Prior to this it would
+   only tell us the batch failed to complete without giving us details of
+   which of M failed. Added as a debug aid.
+
+Changes in Version 11
+----------------------
+1) Split the series into two. Original patches 1-5 in this patchset. The rest
+   will go out after this is merged.
+
+2) Change any references of IFNAMSIZ in the action code when referencing the
+   action name size to ACTNAMSIZ. Thanks to Marcelo.
+
+Changes in Version 10
+----------------------
+1) A couple of patches from the earlier version were clean enough to submit,
+   so we did. This gave us room to split the two largest patches each into
+   two. Even though the split is not git-bisactable and really some of it didn't
+   make much sense (eg spliting a create, and update in one patch and delete and
+   get into another) we made sure each of the split patches compiled
+   independently. The idea is to reduce the number of lines of code to review
+   and when we get sufficient reviews we will put the splits together again.
+   See patch #12 and #13 as well as patches #7 and #8).
+
+2) Add more context in patch 0. Please READ!
+
+3) Added dump/delete filters back to the code - we had taken them out in the
+   earlier patches to reduce the amount of code for review - but in retrospect
+   we feel they are important enough to push earlier rather than later.
+
+
+Changes In version 9
+---------------------
+
+1) Remove the largest patch (externs) to ease review.
+
+2) Break up action patches into two to ease review bringing down the patches
+   that need more scrutiny to 8 (the first 7 are almost trivial).
+
+3) Fixup prefix naming convention to p4tc_xxx for uapi and p4a_xxx for actions
+   to provide consistency(Jiri).
+
+4) Silence sparse warning "was not declared. Should it be static?" for kfuncs
+   by making them static. TBH, not sure if this is the right solution
+   but it makes sparse happy and hopefully someone will comment.
+
+Changes In Version 8
+---------------------
+
+1) Fix all the patchwork warnings and improve our ci to catch them in the future
+
+2) Reduce the number of patches to basic max(15)  to ease review.
+
+Changes In Version 7
+-------------------------
+
+0) First time removing the RFC tag!
+
+1) Removed XDP cookie. It turns out as was pointed out by Toke(Thanks!) - that
+using bpf links was sufficient to protect us from someone replacing or deleting
+a eBPF program after it has been bound to a netdev.
+
+2) Add some reviewed-bys from Vlad.
+
+3) Small bug fixes from v6 based on testing for ebpf.
+
+4) Added the counter extern as a sample extern. Illustrating this example because
+   it is slightly complex since it is possible to invoke it directly from
+   the P4TC domain (in case of direct counters) or from eBPF (indirect counters).
+   It is not exactly the most efficient implementation (a reasonable counter impl
+   should be per-cpu).
+
+Changes In RFC Version 6
+-------------------------
+
+1) Completed integration from scriptable view to eBPF. Completed integration
+   of externs integration.
+
+2) Small bug fixes from v5 based on testing.
+
+Changes In RFC Version 5
+-------------------------
+
+1) More integration from scriptable view to eBPF. Small bug fixes from last
+   integration.
+
+2) More streamlining support of externs via kfunc (create-on-miss, etc)
+
+3) eBPF linking for XDP.
+
+There is more eBPF integration/streamlining coming (we are getting close to
+conversion from scriptable domain).
+
+Changes In RFC Version 4
+-------------------------
+
+1) More integration from scriptable to eBPF. Small bug fixes.
+
+2) More streamlining support of externs via kfunc (one additional kfunc).
+
+3) Removed per-cpu scratchpad per Toke's suggestion and instead use XDP metadata.
+
+There is more eBPF integration coming. One thing we looked at but is not in this
+patchset but should be in the next is use of eBPF link in our loading (see
+"challenge #1" further below).
+
+Changes In RFC Version 3
+-------------------------
+
+These patches are still in a little bit of flux as we adjust to integrating
+eBPF. So there are small constructs that are used in V1 and 2 but no longer
+used in this version. We will make a V4 which will remove those.
+The changes from V2 are as follows:
+
+1) Feedback we got in V2 is to try stick to one of the two modes. In this version
+we are taking one more step and going the path of mode2 vs v2 where we had 2 modes.
+
+2) The P4 Register extern is no longer standalone. Instead, as part of integrating
+into eBPF we introduce another kfunc which encapsulates Register as part of the
+extern interface.
+
+3) We have improved our CICD to include tools pointed to us by Simon. See
+   "Testing" further below. Thanks to Simon for that and other issues he caught.
+   Simon, we discussed on issue [7] but decided to keep that log since we think
+   it is useful.
+
+4) A lot of small cleanups. Thanks Marcelo. There are two things we need to
+   re-discuss though; see: [5], [6].
+
+5) We removed the need for a range of IDs for dynamic actions. Thanks Jakub.
+
+6) Clarify ambiguity caused by smatch in an if(A) else if(B) condition. We are
+   guaranteed that either A or B must exist; however, lets make smatch happy.
+   Thanks to Simon and Dan Carpenter.
+
+Changes In RFC Version 2
+-------------------------
+
+Version 2 is the initial integration of the eBPF datapath.
+We took into consideration suggestions provided to use eBPF and put effort into
+analyzing eBPF as datapath which involved extensive testing.
+We implemented 6 approaches with eBPF and ran performance analysis and presented
+our results at the P4 2023 workshop in Santa Clara[see: 1, 3] on each of the 6
+vs the scriptable P4TC and concluded that 2 of the approaches are sensible (4 if
+you account for XDP or TC separately).
+
+Conclusions from the exercise: We lose the simple operational model we had
+prior to integrating eBPF. We do gain performance in most cases when the
+datapath is less compute-bound.
+For more discussion on our requirements vs journeying the eBPF path please
+scroll down to "Restating Our Requirements" and "Challenges".
+
+This patch set presented two modes.
+mode1: the parser is entirely based on eBPF - whereas the rest of the
+SW datapath stays as _scriptable_ as in Version 1.
+mode2: All of the kernel s/w datapath (including parser) is in eBPF.
+
+The key ingredient for eBPF, that we did not have access to in the past, is
+kfunc (it made a big difference for us to reconsider eBPF).
+
+In V2 the two modes are mutually exclusive (IOW, you get to choose one
+or the other via Kconfig).
+
+Jamal Hadi Salim (15):
+  net: sched: act_api: Introduce P4 actions list
+  net/sched: act_api: increase action kind string length
+  net/sched: act_api: Update tc_action_ops to account for P4 actions
+  net/sched: act_api: add struct p4tc_action_ops as a parameter to
+    lookup callback
+  net: sched: act_api: Add support for preallocated P4 action instances
+  p4tc: add P4 data types
+  p4tc: add template API
+  p4tc: add template pipeline create, get, update, delete
+  p4tc: add template action create, update, delete, get, flush and dump
+  p4tc: add runtime action support
+  p4tc: add template table create, update, delete, get, flush and dump
+  p4tc: add runtime table entry create and update
+  p4tc: add runtime table entry get, delete, flush and dump
+  p4tc: add set of P4TC table kfuncs
+  p4tc: add P4 classifier
+
+ include/linux/bitops.h            |    1 +
+ include/net/act_api.h             |   23 +-
+ include/net/p4tc.h                |  714 +++++++
+ include/net/p4tc_types.h          |   89 +
+ include/net/tc_act/p4tc.h         |   79 +
+ include/uapi/linux/p4tc.h         |  465 +++++
+ include/uapi/linux/pkt_cls.h      |   15 +
+ include/uapi/linux/rtnetlink.h    |   18 +
+ include/uapi/linux/tc_act/tc_p4.h |   11 +
+ net/sched/Kconfig                 |   23 +
+ net/sched/Makefile                |    3 +
+ net/sched/act_api.c               |  192 +-
+ net/sched/cls_api.c               |    2 +-
+ net/sched/cls_p4.c                |  305 +++
+ net/sched/p4tc/Makefile           |    8 +
+ net/sched/p4tc/p4tc_action.c      | 2419 +++++++++++++++++++++++
+ net/sched/p4tc/p4tc_bpf.c         |  360 ++++
+ net/sched/p4tc/p4tc_filter.c      | 1012 ++++++++++
+ net/sched/p4tc/p4tc_pipeline.c    |  700 +++++++
+ net/sched/p4tc/p4tc_runtime_api.c |  145 ++
+ net/sched/p4tc/p4tc_table.c       | 1820 +++++++++++++++++
+ net/sched/p4tc/p4tc_tbl_entry.c   | 3071 +++++++++++++++++++++++++++++
+ net/sched/p4tc/p4tc_tmpl_api.c    |  440 +++++
+ net/sched/p4tc/p4tc_types.c       | 1213 ++++++++++++
+ net/sched/p4tc/trace.c            |   10 +
+ net/sched/p4tc/trace.h            |   44 +
+ security/selinux/nlmsgtab.c       |   10 +-
+ 27 files changed, 13156 insertions(+), 36 deletions(-)
+ create mode 100644 include/net/p4tc.h
+ create mode 100644 include/net/p4tc_types.h
+ create mode 100644 include/net/tc_act/p4tc.h
+ create mode 100644 include/uapi/linux/p4tc.h
+ create mode 100644 include/uapi/linux/tc_act/tc_p4.h
+ create mode 100644 net/sched/cls_p4.c
+ create mode 100644 net/sched/p4tc/Makefile
+ create mode 100644 net/sched/p4tc/p4tc_action.c
+ create mode 100644 net/sched/p4tc/p4tc_bpf.c
+ create mode 100644 net/sched/p4tc/p4tc_filter.c
+ create mode 100644 net/sched/p4tc/p4tc_pipeline.c
+ create mode 100644 net/sched/p4tc/p4tc_runtime_api.c
+ create mode 100644 net/sched/p4tc/p4tc_table.c
+ create mode 100644 net/sched/p4tc/p4tc_tbl_entry.c
+ create mode 100644 net/sched/p4tc/p4tc_tmpl_api.c
+ create mode 100644 net/sched/p4tc/p4tc_types.c
+ create mode 100644 net/sched/p4tc/trace.c
+ create mode 100644 net/sched/p4tc/trace.h
+
+-- 
+2.34.1
 
