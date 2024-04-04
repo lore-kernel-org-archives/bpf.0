@@ -1,139 +1,162 @@
-Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-181.mta1.migadu.com (out-181.mta1.migadu.com [95.215.58.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FED713C3D9;
-	Thu,  4 Apr 2024 22:07:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 844AB13B79F
+	for <bpf@vger.kernel.org>; Thu,  4 Apr 2024 22:08:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712268452; cv=none; b=k2Lru5pNDMO7eG6tdEb8irQKQwPvP6ytdq/DY7pvtSYeh40PpINNteiW1XnWlF3aOhj/htMKAFqaTgtK5XGtx36U8OpKCYfTNPIFoMQZIE9kFU0U1bi85Fs9EVQSiCSnn00PUPXerzQ6QuQe++mZrjlD3H21YfA8gMEkTPlF1Jw=
+	t=1712268505; cv=none; b=dDpT6Lew66WU4jNa4qfKX7WSESLoQjjdMm12w8mJrNBqsBojZYu0G2eSxSGBBEC83npfPHHa5CYLHYcHe1NH8N46h8Qzlt3S8P5kswDf3n+VW3E1QzWHRZpG8dndEOa0br0d+9zyLC1i2zLx4Yiy3NgFoxaXOHbpxkhSnib+oOk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712268452; c=relaxed/simple;
-	bh=AjvuPzaZCOzpiQVfLOn/AmFNJ7anIJ2tJ90YdBIhnKs=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Pq/1UoQSWGgpkSamhvODRyaWjKhVIF4oDfGLSALaDJwMCi2YrP1c3TOfvicfTXZFPCCB2u86FhK925qGDhMqiG3pck/OqHsl1vckhAlY9JisoUxs0dVMnvwkWsEsxGy3ZubRQPX+kWXx7037hjGdu4Rhfwm1WSKpDqDg/uljJkE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QgLDaApk; arc=none smtp.client-ip=209.85.221.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1712268505; c=relaxed/simple;
+	bh=NF4Yu6YLDKq87PViz++XGy8mgHE38jgZknC+kIfo+gU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=HvfY9AoYDz7TN0iXgYllho4W7xrECgiqpzS+4DBlHiQzbz8nvbW8DHI8pNB08U3uPgzXoHGHDDzw00QwF0aOs86HcSZAhMEkNpB3pJJq9ef/1yG5fb2BSfOgUErLBB/+FdrliHEYlYGvfiX76ZYXHmWnok2KHzV3YgTV7JF9as0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=JDDlF23F; arc=none smtp.client-ip=95.215.58.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QgLDaApk"
-Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-343c891bca5so608824f8f.2;
-        Thu, 04 Apr 2024 15:07:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1712268448; x=1712873248; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=AjvuPzaZCOzpiQVfLOn/AmFNJ7anIJ2tJ90YdBIhnKs=;
-        b=QgLDaApkpEkXiMeZ6MtJmWyhxAQnBUVtvfUqAqDRUbO9aw77utl/+M494o8eUqm/el
-         yKc99+g0Luif38DVeny5OoGbAToKp1v8a32HCYvmFJU5yIQCWblPa+KYupv8dbP0XeSn
-         DkE/oVHXGFIRxdzzKmAt3S7Z77fv/qycihI+MKrTYqpChociVtu3kO7+lZ1K4imZmzj3
-         2uoxva7+/tC97VFotDY+430fH0mvDJHksgxqpJ7c/fU41P2BQ3WkYCRHTUrcMRhG7FDx
-         eoump2DFU3l8ZnR7BHysGBNK+vwbaSH6WXPvcVxMQY9kLAr4FNBbdNIgPREQTlYXrU/J
-         TgbA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712268448; x=1712873248;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=AjvuPzaZCOzpiQVfLOn/AmFNJ7anIJ2tJ90YdBIhnKs=;
-        b=jK0DrW9aFdAPYN+w9PokCFyC70JtiZif3YTi83a9Ivr4d3t1V5d+9zlAHUEYaC+6xK
-         qRfISb+TEqq/EnN7PVHHhQqNkmZR1ulSbyi5GLhoVP51OGmkFDPhsDYB8DIGI1p09Mb6
-         9K6zhMzyFcO64NAfiRLOYoX7NESPK6faQHK4BZAmZjMKm9h3sW3o3YbhPl5Q4/ujEmiY
-         JTzV6JhAFtTeKZxpCfkgagEb4F195zeEHSr4lmXqI3HeiCUxNdwmzlGZFOKBg3AslXH1
-         3lO4FqdiRihJGDQ42qtCH1dJ/tIb+d7uxQYR1cxaFNngJDhTOyrJYJk0nGmn8gZNaW6O
-         UbYg==
-X-Forwarded-Encrypted: i=1; AJvYcCXpl0q+k+JBv8Rbvpo9F2C5u2LjRDvVF5UdqViI7NQ218WY6mmibnw4T2bDo7I/s1Api1uBycKDyLzIYW+PFRukL+If
-X-Gm-Message-State: AOJu0Yz9QcDOX+ukU+IzsMpox4JwqFAFQ5LezXCDy1RK7Kwibeb339NY
-	DDYrD8WzRsTrJrC3idYgPZyExUcHYjrQIJkBlD3GDkkiJWDAP2ngCA6LwYM0G9bk2AcCkAgpF8x
-	19OO/afU2i0OJYqhTbaDxD6P4pno=
-X-Google-Smtp-Source: AGHT+IGYEE2XWLfYLVC5q1f8MQwSkAGP99QhnhOCs1Cvyyj1GjLUUmSVwvc+eOXYzH6rsY4aPkKDcWxhTuK28Srinys=
-X-Received: by 2002:adf:e48c:0:b0:343:ae03:2a02 with SMTP id
- i12-20020adfe48c000000b00343ae032a02mr676485wrm.40.1712268448261; Thu, 04 Apr
- 2024 15:07:28 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="JDDlF23F"
+Message-ID: <05dfc9a1-d572-4cf1-aa9f-bbe37b7c881e@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1712268501;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=UXhIA8Ool2ai93FtDAK3tO1T7grvikM9ZpTLQOZzj/k=;
+	b=JDDlF23FmRJz4CXf8G/ckd6/K+fpM+K8y6hT0SsbLQweJLprsFB+POx8JFiQuqDGdmyZab
+	RfaJl3XRndOr+ZOMX5wSPrng5AOZvynhoFt9P+c08LL2ojU/TmTTwuDKkAmekZwQ8e0S8U
+	uWR4Sz9evivz/ESj8XNAw28yELFhNfA=
+Date: Thu, 4 Apr 2024 15:08:11 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240404122338.372945-1-jhs@mojatatu.com> <20240404122338.372945-15-jhs@mojatatu.com>
-In-Reply-To: <20240404122338.372945-15-jhs@mojatatu.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Thu, 4 Apr 2024 15:07:16 -0700
-Message-ID: <CAADnVQLw1FRkvYJX0=6WMDoR7rQaWSVPnparErh4soDtKjc73w@mail.gmail.com>
-Subject: Re: [PATCH net-next v14 14/15] p4tc: add set of P4TC table kfuncs
-To: Jamal Hadi Salim <jhs@mojatatu.com>
-Cc: Network Development <netdev@vger.kernel.org>, deb.chatterjee@intel.com, 
-	Anjali Singhai Jain <anjali.singhai@intel.com>, namrata.limaye@intel.com, tom@sipanda.io, 
-	Marcelo Ricardo Leitner <mleitner@redhat.com>, Mahesh.Shirshyad@amd.com, Vipin.Jain@amd.com, 
-	tomasz.osinski@intel.com, Jiri Pirko <jiri@resnulli.us>, 
-	Cong Wang <xiyou.wangcong@gmail.com>, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Vlad Buslov <vladbu@nvidia.com>, Simon Horman <horms@kernel.org>, khalidm@nvidia.com, 
-	=?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai Lau <martin.lau@linux.dev>, victor@mojatatu.com, 
-	Pedro Tammela <pctammela@mojatatu.com>, bpf <bpf@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH bpf-next 1/3] bpf: store both map ptr and state in
+ bpf_insn_aux_data
+Content-Language: en-GB
+To: Philo Lu <lulie@linux.alibaba.com>, bpf@vger.kernel.org
+Cc: ast@kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com,
+ andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
+ kpsingh@kernel.org, sdf@google.com, haoluo@google.com, jolsa@kernel.org,
+ mykolal@fb.com, shuah@kernel.org, xuanzhuo@linux.alibaba.com
+References: <20240402061615.48894-1-lulie@linux.alibaba.com>
+ <20240402061615.48894-2-lulie@linux.alibaba.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <20240402061615.48894-2-lulie@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-On Thu, Apr 4, 2024 at 5:48=E2=80=AFAM Jamal Hadi Salim <jhs@mojatatu.com> =
-wrote:
+
+On 4/1/24 11:16 PM, Philo Lu wrote:
+> Currently, bpf_insn_aux_data->map_ptr_state is used to store either
+> map_ptr or its poison state (i.e., BPF_MAP_PTR_POISON). Thus
+> BPF_MAP_PTR_POISON must be checked before reading map_ptr. However we do
+> need both of them sometimes, e.g., in bpf_for_each_map_elem() helper ().
+
+You can say:
+In certain cases, we may need valid map_ptr even in case of poison state.
+This will be explained in next patch with bpf_for_each_map_elem() helper.
+
 >
-> We add an initial set of kfuncs to allow interactions from eBPF programs
-> to the P4TC domain.
+> This patch changes map_ptr_state into a new struct including both map
+> pointer and its state (poison/unpriv). It's in the same union with
+> struct bpf_loop_inline_state, so there is no extra memory overhead.
+> Besides, macros BPF_MAP_PTR_UNPRIV/BPF_MAP_PTR_POISON/BPF_MAP_PTR are no
+> longer needed.
 
-...
+You can further mention that this patch does not change any
+existing functionality.
 
-> Note:
-> All P4 objects are owned and reside on the P4TC side. IOW, they are
-> controlled via TC netlink interfaces and their resources are managed
-> (created, updated, freed, etc) by the TC side. As an example, the structu=
-re
-> p4tc_table_entry_act is returned to the ebpf side on table lookup. On the
-> TC side that struct is wrapped around p4tc_table_entry_act_bpf_kern.
-> A multitude of these structure p4tc_table_entry_act_bpf_kern are
-> preallocated (to match the P4 architecture, patch #9 describes some of
-> the subtleties involved) by the P4TC control plane and put in a kernel
-> pool. Their purpose is to hold the action parameters for either a table
-> entry, a global per-table "miss" and "hit" action, etc - which are
-> instantiated and updated via netlink per runtime requests. An instance of
-> the p4tc_table_entry_act_bpf_kern.p4tc_table_entry_act is returned
-> to ebpf when there is a un/successful table lookup depending on how the
-> P4 program is written. When the table entry is deleted the instance of
-> the struct p4tc_table_entry_act_bpf_kern is recycled to the pool to be
-> reused for a future table entry. The only time the pool memory is release=
-d
-> is when the pipeline is deleted.
+>
+> Signed-off-by: Philo Lu <lulie@linux.alibaba.com>
+> ---
+>   include/linux/bpf_verifier.h |  9 ++++++++-
+>   kernel/bpf/verifier.c        | 36 ++++++++++++++++--------------------
+>   2 files changed, 24 insertions(+), 21 deletions(-)
+>
+> diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+> index 7cb1b75eee38..1b5d6c7bb4e0 100644
+> --- a/include/linux/bpf_verifier.h
+> +++ b/include/linux/bpf_verifier.h
+> @@ -502,6 +502,13 @@ struct bpf_loop_inline_state {
+>   	u32 callback_subprogno; /* valid when fit_for_inline is true */
+>   };
+>   
+> +/* pointer and state for maps */
+> +struct bpf_map_ptr_state {
+> +	struct bpf_map *map_ptr;
+> +	unsigned int poison:1;
+> +	unsigned int unpriv:1;
 
-TLDR:
-Nacked-by: Alexei Starovoitov <ast@kernel.org>
+Let us change 'unsigned int' to 'bool' which is more appropriate.
 
-Please drop this patch (all p4tc kfuncs) then I can lift
-the nack and the rest will be up to Kuba/Dave to decide.
-I agree with earlier comments from John and Daniel that
-p4tc is duplicating existing logic and doesn't provide
-any additional value to the kernel, but TC has a bunch
-of code already that no one is using, so
-another 13k lines of such stuff doesn't make it much worse.
+> +};
+> +
+>   /* Possible states for alu_state member. */
+>   #define BPF_ALU_SANITIZE_SRC		(1U << 0)
+>   #define BPF_ALU_SANITIZE_DST		(1U << 1)
+> @@ -514,7 +521,7 @@ struct bpf_loop_inline_state {
+>   struct bpf_insn_aux_data {
+>   	union {
+>   		enum bpf_reg_type ptr_type;	/* pointer type for load/store insns */
+> -		unsigned long map_ptr_state;	/* pointer/poison value for maps */
+> +		struct bpf_map_ptr_state map_ptr_state;
+>   		s32 call_imm;			/* saved imm field of call insn */
+>   		u32 alu_limit;			/* limit for add/sub register with pointer */
+>   		struct {
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index edb650667f44..515ac6165ab1 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -190,11 +190,6 @@ struct bpf_verifier_stack_elem {
+>   #define BPF_MAP_KEY_POISON	(1ULL << 63)
+>   #define BPF_MAP_KEY_SEEN	(1ULL << 62)
+>   
+> -#define BPF_MAP_PTR_UNPRIV	1UL
+> -#define BPF_MAP_PTR_POISON	((void *)((0xeB9FUL << 1) +	\
+> -					  POISON_POINTER_DELTA))
+> -#define BPF_MAP_PTR(X)		((struct bpf_map *)((X) & ~BPF_MAP_PTR_UNPRIV))
+> -
+>   #define BPF_GLOBAL_PERCPU_MA_MAX_SIZE  512
+>   
+>   static int acquire_reference_state(struct bpf_verifier_env *env, int insn_idx);
+> @@ -209,21 +204,22 @@ static bool is_trusted_reg(const struct bpf_reg_state *reg);
+>   
+>   static bool bpf_map_ptr_poisoned(const struct bpf_insn_aux_data *aux)
+>   {
+> -	return BPF_MAP_PTR(aux->map_ptr_state) == BPF_MAP_PTR_POISON;
+> +	return !!aux->map_ptr_state.poison;
 
-What I cannot tolerate is this p4tc <-> bpf integration.
-It breaks all the normal layering and programming from bpf pov.
-Martin explained this earlier. You cannot introduce new
-objects that are instantiated by TC, yet read/write-able
-from xdp and act_bpf that act like a bpf map, but not being a map.
-Performance overhead of these kfuncs is too high.
-It's not what the XDP community is used to.
-We cannot give users such a footgun.
+with 'poison' is bool type, just return aux->map_ptr_state.poison.
 
-Furthermore, act_bpf is something that we added during early
-days and it turned out to be useless. It's still
-there, it's working and supported, but it's out of place
-and in the wrong spot in the pipeline to be useful
-beyond simple examples.
-Yet, p4tc tries to integrate with act_bpf. It's a red flag
-and a sign that that none of this code saw any practical
-application beyond demo code.
-We made our fair share of design mistakes. We learned our lessons
-and not going to repeat the same ones. This one is obvious.
+>   }
+>   
+>   static bool bpf_map_ptr_unpriv(const struct bpf_insn_aux_data *aux)
+>   {
+> -	return aux->map_ptr_state & BPF_MAP_PTR_UNPRIV;
+> +	return !!aux->map_ptr_state.unpriv;
 
-So please drop all bpf integration and focus on pure p4tc.
+return aux->map_ptr_state.unpriv.
+
+>   }
+>   
+>   static void bpf_map_ptr_store(struct bpf_insn_aux_data *aux,
+> -			      const struct bpf_map *map, bool unpriv)
+> +			      struct bpf_map *map,
+> +			      bool unpriv, bool poison)
+>   {
+> -	BUILD_BUG_ON((unsigned long)BPF_MAP_PTR_POISON & BPF_MAP_PTR_UNPRIV);
+>   	unpriv |= bpf_map_ptr_unpriv(aux);
+> -	aux->map_ptr_state = (unsigned long)map |
+> -			     (unpriv ? BPF_MAP_PTR_UNPRIV : 0UL);
+> +	aux->map_ptr_state.unpriv = unpriv;
+> +	aux->map_ptr_state.poison = poison;
+> +	aux->map_ptr_state.map_ptr = map;
+>   }
+>   
+[...]
