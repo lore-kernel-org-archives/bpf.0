@@ -1,88 +1,99 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BF6311718;
-	Thu,  4 Apr 2024 14:50:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A5411D551;
+	Thu,  4 Apr 2024 15:01:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712242228; cv=none; b=auFQDGeGSmGRZ+plQ2SHx0rdHo4M8j+VuzsMKD53tffTD8Mb5pfEr6LbqI8SZ6mR4kTcvzzrtMuS6mXbDEr9IVjieCe9KWy46iYq49XKEoT+w7wov81t8tQDtQ9ii2REPvZukDd06iyb8zPmMpGgbJQJ4yJmkGGeMimcwLTkcZU=
+	t=1712242919; cv=none; b=CNgwtdJYgSWk/6HCzfKI5PtHheMhPDt1V5N2Ec9sVxNtgK8sBXYw95dxhgxagGgjLmsGBt0fXScCxlW2AClr1uxgq2P7yjT62PrHPs86JzQx54qDTsU2uQfrEcmOO9AkITaXfcISHbZ+Wol4VdUHI06eJkV599ZjzsP1S2DhRWY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712242228; c=relaxed/simple;
-	bh=ku2YBuJik1s7SEiP8w3doooX/ZXddO29iUvYxp6Frm0=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=FowwbCL7I6ri7ff/whX/ojaXhjmCaZ/TNSKLsQJRsciafL5ULWjelmyBY8AeZAf7xanL5ZhmBDWy1Vbzcxoes8zGGL58RI/CuQa+qPhpiMoYcIYx1v36psHDgCD/IdqcoK+phEPbErToZ3ZMy7O4Of6AfUlBWU6a2NyEYnWIxPw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nPMJDeX9; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1712242919; c=relaxed/simple;
+	bh=m37CGWgGDzDmqqe0wk4eeU3R+P2kwq9EU6P+HBudePA=;
+	h=From:To:Cc:Subject:References:Date:In-Reply-To:Message-ID:
+	 MIME-Version:Content-Type; b=VOAfbJGO5BUgzB3qSD/o1HLUVN24QIMCpvD+jBGS9p/DlZyr8ruVzX1dz3LlPk218+wxqwTg/cXzKgQcHZiObEfDYgEoyIzs2/kCOYBY930KBwX6LtJRQoQHFG/MFrnrNBOrL1v4zvERcpfViEpFG53aHsi/9tqAMb56H/mFh90=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qaVIpo7K; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nPMJDeX9"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 1C071C43390;
-	Thu,  4 Apr 2024 14:50:28 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qaVIpo7K"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D121C433C7;
+	Thu,  4 Apr 2024 15:01:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712242228;
-	bh=ku2YBuJik1s7SEiP8w3doooX/ZXddO29iUvYxp6Frm0=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=nPMJDeX9sGvtjPadXq7idWRrp18Bxa/O9lJLCNfNttFl6kNJ/Rxel6WpRI+UUOLGR
-	 3BNc1+GEIhmovtwQXIP9jT+yuLPhBP2LDA5ZT6pq3z+cPxWiFqKYou01YVY9JrFkjK
-	 jv+NuohscEc4Y0rggb7V3rAZNW2pQyZJlxS/xQ6Z6qeRDV3xLfnVWxgXDoxUS3L0mG
-	 D5X33u0lPsTldX2FTmciZbxtRAf6dRs+pF0QhnizeY7gJ3Hoqvi7Ka74j0Lb5ib78D
-	 6kQyBH4pka0gDPdFBmN9/cPnEkSWbhpaWPr92+PhNULdHKFwps1Fp0yy2fJXk+L3Mr
-	 YO8a+BLw0bQ9g==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 0622AD9A150;
-	Thu,  4 Apr 2024 14:50:28 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20201202; t=1712242918;
+	bh=m37CGWgGDzDmqqe0wk4eeU3R+P2kwq9EU6P+HBudePA=;
+	h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
+	b=qaVIpo7KcwdH/2KGDFx1mUZTuMagPUnp8++R3YOCdX87zDybHhWnCcJC3PyNi2bW9
+	 BI7jfEPRj8JzPlIooc9+HkzESGwDGV6Y9ij240rM/UHWhO20Q+XTXJCTPeNzihyEbG
+	 TYRbqil/VAwNNwbUzFisJ6vOTzjsdxiX39pCHfqNImY5YpMsM3zV3vGydohSsx0veC
+	 Kik4rPAp1JZYjLXiu55enmnEQ6MnLLMfpUpbPN/UwffcReqM68sIBC+paK/A+EYTL6
+	 AeJMDxRdfWiHbkDTbZANN2Rsvjl38dw5kKQ5XVqVo4cDL+4hxI+lFqFr95RcUZOJCs
+	 dLhuGXRiUHz0g==
+From: Kalle Valo <kvalo@kernel.org>
+To: Breno Leitao <leitao@debian.org>
+Cc: aleksander.lobakin@intel.com,  kuba@kernel.org,  davem@davemloft.net,
+  pabeni@redhat.com,  edumazet@google.com,  elder@kernel.org,
+  linux-arm-kernel@lists.infradead.org,
+  linux-mediatek@lists.infradead.org,  nbd@nbd.name,
+  sean.wang@mediatek.com,  Mark-MC.Lee@mediatek.com,  lorenzo@kernel.org,
+  taras.chornyi@plvision.eu,  Matthias Brugger <matthias.bgg@gmail.com>,
+  AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+  quic_jjohnson@quicinc.com,  leon@kernel.org,
+  dennis.dalessandro@cornelisnetworks.com,  linux-kernel@vger.kernel.org,
+  netdev@vger.kernel.org,  bpf@vger.kernel.org
+Subject: Re: [PATCH net-next v3 0/5] allocate dummy device dynamically
+References: <20240404114854.2498663-1-leitao@debian.org>
+	<87plv549ts.fsf@kernel.org> <Zg63iwvtTMlZSGcd@gmail.com>
+Date: Thu, 04 Apr 2024 18:01:52 +0300
+In-Reply-To: <Zg63iwvtTMlZSGcd@gmail.com> (Breno Leitao's message of "Thu, 4
+	Apr 2024 07:22:03 -0700")
+Message-ID: <87le5t41en.fsf@kernel.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v4 0/2] bpf,riscv: Add support for BPF Arena
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <171224222802.6630.17532386539061151793.git-patchwork-notify@kernel.org>
-Date: Thu, 04 Apr 2024 14:50:28 +0000
-References: <20240404114203.105970-1-puranjay12@gmail.com>
-In-Reply-To: <20240404114203.105970-1-puranjay12@gmail.com>
-To: Puranjay Mohan <puranjay12@gmail.com>
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
- martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
- yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
- sdf@google.com, haoluo@google.com, jolsa@kernel.org, bjorn@kernel.org,
- luke.r.nels@gmail.com, xi.wang@gmail.com, paul.walmsley@sifive.com,
- palmer@dabbelt.com, aou@eecs.berkeley.edu, bpf@vger.kernel.org,
- linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
- pulehui@huaweicloud.com
+Content-Type: text/plain
 
-Hello:
+Breno Leitao <leitao@debian.org> writes:
 
-This series was applied to bpf/bpf-next.git (master)
-by Daniel Borkmann <daniel@iogearbox.net>:
+> Hello Kalle,
+>
+> On Thu, Apr 04, 2024 at 02:59:59PM +0300, Kalle Valo wrote:
+>> Breno Leitao <leitao@debian.org> writes:
+>> 
+>> > struct net_device shouldn't be embedded into any structure, instead,
+>> > the owner should use the private space to embed their state into
+>> > net_device.
+>> >
+>> > But, in some cases the net_device is embedded inside the private
+>> > structure, which blocks the usage of zero-length arrays inside
+>> > net_device.
+>> >
+>> > Create a helper to allocate a dummy device at dynamically runtime, and
+>> > move the Ethernet devices to use it, instead of embedding the dummy
+>> > device inside the private structure.
+>> >
+>> > This fixes all the network cases except for wireless drivers.
+>> >
+>> > PS: Due to lack of hardware, unfortunately all these patches are
+>> > compiled tested only.
+>> 
+>> BTW if it helps, and if you have an ath10k or ath11k patch already, I
+>> can run a quick test on real hardware.
+>
+> That would be very much appreciated! Thanks!
+>
+> I don't have them ready yet, but, I will work on them soon and I will
+> send it to you probably tomorrow.
+>
+> Should I send them as RFC, or as a regular patch, and we iterate over?
+> What would you prefer?
 
-On Thu,  4 Apr 2024 11:42:01 +0000 you wrote:
-> Changes in V4:
-> V3: https://lore.kernel.org/all/20240326224943.86912-1-puranjay12@gmail.com/
-> - Fix some style issues.
-> - Add Tested-by: and Reviewed-by: tags by Pu Lehui and Björn
-> 
-> Changes in V3
-> V2: https://lore.kernel.org/bpf/20240325155434.65589-1-puranjay12@gmail.com/
-> - Use REG_DONT_CLEAR_MARKER in place of DONT_CLEAR as the name.
-> - Use RV_REG_ZERO for the above as it is guaranteed to be never used in as
->   dst/src register in BPF LDX/STX/ST instructions.
-> - Use #define RV_REG_ARENA for RV_REG_S7
-> 
-> [...]
+A regular patch, like you did last time with ath11k, is fine for me. But
+please do add a lore or patchwork link to the depency patchset so that
+I'm testing with correct patches.
 
-Here is the summary with links:
-  - [bpf-next,v4,1/2] bpf,riscv: Implement PROBE_MEM32 pseudo instructions
-    https://git.kernel.org/bpf/bpf-next/c/633a6e01d1a2
-  - [bpf-next,v4,2/2] bpf,riscv: Implement bpf_addr_space_cast instruction
-    https://git.kernel.org/bpf/bpf-next/c/21ab0b6d0cfc
-
-You are awesome, thank you!
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+https://patchwork.kernel.org/project/linux-wireless/list/
 
-
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
