@@ -1,182 +1,183 @@
-Received: from mail-pg1-f169.google.com (mail-pg1-f169.google.com [209.85.215.169])
+Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F38893D76;
-	Thu,  4 Apr 2024 22:17:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D80EE13C3EA
+	for <bpf@vger.kernel.org>; Thu,  4 Apr 2024 22:17:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712269047; cv=none; b=kgG9WFC9MaierUp2nvsBGLrUb0YWQMpH1SxfsznLEsOgYCFaN9s9Er1y5YI6o2qt3uEIrZLsnkOUGjhHKnqQdDsRM6LPeO1czGE2Wx9Q7HNqBgOC7oIfuqhcjtIBXaUVTMA0sX/mlNw4T7hRQfY2RzT03qlHhHj+qBc+KVSSucc=
+	t=1712269081; cv=none; b=rvyJTNZG//ZQIA14DFgk137jj0y2Jp7uzYC2ENVtokh9XmBlZB426m3UFm4XsHPLYFvy1icsGnM6D1QZijwM/7BLP/k/55zL5ElijvLGfkJemFtxfw2rtMie8FxNDMlAOBITlamW+NvHlz3Nx5ELgXpxNauRU92MfskKsFP+UrY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712269047; c=relaxed/simple;
-	bh=jP34MhqFFnOsapC2W1n3vR81oVx3qa/yHXS4isuKsXQ=;
+	s=arc-20240116; t=1712269081; c=relaxed/simple;
+	bh=RZPrq+xVDjiyzuvgmiC5bztMCL91wQIMW6JQhQhfvYY=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=FQZ7/v3cyojmOwVvA2iZMdlrW4etePLYceoMXuZQgJ88r4kqRuMOooRS8zwS9/l+f9GUS2kVs0z5SVHtpYV1AQKVEsknNcLn81S17g+U/rJNDrfDD5x0Z5SavuHYda5A4+pkBHiT7KlWYBWoMKKEYyAu7tLk+wllulXUp9lwqOk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QsjVPcO9; arc=none smtp.client-ip=209.85.215.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 To:Cc:Content-Type; b=YcEP+wzhB4yXYyEqPlV1ANgUiiDh38SHo85u7QcMqypdtokubuzrGo3JIsSOpzPICzu7cvf35etIMjSjICbp7l9u5ssg2yaaHYgUIKdKFayrh4q3xtxx0NxWAVYb/UM5DU8NMw4trI96EaasFzvYsJmWsW8eT2AJOqfncUe96Dk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=iNpgHmou; arc=none smtp.client-ip=209.85.221.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QsjVPcO9"
-Received: by mail-pg1-f169.google.com with SMTP id 41be03b00d2f7-53fbf2c42bfso1204605a12.3;
-        Thu, 04 Apr 2024 15:17:25 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="iNpgHmou"
+Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-343d7ff2350so310839f8f.0
+        for <bpf@vger.kernel.org>; Thu, 04 Apr 2024 15:17:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1712269045; x=1712873845; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1712269077; x=1712873877; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=0S9AzfKyXXro6/KcESb4RixjJwGuwM+I6fIK3FdfbMw=;
-        b=QsjVPcO9WehwHAiP38lNJeq9kmeyTFw1U2NMGwOOOAE2dfcn9DqcIIaxK0NSUVvzAg
-         4n8WwFiOl0z7JDDufLyJdWOugj7JPAG3X6uVJyVhx6yZEaNIoepcuLRtF0gyc6SgFnyG
-         0alKMadvdAP0SK3nMBfKCKMAbgDWM/t4BgaO1Gw+eMODVg/onia0t1UW9PaMQv/3ULUz
-         VsbLVdMNPK57gEO5LzFbzSqaOkEk6yhx5PJvie4yiBN+f5Et4pfVikwJoNJEWUWGkdvM
-         hRWhQREyZDFCneSYPXhIrq5vUfrv8lKZXDdwNLx3FOG40KNogDhMQn77X0q99C+8NH4e
-         TaiQ==
+        bh=eIW+Z3FuH4Tlrbj9QrjroPzWQnEb4hQ4AxEw1tDZfk4=;
+        b=iNpgHmouikM3eS2bzDsViRnQPf4IYT0AntRq/pLUycBts1tEtNDBhLAHPWLbGGQuwD
+         QJtB2nqOmcrDZKQqkypAxU9t8BXasLVzM76U6doxh0UD6M0mrI/XgijigKuOcMI2NCIb
+         whmis5i9jCy0XZKIvDNYWGW+znPQeHBEMsfX8rggozuXIuCHf0B+o1YIbhjdkYuLbC6k
+         nmWR9tyq0QFPwh7UUDhI4p73EwefaEhKQVvrdC/li4M77bvJ/3+wYenQP3FJrzs+WVyB
+         h/Tam1ckIRELByLvoQC8mEYZ6O8sMXwbWpK4qyuHRrWaDSukD/B1KlHnI6ojMiGvDvbK
+         uIeA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712269045; x=1712873845;
+        d=1e100.net; s=20230601; t=1712269077; x=1712873877;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=0S9AzfKyXXro6/KcESb4RixjJwGuwM+I6fIK3FdfbMw=;
-        b=dGl/gaLArP0pxAn4oOiiPtJX5C1zi9t4hC52PQfp+pHs/XaTFDIQ1scyGjQrI32E4k
-         1LIuEvMWZG0aNxSVqK9DbZMhDu761ENKhqa/Z3TqxNEhUPfwKzqrmpbDS+LRPNz6apSt
-         QRffjFH0cwFyrMv9hVkpHVwuE8+EUZcIyB3GIoT1vHA9aijnX6aX/q5FUzgwwEA6/NQM
-         8iWgViQL/X092HOFlsrTPjTx2DtbZMR+xIyFn53ZQab1L3LmrjmmDm5VsNaMGYOfysiE
-         cB6hUZm3lJAyJOAQrIIH5VApn/T2ngAnyBeXtKMyDEw8KJ63EdkF1ez8Kgy25FS0Rgbk
-         tjbw==
-X-Forwarded-Encrypted: i=1; AJvYcCX+x1GmBUj2n7YHFu69kYQzeEgJk8q3jr3MCrTQTMFAnt/fB+pCAY1Q5/1gnF1luFP3pzCfWla7G5aJSxju8naNRULbif5tKYcnDagHjjcLBfeF+LIYArlgY31fzy2D09R2
-X-Gm-Message-State: AOJu0YzbI+YL52V9xPCr6nsaFJCAPBm8yLJp5QZ+Iksi7ciFIuC1qLmU
-	4uM81d2pX0nfhAxAAiY/XOhSZc6LSH57qO9Sn59bWaB4eIGMNSG8pZ9bQw4atgJTig9BsQ1wX+E
-	MxjlqTe6Jiy2QtGKfTBt1k/i+VgE=
-X-Google-Smtp-Source: AGHT+IEhHqqPCiJKMvRzHHiNPR93glELvuoH2VAtNzMJK6uoUINTY9an9ck6wceOm3Y81pn0CohR7AD7YQ64ozaEZ1c=
-X-Received: by 2002:a17:90a:d809:b0:2a2:73e9:c3bf with SMTP id
- a9-20020a17090ad80900b002a273e9c3bfmr3897030pjv.20.1712269045344; Thu, 04 Apr
- 2024 15:17:25 -0700 (PDT)
+        bh=eIW+Z3FuH4Tlrbj9QrjroPzWQnEb4hQ4AxEw1tDZfk4=;
+        b=sR3g/EOodj7fcHS8Nr6TvXYuHo0fiy+4KSUIvEBv+gYU9Ri9rjdsrjG0RFNw6EyajL
+         5Gol2Rprg8WU27kUCqSC709gFVQtwsG2CaglnS5cP84HyQnb94Aq6HxjqjCggxfCLcty
+         fZgEdI+COF0PwK2Q5uwygmhe7v+PBoo1h65VmSiHBQWxWj5XIkV95YtU+bxr1nPBArWp
+         tnovP9QM1tO+wyCM71iWVs7udzyQWMbjjZEtTr6qhv3oASSlzczpu70nrYRL0Tv8rZBf
+         +RUuL/dQzKiTkZ0Gio7vKzSr+ZxjPfpmBjIBVuLNQoE2w6Hi7LrnHY6Pwex4dbATstSV
+         HegA==
+X-Forwarded-Encrypted: i=1; AJvYcCXcG4O+yRANecQDoofyQVTSyp2gIIAud35fHnA8vpkt61C+JiaMPHRSdHxuGiX2VG2CyAQSTn2YQsnX2HISPIMG6YCc
+X-Gm-Message-State: AOJu0Yy2R0E/yYxaOz7jqO+n/Y7ciQsV2qbItjunuoMN0757VkPu+iJM
+	ZpZmzxK4Y6rX/rKgeR7h5ihl500twb1r5SautFBb3TwkJfyzRDhKtUp/1SOWE14yCiwQm8L3tBP
+	Q/G1mJ2sbDUpQzZZYVnei1Yi62NfByZAHxJlx
+X-Google-Smtp-Source: AGHT+IEoGycg7Q6yz1U10yVcrqSmmGhsvl59dTKCzdbY+AGkKJwTyJBRF58S2bqCqewHCyhhbzL+kREAY0nZt0Z/KC8=
+X-Received: by 2002:a5d:56cd:0:b0:343:a117:7d2 with SMTP id
+ m13-20020a5d56cd000000b00343a11707d2mr434133wrw.71.1712269077043; Thu, 04 Apr
+ 2024 15:17:57 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240404010308.334604-1-void@manifault.com> <20240404010308.334604-2-void@manifault.com>
- <36bb0747-bff4-4fad-93ca-dae406f14099@linux.dev> <20240404163316.GA385240@maniforge>
-In-Reply-To: <20240404163316.GA385240@maniforge>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Thu, 4 Apr 2024 15:16:56 -0700
-Message-ID: <CAEf4Bza3rGMh=S7yb_Crf8v_SBTrp+NiKn0_frZnWpEi30DkPg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 2/2] selftests/bpf: Verify calling core kfuncs
- from BPF_PROG_TYPE_SYCALL
-To: David Vernet <void@manifault.com>
-Cc: Yonghong Song <yonghong.song@linux.dev>, ast@kernel.org, daniel@iogearbox.net, 
-	andrii@kernel.org, martin.lau@linux.dev, song@kernel.org, 
-	john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com, 
-	haoluo@google.com, jolsa@kernel.org, linux-kernel@vger.kernel.org, 
-	kernel-team@meta.com, bpf <bpf@vger.kernel.org>
+References: <20240404165404.3805498-1-surenb@google.com> <Zg7dmp5VJkm1nLRM@casper.infradead.org>
+ <CAJuCfpHbTCwDERz+Hh+aLZzNdtSFKA+Q7sW-xzvmFmtyHCqROg@mail.gmail.com>
+In-Reply-To: <CAJuCfpHbTCwDERz+Hh+aLZzNdtSFKA+Q7sW-xzvmFmtyHCqROg@mail.gmail.com>
+From: Suren Baghdasaryan <surenb@google.com>
+Date: Thu, 4 Apr 2024 15:17:43 -0700
+Message-ID: <CAJuCfpHy5Xo76S7h9rEuA3cQ1pVqurL=wmtQ2cx9-xN1aa_C_A@mail.gmail.com>
+Subject: Re: [PATCH 1/1] mm: change inlined allocation helpers to account at
+ the call site
+To: Matthew Wilcox <willy@infradead.org>
+Cc: akpm@linux-foundation.org, joro@8bytes.org, will@kernel.org, 
+	trond.myklebust@hammerspace.com, anna@kernel.org, arnd@arndb.de, 
+	herbert@gondor.apana.org.au, davem@davemloft.net, jikos@kernel.org, 
+	benjamin.tissoires@redhat.com, tytso@mit.edu, jack@suse.com, 
+	dennis@kernel.org, tj@kernel.org, cl@linux.com, jakub@cloudflare.com, 
+	penberg@kernel.org, rientjes@google.com, iamjoonsoo.kim@lge.com, 
+	vbabka@suse.cz, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, 
+	iommu@lists.linux.dev, linux-kernel@vger.kernel.org, 
+	linux-nfs@vger.kernel.org, linux-acpi@vger.kernel.org, 
+	acpica-devel@lists.linux.dev, linux-arch@vger.kernel.org, 
+	linux-crypto@vger.kernel.org, bpf@vger.kernel.org, 
+	linux-input@vger.kernel.org, linux-ext4@vger.kernel.org, linux-mm@kvack.org, 
+	netdev@vger.kernel.org, linux-security-module@vger.kernel.org, 
+	kent.overstreet@linux.dev
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Apr 4, 2024 at 9:33=E2=80=AFAM David Vernet <void@manifault.com> wr=
-ote:
+On Thu, Apr 4, 2024 at 10:08=E2=80=AFAM Suren Baghdasaryan <surenb@google.c=
+om> wrote:
 >
-> On Thu, Apr 04, 2024 at 09:04:19AM -0700, Yonghong Song wrote:
+> On Thu, Apr 4, 2024 at 10:04=E2=80=AFAM Matthew Wilcox <willy@infradead.o=
+rg> wrote:
 > >
-> > On 4/3/24 6:03 PM, David Vernet wrote:
-> > > Now that we can call some kfuncs from BPF_PROG_TYPE_SYSCALL progs, le=
-t's
-> > > add some selftests that verify as much. As a bonus, let's also verify
-> > > that we can't call the progs from raw tracepoints.
+> > On Thu, Apr 04, 2024 at 09:54:04AM -0700, Suren Baghdasaryan wrote:
+> > > +++ b/include/linux/dma-fence-chain.h
+> > > @@ -86,10 +86,7 @@ dma_fence_chain_contained(struct dma_fence *fence)
+> > >   *
+> > >   * Returns a new struct dma_fence_chain object or NULL on failure.
+> > >   */
+> > > -static inline struct dma_fence_chain *dma_fence_chain_alloc(void)
+> > > -{
+> > > -     return kmalloc(sizeof(struct dma_fence_chain), GFP_KERNEL);
+> > > -};
+> > > +#define dma_fence_chain_alloc()      kmalloc(sizeof(struct dma_fence=
+_chain), GFP_KERNEL)
+> >
+> > You've removed some typesafety here.  Before, if I wrote:
+> >
+> >         struct page *page =3D dma_fence_chain_alloc();
+> >
+> > the compiler would warn me that I've done something stupid.  Now it
+> > can't tell.  Suggest perhaps:
+> >
+> > #define dma_fence_chain_alloc()                                        =
+   \
+> >         (struct dma_fence_chain *)kmalloc(sizeof(struct dma_fence_chain=
+), \
+> >                                                 GFP_KERNEL)
+> >
+> > but maybe there's a better way of doing that.  There are a few other
+> > occurrences of the same problem in this monster patch.
+>
+> Got your point.
+
+Ironically, checkpatch generates warnings for these type casts:
+
+WARNING: unnecessary cast may hide bugs, see
+http://c-faq.com/malloc/mallocnocast.html
+#425: FILE: include/linux/dma-fence-chain.h:90:
++ ((struct dma_fence_chain *)kmalloc(sizeof(struct dma_fence_chain),
+GFP_KERNEL))
+
+I guess I can safely ignore them in this case (since we cast to the
+expected type)?
+
+>
+> >
+> > > +++ b/include/linux/hid_bpf.h
+> > > @@ -149,10 +149,7 @@ static inline int hid_bpf_connect_device(struct =
+hid_device *hdev) { return 0; }
+> > >  static inline void hid_bpf_disconnect_device(struct hid_device *hdev=
+) {}
+> > >  static inline void hid_bpf_destroy_device(struct hid_device *hid) {}
+> > >  static inline void hid_bpf_device_init(struct hid_device *hid) {}
+> > > -static inline u8 *call_hid_bpf_rdesc_fixup(struct hid_device *hdev, =
+u8 *rdesc, unsigned int *size)
+> > > -{
+> > > -     return kmemdup(rdesc, *size, GFP_KERNEL);
+> > > -}
+> > > +#define call_hid_bpf_rdesc_fixup(_hdev, _rdesc, _size) kmemdup(_rdes=
+c, *(_size), GFP_KERNEL)
+> >
+> > here
+> >
+> > > -static inline handle_t *jbd2_alloc_handle(gfp_t gfp_flags)
+> > > -{
+> > > -     return kmem_cache_zalloc(jbd2_handle_cache, gfp_flags);
+> > > -}
+> > > +#define jbd2_alloc_handle(_gfp_flags)        kmem_cache_zalloc(jbd2_=
+handle_cache, _gfp_flags)
+> >
+> > here
+> >
+> > > +++ b/include/linux/skmsg.h
+> > > @@ -410,11 +410,8 @@ void sk_psock_stop_verdict(struct sock *sk, stru=
+ct sk_psock *psock);
+> > >  int sk_psock_msg_verdict(struct sock *sk, struct sk_psock *psock,
+> > >                        struct sk_msg *msg);
 > > >
-> > > Signed-off-by: David Vernet <void@manifault.com>
+> > > -static inline struct sk_psock_link *sk_psock_init_link(void)
+> > > -{
+> > > -     return kzalloc(sizeof(struct sk_psock_link),
+> > > -                    GFP_ATOMIC | __GFP_NOWARN);
+> > > -}
+> > > +#define sk_psock_init_link() \
+> > > +             kzalloc(sizeof(struct sk_psock_link), GFP_ATOMIC | __GF=
+P_NOWARN)
 > >
-> > Ack with some comments below.
+> > here
 > >
-> > Acked-by: Yonghong Song <yonghong.song@linux.dev>
+> > ... I kind of gave up at this point.  You'll want to audit for yourself
+> > anyway ;-)
 >
-> Thanks for the review. It looks like accidentally replied directly to
-> me, so I'll re-add the missing cc's.
->
-
-And dropped bpf@vger :) adding back
-
-> >
-> > > ---
-> > >   .../selftests/bpf/prog_tests/cgrp_kfunc.c     |  1 +
-> > >   .../selftests/bpf/prog_tests/task_kfunc.c     |  1 +
-> > >   .../selftests/bpf/progs/cgrp_kfunc_common.h   | 21 ++++++++++++++++=
-+++
-> > >   .../selftests/bpf/progs/cgrp_kfunc_failure.c  |  4 ++++
-> > >   .../selftests/bpf/progs/cgrp_kfunc_success.c  |  4 ++++
-> > >   .../selftests/bpf/progs/cpumask_common.h      | 19 ++++++++++++++++=
-+
-> > >   .../selftests/bpf/progs/cpumask_failure.c     |  4 ++++
-> > >   .../selftests/bpf/progs/cpumask_success.c     |  3 +++
-> > >   .../selftests/bpf/progs/task_kfunc_common.h   | 18 ++++++++++++++++
-> > >   .../selftests/bpf/progs/task_kfunc_failure.c  |  4 ++++
-> > >   .../selftests/bpf/progs/task_kfunc_success.c  |  4 ++++
-> > >   11 files changed, 83 insertions(+)
-> > >
-> > > diff --git a/tools/testing/selftests/bpf/prog_tests/cgrp_kfunc.c b/to=
-ols/testing/selftests/bpf/prog_tests/cgrp_kfunc.c
-> > > index adda85f97058..73f0ec4f4eb7 100644
-> > > --- a/tools/testing/selftests/bpf/prog_tests/cgrp_kfunc.c
-> > > +++ b/tools/testing/selftests/bpf/prog_tests/cgrp_kfunc.c
-> > > @@ -102,6 +102,7 @@ void test_cgrp_kfunc(void)
-> > >             run_success_test(success_tests[i]);
-> > >     }
-> > > +   RUN_TESTS(cgrp_kfunc_success);
-> > >     RUN_TESTS(cgrp_kfunc_failure);
-> > >   cleanup:
-> > > diff --git a/tools/testing/selftests/bpf/prog_tests/task_kfunc.c b/to=
-ols/testing/selftests/bpf/prog_tests/task_kfunc.c
-> > > index d4579f735398..3db4c8601b70 100644
-> > > --- a/tools/testing/selftests/bpf/prog_tests/task_kfunc.c
-> > > +++ b/tools/testing/selftests/bpf/prog_tests/task_kfunc.c
-> > > @@ -94,5 +94,6 @@ void test_task_kfunc(void)
-> > >             run_success_test(success_tests[i]);
-> > >     }
-> > > +   RUN_TESTS(task_kfunc_success);
-> > >     RUN_TESTS(task_kfunc_failure);
-> > >   }
-> >
-> > The above RUN_TESTS(cgrp_kfunc_success) and RUN_TESTS(task_kfunc_succes=
-s)
-> > will do duplicate work for *existing* bpf programs in their respective
-> > files. I think we still prefer to have cgrp_kfunc_success tests
-> > in cgrp_kfunc.c to make it easy to cross check. But in order to
-> > remove duplicate work, one option is to make other non-RUN_TESTS
-> > programs in those files not auto-loaded and their corresponding
-> > prog_tests/*.c file need to explicitly enable loading the problem.
->
-> Good point, and yes I agree with that approach of not auto-loading
-> non-RUN_TESTS programs. Considering that we have a  __success BTF tag to
-> say, "this prog should successfully load", it seems odd that we'd also
-> automatically load and validate progs that _didn't_ specify that tag as
-> well. At that point, I'm not sure what value the tag is bringing. Also,
-
-Just more explicitness (if desired). Normally __success would be
-augmented by __msg() or __retval(). I'd feel uncomfortable just
-silently skipping programs that are not marked with __success, as it
-would be too easy to accidentally forget to add it and not know that
-the BPF program is not tested.
-
-I'd say that RUN_TESTS-based programs should be kept separate from any
-other BPF programs that have a custom user-space testing part, though.
-
-About the patch itself. I don't really see much point in adding
-*_KFUNC_LOAD_TEST macros. They are used once or twice in total, while
-obscuring *what* is actually being tested. Unless you expect to add 5+
-more copies of them, I'd just inline them explicitly.
-
-> that was the expected behavior before RUN_TESTS() was introduced, so it
-> hopefully shouldn't cause much if any churn.
->
-> > Maybe the current patch is okay even with duplicated work as it
-> > should not take much time to verify those tiny problems.
->
-> IMO it should be fine for now as the overhead for validating and loading
-> these progs is low, but it'd definitely be good to address this problem
-> in a follow-up. I don't think it should take too much effort -- AFAICT
-> we'd just have to mark a test spec as invalid if it didn't have any BTF
-> test tags. Ideally I'd like to separate that from this patch set, but I
-> can do it here if folks want.
->
-> Thanks,
-> David
+> Yes, I'll go over it and will make the required changes. Thanks for
+> looking into it!
+> Suren.
