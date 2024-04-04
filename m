@@ -1,142 +1,90 @@
-Received: from mail-pg1-f169.google.com (mail-pg1-f169.google.com [209.85.215.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D9CF13A25E
-	for <bpf@vger.kernel.org>; Thu,  4 Apr 2024 21:21:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C9311C6AF;
+	Thu,  4 Apr 2024 21:22:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712265707; cv=none; b=GM9dKBdCogI1hCnZ/h3tu2VzvGjqcfTQNXUIYnJB0guBkUVwcDEzmHeQsyGyS7mjLU0NcR+Z9L9Qe3aBh0sGhmWoNjjcjS3ZB3Kai6TfoBjWV27NABw0yawx+BpMYuTajP3Gsn/3jD/rhRd81nxv+lXk8IYVen12Og2dUeauyY8=
+	t=1712265745; cv=none; b=cT8sL6K+BpiGxdRT51sMg3naZCruWKMVBdZUiTs621qTGDuAnZoNulNLsU72tbV9mxEju8kYJLBoBLFP2B5Z53Rw8TThn84xQbJO9yRvMYS+bX3kdCPuJzSkI2UPg7yiMFiiNmNa8DOuScWBLXiWRFWLbqfZphmMqttMsXXZlr4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712265707; c=relaxed/simple;
-	bh=qoRhv9m2ra5YsnRikCS05dVEhrC+yEoGGsTy7LYY9TE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=C4OpuxAURp9ruhNmGTACWxwghaQBSbkuAJG+OobQ1sEML++lclT9BZqhPLg9L4Csd7fd92btm/vUA+vrZCDVw8VgeiO6X3fOage824ukwTgRFcE815Xvhmhl4vIvgPiY5MtczZpAwe1wPu065HvH0mpdcH/Jd6OWFiK8vsNM3xE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JLN/Xlt9; arc=none smtp.client-ip=209.85.215.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1712265745; c=relaxed/simple;
+	bh=RoajnSQo90ahqN07mdhoTv3ubUHzrae//AMQ7eSZHUk=;
+	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=jO+Vb4ueAHocQgDKeGWOpd4YxSKYPiNzq7h2uCou5ywk1YGGxQK8iDoATSrVx5E1RwLFf1aEG+Jhc90own7zcfEualE2p0f6TMH/pTh39g/oLnHZTYX8Eyj+ThRJ3gQad4xCYrARHEeBV0/sjPV6kh1uoi9/V9vjQWVvLerkF8g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=CRCX3U5a; arc=none smtp.client-ip=213.133.104.62
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JLN/Xlt9"
-Received: by mail-pg1-f169.google.com with SMTP id 41be03b00d2f7-5dca1efad59so1161581a12.2
-        for <bpf@vger.kernel.org>; Thu, 04 Apr 2024 14:21:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1712265706; x=1712870506; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=yBvZMA+HVroSLFG5ErGuiISZ4ykfO9Alqpvgdxg9wOc=;
-        b=JLN/Xlt9e1wwvq7gqsN4J0XPhYw5aQzxdlZ7feDK7+XBO4aJ4f8RaHcuJkL/ucs6Em
-         /cMk9y5ADAO+Si/4FpqQvvPtdS/x+OvqBTUcesSKEXFfOnE23iT192UzAMfyCoFj/Sgr
-         ruuGIavPn2CGGm3Gd1dNa6WDZVuizmGBclpRuSdCZGkdePucIq/o2eOZMCzEMrVuGUzy
-         S/wezi4PhC6j2bySgZXz4/EA6J0iWdzS8FD4UFh5j+ZzA6qCgnMoZaUVYLMYWmQRS7sT
-         wFLJ//jR5bE2QxC1FPPf5RYsx/BaYaXkVyT9onc1qUjKnnbrT5I9D71CX4bHDRyOAubU
-         GrIA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712265706; x=1712870506;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=yBvZMA+HVroSLFG5ErGuiISZ4ykfO9Alqpvgdxg9wOc=;
-        b=J40DHku/1NPbKIvWf6NJvNh/ulT9ZX8JhqxNk1HTIx6F+3Z5+14vAwnSp8ZpVjcJO5
-         EfOtoaRktpUojXvg3MBRoXMAKuNlL66d7yvoGhfoI6sIBQDG08bVBSeHzIrEcTBODbOZ
-         cGErKzw1+Bi05ywtCpm2bjkzRrKhaH8n6CWt95WBcdfqDCfFq0EQHgewh4Df4TeVnj8L
-         zLTWpfiSVXCIc/8VeNYnd2csaKJsZ1e1omzy3lASiSEflRjgXQYNxCcsNgTfCxOjq8A7
-         ZamX0NjqVOSe4U6RhBaWhZjDElgSaUGaorhzQ4x5YdZt7CH5O/TgfKWCiTZgA0cmjL8Y
-         8A8g==
-X-Forwarded-Encrypted: i=1; AJvYcCWHVdFwFdl1LxHPoqJ2OG+wG52OK1+/SkSk6NNcQ6n/eiolbsscGqRMzmqbwpu+zqaEMvjPiY7c59r7qVAKjBBDrzR3
-X-Gm-Message-State: AOJu0Yw20VRDZ6MuAWik2kH4o756PHLyAXGQuR/+B2M/M6VPYx/m9rrG
-	8Rqv8lVEs5xUydUeRsl6XLxS/Ap7jFWFbyUSuYPj1F5ajEFDIvD2cYtcTFbMb9mSJAl7nC7Ri1J
-	nuZ0lhi7ngtKhff1668zYySYIQ2k=
-X-Google-Smtp-Source: AGHT+IGMZDw4envF2NQ0rxLzTn4DGkFhFyCBNHNYhyvJE6OFmxKu4HFYwPQm75xsOHo7fiyED9Ip/0ydVsni0pMfjvg=
-X-Received: by 2002:a17:90b:1201:b0:2a2:e10e:1594 with SMTP id
- gl1-20020a17090b120100b002a2e10e1594mr2386256pjb.37.1712265705787; Thu, 04
- Apr 2024 14:21:45 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="CRCX3U5a"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=5eyKcts5tc20PP1aa+1X55nOhcWRUmdTyHy+NxYZWls=; b=CRCX3U5alVOz6DXjGUSMG2+eCm
+	qo2wInb1hxXjfsYFMsosksFNxPoto0BZsFp4S38YFpVp8ZmzmBV0Hr7wbQroUMNMprkTTkdwgjDpz
+	TzegGM/xIjtMMrew2yaOGKovdaqI0ZeXdddMs/ebguedCY83sNLgC7Poo7gSLTvNwwyMzkJcjXE47
+	Zk03l5L8g7xQc7OYiTFBzi3I/RQlfkNOEr48b5gCDAXVMevQ3VFTqVbQvFDZ3MQVqSaKgb39Xpp3Y
+	I/5zyoohcLl73FJpp9F9QI/VnWRjlbl4+soSLMkWItcXU99YxtWolNIVfrEMKBjq5wtVXb3Zncp6d
+	jOIsvtmQ==;
+Received: from sslproxy02.your-server.de ([78.47.166.47])
+	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1rsU8F-000FZp-Gb; Thu, 04 Apr 2024 22:56:23 +0200
+Received: from [178.197.249.22] (helo=linux.home)
+	by sslproxy02.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1rsU8E-00FjS9-2b;
+	Thu, 04 Apr 2024 22:56:22 +0200
+Subject: Re: [PATCH net] xsk: validate user input for
+ XDP_{UMEM|COMPLETION}_FILL_RING
+To: Eric Dumazet <edumazet@google.com>, "David S . Miller"
+ <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>
+Cc: netdev@vger.kernel.org, eric.dumazet@gmail.com,
+ syzbot <syzkaller@googlegroups.com>, =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?=
+ <bjorn@kernel.org>, Magnus Karlsson <magnus.karlsson@intel.com>,
+ Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+ Jonathan Lemon <jonathan.lemon@gmail.com>, bpf@vger.kernel.org
+References: <20240404202738.3634547-1-edumazet@google.com>
+From: Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <ea789237-3f4d-267f-4aeb-85ca4d9fc0c4@iogearbox.net>
+Date: Thu, 4 Apr 2024 22:56:21 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240402021307.1012571-1-andrii@kernel.org> <CAEf4BzbQrZ5XpSTv-0NXLRcb3g4VZRymar66zs2QyCVBmB1Mpw@mail.gmail.com>
- <CANk7y0jpJuLsnD1fmK5-oqD5CWvrGkzaYU1+Yya_7VuYtzPpMQ@mail.gmail.com>
-In-Reply-To: <CANk7y0jpJuLsnD1fmK5-oqD5CWvrGkzaYU1+Yya_7VuYtzPpMQ@mail.gmail.com>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Thu, 4 Apr 2024 14:21:33 -0700
-Message-ID: <CAEf4BzYC5j=zYOov+hDaugh5_nJO6z=wAq_f5SxSQUiWXH6ZaQ@mail.gmail.com>
-Subject: Re: [PATCH v2 bpf-next 0/4] Add internal-only BPF per-CPU instruction
-To: Puranjay Mohan <puranjay12@gmail.com>
-Cc: Andrii Nakryiko <andrii@kernel.org>, Pu Lehui <pulehui@huawei.com>, bpf@vger.kernel.org, 
-	ast@kernel.org, daniel@iogearbox.net, martin.lau@kernel.org, 
-	kernel-team@meta.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20240404202738.3634547-1-edumazet@google.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.103.10/27235/Thu Apr  4 10:24:59 2024)
 
-On Thu, Apr 4, 2024 at 2:03=E2=80=AFPM Puranjay Mohan <puranjay12@gmail.com=
-> wrote:
->
-> Hi Andrii,
->
-> On Thu, Apr 4, 2024 at 6:12=E2=80=AFPM Andrii Nakryiko
-> <andrii.nakryiko@gmail.com> wrote:
-> >
-> > On Mon, Apr 1, 2024 at 7:13=E2=80=AFPM Andrii Nakryiko <andrii@kernel.o=
-rg> wrote:
-> > >
-> > > Add a new BPF instruction for resolving per-CPU memory addresses.
-> > >
-> > > New instruction is a special form of BPF_ALU64 | BPF_MOV | BPF_DW, wi=
-th
-> > > insns->off set to BPF_ADDR_PERCPU (=3D=3D -1). It resolves provided p=
-er-CPU offset
-> > > to an absolute address where per-CPU data resides for "this" CPU.
-> > >
-> > > This patch set implements support for it in x86-64 BPF JIT only.
-> > >
-> > > Using the new instruction, we also implement inlining for three cases=
-:
-> > >   - bpf_get_smp_processor_id(), which allows to avoid unnecessary tri=
-vial
-> > >     function call, saving a bit of performance and also not polluting=
- LBR
-> > >     records with unnecessary function call/return records;
-> > >   - PERCPU_ARRAY's bpf_map_lookup_elem() is completely inlined, bring=
-ing its
-> > >     performance to implementing per-CPU data structures using global =
-variables
-> > >     in BPF (which is an awesome improvement, see benchmarks below);
-> > >   - PERCPU_HASH's bpf_map_lookup_elem() is partially inlined, just li=
-ke the
-> > >     same for non-PERCPU HASH map; this still saves a bit of overhead.
-> > >
-> > > To validate performance benefits, I hacked together a tiny benchmark =
-doing
-> > > only bpf_map_lookup_elem() and incrementing the value by 1 for PERCPU=
-_ARRAY
-> > > (arr-inc benchmark below) and PERCPU_HASH (hash-inc benchmark below) =
-maps. To
-> > > establish a baseline, I also implemented logic similar to PERCPU_ARRA=
-Y based
-> > > on global variable array using bpf_get_smp_processor_id() to index ar=
-ray for
-> > > current CPU (glob-arr-inc benchmark below).
->
-> Can you share the code for these benchmarks? I want to use the same to
-> compare the performance
-> on ARM64.
->
+On 4/4/24 10:27 PM, Eric Dumazet wrote:
+> syzbot reported an illegal copy in xsk_setsockopt() [1]
+> 
+> Make sure to validate setsockopt() @optlen parameter.
+> 
+[...]
+> 
+> Fixes: 423f38329d26 ("xsk: add umem fill queue support and mmap")
+> Reported-by: syzbot <syzkaller@googlegroups.com>
+> Signed-off-by: Eric Dumazet <edumazet@google.com>
+> Cc: "Björn Töpel" <bjorn@kernel.org>
+> Cc: Magnus Karlsson <magnus.karlsson@intel.com>
+> Cc: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+> Cc: Jonathan Lemon <jonathan.lemon@gmail.com>
+> Cc: bpf@vger.kernel.org
 
-Sure, see [0]. You can run:
+Given bpf tree PR went out, Jakub, feel free to take directly :
 
-$ ./benchs/run_bench_trigger.sh glob-arr-inc arr-inc hash-inc
+Acked-by: Daniel Borkmann <daniel@iogearbox.net>
 
-from tools/testing/selftest/bpf directory to get something like
-
-$ ./benchs/run_bench_trigger.sh glob-arr-inc arr-inc hash-inc
-glob-arr-inc   :  243.196 =C2=B1 7.879M/s
-arr-inc        :  218.139 =C2=B1 4.407M/s
-hash-inc       :   97.727 =C2=B1 3.643M/s
-
-  [0] https://github.com/anakryiko/linux/commit/8dec900975ef1a0308a78621547=
-35549d6b66f64
-
-> Thanks,
-> Puranjay
+Thanks Eric !
