@@ -1,110 +1,102 @@
-Received: from wfhigh7-smtp.messagingengine.com (wfhigh7-smtp.messagingengine.com [64.147.123.158])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f181.google.com (mail-lj1-f181.google.com [209.85.208.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12AEA139D
-	for <bpf@vger.kernel.org>; Wed,  3 Apr 2024 22:32:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=64.147.123.158
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BB67ED9;
+	Thu,  4 Apr 2024 00:08:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712183524; cv=none; b=bH7gIR4yE8DzIKdnJ1woCWJkL2FFXiCM/FCHAT0ncZ7GADUpKzAc0t0JLS+0/C1xMAJQSxLEPFUjgM5lBuyg928+Au4pkWb0r2dzQz26JwqFKNnbPu/P30XtdCTXkSo8A3axnKg5A6kWscEYgkNtzQuP9f30WbbXa6tqC0AoSv8=
+	t=1712189294; cv=none; b=rZ8QuR5HvwN8Sk13zMOD3zwHJ/9ve3ehy13Mwtk7c7nsjNsZNE2PCngY1pIKoqZOcvQe1oFkJfgFFjdYjiMgtRowrj4xiorsvVtlCXuWRW7YYqhSkx3uMxcJEoeDFs7P60rmtGYF1QFnpOF9zjF2bjq22w3Syuef8KIzFi+B3vc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712183524; c=relaxed/simple;
-	bh=fYne05NcVt1ZjcM3VQ9bQyQoFVp9fgKsPt8hYpx4QQ4=;
-	h=MIME-Version:Message-Id:In-Reply-To:References:Date:From:To:Cc:
-	 Subject:Content-Type; b=pfYXHL43KBxGhVaBOjSnNxiYNvb5MaXXH6oVatw2VAHlOGsTtUHKMTQJGgdLEoAHppLsy2XFyMTiCkXgp+6Y8l7ttP3zUJatjf0jROxNfLp5cQjaMAm75D49eVfZO2u3JramjOZIL4xu+sMjZnFHo+5VUc5I4SqA7CH/Nz4LM+w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=NTNLcZEh; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=pQuErzwA; arc=none smtp.client-ip=64.147.123.158
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+	s=arc-20240116; t=1712189294; c=relaxed/simple;
+	bh=CllVtwahg2YM8GmLV6ISoii10jwOcQAdOsftJ9SyRzg=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=LqdsX/Dw8xRLhMAoxtl5U4ir+JrOU+zlfF/unfNo9NpAaPPtaZMmmIT5Ioxn3szmuQcMYyKqhxOgGH+Aeg5S/CJT4weTFhw7sXrj9dftMSgWI0Owm4SiC/ynTGZhPjBS4+8foFoo6gDPVl6+q7ky6jLpJl14KF8vkQ/2qGTSkRM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FGWNRHv5; arc=none smtp.client-ip=209.85.208.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="NTNLcZEh";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="pQuErzwA"
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-	by mailfhigh.west.internal (Postfix) with ESMTP id 3F11A180006D;
-	Wed,  3 Apr 2024 18:32:01 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute5.internal (MEProxy); Wed, 03 Apr 2024 18:32:02 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:subject
-	:subject:to:to; s=fm1; t=1712183520; x=1712269920; bh=ZKU8QnPFpk
-	fIAfHhZDM9ha1A7ABYqkBBOaVhR2yPGZY=; b=NTNLcZEhZ9JnLzvi9+Lwq9mdAQ
-	7nvL3OfJQ9FerzQm1G8Soi14xIqJa6ZyDjkoELuflFRWoDtvceGl7QnZcoTIKG0D
-	xjGAjexLCR/+qs9Fu/Tkiidc6xyFUdQvcrX5ljTZKie7s4qB8XoRknkQg971FQGH
-	lk3FSL9B7mpnP8H6H9CzMxzIM74D6vEP7S4bRBdHf0IrO7Smtt5Y8Eqji6FS12c1
-	jU3FbNchNexP2yTVWF2ovDIrH1JdsbOuKpOIYNTOakIMc8+ax+17bVmf+X4imrkV
-	9QmWMx5lpMr3X4tgiXSy4gPyvW/rVytrc8KdrnHU55omNTyzRkV9ZPgKVLEA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm2; t=1712183520; x=1712269920; bh=ZKU8QnPFpkfIAfHhZDM9ha1A7ABY
-	qkBBOaVhR2yPGZY=; b=pQuErzwAS6eBywKRZBgX1izos6WpQ62pM2gLslV0jqbO
-	cc8rz6SKvMX/M1xKJDX9jEthSi3zqkyfxPnsMy9my4buPEICpibGlkRK5QKd6MU9
-	1xwjHmXIQ2L/1yX8vZcfuHGZt9jc51x2CMSCkyVYSb5EICrvOLKQHW5wZlIJW1lk
-	aimAc1ruzM9bOtFxUBQ6DxMc1vTgrukIeYtpj2S24u/g7ublF7yYJeXjW/UZYyIM
-	R665A1SwDHC47Rb/USODz7WtQJmmaeAPlVkWKNyHyZx6+UVN+HT7UpBAXW7dA7xi
-	zucy8U0D3MvcE6m1ug7pb0JU2DlAVxRCYojmlhv1Bg==
-X-ME-Sender: <xms:4NgNZonINgTmut4pgUoxTOURHzZUHqUHNeQZwF3MMFiAGQ9jkH_XNw>
-    <xme:4NgNZn2UwPeQE_UpfRsHnTE3ANE03oVTMnU_-v4WlKjy5KlqyNg_q94uLgsqdAerp
-    3vQPLnLAqOG5X7sbOg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrudefjedguddvucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:4NgNZmrfA8Pyh0mpX1fjWtQENldbIOd9sew76u7qNXyAE_kxs-7Jpw>
-    <xmx:4NgNZknI-qkT_s-YicWH8wUd-ghZvwF2K0QL4WhIoCsZXAffmITX_A>
-    <xmx:4NgNZm2hSN2Ncsky83BH_7YJgpydD-FD2RO-14KFwwkWAtFohUzVaQ>
-    <xmx:4NgNZrtFV1C9IbXXMtuTiXMSc7je6f6PtqUtMMUagHTcIljpmoxXNg>
-    <xmx:4NgNZvtoflbYBm3s8jmZ5xz08sG3q9c5wX2p8h8hvInEIHAcPO3xO2uV>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id 03EC5B6008D; Wed,  3 Apr 2024 18:31:59 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.11.0-alpha0-333-gbfea15422e-fm-20240327.001-gbfea1542
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FGWNRHv5"
+Received: by mail-lj1-f181.google.com with SMTP id 38308e7fff4ca-2d6ff0422a2so4884321fa.2;
+        Wed, 03 Apr 2024 17:08:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1712189291; x=1712794091; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:autocrypt
+         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=SFRNzgRPkJphjrDswSNXJJrKg5DTZ1tH618tA7fEZgI=;
+        b=FGWNRHv5Gy57j9wMN5MIoO28nvTVRQOcEGdg90MlSK+QUcnCN5CK85Oa+G7d2c8PjH
+         aO+i4JHDHRMk8eWSZLaYFuqvyHUF3GLvkEVA2NZx/Oh9Wg7j4FBEiOmZ4JiahEybduwT
+         F5UPf+SjumUBYyKk753Kd0REgBQRRg3zEsamRy/EFbung2tKYWV53EweY3ftZaYGEmLS
+         eGkRpdmGfHzu3rt0zWmRHfUpanndsG+Dcks+1uvK4e5nQptQ2H6Rx1sjiNCtdFCXOcA8
+         XFfUZKlZfkn40t5DYtyuSpmkujHBLAlFuu2p7LaAZo42rLjDYNfQ8f+BcHtiV0Z/jd0M
+         jH8g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1712189291; x=1712794091;
+        h=mime-version:user-agent:content-transfer-encoding:autocrypt
+         :references:in-reply-to:date:cc:to:from:subject:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=SFRNzgRPkJphjrDswSNXJJrKg5DTZ1tH618tA7fEZgI=;
+        b=FDeulEOaEePUTZc6T/CWsA4KgnUlnaSWFlTDwImFUUwiojKO3Ia8ZAOH56TP9FttdQ
+         NgMgIGH6YhorGZ7YcWLrUZ83URRMf3W6JS6Z4nZiFW7CgrGdnd9nLwxlJpgt7cvCuYiR
+         u6HduIQ0TzWTbQFGbHaYPr2RhN/+kZ1qkX2IEgWlQVQVlIFCPD2RXtWEE2VdwFJITI6r
+         k/P5ER6a3sfpPj7d01xAHpvBQM+JUPOrjoIfcvMuCqxVf+qIdgF/p4dQFF7K8CiqPc+t
+         FSMv0HQFCbgKpwvTgF6ljItnwV6///OFWngaYekrGiKuqearFOkQXxjDiYcjv9PFKvuk
+         HWSQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU5C6fdci86UBmNfTOIPqPUv+0j+JyKRzT+jR3R74DomCy7+fBjB05/8e6zLyYT+ggQQJkM+5FMIYAIuW5M6e0XDA21gxqZkI3YvO29aMCKT2Xw9ImC6vXQ7FKSLQ==
+X-Gm-Message-State: AOJu0YwfLL4AxaV3K59rfrjsPOrW961Oo4s96+slRD9zBltYM2VnsMeV
+	OwgN2FS3j/3uuPKi6hWOKQWvURtNk1ElJHDUBHg/Ti6/qmG7NJ73
+X-Google-Smtp-Source: AGHT+IHKslzmHWyLaSkPtk5bDPtqjzGjGuzMcoZr9KxUEZX3G6neAaq+M+X0Yxq6vIcQ9H8ogtttCQ==
+X-Received: by 2002:a2e:be28:0:b0:2d8:2799:fbcf with SMTP id z40-20020a2ebe28000000b002d82799fbcfmr815997ljq.34.1712189290872;
+        Wed, 03 Apr 2024 17:08:10 -0700 (PDT)
+Received: from [192.168.100.206] ([89.28.99.140])
+        by smtp.gmail.com with ESMTPSA id z2-20020a05600c0a0200b0041624ddff48sm654482wmp.28.2024.04.03.17.08.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 03 Apr 2024 17:08:10 -0700 (PDT)
+Message-ID: <747816d2edd61a075d200ffa5da680d2cc2d6854.camel@gmail.com>
+Subject: Re: [RFC/PATCHES 00/12] pahole: Reproducible parallel DWARF
+ loading/serial BTF encoding
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Arnaldo Carvalho de Melo <acme@kernel.org>, dwarves@vger.kernel.org
+Cc: Jiri Olsa <jolsa@kernel.org>, Clark Williams <williams@redhat.com>, Kate
+ Carcia <kcarcia@redhat.com>, bpf@vger.kernel.org, Alan Maguire
+ <alan.maguire@oracle.com>,  Kui-Feng Lee <kuifeng@fb.com>, Thomas
+ =?ISO-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
+Date: Thu, 04 Apr 2024 03:08:08 +0300
+In-Reply-To: <20240402193945.17327-1-acme@kernel.org>
+References: <20240402193945.17327-1-acme@kernel.org>
+Autocrypt: addr=eddyz87@gmail.com; prefer-encrypt=mutual; keydata=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
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.50.3 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <1c3d3079-e1f7-4420-b542-c3c451038963@app.fastmail.com>
-In-Reply-To: <728951fe-ccd5-49d2-1584-fc97e2c2266e@iogearbox.net>
-References: <20240403123303.1452184-1-aspsk@isovalent.com>
- <18d8417d-835c-4279-9f84-abdc56fa19fb@app.fastmail.com>
- <728951fe-ccd5-49d2-1584-fc97e2c2266e@iogearbox.net>
-Date: Thu, 04 Apr 2024 00:31:38 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Daniel Borkmann" <daniel@iogearbox.net>,
- "Anton Protopopov" <aspsk@isovalent.com>,
- "Alexei Starovoitov" <ast@kernel.org>, "Andrii Nakryiko" <andrii@kernel.org>,
- "Jiri Olsa" <jolsa@kernel.org>, "Martin KaFai Lau" <martin.lau@linux.dev>,
- "Stanislav Fomichev" <sdf@google.com>, bpf@vger.kernel.org
-Cc: "Alexander Lobakin" <aleksander.lobakin@intel.com>,
- "Naresh Kamboju" <naresh.kamboju@linaro.org>
-Subject: Re: [PATCH bpf-next] bpf: pack struct bpf_fib_lookup
-Content-Type: text/plain
 
-On Wed, Apr 3, 2024, at 23:00, Daniel Borkmann wrote:
-> On 4/3/24 10:09 PM, Arnd Bergmann wrote:
->> On Wed, Apr 3, 2024, at 14:33, Anton Protopopov wrote:
->>>
->>> Declare this inner union as __attribute__((packed, aligned(2))) such
->>> that it always is of size 2 and is aligned to 16 bits.
->> 
->> I think you probably want 32-bit alignment for the structure,
->> to keep the ABI unchanged on all other architectures.
->
-> Fwiw, on x86 nothing should change on this regard, see below pahole dump
-> before/after. I think similar might be true for other archs as otherwise
-> we should have seen a kbuild bot complaint on hitting the size assert.
+On Tue, 2024-04-02 at 16:39 -0300, Arnaldo Carvalho de Melo wrote:
+> Hi,
+>=20
+> 	This allows us to have reproducible builds while keeping the
+> DWARF loading phase in parallel, achieving a noticeable speedup as
+> showed in the commit log messages:
 
-It's not the structure layout that changes, just its alignment.
-Of course this is unlikely to cause actual bugs, but if there there
-is no real need to change it, I would leave the alignment the same
-as before.
+[...]
 
-        Arnd
+> Working on libbpf to allow for parallel reproducible BTF encoding is the
+> next step.
+
+Another option would be to apply some sort of canonical ordering to
+BTF itself. E.g. put all PTR before STRUCT, sort same kinds by name,
+sort same kinds by vlen, etc. Something akin to [1], however this
+experiment has several flaws:
+- slowdown is much worse than with your patch-set;
+- I see a small number of functions with identical names appearing and
+  disappearing from final BTF.
+ =20
+I'll try to figure out the reason for slowdown tomorrow.
+
+[1] https://github.com/eddyz87/dwarves/tree/sort-btf
