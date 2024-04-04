@@ -1,295 +1,189 @@
-Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
+Received: from mail-oi1-f171.google.com (mail-oi1-f171.google.com [209.85.167.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFDA018C38;
-	Thu,  4 Apr 2024 02:00:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07D1018E1F;
+	Thu,  4 Apr 2024 02:10:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712196024; cv=none; b=ptLCv0YYf4Baz+nj4p7MRlDrLqhXD0FXSiob3E1FZEIwWmDQuzOBa5x4AmNgUBuUmrt86A2lDcFnHtZGq4MOYaA8BUJxS0XiKVmJgBNGinTXC0tS0K/2XDNa8pgLNf9Dh0Z4FToyAt+b+7Lixsl62Z0uGFEoHymTzxHKbrEFBq0=
+	t=1712196658; cv=none; b=UKAiG4Eg5umClvx5DIVnakF9aWgu6lPzYcMYrjLnPBsi8OQoIuoDOcH8HgEOuCzq+NMa1uyX5vf512+MqkmQvVnb7+23KbzK7g062el1VY6QseZat3lWpJZizqoGFMGmzKZgx1nYgdSZCuTNW4Ba0X+NRkk+beZhzObd9+3dFHs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712196024; c=relaxed/simple;
-	bh=q8gkWHc5kCbkRF/ybUez70chd5eKVNTJQmZ2vKIyeFM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=lJwsE1G457ta76lJdVz8p0bUb+0ap09ZOXoZwzBt/tiWCBQfqzJvhQpvqJ9uDSyvqlA/a9XCmoixRgBEhqhdvph2Imkx5YPML2FaYRbR6YFxSiM7mV2LPmcSz5DC++/reCCxbQSk87klTzg1ggNiv46sBPLHefYuAkt32aELtT4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MXcsqUTn; arc=none smtp.client-ip=209.85.210.171
+	s=arc-20240116; t=1712196658; c=relaxed/simple;
+	bh=AR/AtEDgmwi8snRJBALAksbcJyt6c2+pQS9F+TaXJUM=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Y+2A7dY8YFM1rClBcNQS+jOdqKQewNIyUWS/atMFqw40OL+Yr8LKLcXNz8kZe4STNygHnRKyzrjeZN7myS9ZBOYYV86V+on2GUnMMWneh5SsNeHV7/GomiLO97kTYadXl5e3muwIffqfB+Bwi2yfcqiDOOqdML/KNtF4w0RQMSU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mIV1nhM3; arc=none smtp.client-ip=209.85.167.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MXcsqUTn"
-Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-6e73e8bdea2so409873b3a.0;
-        Wed, 03 Apr 2024 19:00:22 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mIV1nhM3"
+Received: by mail-oi1-f171.google.com with SMTP id 5614622812f47-3c4f23f3eeaso121139b6e.1;
+        Wed, 03 Apr 2024 19:10:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1712196022; x=1712800822; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=nKh3sxyoRv9cKZKOIDktP1/7vp4+1mfdVBqbgg7wNjk=;
-        b=MXcsqUTnWON7Bjh/sScClAHXjMwQPDKr0hrMK2zNbx0nMdR1HvKrZNaohfBhDwXAJq
-         KY+RA4J2bZKl1mGJQID7b28qX74fXRtlrogv7g6wEDMRJ8fvulEYBKlAiNLAnsp7PI3S
-         E/cA0eW6b6fASV2sxE9U0n495hUb8vAbjimV8UN+HKmedEJTCbNWM6URLL6xXWmC9rmv
-         Rwkh5RRZsiYZ+mbvOzqf+YbsDJVKp1eQTkEOmGfLgYiWwVKSf7Zy58XSBgOGfErhxYWh
-         qlik+gOHdFb52fTa9X51owmxpF2J7k4cJ44Pbn/2vs2gIe6URmGJzrJGqaKNeDR+hq8c
-         3PLw==
+        d=gmail.com; s=20230601; t=1712196656; x=1712801456; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=uJRz5ZKiWg3HYLn11KdTD00YJNISxlIkpr1p7lBKYzo=;
+        b=mIV1nhM3El0JZa8rT8NA42W7ifwh6i2/Jh3W1raBK8Ne84w1i7Eg7SsrORcXD5gWVo
+         yHl4XndziGeacm/x3FuAITEPCQX/oqiVWVrf0dMaYTvwrt7XpNAuCjm1Rfje5FA4wNKF
+         ii4hw+XJ9fYYm4Mm31POMeFPRg9svX1qx7A9djSFqjlBJyUNPXoUMYOjlWzH+9orvl3j
+         bD4GFcs24e4tAI0Yf3ADJfVq+HwRb4IsqgxCdJTknBmD3l114J8g07/Ah4+NYzdRzJEP
+         lZcz7KOZ4C6dEq0srXTm67SPkcrra3wLHI5hfwx1+m70zMvo0HtQPHPHPBhRM6ezF+A9
+         DVqA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712196022; x=1712800822;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=nKh3sxyoRv9cKZKOIDktP1/7vp4+1mfdVBqbgg7wNjk=;
-        b=T+HRKIY4Jpgua/b3fBnALAh9BIL2kP55TwGeEsCKiyW169xJdXw5Tpsa7X4J6jp4UY
-         RAcf+TzARoIiBcvll6KBXVpkYLLnHXsGMrYBxwvRuOt6aXVrsJ30xbEnErAF8YDztPwb
-         HMEPlxP1PhS89GilkH2cFMtxzff3M9i7ateirGYo0LgHBi24KuX4Le2XHeGSxEJJ7gzP
-         tDNhp5QcZucA467jO0goK1t9pMTIX7RCo++DQlBj3PUco5ZjenQ1TyE4OCI4Kjm2pJmA
-         i2f8wNly3mybW88rEtcVcQDNxfCLmNEW+44uQo4pe61UldVXwA2hlpzAMiPjFM1jMdtU
-         7SIg==
-X-Forwarded-Encrypted: i=1; AJvYcCVRYCgJDaqKbvz+0UEbxPLVm8qRFTo+/nEQwDLk3HIYHpmxyp4hCzM4XZ8uN4XuwZO1W6AqcEegD/wgfKu5KrnPfdlnnkAeHXHEe1y92AKSriUwpV9OfGKDvuwbSMl+eoN0a9k4f0HdF4+PYILsArtoPYHSS8+PHJX7IwJn27X9REyIoBnR
-X-Gm-Message-State: AOJu0Yyq1B5lE9HW7Hvk0aMC8CjHlURWGmoURTQaGcBkaSyNFkZZr+ho
-	oOkLg2MiKmiZyfrjAfcitGVDEJEaJqiWV0ZVabq272RmovYH+ttx1JDUSbud81HKDTPG+6Nxzoe
-	HmHFsuNbjHEj7bU+Pokzdgda9klM=
-X-Google-Smtp-Source: AGHT+IERid2KJeMPn9+jPclOZQkCtCIvdoXkTbp0nd54fwPPZTTj0iSLVyRSOiWrN6O1Efy4p8ubNUzmbqJlFRrYrhw=
-X-Received: by 2002:a05:6a20:748e:b0:1a3:6a74:2e6a with SMTP id
- p14-20020a056a20748e00b001a36a742e6amr1591455pzd.14.1712196019685; Wed, 03
- Apr 2024 19:00:19 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1712196656; x=1712801456;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=uJRz5ZKiWg3HYLn11KdTD00YJNISxlIkpr1p7lBKYzo=;
+        b=REPpuqNZe3CU0BKADrc51pOfboQRO3dLtDVaMop082zPSPvmgRDjUp0TbvZqZVIwVs
+         t/DAu+Gm0zPRlM+k5CuRMBaT19q5mgLdxVCxv41ALEMDZxTyC21GOTIeWOmnOLU8XTfb
+         CUQQclrfIau90ItFuk7dwvvnGcyHsf/bYojHQwoXu06KoifbvfXE1tDrGPVpsy8dCyPg
+         BtdA8yaOB2IPcjVot0SOkDw1uQfcYeJ46Euo28XADj7+pux8NIu/4TDk47Ot7ETxrJfe
+         Sk3qsuQuvi5zs1Z7OkTjIT7fnj0Gyvi45YIk30mFECXiw/mITqWPWaDMxb/EIYBKnOaO
+         cr2A==
+X-Forwarded-Encrypted: i=1; AJvYcCVbWeEKo9x2v8OJr4uHQOZc7i+ogWMl1JdJbeTHdlz58ULYpDn3sSFpNR303wjtsbY6jzEz91/b2z7YyGoVxxzHZxlo
+X-Gm-Message-State: AOJu0YwiFXXjD54TFpaf35JoQwRAs3G/eiffPcLwzQY+ofWXHARv7E5I
+	nyJ4aF+CQYpy7ebVqSTQPZB5yUbmqtaH3ggsEbfvckUm9IORy2BP
+X-Google-Smtp-Source: AGHT+IEPkMztezwxSOPNs6IgW9gHolYGByJoazIyo1bdsErohEpkpUEMEU/2x+ve2q1+dSzvp+ZO2w==
+X-Received: by 2002:a05:6808:394d:b0:3c4:e08e:c582 with SMTP id en13-20020a056808394d00b003c4e08ec582mr1140199oib.33.1712196656015;
+        Wed, 03 Apr 2024 19:10:56 -0700 (PDT)
+Received: from KERNELXING-MB0.tencent.com ([111.201.28.7])
+        by smtp.gmail.com with ESMTPSA id lp16-20020a056a003d5000b006e6f0b4d950sm12489643pfb.4.2024.04.03.19.10.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 03 Apr 2024 19:10:55 -0700 (PDT)
+From: Jason Xing <kerneljasonxing@gmail.com>
+To: john.fastabend@gmail.com,
+	edumazet@google.com,
+	jakub@cloudflare.com,
+	davem@davemloft.net,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	daniel@iogearbox.net,
+	ast@kernel.org
+Cc: netdev@vger.kernel.org,
+	bpf@vger.kernel.org,
+	Jason Xing <kernelxing@tencent.com>,
+	syzbot+aa8c8ec2538929f18f2d@syzkaller.appspotmail.com
+Subject: [PATCH net v2] bpf, skmsg: fix NULL pointer dereference in sk_psock_skb_ingress_enqueue
+Date: Thu,  4 Apr 2024 10:10:01 +0800
+Message-Id: <20240404021001.94815-1-kerneljasonxing@gmail.com>
+X-Mailer: git-send-email 2.33.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240402093302.2416467-1-jolsa@kernel.org> <20240402093302.2416467-2-jolsa@kernel.org>
- <20240403100708.233575a8ac2a5bac2192d180@kernel.org> <Zg0lvUIB4WdRUGw_@krava>
- <20240403230937.c3bd47ee47c102cd89713ee8@kernel.org> <CAEf4BzZ2RFfz8PNgJ4ENZ0us4uX=DWhYFimXdtWms-VvGXOjgQ@mail.gmail.com>
- <20240404095829.ec5db177f29cd29e849169fa@kernel.org>
-In-Reply-To: <20240404095829.ec5db177f29cd29e849169fa@kernel.org>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Wed, 3 Apr 2024 19:00:07 -0700
-Message-ID: <CAEf4BzYH60TwvBipHWB_kUqZZ6D-iUVnnFsBv06imRikK3o-bg@mail.gmail.com>
-Subject: Re: [PATCHv2 1/3] uprobe: Add uretprobe syscall to speed up return probe
-To: Masami Hiramatsu <mhiramat@kernel.org>
-Cc: Jiri Olsa <olsajiri@gmail.com>, Steven Rostedt <rostedt@goodmis.org>, 
-	Oleg Nesterov <oleg@redhat.com>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, linux-kernel@vger.kernel.org, 
-	linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org, 
-	Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>, 
-	John Fastabend <john.fastabend@gmail.com>, Peter Zijlstra <peterz@infradead.org>, 
-	Thomas Gleixner <tglx@linutronix.de>, "Borislav Petkov (AMD)" <bp@alien8.de>, x86@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Wed, Apr 3, 2024 at 5:58=E2=80=AFPM Masami Hiramatsu <mhiramat@kernel.or=
-g> wrote:
->
-> On Wed, 3 Apr 2024 09:58:12 -0700
-> Andrii Nakryiko <andrii.nakryiko@gmail.com> wrote:
->
-> > On Wed, Apr 3, 2024 at 7:09=E2=80=AFAM Masami Hiramatsu <mhiramat@kerne=
-l.org> wrote:
-> > >
-> > > On Wed, 3 Apr 2024 11:47:41 +0200
-> > > Jiri Olsa <olsajiri@gmail.com> wrote:
-> > >
-> > > > On Wed, Apr 03, 2024 at 10:07:08AM +0900, Masami Hiramatsu wrote:
-> > > > > Hi Jiri,
-> > > > >
-> > > > > On Tue,  2 Apr 2024 11:33:00 +0200
-> > > > > Jiri Olsa <jolsa@kernel.org> wrote:
-> > > > >
-> > > > > > Adding uretprobe syscall instead of trap to speed up return pro=
-be.
-> > > > >
-> > > > > This is interesting approach. But I doubt we need to add addition=
-al
-> > > > > syscall just for this purpose. Can't we use another syscall or io=
-ctl?
-> > > >
-> > > > so the plan is to optimize entry uprobe in a similar way and given
-> > > > the syscall is not a scarce resource I wanted to add another syscal=
-l
-> > > > for that one as well
-> > > >
-> > > > tbh I'm not sure sure which syscall or ioctl to reuse for this, it'=
-s
-> > > > possible to do that, the trampoline will just have to save one or
-> > > > more additional registers, but adding new syscall seems cleaner to =
-me
-> > >
-> > > Hmm, I think a similar syscall is ptrace? prctl may also be a candida=
-te.
-> >
-> > I think both ptrace and prctl are for completely different use cases
-> > and it would be an abuse of existing API to reuse them for uretprobe
-> > tracing. Also, keep in mind, that any extra argument that has to be
-> > passed into this syscall means that we need to complicate and slow
-> > generated assembly code that is injected into user process (to
-> > save/restore registers) and also kernel-side (again, to deal with all
-> > the extra registers that would be stored/restored on stack).
-> >
-> > Given syscalls are not some kind of scarce resources, what's the
-> > downside to have a dedicated and simple syscall?
->
-> Syscalls are explicitly exposed to user space, thus, even if it is used
-> ONLY for a very specific situation, it is an official kernel interface,
-> and need to care about the compatibility. (If it causes SIGILL unless
-> a specific use case, I don't know there is a "compatibility".)
+From: Jason Xing <kernelxing@tencent.com>
 
-Check rt_sigreturn syscall (manpage at [0], for example).
+Fix NULL pointer data-races in sk_psock_skb_ingress_enqueue() which
+syzbot reported [1].
 
-       sigreturn() exists only to allow the implementation of signal
-       handlers.  It should never be called directly.  (Indeed, a simple
-       sigreturn() wrapper in the GNU C library simply returns -1, with
-       errno set to ENOSYS.)  Details of the arguments (if any) passed
-       to sigreturn() vary depending on the architecture.  (On some
-       architectures, such as x86-64, sigreturn() takes no arguments,
-       since all of the information that it requires is available in the
-       stack frame that was previously created by the kernel on the
-       user-space stack.)
+[1]
+BUG: KCSAN: data-race in sk_psock_drop / sk_psock_skb_ingress_enqueue
 
-This is a very similar use case. Also, check its source code in
-arch/x86/kernel/signal_64.c. It sends SIGSEGV to the calling process
-on any sign of something not being right. It's exactly the same with
-sys_uretprobe.
+write to 0xffff88814b3278b8 of 8 bytes by task 10724 on cpu 1:
+ sk_psock_stop_verdict net/core/skmsg.c:1257 [inline]
+ sk_psock_drop+0x13e/0x1f0 net/core/skmsg.c:843
+ sk_psock_put include/linux/skmsg.h:459 [inline]
+ sock_map_close+0x1a7/0x260 net/core/sock_map.c:1648
+ unix_release+0x4b/0x80 net/unix/af_unix.c:1048
+ __sock_release net/socket.c:659 [inline]
+ sock_close+0x68/0x150 net/socket.c:1421
+ __fput+0x2c1/0x660 fs/file_table.c:422
+ __fput_sync+0x44/0x60 fs/file_table.c:507
+ __do_sys_close fs/open.c:1556 [inline]
+ __se_sys_close+0x101/0x1b0 fs/open.c:1541
+ __x64_sys_close+0x1f/0x30 fs/open.c:1541
+ do_syscall_64+0xd3/0x1d0
+ entry_SYSCALL_64_after_hwframe+0x6d/0x75
 
-  [0] https://man7.org/linux/man-pages/man2/sigreturn.2.html
+read to 0xffff88814b3278b8 of 8 bytes by task 10713 on cpu 0:
+ sk_psock_data_ready include/linux/skmsg.h:464 [inline]
+ sk_psock_skb_ingress_enqueue+0x32d/0x390 net/core/skmsg.c:555
+ sk_psock_skb_ingress_self+0x185/0x1e0 net/core/skmsg.c:606
+ sk_psock_verdict_apply net/core/skmsg.c:1008 [inline]
+ sk_psock_verdict_recv+0x3e4/0x4a0 net/core/skmsg.c:1202
+ unix_read_skb net/unix/af_unix.c:2546 [inline]
+ unix_stream_read_skb+0x9e/0xf0 net/unix/af_unix.c:2682
+ sk_psock_verdict_data_ready+0x77/0x220 net/core/skmsg.c:1223
+ unix_stream_sendmsg+0x527/0x860 net/unix/af_unix.c:2339
+ sock_sendmsg_nosec net/socket.c:730 [inline]
+ __sock_sendmsg+0x140/0x180 net/socket.c:745
+ ____sys_sendmsg+0x312/0x410 net/socket.c:2584
+ ___sys_sendmsg net/socket.c:2638 [inline]
+ __sys_sendmsg+0x1e9/0x280 net/socket.c:2667
+ __do_sys_sendmsg net/socket.c:2676 [inline]
+ __se_sys_sendmsg net/socket.c:2674 [inline]
+ __x64_sys_sendmsg+0x46/0x50 net/socket.c:2674
+ do_syscall_64+0xd3/0x1d0
+ entry_SYSCALL_64_after_hwframe+0x6d/0x75
 
-> And the number of syscalls are limited resource.
+value changed: 0xffffffff83d7feb0 -> 0x0000000000000000
 
-We have almost 500 of them, it didn't seems like adding 1-2 for good
-reasons would be a problem. Can you please point to where the limits
-on syscalls as a resource are described? I'm curious to learn.
+Reported by Kernel Concurrency Sanitizer on:
+CPU: 0 PID: 10713 Comm: syz-executor.4 Tainted: G        W          6.8.0-syzkaller-08951-gfe46a7dd189e #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 02/29/2024
 
->
-> I'm actually not sure how much we need to care of it, but adding a new
-> syscall is worth to be discussed carefully because all of them are
-> user-space compatibility.
+Prior to this, commit 4cd12c6065df ("bpf, sockmap: Fix NULL pointer
+dereference in sk_psock_verdict_data_ready()") fixed one NULL pointer
+similarly due to no protection of saved_data_ready. Here is another
+different caller causing the same issue because of the same reason. So
+we should protect it with sk_callback_lock read lock because the writer
+side in the sk_psock_drop() uses "write_lock_bh(&sk->sk_callback_lock);".
 
-Absolutely, it's a good discussion to have.
+To avoid errors that could happen in future, I move those two pairs of
+lock into the sk_psock_data_ready(), which is suggested by John Fastabend.
 
->
-> > > > > Also, we should run syzkaller on this syscall. And if uretprobe i=
-s
-> > > >
-> > > > right, I'll check on syzkaller
-> > > >
-> > > > > set in the user function, what happen if the user function direct=
-ly
-> > > > > calls this syscall? (maybe it consumes shadow stack?)
-> > > >
-> > > > the process should receive SIGILL if there's no pending uretprobe f=
-or
-> > > > the current task, or it will trigger uretprobe if there's one pendi=
-ng
-> > >
-> > > No, that is too aggressive and not safe. Since the syscall is exposed=
- to
-> > > user program, it should return appropriate error code instead of SIGI=
-LL.
-> > >
-> >
-> > This is the way it is today with uretprobes even through interrupt.
->
-> I doubt that the interrupt (exception) and syscall should be handled
-> differently. Especially, this exception is injected by uprobes but
-> syscall will be caused by itself. But syscall can be called from user
-> program (of couse this works as sys_kill(self, SIGILL)).
+Fixes: 604326b41a6f ("bpf, sockmap: convert to generic sk_msg interface")
+Reported-by: syzbot+aa8c8ec2538929f18f2d@syzkaller.appspotmail.com
+Closes: https://syzkaller.appspot.com/bug?extid=aa8c8ec2538929f18f2d
+Signed-off-by: Jason Xing <kernelxing@tencent.com>
+---
+v2
+Link: https://lore.kernel.org/all/20240329134037.92124-1-kerneljasonxing@gmail.com/
+1. move the read_lock_bh()/unlock_bh() into the sk_psock_data_ready() call (John)
+Signed-off-by: Jason Xing <kernelxing@tencent.com>
+---
+ include/linux/skmsg.h | 2 ++
+ net/core/skmsg.c      | 5 +----
+ 2 files changed, 3 insertions(+), 4 deletions(-)
 
-Yep, I'd keep the behavior the same between uretprobes implemented
-through int3 and sys_uretprobe.
+diff --git a/include/linux/skmsg.h b/include/linux/skmsg.h
+index e65ec3fd2799..a509caf823d6 100644
+--- a/include/linux/skmsg.h
++++ b/include/linux/skmsg.h
+@@ -461,10 +461,12 @@ static inline void sk_psock_put(struct sock *sk, struct sk_psock *psock)
+ 
+ static inline void sk_psock_data_ready(struct sock *sk, struct sk_psock *psock)
+ {
++	read_lock_bh(&sk->sk_callback_lock);
+ 	if (psock->saved_data_ready)
+ 		psock->saved_data_ready(sk);
+ 	else
+ 		sk->sk_data_ready(sk);
++	read_unlock_bh(&sk->sk_callback_lock);
+ }
+ 
+ static inline void psock_set_prog(struct bpf_prog **pprog,
+diff --git a/net/core/skmsg.c b/net/core/skmsg.c
+index 4d75ef9d24bf..fd20aae30be2 100644
+--- a/net/core/skmsg.c
++++ b/net/core/skmsg.c
+@@ -1226,11 +1226,8 @@ static void sk_psock_verdict_data_ready(struct sock *sk)
+ 
+ 		rcu_read_lock();
+ 		psock = sk_psock(sk);
+-		if (psock) {
+-			read_lock_bh(&sk->sk_callback_lock);
++		if (psock)
+ 			sk_psock_data_ready(sk, psock);
+-			read_unlock_bh(&sk->sk_callback_lock);
+-		}
+ 		rcu_read_unlock();
+ 	}
+ }
+-- 
+2.37.3
 
->
-> > E.g., it could happen that user process is using fibers and is
-> > replacing stack pointer without kernel realizing this, which will
-> > trigger some defensive checks in uretprobe handling code and kernel
-> > will send SIGILL because it can't support such cases. This is
-> > happening today already, and it works fine in practice (except for
-> > applications that manually change stack pointer, too bad, you can't
-> > trace them with uretprobes, unfortunately).
->
-> OK, we at least need to document it.
-
-+1, yep
-
->
-> >
-> > So I think it's absolutely adequate to have this behavior if the user
-> > process is *intentionally* abusing this API.
->
-> Of course user expected that it is abusing. So at least we need to
-> add a document that this syscall number is reserved to uprobes and
-> user program must not use it.
->
-
-Totally agree about documenting this.
-
-> >
-> > > >
-> > > > but we could limit the syscall to be executed just from the trampol=
-ine,
-> > > > that should prevent all the user space use cases, I'll do that in n=
-ext
-> > > > version and add more tests for that
-> > >
-> > > Why not limit? :) The uprobe_handle_trampoline() expects it is called
-> > > only from the trampoline, so it is natural to check the caller addres=
-s.
-> > > (and uprobe should know where is the trampoline)
-> > >
-> > > Since the syscall is always exposed to the user program, it should
-> > > - Do nothing and return an error unless it is properly called.
-> > > - check the prerequisites for operation strictly.
-> > > I concern that new system calls introduce vulnerabilities.
-> > >
-> >
-> > As Oleg and Jiri mentioned, this syscall can't harm kernel or other
-> > processes, only the process that is abusing the API. So any extra
-> > checks that would slow down this approach is an unnecessary overhead
-> > and complication that will never be useful in practice.
->
-> I think at least it should check the caller address to ensure the
-> address is in the trampoline.
-> But anyway, uprobes itself can break the target process, so no one
-> might care if this system call breaks the process now.
-
-If we already have an expected range of addresses, then I think it's
-fine to do a quick unlikely() check. I'd be more concerned if we need
-to do another lookup or search to just validate this. I'm sure Jiri
-will figure it out.
-
->
-> >
-> > Also note that sys_uretprobe is a kind of internal and unstable API
-> > and it is explicitly called out that its contract can change at any
-> > time and user space shouldn't rely on it. It's purely for the kernel's
-> > own usage.
->
-> Is that OK to use a syscall as "internal" and "unstable" API?
-
-See above about rt_sigreturn. It seems like yes, for some highly
-specialized syscalls it is the case already.
->
-> >
-> > So let's please keep it fast and simple.
-> >
-> >
-> > > Thank you,
-> > >
-> > >
-> > > >
-> > > > thanks,
-> > > > jirka
-> > > >
-> > > >
-> > > > >
-> >
-> > [...]
->
->
-> ([OT] If we can add syscall so casually, I would like to add sys_traceeve=
-nt
-> for recording user space events :-) .)
-
-Have you proposed this upstream? :) I have no clue and no opinion about it.=
-..
-
->
-> --
-> Masami Hiramatsu (Google) <mhiramat@kernel.org>
