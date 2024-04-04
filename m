@@ -1,146 +1,168 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E0E96FB8;
-	Thu,  4 Apr 2024 00:27:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 473994400;
+	Thu,  4 Apr 2024 00:44:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712190440; cv=none; b=fgxNqNNAvCSMCCICKwV2YILk80D8bQ9BzIr7kcRt4TpzgBsXf2sd78LDy7b0SLBH5BWVyJUwoXIaFtH9MTcsLt1yeQtxjT7x57tB9EjplWhWpIdjcTNEsDz6P6pz8EfmhQ2slMwA/TBn8YnM1ots/nlf46f30koCZjVw+v1yx0Q=
+	t=1712191491; cv=none; b=Rq+zB4uX/bpRjNG5gryw1IaFKXx5TuM+1aXbiOZ59k4zSdfwg07mPy68GtSkQ+pASGZ44fUaVK7qxdGhErGX2hchBYOF5doXr2pBaQO7sPfWaFZ7HceEy3/e6hMV7lcLNgAlqrWpMPlhbO9FQtdMIdXGRY1LCAJepNtJ40vJYA8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712190440; c=relaxed/simple;
-	bh=FF0wEMbEIxHYirLgQiYftva9vJGy2MUJsCk3UTXd8TM=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=WY46XPqp13qzvE+9I1soH8KLoTFTpVg1l36ckb2wEKXtwNrZ+Ll3TXaqrqGl1zHgipl7TSt5fKNtDYMOXPWXmeeoxISUR2uxdxk0sIxW07K+XKkOmwOZR8qYB6F+1CAPB8ZIek9hnVdLC4hB2xKkw0VTZDudDiW40YnBMuBtNyM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mDGpeF7D; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1712191491; c=relaxed/simple;
+	bh=SmTsFNwze+qFk+ZBnumwEq+deOZgym+C/rK3ROx3eOY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Dne+hbBLJhbwfZkGrf7TO6IJYe+Pi0pKAcMtt/gCsB0SJEVg72ZNj9s+oTxrVGNqrK0AjWUjeW6QEEqp04Sp5/YYC7Cu9VVkonzGfGNf8oT0iaLcxzf6mp8Z8mN5L96OKPauqxchmtLCH7G58BqNEQCHx5DuYUved9YspO+dV/4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ESJ/LBrW; arc=none smtp.client-ip=209.85.218.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mDGpeF7D"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1A90C433C7;
-	Thu,  4 Apr 2024 00:27:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712190440;
-	bh=FF0wEMbEIxHYirLgQiYftva9vJGy2MUJsCk3UTXd8TM=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-	b=mDGpeF7DwSRu51eQCUChPvSy/w2T5VN+w5zYxXnUObgJ6UpF2eisXQhzhKefmP42n
-	 Op46mkDVnvMoDYonOJXJRiZGwVZZzP5FNXbyIssdBRgVE6xujBwgiR6P6g4kZv3dKJ
-	 v80OxoXt2DGwh7v5oPPfZWJBgi+6fXJYF4fz0cujuq2KDZSXkcZI+8O0GPCmTz0nvg
-	 aCKjCjPrlKjN8NfQS9lnpDoUddWthvmrtwGUYDvP8Ybp7RLJThtSwAPZeAjFhs5PWh
-	 BwU5WufZz85R2botGwycKfQbHES4CAI3jYcqiSurV70LZbWATaQ9I1/65qXEPvhAB8
-	 oSqc4hLrCzYxg==
-Message-ID: <74fec36278933bd0dd793875ac2343f528c9355d.camel@kernel.org>
-Subject: Re: [PATCH bpf-next] selftests/bpf: Add F_SETFL for fcntl
-From: Geliang Tang <geliang@kernel.org>
-To: Jakub Sitnicki <jakub@cloudflare.com>, John Fastabend
-	 <john.fastabend@gmail.com>
-Cc: Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman
- <eddyz87@gmail.com>,  Mykola Lysenko <mykolal@fb.com>, Alexei Starovoitov
- <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai Lau
- <martin.lau@linux.dev>, Song Liu <song@kernel.org>, Yonghong Song
- <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, Stanislav
- Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, Jiri Olsa
- <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,  bpf@vger.kernel.org,
- mptcp@lists.linux.dev, linux-kselftest@vger.kernel.org
-Date: Thu, 04 Apr 2024 08:27:12 +0800
-In-Reply-To: <660dd833358bd_2144820881@john.notmuch>
-References: 
-	<b67101632c6858d281f105b5d4e1bc62dd6b7d27.1712133039.git.tanggeliang@kylinos.cn>
-	 <878r1ubq8q.fsf@cloudflare.com> <660dd833358bd_2144820881@john.notmuch>
-Autocrypt: addr=geliang@kernel.org; prefer-encrypt=mutual;
- keydata=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
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.50.0-1 
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ESJ/LBrW"
+Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-a4e65dec03eso61842966b.0;
+        Wed, 03 Apr 2024 17:44:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1712191487; x=1712796287; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ongBL07xCA2tmt2N39sHOiy+4X4p/KUcdwXqcVjmBXw=;
+        b=ESJ/LBrWGMcgNdYpB9BHAAWbSiW+LcEIW9IH4orHHcr9qdVh7GY+XlvMm8VFPBjX00
+         mIBsWvmectd678BeOi8pxNO8lAoAGBhrSPwRCRMh2R+rzV1uO4iOFCr0/ulpbDA+DVkW
+         xRJdGZkaTwZ9Rn7KGO9vwQZ4hbB5mYipF0iCRC1yG5lmb3VnvtuGmTFy02/CUuwi3Jy8
+         IyAw1UuQomQh06H4DvbuVFjZ2YuuawLB/neF+oTl1qqo5UlUIJzBYqc8ienAvqfXe1+c
+         5tTrJ2pUHOIj8T43Pxiogv3sQegtl6LxxaaWK9zWO/Ca75vUT001S5JO4IUfuUKo0ST3
+         9odg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1712191487; x=1712796287;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ongBL07xCA2tmt2N39sHOiy+4X4p/KUcdwXqcVjmBXw=;
+        b=j9ekMsxq9KvIN4fgVQWUCU2XYIlcEkIv4oXWO0Ddfm/G9K9nVB9iEaLbWCbaWLbUqf
+         icBpSjhGK2mF2r3O9FHxItw3VnQVS5n9052TttJtrjBj+ek4i/gByExCaMCq71gE//Fj
+         XZjfsk9sutVUMQiRoSAopDuN02HVLdtgY/aR7/0ad31vY3MHD3x8RgCESf9c+3Xxh1oo
+         fXMiKhqwnjfWIz9G4CM5OeGwa3TXYcKuinHWUn+bU7kswskqUYiF2+wtym50dDLmbGh/
+         JGMF1tpM3OwMFUmCi/AWFD8NN7ZsUSeujJlKIIZYvj2oM6TRmHF9f16/S598ZjSOpYvl
+         9KFA==
+X-Forwarded-Encrypted: i=1; AJvYcCVaV4WTMqLY0eqhGHWStqAzuoT2gd2LI+NK+pXxZvAi3BRstqdXSaZ84mnhcc7KveM8yLsCUXZ4oAXkG5gKoB+Dm3bE
+X-Gm-Message-State: AOJu0Yxe5Pzmnf+mravZRaKvvRSnHprAU8kf8iCGxfmlPF7zBNf+GyWb
+	c1HTWTiuogghIB06W4fEjqQrpy0K5NkM6G2x4u6QFp9XG2REawqAOCiHdfNjlBbtGqPtFlexRDP
+	9Td4yLgColbFk/d8/5lnLq29mEpc=
+X-Google-Smtp-Source: AGHT+IGlB/g2jSaO0EOkM126c+fYytG5Ogs8KDYNnrsGBkrwZLoyN08LfjaHwgyxT13gShGPn/lqM9cNSSds4+u2tdk=
+X-Received: by 2002:a17:906:789:b0:a4e:8956:5ee6 with SMTP id
+ l9-20020a170906078900b00a4e89565ee6mr451226ejc.31.1712191487381; Wed, 03 Apr
+ 2024 17:44:47 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+References: <20240329134037.92124-1-kerneljasonxing@gmail.com>
+In-Reply-To: <20240329134037.92124-1-kerneljasonxing@gmail.com>
+From: Jason Xing <kerneljasonxing@gmail.com>
+Date: Thu, 4 Apr 2024 08:44:10 +0800
+Message-ID: <CAL+tcoDjpi8FGWGGFmPY6W9_YYDYaMj+67amA3ZeQcQe0kWO+A@mail.gmail.com>
+Subject: Re: [PATCH net] bpf, skmsg: fix NULL pointer dereference in sk_psock_skb_ingress_enqueue
+To: john.fastabend@gmail.com, edumazet@google.com, jakub@cloudflare.com, 
+	davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com, daniel@iogearbox.net, 
+	ast@kernel.org
+Cc: netdev@vger.kernel.org, bpf@vger.kernel.org, 
+	Jason Xing <kernelxing@tencent.com>, 
+	syzbot+aa8c8ec2538929f18f2d@syzkaller.appspotmail.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Jakub,
-=20
-On Wed, 2024-04-03 at 15:29 -0700, John Fastabend wrote:
-> Jakub Sitnicki wrote:
-> > Hi Geliang,
-> >=20
-> > On Wed, Apr 03, 2024 at 04:32 PM +08, Geliang Tang wrote:
-> > > From: Geliang Tang <tanggeliang@kylinos.cn>
-> > >=20
-> > > Incorrect arguments are passed to fcntl() in test_sockmap.c when
-> > > invoking
-> > > it to set file status flags. If O_NONBLOCK is used as 2nd
-> > > argument and
-> > > passed into fcntl, -EINVAL will be returned (See do_fcntl() in
-> > > fs/fcntl.c).
-> > > The correct approach is to use F_SETFL as 2nd argument, and
-> > > O_NONBLOCK as
-> > > 3rd one.
-> > >=20
-> > > Fixes: 16962b2404ac ("bpf: sockmap, add selftests")
-> > > Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
-> > > ---
-> > > =C2=A0tools/testing/selftests/bpf/test_sockmap.c | 2 +-
-> > > =C2=A01 file changed, 1 insertion(+), 1 deletion(-)
-> > >=20
-> > > diff --git a/tools/testing/selftests/bpf/test_sockmap.c
-> > > b/tools/testing/selftests/bpf/test_sockmap.c
-> > > index 024a0faafb3b..34d6a1e6f664 100644
-> > > --- a/tools/testing/selftests/bpf/test_sockmap.c
-> > > +++ b/tools/testing/selftests/bpf/test_sockmap.c
-> > > @@ -603,7 +603,7 @@ static int msg_loop(int fd, int iov_count,
-> > > int iov_length, int cnt,
-> > > =C2=A0		struct timeval timeout;
-> > > =C2=A0		fd_set w;
-> > > =C2=A0
-> > > -		fcntl(fd, fd_flags);
-> > > +		fcntl(fd, F_SETFL, fd_flags);
-> > > =C2=A0		/* Account for pop bytes noting each iteration
-> > > of apply will
-> > > =C2=A0		 * call msg_pop_data helper so we need to
-> > > account for this
-> > > =C2=A0		 * by calculating the number of apply
-> > > iterations. Note user
-> >=20
-> > Good catch. But we also need to figure out why some tests failing
-> > with
-> > this patch applied and fix them in one go:
-> >=20
-> > # 6/ 7=C2=A0 sockmap::txmsg test skb:FAIL
-> > #21/ 7 sockhash::txmsg test skb:FAIL
-> > #36/ 7 sockhash:ktls:txmsg test skb:FAIL
-> > Pass: 42 Fail: 3
+On Fri, Mar 29, 2024 at 9:40=E2=80=AFPM Jason Xing <kerneljasonxing@gmail.c=
+om> wrote:
+>
+> From: Jason Xing <kernelxing@tencent.com>
+>
+> Fix NULL pointer data-races in sk_psock_skb_ingress_enqueue() which
+> syzbot reported [1].
+>
+> [1]
+> BUG: KCSAN: data-race in sk_psock_drop / sk_psock_skb_ingress_enqueue
+>
+> write to 0xffff88814b3278b8 of 8 bytes by task 10724 on cpu 1:
+>  sk_psock_stop_verdict net/core/skmsg.c:1257 [inline]
+>  sk_psock_drop+0x13e/0x1f0 net/core/skmsg.c:843
+>  sk_psock_put include/linux/skmsg.h:459 [inline]
+>  sock_map_close+0x1a7/0x260 net/core/sock_map.c:1648
+>  unix_release+0x4b/0x80 net/unix/af_unix.c:1048
+>  __sock_release net/socket.c:659 [inline]
+>  sock_close+0x68/0x150 net/socket.c:1421
+>  __fput+0x2c1/0x660 fs/file_table.c:422
+>  __fput_sync+0x44/0x60 fs/file_table.c:507
+>  __do_sys_close fs/open.c:1556 [inline]
+>  __se_sys_close+0x101/0x1b0 fs/open.c:1541
+>  __x64_sys_close+0x1f/0x30 fs/open.c:1541
+>  do_syscall_64+0xd3/0x1d0
+>  entry_SYSCALL_64_after_hwframe+0x6d/0x75
+>
+> read to 0xffff88814b3278b8 of 8 bytes by task 10713 on cpu 0:
+>  sk_psock_data_ready include/linux/skmsg.h:464 [inline]
+>  sk_psock_skb_ingress_enqueue+0x32d/0x390 net/core/skmsg.c:555
+>  sk_psock_skb_ingress_self+0x185/0x1e0 net/core/skmsg.c:606
+>  sk_psock_verdict_apply net/core/skmsg.c:1008 [inline]
+>  sk_psock_verdict_recv+0x3e4/0x4a0 net/core/skmsg.c:1202
+>  unix_read_skb net/unix/af_unix.c:2546 [inline]
+>  unix_stream_read_skb+0x9e/0xf0 net/unix/af_unix.c:2682
+>  sk_psock_verdict_data_ready+0x77/0x220 net/core/skmsg.c:1223
+>  unix_stream_sendmsg+0x527/0x860 net/unix/af_unix.c:2339
+>  sock_sendmsg_nosec net/socket.c:730 [inline]
+>  __sock_sendmsg+0x140/0x180 net/socket.c:745
+>  ____sys_sendmsg+0x312/0x410 net/socket.c:2584
+>  ___sys_sendmsg net/socket.c:2638 [inline]
+>  __sys_sendmsg+0x1e9/0x280 net/socket.c:2667
+>  __do_sys_sendmsg net/socket.c:2676 [inline]
+>  __se_sys_sendmsg net/socket.c:2674 [inline]
+>  __x64_sys_sendmsg+0x46/0x50 net/socket.c:2674
+>  do_syscall_64+0xd3/0x1d0
+>  entry_SYSCALL_64_after_hwframe+0x6d/0x75
+>
+> value changed: 0xffffffff83d7feb0 -> 0x0000000000000000
+>
+> Reported by Kernel Concurrency Sanitizer on:
+> CPU: 0 PID: 10713 Comm: syz-executor.4 Tainted: G        W          6.8.0=
+-syzkaller-08951-gfe46a7dd189e #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS G=
+oogle 02/29/2024
+>
+> Prior to this, commit 4cd12c6065df ("bpf, sockmap: Fix NULL pointer
+> dereference in sk_psock_verdict_data_ready()") fixed one NULL pointer
+> similarly due to no protection of saved_data_ready. Here is another
+> different caller causing the same issue because of the same reason. So
+> we should protect it with sk_callback_lock read lock because the writer
+> side in the sk_psock_drop() uses "write_lock_bh(&sk->sk_callback_lock);".
 
-Sorry, I didn't notice these fails in my testing before, they do exist.
-I'll try to fix them and sent a v2 soon.
+Hello experts, any comments are welcome:) Did I miss something?
 
 Thanks,
--Geliang
+Jason
 
-> >=20
-> > I'm seeing this error message when running `test_sockmap`:
-> >=20
-> > detected skb data error with skb ingress update @iov[0]:0 "00 00 00
-> > 00" !=3D "PASS"
-> > data verify msg failed: Unknown error -5
-> > rx thread exited with err 1.
->=20
-> I have a theory this is a real bug in the SK_SKB_STREAM_PARSER which
-> has an
-> issue with wakup logic. Maybe we wakeup the poll/select logic before
-> the
-> data is copied and because the recv() is actually nonblocking now we
-> get
-> the error.
->=20
-> >=20
-> > I'd also:
-> > - add an error check for fnctl, so we don't regress,
-> > - get rid of fd_flags, pass O_NONBLOCK flag directly to fnctl.
-> >=20
-> > Thanks,
-> > -jkbs
->=20
->=20
-
+>
+> Fixes: 604326b41a6f ("bpf, sockmap: convert to generic sk_msg interface")
+> Reported-by: syzbot+aa8c8ec2538929f18f2d@syzkaller.appspotmail.com
+> Closes: https://syzkaller.appspot.com/bug?extid=3Daa8c8ec2538929f18f2d
+> Signed-off-by: Jason Xing <kernelxing@tencent.com>
+> ---
+>  net/core/skmsg.c | 2 ++
+>  1 file changed, 2 insertions(+)
+>
+> diff --git a/net/core/skmsg.c b/net/core/skmsg.c
+> index 4d75ef9d24bf..67c4c01c5235 100644
+> --- a/net/core/skmsg.c
+> +++ b/net/core/skmsg.c
+> @@ -552,7 +552,9 @@ static int sk_psock_skb_ingress_enqueue(struct sk_buf=
+f *skb,
+>         msg->skb =3D skb;
+>
+>         sk_psock_queue_msg(psock, msg);
+> +       read_lock_bh(&sk->sk_callback_lock);
+>         sk_psock_data_ready(sk, psock);
+> +       read_unlock_bh(&sk->sk_callback_lock);
+>         return copied;
+>  }
+>
+> --
+> 2.37.3
+>
