@@ -1,218 +1,102 @@
-Received: from mail-io1-f49.google.com (mail-io1-f49.google.com [209.85.166.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48BD612E71;
-	Thu,  4 Apr 2024 22:30:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A766D286A6
+	for <bpf@vger.kernel.org>; Thu,  4 Apr 2024 22:32:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712269850; cv=none; b=a8xkraMS8oYTBFzMhaMU0yaYHdA3zNfMN/C5KcpkifU/+y3oFl6DLpDis8GFsjrE4g7JIb0ielqzs0hXYTZLM4Vr0xi7dPR1qclpOALBBUOR+qKBWoE1JcdHkImyIjJNLgeEFFiOKnYEpRUlpjQTsDVymxLumoXHSJ/GojbBH6k=
+	t=1712269939; cv=none; b=AnwWab7i1cS5WMHb5+QcMB80gF2C8Ol7ycLTp51OIjVTfq+wQa17h2CUHL2FDPWnDRETs9Hcghbl8qJfu/1yeORxfu2772U5Pzs/rEw96NeYp8R0OLIlmT9gpHiHEvPif06clS8w6VCoZsWHJV8YbPJiakm1BZbcQ8uxGOLpIXk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712269850; c=relaxed/simple;
-	bh=RsAcx9Znss3UI/v6xG0a1+3qv8k0leUxOrv/V5dBbsc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Im8iB6czzszi+42rn7m7W/6NfkwvJRr+vWZEzMfwdhSjU1YIy+zUU+OkTntlkSNcNYwS2vUsy3JarqPfqfC5So9rM16DjjW+LNXj6a6aKWGrrcM5HxZu2/2vzjeZ0BkwGnKomlrucqQtEeGpyOA0eDKPziA8lI3z5gmOGa7ozew=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=manifault.com; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.166.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=manifault.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-io1-f49.google.com with SMTP id ca18e2360f4ac-7d33ccdb531so71802339f.0;
-        Thu, 04 Apr 2024 15:30:48 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712269847; x=1712874647;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=XSelu9ePRHzAjK8EEcbffo/jkUgtGSViK/2Yc47Rxng=;
-        b=OOozQlFT2VVa/upWXgeXVbFkuzQuNz0Q0NsM5dWO92cdUT24zQdSqSJ3/3CdEPtGCt
-         eVhIMtL5FdnCaKFpi3EmCmB7CqAKhDqOKI2jY9DvYMUQacXZQSyLf00jA2aCz/+fX9BZ
-         pkXxaggdiZ1asvVk3Z5Jg0xvfnJNAYVGfXRBAtprZGjkJsN87q00p4GxxWo/Ics1Z+y/
-         Bsg2NHPtDNb3g/h07IkuNosfDel7V26JZEkgvUr2sEPys6s2+Bv2burNHpbqpQV5t2Ku
-         sUHvdKHJnZ6FzUrLdkwlqlFwMGQFMDyU2DbpPXL9fvMHymMYmSFkJ3QhrCxtDwtzERyn
-         VJ1A==
-X-Forwarded-Encrypted: i=1; AJvYcCWb/WXRORMXMD2f6eKTNt1+4JEKGrC1psjsXTHD3SICM4e/hYsxJZapX73hfi719VScG84v9gSbuPY5mpnCAleNYfp+kXGD4z+Ibglwz3pnE+oMzyOeS+1mEUfUFCENQ4iM
-X-Gm-Message-State: AOJu0YyLSNjpQoEN+6j7BiRF31oU1Z92tzrP/fvnRzTveuuyyficFKPN
-	IFI5Mg7AID2dhSouLh5w/wCygWt5qYzk1dhx1P2B9NUq2hkCkDt0
-X-Google-Smtp-Source: AGHT+IHDfIj9WduqsuFaIpAxWueppSRPhBG4XE9lUWx32V6VPsLztuw1hNNDOs3b+KeHbIsOWrryYQ==
-X-Received: by 2002:a6b:e20c:0:b0:7d0:5034:855a with SMTP id z12-20020a6be20c000000b007d05034855amr4667567ioc.17.1712269847280;
-        Thu, 04 Apr 2024 15:30:47 -0700 (PDT)
-Received: from maniforge (c-76-136-75-40.hsd1.il.comcast.net. [76.136.75.40])
-        by smtp.gmail.com with ESMTPSA id m35-20020a05663840a300b0047a3ac10c62sm183042jam.25.2024.04.04.15.30.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 Apr 2024 15:30:46 -0700 (PDT)
-Date: Thu, 4 Apr 2024 17:30:44 -0500
-From: David Vernet <void@manifault.com>
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: Yonghong Song <yonghong.song@linux.dev>, ast@kernel.org,
-	daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev,
-	song@kernel.org, john.fastabend@gmail.com, kpsingh@kernel.org,
-	sdf@google.com, haoluo@google.com, jolsa@kernel.org,
-	linux-kernel@vger.kernel.org, kernel-team@meta.com,
-	bpf <bpf@vger.kernel.org>
-Subject: Re: [PATCH bpf-next 2/2] selftests/bpf: Verify calling core kfuncs
- from BPF_PROG_TYPE_SYCALL
-Message-ID: <20240404223044.GA521321@maniforge>
-References: <20240404010308.334604-1-void@manifault.com>
- <20240404010308.334604-2-void@manifault.com>
- <36bb0747-bff4-4fad-93ca-dae406f14099@linux.dev>
- <20240404163316.GA385240@maniforge>
- <CAEf4Bza3rGMh=S7yb_Crf8v_SBTrp+NiKn0_frZnWpEi30DkPg@mail.gmail.com>
+	s=arc-20240116; t=1712269939; c=relaxed/simple;
+	bh=ibl465D/PMeJpb5Kyew2Z+ikA2cB192NomKfeWDEmwo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Ye/QWYNlVH76jsBv09bfSRs+U2CTnR2HWwAEiq3Bb7s2rjRrW+ug4I+J/rHHfUPhk8ugRdGmUOtbieQCFkas7i40mL702tyCarTMRrnHgQVBxdEsczBFMjYu4rFl6ZmSbdd/4Vm06vI2Ob++05qJ33iF3xSCRLa493dvARBo/CY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RUocg1I8; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RUocg1I8"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5068C433F1;
+	Thu,  4 Apr 2024 22:32:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1712269939;
+	bh=ibl465D/PMeJpb5Kyew2Z+ikA2cB192NomKfeWDEmwo=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=RUocg1I8SloRDeob59nuZOXjOFqONEj1OVpbmS9AS+MjwqFcN4orjOeWR4KV5+USY
+	 hEsrfMgHug7zpltzDDK336v64Zp5ugLX+ljjeqXzF4jS07GeJOyc7FK5+QvEsAftI9
+	 RUsIBoXi6O5CeySmg7jhFZFr9tQo4uUKds+emduVSDNoiLpeqlhci2nZr0+NLtkZCj
+	 vQ/DgrN4v7Rv69o4IlkfmOsiOsaXcySzw1bI68w7C/o3nb8qmh/pFcHvgHlMKmxDN2
+	 3bC7h6jV5APNt0Su5wxfADlrRysm6Vbj5cqYXBknS/Nsf8kSPCfXvQsrTLyBQX/pHl
+	 IgBaSwXQWyJNg==
+Message-ID: <7de85056-b15e-4c4a-a2f5-a450eaadfab1@kernel.org>
+Date: Thu, 4 Apr 2024 23:32:14 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="k5MxFGT/d2mJJJzb"
-Content-Disposition: inline
-In-Reply-To: <CAEf4Bza3rGMh=S7yb_Crf8v_SBTrp+NiKn0_frZnWpEi30DkPg@mail.gmail.com>
-User-Agent: Mutt/2.2.13 (2024-03-09)
+User-Agent: Mozilla Thunderbird Beta
+Subject: Re: [PATCH bpf-next v5] bpftool: Mount bpffs on provided dir instead
+ of parent dir
+To: Sahil Siddiq <icegambit91@gmail.com>, ast@kernel.org,
+ daniel@iogearbox.net, andrii@kernel.org
+Cc: martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
+ yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
+ sdf@google.com, haoluo@google.com, jolsa@kernel.org, bpf@vger.kernel.org
+References: <20240404192219.52373-1-icegambit91@gmail.com>
+From: Quentin Monnet <qmo@kernel.org>
+Content-Language: en-GB
+In-Reply-To: <20240404192219.52373-1-icegambit91@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
+On 04/04/2024 20:22, Sahil Siddiq wrote:
+> When pinning programs/objects under PATH (eg: during "bpftool prog
+> loadall") the bpffs is mounted on the parent dir of PATH in the
+> following situations:
+> - the given dir exists but it is not bpffs.
+> - the given dir doesn't exist and the parent dir is not bpffs.
+> 
+> Mounting on the parent dir can also have the unintentional side-
+> effect of hiding other files located under the parent dir.
+> 
+> If the given dir exists but is not bpffs, then the bpffs should
+> be mounted on the given dir and not its parent dir.
+> 
+> Similarly, if the given dir doesn't exist and its parent dir is not
+> bpffs, then the given dir should be created and the bpffs should be
+> mounted on this new dir.
+> 
+> Link: https://lore.kernel.org/bpf/2da44d24-74ae-a564-1764-afccf395eeec@isovalent.com/T/#t
+> Closes: https://github.com/libbpf/bpftool/issues/100
+> Fixes: 2a36c26fe3b8 ("bpftool: Support bpffs mountpoint as pin path for prog loadall")
+> 
+> Changes since v1:
+>  - Split "mount_bpffs_for_pin" into two functions.
+>    This is done to improve maintainability and readability.
+> 
+> Changes since v2:
+> - mount_bpffs_for_pin: rename to "create_and_mount_bpffs_dir".
+> - mount_bpffs_given_file: rename to "mount_bpffs_given_file".
+> - create_and_mount_bpffs_dir:
+>   - introduce "dir_exists" boolean.
+>   - remove new dir if "mnt_fs" fails.
+> - improve error handling and error messages.
+> 
+> Changes since v3:
+> - Rectify function name.
+> - Improve error messages and formatting.
+> - mount_bpffs_for_file:
+>   - Check if dir exists before block_mount check.
+> 
+> Changes since v4:
+> - Use strdup instead of strcpy.
+> - create_and_mount_bpffs_dir:
+>   - Use S_IRWXU instead of 0700.
+> - Improve error handling and formatting.
+> 
+> Signed-off-by: Sahil Siddiq <icegambit91@gmail.com>
 
---k5MxFGT/d2mJJJzb
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Tested-by: Quentin Monnet <qmo@kernel.org>
+Reviewed-by: Quentin Monnet <qmo@kernel.org>
 
-On Thu, Apr 04, 2024 at 03:16:56PM -0700, Andrii Nakryiko wrote:
-> On Thu, Apr 4, 2024 at 9:33=E2=80=AFAM David Vernet <void@manifault.com> =
-wrote:
-> >
-> > On Thu, Apr 04, 2024 at 09:04:19AM -0700, Yonghong Song wrote:
-> > >
-> > > On 4/3/24 6:03 PM, David Vernet wrote:
-> > > > Now that we can call some kfuncs from BPF_PROG_TYPE_SYSCALL progs, =
-let's
-> > > > add some selftests that verify as much. As a bonus, let's also veri=
-fy
-> > > > that we can't call the progs from raw tracepoints.
-> > > >
-> > > > Signed-off-by: David Vernet <void@manifault.com>
-> > >
-> > > Ack with some comments below.
-> > >
-> > > Acked-by: Yonghong Song <yonghong.song@linux.dev>
-> >
-> > Thanks for the review. It looks like accidentally replied directly to
-> > me, so I'll re-add the missing cc's.
-> >
->=20
-> And dropped bpf@vger :) adding back
-
-*facepalm*, thanks!
-
->=20
-> > >
-> > > > ---
-> > > >   .../selftests/bpf/prog_tests/cgrp_kfunc.c     |  1 +
-> > > >   .../selftests/bpf/prog_tests/task_kfunc.c     |  1 +
-> > > >   .../selftests/bpf/progs/cgrp_kfunc_common.h   | 21 ++++++++++++++=
-+++++
-> > > >   .../selftests/bpf/progs/cgrp_kfunc_failure.c  |  4 ++++
-> > > >   .../selftests/bpf/progs/cgrp_kfunc_success.c  |  4 ++++
-> > > >   .../selftests/bpf/progs/cpumask_common.h      | 19 ++++++++++++++=
-+++
-> > > >   .../selftests/bpf/progs/cpumask_failure.c     |  4 ++++
-> > > >   .../selftests/bpf/progs/cpumask_success.c     |  3 +++
-> > > >   .../selftests/bpf/progs/task_kfunc_common.h   | 18 ++++++++++++++=
-++
-> > > >   .../selftests/bpf/progs/task_kfunc_failure.c  |  4 ++++
-> > > >   .../selftests/bpf/progs/task_kfunc_success.c  |  4 ++++
-> > > >   11 files changed, 83 insertions(+)
-> > > >
-> > > > diff --git a/tools/testing/selftests/bpf/prog_tests/cgrp_kfunc.c b/=
-tools/testing/selftests/bpf/prog_tests/cgrp_kfunc.c
-> > > > index adda85f97058..73f0ec4f4eb7 100644
-> > > > --- a/tools/testing/selftests/bpf/prog_tests/cgrp_kfunc.c
-> > > > +++ b/tools/testing/selftests/bpf/prog_tests/cgrp_kfunc.c
-> > > > @@ -102,6 +102,7 @@ void test_cgrp_kfunc(void)
-> > > >             run_success_test(success_tests[i]);
-> > > >     }
-> > > > +   RUN_TESTS(cgrp_kfunc_success);
-> > > >     RUN_TESTS(cgrp_kfunc_failure);
-> > > >   cleanup:
-> > > > diff --git a/tools/testing/selftests/bpf/prog_tests/task_kfunc.c b/=
-tools/testing/selftests/bpf/prog_tests/task_kfunc.c
-> > > > index d4579f735398..3db4c8601b70 100644
-> > > > --- a/tools/testing/selftests/bpf/prog_tests/task_kfunc.c
-> > > > +++ b/tools/testing/selftests/bpf/prog_tests/task_kfunc.c
-> > > > @@ -94,5 +94,6 @@ void test_task_kfunc(void)
-> > > >             run_success_test(success_tests[i]);
-> > > >     }
-> > > > +   RUN_TESTS(task_kfunc_success);
-> > > >     RUN_TESTS(task_kfunc_failure);
-> > > >   }
-> > >
-> > > The above RUN_TESTS(cgrp_kfunc_success) and RUN_TESTS(task_kfunc_succ=
-ess)
-> > > will do duplicate work for *existing* bpf programs in their respective
-> > > files. I think we still prefer to have cgrp_kfunc_success tests
-> > > in cgrp_kfunc.c to make it easy to cross check. But in order to
-> > > remove duplicate work, one option is to make other non-RUN_TESTS
-> > > programs in those files not auto-loaded and their corresponding
-> > > prog_tests/*.c file need to explicitly enable loading the problem.
-> >
-> > Good point, and yes I agree with that approach of not auto-loading
-> > non-RUN_TESTS programs. Considering that we have a  __success BTF tag to
-> > say, "this prog should successfully load", it seems odd that we'd also
-> > automatically load and validate progs that _didn't_ specify that tag as
-> > well. At that point, I'm not sure what value the tag is bringing. Also,
->=20
-> Just more explicitness (if desired). Normally __success would be
-> augmented by __msg() or __retval(). I'd feel uncomfortable just
-
-But __success really has no actual purpose, right? Isn't it identical to
-if it's just left off? You don't need __success to specify __msg() or
-__retval() right?
-
-> silently skipping programs that are not marked with __success, as it
-> would be too easy to accidentally forget to add it and not know that
-> the BPF program is not tested.
->
-> I'd say that RUN_TESTS-based programs should be kept separate from any
-> other BPF programs that have a custom user-space testing part, though.
-
-IF we do go this way, maybe just a __skip or something tag would be
-sufficient?
-
-> About the patch itself. I don't really see much point in adding
-> *_KFUNC_LOAD_TEST macros. They are used once or twice in total, while
-> obscuring *what* is actually being tested. Unless you expect to add 5+
-> more copies of them, I'd just inline them explicitly.
-
-It's not really important what's in the actual prog though -- the point
-is that we're verifying we can invoke some kfuncs in a certain prog
-type. But yes, it does obscure what's there, and I'm fine with
-copy-pasting them if that's your preference. The reason I went with a
-macro was to make it easy for us to quickly test new prog types as we
-add support for them, or to add other negative testcases for unsafe prog
-types. Right now we're just testing tracing progs.
-
->=20
-> > that was the expected behavior before RUN_TESTS() was introduced, so it
-> > hopefully shouldn't cause much if any churn.
-> >
-> > > Maybe the current patch is okay even with duplicated work as it
-> > > should not take much time to verify those tiny problems.
-> >
-> > IMO it should be fine for now as the overhead for validating and loading
-> > these progs is low, but it'd definitely be good to address this problem
-> > in a follow-up. I don't think it should take too much effort -- AFAICT
-> > we'd just have to mark a test spec as invalid if it didn't have any BTF
-> > test tags. Ideally I'd like to separate that from this patch set, but I
-> > can do it here if folks want.
-> >
-> > Thanks,
-> > David
-
---k5MxFGT/d2mJJJzb
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEARYKAB0WIQRBxU1So5MTLwphjdFZ5LhpZcTzZAUCZg8qFAAKCRBZ5LhpZcTz
-ZNKkAQD6mUZSIrtesSlM70yQ4aRp1xVkW/8MPgSzIVKKz60XCwD9EZI5Hh0d/3gE
-EYbdUZbeI9eaNobZQv99U2afSKWFNQc=
-=mXpL
------END PGP SIGNATURE-----
-
---k5MxFGT/d2mJJJzb--
+Thank you!
