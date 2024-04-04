@@ -1,67 +1,67 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F5221E86F;
-	Thu,  4 Apr 2024 09:09:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=198.175.65.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 880A71E86F
+	for <bpf@vger.kernel.org>; Thu,  4 Apr 2024 09:11:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=198.175.65.16
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712221788; cv=fail; b=WaUGyPohVTX+S0vt2v9s7r4wudLwWzXEJC1NE9M/NPNL7Zl7IX6kvarAFX0YrB9C4FxPsY4v6McWI2tWhdB9XrFm0uoioCnTqOkJ2cpUte1HW8Q8Cw53DXnZvm1nNaYfy0ruOnJvYnj3NvrRioRqqXdSCyIoeCF5+w+eZLKAG/4=
+	t=1712221873; cv=fail; b=T+opMWAiYf3RIYtGBjUQTWl85I+wz/M9AMBC1yUCoNQ166JjxDOkYIeWcYiU4RI7QA3tD9gUhsTQlXJBMq5qDkBcrMxdyBZm12x8+Lx7+NrmWZw7o9pJDUIJelbpSbfGeFlZO1XpjTMZlOR/q65uR7+49VFSdmbJHO1dPOZGanw=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712221788; c=relaxed/simple;
-	bh=s82c1Rr6FsaH3WUJNL/pPzipMLA+nknWENZ0SgOzq64=;
+	s=arc-20240116; t=1712221873; c=relaxed/simple;
+	bh=Yi6U2cigSyV0WwVT70b9EdeZXgwo6L5/Sdk1Fqa+16o=;
 	h=Message-ID:Date:Subject:To:CC:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=n8BPHrk6i59Lah3xgpoM8X42vTsNAEyGt4mIHnK7J/U9pnO4j+EkVkvdlooh2uVLHlequbsaEQX7efc0lmdVIFs0yy2R2X6qkHreqab5uoxfRSmGIDiQaMFhRb0t3UXNUFk/Pfnv3+lIkA3POHmubg42YHiqHlAXZZslZsVNQSA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PxalPTgM; arc=fail smtp.client-ip=198.175.65.10
+	 Content-Type:MIME-Version; b=rvP8NqO3FF7Pl149j4o4Zva5otkGkxCDaPcZVTqpYM2JYRW46G3V16I8eNLyu7zDAj1vRA5oQRVueAO2tLrUMNv9rmeXkVfQ5ZiQlgGAyGlqO7pJLsZQZy4dArLBRW1t1Re3kCnDnAwkO3zWqDghkHv0U0u+IQwgtUKSx+eGJSo=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lqfac26u; arc=fail smtp.client-ip=198.175.65.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PxalPTgM"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lqfac26u"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1712221785; x=1743757785;
+  t=1712221870; x=1743757870;
   h=message-id:date:subject:to:cc:references:from:
    in-reply-to:content-transfer-encoding:mime-version;
-  bh=s82c1Rr6FsaH3WUJNL/pPzipMLA+nknWENZ0SgOzq64=;
-  b=PxalPTgMZZmmvbkZIw4LmUGaVvRJQQ07fwFGHgiAuIU/VYqHsig/+vfZ
-   hL6GKvuiu9P2hlj9upv8qyqs36QUkNRLO9lBbIXOc9m8ojFJsm0F590H9
-   RP8WecbQT/QaFlQkZ8A/vqCUuM7JQ9ih4CYeDxD1qP1PdJ1IVKVHgbIoV
-   xOIvznGFC5Zb/BIB8pxOCq0CrH4UI9iTvzbF7TUPxUOdrv8qB6Men3std
-   dD/UW4d9ACK7rO4sInBN/dygqvIhIfQEExnWSN4ot+jIJzjw1OdUd2wwH
-   vOLy+CBsNcz37JRlBjB/SXKHMsHysRHRdTAIYEt/XEOIkedfhlRtRpcJt
-   A==;
-X-CSE-ConnectionGUID: BsdDA4eqQyyOV0e/uHGmRg==
-X-CSE-MsgGUID: z7ZP6cPnS7y4I3ay6l3AIQ==
-X-IronPort-AV: E=McAfee;i="6600,9927,11033"; a="24948083"
-X-IronPort-AV: E=Sophos;i="6.07,179,1708416000"; 
-   d="scan'208";a="24948083"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2024 02:09:44 -0700
-X-CSE-ConnectionGUID: /Z3iAKLkR/u0hoOsorBPAQ==
-X-CSE-MsgGUID: 1BcNNrZAR3anXMxMEtYIhQ==
+  bh=Yi6U2cigSyV0WwVT70b9EdeZXgwo6L5/Sdk1Fqa+16o=;
+  b=lqfac26ueedOm9YF+NpSNs4lFlKE8D+qxviSWmXhevOGDmCK4ZbqTBkQ
+   /JiF4cL2QgyLBiyuXXNEVb/1SXY1fIT0OaEJMS8P53QQoZc8D8Jua7+KW
+   ZfLYfXaJzfptxPGkhAKCMMH7Nv0CLJRmwBQ+U8SSjSBltu2VJJNCK9Wh5
+   r6Euj4BuWccAIS4BzxsTcTNmyQPGmDx3rP99vO1CN2CPWoXG8FtdqOOLM
+   udlNMoC618KlCWEPD19uYEO6+h92WgcmREDzlyzCcbItj1xjfcDNdxF/p
+   NYeFM7vH4VWLV9/+i0LJDirURrAW/0jdRd/YfKdgBZhXjO8iArFHk1UR6
+   Q==;
+X-CSE-ConnectionGUID: 7P7cJfOgS1i7vuAhKuT5RA==
+X-CSE-MsgGUID: ShEtFOxvRuyDnAVeeT2Pkw==
+X-IronPort-AV: E=McAfee;i="6600,9927,11033"; a="7622753"
+X-IronPort-AV: E=Sophos;i="6.07,178,1708416000"; 
+   d="scan'208";a="7622753"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Apr 2024 02:05:35 -0700
+X-CSE-ConnectionGUID: ibrQQgAaSFK56cJQag3Org==
+X-CSE-MsgGUID: O7X5EDhHROmhH7lj2u3/OA==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,179,1708416000"; 
-   d="scan'208";a="41888071"
-Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
-  by fmviesa002.fm.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 04 Apr 2024 02:09:43 -0700
-Received: from orsmsx601.amr.corp.intel.com (10.22.229.14) by
- ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
+X-IronPort-AV: E=Sophos;i="6.07,178,1708416000"; 
+   d="scan'208";a="19150909"
+Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
+  by orviesa007.jf.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 04 Apr 2024 02:05:36 -0700
+Received: from fmsmsx601.amr.corp.intel.com (10.18.126.81) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35; Thu, 4 Apr 2024 02:09:42 -0700
-Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
- orsmsx601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
+ 15.1.2507.35; Thu, 4 Apr 2024 02:05:34 -0700
+Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35 via Frontend Transport; Thu, 4 Apr 2024 02:09:42 -0700
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (104.47.55.101)
- by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
+ 15.1.2507.35 via Frontend Transport; Thu, 4 Apr 2024 02:05:34 -0700
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.40) by
+ edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.35; Thu, 4 Apr 2024 02:09:42 -0700
+ 15.1.2507.35; Thu, 4 Apr 2024 02:05:34 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=X+urr8oMZWt7uQFCUmoBgUslEyDDo/40vAKdJC01mWmMp4hP0Bdje54IKwqS2Fj8QLQXWgyYoe1DQFATAfsSHAfocBplzJhkzUV1qERJ3IOTLHDYWFbpTvApXammtyY5v8fSbTQiun6YrtWNN9sSzXbWO774gCselOR3CmClBAByOJWBgjZb9zAPaYxi5/RIVobKMsu7HaSuBhjaGekKm48cwczaSSVfbiZyfbC2goduNuypSDBzr/BKS13UNdmQD7TcjQhFc/UHVWFr/8mwdiRjchBwxiSIMPDyC+fNV5ZDGjNUkTkmNR9aCwjbbtNYHl/JP1gJ4abf2fsmUuBpJA==
+ b=H+3v38ly1HuplTfAMynZ0TvecXoCuAUclt3ySWjYFc371QGG7ykXDiaWk6pqHe2bbjkyRE+la5vco+HeWLr5tT9Cw3ZeHtHfF/X4H8leBsf/SffgwrTHX25gA5AH7aD3E9y54ArHoroOXPKRWYiwZAF+bEhVeFvFqMr844XmLIvQg45M37QH8CJxUvlhxBRNlOZDlxqUMH+GzDUfcIrUDrseaMu86MN6tMO1t8NZXGcv9t/UI/MwwyllSY/DLZ3b77df1+DdYOmb6ammJvO9q8OW4KTSE2maKOntfiCy5219yiJQ4/2rer9pMto4TyiAiuuEdtlJcNKjiYbLIWnJWQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=OVGmFdYaPKUxySzv1cIRiXVtor6PMcrV10ZYVc8cZpY=;
- b=U/CYjl33anMdLDQkPwzW3GetiY1nTsTQ+o59JYbX45ms6hEYH9y9BiEKScfNskMOT2xzCzYs+BNtRQfgZ5cWJTiAw1nXPUlOV3540BuahEmWY9UQE8J1gppdpH8RP1dxKDtZrGKrhsezoPES9seDRqhpNtBucuwRm2r0m5F+KVEcRSaxu4HgU8SnGsbzKtiy3VU/58Bgj9c0/hLu2DXqqQ3he/ENg8QygIx7JyIhaEXV2f36fifnzZayiiK0At5DBUWa5MwwjDZ7XERp2++q4rP4hOiwgC54qWg0BRkEEb88V5qNO2QFzJRMITrirsLijHIAau+wySIae4nYoXJ5yw==
+ bh=T9YktEhC+oxomEp3j/0skjdvNTz7N0UiE+doHCZX8HM=;
+ b=fJERtT+IkJNRMCB0gBhRgSbiXyCNcLVaYF55iucgw+6M0IQ20uKpJ8KY8HSHwPpSw/ijhKXGhdvV6EaSELmS2nbsYLb9JUujGqnh00jBZYHvTIlFFVjLm87XmqX97txkYX18mvAv259seeQQXpODMS0IOY4x/tvXzyHW7O8taoM6rrPChxVMg30VoyLg3O5Wu/BHsRNLhlz6o9S+MLmaGpgPpPv70yVfqcEXw5Sts6HHxG1LuzKtfq7UGiybRTtc7rUIt/OBDaNYA5DP5DTGhvILeQWiz37ixDb0W5AXWXp9mur6hrAUbWaOOHCuWvakHWEvKU3MJjQbJLOwItBilQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
  dkim=pass header.d=intel.com; arc=none
@@ -69,33 +69,33 @@ Received: from DS0PR11MB8718.namprd11.prod.outlook.com (2603:10b6:8:1b9::20)
  by DM4PR11MB6453.namprd11.prod.outlook.com (2603:10b6:8:b6::16) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7452.26; Thu, 4 Apr
- 2024 09:09:33 +0000
+ 2024 09:05:33 +0000
 Received: from DS0PR11MB8718.namprd11.prod.outlook.com
  ([fe80::654c:d66a:ec8e:45e9]) by DS0PR11MB8718.namprd11.prod.outlook.com
  ([fe80::654c:d66a:ec8e:45e9%6]) with mapi id 15.20.7452.019; Thu, 4 Apr 2024
- 09:09:32 +0000
-Message-ID: <2ac91d55-377a-4d07-8d13-b7fa9ee46302@intel.com>
-Date: Thu, 4 Apr 2024 11:08:14 +0200
+ 09:05:33 +0000
+Message-ID: <ada87880-4bf4-4528-98ab-d09d39c515c3@intel.com>
+Date: Thu, 4 Apr 2024 11:04:14 +0200
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v2 1/4] net: Register system page pool as an XDP
- memory model
-To: John Fastabend <john.fastabend@gmail.com>,
-	=?UTF-8?Q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>, "David S.
- Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, "Jakub
- Kicinski" <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, "Alexei
- Starovoitov" <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
-	"Jesper Dangaard Brouer" <hawk@kernel.org>
-CC: <netdev@vger.kernel.org>, <bpf@vger.kernel.org>
-References: <20240220210342.40267-1-toke@redhat.com>
- <20240220210342.40267-2-toke@redhat.com>
- <660dba106f0ed_1cf6b208ad@john.notmuch>
+Subject: Re: [PATCH bpf-next] bpf: pack struct bpf_fib_lookup
+To: Anton Protopopov <aspsk@isovalent.com>, Arnd Bergmann <arnd@arndb.de>
+CC: Daniel Borkmann <daniel@iogearbox.net>, Alexei Starovoitov
+	<ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, Jiri Olsa
+	<jolsa@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, "Stanislav
+ Fomichev" <sdf@google.com>, <bpf@vger.kernel.org>, Naresh Kamboju
+	<naresh.kamboju@linaro.org>
+References: <20240403123303.1452184-1-aspsk@isovalent.com>
+ <18d8417d-835c-4279-9f84-abdc56fa19fb@app.fastmail.com>
+ <728951fe-ccd5-49d2-1584-fc97e2c2266e@iogearbox.net>
+ <1c3d3079-e1f7-4420-b542-c3c451038963@app.fastmail.com>
+ <Zg5dQ6KYqVWA2Iia@lavr>
 From: Alexander Lobakin <aleksander.lobakin@intel.com>
 Content-Language: en-US
-In-Reply-To: <660dba106f0ed_1cf6b208ad@john.notmuch>
+In-Reply-To: <Zg5dQ6KYqVWA2Iia@lavr>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: WA0P291CA0023.POLP291.PROD.OUTLOOK.COM
- (2603:10a6:1d0:1::10) To DS0PR11MB8718.namprd11.prod.outlook.com
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: WA2P291CA0025.POLP291.PROD.OUTLOOK.COM
+ (2603:10a6:1d0:1f::6) To DS0PR11MB8718.namprd11.prod.outlook.com
  (2603:10b6:8:1b9::20)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -108,149 +108,108 @@ X-MS-TrafficTypeDiagnostic: DS0PR11MB8718:EE_|DM4PR11MB6453:EE_
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: yqAow0C11jA7o6or9j2nzFpuOWwvye80R/1M5/2GPHRCLynOeZ470W3YanM4BIHHtPbvKgPUOwXVrNNhcBNYFFNjiibJAibuKEZJnzSP86L+OkIjPYG+dsXyYd11Jy0qCwnLJLauHA/YoNqT2uXO8ZBXXe/sv5MzH4jHdXnvQm6C80L2giIQFFwtZf77wSOgTSJpvYz5WhIEntUjJntruSWiqEupj1jEgPkKpT38bcYTPdG8cQdKk+jbhhSIg9UhtT/c18zF7YNmSgK3YKmQMvO3XFe/AKEGVC96CN4PkZu0wcTzHPtEJTREC12M262fWhr5CeAYkqN8qIYyI5bTMezXm9uUS9LEFuvONjtpmdcwOW1ekbbv32OsQvHoXBZz8CwkKVYW6tIYRfYgNJuO4pMc0lNQBL/lYT5J1516p7hpTXMfGR9iOm7yhwCOxvDOD3LJb3I4hm005OhSM5YOYHBRcdloKZ9imznXOq5li0Df0srY0UkzpR1rXiYw40KnEq68v3659fCizBWQuCjidqLkE9z3TJ5hp5U610r+IymLfi+VGGXHsbZuLB+cPSq+1rVNJ6FwPpHwbSykGL4/noWLmTZLvGvxLbfxdl7lAVk09OdG71ivndAeWyrB94zhVXUc/JqAEq4ME8G/kwnatIt3exfyOsgtYfcHg+V/DW8=
+X-Microsoft-Antispam-Message-Info: oxPsdTeM/OI3SSXmshXgBEhtY+o7sHT7W3nfmDgs5xGLla16MJzIlZEEUAYafWo4M8qMcKsgDZ9GR6+zHdQrz+B94IDpyAinPxk6f0tQdIGdtNVzGU5LV3vfmdX4osTDHCctZkg+d/huwEHGo9QoLfnaOm4vYT9MFF4iT51MkhyeZRVuA+nBPqmkdLb97XdtcjD363ARHAMsV6zwrbVrmgFMZMXbt/ORanFIUOk1SrHsZix/JfcX0uoNF0868cOpB2ojGCkor3rfuIHUXafEKmD2pTeuhKrlwm0/LuXiEQzXYOcJ5mHfKFTNIlYnsXbqrlyYO2eS3ndbA3I3A8vmaQtk40PAenPmor3U2tq8ifscNbXN14mfV7/Ae2Bd9TTEQFrxl+PdrwY0/+qiSNrbAp/5GtZxUTDCi+Gc7FwCY3IYt4qMQtyu9DBZ8bMl/BaXPVWzuvN8nsvNLX4OvaHmcMWcucF/RxvHBHRCmH5O0nBkKEk4eWFBDEKlQ55kVuYORonjQtuuhXLvz2Frw1uTxlPPnWhmwF7L3t6MrEwx2cF/4D3gPZ2mVyeNqnn7/WWEhkeUEt2NSdRRPxQ4Zs0liBXcJV9xdRJf7wo3pBB4eY0smbUSqJczGkq8hqmXeKblK5az2jM9BFD91JFVJHEqTeoI3lOpcTNsa7rnfDsO+OM=
 X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR11MB8718.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(366007)(7416005)(376005)(1800799015);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?cDNYM0ExL0poYkQvQWN0S1d6Tk9pNFBwanNVbDBCOGxzYXhXbTZhY3BJVlVu?=
- =?utf-8?B?U2MyaFhXY3NiOXpsZWFoczV2ZGNlWi9ibmpMRU14MWpKR3I4Z2NkVmFNREV3?=
- =?utf-8?B?QlRDem4vbkVLcGFxTmxpcGdhRnFyTzRIRUdwdVQxVVZLRHIvQ3ZGQTl5azJn?=
- =?utf-8?B?TThuQ1RNdzdJVDBZMUdsb1lWOVM0VUxPUDRZRWVPZFUyWVY0a2Y1dXlMUTE4?=
- =?utf-8?B?eGE5ZlR1OU50OExEVzU1d0drcXBaMEVFU3dtSE5FWDRxclZ4aEFNRW55WUdM?=
- =?utf-8?B?aWRBQXNyV0JPV1lwNFhicHkyZzRnY3BzYk5tSUwweVAvMGt1OUcwUnlJS0pY?=
- =?utf-8?B?T3Nac0hLU0hqY1BpejJrcEVpWEFHL3o4VjFOTGVJZG9LbVZmeW9TVkR0dnJC?=
- =?utf-8?B?QW5sSkhSZEErRFJsV2E0ekZxcFlkUk5EekNNeDhrc1drNnh2Uk9EUWRTQWNz?=
- =?utf-8?B?ZWpyeGtuSndVREFrWGVoM1MveTJ4Y1ZKMncyd1VmVmp1WloyZGZtUEYyL29R?=
- =?utf-8?B?MXVqS2ZGQ2JEYUE2TlpYWmFCam9rcVBMRkJCU0Nmd3BCSGdMTTNEQjlOSUl0?=
- =?utf-8?B?Znk0OUVLSDc2T3Z3SU5aYWVNRlcrUXhsS1psRitkNVBMSG5RS1R5RFZLbmNy?=
- =?utf-8?B?MEUxczhkRWl6a09jZ01hUDBOZTc1aFBJWUhzdUNramZhOTgwVGJuWmFKYThE?=
- =?utf-8?B?ZkFmRlpnR1pBWEY5dlh0bS9vWmdiYWc3SWNVTDlWblMzMnkycHptbmpKaTVR?=
- =?utf-8?B?Smg2SkdCV3NqTVdXcjh4UXNRS2tZSHUyMmlZZXZPcDhQTmV2VHNNcWI0akVK?=
- =?utf-8?B?SHd6ZTZjNEhxVThSZjJkUGtpd3dtQllwYk1mdmgyNElEaTVMUTV1bGhCS1cx?=
- =?utf-8?B?b3BBSUtxb25JTFFWM1dmbldEREZFakE1c0NsakFaNWZ4MUJtdWl5d0E2Zmxu?=
- =?utf-8?B?akVveVNtQTVOWVNOQS9CVGorV0tLd2s2OUhnUk1XMXlPU1RnOVEya3JwK1Ew?=
- =?utf-8?B?L2V3Z1I2SjV4K1p2TlcxSk5uaGhvUENQdHdESGdSTEppTDlCVGErSlFseU5D?=
- =?utf-8?B?UmpNOWNtSU1sY0Zjc1F3d1hCUXpNaGdqbDZzK0pUVXRaK1dqMzJxU3FJYXZH?=
- =?utf-8?B?Q2wyYXVBdmoydzRkU1cyVURXNlh6NmhsZUcrMDBJY244Qktka29CdWdoNUlp?=
- =?utf-8?B?aS92M2puNWsvN3VSUWV2R1ErY29RcWl2YWRHc0x4OGNMYXNRRWtQVDJCQjV3?=
- =?utf-8?B?WFdVb3NsamhQTzd1cWswVyt0dURCdFNjMHZtY0FjK0NlckJUMFFrTXVoNDNV?=
- =?utf-8?B?RG5JNzBFanM5TFN5T2VyWmpxa0MyMFlLUEhla2VQWjlNbThCM0dlNVZodnU0?=
- =?utf-8?B?ZzdGTG1YNkUyc20vUlVidTk3UXEzemlFbEtxVHpLWnhVdTRwVDQ0ZTlPSHBk?=
- =?utf-8?B?czIvT29qQmJoTXd4RFFIUktHNVowenZ4Q2hOcVhNeEoxMFFldVd0dzlqNGNa?=
- =?utf-8?B?SEJjN0RMcFFMd1dSK0J6NmdLKzY0Y0E2TkFhWFBWMEVRanFURG1vNlFzL0FP?=
- =?utf-8?B?REsyUkU2eW9aYnM0Z3RrcXA0bXp0NVI4TGI4V1I0T050L1Q3YVdQUG0zVWl0?=
- =?utf-8?B?MFpDdHVhZXpOdFNOY3NPQ01RODVYMzF1MjFzMzMvR0V1QXBFU3hWcUQ0SVpx?=
- =?utf-8?B?d3NkTWR2VDhrcE1qL05tb2pDMTdrNHErYnpxRnFmRS9IV2tTUWh5OEptK05h?=
- =?utf-8?B?OE1FK3ZGc2swTUtqWHRiZVZUZENWNVVxbHROdStZNnl3bTNFd2J2ejdmdHlS?=
- =?utf-8?B?T05kRHMyMGl1Yk5xRUYzT0h4ZTJFZzdaUHJkT3F5MFBkYVZ4a0xubW0wd1R4?=
- =?utf-8?B?NXVJUFcvQ25hajVuOHZMMkY5dHdmbEFwcVJmZ2N6VmFSTXRsc05HUm5wSkJx?=
- =?utf-8?B?YjZjSXhHM01oZm4wQ0wyWXJBKzhWRzd6NmZpakdkcGtDakxqUFEvRUNvUkJH?=
- =?utf-8?B?Y0xwdmtkbUpZTlcrSXFRaldNdHlHYmtweFZ3RTlRZ0FqUlBZTURCcDlDT01K?=
- =?utf-8?B?VWxDTHorSUNUMkdSbmpqTzdTdFpYWGN0dWQxU2tTMlhXSko3VlNBOUkrYmtO?=
- =?utf-8?B?Z3ZFd1NPOGhnWkhjRm92cFdlejFvVkxlTUZRWUpSU0o5UUw2bnA3Z2pDSHhQ?=
- =?utf-8?B?SFE9PQ==?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 16447348-baeb-44fd-6a9f-08dc5486f115
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZlFxbXcvci9XdFBvWWVZaU9Yc0xJK2Y3b3JUNDZaaW0zMFZBdmdIU1pRWmxm?=
+ =?utf-8?B?S0wzV3ZuS1didVVjeVhlZG1xbEYyUEQ4Vk55NkZmdlpaUExoK2oxQXl1MFN3?=
+ =?utf-8?B?T3lEaFFOQ0kyay9FU3BpNTRDaWNOOUZuSDVLYzJYMERtaHRaY0V6Q09tMWZ2?=
+ =?utf-8?B?djIyK2JJRG4ydVYvanU3cVBMdUthTE9iWVN3T3pBa0luV3RHV3ZuZDRoY2lz?=
+ =?utf-8?B?c0JmMDdObzhUeEttU0FWTk5KdkY4cHFPMERQZDRnQ3ZjSHppOU9HVWZzZGhw?=
+ =?utf-8?B?TWpPZDl2bTNsb0VZb3hvQ01NaTg4UlJJc2lWSzlNaUdQTzIrNFcrOCsza0p6?=
+ =?utf-8?B?L3hNejlReHdjNGZKcDZMQjc4RFdDd0g2MlZvdTdzOWtLcUV1V3BsTUFZVHRI?=
+ =?utf-8?B?NW1LRHFxRm9BTlo2QXV3S1hRU3Fta0VSUmJKa2VjZEZOL2FWcnlaTzRnY2cr?=
+ =?utf-8?B?Nmhhb09BQnZOUTd3cnNQL3llcFFSTXJJRjh3RWkrVjlyWnN3WE9SODNmYTF5?=
+ =?utf-8?B?S0tKWC9JVzV0Q2Z4YVpFNDJLK0loM0JmYlZwOU1UQ052U2NUVTBTTVNKM2x1?=
+ =?utf-8?B?bHdCVFJKMDRpczhyald6NzNST2pHZ3hzNmVDOEhhc3RYM0RDOThtQXhvbDJt?=
+ =?utf-8?B?MTFEMUdCSDRUbUVsV05DWHllMU5PVThLOHBuRE9aM1pNeU1DVllxYXR0Njd6?=
+ =?utf-8?B?dVI1cWltL05pck9SclB3UnFRMXk1Tm5kWHZscGpCUnU3REFGK2FHZWY5UytL?=
+ =?utf-8?B?MWlMRzFCOU02WFBUd01TS3dLVkJYS0tQMFo3SjJhQ3FqMWxBaUFFSW5PcWdV?=
+ =?utf-8?B?SUJ3cThsZUZBQk0rNVViMXNMODNGZzYxS2FHNVdmQTF5M0UrKytTZkhJNW9r?=
+ =?utf-8?B?aUcxRDUxb2hrS3ZiVS9hUFVzMTB4R1NXQ1NDZnQzK0F3S2pHN3lsMGFvQXhX?=
+ =?utf-8?B?bllRVEpGeTJIRDhsYVp5bFpINUdCQ2VvZEdqZ0ZoUUxPWTJhZlMvZ1dTTlZk?=
+ =?utf-8?B?WmNCS1ByQzZ5bnlVeVNpNURHSFZ5US9nYy9iVThDNG9TT0lKVis0Zks4RjN3?=
+ =?utf-8?B?VURBYm1DR25jRFdLU1hSNTJCanVvT29xME9QNnpTTXFvS3c2S3A0Q05idUhp?=
+ =?utf-8?B?bk1WSFhCNVpMbDBORzQ0VmoxVHZpemMvUGp5MlNadWg2ZjJDN2NDTUJsQUl2?=
+ =?utf-8?B?MmY2bTZnSnJNZWQ2cmRHc1Z3YmY3ekZvd0hHMWUzQlZHMWQvVDZ6UDg0cjlM?=
+ =?utf-8?B?RXFKamlFMTRrSEdFMTNnZHI4ZFN6MTZtM3JDNlczZU83VmJZWmMxZUxHTEoz?=
+ =?utf-8?B?RHJHSk5HeGxmZmFMS3lGcGF4SGVWQWlkUnZrbUlWQ01ZZTNsUnZIN3hZL1hH?=
+ =?utf-8?B?RW1LS2VHczZlS25YbnhXWHUyTEhCc1BnVDFaWXk2Z2MzNHNsMHlLQ28vOG5l?=
+ =?utf-8?B?alE0ckVjUTNJZFRURm9VSGRBSHJ2aVMwU0V5TzMxUjg3SDNHTURUVjc2MGtL?=
+ =?utf-8?B?MlBTR0w1b0tzcWcwdFR0YmpBc0hVOEVpVE5BbVo5Q3V6c0NiZjh6bThVbjh0?=
+ =?utf-8?B?MjRhRnBZRzNsOThXaHBJM0ltM05CbW90aVAvM2diRmhPUDNLTDdTWXU5TUl0?=
+ =?utf-8?B?cVdyWG1GZ3BkVGFLTytlS1VxeXJYSHFMRjRmNnR0MEI4NE9FRDE2QVR4dmhY?=
+ =?utf-8?B?NlF6R0FGMHBjcHhEQlZ3K2M0am16R3JwZkQ1d3FUczlyckVid3AyWDJOK09N?=
+ =?utf-8?B?TzhkbGtjTS9wNForYmZ4eHpyMGlIQWhUcHRGUkpTeGJzcEhxVm5kN1dJdlpU?=
+ =?utf-8?B?ekUwQVJEUUJvRDJmMmxTaE1XbDZ0LzBJdDNuN2wwRTFQUEF5RUFvd3UrM1Jq?=
+ =?utf-8?B?K3QvcUhkblBXWjZVL1cvWkg5NUt4cmI2dGE0UElSRjUzRW83SG51MzNoNGsz?=
+ =?utf-8?B?am91eFFTTjRKSElpWm5nSHRoVTBLcWhTUlBBaWNScS9PVlc5TU5ZclR6SHM1?=
+ =?utf-8?B?SU1nMVp5R0ErOSswUWROa2twMUUvL3ZleWkrcHdDNVNlUnMxQnZJNmZNZ2ZZ?=
+ =?utf-8?B?dHU4YWhaOUhGazJNa0MrUHhua0xaNkR4S3d3dmRTa0dlN0lVUFBGMWNmNFp5?=
+ =?utf-8?B?aGpxbWI0RXJaZjdpOUNCTmtmU3JteUFKenpxNW12dC96ajBLK0dvSG1VZVJG?=
+ =?utf-8?B?SlE9PQ==?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8a826757-8dd1-4896-6891-08dc5486623a
 X-MS-Exchange-CrossTenant-AuthSource: DS0PR11MB8718.namprd11.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Apr 2024 09:09:32.8852
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Apr 2024 09:05:33.2334
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 3cx7WmWONx+gSH9kcyCrZjCxTurLrMlMUO3TlQzX5qRbmocI/8VujbDnpPqg5H1ePvRLnJ4mibYaH9xiAMbo5+URs/59rY0/tunKYzBHeZ8=
+X-MS-Exchange-CrossTenant-UserPrincipalName: DWVHLJENGj+lbieA+7wOgRMS24VunWNW6NrnCRAHGttDnMTg4omgu+JokqPto8m5/99VFwP+OzP1ZVGPKTKL2fy8eqBfnTmxyZuGAQcQKXI=
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR11MB6453
 X-OriginatorOrg: intel.com
 
-From: John Fastabend <john.fastabend@gmail.com>
-Date: Wed, 03 Apr 2024 13:20:32 -0700
+From: Anton Protopopov <aspsk@isovalent.com>
+Date: Thu, 4 Apr 2024 09:56:51 +0200
 
-> Toke Høiland-Jørgensen wrote:
->> To make the system page pool usable as a source for allocating XDP
->> frames, we need to register it with xdp_reg_mem_model(), so that page
->> return works correctly. This is done in preparation for using the system
->> page pool for the XDP live frame mode in BPF_TEST_RUN; for the same
->> reason, make the per-cpu variable non-static so we can access it from
->> the test_run code as well.
+> On 24/04/04 12:31, Arnd Bergmann wrote:
+>> On Wed, Apr 3, 2024, at 23:00, Daniel Borkmann wrote:
+>>> On 4/3/24 10:09 PM, Arnd Bergmann wrote:
+>>>> On Wed, Apr 3, 2024, at 14:33, Anton Protopopov wrote:
+>>>>>
+>>>>> Declare this inner union as __attribute__((packed, aligned(2))) such
+>>>>> that it always is of size 2 and is aligned to 16 bits.
+>>>>
+>>>> I think you probably want 32-bit alignment for the structure,
+>>>> to keep the ABI unchanged on all other architectures.
+>>>
+>>> Fwiw, on x86 nothing should change on this regard, see below pahole dump
+>>> before/after. I think similar might be true for other archs as otherwise
+>>> we should have seen a kbuild bot complaint on hitting the size assert.
 >>
->> Reviewed-by: Alexander Lobakin <aleksander.lobakin@intel.com>
->> Tested-by: Alexander Lobakin <aleksander.lobakin@intel.com>
->> Signed-off-by: Toke Høiland-Jørgensen <toke@redhat.com>
->> ---
->>  include/linux/netdevice.h |  1 +
->>  net/core/dev.c            | 13 ++++++++++++-
->>  2 files changed, 13 insertions(+), 1 deletion(-)
->>
->> diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
->> index c541550b0e6e..e1dfdf0c4075 100644
->> --- a/include/linux/netdevice.h
->> +++ b/include/linux/netdevice.h
->> @@ -3345,6 +3345,7 @@ static inline void input_queue_tail_incr_save(struct softnet_data *sd,
->>  }
->>  
->>  DECLARE_PER_CPU_ALIGNED(struct softnet_data, softnet_data);
->> +DECLARE_PER_CPU_ALIGNED(struct page_pool *, system_page_pool);
->>  
->>  static inline int dev_recursion_level(void)
->>  {
->> diff --git a/net/core/dev.c b/net/core/dev.c
->> index d8dd293a7a27..cdb916a647e7 100644
->> --- a/net/core/dev.c
->> +++ b/net/core/dev.c
->> @@ -428,7 +428,7 @@ EXPORT_PER_CPU_SYMBOL(softnet_data);
->>   * PP consumers must pay attention to run APIs in the appropriate context
->>   * (e.g. NAPI context).
->>   */
->> -static DEFINE_PER_CPU_ALIGNED(struct page_pool *, system_page_pool);
->> +DEFINE_PER_CPU_ALIGNED(struct page_pool *, system_page_pool);
->>  
->>  #ifdef CONFIG_LOCKDEP
->>  /*
->> @@ -11739,12 +11739,20 @@ static int net_page_pool_create(int cpuid)
->>  		.pool_size = SYSTEM_PERCPU_PAGE_POOL_SIZE,
->>  		.nid = NUMA_NO_NODE,
->>  	};
->> +	struct xdp_mem_info info;
->>  	struct page_pool *pp_ptr;
->> +	int err;
->>  
->>  	pp_ptr = page_pool_create_percpu(&page_pool_params, cpuid);
->>  	if (IS_ERR(pp_ptr))
->>  		return -ENOMEM;
->>  
->> +	err = xdp_reg_mem_model(&info, MEM_TYPE_PAGE_POOL, pp_ptr);
->> +	if (err) {
->> +		page_pool_destroy(pp_ptr);
->> +		return err;
->> +	}
->> +
->>  	per_cpu(system_page_pool, cpuid) = pp_ptr;
->>  #endif
->>  	return 0;
->> @@ -11834,12 +11842,15 @@ static int __init net_dev_init(void)
->>  out:
->>  	if (rc < 0) {
->>  		for_each_possible_cpu(i) {
->> +			struct xdp_mem_info mem = { .type = MEM_TYPE_PAGE_POOL };
->>  			struct page_pool *pp_ptr;
->>  
->>  			pp_ptr = per_cpu(system_page_pool, i);
->>  			if (!pp_ptr)
->>  				continue;
->>  
->> +			mem.id = pp_ptr->xdp_mem_id;
->> +			xdp_unreg_mem_model(&mem);
+>> It's not the structure layout that changes, just its alignment.
+>> Of course this is unlikely to cause actual bugs, but if there there
+>> is no real need to change it, I would leave the alignment the same
+>> as before.
 > 
-> Take it or leave it, a net_page_pool_destroy(int cpuid) would be
-> symmetric here.
+> I think the struct will now be automatically 4-byte aligned, as it
+> has the following layout:
 > 
->>  			page_pool_destroy(pp_ptr);
+>     struct {
+>             u8 a;
+>             u8 b;
+>             u16 c;
+>             u16 d;
+>             union { u16 e; u16 f; } __aligned__(2);
+>             ...
+>     };
+> 
+> So if the union is 2-byte aligned, then the struct is automatically
+> 4-byte aligned, because its address is 6 bytes less than the address
+> of the union. In fact, as Daniel posted above, pahole shows that the
+> struct actually has __aligned__(4) attribute in the patched version.
+> I can add explicit __aligned__(4) to make this clear.
 
-I believe it's better to remove this page_pool_destroy() and let
-xdp_unreg_mem_model() destroy it.
+I think it would be fine to not introduce an explicit attribute as long
+as pahole shows the structure is already 4-byte aligned.
 
->>  			per_cpu(system_page_pool, i) = NULL;
->>  		}
+Regarding aligning it to 32 or 64 bytes -- the actual benefit can be
+checked via scripts/bloat-o-meter. Usually alignment bigger than 8 bytes
+don't change anything in the object code, at least on x86_64.
+
 > 
-> Acked-by: John Fastabend <john.fastabend@gmail.com>
+>>         Arnd
 
 Thanks,
 Olek
