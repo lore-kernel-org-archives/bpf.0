@@ -1,158 +1,157 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD36A757F5
-	for <bpf@vger.kernel.org>; Thu,  4 Apr 2024 09:58:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22C5B38DD1;
+	Thu,  4 Apr 2024 10:46:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712224719; cv=none; b=dBNiiywvxYVPp1dtJnYyPus6zELCO/8xIRMJCS6GxaqihT6lbixgPNXxHm1SANeNguchqR1rrF4CZJoZpg44iW7Lh1lstC8mb7TKT3yywy3A9858R1vCclZkB3RMFh+/jXrkNjLWFD39kCbePJdBBRNDIeHNT1CWBwm7fk/6b0I=
+	t=1712227562; cv=none; b=UdrMjTdx1TTqfLziB+yF3ZBB+eTEdUjItjAr2eIBvte0/j0JqGZA7XHDKAjhwrT71HMS2PHUOaszyIHXg8zOVhP7hLhdD172Omawbxstz9/EPq21esoIdkPdhqT7QWCxcp0IzzvX5gK9tkc+NJlWBOQlTqQvc92ma0Y9nPaj1aU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712224719; c=relaxed/simple;
-	bh=ODiTlGgRQsjehNRj3kmLlyExikmmOkr5QSGrCtILmIE=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=goqZOVQvzOfuswMDnlpUUzWqMPbmp5QdhjzOqu9+brWmxunZ/Chh3EHOIoKYJ/K08Ptw49B2327T5RIXMLbBvBJx7f460rBOHpnSUtIQh+/QgMEqNuhvasyFWg2ck7zOPNgZazQfESfhk+RN3S47ZLdXAmLdEZn7THAZRB8RFTw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Q6k6wMRV; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1712227562; c=relaxed/simple;
+	bh=ePPMM/uIseZje0ZcIe4lHLIZ0Wj4HLiZRHfwugMfC08=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=JKb3KhEsDFg2ZzfWrqaLPqBwwr9PVX9RVIWdKHrveZ3jUGXYT7H+IyZclkWsYJUAI96I2vknQVgRfV1eRNt1LSDoeLoKl6ZZYtcYQj2Ahn10fmZbi/R6vC/p3egakG11kC0y0qpm768LQgU8L9g5P9eXOpDFfvXjPMWRVEmRSB8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UdmvL/MB; arc=none smtp.client-ip=209.85.218.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Q6k6wMRV"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1712224716;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=Orry6me8Y86MAhIHpdcMtXnc6PoIoyVukOysNCbSjdE=;
-	b=Q6k6wMRVjZI4YYXOCXxGrIP3gK7sp5QILPx5qY8y0q1/dAYdJuYFoQaPFvc64pvwym5nPk
-	dIOYvdx9WiMhe2hEJBytKX/3+e4T0ZJFeene9UDMr7tri6KScdnGMGBYFSBxWwPeTbZePV
-	xXSQVHK4gDn9CCAgPfDMybgAeQ8o210=
-Received: from mail-lj1-f197.google.com (mail-lj1-f197.google.com
- [209.85.208.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-197-u3CKYk-ZOv--sll2ssYBHA-1; Thu, 04 Apr 2024 05:58:32 -0400
-X-MC-Unique: u3CKYk-ZOv--sll2ssYBHA-1
-Received: by mail-lj1-f197.google.com with SMTP id 38308e7fff4ca-2d6884f6de1so1563621fa.0
-        for <bpf@vger.kernel.org>; Thu, 04 Apr 2024 02:58:31 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UdmvL/MB"
+Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-a5193f56986so25153966b.0;
+        Thu, 04 Apr 2024 03:46:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1712227559; x=1712832359; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=F/B6UBwFbisopXHNcGO9MAQyxZ/hbRouxLNeeE3qnFQ=;
+        b=UdmvL/MBM0WrFHCdPUDLQ0S1t/W8Rkph1rANEJkNmLIr4Gy+EDUbLNpf+CFS6LMlVL
+         GdBpvi2Yx3qOH/XmBunoZ+iViLqWDKjrgP9EZR93tE/fn4U/ryYscPJXv8aPtmz+KAR4
+         8ezawz5XeeJTTBkRkMWQomVAJtokSawOoQuJnbkM7icz2/6ikOTuVUhc+iw8XyKc5O16
+         qe572ztoyDM6PS9iUjGz7OmBIIkq7gOx+b6wdsF1so76O0jlqSDlNQHU7iMOka9tG7nh
+         MjJiSsmwv6lS8aehn+F3vLPc2npnTKvgI03FTKy9UzWptmClOAyQJFczdXKLYzvUjkhb
+         cL1w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712224711; x=1712829511;
-        h=mime-version:user-agent:content-transfer-encoding:autocrypt
-         :references:in-reply-to:date:cc:to:from:subject:message-id
+        d=1e100.net; s=20230601; t=1712227559; x=1712832359;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Orry6me8Y86MAhIHpdcMtXnc6PoIoyVukOysNCbSjdE=;
-        b=ZHmzCnBySlgrN/jx9Nk8IL2EIftV8BkWslWXTm3391gcQV4vL/mloQ3MJ0HXHAcviI
-         ZGUYLnuONzkK4QO+UXsMUaJk6pZzgYRaQiO116hFKu7YwMwWHHD4DIFjXhnqBCiLAD9k
-         Y1cQpHtgHQGAydjq49zmN7pRIXMQACAwoVRi8Olh+bSeN8K07igXLpWJYMlMZIbpHiDA
-         7Ep2nISAW4Us8N6IQuHI9UDjjdn1aDCO+21MHX1qc6zeRWkqEXv5SFNvcAMqarwiaBQu
-         6u8kmZzS+YOb6AJk23jAcI2Cpg6azSNPB3B7L9yBTmk8562VsHsHMr0IOYzo81I2zI7s
-         Ilaw==
-X-Forwarded-Encrypted: i=1; AJvYcCW+E1t8a2KiMDu+femwYVL7KeQZl/FDRP0dFaGEEQWZeNs/HyM5MbzCPG7L+P4YD+YdeeIcETyfM+2OUXCX6mQCTzco
-X-Gm-Message-State: AOJu0YzieOpJEbFmweIDR3DAfmVA8iftDaVGjai3S9/AAir9ze8YzTLD
-	su6NLynXUzST0VMuthm+M8BO/UOC1dms4h5eAgJMP/D3+tTTtdxqcUISbYAywqs9KUU2KT0g8Y3
-	f/VnPmtEfUaoAc8BUlUaKEyr3W+bkOVx+c9Gt6//r7H54jNpRhQ==
-X-Received: by 2002:a2e:8495:0:b0:2d4:25c5:df1e with SMTP id b21-20020a2e8495000000b002d425c5df1emr1307563ljh.5.1712224710817;
-        Thu, 04 Apr 2024 02:58:30 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IGL9iywRDTD5XwyTF1/J3z+dPLA+SbOUXVfOYlOrhd3UzBRJvxC5ppQjeIq9Frucy4B4viYOQ==
-X-Received: by 2002:a2e:8495:0:b0:2d4:25c5:df1e with SMTP id b21-20020a2e8495000000b002d425c5df1emr1307537ljh.5.1712224710432;
-        Thu, 04 Apr 2024 02:58:30 -0700 (PDT)
-Received: from gerbillo.redhat.com (146-241-247-213.dyn.eolo.it. [146.241.247.213])
-        by smtp.gmail.com with ESMTPSA id m10-20020a05600c4f4a00b0041562a58b75sm2097660wmq.13.2024.04.04.02.58.28
+        bh=F/B6UBwFbisopXHNcGO9MAQyxZ/hbRouxLNeeE3qnFQ=;
+        b=WseqHV3uqH39PeL22KGbb6ip8vWdOJGqnPrzJi3CoqoV5iz6Wh4eXClrzMCgQHK3ef
+         /HvUS8SrBw+ugdAxmiMAbfPDY3wGIbaf2SMrzTQ2LX6WVZDc4Mp1FtwU4RAE5d6hh4Ji
+         4wrU5nu54jK75pMG/oyE38w3q6GqXbAy/KIpokGtHlPeDzqFgBJfpAzaSFk510ctsDn9
+         4AYq3WmfszCZRntBKTx6eOVmZ5bIJM71Mq+fzVy5K6VhXZFBQ24kpGbZ4Y5Kq0drcMJG
+         F94olmrHpk0BEhW2IOrAntCJcr9X4esG/cr952o5jH4FjM1x3QEaMe2ASjKJNrsZ4ZTU
+         IEnA==
+X-Forwarded-Encrypted: i=1; AJvYcCVA6nNmtq/O8u5+NawdASg71L2XPxZlDzWh2MfC3URWltDdaoq387M8K3F8QMzR1P4GEEx7muKIc0v0beV7Ktaojs9FpG29wg3FNrOn2N5aATc85lN1Ii5QNYphbNju6VLHXyt2qiBZKuP6kHsiEHouawlu7JeNXelpvZP8g5OC3Fh9rL32Xr4qZp6rW94Rg5PrTa8uA4Aw4P5yZyk0420Tyts83WIv7g==
+X-Gm-Message-State: AOJu0YzBUuERcFRZ/aXxLx7oVupcfnTJhtE6ovuNsXJoI1j16HM4oku1
+	7t9axN/v0yMDBM8n4HWlITrfJ6NgPhc+LwtyXfGWDDQj2dmlyVA7
+X-Google-Smtp-Source: AGHT+IE/1NLjMS8nR+IXCRExhY8KPmE74KM21lSRlzizDo1/vs09k4iCje3Q2udrPyYWdVVbVFLRFw==
+X-Received: by 2002:a17:907:10c2:b0:a4e:21e0:2e6e with SMTP id rv2-20020a17090710c200b00a4e21e02e6emr1249068ejb.5.1712227559174;
+        Thu, 04 Apr 2024 03:45:59 -0700 (PDT)
+Received: from jonhaslam-mbp.dhcp.thefacebook.com ([2620:10d:c092:500::7:2535])
+        by smtp.gmail.com with ESMTPSA id wn2-20020a170907068200b00a4e781bd30dsm4060237ejb.24.2024.04.04.03.45.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 Apr 2024 02:58:29 -0700 (PDT)
-Message-ID: <4f44a9cb2d7cbd00d5dfa571bf87068bfd91f622.camel@redhat.com>
-Subject: Re: [PATCH net-next v6 3/3] net: ethernet: ti: am65-cpsw: Add
- minimal XDP support
-From: Paolo Abeni <pabeni@redhat.com>
-To: Julien Panis <jpanis@baylibre.com>, "David S. Miller"
- <davem@davemloft.net>,  Eric Dumazet <edumazet@google.com>, Jakub Kicinski
- <kuba@kernel.org>, Russell King <linux@armlinux.org.uk>,  Alexei
- Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Jesper Dangaard Brouer <hawk@kernel.org>, John Fastabend
- <john.fastabend@gmail.com>, Sumit Semwal <sumit.semwal@linaro.org>,
- Christian =?ISO-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>, Simon Horman
- <horms@kernel.org>, Andrew Lunn <andrew@lunn.ch>, Ratheesh Kannoth
- <rkannoth@marvell.com>, Naveen Mamindlapalli <naveenm@marvell.com>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- bpf@vger.kernel.org,  linux-media@vger.kernel.org,
- dri-devel@lists.freedesktop.org,  linaro-mm-sig@lists.linaro.org
-Date: Thu, 04 Apr 2024 11:58:28 +0200
-In-Reply-To: <20240223-am65-cpsw-xdp-basic-v6-3-212eeff5bd5f@baylibre.com>
-References: <20240223-am65-cpsw-xdp-basic-v6-0-212eeff5bd5f@baylibre.com>
-	 <20240223-am65-cpsw-xdp-basic-v6-3-212eeff5bd5f@baylibre.com>
-Autocrypt: addr=pabeni@redhat.com; prefer-encrypt=mutual; keydata=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
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.50.4 (3.50.4-1.fc39) 
+        Thu, 04 Apr 2024 03:45:58 -0700 (PDT)
+Date: Thu, 4 Apr 2024 11:45:55 +0100
+From: Jonthan Haslam <jonathan.haslam@gmail.com>
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: Masami Hiramatsu <mhiramat@kernel.org>, 
+	linux-trace-kernel@vger.kernel.org, andrii@kernel.org, bpf@vger.kernel.org, rostedt@goodmis.org, 
+	Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
+	Mark Rutland <mark.rutland@arm.com>, Alexander Shishkin <alexander.shishkin@linux.intel.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>, 
+	Adrian Hunter <adrian.hunter@intel.com>, linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] uprobes: reduce contention on uprobes_tree access
+Message-ID: <ktzm722fdhwmtjfbvoymaof2k2jh53x627swbswi24d4hq7aes@yje5kzpmzizy>
+References: <20240321145736.2373846-1-jonathan.haslam@gmail.com>
+ <20240325120323.ec3248d330b2755e73a6571e@kernel.org>
+ <CAEf4BzZS_QCsSY0oGY_3pGveGfXKK_TkVURyNq=UQXVXSqi2Fw@mail.gmail.com>
+ <20240327084245.a890ae12e579f0be1902ae4a@kernel.org>
+ <54jakntmdyedadce7yrf6kljcjapbwyoqqt26dnllrqvs3pg7x@itra4a2ikgqw>
+ <20240328091841.ce9cc613db375536de843cfb@kernel.org>
+ <5yvc6rdiovfjlfpayet57ocqpo3wft3onk6of5sqoh6wjngwhr@blky37q5cuk3>
+ <CAEf4BzbFR-EaQV7pyv4q-2o8q-b65rO6gYmrLBp82RomWwu7nA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAEf4BzbFR-EaQV7pyv4q-2o8q-b65rO6gYmrLBp82RomWwu7nA@mail.gmail.com>
 
-On Tue, 2024-04-02 at 12:33 +0200, Julien Panis wrote:
-[...]
-> +static int am65_cpsw_run_xdp(struct am65_cpsw_common *common, struct am6=
-5_cpsw_port *port,
-> +			     struct xdp_buff *xdp, int desc_idx, int cpu, int *len)
-> +{
-> +	struct am65_cpsw_rx_chn *rx_chn =3D &common->rx_chns;
-> +	struct net_device *ndev =3D port->ndev;
-> +	int ret =3D AM65_CPSW_XDP_CONSUMED;
-> +	struct am65_cpsw_tx_chn *tx_chn;
-> +	struct netdev_queue *netif_txq;
-> +	struct xdp_frame *xdpf;
-> +	struct bpf_prog *prog;
-> +	struct page *page;
-> +	u32 act;
-> +
-> +	prog =3D READ_ONCE(port->xdp_prog);
-> +	if (!prog)
-> +		return AM65_CPSW_XDP_PASS;
-> +
-> +	act =3D bpf_prog_run_xdp(prog, xdp);
-> +	/* XDP prog might have changed packet data and boundaries */
-> +	*len =3D xdp->data_end - xdp->data;
-> +
-> +	switch (act) {
-> +	case XDP_PASS:
-> +		ret =3D AM65_CPSW_XDP_PASS;
-> +		goto out;
-> +	case XDP_TX:
-> +		tx_chn =3D &common->tx_chns[cpu % AM65_CPSW_MAX_TX_QUEUES];
-> +		netif_txq =3D netdev_get_tx_queue(ndev, tx_chn->id);
-> +
-> +		xdpf =3D xdp_convert_buff_to_frame(xdp);
-> +		if (unlikely(!xdpf))
-> +			break;
-> +
-> +		__netif_tx_lock(netif_txq, cpu);
-> +		ret =3D am65_cpsw_xdp_tx_frame(ndev, tx_chn, xdpf,
-> +					     AM65_CPSW_TX_BUF_TYPE_XDP_TX);
-> +		__netif_tx_unlock(netif_txq);
-> +		if (ret)
-> +			break;
-> +
-> +		ndev->stats.rx_bytes +=3D *len;
-> +		ndev->stats.rx_packets++;
-> +		ret =3D AM65_CPSW_XDP_CONSUMED;
-> +		goto out;
-> +	case XDP_REDIRECT:
-> +		if (unlikely(xdp_do_redirect(ndev, xdp, prog)))
-> +			break;
-> +
-> +		xdp_do_flush();
+> > Things to note about the results:
+> >
+> > - The results are slightly variable so don't get too caught up on
+> >   individual thread count - it's the trend that is important.
+> > - In terms of throughput with this specific benchmark a *very* macro view
+> >   is that the RW spinlock provides 40-60% more throughput than the
+> >   spinlock.  The per-CPU RW semaphore provides in the order of 50-100%
+> >   more throughput then the spinlock.
+> > - This doesn't fully reflect the large reduction in latency that we have
+> >   seen in application based measurements. However, it does demonstrate
+> >   that even the trivial change of going to a RW spinlock provides
+> >   significant benefits.
+> 
+> This is probably because trig-uprobe-nop creates a single uprobe that
+> is triggered on many CPUs. While in production we have also *many*
+> uprobes running on many CPUs. In this benchmark, besides contention on
+> uprobes_treelock, we are also hammering on other per-uprobe locks
+> (register_rwsem, also if you don't have [0] patch locally, there will
+> be another filter lock taken each time, filter->rwlock). There is also
+> atomic refcounting going on, which when you have the same uprobe
+> across all CPUs at the same time will cause a bunch of cache line
+> bouncing.
+> 
+> So yes, it's understandable that in practice in production you see an
+> even larger effect of optimizing uprobe_treelock than in this
+> micro-benchmark.
+> 
+>   [0] https://git.kernel.org/pub/scm/linux/kernel/git/trace/linux-trace.git/commit/?h=probes/for-next&id=366f7afd3de31d3ce2f4cbff97c6c23b6aa6bcdf
 
-The above will kill XDP redirect performances. Even if this HW has the
-same limitation of cpsw, the above will still deserve an explicit
-comment.
+Thanks for the reply and the thoughts on this Andrii. Yes, I do have the
+filter->rwlock fix applied but, as you say, there are no doubt other
+effects at play here as to be expected in such a synthetic workload. I'm
+pleased with the outcomes though as they show a good result even if they
+are at the lower end of what I expect.
 
-Quickly skimming over the code it does not look so, so you could
-possibly move xdp_do_flush() in am65_cpsw_nuss_rx_poll().
+The results also show that pursuing an RCU solution is definitely worth it
+but that write penalty is brutal in the case of a full synchronize_rcu()!
+Should be fun.
 
-Cheers,
+> > for num_threads in {1..20}
+> > do
+> >     sudo ./bench -p $num_threads trig-uprobe-nop | grep Summary
+> 
+> just want to mention -a (affinity) option that you can pass a bench
+> tool, it will pin each thread on its own CPU. It generally makes tests
+> more uniform, eliminating CPU migrations variability.
 
-Paolo
+Thanks for pointing that flag  out!
 
+Jon.
+
+> 
+> > done
+> >
+> >
+> > spinlock
+> >
+> > Summary: hits    1.453 ± 0.005M/s (  1.453M/prod)
+> > Summary: hits    2.087 ± 0.005M/s (  1.043M/prod)
+> > Summary: hits    2.701 ± 0.012M/s (  0.900M/prod)
+> 
+> I also wanted to point out that the first measurement (1.453M/s in
+> this row) is total throughput across all threads, while value in
+> parenthesis (0.900M/prod) is averaged throughput per each thread. So
+> this M/prod value is the most interesting in this benchmark where we
+> assess the effect of reducing contention.
+> 
+> > Summary: hits    1.917 ± 0.011M/s (  0.479M/prod)
+> > Summary: hits    2.105 ± 0.003M/s (  0.421M/prod)
+> > Summary: hits    1.615 ± 0.006M/s (  0.269M/prod)
+> 
+> [...]
