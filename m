@@ -1,212 +1,180 @@
-Received: from mail-vk1-f174.google.com (mail-vk1-f174.google.com [209.85.221.174])
+Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 875F71465AD
-	for <bpf@vger.kernel.org>; Fri,  5 Apr 2024 08:28:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EAB3611E;
+	Fri,  5 Apr 2024 08:56:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712305732; cv=none; b=eq5plxhgamUaZ+us5L8kCJySPHS6TWOZuiu5KPOUn3JEfHurKmmyIWROtbivrSo56eZiv6SYpXbvxp+kZdHNJZwaW8G2wB0Ek9mRBn4pMHlsVPKwWUkwdyfcM7QxuPlfo9+ah4zsKntprsn1fsx61HTOgVweRX92pvKRqF9BbUE=
+	t=1712307382; cv=none; b=Ve8bWcb+cy26rOm6mdmEVTY+WDtA1Ge2ul3veXoAFsTIvQOYbGX/HaU2xwb+Jl1kPN6uA3cej/2XWqZYkNRhyTAwp0hbjJ3Jz44OW9b/jmCWX5mJJgbON2ZvPp7ZyWNolmz+V6P0eq6JtNxPPSuKXW6xuVpNTca+DUNoRldPDPM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712305732; c=relaxed/simple;
-	bh=Z5bRgo90vJ1prRsFQfV4KcyZkLttI8kAD0ramKMPe8c=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=I6Rsi6Ef2qxTuDF33omzVhEwmUOf7y+vjDJET5Wv3vLIO7E2cQlxvAzDjAMpZA7yW+W6yp3KLVilgmUvrQRSlVKH+nw51IV8uUO/aNnDRKtbHGQm+jGF8iaFxbdoTh5k+Z+J4fJ2JPXga0CuAMA2MDaj2NFK7T8cIp7qA2nioEo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=t3Ca323N; arc=none smtp.client-ip=209.85.221.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1712307382; c=relaxed/simple;
+	bh=9mH29mPxAOKPezMYs3FWiNFuq+e72vmkdp75jHJFhvk=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=q+CM7z9koMmlY85cOEM0h3ZZgYsB50qx8yjFnJ4iyio/DjAvWiCXWJWL5qBCJhEAN4a47EzlQuHHrvAFSLDdqLmCTlh9MkEWe+2MJ8ft4PWW7wSEDlzeopQ6cs1eDIYsTnb089BsOVV+UzUEJI81K9UcNQ53XuLg7Az9L19gBOM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WIrPQ3fO; arc=none smtp.client-ip=209.85.208.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="t3Ca323N"
-Received: by mail-vk1-f174.google.com with SMTP id 71dfb90a1353d-4d523586a59so721597e0c.2
-        for <bpf@vger.kernel.org>; Fri, 05 Apr 2024 01:28:50 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WIrPQ3fO"
+Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-56df87057bbso2004020a12.3;
+        Fri, 05 Apr 2024 01:56:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1712305729; x=1712910529; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lcjU7+cRt5Aeub+hKdmibp7iA42IF2luH5dCAZQQUiM=;
-        b=t3Ca323NtbTE0MQvO2a6bAWun/Yr72xOl+dUJY+P4/CBsVj0WYdtyMkNySkcC0Hf0O
-         neBlsEYsEiT1m8OK3fhVSiHL0RnG7FSPMGYacOXfZvgCG5R6CyTb5inMAk9U2rKMwsTE
-         D9lwcmybgMAxKKYTJGBQugqphmwSJmaDAXZUVT83E82B5aR+iEhzB35+dap8OBH+x0Vo
-         kEjk/9pGHdWtITgiMlpLCeyEWRofNF+KwV/SjkqDlgVLVjV0KVOgw8224euGxz3VZgj+
-         n94i9nTdpVcoMFwdoDDnSiy31FcmXxF5OzGGPXFbJtmQIHnvly+LzroSD+VjVgY2aaJt
-         8afA==
+        d=gmail.com; s=20230601; t=1712307379; x=1712912179; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=mTuc9EJwZIHipEqAi292Whn+sPWqCiAHFZmxuUeoSkY=;
+        b=WIrPQ3fOTArPaZaCtyXuurtNGgyR7P+rsSjgTTd6rDq21UKa+C6T4mHvHo9Tq04ARW
+         TUjS42aUZR0fG0TdcR5xU7MPMmpBRV1W6ZOsAVaYAZZ8XAYrWf6eniVnMg/S1SnJXEUR
+         USsMGuvH6A+OBYVuBGehwP/l0Zjs1OO3KF2V9Wd0PnU6eVyYUSTKBy+isOsN9yJoua7s
+         uoDlMlP2mwebeU+oBTYzEH2omp1LhbMaWdCgSD7ACWVB4KT2Z7stOCwHZqgK0Y/0hUfL
+         1a/QDoC6GJlY0jFUQ68b1rIbYj4bnUJk3Zdw4nM0kNeAD0LiGTIamNbOUGH9dPVMDF+O
+         BzDA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712305729; x=1712910529;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=lcjU7+cRt5Aeub+hKdmibp7iA42IF2luH5dCAZQQUiM=;
-        b=mYZY5PSv2e136FW5GgJJjT7bBC+/5X3wdwGGP1ARZtR4dfm8Ktm3StWLG6Gfo+Us/v
-         3GZL+J0bygj50igqIJDcKirHInuTwHRytU0qqYx58PGAmR7WsW04XYz59uLLVY3OkUub
-         YNvgYzmd1XVKy5vHLovtcmOy0eWBcF4zyOZz7kWzNmeePFrDYrW3RntcVA52UtL+EiE2
-         m+kuQ+Q4LYVfoS3biR3DckE5HCEb6jMkelxNBzHPaLqWaznKMcSPxr8pamutsHVpnqgb
-         A1ggE9KLqtO/24C7V3uYU7O+7LwGNrMn2m66QFk3J7Y75O2m+m4rhlvdUSJ227YfZh4W
-         nM4A==
-X-Forwarded-Encrypted: i=1; AJvYcCVgGPCS35sld7u4oTUbRTjsbtEwLJ5/JoKSPm+hSJtjyGYYua5dY58goQiR+u5HClVhj8Vj5PjJN6ym34Z9mu8XeRpZ
-X-Gm-Message-State: AOJu0YwLDDxLjFlUxYnm3ZmlN86AqZLbUErXS0KjSxKfq+gCNFB2Exoo
-	abj6IvjAC0DmVw2crPdJjdg5NLOYS7Cim1IV0rjrZxtCry0y7EMUnN7GVdOfxJdhoqGj0xt4/Cn
-	snS+8tC/1yLfm9LGgcz+Fuftr08L/u5dws6Of
-X-Google-Smtp-Source: AGHT+IE9J6DVAmZzKmTiQk80OVY4ikVcmcvr9eGddNabGm/u9T4gAl9+FbNPe74Vg8+GJaziHkSrLGV5+PW+g6Pa8n0=
-X-Received: by 2002:a1f:db04:0:b0:4c0:9ed8:57b3 with SMTP id
- s4-20020a1fdb04000000b004c09ed857b3mr764963vkg.1.1712305729227; Fri, 05 Apr
- 2024 01:28:49 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1712307379; x=1712912179;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mTuc9EJwZIHipEqAi292Whn+sPWqCiAHFZmxuUeoSkY=;
+        b=Dhk2751snr76CzKjBoDHORmIG663/DG4212oDjQgqyGXo0fX+0PW/wA9WADNbbTw7X
+         AUseiXMGapdrGrnDnbA7zYr13YS2kNikc6CQlo+7JLKAu7pIK0kbeHzEynIw/awOwryJ
+         BCW0zYbPuQzjxnaJuJY8hnJMLq9pUajO7hgk86DUlyhdq5XE6A4KNnHN56Iuz17OtsfI
+         zoRyQRwQWZTspCxAPfpmRJC+qgcuRgSYNZU2p72q5FwGh+iVbculPF5oEKwFz4I7BVMQ
+         R9FxlAsdjWmDV9LsXaA0MR+KO3Sb4NCnGsUvKTecbkpjb5h0CC1Lnx65UL1tQavn1N7A
+         Prng==
+X-Forwarded-Encrypted: i=1; AJvYcCXOxNOMxYhyVRxThEaT3GXNYKh6EpPlZykkkpQlbuh191XencLGF3cVEVSgcGWnu1gujre2uIRCBC23gTXqTWmgbqQrA1kYvjPU1V8rfydw64EJDda26aKRltOHWcfESTJS3IWFIMaegJJAP0MhwtlDOparfxqL3aS+VbmbivQvjbs5bMhntAUR3KXsu+huc8fIQKexqPMi2XRyaavEkV9Y
+X-Gm-Message-State: AOJu0YwDBaMQs8WloiSqGx4UWDosur0W4zO/YsTu2l2CPU/rXLExNzYE
+	krjWfbhnhYK9eCUZ5imCKlOYJlcQKNCoDQZJEtmN3hP9drE1M1px
+X-Google-Smtp-Source: AGHT+IH8u6z6LZMoimxuXhlPOWiRu65ig2OfNbn7jhKaH1xlHNq6MOqkQjgf4Zy/I+i4HPS8WNS20Q==
+X-Received: by 2002:a50:8d11:0:b0:56e:cde:8983 with SMTP id s17-20020a508d11000000b0056e0cde8983mr667980eds.7.1712307378387;
+        Fri, 05 Apr 2024 01:56:18 -0700 (PDT)
+Received: from krava ([83.240.63.239])
+        by smtp.gmail.com with ESMTPSA id a1-20020a508581000000b0056e2432d10bsm562570edh.70.2024.04.05.01.56.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 05 Apr 2024 01:56:17 -0700 (PDT)
+From: Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date: Fri, 5 Apr 2024 10:56:15 +0200
+To: Masami Hiramatsu <mhiramat@kernel.org>
+Cc: Oleg Nesterov <oleg@redhat.com>,
+	Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+	Jiri Olsa <olsajiri@gmail.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>, linux-kernel@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org,
+	Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	"Borislav Petkov (AMD)" <bp@alien8.de>, x86@kernel.org,
+	linux-api@vger.kernel.org
+Subject: Re: [PATCHv2 1/3] uprobe: Add uretprobe syscall to speed up return
+ probe
+Message-ID: <Zg-8r63tPSkuhN7p@krava>
+References: <20240402093302.2416467-2-jolsa@kernel.org>
+ <20240403100708.233575a8ac2a5bac2192d180@kernel.org>
+ <Zg0lvUIB4WdRUGw_@krava>
+ <20240403230937.c3bd47ee47c102cd89713ee8@kernel.org>
+ <CAEf4BzZ2RFfz8PNgJ4ENZ0us4uX=DWhYFimXdtWms-VvGXOjgQ@mail.gmail.com>
+ <20240404095829.ec5db177f29cd29e849169fa@kernel.org>
+ <CAEf4BzYH60TwvBipHWB_kUqZZ6D-iUVnnFsBv06imRikK3o-bg@mail.gmail.com>
+ <20240405005405.9bcbe5072d2f32967501edb3@kernel.org>
+ <20240404161108.GG7153@redhat.com>
+ <20240405102203.825c4a2e9d1c2be5b2bffe96@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240404190146.1898103-1-elver@google.com> <CAADnVQKc+Z39k9wbU2MHf-fPFma+9QsyOugmmmGq3ynQCTVfCw@mail.gmail.com>
-In-Reply-To: <CAADnVQKc+Z39k9wbU2MHf-fPFma+9QsyOugmmmGq3ynQCTVfCw@mail.gmail.com>
-From: Marco Elver <elver@google.com>
-Date: Fri, 5 Apr 2024 10:28:10 +0200
-Message-ID: <CANpmjNN+rR1PWKbx6RBWhOjnmAP+jUDzc3TLcwTnmfd=ft03dg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 1/2] bpf: Introduce bpf_probe_write_user_registered()
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Dmitry Vyukov <dvyukov@google.com>, 
-	Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>, 
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, bpf <bpf@vger.kernel.org>, 
-	"open list:DOCUMENTATION" <linux-doc@vger.kernel.org>, linux-trace-kernel@vger.kernel.org, 
-	LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240405102203.825c4a2e9d1c2be5b2bffe96@kernel.org>
 
-On Fri, 5 Apr 2024 at 01:23, Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> On Thu, Apr 4, 2024 at 12:02=E2=80=AFPM Marco Elver <elver@google.com> wr=
-ote:
-> >
-> > With all the known caveats, tracing BPF programs may directly write to
-> > user-space memory with the bpf_probe_write_user() helper. Memory safety
-> > is an obvious problem when using this helper, since it is too easy to
-> > overwrite memory across all running processes that user space did not
-> > expect to be touched (neither the verifier nor the kernel knows what ma=
-y
-> > be touched). While it is possible to come up with mechanisms to safely
-> > communicate to the BPF program which memory region may be written to,
-> > there are no built-in guarantees of safety. For this reason, the helper
-> > produces a warning in the kernel log, and in newer kernels it is
-> > possible to disallow use of the helper since 51e1bb9eeaf7 ("bpf: Add
-> > lockdown check for probe_write_user helper").
->
-> So is it a fix or a feature?
+On Fri, Apr 05, 2024 at 10:22:03AM +0900, Masami Hiramatsu wrote:
+> On Thu, 4 Apr 2024 18:11:09 +0200
+> Oleg Nesterov <oleg@redhat.com> wrote:
+> 
+> > On 04/05, Masami Hiramatsu wrote:
+> > >
+> > > Can we make this syscall and uprobe behavior clearer? As you said, if
+> > > the application use sigreturn or longjump, it may skip returns and
+> > > shadow stack entries are left in the kernel. In such cases, can uretprobe
+> > > detect it properly, or just crash the process (or process runs wrongly)?
+> > 
+> > Please see the comment in handle_trampoline(), it tries to detect this case.
+> > This patch should not make any difference.
+> 
+> I think you mean this loop will skip and discard the stacked return_instance
+> to find the valid one.
+> 
+> ----
+>         do {
+>                 /*
+>                  * We should throw out the frames invalidated by longjmp().
+>                  * If this chain is valid, then the next one should be alive
+>                  * or NULL; the latter case means that nobody but ri->func
+>                  * could hit this trampoline on return. TODO: sigaltstack().
+>                  */
+>                 next = find_next_ret_chain(ri);
+>                 valid = !next || arch_uretprobe_is_alive(next, RP_CHECK_RET, regs);
+> 
+>                 instruction_pointer_set(regs, ri->orig_ret_vaddr);
+>                 do {
+>                         if (valid)
+>                                 handle_uretprobe_chain(ri, regs);
+>                         ri = free_ret_instance(ri);
+>                         utask->depth--;
+>                 } while (ri != next);
+>         } while (!valid);
+> ----
+> 
+> I think this expects setjmp/longjmp as below
+> 
+> foo() { <- retprobe1
+> 	setjmp()
+> 	bar() { <- retprobe2
+> 		longjmp()
+> 	}
+> } <- return to trampoline
+> 
+> In this case, we need to skip retprobe2's instance.
+> My concern is, if we can not find appropriate return instance, what happen?
+> e.g.
+> 
+> foo() { <-- retprobe1
+>    bar() { # sp is decremented
+>        sys_uretprobe() <-- ??
+>     }
+> }
+> 
+> It seems sys_uretprobe() will handle retprobe1 at that point instead of
+> SIGILL.
 
-Feature. The above paragraph is just an intro. Remove it?
+yes, and I think it's fine, you get the consumer called in wrong place,
+but it's your fault and kernel won't crash
 
-> > Nevertheless, direct user-space memory writes from BPF programs can be
-> > useful to efficiently manipulate and communicate with cooperating user
-> > space processes.
->
-> But there are many different ways for bpf to communicate with user space:
-> perf ringbuf, bpf ringbug, various maps including mmap-ed array and arena=
-.
-> The commit log doesn't explain why we need another one.
->
-> > For example, one of our use cases are for events that happen relatively
-> > frequently in the kernel (e.g. specific scheduler events), but a set of
-> > user space threads want to check for such events in very hot code paths
-> > to make more optimal decisions (the cost of such a check can be no more
-> > than a load and compare). The types of events and heuristics used may
-> > change based on system environment and application, and a BPF program
-> > provides the best trade-offs in terms of performance and deployment.
->
-> and the tasks can use mmaped array shared across all or unique to each
-> process.
-> And both bpf and user space can read/write them with a single instruction=
-.
+this can be fixed by checking the syscall is called from the trampoline
+and prevent handle_trampoline call if it's not
 
-That's BPF_F_MMAPABLE, right?
+> 
+> Can we avoid this with below strict check?
+> 
+> if (ri->stack != regs->sp + expected_offset)
+> 	goto sigill;
 
-That does not work because the mmapped region is global. Our requirements a=
-re:
+hm the current uprobe 'alive' check makes sure the return_instance is above
+or at the same stack address, not sure we can match it exactly, need to think
+about that more
 
-1. Single tracing BPF program.
+> 
+> expected_offset should be 16 (push * 3 - ret) on x64 if we ri->stack is the
+> regs->sp right after call.
 
-2. Per-process (per VM) memory region (here it's per-thread, but each
-thread just registers the same process-wide region).  No sharing
-between processes.
+the syscall trampoline already updates the regs->sp before calling
+handle_trampoline
 
-3. From #2 it follows: exec unregisters the registered memory region;
-fork gets a cloned region.
+        regs->sp += sizeof(r11_cx_ax);
 
-4. Unprivileged processes can do prctl(REGISTER). Some of them might
-not be able to use the bpf syscall.
-
-The reason for #2 is that each user space process also writes to the
-memory region (read by the BPF program to make updates depending on
-what state it finds), and having shared state between processes
-doesn't work here.
-
-Is there any reasonable BPF facility that can do this today? (If
-BPF_F_MMAPABLE could do it while satisfying requirements 2-4, I'd be a
-happy camper.)
-
-bpf_probe_write_user() can, but safety is not built in, along with
-getting fork + exec right is brittle.
-
-> > To achieve better safety, introduce tagged user writable regions, that
-> > must explicitly be registered before tracing BPF programs may use them:
-> >
-> >  1. The prctl() option PR_BPF_REGISTER_WRITABLE allows any user space
-> >     process (that is allowed to use prctl()) to register tagged writabl=
-e
-> >     memory regions for the current thread.
-> >
-> >  2. Conversely, the prctl() option PR_BPF_UNREGISTER_WRITABLE allows a
-> >     user space process to unregister a writable memory region that was
-> >     previously registered from the current thread. This must be done
-> >     before freeing memory if the thread that registered a region is
-> >     still running.
-> >
-> >  3. Tracing BPF programs may write to any registered region in the
-> >     current thread with bpf_probe_write_user_registered(). If the memor=
-y
-> >     region has been tagged with a non-zero value, the BPF program must
-> >     provide a matching tag.
-> >
-> > Admin capabilities are still required to attach BPF programs that use
-> > the new bpf_probe_write_user_registered() helper.
->
-> We stopped adding new helpers ~2 years ago.
-> Only new kfuncs are allowed.
-
-Sure.
-
-> >
-> > With this interface, user space threads are guaranteed that no writes
-> > happen to regions that they did not explicitly register. Tagging can be
-> > used to associate additional semantics with the memory region.
-> >
-> > A note on tag allocation: Since such programs can only be installed by
-> > the local system administrator, tag allocation may be done by the syste=
-m
-> > administrator. For example, by providing headers with tag definitions,
-> > or a central service to distribute tags to the BPF program loader and t=
-o
-> > user applications.
->
-> Not clear how that's achieved in practice.
-> To do prctl(REGSISTER, ... tag)
-> the process will just pass this u32 tag.
-> There is no way for the admin or other process to enforce certain
-> tag usage.
-> Since there is no way to enforce extra tag seems like a weak
-> protection against something? What in particular?
-
-The main goal is to a) avoid accidental writes into areas the user
-space program doesn't want writing to, along with 2) weakly
-associating "type" via a tag. As soon as the user space program does
-prctl(REGISTER, tag) it wants writes to happen. It's the user space
-program's fault if it uses random tags, because in practice, we know
-exactly which BPF programs are running in production and which tags
-they service. The programs we do _care_ about are reviewed and do use
-the right tags. The mechanism is not for protecting BPF programs or
-what data they communicate, but for the benefit of the user space
-program itself to bound the memory that could be touched in its own
-address space (use the wrong region/tag .. tough luck).
+jirka
