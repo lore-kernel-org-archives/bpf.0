@@ -1,123 +1,177 @@
-Received: from mail-il1-f178.google.com (mail-il1-f178.google.com [209.85.166.178])
+Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D417B16F856;
-	Fri,  5 Apr 2024 14:30:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE88416EC10;
+	Fri,  5 Apr 2024 14:33:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712327452; cv=none; b=iBE2s96AVWRGKem1bP7Nxvqv4NRXerIRw3xDWlVl4QIRXhdoPNl+sXulBGHeboXi6/ZMMg5eo6puw8risuzNYis/60eVHdFVCsG4N9qLwtK9eyuy9FwZDUSXa6ood3fNeXRRkg3+lEMrn3G6S+7HfKRLWL/vg3YcrlNe7GzVX9w=
+	t=1712327620; cv=none; b=MkEannvQSArYfAOL9C7yvYzSyqZj5I7XrtxGZiwXX6bsnHlHOgPwmLoMk5ZknB/sD4pcH+5ZNB1RmURe4beKILkNBEMi2WToCCTdXezgEEb0oKh1/26ml79YI9BwqZt7xv4V+OUR5wM/pEpaH1xifC5JluXM8yx2XwUc/+2UXZk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712327452; c=relaxed/simple;
-	bh=LFtBoVTcSa0WoZ4hT+3gROUd9+4JFFOPzrtM0DkuNNI=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=UEHuyNSML4YODl/JXJMMHa3+vBbpa64BQ1IEXOTH06FBnJYmtUlLgd8XhvyOTKZN2JpHrNK60ly3DUh9L91yy2Lnp4gDK+PnuEynlbYldSBa6aB2FY0oVzpUYo5bGAxOiDZioifgEXUkEFh4hiQGtk9vZi9z99OOjKZaJvqSiak=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=manifault.com; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.166.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=manifault.com
+	s=arc-20240116; t=1712327620; c=relaxed/simple;
+	bh=VZNc/1BmguK0z9H5D1pOv4bCKdVw6Fjy+qvkjTFgPW0=;
+	h=From:To:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=njT1ouJeQpqJSUjCrB+LqNsEt6FWiO4zigFEXIVDZqIgZd7li6mHSfhDec4nLI2Jzv6nmH59otRUPrl61teMddKCiykVQzAv+c7tVRyxd5/NjOwXcJXnGkLQ0wKfT75AtmbYMaUj3Izvk7ynWl0Ovo/GLHVodX63rg9oSkAFHb0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cff9G3DB; arc=none smtp.client-ip=209.85.221.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-il1-f178.google.com with SMTP id e9e14a558f8ab-36a0d09e6ffso3945665ab.0;
-        Fri, 05 Apr 2024 07:30:50 -0700 (PDT)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cff9G3DB"
+Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-3416a975840so1643042f8f.0;
+        Fri, 05 Apr 2024 07:33:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1712327617; x=1712932417; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:references
+         :in-reply-to:subject:to:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=XE7bBtXjTLLxuBkd0cUQ4f+BnesVFs7jpuSpsklKO2U=;
+        b=cff9G3DBuy6W0JhZEVes4Ik3Dg12guHpIm7pIR0AiLuhf44yoxNDXkyj8/BwofdQmq
+         iKAc7jksRApNHjShfFmXnIsYVcZBsgO4TUfa6dD2APk4IhkCyF2Gv4oOYqk3END9wNts
+         1IJDLZ/ICvKa/FPTVMjLqV46ouKRpUdeEbyZMvPprnFT/j+JWk/gvlAgLmEYJ4WxAiub
+         P573Fy4xEUY+zMkJj1L7Wtfs50Cf9ceVmUwuEOedmo3OjgKFmsTugaFFGHWqYbMMisbI
+         kvpodTxXhqmtRyTiIYIQfh9gj0YH1ZlY8gd9M2P5VuNUulsKUXx9zx3r+bxwcB6FyJm9
+         O8fA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712327450; x=1712932250;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=gfXRwZpB8GnNWQ39P82k01Aag/6u7hx54JnENyAlqhI=;
-        b=tw/vgfu778Q5TiSnD2FxOi7fxj8n2JoOeLn1QEjUkRHC/F6Uq8LHwbMI8sW1e8DWDK
-         V+jM9vglg699o3qTopkdneGQJ8Pc3E7UCDsJnzh3YCD2G8CKiTbNNCazLgfWL9XbmCep
-         iEYpJ6P23TvKHM9XfGA7FJ4h+ZxUhUIEXEniTDH6IzV4Yj1mSujxI2yROeKKv0hSl66O
-         VN/rN0nXdgL18Zwyg2tuYEi7FlfWohNollqDjjtWYgCSVXHJwfMxQQVDR7SZoHk+uMRY
-         Y9yg+Qbq9tGll7KeKry5Lo1FZxnxEop740dSVXPVGxbjqW7Yt4b8zZurIIlG5s63eMWe
-         t07Q==
-X-Forwarded-Encrypted: i=1; AJvYcCXKxAT4oroxKQt0DXdPnJcP5ISarYCLWu6+yWRkO/LQkqPgaBfUSWMY9KvbhYQwzW7N1z4jK+rIkm/vMcpLyivjyOnRuPQvN9+9UKSX
-X-Gm-Message-State: AOJu0Yz6GXAWJrMGwqYg1EEw0usTVyQe2cvn/y675nd+pXT1Jec9+3Zz
-	lV9AX3EqolNGpfg4/Ei6MK77UTnb7+lorB+9juo7MyXikKS0AK+t9uQuHL5AfIM=
-X-Google-Smtp-Source: AGHT+IEz5IjsSZ0rwrqyeaT3VLrS3vSgQpobPv7oPx/vy/q5pxyJq5zwjafs/cRXnl7Zn6ITFBKQYA==
-X-Received: by 2002:a05:6e02:1ca6:b0:368:99a9:3f1c with SMTP id x6-20020a056e021ca600b0036899a93f1cmr1562352ill.9.1712327444873;
-        Fri, 05 Apr 2024 07:30:44 -0700 (PDT)
-Received: from localhost (c-76-136-75-40.hsd1.il.comcast.net. [76.136.75.40])
-        by smtp.gmail.com with ESMTPSA id r11-20020a056638300b00b0047bed8cd9cesm584114jak.81.2024.04.05.07.30.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 05 Apr 2024 07:30:44 -0700 (PDT)
-From: David Vernet <void@manifault.com>
-To: bpf@vger.kernel.org
-Cc: ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	martin.lau@linux.dev,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	john.fastabend@gmail.com,
-	kpsingh@kernel.org,
-	sdf@google.com,
-	haoluo@google.com,
-	jolsa@kernel.org,
-	linux-kernel@vger.kernel.org,
-	kernel-team@meta.com
-Subject: [PATCH bpf-next v2 1/2] bpf: Allow invoking kfuncs from BPF_PROG_TYPE_SYSCALL progs
-Date: Fri,  5 Apr 2024 09:30:40 -0500
-Message-ID: <20240405143041.632519-2-void@manifault.com>
-X-Mailer: git-send-email 2.44.0
-In-Reply-To: <20240405143041.632519-1-void@manifault.com>
-References: <20240405143041.632519-1-void@manifault.com>
+        d=1e100.net; s=20230601; t=1712327617; x=1712932417;
+        h=content-transfer-encoding:mime-version:message-id:date:references
+         :in-reply-to:subject:to:from:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=XE7bBtXjTLLxuBkd0cUQ4f+BnesVFs7jpuSpsklKO2U=;
+        b=MLK9fCN9fMslYCrRl+1Z7+EdX0yemASCq5ztx3zzn4q1DFZ4+Q85HNI0FzbieJmYZU
+         xhG05wv9PCIz7m4W3WtbEyRDgel2Q1zIxZDNVzMZnoqc/5MOgl9mjRdNT2PwSVIH9Gfc
+         3Dtx7q80yiyUHAb3ZDwtCjRq7t2NxM1WBwa/3d9r0k1OwU89cyJ3RdKTpuNndXBPQVi+
+         Slqu20QkvtFJjMKeD2T7kzFRRA761xIfTsE7p6fNLyr2JizcqctNvulumP/3vWrfIin9
+         SiU8AYMCC8hXTgd621ufDBP0TgNQ1Fpdz9BzkFNNx54SNhCEaX2tih2uA+yIOYixfPwn
+         gHVA==
+X-Forwarded-Encrypted: i=1; AJvYcCXcrCAxsb3DbreqEtMKs4bAcJWibS3o32ibrVLQO0pl98k1tWw70plqTlT32BB8W9qylU1Ghy7ku2Ul7CcC88mA7Ui56wAeFf8rUyIeGxDYmQuiTeC0VBL46r7n8zcaHqzc
+X-Gm-Message-State: AOJu0YzFlCUwCpL/u+UNOWlxQjEWi3FmA7lXMF1zSxtdZcizh7YqyAeo
+	sqnebLpjzDmUqfbTGCfZ97TVTsn3oyZrlucaGTOKA0pzZtXvJ1dW
+X-Google-Smtp-Source: AGHT+IEZHLxAivag9esAnrX7FyCLYw7AgXgDUqm69jkpKf7pmtQeCzm4iQJH8oEUjk/4um4e6tEGng==
+X-Received: by 2002:a05:6000:229:b0:343:968e:f27c with SMTP id l9-20020a056000022900b00343968ef27cmr1223599wrz.27.1712327617094;
+        Fri, 05 Apr 2024 07:33:37 -0700 (PDT)
+Received: from localhost (54-240-197-231.amazon.com. [54.240.197.231])
+        by smtp.gmail.com with ESMTPSA id d11-20020adff84b000000b0033e7a102cfesm2167143wrq.64.2024.04.05.07.33.36
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 05 Apr 2024 07:33:36 -0700 (PDT)
+From: Puranjay Mohan <puranjay12@gmail.com>
+To: =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>, Alexei Starovoitov
+ <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko
+ <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, "Eduard
+ Zingerman" <eddyz87@gmail.com>, Song Liu <song@kernel.org>, Yonghong Song
+ <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, "KP
+ Singh" <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo
+ <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, Paul Walmsley
+ <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou
+ <aou@eecs.berkeley.edu>, bpf@vger.kernel.org,
+ linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, Pu Lehui
+ <pulehui@huawei.com>
+Subject: Re: [PATCH bpf-next] riscv, bpf: add internal-only MOV instruction
+ to resolve per-CPU addrs
+In-Reply-To: <87wmpbnbce.fsf@all.your.base.are.belong.to.us>
+References: <20240405124348.27644-1-puranjay12@gmail.com>
+ <87wmpbnbce.fsf@all.your.base.are.belong.to.us>
+Date: Fri, 05 Apr 2024 14:33:34 +0000
+Message-ID: <mb61pjzlb98w1.fsf@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-Currently, a set of core BPF kfuncs (e.g. bpf_task_*, bpf_cgroup_*,
-bpf_cpumask_*, etc) cannot be invoked from BPF_PROG_TYPE_SYSCALL
-programs. The whitelist approach taken for enabling kfuncs makes sense:
-it not safe to call these kfuncs from every program type. For example,
-it may not be safe to call bpf_task_acquire() in an fentry to
-free_task().
+Bj=C3=B6rn T=C3=B6pel <bjorn@kernel.org> writes:
 
-BPF_PROG_TYPE_SYSCALL, on the other hand, is a perfectly safe program
-type from which to invoke these kfuncs, as it's a very controlled
-environment, and we should never be able to run into any of the typical
-problems such as recursive invoations, acquiring references on freeing
-kptrs, etc. Being able to invoke these kfuncs would be useful, as
-BPF_PROG_TYPE_SYSCALL can be invoked with BPF_PROG_RUN, and would
-therefore enable user space programs to synchronously call into BPF to
-manipulate these kptrs.
+> Puranjay Mohan <puranjay12@gmail.com> writes:
+>
+>> Support an instruction for resolving absolute addresses of per-CPU
+>> data from their per-CPU offsets. This instruction is internal-only and
+>> users are not allowed to use them directly. They will only be used for
+>> internal inlining optimizations for now between BPF verifier and BPF
+>> JITs.
+>>
+>> RISC-V uses generic per-cpu implementation where the offsets for CPUs
+>> are kept in an array called __per_cpu_offset[cpu_number]. RISCV stores
+>> the address of the task_struct in TP register. The first element in
+>> tast_struct is struct thread_info, and we can get the cpu number by
+>      ^
+>      k ;-)
 
-This patch therefore enables invoking the aforementioned core kfuncs
-from BPF_PROG_TYPE_SYSCALL progs.
+I need to start using some kind of spell-check in vim :D.
 
-Acked-by: Andrii Nakryiko <andrii@kernel.org>
-Acked-by: Yonghong Song <yonghong.song@linux.dev>
-Signed-off-by: David Vernet <void@manifault.com>
----
- kernel/bpf/cpumask.c | 1 +
- kernel/bpf/helpers.c | 1 +
- 2 files changed, 2 insertions(+)
+>> reading from the TP register + offsetof(struct thread_info, cpu).
+>>
+>> Once we have the cpu number in a register we read the offset for that
+>> cpu from address: &__per_cpu_offset + cpu_number << 3. Then we add this
+>> offset to the destination register.
+>
+> Just to clarify for readers; BPF programs are run with migrate disable,
+> which means that on RT we can be preempted, which means that per-cpu
+> operations are trickier (disabling interrupts/preemption).
+>
+> However, this BPF instruction is about calculating the per-cpu address,
+> so the look up can be inlined.
+>
+> It's not a per-cpu *operation*.
 
-diff --git a/kernel/bpf/cpumask.c b/kernel/bpf/cpumask.c
-index dad0fb1c8e87..33c473d676a5 100644
---- a/kernel/bpf/cpumask.c
-+++ b/kernel/bpf/cpumask.c
-@@ -474,6 +474,7 @@ static int __init cpumask_kfunc_init(void)
- 	ret = bpf_mem_alloc_init(&bpf_cpumask_ma, sizeof(struct bpf_cpumask), false);
- 	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_TRACING, &cpumask_kfunc_set);
- 	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_STRUCT_OPS, &cpumask_kfunc_set);
-+	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_SYSCALL, &cpumask_kfunc_set);
- 	return  ret ?: register_btf_id_dtor_kfuncs(cpumask_dtors,
- 						   ARRAY_SIZE(cpumask_dtors),
- 						   THIS_MODULE);
-diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-index d9e7aca8ae9e..8cde717137bd 100644
---- a/kernel/bpf/helpers.c
-+++ b/kernel/bpf/helpers.c
-@@ -2653,6 +2653,7 @@ static int __init kfunc_init(void)
- 	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_SCHED_CLS, &generic_kfunc_set);
- 	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_XDP, &generic_kfunc_set);
- 	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_STRUCT_OPS, &generic_kfunc_set);
-+	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_SYSCALL, &generic_kfunc_set);
- 	ret = ret ?: register_btf_id_dtor_kfuncs(generic_dtors,
- 						  ARRAY_SIZE(generic_dtors),
- 						  THIS_MODULE);
--- 
-2.44.0
+Will add this information to the commit message.
 
+>> To measure the improvement from this change, the benchmark in [1] was
+>> used on Qemu:
+>>
+>> Before:
+>> glob-arr-inc   :    1.127 =C2=B1 0.013M/s
+>> arr-inc        :    1.121 =C2=B1 0.004M/s
+>> hash-inc       :    0.681 =C2=B1 0.052M/s
+>>
+>> After:
+>> glob-arr-inc   :    1.138 =C2=B1 0.011M/s
+>> arr-inc        :    1.366 =C2=B1 0.006M/s
+>> hash-inc       :    0.676 =C2=B1 0.001M/s
+>>
+>> [1] https://github.com/anakryiko/linux/commit/8dec900975ef
+>>
+>> Signed-off-by: Puranjay Mohan <puranjay12@gmail.com>
+>> ---
+>>  arch/riscv/net/bpf_jit_comp64.c | 24 ++++++++++++++++++++++++
+>>  1 file changed, 24 insertions(+)
+>>
+>> diff --git a/arch/riscv/net/bpf_jit_comp64.c b/arch/riscv/net/bpf_jit_co=
+mp64.c
+>> index 15e482f2c657..e95bd1d459a4 100644
+>> --- a/arch/riscv/net/bpf_jit_comp64.c
+>> +++ b/arch/riscv/net/bpf_jit_comp64.c
+>> @@ -12,6 +12,7 @@
+>>  #include <linux/stop_machine.h>
+>>  #include <asm/patch.h>
+>>  #include <asm/cfi.h>
+>> +#include <asm/percpu.h>
+>>  #include "bpf_jit.h"
+>>=20=20
+>>  #define RV_FENTRY_NINSNS 2
+>> @@ -1089,6 +1090,24 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn=
+, struct rv_jit_context *ctx,
+>>  			emit_or(RV_REG_T1, rd, RV_REG_T1, ctx);
+>>  			emit_mv(rd, RV_REG_T1, ctx);
+>>  			break;
+>> +		} else if (insn_is_mov_percpu_addr(insn)) {
+>> +			if (rd !=3D rs)
+>> +				emit_mv(rd, rs, ctx);
+>> +#ifdef CONFIG_SMP
+>> +				/* Load current CPU number in T1 */
+>> +				emit_ld(RV_REG_T1, offsetof(struct thread_info, cpu), RV_REG_TP,
+>> +					ctx);
+>> +				/* << 3 because offsets are 8 bytes */
+>> +				emit_slli(RV_REG_T1, RV_REG_T1, 3, ctx);
+>> +				/* Load address of __per_cpu_offset array in T2 */
+>> +				emit_imm(RV_REG_T2, (u64)&__per_cpu_offset, ctx);
+>
+> Did you try using emit_addr() here? I'd guess that'll be fewer
+> instructions, no?
+
+Yes, I should have used that, the address would always be in the range
+of auipc+addi right? I will try and see.=20
+
+Thanks,
+Puranjay
