@@ -1,66 +1,94 @@
-Received: from out-181.mta1.migadu.com (out-181.mta1.migadu.com [95.215.58.181])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0F491CFBC
-	for <bpf@vger.kernel.org>; Fri,  5 Apr 2024 16:37:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C210161915;
+	Fri,  5 Apr 2024 16:38:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712335075; cv=none; b=WQzX2Vx7fP96gThpedmndtPpjtwZQeKTp6qEjMGJP54kBVxjS6gesgidBmtA37EgCu3vkRY/ex7l+mMJU3Fg9weOZN6r2SvyG6PTZhO8Nq0L65QNH+rI9HDyhEUDppDbnJrQVLw3bI3fd/nWl37yOFIKUgHabl3CRz9ClSnHKx4=
+	t=1712335092; cv=none; b=jK8LLkRVkFBY00SIjDA7jWi8QO2M923JVX0Pw7KDuIscu4Xe7Vu+cEvE2yVl2ZHtOk8pEZRCiCoYKTh5Xb8evq6/Q/25Nv02Yeo2gHOhvIOK26RfxwHfD7Yf0NDqbu5JVUwm0K1Gs3QlkY0rVka4i2cUs8Bd025T96Oldtv1mD8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712335075; c=relaxed/simple;
-	bh=rHAUGtIF2AXVhtJ8pWLF/P1HUlpGAuTBYlo9XczDqkc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=G3FmgIW1T4Cl2PMMXwdMsVvaJfT8qFDQTZ1wsRtIAmClC8lCqz+H87N3XUl+KjWeJPMBpJlxScAvoB3Hl3P545L4pp0YBYlLtVq3pevXjAmAeBGDZHnxcsROsAVwz7roebQokpmwzC/Gm9u2Fl3fEbo8co7E9JwPdm3KGNUalHM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=dP5h2k1X; arc=none smtp.client-ip=95.215.58.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1712335092; c=relaxed/simple;
+	bh=pxm850hyCfKjvNoJ/0bxv/wxjBo5naOgTvcUoxh7/tw=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=Sld2IdVhTXUO1t02BFfreI3FOR53N7XmKwX+1MEnBaLZ5oe+WNmNQfltLBx0iXD6uuKswQEGc71nJbPtysH8JjvQhRkvmnC7j4gzy++QDUOOdtFS0ENu4lpE13bY1TkMU83hfikjbZWbKqkgqATrfZjZodfoA3fo5BQBIsXhOno=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KztXR1UL; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="dP5h2k1X"
-Message-ID: <625c7c57-734c-4f68-a1cd-7865a0ec0c48@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1712335072;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=rHAUGtIF2AXVhtJ8pWLF/P1HUlpGAuTBYlo9XczDqkc=;
-	b=dP5h2k1XI0CrqCM4MuXGoWuELTiquKzMGhj8FKOk+leEEMXgpriN6QmiDrH7/LMM+hLH5f
-	DRInVac/FHFOAr48HANH50hML7Sx2XS/VmkeM2xb4pdUD1BnFawYWngxaveqldhMgnsQkO
-	0me29lzaQobwE8nAh5AdMaSr0eNFZ8U=
-Date: Fri, 5 Apr 2024 09:37:45 -0700
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KztXR1UL"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD3D9C43394;
+	Fri,  5 Apr 2024 16:38:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1712335091;
+	bh=pxm850hyCfKjvNoJ/0bxv/wxjBo5naOgTvcUoxh7/tw=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=KztXR1ULCYoHC5l879sed6nW3p/pEvsHhaB54wRnPhoO1H0tMXUZvXuZIYFXqhYXo
+	 nasw1Ff5slUS8wDWS63K7lbYEMmqK4oJCIgZehkPzAw59EMDHY5W0Ttes6J8lcGXBU
+	 0x53ODDXjV2nXZjMPlFgnp0FuJ1FivB8dRnpYMvzDJyuHrtiHKyIzevrM2/WVLFqub
+	 W6MljIr+oci2VHqWFZj2sZtriy6s79DKgri4+K4daiR+2Ir7dvlSYi+CUZwg/dx2q5
+	 x3lChXVa2A6xHGj9lGQof6ssN67/PC/6JoovRNgvV7D7R4xgSENiKWUa1dXiOT/Qs0
+	 Ln5Jn3k8yYtvA==
+From: Andrii Nakryiko <andrii@kernel.org>
+To: stable@vger.kernel.org
+Cc: bpf@vger.kernel.org,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>
+Subject: [PATCH 6.6.y 1/2] bpf: put uprobe link's path and task in release callback
+Date: Fri,  5 Apr 2024 09:38:05 -0700
+Message-ID: <20240405163806.45495-1-andrii@kernel.org>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <2024040548-lid-mahogany-fd86@gregkh>
+References: <2024040548-lid-mahogany-fd86@gregkh>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v1 2/3] bpf: allow invoking bpf_for_each_map_elem
- with different maps
-Content-Language: en-GB
-To: Philo Lu <lulie@linux.alibaba.com>, bpf@vger.kernel.org
-Cc: ast@kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com,
- andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
- kpsingh@kernel.org, sdf@google.com, haoluo@google.com, jolsa@kernel.org,
- mykolal@fb.com, shuah@kernel.org, xuanzhuo@linux.alibaba.com
-References: <20240405025536.18113-1-lulie@linux.alibaba.com>
- <20240405025536.18113-3-lulie@linux.alibaba.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <20240405025536.18113-3-lulie@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+Content-Transfer-Encoding: 8bit
 
+There is no need to delay putting either path or task to deallocation
+step. It can be done right after bpf_uprobe_unregister. Between release
+and dealloc, there could be still some running BPF programs, but they
+don't access either task or path, only data in link->uprobes, so it is
+safe to do.
 
-On 4/4/24 7:55 PM, Philo Lu wrote:
-> Taking different maps within a single bpf_for_each_map_elem call is not
-> allowed before, because from the second map,
-> bpf_insn_aux_data->map_ptr_state will be marked as *poison*. In fact
-> both map_ptr and state are needed to support this use case: map_ptr is
-> used by set_map_elem_callback_state() while poison state is needed to
-> determine whether to use direct call.
->
-> Signed-off-by: Philo Lu <lulie@linux.alibaba.com>
+On the other hand, doing path_put() in dealloc callback makes this
+dealloc sleepable because path_put() itself might sleep. Which is
+problematic due to the need to call uprobe's dealloc through call_rcu(),
+which is what is done in the next bug fix patch. So solve the problem by
+releasing these resources early.
 
-Acked-by: Yonghong Song <yonghong.song@linux.dev>
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+Link: https://lore.kernel.org/r/20240328052426.3042617-1-andrii@kernel.org
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+(cherry picked from commit e9c856cabefb71d47b2eeb197f72c9c88e9b45b0)
+---
+ kernel/trace/bpf_trace.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+index 1d76f3b014ae..4d49a9f47e68 100644
+--- a/kernel/trace/bpf_trace.c
++++ b/kernel/trace/bpf_trace.c
+@@ -3065,6 +3065,9 @@ static void bpf_uprobe_multi_link_release(struct bpf_link *link)
+ 
+ 	umulti_link = container_of(link, struct bpf_uprobe_multi_link, link);
+ 	bpf_uprobe_unregister(&umulti_link->path, umulti_link->uprobes, umulti_link->cnt);
++	if (umulti_link->task)
++		put_task_struct(umulti_link->task);
++	path_put(&umulti_link->path);
+ }
+ 
+ static void bpf_uprobe_multi_link_dealloc(struct bpf_link *link)
+@@ -3072,9 +3075,6 @@ static void bpf_uprobe_multi_link_dealloc(struct bpf_link *link)
+ 	struct bpf_uprobe_multi_link *umulti_link;
+ 
+ 	umulti_link = container_of(link, struct bpf_uprobe_multi_link, link);
+-	if (umulti_link->task)
+-		put_task_struct(umulti_link->task);
+-	path_put(&umulti_link->path);
+ 	kvfree(umulti_link->uprobes);
+ 	kfree(umulti_link);
+ }
+-- 
+2.43.0
 
