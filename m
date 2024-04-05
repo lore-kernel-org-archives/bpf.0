@@ -1,79 +1,77 @@
-Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
+Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 350C428DD6
-	for <bpf@vger.kernel.org>; Fri,  5 Apr 2024 04:42:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0DEE1CD23;
+	Fri,  5 Apr 2024 04:43:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712292142; cv=none; b=V9vJezRZlcdAuJodZvFco3oUG64xDYk5tGXzjlK7ZRz0KrmuzHxDhN3uja3A3kUP5XwETR1PX/Nr7YpisBJkr1yCQYX0QWz/5qj+yNQA/7TrqD/pcxJ+VGUx5p5ZvNoNufWSthpj3lMEW2G/I879keLUA5XJsLUxu/HGiTg5DlI=
+	t=1712292222; cv=none; b=oAgw+WepT1bfgfg2X5ENZoDdaKCLR36LecVeW5W/tZDHU8PB+4/ovLFL0sILDAKwV8yAhKX1OV63ybLSUdF1EeHulF4ekXvzMYl265/xTQXVgEfpke8oiyTpArtf/hh4jcvmxfqWZVBx+78MUaXAvn0hv5vZx1J6pp3OLbBKI50=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712292142; c=relaxed/simple;
-	bh=63VvLltA6504QsqVt2PCWIACme5ZueYKMjIkqyX8ubI=;
+	s=arc-20240116; t=1712292222; c=relaxed/simple;
+	bh=ItBpTuY1qBxZzLIIfBvspQ2OBDH7aFvzsC54M6CCwvs=;
 	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 Mime-Version:Content-Type; b=ZG6QLbsILhfqECwOiiqjtNCxX+9qCTV2v+YB0/5VmcyeJ2OO12Z8xcbCYayvNgoSr/joh0uRndzYm/cFWvpTT4W57lxIi9xr+IP4HcH9Ebo1QpruvtTDJ0LM7yKHxjpMcNE2JGhQ9AiySQRZeD7BIRUduLsWqvR/l4bH8yaYLBM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=c//6mLVN; arc=none smtp.client-ip=209.85.210.179
+	 Mime-Version:Content-Type; b=MrNTqTENv8qlORRsDEhqEaWREwZ300Z1yrW6QS41GJ4E6g1AfHplscsoW9K07m4al9VyCS0NgVBVQynPOuqny2St7TreN8DHR735lPC1dtWRW4mJvFzPmUGg9A/AoFuVuXRbczrn36WnV+oyBG0e5xw73ywUvTK9Kc6XhEpdQgY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OZs8JuEY; arc=none smtp.client-ip=209.85.216.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="c//6mLVN"
-Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-6ecf3f001c5so1095657b3a.1
-        for <bpf@vger.kernel.org>; Thu, 04 Apr 2024 21:42:21 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OZs8JuEY"
+Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-2a2dd2221d3so969905a91.0;
+        Thu, 04 Apr 2024 21:43:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1712292140; x=1712896940; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1712292220; x=1712897020; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:subject:references
          :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=KgwdAzHlCCBin24m6ElpAuyZGeG/6Z7+ioKTaRDOPiU=;
-        b=c//6mLVNS2oEima1JcUada7cZLwRfgQzWUsaXdom17mr7uaMt8J/6CXCSXO9MTgKfr
-         hZE0tOzJEBsCWx71W/OqyJ5SW+AV/5NhGLnhVXPWqt8snjFrfZHspWoWZ82kXKYYbrPP
-         1PsCNg1hy/gc0YvsnUxog2so1LGWTFQ9lw7C2vMsQSLGrXDQEm+hS0Bx8G+C0bhDRAwX
-         Ez7x5AxvP07gKaXaKaNww4AgBmWxlIe9oj7xeGmPBzBeJW54aLcqXBhUEpE752tTob5t
-         w8UY1qO5wZN/tEY7wVzSRB36X3C+dSfMs1/BXyAohyd6NBEPPSXp66UFqkHVzSFMaoeH
-         /Gpw==
+        bh=Ztwv2Vgkba6NgmrfOAYLgmgpqx7EzIAvD/dhUW+MU1Q=;
+        b=OZs8JuEYXB/MQIDHQaNrwLELWJMTejd0gVNz1JRlBesdNx/rwqB2sGzRhiR9jltH1c
+         HfYJVSCGo8bE+h0MxRy6jNl7tQkQVJsMH6JEAlDcvn9t8g/3VWnq9u24SjQFhXGmkRW3
+         VbmGohSPUwNFkWibIJ/ptzqOs1a86xM+mkDp/Ado8QRopI0yMuQ/KbgM/eObOjgX5WMv
+         a6qJojto/Y3TwFbXiCNU1yk7yriQFDaGfTxPnKIO5s411UeM2YyN59YCNaYk4eQMebdT
+         DWDcziFkZSkCYBr1F0ZfBG/kMg8tSsLVOmqA9ZOOjlPVSeaBabZXL0Q0h8vC7YU2ZMmv
+         2GOA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712292140; x=1712896940;
+        d=1e100.net; s=20230601; t=1712292220; x=1712897020;
         h=content-transfer-encoding:mime-version:subject:references
          :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=KgwdAzHlCCBin24m6ElpAuyZGeG/6Z7+ioKTaRDOPiU=;
-        b=h/6/bgNylg3A3xNXpyw1SlYHRtJk1K3IhPvGNyk1kK9cjrIW7MTDJIWGdCaVq88dDc
-         DR6VeKlVDngI3pxugKqvCM6iski6LphEJ/wpcXyftddWeqfvYgAEzEykn4+krO3Kqsy2
-         hsqtyl2N+Vum9NyZPES1w4jsPYnpR7AHdps3I2Qp7Aur5G56cPR29kUWuGGP8ap8q7Rd
-         mIWXnygXA7HW8BcToRv94Vs6EGZdo6QDbEgdaaXs4S9ZAYzC1aVLw9cGTcyMJsWvySMg
-         S4blp1eliDJ8u0Fus1VjoAMonpgVClIJHdVwKfL/buJ+t0Qwl78I9NOt4g/qZv1/skbe
-         1jyA==
-X-Gm-Message-State: AOJu0YxOR+K4045seRRtLa1fQI3XK+NFe9RUCR1ET/zX5HwFETOTZxrY
-	5fmNxnSSCnKD72oXOMVDFeUcK0p1c0LBIPa9RMr69ObWiU1yK8AO
-X-Google-Smtp-Source: AGHT+IHpcAhdijjebMVXD9WK1pSP4Ev6/pROnysYbd/WJyEUt97tFOvWa3/A4riS+eiWF9HpbG4HKg==
-X-Received: by 2002:a05:6a20:5605:b0:1a1:87c7:2d03 with SMTP id ir5-20020a056a20560500b001a187c72d03mr524022pzc.33.1712292140501;
-        Thu, 04 Apr 2024 21:42:20 -0700 (PDT)
+        bh=Ztwv2Vgkba6NgmrfOAYLgmgpqx7EzIAvD/dhUW+MU1Q=;
+        b=JZylSnaQPSlcECzX4jpocPQnUNTKjlFVYBkL5rMHWOrc9uzmVfcapxa/whNzZK3hYn
+         yLrsVyqd13R2hU5lyf+cL2DWg+rCo69OgGpSPP93WfeWwP+N5apcqRiMz5cN/pq5sK7F
+         yhFGFt6TuYW4QFjPEvCEMo8yt72ril/FroPP8jOGxf7fZ3/e3xBedB3Cy2NiMlBqmQaw
+         zevNnmkNXviehWQpVYDgVQL6vrAuJ+Kc5eJ/83pTDc+EPHVsddcXthv9/1RFathtUDsB
+         FmXwPg2dDPcE743XRz1xv08swKKsCjtfqbWKYyh1ozBg8U3YYSzk666BCqt98u6fV5oW
+         cj5Q==
+X-Forwarded-Encrypted: i=1; AJvYcCUWxdEW4AFfRt2yovqXurZwK5cPwIkiKMf4K0v1h5dOopPrWG8D59vkY5l0KckSOMI6ENGojKQtPesIc8gOP08MK5qO
+X-Gm-Message-State: AOJu0YzAiUrdVJyiWy9pnqqrR1kF0YrewK2hhapAJcLjAFC85eJRpBfs
+	x71s/594iZbHZKcSCuyHmpCl0Hnu1m81pS99+lT9RYJQdeefFCNrwiAuQcYF
+X-Google-Smtp-Source: AGHT+IFgdeVyr6TLILVudglYWwR6UVYpd53NRGpzrYHcYE3RArhA8GcTaM3e9SiIEzFt/4tIfnQT4A==
+X-Received: by 2002:a17:90b:1905:b0:2a2:510f:fa4b with SMTP id mp5-20020a17090b190500b002a2510ffa4bmr351968pjb.10.1712292220186;
+        Thu, 04 Apr 2024 21:43:40 -0700 (PDT)
 Received: from localhost ([98.97.36.54])
-        by smtp.gmail.com with ESMTPSA id b5-20020a170903228500b001dcc160a4ddsm515885plh.169.2024.04.04.21.42.19
+        by smtp.gmail.com with ESMTPSA id p12-20020a17090b010c00b002a203bd94bfsm555131pjz.51.2024.04.04.21.43.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 Apr 2024 21:42:20 -0700 (PDT)
-Date: Thu, 04 Apr 2024 21:42:19 -0700
+        Thu, 04 Apr 2024 21:43:39 -0700 (PDT)
+Date: Thu, 04 Apr 2024 21:43:38 -0700
 From: John Fastabend <john.fastabend@gmail.com>
-To: Yonghong Song <yonghong.song@linux.dev>, 
- John Fastabend <john.fastabend@gmail.com>, 
- Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: bpf@vger.kernel.org, 
- Alexei Starovoitov <ast@kernel.org>, 
- Andrii Nakryiko <andrii@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, 
- Jakub Sitnicki <jakub@cloudflare.com>, 
- kernel-team@fb.com, 
- Martin KaFai Lau <martin.lau@kernel.org>
-Message-ID: <660f812b3cd68_50b87208e1@john.notmuch>
-In-Reply-To: <55359f46-087e-4685-944b-80fe6d61eb87@linux.dev>
-References: <20240326022153.656006-1-yonghong.song@linux.dev>
- <20240326022158.656285-1-yonghong.song@linux.dev>
- <CAEf4BzbkcKFVEWaHSavbRi9+9VQMbqCgP36p9fzk6Hai2v2izA@mail.gmail.com>
- <27046774-e3d6-40c2-b3e3-ae6e64ecd33b@linux.dev>
- <CAEf4BzaYh6q_0TUUARd8m0eK+5RBxWQJ8=-n84vdayPPh4Z61g@mail.gmail.com>
- <660d964a1444b_1cf6b20885@john.notmuch>
- <55359f46-087e-4685-944b-80fe6d61eb87@linux.dev>
-Subject: Re: [PATCH bpf-next v3 1/5] bpf: Add bpf_link support for sk_msg and
- sk_skb progs
+To: Jason Xing <kerneljasonxing@gmail.com>, 
+ john.fastabend@gmail.com, 
+ edumazet@google.com, 
+ jakub@cloudflare.com, 
+ davem@davemloft.net, 
+ kuba@kernel.org, 
+ pabeni@redhat.com, 
+ daniel@iogearbox.net, 
+ ast@kernel.org
+Cc: netdev@vger.kernel.org, 
+ bpf@vger.kernel.org, 
+ Jason Xing <kernelxing@tencent.com>, 
+ syzbot+aa8c8ec2538929f18f2d@syzkaller.appspotmail.com
+Message-ID: <660f817ad9464_50b8720845@john.notmuch>
+In-Reply-To: <20240404021001.94815-1-kerneljasonxing@gmail.com>
+References: <20240404021001.94815-1-kerneljasonxing@gmail.com>
+Subject: RE: [PATCH net v2] bpf, skmsg: fix NULL pointer dereference in
+ sk_psock_skb_ingress_enqueue
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -82,126 +80,79 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Type: text/plain;
  charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 7bit
 
-Yonghong Song wrote:
-> =
+Jason Xing wrote:
+> From: Jason Xing <kernelxing@tencent.com>
+> 
+> Fix NULL pointer data-races in sk_psock_skb_ingress_enqueue() which
+> syzbot reported [1].
+> 
+> [1]
+> BUG: KCSAN: data-race in sk_psock_drop / sk_psock_skb_ingress_enqueue
+> 
+> write to 0xffff88814b3278b8 of 8 bytes by task 10724 on cpu 1:
+>  sk_psock_stop_verdict net/core/skmsg.c:1257 [inline]
+>  sk_psock_drop+0x13e/0x1f0 net/core/skmsg.c:843
+>  sk_psock_put include/linux/skmsg.h:459 [inline]
+>  sock_map_close+0x1a7/0x260 net/core/sock_map.c:1648
+>  unix_release+0x4b/0x80 net/unix/af_unix.c:1048
+>  __sock_release net/socket.c:659 [inline]
+>  sock_close+0x68/0x150 net/socket.c:1421
+>  __fput+0x2c1/0x660 fs/file_table.c:422
+>  __fput_sync+0x44/0x60 fs/file_table.c:507
+>  __do_sys_close fs/open.c:1556 [inline]
+>  __se_sys_close+0x101/0x1b0 fs/open.c:1541
+>  __x64_sys_close+0x1f/0x30 fs/open.c:1541
+>  do_syscall_64+0xd3/0x1d0
+>  entry_SYSCALL_64_after_hwframe+0x6d/0x75
+> 
+> read to 0xffff88814b3278b8 of 8 bytes by task 10713 on cpu 0:
+>  sk_psock_data_ready include/linux/skmsg.h:464 [inline]
+>  sk_psock_skb_ingress_enqueue+0x32d/0x390 net/core/skmsg.c:555
+>  sk_psock_skb_ingress_self+0x185/0x1e0 net/core/skmsg.c:606
+>  sk_psock_verdict_apply net/core/skmsg.c:1008 [inline]
+>  sk_psock_verdict_recv+0x3e4/0x4a0 net/core/skmsg.c:1202
+>  unix_read_skb net/unix/af_unix.c:2546 [inline]
+>  unix_stream_read_skb+0x9e/0xf0 net/unix/af_unix.c:2682
+>  sk_psock_verdict_data_ready+0x77/0x220 net/core/skmsg.c:1223
+>  unix_stream_sendmsg+0x527/0x860 net/unix/af_unix.c:2339
+>  sock_sendmsg_nosec net/socket.c:730 [inline]
+>  __sock_sendmsg+0x140/0x180 net/socket.c:745
+>  ____sys_sendmsg+0x312/0x410 net/socket.c:2584
+>  ___sys_sendmsg net/socket.c:2638 [inline]
+>  __sys_sendmsg+0x1e9/0x280 net/socket.c:2667
+>  __do_sys_sendmsg net/socket.c:2676 [inline]
+>  __se_sys_sendmsg net/socket.c:2674 [inline]
+>  __x64_sys_sendmsg+0x46/0x50 net/socket.c:2674
+>  do_syscall_64+0xd3/0x1d0
+>  entry_SYSCALL_64_after_hwframe+0x6d/0x75
+> 
+> value changed: 0xffffffff83d7feb0 -> 0x0000000000000000
+> 
+> Reported by Kernel Concurrency Sanitizer on:
+> CPU: 0 PID: 10713 Comm: syz-executor.4 Tainted: G        W          6.8.0-syzkaller-08951-gfe46a7dd189e #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 02/29/2024
+> 
+> Prior to this, commit 4cd12c6065df ("bpf, sockmap: Fix NULL pointer
+> dereference in sk_psock_verdict_data_ready()") fixed one NULL pointer
+> similarly due to no protection of saved_data_ready. Here is another
+> different caller causing the same issue because of the same reason. So
+> we should protect it with sk_callback_lock read lock because the writer
+> side in the sk_psock_drop() uses "write_lock_bh(&sk->sk_callback_lock);".
+> 
+> To avoid errors that could happen in future, I move those two pairs of
+> lock into the sk_psock_data_ready(), which is suggested by John Fastabend.
+> 
+> Fixes: 604326b41a6f ("bpf, sockmap: convert to generic sk_msg interface")
+> Reported-by: syzbot+aa8c8ec2538929f18f2d@syzkaller.appspotmail.com
+> Closes: https://syzkaller.appspot.com/bug?extid=aa8c8ec2538929f18f2d
+> Signed-off-by: Jason Xing <kernelxing@tencent.com>
+> ---
+> v2
+> Link: https://lore.kernel.org/all/20240329134037.92124-1-kerneljasonxing@gmail.com/
+> 1. move the read_lock_bh()/unlock_bh() into the sk_psock_data_ready() call (John)
+> Signed-off-by: Jason Xing <kernelxing@tencent.com>
+> ---
 
-> On 4/3/24 10:47 AM, John Fastabend wrote:
-> > Andrii Nakryiko wrote:
-> >> On Tue, Apr 2, 2024 at 6:08=E2=80=AFPM Yonghong Song <yonghong.song@=
-linux.dev> wrote:
-> >>>
-> >>> On 4/2/24 10:45 AM, Andrii Nakryiko wrote:
-> >>>> On Mon, Mar 25, 2024 at 7:22=E2=80=AFPM Yonghong Song <yonghong.so=
-ng@linux.dev> wrote:
-> >>>>> Add bpf_link support for sk_msg and sk_skb programs. We have an
-> >>>>> internal request to support bpf_link for sk_msg programs so user
-> >>>>> space can have a uniform handling with bpf_link based libbpf
-> >>>>> APIs. Using bpf_link based libbpf API also has a benefit which
-> >>>>> makes system robust by decoupling prog life cycle and
-> >>>>> attachment life cycle.
-> >>>>>
-> > Thanks again for working on it.
-> >
-> >>>>> Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
-> >>>>> ---
-> >>>>>    include/linux/bpf.h            |   6 +
-> >>>>>    include/linux/skmsg.h          |   4 +
-> >>>>>    include/uapi/linux/bpf.h       |   5 +
-> >>>>>    kernel/bpf/syscall.c           |   4 +
-> >>>>>    net/core/sock_map.c            | 263 +++++++++++++++++++++++++=
-+++++++-
-> >>>>>    tools/include/uapi/linux/bpf.h |   5 +
-> >>>>>    6 files changed, 279 insertions(+), 8 deletions(-)
-> >>>>>
-> >> [...]
-> >>
-> >>>>>           psock_set_prog(pprog, prog);
-> >>>>> -       return 0;
-> >>>>> +       if (link)
-> >>>>> +               *plink =3D link;
-> >>>>> +
-> >>>>> +out:
-> >>>>> +       mutex_unlock(&sockmap_prog_update_mutex);
-> >>>> why this mutex is not per-sockmap?
-> >>> My thinking is the system probably won't have lots of sockmaps and
-> >>> sockmap attach/detach/update_prog should not be that frequent. But
-> >>> I could be wrong.
-> >>>
-> > For my use case at least we have a map per protocol we want to inspec=
-t.
-> > So its rather small set <10 I would say. Also they are created once
-> > when the agent starts and when config changes from operator (user dec=
-ides
-> > to remove/add a parser). Config changing is rather rare. I don't thin=
-k
-> > this would be paticularly painful in practice now to have a global
-> > lock.
-> >
-> >> That seems like an even more of an argument to keep mutex per sockma=
-p.
-> >> It won't add a lot of memory, but it is conceptually cleaner, as eac=
-h
-> >> sockmap instance (and corresponding links) are completely independen=
-t,
-> >> even from a locking perspective.
-> >>
-> >> But I can't say I feel very strongly about this.
-> >>
-> >>>>> +       return ret;
-> >>>>>    }
-> >>>>>
-> >> [...]
-> >>
-> >>>>> +
-> >>>>> +static void sock_map_link_release(struct bpf_link *link)
-> >>>>> +{
-> >>>>> +       struct sockmap_link *sockmap_link =3D get_sockmap_link(li=
-nk);
-> >>>>> +
-> >>>>> +       mutex_lock(&sockmap_link_mutex);
-> >>>> similar to the above, why is this mutex not sockmap-specific? And =
-I'd
-> >>>> just combine sockmap_link_mutex and sockmap_prog_update_mutex in t=
-his
-> >>>> case to keep it simple.
-> >>> This is to protect sockmap_link->map. They could share the same loc=
-k.
-> >>> Let me double check...
-> >> If you keep that global sockmap_prog_update_mutex then I'd probably
-> >> reuse that one here for simplicity (and named it a bit more
-> >> generically, "sockmap_mutex" or something like that, just like we ha=
-ve
-> >> global "cgroup_mutex").
-> > I was leaning to a per map lock, but because a global lock simplifies=
- this
-> > part a bunch I would agree just use a single sockmap_mutex throughout=
-.
-> >
-> > If someone has a use case where they want to add/remove maps dynamica=
-lly
-> > maybe they can let us know what that is. For us, on my todo list, I w=
-ant
-> > to just remove the map notion and bind progs to socks directly. The
-> > original map idea was for a L7 load balancer, but other than quick ha=
-cks
-> > I've never built such a thing nor ran it in production. Maybe someday=
-
-> > I'll find the time.
-> =
-
-> I am using a single global lock.
->    https://lore.kernel.org/bpf/20240404025305.2210999-1-yonghong.song@l=
-inux.dev/
-> Let us whether it makes sense or not with code.
-> =
-
-> John, it would be great if you can review the patch set. I am afraid
-> that I could miss something...
-
-Yep I will. Hopefully tonight because I intended to do it today but worse=
-
-case top of list tomorrow. I can also drop it into our test harness which=
-
-runs some longer running stress stuff. Thanks!=
+Reviewed-by: John Fastabend <john.fastabend@gmail.com>
