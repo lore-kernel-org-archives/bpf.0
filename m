@@ -1,197 +1,251 @@
-Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2265E16132B
-	for <bpf@vger.kernel.org>; Fri,  5 Apr 2024 17:31:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D880171664
+	for <bpf@vger.kernel.org>; Fri,  5 Apr 2024 17:35:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712338320; cv=none; b=X39jh0+eL+ZEG0gVjO/D1Nqj9SSQWkbkFlqE77AzJVoRnTOGY8oll1Vdf4BM9EV6RpnIIoDedYdVTrhDQRByc4v6NLVN6ODeXMdf+ARdcPlZsKuTyDBoZTMSBHWWuKykldihKhXg1Y92j8TLSz7z/xzNUHRTpZ50OmXG3eNhB9I=
+	t=1712338558; cv=none; b=IBwEd/XvVxTUNA0r8Po1e9sFp3ib8ihGH/9N8fgtoHycNNCFA1PqElm13E31a3/UTAXXAeiyJCJCOxYOOitg2a9fjoZNnUXKeXLQ+TrvxQtOySGGfqx7TujqOgwWpgT8/ukNPG/U8QWM0WGjfbpxdEk/hWDLtKg46zcb/seiWN4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712338320; c=relaxed/simple;
-	bh=pE13hyDBFU04tIPOusfd4GE28q/rqXK5MAqGgkLXmBQ=;
+	s=arc-20240116; t=1712338558; c=relaxed/simple;
+	bh=Z4i/TzxWMH8U/mLk9Bw5INIIN8GvLnLrRrAUeZjHpSo=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=NI0VbBja2OBsGUV52COOmNLb0BvYudIWV4bRp5OujVpuMxUcH3GojVf/A03Oqx3azXvvg389T9Z+s1XewEcTtxPzPSvqqSNaR/G8XGkijIA4FyIXrE6xWpzJJymZxZOUMeb8DGG672SRxeBre7WqawIHTrWJZHgo18Xbmce152A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=S7jzD7WZ; arc=none smtp.client-ip=209.85.214.178
+	 To:Cc:Content-Type; b=qBy+kyLgmTlQsrl1uTmq45n6hYkczdPB2atrRYD76mP8kRKcxrcxCyhsXZj2G8/We3YNJXeYoafL5O81rYmQjnisXDdn6/42nTJxylmn7xWMIeIaLyAeKXRrU9HydH/KcbgGVsnFkJMma2mt2Mn55Yj0q/S2c+OelDv2+XfijAs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TxR7YDq7; arc=none smtp.client-ip=209.85.214.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="S7jzD7WZ"
-Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-1e36b7e7dd2so8726745ad.1
-        for <bpf@vger.kernel.org>; Fri, 05 Apr 2024 10:31:58 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TxR7YDq7"
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-1e0d8403257so21922545ad.1
+        for <bpf@vger.kernel.org>; Fri, 05 Apr 2024 10:35:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1712338318; x=1712943118; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1712338557; x=1712943357; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=InjN0EynOGU7NuIYsjCLIEqwQe4PioEziabcsuIg3BE=;
-        b=S7jzD7WZIyhiCQse/wes+l6K/MonMW/YkY2wPANj43wsHBj2dnyfhMrtrey1LGwoXM
-         gCCSxiw4lbOXcqUZLPsYD4FLHnW4S5HUeJHr2cHsICmHspuC/BhJU2xmEsRYipcXV1QL
-         EBkRJb3wuRmLsLa5uw8+YTbc1z8RlubM1BUlnMI3BDxgKrAes71ifyjuDmtS7s9IQSie
-         csuN48HO/nIYdbemLNVIJ5jqcehkEeQjXjKVik1e9o/+nToPrvon6u4zY175dMWPOWMU
-         ++KabomxtgmcwlqI9TZxPQzPAU/LJ9t1aUEZh/M5STtcFu1juzYvXjduRxfMdjVbLjlI
-         jYnQ==
+        bh=Dv+yaK5hzGkv+cl9dZjWW8BxHbrbGkhTud+78mVD9IY=;
+        b=TxR7YDq7NqZZ4WRghIRiIrZD4EXKDL+PR7UrfMxdBlL2n+P+Az6sF8AMt1NdWkxXt+
+         7lxrtvDtjGhMruwiIc+T37aAkMIqri8uoKIKXgFS7O9uGWmMCnL31Y1b43AIcIo2cH/x
+         ntAYDutX/IrwpLOnUzT/IeR29PwIjFnGc0aigVo0EkqotX3oI95XB/yQmXT6IAr4hdHK
+         DlAZ3oOtiWbIuyrYhkyA+B1ZdousZ8lu6cGaO+68lASPJPgJOkC4Sr9IlB9UtfCpEL5n
+         QpkTa5MmCThpr3JTUg2xAfPOjr70as3f7yZeD2g5q/c4PVYdGbGgq0rFaPLiJSw70Awd
+         HQag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712338318; x=1712943118;
+        d=1e100.net; s=20230601; t=1712338557; x=1712943357;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=InjN0EynOGU7NuIYsjCLIEqwQe4PioEziabcsuIg3BE=;
-        b=PtYr0rRDGx0vitv98QypvBMXQxFRb+Oqh7KPhwk5FNPGPdSxPN3roDR6TCdMIm3aOS
-         3HHwf4Ynj8xgVEpBIaQB7VAlaJSGH3zWXQdhQvOT7eE6gpUQeQeoFt80lygwTZFFgu3U
-         kmQ4kwqbWRroAMDDNHPysUAkciNr+jL3SRiHZivptVVwLycTaIPnZUrZqTBKFxA8/gkc
-         Ncr6lo2iz40/NoKtlXmLCU5/Gpbi5jSui+zDGbRpL7pEdI3bzoN5553O0LoxA0/m3qBB
-         1Nb7+LjDAebiY8IYnKcVuNAHvL+tX3fuwUh/XXpPMGZstDgOWVgWQNxK2FGAJUA/zEV/
-         3VGg==
-X-Forwarded-Encrypted: i=1; AJvYcCV6c4+jprJW03kqjgNdUjifeNUQtNOQakYg+zZM8WIzONE80+JqVOjqRyWpDOQ2F30QE9w+5xm1baX6UL1uB8ejZsF+
-X-Gm-Message-State: AOJu0YwbGJPJHu8xbtTF+bsifJButwf/l5dd870RfwfSjX+YKnyTx5Rp
-	bCXbi2K7EQ4mhhPF6neKhm1Vjb0fmOsZ8jpBwb3Ms/qZC67NrPWpzd1de1h2dymXvDi9vBgKrlY
-	CwEiWB7Cb3khs3hamrmdj6+OqD9Q=
-X-Google-Smtp-Source: AGHT+IEazYTYitUMQTVxg4vpaIVt5W7gYQeNjeIfJbbDryqxwuWlbS9f2aShAzDFS3UOQxve9oSSZzW4KioqjaTdvNE=
-X-Received: by 2002:a17:90a:1347:b0:2a2:f9d:f600 with SMTP id
- y7-20020a17090a134700b002a20f9df600mr1954727pjf.22.1712338318400; Fri, 05 Apr
- 2024 10:31:58 -0700 (PDT)
+        bh=Dv+yaK5hzGkv+cl9dZjWW8BxHbrbGkhTud+78mVD9IY=;
+        b=l2Z5IMsgEHmHU6kIwrw8JN42bxX6MYaJ3ulucMs18mqu670P57YwMy5NAfirlTzSs2
+         +SzmWKlkdPF6QRwdNYWB4OIx5aPp4fwVA7itlav29PY2tTAO5Tk+O6oOuAcl2SY34Ra3
+         bdKfCM2IQFCCgTz/LIgWG2h5pH1XCO2Ow8UamE8xg26MD9pd7iSgaldaDtok2LwsvpTU
+         cSpVAw25nYSUpTRoqargMj4asKLAciz0dSPJ4Ph7iYrqjgCTeuTf4g4X587+eedhUZeV
+         guQf/eYoyWmr0BM0uGV0hYG8NG2Kk/BzJslVJXkcZA6ksU3qPKB1Owed/JPXqp6OGZSX
+         /0YA==
+X-Gm-Message-State: AOJu0Yyng1t3udGEZGEcfHY1hGqqOvBbKlm9j0rfe9VizAJtB9isO83F
+	C6jWPJgSYnJTA41NVPqfd5guR+6x8G7yrQlZRtgT9lFUcNPUBmpL4UUY2bx8H5H19cPMM5frdHJ
+	yNM+bLzMcTI2YHfvw1pWDgJZUgxc=
+X-Google-Smtp-Source: AGHT+IHxe30XJT/rd7k75kjefrmwvy77bsNHD3N9y9c8bLOgxuFAdDSiCqfkS9JXROt2vVR53eU/ywtlUfFWjhTP2pE=
+X-Received: by 2002:a17:902:da8e:b0:1e3:d38c:9e4b with SMTP id
+ j14-20020a170902da8e00b001e3d38c9e4bmr198339plx.67.1712338556527; Fri, 05 Apr
+ 2024 10:35:56 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240404100901.7d6bc10f@hermes.local> <3ae7e58f-e62f-4d53-8b39-6e3fe1810014@linux.dev>
- <20240404112710.25d4e99d@hermes.local> <CAEf4BzbHbXHixPAEJccnrgt5xtV+d1iyvQYdC8Dpzs3cWdCRcQ@mail.gmail.com>
- <20240404175258.363f441c@hermes.local>
-In-Reply-To: <20240404175258.363f441c@hermes.local>
+References: <20240405025536.18113-1-lulie@linux.alibaba.com> <20240405025536.18113-4-lulie@linux.alibaba.com>
+In-Reply-To: <20240405025536.18113-4-lulie@linux.alibaba.com>
 From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Fri, 5 Apr 2024 10:31:46 -0700
-Message-ID: <CAEf4BzaTNRsFbppS31XQmFv+yjqw1_JASheOdw-7H_bHL=6HGA@mail.gmail.com>
-Subject: Re: vmlinux.h overlap/conflict with network protocol definitions
-To: Stephen Hemminger <stephen@networkplumber.org>
-Cc: Yonghong Song <yonghong.song@linux.dev>, Luca Boccassi <bluca@debian.org>, daniel@iogearbox.net, 
-	ast@kernel.org, andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com, 
-	bpf@vger.kernel.org
+Date: Fri, 5 Apr 2024 10:35:44 -0700
+Message-ID: <CAEf4BzYTOeOhGOXihA-MWBt_yXt2ogubmqyGUTjpmG8Q5K5Oew@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v1 3/3] selftests/bpf: add test for
+ bpf_for_each_map_elem() with different maps
+To: Philo Lu <lulie@linux.alibaba.com>
+Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net, 
+	john.fastabend@gmail.com, andrii@kernel.org, martin.lau@linux.dev, 
+	eddyz87@gmail.com, song@kernel.org, yonghong.song@linux.dev, 
+	kpsingh@kernel.org, sdf@google.com, haoluo@google.com, jolsa@kernel.org, 
+	mykolal@fb.com, shuah@kernel.org, xuanzhuo@linux.alibaba.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Apr 4, 2024 at 5:53=E2=80=AFPM Stephen Hemminger
-<stephen@networkplumber.org> wrote:
+On Thu, Apr 4, 2024 at 7:55=E2=80=AFPM Philo Lu <lulie@linux.alibaba.com> w=
+rote:
 >
-> On Thu, 4 Apr 2024 14:45:04 -0700
-> Andrii Nakryiko <andrii.nakryiko@gmail.com> wrote:
+> A test is added for bpf_for_each_map_elem() with either an arraymap or a
+> hashmap.
+> $ tools/testing/selftests/bpf/test_progs -t for_each
+>  #93/1    for_each/hash_map:OK
+>  #93/2    for_each/array_map:OK
+>  #93/3    for_each/write_map_key:OK
+>  #93/4    for_each/multi_maps:OK
+>  #93      for_each:OK
+> Summary: 1/4 PASSED, 0 SKIPPED, 0 FAILED
 >
-> > > > This is a known issue as currently vmlinux.h does not support macro=
-s.
-> > > > There are some efforts by Edward Zingerman to support this but this=
- has
-> > > > not done yet. At the same time, you could have a trivial header fil=
-e
-> > > > like
-> > > > https://github.com/torvalds/linux/blob/master/tools/testing/selftes=
-ts/bpf/progs/bpf_tracing_net.h
-> > > > to be used for bpf program and then your bpf program with vmlinux.h=
- can
-> > > > have much easier CORE support.
-> > >
-> > >
-> > > That is an example of header surgery which I would rather avoid havin=
-g to carry
-> > > as long term technical debt baggage.
-> > >
-> >
-> > What's your ultimate goal? As Yonghong said, vmlinux.h is not
-> > compatible with other headers. So you have to pick either using
-> > vmlinux.h as a base + adding missing #define's (because those are not
-> > recorded in types, so can't be put into vmlinux.h), or not use
-> > vmlinux.h, use linux UAPI/internal headers and then use explicit CO-RE
-> > helpers/attributes to make your application CO-RE-relocatable.
-> >
-> > It's not clear from your original email why exactly you wanted to
-> > switch to vmlinux.h in the first place.
+> Signed-off-by: Philo Lu <lulie@linux.alibaba.com>
+> ---
+>  .../selftests/bpf/prog_tests/for_each.c       | 62 +++++++++++++++++++
+>  .../selftests/bpf/progs/for_each_multi_maps.c | 49 +++++++++++++++
+>  2 files changed, 111 insertions(+)
+>  create mode 100644 tools/testing/selftests/bpf/progs/for_each_multi_maps=
+.c
 >
-> Some backstory. There is not an existing TC filter for this, so the
-> original developer had the idea of using BPF to do it.
+> diff --git a/tools/testing/selftests/bpf/prog_tests/for_each.c b/tools/te=
+sting/selftests/bpf/prog_tests/for_each.c
+> index 8963f8a549f2..09f6487f58b9 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/for_each.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/for_each.c
+> @@ -5,6 +5,7 @@
+>  #include "for_each_hash_map_elem.skel.h"
+>  #include "for_each_array_map_elem.skel.h"
+>  #include "for_each_map_elem_write_key.skel.h"
+> +#include "for_each_multi_maps.skel.h"
 >
-> The program is a small BPF program to implement a TC filter that looks at
-> SKB and does mapping to queue based on L3 (or L3/L4) header. So not heavi=
-ly dependent
-> on kernel data structure, but sk_buff is not necessarily stable; actual l=
-ayout
-> depends on kernel config.
+>  static unsigned int duration;
 >
-
-If it's only a few fields from sk_buff that you need, you can define
-your own minimal sk_buff definition with
-__attribute__((preserve_access_index)) added to it. You don't have to
-declare fields in the right order, just make sure that field types
-match. E.g., something like:
-
-struct sk_buff {
-  unsigned char *head;
-  unsigned char *data;
-  struct sock *sock;
-} __attribute__((preserve_access_index));
-
-You can call it `struct sk_buff___mine` if you already include
-sk_buff, to avoid the conflict. Libbpf will still understand that it
-should match it to struct sk_buff in the kernel.
-
-Alternatively, you can just use BPF_CORE_READ() macro on types you get
-from kernel headers, even if they don't have that
-preserve_access_index attribute.
-
-Or, you can just use __builtin_preserve_access_index(&skb->len) to
-access sk_buff's fields in CO-RE-relocatable way.
-
-Or, you can have entire block within which all fields accesses will be
-CO-RE-relocatable:
-
-int len;
-
-__builtin_preserve_access_index(({
-    len =3D skb->len;
-    /* other skb accesses here as well */
-}));
-
-Many ways to have bolted on CO-RE even without vmlinux.h. vmlinux.h is
-convenient (apart from lack of #defines, but that's an orthogonal
-problem), but by no means required for BPF CO-RE.
-
-
-> But the evolution of BPF has made the old code unusable. I am trying to g=
-et it working again,
-> and cleanup to modern BPF by using BPF skeleton code.
+> @@ -143,6 +144,65 @@ static void test_write_map_key(void)
+>                 for_each_map_elem_write_key__destroy(skel);
+>  }
 >
+> +static void test_multi_maps(void)
+> +{
+> +       struct for_each_multi_maps *skel;
+> +       __u64 val, array_total, hash_total;
+> +       __u32 key, max_entries;
+> +       int i, err;
+> +
+> +       LIBBPF_OPTS(bpf_test_run_opts, topts,
+> +               .data_in =3D &pkt_v4,
+> +               .data_size_in =3D sizeof(pkt_v4),
+> +               .repeat =3D 1,
+> +       );
+> +
+> +       skel =3D for_each_multi_maps__open_and_load();
+> +       if (!ASSERT_OK_PTR(skel, "for_each_multi_maps__open_and_load"))
+> +               return;
+> +
+> +       array_total =3D 0;
+> +       max_entries =3D bpf_map__max_entries(skel->maps.arraymap);
+> +       for (i =3D 0; i < max_entries; i++) {
+> +               key =3D i;
+> +               val =3D i + 1;
+> +               array_total +=3D val;
+> +               err =3D bpf_map__update_elem(skel->maps.arraymap, &key, s=
+izeof(key),
+> +                                          &val, sizeof(val), BPF_ANY);
+> +               if (!ASSERT_OK(err, "array_map_update"))
+> +                       goto out;
+> +       }
+> +
+> +       hash_total =3D 0;
+> +       max_entries =3D bpf_map__max_entries(skel->maps.hashmap);
+> +       for (i =3D 0; i < max_entries; i++) {
+> +               key =3D i + 100;
+> +               val =3D i + 1;
+> +               hash_total +=3D val;
+> +               err =3D bpf_map__update_elem(skel->maps.hashmap, &key, si=
+zeof(key),
+> +                                          &val, sizeof(val), BPF_ANY);
+> +               if (!ASSERT_OK(err, "hash_map_update"))
+> +                       goto out;
+> +       }
+> +
+> +       skel->bss->data_output =3D 0;
+> +       skel->bss->use_array =3D 1;
+> +       err =3D bpf_prog_test_run_opts(bpf_program__fd(skel->progs.test_p=
+kt_access), &topts);
+> +       ASSERT_OK(err, "bpf_prog_test_run_opts");
+> +       ASSERT_OK(topts.retval, "retval");
+> +       ASSERT_EQ(skel->bss->data_output, array_total, "array output");
+> +
+> +       skel->bss->data_output =3D 0;
+> +       skel->bss->use_array =3D 0;
+> +       err =3D bpf_prog_test_run_opts(bpf_program__fd(skel->progs.test_p=
+kt_access), &topts);
+> +       ASSERT_OK(err, "bpf_prog_test_run_opts");
+> +       ASSERT_OK(topts.retval, "retval");
+> +       ASSERT_EQ(skel->bss->data_output, hash_total, "hash output");
+> +
+> +out:
+> +       for_each_multi_maps__destroy(skel);
+> +}
+> +
+>  void test_for_each(void)
+>  {
+>         if (test__start_subtest("hash_map"))
+> @@ -151,4 +211,6 @@ void test_for_each(void)
+>                 test_array_map();
+>         if (test__start_subtest("write_map_key"))
+>                 test_write_map_key();
+> +       if (test__start_subtest("multi_maps"))
+> +               test_multi_maps();
+>  }
+> diff --git a/tools/testing/selftests/bpf/progs/for_each_multi_maps.c b/to=
+ols/testing/selftests/bpf/progs/for_each_multi_maps.c
+> new file mode 100644
+> index 000000000000..ff0bed7d4459
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/progs/for_each_multi_maps.c
+> @@ -0,0 +1,49 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +#include "vmlinux.h"
+> +#include <bpf/bpf_helpers.h>
+> +
+> +char _license[] SEC("license") =3D "GPL";
+> +
+> +struct {
+> +       __uint(type, BPF_MAP_TYPE_ARRAY);
+> +       __uint(max_entries, 3);
+> +       __type(key, __u32);
+> +       __type(value, __u64);
+> +} arraymap SEC(".maps");
+> +
+> +struct {
+> +       __uint(type, BPF_MAP_TYPE_HASH);
+> +       __uint(max_entries, 5);
+> +       __type(key, __u32);
+> +       __type(value, __u64);
+> +} hashmap SEC(".maps");
+> +
+> +struct callback_ctx {
+> +       int output;
+> +};
+> +
+> +u32 data_output =3D 0;
+> +int use_array =3D 0;
+> +
+> +static __u64
+> +check_map_elem(struct bpf_map *map, __u32 *key, __u64 *val,
+> +              struct callback_ctx *data)
+> +{
+> +       data->output +=3D *val;
+> +       return 0;
+> +}
+> +
+> +SEC("tc")
+> +int test_pkt_access(struct __sk_buff *skb)
+> +{
+> +       struct callback_ctx data;
+> +
+> +       data.output =3D 0;
+> +       if (use_array)
+> +               bpf_for_each_map_elem(&arraymap, check_map_elem, &data, 0=
+);
+> +       else
+> +               bpf_for_each_map_elem(&hashmap, check_map_elem, &data, 0)=
+;
 
-That's a good idea independently from vmlinux.h, yep.
+you are relying on the compiler to combine bpf_for_each_map_elem calls
+to one call instruction and just passing different map pointers,
+right? It would be best to code this in BPF assembly so that this
+doesn't rely on compiler decisions and optimizations.
 
-> Luca was one who had the suggestion about vmlinux.
->
-> > Using bpftool to generate the header at build time is a bit icky,
-> > because it will look at sysfs on the build system, which is from the
-> > running kernel. But a build system's kernel might be some ancient LTS,
-> > and even be a completely different kconfig/build/distro from the actual
-> > runtime one.
-> >
-> > We have ran in the same problem in systemd recently, and the solution
-> > is to have distros publish the vmlinux.h together with the kernel
-> > image/headers, that way we can rely on the fact that by build-depending
-> > on the right kernel package we get exactly the generated vmlinux.h that
-> > we want. This has already happened in Centos, Debian, Fedora and Arch,
-> > and I am trying to get Ubuntu onboard too.
-> >
-> > The annoying thing is that every distro packages differently, so the
-> > path needs to be configurable with a meson option.
-> >
-> > Feel free to pilfer the systemd meson glue:
-> >
-> > https://github.com/systemd/systemd/pull/26826/commits/d917079e7e320aa28=
-1fc4ad6f8073b0814b9cb13
-> >
-> > It's of course file to go to the runtime kernel if no vmlinux.h is
-> > specified, as a fallback, which is going to be useful for developers
-> > machines.
-> >
-> > --
-> > Kind regards,
-> > Luca Boccassi
->
->
+> +       data_output =3D data.output;
+> +
+> +       return 0;
+> +}
+> --
+> 2.32.0.3.g01195cf9f
 >
