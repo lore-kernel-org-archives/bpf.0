@@ -1,172 +1,135 @@
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BECAF1DDD1;
-	Fri,  5 Apr 2024 12:43:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A19A216C86E;
+	Fri,  5 Apr 2024 12:44:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712321041; cv=none; b=Lasd7qenMqEBs6hMmxN6CzNjs6ckWrkGlkHkeyCPOm9fPxZhXMVAO8MGxJpqmg37Ehr0EZ0Bcy3U4xwsfsmBrwBfNWg/VL6NYnzCqTzlUve0SYGdevY+f7SQxvJHlzZ9W+Nd/YNCKsZVBi2ViowpgnpeoLH+lZ21Wlwyxj1p38s=
+	t=1712321074; cv=none; b=JL6CT3KnKeEHQEfUDLZpGx4hrZTfnu9yatKQJdugl4O9oXRaON1vNF059dJPZYPpv/YIZN+M7QZHFJXHwQMSORLbolxKO4/DVUsYGXROFRSpLj7rWXSt9qgjhc7ujyNQCMsnoD5zHdR7mtVMZFkR4hAUuRnHkTbVxjjR/9L39GY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712321041; c=relaxed/simple;
-	bh=5GYBpqDHl1ruxELv5Dvt6rvSuLuznw5wiX1smMGHpyw=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=eE4jmYjljYk6ZrzXFDJ6ejfoQQF0xeIoVuGiEothsPL1uOz02U44Fh10m+5Ene2HJmETpV2Ny+3B+xOPnjh4Vxk5PygZpCYVYWZ1+Ph5F7K3gIRiMgYVAn4R/QYHNbIxRXfn+TrxFfidFR5kveFhjOyK6JwxA/AqIqSYT/ATphA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ct5AtXc5; arc=none smtp.client-ip=209.85.128.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1712321074; c=relaxed/simple;
+	bh=hmp72QspsqQzNfL1h/lUM6waz79GdMoYXwuNVIfb0JI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=N+/SOHK1mX6+y2umx4fy3toiLkcR++8j+vPQejn8S78/hrqGZ1L5wqrbTKXfwMwmUboGz2Q58qXASnl6jSwA/c8173nv9BJeFTDOThPQMvvyQ34LgwWG7FosT75riNskYp3XtF27MUievFsJkkXhtVszwfk9W/6b4Aa/7gyk32Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=u5ed4rhu; arc=none smtp.client-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ct5AtXc5"
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-4162b74f2a1so11329295e9.3;
-        Fri, 05 Apr 2024 05:43:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1712321038; x=1712925838; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=pULb2/SEKmMEonTMi0DJm45CRye8jTdoFzr8IafrgxM=;
-        b=ct5AtXc5XiXqbIdF1L2Jx3gVb82WqV0qovX5HCvTQd5VM3PYY00TGX1beSXFeoHTkd
-         QAqAMLKQlI9DinK7LfFkgyPqH3NK/Dh/zOhGLUPHVnm1bwXGTvPT1yux0c/BWvenOobs
-         9UQJUi9162l3VVkWRxYUA/ajBIlov0zK2aT1fX7bptmC/xBwBiaOIwA6I/kNKjwAaglD
-         /KAIhbOHByWJ2IT1BJa187J0LMRi7wLPnJVs9ZJGZGbKwT75T+wA5mf++imkMHv0f6sJ
-         VdJmYAQkMza15MfZQWRU3pfJK7m4uWqNsj7K+EnUUBWVtqS+zumEKzdnaSLuvCeDhHJT
-         HBSA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712321038; x=1712925838;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=pULb2/SEKmMEonTMi0DJm45CRye8jTdoFzr8IafrgxM=;
-        b=p37zgOPmebPOofkeQitJUKnQiT6DLTtBzh5gXg8SzDqfyfhF+YNPgyxcn1HzHTPZ6v
-         cTeOF/5w8vNFmUkdOmUpbOdYduKTRYLEJBSfeoUWMC6gjEam68dR5M39EwZVLnmjG6EZ
-         oFHO/aWOh2fyeNuWKclu9C9msUaYF5r9MUKZr9pJETb88Er45ZmwXZ9PiLH373ADnSZg
-         9GVdOHWrykMABeK+ZYqzyWQAfRgfZxTO8n9uO0q5G6ktNW+7p3BJjbkM+XQ23dEdPcno
-         G0Y8irXkzf6iyDS0B/+sVgl/Dn5pA3+nPLFE6J0+m7Qfh8LtVG+4601AfQeY8UjJM0Zz
-         j53A==
-X-Forwarded-Encrypted: i=1; AJvYcCVGcI7wQ9CR9kOWhw0AMyJKTsE8Quyo1EJFM6m2oT6w/egFW96M0Hx6slhHBr9QHigkE5f6fN7GIdxfUGGCyGKtGdlC9chc5GkMOWXO04bFnOnXinL6qFb2v79NfDnkQopx
-X-Gm-Message-State: AOJu0Yyo1O5m0CoBtoYo89tmBZm5Dvn2MNnitGHA1VSYgv6k+6KdyHwN
-	tkhBtaJTosrsZwAt5FJO6SkYuP8yPL2AEu3HBFTw3yI4sWDXWff9
-X-Google-Smtp-Source: AGHT+IHUW+bDfIBmn2iekT8yv3sAv6IIGKq2Tu5MgysTRgeCJ5Z1WV+/TuTm7uyrmNDypSyF3mGedA==
-X-Received: by 2002:a05:600c:a0d:b0:416:331f:d3b3 with SMTP id z13-20020a05600c0a0d00b00416331fd3b3mr53944wmp.38.1712321037814;
-        Fri, 05 Apr 2024 05:43:57 -0700 (PDT)
-Received: from localhost (54-240-197-231.amazon.com. [54.240.197.231])
-        by smtp.gmail.com with ESMTPSA id n32-20020a05600c3ba000b00415612e29a1sm2887862wms.30.2024.04.05.05.43.57
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 05 Apr 2024 05:43:57 -0700 (PDT)
-From: Puranjay Mohan <puranjay12@gmail.com>
-To: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@google.com>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	=?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	bpf@vger.kernel.org,
-	linux-riscv@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	Pu Lehui <pulehui@huawei.com>
-Cc: puranjay12@gmail.com
-Subject: [PATCH bpf-next] riscv, bpf: add internal-only MOV instruction to resolve per-CPU addrs
-Date: Fri,  5 Apr 2024 12:43:48 +0000
-Message-Id: <20240405124348.27644-1-puranjay12@gmail.com>
-X-Mailer: git-send-email 2.40.1
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="u5ed4rhu"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=eeNIVwqmbnOxALTxtADLGm9TG4sDVgGYt1HYshiYKqc=; b=u5ed4rhuZriAmkiqPN+PL+siyW
+	LqRb4vlEwDanh3tAUYLOdMIV7AkIlisbY/us6TAVJuto+5fuwLvpi9TPIrnjWbaPPJNccNZW+iz9n
+	CE7C1RkLY5MAKN+mK5a2RxNIgLnodNe3aX7iDp0V7aCmr5P/N6ISdHIVtmL/cESx2/auaAWvOPmPb
+	KuyRV5Y+LQqQCk5pQAdOvh7O24Xw0aWYZroHPNWg+x3RZAuUdwa4MbZzNihetVBFDxn0z1t842ZIz
+	FOV6F7MyMIx1gNWKJJYhVEkf93kF4Zc6qtlbIo+KLHjWxeAtAZV2JO/tPX3rOWtiHHQwKzPY7f2Nl
+	e0gCTrgg==;
+Received: from willy by casper.infradead.org with local (Exim 4.97.1 #2 (Red Hat Linux))
+	id 1rsivU-0000000AUMn-1hDK;
+	Fri, 05 Apr 2024 12:44:12 +0000
+Date: Fri, 5 Apr 2024 13:44:12 +0100
+From: Matthew Wilcox <willy@infradead.org>
+To: Kent Overstreet <kent.overstreet@linux.dev>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+	Suren Baghdasaryan <surenb@google.com>, joro@8bytes.org,
+	will@kernel.org, trond.myklebust@hammerspace.com, anna@kernel.org,
+	arnd@arndb.de, herbert@gondor.apana.org.au, davem@davemloft.net,
+	jikos@kernel.org, benjamin.tissoires@redhat.com, tytso@mit.edu,
+	jack@suse.com, dennis@kernel.org, tj@kernel.org, cl@linux.com,
+	jakub@cloudflare.com, penberg@kernel.org, rientjes@google.com,
+	iamjoonsoo.kim@lge.com, vbabka@suse.cz, edumazet@google.com,
+	kuba@kernel.org, pabeni@redhat.com, iommu@lists.linux.dev,
+	linux-kernel@vger.kernel.org, linux-nfs@vger.kernel.org,
+	linux-acpi@vger.kernel.org, acpica-devel@lists.linux.dev,
+	linux-arch@vger.kernel.org, linux-crypto@vger.kernel.org,
+	bpf@vger.kernel.org, linux-input@vger.kernel.org,
+	linux-ext4@vger.kernel.org, linux-mm@kvack.org,
+	netdev@vger.kernel.org, linux-security-module@vger.kernel.org
+Subject: Re: [PATCH 1/1] mm: change inlined allocation helpers to account at
+ the call site
+Message-ID: <Zg_yHGKpw4HJHdpb@casper.infradead.org>
+References: <20240404165404.3805498-1-surenb@google.com>
+ <Zg7dmp5VJkm1nLRM@casper.infradead.org>
+ <CAJuCfpHbTCwDERz+Hh+aLZzNdtSFKA+Q7sW-xzvmFmtyHCqROg@mail.gmail.com>
+ <CAJuCfpHy5Xo76S7h9rEuA3cQ1pVqurL=wmtQ2cx9-xN1aa_C_A@mail.gmail.com>
+ <Zg8qstJNfK07siNn@casper.infradead.org>
+ <jb25mtkveqf63bv74jhynf6ncxmums5s37esveqsv52yurh4z7@5q55ttv34bia>
+ <20240404154150.c25ba3a0b98023c8c1eff3a4@linux-foundation.org>
+ <jpaw4hdd73ngt7mvtcdryqscivx6m2ic76ikfkcopceb47becp@vox5czt5bec3>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <jpaw4hdd73ngt7mvtcdryqscivx6m2ic76ikfkcopceb47becp@vox5czt5bec3>
 
-Support an instruction for resolving absolute addresses of per-CPU
-data from their per-CPU offsets. This instruction is internal-only and
-users are not allowed to use them directly. They will only be used for
-internal inlining optimizations for now between BPF verifier and BPF
-JITs.
+On Thu, Apr 04, 2024 at 07:00:51PM -0400, Kent Overstreet wrote:
+> On Thu, Apr 04, 2024 at 03:41:50PM -0700, Andrew Morton wrote:
+> > On Thu, 4 Apr 2024 18:38:39 -0400 Kent Overstreet <kent.overstreet@linux.dev> wrote:
+> > 
+> > > On Thu, Apr 04, 2024 at 11:33:22PM +0100, Matthew Wilcox wrote:
+> > > > On Thu, Apr 04, 2024 at 03:17:43PM -0700, Suren Baghdasaryan wrote:
+> > > > > Ironically, checkpatch generates warnings for these type casts:
+> > > > > 
+> > > > > WARNING: unnecessary cast may hide bugs, see
+> > > > > http://c-faq.com/malloc/mallocnocast.html
+> > > > > #425: FILE: include/linux/dma-fence-chain.h:90:
+> > > > > + ((struct dma_fence_chain *)kmalloc(sizeof(struct dma_fence_chain),
+> > > > > GFP_KERNEL))
+> > > > > 
+> > > > > I guess I can safely ignore them in this case (since we cast to the
+> > > > > expected type)?
+> > > > 
+> > > > I find ignoring checkpatch to be a solid move 99% of the time.
+> > > > 
+> > > > I really don't like the codetags.  This is so much churn, and it could
+> > > > all be avoided by just passing in _RET_IP_ or _THIS_IP_ depending on
+> > > > whether we wanted to profile this function or its caller.  vmalloc
+> > > > has done it this way since 2008 (OK, using __builtin_return_address())
+> > > > and lockdep has used _THIS_IP_ / _RET_IP_ since 2006.
+> > > 
+> > > Except you can't. We've been over this; using that approach for tracing
+> > > is one thing, using it for actual accounting isn't workable.
+> > 
+> > I missed that.  There have been many emails.  Please remind us of the
+> > reasoning here.
+> 
+> I think it's on the other people claiming 'oh this would be so easy if
+> you just do it this other way' to put up some code - or at least more
+> than hot takes.
 
-RISC-V uses generic per-cpu implementation where the offsets for CPUs
-are kept in an array called __per_cpu_offset[cpu_number]. RISCV stores
-the address of the task_struct in TP register. The first element in
-tast_struct is struct thread_info, and we can get the cpu number by
-reading from the TP register + offsetof(struct thread_info, cpu).
+Well, /proc/vmallocinfo exists, and has existed since 2008, so this is
+slightly more than a "hot take".
 
-Once we have the cpu number in a register we read the offset for that
-cpu from address: &__per_cpu_offset + cpu_number << 3. Then we add this
-offset to the destination register.
+> But, since you asked - one of the main goals of this patchset was to be
+> fast enough to run in production, and if you do it by return address
+> then you've added at minimum a hash table lookup to every allocate and
+> free; if you do that, running it in production is completely out of the
+> question.
 
-To measure the improvement from this change, the benchmark in [1] was
-used on Qemu:
+And yet vmalloc doesn't do that.
 
-Before:
-glob-arr-inc   :    1.127 ± 0.013M/s
-arr-inc        :    1.121 ± 0.004M/s
-hash-inc       :    0.681 ± 0.052M/s
+> Besides that - the issues with annotating and tracking the correct
+> callsite really don't go away, they just shift around a bit. It's true
+> that the return address approach would be easier initially, but that's
+> not all we're concerned with; we're concerned with making sure
+> allocations get accounted to the _correct_ callsite so that we're giving
+> numbers that you can trust, and by making things less explicit you make
+> that harder.
 
-After:
-glob-arr-inc   :    1.138 ± 0.011M/s
-arr-inc        :    1.366 ± 0.006M/s
-hash-inc       :    0.676 ± 0.001M/s
+I'm not convinced that _THIS_IP_ is less precise than a codetag.  They
+do essentially the same thing, except that codetags embed the source
+location in the file while _THIS_IP_ requires a tool like faddr2line
+to decode kernel_clone+0xc0/0x430 into a file + line number.
 
-[1] https://github.com/anakryiko/linux/commit/8dec900975ef
+> This is all stuff that I've explained before; let's please dial back on
+> the whining - or I'll just bookmark this for next time...
 
-Signed-off-by: Puranjay Mohan <puranjay12@gmail.com>
----
- arch/riscv/net/bpf_jit_comp64.c | 24 ++++++++++++++++++++++++
- 1 file changed, 24 insertions(+)
-
-diff --git a/arch/riscv/net/bpf_jit_comp64.c b/arch/riscv/net/bpf_jit_comp64.c
-index 15e482f2c657..e95bd1d459a4 100644
---- a/arch/riscv/net/bpf_jit_comp64.c
-+++ b/arch/riscv/net/bpf_jit_comp64.c
-@@ -12,6 +12,7 @@
- #include <linux/stop_machine.h>
- #include <asm/patch.h>
- #include <asm/cfi.h>
-+#include <asm/percpu.h>
- #include "bpf_jit.h"
- 
- #define RV_FENTRY_NINSNS 2
-@@ -1089,6 +1090,24 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
- 			emit_or(RV_REG_T1, rd, RV_REG_T1, ctx);
- 			emit_mv(rd, RV_REG_T1, ctx);
- 			break;
-+		} else if (insn_is_mov_percpu_addr(insn)) {
-+			if (rd != rs)
-+				emit_mv(rd, rs, ctx);
-+#ifdef CONFIG_SMP
-+				/* Load current CPU number in T1 */
-+				emit_ld(RV_REG_T1, offsetof(struct thread_info, cpu), RV_REG_TP,
-+					ctx);
-+				/* << 3 because offsets are 8 bytes */
-+				emit_slli(RV_REG_T1, RV_REG_T1, 3, ctx);
-+				/* Load address of __per_cpu_offset array in T2 */
-+				emit_imm(RV_REG_T2, (u64)&__per_cpu_offset, ctx);
-+				/* Add offset of current CPU to  __per_cpu_offset */
-+				emit_add(RV_REG_T1, RV_REG_T2, RV_REG_T1, ctx);
-+				/* Load __per_cpu_offset[cpu] in T1 */
-+				emit_ld(RV_REG_T1, 0, RV_REG_T1, ctx);
-+				/* Add the offset to Rd */
-+				emit_add(rd, rd, RV_REG_T1, ctx);
-+#endif
- 		}
- 		if (imm == 1) {
- 			/* Special mov32 for zext */
-@@ -2038,3 +2057,8 @@ bool bpf_jit_supports_arena(void)
- {
- 	return true;
- }
-+
-+bool bpf_jit_supports_percpu_insn(void)
-+{
-+	return true;
-+}
--- 
-2.40.1
-
+Please stop mischaracterising serious thoughtful criticism as whining.
+I don't understand what value codetags bring over using _THIS_IP_ and
+_RET_IP_ and you need to explain that.
