@@ -1,177 +1,240 @@
-Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
+Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE88416EC10;
-	Fri,  5 Apr 2024 14:33:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2ABFD43170;
+	Fri,  5 Apr 2024 14:58:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712327620; cv=none; b=MkEannvQSArYfAOL9C7yvYzSyqZj5I7XrtxGZiwXX6bsnHlHOgPwmLoMk5ZknB/sD4pcH+5ZNB1RmURe4beKILkNBEMi2WToCCTdXezgEEb0oKh1/26ml79YI9BwqZt7xv4V+OUR5wM/pEpaH1xifC5JluXM8yx2XwUc/+2UXZk=
+	t=1712329100; cv=none; b=BRGhQZLJGGKk528Q3DA5ZQlq5bCV7heM2F7RpdY5nwi3qawQIFS1Ylw5FAQYhDLzuCzK8Mz6/FJ3XxtpgD0+nM6DAQuQVKp+FCiS8tq/qkFz9bAvdVaT+5BeCIovDemhoIsIjkHlTFvg2SZbm5oqvgbKibh+PQNKG6dURZKU4HI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712327620; c=relaxed/simple;
-	bh=VZNc/1BmguK0z9H5D1pOv4bCKdVw6Fjy+qvkjTFgPW0=;
-	h=From:To:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=njT1ouJeQpqJSUjCrB+LqNsEt6FWiO4zigFEXIVDZqIgZd7li6mHSfhDec4nLI2Jzv6nmH59otRUPrl61teMddKCiykVQzAv+c7tVRyxd5/NjOwXcJXnGkLQ0wKfT75AtmbYMaUj3Izvk7ynWl0Ovo/GLHVodX63rg9oSkAFHb0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cff9G3DB; arc=none smtp.client-ip=209.85.221.50
+	s=arc-20240116; t=1712329100; c=relaxed/simple;
+	bh=RbVMPQ9tcHwEBDXRH9GCy1RaLNkTY+CYq4GAsKEad/0=;
+	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
+	 Mime-Version:Content-Type; b=VBq/ImBW5tm7tDSqdNEPQKePKOivlFC8XMEVUzHzVhaiI0hNnhGyFTapC0COs5WI/Gz9F4jfYUVHNEgZ/TwXtJkiol+dMlY+5gbPB/r8pqXgphyyMrWktP74PJwD6XEgtoa29w8wLN6DfQRNQAVj0Sh+mIGf/qmYCKW6INNOcrM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LfqQkk6n; arc=none smtp.client-ip=209.85.210.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cff9G3DB"
-Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-3416a975840so1643042f8f.0;
-        Fri, 05 Apr 2024 07:33:38 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LfqQkk6n"
+Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-6e74aa08d15so1777361b3a.1;
+        Fri, 05 Apr 2024 07:58:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1712327617; x=1712932417; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:references
-         :in-reply-to:subject:to:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=XE7bBtXjTLLxuBkd0cUQ4f+BnesVFs7jpuSpsklKO2U=;
-        b=cff9G3DBuy6W0JhZEVes4Ik3Dg12guHpIm7pIR0AiLuhf44yoxNDXkyj8/BwofdQmq
-         iKAc7jksRApNHjShfFmXnIsYVcZBsgO4TUfa6dD2APk4IhkCyF2Gv4oOYqk3END9wNts
-         1IJDLZ/ICvKa/FPTVMjLqV46ouKRpUdeEbyZMvPprnFT/j+JWk/gvlAgLmEYJ4WxAiub
-         P573Fy4xEUY+zMkJj1L7Wtfs50Cf9ceVmUwuEOedmo3OjgKFmsTugaFFGHWqYbMMisbI
-         kvpodTxXhqmtRyTiIYIQfh9gj0YH1ZlY8gd9M2P5VuNUulsKUXx9zx3r+bxwcB6FyJm9
-         O8fA==
+        d=gmail.com; s=20230601; t=1712329098; x=1712933898; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WmZiflZG1LSH8g3nYSM9hV+Boxznr4tkjKGtjgB7/i4=;
+        b=LfqQkk6n6rrn8pPKOZNA2zv+ECoYOK98jF8pDrB638JqQDXjWPmtsdh+2MmDyJRxyD
+         7lmfUJ6GfbnSLHroLk/SPtN5vtRB6ahQ5zPIMTS/xuYdVizCDf8ksYX5pA3/X6/apz1r
+         y3yeNXweF0SHjpkLMFP1V6I1+VFzDmVsiMbwmZsjJqqSk1OsDWaV/Yp8Qhf1EjPbauF5
+         ut72by/zG7HSXfjCnvEdj/tKeQcYZ+PAF9Vkjnb4wpoJvd4lj5dD6bav8/EhmY6HPN84
+         GQWnn4dD1u7hJ1UGUV7pHxe3einHHl4SMq3lvwqXHnQLx9Tc3+zsrCVtHKBd6oVRAo/A
+         Pc1Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712327617; x=1712932417;
-        h=content-transfer-encoding:mime-version:message-id:date:references
-         :in-reply-to:subject:to:from:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=XE7bBtXjTLLxuBkd0cUQ4f+BnesVFs7jpuSpsklKO2U=;
-        b=MLK9fCN9fMslYCrRl+1Z7+EdX0yemASCq5ztx3zzn4q1DFZ4+Q85HNI0FzbieJmYZU
-         xhG05wv9PCIz7m4W3WtbEyRDgel2Q1zIxZDNVzMZnoqc/5MOgl9mjRdNT2PwSVIH9Gfc
-         3Dtx7q80yiyUHAb3ZDwtCjRq7t2NxM1WBwa/3d9r0k1OwU89cyJ3RdKTpuNndXBPQVi+
-         Slqu20QkvtFJjMKeD2T7kzFRRA761xIfTsE7p6fNLyr2JizcqctNvulumP/3vWrfIin9
-         SiU8AYMCC8hXTgd621ufDBP0TgNQ1Fpdz9BzkFNNx54SNhCEaX2tih2uA+yIOYixfPwn
-         gHVA==
-X-Forwarded-Encrypted: i=1; AJvYcCXcrCAxsb3DbreqEtMKs4bAcJWibS3o32ibrVLQO0pl98k1tWw70plqTlT32BB8W9qylU1Ghy7ku2Ul7CcC88mA7Ui56wAeFf8rUyIeGxDYmQuiTeC0VBL46r7n8zcaHqzc
-X-Gm-Message-State: AOJu0YzFlCUwCpL/u+UNOWlxQjEWi3FmA7lXMF1zSxtdZcizh7YqyAeo
-	sqnebLpjzDmUqfbTGCfZ97TVTsn3oyZrlucaGTOKA0pzZtXvJ1dW
-X-Google-Smtp-Source: AGHT+IEZHLxAivag9esAnrX7FyCLYw7AgXgDUqm69jkpKf7pmtQeCzm4iQJH8oEUjk/4um4e6tEGng==
-X-Received: by 2002:a05:6000:229:b0:343:968e:f27c with SMTP id l9-20020a056000022900b00343968ef27cmr1223599wrz.27.1712327617094;
-        Fri, 05 Apr 2024 07:33:37 -0700 (PDT)
-Received: from localhost (54-240-197-231.amazon.com. [54.240.197.231])
-        by smtp.gmail.com with ESMTPSA id d11-20020adff84b000000b0033e7a102cfesm2167143wrq.64.2024.04.05.07.33.36
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 05 Apr 2024 07:33:36 -0700 (PDT)
-From: Puranjay Mohan <puranjay12@gmail.com>
-To: =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>, Alexei Starovoitov
- <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko
- <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, "Eduard
- Zingerman" <eddyz87@gmail.com>, Song Liu <song@kernel.org>, Yonghong Song
- <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, "KP
- Singh" <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo
- <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, Paul Walmsley
- <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou
- <aou@eecs.berkeley.edu>, bpf@vger.kernel.org,
- linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, Pu Lehui
- <pulehui@huawei.com>
-Subject: Re: [PATCH bpf-next] riscv, bpf: add internal-only MOV instruction
- to resolve per-CPU addrs
-In-Reply-To: <87wmpbnbce.fsf@all.your.base.are.belong.to.us>
-References: <20240405124348.27644-1-puranjay12@gmail.com>
- <87wmpbnbce.fsf@all.your.base.are.belong.to.us>
-Date: Fri, 05 Apr 2024 14:33:34 +0000
-Message-ID: <mb61pjzlb98w1.fsf@gmail.com>
+        d=1e100.net; s=20230601; t=1712329098; x=1712933898;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=WmZiflZG1LSH8g3nYSM9hV+Boxznr4tkjKGtjgB7/i4=;
+        b=i3v1aMuHTZ2teDTw9uh3v2HdkD+nTTTNFvwT5Sdzwb+gV1sl0Q+q324i7qKj1LUXnn
+         0fVH7zNYr7wVd2bcqxW2ciJ7+tT58eaLByjc5sn3aQpj3Gw/WOcQCz6J+zpDzO9TMRGP
+         8l4WK8ulZHhnEe8ma+OzJ0S6SxMIBVu70bW5h54gv3LT9z3B0e0atnLKdXDYJFqFwE9c
+         UUWP7kunTUxoZPOvvOlbAeuq6wmptk91vfxaVHxS921CsLaOFMHDDchBgbB2uj9vdvap
+         1Lj1dt6D3kL68UGDKr9MF6LLHAU4zhF9knpRinO/IoUDty9NdFAN8o11b3GkrArOuIHN
+         3XwQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVNlaiyim1Y/rARKvBT2dqGYSGsAR5TFFZev2CIa1fp0NrRIAD2XlLdPheEuOE95c8LL7n16p/ENlqhmCNDvNgwYKYqY+FTp5lMqFXCAiKhUFd8awsLNuhfvOB5
+X-Gm-Message-State: AOJu0YyvTqbDVvI8R4Xt7/dSh7JOn0pzyeia7TCD7eFZCUtzOHb+k90k
+	lQQUNM8muoAQHk5J4yM8eY6MCyhCn8d+mYrBs+UFEcyuOPB3PlG3/m5wDijU
+X-Google-Smtp-Source: AGHT+IGHmifv+ScFWpw8Xiubhd8Yo/xjy7IhKrrZQNf/jLAZ0fB6JfTIgs28Xhl3ARl+P6rcZYQM3g==
+X-Received: by 2002:aa7:88ca:0:b0:6ea:c4b3:10b7 with SMTP id k10-20020aa788ca000000b006eac4b310b7mr2101792pff.17.1712329098360;
+        Fri, 05 Apr 2024 07:58:18 -0700 (PDT)
+Received: from localhost ([98.97.36.54])
+        by smtp.gmail.com with ESMTPSA id v16-20020aa799d0000000b006e567c81d14sm1594579pfi.43.2024.04.05.07.58.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 05 Apr 2024 07:58:18 -0700 (PDT)
+Date: Fri, 05 Apr 2024 07:58:17 -0700
+From: John Fastabend <john.fastabend@gmail.com>
+To: Jason Xing <kerneljasonxing@gmail.com>, 
+ John Fastabend <john.fastabend@gmail.com>
+Cc: edumazet@google.com, 
+ jakub@cloudflare.com, 
+ davem@davemloft.net, 
+ kuba@kernel.org, 
+ pabeni@redhat.com, 
+ daniel@iogearbox.net, 
+ ast@kernel.org, 
+ netdev@vger.kernel.org, 
+ bpf@vger.kernel.org, 
+ Jason Xing <kernelxing@tencent.com>, 
+ syzbot+aa8c8ec2538929f18f2d@syzkaller.appspotmail.com
+Message-ID: <66101189315a5_58030208cf@john.notmuch>
+In-Reply-To: <CAL+tcoCRswPAD0Zd=KCrJEmvPQVKCoMYr98Rx1wO_-bbUiVvJA@mail.gmail.com>
+References: <20240329134037.92124-1-kerneljasonxing@gmail.com>
+ <660dfbcb45cfc_23f4720810@john.notmuch>
+ <CAL+tcoAE7AC3-jP3NYL1SXPHbC3KCRj_VOvd1=T2e0YTk8R5+g@mail.gmail.com>
+ <660f81fc59256_50b87208e9@john.notmuch>
+ <CAL+tcoCRswPAD0Zd=KCrJEmvPQVKCoMYr98Rx1wO_-bbUiVvJA@mail.gmail.com>
+Subject: Re: [PATCH net] bpf, skmsg: fix NULL pointer dereference in
+ sk_psock_skb_ingress_enqueue
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
-Bj=C3=B6rn T=C3=B6pel <bjorn@kernel.org> writes:
+Jason Xing wrote:
+> On Fri, Apr 5, 2024 at 12:45=E2=80=AFPM John Fastabend <john.fastabend@=
+gmail.com> wrote:
+> >
+> > Jason Xing wrote:
+> > > Hello John,
+> > >
+> > > On Thu, Apr 4, 2024 at 9:01=E2=80=AFAM John Fastabend <john.fastabe=
+nd@gmail.com> wrote:
+> > > >
+> > > > Jason Xing wrote:
+> > > > > From: Jason Xing <kernelxing@tencent.com>
+> > > > >
+> > > > > Fix NULL pointer data-races in sk_psock_skb_ingress_enqueue() w=
+hich
+> > > > > syzbot reported [1].
+> > > > >
+> > > > > [1]
+> > > > > BUG: KCSAN: data-race in sk_psock_drop / sk_psock_skb_ingress_e=
+nqueue
+> > > > >
+> > > > > write to 0xffff88814b3278b8 of 8 bytes by task 10724 on cpu 1:
+> > > > >  sk_psock_stop_verdict net/core/skmsg.c:1257 [inline]
+> > > > >  sk_psock_drop+0x13e/0x1f0 net/core/skmsg.c:843
+> > > > >  sk_psock_put include/linux/skmsg.h:459 [inline]
+> > > > >  sock_map_close+0x1a7/0x260 net/core/sock_map.c:1648
+> > > > >  unix_release+0x4b/0x80 net/unix/af_unix.c:1048
+> > > > >  __sock_release net/socket.c:659 [inline]
+> > > > >  sock_close+0x68/0x150 net/socket.c:1421
+> > > > >  __fput+0x2c1/0x660 fs/file_table.c:422
+> > > > >  __fput_sync+0x44/0x60 fs/file_table.c:507
+> > > > >  __do_sys_close fs/open.c:1556 [inline]
+> > > > >  __se_sys_close+0x101/0x1b0 fs/open.c:1541
+> > > > >  __x64_sys_close+0x1f/0x30 fs/open.c:1541
+> > > > >  do_syscall_64+0xd3/0x1d0
+> > > > >  entry_SYSCALL_64_after_hwframe+0x6d/0x75
+> > > > >
+> > > > > read to 0xffff88814b3278b8 of 8 bytes by task 10713 on cpu 0:
+> > > > >  sk_psock_data_ready include/linux/skmsg.h:464 [inline]
+> > > > >  sk_psock_skb_ingress_enqueue+0x32d/0x390 net/core/skmsg.c:555
+> > > > >  sk_psock_skb_ingress_self+0x185/0x1e0 net/core/skmsg.c:606
+> > > > >  sk_psock_verdict_apply net/core/skmsg.c:1008 [inline]
+> > > > >  sk_psock_verdict_recv+0x3e4/0x4a0 net/core/skmsg.c:1202
+> > > > >  unix_read_skb net/unix/af_unix.c:2546 [inline]
+> > > > >  unix_stream_read_skb+0x9e/0xf0 net/unix/af_unix.c:2682
+> > > > >  sk_psock_verdict_data_ready+0x77/0x220 net/core/skmsg.c:1223
+> > > > >  unix_stream_sendmsg+0x527/0x860 net/unix/af_unix.c:2339
+> > > > >  sock_sendmsg_nosec net/socket.c:730 [inline]
+> > > > >  __sock_sendmsg+0x140/0x180 net/socket.c:745
+> > > > >  ____sys_sendmsg+0x312/0x410 net/socket.c:2584
+> > > > >  ___sys_sendmsg net/socket.c:2638 [inline]
+> > > > >  __sys_sendmsg+0x1e9/0x280 net/socket.c:2667
+> > > > >  __do_sys_sendmsg net/socket.c:2676 [inline]
+> > > > >  __se_sys_sendmsg net/socket.c:2674 [inline]
+> > > > >  __x64_sys_sendmsg+0x46/0x50 net/socket.c:2674
+> > > > >  do_syscall_64+0xd3/0x1d0
+> > > > >  entry_SYSCALL_64_after_hwframe+0x6d/0x75
+> > > > >
+> > > > > value changed: 0xffffffff83d7feb0 -> 0x0000000000000000
+> > > > >
+> > > > > Reported by Kernel Concurrency Sanitizer on:
+> > > > > CPU: 0 PID: 10713 Comm: syz-executor.4 Tainted: G        W     =
+     6.8.0-syzkaller-08951-gfe46a7dd189e #0
+> > > > > Hardware name: Google Google Compute Engine/Google Compute Engi=
+ne, BIOS Google 02/29/2024
+> > > > >
+> > > > > Prior to this, commit 4cd12c6065df ("bpf, sockmap: Fix NULL poi=
+nter
+> > > > > dereference in sk_psock_verdict_data_ready()") fixed one NULL p=
+ointer
+> > > > > similarly due to no protection of saved_data_ready. Here is ano=
+ther
+> > > > > different caller causing the same issue because of the same rea=
+son. So
+> > > > > we should protect it with sk_callback_lock read lock because th=
+e writer
+> > > > > side in the sk_psock_drop() uses "write_lock_bh(&sk->sk_callbac=
+k_lock);".
+> > > > >
+> > > > > Fixes: 604326b41a6f ("bpf, sockmap: convert to generic sk_msg i=
+nterface")
+> > > > > Reported-by: syzbot+aa8c8ec2538929f18f2d@syzkaller.appspotmail.=
+com
+> > > > > Closes: https://syzkaller.appspot.com/bug?extid=3Daa8c8ec253892=
+9f18f2d
+> > > > > Signed-off-by: Jason Xing <kernelxing@tencent.com>
+> > > > > ---
+> > > > >  net/core/skmsg.c | 2 ++
+> > > > >  1 file changed, 2 insertions(+)
+> > > > >
+> > > > > diff --git a/net/core/skmsg.c b/net/core/skmsg.c
+> > > > > index 4d75ef9d24bf..67c4c01c5235 100644
+> > > > > --- a/net/core/skmsg.c
+> > > > > +++ b/net/core/skmsg.c
+> > > > > @@ -552,7 +552,9 @@ static int sk_psock_skb_ingress_enqueue(str=
+uct sk_buff *skb,
+> > > > >       msg->skb =3D skb;
+> > > > >
+> > > > >       sk_psock_queue_msg(psock, msg);
+> > > > > +     read_lock_bh(&sk->sk_callback_lock);
+> > > > >       sk_psock_data_ready(sk, psock);
+> > > > > +     read_unlock_bh(&sk->sk_callback_lock);
+> > > > >       return copied;
+> > > > >  }
+> > > >
+> > > > The problem is the check and then usage presumably it is already =
+set
+> > > > to NULL:
+> > > >
+> > > >  static inline void sk_psock_data_ready(struct sock *sk, struct s=
+k_psock *psock)
+> > > >  {
+> > > >         if (psock->saved_data_ready)
+> > > >                 psock->saved_data_ready(sk);
+> > >
+> > > Yes.
+> > >
+> > > >
+> > > >
+> > > > I'm thinking we might be able to get away with just a READ_ONCE h=
+ere with
+> > > > similar WRITE_ONCE on other side. Something like this,
+> > >
+> > > The simple fix that popped into my mind at the beginning is the sam=
+e
+> > > as you: adding the READ_ONCE/WRITE_ONCE pair.
+> >
+> > Let me know if you want to try doing a patch with the READ_ONCE/WRITE=
+_ONCE
+> > we could push something like that through bpf-next I think. Just need=
+s
+> > some extra thought and testing.
+> =
 
-> Puranjay Mohan <puranjay12@gmail.com> writes:
->
->> Support an instruction for resolving absolute addresses of per-CPU
->> data from their per-CPU offsets. This instruction is internal-only and
->> users are not allowed to use them directly. They will only be used for
->> internal inlining optimizations for now between BPF verifier and BPF
->> JITs.
->>
->> RISC-V uses generic per-cpu implementation where the offsets for CPUs
->> are kept in an array called __per_cpu_offset[cpu_number]. RISCV stores
->> the address of the task_struct in TP register. The first element in
->> tast_struct is struct thread_info, and we can get the cpu number by
->      ^
->      k ;-)
+> Yes, I'm interested in it. Just a little bit worried that I cannot do
+> it well. I will take some time to dig into it.
+> =
 
-I need to start using some kind of spell-check in vim :D.
+> BTW, would this modification conflict with the current patch? The
+> final solution you're thinking of is using the READ_ONCE/WRITE_ONCE
+> pair?
 
->> reading from the TP register + offsetof(struct thread_info, cpu).
->>
->> Once we have the cpu number in a register we read the offset for that
->> cpu from address: &__per_cpu_offset + cpu_number << 3. Then we add this
->> offset to the destination register.
->
-> Just to clarify for readers; BPF programs are run with migrate disable,
-> which means that on RT we can be preempted, which means that per-cpu
-> operations are trickier (disabling interrupts/preemption).
->
-> However, this BPF instruction is about calculating the per-cpu address,
-> so the look up can be inlined.
->
-> It's not a per-cpu *operation*.
+Idea would be you can drop the read_lock/unlock once READ_ONCE/WRITE_ONCE=
 
-Will add this information to the commit message.
+and such are in place.
 
->> To measure the improvement from this change, the benchmark in [1] was
->> used on Qemu:
->>
->> Before:
->> glob-arr-inc   :    1.127 =C2=B1 0.013M/s
->> arr-inc        :    1.121 =C2=B1 0.004M/s
->> hash-inc       :    0.681 =C2=B1 0.052M/s
->>
->> After:
->> glob-arr-inc   :    1.138 =C2=B1 0.011M/s
->> arr-inc        :    1.366 =C2=B1 0.006M/s
->> hash-inc       :    0.676 =C2=B1 0.001M/s
->>
->> [1] https://github.com/anakryiko/linux/commit/8dec900975ef
->>
->> Signed-off-by: Puranjay Mohan <puranjay12@gmail.com>
->> ---
->>  arch/riscv/net/bpf_jit_comp64.c | 24 ++++++++++++++++++++++++
->>  1 file changed, 24 insertions(+)
->>
->> diff --git a/arch/riscv/net/bpf_jit_comp64.c b/arch/riscv/net/bpf_jit_co=
-mp64.c
->> index 15e482f2c657..e95bd1d459a4 100644
->> --- a/arch/riscv/net/bpf_jit_comp64.c
->> +++ b/arch/riscv/net/bpf_jit_comp64.c
->> @@ -12,6 +12,7 @@
->>  #include <linux/stop_machine.h>
->>  #include <asm/patch.h>
->>  #include <asm/cfi.h>
->> +#include <asm/percpu.h>
->>  #include "bpf_jit.h"
->>=20=20
->>  #define RV_FENTRY_NINSNS 2
->> @@ -1089,6 +1090,24 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn=
-, struct rv_jit_context *ctx,
->>  			emit_or(RV_REG_T1, rd, RV_REG_T1, ctx);
->>  			emit_mv(rd, RV_REG_T1, ctx);
->>  			break;
->> +		} else if (insn_is_mov_percpu_addr(insn)) {
->> +			if (rd !=3D rs)
->> +				emit_mv(rd, rs, ctx);
->> +#ifdef CONFIG_SMP
->> +				/* Load current CPU number in T1 */
->> +				emit_ld(RV_REG_T1, offsetof(struct thread_info, cpu), RV_REG_TP,
->> +					ctx);
->> +				/* << 3 because offsets are 8 bytes */
->> +				emit_slli(RV_REG_T1, RV_REG_T1, 3, ctx);
->> +				/* Load address of __per_cpu_offset array in T2 */
->> +				emit_imm(RV_REG_T2, (u64)&__per_cpu_offset, ctx);
->
-> Did you try using emit_addr() here? I'd guess that'll be fewer
-> instructions, no?
+> =
 
-Yes, I should have used that, the address would always be in the range
-of auipc+addi right? I will try and see.=20
+> Thanks,
+> Jason
 
-Thanks,
-Puranjay
+
