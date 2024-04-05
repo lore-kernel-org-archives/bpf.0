@@ -1,140 +1,89 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA7B116EBE7;
-	Fri,  5 Apr 2024 14:16:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41FA716EC01;
+	Fri,  5 Apr 2024 14:26:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712326614; cv=none; b=dRSh12XzcWHE05/19wA4h8QYCPFxqS5ED7x0w9ZzEkx12VAA3NkixJZggucSA10/GxpXCr1ARjlDRrao7bHFC8Q0suNn5oaEpTT1Xo2gPxtJ05ZbK0A1yy8RaFgontFegBERcqw2wG965PVcfZThIld2pj2WCnJFcRu2V74aIm0=
+	t=1712327204; cv=none; b=Hzm4Rtpo+Pqn+vthtxYZMFSos2uxwplh6Jb2YXT/VCA3b6P2FOell1N0g2rl2adPbVTtXDPCCUAGUTp5a1leP/JwGza50PriTWWkAJV0F4rHDn25xFiEW48evuoyWTLnpMabhBLG5UEmzKtKb+LpUVA8JbjhZb7ZG7L7ec+NM7Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712326614; c=relaxed/simple;
-	bh=Hw+KO3P+18sZHmzC74dpfmnZvcgIJNwH7PxzRg8kCyw=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=ZP1gtl251Y5fagcCCYW1zga/0jfcDuwW1cgvYYgFvOqsHU6cQ29zQiF1LWsJF2WVkYbw3Fegi1t0U4Pz88Wu52EO0NqpU2irwVNU5XqFy5XFQCVzE/Mclkp56yld33lm3+Nvgvi6WxWj/hh7DOFnBFkfIKzGcGa4nPJw6k0GigU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NLcxvN8D; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1712327204; c=relaxed/simple;
+	bh=4gI3JY/aS1qAjeKrQZ38gb5dce7Uv7MoJZjqtRTJfZU=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=MaJDYxf9wmREPP6KfG511OH9LHaAu+SdGSLoDvpvyPDh7Io3+CD7ySq/7O/AKjeRUNed/K5tnrETvFy1JhfyOWu+13Ji++FUchqdLIcaDxyNk6lgh1Fjs2zUXsdDYxxhylpUt7t0p+um91LUTxbaCySOgTgon2vfl0EGFD5MhVw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GArRvp9X; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NLcxvN8D"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5D8CC433F1;
-	Fri,  5 Apr 2024 14:16:52 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GArRvp9X"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7AB3C433C7;
+	Fri,  5 Apr 2024 14:26:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712326613;
-	bh=Hw+KO3P+18sZHmzC74dpfmnZvcgIJNwH7PxzRg8kCyw=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=NLcxvN8DTCyS38Wo2c8q90q/2MoZExiascd6YXu8KFmC45GJekv4kw9UWrhP5O+n0
-	 T4xoLBCSAvDVEYvlrPQBTILTQwRgV33CHfTCNI7qRQM7BYrkuE03OQOLgno/wn77Hr
-	 PESugZv29avchfZsAMS7s+RgIUgsP4Oo55AJ5wVwthZ7azQ+bkK9VOK4bnmL9SeDKc
-	 1DW+tMTj256yPD6wXa43Wc+15PNllkAGj03SBSKmJkJyZ4+hPiynM7vGxR5en1wli/
-	 jky8B6fJI7vZ5nZqRQjLt+hBOkkkZ2VwAF70r1CsG/RVx+y3YKum8iJy4svQONVsyM
-	 VcZaxRzX6q6pg==
-From: =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
-To: Puranjay Mohan <puranjay12@gmail.com>, Alexei Starovoitov
- <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko
- <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, Eduard
- Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, Yonghong Song
- <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, KP
- Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo
- <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, Paul Walmsley
- <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou
- <aou@eecs.berkeley.edu>, bpf@vger.kernel.org,
- linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, Pu Lehui
- <pulehui@huawei.com>
-Cc: puranjay12@gmail.com
-Subject: Re: [PATCH bpf-next] riscv, bpf: add internal-only MOV instruction
- to resolve per-CPU addrs
-In-Reply-To: <20240405124348.27644-1-puranjay12@gmail.com>
-References: <20240405124348.27644-1-puranjay12@gmail.com>
-Date: Fri, 05 Apr 2024 16:16:49 +0200
-Message-ID: <87wmpbnbce.fsf@all.your.base.are.belong.to.us>
+	s=k20201202; t=1712327203;
+	bh=4gI3JY/aS1qAjeKrQZ38gb5dce7Uv7MoJZjqtRTJfZU=;
+	h=From:To:Cc:Subject:Date:From;
+	b=GArRvp9X47B5AB5J6I9p6riAu39YnE9MM5h4dyylwkf7e15QcZLFCyHlQRNBISuBt
+	 XamNQYOH6S1iUSGbllnKoEkdcqynh1bUoUYd0hXRnUiY3ybgW5OIF5Aj01XHaCKC6a
+	 qT++ZieI8cf4sLg5VaygYGfM58s2KEUf269XTxLCaKmQtxQ8CJj6uTmDQND954vM9J
+	 bdZcQSy82NRuI8qM/csPXFrVyLfzGOsM75nd36huucxsMZm9wHl1LBj4YbEbr9wpzp
+	 NtWUPBHogG/PTtoopIPUXXHeJXHSh/CSL1BBgAldrwOcZZOoU716KwlvMy9toXWPau
+	 wxr9fVMI8A7Yw==
+From: Arnd Bergmann <arnd@kernel.org>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>
+Cc: Arnd Bergmann <arnd@arndb.de>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <song@kernel.org>,
+	KP Singh <kpsingh@kernel.org>,
+	Shung-Hsi Yu <shung-hsi.yu@suse.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Dave Marchevsky <davemarchevsky@fb.com>,
+	bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] bpf: fix perf_snapshot_branch_stack link failure
+Date: Fri,  5 Apr 2024 16:26:25 +0200
+Message-Id: <20240405142637.577046-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-Puranjay Mohan <puranjay12@gmail.com> writes:
+From: Arnd Bergmann <arnd@arndb.de>
 
-> Support an instruction for resolving absolute addresses of per-CPU
-> data from their per-CPU offsets. This instruction is internal-only and
-> users are not allowed to use them directly. They will only be used for
-> internal inlining optimizations for now between BPF verifier and BPF
-> JITs.
->
-> RISC-V uses generic per-cpu implementation where the offsets for CPUs
-> are kept in an array called __per_cpu_offset[cpu_number]. RISCV stores
-> the address of the task_struct in TP register. The first element in
-> tast_struct is struct thread_info, and we can get the cpu number by
-     ^
-     k ;-)
-> reading from the TP register + offsetof(struct thread_info, cpu).
->
-> Once we have the cpu number in a register we read the offset for that
-> cpu from address: &__per_cpu_offset + cpu_number << 3. Then we add this
-> offset to the destination register.
+The newly added code to handle bpf_get_branch_snapshot fails to link when
+CONFIG_PERF_EVENTS is disabled:
 
-Just to clarify for readers; BPF programs are run with migrate disable,
-which means that on RT we can be preempted, which means that per-cpu
-operations are trickier (disabling interrupts/preemption).
+aarch64-linux-ld: kernel/bpf/verifier.o: in function `do_misc_fixups':
+verifier.c:(.text+0x1090c): undefined reference to `__SCK__perf_snapshot_branch_stack'
 
-However, this BPF instruction is about calculating the per-cpu address,
-so the look up can be inlined.
+Add a build-time check for that Kconfig symbol around the code to
+remove the link time dependency.
 
-It's not a per-cpu *operation*.
+Fixes: 314a53623cd4 ("bpf: inline bpf_get_branch_snapshot() helper")
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+ kernel/bpf/verifier.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-> To measure the improvement from this change, the benchmark in [1] was
-> used on Qemu:
->
-> Before:
-> glob-arr-inc   :    1.127 =C2=B1 0.013M/s
-> arr-inc        :    1.121 =C2=B1 0.004M/s
-> hash-inc       :    0.681 =C2=B1 0.052M/s
->
-> After:
-> glob-arr-inc   :    1.138 =C2=B1 0.011M/s
-> arr-inc        :    1.366 =C2=B1 0.006M/s
-> hash-inc       :    0.676 =C2=B1 0.001M/s
->
-> [1] https://github.com/anakryiko/linux/commit/8dec900975ef
->
-> Signed-off-by: Puranjay Mohan <puranjay12@gmail.com>
-> ---
->  arch/riscv/net/bpf_jit_comp64.c | 24 ++++++++++++++++++++++++
->  1 file changed, 24 insertions(+)
->
-> diff --git a/arch/riscv/net/bpf_jit_comp64.c b/arch/riscv/net/bpf_jit_com=
-p64.c
-> index 15e482f2c657..e95bd1d459a4 100644
-> --- a/arch/riscv/net/bpf_jit_comp64.c
-> +++ b/arch/riscv/net/bpf_jit_comp64.c
-> @@ -12,6 +12,7 @@
->  #include <linux/stop_machine.h>
->  #include <asm/patch.h>
->  #include <asm/cfi.h>
-> +#include <asm/percpu.h>
->  #include "bpf_jit.h"
->=20=20
->  #define RV_FENTRY_NINSNS 2
-> @@ -1089,6 +1090,24 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn,=
- struct rv_jit_context *ctx,
->  			emit_or(RV_REG_T1, rd, RV_REG_T1, ctx);
->  			emit_mv(rd, RV_REG_T1, ctx);
->  			break;
-> +		} else if (insn_is_mov_percpu_addr(insn)) {
-> +			if (rd !=3D rs)
-> +				emit_mv(rd, rs, ctx);
-> +#ifdef CONFIG_SMP
-> +				/* Load current CPU number in T1 */
-> +				emit_ld(RV_REG_T1, offsetof(struct thread_info, cpu), RV_REG_TP,
-> +					ctx);
-> +				/* << 3 because offsets are 8 bytes */
-> +				emit_slli(RV_REG_T1, RV_REG_T1, 3, ctx);
-> +				/* Load address of __per_cpu_offset array in T2 */
-> +				emit_imm(RV_REG_T2, (u64)&__per_cpu_offset, ctx);
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index aca00ba61232..b34cdeff415e 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -20192,7 +20192,8 @@ static int do_misc_fixups(struct bpf_verifier_env *env)
+ 		}
+ 
+ 		/* Implement bpf_get_branch_snapshot inline. */
+-		if (prog->jit_requested && BITS_PER_LONG == 64 &&
++		if (IS_ENABLED(CONFIG_PERF_EVENTS) &&
++		    prog->jit_requested && BITS_PER_LONG == 64 &&
+ 		    insn->imm == BPF_FUNC_get_branch_snapshot) {
+ 			/* We are dealing with the following func protos:
+ 			 * u64 bpf_get_branch_snapshot(void *buf, u32 size, u64 flags);
+-- 
+2.39.2
 
-Did you try using emit_addr() here? I'd guess that'll be fewer
-instructions, no?
-
-
-Bj=C3=B6rn
