@@ -1,77 +1,70 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-187.mta1.migadu.com (out-187.mta1.migadu.com [95.215.58.187])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA700130A7F;
-	Thu,  4 Apr 2024 23:31:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF773393
+	for <bpf@vger.kernel.org>; Fri,  5 Apr 2024 00:34:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.187
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712273463; cv=none; b=BOWF/bDi0/81JWH5umwnoFZDurS8+FbVrget/i5gW4RU6FQI1GGguZsAzHrpHAvpb4Cd/C8yH8faXtVJFECeLUc8xrAvWpRIZXI05W3940Kj04XTttQaI51v0hM/pLBTSyT5eAB0/FKHIV1Lp+XBbn9B/yjU9SKxJy+A8kS3QzE=
+	t=1712277267; cv=none; b=e1OvcfDzpjo071HCnctbx1OKW1x95CjM/7+AKJ8l4sC9w1FE6dCb7k+OM8ijjXGXFbZdZwjRddf3vTmP2m00nUTXDnP2vx6ahamIenqhpFxu2E4PYTLE515js2OgPW5rKSqkrWKNSO7rYFrXonb2IBd7jfwpH6o+lf9EAeyGhSQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712273463; c=relaxed/simple;
-	bh=ORiMOgrFpQGapGq1G1FCEF8WFgKf18pW8LDpbLkwOls=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=BQF7+0ma5D3kpBxVMls/EFVmBnJ020tH5FwOsBlKp8kgqjeq1l2DfYcRsB7bTEeCWVUkH5tuUMnVDKnJtqu9zzO9X23l+LgTLJrvN2y/ttMnK1I3yRPFHrjLzGdxOOfIK1rxKxcWwOMa/MPz/0NuT5EJA9FyAludH5xJ7ActNAE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bzVuvSlN; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1712277267; c=relaxed/simple;
+	bh=MtJKf5WBBAlr3RTdgNEIWJJyhIEJiFwEMGcA1aGQi84=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=uUpxd/iu4qsnqPI0XZAUxj2i3okFXS8XZTCl8tNwvnUmrIUHehy/OEOqtSSfQcK7U7dXOgrtuGMZ8Wa1hxtfCCt+aeCyDvQGyiG+fxNsnxayfdCbukCTHaV3BYz6W20At1z+mKhIoSuZwUYya6Vz9dDRNSYChWKTpdqvLeOvypA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=mQ27+cMO; arc=none smtp.client-ip=95.215.58.187
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bzVuvSlN"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 416FBC433F1;
-	Thu,  4 Apr 2024 23:31:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712273463;
-	bh=ORiMOgrFpQGapGq1G1FCEF8WFgKf18pW8LDpbLkwOls=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=bzVuvSlNch7/ETvg3z832y1lhjZPSRXF2FeUSP6Q9q1LqkxxfUNGJ4MPrg0hH80oF
-	 tMCvg/UyVlaV3NjTbch3sWGqebTUksUc3Eh8M7jqYUaz64ox3v+qC6MiGeCPo/e05y
-	 57HAuQZI/mbVoF6nN5wKOK/0p1LlK9qLdiyRFw7i0YIlO1bA7d87cZUIUE9Qcv9eFe
-	 s9mP72bs6XqjXYbEWeeTzuNm0CTgZqBcOtYwdLvkXT376gVRBJ7EUoadNhtn1/KbX/
-	 DJGmUuIbdSPO+QSMRQmctuP7HQBTYd7qC2yldyWjhDP5i7wsnG1xBkp0TeK6VKCOph
-	 24lW8I0Qxmi2w==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 306E3C395F6;
-	Thu,  4 Apr 2024 23:31:03 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="mQ27+cMO"
+Message-ID: <38bfc363-84fc-40db-9f99-c0654a68617f@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1712277263;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=MtJKf5WBBAlr3RTdgNEIWJJyhIEJiFwEMGcA1aGQi84=;
+	b=mQ27+cMO+yw11u3xpfzWRLhQHNrlqH7iLet27TR/rhbYfHo0wIKeb9NB29+hmVVIWTJxEv
+	TX+WLdm7gilJoG431rwVL3gElSxn/lPNDutbT65xH5ZO1EnHtGjmwsk9Xi22ejQpN/x9r8
+	MbOR57x0beFf8aIah5LBdG7bjNuz1Rg=
+Date: Thu, 4 Apr 2024 17:34:14 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [GIT PULL] Networking for v6.9-rc3
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <171227346319.15041.81356387766911820.git-patchwork-notify@kernel.org>
-Date: Thu, 04 Apr 2024 23:31:03 +0000
-References: <20240404211803.2089033-1-kuba@kernel.org>
-In-Reply-To: <20240404211803.2089033-1-kuba@kernel.org>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: torvalds@linux-foundation.org, davem@davemloft.net,
- netdev@vger.kernel.org, linux-kernel@vger.kernel.org, pabeni@redhat.com,
- bpf@vger.kernel.org
+Subject: Re: [PATCH v2 bpf-next 1/2] bpf: prevent r10 register from being
+ marked as precise
+Content-Language: en-GB
+To: Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org, ast@kernel.org,
+ daniel@iogearbox.net, martin.lau@kernel.org
+Cc: kernel-team@meta.com,
+ syzbot+148110ee7cf72f39f33e@syzkaller.appspotmail.com
+References: <20240404214536.3551295-1-andrii@kernel.org>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <20240404214536.3551295-1-andrii@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-Hello:
 
-This pull request was applied to netdev/net.git (main)
-by Linus Torvalds <torvalds@linux-foundation.org>:
+On 4/4/24 2:45 PM, Andrii Nakryiko wrote:
+> r10 is a special register that is not under BPF program's control and is
+> always effectively precise. The rest of precision logic assumes that
+> only r0-r9 SCALAR registers are marked as precise, so prevent r10 from
+> being marked precise.
+>
+> This can happen due to signed cast instruction allowing to do something
+> like `r0 = (s8)r10;`, which later, if r0 needs to be precise, would lead
+> to an attempt to mark r10 as precise.
+>
+> Prevent this with an extra check during instruction backtracking.
+>
+> Fixes: 8100928c8814 ("bpf: Support new sign-extension mov insns")
+> Reported-by: syzbot+148110ee7cf72f39f33e@syzkaller.appspotmail.com
+> Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 
-On Thu,  4 Apr 2024 14:18:03 -0700 you wrote:
-> Hi Linus!
-> 
-> The following changes since commit 50108c352db70405b3d71d8099d0b3adc3b3352c:
-> 
->   Merge tag 'net-6.9-rc2' of git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net (2024-03-28 13:09:37 -0700)
-> 
-> are available in the Git repository at:
-> 
-> [...]
-
-Here is the summary with links:
-  - [GIT,PULL] Networking for v6.9-rc3
-    https://git.kernel.org/netdev/net/c/c88b9b4cde17
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+Acked-by: Yonghong Song <yonghong.song@linux.dev>
 
