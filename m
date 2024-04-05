@@ -1,65 +1,65 @@
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A4E424B28
-	for <bpf@vger.kernel.org>; Fri,  5 Apr 2024 22:36:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.188.122
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96CCD2D7B8
+	for <bpf@vger.kernel.org>; Fri,  5 Apr 2024 22:36:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.188.123
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712356577; cv=none; b=XqUaRtiV6OK/PF4LXG+L8NQGRY20pL7Wm45yZiny/CGNhQ0K23e+eEOKrmf3quMucN+iQGVISg2JquEHXfekzCX8zizgPdYTI/U+Dws9l1AN737wUbRA3l6gkRujlP8o339S5XL7uU96/KU/eNB7e7v1xldiT+bZLxhcqEYeqm0=
+	t=1712356579; cv=none; b=PJ3ZFVOgMsSVSbcIcfNvloKdEmDA9hN9EHxbRQx/MTVqdap07NEFCA1rPljO+UeXE/woIQ/KdjSutayms1pQpfSjpmTd3tv8bR0jDGtUZmei8EajT76cLxzkjYMQeWXLpdzaAmKsFeSQGJIIM9Ue3af6OVZDIrW57X/qydyLHvs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712356577; c=relaxed/simple;
-	bh=a78vMWglkqZNxVpizm3bz2mABJk4IrXHntVwOv9hkR0=;
+	s=arc-20240116; t=1712356579; c=relaxed/simple;
+	bh=QMvCqoIxUJk4A3mQL/m6zq/lJ4o+BiC3MUzbNU4scZQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=cvs8cG9FuRdpDp+V8teEn2nH0cw01m2EeiNuWaXqpMYrAdpiOnYNMI9EyA/JOk5lxFS9DaT73Yjs4uPsJs0qjXXIBwCrnLgx9KwTW5yqADVMZOvdVYU0Nrz5BWFwpTT5gWWaHr7Ddvd0113PZiaadHErajolSEjuHe7yh/UD7Pg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=canonical.com; dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b=W8hVtIXj; arc=none smtp.client-ip=185.125.188.122
+	 MIME-Version; b=UE7Hc07KAN9g3LBmOqrWjTuEY6cD91Cx3jofxjh1aTNnPfNGUfFBIHvbeBlXN81K1UF5nyLM1MMLhglyNNWrCbvIM7rsl9afwROUMg964BOQL9FBz9Wji2M14USxkVkIJpLp4cT5gAY5bllmHYD31r8+qoCIjVAEMn3VR5q6oo4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=canonical.com; dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b=RMB+3U21; arc=none smtp.client-ip=185.125.188.123
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canonical.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b="W8hVtIXj"
-Received: from mail-lf1-f69.google.com (mail-lf1-f69.google.com [209.85.167.69])
+	dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b="RMB+3U21"
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com [209.85.128.71])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 3DD2942492
-	for <bpf@vger.kernel.org>; Fri,  5 Apr 2024 22:36:04 +0000 (UTC)
+	by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id BB84F3FE4F
+	for <bpf@vger.kernel.org>; Fri,  5 Apr 2024 22:36:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-	s=20210705; t=1712356564;
-	bh=U9JiGxHu1Zu7lOUTn6nQmFFrRqhFXaTmBwUIearvaJY=;
+	s=20210705; t=1712356573;
+	bh=3VLnZHG6NMsFZ484LFX99y48PIsMB85l7TlShPfpb8M=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
 	 MIME-Version;
-	b=W8hVtIXjFuDUvmiKWhDbjnGt6i0qTw3PUA5gvOBYeLP8BIiCGs2UJKsS6kdppHUWn
-	 Fdmf1HeKJyyjenD1xw5yaLl5BNQKbfGMQe4McwRN28YSXew3Y1aAR259b6CbJ+cA5J
-	 FKVoSLp9Gv9FuapotJwwl8h5u+P828WkWTHHSGYWoX46Tn5jgG+Tjw65xR/9W+XYtW
-	 34otTcv/sRrzCoA6zTvv14dadVG1YOZq+K7hJIdAgUnpLkpBg1dAi67ilxvrlfKGI2
-	 BmKIphP+iYx2xNZDsDznppIyuNxHKIxqwOWqI2NKMbebXTh02HT8TRbQrQokEWqqrT
-	 BFAr27G3n/N/Q==
-Received: by mail-lf1-f69.google.com with SMTP id 2adb3069b0e04-513e7ff16a8so2227604e87.1
-        for <bpf@vger.kernel.org>; Fri, 05 Apr 2024 15:36:04 -0700 (PDT)
+	b=RMB+3U21AiqEFB1hoLH7ZqM94SEut0BUv8OgHnCDw+g5No5+U5gMeDe98100Qkzoe
+	 pVJ+0xs2Bx8zRucRW+P4t+eS8FX0vBHIUdf/bT6c18WI/KPubLAthJgg1W2vwx5592
+	 ZiIu5N88Ywi0l4gnuOuQiMWFUvEJ677Ic+FHELjb4zw2J1GGIo1wqb+2Jz/a93fF4z
+	 +D1FUbhPJRVgjX3LCsaXt8EYImBpKOFoirTCAQKo6DGyzc0CoEs8IDN4MV9VZpwlBV
+	 5yoDdTVMEnefrZtV1dDFMtxB6wi5btXOGb4EIXYcAXjJXXeqgPAy3YgKMWtOlpIZ0W
+	 4C3lDamKlLQuQ==
+Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-415610b70e5so12443385e9.2
+        for <bpf@vger.kernel.org>; Fri, 05 Apr 2024 15:36:13 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712356562; x=1712961362;
+        d=1e100.net; s=20230601; t=1712356565; x=1712961365;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=U9JiGxHu1Zu7lOUTn6nQmFFrRqhFXaTmBwUIearvaJY=;
-        b=OlhekmIjhkW5cgOj/lfDRVeYCUD4Si86AKuqQXPUaHpfgbiCl54VUaHhmObrX7TVr+
-         OINZ7DQu2+sQq+/tdP67fA0SdR+w8u3aDs5t9lCIefdM0hGgRiyY9MKyxe2dfSW3hZ4k
-         kZYytgZ0/w4BJFvHg+3tdMObGLyTMHOiGQrbcB3HW9dFa+YkCdZ4LVm0x+afgjXuGChS
-         rWIrWsR7pozASd4ksWzzgKoDPPFc898vUwxDAhqsBUKMcATUSc81PsglBMpcO4JYHsGs
-         0ACwjG1KxpRPAtkznEssx2uO+jKh/AjjU2R3bePXO4I/6V4e50w76lYrvVKoWaeFSi8/
-         y8PQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUC7VcwcUKzFkAqRe7cuRUTEtTM88rD2Em97P0THUJ89B8i8VT9XKcCERz9xisiuljBNDsvEx0CAmLoEpedEVJ52Zt3
-X-Gm-Message-State: AOJu0Yx6r4ENbZHBnJC7Ktm4TNIyi//GXsLo7o9yP3WKv2uYm7QAMNVQ
-	H1nnNiGJxbHX6Yyryu6WtU/LcQM6v5P+kOPpmRf4QZJ0+O1kTTOTp+c4su/QtFXQsiC+uCaINYv
-	wvYwVX5aDirpw+aizlo9yK1YpSqc92/z7AfMm96/JNdz5t8Kz8TYolLhGdo7d/O8TRw==
-X-Received: by 2002:a2e:7210:0:b0:2d8:6561:72ca with SMTP id n16-20020a2e7210000000b002d8656172camr1995339ljc.19.1712356562458;
-        Fri, 05 Apr 2024 15:36:02 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IGBVMYT18cPC1QCrh2MWjzCOnxzSsVoLjeD9J9cFM+sm3A78FEmzC3KWLy5fGTZ57Qk1PyOaA==
-X-Received: by 2002:a2e:7210:0:b0:2d8:6561:72ca with SMTP id n16-20020a2e7210000000b002d8656172camr1995321ljc.19.1712356561922;
-        Fri, 05 Apr 2024 15:36:01 -0700 (PDT)
+        bh=3VLnZHG6NMsFZ484LFX99y48PIsMB85l7TlShPfpb8M=;
+        b=vU4bNeTPGtcmtkwslwvvtuYgF4fvxJ0kfcrOR3FZMz00RGhnA5CLxs01xKlLR3+537
+         uQmqdciontPrfogjV3HKN+DSxzNltTvxrFcnZ4Ab/7EqmBLhFO8qvEnWpE9+/TPgtSGB
+         AyTIr2H1WQYGD8mh3wrrelsepXhIUNsxF5o1eY7/Vlhv26VqLOfw6O9u/RcklaihZ6Rn
+         bcpPj271fhjgLp2tobgPV66J+C0SjVVisPEVLN14lkiCWL35NUWQTfu4KXNDhVuFigGE
+         zdAdJw7EU0N12g6s0IbCcLvNdrF6UCU/Po4jLEqyyZlSOyB0xjGudcJjBvjTb5FUaxfX
+         9bjA==
+X-Forwarded-Encrypted: i=1; AJvYcCX7CKH+P83mxxiKiiU5aipuHm8LeCCY9QHjbSrIIezd4h6rCnkOzduuecp9GlpLI6AahlSnGCcQPz49fQgQ7YztSsPv
+X-Gm-Message-State: AOJu0YxUDzJGSw8UOphQODNqtixu3/l25T8c1Qfyj0whrwpk+Isvxf1o
+	LvsySM2JlLAOxnfNi0u/3FI0cR7Dm7FxG0OPw4HJwIJgFWi+5SJksP2+JSalfwt5vEhfpsng9/H
+	ukNcexCkWN0YGVETmWxIseXo+Yys44OCtqYgldfKvRVaK7bNlAqQox+XQZM5+EH/jPA==
+X-Received: by 2002:a05:600c:1e24:b0:412:efc8:299b with SMTP id ay36-20020a05600c1e2400b00412efc8299bmr1976472wmb.39.1712356564666;
+        Fri, 05 Apr 2024 15:36:04 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IFy6QBCKBbZSuFIsTW1GksJvbLyNHWJv1lSbckpk7UcILNYkV43dYJd1R4rSx10ciYc2EMozQ==
+X-Received: by 2002:a05:600c:1e24:b0:412:efc8:299b with SMTP id ay36-20020a05600c1e2400b00412efc8299bmr1976459wmb.39.1712356564143;
+        Fri, 05 Apr 2024 15:36:04 -0700 (PDT)
 Received: from gpd.station (net-2-39-142-110.cust.vodafonedsl.it. [2.39.142.110])
-        by smtp.gmail.com with ESMTPSA id bi21-20020a05600c3d9500b004163334df40sm1475698wmb.19.2024.04.05.15.36.00
+        by smtp.gmail.com with ESMTPSA id bi21-20020a05600c3d9500b004163334df40sm1475698wmb.19.2024.04.05.15.36.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 05 Apr 2024 15:36:01 -0700 (PDT)
+        Fri, 05 Apr 2024 15:36:03 -0700 (PDT)
 From: Andrea Righi <andrea.righi@canonical.com>
 To: Andrii Nakryiko <andrii@kernel.org>,
 	Eduard Zingerman <eddyz87@gmail.com>
@@ -77,9 +77,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Tejun Heo <tj@kernel.org>,
 	bpf@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v3 1/2] libbpf: ringbuf: allow to consume up to a certain amount of items
-Date: Sat,  6 Apr 2024 00:16:04 +0200
-Message-ID: <20240405223556.11142-2-andrea.righi@canonical.com>
+Subject: [PATCH v3 2/2] libbpf: Add ring__consume_n / ring_buffer__consume_n
+Date: Sat,  6 Apr 2024 00:16:05 +0200
+Message-ID: <20240405223556.11142-3-andrea.righi@canonical.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240405223556.11142-1-andrea.righi@canonical.com>
 References: <20240405223556.11142-1-andrea.righi@canonical.com>
@@ -91,89 +91,126 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-In some cases, instead of always consuming all items from ring buffers
-in a greedy way, we may want to consume up to a certain amount of items,
-for example when we need to copy items from the BPF ring buffer to a
-limited user buffer.
+Introduce a new API to consume items from a ring buffer, limited to a
+specified amount, and return to the caller the actual number of items
+consumed.
 
-This change allows to set an upper limit to the amount of items consumed
-from one or more ring buffers.
-
+Link: https://lore.kernel.org/lkml/20240310154726.734289-1-andrea.righi@canonical.com/T
 Signed-off-by: Andrea Righi <andrea.righi@canonical.com>
 ---
- tools/lib/bpf/ringbuf.c | 23 +++++++++++++++--------
- 1 file changed, 15 insertions(+), 8 deletions(-)
+ tools/lib/bpf/libbpf.h   | 12 ++++++++++++
+ tools/lib/bpf/libbpf.map |  6 ++++++
+ tools/lib/bpf/ringbuf.c  | 38 +++++++++++++++++++++++++++++++++++---
+ 3 files changed, 53 insertions(+), 3 deletions(-)
 
+diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
+index f88ab50c0229..4f775a6dcaa0 100644
+--- a/tools/lib/bpf/libbpf.h
++++ b/tools/lib/bpf/libbpf.h
+@@ -1293,6 +1293,7 @@ LIBBPF_API int ring_buffer__add(struct ring_buffer *rb, int map_fd,
+ 				ring_buffer_sample_fn sample_cb, void *ctx);
+ LIBBPF_API int ring_buffer__poll(struct ring_buffer *rb, int timeout_ms);
+ LIBBPF_API int ring_buffer__consume(struct ring_buffer *rb);
++LIBBPF_API int ring_buffer__consume_n(struct ring_buffer *rb, size_t n);
+ LIBBPF_API int ring_buffer__epoll_fd(const struct ring_buffer *rb);
+ 
+ /**
+@@ -1367,6 +1368,17 @@ LIBBPF_API int ring__map_fd(const struct ring *r);
+  */
+ LIBBPF_API int ring__consume(struct ring *r);
+ 
++/**
++ * @brief **ring__consume_n()** consumes up to a requested amount of items from
++ * a ringbuffer without event polling.
++ *
++ * @param r A ringbuffer object.
++ * @param n Maximum amount of items to consume.
++ * @return The number of items consumed, or a negative number if any of the
++ * callbacks return an error.
++ */
++LIBBPF_API int ring__consume_n(struct ring *r, size_t n);
++
+ struct user_ring_buffer_opts {
+ 	size_t sz; /* size of this struct, for forward/backward compatibility */
+ };
+diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
+index 51732ecb1385..23d82bba021a 100644
+--- a/tools/lib/bpf/libbpf.map
++++ b/tools/lib/bpf/libbpf.map
+@@ -416,3 +416,9 @@ LIBBPF_1.4.0 {
+ 		btf__new_split;
+ 		btf_ext__raw_data;
+ } LIBBPF_1.3.0;
++
++LIBBPF_1.5.0 {
++	global:
++		ring__consume_n;
++		ring_buffer__consume_n;
++} LIBBPF_1.4.0;
 diff --git a/tools/lib/bpf/ringbuf.c b/tools/lib/bpf/ringbuf.c
-index aacb64278a01..2c4031168413 100644
+index 2c4031168413..19cd34883011 100644
 --- a/tools/lib/bpf/ringbuf.c
 +++ b/tools/lib/bpf/ringbuf.c
-@@ -231,7 +231,7 @@ static inline int roundup_len(__u32 len)
- 	return (len + 7) / 8 * 8;
+@@ -277,6 +277,33 @@ static int64_t ringbuf_process_ring(struct ring *r, size_t n)
+ 	return cnt;
  }
  
--static int64_t ringbuf_process_ring(struct ring *r)
-+static int64_t ringbuf_process_ring(struct ring *r, size_t n)
- {
- 	int *len_ptr, len, err;
- 	/* 64-bit to avoid overflow in case of extreme application behavior */
-@@ -268,6 +268,9 @@ static int64_t ringbuf_process_ring(struct ring *r)
- 			}
- 
- 			smp_store_release(r->consumer_pos, cons_pos);
++/* Consume available ring buffer(s) data without event polling, up to n
++ * records.
++ *
++ * Returns number of records consumed across all registered ring buffers (or
++ * n, whichever is less), or negative number if any of the callbacks return
++ * error.
++ */
++int ring_buffer__consume_n(struct ring_buffer *rb, size_t n)
++{
++	int64_t err, res = 0;
++	int i;
 +
-+			if (cnt >= n)
-+				goto done;
- 		}
- 	} while (got_new_data);
- done:
-@@ -287,13 +290,15 @@ int ring_buffer__consume(struct ring_buffer *rb)
- 	for (i = 0; i < rb->ring_cnt; i++) {
- 		struct ring *ring = rb->rings[i];
- 
--		err = ringbuf_process_ring(ring);
-+		err = ringbuf_process_ring(ring, INT_MAX);
- 		if (err < 0)
- 			return libbpf_err(err);
- 		res += err;
-+		if (res > INT_MAX) {
-+			res = INT_MAX;
++	for (i = 0; i < rb->ring_cnt; i++) {
++		struct ring *ring = rb->rings[i];
++
++		err = ringbuf_process_ring(ring, n);
++		if (err < 0)
++			return libbpf_err(err);
++		res += err;
++		n -= err;
++
++		if (n == 0)
 +			break;
-+		}
- 	}
--	if (res > INT_MAX)
--		return INT_MAX;
- 	return res;
++	}
++	return res;
++}
++
+ /* Consume available ring buffer(s) data without event polling.
+  * Returns number of records consumed across all registered ring buffers (or
+  * INT_MAX, whichever is less), or negative number if any of the callbacks
+@@ -378,17 +405,22 @@ int ring__map_fd(const struct ring *r)
+ 	return r->map_fd;
  }
  
-@@ -314,13 +319,15 @@ int ring_buffer__poll(struct ring_buffer *rb, int timeout_ms)
- 		__u32 ring_id = rb->events[i].data.fd;
- 		struct ring *ring = rb->rings[ring_id];
- 
--		err = ringbuf_process_ring(ring);
-+		err = ringbuf_process_ring(ring, INT_MAX);
- 		if (err < 0)
- 			return libbpf_err(err);
- 		res += err;
-+		if (res > INT_MAX) {
-+			res = INT_MAX;
-+			break;
-+		}
- 	}
--	if (res > INT_MAX)
--		return INT_MAX;
- 	return res;
- }
- 
-@@ -375,7 +382,7 @@ int ring__consume(struct ring *r)
+-int ring__consume(struct ring *r)
++int ring__consume_n(struct ring *r, size_t n)
  {
- 	int64_t res;
+-	int64_t res;
++	int res;
  
--	res = ringbuf_process_ring(r);
-+	res = ringbuf_process_ring(r, INT_MAX);
+-	res = ringbuf_process_ring(r, INT_MAX);
++	res = ringbuf_process_ring(r, n);
  	if (res < 0)
  		return libbpf_err(res);
  
+ 	return res > INT_MAX ? INT_MAX : res;
+ }
+ 
++int ring__consume(struct ring *r)
++{
++	return ring__consume_n(r, INT_MAX);
++}
++
+ static void user_ringbuf_unmap_ring(struct user_ring_buffer *rb)
+ {
+ 	if (rb->consumer_pos) {
 -- 
 2.43.0
 
