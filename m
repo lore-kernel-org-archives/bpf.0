@@ -1,137 +1,309 @@
-Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5776416ABC3;
-	Fri,  5 Apr 2024 16:12:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9854716EC0B;
+	Fri,  5 Apr 2024 16:21:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712333566; cv=none; b=oGA9Y7BtyBlBTnhLoHg4Of32F7drTWPPxo5QjhDUbtVM6Sytu9nNBwHvmcvuGCTIVZwHO8WLXl3hyWHSdZIfHUWoZcyUaVZupUl2IpbEek5OFZbBhOCNFyBpMw+WneDuDYmVq+cj9zBh9pKOlmX9ogx29vDqrV6WHF2KZMgWhGk=
+	t=1712334090; cv=none; b=ZGHY/cXOEA1npCg7aPQwNHz/lcu2UIO+h158Eh4GNxtAA7+QoaFZ6uQbSOmpFTLjj68SvOayE2XgQbZFXAF1PMfCX4t8HcI9K9Ssaonq3l0yP5VtFNnsnGQCtmda9Z/UuRQnC7RpFOZavEyAUTXRe1pMUSA6ID6pk4xMy2grY6I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712333566; c=relaxed/simple;
-	bh=rU+WWRBhnpDb+ZVPBQ1akIc9YzS46xtRBAG/iooGCgY=;
+	s=arc-20240116; t=1712334090; c=relaxed/simple;
+	bh=P6cPTWlnE8l6poOJpNqlFH0K2aeeZ1oq2S246jOwDBA=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ZLVzsdXAihs1uQWzQIKiqfJnY+aVQ33E2A269uY76EeJH+1zqt/m0J4xsE23wSPtFU0/8DgIKhMwazPVAA649ylUf+J5+hS4PvJ670qN3Gu643wZi9ib7xYw3PEgEVaebAK0CnMg0h3iXD6cOs3ZRMYoqgMHyXuNuR+r6QlO6I0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Gzg7iVIh; arc=none smtp.client-ip=209.85.221.49
+	 To:Cc:Content-Type; b=oRJlJltvTbYM2TkpQt8k0AJ/V67MOQdMzFS9S9fCL3S/NMS2YbJG3H60/rcpYmWfWOUb1H1r/XVaLOyBNwy+7UgZU2BQqMYhb9/QhnLlg2IQAz2sM9/calkowiDj+Jr8cWP2j1bpbdtwghhZTSx/Sp8jzxE3pS4KxhDRkIUrE4Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=msVXRQ1x; arc=none smtp.client-ip=209.85.214.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Gzg7iVIh"
-Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-33ff53528ceso1705007f8f.0;
-        Fri, 05 Apr 2024 09:12:44 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="msVXRQ1x"
+Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-1e3c7549078so4006165ad.0;
+        Fri, 05 Apr 2024 09:21:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1712333563; x=1712938363; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1712334088; x=1712938888; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=CUFHJXNP6ohiRivChPDINRMxOHKnXBAWCJDuEaDGAZE=;
-        b=Gzg7iVIhHFeDrfYiFc1IgNkzVU2VOm/L2bNquYoeZhBoM2DrG8x+dHVsiDdclE2QDx
-         zOeaKoqnUYP8S80wp9J1ZGtDd8iNf+ATr5bLY2o5XDYG7adDkygUQFJMqCnJmJIobyqg
-         OxOrF4nQFNmM/CnSjf1OQ3tJD/XybkIKlf0/pJHcU9k9k6d6ZWJ9KcpS0P5tvXMrNFXi
-         Qwg0gqTM2tvAChOM4o/ZpudJi/N+0DSFVbHnEZGMGJQObNbPWIzwBo7h81WMILSsdwX9
-         byY+rTmr6G+zIbRhcDjiZqsuUYyLnVA52kp9fBFuk/tKaCxwqJhhaCuTnF5YGRdRT1hB
-         RdLA==
+        bh=/GUBptl3s2kbvyfICaIUTfihJwzVEYCUouoPcDs5zv0=;
+        b=msVXRQ1xBxpXNbFn0hsMoj01BRYw3NnUY0RGPvaRHYhZ/d97ucoY7FDBIALP90E45M
+         e0utOqOBw5/868NN3hqt/bmTFN94VTdKVM1ZLiomBXHmFM7YytXCmKVNxuLteE9AZp3C
+         yxui1IMM8koSg3/yl0bufwM3R8PJXvvnHZMg20E4DV6OGesUmApnPDyTyu3IfM5AqZGI
+         K8CaErD16iu/h54sQsv+TTXoAG9EioLCwd0LxHWOcZb1vxGrvPel+FLY9CHigosfMO8d
+         rEyCxl9+EwtMM16qyKNusiIwQTGPqn+SdIrln0Myt+JWouLQTCJ8bAsGUWkpo9tzqyqM
+         pYlQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712333563; x=1712938363;
+        d=1e100.net; s=20230601; t=1712334088; x=1712938888;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=CUFHJXNP6ohiRivChPDINRMxOHKnXBAWCJDuEaDGAZE=;
-        b=DE7oMu5u1WsS+Xy8cH4C1nClI4YGzIV/s1q0FzVVsRS9D0P/Sv3xof3PTWmZDrMeQi
-         vWHPw/aSflRfIswIsvV9JpIZNTcRxD/2ccqF8JZdQM5Tz9q9mDrtpgb7wtgBf5+lBsjq
-         7gHCBSU5lTwxNYQFEOf81oDgrcoPOuYtcFiDYMAu6GUCPTKc5uE17tDdKpv0HfSeOHD2
-         rgv74Xb+YJTBAXvpkV7Kll1GOIUawyr4IndPSeriyCDGwz2X41OxGAsw+Gbx4ch6q3iZ
-         Od47pGGhAh0dBebydXLYnpocjqHRkZVikp6d5Nbelx2GJQOIz80URDFXC7Zf2xocoDCh
-         piCw==
-X-Forwarded-Encrypted: i=1; AJvYcCUQlMGELGR8LgOpbLCdbX1uVWWJxWaXPnj69Do8+2DbsA7/MNxwIwGzRRiwrBydgTPIb50jCKgz/WHlZaNIyQmJZT+FbVugJhXhrsca0pshig55FdNNjuV7wu6mUnhAZYk3
-X-Gm-Message-State: AOJu0YzKHSLhMjFEndzoyeKVGZkKgYZP9XXwjCZH0UjSL/DsMv+VxlKe
-	P43cA6nz2VmYPd6AXEILyv2CBuJZRDU3rGxIkTNrcwnYiNZXTSDvp9c4rihAzHH/7936pBJ1Nja
-	Y3c8dWLiL5UZBrXpDtuCDvIR2Tn4=
-X-Google-Smtp-Source: AGHT+IHDzXqsB0ENEHKgEDGCUOYAAZXEOJWZIaAYbWlqfC+cN0ZrmyRYp5VZr8mACDNm8TQInLyYUsp8d7YaYFFkrXo=
-X-Received: by 2002:a5d:5225:0:b0:341:ba31:b8ba with SMTP id
- i5-20020a5d5225000000b00341ba31b8bamr1464775wra.57.1712333562610; Fri, 05 Apr
- 2024 09:12:42 -0700 (PDT)
+        bh=/GUBptl3s2kbvyfICaIUTfihJwzVEYCUouoPcDs5zv0=;
+        b=cSOrdz297GUOSsdw73lESPe1YcwdhM2vZQVjdD+n+nrQhD7Hiw6q6dIYO3LPFgLh/4
+         ECdm46sTlG01RLYzo0kcqNmHAKNlT5OI8jFm6+L2VhpVZTN9gxe2VxN9tOKeOoDzefh/
+         9qwvV9h2fAWMWQWYsLMrgAVkIvVvnORBxoQb52Eg4/QjfPyvmSXcEOUY+m6VyV7oY3zv
+         q6wrJHb1xJ9zQMPVydMRwzExEy8pio4bm5b+NqjVXJuZ7pYMbWUjrHyWI5O6lNqg6sg4
+         lxQNIUjZRNwAaqMTKsawf52WUy2iYV5GyPrrKK0IKa61C4D30hG7l5xnE2Jn/Mktb0FB
+         PF3w==
+X-Forwarded-Encrypted: i=1; AJvYcCX52J4zZ/xFihXN2KcUvRHx3aNwXfrLJmuGQidMAPFU8J3MApfOsGkleMacPQw9OraAGItsc4ngTbfuSE546QClrnMDylG6As/6cbNS5dzze8YHSOkRzuwsmeRF
+X-Gm-Message-State: AOJu0YxHjo/NJSJLDZBbSrShXEGBtbzn+qovgnVu+g1EVZh8SQbsxxVr
+	+/u1unztLwKR1y7g6R/imQmQHLs59fnImYpXenlip+U6cFjR27BgFjgxoF6Zu80YMD7Zs/qfCEF
+	yEfc+GvpkI0JUVfL1JbNOvcmPgBA=
+X-Google-Smtp-Source: AGHT+IE4kqNvLYOs7uXGGvW7cklMW0jMay1Z1cWR26xXAtAMxX7n468pCK0HyRQ6SkK3Nme36tQDb6VMF6yMGIxGh74=
+X-Received: by 2002:a17:902:d512:b0:1e0:cea:257e with SMTP id
+ b18-20020a170902d51200b001e00cea257emr4501207plg.2.1712334087801; Fri, 05 Apr
+ 2024 09:21:27 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <000000000000e9a8d80615163f2a@google.com> <20240403184149.0847a9d614f11b249529fd02@linux-foundation.org>
- <CAADnVQ+meL1kvXUehDT3iO2mxiZNeSUqeRKYx1C=3c0h=NSiqA@mail.gmail.com>
- <Zg_aTFoC2Pwakyl1@FVFF77S0Q05N> <Zg/iGQCDKa9bllyI@shell.armlinux.org.uk>
-In-Reply-To: <Zg/iGQCDKa9bllyI@shell.armlinux.org.uk>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Fri, 5 Apr 2024 09:12:31 -0700
-Message-ID: <CAADnVQ+LKO2Y90DVZ4qQv3dXyuWKkvFqqJ0E_p_=qwscsvnaVg@mail.gmail.com>
-Subject: Re: [syzbot] [mm?] BUG: unable to handle kernel paging request in
- copy_from_kernel_nofault (2)
-To: "Russell King (Oracle)" <linux@armlinux.org.uk>, Puranjay Mohan <puranjay12@gmail.com>
-Cc: Mark Rutland <mark.rutland@arm.com>, Andrew Morton <akpm@linux-foundation.org>, 
-	linux-arm-kernel <linux-arm-kernel@lists.infradead.org>, 
-	syzbot <syzbot+186522670e6722692d86@syzkaller.appspotmail.com>, 
-	LKML <linux-kernel@vger.kernel.org>, linux-mm <linux-mm@kvack.org>, 
-	syzkaller-bugs <syzkaller-bugs@googlegroups.com>, bpf <bpf@vger.kernel.org>
+References: <2024040527-propeller-immovably-a6d8@gregkh> <CAEf4BzaNmxj2nLyxiugcmC1v1Cs7HEX2Z0-3a=P323-TxHHTXQ@mail.gmail.com>
+In-Reply-To: <CAEf4BzaNmxj2nLyxiugcmC1v1Cs7HEX2Z0-3a=P323-TxHHTXQ@mail.gmail.com>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Fri, 5 Apr 2024 09:21:15 -0700
+Message-ID: <CAEf4BzY03zZrHUXTNop8+PMt=-d0+oOaWBnJyPTSSOvKv1mgNg@mail.gmail.com>
+Subject: Re: FAILED: patch "[PATCH] bpf: support deferring bpf_link dealloc to
+ after RCU grace" failed to apply to 6.8-stable tree
+To: gregkh@linuxfoundation.org
+Cc: andrii@kernel.org, ast@kernel.org, jolsa@kernel.org, 
+	stable@vger.kernel.org, bpf <bpf@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Apr 5, 2024 at 4:36=E2=80=AFAM Russell King (Oracle)
-<linux@armlinux.org.uk> wrote:
+On Fri, Apr 5, 2024 at 9:15=E2=80=AFAM Andrii Nakryiko
+<andrii.nakryiko@gmail.com> wrote:
 >
-> On Fri, Apr 05, 2024 at 12:02:36PM +0100, Mark Rutland wrote:
-> > On Thu, Apr 04, 2024 at 03:57:04PM -0700, Alexei Starovoitov wrote:
-> > > On Wed, Apr 3, 2024 at 6:56=E2=80=AFPM Andrew Morton <akpm@linux-foun=
-dationorg> wrote:
-> > > >
-> > > > On Mon, 01 Apr 2024 22:19:25 -0700 syzbot <syzbot+186522670e6722692=
-d86@syzkaller.appspotmail.com> wrote:
-> > > >
-> > > > > Hello,
-> > > >
-> > > > Thanks.  Cc: bpf@vger.kernel.org
-> > >
-> > > I suspect the issue is not on bpf side.
-> > > Looks like the bug is somewhere in arm32 bits.
-> > > copy_from_kernel_nofault() is called from lots of places.
-> > > bpf is just one user that is easy for syzbot to fuzz.
-> > > Interestingly arm defines copy_from_kernel_nofault_allowed()
-> > > that should have filtered out user addresses.
-> > > In this case ffffffe9 is probably a kernel address?
+> On Fri, Apr 5, 2024 at 2:50=E2=80=AFAM <gregkh@linuxfoundation.org> wrote=
+:
 > >
-> > It's at the end of the kernel range, and it's ERR_PTR(-EINVAL).
 > >
-> > 0xffffffe9 is -0x16, which is -22, which is -EINVAL.
+> > The patch below does not apply to the 6.8-stable tree.
+> > If someone wants it applied there, or to any other stable or longterm
+> > tree, then please email the backport, including the original git commit
+> > id to <stable@vger.kernel.org>.
 > >
-> > > But the kernel is doing a write?
-> > > Which makes no sense, since copy_from_kernel_nofault is probe reading=
-.
-> >
-> > It makes perfect sense; the read from 'src' happened, then the kernel t=
-ries to
-> > write the result to 'dst', and that aligns with the disassembly in the =
-report
-> > below, which I beleive is:
-> >
-> >      8: e4942000        ldr     r2, [r4], #0  <-- Read of 'src', fault =
-fixup is elsewhere
-> >      c: e3530000        cmp     r3, #0
-> >   * 10: e5852000        str     r2, [r5]      <-- Write to 'dst'
-> >
-> > As above, it looks like 'dst' is ERR_PTR(-EINVAL).
-> >
-> > Are you certain that BPF is passing a sane value for 'dst'? Where does =
-that
-> > come from in the first place?
 >
-> It looks to me like it gets passed in from the BPF program, and the
-> "type" for the argument is set to ARG_PTR_TO_UNINIT_MEM. What that
-> means for validation purposes, I've no idea, I'm not a BPF hacker.
+> This is strange, I get a clean auto-merged cherry-pick:
 >
-> Obviously, if BPF is allowing copy_from_kernel_nofault() to be passed
-> an arbitary destination address, that would be a huge security hole.
+> $ git co linux-6.8.y
+> Updating files: 100% (10694/10694), done.
+> branch 'linux-6.8.y' set up to track 'stable/linux-6.8.y'.
+> Switched to a new branch 'linux-6.8.y'
+> $ git cp -x 1a80dbcb2dbaf6e4c216e62e30fa7d3daa8001ce
+> Auto-merging include/linux/bpf.h
+> Auto-merging kernel/bpf/syscall.c
+> Auto-merging kernel/trace/bpf_trace.c
+> [linux-6.8.y fd74c60792f5] bpf: support deferring bpf_link dealloc to
+> after RCU grace period
+>  Date: Wed Mar 27 22:24:26 2024 -0700
+>  3 files changed, 49 insertions(+), 6 deletions(-)
+>
+> Note that e9c856cabefb ("bpf: put uprobe link's path and task in
+> release callback") has to be backported at the same time. I'll
+> cherry-pick both and will send it just in case.
+>
 
-If that's the case that's indeed a giant security hole,
-but I doubt it. We would be crashing other archs as well.
-I cannot really tell whether arm32 JIT is on.
-If it is, it's likely a bug there.
-Puranjay,
-could you please take a look.
+Ah, so it doesn't build (trivial link->prog->sleepable ->
+link->prog->aux->sleepable change, will fix up). Not sure if possible,
+but it would be nice to distinguish between patch not applying vs it
+causing build (or test) failures, but no big deal.
+
+>
+> > To reproduce the conflict and resubmit, you may use the following comma=
+nds:
+> >
+> > git fetch https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.=
+git/ linux-6.8.y
+> > git checkout FETCH_HEAD
+> > git cherry-pick -x 1a80dbcb2dbaf6e4c216e62e30fa7d3daa8001ce
+> > # <resolve conflicts, build, test, etc.>
+> > git commit -s
+> > git send-email --to '<stable@vger.kernel.org>' --in-reply-to '202404052=
+7-propeller-immovably-a6d8@gregkh' --subject-prefix 'PATCH 6.8.y' HEAD^..
+> >
+> > Possible dependencies:
+> >
+> >
+> >
+> > thanks,
+> >
+> > greg k-h
+> >
+> > ------------------ original commit in Linus's tree ------------------
+> >
+> > From 1a80dbcb2dbaf6e4c216e62e30fa7d3daa8001ce Mon Sep 17 00:00:00 2001
+> > From: Andrii Nakryiko <andrii@kernel.org>
+> > Date: Wed, 27 Mar 2024 22:24:26 -0700
+> > Subject: [PATCH] bpf: support deferring bpf_link dealloc to after RCU g=
+race
+> >  period
+> >
+> > BPF link for some program types is passed as a "context" which can be
+> > used by those BPF programs to look up additional information. E.g., for
+> > multi-kprobes and multi-uprobes, link is used to fetch BPF cookie value=
+s.
+> >
+> > Because of this runtime dependency, when bpf_link refcnt drops to zero
+> > there could still be active BPF programs running accessing link data.
+> >
+> > This patch adds generic support to defer bpf_link dealloc callback to
+> > after RCU GP, if requested. This is done by exposing two different
+> > deallocation callbacks, one synchronous and one deferred. If deferred
+> > one is provided, bpf_link_free() will schedule dealloc_deferred()
+> > callback to happen after RCU GP.
+> >
+> > BPF is using two flavors of RCU: "classic" non-sleepable one and RCU
+> > tasks trace one. The latter is used when sleepable BPF programs are
+> > used. bpf_link_free() accommodates that by checking underlying BPF
+> > program's sleepable flag, and goes either through normal RCU GP only fo=
+r
+> > non-sleepable, or through RCU tasks trace GP *and* then normal RCU GP
+> > (taking into account rcu_trace_implies_rcu_gp() optimization), if BPF
+> > program is sleepable.
+> >
+> > We use this for multi-kprobe and multi-uprobe links, which dereference
+> > link during program run. We also preventively switch raw_tp link to use
+> > deferred dealloc callback, as upcoming changes in bpf-next tree expose
+> > raw_tp link data (specifically, cookie value) to BPF program at runtime
+> > as well.
+> >
+> > Fixes: 0dcac2725406 ("bpf: Add multi kprobe link")
+> > Fixes: 89ae89f53d20 ("bpf: Add multi uprobe link")
+> > Reported-by: syzbot+981935d9485a560bfbcb@syzkaller.appspotmail.com
+> > Reported-by: syzbot+2cb5a6c573e98db598cc@syzkaller.appspotmail.com
+> > Reported-by: syzbot+62d8b26793e8a2bd0516@syzkaller.appspotmail.com
+> > Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+> > Acked-by: Jiri Olsa <jolsa@kernel.org>
+> > Link: https://lore.kernel.org/r/20240328052426.3042617-2-andrii@kernel.=
+org
+> > Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+> >
+> > diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+> > index 4f20f62f9d63..890e152d553e 100644
+> > --- a/include/linux/bpf.h
+> > +++ b/include/linux/bpf.h
+> > @@ -1574,12 +1574,26 @@ struct bpf_link {
+> >         enum bpf_link_type type;
+> >         const struct bpf_link_ops *ops;
+> >         struct bpf_prog *prog;
+> > -       struct work_struct work;
+> > +       /* rcu is used before freeing, work can be used to schedule tha=
+t
+> > +        * RCU-based freeing before that, so they never overlap
+> > +        */
+> > +       union {
+> > +               struct rcu_head rcu;
+> > +               struct work_struct work;
+> > +       };
+> >  };
+> >
+> >  struct bpf_link_ops {
+> >         void (*release)(struct bpf_link *link);
+> > +       /* deallocate link resources callback, called without RCU grace=
+ period
+> > +        * waiting
+> > +        */
+> >         void (*dealloc)(struct bpf_link *link);
+> > +       /* deallocate link resources callback, called after RCU grace p=
+eriod;
+> > +        * if underlying BPF program is sleepable we go through tasks t=
+race
+> > +        * RCU GP and then "classic" RCU GP
+> > +        */
+> > +       void (*dealloc_deferred)(struct bpf_link *link);
+> >         int (*detach)(struct bpf_link *link);
+> >         int (*update_prog)(struct bpf_link *link, struct bpf_prog *new_=
+prog,
+> >                            struct bpf_prog *old_prog);
+> > diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+> > index ae2ff73bde7e..c287925471f6 100644
+> > --- a/kernel/bpf/syscall.c
+> > +++ b/kernel/bpf/syscall.c
+> > @@ -3024,17 +3024,46 @@ void bpf_link_inc(struct bpf_link *link)
+> >         atomic64_inc(&link->refcnt);
+> >  }
+> >
+> > +static void bpf_link_defer_dealloc_rcu_gp(struct rcu_head *rcu)
+> > +{
+> > +       struct bpf_link *link =3D container_of(rcu, struct bpf_link, rc=
+u);
+> > +
+> > +       /* free bpf_link and its containing memory */
+> > +       link->ops->dealloc_deferred(link);
+> > +}
+> > +
+> > +static void bpf_link_defer_dealloc_mult_rcu_gp(struct rcu_head *rcu)
+> > +{
+> > +       if (rcu_trace_implies_rcu_gp())
+> > +               bpf_link_defer_dealloc_rcu_gp(rcu);
+> > +       else
+> > +               call_rcu(rcu, bpf_link_defer_dealloc_rcu_gp);
+> > +}
+> > +
+> >  /* bpf_link_free is guaranteed to be called from process context */
+> >  static void bpf_link_free(struct bpf_link *link)
+> >  {
+> > +       bool sleepable =3D false;
+> > +
+> >         bpf_link_free_id(link->id);
+> >         if (link->prog) {
+> > +               sleepable =3D link->prog->sleepable;
+> >                 /* detach BPF program, clean up used resources */
+> >                 link->ops->release(link);
+> >                 bpf_prog_put(link->prog);
+> >         }
+> > -       /* free bpf_link and its containing memory */
+> > -       link->ops->dealloc(link);
+> > +       if (link->ops->dealloc_deferred) {
+> > +               /* schedule BPF link deallocation; if underlying BPF pr=
+ogram
+> > +                * is sleepable, we need to first wait for RCU tasks tr=
+ace
+> > +                * sync, then go through "classic" RCU grace period
+> > +                */
+> > +               if (sleepable)
+> > +                       call_rcu_tasks_trace(&link->rcu, bpf_link_defer=
+_dealloc_mult_rcu_gp);
+> > +               else
+> > +                       call_rcu(&link->rcu, bpf_link_defer_dealloc_rcu=
+_gp);
+> > +       }
+> > +       if (link->ops->dealloc)
+> > +               link->ops->dealloc(link);
+> >  }
+> >
+> >  static void bpf_link_put_deferred(struct work_struct *work)
+> > @@ -3544,7 +3573,7 @@ static int bpf_raw_tp_link_fill_link_info(const s=
+truct bpf_link *link,
+> >
+> >  static const struct bpf_link_ops bpf_raw_tp_link_lops =3D {
+> >         .release =3D bpf_raw_tp_link_release,
+> > -       .dealloc =3D bpf_raw_tp_link_dealloc,
+> > +       .dealloc_deferred =3D bpf_raw_tp_link_dealloc,
+> >         .show_fdinfo =3D bpf_raw_tp_link_show_fdinfo,
+> >         .fill_link_info =3D bpf_raw_tp_link_fill_link_info,
+> >  };
+> > diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+> > index 0b73fe5f7206..9dc605f08a23 100644
+> > --- a/kernel/trace/bpf_trace.c
+> > +++ b/kernel/trace/bpf_trace.c
+> > @@ -2728,7 +2728,7 @@ static int bpf_kprobe_multi_link_fill_link_info(c=
+onst struct bpf_link *link,
+> >
+> >  static const struct bpf_link_ops bpf_kprobe_multi_link_lops =3D {
+> >         .release =3D bpf_kprobe_multi_link_release,
+> > -       .dealloc =3D bpf_kprobe_multi_link_dealloc,
+> > +       .dealloc_deferred =3D bpf_kprobe_multi_link_dealloc,
+> >         .fill_link_info =3D bpf_kprobe_multi_link_fill_link_info,
+> >  };
+> >
+> > @@ -3242,7 +3242,7 @@ static int bpf_uprobe_multi_link_fill_link_info(c=
+onst struct bpf_link *link,
+> >
+> >  static const struct bpf_link_ops bpf_uprobe_multi_link_lops =3D {
+> >         .release =3D bpf_uprobe_multi_link_release,
+> > -       .dealloc =3D bpf_uprobe_multi_link_dealloc,
+> > +       .dealloc_deferred =3D bpf_uprobe_multi_link_dealloc,
+> >         .fill_link_info =3D bpf_uprobe_multi_link_fill_link_info,
+> >  };
+> >
+> >
