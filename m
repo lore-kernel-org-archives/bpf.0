@@ -1,481 +1,253 @@
-Received: from smtp5.epfl.ch (smtp5.epfl.ch [128.178.224.8])
-	(using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC7F1634
-	for <bpf@vger.kernel.org>; Fri,  5 Apr 2024 20:26:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=128.178.224.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE4BD171077;
+	Fri,  5 Apr 2024 20:28:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712348792; cv=none; b=o1LZ1UgdUuAMVAhNrD1kM9rjW0E4yL8X+cJOjBBy6UZKlMydcVTlBil9qo7Y3+eqMLG315fDQf+5nil8yqjjOX8SLtNf8ZuIchs0Wox1/HIuOPphiZMA94FUNKpAATu14xrSYxX6tEQE4ZmzrIM7oQyR75y2gK7OWZeiZ8VY/2s=
+	t=1712348926; cv=none; b=P8f4tRpKwLDCeMGSrOkYs9qCTc4TkaNhtYSLyrblAvHbGjIPSdhhYWXeg9yRptJZv+fT/GksOMJqbviuRVE5wcdK4vnoegWe5oA7kkggr40HxgWoo3XssqmHmCz/xDBdoLHJW0i1VNz0d/vC79KOIMTN22aj79gJ7C7I0ynXrj8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712348792; c=relaxed/simple;
-	bh=p6kDP9z27M8cTDH10t100JMbK/BPhMTRTvtqIxwZxh8=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=KDvTKEBNnwDRBWvIRDGGjGF3wLJGgcyXSjfzPFD+YoaYwb/hdVVKFaDYOBlwklNty0osPYw+fDdxtH5D/hDXZJD03aCMIh95rf+UyEmd8/+QFJVwqqQWT18E+301YhVfnJPW5y7vVJ+zRUgORlAuQXvuW5IQr5pGk2Kbb6jSaeU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=epfl.ch; spf=pass smtp.mailfrom=epfl.ch; dkim=pass (1024-bit key) header.d=epfl.ch header.i=@epfl.ch header.b=7Hak5hiD; arc=none smtp.client-ip=128.178.224.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=epfl.ch
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=epfl.ch
+	s=arc-20240116; t=1712348926; c=relaxed/simple;
+	bh=SRk1BAyFbO7xlNckhNzLlmX4edRBAotwNcUvm9mn+Dc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=MmPNWf3T9nizC4rMQf+a5IpeSUSuB8zIeHgyRqJOi6Xo9R4qkmo0CWULAbxZsOGVK5b9qKaEgDD46nDOAfltujujBjUoaJtiqVj1jt1t58jKPkOjjtjeUkpdx01SZ9WQlLZ/y04cjzfyUvGW6XkDSma/CLcWHbwzxBDOjftKr3o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=INsAG9/U; arc=none smtp.client-ip=209.85.216.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=epfl.ch header.i=@epfl.ch header.b="7Hak5hiD"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=epfl.ch;
-      s=epfl; t=1712348779;
-      h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Transfer-Encoding:Content-Type;
-      bh=p6kDP9z27M8cTDH10t100JMbK/BPhMTRTvtqIxwZxh8=;
-      b=7Hak5hiDMqH60prHt65ANNPL4ZLEkUs3TQDnewAn5WdeQ38xbAvyv//JSWUJTSRWF
-        NHwZvk6urbqkmen8XKKcmWHAZQarRsoRKnds5eUPefioQOSGiaGcaKCCuOyFDuEjC
-        Mf4Usnw2qb4tReoW2PjC0f7Gkl2I760MzDqAtX8bA=
-Received: (qmail 903 invoked by uid 107); 5 Apr 2024 20:26:19 -0000
-Received: from ax-snat-224-178.epfl.ch (HELO ewa07.intranet.epfl.ch) (192.168.224.178) (TLS, ECDHE-RSA-AES256-GCM-SHA384 (P-256 curve) cipher)
-  by mail.epfl.ch (AngelmatoPhylax SMTP proxy) with ESMTPS; Fri, 05 Apr 2024 22:26:19 +0200
-X-EPFL-Auth: Ybur4Gjapr/dblrKFNAYwEwtiRSA1boVlH0FDjy9exQAC13urAc=
-Received: from rs3labsrv2.iccluster.epfl.ch (10.90.46.62) by
- ewa07.intranet.epfl.ch (128.178.224.178) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.35; Fri, 5 Apr 2024 22:26:19 +0200
-From: Tao Lyu <tao.lyu@epfl.ch>
-To: <andrii.nakryiko@gmail.com>
-CC: <andrii@kernel.org>, <ast@kernel.org>, <bpf@vger.kernel.org>,
-	<john.fastabend@gmail.com>, <mathias.payer@nebelwelt.net>,
-	<meng.xu.cs@uwaterloo.ca>, <sanidhya.kashyap@epfl.ch>, <tao.lyu@epfl.ch>
-Subject: [PATCH bpf-next] bpf: Fix verifier error due to narrower scalar spill onto 64-bit spilled scalar slots
-Date: Fri, 5 Apr 2024 22:26:07 +0200
-Message-ID: <20240405202607.4146642-1-tao.lyu@epfl.ch>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <CAEf4BzZL6dCZx8Mve1RYXRJ1JeA6xqZeYN0V4Jfr9Xg04vAZrg@mail.gmail.com>
-References: <CAEf4BzZL6dCZx8Mve1RYXRJ1JeA6xqZeYN0V4Jfr9Xg04vAZrg@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="INsAG9/U"
+Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-2a2f82ded89so1153236a91.1;
+        Fri, 05 Apr 2024 13:28:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1712348924; x=1712953724; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/KHiRz2MEVl6qNeBBl7ut0Lqj346TjDrch4NCQyug9w=;
+        b=INsAG9/U3eFBAZPqy+PgaI37Br6TXkpFrSyWVtK9HmQ0cA1+T/8JdEhiRoUZPMFtfh
+         l+gjX4aXzoH+PrPP/nVWMRO7gcMC3kkFK7mgcVitqt7LdwSdatFda5TMcytxZAo8nitN
+         70k1SYwd7+sZhGjsnTKkbRIKxWCezMz4Lmta7x6gxlQAdw9SCZGAUel1lKTu/xJxJlGu
+         kLL8c6BcUuxLPo6O7aVADtOFpzIHHbfzBUlG0c5R/ntVgRzqQhcRx1JJxz0KqkQ/INHd
+         qHSx2FP11k1xryqLv9xzlvW0GGsWtwGbf2A1GnEF7sQxCzmUxZR8ncVM96mF+YO+MAVw
+         LEww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1712348924; x=1712953724;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=/KHiRz2MEVl6qNeBBl7ut0Lqj346TjDrch4NCQyug9w=;
+        b=qsF7rNn9nOY7nbgRFChWcugEMhHGIq0X9F23NnWU2EssWWHK60sZ/IRh6o18ybZrrU
+         sEsh1exNqmOlQIKDBBuyiAizY6iW/PtlcMIgzMd/ee6aPfjwpRY2sS7kfYNQ9p34Seah
+         ECzhb7S9AQAApX1yiGCMfuY+bLV7Q0J4vfVIqmUWn9u6DtZJvb/w5D2+1UsIDmwSJ9Hy
+         KngHa08RrUvTJZgf5PAdwAjVqqUdtMUJHImUgM7IKfJ4VQsvNi4fd4BXpOaLVnESDZ7V
+         iKe+uB0tK6nDJ3Pk2yiNrBgbiERTZM14FgwK+O+11luTqQX9dR+EEQqlaSvu1IMDymuB
+         NIkw==
+X-Forwarded-Encrypted: i=1; AJvYcCU2jAPnUburRJx8tPbp5ccLMQB/9VL+v7Kn8ukoRnwaF+pXcQGvwWiXGc9/h7z7vVmxeMLqVhQhIkxJnMYSHf6npSPzAbdvpLSVFfhWWUuuf6zhEeatNSSH0XtXTbeoXCr7L/MwdBytxQ6QwW9n7k8ALMml/vJYi5C2ReK5BBpTQ+q86g+7rA6kSJsh18DPyOev98rG2L3oGOplYr4mUhfc
+X-Gm-Message-State: AOJu0YwuQZDgR+xdJYMFQJ+6ouRClXrLlWJClXXXznw3ZjHN+Cj/6veC
+	19K3X2RE41j1ue8wUBVruN36WU9RDWXsOvyvhhsrvMQ2AvIfgauDd8zRkRzF4WhiEjU1wSZ68bm
+	xfQP3uDT1Py5naBI0fCi1CHyo3FI=
+X-Google-Smtp-Source: AGHT+IEB17rUN/p90piyyO2Fh5+5Y5JCRNaDz+2U2dzLD5suRIg39op7NfkR+8THwcH3RleE5jqbr98eGeCYB6CxcAk=
+X-Received: by 2002:a17:90a:f0c8:b0:2a2:21a7:48bf with SMTP id
+ fa8-20020a17090af0c800b002a221a748bfmr2697144pjb.14.1712348924104; Fri, 05
+ Apr 2024 13:28:44 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: ewa12.intranet.epfl.ch (128.178.224.187) To
- ewa07.intranet.epfl.ch (128.178.224.178)
+References: <20240404190146.1898103-1-elver@google.com> <CAADnVQKc+Z39k9wbU2MHf-fPFma+9QsyOugmmmGq3ynQCTVfCw@mail.gmail.com>
+ <CANpmjNN+rR1PWKbx6RBWhOjnmAP+jUDzc3TLcwTnmfd=ft03dg@mail.gmail.com>
+In-Reply-To: <CANpmjNN+rR1PWKbx6RBWhOjnmAP+jUDzc3TLcwTnmfd=ft03dg@mail.gmail.com>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Fri, 5 Apr 2024 13:28:32 -0700
+Message-ID: <CAEf4BzZCj=3hevf+Je=oed9Nisctotp_CX00NrLaO6_7+-0LSQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 1/2] bpf: Introduce bpf_probe_write_user_registered()
+To: Marco Elver <elver@google.com>
+Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Dmitry Vyukov <dvyukov@google.com>, 
+	Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>, 
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, bpf <bpf@vger.kernel.org>, 
+	"open list:DOCUMENTATION" <linux-doc@vger.kernel.org>, linux-trace-kernel@vger.kernel.org, 
+	LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-When CAP_PERFMON and CAP_SYS_ADMIN (allow_ptr_leaks) are disabled,
-the verifier previously aimed to reject partial overwrite on an 8-byte stack slot
-that contains a spilled pointer.
+On Fri, Apr 5, 2024 at 1:28=E2=80=AFAM Marco Elver <elver@google.com> wrote=
+:
+>
+> On Fri, 5 Apr 2024 at 01:23, Alexei Starovoitov
+> <alexei.starovoitov@gmail.com> wrote:
+> >
+> > On Thu, Apr 4, 2024 at 12:02=E2=80=AFPM Marco Elver <elver@google.com> =
+wrote:
+> > >
+> > > With all the known caveats, tracing BPF programs may directly write t=
+o
+> > > user-space memory with the bpf_probe_write_user() helper. Memory safe=
+ty
+> > > is an obvious problem when using this helper, since it is too easy to
+> > > overwrite memory across all running processes that user space did not
+> > > expect to be touched (neither the verifier nor the kernel knows what =
+may
+> > > be touched). While it is possible to come up with mechanisms to safel=
+y
+> > > communicate to the BPF program which memory region may be written to,
+> > > there are no built-in guarantees of safety. For this reason, the help=
+er
+> > > produces a warning in the kernel log, and in newer kernels it is
+> > > possible to disallow use of the helper since 51e1bb9eeaf7 ("bpf: Add
+> > > lockdown check for probe_write_user helper").
+> >
+> > So is it a fix or a feature?
+>
+> Feature. The above paragraph is just an intro. Remove it?
+>
+> > > Nevertheless, direct user-space memory writes from BPF programs can b=
+e
+> > > useful to efficiently manipulate and communicate with cooperating use=
+r
+> > > space processes.
+> >
+> > But there are many different ways for bpf to communicate with user spac=
+e:
+> > perf ringbuf, bpf ringbug, various maps including mmap-ed array and are=
+na.
+> > The commit log doesn't explain why we need another one.
+> >
+> > > For example, one of our use cases are for events that happen relative=
+ly
+> > > frequently in the kernel (e.g. specific scheduler events), but a set =
+of
+> > > user space threads want to check for such events in very hot code pat=
+hs
+> > > to make more optimal decisions (the cost of such a check can be no mo=
+re
+> > > than a load and compare). The types of events and heuristics used may
+> > > change based on system environment and application, and a BPF program
+> > > provides the best trade-offs in terms of performance and deployment.
+> >
+> > and the tasks can use mmaped array shared across all or unique to each
+> > process.
+> > And both bpf and user space can read/write them with a single instructi=
+on.
+>
+> That's BPF_F_MMAPABLE, right?
+>
+> That does not work because the mmapped region is global. Our requirements=
+ are:
+>
+> 1. Single tracing BPF program.
+>
+> 2. Per-process (per VM) memory region (here it's per-thread, but each
+> thread just registers the same process-wide region).  No sharing
+> between processes.
+>
+> 3. From #2 it follows: exec unregisters the registered memory region;
+> fork gets a cloned region.
+>
+> 4. Unprivileged processes can do prctl(REGISTER). Some of them might
+> not be able to use the bpf syscall.
+>
+> The reason for #2 is that each user space process also writes to the
+> memory region (read by the BPF program to make updates depending on
+> what state it finds), and having shared state between processes
+> doesn't work here.
+>
+> Is there any reasonable BPF facility that can do this today? (If
+> BPF_F_MMAPABLE could do it while satisfying requirements 2-4, I'd be a
+> happy camper.)
 
-However, it rejects all partial stack overwrites
-as long as the targeted stack slot is a spilled register in that cap setting,
-because it does not check if the stack slot is a spilled pointer.
+You could simulate something like this with multi-element ARRAY +
+BPF_F_MMAPABLE, though you'd need to pre-allocate up to max number of
+processes, so it's not an exact fit.
 
-Finally, incomplete checks will result in the rejection of valid programs,
-which spill narrower scalar values onto scalar slots, as shown below.
+But what seems to be much closer is using BPF task-local storage, if
+we support mmap()'ing its memory into user-space. We've had previous
+discussions on how to achieve this (the simplest being that
+mmap(task_local_map_fd, ...) maps current thread's part of BPF task
+local storage). You won't get automatic cloning (you'd have to do that
+from the BPF program on fork/exec tracepoint, for example), and within
+the process you'd probably want to have just one thread (main?) to
+mmap() initially and just share the pointer across all relevant
+threads. But this is a more generic building block, IMO. This relying
+on BPF map also means pinning is possible and all the other BPF map
+abstraction benefits.
 
-0: R1=ctx() R10=fp0
-; asm volatile ( @ repro.bpf.c:679
-0: (7a) *(u64 *)(r10 -8) = 1          ; R10=fp0 fp-8_w=1
-1: (62) *(u32 *)(r10 -8) = 1
-attempt to corrupt spilled pointer on stack
-processed 2 insns (limit 1000000) max_states_per_insn 0 total_states 0 peak_states 0 mark_read 0.
 
-Note that only when CAP_BPF or CAP_SYS_ADMIN are enabled,
-are 64-bit scalars stored onto stacks marked as spilled scalars.
-
-Thus, to reproduce this issue,
-we can only assign CAP_BPF capability to the test.
-
-However, the existing bpf selftest doesn't support setting specific caps.
-
-So, I modified the test_loader.c and some related header files to
-enabled set specific capabilities on a test with the following attributes:
-
-__msg_caps(msg)
-__failure_caps(caps)
-__success_caps(caps)
-__retval_caps(val)
-
-Here, caps can be any combination of capabilities, like "CAP_BPF | CAP_PERFMON".
-
-Finally, the issue is fixed by checking the spilled register type of targeted slots.
-
-Fixes: ab125ed3ec1c ("bpf: fix check for attempt to corrupt spilled pointer")
-Signed-off-by: Tao Lyu <tao.lyu@epfl.ch>
----
- kernel/bpf/verifier.c                         |   1 +
- tools/testing/selftests/bpf/progs/bpf_misc.h  |  13 ++
- .../selftests/bpf/progs/verifier_spill_fill.c |  18 ++
- tools/testing/selftests/bpf/test_loader.c     | 154 ++++++++++++++++--
- 4 files changed, 169 insertions(+), 17 deletions(-)
-
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 63749ad5ac6b..da575e295d53 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -4493,6 +4493,7 @@ static int check_stack_write_fixed_off(struct bpf_verifier_env *env,
- 	 */
- 	if (!env->allow_ptr_leaks &&
- 	    is_spilled_reg(&state->stack[spi]) &&
-+	    !is_spilled_scalar_reg(&state->stack[spi]) &&
- 	    size != BPF_REG_SIZE) {
- 		verbose(env, "attempt to corrupt spilled pointer on stack\n");
- 		return -EACCES;
-diff --git a/tools/testing/selftests/bpf/progs/bpf_misc.h b/tools/testing/selftests/bpf/progs/bpf_misc.h
-index fb2f5513e29e..b8dc0d73932f 100644
---- a/tools/testing/selftests/bpf/progs/bpf_misc.h
-+++ b/tools/testing/selftests/bpf/progs/bpf_misc.h
-@@ -2,6 +2,10 @@
- #ifndef __BPF_MISC_H__
- #define __BPF_MISC_H__
- 
-+/* Expand a macro and then stringize the expansion */
-+#define QUOTE(str) #str
-+#define EXPAND_QUOTE(str) QUOTE(str)
-+
- /* This set of attributes controls behavior of the
-  * test_loader.c:test_loader__run_subtests().
-  *
-@@ -24,11 +28,15 @@
-  *                   Multiple __msg attributes could be specified.
-  * __msg_unpriv      Same as __msg but for unprivileged mode.
-  *
-+ * __msg_caps        Same as __msg but for specified capabilities.
-+ *
-  * __success         Expect program load success in privileged mode.
-  * __success_unpriv  Expect program load success in unprivileged mode.
-+ * __success_caps    Expect program load success in specified cap mode.
-  *
-  * __failure         Expect program load failure in privileged mode.
-  * __failure_unpriv  Expect program load failure in unprivileged mode.
-+ * __failure_caps    Expect program load failure in specified cap mode.
-  *
-  * __retval          Execute the program using BPF_PROG_TEST_RUN command,
-  *                   expect return value to match passed parameter:
-@@ -38,6 +46,7 @@
-  *                   - literal POINTER_VALUE (see definition below)
-  *                   - literal TEST_DATA_LEN (see definition below)
-  * __retval_unpriv   Same, but load program in unprivileged mode.
-+ * __retval_caps     Same, but load program in specified cap mode.
-  *
-  * __description     Text to be used instead of a program name for display
-  *                   and filtering purposes.
-@@ -63,12 +72,16 @@
- #define __success		__attribute__((btf_decl_tag("comment:test_expect_success")))
- #define __description(desc)	__attribute__((btf_decl_tag("comment:test_description=" desc)))
- #define __msg_unpriv(msg)	__attribute__((btf_decl_tag("comment:test_expect_msg_unpriv=" msg)))
-+#define __msg_caps(msg)	__attribute__((btf_decl_tag("comment:test_expect_msg_caps=" msg)))
- #define __failure_unpriv	__attribute__((btf_decl_tag("comment:test_expect_failure_unpriv")))
- #define __success_unpriv	__attribute__((btf_decl_tag("comment:test_expect_success_unpriv")))
-+#define __failure_caps(caps)	__attribute__((btf_decl_tag("comment:test_expect_failure_caps="EXPAND_QUOTE(caps))))
-+#define __success_caps(caps)	__attribute__((btf_decl_tag("comment:test_expect_success_caps="EXPAND_QUOTE(caps))))
- #define __log_level(lvl)	__attribute__((btf_decl_tag("comment:test_log_level="#lvl)))
- #define __flag(flag)		__attribute__((btf_decl_tag("comment:test_prog_flags="#flag)))
- #define __retval(val)		__attribute__((btf_decl_tag("comment:test_retval="#val)))
- #define __retval_unpriv(val)	__attribute__((btf_decl_tag("comment:test_retval_unpriv="#val)))
-+#define __retval_caps(val)	__attribute__((btf_decl_tag("comment:test_retval_caps="#val)))
- #define __auxiliary		__attribute__((btf_decl_tag("comment:test_auxiliary")))
- #define __auxiliary_unpriv	__attribute__((btf_decl_tag("comment:test_auxiliary_unpriv")))
- #define __btf_path(path)	__attribute__((btf_decl_tag("comment:test_btf_path=" path)))
-diff --git a/tools/testing/selftests/bpf/progs/verifier_spill_fill.c b/tools/testing/selftests/bpf/progs/verifier_spill_fill.c
-index 85e48069c9e6..c3eb6f7cf0c2 100644
---- a/tools/testing/selftests/bpf/progs/verifier_spill_fill.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_spill_fill.c
-@@ -5,6 +5,7 @@
- #include <bpf/bpf_helpers.h>
- #include "bpf_misc.h"
- #include <../../../tools/include/linux/filter.h>
-+#include "../cap_helpers.h"
- 
- struct {
- 	__uint(type, BPF_MAP_TYPE_RINGBUF);
-@@ -1244,4 +1245,21 @@ __naked void old_stack_misc_vs_cur_ctx_ptr(void)
- 	: __clobber_all);
- }
- 
-+SEC("socket")
-+__description("32-bit scalars should be able to overwrite 64-bit scalar spilled slots")
-+__log_level(2)
-+__success __success_unpriv
-+__success_caps(CAP_BPF) __retval_caps(0)
-+__naked void spill_32bit_onto_64bit_slot(void)
-+{
-+	asm volatile("					\
-+	*(u64*)(r10 - 8) = 1;				\
-+	*(u32*)(r10 - 8) = 1;				\
-+	r0 = 0;						\
-+	exit;						\
-+"	:
-+	:
-+	: __clobber_all);
-+}
-+
- char _license[] SEC("license") = "GPL";
-diff --git a/tools/testing/selftests/bpf/test_loader.c b/tools/testing/selftests/bpf/test_loader.c
-index 524c38e9cde4..42701ec0212f 100644
---- a/tools/testing/selftests/bpf/test_loader.c
-+++ b/tools/testing/selftests/bpf/test_loader.c
-@@ -20,11 +20,15 @@
- #define TEST_TAG_EXPECT_FAILURE_UNPRIV "comment:test_expect_failure_unpriv"
- #define TEST_TAG_EXPECT_SUCCESS_UNPRIV "comment:test_expect_success_unpriv"
- #define TEST_TAG_EXPECT_MSG_PFX_UNPRIV "comment:test_expect_msg_unpriv="
-+#define TEST_TAG_EXPECT_FAILURE_CAPS "comment:test_expect_failure_caps="
-+#define TEST_TAG_EXPECT_SUCCESS_CAPS "comment:test_expect_success_caps="
-+#define TEST_TAG_EXPECT_MSG_PFX_CAPS "comment:test_expect_msg_caps="
- #define TEST_TAG_LOG_LEVEL_PFX "comment:test_log_level="
- #define TEST_TAG_PROG_FLAGS_PFX "comment:test_prog_flags="
- #define TEST_TAG_DESCRIPTION_PFX "comment:test_description="
- #define TEST_TAG_RETVAL_PFX "comment:test_retval="
- #define TEST_TAG_RETVAL_PFX_UNPRIV "comment:test_retval_unpriv="
-+#define TEST_TAG_RETVAL_PFX_CAPS "comment:test_retval_caps="
- #define TEST_TAG_AUXILIARY "comment:test_auxiliary"
- #define TEST_TAG_AUXILIARY_UNPRIV "comment:test_auxiliary_unpriv"
- #define TEST_BTF_PATH "comment:test_btf_path="
-@@ -43,7 +47,8 @@ static int sysctl_unpriv_disabled = -1;
- 
- enum mode {
- 	PRIV = 1,
--	UNPRIV = 2
-+	UNPRIV = 2,
-+	CUSTCAPS = 4
- };
- 
- struct test_subspec {
-@@ -59,6 +64,8 @@ struct test_spec {
- 	const char *prog_name;
- 	struct test_subspec priv;
- 	struct test_subspec unpriv;
-+	struct test_subspec custom_caps;
-+	__u64 caps;
- 	const char *btf_custom_path;
- 	int log_level;
- 	int prog_flags;
-@@ -133,6 +140,33 @@ static int parse_int(const char *str, int *val, const char *name)
- 	return 0;
- }
- 
-+static int parse_caps(const char *str, __u64 *val, const char *name)
-+{
-+	int cap_flag = 0;
-+	char *token = NULL, *saveptr = NULL;
-+
-+	char *str_cpy = strdup(str);
-+	if (str_cpy == NULL) {
-+		PRINT_FAIL("Memory allocation failed\n");
-+		return -EINVAL;
-+	}
-+
-+	token = strtok_r(str_cpy, "|", &saveptr);
-+	while (token != NULL) {
-+		errno = 0;
-+		cap_flag = strtol(token, NULL, 10);
-+		if (errno) {
-+			PRINT_FAIL("failed to parse caps %s\n", name);
-+			return -EINVAL;
-+		}
-+		*val |= (1ULL << cap_flag);
-+		token = strtok_r(NULL, "|", &saveptr);
-+	}
-+
-+	free(str_cpy);
-+	return 0;
-+}
-+
- static int parse_retval(const char *str, int *val, const char *name)
- {
- 	struct {
-@@ -163,6 +197,22 @@ static void update_flags(int *flags, int flag, bool clear)
- 		*flags |= flag;
- }
- 
-+static char *create_desc(const char *description, const char *suffix)
-+{
-+	int descr_len = strlen(description);
-+	char *name;
-+
-+	name = malloc(descr_len + strlen(suffix) + 1);
-+	if (!name) {
-+		PRINT_FAIL("failed to allocate memory for unpriv.name\n");
-+		return NULL;
-+	}
-+
-+	strcpy(name, description);
-+	strcpy(&name[descr_len], suffix);
-+	return name;
-+}
-+
- /* Uses btf_decl_tag attributes to describe the expected test
-  * behavior, see bpf_misc.h for detailed description of each attribute
-  * and attribute combinations.
-@@ -225,6 +275,20 @@ static int parse_test_spec(struct test_loader *tester,
- 			spec->unpriv.expect_failure = false;
- 			spec->mode_mask |= UNPRIV;
- 			has_unpriv_result = true;
-+		} else if (str_has_pfx(s, TEST_TAG_EXPECT_FAILURE_CAPS)) {
-+			val = s + sizeof(TEST_TAG_EXPECT_FAILURE_CAPS) - 1;
-+			err = parse_caps(val, &spec->caps, "test caps");
-+			if (err)
-+				goto cleanup;
-+			spec->custom_caps.expect_failure = true;
-+			spec->mode_mask |= CUSTCAPS;
-+                } else if (str_has_pfx(s, TEST_TAG_EXPECT_SUCCESS_CAPS)) {
-+			val = s + sizeof(TEST_TAG_EXPECT_SUCCESS_CAPS) - 1;
-+			err = parse_caps(val, &spec->caps, "test caps");
-+			if (err)
-+				goto cleanup;
-+			spec->custom_caps.expect_failure = false;
-+			spec->mode_mask |= CUSTCAPS;
- 		} else if (strcmp(s, TEST_TAG_AUXILIARY) == 0) {
- 			spec->auxiliary = true;
- 			spec->mode_mask |= PRIV;
-@@ -243,6 +307,12 @@ static int parse_test_spec(struct test_loader *tester,
- 			if (err)
- 				goto cleanup;
- 			spec->mode_mask |= UNPRIV;
-+		} else if (str_has_pfx(s, TEST_TAG_EXPECT_MSG_PFX_CAPS)) {
-+			msg = s + sizeof(TEST_TAG_EXPECT_MSG_PFX_CAPS) - 1;
-+			err = push_msg(msg, &spec->custom_caps);
-+			if (err)
-+				goto cleanup;
-+			spec->mode_mask |= CUSTCAPS;
- 		} else if (str_has_pfx(s, TEST_TAG_RETVAL_PFX)) {
- 			val = s + sizeof(TEST_TAG_RETVAL_PFX) - 1;
- 			err = parse_retval(val, &spec->priv.retval, "__retval");
-@@ -258,6 +328,13 @@ static int parse_test_spec(struct test_loader *tester,
- 			spec->mode_mask |= UNPRIV;
- 			spec->unpriv.execute = true;
- 			has_unpriv_retval = true;
-+		} else if (str_has_pfx(s, TEST_TAG_RETVAL_PFX_CAPS)) {
-+			val = s + sizeof(TEST_TAG_RETVAL_PFX_CAPS) - 1;
-+			err = parse_retval(val, &spec->custom_caps.retval, "__retval_caps");
-+			if (err)
-+				goto cleanup;
-+			spec->mode_mask |= CUSTCAPS;
-+			spec->custom_caps.execute = true;
- 		} else if (str_has_pfx(s, TEST_TAG_LOG_LEVEL_PFX)) {
- 			val = s + sizeof(TEST_TAG_LOG_LEVEL_PFX) - 1;
- 			err = parse_int(val, &spec->log_level, "test log level");
-@@ -311,22 +388,23 @@ static int parse_test_spec(struct test_loader *tester,
- 	}
- 
- 	if (spec->mode_mask & UNPRIV) {
--		int descr_len = strlen(description);
--		const char *suffix = " @unpriv";
--		char *name;
--
--		name = malloc(descr_len + strlen(suffix) + 1);
-+		char *name = create_desc(description, " @unpriv");
- 		if (!name) {
--			PRINT_FAIL("failed to allocate memory for unpriv.name\n");
- 			err = -ENOMEM;
- 			goto cleanup;
- 		}
--
--		strcpy(name, description);
--		strcpy(&name[descr_len], suffix);
- 		spec->unpriv.name = name;
- 	}
- 
-+	if (spec->mode_mask & CUSTCAPS) {
-+		char *name = create_desc(description, " @caps");
-+		if (!name) {
-+			err = -ENOMEM;
-+			goto cleanup;
-+		}
-+		spec->custom_caps.name = name;
-+	}
-+
- 	if (spec->mode_mask & (PRIV | UNPRIV)) {
- 		if (!has_unpriv_result)
- 			spec->unpriv.expect_failure = spec->priv.expect_failure;
-@@ -461,6 +539,28 @@ static int restore_capabilities(struct cap_state *caps)
- 	return err;
- }
- 
-+static int set_capabilities(__u64 new_caps, struct cap_state *save_caps) {
-+
-+	int err;
-+
-+	/* Drop all bpf related caps */
-+	err = drop_capabilities(save_caps);
-+	if (err) {
-+		PRINT_FAIL("failed to drop capabilities: %i, %s\n", err, strerror(err));
-+		return err;
-+	}
-+
-+	/* Set the specified caps */
-+	err = cap_enable_effective(new_caps, NULL);
-+	if (err) {
-+		PRINT_FAIL("failed to set capabilities: %i, %s\n", err, strerror(err));
-+		return err;
-+	}
-+
-+	save_caps->initialized = true;
-+	return 0;
-+}
-+
- static bool can_execute_unpriv(struct test_loader *tester, struct test_spec *spec)
- {
- 	if (sysctl_unpriv_disabled < 0)
-@@ -560,21 +660,34 @@ void run_subtest(struct test_loader *tester,
- 		 size_t obj_byte_cnt,
- 		 struct test_spec *specs,
- 		 struct test_spec *spec,
--		 bool unpriv)
-+		 int priv_level)
- {
--	struct test_subspec *subspec = unpriv ? &spec->unpriv : &spec->priv;
-+	struct test_subspec *subspec = NULL;
- 	struct bpf_program *tprog = NULL, *tprog_iter;
- 	struct test_spec *spec_iter;
- 	struct cap_state caps = {};
- 	struct bpf_object *tobj;
- 	struct bpf_map *map;
- 	int retval, err, i;
--	bool should_load;
-+	bool should_load, unpriv = (priv_level != PRIV);
-+
-+	switch (priv_level) {
-+		case PRIV:
-+			subspec = &spec->priv;
-+			break;
-+		case UNPRIV:
-+			subspec = &spec->unpriv;
-+			break;
-+		case CUSTCAPS:
-+			subspec = &spec->custom_caps;
-+			break;
-+		default:
-+	}
- 
- 	if (!test__start_subtest(subspec->name))
- 		return;
- 
--	if (unpriv) {
-+	if (priv_level == UNPRIV) {
- 		if (!can_execute_unpriv(tester, spec)) {
- 			test__skip();
- 			test__end_subtest();
-@@ -584,6 +697,11 @@ void run_subtest(struct test_loader *tester,
- 			test__end_subtest();
- 			return;
- 		}
-+	} else if (priv_level == CUSTCAPS) {
-+		if (set_capabilities(spec->caps, &caps)) {
-+			test__end_subtest();
-+			return;
-+		}
- 	}
- 
- 	/* Implicitly reset to NULL if next test case doesn't specify */
-@@ -714,11 +832,13 @@ static void process_subtest(struct test_loader *tester,
- 
- 		if (spec->mode_mask & PRIV)
- 			run_subtest(tester, &open_opts, obj_bytes, obj_byte_cnt,
--				    specs, spec, false);
-+				    specs, spec, PRIV);
- 		if (spec->mode_mask & UNPRIV)
- 			run_subtest(tester, &open_opts, obj_bytes, obj_byte_cnt,
--				    specs, spec, true);
--
-+				    specs, spec, UNPRIV);
-+		if (spec->mode_mask & CUSTCAPS)
-+			run_subtest(tester, &open_opts, obj_bytes, obj_byte_cnt,
-+				    specs, spec, CUSTCAPS);
- 	}
- 
- 	for (i = 0; i < nr_progs; ++i)
--- 
-2.34.1
-
+>
+> bpf_probe_write_user() can, but safety is not built in, along with
+> getting fork + exec right is brittle.
+>
+> > > To achieve better safety, introduce tagged user writable regions, tha=
+t
+> > > must explicitly be registered before tracing BPF programs may use the=
+m:
+> > >
+> > >  1. The prctl() option PR_BPF_REGISTER_WRITABLE allows any user space
+> > >     process (that is allowed to use prctl()) to register tagged writa=
+ble
+> > >     memory regions for the current thread.
+> > >
+> > >  2. Conversely, the prctl() option PR_BPF_UNREGISTER_WRITABLE allows =
+a
+> > >     user space process to unregister a writable memory region that wa=
+s
+> > >     previously registered from the current thread. This must be done
+> > >     before freeing memory if the thread that registered a region is
+> > >     still running.
+> > >
+> > >  3. Tracing BPF programs may write to any registered region in the
+> > >     current thread with bpf_probe_write_user_registered(). If the mem=
+ory
+> > >     region has been tagged with a non-zero value, the BPF program mus=
+t
+> > >     provide a matching tag.
+> > >
+> > > Admin capabilities are still required to attach BPF programs that use
+> > > the new bpf_probe_write_user_registered() helper.
+> >
+> > We stopped adding new helpers ~2 years ago.
+> > Only new kfuncs are allowed.
+>
+> Sure.
+>
+> > >
+> > > With this interface, user space threads are guaranteed that no writes
+> > > happen to regions that they did not explicitly register. Tagging can =
+be
+> > > used to associate additional semantics with the memory region.
+> > >
+> > > A note on tag allocation: Since such programs can only be installed b=
+y
+> > > the local system administrator, tag allocation may be done by the sys=
+tem
+> > > administrator. For example, by providing headers with tag definitions=
+,
+> > > or a central service to distribute tags to the BPF program loader and=
+ to
+> > > user applications.
+> >
+> > Not clear how that's achieved in practice.
+> > To do prctl(REGSISTER, ... tag)
+> > the process will just pass this u32 tag.
+> > There is no way for the admin or other process to enforce certain
+> > tag usage.
+> > Since there is no way to enforce extra tag seems like a weak
+> > protection against something? What in particular?
+>
+> The main goal is to a) avoid accidental writes into areas the user
+> space program doesn't want writing to, along with 2) weakly
+> associating "type" via a tag. As soon as the user space program does
+> prctl(REGISTER, tag) it wants writes to happen. It's the user space
+> program's fault if it uses random tags, because in practice, we know
+> exactly which BPF programs are running in production and which tags
+> they service. The programs we do _care_ about are reviewed and do use
+> the right tags. The mechanism is not for protecting BPF programs or
+> what data they communicate, but for the benefit of the user space
+> program itself to bound the memory that could be touched in its own
+> address space (use the wrong region/tag .. tough luck).
