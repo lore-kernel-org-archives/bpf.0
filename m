@@ -1,153 +1,209 @@
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 980EA208AD
-	for <bpf@vger.kernel.org>; Fri,  5 Apr 2024 04:52:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C91BE28E2;
+	Fri,  5 Apr 2024 05:13:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712292739; cv=none; b=syfJhDLXhkudm6EaWz3NndOFISOgfoQoS/2cpYEeq/HNadMY1FPVya2u6S8WnE5h/lnkNAHcxKRjoRgRzTiFfCMZS2qhWH2uwGuEmwsKZWlJsxZDnatkyIuBvgzVoPp9sjiOBcdTF4mlIK3lKkgA5UbdO2t0yP2cRlkzmhRD3gY=
+	t=1712293993; cv=none; b=lV2bYnusbVp0K7nshiDyJXBTVIPZCsE0fWQxUpuNrd+i6aiPtJGXCQAz3DS9rL+EqcVCFFTbFjZTCdp+m1pkNwxD55awOav1kDznPERP3TZO3ikt1MY6UO3onqEFM85SNPi8/IY1OpggwddELguVU9SwbFpAEamYLuDcY7v9abo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712292739; c=relaxed/simple;
-	bh=KN4AHgf6ZxBccsLo49QfFOIDtSh/mT5uHpAcZfdBrNQ=;
-	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 Mime-Version:Content-Type; b=I8LlyrjquT7RqyCNRtGL2t6MUQvzcEPncTgL8e67ZM0IenFEv81JqRTMNSCb1lkFuFr+aFV0w8BACDT113uJW1wx2fFGNg2uC3alQK7Ix7RyPt5rXQLM4gTXdnt+4e6G9/qkZ9p9yDVUM0ONsyxWe003rGafu874O9Hh6m6fvMw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=g+AT/5YC; arc=none smtp.client-ip=209.85.214.180
+	s=arc-20240116; t=1712293993; c=relaxed/simple;
+	bh=Yh5y/NOBPWAF8HU8gDDpGubvxNSJjp+VpV57uNMwDLE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Ao1kprULqo2VpmZDnlscwimlKHIEyVSh7740uXkZVa/GMSrn0iBzUk5vogKiv0eXSVwuje7jeJSSu2eZqun0EDJUwN4rBwXLow3Kv3KNgHTjLFtB6ow3QfGrPLCNOYYejOQ0mcVr1/E76T3NhbP3GxpvulgKp4fZ1MO4VrjXs1c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mYUiljKu; arc=none smtp.client-ip=209.85.218.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="g+AT/5YC"
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-1e0ae065d24so14906575ad.1
-        for <bpf@vger.kernel.org>; Thu, 04 Apr 2024 21:52:17 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mYUiljKu"
+Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-a44665605f3so198269466b.2;
+        Thu, 04 Apr 2024 22:13:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1712292737; x=1712897537; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1712293990; x=1712898790; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=eMnsm99QjMp7/RpE4OeJ33hRhVaELn41hfyW19g7XYI=;
-        b=g+AT/5YCe4XxZLk8rp6vQ2lcwrQWIEt/TPPSWpgALbvw9OTB6zg0vMVlcGrNkPrxAj
-         B9pm0YVSUnMGnG4xXvi6dDZ3FRBCd+4U04f3+D0TxRy7bHzFSEQN+oPiRZkPAPaHxJK6
-         o4cENes8+46cU2Za9nkZm9BCp5YVq54j+S5+OZqOHgjoO6hOfPakqYOvGud54Zccv7J7
-         D1gPtQZSFlbrEoAN4vM8QWOfw0ymqRCw3x8x4hN4YsRFka2bneCwXK+j2uLnlQ3o60uu
-         ur8i1HM0dOYGZfrg6ZXA36IdlV1BDNygNRG4Y71GvL3+gn1BD4PCbX4/YXFNTS9TFUu5
-         c+1Q==
+        bh=+BUgYCUh1pAAv2v4S5nQUsZfz3aEo2GLtn2+TPhQ88w=;
+        b=mYUiljKuG7fWxuZD7aJSVwKm/EMUBJdaifx0rXLXEMt1swVdCI7xaxvgZ3Vnlh23aa
+         fu1jr7jDpxD3Y77NBGnBG6WB+JuuGXL2i88ls9TWOsvtbtYiCEVB+AHgUIu+v66ditsN
+         urYk7XOj1sJxn+2idwMhm7fF/PRS1pgQ5HGCMkB0qTrWDPdTVhNpEtr9LNMKo/9ve3TV
+         SaOLrftBt4cG9DC1kTGoYfQ74Q+0RcielTes4Q37hMFw42tFn1xpFXA3fW/Kh5K11UCX
+         0SxpmA4AHH9qJe8dmy7lHVTFSB6lAXxLOuKI9bxBAEYgljBANPvAcH7sbgiImth38QzB
+         ul7w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712292737; x=1712897537;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=eMnsm99QjMp7/RpE4OeJ33hRhVaELn41hfyW19g7XYI=;
-        b=D04m87/HtMl51mWT7vivZwejO7A3t9hqzMWe3fKu1dqEZ8/pct0RjEdnA0paxWO7w3
-         qnSVeI2RaRf7ls879wAFpRiJ1YTESKI+0J2jonHIlYEwKxZidc09S8AzeDdcDSSeRBfG
-         t/LuTWK4pfkC3QJHy4HuMCKuph77rCTmm/8nUwPSMIZlXloDrfoQ93BG0JQW+1uM+63L
-         KyZ+or2IjyTRW8eMmWv/ksy8bDTD7kPXv4TOllyDS01QZ07O1XY8dC3bchyZsN9B5Q6p
-         g4U5yezv+mZs4iMyOc0FA2gpJzBWdgrDvhAZZFJM5PUKHmwhlwGB3R75PKGhdYugg7n5
-         HNsg==
-X-Forwarded-Encrypted: i=1; AJvYcCWMFwzTN6hRbGoIYzk3TVP0424MEQnX0w0Sms0Gi7Eqk43ZzY+g+glL++jMZXJ1WWvmuZT+TGfw4rjJqFm1xRUHyyzG
-X-Gm-Message-State: AOJu0YwTl2b0L/JBeDFKMaNEej8vAra4aXAX2MzAlTUdJQNcZ5gmOn5i
-	ukuoIfwupj4XdQbrNFX6GeGCoSCO+bOKVjWKl3I9i7eevB61w5rr
-X-Google-Smtp-Source: AGHT+IGJ1O6er88crei12qoj6EIiHx60KQTcIx0/cH7gLebObLqoYWELy1873PfqAXwoWdqYSV7gMA==
-X-Received: by 2002:a17:902:f7cc:b0:1e0:fcf9:95e0 with SMTP id h12-20020a170902f7cc00b001e0fcf995e0mr348229plw.20.1712292736767;
-        Thu, 04 Apr 2024 21:52:16 -0700 (PDT)
-Received: from localhost ([98.97.36.54])
-        by smtp.gmail.com with ESMTPSA id ix5-20020a170902f80500b001e24a287d66sm536032plb.117.2024.04.04.21.52.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 Apr 2024 21:52:16 -0700 (PDT)
-Date: Thu, 04 Apr 2024 21:52:15 -0700
-From: John Fastabend <john.fastabend@gmail.com>
-To: Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
- John Fastabend <john.fastabend@gmail.com>, 
- bpf <bpf@vger.kernel.org>
-Cc: Kashyap Sanidhya <sanidhya.kashyap@epfl.ch>, 
- rishabh.iyer@berkley.edu, 
- Daniel Borkmann <daniel@iogearbox.net>, 
- Jakub Sitnicki <jakub@cloudflare.com>
-Message-ID: <660f837f9e83a_50b8720828@john.notmuch>
-In-Reply-To: <CAP01T74=OChcu8V2u3bSMas=Lh-y72Y+7my1djn-uSKygBoX+w@mail.gmail.com>
-References: <CAP01T74=OChcu8V2u3bSMas=Lh-y72Y+7my1djn-uSKygBoX+w@mail.gmail.com>
-Subject: RE: [Bug Report] Packet drops after trimming skb using
- bpf_skb_adjust_room
+        d=1e100.net; s=20230601; t=1712293990; x=1712898790;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=+BUgYCUh1pAAv2v4S5nQUsZfz3aEo2GLtn2+TPhQ88w=;
+        b=IqU+LhSe9PBcwGxxmH6qpKCTZFUvBAJcjEv8u4nTI78LBgmsPk3ZrUFBqP+yUgRIWc
+         BHFS4yYJ+QyPii6qfTi/JcuMDMek8c+ObgSkoida31WOaMVqPmt+e1DsIFsJxfHhVLKR
+         YEL1DqVMxVxwF5gfhlJQrgRZjEEcS4ajxk0u/ovzBX5lYcDTfRncaDmWnfS1OiveX1Ed
+         glyRD7HwgZXC974qVzo0SUsfJJs3sdMseZoSZ9i63IpT2vQl3v2ISSDPMiNLO3NX9Lyy
+         AUNeQv3/qAZ0HdGJyFe/5eztXV0019Mb4UlCNp1QJxXsUXcKVx22sMsgdMCAkgTv3zJw
+         fbwQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUw/bMnwJwJYgoY24FKDbKZrbMV6TOXaBBMYAFuwfWn1r/HYvh7X/1nURTC2m4N05mTv41DPZoSJoVawn3DC2aLeqTeDjBuvP45cMptSCxEmNxZAAR9KoA7p1k/
+X-Gm-Message-State: AOJu0YxBKn6TLeWnI1DxSB3GYDfl5SmFgK8efCsR98n18A/XOInE3PSv
+	R5IQ+xmpgbfTZCUXIJfiOeAekb0BNQhRQR4ecB1u30aF6OQFV/NCUNJg+WkTrDNQ0diLn25T/JG
+	9vSQb8ZbmUusLwy9UDhhL5rad6HM=
+X-Google-Smtp-Source: AGHT+IFFxhZJYWFXNUBgJiSi4afj1iYI8p8bxSLG9lI6B38ByT36kYZB54vSpAkmMIkUcjsxPBwfVz+lCoFPKjjefL8=
+X-Received: by 2002:a17:907:6d0b:b0:a51:99ea:a9cc with SMTP id
+ sa11-20020a1709076d0b00b00a5199eaa9ccmr242075ejc.54.1712293989908; Thu, 04
+ Apr 2024 22:13:09 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+References: <20240329134037.92124-1-kerneljasonxing@gmail.com>
+ <660dfbcb45cfc_23f4720810@john.notmuch> <CAL+tcoAE7AC3-jP3NYL1SXPHbC3KCRj_VOvd1=T2e0YTk8R5+g@mail.gmail.com>
+ <660f81fc59256_50b87208e9@john.notmuch>
+In-Reply-To: <660f81fc59256_50b87208e9@john.notmuch>
+From: Jason Xing <kerneljasonxing@gmail.com>
+Date: Fri, 5 Apr 2024 13:12:33 +0800
+Message-ID: <CAL+tcoCRswPAD0Zd=KCrJEmvPQVKCoMYr98Rx1wO_-bbUiVvJA@mail.gmail.com>
+Subject: Re: [PATCH net] bpf, skmsg: fix NULL pointer dereference in sk_psock_skb_ingress_enqueue
+To: John Fastabend <john.fastabend@gmail.com>
+Cc: edumazet@google.com, jakub@cloudflare.com, davem@davemloft.net, 
+	kuba@kernel.org, pabeni@redhat.com, daniel@iogearbox.net, ast@kernel.org, 
+	netdev@vger.kernel.org, bpf@vger.kernel.org, 
+	Jason Xing <kernelxing@tencent.com>, 
+	syzbot+aa8c8ec2538929f18f2d@syzkaller.appspotmail.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Kumar Kartikeya Dwivedi wrote:
-> Hello John,
-> 
-> For background, I have a sk_skb program where for certain flows, a
-> subset of request handling logic (on Rx) that is typically done in
-> user space is handed over to a BPF program for doing it in-kernel.
-> 
-> Since the protocol is over TCP, I'm using sk_skb programs to handle
-> these requests and generate responses from within the kernel. The user
-> space application will decide which flow should be added to the
-> sockmap on socket accept and then let it be handled in the kernel for
-> some of the request types.
-> 
-> However, when generating replies and trimming away extra bytes in the
-> packet by using bpf_skb_adjust_room, I see packet drops because the
-> strp_msg->full_len is not updated unless tls_sw_has_ctx_rx is true for
-> the socket. Removing that condition makes everything work, but I am
-> not sure that is the right fix.
-> 
-> My understanding so far is that in sk_psock_backlog,
-> sk_psock_handle_skb returns an error since the stm->full_len is not
-> correct (and passed into it as len), and SK_PSOCK_TX_ENABLED gets
-> cleared due to this error. Then, on the redirect side
-> (sk_psock_skb_redirect), it does sock_drop because the test for the
-> SK_PSOCK_TX_ENABLED flag fails, which does kfree_skb.
-> 
-> I have attached a patch with a selftest (skb_adjust_room) that you can
-> run to verify the problem. It should basically hang on the second read
-> as the packet would be dropped by the kernel. The first read goes
-> through fine. Applying the diff below allows the selftest to pass.
-> 
-> I am not familiar with the code to know whether the fix below is
-> correct, but it seems to resolve the problem for me (and I carried it
-> for a while and ran my stuff on it until I got around to reporting
-> this now).
-> 
-> In case gmail screws up the formatting, I'm just removing the
-> tls_sw_has_ctx_rx(skb->sk) conditional on the strp_msg->full_len
-> update in sk_skb_adjust_room.
+On Fri, Apr 5, 2024 at 12:45=E2=80=AFPM John Fastabend <john.fastabend@gmai=
+l.com> wrote:
+>
+> Jason Xing wrote:
+> > Hello John,
+> >
+> > On Thu, Apr 4, 2024 at 9:01=E2=80=AFAM John Fastabend <john.fastabend@g=
+mail.com> wrote:
+> > >
+> > > Jason Xing wrote:
+> > > > From: Jason Xing <kernelxing@tencent.com>
+> > > >
+> > > > Fix NULL pointer data-races in sk_psock_skb_ingress_enqueue() which
+> > > > syzbot reported [1].
+> > > >
+> > > > [1]
+> > > > BUG: KCSAN: data-race in sk_psock_drop / sk_psock_skb_ingress_enque=
+ue
+> > > >
+> > > > write to 0xffff88814b3278b8 of 8 bytes by task 10724 on cpu 1:
+> > > >  sk_psock_stop_verdict net/core/skmsg.c:1257 [inline]
+> > > >  sk_psock_drop+0x13e/0x1f0 net/core/skmsg.c:843
+> > > >  sk_psock_put include/linux/skmsg.h:459 [inline]
+> > > >  sock_map_close+0x1a7/0x260 net/core/sock_map.c:1648
+> > > >  unix_release+0x4b/0x80 net/unix/af_unix.c:1048
+> > > >  __sock_release net/socket.c:659 [inline]
+> > > >  sock_close+0x68/0x150 net/socket.c:1421
+> > > >  __fput+0x2c1/0x660 fs/file_table.c:422
+> > > >  __fput_sync+0x44/0x60 fs/file_table.c:507
+> > > >  __do_sys_close fs/open.c:1556 [inline]
+> > > >  __se_sys_close+0x101/0x1b0 fs/open.c:1541
+> > > >  __x64_sys_close+0x1f/0x30 fs/open.c:1541
+> > > >  do_syscall_64+0xd3/0x1d0
+> > > >  entry_SYSCALL_64_after_hwframe+0x6d/0x75
+> > > >
+> > > > read to 0xffff88814b3278b8 of 8 bytes by task 10713 on cpu 0:
+> > > >  sk_psock_data_ready include/linux/skmsg.h:464 [inline]
+> > > >  sk_psock_skb_ingress_enqueue+0x32d/0x390 net/core/skmsg.c:555
+> > > >  sk_psock_skb_ingress_self+0x185/0x1e0 net/core/skmsg.c:606
+> > > >  sk_psock_verdict_apply net/core/skmsg.c:1008 [inline]
+> > > >  sk_psock_verdict_recv+0x3e4/0x4a0 net/core/skmsg.c:1202
+> > > >  unix_read_skb net/unix/af_unix.c:2546 [inline]
+> > > >  unix_stream_read_skb+0x9e/0xf0 net/unix/af_unix.c:2682
+> > > >  sk_psock_verdict_data_ready+0x77/0x220 net/core/skmsg.c:1223
+> > > >  unix_stream_sendmsg+0x527/0x860 net/unix/af_unix.c:2339
+> > > >  sock_sendmsg_nosec net/socket.c:730 [inline]
+> > > >  __sock_sendmsg+0x140/0x180 net/socket.c:745
+> > > >  ____sys_sendmsg+0x312/0x410 net/socket.c:2584
+> > > >  ___sys_sendmsg net/socket.c:2638 [inline]
+> > > >  __sys_sendmsg+0x1e9/0x280 net/socket.c:2667
+> > > >  __do_sys_sendmsg net/socket.c:2676 [inline]
+> > > >  __se_sys_sendmsg net/socket.c:2674 [inline]
+> > > >  __x64_sys_sendmsg+0x46/0x50 net/socket.c:2674
+> > > >  do_syscall_64+0xd3/0x1d0
+> > > >  entry_SYSCALL_64_after_hwframe+0x6d/0x75
+> > > >
+> > > > value changed: 0xffffffff83d7feb0 -> 0x0000000000000000
+> > > >
+> > > > Reported by Kernel Concurrency Sanitizer on:
+> > > > CPU: 0 PID: 10713 Comm: syz-executor.4 Tainted: G        W         =
+ 6.8.0-syzkaller-08951-gfe46a7dd189e #0
+> > > > Hardware name: Google Google Compute Engine/Google Compute Engine, =
+BIOS Google 02/29/2024
+> > > >
+> > > > Prior to this, commit 4cd12c6065df ("bpf, sockmap: Fix NULL pointer
+> > > > dereference in sk_psock_verdict_data_ready()") fixed one NULL point=
+er
+> > > > similarly due to no protection of saved_data_ready. Here is another
+> > > > different caller causing the same issue because of the same reason.=
+ So
+> > > > we should protect it with sk_callback_lock read lock because the wr=
+iter
+> > > > side in the sk_psock_drop() uses "write_lock_bh(&sk->sk_callback_lo=
+ck);".
+> > > >
+> > > > Fixes: 604326b41a6f ("bpf, sockmap: convert to generic sk_msg inter=
+face")
+> > > > Reported-by: syzbot+aa8c8ec2538929f18f2d@syzkaller.appspotmail.com
+> > > > Closes: https://syzkaller.appspot.com/bug?extid=3Daa8c8ec2538929f18=
+f2d
+> > > > Signed-off-by: Jason Xing <kernelxing@tencent.com>
+> > > > ---
+> > > >  net/core/skmsg.c | 2 ++
+> > > >  1 file changed, 2 insertions(+)
+> > > >
+> > > > diff --git a/net/core/skmsg.c b/net/core/skmsg.c
+> > > > index 4d75ef9d24bf..67c4c01c5235 100644
+> > > > --- a/net/core/skmsg.c
+> > > > +++ b/net/core/skmsg.c
+> > > > @@ -552,7 +552,9 @@ static int sk_psock_skb_ingress_enqueue(struct =
+sk_buff *skb,
+> > > >       msg->skb =3D skb;
+> > > >
+> > > >       sk_psock_queue_msg(psock, msg);
+> > > > +     read_lock_bh(&sk->sk_callback_lock);
+> > > >       sk_psock_data_ready(sk, psock);
+> > > > +     read_unlock_bh(&sk->sk_callback_lock);
+> > > >       return copied;
+> > > >  }
+> > >
+> > > The problem is the check and then usage presumably it is already set
+> > > to NULL:
+> > >
+> > >  static inline void sk_psock_data_ready(struct sock *sk, struct sk_ps=
+ock *psock)
+> > >  {
+> > >         if (psock->saved_data_ready)
+> > >                 psock->saved_data_ready(sk);
+> >
+> > Yes.
+> >
+> > >
+> > >
+> > > I'm thinking we might be able to get away with just a READ_ONCE here =
+with
+> > > similar WRITE_ONCE on other side. Something like this,
+> >
+> > The simple fix that popped into my mind at the beginning is the same
+> > as you: adding the READ_ONCE/WRITE_ONCE pair.
+>
+> Let me know if you want to try doing a patch with the READ_ONCE/WRITE_ONC=
+E
+> we could push something like that through bpf-next I think. Just needs
+> some extra thought and testing.
 
-I think your analysis is correct and patch looks good. I'll study
-a bit more tomorrow.  It looks like I just messed it up there and
-didn't consider the case of redirect in non-TLS case.
+Yes, I'm interested in it. Just a little bit worried that I cannot do
+it well. I will take some time to dig into it.
 
-Gmail did fine pushing code through.
+BTW, would this modification conflict with the current patch? The
+final solution you're thinking of is using the READ_ONCE/WRITE_ONCE
+pair?
 
-> 
-> diff --git a/net/core/filter.c b/net/core/filter.c
-> index 524adf1fa6d0..e3009d0f3352 100644
-> 
-> --- a/net/core/filter.c
-> +++ b/net/core/filter.c
-> @@ -3622,11 +3622,7 @@ BPF_CALL_4(sk_skb_adjust_room, struct sk_buff
-> *, skb, s32, len_diff,
-> 
->                         return -ENOMEM;
-> 
->                 __skb_pull(skb, len_diff_abs);
-> 
->         }
-> 
-> -       if (tls_sw_has_ctx_rx(skb->sk)) {
-> -               struct strp_msg *rxm = strp_msg(skb);
-> -
-> -               rxm->full_len += len_diff;
-> -       }
-> +       strp_msg(skb)->full_len += len_diff;
->         return ret;
->  }
-> 
-> --
-> 
-> Thanks!
-
-
+Thanks,
+Jason
