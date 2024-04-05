@@ -1,85 +1,71 @@
-Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
+Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC1C6A21;
-	Fri,  5 Apr 2024 04:47:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 980EA208AD
+	for <bpf@vger.kernel.org>; Fri,  5 Apr 2024 04:52:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712292460; cv=none; b=s5vclOEDCblwHjlyhJDwCPQS6/RhVbCmXznLylzFi7LSkxN6S2OLuh+NtTVUkdhPOam60qOcdJfXwWgSeuMdXXNGBThk1GRbRPCMs5ni4kKuW1cAl90w19RyjGD37FIjZjGRcSmChGGeok7CT/9yBGo619WvCaIslwnCLRhfcpI=
+	t=1712292739; cv=none; b=syfJhDLXhkudm6EaWz3NndOFISOgfoQoS/2cpYEeq/HNadMY1FPVya2u6S8WnE5h/lnkNAHcxKRjoRgRzTiFfCMZS2qhWH2uwGuEmwsKZWlJsxZDnatkyIuBvgzVoPp9sjiOBcdTF4mlIK3lKkgA5UbdO2t0yP2cRlkzmhRD3gY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712292460; c=relaxed/simple;
-	bh=KPPAy2NRlf1bP6Z6fFT7GBie8pIP3N18Qq41ae3iumU=;
+	s=arc-20240116; t=1712292739; c=relaxed/simple;
+	bh=KN4AHgf6ZxBccsLo49QfFOIDtSh/mT5uHpAcZfdBrNQ=;
 	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 Mime-Version:Content-Type; b=sTX6UMblUGQJWLuvBBaWggGAVsw+6HZT/NfrG13mud3T8r+7obYlt/44cEsis1paq6zpyBlCPERJTpMxKKr8f6XsGZbE9F7tY/cpzh44ViuKUrMV0St3/5saudk8nMNS7/Pjm/Ko+YKitfcwLrumElDHzT+WS8Za24pkZ9sAImk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nIdKehFQ; arc=none smtp.client-ip=209.85.210.181
+	 Mime-Version:Content-Type; b=I8LlyrjquT7RqyCNRtGL2t6MUQvzcEPncTgL8e67ZM0IenFEv81JqRTMNSCb1lkFuFr+aFV0w8BACDT113uJW1wx2fFGNg2uC3alQK7Ix7RyPt5rXQLM4gTXdnt+4e6G9/qkZ9p9yDVUM0ONsyxWe003rGafu874O9Hh6m6fvMw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=g+AT/5YC; arc=none smtp.client-ip=209.85.214.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nIdKehFQ"
-Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-6ecf1bb7f38so1069787b3a.0;
-        Thu, 04 Apr 2024 21:47:38 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="g+AT/5YC"
+Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-1e0ae065d24so14906575ad.1
+        for <bpf@vger.kernel.org>; Thu, 04 Apr 2024 21:52:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1712292458; x=1712897258; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1712292737; x=1712897537; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:subject:references
          :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=CCjVoUS8vmrMVqQdQng+Kk/4Ylbn3WMAKPvIJ7dMXnQ=;
-        b=nIdKehFQ2lDrw1qtZ0TunDFY6bPFtu40PBrzVpSKfc4h2txCejZ/vUTFILGGnh5oVW
-         PytQWLoAGLzkfdjrgI3NV+B40KbvGd8NiYq9z7YfhyKIVnXLKmRhS56fLBgsVKNjzRBw
-         k1DrlDIePEmUFz20y49V871u4dQS44E69BL/no2Y8OgP4i1M10NZNLTmSZ4V4C+fOlRe
-         9fg0x2qHY4wP/QGH6Bmtagnbq3KihuWmcFGTcDg+0bf8K2Gl1mDBsKYepuH29B+rpt33
-         CfPbKuuDFq1kcPsw94FECu0vKRUUNQBKkJJtut72Uj+ra9xfvQ2H0bZvLy3DdjPY7KbY
-         mNpA==
+        bh=eMnsm99QjMp7/RpE4OeJ33hRhVaELn41hfyW19g7XYI=;
+        b=g+AT/5YCe4XxZLk8rp6vQ2lcwrQWIEt/TPPSWpgALbvw9OTB6zg0vMVlcGrNkPrxAj
+         B9pm0YVSUnMGnG4xXvi6dDZ3FRBCd+4U04f3+D0TxRy7bHzFSEQN+oPiRZkPAPaHxJK6
+         o4cENes8+46cU2Za9nkZm9BCp5YVq54j+S5+OZqOHgjoO6hOfPakqYOvGud54Zccv7J7
+         D1gPtQZSFlbrEoAN4vM8QWOfw0ymqRCw3x8x4hN4YsRFka2bneCwXK+j2uLnlQ3o60uu
+         ur8i1HM0dOYGZfrg6ZXA36IdlV1BDNygNRG4Y71GvL3+gn1BD4PCbX4/YXFNTS9TFUu5
+         c+1Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712292458; x=1712897258;
+        d=1e100.net; s=20230601; t=1712292737; x=1712897537;
         h=content-transfer-encoding:mime-version:subject:references
          :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=CCjVoUS8vmrMVqQdQng+Kk/4Ylbn3WMAKPvIJ7dMXnQ=;
-        b=nJOIhd0yiY5YeTBLPUXowZiCiVHxpPoSHKQoCsac2OCBofgg8AxmhfXvLUgaPgbwkG
-         andL86EnuNXER4jwuzjXjQSWqnDoQ7q8DCqaT2b1I5RehXpFjWKtNioGhd40jXRhYlHk
-         AZe863YlDmjW927XKzfMbyXY06DdfrxVw+Xw1b6wbfHkKmcNFniHaAeORONIjplPBoU7
-         UnthWnnJz9TaCLihMdvJfI1MoBNzxi/HTcZf7+a9QPkmtNQlJdDZ0XuXCsay6e8Kw/LD
-         X3NWgqNX5hJgifM4NMiwgeGulL4x1UPqhWMCGCzOj0Sa9/Q5dOXUOb43RXQyIUrhF9/f
-         5O8g==
-X-Forwarded-Encrypted: i=1; AJvYcCXf6L9QoUTVwOYAZ1PIi8KYuGEsU/9EeioMBjYA6X5wc5ipOTb2Biig5sEcF2/DFmJ/rcI57JB39zNxIU8XuC5QLJJ/oG01H+z/IRatxM7uowt5U6t2gnMDw3LwH2K/kCjJsmDC
-X-Gm-Message-State: AOJu0YwD1AsRNfZ8mO74pYXyiRkWghTN8D53oMRk2vhozkh3J7K2uOct
-	k9awG3pat3lonC89S6pHugBroGJUM1YoOdFPO5JdtKKuP4Xsrdv9
-X-Google-Smtp-Source: AGHT+IF3ayvSmRejOAejiQIAYZuBc7XfDRh2N7JSjg21At89QKgITaRBie8cblrEyUd7I4EymnbR/Q==
-X-Received: by 2002:a05:6a00:3c89:b0:6ea:7db6:6271 with SMTP id lm9-20020a056a003c8900b006ea7db66271mr444514pfb.19.1712292458051;
-        Thu, 04 Apr 2024 21:47:38 -0700 (PDT)
+        bh=eMnsm99QjMp7/RpE4OeJ33hRhVaELn41hfyW19g7XYI=;
+        b=D04m87/HtMl51mWT7vivZwejO7A3t9hqzMWe3fKu1dqEZ8/pct0RjEdnA0paxWO7w3
+         qnSVeI2RaRf7ls879wAFpRiJ1YTESKI+0J2jonHIlYEwKxZidc09S8AzeDdcDSSeRBfG
+         t/LuTWK4pfkC3QJHy4HuMCKuph77rCTmm/8nUwPSMIZlXloDrfoQ93BG0JQW+1uM+63L
+         KyZ+or2IjyTRW8eMmWv/ksy8bDTD7kPXv4TOllyDS01QZ07O1XY8dC3bchyZsN9B5Q6p
+         g4U5yezv+mZs4iMyOc0FA2gpJzBWdgrDvhAZZFJM5PUKHmwhlwGB3R75PKGhdYugg7n5
+         HNsg==
+X-Forwarded-Encrypted: i=1; AJvYcCWMFwzTN6hRbGoIYzk3TVP0424MEQnX0w0Sms0Gi7Eqk43ZzY+g+glL++jMZXJ1WWvmuZT+TGfw4rjJqFm1xRUHyyzG
+X-Gm-Message-State: AOJu0YwTl2b0L/JBeDFKMaNEej8vAra4aXAX2MzAlTUdJQNcZ5gmOn5i
+	ukuoIfwupj4XdQbrNFX6GeGCoSCO+bOKVjWKl3I9i7eevB61w5rr
+X-Google-Smtp-Source: AGHT+IGJ1O6er88crei12qoj6EIiHx60KQTcIx0/cH7gLebObLqoYWELy1873PfqAXwoWdqYSV7gMA==
+X-Received: by 2002:a17:902:f7cc:b0:1e0:fcf9:95e0 with SMTP id h12-20020a170902f7cc00b001e0fcf995e0mr348229plw.20.1712292736767;
+        Thu, 04 Apr 2024 21:52:16 -0700 (PDT)
 Received: from localhost ([98.97.36.54])
-        by smtp.gmail.com with ESMTPSA id e12-20020a62aa0c000000b006ead792b6a0sm560411pff.93.2024.04.04.21.47.37
+        by smtp.gmail.com with ESMTPSA id ix5-20020a170902f80500b001e24a287d66sm536032plb.117.2024.04.04.21.52.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 Apr 2024 21:47:37 -0700 (PDT)
-Date: Thu, 04 Apr 2024 21:47:36 -0700
+        Thu, 04 Apr 2024 21:52:16 -0700 (PDT)
+Date: Thu, 04 Apr 2024 21:52:15 -0700
 From: John Fastabend <john.fastabend@gmail.com>
-To: Geliang Tang <geliang@kernel.org>, 
- Jakub Sitnicki <jakub@cloudflare.com>, 
- John Fastabend <john.fastabend@gmail.com>
-Cc: Andrii Nakryiko <andrii@kernel.org>, 
- Eduard Zingerman <eddyz87@gmail.com>, 
- Mykola Lysenko <mykolal@fb.com>, 
- Alexei Starovoitov <ast@kernel.org>, 
+To: Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+ John Fastabend <john.fastabend@gmail.com>, 
+ bpf <bpf@vger.kernel.org>
+Cc: Kashyap Sanidhya <sanidhya.kashyap@epfl.ch>, 
+ rishabh.iyer@berkley.edu, 
  Daniel Borkmann <daniel@iogearbox.net>, 
- Martin KaFai Lau <martin.lau@linux.dev>, 
- Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, 
- KP Singh <kpsingh@kernel.org>, 
- Stanislav Fomichev <sdf@google.com>, 
- Hao Luo <haoluo@google.com>, 
- Jiri Olsa <jolsa@kernel.org>, 
- Shuah Khan <shuah@kernel.org>, 
- bpf@vger.kernel.org, 
- mptcp@lists.linux.dev, 
- linux-kselftest@vger.kernel.org
-Message-ID: <660f8268ddd8f_50b87208bb@john.notmuch>
-In-Reply-To: <74fec36278933bd0dd793875ac2343f528c9355d.camel@kernel.org>
-References: <b67101632c6858d281f105b5d4e1bc62dd6b7d27.1712133039.git.tanggeliang@kylinos.cn>
- <878r1ubq8q.fsf@cloudflare.com>
- <660dd833358bd_2144820881@john.notmuch>
- <74fec36278933bd0dd793875ac2343f528c9355d.camel@kernel.org>
-Subject: Re: [PATCH bpf-next] selftests/bpf: Add F_SETFL for fcntl
+ Jakub Sitnicki <jakub@cloudflare.com>
+Message-ID: <660f837f9e83a_50b8720828@john.notmuch>
+In-Reply-To: <CAP01T74=OChcu8V2u3bSMas=Lh-y72Y+7my1djn-uSKygBoX+w@mail.gmail.com>
+References: <CAP01T74=OChcu8V2u3bSMas=Lh-y72Y+7my1djn-uSKygBoX+w@mail.gmail.com>
+Subject: RE: [Bug Report] Packet drops after trimming skb using
+ bpf_skb_adjust_room
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -88,81 +74,80 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Type: text/plain;
  charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 7bit
 
-Geliang Tang wrote:
-> Hi Jakub,
->  =
+Kumar Kartikeya Dwivedi wrote:
+> Hello John,
+> 
+> For background, I have a sk_skb program where for certain flows, a
+> subset of request handling logic (on Rx) that is typically done in
+> user space is handed over to a BPF program for doing it in-kernel.
+> 
+> Since the protocol is over TCP, I'm using sk_skb programs to handle
+> these requests and generate responses from within the kernel. The user
+> space application will decide which flow should be added to the
+> sockmap on socket accept and then let it be handled in the kernel for
+> some of the request types.
+> 
+> However, when generating replies and trimming away extra bytes in the
+> packet by using bpf_skb_adjust_room, I see packet drops because the
+> strp_msg->full_len is not updated unless tls_sw_has_ctx_rx is true for
+> the socket. Removing that condition makes everything work, but I am
+> not sure that is the right fix.
+> 
+> My understanding so far is that in sk_psock_backlog,
+> sk_psock_handle_skb returns an error since the stm->full_len is not
+> correct (and passed into it as len), and SK_PSOCK_TX_ENABLED gets
+> cleared due to this error. Then, on the redirect side
+> (sk_psock_skb_redirect), it does sock_drop because the test for the
+> SK_PSOCK_TX_ENABLED flag fails, which does kfree_skb.
+> 
+> I have attached a patch with a selftest (skb_adjust_room) that you can
+> run to verify the problem. It should basically hang on the second read
+> as the packet would be dropped by the kernel. The first read goes
+> through fine. Applying the diff below allows the selftest to pass.
+> 
+> I am not familiar with the code to know whether the fix below is
+> correct, but it seems to resolve the problem for me (and I carried it
+> for a while and ran my stuff on it until I got around to reporting
+> this now).
+> 
+> In case gmail screws up the formatting, I'm just removing the
+> tls_sw_has_ctx_rx(skb->sk) conditional on the strp_msg->full_len
+> update in sk_skb_adjust_room.
 
-> On Wed, 2024-04-03 at 15:29 -0700, John Fastabend wrote:
-> > Jakub Sitnicki wrote:
-> > > Hi Geliang,
-> > > =
+I think your analysis is correct and patch looks good. I'll study
+a bit more tomorrow.  It looks like I just messed it up there and
+didn't consider the case of redirect in non-TLS case.
 
-> > > On Wed, Apr 03, 2024 at 04:32 PM +08, Geliang Tang wrote:
-> > > > From: Geliang Tang <tanggeliang@kylinos.cn>
-> > > > =
+Gmail did fine pushing code through.
 
-> > > > Incorrect arguments are passed to fcntl() in test_sockmap.c when
-> > > > invoking
-> > > > it to set file status flags. If O_NONBLOCK is used as 2nd
-> > > > argument and
-> > > > passed into fcntl, -EINVAL will be returned (See do_fcntl() in
-> > > > fs/fcntl.c).
-> > > > The correct approach is to use F_SETFL as 2nd argument, and
-> > > > O_NONBLOCK as
-> > > > 3rd one.
-> > > > =
+> 
+> diff --git a/net/core/filter.c b/net/core/filter.c
+> index 524adf1fa6d0..e3009d0f3352 100644
+> 
+> --- a/net/core/filter.c
+> +++ b/net/core/filter.c
+> @@ -3622,11 +3622,7 @@ BPF_CALL_4(sk_skb_adjust_room, struct sk_buff
+> *, skb, s32, len_diff,
+> 
+>                         return -ENOMEM;
+> 
+>                 __skb_pull(skb, len_diff_abs);
+> 
+>         }
+> 
+> -       if (tls_sw_has_ctx_rx(skb->sk)) {
+> -               struct strp_msg *rxm = strp_msg(skb);
+> -
+> -               rxm->full_len += len_diff;
+> -       }
+> +       strp_msg(skb)->full_len += len_diff;
+>         return ret;
+>  }
+> 
+> --
+> 
+> Thanks!
 
-> > > > Fixes: 16962b2404ac ("bpf: sockmap, add selftests")
-> > > > Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
-> > > > ---
-> > > > =C2=A0tools/testing/selftests/bpf/test_sockmap.c | 2 +-
-> > > > =C2=A01 file changed, 1 insertion(+), 1 deletion(-)
-> > > > =
 
-> > > > diff --git a/tools/testing/selftests/bpf/test_sockmap.c
-> > > > b/tools/testing/selftests/bpf/test_sockmap.c
-> > > > index 024a0faafb3b..34d6a1e6f664 100644
-> > > > --- a/tools/testing/selftests/bpf/test_sockmap.c
-> > > > +++ b/tools/testing/selftests/bpf/test_sockmap.c
-> > > > @@ -603,7 +603,7 @@ static int msg_loop(int fd, int iov_count,
-> > > > int iov_length, int cnt,
-> > > > =C2=A0		struct timeval timeout;
-> > > > =C2=A0		fd_set w;
-> > > > =C2=A0
-> > > > -		fcntl(fd, fd_flags);
-> > > > +		fcntl(fd, F_SETFL, fd_flags);
-> > > > =C2=A0		/* Account for pop bytes noting each iteration
-> > > > of apply will
-> > > > =C2=A0		 * call msg_pop_data helper so we need to
-> > > > account for this
-> > > > =C2=A0		 * by calculating the number of apply
-> > > > iterations. Note user
-> > > =
-
-> > > Good catch. But we also need to figure out why some tests failing
-> > > with
-> > > this patch applied and fix them in one go:
-> > > =
-
-> > > # 6/ 7=C2=A0 sockmap::txmsg test skb:FAIL
-> > > #21/ 7 sockhash::txmsg test skb:FAIL
-> > > #36/ 7 sockhash:ktls:txmsg test skb:FAIL
-> > > Pass: 42 Fail: 3
-> =
-
-> Sorry, I didn't notice these fails in my testing before, they do exist.=
-
-> I'll try to fix them and sent a v2 soon.
-
-Not 100% sure but a hint. I would look into where the stream parser
-is waking up the sock here. I'm not sure there is an easy fix tbh.
-I can help look at this soon as well if you don't beat me to a fix.
-
-Thanks for looking into it.
-
-> =
-
-> Thanks,
-> -Geliang=
