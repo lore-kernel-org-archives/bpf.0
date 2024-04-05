@@ -1,119 +1,88 @@
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [78.32.30.218])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3C1E16C426;
-	Fri,  5 Apr 2024 11:36:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.32.30.218
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21A5F1E87F;
+	Fri,  5 Apr 2024 12:34:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712316965; cv=none; b=q4H6FLltZnNADOkEDYFv7xxBcv0ucaosjT1DoBdtf0SFJOitmU1oPl+/Y9rYaVa5svTGmIkNIooszBfF57n4h1Y3vvA08LNy4VzidR9QTvb1uBy33c+F3ticR37iqC63EKo3tvaZUcU6gBNu5K+Wxw0ZUL8LyxMja8ZzDC9QFCI=
+	t=1712320445; cv=none; b=SOlA8kPv0RL3fVijCTkM9ZlBXTWSUEJTn1JtyBqb5Vp6hf8p89Q5D5fM7efT0F6CYELp+SWzZwezNDiQuG1oB+DhRrwGWOEIzD4t/j0CT6LgXI0OK9Kb/RwW0x2dCkykrNEmygeGWwiWgQ5XGNdc2ZXuF+ypqKxF7igQ0loH0kQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712316965; c=relaxed/simple;
-	bh=dtcfj64x/DbH4J83jgaQf165/61rA70kiyeU0XQuti4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZCvcwpTPcVJOeG/Vp/tvf0AjRPkT5Kdu5MsoOo6eOe6lLl8hT5LXyCkRoAXi5XaNwRx9/ZoqTpmrtf287stub8X4gsX33Nmn7XoeGTCbUb8BYREuj01iI0ZSNeRI7f9sUJ/hwM8ybUA/SYV8rguydYJZsBOEDX5XYVYjA+N3zoA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk; spf=none smtp.mailfrom=armlinux.org.uk; dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b=bfGUHewc; arc=none smtp.client-ip=78.32.30.218
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=armlinux.org.uk
+	s=arc-20240116; t=1712320445; c=relaxed/simple;
+	bh=PECncfpIj9KF2NL1qIow7qaBE8q+dGkyd5JVLY75BOg=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=rr4vzquK5N5qiEPuGyTkXVjDjW8bS2Hi5T3l8qbROokgytelZIBWxXwQPivccmcXKB+ypH217tpStOgeogFPLNOfvwDtuHM6pj1s963CHFzs77d0FFLuPdsKJ3NkJY2igu+UGy6WYOoxl1Y/6se4rUPVpLeVWtgTNFG8AT5osos=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=f7OO++ld; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b="bfGUHewc"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:
-	Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
-	Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-	List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=CJp1+BJnCHioQp+DU63SJcb4jsAzGQK2w3ccuNxWycw=; b=bfGUHewcFdVduY14Pq0OjeGyw1
-	DpsgB0719rKoZwgF59u1emrB+ni9APzRlZR2mj7y3RKBu97MbBOryjmhDGg44GnsTDbdGV6Uo1qik
-	gMTgK9hf8lR5Bk1FVdP7aFcANuQ8fXXJDJR6ShiGc78/M9oR5pGFeDYm545rHVubsTmIY8K9hUowr
-	B7xj2sua2+QBBOykDkyQFwT9q01gGnnlrGP5GN8gD8l4I9a55He3umjnlmnp0nh6opemh9Rz0wEFe
-	LelDLVkXUEi4seOr7CPtm1Gc+7SXKXPs1t7CbhMFAT1cln6K5F2pDghulJ0KwiAA9hDw2l6LubVoD
-	39s+mJMg==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:53358)
-	by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <linux@armlinux.org.uk>)
-	id 1rshrP-0002K6-1N;
-	Fri, 05 Apr 2024 12:35:55 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-	(envelope-from <linux@shell.armlinux.org.uk>)
-	id 1rshrN-0001Lz-RJ; Fri, 05 Apr 2024 12:35:53 +0100
-Date: Fri, 5 Apr 2024 12:35:53 +0100
-From: "Russell King (Oracle)" <linux@armlinux.org.uk>
-To: Mark Rutland <mark.rutland@arm.com>
-Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-	syzbot <syzbot+186522670e6722692d86@syzkaller.appspotmail.com>,
-	LKML <linux-kernel@vger.kernel.org>, linux-mm <linux-mm@kvack.org>,
-	syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
-	bpf <bpf@vger.kernel.org>
-Subject: Re: [syzbot] [mm?] BUG: unable to handle kernel paging request in
- copy_from_kernel_nofault (2)
-Message-ID: <Zg/iGQCDKa9bllyI@shell.armlinux.org.uk>
-References: <000000000000e9a8d80615163f2a@google.com>
- <20240403184149.0847a9d614f11b249529fd02@linux-foundation.org>
- <CAADnVQ+meL1kvXUehDT3iO2mxiZNeSUqeRKYx1C=3c0h=NSiqA@mail.gmail.com>
- <Zg_aTFoC2Pwakyl1@FVFF77S0Q05N>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="f7OO++ld"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF20DC433C7;
+	Fri,  5 Apr 2024 12:34:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1712320444;
+	bh=PECncfpIj9KF2NL1qIow7qaBE8q+dGkyd5JVLY75BOg=;
+	h=From:To:Cc:Subject:Date:From;
+	b=f7OO++ldDAG5EvmYC/zNV61hMnNPLbuFpCPIFVPgvRCZ3MYgmFm8WHRO+XWL4WQ67
+	 ePFkz+UQVYDfnUjZY8s6OsNrJOH63T2asc5L7yRbMSdNL53LOd3GWDcWDD5vyIz4pT
+	 qHh+ZgTY43kwgrSlbxKaD4VCb4YJ1mUMQQlK57VJ7VLWLebLRjR6ecq28RvkVvglLH
+	 GiC4bQx2PPqnuKVgr8BAH729yQS56FpSXMdB0S65D0Timy7W3InfO6SRenpmaHxcbu
+	 0m2q2rs+x4g4XgRUC/xIq+SfeFpMsPjjZFqSKdtB1K+4ZvzAUHrMLpG8O0h2RseZEm
+	 RBeYAPQuBl0TQ==
+From: =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	bpf@vger.kernel.org,
+	netdev@vger.kernel.org,
+	Pu Lehui <pulehui@huawei.com>,
+	Puranjay Mohan <puranjay@kernel.org>
+Cc: =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@rivosinc.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	linux-kernel@vger.kernel.org,
+	linux-riscv@lists.infradead.org,
+	=?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>
+Subject: [PATCH bpf] MAINTAINERS: bpf: Add Lehui and Puranjay as riscv64 reviewers
+Date: Fri,  5 Apr 2024 14:33:51 +0200
+Message-Id: <20240405123352.2852393-1-bjorn@kernel.org>
+X-Mailer: git-send-email 2.40.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <Zg_aTFoC2Pwakyl1@FVFF77S0Q05N>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
 
-On Fri, Apr 05, 2024 at 12:02:36PM +0100, Mark Rutland wrote:
-> On Thu, Apr 04, 2024 at 03:57:04PM -0700, Alexei Starovoitov wrote:
-> > On Wed, Apr 3, 2024 at 6:56 PM Andrew Morton <akpm@linux-foundationorg> wrote:
-> > >
-> > > On Mon, 01 Apr 2024 22:19:25 -0700 syzbot <syzbot+186522670e6722692d86@syzkaller.appspotmail.com> wrote:
-> > >
-> > > > Hello,
-> > >
-> > > Thanks.  Cc: bpf@vger.kernel.org
-> > 
-> > I suspect the issue is not on bpf side.
-> > Looks like the bug is somewhere in arm32 bits.
-> > copy_from_kernel_nofault() is called from lots of places.
-> > bpf is just one user that is easy for syzbot to fuzz.
-> > Interestingly arm defines copy_from_kernel_nofault_allowed()
-> > that should have filtered out user addresses.
-> > In this case ffffffe9 is probably a kernel address?
-> 
-> It's at the end of the kernel range, and it's ERR_PTR(-EINVAL).
-> 
-> 0xffffffe9 is -0x16, which is -22, which is -EINVAL.
-> 
-> > But the kernel is doing a write?
-> > Which makes no sense, since copy_from_kernel_nofault is probe reading.
-> 
-> It makes perfect sense; the read from 'src' happened, then the kernel tries to
-> write the result to 'dst', and that aligns with the disassembly in the report
-> below, which I beleive is:
-> 
->      8: e4942000        ldr     r2, [r4], #0	<-- Read of 'src', fault fixup is elsewhere
->      c: e3530000        cmp     r3, #0
->   * 10: e5852000        str     r2, [r5]	<-- Write to 'dst'
-> 
-> As above, it looks like 'dst' is ERR_PTR(-EINVAL).
-> 
-> Are you certain that BPF is passing a sane value for 'dst'? Where does that
-> come from in the first place?
+From: Björn Töpel <bjorn@rivosinc.com>
 
-It looks to me like it gets passed in from the BPF program, and the
-"type" for the argument is set to ARG_PTR_TO_UNINIT_MEM. What that
-means for validation purposes, I've no idea, I'm not a BPF hacker.
+Lehui and Puranjay have been active RISC-V 64-bit BPF JIT
+contributors/reviewers for a long time!
 
-Obviously, if BPF is allowing copy_from_kernel_nofault() to be passed
-an arbitary destination address, that would be a huge security hole.
-So I think BPF folk need to urgently state what checks are done on
-the destination value for _any_ function that BPF can call which
-writes to memory.
+Let's make it more official by adding them as reviewers in
+MAINTAINERS.
 
+Thank you for your hard work!
+
+Signed-off-by: Björn Töpel <bjorn@kernel.org>
+---
+ MAINTAINERS | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 75381386fe4c..58ab032ad33d 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -3764,6 +3764,8 @@ X:	arch/riscv/net/bpf_jit_comp64.c
+ 
+ BPF JIT for RISC-V (64-bit)
+ M:	Björn Töpel <bjorn@kernel.org>
++R:	Pu Lehui <pulehui@huawei.com>
++R:	Puranjay Mohan <puranjay@kernel.org>
+ L:	bpf@vger.kernel.org
+ S:	Maintained
+ F:	arch/riscv/net/
+
+base-commit: c88b9b4cde17aec34fb9bfaf69f9f72a1c44f511
 -- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
+2.40.1
+
