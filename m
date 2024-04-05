@@ -1,222 +1,340 @@
-Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A1A7173340
-	for <bpf@vger.kernel.org>; Fri,  5 Apr 2024 19:43:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A22235D734
+	for <bpf@vger.kernel.org>; Fri,  5 Apr 2024 19:58:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712346227; cv=none; b=mBIdXjp5Rui9xvLDxrBR7k+JE7ZWK3BBkYz4/SGwruQ7zjp7DFK1Djf97QopN6u79ASdrqAXRzXcfh/YL8ssMdJsrY5umtvqvRSRF38yBBw+NdWU/d4cwG8xtqDasx1dNFee+IpHdDneFMvASnkRynxia28aVH9uQWOXrMTxqI8=
+	t=1712347111; cv=none; b=X1o49fpp6UVoPv1UkGRYjs7/xTOe94giJgB52b+/dtvbd+fYJPXhl565jHZErYk04I7I8Xj8fbrcqsO0Ulj3ZiVEb/86PYs1xjtq0j/8/s+/V+st7AB9AbV8tonrGP/moAkwX23MOoCinYppfd6UACmYNYzp2ii9StzKWdBMAZg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712346227; c=relaxed/simple;
-	bh=qzokeEy+8Yqfkgk6NuTu77aROxbfH73ZZVeMKnRzvaU=;
-	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 Mime-Version:Content-Type; b=ia0yzggicZc0pOsZ5uBoymfqWXyWWyXYwKI3Lw63H3kE8eteT+jAGEpI2ZBvWjmcMhtUxtzQAKUVr+LMOZ3kNBULV64tf8MCIil3QWTxF7m88H/PBC4+vOGls4lNjvT00G7vB9cfibqcZnOKWCftPyor6r/RuIe/Kvegw6Y3K+4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lKyFsk4R; arc=none smtp.client-ip=209.85.216.43
+	s=arc-20240116; t=1712347111; c=relaxed/simple;
+	bh=V3bmhc2QhQu1qTd/7Veau1ga8c1OdHT79KY4iL4lWTo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ZHwK+aM3fRCi0GsQgsFnMNlIarGEs6kvpUpGHd6yKM4V0bCDvcBiVYOSQPJeQVqRcK8pM52wFYY086ABkLQTwstNgEUlcJDFZu4gF45vkk/LaSbz4M4AAEVgwI3Y4Jp0brkZX/FnsrcQwxyCUmEcuJy4U2Vhb9YijfzMBQidFD8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BnibfRFe; arc=none smtp.client-ip=209.85.214.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lKyFsk4R"
-Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-2a2e5d86254so1420002a91.1
-        for <bpf@vger.kernel.org>; Fri, 05 Apr 2024 12:43:45 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BnibfRFe"
+Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-1e220e40998so18594395ad.1
+        for <bpf@vger.kernel.org>; Fri, 05 Apr 2024 12:58:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1712346225; x=1712951025; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1712347109; x=1712951909; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=5XSJroq0LGvxsPzeyw4upgpxRnAU+2JOA5LA4G7ztVA=;
-        b=lKyFsk4R/M0j3lS2x0U71/cH6bEPjQd7iIdq3Xih2I/50UN0NbbLo95llDy/Y/z8Ft
-         xgjXlLu7dQcg9BGpO8rPNAoGhhVvWQywy3mIaFHsvuWamViAMjkthTeRLQestNOOBEtP
-         uNO3IpGgN5Uy5JKrZYkm9a6bo5SvcTWG3CCB9uZtgHIZqTNMDO4FCRZBA+YzddmhlVkb
-         jn6e5p7auE3brHuL0n9BTzibS9B9tccsja2oAGB9EuinjvAXSpn4AjUxKV1tt861eTDA
-         gv6xpusqKg5aht3VhThO3FBhVMmaqaOH8AcZBUjQOzIvjms5w0npeoVLYmRQ34mcWkcv
-         ofog==
+        bh=E1yD3iVOeVhMk2NmSFW5HWaZqPQJuShUZbYOeRmfKlU=;
+        b=BnibfRFe/j9F2GCBfr1zpkIxlQwOr2H3wyOImkomJvteaFRaqsDqPGFLpDLDLHBv6t
+         ZGS9qZho8xZ60GXGSQjCRBrmqmZxH9nHE3vaPdr26r4H3qNu33T1O0zBG21eJS9RBSxV
+         vO/p3NNLrWIVO1SjVaP+Y5VsR/VDOBKRqr81SLbEHg83H6zUSOJY+oDZ46HAT8A2JjCa
+         5ANXwpg/wPOGiRL27r1t9nMOUY70VwcPOGzEMI60SE7aQmNfNkzl1TY1xpfLaFaDEa/F
+         m0aceHxCjmzkmC+ThVu7a4/j1Wl7KfVqZsZoS8z9KVWdBpqdGh8teUQXnFtAjVUr+FhN
+         cTPg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712346225; x=1712951025;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=5XSJroq0LGvxsPzeyw4upgpxRnAU+2JOA5LA4G7ztVA=;
-        b=crctfaHZxGoXhY71gcCKyTpH8GwMQt3nq1emjwXu6XOGXAr/97Zz2pt62w/qPPwAKZ
-         vZq/yV6BaH76PnSpRZOQJat7qDmMZE46O/u/qbWasrOD+iRvvwetS+Rj1GQWTRhGMsN+
-         HGCfNsABDhUxuz3b1xwiN4PY3wUYJ6pj3mLiL9dRDzgiT4JbhgdybC1sKkyYE9NBvurk
-         u4/QtfDkPQRvqq0Pl0azthXDybrnTYnAGuRBZ7J6XqAY5fevQVDEHmRSS0SC1sqGMBuF
-         Gm6yii2hQgxyZjqNwHM7FyCbGfMzwbwzZ52ou4pWPd+nxQbWpTYyS3+sXUFOw0tnR/EA
-         qw3A==
-X-Forwarded-Encrypted: i=1; AJvYcCUnbeStFDSwpnw70fNRxwlm3VLn1Vrr0wHNd521fLtoXKCmVm0Q/5d48jcVd3TPxW8JoQqKmRlWcyQ4mo2JayXbLRqn
-X-Gm-Message-State: AOJu0YwicS2lX4MllQ61DOZgi2f1HegTrCQCxjWB7eZjl0GNUOb9B3P/
-	0zvQP960OdYM421VzuqJwFt6DBUh8FEU6yK1YC0DRw4KRSvkLcCV
-X-Google-Smtp-Source: AGHT+IHZcYtPjwxNCzR5A5bkAu3wWPrjZ9+QowEjf/Mi7EqGNi1F9XB1zmXUvE4pA2a179zO1KoAkA==
-X-Received: by 2002:a17:90b:10d:b0:2a2:e384:c8cd with SMTP id p13-20020a17090b010d00b002a2e384c8cdmr4730095pjz.20.1712346224716;
-        Fri, 05 Apr 2024 12:43:44 -0700 (PDT)
-Received: from localhost ([98.97.36.54])
-        by smtp.gmail.com with ESMTPSA id iq16-20020a17090afb5000b002a49ff7c1f2sm60330pjb.56.2024.04.05.12.43.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 05 Apr 2024 12:43:44 -0700 (PDT)
-Date: Fri, 05 Apr 2024 12:43:43 -0700
-From: John Fastabend <john.fastabend@gmail.com>
-To: Yonghong Song <yonghong.song@linux.dev>, 
- John Fastabend <john.fastabend@gmail.com>, 
- bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>, 
- Andrii Nakryiko <andrii@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, 
- Jakub Sitnicki <jakub@cloudflare.com>, 
- kernel-team@fb.com, 
- Martin KaFai Lau <martin.lau@kernel.org>
-Message-ID: <6610546f51fff_60c8a2088c@john.notmuch>
-In-Reply-To: <71218766-13fe-48c9-a24d-b897d7c428fd@linux.dev>
-References: <20240404025305.2210999-1-yonghong.song@linux.dev>
- <20240404025310.2211688-1-yonghong.song@linux.dev>
- <66101695d69a7_5803020833@john.notmuch>
- <c9db2abb-2391-415b-ba71-db80dc42cc54@linux.dev>
- <6610258cb977b_5a9cb20838@john.notmuch>
- <71218766-13fe-48c9-a24d-b897d7c428fd@linux.dev>
-Subject: Re: [PATCH bpf-next v4 1/5] bpf: Add bpf_link support for sk_msg and
- sk_skb progs
+        d=1e100.net; s=20230601; t=1712347109; x=1712951909;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=E1yD3iVOeVhMk2NmSFW5HWaZqPQJuShUZbYOeRmfKlU=;
+        b=KLup/cMRLQJk9+gLz8Rwz/8XmlOEeEiuibwIQ7SaHjD+HwP7MyhC82R3sO+7k7Mrvo
+         GmyVK6Ng/0rBr0dXSfjnOTHmQtvUQN2/OJIQavfYZc7A+WADVe4c/4PdyMNocDWkXuA9
+         T7qMkka9oAJcHBt2jDkh1anPRatOVLIBpyJvN94JwSt5iUs+XWYk0Uj9AT7NtnOTIC+x
+         +OQPE4qchsp7QffMvk5loDANIu6jODkhuYfhe2l7jxl+wHzy/nYEeKBpH5xeFYH93v59
+         QcLKN3OUgFCxHa7QvrS6oR0sevWuJO3pniZBo+vncZ9eeTtqBj5IphcjxXKv4vCpTK09
+         +zJA==
+X-Forwarded-Encrypted: i=1; AJvYcCVjaFBDEqqPHI2DzsEtg048q7wmRMqoMEPoB5izcxoJjXGJ0LlESxr6YmynI3zXaIZaHZcrO+OKwCKFecVT/+BRbaZo
+X-Gm-Message-State: AOJu0Ywp2+LUhgMQwx230T4gq4zbw9QUaHDaQYkQlkHl4o1zYrVo7hB8
+	UTVwwd8RNB/V1qK4s0WdNq/VNViaH8VizsNo6C1sImBYU88z47SRUHYNlqz9vNmCG/7+24G2Fle
+	eSRWqzgfyoaRh46GJHHXgbgtvdIY=
+X-Google-Smtp-Source: AGHT+IFbeqUD4evOuCDEXlcruU0qGT2Txl85TOCZYTlNT+s0Lph1uKS4KP5SV/mRFzfl7Fahv4mVo2h6CQojrGESudA=
+X-Received: by 2002:a17:903:22c5:b0:1e2:9ddc:f620 with SMTP id
+ y5-20020a17090322c500b001e29ddcf620mr2978100plg.23.1712347108831; Fri, 05 Apr
+ 2024 12:58:28 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+References: <20240322102455.98558-1-alan.maguire@oracle.com>
+ <20240322102455.98558-11-alan.maguire@oracle.com> <CAEf4BzbQEYgiJ=Xc7qaf0Tm_geTd40Ld+623Gk0TaBjPtTsnKg@mail.gmail.com>
+ <9be97b85-104b-4c33-a23a-ad68ba7f5838@oracle.com>
+In-Reply-To: <9be97b85-104b-4c33-a23a-ad68ba7f5838@oracle.com>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Fri, 5 Apr 2024 12:58:16 -0700
+Message-ID: <CAEf4Bza41cU4R=PeqO6aaqcvzVmNcQNCN8Ee8bdyiOsPF-kfyA@mail.gmail.com>
+Subject: Re: [RFC bpf-next 09/13] libbpf: split BTF reconciliation
+To: Alan Maguire <alan.maguire@oracle.com>
+Cc: andrii@kernel.org, jolsa@kernel.org, acme@redhat.com, 
+	quentin@isovalent.com, eddyz87@gmail.com, mykolal@fb.com, ast@kernel.org, 
+	daniel@iogearbox.net, martin.lau@linux.dev, song@kernel.org, 
+	yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org, 
+	sdf@google.com, haoluo@google.com, houtao1@huawei.com, bpf@vger.kernel.org, 
+	masahiroy@kernel.org, mcgrof@kernel.org, nathan@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Yonghong Song wrote:
-> 
-> On 4/5/24 9:23 AM, John Fastabend wrote:
-> > Yonghong Song wrote:
-> >> On 4/5/24 8:19 AM, John Fastabend wrote:
-> >>> Yonghong Song wrote:
-> >>>> Add bpf_link support for sk_msg and sk_skb programs. We have an
-> >>>> internal request to support bpf_link for sk_msg programs so user
-> >>>> space can have a uniform handling with bpf_link based libbpf
-> >>>> APIs. Using bpf_link based libbpf API also has a benefit which
-> >>>> makes system robust by decoupling prog life cycle and
-> >>>> attachment life cycle.
-> >>>>
-> >>>> Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
-> >>>> ---
-> >>>>    include/linux/bpf.h            |   6 +
-> >>>>    include/linux/skmsg.h          |   4 +
-> >>>>    include/uapi/linux/bpf.h       |   5 +
-> >>>>    kernel/bpf/syscall.c           |   4 +
-> >>>>    net/core/sock_map.c            | 268 ++++++++++++++++++++++++++++++++-
-> >>>>    tools/include/uapi/linux/bpf.h |   5 +
-> >>>>    6 files changed, 284 insertions(+), 8 deletions(-)
-> >>>>
-> >>> LGTM one question below.
-> >>>
-> >>>> +/* Handle the following two cases:
-> >>>> + * case 1: link != NULL, prog != NULL, old != NULL
-> >>>> + * case 2: link != NULL, prog != NULL, old == NULL
-> >>>> + */
-> >>>> +static int sock_map_link_update_prog(struct bpf_link *link,
-> >>>> +				     struct bpf_prog *prog,
-> >>>> +				     struct bpf_prog *old)
-> >>>> +{
-> >>>> +	const struct sockmap_link *sockmap_link = container_of(link, struct sockmap_link, link);
-> >>>> +	struct bpf_prog **pprog;
-> >>>> +	struct bpf_link **plink;
-> >>>> +	int ret = 0;
-> >>>> +
-> >>>> +	mutex_lock(&sockmap_mutex);
-> >>>> +
-> >>>> +	/* If old prog is not NULL, ensure old prog is the same as link->prog. */
-> >>>> +	if (old && link->prog != old) {
-> >>>> +		ret = -EINVAL;
-> >>>> +		goto out;
-> >>>> +	}
-> >>>> +	/* Ensure link->prog has the same type/attach_type as the new prog. */
-> >>>> +	if (link->prog->type != prog->type ||
-> >>>> +	    link->prog->expected_attach_type != prog->expected_attach_type) {
-> >>>> +		ret = -EINVAL;
-> >>>> +		goto out;
-> >>>> +	}
-> >>>> +
-> >>>> +	ret = sock_map_prog_lookup(sockmap_link->map, &pprog,
-> >>>> +				   sockmap_link->attach_type);
-> >>>> +	if (ret)
-> >>>> +		goto out;
-> >>>> +
-> >>>> +	/* Ensure the same link between the one in map and the passed-in. */
-> >>>> +	ret = sock_map_link_lookup(sockmap_link->map, &plink, link, false,
-> >>>> +				   sockmap_link->attach_type);
-> >>>> +	if (ret)
-> >>>> +		goto out;
-> >>>> +
-> >>>> +	if (old) {
-> >>>> +		ret = psock_replace_prog(pprog, prog, old);
-> >>>> +		goto out;
-> >>>> +	}
-> >>>> +
-> >>>> +	psock_set_prog(pprog, prog);
-> >>>> +
-> >>>> +out:
-> >>>> +	if (!ret) {
-> >>>> +		bpf_prog_inc(prog);
-> >>>> +		old = xchg(&link->prog, prog);
-> >>>> +		bpf_prog_put(old);
-> >>> Need to check old? I don't think we can clal bpf_prog_put on null?
-> >>>
-> >>>     if (old)
-> >>>        bpf_prog_put(old)
-> >> The 'old' here represents the *old* link->prog program and
-> >> link->prog should not be NULL at this point.
-> > Ah ok. Maybe instead of using the input old var make it
-> > explicit?
+On Fri, Apr 5, 2024 at 3:06=E2=80=AFAM Alan Maguire <alan.maguire@oracle.co=
+m> wrote:
+>
+> On 29/03/2024 22:01, Andrii Nakryiko wrote:
+> > On Fri, Mar 22, 2024 at 3:26=E2=80=AFAM Alan Maguire <alan.maguire@orac=
+le.com> wrote:
+> >>
+> >> Map base reference BTF type ids referenced in split BTF and their
+> >> references to the base BTF passed in, and if the mapping succeeds,
+> >> reparent the split BTF to the base BTF.
+> >>
+> >> Reconciliation rules are
+> >>
+> >> - base types must match exactly
+> >> - enum[64] types should match all value name/value pairs, but the
+> >>   to-be-reconciled enum[64] can also define additional name/value pair=
+s
+> >> - named fwds match to the correspondingly-named struct/union/enum/enum=
+64
 > >
-> >      if (!ret) {
-> >         struct bpf_prog *old_link;
+> > yeah, but what about their size if they are embedded? Using FWD was a
+> > nice trick, but it's not flexible enough for recording (optionally)
+> > size... Probably emitting an empty (but named) struct/union/enum would
+> > be a bit better (and actually make split BTF using base ref more valid
+> > even without pre-processing).
 > >
-> >         bpf_prog_inc(prog);
-> >         old_link = xchg(&link->prog, prog);
-> >         bpf_prog_put(old)
-> >      }
+> >> - anon struct/unions must have field names/offsets specified in base
+> >>   reference BTF matched by those in base BTF we are matching with
+> >>
+> >> Reconciliation can not recurse, since it will be used in-kernel also a=
+nd
+> >> we do not want to blow up the kernel stack when carrying out type
+> >> compatibility checks.  Hence we use a stack for reference type
+> >> reconciliation rather then recursive function calls.
+> >>
+> >> Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
+> >> ---
+> >>  tools/lib/bpf/Build             |   2 +-
+> >>  tools/lib/bpf/btf.c             |  58 ++++
+> >>  tools/lib/bpf/btf.h             |   8 +
+> >>  tools/lib/bpf/btf_reconcile.c   | 590 +++++++++++++++++++++++++++++++=
++
 > >
-> > Is a bit more obious to me at least. Up to you I have a slight preference
-> > for the explicit more verbose above.
-> 
-> Regarding naming convention, yes, it is hard. My above code similar to
-> kernel/bpf/net_namespace.c:
-> 
-> static int bpf_netns_link_update_prog(struct bpf_link *link,
->                                        struct bpf_prog *new_prog,
->                                        struct bpf_prog *old_prog)
-> {
->          struct bpf_netns_link *net_link =
->                  container_of(link, struct bpf_netns_link, link);
->          enum netns_bpf_attach_type type = net_link->netns_type;
->          struct bpf_prog_array *run_array;
->          struct net *net;
->          int idx, ret;
->          
->          if (old_prog && old_prog != link->prog)
->                  return -EPERM;
-> 	...
-> 	old_prog = xchg(&link->prog, new_prog);
->          bpf_prog_put(old_prog);
-> 	...
-> }
-> 
-> The 'old_prog' is reused in the above.
-> 
-> I am okay to change
-> 	old = xchg(&link->prog, prog);
-> to
-> 	old_link_prog = xchg(&link->prog, prog);
-> 
-> in next revision (if requested or additional changes needed)
-> or as a followup.
+> > how wrong would it be to call this process "relocate" rather than "reco=
+ncile"?
+> >
+>
+> seems fine to me.
+>
+> >>  tools/lib/bpf/libbpf.map        |   1 +
+> >>  tools/lib/bpf/libbpf_internal.h |   2 +
+> >>  6 files changed, 660 insertions(+), 1 deletion(-)
+> >>  create mode 100644 tools/lib/bpf/btf_reconcile.c
+> >>
+> >
+> > [...]
+> >
+> >> +/* Find next type after *id in base BTF that matches kind of type t p=
+assed in
+> >> + * and name (if it is specified).  Match fwd kinds to appropriate kin=
+d also.
+> >> + */
+> >> +static int btf_reconcile_find_next(struct btf_reconcile *r, const str=
+uct btf_type *t,
+> >> +                                  __u32 *id, const struct btf_type **=
+tp)
+> >
+> > I haven't grokked the whole patch logic just yet, doing a first pass,
+> > so I might be asking stupid questions, sorry.
+> >
+> > But it looks like we have these linear searches here to find matching
+> > types, is that right? Wouldn't it be better to build an index first to
+> > speed up search?
+> >
+>
+> It would, but the aim here was to keep things simple with an eye to
+> sharing the code with the kernel. A lot of the libbpf hash stuff would
+> be handy but then we'd have to have something on the kernel side. Given
+> that the size of the base BTF is so small, the linear searches aren't
+> much of a cost.
 
-I'm good with this series as is LGTM. We can do a follow up if we want.
-Although the xchg is exactly one line above so I'm not sure its even necessary.
+I didn't mean hashmap, I was thinking sort+binary search, but ok, we
+can do that later as an optimization.
 
-> 
+[...]
+
+> >> +
+> >> +/* Ensure each enum value in type t has equivalent in base BTF and th=
+at values (if any) match. */
+> >> +static int btf_reconcile_enum(struct btf_reconcile *r, const char *na=
+me,
+> >> +                             const struct btf_type *t, const struct b=
+tf_type *bt)
+> >> +{
 > >
-> > Otherwise for the series.
+> > should we care about compatibility between ENUM and ENUM64, they can
+> > both represent the same values of the same size?
 > >
-> > Reviewed-by: John Fastabend <john.fastabend@gmail.com>
+>
+> so do you mean if one representation uses an enum, another an enum64?
+> Yep that might well be the case, I'll add that too.
+
+yep, they are two different kinds, but they overlap in what they can
+represent, so we try to support them interchangeably, if possible
+
+[...]
+
+> >> +                               if (err) {
+> >> +                                       pr_warn("could not find base B=
+TF type for base reference type[%u]\n",
+> >> +                                               id);
+> >> +                                       return err;
+> >> +                               }
+> >> +                       } else {
+> >> +                               if (btf_reconcile_push(r, id) < 0 ||
+> >> +                                   btf_reconcile_push(r, t->type) < 0=
+)
+> >> +                                       return -ENOSPC;
+> >
+> > I'm missing something, please help me understand. I don't get why we
+> > need a recursive algorithm at all.
+> >
+> > In my mind, we have this small "base ref" set of types referenced from
+> > module's BTF (split BTF part), right? So all we should need is to map
+> > every type from base ref set to vmlinux BTF.
+> >
+> > What I don't yet fully get is why CONST/VOLATILE or PTR need to
+> > postpone reconciliation via a queue. By the time we get to types in
+> > split BTF all base ref types should be mapped, so all you need is to
+> > remap t->type to resolved vmlinux BTF, no?
+> >
+>
+> It's possible to have multiple layers of reference in the distilled base
+> BTF though; for example here's a case from a module's distilled base BTF:
+>
+> [41] PTR '(anon)' type_id=3D42
+> [42] CONST '(anon)' type_id=3D0
+>
+> To resolve type id 41 we need to resolve type id 42, and since type id 0
+> already has a mapping, at that point we can look for CONSTs that refer
+> to type id 0 and then once we've established that mapping we can find
+> PTRs that have a t->type that refers to the const. So as described below
+> we keep pushing type ids onto the stack until we find one with a t->type
+> mapping to base BTF; once we hit that we can start looking in base BTF
+> for types that have the mapped t->type value.
+>
+
+see below
+
+> > I suspect the answer might have something to do with those anonymous
+> > structs/unions which you copy verbatim into base ref BTF?
+> >
+>
+> They do add a few more types, but we can get base BTF references that
+> don't come from that source too. The above case PTR CONST void for
+> example wasn't referred to via any other distilled base types.
+
+I think it's too problematic to allow unnamed types in base reference
+BTF. If we keep the rule that only named
+structs/unions/typedefs/int/float kinds can be in base reference, then
+everything becomes much simpler and faster, without breaking any of
+kfunc/PTR_TO_BTF_ID usage.
+
+The biggest problem is probably TYPEDEF pointing to anonymous
+struct/union/func proto, so we might want to still record the shape of
+expected underlying type, maybe, but we still go off of just a name in
+the first place. Maybe initially we should just say that any ambiguity
+would be rejected and keep only TYPEDEF with name?
+
+Let me know if this is unrealistic, though.
+
+>
+> > But on the latter topic, I wonder if we at all need this? Why not keep
+> > all those anon struct/union/enum in module's part of BTF? If they are
+> > unnamed, I doubt they will ever be referenced from kfuncs or anything
+> > like that, so their BTF ID isn't that important.
+> >
+>
+> Changing the module BTF would make things a bit more complicated.
+
+you mean appending those anonymous types from base BTF to module BTF?
+It shouldn't be too hard, we just do it recursively and keep track of
+ID remapping (so we don't add the same type twice). Or is there
+something more?
 
 
+> Currently we just update type id references and string offsets. The anon
+> structs we end up with tend to be very small; from the same distilled
+> base BTF used above here are the instances of struct/union:
+>
+> [35] STRUCT '(anon)' size=3D4 vlen=3D1
+>         'counter' type_id=3D6 bits_offset=3D0
+> [62] STRUCT '(anon)' size=3D8 vlen=3D1
+>         'raw_lock' type_id=3D48 bits_offset=3D0
+> [113] UNION '(anon)' size=3D8 vlen=3D2
+>         'kernel' type_id=3D13 bits_offset=3D0
+>         'user' type_id=3D13 bits_offset=3D0
+> [114] STRUCT '(anon)' size=3D16 vlen=3D2
+>         '(anon)' type_id=3D113 bits_offset=3D0
+>         'is_kernel' type_id=3D11 bits_offset=3D64 bitfield_size=3D1
+> [119] STRUCT '(anon)' size=3D8 vlen=3D1
+>         'net' type_id=3D85 bits_offset=3D0
+>
+> These only added one type that wasn't referenced elsewhere - typedef
+> arch_rwlock_t.
+>
+> > If base BTF is all named types, it would simplify the reconciliation
+> > process significantly, I think.
+> >
+> > But again, I only skimmed the overall algorithm, sorry for my
+> > laziness, but I figured it would be good to discuss the above first
+> > anyways.
+> >
+>
+> I'll try and walk through an example of how the algorithm proceeds; that
+> might help make the approach concrete and we can see if it can be
+> simplified.
+>
+> Consider split BTF that uses the base BTF type "int *", i.e. a PTR to an
+> "int". It could do so in an anonymous struct/union, but also as an array
+> member type or a FUNC_PROTO or VAR. For such a reference type, we first
+> encounter the outer PTR. If its t->type has a mapping to base BTF "int"
+> (it will), we look through the base BTF for reference types that match
+> the kind (here a PTR) _and_ have the required t->type (int). Once we
+> find the reference type in base BTF, we can add the mapping for PTR to
+> int from distilled->base BTF id. So the reference type with one layer of
+> reference is pretty straightforward.
+>
+> In the case where we don't have a mapping for a t->type - let's say PTR
+> to PTR to int (int **) - we push the type id for PTR to PTR to int onto
+> the stack along with the type id for t->type (PTR to int) after. So we
+> will first pop PTR to int and go through the above-described type
+> resolution. Next we will pop the PTR to PTR to int and because we've
+> resolved PTR to int now, it's t->type will have a mapping and we can go
+> through the search process to find a PTR that refers to a PTR to int
+> in base BTF, and we then add that mapping too.
+
+sure, pretty standard dfs with memoization, makes sense
+
+what makes me a bit uncomfortable is that if you have PTR -> STRUCT,
+once you found match for STRUCT, you'll go do a linear search for any
+PTR  to that STRUCT. Which starts to sound like BTF deduplication
+(though admittedly matching STRUCT by name removes half of BTF dedup
+complexity) and the way you are doing it right now with linear search
+over vmlinux BTF is going to be slow (which is why I was proposing an
+index).
+
+Ok, anyways, it's probably going to work. If we can simplify further
+with keeping just named types, it would be great. If not, so be it, I
+suppose.
+
+>
+> For an array we push the member and index types, a func proto the return
+> type and parameter types, etc.
+>
+> So once multiple layers of reference are part of the picture I _think_
+> we need something like this approach.
+>
+> Alan
+>
+> >> +                       }
+> >> +                       break;
+> >
+> > [...]
