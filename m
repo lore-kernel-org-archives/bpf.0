@@ -1,186 +1,130 @@
-Received: from out-179.mta0.migadu.com (out-179.mta0.migadu.com [91.218.175.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com [209.85.128.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1AEE171643
-	for <bpf@vger.kernel.org>; Fri,  5 Apr 2024 16:52:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7975B1E494
+	for <bpf@vger.kernel.org>; Fri,  5 Apr 2024 17:14:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712335924; cv=none; b=ujz0+cOTct67gVds619t/YrYSbZiAnq3DJrffLC4jMSAlzZ3/zgiE5ULmFnYKxCZRDJH+vaSjdPrdOBAy0ZU/0Y5opG/XJvQ3SZLKw3do1/y7sRmgE09tR/ZDxgzCeb8Xx73oxCyQIQT709OQf5DQKna27xfB3TlLnQsL2uIH/w=
+	t=1712337286; cv=none; b=m7g/xmW9SY+0x2MJW/ZDflfyXk6n5lktPWpnWMqMRRaRQONTTdEodW/wtRrOkirwVA7FerLAiSvPHgQ3+rz9f1QsDvJIQe5kh4It+YNbxJO6LhmuQ1e8j/zQekM0KP9jA5bX1VNXTqb9pmylm47BJkDK2Pm/cCorI9I7exw4Qvw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712335924; c=relaxed/simple;
-	bh=ohW2mpgzUWihTiXwhAawuRYJ1lTHHSj0x+a0h89xDtE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=bFs3K68vkJaKsmNuuG8LNznCbYF42vRhFwIEtzkEYVt7ScH5L3CbtRCUqZmXgYBwwVnYkB0qLaKZdwpstZXtBqZAal3jPnwzkrPKV/fJE+NhSgqkVminq3UZGFwfmtWsYsSbystfpK4U5XQnWcAh+SeJu9UH9BxHg3SjgbX9FGY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=b0HUeH0c; arc=none smtp.client-ip=91.218.175.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1712337286; c=relaxed/simple;
+	bh=EkTn7u0sYAeoa9bLdyb/dieFuxcJd6z2/oY9Xf732SA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=HGT41BfCJl9oGt8lo83CXLahmD0LZ3D+oXYoyeUvwgSmPB6vYZHZGIkjdTZLI9K+NmiVwNq1E8N2NvW6Mxo530mzvCUw3PEFN+AjmV8x3zx9O7Q7pNLHJsgJpDRX2/FKIXAEYMpwTjMCgmgLRnL+61FNtPczWG6yb3Q6/iG1bqA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mojatatu.com; spf=none smtp.mailfrom=mojatatu.com; dkim=pass (2048-bit key) header.d=mojatatu-com.20230601.gappssmtp.com header.i=@mojatatu-com.20230601.gappssmtp.com header.b=2CiJ1Ilm; arc=none smtp.client-ip=209.85.128.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mojatatu.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=mojatatu.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="b0HUeH0c"
-Message-ID: <71218766-13fe-48c9-a24d-b897d7c428fd@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1712335919;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ny3RsVi2Ef0S3tRz3nlSwNO3/f8cRb8nFXo0jxpPOP0=;
-	b=b0HUeH0cET1v1XwaMBxyE+hc6MgJ2jCbIoN9R/LHbUqEQbmTtHswMYgK+0rVewOfnyADfF
-	K2dCUms9oxlB9TvD6r58JC+rA8POdRyBPOVUXah1aE3IJx5Yg/tViw3AxugUydyxMdrryF
-	8qAiiO1LRAktHLsIEscsIFc0voWwMUI=
-Date: Fri, 5 Apr 2024 09:51:52 -0700
+	dkim=pass (2048-bit key) header.d=mojatatu-com.20230601.gappssmtp.com header.i=@mojatatu-com.20230601.gappssmtp.com header.b="2CiJ1Ilm"
+Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-617dfcf80aeso3956227b3.3
+        for <bpf@vger.kernel.org>; Fri, 05 Apr 2024 10:14:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=mojatatu-com.20230601.gappssmtp.com; s=20230601; t=1712337283; x=1712942083; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5w11nCTqm8J4qGiccVNrSRqUDMWKnAd7bql5yRn1SQM=;
+        b=2CiJ1Ilml9coMeq5TgmmgiJv8+K9dafFBA9a+rt+pPoHonkCmz55M4HakrJbmVna7U
+         DkJ15J1ymAGfmdGm7+4LCyFwnz7R5mOg6gt6ZPEJJALU+z+mtLpaKXuWPRt3Tge2mhRc
+         2r12NpxtG5XAFHE8TwE5Xh0aqDfvP6FheaYPP94o6BMS8CzbAL/1tpNCxq1dKnDBwkDe
+         bG4OSRgklq8UeU3YgD0+hPqoYsS0rur0HspaCCHJxO1UWA4MYnf5LueOKw33NkG6K3VC
+         BgNcc5Gr44dDnInwBDU6//qfh2c/5ZRLn/PLwDHfgcU/L4Sxq3RJjPagzRF7M4NaSL+j
+         b3WQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1712337283; x=1712942083;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=5w11nCTqm8J4qGiccVNrSRqUDMWKnAd7bql5yRn1SQM=;
+        b=nI/8kMhLquh+TanVq/F5xsewR5eW+wHGA50qgcYpYVUjM8FnBLbPtuDozCeE0CqR8t
+         g/+RhF4YW8n/L1gZTHWM1XTwinU3u7ZgJyTp39hnQcUowzsBCyg+u6Vy4+MZBxC6hpo9
+         pzM88E5UcDaHFyD/69BWs2x0k2KQ8BMFsu3yRiilBGtIolgEz3p/LOXW+dEg37bFJlQD
+         QxmxPKDdRnKRZr/Hu9zMgYoOD106ZRTEAXyJZkAXYNyAP1JTH65KFInWaWYFpsmuf01g
+         S9pXRKvuvZOJ+HDGRxlwwKCsuczyv9HYKXp93GK67HroVUkSVFHiCC5CjjvH9akomL0Y
+         LSSQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXmpcSAVTDv5AzcCgIg0hWw7bAqeVNqqH7DC8lKnrxMsg02IKG9sdo8nwPphKj2sJZVqWfOnvEEZXG79PZ03FIS7qks
+X-Gm-Message-State: AOJu0YxTCl5E8mv2uqkYT+z8dEgZ/h7fvKEqT/LEkMBUIjPk6FCE/lMY
+	9pgEbqTlq+/tM5r990f/NUKNTY2H7gSTC+/TeW/9x/G/OQzyqjXSePPufSGB+HEm4jwSuFFpDG2
+	92JF5AoOhn6CU1edlYL1WqTPbSf5BH9i4WJWL
+X-Google-Smtp-Source: AGHT+IFsONJN+PXLdXKVh9Slji3R+8eAgDnXMa9qUeh0+VWHzm9WNWcb3V4HreRbCGMYs/cVA/TmnI2kqH05/U+8ON8=
+X-Received: by 2002:a25:900b:0:b0:dcc:d196:a573 with SMTP id
+ s11-20020a25900b000000b00dccd196a573mr1998118ybl.36.1712337283481; Fri, 05
+ Apr 2024 10:14:43 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v4 1/5] bpf: Add bpf_link support for sk_msg and
- sk_skb progs
-Content-Language: en-GB
-To: John Fastabend <john.fastabend@gmail.com>, bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Jakub Sitnicki
- <jakub@cloudflare.com>, kernel-team@fb.com,
- Martin KaFai Lau <martin.lau@kernel.org>
-References: <20240404025305.2210999-1-yonghong.song@linux.dev>
- <20240404025310.2211688-1-yonghong.song@linux.dev>
- <66101695d69a7_5803020833@john.notmuch>
- <c9db2abb-2391-415b-ba71-db80dc42cc54@linux.dev>
- <6610258cb977b_5a9cb20838@john.notmuch>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <6610258cb977b_5a9cb20838@john.notmuch>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+References: <20240404122338.372945-1-jhs@mojatatu.com> <20240404122338.372945-15-jhs@mojatatu.com>
+ <CAADnVQLw1FRkvYJX0=6WMDoR7rQaWSVPnparErh4soDtKjc73w@mail.gmail.com>
+ <CAM0EoM=SyHR-f7z8YVRknXrUsKALgx96eH-hBudo40NyeaxuoA@mail.gmail.com>
+ <CAADnVQLJ3iO73c7g0PG1Em9iM4W-n=7aanu_pc9O0t4XrG5Gwg@mail.gmail.com>
+ <CAM0EoMn6Nyu5AKgSERZEtSojvzKN6r7enc7t313G9xBvq-bcog@mail.gmail.com> <db5fa77e-c179-d90c-f4f5-1f39a5a0f56d@iogearbox.net>
+In-Reply-To: <db5fa77e-c179-d90c-f4f5-1f39a5a0f56d@iogearbox.net>
+From: Jamal Hadi Salim <jhs@mojatatu.com>
+Date: Fri, 5 Apr 2024 13:14:31 -0400
+Message-ID: <CAM0EoMmGxQGA8LXWvRvgPHZd80r2mv6SB8P79v47tkbWhx7SXg@mail.gmail.com>
+Subject: Re: [PATCH net-next v14 14/15] p4tc: add set of P4TC table kfuncs
+To: Daniel Borkmann <daniel@iogearbox.net>
+Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>, 
+	Network Development <netdev@vger.kernel.org>, deb.chatterjee@intel.com, 
+	Anjali Singhai Jain <anjali.singhai@intel.com>, namrata.limaye@intel.com, tom@sipanda.io, 
+	Marcelo Ricardo Leitner <mleitner@redhat.com>, Mahesh.Shirshyad@amd.com, Vipin.Jain@amd.com, 
+	tomasz.osinski@intel.com, Jiri Pirko <jiri@resnulli.us>, 
+	Cong Wang <xiyou.wangcong@gmail.com>, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Vlad Buslov <vladbu@nvidia.com>, Simon Horman <horms@kernel.org>, khalidm@nvidia.com, 
+	=?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, victor@mojatatu.com, 
+	Pedro Tammela <pctammela@mojatatu.com>, bpf <bpf@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-
-On 4/5/24 9:23 AM, John Fastabend wrote:
-> Yonghong Song wrote:
->> On 4/5/24 8:19 AM, John Fastabend wrote:
->>> Yonghong Song wrote:
->>>> Add bpf_link support for sk_msg and sk_skb programs. We have an
->>>> internal request to support bpf_link for sk_msg programs so user
->>>> space can have a uniform handling with bpf_link based libbpf
->>>> APIs. Using bpf_link based libbpf API also has a benefit which
->>>> makes system robust by decoupling prog life cycle and
->>>> attachment life cycle.
->>>>
->>>> Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
->>>> ---
->>>>    include/linux/bpf.h            |   6 +
->>>>    include/linux/skmsg.h          |   4 +
->>>>    include/uapi/linux/bpf.h       |   5 +
->>>>    kernel/bpf/syscall.c           |   4 +
->>>>    net/core/sock_map.c            | 268 ++++++++++++++++++++++++++++++++-
->>>>    tools/include/uapi/linux/bpf.h |   5 +
->>>>    6 files changed, 284 insertions(+), 8 deletions(-)
->>>>
->>> LGTM one question below.
->>>
->>>> +/* Handle the following two cases:
->>>> + * case 1: link != NULL, prog != NULL, old != NULL
->>>> + * case 2: link != NULL, prog != NULL, old == NULL
->>>> + */
->>>> +static int sock_map_link_update_prog(struct bpf_link *link,
->>>> +				     struct bpf_prog *prog,
->>>> +				     struct bpf_prog *old)
->>>> +{
->>>> +	const struct sockmap_link *sockmap_link = container_of(link, struct sockmap_link, link);
->>>> +	struct bpf_prog **pprog;
->>>> +	struct bpf_link **plink;
->>>> +	int ret = 0;
->>>> +
->>>> +	mutex_lock(&sockmap_mutex);
->>>> +
->>>> +	/* If old prog is not NULL, ensure old prog is the same as link->prog. */
->>>> +	if (old && link->prog != old) {
->>>> +		ret = -EINVAL;
->>>> +		goto out;
->>>> +	}
->>>> +	/* Ensure link->prog has the same type/attach_type as the new prog. */
->>>> +	if (link->prog->type != prog->type ||
->>>> +	    link->prog->expected_attach_type != prog->expected_attach_type) {
->>>> +		ret = -EINVAL;
->>>> +		goto out;
->>>> +	}
->>>> +
->>>> +	ret = sock_map_prog_lookup(sockmap_link->map, &pprog,
->>>> +				   sockmap_link->attach_type);
->>>> +	if (ret)
->>>> +		goto out;
->>>> +
->>>> +	/* Ensure the same link between the one in map and the passed-in. */
->>>> +	ret = sock_map_link_lookup(sockmap_link->map, &plink, link, false,
->>>> +				   sockmap_link->attach_type);
->>>> +	if (ret)
->>>> +		goto out;
->>>> +
->>>> +	if (old) {
->>>> +		ret = psock_replace_prog(pprog, prog, old);
->>>> +		goto out;
->>>> +	}
->>>> +
->>>> +	psock_set_prog(pprog, prog);
->>>> +
->>>> +out:
->>>> +	if (!ret) {
->>>> +		bpf_prog_inc(prog);
->>>> +		old = xchg(&link->prog, prog);
->>>> +		bpf_prog_put(old);
->>> Need to check old? I don't think we can clal bpf_prog_put on null?
->>>
->>>     if (old)
->>>        bpf_prog_put(old)
->> The 'old' here represents the *old* link->prog program and
->> link->prog should not be NULL at this point.
-> Ah ok. Maybe instead of using the input old var make it
-> explicit?
+On Fri, Apr 5, 2024 at 11:51=E2=80=AFAM Daniel Borkmann <daniel@iogearbox.n=
+et> wrote:
 >
->      if (!ret) {
->         struct bpf_prog *old_link;
+> On 4/5/24 1:16 AM, Jamal Hadi Salim wrote:
+> > On Thu, Apr 4, 2024 at 7:05=E2=80=AFPM Alexei Starovoitov
+> > <alexei.starovoitov@gmail.com> wrote:
+> >> On Thu, Apr 4, 2024 at 3:59=E2=80=AFPM Jamal Hadi Salim <jhs@mojatatu.=
+com> wrote:
+> >>>
+> >>> We will use ebpf/xdp/kfuncs whenever they make sense to us.
+> >>
+> >> In such case my Nack stands even if you drop this patch.
+> >
+> > We are not changing any ebpf code. I must have missed the memo that
+> > stated you can control how people write or use ebpf.
+> > The situation is this: Anybody can write kfuncs today. They can put
+> > them in kernel modules - i am sure you designed it with that intent.
+> > So what exactly are you objecting to that is ebpf related here?
 >
->         bpf_prog_inc(prog);
->         old_link = xchg(&link->prog, prog);
->         bpf_prog_put(old)
->      }
->
-> Is a bit more obious to me at least. Up to you I have a slight preference
-> for the explicit more verbose above.
+> To be honest, this entire patchset is questionable from a design pov for
+> the many reasons stated by various folks (including tc co-maintainers) in
+> all the earlier discussions, but related to the BPF bits if someone else
+> were trying to propose an interface on kfuncs which replicate to a larger
+> extend BPF map APIs, the feedback would be similarly in that this should
+> be attempted to generalize instead so that this is useful as a building
+> block, esp given the goal is on SW datapath and not offloads, and the
+> context specific pieces would reside in the p4tc code.
 
-Regarding naming convention, yes, it is hard. My above code similar to
-kernel/bpf/net_namespace.c:
+"questionable from a design pov" is the crux of the back and forth.
+You have to live in a world where other people have different design
+Povs, different use cases. You are imposing on us how it should be
+done and according to you guys just because it runs in tc it is
+inferior. In open source you work on your itches -  many use cases and
+many designs. Given history on how far we bent over to try and reach a
+compromise i have concluded we'll never satisfy you.
+100% of the code is in the tc domain. It is touching zero of the ebpf code.
+We are using kfuncs the way they are intended. You are not going to
+stop people using kfuncs the way we did. Giving us advice on how to
+better kfuncs is reasonable. Martin did that and we fixed those
+issues. Trying to dictate whether we can use kfuncs or not is crossing
+the line in particular given that you have said many times that kfuncs
+dont even have to be even posted on the bpf mailing list. And i am not
+going to relitigate some of the statements you made above that we have
+rehashed many times. Read the cover letter.
 
-static int bpf_netns_link_update_prog(struct bpf_link *link,
-                                       struct bpf_prog *new_prog,
-                                       struct bpf_prog *old_prog)
-{
-         struct bpf_netns_link *net_link =
-                 container_of(link, struct bpf_netns_link, link);
-         enum netns_bpf_attach_type type = net_link->netns_type;
-         struct bpf_prog_array *run_array;
-         struct net *net;
-         int idx, ret;
-         
-         if (old_prog && old_prog != link->prog)
-                 return -EPERM;
-	...
-	old_prog = xchg(&link->prog, new_prog);
-         bpf_prog_put(old_prog);
-	...
-}
-
-The 'old_prog' is reused in the above.
-
-I am okay to change
-	old = xchg(&link->prog, prog);
-to
-	old_link_prog = xchg(&link->prog, prog);
-
-in next revision (if requested or additional changes needed)
-or as a followup.
-
->
-> Otherwise for the series.
->
-> Reviewed-by: John Fastabend <john.fastabend@gmail.com>
+cheers,
+jamal
