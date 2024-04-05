@@ -1,79 +1,88 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f51.google.com (mail-io1-f51.google.com [209.85.166.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD54A171E62
-	for <bpf@vger.kernel.org>; Fri,  5 Apr 2024 17:40:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FEA9171657
+	for <bpf@vger.kernel.org>; Fri,  5 Apr 2024 17:41:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712338829; cv=none; b=DUPgr6mIc3mqcSTGiVrIcOarPLW7WQqWf6IhYQzgHKmiEHvIo2zu9q8MuufGcrOl2opxL6w7O8T8Psl37fSRV8TzIOMFF1eGLosk6eit4cHTYOFBwI5iGMyeCatHkCmrtfRZbSAiLvuLfl1Zmd5Y/LU7uvoWCW0LLlHsea0ds5c=
+	t=1712338862; cv=none; b=iC7qDcwRdyH1AAboFldcQAE1gtO9Amc7pcRyvakSX2+BbiUcE8KF4DHUiM7a1pogPxU2l74crYh7OgsqxL5mSZloRC+jOgfD3Vxv7L6l4HCDHK1C96Gc6feMXgPebPM/t1ftH1plB7fmvNoc6zPQmfJeTSNoDuPrBgAK2MOFlJc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712338829; c=relaxed/simple;
-	bh=4sFxt79hKjG7dhiKcgFycWfyXq5/IaZzTdx5N90HHw8=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=TqXfnB/Gp/qAsH2s34ZvdMVANGX6SK4vg/gXF6Cdfs1/3rQgVUXAp5s3LMwqK9UE+kIZ3PcP+Napa+4mtJOIaxQ4XH8wD+trim8tuEzD9kQr5v2c1GaRKxMtC+evaDg8/jM4uYpnZ4may8Tgdnf5ho0LXKA/NqZH/rXHTwYuiEQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AF2f/MXU; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AF2f/MXU"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 52C14C43601;
-	Fri,  5 Apr 2024 17:40:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712338829;
-	bh=4sFxt79hKjG7dhiKcgFycWfyXq5/IaZzTdx5N90HHw8=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=AF2f/MXUWgKv/QWlo+FmIFYAEILCiSpntqHxo5fytLVXRlwE8BkcrVwirtaGCSokp
-	 ekrbsl9OAnfUgDEqkkN5Ti3K2KcnEImIwiMqB69Rvx78jJ7wItp1EQoPXr4pY15kXB
-	 OWHqwNWfxWvvpPHFChKtw79Xl0PyVBr/bsoBQvn0rgBkJw+5XQr1BKBdP0d2FqQdKo
-	 FW0wB8WRpxDkA3FEm/E5YT87u3K7ypZY+ed5JeqCi5Ej+HSrKXg0UQpWaIzkhWtHfb
-	 0PLKdcTSoNqkhWJl5zqCEPIopy8155q04VCYoxViDZDDWM8ETfxzBW4VyuewFv2Y5z
-	 27W7qeN69pslw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 443E6D8BCE4;
-	Fri,  5 Apr 2024 17:40:29 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1712338862; c=relaxed/simple;
+	bh=VV4/WsIw0bjyvw7kkAcl0orY+3uhEqN5npfbyUmFwcA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=DHg+bSH678xJBmMuhxNTZzv6omPfDPIa09AGxBiwQliG8zenPx+J89WX35UVorJRs3Vk1lrA+E1CNHqXz7fVGtpNtr3lAbb3t06E9ZBSNoGMnajfZa3YI1PtpxAoqxyGNn/vGmd/hfuJMtEjF1+SryuhrUmJ+cH3QYHvJQPljmk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=manifault.com; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.166.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=manifault.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-io1-f51.google.com with SMTP id ca18e2360f4ac-7d5abd91ea4so52911539f.0
+        for <bpf@vger.kernel.org>; Fri, 05 Apr 2024 10:41:00 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1712338860; x=1712943660;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=VV4/WsIw0bjyvw7kkAcl0orY+3uhEqN5npfbyUmFwcA=;
+        b=A7yk2u4cAtalIbn8Lk6KKNZP9u6RmVfm1RNZuw9TWEKbpTe/d3UM5a6TfOQNrtYuUt
+         UbLmiET7QoPXswTnWOtoms5pEXnlHp1rnQ8ZhGYG/3FIvAvTpVBSMryCk68rh2An09yT
+         y9Xbz3sZnZGQnY0vhOF6vJSML7MbXgq9scKYyu7dfa8nwM34m/nk/Jcx/m2azWwWyvm3
+         lY6jU6EmSHxZu+4ou9BY0/U2e16bm4SVRZKG3/8dBaGzQOeRVgaXYg2VrEpPXXTEoc1z
+         RwfmQ4VW4i+8vMPWQ/EwZ0lbYWE6z8Hr8+osNnNFmSsYUoyyRwLjmX1Nzuibu2Pr7OFI
+         mprg==
+X-Gm-Message-State: AOJu0YydL6bqiFOhIOip5ugyxoTeePWdS+55dd1Is71Pp9fSd/5IZVlF
+	DH9TbViBIr48xcTIS4jw3WJBhaRFCOy/Jrd0/GeZcTGez8G/ycS1VSGxsdc4
+X-Google-Smtp-Source: AGHT+IF+ljzQYwGcrc35Ddph03ruUQB0OlgeOO0DesC8YfCHNSyuudE6WE4/sWGSULHY01CzSg3uSA==
+X-Received: by 2002:a05:6602:884:b0:7d0:c0e2:d0d3 with SMTP id f4-20020a056602088400b007d0c0e2d0d3mr2292565ioz.19.1712338860019;
+        Fri, 05 Apr 2024 10:41:00 -0700 (PDT)
+Received: from maniforge (c-76-136-75-40.hsd1.il.comcast.net. [76.136.75.40])
+        by smtp.gmail.com with ESMTPSA id n8-20020a056602340800b007d5c94c4b9csm35499ioz.25.2024.04.05.10.40.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 05 Apr 2024 10:40:59 -0700 (PDT)
+Date: Fri, 5 Apr 2024 12:40:57 -0500
+From: David Vernet <void@manifault.com>
+To: Dave Thaler <dthaler1968=40googlemail.com@dmarc.ietf.org>
+Cc: bpf@vger.kernel.org, bpf@ietf.org, Dave Thaler <dthaler1968@gmail.com>
+Subject: Re: [Bpf] [PATCH bpf-next] bpf, docs: Editorial nits in
+ instruction-set.rst
+Message-ID: <20240405174057.GA19691@maniforge>
+References: <20240405155245.3618-1-dthaler1968@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v2] selftests/bpf: Make sure libbpf doesn't enforce
- the signature of a func pointer.
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <171233882927.27871.5401916900839509718.git-patchwork-notify@kernel.org>
-Date: Fri, 05 Apr 2024 17:40:29 +0000
-References: <20240404232342.991414-1-thinker.li@gmail.com>
-In-Reply-To: <20240404232342.991414-1-thinker.li@gmail.com>
-To: Kui-Feng Lee <thinker.li@gmail.com>
-Cc: bpf@vger.kernel.org, ast@kernel.org, martin.lau@linux.dev,
- song@kernel.org, kernel-team@meta.com, andrii@kernel.org,
- john.fastabend@gmail.com, sinquersw@gmail.com, kuifeng@meta.com
-
-Hello:
-
-This patch was applied to bpf/bpf-next.git (master)
-by Andrii Nakryiko <andrii@kernel.org>:
-
-On Thu,  4 Apr 2024 16:23:42 -0700 you wrote:
-> The verifier in the kernel ensures that the struct_ops operators behave
-> correctly by checking that they access parameters and context
-> appropriately. The verifier will approve a program as long as it correctly
-> accesses the context/parameters, regardless of its function signature. In
-> contrast, libbpf should not verify the signature of function pointers and
-> functions to enable flexibility in loading various implementations of an
-> operator even if the signature of the function pointer does not match those
-> in the implementations or the kernel.
-> 
-> [...]
-
-Here is the summary with links:
-  - [bpf-next,v2] selftests/bpf: Make sure libbpf doesn't enforce the signature of a func pointer.
-    https://git.kernel.org/bpf/bpf-next/c/ba0cbe2bb4ab
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="+YnSGq4SeLXWNs7r"
+Content-Disposition: inline
+In-Reply-To: <20240405155245.3618-1-dthaler1968@gmail.com>
+User-Agent: Mutt/2.2.13 (2024-03-09)
 
 
+--+YnSGq4SeLXWNs7r
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Fri, Apr 05, 2024 at 08:52:45AM -0700, Dave Thaler wrote:
+> This patch addresses a number of editorial nits including
+> spelling, punctuation, grammar, and wording consistency issues
+> in instruction-set.rst.
+>=20
+> Signed-off-by: Dave Thaler <dthaler1968@gmail.com>
+
+LG, thanks
+
+Acked-by: David Vernet <void@manifault.com>
+
+--+YnSGq4SeLXWNs7r
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEARYKAB0WIQRBxU1So5MTLwphjdFZ5LhpZcTzZAUCZhA3qQAKCRBZ5LhpZcTz
+ZBsPAP9dp9lzNrQOY0PZvp9K/Td5Gzq5gkkQzhz2Zll/lYgJhwEAm8WRmoxzevQn
+3nLXwfuI+Hk0j5dM6ZB9nUljchTrEgU=
+=v+fi
+-----END PGP SIGNATURE-----
+
+--+YnSGq4SeLXWNs7r--
