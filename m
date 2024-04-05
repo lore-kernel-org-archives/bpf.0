@@ -1,284 +1,169 @@
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C398171E42
-	for <bpf@vger.kernel.org>; Fri,  5 Apr 2024 20:13:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBACE17334F
+	for <bpf@vger.kernel.org>; Fri,  5 Apr 2024 20:14:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712347990; cv=none; b=E73hQD0XKxsfvVAuXV/MymVuWlGblPjUzQMY6/rLBwXVlbyTYBT+XpA9XSf2zBBXiFTzRUxLLbZ74z2vdV6nCuD+VZ4w6iHaXCkaxnJoA60XF9rXQ4CzHxsCCXl0eVJHJl7xlPHf31/8tOoE2p/8p28FWZ2scF5RPpXYUFMnXh8=
+	t=1712348070; cv=none; b=dIm2PPW8zFZDqG1+4ugMUGmz6ge37avvqXG5lonajD2RBJyHHnWgSgoDYovI8u/R2Iy+Jj+fJHJ8RcQxbJAJE6fg7uP9IeTRFUZb+lkBNeLkncWPDFslTXwkhqIKTWHj/lNRWK0IUV5s9zb1geO2P4vmZtZ3OTBUF6dUyt4KT3k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712347990; c=relaxed/simple;
-	bh=VI+14nnW8XBebyo2i7cd9d4ULwFKEuMkLIrDBmL/SNs=;
+	s=arc-20240116; t=1712348070; c=relaxed/simple;
+	bh=XKbJl9/agIQcdKKtJpehnrVr0Kvbv+4WkJd2KMuyBl4=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ng/ZFUfmTTUTMJ+9T8/TBC3meLLRTSb9BwPN21FlAYHKaId/HqHUu7Hpj9PP/L7Kah4R2mqBjNnz0NIc3QrAXhZRPf0BPGWNEdIlxStXv/IhAiPOofOydPNeXd+Bpnz08f0/CoTxBFqzsfvWy7qgn3y054OM+QZ+TTkS9o1JZCs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nQtvhHrO; arc=none smtp.client-ip=209.85.214.180
+	 To:Cc:Content-Type; b=QaqOzX0OfmbB+dqWcWcx1oMn726cqx+GbuDoRnVuZng0m1JFb5WCSL8yBVaCx0hhz+dfNHelpMURSKRdHxH1q6H/w/jxU6plHj/HKEYbWid7OwljkPPShYgIZ3aseBSQyzsfoY4FUqlJmjG1aZEwX43C4Rdp/fRIbLz0qdWrJ7I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NHfR6n3d; arc=none smtp.client-ip=209.85.216.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nQtvhHrO"
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-1e034607879so23019155ad.0
-        for <bpf@vger.kernel.org>; Fri, 05 Apr 2024 13:13:08 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NHfR6n3d"
+Received: by mail-pj1-f52.google.com with SMTP id 98e67ed59e1d1-2a2d248a2e1so1628856a91.0
+        for <bpf@vger.kernel.org>; Fri, 05 Apr 2024 13:14:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1712347988; x=1712952788; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1712348068; x=1712952868; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=2DUkicJyjOXfGDld+e/v772Bmxt0P/7OxW+6jultECc=;
-        b=nQtvhHrOF1ugiuqmUYnQBaSC2hRAMdybk+Er9l0+vzOEL7MpBwlf4HDttHWC3SkAy9
-         8hq0wLE01Tk1jcy56Rl3C5y60guZP7129rt1yaGp3xdUg5IMsvwc6HhjDw23hZroaxDr
-         ShM2alL0ZRuybMK2hPqLUzeRUxQVHHnLgDRjSOIN+GiLNjJVKbKxGA9xyGy3bp70x+oQ
-         OX8jhO1OJg/CRLzuXORUKREmzgj1uOCP6GFMZ3YcmG/MopsglT7ZDXYvv/Ws0+MT5X6o
-         1fEV0AadDZzsvcaHoCAvMA5g1FqeFdLFqZZyA/HlVlMn91+KMANtWzRoif+ol77Byyfd
-         PYzA==
+        bh=wwOTW9R95lSEOVPo59KfFJBA2kGRjIcaVRI6rZOCAvA=;
+        b=NHfR6n3dl/VJRsPgDB1xgQN2QSBzphHM9TvCy7s2Aq95/6qr1kxT4WrjxOZcmK8ODV
+         bUdGbbe6/ZxXlxHUEGlRIttzirzFX6dhrh38IxoYHd1Rbx1KYpiJARy3Y+PZLYelO5vD
+         A5c2i7UQC46SYgef6HmyMZLQLBz/U73iXGn+5rlQkooYV4nuUjRQ6n2PllrkySoYRJY1
+         +fTEuiDqX4yYd3z0Gg8S+826suU6FO83j9egeDpB8ovL9xU7sVw13rGaMkmqlkkMVtXT
+         HyMlXDYUaPlv9lnhAJSjw2UcmNcdq5mMB/6DNHGRn4cUb5vHIVXtKcttxQbDeoPbgjB7
+         dRwQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712347988; x=1712952788;
+        d=1e100.net; s=20230601; t=1712348068; x=1712952868;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=2DUkicJyjOXfGDld+e/v772Bmxt0P/7OxW+6jultECc=;
-        b=wM+lR3WY4sHUhVk/VCNIQkwnc9fKy80NcE12dW3VMskZr+0s2d8ZTv/j+J/gk17oub
-         Lw5yMg9vVz7xuLvUzRJ5BOrno2tVfQr8hUPNLjXSXX4nO/SwQq1026Ua3js/dmxJRzhr
-         0NFN+FZ/GlFoIGHAF2m1Yq5JcU22wDKWv443ajK+3aGH4qcqOHki1JIqxTd/vV3wsvbX
-         fSNEpaa32YMe1PxBaML9OgFMLmRQ40VcXjfgPXzwMbksPNU7C1ms3O2zBd87zNdZx3lS
-         3y/SugdqMdfffAbXmwWpY0ppkIIMK965Y21862cHCCaoQNmGh3yEU6mLHsrWJ6qK3Eeb
-         I36Q==
-X-Gm-Message-State: AOJu0YwQW3xNiDWBfazKw1oZTAnjrvUR6tmgmvNpSBZNuLZhRkVICQmq
-	u1h7JC2imn1qsKGdlG2bTueH+zY0IGZderwB2NIE/Jrt5N97946K2snSMMzQbASOdWOruK/0TfV
-	mWbgx1QCUCZ0AZCUmk2HRZRIePogwTTjrONc=
-X-Google-Smtp-Source: AGHT+IHVWf9c8POXNmVGwO5OlXx2FGCigGYooOVyXDjTsnG9H2kjChNKclXWbmnPK66alkEBwoLxpu9xXcA+I35nvLM=
-X-Received: by 2002:a17:902:e84f:b0:1e0:a735:227a with SMTP id
- t15-20020a170902e84f00b001e0a735227amr3304667plg.1.1712347988399; Fri, 05 Apr
- 2024 13:13:08 -0700 (PDT)
+        bh=wwOTW9R95lSEOVPo59KfFJBA2kGRjIcaVRI6rZOCAvA=;
+        b=Rp2LK0F2R2Lf04xPsjVZrBlRSoH3x6MqHnaosFysFFPKP0IJoN6v6ShxqMU4vbg7qL
+         ggr74xqrGf8s0cZ6fZFoL77LSqsr2jzpFs7YIuU+3gRBml5Pq43vQdKtywIXiOAIbL+W
+         3a6ix4gUPQyZGo7KEZWLxoLnoFhfkGAAyYjVzOG9snY79edpWGGiBDvpBK9tXHw7FMUr
+         D2587PYoOieFfYYBa2nD5Erh5lwrzWD0IFLQuyl2RjB5/p6fyMdGd4ga1xMpfNnBjD66
+         uwxfDzsUO5dKWz7vrT+FGHuITsfAMTi/X/kWE2lPIjINHlr2EC7Zb55Egr8AVs/mjxpI
+         xKeA==
+X-Gm-Message-State: AOJu0YxlA4cb5NSU/Pc19YWjRY3QzMkLzcRx80iWjnFY0YDufFQ6X+XU
+	twRknowIxb81C3tFlcm8clcjEmUtIzpFVrBDW5knzkbuN7p7ampCpDAWBxmBr2PZaWdWlpOiNE6
+	WuaqzIj1FVcQrCg9e04InCS2QJs4=
+X-Google-Smtp-Source: AGHT+IHtQ4dloIMll3JvrsJMFHMe2w1qhS412Sthgp5rOnjmSUd2F4UeOtk4BX+DmBODoim6wXF8laMPsq8rDCvfw9o=
+X-Received: by 2002:a17:90b:3113:b0:2a2:1ec6:924 with SMTP id
+ gc19-20020a17090b311300b002a21ec60924mr4760967pjb.3.1712348068075; Fri, 05
+ Apr 2024 13:14:28 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240404025305.2210999-1-yonghong.song@linux.dev> <20240404025310.2211688-1-yonghong.song@linux.dev>
-In-Reply-To: <20240404025310.2211688-1-yonghong.song@linux.dev>
+References: <20240404025305.2210999-1-yonghong.song@linux.dev> <20240404025316.2212069-1-yonghong.song@linux.dev>
+In-Reply-To: <20240404025316.2212069-1-yonghong.song@linux.dev>
 From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Fri, 5 Apr 2024 13:12:56 -0700
-Message-ID: <CAEf4Bza+V-DerE=Y2cuNNYgyv0jv0b4RH2r3gXt9=uzZzA2JTQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v4 1/5] bpf: Add bpf_link support for sk_msg and
- sk_skb progs
+Date: Fri, 5 Apr 2024 13:14:16 -0700
+Message-ID: <CAEf4BzY-ekyrSs-Z7SXtWJtAgn4AoLfiVcYv6fip=9ay9a0obQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v4 2/5] libbpf: Add bpf_link support for BPF_PROG_TYPE_SOCKMAP
 To: Yonghong Song <yonghong.song@linux.dev>
 Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
 	Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
 	Jakub Sitnicki <jakub@cloudflare.com>, John Fastabend <john.fastabend@gmail.com>, kernel-team@fb.com, 
-	Martin KaFai Lau <martin.lau@kernel.org>
+	Martin KaFai Lau <martin.lau@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
 On Wed, Apr 3, 2024 at 7:53=E2=80=AFPM Yonghong Song <yonghong.song@linux.d=
 ev> wrote:
 >
-> Add bpf_link support for sk_msg and sk_skb programs. We have an
-> internal request to support bpf_link for sk_msg programs so user
-> space can have a uniform handling with bpf_link based libbpf
-> APIs. Using bpf_link based libbpf API also has a benefit which
-> makes system robust by decoupling prog life cycle and
-> attachment life cycle.
+> Introduce a libbpf API function bpf_program__attach_sockmap()
+> which allow user to get a bpf_link for their corresponding programs.
 >
+> Acked-by: Eduard Zingerman <eddyz87@gmail.com>
 > Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
 > ---
->  include/linux/bpf.h            |   6 +
->  include/linux/skmsg.h          |   4 +
->  include/uapi/linux/bpf.h       |   5 +
->  kernel/bpf/syscall.c           |   4 +
->  net/core/sock_map.c            | 268 ++++++++++++++++++++++++++++++++-
->  tools/include/uapi/linux/bpf.h |   5 +
->  6 files changed, 284 insertions(+), 8 deletions(-)
+>  tools/lib/bpf/libbpf.c         | 7 +++++++
+>  tools/lib/bpf/libbpf.h         | 2 ++
+>  tools/lib/bpf/libbpf.map       | 6 ++++++
+>  tools/lib/bpf/libbpf_version.h | 2 +-
+>  4 files changed, 16 insertions(+), 1 deletion(-)
 >
-
-[...]
-
-> @@ -103,7 +111,7 @@ int sock_map_prog_detach(const union bpf_attr *attr, =
-enum bpf_prog_type ptype)
->                 goto put_prog;
->         }
+> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+> index b091154bc5b5..97eb6e5dd7c8 100644
+> --- a/tools/lib/bpf/libbpf.c
+> +++ b/tools/lib/bpf/libbpf.c
+> @@ -149,6 +149,7 @@ static const char * const link_type_name[] =3D {
+>         [BPF_LINK_TYPE_TCX]                     =3D "tcx",
+>         [BPF_LINK_TYPE_UPROBE_MULTI]            =3D "uprobe_multi",
+>         [BPF_LINK_TYPE_NETKIT]                  =3D "netkit",
+> +       [BPF_LINK_TYPE_SOCKMAP]                 =3D "sockmap",
+>  };
 >
-> -       ret =3D sock_map_prog_update(map, NULL, prog, attr->attach_type);
-> +       ret =3D sock_map_prog_update(map, NULL, prog, NULL, attr->attach_=
-type);
->  put_prog:
->         bpf_prog_put(prog);
->  put_map:
-> @@ -1488,21 +1496,79 @@ static int sock_map_prog_lookup(struct bpf_map *m=
-ap, struct bpf_prog ***pprog,
->         return 0;
+>  static const char * const map_type_name[] =3D {
+> @@ -12533,6 +12534,12 @@ bpf_program__attach_netns(const struct bpf_progr=
+am *prog, int netns_fd)
+>         return bpf_program_attach_fd(prog, netns_fd, "netns", NULL);
 >  }
 >
-> +static int sock_map_link_lookup(struct bpf_map *map, struct bpf_link ***=
-plink,
-> +                               struct bpf_link *link, bool skip_check, u=
-32 which)
-
-why not combine prog + link into a single lookup? also it seems like
-sock_map_prog_lookup has some additional EBUSY conditions, do we need
-to replicate them here?
-
+> +struct bpf_link *
+> +bpf_program__attach_sockmap(const struct bpf_program *prog, int map_fd)
 > +{
-> +       struct sk_psock_progs *progs =3D sock_map_progs(map);
-> +       struct bpf_link **cur_plink;
-> +
-> +       switch (which) {
-> +       case BPF_SK_MSG_VERDICT:
-> +               cur_plink =3D &progs->msg_parser_link;
-> +               break;
-> +#if IS_ENABLED(CONFIG_BPF_STREAM_PARSER)
-> +       case BPF_SK_SKB_STREAM_PARSER:
-> +               cur_plink =3D &progs->stream_parser_link;
-> +               break;
-> +#endif
-> +       case BPF_SK_SKB_STREAM_VERDICT:
-> +               cur_plink =3D &progs->stream_verdict_link;
-> +               break;
-> +       case BPF_SK_SKB_VERDICT:
-> +               cur_plink =3D &progs->skb_verdict_link;
-> +               break;
-> +       default:
-> +               return -EOPNOTSUPP;
-> +       }
-> +
-> +       if (!skip_check && ((!link && *cur_plink) || (link && link !=3D *=
-cur_plink)))
-> +               return -EBUSY;
-> +
-> +       *plink =3D cur_plink;
-> +       return 0;
+> +       return bpf_program_attach_fd(prog, map_fd, "sockmap", NULL);
 > +}
 > +
-> +/* Handle the following four cases:
-> + * prog_attach: prog !=3D NULL, old =3D=3D NULL, link =3D=3D NULL
-> + * prog_detach: prog =3D=3D NULL, old !=3D NULL, link =3D=3D NULL
-> + * link_attach: prog !=3D NULL, old =3D=3D NULL, link !=3D NULL
-> + * link_detach: prog =3D=3D NULL, old !=3D NULL, link !=3D NULL
-> + */
->  static int sock_map_prog_update(struct bpf_map *map, struct bpf_prog *pr=
-og,
-> -                               struct bpf_prog *old, u32 which)
-> +                               struct bpf_prog *old, struct bpf_link *li=
-nk,
-> +                               u32 which)
+>  struct bpf_link *bpf_program__attach_xdp(const struct bpf_program *prog,=
+ int ifindex)
 >  {
->         struct bpf_prog **pprog;
-> +       struct bpf_link **plink;
->         int ret;
+>         /* target_fd/target_ifindex use the same field in LINK_CREATE */
+> diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
+> index f88ab50c0229..4c7ada03bf4f 100644
+> --- a/tools/lib/bpf/libbpf.h
+> +++ b/tools/lib/bpf/libbpf.h
+> @@ -795,6 +795,8 @@ bpf_program__attach_cgroup(const struct bpf_program *=
+prog, int cgroup_fd);
+>  LIBBPF_API struct bpf_link *
+>  bpf_program__attach_netns(const struct bpf_program *prog, int netns_fd);
+>  LIBBPF_API struct bpf_link *
+> +bpf_program__attach_sockmap(const struct bpf_program *prog, int map_fd);
+> +LIBBPF_API struct bpf_link *
+>  bpf_program__attach_xdp(const struct bpf_program *prog, int ifindex);
+>  LIBBPF_API struct bpf_link *
+>  bpf_program__attach_freplace(const struct bpf_program *prog,
+> diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
+> index 51732ecb1385..015737439007 100644
+> --- a/tools/lib/bpf/libbpf.map
+> +++ b/tools/lib/bpf/libbpf.map
+> @@ -411,8 +411,14 @@ LIBBPF_1.3.0 {
+>  LIBBPF_1.4.0 {
+>         global:
+>                 bpf_program__attach_raw_tracepoint_opts;
+> +               bpf_program__attach_sockmap;
+
+leftover from the previous revision? please remove
+
+with that:
+
+Acked-by: Andrii Nakryiko <andrii@kernel.org>
+
+>                 bpf_raw_tracepoint_open_opts;
+>                 bpf_token_create;
+>                 btf__new_split;
+>                 btf_ext__raw_data;
+>  } LIBBPF_1.3.0;
+> +
+> +LIBBPF_1.5.0 {
+> +       global:
+> +               bpf_program__attach_sockmap;
+> +} LIBBPF_1.4.0;
+> diff --git a/tools/lib/bpf/libbpf_version.h b/tools/lib/bpf/libbpf_versio=
+n.h
+> index e783a47da815..d6e5eff967cb 100644
+> --- a/tools/lib/bpf/libbpf_version.h
+> +++ b/tools/lib/bpf/libbpf_version.h
+> @@ -4,6 +4,6 @@
+>  #define __LIBBPF_VERSION_H
 >
-> +       mutex_lock(&sockmap_mutex);
-> +
->         ret =3D sock_map_prog_lookup(map, &pprog, which);
->         if (ret)
-> -               return ret;
-> +               goto out;
+>  #define LIBBPF_MAJOR_VERSION 1
+> -#define LIBBPF_MINOR_VERSION 4
+> +#define LIBBPF_MINOR_VERSION 5
 >
-> -       if (old)
-> -               return psock_replace_prog(pprog, prog, old);
-> +       if (!link || prog)
-> +               ret =3D sock_map_link_lookup(map, &plink, NULL, false, wh=
-ich);
-> +       else
-> +               ret =3D sock_map_link_lookup(map, &plink, NULL, true, whi=
-ch);
-> +       if (ret)
-> +               goto out;
-> +
-> +       if (old) {
-> +               ret =3D psock_replace_prog(pprog, prog, old);
-> +               if (!ret)
-> +                       *plink =3D NULL;
-> +               goto out;
-> +       }
+>  #endif /* __LIBBPF_VERSION_H */
+> --
+> 2.43.0
 >
->         psock_set_prog(pprog, prog);
-> -       return 0;
-> +       if (link)
-> +               *plink =3D link;
-
-nit: feels more natural to do
-
-if (old) {
-    psock_replace_prog(...)
-} else {
-    psock_set_prog(...)
-}
-
-it's two alternatives, not one unlikely vs one main use case (but it's mino=
-r)
-
-> +
-> +out:
-> +       mutex_unlock(&sockmap_mutex);
-> +       return ret;
->  }
->
->  int sock_map_bpf_prog_query(const union bpf_attr *attr,
-> @@ -1657,6 +1723,192 @@ void sock_map_close(struct sock *sk, long timeout=
-)
->  }
->  EXPORT_SYMBOL_GPL(sock_map_close);
->
-> +struct sockmap_link {
-> +       struct bpf_link link;
-> +       struct bpf_map *map;
-> +       enum bpf_attach_type attach_type;
-> +};
-> +
-> +static void sock_map_link_release(struct bpf_link *link)
-> +{
-> +       struct sockmap_link *sockmap_link =3D container_of(link, struct s=
-ockmap_link, link);
-> +
-> +       if (sockmap_link->map) {
-
-nit: if (!sockmap_link->map) return;
-
-and reduce nesting of everything else
-
-> +               WARN_ON_ONCE(sock_map_prog_update(sockmap_link->map, NULL=
-, link->prog, link,
-> +                                                 sockmap_link->attach_ty=
-pe));
-
-I think sockmap_link->map access in general has to be always protected
-my sockmap_mutex (I'd do that even for the if above), because it can
-race with force-detach logic at least
-
-> +
-> +               mutex_lock(&sockmap_mutex);
-> +               bpf_map_put_with_uref(sockmap_link->map);
-> +               sockmap_link->map =3D NULL;
-> +               mutex_unlock(&sockmap_mutex);
-> +       }
-> +}
-> +
-
-[...]
-
-> +       if (old) {
-> +               ret =3D psock_replace_prog(pprog, prog, old);
-> +               goto out;
-> +       }
-> +
-> +       psock_set_prog(pprog, prog);
-> +
-> +out:
-
-same nit, feels like
-
-if (old) /* replace */ else /* set */ is more natural, and then you
-can move xchg logic before out: knowing that it's the only success
-case
-
-> +       if (!ret) {
-> +               bpf_prog_inc(prog);
-> +               old =3D xchg(&link->prog, prog);
-> +               bpf_prog_put(old);
-> +       }
-> +       mutex_unlock(&sockmap_mutex);
-> +       return ret;
-> +}
-> +
-
-[...]
