@@ -1,94 +1,137 @@
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D27A0171069;
-	Fri,  5 Apr 2024 16:07:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5776416ABC3;
+	Fri,  5 Apr 2024 16:12:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712333248; cv=none; b=l+tzgcDuD+Cm8HJ2CiFzLpC1u93Ir39qK6E9Icqq6Ov6SQ+bBgJ69X/sx9Jz6qEd+HhQMIdJtyHw9Wh5hwB8zYlYeqh6ztXFYAsW21K9hQBIZhDIiThYpExe+nSRnUFaKQb75RTdvTjtlnTF30ycuDuVKPxgUtgO13naRZG/tLA=
+	t=1712333566; cv=none; b=oGA9Y7BtyBlBTnhLoHg4Of32F7drTWPPxo5QjhDUbtVM6Sytu9nNBwHvmcvuGCTIVZwHO8WLXl3hyWHSdZIfHUWoZcyUaVZupUl2IpbEek5OFZbBhOCNFyBpMw+WneDuDYmVq+cj9zBh9pKOlmX9ogx29vDqrV6WHF2KZMgWhGk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712333248; c=relaxed/simple;
-	bh=/n6EdmNiAaj7jJ9fb7jZrjiJ9kgHzGDjzSEonMO8iBs=;
+	s=arc-20240116; t=1712333566; c=relaxed/simple;
+	bh=rU+WWRBhnpDb+ZVPBQ1akIc9YzS46xtRBAG/iooGCgY=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=CwiKPkhAM1Oa144eyNRf2oLWfZjjeIQnMGSDOBmrGVBUhmWD5D+4jH0MXJjjcr1X/ppY/F07sTW56Zq/QUIyU4cjcqTPkDfmsNTtjst6LFrz3qIqZJzk7Lj6rRVcJ8wHU4/ur+XQYfrmjSTTVyOMQShORS1ViLDZF11v7M8M7zg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RfgX9mWr; arc=none smtp.client-ip=209.85.128.53
+	 To:Cc:Content-Type; b=ZLVzsdXAihs1uQWzQIKiqfJnY+aVQ33E2A269uY76EeJH+1zqt/m0J4xsE23wSPtFU0/8DgIKhMwazPVAA649ylUf+J5+hS4PvJ670qN3Gu643wZi9ib7xYw3PEgEVaebAK0CnMg0h3iXD6cOs3ZRMYoqgMHyXuNuR+r6QlO6I0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Gzg7iVIh; arc=none smtp.client-ip=209.85.221.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RfgX9mWr"
-Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-4162b0e21b0so12292965e9.0;
-        Fri, 05 Apr 2024 09:07:26 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Gzg7iVIh"
+Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-33ff53528ceso1705007f8f.0;
+        Fri, 05 Apr 2024 09:12:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1712333245; x=1712938045; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1712333563; x=1712938363; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=/n6EdmNiAaj7jJ9fb7jZrjiJ9kgHzGDjzSEonMO8iBs=;
-        b=RfgX9mWr43Y+3XZRcFnHgI14j9KrKgoCF7tr7tCVdIB22tu95THyy6aJRO4/JKlWOW
-         XQbnGdqQoG+O76jjqxmvtvuPy8fHFYcsGw6eHdUn+9b9Z+VfAUNF8DZT+Ws4xJeqCVKL
-         xUR/DymovD9h2Ji9dxE5BHFW64Za87PfHppv0UJ5u89RE8EgvhlnIz/YNKKxe4Y1gqRR
-         9fSWFh6ldWz2nkvjJWndojYUi+8tSX+nIUKXLuFYODIMDUT6uvkXZsn0NNAuv7DjqWNl
-         seGewuzpUfjcIscpYNIw/bWDz9l0yxzPCmC4FowuTrkFS2D2iPlA6cH7dOOsyiHXewBB
-         KvLw==
+        bh=CUFHJXNP6ohiRivChPDINRMxOHKnXBAWCJDuEaDGAZE=;
+        b=Gzg7iVIhHFeDrfYiFc1IgNkzVU2VOm/L2bNquYoeZhBoM2DrG8x+dHVsiDdclE2QDx
+         zOeaKoqnUYP8S80wp9J1ZGtDd8iNf+ATr5bLY2o5XDYG7adDkygUQFJMqCnJmJIobyqg
+         OxOrF4nQFNmM/CnSjf1OQ3tJD/XybkIKlf0/pJHcU9k9k6d6ZWJ9KcpS0P5tvXMrNFXi
+         Qwg0gqTM2tvAChOM4o/ZpudJi/N+0DSFVbHnEZGMGJQObNbPWIzwBo7h81WMILSsdwX9
+         byY+rTmr6G+zIbRhcDjiZqsuUYyLnVA52kp9fBFuk/tKaCxwqJhhaCuTnF5YGRdRT1hB
+         RdLA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712333245; x=1712938045;
+        d=1e100.net; s=20230601; t=1712333563; x=1712938363;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=/n6EdmNiAaj7jJ9fb7jZrjiJ9kgHzGDjzSEonMO8iBs=;
-        b=Z85b82U+wwYSKx7HAQO/dQal3ma9IvxtcnhYjtJLLe0VGrTU0xbWIZGDKBm5LDEf+H
-         y1w7yhf4VwGE8TwE4gQUMVVJwHMrHWt+Sof2mx9Idg8jWE6QbAnYlXm11rJ8pHTpRulB
-         jCOEgr5+HhP7qOXchzc2ohAODvnXGSe+C3RrrhvBJaUkKp8w+ktsaT4/wo9brblZukTX
-         JXDOFOH/u2NJACmkyJ+Ow1SXQV7uXyzT94VL5tMJSFlKeNyMA/nsEMnVNts8oGE4a1oo
-         Vxt1jxtgUgY+KkO25fwBaRsm1EqjuEQ9eHce/LNA6zTXbhTPSP3gWFfKH8K5CoHUyQUp
-         wFNQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVeolWJhwdl1wXc9aJpc9cYVmiAXVKCJ0xqZfldgMfiucU8vGal3KMrOmGg73vSE2JoJjV6jXZ93sghwgtm5oH7vBAD048PCsGeqxjItiERTYxU52vyZj64K9tnAKQnOG9KXdUKTy9ayP6CRANXr8SDIdNQITqeEgb7CzJiZ8pFXvAX
-X-Gm-Message-State: AOJu0YzrZ6i6bKbRCIkZAIq2CaAD5OXk+GY3d25ZbYkJNrrW7pG2GOR5
-	bQ3P4UGtVEpuRIp/3h/R5dPr2s/p/idneS8BftBhE5LZ02eT/JMui02IKwajfvOS4qMvKJdWd2v
-	eX9LP2IlLR043wS7j+g0+LakzfiE=
-X-Google-Smtp-Source: AGHT+IHJa17c/UAjDpaaM4OZ/aa58GujEn4FPNnYug7DLSdv/Q08eVXaiGF1njm/Xbdk+2JyNPc9peKruPCsUnY/uQw=
-X-Received: by 2002:a5d:6184:0:b0:343:e45c:c91d with SMTP id
- j4-20020a5d6184000000b00343e45cc91dmr1422867wru.41.1712333245021; Fri, 05 Apr
- 2024 09:07:25 -0700 (PDT)
+        bh=CUFHJXNP6ohiRivChPDINRMxOHKnXBAWCJDuEaDGAZE=;
+        b=DE7oMu5u1WsS+Xy8cH4C1nClI4YGzIV/s1q0FzVVsRS9D0P/Sv3xof3PTWmZDrMeQi
+         vWHPw/aSflRfIswIsvV9JpIZNTcRxD/2ccqF8JZdQM5Tz9q9mDrtpgb7wtgBf5+lBsjq
+         7gHCBSU5lTwxNYQFEOf81oDgrcoPOuYtcFiDYMAu6GUCPTKc5uE17tDdKpv0HfSeOHD2
+         rgv74Xb+YJTBAXvpkV7Kll1GOIUawyr4IndPSeriyCDGwz2X41OxGAsw+Gbx4ch6q3iZ
+         Od47pGGhAh0dBebydXLYnpocjqHRkZVikp6d5Nbelx2GJQOIz80URDFXC7Zf2xocoDCh
+         piCw==
+X-Forwarded-Encrypted: i=1; AJvYcCUQlMGELGR8LgOpbLCdbX1uVWWJxWaXPnj69Do8+2DbsA7/MNxwIwGzRRiwrBydgTPIb50jCKgz/WHlZaNIyQmJZT+FbVugJhXhrsca0pshig55FdNNjuV7wu6mUnhAZYk3
+X-Gm-Message-State: AOJu0YzKHSLhMjFEndzoyeKVGZkKgYZP9XXwjCZH0UjSL/DsMv+VxlKe
+	P43cA6nz2VmYPd6AXEILyv2CBuJZRDU3rGxIkTNrcwnYiNZXTSDvp9c4rihAzHH/7936pBJ1Nja
+	Y3c8dWLiL5UZBrXpDtuCDvIR2Tn4=
+X-Google-Smtp-Source: AGHT+IHDzXqsB0ENEHKgEDGCUOYAAZXEOJWZIaAYbWlqfC+cN0ZrmyRYp5VZr8mACDNm8TQInLyYUsp8d7YaYFFkrXo=
+X-Received: by 2002:a5d:5225:0:b0:341:ba31:b8ba with SMTP id
+ i5-20020a5d5225000000b00341ba31b8bamr1464775wra.57.1712333562610; Fri, 05 Apr
+ 2024 09:12:42 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240322-hid-bpf-sleepable-v5-0-179c7b59eaaa@kernel.org>
- <20240322-hid-bpf-sleepable-v5-1-179c7b59eaaa@kernel.org> <CAADnVQJdm7+7tbJC8yhPqDUijE0DTD9UG4LOQmNRCWchQ3uGsg@mail.gmail.com>
- <CAO-hwJKVVjhg6_0tAM75HGJL0WcERotyJc+7oBVvDiTGJAqTfw@mail.gmail.com>
- <CAADnVQ+5NqjqyeFS3XgDU0OCFgt1Y9bmTbHOPv6ekw1sJasyaA@mail.gmail.com>
- <CAADnVQJm7bi=iFtWj1XCmEdyDwb64KjxeP5RFo57paG3-zZo_g@mail.gmail.com>
- <CAADnVQKSwdpfx8EoqURvzFymYNr1evkB3+4dRt_coPOZhW2LTw@mail.gmail.com>
- <CAO-hwJLDuGHDNLRAJit7+5Dh7MRmwmWNt0+rreMyjf7P6UpAYg@mail.gmail.com>
- <CAADnVQ+gikPakTuYpD4-oxS6yS5-Dd_HanfqyNnGW-nk7=eXNg@mail.gmail.com>
- <CAO-hwJLz4ET8Rba-_8icR+7t9T63BPnf97JrSFjviJWG+i8dVQ@mail.gmail.com>
- <CAADnVQ+MSqf1=FesorSxT63Qh83+4W79HX3HDyOWupajk_rTHg@mail.gmail.com> <CAO-hwJJmb3f7y39YqFrt9K0rUdab8ERvA9sU3kNz1qUj7_=BfA@mail.gmail.com>
-In-Reply-To: <CAO-hwJJmb3f7y39YqFrt9K0rUdab8ERvA9sU3kNz1qUj7_=BfA@mail.gmail.com>
+References: <000000000000e9a8d80615163f2a@google.com> <20240403184149.0847a9d614f11b249529fd02@linux-foundation.org>
+ <CAADnVQ+meL1kvXUehDT3iO2mxiZNeSUqeRKYx1C=3c0h=NSiqA@mail.gmail.com>
+ <Zg_aTFoC2Pwakyl1@FVFF77S0Q05N> <Zg/iGQCDKa9bllyI@shell.armlinux.org.uk>
+In-Reply-To: <Zg/iGQCDKa9bllyI@shell.armlinux.org.uk>
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Fri, 5 Apr 2024 09:07:13 -0700
-Message-ID: <CAADnVQLxKuTDKhN4R_LVnXpO8oS6AWNhQpExtV9+P66giHq=UA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v5 1/6] bpf/helpers: introduce sleepable bpf_timers
-To: Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Cc: Benjamin Tissoires <bentiss@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>, 
-	bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
+Date: Fri, 5 Apr 2024 09:12:31 -0700
+Message-ID: <CAADnVQ+LKO2Y90DVZ4qQv3dXyuWKkvFqqJ0E_p_=qwscsvnaVg@mail.gmail.com>
+Subject: Re: [syzbot] [mm?] BUG: unable to handle kernel paging request in
+ copy_from_kernel_nofault (2)
+To: "Russell King (Oracle)" <linux@armlinux.org.uk>, Puranjay Mohan <puranjay12@gmail.com>
+Cc: Mark Rutland <mark.rutland@arm.com>, Andrew Morton <akpm@linux-foundation.org>, 
+	linux-arm-kernel <linux-arm-kernel@lists.infradead.org>, 
+	syzbot <syzbot+186522670e6722692d86@syzkaller.appspotmail.com>, 
+	LKML <linux-kernel@vger.kernel.org>, linux-mm <linux-mm@kvack.org>, 
+	syzkaller-bugs <syzkaller-bugs@googlegroups.com>, bpf <bpf@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Apr 5, 2024 at 8:46=E2=80=AFAM Benjamin Tissoires
-<benjamin.tissoires@redhat.com> wrote:
+On Fri, Apr 5, 2024 at 4:36=E2=80=AFAM Russell King (Oracle)
+<linux@armlinux.org.uk> wrote:
 >
-> Alright, as of today (and I'm about to be AFK for the weekend), I got
-> your changes in and working (I think). I'll review the series on
-> Monday and send it back so we have a baseline to compare it to with
-> bpf_wq.
+> On Fri, Apr 05, 2024 at 12:02:36PM +0100, Mark Rutland wrote:
+> > On Thu, Apr 04, 2024 at 03:57:04PM -0700, Alexei Starovoitov wrote:
+> > > On Wed, Apr 3, 2024 at 6:56=E2=80=AFPM Andrew Morton <akpm@linux-foun=
+dationorg> wrote:
+> > > >
+> > > > On Mon, 01 Apr 2024 22:19:25 -0700 syzbot <syzbot+186522670e6722692=
+d86@syzkaller.appspotmail.com> wrote:
+> > > >
+> > > > > Hello,
+> > > >
+> > > > Thanks.  Cc: bpf@vger.kernel.org
+> > >
+> > > I suspect the issue is not on bpf side.
+> > > Looks like the bug is somewhere in arm32 bits.
+> > > copy_from_kernel_nofault() is called from lots of places.
+> > > bpf is just one user that is easy for syzbot to fuzz.
+> > > Interestingly arm defines copy_from_kernel_nofault_allowed()
+> > > that should have filtered out user addresses.
+> > > In this case ffffffe9 is probably a kernel address?
+> >
+> > It's at the end of the kernel range, and it's ERR_PTR(-EINVAL).
+> >
+> > 0xffffffe9 is -0x16, which is -22, which is -EINVAL.
+> >
+> > > But the kernel is doing a write?
+> > > Which makes no sense, since copy_from_kernel_nofault is probe reading=
+.
+> >
+> > It makes perfect sense; the read from 'src' happened, then the kernel t=
+ries to
+> > write the result to 'dst', and that aligns with the disassembly in the =
+report
+> > below, which I beleive is:
+> >
+> >      8: e4942000        ldr     r2, [r4], #0  <-- Read of 'src', fault =
+fixup is elsewhere
+> >      c: e3530000        cmp     r3, #0
+> >   * 10: e5852000        str     r2, [r5]      <-- Write to 'dst'
+> >
+> > As above, it looks like 'dst' is ERR_PTR(-EINVAL).
+> >
+> > Are you certain that BPF is passing a sane value for 'dst'? Where does =
+that
+> > come from in the first place?
+>
+> It looks to me like it gets passed in from the BPF program, and the
+> "type" for the argument is set to ARG_PTR_TO_UNINIT_MEM. What that
+> means for validation purposes, I've no idea, I'm not a BPF hacker.
+>
+> Obviously, if BPF is allowing copy_from_kernel_nofault() to be passed
+> an arbitary destination address, that would be a huge security hole.
 
-Nice! Looking forward to it.
+If that's the case that's indeed a giant security hole,
+but I doubt it. We would be crashing other archs as well.
+I cannot really tell whether arm32 JIT is on.
+If it is, it's likely a bug there.
+Puranjay,
+could you please take a look.
