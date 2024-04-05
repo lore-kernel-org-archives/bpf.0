@@ -1,193 +1,172 @@
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [78.32.30.218])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9CC9171E47;
-	Fri,  5 Apr 2024 18:19:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.32.30.218
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FB9A173331
+	for <bpf@vger.kernel.org>; Fri,  5 Apr 2024 19:38:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712341163; cv=none; b=SiityV3gQX6hh3X1GR/PFkUXgNk/uG5RQuPtc26T3epjPBQYI/b2Er+rJ2Ko4F672avpZvsoxkdgy8vflCRefJsB3HToQHWP7mtOPgQWHg4fwunhmzPMYSoxqvxyT6aWZ5gWYyFVcf2SlwoOGMjTOkGMuV2CEyQQTeCl/IacYxo=
+	t=1712345885; cv=none; b=pjumwpX9HVZXppTfQqBJqSIwPzm/1CfFabqqEFCscAEBft+FDVShq6alEJ+kVnyuWxHEtVX6tNQy0atDGTyz7f1PbFCwrTGc2xsw7mfAp64JtL6vc/O9rG5iCDmrJ0aOrLDjo6WQEJNmzEHEZEbgQ9C6aOM3tyaI+Vo4ioY6Y/o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712341163; c=relaxed/simple;
-	bh=QCgEPH4wUkS+9dfZeNb/0z4fye0/PiFdlQxjbFRrVxU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kn8TJ15EeDfztgvmZwVjzfSODonZMViEY+3HZ8C4PgPvDBdvh7yx/66H/FX8zG/o+eiTkyp7HOJmKOo5XVFk8Fh4tI3gtFMoJ+cIrQv57hpr2M4Jep2uKl9hCiDfZivmNjMLRdQPtWz6xMXnHfNMPUndHbD1P1ct3T69Rs+d6gU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk; spf=none smtp.mailfrom=armlinux.org.uk; dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b=i0B2OSKK; arc=none smtp.client-ip=78.32.30.218
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=armlinux.org.uk
+	s=arc-20240116; t=1712345885; c=relaxed/simple;
+	bh=kgTkYWu9av3fk1wXE/MMRWaBlHajVPxmTOnpQFuf3wQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=U07Fr4oAGDaTP+vVUKcVFSo3rjXsUzyP3Edx3yP3a5OPOYo1EgLXL2U+8x9F19zmBQoCuR1GrKVWek+epzm1E/Iyx832Hti/ApQF6bGSPDZwaxjmfAPV2KcojGb7SqHQCsFV9uqUbgRxyUw8cfqboEaS7j7ofU2cjJLj5zDX2pU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=networkplumber.org; spf=pass smtp.mailfrom=networkplumber.org; dkim=pass (2048-bit key) header.d=networkplumber-org.20230601.gappssmtp.com header.i=@networkplumber-org.20230601.gappssmtp.com header.b=nYlQpOQB; arc=none smtp.client-ip=209.85.210.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=networkplumber.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=networkplumber.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b="i0B2OSKK"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:
-	Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
-	Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-	List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=78zodIlf2id93sGgo87RUv6tjv4oQ4pNi83y08mn66s=; b=i0B2OSKKQ+YnkGLQ7fe+OSdfRU
-	XcZvIyYdwQj4pbTuMMQ9CO5AY0fZl5Gnq93sDigw0Qyg59kyL+y6ayxo2+y5rYz8E4tsOAC44QQGI
-	CQUAKeaQXCpN9nbUy6q12VP79A4e7A2qH5gjT93NxGYK91z5ONa2Wxs0aDS4EXfHzhRXP16hLxF/H
-	7Gu2gYvmkBp/77WCASD9rLbVyK79lh3Dtq6dMdDKDxIjT0VtUl8OhyqBpyaShGjpLBNAJ8OM42gMX
-	B+D4JXbo0yqGGSs9IeL+3XL/qAxsow0Djc8GntmOzBj3Ndv0QBOjo645RvO3oQg197pongk5ktcjC
-	Gj1Kq83Q==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:46188)
-	by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <linux@armlinux.org.uk>)
-	id 1rso9g-0002jG-0U;
-	Fri, 05 Apr 2024 19:19:12 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-	(envelope-from <linux@shell.armlinux.org.uk>)
-	id 1rso9e-0001a9-79; Fri, 05 Apr 2024 19:19:10 +0100
-Date: Fri, 5 Apr 2024 19:19:10 +0100
-From: "Russell King (Oracle)" <linux@armlinux.org.uk>
+	dkim=pass (2048-bit key) header.d=networkplumber-org.20230601.gappssmtp.com header.i=@networkplumber-org.20230601.gappssmtp.com header.b="nYlQpOQB"
+Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-6e782e955adso2403316b3a.3
+        for <bpf@vger.kernel.org>; Fri, 05 Apr 2024 12:38:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=networkplumber-org.20230601.gappssmtp.com; s=20230601; t=1712345882; x=1712950682; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0Skw/7zSwkdGJ/Jo5P9vQ92gzd4vVsUPWr/RZJFT+0E=;
+        b=nYlQpOQBwu0SeowBmx5buT+znB91WQ+lG5jBfadkguScgcKKYn2mxWXIBgTo6TjcjF
+         hh1ju9BZ/cU1tvJ+aEghewejfqN+ELULAnlLXj3Pwelw6poz+JhWMGtkWVDsy8X+RUb/
+         RVDXNNT5JbQxHRP7StJMFIGPyp/WLyYSlhAvdpX6uafO3YZsUk6hwE2OrdHs1ZP0rxUk
+         pfVtgs4E3u/KSz3gttSLe56zhmTKDw6Nyq1nI+iWKOeau3gPJMyNJmEy+vZ2ylfc5W5e
+         7M5I5z33CdK75eUhkrxwmV7vJ4sUSQLmUG9b5CaOIFwyv3nRW8JcWr5wcFi3g2Kk0dub
+         RWqA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1712345882; x=1712950682;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=0Skw/7zSwkdGJ/Jo5P9vQ92gzd4vVsUPWr/RZJFT+0E=;
+        b=EJBP5rgUjTEndo83tf5N3fFTZx6S2jE8mbd2JbFCOEhySIJTRTA0qAfyDvARYISEg5
+         18sXr+/y2LGqZ6Awk4tUobR8h0CQ+6abtKY8fXxtt7a+Idy1yDgLWOAw0qxkvhElSbGn
+         K3sVkH/fgM2SJ7mjWRJs1cCQU9qVhwn2/aO0nzoV+duoV8aY05DBLGsaD1cTusbb17D2
+         xkiriW6YDISWLCQqlcz5pTmgIzJev2eAoRINx47v0I0VgQOK/cO9/DE5CQwKq1/XvNvu
+         MDdsf+q/XPK/4F1/059c2d4A6r/e/NlOQrS1hBUI60l7+rc+uu+5mnHXlAoGQGUnRdOT
+         G7RA==
+X-Forwarded-Encrypted: i=1; AJvYcCU/Rc1n22LyGtXlN3q3h1QPLZvqMLbuatfqQY1B9B8fW/IL8JV/tJkyMADxhvB+pIlUdH4dZ1nPPeot9QbtK9YeM6Su
+X-Gm-Message-State: AOJu0YynHV4jy2ZBK2fz+f8AOBSlv24NTH0pCFet9+d7WgaPokq8jRtj
+	u99dK2ZTLoLUDt5VeE7P/rDw/Q1pFnOieD1mkp3JjXukQNw5SWexZWxVg58bvCY=
+X-Google-Smtp-Source: AGHT+IHdaoeChGjYHsWpM/vSMHNxgMOeDLvzY75BPeRxNbiJW2/6A2VWDhF9OxxjEBBo27nQU10WdQ==
+X-Received: by 2002:a05:6a20:87aa:b0:1a7:3ee0:5e17 with SMTP id g42-20020a056a2087aa00b001a73ee05e17mr1893999pzf.55.1712345882555;
+        Fri, 05 Apr 2024 12:38:02 -0700 (PDT)
+Received: from hermes.local (204-195-96-226.wavecable.com. [204.195.96.226])
+        by smtp.gmail.com with ESMTPSA id 16-20020a056a00071000b006ecee1ae8fdsm1942485pfl.144.2024.04.05.12.38.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 05 Apr 2024 12:38:01 -0700 (PDT)
+Date: Fri, 5 Apr 2024 12:37:59 -0700
+From: Stephen Hemminger <stephen@networkplumber.org>
 To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-	Puranjay Mohan <puranjay12@gmail.com>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-	syzbot <syzbot+186522670e6722692d86@syzkaller.appspotmail.com>,
-	LKML <linux-kernel@vger.kernel.org>, linux-mm <linux-mm@kvack.org>,
-	syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
-	bpf <bpf@vger.kernel.org>
-Subject: Re: [syzbot] [mm?] BUG: unable to handle kernel paging request in
- copy_from_kernel_nofault (2)
-Message-ID: <ZhBAnvLRfj/JW5bZ@shell.armlinux.org.uk>
-References: <000000000000e9a8d80615163f2a@google.com>
- <20240403184149.0847a9d614f11b249529fd02@linux-foundation.org>
- <CAADnVQ+meL1kvXUehDT3iO2mxiZNeSUqeRKYx1C=3c0h=NSiqA@mail.gmail.com>
- <Zg_aTFoC2Pwakyl1@FVFF77S0Q05N>
- <Zg/iGQCDKa9bllyI@shell.armlinux.org.uk>
- <CAADnVQ+LKO2Y90DVZ4qQv3dXyuWKkvFqqJ0E_p_=qwscsvnaVg@mail.gmail.com>
- <CAEf4BzYNc-cxRu9qEe2DWdCBNwXAvpSBHKtUhXtoEhB_XNc1Gg@mail.gmail.com>
+Cc: Yonghong Song <yonghong.song@linux.dev>, Luca Boccassi
+ <bluca@debian.org>, daniel@iogearbox.net, ast@kernel.org,
+ andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com,
+ bpf@vger.kernel.org
+Subject: Re: vmlinux.h overlap/conflict with network protocol definitions
+Message-ID: <20240405123759.6265fd4e@hermes.local>
+In-Reply-To: <CAEf4BzaTNRsFbppS31XQmFv+yjqw1_JASheOdw-7H_bHL=6HGA@mail.gmail.com>
+References: <20240404100901.7d6bc10f@hermes.local>
+	<3ae7e58f-e62f-4d53-8b39-6e3fe1810014@linux.dev>
+	<20240404112710.25d4e99d@hermes.local>
+	<CAEf4BzbHbXHixPAEJccnrgt5xtV+d1iyvQYdC8Dpzs3cWdCRcQ@mail.gmail.com>
+	<20240404175258.363f441c@hermes.local>
+	<CAEf4BzaTNRsFbppS31XQmFv+yjqw1_JASheOdw-7H_bHL=6HGA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAEf4BzYNc-cxRu9qEe2DWdCBNwXAvpSBHKtUhXtoEhB_XNc1Gg@mail.gmail.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Apr 05, 2024 at 10:50:30AM -0700, Andrii Nakryiko wrote:
-> On Fri, Apr 5, 2024 at 9:30 AM Alexei Starovoitov
-> <alexei.starovoitov@gmail.com> wrote:
+On Fri, 5 Apr 2024 10:31:46 -0700
+Andrii Nakryiko <andrii.nakryiko@gmail.com> wrote:
+
+> On Thu, Apr 4, 2024 at 5:53=E2=80=AFPM Stephen Hemminger
+> <stephen@networkplumber.org> wrote:
 > >
-> > On Fri, Apr 5, 2024 at 4:36 AM Russell King (Oracle)
-> > <linux@armlinux.org.uk> wrote:
+> > On Thu, 4 Apr 2024 14:45:04 -0700
+> > Andrii Nakryiko <andrii.nakryiko@gmail.com> wrote:
+> > =20
+> > > > > This is a known issue as currently vmlinux.h does not support mac=
+ros.
+> > > > > There are some efforts by Edward Zingerman to support this but th=
+is has
+> > > > > not done yet. At the same time, you could have a trivial header f=
+ile
+> > > > > like
+> > > > > https://github.com/torvalds/linux/blob/master/tools/testing/selft=
+ests/bpf/progs/bpf_tracing_net.h
+> > > > > to be used for bpf program and then your bpf program with vmlinux=
+.h can
+> > > > > have much easier CORE support. =20
+> > > >
+> > > >
+> > > > That is an example of header surgery which I would rather avoid hav=
+ing to carry
+> > > > as long term technical debt baggage.
+> > > > =20
 > > >
-> > > On Fri, Apr 05, 2024 at 12:02:36PM +0100, Mark Rutland wrote:
-> > > > On Thu, Apr 04, 2024 at 03:57:04PM -0700, Alexei Starovoitov wrote:
-> > > > > On Wed, Apr 3, 2024 at 6:56 PM Andrew Morton <akpm@linux-foundationorg> wrote:
-> > > > > >
-> > > > > > On Mon, 01 Apr 2024 22:19:25 -0700 syzbot <syzbot+186522670e6722692d86@syzkaller.appspotmail.com> wrote:
-> > > > > >
-> > > > > > > Hello,
-> > > > > >
-> > > > > > Thanks.  Cc: bpf@vger.kernel.org
-> > > > >
-> > > > > I suspect the issue is not on bpf side.
-> > > > > Looks like the bug is somewhere in arm32 bits.
-> > > > > copy_from_kernel_nofault() is called from lots of places.
-> > > > > bpf is just one user that is easy for syzbot to fuzz.
-> > > > > Interestingly arm defines copy_from_kernel_nofault_allowed()
-> > > > > that should have filtered out user addresses.
-> > > > > In this case ffffffe9 is probably a kernel address?
-> > > >
-> > > > It's at the end of the kernel range, and it's ERR_PTR(-EINVAL).
-> > > >
-> > > > 0xffffffe9 is -0x16, which is -22, which is -EINVAL.
-> > > >
-> > > > > But the kernel is doing a write?
-> > > > > Which makes no sense, since copy_from_kernel_nofault is probe reading.
-> > > >
-> > > > It makes perfect sense; the read from 'src' happened, then the kernel tries to
-> > > > write the result to 'dst', and that aligns with the disassembly in the report
-> > > > below, which I beleive is:
-> > > >
-> > > >      8: e4942000        ldr     r2, [r4], #0  <-- Read of 'src', fault fixup is elsewhere
-> > > >      c: e3530000        cmp     r3, #0
-> > > >   * 10: e5852000        str     r2, [r5]      <-- Write to 'dst'
-> > > >
-> > > > As above, it looks like 'dst' is ERR_PTR(-EINVAL).
-> > > >
-> > > > Are you certain that BPF is passing a sane value for 'dst'? Where does that
-> > > > come from in the first place?
+> > > What's your ultimate goal? As Yonghong said, vmlinux.h is not
+> > > compatible with other headers. So you have to pick either using
+> > > vmlinux.h as a base + adding missing #define's (because those are not
+> > > recorded in types, so can't be put into vmlinux.h), or not use
+> > > vmlinux.h, use linux UAPI/internal headers and then use explicit CO-RE
+> > > helpers/attributes to make your application CO-RE-relocatable.
 > > >
-> > > It looks to me like it gets passed in from the BPF program, and the
-> > > "type" for the argument is set to ARG_PTR_TO_UNINIT_MEM. What that
-> > > means for validation purposes, I've no idea, I'm not a BPF hacker.
-> > >
-> > > Obviously, if BPF is allowing copy_from_kernel_nofault() to be passed
-> > > an arbitary destination address, that would be a huge security hole.
+> > > It's not clear from your original email why exactly you wanted to
+> > > switch to vmlinux.h in the first place. =20
 > >
-> > If that's the case that's indeed a giant security hole,
-> > but I doubt it. We would be crashing other archs as well.
-> > I cannot really tell whether arm32 JIT is on.
-> > If it is, it's likely a bug there.
-> > Puranjay,
-> > could you please take a look.
+> > Some backstory. There is not an existing TC filter for this, so the
+> > original developer had the idea of using BPF to do it.
 > >
-> 
-> I dumped the BPF program that repro.c is loading, it works on x86-64
-> and there is nothing special there. We are probe-reading 5 bytes from
-> somewhere into the stack. Everything is unaligned here, but stays
-> within a well-defined memory slot.
-> 
-> Note the r3 = (s8)r1, that's a new-ish thing, maybe bug is somewhere
-> there (but then it would be JIT, not verifier itself)
-> 
->    0: (7a) *(u64 *)(r10 -8) = 896542069
->    1: (bf) r1 = r10
->    2: (07) r1 += -7
->    3: (b7) r2 = 5
->    4: (bf) r3 = (s8)r1
->    5: (85) call bpf_probe_read_kernel#-72390
+> > The program is a small BPF program to implement a TC filter that looks =
+at
+> > SKB and does mapping to queue based on L3 (or L3/L4) header. So not hea=
+vily dependent
+> > on kernel data structure, but sk_buff is not necessarily stable; actual=
+ layout
+> > depends on kernel config.
+> > =20
+>=20
+> If it's only a few fields from sk_buff that you need, you can define
+> your own minimal sk_buff definition with
+> __attribute__((preserve_access_index)) added to it. You don't have to
+> declare fields in the right order, just make sure that field types
+> match. E.g., something like:
+>=20
+> struct sk_buff {
+>   unsigned char *head;
+>   unsigned char *data;
+>   struct sock *sock;
+> } __attribute__((preserve_access_index));
+>=20
+> You can call it `struct sk_buff___mine` if you already include
+> sk_buff, to avoid the conflict. Libbpf will still understand that it
+> should match it to struct sk_buff in the kernel.
+>=20
+> Alternatively, you can just use BPF_CORE_READ() macro on types you get
+> from kernel headers, even if they don't have that
+> preserve_access_index attribute.
+>=20
+> Or, you can just use __builtin_preserve_access_index(&skb->len) to
+> access sk_buff's fields in CO-RE-relocatable way.
+>=20
+> Or, you can have entire block within which all fields accesses will be
+> CO-RE-relocatable:
+>=20
+> int len;
+>=20
+> __builtin_preserve_access_index(({
+>     len =3D skb->len;
+>     /* other skb accesses here as well */
+> }));
+>=20
+> Many ways to have bolted on CO-RE even without vmlinux.h. vmlinux.h is
+> convenient (apart from lack of #defines, but that's an orthogonal
+> problem), but by no means required for BPF CO-RE.
+>=20
 
-Before jumping to conclusions, let's try to unravel what's going on
-here.
 
-We're calling bpf_probe_read_kernel(), and the arguments to this are:
-
-	void *dst		; r1
-	u32 size		; r2
-	const void *unsafe_ptr	; r3
-
-The problem that has been reported is that the _store_ in
-copy_from_kernel_nofault(). Thus it's the destination pointer that's
-the proble, and thus that is the value that ends up in r1.
-
-What we can also see in the dump is that the address being read from
-is the same as the address being written, and these are both
-0xffffffe9 or -22. This would mean that both r3 and r1 contain the
-same value.
-
-Unwinding the code further, r1 comes from r10 - 7. So r10 probably
-was -15.
-
-Neither of these are valid stack addresses on 32-bit ARM.
-
-Now, to repeat the same question. Is the BPF JIT on for this test?
-This is a crucial piece of information, because it tells us whether
-we need to look at the JIT or whether there's a problem with the
-BPF interpreter. Please answer this question.
-
-The next question to BPF people is... what is r10? Is that supposed
-to be the read-only frame pointer? If so, why is it called r10 and
-not something more readable? I'm guessing that the definition is
-BPF_REG_FP, but I'm grasping at straws here (BPF people, fix your
-debug so people who don't know BPF inside out can understand it!)
-
-If the BPF JIT is being used, I think the next thing which needs to
-happen is that the BPF JIT debug needs to be enabled. If
-/proc/sys/net/core/bpf_jit_enable contains a value greater than 1,
-then the ARM assembly will be hexdumped. One of the annoying things
-is going to be piecing the hexdump together, converting it into a
-form that can then be turned into a binary file, to then be
-disassembled by objdump.
-
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
+The skbuff pointer is passed to the TC program. So BPF_CORE_READ doesn't
+make sense here.  The biggest concern is that kernel config of the build
+machine may not match the kernel config of the eventual target, and some
+of the fields of the sk_buff are hidden based on #ifdef and may change.
