@@ -1,226 +1,224 @@
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F18015FD1B;
-	Fri,  5 Apr 2024 09:17:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B4C7161318;
+	Fri,  5 Apr 2024 09:53:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712308653; cv=none; b=hm7ZAkaF2oUPiNBnQHblQfA6tUH07ksvE0+z3V2VaB0zhRhSAqdlmcSV//M4MhfkzJxC3Em9lzstB8pQulTdTg4uaz33pnLAxqxHCd9orGzNxGJ0PyBpE+1iIX8g4WFtjETp/x3dFnlkf102MIEScgsRBsmwdhSDP+KiKFyLmSQ=
+	t=1712310815; cv=none; b=mIY19KJ4UI01mSUrK/lBBv8QwjcJFR/GcJ6feTqejR8OgeII6d1QwMKbqIJTyzfDe2X7g00bTfU0bh5S7h+NSCXlfxA62h9QQpRYFxXo7OHTIxC2zyX5YlvA7BynzOoUeIx5UKv0uZ6mblIOhEjhQ3rfAySQg7m8fsf0PYzEYx8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712308653; c=relaxed/simple;
-	bh=arne33H5//u9DO+V442IJ7DrQF6kabb/of8ByX5eni0=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=qPOghpStzjlat6loyHGvcvM3f0uO8PoX7Z90/0M3FmehnJu+NMEMoo1ULP6kb8yRqYmwR3vyg7sFJf2WCYP5je6w/9YZyt/z0chsM6/fdTPlsYtNpGp74TTb4DsH/HzXyPSSqXZFcyDUuYuxiFo4d52oVZHpLUzrlYv5CZr77dg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kzJtCOip; arc=none smtp.client-ip=209.85.128.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1712310815; c=relaxed/simple;
+	bh=iG4O7MMO9gnBVtJZSYs1Hq2UvQRfp2O+8N10zEhPJQc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=DTPANW0a0wV97PEgXPLudGyv3gNtEeQLhpJBkNuIi948I7CrYZ9fV9IXUO9CHKdzxmRFDqRx0rKF1oJDd3VteF75R6+ZlJBtipMSwfwrUNbT5Fxu40VGFfJ1EKKvwLJtoCIlZQ86OWSzO0Xlf9VMAHYCMnI1p2jWMX1LE6MYm2Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=0AXR3Sr9; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=mv3acM2x; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=Z0+7rq6f; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=lVccGfCI; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kzJtCOip"
-Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-41551639550so13904365e9.2;
-        Fri, 05 Apr 2024 02:17:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1712308649; x=1712913449; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=LX/ma26TDvYVdpCIWg6iUhgi/+t6jX0tkNjGdFErDfk=;
-        b=kzJtCOipc0PGWTAIzhWCt42nTXcjST16Q0DJqovup6Kl2OipUZ4lCEas0BGjcX51J9
-         JVRUrbL6Qpyj7tMZWtmXOUgP9oFqQC116k116DECpseJK3hBU8AGmqf83gZePNFZEAyp
-         FIajbu9wkXBLPurCvFNgyMfHRs90gQE15FPN6aAnn44AFDF+YQB09GGtrI9ygg7zTxLZ
-         FaGJE695m22z0/o+HfHdYGWVepN+selmKRrgA6sCyH8xLSOZ1eYyow4aXUC9PRjth2Rx
-         Bu836SqoX5pjs4GLVxDZwW0Pp1lPWrBpxfhFoVrhH36qEgT56lQfTE7svPwkTRmdHV+Z
-         UoLA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712308649; x=1712913449;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=LX/ma26TDvYVdpCIWg6iUhgi/+t6jX0tkNjGdFErDfk=;
-        b=WxG6H3i/Kyxx1dqweEV97VTZXatzVNm7XaOtSgEe9GIhovxVT0WSWcu09P2YVcHaRJ
-         C3uRz5UsCtVVjfMWdjzhwHXUFNN9r5LTRBCTHPbMZ2OcWMsb3NaNMMuHARe00KWHaZKQ
-         8XxgcOTrHmlt+3TcfF+2GhKYNtscNgC/oh2lslGGBihGdXji3HikPZZDChomCnsx8SrI
-         HhJHk1mtF/aPkjtarl6CriqKuD5GfboNC5A0m3C9e1UwzgyTGfSpBr9pJeNcgQrpSZY2
-         UUjQAP1enyQAxs9XY3E5uiWU4gGcxcRHBcX5gnuFMwoIBv3szXm6pClSyWQxctGAWpQ3
-         E7Qg==
-X-Forwarded-Encrypted: i=1; AJvYcCUEIlqKh0a50/dMExoO3GYBRsrA4OTJvKBAl8bcBzx70QhmC/0pX39m1n6QmPhh0VtOwQK142riwmm2GSSGKF5sXW613IbiaVAVCFkUKFpMIKtglhvBC0Mu7mdMgEuhoChP
-X-Gm-Message-State: AOJu0YxKSUmYKDRl8/LfGcjSV/z7fQGofcgFMKWl2oX4QVj68oIJMvJ2
-	2BtQ7QDpXE3jMVgq2WOCqhT/qfatjlz2UnIwTgn1qrugcKFk8LimuHD2fDl9KlyPaeyx
-X-Google-Smtp-Source: AGHT+IGgfHTLTIsVgQ3B5HauM2cnUDg4HorY6H22kp7XWlCO7vVHucxahGea+Fkf1Sjbk1Up4r//pg==
-X-Received: by 2002:a05:600c:4f41:b0:416:1df0:7c06 with SMTP id m1-20020a05600c4f4100b004161df07c06mr933170wmq.6.1712308648855;
-        Fri, 05 Apr 2024 02:17:28 -0700 (PDT)
-Received: from localhost (54-240-197-231.amazon.com. [54.240.197.231])
-        by smtp.gmail.com with ESMTPSA id v13-20020a05600c444d00b00416306c17basm1017286wmn.14.2024.04.05.02.17.28
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 05 Apr 2024 02:17:28 -0700 (PDT)
-From: Puranjay Mohan <puranjay12@gmail.com>
-To: Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@google.com>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Zi Shen Lim <zlim.lnx@gmail.com>,
-	Xu Kuohai <xukuohai@huawei.com>,
-	Florent Revest <revest@chromium.org>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org
-Cc: puranjay12@gmail.com
-Subject: [PATCH bpf-next] arm64, bpf: add internal-only MOV instruction to resolve per-CPU addrs
-Date: Fri,  5 Apr 2024 09:17:07 +0000
-Message-Id: <20240405091707.66675-1-puranjay12@gmail.com>
-X-Mailer: git-send-email 2.40.1
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="0AXR3Sr9";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="mv3acM2x";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="Z0+7rq6f";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="lVccGfCI"
+Received: from imap2.dmz-prg2.suse.org (imap2.dmz-prg2.suse.org [10.150.64.98])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 65BF721A2E;
+	Fri,  5 Apr 2024 09:53:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1712310809; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=kxLJbVvPYqfzG83pwvoYNu5wMFXj9ZScFtz4XZeGAUk=;
+	b=0AXR3Sr9XfI+c7rTPImw5uCIqUd0/09qhqdILdsZtrOOOTHNThWW8IWO2LavomosrDlGR4
+	r5zcQ7aU/RB1e9VhO2PeMNtjvZCEdKzHqupTEPNLaoS68JZ7HFWh4OFd1ckPqsmFOlBB7H
+	mcwM4kvxTwfCAYfvPvAMLZZtKWx5vB8=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1712310809;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=kxLJbVvPYqfzG83pwvoYNu5wMFXj9ZScFtz4XZeGAUk=;
+	b=mv3acM2xzaAtD0goPoMaKRbxprQYlRRQRdWeBSj+XgsIgB6XYwFswsOsyAWM2lrdH+uuj0
+	DSsBpoDlTl2n1rDQ==
+Authentication-Results: smtp-out1.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1712310808; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=kxLJbVvPYqfzG83pwvoYNu5wMFXj9ZScFtz4XZeGAUk=;
+	b=Z0+7rq6fcjYyrOGJFwhu7EPjxeB2YzEP6/GI4QJE77wXmTpoCFc1mE9dE1Bj/PEGY1tu49
+	ESTilKNYDaC1JrKhdHCnLw44UtjznYqGrEfN+CtNGBPA2Dt9MhQgjmAw2Ok0XXX+qUvUQJ
+	M0o1kG24lT0V2nbGjew3Qb50utPv0T0=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1712310808;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=kxLJbVvPYqfzG83pwvoYNu5wMFXj9ZScFtz4XZeGAUk=;
+	b=lVccGfCILCM4svVbHjo2v2GSsNkbxp/3kUm/GIkdwdP1GGRDcHYdF3Ew32qMBI0ItKMWtc
+	2n16V0vgVrwCANAQ==
+Received: from imap2.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap2.dmz-prg2.suse.org (Postfix) with ESMTPS id 5716C139F1;
+	Fri,  5 Apr 2024 09:53:28 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap2.dmz-prg2.suse.org with ESMTPSA
+	id 2Ig+FRjKD2a3YAAAn2gu4w
+	(envelope-from <jack@suse.cz>); Fri, 05 Apr 2024 09:53:28 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+	id 0505DA0814; Fri,  5 Apr 2024 11:53:27 +0200 (CEST)
+Date: Fri, 5 Apr 2024 11:53:27 +0200
+From: Jan Kara <jack@suse.cz>
+To: Suren Baghdasaryan <surenb@google.com>
+Cc: Kent Overstreet <kent.overstreet@linux.dev>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Matthew Wilcox <willy@infradead.org>, joro@8bytes.org,
+	will@kernel.org, trond.myklebust@hammerspace.com, anna@kernel.org,
+	arnd@arndb.de, herbert@gondor.apana.org.au, davem@davemloft.net,
+	jikos@kernel.org, benjamin.tissoires@redhat.com, tytso@mit.edu,
+	jack@suse.com, dennis@kernel.org, tj@kernel.org, cl@linux.com,
+	jakub@cloudflare.com, penberg@kernel.org, rientjes@google.com,
+	iamjoonsoo.kim@lge.com, vbabka@suse.cz, edumazet@google.com,
+	kuba@kernel.org, pabeni@redhat.com, iommu@lists.linux.dev,
+	linux-kernel@vger.kernel.org, linux-nfs@vger.kernel.org,
+	linux-acpi@vger.kernel.org, acpica-devel@lists.linux.dev,
+	linux-arch@vger.kernel.org, linux-crypto@vger.kernel.org,
+	bpf@vger.kernel.org, linux-input@vger.kernel.org,
+	linux-ext4@vger.kernel.org, linux-mm@kvack.org,
+	netdev@vger.kernel.org, linux-security-module@vger.kernel.org
+Subject: Re: [PATCH 1/1] mm: change inlined allocation helpers to account at
+ the call site
+Message-ID: <20240405095327.ufsimeplwahh6mem@quack3>
+References: <20240404165404.3805498-1-surenb@google.com>
+ <Zg7dmp5VJkm1nLRM@casper.infradead.org>
+ <CAJuCfpHbTCwDERz+Hh+aLZzNdtSFKA+Q7sW-xzvmFmtyHCqROg@mail.gmail.com>
+ <CAJuCfpHy5Xo76S7h9rEuA3cQ1pVqurL=wmtQ2cx9-xN1aa_C_A@mail.gmail.com>
+ <Zg8qstJNfK07siNn@casper.infradead.org>
+ <jb25mtkveqf63bv74jhynf6ncxmums5s37esveqsv52yurh4z7@5q55ttv34bia>
+ <20240404154150.c25ba3a0b98023c8c1eff3a4@linux-foundation.org>
+ <jpaw4hdd73ngt7mvtcdryqscivx6m2ic76ikfkcopceb47becp@vox5czt5bec3>
+ <CAJuCfpF10COO2nh1nt3CcaZOFe4iSXszsup+a0qAEQ1ngyy5tQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJuCfpF10COO2nh1nt3CcaZOFe4iSXszsup+a0qAEQ1ngyy5tQ@mail.gmail.com>
+X-Spam-Level: 
+X-Spamd-Result: default: False [-3.80 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	MID_RHS_NOT_FQDN(0.50)[];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	MISSING_XM_UA(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	RCPT_COUNT_TWELVE(0.00)[39];
+	ARC_NA(0.00)[];
+	TO_DN_SOME(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	R_RATELIMIT(0.00)[to_ip_from(RLinodumkc3pofpwycnya9d5a9)];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	FROM_EQ_ENVFROM(0.00)[];
+	RCVD_COUNT_THREE(0.00)[3];
+	RCVD_TLS_LAST(0.00)[];
+	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	FUZZY_BLOCKED(0.00)[rspamd.com];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[c-faq.com:url,suse.com:email,imap2.dmz-prg2.suse.org:helo,imap2.dmz-prg2.suse.org:rdns,linux.dev:email]
+X-Spam-Score: -3.80
+X-Spam-Flag: NO
 
-Support an instruction for resolving absolute addresses of per-CPU
-data from their per-CPU offsets. This instruction is internal-only and
-users are not allowed to use them directly. They will only be used for
-internal inlining optimizations for now between BPF verifier and BPF
-JITs.
+On Thu 04-04-24 16:16:15, Suren Baghdasaryan wrote:
+> On Thu, Apr 4, 2024 at 4:01 PM Kent Overstreet
+> <kent.overstreet@linux.dev> wrote:
+> >
+> > On Thu, Apr 04, 2024 at 03:41:50PM -0700, Andrew Morton wrote:
+> > > On Thu, 4 Apr 2024 18:38:39 -0400 Kent Overstreet <kent.overstreet@linux.dev> wrote:
+> > >
+> > > > On Thu, Apr 04, 2024 at 11:33:22PM +0100, Matthew Wilcox wrote:
+> > > > > On Thu, Apr 04, 2024 at 03:17:43PM -0700, Suren Baghdasaryan wrote:
+> > > > > > Ironically, checkpatch generates warnings for these type casts:
+> > > > > >
+> > > > > > WARNING: unnecessary cast may hide bugs, see
+> > > > > > http://c-faq.com/malloc/mallocnocast.html
+> > > > > > #425: FILE: include/linux/dma-fence-chain.h:90:
+> > > > > > + ((struct dma_fence_chain *)kmalloc(sizeof(struct dma_fence_chain),
+> > > > > > GFP_KERNEL))
+> > > > > >
+> > > > > > I guess I can safely ignore them in this case (since we cast to the
+> > > > > > expected type)?
+> > > > >
+> > > > > I find ignoring checkpatch to be a solid move 99% of the time.
+> > > > >
+> > > > > I really don't like the codetags.  This is so much churn, and it could
+> > > > > all be avoided by just passing in _RET_IP_ or _THIS_IP_ depending on
+> > > > > whether we wanted to profile this function or its caller.  vmalloc
+> > > > > has done it this way since 2008 (OK, using __builtin_return_address())
+> > > > > and lockdep has used _THIS_IP_ / _RET_IP_ since 2006.
+> > > >
+> > > > Except you can't. We've been over this; using that approach for tracing
+> > > > is one thing, using it for actual accounting isn't workable.
+> > >
+> > > I missed that.  There have been many emails.  Please remind us of the
+> > > reasoning here.
+> >
+> > I think it's on the other people claiming 'oh this would be so easy if
+> > you just do it this other way' to put up some code - or at least more
+> > than hot takes.
+> >
+> > But, since you asked - one of the main goals of this patchset was to be
+> > fast enough to run in production, and if you do it by return address
+> > then you've added at minimum a hash table lookup to every allocate and
+> > free; if you do that, running it in production is completely out of the
+> > question.
+> >
+> > Besides that - the issues with annotating and tracking the correct
+> > callsite really don't go away, they just shift around a bit. It's true
+> > that the return address approach would be easier initially, but that's
+> > not all we're concerned with; we're concerned with making sure
+> > allocations get accounted to the _correct_ callsite so that we're giving
+> > numbers that you can trust, and by making things less explicit you make
+> > that harder.
+> >
+> > Additionally: the alloc_hooks() macro is for more than this. It's also
+> > for more usable fault injection - remember every thread we have where
+> > people are begging for every allocation to be __GFP_NOFAIL - "oh, error
+> > paths are hard to test, let's just get rid of them" - never mind that
+> > actually do have to have error paths - but _per callsite_ selectable
+> > fault injection will actually make it practical to test memory error
+> > paths.
+> >
+> > And Kees working on stuff that'll make use of the alloc_hooks() macro
+> > for segregating kmem_caches.
+> 
+> Yeah, that pretty much summarizes it. Note that we don't have to make
+> the conversions in this patch and accounting will still work but then
+> all allocations from different callers will be accounted to the helper
+> function and that's less useful than accounting at the call site.
+> It's a sizable churn but the conversions are straight-forward and we
+> do get accurate, performant and easy to use memory accounting.
 
-Since commit 7158627686f0 ("arm64: percpu: implement optimised pcpu
-access using tpidr_el1"), the per-cpu offset for the CPU is stored in
-the tpidr_el1/2 register of that CPU.
+OK, fair enough. I guess I can live with the allocation macros in jbd2 if
+type safety is preserved. But please provide a short summary of why we need
+these macros (e.g. instead of RET_IP approach) in the changelog (or at
+least a link to some email explaining this if the explanation would get too
+long). Because I was wondering about the same as Andrew (and yes, this is
+because I wasn't really following the huge discussion last time).
 
-To support this BPF instruction in the ARM64 JIT, the following ARM64
-instructions are emitted:
-
-mov dst, src		// Move src to dst, if src != dst
-mrs tmp, tpidr_el1/2	// Move per-cpu offset of the current cpu in tmp.
-add dst, dst, tmp	// Add the per cpu offset to the dst.
-
-If CONFIG_SMP is not defined, then nothing is emitted if src == dst, and
-mov dst, src is emitted if dst != src.
-
-To measure the performance improvement provided by this change, the
-benchmark in [1] was used:
-
-Before:
-glob-arr-inc   :   23.597 ± 0.012M/s
-arr-inc        :   23.173 ± 0.019M/s
-hash-inc       :   12.186 ± 0.028M/s
-
-After:
-glob-arr-inc   :   23.819 ± 0.034M/s
-arr-inc        :   23.285 ± 0.017M/s
-hash-inc       :   12.419 ± 0.011M/s
-
-[1] https://github.com/anakryiko/linux/commit/8dec900975ef
-
-Signed-off-by: Puranjay Mohan <puranjay12@gmail.com>
----
- arch/arm64/include/asm/insn.h |  7 +++++++
- arch/arm64/lib/insn.c         | 11 +++++++++++
- arch/arm64/net/bpf_jit.h      |  6 ++++++
- arch/arm64/net/bpf_jit_comp.c | 16 ++++++++++++++++
- 4 files changed, 40 insertions(+)
-
-diff --git a/arch/arm64/include/asm/insn.h b/arch/arm64/include/asm/insn.h
-index db1aeacd4cd9..d16d68550c22 100644
---- a/arch/arm64/include/asm/insn.h
-+++ b/arch/arm64/include/asm/insn.h
-@@ -135,6 +135,11 @@ enum aarch64_insn_special_register {
- 	AARCH64_INSN_SPCLREG_SP_EL2	= 0xF210
- };
- 
-+enum aarch64_insn_system_register {
-+	AARCH64_INSN_SYSREG_TPIDR_EL1	= 0xC684,
-+	AARCH64_INSN_SYSREG_TPIDR_EL2	= 0xE682,
-+};
-+
- enum aarch64_insn_variant {
- 	AARCH64_INSN_VARIANT_32BIT,
- 	AARCH64_INSN_VARIANT_64BIT
-@@ -686,6 +691,8 @@ u32 aarch64_insn_gen_cas(enum aarch64_insn_register result,
- }
- #endif
- u32 aarch64_insn_gen_dmb(enum aarch64_insn_mb_type type);
-+u32 aarch64_insn_gen_mrs(enum aarch64_insn_register result,
-+			 enum aarch64_insn_system_register sysreg);
- 
- s32 aarch64_get_branch_offset(u32 insn);
- u32 aarch64_set_branch_offset(u32 insn, s32 offset);
-diff --git a/arch/arm64/lib/insn.c b/arch/arm64/lib/insn.c
-index a635ab83fee3..b008a9b46a7f 100644
---- a/arch/arm64/lib/insn.c
-+++ b/arch/arm64/lib/insn.c
-@@ -1515,3 +1515,14 @@ u32 aarch64_insn_gen_dmb(enum aarch64_insn_mb_type type)
- 
- 	return insn;
- }
-+
-+u32 aarch64_insn_gen_mrs(enum aarch64_insn_register result,
-+			 enum aarch64_insn_system_register sysreg)
-+{
-+	u32 insn = aarch64_insn_get_mrs_value();
-+
-+	insn &= ~GENMASK(19, 0);
-+	insn |= sysreg << 5;
-+	return aarch64_insn_encode_register(AARCH64_INSN_REGTYPE_RT,
-+					    insn, result);
-+}
-diff --git a/arch/arm64/net/bpf_jit.h b/arch/arm64/net/bpf_jit.h
-index 23b1b34db088..b627ef7188c7 100644
---- a/arch/arm64/net/bpf_jit.h
-+++ b/arch/arm64/net/bpf_jit.h
-@@ -297,4 +297,10 @@
- #define A64_ADR(Rd, offset) \
- 	aarch64_insn_gen_adr(0, offset, Rd, AARCH64_INSN_ADR_TYPE_ADR)
- 
-+/* MRS */
-+#define A64_MRS_TPIDR_EL1(Rt) \
-+	aarch64_insn_gen_mrs(Rt, AARCH64_INSN_SYSREG_TPIDR_EL1)
-+#define A64_MRS_TPIDR_EL2(Rt) \
-+	aarch64_insn_gen_mrs(Rt, AARCH64_INSN_SYSREG_TPIDR_EL2)
-+
- #endif /* _BPF_JIT_H */
-diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
-index 76b91f36c729..e9ad9f257a18 100644
---- a/arch/arm64/net/bpf_jit_comp.c
-+++ b/arch/arm64/net/bpf_jit_comp.c
-@@ -877,6 +877,17 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx,
- 			emit(A64_ORR(1, tmp, dst, tmp), ctx);
- 			emit(A64_MOV(1, dst, tmp), ctx);
- 			break;
-+		} else if (insn_is_mov_percpu_addr(insn)) {
-+			if (dst != src)
-+				emit(A64_MOV(1, dst, src), ctx);
-+#ifdef CONFIG_SMP
-+			if (cpus_have_cap(ARM64_HAS_VIRT_HOST_EXTN))
-+				emit(A64_MRS_TPIDR_EL2(tmp), ctx);
-+			else
-+				emit(A64_MRS_TPIDR_EL1(tmp), ctx);
-+			emit(A64_ADD(1, dst, dst, tmp), ctx);
-+#endif
-+			break;
- 		}
- 		switch (insn->off) {
- 		case 0:
-@@ -2527,6 +2538,11 @@ bool bpf_jit_supports_arena(void)
- 	return true;
- }
- 
-+bool bpf_jit_supports_percpu_insn(void)
-+{
-+	return true;
-+}
-+
- void bpf_jit_free(struct bpf_prog *prog)
- {
- 	if (prog->jited) {
+								Honza
 -- 
-2.40.1
-
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
