@@ -1,58 +1,58 @@
-Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
+Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E8A416F84A
-	for <bpf@vger.kernel.org>; Fri,  5 Apr 2024 15:19:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4C6616F850
+	for <bpf@vger.kernel.org>; Fri,  5 Apr 2024 15:20:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712330393; cv=none; b=tBBak3B8r29rNYy19SzoJ6lL/24OLd6jITMurlyIYtWi68Y6KqJEGTMjz2hMoCw5NAYKV3zQt28jFfYRiumr0Ax4xvD+z8J08tsaLNVGHkD6+olPBecbeHKRFB0PgEbCAcxfzRWn/A/VM8UbQMml7R07K2scJYGOsXlSx8sUQ9s=
+	t=1712330427; cv=none; b=laWlH2ZAA97szDbynLrFzzgk9SxBHGBy7cYsSoS1Y/bXyFfMccbDju/wwMw0J6PQVTP8MXqsp13+ekto0QeQPPy5RxtInn4uDifyswqqNfdJgszxX4zsaRFeOxsNoyxGFeaUFWnA6j8u8cpdX7rixmm1ag1dcIkXbJcadqN1kjU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712330393; c=relaxed/simple;
-	bh=7ExM+nOWjFjEqWU/LaZ3c7XsijGS2VP3Sh7LUGhYVeI=;
+	s=arc-20240116; t=1712330427; c=relaxed/simple;
+	bh=UZjaAFnvheNmrWurX8yCb6mGBktKDAjudC/vJFSJZa0=;
 	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 Mime-Version:Content-Type; b=sQgQazIsbF2EfAqu+uM7x6eBrPQh2QDFK7qx2lQHaNlohAS3suAKGL+bO1OpEor6sYJA897V0WzdrmqgzKCX6EORjk32VvcGi4GxpruBkz3ykZthGB2hxtOQw2/OcBOALocmZ+I/aWadM7pJGcxXLeiLNDmjN+urKbnFAZuaKww=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nqAtr19a; arc=none smtp.client-ip=209.85.210.174
+	 Mime-Version:Content-Type; b=jc52nTEO64s5yK8cEdsy0Qc150/cX5PVLTGRgbTwXQpSIznHagnpvvcJiwiNoPpnHqIeGEv6Z1eTNkPKx0WgPm7K+dK7v5cXFRi8YeaZRaTz9G0o03Vs1pJTjTDozWkSiWPL6kX6Eq89toHX/Wt+k86S6kGsjP63UZ3xxHNb4bI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eXxpFcjq; arc=none smtp.client-ip=209.85.216.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nqAtr19a"
-Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-6e46dcd8feaso1349808b3a.2
-        for <bpf@vger.kernel.org>; Fri, 05 Apr 2024 08:19:52 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eXxpFcjq"
+Received: by mail-pj1-f52.google.com with SMTP id 98e67ed59e1d1-2a2d248a2e1so1416540a91.0
+        for <bpf@vger.kernel.org>; Fri, 05 Apr 2024 08:20:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1712330392; x=1712935192; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1712330425; x=1712935225; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:subject:references
          :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=lWDqqBcEDXK40Q4FcvTHHo9rfB4ZEMKtPpPeEV33bcM=;
-        b=nqAtr19aOIWu/RB5VyIMs+pnP/A3vJFr6LGLDtjN7tb4iK48gPmcL8B8zERoP/uq/6
-         XmMwnUxyDl6EhxsveIyN2kfmncOYZKU3F1dglI5JJdhZ+MQyuSyf5IhimuDELlRxK9rL
-         dSUo5JCi+7I2g24SVFRKW5Kh2A2fm+2d5zRpr21koE1aIk9Q2OTRiWBZuBY6QO1SdHN/
-         kmtv04c7r4ZwKt1CRSHKLB6GV+s5Lm3C+M3mjEXoAmrwx0M76J4yM3TkORwFAZrAIVJ+
-         cbVBokqzxspMJQVsf0/QVnUIOAOmAUs/8AduhxqCCN7A3Fao8a5mtUADklQPr0yOdtET
-         edzg==
+        bh=khktNbgcrMg4lWtVC+HHmiY+qicibrhDhO5K3Jh7lCQ=;
+        b=eXxpFcjq31OIz9RoyHnnHtJFARNOKo80GXVbF3CpChxv7Jeq6RygoeUYqKMGilSM4T
+         JfPwBq8T/oWOr9hVNf3PHJn2zdhyBCcn7eqT/wzwCuKIcrLhZys1Pem8JkbG76XHyzBv
+         sYlOuMz9mojHO3OoOvwwN/BsQGYHW+y3C6hBY3vpKTCR1+z3SXvXyOqMm9dOcBnqYq1B
+         xr16YVZyTKjXSMkmM5ZphEVlWOxdg6soeblfEbrZt3AsZXwe9BDg5SdtGw0hl9jAgEbv
+         5ER/jl444SbDsarnEPFvDDxcvW+IQiYKK/CRrxXLrvgjzGyrdpVbrotnYTKo+mSCuNuE
+         g/fQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712330392; x=1712935192;
+        d=1e100.net; s=20230601; t=1712330425; x=1712935225;
         h=content-transfer-encoding:mime-version:subject:references
          :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=lWDqqBcEDXK40Q4FcvTHHo9rfB4ZEMKtPpPeEV33bcM=;
-        b=Law9johFhtAjzdPg5oy8NdKvvBGcTHmJF1eXeZAFERIJwb8oiQ/61EQ07nyIBg9dlN
-         Fs5M3SW0K1Ox5ajTz4XndJ8qSb6PKwX6FEXOxbH+dX1hg3ON1P6z8XDYNiqUU21bSJch
-         X9yTHogH8pCaU5yeG7v3gv2ENgglcXq6K+f/Pl1T2HZrNgXAKwMLEZ0wDKL9x5ta7nEz
-         4/4ExotkTIVHndi4O722NshGVIV6mOyQD4mkl8qr6ZZiSm2o6LEJs6B10Vkg+DyCLOFT
-         f7qCUHHIO4at3XX0KqLy6G9uYmmMEXgMsdLLLKfCyupoD4AI3z7Uq2y7mPRId3hN5x1t
-         8FUg==
-X-Forwarded-Encrypted: i=1; AJvYcCUqg9qeL5RZgbz2EWuCzZkjKpb2QhKrC3jZ3g4Sy3ltz3BxEKEBWl5RNp8IewSNiRBimGEoYr2M6veFkkjOGaGbAkAL
-X-Gm-Message-State: AOJu0Ywo3GBWqPk9dwaI3dAFXtNAktD3qgeocQKjogBWdUl8LD3ANeHQ
-	HvYyV4wF6APSLwsAF9OxyNU4eTB8Kp+ICAIlCaX8VNtw4nZELMbbsqAM+9Pj
-X-Google-Smtp-Source: AGHT+IGsU1lroEUkLVNKTRj4kGu4PWws1HBvfMILqfs82V2AECqq5m+wUbyrbNw8fcKTTQWx+PoFxg==
-X-Received: by 2002:a05:6a00:cc8:b0:6ec:ec8f:d588 with SMTP id b8-20020a056a000cc800b006ecec8fd588mr2054683pfv.16.1712330390867;
-        Fri, 05 Apr 2024 08:19:50 -0700 (PDT)
+        bh=khktNbgcrMg4lWtVC+HHmiY+qicibrhDhO5K3Jh7lCQ=;
+        b=j4T7JUBKCzqP5OG92e5q3RZf7n3/QuOP9bCugN7NVZOVws/zMM5y4TZwep6Mf/vTC9
+         cgVeCOqBvl7tgDYY8ij8Dgi5yBGBsb0aZ3ExOBlnJXQWYl13PJN3cGhvk/HnrCfFJVgv
+         +J9GweJbuuvVX+oAH2qpGFQpcdav1DKlrMKfidBxA2bO7fDRdsTb7/MddHHp0OUhWAcH
+         k/VXfzkTx8KSAx7hxzOTd0F6vwJWOsykGM6bIi3KnlWtt0lRZPP80DZEmytgrD9Qof6o
+         Alm2IeDU4fG1gDGXz9D6ZEvm5cRVMyBU6kALt3G8F/WGMwwyyQ2zBbf9tPoGJVlPBXqa
+         SY+g==
+X-Forwarded-Encrypted: i=1; AJvYcCWgbFGZQUCOCRNS9rv43iCU5duPPwu5dkG2Ub66YaWIAgM8iwtxvqzoSo8FVFnPHtZq9mhnVVDzn5Eq2yabJmyYaquM
+X-Gm-Message-State: AOJu0Yz+cXkAA14R9bdFT3uJYAm1zUqdOe5cNXaBLrBYDC2XyuRyyHGp
+	Gh9vzTy1jDJNzBxqmI7zoeOpLdHbHU4sfloxVdOzBwA0TVzHT1W1
+X-Google-Smtp-Source: AGHT+IEB/U+UT2BBWCOGsbuGxemIQPeZK56ELSDVD8edrqVijbDHEMoLVGIJToexDiSfwUL0Q3iu2Q==
+X-Received: by 2002:a17:90a:bb97:b0:2a2:7494:15df with SMTP id v23-20020a17090abb9700b002a2749415dfmr2679497pjr.9.1712330424935;
+        Fri, 05 Apr 2024 08:20:24 -0700 (PDT)
 Received: from localhost ([98.97.36.54])
-        by smtp.gmail.com with ESMTPSA id i26-20020aa787da000000b006ecbcbd2293sm1679827pfo.173.2024.04.05.08.19.50
+        by smtp.gmail.com with ESMTPSA id s22-20020a17090ad49600b002a03456ccabsm3477391pju.30.2024.04.05.08.20.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 05 Apr 2024 08:19:50 -0700 (PDT)
-Date: Fri, 05 Apr 2024 08:19:49 -0700
+        Fri, 05 Apr 2024 08:20:24 -0700 (PDT)
+Date: Fri, 05 Apr 2024 08:20:23 -0700
 From: John Fastabend <john.fastabend@gmail.com>
 To: Yonghong Song <yonghong.song@linux.dev>, 
  bpf@vger.kernel.org
@@ -62,13 +62,14 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
  Jakub Sitnicki <jakub@cloudflare.com>, 
  John Fastabend <john.fastabend@gmail.com>, 
  kernel-team@fb.com, 
- Martin KaFai Lau <martin.lau@kernel.org>
-Message-ID: <66101695d69a7_5803020833@john.notmuch>
-In-Reply-To: <20240404025310.2211688-1-yonghong.song@linux.dev>
+ Martin KaFai Lau <martin.lau@kernel.org>, 
+ Eduard Zingerman <eddyz87@gmail.com>
+Message-ID: <661016b7a5a33_580302086b@john.notmuch>
+In-Reply-To: <20240404025316.2212069-1-yonghong.song@linux.dev>
 References: <20240404025305.2210999-1-yonghong.song@linux.dev>
- <20240404025310.2211688-1-yonghong.song@linux.dev>
-Subject: RE: [PATCH bpf-next v4 1/5] bpf: Add bpf_link support for sk_msg and
- sk_skb progs
+ <20240404025316.2212069-1-yonghong.song@linux.dev>
+Subject: RE: [PATCH bpf-next v4 2/5] libbpf: Add bpf_link support for
+ BPF_PROG_TYPE_SOCKMAP
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -80,84 +81,10 @@ Content-Type: text/plain;
 Content-Transfer-Encoding: 7bit
 
 Yonghong Song wrote:
-> Add bpf_link support for sk_msg and sk_skb programs. We have an
-> internal request to support bpf_link for sk_msg programs so user
-> space can have a uniform handling with bpf_link based libbpf
-> APIs. Using bpf_link based libbpf API also has a benefit which
-> makes system robust by decoupling prog life cycle and
-> attachment life cycle.
+> Introduce a libbpf API function bpf_program__attach_sockmap()
+> which allow user to get a bpf_link for their corresponding programs.
 > 
+> Acked-by: Eduard Zingerman <eddyz87@gmail.com>
 > Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
-> ---
->  include/linux/bpf.h            |   6 +
->  include/linux/skmsg.h          |   4 +
->  include/uapi/linux/bpf.h       |   5 +
->  kernel/bpf/syscall.c           |   4 +
->  net/core/sock_map.c            | 268 ++++++++++++++++++++++++++++++++-
->  tools/include/uapi/linux/bpf.h |   5 +
->  6 files changed, 284 insertions(+), 8 deletions(-)
-> 
 
-LGTM one question below.
-
-> +/* Handle the following two cases:
-> + * case 1: link != NULL, prog != NULL, old != NULL
-> + * case 2: link != NULL, prog != NULL, old == NULL
-> + */
-> +static int sock_map_link_update_prog(struct bpf_link *link,
-> +				     struct bpf_prog *prog,
-> +				     struct bpf_prog *old)
-> +{
-> +	const struct sockmap_link *sockmap_link = container_of(link, struct sockmap_link, link);
-> +	struct bpf_prog **pprog;
-> +	struct bpf_link **plink;
-> +	int ret = 0;
-> +
-> +	mutex_lock(&sockmap_mutex);
-> +
-> +	/* If old prog is not NULL, ensure old prog is the same as link->prog. */
-> +	if (old && link->prog != old) {
-> +		ret = -EINVAL;
-> +		goto out;
-> +	}
-> +	/* Ensure link->prog has the same type/attach_type as the new prog. */
-> +	if (link->prog->type != prog->type ||
-> +	    link->prog->expected_attach_type != prog->expected_attach_type) {
-> +		ret = -EINVAL;
-> +		goto out;
-> +	}
-> +
-> +	ret = sock_map_prog_lookup(sockmap_link->map, &pprog,
-> +				   sockmap_link->attach_type);
-> +	if (ret)
-> +		goto out;
-> +
-> +	/* Ensure the same link between the one in map and the passed-in. */
-> +	ret = sock_map_link_lookup(sockmap_link->map, &plink, link, false,
-> +				   sockmap_link->attach_type);
-> +	if (ret)
-> +		goto out;
-> +
-> +	if (old) {
-> +		ret = psock_replace_prog(pprog, prog, old);
-> +		goto out;
-> +	}
-> +
-> +	psock_set_prog(pprog, prog);
-> +
-> +out:
-> +	if (!ret) {
-> +		bpf_prog_inc(prog);
-> +		old = xchg(&link->prog, prog);
-> +		bpf_prog_put(old);
-
-Need to check old? I don't think we can clal bpf_prog_put on null?
-
-  if (old)
-     bpf_prog_put(old)
-
-> +	}
-> +	mutex_unlock(&sockmap_mutex);
-> +	return ret;
-> +}
-> +
+Reviewed-by: John Fastabend <john.fastabend@gmail.com>
