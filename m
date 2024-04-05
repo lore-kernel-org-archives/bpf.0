@@ -1,218 +1,416 @@
-Received: from out30-112.freemail.mail.aliyun.com (out30-112.freemail.mail.aliyun.com [115.124.30.112])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D80C6171AD
-	for <bpf@vger.kernel.org>; Fri,  5 Apr 2024 02:55:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.112
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00BE618E2A
+	for <bpf@vger.kernel.org>; Fri,  5 Apr 2024 03:55:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.198
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712285751; cv=none; b=QkhOIsRAfNzQvDyuEFb9Z+BMK6bRhDMTwa8F4972glByKIUbBm42vfiYOHt4B2GP65SEjLxdrx4sQbjKxukM2Re30VPMQi3cNSfhaCNbcQFsTMhlRTl007z6CmrCmUy1cR222PH8wMNcTv+9v0faH8PacQXcu0kwMKW0lDv5GIM=
+	t=1712289305; cv=none; b=pPXr0mX2BXQBaL2z5SbGkIgFr8leQ8qbY0Hcb1ZKQdFFTHEhwp3P9MlnEncXUyY7kMOVuFIV8+tnrcPc8niDjZzMyBMexxIqfv3OtJ1XCpl6+WmcT+oGm557NmBVXhDWs9QguSxxfKZt+ZDQTJqWttKWPjcCtZLsFoSHVOPgIM8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712285751; c=relaxed/simple;
-	bh=JrODJJcVR24hZIZEQI3b9QI4VckhWWVhWDwQbSFtSPI=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=q4q+b5HS+IezM0YWCvZ+xJUXjgn4xCdypPbetTMYeKJf5i9D8lWI4Quy5uX1tVJaCa1qSrUCKzBFJvB2uFJ04qpgvl7wFe6+yC2RbVDPRgwpvCQB8nxmuivOFHG9a1vrF+s62lqR09oxyLncgIrHI4o1JHdafVo0Tr+Um51jWUA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=HiUC6p3/; arc=none smtp.client-ip=115.124.30.112
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="HiUC6p3/"
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux.alibaba.com; s=default;
-	t=1712285741; h=From:To:Subject:Date:Message-Id:MIME-Version;
-	bh=AcYjN5VXBKtvQEuuQE/zVL8Yv9a6PKz80X8USUskYXo=;
-	b=HiUC6p3/CAZmy8B4x+sT32kRlw+Aj+Miv5t0/E1oUHs6JxqluhBG2dxI2MIxJOqTa8KBlL+VTA2wwwbyRR8oKn5hMGZsvlQ7UX2Ow6FNNSCQ8f9MgtawDpUCq27c2b7Ps04BO8KU8OVS2FzqajGoM8H0FiExvhHdN+xahas1XUA=
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R951e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046056;MF=lulie@linux.alibaba.com;NM=1;PH=DS;RN=16;SR=0;TI=SMTPD_---0W3vv8Zw_1712285740;
-Received: from localhost(mailfrom:lulie@linux.alibaba.com fp:SMTPD_---0W3vv8Zw_1712285740)
-          by smtp.aliyun-inc.com;
-          Fri, 05 Apr 2024 10:55:41 +0800
-From: Philo Lu <lulie@linux.alibaba.com>
-To: bpf@vger.kernel.org
-Cc: ast@kernel.org,
-	daniel@iogearbox.net,
-	john.fastabend@gmail.com,
-	andrii@kernel.org,
-	martin.lau@linux.dev,
-	eddyz87@gmail.com,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	kpsingh@kernel.org,
-	sdf@google.com,
-	haoluo@google.com,
-	jolsa@kernel.org,
-	mykolal@fb.com,
-	shuah@kernel.org,
-	xuanzhuo@linux.alibaba.com
-Subject: [PATCH bpf-next v1 3/3] selftests/bpf: add test for bpf_for_each_map_elem() with different maps
-Date: Fri,  5 Apr 2024 10:55:36 +0800
-Message-Id: <20240405025536.18113-4-lulie@linux.alibaba.com>
-X-Mailer: git-send-email 2.32.0.3.g01195cf9f
-In-Reply-To: <20240405025536.18113-1-lulie@linux.alibaba.com>
-References: <20240405025536.18113-1-lulie@linux.alibaba.com>
+	s=arc-20240116; t=1712289305; c=relaxed/simple;
+	bh=8QgA6DOlCmayaHhs1fekr3BR6y7tDejbJkvzOiyQjTk=;
+	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
+	 Content-Type; b=M5LRXUlbRTtE3bVAipjDAcEub6n2O8mSGWq3p41fXF1cWR97BUy37ES7BmP1QgqN3v1W3BDG3buoz1rHiFgCVov3VmrI1/3nSuRQx9kYZG835/Mhf2ETogVjLB7BBz6VE6kJtaizkwje8o2rL4fzHeOE4si3wj3O4PspB2E4PhA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.198
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-il1-f198.google.com with SMTP id e9e14a558f8ab-36a0d9d820cso1840225ab.0
+        for <bpf@vger.kernel.org>; Thu, 04 Apr 2024 20:55:03 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1712289303; x=1712894103;
+        h=content-transfer-encoding:to:from:subject:message-id:in-reply-to
+         :date:mime-version:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=daxVM/BLo0+xwP1DRhEuzZBZpx546SIeQX2MbDYDmYA=;
+        b=I48iJaX5FfvMDi9gSKEAtL2Oyy3fBaG+oWXsuy/p748IEjx73sikf2flTVnjjfeMFu
+         0mcdIZ/+z37EJEFUhmC0FJmRr+5R2WEJGRTgSfnyKzujusDqW5uddQSIfMlMsy09yTwR
+         3g+dDwMZAsVobcvcHS2N46d1Ur3tpTMVAEXpEBGuCZns6nZyDKYvevx5qhNfxngCvjk3
+         Y13VCQ7aPM4qpxZfPIFDhA8K9mBFtGT5/78IKNVRj5qX7wHITJaQfoXBUvWkLU9L/coP
+         60osTe3lB6DHjUQ/3E6Ol14utNVVYDPQMwxzTptlKXZ3AOmWsVjxIQx40M3YzZUyyoGq
+         yNvw==
+X-Forwarded-Encrypted: i=1; AJvYcCX3rG5wOHETeOfm231F8wVPMjXzxx9cME/UJjSUx6kSjUxcr8GnpC4O1TMiSmLJ5+315JwCvNJksxQMbHMy3nWdRRIx
+X-Gm-Message-State: AOJu0YyBM8XqrwDafrl+d/3eHL/aSyF9giaGpq+3mWXLgRK3RkypxWD5
+	65355VH+yZBFwXUFqpZsK37za6e88lyXTaPbmlZf4LUgfZKKCSrDigjWuVJwTuzONHHc+urJEpn
+	yjHN7sTb3Q0IKhoZw22eyLi7R2yZ2VFnhggDY79lkxbfvMxNjbhEQvdI=
+X-Google-Smtp-Source: AGHT+IEOv55P0ddNX04it23/vZGe28+kuyVprry7choTO1Rkh39eQSySLwrGarJGNP0KQXz5X/s4BaG8DA6APMxVR6Aw/G22SwwT
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-Received: by 2002:a92:ca4e:0:b0:368:b289:38af with SMTP id
+ q14-20020a92ca4e000000b00368b28938afmr11809ilo.6.1712289303215; Thu, 04 Apr
+ 2024 20:55:03 -0700 (PDT)
+Date: Thu, 04 Apr 2024 20:55:03 -0700
+In-Reply-To: <87plv4kfil.fsf@toke.dk>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000abd40e0615516bdb@google.com>
+Subject: Re: [syzbot] [bpf?] [net?] general protection fault in dev_map_enqueue
+From: syzbot <syzbot+af9492708df9797198d6@syzkaller.appspotmail.com>
+To: andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org, 
+	daniel@iogearbox.net, davem@davemloft.net, eadavis@qq.com, eddyz87@gmail.com, 
+	haoluo@google.com, hawk@kernel.org, john.fastabend@gmail.com, 
+	jolsa@kernel.org, kpsingh@kernel.org, kuba@kernel.org, 
+	linux-kernel@vger.kernel.org, martin.lau@linux.dev, netdev@vger.kernel.org, 
+	sdf@google.com, song@kernel.org, syzkaller-bugs@googlegroups.com, 
+	toke@kernel.org, yonghong.song@linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-A test is added for bpf_for_each_map_elem() with either an arraymap or a
-hashmap.
-$ tools/testing/selftests/bpf/test_progs -t for_each
- #93/1    for_each/hash_map:OK
- #93/2    for_each/array_map:OK
- #93/3    for_each/write_map_key:OK
- #93/4    for_each/multi_maps:OK
- #93      for_each:OK
-Summary: 1/4 PASSED, 0 SKIPPED, 0 FAILED
+Hello,
 
-Signed-off-by: Philo Lu <lulie@linux.alibaba.com>
----
- .../selftests/bpf/prog_tests/for_each.c       | 62 +++++++++++++++++++
- .../selftests/bpf/progs/for_each_multi_maps.c | 49 +++++++++++++++
- 2 files changed, 111 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/progs/for_each_multi_maps.c
+syzbot tried to test the proposed patch but the build/boot failed:
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/for_each.c b/tools/testing/selftests/bpf/prog_tests/for_each.c
-index 8963f8a549f2..09f6487f58b9 100644
---- a/tools/testing/selftests/bpf/prog_tests/for_each.c
-+++ b/tools/testing/selftests/bpf/prog_tests/for_each.c
-@@ -5,6 +5,7 @@
- #include "for_each_hash_map_elem.skel.h"
- #include "for_each_array_map_elem.skel.h"
- #include "for_each_map_elem_write_key.skel.h"
-+#include "for_each_multi_maps.skel.h"
- 
- static unsigned int duration;
- 
-@@ -143,6 +144,65 @@ static void test_write_map_key(void)
- 		for_each_map_elem_write_key__destroy(skel);
- }
- 
-+static void test_multi_maps(void)
-+{
-+	struct for_each_multi_maps *skel;
-+	__u64 val, array_total, hash_total;
-+	__u32 key, max_entries;
-+	int i, err;
-+
-+	LIBBPF_OPTS(bpf_test_run_opts, topts,
-+		.data_in = &pkt_v4,
-+		.data_size_in = sizeof(pkt_v4),
-+		.repeat = 1,
-+	);
-+
-+	skel = for_each_multi_maps__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "for_each_multi_maps__open_and_load"))
-+		return;
-+
-+	array_total = 0;
-+	max_entries = bpf_map__max_entries(skel->maps.arraymap);
-+	for (i = 0; i < max_entries; i++) {
-+		key = i;
-+		val = i + 1;
-+		array_total += val;
-+		err = bpf_map__update_elem(skel->maps.arraymap, &key, sizeof(key),
-+					   &val, sizeof(val), BPF_ANY);
-+		if (!ASSERT_OK(err, "array_map_update"))
-+			goto out;
-+	}
-+
-+	hash_total = 0;
-+	max_entries = bpf_map__max_entries(skel->maps.hashmap);
-+	for (i = 0; i < max_entries; i++) {
-+		key = i + 100;
-+		val = i + 1;
-+		hash_total += val;
-+		err = bpf_map__update_elem(skel->maps.hashmap, &key, sizeof(key),
-+					   &val, sizeof(val), BPF_ANY);
-+		if (!ASSERT_OK(err, "hash_map_update"))
-+			goto out;
-+	}
-+
-+	skel->bss->data_output = 0;
-+	skel->bss->use_array = 1;
-+	err = bpf_prog_test_run_opts(bpf_program__fd(skel->progs.test_pkt_access), &topts);
-+	ASSERT_OK(err, "bpf_prog_test_run_opts");
-+	ASSERT_OK(topts.retval, "retval");
-+	ASSERT_EQ(skel->bss->data_output, array_total, "array output");
-+
-+	skel->bss->data_output = 0;
-+	skel->bss->use_array = 0;
-+	err = bpf_prog_test_run_opts(bpf_program__fd(skel->progs.test_pkt_access), &topts);
-+	ASSERT_OK(err, "bpf_prog_test_run_opts");
-+	ASSERT_OK(topts.retval, "retval");
-+	ASSERT_EQ(skel->bss->data_output, hash_total, "hash output");
-+
-+out:
-+	for_each_multi_maps__destroy(skel);
-+}
-+
- void test_for_each(void)
- {
- 	if (test__start_subtest("hash_map"))
-@@ -151,4 +211,6 @@ void test_for_each(void)
- 		test_array_map();
- 	if (test__start_subtest("write_map_key"))
- 		test_write_map_key();
-+	if (test__start_subtest("multi_maps"))
-+		test_multi_maps();
- }
-diff --git a/tools/testing/selftests/bpf/progs/for_each_multi_maps.c b/tools/testing/selftests/bpf/progs/for_each_multi_maps.c
-new file mode 100644
-index 000000000000..ff0bed7d4459
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/for_each_multi_maps.c
-@@ -0,0 +1,49 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include "vmlinux.h"
-+#include <bpf/bpf_helpers.h>
-+
-+char _license[] SEC("license") = "GPL";
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__uint(max_entries, 3);
-+	__type(key, __u32);
-+	__type(value, __u64);
-+} arraymap SEC(".maps");
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_HASH);
-+	__uint(max_entries, 5);
-+	__type(key, __u32);
-+	__type(value, __u64);
-+} hashmap SEC(".maps");
-+
-+struct callback_ctx {
-+	int output;
-+};
-+
-+u32 data_output = 0;
-+int use_array = 0;
-+
-+static __u64
-+check_map_elem(struct bpf_map *map, __u32 *key, __u64 *val,
-+	       struct callback_ctx *data)
-+{
-+	data->output += *val;
-+	return 0;
-+}
-+
-+SEC("tc")
-+int test_pkt_access(struct __sk_buff *skb)
-+{
-+	struct callback_ctx data;
-+
-+	data.output = 0;
-+	if (use_array)
-+		bpf_for_each_map_elem(&arraymap, check_map_elem, &data, 0);
-+	else
-+		bpf_for_each_map_elem(&hashmap, check_map_elem, &data, 0);
-+	data_output = data.output;
-+
-+	return 0;
-+}
--- 
-2.32.0.3.g01195cf9f
+erface driver port100
+[    7.311436][    T1] usbcore: registered new interface driver nfcmrvl
+[    7.318515][    T1] Loading iSCSI transport class v2.0-870.
+[    7.335287][    T1] virtio_scsi virtio0: 1/0/0 default/read/poll queues
+[    7.343626][    T1] ------------[ cut here ]------------
+[    7.344498][    T1] refcount_t: decrement hit 0; leaking memory.
+[    7.345816][    T1] WARNING: CPU: 0 PID: 1 at lib/refcount.c:31 refcount=
+_warn_saturate+0xfa/0x1d0
+[    7.347895][    T1] Modules linked in:
+[    7.348644][    T1] CPU: 0 PID: 1 Comm: swapper/0 Not tainted 6.9.0-rc1-=
+syzkaller-00245-g1cfa2f10f4e9-dirty #0
+[    7.350284][    T1] Hardware name: Google Google Compute Engine/Google C=
+ompute Engine, BIOS Google 03/27/2024
+[    7.351743][    T1] RIP: 0010:refcount_warn_saturate+0xfa/0x1d0
+[    7.352725][    T1] Code: b2 00 00 00 e8 97 cf e9 fc 5b 5d c3 cc cc cc c=
+c e8 8b cf e9 fc c6 05 6e 74 e8 0a 01 90 48 c7 c7 e0 33 1f 8c e8 c7 6b ac f=
+c 90 <0f> 0b 90 90 eb d9 e8 6b cf e9 fc c6 05 4b 74 e8 0a 01 90 48 c7 c7
+[    7.355628][    T1] RSP: 0000:ffffc90000066e18 EFLAGS: 00010246
+[    7.356908][    T1] RAX: 97987c7bd8eab100 RBX: ffff8881472d6f6c RCX: fff=
+f8880166d0000
+[    7.358339][    T1] RDX: 0000000000000000 RSI: 0000000000000000 RDI: 000=
+0000000000000
+[    7.359509][    T1] RBP: 0000000000000004 R08: ffffffff81580062 R09: fff=
+ffbfff1c396e0
+[    7.360660][    T1] R10: dffffc0000000000 R11: fffffbfff1c396e0 R12: fff=
+fea0000856dc0
+[    7.361924][    T1] R13: ffffea0000856dc8 R14: 1ffffd400010adb9 R15: 000=
+0000000000000
+[    7.363052][    T1] FS:  0000000000000000(0000) GS:ffff8880b9400000(0000=
+) knlGS:0000000000000000
+[    7.364304][    T1] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[    7.365198][    T1] CR2: ffff88823ffff000 CR3: 000000000e132000 CR4: 000=
+00000003506f0
+[    7.367259][    T1] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 000=
+0000000000000
+[    7.368495][    T1] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 000=
+0000000000400
+[    7.369779][    T1] Call Trace:
+[    7.370257][    T1]  <TASK>
+[    7.370879][    T1]  ? __warn+0x163/0x4e0
+[    7.371456][    T1]  ? refcount_warn_saturate+0xfa/0x1d0
+[    7.372221][    T1]  ? report_bug+0x2b3/0x500
+[    7.372874][    T1]  ? refcount_warn_saturate+0xfa/0x1d0
+[    7.373951][    T1]  ? handle_bug+0x3e/0x70
+[    7.374586][    T1]  ? exc_invalid_op+0x1a/0x50
+[    7.375235][    T1]  ? asm_exc_invalid_op+0x1a/0x20
+[    7.375940][    T1]  ? __warn_printk+0x292/0x360
+[    7.376982][    T1]  ? refcount_warn_saturate+0xfa/0x1d0
+[    7.377792][    T1]  ? refcount_warn_saturate+0xf9/0x1d0
+[    7.378630][    T1]  __free_pages_ok+0xc60/0xd90
+[    7.379362][    T1]  make_alloc_exact+0xa3/0xf0
+[    7.380045][    T1]  vring_alloc_queue_split+0x20a/0x600
+[    7.380857][    T1]  ? __pfx_vring_alloc_queue_split+0x10/0x10
+[    7.381697][    T1]  ? vp_find_vqs+0x4c/0x4e0
+[    7.382711][    T1]  ? virtscsi_probe+0x3ea/0xf60
+[    7.383786][    T1]  ? virtio_dev_probe+0x991/0xaf0
+[    7.384631][    T1]  ? really_probe+0x2b8/0xad0
+[    7.385324][    T1]  ? driver_probe_device+0x50/0x430
+[    7.386103][    T1]  vring_create_virtqueue_split+0xc6/0x310
+[    7.387313][    T1]  ? ret_from_fork+0x4b/0x80
+[    7.388031][    T1]  ? __pfx_vring_create_virtqueue_split+0x10/0x10
+[    7.389084][    T1]  vring_create_virtqueue+0xca/0x110
+[    7.389967][    T1]  ? __pfx_vp_notify+0x10/0x10
+[    7.390812][    T1]  ? __pfx_virtscsi_ctrl_done+0x10/0x10
+[    7.391660][    T1]  setup_vq+0xe9/0x2d0
+[    7.392432][    T1]  ? __pfx_vp_notify+0x10/0x10
+[    7.393181][    T1]  ? __pfx_virtscsi_ctrl_done+0x10/0x10
+[    7.393942][    T1]  ? __pfx_virtscsi_ctrl_done+0x10/0x10
+[    7.394867][    T1]  ? __pfx_virtscsi_ctrl_done+0x10/0x10
+[    7.395927][    T1]  vp_setup_vq+0xbf/0x330
+[    7.397180][    T1]  ? __pfx_vp_config_changed+0x10/0x10
+[    7.398233][    T1]  ? ioread16+0x2f/0x90
+[    7.398859][    T1]  ? __pfx_virtscsi_ctrl_done+0x10/0x10
+[    7.399621][    T1]  vp_find_vqs_msix+0x8b2/0xc80
+[    7.400563][    T1]  vp_find_vqs+0x4c/0x4e0
+[    7.401171][    T1]  virtscsi_init+0x8db/0xd00
+[    7.401888][    T1]  ? __pfx_virtscsi_init+0x10/0x10
+[    7.402696][    T1]  ? __pfx_default_calc_sets+0x10/0x10
+[    7.403594][    T1]  ? scsi_host_alloc+0xa57/0xea0
+[    7.404281][    T1]  ? vp_get+0xfd/0x140
+[    7.404929][    T1]  virtscsi_probe+0x3ea/0xf60
+[    7.405637][    T1]  ? __pfx_virtscsi_probe+0x10/0x10
+[    7.406398][    T1]  ? virtio_pci_modern_probe+0x1ad/0x270
+[    7.407182][    T1]  ? __pfx_vp_set_status+0x10/0x10
+[    7.407898][    T1]  ? vp_set_status+0x1a/0x40
+[    7.408529][    T1]  ? virtio_no_restricted_mem_acc+0x9/0x10
+[    7.409355][    T1]  ? virtio_features_ok+0x10c/0x270
+[    7.410072][    T1]  virtio_dev_probe+0x991/0xaf0
+[    7.410754][    T1]  ? __pfx_virtio_dev_probe+0x10/0x10
+[    7.411546][    T1]  really_probe+0x2b8/0xad0
+[    7.412167][    T1]  __driver_probe_device+0x1a2/0x390
+[    7.412887][    T1]  driver_probe_device+0x50/0x430
+[    7.413590][    T1]  __driver_attach+0x45f/0x710
+[    7.414237][    T1]  ? __pfx___driver_attach+0x10/0x10
+[    7.414953][    T1]  bus_for_each_dev+0x239/0x2b0
+[    7.415674][    T1]  ? __pfx___driver_attach+0x10/0x10
+[    7.416541][    T1]  ? __pfx_bus_for_each_dev+0x10/0x10
+[    7.417323][    T1]  ? do_raw_spin_unlock+0x13c/0x8b0
+[    7.418091][    T1]  bus_add_driver+0x347/0x620
+[    7.418770][    T1]  driver_register+0x23a/0x320
+[    7.419601][    T1]  ? __pfx_virtio_scsi_init+0x10/0x10
+[    7.420387][    T1]  virtio_scsi_init+0x65/0xe0
+[    7.421063][    T1]  ? __pfx_virtio_scsi_init+0x10/0x10
+[    7.421802][    T1]  do_one_initcall+0x248/0x880
+[    7.422452][    T1]  ? __pfx_virtio_scsi_init+0x10/0x10
+[    7.423191][    T1]  ? __pfx_lockdep_hardirqs_on_prepare+0x10/0x10
+[    7.424043][    T1]  ? __pfx_do_one_initcall+0x10/0x10
+[    7.424842][    T1]  ? __pfx_parse_args+0x10/0x10
+[    7.425562][    T1]  ? do_initcalls+0x1c/0x80
+[    7.426235][    T1]  ? rcu_is_watching+0x15/0xb0
+[    7.426902][    T1]  do_initcall_level+0x157/0x210
+[    7.427580][    T1]  do_initcalls+0x3f/0x80
+[    7.428174][    T1]  kernel_init_freeable+0x435/0x5d0
+[    7.428912][    T1]  ? __pfx_kernel_init_freeable+0x10/0x10
+[    7.429687][    T1]  ? __pfx_lockdep_hardirqs_on_prepare+0x10/0x10
+[    7.430608][    T1]  ? __pfx_kernel_init+0x10/0x10
+[    7.431281][    T1]  ? __pfx_kernel_init+0x10/0x10
+[    7.432008][    T1]  ? __pfx_kernel_init+0x10/0x10
+[    7.432791][    T1]  kernel_init+0x1d/0x2b0
+[    7.433667][    T1]  ret_from_fork+0x4b/0x80
+[    7.434410][    T1]  ? __pfx_kernel_init+0x10/0x10
+[    7.435247][    T1]  ret_from_fork_asm+0x1a/0x30
+[    7.436036][    T1]  </TASK>
+[    7.436777][    T1] Kernel panic - not syncing: kernel: panic_on_warn se=
+t ...
+[    7.437767][    T1] CPU: 0 PID: 1 Comm: swapper/0 Not tainted 6.9.0-rc1-=
+syzkaller-00245-g1cfa2f10f4e9-dirty #0
+[    7.439106][    T1] Hardware name: Google Google Compute Engine/Google C=
+ompute Engine, BIOS Google 03/27/2024
+[    7.440461][    T1] Call Trace:
+[    7.440914][    T1]  <TASK>
+[    7.441323][    T1]  dump_stack_lvl+0x241/0x360
+[    7.441989][    T1]  ? __pfx_dump_stack_lvl+0x10/0x10
+[    7.442706][    T1]  ? __pfx__printk+0x10/0x10
+[    7.443350][    T1]  ? _printk+0xd5/0x120
+[    7.443977][    T1]  ? vscnprintf+0x5d/0x90
+[    7.444934][    T1]  panic+0x349/0x860
+[    7.445694][    T1]  ? __warn+0x172/0x4e0
+[    7.446290][    T1]  ? __pfx_panic+0x10/0x10
+[    7.446639][    T1]  ? show_trace_log_lvl+0x4e6/0x520
+[    7.446639][    T1]  ? ret_from_fork_asm+0x1a/0x30
+[    7.446639][    T1]  __warn+0x346/0x4e0
+[    7.446639][    T1]  ? refcount_warn_saturate+0xfa/0x1d0
+[    7.446639][    T1]  report_bug+0x2b3/0x500
+[    7.446639][    T1]  ? refcount_warn_saturate+0xfa/0x1d0
+[    7.446639][    T1]  handle_bug+0x3e/0x70
+[    7.446639][    T1]  exc_invalid_op+0x1a/0x50
+[    7.446639][    T1]  asm_exc_invalid_op+0x1a/0x20
+[    7.446639][    T1] RIP: 0010:refcount_warn_saturate+0xfa/0x1d0
+[    7.446639][    T1] Code: b2 00 00 00 e8 97 cf e9 fc 5b 5d c3 cc cc cc c=
+c e8 8b cf e9 fc c6 05 6e 74 e8 0a 01 90 48 c7 c7 e0 33 1f 8c e8 c7 6b ac f=
+c 90 <0f> 0b 90 90 eb d9 e8 6b cf e9 fc c6 05 4b 74 e8 0a 01 90 48 c7 c7
+[    7.446639][    T1] RSP: 0000:ffffc90000066e18 EFLAGS: 00010246
+[    7.446639][    T1] RAX: 97987c7bd8eab100 RBX: ffff8881472d6f6c RCX: fff=
+f8880166d0000
+[    7.446639][    T1] RDX: 0000000000000000 RSI: 0000000000000000 RDI: 000=
+0000000000000
+[    7.446639][    T1] RBP: 0000000000000004 R08: ffffffff81580062 R09: fff=
+ffbfff1c396e0
+[    7.446639][    T1] R10: dffffc0000000000 R11: fffffbfff1c396e0 R12: fff=
+fea0000856dc0
+[    7.446639][    T1] R13: ffffea0000856dc8 R14: 1ffffd400010adb9 R15: 000=
+0000000000000
+[    7.446639][    T1]  ? __warn_printk+0x292/0x360
+[    7.446639][    T1]  ? refcount_warn_saturate+0xf9/0x1d0
+[    7.446639][    T1]  __free_pages_ok+0xc60/0xd90
+[    7.446639][    T1]  make_alloc_exact+0xa3/0xf0
+[    7.446639][    T1]  vring_alloc_queue_split+0x20a/0x600
+[    7.446639][    T1]  ? __pfx_vring_alloc_queue_split+0x10/0x10
+[    7.446639][    T1]  ? vp_find_vqs+0x4c/0x4e0
+[    7.446639][    T1]  ? virtscsi_probe+0x3ea/0xf60
+[    7.446639][    T1]  ? virtio_dev_probe+0x991/0xaf0
+[    7.446639][    T1]  ? really_probe+0x2b8/0xad0
+[    7.446639][    T1]  ? driver_probe_device+0x50/0x430
+[    7.446639][    T1]  vring_create_virtqueue_split+0xc6/0x310
+[    7.446639][    T1]  ? ret_from_fork+0x4b/0x80
+[    7.446639][    T1]  ? __pfx_vring_create_virtqueue_split+0x10/0x10
+[    7.446639][    T1]  vring_create_virtqueue+0xca/0x110
+[    7.446639][    T1]  ? __pfx_vp_notify+0x10/0x10
+[    7.446639][    T1]  ? __pfx_virtscsi_ctrl_done+0x10/0x10
+[    7.446639][    T1]  setup_vq+0xe9/0x2d0
+[    7.446639][    T1]  ? __pfx_vp_notify+0x10/0x10
+[    7.446639][    T1]  ? __pfx_virtscsi_ctrl_done+0x10/0x10
+[    7.446639][    T1]  ? __pfx_virtscsi_ctrl_done+0x10/0x10
+[    7.446639][    T1]  ? __pfx_virtscsi_ctrl_done+0x10/0x10
+[    7.446639][    T1]  vp_setup_vq+0xbf/0x330
+[    7.446639][    T1]  ? __pfx_vp_config_changed+0x10/0x10
+[    7.446639][    T1]  ? ioread16+0x2f/0x90
+[    7.446639][    T1]  ? __pfx_virtscsi_ctrl_done+0x10/0x10
+[    7.446639][    T1]  vp_find_vqs_msix+0x8b2/0xc80
+[    7.446639][    T1]  vp_find_vqs+0x4c/0x4e0
+[    7.446639][    T1]  virtscsi_init+0x8db/0xd00
+[    7.446639][    T1]  ? __pfx_virtscsi_init+0x10/0x10
+[    7.446639][    T1]  ? __pfx_default_calc_sets+0x10/0x10
+[    7.446639][    T1]  ? scsi_host_alloc+0xa57/0xea0
+[    7.446639][    T1]  ? vp_get+0xfd/0x140
+[    7.446639][    T1]  virtscsi_probe+0x3ea/0xf60
+[    7.446639][    T1]  ? __pfx_virtscsi_probe+0x10/0x10
+[    7.446639][    T1]  ? virtio_pci_modern_probe+0x1ad/0x270
+[    7.446639][    T1]  ? __pfx_vp_set_status+0x10/0x10
+[    7.446639][    T1]  ? vp_set_status+0x1a/0x40
+[    7.446639][    T1]  ? virtio_no_restricted_mem_acc+0x9/0x10
+[    7.446639][    T1]  ? virtio_features_ok+0x10c/0x270
+[    7.446639][    T1]  virtio_dev_probe+0x991/0xaf0
+[    7.446639][    T1]  ? __pfx_virtio_dev_probe+0x10/0x10
+[    7.446639][    T1]  really_probe+0x2b8/0xad0
+[    7.446639][    T1]  __driver_probe_device+0x1a2/0x390
+[    7.496320][    T1]  driver_probe_device+0x50/0x430
+[    7.496320][    T1]  __driver_attach+0x45f/0x710
+[    7.496320][    T1]  ? __pfx___driver_attach+0x10/0x10
+[    7.496320][    T1]  bus_for_each_dev+0x239/0x2b0
+[    7.496320][    T1]  ? __pfx___driver_attach+0x10/0x10
+[    7.496320][    T1]  ? __pfx_bus_for_each_dev+0x10/0x10
+[    7.496320][    T1]  ? do_raw_spin_unlock+0x13c/0x8b0
+[    7.496320][    T1]  bus_add_driver+0x347/0x620
+[    7.496320][    T1]  driver_register+0x23a/0x320
+[    7.496320][    T1]  ? __pfx_virtio_scsi_init+0x10/0x10
+[    7.496320][    T1]  virtio_scsi_init+0x65/0xe0
+[    7.496320][    T1]  ? __pfx_virtio_scsi_init+0x10/0x10
+[    7.496320][    T1]  do_one_initcall+0x248/0x880
+[    7.496320][    T1]  ? __pfx_virtio_scsi_init+0x10/0x10
+[    7.496320][    T1]  ? __pfx_lockdep_hardirqs_on_prepare+0x10/0x10
+[    7.496320][    T1]  ? __pfx_do_one_initcall+0x10/0x10
+[    7.496320][    T1]  ? __pfx_parse_args+0x10/0x10
+[    7.496320][    T1]  ? do_initcalls+0x1c/0x80
+[    7.496320][    T1]  ? rcu_is_watching+0x15/0xb0
+[    7.496320][    T1]  do_initcall_level+0x157/0x210
+[    7.496320][    T1]  do_initcalls+0x3f/0x80
+[    7.496320][    T1]  kernel_init_freeable+0x435/0x5d0
+[    7.496320][    T1]  ? __pfx_kernel_init_freeable+0x10/0x10
+[    7.496320][    T1]  ? __pfx_lockdep_hardirqs_on_prepare+0x10/0x10
+[    7.496320][    T1]  ? __pfx_kernel_init+0x10/0x10
+[    7.496320][    T1]  ? __pfx_kernel_init+0x10/0x10
+[    7.496320][    T1]  ? __pfx_kernel_init+0x10/0x10
+[    7.496320][    T1]  kernel_init+0x1d/0x2b0
+[    7.496320][    T1]  ret_from_fork+0x4b/0x80
+[    7.496320][    T1]  ? __pfx_kernel_init+0x10/0x10
+[    7.496320][    T1]  ret_from_fork_asm+0x1a/0x30
+[    7.496320][    T1]  </TASK>
+[    7.496320][    T1] Kernel Offset: disabled
+[    7.496320][    T1] Rebooting in 86400 seconds..
+
+
+syzkaller build log:
+go env (err=3D<nil>)
+GO111MODULE=3D'auto'
+GOARCH=3D'amd64'
+GOBIN=3D''
+GOCACHE=3D'/syzkaller/.cache/go-build'
+GOENV=3D'/syzkaller/.config/go/env'
+GOEXE=3D''
+GOEXPERIMENT=3D''
+GOFLAGS=3D''
+GOHOSTARCH=3D'amd64'
+GOHOSTOS=3D'linux'
+GOINSECURE=3D''
+GOMODCACHE=3D'/syzkaller/jobs-2/linux/gopath/pkg/mod'
+GONOPROXY=3D''
+GONOSUMDB=3D''
+GOOS=3D'linux'
+GOPATH=3D'/syzkaller/jobs-2/linux/gopath'
+GOPRIVATE=3D''
+GOPROXY=3D'https://proxy.golang.org,direct'
+GOROOT=3D'/usr/local/go'
+GOSUMDB=3D'sum.golang.org'
+GOTMPDIR=3D''
+GOTOOLCHAIN=3D'auto'
+GOTOOLDIR=3D'/usr/local/go/pkg/tool/linux_amd64'
+GOVCS=3D''
+GOVERSION=3D'go1.21.4'
+GCCGO=3D'gccgo'
+GOAMD64=3D'v1'
+AR=3D'ar'
+CC=3D'gcc'
+CXX=3D'g++'
+CGO_ENABLED=3D'1'
+GOMOD=3D'/syzkaller/jobs-2/linux/gopath/src/github.com/google/syzkaller/go.=
+mod'
+GOWORK=3D''
+CGO_CFLAGS=3D'-O2 -g'
+CGO_CPPFLAGS=3D''
+CGO_CXXFLAGS=3D'-O2 -g'
+CGO_FFLAGS=3D'-O2 -g'
+CGO_LDFLAGS=3D'-O2 -g'
+PKG_CONFIG=3D'pkg-config'
+GOGCCFLAGS=3D'-fPIC -m64 -pthread -Wl,--no-gc-sections -fmessage-length=3D0=
+ -ffile-prefix-map=3D/tmp/go-build2839934155=3D/tmp/go-build -gno-record-gc=
+c-switches'
+
+git status (err=3D<nil>)
+HEAD detached at 454571b6a
+nothing to commit, working tree clean
+
+
+tput: No value for $TERM and no -T specified
+tput: No value for $TERM and no -T specified
+Makefile:31: run command via tools/syz-env for best compatibility, see:
+Makefile:32: https://github.com/google/syzkaller/blob/master/docs/contribut=
+ing.md#using-syz-env
+go list -f '{{.Stale}}' ./sys/syz-sysgen | grep -q false || go install ./sy=
+s/syz-sysgen
+make .descriptions
+tput: No value for $TERM and no -T specified
+tput: No value for $TERM and no -T specified
+Makefile:31: run command via tools/syz-env for best compatibility, see:
+Makefile:32: https://github.com/google/syzkaller/blob/master/docs/contribut=
+ing.md#using-syz-env
+bin/syz-sysgen
+touch .descriptions
+GOOS=3Dlinux GOARCH=3Damd64 go build "-ldflags=3D-s -w -X github.com/google=
+/syzkaller/prog.GitRevision=3D454571b6a16598f5a6e015b9fb1a04932bce7ab9 -X '=
+github.com/google/syzkaller/prog.gitRevisionDate=3D20240326-163935'" "-tags=
+=3Dsyz_target syz_os_linux syz_arch_amd64 " -o ./bin/linux_amd64/syz-fuzzer=
+ github.com/google/syzkaller/syz-fuzzer
+GOOS=3Dlinux GOARCH=3Damd64 go build "-ldflags=3D-s -w -X github.com/google=
+/syzkaller/prog.GitRevision=3D454571b6a16598f5a6e015b9fb1a04932bce7ab9 -X '=
+github.com/google/syzkaller/prog.gitRevisionDate=3D20240326-163935'" "-tags=
+=3Dsyz_target syz_os_linux syz_arch_amd64 " -o ./bin/linux_amd64/syz-execpr=
+og github.com/google/syzkaller/tools/syz-execprog
+GOOS=3Dlinux GOARCH=3Damd64 go build "-ldflags=3D-s -w -X github.com/google=
+/syzkaller/prog.GitRevision=3D454571b6a16598f5a6e015b9fb1a04932bce7ab9 -X '=
+github.com/google/syzkaller/prog.gitRevisionDate=3D20240326-163935'" "-tags=
+=3Dsyz_target syz_os_linux syz_arch_amd64 " -o ./bin/linux_amd64/syz-stress=
+ github.com/google/syzkaller/tools/syz-stress
+mkdir -p ./bin/linux_amd64
+gcc -o ./bin/linux_amd64/syz-executor executor/executor.cc \
+	-m64 -O2 -pthread -Wall -Werror -Wparentheses -Wunused-const-variable -Wfr=
+ame-larger-than=3D16384 -Wno-stringop-overflow -Wno-array-bounds -Wno-forma=
+t-overflow -Wno-unused-but-set-variable -Wno-unused-command-line-argument -=
+static-pie -fpermissive -w -DGOOS_linux=3D1 -DGOARCH_amd64=3D1 \
+	-DHOSTGOOS_linux=3D1 -DGIT_REVISION=3D\"454571b6a16598f5a6e015b9fb1a04932b=
+ce7ab9\"
+
+
+Error text is too large and was truncated, full error text is at:
+https://syzkaller.appspot.com/x/error.txt?x=3D17196223180000
+
+
+Tested on:
+
+commit:         1cfa2f10 Merge tag 'for-netdev' of https://git.kernel...
+git tree:       net
+kernel config:  https://syzkaller.appspot.com/x/.config?x=3D7b667bc37450fdc=
+d
+dashboard link: https://syzkaller.appspot.com/bug?extid=3Daf9492708df979719=
+8d6
+compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debia=
+n) 2.40
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=3D11cdcca91800=
+00
 
