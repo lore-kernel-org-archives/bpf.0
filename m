@@ -1,177 +1,151 @@
-Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-177.mta0.migadu.com (out-177.mta0.migadu.com [91.218.175.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A88C5172BC9
-	for <bpf@vger.kernel.org>; Fri,  5 Apr 2024 20:00:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8776416FF36;
+	Fri,  5 Apr 2024 20:01:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712347232; cv=none; b=WvhM5W7nscQLqHy259OWUkLL1JHSAiztH9/gxh+u+TP+EEYhC1Zm5ZeNgAbnhlB0ZOZnyebrfIeqEtM5+INQcdGhCDBxO9J+ZAUTxypEjZ90M3GbFK6lUbepNgJzOuVQU2CRVQ1G1clmMBKIgXELMZJCESiMOuj9tbDzllnu+Bw=
+	t=1712347313; cv=none; b=r7a1M+9pp1OIgEDo5QYLYhwM8U2qxK4TaEYeAgOoExbN+WHGezQ/s/LYA7RWJz5qApGR0HcUCWBgMVWJVH00aentlwmGGS00VqlSj1w107xJoQQzf80zkFd0fsaVviLj3ItgsjJumUeMfJz6eiE3IcRYzQMryzOH2Yyt0VUWGVQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712347232; c=relaxed/simple;
-	bh=CrFUiy1deeiBJvBEQ1xNg3t5/ykhus5T3L1JFlB1Oxw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=nha8Vw6drj1p/eDFwe0Ys0bEkDuiped/qCY9rrN4dOZnPG8wVo67/vGCkT/2/sQUhqAV7eRc+kJtKZ1ZccYcTzkYg2AeoTB2GwyO6wq/UytMpsjoHYnfa0lSHMS6kQWay2w4uyAPKi/oXmCMr3P6CmvD6pH7+kxYReIFFYcEgJw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=j6mqbuw2; arc=none smtp.client-ip=209.85.216.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1712347313; c=relaxed/simple;
+	bh=t8Zy94V47DEeguDpVsCAlSHh8loEquEVZj3DhaG/mCE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=g7A2Fp8NZpMil9uCfEe3iFY7q7coaSqmV7O8yj4AsCS3NXqryAZ9lAAst5umiioC7p3IbRh8n1Hz5Ol2GlxdD1R10t/nPCrlJlQDCxD1H+dLxYhil2xZjW11JZ4ak+psZ9LH3q9/59BnNjWTxD3F7aKckFoyZXIvfm5TzUfcoUY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=q0ir2StH; arc=none smtp.client-ip=91.218.175.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="j6mqbuw2"
-Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-2a49bce83baso124950a91.1
-        for <bpf@vger.kernel.org>; Fri, 05 Apr 2024 13:00:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1712347230; x=1712952030; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gfXECwOHl3edVA8AwxDyNhvCAArh8CvhHu0VTvGbVNQ=;
-        b=j6mqbuw2CrMymf02A4RHWegwgStmxBGamzNv5f7UGpT79xpJnvymYNxa/U8u7PtmUm
-         XTFhaSrpm9FUOFrzgnm4Q0JEFYFA7u6HjIUquQ3FTlHqNT8rVdSAk1mB359iSJqGUPlv
-         wvnlifLNrU62fvpp0aCkuZyUFmN62+z4Ms52SFIRUDGL1sOKJFUVagxvkKZlGqM7CEu5
-         +P77dO1g8UVTMxnADFgp2d4S9r9bEVyAQCEHdC9gnewkvNI0fNBwgMOHsutXwxIUYYHF
-         cvlgN8wuLbMj4OXIYV8gYkVUFlFsp5Erwnbqm5lQU6g0bCMb7vwBn6tJRyyFArbKoYyE
-         H5Dw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712347230; x=1712952030;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=gfXECwOHl3edVA8AwxDyNhvCAArh8CvhHu0VTvGbVNQ=;
-        b=JE5cYC0bPShGvkliqrDK/SglSDSBOwapO6T08Rf/lvfDOiSIknDvCN83XiljS0DVTF
-         niDLrWTIty6H1Nlva5GHinZYSgDZdK3Zj+Or77Xl9Zh9/PVY4Ig9uRYGUUCA3ilGD1ca
-         sPgX7wsZi4vrWK46gguqhIGZ7z2A4ZWuxw8rVKFdP9cUEprumfaHPhbP+UQG5yZlFidv
-         ULNH11B56ACA28vT7Ma0IPNhYPA2RXCyJZqAe8cqXIT1qPViUpNu4Fwn7O7SPJfzHaje
-         7DRJoLLvlg+Kj0HHjPnY0IAt7p6QF66zUXJJgMwZa/eeZSv1oH/INxDTeYK5+603INBy
-         pokA==
-X-Forwarded-Encrypted: i=1; AJvYcCWoEj8xBGm2mWIqifE2jhsto/oNFQQahFdChuDt1W17ZVPIQM0j1B23QR+X6VErOOlAQa9prqRV4vtmac7a9aIW3DAe
-X-Gm-Message-State: AOJu0YxiTbSI2p1mj1/BHBl5YFnvnfCSSFAYcoyc7lRnVA0RyE9mQQkb
-	uWCSBI1eCXqETeSS+xCMpzN2ehO1eAUr5wStPfxn8tuRLc9x3DfYTR3igKG0ha832Y5eyWvgNv6
-	JNl3sNBACm3Z681VtW1q8wvQtnUE=
-X-Google-Smtp-Source: AGHT+IGBoqPz6jJPG0WUkux/B2OxbMJurT8tbHkRr/ay3h1HZeZiW6swywoIjfYxA0SJbbLPhPzmckZBLRyISTSoLD0=
-X-Received: by 2002:a17:90a:cb97:b0:2a3:1081:b338 with SMTP id
- a23-20020a17090acb9700b002a31081b338mr2387326pju.10.1712347229458; Fri, 05
- Apr 2024 13:00:29 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="q0ir2StH"
+Message-ID: <29325462-d001-4cb3-909d-27f7243a5c05@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1712347309;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=6gWflinqU1d4wkQYf0aiD/ruz8RWl/tYTTOYnC5SJvI=;
+	b=q0ir2StHc3kPa0wMeyOID45TWAeATcIeQbaZClgmEfmzmdtgPJrlcv6qHBr1bYfYt07BB5
+	9Dxh3WzWLM2mpLIqv+IsnXo8LoYFDyLoSmMPxGxLExJblxBQCVvOcgXKPiOe65vUzwZZLh
+	T7czWGzGRog4EKJiUvzb+qgFFNh4HvY=
+Date: Fri, 5 Apr 2024 13:01:40 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240404100901.7d6bc10f@hermes.local> <3ae7e58f-e62f-4d53-8b39-6e3fe1810014@linux.dev>
- <20240404112710.25d4e99d@hermes.local> <CAEf4BzbHbXHixPAEJccnrgt5xtV+d1iyvQYdC8Dpzs3cWdCRcQ@mail.gmail.com>
- <20240404175258.363f441c@hermes.local> <CAEf4BzaTNRsFbppS31XQmFv+yjqw1_JASheOdw-7H_bHL=6HGA@mail.gmail.com>
- <20240405123759.6265fd4e@hermes.local>
-In-Reply-To: <20240405123759.6265fd4e@hermes.local>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Fri, 5 Apr 2024 13:00:17 -0700
-Message-ID: <CAEf4BzZ8ue3e2ZzapxFLB0Lih4jWOWTcF4NPZfhaGOy9TVbtpQ@mail.gmail.com>
-Subject: Re: vmlinux.h overlap/conflict with network protocol definitions
-To: Stephen Hemminger <stephen@networkplumber.org>
-Cc: Yonghong Song <yonghong.song@linux.dev>, Luca Boccassi <bluca@debian.org>, daniel@iogearbox.net, 
-	ast@kernel.org, andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com, 
-	bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH bpf-next] net: netfilter: Make ct zone id configurable for
+ bpf ct helper functions
+To: Brad Cowie <brad@faucet.nz>
+Cc: lorenzo@kernel.org, memxor@gmail.com, pablo@netfilter.org,
+ davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com, ast@kernel.org,
+ daniel@iogearbox.net, andrii@kernel.org, song@kernel.org,
+ john.fastabend@gmail.com, sdf@google.com, jolsa@kernel.org,
+ netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
+ netdev@vger.kernel.org, bpf@vger.kernel.org
+References: <20240329041430.2176860-1-brad@faucet.nz>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Martin KaFai Lau <martin.lau@linux.dev>
+In-Reply-To: <20240329041430.2176860-1-brad@faucet.nz>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-On Fri, Apr 5, 2024 at 12:38=E2=80=AFPM Stephen Hemminger
-<stephen@networkplumber.org> wrote:
->
-> On Fri, 5 Apr 2024 10:31:46 -0700
-> Andrii Nakryiko <andrii.nakryiko@gmail.com> wrote:
->
-> > On Thu, Apr 4, 2024 at 5:53=E2=80=AFPM Stephen Hemminger
-> > <stephen@networkplumber.org> wrote:
-> > >
-> > > On Thu, 4 Apr 2024 14:45:04 -0700
-> > > Andrii Nakryiko <andrii.nakryiko@gmail.com> wrote:
-> > >
-> > > > > > This is a known issue as currently vmlinux.h does not support m=
-acros.
-> > > > > > There are some efforts by Edward Zingerman to support this but =
-this has
-> > > > > > not done yet. At the same time, you could have a trivial header=
- file
-> > > > > > like
-> > > > > > https://github.com/torvalds/linux/blob/master/tools/testing/sel=
-ftests/bpf/progs/bpf_tracing_net.h
-> > > > > > to be used for bpf program and then your bpf program with vmlin=
-ux.h can
-> > > > > > have much easier CORE support.
-> > > > >
-> > > > >
-> > > > > That is an example of header surgery which I would rather avoid h=
-aving to carry
-> > > > > as long term technical debt baggage.
-> > > > >
-> > > >
-> > > > What's your ultimate goal? As Yonghong said, vmlinux.h is not
-> > > > compatible with other headers. So you have to pick either using
-> > > > vmlinux.h as a base + adding missing #define's (because those are n=
-ot
-> > > > recorded in types, so can't be put into vmlinux.h), or not use
-> > > > vmlinux.h, use linux UAPI/internal headers and then use explicit CO=
--RE
-> > > > helpers/attributes to make your application CO-RE-relocatable.
-> > > >
-> > > > It's not clear from your original email why exactly you wanted to
-> > > > switch to vmlinux.h in the first place.
-> > >
-> > > Some backstory. There is not an existing TC filter for this, so the
-> > > original developer had the idea of using BPF to do it.
-> > >
-> > > The program is a small BPF program to implement a TC filter that look=
-s at
-> > > SKB and does mapping to queue based on L3 (or L3/L4) header. So not h=
-eavily dependent
-> > > on kernel data structure, but sk_buff is not necessarily stable; actu=
-al layout
-> > > depends on kernel config.
-> > >
-> >
-> > If it's only a few fields from sk_buff that you need, you can define
-> > your own minimal sk_buff definition with
-> > __attribute__((preserve_access_index)) added to it. You don't have to
-> > declare fields in the right order, just make sure that field types
-> > match. E.g., something like:
-> >
-> > struct sk_buff {
-> >   unsigned char *head;
-> >   unsigned char *data;
-> >   struct sock *sock;
-> > } __attribute__((preserve_access_index));
-> >
-> > You can call it `struct sk_buff___mine` if you already include
-> > sk_buff, to avoid the conflict. Libbpf will still understand that it
-> > should match it to struct sk_buff in the kernel.
-> >
-> > Alternatively, you can just use BPF_CORE_READ() macro on types you get
-> > from kernel headers, even if they don't have that
-> > preserve_access_index attribute.
-> >
-> > Or, you can just use __builtin_preserve_access_index(&skb->len) to
-> > access sk_buff's fields in CO-RE-relocatable way.
-> >
-> > Or, you can have entire block within which all fields accesses will be
-> > CO-RE-relocatable:
-> >
-> > int len;
-> >
-> > __builtin_preserve_access_index(({
-> >     len =3D skb->len;
-> >     /* other skb accesses here as well */
-> > }));
-> >
-> > Many ways to have bolted on CO-RE even without vmlinux.h. vmlinux.h is
-> > convenient (apart from lack of #defines, but that's an orthogonal
-> > problem), but by no means required for BPF CO-RE.
-> >
->
->
-> The skbuff pointer is passed to the TC program. So BPF_CORE_READ doesn't
-> make sense here.  The biggest concern is that kernel config of the build
-> machine may not match the kernel config of the eventual target, and some
-> of the fields of the sk_buff are hidden based on #ifdef and may change.
+On 3/28/24 9:14 PM, Brad Cowie wrote:
+> Add ct zone id to bpf_ct_opts so that arbitrary ct zone can be
+> set for xdp/tc bpf ct helper functions bpf_{xdp,skb}_ct_alloc
+> and bpf_{xdp,skb}_ct_lookup.
+> 
+> Signed-off-by: Brad Cowie <brad@faucet.nz>
+> ---
+>   net/netfilter/nf_conntrack_bpf.c              | 23 ++++++++++---------
+>   .../testing/selftests/bpf/prog_tests/bpf_nf.c |  1 -
+>   .../testing/selftests/bpf/progs/test_bpf_nf.c | 13 ++---------
+>   3 files changed, 14 insertions(+), 23 deletions(-)
+> 
+> diff --git a/net/netfilter/nf_conntrack_bpf.c b/net/netfilter/nf_conntrack_bpf.c
+> index d2492d050fe6..a0f8a64751ec 100644
+> --- a/net/netfilter/nf_conntrack_bpf.c
+> +++ b/net/netfilter/nf_conntrack_bpf.c
+> @@ -30,7 +30,6 @@
+>    * @error      - Out parameter, set for any errors encountered
+>    *		 Values:
+>    *		   -EINVAL - Passed NULL for bpf_tuple pointer
+> - *		   -EINVAL - opts->reserved is not 0
+>    *		   -EINVAL - netns_id is less than -1
+>    *		   -EINVAL - opts__sz isn't NF_BPF_CT_OPTS_SZ (12)
+>    *		   -EPROTO - l4proto isn't one of IPPROTO_TCP or IPPROTO_UDP
+> @@ -42,16 +41,14 @@
+>    *		 Values:
+>    *		   IPPROTO_TCP, IPPROTO_UDP
+>    * @dir:       - connection tracking tuple direction.
+> - * @reserved   - Reserved member, will be reused for more options in future
+> - *		 Values:
+> - *		   0
+> + * @ct_zone    - connection tracking zone id.
+>    */
+>   struct bpf_ct_opts {
+>   	s32 netns_id;
+>   	s32 error;
+>   	u8 l4proto;
+>   	u8 dir;
+> -	u8 reserved[2];
+> +	u16 ct_zone;
 
-And everything else I wrote?..
+How about the other fields (flags and dir) in the "struct nf_conntrack_zone" and 
+would it be useful to have values other than the default?
 
-Regardless, I think at this point if you want to get help, you
-probably should provide the source code.
+[ ... ]
+
+> diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_nf.c b/tools/testing/selftests/bpf/prog_tests/bpf_nf.c
+> index b30ff6b3b81a..25c3c4e87ed5 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/bpf_nf.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/bpf_nf.c
+> @@ -103,7 +103,6 @@ static void test_bpf_nf_ct(int mode)
+>   		goto end;
+>   
+>   	ASSERT_EQ(skel->bss->test_einval_bpf_tuple, -EINVAL, "Test EINVAL for NULL bpf_tuple");
+> -	ASSERT_EQ(skel->bss->test_einval_reserved, -EINVAL, "Test EINVAL for reserved not set to 0");
+>   	ASSERT_EQ(skel->bss->test_einval_netns_id, -EINVAL, "Test EINVAL for netns_id < -1");
+>   	ASSERT_EQ(skel->bss->test_einval_len_opts, -EINVAL, "Test EINVAL for len__opts != NF_BPF_CT_OPTS_SZ");
+>   	ASSERT_EQ(skel->bss->test_eproto_l4proto, -EPROTO, "Test EPROTO for l4proto != TCP or UDP");
+> diff --git a/tools/testing/selftests/bpf/progs/test_bpf_nf.c b/tools/testing/selftests/bpf/progs/test_bpf_nf.c
+> index 77ad8adf68da..4adb73bc1b33 100644
+> --- a/tools/testing/selftests/bpf/progs/test_bpf_nf.c
+> +++ b/tools/testing/selftests/bpf/progs/test_bpf_nf.c
+> @@ -45,7 +45,8 @@ struct bpf_ct_opts___local {
+>   	s32 netns_id;
+>   	s32 error;
+>   	u8 l4proto;
+> -	u8 reserved[3];
+> +	u8 dir;
+> +	u16 ct_zone;
+>   } __attribute__((preserve_access_index));
+>   
+>   struct nf_conn *bpf_xdp_ct_alloc(struct xdp_md *, struct bpf_sock_tuple *, u32,
+> @@ -84,16 +85,6 @@ nf_ct_test(struct nf_conn *(*lookup_fn)(void *, struct bpf_sock_tuple *, u32,
+>   	else
+>   		test_einval_bpf_tuple = opts_def.error;
+>   
+> -	opts_def.reserved[0] = 1;
+> -	ct = lookup_fn(ctx, &bpf_tuple, sizeof(bpf_tuple.ipv4), &opts_def,
+> -		       sizeof(opts_def));
+> -	opts_def.reserved[0] = 0;
+> -	opts_def.l4proto = IPPROTO_TCP;
+> -	if (ct)
+> -		bpf_ct_release(ct);
+> -	else
+> -		test_einval_reserved = opts_def.error;
+> -
+
+Can it actually test an alloc and lookup of a non default zone id?
+
+Please also separate the selftest into another patch.
+
+pw-bot: cr
+
+>   	opts_def.netns_id = -2;
+>   	ct = lookup_fn(ctx, &bpf_tuple, sizeof(bpf_tuple.ipv4), &opts_def,
+>   		       sizeof(opts_def));
+
