@@ -1,188 +1,152 @@
-Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-173.mta0.migadu.com (out-173.mta0.migadu.com [91.218.175.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91F641B7FD
-	for <bpf@vger.kernel.org>; Sat,  6 Apr 2024 04:09:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C15C1BC46
+	for <bpf@vger.kernel.org>; Sat,  6 Apr 2024 05:19:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712376563; cv=none; b=oxMBryoHlYgL/mCuKtgOjhBGF5CXASilI5zOHiFHMR9T5N3a8hsxa+NjGIUr0YyYJTd++BgidCK9NXlUPiM2JiPZhBLRU0uCJB+f+lwkuqBtb84VmeNM1g4J1TVkpHejImUQAPJG4xJP2c/kPhkUksSI/JF+8ioVVcKLGA8gFRY=
+	t=1712380758; cv=none; b=mVgycdjMTTj6/ow1/IvfhkJIBMm172KQ1ZlIoPjpe/ozBiPVxyQcdRnBMvABJlPUsqimZX1riudo3Np8wn0PCdWzKtrkLjyIz9lPuTw+bwMvwoPhS5LKKGZgzCWn6KtXTVfQPUZ9skq91Y+tJ4AjaSne4zBNXpvkKfs3YltYs1o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712376563; c=relaxed/simple;
-	bh=juPnXzP618xWObDkf1iUj+LsRWuVKPa2Y4ItrduMxq0=;
-	h=Date:In-Reply-To:Message-Id:Mime-Version:References:Subject:From:
-	 To:Content-Type; b=H2uYO83FGyVbP6PM+NbRbn0Ejf5ffqsRM9i464KJptltz6Jyf0z5UZqhKe8NrQvTfKiJwq8MeRsxBlIhdvVK0qXdnzu8R45tiTd7J3binWR/M/PIONSd9/YLmXEceHAFsDsuhnQXs31LMyKSbFwu90vy9+36CmkeULmDYSd51Sg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=U8QItgEn; arc=none smtp.client-ip=209.85.128.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
+	s=arc-20240116; t=1712380758; c=relaxed/simple;
+	bh=k2NSs4cK+Bm4Qrs1VntDiYJq8I+I5/lWSP4xs5flUpE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=btVjtbECH0kFCsuv9OOasROqh+JQW5I1nj5+px+NoeCQsCDfpCAF3YIizDTVhM0QC9eeGNlDGmAXUVpI0v2U4T57+ThIYBf8hweUaXteDfOw+houT9RjiHoLkF2yV3JirlDwYT3wQBxHPk2xeMLbUe/QtfBsxDmZhmK1U/jiIxw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=FLZL/GJL; arc=none smtp.client-ip=91.218.175.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="U8QItgEn"
-Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-61506d6d667so48160257b3.1
-        for <bpf@vger.kernel.org>; Fri, 05 Apr 2024 21:09:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1712376561; x=1712981361; darn=vger.kernel.org;
-        h=to:from:subject:references:mime-version:message-id:in-reply-to:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=G6CfeKOKugD2wHzsxUq+tzYMTN2fGH3EGK3TX/G0kaY=;
-        b=U8QItgEneV0nrbeFlyb00Ii1SS5i04UN6IZrhpWjLgjAQF1z56K1sudQSWhH6THENP
-         XkBQNQD9uWjB88HJ2d6HqTF+tBvpvAvJx9rJSXwnXfIiXf/CQrjAd4AU5iDiARLKsvEp
-         Yrlfz7RNwLtLL4+EtvKbPfcphSNEN9Z9/N432sSrJVExqNbLMbGAPGNWizbayqaCVdIv
-         jBo3P1ubEx15MFTqphEWoKpQOl8hy5qTDOobtxG/WNSmG56EHqA5iD+eJUBo1pIGKtuv
-         y3G+iqmrdB4gRhZdyN/BKe5VsomhdLfb6xqPsZjk6Ziko0C3zW8iaabJlyxGWNCs49Na
-         VVPg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712376561; x=1712981361;
-        h=to:from:subject:references:mime-version:message-id:in-reply-to:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=G6CfeKOKugD2wHzsxUq+tzYMTN2fGH3EGK3TX/G0kaY=;
-        b=fPdMCj3lYzL/GuA/DaAsf8LEzoTeNRf6aODbeOJudlOTGQ6K5H3sZ92SKYVwCD8zKe
-         WwA4fFw+TQ+p3N6Kkm71ReqPRcD3J3pGyWK7gbBUaEcvo/fx4syoMlzPc11Gse+XQPWE
-         hUJ/i8TKMpq1JbT9rbcej/EIo60uXt2MSyLrEy2cGdZQ2caoyYgSMMhG8hwNB1hBVfPG
-         oVSnxuecDWv8vLAQ9ziMWHiHG43L9IhtKoX0tGkEKlYAl4NWXIFk1CjDeRh2yK3cYzZx
-         cHINNUlL39/Ig2TDmKC0KdK4Hwf8rSlyXeaU8gj6sxriBVf0Fr/C/JH2107ZTHPLw2jB
-         iOgg==
-X-Forwarded-Encrypted: i=1; AJvYcCU7yY+q1UrU7iwrtwPj2gGRVFCsft/+oFZdfHUhmObz4CDKXgmHhCv+dQHOjCMotNb4ZteqyBhpWXFb8DdfEQXclJGA
-X-Gm-Message-State: AOJu0Yz2W99w0dulHOJ4QdJzJpMU9Q55/ooHwRX9+aZKlv1T5sYs7ag1
-	kZZxz7ltVw8VQf4OmxOpfG8ZZ+BV4b7gNi0lkEHTihLmyL+wMpYgjJI1D9R5Jv98Wh732sBOFlL
-	+conR9Q==
-X-Google-Smtp-Source: AGHT+IGKdPN5hUTbwKOwQZ1f9rtbG1LHGY0ZdYTo9IZKVqZ2bXxgEHgJCHIFKCtc+jY7dFopC7vL4/p0oAeC
-X-Received: from irogers.svl.corp.google.com ([2620:15c:2a3:200:51c1:e2b:9198:3cdc])
- (user=irogers job=sendgmr) by 2002:a05:690c:4509:b0:615:19db:8ee0 with SMTP
- id gt9-20020a05690c450900b0061519db8ee0mr767763ywb.1.1712376560891; Fri, 05
- Apr 2024 21:09:20 -0700 (PDT)
-Date: Fri,  5 Apr 2024 21:09:11 -0700
-In-Reply-To: <20240406040911.1603801-1-irogers@google.com>
-Message-Id: <20240406040911.1603801-2-irogers@google.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="FLZL/GJL"
+Message-ID: <fbb3102e-953c-4d4f-b781-3c677c33126a@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1712380753;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=AdX4huv0L7kcRovvqjVvbFzQ6QYzizR0EprqJz845cg=;
+	b=FLZL/GJL7EEsihMgHKG3q0hwIZa61VgAVWnzkCa6RWB6ALdHfD89bayR5pw9FeSzLuhHU7
+	LvYOCk7VraeGUqeXu3FNHbNyPwAwSoPDagy2KpBgSlXzJiEO7in5QxISWoblYM66IQPOFV
+	oR0FSnlJNqeLXcR/FTdhkyWmL66RlAY=
+Date: Fri, 5 Apr 2024 22:19:04 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20240406040911.1603801-1-irogers@google.com>
-X-Mailer: git-send-email 2.44.0.478.gd926399ef9-goog
-Subject: [PATCH v1 2/2] perf bench uprobe: Add uretprobe variant of uprobe benchmarks
-From: Ian Rogers <irogers@google.com>
-To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
-	Mark Rutland <mark.rutland@arm.com>, 
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, 
-	Kan Liang <kan.liang@linux.intel.com>, Kees Cook <keescook@chromium.org>, 
-	Andrei Vagin <avagin@google.com>, linux-perf-users@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Subject: Re: [PATCH bpf-next v4 2/5] libbpf: Add bpf_link support for
+ BPF_PROG_TYPE_SOCKMAP
+Content-Language: en-GB
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+ Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Jakub Sitnicki <jakub@cloudflare.com>,
+ John Fastabend <john.fastabend@gmail.com>, kernel-team@fb.com,
+ Martin KaFai Lau <martin.lau@kernel.org>,
+ Eduard Zingerman <eddyz87@gmail.com>
+References: <20240404025305.2210999-1-yonghong.song@linux.dev>
+ <20240404025316.2212069-1-yonghong.song@linux.dev>
+ <CAEf4BzY-ekyrSs-Z7SXtWJtAgn4AoLfiVcYv6fip=9ay9a0obQ@mail.gmail.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <CAEf4BzY-ekyrSs-Z7SXtWJtAgn4AoLfiVcYv6fip=9ay9a0obQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-Name benchmarks with _ret at the end to avoid creating a new set of
-benchmarks.
 
-Signed-off-by: Ian Rogers <irogers@google.com>
----
- tools/perf/bench/bench.h                    |  2 ++
- tools/perf/bench/uprobe.c                   | 20 +++++++++++++++++---
- tools/perf/builtin-bench.c                  |  2 ++
- tools/perf/util/bpf_skel/bench_uprobe.bpf.c | 16 ++++++++++++++++
- 4 files changed, 37 insertions(+), 3 deletions(-)
+On 4/5/24 1:14 PM, Andrii Nakryiko wrote:
+> On Wed, Apr 3, 2024 at 7:53 PM Yonghong Song <yonghong.song@linux.dev> wrote:
+>> Introduce a libbpf API function bpf_program__attach_sockmap()
+>> which allow user to get a bpf_link for their corresponding programs.
+>>
+>> Acked-by: Eduard Zingerman <eddyz87@gmail.com>
+>> Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
+>> ---
+>>   tools/lib/bpf/libbpf.c         | 7 +++++++
+>>   tools/lib/bpf/libbpf.h         | 2 ++
+>>   tools/lib/bpf/libbpf.map       | 6 ++++++
+>>   tools/lib/bpf/libbpf_version.h | 2 +-
+>>   4 files changed, 16 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+>> index b091154bc5b5..97eb6e5dd7c8 100644
+>> --- a/tools/lib/bpf/libbpf.c
+>> +++ b/tools/lib/bpf/libbpf.c
+>> @@ -149,6 +149,7 @@ static const char * const link_type_name[] = {
+>>          [BPF_LINK_TYPE_TCX]                     = "tcx",
+>>          [BPF_LINK_TYPE_UPROBE_MULTI]            = "uprobe_multi",
+>>          [BPF_LINK_TYPE_NETKIT]                  = "netkit",
+>> +       [BPF_LINK_TYPE_SOCKMAP]                 = "sockmap",
+>>   };
+>>
+>>   static const char * const map_type_name[] = {
+>> @@ -12533,6 +12534,12 @@ bpf_program__attach_netns(const struct bpf_program *prog, int netns_fd)
+>>          return bpf_program_attach_fd(prog, netns_fd, "netns", NULL);
+>>   }
+>>
+>> +struct bpf_link *
+>> +bpf_program__attach_sockmap(const struct bpf_program *prog, int map_fd)
+>> +{
+>> +       return bpf_program_attach_fd(prog, map_fd, "sockmap", NULL);
+>> +}
+>> +
+>>   struct bpf_link *bpf_program__attach_xdp(const struct bpf_program *prog, int ifindex)
+>>   {
+>>          /* target_fd/target_ifindex use the same field in LINK_CREATE */
+>> diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
+>> index f88ab50c0229..4c7ada03bf4f 100644
+>> --- a/tools/lib/bpf/libbpf.h
+>> +++ b/tools/lib/bpf/libbpf.h
+>> @@ -795,6 +795,8 @@ bpf_program__attach_cgroup(const struct bpf_program *prog, int cgroup_fd);
+>>   LIBBPF_API struct bpf_link *
+>>   bpf_program__attach_netns(const struct bpf_program *prog, int netns_fd);
+>>   LIBBPF_API struct bpf_link *
+>> +bpf_program__attach_sockmap(const struct bpf_program *prog, int map_fd);
+>> +LIBBPF_API struct bpf_link *
+>>   bpf_program__attach_xdp(const struct bpf_program *prog, int ifindex);
+>>   LIBBPF_API struct bpf_link *
+>>   bpf_program__attach_freplace(const struct bpf_program *prog,
+>> diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
+>> index 51732ecb1385..015737439007 100644
+>> --- a/tools/lib/bpf/libbpf.map
+>> +++ b/tools/lib/bpf/libbpf.map
+>> @@ -411,8 +411,14 @@ LIBBPF_1.3.0 {
+>>   LIBBPF_1.4.0 {
+>>          global:
+>>                  bpf_program__attach_raw_tracepoint_opts;
+>> +               bpf_program__attach_sockmap;
+> leftover from the previous revision? please remove
 
-diff --git a/tools/perf/bench/bench.h b/tools/perf/bench/bench.h
-index faa18e6d2467..9f736423af53 100644
---- a/tools/perf/bench/bench.h
-+++ b/tools/perf/bench/bench.h
-@@ -46,6 +46,8 @@ int bench_breakpoint_enable(int argc, const char **argv);
- int bench_uprobe_baseline(int argc, const char **argv);
- int bench_uprobe_empty(int argc, const char **argv);
- int bench_uprobe_trace_printk(int argc, const char **argv);
-+int bench_uprobe_empty_ret(int argc, const char **argv);
-+int bench_uprobe_trace_printk_ret(int argc, const char **argv);
- int bench_pmu_scan(int argc, const char **argv);
- 
- #define BENCH_FORMAT_DEFAULT_STR	"default"
-diff --git a/tools/perf/bench/uprobe.c b/tools/perf/bench/uprobe.c
-index b722ff88fe7d..0b90275862e1 100644
---- a/tools/perf/bench/uprobe.c
-+++ b/tools/perf/bench/uprobe.c
-@@ -26,9 +26,11 @@
- static int loops = LOOPS_DEFAULT;
- 
- enum bench_uprobe {
--        BENCH_UPROBE__BASELINE,
--        BENCH_UPROBE__EMPTY,
--        BENCH_UPROBE__TRACE_PRINTK,
-+	BENCH_UPROBE__BASELINE,
-+	BENCH_UPROBE__EMPTY,
-+	BENCH_UPROBE__TRACE_PRINTK,
-+	BENCH_UPROBE__EMPTY_RET,
-+	BENCH_UPROBE__TRACE_PRINTK_RET,
- };
- 
- static const struct option options[] = {
-@@ -81,6 +83,8 @@ static int bench_uprobe__setup_bpf_skel(enum bench_uprobe bench)
- 	case BENCH_UPROBE__BASELINE:							break;
- 	case BENCH_UPROBE__EMPTY:	 bench_uprobe__attach_uprobe(empty);		break;
- 	case BENCH_UPROBE__TRACE_PRINTK: bench_uprobe__attach_uprobe(trace_printk);	break;
-+	case BENCH_UPROBE__EMPTY_RET:	 bench_uprobe__attach_uprobe(empty_ret);	break;
-+	case BENCH_UPROBE__TRACE_PRINTK_RET: bench_uprobe__attach_uprobe(trace_printk_ret); break;
- 	default:
- 		fprintf(stderr, "Invalid bench: %d\n", bench);
- 		goto cleanup;
-@@ -197,3 +201,13 @@ int bench_uprobe_trace_printk(int argc, const char **argv)
- {
- 	return bench_uprobe(argc, argv, BENCH_UPROBE__TRACE_PRINTK);
- }
-+
-+int bench_uprobe_empty_ret(int argc, const char **argv)
-+{
-+	return bench_uprobe(argc, argv, BENCH_UPROBE__EMPTY_RET);
-+}
-+
-+int bench_uprobe_trace_printk_ret(int argc, const char **argv)
-+{
-+	return bench_uprobe(argc, argv, BENCH_UPROBE__TRACE_PRINTK_RET);
-+}
-diff --git a/tools/perf/builtin-bench.c b/tools/perf/builtin-bench.c
-index 1a8898d5b560..2c1a9f3d847a 100644
---- a/tools/perf/builtin-bench.c
-+++ b/tools/perf/builtin-bench.c
-@@ -109,6 +109,8 @@ static struct bench uprobe_benchmarks[] = {
- 	{ "baseline",	"Baseline libc usleep(1000) call",				bench_uprobe_baseline,	},
- 	{ "empty",	"Attach empty BPF prog to uprobe on usleep, system wide",	bench_uprobe_empty,	},
- 	{ "trace_printk", "Attach trace_printk BPF prog to uprobe on usleep syswide",	bench_uprobe_trace_printk,	},
-+	{ "empty_ret",	"Attach empty BPF prog to uretprobe on usleep, system wide",	bench_uprobe_empty_ret,	},
-+	{ "trace_printk_ret", "Attach trace_printk BPF prog to uretprobe on usleep syswide", bench_uprobe_trace_printk_ret,},
- 	{ NULL,	NULL, NULL },
- };
- 
-diff --git a/tools/perf/util/bpf_skel/bench_uprobe.bpf.c b/tools/perf/util/bpf_skel/bench_uprobe.bpf.c
-index 2c55896bb33c..a01c7f791fcd 100644
---- a/tools/perf/util/bpf_skel/bench_uprobe.bpf.c
-+++ b/tools/perf/util/bpf_skel/bench_uprobe.bpf.c
-@@ -4,6 +4,7 @@
- #include <bpf/bpf_tracing.h>
- 
- unsigned int nr_uprobes;
-+unsigned int nr_uretprobes;
- 
- SEC("uprobe")
- int BPF_UPROBE(empty)
-@@ -20,4 +21,19 @@ int BPF_UPROBE(trace_printk)
- 	return 0;
- }
- 
-+SEC("uretprobe")
-+int BPF_URETPROBE(empty_ret)
-+{
-+	return 0;
-+}
-+
-+SEC("uretprobe")
-+int BPF_URETPROBE(trace_printk_ret)
-+{
-+	char fmt[] = "perf bench uretprobe %u";
-+
-+	bpf_trace_printk(fmt, sizeof(fmt), ++nr_uretprobes);
-+	return 0;
-+}
-+
- char LICENSE[] SEC("license") = "Dual BSD/GPL";
--- 
-2.44.0.478.gd926399ef9-goog
+Good catch. Thanks. will fix in the next revision.
 
+>
+> with that:
+>
+> Acked-by: Andrii Nakryiko <andrii@kernel.org>
+>
+>>                  bpf_raw_tracepoint_open_opts;
+>>                  bpf_token_create;
+>>                  btf__new_split;
+>>                  btf_ext__raw_data;
+>>   } LIBBPF_1.3.0;
+>> +
+>> +LIBBPF_1.5.0 {
+>> +       global:
+>> +               bpf_program__attach_sockmap;
+>> +} LIBBPF_1.4.0;
+>> diff --git a/tools/lib/bpf/libbpf_version.h b/tools/lib/bpf/libbpf_version.h
+>> index e783a47da815..d6e5eff967cb 100644
+>> --- a/tools/lib/bpf/libbpf_version.h
+>> +++ b/tools/lib/bpf/libbpf_version.h
+>> @@ -4,6 +4,6 @@
+>>   #define __LIBBPF_VERSION_H
+>>
+>>   #define LIBBPF_MAJOR_VERSION 1
+>> -#define LIBBPF_MINOR_VERSION 4
+>> +#define LIBBPF_MINOR_VERSION 5
+>>
+>>   #endif /* __LIBBPF_VERSION_H */
+>> --
+>> 2.43.0
+>>
