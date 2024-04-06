@@ -1,152 +1,180 @@
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DC3022EF3
-	for <bpf@vger.kernel.org>; Sat,  6 Apr 2024 08:13:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.188.123
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 539BF3B2A2
+	for <bpf@vger.kernel.org>; Sat,  6 Apr 2024 09:20:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.188.122
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712391229; cv=none; b=G/TsHkdE8PsikNPLR388VoaYo3IO8qynlCJQaEujifiIimtbRW7lYBupVNPJ6xiiznWeIq3NOGnYsTmynIL3EBWvxGBfzhTVxHtQ8lyBNDr3hzpoff/G5aBy1pPrhie1CfWSUJKwua56v5+nCkrqCMOKupOl8wOme7Dxck9s8bY=
+	t=1712395223; cv=none; b=hZwo/7v6LR56t5s6nc+xmU0QaHK5U4qYY/ZfdDpDgHLici3UbErAmWsFFcV9qK1UqqTyjZK6JYvXREv5L0gUD2JKtbvoBttMCepB4wkDUn0KEkd33Ec7x0vC8XTm4scJItlrtQcBuVI2osOhT4c8AnuwFO54LRy6+Nb9bpM8c4E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712391229; c=relaxed/simple;
-	bh=Ok3cHEbOCqoXYq6UqpsUBQYpX66UX3Wh8EvM3EaWyqs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=P5XvAesCvDbTCS5G09gvaQPMMGgF+fZIBdYUJD0OXZHc6TzCY+YVISRD+RvG7JHe4vSC2Rd7jiW0Ri3ma3LBEYOIb5wy0Wi7RQaYBN+24wH3yXiq9hClPoTbIorRxJOld+wtpI6n1KtItemlhbjfY0P2i12J6kyfPi4eLj4NdO4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=canonical.com; dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b=Q20gfgyY; arc=none smtp.client-ip=185.125.188.123
+	s=arc-20240116; t=1712395223; c=relaxed/simple;
+	bh=a78vMWglkqZNxVpizm3bz2mABJk4IrXHntVwOv9hkR0=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=uOf+ynDH40QtDS1r1nmWMUl9/rKZN3D7vG5IITKAEZT1Ag2ztHNYdVPNPZrU+v3kH3bvfda204r+JNxCRWZigdTMshtNOGPeBud1DWUn9SFJacZdwDVuqmtxpRw2hLs7CyifZ3tsrwP5YuF06TTNq0JfXRNlQQifRguyxep+/Yg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=canonical.com; dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b=vmsuGGo2; arc=none smtp.client-ip=185.125.188.122
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canonical.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b="Q20gfgyY"
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com [209.85.221.71])
+	dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b="vmsuGGo2"
+Received: from mail-lf1-f70.google.com (mail-lf1-f70.google.com [209.85.167.70])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 0ED773FB79
-	for <bpf@vger.kernel.org>; Sat,  6 Apr 2024 08:13:42 +0000 (UTC)
+	by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id DF6EC424A4
+	for <bpf@vger.kernel.org>; Sat,  6 Apr 2024 09:20:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-	s=20210705; t=1712391222;
-	bh=4w5lg7DeOe3LCRsqgZwV7U/9sNfG7JcNUgXKCyuVpSs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:In-Reply-To;
-	b=Q20gfgyYMB/a8zKmsyTYiWi0gfeAiLAemRYFjkApLtCCOIgJMWW6oCnMUbVPcWI+X
-	 RligjAigKiNdBqi1VmMZenwU/b0HHt1FW1/aTRPiyIk74aq9JS2DnjnkAuVeedgmAW
-	 dujwNeBg0cYC/UARqQq0JQod/ATIP6O21DKXP8c62eceLFF3nIfT3lwmmnMKZurc5j
-	 yqhxO9WC2e4u0OkVkjPhpQ3y7yMw+BTeh8hfvZz8E1qHgMB7duhjrm8ylSbNJKBf31
-	 ooexeVswVTcT/TR40bfbIo6gR/DoePYogqnQg3Ry9NVcjDCV/zrQKMkMR3dU2v2XDV
-	 x3s99wfdBHfRA==
-Received: by mail-wr1-f71.google.com with SMTP id ffacd0b85a97d-343e54fc19bso927976f8f.2
-        for <bpf@vger.kernel.org>; Sat, 06 Apr 2024 01:13:42 -0700 (PDT)
+	s=20210705; t=1712395217;
+	bh=U9JiGxHu1Zu7lOUTn6nQmFFrRqhFXaTmBwUIearvaJY=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version;
+	b=vmsuGGo24oaZbKZFIXkYa+05DycEitw/wz+rIRGEtHAWz87kgV3BH0MMHcZK9e9F3
+	 E3XVfTxcX8aSUK/bXlJ4sQozTXugcN4TEv5vwegJ16njQ9OlX9JTIeFHVazRRwNbIz
+	 MV5T0qlB8Qr6TDX6P0of5FteLf+mJdyUr4MIn526exZyEMVmVM4Jzs3J6FQppFhLlB
+	 i1HBPLh9EpzmXtOka7Hmi1OivoYYn8tr1qArtId03O6wuHmZsVb903qljbkSwSITgo
+	 2q4mQK03TDHzSww2tJcTllLjcx5kmol0aUnkm5u3O8EtU6tkSmP7pcCBFCQENAk86i
+	 DDu4C/LjPAfJA==
+Received: by mail-lf1-f70.google.com with SMTP id 2adb3069b0e04-516be44ea1dso2472119e87.1
+        for <bpf@vger.kernel.org>; Sat, 06 Apr 2024 02:20:17 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712391221; x=1712996021;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4w5lg7DeOe3LCRsqgZwV7U/9sNfG7JcNUgXKCyuVpSs=;
-        b=VY0N9Puk2e33CLz1/wxxbTHgbWzIFGmtGfowGnfYtPL9woErsKS8C5Z17iqgK6Tq/c
-         hOBEm5TrWmcT5surMGnkz8lD7CUmfSU+fezsRPEx6V8kLkkoqTwlQvYYQ1MvtOOcwhMC
-         TKgHaQRS7WgL2mxzcquRzTRec4o5vVrZAL2qym/oa+GZAyM61x99MFoDAZ6LN+vF0c+I
-         gqYlcYx8QqMo7SYwJ5pa1x+QYL2tHtfxGwOEC2U5t8tWnFewBd1HW3cjSLjdpzU8pnWb
-         b/emwM4aDqvibXsrZLICSITaFkTMXVFtVH62YYenQKsjl5Ptf0oS0b5hULF3RupTfhVu
-         TDbA==
-X-Forwarded-Encrypted: i=1; AJvYcCWhAV7p2JL4IFyeZjBbunkEhKBVrNN+n80L2bgFm0Kx64KrwvUhiRRKpyWsfy3ojYKEQWDi/v0wtK7/ZeWgT7uTQ5QF
-X-Gm-Message-State: AOJu0YwOCNxyAf2QD0N4jOCU6/xnz5VantDwJhNM0G893NWo5upFBIAc
-	4cQNgeYZ8M54LviwUqABV0ND/ld4rngqeI/5zP4XvK8pLhvX4v/JhhFlXB6dZO72yj8bXT3jfUN
-	u2wSbaZ6qhEgvn6mkDGEX043bhkoWeVYOhpNuwgxUohguA4+5Cqr0pBfi7+uSK6DsuA==
-X-Received: by 2002:adf:fccb:0:b0:343:bd44:b8bb with SMTP id f11-20020adffccb000000b00343bd44b8bbmr2556617wrs.12.1712391220858;
-        Sat, 06 Apr 2024 01:13:40 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IGT0iyPV+c5mEtz/7mmX5nHiU4zAbRw6sQgj0CzMiZl4lXnM6HwckvfVU2cBGk8aUQQoY5uEg==
-X-Received: by 2002:adf:fccb:0:b0:343:bd44:b8bb with SMTP id f11-20020adffccb000000b00343bd44b8bbmr2556586wrs.12.1712391219960;
-        Sat, 06 Apr 2024 01:13:39 -0700 (PDT)
-Received: from localhost (net-2-39-142-110.cust.vodafonedsl.it. [2.39.142.110])
-        by smtp.gmail.com with ESMTPSA id q13-20020a056000136d00b00343e3023fbasm3634187wrz.34.2024.04.06.01.13.39
+        d=1e100.net; s=20230601; t=1712395216; x=1713000016;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=U9JiGxHu1Zu7lOUTn6nQmFFrRqhFXaTmBwUIearvaJY=;
+        b=GdnrDn5n/aawccRWT31UlZEIb79UoFa8p7mb9wWhZ+g7ragMsefEXruFHIxb/ma2G2
+         XE7x/n96u2n2vgIMBSb7NwE+YgNcCUMZOhnKTu5wZRg9Zfg5dsR8xTabvqTr9fx26ZCX
+         9v0Q4hhZ+H2Pn+CUhZCsS/116bJZM0ygzBRWSBY8t4Tc5dZMBHM3bqHF9AiPk1I1k3GJ
+         /hQtg1ZZd+nBJclADnycv0qCtUNcSPIoTfZM49Q93wpZ+Dg4S6phn192hW3EtIBvyCXn
+         i6Ittk10CN6QB0pOqxj7ko9SjhgLYfUhO2eAph6M904iYoa86DzRzFI+18Ao7uKsKe6C
+         tnPw==
+X-Forwarded-Encrypted: i=1; AJvYcCWhl9J+WyqHjKjnkGblzDjhHr6i/6eS3LJVz0Pf/dPMchQjUZUBEiVVcM9gnRaG96Chuc7YAWQURymiLyhRRbVfHO1k
+X-Gm-Message-State: AOJu0Yw5lWin3U6FX/7r9N6B7Lbl6Hnd/+YPaoormMTsPPtJX6MNX/4V
+	oURVwB7GEWpbmByZBL4m+vWa1LLBLZUWb8tT8ZOrZeZr4OEPZDAO0tbj5Ijq/qGB3tYs4Pj2Z+W
+	woy5AiArMTTdsF6EjM00tyK416EyHj27TVgPkEn+Kc0/hM0qxBGlvzAETVvFkGf2FuQ==
+X-Received: by 2002:ac2:5df9:0:b0:515:d50f:c6cc with SMTP id z25-20020ac25df9000000b00515d50fc6ccmr2674255lfq.63.1712395215921;
+        Sat, 06 Apr 2024 02:20:15 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IHS/Wj4fTtj4EhH4SwuK4rc7frejoX2SMVVjV8lwzSRp5JOOCrfUKz3Ui9mytME96ZdhQmWHg==
+X-Received: by 2002:ac2:5df9:0:b0:515:d50f:c6cc with SMTP id z25-20020ac25df9000000b00515d50fc6ccmr2674231lfq.63.1712395215460;
+        Sat, 06 Apr 2024 02:20:15 -0700 (PDT)
+Received: from gpd.station (net-2-39-142-110.cust.vodafonedsl.it. [2.39.142.110])
+        by smtp.gmail.com with ESMTPSA id l23-20020a7bc457000000b00414924f307csm5779993wmi.26.2024.04.06.02.20.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 06 Apr 2024 01:13:39 -0700 (PDT)
-Date: Sat, 6 Apr 2024 10:13:37 +0200
+        Sat, 06 Apr 2024 02:20:14 -0700 (PDT)
 From: Andrea Righi <andrea.righi@canonical.com>
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Alexei Starovoitov <ast@kernel.org>,
+To: Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>
+Cc: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
 	Yonghong Song <yonghong.song@linux.dev>,
 	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
-	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-	David Vernet <void@manifault.com>, Tejun Heo <tj@kernel.org>,
-	bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 0/2] libbpf: API to partially consume items from
- ringbuffer
-Message-ID: <ZhEEMU_M2qSISfxB@gpd>
-References: <20240405223556.11142-1-andrea.righi@canonical.com>
- <CAEf4BzZyd2T_S+46NcKsM-Vv0mMnsgGd_Hzaq7tn4DFkD+GOGw@mail.gmail.com>
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@google.com>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	David Vernet <void@manifault.com>,
+	Tejun Heo <tj@kernel.org>,
+	bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v4 2/4] libbpf: ringbuf: allow to consume up to a certain amount of items
+Date: Sat,  6 Apr 2024 11:15:42 +0200
+Message-ID: <20240406092005.92399-3-andrea.righi@canonical.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20240406092005.92399-1-andrea.righi@canonical.com>
+References: <20240406092005.92399-1-andrea.righi@canonical.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAEf4BzZyd2T_S+46NcKsM-Vv0mMnsgGd_Hzaq7tn4DFkD+GOGw@mail.gmail.com>
 
-On Fri, Apr 05, 2024 at 04:16:34PM -0700, Andrii Nakryiko wrote:
-> On Fri, Apr 5, 2024 at 3:36 PM Andrea Righi <andrea.righi@canonical.com> wrote:
-> >
-> > Introduce ring__consume_n() and ring_buffer__consume_n() API to
-> > partially consume items from one (or more) ringbuffer(s).
-> >
-> > This can be useful, for example, to consume just a single item or when
-> > we need to copy multiple items to a limited user-space buffer from the
-> > ringbuffer callback.
-> >
-> > Practical example (where this API can be used):
-> > https://github.com/sched-ext/scx/blob/b7c06b9ed9f72cad83c31e39e9c4e2cfd8683a55/rust/scx_rustland_core/src/bpf.rs#L217
-> >
-> > See also:
-> > https://lore.kernel.org/lkml/20240310154726.734289-1-andrea.righi@canonical.com/T/#u
-> >
-> > [ Note: I haven't implemented the special case of n == 0 as "no limit",
-> > because we still need to add a bunch of extra checks for INT_MAX, making
-> > the code less readable and, from a performance perspective, it seems
-> > that we may get more downsides than benefits, but I can try to look more
-> > at this if you think it's worth it ]
-> >
-> > v3:
-> >  - rename ring__consume_max() -> ring__consume_n() and
-> >    ring_buffer__consume_max() -> ring_buffer__consume_n()
-> >  - add new API to a new 1.5.0 cycle
-> 
-> You also need to update Makefile, CI is failing right now ([0]).
+In some cases, instead of always consuming all items from ring buffers
+in a greedy way, we may want to consume up to a certain amount of items,
+for example when we need to copy items from the BPF ring buffer to a
+limited user buffer.
 
-Yep, I wasn't sure if should have bumped up the version as well
-(in libbpf_version.h). I'll add that.
+This change allows to set an upper limit to the amount of items consumed
+from one or more ring buffers.
 
-> 
-> Please also add a simple test to BPF selftests using the new API.
-> Other than that the changes look good.
+Signed-off-by: Andrea Righi <andrea.righi@canonical.com>
+---
+ tools/lib/bpf/ringbuf.c | 23 +++++++++++++++--------
+ 1 file changed, 15 insertions(+), 8 deletions(-)
 
-Ok, will add a selftest.
+diff --git a/tools/lib/bpf/ringbuf.c b/tools/lib/bpf/ringbuf.c
+index aacb64278a01..2c4031168413 100644
+--- a/tools/lib/bpf/ringbuf.c
++++ b/tools/lib/bpf/ringbuf.c
+@@ -231,7 +231,7 @@ static inline int roundup_len(__u32 len)
+ 	return (len + 7) / 8 * 8;
+ }
+ 
+-static int64_t ringbuf_process_ring(struct ring *r)
++static int64_t ringbuf_process_ring(struct ring *r, size_t n)
+ {
+ 	int *len_ptr, len, err;
+ 	/* 64-bit to avoid overflow in case of extreme application behavior */
+@@ -268,6 +268,9 @@ static int64_t ringbuf_process_ring(struct ring *r)
+ 			}
+ 
+ 			smp_store_release(r->consumer_pos, cons_pos);
++
++			if (cnt >= n)
++				goto done;
+ 		}
+ 	} while (got_new_data);
+ done:
+@@ -287,13 +290,15 @@ int ring_buffer__consume(struct ring_buffer *rb)
+ 	for (i = 0; i < rb->ring_cnt; i++) {
+ 		struct ring *ring = rb->rings[i];
+ 
+-		err = ringbuf_process_ring(ring);
++		err = ringbuf_process_ring(ring, INT_MAX);
+ 		if (err < 0)
+ 			return libbpf_err(err);
+ 		res += err;
++		if (res > INT_MAX) {
++			res = INT_MAX;
++			break;
++		}
+ 	}
+-	if (res > INT_MAX)
+-		return INT_MAX;
+ 	return res;
+ }
+ 
+@@ -314,13 +319,15 @@ int ring_buffer__poll(struct ring_buffer *rb, int timeout_ms)
+ 		__u32 ring_id = rb->events[i].data.fd;
+ 		struct ring *ring = rb->rings[ring_id];
+ 
+-		err = ringbuf_process_ring(ring);
++		err = ringbuf_process_ring(ring, INT_MAX);
+ 		if (err < 0)
+ 			return libbpf_err(err);
+ 		res += err;
++		if (res > INT_MAX) {
++			res = INT_MAX;
++			break;
++		}
+ 	}
+-	if (res > INT_MAX)
+-		return INT_MAX;
+ 	return res;
+ }
+ 
+@@ -375,7 +382,7 @@ int ring__consume(struct ring *r)
+ {
+ 	int64_t res;
+ 
+-	res = ringbuf_process_ring(r);
++	res = ringbuf_process_ring(r, INT_MAX);
+ 	if (res < 0)
+ 		return libbpf_err(res);
+ 
+-- 
+2.43.0
 
-Thanks,
--Andrea
-
-> 
->   [0] https://github.com/kernel-patches/bpf/actions/runs/8576515495/job/23507610313#step:11:73
-> 
-> pw-bot: cr
-> 
-> >  - fixed minor nits / comments
-> >
-> > v2:
-> >  - introduce a new API instead of changing the callback's retcode
-> >    behavior
-> >
-> > Andrea Righi (2):
-> >       libbpf: ringbuf: allow to consume up to a certain amount of items
-> >       libbpf: Add ring__consume_n / ring_buffer__consume_n
-> >
-> >  tools/lib/bpf/libbpf.h   | 12 ++++++++++
-> >  tools/lib/bpf/libbpf.map |  6 +++++
-> >  tools/lib/bpf/ringbuf.c  | 59 ++++++++++++++++++++++++++++++++++++++++--------
-> >  3 files changed, 67 insertions(+), 10 deletions(-)
