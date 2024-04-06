@@ -1,215 +1,289 @@
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C73F3FBA2
-	for <bpf@vger.kernel.org>; Sat,  6 Apr 2024 09:20:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.188.123
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D13BEAD5
+	for <bpf@vger.kernel.org>; Sat,  6 Apr 2024 09:45:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712395238; cv=none; b=nGgMTJkrUlHY6ge3AuWet/yU1xQHobiFxRJlABe+o5FdobU0M4bLtWjgsxRMku7gO2psbUJmKSjWtI1Tuz1O6FAMpn8yNbVqY9oq/rtUGx1sbPxOcX56Lh8CprycOAFqFEdSba105Mfmi8LXM4LJa2Ua+gwxh3eVuSjQuEx03cE=
+	t=1712396730; cv=none; b=eIXnvMXYEHhU7TY/ZfEiPwxtvj8H95+NAOiipp20eQjZ1THXER6Og5kVk2UQ/fdbgHFv+a11Oqjb/CNSX2tdlQg+psZz0/dfVw5vX7SqSi4i3tUgHLZPVEEY5cASwNw+PeGWgE/J8nQP4ZqGwJQ6TmsIAJtGVJYC2MB1j0y2vys=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712395238; c=relaxed/simple;
-	bh=WxyORd5UGrvrhH3ovdgj29XhigFycIY9JFgRu0PCY/A=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=euU0/XDUC154CLEZ1NCKG6FZbHQn/nT/DagKp6vnx0UCJ9xwW+gzBlxSnA9rfiAdead5XWWesyF630VcbyQPUUFkm7BKMy8x2a4UNSS1/hWcFnF4NVIjA5haKeszhlYslZMpU+V/EaMm3Y2WFfINC66+s6XehiKnybO7CqNymDg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=canonical.com; dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b=FKZhXKdn; arc=none smtp.client-ip=185.125.188.123
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canonical.com
+	s=arc-20240116; t=1712396730; c=relaxed/simple;
+	bh=k6rAmD+OHxGpiV4C2baGU4ne4+kd25Yj9x2ofoODbZ4=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=f8FbNcJ+Zkoy5BSXrqMElBBgiirFOE7Vx2A9ALGGSoJlNnahZCafHtOKtuw3U7b/6UtzqX2d1/1xN4CId0Z454cVBjFPlqk9ywGkPe2SMcUVcsYvDcWlEugbau+gOaiFcqW35PUTd4mLSSFFQp+QqdKJ0XoEWNn3B4DdrxKaaaA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kzoA6Yv7; arc=none smtp.client-ip=209.85.128.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b="FKZhXKdn"
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com [209.85.128.70])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 010AE3FE65
-	for <bpf@vger.kernel.org>; Sat,  6 Apr 2024 09:20:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-	s=20210705; t=1712395224;
-	bh=OGumsLBWYsNiBqaQkxgfB4Yj3V+oiBGI9bnDO7L7IE8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version;
-	b=FKZhXKdnqeowQv0waOcRef6TIIWf8DZwwosHupqS/iFa0vVTAGbEHCWCBtimSKvST
-	 LBPjTWRoyQY2QzJTLSn7yJBpJN3DhtxLk55ZGLwkJwyReZyeTNp75LjFMcbtX/GX9t
-	 yR6GkLOcv/IzneyAGtsEj0QERz1OqLqGNiHTRjwi7ie+H+Kl5hk2bNc8bz3YQ1dlzt
-	 kYC7fTsAtQ9c4/gm5G3506V0n0Qmw+ecMFxCUsIzAqlqi2xdshQ4fhh9GU9cC6TmTk
-	 ZBRnppVTi/dXkPvzH6/4fgvKYmADevchJc3XjNlbkpqQyl28pNA4voUUP+arFiZ/mA
-	 yTm7FRUygKDkQ==
-Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-41552c04845so14445345e9.2
-        for <bpf@vger.kernel.org>; Sat, 06 Apr 2024 02:20:23 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kzoA6Yv7"
+Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-416449c7fd0so276125e9.0
+        for <bpf@vger.kernel.org>; Sat, 06 Apr 2024 02:45:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1712396726; x=1713001526; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:autocrypt
+         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=7NVa03Hd/woOra5Ebc55KaziKKOOtwWxPH4ZQvn7uJw=;
+        b=kzoA6Yv7yMx0TkjELMzufFalI65OpChm6R7sHZKHQP/if9FHlFUq/rSbZiG330T3eh
+         lrCktaqWycsL1Yr0lMb706eyPbRjgcS6PcvjuF7+USoMqgofEOCtpeNPApK6mJZnxn6R
+         cW9AKRjxnwI41quR9BJgq8CpIGtcFx4gseZ0oyYdeiCLFzrqF5VPUtIBiRZwbvXmOd2u
+         uB/+Eh26TPuHgOBq14XfJSOOzk+d6HsD+LsnUr76B3/RKiHs8V0KJuWaMiIiPSZDrWi+
+         yNvxyB882Xu5JdcdbZHK2iRWhP6QmZkhedMVlMXsA4u86h6N3atsZ2qGiH2Q3KLdfIef
+         zFfQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712395218; x=1713000018;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=OGumsLBWYsNiBqaQkxgfB4Yj3V+oiBGI9bnDO7L7IE8=;
-        b=p/UwflbgnBrnTiAgn2QIkcWGm3f9CeGWd9rLUG+pOjI+RF24jIGeKDLdCI8QrFFBFs
-         LGHixST3O+9B26jJ6RS0+fcipPbaU1aKu/kwqYHIz0+Q7xUEAI1A9VM8WLp1UCRtTCMf
-         /IoMnAa8tY4VXipN82+unGYkVmabpyib/qiQXX5KR6kVSlCc3wDe0R+8Gh2DRFopKVCB
-         /ZqCAfZmHuS08YC3PPPTjRFTaJpb3H7z2X1pi+PiII9doXXEuaGPcQQRr7QYdY8Aoney
-         8u3w18uewUejJr4m/obPXyKVbu9iPx03arbAJA4rFz5fanUOednKzN0ECcnJ3e85yo4D
-         I3tw==
-X-Forwarded-Encrypted: i=1; AJvYcCX9M9Y63n+i34ia5kQEvB0iR0D5bXs0/inXRNfY5ZJEKmURMxhDnMJ4U5R60SKHdIEgXcfELGBJ1tBNmEjQ/WhcT1Vj
-X-Gm-Message-State: AOJu0YyGlvdfxtQRKAtWkdgQujWDC6yzuC83FK1uVrrweaTVp1fDNWKm
-	6rVFydxXKw68fBS2lQritlGFavudJdpJ8KINDnmHPKzpybNB/C+mt1vf8NDysca0fVUzAcrH44s
-	w6fTxszPDXmFSS2+Ts1pi8Ou1ajqbAF6MaMH+ALBgtDZojUo4ZxWcICZ84cjaEeowQA==
-X-Received: by 2002:a05:600c:4e8c:b0:415:6728:a584 with SMTP id f12-20020a05600c4e8c00b004156728a584mr2494544wmq.25.1712395217761;
-        Sat, 06 Apr 2024 02:20:17 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IGNXztDhLsiKAKWeuFLp95WeOaSFimKeT6ittgqyCRbNIAyGvgIZJkAN7068+uWqmdKvBO5fg==
-X-Received: by 2002:a05:600c:4e8c:b0:415:6728:a584 with SMTP id f12-20020a05600c4e8c00b004156728a584mr2494512wmq.25.1712395217054;
-        Sat, 06 Apr 2024 02:20:17 -0700 (PDT)
-Received: from gpd.station (net-2-39-142-110.cust.vodafonedsl.it. [2.39.142.110])
-        by smtp.gmail.com with ESMTPSA id l23-20020a7bc457000000b00414924f307csm5779993wmi.26.2024.04.06.02.20.15
+        d=1e100.net; s=20230601; t=1712396726; x=1713001526;
+        h=mime-version:user-agent:content-transfer-encoding:autocrypt
+         :references:in-reply-to:date:cc:to:from:subject:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=7NVa03Hd/woOra5Ebc55KaziKKOOtwWxPH4ZQvn7uJw=;
+        b=nN0lkwRYi6J1J1J8vEz1Hi3fZWDOhC5NsX2T16VjuwsEvksVHrzFfPUl7DRC8iK3kX
+         6W6N6fifhKg2bEEGTJWKx6H/ouHFsQo2bLsRNMMiqWrcCoDFJhnbgrw2gNb0kpZhRtz8
+         yNfD8QLL4ituQz9JSutWg1fNvcroPvYVMPqP1JzTdVMwhq0mmIoD1HbrSCEKyhqOXtVV
+         TSH2gsLXv0SzSneMyDj9SnluvPHsStPNbQHxHwbgTkKPZtNSWJ3L4IYUCVJ00hRNCGSL
+         5rPto1x3zWy3bxZO0MqMT51woNsklsm53m+hcPPtTLgvmwi8LNmq8JVuYgujT8qAnEWR
+         8vjA==
+X-Forwarded-Encrypted: i=1; AJvYcCVpQJGhf5k32OWjhYkSLt/kJXZTORiMWXrnmBmSfXbUlY5aT2nidD5rxSs02Y+n6cKgla2/BL1RG1WJFfEaYb9WjmGX
+X-Gm-Message-State: AOJu0YyfaqqhKRX65OEj/NAfT4UGVzdaaqazw3XT7qf7kG4PpEg0Tlk9
+	WMsHxE4ME2hbx2Vqvf3tlwD2ZaYaqNvuGWDllUdpH7kjxYtXMjhP
+X-Google-Smtp-Source: AGHT+IHnVxIsPJ6LORnDY+pBcsSQ1mPAGvEq2DmN4HgCgEzylwIfwDc1G0Nd+4wVPQchOCq6NwFggw==
+X-Received: by 2002:a05:600c:1e04:b0:416:3e77:d88b with SMTP id ay4-20020a05600c1e0400b004163e77d88bmr627995wmb.21.1712396726241;
+        Sat, 06 Apr 2024 02:45:26 -0700 (PDT)
+Received: from [192.168.100.206] ([89.28.99.140])
+        by smtp.gmail.com with ESMTPSA id o32-20020a05600c512000b004163321790esm3160634wms.19.2024.04.06.02.45.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 06 Apr 2024 02:20:16 -0700 (PDT)
-From: Andrea Righi <andrea.righi@canonical.com>
-To: Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@google.com>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	David Vernet <void@manifault.com>,
-	Tejun Heo <tj@kernel.org>,
-	bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v4 3/4] libbpf: Add ring__consume_n / ring_buffer__consume_n
-Date: Sat,  6 Apr 2024 11:15:43 +0200
-Message-ID: <20240406092005.92399-4-andrea.righi@canonical.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240406092005.92399-1-andrea.righi@canonical.com>
-References: <20240406092005.92399-1-andrea.righi@canonical.com>
+        Sat, 06 Apr 2024 02:45:25 -0700 (PDT)
+Message-ID: <a1e48f5d9ae133e19adc6adf27e19d585e06bab4.camel@gmail.com>
+Subject: Re: [PATCH bpf-next] bpf: Fix verifier error due to narrower scalar
+ spill onto 64-bit spilled scalar slots
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>, Tao Lyu <tao.lyu@epfl.ch>
+Cc: andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org, 
+ john.fastabend@gmail.com, mathias.payer@nebelwelt.net,
+ meng.xu.cs@uwaterloo.ca,  sanidhya.kashyap@epfl.ch
+Date: Sat, 06 Apr 2024 12:45:23 +0300
+In-Reply-To: <CAEf4BzbpZQtiM-ruX-oO-6jth9ZhX5Sr5bTvRx8pNj+VEH3NfA@mail.gmail.com>
+References: 
+	<CAEf4BzZL6dCZx8Mve1RYXRJ1JeA6xqZeYN0V4Jfr9Xg04vAZrg@mail.gmail.com>
+	 <20240405202607.4146642-1-tao.lyu@epfl.ch>
+	 <CAEf4BzbpZQtiM-ruX-oO-6jth9ZhX5Sr5bTvRx8pNj+VEH3NfA@mail.gmail.com>
+Autocrypt: addr=eddyz87@gmail.com; prefer-encrypt=mutual; keydata=mQGNBGKNNQEBDACwcUNXZOGTzn4rr7Sd18SA5Wv0Wna/ONE0ZwZEx+sIjyGrPOIhR14/DsOr3ZJer9UJ/WAJwbxOBj6E5Y2iF7grehljNbLr/jMjzPJ+hJpfOEAb5xjCB8xIqDoric1WRcCaRB+tDSk7jcsIIiMish0diTK3qTdu4MB6i/sh4aeFs2nifkNi3LdBuk8Xnk+RJHRoKFJ+C+EoSmQPuDQIRaF9N2m4yO0eG36N8jLwvUXnZzGvHkphoQ9ztbRJp58oh6xT7uH62m98OHbsVgzYKvHyBu/IU2ku5kVG9pLrFp25xfD4YdlMMkJH6l+jk+cpY0cvMTS1b6/g+1fyPM+uzD8Wy+9LtZ4PHwLZX+t4ONb/48i5AKq/jSsb5HWdciLuKEwlMyFAihZamZpEj+9n91NLPX4n7XeThXHaEvaeVVl4hfW/1Qsao7l1YjU/NCHuLaDeH4U1P59bagjwo9d1n5/PESeuD4QJFNqW+zkmE4tmyTZ6bPV6T5xdDRHeiITGc00AEQEAAbQkRWR1YXJkIFppbmdlcm1hbiA8ZWRkeXo4N0BnbWFpbC5jb20+iQHUBBMBCgA+FiEEx+6LrjApQyqnXCYELgxleklgRAkFAmKNNQECGwMFCQPCZwAFCwkIBwIGFQoJCAsCBBYCAwECHgECF4AACgkQLgxleklgRAlWZAv/cJ5v3zlEyP0/jMKQBqbVCCHTirPEw+nqxbkeSO6r2FUds0NnGA9a6NPOpBH+qW7a6+n6q3sIbvH7jlss4pzLI7LYlDC6z+egTv7KR5X1xFrY1uR5UGs1beAjnzYeV2hK4yqRUfygsT0Wk5e4FiNBv4+DUZ8r0cNDkO6swJxU55DO21mcteC147+4aDoHZ40R0tsAu+brDGSSoOPpb0RWVsEf9XOBJqWWA+T7mluw
+ nYzhLWGcczc6J71q1Dje0l5vIPaSFOgwmWD4DA+WvuxM/shH4rtWeodbv iCTce6yYIygHgUAtJcHozAlgRrL0jz44cggBTcoeXp/atckXK546OugZPnl00J3qmm5uWAznU6T5YDv2vCvAMEbz69ib+kHtnOSBvR0Jb86UZZqSb4ATfwMOWe9htGTjKMb0QQOLK0mTcrk/TtymaG+T4Fsos0kgrxqjgfrxxEhYcVNW8v8HISmFGFbqsJmFbVtgk68BcU0wgF8oFxo7u+XYQDdKbI1uQGNBGKNNQEBDADbQIdo8L3sdSWGQtu+LnFqCZoAbYurZCmUjLV3df1b+sg+GJZvVTmMZnzDP/ADufcbjopBBjGTRAY4L76T2niu2EpjclMMM3mtrOc738Kr3+RvPjUupdkZ1ZEZaWpf4cZm+4wH5GUfyu5pmD5WXX2i1r9XaUjeVtebvbuXWmWI1ZDTfOkiz/6Z0GDSeQeEqx2PXYBcepU7S9UNWttDtiZ0+IH4DZcvyKPUcK3tOj4u8GvO3RnOrglERzNCM/WhVdG1+vgU9fXO83TB/PcfAsvxYSie7u792s/I+yA4XKKh82PSTvTzg2/4vEDGpI9yubkfXRkQN28w+HKF5qoRB8/L1ZW/brlXkNzA6SveJhCnH7aOF0Yezl6TfX27w1CW5Xmvfi7X33V/SPvo0tY1THrO1c+bOjt5F+2/K3tvejmXMS/I6URwa8n1e767y5ErFKyXAYRweE9zarEgpNZTuSIGNNAqK+SiLLXt51G7P30TVavIeB6s2lCt1QKt62ccLqUAEQEAAYkBvAQYAQoAJhYhBMfui64wKUMqp1wmBC4MZXpJYEQJBQJijTUBAhsMBQkDwmcAAAoJEC4MZXpJYEQJkRAMAKNvWVwtXm/WxWoiLnXyF2WGXKoDe5+itTLvBmKcV/b1OKZF1s90V7WfSBz712eFAynEzyeezPbwU8QBiTpZcHXwQni3IYKvsh7s
+ t1iq+gsfnXbPz5AnS598ScZI1oP7OrPSFJkt/z4acEbOQDQs8aUqrd46PV jsdqGvKnXZxzylux29UTNby4jTlz9pNJM+wPrDRmGfchLDUmf6CffaUYCbu4FiId+9+dcTCDvxbABRy1C3OJ8QY7cxfJ+pEZW18fRJ0XCl/fiV/ecAOfB3HsqgTzAn555h0rkFgay0hAvMU/mAW/CFNSIxV397zm749ZNLA0L2dMy1AKuOqH+/B+/ImBfJMDjmdyJQ8WU/OFRuGLdqOd2oZrA1iuPIa+yUYyZkaZfz/emQwpIL1+Q4p1R/OplA4yc301AqruXXUcVDbEB+joHW3hy5FwK5t5OwTKatrSJBkydSF9zdXy98fYzGniRyRA65P0Ix/8J3BYB4edY2/w0Ip/mdYsYQljBY0A==
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.50.3 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-Introduce a new API to consume items from a ring buffer, limited to a
-specified amount, and return to the caller the actual number of items
-consumed.
+On Fri, 2024-04-05 at 13:33 -0700, Andrii Nakryiko wrote:
+[...]
+> > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> > index 63749ad5ac6b..da575e295d53 100644
+> > --- a/kernel/bpf/verifier.c
+> > +++ b/kernel/bpf/verifier.c
+> > @@ -4493,6 +4493,7 @@ static int check_stack_write_fixed_off(struct bpf=
+_verifier_env *env,
+> >          */
+> >         if (!env->allow_ptr_leaks &&
+> >             is_spilled_reg(&state->stack[spi]) &&
+> > +           !is_spilled_scalar_reg(&state->stack[spi]) &&
+> >             size !=3D BPF_REG_SIZE) {
+> >                 verbose(env, "attempt to corrupt spilled pointer on sta=
+ck\n");
+> >                 return -EACCES;
+>=20
+> ack for this part:
+>=20
+> Acked-by: Andrii Nakryiko <andrii@kernel.org>
+>=20
+> but I'm not sure if we need all the *_caps logic for selftests just to
+> test this, tbh. I'll let other decide, though.
 
-Link: https://lore.kernel.org/lkml/20240310154726.734289-1-andrea.righi@canonical.com/T
-Signed-off-by: Andrea Righi <andrea.righi@canonical.com>
+Hi Tao, Andrii,
+
+I agree with Andrii that *_caps logic is a bit heavy-handed.
+It works on top of the test_loader.c:drop_capabilities() used for
+unpriv testing, so I suggest that we add only one macro: __caps_unpriv(<set=
+-of-caps>),
+that would enable specified capabilities when testing unpriv.
+E.g. as in the patch at the end of this email (based on Tao's work).
+
+A few additional notes:
+- changes to the verifier.c, to the test_loader.c and actual feature
+  test should be split in separate commits;
+- __caps_unpriv as in Tao's or my patches allows to set arbitrary
+  capabilities, however restore_capabilities() uses
+  cap_enable_effective(requested_caps), which does logical OR
+  of current_caps and requested_caps.
+  For the purpose of restore_capabilities(), I think
+  cap_enable_effective() should be updated with a flag to overwrite
+  current_caps with requested_caps. Otherwise it might not undo
+  __caps_unpriv() effects in some cases.
+- I changed the test case to avoid BPF_ST assembly instructions
+  ('*(u64*)(r10 - 8) =3D 1') in order to allow compilation by LLVM 16.
+ =20
+Thanks,
+Eduard
+
 ---
- tools/lib/bpf/libbpf.h   | 12 ++++++++++++
- tools/lib/bpf/libbpf.map |  3 +++
- tools/lib/bpf/ringbuf.c  | 38 +++++++++++++++++++++++++++++++++++---
- 3 files changed, 50 insertions(+), 3 deletions(-)
 
-diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
-index f88ab50c0229..4f775a6dcaa0 100644
---- a/tools/lib/bpf/libbpf.h
-+++ b/tools/lib/bpf/libbpf.h
-@@ -1293,6 +1293,7 @@ LIBBPF_API int ring_buffer__add(struct ring_buffer *rb, int map_fd,
- 				ring_buffer_sample_fn sample_cb, void *ctx);
- LIBBPF_API int ring_buffer__poll(struct ring_buffer *rb, int timeout_ms);
- LIBBPF_API int ring_buffer__consume(struct ring_buffer *rb);
-+LIBBPF_API int ring_buffer__consume_n(struct ring_buffer *rb, size_t n);
- LIBBPF_API int ring_buffer__epoll_fd(const struct ring_buffer *rb);
- 
- /**
-@@ -1367,6 +1368,17 @@ LIBBPF_API int ring__map_fd(const struct ring *r);
-  */
- LIBBPF_API int ring__consume(struct ring *r);
- 
-+/**
-+ * @brief **ring__consume_n()** consumes up to a requested amount of items from
-+ * a ringbuffer without event polling.
-+ *
-+ * @param r A ringbuffer object.
-+ * @param n Maximum amount of items to consume.
-+ * @return The number of items consumed, or a negative number if any of the
-+ * callbacks return an error.
-+ */
-+LIBBPF_API int ring__consume_n(struct ring *r, size_t n);
+diff --git a/tools/testing/selftests/bpf/progs/bpf_misc.h b/tools/testing/s=
+elftests/bpf/progs/bpf_misc.h
+index fb2f5513e29e..14a79bc76b45 100644
+--- a/tools/testing/selftests/bpf/progs/bpf_misc.h
++++ b/tools/testing/selftests/bpf/progs/bpf_misc.h
+@@ -2,6 +2,10 @@
+ #ifndef __BPF_MISC_H__
+ #define __BPF_MISC_H__
+=20
++/* Expand a macro and then stringize the expansion */
++#define QUOTE(str) #str
++#define EXPAND_QUOTE(str) QUOTE(str)
 +
- struct user_ring_buffer_opts {
- 	size_t sz; /* size of this struct, for forward/backward compatibility */
+ /* This set of attributes controls behavior of the
+  * test_loader.c:test_loader__run_subtests().
+  *
+@@ -72,6 +76,7 @@
+ #define __auxiliary		__attribute__((btf_decl_tag("comment:test_auxiliary")=
+))
+ #define __auxiliary_unpriv	__attribute__((btf_decl_tag("comment:test_auxil=
+iary_unpriv")))
+ #define __btf_path(path)	__attribute__((btf_decl_tag("comment:test_btf_pat=
+h=3D" path)))
++#define __caps_unpriv(caps)	__attribute__((btf_decl_tag("comment:test_caps=
+_unpriv=3D"EXPAND_QUOTE(caps))))
+=20
+ /* Convenience macro for use with 'asm volatile' blocks */
+ #define __naked __attribute__((naked))
+diff --git a/tools/testing/selftests/bpf/progs/verifier_spill_fill.c b/tool=
+s/testing/selftests/bpf/progs/verifier_spill_fill.c
+index 85e48069c9e6..a043514da4f0 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_spill_fill.c
++++ b/tools/testing/selftests/bpf/progs/verifier_spill_fill.c
+@@ -5,6 +5,7 @@
+ #include <bpf/bpf_helpers.h>
+ #include "bpf_misc.h"
+ #include <../../../tools/include/linux/filter.h>
++#include "../cap_helpers.h"
+=20
+ struct {
+ 	__uint(type, BPF_MAP_TYPE_RINGBUF);
+@@ -1244,4 +1245,19 @@ __naked void old_stack_misc_vs_cur_ctx_ptr(void)
+ 	: __clobber_all);
+ }
+=20
++/* 32-bit scalars should be able to overwrite 64-bit scalar spilled slots =
+*/
++SEC("socket")
++__log_level(2) __success __caps_unpriv(CAP_BPF)
++__naked void spill_32bit_onto_64bit_slot(void)
++{
++	asm volatile("					\
++	r0 =3D 0;						\
++	*(u64*)(r10 - 8) =3D r0;				\
++	*(u32*)(r10 - 8) =3D r0;				\
++	exit;						\
++"	:
++	:
++	: __clobber_all);
++}
++
+ char _license[] SEC("license") =3D "GPL";
+diff --git a/tools/testing/selftests/bpf/test_loader.c b/tools/testing/self=
+tests/bpf/test_loader.c
+index 524c38e9cde4..ad79b5948440 100644
+--- a/tools/testing/selftests/bpf/test_loader.c
++++ b/tools/testing/selftests/bpf/test_loader.c
+@@ -27,6 +27,7 @@
+ #define TEST_TAG_RETVAL_PFX_UNPRIV "comment:test_retval_unpriv=3D"
+ #define TEST_TAG_AUXILIARY "comment:test_auxiliary"
+ #define TEST_TAG_AUXILIARY_UNPRIV "comment:test_auxiliary_unpriv"
++#define TEST_TAG_CAPS_UNPRIV "comment:test_caps_unpriv=3D"
+ #define TEST_BTF_PATH "comment:test_btf_path=3D"
+=20
+ /* Warning: duplicated in bpf_misc.h */
+@@ -53,6 +54,7 @@ struct test_subspec {
+ 	size_t expect_msg_cnt;
+ 	int retval;
+ 	bool execute;
++	__u64 caps;
  };
-diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
-index 5dd81a7b96b5..23d82bba021a 100644
---- a/tools/lib/bpf/libbpf.map
-+++ b/tools/lib/bpf/libbpf.map
-@@ -418,4 +418,7 @@ LIBBPF_1.4.0 {
- } LIBBPF_1.3.0;
- 
- LIBBPF_1.5.0 {
-+	global:
-+		ring__consume_n;
-+		ring_buffer__consume_n;
- } LIBBPF_1.4.0;
-diff --git a/tools/lib/bpf/ringbuf.c b/tools/lib/bpf/ringbuf.c
-index 2c4031168413..19cd34883011 100644
---- a/tools/lib/bpf/ringbuf.c
-+++ b/tools/lib/bpf/ringbuf.c
-@@ -277,6 +277,33 @@ static int64_t ringbuf_process_ring(struct ring *r, size_t n)
- 	return cnt;
+=20
+ struct test_spec {
+@@ -133,6 +135,33 @@ static int parse_int(const char *str, int *val, const =
+char *name)
+ 	return 0;
  }
- 
-+/* Consume available ring buffer(s) data without event polling, up to n
-+ * records.
-+ *
-+ * Returns number of records consumed across all registered ring buffers (or
-+ * n, whichever is less), or negative number if any of the callbacks return
-+ * error.
-+ */
-+int ring_buffer__consume_n(struct ring_buffer *rb, size_t n)
+=20
++static int parse_caps(const char *str, __u64 *val, const char *name)
 +{
-+	int64_t err, res = 0;
-+	int i;
++	int cap_flag =3D 0;
++	char *token =3D NULL, *saveptr =3D NULL;
 +
-+	for (i = 0; i < rb->ring_cnt; i++) {
-+		struct ring *ring = rb->rings[i];
-+
-+		err = ringbuf_process_ring(ring, n);
-+		if (err < 0)
-+			return libbpf_err(err);
-+		res += err;
-+		n -= err;
-+
-+		if (n == 0)
-+			break;
++	char *str_cpy =3D strdup(str);
++	if (str_cpy =3D=3D NULL) {
++		PRINT_FAIL("Memory allocation failed\n");
++		return -EINVAL;
 +	}
-+	return res;
++
++	token =3D strtok_r(str_cpy, "|", &saveptr);
++	while (token !=3D NULL) {
++		errno =3D 0;
++		cap_flag =3D strtol(token, NULL, 10);
++		if (errno) {
++			PRINT_FAIL("failed to parse caps %s\n", name);
++			return -EINVAL;
++		}
++		*val |=3D (1ULL << cap_flag);
++		token =3D strtok_r(NULL, "|", &saveptr);
++	}
++
++	free(str_cpy);
++	return 0;
 +}
 +
- /* Consume available ring buffer(s) data without event polling.
-  * Returns number of records consumed across all registered ring buffers (or
-  * INT_MAX, whichever is less), or negative number if any of the callbacks
-@@ -378,17 +405,22 @@ int ring__map_fd(const struct ring *r)
- 	return r->map_fd;
- }
- 
--int ring__consume(struct ring *r)
-+int ring__consume_n(struct ring *r, size_t n)
+ static int parse_retval(const char *str, int *val, const char *name)
  {
--	int64_t res;
-+	int res;
- 
--	res = ringbuf_process_ring(r, INT_MAX);
-+	res = ringbuf_process_ring(r, n);
- 	if (res < 0)
- 		return libbpf_err(res);
- 
- 	return res > INT_MAX ? INT_MAX : res;
- }
- 
-+int ring__consume(struct ring *r)
-+{
-+	return ring__consume_n(r, INT_MAX);
-+}
-+
- static void user_ringbuf_unmap_ring(struct user_ring_buffer *rb)
- {
- 	if (rb->consumer_pos) {
--- 
-2.43.0
+ 	struct {
+@@ -258,6 +287,12 @@ static int parse_test_spec(struct test_loader *tester,
+ 			spec->mode_mask |=3D UNPRIV;
+ 			spec->unpriv.execute =3D true;
+ 			has_unpriv_retval =3D true;
++                } else if (str_has_pfx(s, TEST_TAG_CAPS_UNPRIV)) {
++			val =3D s + sizeof(TEST_TAG_CAPS_UNPRIV) - 1;
++			err =3D parse_caps(val, &spec->unpriv.caps, "test caps");
++			if (err)
++				goto cleanup;
++			spec->mode_mask |=3D UNPRIV;
+ 		} else if (str_has_pfx(s, TEST_TAG_LOG_LEVEL_PFX)) {
+ 			val =3D s + sizeof(TEST_TAG_LOG_LEVEL_PFX) - 1;
+ 			err =3D parse_int(val, &spec->log_level, "test log level");
+@@ -575,6 +610,7 @@ void run_subtest(struct test_loader *tester,
+ 		return;
+=20
+ 	if (unpriv) {
++		fprintf(stderr, "can_execute_unpriv: %d\n", can_execute_unpriv(tester, s=
+pec));
+ 		if (!can_execute_unpriv(tester, spec)) {
+ 			test__skip();
+ 			test__end_subtest();
+@@ -584,6 +620,13 @@ void run_subtest(struct test_loader *tester,
+ 			test__end_subtest();
+ 			return;
+ 		}
++		if (subspec->caps) {
++			err =3D cap_enable_effective(subspec->caps, NULL);
++			if (err) {
++				PRINT_FAIL("failed to set capabilities: %i, %s\n", err, strerror(err))=
+;
++				goto subtest_cleanup;
++			}
++		}
+ 	}
+=20
+ 	/* Implicitly reset to NULL if next test case doesn't specify */
 
