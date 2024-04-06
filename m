@@ -1,161 +1,97 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AE3915EA2;
-	Sat,  6 Apr 2024 03:41:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BFE317C8B
+	for <bpf@vger.kernel.org>; Sat,  6 Apr 2024 04:09:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712374871; cv=none; b=f3UAeJ8lzd3hZgeeWCgTUE6NDsnq8GyyCprbDE2BRYpsQlw0jlSGwag1b80zgMCDpYSkjVoy17TdPlDeIJ/4m/mVo3+5/woxmC4DrMHixBP2aQUYGW7Y2z6nzqCDvqwfPHAIYTxFT7gSDiiyNszOG9HbzS/dFJWgf+rh4VHTh5s=
+	t=1712376561; cv=none; b=FbLG6BMDNb1MXlioRD3l0GrcQgASCY+WinK5325uDgENf/SB9tggcreGDMwDlb55h9ss9sHX1c5VgCLKwkXkEe0b5DeaHKaP/wgj7X/Y+7YR4AFV/bLoL6HP7K0nh4yX9nCfAxlqyiUZnWQaO3SVcarjIn7LJIs1QbPBqymJ464=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712374871; c=relaxed/simple;
-	bh=KE+dNIQdAyDvLBy+9sloH0zECC5/5h5S54aNwN3B358=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=q9krds4Ksc4tKkPjbARoZcTsMSyY0Ks/CHrQuYGqtE6JN4PTTMRvtREib5XmJaUz4UcxlQjGt10hA6IpjifgSfpD8V6/LAlKTefu+EsVhHD206lMszf3sUFue3ruyZyj8YiKMxu3QxEwmDEAsw8V3beyMbNTZSbaLbtKm6EIqS8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=btgwzwNH; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1712376561; c=relaxed/simple;
+	bh=ryhaCjT8y83e6nm9rSvWXbKLjBmeKFK9uS2+aXyQEW0=;
+	h=Date:Message-Id:Mime-Version:Subject:From:To:Content-Type; b=AsVaHit6hpfOQ2jo+UMreore3LPeOYdDripXU2B2sNXLw9gSF3nC/IwcUkH+0Zb3XNOaKHNz7Za+K6CuK1D7uZOgxNv3yUDJXqv/ThsnaxKyFltB2QIxWKsh51Q1wyJMK1S3DeY0X+oR9Gjvl/PWDraqnTI5O5dtL/rfBUAHR1g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=3zBk0Xr7; arc=none smtp.client-ip=209.85.128.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="btgwzwNH"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74A4EC433C7;
-	Sat,  6 Apr 2024 03:41:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712374870;
-	bh=KE+dNIQdAyDvLBy+9sloH0zECC5/5h5S54aNwN3B358=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=btgwzwNHXz5KIlx3SZpRB6t4t1FTd8vrzeFC9dF6jND52MPySxjHDMYb1mcLdaXqd
-	 j/lBhurrw7xUc63vu/Vn18TvX9JHoscS2wh7DyqXjGeZRoKKp0/aOBhYvpiJL1m5Lg
-	 g7ZSAf5DzHgaQOljJA9DNxsia0PbxwFBb9xoPWYlzccWr0j6x9FBVJO2BzZQm+Fnyl
-	 r4pUUhMX4+kV5a4VfZcOUz53IYCbw/6miOAksS8nKavIo9fZ3rkZQuBPeV02WW4lTD
-	 V3N6CYGShjtI/r/X/2UAQMKqvq9F+2bDs9G3Dpm/X8UwdD7FiYLxM33c7/4cwXgaTW
-	 IWU7j1+Yzyaog==
-Date: Sat, 6 Apr 2024 12:41:05 +0900
-From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: Steven Rostedt <rostedt@goodmis.org>, "Masami Hiramatsu (Google)"
- <mhiramat@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
- linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org, jolsa@kernel.org,
- "Paul E . McKenney" <paulmck@kernel.org>, Peter Zijlstra
- <peterz@infradead.org>
-Subject: Re: [PATCH] ftrace: make extra rcu_is_watching() validation check
- optional
-Message-Id: <20240406124105.5a31c488b00c36432cc81446@kernel.org>
-In-Reply-To: <CAEf4BzauQ2WKMjZdc9s0rBWa01BYbgwHN6aNDXQSHYia47pQ-w@mail.gmail.com>
-References: <20240322160323.2463329-1-andrii@kernel.org>
-	<20240325113848.32a70948d1cdb0fa76225690@kernel.org>
-	<20240325181338.39376089@gandalf.local.home>
-	<CAEf4BzazyWqLRmruj6XPXMYSYrrFPRAJRizWGhKtTt9A8zWE3A@mail.gmail.com>
-	<20240326150121.68e9db8a@gandalf.local.home>
-	<20240401202552.470d845bd79c841b9158fb56@kernel.org>
-	<20240401120918.67cc3191@gandalf.local.home>
-	<20240402093839.7de89341138748f743ae896d@kernel.org>
-	<CAEf4BzaGWEKnntoD2KLhVORGZ0ATq_TqhPBQnbbWQCeCM2EteA@mail.gmail.com>
-	<20240401224733.7a9bcbb6@gandalf.local.home>
-	<20240403094048.3a443fbeeed551f11c1970d8@kernel.org>
-	<20240402205459.297c4206@gandalf.local.home>
-	<CAEf4BzahMFsdN8QvW6XiUk+3MzvLUjudXO5=qfhKBYfDvEgy5w@mail.gmail.com>
-	<CAEf4BzauQ2WKMjZdc9s0rBWa01BYbgwHN6aNDXQSHYia47pQ-w@mail.gmail.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="3zBk0Xr7"
+Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-60a2386e932so52655767b3.1
+        for <bpf@vger.kernel.org>; Fri, 05 Apr 2024 21:09:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1712376558; x=1712981358; darn=vger.kernel.org;
+        h=to:from:subject:mime-version:message-id:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=sNu7c9amoaI33ZXVqjycoBCCoj/nNGvrPWP0zIU3JJE=;
+        b=3zBk0Xr7z/O6DQ7wPX07f9FomFCdMKYk+5o37Ytw0tYuIrpnIAtC3TjJcAycYEYmK4
+         8rjVaH7lXIa6Xel7D2it7fad1mWR2UbUMNUlrlnkDSKMdqSYcBd4L526I1caImigrENJ
+         wokRdsmVG2KuNTgb2kCSu8BM8XixsY9/VFaRf3muRRqr7Vh4XfurriIDhyHh1o3zXQOC
+         NSQoUYtzDiPlA34Dzn4WXbxpQET1AuD/caeXMd+cXp1s2hv07GrVSUjIGWmeHo0afjDw
+         Ew0c1EaU0addIEkgbwFjvlTBsaGUs2LRloTptPy1TIrjT6Ta/hTKYvmWOk2UBNu3B5lD
+         smFg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1712376558; x=1712981358;
+        h=to:from:subject:mime-version:message-id:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=sNu7c9amoaI33ZXVqjycoBCCoj/nNGvrPWP0zIU3JJE=;
+        b=IsHI7NiPadGeP9hyBDEpAWEvhyyhE1gERyDhSarw2o5nLp0B0Tm+mXOKoKD51f0mtr
+         XW/EvvsqaHD84Ldu7XtB80wzxl1Z37o7O/17KX5MBLxiUHWkpKlj7n/TgKWc2Nsk/6LH
+         xTCWhMl/wxYpTDPz4Elq+VuKOVtXQ8NzG9mc5CITGSF6k4++o3Rytw1yWuvsjCnMi0di
+         wFDt+aACFqxNX2JdEiUpZNaAHVclApMbSoFeA8TILG6Q4upQnztWVJNCtK1LvuAy9jgu
+         XJRQVJxd+Je81X+5DSKPCKkTPRRjUM5gOz2BEo6NTto59wOYPzI/3KFHt4koDU+9eabX
+         rqjg==
+X-Forwarded-Encrypted: i=1; AJvYcCXRe7fqT0kuWdETHKI4CLtduECpyaulep6jr0ISmwKMxx2tbl/MW7fFaw9hNYxIulcWHc1J+0h833C65eCCLqEc0R1+
+X-Gm-Message-State: AOJu0Yzli/IFcDUOYONRPMpt4tr1sGF+ZPuOY36Yb9GqQXYDbVJ2cTfH
+	y50wnLXKZWwKxIvv8CQNA/oLOYedTEhgHf4j2tOo2J/dzjianXPZqE5a3cMVcmapOKxpdnjGO3W
+	JeQHFvA==
+X-Google-Smtp-Source: AGHT+IH7IGd2BpRVCyTAOvsnf3SjaXVdsGIlIFz5FXVc55i7Tlr9PCarJ5xLRb9aFCQWhPs6faG7upJWWRWK
+X-Received: from irogers.svl.corp.google.com ([2620:15c:2a3:200:51c1:e2b:9198:3cdc])
+ (user=irogers job=sendgmr) by 2002:a0d:ca88:0:b0:614:ff0d:2c7b with SMTP id
+ m130-20020a0dca88000000b00614ff0d2c7bmr806437ywd.10.1712376558227; Fri, 05
+ Apr 2024 21:09:18 -0700 (PDT)
+Date: Fri,  5 Apr 2024 21:09:10 -0700
+Message-Id: <20240406040911.1603801-1-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+X-Mailer: git-send-email 2.44.0.478.gd926399ef9-goog
+Subject: [PATCH v1 1/2] perf bench uprobe: Remove lib64 from libc.so.6 binary path
+From: Ian Rogers <irogers@google.com>
+To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
+	Mark Rutland <mark.rutland@arm.com>, 
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, 
+	Kan Liang <kan.liang@linux.intel.com>, Kees Cook <keescook@chromium.org>, 
+	Andrei Vagin <avagin@google.com>, linux-perf-users@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On Tue, 2 Apr 2024 22:21:00 -0700
-Andrii Nakryiko <andrii.nakryiko@gmail.com> wrote:
+bpf_program__attach_uprobe_opts will search LD_LIBRARY_PATH and so
+specifying `/lib64` is unnecessary and causes failures for libc.so.6
+paths like `/lib/x86_64-linux-gnu/libc.so.6`.
 
-> On Tue, Apr 2, 2024 at 9:00 PM Andrii Nakryiko
-> <andrii.nakryiko@gmail.com> wrote:
-> >
-> > On Tue, Apr 2, 2024 at 5:52 PM Steven Rostedt <rostedt@goodmis.org> wrote:
-> > >
-> > > On Wed, 3 Apr 2024 09:40:48 +0900
-> > > Masami Hiramatsu (Google) <mhiramat@kernel.org> wrote:
-> > >
-> > > > OK, for me, this last sentence is preferred for the help message. That explains
-> > > > what this is for.
-> > > >
-> > > >         All callbacks that attach to the function tracing have some sort
-> > > >         of protection against recursion. This option is only to verify that
-> > > >　       ftrace (and other users of ftrace_test_recursion_trylock()) are not
-> > > >         called outside of RCU, as if they are, it can cause a race.
-> > > >         But it also has a noticeable overhead when enabled.
-> >
-> > Sounds good to me, I can add this to the description of the Kconfig option.
-> >
-> > > >
-> > > > BTW, how much overhead does this introduce? and the race case a kernel crash?
-> >
-> > I just checked our fleet-wide production data for the last 24 hours.
-> > Within the kprobe/kretprobe code path (ftrace_trampoline and
-> > everything called from it), rcu_is_watching (both calls, see below)
-> > cause 0.484% CPU cycles usage, which isn't nothing. So definitely we'd
-> > prefer to be able to avoid that in production use cases.
-> >
-> 
-> I just ran synthetic microbenchmark testing multi-kretprobe
-> throughput. We get (in millions of BPF kretprobe-multi program
-> invocations per second):
->   - 5.568M/s as baseline;
->   - 5.679M/s with changes in this patch (+2% throughput improvement);
->   - 5.808M/s with disabling rcu_is_watching in rethook_try_get()
-> (+2.3% more vs just one of rcu_is_watching, and +4.3% vs baseline).
-> 
-> It's definitely noticeable.
+Fixes: 7b47623b8cae ("perf bench uprobe trace_printk: Add entry attaching an BPF program that does a trace_printk")
+Signed-off-by: Ian Rogers <irogers@google.com>
+---
+ tools/perf/bench/uprobe.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thanks for checking the overhead! Hmm, it is considerable.
-
-> > > > or just messed up the ftrace buffer?
-> > >
-> > > There's a hypothetical race where it can cause a use after free.
-
-Hmm, so it might not lead a kernel crash but is better to enable with
-other debugging options.
-
-> > >
-> > > That is, after you shutdown ftrace, you need to call synchronize_rcu_tasks(),
-> > > which requires RCU to be watching. There's a theoretical case where that
-> > > task calls the trampoline and misses the synchronization. Note, these
-> > > locations are with preemption disabled, as rcu is always watching when
-> > > preemption is enabled. Thus it would be extremely fast where as the
-> > > synchronize_rcu_tasks() is rather slow.
-> > >
-> > > We also have synchronize_rcu_tasks_rude() which would actually keep the
-> > > trace from happening, as it would schedule on each CPU forcing all CPUs to
-> > > have RCU watching.
-> > >
-> > > I have never heard of this race being hit. I guess it could happen on a VM
-> > > where a vCPU gets preempted at the right moment for a long time and the
-> > > other CPUs synchronize.
-> > >
-> > > But like lockdep, where deadlocks can crash the kernel, we don't enable it
-> > > for production.
-> > >
-> > > The overhead is another function call within the function tracer. I had
-> > > numbers before, but I guess I could run tests again and get new numbers.
-> > >
-> >
-> > I just noticed another rcu_is_watching() call, in rethook_try_get(),
-> > which seems to be a similar and complementary validation check to the
-> > one we are putting under CONFIG_FTRACE_VALIDATE_RCU_IS_WATCHING option
-> > in this patch. It feels like both of them should be controlled by the
-> > same settings. WDYT? Can I add CONFIG_FTRACE_VALIDATE_RCU_IS_WATCHING
-> > guard around rcu_is_watching() check in rethook_try_get() as well?
-
-Hmmm, no, I think it should not change the rethook side because rethook
-can be used with kprobes without ftrace. If we can detect it is used from
-the ftrace, we can skip it. (From this reason, I would like to remove
-return probe from kprobes...)
-
-Thank you,
-
-> >
-> >
-> > > Thanks,
-> > >
-> > > -- Steve
-
-
+diff --git a/tools/perf/bench/uprobe.c b/tools/perf/bench/uprobe.c
+index 5c71fdc419dd..b722ff88fe7d 100644
+--- a/tools/perf/bench/uprobe.c
++++ b/tools/perf/bench/uprobe.c
+@@ -47,7 +47,7 @@ static const char * const bench_uprobe_usage[] = {
+ #define bench_uprobe__attach_uprobe(prog) \
+ 	skel->links.prog = bpf_program__attach_uprobe_opts(/*prog=*/skel->progs.prog, \
+ 							   /*pid=*/-1, \
+-							   /*binary_path=*/"/lib64/libc.so.6", \
++							   /*binary_path=*/"libc.so.6", \
+ 							   /*func_offset=*/0, \
+ 							   /*opts=*/&uprobe_opts); \
+ 	if (!skel->links.prog) { \
 -- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+2.44.0.478.gd926399ef9-goog
+
