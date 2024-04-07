@@ -1,146 +1,177 @@
-Received: from mail.ietf.org (mail.ietf.org [50.223.129.194])
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD29A17F0
-	for <bpf@vger.kernel.org>; Sun,  7 Apr 2024 06:58:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=50.223.129.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B9A01879
+	for <bpf@vger.kernel.org>; Sun,  7 Apr 2024 08:10:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.188.123
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712473090; cv=none; b=j6tnZlnvMwFsBJpy45iDgl9WqVLiHBBLLZ3Lvui5q/b97Zog8wlIoOeRiF4RhVTB4vwjtZOUpUGPUNU2Z9tcrTE9w65n2ktBqC/hf3Azww8uoDq0HQuLvZQtQsU9hgZXq748SUEO+79/y4XKVw/5FHUQuffD4VvLYUSP8I5gxu8=
+	t=1712477409; cv=none; b=pmTLWjrIMg8Xy0usPWZitPHyYz+QTsFWMqf+Zt0Cd77Wzqjq/ULb3EyGzM5ha0+6qNvB16zJHLoXI72uQEgRmAYBOT0blV6C8TBkbPWEwznNfeMAbCjoxTpZ3Xf/v7WR9mcis5fky0hz6j4baVpS3QQeYKKPNTrscYy6alTPsfE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712473090; c=relaxed/simple;
-	bh=HsV4EQ4/kaNEoAv0aMtE7iW7auPcheIYsNIYs+6fgZY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:To:Cc:
-	 Subject:Content-Type; b=T7YmMlzhL9e3IDH3A+QZOf8MSb4Y1/quCdp4kRnSFiXCKqdfNY4PtAZALSjrYLvSKC6PMCs4ZimMXtzBhfiTdpfdsmgjd0E2Wb98LKGt5N8BRy+lfFQln/omd+GMqvUz8TSFCS5tTo7bGJ314ikeqivMveRISqwWWMjzZxKvloQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=ietf.org; dkim=pass (1024-bit key) header.d=ietf.org header.i=@ietf.org header.b=HPLH+Uua; dkim=pass (1024-bit key) header.d=ietf.org header.i=@ietf.org header.b=HPLH+Uua; dkim=fail (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=k4WCiE+0 reason="signature verification failed"; arc=none smtp.client-ip=50.223.129.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ietf.org
+	s=arc-20240116; t=1712477409; c=relaxed/simple;
+	bh=VBnMmaY/jSdSTkC4TB/mxJq/6u5SVhMScG2xHkwOpHQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=PoHJuLHn6UeBz1OlGLIVP1HzoAkO7sZcesANptSR158gIp7RaFsnAdn17+ZQLnZ+UUlOQW8MZGuKjYQkqgEtxlUq9sAbNIl35zNZmNjQYBKu2cc4WgJHMRAOErdkwnFmPV6jvikw/4VTCRJ1O9tHUwKkaUPeKviTWl7lh5f7VQE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=canonical.com; dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b=HqVcuMZ5; arc=none smtp.client-ip=185.125.188.123
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canonical.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ietf.org header.i=@ietf.org header.b="HPLH+Uua";
-	dkim=pass (1024-bit key) header.d=ietf.org header.i=@ietf.org header.b="HPLH+Uua";
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="k4WCiE+0"
-Received: from ietfa.amsl.com (localhost [IPv6:::1])
-	by ietfa.amsl.com (Postfix) with ESMTP id D500FC14F6E1
-	for <bpf@vger.kernel.org>; Sat,  6 Apr 2024 23:58:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ietf.org; s=ietf1;
-	t=1712473082; bh=HsV4EQ4/kaNEoAv0aMtE7iW7auPcheIYsNIYs+6fgZY=;
-	h=References:In-Reply-To:From:Date:To:Cc:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe;
-	b=HPLH+Uua2Jp+Co9SgIo6KjXxj0J9FD7DE8A2/SNb9hpixw89A3BJfb2fh/5oKIJgr
-	 zVUvEAXprcEzGnCyVOW6l3ubTMyQGACmC3HpDUcIor+qCZZxiIdIeGt/IcOV6aNkjR
-	 QKRux45lBJxQ+Fq8HwAI+TMTppfe4iqjpYlPDGnA=
-X-Mailbox-Line: From bpf-bounces@ietf.org  Sat Apr  6 23:58:02 2024
-Received: from ietfa.amsl.com (localhost [IPv6:::1])
-	by ietfa.amsl.com (Postfix) with ESMTP id A2035C14F6A5;
-	Sat,  6 Apr 2024 23:58:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ietf.org; s=ietf1;
-	t=1712473082; bh=HsV4EQ4/kaNEoAv0aMtE7iW7auPcheIYsNIYs+6fgZY=;
-	h=References:In-Reply-To:From:Date:To:Cc:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe;
-	b=HPLH+Uua2Jp+Co9SgIo6KjXxj0J9FD7DE8A2/SNb9hpixw89A3BJfb2fh/5oKIJgr
-	 zVUvEAXprcEzGnCyVOW6l3ubTMyQGACmC3HpDUcIor+qCZZxiIdIeGt/IcOV6aNkjR
-	 QKRux45lBJxQ+Fq8HwAI+TMTppfe4iqjpYlPDGnA=
-Received: from localhost (localhost [127.0.0.1])
- by ietfa.amsl.com (Postfix) with ESMTP id ABFA4C14F6A5
- for <bpf@ietfa.amsl.com>; Sat,  6 Apr 2024 23:58:01 -0700 (PDT)
-X-Virus-Scanned: amavisd-new at amsl.com
-X-Spam-Flag: NO
-X-Spam-Score: -2.095
-X-Spam-Level: 
-Authentication-Results: ietfa.amsl.com (amavisd-new); dkim=pass (2048-bit key)
- header.d=gmail.com
-Received: from mail.ietf.org ([50.223.129.194])
- by localhost (ietfa.amsl.com [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id nuiQ6O82jDCI for <bpf@ietfa.amsl.com>;
- Sat,  6 Apr 2024 23:57:57 -0700 (PDT)
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com
- [IPv6:2a00:1450:4864:20::22b])
- (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
- key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
- (No client certificate requested)
- by ietfa.amsl.com (Postfix) with ESMTPS id D83C3C14F6A2
- for <bpf@ietf.org>; Sat,  6 Apr 2024 23:57:57 -0700 (PDT)
-Received: by mail-lj1-x22b.google.com with SMTP id
- 38308e7fff4ca-2d717603aa5so42346621fa.0
- for <bpf@ietf.org>; Sat, 06 Apr 2024 23:57:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1712473075; x=1713077875; darn=ietf.org;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:from:to:cc:subject:date
- :message-id:reply-to;
- bh=pbMdnxbiUtVNhOQOVtmEhywxDVYbSNqfcBpNBSCVW1Y=;
- b=k4WCiE+0j9V7XBS+WNogxhhEHZAK6Bu/Z6SZdYDX8PZb4FSc1aZF0IkVvgqJZAdeGQ
- 5H88W6Fk1IPLcc+TY7ewKrYAKsmam0IJgDTp1JxuTFdNZqNEC/ja/VVbeNBuKmTXQUag
- 1PvoIgwAb2zuw6dJ53vcInppuVxG6C6SjHRbTuner9AzMf+RkfKmMF0gddcex7W/Ulz/
- 9FqUN2GwyhnWcCQ6UxWsbQgqNq7CxLcPATC+JUriYwvX9MOdWL3ZBMTTzd7iGSZN/K1t
- 6sp5ZxokpNS0zmYU49qnRRQh4An6wVxgjtQWXcxvu7JNPHqZ1yZYMUWS2H5z1AMnFn1c
- L2sA==
+	dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b="HqVcuMZ5"
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com [209.85.221.72])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id D3FEF3FB79
+	for <bpf@vger.kernel.org>; Sun,  7 Apr 2024 08:09:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+	s=20210705; t=1712477398;
+	bh=MRAOR6NXs+WDh7P3Pk4nsf9IHt46kV2t0C6KeL8Xd0c=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:In-Reply-To;
+	b=HqVcuMZ5uuB65vHwZavVByWoTKVIEdwiiA8QwkgBCkE2j4Vu62CuBTu4Yo5ucygeb
+	 o0O8zExLUUwD7ZcgVJzSjGHEWVK3Qhkukey/OcKUtLMXrnuTVzhlpxsKMNBid7mdbz
+	 9BB0jx4ZmfwCzBIqxARAIVmLpkWzEZHTb2SLK+zOoPg0VIlwn9f7zYnHzplZY33jDr
+	 EW1P90teBBTQ2l2BHa4U+LHHgAFT6BAO1QdZHaj33iXPIeGoqHPXi0pIlInaVMH/U8
+	 zepJ6kYGoGJ1EslMeKnHY4pzVE53YKaRwQglomQcN9pdy7frUcacRiRlnO7Zr3OxIA
+	 v2fBXkwiz7xow==
+Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-343da0a889dso1826747f8f.0
+        for <bpf@vger.kernel.org>; Sun, 07 Apr 2024 01:09:58 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1712473075; x=1713077875;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=pbMdnxbiUtVNhOQOVtmEhywxDVYbSNqfcBpNBSCVW1Y=;
- b=UGgTuLGfF2KY//ryNO8lGfhMF2XjwP4A2+aU9HX8fqbry4LBcXW+4v64raBu/wKry8
- 81LEZBcBsH2SiZBIZ1OeO6MFsqvDA3z36ZYwkOyGrz1vvDsXRrcUAy00u5wCA2Yt8GRi
- bL9DZYQSF2P3yuq9tukiC5nShN8UvhdgIoFIDTWNlU5zVZajq3ftglG+TGqHuP9I5xSW
- L6szY2mvcI67fCPKrG1sQuvjwzIFAndYYh4UwTbBm1gck+urXB1JkihuC6J3t8Zo46hw
- Q9CakDfeD0cZaJqjybtQJtACB3g8JaCWaijtQFuOgs8gb4pH+R6qGQKgDsmQrLx63qNA
- vF3Q==
-X-Forwarded-Encrypted: i=1;
- AJvYcCVESJTCau6928gzeLZK6EyOHzcMTgdXRTVAXZwbbT8SHOfkP0qB49nbM3sSuTN9iC0RrRY5eRHi0BLo+Rw=
-X-Gm-Message-State: AOJu0YzjzQATds4iHsqm17po+jqE6G2DO3nlrYPgZPAZe6kVn0Gmprph
- HXD4whk4vvXTwN06RMCoKj4yieTdWcA72InoTOI6014L2m2IDv5a0Vaf+l1AKyVTBezzB2TUdbQ
- zFSNK35OQ0a5oOl1wCNfyqxDEJTI=
-X-Google-Smtp-Source: AGHT+IHRKbh1gq9cx1Up4Xd4KeqXF6KfAWPuvKtbSXbTaU82E1ACigNlK2IcjqYnvUtQ3AGAgEAaaY+ygf3t213o8IY=
-X-Received: by 2002:a2e:98d9:0:b0:2d6:d351:78ae with SMTP id
- s25-20020a2e98d9000000b002d6d35178aemr4526570ljj.29.1712473075170; Sat, 06
- Apr 2024 23:57:55 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1712477396; x=1713082196;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=MRAOR6NXs+WDh7P3Pk4nsf9IHt46kV2t0C6KeL8Xd0c=;
+        b=OiLtikEVvwEIMNCq35I5ly1tPIHNmFxoc5poQipW/2tULoXrveE/ZNdAZwjQJAE0CO
+         KsfCiXf/8EBoflbtR079Ssg0PMQVWl3eY5x1bZBmh38pf2CX2/DWU/y/AFGUG2tgsLww
+         8lJXD9f+I39qAv6Rfpa0Xx9l7FkryJ55Vu6IY3OBWv6NedtCxL/MauYaBSIqC+fKQmZE
+         dqbwsOxBUypWSrrulkmiAcNxSrfbGIfL2Oq9mgCid9sZuqYQazvWqNbhYjJX+9qvbAlv
+         2oyzxckn1PKlEcFvbKLVT9Xdv2ByNprTpibfk9Pu1sjMVpONU5hvHJphQbk6a7fm96dR
+         XLOg==
+X-Forwarded-Encrypted: i=1; AJvYcCUUR0tiVwjPcn5FWOqsZkL2AKosCTRS5TYjTRu9U3Oc+SqakR6ReMOrAG2Fm6aa01Gzj6HTwkOr87XIym8A2UHLERAE
+X-Gm-Message-State: AOJu0YxIIoWZQGNfB+Cx9MzgERHtdrR1F61wQ5hIMlErQOXYYqJ5ohSq
+	1VPQRa2xMxIBx7Eh3jzBEgkrJSujfsTAFBMmzg/mShJQmmxpt+vMBCEvgUbadZOXHVnuKUBi+6/
+	8y6wvZTeSKcqoPCKwSF9Eo1gQ7lrOxCnNo+Y3pcIZxejVrKybI9GkIfza0fvQXGfDjR2oT4ALUc
+	DR
+X-Received: by 2002:adf:fed1:0:b0:343:a183:4218 with SMTP id q17-20020adffed1000000b00343a1834218mr4431411wrs.52.1712477394382;
+        Sun, 07 Apr 2024 01:09:54 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IE7O+B0XCMESRc4pHeuqRzfZFND+/CmarJwhrJTwar81zScxLL0MtBoOtKhKPuUzsu2gsRPkA==
+X-Received: by 2002:adf:fed1:0:b0:343:a183:4218 with SMTP id q17-20020adffed1000000b00343a1834218mr4431370wrs.52.1712477393487;
+        Sun, 07 Apr 2024 01:09:53 -0700 (PDT)
+Received: from localhost (net-2-39-142-110.cust.vodafonedsl.it. [2.39.142.110])
+        by smtp.gmail.com with ESMTPSA id q13-20020a056000136d00b00343e3023fbasm5866411wrz.34.2024.04.07.01.09.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 07 Apr 2024 01:09:52 -0700 (PDT)
+Date: Sun, 7 Apr 2024 10:09:47 +0200
+From: Andrea Righi <andrea.righi@canonical.com>
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
+	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+	David Vernet <void@manifault.com>, Tejun Heo <tj@kernel.org>,
+	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 4/4] selftests/bpf: Add tests for ring__consume_n and
+ ring_buffer__consume_n
+Message-ID: <ZhJUy6nWFOFi8oT_@gpd>
+References: <20240406092005.92399-1-andrea.righi@canonical.com>
+ <20240406092005.92399-5-andrea.righi@canonical.com>
+ <CAEf4BzanzbBaVgP7Qu8v4jnfsWt+9vJqB6D9G7NjE5QL+3iKXQ@mail.gmail.com>
+ <CAEf4BzaR4zqUpDmj44KNLdpJ=Tpa97GrvzuzVNO5nM6b7oWd1w@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <0a0f01da8795$5496b250$fdc416f0$@gmail.com>
- <20240405215044.GC19691@maniforge>
-In-Reply-To: <20240405215044.GC19691@maniforge>
-From: Watson Ladd <watsonbladd@gmail.com>
-Date: Sat, 6 Apr 2024 23:57:43 -0700
-Message-ID: <CACsn0cmWzT4-+g0w0-ETC5ZMC1hdW0v-Rh1ZNCG2O23m9YCALQ@mail.gmail.com>
-To: David Vernet <void@manifault.com>
-Cc: dthaler1968=40googlemail.com@dmarc.ietf.org, bpf@vger.kernel.org, 
- bpf@ietf.org
-Archived-At: <https://mailarchive.ietf.org/arch/msg/bpf/p-bKeV2wNiPsPIkg5buEGptJ0BI>
-Subject: Re: [Bpf] Follow up on "call helper function by address" terminology
-X-BeenThere: bpf@ietf.org
-X-Mailman-Version: 2.1.39
-Precedence: list
-List-Archive: <https://mailarchive.ietf.org/arch/browse/bpf/>
-List-Post: <mailto:bpf@ietf.org>
-List-Help: <mailto:bpf-request@ietf.org?subject=help>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
-Errors-To: bpf-bounces@ietf.org
-Sender: "Bpf" <bpf-bounces@ietf.org>
-Message-ID: <20240407065743.yg4BfenFXd5uNTRXPLRfEsvMA1OUjc1b84wgOvdTcsE@z>
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAEf4BzaR4zqUpDmj44KNLdpJ=Tpa97GrvzuzVNO5nM6b7oWd1w@mail.gmail.com>
 
-T24gRnJpLCBBcHIgNSwgMjAyNCBhdCAyOjUw4oCvUE0gRGF2aWQgVmVybmV0IDx2b2lkQG1hbmlm
-YXVsdC5jb20+IHdyb3RlOgo+Cj4gT24gRnJpLCBBcHIgMDUsIDIwMjQgYXQgMDE6MTA6MzhQTSAt
-MDcwMCwgZHRoYWxlcjE5Njg9NDBnb29nbGVtYWlsLmNvbUBkbWFyYy5pZXRmLm9yZyB3cm90ZToK
-PiA+IEF0IElFVEYgMTE5LCB3ZSBhZ3JlZWQgdGhhdCAiYnkgYWRkcmVzcyIgc2hvdWxkIGJlIGNo
-YW5nZWQgdG8KPiA+IHNvbWV0aGluZyBlbHNlIGluIHRoZSBJU0EuICBUaGUgdGVybSAibGVnYWN5
-IElEIiB3YXMgdXNlZCBkdXJpbmcgdGhlCj4gPiBkaXNjdXNzaW9uIGJ1dCBDaHJpc3RvcGggKGlm
-IEkgcmVtZW1iZXIgcmlnaHQpIHBvaW50ZWQgb3V0IHRoYXQgc3VjaAo+ID4gSURzIGFyZSBub3Qg
-ZGVwcmVjYXRlZCBwZXIgc2UuICBIZW5jZSAibGVnYWN5IiBtYXkgbm90IGJlIHRoZSByaWdodAo+
-ID4gd29yZCBzaW5jZSB3ZSB1c2UgdGhhdCB3b3JkIHdpdGggbGVnYWN5IHBhY2tldCBhY2Nlc3Mg
-aW5zdHJ1Y3Rpb25zCj4gPiB0aGF0IGFyZSBkZXByZWNhdGVkLiBXZSBkZWNpZGVkIHRvIHRha2Ug
-ZnVydGhlciBkaXNjdXNzaW9uIHRvIHRoZQo+ID4gbGlzdCwgaGVuY2UgdGhpcyBlbWFpbC4KPiA+
-Cj4gPiBXZSBuZWVkIHNvbWUgdGVybSB0byBkaXN0aW5ndWlzaCB0aGVtIGZyb20gQlRGIElEcywg
-c28gYW5vdGhlcgo+ID4gYWx0ZXJuYXRpdmUgbWlnaHQgYmUgIm5vbi1CVEYgSUQiLgo+Cj4gTm9u
-LUJURiBJRCBpcyBmaW5lIHdpdGggbWUuIEFueSBvYmplY3Rpb25zPwoKSWYgc29tZXRoaW5nIGxh
-dGVyIGNvbWVzIGFsb25nIHN1cHBsYW50aW5nIEJURiBpdCB3aWxsIGJlIHRoZSBub3QtQlRGCm5v
-dC1ub24tQlRGIHRoaW5nLiBUaGlzIGlzIGJhZC4gSG93IGFib3V0IHVudHlwZWQgaWRlbnRpZmll
-cnM/Cj4KPiBUaGFua3MsCj4gRGF2aWQKPiAtLQo+IEJwZiBtYWlsaW5nIGxpc3QKPiBCcGZAaWV0
-Zi5vcmcKPiBodHRwczovL3d3dy5pZXRmLm9yZy9tYWlsbWFuL2xpc3RpbmZvL2JwZgoKCgotLSAK
-QXN0cmEgbW9ydGVtcXVlIHByYWVzdGFyZSBncmFkYXRpbQoKLS0gCkJwZiBtYWlsaW5nIGxpc3QK
-QnBmQGlldGYub3JnCmh0dHBzOi8vd3d3LmlldGYub3JnL21haWxtYW4vbGlzdGluZm8vYnBmCg==
+On Sat, Apr 06, 2024 at 10:52:10AM -0700, Andrii Nakryiko wrote:
+> On Sat, Apr 6, 2024 at 10:39 AM Andrii Nakryiko
+> <andrii.nakryiko@gmail.com> wrote:
+> >
+> > On Sat, Apr 6, 2024 at 2:20 AM Andrea Righi <andrea.righi@canonical.com> wrote:
+> > >
+> > > Add tests for new API ring__consume_n() and ring_buffer__consume_n().
+> > >
+> > > Signed-off-by: Andrea Righi <andrea.righi@canonical.com>
+> > > ---
+> > >  tools/testing/selftests/bpf/prog_tests/ringbuf.c | 8 ++++++++
+> > >  1 file changed, 8 insertions(+)
+> > >
+> > > diff --git a/tools/testing/selftests/bpf/prog_tests/ringbuf.c b/tools/testing/selftests/bpf/prog_tests/ringbuf.c
+> > > index 48c5695b7abf..33aba7684ab9 100644
+> > > --- a/tools/testing/selftests/bpf/prog_tests/ringbuf.c
+> > > +++ b/tools/testing/selftests/bpf/prog_tests/ringbuf.c
+> > > @@ -304,10 +304,18 @@ static void ringbuf_subtest(void)
+> > >         err = ring_buffer__consume(ringbuf);
+> > >         CHECK(err < 0, "rb_consume", "failed: %d\b", err);
+> > >
+> > > +       /* try to consume up to one item */
+> > > +       err = ring_buffer__consume_n(ringbuf, 1);
+> > > +       CHECK(err < 0 || err > 1, "rb_consume_n", "failed: %d\b", err);
+> > > +
+> > >         /* also consume using ring__consume to make sure it works the same */
+> > >         err = ring__consume(ring);
+> > >         ASSERT_GE(err, 0, "ring_consume");
+> > >
+> > > +       /* try to consume up to one item */
+> > > +       err = ring__consume_n(ring, 1);
+> > > +       CHECK(err < 0 || err > 1, "ring_consume_n", "failed: %d\b", err);
+> > > +
+> >
+> > Did you actually run this test? There is ring_buffer__consume() and
+> > ring__consume() calls right before your added calls, so consume_n will
+> > return zero.
+> >
+> > I dropped this broken patch. Please send a proper test as a follow up.
+> 
+> Sorry, technically, it's not broken, it just doesn't test much (CHECK
+> conditions confused me, I didn't realize you allow zero initially). We
+> will never consume anything and the result will be zero, which isn't
+> very meaningful.
+> 
+> "Interesting" test would set up things so that we have >1 item in
+> ringbuf and we consume exactly one at a time, because that's the new
+> logic you added.
+> 
+> I think it will be simpler to add a dedicated and simpler ringbuf test
+> for this, where you can specify how many items to submit, and then do
+> a bunch of consume/consume_n invocations, checking exact results.
+> 
+> Plus, please don't add new CHECK() uses, use ASSERT_XXX() ones instead.
+> 
+> I've applied first three patches because they look correct and it's
+> good to setup libbpf 1.5 dev cycle, but please do follow up with a
+> better test. Thanks.
+
+Yeah, sorry, I tried to add a minimal test to the existing one, but I
+agree that it not very meaningful.
+
+I already have a better dedicated test case for this
+(https://github.com/arighi/ebpf-maps/blob/libbpf-consume-n/src/main.c#L118),
+I just need to integrate it in the kselftest properly (and maybe
+pre-generate more than N records in the ring buffer, so that we can
+better test if the limit works as expected).
+
+I'll send another patch to add a proper test case.
+
+Thanks for applying the other patches!
+-Andrea
+
+> 
+> >
+> > >         /* 3 rounds, 2 samples each */
+> > >         cnt = atomic_xchg(&sample_cnt, 0);
+> > >         CHECK(cnt != 6, "cnt", "exp %d samples, got %d\n", 6, cnt);
+> > > --
+> > > 2.43.0
+> > >
