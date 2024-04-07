@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C9398662A;
-	Sun,  7 Apr 2024 13:13:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 523F212FF9C;
+	Sun,  7 Apr 2024 13:13:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712495587; cv=none; b=ipN6V1CstPp+/BD/jIxYzoqFGqe53IscSi60Os6jSpRX8tPwmsBF1MZKbNGVPempgZkk+84W0r9e/antH6Il1jqwPcwTICeD426exHcgMD1aMrsOQS7o3D4N14Ooaz1aExrGOBLEvhJHycK8MWZ7Tdf6h77yAscLHidpw/uarJQ=
+	t=1712495617; cv=none; b=KD2XgNGj7H4Y4784/6pgr1vnOHHQvIrWrnPSwpliCfVoQ79VuIcrPre4oyesywQmpWtqtxCP5fBV1qNPB9FgIHMGibOwY1OlowdFelEWvUx9ZYD40jmM/Y913KdFSC+VvlwUtSf/JEcX/So4tyzwxutFa/2m3qpYFA7Vn3AfTCE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712495587; c=relaxed/simple;
-	bh=9CJNlSm7UdFGd3F3/J22Rexp6lW1kYdcgxWT5Q7WTEg=;
+	s=arc-20240116; t=1712495617; c=relaxed/simple;
+	bh=c8XQeQwtEltbFX6HkBYB9bg5rHyG3/SpOdtdE31OSls=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=qZ1zLOf2QVQ5PsI4AHzwxsVRSLghuT1wYw6tOjkwiqIW/mBoX8Abw8az6WHCTE232Mu5pMhZqgbU3xe2bOegDPGbJ9CGBqgsIo7vVF4tq3LO5ofTq+6OmwAU236EBWDZidAnh7UGEt25lJtywuCn3jmqRGsFAbgsikKvthoazT8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=daBV+8YH; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=cdKV7rqup8XEZY9DwAiG5Pf7UkuSmF3YmZWHHCDGQ9o3YTdu7PTfwA+Mad0gTxKxhtQjQdfvdre0gAQlP90KuSMvWlybnxYii8T2s5QLPQ55N8Gf0fgbXqpafpHlJDQmCz1Rw0OSzsZsjY35/NSA2t4/iWRV+DCLLpfwjxbR7DE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sgngkJMr; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="daBV+8YH"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA633C433C7;
-	Sun,  7 Apr 2024 13:13:05 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sgngkJMr"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C0E7C433F1;
+	Sun,  7 Apr 2024 13:13:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1712495587;
-	bh=9CJNlSm7UdFGd3F3/J22Rexp6lW1kYdcgxWT5Q7WTEg=;
+	s=k20201202; t=1712495617;
+	bh=c8XQeQwtEltbFX6HkBYB9bg5rHyG3/SpOdtdE31OSls=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=daBV+8YHCVPAb/i5ufo92Xboixqi09Q2Axd1nZOmQBk3KMUBPu6qTpUw4aFdoN/jh
-	 WLA9qje0faRaKDhjZgMwEhQot5ypQhL2dRGjnjHqfkewfbCgiN/pBkRSnpyrytPhr4
-	 lOA/mu/F9vdNiSkf8aFwUMjQ6uESqhOUhO5NuMDdTxLiumgnIrMcYepkgeu7wGbdnv
-	 aqq8FBQgqk5IBQYP+CO7OrJvbR/mjff5wIUT+yzlhiP2mPDf67HqoIBucZElvuJVJF
-	 SIvsrzoqzc556ZMGMCcWTDgX8OauMLKAcOE1rNUAS4apHJixq7C0QxV/GmTBvOcdTA
-	 3jA+C1+Y5bJcw==
+	b=sgngkJMrLMz3SCoa0HajWFAbNyv6O8uOr3bYSQMxs4it+J68qDyvLBLZ4rgEKMSjZ
+	 wyVZJB9d3ZTBQTlM3EYFUG6hN55fJxJVohCESczt3kfEED1C8oMYvHAJqlK9PQBr84
+	 Jf5ZTgHAfqt9y02DrbZDOeByDKM8FgrNyIeey96erk1z73QVqieAiJ/nU56TedVBqw
+	 xrNtHN08riQGjIJwye6I3ki4bMWtaARZKCTyZ80kTetojoVyzq73y2qC1/TIkBo+Q1
+	 p1p24jK/yM2SPAmOmvPwZ0Wn0d5+jzFuF4mkpRnjfeXK0JODsAo8w2dCA0IiZVYaId
+	 m2+EE8lxuiLWw==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -38,12 +38,12 @@ Cc: Andrei Matei <andreimatei1@gmail.com>,
 	jolsa@kernel.org,
 	bpf@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.6 20/22] bpf: Check bloom filter map value size
-Date: Sun,  7 Apr 2024 09:12:19 -0400
-Message-ID: <20240407131231.1051652-20-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.1 12/13] bpf: Check bloom filter map value size
+Date: Sun,  7 Apr 2024 09:13:11 -0400
+Message-ID: <20240407131316.1052393-12-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240407131231.1051652-1-sashal@kernel.org>
-References: <20240407131231.1051652-1-sashal@kernel.org>
+In-Reply-To: <20240407131316.1052393-1-sashal@kernel.org>
+References: <20240407131316.1052393-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -52,7 +52,7 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.6.25
+X-stable-base: Linux 6.1.84
 Content-Transfer-Encoding: 8bit
 
 From: Andrei Matei <andreimatei1@gmail.com>
@@ -78,10 +78,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  2 files changed, 19 insertions(+)
 
 diff --git a/kernel/bpf/bloom_filter.c b/kernel/bpf/bloom_filter.c
-index addf3dd57b59b..35e1ddca74d21 100644
+index 48ee750849f25..78e810f49c445 100644
 --- a/kernel/bpf/bloom_filter.c
 +++ b/kernel/bpf/bloom_filter.c
-@@ -80,6 +80,18 @@ static int bloom_map_get_next_key(struct bpf_map *map, void *key, void *next_key
+@@ -88,6 +88,18 @@ static int bloom_map_get_next_key(struct bpf_map *map, void *key, void *next_key
  	return -EOPNOTSUPP;
  }
  
@@ -100,7 +100,7 @@ index addf3dd57b59b..35e1ddca74d21 100644
  static struct bpf_map *bloom_map_alloc(union bpf_attr *attr)
  {
  	u32 bitset_bytes, bitset_mask, nr_hash_funcs, nr_bits;
-@@ -191,6 +203,7 @@ static u64 bloom_map_mem_usage(const struct bpf_map *map)
+@@ -196,6 +208,7 @@ static int bloom_map_check_btf(const struct bpf_map *map,
  BTF_ID_LIST_SINGLE(bpf_bloom_map_btf_ids, struct, bpf_bloom_filter)
  const struct bpf_map_ops bloom_filter_map_ops = {
  	.map_meta_equal = bpf_map_meta_equal,
