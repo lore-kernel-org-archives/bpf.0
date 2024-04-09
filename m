@@ -1,110 +1,121 @@
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F6CE1428FA;
-	Tue,  9 Apr 2024 03:16:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 943505578A;
+	Tue,  9 Apr 2024 03:16:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712632618; cv=none; b=D8mymBfRgZYD5LNtvoldGGSjASHDNsd25O+aW6od8ph1DOqzITCTjdCay1gArYtPHlc5nKSsJfZIJqY9x3O1U1qI0e2BedW8+ms9h7eztG2HpOv+/BFePfnF0dubu9EGlAOWbyeC9T2tGyrtgfeFBMA5RaY7FncmrygC84b4m1A=
+	t=1712632618; cv=none; b=Dv54r5h4Syd4uZNMgp9/GS2Ok0ewDfaxqDW7P9gRnFAn2YZlmSU8GGnfo+E+faxuYZaxEhNWDOlEa/FAWIwjRjSIQZ+m5htC7SvYPkT4ErRPEXoaMvA0TUKptOEGZgq8L27nxSSOnqe2PGe2fglHnnotLlOxE8MDMRLIwpl9l8E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1712632618; c=relaxed/simple;
-	bh=Qa5NPcUZfbQXi2Sruz1/vVIcu+7nEJfLxk4HgFKqNq4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=SuszLTmZAH9xOETObsF51RTRTHMzH9ykU6zBwlM4aYu/9rXHbLqQ/ksm/KmC/PZ2cgDLLuFcOG5wWS/VVtPGfO/FTV4/l/tCvpNjxLaAVyh8qwEddPU7JZw4j2zKeTlE2618paJwYeu48noW40887vcdilOiF5TO3Mo7fp3+anA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jahHa+vy; arc=none smtp.client-ip=209.85.221.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	bh=gZcoxT+eHxeUPYgzQtfsTv7+4vbMaAl8YaTwWiTQxRc=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=UV8Kal+Mqqe1lcuH7KkocfKV1Y8pNjWgAH5KKYa7scNWTMpc82b4fdrUZbS+dnjZS9DHUHGIZKPg8FcSa3kv4BTmmpypodoasXapt9J07DB/b/2pkz0+lLShj4vryafL6WNEtw5yrGrd0Zv2mma3KLX/szohyyVs6S1o2z2rUVI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=c3LyIE9A; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jahHa+vy"
-Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-3442f4e098bso1383892f8f.1;
-        Mon, 08 Apr 2024 20:16:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1712632615; x=1713237415; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=L9sowHMZ+pR1GuhNLCPxU7rSfIL1rnaJJWhD78bjuKo=;
-        b=jahHa+vyQ2raIjSBvYCTunwjEk41YkrHai/U6IGpdhauDkJq+Bh3Qzw5HBEzC95xP1
-         NKMQHd2fhcNLNi1T9MAkJSsqxLn1mN97FeIXqFaH+yzToB+O2xfsbE4pEEz+qu6Y3dQS
-         F/MTEoULXh9G9PuWJqFPfOVF53GxxPVVv87mxJlLYozmUUWJVfOoz3fW6Tg4vh3OsW7x
-         N6hQmAqRsOg6r++uxrGKl33gf2VYHanPww74fYEMc7SkRVUfCChpJaHpNZLlXpk2ex1q
-         EXTO4vWpM0Q6l1Tcl/wPjJ1B8zcgXfbpbwvsU2MH9GaFTVAbtXbDgtsaK7H8tTUmOioD
-         jkgA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712632615; x=1713237415;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=L9sowHMZ+pR1GuhNLCPxU7rSfIL1rnaJJWhD78bjuKo=;
-        b=WP/l2qWM8YrgQCJNFwazK4dDkg3fQJa8Qdf+k1pJwQ4JzeezWh6O7jLcDr2Lk1fT8X
-         53ZZATTEIO3759eihaCOuAottFThpAOV+MAMcwFKkdEuSMaQnao3DK/LG64nzxWp6ih7
-         cAEPD2bBgkOG1jvsftn1o2BkYv1AU7RILb+kHJAd2UmATwPcmpSDI3HW7Gjz4VNGhqVk
-         mF1I6HqgYBOW5hUEWDGaRW0BHfl4dOjvCIjYXrOr80pXYxwgyAIqJzU9FDItWKomdzTC
-         B7Qn1oGsRHKaiyn0Q1bKd6q7z12a6mECXSegLvHkgfR/VGR0MqETll9qRW6mcLSXxc0r
-         1xVQ==
-X-Forwarded-Encrypted: i=1; AJvYcCV1iG2clA/vBCbhh3dupJ/+33OE6hgbV/kfbrGC6pvlOHRhcsOIXrmxABoeFLF/Bo0Fpn3nRqODnvl0/fjPX0gn072SL4ScYzJrLM6PnyBNfl4KPO28mf4rx+WCRNsRsWX26jf+roFo0Pf1GrSIs20ekIOBWBsAi2jBtEXNEsbTJr35
-X-Gm-Message-State: AOJu0YyDoDAHP3i7dtyNKAWNwLn5Lx2k576U/D+kmJ3JtCrSP/OBCEKF
-	bAbD2V7IyDoZ94ea5Td1hZjA6OqAT6VoioSU74tL3qgMlidtp0NyMtUajAladmLMRr9X2xF6r1D
-	PSdF7/jQWudd9J26vsibJcUiiGLU=
-X-Google-Smtp-Source: AGHT+IHKM8ltsBKsFHCQ4PHGPc1GwPESwNA7ZqxlJmaA0dwJIa65oMl/neGXNoN7SoIWVMzg+E6noftmHOV4dcGbM/Q=
-X-Received: by 2002:adf:f607:0:b0:343:6c07:c816 with SMTP id
- t7-20020adff607000000b003436c07c816mr925290wrp.16.1712632614749; Mon, 08 Apr
- 2024 20:16:54 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="c3LyIE9A"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4EF3C433F1;
+	Tue,  9 Apr 2024 03:16:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1712632618;
+	bh=gZcoxT+eHxeUPYgzQtfsTv7+4vbMaAl8YaTwWiTQxRc=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=c3LyIE9AXANuzef+WL7A/qfePVDcNU2+DTmQTqbUfI6TlIllagO23f7BNkd3fAXFt
+	 A+z2rOnACQPSMggmVjOohojkd511nHIXQuihd0uroKFMRNduIKm786gUDeUbkVcSaA
+	 r/ku9+ijudhvhwv/iykvTAo6GfqRTsFGPnN+LDiYhr/lF4o5hryDqjNFQibAc4q8Yq
+	 NjNCU6rPrRme4LNLiZd9QGABaIQjI9CLM0iVC1SXw0K1RS1VLTfB3mKSrlv7C/8YPL
+	 sf3aR8wTBhs98Yv8c3sSpHJiFBfoEwrdiXOmFx6K6ZIghMdmR8JH+le3IUd9nFj8yI
+	 SIK01BSKpMETA==
+From: Jakub Kicinski <kuba@kernel.org>
+To: davem@davemloft.net
+Cc: netdev@vger.kernel.org,
+	edumazet@google.com,
+	pabeni@redhat.com,
+	bpf@vger.kernel.org,
+	andrii@kernel.org,
+	mykolal@fb.com,
+	eddyz87@gmail.com,
+	shuah@kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH net-next 2/4] selftests: net: bpf_offload: wait for maps
+Date: Mon,  8 Apr 2024 20:15:47 -0700
+Message-ID: <20240409031549.3531084-3-kuba@kernel.org>
+X-Mailer: git-send-email 2.44.0
+In-Reply-To: <20240409031549.3531084-1-kuba@kernel.org>
+References: <20240409031549.3531084-1-kuba@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240408-hid-bpf-sleepable-v6-0-0499ddd91b94@kernel.org>
- <20240408-hid-bpf-sleepable-v6-6-0499ddd91b94@kernel.org> <345cddbdfe8e91dc6395331c838329d02d519863.camel@gmail.com>
-In-Reply-To: <345cddbdfe8e91dc6395331c838329d02d519863.camel@gmail.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Mon, 8 Apr 2024 20:16:43 -0700
-Message-ID: <CAADnVQ+AOtxrQ6Oai20CmU=MSW3f+d_ykRZehYdK=pYjBDdYnQ@mail.gmail.com>
-Subject: Re: [PATCH RFC bpf-next v6 6/6] selftests/bpf: add sleepable timer tests
-To: Eduard Zingerman <eddyz87@gmail.com>
-Cc: Benjamin Tissoires <bentiss@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>, 
-	bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Mon, Apr 8, 2024 at 4:01=E2=80=AFPM Eduard Zingerman <eddyz87@gmail.com>=
- wrote:
->
-> > +SEC("tc")
-> > +/* check that calling bpf_timer_start() with a delay on a sleepable
-> > + * callback is returning -EINVAL
-> > + */
-> > +__retval(-22)
-> > +long test_call_sleepable_delay(void *ctx)
-> > +{
-> > +     int key =3D 2;
-> > +     struct bpf_timer *timer;
-> > +
-> > +     timer =3D bpf_map_lookup_elem(&timer_map, &key);
-> > +     if (!timer)
-> > +             return 1;
-> > +
-> > +     if (bpf_timer_init(timer, &timer_map, CLOCK_MONOTONIC | BPF_F_TIM=
-ER_SLEEPABLE))
-> > +             return 2;
-> > +
-> > +     if (bpf_timer_set_sleepable_cb(timer, timer_cb_sleepable))
-> > +             return 3;
-> > +
-> > +     return bpf_timer_start(timer, 1, 0);
->
-> Q: should verifier statically check that 3rd parameter is zero for sleepa=
-ble timers?
->   (same question for call to bpf_timer_set_sleepable_cb() with non-sleepa=
-ble map)
+Maps are removed asynchronously. Either there's a bigger delay
+now or the test has always been flaky. Retry waiting in the loop.
 
-It can, but that sounds like more work for the verifier.
-Which gives more reasons to use new kfuncs and clean start with bpf_wq.
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+---
+ tools/testing/selftests/net/bpf_offload.py | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
+
+diff --git a/tools/testing/selftests/net/bpf_offload.py b/tools/testing/selftests/net/bpf_offload.py
+index 6157f884d091..174dba1a48d3 100755
+--- a/tools/testing/selftests/net/bpf_offload.py
++++ b/tools/testing/selftests/net/bpf_offload.py
+@@ -201,11 +201,11 @@ netns = [] # net namespaces to be removed
+         time.sleep(0.05)
+     raise Exception("Time out waiting for program counts to stabilize want %d, have %d" % (expected, nprogs))
+ 
+-def bpftool_map_list_wait(expected=0, n_retry=20):
++def bpftool_map_list_wait(expected=0, n_retry=20, ns=""):
+     for i in range(n_retry):
+-        nmaps = len(bpftool_map_list())
+-        if nmaps == expected:
+-            return
++        maps = bpftool_map_list(ns=ns)
++        if len(maps) == expected:
++            return maps
+         time.sleep(0.05)
+     raise Exception("Time out waiting for map counts to stabilize want %d, have %d" % (expected, nmaps))
+ 
+@@ -605,7 +605,7 @@ def bpftool_prog_load(sample, file_name, maps=[], prog_type="xdp", dev=None,
+     return file_name, bpf_pinned(file_name)
+ 
+ def pin_map(file_name, idx=0, expected=1):
+-    maps = bpftool_map_list(expected=expected)
++    maps = bpftool_map_list_wait(expected=expected)
+     m = maps[idx]
+     bpftool("map pin id %d %s" % (m["id"], file_name))
+     files.append(file_name)
+@@ -618,7 +618,7 @@ def bpftool_prog_load(sample, file_name, maps=[], prog_type="xdp", dev=None,
+     ret, err = bpftool("prog show pin %s" % (prog_file), fail=False)
+     fail(ret != 0, "failed to show prog with removed device")
+ 
+-    bpftool_map_list(expected=0)
++    bpftool_map_list_wait(expected=0)
+     ret, err = bpftool("map show pin %s" % (map_file), fail=False)
+     fail(ret == 0, "Showing map with removed device did not fail")
+     fail(err["error"].find("No such device") == -1,
+@@ -642,7 +642,7 @@ def bpftool_prog_load(sample, file_name, maps=[], prog_type="xdp", dev=None,
+     else:
+         fail("ifname" in dev.keys(), "Ifname is reported for other ns")
+ 
+-    maps = bpftool_map_list(expected=2, ns=ns)
++    maps = bpftool_map_list_wait(expected=2, ns=ns)
+     for m in maps:
+         fail("dev" not in m.keys(), "Device parameters not reported")
+         fail(dev != m["dev"], "Map's device different than program's")
+@@ -1206,7 +1206,7 @@ netns = []
+ 
+     start_test("Test map update (no flags)...")
+     sim.set_xdp(map_obj, "offload", JSON=False) # map fixup msg breaks JSON
+-    maps = bpftool_map_list(expected=2)
++    maps = bpftool_map_list_wait(expected=2)
+     array = maps[0] if maps[0]["type"] == "array" else maps[1]
+     htab = maps[0] if maps[0]["type"] == "hash" else maps[1]
+     for m in maps:
+-- 
+2.44.0
+
