@@ -1,662 +1,342 @@
-Received: from mail-qk1-f169.google.com (mail-qk1-f169.google.com [209.85.222.169])
+Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com [209.85.215.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30C891791F3
-	for <bpf@vger.kernel.org>; Wed, 10 Apr 2024 14:02:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4405913E3F3
+	for <bpf@vger.kernel.org>; Wed, 10 Apr 2024 14:09:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712757733; cv=none; b=c6KawOvgDkF4D5e/alc5NOKBxzmaN7vrXBJk0OixdDWpnUwRmZRJhZ9//wlT6BShzcBAI2EJ9yh9neP2VHhPOWzP53ac/bSjTFaATNcFPR37aa59pAgePDhOuqz8C6f0PCHsIbp/HQFouY1BytHTbpuE6BSl7aZEacxlpM7nXK0=
+	t=1712758183; cv=none; b=ka89dqp7BZckyPPcziIYmScHpwUfAURO7AdmwL+qOUXr0vZbm5IgmriWdA+ph/nkddENOHEFCpt2DotkEakpyUJ2CiO+HJCISEw9zt7lSVjDWoV6fZZ1Zt0pBYGLbYebzOYskrgw4iyb/gPOxsCqg1IerhHpjCFdbVyTu/LiSws=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712757733; c=relaxed/simple;
-	bh=J/01KOvPbSQZ7+iQZQfKzNawJwXPmBZrDFifMh6ZeME=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ptS6BYwFaGvCjxDFmRv2M0Mbn1hGYYnVS8Q9lUsFkirwIb7ftaKfuUH/AeubTJHSHIDju1pDAqmehqGanP6J4fqWjfBtm3aNgfCJuZB56q1VypKddQm0QIFtkgjsuSTpCzP3doOtN7su4mHWIMf0U1rl7tl1XjsI5LGemrhgsD0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mojatatu.com; spf=none smtp.mailfrom=mojatatu.com; dkim=pass (2048-bit key) header.d=mojatatu-com.20230601.gappssmtp.com header.i=@mojatatu-com.20230601.gappssmtp.com header.b=KYpjuWIR; arc=none smtp.client-ip=209.85.222.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mojatatu.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=mojatatu.com
+	s=arc-20240116; t=1712758183; c=relaxed/simple;
+	bh=kGueJkBWvRlGFwiBQhbk6CSsHNjYhwlWZdYelvUKl0A=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=DvBCUo0AVxQ6OiZCtzBOK7iyEO9WPA0UajtuXt8Nhh3v6HycPqmHJtECzwUja+nnhJjzy1iTdUorUfxvkXSDqgwbBP8yxtqCf7LS0ncMEtCFTmK2pcZ5IikJayWeiVadp9DeDvicjYM/UAAMP1FzGm00U1pclbyXuagdaru9Ofc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=A4xaUd+E; arc=none smtp.client-ip=209.85.215.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=mojatatu-com.20230601.gappssmtp.com header.i=@mojatatu-com.20230601.gappssmtp.com header.b="KYpjuWIR"
-Received: by mail-qk1-f169.google.com with SMTP id af79cd13be357-78d5e80bc42so320393585a.0
-        for <bpf@vger.kernel.org>; Wed, 10 Apr 2024 07:02:10 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="A4xaUd+E"
+Received: by mail-pg1-f170.google.com with SMTP id 41be03b00d2f7-53fa455cd94so5237037a12.2
+        for <bpf@vger.kernel.org>; Wed, 10 Apr 2024 07:09:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=mojatatu-com.20230601.gappssmtp.com; s=20230601; t=1712757729; x=1713362529; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=yTQzjgj5nFoy3aE0L3fLeRsDEegSxtmQN293bIqEsZo=;
-        b=KYpjuWIRGD1bnnFmYX6YGxUPT0hzyLoh5yQ5dO9nLdaTTTRCm+lNczhTB/GIbhRY3g
-         sI6Wizjxd13Wzj95/p9HtVWEgrQwqYbWYVzyMCztPFYqgWx1lu1gW7PvT4h5A9bXJptE
-         4rqHZ6WdBYMw5R4OSjYprfK+JSIUug78vHBgxxtT8+nCVPKPVp4RTT0ycT2CGVou+QnC
-         yam63LbuWfyjbbNxqw7be+sAqfdIhgXPLEQp0tuLRbS0YgEnNcrfJ1RTwkADrPFqfa3D
-         TK+Qs0qiX/12JblnESIu1O0LjPLHmapew2W/+Hv9l9ApRAitSZu513UEt8arkptPP02b
-         Wmuw==
+        d=gmail.com; s=20230601; t=1712758181; x=1713362981; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=dW9Nth+VaOAL0bUv5pG/cXT7CTu/Up7meglrwkedYEY=;
+        b=A4xaUd+EcvJVIlhZu6y1zpYcmOkoZaVju/RYAfQqtQcys6OPmS1wxU2zEK49CLhMu/
+         T9bW+K1N3kVZM9uuEE+coIcb4kAjCPAqAQR/ktLhG6noq8NPFYw60FEp9G9QnnHmVSdY
+         TLFcSduafDZWTcVganjkyHkCD8Wic0NpHnaxASi8TV8mL8EDUJl+xt+OJtfkQygREI+z
+         WeRi0R/FR2lLYvdqwqRj9QbDN7CaaEhrc7MA8wRld/9asntqpsUYk5KakpWLX/Ug7Bk/
+         MpUYTs8AKMneLK7a/DinqDCG1T7pWSnrNyymLDt8GEE/1z5IiVz2+iVC90YQduNkSTCk
+         T4rQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712757729; x=1713362529;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=yTQzjgj5nFoy3aE0L3fLeRsDEegSxtmQN293bIqEsZo=;
-        b=N+bTrw68pop9wuLZLCdkcl6Ko2btcOsiiuWpcRzJo95/SWW8agZrkVnYz5CEpF3tmx
-         waf1FIhFsd75icW8qnPdGqUrIRtXtd30ggzsTytkgOi0vELCbWXKQXNDz5PDxeVGD62Z
-         B57udGthzL5i4cmo+IQh0/S4iB6g6TackiQugXR9ymPgSgmlXrLAQ/JGozbmnxikLRiS
-         sAxq/ZHXQNis3lA05U4xMiSV5KN6uubqYqoDfQ3yFIHTdFbmI+/EKMmyQ59rYxdevjQ1
-         FDpvt7FJvzShe80gFjpPZf4wWrl1SEcq6wkK1xQJz6sJX8i80LaIWkjBaEO76FU7Xy18
-         qd+w==
-X-Forwarded-Encrypted: i=1; AJvYcCWbscUNuR5NzQ+xqRcUU4xCY5A4271Q4Bs9BKljcv12itK41S9ALJteUNwgnVHCglkDVne+o6ND3HqkuaLqxxm/G6kK
-X-Gm-Message-State: AOJu0YxbWcIsHMLneq2KX9yjy+u+LqwO1K5kClK0Icw3QU0zBrYpWD07
-	7YF9jtDEl8B3ypVkbhM2KPIPOYXSASTJMZ+U7ZYhXVTG7a4bHntgBfJJhPuhoQ==
-X-Google-Smtp-Source: AGHT+IHzOBjW3TyC8CLEuFEUln8ZK0a988fBM2o/5ikaHw+2ITPpmoYqkCqEBYuoYXO5FWEwVELQag==
-X-Received: by 2002:a05:620a:46a3:b0:78e:baa6:b158 with SMTP id bq35-20020a05620a46a300b0078ebaa6b158mr1157191qkb.39.1712757728912;
-        Wed, 10 Apr 2024 07:02:08 -0700 (PDT)
-Received: from majuu.waya (bras-base-kntaon1621w-grc-19-174-94-28-98.dsl.bell.ca. [174.94.28.98])
-        by smtp.gmail.com with ESMTPSA id t30-20020a05620a035e00b0078d74f1d3c8sm1345173qkm.110.2024.04.10.07.02.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 Apr 2024 07:02:07 -0700 (PDT)
-From: Jamal Hadi Salim <jhs@mojatatu.com>
-To: netdev@vger.kernel.org
-Cc: deb.chatterjee@intel.com,
-	anjali.singhai@intel.com,
-	namrata.limaye@intel.com,
-	tom@sipanda.io,
-	mleitner@redhat.com,
-	Mahesh.Shirshyad@amd.com,
-	tomasz.osinski@intel.com,
-	jiri@resnulli.us,
-	xiyou.wangcong@gmail.com,
-	davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	vladbu@nvidia.com,
-	horms@kernel.org,
-	khalidm@nvidia.com,
-	toke@redhat.com,
-	victor@mojatatu.com,
-	pctammela@mojatatu.com,
-	bpf@vger.kernel.org
-Subject: [PATCH net-next v16  15/15] p4tc: add P4 classifier
-Date: Wed, 10 Apr 2024 10:01:41 -0400
-Message-Id: <20240410140141.495384-16-jhs@mojatatu.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240410140141.495384-1-jhs@mojatatu.com>
-References: <20240410140141.495384-1-jhs@mojatatu.com>
+        d=1e100.net; s=20230601; t=1712758181; x=1713362981;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=dW9Nth+VaOAL0bUv5pG/cXT7CTu/Up7meglrwkedYEY=;
+        b=Tt/eHqNBb0tF+us04tFw5omkrmH6ifoToBioYtvfnUyCjIDUdMNEZGv0H4rNAlN5eJ
+         THoy+rmM2o/DPsRgG1Oc7O7S/E/9hkNDdDpNkkVMMdDnbsWQd9MVxHoFPmiS+rIcBMxk
+         1QjSU6mEDtVBWxikM1AEPV/sFShhWp/mDicD10U6173Zwvh9i5UBbbjHGKVFSkR/k0x0
+         yEOIUMMJ44NXyMa/QhJRlLsqDxk3Lp7jgdGO+aWutd9CP4URjmy1cp6tUL6reM5yRv1v
+         GO+2MNfQ7uAJH8Wcd22SbCTw5WxuTPlUsbEF6o9v3WCD92RZQ3mc4kdRj2zVMNjy5U8V
+         lMFQ==
+X-Gm-Message-State: AOJu0Yz3owX+sgLqBiwpORTRny0Gxjv2VP1s3swqMQZarpUjBMFQeM0f
+	LAuwEO92HF9Vjd1HkU4zPhhj0mRRhSGN8dFuzuQdsCC1J4C4luaK
+X-Google-Smtp-Source: AGHT+IFg2r1wGIr5cToqPOKWjL/J/uNpKFFoRp8zE40aXgdOzwIFwabZENeLPT4+afmjY5LyC+9YTw==
+X-Received: by 2002:a17:90a:2d8f:b0:2a2:4040:f57b with SMTP id p15-20020a17090a2d8f00b002a24040f57bmr2783098pjd.36.1712758181233;
+        Wed, 10 Apr 2024 07:09:41 -0700 (PDT)
+Received: from [192.168.1.76] (bb116-14-181-187.singnet.com.sg. [116.14.181.187])
+        by smtp.gmail.com with ESMTPSA id ga12-20020a17090b038c00b0029c7743cb33sm1379086pjb.40.2024.04.10.07.09.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 10 Apr 2024 07:09:40 -0700 (PDT)
+Message-ID: <6140d7a3-53c6-46ea-b812-d2f45ed2ca92@gmail.com>
+Date: Wed, 10 Apr 2024 22:09:33 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v3 2/3] bpf, x64: Fix tailcall hierarchy
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ "Fijalkowski, Maciej" <maciej.fijalkowski@intel.com>,
+ Jakub Sitnicki <jakub@cloudflare.com>, Pu Lehui <pulehui@huawei.com>,
+ Hengqi Chen <hengqi.chen@gmail.com>, kernel-patches-bot@fb.com
+References: <20240402152638.31377-1-hffilwlqm@gmail.com>
+ <20240402152638.31377-3-hffilwlqm@gmail.com>
+ <CAADnVQ+vJyi6JFsck8KbyxvOuRvmAO5gVTJPwNiyNeBwzsHu9Q@mail.gmail.com>
+ <55442238-33d6-4e7d-9dd1-e36da20f7c90@gmail.com>
+ <CAADnVQKxnEBS7JxK8YqXaa1C0kZZ=KSyPmqiE79KuZbe8Y_7YA@mail.gmail.com>
+Content-Language: en-US
+From: Leon Hwang <hffilwlqm@gmail.com>
+In-Reply-To: <CAADnVQKxnEBS7JxK8YqXaa1C0kZZ=KSyPmqiE79KuZbe8Y_7YA@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Introduce P4 tc classifier. The main task of this classifier is to manage
-the lifetime of pipeline instances across one or more netdev ports.
-Note: a defined pipeline may be instantiated multiple times across one or
-more tc chains and different priorities.
 
-Note that part or whole of the P4 pipeline could reside in tc, XDP or even
-hardware depending on how the P4 program was compiled. This classifier only
-deals with tc layer.
-To use the P4 classifier you must specify a pipeline name that will be
-associated to the filter instance, a s/w parser (eBPF) and datapath P4
-control block program (eBPF) program. Although this patchset does not deal
-with offloads, it is also possible to load the h/w part using this filter.
-We will illustrate a few examples further below to clarify. Please treat
-the illustrated split as an example - there are probably more pragmatic
-approaches to splitting the pipeline; however, regardless of where the
-different pieces of the pipeline are placed (tc, XDP, HW) and what each
-layer will implement (what part of the pipeline) - these examples are
-merely showing what is possible.
 
-The pipeline is assumed to have already been created via a template.
+On 2024/4/8 00:30, Alexei Starovoitov wrote:
+> On Sun, Apr 7, 2024 at 4:34 AM Leon Hwang <hffilwlqm@gmail.com> wrote:
+>>
+>>
+>>
+>> On 2024/4/5 09:03, Alexei Starovoitov wrote:
+>>>>   * Solution changes from percpu tail_call_cnt to tail_call_cnt at task_struct.
+>>>
+>>> Please remind us what was wrong with per-cpu approach?
+>>
+>> There are some cases that the per-cpu approach cannot handle properly.
+>> Especialy, on non-SMP machine, if there are many bpf progs to run with
+>> tail call simultaneously, MAX_TAIL_CALL_CNT limit is unable to limit the
+>> tail call expectedly.
+> 
+> That's not a very helpful explanation.
 
-For example, if we were to add a filter to ingress of a group of netdevs
-(tc block 22) and associate it to P4 pipeline simple_l3 we could issue the
-following command:
+I apologize for my poor communication skill. I hope I can help to fix
+this issue.
 
-tc filter add block 22 parent ffff: protocol all prio 6 p4 pname simple_l3 \
-    action bpf obj $PARSER.o ... \
-    action bpf obj $PROGNAME.o section p4tc/main
+Why did I raise this approach, tcc in task_struct? When I tried to
+figure out a better position to store tcc instead as a stack variable or
+a per-cpu variable, why not store it in runtime context?
+Around a tail call, the tail caller and the tail callee run on the same
+thread, and the thread won't be migrated because of migrate_disable(),
+if I understand correctly. As a consequence, it's better to store tcc in
+thread struct or in thread local storage. In kernel, task_struct is the
+thread struct, if I understand correctly. Thereafter, when multiple
+progs tail_call-ing on the same cpu, the per-task tcc should limit them
+independently, e.g.
 
-The above uses the classical tc action mechanism in which the first action
-runs the P4 parser and if that goes well then the P4 control block is
-executed. Note, although not shown above, one could also append the command
-line with other traditional tc actions.
+   prog1     prog2
+  thread1   thread2
+     |         |
+     |--sched->|
+     |         |
+     |<-sched--|
+     |         |
+   ---------------
+        CPU1
 
-Given one of the objectives of this classifier is to manage the lifetime
-of the p4 program and said program may be split across tc:xdp:hardware we
-allow specification of where the xdp (and in the future hardware) programs
-can be found. For this reason when instantiating one could specify where
-the associated XDP program using they syntax "prog type xdp progname",
-where progname refers to the XDP ebpf program name. The control plane side
-(below we show iproute2) will be responsible for loading the XDP program.
-The kernel is unaware of the XDP side.
-There is an ongoing discussion in the P4TC community biweekly meetings
-which is likely going to have us add another location definition "prog type
-hw" which will specify the hardware object file name and other related
-attributes. The current discussion is that this h/w piece will go via the
-p4 classifier.
+NOTE: prog1 is diff from prog2. And they have tail call to handle while
+they're scheduled.
 
-An example using xdp and tc:
+The tcc in thread2 would not override the tcc in thread1.
 
-tc filter add dev $P0 ingress protocol all prio 1 p4 pname simple_l3 \
-    prog type xdp obj $PARSER.o section p4tc/parse-xdp \
-    action bpf obj $PROGNAME.o section p4tc/main
+When the same scenario as the above diagram shows happens to per-cpu tcc
+approach, the tcc in thread2 will override the tcc in thread1. As a
+result, per-cpu tcc cannot limit the tail call in thread1 and thread2
+independently. This is what I concern about per-cpu tcc approach.
 
-In this case, the parser will be executed in the XDP layer and the rest of
-P4 control block as a tc action.
 
-For illustration sake, the hw one looks as follows (please note there's
-still a lot of discussions going on in the meetings - the example is here
-merely to illustrate the tc filter functionality):
+> Last, I recall, the concern was that tcc will be a bit off.
+> The per-cpu tcc will limit recursion sooner when multiple progs
+> tail_call-ing on the same cpu?
 
-tc filter add block 22 ingress protocol all prio 1 p4 pname simple_l3 \
-   prog type hw filename "mypnameprog.o" ... \
-   prog type xdp obj $PARSER.o section p4tc/parse-xdp \
-   action bpf obj $PROGNAME.o section p4tc/main
+Yes.
 
-The theory of operations is as follows:
+> If so, I think it's a trade-off that should be discussed.
+> tcc in task_struct will have the same issue.
+> It will limit tailcalls sooner in some cases.
 
-================================1. PARSING================================
+Could you explain one of them in details?
 
-The packet first encounters the parser.
-The parser is implemented in ebpf residing either at the TC or XDP
-level. The parsed header values are stored in a shared per-cpu eBPF map.
-When the parser runs at XDP level, we load it into XDP using the control
-plane (tc filter command) and pin it to a file.
+> 
+> There were some issues with overriding of per-cpu tcc.
+> The same concerns apply to per-task tcc.
+> 
+>>>
+>>> Also notice we have pseudo per-cpu bpf insns now,
+>>> so things might be easier today.
+>>
+>> Great to hear that. With pseudo per-cpu bpf insns, it is able to get
+>> tcc_ptr from task_struct without a function call.
+>>
 
-=============================2. ACTIONS=============================
+[SNIP]
 
-In the above example, the P4 program (minus the parser) is encoded in an
-action($PROGNAME.o). It should be noted that classical tc actions
-continue to work:
-IOW, someone could decide to add a mirred action to mirror all packets
-after or before the ebpf action.
+>>>>                 if (tail_call_reachable && !is_subprog)
+>>>> -                       /* When it's the entry of the whole tailcall context,
+>>>> -                        * zeroing rax means initialising tail_call_cnt.
+>>>> +                       /* Call bpf_tail_call_cnt_init to initilise
+>>>> +                        * tail_call_cnt.
+>>>>                          */
+>>>> -                       EMIT2(0x31, 0xC0); /* xor eax, eax */
+>>>> +                       emit_call(&prog, bpf_tail_call_cnt_init,
+>>>> +                                 ip + (prog - start));
+>>>
+>>> You're repeating the same bug we discussed before.
+>>> There is nothing in bpf_tail_call_cnt_init() that
+>>> prevents the compiler from scratching rdi,rsi,...
+>>> bpf_tail_call_cnt_init() is a normal function from compiler pov
+>>> and it's allowed to use those regs.
+>>> Must have been lucky that CI is not showing crashes.
+>>
+>> Oh, get it. In order to prevent the compiler from scratching
+>> rdi,rsi,..., the asm clobbered register list in bpf_tail_call_cnt_init()
+>> must be "rdi", "rsi", "rdx", "rcx", "r8". I learn it from the GCC doc[0].
+>>
+>> static __used void bpf_tail_call_cnt_init(void)
+>> {
+>>         /* In short:
+>>          * current->bpf_tail_call_cnt = 0;
+>>          */
+>>
+>>         asm volatile (
+>>             "addq " __percpu_arg(0) ", %1\n\t"
+>>             "movq (%1), %1\n\t"
+>>             "movl $0x0, %c2(%1)\n\t"
+>>             :
+>>             : "m" (__my_cpu_var(this_cpu_off)), "r" (&pcpu_hot.current_task),
+>>               "i" (offsetof(struct task_struct, bpf_tail_call_cnt))
+>>             : "rdi", "rsi", "rdx", "rcx", "r8" /* to avoid scratching these regs */
+> 
+> That will only prevent the compiler from allocating these regs
+> into "r" constraint, but the compiler can still use them outside of asm.
+> You need __naked too.
 
-tc filter add dev $P0 parent ffff: protocol all prio 6 p4 pname simple_l3 \
-    action bpf obj $PARSER.o section p4tc/parse \
-    action bpf obj $PROGNAME.o section p4tc/main \
-    action mirred egress mirror index 1 dev $P1 \
-    action bpf obj $ANOTHERPROG.o section mysect/section-1
+Got it.
 
-It should also be noted that it is feasible to split some of the ingress
-datapath into XDP first and more into TC later (as was shown above for
-example where the parser runs at XDP level). YMMV.
-Regardless of choice of which scheme to use, none of these will affect
-UAPI. It will all depend on whether you generate code to load on XDP vs
-tc, etc. We expect the compiler to evolve over time (but that has
-nothing to do with the kernel part).
+> 
+>>         );
+>> }
+>>
+>> [0]
+>> https://gcc.gnu.org/onlinedocs/gcc/Extended-Asm.html#Clobbers-and-Scratch-Registers-1
+>>
+>>>
+>>>>                 else
+>>>>                         /* Keep the same instruction layout. */
+>>>> -                       EMIT2(0x66, 0x90); /* nop2 */
+>>>> +                       emit_nops(&prog, X86_PATCH_SIZE);
+>>>>         }
+>>>>         /* Exception callback receives FP as third parameter */
+>>>>         if (is_exception_cb) {
+>>>> @@ -452,8 +459,6 @@ static void emit_prologue(u8 **pprog, u32 stack_depth, bool ebpf_from_cbpf,
+>>>>         /* sub rsp, rounded_stack_depth */
+>>>>         if (stack_depth)
+>>>>                 EMIT3_off32(0x48, 0x81, 0xEC, round_up(stack_depth, 8));
+>>>> -       if (tail_call_reachable)
+>>>> -               EMIT1(0x50);         /* push rax */
+>>>>         *pprog = prog;
+>>>>  }
+>>>>
+>>>> @@ -589,13 +594,61 @@ static void emit_return(u8 **pprog, u8 *ip)
+>>>>         *pprog = prog;
+>>>>  }
+>>>>
 
-Co-developed-by: Victor Nogueira <victor@mojatatu.com>
-Signed-off-by: Victor Nogueira <victor@mojatatu.com>
-Co-developed-by: Pedro Tammela <pctammela@mojatatu.com>
-Signed-off-by: Pedro Tammela <pctammela@mojatatu.com>
-Signed-off-by: Jamal Hadi Salim <jhs@mojatatu.com>
-Acked-by: Toke Høiland-Jørgensen <toke@redhat.com>
----
- include/uapi/linux/pkt_cls.h |  14 ++
- net/sched/Kconfig            |  12 ++
- net/sched/Makefile           |   1 +
- net/sched/cls_p4.c           | 305 +++++++++++++++++++++++++++++++++++
- net/sched/p4tc/Makefile      |   4 +-
- net/sched/p4tc/trace.c       |  10 ++
- net/sched/p4tc/trace.h       |  44 +++++
- 7 files changed, 389 insertions(+), 1 deletion(-)
- create mode 100644 net/sched/cls_p4.c
- create mode 100644 net/sched/p4tc/trace.c
- create mode 100644 net/sched/p4tc/trace.h
+[SNIP]
 
-diff --git a/include/uapi/linux/pkt_cls.h b/include/uapi/linux/pkt_cls.h
-index 898f6a05ecf5..efc98765ad20 100644
---- a/include/uapi/linux/pkt_cls.h
-+++ b/include/uapi/linux/pkt_cls.h
-@@ -706,6 +706,20 @@ enum {
- 
- #define TCA_MATCHALL_MAX (__TCA_MATCHALL_MAX - 1)
- 
-+/* P4 classifier */
-+
-+enum {
-+	TCA_P4_UNSPEC,
-+	TCA_P4_CLASSID,
-+	TCA_P4_ACT,
-+	TCA_P4_PNAME,
-+	TCA_P4_PIPEID,
-+	TCA_P4_PAD,
-+	__TCA_P4_MAX,
-+};
-+
-+#define TCA_P4_MAX (__TCA_P4_MAX - 1)
-+
- /* Extended Matches */
- 
- struct tcf_ematch_tree_hdr {
-diff --git a/net/sched/Kconfig b/net/sched/Kconfig
-index 5dbae579bda8..66d7fed274e6 100644
---- a/net/sched/Kconfig
-+++ b/net/sched/Kconfig
-@@ -565,6 +565,18 @@ config NET_CLS_MATCHALL
- 	  To compile this code as a module, choose M here: the module will
- 	  be called cls_matchall.
- 
-+config NET_CLS_P4
-+	tristate "P4 classifier"
-+	select NET_CLS
-+	select NET_P4TC
-+	help
-+	  If you say Y here, you will be able to bind a P4 pipeline
-+	  program. You will need to install a P4 template representing the
-+	  program successfully to use this feature.
-+
-+	  To compile this code as a module, choose M here: the module will
-+	  be called cls_p4.
-+
- config NET_EMATCH
- 	bool "Extended Matches"
- 	select NET_CLS
-diff --git a/net/sched/Makefile b/net/sched/Makefile
-index 581f9dd69032..b4f9ef48dd28 100644
---- a/net/sched/Makefile
-+++ b/net/sched/Makefile
-@@ -72,6 +72,7 @@ obj-$(CONFIG_NET_CLS_CGROUP)	+= cls_cgroup.o
- obj-$(CONFIG_NET_CLS_BPF)	+= cls_bpf.o
- obj-$(CONFIG_NET_CLS_FLOWER)	+= cls_flower.o
- obj-$(CONFIG_NET_CLS_MATCHALL)	+= cls_matchall.o
-+obj-$(CONFIG_NET_CLS_P4)	+= cls_p4.o
- obj-$(CONFIG_NET_EMATCH)	+= ematch.o
- obj-$(CONFIG_NET_EMATCH_CMP)	+= em_cmp.o
- obj-$(CONFIG_NET_EMATCH_NBYTE)	+= em_nbyte.o
-diff --git a/net/sched/cls_p4.c b/net/sched/cls_p4.c
-new file mode 100644
-index 000000000000..a266e777b899
---- /dev/null
-+++ b/net/sched/cls_p4.c
-@@ -0,0 +1,305 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/*
-+ * net/sched/cls_p4.c - P4 Classifier
-+ * Copyright (c) 2022-2024, Mojatatu Networks
-+ * Copyright (c) 2022-2024, Intel Corporation.
-+ * Authors:     Jamal Hadi Salim <jhs@mojatatu.com>
-+ *              Victor Nogueira <victor@mojatatu.com>
-+ *              Pedro Tammela <pctammela@mojatatu.com>
-+ */
-+
-+#include <linux/kernel.h>
-+#include <linux/init.h>
-+#include <linux/module.h>
-+#include <linux/percpu.h>
-+#include <linux/bpf.h>
-+#include <linux/filter.h>
-+
-+#include <net/sch_generic.h>
-+#include <net/pkt_cls.h>
-+
-+#include <net/p4tc.h>
-+
-+#include "p4tc/trace.h"
-+
-+struct cls_p4_head {
-+	struct tcf_exts exts;
-+	struct tcf_result res;
-+	struct rcu_work rwork;
-+	struct p4tc_pipeline *pipeline;
-+	u32 handle;
-+};
-+
-+static int p4_classify(struct sk_buff *skb, const struct tcf_proto *tp,
-+		       struct tcf_result *res)
-+{
-+	struct cls_p4_head *head = rcu_dereference_bh(tp->root);
-+
-+	if (unlikely(!head)) {
-+		pr_err("P4 classifier not found\n");
-+		return -1;
-+	}
-+
-+	trace_p4_classify(skb, head->pipeline);
-+
-+	*res = head->res;
-+
-+	return tcf_exts_exec(skb, &head->exts, res);
-+}
-+
-+static int p4_init(struct tcf_proto *tp)
-+{
-+	return 0;
-+}
-+
-+static void __p4_destroy(struct cls_p4_head *head)
-+{
-+	tcf_exts_destroy(&head->exts);
-+	tcf_exts_put_net(&head->exts);
-+	p4tc_pipeline_put(head->pipeline);
-+	kfree(head);
-+}
-+
-+static void p4_destroy_work(struct work_struct *work)
-+{
-+	struct cls_p4_head *head =
-+		container_of(to_rcu_work(work), struct cls_p4_head, rwork);
-+
-+	rtnl_lock();
-+	__p4_destroy(head);
-+	rtnl_unlock();
-+}
-+
-+static void p4_destroy(struct tcf_proto *tp, bool rtnl_held,
-+		       struct netlink_ext_ack *extack)
-+{
-+	struct cls_p4_head *head = rtnl_dereference(tp->root);
-+
-+	if (!head)
-+		return;
-+
-+	tcf_unbind_filter(tp, &head->res);
-+
-+	if (tcf_exts_get_net(&head->exts))
-+		tcf_queue_work(&head->rwork, p4_destroy_work);
-+	else
-+		__p4_destroy(head);
-+}
-+
-+static void *p4_get(struct tcf_proto *tp, u32 handle)
-+{
-+	struct cls_p4_head *head = rtnl_dereference(tp->root);
-+
-+	if (head && head->handle == handle)
-+		return head;
-+
-+	return NULL;
-+}
-+
-+static const struct nla_policy p4_policy[TCA_P4_MAX + 1] = {
-+	[TCA_P4_UNSPEC] = { .type = NLA_UNSPEC },
-+	[TCA_P4_CLASSID] = { .type = NLA_U32 },
-+	[TCA_P4_ACT] = { .type = NLA_NESTED },
-+	[TCA_P4_PNAME] = { .type = NLA_STRING, .len = P4TC_PIPELINE_NAMSIZ },
-+	[TCA_P4_PIPEID] = { .type = NLA_U32 },
-+};
-+
-+static int p4_set_parms(struct net *net, struct tcf_proto *tp,
-+			struct cls_p4_head *head, unsigned long base,
-+			struct nlattr **tb, struct nlattr *est, u32 flags,
-+			struct netlink_ext_ack *extack)
-+{
-+	int err;
-+
-+	err = tcf_exts_validate_ex(net, tp, tb, est, &head->exts, flags, 0,
-+				   extack);
-+	if (err < 0)
-+		return err;
-+
-+	if (tb[TCA_P4_CLASSID]) {
-+		head->res.classid = nla_get_u32(tb[TCA_P4_CLASSID]);
-+		tcf_bind_filter(tp, &head->res, base);
-+	}
-+
-+	return 0;
-+}
-+
-+static int p4_change(struct net *net, struct sk_buff *in_skb,
-+		     struct tcf_proto *tp, unsigned long base, u32 handle,
-+		     struct nlattr **tca, void **arg, u32 flags,
-+		     struct netlink_ext_ack *extack)
-+{
-+	struct cls_p4_head *head = rtnl_dereference(tp->root);
-+	struct p4tc_pipeline *pipeline = NULL;
-+	struct nlattr *tb[TCA_P4_MAX + 1];
-+	struct cls_p4_head *new_cls;
-+	char *pname = NULL;
-+	u32 pipeid = 0;
-+	int err;
-+
-+	if (!tca[TCA_OPTIONS]) {
-+		NL_SET_ERR_MSG(extack, "Must provide pipeline options");
-+		return -EINVAL;
-+	}
-+
-+	if (head)
-+		return -EEXIST;
-+
-+	err = nla_parse_nested(tb, TCA_P4_MAX, tca[TCA_OPTIONS], p4_policy,
-+			       extack);
-+	if (err < 0)
-+		return err;
-+
-+	if (tb[TCA_P4_PNAME])
-+		pname = nla_data(tb[TCA_P4_PNAME]);
-+
-+	if (tb[TCA_P4_PIPEID])
-+		pipeid = nla_get_u32(tb[TCA_P4_PIPEID]);
-+
-+	pipeline = p4tc_pipeline_find_get(net, pname, pipeid, extack);
-+	if (IS_ERR(pipeline))
-+		return PTR_ERR(pipeline);
-+
-+	if (!p4tc_pipeline_sealed(pipeline)) {
-+		err = -EINVAL;
-+		NL_SET_ERR_MSG(extack, "Pipeline must be sealed before use");
-+		goto pipeline_put;
-+	}
-+
-+	new_cls = kzalloc(sizeof(*new_cls), GFP_KERNEL);
-+	if (!new_cls) {
-+		err = -ENOMEM;
-+		goto pipeline_put;
-+	}
-+
-+	err = tcf_exts_init(&new_cls->exts, net, TCA_P4_ACT, 0);
-+	if (err)
-+		goto err_exts_init;
-+
-+	if (!handle)
-+		handle = 1;
-+
-+	new_cls->handle = handle;
-+
-+	err = p4_set_parms(net, tp, new_cls, base, tb, tca[TCA_RATE], flags,
-+			   extack);
-+	if (err)
-+		goto err_set_parms;
-+
-+	new_cls->pipeline = pipeline;
-+	*arg = head;
-+	rcu_assign_pointer(tp->root, new_cls);
-+	return 0;
-+
-+err_set_parms:
-+	tcf_exts_destroy(&new_cls->exts);
-+err_exts_init:
-+	kfree(new_cls);
-+pipeline_put:
-+	p4tc_pipeline_put(pipeline);
-+	return err;
-+}
-+
-+static int p4_delete(struct tcf_proto *tp, void *arg, bool *last,
-+		     bool rtnl_held, struct netlink_ext_ack *extack)
-+{
-+	*last = true;
-+	return 0;
-+}
-+
-+static void p4_walk(struct tcf_proto *tp, struct tcf_walker *arg,
-+		    bool rtnl_held)
-+{
-+	struct cls_p4_head *head = rtnl_dereference(tp->root);
-+
-+	if (arg->count < arg->skip)
-+		goto skip;
-+
-+	if (!head)
-+		return;
-+	if (arg->fn(tp, head, arg) < 0)
-+		arg->stop = 1;
-+skip:
-+	arg->count++;
-+}
-+
-+static int p4_dump(struct net *net, struct tcf_proto *tp, void *fh,
-+		   struct sk_buff *skb, struct tcmsg *t, bool rtnl_held)
-+{
-+	struct cls_p4_head *head = fh;
-+	struct nlattr *nest;
-+
-+	if (!head)
-+		return skb->len;
-+
-+	t->tcm_handle = head->handle;
-+
-+	nest = nla_nest_start(skb, TCA_OPTIONS);
-+	if (!nest)
-+		goto nla_put_failure;
-+
-+	if (nla_put_string(skb, TCA_P4_PNAME, head->pipeline->common.name))
-+		goto nla_put_failure;
-+
-+	if (head->res.classid &&
-+	    nla_put_u32(skb, TCA_P4_CLASSID, head->res.classid))
-+		goto nla_put_failure;
-+
-+	if (tcf_exts_dump(skb, &head->exts))
-+		goto nla_put_failure;
-+
-+	nla_nest_end(skb, nest);
-+
-+	if (tcf_exts_dump_stats(skb, &head->exts) < 0)
-+		goto nla_put_failure;
-+
-+	return skb->len;
-+
-+nla_put_failure:
-+	nla_nest_cancel(skb, nest);
-+	return -1;
-+}
-+
-+static void p4_bind_class(void *fh, u32 classid, unsigned long cl, void *q,
-+			  unsigned long base)
-+{
-+	struct cls_p4_head *head = fh;
-+
-+	if (head && head->res.classid == classid) {
-+		if (cl)
-+			__tcf_bind_filter(q, &head->res, base);
-+		else
-+			__tcf_unbind_filter(q, &head->res);
-+	}
-+}
-+
-+static struct tcf_proto_ops cls_p4_ops __read_mostly = {
-+	.kind		= "p4",
-+	.classify	= p4_classify,
-+	.init		= p4_init,
-+	.destroy	= p4_destroy,
-+	.get		= p4_get,
-+	.change		= p4_change,
-+	.delete		= p4_delete,
-+	.walk		= p4_walk,
-+	.dump		= p4_dump,
-+	.bind_class	= p4_bind_class,
-+	.owner		= THIS_MODULE,
-+};
-+
-+static int __init cls_p4_init(void)
-+{
-+	return register_tcf_proto_ops(&cls_p4_ops);
-+}
-+
-+static void __exit cls_p4_exit(void)
-+{
-+	unregister_tcf_proto_ops(&cls_p4_ops);
-+}
-+
-+module_init(cls_p4_init);
-+module_exit(cls_p4_exit);
-+
-+MODULE_AUTHOR("Mojatatu Networks");
-+MODULE_DESCRIPTION("P4 Classifier");
-+MODULE_LICENSE("GPL");
-diff --git a/net/sched/p4tc/Makefile b/net/sched/p4tc/Makefile
-index 73ccb53c46bc..04302a3ac0cc 100644
---- a/net/sched/p4tc/Makefile
-+++ b/net/sched/p4tc/Makefile
-@@ -1,6 +1,8 @@
- # SPDX-License-Identifier: GPL-2.0
- 
-+CFLAGS_trace.o := -I$(src)
-+
- obj-y := p4tc_types.o p4tc_tmpl_api.o p4tc_pipeline.o \
- 	p4tc_action.o p4tc_table.o p4tc_tbl_entry.o \
--	p4tc_filter.o p4tc_runtime_api.o
-+	p4tc_filter.o p4tc_runtime_api.o trace.o
- obj-$(CONFIG_DEBUG_INFO_BTF) += p4tc_bpf.o
-diff --git a/net/sched/p4tc/trace.c b/net/sched/p4tc/trace.c
-new file mode 100644
-index 000000000000..6833134077fa
---- /dev/null
-+++ b/net/sched/p4tc/trace.c
-@@ -0,0 +1,10 @@
-+// SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+
-+#include <net/p4tc.h>
-+
-+#ifndef __CHECKER__
-+
-+#define CREATE_TRACE_POINTS
-+#include "trace.h"
-+EXPORT_TRACEPOINT_SYMBOL_GPL(p4_classify);
-+#endif
-diff --git a/net/sched/p4tc/trace.h b/net/sched/p4tc/trace.h
-new file mode 100644
-index 000000000000..80abec13b1bd
---- /dev/null
-+++ b/net/sched/p4tc/trace.h
-@@ -0,0 +1,44 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#undef TRACE_SYSTEM
-+#define TRACE_SYSTEM p4tc
-+
-+#if !defined(__P4TC_TRACE_H_) || defined(TRACE_HEADER_MULTI_READ)
-+#define __P4TC_TRACE_H
-+
-+#include <linux/tracepoint.h>
-+
-+struct p4tc_pipeline;
-+
-+TRACE_EVENT(p4_classify,
-+	    TP_PROTO(struct sk_buff *skb, struct p4tc_pipeline *pipeline),
-+
-+	    TP_ARGS(skb, pipeline),
-+
-+	    TP_STRUCT__entry(__string(pname, pipeline->common.name)
-+			     __field(u32,  p_id)
-+			     __field(u32,  ifindex)
-+			     __field(u32,  ingress)
-+			    ),
-+
-+	    TP_fast_assign(__assign_str(pname, pipeline->common.name);
-+			   __entry->p_id = pipeline->common.p_id;
-+			   __entry->ifindex = skb->dev->ifindex;
-+			   __entry->ingress = skb_at_tc_ingress(skb);
-+			  ),
-+
-+	    TP_printk("dev=%u dir=%s pipeline=%s p_id=%u",
-+		      __entry->ifindex,
-+		      __entry->ingress ? "ingress" : "egress",
-+		      __get_str(pname),
-+		      __entry->p_id
-+		     )
-+);
-+
-+#endif
-+
-+#undef TRACE_INCLUDE_PATH
-+#define TRACE_INCLUDE_PATH .
-+#undef TRACE_INCLUDE_FILE
-+#define TRACE_INCLUDE_FILE trace
-+
-+#include <trace/define_trace.h>
--- 
-2.34.1
+>>>> +       emit_call(&prog, bpf_tail_call_cnt_ptr, ip + (prog - start));
+>>>
+>>> same issue.
+>>
+>> I will rewrite it to emit_bpf_tail_call_cnt_ptr(), which will use pseudo
+>> per-cpu bpf insns to get tcc_ptr from task_struct.
+>>
+>> static void emit_bpf_tail_call_cnt_ptr(u8 **pprog)
+>> {
+>>         u8 *prog = *pprog;
+>>
+>>         /* In short:
+>>          * return &current->bpf_tail_call_cnt;
+>>          */
+>>
+>>         /* mov rax, &pcpu_hot.current_task */
+>>         EMIT3_off32(0x48, 0xC7, 0xC0, ((u32)(unsigned
+>> long)&pcpu_hot.current_task));
+>>
+>> #ifdef CONFIG_SMP
+>>         /* add rax, gs:[&this_cpu_off] */
+>>         EMIT1(0x65);
+>>         EMIT4_off32(0x48, 0x03, 0x04, 0x25, ((u32)(unsigned long)&this_cpu_off));
+>> #endif
+>>
+>>         /* mov rax, qword ptr [rax] */
+>>         EMIT3(0x48, 0x8B, 0x00);
+>>         /* add rax, offsetof(struct task_struct, bpf_tail_call_cnt) */
+>>         EMIT2_off32(0x48, 0x05, ((u32)offsetof(struct task_struct,
+>> bpf_tail_call_cnt)));
+>>
+>>         *pprog = prog;
+>> }
+> 
+> I think it's cleaner to use __naked func with asm volatile
+> and explicit 'rax'.
 
+Yeah. With asm volatile, these two bpf_tail_call_cnt functions are
+similar. And it's easier to understand them together.
+
+> 
+> The suggestion to consider BPF_ADDR_PERCPU insn was in the context
+> of generating it in the verifier, so that JITs don't need
+> to do anything special with tcc.
+> Like if the verifier emits tcc checks that JIT's
+> emit_bpf_tail_call_[in]direct() will only deal with the actual call.
+> That was a bit of an orthogonal optimization/cleanup idea.
+
+Awesome! It's great to handle it in verifier with BPF_ADDR_PERCPU insn.
+
+> 
+>>
+>>>
+>>>> +       EMIT3(0x83, 0x38, MAX_TAIL_CALL_CNT);     /* cmp dword ptr [rax], MAX_TAIL_CALL_CNT */
+>>>>
+>>>>         offset = ctx->tail_call_indirect_label - (prog + 2 - start);
+>>>>         EMIT2(X86_JAE, offset);                   /* jae out */
+>>>> -       EMIT3(0x83, 0xC0, 0x01);                  /* add eax, 1 */
+>>>> -       EMIT2_off32(0x89, 0x85, tcc_off);         /* mov dword ptr [rbp - tcc_off], eax */
+>>>> +       EMIT2(0xFF, 0x00);                        /* inc dword ptr [rax] */
+>>>>
+>>>>         /* prog = array->ptrs[index]; */
+>>>>         EMIT4_off32(0x48, 0x8B, 0x8C, 0xD6,       /* mov rcx, [rsi + rdx * 8 + offsetof(...)] */
+>>>> @@ -663,7 +715,6 @@ static void emit_bpf_tail_call_indirect(struct bpf_prog *bpf_prog,
+>>>>                         pop_r12(&prog);
+>>>>         }
+>>>>
+>>>> -       EMIT1(0x58);                              /* pop rax */
+>>>>         if (stack_depth)
+>>>>                 EMIT3_off32(0x48, 0x81, 0xC4,     /* add rsp, sd */
+>>>>                             round_up(stack_depth, 8));
+>>>> @@ -691,21 +742,20 @@ static void emit_bpf_tail_call_direct(struct bpf_prog *bpf_prog,
+>>>>                                       bool *callee_regs_used, u32 stack_depth,
+>>>>                                       struct jit_context *ctx)
+>>>>  {
+>>>> -       int tcc_off = -4 - round_up(stack_depth, 8);
+>>>>         u8 *prog = *pprog, *start = *pprog;
+>>>>         int offset;
+>>>>
+>>>>         /*
+>>>> -        * if (tail_call_cnt++ >= MAX_TAIL_CALL_CNT)
+>>>> +        * if ((*tcc_ptr)++ >= MAX_TAIL_CALL_CNT)
+>>>>          *      goto out;
+>>>>          */
+>>>> -       EMIT2_off32(0x8B, 0x85, tcc_off);             /* mov eax, dword ptr [rbp - tcc_off] */
+>>>> -       EMIT3(0x83, 0xF8, MAX_TAIL_CALL_CNT);         /* cmp eax, MAX_TAIL_CALL_CNT */
+>>>> +       /* call bpf_tail_call_cnt_ptr */
+>>>> +       emit_call(&prog, bpf_tail_call_cnt_ptr, ip);
+>>>
+>>> and here as well.
+>>
+>> Replace with emit_bpf_tail_call_cnt_ptr(), too.
+>>
+>>>
+>>> pw-bot: cr
+>>
+>> I would like to send next version with these update.
+> 
+> pw-bot is a special keyword that is recognized by "patchwork bot".
+> "cr" stands for "changes requested".
+> It's a patch status in patchwork.
+> It means that the patch will not be applied as-is.
+> So it means that you have to make changes and resend.
+
+Thanks for your explanation. Thanks for your patience.
+
+
+Thanks,
+Leon
