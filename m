@@ -1,52 +1,54 @@
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BF4517548;
-	Thu, 11 Apr 2024 23:05:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 908CC224FA;
+	Thu, 11 Apr 2024 23:05:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712876731; cv=none; b=hMxpYVm0FBj9NpA3Xmm2vJfMc0oyXpqzg7UfREkXdF5jklJk8RxcxK8R9ORq1nhkmBlg/nzPMitxV/RbQN3GkqgqFYzZo7j8tni3SLo6Ev9Ks6ixx57qgScEIOaNaQTeX9C6X0jOH+GTD2u/FYRIUXCAygVHN58Eaeh7E6eizHY=
+	t=1712876733; cv=none; b=mxrFVPKDDrk25gkwUVfK96Zf4YF8IAXQiFiFHATRK3Z7iPnknzC+9hnhjXz/1CvvBavs29KYHJApmGbsdy5318SIbKKSXgRvcUcy+NyrQqlZPXhPOS2+YCWnI6WYqCkadr+Nbhp8NzYwTKxYF58yBfJLBrI3C3wnef1lOFre8Q8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712876731; c=relaxed/simple;
-	bh=wDiqDfSQwKgl2YXcdLMUIGZS+yBAbZt9wH6TycsKLQ8=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=CnwxfJWVyu8/O/i+0TRYPTdDfDjx+uya0UeNST/lt+6JaVsDpp3NITzPaUjY3iRRKnkJCQrvxuPZ/pi624G/F4GhGD3loREGsgLUcwteAlt/3XTOhY7X15Py3Aca1M/o2TWlNS3H5o/WVT/zKRMnKkxYY/ZtUieq6zJ970G5MUI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=qualcomm.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=DOn/9P98; arc=none smtp.client-ip=205.220.168.131
+	s=arc-20240116; t=1712876733; c=relaxed/simple;
+	bh=owgIR5FFMOUQQzS71LELcpwlIX6dqy8tOshNH6lF74w=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=pfrZb4yks48KXZSNiHPyCpIbMEkbu1M0uNR0N3xj0hYorw/JcVHT8/6w6EMAfS15pPAB2B9WbY2NdAdPoBFyYIU/GZW4IB9CYBED4JEC+0YXSQ1DXVpOFwelIcVYTP08r5Dt/sg/rInvJaa155V327C27jvu7bg56BYLEk4vAZo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=qualcomm.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=Pt67OJre; arc=none smtp.client-ip=205.220.180.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="DOn/9P98"
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 43BMj2wk015725;
-	Thu, 11 Apr 2024 23:05:09 GMT
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="Pt67OJre"
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 43BJv1OI015510;
+	Thu, 11 Apr 2024 23:05:10 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	from:to:cc:subject:date:message-id:mime-version
-	:content-transfer-encoding; s=qcppdkim1; bh=xHF+sDd8rsIy2kUSdpvt
-	vP96ViWFd/9tKXSBhWUmSq4=; b=DOn/9P98/+D/+5KZbG2smy99B0u5betliX7b
-	gsl6zieKTOWPCqj1oT40vl3MkbUAqRl+BdVC/giKBAw4CGt7JM9sBIwfZmoIJvVy
-	VN2lWg5VJ63SN5ulsG8Oxlw/4uLrUHs4Q3Ttop9B7jeJhsp+ImOlcOTInYFR4pp/
-	QeEHQnOK53rj7jZrcVqO+IY1Bw0M5WpF4m82nrB7tpQJPX6p6KfceU1/jt/C4+Ay
-	+E5W5KMyKZHACyB/D5uZBV7HrHl9Pb3SXoGTe+6Yg1BN94DpPkESHFKuWHBRMbkd
-	uGLt68oStY82CDUqtmfZnxKUHHCfepvXG+PgMXd7qbkMrl+Qlw==
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3xeb62ap3g-1
+	from:to:cc:subject:date:message-id:in-reply-to:references
+	:mime-version:content-transfer-encoding; s=qcppdkim1; bh=c9gBWCz
+	hHphn6UZmqNQ4Ox7oiNUHdih3QZZpFoOrG7U=; b=Pt67OJreSG6Fv0xvzgE2ecY
+	gTWpn1wK15SyUC+jmDsf2T1nVP6NA79CtPBjjrZto4CjO2cKq4LofYStNsj7vXqi
+	/7kCMEbZ1c3Bqgu91EpUiC76FsvT1Td8ge/LO9g4cQe+UnB1L/VP3tFk/uqwPcPi
+	Mgg4jJEBh3NkrbVCHDVKvDWmI4Ze2vqKanRcpMgCjqPaE47ly2YPTdAX/5SXTFhi
+	KaPJSkbQadMN5ZViegjYoIRNNt/55nbQn6Aq2Gg9w2GFnF/j0v1Tx4q3hHbujw7g
+	ScOBgrUJ8IhLxSPyQOAob/eYG/2SoCHyR1cme/YzGGqAxxOADBHaMVj5qSie1mA=
+	=
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3xec6vtc40-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 11 Apr 2024 23:05:08 +0000 (GMT)
-Received: from pps.filterd (NALASPPMTA01.qualcomm.com [127.0.0.1])
-	by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 43BN58br022029;
+	Thu, 11 Apr 2024 23:05:10 +0000 (GMT)
+Received: from pps.filterd (NALASPPMTA03.qualcomm.com [127.0.0.1])
+	by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 43BN58jP028696;
 	Thu, 11 Apr 2024 23:05:08 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-	by NALASPPMTA01.qualcomm.com (PPS) with ESMTPS id 3xdpry4xym-1
+	by NALASPPMTA03.qualcomm.com (PPS) with ESMTPS id 3xayfnby7u-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
 	Thu, 11 Apr 2024 23:05:08 +0000
-Received: from NALASPPMTA01.qualcomm.com (NALASPPMTA01.qualcomm.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 43BN575N022016;
+Received: from NALASPPMTA03.qualcomm.com (NALASPPMTA03.qualcomm.com [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 43BN57dm028689;
 	Thu, 11 Apr 2024 23:05:07 GMT
 Received: from hu-devc-lv-u20-a-new.qualcomm.com (hu-abchauha-lv.qualcomm.com [10.81.25.35])
-	by NALASPPMTA01.qualcomm.com (PPS) with ESMTPS id 43BN577E022014
+	by NALASPPMTA03.qualcomm.com (PPS) with ESMTPS id 43BN57Rw028683
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
 	Thu, 11 Apr 2024 23:05:07 +0000
 Received: by hu-devc-lv-u20-a-new.qualcomm.com (Postfix, from userid 214165)
-	id B4684220A5; Thu, 11 Apr 2024 16:05:06 -0700 (PDT)
+	id B992E220D9; Thu, 11 Apr 2024 16:05:06 -0700 (PDT)
 From: Abhishek Chauhan <quic_abchauha@quicinc.com>
 To: "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
@@ -57,10 +59,12 @@ To: "David S. Miller" <davem@davemloft.net>,
         Martin KaFai Lau <martin.lau@linux.dev>,
         Daniel Borkmann <daniel@iogearbox.net>, bpf <bpf@vger.kernel.org>
 Cc: kernel@quicinc.com
-Subject: [RFC PATCH bpf-next v2 0/2] Replace mono_delivery_time with tstamp_type
-Date: Thu, 11 Apr 2024 16:05:04 -0700
-Message-Id: <20240411230506.1115174-1-quic_abchauha@quicinc.com>
+Subject: [RFC PATCH bpf-next v2] net: Add additional bit to support userspace timestamp type
+Date: Thu, 11 Apr 2024 16:05:06 -0700
+Message-Id: <20240411230506.1115174-3-quic_abchauha@quicinc.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20240411230506.1115174-1-quic_abchauha@quicinc.com>
+References: <20240411230506.1115174-1-quic_abchauha@quicinc.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -72,59 +76,206 @@ X-QCInternal: smtphost
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: OU1udE0yyT2rmM7aIJvnhhEJDqJkmBGv
-X-Proofpoint-GUID: OU1udE0yyT2rmM7aIJvnhhEJDqJkmBGv
+X-Proofpoint-ORIG-GUID: WELdZSZ_-cLFhkoqayt2bzzDi8nihUsW
+X-Proofpoint-GUID: WELdZSZ_-cLFhkoqayt2bzzDi8nihUsW
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
  definitions=2024-04-11_11,2024-04-09_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- suspectscore=0 priorityscore=1501 mlxscore=0 mlxlogscore=791
- malwarescore=0 phishscore=0 spamscore=0 bulkscore=0 adultscore=0
- clxscore=1015 impostorscore=0 classifier=spam adjust=0 reason=mlx
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 impostorscore=0
+ priorityscore=1501 mlxscore=0 clxscore=1015 adultscore=0
+ lowpriorityscore=0 malwarescore=0 suspectscore=0 spamscore=0
+ mlxlogscore=999 phishscore=0 classifier=spam adjust=0 reason=mlx
  scancount=1 engine=8.19.0-2404010003 definitions=main-2404110165
 
-Patch 1 :- This patch takes care of only renaming the mono delivery
-timestamp to tstamp_type with no change in functionality of 
-existing available code in kernel also  
-Starts assigning tstamp_type with either mono or real and 
-introduces a new enum in the skbuff.h, again no change in functionality 
-of the existing available code in kernel , just making the code scalable.
+tstamp_type can be real, mono or userspace timestamp.
 
-Patch 2 :- Additional bit was added to support userspace timestamp to 
-avoid tstamp drops in the forwarding path when testing TC-ETF. 
-With this patch i am not sure what impacts it has towards BPF code. 
-I need upstream BPF community to help me in adding the necessary BPF 
-changes to avoid any BPF test case failures. 
-I haven't changed any of the BPF functionalities and hence i need 
-upstream BPF help to assist me with those changes so i can make them as 
-part of this patch.  
+This commit adds userspace timestamp and sets it if there is
+valid transmit_time available in socket coming from userspace.
 
-Abhishek Chauhan (2):
-  net: Rename mono_delivery_time to tstamp_type for scalabilty
-  net: Add additional bit to support userspace timestamp type
+To make the design scalable for future needs this commit bring in
+the change to extend the tstamp_type:1 to tstamp_type:2 to support
+userspace timestamp.
 
- include/linux/skbuff.h                        | 50 ++++++++++++++-----
- include/net/inet_frag.h                       |  4 +-
- net/bridge/netfilter/nf_conntrack_bridge.c    |  6 +--
- net/core/dev.c                                |  2 +-
- net/core/filter.c                             |  8 +--
- net/ipv4/inet_fragment.c                      |  2 +-
- net/ipv4/ip_fragment.c                        |  2 +-
- net/ipv4/ip_output.c                          | 10 ++--
+Link: https://lore.kernel.org/netdev/bc037db4-58bb-4861-ac31-a361a93841d3@linux.dev/
+Signed-off-by: Abhishek Chauhan <quic_abchauha@quicinc.com>
+---
+Changes since v1 
+- identified additional changes in BPF framework.
+- Bit shift in SKB_MONO_DELIVERY_TIME_MASK and TC_AT_INGRESS_MASK.
+- Made changes in skb_set_delivery_time to keep changes similar to 
+  previous code for mono_delivery_time and just setting tstamp_type
+  bit 1 for userspace timestamp.
+
+ include/linux/skbuff.h                        | 19 +++++++++++++++----
+ net/ipv4/ip_output.c                          |  2 +-
  net/ipv4/raw.c                                |  2 +-
- net/ipv4/tcp_output.c                         | 14 +++---
- net/ipv6/ip6_output.c                         |  8 +--
- net/ipv6/netfilter.c                          |  6 +--
- net/ipv6/netfilter/nf_conntrack_reasm.c       |  2 +-
+ net/ipv6/ip6_output.c                         |  2 +-
  net/ipv6/raw.c                                |  2 +-
- net/ipv6/reassembly.c                         |  2 +-
- net/ipv6/tcp_ipv6.c                           |  2 +-
- net/packet/af_packet.c                        |  7 ++-
- net/sched/act_bpf.c                           |  4 +-
- net/sched/cls_bpf.c                           |  4 +-
- .../selftests/bpf/prog_tests/ctx_rewrite.c    |  8 +--
- 20 files changed, 84 insertions(+), 61 deletions(-)
+ net/packet/af_packet.c                        |  7 +++----
+ .../selftests/bpf/prog_tests/ctx_rewrite.c    |  8 ++++----
+ 7 files changed, 26 insertions(+), 16 deletions(-)
 
+diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
+index a83a2120b57f..b6346c21c3d4 100644
+--- a/include/linux/skbuff.h
++++ b/include/linux/skbuff.h
+@@ -827,7 +827,8 @@ enum skb_tstamp_type {
+  *	@tstamp_type: When set, skb->tstamp has the
+  *		delivery_time in mono clock base (i.e. EDT).  Otherwise, the
+  *		skb->tstamp has the (rcv) timestamp at ingress and
+- *		delivery_time at egress.
++ *		delivery_time at egress or skb->tstamp defined by skb->sk->sk_clockid
++ *		coming from userspace
+  *	@napi_id: id of the NAPI struct this skb came from
+  *	@sender_cpu: (aka @napi_id) source CPU in XPS
+  *	@alloc_cpu: CPU which did the skb allocation.
+@@ -955,7 +956,7 @@ struct sk_buff {
+ 	/* private: */
+ 	__u8			__mono_tc_offset[0];
+ 	/* public: */
+-	__u8			tstamp_type:1;	/* See SKB_MONO_DELIVERY_TIME_MASK */
++	__u8			tstamp_type:2;	/* See SKB_MONO_DELIVERY_TIME_MASK */
+ #ifdef CONFIG_NET_XGRESS
+ 	__u8			tc_at_ingress:1;	/* See TC_AT_INGRESS_MASK */
+ 	__u8			tc_skip_classify:1;
+@@ -1090,10 +1091,10 @@ struct sk_buff {
+  */
+ #ifdef __BIG_ENDIAN_BITFIELD
+ #define SKB_MONO_DELIVERY_TIME_MASK	(1 << 7)
+-#define TC_AT_INGRESS_MASK		(1 << 6)
++#define TC_AT_INGRESS_MASK		(1 << 5)
+ #else
+ #define SKB_MONO_DELIVERY_TIME_MASK	(1 << 0)
+-#define TC_AT_INGRESS_MASK		(1 << 1)
++#define TC_AT_INGRESS_MASK		(1 << 2)
+ #endif
+ #define SKB_BF_MONO_TC_OFFSET		offsetof(struct sk_buff, __mono_tc_offset)
+ 
+@@ -4262,6 +4263,16 @@ static inline void skb_set_delivery_time(struct sk_buff *skb, ktime_t kt,
+ 	case CLOCK_MONO:
+ 		skb->tstamp_type = kt && tstamp_type;
+ 		break;
++	/* if any other time base, must be from userspace
++	 * so set userspace tstamp_type bit
++	 * See skbuff tstamp_type:2
++	 * 0x0 => real timestamp_type
++	 * 0x1 => mono timestamp_type
++	 * 0x2 => timestamp_type set from userspace
++	 */
++	default:
++		if (kt && tstamp_type)
++			skb->tstamp_type = 0x2;
+ 	}
+ }
+ 
+diff --git a/net/ipv4/ip_output.c b/net/ipv4/ip_output.c
+index 62e457f7c02c..c9317d4addce 100644
+--- a/net/ipv4/ip_output.c
++++ b/net/ipv4/ip_output.c
+@@ -1457,7 +1457,7 @@ struct sk_buff *__ip_make_skb(struct sock *sk,
+ 
+ 	skb->priority = (cork->tos != -1) ? cork->priority: READ_ONCE(sk->sk_priority);
+ 	skb->mark = cork->mark;
+-	skb->tstamp = cork->transmit_time;
++	skb_set_delivery_time(skb, cork->transmit_time, sk->sk_clockid);
+ 	/*
+ 	 * Steal rt from cork.dst to avoid a pair of atomic_inc/atomic_dec
+ 	 * on dst refcount
+diff --git a/net/ipv4/raw.c b/net/ipv4/raw.c
+index dcb11f22cbf2..a7d84fc0e530 100644
+--- a/net/ipv4/raw.c
++++ b/net/ipv4/raw.c
+@@ -360,7 +360,7 @@ static int raw_send_hdrinc(struct sock *sk, struct flowi4 *fl4,
+ 	skb->protocol = htons(ETH_P_IP);
+ 	skb->priority = READ_ONCE(sk->sk_priority);
+ 	skb->mark = sockc->mark;
+-	skb->tstamp = sockc->transmit_time;
++	skb_set_delivery_time(skb, sockc->transmit_time, sk->sk_clockid);
+ 	skb_dst_set(skb, &rt->dst);
+ 	*rtp = NULL;
+ 
+diff --git a/net/ipv6/ip6_output.c b/net/ipv6/ip6_output.c
+index a9e819115622..0b8193bdd98f 100644
+--- a/net/ipv6/ip6_output.c
++++ b/net/ipv6/ip6_output.c
+@@ -1924,7 +1924,7 @@ struct sk_buff *__ip6_make_skb(struct sock *sk,
+ 
+ 	skb->priority = READ_ONCE(sk->sk_priority);
+ 	skb->mark = cork->base.mark;
+-	skb->tstamp = cork->base.transmit_time;
++	skb_set_delivery_time(skb, cork->base.transmit_time, sk->sk_clockid);
+ 
+ 	ip6_cork_steal_dst(skb, cork);
+ 	IP6_INC_STATS(net, rt->rt6i_idev, IPSTATS_MIB_OUTREQUESTS);
+diff --git a/net/ipv6/raw.c b/net/ipv6/raw.c
+index 0d896ca7b589..625f3a917e50 100644
+--- a/net/ipv6/raw.c
++++ b/net/ipv6/raw.c
+@@ -621,7 +621,7 @@ static int rawv6_send_hdrinc(struct sock *sk, struct msghdr *msg, int length,
+ 	skb->protocol = htons(ETH_P_IPV6);
+ 	skb->priority = READ_ONCE(sk->sk_priority);
+ 	skb->mark = sockc->mark;
+-	skb->tstamp = sockc->transmit_time;
++	skb_set_delivery_time(skb, sockc->transmit_time, sk->sk_clockid);
+ 
+ 	skb_put(skb, length);
+ 	skb_reset_network_header(skb);
+diff --git a/net/packet/af_packet.c b/net/packet/af_packet.c
+index 8c6d3fbb4ed8..356c96f23370 100644
+--- a/net/packet/af_packet.c
++++ b/net/packet/af_packet.c
+@@ -2056,8 +2056,7 @@ static int packet_sendmsg_spkt(struct socket *sock, struct msghdr *msg,
+ 	skb->dev = dev;
+ 	skb->priority = READ_ONCE(sk->sk_priority);
+ 	skb->mark = READ_ONCE(sk->sk_mark);
+-	skb->tstamp = sockc.transmit_time;
+-
++	skb_set_delivery_time(skb, sockc.transmit_time, sk->sk_clockid);
+ 	skb_setup_tx_timestamp(skb, sockc.tsflags);
+ 
+ 	if (unlikely(extra_len == 4))
+@@ -2585,7 +2584,7 @@ static int tpacket_fill_skb(struct packet_sock *po, struct sk_buff *skb,
+ 	skb->dev = dev;
+ 	skb->priority = READ_ONCE(po->sk.sk_priority);
+ 	skb->mark = READ_ONCE(po->sk.sk_mark);
+-	skb->tstamp = sockc->transmit_time;
++	skb_set_delivery_time(skb, sockc->transmit_time, po->sk.sk_clockid);
+ 	skb_setup_tx_timestamp(skb, sockc->tsflags);
+ 	skb_zcopy_set_nouarg(skb, ph.raw);
+ 
+@@ -3063,7 +3062,7 @@ static int packet_snd(struct socket *sock, struct msghdr *msg, size_t len)
+ 	skb->dev = dev;
+ 	skb->priority = READ_ONCE(sk->sk_priority);
+ 	skb->mark = sockc.mark;
+-	skb->tstamp = sockc.transmit_time;
++	skb_set_delivery_time(skb, sockc.transmit_time, sk->sk_clockid);
+ 
+ 	if (unlikely(extra_len == 4))
+ 		skb->no_fcs = 1;
+diff --git a/tools/testing/selftests/bpf/prog_tests/ctx_rewrite.c b/tools/testing/selftests/bpf/prog_tests/ctx_rewrite.c
+index 3b7c57fe55a5..d7f58d9671f7 100644
+--- a/tools/testing/selftests/bpf/prog_tests/ctx_rewrite.c
++++ b/tools/testing/selftests/bpf/prog_tests/ctx_rewrite.c
+@@ -69,15 +69,15 @@ static struct test_case test_cases[] = {
+ 	{
+ 		N(SCHED_CLS, struct __sk_buff, tstamp),
+ 		.read  = "r11 = *(u8 *)($ctx + sk_buff::__mono_tc_offset);"
+-			 "w11 &= 3;"
+-			 "if w11 != 0x3 goto pc+2;"
++			 "w11 &= 5;"
++			 "if w11 != 0x5 goto pc+2;"
+ 			 "$dst = 0;"
+ 			 "goto pc+1;"
+ 			 "$dst = *(u64 *)($ctx + sk_buff::tstamp);",
+ 		.write = "r11 = *(u8 *)($ctx + sk_buff::__mono_tc_offset);"
+-			 "if w11 & 0x2 goto pc+1;"
++			 "if w11 & 0x4 goto pc+1;"
+ 			 "goto pc+2;"
+-			 "w11 &= -2;"
++			 "w11 &= -4;"
+ 			 "*(u8 *)($ctx + sk_buff::__mono_tc_offset) = r11;"
+ 			 "*(u64 *)($ctx + sk_buff::tstamp) = $src;",
+ 	},
 -- 
 2.25.1
 
