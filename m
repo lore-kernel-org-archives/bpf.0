@@ -1,91 +1,150 @@
-Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com [209.85.167.47])
+Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com [209.85.128.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E4C15914E
-	for <bpf@vger.kernel.org>; Fri, 12 Apr 2024 15:32:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8539E13DDCC
+	for <bpf@vger.kernel.org>; Fri, 12 Apr 2024 15:38:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712935960; cv=none; b=Cf/OP/JIJcrT2tojEyJdtg4VGLFEJW5Pzbu1MEPcgemzoQ5sx33P7MVHDJdnUg3ZX4SjoTnnkkMNQWjVWN7/ak0ShbqL+6Iu9J5+UgO23PziOr2Azy7e17UCKgW2WWYA87gum2yZOPZoYLzn7vnygUMQ7UgA42Y5uy14hXbCJp0=
+	t=1712936299; cv=none; b=qTgyokNB37Vzl1w7qkSyp6LrpQuBvNxYtyHnzIKLXMxh/ZaqXht91IEuzK39N/65LcEjtxX0i5SSGO1+XEdAj8m+/OnR4zX9AQfrFeR3Xq9GyoJGRIK54/VfKxzBG5PKmmIjkAMRBHNLbx7Gej0IZeAVM9aI/rO4TbOFn+KCWlw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712935960; c=relaxed/simple;
-	bh=j93jEF2GlD+i0MVOEMhm2vuLbdm2ki3Q9BlnhRi3w0M=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=rS4NhKeQiKwslO4UzkJzKh+CEKceHIxe1tYUF6Nl8srba9vyMJ+peEZTAvkekbOjix95Ct71WD4JTkWyfGloUtHEoWvhksAiMIZlyXT44hBMe6cA4TniE3m7J/FJBaU5LKnC1RgBZxfCMM1of6Qk1CnT/bJyWR8DHjhyw+saX0s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Gxh73LIZ; arc=none smtp.client-ip=209.85.167.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1712936299; c=relaxed/simple;
+	bh=feaXepO6mCcRDgHe5YC62zkfeh1WyMJRpN3oTbKTR1Q=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=SNhAZFXDMPvd1KagLwOuRG4NF7Bs8Y1JX9FMlWgC6/24A+v4oU5spOOwEV36cu5NoczJgLpWLcsWKGUmVv0yzzF/jrSzz9M6cfyBStnV7NisPE2Dk5I9VVawvcBDSWCHrmydVJqSxIrZaNtK+jAwRukVTNpM1rmQfQSCiOEDMx4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=DOQiydPs; arc=none smtp.client-ip=209.85.128.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Gxh73LIZ"
-Received: by mail-lf1-f47.google.com with SMTP id 2adb3069b0e04-516c403cc46so2275062e87.3
-        for <bpf@vger.kernel.org>; Fri, 12 Apr 2024 08:32:39 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="DOQiydPs"
+Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-61874a5b8ecso10502767b3.0
+        for <bpf@vger.kernel.org>; Fri, 12 Apr 2024 08:38:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1712935957; x=1713540757; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=j93jEF2GlD+i0MVOEMhm2vuLbdm2ki3Q9BlnhRi3w0M=;
-        b=Gxh73LIZJHNjvXmBfoW3KLA6gUYdfRtvXQg0L3JQALspfduNuVxunO4rNfvKeS5Xkj
-         VkYfWMNCYVKSms8mfo8VA/xqqj0RKJCRp6xGFfh1Re0L+t67abgsa50SBJ6D6Y1hmTKn
-         SKsxCwfMtiB5EcExVsIal5CLpw+MRYm64ICOb051nlZ2cvtLA7gt6o3eITw2ZabtmQjX
-         ZEgfEEujH9xp7mhNUx+ExzRVtnxPcCOxvwSOfaXFY4xg7vD4GC2sEepUYspVt4Kwkd7N
-         zly3yyxkSw5q6iA565Vr0OxlPIOGH5xvYi+WuTGgoqdR5fgkUvBXKFwpd5SzABffDeIE
-         r9rQ==
+        d=paul-moore.com; s=google; t=1712936296; x=1713541096; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=fRsLhmspJrGAlI8VzBOaMngZDHCKYEewxjKZbuVmGJo=;
+        b=DOQiydPs5heo40A6ZpiHcdhwTS2mfVMwVFTusHpDOVfUJlNTlV/O4PgS7NDNiPY2Te
+         /v1II6WyRg/jGTbgXpKkEW/QEcnMMekUkhrGMMCT8pggwC4RxuE16t6oZEGQxX951wk0
+         O7cyBFvwlQHR//l7ajRA4hi6pLARioULhEN663Bm5g1T3FsEOPuKGRl9f5Lk1utUuGPD
+         k5x883XPAUF/9h22YnxZmea/FlNoOCqwY3MFNOhDEcOBdB8L5pZyN8epT4MVkfiRUQoe
+         2JPPdQ15eubsW4hrHrPSEiN0w3HLtTQq3Q/H0REpgIivj0P/HNIfVzzvqMb/NpiELeIF
+         cR0A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712935957; x=1713540757;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=j93jEF2GlD+i0MVOEMhm2vuLbdm2ki3Q9BlnhRi3w0M=;
-        b=KnQJS634CFVP8b2wRkuBSKj2R1b7cLCR2YA1ctPjqVPcMP8U9drKFzoDGFZ9gO8L5A
-         3VAWvRSuoi82NdM1+8dUKOi7EeqmXMLavGvsIljLBfmMSr7uBDnUiXHVFNoN7v/WpIUy
-         MjPvld6LPbDGpScCJKcwvQSr+nJ6Tp092YWFK/OAGkqUg+fSNIvjEaS1VmD40SEtzj3U
-         2Tc6Hh7O1O0SnBJ1jQKyE2STjOcLFilH/O7RSe0QWO0El9LXlNoJuWH72BI17ayhnQdD
-         LEj8OtxgiowNMCp3K5T1O9LpT7gGTKTxBRYgC7XNg0oMh0W2A5ngHyvqVtV9uOYNl+Zs
-         r7xw==
-X-Forwarded-Encrypted: i=1; AJvYcCVRRgmQlu0nO+0St6YCiME+sRKvu7GIWEJzx+1mMpiRwi4WiF/IP3ra9GgR3WgIpgem1SqCh4a+XpiLUzYKkncnC2kv
-X-Gm-Message-State: AOJu0YzDjH+L2G3GgUcyYG+neIsyW2HJIjbDhUanUiyX8l65eoG8hhCG
-	vZBsiUq2kfcCrK0uGTYE3Dq1tPmhPmVmdl9yz+Nk6UHHP4/njMQIBm8DafTT
-X-Google-Smtp-Source: AGHT+IG9X81+2V1l9uJ0YkHXho2ZjhN+n6k0mODMMJVvMX7U3BdQrAlZ02ARaPKxj+2CXncZtMtkbg==
-X-Received: by 2002:ac2:41d3:0:b0:516:d3de:88e with SMTP id d19-20020ac241d3000000b00516d3de088emr2068258lfi.49.1712935957268;
-        Fri, 12 Apr 2024 08:32:37 -0700 (PDT)
-Received: from [192.168.100.206] ([89.28.99.140])
-        by smtp.gmail.com with ESMTPSA id go36-20020a1709070da400b00a51fea47897sm1930091ejc.214.2024.04.12.08.32.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 12 Apr 2024 08:32:36 -0700 (PDT)
-Message-ID: <8d12fcfe44693bf69382951c8b090b06df8fe912.camel@gmail.com>
-Subject: Re: [PATCH bpf-next 05/11] bpf: initialize/free array of
- btf_field(s).
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Kui-Feng Lee <sinquersw@gmail.com>, Kui-Feng Lee <thinker.li@gmail.com>,
-  bpf@vger.kernel.org, ast@kernel.org, martin.lau@linux.dev,
- song@kernel.org,  kernel-team@meta.com, andrii@kernel.org
-Cc: kuifeng@meta.com
-Date: Fri, 12 Apr 2024 18:32:35 +0300
-In-Reply-To: <f1957694-13c3-4b4f-96f1-451b8acedc4b@gmail.com>
-References: <20240410004150.2917641-1-thinker.li@gmail.com>
-	 <20240410004150.2917641-6-thinker.li@gmail.com>
-	 <57d016ec8ccb9cbc454f318d74b6d657de59ffcd.camel@gmail.com>
-	 <f1957694-13c3-4b4f-96f1-451b8acedc4b@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4-0ubuntu2 
+        d=1e100.net; s=20230601; t=1712936296; x=1713541096;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=fRsLhmspJrGAlI8VzBOaMngZDHCKYEewxjKZbuVmGJo=;
+        b=dCq1J8IyUYTcdWva3Qx+XIY82CRFNRnhLWlAoprxdk8h/WT7v+s7Df7KgbtqHctRuR
+         qi9oedNNwobZUL/Wn4HaB1EbkOr6omtciOyapoqJUmtwpD7COBZ3JMsqsjw61YDF1j/i
+         zD8uFOlmPLLGRALf/2Q6dE+AzpU9c9aG6I2pGtLUeaItsexZdj+aIr0XyYbTjelkeh9N
+         vHaJoZCvmuJOvuv4QnLJo8jIi5Av9MfdkG45co676nCaR8gDq4cGczGaFInU65lRPw6r
+         Wn7rX9DNsYkk4cPZyhqvAMr4mlx1FbgPg7TDK/nWw+oAyA+mC3jRZ/HL0kxai77k+Tih
+         Wp7Q==
+X-Gm-Message-State: AOJu0YzOEiilI3Vhya6Ni8/GbPsYDOLXzq2pfY1V+Ypvc59IX2sWhsRZ
+	SGF9ZdA+jt63Gi3eD0/HQPFSMYn8a59vW2ZpEH8J3lIjAsltCOlb3XoWYyxBwKfUVugSI9FHf84
+	xhHkqKQydfEuq+gbVWE6Vx65ExWAu9JUfGVN1
+X-Google-Smtp-Source: AGHT+IHGk9GUlGOTcnEZDYfJjj7QEfDwKDa2s/bpxEAk9fg7DLcA+nzBug9hzKR0y9xbh9qoLjYXcchA/vnqHeA8iEg=
+X-Received: by 2002:a0d:d4ca:0:b0:615:f53:64de with SMTP id
+ w193-20020a0dd4ca000000b006150f5364demr2773367ywd.29.1712936295896; Fri, 12
+ Apr 2024 08:38:15 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+References: <20240207124918.3498756-4-kpsingh@kernel.org> <a6689b0b5564461b829a18379eb3e83f@paul-moore.com>
+ <492036A7-4944-4225-B045-3C2F79DBEA31@kernel.org>
+In-Reply-To: <492036A7-4944-4225-B045-3C2F79DBEA31@kernel.org>
+From: Paul Moore <paul@paul-moore.com>
+Date: Fri, 12 Apr 2024 11:39:02 -0400
+Message-ID: <CAHC9VhTN-H1m01BZ2Z_W_roTEeUGf-k=_YmOb-12ZNJ_996foA@mail.gmail.com>
+Subject: Re: [PATCH v9 3/4] security: Replace indirect LSM hook calls with
+ static calls
+To: KP Singh <kpsingh@kernel.org>
+Cc: bpf@vger.kernel.org, linux-security-module@vger.kernel.org, 
+	Kees Cook <keescook@chromium.org>, Casey Schaufler <casey@schaufler-ca.com>, song@kernel.org, 
+	daniel@iogearbox.net, ast@kernel.org, pabeni@redhat.com, andrii@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, 2024-04-11 at 20:56 -0700, Kui-Feng Lee wrote:
-[...]
+On Thu, Apr 11, 2024 at 3:12=E2=80=AFAM KP Singh <kpsingh@kernel.org> wrote=
+:
+> > On 11 Apr 2024, at 02:38, Paul Moore <paul@paul-moore.com> wrote:
+> > On Feb  7, 2024 KP Singh <kpsingh@kernel.org> wrote:
+> >>
+> >> LSM hooks are currently invoked from a linked list as indirect calls
+> >> which are invoked using retpolines as a mitigation for speculative
+> >> attacks (Branch History / Target injection) and add extra overhead whi=
+ch
+> >> is especially bad in kernel hot paths:
 
-> So, I decided not to support rbtree nodes and list nodes.
->=20
-> However, there are a discussion about looking into fields of struct
-> types in an outer struct type. So, we will have another patchset to
-> implement it. Once we have it, we can support the case of gFoo and
-> all_nodes described earlier.
+...
 
-All this makes sense, but in such a case would it make sense to adjust
-btf_find_datasec_var() to avoid adding BPF_RB_NODE and BPF_LIST_NODE
-variables with nelem > 1? (Like it does for BPF_TIMER etc).
+> > Beyond that, let's find a way to use static calls in the LSM hooks
+> > which don't use the call_{int,void}_hook() macros.  If we're going to d=
+o
+> > this to help close some attack vectors, let's make sure we do the
+> > conversion everywhere.
+>
+> This is surely doable, We can unroll the loop individually in these separ=
+ate hooks. It would need separate
+>
+> LSM_LOOP_UNROLL(__CALL_STATIC_xfrm_state_pol_flow_match, x, xp file)
+>
+> Would you be okay if we do it in a follow up series? These are special ho=
+oks and I don't want to introduce any subtle logical bugs when fixing poten=
+tial speculative side channels (Which could be fixed with retpolines, prope=
+r flushing at privilege changes etc).
+
+I'm okay if you want to do it in a separate patch, but I would like to
+see it included in the same patchset.  The good news is that recent
+commits have significantly reduced the number of cases where we aren't
+using the macros.
+
+> >> @@ -846,29 +906,41 @@ int lsm_fill_user_ctx(struct lsm_ctx __user *uct=
+x, size_t *uctx_len,
+> >>  * call_int_hook:
+> >>  * This is a hook that returns a value.
+> >>  */
+> >> +#define __CALL_STATIC_VOID(NUM, HOOK, ...)      \
+> >> +do {      \
+> >> + if (static_branch_unlikely(&SECURITY_HOOK_ACTIVE_KEY(HOOK, NUM))) { =
+   \
+> >
+> > I'm not a fan of the likely()/unlikely() style markings/macros in cases
+> > like this as it can vary tremendously.  Drop the likely()/unlikely()
+> > checks and just do a static_call().
+> >
+>
+> These are actually not the the classical likely, unlikely macros which ar=
+e just hints to the compiler:
+>
+> #define likely(x) __builtin_expect(!!(x), 1)
+> #define unlikely(x) __builtin_expect(!!(x), 0
+>
+>
+> but a part of the static keys API which generates jump tables and the cod=
+e generated depends on the (default state, likelyhood). It could have been =
+named better, all we need is to have a jump table so that we can optimize t=
+his extra branch in hotpaths, in one direction.
+>
+>    https://www.kernel.org/doc/Documentation/static-keys.txt
+>
+>
+> If you want I can put this behind a macro:
+>
+>
+> #define LSM_HOOK_ACTIVE(HOOK, NUM) static_branch_unlikely(&SECURITY_HOOK_=
+ACTIVE_KEY(HOOK, NUM)
+>
+> the static_branch_likely / static_branch_unlikey actually does not matter=
+ much here, because without this we have a conditional branch and an extra =
+load.
+
+Fair enough, leave it as-is.  Thanks for the explanation.
+
+--=20
+paul-moore.com
