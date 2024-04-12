@@ -1,150 +1,176 @@
-Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com [209.85.128.174])
+Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8539E13DDCC
-	for <bpf@vger.kernel.org>; Fri, 12 Apr 2024 15:38:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A474F1487CB
+	for <bpf@vger.kernel.org>; Fri, 12 Apr 2024 15:38:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712936299; cv=none; b=qTgyokNB37Vzl1w7qkSyp6LrpQuBvNxYtyHnzIKLXMxh/ZaqXht91IEuzK39N/65LcEjtxX0i5SSGO1+XEdAj8m+/OnR4zX9AQfrFeR3Xq9GyoJGRIK54/VfKxzBG5PKmmIjkAMRBHNLbx7Gej0IZeAVM9aI/rO4TbOFn+KCWlw=
+	t=1712936330; cv=none; b=fgZQF/r2iCkUDpAWLGoVcNLOJSjFJFwtyCaKtE6poj6dTfOEmlgJyvqs2dgpZOe4NQbUHToHhnNkLRgzy6NlACvGqPqONeArLyu0O02Me1hzNfraskerTgDzbesVwMy0A10XehI4gcefD+95yEb0ivGPn3iAqgDK35iX1TSLhwg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712936299; c=relaxed/simple;
-	bh=feaXepO6mCcRDgHe5YC62zkfeh1WyMJRpN3oTbKTR1Q=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=SNhAZFXDMPvd1KagLwOuRG4NF7Bs8Y1JX9FMlWgC6/24A+v4oU5spOOwEV36cu5NoczJgLpWLcsWKGUmVv0yzzF/jrSzz9M6cfyBStnV7NisPE2Dk5I9VVawvcBDSWCHrmydVJqSxIrZaNtK+jAwRukVTNpM1rmQfQSCiOEDMx4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=DOQiydPs; arc=none smtp.client-ip=209.85.128.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+	s=arc-20240116; t=1712936330; c=relaxed/simple;
+	bh=FKKMgqvHByKA4tvc3eA5ffKwH9FrWfmfSY8lLNIiWog=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=ugAENLrJ1LThTmJ0BYJY3wtodGjTkhVwxA0eggagfkShvkz5zrWY5MZN6x0JGFo1Gt9yMrEzFqyyMQFVI+8QBl84Lwo8S1T9hrQgEQ3+tziB2dwLiefzJk2GQkF9JI5DlsaLRO6bNqxIvTqmWdo6gc4X0cNHsGSUcnGzOY4gbjU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=O1xMdSjQ; arc=none smtp.client-ip=209.85.221.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="DOQiydPs"
-Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-61874a5b8ecso10502767b3.0
-        for <bpf@vger.kernel.org>; Fri, 12 Apr 2024 08:38:17 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="O1xMdSjQ"
+Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-343eb6cc46bso669431f8f.2
+        for <bpf@vger.kernel.org>; Fri, 12 Apr 2024 08:38:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1712936296; x=1713541096; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fRsLhmspJrGAlI8VzBOaMngZDHCKYEewxjKZbuVmGJo=;
-        b=DOQiydPs5heo40A6ZpiHcdhwTS2mfVMwVFTusHpDOVfUJlNTlV/O4PgS7NDNiPY2Te
-         /v1II6WyRg/jGTbgXpKkEW/QEcnMMekUkhrGMMCT8pggwC4RxuE16t6oZEGQxX951wk0
-         O7cyBFvwlQHR//l7ajRA4hi6pLARioULhEN663Bm5g1T3FsEOPuKGRl9f5Lk1utUuGPD
-         k5x883XPAUF/9h22YnxZmea/FlNoOCqwY3MFNOhDEcOBdB8L5pZyN8epT4MVkfiRUQoe
-         2JPPdQ15eubsW4hrHrPSEiN0w3HLtTQq3Q/H0REpgIivj0P/HNIfVzzvqMb/NpiELeIF
-         cR0A==
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1712936327; x=1713541127; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=6PZpErhXoFLSgcwKLydiKCIqyrzv/osbJWkwgwT5Ay0=;
+        b=O1xMdSjQwoUHvRW1ydPKWZqHpGO7AFro/nxnv0Ztanz5XcHzWmzb3KujO+CO7KcfEE
+         2fqQAh2pdC/PYCWUVjjMNeguYH33VAJYArT3MGR3/+6D3m8EtalFyrJlg7rdx0HY2TT8
+         Y4suxBITFQHxYbXucrfrmcnnFLOabNsSTU3RtSjZoZJiMgjRJneXc0bTnQ46d3k1yt4a
+         f74wU3mqFXz/aQUKvEe39hl8wtbRz687KjrWsFN2nIIvb3gQNdv1AHSIDrJ7JVplbA0B
+         aG539MzeCL/fMcwxqcrinI3hNGFTrLLjyiJTGb+G3b5VE5cFzqpGGjMVspO82NTkINF0
+         TNWg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1712936296; x=1713541096;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=fRsLhmspJrGAlI8VzBOaMngZDHCKYEewxjKZbuVmGJo=;
-        b=dCq1J8IyUYTcdWva3Qx+XIY82CRFNRnhLWlAoprxdk8h/WT7v+s7Df7KgbtqHctRuR
-         qi9oedNNwobZUL/Wn4HaB1EbkOr6omtciOyapoqJUmtwpD7COBZ3JMsqsjw61YDF1j/i
-         zD8uFOlmPLLGRALf/2Q6dE+AzpU9c9aG6I2pGtLUeaItsexZdj+aIr0XyYbTjelkeh9N
-         vHaJoZCvmuJOvuv4QnLJo8jIi5Av9MfdkG45co676nCaR8gDq4cGczGaFInU65lRPw6r
-         Wn7rX9DNsYkk4cPZyhqvAMr4mlx1FbgPg7TDK/nWw+oAyA+mC3jRZ/HL0kxai77k+Tih
-         Wp7Q==
-X-Gm-Message-State: AOJu0YzOEiilI3Vhya6Ni8/GbPsYDOLXzq2pfY1V+Ypvc59IX2sWhsRZ
-	SGF9ZdA+jt63Gi3eD0/HQPFSMYn8a59vW2ZpEH8J3lIjAsltCOlb3XoWYyxBwKfUVugSI9FHf84
-	xhHkqKQydfEuq+gbVWE6Vx65ExWAu9JUfGVN1
-X-Google-Smtp-Source: AGHT+IHGk9GUlGOTcnEZDYfJjj7QEfDwKDa2s/bpxEAk9fg7DLcA+nzBug9hzKR0y9xbh9qoLjYXcchA/vnqHeA8iEg=
-X-Received: by 2002:a0d:d4ca:0:b0:615:f53:64de with SMTP id
- w193-20020a0dd4ca000000b006150f5364demr2773367ywd.29.1712936295896; Fri, 12
- Apr 2024 08:38:15 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1712936327; x=1713541127;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=6PZpErhXoFLSgcwKLydiKCIqyrzv/osbJWkwgwT5Ay0=;
+        b=bV0Bv4ls3qROgVspiQq3IMCvU7AOkphFnb9ty4/hGVK1xyRnxonXpYDDg4ai54ws2D
+         lIBIzbqdji+3QTH87FSlFsGDfuFONSTO0i6sFVYOfH3FGL0Qs6aEjtnfa9VjRViugeVS
+         ewPGbUlKGbD1YKMnZr0es6jcy9Swx1lX4L+fmeom+sK7ZypcCKTz7kXoTmJiRStRsDGt
+         /L9j6ul746dbESki/WWDF8X5EInZj3Al17qPDV2DEFXx6+iq2VyfEUNRcv46czbf9Fwz
+         6nk+P5P45JQ9mYeZfv1riGl/wwjrtA5nxovBl3oxyKndx/HWTgc5itSVCU7J4/u7GtBu
+         XpEg==
+X-Forwarded-Encrypted: i=1; AJvYcCX6KS6r/DDfUFRSV6syOOsK2F1pHSGSOz5r4AcW0uSmg49xbx1PFRnZsX55CHIF4yGJQBQA8MvxaxgKKKwe8gOBoVPQ
+X-Gm-Message-State: AOJu0Yx4/VAB1zYOVuLv0FmJlN4e0I6ChAJJl8XIfDsA7yMbCb6BVi1w
+	g0JYr5gnCMeOry7P7mmxISPWFnIpvu7J9voxQNj/sGJR2Zyp8D7Uq/iK9/oqnQA=
+X-Google-Smtp-Source: AGHT+IFvHJ+ngcqc9RhfIXSS90heNPGSCkUVEJnwKOCeh0icy2zvFyQwZwEFve7IGLGy1/ZjqkhBHw==
+X-Received: by 2002:a5d:6082:0:b0:341:c589:8aea with SMTP id w2-20020a5d6082000000b00341c5898aeamr1589834wrt.63.1712936326779;
+        Fri, 12 Apr 2024 08:38:46 -0700 (PDT)
+Received: from [127.0.1.1] ([84.102.31.74])
+        by smtp.gmail.com with ESMTPSA id k9-20020adff289000000b0033e45930f35sm4545791wro.6.2024.04.12.08.38.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 12 Apr 2024 08:38:46 -0700 (PDT)
+From: Julien Panis <jpanis@baylibre.com>
+Subject: [PATCH net-next v9 0/3] Add minimal XDP support to TI AM65 CPSW
+ Ethernet driver
+Date: Fri, 12 Apr 2024 17:38:31 +0200
+Message-Id: <20240223-am65-cpsw-xdp-basic-v9-0-2c194217e325@baylibre.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240207124918.3498756-4-kpsingh@kernel.org> <a6689b0b5564461b829a18379eb3e83f@paul-moore.com>
- <492036A7-4944-4225-B045-3C2F79DBEA31@kernel.org>
-In-Reply-To: <492036A7-4944-4225-B045-3C2F79DBEA31@kernel.org>
-From: Paul Moore <paul@paul-moore.com>
-Date: Fri, 12 Apr 2024 11:39:02 -0400
-Message-ID: <CAHC9VhTN-H1m01BZ2Z_W_roTEeUGf-k=_YmOb-12ZNJ_996foA@mail.gmail.com>
-Subject: Re: [PATCH v9 3/4] security: Replace indirect LSM hook calls with
- static calls
-To: KP Singh <kpsingh@kernel.org>
-Cc: bpf@vger.kernel.org, linux-security-module@vger.kernel.org, 
-	Kees Cook <keescook@chromium.org>, Casey Schaufler <casey@schaufler-ca.com>, song@kernel.org, 
-	daniel@iogearbox.net, ast@kernel.org, pabeni@redhat.com, andrii@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAHdVGWYC/43QzW7CMAwH8FdBOZMt30057T2mCdmJOzJBqBrUg
+ RDvvtDbpmrK0bH9y1++s0JTosJ2mzubaE4lnXMt+u2GhQPkT+Ip1popoYxQSnM4OcvDWL75NY4
+ coaTATUSvvBUejWd1s74SxwlyODx3v0bIqbzW+f0JUj6mTPtZPAfHiYZ0Xb5/Z5kuPNP1wj5q5
+ 5DK5TzdllyzXPr/Rpgll7wfBLqAEbQUbwi3Y8KJXsL5tJCzamAUF1zI4AJAAES3wugGRlfGxt4
+ Y6KM3sJbGNDCmMtprJ8FpMB5/M9tNw7oiY8lGCsL4lRS2IYWtDAbZ6V52AsPaTVwD455ppCIaB
+ ovRDitM18B0lQna2y54FSHiCuMbGF+ZQRsl0foIov/DPB6PH37djukcAwAA
+To: "David S. Miller" <davem@davemloft.net>, 
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
+ Paolo Abeni <pabeni@redhat.com>, Russell King <linux@armlinux.org.uk>, 
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+ Jesper Dangaard Brouer <hawk@kernel.org>, 
+ John Fastabend <john.fastabend@gmail.com>, 
+ Sumit Semwal <sumit.semwal@linaro.org>, 
+ =?utf-8?q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
+ Simon Horman <horms@kernel.org>, Andrew Lunn <andrew@lunn.ch>, 
+ Ratheesh Kannoth <rkannoth@marvell.com>, 
+ Naveen Mamindlapalli <naveenm@marvell.com>, 
+ Jacob Keller <jacob.e.keller@intel.com>
+Cc: danishanwar@ti.com, yuehaibing@huawei.com, rogerq@kernel.org, 
+ netdev@vger.kernel.org, linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
+ linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org, 
+ linaro-mm-sig@lists.linaro.org, Julien Panis <jpanis@baylibre.com>
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1712936324; l=3692;
+ i=jpanis@baylibre.com; s=20230526; h=from:subject:message-id;
+ bh=FKKMgqvHByKA4tvc3eA5ffKwH9FrWfmfSY8lLNIiWog=;
+ b=kwII0V9/2FbZDaTT8w+6oNfTEwAwUdOycaJSWRYmzp5yES3hHPlZUB8rpnxgLZj6mscBbWIPZ
+ z+FRe6YDvzgDTx5m8F8cVA6A+X+ILKW6dCkIu4bWnfCN8UUKFssa5lV
+X-Developer-Key: i=jpanis@baylibre.com; a=ed25519;
+ pk=8eSM4/xkiHWz2M1Cw1U3m2/YfPbsUdEJPCWY3Mh9ekQ=
 
-On Thu, Apr 11, 2024 at 3:12=E2=80=AFAM KP Singh <kpsingh@kernel.org> wrote=
-:
-> > On 11 Apr 2024, at 02:38, Paul Moore <paul@paul-moore.com> wrote:
-> > On Feb  7, 2024 KP Singh <kpsingh@kernel.org> wrote:
-> >>
-> >> LSM hooks are currently invoked from a linked list as indirect calls
-> >> which are invoked using retpolines as a mitigation for speculative
-> >> attacks (Branch History / Target injection) and add extra overhead whi=
-ch
-> >> is especially bad in kernel hot paths:
+This patch adds XDP support to TI AM65 CPSW Ethernet driver.
 
-...
+The following features are implemented: NETDEV_XDP_ACT_BASIC,
+NETDEV_XDP_ACT_REDIRECT, and NETDEV_XDP_ACT_NDO_XMIT.
 
-> > Beyond that, let's find a way to use static calls in the LSM hooks
-> > which don't use the call_{int,void}_hook() macros.  If we're going to d=
-o
-> > this to help close some attack vectors, let's make sure we do the
-> > conversion everywhere.
->
-> This is surely doable, We can unroll the loop individually in these separ=
-ate hooks. It would need separate
->
-> LSM_LOOP_UNROLL(__CALL_STATIC_xfrm_state_pol_flow_match, x, xp file)
->
-> Would you be okay if we do it in a follow up series? These are special ho=
-oks and I don't want to introduce any subtle logical bugs when fixing poten=
-tial speculative side channels (Which could be fixed with retpolines, prope=
-r flushing at privilege changes etc).
+Zero-copy and non-linear XDP buffer supports are NOT implemented.
 
-I'm okay if you want to do it in a separate patch, but I would like to
-see it included in the same patchset.  The good news is that recent
-commits have significantly reduced the number of cases where we aren't
-using the macros.
+Besides, the page pool memory model is used to get better performance.
 
-> >> @@ -846,29 +906,41 @@ int lsm_fill_user_ctx(struct lsm_ctx __user *uct=
-x, size_t *uctx_len,
-> >>  * call_int_hook:
-> >>  * This is a hook that returns a value.
-> >>  */
-> >> +#define __CALL_STATIC_VOID(NUM, HOOK, ...)      \
-> >> +do {      \
-> >> + if (static_branch_unlikely(&SECURITY_HOOK_ACTIVE_KEY(HOOK, NUM))) { =
-   \
-> >
-> > I'm not a fan of the likely()/unlikely() style markings/macros in cases
-> > like this as it can vary tremendously.  Drop the likely()/unlikely()
-> > checks and just do a static_call().
-> >
->
-> These are actually not the the classical likely, unlikely macros which ar=
-e just hints to the compiler:
->
-> #define likely(x) __builtin_expect(!!(x), 1)
-> #define unlikely(x) __builtin_expect(!!(x), 0
->
->
-> but a part of the static keys API which generates jump tables and the cod=
-e generated depends on the (default state, likelyhood). It could have been =
-named better, all we need is to have a jump table so that we can optimize t=
-his extra branch in hotpaths, in one direction.
->
->    https://www.kernel.org/doc/Documentation/static-keys.txt
->
->
-> If you want I can put this behind a macro:
->
->
-> #define LSM_HOOK_ACTIVE(HOOK, NUM) static_branch_unlikely(&SECURITY_HOOK_=
-ACTIVE_KEY(HOOK, NUM)
->
-> the static_branch_likely / static_branch_unlikey actually does not matter=
- much here, because without this we have a conditional branch and an extra =
-load.
+Signed-off-by: Julien Panis <jpanis@baylibre.com>
+---
+Changes in v9:
+- In k3_cppi_desc_pool_destroy(), free memory allocated for pool.
+- In k3_cppi_desc_pool_create_name() function, remove unnecessary
+error messages on mem alloc failures.
+- In k3_cppi_desc_pool_create_name() function, move desc_infos alloc
+forward to leverage pool_name freeing in gen_pool_destroy().
+- In k3_cppi_desc_pool_create_name() function, remove unnecessary
+'ret = -ENOMEM' since ret is already initialized with -ENOMEM value.
+- For rx, do not build the skb upfront any more, Instead, give the page
+to the HW then build the skb once HW sends a completion.
+- Link to v8: https://lore.kernel.org/r/20240223-am65-cpsw-xdp-basic-v8-0-f3421b58da09@baylibre.com
 
-Fair enough, leave it as-is.  Thanks for the explanation.
+Changes in v8:
+- Fix some warnings reported by patchwork.
+- Link to v7: https://lore.kernel.org/r/20240223-am65-cpsw-xdp-basic-v7-0-c3857c82dadb@baylibre.com
 
---=20
-paul-moore.com
+Changes in v7:
+- Move xdp_do_flush() function call in am65_cpsw_nuss_rx_poll().
+- Link to v6: https://lore.kernel.org/r/20240223-am65-cpsw-xdp-basic-v6-0-212eeff5bd5f@baylibre.com
+
+Changes in v6:
+- In k3_cppi_*() functions, use const qualifier when the content of
+pool is not modified.
+- Add allow_direct bool parameter to am65_cpsw_alloc_skb() function
+for direct use by page_pool_put_full_page().
+- Link to v5: https://lore.kernel.org/r/20240223-am65-cpsw-xdp-basic-v5-0-bc1739170bc6@baylibre.com
+
+Changes in v5:
+- In k3_cppi_desc_pool_destroy(), free memory allocated for desc_infos.
+- Link to v4: https://lore.kernel.org/r/20240223-am65-cpsw-xdp-basic-v4-0-2e45e5dec048@baylibre.com
+
+Changes in v4:
+- Add skb_mark_for_recycle() in am65_cpsw_nuss_rx_packets() function.
+- Specify napi page pool parameter in am65_cpsw_create_xdp_rxqs() function.
+- Add benchmark numbers (with VS without page pool) in the commit description.
+- Add xdp_do_flush() in am65_cpsw_run_xdp() function for XDP_REDIRECT case.
+- Link to v3: https://lore.kernel.org/r/20240223-am65-cpsw-xdp-basic-v3-0-5d944a9d84a0@baylibre.com
+
+Changes in v3:
+- Fix a potential issue with TX buffer type, which is now set for each buffer.
+- Link to v2: https://lore.kernel.org/r/20240223-am65-cpsw-xdp-basic-v2-0-01c6caacabb6@baylibre.com
+
+Changes in v2:
+- Use page pool memory model instead of MEM_TYPE_PAGE_ORDER0.
+- In am65_cpsw_alloc_skb(), release reference on the page pool page
+in case of error returned by build_skb().
+- [nit] Cleanup am65_cpsw_nuss_common_open/stop() functions.
+- [nit] Arrange local variables in reverse xmas tree order.
+- Link to v1: https://lore.kernel.org/r/20240223-am65-cpsw-xdp-basic-v1-1-9f0b6cbda310@baylibre.com
+
+---
+Julien Panis (3):
+      net: ethernet: ti: Add accessors for struct k3_cppi_desc_pool members
+      net: ethernet: ti: Add desc_infos member to struct k3_cppi_desc_pool
+      net: ethernet: ti: am65-cpsw: Add minimal XDP support
+
+ drivers/net/ethernet/ti/am65-cpsw-nuss.c    | 659 ++++++++++++++++++++++++----
+ drivers/net/ethernet/ti/am65-cpsw-nuss.h    |  13 +
+ drivers/net/ethernet/ti/k3-cppi-desc-pool.c |  46 +-
+ drivers/net/ethernet/ti/k3-cppi-desc-pool.h |   6 +
+ 4 files changed, 623 insertions(+), 101 deletions(-)
+---
+base-commit: 6613476e225e090cc9aad49be7fa504e290dd33d
+change-id: 20240223-am65-cpsw-xdp-basic-4db828508b48
+
+Best regards,
+-- 
+Julien Panis <jpanis@baylibre.com>
+
