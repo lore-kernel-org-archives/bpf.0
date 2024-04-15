@@ -1,140 +1,114 @@
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99BF2156236;
-	Mon, 15 Apr 2024 21:26:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76FBA1272B8;
+	Mon, 15 Apr 2024 23:17:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713216405; cv=none; b=OxKN03NJ8CEzbCqYibPrT4bNF7lyMjtuVVfiB+6kPqF7Z51rLqMAq+q8aw6Vpv+rdIo2uoRUGmKpB2zdS/WRVz1o+0TPLsww4j/2Lwq8JKaU+H9y9b81xkDEWgIe05yeCRK2FWgql/WFcsUIqBVyDyisQP6NiCjAcKGRTHYfFwk=
+	t=1713223030; cv=none; b=Dhk90T1JiC9SU6BELvAYBpS+FckIw4RfQu6IShzS5pv7uU/W0NYVwsMwrKGLPIYH54k3zNb8ODU1dkQlT2MLOnh8NblV//URUDlz5R0fjc9h3YMnl/PFfzbjOcrSuI6mcJx0ucYIaeb0hQ+b88kbdqy6SAKgfcqnpp1BJH2cCzA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713216405; c=relaxed/simple;
-	bh=zJtKB7O3/WvCqOnP2/g5NcTJPMuxI5QmR9+UIN4j/Bw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=OcxfaV5BUSd+Tnsx1U3bdrDnblBFos5HBGNn1ymG8mcdHV70gp+e8xLbEBdJ7XlrAFXygEmm/k1zFCG40x+EYpqZfnB/gdGSfXt2xBC+vHrcDSvkGSaIn4CtjxH0QTtri3FwaV3iYKderuMektOq9C/qBcOLg+DlpQk1Rg0ZVvg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=j3ACQGsb; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+	s=arc-20240116; t=1713223030; c=relaxed/simple;
+	bh=idkIPd4643iMp6zp5cWydiUKzewJWHnlG0YbVeUo8v0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=GSXpS3orheRWVhtIBWqHSHb2d+02K+NQLySy7gh6rcF8AMqhALd4sjGb6G5f+lzrEBUYYjbT17hl8cyGW2qk6D1WK0gTABffgLd/NKQQTTSt43MgE7DmsdZJfZah2/8SHaAA6o9IXs3jzIDBDhgd5PIDfpGd3HCPzMJoGqdJdgw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fag92VRt; arc=none smtp.client-ip=209.85.221.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="j3ACQGsb"
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 43FKfUTV006457;
-	Mon, 15 Apr 2024 21:26:17 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	message-id:date:mime-version:subject:to:cc:references:from
-	:in-reply-to:content-type:content-transfer-encoding; s=
-	qcppdkim1; bh=tOrMnghh2NCP6ZkuUqQk7otGncms/swKbAn60nOpyaQ=; b=j3
-	ACQGsbXKUGv9+CSTk2GRX0G03ICqYhvtvoJ5Vf1sVMZo87NZXtAb+JdQLVXpg6zF
-	+EFRgi4qjJqpKBPEMZ5ANaZIWzHlokVbRhpXfOt303PnJpFX1x/M6oyxe+rP+8E/
-	dXK3I8WACQpJq5Rm/XODe5tsHyQH9Nz7p0vYyoxOGirQmFYFq7nykMEFEo9yxzi/
-	eAktNFv2TAsM9HkrdoxPvbaN4vEZsivaIkXGytO3mgEb7MdbEXMFz8BZuzCQhknt
-	rVbaqLonQ4c9joqRear1CYwkaSbyRM6N4YfNQmRxDmcO2ryZTBg6lJdeSPziXymo
-	5FWlokwbjmWiWWLodBNg==
-Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3xhbg882gg-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 15 Apr 2024 21:26:16 +0000 (GMT)
-Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
-	by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 43FLQFB7026132
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 15 Apr 2024 21:26:15 GMT
-Received: from [10.46.19.239] (10.80.80.8) by nasanex01a.na.qualcomm.com
- (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Mon, 15 Apr
- 2024 14:26:11 -0700
-Message-ID: <83dbc057-be42-41d6-95a3-af4b01d64afb@quicinc.com>
-Date: Mon, 15 Apr 2024 14:26:10 -0700
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fag92VRt"
+Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-343d2b20c4bso2873330f8f.2;
+        Mon, 15 Apr 2024 16:17:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1713223027; x=1713827827; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ruJIf0VvZi4YUJJHl+VqnTHRzLwdSGx7P/d+L8YCyOQ=;
+        b=fag92VRtHUmyr0EqviDUb6u3X5+KG3RkSeHljMK9DMI+liz8zlJ241yo4UqHt4ja9R
+         2YhE2HQZjxflJmHIuv/D91FXnOtspBCCgL5hlnPYJpx5r+seUxAQs9GpSiTp53oO6e5d
+         r2XNQX2RdC8dLXspNDauCLBO85PJRWYl7CVGM0emdYYUz+XKJLtvB5bv3/CCGd8PYp+9
+         ONwS2KjDqTIjCRvwxRSfmt7wtxBZNZ3pJLyLosbaaZgUG0Jvj5eE1Afv14zRtS8yXOFL
+         UOGEYcdxSIDOuhxF6A7nKQouviijz4axXxWg8xL/DNbhpdS95XhkqWci7AW3mXbhO2/a
+         fJvQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1713223027; x=1713827827;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ruJIf0VvZi4YUJJHl+VqnTHRzLwdSGx7P/d+L8YCyOQ=;
+        b=lIoUaMEqu++X0vTKx/gv/WHsGMlyrz6gwBAdwIx9lUl7r7Ly1JWw7uGj4MmXwGmnJL
+         d0wDduqZCjRNceiESvKW5VJSetvJViLUEQShqU+BfuT1lht779Z/PuJRTSw0gWZryrTO
+         0+cIB1KFfcPjS2do8XdV+xUKwaVWCQwBoEH6658lTgGCt5GPfnuFv8NkKvR39vnhcAOc
+         8d3HNRoTkyY2B59056v+ZRvLskhgLLyHbQEoTtJDk0Zfg9GXd0+QLtxKSYpSG8+bdr+t
+         VYJ2I2KxZ40AzPDbnZPDOl6VSScd/jIsOPVd1o36Caok/ma2MOp9kG6ZEh0SzY44vyzf
+         ECXA==
+X-Forwarded-Encrypted: i=1; AJvYcCX4EAzfAKWbmVZF9HcGodhnu5esVDZUgwBTxFtJeJvOd5xO4Vo+rFdzefF2LBWJfycsRxd/VYfEJpwVDTkeLGY79Kfjqz9PMjW0
+X-Gm-Message-State: AOJu0Yw1o9nF26mUNGmQGtaaqzmP5TzZp/8QkoTbJG9Qa6slY7EdkADq
+	QdfahjCsQpOzfabFgP1k8mbh+w5x3nO1Pu+cf11JWft9gMU0+k8jEYKV1PlTjL1aT9dntKDL3Vq
+	mfGR5GEU0VwzbEjMp+PlqkZReQgY=
+X-Google-Smtp-Source: AGHT+IEecAmwVB3re9uIi+jukJ6rI2C+0KFoXSMsLiYE6FwY01cNohbu9XFzE7AdG3SFvLMvaGvCMIgTcEx0lintfg8=
+X-Received: by 2002:a05:6000:1150:b0:343:a117:7d2 with SMTP id
+ d16-20020a056000115000b00343a11707d2mr6631391wrx.71.1713223026568; Mon, 15
+ Apr 2024 16:17:06 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH bpf-next v3 1/2] net: Rename mono_delivery_time to
- tstamp_type for scalabilty
-Content-Language: en-US
-To: Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-        "David S. Miller"
-	<davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>, Jakub Kicinski
-	<kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, Andrew Halaney <ahalaney@redhat.com>,
-        "Martin
- KaFai Lau" <martin.lau@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Daniel Borkmann <daniel@iogearbox.net>, bpf <bpf@vger.kernel.org>
-CC: <kernel@quicinc.com>
-References: <20240412210125.1780574-1-quic_abchauha@quicinc.com>
- <20240412210125.1780574-2-quic_abchauha@quicinc.com>
- <661ad4f0e3766_3be9a7294a1@willemb.c.googlers.com.notmuch>
- <c992e03b-eee5-471a-9002-f35bdfa1be2d@quicinc.com>
- <661d92391de45_30101294f2@willemb.c.googlers.com.notmuch>
- <6bfee126-36f4-4595-950e-058d93303362@quicinc.com>
- <661d9a8bb862c_314dd2942c@willemb.c.googlers.com.notmuch>
-From: "Abhishek Chauhan (ABC)" <quic_abchauha@quicinc.com>
-In-Reply-To: <661d9a8bb862c_314dd2942c@willemb.c.googlers.com.notmuch>
+References: <20240415230612.658798-1-martin.kelly@crowdstrike.com>
+In-Reply-To: <20240415230612.658798-1-martin.kelly@crowdstrike.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Mon, 15 Apr 2024 16:16:55 -0700
+Message-ID: <CAADnVQKfo-s4vXopJJ50Q4KP-mPKCbOc_8Pwz9u=uUn2=NU1ww@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] bpf: clarify libbpf skeleton header licensing
+To: Martin Kelly <martin.kelly@crowdstrike.com>
+Cc: bpf <bpf@vger.kernel.org>, 
+	"open list:DOCUMENTATION" <linux-doc@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Jonathan Corbet <corbet@lwn.net>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: GXEKuWOz6boZJQfEpxUP9kMgRF79ZkN6
-X-Proofpoint-ORIG-GUID: GXEKuWOz6boZJQfEpxUP9kMgRF79ZkN6
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-04-15_18,2024-04-15_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 bulkscore=0
- malwarescore=0 spamscore=0 mlxscore=0 mlxlogscore=999 priorityscore=1501
- phishscore=0 lowpriorityscore=0 impostorscore=0 adultscore=0 clxscore=1015
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2404010003
- definitions=main-2404150143
+Content-Transfer-Encoding: quoted-printable
 
+On Mon, Apr 15, 2024 at 4:07=E2=80=AFPM Martin Kelly
+<martin.kelly@crowdstrike.com> wrote:
+>
+> Add an explicit statement clarifying that generated BPF code bundled
+> inside a libbpf skeleton header may have a license distinct from the
+> skeleton header (in other words, the bundled code does not alter the
+> skeleton header license). This is a follow-up from a previous thread
+> discussing licensing terms:
+> https://lore.kernel.org/bpf/54d3cb9669644995b6ae787b4d532b73@crowdstrike.=
+com/#r
+>
+> Signed-off-by: Martin Kelly <martin.kelly@crowdstrike.com>
+> ---
+>  Documentation/bpf/bpf_licensing.rst | 6 +++++-
+>  1 file changed, 5 insertions(+), 1 deletion(-)
+>
+> diff --git a/Documentation/bpf/bpf_licensing.rst b/Documentation/bpf/bpf_=
+licensing.rst
+> index b19c433f41d2..05bc1b845e64 100644
+> --- a/Documentation/bpf/bpf_licensing.rst
+> +++ b/Documentation/bpf/bpf_licensing.rst
+> @@ -89,4 +89,8 @@ Packaging BPF programs with user space applications
+>
+>  Generally, proprietary-licensed applications and GPL licensed BPF progra=
+ms
+>  written for the Linux kernel in the same package can co-exist because th=
+ey are
+> -separate executable processes. This applies to both cBPF and eBPF progra=
+ms.
+> +separate executable processes. In particular, BPF code bundled inside a =
+libbpf
+> +skeleton header may have a different license than that of its surroundin=
+g
+> +skeleton. In other words, the license of the bundled BPF code does not a=
+lter the
+> +license of the skeleton header nor of a program including the header. Th=
+is
+> +paragraph applies to both cBPF and eBPF programs.
 
-
-On 4/15/2024 2:22 PM, Willem de Bruijn wrote:
->>>>>>  static inline void skb_set_delivery_time(struct sk_buff *skb, ktime_t kt,
->>>>>> -					 bool mono)
->>>>>> +					  u8 tstamp_type)
->>>>>>  {
->>>>>>  	skb->tstamp = kt;
->>>>>> -	skb->mono_delivery_time = kt && mono;
->>>>>> +
->>>>>> +	switch (tstamp_type) {
->>>>>> +	case CLOCK_REAL:
->>>>>> +		skb->tstamp_type = CLOCK_REAL;
->>>>>> +		break;
->>>>>> +	case CLOCK_MONO:
->>>>>> +		skb->tstamp_type = kt && tstamp_type;
->>>>>> +		break;
->>>>>> +	}
->>>>>
->>>>> Technically this leaves the tstamp_type undefined if (skb, 0, CLOCK_REAL)
->>>> Do you think i should be checking for valid value of tstamp before setting the tstamp_type ? Only then set it. 
->>>
->>> A kt of 0 is interpreted as resetting the type. That should probably
->>> be maintained.
->>>
->>> For SO_TIMESTAMPING, a mono delivery time of 0 does have some meaning.
->>> In __sock_recv_timestamp:
->>>
->>>         /* Race occurred between timestamp enabling and packet
->>>            receiving.  Fill in the current time for now. */
->>>         if (need_software_tstamp && skb->tstamp == 0) {
->>>                 __net_timestamp(skb);
->>>                 false_tstamp = 1;
->>>         }
->>
->> Well in that case the above logic still resets the tstamp and sets the tstamp_type to CLOCK_REAL(value 0). 
->> Anyway the tstamp_type will be 0 to begin with. 
->> The logic is still inline with previous implementation, because previously if kt was 0 then kt && mono sets the tstamp_type (previously called as mono_delivery_time) to 0 (i.e SKB_CLOCK_REAL). 
-> 
-> Sorry, I got my defaults confused. If we maintain that a zero tstamp
-> resets the type, then here should be no case with skb->tstamp 0 and
-> skb->tstamp_type SKB_CLOCK_REAL (or SKB_CLOCK_TAI or whatever). I
-> think it's preferable to make that obvious in the
-> skb_set_delivery_time implementation, rather than depend on knowledge
-> of its callers.
-
-Noted!. I will do the same as part of the next patchset. 
+The doc is clear enough. This is unnecessary.
+Otherwise we'll start listing every project that bundles bpf prog
+in some form.
