@@ -1,133 +1,137 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAACB83CD8;
-	Mon, 15 Apr 2024 17:05:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCF68811EB;
+	Mon, 15 Apr 2024 17:26:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713200726; cv=none; b=D4vR0jY7jASS66cIUiPvhMUynlacCLw48FpDomi3EDrtjqnh92neyxuBDFy+fzANysgZodViBbPfK6h/M+e/GK5gjOZhf1KdbtDMrGyuVQl9wYPXcB6Afs1PLIg2PrGmcGtRv63QvWGUGYI6dT1+AzPvetFtgaARQ1z4mwOZwvU=
+	t=1713201990; cv=none; b=PpRXSktmuUwL9Q+wPzC3MN7SV+HlcDQN6QCmEIm3nEfU0wY9xtY0t9igjg2RiPLqQgCmyTovmwebc6QHFT+gcVvIpkzH3UGtcanhINuxeQg5xmHMgN5HJLP7zDn0/10/Nl8XinzHyAZFveXFOiFo3z0qEfne71G8r1aBSE2YwzA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713200726; c=relaxed/simple;
-	bh=brTfnO2VyUJAmFmt0xYsxELn1GfIqBydjJY5MAA2GwI=;
+	s=arc-20240116; t=1713201990; c=relaxed/simple;
+	bh=e3LUBSmQZQUFCOfS0arhOZflBaVH3oMdq/D1XyzmOvk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AZJ85qC0HBDw3r8J0cbDsDD19Con1J0u4NqUej0Xl7wSVVGFmg2MnW/4izSnPX2CceHFQUwIrH3CK8Bw518QCYq55bFdV8XkkH26qSJK/GGc8rwELB/XLp19CRGemip2i30yBHN1z9K2+/8jXI6HXkr3YQYqPK5KVKouSBNu15w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eA4Y4x6L; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=M2SgwIfIjkikeeTmWZA6PkSeHje6uAOOohixJTvdKHvBhfwwCjR24EqQg+l58IXpxLDN30050o4JfyoH6lze4ij7GuunnSRx3pvEJMbWLYhu/znya4mkFEpn5G4b2xxniiDf3Njzz5bEjiSTqIMLel3C/A3Mq29HlIydIVakbyU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LsKrcUQc; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eA4Y4x6L"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9EB7C2BD10;
-	Mon, 15 Apr 2024 17:05:17 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LsKrcUQc"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6880C113CC;
+	Mon, 15 Apr 2024 17:26:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1713200726;
-	bh=brTfnO2VyUJAmFmt0xYsxELn1GfIqBydjJY5MAA2GwI=;
+	s=k20201202; t=1713201989;
+	bh=e3LUBSmQZQUFCOfS0arhOZflBaVH3oMdq/D1XyzmOvk=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=eA4Y4x6LpKDmJlhsFuCKUKDWszVPc0aMol9ibBC4zWuhXiukyHzmx+wctUQDy9YcO
-	 SgrxzhBVYrKzoib5nD4pxj58Yru3AKozTZkN+TvcG/88RKgokKwWdJ7ot3KrqKc7Eq
-	 DUMXngRm3Kt+F/W7nD5rsdsyrXI/SKwSE27eJw0RyuFsxXe2CY8Th13OWBhzodIeFI
-	 g3IfMeClHVfNPTzOpcIibEz/rTBRU3MdIzMovL+lADX98nFVYDJgBcU0E0gUS/Sp3y
-	 NkyrAJJ3bphAZ5D3Vr/0URqS2QdYx5P8qEukDaFoUJqWeYw/1mketQaU4aGKwRL5Ma
-	 kNnuFlXqLWYaw==
-Date: Mon, 15 Apr 2024 20:04:13 +0300
-From: Mike Rapoport <rppt@kernel.org>
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: linux-kernel@vger.kernel.org, Andrew Morton <akpm@linux-foundation.org>,
-	Andy Lutomirski <luto@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Christoph Hellwig <hch@infradead.org>, Helge Deller <deller@gmx.de>,
-	Lorenzo Stoakes <lstoakes@gmail.com>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Russell King <linux@armlinux.org.uk>, Song Liu <song@kernel.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Uladzislau Rezki <urezki@gmail.com>, Will Deacon <will@kernel.org>,
-	bpf@vger.kernel.org, linux-arch@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-mm@kvack.org,
-	linux-modules@vger.kernel.org, linux-parisc@vger.kernel.org,
-	linux-riscv@lists.infradead.org, linux-trace-kernel@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org, x86@kernel.org
-Subject: Re: [RFC PATCH 5/7] x86/module: perpare module loading for ROX
- allocations of text
-Message-ID: <Zh1eDU1L1FbFwZzT@kernel.org>
-References: <20240411160526.2093408-1-rppt@kernel.org>
- <20240411160526.2093408-6-rppt@kernel.org>
- <20240415104316.GI40213@noisy.programming.kicks-ass.net>
+	b=LsKrcUQcxPWtOypFfZQiLydX3m3L16McWE4MJG7VL9ZfmAKXI0LzsDNAesOJA3PqV
+	 5vLyNQHa/xcAajv9VFu9ncbOwU1PD1dyr6RAbyEmWcEP8PToEQXBCgd7KRfCPfvTVc
+	 Xe6Fv0IlZYv6ThHYARMvTEXSh+xkrZkV++0oFnjeFS0Z8evIOlnBMwdkDcDM0fAUey
+	 PHuzFfmUjsf57glWTR0m3f7p0WhHhQskHOFwwjlN5rS5VsBe3/2gkgPUx+BRM3ZMn+
+	 Q/8+v5koutcoUcDWOooE2TKgvV3fJa0Qg2lUo4VHLGzhzGYUfGvz+HlpzwWa2SBg9V
+	 nZiVcPp4gyEdg==
+Date: Mon, 15 Apr 2024 14:26:25 -0300
+From: Arnaldo Carvalho de Melo <acme@kernel.org>
+To: Alan Maguire <alan.maguire@oracle.com>
+Cc: dwarves@vger.kernel.org, Jiri Olsa <jolsa@kernel.org>,
+	Clark Williams <williams@redhat.com>,
+	Kate Carcia <kcarcia@redhat.com>, bpf@vger.kernel.org,
+	Arnaldo Carvalho de Melo <acme@redhat.com>,
+	Kui-Feng Lee <kuifeng@fb.com>,
+	Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
+Subject: Re: [PATCH 12/12] tests: Add a BTF reproducible generation test
+Message-ID: <Zh1jQc-0edRk4y99@x1>
+References: <20240412211604.789632-1-acme@kernel.org>
+ <20240412211604.789632-13-acme@kernel.org>
+ <3817fa6d-122f-4cbc-92be-616355ec04c2@oracle.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20240415104316.GI40213@noisy.programming.kicks-ass.net>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <3817fa6d-122f-4cbc-92be-616355ec04c2@oracle.com>
 
-On Mon, Apr 15, 2024 at 12:43:16PM +0200, Peter Zijlstra wrote:
-> On Thu, Apr 11, 2024 at 07:05:24PM +0300, Mike Rapoport wrote:
-> > diff --git a/arch/x86/kernel/alternative.c b/arch/x86/kernel/alternative.c
-> > index 45a280f2161c..b4d6868df573 100644
-> > --- a/arch/x86/kernel/alternative.c
-> > +++ b/arch/x86/kernel/alternative.c
+On Mon, Apr 15, 2024 at 11:26:44AM +0100, Alan Maguire wrote:
+> On 12/04/2024 22:16, Arnaldo Carvalho de Melo wrote:
+> > From: Arnaldo Carvalho de Melo <acme@redhat.com>
+> > 
+> >   $ time tests/reproducible_build.sh vmlinux
+> >   Parallel reproducible DWARF Loading/Serial BTF encoding: Ok
+> > 
+> >   real  1m13.844s
+> >   user  3m3.601s
+> >   sys   0m9.049s
+> >   $
+> > 
+> > If the number of threads started by pahole is different than what was
+> > requests via its -j command line option, it will fail as well as if the
+> > output of 'bpftool btf dump' differs from the BTF encoded totally
+> > serially to one of the detached BTF encoded using reproducible DWARF
+> > loading/BTF encoding.
+> > 
+> > Cc: Alan Maguire <alan.maguire@oracle.com>
+> > Cc: Kui-Feng Lee <kuifeng@fb.com>
+> > Cc: Thomas Weißschuh <linux@weissschuh.net>
+> > Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+> > ---
+> >  tests/reproducible_build.sh | 56 +++++++++++++++++++++++++++++++++++++
+> >  1 file changed, 56 insertions(+)
+> >  create mode 100755 tests/reproducible_build.sh
+> > 
 > 
-> > @@ -504,17 +513,17 @@ void __init_or_module noinline apply_alternatives(struct alt_instr *start,
-> >  		 *   patch if feature is *NOT* present.
-> >  		 */
-> >  		if (!boot_cpu_has(a->cpuid) == !(a->flags & ALT_FLAG_NOT)) {
-> > -			optimize_nops_inplace(instr, a->instrlen);
-> > +			optimize_nops_inplace(wr_instr, a->instrlen);
-> >  			continue;
-> >  		}
-> >  
-> > -		DPRINTK(ALT, "feat: %d*32+%d, old: (%pS (%px) len: %d), repl: (%px, len: %d) flags: 0x%x",
-> > +		DPRINTK(ALT, "feat: %d*32+%d, old: (%px (%px) len: %d), repl: (%px (%px), len: %d) flags: 0x%x",
-> >  			a->cpuid >> 5,
-> >  			a->cpuid & 0x1f,
-> > -			instr, instr, a->instrlen,
-> > -			replacement, a->replacementlen, a->flags);
-> > +			instr, wr_instr, a->instrlen,
-> > +			replacement, wr_replacement, a->replacementlen, a->flags);
+> great to have a test for this! a few small things below but
+> for the series
 > 
-> I think this, and
+> Reviewed-by: Alan Maguire <alan.maguire@oracle.com>
+> Tested-by: Alan Maguire <alan.maguire@oracle.com>
+> 
+> > diff --git a/tests/reproducible_build.sh b/tests/reproducible_build.sh
+> > new file mode 100755
+> > index 0000000000000000..9c72d548c2a21136
+> > --- /dev/null
+> > +++ b/tests/reproducible_build.sh
+> > @@ -0,0 +1,56 @@
+> > +#!/bin/bash
+> > +# SPDX-License-Identifier: GPL-2.0-only
+> > +#
+> > +# Test if BTF generated serially matches reproducible parallel DWARF loading + serial BTF encoding
+> > +# Arnaldo Carvalho de Melo <acme@redhat.com> (C) 2024-
+> > +
+> > +vmlinux=$1
+> 
+> nit: might be worth having a usage check/error for the vmlinux binary here.
 
-I've found printing both address handy when I debugged it, but no strong
-feelings here.
+Right, I'm doing that now.
+
+Suggested-by: Alan Maguire <alan.maguire@oracle.com>
+
+⬢[acme@toolbox pahole]$ tests/reproducible_build.sh 
+Please specify a vmlinux file to operate on
+⬢[acme@toolbox pahole]$ tests/reproducible_build.sh vmlinux1
+vmlinux1 file not available, please specify another
+⬢[acme@toolbox pahole]$ tests/reproducible_build.sh vmlinux
+Parallel reproducible DWARF Loading/Serial BTF encoding: ^C
+⬢[acme@toolbox pahole]$
+
+diff --git a/tests/reproducible_build.sh b/tests/reproducible_build.sh
+index 9c72d548c2a21136..b821e28e7ce7bf8c 100755
+--- a/tests/reproducible_build.sh
++++ b/tests/reproducible_build.sh
+@@ -5,6 +5,17 @@
+ # Arnaldo Carvalho de Melo <acme@redhat.com> (C) 2024-
  
-> >  
-> > -		memcpy(insn_buff, replacement, a->replacementlen);
-> > +		memcpy(insn_buff, wr_replacement, a->replacementlen);
-> >  		insn_buff_sz = a->replacementlen;
-> >  
-> >  		if (a->flags & ALT_FLAG_DIRECT_CALL) {
-> > @@ -528,11 +537,11 @@ void __init_or_module noinline apply_alternatives(struct alt_instr *start,
-> >  
-> >  		apply_relocation(insn_buff, a->instrlen, instr, replacement, a->replacementlen);
-> >  
-> > -		DUMP_BYTES(ALT, instr, a->instrlen, "%px:   old_insn: ", instr);
-> > +		DUMP_BYTES(ALT, wr_instr, a->instrlen, "%px:   old_insn: ", instr);
-> 
-> this, want to remain as is. 
-
-here wr_instr is the buffer to dump:
-
-DUMP_BYTES(type, buf, len, fmt, args...)
-
-rather than an address, which remained 'instr'.
+ vmlinux=$1
++
++if [ -z "$vmlinux" ] ; then
++	echo "Please specify a vmlinux file to operate on"
++	exit 1
++fi
++
++if [ ! -f "$vmlinux" ] ; then
++	echo "$vmlinux file not available, please specify another"
++	exit 1
++fi
++
+ outdir=$(mktemp -d /tmp/reproducible_build.sh.XXXXXX)
  
-> >  		DUMP_BYTES(ALT, replacement, a->replacementlen, "%px:   rpl_insn: ", replacement);
-> >  		DUMP_BYTES(ALT, insn_buff, insn_buff_sz, "%px: final_insn: ", instr);
-> >  
-> > -		text_poke_early(instr, insn_buff, insn_buff_sz);
-> > +		text_poke_early(wr_instr, insn_buff, insn_buff_sz);
-> >  	}
-> >  
-> >  	kasan_enable_current();
-> 
-> The rationale being that we then print an address that can be correlated
-> to the kernel image (provided one either kills kaslr or adjusts for it).
-
--- 
-Sincerely yours,
-Mike.
+ echo -n "Parallel reproducible DWARF Loading/Serial BTF encoding: "
