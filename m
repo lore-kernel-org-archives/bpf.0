@@ -1,188 +1,324 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D69712F5B7;
-	Tue, 16 Apr 2024 14:11:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8318612D778;
+	Tue, 16 Apr 2024 14:22:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713276667; cv=none; b=b6CtMCfSoqxVc9hVkjkuYTP8tz7LwigzrI6UzN4Sh4CH2RBGXqpF7FRlnWzf1EJOWqBCYi0jlO60hWRxDuNnOY8m9YjyjaHefu5k257g35K+1vn6ryadOQgwVx33IonZ52PvEXrG0KTfi8MpLnXycS4dLFOu3hwZXH7IecVNqgc=
+	t=1713277376; cv=none; b=fSbEhgLzU9Ai5kmiSxxrLxVfqsYQxvcCWv0WYanbaNCuS0CZW4oaPuoPdmoTsGC1AfWOQIQIi39HF39PUt/SyuP51Ele5anoRZYZx4Y0yMe2iVstu7gGNXeMvGXwoyNRt6SBe49BjlruaRs2+Eg46Km879+ZN+iHKJzKF4UtY9I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713276667; c=relaxed/simple;
-	bh=gnbd2RQ+3wctyheUyU6clAJleG99mpq90RdQg9GTbNQ=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=NhcpVKHa3p76w8dc8cWL6v7UD1utHYb59uYVa0fzmTzlrVIOWaeWlX02y3YPvn5mdjP0K6RPqB8xx/L89du39EyLW8E/6G2eHVjzu4yJO2FUg2QCMqXG7r/bF6En18c6yts/aLD/YqBl5ksor9uSYl8ChaCgxkJdEseJxr77+Cg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BEnSi6sE; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1713277376; c=relaxed/simple;
+	bh=mJIhrlVVoiuuLdrcqGs0QVWFaTBQrTjzmq7TsBOIcb0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=AwespAFQYlJKfYMUG1lghQSCXmFnoiV57ObJ9ysXWQ/ZiEUXSefOzwDyx8V8p5AJgNE2FS7pxLVYaCwnz+yOoAHICoX95375AqQP7ingWfuP9iLvcb1X2PA0QwW3Lb2BprYK2YLYRf1rGFdqci8w5qB+4rZUEdjSibbbYnFq0b0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fki2RT6N; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BEnSi6sE"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8BF52C4AF08;
-	Tue, 16 Apr 2024 14:11:03 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fki2RT6N"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00EA1C113CE;
+	Tue, 16 Apr 2024 14:22:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1713276666;
-	bh=gnbd2RQ+3wctyheUyU6clAJleG99mpq90RdQg9GTbNQ=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=BEnSi6sEfEy4ETnuX2tyAlbFU3a2WhICTdSAAhJc6cCjoZRYho6M2iM4SyMD0JWx5
-	 QDIj9dD9GSmaPzfHCOcY64foFkxrK3fgSys79boI6ku3nDRxelSuBKDG5j7/Y2Tpdw
-	 Drg2xd/5jxoeOm/xQ40GkZQwZdd+0ExD0a4bJCIRkDCT0+Gt5DC9I7wtGTlBWeONfz
-	 epxg69KPorBQJBigXSF7VwNJdMFomIQpedr/fCtoIBPfLJ6JK3JOB/SaQIqOfViqRP
-	 cb7vjD9GI1pHp3NvkqECm3QQwY0b+kQAOC7mVFECeg9uazU268pcP9xa6/HI990T+S
-	 aYPM0Ae6Ip5EQ==
-From: Benjamin Tissoires <bentiss@kernel.org>
-Date: Tue, 16 Apr 2024 16:08:31 +0200
-Subject: [PATCH bpf-next 18/18] selftests/bpf: wq: add bpf_wq_start()
- checks
+	s=k20201202; t=1713277376;
+	bh=mJIhrlVVoiuuLdrcqGs0QVWFaTBQrTjzmq7TsBOIcb0=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=fki2RT6N/Bu8kh0QJSvzmDan9K+Xum8nCK7oyxnJts8yY4p9utBJwOZTedMU/9hAl
+	 8EQ0c5f2JDLL7WYPtYP0pX2vQNPh2U+YcpTpcNkiIMUY1iWY3lfbhcRPyDhbJTIutQ
+	 J4I1FbWMz7+6q2AZyylwUdUmspTIY0w/Ad9WKERnfGq7AETqh+wIdeJjCiAaaVO4Hd
+	 5ugtERLxnYXNTmNAc2BJzPRrak8CTqcpzy2ze80qDnADQJL06SnzdYoMd+fAc0Pf+u
+	 iZPgTpzU1HtqjMKkMOtXQlV9rrEQb7j3PLKT9kFQFxe6Jn3JaWOV4CWfYzXkKKdKQB
+	 WvNAom5j6tpXA==
+Message-ID: <9f6333ec-f28c-4a91-b7b9-07a028d92225@kernel.org>
+Date: Tue, 16 Apr 2024 16:22:51 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240416-bpf_wq-v1-18-c9e66092f842@kernel.org>
-References: <20240416-bpf_wq-v1-0-c9e66092f842@kernel.org>
-In-Reply-To: <20240416-bpf_wq-v1-0-c9e66092f842@kernel.org>
-To: Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
- Martin KaFai Lau <martin.lau@linux.dev>, 
- Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, 
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
- Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
- Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>, 
- Shuah Khan <shuah@kernel.org>
-Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, Benjamin Tissoires <bentiss@kernel.org>
-X-Mailer: b4 0.12.4
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1713276593; l=3923;
- i=bentiss@kernel.org; s=20230215; h=from:subject:message-id;
- bh=gnbd2RQ+3wctyheUyU6clAJleG99mpq90RdQg9GTbNQ=;
- b=mzIPuuOm/lFkrF62NVNgi+3On2eJg7VFrdRf4n38fn++QOsGIWqJb9YU8tvgORWM3sVh/ni3y
- YhwFhuWpvFsCMCKYndxDhjdyGcYoMm0m90DEhYDSoSeKzREEXqbbpxO
-X-Developer-Key: i=bentiss@kernel.org; a=ed25519;
- pk=7D1DyAVh6ajCkuUTudt/chMuXWIJHlv2qCsRkIizvFw=
+User-Agent: Mozilla Thunderbird
+Subject: Re: Advice on cgroup rstat lock
+To: Yosry Ahmed <yosryahmed@google.com>
+Cc: Waiman Long <longman@redhat.com>, Johannes Weiner <hannes@cmpxchg.org>,
+ Tejun Heo <tj@kernel.org>, Jesper Dangaard Brouer <jesper@cloudflare.com>,
+ "David S. Miller" <davem@davemloft.net>,
+ Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+ Shakeel Butt <shakeelb@google.com>,
+ Arnaldo Carvalho de Melo <acme@kernel.org>,
+ Daniel Bristot de Oliveira <bristot@redhat.com>,
+ kernel-team <kernel-team@cloudflare.com>, cgroups@vger.kernel.org,
+ Linux-MM <linux-mm@kvack.org>, Netdev <netdev@vger.kernel.org>,
+ bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+ Ivan Babrou <ivan@cloudflare.com>
+References: <7cd05fac-9d93-45ca-aa15-afd1a34329c6@kernel.org>
+ <20240319154437.GA144716@cmpxchg.org>
+ <56556042-5269-4c7e-99ed-1a1ab21ac27f@kernel.org>
+ <CAJD7tkYbO7MdKUBsaOiSp6-qnDesdmVsTCiZApN_ncS3YkDqGQ@mail.gmail.com>
+ <bf94f850-fab4-4171-8dfe-b19ada22f3be@kernel.org>
+ <CAJD7tkbn-wFEbhnhGWTy0-UsFoosr=m7wiJ+P96XnDoFnSH7Zg@mail.gmail.com>
+ <ac4cf07f-52dd-454f-b897-2a4b3796a4d9@kernel.org>
+ <96728c6d-3863-48c7-986b-b0b37689849e@redhat.com>
+ <CAJD7tkZrVjhe5PPUZQNoAZ5oOO4a+MZe283MVTtQHghGSxAUnA@mail.gmail.com>
+ <4fd9106c-40a6-415a-9409-c346d7ab91ce@redhat.com>
+ <f72ab971-989e-4a1c-9246-9b8e57201b60@kernel.org>
+ <CAJD7tka=1AnBNFn=frp7AwfjGsZMGcDjw=xiWeqNygC5rPf6uQ@mail.gmail.com>
+ <75d837cc-4d33-44f6-bb0c-7558f0488d4e@kernel.org>
+ <CAJD7tka_ESbcK6cspyEfVqv1yTW0uhWSvvoO4bqMJExn-j-SEg@mail.gmail.com>
+Content-Language: en-US
+From: Jesper Dangaard Brouer <hawk@kernel.org>
+In-Reply-To: <CAJD7tka_ESbcK6cspyEfVqv1yTW0uhWSvvoO4bqMJExn-j-SEg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Allows to test if allocation/free works
 
-Signed-off-by: Benjamin Tissoires <bentiss@kernel.org>
----
- tools/testing/selftests/bpf/bpf_experimental.h |  1 +
- tools/testing/selftests/bpf/prog_tests/wq.c    | 22 ++++++++++++++++++++++
- tools/testing/selftests/bpf/progs/wq.c         | 22 +++++++++++++++++++---
- 3 files changed, 42 insertions(+), 3 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/bpf_experimental.h b/tools/testing/selftests/bpf/bpf_experimental.h
-index 272604f9c4a5..19dffa32fc08 100644
---- a/tools/testing/selftests/bpf/bpf_experimental.h
-+++ b/tools/testing/selftests/bpf/bpf_experimental.h
-@@ -471,6 +471,7 @@ extern struct cgroup_subsys_state *bpf_iter_css_next(struct bpf_iter_css *it) __
- extern void bpf_iter_css_destroy(struct bpf_iter_css *it) __weak __ksym;
- 
- extern int bpf_wq_init(struct bpf_wq *wq, void *map, unsigned int flags) __weak __ksym;
-+extern int bpf_wq_start(struct bpf_wq *wq, unsigned int flags) __weak __ksym;
- extern int bpf_wq_set_callback_impl(struct bpf_wq *wq,
- 		int (callback_fn)(void *map, int *key, struct bpf_wq *wq),
- 		unsigned int flags__k, void *aux__ign) __ksym;
-diff --git a/tools/testing/selftests/bpf/prog_tests/wq.c b/tools/testing/selftests/bpf/prog_tests/wq.c
-index 26ab69796103..8a4a91d944cc 100644
---- a/tools/testing/selftests/bpf/prog_tests/wq.c
-+++ b/tools/testing/selftests/bpf/prog_tests/wq.c
-@@ -6,9 +6,31 @@
- 
- void serial_test_wq(void)
- {
-+	struct wq *wq_skel = NULL;
-+	int err, prog_fd;
-+
- 	LIBBPF_OPTS(bpf_test_run_opts, topts);
- 
- 	RUN_TESTS(wq);
-+
-+	/* re-run the success test to check if the timer was actually executed */
-+
-+	wq_skel = wq__open_and_load();
-+	if (!ASSERT_OK_PTR(wq_skel, "wq_skel_load"))
-+		return;
-+
-+	err = wq__attach(wq_skel);
-+	if (!ASSERT_OK(err, "wq_attach"))
-+		return;
-+
-+	prog_fd = bpf_program__fd(wq_skel->progs.test_syscall_array_sleepable);
-+	err = bpf_prog_test_run_opts(prog_fd, &topts);
-+	ASSERT_OK(err, "test_run");
-+	ASSERT_EQ(topts.retval, 0, "test_run");
-+
-+	usleep(50); /* 10 usecs should be enough, but give it extra */
-+
-+	ASSERT_EQ(wq_skel->bss->ok_sleepable, (1 << 1), "ok_sleepable");
- }
- 
- void serial_test_failures_wq(void)
-diff --git a/tools/testing/selftests/bpf/progs/wq.c b/tools/testing/selftests/bpf/progs/wq.c
-index c0a094c84834..0cdb9d273e60 100644
---- a/tools/testing/selftests/bpf/progs/wq.c
-+++ b/tools/testing/selftests/bpf/progs/wq.c
-@@ -49,6 +49,11 @@ struct {
- 	__type(value, struct elem);
- } lru SEC(".maps");
- 
-+#define CLOCK_MONOTONIC 1
-+
-+__u32 ok;
-+__u32 ok_sleepable;
-+
- static int test_elem_callback(void *map, int *key,
- 		int (callback_fn)(void *map, int *key, struct bpf_wq *wq),
- 		u64 callback_flags)
-@@ -56,6 +61,10 @@ static int test_elem_callback(void *map, int *key,
- 	struct elem init = {}, *val;
- 	struct bpf_wq *wq;
- 
-+	if ((ok & (1 << *key) ||
-+	    (ok_sleepable & (1 << *key))))
-+		return -22;
-+
- 	if (map == &lru &&
- 	    bpf_map_update_elem(map, key, &init, 0))
- 		return -1;
-@@ -71,6 +80,9 @@ static int test_elem_callback(void *map, int *key,
- 	if (bpf_wq_set_callback(wq, callback_fn, callback_flags))
- 		return -4;
- 
-+	if (bpf_wq_start(wq, 0))
-+		return -5;
-+
- 	return 0;
- }
- 
-@@ -81,6 +93,10 @@ static int test_hmap_elem_callback(void *map, int *key,
- 	struct hmap_elem init = {}, *val;
- 	struct bpf_wq *wq;
- 
-+	if ((ok & (1 << *key) ||
-+	    (ok_sleepable & (1 << *key))))
-+		return -22;
-+
- 	if (bpf_map_update_elem(map, key, &init, 0))
- 		return -1;
- 
-@@ -95,12 +111,12 @@ static int test_hmap_elem_callback(void *map, int *key,
- 	if (bpf_wq_set_callback(wq, callback_fn, callback_flags))
- 		return -4;
- 
-+	if (bpf_wq_start(wq, 0))
-+		return -5;
-+
- 	return 0;
- }
- 
--__u32 ok;
--__u32 ok_sleepable;
--
- /* callback for non sleepable workqueue */
- static int wq_callback(void *map, int *key, struct bpf_wq *work)
- {
+On 12/04/2024 21.51, Yosry Ahmed wrote:
+> On Fri, Apr 12, 2024 at 12:26 PM Jesper Dangaard Brouer <hawk@kernel.org> wrote:
+>>
+>>
+>> On 11/04/2024 19.22, Yosry Ahmed wrote:
+>>> [..]
+>>>>>>>>
+>>>>>>>> How far can we go... could cgroup_rstat_lock be converted to a mutex?
+>>>>    >>>
+>>>>>>> The cgroup_rstat_lock was originally a mutex. It was converted to a
+>>>>>>> spinlock in commit 0fa294fb1985 ("group: Replace cgroup_rstat_mutex with
+>>>>>>> a spinlock"). Irq was disabled to enable calling from atomic context.
+>>>>>>> Since commit 0a2dc6ac3329 ("cgroup: remove
+>>>>>>> cgroup_rstat_flush_atomic()"), the rstat API hadn't been called from
+>>>>>>> atomic context anymore. Theoretically, we could change it back to a
+>>>>>>> mutex or not disabling interrupt. That will require that the API cannot
+>>>>>>> be called from atomic context going forward.
+>>>>    >>>
+>>>>>> I think we should avoid flushing from atomic contexts going forward
+>>>>>> anyway tbh. It's just too much work to do with IRQs disabled, and we
+>>>>>> observed hard lockups before in worst case scenarios.
+>>>>>>
+>>>>
+>>>> Appreciate the historic commits as documentation for how the code
+>>>> evolved.  Sounds like we agree that the IRQ-disable can be lifted,
+>>>> at-least between the three of us.
+>>>
+>>> It can be lifted, but whether it should be or not is a different
+>>> story. I tried keeping it as a spinlock without disabling IRQs before
+>>> and Tejun pointed out possible problems, see below.
+>>>
+>>
+>> IMHO it *MUST* be lifted, as disabling IRQs here is hurting other parts
+>> of the system and actual production systems.
+>>
+>> The "offending" IRQ-spin_lock commit (0fa294fb1985) is from 2018, and
+>> GitHub noticed in 2019 (via blog[1]) and at Red Hat I backported[2]
+>> patches (which I now understand) only mitigate the issues.  Our prod
+>> systems are on 6.1 and 6.6 where we still clearly see the issue
+>> occurring.  Also Daniel's "rtla timerlat" tool for catching systems
+>> latency issues have "cgroup_rstat_flush_locked" as the poster child [3][4].
+> 
+> We have been bitten by the IRQ-spinlock before, so I cannot disagree,
+> although for us removing atomic flushes and allowing the lock to be
+> dropped between CPU flushes seems to be good enough (for now).
+> 
+>>
+>>
+>>    [1] https://github.blog/2019-11-21-debugging-network-stalls-on-kubernetes/
+>>    [2] https://bugzilla.redhat.com/show_bug.cgi?id=1795049
+>>    [3] https://bristot.me/linux-scheduling-latency-debug-and-analysis/
+>>    [4] Documentation/tools/rtla/rtla-timerlat-top.rst
+>>
+>>>>
+>>>>>> I think one problem that was discussed before is that flushing is
+>>>>>> exercised from multiple contexts and could have very high concurrency
+>>>>>> (e.g. from reclaim when the system is under memory pressure). With a
+>>>>>> mutex, the flusher could sleep with the mutex held and block other
+>>>>>> threads for a while.
+>>>>>>
+>>>>
+>>>> Fair point, so in first iteration we keep the spin_lock but don't do the
+>>>> IRQ disable.
+>>>
+>>> I tried doing that before, and Tejun had some objections:
+>>> https://lore.kernel.org/lkml/ZBz%2FV5a7%2F6PZeM7S@slm.duckdns.org/
+>>>
+>>> My read of that thread is that Tejun would prefer we look into
+>>> converting cgroup_rsat_lock into a mutex again, or more aggressively
+>>> drop the lock on CPU boundaries. Perhaps we can unconditionally drop
+>>> the lock on each CPU boundary, but I am worried that contending the
+>>> lock too often may be an issue, which is why I suggested dropping the
+>>> lock if there are pending IRQs instead -- but I am not sure how to do
+>>> that :)
+>>>
+>>
+>> Like Tejun, I share the concern that keeping this a spinlock will
+>> can increase the chance of several CPUs contend on this lock (which is
+>> also a production issue we see).  This is why I suggested to "exit" if
+>> (1) we see the lock have been taken by somebody else, or if (2) stats
+>> were flushed recently.
+> 
+> When you say "exit", do you mean abort the whole thing, or just don't
+> spin for the lock but wait for the ongoing flush?
+> 
 
--- 
-2.44.0
+I like that we are considering a mutex lock, because it is not
+reasonable to be waiting by spinning on the lock from remote CPUs,
+because this cgroup_rstat_lock is held for too long (up to 64-128 ms in 
+[prod]).
 
+Prod latency data mentioned earlier:
+  [prod] 
+https://lore.kernel.org/all/ac4cf07f-52dd-454f-b897-2a4b3796a4d9@kernel.org/
+
+
+>>
+>> For (2), memcg have a mem_cgroup_flush_stats_ratelimited() system
+>> combined with memcg_vmstats_needs_flush(), which limits the pressure on
+>> the global lock (cgroup_rstat_lock).
+>> *BUT* other users of cgroup_rstat_flush() like when reading io.stat
+>> (blk-cgroup.c) and cpu.stat, don't have such a system to limit pressure
+>> on global lock. Further more, userspace can easily trigger this via
+>> reading those stat files.  And normal userspace stats tools (like
+>> cadvisor, nomad, systemd) spawn threads reading io.stat, cpu.stat and
+>> memory.stat, likely without realizing that kernel side they share same
+>> global lock...
+>>
+>> I'm working on a code solution/proposal for "ratelimiting" global lock
+>> access when reading io.stat and cpu.stat.
+> 
+> I personally don't like mem_cgroup_flush_stats_ratelimited() very
+> much, because it is time-based (unlike memcg_vmstats_needs_flush()),
+> and a lot of changes can happen in a very short amount of time.
+> However, it seems like for some workloads it's a necessary evil :/
+> 
+
+I like the combination of the two mem_cgroup_flush_stats_ratelimited()
+and memcg_vmstats_needs_flush().
+IMHO the jiffies rate limit 2*FLUSH_TIME is too high, looks like 4 sec?
+
+
+> I briefly looked into a global scheme similar to
+> memcg_vmstats_needs_flush() in core cgroups code, but I gave up
+> quickly. Different subsystems have different incomparable stats, so we
+> cannot have a simple magnitude of pending updates on a cgroup-level
+> that represents all subsystems fairly.
+> 
+> I tried to have per-subsystem callbacks to update the pending stats
+> and check if flushing is required -- but it got complicated quickly
+> and performance was bad.
+> 
+
+I like the time-based limit because it doesn't require tracking pending
+updates.
+
+I'm looking at using a time-based limit, on how often userspace can take
+the lock, but in the area of 50ms to 100 ms.
+
+> At some point, having different rstat trees for different subsystems
+> was brought up. I never looked into actually implementing it, but I
+> suppose if we do that we have a generic scheme similar to
+> memcg_vmstats_needs_flush() that can be customized by each subsystem
+> in a clean performant way? I am not sure.
+> 
+> [..]
+>>>>
+>>>>>> I vaguely recall experimenting locally with changing that lock into a
+>>>>>> mutex and not liking the results, but I can't remember much more. I
+>>>>>> could be misremembering though.
+>>>>>>
+>>>>>> Currently, the lock is dropped in cgroup_rstat_flush_locked() between
+>>>>>> CPU iterations if rescheduling is needed or the lock is being
+>>>>>> contended (i.e. spin_needbreak() returns true). I had always wondered
+>>>>>> if it's possible to introduce a similar primitive for IRQs? We could
+>>>>>> also drop the lock (and re-enable IRQs) if IRQs are pending then.
+>>>>>
+>>>>> I am not sure if there is a way to check if a hardirq is pending, but we
+>>>>> do have a local_softirq_pending() helper.
+>>>>
+>>>> The local_softirq_pending() might work well for me, as this is our prod
+>>>> problem, that CPU local pending softirq's are getting starved.
+>>>
+>>> If my understanding is correct, softirqs are usually scheduled by
+>>> IRQs, which means that local_softirq_pending() may return false if
+>>> there are pending IRQs (that will schedule softirqs). Is this correct?
+>>>
+>>
+>> Yes, networking hard IRQ will raise softirq, but software often also
+>> raise softirq.
+>> I see where you are going with this... the cgroup_rstat_flush_locked()
+>> loop "play nice" check happens with IRQ lock held, so you speculate that
+>> IRQ handler will not be able to raise softirq, thus
+>> local_softirq_pending() will not work inside IRQ lock.
+> 
+> Exactly.
+> 
+> I wonder if it would be okay to just unconditionally drop the lock at
+> each CPU boundary. Would be interesting to experiment with this. One
+> disadvantage of the mutex in this case (imo) is that outside of the
+> percpu spinlock critical section, we don't really need to be holding
+> the global lock/mutex. So sleeping while holding it is not needed and
+> only introduces problems. Dropping the spinlock at each boundary seems
+> like a way to circumvent that.
+> 
+
+This sound interesting, to unconditionally drop the lock at each CPU
+boundary.  We should experiment with this.
+
+> If the problems you are observing are mainly on CPUs that are holding
+> the lock and flushing, I suspect this should greatly. If the problems
+> are mainly on CPUs spinning for the lock, I suspect it will still help
+> redistribute the lock (and IRQs disablement) more often, but not as
+> much.
+> 
+>>
+>>
+>>>>
+>>>> In production another problematic (but rarely occurring issue) is when
+>>>> several CPUs contend on this lock.  Yosry's recent work/patches have
+>>>> already reduced the chances of this happening (thanks), BUT it still can
+>>>> and does happen.
+>>>> A simple solution to this, would be to do a spin_trylock() in
+>>>> cgroup_rstat_flush(), and exit if we cannot get the lock, because we
+>>>> know someone else will do the work.
+>>>
+>>> I am not sure I understand what you mean specifically with the checks
+>>> below, but I generally don't like this (as you predicted :) ).
+>>>
+>>> On the memcg side, we used to have similar logic when we used to
+>>> always flush the entire tree. This leaded to flushing being
+>>> indeterministic. You would occasionally get stale stats because of the
+>>> contention, which resulted in some inconsistencies (e.g. performing
+>>> proactive reclaim successfully then reading the stats that do not
+>>> reflect that).
+>>>
+>>> Now that we dropped the logic to always flush the entire tree, it is
+>>> even more difficult because concurrent flushes could be in completely
+>>> irrelevant subtrees.
+>>>
+>>> If we were to introduce some smart logic to figure out that the
+>>> subtree we are trying to flush is already being flushed, I think we
+>>> would need to wait for that ongoing flush to complete instead of just
+>>> returning (e.g. using completions). But I think such implementations
+>>> to find overlapping flushes and wait for them may be too compicated.
+>>>
+>>
+>> We will see if you hate my current code approach ;-)
+> 
+> Just to be clear, if the spinlock was to be converted to a mutex, or
+> to be dropped at each CPU boundary, do you still think such
+> ratelimiting is still needed to mitigate lock contention -- even if
+> the IRQs latency problem is fixed?
+
+With a mutex lock contention will be less obvious, as converting this to
+a mutex avoids multiple CPUs spinning while waiting for the lock, but
+it doesn't remove the lock contention.
+
+Userspace can easily triggered pressure on the global cgroup_rstat_lock
+via simply reading io.stat and cpu.stat files (under /sys/fs/cgroup/).
+I think we need a system to mitigate lock contention from userspace
+(waiting on code compiling with a proposal).  We see normal userspace
+stats tools like cadvisor, nomad (and systemd) trigger this by reading
+all the stat file on the system and even spawning parallel threads
+without realizing that kernel side they share same global lock.
+
+You have done a huge effort to mitigate lock contention from memcg,
+thank you for that.  It would be sad if userspace reading these stat
+files can block memcg.  On production I see shrink_node having a
+congestion point happening on this global lock.
+
+--Jesper
