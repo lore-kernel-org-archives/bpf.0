@@ -1,282 +1,317 @@
-Received: from mx0b-00154904.pphosted.com (mx0b-00154904.pphosted.com [148.163.137.20])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98ABE2375B;
-	Tue, 16 Apr 2024 23:25:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=148.163.137.20
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713309931; cv=fail; b=dkESBOPyXl667ht2Nus0mdk35i/dCaF7c/djtbwFXfaEoqTS5SONu8mf/EiFTxLFMr/VD8Xn32KG33qWhGltS0UWDxuumf/1iGcyOgTauM++mmWD3U8rHw1F/JvQqGcuKThk0FuB5meW48/H5Uf9qiNlgv68PRRIaRnq6pgIV4E=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713309931; c=relaxed/simple;
-	bh=gFPrnkqx3NVi3+GzPo/GRI8nFPhTPu+XwXn1NQokQBQ=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=CI91m5xUjd2HG/POUdbP0KXfDyOnemdy58LrJ+3tYKuCZTdNEdSnd6of6WFAutVuFRf69XgG4KQ9Mx7C5e1etfauoEG8kdHFXCLW7AOEMnDkR2RT/kxTy0nRirGg/4SFuXmIdRvi3EKFzsDNXdQssvs3yz+6Wxm8oeH/xEW1Ifg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=Dell.com; spf=pass smtp.mailfrom=dell.com; dkim=pass (2048-bit key) header.d=dell.com header.i=@dell.com header.b=uPe5Cl0z; arc=fail smtp.client-ip=148.163.137.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=Dell.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dell.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 294F012E1CE;
+	Tue, 16 Apr 2024 23:41:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1713310874; cv=none; b=tVHnZSehwYK/iFwsQPkmC//c5rk6otYEGAmXLxSz4nUwwoN54l28hw4BCXxsVqrWG2bEHJrobrI/kdGLO6V5rvp3kae6gl3A33q0MlpdGwc5KvuXFCYPi5My86vZWBFC1m4cHV99fHp9vwUrhTPq8HyxB3Eu3O0G0YdAU4ft5JA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1713310874; c=relaxed/simple;
+	bh=bICZAsXgYGT5YWWOuMl10d7+YEs7h/CLvGEmAXXw3M8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=nDiIYgYMxMqZ1pVppOsJritE3BER+ea4PV8SGPXCDZVN0hqne7sYE2Mr8UhfvGMfBRq8HWG+XfsXOV3Y6GrL5LKd1JnmcLYFm9bD0FUaVhVkU2mORc4jLJ7VJucePbOAId4fcNbSq5Xj+aaMbSWlv68EAA7qi3JnxYTjLriNU8U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=OVOWgNkF; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=dell.com header.i=@dell.com header.b="uPe5Cl0z"
-Received: from pps.filterd (m0170394.ppops.net [127.0.0.1])
-	by mx0b-00154904.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 43G6EnC5026553;
-	Tue, 16 Apr 2024 06:36:29 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dell.com; h=from : to : cc :
- subject : date : message-id : references : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=smtpout1;
- bh=a9JEITAo9hQd9VDZ7WauxvzVY5CuSzIrt4eEuEag+bM=;
- b=uPe5Cl0z7FHbwwZsj26V8Q9UPSAxDsAE18fxJWU/8xVIHfRcHYl1lKONL1ZOdxJYxTUx
- PXEEJ4bcZDIA96LwU94pilTp1G178s6zuzuYOKX42gbk48g2aVcXEFiYE/21P9vEXO2Q
- 4+2gs/Zb32MILh7D/toLvlOalqqY2kadxnjzBghzvMMM3IwGpRkTSHISe0eaRXlOXeag
- BUiTrwytZIkLP+xTIjsbP48slAhYer6YDXUXHunUQxcL0DjzKnUFglV/rgHKVqIvvrKu
- ZZJiH6LqVL7jnvypkJgQC62jg3igdXFP1Q6y/63jVz9EKRHXIEBp7Jffjd5KbUr7fyDM 4w== 
-Received: from mx0b-00154901.pphosted.com (mx0b-00154901.pphosted.com [67.231.157.37])
-	by mx0b-00154904.pphosted.com (PPS) with ESMTPS id 3xfmm8v2eb-1
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="OVOWgNkF"
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 43GNBICL005996;
+	Tue, 16 Apr 2024 23:40:45 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	message-id:date:mime-version:subject:to:cc:references:from
+	:in-reply-to:content-type:content-transfer-encoding; s=
+	qcppdkim1; bh=of/cLQJhseuXknQ6XKSZPirrsTVR+NSnRl42Oh7x+68=; b=OV
+	OWgNkF4DQ9h65JBh8VyMhobHYT1HdHJEbLyHsW44S/IsyZ59QMftya4nUgFtDd0z
+	UmzNOMsB+Z+6g7re71Cke0jMSWF7z6oUsD4TxzpI27YWuPxbQHxUaOMCQa5n9nNO
+	EA4cBWC3Hpaz04ymPBQs9tZvZ0Tl5v4s106pf02WtF2aubpLepDHfMOkg8eI46+k
+	bmE3HggGYnRLguWoOvZ4TJoLvpGVM3bYp2xEb5fG7OGt3LCU4n90zSOGKI4M8U3Z
+	G6NlJBFrdFaScYK0PJ2wCewB2rYtOBZM1gkD3WVvMvbEVitAEND9uE9CH66t2DEf
+	EKL8VFU9Y3iUF4iY1IMg==
+Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3xhswvsvs4-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 16 Apr 2024 06:36:29 -0400
-Received: from pps.filterd (m0144104.ppops.net [127.0.0.1])
-	by mx0b-00154901.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 43G8vNxw021463;
-	Tue, 16 Apr 2024 06:36:29 -0400
-Received: from nam11-co1-obe.outbound.protection.outlook.com (mail-co1nam11lp2169.outbound.protection.outlook.com [104.47.56.169])
-	by mx0b-00154901.pphosted.com (PPS) with ESMTPS id 3xhnvgsp9x-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 16 Apr 2024 06:36:28 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=g7pZVufW6Ag8noKl3GNzgv+jAhEhJkjSQW3gRfia/X9zOTvKskD/4i9UvhPHl0IiK8sgfWmQGGXJcNNdC+2W7l7d7xSIukm2UadT05c6AU7HEn6bTNo7xjn+kUgB8cacZ7QjEcg9i8vqZYMBhAa6m6W3wXT0ZyPoLiMOt+jBNzGlDldoyK7sepiCIvFKEZ1oseswdm9Yli+dA8GEUpIXzSvclEgPt29Id8vf0e6GbZI/TtVYOf600RoUuAqLWXg5d+pGpsZTCKgeZnt/uh5SjKhrCpHczgvVX6eddQMhAYrLIX3cGWRpwJQ96eoK0GXG3ECnQCtFavgw7I2FJFl+hQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=a9JEITAo9hQd9VDZ7WauxvzVY5CuSzIrt4eEuEag+bM=;
- b=nESuLKU6Z36zTWeN5V+fZM9KBKmecyEONZPu72DFY+wvlg6TfS1EniZgxLxO++MU7/B0dtEqF131X1MC+WrNsARNCr2ucpSNPNL9hqaGaj0LnN6B+3cu+lEnWPwNTx4XbFKxnLDCrz+kTbkv8qSufEV8acH9vzLl/wMMnFZDVsXxb7beHO97eDjFMO09M9R9xU6ntAug+6G32hFLRMvFqDvply3k8lpVBJ0vomkRojAYgAGfydU/MSpIM775OjvFuA3PwexiDJTweuU4YIYMOY2wN5KnvaPakCIcnXYiDzRBPfBWJ9pCbnyg6I6pF1OYCMBCcrFtzfVRyN+L5pUl3w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=dell.com; dmarc=pass action=none header.from=dell.com;
- dkim=pass header.d=dell.com; arc=none
-Received: from IA1PR19MB6545.namprd19.prod.outlook.com (2603:10b6:208:3aa::12)
- by SA1PR19MB6918.namprd19.prod.outlook.com (2603:10b6:806:29f::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7452.50; Tue, 16 Apr
- 2024 10:36:24 +0000
-Received: from IA1PR19MB6545.namprd19.prod.outlook.com
- ([fe80::40b9:81ae:9b9b:8c66]) by IA1PR19MB6545.namprd19.prod.outlook.com
- ([fe80::40b9:81ae:9b9b:8c66%6]) with mapi id 15.20.7452.049; Tue, 16 Apr 2024
- 10:36:23 +0000
-From: "Li, James Zheng" <James.Z.Li@Dell.com>
-To: Eric Dumazet <edumazet@google.com>, Zheng Li <lizheng043@gmail.com>
-CC: "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "bpf@vger.kernel.org"
-	<bpf@vger.kernel.org>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "jmorris@namei.org" <jmorris@namei.org>,
-        "pabeni@redhat.com"
-	<pabeni@redhat.com>,
-        "kuba@kernel.org" <kuba@kernel.org>
-Subject: RE: [PATCH] neighbour: guarantee the localhost connections be
- established successfully even the ARP table is full
-Thread-Topic: [PATCH] neighbour: guarantee the localhost connections be
- established successfully even the ARP table is full
-Thread-Index: AQHaj+QRjYt3y/dXhUSCVOE2zaWf8rFqqowAgAAITeA=
-Date: Tue, 16 Apr 2024 10:36:23 +0000
-Message-ID: 
- <IA1PR19MB6545F5F1940C0B326058987ABB082@IA1PR19MB6545.namprd19.prod.outlook.com>
-References: <20240416095343.540-1-lizheng043@gmail.com>
- <CANn89i+TKbGbmy0JJbyhUxQ9Zc_jj=EHv=bYXT5dUvQY7hw12g@mail.gmail.com>
-In-Reply-To: 
- <CANn89i+TKbGbmy0JJbyhUxQ9Zc_jj=EHv=bYXT5dUvQY7hw12g@mail.gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: 
- MSIP_Label_73dd1fcc-24d7-4f55-9dc2-c1518f171327_ActionId=e2bb6b5a-99a7-4a30-b44f-fc77fd5ca991;MSIP_Label_73dd1fcc-24d7-4f55-9dc2-c1518f171327_ContentBits=0;MSIP_Label_73dd1fcc-24d7-4f55-9dc2-c1518f171327_Enabled=true;MSIP_Label_73dd1fcc-24d7-4f55-9dc2-c1518f171327_Method=Standard;MSIP_Label_73dd1fcc-24d7-4f55-9dc2-c1518f171327_Name=No
- Protection (Label Only) - Internal
- Use;MSIP_Label_73dd1fcc-24d7-4f55-9dc2-c1518f171327_SetDate=2024-04-16T10:32:00Z;MSIP_Label_73dd1fcc-24d7-4f55-9dc2-c1518f171327_SiteId=945c199a-83a2-4e80-9f8c-5a91be5752dd;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: IA1PR19MB6545:EE_|SA1PR19MB6918:EE_
-x-ms-office365-filtering-correlation-id: 68b55b42-f750-428b-901d-08dc5e01101d
-x-exotenant: 2khUwGVqB6N9v58KS13ncyUmMJd8q4
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 
- =?utf-7?B?bzgvSzB4eFN0eHJiMnRJa1hQL2JGODNtQ2VmMDFlM1pEUTROc0taVnl6UXB3?=
- =?utf-7?B?VGpBUkZYSHJZaDZGeUpLQ2hORTFKb29yVVJmTmtxdmxidWdMSWRuYUc4R05n?=
- =?utf-7?B?RkJVUFlHUnFTYXM4dHp4emtaTWNRa20wZUxkaFJFMUxkVGg5TVJWUm1CaDZ5?=
- =?utf-7?B?cWU5dGtVSHhCNThlKy00bC9TU3Z0bloyL3FTSTNJRjR2STRWbVRIVkxGd0Z2?=
- =?utf-7?B?bDJVc0RXeXBNRnkrLWYwTUZMc3U4b05TTEFmUXJVNForLXFaUVU1VzFBa3FT?=
- =?utf-7?B?TExTVy9uUmlub0pOM2hlNWVlVXZxM0tiL083QkhYQklxZFlwYk1WTm5ERVhN?=
- =?utf-7?B?NSstNlAvL2Q3SlZQYjZjZDg0UkJKN0xpNFFGRjR6b1F6MW81elROa2JWUS9J?=
- =?utf-7?B?c1UzZm1jdEZ2TUE1anRBZTB4RnhWNmc3R2MvRGo4OEJtb2lka2kxZTNGakdk?=
- =?utf-7?B?TGQ2dUpOU0Y0b1VubEJtVGlTTHBZWXU4R1E0TjlaRThQT1lKSGhJUGc2eXhZ?=
- =?utf-7?B?dkNSUkpQVWorLXRYV1F1OTN6ZTZlWmRGd09PUDBjMG90a0hadkdBNmh6UGhT?=
- =?utf-7?B?OU55TW9hcnJ1WGFDbEE1eDQ3eCstYlZiaHZ2UXJRTVRKME90a3FaVHZ5c0J3?=
- =?utf-7?B?a2J2alhDYUNLY1U4ek9EamJIUkUybjZKZUVyMVM1WkpMVHpzVWNOdS9ENFM1?=
- =?utf-7?B?WXp2ZjR2UzBUOVZTcXhwMmlrOFdVSlROOGhUVml3azV5Q1dJVnMzU2tvWWtm?=
- =?utf-7?B?Y3IxV2dNL3AwS1k5R0hEdWludU4vMFUrLU1wNDFyeTVWQnBpWHJleXhXNSst?=
- =?utf-7?B?b1EwNHhCd1BPQzdnR0llclpXdUV3VUszUXlKRFMwQXptS0E1YWxiaHErLUlp?=
- =?utf-7?B?V0VyN2lyalNTRWYwVVIrLWVvZm8yWTRqb3N2S1lBaTcrLXFEN2FmMTJoM0tG?=
- =?utf-7?B?cnpsMUJyYkNyY1RUbENmOHhvc09oUE9tUTJqOUN0aHhMMnBnSWs1aWdHcEk4?=
- =?utf-7?B?SUU4c2lkd3lMQ0kwTDNTR3ZHNjQ3WFFRZkRYeHRWQzNFeUljSmQ0RjQyUlQ3?=
- =?utf-7?B?QXMrLVBnZEVLeW1kOGFKMUhCdFJIRzJvTXUyN0tEZDJTbW9EMjNPOGFVN3VG?=
- =?utf-7?B?Rkw5L2hPVzczZlZKTFU0NU52SWduQkRrMHBFcll4SDdvZEl3aHc5MnJEcC9D?=
- =?utf-7?B?UmxtekpIdnh4NklQTCstR1JCZVJ2WnkvZUd0RW9qblozdUdpM2Q1bnVHSjMw?=
- =?utf-7?B?V3M3SG5pRU1iYTNnNzlwd2duY253UEswdHg4eGVRY0VNeHJxelVQQnA1MnB2?=
- =?utf-7?B?WmRPMkhZMTRKdGgwek0wNUh2c3NwTUlHZXd1NkUwdDhnNEhBakRDS090SWFC?=
- =?utf-7?B?bDJFVHFiU0xTKy1XMGV2VzhaTUt2RE9tcXFjWG1XT0FIVEtxTTNmd2cwY09W?=
- =?utf-7?B?NjFydDFYdGQrLWd4SFQySDNxWm14V1hkWDhsV2lJTEx2cHVzUDM4V3dxWGdI?=
- =?utf-7?B?U29CRWUyNmVSS0d1WjRrdE8rLXBBMUcrLTRYUWpsMFdySnBCYllaVksrLTFU?=
- =?utf-7?B?TnpzZnhUVHVBbUpHdFBObW1WVlpYVGZqcmpZOVduOWRIVzZqckRxV0ZQVCst?=
- =?utf-7?B?TVc4NFJFUENKQjJxRkJSVy9yVTZhM0xHSmViWlAvWUM5c3F3aHd4Mk5Gcjhh?=
- =?utf-7?B?ckMxZElmUG05V2xnVy9odmYrLUxUUTJtcU10dmRJNnJ3dFQwOG5tZnkrLTh1?=
- =?utf-7?B?MXhwNDFBcUNCdlgyT3p4cXBYWlU3UXdPd2hTS2FibnMrLVEvcDl0aUV5aktC?=
- =?utf-7?B?SlFiVklMUnpLejRRTTNNdmpka0k5c2NkQkxpM0FLYTJoTFNFWEErQUQwLQ==?=
- =?utf-7?B?K0FEMC0=?=
-x-forefront-antispam-report: 
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:IA1PR19MB6545.namprd19.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(1800799015)(376005)(366007)(38070700009);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: 
- =?utf-7?B?ZG5mYk1QLzBQSEFHeistQU5EVzhxRDBONXl4WUR5bkkvdjEzUGowL3FmdXRk?=
- =?utf-7?B?TFBQaWdpVTJYWmRTYmxCMVZiKy0vNUt0R0daZ0VIb3R2THJLUjBoU2lJQXZ3?=
- =?utf-7?B?R0pFWVVJL2VsM3g5U2RMV0tmaFNZeXp6TW1BTC9oKy1ObFNweFQycXV5L1U1?=
- =?utf-7?B?OTZWOHY0Y09PTDlldUZWaTU5NFpMUWs1cSsteistQ2dJSDk3WHNPeDRzR1U=?=
- =?utf-7?B?Ky1zMGxBQkFkTEUrLXVTeWhrcWRNZm1mNmUyMUtCVkt6YnpXQmJ0SzhPSGdG?=
- =?utf-7?B?V3Q5a3VwbHM3NnI2SnVGblZBS1B4M1dxdnhvQjVZUVp1c0oxanU5RzZUY0I4?=
- =?utf-7?B?UC9ka0NFeE5tL0M5c0svNzhyYTNnQWlOYnhxSm1LaWVaWi9hdEc0c2NWZGE0?=
- =?utf-7?B?OEV1dmR4bGU2NGtON2U5TVljSXc1ZUpqMmNoNkxsVkUyaDZSNTlCc0puSDFI?=
- =?utf-7?B?TmlxLzFuVnZUellobklxSWxCTzV1ZUdQNVFmR1NjbnE2d0FxcjBMTGU4WW9Q?=
- =?utf-7?B?ZHZWaEFiQnZPRG1ydkZNKy1yMmR5TFVmZ1lFT1N4dGo4WGc2MkttbUFyd05F?=
- =?utf-7?B?YlZ1aE4rLTA3U2VXRC9hR0tBY0wrLThMNm1mUkFzN2kzbUF5RHQrLXBOeURj?=
- =?utf-7?B?UG9INkFtcXd3YXFoRWtFWWtncHVrYThlOEo5bDFrY0VzWnVLMmxCeDlzZTJO?=
- =?utf-7?B?TU5YVEVUbkowb2JrR3RkTy9FNVhPMmNoM1VGTFp6a09rdWJPR1plcUhXckIw?=
- =?utf-7?B?cy9sdFNPbzlUc0V4WDhqM2R6ZmxTUHJSaDdKKy1QTkpGM1Q1UVRGNE1zb2o2?=
- =?utf-7?B?UnN3OGY0dDk2VnhWMHczVjdsU1VydSstOUx6NThEbEY4WjBQeXBFRkRDdEsw?=
- =?utf-7?B?QnZ3bFI0NWtwV1YyWnhLNDZvNlQ5dWJubkZ1clNNOWJWa3Y4Mm5yVXZaZi9x?=
- =?utf-7?B?MGRlS0VRb1ZzNkRqM2RicmRHMmdsM1VaMEdiekFFWmdGV25YWGdFMlUyRHRz?=
- =?utf-7?B?ZWk3c05yNDkvZzd1UFplZHlrUmdsQ05vTThNRXpzRGZzaXJmTFlaVXd2MzJp?=
- =?utf-7?B?V29YYnJVejlub3o3cUF0UlMxWFFzMXVPRDloeistc2w1MFJEcGpRRnV1TVNC?=
- =?utf-7?B?T2kzR09rL0lrZ1RxZjFna2ZuOVh1Y2VWWjdCTXI3S3RuWUdlVEpOeWFkOGtL?=
- =?utf-7?B?SEpNR2hoL2ovQlh1YkZWYWx2MlV1cjVCeG9NWVI1S2dPS1ozUk1nTUEwTjdz?=
- =?utf-7?B?VzVjTWR1d1ZneC9oaG81a1NMSWJmNDdob0pZWTFFNU9WcmtHSGJNSm5SRVY3?=
- =?utf-7?B?enBNaFFaRFNGVDhWYWpnSVpyLzljM1d6QVZHdWFLRkp5MEthVXZ4WlJxT0Fz?=
- =?utf-7?B?MTVSSllVR1hONkNYeldaME1MU2pZQ3pCQUtOd2JEeVFENTBpZjdrTU1rLzVY?=
- =?utf-7?B?WFd2eFhkV2FEZUpaek9Ballidk93dystM1ZOWkZDVlFjZ0U5OEltc0YrLUtE?=
- =?utf-7?B?VHNTdEV5YUtQbXRZUzVMNktEeWo1R1JibVdNVGlrMlZyWHROMVRtSnkxVmFE?=
- =?utf-7?B?ZUpxOVdIcXBDMy9oVTdScjJ4MENyOTI1TXo0NVVwc00wS3FxR0lhd2lFeFFj?=
- =?utf-7?B?aWhZWnZoWTU5NTZrdVFHaFhhTmFBc0k0V0w1Y3RieXduL0M5c2tydFowTTFH?=
- =?utf-7?B?ZXZTTlhzUUpxS2ZGMistRE1NVnNoMElvdmhDbWdRd0t5ZmtaaW0vbVg1R3M1?=
- =?utf-7?B?clhCanNSLzdPQVpJcGpEMistUU15YUVzZHIrLUxIallCcmhpdEJjaHBSRzNH?=
- =?utf-7?B?eG9OWjJUZmdnR0UySG81cEExMlJoSVhjM0dSV2NkYXFzTmlYMXI5VFVicmw4?=
- =?utf-7?B?Qy9PT3BJbE1CKy1qVnVWc1NMU2ovTmpKbW91ZVFHcmJIL2hJS2I0MjZrNUk5?=
- =?utf-7?B?Z2RNVW95aEc0c2FUbzkyWUJ0QTc5QU1aR25nU0xEOFR3ZTRiTlcvYVlCR0g=?=
- =?utf-7?B?Ky1RUWp0YlhKYzlTTXJvVk0wbGdwVlR4U2ZwRDdBSVowYVRTUmF4OHhnNUlp?=
- =?utf-7?B?WXd2NzlNOVIwY2ZIME9jalE0SzJvZDZBMExtKy1wTlR6UmJWWE9tRm5wazM4?=
- =?utf-7?B?OEU1WllHai9VVFlZWktPZlJRU1RpWVZlRW4wR25UWnQ5RXpWL0w5THdtZ3ZD?=
- =?utf-7?B?eVRRSQ==?=
-Content-Type: text/plain; charset="utf-7"
-Content-Transfer-Encoding: quoted-printable
+	Tue, 16 Apr 2024 23:40:45 +0000 (GMT)
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+	by NASANPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 43GNehnE017108
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 16 Apr 2024 23:40:43 GMT
+Received: from [10.110.24.237] (10.80.80.8) by nasanex01a.na.qualcomm.com
+ (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Tue, 16 Apr
+ 2024 16:40:39 -0700
+Message-ID: <248cfe7f-cc29-4473-960f-0b036b43a52e@quicinc.com>
+Date: Tue, 16 Apr 2024 16:40:38 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: Dell.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: IA1PR19MB6545.namprd19.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 68b55b42-f750-428b-901d-08dc5e01101d
-X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Apr 2024 10:36:23.7520
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 945c199a-83a2-4e80-9f8c-5a91be5752dd
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: YC1TP+hZTXCozGcfztWTHJ1ZlfCHTjQQTBbR9r+iqE2CxHOP9r3WJoOmBEbP12pvdMduLfNVzZ1U9lKGKZWaMg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR19MB6918
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH bpf-next v3 2/2] net: Add additional bit to support
+ userspace timestamp type
+Content-Language: en-US
+To: Martin KaFai Lau <martin.lau@linux.dev>,
+        Willem de Bruijn
+	<willemdebruijn.kernel@gmail.com>
+CC: <kernel@quicinc.com>, "David S. Miller" <davem@davemloft.net>,
+        "Eric
+ Dumazet" <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
+	<pabeni@redhat.com>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Andrew Halaney <ahalaney@redhat.com>,
+        "Martin
+ KaFai Lau" <martin.lau@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>, bpf <bpf@vger.kernel.org>
+References: <20240412210125.1780574-1-quic_abchauha@quicinc.com>
+ <20240412210125.1780574-3-quic_abchauha@quicinc.com>
+ <661ad7d4c65da_3be9a7294e@willemb.c.googlers.com.notmuch>
+ <617e2577-8de2-4fde-bbfe-2d6280c48c29@linux.dev>
+From: "Abhishek Chauhan (ABC)" <quic_abchauha@quicinc.com>
+In-Reply-To: <617e2577-8de2-4fde-bbfe-2d6280c48c29@linux.dev>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: yuMeAIjQjXmhhvEyVuLphiAIzj8JDkiz
+X-Proofpoint-ORIG-GUID: yuMeAIjQjXmhhvEyVuLphiAIzj8JDkiz
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-04-16_07,2024-04-15_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 impostorscore=0
- suspectscore=0 mlxscore=0 malwarescore=0 phishscore=0 bulkscore=0
- lowpriorityscore=0 mlxlogscore=999 priorityscore=1501 spamscore=0
- clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2404010000 definitions=main-2404160064
-X-Proofpoint-GUID: 9yS71TqFA7l-Wk7ARBFwHb0jZ9Y1Pw7w
-X-Proofpoint-ORIG-GUID: 9yS71TqFA7l-Wk7ARBFwHb0jZ9Y1Pw7w
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 impostorscore=0
- priorityscore=1501 spamscore=0 lowpriorityscore=0 suspectscore=0
- bulkscore=0 clxscore=1015 adultscore=0 phishscore=0 malwarescore=0
+ definitions=2024-04-16_18,2024-04-16_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0
+ priorityscore=1501 spamscore=0 impostorscore=0 bulkscore=0 adultscore=0
+ lowpriorityscore=0 malwarescore=0 clxscore=1015 suspectscore=0 mlxscore=0
  mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2404010000 definitions=main-2404160064
+ engine=8.19.0-2404010003 definitions=main-2404160155
 
 
 
+On 4/15/2024 1:00 PM, Martin KaFai Lau wrote:
+> On 4/13/24 12:07 PM, Willem de Bruijn wrote:
+>>> diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
+>>> index a83a2120b57f..b6346c21c3d4 100644
+>>> --- a/include/linux/skbuff.h
+>>> +++ b/include/linux/skbuff.h
+>>> @@ -827,7 +827,8 @@ enum skb_tstamp_type {
+>>>    *    @tstamp_type: When set, skb->tstamp has the
+>>>    *        delivery_time in mono clock base (i.e. EDT).  Otherwise, the
+>>>    *        skb->tstamp has the (rcv) timestamp at ingress and
+>>> - *        delivery_time at egress.
+>>> + *        delivery_time at egress or skb->tstamp defined by skb->sk->sk_clockid
+>>> + *        coming from userspace
+>>>    *    @napi_id: id of the NAPI struct this skb came from
+>>>    *    @sender_cpu: (aka @napi_id) source CPU in XPS
+>>>    *    @alloc_cpu: CPU which did the skb allocation.
+>>> @@ -955,7 +956,7 @@ struct sk_buff {
+>>>       /* private: */
+>>>       __u8            __mono_tc_offset[0];
+>>>       /* public: */
+>>> -    __u8            tstamp_type:1;    /* See SKB_MONO_DELIVERY_TIME_MASK */
+>>> +    __u8            tstamp_type:2;    /* See SKB_MONO_DELIVERY_TIME_MASK */
+>>>   #ifdef CONFIG_NET_XGRESS
+>>>       __u8            tc_at_ingress:1;    /* See TC_AT_INGRESS_MASK */
+>>>       __u8            tc_skip_classify:1;
+>>
+>> A quick pahole for a fairly standard .config that I had laying around
+>> shows a hole after this list of bits, so no huge concerns there from
+>> adding a bit:
+>>
+>>             __u8               slow_gro:1;           /*     3: 4  1 */
+>>             __u8               csum_not_inet:1;      /*     3: 5  1 */
+>>
+>>             /* XXX 2 bits hole, try to pack */
+>>
+>>             __u16              tc_index;             /*     4     2 */
+>>
+>>> @@ -1090,10 +1091,10 @@ struct sk_buff {
+>>>    */
+>>>   #ifdef __BIG_ENDIAN_BITFIELD
+>>>   #define SKB_MONO_DELIVERY_TIME_MASK    (1 << 7)
+>>> -#define TC_AT_INGRESS_MASK        (1 << 6)
+>>> +#define TC_AT_INGRESS_MASK        (1 << 5)
+>>
+>> Have to be careful when adding a new 2 bit tstamp_type with both bits
+>> set, that this does not incorrectly get interpreted as MONO.
+>>
+>> I haven't looked closely at the BPF API, but hopefully it can be
+>> extensible to return the specific type. If it is hardcoded to return
+>> either MONO or not, then only 0x1 should match, not 0x3.
+> 
+> Good point. I believe it is the best to have bpf to consider both bits in tstamp_type:2 in filter.c to avoid the 0x3 surprise in the future. The BPF API can be extended to support SKB_CLOCK_TAI.
+> 
+> Regardless, in bpf_convert_tstamp_write(), it still needs to clear both bits in tstamp_type when it is at ingress. Right now it only clears the mono bit.
+> 
+> Then it may as well consider both tstamp_type:2 bits in bpf_convert_tstamp_read() and bpf_convert_tstamp_type_read(). e.g. bpf_convert_tstamp_type_read(), it should be a pretty straight forward change because the SKB_CLOCK_* enum value should be a 1:1 mapping to the BPF_SKB_TSTAMP_*.
+> 
+>>
+>>>   #else
+>>>   #define SKB_MONO_DELIVERY_TIME_MASK    (1 << 0)
+>>> -#define TC_AT_INGRESS_MASK        (1 << 1)
+>>> +#define TC_AT_INGRESS_MASK        (1 << 2)
+>>>   #endif
+>>>   #define SKB_BF_MONO_TC_OFFSET        offsetof(struct sk_buff, __mono_tc_offset)
+>>>   
+> 
+Hi Martin and Willem,
 
-Internal Use - Confidential
------Original Message-----
-From: Eric Dumazet +ADw-edumazet+AEA-google.com+AD4-
-Sent: Tuesday, April 16, 2024 6:02 PM
-To: Zheng Li +ADw-lizheng043+AEA-gmail.com+AD4-
-Cc: netdev+AEA-vger.kernel.org+ADs- bpf+AEA-vger.kernel.org+ADs- davem+AEA-=
-davemloft.net+ADs- jmorris+AEA-namei.org+ADs- pabeni+AEA-redhat.com+ADs- ku=
-ba+AEA-kernel.org+ADs- Li, James Zheng +ADw-James.Z.Li+AEA-Dell.com+AD4-
-Subject: Re: +AFs-PATCH+AF0- neighbour: guarantee the localhost connections=
- be established successfully even the ARP table is full
+I have made the changes as per your guidelines . I will be raising RFC patch bpf-next v4 soon. Giving you heads up of the changes i am bringing in the BPF code. If you feel i have done something incorrectly, please do correct me here.  
+I apologies for adding the code here and making the content of the email huge for other upstream reviewers. 
+
+//Introduce a new BPF tstamp type mask in bpf.h 
+
+#ifdef __BIG_ENDIAN_BITFIELD
+#define SKB_MONO_DELIVERY_TIME_MASK	(1 << 7)
++ #define SKB_TAI_DELIVERY_TIME_MASK	(1 << 6) (new)
+#define TC_AT_INGRESS_MASK		(1 << 5)
+#else
+#define SKB_MONO_DELIVERY_TIME_MASK	(1 << 0)
++ #define SKB_TAI_DELIVERY_TIME_MASK	(1 << 1) (new)
+#define TC_AT_INGRESS_MASK		(1 << 2)
+#endif
+
+//changes in the filter.c (bpf_convert_tstamp_{read,write}, bpf_convert_tstamp_type_read())code are accordingly taken care since now we have 3 bits instead of 2 
+
+Value 3 => unspec
+Value 2 => tai 
+Value 1 => mono
+
+static struct bpf_insn *bpf_convert_tstamp_type_read(const struct bpf_insn *si,
+						     struct bpf_insn *insn)
+{
+	__u8 value_reg = si->dst_reg;
+	__u8 skb_reg = si->src_reg;
+	/* AX is needed because src_reg and dst_reg could be the same */
+	__u8 tmp_reg = BPF_REG_AX;
+
+	*insn++ = BPF_LDX_MEM(BPF_B, tmp_reg, skb_reg,
+			      SKB_BF_MONO_TC_OFFSET);
+	*insn++ = BPF_JMP32_IMM(BPF_JSET, tmp_reg,
+				SKB_MONO_DELIVERY_TIME_MASK | SKB_TAI_DELIVERY_TIME_MASK, 2); <== check for both bits are set (if so make it tstamp_unspec)
+	*insn++ = BPF_JMP32_IMM(BPF_JSET, tmp_reg, 
+				SKB_MONO_DELIVERY_TIME_MASK, 3); <== if mono is set then its mono base and jump to 3rd instruction from here.  
+	*insn++ = BPF_JMP32_IMM(BPF_JSET, tmp_reg,
+				SKB_TAI_DELIVERY_TIME_MASK, 4); <== if tai is set then its tai base and jump to 4th instruction from here. 
+	*insn++ = BPF_MOV32_IMM(value_reg, BPF_SKB_TSTAMP_UNSPEC);
+	*insn++ = BPF_JMP_A(1);
+	*insn++ = BPF_MOV32_IMM(value_reg, BPF_SKB_TSTAMP_DELIVERY_MONO);
+	*insn++ = BPF_JMP_A(1);
+	*insn++ = BPF_MOV32_IMM(value_reg, BPF_SKB_TSTAMP_DELIVERY_TAI);
+
+	return insn;
+}
+
+//Values 7, 6 and 5 as input will set the value reg to 0 
+//otherwise the skb_reg has correct configuration and will store the content in value reg. 
+                 
+static struct bpf_insn *bpf_convert_tstamp_read(const struct bpf_prog *prog,
+						const struct bpf_insn *si,
+						struct bpf_insn *insn)
+{
+	__u8 value_reg = si->dst_reg;
+	__u8 skb_reg = si->src_reg;
+
+#ifdef CONFIG_NET_XGRESS
+	/* If the tstamp_type is read,
+	 * the bpf prog is aware the tstamp could have delivery time.
+	 * Thus, read skb->tstamp as is if tstamp_type_access is true.
+	 */
+	if (!prog->tstamp_type_access) {
+		/* AX is needed because src_reg and dst_reg could be the same */
+		__u8 tmp_reg = BPF_REG_AX;
+
+		*insn++ = BPF_LDX_MEM(BPF_B, tmp_reg, skb_reg, SKB_BF_MONO_TC_OFFSET);
+		/*check if all three bits are set*/
+		*insn++ = BPF_ALU32_IMM(BPF_AND, tmp_reg,
+					TC_AT_INGRESS_MASK | SKB_MONO_DELIVERY_TIME_MASK |
+					SKB_TAI_DELIVERY_TIME_MASK);  <== check if all 3 bits are set which is value 7 
+		/*if all 3 bits are set jump 3 instructions and clear the register */
+		*insn++ = BPF_JMP32_IMM(BPF_JEQ, tmp_reg,
+					TC_AT_INGRESS_MASK | SKB_MONO_DELIVERY_TIME_MASK | 
+					SKB_TAI_DELIVERY_TIME_MASK, 4); <== if all 3 bits are set then value reg is set to 0 
+		/*Now check Mono is set with ingress mask if so clear*/
+		*insn++ = BPF_JMP32_IMM(BPF_JEQ, tmp_reg,
+					TC_AT_INGRESS_MASK | SKB_MONO_DELIVERY_TIME_MASK, 3); <== check if value is 5 (mono + ingress) if so then value reg is set to 0 
+		/*Now Check tai is set with ingress mask if so clear*/
+		*insn++ = BPF_JMP32_IMM(BPF_JEQ, tmp_reg,
+					TC_AT_INGRESS_MASK | SKB_TAI_DELIVERY_TIME_MASK, 2); <== check if value is 6 (tai + ingress) if so then value reg is set to 0 
+		/*Now Check tai and mono are set if so clear */
+		*insn++ = BPF_JMP32_IMM(BPF_JEQ, tmp_reg,
+					SKB_MONO_DELIVERY_TIME_MASK | SKB_TAI_DELIVERY_TIME_MASK, 1); <== check if value 3 (tai + mono) if so then value reg is set to 0
+		/* goto <store> */
+		*insn++ = BPF_JMP_A(2);
+		/* skb->tc_at_ingress && skb->tstamp_type:1,
+		 * read 0 as the (rcv) timestamp.
+		 */
+		*insn++ = BPF_MOV64_IMM(value_reg, 0);
+		*insn++ = BPF_JMP_A(1);
+	}
+#endif
+
+	*insn++ = BPF_LDX_MEM(BPF_DW, value_reg, skb_reg,
+			      offsetof(struct sk_buff, tstamp));
+	return insn;
+}
+
+//this was pretty straight forward 
+//if ingress mask is set just go ahead and unset both tai and mono delivery time. 
+
+static struct bpf_insn *bpf_convert_tstamp_write(const struct bpf_prog *prog,
+						 const struct bpf_insn *si,
+						 struct bpf_insn *insn)
+{
+	__u8 value_reg = si->src_reg;
+	__u8 skb_reg = si->dst_reg;
+
+#ifdef CONFIG_NET_XGRESS
+	/* If the tstamp_type is read,
+	 * the bpf prog is aware the tstamp could have delivery time.
+	 * Thus, write skb->tstamp as is if tstamp_type_access is true.
+	 * Otherwise, writing at ingress will have to clear the
+	 * mono_delivery_time (skb->tstamp_type:1)bit also.
+	 */
+	if (!prog->tstamp_type_access) {
+		__u8 tmp_reg = BPF_REG_AX;
+
+		*insn++ = BPF_LDX_MEM(BPF_B, tmp_reg, skb_reg, SKB_BF_MONO_TC_OFFSET);
+		/* Writing __sk_buff->tstamp as ingress, goto <clear> */
+		*insn++ = BPF_JMP32_IMM(BPF_JSET, tmp_reg, TC_AT_INGRESS_MASK, 1);
+		/* goto <store> */
+		*insn++ = BPF_JMP_A(3);
+		/* <clear>: mono_delivery_time or (skb->tstamp_type:1) */
+		*insn++ = BPF_ALU32_IMM(BPF_AND, tmp_reg, ~SKB_MONO_DELIVERY_TIME_MASK);
+		/* <clear>: tai delivery_time or (skb->tstamp_type:2) */ (new)
+		*insn++ = BPF_ALU32_IMM(BPF_AND, tmp_reg, ~SKB_TAI_DELIVERY_TIME_MASK); (new) <== reset tai delivery mask if ingress bit is set. 
+		*insn++ = BPF_STX_MEM(BPF_B, skb_reg, tmp_reg, SKB_BF_MONO_TC_OFFSET); 
+	}
+#endif
+
+	/* <store>: skb->tstamp = tstamp */
+	*insn++ = BPF_RAW_INSN(BPF_CLASS(si->code) | BPF_DW | BPF_MEM,
+			       skb_reg, value_reg, offsetof(struct sk_buff, tstamp), si->imm);
+	return insn;
 
 
-+AFs-EXTERNAL EMAIL+AF0-
+And the ctx_rewrite will be as follows 
 
-On Tue, Apr 16, 2024 at 11:54+IC8-AM Zheng Li +ADw-lizheng043+AEA-gmail.com=
-+AD4- wrote:
-+AD4-
-+AD4- From: Zheng Li +ADw-James.Z.Li+AEA-Dell.com+AD4-
-+AD4-
-+AD4- Inter-process communication on localhost should be established
-+AD4- successfully even the ARP table is full, many processes on server
-+AD4- machine use the localhost to communicate such as command-line
-+AD4- interface (CLI), servers hope all CLI commands can be executed
-+AD4- successfully even the arp table is full. Right now CLI commands got
-+AD4- timeout when the arp table is full. Set the parameter of
-+AD4- exempt+AF8-from+AF8-gc to be true for LOOPBACK net device to keep loc=
-alhost neigh in arp table, not removed by gc.
-+AD4-
-+AD4- the steps of reproduced:
-+AD4- server with +ACI-gc+AF8-thresh3 +AD0- 1024+ACI- setting, ping server =
-from more than
-+AD4- 1024 same netmask Lan IPv4 addresses, run +ACI-ssh localhost+ACI- on =
-console
-+AD4- interface, then the command will get timeout.
-+AD4-
-+AD4- Signed-off-by: Zheng Li +ADw-James.Z.Li+AEA-Dell.com+AD4-
-+AD4- ---
-+AD4-  net/core/neighbour.c +AHw- 4 +-+-+--
-+AD4-  1 file changed, 3 insertions(+-), 1 deletion(-)
-+AD4-
-+AD4- diff --git a/net/core/neighbour.c b/net/core/neighbour.c index
-+AD4- 552719c3bbc3..47d07b122f7a 100644
-+AD4- --- a/net/core/neighbour.c
-+AD4- +-+-+- b/net/core/neighbour.c
-+AD4- +AEAAQA- -734,7 +-734,9 +AEAAQA- +AF8AXwBf-neigh+AF8-create(struct ne=
-igh+AF8-table +ACo-tbl, const
-+AD4- void +ACo-pkey,  struct neighbour +ACoAXwBf-neigh+AF8-create(struct n=
-eigh+AF8-table +ACo-tbl, const void +ACo-pkey,
-+AD4-                                  struct net+AF8-device +ACo-dev, bool
-+AD4- want+AF8-ref)  +AHs-
-+AD4- -       return +AF8AXwBf-neigh+AF8-create(tbl, pkey, dev, 0, false, w=
-ant+AF8-ref)+ADs-
-+AD4- +-       bool exempt+AF8-from+AF8-gc +AD0- +ACEAIQ-(dev-+AD4-flags +A=
-CY- IFF+AF8-LOOPBACK)+ADs-
-+AD4- +-
-+AD4- +-       return +AF8AXwBf-neigh+AF8-create(tbl, pkey, dev, 0, exempt+=
-AF8-from+AF8-gc,
-+AD4- +- want+AF8-ref)+ADs-
-+AD4-  +AH0-
-+AD4-  EXPORT+AF8-SYMBOL(+AF8AXw-neigh+AF8-create)+ADs-
-+AD4-
-
-+AD4- Hmmm...
-
-+AD4- Loopback IPv4 can hold 2+AF4-24 different addresses, that is 16384 +A=
-Co- 1024
-
-There is only one Loopback neigh +ACI-0.0.0.0 dev lo lladdr 00:00:00:00:00:=
-00 NOARP+ACI- existing even you have configured 2+AF4-24 different addresse=
-s on the loopback device.
-
-
-
+		.read  = "r11 = *(u8 *)($ctx + sk_buff::__mono_tc_offset);"
+			 "w11 &= 7;"
+			 "if w11 == 0x7 goto pc+4;"
+			 "if w11 == 0x5 goto pc+3;"
+			 "if w11 == 0x6 goto pc+2;"
+			 "if w11 == 0x3 goto pc+1;"
+			 "goto pc+2"
+			 "$dst = 0;"
+			 "goto pc+1;"
+			 "$dst = *(u64 *)($ctx + sk_buff::tstamp);",
+		.write = "r11 = *(u8 *)($ctx + sk_buff::__mono_tc_offset);"
+			 "if w11 & 0x4 goto pc+1;"
+			 "goto pc+3;"
+			 "w11 &= -2;"
+			 "w11 &= -3;"
+			 "*(u8 *)($ctx + sk_buff::__mono_tc_offset) = r11;"
+			 "*(u64 *)($ctx + sk_buff::tstamp) = $src;",
