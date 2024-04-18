@@ -1,132 +1,75 @@
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from out-188.mta0.migadu.com (out-188.mta0.migadu.com [91.218.175.188])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 211228C11;
-	Thu, 18 Apr 2024 00:48:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87BE2376
+	for <bpf@vger.kernel.org>; Thu, 18 Apr 2024 00:49:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.188
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713401313; cv=none; b=gWvrTtbD/OirQR2KYFoEOxRQ1LObMgTFQMEkm9HDydbPmYASYwr16KOaH0BST8FF4cp7NH3nkPvBbz18N2AhFqwis3QHHoOxJh3F4vabT6NNzuek0SSwdAObdj38FhUZYwX4jJ1vZw6YEfJu19lmmLwCVfWV9YfsEuWL0HtG32g=
+	t=1713401373; cv=none; b=LsjeRAz7nRptc2uBoc+B7GetEidZofiKBTpiTkne/k3sYS4349a/LG0thjLTk5XAl0k8li2lg65K8VHoLdW8GjFz0Vgv7pQYHF20NVIOm+nqE1VqHb/6Hon8kHpbkyKNayL9ZXYthocxrO6NHRV/2sdXP0ex9PGF+68iX2CfdAI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713401313; c=relaxed/simple;
-	bh=4myWCl9rPEvJWxhoy9ruc8t8VmTwMfGnJKppesHAdak=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=WiEy99VLS4Oqd/Z4pXumvs8WM7wR/7VxCR3GQq+ChRj+8p654z9dw7bZvSyYZhqiw7nKrA3IXSKXE319HzqhroE5aISA/b9qqA5ZqxuR7d2Cyf32Msw5Hc+UZgobJiB+t6wUfpFnjG8EscQnhWW0TvcR50UwqIFb11SbdlE5bfg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=qualcomm.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=ax2U+pHG; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qualcomm.com
+	s=arc-20240116; t=1713401373; c=relaxed/simple;
+	bh=F/SkmoQvSLWZ7QJaggfJvpFq6OEWRVn9qMxeTf9LvM0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Xq2tn3iWCnI9g5m1xd/rBporsIvIwC+WfeE8jt38q4kN0DhdoLIl9Q+f3/77fAKTK283VCfFl80bf3zxDP0igVYk1157JWv6olLTzR2mizJZzFSwilvPzWsCu9ehmGPQ2wXHWSFtZyy6s82JWMQ796o7NpCh9OoQGMSPo4vpN/4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=hXoMgPLq; arc=none smtp.client-ip=91.218.175.188
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="ax2U+pHG"
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 43H8FdRs013344;
-	Thu, 18 Apr 2024 00:43:13 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	from:to:cc:subject:date:message-id:mime-version
-	:content-transfer-encoding; s=qcppdkim1; bh=b17XR78sxCkLDTNPfOL5
-	o/sHbO6u5mrz5YsT90tih/s=; b=ax2U+pHG9Qiiy1G3b98+K4Dlp4VOjc5U+HBA
-	VgVfLYmH+7ytwPxH1UWvUyvu239Fa2IVKFs51mB7sXAmF6bujmj3k1k2OCiUd2J/
-	7aJAw1tsJ2PyhiV7R5w/MTT7v3z36p+LuyWaq+zNDLeZigEQp8PzoMQBWzlf+nfY
-	7PZlLcs9Fy+wNmDFVOLuirW9IYV3QWmcAwxfs9UcFf69vJJy7kjX4lPguBd5e2Cc
-	C1niwWI2HnUWvjfDau/K5bzEzV/cjireHCqvm0ns9WaBA8D50LaqEmi0T7OZuKn5
-	R6KbVgkcv/uUBEaEf2KFGn2KpENSSEZzZYvD1b8OQ2bX+gzs9w==
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3xjarpjdfc-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 18 Apr 2024 00:43:12 +0000 (GMT)
-Received: from pps.filterd (NALASPPMTA03.qualcomm.com [127.0.0.1])
-	by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 43I0hAMa001750;
-	Thu, 18 Apr 2024 00:43:10 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-	by NALASPPMTA03.qualcomm.com (PPS) with ESMTPS id 3xhpckexw2-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 18 Apr 2024 00:43:10 +0000
-Received: from NALASPPMTA03.qualcomm.com (NALASPPMTA03.qualcomm.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 43I0h9Fw001742;
-	Thu, 18 Apr 2024 00:43:09 GMT
-Received: from hu-devc-lv-u20-a-new.qualcomm.com (hu-abchauha-lv.qualcomm.com [10.81.25.35])
-	by NALASPPMTA03.qualcomm.com (PPS) with ESMTPS id 43I0h91E001741
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 18 Apr 2024 00:43:09 +0000
-Received: by hu-devc-lv-u20-a-new.qualcomm.com (Postfix, from userid 214165)
-	id B4648220A2; Wed, 17 Apr 2024 17:43:08 -0700 (PDT)
-From: Abhishek Chauhan <quic_abchauha@quicinc.com>
-To: "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Andrew Halaney <ahalaney@redhat.com>,
-        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-        Martin KaFai Lau <martin.lau@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Daniel Borkmann <daniel@iogearbox.net>, bpf <bpf@vger.kernel.org>
-Cc: kernel@quicinc.com
-Subject: [RFC PATCH bpf-next v4 0/2] Replace mono_delivery_time with tstamp_type
-Date: Wed, 17 Apr 2024 17:43:06 -0700
-Message-Id: <20240418004308.1009262-1-quic_abchauha@quicinc.com>
-X-Mailer: git-send-email 2.25.1
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="hXoMgPLq"
+Message-ID: <f164369a-2b6b-45e0-8e3e-aa0035038cb6@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1713401369;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=O2R/bhzkqU116/NpQeIcCt+dReP6JwLb0WVDt23oS7A=;
+	b=hXoMgPLqYrqlqpzea3HP+pt6VK3cxm6EshAaFRPTEnsnLBh2zaFKZQVkNYFAtDpmLc86yG
+	0Wzk7FLlGlY1zPsF6jGDTYDDakEUSNcH/aPeJb4T9XDDvkPhY1QyenFGm568QZYLiTqPOJ
+	/AJ1zVymfUEs+gqxa5g9gbAnQq8l3pA=
+Date: Wed, 17 Apr 2024 17:49:20 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QCInternal: smtphost
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: FKByXQ9fZPf2WC09diIY5oSLdH0Rirx7
-X-Proofpoint-ORIG-GUID: FKByXQ9fZPf2WC09diIY5oSLdH0Rirx7
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-04-17_20,2024-04-17_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 suspectscore=0
- malwarescore=0 mlxlogscore=830 phishscore=0 adultscore=0 impostorscore=0
- priorityscore=1501 lowpriorityscore=0 spamscore=0 mlxscore=0 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2404010003
- definitions=main-2404180002
+Subject: Re: [PATCH v2 bpf-next 4/6] selftests/bpf: Add IPv4 and IPv6 sockaddr
+ test cases
+To: Jordan Rife <jrife@google.com>
+Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ netdev@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>,
+ Shuah Khan <shuah@kernel.org>, Kui-Feng Lee <thinker.li@gmail.com>,
+ Artem Savkov <asavkov@redhat.com>, Dave Marchevsky <davemarchevsky@fb.com>,
+ Menglong Dong <imagedong@tencent.com>, Daniel Xu <dxu@dxuuu.xyz>,
+ David Vernet <void@manifault.com>, Daan De Meyer <daan.j.demeyer@gmail.com>,
+ Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+References: <20240412165230.2009746-1-jrife@google.com>
+ <20240412165230.2009746-5-jrife@google.com>
+ <3df13496-a644-4a3a-9f9b-96ccc070f2a3@linux.dev>
+ <CADKFtnQDJbSFRS4oyEsn3ZBDAN7T6EvxXUNdrz1kU3Bnhzfgug@mail.gmail.com>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Martin KaFai Lau <martin.lau@linux.dev>
+In-Reply-To: <CADKFtnQDJbSFRS4oyEsn3ZBDAN7T6EvxXUNdrz1kU3Bnhzfgug@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-Patch 1 :- This patch takes care of only renaming the mono delivery
-timestamp to tstamp_type with no change in functionality of 
-existing available code in kernel also  
-Starts assigning tstamp_type with either mono or real and 
-introduces a new enum in the skbuff.h, again no change in functionality 
-of the existing available code in kernel , just making the code scalable.
+On 4/17/24 10:08 AM, Jordan Rife wrote:
+>> Can the test_sock_addr.{c,sh} be retired after this patch?
+> I know it's not used in the BPF CI tests, but is it still used in any
+> other contexts?
 
-Patch 2 :- Additional bit was added to support tai timestamp type to 
-avoid tstamp drops in the forwarding path when testing TC-ETF. 
-With this patch i am updating bpf filter.c and not sure
-what impacts it has towards BPF code. 
-I need upstream BPF community to help me in adding the necessary BPF 
-changes to avoid any BPF test case failures. 
-I have added some BPF changes as part of this commit to handle 
-cases of both tai and mono bit being set at the same time. 
+If anyone depends on the test_sock_addr binary, it will have to start using 
+"./test_progs -t sock_addr".
 
-Abhishek Chauhan (2):
-  net: Rename mono_delivery_time to tstamp_type for scalabilty
-  net: Add additional bit to support clockid_t timestamp type
-
- include/linux/skbuff.h                        | 61 +++++++++++++++----
- include/net/inet_frag.h                       |  4 +-
- include/uapi/linux/bpf.h                      |  1 +
- net/bridge/netfilter/nf_conntrack_bridge.c    |  6 +-
- net/core/dev.c                                |  2 +-
- net/core/filter.c                             | 50 ++++++++++++---
- net/ieee802154/6lowpan/reassembly.c           |  2 +-
- net/ipv4/inet_fragment.c                      |  2 +-
- net/ipv4/ip_fragment.c                        |  2 +-
- net/ipv4/ip_output.c                          | 11 ++--
- net/ipv4/raw.c                                |  2 +-
- net/ipv4/tcp_output.c                         | 14 ++---
- net/ipv6/ip6_output.c                         |  8 +--
- net/ipv6/netfilter.c                          |  6 +-
- net/ipv6/netfilter/nf_conntrack_reasm.c       |  2 +-
- net/ipv6/raw.c                                |  2 +-
- net/ipv6/reassembly.c                         |  2 +-
- net/ipv6/tcp_ipv6.c                           |  2 +-
- net/packet/af_packet.c                        |  7 +--
- net/sched/act_bpf.c                           |  4 +-
- net/sched/cls_bpf.c                           |  4 +-
- .../selftests/bpf/prog_tests/ctx_rewrite.c    | 13 ++--
- 22 files changed, 139 insertions(+), 68 deletions(-)
-
--- 
-2.25.1
+The test_sock_addr.{c,sh} can be retired as long as all its tests are migrated 
+to sock_addr.c
 
