@@ -1,68 +1,68 @@
-Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
+Received: from mail-lj1-f177.google.com (mail-lj1-f177.google.com [209.85.208.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2B8682D66;
-	Fri, 19 Apr 2024 15:34:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07B131304A5;
+	Fri, 19 Apr 2024 15:49:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713540879; cv=none; b=Elup8KDTH7c964ikPma7CCPp5ZXYwNTGOgEA6vsotn+vJ5bf1/F5PqXYNrIXHOwN83vNZlZv3GhuVwIEi8kBV6wZXkxGeqrjtA9w1GJmrf1hUnvFRCP0JKpJx+V2EX85D640d0MhvKZ5nqY8ZOsHgbYaq5nk8xSq3yWmfjQTJek=
+	t=1713541791; cv=none; b=gZs1g8EC/zaLNAgpYCBluhOhdZ9l6N0TbkSCx1Nb+XIFq/o5TV6RdD+NE/WZhggekbyVwuZvQxGL9++F8N87Z+erLccpOA7TdCH8oVMRzIK2l6eZ4rhNJ91GBQuR3+FOQH7zpuBq/mb1BR/ccApl/4Hj13cqefNRMpEPQ7vNrDs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713540879; c=relaxed/simple;
-	bh=Fy3NveURe5w5uBQe770wnBgJqw9cuLqS7f+LkC2Xup4=;
+	s=arc-20240116; t=1713541791; c=relaxed/simple;
+	bh=WWJM97CcvSF3993rmBMTv0D7IMRw9Z8Se5HS1FM9dCc=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=C8mJpo8VvheqVk7Y+nb/tDiqVu6nW2mx1XJUhLsckgvuFe4y2nIlGh4Xwc6B699jaJ+c2Lr0lye2moPGWH77csi49SboaiDwpbWWbG7fsSkoUH52WRvgcx+7l5ChAkC9grC4dBDhWQZgWM+1Dpp9F5EmrdWIoATj6PcLH+Cpoto=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=O0kEpJf6; arc=none smtp.client-ip=209.85.218.45
+	 To:Cc:Content-Type; b=juM07VQTd6gHNjixM6Iu4vpBI7CoQFXGMwneKN/2bSRrEzHhtW3eAu7e6QN/Jn/hCd0xftRjnbI/cbeqdmLM3yrSS69q4fN6gg081sl1c027LTjm2vfgsmQjVm0g03B5FL9GiLioE0/EfyCQLCEWJd0U14U6tiaDgP5ecsBWaEE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kmYMhp6L; arc=none smtp.client-ip=209.85.208.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="O0kEpJf6"
-Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-a44f2d894b7so212008166b.1;
-        Fri, 19 Apr 2024 08:34:37 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kmYMhp6L"
+Received: by mail-lj1-f177.google.com with SMTP id 38308e7fff4ca-2da01cb187cso38815321fa.0;
+        Fri, 19 Apr 2024 08:49:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1713540876; x=1714145676; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1713541788; x=1714146588; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Fy3NveURe5w5uBQe770wnBgJqw9cuLqS7f+LkC2Xup4=;
-        b=O0kEpJf6g/at7LVZllH+K4v6tVGvh4UGtE3kZbQ+AxzJxBEmZ7PT3rRhDump4BUu4/
-         ZRxq556Z0Vr7BTjxV9WmP3pJEM0Ww/AdMYC+ptXDO1Yjuvpc0WqeKCfc8xtLj7UcWL19
-         +Ht+pHEAJqq8GEe33brM9tmA7kZAKWhyQooLdPb4lAA9uwweDLFZhUvae0xyigoEu4yb
-         uft1z68hz7aHyEkQksYQNjzvrt5xsRLY+odNT6hXxqFh9dHOUY2a790ZZ8wv5hccX17j
-         GT3/jYwrWBdRNFGOOY4RPkO1v5NCpICeFJY6dfB4Pb63UMl9gCl5mfF49TQ88Ka3+w1+
-         Nm5Q==
+        bh=WWJM97CcvSF3993rmBMTv0D7IMRw9Z8Se5HS1FM9dCc=;
+        b=kmYMhp6LRdt/pghJaBvQj6WbF6GqXMtpUAEhZK0d2NdAFc6DCgAZqfSnb4plb5Zd+l
+         58cn/Z9mUPVU8LZpZgBVMGRo1doOHE8s3odLMyWdKZrqcmh3oVMPDaz6ACTLr6DqrG/N
+         7/Ejhfq+3pJ9aRsZBAMeTHWbkkCGBeNnLqFUUAJ/D2lTd+Z1WsfHIFQ6ka1UHTLCEwGW
+         5efgVwRq6vhcMF6m+ped9WKAlH84SHWYU9b2pAW9GxEiGoSxo9jxizM+Tov729mEBZOt
+         HKE20TKgnhFYwgZYebOaLUGC3CKwmGmYKEuE/1+CYTaljYQwMD6Vc5yReg3TZ7l3skl/
+         +2fA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713540876; x=1714145676;
+        d=1e100.net; s=20230601; t=1713541788; x=1714146588;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Fy3NveURe5w5uBQe770wnBgJqw9cuLqS7f+LkC2Xup4=;
-        b=sY3tp+SNpvpdsWkJvE6fyS+BZ2v/o1yPrQUgaIj7lSmHr0rxrc4SJNxSwex4ll3JQL
-         koONjeLTV7zBbMD6eesDVVS68xjs+wzwuBJB39dfbibFjpipn355KLwGkUAi2blT9pEq
-         ONsqBKq6nOfBf6983oeABX2cEspogGv6fQKn4lKE/nbjVs+0DxmzSnRZkfm54ir7QgmK
-         3r653V6JRlPKI5ldHOyJ2egYCv833lc00JpXlWRwuuqZaQzOOfrgXXA6y/l65WTkpMyl
-         Q7Du9T/yyjgHfnlTiHtTI3CmLn8LQOe/v/DqR7EFm4mncIMstDue8kFHvNaK19leuwJk
-         to6w==
-X-Forwarded-Encrypted: i=1; AJvYcCXhrtNLEI6XHjHFEJ4Hu7zg7YFi8ObElXXGdV9+Di7oi1/FTCUUDW6OjnWI8BqxGPKiyde1qZ9RQvIQlB9JiYJLk/bPQ8AfWbI0V9Bkun4xZtRk/rIkfbz7X32r5AgePt4c6SeJrltHXn76AP4s/p674WmdDLP5y2Y0oBKvmSPfN7OJ
-X-Gm-Message-State: AOJu0YwZGPEpTzGs/eDTs+UnF9gPhVyi4orc2WpTKTPGn121FEPBzNT8
-	kv8n0Dniu9sEBrPYiQW1m7rwP5aVh9IvRGe0w1pMRZI4mvF17I2M7or0saUgdGQ8b17SYg2vOeq
-	ZHTAAJwc83A/mXnXRBBP2W4vL5NI=
-X-Google-Smtp-Source: AGHT+IFCbVlKQPPmkqkmKImix65doOKuBzMyYvGPcOjPLaTao7TxtnWGuMjYGvzK7fLSO03J/NfMLZPbNCgYn1BMPO8=
-X-Received: by 2002:a17:906:b31a:b0:a55:4378:9891 with SMTP id
- n26-20020a170906b31a00b00a5543789891mr1859696ejz.24.1713540876037; Fri, 19
- Apr 2024 08:34:36 -0700 (PDT)
+        bh=WWJM97CcvSF3993rmBMTv0D7IMRw9Z8Se5HS1FM9dCc=;
+        b=G+z/Fu7vFcNFFrquMB4/fDHgbGXC+49mTakdt0GHgTYH22yXDNdo28IxJFsNRX1Opk
+         R0866oqyI9igAQS8Yeb4xEBDqnZP8c1ki3sb27qtbyDjS88XLDstxqw00OUXJGT/4Lli
+         CPUnBl1SNRlh3uPjDrKaDAGLpYgGMH4EfD9HNz2MaCF39w6IA4GRdWBd5lmcckN9gITJ
+         qOFIS75wTxGCDXaw2N5O4w+3URZaybNiScNaL+pZQmFIoe7ro3g6kwlQm/f2n3PjHgVn
+         t4incPZds7I7VkIL//G+0j17UDt+nSimXyraB5rSo6Mh4ZP6NgYbtNR/xQLpn/sliV0T
+         flRA==
+X-Forwarded-Encrypted: i=1; AJvYcCUzG3Ww9PtQwC+9qqzZ0+RqyzRwynmM8cpl3umth9xsVfHg/uzOBD4O/7hHpLZ6QF+cE2J/yMfKNplWmNO/aeWl8/swEym5FojOex7RG11Ydj8e5mbeVZrqg0t0ySYfD0/2tLCmgs2ciGr21tHcsI4Q+0KuMXB9Dv6O8xrFLTmASwd0
+X-Gm-Message-State: AOJu0YzuvAL0JSGR2Qby7NKpfwCiH3MWWmA7Ggf6R8PPwc8JCxgH/WTQ
+	IiqiIrdeM1LluReDIcdVb5jmU7XecjthSpsZVwdAb4RdAp0fVpzasM7/YBjEKrmXDci5J8dMCaY
+	NewhrAC8zJ1gZxvdW8/1clIQPTrk3G2/y
+X-Google-Smtp-Source: AGHT+IH04YykqEPooeOpjDIaG5sd/QHb2gYVKjVVnbzLd0iOOjJo3/w0oYTDMe3y+t0h1QyYwoWJkv8kcRg4hn+1y0U=
+X-Received: by 2002:a2e:bea7:0:b0:2d6:fa7a:a670 with SMTP id
+ a39-20020a2ebea7000000b002d6fa7aa670mr2311881ljr.33.1713541787684; Fri, 19
+ Apr 2024 08:49:47 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240416-bpf_wq-v1-0-c9e66092f842@kernel.org> <20240416-bpf_wq-v1-11-c9e66092f842@kernel.org>
- <f7awluzevpzqhqo5a65dxlfoo3dhkvbpntb4a5uueq2v7gjj7b@ddoyfpeymg3u> <tqj7biswz4ktars2mjrog35sijfgnm2nmvqrzbldphksbtj4kj@qd3digliqsjm>
-In-Reply-To: <tqj7biswz4ktars2mjrog35sijfgnm2nmvqrzbldphksbtj4kj@qd3digliqsjm>
+References: <20240416-bpf_wq-v1-0-c9e66092f842@kernel.org> <20240416-bpf_wq-v1-17-c9e66092f842@kernel.org>
+ <khz5omyjsd2iklm66bi3na4gdxw2cpwhb3c2xwu4fjxkaefi77@puck4pfltjgm> <b7akvvt67m7w6hdfq5vboojnzyjbntxrjioh6nuqziz4pzia3d@6x2le6iz6cor>
+In-Reply-To: <b7akvvt67m7w6hdfq5vboojnzyjbntxrjioh6nuqziz4pzia3d@6x2le6iz6cor>
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Fri, 19 Apr 2024 08:34:24 -0700
-Message-ID: <CAADnVQKpC_11C3LNia6uGD5yAe5QeViYHD6TEHKBtEi3L6awLg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 11/18] bpf: wq: add bpf_wq_init
+Date: Fri, 19 Apr 2024 08:49:36 -0700
+Message-ID: <CAADnVQ+hPNQ3-fVj-5qt+UrT8yPavE9L7AaphsLLEKwve21P-g@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 17/18] bpf: add bpf_wq_start
 To: Benjamin Tissoires <bentiss@kernel.org>
 Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
 	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
@@ -75,20 +75,26 @@ Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Apr 19, 2024 at 8:12=E2=80=AFAM Benjamin Tissoires <bentiss@kernel.=
+On Fri, Apr 19, 2024 at 8:14=E2=80=AFAM Benjamin Tissoires <bentiss@kernel.=
 org> wrote:
 >
 >
-> It's something I added while adding the tests. And some tests were passin=
-g
-> in case I was having a non sleepable callback. But if we have
-> bpf_rcu_read_lock(), we are all fine and can reduce the complexity.
+> Honestly I just felt the patch series was big enough for a PoC and
+> comparison with sleepable bpf_timer. But if we think this needs not to
+> be added, I guess that works too :)
 
-Not quite following what was the issue.
-Since the verifier is unconditionally verifying such callback as sleepable
-the callback won't be able to access rcu pointers without doing
-explicit bpf_rcu_read_lock() first (and few other code patterns
-might be rejected), but that's a good thing.
-Maybe next to set_cb kfunc add a comment that wq callbacks are sleepable.
-I think bpf prog writers are often with kernel background,
-so it will be their natural assumption that cb is sleepable.
+It certainly did its job to compare the two and imo bpf_wq with kfunc appro=
+ach
+looks cleaner overall and will be easier to extend in the long term.
+
+I mean that we'll be adding 3 kfuncs initially:
+bpf_wq_init, bpf_wq_start, bpf_wq_set_callback.
+
+imo that's good enough to land it and get some exposure.
+I'll be using it right away to refactor bpf_arena_alloc.h into
+actual arena allocator for bpf progs that is not just a selftest.
+
+I'm currently working on locks for bpf_arena.
+Kumar has a patch set that adds bpf_preempt_disble kfunc and
+coupled with bpf_wq we'll have all mechanisms to build
+arbitrary data structures/algorithms as bpf programs.
