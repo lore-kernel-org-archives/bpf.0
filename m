@@ -1,277 +1,142 @@
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B566625
-	for <bpf@vger.kernel.org>; Sat, 20 Apr 2024 15:59:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.188.123
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A60B3232
+	for <bpf@vger.kernel.org>; Sat, 20 Apr 2024 16:08:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713628760; cv=none; b=GDhoivFOvs2iSZkbWYimoGI91Ae9pePB6GdK8HoIQwtYy+1xuBHtzd50dRB+nO5DZwWrwFwuu9A6iErx6tKbXx3sAKDARPnu63+yzZqP2Uf9lQ8Ko6xXzVwIWTnfckhI4XC/vDCNBt/qXcLsJlUBNRCf5Nl87sUePu6ERvKJXrw=
+	t=1713629341; cv=none; b=oPaL96oyFMKKJcUCSQt0eV+kqpN0TOV9gX83mYcCTDhTiFOvTxOalPSGuNCnQ7L/N8TR/fQMEabxDBcZHaXJlzenIMRWtIozg133UASskXauUHY6pAcluP6KYw27WhhVKSUYkdbCKQBKVd7Eky/64Lil8dpMS/fr1hy9Y1VNSnM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713628760; c=relaxed/simple;
-	bh=nNRohb4TCqxwIK1Y/PiM1fnTGVi7tniX1l39w0EWGdQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=X7bNGxBjiTyU5sTWtt+wSpDzibA3GCrexqf7f3jttzRiIDIvqkIZ+1POwINtIaHFR8uGQnlvSkKSIOQp4ozhJmz8GI4j0KaB4E9lvEVCJyWt52LnXluDahePNx/AwH+iXd/tEMcr04X4AfhjK0iU785FrPfVB7m1hhYOBhIfbmg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=canonical.com; dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b=LIPxk7PH; arc=none smtp.client-ip=185.125.188.123
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canonical.com
+	s=arc-20240116; t=1713629341; c=relaxed/simple;
+	bh=t7M0pQ2Vihkj3GtxtH8+DjTk5Rlt2lxM3Ez/au/QYhk=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type; b=g4P5yEERdryYwXflG6Z945ET3FJtnYf8BAxMx2fVN/2YOSbkvsP1KPazFH1XwMqmeuKiJ0LPeW0kpk8fYa2sh4aN5DLCINElfgErLNDmjF+pQj3yhWn/7FFJPxHKzPyzcgVvPcS1So0qQJIkzcWMeYG04YjGkhNGIAIzSWayab0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=googlemail.com; spf=pass smtp.mailfrom=googlemail.com; dkim=pass (2048-bit key) header.d=googlemail.com header.i=@googlemail.com header.b=gpL73mpL; arc=none smtp.client-ip=209.85.215.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=googlemail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=googlemail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b="LIPxk7PH"
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com [209.85.128.72])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id E8CDA3F626
-	for <bpf@vger.kernel.org>; Sat, 20 Apr 2024 15:59:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-	s=20210705; t=1713628755;
-	bh=L2v1NeYeJE3K4VQPmxfg+80DARtMgvysXIKgeUBdR7A=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version;
-	b=LIPxk7PHqN2WqphaRY9jgEXQC94B3y6EZ6CSEWzJwsOoorWp891yEB+yiH5R/Z6L2
-	 bMiruy4mjcSkO3w/5TwXjiOvT8TzlQqOLX14L9CoguBzZW1RwFD+eM0ZEzEjC/3ra7
-	 TGNaDAI5fg0t61oNDKpNSVfPhSN58trO99gHe5GnMCd5GUCE8TGYA68vwoSkSP/Q73
-	 ZlxhmUDgpJd2vrGqeWrp7dHrp5zPk9eEte3nfp7dceyKzVNKB6DWJibXvw35Aj4Q34
-	 jyh0qdmN2XcTBqxNqVcU3ol08+/1awu/zJ0j1vAMxCmhXkL8vgA1H55eIxJIOlyE56
-	 kEZuKt7riqiNw==
-Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-419e3f83aeeso4124945e9.1
-        for <bpf@vger.kernel.org>; Sat, 20 Apr 2024 08:59:15 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=googlemail.com header.i=@googlemail.com header.b="gpL73mpL"
+Received: by mail-pg1-f178.google.com with SMTP id 41be03b00d2f7-5d8b519e438so2348594a12.1
+        for <bpf@vger.kernel.org>; Sat, 20 Apr 2024 09:08:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20230601; t=1713629339; x=1714234139; darn=vger.kernel.org;
+        h=content-language:thread-index:content-transfer-encoding
+         :mime-version:message-id:date:subject:to:from:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=E/WmtljErpsPGSoYf+NBQ+/HwJNg6O75Uptt6hKujQ4=;
+        b=gpL73mpLSrbSjE6UyxkXbTNyykKMPQSzs32DaxUQccBORPIsTzHDKh9t7b01Ipgshl
+         5F8SCz/RwzF3CXefQ+BqSwURuGjI9lv/7QCKkDPAin/aTXVN8tMsS0DdRbTMBMORYsiD
+         gnU4+gQyfBhhUfL+k0yStGrfmmnL5O0zbWkok1bV145LWl18zRYk14rLKoykiHu5MrtP
+         e/FPskfXBvR+rJXCcMQjBBlRWEeI4X+eBW2kl7AuJRbEIAAAXtEGOeojPfbP+Neg3VWl
+         vGJeaZEuvftrW7wTtauQWxMVpGPWiin6Rx11Kq+GjyaLdQ3iyuE4PkxP0WcZa6MSilg7
+         WNmA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713628755; x=1714233555;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=L2v1NeYeJE3K4VQPmxfg+80DARtMgvysXIKgeUBdR7A=;
-        b=G2jVP2rSpBajbqMvCXaVAK5Pvq00HOeaBWouIs9H08itZ1OE3GeZEhBDKn46nplXAP
-         T7ajj8kX/9dOhx+Afkxrh+wiOSbYEVnkgKEZ+KBzUWzUA0L5yScGq84E7n0Po3ZmF9p9
-         i3RYltrXshFPj894+Wrd+aapAU5b4fbvg7tVe7yuG3HgSw7sFx6wY1Ly6aIad/Brvhvm
-         lDawDWZ46MKO2ASzyjTUu6UjNKh6ASnONchf+sgVh9NI3Fp2oBrkH23O0HYdMULfwXdC
-         BjtB9MEvOb8LCONQFR0cehx8VFYQ6igaQ7yhqzFGjU3t5syCMofO6litiugHXDIsZORr
-         uQfA==
-X-Forwarded-Encrypted: i=1; AJvYcCUVWRN7l3U66BXiO7oCgnWVSflzHycWwGebFw7mRWlhSyzNeiT72M52ivSwKJh7XOvDRCBVPbFvtdIwGW/BdV2xe+vb
-X-Gm-Message-State: AOJu0Yyo/1/6bI49a4qx+FoZTN7IOe7GPnzJpeWcflZBN7piwb04GNA8
-	W2d3vhlgXB3fBGYBCFBoeRBswaXOxLAtrkE39WW084AXk85p6EG1xl3iiIW6xkW5lKtHYuVaIVT
-	psqjUyrggFd/2CpS++X5Pr2J4b058kMISODYf+1GWjneWzQ1ZdrWYgFT+Bl10NQJM8Q==
-X-Received: by 2002:a05:600c:5008:b0:419:db01:f391 with SMTP id n8-20020a05600c500800b00419db01f391mr2064587wmr.12.1713628755019;
-        Sat, 20 Apr 2024 08:59:15 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IES1yNyzlrb+9WaiK0MZQfB1d9PfHUIaT+JsnQy9N4roDXlEI01EQiBXdSmC1jsqyYTOTc6dQ==
-X-Received: by 2002:a05:600c:5008:b0:419:db01:f391 with SMTP id n8-20020a05600c500800b00419db01f391mr2064560wmr.12.1713628754198;
-        Sat, 20 Apr 2024 08:59:14 -0700 (PDT)
-Received: from gpd.. ([151.57.165.71])
-        by smtp.gmail.com with ESMTPSA id r16-20020a5d6950000000b003477d26736dsm7154350wrw.94.2024.04.20.08.59.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 20 Apr 2024 08:59:13 -0700 (PDT)
-From: Andrea Righi <andrea.righi@canonical.com>
-To: Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Mykola Lysenko <mykolal@fb.com>
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@google.com>,
-	Hao Luo <haoluo@google.com>,
-	Shuah Khan <shuah@kernel.org>,
-	linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Andrea Righi <andrea.righi@canonical.com>
-Subject: [PATCH] selftests/bpf: Add ring_buffer__consume_n test.
-Date: Sat, 20 Apr 2024 17:59:04 +0200
-Message-ID: <20240420155904.1450768-1-andrea.righi@canonical.com>
-X-Mailer: git-send-email 2.43.0
+        d=1e100.net; s=20230601; t=1713629339; x=1714234139;
+        h=content-language:thread-index:content-transfer-encoding
+         :mime-version:message-id:date:subject:to:from:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=E/WmtljErpsPGSoYf+NBQ+/HwJNg6O75Uptt6hKujQ4=;
+        b=YXGm9HfBzqRM8/pI8Em+ykC0nc2PKlcTT1pBek9PytHmUOnqBqFD8fvaWuOqpAqpuC
+         HN2hhbwHXpKziHnF8JWAgDEbesWlFP6wFxRy5302zD5goffcPRTZg75X9GjwWW7Eb5PM
+         F3tfhC4zmxIbPrjyC4NPAh3FWAUl1s6z5BgeDpgrc14Zuy2fM0Yy50FBQ9IBiWBgtcu5
+         z5+ksczaBh/EqXxKkmDL8516r9aOVu0v2bXE7SRTpDwnmTQjchsyAJ9UuMFF17bT7dRK
+         rhFwWrEGeaVofY8XnMn7z08ooRBuT0zRRw8zikR+qkXHM7zuX42Rm5K5liVIXGf17RBt
+         gSkg==
+X-Forwarded-Encrypted: i=1; AJvYcCWMuSvskC9y+toDL3nXILKYvvnafVgsgfBGWD/KWXlKK+LCVBBkva16SATBpaVpxXkk3I8lq02QKJf5PWBWf4JUJOfS
+X-Gm-Message-State: AOJu0YzMsHMeXEFUzJs8bdWT7NtPgfj+WjaKmD/UuTrDCA+2yVBHGxa4
+	TBcJ4+zkGZs4ASc/JKWsyAKLp3oM5QRcXBktDJO+qB4HBcNMgAUyyEQmFkqd
+X-Google-Smtp-Source: AGHT+IEC+tf+O7t4uAXZEPvdFLa+pRZDDtdgrjZeDDMxbyiGnoM2e113+fi2HXf5vXIPj2TUNWDmZg==
+X-Received: by 2002:a17:902:f78b:b0:1e2:1915:2479 with SMTP id q11-20020a170902f78b00b001e219152479mr6890395pln.12.1713629339222;
+        Sat, 20 Apr 2024 09:08:59 -0700 (PDT)
+Received: from ArmidaleLaptop (c-67-170-74-237.hsd1.wa.comcast.net. [67.170.74.237])
+        by smtp.gmail.com with ESMTPSA id s10-20020a170902a50a00b001e0da190a07sm5230358plq.167.2024.04.20.09.08.58
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Sat, 20 Apr 2024 09:08:58 -0700 (PDT)
+From: dthaler1968@googlemail.com
+X-Google-Original-From: <dthaler1968@gmail.com>
+To: <bpf@ietf.org>,
+	<bpf@vger.kernel.org>
+Subject: BPF ISA Security Considerations section
+Date: Sat, 20 Apr 2024 09:08:56 -0700
+Message-ID: <093301da933d$0d478510$27d68f30$@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain;
+	charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+X-Mailer: Microsoft Outlook 16.0
+Thread-Index: AdqTOqUAZKicZw8rQGyj6y+Q3f6+eQ==
+Content-Language: en-us
 
-Add a testcase for the ring_buffer__consume_n() API.
+Per https://authors.ietf.org/en/required-content#security-considerations,
+the BPF ISA draft is required to have a Security Considerations section
+before
+it can become an RFC.
 
-The test produces multiple samples in a ring buffer, using a
-sys_getpid() fentry prog, and consumes them from user-space in batches,
-rather than consuming all of them greedily, like ring_buffer__consume()
-does.
+Below is strawman text that tries to strike a balance between discussing
+security issues and solutions vs keeping details out of scope that belong in
+other
+documents like the "verifier expectations and building blocks for allowing
+safe
+execution of untrusted BPF programs" document that is a separate item on the
+IETF WG charter.
 
-Link: https://lore.kernel.org/lkml/CAEf4BzaR4zqUpDmj44KNLdpJ=Tpa97GrvzuzVNO5nM6b7oWd1w@mail.gmail.com
-Signed-off-by: Andrea Righi <andrea.righi@canonical.com>
----
- tools/testing/selftests/bpf/Makefile          |  2 +-
- .../selftests/bpf/prog_tests/ringbuf.c        | 65 +++++++++++++++++++
- .../selftests/bpf/progs/test_ringbuf_n.c      | 52 +++++++++++++++
- 3 files changed, 118 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/bpf/progs/test_ringbuf_n.c
+Proposed text:
 
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index edc73f8f5aef..6332277edeca 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -455,7 +455,7 @@ LINKED_SKELS := test_static_linked.skel.h linked_funcs.skel.h		\
- LSKELS := fentry_test.c fexit_test.c fexit_sleep.c atomics.c 		\
- 	trace_printk.c trace_vprintk.c map_ptr_kern.c 			\
- 	core_kern.c core_kern_overflow.c test_ringbuf.c			\
--	test_ringbuf_map_key.c
-+	test_ringbuf_n.c test_ringbuf_map_key.c
- 
- # Generate both light skeleton and libbpf skeleton for these
- LSKELS_EXTRA := test_ksyms_module.c test_ksyms_weak.c kfunc_call_test.c \
-diff --git a/tools/testing/selftests/bpf/prog_tests/ringbuf.c b/tools/testing/selftests/bpf/prog_tests/ringbuf.c
-index 48c5695b7abf..7e085bfce9b5 100644
---- a/tools/testing/selftests/bpf/prog_tests/ringbuf.c
-+++ b/tools/testing/selftests/bpf/prog_tests/ringbuf.c
-@@ -13,6 +13,7 @@
- #include <linux/perf_event.h>
- #include <linux/ring_buffer.h>
- #include "test_ringbuf.lskel.h"
-+#include "test_ringbuf_n.lskel.h"
- #include "test_ringbuf_map_key.lskel.h"
- 
- #define EDONE 7777
-@@ -60,6 +61,7 @@ static int process_sample(void *ctx, void *data, size_t len)
- }
- 
- static struct test_ringbuf_map_key_lskel *skel_map_key;
-+static struct test_ringbuf_n_lskel *skel_n;
- static struct test_ringbuf_lskel *skel;
- static struct ring_buffer *ringbuf;
- 
-@@ -326,6 +328,67 @@ static void ringbuf_subtest(void)
- 	test_ringbuf_lskel__destroy(skel);
- }
- 
-+/*
-+ * Test ring_buffer__consume_n() by producing N_TOT_SAMPLES samples in the ring
-+ * buffer, via getpid(), and consuming them in chunks of N_SAMPLES.
-+ */
-+#define N_TOT_SAMPLES	32
-+#define N_SAMPLES	4
-+
-+/* Sample value to verify the callback validity */
-+#define SAMPLE_VALUE	42L
-+
-+static int process_n_sample(void *ctx, void *data, size_t len)
-+{
-+	struct sample *s = data;
-+
-+	CHECK(s->value != SAMPLE_VALUE,
-+	      "sample_value", "exp %ld, got %ld\n", SAMPLE_VALUE, s->value);
-+
-+	return 0;
-+}
-+
-+static void ringbuf_n_subtest(void)
-+{
-+	int err, i;
-+
-+	skel_n = test_ringbuf_n_lskel__open();
-+	if (!ASSERT_OK_PTR(skel_n, "test_ringbuf_n_lskel__open"))
-+		return;
-+
-+	skel_n->maps.ringbuf.max_entries = getpagesize();
-+	skel_n->bss->pid = getpid();
-+
-+	err = test_ringbuf_n_lskel__load(skel_n);
-+	if (!ASSERT_OK(err, "test_ringbuf_n_lskel__load"))
-+		goto cleanup;
-+
-+	ringbuf = ring_buffer__new(skel_n->maps.ringbuf.map_fd,
-+				   process_n_sample, NULL, NULL);
-+	if (!ASSERT_OK_PTR(ringbuf, "ring_buffer__new"))
-+		goto cleanup;
-+
-+	err = test_ringbuf_n_lskel__attach(skel_n);
-+	if (!ASSERT_OK(err, "test_ringbuf_n_lskel__attach"))
-+		goto cleanup_ringbuf;
-+
-+	/* Produce N_TOT_SAMPLES samples in the ring buffer by calling getpid() */
-+	skel->bss->value = SAMPLE_VALUE;
-+	for (i = 0; i < N_TOT_SAMPLES; i++)
-+		syscall(__NR_getpgid);
-+
-+	/* Consume all samples from the ring buffer in batches of N_SAMPLES */
-+	for (i = 0; i < N_TOT_SAMPLES; i += err) {
-+		err = ring_buffer__consume_n(ringbuf, N_SAMPLES);
-+		ASSERT_EQ(err, N_SAMPLES, "rb_consume");
-+	}
-+
-+cleanup_ringbuf:
-+	ring_buffer__free(ringbuf);
-+cleanup:
-+	test_ringbuf_n_lskel__destroy(skel_n);
-+}
-+
- static int process_map_key_sample(void *ctx, void *data, size_t len)
- {
- 	struct sample *s;
-@@ -384,6 +447,8 @@ void test_ringbuf(void)
- {
- 	if (test__start_subtest("ringbuf"))
- 		ringbuf_subtest();
-+	if (test__start_subtest("ringbuf_n"))
-+		ringbuf_n_subtest();
- 	if (test__start_subtest("ringbuf_map_key"))
- 		ringbuf_map_key_subtest();
- }
-diff --git a/tools/testing/selftests/bpf/progs/test_ringbuf_n.c b/tools/testing/selftests/bpf/progs/test_ringbuf_n.c
-new file mode 100644
-index 000000000000..b98b5bb20699
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_ringbuf_n.c
-@@ -0,0 +1,52 @@
-+// SPDX-License-Identifier: GPL-2.0
-+// Copyright (c) 2024 Andrea Righi <andrea.righi@canonical.com>
-+
-+#include <linux/bpf.h>
-+#include <sched.h>
-+#include <unistd.h>
-+#include <bpf/bpf_helpers.h>
-+#include "bpf_misc.h"
-+
-+char _license[] SEC("license") = "GPL";
-+
-+#define TASK_COMM_LEN 16
-+
-+struct sample {
-+	int pid;
-+	int seq;
-+	long value;
-+	char comm[16];
-+};
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_RINGBUF);
-+} ringbuf SEC(".maps");
-+
-+int pid = 0;
-+long value = 0;
-+
-+/* inner state */
-+long seq = 0;
-+
-+SEC("fentry/" SYS_PREFIX "sys_getpgid")
-+int test_ringbuf_n(void *ctx)
-+{
-+	int cur_pid = bpf_get_current_pid_tgid() >> 32;
-+	struct sample *sample;
-+
-+	if (cur_pid != pid)
-+		return 0;
-+
-+	sample = bpf_ringbuf_reserve(&ringbuf, sizeof(*sample), 0);
-+	if (!sample)
-+		return 0;
-+
-+	sample->pid = pid;
-+	sample->seq = seq++;
-+	sample->value = value;
-+	bpf_get_current_comm(sample->comm, sizeof(sample->comm));
-+
-+	bpf_ringbuf_submit(sample, 0);
-+
-+	return 0;
-+}
--- 
-2.43.0
+> Security Considerations
+>
+> BPF programs could use BPF instructions to do malicious things with
+memory,
+> CPU, networking, or other system resources. This is not fundamentally
+different
+> from any other type of software that may run on a device. Execution
+environments
+> should be carefully designed to only run BPF programs that are trusted or
+verified,
+> and sandboxing and privilege level separation are key strategies for
+limiting
+> security and abuse impact. For example, BPF verifiers are well-known and
+widely
+> deployed and are responsible for ensuring that BPF programs will terminate
+> within a reasonable time, only interact with memory in safe ways, and
+adhere to
+> platform-specified API contracts. The details are out of scope of this
+document
+> (but see [LINUX] and [PREVAIL]), but this level of verification can often
+provide a
+> stronger level of security assurance than for other software and operating
+system
+> code.
+>
+> Executing programs using the BPF instruction set also requires either an
+interpreter
+> or a JIT compiler to translate them to hardware processor native
+instructions. In
+> general, interpreters are considered a source of insecurity (e.g., gadgets
+susceptible
+> to side-channel attacks due to speculative execution) and are not
+recommended.
+>
+> Informative References:
+>
+> [LINUX] "eBPF verifier",
+https://www.kernel.org/doc/html/latest/bpf/verifier.html
+>
+> [PREVAIL] Elazar Gershuni, Nadav Amit, Arie Gurfinkel, Nina Narodytska,
+Jorge
+>    A. Navas, Noam Rinetzky, Leonid Ryzhyk, and Mooly Sagiv. "Simple and
+Precise
+>    Static Analysis of Untrusted Linux Kernel Extensions." In Proceedings
+of the 40th
+>    ACM SIGPLAN Conference on Programming Language Design and
+Implementation,
+>    pp. 1069-1084. 2019.
+>
+https://pldi19.sigplan.org/details/pldi-2019-papers/44/Simple-and-Precise-St
+atic-Analysis-of-Untrusted-Linux-Kernel-Extensions
+
+Dave
 
