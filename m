@@ -1,144 +1,115 @@
-Received: from out30-113.freemail.mail.aliyun.com (out30-113.freemail.mail.aliyun.com [115.124.30.113])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f178.google.com (mail-yb1-f178.google.com [209.85.219.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71F094431
-	for <bpf@vger.kernel.org>; Sun, 21 Apr 2024 04:24:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.113
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E3A915E96
+	for <bpf@vger.kernel.org>; Sun, 21 Apr 2024 16:38:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713673497; cv=none; b=UOF+oEzbXSr2ZZpRhfOzVtzAwrP9SyTt/J+FW/yxm+js4RSfes2EA31AmkwrIOBLPgiNys+WzGZOby0WKtXos1f6eL8nKn5YK1CR5KqLMTN/sc9buGxJOJc/rBoj4hoxa30nJBLkyBjDomAgjaNHlPNo/QQKIGe108vUNqK3aeU=
+	t=1713717527; cv=none; b=KVvYCrgC5kLnOu2j/eiBJIqAA52Kq5NpFJmJUzaukiXKJ7wIMy2dz+waLHvdhI1Ct2cR16e+LDYntyLRYcZvEIL2fbAiD32URJcAe5NUNUIEpMCoaaVk2LH8IkuyWIczBsnUZ74JpuT8ZbffoIIMrJojVQNCyi51jClCdx813rc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713673497; c=relaxed/simple;
-	bh=n2PYjq0P3beuqGqWkzITxlHB7H2W5QDyiRY084gcMJU=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=PnHq/Qh923rDS9nFL2gZyjqGEXAB8JwRyqbR6dZoQWlu8hNfXG8sgudWinDac8dUPJ4dBSOmH6T9BoOLCSyil+7pcoXhqQndIfP7XWebf3LWmqzULy+2wHmBCbAPHeWWWPKmE1DzQQm9ZJgh8op4UbzEw1cvEpeR3UXzd1NEbKM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=Hu2xbfOq; arc=none smtp.client-ip=115.124.30.113
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="Hu2xbfOq"
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux.alibaba.com; s=default;
-	t=1713673482; h=From:To:Subject:Date:Message-Id:MIME-Version;
-	bh=gm6Wjmg+lIQBKwflFEgmOErBDNtfZvaowDxawJI4aRg=;
-	b=Hu2xbfOqRvvEMGRQrzK14wdn6GoMb50MEbf0+KwPQBE+jUXOAbQPbaU1VGN3r4bp9Eyr8QmMVL6/cRowis2Ehp4dYQ22H2Ej21DgmWSVuzkAXK5fXbTGfNDzH8/D6dZ5TqRf4iwJ8etIXoIHIXIMK/tgIQISejMDMhP8rdo6TTs=
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R651e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=lulie@linux.alibaba.com;NM=1;PH=DS;RN=21;SR=0;TI=SMTPD_---0W4w4ycu_1713673480;
-Received: from localhost(mailfrom:lulie@linux.alibaba.com fp:SMTPD_---0W4w4ycu_1713673480)
-          by smtp.aliyun-inc.com;
-          Sun, 21 Apr 2024 12:24:41 +0800
-From: Philo Lu <lulie@linux.alibaba.com>
-To: bpf@vger.kernel.org
-Cc: edumazet@google.com,
-	davem@davemloft.net,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	martin.lau@linux.dev,
-	eddyz87@gmail.com,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	john.fastabend@gmail.com,
-	kpsingh@kernel.org,
-	sdf@google.com,
-	haoluo@google.com,
-	jolsa@kernel.org,
-	dsahern@kernel.org,
-	laoar.shao@gmail.com,
-	fred.cc@alibaba-inc.com,
-	xuanzhuo@linux.alibaba.com
-Subject: [PATCH bpf-next] bpf: add mrtt and srtt as BPF_SOCK_OPS_RTT_CB args
-Date: Sun, 21 Apr 2024 12:24:40 +0800
-Message-Id: <20240421042440.33125-1-lulie@linux.alibaba.com>
-X-Mailer: git-send-email 2.32.0.3.g01195cf9f
+	s=arc-20240116; t=1713717527; c=relaxed/simple;
+	bh=Nm5dkH/MIwEnF98ON8uINVkKwhvPZphzWtcRP1tSiNQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=HyXmT+8Hv81J1PhfFu6B2ufXFZJ3tGJoxKMb/iwmXU1PLak2CratEE4ziQd97eCfdGyzfaPoW4ckQibhRUMWQFBattlHjg8Pwu7NWt9epaTvtyVyP1DNmzlPWA0fP1CB1/CGL0y4vViRAW+GXbc32M/2+8sQ0FHO1LNByPfmvDc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=manifault.com; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.219.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=manifault.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yb1-f178.google.com with SMTP id 3f1490d57ef6-de45e5c3c84so3357109276.1
+        for <bpf@vger.kernel.org>; Sun, 21 Apr 2024 09:38:45 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1713717525; x=1714322325;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=mOR+AYrLtNL7l8v3dr2Gt+pTc8obIcyCPx3GHPRsTzw=;
+        b=oI9eeC5CMNd/GyYDlgl3wFR/rd5BZfREuizJRHONBNSr3nX0bdTIBgoR6fd+PqjWCU
+         XTxq/3THLZlbt05/finOobmwluOgC8BZ4TmCqckbYC7Rwn7xkPK99Qo9N3rtjmCIb+Rr
+         fUyPr8uEGOC32ZVEq5fyVodpOxrchcXbLRtPU8YU/a+m+CExfa47w+EZcbNjjg/ZZT8I
+         arhsX4GALwrz7rL/atLX7vBAPHbii5IWnRvcM1X8samxG367ETuKzilKgZWeZ9FTeSYi
+         fNTa21uzDd/V57YW1yxDQTh8RD7f6z/qTnOUTP2M+8QAGuq3TbmyMnCqODPm4LNDLVCx
+         tHtg==
+X-Gm-Message-State: AOJu0YzIM5IslKSk6BeUYCPM4sadVrgcSfMUihGrogG8c3YLM0O0i5VF
+	5kKjG58Dj9WeP6MQvYtOZsW4zNnsEYnirBJ+4LzmUUDZQ0OUxvva
+X-Google-Smtp-Source: AGHT+IEIU4GT4jJcNLtyp0i5A8mETarP2WuC5OjV9Q4N6PZyYC15JesqzB5ipvv0C8G3tP5i1oF0fg==
+X-Received: by 2002:a25:ad5f:0:b0:de0:e368:fa59 with SMTP id l31-20020a25ad5f000000b00de0e368fa59mr6692508ybe.31.1713717525060;
+        Sun, 21 Apr 2024 09:38:45 -0700 (PDT)
+Received: from maniforge (c-76-136-75-40.hsd1.il.comcast.net. [76.136.75.40])
+        by smtp.gmail.com with ESMTPSA id 126-20020a251984000000b00dc230f91674sm1695641ybz.26.2024.04.21.09.38.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 21 Apr 2024 09:38:44 -0700 (PDT)
+Date: Sun, 21 Apr 2024 11:38:42 -0500
+From: David Vernet <void@manifault.com>
+To: Dave Thaler <dthaler1968=40googlemail.com@dmarc.ietf.org>
+Cc: bpf@vger.kernel.org, bpf@ietf.org, Dave Thaler <dthaler1968@gmail.com>,
+	Dave Thaler <dthaler1968@googlemail.com>
+Subject: Re: [Bpf] [PATCH bpf-next] bpf, docs: Fix formatting nit in
+ instruction-set.rst
+Message-ID: <20240421163842.GA8626@maniforge>
+References: <20240419213826.7301-1-dthaler1968@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="lHT9sOIxyn9YAd6l"
+Content-Disposition: inline
+In-Reply-To: <20240419213826.7301-1-dthaler1968@gmail.com>
+User-Agent: Mutt/2.2.13 (00d56288) (2024-03-09)
 
-Two important arguments in RTT estimation, mrtt and srtt, are passed to
-tcp_bpf_rtt(), so that bpf programs get more information about RTT
-computation in BPF_SOCK_OPS_RTT_CB.
 
-The difference between bpf_sock_ops->srtt_us and the srtt here is: the
-former is an old rtt before update, while srtt passed by tcp_bpf_rtt()
-is that after update.
+--lHT9sOIxyn9YAd6l
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Philo Lu <lulie@linux.alibaba.com>
----
- include/net/tcp.h              | 4 ++--
- include/uapi/linux/bpf.h       | 2 ++
- net/ipv4/tcp_input.c           | 4 ++--
- tools/include/uapi/linux/bpf.h | 2 ++
- 4 files changed, 8 insertions(+), 4 deletions(-)
+On Fri, Apr 19, 2024 at 02:38:26PM -0700, Dave Thaler wrote:
+> Other places that had pseudocode were prefixed with ::
+> so as to appear in a literal block, but one place was inconsistent.
+> This patch fixes that inconsistency.
+>=20
+> Signed-off-by: Dave Thaler <dthaler1968@googlemail.com>
 
-diff --git a/include/net/tcp.h b/include/net/tcp.h
-index 6ae35199d3b3c..0f75d03287c25 100644
---- a/include/net/tcp.h
-+++ b/include/net/tcp.h
-@@ -2706,10 +2706,10 @@ static inline bool tcp_bpf_ca_needs_ecn(struct sock *sk)
- 	return (tcp_call_bpf(sk, BPF_SOCK_OPS_NEEDS_ECN, 0, NULL) == 1);
- }
- 
--static inline void tcp_bpf_rtt(struct sock *sk)
-+static inline void tcp_bpf_rtt(struct sock *sk, long mrtt, u32 srtt)
- {
- 	if (BPF_SOCK_OPS_TEST_FLAG(tcp_sk(sk), BPF_SOCK_OPS_RTT_CB_FLAG))
--		tcp_call_bpf(sk, BPF_SOCK_OPS_RTT_CB, 0, NULL);
-+		tcp_call_bpf_2arg(sk, BPF_SOCK_OPS_RTT_CB, mrtt, srtt);
- }
- 
- #if IS_ENABLED(CONFIG_SMC)
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index cee0a7915c08a..d80bef9bbdc15 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -6947,6 +6947,8 @@ enum {
- 					 * socket transition to LISTEN state.
- 					 */
- 	BPF_SOCK_OPS_RTT_CB,		/* Called on every RTT.
-+					 * Arg1: measured RTT input (mrtt)
-+					 * Arg2: updated srtt
- 					 */
- 	BPF_SOCK_OPS_PARSE_HDR_OPT_CB,	/* Parse the header option.
- 					 * It will be called to handle
-diff --git a/net/ipv4/tcp_input.c b/net/ipv4/tcp_input.c
-index 5d874817a78db..d1115d7c3936a 100644
---- a/net/ipv4/tcp_input.c
-+++ b/net/ipv4/tcp_input.c
-@@ -911,7 +911,7 @@ static void tcp_rtt_estimator(struct sock *sk, long mrtt_us)
- 			tp->rtt_seq = tp->snd_nxt;
- 			tp->mdev_max_us = tcp_rto_min_us(sk);
- 
--			tcp_bpf_rtt(sk);
-+			tcp_bpf_rtt(sk, mrtt_us, srtt);
- 		}
- 	} else {
- 		/* no previous measure. */
-@@ -921,7 +921,7 @@ static void tcp_rtt_estimator(struct sock *sk, long mrtt_us)
- 		tp->mdev_max_us = tp->rttvar_us;
- 		tp->rtt_seq = tp->snd_nxt;
- 
--		tcp_bpf_rtt(sk);
-+		tcp_bpf_rtt(sk, mrtt_us, srtt);
- 	}
- 	tp->srtt_us = max(1U, srtt);
- }
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-index cee0a7915c08a..d80bef9bbdc15 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -6947,6 +6947,8 @@ enum {
- 					 * socket transition to LISTEN state.
- 					 */
- 	BPF_SOCK_OPS_RTT_CB,		/* Called on every RTT.
-+					 * Arg1: measured RTT input (mrtt)
-+					 * Arg2: updated srtt
- 					 */
- 	BPF_SOCK_OPS_PARSE_HDR_OPT_CB,	/* Parse the header option.
- 					 * It will be called to handle
--- 
-2.32.0.3.g01195cf9f
+Acked-by: David Vernet <void@manifault.com>
 
+> ---
+>  Documentation/bpf/standardization/instruction-set.rst | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/Documentation/bpf/standardization/instruction-set.rst b/Docu=
+mentation/bpf/standardization/instruction-set.rst
+> index 8d0781f0b..02fbc286c 100644
+> --- a/Documentation/bpf/standardization/instruction-set.rst
+> +++ b/Documentation/bpf/standardization/instruction-set.rst
+> @@ -370,7 +370,7 @@ Note that there are varying definitions of the signed=
+ modulo operation
+>  when the dividend or divisor are negative, where implementations often
+>  vary by language such that Python, Ruby, etc.  differ from C, Go, Java,
+>  etc. This specification requires that signed modulo use truncated divisi=
+on
+> -(where -13 % 3 =3D=3D -1) as implemented in C, Go, etc.:
+> +(where -13 % 3 =3D=3D -1) as implemented in C, Go, etc.::
+> =20
+>     a % n =3D a - n * trunc(a / n)
+> =20
+> --=20
+> 2.40.1
+>=20
+> --=20
+> Bpf mailing list
+> Bpf@ietf.org
+> https://www.ietf.org/mailman/listinfo/bpf
+
+--lHT9sOIxyn9YAd6l
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEARYKAB0WIQRBxU1So5MTLwphjdFZ5LhpZcTzZAUCZiVBEQAKCRBZ5LhpZcTz
+ZMzfAQDtwENLh06G3HGQy/TJdzm4/CEwrf3xprx5S32173pTqAEAm6eBaNsnA9wS
+MTXrVLok218g13i4nF0nn1Y50ISofAc=
+=8SDC
+-----END PGP SIGNATURE-----
+
+--lHT9sOIxyn9YAd6l--
