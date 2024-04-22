@@ -1,237 +1,196 @@
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95FD415535D;
-	Mon, 22 Apr 2024 20:25:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8ACB15535D
+	for <bpf@vger.kernel.org>; Mon, 22 Apr 2024 20:26:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713817533; cv=none; b=rQzqJEhOmB2XF8Idd2UTDTSfmp5esBsAWqX0qAJMtrirdq9nkxysTBkfx+hGGzh8l8qEvSe9Dk6o75LgIHiASxZiJ/OIk66S52wt/JiRE/gEDxc+R5StAcLpvmoVfCOf6Km+XqzmYmllmB7ASgetMg3YecUkkHSCVLh3DH+6aZ0=
+	t=1713817572; cv=none; b=JbiC4PUNHVDGquRyIegeB5Z0aB+HFE8AqtKqwxews9He97g22B3PyF9Nx/f5rvTtcf2wf5rrResyBeKTaYunrvotZpGFxaAiEY2tLjlH2U+RpTW16fOrT5Pwu82EhBBC81Ck9ERHirv5QL7O4GfwTQVxwoGm+CI+V+g2h09X+zk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713817533; c=relaxed/simple;
-	bh=YjFau6lGb9LTELqCEb2X2127G9ZwnIlW8kYv21dRJJA=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=uz01MX3q+BR9HA7r0Met38v4BJEZfYKwZtaPZILQRbyuvEmv4jyvytVUBFoUIHrpNO3GGGoq4H+XoJU17oZwRJzvFZltmJIuyz/XKdCi5cqclctYDD6kqtKFBIZUOTkb7ijgnvWr8KC2R94joC+I6gwMFpXCwdb+M+YgdxldpH0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Gh0PyTvB; arc=none smtp.client-ip=209.85.128.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1713817572; c=relaxed/simple;
+	bh=wwilZw/NqDPOQfAJxwdWU+RY3id0x0BNa/3GzQIfPY8=;
+	h=From:To:Cc:References:In-Reply-To:Subject:Date:Message-ID:
+	 MIME-Version:Content-Type; b=H5iwB27J1xJDIKFcnHqOp5L/XgjVEKG6rZUnOi1n5PghAnM5PMAdS2hpPFRAFQ8FwPNASEIGmO9DXkipFRgwOqhkYYtvG6QiEPkkoTvulFi+LDvHXjyMsr16pCHphmQ6He2ED2jOBjEV43NNS9TO5HrMM/GJx5lI+SJWkFh5tl0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=googlemail.com; spf=pass smtp.mailfrom=googlemail.com; dkim=pass (2048-bit key) header.d=googlemail.com header.i=@googlemail.com header.b=ZfWixaa3; arc=none smtp.client-ip=209.85.214.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=googlemail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=googlemail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Gh0PyTvB"
-Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-41aa21b06b3so4139585e9.0;
-        Mon, 22 Apr 2024 13:25:30 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=googlemail.com header.i=@googlemail.com header.b="ZfWixaa3"
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-1e5aa82d1f6so36148955ad.0
+        for <bpf@vger.kernel.org>; Mon, 22 Apr 2024 13:26:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1713817529; x=1714422329; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=xLiWlfsmSMobonfpzJOKL/uqlF5pCv8voW0Gv0gZ6Xg=;
-        b=Gh0PyTvBauqIoQuzFwPzAT9cIllRID2jLxH/W8N+oJUukbTuuXgj+iNlz/R5uH2162
-         O3Fl7cdKLs540cAgmrg5BIqjpTBnYz03oPE590YpFFgU5aaeps3Emef8r+ZblBPuqEMF
-         uMg42sbGgeDfa0VQG4ZjAEEa7q2azc8hjpXyX2N17u0UPNhhPngH1Ra+ZMD8G+IJ+W9B
-         aa+POBd78H1LoI5DNgjBpWs4wxeYu1Wd8jS3Etr4zKwnnP+WSuYwIFbzxWKTKUjhrSuZ
-         1yUDVEYT0oPvbYIWEF6Wvea8BTjnRq0pX1hjE0oYnKfgY2HyimlH8SuF0MOh/V/1BwjX
-         MftA==
+        d=googlemail.com; s=20230601; t=1713817570; x=1714422370; darn=vger.kernel.org;
+        h=content-language:thread-index:content-transfer-encoding
+         :mime-version:message-id:date:subject:in-reply-to:references:cc:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=sAleLJ3Lnsbgg5q0zBlOroU0eQVdHDAK3QVBYwKAgSE=;
+        b=ZfWixaa3hDsnhX19WewSzT3sMTLMDVjeHoJ1nO2LX8OS6JXFGhPIb0UayvH7suFb4J
+         JXb6ocvghCJZUj664CPicUZt2buuGZ5m58L+rgFPdlYGeiAaqCnXzVDmht2dSdbiU3R/
+         TTSTepHqfSqJiltBRKVgiCRF1sTHV8Aoc5mzfWyV39MreLP5m8JGCH7fcYmp4kGwHZbX
+         6BqpuP+nZdjuv92zltpv/ORT26PG2cyqEXLsIFEWrdSSz6R5Z08hQlcaD0bnZWQOoF5d
+         bB3TsHLSApt1KvZAL0b5NOF2kDNNtkpkAy/YuzJgGAovmdBA0n9usaKpq54hF1uRAy7B
+         hR0A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713817529; x=1714422329;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xLiWlfsmSMobonfpzJOKL/uqlF5pCv8voW0Gv0gZ6Xg=;
-        b=lzA32fT7e6IVhv98ah6lzfGzBq1ujzlLUNQKxCJ72UUHImZwCMmsy/sPqrVVLnJ2Mm
-         rwkgjtrE8d0jYn8gbxtk0xENqQoHvBCr49w7NX4rALMPdhvwescFiNbzY3nQ6JqBEoj1
-         mbMtHRm1FcRynnHiROR+BAI8v3YBlm39n63Nw2ZkVuiskxjf22qo/8db/pZmcbLhHQ34
-         YI79WLgSMRu5QixmfXAno0qrvLQ96jEH2HWExL2tWHWCssTh1jUIPokbAINHqz+bGH5r
-         9cK3Nuft1nDuVHrKM1EIw2XwULWH7xpIug6dLcG7tadLXxzbmUKUYmBiv7vWAgWT6rIj
-         87nA==
-X-Forwarded-Encrypted: i=1; AJvYcCXEgou/2UoJKC2RJHvfiiYuKKJOaw/KMtTsq2DvHUctatnfGPCPQzWYIbPRBF53xG8JyHGnBeRlKWhT1dGX95kmH2yGdtEIzHFz1Wp8kfWR6heeDYmnMtwGV6zHC7qpEqA7UKTAdfWo9By+5wsbpcgx/dskr3s73eWa+hyZspxveVSVZ/WLmbqehHP1HgqDFhMq08MRRGjfS/3p91LOn/xZ
-X-Gm-Message-State: AOJu0YzYt9KRGFV3SsOmXtjiBWj8U3E6EtJTUdQ0HCzi/toCeYeJdWja
-	vpo2nlOhsKZhtWtkoXhwyQ7gdPFjC4FOEG2AlkQNC+ZCxCAuc+cS
-X-Google-Smtp-Source: AGHT+IFdhuSfTDsPTFsuDuTro4BCnnKCqf/kS6VlPXSQ+kB2rJD85vAd/+j/R7CUUdiaTnwaZ5wk8g==
-X-Received: by 2002:a05:600c:1c9b:b0:416:4641:5947 with SMTP id k27-20020a05600c1c9b00b0041646415947mr9806179wms.34.1713817528960;
-        Mon, 22 Apr 2024 13:25:28 -0700 (PDT)
-Received: from krava ([83.240.62.18])
-        by smtp.gmail.com with ESMTPSA id f17-20020a05600c4e9100b004182b87aaacsm17888971wmq.14.2024.04.22.13.25.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 Apr 2024 13:25:28 -0700 (PDT)
-From: Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Mon, 22 Apr 2024 22:25:25 +0200
-To: Masami Hiramatsu <mhiramat@kernel.org>
-Cc: Steven Rostedt <rostedt@goodmis.org>, Oleg Nesterov <oleg@redhat.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>, linux-kernel@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org, linux-api@vger.kernel.org,
-	x86@kernel.org, bpf@vger.kernel.org,
-	Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	"Borislav Petkov (AMD)" <bp@alien8.de>,
-	Ingo Molnar <mingo@redhat.com>, Andy Lutomirski <luto@kernel.org>
-Subject: Re: [PATCHv3 bpf-next 0/7] uprobe: uretprobe speed up
-Message-ID: <ZibHtXFcHr_sJdP9@krava>
-References: <20240421194206.1010934-1-jolsa@kernel.org>
- <20240423000943.478ccf1e735a63c6c1b4c66b@kernel.org>
+        d=1e100.net; s=20230601; t=1713817570; x=1714422370;
+        h=content-language:thread-index:content-transfer-encoding
+         :mime-version:message-id:date:subject:in-reply-to:references:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=sAleLJ3Lnsbgg5q0zBlOroU0eQVdHDAK3QVBYwKAgSE=;
+        b=dlBduzra14Sb26PMkFnlhtzMQYUmErOPDalwE+5VZ43WyqWiE6ZrRSMxBX/AwB87F1
+         clhBfMgHmzE1+h4EPZf139uWWYrERzmsbgUr/dKEUM0MQh4EjJ+49YBTRvH/+OpA0K1O
+         XPTs//uwITPKQXB9YK5G019x+l9Y2k2e93g1SYcl+0CHQUn+s1/iSVF55gYtgskapSjz
+         lXji2UqVNEHfWdyeDYzV+BMW9BJkdlwakz1sfmpPJ7VF7VzLQ4lVtM0/guvNGrrDBS5o
+         ds0pdHJ5lxKYWXWSYfzWaM44IrS9sTxxFYvQzVRK+cBiQL3lrMygXSegOk88JL8ofs+g
+         Osfw==
+X-Forwarded-Encrypted: i=1; AJvYcCWbxKKIo3YaisBgWjdpRCyHwd2L1j5K/bU1WEpbHjV9mCgxLCKwvST6A7boH24SV4k1Ym48uABJd4x6H1XsRH9v8584
+X-Gm-Message-State: AOJu0YwjQtbmSE7hW+Pdh4xN1YENe2rUHGtF5s+dLOMePpBXifJq8QoT
+	Kprp65t6ldj500VY04A/jjaODbVXnhKyb2zAc8kxYsumXOlu8nRqXkR8mLUc
+X-Google-Smtp-Source: AGHT+IGTCcFq8Z70m7WCdP62KIRPrwyDkCCrImhtPjT3LggVPB3SVov4liWxAKAdQc0aR1Rz0/HWZA==
+X-Received: by 2002:a17:903:2309:b0:1e5:c131:ca0e with SMTP id d9-20020a170903230900b001e5c131ca0emr1007464plh.6.1713817570006;
+        Mon, 22 Apr 2024 13:26:10 -0700 (PDT)
+Received: from ArmidaleLaptop (c-67-170-74-237.hsd1.wa.comcast.net. [67.170.74.237])
+        by smtp.gmail.com with ESMTPSA id jv21-20020a170903059500b001e89827e2e8sm7968336plb.305.2024.04.22.13.26.08
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 22 Apr 2024 13:26:09 -0700 (PDT)
+From: dthaler1968@googlemail.com
+X-Google-Original-From: <dthaler1968@gmail.com>
+To: "'David Vernet'" <void@manifault.com>,
+	<dthaler1968@googlemail.com>
+Cc: <bpf@ietf.org>,
+	<bpf@vger.kernel.org>
+References: <093301da933d$0d478510$27d68f30$@gmail.com> <20240421165134.GA9215@maniforge> <109c01da9410$331ae880$9950b980$@gmail.com> <149401da94e4$2da0acd0$88e20670$@gmail.com> <20240422193451.GA18561@maniforge>
+In-Reply-To: <20240422193451.GA18561@maniforge>
+Subject: RE: BPF ISA Security Considerations section
+Date: Mon, 22 Apr 2024 13:26:08 -0700
+Message-ID: <160501da94f3$4f8aef40$eea0cdc0$@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240423000943.478ccf1e735a63c6c1b4c66b@kernel.org>
+Content-Type: text/plain;
+	charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+X-Mailer: Microsoft Outlook 16.0
+Thread-Index: AQIuELsBo+B+UsoJNRbSlFOn1N3FrQD/w4oWAbyzN8QCsHqedwKUttqRsI22rCA=
+Content-Language: en-us
 
-On Tue, Apr 23, 2024 at 12:09:43AM +0900, Masami Hiramatsu wrote:
-> Hi Jiri,
+> -----Original Message-----
+> From: David Vernet <void@manifault.com>
+> Sent: Monday, April 22, 2024 12:35 PM
+> To: dthaler1968@googlemail.com
+> Cc: bpf@ietf.org; bpf@vger.kernel.org
+> Subject: Re: BPF ISA Security Considerations section
 > 
-> On Sun, 21 Apr 2024 21:41:59 +0200
-> Jiri Olsa <jolsa@kernel.org> wrote:
+> On Mon, Apr 22, 2024 at 11:37:48AM -0700, dthaler1968@googlemail.com
+wrote:
+> > David Vernet <void@manifault.com> wrote:
+> > > > Thanks for writing this up. Overall it looks great, just had one
+> > > > comment
+> > > below.
+> > > >
+> > > > > > Security Considerations
+> > > > > >
+> > > > > > BPF programs could use BPF instructions to do malicious things
+> > > > > > with memory, CPU, networking, or other system resources. This
+> > > > > > is not fundamentally different  from any other type of
+> > > > > > software that may run on a device. Execution environments
+> > > > > > should be carefully designed to only run BPF programs that are
+> > > > > > trusted or verified, and sandboxing and privilege level
+> > > > > > separation are key strategies for limiting security and abuse
+> > > > > > impact. For example, BPF verifiers are well-known and widely
+> > > > > > deployed and are responsible for ensuring that BPF programs
+> > > > > > will terminate within a reasonable time, only interact with
+> > > > > > memory in safe ways, and adhere to platform-specified API
+> > > > > > contracts. The details are out of scope of this document (but
+> > > > > > see [LINUX] and [PREVAIL]), but this level of verification can
+> > > > > > often provide a stronger level of security assurance than for
+other software
+> and operating system code.
+> > > > > >
+> > > > > > Executing programs using the BPF instruction set also requires
+> > > > > > either an interpreter or a JIT compiler to translate them to
+> > > > > > hardware processor native instructions. In general,
+> > > > > > interpreters are considered a source of insecurity (e.g.,
+> > > > > > gadgets susceptible to side-channel attacks due to speculative
+> > > > > > execution) and are not recommended.
+> > > >
+> > > > Do we need to say that it's not recommended to use JIT engines?
+> > > > Given that this is explaining how BPF programs are executed, to me
+> > > > it reads a bit as saying, "It's not recommended to use BPF." Is it
+> > > > not sufficient to just explain the risks?
+> > >
+> > > It says it's not recommended to use interpreters.  I couldn't tell
+> > > if your comment was a typo, did you mean interpreters or JIT
+> > > engines?  It should read as saying it's recommended to use a JIT
+> > > engine rather than an interpreter.
 > 
-> > hi,
-> > as part of the effort on speeding up the uprobes [0] coming with
-> > return uprobe optimization by using syscall instead of the trap
-> > on the uretprobe trampoline.
-> > 
-> > The speed up depends on instruction type that uprobe is installed
-> > and depends on specific HW type, please check patch 1 for details.
-> > 
-> > Patches 1-6 are based on bpf-next/master, but path 1 and 2 are
-> > apply-able on linux-trace.git tree probes/for-next branch.
-> > Patch 7 is based on man-pages master.
+> Sorry, yes, I meant to say interpreters. What I really meant though is
+that discussing
+> the safety of JIT engines vs. interpreters seems a bit out of scope for
+this Security
+> Considerations section. It's not as though JIT is a foolproof method in
+and of itself.
 > 
-> Thanks for updated! I reviewed the series and just except for the
-> manpage, it looks good to me.
+> > > Do you have a suggested alternate wording?
 > 
-> Reviewed-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> How about this:
 > 
-> for the series.
-> If Linux API maintainers are OK, I can pick this in probes/for-next.
+> Executing programs using the BPF instruction set also requires either an
+interpreter
+> or a JIT compiler to translate them to hardware processor native
+instructions. In
+> general, interpreters and JIT engines can be a source of insecurity (e.g.,
+gadgets
+> susceptible to side-channel attacks due to speculative execution, or W^X
+mappings),
+> and should be audited carefully for vulnerabilities.
 
-great, thanks
+I've had security researchers tell me that using an interpreter in the same
+address
+space as other confidential data is inherently a vulnerability, i.e., no one
+can prove
+that it's not a side channel attack waiting to happen and all evidence is
+that it cannot
+be protected.  Only an interpreter in a separate address space from any
+secrets
+can be safe in that respect.  So I believe just saying that interpreters
+"should be
+audited carefully for vulnerabilities" would not pass security muster by
+such folks.
 
-> (BTW, who will pick the manpage patch?)
+> > How about:
+> >
+> > OLD: In general, interpreters are considered a
+> > OLD: source of insecurity (e.g., gadgets susceptible to side-channel
+> > attacks due to speculative execution)
+> > OLD: and are not recommended.
+> >
+> > NEW: In general, interpreters are considered a
+> > NEW: source of insecurity (e.g., gadgets susceptible to side-channel
+> > attacks due to speculative execution)
+> > NEW: so use of a JIT compiler is recommended instead.
+> 
+> This is fine too. My only worry is that there have also been plenty of
+vulnerabilities
+> exploited against JIT engines as well, so it might be more prudent to just
+warn the
+> reader of the risks of interpreters/JITs in general as opposed to
+prescribing one over
+> the other.
+> 
+> What do you think?
 
-ugh, I cc-ed linux-api but not linux-man@vger.kernel.org
-I'll add that for new version
+I think the "should be audited carefully for vulnerabilities" phrase would
+apply to
+JITs for sure.  However it would also apply to any non-BPF code in a
+privileged
+context such as a kernel, so it would seem odd to call it out here and not
+in all other
+RFCs that would apply to kernel code (e.g., TCP/IP).  But if others really
+want that,
+we could certainly say that.
 
-jirka
+Dave
 
-> 
-> Thank you,
-> 
-> > 
-> > v3 changes:
-> >   - added source ip check if the uretprobe syscall is called from
-> >     trampoline and sending SIGILL to process if it's not
-> >   - keep x86 compat process to use standard breakpoint
-> >   - split syscall wiring into separate change
-> >   - ran ltp and syzkaller locally, no issues found [Masami]
-> >   - building uprobe_compat binary in selftests which breaks
-> >     CI atm because of missing 32-bit delve packages, I will
-> >     need to fix that in separate changes once this is acked
-> >   - added man page change
-> >   - there were several changes so I removed acks [Oleg Andrii]
-> > 
-> > Also available at:
-> >   https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git
-> >   uretprobe_syscall
-> > 
-> > thanks,
-> > jirka
-> > 
-> > 
-> > Notes to check list items in Documentation/process/adding-syscalls.rst:
-> > 
-> > - System Call Alternatives
-> >   New syscall seems like the best way in here, becase we need
-> >   just to quickly enter kernel with no extra arguments processing,
-> >   which we'd need to do if we decided to use another syscall.
-> > 
-> > - Designing the API: Planning for Extension
-> >   The uretprobe syscall is very specific and most likely won't be
-> >   extended in the future.
-> > 
-> >   At the moment it does not take any arguments and even if it does
-> >   in future, it's allowed to be called only from trampoline prepared
-> >   by kernel, so there'll be no broken user.
-> > 
-> > - Designing the API: Other Considerations
-> >   N/A because uretprobe syscall does not return reference to kernel
-> >   object.
-> > 
-> > - Proposing the API
-> >   Wiring up of the uretprobe system call si in separate change,
-> >   selftests and man page changes are part of the patchset.
-> > 
-> > - Generic System Call Implementation
-> >   There's no CONFIG option for the new functionality because it
-> >   keeps the same behaviour from the user POV.
-> > 
-> > - x86 System Call Implementation
-> >   It's 64-bit syscall only.
-> > 
-> > - Compatibility System Calls (Generic)
-> >   N/A uretprobe syscall has no arguments and is not supported
-> >   for compat processes.
-> > 
-> > - Compatibility System Calls (x86)
-> >   N/A uretprobe syscall is not supported for compat processes.
-> > 
-> > - System Calls Returning Elsewhere
-> >   N/A.
-> > 
-> > - Other Details
-> >   N/A.
-> > 
-> > - Testing
-> >   Adding new bpf selftests and ran ltp on top of this change.
-> > 
-> > - Man Page
-> >   Attached.
-> > 
-> > - Do not call System Calls in the Kernel
-> >   N/A.
-> > 
-> > 
-> > [0] https://lore.kernel.org/bpf/ZeCXHKJ--iYYbmLj@krava/
-> > ---
-> > Jiri Olsa (6):
-> >       uprobe: Wire up uretprobe system call
-> >       uprobe: Add uretprobe syscall to speed up return probe
-> >       selftests/bpf: Add uretprobe syscall test for regs integrity
-> >       selftests/bpf: Add uretprobe syscall test for regs changes
-> >       selftests/bpf: Add uretprobe syscall call from user space test
-> >       selftests/bpf: Add uretprobe compat test
-> > 
-> >  arch/x86/entry/syscalls/syscall_64.tbl                    |   1 +
-> >  arch/x86/kernel/uprobes.c                                 | 115 ++++++++++++++++++++++++++++++
-> >  include/linux/syscalls.h                                  |   2 +
-> >  include/linux/uprobes.h                                   |   3 +
-> >  include/uapi/asm-generic/unistd.h                         |   5 +-
-> >  kernel/events/uprobes.c                                   |  24 +++++--
-> >  kernel/sys_ni.c                                           |   2 +
-> >  tools/include/linux/compiler.h                            |   4 ++
-> >  tools/testing/selftests/bpf/.gitignore                    |   1 +
-> >  tools/testing/selftests/bpf/Makefile                      |   6 +-
-> >  tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c     | 123 +++++++++++++++++++++++++++++++-
-> >  tools/testing/selftests/bpf/prog_tests/uprobe_syscall.c   | 362 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-> >  tools/testing/selftests/bpf/progs/uprobe_syscall.c        |  15 ++++
-> >  tools/testing/selftests/bpf/progs/uprobe_syscall_call.c   |  15 ++++
-> >  tools/testing/selftests/bpf/progs/uprobe_syscall_compat.c |  13 ++++
-> >  15 files changed, 681 insertions(+), 10 deletions(-)
-> >  create mode 100644 tools/testing/selftests/bpf/prog_tests/uprobe_syscall.c
-> >  create mode 100644 tools/testing/selftests/bpf/progs/uprobe_syscall.c
-> >  create mode 100644 tools/testing/selftests/bpf/progs/uprobe_syscall_call.c
-> >  create mode 100644 tools/testing/selftests/bpf/progs/uprobe_syscall_compat.c
-> > 
-> > 
-> > Jiri Olsa (1):
-> >       man2: Add uretprobe syscall page
-> > 
-> >  man2/uretprobe.2 | 40 ++++++++++++++++++++++++++++++++++++++++
-> >  1 file changed, 40 insertions(+)
-> >  create mode 100644 man2/uretprobe.2
-> 
-> 
-> -- 
-> Masami Hiramatsu (Google) <mhiramat@kernel.org>
