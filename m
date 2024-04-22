@@ -1,145 +1,139 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A85A41847;
-	Mon, 22 Apr 2024 18:32:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42666153BFC
+	for <bpf@vger.kernel.org>; Mon, 22 Apr 2024 18:37:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713810736; cv=none; b=QznZ5pBJl0AHmDy48WduUBUcGmD1B5IijLy07IEf5r/lnv88qxYRvA5oQaYlwdAlpqc1GVY1w1jWVl0QJqGwczxeeYfnZSSyAcfepfHnjKaKOF2nbfqgLPQaF761qomi9Pp7CLQeTv3/4Q6nT+jkRFMRRAHrU+7khNTTDfbwIaI=
+	t=1713811074; cv=none; b=df19fHOpgDCYtuVdUiL0ssBP7FCL23/uJM8X/BHt3OFYFZAibNUi7j5mfYWwGgvW0aHOs/HDfIoAAN6BocGy1BYNQKGOXX9/gSln/jljdb2/+l9LOa8tFqXqPq/7PMYH08iUGcj2nM5sdCiOlv/4gttOQs+1OV+/1QJ8lZTF6cY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713810736; c=relaxed/simple;
-	bh=41bQmayZLa9F2TS6BjEFSDm7V8S6LLEq/o95h7wxG6E=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=l28eZyiFEZGZ1i/VsciXHLakue8jpER4MkOl+eJHmzT4EU9NaymBI9aKgNE9lZM/8yoE6WRNH4NyIldiPpWKYf1t9kvuTHhyts5SEsj2/ZLFCkaNrcxQpiqy6FhTHbHod+xQPd+97s1/vPOsXJ5KKbqXRqeBgtbDl/8gOtm5gBA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WFjAm3nG; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1713811074; c=relaxed/simple;
+	bh=Itd3L/OCuCAqmJ4nX1oUVNH9ljB/0uDzwB4022YeUv4=;
+	h=From:To:Cc:References:In-Reply-To:Subject:Date:Message-ID:
+	 MIME-Version:Content-Type; b=rvHW6soSL5SjGrWOzroqOmIooVycdxGBpzO2NNjzbQC/xTqiwu0eQNX32Ta19O3kXk/7cD34ke7bvg6GidmWUcIeso4zZBSqzLf3XdhLKZsIKEgnHANFpG7uaT3CizRq9vgEw5BJJYXZ7/zL273A3a0IGqb/UXYk6h3fLtZaVLk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=googlemail.com; spf=pass smtp.mailfrom=googlemail.com; dkim=pass (2048-bit key) header.d=googlemail.com header.i=@googlemail.com header.b=Y3/biIjE; arc=none smtp.client-ip=209.85.210.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=googlemail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=googlemail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WFjAm3nG"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3AA94C4AF0B;
-	Mon, 22 Apr 2024 18:32:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1713810736;
-	bh=41bQmayZLa9F2TS6BjEFSDm7V8S6LLEq/o95h7wxG6E=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=WFjAm3nG7XUTrBnb9o2ks89OQgjxiSe5eWX8YxXd1sW0hbIxt8VjaFgdNY7jwwl/k
-	 AfWjBBQkR55Va8AnJ9aZ9HNo3aWGj92Hg8yQfe6AZc/sgCyr09/ddJev56eXLxhUbk
-	 bYRNUKDXSWSv0PHnlWydUHx0kp/IGq0ZRSR0xO71ow/Lfv7EI3MTbMaLFw4v7bXSFJ
-	 3STUYz/yJHlp6VqKWBeoWQO13+U5j6+pSZw+u4eCUWHpkY832oOPrwYV84rmuYW4C/
-	 bOCj02N41ZbDl+Gdwcz6EkWfYsWwZ5MhWh4lcO8wHP44/mjOjwNi1xfPxSrEJkKHPw
-	 nRWV7XhBkaFPQ==
-Received: by mail-lj1-f171.google.com with SMTP id 38308e7fff4ca-2da08b06e0dso56752861fa.2;
-        Mon, 22 Apr 2024 11:32:16 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVAiL4f0XpoTnbX2tsCYaeKCYRiAi5LlPsAXRg2XqaLnBfw0mAuWdG/n2s/rm1fN67yq2GFli/x7nix6Ci20zGBFF2tfTCPkpcU/cIUBXZfkl7bWOQ674srKDnADgriyGJjKil0QaqrFI6dYTBROAkgPQKjtNQoJOgjlaRxPYZtdGQ1xcGmfmo0LD51lKKVhfV+73d6mxcL3emy2Up/snWYvkBkSLoI6l8HPx139+GJVqJqGWEqCwbslJXVJ+i8E6ipAnU54pLeSVwJhoM1dTOLgvLRzXWjcDvU2C4oMB/Tgx3uj0qCNRGpKIrpvjSk81tsEbxLki9rk8infjoGwWTgUgZ/U+KECMhad5na35inrctV6TP7qU+I+9l7U++LRZ9ZsqeiFMXTp8B2pjo9iEXyJe6o+/8L3LQDsvbol2gD9M6TJmM+Tb/uvUQ=
-X-Gm-Message-State: AOJu0YzIVj4kudDkOfIdSzPU7qWk5hi4ACyrTbrFxV2xQk0sd40r9cdc
-	G+YEaqz2iHHiLezycD0rMYEcmoO8FS2eYfkJpBR1rkwmo709PQ8NsIDTsIZrqnsyZnn0247incU
-	B6rCbtRT3RUAl8E2ws3o7ouKDoIs=
-X-Google-Smtp-Source: AGHT+IEL0FWUHmCKYIOk93aax6U4BdFHP3q3Bogcq6+CoScwmomqpj0/rB2eiX3SYQzXlZuuQSNAuqDXXtIwEOxd65Y=
-X-Received: by 2002:a2e:9496:0:b0:2d8:1d29:23a8 with SMTP id
- c22-20020a2e9496000000b002d81d2923a8mr6582027ljh.29.1713810734431; Mon, 22
- Apr 2024 11:32:14 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=googlemail.com header.i=@googlemail.com header.b="Y3/biIjE"
+Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-6eff9dc1821so4681357b3a.3
+        for <bpf@vger.kernel.org>; Mon, 22 Apr 2024 11:37:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20230601; t=1713811072; x=1714415872; darn=vger.kernel.org;
+        h=content-language:thread-index:content-transfer-encoding
+         :mime-version:message-id:date:subject:in-reply-to:references:cc:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=i/O8pnmYH0xDG4ELW4n0m95T2/dxB9yFPAEgLSJkkMk=;
+        b=Y3/biIjEzMQQGckRygvl17s46rFZ9XhPZDUnpbHBWxa8CGcsTwYY5Zh7+4Euiw3MkN
+         HpvJaUyzSvievm+wemsg+1AQJDroy8djEzIkzz9GsZtv7MkYYSjanRV3/zLE2uFMXpJG
+         8EG/tXp/HvKPi6xcqfZnhuCg24YBRAONS6kCWwhnKLZ+j9a1ZYDqusEqmr4m0JeehfPT
+         VOQMWjl7QYgg3VPUtVRAU+EW63sEfT41WoDzhM/ljkCMoagwgGa6I9tfDyIlDCnz3k5W
+         AJjyvGRasGRyE+PFGaJrfNk076HoG37s9ZCFkNpovtHYU7FUw43IMEr46lqXKd5kUhEj
+         vgUA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1713811072; x=1714415872;
+        h=content-language:thread-index:content-transfer-encoding
+         :mime-version:message-id:date:subject:in-reply-to:references:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=i/O8pnmYH0xDG4ELW4n0m95T2/dxB9yFPAEgLSJkkMk=;
+        b=S0C0sNfXXiPGPvakSXSslV6pLYSeUwftWSCbGzjdkF3Qu23WbIg8i1jpjsvmFMfzwW
+         YrbJYczlOgasHgo+s8BC3p6vipPap9wCaAkVywag0zUKofeQ1A3lmQiqSol+Isn91xbg
+         Lc9p2ZM3+ZGXsVSSyzKLBBfLxXVNFcRTF4uJSfBIdTAcZB9Vxa18ApecnQH8I9/Rqkkc
+         N490FX4xQ1XYmFYWQlxJVIGJaxRhZPyLoknXgEdRXeJXRiSYKPGMN5lNWEOu1nc6TykZ
+         yZ/hWdj5E62j4g34JcwGaPQhhkVWgR2+UuGIGnkMyKhXy4K6mxvIfYu04UToI0CuAkkm
+         UkEg==
+X-Forwarded-Encrypted: i=1; AJvYcCW5Xn2iSnuCjzSsaExDKFvLqWmcYmemFpTOMuvzgCm0Vfb3jmGYnTkgaYvkZ/3070cYzJOjERb+5TUOT+uYJvhKgJBo
+X-Gm-Message-State: AOJu0Yyt9EgAe2K4/PYwM6gJLGnthZM7GHaL+X8dSeJMPqkqIjaom2GZ
+	lL6YS/i3uQD1wLIzCq3vPEWA5cuLTA6fzVeyriOUncFmxh6eR2ezj3pi750g
+X-Google-Smtp-Source: AGHT+IHIdONuhi1tU+z0ZhjG4E0Tr/CgUPURvarA/i4pLG2Vs562U3KrvymtWQu3Xe5GyxVhorKclA==
+X-Received: by 2002:a05:6a00:a0e:b0:6eb:6:6b72 with SMTP id p14-20020a056a000a0e00b006eb00066b72mr12320037pfh.25.1713811072347;
+        Mon, 22 Apr 2024 11:37:52 -0700 (PDT)
+Received: from ArmidaleLaptop (c-67-170-74-237.hsd1.wa.comcast.net. [67.170.74.237])
+        by smtp.gmail.com with ESMTPSA id s11-20020a62e70b000000b006ecde91bb6esm8169972pfh.183.2024.04.22.11.37.51
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 22 Apr 2024 11:37:52 -0700 (PDT)
+From: dthaler1968@googlemail.com
+X-Google-Original-From: <dthaler1968@gmail.com>
+To: <dthaler1968@googlemail.com>,
+	"'David Vernet'" <void@manifault.com>
+Cc: <bpf@ietf.org>,
+	<bpf@vger.kernel.org>
+References: <093301da933d$0d478510$27d68f30$@gmail.com> <20240421165134.GA9215@maniforge> <109c01da9410$331ae880$9950b980$@gmail.com>
+In-Reply-To: <109c01da9410$331ae880$9950b980$@gmail.com>
+Subject: RE: BPF ISA Security Considerations section
+Date: Mon, 22 Apr 2024 11:37:48 -0700
+Message-ID: <149401da94e4$2da0acd0$88e20670$@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <ZiE91CJcNw7gBj9g@kernel.org> <CAPhsuW4au6v8k8Ab7Ff6Yj64rGvZ7wkz=Xrgh8ZZtLyscpChqQ@mail.gmail.com>
- <ZiFd567L4Zzm2okO@kernel.org> <CAPhsuW5SL4_=ZXdHZV8o0KS+5Vf25UMvEKhRgFQLioFtf2pgoQ@mail.gmail.com>
- <ZiIVVBgaDN4RsroT@kernel.org> <CAPhsuW7WoU+a46FhqqH8f-3=ehxeD4wSgKDWegMin1pT49OSWw@mail.gmail.com>
- <ZiKjmaDgz_56ovbv@kernel.org> <CAPhsuW7Nj1Sa_9xQtTgHz9AmX39zdh2x2COqA-qmkfpfX9hNWw@mail.gmail.com>
- <ZiLNGgVSQ7_cg58y@kernel.org> <CAPhsuW4KRM4O4RFbYQrt=Coqyh9w29WiF2YF=8soDfauLFsKBA@mail.gmail.com>
- <ZiNDGjkcqEPqruza@kernel.org> <20240420181121.d6c7be11a6f98dc2462f8b41@kernel.org>
-In-Reply-To: <20240420181121.d6c7be11a6f98dc2462f8b41@kernel.org>
-From: Song Liu <song@kernel.org>
-Date: Mon, 22 Apr 2024 11:32:02 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW5RYfq8FOtMkO69cdQ3Bc1p2kQPWE2crts1UMhqJr+7sQ@mail.gmail.com>
-Message-ID: <CAPhsuW5RYfq8FOtMkO69cdQ3Bc1p2kQPWE2crts1UMhqJr+7sQ@mail.gmail.com>
-Subject: Re: [PATCH v4 05/15] mm: introduce execmem_alloc() and execmem_free()
-To: Masami Hiramatsu <mhiramat@kernel.org>
-Cc: Mike Rapoport <rppt@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
-	Peter Zijlstra <peterz@infradead.org>, linux-kernel@vger.kernel.org, 
-	Alexandre Ghiti <alexghiti@rivosinc.com>, Andrew Morton <akpm@linux-foundation.org>, 
-	Bjorn Topel <bjorn@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>, 
-	Christophe Leroy <christophe.leroy@csgroup.eu>, "David S. Miller" <davem@davemloft.net>, 
-	Dinh Nguyen <dinguyen@kernel.org>, Donald Dutile <ddutile@redhat.com>, 
-	Eric Chanudet <echanude@redhat.com>, Heiko Carstens <hca@linux.ibm.com>, Helge Deller <deller@gmx.de>, 
-	Huacai Chen <chenhuacai@kernel.org>, Kent Overstreet <kent.overstreet@linux.dev>, 
-	Luis Chamberlain <mcgrof@kernel.org>, Michael Ellerman <mpe@ellerman.id.au>, 
-	Nadav Amit <nadav.amit@gmail.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Puranjay Mohan <puranjay12@gmail.com>, Rick Edgecombe <rick.p.edgecombe@intel.com>, 
-	Russell King <linux@armlinux.org.uk>, Steven Rostedt <rostedt@goodmis.org>, 
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Thomas Gleixner <tglx@linutronix.de>, 
-	Will Deacon <will@kernel.org>, bpf@vger.kernel.org, linux-arch@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org, 
-	linux-mm@kvack.org, linux-modules@vger.kernel.org, 
-	linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org, 
-	linux-s390@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
-	linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev, 
-	netdev@vger.kernel.org, sparclinux@vger.kernel.org, x86@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain;
+	charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+X-Mailer: Microsoft Outlook 16.0
+Thread-Index: AQIuELsBo+B+UsoJNRbSlFOn1N3FrQD/w4oWAbyzN8Swt8KZIA==
+Content-Language: en-us
 
-Hi Masami and Mike,
-
-On Sat, Apr 20, 2024 at 2:11=E2=80=AFAM Masami Hiramatsu <mhiramat@kernel.o=
-rg> wrote:
-[...]
-> > >
-> > > IIUC, we need to update __execmem_cache_alloc() to take a range point=
-er as
-> > > input. module text will use "range" for EXECMEM_MODULE_TEXT, while kp=
-robe
-> > > will use "range" for EXECMEM_KPROBE. Without "map to" concept or shar=
-ing
-> > > the "range" object, we will have to compare different range parameter=
-s to check
-> > > we can share cached pages between module text and kprobe, which is no=
-t
-> > > efficient. Did I miss something?
->
-> Song, thanks for trying to eplain. I think I need to explain why I used
-> module_alloc() originally.
->
-> This depends on how kprobe features are implemented on the architecture, =
-and
-> how much features are supported on kprobes.
->
-> Because kprobe jump optimization and kprobe jump-back optimization need t=
-o
-> use a jump instruction to jump into the trampoline and jump back from the
-> trampoline directly, if the architecuture jmp instruction supports +-2GB =
-range
-> like x86, it needs to allocate the trampoline buffer inside such address =
-space.
-> This requirement is similar to the modules (because module function needs=
- to
-> call other functions in the kernel etc.), at least kprobes on x86 used
-> module_alloc().
->
-> However, if an architecture only supports breakpoint/trap based kprobe,
-> it does not need to consider whether the execmem is allocated.
->
+David Vernet <void@manifault.com> wrote:
+> > Thanks for writing this up. Overall it looks great, just had one
+> > comment
+> below.
 > >
-> > We can always share large ROX pages as long as they are within the corr=
-ect
-> > address space. The permissions for them are ROX and the alignment
-> > differences are due to KASAN and this is handled during allocation of t=
-he
-> > large page to refill the cache. __execmem_cache_alloc() only needs to l=
-imit
-> > the search for the address space of the range.
->
-> So I don't think EXECMEM_KPROBE always same as EXECMEM_MODULE_TEXT, it
-> should be configured for each arch. Especially, if it is only used for
-> searching parameter, it looks OK to me.
+> > > > Security Considerations
+> > > >
+> > > > BPF programs could use BPF instructions to do malicious things
+> > > > with memory, CPU, networking, or other system resources. This is
+> > > > not fundamentally different  from any other type of software that
+> > > > may run on a device. Execution environments should be carefully
+> > > > designed to only run BPF programs that are trusted or verified,
+> > > > and sandboxing and privilege level separation are key strategies
+> > > > for limiting security and abuse impact. For example, BPF verifiers
+> > > > are well-known and widely deployed and are responsible for
+> > > > ensuring that BPF programs will terminate within a reasonable
+> > > > time, only interact with memory in safe ways, and adhere to
+> > > > platform-specified API contracts. The details are out of scope of
+> > > > this document (but see [LINUX] and [PREVAIL]), but this level of
+> > > > verification can often provide a stronger level of security
+> > > > assurance than for other software and operating system code.
+> > > >
+> > > > Executing programs using the BPF instruction set also requires
+> > > > either an interpreter or a JIT compiler to translate them to
+> > > > hardware processor native instructions. In general, interpreters
+> > > > are considered a source of insecurity (e.g., gadgets susceptible
+> > > > to side-channel attacks due to speculative execution) and are not
+> > > > recommended.
+> >
+> > Do we need to say that it's not recommended to use JIT engines? Given
+> > that
+> this is
+> > explaining how BPF programs are executed, to me it reads a bit as
+> > saying,
+> "It's not
+> > recommended to use BPF." Is it not sufficient to just explain the risks?
+> 
+> It says it's not recommended to use interpreters.
+> I couldn't tell if your comment was a typo, did you mean interpreters or
+JIT
+> engines?
+> It should read as saying it's recommended to use a JIT engine rather than
+an
+> interpreter.
+> 
+> Do you have a suggested alternate wording?
 
-Thanks for the explanation!
+How about:
 
-I was thinking "we can have EXECMEM_KPROBE share the same parameters as
-EXECMEM_MODULE_TEXT for all architectures". But this thought is built on to=
-p
-of assumptions on future changes/improvements within multiple sub systems.
-At this moment, I have no objections moving forward with current execmem AP=
-Is.
+OLD: In general, interpreters are considered a
+OLD: source of insecurity (e.g., gadgets susceptible to side-channel attacks
+due to speculative execution)
+OLD: and are not recommended.
 
-Thanks,
-Song
+NEW: In general, interpreters are considered a
+NEW: source of insecurity (e.g., gadgets susceptible to side-channel attacks
+due to speculative execution)
+NEW: so use of a JIT compiler is recommended instead.
+
+Dave
+
