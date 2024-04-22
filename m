@@ -1,163 +1,157 @@
-Received: from mail-oo1-f42.google.com (mail-oo1-f42.google.com [209.85.161.42])
+Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com [209.85.215.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 671DE45BF1
-	for <bpf@vger.kernel.org>; Sun, 21 Apr 2024 23:48:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52D3F2579;
+	Mon, 22 Apr 2024 03:32:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713743291; cv=none; b=XL32eRUrBNR2wV+wPtklTJuvySJT+D2v6Ki/iT+MB5eGnn7s0amxUW6US6/hWD06n8nPNB6h3q6oek6XdGM2Zq7ymS7zp/VvOOq4yzKUXYiem0HLTq4MQDPAJu2/gDDxyv6584QZlwR/24f0POQqLMK6QGD/f3Rh/ugBk+fTtq8=
+	t=1713756737; cv=none; b=BP5WOifLEBN5V0LXsicizJi+d/jbqO31hdrSF2jAR8zRbtyb4WrL1ckmt+h5ZtSci2jkFVHJ7DVnFMfQRFJcifB/Y3lTHMkXRHnVzdujpNbOj5muAZBHSg+WHTpNANh5uquoV3TnUuWGVSXucrOJUUsthKag6VHy6Q3DSEcTyMQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713743291; c=relaxed/simple;
-	bh=LV7yOmj0vEDEf7MxxwWNX2GO/ZMfXhMdVJLTEuXSjco=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=aWF2nWyA+pr/hwWz96rz/bOPyYOEpt7XFDDaYer1m7TPaTDo8da8Mr6VsZWyhJOt7LLW4U8quLpW19oFJrw9yiTiu6XmMSkzVLg7dRgNlrfYpExnEIhbV7OXquFUfHk7gRgUUL2EHZBbsZFwsGPIyzQJbKwNIprS6ch87xCWyQs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gzgTMR5U; arc=none smtp.client-ip=209.85.161.42
+	s=arc-20240116; t=1713756737; c=relaxed/simple;
+	bh=8ZxelrFYDpIWsgv+hfq9Z0QBnO4jg4SnHI12pHxjFZA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=VMYjilUqHQl/+89fCPM76CDrBdSL0VrO6Xza1/7UpYZdeCfMH9vQMb5fcXJKLFOeZBbdpjerZfs2Sa4TbCQhDMgtZ3vA9J/9dLvm+SqQu9iIGRp9l2OECI6M6Ewfu5AKBid62k4qzFW3CPW+czWkYLmg9YCgD73oVuysp8h4YNo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=N0g4WYsT; arc=none smtp.client-ip=209.85.215.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gzgTMR5U"
-Received: by mail-oo1-f42.google.com with SMTP id 006d021491bc7-5ad2a15374eso1148604eaf.3
-        for <bpf@vger.kernel.org>; Sun, 21 Apr 2024 16:48:10 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="N0g4WYsT"
+Received: by mail-pg1-f182.google.com with SMTP id 41be03b00d2f7-5dbd519bde6so2794150a12.1;
+        Sun, 21 Apr 2024 20:32:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1713743289; x=1714348089; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=0CxJuwpvOzEOqzYfyAwHTzK85EjW29lHibFHXfSGJU0=;
-        b=gzgTMR5UuMJOYPxkrqtPXwKNX7+PZMTW64Su6dSYwUrudwKmcq/KAYjWTfF4BE2TJp
-         bi6pJo4i4VJavtic5rdH6G5lRepTYVkJlOfO8eJn9lC8Evuql8f4LVLi44QR7QEVdgv2
-         ih0Txe+mLSa8q+f8xLynZ74CpPUWkyWoDFpfy9tCwScl5oThy18M5rs2I9teLswaKrGO
-         pquB0mFppsVqYKUjLqc3mT8y8jlW1sUcpGIAGecu2vC0QYhLiNo/V/qfxoFoaRUMvzMF
-         k7wmo1DVskh/IsTqOrJSWS6cpUfGm9eFZUbkMfc2FItfbq4M9t6Z6rhPy0BdNHWKz2YH
-         oQFw==
+        d=gmail.com; s=20230601; t=1713756735; x=1714361535; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=4/ZJL1pTmzEwFyLqE8i5v/vS2NbXGhujrhuWi0OmhOc=;
+        b=N0g4WYsTdpDfXjuiDqQo/orzBSZ26QmyasdXvRn91F5Y5QiEZ1v1WYsfQ0ZFEj0E0M
+         zUkTrlkUuhWCsxVUZx+cZh+AZb7mE9fXy97xJ8O32C/Emk7eAieKiLRXlJT9+XsheZzx
+         yn74aSf8Z/J2lFzAp4/HEKf0g6igeXCR5NdJw86PJ4OXkm6I0pOxd1QwBuw2P+PR230T
+         J9a/MnPTQ/JBD/A/LoDUYfiDmuDKbl4IIb3TTXkq9muCAF7R+Na/Zr3anNxgWka6tI1b
+         P3Ics0ZNJCZYY2XWUZ/OrLsjW/4mdve03Vou7YbPbRRvVQ9jKBxfO/zDMisd+OSvdNOZ
+         UJOA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713743289; x=1714348089;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=0CxJuwpvOzEOqzYfyAwHTzK85EjW29lHibFHXfSGJU0=;
-        b=rIRdeKZGwyx/e+obyRYzv3R60XSyjlBpg7/OyN5FGrtVWVqk/6uY7LHYbp63CAAteB
-         LY+Z3sNS7zJJmTUAgbNrVVweYm9DOjdtOuVtPhYkKnzBpBEYldWZF8mBeFenvowcSPK+
-         71SVlW4jKD4K8dwdOzX5mNWkgfdgJ7ikRZZAg5Ipg1yus+TxnSVYAgl9/u0+x1ZrRHIm
-         2AZ4kz0vwClwo3w8wK8dEB58K0gYR1SmktcZ0uGWyUFPGssB9RfYoU23DEd2ti24RnlF
-         4mbs9nB/pobh5tVkqyEOjja/2bR3iwLN+jMzqZn6I8E+XsS1zv0RlDYC4QGscgc2ddH/
-         jjTA==
-X-Gm-Message-State: AOJu0YyGSz5JaPO5PyORqiteRmJ57iozoNZYnxBvAInjKIsX2V9/3pCc
-	m+cbAhSpuRX1mAPg1eakPpf3RmJ+B88WplAedttyzb3C3gcAov2ILJ3n+WbV
-X-Google-Smtp-Source: AGHT+IG3PSeXEDIh+809FahSGYWNO2uHw3koFPcAlJPJ/dWhrYWMWOA68u7PjhMs1iWi8jwltISsmg==
-X-Received: by 2002:a05:6358:6914:b0:186:2ac7:317c with SMTP id d20-20020a056358691400b001862ac7317cmr10217590rwh.25.1713743288990;
-        Sun, 21 Apr 2024 16:48:08 -0700 (PDT)
-Received: from fedora.. ([2607:b400:30:a100:6442:5b0e:54ab:110b])
-        by smtp.gmail.com with ESMTPSA id r13-20020ad4404d000000b006a056f65896sm3500881qvp.106.2024.04.21.16.48.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 21 Apr 2024 16:48:08 -0700 (PDT)
-From: Siddharth Chintamaneni <sidchintamaneni@gmail.com>
-X-Google-Original-From: Siddharth Chintamaneni <sidchintamaneni@vt.edu>
-To: bpf@vger.kernel.org
-Cc: alexei.starovoitov@gmail.com,
-	daniel@iogearbox.net,
-	olsajiri@gmail.com,
-	andrii@kernel.org,
-	yonghong.song@linux.dev,
-	miloc@vt.edu,
-	rjsu26@vt.edu,
-	sairoop@vt.edu,
-	djwillia@vt.edu,
-	Siddharth Chintamaneni <sidchintamaneni@vt.edu>
-Subject: [PATCH bpf-next v2] Add notrace to queued_spin_lock_slowpath
-Date: Sun, 21 Apr 2024 19:43:36 -0400
-Message-ID: <20240421234336.542607-1-sidchintamaneni@vt.edu>
-X-Mailer: git-send-email 2.44.0
+        d=1e100.net; s=20230601; t=1713756735; x=1714361535;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=4/ZJL1pTmzEwFyLqE8i5v/vS2NbXGhujrhuWi0OmhOc=;
+        b=aUhmci8XZ/zDay8e6FjIyKThsxzZDaUhPwZWc3AtUxHZjqF+8+Y4Sh7qazQ/855vEH
+         yOXjyLEy9tb8Z1f/N+LtWzdUZza3F8xDatVPkbNk8EcrAvRSX1X3GZOnZ5NmU7JD+LP0
+         HJxfDpti5UxaXMH28swqve4JVmh10bp1xcPsCgkco3TlguUvL/N7biwdFAdtaEBe+yLU
+         bnb0PDesrPUtmGqlEdx6RyWjSbZ9SYqJK8LNWPcC3cjMJaUp7PrOqoOK+73h0tXUgTGE
+         Mi6wzBoaGbLjqLYOCJISqGnYWUBHFIZpX21jHPEdRXVs6dTwFuHmeI8x8Axkr1g+is3n
+         21pA==
+X-Forwarded-Encrypted: i=1; AJvYcCVBytpF5xSNM9qsRM/L+IMAsZ0PmhlCs3PpCnJCYYjqEfDqkJIxGwtETOjYVzCf/OVm8aeaoU0E4qrV6f7taDdxQX3REWRKH34UJ1QybWfnGeTDdg/0YPwQMMl2oWhg170A92b8EL5EpojfW5FkCa5c2b2BHwThreyFypozbmAUxaBpnEo9iUYf0jeFCLaYHSgfZ6O2
+X-Gm-Message-State: AOJu0YzEI1gJwK0PaFikDs70iJiV2VxA+JO+iUbg9kxjPlX/JftvU5wG
+	vrR1oeBQr9+jiufgnLmx3eTJkHax92G+MDLALah7B65C7To8orI4cxsSMd+MT98l7GXykaXzwm2
+	alcSzs95hgxbDda3HBugEpTf38sQ=
+X-Google-Smtp-Source: AGHT+IEPRvtxI6/g1huUDW70lpXzs8IjQOSCtUsfVTl265mSKB6kl1T3yNXxP4qPGJnDIw87Ykgbrpi4qjFfagWlu/c=
+X-Received: by 2002:a05:6a21:191:b0:1a7:5fe0:1c99 with SMTP id
+ le17-20020a056a21019100b001a75fe01c99mr10040642pzb.46.1713756735513; Sun, 21
+ Apr 2024 20:32:15 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20240420104801.94701-1-usiegl00@gmail.com> <171374175513.12877.8993642908082014881@noble.neil.brown.name>
+In-Reply-To: <171374175513.12877.8993642908082014881@noble.neil.brown.name>
+From: Lex Siegel <usiegl00@gmail.com>
+Date: Mon, 22 Apr 2024 12:32:04 +0900
+Message-ID: <CAHCWhjScokCi7u_98-i6E_xHaSJnFGY6dnkv9-C5-yrpihVJFg@mail.gmail.com>
+Subject: Re: [PATCH] xprtsock: Fix a loop in xs_tcp_setup_socket()
+To: NeilBrown <neilb@suse.de>
+Cc: Chuck Lever <chuck.lever@oracle.com>, Jeff Layton <jlayton@kernel.org>, 
+	Olga Kornievskaia <kolga@netapp.com>, Dai Ngo <Dai.Ngo@oracle.com>, Tom Talpey <tom@talpey.com>, 
+	Trond Myklebust <trond.myklebust@hammerspace.com>, Anna Schumaker <anna@kernel.org>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, linux-nfs@vger.kernel.org, 
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org, bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-This patch is to prevent deadlocks when multiple bpf
-programs are attached to queued_spin_locks functions. This issue is similar
-to what is already discussed[1] before with the spin_lock helpers.
+> Better still would be for kernel_connect() to return a more normal error
+> code - not EPERM.  If that cannot be achieved, then I think it would be
+> best for the sunrpc code to map EPERM to something else at the place
+> where kernel_connect() is called - catch it early.
 
-The addition of notrace macro to the queued_spin_locks
-has been discussed[2] when bpf_spin_locks are introduced.
+The question is whether a permission error, EPERM, should cause a retry or
+return. Currently xs_tcp_setup_socket() is retrying. For the retry to clear=
+,
+the connect call will have to not return a permission error to halt the ret=
+ry
+attempts.
 
-[1] https://lore.kernel.org/bpf/CAE5sdEigPnoGrzN8WU7Tx-h-iFuMZgW06qp0KHWtpvoXxf1OAQ@mail.gmail.com/#r
-[2] https://lore.kernel.org/all/20190117011629.efxp7abj4bpf5yco@ast-mbp/t/#maf05c4d71f935f3123013b7ed410e4f50e9da82c
+This is a default behavior because EPERM is not an explicit case of the swi=
+tch
+statement. Because bpf appropriately uses EPERM to show that the kernel_con=
+nect
+was not permitted, it highlights the return handling for this case is missi=
+ng.
+It is unlikely that retry was ever the intended result.
 
-Fixes: d83525ca62cf ("bpf: introduce bpf_spin_lock")
-Signed-off-by: Siddharth Chintamaneni <sidchintamaneni@vt.edu>
----
- kernel/locking/qspinlock.c                    |  2 +-
- .../bpf/prog_tests/tracing_failure.c          | 24 +++++++++++++++++++
- .../selftests/bpf/progs/tracing_failure.c     |  6 +++++
- 3 files changed, 31 insertions(+), 1 deletion(-)
+Upstream, the bpf that caused this is at:
+https://github.com/cilium/cilium/blob/v1.15/bpf/bpf_sock.c#L336
 
-diff --git a/kernel/locking/qspinlock.c b/kernel/locking/qspinlock.c
-index ebe6b8ec7cb3..4d46538d8399 100644
---- a/kernel/locking/qspinlock.c
-+++ b/kernel/locking/qspinlock.c
-@@ -313,7 +313,7 @@ static __always_inline u32  __pv_wait_head_or_lock(struct qspinlock *lock,
-  * contended             :    (*,x,y) +--> (*,0,0) ---> (*,0,1) -'  :
-  *   queue               :         ^--'                             :
-  */
--void __lockfunc queued_spin_lock_slowpath(struct qspinlock *lock, u32 val)
-+notrace void __lockfunc queued_spin_lock_slowpath(struct qspinlock *lock, u32 val)
- {
- 	struct mcs_spinlock *prev, *next, *node;
- 	u32 old, tail;
-diff --git a/tools/testing/selftests/bpf/prog_tests/tracing_failure.c b/tools/testing/selftests/bpf/prog_tests/tracing_failure.c
-index a222df765bc3..822ee6c559bc 100644
---- a/tools/testing/selftests/bpf/prog_tests/tracing_failure.c
-+++ b/tools/testing/selftests/bpf/prog_tests/tracing_failure.c
-@@ -28,10 +28,34 @@ static void test_bpf_spin_lock(bool is_spin_lock)
- 	tracing_failure__destroy(skel);
- }
- 
-+static void test_queued_spin_lock(void)
-+{
-+	struct tracing_failure *skel;
-+	int err;
-+
-+	skel = tracing_failure__open();
-+	if (!ASSERT_OK_PTR(skel, "tracing_failure__open"))
-+		return;
-+
-+	bpf_program__set_autoload(skel->progs.test_queued_spin_lock, true);
-+
-+	err = tracing_failure__load(skel);
-+	if (!ASSERT_OK(err, "tracing_failure__load"))
-+		goto out;
-+
-+	err = tracing_failure__attach(skel);
-+	ASSERT_ERR(err, "tracing_failure__attach");
-+
-+out:
-+	tracing_failure__destroy(skel);
-+}
-+
- void test_tracing_failure(void)
- {
- 	if (test__start_subtest("bpf_spin_lock"))
- 		test_bpf_spin_lock(true);
- 	if (test__start_subtest("bpf_spin_unlock"))
- 		test_bpf_spin_lock(false);
-+	if (test__start_subtest("queued_spin_lock_slowpath"))
-+		test_queued_spin_lock();
- }
-diff --git a/tools/testing/selftests/bpf/progs/tracing_failure.c b/tools/testing/selftests/bpf/progs/tracing_failure.c
-index d41665d2ec8c..2d2e7fc9d4f0 100644
---- a/tools/testing/selftests/bpf/progs/tracing_failure.c
-+++ b/tools/testing/selftests/bpf/progs/tracing_failure.c
-@@ -18,3 +18,9 @@ int BPF_PROG(test_spin_unlock, struct bpf_spin_lock *lock)
- {
- 	return 0;
- }
-+
-+SEC("?fentry/queued_spin_lock_slowpath")
-+int BPF_PROG(test_queued_spin_lock, struct qspinlock *lock, u32 val)
-+{
-+	return 0;
-+}
--- 
-2.43.0
+This cilium bpf code has two return statuses, EPERM and ENXIO, that fall
+through to the default case of retrying. Here, cilium expects both of these
+statuses to indicate the connect failed. A retry is not the intended result=
+.
 
+Handling this case without a retry aligns this code with the udp behavior. =
+This
+precedence for passing EPERM back up the stack was set in 3dedbb5ca10ef.
+
+I will amend my patch to include an explicit case for ENXIO as well, as thi=
+s is
+also in cilium's bpf and will cause the same bug to occur.
+
+
+On Mon, Apr 22, 2024 at 8:22=E2=80=AFAM NeilBrown <neilb@suse.de> wrote:
+>
+> On Sat, 20 Apr 2024, Lex Siegel wrote:
+> > When using a bpf on kernel_connect(), the call can return -EPERM.
+> > This causes xs_tcp_setup_socket() to loop forever, filling up the
+> > syslog and causing the kernel to freeze up.
+> >
+> > Signed-off-by: Lex Siegel <usiegl00@gmail.com>
+> > ---
+> >  net/sunrpc/xprtsock.c | 2 ++
+> >  1 file changed, 2 insertions(+)
+> >
+> > diff --git a/net/sunrpc/xprtsock.c b/net/sunrpc/xprtsock.c
+> > index bb9b747d58a1..47b254806a08 100644
+> > --- a/net/sunrpc/xprtsock.c
+> > +++ b/net/sunrpc/xprtsock.c
+> > @@ -2446,6 +2446,8 @@ static void xs_tcp_setup_socket(struct work_struc=
+t *work)
+> >               /* Happens, for instance, if the user specified a link
+> >                * local IPv6 address without a scope-id.
+> >                */
+> > +     case -EPERM:
+> > +             /* Happens, for instance, if a bpf is preventing the conn=
+ect */
+>
+> This will propagate -EPERM up into other layers which might not be ready
+> to handle it.
+> It might be safer to map EPERM to an error we would be more likely to
+> expect  from the network system - such as ECONNREFUSED or ENETDOWN.
+>
+> Better still would be for kernel_connect() to return a more normal error
+> code - not EPERM.  If that cannot be achieved, then I think it would be
+> best for the sunrpc code to map EPERM to something else at the place
+> where kernel_connect() is called - catch it early.
+>
+> NeilBrown
+>
+>
+> >       case -ECONNREFUSED:
+> >       case -ECONNRESET:
+> >       case -ENETDOWN:
+> > --
+> > 2.39.3
+> >
+> >
+>
