@@ -1,88 +1,165 @@
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+Received: from mail-io1-f49.google.com (mail-io1-f49.google.com [209.85.166.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F39821DFD0
-	for <bpf@vger.kernel.org>; Tue, 23 Apr 2024 19:37:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EC611411E0
+	for <bpf@vger.kernel.org>; Tue, 23 Apr 2024 19:59:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713901072; cv=none; b=bKS1hS0Hf1i4m4Dx/XUjCUn0yzWd1IeHVQm5xLsrtXpQ4gOMgUJLFlKDryDYmnYc1Mcla84p9fM0ajGxAJITgKOALe53Ih74U03V+wzNnRPWFdz0pgVS/rI5868DJ54OCJlo1iFHVaoAI2zviPA8WG1YP/HkjsKaEd/MqYLmGuc=
+	t=1713902354; cv=none; b=DQNX+mOjW7kYATatBc1SbU/hJoCB7Irv00pbg9wF0AE6oL903kHpwXUQB2E5uk1la+/468F6UjwlelMSn73MVvzIoAuwXI67iV1U4T7XrG9iBdGVAmj1BQAQTb80g/Y0P0NEjwoZ2baG+Kys/e8htqCLFHCYIrkHKKWFjYgl1YE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713901072; c=relaxed/simple;
-	bh=v9SbsjyhzhjwcOcCqyudGLl0V5x/J4wgYJOh494ToTE=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=R0Wvv/Q27sVXQ8euIIwl3mjLAL+3xACo1MAAaettnU7xfIvOKnwkg6JVE5QBeqMqbG38+zWFV2KDrSozH3m+4XVQ4LigDOAznJ2P5LPzbXuXj9IvKw8c6dirF7kOmx1M2zZ9dnH4251zSSuEnV+2YlwHwBsxSgpUljNtTOlCKoI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ngz0lt4Q; arc=none smtp.client-ip=209.85.214.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+	s=arc-20240116; t=1713902354; c=relaxed/simple;
+	bh=PFBCUwILRJjtxFpxfpt+sz9gVZcMQB8c8oc+7TWv1FU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=hHyt+C/UURLNQbx3SFWI+qfq12m0JtV6w7qAecDSvWNuyMLJzG/+KdMMDRTGjOEhK/eio0nLATDAgP9L6L6gcdkQKn/3Cm0HmFeDnO/RomwRwEigIPGAOAL7VoTEAfRCPkkmK952SJZ8fhur0nDquuvhuEsCVqciw+x2hyQEOgE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=manifault.com; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.166.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=manifault.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ngz0lt4Q"
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-1e5c7d087e1so49387115ad.0
-        for <bpf@vger.kernel.org>; Tue, 23 Apr 2024 12:37:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1713901070; x=1714505870; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=v9SbsjyhzhjwcOcCqyudGLl0V5x/J4wgYJOh494ToTE=;
-        b=ngz0lt4QUjwHyBZrwZEpZuDaIiYcz97mwf0jzS3AZ5DSsJVnmi2qPstwr2h9K8chT/
-         GEb1ydOtzFoem60exoHRixdwA4cSMTJlWbRwtzEKvkhTKX3BfjUQmp+3V7aIpch/wGB3
-         O3C93lBvcwmPZFQxmPELPmKt0dGF27lRmtfLLI3qBzGdcT8Us1t363DWacduNZc4Ei2m
-         W4TnmNB2O/ZK14BLncnWkI2MX9zQVysSP6LThEWgrXGKlravrzAgSzJeuA7YsOCABHZQ
-         Uu5ByZqZcPwg3nwXzYUT9kuweaA/nEFSwPjq7kJZZkIiQ0rJNPduB6IIqKu8Ogl3T6Eh
-         Zfhg==
+Received: by mail-io1-f49.google.com with SMTP id ca18e2360f4ac-7da1d81d042so259525939f.0
+        for <bpf@vger.kernel.org>; Tue, 23 Apr 2024 12:59:12 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713901070; x=1714505870;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=v9SbsjyhzhjwcOcCqyudGLl0V5x/J4wgYJOh494ToTE=;
-        b=o8s+JMJOWWoMfU/8hTm49XgIAC0vvVXdYkpQot3pXdyc7ceMFBumtG7eIdqTlu6xOG
-         VZMH68v5dbDB9A0eBC7Ter3jpG+NfamAokUWJnXQ27/ClDBnu1PiDk9JGvkCwYLBUNS5
-         bOtPtB9xjqIyLf/eiUfZSxIZ6cHj3TY3qN+dM2V3ICvktB3NEQUTcrRY4U61Z9sHBKSi
-         xd5IY9dkZsF/T2D9EqCeL2yOLenfejMraPmfWwZWfrmS46rV5L5/DHUSIJyiE3ikMtzh
-         SvRygdexSdh3cER+SzQjKkFI35QkxD7RriPshLnU0XZ40IFQo4aGPRaPE1G525JjNf7C
-         U6pQ==
-X-Gm-Message-State: AOJu0YxpwIb8gEzHg/fs5D9vOgvmuBBlJFyY+Zzh3nnY9sKpp8ARxTZY
-	RU18kikw7guCzVpResZnVNRcTs+rQrKeIfIpATl2oRlZf6jVmmDL
-X-Google-Smtp-Source: AGHT+IFiAE9q7PMEP3ZmV52lL/zErsK9ZhSbTqWCblH12rVO+8Z/W0sJFDkpHnHS+Z+hl3kisA+Z+g==
-X-Received: by 2002:a17:902:c943:b0:1e0:115c:e03c with SMTP id i3-20020a170902c94300b001e0115ce03cmr623953pla.53.1713901070114;
-        Tue, 23 Apr 2024 12:37:50 -0700 (PDT)
-Received: from ?IPv6:2604:3d08:9880:5900:74d0:ee16:7cb6:89ea? ([2604:3d08:9880:5900:74d0:ee16:7cb6:89ea])
-        by smtp.gmail.com with ESMTPSA id f8-20020a17090274c800b001e28d18bd52sm10422720plt.232.2024.04.23.12.37.49
+        d=1e100.net; s=20230601; t=1713902352; x=1714507152;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=EeIQh3BCmDuM5IuVKvmeXknAspSGb9upq89lP3SNgKQ=;
+        b=qfV5ulVwttKHRb+6sV0lS1H0pNoa9btOkksV+yXES1pHeqo1T/1Db4aFVnjcNJ0rf1
+         9Y6trLXk4C8dP4gk9c9kwKp0S713hb43Udose93Hr4yHinNhnujndThOvMpJvZCSlQeE
+         MR7H4mJNTYaedpQpsPOyaNPjO17hnZffb3x+DxZQefOXC91mK5jbLul+SJwd/C/EF8aD
+         kkCJIXT9C0i01Y89RWrrQId6MZFQNUZQ9sEttPJLChI/J7nQ8bgxoP3dIqbKkabpB58v
+         jm0pHbJceu4hhavJOY/49PfCv9lOqN54I3sEeRpqSBTlreUdRTmjI27L3TAwpj1w5KGI
+         Ba1Q==
+X-Forwarded-Encrypted: i=1; AJvYcCU1Vk/mdrql9e/URNkXCksL9ZZhqJ8+We5jU5eW0h18yFDYBIUabtD/Ql/+bjLwBC0cYM6YJ+u6whwHZvcEeoUFFBE9
+X-Gm-Message-State: AOJu0YwpeAo7vrzT5KG7Nwx+dDEw9k+oAA1aPpiylyQkVstzPUaMzes8
+	MLrFaUNq/l31J88ZGSH1Smt14KQddHpjv4On6aBYeHL94yY7tFcu
+X-Google-Smtp-Source: AGHT+IF9CXTMbUnNO8sYHTWQBSBlbgZnR51dfmTHfp9FhdVsrQlMaY7gMJB/N8hnUk405Irfbp9NAA==
+X-Received: by 2002:a05:6e02:1fe9:b0:36b:fffc:73bb with SMTP id dt9-20020a056e021fe900b0036bfffc73bbmr660654ilb.7.1713902352112;
+        Tue, 23 Apr 2024 12:59:12 -0700 (PDT)
+Received: from maniforge (c-76-136-75-40.hsd1.il.comcast.net. [76.136.75.40])
+        by smtp.gmail.com with ESMTPSA id ay31-20020a056638411f00b0048571836194sm761127jab.108.2024.04.23.12.59.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Apr 2024 12:37:49 -0700 (PDT)
-Message-ID: <bd151667d1afa40abbcf5df3bb8044ed3b51b2f8.camel@gmail.com>
-Subject: Re: [PATCH bpf-next v2 1/5] bpf/verifier: refactor checks for range
- computation
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Cupertino Miranda <cupertino.miranda@oracle.com>
-Cc: bpf@vger.kernel.org, Yonghong Song <yonghong.song@linux.dev>, Alexei
- Starovoitov <alexei.starovoitov@gmail.com>, David Faust
- <david.faust@oracle.com>, Elena Zannoni <elena.zannoni@oracle.com>
-Date: Tue, 23 Apr 2024 12:37:49 -0700
-In-Reply-To: <87wmonzxav.fsf@oracle.com>
-References: <20240417122341.331524-1-cupertino.miranda@oracle.com>
-	 <20240417122341.331524-2-cupertino.miranda@oracle.com>
-	 <f347d6ea9a0d8ecb77fe13a89470195735c706d2.camel@gmail.com>
-	 <878r19k812.fsf@oracle.com>
-	 <047c972f71bf89a7d4004f1852fe498d3e2ad010.camel@gmail.com>
-	 <833fde942383aa4b306ee0ef75c1a5ebf212e02b.camel@gmail.com>
-	 <87wmonzxav.fsf@oracle.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4-0ubuntu2 
+        Tue, 23 Apr 2024 12:59:11 -0700 (PDT)
+Date: Tue, 23 Apr 2024 14:59:09 -0500
+From: David Vernet <void@manifault.com>
+To: dthaler1968@googlemail.com
+Cc: 'Watson Ladd' <watsonbladd@gmail.com>,
+	'Alan Jowett' <Alan.Jowett@microsoft.com>, bpf@ietf.org,
+	bpf@vger.kernel.org
+Subject: Re: [Bpf] BPF ISA Security Considerations section
+Message-ID: <20240423195909.GA89547@maniforge>
+References: <093301da933d$0d478510$27d68f30$@gmail.com>
+ <20240421165134.GA9215@maniforge>
+ <109c01da9410$331ae880$9950b980$@gmail.com>
+ <149401da94e4$2da0acd0$88e20670$@gmail.com>
+ <20240422193451.GA18561@maniforge>
+ <160501da94f3$4f8aef40$eea0cdc0$@gmail.com>
+ <160f01da94f4$31201c50$936054f0$@gmail.com>
+ <CACsn0ck4FW+S6ewkFwAouQ1ObHx-2sYZsEv3qGi7LcsFywfzAg@mail.gmail.com>
+ <1b5f01da95a7$f1a684b0$d4f38e10$@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="kIjviTN9lakZEcNj"
+Content-Disposition: inline
+In-Reply-To: <1b5f01da95a7$f1a684b0$d4f38e10$@gmail.com>
+User-Agent: Mutt/2.2.13 (00d56288) (2024-03-09)
 
-On Tue, 2024-04-23 at 20:36 +0100, Cupertino Miranda wrote:
 
-[...]
+--kIjviTN9lakZEcNj
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> Sure, I will prepare it. I presure the patch should be the first in the
-> series.
+On Tue, Apr 23, 2024 at 10:59:09AM -0700, dthaler1968@googlemail.com wrote:
+> Thanks Watson and Alan for continued feedback.
+>=20
+> Watson wrote:
+> > But W^X mappings are for JIT (and avoidable by writing, then remapping =
+and
+> > executing), not interpreters.
+>=20
+> Removed W^X phrase.
+>=20
+> > How about we just say "Executing the program requires
+> > an interpreter or JIT compiler in the same memory space as the system b=
+eing
+> > probed or extended.
+>=20
+> Execution does not require that the interpreter or JIT compiler is in the=
+ same
+> memory space, even if that is the most common implementation.  (And Alan's
+> point also applies here that compilation might or might not be JIT per se=
+=2E)
+>=20
+> Below is the latest strawman after taking the latest feedback into accoun=
+t...
+>=20
+> -Dave
+>=20
+>=20
+> Security Considerations
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+>=20
+> BPF programs could use BPF instructions to do malicious things with memor=
+y, CPU, networking,
+> or other system resources.  This is not fundamentally different from any =
+other type of
+> software that may run on a device.  Execution environments should be care=
+fully designed
+> to only run BPF programs that are trusted and verified, and sandboxing an=
+d privilege level
+> separation are key strategies for limiting security and abuse impact.  Fo=
+r example, BPF
+> verifiers are well-known and widely deployed and are responsible for ensu=
+ring that BPF programs
+> will terminate within a reasonable time, only interact with memory in saf=
+e ways, and adhere to
+> platform-specified API contracts. This level of verification can often pr=
+ovide a stronger level
+> of security assurance than for other software and operating system code.
+> While the details are out of scope of this document,
+> `Linux <https://www.kernel.org/doc/html/latest/bpf/verifier.html>`_ and
+> `PREVAIL <https://pldi19.sigplan.org/details/pldi-2019-papers/44/Simple-a=
+nd-Precise-Static-Analysis-of-Untrusted-Linux-K                            =
+                                                                           =
+        Kernel-Extensions>`_ do provide many details.  Future IETF work wil=
+l document verifier expectations
+> and building blocks for allowing safe execution of untrusted BPF programs.
+>=20
+> Executing programs using the BPF instruction set also requires either an =
+interpreter or a compiler
+> to translate them to hardware processor native instructions. In general, =
+interpreters are considered a
+> source of insecurity (e.g., gadgets susceptible to side-channel attacks d=
+ue to speculative execution)
+> whenever one is used in the same memory address space as data with confid=
+entiality
+> concerns.  As such, use of a compiler is recommended instead.  Compilers =
+should be audited
+> carefully for vulnerabilities to ensure that compilation of a trusted and=
+ verified BPF program
+> to native processor instructions does not introduce vulnerabilities.
+>=20
+> Exposing functionality via BPF extends the interface between the componen=
+t executing the BPF program and the
+> component submitting it. Careful consideration of what functionality is e=
+xposed and how
+> that impacts the security properties desired is required.
 
-Right, thank you.
+LGTM
+
+--kIjviTN9lakZEcNj
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEARYKAB0WIQRBxU1So5MTLwphjdFZ5LhpZcTzZAUCZigTDQAKCRBZ5LhpZcTz
+ZCBLAP9GFqJD/OoXGej/fxWM2rjSgZUz+A3+vSanqwdjADtoXAEAxbAkbZnqQZo/
+D4cznspBJTL7T2trnVU+9qcOKtnpxA4=
+=FyLi
+-----END PGP SIGNATURE-----
+
+--kIjviTN9lakZEcNj--
