@@ -1,192 +1,261 @@
-Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E81444C9C
-	for <bpf@vger.kernel.org>; Mon, 22 Apr 2024 23:47:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AD1B23B1
+	for <bpf@vger.kernel.org>; Tue, 23 Apr 2024 00:19:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713829681; cv=none; b=IL9gsYQQsTSGL/ZTTv9c4MUEYdNwZcNothO/ki8V4JXpVLHAupwXOiP7p1JmhsmmdvkJCkHHN4nv+ED5rB3WtjwHZLtPjVhGwthRPBRbOhpqnkgBeewJ/MuvGz5hn7Mhsjs9rQuL/hSllGz+4oLAX9EXCEVtan/NXYEUCxIlhIQ=
+	t=1713831578; cv=none; b=KK9hYseDU2wC4gi81DM3B4MSt22jQq9Ye6FUfXEy3vT0tl7j7STNB03+i1XR7jULmR3zgyNUb+OwJQNBaHOCYoAns4N2JkkJdJkQxvBvdxDRieQPydHrVRuyuWUcuk1II9UhH64b2UAHfFUT0Nu0pkI7QbmVO3QE58/u5s1vrbQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713829681; c=relaxed/simple;
-	bh=Ah8DXrQGiurSc8zrC01VGOUbXyVIHW5IRWR6qpNk2YQ=;
+	s=arc-20240116; t=1713831578; c=relaxed/simple;
+	bh=zJaI4J9nUXOLv86dpkjWP7vZXN7gQcC8ka584ZQmtkM=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=JHqRFbdLo2aigUNWuR1HUfg8jw6jGNhmc9vrh3RIDREQrcj8oHPgHDmpxYsjcU08jbUlumht8OAECYKpIzGJHxz6umfdAZ16d/Ti7hVDKAae55YlXP0v1tym4/UizaTG/Pgcpc3L9/u/F+8rYOPeFpLRyARSA+ef3EVyBAGDKJI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=POMptckr; arc=none smtp.client-ip=209.85.221.46
+	 To:Cc:Content-Type; b=ah97VkISY3unJ3hOP9AW+n9jjDuvdEN3XZNirOYpnZFYkAdIZEyCrVfcvZIXLcYdljC43pAs7eM1OfKfa7Yu033nJ1bWgfYmAM2O4F4aA5bHfuMGOPCP6+48/yFq0CIPz0jWfNJPEzgSmgZK9Iio0ZWmOrgO2iqVE5nzs58kqNE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AvBrHPxZ; arc=none smtp.client-ip=209.85.128.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="POMptckr"
-Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-34388753650so2601272f8f.3
-        for <bpf@vger.kernel.org>; Mon, 22 Apr 2024 16:47:59 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AvBrHPxZ"
+Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-41a4f291f9dso12465615e9.2
+        for <bpf@vger.kernel.org>; Mon, 22 Apr 2024 17:19:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1713829678; x=1714434478; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1713831575; x=1714436375; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=0U4gqdi/Ry/a7UldVubMo2KV9OlD1cfV9vx7ihiisSw=;
-        b=POMptckrRrQdmxqD+1XpbtaxG+3liqLp/u7FBOsrFwZwsiHOP6X7MViwThU62ZrnRA
-         M+8NYSGjR9/lEdjPkUr1bugXUeKulEXux5UiCCqvWzKAAzBKIgK87QkXvYmtUzAh9t0w
-         pgMHXyOKVhM1OnMKs6hVfFXASL5M0v+nkq2VZmLtrRYuu19ZcwEmh1LXrzuc5mWsbZI9
-         Jq3uDlbXfscNgqCfB8Rfc4OjQxglOcDkiPCBrTOX4uX/vYQt/JbjP+KDy5a/6Ahjxp+c
-         WnFspthl+KDDaGWNBSXn9YzcokI224ycAxVmPnUFNanFe3CysyBMsh2Na6LdgaOOc5nN
-         EOlw==
+        bh=aLlzRTFAcFtl98xJoEUnAY+WWTCHtrEIDgh4Q1C0lFs=;
+        b=AvBrHPxZd9tRrEgLOKOlSgtXZY0Sqlcfa5OYFemDoU8Aa/7w5NKTrhwcwlO0AM7i+p
+         LSrw0Pc/C1XNGAg58aHnykESw1IC7V9GnKradsfmFF+MpTNNuLnlfpsc35//KKq4MTrY
+         C6sr89ed2W+auoPy4RLG9vUTkdv/Z3msDxK8StuLpCgxFznp0Td0vhTMIW8oPP79oiuv
+         grY7M65lhGO1Xuy4Uzrvi2sGUkxkWDtesLQvHz7VMBPE5+lVQ8km978A9lmAIqx3s0jo
+         RxjL78e8bLX5oRdQpLD/ljWMNgtMRmU3PGZ9RT3Qhflvu9lcCtctNoUTP1k9CkrD4rGr
+         1ViA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713829678; x=1714434478;
+        d=1e100.net; s=20230601; t=1713831575; x=1714436375;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=0U4gqdi/Ry/a7UldVubMo2KV9OlD1cfV9vx7ihiisSw=;
-        b=BBsm+AoOHzHc5BfH4Hp/LesES2r0YwbhtHwhllB/BNeIGCnFL33pI0WTymyw0ekUVF
-         jtc4ygbYMwl+h6zRlUO4nxN54x+MXoz78yAvOwGq7/KNRUR1ZAVqQfciZY7Pk82LO3Sr
-         Tc/KhxhXlUxxOWP37wisr9u5P5ORhcUjlv/EIC2z/A28oJqtLVExzURAy6Y/MN/xRPGq
-         rPpnaMPYLbBrlyiHHq7c/4lL8Rew6YCvEBgnEvysU41gmXQTDogzURchOuEwFyLuDB1m
-         zxfEWg/CnNMhPLezGqtAbtP5NZq69G1lthk3dTqQWtOIkHqPGrB0u7Hh+g0X7v2yJjLr
-         LDnA==
-X-Forwarded-Encrypted: i=1; AJvYcCX5HjG0CTdkh1z3bW6lpE7QF+tGFYx3y30DNq9SWBnPxmilkXWZdE3dlT7GRSQcXKJVfuA4K2nxIe/NsXraFBCxCb/B
-X-Gm-Message-State: AOJu0Yzj+QX7kMaV8v2zOrkzUHmGKBPunRuZ7ZgtVCqiQdFFqKJfw8so
-	W/jhTMP+3Mxk4K0ut8SxvtteFWE7Dy5Xku77m6dpWqlc60Lda1SKkV8Gwbbit7he4R1/b/5xsZF
-	8L2BQ1XuZYPTYCgg5YSqd82OTh+M=
-X-Google-Smtp-Source: AGHT+IGEM508RLbiqVcYP9Mgw9EBP+wcm0Hs8eey4YjjvQKU6h/fE7Rrkv9rR97xD1MfjPRC8ObGYTC4hVk+RSmw0Fo=
-X-Received: by 2002:a5d:5412:0:b0:343:dcbc:62df with SMTP id
- g18-20020a5d5412000000b00343dcbc62dfmr8115380wrv.50.1713829678176; Mon, 22
- Apr 2024 16:47:58 -0700 (PDT)
+        bh=aLlzRTFAcFtl98xJoEUnAY+WWTCHtrEIDgh4Q1C0lFs=;
+        b=wAnzT6xWmA8d2Q00G5Xz86RMIS7VXpIFLh2U0YB9bjYpmZC3NHwjI68Lu3a4MgYmsS
+         y3P7mL3I4nfLmTj4kX99HsN6daOeozH2KGVWUjZP477GaH+7K8NGRqW+hk2OTEDfU0vh
+         JUr3DVmaRBHUBu4DHSXEkiWDyD04MTH6o5J29Zzsh1ZZZgWnmk9UZ7WEHQ5xXlGt874p
+         kDMTv8PoBwNUs5BRccraqFEcAh6ux+WrZw6ZbmVzZizfchX0hKf9dXcc+efxHoqdO5/A
+         gRaqj+80tTNtHDPUZUV3m/55Qbm9RaTO68ArVb4Zs8birh1RgNbTTo+eXTiJI3U6DIiR
+         4+1Q==
+X-Forwarded-Encrypted: i=1; AJvYcCX4fEwlhPfwrM5g5BlJX4n2QReYFnQEXWIW9MYjZHEn101J00fBF4e6Py6v3bBw20b8uFu57KC3muLj9nlegNse3sfO
+X-Gm-Message-State: AOJu0YyU8m+l6UBDR8LEH++tsBk7dRXnSLc/6blGytOl1wS9oWnNuwon
+	JNxttNcYqxmFEDZhD8ALJJ0bzr+k9/ULtFH6bRil8GouI6V13d+/TAShPwFbQP3rTE6MeuYqQzT
+	ydTiqk+K2EMWE29CHW+AIwajnYHw=
+X-Google-Smtp-Source: AGHT+IFpw/AmZClbJHnALGmqym9VavRccgjWEVVVlOYo5V7O1P09NK+Dz+F8SLtTPPB4RPnxBbZB+jc6QWY/JasBYNA=
+X-Received: by 2002:adf:a4c7:0:b0:347:1c20:f262 with SMTP id
+ h7-20020adfa4c7000000b003471c20f262mr7250276wrb.16.1713831574461; Mon, 22 Apr
+ 2024 17:19:34 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240421234336.542607-1-sidchintamaneni@vt.edu>
- <ZiYWKbDKp2zHBz6S@krava> <CAADnVQLn+zCAGCcFeE3wUfGULXBs3xii2shYTmS1BQMN5ZNYbQ@mail.gmail.com>
- <CAE5sdEgMB=hGjsCfSFkdS-b_YJDErobu=r1-xKvMkqZqLuW8=A@mail.gmail.com>
-In-Reply-To: <CAE5sdEgMB=hGjsCfSFkdS-b_YJDErobu=r1-xKvMkqZqLuW8=A@mail.gmail.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Mon, 22 Apr 2024 16:47:46 -0700
-Message-ID: <CAADnVQK+yZVcDTKNEKNdyJ9kaCHffcp9Wd0QLvipM9RykvByVw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2] Add notrace to queued_spin_lock_slowpath
-To: Siddharth Chintamaneni <sidchintamaneni@gmail.com>
-Cc: Jiri Olsa <olsajiri@gmail.com>, bpf <bpf@vger.kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, miloc@vt.edu, rjsu26@vt.edu, sairoop@vt.edu, 
-	Dan Williams <djwillia@vt.edu>, Siddharth Chintamaneni <sidchintamaneni@vt.edu>
+References: <093301da933d$0d478510$27d68f30$@gmail.com> <20240421165134.GA9215@maniforge>
+ <109c01da9410$331ae880$9950b980$@gmail.com> <149401da94e4$2da0acd0$88e20670$@gmail.com>
+ <20240422193451.GA18561@maniforge> <160501da94f3$4f8aef40$eea0cdc0$@gmail.com>
+ <160f01da94f4$31201c50$936054f0$@gmail.com>
+In-Reply-To: <160f01da94f4$31201c50$936054f0$@gmail.com>
+From: Watson Ladd <watsonbladd@gmail.com>
+Date: Mon, 22 Apr 2024 17:19:23 -0700
+Message-ID: <CACsn0ck4FW+S6ewkFwAouQ1ObHx-2sYZsEv3qGi7LcsFywfzAg@mail.gmail.com>
+Subject: Re: [Bpf] BPF ISA Security Considerations section
+To: dthaler1968=40googlemail.com@dmarc.ietf.org
+Cc: dthaler1968@googlemail.com, David Vernet <void@manifault.com>, bpf@ietf.org, 
+	bpf@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Apr 22, 2024 at 4:20=E2=80=AFPM Siddharth Chintamaneni
-<sidchintamaneni@gmail.com> wrote:
+On Mon, Apr 22, 2024 at 1:32=E2=80=AFPM
+<dthaler1968=3D40googlemail.com@dmarc.ietf.org> wrote:
 >
-> On Mon, 22 Apr 2024 at 13:13, Alexei Starovoitov
-> <alexei.starovoitov@gmail.com> wrote:
+> > -----Original Message-----
+> > From: dthaler1968@googlemail.com <dthaler1968@googlemail.com>
+> > Sent: Monday, April 22, 2024 1:26 PM
+> > To: 'David Vernet' <void@manifault.com>; dthaler1968@googlemail.com
+> > Cc: bpf@ietf.org; bpf@vger.kernel.org
+> > Subject: RE: BPF ISA Security Considerations section
 > >
-> > On Mon, Apr 22, 2024 at 12:47=E2=80=AFAM Jiri Olsa <olsajiri@gmail.com>=
- wrote:
+> > > -----Original Message-----
+> > > From: David Vernet <void@manifault.com>
+> > > Sent: Monday, April 22, 2024 12:35 PM
+> > > To: dthaler1968@googlemail.com
+> > > Cc: bpf@ietf.org; bpf@vger.kernel.org
+> > > Subject: Re: BPF ISA Security Considerations section
 > > >
-> > > On Sun, Apr 21, 2024 at 07:43:36PM -0400, Siddharth Chintamaneni wrot=
-e:
-> > > > This patch is to prevent deadlocks when multiple bpf
-> > > > programs are attached to queued_spin_locks functions. This issue is=
- similar
-> > > > to what is already discussed[1] before with the spin_lock helpers.
-> > > >
-> > > > The addition of notrace macro to the queued_spin_locks
-> > > > has been discussed[2] when bpf_spin_locks are introduced.
-> > > >
-> > > > [1] https://lore.kernel.org/bpf/CAE5sdEigPnoGrzN8WU7Tx-h-iFuMZgW06q=
-p0KHWtpvoXxf1OAQ@mail.gmail.com/#r
-> > > > [2] https://lore.kernel.org/all/20190117011629.efxp7abj4bpf5yco@ast=
--mbp/t/#maf05c4d71f935f3123013b7ed410e4f50e9da82c
-> > > >
-> > > > Fixes: d83525ca62cf ("bpf: introduce bpf_spin_lock")
-> > > > Signed-off-by: Siddharth Chintamaneni <sidchintamaneni@vt.edu>
-> > > > ---
-> > > >  kernel/locking/qspinlock.c                    |  2 +-
-> > > >  .../bpf/prog_tests/tracing_failure.c          | 24 +++++++++++++++=
-++++
-> > > >  .../selftests/bpf/progs/tracing_failure.c     |  6 +++++
-> > > >  3 files changed, 31 insertions(+), 1 deletion(-)
-> > > >
-> > > > diff --git a/kernel/locking/qspinlock.c b/kernel/locking/qspinlock.=
-c
-> > > > index ebe6b8ec7cb3..4d46538d8399 100644
-> > > > --- a/kernel/locking/qspinlock.c
-> > > > +++ b/kernel/locking/qspinlock.c
-> > > > @@ -313,7 +313,7 @@ static __always_inline u32  __pv_wait_head_or_l=
-ock(struct qspinlock *lock,
-> > > >   * contended             :    (*,x,y) +--> (*,0,0) ---> (*,0,1) -'=
-  :
-> > > >   *   queue               :         ^--'                           =
-  :
-> > > >   */
-> > > > -void __lockfunc queued_spin_lock_slowpath(struct qspinlock *lock, =
-u32 val)
-> > > > +notrace void __lockfunc queued_spin_lock_slowpath(struct qspinlock=
- *lock, u32 val)
+> > > On Mon, Apr 22, 2024 at 11:37:48AM -0700, dthaler1968@googlemail.com
+> > wrote:
+> > > > David Vernet <void@manifault.com> wrote:
+> > > > > > Thanks for writing this up. Overall it looks great, just had on=
+e
+> > > > > > comment
+> > > > > below.
+> > > > > >
+> > > > > > > > Security Considerations
+> > > > > > > >
+> > > > > > > > BPF programs could use BPF instructions to do malicious
+> > > > > > > > things with memory, CPU, networking, or other system
+> > > > > > > > resources. This is not fundamentally different  from any
+> > > > > > > > other type of software that may run on a device. Execution
+> > > > > > > > environments should be carefully designed to only run BPF
+> > > > > > > > programs that are trusted or verified, and sandboxing and
+> > > > > > > > privilege level separation are key strategies for limiting
+> > > > > > > > security and abuse impact. For example, BPF verifiers are
+> > > > > > > > well-known and widely deployed and are responsible for
+> > > > > > > > ensuring that BPF programs will terminate within a
+> > > > > > > > reasonable time, only interact with memory in safe ways, an=
+d
+> > > > > > > > adhere to platform-specified API contracts. The details are
+> > > > > > > > out of scope of this document (but see [LINUX] and
+> > > > > > > > [PREVAIL]), but this level of verification can often provid=
+e
+> > > > > > > > a stronger level of security assurance than for
+> > other software
+> > > and operating system code.
+> > > > > > > >
+> > > > > > > > Executing programs using the BPF instruction set also
+> > > > > > > > requires either an interpreter or a JIT compiler to
+> > > > > > > > translate them to hardware processor native instructions. I=
+n
+> > > > > > > > general, interpreters are considered a source of insecurity
+> > > > > > > > (e.g., gadgets susceptible to side-channel attacks due to
+> > > > > > > > speculative
+> > > > > > > > execution) and are not recommended.
+> > > > > >
+> > > > > > Do we need to say that it's not recommended to use JIT engines?
+> > > > > > Given that this is explaining how BPF programs are executed, to
+> > > > > > me it reads a bit as saying, "It's not recommended to use BPF."
+> > > > > > Is it not sufficient to just explain the risks?
+> > > > >
+> > > > > It says it's not recommended to use interpreters.  I couldn't tel=
+l
+> > > > > if your comment was a typo, did you mean interpreters or JIT
+> > > > > engines?  It should read as saying it's recommended to use a JIT
+> > > > > engine rather than an interpreter.
 > > >
-> > > we did the same for bpf spin lock helpers, which is fine, but I wonde=
-r
-> > > removing queued_spin_lock_slowpath from traceable functions could bre=
-ak
-> > > some scripts (even though many probably use contention tracepoints..)
+> > > Sorry, yes, I meant to say interpreters. What I really meant though i=
+s
+> > that discussing
+> > > the safety of JIT engines vs. interpreters seems a bit out of scope
+> > > for
+> > this Security
+> > > Considerations section. It's not as though JIT is a foolproof method
+> > > in
+> > and of itself.
 > > >
-> > > maybe we could have a list of helpers/kfuncs that could call spin loc=
-k
-> > > and deny bpf program to load/attach to queued_spin_lock_slowpath
-> > > if it calls anything from that list
+> > > > > Do you have a suggested alternate wording?
+> > >
+> > > How about this:
+> > >
+> > > Executing programs using the BPF instruction set also requires either
+> > > an
+> > interpreter
+> > > or a JIT compiler to translate them to hardware processor native
+> > instructions. In
+> > > general, interpreters and JIT engines can be a source of insecurity
+> > > (e.g.,
+> > gadgets
+> > > susceptible to side-channel attacks due to speculative execution, or
+> > > W^X
+> > mappings),
+> > > and should be audited carefully for vulnerabilities.
 > >
-> > We can filter out many such functions, but the possibility of deadlock
-> > will still exist.
-> > Adding notrace here won't help much,
-> > since there are tracepoints in there: trace_contention_begin/end
-> > which are quite useful and we should still allow bpf to use them.
-> > I think the only bullet proof way is to detect deadlocks at runtime.
-> > I'm working on such "try hard to spin_lock but abort if it deadlocks."
+> > I've had security researchers tell me that using an interpreter in the
+> same address
+> > space as other confidential data is inherently a vulnerability, i.e., n=
+o
+> one can prove
+> > that it's not a side channel attack waiting to happen and all evidence =
+is
+> that it cannot
+> > be protected.  Only an interpreter in a separate address space from any
+> secrets can
+> > be safe in that respect.  So I believe just saying that interpreters
+> "should be audited
+> > carefully for vulnerabilities" would not pass security muster by such
+> folks.
+> >
+> > > > How about:
+> > > >
+> > > > OLD: In general, interpreters are considered a
+> > > > OLD: source of insecurity (e.g., gadgets susceptible to side-channe=
+l
+> > > > attacks due to speculative execution)
+> > > > OLD: and are not recommended.
+> > > >
+> > > > NEW: In general, interpreters are considered a
+> > > > NEW: source of insecurity (e.g., gadgets susceptible to side-channe=
+l
+> > > > attacks due to speculative execution)
+> > > > NEW: so use of a JIT compiler is recommended instead.
+> > >
+> > > This is fine too. My only worry is that there have also been plenty o=
+f
+> > vulnerabilities
+> > > exploited against JIT engines as well, so it might be more prudent to
+> > > just
+> > warn the
+> > > reader of the risks of interpreters/JITs in general as opposed to
+> > prescribing one over
+> > > the other.
+> > >
+> > > What do you think?
+> >
+> > I think the "should be audited carefully for vulnerabilities" phrase wo=
+uld
+> apply to JITs
+> > for sure.  However it would also apply to any non-BPF code in a privile=
+ged
+> context
+> > such as a kernel, so it would seem odd to call it out here and not in a=
+ll
+> other RFCs
+> > that would apply to kernel code (e.g., TCP/IP).  But if others really w=
+ant
+> that, we
+> > could certainly say that.
 >
-> I agree with the point that notracing all the functions will not
-> resolve the issue. I could also find a scenario where BPF programs
-> will end up in a deadlock easily by using bpf_map_pop_elem and
-> bpf_map_push_elem helper functions called from two different BPF
-> programs accessing the same map. Here are some issues raised by syzbot
-> [2, 3].
-
-ringbuf and stackqueue maps should probably be fixed now
-similar to hashmap's __this_cpu_inc_return(*(htab->map_locked...)
-approach.
-Both ringbug and queue_stack can handle failure to lock.
-That will address the issue spotted by these 2 syzbot reports.
-Could you work on such patches?
-
-The full run-time solution will take time to land and
-may be too big to be backportable.
-I'll certainly cc you on the patches when I send them.
-
->  I also believe that a BPF program can end up in a deadlock scenario
-> without any assistance from the second BPF program, like described
-> above. The runtime solution sounds like a better fit to address this
-> problem, unless there is a BPF program that should definitely run for
-> the performance or security of the system (like an LSM hook or a
-> nested scheduling type program as mentioned here [1]).
-
-Right. Certain bpf progs like tcp-bpf don't even have a recursion
-run-time counter, because they have to nest and it's safe to nest.
-
-> In those cases, the user assumes that these BPF programs will always
-> trigger. So, to address these types of issues, we are currently
-> working on a helper's function callgraph based approach so that the
-> verifier gets the ability to make a decision during load time on
-> whether to load it or not, ensuring that if a BPF program is attached,
-> it will be triggered.
-
-callgraph approach? Could you share more details?
-
+> Updated proposed text, based on David's and Watson's feedback:
 >
-> [1] https://lore.kernel.org/all/a15f6a20-c902-4057-a1a9-8259a225bb8b@linu=
-x.dev/
-> [2] https://lore.kernel.org/lkml/0000000000004aa700061379547e@google.com/
-> [3] https://lore.kernel.org/lkml/0000000000004c3fc90615f37756@google.com/
->
-> PS. We are following a similar approach to solve the stackoverflow
-> problem with nesting.
+> Executing programs using the BPF instruction set also requires either an
+> interpreter or a JIT compiler
+> to translate them to hardware processor native instructions.  In general,
+> interpreters are considered a
+> source of insecurity (e.g., gadgets susceptible to side-channel attacks d=
+ue
+> to speculative execution,
+> or W^X mappings) whenever one is used in the same memory address space as
+> data with confidentiality
+> concerns.  As such, use of a JIT compiler is recommended instead.  JIT
+> compilers should be audited
+> carefully for vulnerabilities to ensure that JIT compilation of a trusted
+> and verified BPF program
+> does not introduce vulnerabilities.
 
-Not following. The stack overflow issue is being fixed by not using
-the kernel stack. So each bpf prog will consume a tiny bit of stack
-to save frame pointer, return address, and callee regs.
+But W^X mappings are for JIT (and avoidable by writing, then remapping
+and executing), not interpreters. How about we just say "Executing the
+program requires an interpreter or JIT compiler in the same memory
+space as the system being probed or extended. This creates risks of
+transient execution attacks that can reveal data with confidentiality
+concerns. Methods for avoiding these attacks are under active research
+and frequently depend on microarchitectural details."
+
+Sincerely,
+Watson
+>
+> Dave
+>
+> --
+> Bpf mailing list
+> Bpf@ietf.org
+> https://www.ietf.org/mailman/listinfo/bpf
+
+
+
+--=20
+Astra mortemque praestare gradatim
