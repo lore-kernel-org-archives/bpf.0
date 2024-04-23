@@ -1,84 +1,159 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1931E13CA96;
-	Tue, 23 Apr 2024 17:54:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EA8413E03B
+	for <bpf@vger.kernel.org>; Tue, 23 Apr 2024 17:59:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713894863; cv=none; b=RLdr/jrTsWZb6mrNNlVWsD2zAPezlaaE9y7aoUi6fqojThRPBI5h/FmxVYIBsWd5i4p3TuJTc/otpCGOy2MxR02LWM5IUdOJetfqk5VoWspmQU0cFhR9D7haIyib7VbURuJD+xfdgAoeNTSJl2I4eOGroS1qOT11/YUy7yt2XRM=
+	t=1713895154; cv=none; b=kWapAV2cMSp9oFY6l9bDu3LZI9JV+vcAOeArN/DmOcXE6DaQiRg7ZoObrPptyH3Au0PadBhOtOiBFpMc9KijhHJ54NKyjdzRR4wX9SsviMXgh7VHbBJsuIxaRwJ+Di1oiglTxIgKGM3rb4I8BP9tZQenOl14L4JlQq4W5I+SrDQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713894863; c=relaxed/simple;
-	bh=ZzNi7yvNwiyPn3p4svVXCBMMGLRPKuJ8+pFxOBldCtU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=O01uj/CaNnOn3yAdMdYN/p+IgfI/aIyt173cQUutFf0Tmb+U9NPQR+5Yo4tABZutantGR9U1+ct8iCJb3kTjk9fIGrxnb0CPdIIaVtRD8sk4Zk++W168gBsWFPuc9HKcBBF0f+Pskht8MOsKmdTQRvEW0MUaPl363hdn2KP2jW4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=u4wCMIlu; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1713895154; c=relaxed/simple;
+	bh=muCuiB9JPin63jig6QeMR9f/HGUlIlt4aO/ZDtGuATo=;
+	h=From:To:Cc:References:In-Reply-To:Subject:Date:Message-ID:
+	 MIME-Version:Content-Type; b=k2Rd8pjCYdxk/0Eem1N87Z1dWgJB8qO+FUpTdfhgHGushbj/J4cfjNy/+X9hI8kOiypUkRPXv4w8e21QT6KDowmpSlzZkMsuTDfmAqWqjxhiQRD0AXbLsdronJH5NRXJxq4vC7grfxHY7exY9tIfNrGzKEKpcDSmI03g4gOGK10=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=googlemail.com; spf=pass smtp.mailfrom=googlemail.com; dkim=pass (2048-bit key) header.d=googlemail.com header.i=@googlemail.com header.b=GSLXazTd; arc=none smtp.client-ip=209.85.214.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=googlemail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=googlemail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="u4wCMIlu"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0066CC116B1;
-	Tue, 23 Apr 2024 17:54:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1713894862;
-	bh=ZzNi7yvNwiyPn3p4svVXCBMMGLRPKuJ8+pFxOBldCtU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=u4wCMIlu8OwyiSAxerkAweuCR9dR9bpaZ0gp1o7PLnus5h7LNgcwvmUCFfNi/V55b
-	 3ljd/40N2bZJtA6WCOasX0IzVcSNXciEDsmAx+DKIF+tHd1yxRSHs9v9ylTj/WDQh2
-	 h7o4gn1f7C4osqJVMeK2wl9Wzh6CiPXeDWwTjh7U8HC5f000siX9QGyTTat5V6rS4x
-	 XMGbGskp4fx9Jwzti/QWzeNeAHsuEikqiA3CZRKjCUeyQjMWyZXfEbBxrZmUp1Cp77
-	 MP72qZTvpO3ZBi9WqVDQfvI+fW4CteT5IG6m9+GUCup/PFF2SSNw5TB4lRwGAi0roz
-	 0+A9xBhtMvQYg==
-Date: Tue, 23 Apr 2024 14:54:18 -0300
-From: Arnaldo Carvalho de Melo <acme@kernel.org>
-To: Alan Maguire <alan.maguire@oracle.com>
-Cc: dxu@dxuuu.xyz, dwarves@vger.kernel.org, andrii.nakryiko@gmail.com,
-	jolsa@kernel.org, bpf@vger.kernel.org, eddyz87@gmail.com
-Subject: Re: [PATCH dwarves 0/2] replace --btf_features="all" with "default"
-Message-ID: <Zif1ysMXHRd01ovg@x1>
-References: <20240423160200.3139270-1-alan.maguire@oracle.com>
+	dkim=pass (2048-bit key) header.d=googlemail.com header.i=@googlemail.com header.b="GSLXazTd"
+Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-1e3c9300c65so51268915ad.0
+        for <bpf@vger.kernel.org>; Tue, 23 Apr 2024 10:59:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20230601; t=1713895153; x=1714499953; darn=vger.kernel.org;
+        h=content-language:thread-index:content-transfer-encoding
+         :mime-version:message-id:date:subject:in-reply-to:references:cc:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=rzr2S8gxVYUH3LL7p/I5C6SRBVnZxMl84/YSRebCjZg=;
+        b=GSLXazTdxPS4BDNBNOeV2R2ZMu7BTHDFbOVeRI0umh0z8Q4DBzaACbTsejIsWzQijw
+         TSrpQYTzSHlDhn84jhO8rvTcntnnsqU/SytFbol+3BII21pHZhlu9c6vQMYQPHqo6HY6
+         R00a6d0FfvdFzzjkmqK4JqrcIXsgfkBGtn2Mwm7Y8w+/NjwSkSuRmt7QS4UHyUJM+hFl
+         6kENmSvWm+wQBlrz7ROJyglkbo+Hep84UZo9rWLMU6byHJW0Ng37XmTuP8OANlqyTJ20
+         0GmU6NJnCZAUNAoLPT2tqtojieixepP1wJjQa41WazFE0NDhxByjl448ol90MDRpTZt7
+         xsaw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1713895153; x=1714499953;
+        h=content-language:thread-index:content-transfer-encoding
+         :mime-version:message-id:date:subject:in-reply-to:references:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=rzr2S8gxVYUH3LL7p/I5C6SRBVnZxMl84/YSRebCjZg=;
+        b=pumfde4xjozJUdBAWWpl0VsjNjP+R3geKneeZH12Q8xpOH9ed8B7Ap4oDP6zGOfHVZ
+         hVfgZ0XWWMUoTjy+W7vxo2rfO2OjLmDisOa7i8en3qWkjGslnQwYtzR8sTNKW8SankuF
+         6keG2zfaenUx2aLbRIWVhilRH2mhKw1zO3Xj3ogN678W76ytx5n9tyg4hM42G9ozVrow
+         3nAt1gQYx8/7lWkw4TEv/RupGYjAa49oOppHm8NhffjEXr7RR9K1/Ido9KaceX5fqbei
+         1sqfRDBFSIAOyhoeU3VAJEyJ6IljNxUB4VYUgkVGWjMbsKVr4ULEnYPbX1zlIOycrM2Q
+         an4A==
+X-Forwarded-Encrypted: i=1; AJvYcCUZS3DZsro1R7hE70B3ZUVeEmejU/Qep6/D9twkUCobOCjleg1AzBVgY/zxEeb4RmuAdccniIaWhilh/40gyxzmDw96
+X-Gm-Message-State: AOJu0YzSX96rpNf0xULVAaIQmNAyZjTYa6IXg/bmcK9yMsc+CpHbPRMT
+	8mWVy36RLPc4GcSb2wV53Nu6ZOZY/0BUVCGxGYf2X2Avalx047P1
+X-Google-Smtp-Source: AGHT+IETD7RDVXoMYsVAvqtuxS1A0YmNiOqZY7/ot9Hqsj6EmXRlCRhov93Xqqnc8OOoVhbe04NVdQ==
+X-Received: by 2002:a17:902:8d87:b0:1e2:a40d:b742 with SMTP id v7-20020a1709028d8700b001e2a40db742mr198051plo.56.1713895152526;
+        Tue, 23 Apr 2024 10:59:12 -0700 (PDT)
+Received: from ArmidaleLaptop (c-67-170-74-237.hsd1.wa.comcast.net. [67.170.74.237])
+        by smtp.gmail.com with ESMTPSA id u1-20020a170902e80100b001e4344a7601sm10345119plg.42.2024.04.23.10.59.11
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 23 Apr 2024 10:59:11 -0700 (PDT)
+From: dthaler1968@googlemail.com
+X-Google-Original-From: <dthaler1968@gmail.com>
+To: "'Watson Ladd'" <watsonbladd@gmail.com>,
+	"'Alan Jowett'" <Alan.Jowett@microsoft.com>
+Cc: "'David Vernet'" <void@manifault.com>,
+	<bpf@ietf.org>,
+	<bpf@vger.kernel.org>
+References: <093301da933d$0d478510$27d68f30$@gmail.com> <20240421165134.GA9215@maniforge> <109c01da9410$331ae880$9950b980$@gmail.com> <149401da94e4$2da0acd0$88e20670$@gmail.com> <20240422193451.GA18561@maniforge> <160501da94f3$4f8aef40$eea0cdc0$@gmail.com> <160f01da94f4$31201c50$936054f0$@gmail.com> <CACsn0ck4FW+S6ewkFwAouQ1ObHx-2sYZsEv3qGi7LcsFywfzAg@mail.gmail.com>
+In-Reply-To: <CACsn0ck4FW+S6ewkFwAouQ1ObHx-2sYZsEv3qGi7LcsFywfzAg@mail.gmail.com>
+Subject: RE: [Bpf] BPF ISA Security Considerations section
+Date: Tue, 23 Apr 2024 10:59:09 -0700
+Message-ID: <1b5f01da95a7$f1a684b0$d4f38e10$@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240423160200.3139270-1-alan.maguire@oracle.com>
+Content-Type: text/plain;
+	charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Mailer: Microsoft Outlook 16.0
+Thread-Index: AQIuELsBo+B+UsoJNRbSlFOn1N3FrQD/w4oWAbyzN8QCsHqedwKUttqRAeznaHkCeyV1OQEF6vAGsGOvYKA=
+Content-Language: en-us
 
-On Tue, Apr 23, 2024 at 05:01:58PM +0100, Alan Maguire wrote:
-> Use of "all" in --btf_features is confusing; use the "default" keyword
-> to request default set of BTF features for encoding instead.  Then
-> non-standard features can be added in a more natural way; i.e.
-> 
-> --btf_features=default,reproducible_build
-> 
-> Patch 1 makes this change in pahole.c and documentation.
-> Patch 2 adjusts the reproducible build selftest to use "default"
-> instead of "all".
-> 
-> This series is applicable on the "next" branch.
+Thanks Watson and Alan for continued feedback.
 
-Applied to the next branch, I also refreshed the patches adding the
-alternative + syntax, its basically a one liner :-)
+Watson wrote:
+> But W^X mappings are for JIT (and avoidable by writing, then remapping =
+and
+> executing), not interpreters.
 
-I'll leave it there for a day for the libbpf CI to test with it and then
-will move all to 'master'.
+Removed W^X phrase.
 
-The first patch of Daniel's series got merged as well, it would be good
-to refresh the other two patches on top of what we have in 'next' now,
-Daniel?
+> How about we just say "Executing the program requires
+> an interpreter or JIT compiler in the same memory space as the system =
+being
+> probed or extended.
 
-Thanks!
+Execution does not require that the interpreter or JIT compiler is in =
+the same
+memory space, even if that is the most common implementation.  (And =
+Alan's
+point also applies here that compilation might or might not be JIT per =
+se.)
 
-- Arnaldo
- 
-> Alan Maguire (2):
->   pahole: replace use of "all" with "default" for --btf_features
->   tests: update reproducible_build test to use "default"
-> 
->  man-pages/pahole.1          |  4 +-
->  pahole.c                    | 75 +++++++++++++++++++------------------
->  tests/reproducible_build.sh |  4 +-
->  3 files changed, 43 insertions(+), 40 deletions(-)
-> 
-> -- 
-> 2.39.3
+Below is the latest strawman after taking the latest feedback into =
+account...
+
+-Dave
+
+
+Security Considerations
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+
+BPF programs could use BPF instructions to do malicious things with =
+memory, CPU, networking,
+or other system resources.  This is not fundamentally different from any =
+other type of
+software that may run on a device.  Execution environments should be =
+carefully designed
+to only run BPF programs that are trusted and verified, and sandboxing =
+and privilege level
+separation are key strategies for limiting security and abuse impact.  =
+For example, BPF
+verifiers are well-known and widely deployed and are responsible for =
+ensuring that BPF programs
+will terminate within a reasonable time, only interact with memory in =
+safe ways, and adhere to
+platform-specified API contracts. This level of verification can often =
+provide a stronger level
+of security assurance than for other software and operating system code.
+While the details are out of scope of this document,
+`Linux <https://www.kernel.org/doc/html/latest/bpf/verifier.html>`_ and
+`PREVAIL =
+<https://pldi19.sigplan.org/details/pldi-2019-papers/44/Simple-and-Precis=
+e-Static-Analysis-of-Untrusted-Linux-K                                   =
+                                                                         =
+   Kernel-Extensions>`_ do provide many details.  Future IETF work will =
+document verifier expectations
+and building blocks for allowing safe execution of untrusted BPF =
+programs.
+
+Executing programs using the BPF instruction set also requires either an =
+interpreter or a compiler
+to translate them to hardware processor native instructions. In general, =
+interpreters are considered a
+source of insecurity (e.g., gadgets susceptible to side-channel attacks =
+due to speculative execution)
+whenever one is used in the same memory address space as data with =
+confidentiality
+concerns.  As such, use of a compiler is recommended instead.  Compilers =
+should be audited
+carefully for vulnerabilities to ensure that compilation of a trusted =
+and verified BPF program
+to native processor instructions does not introduce vulnerabilities.
+
+Exposing functionality via BPF extends the interface between the =
+component executing the BPF program and the
+component submitting it. Careful consideration of what functionality is =
+exposed and how
+that impacts the security properties desired is required.
+
+
+
