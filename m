@@ -1,356 +1,126 @@
-Received: from out30-132.freemail.mail.aliyun.com (out30-132.freemail.mail.aliyun.com [115.124.30.132])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE86C8563D;
-	Tue, 23 Apr 2024 11:32:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.132
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D5FF7EEE1;
+	Tue, 23 Apr 2024 11:56:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713871925; cv=none; b=WdrJhwxghkpdDcqvpvqd3LAE8SG16TkYONaVvmOp0ntx3FTS7doCOrvXpDIIn5chBqsO1WqZajWYs5IZ0aoVZnsvowZ+006OOeo1CBKxvv67upreDzwoD/uFAhS6y2+pDGaUCBRMNUoy1HL7P460dbdJy+k3352IHhTRC4fdX0g=
+	t=1713873396; cv=none; b=h9jKYHiacrwmt6Ry3dnH1SxsSws/deFf5JiDsRsLw/Zr3J9r5qr7oLj48sD7kYTxPJgKB5iFelEPifPCwGZ5dlYVGEXTilAKEf1moDJWL+kBi+4/lA9NFrbD6tV35TJ7wIcUbKqD5FwNoX1I1RydHkuXSxwnOC8c0gKXREySIqI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713871925; c=relaxed/simple;
-	bh=7Mr/4ivr3Y/mLeJHyrMzIgpQgY7W1JKx1wFWQ8Z1leU=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=L3ajjYPBMW0oO0DZDI59cZ503VOllSd6QkSwPXdq3NWcJSltS5+QGxW/MUQ0bYVif+445KJCtX96PVJBYj1rPldgfo0sx5Q6LZEpfniN1IZ+1lI2cVopjhBvxl3Q9rSYZjDZjih5uxwMy16HFo9GBi89rTYDt78Um3csssR2qtI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=VZlumKBG; arc=none smtp.client-ip=115.124.30.132
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
+	s=arc-20240116; t=1713873396; c=relaxed/simple;
+	bh=p/uf6VYgCKT6JxvSBrFmzJpBlF+YiW1WjAHp1el+N5I=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=RRefhtASDKr2mEtCS9loH8pgtQWYN18D53HyMy1whrzoBECHPWqDZdm2D18Q0UaZHdG6UYl/X308kqKJ0JuXaMIt+BPHsTa+N1IQ00Q9DWpIhDl8jwiz4ZI4DOsgb4yZpomF3evbWPuNx+aMLylSTPDbc7T8UZPbyo6Y8R3Krdg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=l70ZxMLC; arc=none smtp.client-ip=192.198.163.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="VZlumKBG"
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux.alibaba.com; s=default;
-	t=1713871915; h=From:To:Subject:Date:Message-Id:MIME-Version;
-	bh=G2ylAct8v28rDflvY+HwznLPnqQmZx6wEikbnF/lZBY=;
-	b=VZlumKBGGxkMmkcSytrtFlgUgW2FRKy6yYJk4bXtd4TguiWYBJNirjVPX0MwIcR7Yv7IId32ddlvyrWOHlBY3eAQIlla8zPIqv9A91g7kcshAMcHKrfZU+/SiaDgRmZg7/vfEpvXARmhceEiKX4qfoBc7nRjkmWOGBw2HFNItxw=
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R211e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033068173054;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=19;SR=0;TI=SMTPD_---0W592gT._1713871912;
-Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0W592gT._1713871912)
-          by smtp.aliyun-inc.com;
-          Tue, 23 Apr 2024 19:31:53 +0800
-From: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-To: netdev@vger.kernel.org
-Cc: "David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="l70ZxMLC"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1713873394; x=1745409394;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=p/uf6VYgCKT6JxvSBrFmzJpBlF+YiW1WjAHp1el+N5I=;
+  b=l70ZxMLCwCNRoVpPZ+6C1OJXBW1NP6oY2Pq1YTRMDENlzci8CzzE9n8N
+   DVB7iUAfVhYTMyBCMcbCRBP2Al10uk6cDKYL+AeT8UXV4Co24b3kVDB9z
+   bCK8HKX8iq0hJVlF5XJ1eR38SbiiZIWFr9i/ySPa4vbcuEec4FcYQsuZr
+   lNMxhmjkoygZdNhANOZj1AgV9LINxiRChBKksICUsmZ0ung2UuyMV8osl
+   zt1BW10YJjFVD0OUqkDGaWHS60qPnNvhz4rNiYVwHGS/+I222MgYruUBU
+   4IemIm7ObGEJNGl1F4AEyGwK4K9F/9ph3Sg0cGbgxTncTduIKHLlPxKUm
+   g==;
+X-CSE-ConnectionGUID: aWWkIAmwT5yF6caDE4I5tw==
+X-CSE-MsgGUID: +5RLew28Sn6Zlr3xt0ZJFQ==
+X-IronPort-AV: E=McAfee;i="6600,9927,11052"; a="9305408"
+X-IronPort-AV: E=Sophos;i="6.07,222,1708416000"; 
+   d="scan'208";a="9305408"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2024 04:56:33 -0700
+X-CSE-ConnectionGUID: hWAL2QWzRY67+bfCqqupIA==
+X-CSE-MsgGUID: nyaBbhdCQVKOIqKg29TI3Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,222,1708416000"; 
+   d="scan'208";a="55297699"
+Received: from lkp-server01.sh.intel.com (HELO e434dd42e5a1) ([10.239.97.150])
+  by orviesa002.jf.intel.com with ESMTP; 23 Apr 2024 04:56:30 -0700
+Received: from kbuild by e434dd42e5a1 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rzEl9-0000A4-0p;
+	Tue, 23 Apr 2024 11:56:27 +0000
+Date: Tue, 23 Apr 2024 19:56:10 +0800
+From: kernel test robot <lkp@intel.com>
+To: Vadim Fedorenko <vadfed@meta.com>,
+	Vadim Fedorenko <vadim.fedorenko@linux.dev>,
 	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	"Michael S. Tsirkin" <mst@redhat.com>,
-	Jason Wang <jasowang@redhat.com>,
-	Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Andrii Nakryiko <andrii@kernel.org>,
 	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@google.com>,
-	Amritha Nambiar <amritha.nambiar@intel.com>,
-	Larysa Zaremba <larysa.zaremba@intel.com>,
-	Sridhar Samudrala <sridhar.samudrala@intel.com>,
-	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-	virtualization@lists.linux.dev,
+	Mykola Lysenko <mykolal@fb.com>,
+	Herbert Xu <herbert@gondor.apana.org.au>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	netdev@vger.kernel.org, linux-crypto@vger.kernel.org,
 	bpf@vger.kernel.org
-Subject: [PATCH net-next v6 7/8] netdev: add queue stats
-Date: Tue, 23 Apr 2024 19:31:40 +0800
-Message-Id: <20240423113141.1752-8-xuanzhuo@linux.alibaba.com>
-X-Mailer: git-send-email 2.32.0.3.g01195cf9f
-In-Reply-To: <20240423113141.1752-1-xuanzhuo@linux.alibaba.com>
-References: <20240423113141.1752-1-xuanzhuo@linux.alibaba.com>
+Subject: Re: [PATCH bpf-next v10 1/4] bpf: make common crypto API for TC/XDP
+ programs
+Message-ID: <202404231955.qUkSEasH-lkp@intel.com>
+References: <20240422225024.2847039-2-vadfed@meta.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Git-Hash: 75c95ace5f2d
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240422225024.2847039-2-vadfed@meta.com>
 
-These stats are commonly. Support reporting those via netdev-genl queue
-stats.
+Hi Vadim,
 
-name: rx-hw-drops
-name: rx-hw-drop-overruns
-name: rx-csum-unnecessary
-name: rx-csum-none
-name: rx-csum-bad
-name: rx-hw-gro-packets
-name: rx-hw-gro-bytes
-name: rx-hw-gro-wire-packets
-name: rx-hw-gro-wire-bytes
-name: rx-hw-drop-ratelimits
-name: tx-hw-drops
-name: tx-hw-drop-errors
-name: tx-csum-none
-name: tx-needs-csum
-name: tx-hw-gso-packets
-name: tx-hw-gso-bytes
-name: tx-hw-gso-wire-packets
-name: tx-hw-gso-wire-bytes
-name: tx-hw-drop-ratelimits
+kernel test robot noticed the following build warnings:
 
-Signed-off-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
----
- Documentation/netlink/specs/netdev.yaml | 104 ++++++++++++++++++++++++
- include/net/netdev_queues.h             |  27 ++++++
- include/uapi/linux/netdev.h             |  19 +++++
- net/core/netdev-genl.c                  |  23 +++++-
- tools/include/uapi/linux/netdev.h       |  19 +++++
- 5 files changed, 190 insertions(+), 2 deletions(-)
+[auto build test WARNING on bpf-next/master]
 
-diff --git a/Documentation/netlink/specs/netdev.yaml b/Documentation/netlink/specs/netdev.yaml
-index 76352dbd2be4..31b51b60ef13 100644
---- a/Documentation/netlink/specs/netdev.yaml
-+++ b/Documentation/netlink/specs/netdev.yaml
-@@ -335,6 +335,110 @@ attribute-sets:
-           Allocation failure may, or may not result in a packet drop, depending
-           on driver implementation and whether system recovers quickly.
-         type: uint
-+      -
-+        name: rx-hw-drops
-+        doc: |
-+          Number of all packets which entered the device, but never left it,
-+          including but not limited to: packets dropped due to lack of buffer
-+          space, processing errors, explicit or implicit policies and packet
-+          filters.
-+        type: uint
-+      -
-+        name: rx-hw-drop-overruns
-+        doc: |
-+          Number of packets dropped due to transient lack of resources, such as
-+          buffer space, host descriptors etc.
-+        type: uint
-+      -
-+        name: rx-csum-unnecessary
-+        doc: Number of packets that were marked as CHECKSUM_UNNECESSARY.
-+        type: uint
-+      -
-+        name: rx-csum-none
-+        doc: Number of packets that were not checksummed by device.
-+        type: uint
-+      -
-+        name: rx-csum-bad
-+        doc: |
-+          Number of packets with bad checksum. The packets are not discarded,
-+          but still delivered to the stack.
-+        type: uint
-+      -
-+        name: rx-hw-gro-packets
-+        doc: |
-+          Number of packets that were coalesced from smaller packets by the device.
-+          Counts only packets coalesced with the HW-GRO netdevice feature,
-+          LRO-coalesced packets are not counted.
-+        type: uint
-+      -
-+        name: rx-hw-gro-bytes
-+        doc: See `rx-hw-gro-packets`.
-+        type: uint
-+      -
-+        name: rx-hw-gro-wire-packets
-+        doc: |
-+          Number of packets that were coalesced to bigger packetss with the HW-GRO
-+          netdevice feature. LRO-coalesced packets are not counted.
-+        type: uint
-+      -
-+        name: rx-hw-gro-wire-bytes
-+        doc: See `rx-hw-gro-wire-packets`.
-+        type: uint
-+      -
-+        name: rx-hw-drop-ratelimits
-+        doc: |
-+          Number of the packets dropped by the device due to the received
-+          packets bitrate exceeding the device rate limit.
-+        type: uint
-+      -
-+        name: tx-hw-drops
-+        doc: |
-+          Number of packets that arrived at the device but never left it,
-+          encompassing packets dropped for reasons such as processing errors, as
-+          well as those affected by explicitly defined policies and packet
-+          filtering criteria.
-+        type: uint
-+      -
-+        name: tx-hw-drop-errors
-+        doc: Number of packets dropped because they were invalid or malformed.
-+        type: uint
-+      -
-+        name: tx-csum-none
-+        doc: |
-+          Number of packets that did not require the device to calculate the
-+          checksum.
-+        type: uint
-+      -
-+        name: tx-needs-csum
-+        doc: |
-+          Number of packets that required the device to calculate the checksum.
-+        type: uint
-+      -
-+        name: tx-hw-gso-packets
-+        doc: |
-+          Number of packets that necessitated segmentation into smaller packets
-+          by the device.
-+        type: uint
-+      -
-+        name: tx-hw-gso-bytes
-+        doc: See `tx-hw-gso-packets`.
-+        type: uint
-+      -
-+        name: tx-hw-gso-wire-packets
-+        doc: |
-+          Number of wire-sized packets generated by processing
-+          `tx-hw-gso-packets`
-+        type: uint
-+      -
-+        name: tx-hw-gso-wire-bytes
-+        doc: See `tx-hw-gso-wire-packets`.
-+        type: uint
-+      -
-+        name: tx-hw-drop-ratelimits
-+        doc: |
-+          Number of the packets dropped by the device due to the transmit
-+          packets bitrate exceeding the device rate limit.
-+        type: uint
- 
- operations:
-   list:
-diff --git a/include/net/netdev_queues.h b/include/net/netdev_queues.h
-index 1ec408585373..c7ac4539eafc 100644
---- a/include/net/netdev_queues.h
-+++ b/include/net/netdev_queues.h
-@@ -9,11 +9,38 @@ struct netdev_queue_stats_rx {
- 	u64 bytes;
- 	u64 packets;
- 	u64 alloc_fail;
-+
-+	u64 hw_drops;
-+	u64 hw_drop_overruns;
-+
-+	u64 csum_unnecessary;
-+	u64 csum_none;
-+	u64 csum_bad;
-+
-+	u64 hw_gro_packets;
-+	u64 hw_gro_bytes;
-+	u64 hw_gro_wire_packets;
-+	u64 hw_gro_wire_bytes;
-+
-+	u64 hw_drop_ratelimits;
- };
- 
- struct netdev_queue_stats_tx {
- 	u64 bytes;
- 	u64 packets;
-+
-+	u64 hw_drops;
-+	u64 hw_drop_errors;
-+
-+	u64 csum_none;
-+	u64 needs_csum;
-+
-+	u64 hw_gso_packets;
-+	u64 hw_gso_bytes;
-+	u64 hw_gso_wire_packets;
-+	u64 hw_gso_wire_bytes;
-+
-+	u64 hw_drop_ratelimits;
- };
- 
- /**
-diff --git a/include/uapi/linux/netdev.h b/include/uapi/linux/netdev.h
-index bb65ee840cda..cf24f1d9adf8 100644
---- a/include/uapi/linux/netdev.h
-+++ b/include/uapi/linux/netdev.h
-@@ -146,6 +146,25 @@ enum {
- 	NETDEV_A_QSTATS_TX_PACKETS,
- 	NETDEV_A_QSTATS_TX_BYTES,
- 	NETDEV_A_QSTATS_RX_ALLOC_FAIL,
-+	NETDEV_A_QSTATS_RX_HW_DROPS,
-+	NETDEV_A_QSTATS_RX_HW_DROP_OVERRUNS,
-+	NETDEV_A_QSTATS_RX_CSUM_UNNECESSARY,
-+	NETDEV_A_QSTATS_RX_CSUM_NONE,
-+	NETDEV_A_QSTATS_RX_CSUM_BAD,
-+	NETDEV_A_QSTATS_RX_HW_GRO_PACKETS,
-+	NETDEV_A_QSTATS_RX_HW_GRO_BYTES,
-+	NETDEV_A_QSTATS_RX_HW_GRO_WIRE_PACKETS,
-+	NETDEV_A_QSTATS_RX_HW_GRO_WIRE_BYTES,
-+	NETDEV_A_QSTATS_RX_HW_DROP_RATELIMITS,
-+	NETDEV_A_QSTATS_TX_HW_DROPS,
-+	NETDEV_A_QSTATS_TX_HW_DROP_ERRORS,
-+	NETDEV_A_QSTATS_TX_CSUM_NONE,
-+	NETDEV_A_QSTATS_TX_NEEDS_CSUM,
-+	NETDEV_A_QSTATS_TX_HW_GSO_PACKETS,
-+	NETDEV_A_QSTATS_TX_HW_GSO_BYTES,
-+	NETDEV_A_QSTATS_TX_HW_GSO_WIRE_PACKETS,
-+	NETDEV_A_QSTATS_TX_HW_GSO_WIRE_BYTES,
-+	NETDEV_A_QSTATS_TX_HW_DROP_RATELIMITS,
- 
- 	__NETDEV_A_QSTATS_MAX,
- 	NETDEV_A_QSTATS_MAX = (__NETDEV_A_QSTATS_MAX - 1)
-diff --git a/net/core/netdev-genl.c b/net/core/netdev-genl.c
-index 7004b3399c2b..a2bf9af2dcf6 100644
---- a/net/core/netdev-genl.c
-+++ b/net/core/netdev-genl.c
-@@ -489,7 +489,17 @@ netdev_nl_stats_write_rx(struct sk_buff *rsp, struct netdev_queue_stats_rx *rx)
- {
- 	if (netdev_stat_put(rsp, NETDEV_A_QSTATS_RX_PACKETS, rx->packets) ||
- 	    netdev_stat_put(rsp, NETDEV_A_QSTATS_RX_BYTES, rx->bytes) ||
--	    netdev_stat_put(rsp, NETDEV_A_QSTATS_RX_ALLOC_FAIL, rx->alloc_fail))
-+	    netdev_stat_put(rsp, NETDEV_A_QSTATS_RX_ALLOC_FAIL, rx->alloc_fail) ||
-+	    netdev_stat_put(rsp, NETDEV_A_QSTATS_RX_HW_DROPS, rx->hw_drops) ||
-+	    netdev_stat_put(rsp, NETDEV_A_QSTATS_RX_HW_DROP_OVERRUNS, rx->hw_drop_overruns) ||
-+	    netdev_stat_put(rsp, NETDEV_A_QSTATS_RX_CSUM_UNNECESSARY, rx->csum_unnecessary) ||
-+	    netdev_stat_put(rsp, NETDEV_A_QSTATS_RX_CSUM_NONE, rx->csum_none) ||
-+	    netdev_stat_put(rsp, NETDEV_A_QSTATS_RX_CSUM_BAD, rx->csum_bad) ||
-+	    netdev_stat_put(rsp, NETDEV_A_QSTATS_RX_HW_GRO_PACKETS, rx->hw_gro_packets) ||
-+	    netdev_stat_put(rsp, NETDEV_A_QSTATS_RX_HW_GRO_BYTES, rx->hw_gro_bytes) ||
-+	    netdev_stat_put(rsp, NETDEV_A_QSTATS_RX_HW_GRO_WIRE_PACKETS, rx->hw_gro_wire_packets) ||
-+	    netdev_stat_put(rsp, NETDEV_A_QSTATS_RX_HW_GRO_WIRE_BYTES, rx->hw_gro_wire_bytes) ||
-+	    netdev_stat_put(rsp, NETDEV_A_QSTATS_RX_HW_DROP_RATELIMITS, rx->hw_drop_ratelimits))
- 		return -EMSGSIZE;
- 	return 0;
- }
-@@ -498,7 +508,16 @@ static int
- netdev_nl_stats_write_tx(struct sk_buff *rsp, struct netdev_queue_stats_tx *tx)
- {
- 	if (netdev_stat_put(rsp, NETDEV_A_QSTATS_TX_PACKETS, tx->packets) ||
--	    netdev_stat_put(rsp, NETDEV_A_QSTATS_TX_BYTES, tx->bytes))
-+	    netdev_stat_put(rsp, NETDEV_A_QSTATS_TX_BYTES, tx->bytes) ||
-+	    netdev_stat_put(rsp, NETDEV_A_QSTATS_TX_HW_DROPS, tx->hw_drops) ||
-+	    netdev_stat_put(rsp, NETDEV_A_QSTATS_TX_HW_DROP_ERRORS, tx->hw_drop_errors) ||
-+	    netdev_stat_put(rsp, NETDEV_A_QSTATS_TX_CSUM_NONE, tx->csum_none) ||
-+	    netdev_stat_put(rsp, NETDEV_A_QSTATS_TX_NEEDS_CSUM, tx->needs_csum) ||
-+	    netdev_stat_put(rsp, NETDEV_A_QSTATS_TX_HW_GSO_PACKETS, tx->hw_gso_packets) ||
-+	    netdev_stat_put(rsp, NETDEV_A_QSTATS_TX_HW_GSO_BYTES, tx->hw_gso_bytes) ||
-+	    netdev_stat_put(rsp, NETDEV_A_QSTATS_TX_HW_GSO_WIRE_PACKETS, tx->hw_gso_wire_packets) ||
-+	    netdev_stat_put(rsp, NETDEV_A_QSTATS_TX_HW_GSO_WIRE_BYTES, tx->hw_gso_wire_bytes) ||
-+	    netdev_stat_put(rsp, NETDEV_A_QSTATS_TX_HW_DROP_RATELIMITS, tx->hw_drop_ratelimits))
- 		return -EMSGSIZE;
- 	return 0;
- }
-diff --git a/tools/include/uapi/linux/netdev.h b/tools/include/uapi/linux/netdev.h
-index bb65ee840cda..cf24f1d9adf8 100644
---- a/tools/include/uapi/linux/netdev.h
-+++ b/tools/include/uapi/linux/netdev.h
-@@ -146,6 +146,25 @@ enum {
- 	NETDEV_A_QSTATS_TX_PACKETS,
- 	NETDEV_A_QSTATS_TX_BYTES,
- 	NETDEV_A_QSTATS_RX_ALLOC_FAIL,
-+	NETDEV_A_QSTATS_RX_HW_DROPS,
-+	NETDEV_A_QSTATS_RX_HW_DROP_OVERRUNS,
-+	NETDEV_A_QSTATS_RX_CSUM_UNNECESSARY,
-+	NETDEV_A_QSTATS_RX_CSUM_NONE,
-+	NETDEV_A_QSTATS_RX_CSUM_BAD,
-+	NETDEV_A_QSTATS_RX_HW_GRO_PACKETS,
-+	NETDEV_A_QSTATS_RX_HW_GRO_BYTES,
-+	NETDEV_A_QSTATS_RX_HW_GRO_WIRE_PACKETS,
-+	NETDEV_A_QSTATS_RX_HW_GRO_WIRE_BYTES,
-+	NETDEV_A_QSTATS_RX_HW_DROP_RATELIMITS,
-+	NETDEV_A_QSTATS_TX_HW_DROPS,
-+	NETDEV_A_QSTATS_TX_HW_DROP_ERRORS,
-+	NETDEV_A_QSTATS_TX_CSUM_NONE,
-+	NETDEV_A_QSTATS_TX_NEEDS_CSUM,
-+	NETDEV_A_QSTATS_TX_HW_GSO_PACKETS,
-+	NETDEV_A_QSTATS_TX_HW_GSO_BYTES,
-+	NETDEV_A_QSTATS_TX_HW_GSO_WIRE_PACKETS,
-+	NETDEV_A_QSTATS_TX_HW_GSO_WIRE_BYTES,
-+	NETDEV_A_QSTATS_TX_HW_DROP_RATELIMITS,
- 
- 	__NETDEV_A_QSTATS_MAX,
- 	NETDEV_A_QSTATS_MAX = (__NETDEV_A_QSTATS_MAX - 1)
+url:    https://github.com/intel-lab-lkp/linux/commits/Vadim-Fedorenko/bpf-make-common-crypto-API-for-TC-XDP-programs/20240423-070416
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
+patch link:    https://lore.kernel.org/r/20240422225024.2847039-2-vadfed%40meta.com
+patch subject: [PATCH bpf-next v10 1/4] bpf: make common crypto API for TC/XDP programs
+config: riscv-defconfig (https://download.01.org/0day-ci/archive/20240423/202404231955.qUkSEasH-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 5ef5eb66fb428aaf61fb51b709f065c069c11242)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240423/202404231955.qUkSEasH-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202404231955.qUkSEasH-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> kernel/bpf/crypto.c:34: warning: Function parameter or struct member 'reserved' not described in 'bpf_crypto_params'
+   kernel/bpf/crypto.c:55: warning: Function parameter or struct member 'siv_len' not described in 'bpf_crypto_ctx'
+
+
+vim +34 kernel/bpf/crypto.c
+
+    17	
+    18	/* BPF crypto initialization parameters struct */
+    19	/**
+    20	 * struct bpf_crypto_params - BPF crypto initialization parameters structure
+    21	 * @type:	The string of crypto operation type.
+    22	 * @algo:	The string of algorithm to initialize.
+    23	 * @key:	The cipher key used to init crypto algorithm.
+    24	 * @key_len:	The length of cipher key.
+    25	 * @authsize:	The length of authentication tag used by algorithm.
+    26	 */
+    27	struct bpf_crypto_params {
+    28		char type[14];
+    29		u8 reserved[2];
+    30		char algo[128];
+    31		u8 key[256];
+    32		u32 key_len;
+    33		u32 authsize;
+  > 34	};
+    35	
+
 -- 
-2.32.0.3.g01195cf9f
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
