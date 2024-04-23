@@ -1,30 +1,30 @@
-Received: from out30-100.freemail.mail.aliyun.com (out30-100.freemail.mail.aliyun.com [115.124.30.100])
+Received: from out30-124.freemail.mail.aliyun.com (out30-124.freemail.mail.aliyun.com [115.124.30.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5235384039;
-	Tue, 23 Apr 2024 11:31:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E74EC84A40;
+	Tue, 23 Apr 2024 11:31:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713871916; cv=none; b=ODXrPpbtfWuslgUb71vaBSBHkx0KCSZBuc0ag5kt0V/lKm3lZosOwLNN4DDQDG3wSzKpLzBBKZIj96k/GxLfNZEOkIt0GV+MIB+wsOusB6YviflGO/P2bOBlS3zhs+w6BUMPlnrh+5Pw1b6EwtS6W9oeT9ZpSbLGujbXLmy0Ih0=
+	t=1713871916; cv=none; b=h1ZE2Q5ioHmys1S3yiwe7N57hW2N1IOBeYkXnYVZzIvhi0mBNOuIGmii78reUkXEMfEf5ROX0iKkW6YHxd+OjA39UjyQt7Mhza+Tok6CbMUShKzERzxK+eISemPyk+jNTaZDdXJquIfKLwa3Q9RZ8rSHBal/Z0qIk8I4Jm7uofk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1713871916; c=relaxed/simple;
-	bh=fs9mBfnUo5VUwoC49M1oKhjXjQYzloflCrFTocr6Ktc=;
+	bh=q3ZyIgBmElYvqwygrKxU4CkdF4eQJwLkLTU61XautEs=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=fZqAf+0lvrh40JbfVsU5BmqnM6ou8IilA1grodw4RsHw0NaVn9HSI6nmsYCyJbCrRekCYm/tsvdMDJ2iDZjxCnbF+NNxhgNkptJFMQuKqc3ATvTgLE+F6sl0gxHqHTHTl522Bacu7bc7ya+H9Io51QBbljms0VMoS5qcvnrmWew=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=fUrBtGLU; arc=none smtp.client-ip=115.124.30.100
+	 MIME-Version; b=TDXEJEC6ErAQf4TuIQBQWD1lbUIr7SgBK5OEuxLvQuDsjb6YxKLulfTX+7C/nXiBGXFY+xQQSYn3VeBQ+mxRYjHvPcKK6dzF5C1R7FypeXWv/5NvPymTLbDAx3WgQlcBr3sETLdvx0Mp1Dprs0Vy7yWJMAsZ24yyaKrQbJzk9UA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=i4SDtJuD; arc=none smtp.client-ip=115.124.30.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="fUrBtGLU"
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="i4SDtJuD"
 DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
 	d=linux.alibaba.com; s=default;
-	t=1713871912; h=From:To:Subject:Date:Message-Id:MIME-Version;
-	bh=TRD9x7KsHx7J1Ivp7O94hlWIwg6juNJcB2vUf7rdXAU=;
-	b=fUrBtGLUvMUXcFpzlpw7Kt276fhqUQUg3ZFtmYCd+Lyo2HN5gY8lGIu+hxmcd6uIIDBMS6Jdx6soKswgJmGsvNKykr6+O1jyWf0pdW+J0gRDt2Eq5ChqKRtYpG/NX/nZFvPCeV5vfVUNY0ImxOFFItm1Gq/J4itaxV7HsizdoE8=
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R221e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033068173054;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=19;SR=0;TI=SMTPD_---0W592gRd_1713871909;
-Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0W592gRd_1713871909)
+	t=1713871906; h=From:To:Subject:Date:Message-Id:MIME-Version;
+	bh=NQb2rLSJ5HIC9zF/pW9mQ/XcCiSAq+Fis1uUOTIBIAM=;
+	b=i4SDtJuDVeLK2oPzZxsXP2I4wPwXYFP/89ys8wlE/SUmFL10bCMxbYC8U1395wE1mUKKsHrLaPOkwdz2FVsw94COMIaHB9wVV2TGYxgCBc32id0nv8D+kkZBZFKUK3Z90NrzwREkbYUBQWGcSZhyMXfcC0BcLBfNCwHznC4Uu0c=
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R121e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045170;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=19;SR=0;TI=SMTPD_---0W591Z6W_1713871904;
+Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0W591Z6W_1713871904)
           by smtp.aliyun-inc.com;
-          Tue, 23 Apr 2024 19:31:50 +0800
+          Tue, 23 Apr 2024 19:31:45 +0800
 From: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
 To: netdev@vger.kernel.org
 Cc: "David S. Miller" <davem@davemloft.net>,
@@ -45,9 +45,9 @@ Cc: "David S. Miller" <davem@davemloft.net>,
 	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
 	virtualization@lists.linux.dev,
 	bpf@vger.kernel.org
-Subject: [PATCH net-next v6 5/8] virtio_net: add the total stats field
-Date: Tue, 23 Apr 2024 19:31:38 +0800
-Message-Id: <20240423113141.1752-6-xuanzhuo@linux.alibaba.com>
+Subject: [PATCH net-next v6 2/8] virtio_net: remove "_queue" from ethtool -S
+Date: Tue, 23 Apr 2024 19:31:35 +0800
+Message-Id: <20240423113141.1752-3-xuanzhuo@linux.alibaba.com>
 X-Mailer: git-send-email 2.32.0.3.g01195cf9f
 In-Reply-To: <20240423113141.1752-1-xuanzhuo@linux.alibaba.com>
 References: <20240423113141.1752-1-xuanzhuo@linux.alibaba.com>
@@ -60,280 +60,43 @@ MIME-Version: 1.0
 X-Git-Hash: 75c95ace5f2d
 Content-Transfer-Encoding: 8bit
 
-Now, we just show the stats of every queue.
+The key size of ethtool -S is controlled by this macro.
 
-But for the user, the total values of every stat may are valuable.
+ETH_GSTRING_LEN 32
 
-NIC statistics:
-     rx_packets: 373522
-     rx_bytes: 85919736
-     rx_drops: 0
-     rx_xdp_packets: 0
-     rx_xdp_tx: 0
-     rx_xdp_redirects: 0
-     rx_xdp_drops: 0
-     rx_kicks: 11125
-     rx_hw_notifications: 0
-     rx_hw_packets: 1325870
-     rx_hw_bytes: 263348963
-     rx_hw_interrupts: 0
-     rx_hw_drops: 1451
-     rx_hw_drop_overruns: 0
-     rx_hw_csum_valid: 1325870
-     rx_hw_needs_csum: 1325870
-     rx_hw_csum_none: 0
-     rx_hw_csum_bad: 0
-     rx_hw_ratelimit_packets: 0
-     rx_hw_ratelimit_bytes: 0
-     tx_packets: 10050
-     tx_bytes: 1230176
-     tx_xdp_tx: 0
-     tx_xdp_tx_drops: 0
-     tx_kicks: 10050
-     tx_timeouts: 0
-     tx_hw_notifications: 0
-     tx_hw_packets: 32281
-     tx_hw_bytes: 4315590
-     tx_hw_interrupts: 0
-     tx_hw_drops: 0
-     tx_hw_drop_malformed: 0
-     tx_hw_csum_none: 0
-     tx_hw_needs_csum: 32281
-     tx_hw_ratelimit_packets: 0
-     tx_hw_ratelimit_bytes: 0
-     rx0_packets: 373522
-     rx0_bytes: 85919736
-     rx0_drops: 0
-     rx0_xdp_packets: 0
-     rx0_xdp_tx: 0
-     rx0_xdp_redirects: 0
-     rx0_xdp_drops: 0
-     rx0_kicks: 11125
-     rx0_hw_notifications: 0
-     rx0_hw_packets: 1325870
-     rx0_hw_bytes: 263348963
-     rx0_hw_interrupts: 0
-     rx0_hw_drops: 1451
-     rx0_hw_drop_overruns: 0
-     rx0_hw_csum_valid: 1325870
-     rx0_hw_needs_csum: 1325870
-     rx0_hw_csum_none: 0
-     rx0_hw_csum_bad: 0
-     rx0_hw_ratelimit_packets: 0
-     rx0_hw_ratelimit_bytes: 0
-     tx0_packets: 10050
-     tx0_bytes: 1230176
-     tx0_xdp_tx: 0
-     tx0_xdp_tx_drops: 0
-     tx0_kicks: 10050
-     tx0_timeouts: 0
-     tx0_hw_notifications: 0
-     tx0_hw_packets: 32281
-     tx0_hw_bytes: 4315590
-     tx0_hw_interrupts: 0
-     tx0_hw_drops: 0
-     tx0_hw_drop_malformed: 0
-     tx0_hw_csum_none: 0
-     tx0_hw_needs_csum: 32281
-     tx0_hw_ratelimit_packets: 0
-     tx0_hw_ratelimit_bytes: 0
+That includes the \0 at the end. So the max length of the key name must
+is 31. But the length of the prefix "rx_queue_0_" is 11. If the queue
+num is larger than 10, the length of the prefix is 12. So the
+key name max is 19. That is too short. We will introduce some keys
+such as "gso_packets_coalesced". So we should change the prefix
+to "rx0_".
 
 Signed-off-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+Acked-by: Jason Wang <jasowang@redhat.com>
 ---
- drivers/net/virtio_net.c | 81 ++++++++++++++++++++++++++++++++++------
- 1 file changed, 69 insertions(+), 12 deletions(-)
+ drivers/net/virtio_net.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
-index 6d24cd8fb15f..8a4d22f5f5b1 100644
+index 921b2254594f..bd90f9d3d9b7 100644
 --- a/drivers/net/virtio_net.c
 +++ b/drivers/net/virtio_net.c
-@@ -3344,14 +3344,15 @@ static void virtnet_stats_sprintf(u8 **p, const char *fmt, const char *noq_fmt,
- 	}
- }
- 
-+/* qid == -1: for rx/tx queue total field */
- static void virtnet_get_stats_string(struct virtnet_info *vi, int type, int qid, u8 **data)
- {
- 	const struct virtnet_stat_desc *desc;
- 	const char *fmt, *noq_fmt;
- 	u8 *p = *data;
--	u32 num = 0;
-+	u32 num;
- 
--	if (type == VIRTNET_Q_TYPE_CQ) {
-+	if (type == VIRTNET_Q_TYPE_CQ && qid >= 0) {
- 		noq_fmt = "cq_hw_%s";
- 
- 		if (VIRTIO_NET_STATS_TYPE_CVQ & vi->device_stats_cap) {
-@@ -3364,65 +3365,69 @@ static void virtnet_get_stats_string(struct virtnet_info *vi, int type, int qid,
- 
- 	if (type == VIRTNET_Q_TYPE_RX) {
- 		fmt = "rx%u_%s";
-+		noq_fmt = "rx_%s";
- 
- 		desc = &virtnet_rq_stats_desc[0];
- 		num = ARRAY_SIZE(virtnet_rq_stats_desc);
- 
--		virtnet_stats_sprintf(&p, fmt, NULL, num, qid, desc);
-+		virtnet_stats_sprintf(&p, fmt, noq_fmt, num, qid, desc);
- 
- 		fmt = "rx%u_hw_%s";
-+		noq_fmt = "rx_hw_%s";
- 
- 		if (VIRTIO_NET_STATS_TYPE_RX_BASIC & vi->device_stats_cap) {
- 			desc = &virtnet_stats_rx_basic_desc[0];
- 			num = ARRAY_SIZE(virtnet_stats_rx_basic_desc);
- 
--			virtnet_stats_sprintf(&p, fmt, NULL, num, qid, desc);
-+			virtnet_stats_sprintf(&p, fmt, noq_fmt, num, qid, desc);
- 		}
- 
- 		if (VIRTIO_NET_STATS_TYPE_RX_CSUM & vi->device_stats_cap) {
- 			desc = &virtnet_stats_rx_csum_desc[0];
- 			num = ARRAY_SIZE(virtnet_stats_rx_csum_desc);
- 
--			virtnet_stats_sprintf(&p, fmt, NULL, num, qid, desc);
-+			virtnet_stats_sprintf(&p, fmt, noq_fmt, num, qid, desc);
- 		}
- 
- 		if (VIRTIO_NET_STATS_TYPE_RX_SPEED & vi->device_stats_cap) {
- 			desc = &virtnet_stats_rx_speed_desc[0];
- 			num = ARRAY_SIZE(virtnet_stats_rx_speed_desc);
- 
--			virtnet_stats_sprintf(&p, fmt, NULL, num, qid, desc);
-+			virtnet_stats_sprintf(&p, fmt, noq_fmt, num, qid, desc);
- 		}
- 	}
- 
- 	if (type == VIRTNET_Q_TYPE_TX) {
- 		fmt = "tx%u_%s";
-+		noq_fmt = "tx_%s";
- 
- 		desc = &virtnet_sq_stats_desc[0];
- 		num = ARRAY_SIZE(virtnet_sq_stats_desc);
- 
--		virtnet_stats_sprintf(&p, fmt, NULL, num, qid, desc);
-+		virtnet_stats_sprintf(&p, fmt, noq_fmt, num, qid, desc);
- 
- 		fmt = "tx%u_hw_%s";
-+		noq_fmt = "tx_hw_%s";
- 
- 		if (VIRTIO_NET_STATS_TYPE_TX_BASIC & vi->device_stats_cap) {
- 			desc = &virtnet_stats_tx_basic_desc[0];
- 			num = ARRAY_SIZE(virtnet_stats_tx_basic_desc);
- 
--			virtnet_stats_sprintf(&p, fmt, NULL, num, qid, desc);
-+			virtnet_stats_sprintf(&p, fmt, noq_fmt, num, qid, desc);
- 		}
- 
- 		if (VIRTIO_NET_STATS_TYPE_TX_GSO & vi->device_stats_cap) {
- 			desc = &virtnet_stats_tx_gso_desc[0];
- 			num = ARRAY_SIZE(virtnet_stats_tx_gso_desc);
- 
--			virtnet_stats_sprintf(&p, fmt, NULL, num, qid, desc);
-+			virtnet_stats_sprintf(&p, fmt, noq_fmt, num, qid, desc);
- 		}
- 
- 		if (VIRTIO_NET_STATS_TYPE_TX_SPEED & vi->device_stats_cap) {
- 			desc = &virtnet_stats_tx_speed_desc[0];
- 			num = ARRAY_SIZE(virtnet_stats_tx_speed_desc);
- 
--			virtnet_stats_sprintf(&p, fmt, NULL, num, qid, desc);
-+			virtnet_stats_sprintf(&p, fmt, noq_fmt, num, qid, desc);
- 		}
- 	}
- 
-@@ -3503,6 +3508,49 @@ static void virtnet_stats_ctx_init(struct virtnet_info *vi,
- 	}
- }
- 
-+/* stats_sum_queue - Calculate the sum of the same fields in sq or rq.
-+ * @sum: the position to store the sum values
-+ * @num: field num
-+ * @q_value: the first queue fields
-+ * @q_num: number of the queues
-+ */
-+static void stats_sum_queue(u64 *sum, u32 num, u64 *q_value, u32 q_num)
-+{
-+	u32 step = num;
-+	int i, j;
-+	u64 *p;
-+
-+	for (i = 0; i < num; ++i) {
-+		p = sum + i;
-+		*p = 0;
-+
-+		for (j = 0; j < q_num; ++j)
-+			*p += *(q_value + i + j * step);
-+	}
-+}
-+
-+static void virtnet_fill_total_fields(struct virtnet_info *vi,
-+				      struct virtnet_stats_ctx *ctx)
-+{
-+	u64 *data, *first_rx_q, *first_tx_q;
-+	u32 num_cq, num_rx, num_tx;
-+
-+	num_cq = ctx->desc_num[VIRTNET_Q_TYPE_CQ];
-+	num_rx = ctx->desc_num[VIRTNET_Q_TYPE_RX];
-+	num_tx = ctx->desc_num[VIRTNET_Q_TYPE_TX];
-+
-+	first_rx_q = ctx->data + num_rx + num_tx + num_cq;
-+	first_tx_q = first_rx_q + vi->curr_queue_pairs * num_rx;
-+
-+	data = ctx->data;
-+
-+	stats_sum_queue(data, num_rx, first_rx_q, vi->curr_queue_pairs);
-+
-+	data = ctx->data + num_rx;
-+
-+	stats_sum_queue(data, num_tx, first_tx_q, vi->curr_queue_pairs);
-+}
-+
- /* virtnet_fill_stats - copy the stats to ethtool -S
-  * The stats source is the device or the driver.
-  *
-@@ -3530,7 +3578,9 @@ static void virtnet_fill_stats(struct virtnet_info *vi, u32 qid,
- 
- 	queue_type = vq_type(vi, qid);
- 	bitmap = ctx->bitmap[queue_type];
--	offset = 0;
-+
-+	/* skip the total fields of pairs */
-+	offset = num_rx + num_tx;
- 
- 	if (queue_type == VIRTNET_Q_TYPE_TX) {
- 		offset += num_cq + num_rx * vi->curr_queue_pairs + num_tx * (qid / 2);
-@@ -3741,6 +3791,10 @@ static void virtnet_get_strings(struct net_device *dev, u32 stringset, u8 *data)
- 
- 	switch (stringset) {
+@@ -3278,13 +3278,13 @@ static void virtnet_get_strings(struct net_device *dev, u32 stringset, u8 *data)
  	case ETH_SS_STATS:
-+		/* Generate the total field names. */
-+		virtnet_get_stats_string(vi, VIRTNET_Q_TYPE_RX, -1, &p);
-+		virtnet_get_stats_string(vi, VIRTNET_Q_TYPE_TX, -1, &p);
-+
- 		virtnet_get_stats_string(vi, VIRTNET_Q_TYPE_CQ, 0, &p);
+ 		for (i = 0; i < vi->curr_queue_pairs; i++) {
+ 			for (j = 0; j < VIRTNET_RQ_STATS_LEN; j++)
+-				ethtool_sprintf(&p, "rx_queue_%u_%s", i,
++				ethtool_sprintf(&p, "rx%u_%s", i,
+ 						virtnet_rq_stats_desc[j].desc);
+ 		}
  
- 		for (i = 0; i < vi->curr_queue_pairs; ++i)
-@@ -3764,7 +3818,8 @@ static int virtnet_get_sset_count(struct net_device *dev, int sset)
- 
- 		pair_count = ctx.desc_num[VIRTNET_Q_TYPE_RX] + ctx.desc_num[VIRTNET_Q_TYPE_TX];
- 
--		return ctx.desc_num[VIRTNET_Q_TYPE_CQ] + vi->curr_queue_pairs * pair_count;
-+		return pair_count + ctx.desc_num[VIRTNET_Q_TYPE_CQ] +
-+			vi->curr_queue_pairs * pair_count;
- 	default:
- 		return -EOPNOTSUPP;
- 	}
-@@ -3798,6 +3853,8 @@ static void virtnet_get_ethtool_stats(struct net_device *dev,
- 			virtnet_fill_stats(vi, i * 2 + 1, &ctx, stats_base, true, 0);
- 		} while (u64_stats_fetch_retry(&sq->stats.syncp, start));
- 	}
-+
-+	virtnet_fill_total_fields(vi, &ctx);
- }
- 
- static void virtnet_get_channels(struct net_device *dev,
+ 		for (i = 0; i < vi->curr_queue_pairs; i++) {
+ 			for (j = 0; j < VIRTNET_SQ_STATS_LEN; j++)
+-				ethtool_sprintf(&p, "tx_queue_%u_%s", i,
++				ethtool_sprintf(&p, "tx%u_%s", i,
+ 						virtnet_sq_stats_desc[j].desc);
+ 		}
+ 		break;
 -- 
 2.32.0.3.g01195cf9f
 
