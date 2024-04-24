@@ -1,156 +1,145 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C890129A9C
-	for <bpf@vger.kernel.org>; Wed, 24 Apr 2024 03:55:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D34D154BEB
+	for <bpf@vger.kernel.org>; Wed, 24 Apr 2024 05:12:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713930940; cv=none; b=oARvgtV5ULXylLte0kzdfLZ/sPtsCdSQrroOBaR83Y01CJBxyFhetDToV0l46OSjAqave7NqdMeOGKoxL1CU8lwofxwCTQ+F3uRElRz9qQorK1NwZlTzZfTgzWmXVeRCQjOxlYi9wYVzHUBr2qk6aPRB0+UWtESOtRXc3exEkbs=
+	t=1713935530; cv=none; b=sZlbzo6SbuNWNqiOwZqjDTswYVKc95xRY1lnhSyzr+co980pOEPpbgXF7/NMBW3gqbVXrZmb2QnfbNuTtniSiSQafZpV4JfQGb41e+GQ4/a6MYUK8/xr+UHOXwXcVxdz8g063uN/nxOc7N3exLTCKqO/+r4oKSvVMJOz0E9UBLQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713930940; c=relaxed/simple;
-	bh=KKcgxasDyJFXqv/hgRIywTzUidpY5yGFOfGd8BXBmas=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=CSeXMOwJbfsJ1vsLvbdP2a7887f/7qnC3HjT+7OkFTGLvg+8HpTBDxBq5+4u37UnMJWeD0NNr5/7JqxfctLeX+XBDczrdCJAipNq6Mwm7jQNZupccdoL2bYHGKjJjW+jKiDj36xwCqckZSVL0qaDUUEfdaQocHj9U1uwBM4Ef3o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=RSC4oSBq; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1713935530; c=relaxed/simple;
+	bh=oigdUpyDyXGEsznwqLeXQmV6wBROE5hyxlqkdeJIZ9Q=;
+	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
+	 Mime-Version:Content-Type; b=pvsdaK+bXUQVcGnE8DhwCrIyTv3e15E1W60mZEd9BNpinKQUNk2dWjLZSAmfixEqcQa2FLmS65q3QJwZkAcbOqmJmH4tC2+JQVM82ETZLqxG8G9sfDHGb0Hzcglv8YvD40unHcL7sWBFkF/Or2QzSxA65uy82XPSQ6h/SboH7a8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OmlF+96g; arc=none smtp.client-ip=209.85.214.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="RSC4oSBq"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1713930938;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=3pzndRW90+wqE5EwVxS+cBCK5mYVppdbl6Yx4ow+tjY=;
-	b=RSC4oSBqXty50/kp0tewl1tu8bXMjKWtLu3BdvjkGA84D1ZU0KxBjw0axBbDxcfElvNqQj
-	qwwvkllkgvUlKf/4KcxmKfpDu9ED/yfyRhNR6lAoMHiheDJDz+a32C0ciDj++Vl21j1LZ7
-	vaycnXbR8q507N7IMw8QS5mZOlTCHGY=
-Received: from mail-pl1-f200.google.com (mail-pl1-f200.google.com
- [209.85.214.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-55-_UWV7gVeO5mrgblWZC-OCg-1; Tue, 23 Apr 2024 23:55:36 -0400
-X-MC-Unique: _UWV7gVeO5mrgblWZC-OCg-1
-Received: by mail-pl1-f200.google.com with SMTP id d9443c01a7336-1e851c0204aso79019215ad.3
-        for <bpf@vger.kernel.org>; Tue, 23 Apr 2024 20:55:36 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OmlF+96g"
+Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-1e4266673bbso58308335ad.2
+        for <bpf@vger.kernel.org>; Tue, 23 Apr 2024 22:12:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1713935529; x=1714540329; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=q0kS4SbVAyAukHq+C3RgQ7YfBlnAL0irPtThbDywcDw=;
+        b=OmlF+96g8ImvD6Z/zPjWjox0qDH/ho4+DWKtHjYz3b2JeDmyrpnidyPx5noTJRSKhl
+         VrBa71ykHcBZe03iOrEFOYf+x6KcfYwc7pOSxQhlgUDY5bTC9hlvYJJk5YIQEiwlXcG3
+         IMabuiYYX+uq44K2EXxbGAh954Txr6BjYI47KFZXUrOOWuaLwQgNWWmmqSKA8/8Kd6cy
+         A/SSd/ftafAnb+xb03RK5TsKvFe0UNFbUxq+qfKPuuRuf8cszS5d2clPvFRZPIyoIRDj
+         1DY5RcxLAkVbpjd0AACXQswqKU5jDV3LSJPiKySoPioKnXDnaWHCU6Mr05SX398p8K8p
+         MW0Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713930935; x=1714535735;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=3pzndRW90+wqE5EwVxS+cBCK5mYVppdbl6Yx4ow+tjY=;
-        b=gSHziqyFP6Vm075Aq6LSkVXWsxVMowefS3m3sXDJeZdBEtLk45B5a7FSlxF4x9MWHH
-         3dRB0K2VNT2Hq7Ik4rtrTbN7IO0XW0RkB6Xj36mOV+wNDLOYQfxlNWHn9/3sWtbwgtan
-         w0lCWC09CcJTxtGS9QaGydWa2fJGjPqZqj2OCMAKErzAByypbpqXmLZcl6wDG7YRvrWN
-         DCxDaYR+dMDWRwRz/uT1+ejR2FhnFaxdwbclTK0ic7GGssEVDuEi/MSV0L2HQu9ZNLPT
-         SOKILKiORNdffRAE0GQD8q1SBB/S0yxyXxpRe5JXyhVh1/o3MzlainLY6tlRgZWGirEt
-         4gXg==
-X-Forwarded-Encrypted: i=1; AJvYcCUFkzV1yhaw2CtrBhKjY2lchVPqcklJuo9qZDARHbhe9zxPj9+mrPEN/XI4Iv8gWQ8OJz3DktekO2HLjhaD2VrK4pd5
-X-Gm-Message-State: AOJu0YzBvpBG9/C4YLJDEAbmXDTgJGzAAFxfnemsVi+9i9vi6shbOXj2
-	EZlxrcP6XKquB4eqOVfHx0h3+pI8Rdr1ZZnpgWEJ5YH+ljyPBQI5Q7GDNe/hqcOK+YxvFcCc6RG
-	gw1GgIFzFTKferD5Q30f3dpfI58xgbJcyhvHpW5gNq0/YKEdcMQ5MmFKHKCVySvP5CUZQsmAQOU
-	YMJQmd3A2Lt6SKxt0urgyBjGfH
-X-Received: by 2002:a17:902:9897:b0:1e2:82fc:bf71 with SMTP id s23-20020a170902989700b001e282fcbf71mr1296396plp.22.1713930935681;
-        Tue, 23 Apr 2024 20:55:35 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IGgSdtzrZUnBDlB/5t9CYlcaU1yJjdPtWZ7q9A2G3rYLw3S9Y2o9HHDb07alKkZ1waM2Madn5EeKEjJMNpAHkY=
-X-Received: by 2002:a17:902:9897:b0:1e2:82fc:bf71 with SMTP id
- s23-20020a170902989700b001e282fcbf71mr1296382plp.22.1713930935374; Tue, 23
- Apr 2024 20:55:35 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1713935529; x=1714540329;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=q0kS4SbVAyAukHq+C3RgQ7YfBlnAL0irPtThbDywcDw=;
+        b=RGQp66hNdr1T4BnXsSwclx6NsGMP8YRm3NA8zTVtXHrr/aUGtib6MnrTISqj+r+YCf
+         8H6kEs1cmxAaRnMxQVA6QIvlHkcImAbFeqC+E8b3bjhnR2xOV1tKYGNT+ZXfKT38zU1h
+         6fq1maAroQFHXrd3pmtY+fSFFAoW1zc/M9MJc7So8m5v+ccgnKiM0Y/+e0Q6ZTyRT0he
+         aCZWwB4HERki/sXBJt/80EmtYZhhAx7+N/yBwFvXHUbN0bGeWQi5fyA6pUkQeNpWbAvK
+         wMaTOydfWZLIY11nQcgtNmApXsuBFI06pTDZex24s/emI38haH2578mEicaYxFXJeDtl
+         r8CQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVhkykrb0d3XHROOIYcDDEU+RmVFH/OPglC2vJTUbITS8Ziq+9eJtCdU2XBcB8Svq7ii9Z3bd1HtefyMt5HgpFBRSUJ
+X-Gm-Message-State: AOJu0YzDQLIeDcaZ7YNvW9uCfrq7b4c6eZhfJqenHPSZAFM0u2VVaILU
+	39YvPJpVzS7qc5crNppbesG6iA0pX40dMfOcHsVZgxkZmPtLPKO5
+X-Google-Smtp-Source: AGHT+IHa9T9tfgx95++vBjhRcqPgd8kkq9Fvz9S6JkXaopJX7hRXob2Fw9RvT9C3IxEjzxErE+OWdQ==
+X-Received: by 2002:a17:902:c40f:b0:1e5:5ccd:30e1 with SMTP id k15-20020a170902c40f00b001e55ccd30e1mr1359938plk.65.1713935528533;
+        Tue, 23 Apr 2024 22:12:08 -0700 (PDT)
+Received: from localhost ([98.97.33.87])
+        by smtp.gmail.com with ESMTPSA id f12-20020a170902ce8c00b001e1071cf0bbsm10965631plg.302.2024.04.23.22.12.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 23 Apr 2024 22:12:08 -0700 (PDT)
+Date: Tue, 23 Apr 2024 22:12:07 -0700
+From: John Fastabend <john.fastabend@gmail.com>
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>, 
+ Jiri Olsa <jolsa@kernel.org>
+Cc: Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, 
+ Andrii Nakryiko <andrii@kernel.org>, 
+ bpf@vger.kernel.org, 
+ Martin KaFai Lau <kafai@fb.com>, 
+ Song Liu <songliubraving@fb.com>, 
+ Yonghong Song <yhs@fb.com>, 
+ John Fastabend <john.fastabend@gmail.com>, 
+ KP Singh <kpsingh@chromium.org>, 
+ Stanislav Fomichev <sdf@google.com>, 
+ Hao Luo <haoluo@google.com>, 
+ Viktor Malik <vmalik@redhat.com>, 
+ "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+Message-ID: <662894a735565_61405208b7@john.notmuch>
+In-Reply-To: <CAEf4BzbAjGcrqLi4+rjU5JALHPF5CjAww4fexassr3vWe4FaZw@mail.gmail.com>
+References: <20240422121241.1307168-1-jolsa@kernel.org>
+ <CAEf4BzbAjGcrqLi4+rjU5JALHPF5CjAww4fexassr3vWe4FaZw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 0/7] bpf: Introduce kprobe_multi session attach
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20240423113141.1752-1-xuanzhuo@linux.alibaba.com> <20240423113141.1752-7-xuanzhuo@linux.alibaba.com>
-In-Reply-To: <20240423113141.1752-7-xuanzhuo@linux.alibaba.com>
-From: Jason Wang <jasowang@redhat.com>
-Date: Wed, 24 Apr 2024 11:55:24 +0800
-Message-ID: <CACGkMEvoOqcazXxAt6KwShwJxtn=Z-sF7-yZr+JcUGL3Vk=S7g@mail.gmail.com>
-Subject: Re: [PATCH net-next v6 6/8] virtio_net: rename stat tx_timeout to timeout
-To: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-Cc: netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	"Michael S. Tsirkin" <mst@redhat.com>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Jesper Dangaard Brouer <hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>, 
-	Stanislav Fomichev <sdf@google.com>, Amritha Nambiar <amritha.nambiar@intel.com>, 
-	Larysa Zaremba <larysa.zaremba@intel.com>, Sridhar Samudrala <sridhar.samudrala@intel.com>, 
-	Maciej Fijalkowski <maciej.fijalkowski@intel.com>, virtualization@lists.linux.dev, 
-	bpf@vger.kernel.org, Jiri Pirko <jiri@nvidia.com>
-Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Apr 23, 2024 at 7:32=E2=80=AFPM Xuan Zhuo <xuanzhuo@linux.alibaba.c=
-om> wrote:
->
-> Now, we have this:
->
->     tx_queue_0_tx_timeouts
->
-> This is used to record the tx schedule timeout.
-> But this has two "tx". I think the below is enough.
->
->     tx_queue_0_timeouts
->
-> So I rename this field.
->
-> Signed-off-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-> Reviewed-by: Jiri Pirko <jiri@nvidia.com>
-> ---
->  drivers/net/virtio_net.c | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
->
-> diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
-> index 8a4d22f5f5b1..51ce2308f4f5 100644
-> --- a/drivers/net/virtio_net.c
-> +++ b/drivers/net/virtio_net.c
-> @@ -87,7 +87,7 @@ struct virtnet_sq_stats {
->         u64_stats_t xdp_tx;
->         u64_stats_t xdp_tx_drops;
->         u64_stats_t kicks;
-> -       u64_stats_t tx_timeouts;
-> +       u64_stats_t timeouts;
->  };
->
->  struct virtnet_rq_stats {
-> @@ -111,7 +111,7 @@ static const struct virtnet_stat_desc virtnet_sq_stat=
-s_desc[] =3D {
->         VIRTNET_SQ_STAT("xdp_tx",       xdp_tx),
->         VIRTNET_SQ_STAT("xdp_tx_drops", xdp_tx_drops),
->         VIRTNET_SQ_STAT("kicks",        kicks),
-> -       VIRTNET_SQ_STAT("tx_timeouts",  tx_timeouts),
-> +       VIRTNET_SQ_STAT("timeouts",     timeouts),
+Andrii Nakryiko wrote:
+> On Mon, Apr 22, 2024 at 5:12=E2=80=AFAM Jiri Olsa <jolsa@kernel.org> wr=
+ote:
+> >
+> > hi,
+> > adding support to attach kprobe program through kprobe_multi link
+> > in a session mode, which means:
+> >   - program is attached to both function entry and return
+> >   - entry program can decided if the return program gets executed
+> >   - entry program can share u64 cookie value with return program
+> >
+> > The initial RFC for this was posted in [0] and later discussed more
+> > and which ended up with the session idea [1]
+> >
+> > Having entry together with return probe for given function is common
+> > use case for tetragon, bpftrace and most likely for others.
+> >
+> > At the moment if we want both entry and return probe to execute bpf
+> > program we need to create two (entry and return probe) links. The lin=
+k
+> > for return probe creates extra entry probe to setup the return probe.=
 
-Not sure if it is too late to do this as it is noticeable by the userspace.
+> > The extra entry probe execution could be omitted if we had a way to
+> > use just single link for both entry and exit probe.
+> >
+> > In addition the possibility to control the return program execution
+> > and sharing data within entry and return probe allows for other use
+> > cases.
+> >
+> > Changes from last RFC version [1]:
+> >   - changed wrapper name to session
+> >   - changed flag to adding new attach type for session:
+> >       BPF_TRACE_KPROBE_MULTI_SESSION
+> >     it's more convenient wrt filtering on kfuncs setup and seems
+> >     to make more sense alltogether
+> >   - renamed bpf_kprobe_multi_is_return to bpf_session_is_return
+> >   - added bpf_session_cookie kfunc, which actually already works
+> >     on current fprobe implementation (not just fprobe-on-fgraph)
+> >     and it provides the shared data between entry/return probes [Andr=
+ii]
+> >
+> >     we could actually make the cookie size configurable.. thoughts?
+> >     (it's 8 bytes atm)
+> >
+> =
 
-Thanks
+> Attach cookie is fixed at 8 bytes and that works pretty well. I think
+> beyond 8 bytes there is no clearly "right" size. A common case would
+> be to capture arguments in kprobe to handle in kretprobe, and there
+> you might need at least 40+ bytes, which seems wasteful. So I want to
+> say that it's probably good to hard-code it to just 8 bytes (enough to
+> store timestamp and you can even fit in some flags if you reduce
+> timestamp precision from nanoseconds to microseconds), or use it as an
+> index into array or some other data structure.
+> =
 
->  };
->
->  static const struct virtnet_stat_desc virtnet_rq_stats_desc[] =3D {
-> @@ -2691,7 +2691,7 @@ static void virtnet_stats(struct net_device *dev,
->                         start =3D u64_stats_fetch_begin(&sq->stats.syncp)=
-;
->                         tpackets =3D u64_stats_read(&sq->stats.packets);
->                         tbytes   =3D u64_stats_read(&sq->stats.bytes);
-> -                       terrors  =3D u64_stats_read(&sq->stats.tx_timeout=
-s);
-> +                       terrors  =3D u64_stats_read(&sq->stats.timeouts);
->                 } while (u64_stats_fetch_retry(&sq->stats.syncp, start));
->
->                 do {
-> @@ -4639,7 +4639,7 @@ static void virtnet_tx_timeout(struct net_device *d=
-ev, unsigned int txqueue)
->         struct netdev_queue *txq =3D netdev_get_tx_queue(dev, txqueue);
->
->         u64_stats_update_begin(&sq->stats.syncp);
-> -       u64_stats_inc(&sq->stats.tx_timeouts);
-> +       u64_stats_inc(&sq->stats.timeouts);
->         u64_stats_update_end(&sq->stats.syncp);
->
->         netdev_err(dev, "TX timeout on queue: %u, sq: %s, vq: 0x%x, name:=
- %s, %u usecs ago\n",
-> --
-> 2.32.0.3.g01195cf9f
->
+> let's keep it simple?
 
++1 for keeping it simple. Use it as a key if you need more.=
