@@ -1,245 +1,114 @@
-Received: from smtp.forwardemail.net (smtp.forwardemail.net [167.172.40.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from wfhigh5-smtp.messagingengine.com (wfhigh5-smtp.messagingengine.com [64.147.123.156])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA35613B5A6
-	for <bpf@vger.kernel.org>; Wed, 24 Apr 2024 03:22:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=167.172.40.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD6A413777A;
+	Wed, 24 Apr 2024 03:32:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=64.147.123.156
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713928964; cv=none; b=aTVPHMb2B/+72oMzdXwHs5hQcWt/TTMkuiv2iTcJRjS6Ng0Zbsn/r3cZ8o8o+gqx8hCUvP6MaSxC/pyIKo77h9a3rkZ+HwmKvwe+DhsSgtfEFwFE+/jWlQeTw4qL0ZZ3qV0nHI+VirTwrs+SDOa7A0fjrLgccn43FPeItigFdAw=
+	t=1713929570; cv=none; b=dPFVeuh5GOWHIQyDmResMpwk48eQZ23TYCJIkA/lXY4wezr/ZxqG46irDmegO/VFeriT0OFP3wJig8WP41WC+t3sdOhv3f2AgpZ41T8Au5baKQbaLvXj0KJ1x3aZQNxodCUKojF4u1ZJJiVumffYG+OvUxw8C3DddbZ333a84js=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713928964; c=relaxed/simple;
-	bh=ixjUJXw4nQE3HB83UKcfDymblYLFDl/G8ayYXzBTTRo=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=jqK7pxhQ5gejOMJN+TmaiQ3m0CE9H+QLqQS0TDRjcl9tlYfC8xPCUd+aiNEYCGcxH8FbpMN81UFFRj7mH1kiOaw+tetny+gadIqPxqto/gq65cMNgCoZEsuencUn9p/wLGvDL/r3zPklArB14hugK72yeu4LB7KlunLztO3Sbbc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=faucet.nz; spf=pass smtp.mailfrom=fe-bounces.faucet.nz; dkim=pass (1024-bit key) header.d=faucet.nz header.i=@faucet.nz header.b=VHezlE7R; arc=none smtp.client-ip=167.172.40.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=faucet.nz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fe-bounces.faucet.nz
+	s=arc-20240116; t=1713929570; c=relaxed/simple;
+	bh=Khjus+HfzxaJppH7X7Pk3KpV1jmAMizV4V6024DU/Uc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=j76cv26stb4bxKQF0vwQjzDMABlBTpj8Gpl3GOOUbURzSfZwea2xFQVpJcVapwCFp1uznBD3kUo/E/qmikcCIRrIPdQRN5X7kZg4tEQQfI+QUYYSSBJT0Pf3YNAmhCkMPSmgIHoHaEjvomY4VdEK/hpkNsKXLpgLK58J4LBkY3k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dxuuu.xyz; spf=pass smtp.mailfrom=dxuuu.xyz; dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b=jn1DlBWa; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=cpKb9fM2; arc=none smtp.client-ip=64.147.123.156
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dxuuu.xyz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dxuuu.xyz
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=faucet.nz header.i=@faucet.nz header.b="VHezlE7R"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=faucet.nz;
- h=Content-Transfer-Encoding: MIME-Version: Message-Id: Date: Subject: Cc:
- To: From; q=dns/txt; s=fe-4ed8c67516; t=1713928932;
- bh=dctxQUTxOdRJTH9kP5hwSd0PPiNt9bq+Uh5QaMkxLw8=;
- b=VHezlE7R1kC3pdK6p4CMWa6cF8ILZARCUyg614Ab20diWTEk/MJp0dprKoDONBYyFHkAfitFK
- p+LrgOftiTjo0zu2HvgVNBWlhM5DvLxzkWwILekuiD2oYDWZIqvbICL41FXrn/VvxNrUobYXSET
- ISbyZESxYq+I2u/EbqeJpuA=
-From: Brad Cowie <brad@faucet.nz>
-To: bpf@vger.kernel.org, martin.lau@linux.dev
-Cc: lorenzo@kernel.org, memxor@gmail.com, pablo@netfilter.org,
- davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com, ast@kernel.org,
- daniel@iogearbox.net, andrii@kernel.org, song@kernel.org,
- john.fastabend@gmail.com, sdf@google.com, jolsa@kernel.org,
- netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
- netdev@vger.kernel.org, Brad Cowie <brad@faucet.nz>
-Subject: [PATCH bpf-next v2 1/2] net: netfilter: Make ct zone opts configurable for bpf ct helpers
-Date: Wed, 24 Apr 2024 15:00:26 +1200
-Message-Id: <20240424030027.3932184-1-brad@faucet.nz>
-X-Mailer: git-send-email 2.34.1
+	dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b="jn1DlBWa";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="cpKb9fM2"
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+	by mailfhigh.west.internal (Postfix) with ESMTP id 3F78F1800102;
+	Tue, 23 Apr 2024 23:32:47 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute2.internal (MEProxy); Tue, 23 Apr 2024 23:32:47 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
+	:cc:content-type:content-type:date:date:from:from:in-reply-to
+	:in-reply-to:message-id:mime-version:references:reply-to:subject
+	:subject:to:to; s=fm2; t=1713929565; x=1714015965; bh=2u7QLK6iLE
+	fgIF/y1f/4W+S7yA8t2QuIHCWyyrdNLQQ=; b=jn1DlBWavDnu0mjYMMvnVLH87R
+	wJYK9qL1kQ2tc0/E417m0d1nPxoVP+6qDGjq/ucR+30/gdQzrOgxubeLE2w1xe2T
+	DStvW9iWvg4UtAdxUodk9tDkqkCfKrVdEOk3LCMVRNNGKB6V+K78uOQfgqcRn96n
+	HMobVGJICB1ui3djy4UROcH1CBkr+r48fdAk6sywB7fYtrLQeGm1bLeMBZkYbS+6
+	tbJURxCAlYcTOUT1AuPj1K7m8e74qORslurGsKbJ0YwkmpwoYzqL4tee3nONE1+M
+	h3asJVxVw0pV1oRxbPVhXG7tYT+/5V6umpXe/gTw5sqt1qt808IVGJ+9l8FA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+	fm3; t=1713929565; x=1714015965; bh=2u7QLK6iLEfgIF/y1f/4W+S7yA8t
+	2QuIHCWyyrdNLQQ=; b=cpKb9fM2O8JleeFZNt+uLRgx0AU9lFIn0K6xoMLifW0F
+	9KFWO7Goz/CnFa/qiM3UIgYOL4lz+ljf8WDDDlPkvmU603jdW/LOUSvg1GmPOea7
+	TAuZgA1dp9wC7/bLslqGVLKE9dV9PTJz/M997NR3J31f1v3sWva5LkqNhxHihDPu
+	Aju/oJW+7oAQU5I9mqxQn3JipbzvJjbc1/A+PxbHAHZkqLHq4d54UkvoYPy0P/Do
+	s7tZGbZQqw/k+Dl01EhhCD7YkT8Igwklg4j0zza8bJyFsutJSDe/siEfUCKZBU3U
+	Oc9oEkD7m8wzk4PFajQI1vGhiSSYWUt8+AdqoRelxQ==
+X-ME-Sender: <xms:XX0oZreXQoes74M0gR1wZZEwsaY-7OBbu-AmqXUSKJg26HozOcs69A>
+    <xme:XX0oZhMfU0Lmwx63uSn90uNLU79rmmjufhIFJhvHY9RsIKUVr1N7bld8Kwae1EaI3
+    32IDgyuqn3RE-qUTA>
+X-ME-Received: <xmr:XX0oZkilMwLGBuLpOAwRIaz4yBVBkhOagSC701p46CSExUNah5GPhmv_GwmdCvg7Wnl0BM2Rr2aVKdmMBQawicwM1sYB2RPcPzKz>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrudelvddgieelucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    gfrhhlucfvnfffucdljedtmdenucfjughrpeffhffvvefukfhfgggtuggjsehttdfstddt
+    tddvnecuhfhrohhmpeffrghnihgvlhcuighuuceougiguhesugiguhhuuhdrgiihiieqne
+    cuggftrfgrthhtvghrnhepvdefkeetuddufeeigedtheefffekuedukeehudffudfffffg
+    geeitdetgfdvhfdvnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilh
+    hfrhhomhepugiguhesugiguhhuuhdrgiihii
+X-ME-Proxy: <xmx:XX0oZs97v2mZI6KLTWkqQObrXEa2v-Ap5aOjW6EMZb6gYzHlVBQnAQ>
+    <xmx:XX0oZnt12_AR-UT3D7KYYactfKZPUzUv3v14Fv2mSa9DRrjV9RJ7BA>
+    <xmx:XX0oZrEjSDExO5gMIqpxa-m76r2j3LYzymNyqadgnVMKF6Znal632Q>
+    <xmx:XX0oZuPJkaOOrYmhHBSMRxr1Hv3RvPeC7MbF08_6p3cQpiHfLP1CkQ>
+    <xmx:XX0oZg-UXqT4ZgKf4GAhJMPxcl1tqz9jQvLB4lyOrd4NgJP-koM3zS01>
+Feedback-ID: i6a694271:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 23 Apr 2024 23:32:44 -0400 (EDT)
+Date: Tue, 23 Apr 2024 21:32:43 -0600
+From: Daniel Xu <dxu@dxuuu.xyz>
+To: Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc: Alan Maguire <alan.maguire@oracle.com>, dwarves@vger.kernel.org, 
+	andrii.nakryiko@gmail.com, jolsa@kernel.org, bpf@vger.kernel.org, eddyz87@gmail.com
+Subject: Re: [PATCH dwarves 0/2] replace --btf_features="all" with "default"
+Message-ID: <hpokpgpw6aruujyis4bdgymc4jsucegwoos2kpsj5ty2i2jnjk@mquc3dvsor33>
+References: <20240423160200.3139270-1-alan.maguire@oracle.com>
+ <Zif1ysMXHRd01ovg@x1>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Report-Abuse-To: abuse@forwardemail.net
-X-Report-Abuse: abuse@forwardemail.net
-X-Complaints-To: abuse@forwardemail.net
-X-ForwardEmail-Version: 0.4.40
-X-ForwardEmail-Sender: rfc822; brad@faucet.nz, smtp.forwardemail.net,
- 167.172.40.54
-X-ForwardEmail-ID: 662875fefb9de1ab903e411e
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Zif1ysMXHRd01ovg@x1>
 
-Add ct zone id/flags/dir to bpf_ct_opts so that arbitrary ct zones
-can be used for xdp/tc bpf ct helper functions bpf_{xdp,skb}_ct_alloc
-and bpf_{xdp,skb}_ct_lookup.
+On Tue, Apr 23, 2024 at 02:54:18PM -0300, Arnaldo Carvalho de Melo wrote:
+> On Tue, Apr 23, 2024 at 05:01:58PM +0100, Alan Maguire wrote:
+> > Use of "all" in --btf_features is confusing; use the "default" keyword
+> > to request default set of BTF features for encoding instead.  Then
+> > non-standard features can be added in a more natural way; i.e.
+> > 
+> > --btf_features=default,reproducible_build
+> > 
+> > Patch 1 makes this change in pahole.c and documentation.
+> > Patch 2 adjusts the reproducible build selftest to use "default"
+> > instead of "all".
+> > 
+> > This series is applicable on the "next" branch.
+> 
+> Applied to the next branch, I also refreshed the patches adding the
+> alternative + syntax, its basically a one liner :-)
+> 
+> I'll leave it there for a day for the libbpf CI to test with it and then
+> will move all to 'master'.
+> 
+> The first patch of Daniel's series got merged as well, it would be good
+> to refresh the other two patches on top of what we have in 'next' now,
+> Daniel?
 
-Signed-off-by: Brad Cowie <brad@faucet.nz>
----
-v1 -> v2:
-  - Make ct zone flags/dir configurable
----
- net/netfilter/nf_conntrack_bpf.c | 97 ++++++++++++++++++++------------
- 1 file changed, 61 insertions(+), 36 deletions(-)
+Apologies for the delay - it's top of my todo list now. I will rebase
+with changes in the morning.
 
-diff --git a/net/netfilter/nf_conntrack_bpf.c b/net/netfilter/nf_conntrack_bpf.c
-index d2492d050fe6..67f73b57089b 100644
---- a/net/netfilter/nf_conntrack_bpf.c
-+++ b/net/netfilter/nf_conntrack_bpf.c
-@@ -21,41 +21,44 @@
- /* bpf_ct_opts - Options for CT lookup helpers
-  *
-  * Members:
-- * @netns_id   - Specify the network namespace for lookup
-- *		 Values:
-- *		   BPF_F_CURRENT_NETNS (-1)
-- *		     Use namespace associated with ctx (xdp_md, __sk_buff)
-- *		   [0, S32_MAX]
-- *		     Network Namespace ID
-- * @error      - Out parameter, set for any errors encountered
-- *		 Values:
-- *		   -EINVAL - Passed NULL for bpf_tuple pointer
-- *		   -EINVAL - opts->reserved is not 0
-- *		   -EINVAL - netns_id is less than -1
-- *		   -EINVAL - opts__sz isn't NF_BPF_CT_OPTS_SZ (12)
-- *		   -EPROTO - l4proto isn't one of IPPROTO_TCP or IPPROTO_UDP
-- *		   -ENONET - No network namespace found for netns_id
-- *		   -ENOENT - Conntrack lookup could not find entry for tuple
-- *		   -EAFNOSUPPORT - tuple__sz isn't one of sizeof(tuple->ipv4)
-- *				   or sizeof(tuple->ipv6)
-- * @l4proto    - Layer 4 protocol
-- *		 Values:
-- *		   IPPROTO_TCP, IPPROTO_UDP
-- * @dir:       - connection tracking tuple direction.
-- * @reserved   - Reserved member, will be reused for more options in future
-- *		 Values:
-- *		   0
-+ * @netns_id	  - Specify the network namespace for lookup
-+ *		    Values:
-+ *		      BPF_F_CURRENT_NETNS (-1)
-+ *		        Use namespace associated with ctx (xdp_md, __sk_buff)
-+ *		      [0, S32_MAX]
-+ *		        Network Namespace ID
-+ * @error	  - Out parameter, set for any errors encountered
-+ *		    Values:
-+ *		      -EINVAL - Passed NULL for bpf_tuple pointer
-+ *		      -EINVAL - netns_id is less than -1
-+ *		      -EINVAL - opts__sz isn't NF_BPF_CT_OPTS_SZ (16)
-+ *			        or NF_BPF_CT_OPTS_OLD_SZ (12)
-+ *		      -EPROTO - l4proto isn't one of IPPROTO_TCP or IPPROTO_UDP
-+ *		      -ENONET - No network namespace found for netns_id
-+ *		      -ENOENT - Conntrack lookup could not find entry for tuple
-+ *		      -EAFNOSUPPORT - tuple__sz isn't one of sizeof(tuple->ipv4)
-+ *				      or sizeof(tuple->ipv6)
-+ * @l4proto	  - Layer 4 protocol
-+ *		    Values:
-+ *		      IPPROTO_TCP, IPPROTO_UDP
-+ * @dir:	  - connection tracking tuple direction.
-+ * @ct_zone_id	  - connection tracking zone id.
-+ * @ct_zone_flags - connection tracking zone flags.
-+ * @ct_zone_dir   - connection tracking zone direction.
-  */
- struct bpf_ct_opts {
- 	s32 netns_id;
- 	s32 error;
- 	u8 l4proto;
- 	u8 dir;
--	u8 reserved[2];
-+	u16 ct_zone_id;
-+	u8 ct_zone_flags;
-+	u8 ct_zone_dir;
- };
- 
- enum {
--	NF_BPF_CT_OPTS_SZ = 12,
-+	NF_BPF_CT_OPTS_SZ = 16,
-+	NF_BPF_CT_OPTS_OLD_SZ = 12,
- };
- 
- static int bpf_nf_ct_tuple_parse(struct bpf_sock_tuple *bpf_tuple,
-@@ -104,11 +107,13 @@ __bpf_nf_ct_alloc_entry(struct net *net, struct bpf_sock_tuple *bpf_tuple,
- 			u32 timeout)
- {
- 	struct nf_conntrack_tuple otuple, rtuple;
-+	struct nf_conntrack_zone ct_zone;
- 	struct nf_conn *ct;
- 	int err;
- 
--	if (!opts || !bpf_tuple || opts->reserved[0] || opts->reserved[1] ||
--	    opts_len != NF_BPF_CT_OPTS_SZ)
-+	if (!opts || !bpf_tuple)
-+		return ERR_PTR(-EINVAL);
-+	if (!(opts_len == NF_BPF_CT_OPTS_SZ || opts_len == NF_BPF_CT_OPTS_OLD_SZ))
- 		return ERR_PTR(-EINVAL);
- 
- 	if (unlikely(opts->netns_id < BPF_F_CURRENT_NETNS))
-@@ -130,7 +135,16 @@ __bpf_nf_ct_alloc_entry(struct net *net, struct bpf_sock_tuple *bpf_tuple,
- 			return ERR_PTR(-ENONET);
- 	}
- 
--	ct = nf_conntrack_alloc(net, &nf_ct_zone_dflt, &otuple, &rtuple,
-+	if (opts_len == NF_BPF_CT_OPTS_SZ) {
-+		if (opts->ct_zone_dir == 0)
-+			opts->ct_zone_dir = NF_CT_DEFAULT_ZONE_DIR;
-+		nf_ct_zone_init(&ct_zone,
-+				opts->ct_zone_id, opts->ct_zone_dir, opts->ct_zone_flags);
-+	} else {
-+		ct_zone = nf_ct_zone_dflt;
-+	}
-+
-+	ct = nf_conntrack_alloc(net, &ct_zone, &otuple, &rtuple,
- 				GFP_ATOMIC);
- 	if (IS_ERR(ct))
- 		goto out;
-@@ -152,11 +166,13 @@ static struct nf_conn *__bpf_nf_ct_lookup(struct net *net,
- {
- 	struct nf_conntrack_tuple_hash *hash;
- 	struct nf_conntrack_tuple tuple;
-+	struct nf_conntrack_zone ct_zone;
- 	struct nf_conn *ct;
- 	int err;
- 
--	if (!opts || !bpf_tuple || opts->reserved[0] || opts->reserved[1] ||
--	    opts_len != NF_BPF_CT_OPTS_SZ)
-+	if (!opts || !bpf_tuple)
-+		return ERR_PTR(-EINVAL);
-+	if (!(opts_len == NF_BPF_CT_OPTS_SZ || opts_len == NF_BPF_CT_OPTS_OLD_SZ))
- 		return ERR_PTR(-EINVAL);
- 	if (unlikely(opts->l4proto != IPPROTO_TCP && opts->l4proto != IPPROTO_UDP))
- 		return ERR_PTR(-EPROTO);
-@@ -174,7 +190,16 @@ static struct nf_conn *__bpf_nf_ct_lookup(struct net *net,
- 			return ERR_PTR(-ENONET);
- 	}
- 
--	hash = nf_conntrack_find_get(net, &nf_ct_zone_dflt, &tuple);
-+	if (opts_len == NF_BPF_CT_OPTS_SZ) {
-+		if (opts->ct_zone_dir == 0)
-+			opts->ct_zone_dir = NF_CT_DEFAULT_ZONE_DIR;
-+		nf_ct_zone_init(&ct_zone,
-+				opts->ct_zone_id, opts->ct_zone_dir, opts->ct_zone_flags);
-+	} else {
-+		ct_zone = nf_ct_zone_dflt;
-+	}
-+
-+	hash = nf_conntrack_find_get(net, &ct_zone, &tuple);
- 	if (opts->netns_id >= 0)
- 		put_net(net);
- 	if (!hash)
-@@ -245,7 +270,7 @@ __bpf_kfunc_start_defs();
-  * @opts	- Additional options for allocation (documented above)
-  *		    Cannot be NULL
-  * @opts__sz	- Length of the bpf_ct_opts structure
-- *		    Must be NF_BPF_CT_OPTS_SZ (12)
-+ *		    Must be NF_BPF_CT_OPTS_SZ (16)
-  */
- __bpf_kfunc struct nf_conn___init *
- bpf_xdp_ct_alloc(struct xdp_md *xdp_ctx, struct bpf_sock_tuple *bpf_tuple,
-@@ -279,7 +304,7 @@ bpf_xdp_ct_alloc(struct xdp_md *xdp_ctx, struct bpf_sock_tuple *bpf_tuple,
-  * @opts	- Additional options for lookup (documented above)
-  *		    Cannot be NULL
-  * @opts__sz	- Length of the bpf_ct_opts structure
-- *		    Must be NF_BPF_CT_OPTS_SZ (12)
-+ *		    Must be NF_BPF_CT_OPTS_SZ (16)
-  */
- __bpf_kfunc struct nf_conn *
- bpf_xdp_ct_lookup(struct xdp_md *xdp_ctx, struct bpf_sock_tuple *bpf_tuple,
-@@ -312,7 +337,7 @@ bpf_xdp_ct_lookup(struct xdp_md *xdp_ctx, struct bpf_sock_tuple *bpf_tuple,
-  * @opts	- Additional options for allocation (documented above)
-  *		    Cannot be NULL
-  * @opts__sz	- Length of the bpf_ct_opts structure
-- *		    Must be NF_BPF_CT_OPTS_SZ (12)
-+ *		    Must be NF_BPF_CT_OPTS_SZ (16)
-  */
- __bpf_kfunc struct nf_conn___init *
- bpf_skb_ct_alloc(struct __sk_buff *skb_ctx, struct bpf_sock_tuple *bpf_tuple,
-@@ -347,7 +372,7 @@ bpf_skb_ct_alloc(struct __sk_buff *skb_ctx, struct bpf_sock_tuple *bpf_tuple,
-  * @opts	- Additional options for lookup (documented above)
-  *		    Cannot be NULL
-  * @opts__sz	- Length of the bpf_ct_opts structure
-- *		    Must be NF_BPF_CT_OPTS_SZ (12)
-+ *		    Must be NF_BPF_CT_OPTS_SZ (16)
-  */
- __bpf_kfunc struct nf_conn *
- bpf_skb_ct_lookup(struct __sk_buff *skb_ctx, struct bpf_sock_tuple *bpf_tuple,
--- 
-2.34.1
-
+Thanks,
+Daniel
