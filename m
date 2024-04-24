@@ -1,252 +1,136 @@
-Received: from smtp.forwardemail.net (smtp.forwardemail.net [167.172.40.54])
+Received: from mail-lf1-f65.google.com (mail-lf1-f65.google.com [209.85.167.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75A288529E
-	for <bpf@vger.kernel.org>; Wed, 24 Apr 2024 03:13:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=167.172.40.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03D5A83CD6
+	for <bpf@vger.kernel.org>; Wed, 24 Apr 2024 03:13:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.65
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713928389; cv=none; b=oN1LOTYGhcJfNI5+LcHCXWdgilGHfVZjG2fWZOXoicmwsAnc/bNkxvC2h8Z+1CrrsQtfjhzw0T/gEFCJntP5ZhDiT+spWOQjY0pRvO7NqdJGlTP7jwqL0+qnSmZLFLvuPTkZq/j+RknznxtLDAdBCJUpof5X4rd/aAQOREysjoI=
+	t=1713928401; cv=none; b=RJYvIcUQPrp/8QMbd354puVMoTP97Wp8NyIrKZAFa5L2QcJU0KjvyLpkqBmmBYeSeDBiBgaAVqBvCGgbI44qsmPGnEWnHTUECC8xR18yrEa/fCm+NPLNWOMsCvAbint2vQK4NrrkkuxUswo7CJPukqAPolH0IGg6fnQd6L7omao=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713928389; c=relaxed/simple;
-	bh=tg31TNyBqe3HU0jkHJbf+NlmS6IddKPkb9/qVP0HBj4=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=mzB960EOC4uiGFGZ/r/IRrvEVQIWu3wosM43M3NsPLt/is8eF+15QwMup+6g0C02CLne0GeuohhSm1XrnGx6Lwh18cxb/S3IypKmR1rYnx5nlaaY5RoO8mjrtANxzV+faJYBRITe1D+nssJef8D5E1+ttF/QMzth9tGW3NGDie0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=faucet.nz; spf=pass smtp.mailfrom=fe-bounces.faucet.nz; dkim=pass (1024-bit key) header.d=faucet.nz header.i=@faucet.nz header.b=i04hjCIq; arc=none smtp.client-ip=167.172.40.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=faucet.nz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fe-bounces.faucet.nz
+	s=arc-20240116; t=1713928401; c=relaxed/simple;
+	bh=y53M2DOtzi+3XQlUTRm04riS/pBg8Jp8c90WRsn+Vs8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Q+BP+cAmbvK30be4H49iNJZNrPvkPFD0yRCj4cuRpqZpyvFGomBoUYGEogDKy6Aq7YrrnXOh/JQDOFOsaybzsYcDcf2HJoHYe1poXuGavDsoZGhgV5dmNMPProQvaVLsUECodCwmrp52XucfYaew/QvO9sPcZTih9FVylKrjl/E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Twhdhbod; arc=none smtp.client-ip=209.85.167.65
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=faucet.nz header.i=@faucet.nz header.b="i04hjCIq"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=faucet.nz;
- h=Content-Transfer-Encoding: MIME-Version: References: In-Reply-To:
- Message-Id: Date: Subject: Cc: To: From; q=dns/txt; s=fe-4ed8c67516;
- t=1713928372; bh=otRTde3iwWVVSbUbQ6qJYUOlvD+bh8w/dP23dF0cilE=;
- b=i04hjCIqJTQEDpHrJ2401NjNntCdtz31+ILg1gyiaju8j1BfGff8mzMYwhlr57NEtiDsA9jtT
- yTGyabgGfFddtW95/356sOttRIFv/JGH+P/etahd9V+9GJ1k+tqm7eECKql+4lZHxCjkuX5eijw
- ntglAT7GMbuKm02yUkrQfWA=
-From: Brad Cowie <brad@faucet.nz>
-To: bpf@vger.kernel.org, martin.lau@linux.dev
-Cc: lorenzo@kernel.org, memxor@gmail.com, pablo@netfilter.org,
- davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com, ast@kernel.org,
- daniel@iogearbox.net, andrii@kernel.org, song@kernel.org,
- john.fastabend@gmail.com, sdf@google.com, jolsa@kernel.org,
- netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
- netdev@vger.kernel.org, Brad Cowie <brad@faucet.nz>
-Subject: [PATCH bpf-next v2 2/2] selftests/bpf: Update tests for new ct zone opts for nf_conntrack kfuncs
-Date: Wed, 24 Apr 2024 15:00:27 +1200
-Message-Id: <20240424030027.3932184-2-brad@faucet.nz>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240424030027.3932184-1-brad@faucet.nz>
-References: <20240424030027.3932184-1-brad@faucet.nz>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Twhdhbod"
+Received: by mail-lf1-f65.google.com with SMTP id 2adb3069b0e04-51ae2e37a87so5435036e87.2
+        for <bpf@vger.kernel.org>; Tue, 23 Apr 2024 20:13:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1713928397; x=1714533197; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Q9TqmM3y8W4CEDNAiZdApW+5uxTvMByjIAGPlIDhCvs=;
+        b=Twhdhbodvlbo5WiP4VeDJWFSh4iSImyRYU5Rk+yYBOX7dTbadhKsafVwh+srg+BTG0
+         pnnwFygVPZbHr9o+oVyiaVFVDDk6N9kRPtrWtFkj38tPabxXbXNJI7b3jTyCdcfp++ko
+         W9arATpJbBi1ZGj4KyVhKgdIcSyXHzGVsUFAK2CRF4YYb32ywfEUCmKsOy1wz7g44ajC
+         xIh8r2MO1wtdYk14u5Q29lYkKS/kBCz19/xpLSkDsZ0WxbzfOxX1atPOo/DPTJCZuHIj
+         UKZWFit7lLocisi1oAGEJhFc8mAUHGwwvMGQfZbDANGi8NNGVACgN2emzzxygX0v0WSV
+         /i3w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1713928397; x=1714533197;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Q9TqmM3y8W4CEDNAiZdApW+5uxTvMByjIAGPlIDhCvs=;
+        b=Fq4Y8c/RD1bLZb0Uc96rClFbknX1ejt233ccyCDYTYpgf+nR+qe+l1lh4VaRtaPFR4
+         aXVSKuucV4g2tSXK1RpCiCi2zN0T8nFItbLIQamiutiwEt6hQ1YwE2Hq0F+lygRnjp5f
+         52ucmn8SJBVxXxlrnU02sSoOe8B8bVSxIPpy+2GHs008CGKqm+YJNh7hxDaMvicYtjGw
+         63N5lLHuUHo3KnRg069HU3JqupBe7fIp2aLy4+BZ9WcZxqjc6/UovVoKDiMK30Yr7R7T
+         ZEKLFoF48ZpJD6t2UHbEEiV5d+kFcJdrFYJPqAsYSeltutS7FjBEz8dnx/G6Z75crVIn
+         VjqQ==
+X-Gm-Message-State: AOJu0YwlYIPTv6Y/Qf06qXXBmnRxw00MWJ0vFsoT3RLtHlZHOnzQhv5X
+	rlX5WsVr6utgTOZr+D1aC/jVmIJpIOkdbUgY/digUYWFSX27qhoEBHNIewAp
+X-Google-Smtp-Source: AGHT+IHZr7151IYo9xD5u5EkxeuBQ6r/O/uMlZix2L5kYRveUcAqsnYflpmzu3jCTybFML/TFxhFqA==
+X-Received: by 2002:ac2:4557:0:b0:51b:a801:3067 with SMTP id j23-20020ac24557000000b0051ba8013067mr767317lfm.25.1713928396821;
+        Tue, 23 Apr 2024 20:13:16 -0700 (PDT)
+Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
+        by smtp.gmail.com with ESMTPSA id qt3-20020a170906ece300b00a5887fed95dsm754008ejb.2.2024.04.23.20.13.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 23 Apr 2024 20:13:16 -0700 (PDT)
+From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Martin KaFai Lau <martin.lau@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Barret Rhoden <brho@google.com>,
+	David Vernet <void@manifault.com>,
+	Tejun Heo <tj@kernel.org>
+Subject: [PATCH bpf-next v2 0/2] Introduce bpf_preempt_{disable,enable}
+Date: Wed, 24 Apr 2024 03:13:13 +0000
+Message-ID: <20240424031315.2757363-1-memxor@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2509; i=memxor@gmail.com; h=from:subject; bh=y53M2DOtzi+3XQlUTRm04riS/pBg8Jp8c90WRsn+Vs8=; b=owEBbQKS/ZANAwAKAUzgyIZIvxHKAcsmYgBmKHiPQ5wEz/+M7i8nmw6t/wg508flnRViuoSKC cBnzWsIFm+JAjMEAAEKAB0WIQRLvip+Buz51YI8YRFM4MiGSL8RygUCZih4jwAKCRBM4MiGSL8R yne2EACCKheUy+CleTUXT6jjIFVZlu+SP+1K5mxnx6+vStUku1UA9P4sZ/GxA/GRf1cxvJqOArp wCTP6hKyjM6ogX683YrhMbwZnNzVhaRnK6hHrAJ5U/P3QAtsX67ZbhYKjqwcJv800wOQZmMU8c/ icA4lUQtqFfJIl3VC6oft/XbDxFUbs4ng33gDMNQz5EvgBN/GrKLJTpRRVDRoKeLw7Nn06Cp2yT 44HLiXHR9HGg7mDy8IPYirw15Z3pUfBueW02MG6WUtUxFiQNWBglL67iCWn71eE8sRaG/WKtK3E Xh1uXsU/1xayfD+AAvn+ndcYy0ywzsgwfEju4pZBm9iNrKg3LOeHv96d+y0mC3PZPsHYWsa4Fhv LcgB/FG8QUW6VYokbIbwH4vN+XXeMibjSltRNb0qv+BkMp3WIXLAja02mzdN+qb8v1LauPDP3g1 drT9b57q8UMi0KiUv7CQo6A+Gl4tFS1IeJx/fw7KXYy4JEt3l9w6iMP30j5NTPxa8sztUQyfBm6 qLEIlFlamJQOgaWyaV0OcQWHiETLAkYJjdLr6iiAKkZ721V84kGPNJ0am0Tf8JSgX7bHPJC1OG4 V6YDAVb9zKe5oN8oTZsAaBqV5qMU9o5aHI4GGdXby6LFh2nyhMY2PbQHPjH5Q2sCpHA8VvKa0J+ WH26mFKHRClz0Fw==
+X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=4BBE2A7E06ECF9D5823C61114CE0C88648BF11CA
 Content-Transfer-Encoding: 8bit
-X-Report-Abuse-To: abuse@forwardemail.net
-X-Report-Abuse: abuse@forwardemail.net
-X-Complaints-To: abuse@forwardemail.net
-X-ForwardEmail-Version: 0.4.40
-X-ForwardEmail-Sender: rfc822; brad@faucet.nz, smtp.forwardemail.net,
- 167.172.40.54
-X-ForwardEmail-ID: 66287606fb9de1ab903e4133
 
-Remove test for reserved options in bpf_ct_opts,
-which have been removed.
+This set introduces two kfuncs, bpf_preempt_disable and
+bpf_preempt_enable, which are wrappers around preempt_disable and
+preempt_enable in the kernel. These functions allow a BPF program to
+have code sections where preemption is disabled. There are multiple use
+cases that are served by such a feature, a few are listed below:
 
-Add test for allocating and looking up ct entry in a
-non-default ct zone with kfuncs bpf_{xdp,skb}_ct_alloc
-and bpf_{xdp,skb}_ct_lookup.
+1. Writing safe per-CPU alogrithms/data structures that work correctly
+   across different contexts.
+2. Writing safe per-CPU allocators similar to bpf_memalloc on top of
+   array/arena memory blobs.
+3. Writing locking algorithms in BPF programs natively.
 
-Add negative test for looking up ct entry in a different
-ct zone to where it was allocated.
+Note that local_irq_disable/enable equivalent is also needed for proper
+IRQ context protection, but that is a more involved change and will be
+sent later.
 
-Signed-off-by: Brad Cowie <brad@faucet.nz>
----
-v1 -> v2:
-  - Separate test changes into different patch
-  - Add test for allocating/looking up entry in non-default ct zone
----
- tools/testing/selftests/bpf/config            |  1 +
- .../testing/selftests/bpf/prog_tests/bpf_nf.c |  6 +-
- .../testing/selftests/bpf/progs/test_bpf_nf.c | 88 ++++++++++++++++---
- 3 files changed, 82 insertions(+), 13 deletions(-)
+While bpf_preempt_{disable,enable} is not sufficient for all of these
+usage scenarios on its own, it is still necessary.
 
-diff --git a/tools/testing/selftests/bpf/config b/tools/testing/selftests/bpf/config
-index afd675b1bf80..8d4110fe8d26 100644
---- a/tools/testing/selftests/bpf/config
-+++ b/tools/testing/selftests/bpf/config
-@@ -75,6 +75,7 @@ CONFIG_NETFILTER_XT_TARGET_CT=y
- CONFIG_NETKIT=y
- CONFIG_NF_CONNTRACK=y
- CONFIG_NF_CONNTRACK_MARK=y
-+CONFIG_NF_CONNTRACK_ZONES=y
- CONFIG_NF_DEFRAG_IPV4=y
- CONFIG_NF_DEFRAG_IPV6=y
- CONFIG_NF_NAT=y
-diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_nf.c b/tools/testing/selftests/bpf/prog_tests/bpf_nf.c
-index b30ff6b3b81a..853f694af6d4 100644
---- a/tools/testing/selftests/bpf/prog_tests/bpf_nf.c
-+++ b/tools/testing/selftests/bpf/prog_tests/bpf_nf.c
-@@ -103,7 +103,6 @@ static void test_bpf_nf_ct(int mode)
- 		goto end;
- 
- 	ASSERT_EQ(skel->bss->test_einval_bpf_tuple, -EINVAL, "Test EINVAL for NULL bpf_tuple");
--	ASSERT_EQ(skel->bss->test_einval_reserved, -EINVAL, "Test EINVAL for reserved not set to 0");
- 	ASSERT_EQ(skel->bss->test_einval_netns_id, -EINVAL, "Test EINVAL for netns_id < -1");
- 	ASSERT_EQ(skel->bss->test_einval_len_opts, -EINVAL, "Test EINVAL for len__opts != NF_BPF_CT_OPTS_SZ");
- 	ASSERT_EQ(skel->bss->test_eproto_l4proto, -EPROTO, "Test EPROTO for l4proto != TCP or UDP");
-@@ -122,6 +121,11 @@ static void test_bpf_nf_ct(int mode)
- 	ASSERT_EQ(skel->bss->test_exist_lookup_mark, 43, "Test existing connection lookup ctmark");
- 	ASSERT_EQ(skel->data->test_snat_addr, 0, "Test for source natting");
- 	ASSERT_EQ(skel->data->test_dnat_addr, 0, "Test for destination natting");
-+	ASSERT_EQ(skel->data->test_ct_zone_id_alloc_entry, 0, "Test for alloc new entry in specified ct zone");
-+	ASSERT_EQ(skel->data->test_ct_zone_id_insert_entry, 0, "Test for insert new entry in specified ct zone");
-+	ASSERT_EQ(skel->data->test_ct_zone_id_succ_lookup, 0, "Test for successful lookup in specified ct_zone");
-+	ASSERT_EQ(skel->bss->test_ct_zone_id_enoent_lookup, -ENOENT, "Test ENOENT for lookup in wrong ct zone");
-+
- end:
- 	if (client_fd != -1)
- 		close(client_fd);
-diff --git a/tools/testing/selftests/bpf/progs/test_bpf_nf.c b/tools/testing/selftests/bpf/progs/test_bpf_nf.c
-index 77ad8adf68da..b47fa0708f1e 100644
---- a/tools/testing/selftests/bpf/progs/test_bpf_nf.c
-+++ b/tools/testing/selftests/bpf/progs/test_bpf_nf.c
-@@ -12,7 +12,6 @@
- extern unsigned long CONFIG_HZ __kconfig;
- 
- int test_einval_bpf_tuple = 0;
--int test_einval_reserved = 0;
- int test_einval_netns_id = 0;
- int test_einval_len_opts = 0;
- int test_eproto_l4proto = 0;
-@@ -22,6 +21,10 @@ int test_eafnosupport = 0;
- int test_alloc_entry = -EINVAL;
- int test_insert_entry = -EAFNOSUPPORT;
- int test_succ_lookup = -ENOENT;
-+int test_ct_zone_id_alloc_entry = -EINVAL;
-+int test_ct_zone_id_insert_entry = -EAFNOSUPPORT;
-+int test_ct_zone_id_succ_lookup = -ENOENT;
-+int test_ct_zone_id_enoent_lookup = 0;
- u32 test_delta_timeout = 0;
- u32 test_status = 0;
- u32 test_insert_lookup_mark = 0;
-@@ -45,7 +48,10 @@ struct bpf_ct_opts___local {
- 	s32 netns_id;
- 	s32 error;
- 	u8 l4proto;
--	u8 reserved[3];
-+	u8 dir;
-+	u16 ct_zone_id;
-+	u8 ct_zone_flags;
-+	u8 ct_zone_dir;
- } __attribute__((preserve_access_index));
- 
- struct nf_conn *bpf_xdp_ct_alloc(struct xdp_md *, struct bpf_sock_tuple *, u32,
-@@ -84,16 +90,6 @@ nf_ct_test(struct nf_conn *(*lookup_fn)(void *, struct bpf_sock_tuple *, u32,
- 	else
- 		test_einval_bpf_tuple = opts_def.error;
- 
--	opts_def.reserved[0] = 1;
--	ct = lookup_fn(ctx, &bpf_tuple, sizeof(bpf_tuple.ipv4), &opts_def,
--		       sizeof(opts_def));
--	opts_def.reserved[0] = 0;
--	opts_def.l4proto = IPPROTO_TCP;
--	if (ct)
--		bpf_ct_release(ct);
--	else
--		test_einval_reserved = opts_def.error;
--
- 	opts_def.netns_id = -2;
- 	ct = lookup_fn(ctx, &bpf_tuple, sizeof(bpf_tuple.ipv4), &opts_def,
- 		       sizeof(opts_def));
-@@ -220,10 +216,77 @@ nf_ct_test(struct nf_conn *(*lookup_fn)(void *, struct bpf_sock_tuple *, u32,
- 	}
- }
- 
-+static __always_inline void
-+nf_ct_zone_id_test(struct nf_conn *(*lookup_fn)(void *, struct bpf_sock_tuple *, u32,
-+						struct bpf_ct_opts___local *, u32),
-+		   struct nf_conn *(*alloc_fn)(void *, struct bpf_sock_tuple *, u32,
-+					       struct bpf_ct_opts___local *, u32),
-+		   void *ctx)
-+{
-+	struct bpf_ct_opts___local opts_def = { .l4proto = IPPROTO_TCP, .netns_id = -1 };
-+	struct bpf_sock_tuple bpf_tuple;
-+	struct nf_conn *ct;
-+
-+	__builtin_memset(&bpf_tuple, 0, sizeof(bpf_tuple.ipv4));
-+
-+	bpf_tuple.ipv4.saddr = bpf_get_prandom_u32(); /* src IP */
-+	bpf_tuple.ipv4.daddr = bpf_get_prandom_u32(); /* dst IP */
-+	bpf_tuple.ipv4.sport = bpf_get_prandom_u32(); /* src port */
-+	bpf_tuple.ipv4.dport = bpf_get_prandom_u32(); /* dst port */
-+
-+	/* use non-default ct zone */
-+	opts_def.ct_zone_id = 10;
-+	ct = alloc_fn(ctx, &bpf_tuple, sizeof(bpf_tuple.ipv4), &opts_def,
-+		      sizeof(opts_def));
-+	if (ct) {
-+		__u16 sport = bpf_get_prandom_u32();
-+		__u16 dport = bpf_get_prandom_u32();
-+		union nf_inet_addr saddr = {};
-+		union nf_inet_addr daddr = {};
-+		struct nf_conn *ct_ins;
-+
-+		bpf_ct_set_timeout(ct, 10000);
-+
-+		/* snat */
-+		saddr.ip = bpf_get_prandom_u32();
-+		bpf_ct_set_nat_info(ct, &saddr, sport, NF_NAT_MANIP_SRC___local);
-+		/* dnat */
-+		daddr.ip = bpf_get_prandom_u32();
-+		bpf_ct_set_nat_info(ct, &daddr, dport, NF_NAT_MANIP_DST___local);
-+
-+		ct_ins = bpf_ct_insert_entry(ct);
-+		if (ct_ins) {
-+			struct nf_conn *ct_lk;
-+
-+			/* entry should exist in same ct zone we inserted it */
-+			ct_lk = lookup_fn(ctx, &bpf_tuple, sizeof(bpf_tuple.ipv4),
-+					  &opts_def, sizeof(opts_def));
-+			if (ct_lk) {
-+				bpf_ct_release(ct_lk);
-+				test_ct_zone_id_succ_lookup = 0;
-+			}
-+
-+			/* entry should not exist in default ct zone */
-+			opts_def.ct_zone_id = 0;
-+			ct_lk = lookup_fn(ctx, &bpf_tuple, sizeof(bpf_tuple.ipv4),
-+					  &opts_def, sizeof(opts_def));
-+			if (ct_lk)
-+				bpf_ct_release(ct_lk);
-+			else
-+				test_ct_zone_id_enoent_lookup = opts_def.error;
-+
-+			bpf_ct_release(ct_ins);
-+			test_ct_zone_id_insert_entry = 0;
-+		}
-+		test_ct_zone_id_alloc_entry = 0;
-+	}
-+}
-+
- SEC("xdp")
- int nf_xdp_ct_test(struct xdp_md *ctx)
- {
- 	nf_ct_test((void *)bpf_xdp_ct_lookup, (void *)bpf_xdp_ct_alloc, ctx);
-+	nf_ct_zone_id_test((void *)bpf_xdp_ct_lookup, (void *)bpf_xdp_ct_alloc, ctx);
- 	return 0;
- }
- 
-@@ -231,6 +294,7 @@ SEC("tc")
- int nf_skb_ct_test(struct __sk_buff *ctx)
- {
- 	nf_ct_test((void *)bpf_skb_ct_lookup, (void *)bpf_skb_ct_alloc, ctx);
-+	nf_ct_zone_id_test((void *)bpf_skb_ct_lookup, (void *)bpf_skb_ct_alloc, ctx);
- 	return 0;
- }
- 
+The same effect as these kfuncs can in some sense be already achieved
+using the bpf_spin_lock or rcu_read_lock APIs, therefore from the
+standpoint of kernel functionality exposure in the verifier, this is
+well understood territory.
+
+Note that these helpers do allow calling kernel helpers and kfuncs from
+within the non-preemptible region (unless sleepable). Otherwise, any
+locks built using the preemption helpers will be as limited as
+existing bpf_spin_lock.
+
+Nesting is allowed by keeping a counter for tracking remaining enables
+required to be performed. Similar approach can be applied to
+rcu_read_locks in a follow up.
+
+Changelog
+=========
+v1: https://lore.kernel.org/bpf/20240423061922.2295517-1-memxor@gmail.com
+
+ * Move kfunc BTF ID declerations above css task kfunc for
+   !CONFIG_CGROUPS config (Alexei)
+ * Add test case for global function call in non-preemptible region
+   (Jiri)
+
+Kumar Kartikeya Dwivedi (2):
+  bpf: Introduce bpf_preempt_[disable,enable] kfuncs
+  selftests/bpf: Add tests for preempt kfuncs
+
+ include/linux/bpf_verifier.h                  |   1 +
+ kernel/bpf/helpers.c                          |  12 ++
+ kernel/bpf/verifier.c                         |  71 ++++++++-
+ .../selftests/bpf/prog_tests/preempt_lock.c   |   9 ++
+ .../selftests/bpf/progs/preempt_lock.c        | 135 ++++++++++++++++++
+ 5 files changed, 226 insertions(+), 2 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/preempt_lock.c
+ create mode 100644 tools/testing/selftests/bpf/progs/preempt_lock.c
+
+
+base-commit: 6e10b6350a67d398c795ac0b93a7bb7103633fe4
 -- 
-2.34.1
+2.43.0
 
