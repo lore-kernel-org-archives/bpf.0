@@ -1,102 +1,103 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3F231C06;
-	Fri, 26 Apr 2024 19:01:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 606803FD4
+	for <bpf@vger.kernel.org>; Fri, 26 Apr 2024 19:21:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714158108; cv=none; b=W6HD41fQz19sweJgwEJ7EYqIaTLo9/32ZjmbPalPqYI4rRBRpWWipZDtA3AmAtb0KjhboJrcLpzp1i2kA7bcOcLKdIerYONNNzOz/m3i9R8OCsTc8NeO9hoOUGY2To7hf/8Hb/0NPp46hywRGydNPK+KNu4u2b1qSNFlnVZwRdo=
+	t=1714159318; cv=none; b=OLfYfcddACwr6OCPljpnddQbLb0InD4z4AMRjd2gak4D8TBprntGsv1EzOlQwWszL+6oDLs7XEVTqd2/SHf8cSNODc3ENMK86IfJvMqM13zqQWX5hetbL+YcbJj5ERNrxsqNn9K5cG9Ef/gUXC90iHy/jIYnHhvfA432EyHvzL8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714158108; c=relaxed/simple;
-	bh=spHwlcTCpaNA543nwyK0H2eAD2T0c3htMv4UjyBqffA=;
+	s=arc-20240116; t=1714159318; c=relaxed/simple;
+	bh=AWJ/bLOIfX9i4GIZYyjUwkgN3p1VjeBeftjGm2AOMP8=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=RhdvC1F4R4e3uvxGNnkx3a5KQr3e8bp8ki0aLHO7xtNRl4F3FBkh3MRRYzDgD+oUgMeSL2sVjQ93FK3x9FvSdCu2JIzqn9xv3aZ4l74MXhCVFwgCNRn3ed4mfMPi4n5wx0Vs/wd6c/rncLGmsB99ky4cqNSkQ0uz8pc4DRD1BWU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=u1J8gS6e; arc=none smtp.client-ip=10.30.226.201
+	 To:Cc:Content-Type; b=r43vJpVQMz6w9C1Nd2XGAJGWnGAXyYEXxDnglq+oknRjR076Qx4DspZT7vkYAFGOMwUgM4/Y7Sigsp74i0PPyNaaeCEFu/lwVoS09rVKOZvIp0Yd/ge4XRYjNnVqeGBsoXjB2X4u4M07VrT9JxS7E2ghoJ/gHjTUP7GYT0RrsLM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EEQeltDN; arc=none smtp.client-ip=209.85.221.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="u1J8gS6e"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D934C4AF0B;
-	Fri, 26 Apr 2024 19:01:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1714158107;
-	bh=spHwlcTCpaNA543nwyK0H2eAD2T0c3htMv4UjyBqffA=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=u1J8gS6el0nAxFSbvhUmiteeeXNoJZJN5MPZ60QK8xy+IuJlkTXsHsNrzkbPy5TqD
-	 de39M5yXbq+ntNG1c/6nbsdwkYXeDFX1MSl+Fi0o2O9vI1Qd0a43krhnD8x6h+FV0m
-	 wlO6PXD2h3aPbk1x/4BZ7QoDsjaeDob+jGsSj+rmBEO15awWX82WHpVByDcK/7srXO
-	 ZSQDUE3BCOcr85i/+vlQyfSOR0XhzCaCfEOgUJDjSgUS6O0kiXb7ZAZne92g7psDMZ
-	 DVcXQzkfK3TKHln6vD5/6f1ZlTR1cK6SRZi9YHQAfiSfJAxBcBY+UqW5ezGHDQjaaF
-	 pbTgvfRBhCTeA==
-Received: by mail-lf1-f49.google.com with SMTP id 2adb3069b0e04-51ac5923ef6so2266102e87.0;
-        Fri, 26 Apr 2024 12:01:47 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCXv8pxNSWqRXzdQ9G76oELuSMmA5ZFIlKT4vxK5ksqnk6ZYTE2tcW0E/2KmtMBHb0bg5+DgxJCjjVAc0AYY0KuJOIMjrn1f/POQ2t3w1u8h0+v2bJS6LJgRf13SVvbnvJb0RqzVHlQUoOf+2R231l1BJpSJXOSEM/iGAcYOZWYlv710cZYY2EmUAAUZKBJQYESduiBpOqICtdkQx80HUwyGl9nncqu6SlK/LwugCoab+5CEkwAON6Crp5j/Qpu4sx5HqLfh71Iqhvsqn/wBf91CZMhVsUN38HzsPS3M23OBN9pJw21DKsQP1tg9EO+12j0gtaZsUO0Bty0pVxtlp2XSu5gIWAw2Drkx2eLS0ALFz7EMSv976hGLtmS0yLo5y1AVZ0RQywRwpexkIo4=
-X-Gm-Message-State: AOJu0YzeamOqJfgHaiNFAFTc75ZvDN7CvcR1I9Tcr0KrQOg6ZMWUUo8t
-	4cLLMKqy9j8L3V/5vBpRNP4O+BHS0Q8nNtyhwthsncMEeR95E+mQeWS6j01P48Hinoh+APKwzot
-	ZwcMX9BesBaQDLTzIu/xvWnE0R6E=
-X-Google-Smtp-Source: AGHT+IF/3UI9Cwbb8z8OI8jFmskqzepU4aeg2+YglDD7FKhfHPiRdUcmMxLF73Ba/yVMMyprkxylEY00eIaasdUhAvE=
-X-Received: by 2002:a05:6512:151:b0:513:c1a2:d380 with SMTP id
- m17-20020a056512015100b00513c1a2d380mr1420572lfo.31.1714158105499; Fri, 26
- Apr 2024 12:01:45 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EEQeltDN"
+Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-34b1e35155aso2605199f8f.3
+        for <bpf@vger.kernel.org>; Fri, 26 Apr 2024 12:21:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1714159315; x=1714764115; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zvXnIn/XDuJAQsm3VwD/VgmBSl2ZQcQJR0lrhNHqgko=;
+        b=EEQeltDNAz27pDAcaOY4CW4m6GtliLuCabPrItwIgXTW/AK6z0KrODQ29KxXfFu7jB
+         BxruO3+D5oRh3UF4qngPxutaEzrfJQvD3yKg165e9A9ikqI0M/QI+9eL/LgLegKcQLxp
+         tnJFfa+ma0Z1JTz/UBBG40MeJKN4lnqo4kzXCukGQ+rQbT3Qs5BM7RCCj7HV5GBUId9L
+         5xfHDGKmtnPeMHUfdmiP3IUzaKeH2wemIsbUrXJuagGioEjNBJI9TJ/dgskP6ZgMzMtr
+         C5MR6prBZACz85tovB9PNicUxP87LdhZdKv0E9hFtyiTMNFe1lQGMRGZ8+eZyMexIQli
+         IyoA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1714159315; x=1714764115;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=zvXnIn/XDuJAQsm3VwD/VgmBSl2ZQcQJR0lrhNHqgko=;
+        b=vMCtnR/4iKqG6/uMrs2vXffOfmL9UiL64cLxIfCxwLCAUiiqFR6G9VY/2yoszy+K23
+         bmsNpJDNvBoAH2Y+cQ/D6ACvg9NNLCnOpjDzOei507FW8IaFezMXwIX8jqFg8IJc2hLZ
+         ABy4mb0PxrcKj8tfQYW8GWhWGLFkd4m7zuYToIIh3NyRRzfgN8vPdDif/8F8D6s3AELV
+         tXRXLmcbYnWJi3Hhljo+pDX3umsZ6OszB6FU4GVv6sIc2Wa3QFOQKroqtH1egWbcai5r
+         SUCZofr0+i3NrSHaWUMXueGvHCOM/aEXZJQhyKE44/T5wlp8qRDsGcYt/fo1OikIQm/j
+         Sugw==
+X-Gm-Message-State: AOJu0YzlxPKu6xtFLM4o7lfDf5zK94RzptYsRYJqSw9oMGvldOXCYYq0
+	XkzIOQ+KBqeyXSUKpztDr1LXGMkfJrUyFulkqOmip0Clt9pWSaekgaIgOsQ/m98isJbqHfMs4G7
+	sYcBtYQF69L4r5U9RpiwxVsPh+Fc=
+X-Google-Smtp-Source: AGHT+IH0MLG0SVP4mrXSBuAu8KABnzQTBrtqHEbXi4UMP6EvI2jnDFoYCj5B9kf3O7PRo8R7RKIqh13ChOAsi9o5Vk0=
+X-Received: by 2002:a5d:6306:0:b0:34c:7410:d6c8 with SMTP id
+ i6-20020a5d6306000000b0034c7410d6c8mr1837093wru.49.1714159315386; Fri, 26 Apr
+ 2024 12:21:55 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240426082854.7355-1-rppt@kernel.org> <20240426082854.7355-9-rppt@kernel.org>
-In-Reply-To: <20240426082854.7355-9-rppt@kernel.org>
-From: Song Liu <song@kernel.org>
-Date: Fri, 26 Apr 2024 12:01:34 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW52MYy4Md5O=7XVGvkw395-LB+BiSadxoDdw8CrLw5t7A@mail.gmail.com>
-Message-ID: <CAPhsuW52MYy4Md5O=7XVGvkw395-LB+BiSadxoDdw8CrLw5t7A@mail.gmail.com>
-Subject: Re: [PATCH v6 08/16] mm/execmem, arch: convert remaining overrides of
- module_alloc to execmem
-To: Mike Rapoport <rppt@kernel.org>
-Cc: linux-kernel@vger.kernel.org, Alexandre Ghiti <alexghiti@rivosinc.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Christophe Leroy <christophe.leroy@csgroup.eu>, 
-	"David S. Miller" <davem@davemloft.net>, Dinh Nguyen <dinguyen@kernel.org>, 
-	Donald Dutile <ddutile@redhat.com>, Eric Chanudet <echanude@redhat.com>, 
-	Heiko Carstens <hca@linux.ibm.com>, Helge Deller <deller@gmx.de>, Huacai Chen <chenhuacai@kernel.org>, 
-	Kent Overstreet <kent.overstreet@linux.dev>, Luis Chamberlain <mcgrof@kernel.org>, 
-	Mark Rutland <mark.rutland@arm.com>, Masami Hiramatsu <mhiramat@kernel.org>, 
-	Michael Ellerman <mpe@ellerman.id.au>, Nadav Amit <nadav.amit@gmail.com>, 
-	Palmer Dabbelt <palmer@dabbelt.com>, Peter Zijlstra <peterz@infradead.org>, 
-	Rick Edgecombe <rick.p.edgecombe@intel.com>, Russell King <linux@armlinux.org.uk>, 
-	Sam Ravnborg <sam@ravnborg.org>, Steven Rostedt <rostedt@goodmis.org>, 
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Thomas Gleixner <tglx@linutronix.de>, 
-	Will Deacon <will@kernel.org>, bpf@vger.kernel.org, linux-arch@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org, 
-	linux-mm@kvack.org, linux-modules@vger.kernel.org, 
-	linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org, 
-	linux-s390@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
-	linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev, 
-	netdev@vger.kernel.org, sparclinux@vger.kernel.org, x86@kernel.org
+References: <20240426171103.3496-1-dthaler1968@gmail.com>
+In-Reply-To: <20240426171103.3496-1-dthaler1968@gmail.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Fri, 26 Apr 2024 12:21:43 -0700
+Message-ID: <CAADnVQLmu-v30D=JP75Cd0qBhDXm8izAnUnyZZ4-QwyM67nNww@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] bpf, docs: Clarify PC use in instruction-set.rst
+To: Dave Thaler <dthaler1968@googlemail.com>
+Cc: bpf <bpf@vger.kernel.org>, bpf@ietf.org, Dave Thaler <dthaler1968@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Apr 26, 2024 at 1:30=E2=80=AFAM Mike Rapoport <rppt@kernel.org> wro=
-te:
+On Fri, Apr 26, 2024 at 10:11=E2=80=AFAM Dave Thaler <dthaler1968@googlemai=
+l.com> wrote:
 >
-> From: "Mike Rapoport (IBM)" <rppt@kernel.org>
+> This patch elaborates on the use of PC by expanding the PC acronym,
+> explaining the units, and the relative position to which the offset
+> applies.
 >
-> Extend execmem parameters to accommodate more complex overrides of
-> module_alloc() by architectures.
+> Signed-off-by: Dave Thaler <dthaler1968@googlemail.com>
+> ---
+>  Documentation/bpf/standardization/instruction-set.rst | 5 +++++
+>  1 file changed, 5 insertions(+)
 >
-> This includes specification of a fallback range required by arm, arm64
-> and powerpc, EXECMEM_MODULE_DATA type required by powerpc, support for
-> allocation of KASAN shadow required by s390 and x86 and support for
-> late initialization of execmem required by arm64.
+> diff --git a/Documentation/bpf/standardization/instruction-set.rst b/Docu=
+mentation/bpf/standardization/instruction-set.rst
+> index b44bdacd0..5592620cf 100644
+> --- a/Documentation/bpf/standardization/instruction-set.rst
+> +++ b/Documentation/bpf/standardization/instruction-set.rst
+> @@ -469,6 +469,11 @@ JSLT      0xc    any      PC +=3D offset if dst < sr=
+c          signed
+>  JSLE      0xd    any      PC +=3D offset if dst <=3D src         signed
+>  =3D=3D=3D=3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D=3D=3D  =3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D
 >
-> The core implementation of execmem_alloc() takes care of suppressing
-> warnings when the initial allocation fails but there is a fallback range
-> defined.
->
-> Signed-off-by: Mike Rapoport (IBM) <rppt@kernel.org>
-> Acked-by: Will Deacon <will@kernel.org>
+> +where 'PC' denotes the program counter, and the offset to increment by
+> +is in units of 64-bit instructions relative to the instruction following
+> +the jump instruction.  Thus 'PC +=3D 1' results in the next instruction
+> +to execute being two 64-bit instructions later.
 
-nit: We should probably move the logic for ARCH_WANTS_EXECMEM_LATE
-to a separate patch.
-
-Otherwise,
-
-Acked-by: Song Liu <song@kernel.org>
+The last part is confusing.
+"two 64-bit instructions later"
+I'm struggling to understand that.
+Maybe say that 'PC +=3D 1' skips execution of the next insn?
