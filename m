@@ -1,125 +1,127 @@
-Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
+Received: from mail-io1-f50.google.com (mail-io1-f50.google.com [209.85.166.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 337E21DFC7
-	for <bpf@vger.kernel.org>; Sun, 28 Apr 2024 20:22:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5155DDDAE
+	for <bpf@vger.kernel.org>; Sun, 28 Apr 2024 22:01:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714335768; cv=none; b=utoZfhflNJ+7ZwM6EY13EiVBsLv/Wu3cNW7hNsPHEoADsHTFEDeH3gHkVf3mGZrDyBjzFPxuFp1uMdsc67PdqCJFnwZ1Po+733BinOv8IxO9VhHuUG3kGx1JiuLMAF79/GaXtkyQ175loENRN5wLCvbdjOMXK6jNZ1cY9Rbw9h0=
+	t=1714341675; cv=none; b=JKIr0y5Sim3EcueR+T1RM8BjHzBgc9SpEDPHEs6F+yC4nR+IeRx3AnSzzl9ALlmqFJGjRQZpfieY3awTPJnasYAMiaTBhex0uWyRo5uibJaDfa+uBbyTBM35f9aDO27F/9bID2JS2p1k6bRhCabuG4zXFinZ2Pi0ULVS1mR7Kz4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714335768; c=relaxed/simple;
-	bh=H71Tv2dUxdSU6L0QrBYX2j1pl48rzgL4H1/kXqthOD8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=TosgaTGDLGzmr+JUQfxSRvM3SbtBUCH1oEIxBv8qYd808oblz0R+xVDNogMYvTAjLPuQUyNhrERYUEvDBg1kJGBe+g2vqvFjNX8ybDlT70frx3+ZiqrQK0bvVbgmQi4AwMe0+PbJT3Qh/pF95xM8Zvo+szRCI021MVIXphnd+GY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=LNVdFvlY; arc=none smtp.client-ip=209.85.218.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="LNVdFvlY"
-Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-a58872c07d8so860297166b.0
-        for <bpf@vger.kernel.org>; Sun, 28 Apr 2024 13:22:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1714335764; x=1714940564; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=qNIV9pJKRQ0bK2019WbvTNRu1m1w296Oj9c68XnoHTQ=;
-        b=LNVdFvlYt3jhy1z81Dj21uiB8CbhCD6yi9O0SMUv6XspmSCCK7Mn3tiQLhtZDip0NR
-         xBo78b3zyWpgC36WezkH1Z5hPmKE8IaCmF9RSSko90yyuCFDGWntvQk2aEyUNZOHMXAm
-         whdl0h5yNkQskhT7z07FUGJYRhFz3JDrHXVwY=
+	s=arc-20240116; t=1714341675; c=relaxed/simple;
+	bh=5Aq4YC+PRccnebQZtttVKVp6kSXbjoUVpwXVrRXU0hw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=LmUXb5IiO0Un9kTNtV+oaVTbGIEDvlz8rho4scoJNztHZzsthgjXVF2oF1NOCB1SQq4Tsn6AgpFwUWXJFoPkY1N/haMD8wDUWdbXc02FVrjFpVcv7YlOdAWxD1GlVO4EP+x1PR63OfNA0R7kRHqKFAVcRv8nYCo08SpE8fpJEfg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=manifault.com; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.166.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=manifault.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-io1-f50.google.com with SMTP id ca18e2360f4ac-7da37436e36so179098539f.0
+        for <bpf@vger.kernel.org>; Sun, 28 Apr 2024 15:01:13 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714335764; x=1714940564;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=qNIV9pJKRQ0bK2019WbvTNRu1m1w296Oj9c68XnoHTQ=;
-        b=BdoVHU1TK17x5IRsAFpnSxJ/67V6XNFBovEgt1bWfzVrMcFvPt4icBUeJEEsCtOhKn
-         QMbz4vVrk8JHFofGatNFh1hMk7WFmmU9VFsIXcafYtC2q+7B3SHjgQBNX+59RTP6P/Ou
-         f2PfsKSwF2IKlHdRxS7FrOzIJotTJsDzPBgalBP82tQITYOtSVzva9DZgLVFYAEd2xtt
-         Qe92jyKAIsxX1lU3f9BlFifIjbKsUePkan3hoYg6HO+tbn7QV0Wh3WxftJaN3KhQFq2t
-         QH9/Nmdl+iSOvLt9WPAL1txYu1JGhqGB3puJMQ51fimtP0MUWh/nwfoQX1hZFnuN8Blz
-         WMfQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU6R0XC0XHfSP1hBrJHl0rlOqSDItzLK58lQ8uMAI2Xb827O739tYFxyXCtlDvIC58Sk/fO529JSdkhlJFm3W/U6VVy
-X-Gm-Message-State: AOJu0YwfYUhoVrHF7Ve1XCXQoNcZN5Jk1Op9j+5YorIlUfQv4hAd7/Ar
-	QUBP0yc0gK7EwV+R4dT2aaxxK8H2+CLcODTffI2Am46QrXwBgaUxI5u/V+9G7uwz27OWx6sex4s
-	NeM4zXA==
-X-Google-Smtp-Source: AGHT+IEnLUF7IbaCXD8fXgecFaL5EsHydtoWTdAcrGYnBDeJ/4+8BWNkLhXpmLGS7oqwJ3M2jl9lqw==
-X-Received: by 2002:a17:906:81ce:b0:a55:b67c:bd04 with SMTP id e14-20020a17090681ce00b00a55b67cbd04mr4077146ejx.4.1714335764269;
-        Sun, 28 Apr 2024 13:22:44 -0700 (PDT)
-Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com. [209.85.218.45])
-        by smtp.gmail.com with ESMTPSA id z13-20020a170906434d00b00a51e5813f4fsm13300520ejm.19.2024.04.28.13.22.43
-        for <bpf@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 28 Apr 2024 13:22:43 -0700 (PDT)
-Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-a58e787130fso196287766b.0
-        for <bpf@vger.kernel.org>; Sun, 28 Apr 2024 13:22:43 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVgg4uWmyzmngRMgNkrhQL98DzahJH7JtEkK7k9G9JRdiHuZvzf8UN3qxNCj9sWrkSnUOOI0g4/aPINtvMF39Q70EGW
-X-Received: by 2002:a17:906:370f:b0:a58:eb0d:f2a6 with SMTP id
- d15-20020a170906370f00b00a58eb0df2a6mr3640636ejc.31.1714335763076; Sun, 28
- Apr 2024 13:22:43 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1714341672; x=1714946472;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=1rSEZ0uJLMLS6TADaoKbbKJSQj1pHqO0QBkdngdbebQ=;
+        b=xHzq3X8SwVsP5d/5xk4yEahoYet1mnbyXbfI8TqoAJLE8ZLUt38TWkP1gnavYWxNla
+         hVPzkFQysZsbxyV3Tkr8t2Rfr01icip7GhErBwP2HKhHNAFamS3lgk4wXsAkUieG8pb4
+         Tmg7mwhhJ1MHRlrYKK00TJSD/U7Bl/19DdoXwqiiYpCp0CAS4xVdbjCSdHcmp7QcuTrM
+         z0IUCck7f8C407j3C7j2g1DuMNStjSNllVh9R7wDP96IC0bS0C+lXn3h6/gfZ3Aklx+Y
+         PgCNWr4u5rJlyRrL795Hh260wFdnclYZJN1ba+qS90fqDFOwtb1aKSNJNTbqu0/Cbsk7
+         jYbA==
+X-Gm-Message-State: AOJu0YzHW+KYZUZgykuQrqPvanQYvxyif8tb/3GZfOOavKM4HAcHvB5Y
+	GmduVr/pN+Q+gGt63MF0RmxMhsHeWOh7EiFsQ9D2KgW6F8aPFKG6
+X-Google-Smtp-Source: AGHT+IHgt6RN8ipT5cwAmYfDxMriZycZUdurc65/N+C556e5XdPU6TLS/thpptRI1OS3/u7lJbps/A==
+X-Received: by 2002:a5d:8e16:0:b0:7da:bccd:c3ec with SMTP id e22-20020a5d8e16000000b007dabccdc3ecmr10564903iod.5.1714341672311;
+        Sun, 28 Apr 2024 15:01:12 -0700 (PDT)
+Received: from maniforge (c-76-136-75-40.hsd1.il.comcast.net. [76.136.75.40])
+        by smtp.gmail.com with ESMTPSA id iv15-20020a056638868f00b0048792a75bb1sm830354jab.111.2024.04.28.15.01.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 28 Apr 2024 15:01:11 -0700 (PDT)
+Date: Sun, 28 Apr 2024 17:01:08 -0500
+From: David Vernet <void@manifault.com>
+To: Dave Thaler <dthaler1968=40googlemail.com@dmarc.ietf.org>
+Cc: bpf@vger.kernel.org, bpf@ietf.org, Dave Thaler <dthaler1968@gmail.com>,
+	Dave Thaler <dthaler1968@googlemail.com>
+Subject: Re: [Bpf] [PATCH bpf-next v3] bpf, docs: Clarify PC use in
+ instruction-set.rst
+Message-ID: <20240428220108.GB21308@maniforge>
+References: <20240426231126.5130-1-dthaler1968@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <0000000000009dfa6d0617197994@google.com> <20240427231321.3978-1-hdanton@sina.com>
- <CAHk-=wjBvNvVggy14p9rkHA8W1ZVfoKXvW0oeX5NZWxWUv8gfQ@mail.gmail.com>
-In-Reply-To: <CAHk-=wjBvNvVggy14p9rkHA8W1ZVfoKXvW0oeX5NZWxWUv8gfQ@mail.gmail.com>
-From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Sun, 28 Apr 2024 13:22:26 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wi8U1PjW_L6Ng9_A80L_1keyEOKud3PVh-8bwPL9W0CNg@mail.gmail.com>
-Message-ID: <CAHk-=wi8U1PjW_L6Ng9_A80L_1keyEOKud3PVh-8bwPL9W0CNg@mail.gmail.com>
-Subject: Re: [syzbot] [bpf?] [trace?] possible deadlock in force_sig_info_to_task
-To: Hillf Danton <hdanton@sina.com>
-Cc: syzbot <syzbot+83e7f982ca045ab4405c@syzkaller.appspotmail.com>, 
-	andrii@kernel.org, bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="jLF0M3BlpDlPplJb"
+Content-Disposition: inline
+In-Reply-To: <20240426231126.5130-1-dthaler1968@gmail.com>
+User-Agent: Mutt/2.2.13 (00d56288) (2024-03-09)
 
-On Sun, 28 Apr 2024 at 13:01, Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> The *problem* here is that the page fault doesn't actually happen on a
-> user access, it happens on the *ret* instruction in
-> rep_movs_alternative itself (which doesn't have a exception fixup,
-> obviously, because no exception is supposed to happen there!):
 
-Actually, there's another page fault deeper in that call chain:
+--jLF0M3BlpDlPplJb
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-   asm_exc_page_fault+0x26/0x30 arch/x86/include/asm/idtentry.h:623
-  RIP: 0010:__put_user_handle_exception+0x0/0x10 arch/x86/lib/putuser.S:125
-  Code: 90 90 90 90 90 90 90 90 90 90 f3 0f 1e fa 0f 01 cb 48 89 01 31
-c9 0f 01 ca c3 cc cc cc cc 66 2e 0f 1f 84 00 00 00 00 00 66 90 <0f> 01
-ca b9 f2 ff ff ff c3 cc cc cc cc 0f 1f 00 90 90 90 90 90 90
-  RSP: 0000:ffffc90004137d98 EFLAGS: 00050202
-  RAX: 00000000662d5943 RBX: 0000000000000000 RCX: 0000000000000019
-  RDX: 0000000000000000 RSI: ffffffff8bcaca20 RDI: ffffffff8c1eaba0
-  RBP: ffffc90004137e50 R08: ffffffff8fa7cd6f R09: 1ffffffff1f4f9ad
-  R10: dffffc0000000000 R11: fffffbfff1f4f9ae R12: ffffc90004137de0
-  R13: dffffc0000000000 R14: 1ffff92000826fb8 R15: 0000000000000019
-   __do_sys_gettimeofday kernel/time/time.c:147 [inline]
-   __se_sys_gettimeofday+0xd9/0x240 kernel/time/time.c:140
+On Fri, Apr 26, 2024 at 04:11:26PM -0700, Dave Thaler wrote:
+> This patch elaborates on the use of PC by expanding the PC acronym,
+> explaining the units, and the relative position to which the offset
+> applies.
+>=20
+> v1->v2: reword per feedback from Alexei
+>=20
+> v2->v3: reword per feedback from David Vernet
+>=20
+> Signed-off-by: Dave Thaler <dthaler1968@googlemail.com>
 
-which is also nonsensical, since that "<0f> 01 ca" code is just the
-"CLAC" instruction (which is the first instruction of
-__put_user_handle_exception, which is the exception fixup for the
-__put_user() functions.
+Reviewed-by: David Vernet <void@manifault.com>
 
-So that seems to be the *first* problem spot, actually. It too is
-incomprehensible to me. I must be missing something. A "clac"
-instruction cannot take a page fault (except for the instruction fetch
-itself, of course).
+> ---
+>  Documentation/bpf/standardization/instruction-set.rst | 6 ++++++
+>  1 file changed, 6 insertions(+)
+>=20
+> diff --git a/Documentation/bpf/standardization/instruction-set.rst b/Docu=
+mentation/bpf/standardization/instruction-set.rst
+> index b44bdacd0..997560aba 100644
+> --- a/Documentation/bpf/standardization/instruction-set.rst
+> +++ b/Documentation/bpf/standardization/instruction-set.rst
+> @@ -469,6 +469,12 @@ JSLT      0xc    any      PC +=3D offset if dst < sr=
+c          signed
+>  JSLE      0xd    any      PC +=3D offset if dst <=3D src         signed
+>  =3D=3D=3D=3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D=3D=3D  =3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D
+> =20
+> +where 'PC' denotes the program counter, and the offset to increment by
+> +is in units of 64-bit instructions relative to the instruction following
+> +the jump instruction.  Thus 'PC +=3D 1' skips execution of the next
+> +instruction if it's a basic instruction or results in undefined behavior
+> +if the next instruction is a 128-bit wide instruction.
+> +
+>  The BPF program needs to store the return value into register R0 before =
+doing an
+>  ``EXIT``.
+> =20
+> --=20
+> 2.40.1
+>=20
+> --=20
+> Bpf mailing list
+> Bpf@ietf.org
+> https://www.ietf.org/mailman/listinfo/bpf
 
-So if the page fault on the 'RET' instruction was odd, the page fault
-on the CLAC is *really* odd.
+--jLF0M3BlpDlPplJb
+Content-Type: application/pgp-signature; name="signature.asc"
 
-That original page fault looks like it's just from one of the
-put_user() calls in gettimeofday():
+-----BEGIN PGP SIGNATURE-----
 
-                if (put_user(ts.tv_sec, &tv->tv_sec) ||
-                    put_user(ts.tv_nsec / 1000, &tv->tv_usec))
+iHUEARYKAB0WIQRBxU1So5MTLwphjdFZ5LhpZcTzZAUCZi7HJAAKCRBZ5LhpZcTz
+ZByRAQC2QFtgliqW/7CMUHUnEnVIs+TfZFayYWZEElNx/y37RAD/QLAGp3E+LDUL
+3ZVkVeVLSvnSnvu4qDWkjdkEyWDUqAU=
+=YSPW
+-----END PGP SIGNATURE-----
 
-and yes, they can fault, but I'm not seeing how that then points to
-the CLAC in the exception handler.
-
-                Linus
+--jLF0M3BlpDlPplJb--
