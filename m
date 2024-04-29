@@ -1,229 +1,185 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75D2881AB1;
-	Mon, 29 Apr 2024 15:08:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A56F84D06
+	for <bpf@vger.kernel.org>; Mon, 29 Apr 2024 15:18:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714403327; cv=none; b=b27KXvaqXpoa6OkW0R78j4Bed6/bhGJinEKRSwS3WzHkhy8WY1Ll5/EO0Ce5c4Y33R+FHlTLu9LTar24Drl/J8I4FrtFo3U6mNbn9SK9oOMD6XLT4KTN1zp9LM4QqB3b2MCLgTjioFH5UziyqC6LoR/MKLigMA7YpVJfog420YM=
+	t=1714403907; cv=none; b=PQcfbf/TfQMBpaDFEmod3Rw5xd0n6zeHwVutLmdWTHZGqEDSEf6HvPBe+nW6cFuuzoHGGhibWDpAU/nWfDxVesU+vnAN9VJFjYI7hJCUq8J0x+tyYIyKNPMq9lkkezjvK0fSY2Zd3ih7ZiY1V0MNKUZxcfhmMe9NEABvK92ALPw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714403327; c=relaxed/simple;
-	bh=Bjx5gl49VFSc1mqMjIvCV5QyXb/r8anmZ/JpE0QNtUg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=SBkfRHdgey3TyJy8MLKVR+c4RVxDuU6mQCt4mUt/I6UsiY1u5tShMKL2epPMtqRLRls8ApPtoVZH33bfAi710p/0w82LgEYpw38gTgHiyowUCTPSgzKG8ywxXa6N0EfZirNTWEAnIwkXHMwYY1VTDNJRswUtZoGXK9v1I3rgVMc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=us7LGmTF; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="us7LGmTF"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C04FDC113CD;
-	Mon, 29 Apr 2024 15:08:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1714403327;
-	bh=Bjx5gl49VFSc1mqMjIvCV5QyXb/r8anmZ/JpE0QNtUg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=us7LGmTFUvR9qlbeUavr2vBJcXJDL8YupNIJWRuGGcSIHSRK4yNIbx4/nUELan+bZ
-	 QVsidnDrL639ZmuSN3im/wf0UNl6w2TSUCXIJFRvewc0mLD5fuR26XScAWn5avm3XV
-	 A0ROdl0dX1LU0BNMhth7be8WguEn8VJnJEtUkP1P1liOaGQX6GmG3FKWWM9n6aKZsb
-	 B/7mN+rhOnzjJFTgAikEbyPTvJxYtFLfNFqdj0UqDlC6CtZnbdBHngvSU07lni3+xX
-	 fTJnQHpcZxlg10cVvTU1OB/CAjY1g0Oy1kxilp6iNBSZ8Wr4L+2OjYPySzjolPDRGE
-	 CIqox8Qm+aG/A==
-Date: Mon, 29 Apr 2024 10:08:42 -0500
-From: Rob Herring <robh@kernel.org>
-To: Frank Li <Frank.Li@nxp.com>
-Cc: Richard Zhu <hongxing.zhu@nxp.com>,
-	Lucas Stach <l.stach@pengutronix.de>,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-	Bjorn Helgaas <bhelgaas@google.com>,
-	Shawn Guo <shawnguo@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>,
-	NXP Linux Team <linux-imx@nxp.com>,
-	Philipp Zabel <p.zabel@pengutronix.de>,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	Mark Brown <broonie@kernel.org>,
-	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>, linux-pci@vger.kernel.org,
-	imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-	devicetree@vger.kernel.org
-Subject: Re: [PATCH v3 08/11] PCI: imx: Config look up table(LUT) to support
- MSI ITS and IOMMU for i.MX95
-Message-ID: <20240429150842.GC1709920-robh@kernel.org>
-References: <20240402-pci2_upstream-v3-0-803414bdb430@nxp.com>
- <20240402-pci2_upstream-v3-8-803414bdb430@nxp.com>
+	s=arc-20240116; t=1714403907; c=relaxed/simple;
+	bh=T3zY9f3mdbrBAJBgJWZvgMaZ+jCWWTgFmnhWg5s78P4=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=SJV1y7aSNM2BPREcNJX7i1PGBSEbFKYskEPdBYQEDFQ9gh3jepmLizXomPzKgTkXqa4GOUaSfMSom//oEjc3d2zaZqvy7zXr7dLzfxgqueoVZok7M6iXETP+hrAfZNDebni/gTk3WgOb1ercqEfRicf23tA4SSAOP9H8W64c57g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.216])
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4VSn5f46dlz4f3k6J
+	for <bpf@vger.kernel.org>; Mon, 29 Apr 2024 23:18:14 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.128])
+	by mail.maildlp.com (Postfix) with ESMTP id 9923E1A0B84
+	for <bpf@vger.kernel.org>; Mon, 29 Apr 2024 23:18:19 +0800 (CST)
+Received: from k01.huawei.com (unknown [10.67.174.197])
+	by APP4 (Coremail) with SMTP id gCh0CgA3h2k5ui9mf0EALg--.61812S2;
+	Mon, 29 Apr 2024 23:18:18 +0800 (CST)
+From: Xu Kuohai <xukuohai@huaweicloud.com>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@google.com>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>
+Subject: [PATCH bpf-next] bpf: Fold LSH and ARSH pair to a single MOVSX for sign-extension
+Date: Mon, 29 Apr 2024 23:20:36 +0800
+Message-Id: <20240429152036.3411628-1-xukuohai@huaweicloud.com>
+X-Mailer: git-send-email 2.30.2
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240402-pci2_upstream-v3-8-803414bdb430@nxp.com>
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:gCh0CgA3h2k5ui9mf0EALg--.61812S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxur43Wry8Xr1kCrWUJF1DJrb_yoW5Zry3pF
+	n5XFy5Gr48Aa17Ww4fZF4xCr9Iya18Ww47GFW7G34rJrWIqFn5GFWIgr4aya45tr4rWa12
+	y3Wq9rWUW34UA3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUk2b4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
+	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+	6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+	Cjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxAIw28I
+	cxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2
+	IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI
+	42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42
+	IY6xAIw20EY4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E
+	87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUrR6zUUUUU
+X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
 
-On Tue, Apr 02, 2024 at 10:33:44AM -0400, Frank Li wrote:
-> i.MX95 need config LUT to convert bpf to stream id. IOMMU and ITS use the
-> same stream id. Check msi-map and smmu-map and make sure the same PCI bpf
-> map to the same stream id. Then config LUT related registers.
-> 
-> Signed-off-by: Frank Li <Frank.Li@nxp.com>
-> ---
->  drivers/pci/controller/dwc/pcie-imx.c | 175 ++++++++++++++++++++++++++++++++++
->  1 file changed, 175 insertions(+)
-> 
-> diff --git a/drivers/pci/controller/dwc/pcie-imx.c b/drivers/pci/controller/dwc/pcie-imx.c
-> index af0f960f28757..653d8e8ee1abc 100644
-> --- a/drivers/pci/controller/dwc/pcie-imx.c
-> +++ b/drivers/pci/controller/dwc/pcie-imx.c
-> @@ -55,6 +55,22 @@
->  #define IMX95_PE0_GEN_CTRL_3			0x1058
->  #define IMX95_PCIE_LTSSM_EN			BIT(0)
->  
-> +#define IMX95_PE0_LUT_ACSCTRL			0x1008
-> +#define IMX95_PEO_LUT_RWA			BIT(16)
-> +#define IMX95_PE0_LUT_ENLOC			GENMASK(4, 0)
-> +
-> +#define IMX95_PE0_LUT_DATA1			0x100c
-> +#define IMX95_PE0_LUT_VLD			BIT(31)
-> +#define IMX95_PE0_LUT_DAC_ID			GENMASK(10, 8)
-> +#define IMX95_PE0_LUT_STREAM_ID			GENMASK(5, 0)
-> +
-> +#define IMX95_PE0_LUT_DATA2			0x1010
-> +#define IMX95_PE0_LUT_REQID			GENMASK(31, 16)
-> +#define IMX95_PE0_LUT_MASK			GENMASK(15, 0)
-> +
-> +#define IMX95_SID_MASK				GENMASK(5, 0)
-> +#define IMX95_MAX_LUT				32
-> +
->  #define to_imx_pcie(x)	dev_get_drvdata((x)->dev)
->  
->  enum imx_pcie_variants {
-> @@ -217,6 +233,159 @@ static int imx95_pcie_init_phy(struct imx_pcie *imx_pcie)
->  	return 0;
->  }
->  
-> +static int imx_pcie_update_lut(struct imx_pcie *imx_pcie, int index, u16 reqid, u16 mask, u8 sid)
-> +{
-> +	struct dw_pcie *pci = imx_pcie->pci;
-> +	struct device *dev = pci->dev;
-> +	u32 data1, data2;
-> +
-> +	if (sid >= 64) {
-> +		dev_err(dev, "Too big stream id: %d\n", sid);
-> +		return -EINVAL;
-> +	}
-> +
-> +	data1 = FIELD_PREP(IMX95_PE0_LUT_DAC_ID, 0);
-> +	data1 |= FIELD_PREP(IMX95_PE0_LUT_STREAM_ID, sid);
-> +	data1 |= IMX95_PE0_LUT_VLD;
-> +
-> +	regmap_write(imx_pcie->iomuxc_gpr, IMX95_PE0_LUT_DATA1, data1);
-> +
-> +	data2 = mask;
-> +	data2 |= FIELD_PREP(IMX95_PE0_LUT_REQID, reqid);
-> +
-> +	regmap_write(imx_pcie->iomuxc_gpr, IMX95_PE0_LUT_DATA2, data2);
-> +
-> +	regmap_write(imx_pcie->iomuxc_gpr, IMX95_PE0_LUT_ACSCTRL, index);
-> +
-> +	return 0;
-> +}
-> +
-> +struct imx_of_map {
-> +	u32 bdf;
-> +	u32 phandle;
-> +	u32 sid;
-> +	u32 sid_len;
-> +};
-> +
-> +static int imx_check_msi_and_smmmu(struct imx_pcie *imx_pcie,
-> +				   struct imx_of_map *msi_map, u32 msi_size, u32 msi_map_mask,
-> +				   struct imx_of_map *smmu_map, u32 smmu_size, u32 smmu_map_mask)
-> +{
-> +	struct dw_pcie *pci = imx_pcie->pci;
-> +	struct device *dev = pci->dev;
-> +	int i;
-> +
-> +	if (msi_map && smmu_map) {
-> +		if (msi_size != smmu_size)
-> +			return -EINVAL;
-> +		if (msi_map_mask != smmu_map_mask)
-> +			return -EINVAL;
-> +
-> +		for (i = 0; i < msi_size / sizeof(*msi_map); i++) {
-> +			if (msi_map->bdf != smmu_map->bdf) {
-> +				dev_err(dev, "bdf setting is not match\n");
-> +				return -EINVAL;
-> +			}
-> +			if ((msi_map->sid & IMX95_SID_MASK) != smmu_map->sid) {
-> +				dev_err(dev, "sid setting is not match\n");
-> +				return -EINVAL;
-> +			}
-> +			if ((msi_map->sid_len & IMX95_SID_MASK) != smmu_map->sid_len) {
-> +				dev_err(dev, "sid_len setting is not match\n");
-> +				return -EINVAL;
-> +			}
-> +		}
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +/*
-> + * Simple static config lut according to dts settings DAC index and stream ID used as a match result
-> + * of LUT pre-allocated and used by PCIes.
-> + *
-> + * Currently stream ID from 32-64 for PCIe.
-> + * 32-40: first PCI bus.
-> + * 40-48: second PCI bus.
-> + *
-> + * DAC_ID is index of TRDC.DAC index, start from 2 at iMX95.
-> + * ITS [pci(2bit): streamid(6bits)]
-> + *	pci 0 is 0
-> + *	pci 1 is 3
-> + */
-> +static int imx_pcie_config_sid(struct imx_pcie *imx_pcie)
-> +{
-> +	struct imx_of_map *msi_map = NULL, *smmu_map = NULL, *cur;
-> +	int i, j, lut_index, nr_map, msi_size = 0, smmu_size = 0;
-> +	u32 msi_map_mask = 0xffff, smmu_map_mask = 0xffff;
-> +	struct dw_pcie *pci = imx_pcie->pci;
-> +	struct device *dev = pci->dev;
-> +	u32 mask;
-> +	int size;
-> +
-> +	of_get_property(dev->of_node, "msi-map", &msi_size);
-> +	if (msi_size) {
-> +		msi_map = devm_kzalloc(dev, msi_size, GFP_KERNEL);
-> +		if (!msi_map)
-> +			return -ENOMEM;
-> +
-> +		if (of_property_read_u32_array(dev->of_node, "msi-map", (u32 *)msi_map,
-> +					       msi_size / sizeof(u32)))
-> +			return -EINVAL;
-> +
-> +		of_property_read_u32(dev->of_node, "msi-map-mask", &msi_map_mask);
-> +	}
-> +
-> +	cur = msi_map;
-> +	size = msi_size;
-> +	mask = msi_map_mask;
-> +
-> +	of_get_property(dev->of_node, "iommu-map", &smmu_size);
-> +	if (smmu_size) {
-> +		smmu_map = devm_kzalloc(dev, smmu_size, GFP_KERNEL);
-> +		if (!smmu_map)
-> +			return -ENOMEM;
-> +
-> +		if (of_property_read_u32_array(dev->of_node, "iommu-map", (u32 *)smmu_map,
-> +					       smmu_size / sizeof(u32)))
-> +			return -EINVAL;
-> +
-> +		of_property_read_u32(dev->of_node, "iommu_map_mask", &smmu_map_mask);
-> +	}
+From: Xu Kuohai <xukuohai@huawei.com>
 
-You should not be doing your own parsing of these properties.
+As shown in the ExpandSEXTINREG function in [1], LLVM generates SRL and
+SRA instruction pair to implement sign-extension. For x86 and arm64,
+this instruction pair will be folded to a single instruction, but the
+LLVM BPF backend does not do such folding.
 
-Rob
+For example, the following C code:
+
+long f(int x)
+{
+	return x;
+}
+
+will be compiled to:
+
+r0 = r1
+r0 <<= 0x20
+r0 s>>= 0x20
+exit
+
+Since 32-bit to 64-bit sign-extension is a common case and we already
+have MOVSX instruction for sign-extension, this patch tries to fold
+the 32-bit to 64-bit LSH and ARSH pair to a single MOVSX instruction.
+
+[1] https://github.com/llvm/llvm-project/blob/4523a267829c807f3fc8fab8e5e9613985a51565/llvm/lib/CodeGen/SelectionDAG/LegalizeVectorOps.cpp#L1228
+
+Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
+---
+ include/linux/filter.h |  8 ++++++++
+ kernel/bpf/verifier.c  | 46 ++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 54 insertions(+)
+
+diff --git a/include/linux/filter.h b/include/linux/filter.h
+index 7a27f19bf44d..7cc90a32ed9a 100644
+--- a/include/linux/filter.h
++++ b/include/linux/filter.h
+@@ -173,6 +173,14 @@ struct ctl_table_header;
+ 		.off   = 0,					\
+ 		.imm   = 0 })
+ 
++#define BPF_MOV64_SEXT_REG(DST, SRC, OFF)			\
++	((struct bpf_insn) {					\
++		.code  = BPF_ALU64 | BPF_MOV | BPF_X,		\
++		.dst_reg = DST,					\
++		.src_reg = SRC,					\
++		.off   = OFF,					\
++		.imm   = 0 })
++
+ #define BPF_MOV32_REG(DST, SRC)					\
+ 	((struct bpf_insn) {					\
+ 		.code  = BPF_ALU | BPF_MOV | BPF_X,		\
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 4e474ef44e9c..6bcee052d90d 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -20659,6 +20659,49 @@ static int optimize_bpf_loop(struct bpf_verifier_env *env)
+ 	return 0;
+ }
+ 
++static bool is_sext32(struct bpf_insn *insn1, struct bpf_insn *insn2)
++{
++	if (insn1->code != (BPF_ALU64 | BPF_K | BPF_LSH) || insn1->imm != 32)
++		return false;
++
++	if (insn2->code != (BPF_ALU64 | BPF_K | BPF_ARSH) || insn2->imm != 32)
++		return false;
++
++	if (insn1->dst_reg != insn2->dst_reg)
++		return false;
++
++	return true;
++}
++
++/* LLVM generates sign-extension with LSH and ARSH pair, replace it with MOVSX.
++ *
++ * Before:
++ * DST <<= 32
++ * DST s>>= 32
++ *
++ * After:
++ * DST = (s32)DST
++ */
++static int optimize_sext32_insns(struct bpf_verifier_env *env)
++{
++	int i, err;
++	int insn_cnt = env->prog->len;
++	struct bpf_insn *insn = env->prog->insnsi;
++
++	for (i = 0; i < insn_cnt; i++, insn++) {
++		if (i + 1 >= insn_cnt || !is_sext32(insn, insn + 1))
++			continue;
++		/* patch current insn to MOVSX */
++		*insn = BPF_MOV64_SEXT_REG(insn->dst_reg, insn->dst_reg, 32);
++		/* remove next insn */
++		err = verifier_remove_insns(env, i + 1, 1);
++		if (err)
++			return err;
++		insn_cnt--;
++	}
++	return 0;
++}
++
+ static void free_states(struct bpf_verifier_env *env)
+ {
+ 	struct bpf_verifier_state_list *sl, *sln;
+@@ -21577,6 +21620,9 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpfptr_t uattr, __u3
+ 	if (ret == 0)
+ 		ret = optimize_bpf_loop(env);
+ 
++	if (ret == 0)
++		ret = optimize_sext32_insns(env);
++
+ 	if (is_priv) {
+ 		if (ret == 0)
+ 			opt_hard_wire_dead_code_branches(env);
+-- 
+2.30.2
+
