@@ -1,168 +1,142 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5961C7350E;
-	Mon, 29 Apr 2024 13:17:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E112A79950;
+	Mon, 29 Apr 2024 13:51:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714396631; cv=none; b=bwKBNer82bUL/dynYscef8quC2HDNg1tnlquy2tnhs+sBrdb/L/tKQgLxl4VHiFGxbYZgVBgzJMPNjU6Ze5+aMPHz+3i//aA66q0ScWfKFsAZ3OidarV62c9dV+xnLujcqvXJ9gM+uYP8SaTf9xRz/TCeQ546MTp92uREnDmBhg=
+	t=1714398687; cv=none; b=tCrKyBjbWhBfNJMzSZgxOEBJxkk8q9Ip+DIKRZqVenaqbThaV5z0fC/NxPIhB2WYPEfWfARVlbBKYk6+H9hESLrlZoQ6TB4UPRZ/8M2HRf/wzOatIkacF0dmD/edcfy0EekmJDMNEqbY/3If+zNybHCecCES068RgFc5uvCFbHU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714396631; c=relaxed/simple;
-	bh=w2Ysbdlw62K0XMPywgvp3DwJa4tgzeEkrintEchxF5U=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=DhSn6fQP53lhITcs863x0pSS8zvhhc4Zaf4N+fzwN7wlXuGQCU/hOQfXjKsWYVigSQyx3RXX/6VQ0SpxxHpICwtt/tuVZ5ZzNbyHHXnUgas14U6mYy2uhjsF7CqukmOnpcuqOAQFOxsTQ1fSjDgbGN90tV1MXnJtSqVGuRpssAw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jgZihBMK; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1714398687; c=relaxed/simple;
+	bh=odyPaTA/NBNHAchzjVqJiP2jl0Yo6XGZMxvJSgkgKFc=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=g8ctb78tfi21m7vlAcrHG4t++pja60ZAEvK9hOrpMMHGwVN2ufL4/nNf/nM3PNoAZkjtjuUQEC0E4X6H3XuIOqsozxEvzle0eHGm1ZaAowhN/veBw8wtDjmfktD9G46XVE+ky9hysArqGteqKXbrUuh5iGGkosVpBvlmMjGyxyc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=h5c61wun; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jgZihBMK"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DAE3FC4AF19;
-	Mon, 29 Apr 2024 13:17:10 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="h5c61wun"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68756C4AF17;
+	Mon, 29 Apr 2024 13:51:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1714396631;
-	bh=w2Ysbdlw62K0XMPywgvp3DwJa4tgzeEkrintEchxF5U=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=jgZihBMKVPHRsloBrY/8lzLQ/TRynZHkNsHXz/ww9wRr+Av0CpfExPcWbDbhfkym5
-	 GLSOpLPZ/BIInWmbkT6XLEK95VsCL5UwA7qIMCl4z38Nnntf60a4HXHilFRyV9+NWK
-	 LuTwupx/d/ttfDXaO3OrDC6l/o08n62KMxBajo6OO8Ffu+6xkZMwkVDGOEt5HrNhQI
-	 c+MZiKmjpb9m5d6flH8k4wT2v4QZlqPh+dBV0ywGnVAIJaRxaXUT73aRJxBcTELrmO
-	 j/lGMUQjBBkK+x0xzhxx6WZbQtx+PWNtFsbnSySP2vFAkaEs+sBKD0ASau85NA2c0A
-	 GbLpILZGFHTPg==
-From: Puranjay Mohan <puranjay@kernel.org>
-To: Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@google.com>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Zi Shen Lim <zlim.lnx@gmail.com>,
-	Xu Kuohai <xukuohai@huawei.com>,
-	Florent Revest <revest@chromium.org>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org
-Cc: puranjay12@gmail.com
-Subject: [PATCH bpf-next v4 2/2] bpf, arm64: inline bpf_get_smp_processor_id() helper
-Date: Mon, 29 Apr 2024 13:16:47 +0000
-Message-Id: <20240429131647.50165-3-puranjay@kernel.org>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20240429131647.50165-1-puranjay@kernel.org>
-References: <20240429131647.50165-1-puranjay@kernel.org>
+	s=k20201202; t=1714398686;
+	bh=odyPaTA/NBNHAchzjVqJiP2jl0Yo6XGZMxvJSgkgKFc=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=h5c61wunqAacEMS3E6c8pNczBD1EAXrrSWT+ABXr2u4rRtaVqjCFUafYO5SbXFmxW
+	 Y5buu4FvNHaCyPhdBzpUso/RVCKbtdw4HqV6cN/z8KHV/EQx9G6ALNK/Hzd+kBad0w
+	 UU2XvMzysLvE3rbyR2yfbwooMG7W0tgXR4lsmkwLrh/mgnRxA0fYzSk9sK2lkbpZy0
+	 Dmw9lA+ExiYpXRJfxa0eHYG5dGPsM1Cm75UZwVdPwHL1p+tCApfzHQUdGGQipGLt60
+	 CZjwEEn7rgh6WjCPg0gwv/tRxfyl/y3DxJ99izTnj1eI3STNvt64Ah8GaT9xckdkH8
+	 f6rd46qSLti6w==
+Date: Mon, 29 Apr 2024 22:51:19 +0900
+From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>, Steven Rostedt
+ <rostedt@goodmis.org>, Florent Revest <revest@chromium.org>,
+ linux-trace-kernel@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+ Martin KaFai Lau <martin.lau@linux.dev>, bpf <bpf@vger.kernel.org>, Sven
+ Schnelle <svens@linux.ibm.com>, Alexei Starovoitov <ast@kernel.org>, Jiri
+ Olsa <jolsa@kernel.org>, Arnaldo Carvalho de Melo <acme@kernel.org>, Daniel
+ Borkmann <daniel@iogearbox.net>, Alan Maguire <alan.maguire@oracle.com>,
+ Mark Rutland <mark.rutland@arm.com>, Peter Zijlstra <peterz@infradead.org>,
+ Thomas Gleixner <tglx@linutronix.de>, Guo Ren <guoren@kernel.org>
+Subject: Re: [PATCH v9 00/36] tracing: fprobe: function_graph:
+ Multi-function graph and fprobe on fgraph
+Message-Id: <20240429225119.410833c12d9f6fbcce0a58db@kernel.org>
+In-Reply-To: <CAEf4BzYMToveELxsOJ9dXz3H-9omhxRLKgGK-ppYvmK8pgDsfA@mail.gmail.com>
+References: <171318533841.254850.15841395205784342850.stgit@devnote2>
+	<CAEf4BzYMToveELxsOJ9dXz3H-9omhxRLKgGK-ppYvmK8pgDsfA@mail.gmail.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
+Mime-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-As ARM64 JIT now implements BPF_MOV64_PERCPU_REG instruction, inline
-bpf_get_smp_processor_id().
+Hi Andrii,
 
-ARM64 uses the per-cpu variable cpu_number to store the cpu id.
+On Thu, 25 Apr 2024 13:31:53 -0700
+Andrii Nakryiko <andrii.nakryiko@gmail.com> wrote:
 
-Here is how the BPF and ARM64 JITed assembly changes after this commit:
+> Hey Masami,
+> 
+> I can't really review most of that code as I'm completely unfamiliar
+> with all those inner workings of fprobe/ftrace/function_graph. I left
+> a few comments where there were somewhat more obvious BPF-related
+> pieces.
+> 
+> But I also did run our BPF benchmarks on probes/for-next as a baseline
+> and then with your series applied on top. Just to see if there are any
+> regressions. I think it will be a useful data point for you.
 
-                                         BPF
-         		                =====
-              BEFORE                                       AFTER
-             --------                                     -------
+Thanks for testing!
 
-int cpu = bpf_get_smp_processor_id();           int cpu = bpf_get_smp_processor_id();
-(85) call bpf_get_smp_processor_id#229032       (18) r0 = 0xffff800082072008
-                                                (bf) r0 = &(void __percpu *)(r0)
-                                                (61) r0 = *(u32 *)(r0 +0)
+> 
+> You should be already familiar with the bench tool we have in BPF
+> selftests (I used it on some other patches for your tree).
 
-				      ARM64 JIT
-				     ===========
+What patches we need?
 
-              BEFORE                                       AFTER
-             --------                                     -------
+> 
+> BASELINE
+> ========
+> kprobe         :   24.634 ± 0.205M/s
+> kprobe-multi   :   28.898 ± 0.531M/s
+> kretprobe      :   10.478 ± 0.015M/s
+> kretprobe-multi:   11.012 ± 0.063M/s
+> 
+> THIS PATCH SET ON TOP
+> =====================
+> kprobe         :   25.144 ± 0.027M/s (+2%)
+> kprobe-multi   :   28.909 ± 0.074M/s
+> kretprobe      :    9.482 ± 0.008M/s (-9.5%)
+> kretprobe-multi:   13.688 ± 0.027M/s (+24%)
 
-int cpu = bpf_get_smp_processor_id();           int cpu = bpf_get_smp_processor_id();
-mov     x10, #0xfffffffffffff4d0                mov     x7, #0xffff8000ffffffff
-movk    x10, #0x802b, lsl #16                   movk    x7, #0x8207, lsl #16
-movk    x10, #0x8000, lsl #32                   movk    x7, #0x2008
-blr     x10                                     mrs     x10, tpidr_el1
-add     x7, x0, #0x0                            add     x7, x7, x10
-                                                ldr     w7, [x7]
+This looks good. Kretprobe should also use kretprobe-multi (fprobe)
+eventually because it should be a single callback version of
+kretprobe-multi.
 
-Performance improvement using benchmark[1]
+> 
+> These numbers are pretty stable and look to be more or less representative.
+> 
+> As you can see, kprobes got a bit faster, kprobe-multi seems to be
+> about the same, though.
+> 
+> Then (I suppose they are "legacy") kretprobes got quite noticeably
+> slower, almost by 10%. Not sure why, but looks real after re-running
+> benchmarks a bunch of times and getting stable results.
 
-             BEFORE                                       AFTER
-            --------                                     -------
+Hmm, kretprobe on x86 should use ftrace + rethook even with my series.
+So nothing should be changed. Maybe cache access pattern has been
+changed?
+I'll check it with tracefs (to remove the effect from bpf related changes)
 
-glob-arr-inc   :   23.817 ± 0.019M/s      glob-arr-inc   :   24.631 ± 0.027M/s [+ 3.41%]
-arr-inc        :   23.253 ± 0.019M/s      arr-inc        :   23.742 ± 0.023M/s [+ 2.10%]
-hash-inc       :   12.258 ± 0.010M/s      hash-inc       :   12.625 ± 0.004M/s [+ 3.00%]
+> 
+> On the other hand, multi-kretprobes got significantly faster (+24%!).
+> Again, I don't know if it is expected or not, but it's a nice
+> improvement.
 
-[1] https://github.com/anakryiko/linux/commit/8dec900975ef
+Thanks!
 
-Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
-Acked-by: Andrii Nakryiko <andrii@kernel.org>
----
- kernel/bpf/verifier.c | 27 ++++++++++++++++++++-------
- 1 file changed, 20 insertions(+), 7 deletions(-)
+> 
+> If you have any idea why kretprobes would get so much slower, it would
+> be nice to look into that and see if you can mitigate the regression
+> somehow. Thanks!
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 4e474ef44e9c..d0725b1c7bec 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -20273,19 +20273,33 @@ static int do_misc_fixups(struct bpf_verifier_env *env)
- 			goto next_insn;
- 		}
- 
--#ifdef CONFIG_X86_64
- 		/* Implement bpf_get_smp_processor_id() inline. */
- 		if (insn->imm == BPF_FUNC_get_smp_processor_id &&
- 		    prog->jit_requested && bpf_jit_supports_percpu_insn()) {
- 			/* BPF_FUNC_get_smp_processor_id inlining is an
--			 * optimization, so if pcpu_hot.cpu_number is ever
-+			 * optimization, so if cpu_number_addr is ever
- 			 * changed in some incompatible and hard to support
- 			 * way, it's fine to back out this inlining logic
- 			 */
--			insn_buf[0] = BPF_MOV32_IMM(BPF_REG_0, (u32)(unsigned long)&pcpu_hot.cpu_number);
--			insn_buf[1] = BPF_MOV64_PERCPU_REG(BPF_REG_0, BPF_REG_0);
--			insn_buf[2] = BPF_LDX_MEM(BPF_W, BPF_REG_0, BPF_REG_0, 0);
--			cnt = 3;
-+			u64 cpu_number_addr;
-+			struct bpf_insn ld_insn[2] = {
-+				BPF_LD_IMM64(BPF_REG_0, 0)
-+			};
-+
-+#if defined(CONFIG_X86_64)
-+			cpu_number_addr = (u64)&pcpu_hot.cpu_number;
-+#elif defined(CONFIG_ARM64)
-+			cpu_number_addr = (u64)&cpu_number;
-+#else
-+			goto next_insn;
-+#endif
-+			ld_insn[0].imm = (u32)cpu_number_addr;
-+			ld_insn[1].imm = (u32)(cpu_number_addr >> 32);
-+			insn_buf[0] = ld_insn[0];
-+			insn_buf[1] = ld_insn[1];
-+			insn_buf[2] = BPF_MOV64_PERCPU_REG(BPF_REG_0, BPF_REG_0);
-+			insn_buf[3] = BPF_LDX_MEM(BPF_W, BPF_REG_0, BPF_REG_0, 0);
-+			cnt = 4;
- 
- 			new_prog = bpf_patch_insn_data(env, i + delta, insn_buf, cnt);
- 			if (!new_prog)
-@@ -20296,7 +20310,6 @@ static int do_misc_fixups(struct bpf_verifier_env *env)
- 			insn      = new_prog->insnsi + i + delta;
- 			goto next_insn;
- 		}
--#endif
- 		/* Implement bpf_get_func_arg inline. */
- 		if (prog_type == BPF_PROG_TYPE_TRACING &&
- 		    insn->imm == BPF_FUNC_get_func_arg) {
+OK, let me check it.
+
+Thank you!
+
+> 
+> 
+> >  51 files changed, 2325 insertions(+), 882 deletions(-)
+> >  create mode 100644 tools/testing/selftests/ftrace/test.d/dynevent/add_remove_fprobe_repeat.tc
+> >
+> > --
+> > Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> >
+
+
 -- 
-2.40.1
-
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
