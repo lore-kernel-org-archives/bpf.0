@@ -1,57 +1,57 @@
-Received: from mail-pg1-f171.google.com (mail-pg1-f171.google.com [209.85.215.171])
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDFC913340D;
-	Wed,  1 May 2024 15:13:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C671D134426;
+	Wed,  1 May 2024 15:14:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714576441; cv=none; b=uyNLA6rLFJK88CjDauTSh3qdxu6wmCqjhYW8AV6IamOu9XSXYWcROYKWtKU1DBR5TH62E5/MntgM85IGyHFLA36bwBKkHDj+ja2cBTrFhXsaFoxWE1+TETnAlZR/0V2poGa5Mtup4Fol0Rh0V9NH4oDdCSqcmx/myWnZccHYSeU=
+	t=1714576444; cv=none; b=B/n3IcRq/990KWvyqQaZPP9wVlDSY4XjKg41qXtz9U0WTKtAxMbuJf4V2WibTbvExSwgfKeJZDe+cEbXj2xahyAWwo529783VmCIuD9ccacqB6iqKcFt59c/8l6RquvzTvC6OweFOe4y+21JCwmc3XTo9gBK66wgpc3odkLvxE0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714576441; c=relaxed/simple;
-	bh=gIF2QrsMHM/B/UDcxk7sbrnEHtEOU99YBgh/AMxu8/k=;
+	s=arc-20240116; t=1714576444; c=relaxed/simple;
+	bh=k3Arv2uFDgrC9YXQZRt7QUCT9BMyMnr/oQ9x+4dCHxA=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=qmgJ3TdNcKlcHpx0botLRjcus1YDdxT11i8L7o7RNJvJIKuU2EN3KcMMw8+7vMPz30CTxq+Q1dFXPYCc4zq0vn1xQ2zIbu44Ordvhf6yGCDcgaUKQijWHrpROAWErkHHPCBFhkI5+8ECTsIdpqsfSRZnkT5FIhb2liZ1OYJzevQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XivLhFjW; arc=none smtp.client-ip=209.85.215.171
+	 MIME-Version; b=QLppjQz8t4X2Bd6PPoyZY3OoHlu7XEQWQfDeb+LJBs7b9fK6B/lxIKi7PBVoE5+9M5VGeVM5mZQGO4lm+0+0yJT5bU+AGBAouWYrVOFSAw/bXLxCdGsfrb5cChpKAQJjKlsaDEOfWCo/MSU4GcThIUmOBVpbSKIokDzAy06Jhew=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jXy9TjkI; arc=none smtp.client-ip=209.85.214.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XivLhFjW"
-Received: by mail-pg1-f171.google.com with SMTP id 41be03b00d2f7-613a6bb2947so2315325a12.3;
-        Wed, 01 May 2024 08:13:57 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jXy9TjkI"
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-1ec486198b6so15488635ad.1;
+        Wed, 01 May 2024 08:14:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1714576437; x=1715181237; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1714576441; x=1715181241; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=1OvIoU1oRLEpEy46qbogjdAzeNGp3CqtPIa9rK8TZug=;
-        b=XivLhFjWeInfXC05XRNF3adW3O1NGfugWqWT7/d2w8RzNiQJeKf3Cd0lK1trOdNrHV
-         FwPZeTR47l0Xp9OqPa8F6UTmJKwKQ6XTqhHx2Hss0SlGem6bEFUduOOI46iFBJFRdHqS
-         kmUd7XAEHo7byLeujg1j0wl/02XJk8D5BBEfrujhdP9/jnz5LaejSym47RuC+ffF9Fmt
-         FcTL6s+WSUcDhH3Wr9X6IL4KWTEp+5gIjdK6Zg7Eut2mje0XdnKYPiYhLZ4TLlbq/hiZ
-         ir4hfBSax53Xl/TsuCp47sZcN6jrHQ1TFU8BGqR14MJ6qoZk67lM63sBoBXpiFlX0bbA
-         WG8g==
+        bh=sR6IVCnSJtev+jROYsGFPF1ZJvjjWoytx7SF4Wpesto=;
+        b=jXy9TjkIiCzbty+G3ztL+gZp7Kji6D6pr24oA566Zf86/41DWCz8x2tkIWECdMiFag
+         KGczppDrHlTFQttlLsDs68YRup1sdda9pRq3gJPKhyalOEr1MhpS4znVLuw/Io1kSxf8
+         qRyh4atS6pghUDVcXB8GWd1mdRJpNE1OK+QJO+rMydOLMlLLeHs6QXjFM/Xgfs9sTu+u
+         /a5huO3sAjYd/Mgl+S5m23oBTVaFLmIzBD6uRgKhvDA/EXDfAmAse1SbpHTkgD6yFA5l
+         MeCuQCDkFLeI4K5ECiUmstBID3ZvDdNbj//R4dePBVwXhNuwYBWxKSAb4FofsK+eQy1s
+         Jc+A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1714576437; x=1715181237;
+        d=1e100.net; s=20230601; t=1714576441; x=1715181241;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=1OvIoU1oRLEpEy46qbogjdAzeNGp3CqtPIa9rK8TZug=;
-        b=scmK92QihBInZYwnWdzw03yYGSHGIOlvlQH3kqATCw1eaYB/mL/YNxIYYujpHlGYSN
-         qE1Eb9kAe33mQ6rhAQ6UYvLc9qs5K1mZMNtSLb6ktFECHdpyBs/VZ5pnRaLwTGuxq7Ra
-         CQq2u1ig8jRdkV/bUABLawQOKvNjgrEUhnFWOIXlUtNKqCh4Rvoclyc24eYVsUgcnVjt
-         X128qPozVt2UcXMhH23kbGtwBTmMjswJ0u8i9ojVVpM2szuRi7m8FDvXM37XOA2lkIu1
-         XEW8paT2CvbTaFWzs4QBOEx6j5WVJarAd1UFE+9neat1SU8xMVnH0g8qrlHH+jRgLBhE
-         wt8w==
-X-Forwarded-Encrypted: i=1; AJvYcCXG0MrRSUyoM3eK6RLWMqHw3NmTfonKVTWHVFcchiXDLe2Jli7WZjW51CV4uWFYc+xxjbnV0TumMD5LiIeE5Jypf88w
-X-Gm-Message-State: AOJu0YxqY8elq+3xEQCo25jKyskDtMjAocH8ut7BV0RIG/2Px7Dm7XqK
-	gtT+gfElXVM0OZOyg4KWgmRPr8dBfSD+Ua1WfEz5fy0llKcBUszP
-X-Google-Smtp-Source: AGHT+IEihIMgtvCmRXAbzZiUukfbDjgNDRcPvD+8breDm9CHfzIQNSn1qriPEf8opbcMbTWDPqXbYw==
-X-Received: by 2002:a17:90a:d191:b0:2a6:ff2e:dce0 with SMTP id fu17-20020a17090ad19100b002a6ff2edce0mr2783485pjb.5.1714576437139;
-        Wed, 01 May 2024 08:13:57 -0700 (PDT)
+        bh=sR6IVCnSJtev+jROYsGFPF1ZJvjjWoytx7SF4Wpesto=;
+        b=qJ+xB7fT7/6aX+8mCeCbOASGEE/LQ4c6IlSQSeV7Icx4ZC85GTufPItOInxYgxoc6D
+         r9INxZPooopEzoGmY1eNjrr1HcBJ87yPbJjgGdGMrrDKViEj9Za63qBoBbdTadVzw22y
+         1adjv/PpkGhT/+xFx6/OMwTxW/xRsyk2ynuPz0Opv9Fcre+Fd1GKX2gVOJSq8G5tGo4J
+         29HGbDcBHRYcAooEwJ4Vlirq7D7Up9LeVheFJEHiU8MZNzxtTSvQgoSS8mxXFT20GGGS
+         m8KE1oaggumP8TVL1sD/rTe+fyCWkMm2xEpzXvxZmkWDyOcpGXpXjZ8G/85N3hFfInb4
+         flbg==
+X-Forwarded-Encrypted: i=1; AJvYcCX27ZFHmnh9UwVbB7VwUJePe9RFRBAc158GaPFYRJbWRYw9T9eReUEp7nLSrH3DF26UPvF2CLUPu3RsqnISW/KBa/zg
+X-Gm-Message-State: AOJu0YwX3aUnF6ZHmZVi7sqQ/CkhlYzEuR/krVjBirj2qoJyCcRGoVEh
+	sxYUKzNN+4m0CrMtec0E+J09ZhuBvEkICDEGFuPPJQpoEhqblIU6
+X-Google-Smtp-Source: AGHT+IFWLdSXMHta5PuAJ0wHsZ+7FJn7WdBqP2SBRutIOarbKrhI/cqlBxVU16vdw2NvJl+r7K62Cw==
+X-Received: by 2002:a17:902:ea07:b0:1e4:5b89:dbfa with SMTP id s7-20020a170902ea0700b001e45b89dbfamr2990644plg.41.1714576440815;
+        Wed, 01 May 2024 08:14:00 -0700 (PDT)
 Received: from localhost (dhcp-141-239-159-203.hawaiiantel.net. [141.239.159.203])
-        by smtp.gmail.com with ESMTPSA id 100-20020a17090a09ed00b002a2f6da006csm1575238pjo.52.2024.05.01.08.13.56
+        by smtp.gmail.com with ESMTPSA id q16-20020a17090311d000b001e9685ad053sm19157802plh.248.2024.05.01.08.14.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 May 2024 08:13:56 -0700 (PDT)
+        Wed, 01 May 2024 08:14:00 -0700 (PDT)
 Sender: Tejun Heo <htejun@gmail.com>
 From: Tejun Heo <tj@kernel.org>
 To: torvalds@linux-foundation.org,
@@ -87,9 +87,9 @@ Cc: linux-kernel@vger.kernel.org,
 	bpf@vger.kernel.org,
 	kernel-team@meta.com,
 	Tejun Heo <tj@kernel.org>
-Subject: [PATCH 20/39] sched_ext: Print debug dump after an error exit
-Date: Wed,  1 May 2024 05:09:55 -1000
-Message-ID: <20240501151312.635565-21-tj@kernel.org>
+Subject: [PATCH 22/39] sched_ext: Implement scx_bpf_kick_cpu() and task preemption support
+Date: Wed,  1 May 2024 05:09:57 -1000
+Message-ID: <20240501151312.635565-23-tj@kernel.org>
 X-Mailer: git-send-email 2.44.0
 In-Reply-To: <20240501151312.635565-1-tj@kernel.org>
 References: <20240501151312.635565-1-tj@kernel.org>
@@ -101,439 +101,498 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-If a BPF scheduler triggers an error, the scheduler is aborted and the
-system is reverted to the built-in scheduler. In the process, a lot of
-information which may be useful for figuring out what happened can be lost.
+It's often useful to wake up and/or trigger reschedule on other CPUs. This
+patch adds scx_bpf_kick_cpu() kfunc helper that BPF scheduler can call to
+kick the target CPU into the scheduling path.
 
-This patch adds debug dump which captures information which may be useful
-for debugging including runqueue and runnable thread states at the time of
-failure. The following shows a debug dump after triggering the watchdog:
+As a sched_ext task relinquishes its CPU only after its slice is depleted,
+this patch also adds SCX_KICK_PREEMPT and SCX_ENQ_PREEMPT which clears the
+slice of the target CPU's current task to guarantee that sched_ext's
+scheduling path runs on the CPU.
 
-  # os/work/tools/sched_ext/build/bin/scx_qmap -t 100
-  enq=0, dsp=0, delta=0, deq=0
-  enq=21, dsp=21, delta=0, deq=0
-  enq=96, dsp=96, delta=0, deq=1
+If SCX_KICK_IDLE is specified, the target CPU is kicked iff the CPU is idle
+to guarantee that the target CPU will go through at least one full sched_ext
+scheduling cycle after the kicking. This can be used to wake up idle CPUs
+without incurring unnecessary overhead if it isn't currently idle.
 
-  DEBUG DUMP
-  ================================================================================
+As a demonstration of how backward compatibility can be supported using BPF
+CO-RE, tools/sched_ext/include/scx/compat.bpf.h is added. It provides
+__COMPAT_scx_bpf_kick_cpu_IDLE() which uses SCX_KICK_IDLE if available or
+becomes a regular kicking otherwise. This allows schedulers to use the new
+SCX_KICK_IDLE while maintaining support for older kernels. The plan is to
+temporarily use compat helpers to ease API updates and drop them after a few
+kernel releases.
 
-  kworker/u16:0[11] triggered exit kind 1026:
-    runnable task stall (scx_qmap[1524] failed to run for 5.659s)
+v5: - SCX_KICK_IDLE added. Note that this also adds a compat mechanism for
+      schedulers so that they can support kernels without SCX_KICK_IDLE.
+      This is useful as a demonstration of how new feature flags can be
+      added in a backward compatible way.
 
-  Backtrace:
-    scx_watchdog_workfn+0x138/0x1c0
-    process_scheduled_works+0x245/0x4e0
-    worker_thread+0x270/0x360
-    kthread+0xeb/0x110
-    ret_from_fork+0x36/0x40
-    ret_from_fork_asm+0x11/0x20
+    - kick_cpus_irq_workfn() reimplemented so that it touches the pending
+      cpumasks only as necessary to reduce kicking overhead on machines with
+      a lot of CPUs.
 
-  Runqueue states
-  ---------------
+    - tools/sched_ext/include/scx/compat.bpf.h added.
 
-  CPU 2   : nr_run=1 ops_qseq=34
-	    curr=kworker/u16:0[11] class=ext_sched_class
+v4: - Move example scheduler to its own patch.
 
-   *R kworker/u16:0[11] +0ms
-	scx_state/flags=3/0xd ops_state/qseq=0/0
-	sticky/holding_cpu=-1/-1 dsq_id=(n/a)
-	cpus=ff
+v3: - Make scx_example_central switch all tasks by default.
 
-      scx_ops_error_irq_workfn+0x25d/0x340
-      irq_work_run_list+0x7d/0xc0
-      irq_work_run+0x18/0x30
-      __sysvec_irq_work+0x38/0x100
-      sysvec_irq_work+0x69/0x80
-      asm_sysvec_irq_work+0x1b/0x20
-      scx_watchdog_workfn+0x15d/0x1c0
-      process_scheduled_works+0x245/0x4e0
-      worker_thread+0x270/0x360
-      kthread+0xeb/0x110
-      ret_from_fork+0x36/0x40
-      ret_from_fork_asm+0x11/0x20
+    - Convert to BPF inline iterators.
 
-  CPU 7   : nr_run=1 ops_qseq=11
-	    curr=swapper/7[0] class=idle_sched_class
+v2: - Julia Lawall reported that scx_example_central can overflow the
+      dispatch buffer and malfunction. As scheduling for other CPUs can't be
+      handled by the automatic retry mechanism, fix by implementing an
+      explicit overflow and retry handling.
 
-    R scx_qmap[1524] -5659ms
-	scx_state/flags=3/0x9 ops_state/qseq=2/3
-	sticky/holding_cpu=-1/-1 dsq_id=(n/a)
-	cpus=ff
-
-      common_nsleep+0x34/0x50
-      __x64_sys_clock_nanosleep+0xd9/0x120
-      do_syscall_64+0x7e/0x150
-      entry_SYSCALL_64_after_hwframe+0x46/0x4e
-
-  ================================================================================
-
-  EXIT: runnable task stall (scx_qmap[1524] failed to run for 5.659s)
-
-It shows that CPU 2 was running the watchdog when it triggered the error
-condition and the scx_qmap thread has been queued on CPU 7 for over 5
-seconds but failed to run. This dump has proved pretty useful for developing
-and debugging BPF schedulers.
-
-Currently, it uses fixed 32k buffer and doesn't provide any way for the BPF
-scheduler to add additional information. These will be improved in the
-future.
+    - Updated to use generic BPF cpumask helpers.
 
 Signed-off-by: Tejun Heo <tj@kernel.org>
 Reviewed-by: David Vernet <dvernet@meta.com>
+Acked-by: Josh Don <joshdon@google.com>
+Acked-by: Hao Luo <haoluo@google.com>
+Acked-by: Barret Rhoden <brho@google.com>
 ---
- kernel/sched/ext.c                           | 122 ++++++++++++++++++-
- tools/sched_ext/include/scx/compat.h         |  11 +-
- tools/sched_ext/include/scx/user_exit_info.h |  19 +++
- tools/sched_ext/scx_qmap.c                   |  10 +-
- tools/sched_ext/scx_simple.c                 |   2 +-
- 5 files changed, 155 insertions(+), 9 deletions(-)
+ include/linux/sched/ext.h                |   4 +
+ kernel/sched/ext.c                       | 225 +++++++++++++++++++++--
+ kernel/sched/sched.h                     |  10 +
+ tools/sched_ext/include/scx/common.bpf.h |   1 +
+ tools/sched_ext/include/scx/compat.bpf.h |  16 ++
+ 5 files changed, 243 insertions(+), 13 deletions(-)
 
+diff --git a/include/linux/sched/ext.h b/include/linux/sched/ext.h
+index 123d6dffdf26..4be270d02b98 100644
+--- a/include/linux/sched/ext.h
++++ b/include/linux/sched/ext.h
+@@ -134,6 +134,10 @@ struct sched_ext_entity {
+ 	 * scx_bpf_dispatch() but can also be modified directly by the BPF
+ 	 * scheduler. Automatically decreased by SCX as the task executes. On
+ 	 * depletion, a scheduling event is triggered.
++	 *
++	 * This value is cleared to zero if the task is preempted by
++	 * %SCX_KICK_PREEMPT and shouldn't be used to determine how long the
++	 * task ran. Use p->se.sum_exec_runtime instead.
+ 	 */
+ 	u64			slice;
+ 
 diff --git a/kernel/sched/ext.c b/kernel/sched/ext.c
-index ff080b5f0330..4ffa42e5d7dd 100644
+index 4ffa42e5d7dd..26c6a0b1e909 100644
 --- a/kernel/sched/ext.c
 +++ b/kernel/sched/ext.c
-@@ -12,6 +12,7 @@ enum scx_consts {
+@@ -371,6 +371,14 @@ enum scx_enq_flags {
  
- 	SCX_EXIT_BT_LEN			= 64,
- 	SCX_EXIT_MSG_LEN		= 1024,
-+	SCX_EXIT_DUMP_DFL_LEN		= 32768,
- };
- 
- enum scx_exit_kind {
-@@ -48,6 +49,9 @@ struct scx_exit_info {
- 
- 	/* informational message */
- 	char			*msg;
-+
-+	/* debug dump */
-+	char			*dump;
- };
- 
- /* sched_ext_ops.flags */
-@@ -330,6 +334,12 @@ struct sched_ext_ops {
- 	 */
- 	u32 timeout_ms;
- 
-+	/**
-+	 * exit_dump_len - scx_exit_info.dump buffer length. If 0, the default
-+	 * value of 32768 is used.
-+	 */
-+	u32 exit_dump_len;
-+
- 	/**
- 	 * name - BPF scheduler's name
- 	 *
-@@ -2888,12 +2898,13 @@ static void scx_ops_bypass(bool bypass)
- 
- static void free_exit_info(struct scx_exit_info *ei)
- {
-+	kfree(ei->dump);
- 	kfree(ei->msg);
- 	kfree(ei->bt);
- 	kfree(ei);
- }
- 
--static struct scx_exit_info *alloc_exit_info(void)
-+static struct scx_exit_info *alloc_exit_info(size_t exit_dump_len)
- {
- 	struct scx_exit_info *ei;
- 
-@@ -2903,8 +2914,9 @@ static struct scx_exit_info *alloc_exit_info(void)
- 
- 	ei->bt = kcalloc(sizeof(ei->bt[0]), SCX_EXIT_BT_LEN, GFP_KERNEL);
- 	ei->msg = kzalloc(SCX_EXIT_MSG_LEN, GFP_KERNEL);
-+	ei->dump = kzalloc(exit_dump_len, GFP_KERNEL);
- 
--	if (!ei->bt || !ei->msg) {
-+	if (!ei->bt || !ei->msg || !ei->dump) {
- 		free_exit_info(ei);
- 		return NULL;
- 	}
-@@ -3104,8 +3116,101 @@ static void scx_ops_disable(enum scx_exit_kind kind)
- 	schedule_scx_ops_disable_work();
- }
- 
-+static void scx_dump_task(struct seq_buf *s, struct task_struct *p, char marker,
-+			  unsigned long now)
-+{
-+	static unsigned long bt[SCX_EXIT_BT_LEN];
-+	char dsq_id_buf[19] = "(n/a)";
-+	unsigned long ops_state = atomic_long_read(&p->scx.ops_state);
-+	unsigned int bt_len;
-+	size_t avail, used;
-+	char *buf;
-+
-+	if (p->scx.dsq)
-+		scnprintf(dsq_id_buf, sizeof(dsq_id_buf), "0x%llx",
-+			  (unsigned long long)p->scx.dsq->id);
-+
-+	seq_buf_printf(s, "\n %c%c %s[%d] %+ldms\n",
-+		       marker, task_state_to_char(p), p->comm, p->pid,
-+		       jiffies_delta_msecs(p->scx.runnable_at, now));
-+	seq_buf_printf(s, "      scx_state/flags=%u/0x%x ops_state/qseq=%lu/%lu\n",
-+		       scx_get_task_state(p),
-+		       p->scx.flags & ~SCX_TASK_STATE_MASK,
-+		       ops_state & SCX_OPSS_STATE_MASK,
-+		       ops_state >> SCX_OPSS_QSEQ_SHIFT);
-+	seq_buf_printf(s, "      sticky/holding_cpu=%d/%d dsq_id=%s\n",
-+		       p->scx.sticky_cpu, p->scx.holding_cpu, dsq_id_buf);
-+	seq_buf_printf(s, "      cpus=%*pb\n\n", cpumask_pr_args(p->cpus_ptr));
-+
-+	bt_len = stack_trace_save_tsk(p, bt, SCX_EXIT_BT_LEN, 1);
-+
-+	avail = seq_buf_get_buf(s, &buf);
-+	used = stack_trace_snprint(buf, avail, bt, bt_len, 3);
-+	seq_buf_commit(s, used < avail ? used : -1);
-+}
-+
-+static void scx_dump_state(struct scx_exit_info *ei, size_t dump_len)
-+{
-+	const char trunc_marker[] = "\n\n~~~~ TRUNCATED ~~~~\n";
-+	unsigned long now = jiffies;
-+	struct seq_buf s;
-+	size_t avail, used;
-+	char *buf;
-+	int cpu;
-+
-+	if (dump_len <= sizeof(trunc_marker))
-+		return;
-+
-+	seq_buf_init(&s, ei->dump, dump_len - sizeof(trunc_marker));
-+
-+	seq_buf_printf(&s, "%s[%d] triggered exit kind %d:\n  %s (%s)\n\n",
-+		       current->comm, current->pid, ei->kind, ei->reason, ei->msg);
-+	seq_buf_printf(&s, "Backtrace:\n");
-+	avail = seq_buf_get_buf(&s, &buf);
-+	used = stack_trace_snprint(buf, avail, ei->bt, ei->bt_len, 1);
-+	seq_buf_commit(&s, used < avail ? used : -1);
-+
-+	seq_buf_printf(&s, "\nRunqueue states\n");
-+	seq_buf_printf(&s, "---------------\n");
-+
-+	for_each_possible_cpu(cpu) {
-+		struct rq *rq = cpu_rq(cpu);
-+		struct rq_flags rf;
-+		struct task_struct *p;
-+
-+		rq_lock(rq, &rf);
-+
-+		if (list_empty(&rq->scx.runnable_list) &&
-+		    rq->curr->sched_class == &idle_sched_class)
-+			goto next;
-+
-+		seq_buf_printf(&s, "\nCPU %-4d: nr_run=%u ops_qseq=%lu\n",
-+			       cpu, rq->scx.nr_running, rq->scx.ops_qseq);
-+		seq_buf_printf(&s, "          curr=%s[%d] class=%ps\n",
-+			       rq->curr->comm, rq->curr->pid,
-+			       rq->curr->sched_class);
-+
-+		if (rq->curr->sched_class == &ext_sched_class)
-+			scx_dump_task(&s, rq->curr, '*', now);
-+
-+		list_for_each_entry(p, &rq->scx.runnable_list, scx.runnable_node)
-+			scx_dump_task(&s, p, ' ', now);
-+	next:
-+		rq_unlock(rq, &rf);
-+	}
-+
-+	if (seq_buf_has_overflowed(&s))
-+		memcpy(ei->dump + seq_buf_used(&s) - 1, trunc_marker,
-+		       sizeof(trunc_marker));
-+}
-+
- static void scx_ops_error_irq_workfn(struct irq_work *irq_work)
- {
-+	struct scx_exit_info *ei = scx_exit_info;
-+
-+	if (ei->kind >= SCX_EXIT_ERROR)
-+		scx_dump_state(ei, scx_ops.exit_dump_len);
-+
- 	schedule_scx_ops_disable_work();
- }
- 
-@@ -3131,6 +3236,13 @@ static __printf(3, 4) void scx_ops_exit_kind(enum scx_exit_kind kind,
- 	vscnprintf(ei->msg, SCX_EXIT_MSG_LEN, fmt, args);
- 	va_end(args);
+ 	/* high 32bits are SCX specific */
  
 +	/*
-+	 * Set ei->kind and ->reason for scx_dump_state(). They'll be set again
-+	 * in scx_ops_disable_workfn().
++	 * Set the following to trigger preemption when calling
++	 * scx_bpf_dispatch() with a local dsq as the target. The slice of the
++	 * current task is cleared to zero and the CPU is kicked into the
++	 * scheduling path. Implies %SCX_ENQ_HEAD.
 +	 */
-+	ei->kind = kind;
-+	ei->reason = scx_exit_reason(ei->kind);
++	SCX_ENQ_PREEMPT		= 1LLU << 32,
 +
- 	irq_work_queue(&scx_ops_error_irq_work);
- }
- 
-@@ -3192,7 +3304,7 @@ static int scx_ops_enable(struct sched_ext_ops *ops)
- 	if (ret < 0)
- 		goto err;
- 
--	scx_exit_info = alloc_exit_info();
-+	scx_exit_info = alloc_exit_info(ops->exit_dump_len);
- 	if (!scx_exit_info) {
- 		ret = -ENOMEM;
- 		goto err_del;
-@@ -3572,6 +3684,10 @@ static int bpf_scx_init_member(const struct btf_type *t,
- 			return -E2BIG;
- 		ops->timeout_ms = *(u32 *)(udata + moff);
- 		return 1;
-+	case offsetof(struct sched_ext_ops, exit_dump_len):
-+		ops->exit_dump_len =
-+			*(u32 *)(udata + moff) ?: SCX_EXIT_DUMP_DFL_LEN;
-+		return 1;
- 	}
- 
- 	return 0;
-diff --git a/tools/sched_ext/include/scx/compat.h b/tools/sched_ext/include/scx/compat.h
-index 2a66f3eb87a9..2be79bd88a25 100644
---- a/tools/sched_ext/include/scx/compat.h
-+++ b/tools/sched_ext/include/scx/compat.h
-@@ -126,7 +126,8 @@ static inline bool __COMPAT_struct_has_field(const char *type, const char *field
-  * and attach it, backward compatibility is automatically maintained where
-  * reasonable.
-  *
-- * - sched_ext_ops.tick(): Ignored on older kernels with a warning.
-+ * - ops.tick(): Ignored on older kernels with a warning.
-+ * - ops.exit_dump_len: Cleared to zero on older kernels with a warning.
-  */
- #define SCX_OPS_OPEN(__ops_name, __scx_name) ({					\
- 	struct __scx_name *__skel;						\
-@@ -136,7 +137,13 @@ static inline bool __COMPAT_struct_has_field(const char *type, const char *field
- 	__skel; 								\
- })
- 
--#define SCX_OPS_LOAD(__skel, __ops_name, __scx_name) ({				\
-+#define SCX_OPS_LOAD(__skel, __ops_name, __scx_name, __uei_name) ({		\
-+	UEI_SET_SIZE(__skel, __ops_name, __uei_name);				\
-+	if (!__COMPAT_struct_has_field("sched_ext_ops", "exit_dump_len") &&	\
-+	    (__skel)->struct_ops.__ops_name->exit_dump_len) {			\
-+		fprintf(stderr, "WARNING: kernel doesn't support setting exit dump len\n"); \
-+		(__skel)->struct_ops.__ops_name->exit_dump_len = 0;		\
-+	}									\
- 	if (!__COMPAT_struct_has_field("sched_ext_ops", "tick") &&		\
- 	    (__skel)->struct_ops.__ops_name->tick) {				\
- 		fprintf(stderr, "WARNING: kernel doesn't support ops.tick()\n"); \
-diff --git a/tools/sched_ext/include/scx/user_exit_info.h b/tools/sched_ext/include/scx/user_exit_info.h
-index 8c3b7fac4d05..cf4293cb250e 100644
---- a/tools/sched_ext/include/scx/user_exit_info.h
-+++ b/tools/sched_ext/include/scx/user_exit_info.h
-@@ -13,6 +13,7 @@
- enum uei_sizes {
- 	UEI_REASON_LEN		= 128,
- 	UEI_MSG_LEN		= 1024,
-+	UEI_DUMP_DFL_LEN	= 32768,
+ 	/*
+ 	 * The task being enqueued is the only task available for the cpu. By
+ 	 * default, ext core keeps executing such tasks but when
+@@ -400,6 +408,24 @@ enum scx_pick_idle_cpu_flags {
+ 	SCX_PICK_IDLE_CORE	= 1LLU << 0,	/* pick a CPU whose SMT siblings are also idle */
  };
  
- struct user_exit_info {
-@@ -28,6 +29,8 @@ struct user_exit_info {
- #include <bpf/bpf_core_read.h>
++enum scx_kick_flags {
++	/*
++	 * Kick the target CPU if idle. Guarantees that the target CPU goes
++	 * through at least one full scheduling cycle before going idle. If the
++	 * target CPU can be determined to be currently not idle and going to go
++	 * through a scheduling cycle before going idle, noop.
++	 */
++	SCX_KICK_IDLE		= 1LLU << 0,
++
++	/*
++	 * Preempt the current task and execute the dispatch path. If the
++	 * current task of the target CPU is an SCX task, its ->scx.slice is
++	 * cleared to zero before the scheduling path is invoked so that the
++	 * task expires and the dispatch path is invoked.
++	 */
++	SCX_KICK_PREEMPT	= 1LLU << 1,
++};
++
+ enum scx_ops_enable_state {
+ 	SCX_OPS_PREPPING,
+ 	SCX_OPS_ENABLING,
+@@ -944,7 +970,7 @@ static void dispatch_enqueue(struct scx_dispatch_q *dsq, struct task_struct *p,
+ 		}
+ 	}
  
- #define UEI_DEFINE(__name)							\
-+	char RESIZABLE_ARRAY(data, __name##_dump);				\
-+	const volatile u32 __name##_dump_len;					\
- 	struct user_exit_info __name SEC(".data")
+-	if (enq_flags & SCX_ENQ_HEAD)
++	if (enq_flags & (SCX_ENQ_HEAD | SCX_ENQ_PREEMPT))
+ 		list_add(&p->scx.dsq_node, &dsq->list);
+ 	else
+ 		list_add_tail(&p->scx.dsq_node, &dsq->list);
+@@ -970,8 +996,16 @@ static void dispatch_enqueue(struct scx_dispatch_q *dsq, struct task_struct *p,
  
- #define UEI_RECORD(__uei_name, __ei) ({						\
-@@ -35,6 +38,8 @@ struct user_exit_info {
- 				  sizeof(__uei_name.reason), (__ei)->reason);	\
- 	bpf_probe_read_kernel_str(__uei_name.msg,				\
- 				  sizeof(__uei_name.msg), (__ei)->msg);		\
-+	bpf_probe_read_kernel_str(__uei_name##_dump,				\
-+				  __uei_name##_dump_len, (__ei)->dump);		\
- 	if (bpf_core_field_exists((__ei)->exit_code))				\
- 		__uei_name.exit_code = (__ei)->exit_code;			\
- 	/* use __sync to force memory barrier */				\
-@@ -47,6 +52,13 @@ struct user_exit_info {
- #include <stdio.h>
- #include <stdbool.h>
+ 	if (is_local) {
+ 		struct rq *rq = container_of(dsq, struct rq, scx.local_dsq);
++		bool preempt = false;
++
++		if ((enq_flags & SCX_ENQ_PREEMPT) && p != rq->curr &&
++		    rq->curr->sched_class == &ext_sched_class) {
++			rq->curr->scx.slice = 0;
++			preempt = true;
++		}
  
-+/* no need to call the following explicitly if SCX_OPS_LOAD() is used */
-+#define UEI_SET_SIZE(__skel, __ops_name, __uei_name) ({				\
-+	u32 __len = (__skel)->struct_ops.__ops_name->exit_dump_len ?: UEI_DUMP_DFL_LEN; \
-+	(__skel)->rodata->__uei_name##_dump_len = __len;			\
-+	RESIZE_ARRAY(data, __uei_name##_dump, __len);				\
+-		if (sched_class_above(&ext_sched_class, rq->curr->sched_class))
++		if (preempt || sched_class_above(&ext_sched_class,
++						 rq->curr->sched_class))
+ 			resched_curr(rq);
+ 	} else {
+ 		raw_spin_unlock(&dsq->lock);
+@@ -1806,8 +1840,10 @@ static int balance_scx(struct rq *rq, struct task_struct *prev,
+ 	struct scx_rq *scx_rq = &rq->scx;
+ 	struct scx_dsp_ctx *dspc = this_cpu_ptr(&scx_dsp_ctx);
+ 	bool prev_on_scx = prev->sched_class == &ext_sched_class;
++	bool has_tasks = false;
+ 
+ 	lockdep_assert_rq_held(rq);
++	scx_rq->flags |= SCX_RQ_BALANCING;
+ 
+ 	if (prev_on_scx) {
+ 		WARN_ON_ONCE(prev->scx.flags & SCX_TASK_BAL_KEEP);
+@@ -1824,19 +1860,19 @@ static int balance_scx(struct rq *rq, struct task_struct *prev,
+ 		if ((prev->scx.flags & SCX_TASK_QUEUED) &&
+ 		    prev->scx.slice && !scx_ops_bypassing()) {
+ 			prev->scx.flags |= SCX_TASK_BAL_KEEP;
+-			return 1;
++			goto has_tasks;
+ 		}
+ 	}
+ 
+ 	/* if there already are tasks to run, nothing to do */
+ 	if (scx_rq->local_dsq.nr)
+-		return 1;
++		goto has_tasks;
+ 
+ 	if (consume_dispatch_q(rq, rf, &scx_dsq_global))
+-		return 1;
++		goto has_tasks;
+ 
+ 	if (!SCX_HAS_OP(dispatch) || scx_ops_bypassing())
+-		return 0;
++		goto out;
+ 
+ 	dspc->rq = rq;
+ 	dspc->rf = rf;
+@@ -1857,12 +1893,18 @@ static int balance_scx(struct rq *rq, struct task_struct *prev,
+ 		flush_dispatch_buf(rq, rf);
+ 
+ 		if (scx_rq->local_dsq.nr)
+-			return 1;
++			goto has_tasks;
+ 		if (consume_dispatch_q(rq, rf, &scx_dsq_global))
+-			return 1;
++			goto has_tasks;
+ 	} while (dspc->nr_tasks);
+ 
+-	return 0;
++	goto out;
++
++has_tasks:
++	has_tasks = true;
++out:
++	scx_rq->flags &= ~SCX_RQ_BALANCING;
++	return has_tasks;
+ }
+ 
+ static void set_next_task_scx(struct rq *rq, struct task_struct *p, bool first)
+@@ -2600,7 +2642,8 @@ int scx_check_setscheduler(struct task_struct *p, int policy)
+  * Omitted operations:
+  *
+  * - wakeup_preempt: NOOP as it isn't useful in the wakeup path because the task
+- *   isn't tied to the CPU at that point.
++ *   isn't tied to the CPU at that point. Preemption is implemented by resetting
++ *   the victim task's slice to 0 and triggering reschedule on the target CPU.
+  *
+  * - migrate_task_rq: Unncessary as task to cpu mapping is transient.
+  *
+@@ -2836,6 +2879,9 @@ bool task_should_scx(struct task_struct *p)
+  *    of the queue.
+  *
+  * d. pick_next_task() suppresses zero slice warning.
++ *
++ * e. scx_bpf_kick_cpu() is disabled to avoid irq_work malfunction during PM
++ *    operations.
+  */
+ static void scx_ops_bypass(bool bypass)
+ {
+@@ -3184,11 +3230,21 @@ static void scx_dump_state(struct scx_exit_info *ei, size_t dump_len)
+ 		    rq->curr->sched_class == &idle_sched_class)
+ 			goto next;
+ 
+-		seq_buf_printf(&s, "\nCPU %-4d: nr_run=%u ops_qseq=%lu\n",
+-			       cpu, rq->scx.nr_running, rq->scx.ops_qseq);
++		seq_buf_printf(&s, "\nCPU %-4d: nr_run=%u flags=0x%x ops_qseq=%lu\n",
++			       cpu, rq->scx.nr_running, rq->scx.flags,
++			       rq->scx.ops_qseq);
+ 		seq_buf_printf(&s, "          curr=%s[%d] class=%ps\n",
+ 			       rq->curr->comm, rq->curr->pid,
+ 			       rq->curr->sched_class);
++		if (!cpumask_empty(rq->scx.cpus_to_kick))
++			seq_buf_printf(&s, "  cpus_to_kick   : %*pb\n",
++				       cpumask_pr_args(rq->scx.cpus_to_kick));
++		if (!cpumask_empty(rq->scx.cpus_to_kick_if_idle))
++			seq_buf_printf(&s, "  idle_to_kick   : %*pb\n",
++				       cpumask_pr_args(rq->scx.cpus_to_kick_if_idle));
++		if (!cpumask_empty(rq->scx.cpus_to_preempt))
++			seq_buf_printf(&s, "  cpus_to_preempt: %*pb\n",
++				       cpumask_pr_args(rq->scx.cpus_to_preempt));
+ 
+ 		if (rq->curr->sched_class == &ext_sched_class)
+ 			scx_dump_task(&s, rq->curr, '*', now);
+@@ -3819,6 +3875,82 @@ static const struct sysrq_key_op sysrq_sched_ext_reset_op = {
+ 	.enable_mask	= SYSRQ_ENABLE_RTNICE,
+ };
+ 
++static bool can_skip_idle_kick(struct rq *rq)
++{
++	lockdep_assert_rq_held(rq);
++
++	/*
++	 * We can skip idle kicking if @rq is going to go through at least one
++	 * full SCX scheduling cycle before going idle. Just checking whether
++	 * curr is not idle is insufficient because we could be racing
++	 * balance_one() trying to pull the next task from a remote rq, which
++	 * may fail, and @rq may become idle afterwards.
++	 *
++	 * The race window is small and we don't and can't guarantee that @rq is
++	 * only kicked while idle anyway. Skip only when sure.
++	 */
++	return !is_idle_task(rq->curr) && !(rq->scx.flags & SCX_RQ_BALANCING);
++}
++
++static void kick_one_cpu(s32 cpu, struct rq *this_rq)
++{
++	struct rq *rq = cpu_rq(cpu);
++	struct scx_rq *this_scx = &this_rq->scx;
++	unsigned long flags;
++
++	raw_spin_rq_lock_irqsave(rq, flags);
++
++	/*
++	 * During CPU hotplug, a CPU may depend on kicking itself to make
++	 * forward progress. Allow kicking self regardless of online state.
++	 */
++	if (cpu_online(cpu) || cpu == cpu_of(this_rq)) {
++		if (cpumask_test_cpu(cpu, this_scx->cpus_to_preempt)) {
++			if (rq->curr->sched_class == &ext_sched_class)
++				rq->curr->scx.slice = 0;
++			cpumask_clear_cpu(cpu, this_scx->cpus_to_preempt);
++		}
++
++		resched_curr(rq);
++	} else {
++		cpumask_clear_cpu(cpu, this_scx->cpus_to_preempt);
++	}
++
++	raw_spin_rq_unlock_irqrestore(rq, flags);
++}
++
++static void kick_one_cpu_if_idle(s32 cpu, struct rq *this_rq)
++{
++	struct rq *rq = cpu_rq(cpu);
++	unsigned long flags;
++
++	raw_spin_rq_lock_irqsave(rq, flags);
++
++	if (!can_skip_idle_kick(rq) &&
++	    (cpu_online(cpu) || cpu == cpu_of(this_rq)))
++		resched_curr(rq);
++
++	raw_spin_rq_unlock_irqrestore(rq, flags);
++}
++
++static void kick_cpus_irq_workfn(struct irq_work *irq_work)
++{
++	struct rq *this_rq = this_rq();
++	struct scx_rq *this_scx = &this_rq->scx;
++	s32 cpu;
++
++	for_each_cpu(cpu, this_scx->cpus_to_kick) {
++		kick_one_cpu(cpu, this_rq);
++		cpumask_clear_cpu(cpu, this_scx->cpus_to_kick);
++		cpumask_clear_cpu(cpu, this_scx->cpus_to_kick_if_idle);
++	}
++
++	for_each_cpu(cpu, this_scx->cpus_to_kick_if_idle) {
++		kick_one_cpu_if_idle(cpu, this_rq);
++		cpumask_clear_cpu(cpu, this_scx->cpus_to_kick_if_idle);
++	}
++}
++
+ /**
+  * print_scx_info - print out sched_ext scheduler state
+  * @log_lvl: the log level to use when printing
+@@ -3873,7 +4005,7 @@ void __init init_sched_ext_class(void)
+ 	 * definitions so that BPF scheduler implementations can use them
+ 	 * through the generated vmlinux.h.
+ 	 */
+-	WRITE_ONCE(v, SCX_ENQ_WAKEUP | SCX_DEQ_SLEEP);
++	WRITE_ONCE(v, SCX_ENQ_WAKEUP | SCX_DEQ_SLEEP | SCX_KICK_PREEMPT);
+ 
+ 	BUG_ON(rhashtable_init(&dsq_hash, &dsq_hash_params));
+ 	init_dsq(&scx_dsq_global, SCX_DSQ_GLOBAL);
+@@ -3886,6 +4018,11 @@ void __init init_sched_ext_class(void)
+ 
+ 		init_dsq(&rq->scx.local_dsq, SCX_DSQ_LOCAL);
+ 		INIT_LIST_HEAD(&rq->scx.runnable_list);
++
++		BUG_ON(!zalloc_cpumask_var(&rq->scx.cpus_to_kick, GFP_KERNEL));
++		BUG_ON(!zalloc_cpumask_var(&rq->scx.cpus_to_kick_if_idle, GFP_KERNEL));
++		BUG_ON(!zalloc_cpumask_var(&rq->scx.cpus_to_preempt, GFP_KERNEL));
++		init_irq_work(&rq->scx.kick_cpus_irq_work, kick_cpus_irq_workfn);
+ 	}
+ 
+ 	register_sysrq_key('S', &sysrq_sched_ext_reset_op);
+@@ -4173,6 +4310,67 @@ static const struct btf_kfunc_id_set scx_kfunc_set_dispatch = {
+ 
+ __bpf_kfunc_start_defs();
+ 
++/**
++ * scx_bpf_kick_cpu - Trigger reschedule on a CPU
++ * @cpu: cpu to kick
++ * @flags: %SCX_KICK_* flags
++ *
++ * Kick @cpu into rescheduling. This can be used to wake up an idle CPU or
++ * trigger rescheduling on a busy CPU. This can be called from any online
++ * scx_ops operation and the actual kicking is performed asynchronously through
++ * an irq work.
++ */
++__bpf_kfunc void scx_bpf_kick_cpu(s32 cpu, u64 flags)
++{
++	struct rq *this_rq;
++	unsigned long irq_flags;
++
++	if (!ops_cpu_valid(cpu, NULL))
++		return;
++
++	/*
++	 * While bypassing for PM ops, IRQ handling may not be online which can
++	 * lead to irq_work_queue() malfunction such as infinite busy wait for
++	 * IRQ status update. Suppress kicking.
++	 */
++	if (scx_ops_bypassing())
++		return;
++
++	local_irq_save(irq_flags);
++
++	this_rq = this_rq();
++
++	/*
++	 * Actual kicking is bounced to kick_cpus_irq_workfn() to avoid nesting
++	 * rq locks. We can probably be smarter and avoid bouncing if called
++	 * from ops which don't hold a rq lock.
++	 */
++	if (flags & SCX_KICK_IDLE) {
++		struct rq *target_rq = cpu_rq(cpu);
++
++		if (unlikely(flags & SCX_KICK_PREEMPT))
++			scx_ops_error("PREEMPT cannot be used with SCX_KICK_IDLE");
++
++		if (raw_spin_rq_trylock(target_rq)) {
++			if (can_skip_idle_kick(target_rq)) {
++				raw_spin_rq_unlock(target_rq);
++				goto out;
++			}
++			raw_spin_rq_unlock(target_rq);
++		}
++		cpumask_set_cpu(cpu, this_rq->scx.cpus_to_kick_if_idle);
++	} else {
++		cpumask_set_cpu(cpu, this_rq->scx.cpus_to_kick);
++
++		if (flags & SCX_KICK_PREEMPT)
++			cpumask_set_cpu(cpu, this_rq->scx.cpus_to_preempt);
++	}
++
++	irq_work_queue(&this_rq->scx.kick_cpus_irq_work);
++out:
++	local_irq_restore(irq_flags);
++}
++
+ /**
+  * scx_bpf_dsq_nr_queued - Return the number of queued tasks
+  * @dsq_id: id of the DSQ
+@@ -4520,6 +4718,7 @@ __bpf_kfunc s32 scx_bpf_task_cpu(const struct task_struct *p)
+ __bpf_kfunc_end_defs();
+ 
+ BTF_KFUNCS_START(scx_kfunc_ids_any)
++BTF_ID_FLAGS(func, scx_bpf_kick_cpu)
+ BTF_ID_FLAGS(func, scx_bpf_dsq_nr_queued)
+ BTF_ID_FLAGS(func, scx_bpf_destroy_dsq)
+ BTF_ID_FLAGS(func, scx_bpf_exit_bstr, KF_TRUSTED_ARGS)
+diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
+index 4a55a31250ab..2ce8cd64fa65 100644
+--- a/kernel/sched/sched.h
++++ b/kernel/sched/sched.h
+@@ -709,12 +709,22 @@ struct cfs_rq {
+ };
+ 
+ #ifdef CONFIG_SCHED_CLASS_EXT
++/* scx_rq->flags, protected by the rq lock */
++enum scx_rq_flags {
++	SCX_RQ_BALANCING	= 1 << 0,
++};
++
+ struct scx_rq {
+ 	struct scx_dispatch_q	local_dsq;
+ 	struct list_head	runnable_list;		/* runnable tasks on this rq */
+ 	unsigned long		ops_qseq;
+ 	u64			extra_enq_flags;	/* see move_task_to_local_dsq() */
+ 	u32			nr_running;
++	u32			flags;
++	cpumask_var_t		cpus_to_kick;
++	cpumask_var_t		cpus_to_kick_if_idle;
++	cpumask_var_t		cpus_to_preempt;
++	struct irq_work		kick_cpus_irq_work;
+ };
+ #endif /* CONFIG_SCHED_CLASS_EXT */
+ 
+diff --git a/tools/sched_ext/include/scx/common.bpf.h b/tools/sched_ext/include/scx/common.bpf.h
+index 6b355899f67d..8b4052034f93 100644
+--- a/tools/sched_ext/include/scx/common.bpf.h
++++ b/tools/sched_ext/include/scx/common.bpf.h
+@@ -34,6 +34,7 @@ void scx_bpf_dispatch(struct task_struct *p, u64 dsq_id, u64 slice, u64 enq_flag
+ u32 scx_bpf_dispatch_nr_slots(void) __ksym;
+ void scx_bpf_dispatch_cancel(void) __ksym;
+ bool scx_bpf_consume(u64 dsq_id) __ksym;
++void scx_bpf_kick_cpu(s32 cpu, u64 flags) __ksym;
+ s32 scx_bpf_dsq_nr_queued(u64 dsq_id) __ksym;
+ void scx_bpf_destroy_dsq(u64 dsq_id) __ksym;
+ void scx_bpf_exit_bstr(s64 exit_code, char *fmt, unsigned long long *data, u32 data__sz) __ksym __weak;
+diff --git a/tools/sched_ext/include/scx/compat.bpf.h b/tools/sched_ext/include/scx/compat.bpf.h
+index c32a6a0f994c..0729aa9bb03e 100644
+--- a/tools/sched_ext/include/scx/compat.bpf.h
++++ b/tools/sched_ext/include/scx/compat.bpf.h
+@@ -7,6 +7,22 @@
+ #ifndef __SCX_COMPAT_BPF_H
+ #define __SCX_COMPAT_BPF_H
+ 
++#define __COMPAT_ENUM_OR_ZERO(__type, __ent)					\
++({										\
++	__type __ret = 0;							\
++	if (bpf_core_enum_value_exists(__type, __ent))				\
++		__ret = __ent;							\
++	__ret;									\
 +})
 +
- #define UEI_EXITED(__skel, __uei_name) ({					\
- 	/* use __sync to force memory barrier */				\
- 	__sync_val_compare_and_swap(&(__skel)->data->__uei_name.kind, -1, -1);	\
-@@ -54,6 +66,13 @@ struct user_exit_info {
- 
- #define UEI_REPORT(__skel, __uei_name) ({					\
- 	struct user_exit_info *__uei = &(__skel)->data->__uei_name;		\
-+	char *__uei_dump = (__skel)->data_##__uei_name##_dump->__uei_name##_dump; \
-+	if (__uei_dump[0] != '\0') {						\
-+		fputs("\nDEBUG DUMP\n", stderr);				\
-+		fputs("================================================================================\n\n", stderr); \
-+		fputs(__uei_dump, stderr);					\
-+		fputs("\n================================================================================\n\n", stderr); \
-+	}									\
- 	fprintf(stderr, "EXIT: %s", __uei->reason);				\
- 	if (__uei->msg[0] != '\0')						\
- 		fprintf(stderr, " (%s)", __uei->msg);				\
-diff --git a/tools/sched_ext/scx_qmap.c b/tools/sched_ext/scx_qmap.c
-index d2b98ef3ead2..28fd5aa4e62c 100644
---- a/tools/sched_ext/scx_qmap.c
-+++ b/tools/sched_ext/scx_qmap.c
-@@ -20,7 +20,7 @@ const char help_fmt[] =
- "See the top-level comment in .bpf.c for more details.\n"
- "\n"
- "Usage: %s [-s SLICE_US] [-e COUNT] [-t COUNT] [-T COUNT] [-b COUNT]\n"
--"       [-d PID] [-p] [-v]\n"
-+"       [-d PID] [-D LEN] [-p] [-v]\n"
- "\n"
- "  -s SLICE_US   Override slice duration\n"
- "  -e COUNT      Trigger scx_bpf_error() after COUNT enqueues\n"
-@@ -28,6 +28,7 @@ const char help_fmt[] =
- "  -T COUNT      Stall every COUNT'th kernel thread\n"
- "  -b COUNT      Dispatch upto COUNT tasks together\n"
- "  -d PID        Disallow a process from switching into SCHED_EXT (-1 for self)\n"
-+"  -D LEN        Set scx_exit_info.dump buffer length\n"
- "  -p            Switch only tasks on SCHED_EXT policy intead of all\n"
- "  -v            Print libbpf debug messages\n"
- "  -h            Display this help and exit\n";
-@@ -59,7 +60,7 @@ int main(int argc, char **argv)
- 
- 	skel = SCX_OPS_OPEN(qmap_ops, scx_qmap);
- 
--	while ((opt = getopt(argc, argv, "s:e:t:T:b:d:pvh")) != -1) {
-+	while ((opt = getopt(argc, argv, "s:e:t:T:b:d:D:pvh")) != -1) {
- 		switch (opt) {
- 		case 's':
- 			skel->rodata->slice_ns = strtoull(optarg, NULL, 0) * 1000;
-@@ -81,6 +82,9 @@ int main(int argc, char **argv)
- 			if (skel->rodata->disallow_tgid < 0)
- 				skel->rodata->disallow_tgid = getpid();
- 			break;
-+		case 'D':
-+			skel->struct_ops.qmap_ops->exit_dump_len = strtoul(optarg, NULL, 0);
-+			break;
- 		case 'p':
- 			skel->rodata->switch_partial = true;
- 			skel->struct_ops.qmap_ops->flags |= __COMPAT_SCX_OPS_SWITCH_PARTIAL;
-@@ -94,7 +98,7 @@ int main(int argc, char **argv)
- 		}
- 	}
- 
--	SCX_OPS_LOAD(skel, qmap_ops, scx_qmap);
-+	SCX_OPS_LOAD(skel, qmap_ops, scx_qmap, uei);
- 	link = SCX_OPS_ATTACH(skel, qmap_ops);
- 
- 	while (!exit_req && !UEI_EXITED(skel, uei)) {
-diff --git a/tools/sched_ext/scx_simple.c b/tools/sched_ext/scx_simple.c
-index 08c741f56685..9ffa8d084228 100644
---- a/tools/sched_ext/scx_simple.c
-+++ b/tools/sched_ext/scx_simple.c
-@@ -80,7 +80,7 @@ int main(int argc, char **argv)
- 		}
- 	}
- 
--	SCX_OPS_LOAD(skel, simple_ops, scx_simple);
-+	SCX_OPS_LOAD(skel, simple_ops, scx_simple, uei);
- 	link = SCX_OPS_ATTACH(skel, simple_ops);
- 
- 	while (!exit_req && !UEI_EXITED(skel, uei)) {
++/*
++ * %SCX_KICK_IDLE is a later addition. To support both before and after, use
++ * %__COMPAT_SCX_KICK_IDLE which becomes 0 on kernels which don't support it.
++ * Users can use %SCX_KICK_IDLE directly in the future.
++ */
++#define __COMPAT_SCX_KICK_IDLE							\
++	__COMPAT_ENUM_OR_ZERO(enum scx_kick_flags, SCX_KICK_IDLE)
++
+ /*
+  * scx_switch_all() was replaced by %SCX_OPS_SWITCH_PARTIAL. See
+  * %__COMPAT_SCX_OPS_SWITCH_PARTIAL in compat.h. This can be dropped in the
 -- 
 2.44.0
 
