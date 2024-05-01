@@ -1,96 +1,114 @@
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C14AFBEA;
-	Wed,  1 May 2024 17:02:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.153.30
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C10DF11CAB
+	for <bpf@vger.kernel.org>; Wed,  1 May 2024 17:04:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714582928; cv=none; b=gLVzKAX//LGG3zz0tVCNLCEEyMUbbG4RJ2fEb5mV3WIz3mH1FAw4yeQWQPMIhz8I0LQ+HEKy3me4dKjqX2Obje/X7nHgDWHEvva1tTk+Uz8uJR6QwWEyTQ0bTFR5lFJBBulmpxxL5OjePI5qZgkJuoRYQKQ2MYKgwv2/4HeJK14=
+	t=1714583050; cv=none; b=prYo6OVUz9gkOMtFGZJwagIQOraEbnrjbXJ6eeyqCmkpyr8UwEVlrTwwC58fLMJYwUfEO0vldyQKBUwdNAm0biErg47VMbwHcunlLI1mTYRX4JB7dNsB+FHsgUzKkhWA5PpS6Q2zI9c3UNa10RxKluDSJSoDYCoBHT8Mmd+uSMk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714582928; c=relaxed/simple;
-	bh=ybzwn+ydfIFK+DqICo0Legpr8uBh0C4IME5KILc5CxY=;
-	h=From:To:CC:Subject:Date:Message-ID:Content-Type:MIME-Version; b=cbtgj/vRd7bmhCiT3TwXxCn31ne98zMsVLkET7zhocZAwf2J75W+Am4hZCZfDQlpRfdC6vajB0Aae0B6DTJnmN/SRpcnPWngSIYR3nWNinzQokhwmj1MD8xQ+kmbZlpUNA6JnGfsOdD/O3wBqYCL+XKepJcRr+RQvxxkOHjplpo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com; spf=pass smtp.mailfrom=meta.com; dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b=mVFS2axn; arc=none smtp.client-ip=67.231.153.30
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
+	s=arc-20240116; t=1714583050; c=relaxed/simple;
+	bh=bod+a9SXQigFO9yfPO1ocBQDxIaFDCdfchUVh0+n9Jk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=BNNVsAqtcr4aHZhCWVXmHTAwom+BXoAuniDOxijlBn21F02DND09F/hEeLUj8Gxl7DWsXakOG0YgGCBcxAjY/Wk1ztCMryK95K5fJD+8JMHLzelf7+Q434CDxSytlOLUGlKUothpTh/KCcBvyo2eFqDMhcXvJnlkBGlvSPu70DU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ky1/gGMx; arc=none smtp.client-ip=209.85.216.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b="mVFS2axn"
-Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 441G3SVd030744;
-	Wed, 1 May 2024 10:01:54 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=from : to : cc :
- subject : date : message-id : content-type : content-transfer-encoding :
- mime-version; s=s2048-2021-q4;
- bh=udk0F/KA0u3ymt82al7pZ6iIYBODYjSafKhMsfUmCeg=;
- b=mVFS2axnHcM/GWx4hue24joAQUaeQgUZJLERqTmckQqTChddNotTqiGk1+JPkGRN791s
- O1Vl8bFf7KFEo3MFdwkRLnH33JV+a9bjRfPQOEPOZkzQr9GFN7vMfeQErLQ+EoOIUUqK
- 6C3xZzPE1RSqnd1nRdvp8DVtIkhQ1cuSj5BqQG8jPsVEH8ad3Bskbz3eSnZPYOq5ofuq
- Uh9Cu6pBMwyz0mn4GkQcq1hyhG4Jj9S+7p4ayZETYVs5MKgQ7hkhmVBhFpdbZX2AuLuG
- NFVkxx38/rL1VxxRbvbOckwwhJEJ1g0S0FnFas/whUUP0edKq/MeBmkFaqEGOAWkiF2Y vw== 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3xuqv18xud-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-	Wed, 01 May 2024 10:01:53 -0700
-Received: from devvm4158.cln0.facebook.com (2620:10d:c0a8:fe::f072) by
- mail.thefacebook.com (2620:10d:c0a8:83::8) with Microsoft SMTP Server id
- 15.1.2507.35; Wed, 1 May 2024 17:01:52 +0000
-From: Vadim Fedorenko <vadfed@meta.com>
-To: Vadim Fedorenko <vadim.fedorenko@linux.dev>,
-        Jakub Kicinski
-	<kuba@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Andrii Nakryiko
-	<andrii@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>, Mykola Lysenko
-	<mykolal@fb.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>
-CC: Vadim Fedorenko <vadfed@meta.com>, <netdev@vger.kernel.org>,
-        <linux-crypto@vger.kernel.org>, <bpf@vger.kernel.org>,
-        kernel test robot
-	<lkp@intel.com>
-Subject: [PATCH bpf-next] bpf: crypto: fix build when CONFIG_CRYPTO=m
-Date: Wed, 1 May 2024 10:01:30 -0700
-Message-ID: <20240501170130.1682309-1-vadfed@meta.com>
-X-Mailer: git-send-email 2.43.0
-Content-Type: text/plain
-X-Proofpoint-GUID: Llnlnv5e43kv2K0G7cdRIdhWpImmv_eA
-X-Proofpoint-ORIG-GUID: Llnlnv5e43kv2K0G7cdRIdhWpImmv_eA
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ky1/gGMx"
+Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-2b239b5fedaso2291848a91.0
+        for <bpf@vger.kernel.org>; Wed, 01 May 2024 10:04:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1714583048; x=1715187848; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=umwnRDARfhfaoXnNGS4PJ79T7/j7jwcYGd/k7xTzkT4=;
+        b=Ky1/gGMxYyMHFWGCgPc81xdRhiQl/dpdsWXxsxaoDrKbYwrsR6kvKcn+J/KKdkaAi2
+         n8ZyWSjrklnPiuQMIuaGL3Mc2nEBCGwjSMQAO0yEU+tfE0Q1iHTv4Ee1ZV4+RJARKSQc
+         Iu3vEbptHuT6k6d7lCwZDV2pHHQrzy5YkvVKre48jZ0A6EeNwtfKb2SfEGscZCnPYBuN
+         wLafZ88Xe84yRYPYm+7qs16gY2nmL1QtRNTrz/2xeMt6hv8ItybldY8H19tCcrBwYihc
+         Jnag4Ko32/RcLgTmuvzqWy9jzSiWjtMSYhELAsfVNwcetrWSmlWQ60xSa1/NjiDbJ7IF
+         g6QA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1714583048; x=1715187848;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=umwnRDARfhfaoXnNGS4PJ79T7/j7jwcYGd/k7xTzkT4=;
+        b=sUZKH7CKjdK2IVHRquI7iD+vdfSXGHmrf1VTG2VMRSnAmDhD8XVwHJ3VMmUDbkTR6u
+         qP8DBnCFWrfR8Uyi4lzCSJnWFfatTeCp8X/FaRpSy2z0L0CNa2NM0uVd4ZeHpwL8aJ4p
+         Vd7WR2tDLjMkIIXkm4Cz2+UZRfRbgrQ8/N1Mb4Qb8iQEuoSzQMKSn0plmH8eRrUyunBh
+         AwO/0PKBRmqnOKwg6Nk0i2nXCBueLirNyLMtLWNqdGWqcLFQ7n91olv4xYUFZlUeHkJq
+         PZzNcIeHjR6oHktpDbZjxeDYFZNS2vnR/H6acLii715qHtI6k8ucuOJpZEcdc/UzpcQl
+         puVg==
+X-Gm-Message-State: AOJu0Yw/46+G8HSqQGpm+wAnEb/Dif/iRfcWZORBZivAzJLiOYuvIGYL
+	S5YYEsLZlN5JvjizPiGlRCBYUXskkKw71v1hYWU7YzTLki4vmS9HPDJM/bpLUCCBYrYQJQR9aoL
+	MJbpX0PzxA5ZzRcP9b0+8s6HJZ6w=
+X-Google-Smtp-Source: AGHT+IF8trU2aG57IdQeGKZlq0isQ97tmnLLsRMvl9gExK9m44L9PFFK/KMzsmvACJyfL26ujd3UOzMppJIt0u7nU0Y=
+X-Received: by 2002:a17:90b:4f4e:b0:2ad:e004:76e6 with SMTP id
+ pj14-20020a17090b4f4e00b002ade00476e6mr2854103pjb.7.1714583048062; Wed, 01
+ May 2024 10:04:08 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1011,Hydra:6.0.650,FMLib:17.11.176.26
- definitions=2024-05-01_16,2024-04-30_01,2023-05-22_02
+References: <20240429213609.487820-1-thinker.li@gmail.com> <20240429213609.487820-6-thinker.li@gmail.com>
+In-Reply-To: <20240429213609.487820-6-thinker.li@gmail.com>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Wed, 1 May 2024 10:03:56 -0700
+Message-ID: <CAEf4BzacheKXJRfnDimQYhqQzhPcMD9TEZBaT9mFqqKFK2B0BA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 5/6] bpf: support epoll from bpf struct_ops links.
+To: Kui-Feng Lee <thinker.li@gmail.com>
+Cc: bpf@vger.kernel.org, ast@kernel.org, martin.lau@linux.dev, song@kernel.org, 
+	kernel-team@meta.com, andrii@kernel.org, sinquersw@gmail.com, 
+	kuifeng@meta.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Crypto subsytem can be build as a module. In this case we still have to
-build BPF crypto framework otherwise the build will fail.
+On Mon, Apr 29, 2024 at 2:36=E2=80=AFPM Kui-Feng Lee <thinker.li@gmail.com>=
+ wrote:
+>
+> Add epoll support to bpf struct_ops links to trigger EPOLLHUP event upon
+> detachment.
+>
+> Signed-off-by: Kui-Feng Lee <thinker.li@gmail.com>
+> ---
+>  include/linux/bpf.h         |  2 ++
+>  kernel/bpf/bpf_struct_ops.c | 14 ++++++++++++++
+>  kernel/bpf/syscall.c        | 15 +++++++++++++++
+>  3 files changed, 31 insertions(+)
+>
+> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+> index eeeed4b1bd32..a4550b927352 100644
+> --- a/include/linux/bpf.h
+> +++ b/include/linux/bpf.h
+> @@ -1574,6 +1574,7 @@ struct bpf_link {
+>         const struct bpf_link_ops *ops;
+>         struct bpf_prog *prog;
+>         struct work_struct work;
+> +       wait_queue_head_t wait_hup;
 
-Fixes: 3e1c6f35409f ("bpf: make common crypto API for TC/XDP programs")
-Reported-by: kernel test robot <lkp@intel.com>
-Closes: https://lore.kernel.org/oe-kbuild-all/202405011634.4JK40epY-lkp@intel.com/
-Signed-off-by: Vadim Fedorenko <vadfed@meta.com>
----
- kernel/bpf/Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+let's keep it struct_ops-specific, there is no need to pay for this
+for all existing BPF link types. We can always generalize later, if
+necessary.
 
-diff --git a/kernel/bpf/Makefile b/kernel/bpf/Makefile
-index 85786fd97d2a..7eb9ad3a3ae6 100644
---- a/kernel/bpf/Makefile
-+++ b/kernel/bpf/Makefile
-@@ -44,7 +44,7 @@ obj-$(CONFIG_BPF_SYSCALL) += bpf_struct_ops.o
- obj-$(CONFIG_BPF_SYSCALL) += cpumask.o
- obj-${CONFIG_BPF_LSM} += bpf_lsm.o
- endif
--ifeq ($(CONFIG_CRYPTO),y)
-+ifneq ($(CONFIG_CRYPTO),)
- obj-$(CONFIG_BPF_SYSCALL) += crypto.o
- endif
- obj-$(CONFIG_BPF_PRELOAD) += preload/
--- 
-2.43.0
+pw-bot: cr
 
+
+>  };
+>
+>  struct bpf_link_ops {
+> @@ -1587,6 +1588,7 @@ struct bpf_link_ops {
+>                               struct bpf_link_info *info);
+>         int (*update_map)(struct bpf_link *link, struct bpf_map *new_map,
+>                           struct bpf_map *old_map);
+> +       __poll_t (*poll)(struct file *file, struct poll_table_struct *pts=
+);
+>  };
+>
+>  struct bpf_tramp_link {
+
+[...]
