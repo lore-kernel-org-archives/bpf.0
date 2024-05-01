@@ -1,43 +1,42 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp.forwardemail.net (smtp.forwardemail.net [149.28.215.223])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5467B101CA
-	for <bpf@vger.kernel.org>; Wed,  1 May 2024 04:17:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD00A446A1
+	for <bpf@vger.kernel.org>; Wed,  1 May 2024 05:04:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=149.28.215.223
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714537030; cv=none; b=a2n0KVcTRWhw1QfC84q81Po3Q8v/fwoB12Rg3zbIUdqQar1DvQ/inj+gF3prSM6DQAHpwFZwe7XtdfzVYdPUMWmlrCVMLpxH8Y49awq6zLsxDQ/34UPaVSLAFSvF5iUvNiUx7zPDj9E7NhZPGOa3lpKxrtMVjTF5tOc2N1ZfrVA=
+	t=1714539859; cv=none; b=UxoAsMLGTyj5AcBv6WPzM5QfZmL5qOMInStTL4LUfiSOpWpBsGvVmBQnO8scZx1OUlyOg0JF5r4h8hnbtmYR1gff+cnwC4xkyaLQ8xVcBvthN3le5sxXSugRP+yUsHG+VTeV2cvyY3clT6+dxEmqaNrXvVnjgunCgh6IDGfs6xY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714537030; c=relaxed/simple;
-	bh=zW/R8msSZIIYaPl3izGD/ZyqnfyfTIx3G3LQBxDWVjg=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=HWAHyEhRZdylp38sJg61Vcq6K7hxsIi7Z4cziDoIoSNj2ryD9wjN5jV9tZWVYZYawLWgj1bnouWvflsi0QKiu5U0RXKcm1B0jeWrzZs+KTrY2rcEzi7STskVCMppaxEnHnvD+C2fdid290mS5gb0rXwC/9cyyMVOqHzzr3kXYrs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rwuYsBUh; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1714539859; c=relaxed/simple;
+	bh=bwiq97hl0ulqMWBNQjmyB2B12PjF7UwQ9e34FplS5vI=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=bNfE4nAqYTSZPyChGx/3PrlEjY2W8Mpw8oeLqL3ixZse7d0tgVEJBLCJk6XfwsYu2uYfYt/BJBSHe2aWQo5rmSsjbqGwgLjtqqOxD4b3YnU9YWWB20x+8gMgZUI2+mrBHNLsOZha58HNDwRTvfRBJeCT7avbj5chdy5/hyxxto4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=faucet.nz; spf=pass smtp.mailfrom=fe-bounces.faucet.nz; dkim=pass (1024-bit key) header.d=faucet.nz header.i=@faucet.nz header.b=qNM2WUAc; arc=none smtp.client-ip=149.28.215.223
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=faucet.nz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fe-bounces.faucet.nz
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rwuYsBUh"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37FA2C113CC;
-	Wed,  1 May 2024 04:17:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1714537029;
-	bh=zW/R8msSZIIYaPl3izGD/ZyqnfyfTIx3G3LQBxDWVjg=;
-	h=From:To:Cc:Subject:Date:From;
-	b=rwuYsBUhrSU6BHCgsTtCY8vhMyd7PrmUx/+aFRG31/tPgxGUidop1mc8mTWennyzH
-	 /6jQf2qqGAzPQWVM4u2rCClveAbcDFrgcKHQvTCB0T6W5neuQ7B3D3BauFVuj6pxKM
-	 mzOj69B3/Vrmelt9NS66Pd93k/32+hP5k1cnLUmb0HsWnKpdYE5H2CqaOH/h1OG3cH
-	 qQekQsyo9PR2CG84Q+oYemqf1wLyj/j06v+V42YV6rtWDbiSbWX/aIGWVEYxBh6DvD
-	 XHv/4kiDTHYbuZ8BOaa18CybsmITeXTAVOJf6XNnxfaRHjwuEGezOilN04VUAra95m
-	 4qG+iKd4CTtnQ==
-From: Andrii Nakryiko <andrii@kernel.org>
-To: bpf@vger.kernel.org,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	martin.lau@kernel.org
-Cc: andrii@kernel.org,
-	kernel-team@meta.com,
-	Kui-Feng Lee <thinker.li@gmail.com>,
-	Eduard Zingerman <eddyz87@gmail.com>
-Subject: [PATCH bpf-next] libbpf: better fix for handling nulled-out struct_ops program
-Date: Tue, 30 Apr 2024 21:17:06 -0700
-Message-ID: <20240501041706.3712608-1-andrii@kernel.org>
-X-Mailer: git-send-email 2.43.0
+	dkim=pass (1024-bit key) header.d=faucet.nz header.i=@faucet.nz header.b="qNM2WUAc"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=faucet.nz;
+ h=Content-Transfer-Encoding: MIME-Version: References: In-Reply-To:
+ Message-Id: Date: Subject: Cc: To: From; q=dns/txt; s=fe-4ed8c67516;
+ t=1714539842; bh=RsrIq7/ZvC8loumi0io1jOngwJSiw32p9ZnpvFMQJ4o=;
+ b=qNM2WUAc04iwfGRh77R6k6MWdN/xaaYZUpHqLLMLm7vfH6dzrzrL63SG/IMRRyVrs+Ky5xAAy
+ 9zVBsRixF7DV4Xwza+O64bAM5mQYOzwZzsyZ03jQdPorEmSZREaVlRFmnvMwRkQAGAoraEk3z9G
+ FJHrSUOs45rvYeH4l7atJWw=
+From: Brad Cowie <brad@faucet.nz>
+To: martin.lau@linux.dev
+Cc: andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org, brad@faucet.nz,
+ coreteam@netfilter.org, daniel@iogearbox.net, davem@davemloft.net,
+ john.fastabend@gmail.com, jolsa@kernel.org, kuba@kernel.org,
+ lorenzo@kernel.org, memxor@gmail.com, netdev@vger.kernel.org,
+ netfilter-devel@vger.kernel.org, pabeni@redhat.com, pablo@netfilter.org,
+ sdf@google.com, song@kernel.org
+Subject: Re: [PATCH bpf-next v2 2/2] selftests/bpf: Update tests for new ct zone opts for nf_conntrack kfuncs
+Date: Wed,  1 May 2024 17:03:21 +1200
+Message-Id: <20240501050321.157531-1-brad@faucet.nz>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <288b0d96-d5a8-4d81-9302-32b0d414a983@linux.dev>
+References: <288b0d96-d5a8-4d81-9302-32b0d414a983@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -45,125 +44,67 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-Report-Abuse-To: abuse@forwardemail.net
+X-Report-Abuse: abuse@forwardemail.net
+X-Complaints-To: abuse@forwardemail.net
+X-ForwardEmail-Version: 0.4.40
+X-ForwardEmail-Sender: rfc822; brad@faucet.nz, smtp.forwardemail.net,
+ 149.28.215.223
+X-ForwardEmail-ID: 6631cd401fff278fe661f725
 
-Previous attempt to fix the handling of nulled-out (from skeleton)
-struct_ops program is working well only if struct_ops program is defined
-as non-autoloaded by default (i.e., has SEC("?struct_ops") annotation,
-with question mark).
+On Fri, 26 Apr 2024 at 11:34, Martin KaFai Lau <martin.lau@linux.dev> wrote:
+> On 4/23/24 8:00 PM, Brad Cowie wrote:
+> >   } __attribute__((preserve_access_index));
+> >   
+> >   struct nf_conn *bpf_xdp_ct_alloc(struct xdp_md *, struct bpf_sock_tuple *, u32,
+> > @@ -84,16 +90,6 @@ nf_ct_test(struct nf_conn *(*lookup_fn)(void *, struct bpf_sock_tuple *, u32,
+> >   	else
+> >   		test_einval_bpf_tuple = opts_def.error;
+> >   
+> > -	opts_def.reserved[0] = 1;
+> > -	ct = lookup_fn(ctx, &bpf_tuple, sizeof(bpf_tuple.ipv4), &opts_def,
+> > -		       sizeof(opts_def));
+> > -	opts_def.reserved[0] = 0;
+> > -	opts_def.l4proto = IPPROTO_TCP;
+> > -	if (ct)
+> > -		bpf_ct_release(ct);
+> > -	else
+> > -		test_einval_reserved = opts_def.error;
+> > -
+> >   	opts_def.netns_id = -2;
+> >   	ct = lookup_fn(ctx, &bpf_tuple, sizeof(bpf_tuple.ipv4), &opts_def,
+> >   		       sizeof(opts_def));
+> > @@ -220,10 +216,77 @@ nf_ct_test(struct nf_conn *(*lookup_fn)(void *, struct bpf_sock_tuple *, u32,
+> >   	}
+> >   }
+> >   
+> > +static __always_inline void
+> > +nf_ct_zone_id_test(struct nf_conn *(*lookup_fn)(void *, struct bpf_sock_tuple *, u32,
+> > +						struct bpf_ct_opts___local *, u32),
+> > +		   struct nf_conn *(*alloc_fn)(void *, struct bpf_sock_tuple *, u32,
+> > +					       struct bpf_ct_opts___local *, u32),
+> > +		   void *ctx)
+> > +{
+> > +	struct bpf_ct_opts___local opts_def = { .l4proto = IPPROTO_TCP, .netns_id = -1 };
+> > +	struct bpf_sock_tuple bpf_tuple;
+> > +	struct nf_conn *ct;
+> > +
+> > +	__builtin_memset(&bpf_tuple, 0, sizeof(bpf_tuple.ipv4));
+> > +
+> > +	bpf_tuple.ipv4.saddr = bpf_get_prandom_u32(); /* src IP */
+> > +	bpf_tuple.ipv4.daddr = bpf_get_prandom_u32(); /* dst IP */
+> > +	bpf_tuple.ipv4.sport = bpf_get_prandom_u32(); /* src port */
+> > +	bpf_tuple.ipv4.dport = bpf_get_prandom_u32(); /* dst port */
+> > +
+> > +	/* use non-default ct zone */
+> > +	opts_def.ct_zone_id = 10;
+>
+> Can the ct_zone_flags and ct_zone_dir be tested also?
 
-Unfortunately, that fix is incomplete due to how
-bpf_object_adjust_struct_ops_autoload() is marking referenced or
-non-referenced struct_ops program as autoloaded (or not). Because
-bpf_object_adjust_struct_ops_autoload() is run after
-bpf_map__init_kern_struct_ops() step, which sets program slot to NULL,
-such programs won't be considered "referenced", and so its autoload
-property won't be changed.
+I have added an additional test for ct_zone_dir, this will be included
+in my v3 patchset.
 
-This all sounds convoluted and it is, but the desire is to have as
-natural behavior (as far as struct_ops usage is concerned) as possible.
-
-This fix is redoing the original fix but makes it work for
-autoloaded-by-default struct_ops programs as well. We achieve this by
-forcing prog->autoload to false if prog was declaratively set for some
-struct_ops map, but then nulled-out from skeleton (programmatically).
-This achieves desired effect of not autoloading it. If such program is
-still referenced somewhere else (different struct_ops map or different
-callback field), it will get its autoload property adjusted by
-bpf_object_adjust_struct_ops_autoload() later.
-
-We also fix selftest, which accidentally used SEC("?struct_ops")
-annotation. It was meant to use autoload-by-default program from the
-very beginning.
-
-Fixes: f973fccd43d3 ("libbpf: handle nulled-out program in struct_ops correctly")
-Cc: Kui-Feng Lee <thinker.li@gmail.com>
-Cc: Eduard Zingerman <eddyz87@gmail.com>
-Cc: Martin KaFai Lau <martin.lau@kernel.org>
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
----
- tools/lib/bpf/libbpf.c                        | 37 +++++++++++++------
- .../selftests/bpf/progs/struct_ops_module.c   |  2 +-
- 2 files changed, 27 insertions(+), 12 deletions(-)
-
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 7667671187e9..57a514eec49b 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -1128,6 +1128,7 @@ static int bpf_map__init_kern_struct_ops(struct bpf_map *map)
- 		const struct btf_type *mtype, *kern_mtype;
- 		__u32 mtype_id, kern_mtype_id;
- 		void *mdata, *kern_mdata;
-+		struct bpf_program *prog;
- 		__s64 msize, kern_msize;
- 		__u32 moff, kern_moff;
- 		__u32 kern_member_idx;
-@@ -1145,19 +1146,35 @@ static int bpf_map__init_kern_struct_ops(struct bpf_map *map)
- 
- 		kern_member = find_member_by_name(kern_btf, kern_type, mname);
- 		if (!kern_member) {
--			/* Skip all zeros or null fields if they are not
--			 * presented in the kernel BTF.
--			 */
--			if (libbpf_is_mem_zeroed(mdata, msize)) {
--				st_ops->progs[i] = NULL;
--				pr_info("struct_ops %s: member %s not found in kernel, skipping it as it's set to zero\n",
-+			if (!libbpf_is_mem_zeroed(mdata, msize)) {
-+				pr_warn("struct_ops init_kern %s: Cannot find member %s in kernel BTF\n",
- 					map->name, mname);
--				continue;
-+				return -ENOTSUP;
- 			}
- 
--			pr_warn("struct_ops init_kern %s: Cannot find member %s in kernel BTF\n",
-+			prog = st_ops->progs[i];
-+			if (prog) {
-+				/* If we had declaratively set struct_ops callback, we need to
-+				 * first validate that it's actually a struct_ops program.
-+				 * And then force its autoload to false, because it doesn't have
-+				 * a chance of succeeding from POV of the current struct_ops map.
-+				 * If this program is still referenced somewhere else, though,
-+				 * then bpf_object_adjust_struct_ops_autoload() will update its
-+				 * autoload accordingly.
-+				 */
-+				if (!is_valid_st_ops_program(obj, prog)) {
-+					pr_warn("struct_ops init_kern %s: member %s is declaratively assigned a non-struct_ops program\n",
-+						map->name, mname);
-+					return -EINVAL;
-+				}
-+				prog->autoload = false;
-+				st_ops->progs[i] = NULL;
-+			}
-+
-+			/* Skip all-zero/NULL fields if they are not present in the kernel BTF */
-+			pr_info("struct_ops %s: member %s not found in kernel, skipping it as it's set to zero\n",
- 				map->name, mname);
--			return -ENOTSUP;
-+			continue;
- 		}
- 
- 		kern_member_idx = kern_member - btf_members(kern_type);
-@@ -1183,8 +1200,6 @@ static int bpf_map__init_kern_struct_ops(struct bpf_map *map)
- 		}
- 
- 		if (btf_is_ptr(mtype)) {
--			struct bpf_program *prog;
--
- 			/* Update the value from the shadow type */
- 			prog = *(void **)mdata;
- 			st_ops->progs[i] = prog;
-diff --git a/tools/testing/selftests/bpf/progs/struct_ops_module.c b/tools/testing/selftests/bpf/progs/struct_ops_module.c
-index 40109be2b3ae..4c56d4a9d9f4 100644
---- a/tools/testing/selftests/bpf/progs/struct_ops_module.c
-+++ b/tools/testing/selftests/bpf/progs/struct_ops_module.c
-@@ -63,7 +63,7 @@ struct bpf_testmod_ops___zeroed {
- 	int zeroed;
- };
- 
--SEC("?struct_ops/test_3")
-+SEC("struct_ops/test_3")
- int BPF_PROG(zeroed_op)
- {
- 	return 1;
--- 
-2.43.0
-
+While writing a test for ct_zone_flags, I realised this option is not
+used for the conntrack functions that the bpf ct helper functions call,
+nf_conntrack_alloc() and nf_conntrack_find_get(), it is only used by
+nf_conntrack_in(), so I will remove ct_zone_flags from my v3 patchset.
