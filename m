@@ -1,42 +1,43 @@
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62699171AA
-	for <bpf@vger.kernel.org>; Thu,  2 May 2024 04:23:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.145.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 860231CA82
+	for <bpf@vger.kernel.org>; Thu,  2 May 2024 04:23:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.153.30
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714623829; cv=none; b=f4JSo6lzxFs8aZ1ns6XyxareaucbBkRZHuqE58grEiF4LEZ6qoC8Ss7v2L0Dc+XiUFtudOkuvW13cx9fstlY5lewuSRq9geqPII0FsnvQXt/LMy5i7H1W8MT1gc6u9kLFBBJc/oItQyDRGzz5X2K2GbAbGwVOGIcJrrlX84aRuc=
+	t=1714623832; cv=none; b=UEXMzwQ9Bib4A3CUHTbbaNXi2CZhVu572g2dCiTO5C665aEiTuIWaw2lMXJEwBw/xVnRvUFMk8Y4caka3b4Wr/9ezTS338cFrzrYYbKx3zagZjrs6Jua1UbLaiPEmd/dtiivnGp6ot2W8gXRWpCynqdEDPAcNQuRsdp3MBDDmSo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714623829; c=relaxed/simple;
-	bh=9loqrPzqZAxVOaUc4oopSnUKFBSd2uYPXYpzR5q9FAU=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=EEIP3CPzG5UNJIAD0jPgchQ+IG65vIgxB+VNIVBDFU1SmEHVbwWcCSrRBvA6/URv7K4SXXd+nQAF8VMSVbUuOvBvC95OnUr9N9vmJWGHIeDd7Sc5B/s4WpN4sUYyVTXXpZ/tzooki+70aEcjfGpuKkDHVDOGmH1dkzsE7N+8qGI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com; spf=pass smtp.mailfrom=meta.com; dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b=RaHOUhGC; arc=none smtp.client-ip=67.231.145.42
+	s=arc-20240116; t=1714623832; c=relaxed/simple;
+	bh=mOFBz0Vwi79zWTBvD7c6ovgqZSa09WGBOELcyB6lWWs=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=MvzGvQug3NMQec8WKjChr21DO6yWO4YDMn9hwAZCGV6+fL/URAQVQWNGNuUYsdKm3ECG5sMaDYogPKky3k9LPUqFjm35nCOLyHNloOmmB9fevX2v0QzpGXMPnNJCNFfs6P0AENCiYHLLEs/9Wyx/sx1xQcJ7g/VdqTOBsJlNq+M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com; spf=pass smtp.mailfrom=meta.com; dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b=EMprmCPA; arc=none smtp.client-ip=67.231.153.30
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b="RaHOUhGC"
-Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 441Mjqpm010650
-	for <bpf@vger.kernel.org>; Wed, 1 May 2024 21:23:47 -0700
+	dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b="EMprmCPA"
+Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
+	by m0089730.ppops.net (8.17.1.19/8.17.1.19) with ESMTP id 441L060G025995
+	for <bpf@vger.kernel.org>; Wed, 1 May 2024 21:23:50 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=s2048-2021-q4;
- bh=TO1PSaKRd633vyRFurgOUtsTs/4pfrreyOBxMprrjDI=;
- b=RaHOUhGCOTO8nhlHvVCSpuaHMR5lCZLS4e+R/PZeKQ4I1ZN+gUov+ya/75UAXUArk/NS
- EaxiAWRKzD/7+g+SlTF+y0BSZfTx0TEuZVMmhyQb/MMW1M56JoLDi8o2ZEkvzM7edDIT
- 3tteickO2quAFXRaFBuP/OnzrD1nOGy7Wmp0FyYBYK5ttG+/N9e/BoBtcdPS5PgKWtPq
- sDEenRUJ/i7qROB47WQIfPGD577rzdkPz2kSuzXcTmALh/tF9Ur5CF8b5QoPusG26KLH
- 2ZmfuYWkOktnzYsivXOIp8AGiSIfI7hL3WATUReMTIWcMVeKO+BQ2sc9WTki1i5laUoj 7g== 
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=s2048-2021-q4;
+ bh=FdW5u1MxBSQfGLg/7BMhH46+WtHnACBpEy9949+GeOc=;
+ b=EMprmCPAF8ckU0nLGGnK/gweBIxWc5SlyeMi/ggZgLqJnSnhpRJ3bi1ouNsApx2pbt0e
+ KmE0wbvFyZehsMYn6VhYVhhXUW5uZf0DbuGyDasXIbv0+hVUJ3zbDFXck9q05OXALHWV
+ +ZFLB0DDeX4Q4JMFUX1jzRWOon+PVLkA5pVQrhkzdREFctbTezs0SCgvjbyZU1cx2jC6
+ wyAQd/IAo/nfpygFyka6sgjJWZxmAOaIzZGYIFPJUqnFzvQTfhHX/I6xXxEYtcgMuDSr
+ LZY/SfsTUPnt/qOD/cWXt/EkBuLc8132hRh/FR0Nts8kvfhm+LD1SUMgsyKyYeyfxEOd nw== 
 Received: from mail.thefacebook.com ([163.114.132.120])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3xuxtmhhjt-6
+	by m0089730.ppops.net (PPS) with ESMTPS id 3xu2ymk05c-7
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <bpf@vger.kernel.org>; Wed, 01 May 2024 21:23:47 -0700
-Received: from twshared53332.38.frc1.facebook.com (2620:10d:c085:108::8) by
- mail.thefacebook.com (2620:10d:c085:11d::8) with Microsoft SMTP Server
+	for <bpf@vger.kernel.org>; Wed, 01 May 2024 21:23:49 -0700
+Received: from twshared18280.38.frc1.facebook.com (2620:10d:c085:208::11) by
+ mail.thefacebook.com (2620:10d:c085:21d::8) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35; Thu, 2 May 2024 04:23:45 +0000
+ 15.1.2507.35; Wed, 1 May 2024 21:23:45 -0700
 Received: by devvm15954.vll0.facebook.com (Postfix, from userid 420730)
-	id 53D20CB261CF; Wed,  1 May 2024 21:23:30 -0700 (PDT)
+	id E8689CB26250; Wed,  1 May 2024 21:23:43 -0700 (PDT)
 From: Miao Xu <miaxu@meta.com>
 To: Eric Dumazet <edumazet@google.com>,
         "David S . Miller"
@@ -46,10 +47,12 @@ To: Eric Dumazet <edumazet@google.com>,
         David Ahern <dsahern@kernel.org>, Martin Lau
 	<kafai@meta.com>
 CC: <netdev@vger.kernel.org>, <bpf@vger.kernel.org>, Miao Xu <miaxu@meta.com>
-Subject: [PATCH net-next v3 0/3] Add new args into tcp_congestion_ops' cong_control
-Date: Wed, 1 May 2024 21:23:15 -0700
-Message-ID: <20240502042318.801932-1-miaxu@meta.com>
+Subject: [PATCH net-next v3 2/3] bpf: tcp: Allow to write tp->snd_cwnd_stamp in bpf_tcp_ca
+Date: Wed, 1 May 2024 21:23:17 -0700
+Message-ID: <20240502042318.801932-3-miaxu@meta.com>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20240502042318.801932-1-miaxu@meta.com>
+References: <20240502042318.801932-1-miaxu@meta.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -59,45 +62,45 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: ux_bGmHcqVRZn4_T7hQ-RmqVkrg7dhzW
-X-Proofpoint-GUID: ux_bGmHcqVRZn4_T7hQ-RmqVkrg7dhzW
+X-Proofpoint-ORIG-GUID: 9YlKpdXg1YnKMD1g6J39CaU9hawpmZoa
+X-Proofpoint-GUID: 9YlKpdXg1YnKMD1g6J39CaU9hawpmZoa
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1011,Hydra:6.0.650,FMLib:17.11.176.26
  definitions=2024-05-01_16,2024-04-30_01,2023-05-22_02
 
-This patchset attempts to add two new arguments into the hookpoint
-cong_control in tcp_congestion_ops. The new arguments are inherited
-from the caller tcp_cong_control and can be used by any bpf cc prog
-that implements its own logic inside this hookpoint.
+This patch allows the write of tp->snd_cwnd_stamp in a bpf tcp
+ca program. An use case of writing this field is to keep track
+of the time whenever tp->snd_cwnd is raised or reduced inside
+the `cong_control` callback.
 
-Please review. Thanks a lot!
+Reviewed-by: Eric Dumazet <edumazet@google.com>
+---
+Changes in v3:
+* Updated the title.
 
-Changelog
-=3D=3D=3D=3D=3D
-v2->v3:
-  - Fixed the broken selftest caused by the new arguments.
-  - Renamed the selftest file name and bpf prog name.
+Changes in v2:
+* None. It is a spinout from the original 1st patch.
 
-v1->v2:
-  - Split the patchset into 3 separate patches.
-  - Added highlights in the selftest prog.
-  - Removed the dependency on bpf_tcp_helpers.h.
+Signed-off-by: Miao Xu <miaxu@meta.com>
+---
+ net/ipv4/bpf_tcp_ca.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-Miao Xu (3):
-  tcp: Add new args for cong_control in tcp_congestion_ops
-  bpf: tcp: Allow to write tp->snd_cwnd_stamp in bpf_tcp_ca
-  selftests/bpf: Add test for the use of new args in cong_control
-
- include/net/tcp.h                             |   2 +-
- net/ipv4/bpf_tcp_ca.c                         |   6 +-
- net/ipv4/tcp_bbr.c                            |   2 +-
- net/ipv4/tcp_input.c                          |   2 +-
- .../selftests/bpf/progs/bpf_cc_cubic.c        | 206 ++++++++++++++++++
- .../selftests/bpf/progs/bpf_tracing_net.h     |  10 +
- .../selftests/bpf/progs/tcp_ca_kfunc.c        |   6 +-
- 7 files changed, 227 insertions(+), 7 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/progs/bpf_cc_cubic.c
-
+diff --git a/net/ipv4/bpf_tcp_ca.c b/net/ipv4/bpf_tcp_ca.c
+index 6bd7f8db189a..18227757ec0c 100644
+--- a/net/ipv4/bpf_tcp_ca.c
++++ b/net/ipv4/bpf_tcp_ca.c
+@@ -107,6 +107,9 @@ static int bpf_tcp_ca_btf_struct_access(struct bpf_ve=
+rifier_log *log,
+ 	case offsetof(struct tcp_sock, snd_cwnd_cnt):
+ 		end =3D offsetofend(struct tcp_sock, snd_cwnd_cnt);
+ 		break;
++	case offsetof(struct tcp_sock, snd_cwnd_stamp):
++		end =3D offsetofend(struct tcp_sock, snd_cwnd_stamp);
++		break;
+ 	case offsetof(struct tcp_sock, snd_ssthresh):
+ 		end =3D offsetofend(struct tcp_sock, snd_ssthresh);
+ 		break;
 --=20
 2.43.0
 
