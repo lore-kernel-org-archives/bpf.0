@@ -1,83 +1,209 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5A9A83CCE
-	for <bpf@vger.kernel.org>; Thu,  2 May 2024 13:35:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBD097441E;
+	Thu,  2 May 2024 13:43:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714656916; cv=none; b=JMN5Z75cIqq0U7Jqwck+TyGG5XQ8t3yDL6hBeyTTFEfjdcxAS8IB5W+TWkQamSHwwly+aWVUPCr/PVbatK8lAT38Flw29NsRxLlooaxtd7TIbFMZOXnT1Yxs9hVrTlXvSLgLskpB4ymDBMk4T4Uk4EWOuZHU3m49OPygZCzH6mg=
+	t=1714657420; cv=none; b=F2Jwh7xuFHgHlQujvmkmdcrUTgAQA5xHCZ3BV7beDvCXLeCPCrukpjbNDlFb2hEKHO/CsKiPY7RvF8Tk41+rokR1jgjw51AroBF2IA9qsPlVPIx+50Ahl9OTyR20ywzFkyEZXqjQzb+5LakT/KDi2gNeL8Y9nfHbzKR/jW6qfyQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714656916; c=relaxed/simple;
-	bh=uXiiEc49gyJlcB3cUGtvNaLwAg50LhovFpPKHuk1lEQ=;
+	s=arc-20240116; t=1714657420; c=relaxed/simple;
+	bh=HtGp1xU+30x0HMmW9Qu2geRr7bEsMJ+1LRzEdacgOZI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UZsCLxnMG/zjRqNf38YPi/TyQX4VrNyYqfX6itNWqFSTeXE0nDE7G6BXiTUql+Ovj8fwxCUAz+Vt5Ax2bwfcUTJe9MzjfKZP/6axikpBlOCPVCwCHfSoxOs/3AVwLnLZuVVd4uuk8fVsgInGMaSI85ApWFbjMEmYSfxHm/tKNXc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AUysGepP; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=KsjajTHohT57T7ByD2B/b+cg/pZ7xTmKiSRSXxAyFBcvwE8bZUbFg4SnHFnbuc0Iunw0YnbgowZizc3TOoIJV59U/iIPuBDnilo3lEAjA9UOtlNESn5JFCqTpKQpK902NV3jaAwSl8x4i/ddPP1kFh1WKjMX8g5aSAk5gQb+vXc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QRcwr4M1; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AUysGepP"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7472C113CC;
-	Thu,  2 May 2024 13:35:15 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QRcwr4M1"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3CD6CC113CC;
+	Thu,  2 May 2024 13:43:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1714656916;
-	bh=uXiiEc49gyJlcB3cUGtvNaLwAg50LhovFpPKHuk1lEQ=;
+	s=k20201202; t=1714657420;
+	bh=HtGp1xU+30x0HMmW9Qu2geRr7bEsMJ+1LRzEdacgOZI=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=AUysGepPXftd25fg0FmWE/X6xcUNto1yhtff3Trbb+2r9duIl1OEP3VcQnp15sm2N
-	 Nt0qugLiNm3Xei5Jt+rt32saTa3zZUERm82ik+rAIa5hMpAvwNePn0aAq6LBvwG/hv
-	 O74vLOt7PdkfAS8dcZqn08xZLNNUVIBRkXF3lMVSDtYqMd89XZDxZpcz/AewN6l71u
-	 NRY+AEguG8OhsowkZaSk5tgvKBg8/mGvvk8/4lvDRTxP9aKfnpDiFAQ3jzVW7O+cC3
-	 X9xzPUVi4fPaSiwucyUEKCFjI5QR6eTT+VFbaUWI69eWrSEmfGQRiZwrN4eHac/OxM
-	 tBMy1Gc6wu+8Q==
-Date: Thu, 2 May 2024 10:35:10 -0300
-From: Arnaldo Carvalho de Melo <acme@kernel.org>
-To: Alan Maguire <alan.maguire@oracle.com>
-Cc: Daniel Xu <dxu@dxuuu.xyz>, jolsa@kernel.org, quentin@isovalent.com,
-	eddyz87@gmail.com, andrii.nakryiko@gmail.com, ast@kernel.org,
-	daniel@iogearbox.net, bpf@vger.kernel.org
-Subject: Re: [PATCH dwarves v9 2/3] pahole: Add --btf_feature=decl_tag_kfuncs
- feature
-Message-ID: <ZjOWjjUmgCdNsXkD@x1>
-References: <cover.1714430735.git.dxu@dxuuu.xyz>
- <6d69d6dce917475ffe9c1bd7bc53358904f60915.1714430735.git.dxu@dxuuu.xyz>
- <ZjE85q0SJ1sve25u@x1>
- <2jjkwylnz7rjqkjpjb5li3n7g32uhrhx2uzwwthtgfqdf6bwzl@yjmuy24buoyl>
- <2bc24644-0289-48c5-8118-8be4fc1658a9@oracle.com>
+	b=QRcwr4M1hCYR/BY50XFObmHG8s43BYAUBcoEseJHA3vgZxK8Nff7R0AXErOKGxKRe
+	 tOsO6qL/BVFSeeWah0nHQke056L2xlMlQVLnEjMmK83xVdwqJ77ltNLJmKQcQJHVVr
+	 z1Fs2FhkoIj6uexh1YJoyxq7tZDgWQ/EUm7KbytdqhN9wdvvSZ6nlN2kGIdIUmuClc
+	 dWZRlHcxfLpDtVkyJ1tEqMGi/2aMY1dj39ZcNT2QYTvcdWWrS64zm3pela9U0GJIsp
+	 X6HKBOGe+5A96ULnlboZRRCBLiIYifxPXJYDIb2x4I9rcyLOB3qAhcC8oavkDW7q7J
+	 4qbUIiE1DcgiQ==
+Date: Thu, 2 May 2024 15:43:27 +0200
+From: Alejandro Colomar <alx@kernel.org>
+To: Jiri Olsa <jolsa@kernel.org>
+Cc: Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Oleg Nesterov <oleg@redhat.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>, linux-kernel@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org, linux-api@vger.kernel.org,
+	linux-man@vger.kernel.org, x86@kernel.org, bpf@vger.kernel.org,
+	Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	"Borislav Petkov (AMD)" <bp@alien8.de>,
+	Ingo Molnar <mingo@redhat.com>, Andy Lutomirski <luto@kernel.org>
+Subject: Re: [PATCHv4 7/7] man2: Add uretprobe syscall page
+Message-ID: <ZjOYf_g2qRrhDoQD@debian>
+References: <20240502122313.1579719-1-jolsa@kernel.org>
+ <20240502122313.1579719-8-jolsa@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="KBL3g/TAaXMZ7pyE"
 Content-Disposition: inline
-In-Reply-To: <2bc24644-0289-48c5-8118-8be4fc1658a9@oracle.com>
+In-Reply-To: <20240502122313.1579719-8-jolsa@kernel.org>
 
-On Thu, May 02, 2024 at 12:49:26PM +0100, Alan Maguire wrote:
-> On 01/05/2024 00:00, Daniel Xu wrote:
-> > On Tue, Apr 30, 2024 at 03:48:06PM GMT, Arnaldo Carvalho de Melo wrote:
-> >> On Mon, Apr 29, 2024 at 04:45:59PM -0600, Daniel Xu wrote:
-> >> Also 'decl_tag_kfuncs' is not enabled when using --btf_features=default,
-> >> right? as:
 
-> >>         BTF_DEFAULT_FEATURE(decl_tag_kfuncs, btf_decl_tag_kfuncs, false),
+--KBL3g/TAaXMZ7pyE
+Content-Type: text/plain; protected-headers=v1; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Date: Thu, 2 May 2024 15:43:27 +0200
+From: Alejandro Colomar <alx@kernel.org>
+To: Jiri Olsa <jolsa@kernel.org>
+Cc: Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Oleg Nesterov <oleg@redhat.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>, linux-kernel@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org, linux-api@vger.kernel.org,
+	linux-man@vger.kernel.org, x86@kernel.org, bpf@vger.kernel.org,
+	Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	"Borislav Petkov (AMD)" <bp@alien8.de>,
+	Ingo Molnar <mingo@redhat.com>, Andy Lutomirski <luto@kernel.org>
+Subject: Re: [PATCHv4 7/7] man2: Add uretprobe syscall page
 
-> >> And that false is .default_enabled=false.
+Hi Jiri,
 
-> > I think that `false` is for `initial_value`, isn't it? The macro sets
-> > the `default_enabled` field.
- 
-> yep it's the initial unset value. Specifying an option in --btf_features
-> flips that value, so for initial-off values they are switched on, while
+On Thu, May 02, 2024 at 02:23:13PM +0200, Jiri Olsa wrote:
+> Adding man page for new uretprobe syscall.
+>=20
+> Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+> ---
+>  man2/uretprobe.2 | 45 +++++++++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 45 insertions(+)
+>  create mode 100644 man2/uretprobe.2
+>=20
+> diff --git a/man2/uretprobe.2 b/man2/uretprobe.2
+> new file mode 100644
+> index 000000000000..08fe6a670430
+> --- /dev/null
+> +++ b/man2/uretprobe.2
+> @@ -0,0 +1,45 @@
+> +.\" Copyright (C) 2024, Jiri Olsa <jolsa@kernel.org>
+> +.\"
+> +.\" SPDX-License-Identifier: Linux-man-pages-copyleft
+> +.\"
+> +.TH uretprobe 2 (date) "Linux man-pages (unreleased)"
+> +.SH NAME
+> +uretprobe \- execute pending return uprobes
+> +.SH SYNOPSIS
+> +.nf
+> +.B int uretprobe(void)
+> +.fi
+> +.SH DESCRIPTION
+> +Kernel is using
+> +.BR uretprobe()
+> +syscall to trigger uprobe return probe consumers instead of using
+> +standard breakpoint instruction.
+> +
 
-So --btf_features=something may mean "don't use that feature"? That is
-confusing, perhaps the '-something' come in handy?
+Please use .P instead of a blank.  See man-pages(7):
 
-> initial-on values are switched off. I _think_ the intent here is to tag
-> kfuncs by default, so we can add tag_kfuncs to the set of options
+   Formatting conventions (general)
+     Paragraphs should be separated by suitable markers (usually either
+     .P or .IP).  Do not separate paragraphs using blank lines, as this
+     results in poor rendering in some output formats  (such  as  Post=E2=
+=80=90
+     Script and PDF).
 
-Probably, if they are present in the file being BTF encoded.
+> +The uretprobe syscall is not supposed to be called directly by user, it'=
+s allowed
 
-> specified in pahole-flags for v1.26. We won't be using "default" there
-> as we want to call out the flags explicitly.
+s/by user/by the user/
 
-Sure.
+> +to be invoked only through user space trampoline provided by kernel.
 
-- Arnaldo
+s/user space/user-space/
+
+Missing a few 'the' too, here and in the rest of the page.
+
+> +When called from outside of this trampoline, the calling process will re=
+ceive
+> +.BR SIGILL .
+> +
+> +.SH RETURN VALUE
+> +.BR uretprobe()
+
+You're missing a space here:
+
+=2EBR uretprobe ()
+
+> +return value is specific for given architecture.
+> +
+> +.SH VERSIONS
+> +This syscall is not specified in POSIX,
+> +and details of its behavior vary across systems.
+> +.SH STANDARDS
+> +None.
+
+You could add a HISTORY section.
+
+Have a lovely day!
+Alex
+
+> +.SH NOTES
+> +.BR uretprobe()
+> +syscall is initially introduced on x86-64 architecture, because doing sy=
+scall
+> +is faster than doing breakpoint trap on it. It might be extended to other
+> +architectures.
+> +
+> +.BR uretprobe()
+> +syscall exists only to allow the invocation of return uprobe consumers.
+> +It should
+> +.B never
+> +be called directly.
+> +Details of the arguments (if any) passed to
+> +.BR uretprobe ()
+> +and the return value are specific for given architecture.
+> --=20
+> 2.44.0
+>=20
+>=20
+
+--=20
+<https://www.alejandro-colomar.es/>
+A client is hiring kernel driver, mm, and/or crypto developers;
+contact me if interested.
+
+--KBL3g/TAaXMZ7pyE
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE6jqH8KTroDDkXfJAnowa+77/2zIFAmYzmH8ACgkQnowa+77/
+2zImYBAAlwYZZzeDBdbX0PzV0n1M313n43ulhVURXdHBIIN6w+rRyt/SCAFYRGq7
+8qXhG38H0HX/vN/8pRUQ0r31xT7vlAYXllo9NKM/OOeiYdw48hOYWQuHNDqFAihd
+o3trVoKeLHc47boWpIUljBWjchbT89ik2bp/WwGLFvZJFFjy8CmWEhQqIpMDRnP4
+nfdTbhGb2GJLXy5FC7MO+oRn9uyOUEO+NTngNVduRpsWMYCZFEIKUdcMHJdFIROt
+mPB2s455mopPg7paOSiGZpxSIln9gKUUzzlbznh5Q9K0MOIAwdW6MMAo6tEcBwtw
+6mU67Q3plUykc3t43EpuDrlfKo3APtKIzSw5npSNOJ2p+XVqyB6rNGRPchB1yRNC
+Wyk5j/ZqEidg1inH2+sw/vyRakophCPJZTL8N4BUqaiJkmTgS2YixQNieuzFP0gy
+YHu9XCI/uu/tVJVCCSFT+PA/84WFr3uysyoGJKEtKAycBHLMdGFzU6xIj5I7PTwn
+vkTPj8p5sJ1kK2lPhLdRs2ofwPfOI0ZI7P8DjLu7vKiHslF/CilPu7HfdQ/1T+/w
+Z0MNCA2xPCClNJvIQGHF7ope0rhIGXHlHpFHaYa6nw+gCoJyStqR65zxvaptH0xK
+UKDxMqU0hh5i9kjTrSlm9vgzpRklyKYlh2D1YUugCvP+OoOk1t8=
+=gVaX
+-----END PGP SIGNATURE-----
+
+--KBL3g/TAaXMZ7pyE--
