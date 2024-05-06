@@ -1,105 +1,161 @@
-Received: from mail-pg1-f175.google.com (mail-pg1-f175.google.com [209.85.215.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from shelob.surriel.com (shelob.surriel.com [96.67.55.147])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73D37158D99
-	for <bpf@vger.kernel.org>; Mon,  6 May 2024 18:56:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCFEE158DB0;
+	Mon,  6 May 2024 18:58:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=96.67.55.147
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715021763; cv=none; b=echoiWxNwrhrGC1k7I+IqG2qPL4iDW3YDs33yVi6fHxlFDNF4eRamy6LxCgZ9aDYfQSmrJrt+8mqWvGQ5b8nbmAnqsuU4SXaxG/UclYFLRlB6h43VTBvx7Occ5qIWG1b5l18ZvZ8w+N7AtDT9nLsg1ZgtFsgSNVNF3ku1jtjy4I=
+	t=1715021898; cv=none; b=EsCHGazoIkwhQPqY2r2i8UY2snR4s8qpBMmTPGwG/50cTYJOvtN5zECEJmFyLTRq8jcABsqJG2WZooRQiLqvjapkO+DtkMuSmSKFamsUm6Jpb7d5Phu1oIfr9b63/nXp1vJdZ4vtjpgx1QAWJcSBO6pKP98pj6sIzpwxEScthFw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715021763; c=relaxed/simple;
-	bh=XqrtzgcBEV5YbLEMw+2IN4+q2xbfKEGZwufxIFq4oNk=;
+	s=arc-20240116; t=1715021898; c=relaxed/simple;
+	bh=V5Q/PtAoa1EYXLeQtATWPzqJIo+EJXn8vpl0tEf4S8I=;
 	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=KcSgrBmeri9XFwS1kKq2/dChndGSklcpeF+LbVDs3IXkwqMBe9U/arFe9wMzG78FfJBzFOC80aGFbb3lx69vKCx0aT5zD8HVgOxb90FDK+Szuij31JHMLgyhnFeywMuJv3jgX8+G+GfbJk13PswfKjn1UJ2HO/a+5OSuPISOD4Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=N/tCZ0dx; arc=none smtp.client-ip=209.85.215.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="N/tCZ0dx"
-Received: by mail-pg1-f175.google.com with SMTP id 41be03b00d2f7-5e4f79007ffso1563277a12.2
-        for <bpf@vger.kernel.org>; Mon, 06 May 2024 11:56:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1715021762; x=1715626562; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=DuSjLZx0k+gXLvG6GioJ/gS9ZCmzbuvQ5PmqNnJw21Y=;
-        b=N/tCZ0dx6UJLw7QG4zHUGdBLBN/LBU/wvpx2KdsDIAylv8pVU9fnjnkVcvaqzHnAT7
-         cazVc3FBi97Eb+L/tPkioB+c6agBVEpUUJwHyRayWq9X9bi8WGQZEtxlEMwKnzuw5XuO
-         36/M3lE/mqWm+evYGcI8l/MVZUiXjmHrTs1yNPBLnh4jkGBJXTiHD4cJrNS29+ue9Fm0
-         ZbYXMtXx6jvP5QqYl+9FygzB/77UsfbJ9LKJv+0KEfmx4zmeKo29P0+ibalw30jzfV+c
-         Ki/RU8AgFScTmfeMHa7mUtvEgGmw3ofEPUKGgywnK2bKy2bOGZ+9gA1uD6i9VIcygKFV
-         KUQQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715021762; x=1715626562;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=DuSjLZx0k+gXLvG6GioJ/gS9ZCmzbuvQ5PmqNnJw21Y=;
-        b=OHOLGMjIqXZDJHUe9HBBJmDPLOhSZPD56sGMJr3ZO0CbkjkFhHONG71uKQbGt9Kp7f
-         izf+S3KqkGqRkf5eOkySdZiHMSoorYzw1eGdtcy7TxdrWuTd00uDMQ8Vtau/xPeuTBGc
-         i/CAGwg9g3o7//x570ZTenWK4ob0riF05/kSbejCcimlapUQRoF0bHj5ug1Ft6y+U3oH
-         939DhqF+dI7VtcVOV2MGhXajag+4V+BtCgRWWuHqLhndwWut8Q6a+ndGbj7tRd82YbOm
-         qIfyOnJLgN459OrsgjkaB6Qfri8lg+YbXoChPebSZQzk1jyxE5RZC2LBjhXNdlD0oqaY
-         oqXw==
-X-Gm-Message-State: AOJu0YxSpCCaD/E9rZdYfXQsWJNVdt481v2yAYkoyMa+nsQSwPUPJxl0
-	2qUCiHiKd4sQgBCT2NW05eCCotBljWM4fH8JDOQzHSe0JS+gq5hb
-X-Google-Smtp-Source: AGHT+IHq4UVmP0Ga+NTXqLZQSTc6vmh2WD+KoYdxp+FSRY2SVdbFTfrtu2NobLxIp47PDYMhH0+Hpw==
-X-Received: by 2002:a05:6a20:3d90:b0:1a3:ae75:d6f5 with SMTP id s16-20020a056a203d9000b001a3ae75d6f5mr13692395pzi.20.1715021761055;
-        Mon, 06 May 2024 11:56:01 -0700 (PDT)
-Received: from ?IPv6:2604:3d08:6979:1160:7ee2:7e98:c6c4:56ad? ([2604:3d08:6979:1160:7ee2:7e98:c6c4:56ad])
-        by smtp.gmail.com with ESMTPSA id h6-20020a056a00170600b006f4586193a4sm4687895pfc.136.2024.05.06.11.56.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 May 2024 11:56:00 -0700 (PDT)
-Message-ID: <14531c3db62da3761e0783d12fa67060171ed722.camel@gmail.com>
-Subject: Re: [RFC bpf-next] bpf: avoid clang-specific push/pop attribute
- pragmas in bpftool
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: "Jose E. Marchesi" <jose.marchesi@oracle.com>, Andrii Nakryiko
-	 <andrii.nakryiko@gmail.com>
-Cc: bpf@vger.kernel.org, Alexei Starovoitov <alexei.starovoitov@gmail.com>, 
- Yonghong Song <yonghong.song@linux.dev>, david.faust@oracle.com,
- cupertino.miranda@oracle.com
-Date: Mon, 06 May 2024 11:55:59 -0700
-In-Reply-To: <87a5l5jncs.fsf@oracle.com>
-References: <20240503111836.25275-1-jose.marchesi@oracle.com>
-	 <6687f49cdd5061202ee112c38614bea091266179.camel@gmail.com>
-	 <171a007587c02ff4a8d064c65531fde318c3b4e2.camel@gmail.com>
-	 <CAEf4Bza5cmJK-+tK1QJ-SVUWmTOTOM_3gZQ=9yhynU5vE_wWyg@mail.gmail.com>
-	 <87a5l5jncs.fsf@oracle.com>
+	 Content-Type:MIME-Version; b=B69ZsePTjOSw7rcvWOXjEJniGwA+NG8AkJRiPPgWG88aV+PlbweJBfL2JnZ+Fl8AT94ZBYBzxlT2f6FyT84myAGC3I3fLOMdX18fiLagxNo3uy7DknuMZF8xlR5fxqs6Dem2spVGh4PFwmHfH7ArxmzWdgofsX6X9XFRZiSrEOM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=surriel.com; spf=pass smtp.mailfrom=shelob.surriel.com; arc=none smtp.client-ip=96.67.55.147
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=surriel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=shelob.surriel.com
+Received: from [2601:18c:9101:a8b6:6e0b:84ff:fee2:98bb] (helo=imladris.surriel.com)
+	by shelob.surriel.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.97.1)
+	(envelope-from <riel@shelob.surriel.com>)
+	id 1s43NP-000000002I5-3dwS;
+	Mon, 06 May 2024 14:47:51 -0400
+Message-ID: <798768ad5db073d36467a432352b968b01649898.camel@surriel.com>
+Subject: Re: [PATCHSET v6] sched: Implement BPF extensible scheduler class
+From: Rik van Riel <riel@surriel.com>
+To: Peter Zijlstra <peterz@infradead.org>, Tejun Heo <tj@kernel.org>
+Cc: torvalds@linux-foundation.org, mingo@redhat.com, juri.lelli@redhat.com, 
+ vincent.guittot@linaro.org, dietmar.eggemann@arm.com, rostedt@goodmis.org, 
+ bsegall@google.com, mgorman@suse.de, bristot@redhat.com,
+ vschneid@redhat.com,  ast@kernel.org, daniel@iogearbox.net,
+ andrii@kernel.org, martin.lau@kernel.org,  joshdon@google.com,
+ brho@google.com, pjt@google.com, derkling@google.com,  haoluo@google.com,
+ dvernet@meta.com, dschatzberg@meta.com, dskarlat@cs.cmu.edu, 
+ changwoo@igalia.com, himadrics@inria.fr, memxor@gmail.com, 
+ andrea.righi@canonical.com, joel@joelfernandes.org,
+ linux-kernel@vger.kernel.org,  bpf@vger.kernel.org, kernel-team@meta.com
+Date: Mon, 06 May 2024 14:47:47 -0400
+In-Reply-To: <20240503085232.GC30852@noisy.programming.kicks-ass.net>
+References: <20240501151312.635565-1-tj@kernel.org>
+	 <20240502084800.GY30852@noisy.programming.kicks-ass.net>
+	 <ZjPnb1vdt80FrksA@slm.duckdns.org>
+	 <20240503085232.GC30852@noisy.programming.kicks-ass.net>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4-0ubuntu2 
+User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Sender: riel@surriel.com
 
-On Sat, 2024-05-04 at 23:09 +0200, Jose E. Marchesi wrote:
+On Fri, 2024-05-03 at 10:52 +0200, Peter Zijlstra wrote:
+> On Thu, May 02, 2024 at 09:20:15AM -1000, Tejun Heo wrote:
+> > Hello, Peter.
+> >=20
+> > On Thu, May 02, 2024 at 10:48:00AM +0200, Peter Zijlstra wrote:
+> > > Can you please put your efforts and the touted Google
+> > > collaboration in
+> > > fixing the existing cgroup mess?
+> >=20
+> > I suppose you're referring to Rik's flattened hierarchy patchset.
+> >=20
+> > =C2=A0
+> > https://lore.kernel.org/all/20190822021740.15554-1-riel@surriel.com
+> >=20
+>=20
+> You guys Google/Facebook got us the cgroup thing, Google did a lot of
+> the work for cpu-cgroup, and now you Facebook say you can't live with
+> it
+> because it's too expensive. Yes Rik did put a lot of effort into it,
+> but
+> Google shot it down. What am I to do?
 
-[...]
+I believe the issues that Paul pointed out with my
+flattened cgroup code are fixable. I ended up not
+getting back to this code because it took me a few
+months to think of ways to fix the issues Paul found,
+and by then I had moved on to other projects.
 
-> I have sent a tentative patch that adds the `record_attrs_str'
-> configuration parameter to the btf_dump_opts, incorporating a few
-> changes after Eduard's suggestions regarding avoiding double negations
-> and docstrings.
+For reference, Paul found these two (very real) issues
+with my implementation.
 
-[...]
+1) Thundering herd problem. If many tasks in a low
+   priority cgroup wake up at the same time, they can
+   end up swamping a CPU.
 
-> I am not familiar with the particular use cases, but generally speaking
-> separating sorting and emission makes sense to me.  I would also prefer
-> that to iterators.
+   I believe this can be solved with the same idea
+   I had for reimplementing CONFIG_CFS_BANDWIDTH.
+   Specifically, the code that determines the time
+   slice length for a task already has a way to
+   determine whether a CPU is "overloaded", and
+   time slices need to be shortened.  Once we reach
+   that situation, we can place woken up tasks on
+   a secondary heap of per-cgroup runqueues, from
+   which we do not directly run tasks, but pick
+   the lowest vruntime task from the lowest vruntime
+   cgroup and put that on the main runqueue, if
+   the previously running task has a vruntime that
+   is higher than that of a task in the secondary
+   group. If a task is woken up in a cgroup that
+   already has tasks on that secondary queue, we
+   wake up the task onto that secondary queue.
 
-Hi Jose,
+   This means on overloaded CPUs, we move back to
+   a task selection mechanism closer to what we
+   currently have, while in the non-overloaded
+   situation we use a flat runqueue.
 
-I've discussed this issue with Andrii today,
-and we decided that we want to proceed with API changes,
-that introduce two functions: one for sorting ids,
-one for printing single type.
+   This same scheme could be used to implement
+   CFS bandwidth control. A task belonging to a
+   throttled group would be placed on the group's
+   queue, not the CPU's flat runqueue.
 
-I can do this change on Tue or Wed, if that is ok with you.
+2) The vruntime for a task can be advanced by way
+   to much at once. If we have tasks A & B running,
+   and task B has a priority that is 1/100th of that
+   of task A, its vruntime would be advanced 100x
+   as much as task A, when running the same length
+   time slice.
 
-Thanks,
-Eduard
+   This creates a big issue if we get a wakeup of
+   task C, at the same priority as task B, and then
+   task A goes to sleep. Due to the very far advanced
+   runtime of task B, task C could get to monopolize
+   the CPU for a considerable amount of time, and
+   task B could get starved.
+
+   A potential fix for this is to never account more
+   than the maximum time slice length at a time, while
+   any excess delta_exec time for the task gets remembered.
+
+   At pick_next_entity time, the scheduler can see that
+   task B has a lot of delta_exec time left, and account
+   up to the maximum slice length to the task's vruntime,
+   and place it back in the queue if the next task now has
+   a lower vruntime.
+
+   For a steady state of a high priority task A and a low
+   priority task B, this makes pick_next_task more expensive,
+   but when task A disappears and task C appears, CPU time
+   will continue to be fair between them.
+
+   Limiting the total weight of tasks on the flat runqueue,
+   using the mechanism for thundering herd and CFS bandwidth
+   outlined above, should keep this overhead bounded to
+   something reasonable.
+
+Does the above sound like it would work?
+
+Does it sound like code that you would be ok with merging?
+
+Is it a large enough improvement over the current hierarchical
+runqueue that it would be worth doing?
+
+This would be a fairly large project, so we should probably discuss
+some of the details before investing too much time in it.
+
+--=20
+All Rights Reversed.
