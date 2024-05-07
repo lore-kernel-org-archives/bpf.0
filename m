@@ -1,131 +1,179 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B0A3156C7A
-	for <bpf@vger.kernel.org>; Tue,  7 May 2024 10:48:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A8D614EC77;
+	Tue,  7 May 2024 10:53:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715078913; cv=none; b=THdSvFnNYJaPTMc5sJadxBaLMQ/Ak29wuCdNASJXy2iX3FT6ptR40E7CE/5D0+CJjpOfHc8BdzUUV62rNGW30n1hkp0QAybDPD5Qvdlx9rB8ju1fOCB+hzrdIdyHmBQ4RuHgKEk4DwQ7mhWDgSLEi7D6kiTidHoMpiGcjWdq6Ss=
+	t=1715079209; cv=none; b=nOZrUeMM/Y6EIQpsk87qMqADa8QIKThtQtTyYJy3GwtAebQL+fXiz3zkzKqqFGMwDeVFEs+S72NnXXW5EysPN0+uoYftSmoDnUiX5utTr4en82MOrPGjVOmQP8MrC+K2rKVdvpNOYZ/t8FK19f/0cM/tWKZmXEZkO6CXALOw/7k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715078913; c=relaxed/simple;
-	bh=wHy9en/As03N1zh8IZ4ouvHe4kFf6ummlv20ZpEe0hw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DuwZUR/fw4vaygSBzyoFMDQbxvQyZi7477urwR/vVaxpOidO3h3lQZwkZKpYvqV2wprfcZNzfsjKN7cFgqHTHE0DZMDV3bZ5LS97OGaPWj8/63u2bBIOJhj7kbvqJhgLOsuUy/DaWR9No3OlxuiblxqEA5SdEY4QE6jLXTck4Sc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YOAwqzzB; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1715079209; c=relaxed/simple;
+	bh=zRCYiOQHPnfhs1z3DR2elwt2Yar4HKiZO0wVgLYg+Vg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=hEqIG2sksvVU9Z7qrWCJ2ddzJKAUgJQFvs5XZXH8mOHkioRlsMc1pwr/cEYvsVbdim2kwlUzZElWQENkfYmPYQ9q4Ru95AVXSFdoPUxA4lXsKIEbL9Te8FXyfvzU/TWjpRCdqn99sDd4k6Zqsa3flon5BQVXOtFl5j18L/Xrw78=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sd9lJi5H; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YOAwqzzB"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4A0EC2BBFC;
-	Tue,  7 May 2024 10:48:31 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sd9lJi5H"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2481C2BBFC;
+	Tue,  7 May 2024 10:53:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1715078912;
-	bh=wHy9en/As03N1zh8IZ4ouvHe4kFf6ummlv20ZpEe0hw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=YOAwqzzBH5PKhzKNzZnw3UWJMDn+/rEJ5HYu+otCd8UbJzW4ogeSTLypLKVj/W94t
-	 6i5DTQAfiaDf2NNwLiZ+XCTO5iWCSRbQLcTE9w8+2C1lBdN0KD3a19BnYNYWUzkdY7
-	 QORzHW72t0fI9WYH/jcqLXxEcRTq4C43TGGy1h/IWvq4mN1ppdDAs+NCyjAZyYZhSl
-	 gYBNYzkrcykYgJUGrR2PVwZPDHnjSZU0Dwtl9CusIvP/45tqvyqpW5zoL4nM9JOrrC
-	 8rOqW6cD3zfh29OLGtz98vBvEnYzJEkrHavgeCQJ1PLO3U2IQClKj0o1AtvJBwYWHw
-	 rmS3dX5FwaoZQ==
-Date: Tue, 7 May 2024 16:10:51 +0530
-From: Naveen N Rao <naveen@kernel.org>
-To: Hari Bathini <hbathini@linux.ibm.com>
-Cc: linuxppc-dev <linuxppc-dev@lists.ozlabs.org>, bpf@vger.kernel.org, 
-	Song Liu <songliubraving@fb.com>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>
-Subject: Re: [PATCH v4 2/2] powerpc/bpf: enable kfunc call
-Message-ID: <hhdzfgivl6e6xkuj23srokm23n2kn3lx42a3f54hzsurvmil5e@ssylns6n7uh6>
-References: <20240502173205.142794-1-hbathini@linux.ibm.com>
- <20240502173205.142794-2-hbathini@linux.ibm.com>
+	s=k20201202; t=1715079209;
+	bh=zRCYiOQHPnfhs1z3DR2elwt2Yar4HKiZO0wVgLYg+Vg=;
+	h=From:To:Cc:Subject:Date:From;
+	b=sd9lJi5HBDDMQcb1fyizgnog+zrbmj5jPa0DvXupXs6nqIMgdu6hI3V4VMe3GjB4f
+	 lo2xNa1OWmjwKh8uY1kkVCEeOCjtqo6YXMIyhMInI0TXtmOy7KbvyBGRkiSG7tlFZa
+	 yt8KkxFd5HryeNJ9NpGX/3djDR8zx7QkrnD3GEsTJ7Q28SdhvGw9yKAJ2XRIzDyfXg
+	 lKQsWQERWl44PwOYWS/WjAdtjfolJLSINidU0Q6tz4q+t2rLtwIUiOUnlbAg9aZFck
+	 nbfsMm+qNHypPzPGTs3Qj5BPBzZMDTLJnEcypgrn3JwbGxrF0E1emYkYDi7UKWGlJo
+	 RcZZQlVaWwAhw==
+From: Jiri Olsa <jolsa@kernel.org>
+To: Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Oleg Nesterov <oleg@redhat.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>
+Cc: linux-kernel@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org,
+	linux-api@vger.kernel.org,
+	linux-man@vger.kernel.org,
+	x86@kernel.org,
+	bpf@vger.kernel.org,
+	Song Liu <songliubraving@fb.com>,
+	Yonghong Song <yhs@fb.com>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	"Borislav Petkov (AMD)" <bp@alien8.de>,
+	Ingo Molnar <mingo@redhat.com>,
+	Andy Lutomirski <luto@kernel.org>,
+	"Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
+	Deepak Gupta <debug@rivosinc.com>
+Subject: [PATCHv5 bpf-next 0/8] uprobe: uretprobe speed up
+Date: Tue,  7 May 2024 12:53:13 +0200
+Message-ID: <20240507105321.71524-1-jolsa@kernel.org>
+X-Mailer: git-send-email 2.44.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240502173205.142794-2-hbathini@linux.ibm.com>
+Content-Transfer-Encoding: 8bit
 
-On Thu, May 02, 2024 at 11:02:05PM GMT, Hari Bathini wrote:
-> Currently, bpf jit code on powerpc assumes all the bpf functions and
-> helpers to be part of core kernel text. This is false for kfunc case,
-> as function addresses may not be part of core kernel text area. So,
-> add support for addresses that are not within core kernel text area
-> too, to enable kfunc support. Emit instructions based on whether the
-> function address is within core kernel text address or not, to retain
-> optimized instruction sequence where possible.
-> 
-> In case of PCREL, as a bpf function that is not within core kernel
-> text area is likely to go out of range with relative addressing on
-> kernel base, use PC relative addressing. If that goes out of range,
-> load the full address with PPC_LI64().
-> 
-> With addresses that are not within core kernel text area supported,
-> override bpf_jit_supports_kfunc_call() to enable kfunc support. Also,
-> override bpf_jit_supports_far_kfunc_call() to enable 64-bit pointers,
-> as an address offset can be more than 32-bit long on PPC64.
-> 
-> Signed-off-by: Hari Bathini <hbathini@linux.ibm.com>
-> ---
-> 
-> * Changes in v4:
->   - Use either kernelbase or PC for relative addressing. Also, fallback
->     to PPC_LI64(), if both are out of range.
->   - Update r2 with kernel TOC for elfv1 too as elfv1 also uses the
->     optimization sequence, that expects r2 to be kernel TOC, when
->     function address is within core kernel text.
-> 
-> * Changes in v3:
->   - Retained optimized instruction sequence when function address is
->     a core kernel address as suggested by Naveen.
->   - Used unoptimized instruction sequence for PCREL addressing to
->     avoid out of range errors for core kernel function addresses.
->   - Folded patch that adds support for kfunc calls with patch that
->     enables/advertises this support as suggested by Naveen.
-> 
-> 
->  arch/powerpc/net/bpf_jit_comp.c   | 10 +++++
->  arch/powerpc/net/bpf_jit_comp64.c | 61 ++++++++++++++++++++++++++-----
->  2 files changed, 61 insertions(+), 10 deletions(-)
-> 
-> diff --git a/arch/powerpc/net/bpf_jit_comp.c b/arch/powerpc/net/bpf_jit_comp.c
-> index 0f9a21783329..984655419da5 100644
-> --- a/arch/powerpc/net/bpf_jit_comp.c
-> +++ b/arch/powerpc/net/bpf_jit_comp.c
-> @@ -359,3 +359,13 @@ void bpf_jit_free(struct bpf_prog *fp)
->  
->  	bpf_prog_unlock_free(fp);
->  }
-> +
-> +bool bpf_jit_supports_kfunc_call(void)
-> +{
-> +	return true;
-> +}
-> +
-> +bool bpf_jit_supports_far_kfunc_call(void)
-> +{
-> +	return IS_ENABLED(CONFIG_PPC64);
-> +}
-> diff --git a/arch/powerpc/net/bpf_jit_comp64.c b/arch/powerpc/net/bpf_jit_comp64.c
-> index 4de08e35e284..8afc14a4a125 100644
-> --- a/arch/powerpc/net/bpf_jit_comp64.c
-> +++ b/arch/powerpc/net/bpf_jit_comp64.c
-> @@ -208,17 +208,13 @@ bpf_jit_emit_func_call_hlp(u32 *image, u32 *fimage, struct codegen_context *ctx,
->  	unsigned long func_addr = func ? ppc_function_entry((void *)func) : 0;
->  	long reladdr;
->  
-> -	if (WARN_ON_ONCE(!core_kernel_text(func_addr)))
-> +	if (WARN_ON_ONCE(!kernel_text_address(func_addr)))
->  		return -EINVAL;
->  
-> -	if (IS_ENABLED(CONFIG_PPC_KERNEL_PCREL)) {
-> -		reladdr = func_addr - local_paca->kernelbase;
-> +#ifdef CONFIG_PPC_KERNEL_PCREL
+hi,
+as part of the effort on speeding up the uprobes [0] coming with
+return uprobe optimization by using syscall instead of the trap
+on the uretprobe trampoline.
 
-Would be good to retain use of IS_ENABLED().
-Reviewed-by: Naveen N Rao <naveen@kernel.org>
+The speed up depends on instruction type that uprobe is installed
+and depends on specific HW type, please check patch 1 for details.
+
+Patches 1-7 are based on bpf-next/master, but path 1 and 2 are
+apply-able on linux-trace.git tree probes/for-next branch.
+Patch 8 is based on man-pages master.
+
+v5 changes:
+- added shadow stack support for uretprobe [peterz]
+- reworded man page + typos [Alejandro Colom]
+- added pipe ASSERT_OK [Andrii]
+- added acks [Andrii]
+- removed compat test for now before ci is fixed
+
+Also available at:
+  https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git
+  uretprobe_syscall
+
+thanks,
+jirka
 
 
-- Naveen
+Notes to check list items in Documentation/process/adding-syscalls.rst:
 
+- System Call Alternatives
+  New syscall seems like the best way in here, because we need
+  just to quickly enter kernel with no extra arguments processing,
+  which we'd need to do if we decided to use another syscall.
+
+- Designing the API: Planning for Extension
+  The uretprobe syscall is very specific and most likely won't be
+  extended in the future.
+
+  At the moment it does not take any arguments and even if it does
+  in future, it's allowed to be called only from trampoline prepared
+  by kernel, so there'll be no broken user.
+
+- Designing the API: Other Considerations
+  N/A because uretprobe syscall does not return reference to kernel
+  object.
+
+- Proposing the API
+  Wiring up of the uretprobe system call is in separate change,
+  selftests and man page changes are part of the patchset.
+
+- Generic System Call Implementation
+  There's no CONFIG option for the new functionality because it
+  keeps the same behaviour from the user POV.
+
+- x86 System Call Implementation
+  It's 64-bit syscall only.
+
+- Compatibility System Calls (Generic)
+  N/A uretprobe syscall has no arguments and is not supported
+  for compat processes.
+
+- Compatibility System Calls (x86)
+  N/A uretprobe syscall is not supported for compat processes.
+
+- System Calls Returning Elsewhere
+  N/A.
+
+- Other Details
+  N/A.
+
+- Testing
+  Adding new bpf selftests and ran ltp on top of this change.
+
+- Man Page
+  Attached.
+
+- Do not call System Calls in the Kernel
+  N/A.
+
+
+[0] https://lore.kernel.org/bpf/ZeCXHKJ--iYYbmLj@krava/
+---
+Jiri Olsa (7):
+      uprobe: Wire up uretprobe system call
+      uprobe: Add uretprobe syscall to speed up return probe
+      selftests/bpf: Add uretprobe syscall test for regs integrity
+      selftests/bpf: Add uretprobe syscall test for regs changes
+      selftests/bpf: Add uretprobe syscall call from user space test
+      x86/shstk: Add return uprobe support
+      selftests/x86: Add return uprobe shadow stack test
+
+ arch/x86/entry/syscalls/syscall_64.tbl                      |   1 +
+ arch/x86/include/asm/shstk.h                                |   4 ++
+ arch/x86/kernel/shstk.c                                     |  29 +++++++++
+ arch/x86/kernel/uprobes.c                                   | 127 +++++++++++++++++++++++++++++++++++-
+ include/linux/syscalls.h                                    |   2 +
+ include/linux/uprobes.h                                     |   3 +
+ include/uapi/asm-generic/unistd.h                           |   5 +-
+ kernel/events/uprobes.c                                     |  24 +++++--
+ kernel/sys_ni.c                                             |   2 +
+ tools/include/linux/compiler.h                              |   4 ++
+ tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c       | 123 ++++++++++++++++++++++++++++++++++-
+ tools/testing/selftests/bpf/prog_tests/uprobe_syscall.c     | 325 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ tools/testing/selftests/bpf/progs/uprobe_syscall.c          |  15 +++++
+ tools/testing/selftests/bpf/progs/uprobe_syscall_executed.c |  17 +++++
+ tools/testing/selftests/x86/test_shadow_stack.c             | 142 ++++++++++++++++++++++++++++++++++++++++
+ 15 files changed, 813 insertions(+), 10 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/uprobe_syscall.c
+ create mode 100644 tools/testing/selftests/bpf/progs/uprobe_syscall.c
+ create mode 100644 tools/testing/selftests/bpf/progs/uprobe_syscall_executed.c
+
+Jiri Olsa (1):
+      man2: Add uretprobe syscall page
+
+ man2/uretprobe.2 | 50 ++++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 50 insertions(+)
+ create mode 100644 man2/uretprobe.2
