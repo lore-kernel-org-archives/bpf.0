@@ -1,225 +1,288 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 090DA14EC4D;
-	Tue,  7 May 2024 10:54:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58D6D14EC65;
+	Tue,  7 May 2024 10:54:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715079243; cv=none; b=obrmUqT8vg3aoEaXoqceKhG2FjdH+1Sp1w5XLBb3XWew4MNGfZZqpJtGGD25/9jgmh7yWYHxwr7ontDL0dZozsiA2BIZK0cO0gWjOG1Cygh7TIXX96PyHRwOoj56SVxwNZ/U/4GxyYb9czqGJW5uRvrd6RH7bIGEsT/YGTaR0sY=
+	t=1715079247; cv=none; b=EOb6wtLa42XuNUFCN+2lQb8SvQM/0jEhhN+/e/Ziz4QFvP864HzO5nA3DDhQkPcd9VyHv66VAfC85O/I6RUMINsSj0WnYAk5MuZKQa2V6BkEFa5A7JVObiBEM8GeHDDpdVfy92kROZc6sXGH/1TWzoDhYTmjgSeAl0J58fBCzqc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715079243; c=relaxed/simple;
-	bh=fyRycR9/L+qh3CJ6pIxN0skKoQZC9oBAv+ztBt5UGzg=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=AiW+5xrgiPEHC9Wox+iDMGqj9+rBnMQRVGoESyB1Cen3x5bvOvGIuwn6slSu71LF+5fy2W3rqps709CwS7xudDxpnDeiT1kOxlgrMrtnRBIQSGwgSKCqgXOHFeAldfI6v6agoMGlmRO2lGlkNBGXE+nTq0cq8bIi6w8tOntJQTY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YVqsxteN; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1715079247; c=relaxed/simple;
+	bh=X8WQoJWCi5EsqZ1cUiZDhhYWAyVOCBS3m1FJvk2LOc0=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=VSwIkp30OYJFsS7aX4JbfdqTR6UqgQBacp2YNd1s+o7zJdBwhiHLgP48e285VvL1dTouQ7mbUWK5yjyZghsi7bBHUUPQ3Ns4vnW5Q4odjWmAj3p77MmMZZZABt2J/QtFqNOisTNlHJOjcElb+qL1G31SJgjXZ139b510QjkiuVY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NLVxRgsG; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YVqsxteN"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9716AC4DDF0;
-	Tue,  7 May 2024 10:53:57 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NLVxRgsG"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF36FC2BBFC;
+	Tue,  7 May 2024 10:54:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1715079242;
-	bh=fyRycR9/L+qh3CJ6pIxN0skKoQZC9oBAv+ztBt5UGzg=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=YVqsxteNtzE4S8exHApU/2njm3ygd9CpTi1TDM5H0/OP24rlJh8uvz38v+hVWmxze
-	 A9do2IjGGYXPPMb6WjGy7HZpfqJhz4A81LwfflTnp6RsjOXEqVdIbvDwJhZiur/e98
-	 dXkNvHxGROHR6LL8d9iNUyH75RuqJHlvHsTSN0FmfCEqoxgu09LHXtn0RDR4f+6XJV
-	 qamYMh+A1PcuBs7s68dvaCNqSEuUa/1TB+1k8ffynFBWWafZDRumSz7CxI1xV8TBHA
-	 PPyCXtfYoYCIheVjQx9F1Jo4+YnAbRqhlqQhzOtOr/tbbRjMbTGlMdiwFR9g4OIb0Q
-	 SjWqMq8UsipKg==
-From: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
-Date: Tue, 07 May 2024 12:53:34 +0200
-Subject: [PATCH bpf-next 4/4] selftests/bpf: Add mptcp subflow subtest
+	s=k20201202; t=1715079247;
+	bh=X8WQoJWCi5EsqZ1cUiZDhhYWAyVOCBS3m1FJvk2LOc0=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=NLVxRgsGIYvbF3nsJf68Kn5/A1G/3ddeeZqKd1nruQaGl1P8p9lt8SvNY+0Dci2iv
+	 0ApnqzYYqLqY1Hkx/xaPIXojk2ZRblbYTAbwCZ8BcpOx2hWwK8YopNkxnMfKjp4mhl
+	 y8NVGZwyV06E2Pm52Rar2FFet12Y1CMIsl/yYTxdG2K2Xw8xw91IKZXhPb22Bh5nlo
+	 MhNxeqqtRpQD1hCo32QAEGDBNnldeOVzyRDieNkm3kT4UE1tJ/kBvJlPXXOWvTQot+
+	 PVFnE0pL8dU+pn30b/OP7KZeWNDzkG9NYVWbRETZ4zOoKAVfrBNM2bjkauvGh/228D
+	 1qp46Gjm8If2Q==
+From: Jiri Olsa <jolsa@kernel.org>
+To: Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Oleg Nesterov <oleg@redhat.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>
+Cc: linux-kernel@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org,
+	linux-api@vger.kernel.org,
+	linux-man@vger.kernel.org,
+	x86@kernel.org,
+	bpf@vger.kernel.org,
+	Song Liu <songliubraving@fb.com>,
+	Yonghong Song <yhs@fb.com>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	"Borislav Petkov (AMD)" <bp@alien8.de>,
+	Ingo Molnar <mingo@redhat.com>,
+	Andy Lutomirski <luto@kernel.org>,
+	"Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
+	Deepak Gupta <debug@rivosinc.com>
+Subject: [PATCHv5 bpf-next 3/8] selftests/bpf: Add uretprobe syscall test for regs integrity
+Date: Tue,  7 May 2024 12:53:16 +0200
+Message-ID: <20240507105321.71524-4-jolsa@kernel.org>
+X-Mailer: git-send-email 2.44.0
+In-Reply-To: <20240507105321.71524-1-jolsa@kernel.org>
+References: <20240507105321.71524-1-jolsa@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240507-upstream-bpf-next-20240506-mptcp-subflow-test-v1-4-e2bcbdf49857@kernel.org>
-References: <20240507-upstream-bpf-next-20240506-mptcp-subflow-test-v1-0-e2bcbdf49857@kernel.org>
-In-Reply-To: <20240507-upstream-bpf-next-20240506-mptcp-subflow-test-v1-0-e2bcbdf49857@kernel.org>
-To: mptcp@lists.linux.dev, Mat Martineau <martineau@kernel.org>, 
- Geliang Tang <geliang@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
- Eduard Zingerman <eddyz87@gmail.com>, Mykola Lysenko <mykolal@fb.com>, 
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, 
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
- Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
- Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>
-Cc: linux-kernel@vger.kernel.org, netdev@vger.kernel.org, 
- bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- "Matthieu Baerts (NGI0)" <matttbe@kernel.org>, 
- Geliang Tang <tanggeliang@kylinos.cn>
-X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4474; i=matttbe@kernel.org;
- h=from:subject:message-id; bh=QeuP1pMc/k96+AiijABtrDomlFWQNDkZyAl1mjsJHSA=;
- b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBmOgguuQJyqIBiUOXpxcvyUyTh/u9QRs36zlLNG
- kJj1KXPxsaJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZjoILgAKCRD2t4JPQmmg
- c/mYD/9W/Xm0YcLRjcCEdydksviMvjwjFXItUHpjmNxvluDyfxbakZfpDYsxJjS3rIdNzjfYK03
- en4bT/fZh8xRQiKg1UVCPwh+MlxIenzovEMNZdAtRTPoW9pWNG3HR6bqGqtZ//3084bTpg/b4eE
- 8JO3ifXOQiyp3f5902sEq+jTLaUzp2pW3k2c7IboooXf3bnYqT9cH/R5J4d/UMErsf0A1L8OCV9
- kcxHe1PizEQ0blKkpBKxBmX9/FcQbl8T9f9+TxDs1oDO4Xy+a2ZaMse1IrVRIAxfo3ILmyb4reo
- mGPP7ZSq5n3poQSndzN/UNJlPZtYHlazS+06JZn0J3Ft7UuO1Mh8j6Feo5gQ1u70r1LTsGd7yVu
- hON+J+xMscJuoFlTx2aOBE1nNxFFeVyQ30fSJy4whxp0Mx7HrCavBoHa9QGeNJ4k/qivxl3TMh9
- 6WNxaI4QajQVGpeXeMTBD7sUETWJt7WvM6mb3lVlNvWtlyRbdyPypW87u1XVb8CZO9JNTF0j/oO
- LZ9ctbjCOn7GEOkS+nT38Pjxw+sC3To92UYYUjbOuEECOFGZksr79JuS9iRkGUpyGQUeuQ642XS
- y6pj7xWa15Dx9yYvW14CgSJ5g+nesidxrWW/5rM4M9d+WThDBRP2ddSwyviNxBgJphuCdTeOQkT
- GE36SAyPy7nVIug==
-X-Developer-Key: i=matttbe@kernel.org; a=openpgp;
- fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
+Content-Transfer-Encoding: 8bit
 
-From: Geliang Tang <tanggeliang@kylinos.cn>
+Add uretprobe syscall test that compares register values before
+and after the uretprobe is hit. It also compares the register
+values seen from attached bpf program.
 
-This patch adds a subtest named test_subflow to load and verify the newly
-added mptcp subflow example in test_mptcp. Add a helper endpoint_init()
-to add a new subflow endpoint. Add another helper ss_search() to verify the
-fwmark and congestion values set by mptcp_subflow prog using setsockopts.
-
-Closes: https://github.com/multipath-tcp/mptcp_net-next/issues/76
-Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
-Reviewed-by: Mat Martineau <martineau@kernel.org>
-Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
+Acked-by: Andrii Nakryiko <andrii@kernel.org>
+Reviewed-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Signed-off-by: Jiri Olsa <jolsa@kernel.org>
 ---
- tools/testing/selftests/bpf/prog_tests/mptcp.c | 108 +++++++++++++++++++++++++
- 1 file changed, 108 insertions(+)
+ tools/include/linux/compiler.h                |   4 +
+ .../selftests/bpf/prog_tests/uprobe_syscall.c | 163 ++++++++++++++++++
+ .../selftests/bpf/progs/uprobe_syscall.c      |  15 ++
+ 3 files changed, 182 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/uprobe_syscall.c
+ create mode 100644 tools/testing/selftests/bpf/progs/uprobe_syscall.c
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/mptcp.c b/tools/testing/selftests/bpf/prog_tests/mptcp.c
-index 9d1b255bb654..b1f4b74efd2b 100644
---- a/tools/testing/selftests/bpf/prog_tests/mptcp.c
-+++ b/tools/testing/selftests/bpf/prog_tests/mptcp.c
-@@ -9,8 +9,12 @@
- #include "network_helpers.h"
- #include "mptcp_sock.skel.h"
- #include "mptcpify.skel.h"
-+#include "mptcp_subflow.skel.h"
+diff --git a/tools/include/linux/compiler.h b/tools/include/linux/compiler.h
+index 8a63a9913495..6f7f22ac9da5 100644
+--- a/tools/include/linux/compiler.h
++++ b/tools/include/linux/compiler.h
+@@ -62,6 +62,10 @@
+ #define __nocf_check __attribute__((nocf_check))
+ #endif
  
- #define NS_TEST "mptcp_ns"
-+#define ADDR_1	"10.0.1.1"
-+#define ADDR_2	"10.0.1.2"
-+#define PORT_1	10001
- 
- #ifndef IPPROTO_MPTCP
- #define IPPROTO_MPTCP 262
-@@ -347,6 +351,109 @@ static void test_mptcpify(void)
- 	close(cgroup_fd);
- }
- 
-+static int endpoint_init(char *flags)
-+{
-+	SYS(fail, "ip -net %s link add veth1 type veth peer name veth2", NS_TEST);
-+	SYS(fail, "ip -net %s addr add %s/24 dev veth1", NS_TEST, ADDR_1);
-+	SYS(fail, "ip -net %s link set dev veth1 up", NS_TEST);
-+	SYS(fail, "ip -net %s addr add %s/24 dev veth2", NS_TEST, ADDR_2);
-+	SYS(fail, "ip -net %s link set dev veth2 up", NS_TEST);
-+	SYS(fail, "ip -net %s mptcp endpoint add %s %s", NS_TEST, ADDR_2, flags);
++#ifndef __naked
++#define __naked __attribute__((__naked__))
++#endif
 +
+ /* Are two types/vars the same type (ignoring qualifiers)? */
+ #ifndef __same_type
+ # define __same_type(a, b) __builtin_types_compatible_p(typeof(a), typeof(b))
+diff --git a/tools/testing/selftests/bpf/prog_tests/uprobe_syscall.c b/tools/testing/selftests/bpf/prog_tests/uprobe_syscall.c
+new file mode 100644
+index 000000000000..311ac19d8992
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/uprobe_syscall.c
+@@ -0,0 +1,163 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#include <test_progs.h>
++
++#ifdef __x86_64__
++
++#include <unistd.h>
++#include <asm/ptrace.h>
++#include <linux/compiler.h>
++#include "uprobe_syscall.skel.h"
++
++__naked unsigned long uretprobe_regs_trigger(void)
++{
++	asm volatile (
++		"movq $0xdeadbeef, %rax\n"
++		"ret\n"
++	);
++}
++
++__naked void uretprobe_regs(struct pt_regs *before, struct pt_regs *after)
++{
++	asm volatile (
++		"movq %r15,   0(%rdi)\n"
++		"movq %r14,   8(%rdi)\n"
++		"movq %r13,  16(%rdi)\n"
++		"movq %r12,  24(%rdi)\n"
++		"movq %rbp,  32(%rdi)\n"
++		"movq %rbx,  40(%rdi)\n"
++		"movq %r11,  48(%rdi)\n"
++		"movq %r10,  56(%rdi)\n"
++		"movq  %r9,  64(%rdi)\n"
++		"movq  %r8,  72(%rdi)\n"
++		"movq %rax,  80(%rdi)\n"
++		"movq %rcx,  88(%rdi)\n"
++		"movq %rdx,  96(%rdi)\n"
++		"movq %rsi, 104(%rdi)\n"
++		"movq %rdi, 112(%rdi)\n"
++		"movq   $0, 120(%rdi)\n" /* orig_rax */
++		"movq   $0, 128(%rdi)\n" /* rip      */
++		"movq   $0, 136(%rdi)\n" /* cs       */
++		"pushf\n"
++		"pop %rax\n"
++		"movq %rax, 144(%rdi)\n" /* eflags   */
++		"movq %rsp, 152(%rdi)\n" /* rsp      */
++		"movq   $0, 160(%rdi)\n" /* ss       */
++
++		/* save 2nd argument */
++		"pushq %rsi\n"
++		"call uretprobe_regs_trigger\n"
++
++		/* save  return value and load 2nd argument pointer to rax */
++		"pushq %rax\n"
++		"movq 8(%rsp), %rax\n"
++
++		"movq %r15,   0(%rax)\n"
++		"movq %r14,   8(%rax)\n"
++		"movq %r13,  16(%rax)\n"
++		"movq %r12,  24(%rax)\n"
++		"movq %rbp,  32(%rax)\n"
++		"movq %rbx,  40(%rax)\n"
++		"movq %r11,  48(%rax)\n"
++		"movq %r10,  56(%rax)\n"
++		"movq  %r9,  64(%rax)\n"
++		"movq  %r8,  72(%rax)\n"
++		"movq %rcx,  88(%rax)\n"
++		"movq %rdx,  96(%rax)\n"
++		"movq %rsi, 104(%rax)\n"
++		"movq %rdi, 112(%rax)\n"
++		"movq   $0, 120(%rax)\n" /* orig_rax */
++		"movq   $0, 128(%rax)\n" /* rip      */
++		"movq   $0, 136(%rax)\n" /* cs       */
++
++		/* restore return value and 2nd argument */
++		"pop %rax\n"
++		"pop %rsi\n"
++
++		"movq %rax,  80(%rsi)\n"
++
++		"pushf\n"
++		"pop %rax\n"
++
++		"movq %rax, 144(%rsi)\n" /* eflags   */
++		"movq %rsp, 152(%rsi)\n" /* rsp      */
++		"movq   $0, 160(%rsi)\n" /* ss       */
++		"ret\n"
++);
++}
++
++static void test_uretprobe_regs_equal(void)
++{
++	struct uprobe_syscall *skel = NULL;
++	struct pt_regs before = {}, after = {};
++	unsigned long *pb = (unsigned long *) &before;
++	unsigned long *pa = (unsigned long *) &after;
++	unsigned long *pp;
++	unsigned int i, cnt;
++	int err;
++
++	skel = uprobe_syscall__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "uprobe_syscall__open_and_load"))
++		goto cleanup;
++
++	err = uprobe_syscall__attach(skel);
++	if (!ASSERT_OK(err, "uprobe_syscall__attach"))
++		goto cleanup;
++
++	uretprobe_regs(&before, &after);
++
++	pp = (unsigned long *) &skel->bss->regs;
++	cnt = sizeof(before)/sizeof(*pb);
++
++	for (i = 0; i < cnt; i++) {
++		unsigned int offset = i * sizeof(unsigned long);
++
++		/*
++		 * Check register before and after uretprobe_regs_trigger call
++		 * that triggers the uretprobe.
++		 */
++		switch (offset) {
++		case offsetof(struct pt_regs, rax):
++			ASSERT_EQ(pa[i], 0xdeadbeef, "return value");
++			break;
++		default:
++			if (!ASSERT_EQ(pb[i], pa[i], "register before-after value check"))
++				fprintf(stdout, "failed register offset %u\n", offset);
++		}
++
++		/*
++		 * Check register seen from bpf program and register after
++		 * uretprobe_regs_trigger call
++		 */
++		switch (offset) {
++		/*
++		 * These values will be different (not set in uretprobe_regs),
++		 * we don't care.
++		 */
++		case offsetof(struct pt_regs, orig_rax):
++		case offsetof(struct pt_regs, rip):
++		case offsetof(struct pt_regs, cs):
++		case offsetof(struct pt_regs, rsp):
++		case offsetof(struct pt_regs, ss):
++			break;
++		default:
++			if (!ASSERT_EQ(pp[i], pa[i], "register prog-after value check"))
++				fprintf(stdout, "failed register offset %u\n", offset);
++		}
++	}
++
++cleanup:
++	uprobe_syscall__destroy(skel);
++}
++#else
++static void test_uretprobe_regs_equal(void)
++{
++	test__skip();
++}
++#endif
++
++void test_uprobe_syscall(void)
++{
++	if (test__start_subtest("uretprobe_regs_equal"))
++		test_uretprobe_regs_equal();
++}
+diff --git a/tools/testing/selftests/bpf/progs/uprobe_syscall.c b/tools/testing/selftests/bpf/progs/uprobe_syscall.c
+new file mode 100644
+index 000000000000..8a4fa6c7ef59
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/uprobe_syscall.c
+@@ -0,0 +1,15 @@
++// SPDX-License-Identifier: GPL-2.0
++#include "vmlinux.h"
++#include <bpf/bpf_helpers.h>
++#include <string.h>
++
++struct pt_regs regs;
++
++char _license[] SEC("license") = "GPL";
++
++SEC("uretprobe//proc/self/exe:uretprobe_regs_trigger")
++int uretprobe(struct pt_regs *ctx)
++{
++	__builtin_memcpy(&regs, ctx, sizeof(regs));
 +	return 0;
-+fail:
-+	return -1;
 +}
-+
-+static int _ss_search(char *src, char *dst, char *port, char *keyword)
-+{
-+	char cmd[128];
-+	int n;
-+
-+	n = snprintf(cmd, sizeof(cmd),
-+		     "ip netns exec %s ss -Menita src %s dst %s %s %d | grep -q '%s'",
-+		     NS_TEST, src, dst, port, PORT_1, keyword);
-+	if (n < 0 || n >= sizeof(cmd))
-+		return -1;
-+
-+	return system(cmd);
-+}
-+
-+static int ss_search(char *src, char *keyword)
-+{
-+	return _ss_search(src, ADDR_1, "dport", keyword);
-+}
-+
-+static void run_subflow(char *new)
-+{
-+	int server_fd, client_fd, err;
-+	char cc[TCP_CA_NAME_MAX];
-+	socklen_t len = sizeof(cc);
-+
-+	server_fd = start_mptcp_server(AF_INET, ADDR_1, PORT_1, 0);
-+	if (!ASSERT_GE(server_fd, 0, "start_mptcp_server"))
-+		return;
-+
-+	client_fd = connect_to_fd(server_fd, 0);
-+	if (!ASSERT_GE(client_fd, 0, "connect to fd"))
-+		goto fail;
-+
-+	err = getsockopt(server_fd, SOL_TCP, TCP_CONGESTION, cc, &len);
-+	if (!ASSERT_OK(err, "getsockopt(srv_fd, TCP_CONGESTION)"))
-+		goto fail;
-+
-+	send_byte(client_fd);
-+
-+	ASSERT_OK(ss_search(ADDR_1, "fwmark:0x1"), "ss_search fwmark:0x1");
-+	ASSERT_OK(ss_search(ADDR_2, "fwmark:0x2"), "ss_search fwmark:0x2");
-+	ASSERT_OK(ss_search(ADDR_1, new), "ss_search new cc");
-+	ASSERT_OK(ss_search(ADDR_2, cc), "ss_search default cc");
-+
-+	close(client_fd);
-+fail:
-+	close(server_fd);
-+}
-+
-+static void test_subflow(void)
-+{
-+	int cgroup_fd, prog_fd, err;
-+	struct mptcp_subflow *skel;
-+	struct nstoken *nstoken;
-+
-+	cgroup_fd = test__join_cgroup("/mptcp_subflow");
-+	if (!ASSERT_GE(cgroup_fd, 0, "join_cgroup: mptcp_subflow"))
-+		return;
-+
-+	skel = mptcp_subflow__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "skel_open_load: mptcp_subflow"))
-+		goto close_cgroup;
-+
-+	err = mptcp_subflow__attach(skel);
-+	if (!ASSERT_OK(err, "skel_attach: mptcp_subflow"))
-+		goto skel_destroy;
-+
-+	prog_fd = bpf_program__fd(skel->progs.mptcp_subflow);
-+	err = bpf_prog_attach(prog_fd, cgroup_fd, BPF_CGROUP_SOCK_OPS, 0);
-+	if (!ASSERT_OK(err, "prog_attach"))
-+		goto skel_destroy;
-+
-+	nstoken = create_netns();
-+	if (!ASSERT_OK_PTR(nstoken, "create_netns: mptcp_subflow"))
-+		goto skel_destroy;
-+
-+	if (!ASSERT_OK(endpoint_init("subflow"), "endpoint_init"))
-+		goto close_netns;
-+
-+	run_subflow(skel->data->cc);
-+
-+close_netns:
-+	cleanup_netns(nstoken);
-+skel_destroy:
-+	mptcp_subflow__destroy(skel);
-+close_cgroup:
-+	close(cgroup_fd);
-+}
-+
- #define RUN_MPTCP_TEST(suffix)					\
- do {								\
- 	if (test__start_subtest(#suffix))			\
-@@ -357,4 +464,5 @@ void test_mptcp(void)
- {
- 	RUN_MPTCP_TEST(base);
- 	RUN_MPTCP_TEST(mptcpify);
-+	RUN_MPTCP_TEST(subflow);
- }
-
 -- 
-2.43.0
+2.44.0
 
