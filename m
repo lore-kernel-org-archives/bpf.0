@@ -1,173 +1,131 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88A01AD5D;
-	Tue,  7 May 2024 10:43:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B0A3156C7A
+	for <bpf@vger.kernel.org>; Tue,  7 May 2024 10:48:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715078597; cv=none; b=GIrXmbhCplvGaALoc4P8pGq1COajmPleT8PgMr6FAE0QMOSRr/muayWgYPs3TPK7xUnQp6A8s2TgBxAhLMOq/TO1nDbFIJuyyCdE2LLt1KJJJ6BLQm+CouVQglM1USpTAKQAi0LUR8yU2lRwgbKDubMgJjJWc/qyMH3hV5F51dw=
+	t=1715078913; cv=none; b=THdSvFnNYJaPTMc5sJadxBaLMQ/Ak29wuCdNASJXy2iX3FT6ptR40E7CE/5D0+CJjpOfHc8BdzUUV62rNGW30n1hkp0QAybDPD5Qvdlx9rB8ju1fOCB+hzrdIdyHmBQ4RuHgKEk4DwQ7mhWDgSLEi7D6kiTidHoMpiGcjWdq6Ss=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715078597; c=relaxed/simple;
-	bh=+TRQfeq8Nw7b6DoQt3C1fHE3AuYEeUkPp5208iLu1YA=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=YhBTLQwhZxHARfcPFcoFEOfkChNoYPOJWvPdZjoTAqkBg9K8HKYu2QX5mxa+w306lWWWNdiHfSMJD7fHZXkV5flhLHH4Ub0W0B9JQK4L7+uy3+P83gHSa46wJGUSXH31YIYEOFAt+LQlh6xj5BdP5+vK3tFNFvr8viylPCofejU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TPJNzY3H; arc=none smtp.client-ip=192.198.163.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1715078913; c=relaxed/simple;
+	bh=wHy9en/As03N1zh8IZ4ouvHe4kFf6ummlv20ZpEe0hw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=DuwZUR/fw4vaygSBzyoFMDQbxvQyZi7477urwR/vVaxpOidO3h3lQZwkZKpYvqV2wprfcZNzfsjKN7cFgqHTHE0DZMDV3bZ5LS97OGaPWj8/63u2bBIOJhj7kbvqJhgLOsuUy/DaWR9No3OlxuiblxqEA5SdEY4QE6jLXTck4Sc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YOAwqzzB; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TPJNzY3H"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1715078596; x=1746614596;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=+TRQfeq8Nw7b6DoQt3C1fHE3AuYEeUkPp5208iLu1YA=;
-  b=TPJNzY3HVrt/y16SROkopaGKy8UdProYDKJCfpZkhpC2VeT7FslxMBt5
-   KwbU86rIQY0OdYMINHltm8JYaDf/x5MI8cCGAPVdOueLa4u86yeUWWceg
-   oPx5dmqbWS1iBukos4VtmzSem7pFpJh8R+mqxUygY5hKzlBmgikVyuktd
-   crslEGfAS4Pzt19yPEPhr/G4lLMj1e1X+E2F9OfTBcZMWSDSYjZjak27k
-   ma64nmxGuoRN+DZ+DisPHEdBEd1QHMtelFfT2SPu16Tav5UwNYQt3Fvnn
-   SOoneBA8e9RcrM571GYTYa7scpcFs+HvVjeZmQa2wkQpWuSR5SSDl0Oxb
-   g==;
-X-CSE-ConnectionGUID: nsCoCiQERXaGxwvUBTLDJw==
-X-CSE-MsgGUID: AkjPtzKvT82JSjy93C4i5w==
-X-IronPort-AV: E=McAfee;i="6600,9927,11065"; a="36245724"
-X-IronPort-AV: E=Sophos;i="6.07,261,1708416000"; 
-   d="scan'208";a="36245724"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 May 2024 03:43:15 -0700
-X-CSE-ConnectionGUID: l7+b9JCCSqubT7cmWJcHIg==
-X-CSE-MsgGUID: euSulxasRP6BMwVw+2KcCg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,261,1708416000"; 
-   d="scan'208";a="33312129"
-Received: from xiao-desktop.sh.intel.com ([10.239.46.158])
-  by orviesa004.jf.intel.com with ESMTP; 07 May 2024 03:43:09 -0700
-From: Xiao Wang <xiao.w.wang@intel.com>
-To: paul.walmsley@sifive.com,
-	palmer@dabbelt.com,
-	aou@eecs.berkeley.edu,
-	luke.r.nels@gmail.com,
-	xi.wang@gmail.com,
-	bjorn@kernel.org
-Cc: ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	martin.lau@linux.dev,
-	eddyz87@gmail.com,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	john.fastabend@gmail.com,
-	kpsingh@kernel.org,
-	sdf@google.com,
-	haoluo@google.com,
-	jolsa@kernel.org,
-	linux-riscv@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org,
-	pulehui@huawei.com,
-	haicheng.li@intel.com,
-	Xiao Wang <xiao.w.wang@intel.com>
-Subject: [PATCH] riscv, bpf: Optimize zextw insn with Zba extension
-Date: Tue,  7 May 2024 18:45:28 +0800
-Message-Id: <20240507104528.435980-1-xiao.w.wang@intel.com>
-X-Mailer: git-send-email 2.25.1
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YOAwqzzB"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4A0EC2BBFC;
+	Tue,  7 May 2024 10:48:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1715078912;
+	bh=wHy9en/As03N1zh8IZ4ouvHe4kFf6ummlv20ZpEe0hw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=YOAwqzzBH5PKhzKNzZnw3UWJMDn+/rEJ5HYu+otCd8UbJzW4ogeSTLypLKVj/W94t
+	 6i5DTQAfiaDf2NNwLiZ+XCTO5iWCSRbQLcTE9w8+2C1lBdN0KD3a19BnYNYWUzkdY7
+	 QORzHW72t0fI9WYH/jcqLXxEcRTq4C43TGGy1h/IWvq4mN1ppdDAs+NCyjAZyYZhSl
+	 gYBNYzkrcykYgJUGrR2PVwZPDHnjSZU0Dwtl9CusIvP/45tqvyqpW5zoL4nM9JOrrC
+	 8rOqW6cD3zfh29OLGtz98vBvEnYzJEkrHavgeCQJ1PLO3U2IQClKj0o1AtvJBwYWHw
+	 rmS3dX5FwaoZQ==
+Date: Tue, 7 May 2024 16:10:51 +0530
+From: Naveen N Rao <naveen@kernel.org>
+To: Hari Bathini <hbathini@linux.ibm.com>
+Cc: linuxppc-dev <linuxppc-dev@lists.ozlabs.org>, bpf@vger.kernel.org, 
+	Song Liu <songliubraving@fb.com>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>
+Subject: Re: [PATCH v4 2/2] powerpc/bpf: enable kfunc call
+Message-ID: <hhdzfgivl6e6xkuj23srokm23n2kn3lx42a3f54hzsurvmil5e@ssylns6n7uh6>
+References: <20240502173205.142794-1-hbathini@linux.ibm.com>
+ <20240502173205.142794-2-hbathini@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240502173205.142794-2-hbathini@linux.ibm.com>
 
-The Zba extension provides add.uw insn which can be used to implement
-zext.w with rs2 set as ZERO.
+On Thu, May 02, 2024 at 11:02:05PM GMT, Hari Bathini wrote:
+> Currently, bpf jit code on powerpc assumes all the bpf functions and
+> helpers to be part of core kernel text. This is false for kfunc case,
+> as function addresses may not be part of core kernel text area. So,
+> add support for addresses that are not within core kernel text area
+> too, to enable kfunc support. Emit instructions based on whether the
+> function address is within core kernel text address or not, to retain
+> optimized instruction sequence where possible.
+> 
+> In case of PCREL, as a bpf function that is not within core kernel
+> text area is likely to go out of range with relative addressing on
+> kernel base, use PC relative addressing. If that goes out of range,
+> load the full address with PPC_LI64().
+> 
+> With addresses that are not within core kernel text area supported,
+> override bpf_jit_supports_kfunc_call() to enable kfunc support. Also,
+> override bpf_jit_supports_far_kfunc_call() to enable 64-bit pointers,
+> as an address offset can be more than 32-bit long on PPC64.
+> 
+> Signed-off-by: Hari Bathini <hbathini@linux.ibm.com>
+> ---
+> 
+> * Changes in v4:
+>   - Use either kernelbase or PC for relative addressing. Also, fallback
+>     to PPC_LI64(), if both are out of range.
+>   - Update r2 with kernel TOC for elfv1 too as elfv1 also uses the
+>     optimization sequence, that expects r2 to be kernel TOC, when
+>     function address is within core kernel text.
+> 
+> * Changes in v3:
+>   - Retained optimized instruction sequence when function address is
+>     a core kernel address as suggested by Naveen.
+>   - Used unoptimized instruction sequence for PCREL addressing to
+>     avoid out of range errors for core kernel function addresses.
+>   - Folded patch that adds support for kfunc calls with patch that
+>     enables/advertises this support as suggested by Naveen.
+> 
+> 
+>  arch/powerpc/net/bpf_jit_comp.c   | 10 +++++
+>  arch/powerpc/net/bpf_jit_comp64.c | 61 ++++++++++++++++++++++++++-----
+>  2 files changed, 61 insertions(+), 10 deletions(-)
+> 
+> diff --git a/arch/powerpc/net/bpf_jit_comp.c b/arch/powerpc/net/bpf_jit_comp.c
+> index 0f9a21783329..984655419da5 100644
+> --- a/arch/powerpc/net/bpf_jit_comp.c
+> +++ b/arch/powerpc/net/bpf_jit_comp.c
+> @@ -359,3 +359,13 @@ void bpf_jit_free(struct bpf_prog *fp)
+>  
+>  	bpf_prog_unlock_free(fp);
+>  }
+> +
+> +bool bpf_jit_supports_kfunc_call(void)
+> +{
+> +	return true;
+> +}
+> +
+> +bool bpf_jit_supports_far_kfunc_call(void)
+> +{
+> +	return IS_ENABLED(CONFIG_PPC64);
+> +}
+> diff --git a/arch/powerpc/net/bpf_jit_comp64.c b/arch/powerpc/net/bpf_jit_comp64.c
+> index 4de08e35e284..8afc14a4a125 100644
+> --- a/arch/powerpc/net/bpf_jit_comp64.c
+> +++ b/arch/powerpc/net/bpf_jit_comp64.c
+> @@ -208,17 +208,13 @@ bpf_jit_emit_func_call_hlp(u32 *image, u32 *fimage, struct codegen_context *ctx,
+>  	unsigned long func_addr = func ? ppc_function_entry((void *)func) : 0;
+>  	long reladdr;
+>  
+> -	if (WARN_ON_ONCE(!core_kernel_text(func_addr)))
+> +	if (WARN_ON_ONCE(!kernel_text_address(func_addr)))
+>  		return -EINVAL;
+>  
+> -	if (IS_ENABLED(CONFIG_PPC_KERNEL_PCREL)) {
+> -		reladdr = func_addr - local_paca->kernelbase;
+> +#ifdef CONFIG_PPC_KERNEL_PCREL
 
-Signed-off-by: Xiao Wang <xiao.w.wang@intel.com>
----
- arch/riscv/Kconfig       | 19 +++++++++++++++++++
- arch/riscv/net/bpf_jit.h | 18 ++++++++++++++++++
- 2 files changed, 37 insertions(+)
+Would be good to retain use of IS_ENABLED().
+Reviewed-by: Naveen N Rao <naveen@kernel.org>
 
-diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-index 6bec1bce6586..0679127cc0ea 100644
---- a/arch/riscv/Kconfig
-+++ b/arch/riscv/Kconfig
-@@ -586,6 +586,14 @@ config RISCV_ISA_V_PREEMPTIVE
- 	  preemption. Enabling this config will result in higher memory
- 	  consumption due to the allocation of per-task's kernel Vector context.
- 
-+config TOOLCHAIN_HAS_ZBA
-+	bool
-+	default y
-+	depends on !64BIT || $(cc-option,-mabi=lp64 -march=rv64ima_zba)
-+	depends on !32BIT || $(cc-option,-mabi=ilp32 -march=rv32ima_zba)
-+	depends on LLD_VERSION >= 150000 || LD_VERSION >= 23900
-+	depends on AS_HAS_OPTION_ARCH
-+
- config TOOLCHAIN_HAS_ZBB
- 	bool
- 	default y
-@@ -601,6 +609,17 @@ config TOOLCHAIN_HAS_VECTOR_CRYPTO
- 	def_bool $(as-instr, .option arch$(comma) +v$(comma) +zvkb)
- 	depends on AS_HAS_OPTION_ARCH
- 
-+config RISCV_ISA_ZBA
-+	bool "Zba extension support for bit manipulation instructions"
-+	depends on TOOLCHAIN_HAS_ZBA
-+	depends on RISCV_ALTERNATIVE
-+	default y
-+	help
-+	   Adds support to dynamically detect the presence of the ZBA
-+	   extension (address generation acceleration) and enable its usage.
-+
-+	   If you don't know what to do here, say Y.
-+
- config RISCV_ISA_ZBB
- 	bool "Zbb extension support for bit manipulation instructions"
- 	depends on TOOLCHAIN_HAS_ZBB
-diff --git a/arch/riscv/net/bpf_jit.h b/arch/riscv/net/bpf_jit.h
-index f4b6b3b9edda..18a7885ba95e 100644
---- a/arch/riscv/net/bpf_jit.h
-+++ b/arch/riscv/net/bpf_jit.h
-@@ -18,6 +18,11 @@ static inline bool rvc_enabled(void)
- 	return IS_ENABLED(CONFIG_RISCV_ISA_C);
- }
- 
-+static inline bool rvzba_enabled(void)
-+{
-+	return IS_ENABLED(CONFIG_RISCV_ISA_ZBA) && riscv_has_extension_likely(RISCV_ISA_EXT_ZBA);
-+}
-+
- static inline bool rvzbb_enabled(void)
- {
- 	return IS_ENABLED(CONFIG_RISCV_ISA_ZBB) && riscv_has_extension_likely(RISCV_ISA_EXT_ZBB);
-@@ -937,6 +942,14 @@ static inline u16 rvc_sdsp(u32 imm9, u8 rs2)
- 	return rv_css_insn(0x7, imm, rs2, 0x2);
- }
- 
-+/* RV64-only ZBA instructions. */
-+
-+static inline u32 rvzba_zextw(u8 rd, u8 rs1)
-+{
-+	/* add.uw rd, rs1, ZERO */
-+	return rv_r_insn(0x04, RV_REG_ZERO, rs1, 0, rd, 0x3b);
-+}
-+
- #endif /* __riscv_xlen == 64 */
- 
- /* Helper functions that emit RVC instructions when possible. */
-@@ -1159,6 +1172,11 @@ static inline void emit_zexth(u8 rd, u8 rs, struct rv_jit_context *ctx)
- 
- static inline void emit_zextw(u8 rd, u8 rs, struct rv_jit_context *ctx)
- {
-+	if (rvzba_enabled()) {
-+		emit(rvzba_zextw(rd, rs), ctx);
-+		return;
-+	}
-+
- 	emit_slli(rd, rs, 32, ctx);
- 	emit_srli(rd, rd, 32, ctx);
- }
--- 
-2.25.1
+
+- Naveen
 
