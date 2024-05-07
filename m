@@ -1,370 +1,189 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D754714F9EA;
-	Tue,  7 May 2024 10:53:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 331B11509B4;
+	Tue,  7 May 2024 10:53:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715079235; cv=none; b=Ek3+KBjHoKI3JPqsCxWZTn9kyXtCjnvsNcfTcOgUoSlrOVOC5yfCGMHZgWS9X2jKxjzLRdXBeASM6Sdxaee02Exq6H+GuTX+IHlUdv43dbzvve5Q/fYrKFACsFANAaeCCYd87cjcYEEnrCy3QGnKck+aWoKhdGiDUtHut/FobCM=
+	t=1715079237; cv=none; b=RBxshMcBtUTq46AgiFbVe9H5u3eSNBDcAHRr7ecGL+UC3KBWSt2vymv5EGDgUcLUILTOkMGZ2wG63g7gqpF+gyrFQWEmolcpnN4rAxLieXRQyfLqgImRA9PGHo2y53HxWvLvRBKySDTfz8+//sLgzN4AYiZUhi09toyfgEJ2qZE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715079235; c=relaxed/simple;
-	bh=vlG7tlGdmKDoaLxWamWkA1dw1zwEzZq9akp3W7H34Ws=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=o7ZGUqtAVTOtxazAy/sDaIBnfIroUbBvy93hNkdRUieOVukQYAhP4hR1r7WAp8tw91kIgparnLJoLQbnni+6xfPLTZgy1sN0c+k3g3kPuyqg4PY5QYX7EJuYRpTbhvCaRQRfy4M+FWTigZX5qoCT67WOL52xe0c39E825SRRf8s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WlQ9GgBd; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1715079237; c=relaxed/simple;
+	bh=VFKyTxMNnjtTnAGapwEqo0y+Wl3eNywA8QPOjetFwbY=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=NAZUF2zaoh3SdhMtjkVOM2vPF3uZDymqUbGzoWBIm9b9v56Y8KiPlyp9WEGYD7l6qHFzGKTFmhP4pEAPzq73qMbgHPw7k15wQ6C7u11/JldZCmr5QJ1XJYo4RvF6+OoU7dR/A8oBp1qGY1aahBW9Bp6Ypxi3TYDA98kng80s+84=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QfuF2Tdn; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WlQ9GgBd"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D45EC4AF67;
-	Tue,  7 May 2024 10:53:49 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QfuF2Tdn"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5F2DC3277B;
+	Tue,  7 May 2024 10:53:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1715079234;
-	bh=vlG7tlGdmKDoaLxWamWkA1dw1zwEzZq9akp3W7H34Ws=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=WlQ9GgBdJPOscjFN6LAzoeC1/Ys+SDp07rTNPq7t8dkOIExXHGx8UnN/axTgtv5HP
-	 OAdtB1205JfpKTmNBWvzs7TwjO3mgduoFtX3TdFPb8emSWpeKX5rOmzuSoBIG4gS6a
-	 O2+QoFmqAu3YBvFQC84xI0DJa1/TJ+XsCHLKTy2vECFs1WNOUtXcGx6SfokD93MKYD
-	 WjwUpAWgNbNU0rjHCsgnOG2b1AoAjUgXzWshq3PLaTqAqPgn12/ZLlzh/UVh6QNIkF
-	 NziRuRXKj1SZ890J6pWWYQNvf6m3gUrI8dluq8kKggjA2rfCioq6O1s6aMXidxII8Y
-	 yobC8GfsXsyUg==
-From: Jiri Olsa <jolsa@kernel.org>
-To: Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Oleg Nesterov <oleg@redhat.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>
-Cc: linux-kernel@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org,
-	linux-api@vger.kernel.org,
-	linux-man@vger.kernel.org,
-	x86@kernel.org,
-	bpf@vger.kernel.org,
-	Song Liu <songliubraving@fb.com>,
-	Yonghong Song <yhs@fb.com>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	"Borislav Petkov (AMD)" <bp@alien8.de>,
-	Ingo Molnar <mingo@redhat.com>,
-	Andy Lutomirski <luto@kernel.org>,
-	"Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
-	Deepak Gupta <debug@rivosinc.com>
-Subject: [PATCHv5 bpf-next 2/8] uprobe: Add uretprobe syscall to speed up return probe
-Date: Tue,  7 May 2024 12:53:15 +0200
-Message-ID: <20240507105321.71524-3-jolsa@kernel.org>
-X-Mailer: git-send-email 2.44.0
-In-Reply-To: <20240507105321.71524-1-jolsa@kernel.org>
-References: <20240507105321.71524-1-jolsa@kernel.org>
+	s=k20201202; t=1715079237;
+	bh=VFKyTxMNnjtTnAGapwEqo0y+Wl3eNywA8QPOjetFwbY=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
+	b=QfuF2TdnxdGRGi4LcpbRaW7FyT2AqrnNLOss5JrPM2uZJhXox8R38GANJZUNA9Zfx
+	 PWufTSqrVKm3gmXIyHT8pbymWFOck4emf9Bz4IljrXF8VJRH+w6hSedyZONnClK+iE
+	 WWFXhsnvZk4Lall5KUOBmJULg+9e0FJSMwdgaQSgU9pNtnAQDE0fDc2T5T7/VZKF1R
+	 VHzlMNggpKHsJWg14DydAkfYySztncyyCzHTSvXC4INxRcjYcouRYwvJIEnjNOtmxm
+	 9DZg++mNJZp7UyHiMVgdtHsETG0o30UqhpzdCsIWFECgS95u0QAzZ2nmmUrcmUhLG6
+	 FqLmV29QA7A1w==
+From: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
+Date: Tue, 07 May 2024 12:53:33 +0200
+Subject: [PATCH bpf-next 3/4] selftests/bpf: Add mptcp subflow example
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20240507-upstream-bpf-next-20240506-mptcp-subflow-test-v1-3-e2bcbdf49857@kernel.org>
+References: <20240507-upstream-bpf-next-20240506-mptcp-subflow-test-v1-0-e2bcbdf49857@kernel.org>
+In-Reply-To: <20240507-upstream-bpf-next-20240506-mptcp-subflow-test-v1-0-e2bcbdf49857@kernel.org>
+To: mptcp@lists.linux.dev, Mat Martineau <martineau@kernel.org>, 
+ Geliang Tang <geliang@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
+ Eduard Zingerman <eddyz87@gmail.com>, Mykola Lysenko <mykolal@fb.com>, 
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, 
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
+ Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
+ Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>
+Cc: linux-kernel@vger.kernel.org, netdev@vger.kernel.org, 
+ bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ "Matthieu Baerts (NGI0)" <matttbe@kernel.org>, 
+ Nicolas Rybowski <nicolas.rybowski@tessares.net>, 
+ Geliang Tang <tanggeliang@kylinos.cn>
+X-Mailer: b4 0.13.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3387; i=matttbe@kernel.org;
+ h=from:subject:message-id; bh=9yBRlvcB78kseSfkWuFKFSLv7Nh7bJtbBJ9j/JCwOfc=;
+ b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBmOggueCE7DHl2/0U2kOTU6h1W2xplY9qsqP5kw
+ sph3IgS5NCJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZjoILgAKCRD2t4JPQmmg
+ c1awEACUa0bjOdrYDibYKxuW27ayQDefRp0gFGZROprmFgXaqrVf5FzjrsIk7gdgOe7bkPA4i9x
+ pB6swZyvDFXILuFgix661/g1+P0MNAiYnch3YuMcCFvXpsQBQlmzGGLl4bqL5+P/knnRca9K7Zl
+ BCSwKzNRv23u6sERo0mjMGfZrPVpiEuaYf7a1y4Gl3IfOmjL/ZbiPlU2pDCiyWdMkXaFnYhysOC
+ g1LQ44vg947h9v3cJeDLWr9kgRYLU/Lx24RbctunZQp69GWvsI0OVcK344gWpj8hLXANyxNm/h/
+ rHUEK470BgzDG2NsaEA69DM8CFKskTidPYV3L/Q3TKnbpf8LufMYPT3g5td77xFu1wvD/urN6P4
+ Ts6k7NS0xcYuFho3XUrxoHbIcqkBOxGBoR4gvh4wq+z2s0eB2gGjs9J+MuPi2UeIjHR8ahRZY5l
+ vLxyP9/nwH7Nw0OPnK1BK6yU2725UvgRbHSEbDBUSgU6aNAKPSIFNO+UAMGyy8J2EWxblslaqyp
+ 6ZS34aVk2EpluwlE8zZ38oUqxGGDchR+HKOPOKARo7goYKPhHahhdmU1xK8TQi8gYYqdFkNcvcV
+ qoKnrOhoP4jjG9ib3JX/xFmsGlbIRJAG9ExtywZnt4Lfx9DxEQD522vx2bRfUPtxkydfvAadu0x
+ ivB4sffwHEeSlUQ==
+X-Developer-Key: i=matttbe@kernel.org; a=openpgp;
+ fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
 
-Adding uretprobe syscall instead of trap to speed up return probe.
+From: Nicolas Rybowski <nicolas.rybowski@tessares.net>
 
-At the moment the uretprobe setup/path is:
+Move Nicolas's patch into bpf selftests directory. This example added a
+test that was adding a different mark (SO_MARK) on each subflow, and
+changing the TCP CC only on the first subflow.
 
-  - install entry uprobe
+This example shows how it is possible to:
 
-  - when the uprobe is hit, it overwrites probed function's return address
-    on stack with address of the trampoline that contains breakpoint
-    instruction
+    Identify the parent msk of an MPTCP subflow.
+    Put different sockopt for each subflow of a same MPTCP connection.
 
-  - the breakpoint trap code handles the uretprobe consumers execution and
-    jumps back to original return address
+Here especially, we implemented two different behaviours:
 
-This patch replaces the above trampoline's breakpoint instruction with new
-ureprobe syscall call. This syscall does exactly the same job as the trap
-with some more extra work:
+    A socket mark (SOL_SOCKET SO_MARK) is put on each subflow of a same
+    MPTCP connection. The order of creation of the current subflow defines
+    its mark. The TCP CC algorithm of the very first subflow of an MPTCP
+    connection is set to "reno".
 
-  - syscall trampoline must save original value for rax/r11/rcx registers
-    on stack - rax is set to syscall number and r11/rcx are changed and
-    used by syscall instruction
+The code comes from
 
-  - the syscall code reads the original values of those registers and
-    restore those values in task's pt_regs area
+    commit 4d120186e4d6 ("bpf:examples: update mptcp_set_mark_kern.c")
 
-  - only caller from trampoline exposed in '[uprobes]' is allowed,
-    the process will receive SIGILL signal otherwise
+in MPTCP repo https://github.com/multipath-tcp/mptcp_net-next (the
+"scripts" branch).
 
-Even with some extra work, using the uretprobes syscall shows speed
-improvement (compared to using standard breakpoint):
-
-  On Intel (11th Gen Intel(R) Core(TM) i7-1165G7 @ 2.80GHz)
-
-  current:
-    uretprobe-nop  :    1.498 ± 0.000M/s
-    uretprobe-push :    1.448 ± 0.001M/s
-    uretprobe-ret  :    0.816 ± 0.001M/s
-
-  with the fix:
-    uretprobe-nop  :    1.969 ± 0.002M/s  < 31% speed up
-    uretprobe-push :    1.910 ± 0.000M/s  < 31% speed up
-    uretprobe-ret  :    0.934 ± 0.000M/s  < 14% speed up
-
-  On Amd (AMD Ryzen 7 5700U)
-
-  current:
-    uretprobe-nop  :    0.778 ± 0.001M/s
-    uretprobe-push :    0.744 ± 0.001M/s
-    uretprobe-ret  :    0.540 ± 0.001M/s
-
-  with the fix:
-    uretprobe-nop  :    0.860 ± 0.001M/s  < 10% speed up
-    uretprobe-push :    0.818 ± 0.001M/s  < 10% speed up
-    uretprobe-ret  :    0.578 ± 0.000M/s  <  7% speed up
-
-The performance test spawns a thread that runs loop which triggers
-uprobe with attached bpf program that increments the counter that
-gets printed in results above.
-
-The uprobe (and uretprobe) kind is determined by which instruction
-is being patched with breakpoint instruction. That's also important
-for uretprobes, because uprobe is installed for each uretprobe.
-
-The performance test is part of bpf selftests:
-  tools/testing/selftests/bpf/run_bench_uprobes.sh
-
-Note at the moment uretprobe syscall is supported only for native
-64-bit process, compat process still uses standard breakpoint.
-
-Suggested-by: Andrii Nakryiko <andrii@kernel.org>
-Reviewed-by: Oleg Nesterov <oleg@redhat.com>
-Reviewed-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-Acked-by: Andrii Nakryiko <andrii@kernel.org>
-Signed-off-by: Oleg Nesterov <oleg@redhat.com>
-Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+Closes: https://github.com/multipath-tcp/mptcp_net-next/issues/76
+Co-developed-by: Geliang Tang <tanggeliang@kylinos.cn>
+Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
+Signed-off-by: Nicolas Rybowski <nicolas.rybowski@tessares.net>
+Reviewed-by: Mat Martineau <martineau@kernel.org>
+Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
 ---
- arch/x86/kernel/uprobes.c | 115 ++++++++++++++++++++++++++++++++++++++
- include/linux/uprobes.h   |   3 +
- kernel/events/uprobes.c   |  24 +++++---
- 3 files changed, 135 insertions(+), 7 deletions(-)
+ tools/testing/selftests/bpf/progs/mptcp_subflow.c | 70 +++++++++++++++++++++++
+ 1 file changed, 70 insertions(+)
 
-diff --git a/arch/x86/kernel/uprobes.c b/arch/x86/kernel/uprobes.c
-index 6c07f6daaa22..81e6ee95784d 100644
---- a/arch/x86/kernel/uprobes.c
-+++ b/arch/x86/kernel/uprobes.c
-@@ -12,6 +12,7 @@
- #include <linux/ptrace.h>
- #include <linux/uprobes.h>
- #include <linux/uaccess.h>
-+#include <linux/syscalls.h>
- 
- #include <linux/kdebug.h>
- #include <asm/processor.h>
-@@ -308,6 +309,120 @@ static int uprobe_init_insn(struct arch_uprobe *auprobe, struct insn *insn, bool
- }
- 
- #ifdef CONFIG_X86_64
+diff --git a/tools/testing/selftests/bpf/progs/mptcp_subflow.c b/tools/testing/selftests/bpf/progs/mptcp_subflow.c
+new file mode 100644
+index 000000000000..de9dbba37133
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/mptcp_subflow.c
+@@ -0,0 +1,70 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2020, Tessares SA. */
++/* Copyright (c) 2024, Kylin Software */
 +
-+asm (
-+	".pushsection .rodata\n"
-+	".global uretprobe_syscall_entry\n"
-+	"uretprobe_syscall_entry:\n"
-+	"pushq %rax\n"
-+	"pushq %rcx\n"
-+	"pushq %r11\n"
-+	"movq $" __stringify(__NR_uretprobe) ", %rax\n"
-+	"syscall\n"
-+	".global uretprobe_syscall_check\n"
-+	"uretprobe_syscall_check:\n"
-+	"popq %r11\n"
-+	"popq %rcx\n"
++#include <sys/socket.h> // SOL_SOCKET, SO_MARK, ...
++#include <linux/tcp.h>  // TCP_CONGESTION
++#include <linux/bpf.h>
++#include <bpf/bpf_helpers.h>
++#include "bpf_tcp_helpers.h"
 +
-+	/* The uretprobe syscall replaces stored %rax value with final
-+	 * return address, so we don't restore %rax in here and just
-+	 * call ret.
-+	 */
-+	"retq\n"
-+	".global uretprobe_syscall_end\n"
-+	"uretprobe_syscall_end:\n"
-+	".popsection\n"
-+);
++char _license[] SEC("license") = "GPL";
 +
-+extern u8 uretprobe_syscall_entry[];
-+extern u8 uretprobe_syscall_check[];
-+extern u8 uretprobe_syscall_end[];
++#ifndef SOL_TCP
++#define SOL_TCP 6
++#endif
 +
-+void *arch_uprobe_trampoline(unsigned long *psize)
++#ifndef TCP_CA_NAME_MAX
++#define TCP_CA_NAME_MAX 16
++#endif
++
++char cc[TCP_CA_NAME_MAX] = "reno";
++
++/* Associate a subflow counter to each token */
++struct {
++	__uint(type, BPF_MAP_TYPE_HASH);
++	__uint(key_size, sizeof(__u32));
++	__uint(value_size, sizeof(__u32));
++	__uint(max_entries, 100);
++} mptcp_sf SEC(".maps");
++
++SEC("sockops")
++int mptcp_subflow(struct bpf_sock_ops *skops)
 +{
-+	static uprobe_opcode_t insn = UPROBE_SWBP_INSN;
-+	struct pt_regs *regs = task_pt_regs(current);
++	__u32 init = 1, key, mark, *cnt;
++	struct mptcp_sock *msk;
++	struct bpf_sock *sk;
++	int err;
 +
-+	/*
-+	 * At the moment the uretprobe syscall trampoline is supported
-+	 * only for native 64-bit process, the compat process still uses
-+	 * standard breakpoint.
-+	 */
-+	if (user_64bit_mode(regs)) {
-+		*psize = uretprobe_syscall_end - uretprobe_syscall_entry;
-+		return uretprobe_syscall_entry;
++	if (skops->op != BPF_SOCK_OPS_TCP_CONNECT_CB)
++		return 1;
++
++	sk = skops->sk;
++	if (!sk)
++		return 1;
++
++	msk = bpf_skc_to_mptcp_sock(sk);
++	if (!msk)
++		return 1;
++
++	key = msk->token;
++	cnt = bpf_map_lookup_elem(&mptcp_sf, &key);
++	if (cnt) {
++		/* A new subflow is added to an existing MPTCP connection */
++		__sync_fetch_and_add(cnt, 1);
++		mark = *cnt;
++	} else {
++		/* A new MPTCP connection is just initiated and this is its primary subflow */
++		bpf_map_update_elem(&mptcp_sf, &key, &init, BPF_ANY);
++		mark = init;
 +	}
 +
-+	*psize = UPROBE_SWBP_INSN_SIZE;
-+	return &insn;
++	/* Set the mark of the subflow's socket based on appearance order */
++	err = bpf_setsockopt(skops, SOL_SOCKET, SO_MARK, &mark, sizeof(mark));
++	if (err < 0)
++		return 1;
++	if (mark == 1)
++		err = bpf_setsockopt(skops, SOL_TCP, TCP_CONGESTION, cc, TCP_CA_NAME_MAX);
++
++	return 1;
 +}
-+
-+static unsigned long trampoline_check_ip(void)
-+{
-+	unsigned long tramp = uprobe_get_trampoline_vaddr();
-+
-+	return tramp + (uretprobe_syscall_check - uretprobe_syscall_entry);
-+}
-+
-+SYSCALL_DEFINE0(uretprobe)
-+{
-+	struct pt_regs *regs = task_pt_regs(current);
-+	unsigned long err, ip, sp, r11_cx_ax[3];
-+
-+	if (regs->ip != trampoline_check_ip())
-+		goto sigill;
-+
-+	err = copy_from_user(r11_cx_ax, (void __user *)regs->sp, sizeof(r11_cx_ax));
-+	if (err)
-+		goto sigill;
-+
-+	/* expose the "right" values of r11/cx/ax/sp to uprobe_consumer/s */
-+	regs->r11 = r11_cx_ax[0];
-+	regs->cx  = r11_cx_ax[1];
-+	regs->ax  = r11_cx_ax[2];
-+	regs->sp += sizeof(r11_cx_ax);
-+	regs->orig_ax = -1;
-+
-+	ip = regs->ip;
-+	sp = regs->sp;
-+
-+	uprobe_handle_trampoline(regs);
-+
-+	/*
-+	 * uprobe_consumer has changed sp, we can do nothing,
-+	 * just return via iret
-+	 */
-+	if (regs->sp != sp)
-+		return regs->ax;
-+	regs->sp -= sizeof(r11_cx_ax);
-+
-+	/* for the case uprobe_consumer has changed r11/cx */
-+	r11_cx_ax[0] = regs->r11;
-+	r11_cx_ax[1] = regs->cx;
-+
-+	/*
-+	 * ax register is passed through as return value, so we can use
-+	 * its space on stack for ip value and jump to it through the
-+	 * trampoline's ret instruction
-+	 */
-+	r11_cx_ax[2] = regs->ip;
-+	regs->ip = ip;
-+
-+	err = copy_to_user((void __user *)regs->sp, r11_cx_ax, sizeof(r11_cx_ax));
-+	if (err)
-+		goto sigill;
-+
-+	/* ensure sysret, see do_syscall_64() */
-+	regs->r11 = regs->flags;
-+	regs->cx  = regs->ip;
-+
-+	return regs->ax;
-+
-+sigill:
-+	force_sig(SIGILL);
-+	return -1;
-+}
-+
- /*
-  * If arch_uprobe->insn doesn't use rip-relative addressing, return
-  * immediately.  Otherwise, rewrite the instruction so that it accesses
-diff --git a/include/linux/uprobes.h b/include/linux/uprobes.h
-index f46e0ca0169c..b503fafb7fb3 100644
---- a/include/linux/uprobes.h
-+++ b/include/linux/uprobes.h
-@@ -138,6 +138,9 @@ extern bool arch_uretprobe_is_alive(struct return_instance *ret, enum rp_check c
- extern bool arch_uprobe_ignore(struct arch_uprobe *aup, struct pt_regs *regs);
- extern void arch_uprobe_copy_ixol(struct page *page, unsigned long vaddr,
- 					 void *src, unsigned long len);
-+extern void uprobe_handle_trampoline(struct pt_regs *regs);
-+extern void *arch_uprobe_trampoline(unsigned long *psize);
-+extern unsigned long uprobe_get_trampoline_vaddr(void);
- #else /* !CONFIG_UPROBES */
- struct uprobes_state {
- };
-diff --git a/kernel/events/uprobes.c b/kernel/events/uprobes.c
-index e4834d23e1d1..c550449d66be 100644
---- a/kernel/events/uprobes.c
-+++ b/kernel/events/uprobes.c
-@@ -1474,11 +1474,20 @@ static int xol_add_vma(struct mm_struct *mm, struct xol_area *area)
- 	return ret;
- }
- 
-+void * __weak arch_uprobe_trampoline(unsigned long *psize)
-+{
-+	static uprobe_opcode_t insn = UPROBE_SWBP_INSN;
-+
-+	*psize = UPROBE_SWBP_INSN_SIZE;
-+	return &insn;
-+}
-+
- static struct xol_area *__create_xol_area(unsigned long vaddr)
- {
- 	struct mm_struct *mm = current->mm;
--	uprobe_opcode_t insn = UPROBE_SWBP_INSN;
-+	unsigned long insns_size;
- 	struct xol_area *area;
-+	void *insns;
- 
- 	area = kmalloc(sizeof(*area), GFP_KERNEL);
- 	if (unlikely(!area))
-@@ -1502,7 +1511,8 @@ static struct xol_area *__create_xol_area(unsigned long vaddr)
- 	/* Reserve the 1st slot for get_trampoline_vaddr() */
- 	set_bit(0, area->bitmap);
- 	atomic_set(&area->slot_count, 1);
--	arch_uprobe_copy_ixol(area->pages[0], 0, &insn, UPROBE_SWBP_INSN_SIZE);
-+	insns = arch_uprobe_trampoline(&insns_size);
-+	arch_uprobe_copy_ixol(area->pages[0], 0, insns, insns_size);
- 
- 	if (!xol_add_vma(mm, area))
- 		return area;
-@@ -1827,7 +1837,7 @@ void uprobe_copy_process(struct task_struct *t, unsigned long flags)
-  *
-  * Returns -1 in case the xol_area is not allocated.
-  */
--static unsigned long get_trampoline_vaddr(void)
-+unsigned long uprobe_get_trampoline_vaddr(void)
- {
- 	struct xol_area *area;
- 	unsigned long trampoline_vaddr = -1;
-@@ -1878,7 +1888,7 @@ static void prepare_uretprobe(struct uprobe *uprobe, struct pt_regs *regs)
- 	if (!ri)
- 		return;
- 
--	trampoline_vaddr = get_trampoline_vaddr();
-+	trampoline_vaddr = uprobe_get_trampoline_vaddr();
- 	orig_ret_vaddr = arch_uretprobe_hijack_return_addr(trampoline_vaddr, regs);
- 	if (orig_ret_vaddr == -1)
- 		goto fail;
-@@ -2123,7 +2133,7 @@ static struct return_instance *find_next_ret_chain(struct return_instance *ri)
- 	return ri;
- }
- 
--static void handle_trampoline(struct pt_regs *regs)
-+void uprobe_handle_trampoline(struct pt_regs *regs)
- {
- 	struct uprobe_task *utask;
- 	struct return_instance *ri, *next;
-@@ -2187,8 +2197,8 @@ static void handle_swbp(struct pt_regs *regs)
- 	int is_swbp;
- 
- 	bp_vaddr = uprobe_get_swbp_addr(regs);
--	if (bp_vaddr == get_trampoline_vaddr())
--		return handle_trampoline(regs);
-+	if (bp_vaddr == uprobe_get_trampoline_vaddr())
-+		return uprobe_handle_trampoline(regs);
- 
- 	uprobe = find_active_uprobe(bp_vaddr, &is_swbp);
- 	if (!uprobe) {
+
 -- 
-2.44.0
+2.43.0
 
