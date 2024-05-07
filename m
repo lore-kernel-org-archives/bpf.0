@@ -1,91 +1,101 @@
-Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from imap5.colo.codethink.co.uk (imap5.colo.codethink.co.uk [78.40.148.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 357DC1514C5;
-	Tue,  7 May 2024 14:36:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57A2015ECE2;
+	Tue,  7 May 2024 14:37:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.40.148.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715092593; cv=none; b=Y9WKM4PQpRdGxZRepq01FmdWDxDivp1E9vqnZtjOLy3YLDrcgrkZB1ms9juj/ZEPvwvHVhS+wVJU7w4TCK5dHBLcTRlHqHvc1xtEQuxgU81XXelN1xtFR5qh0RgB/ZtV+DNlSItgJMct+lUEqV/g44RK/vxB7OhRkxsrJpwr7RA=
+	t=1715092623; cv=none; b=sqj4My9w5+4/MVC14NrckpcNIU27twCwp2shPUjFhvKXPr9Hj6/7rpyfvK6iZ3InC4WXirvmhF/18lJdY8xAkf3jMHQ5qiA4O8KVNpixnyWhgVQJyBOxFK/oWdeaMaTY3t8x6V97IS7ok2xQwi3ABiLWLfHZR8VEOk4daTgjngs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715092593; c=relaxed/simple;
-	bh=ltkHF7USXEUiblC57EI2w5ExeCBBkAO5TlznSzRIeWg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=r2b7a9Y+qJY5cJ57h/0Lvjx4RTeC9Q1b+65brjXJIi0T3pgLBCqEEWt38oP53aWK3OQhqfs6fhL2AGtyftA+xA/fiW3iUCrNsZwSW/0Yi82ml+msKxoEGomcWXGX6NPYbKJ/l8GsEAz06x+E0a86WRnGTBVtktyamRPgqkdh4EM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mq6/KdbR; arc=none smtp.client-ip=209.85.221.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1715092623; c=relaxed/simple;
+	bh=8lBxj7OlkdnR3Nw99USWXlYjj/eD13fDPsd3mf0Jpz4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=TvdxLnCtoP3FzGcOKxRQbK6g90aXYTO2b6lpEKAqbd8Xc85orAcvMePGHPCmnjajrCCTJKpYUtD0Ph1FwiTvUdoqgYq6OovxowgNGAPxCm50TghNcMi8/kp+nHGe2UMuvistQHtET8PTfziAoNI7bPOhP+yMiCmS4Wx3+xH4bjI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=codethink.co.uk; spf=pass smtp.mailfrom=codethink.co.uk; dkim=pass (2048-bit key) header.d=codethink.co.uk header.i=@codethink.co.uk header.b=lF29aSwl; arc=none smtp.client-ip=78.40.148.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=codethink.co.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=codethink.co.uk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mq6/KdbR"
-Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-34ef66c0178so1873018f8f.1;
-        Tue, 07 May 2024 07:36:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1715092589; x=1715697389; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ltkHF7USXEUiblC57EI2w5ExeCBBkAO5TlznSzRIeWg=;
-        b=mq6/KdbRwdTPQMSRwYPD3fXvfvoj3V8L22IKTWwAtkaI/bgezFfzTd8JIJizjhrNWD
-         Qd+q2XQh3XY+WRw0DlUK4SyocXMj28jMojqvf8C562Xk+7/+XO+bym6QvTZQauaGHKS5
-         xVD8OFy7/ZJsUTEEkXvMIwnnpiuC/t1X5+OXAASr5gAD9IoIsCv8K1u8f9iB/+Oy7XM2
-         Rrr461egeZyLcwzcZK0nCPVWaW5uL3cix0l7lnLkEW5GJkWjsYr8EyxGok5OU38nrB9m
-         9sjXgQ9VfECgQgmYnjXWZ2NzD0s91OAgP6Sb6vIDS0f5Zuk/EkYOC4Ljq7EIJSWPKrrE
-         Rbvw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715092589; x=1715697389;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ltkHF7USXEUiblC57EI2w5ExeCBBkAO5TlznSzRIeWg=;
-        b=X0oaMgafNaKUuL78FMi4536T7kq+I3z70H3FGSiL1YtNGKfo32igi3etCK59qp3dB9
-         pKQ4QiMgbJwmNHbue3ewuJrYRI2ubIv4EiIKMu3MOwLss1iKU0QsPaD4URjcIf+etIq/
-         a37fuu3R6U7MNj/MZbOC8uTvm9c+F8ScptvZLgPpKt8flpzKQdwoJtQr4n2PW220viQX
-         FP8o7ZRBGv3yewqxuYgLaaZ5v9EQm0h/9Rc+Cn216ih4fr4PbBrIjWJ9wuPnwLifWJ+0
-         F3o8pyM+oKW+eEyLhWWFICQ8Iayar6D0UPUN7xNih014wnyXv83bnAds4Z2mJ7ddlxLj
-         fKrw==
-X-Forwarded-Encrypted: i=1; AJvYcCUDH3Z7myb5KGZNqm4JjcOtx26jecXo+mrA51OU4dIR2XDrRg+ASnt2ciqXGGIWXYKaX9Vm1v4BPvIVkvqol5izbS7f/iBxA3kYHjdO
-X-Gm-Message-State: AOJu0Yxek0Y3XMvGQbolktFfisSvCEnEm3bNGDyS0Per+iylTlzoAEU0
-	QNQ56fsjm4oOdX0M2R+XbQmNw4zfsIGxR8EJ5Gt3s3n0bcKjV3FDrBlgkUTEfE0HQ2bRvDpQV9D
-	rLWPFhGk08jGorgghQkQCuIYbHmU=
-X-Google-Smtp-Source: AGHT+IHTsLpepLtn1ceKo4nbzm7tDYWoONlZoXEISnwYHFP/Vzwk2BC/YEf3kkUVPJYp9IlI09mYAlfXbVpY7XA7PkQ=
-X-Received: by 2002:adf:f8c6:0:b0:34d:9c8f:61a1 with SMTP id
- f6-20020adff8c6000000b0034d9c8f61a1mr11820520wrq.60.1715092589280; Tue, 07
- May 2024 07:36:29 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=codethink.co.uk header.i=@codethink.co.uk header.b="lF29aSwl"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=codethink.co.uk; s=imap5-20230908; h=Sender:Content-Transfer-Encoding:
+	Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+	Message-ID:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=bE7QxHBl23SqmkvQImsRLD5Ew8sdZ2Sh0oNk8KX8UXI=; b=lF29aSwlz7rdbvZlOKsenoLRqj
+	WPB0gv4x5crFU+bqbBAuOVDDVwlxMWUqxkLYMqTigGdwilcGQOdG31W7ChRV00vDImXw9ktfgN2OX
+	r/02MyS0yrCoGE1Cz5ctBUr8GdVEkoHYzFUvAy6CXQhvghOyLmRR3WO0vNeCbr48AV33D/mRKEXOd
+	Nt5oSU7qQvtojXW4qyTc10bq8fvakg3LaRuuFtOfvSD4Me0QcFHERYeahgWuxk6ea89VOlQ9BH5b4
+	NylfnD0+nDTd6MryDtsvcy5lZQJcxNa3lYx8taKNzSWBXk/2zlWKhTlTC/irXHHLQcO13Z0Kl0jXg
+	PlInHUHg==;
+Received: from [217.161.79.54] (helo=[172.16.0.144])
+	by imap5.colo.codethink.co.uk with esmtpsa  (Exim 4.94.2 #2 (Debian))
+	id 1s4LMT-008sEA-Fx; Tue, 07 May 2024 15:00:05 +0100
+Message-ID: <b7421822-4c07-40e2-b2a4-3599ba6b39da@codethink.co.uk>
+Date: Tue, 7 May 2024 15:00:04 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240507024952.1590681-1-haiyue.wang@intel.com>
-In-Reply-To: <20240507024952.1590681-1-haiyue.wang@intel.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Tue, 7 May 2024 07:36:17 -0700
-Message-ID: <CAADnVQK7zD312WRJboMib8HJnNzN=i2FKH2QxkVVy736b7sNTQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v1] bpf,arena: Rename the kfunc set variable
-To: Haiyue Wang <haiyue.wang@intel.com>
-Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] riscv, bpf: Optimize zextw insn with Zba extension
+To: Pu Lehui <pulehui@huawei.com>, Xiao Wang <xiao.w.wang@intel.com>,
+ paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu,
+ luke.r.nels@gmail.com, xi.wang@gmail.com, bjorn@kernel.org
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+ martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
+ yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
+ sdf@google.com, haoluo@google.com, jolsa@kernel.org,
+ linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+ bpf@vger.kernel.org, haicheng.li@intel.com
+References: <20240507104528.435980-1-xiao.w.wang@intel.com>
+ <6836eb5c-f135-4e58-987b-987ab446b27c@huawei.com>
+Content-Language: en-GB
+From: Ben Dooks <ben.dooks@codethink.co.uk>
+Organization: Codethink Limited.
+In-Reply-To: <6836eb5c-f135-4e58-987b-987ab446b27c@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Sender: ben.dooks@codethink.co.uk
 
-On Mon, May 6, 2024 at 7:46=E2=80=AFPM Haiyue Wang <haiyue.wang@intel.com> =
-wrote:
->
-> Rename the kfunc set variable to specify the 'arena' function scope,
-> although the 'UNSPEC' type BPF program is mapped to 'COMMON' hook.
->
-> And there is 'common_kfunc_set' defined for real 'common' function in
-> file 'kernel/bpf/helpers.c'.
+On 07/05/2024 13:47, Pu Lehui wrote:
+> 
+> On 2024/5/7 18:45, Xiao Wang wrote:
+>> The Zba extension provides add.uw insn which can be used to implement
+>> zext.w with rs2 set as ZERO.
+>>
+>> Signed-off-by: Xiao Wang <xiao.w.wang@intel.com>
+>> ---
+>>   arch/riscv/Kconfig       | 19 +++++++++++++++++++
+>>   arch/riscv/net/bpf_jit.h | 18 ++++++++++++++++++
+>>   2 files changed, 37 insertions(+)
+>>
+>> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+>> index 6bec1bce6586..0679127cc0ea 100644
+>> --- a/arch/riscv/Kconfig
+>> +++ b/arch/riscv/Kconfig
+>> @@ -586,6 +586,14 @@ config RISCV_ISA_V_PREEMPTIVE
+>>         preemption. Enabling this config will result in higher memory
+>>         consumption due to the allocation of per-task's kernel Vector 
+>> context.
+>> +config TOOLCHAIN_HAS_ZBA
+>> +    bool
+>> +    default y
+>> +    depends on !64BIT || $(cc-option,-mabi=lp64 -march=rv64ima_zba)
+>> +    depends on !32BIT || $(cc-option,-mabi=ilp32 -march=rv32ima_zba)
+>> +    depends on LLD_VERSION >= 150000 || LD_VERSION >= 23900
+>> +    depends on AS_HAS_OPTION_ARCH
+>> +
+>>   config TOOLCHAIN_HAS_ZBB
 
-I think common_kfunc_set is a better name to describe that these
-two kfuncs are in a common category.
-BPF_PROG_TYPE_UNSPEC is a lot less obvious.
+At this point would it be easier to ask the toolchain what's enabled
+and put into kconfig via some sort of script?
 
-There are two static common_kfunc_set in helpers.c and arena.c
-and that's fine.
+-- 
+Ben Dooks				http://www.codethink.co.uk/
+Senior Engineer				Codethink - Providing Genius
 
-pw-bot: cr
+https://www.codethink.co.uk/privacy.html
+
