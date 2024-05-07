@@ -1,179 +1,111 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A8D614EC77;
-	Tue,  7 May 2024 10:53:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8AE3214EC77;
+	Tue,  7 May 2024 10:53:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715079209; cv=none; b=nOZrUeMM/Y6EIQpsk87qMqADa8QIKThtQtTyYJy3GwtAebQL+fXiz3zkzKqqFGMwDeVFEs+S72NnXXW5EysPN0+uoYftSmoDnUiX5utTr4en82MOrPGjVOmQP8MrC+K2rKVdvpNOYZ/t8FK19f/0cM/tWKZmXEZkO6CXALOw/7k=
+	t=1715079220; cv=none; b=mJ32/EGIMXbIDcg8YjjGHQ6eO5cePja9B9ukxJxuLIOCmDQDeuHPnOvB/+7f07hi0gXA3dY9swAwlmfNyVD26dL2SrHeHaPFpnGShxng8TX260vt/As0JDAf6MrQ1+8I4is1ePA4GT6iXRYcCSsrkqOYXST0v5EQamqP8PrxVio=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715079209; c=relaxed/simple;
-	bh=zRCYiOQHPnfhs1z3DR2elwt2Yar4HKiZO0wVgLYg+Vg=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=hEqIG2sksvVU9Z7qrWCJ2ddzJKAUgJQFvs5XZXH8mOHkioRlsMc1pwr/cEYvsVbdim2kwlUzZElWQENkfYmPYQ9q4Ru95AVXSFdoPUxA4lXsKIEbL9Te8FXyfvzU/TWjpRCdqn99sDd4k6Zqsa3flon5BQVXOtFl5j18L/Xrw78=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sd9lJi5H; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1715079220; c=relaxed/simple;
+	bh=DDtXv196sRdXkSns3p8qkThzlerAR6hPwCoy0eKwf1o=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=L+0PUEARI8xpNcdaocdYNaQVsTlHM+2PJgq0rAT12KxlBHC7jOlhXi0R+M/Vp8x7dwHKLtOeeJ5CWUAhabY3NK1s54Qf6xPSEyve+N8/bO7hXTNO6d+MOZm3RP/82j3cfB3eT7bSOBF+hlwyNt3nTlzQTYLUa3mWWupTPLa5cqA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Lc2l0Tl5; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sd9lJi5H"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2481C2BBFC;
-	Tue,  7 May 2024 10:53:23 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Lc2l0Tl5"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4D4FC2BBFC;
+	Tue,  7 May 2024 10:53:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1715079209;
-	bh=zRCYiOQHPnfhs1z3DR2elwt2Yar4HKiZO0wVgLYg+Vg=;
-	h=From:To:Cc:Subject:Date:From;
-	b=sd9lJi5HBDDMQcb1fyizgnog+zrbmj5jPa0DvXupXs6nqIMgdu6hI3V4VMe3GjB4f
-	 lo2xNa1OWmjwKh8uY1kkVCEeOCjtqo6YXMIyhMInI0TXtmOy7KbvyBGRkiSG7tlFZa
-	 yt8KkxFd5HryeNJ9NpGX/3djDR8zx7QkrnD3GEsTJ7Q28SdhvGw9yKAJ2XRIzDyfXg
-	 lKQsWQERWl44PwOYWS/WjAdtjfolJLSINidU0Q6tz4q+t2rLtwIUiOUnlbAg9aZFck
-	 nbfsMm+qNHypPzPGTs3Qj5BPBzZMDTLJnEcypgrn3JwbGxrF0E1emYkYDi7UKWGlJo
-	 RcZZQlVaWwAhw==
-From: Jiri Olsa <jolsa@kernel.org>
-To: Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Oleg Nesterov <oleg@redhat.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>
-Cc: linux-kernel@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org,
-	linux-api@vger.kernel.org,
-	linux-man@vger.kernel.org,
-	x86@kernel.org,
-	bpf@vger.kernel.org,
-	Song Liu <songliubraving@fb.com>,
-	Yonghong Song <yhs@fb.com>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	"Borislav Petkov (AMD)" <bp@alien8.de>,
-	Ingo Molnar <mingo@redhat.com>,
-	Andy Lutomirski <luto@kernel.org>,
-	"Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
-	Deepak Gupta <debug@rivosinc.com>
-Subject: [PATCHv5 bpf-next 0/8] uprobe: uretprobe speed up
-Date: Tue,  7 May 2024 12:53:13 +0200
-Message-ID: <20240507105321.71524-1-jolsa@kernel.org>
-X-Mailer: git-send-email 2.44.0
+	s=k20201202; t=1715079220;
+	bh=DDtXv196sRdXkSns3p8qkThzlerAR6hPwCoy0eKwf1o=;
+	h=From:Subject:Date:To:Cc:From;
+	b=Lc2l0Tl52xnX1scDwjpbITc4zdvgHvkTeYIdFY8HCHHaXfKCAHcg4kdXNxM3WSN0i
+	 gc31g0jkfUwF+lsF58lYqbdu1djXAcCiA7qHy/bWU/h6g3Hy6M6AzCS13SwZ//Y/aj
+	 0g8c8PtEgexm/tKf+GgQLsOZa6TtyMxFkBMzergRoOIOOlro/N4F2UhdguKZinWjXK
+	 5Z1PBDFGwfnzkiwg0gxwyjolJsY3VPJO7cG+aK/8fNRsaup09H7dxEfJFtlxmKQM44
+	 R6vdnkjPJHeIe8ErtXWD3o/PbMJOY0xyOC+XYDMagQDwQKYiQnHhPuwmPnlMtGTDBv
+	 t8Dl1jI5B8TEQ==
+From: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
+Subject: [PATCH bpf-next 0/4] selftests/bpf: new MPTCP subflow subtest &
+ improvements
+Date: Tue, 07 May 2024 12:53:30 +0200
+Message-Id: <20240507-upstream-bpf-next-20240506-mptcp-subflow-test-v1-0-e2bcbdf49857@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIACoIOmYC/z2NywrCMBAAf6Xs2YXYRw7+inhI2l0N2HTJbrVQ+
+ u8GQY/DwMwOSiWRwqXZodAraVpyhfOpgfER8p0wTZWhdW3vBudxFbVCYcYojJk2w7+axUZBXSM
+ /lzcaqSEHYu+HPnLooDalEKft+7vCrwC34/gA2ZwZXYkAAAA=
+To: mptcp@lists.linux.dev, Mat Martineau <martineau@kernel.org>, 
+ Geliang Tang <geliang@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
+ Eduard Zingerman <eddyz87@gmail.com>, Mykola Lysenko <mykolal@fb.com>, 
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, 
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
+ Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
+ Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>
+Cc: linux-kernel@vger.kernel.org, netdev@vger.kernel.org, 
+ bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ "Matthieu Baerts (NGI0)" <matttbe@kernel.org>, 
+ Geliang Tang <tanggeliang@kylinos.cn>, 
+ Nicolas Rybowski <nicolas.rybowski@tessares.net>
+X-Mailer: b4 0.13.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1258; i=matttbe@kernel.org;
+ h=from:subject:message-id; bh=DDtXv196sRdXkSns3p8qkThzlerAR6hPwCoy0eKwf1o=;
+ b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBmOggtO/Cqc1Fa0yeK9U1dM6TuwUP3NS7h5UWQL
+ /9w5S4BGBmJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZjoILQAKCRD2t4JPQmmg
+ c+7sEACXzbvsXdwki+w0gLTftwninrBAg5VPvkKu6zYdk12OO4hptnDsYhF8lhAlVwlzAXQEhbm
+ bdzyKgf4F3DCDPTuQuDeG1mEquvx9K8DtVOKf2EsXrUZsRwnp0+Br5JPA6MEYDmRTOrKnBepLXx
+ ZXVQPLd1ISdFgHCyRjt2eb3OEBDp0O6lQxrxEZZwS3PKWtg/0H2/niKwKMKP8OZh7yFgnWGZDNi
+ kmTOZEaH9tIhMigeJUV5iVIhz+mXr1XHXTD2DPI8DMPPfMGodnhDBRrQwnl+syg5k2xITETu2yH
+ qPS9+3NZutNaLv7U+jfJCBlRykD8sv53Q93dieWRh6saG7CaRWHmFXTOyVlxFiMqHWZXWPwa4q9
+ kMexvQkimZHp0nzQ9TvPhIm51QyunMlHQg34KCaRHoCDgfGtocecAZ82PvhbSFbghUQne6xf595
+ 4ScH71GNWejxWdyUIgTELIdQxeXlTlloBk+bcmpPj/9bFCg3557fgmp0T3POXcnbPzdvNqVC7dK
+ TFkLAuLnNNYq1uclD7eia1Qfa33cANUX6kMM1wZrnfkfm196UJpKgVPt0Ak+84mm6sJYsJqZejU
+ OPoNpaxV6dJAjPXBWVAKdtK3Tg7qS52g+N/GipnXNOh0w8kbhSEk6C9976xRvtT4WAP7X5ydHqk
+ 0/134ECvKFsarpQ==
+X-Developer-Key: i=matttbe@kernel.org; a=openpgp;
+ fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
 
-hi,
-as part of the effort on speeding up the uprobes [0] coming with
-return uprobe optimization by using syscall instead of the trap
-on the uretprobe trampoline.
+In this series from Geliang, modifying MPTCP BPF selftests, we have:
 
-The speed up depends on instruction type that uprobe is installed
-and depends on specific HW type, please check patch 1 for details.
+- SIGINT support
 
-Patches 1-7 are based on bpf-next/master, but path 1 and 2 are
-apply-able on linux-trace.git tree probes/for-next branch.
-Patch 8 is based on man-pages master.
+- A new macro to reduce duplicated code
 
-v5 changes:
-- added shadow stack support for uretprobe [peterz]
-- reworded man page + typos [Alejandro Colom]
-- added pipe ASSERT_OK [Andrii]
-- added acks [Andrii]
-- removed compat test for now before ci is fixed
+- A new MPTCP subflow BPF program setting socket options per subflow: it
+  looks better to have this old test program in the BPF selftests to
+  track regressions and to serve as example.
 
-Also available at:
-  https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git
-  uretprobe_syscall
+  Note: Nicolas is no longer working for Tessares, but he did this work
+  while working for them, and his email address is no longer available.
 
-thanks,
-jirka
+- A new MPTCP BPF subtest validating the new BPF program.
 
-
-Notes to check list items in Documentation/process/adding-syscalls.rst:
-
-- System Call Alternatives
-  New syscall seems like the best way in here, because we need
-  just to quickly enter kernel with no extra arguments processing,
-  which we'd need to do if we decided to use another syscall.
-
-- Designing the API: Planning for Extension
-  The uretprobe syscall is very specific and most likely won't be
-  extended in the future.
-
-  At the moment it does not take any arguments and even if it does
-  in future, it's allowed to be called only from trampoline prepared
-  by kernel, so there'll be no broken user.
-
-- Designing the API: Other Considerations
-  N/A because uretprobe syscall does not return reference to kernel
-  object.
-
-- Proposing the API
-  Wiring up of the uretprobe system call is in separate change,
-  selftests and man page changes are part of the patchset.
-
-- Generic System Call Implementation
-  There's no CONFIG option for the new functionality because it
-  keeps the same behaviour from the user POV.
-
-- x86 System Call Implementation
-  It's 64-bit syscall only.
-
-- Compatibility System Calls (Generic)
-  N/A uretprobe syscall has no arguments and is not supported
-  for compat processes.
-
-- Compatibility System Calls (x86)
-  N/A uretprobe syscall is not supported for compat processes.
-
-- System Calls Returning Elsewhere
-  N/A.
-
-- Other Details
-  N/A.
-
-- Testing
-  Adding new bpf selftests and ran ltp on top of this change.
-
-- Man Page
-  Attached.
-
-- Do not call System Calls in the Kernel
-  N/A.
-
-
-[0] https://lore.kernel.org/bpf/ZeCXHKJ--iYYbmLj@krava/
+Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
 ---
-Jiri Olsa (7):
-      uprobe: Wire up uretprobe system call
-      uprobe: Add uretprobe syscall to speed up return probe
-      selftests/bpf: Add uretprobe syscall test for regs integrity
-      selftests/bpf: Add uretprobe syscall test for regs changes
-      selftests/bpf: Add uretprobe syscall call from user space test
-      x86/shstk: Add return uprobe support
-      selftests/x86: Add return uprobe shadow stack test
+Geliang Tang (3):
+      selftests/bpf: Handle SIGINT when creating netns
+      selftests/bpf: Add RUN_MPTCP_TEST macro
+      selftests/bpf: Add mptcp subflow subtest
 
- arch/x86/entry/syscalls/syscall_64.tbl                      |   1 +
- arch/x86/include/asm/shstk.h                                |   4 ++
- arch/x86/kernel/shstk.c                                     |  29 +++++++++
- arch/x86/kernel/uprobes.c                                   | 127 +++++++++++++++++++++++++++++++++++-
- include/linux/syscalls.h                                    |   2 +
- include/linux/uprobes.h                                     |   3 +
- include/uapi/asm-generic/unistd.h                           |   5 +-
- kernel/events/uprobes.c                                     |  24 +++++--
- kernel/sys_ni.c                                             |   2 +
- tools/include/linux/compiler.h                              |   4 ++
- tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c       | 123 ++++++++++++++++++++++++++++++++++-
- tools/testing/selftests/bpf/prog_tests/uprobe_syscall.c     | 325 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
- tools/testing/selftests/bpf/progs/uprobe_syscall.c          |  15 +++++
- tools/testing/selftests/bpf/progs/uprobe_syscall_executed.c |  17 +++++
- tools/testing/selftests/x86/test_shadow_stack.c             | 142 ++++++++++++++++++++++++++++++++++++++++
- 15 files changed, 813 insertions(+), 10 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/uprobe_syscall.c
- create mode 100644 tools/testing/selftests/bpf/progs/uprobe_syscall.c
- create mode 100644 tools/testing/selftests/bpf/progs/uprobe_syscall_executed.c
+Nicolas Rybowski (1):
+      selftests/bpf: Add mptcp subflow example
 
-Jiri Olsa (1):
-      man2: Add uretprobe syscall page
+ tools/testing/selftests/bpf/prog_tests/mptcp.c    | 127 +++++++++++++++++++++-
+ tools/testing/selftests/bpf/progs/mptcp_subflow.c |  70 ++++++++++++
+ 2 files changed, 193 insertions(+), 4 deletions(-)
+---
+base-commit: 329a6720a3ebbc041983b267981ab2cac102de93
+change-id: 20240506-upstream-bpf-next-20240506-mptcp-subflow-test-faef6654bfa3
 
- man2/uretprobe.2 | 50 ++++++++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 50 insertions(+)
- create mode 100644 man2/uretprobe.2
+Best regards,
+-- 
+Matthieu Baerts (NGI0) <matttbe@kernel.org>
+
