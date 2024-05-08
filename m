@@ -1,211 +1,294 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A128878C85;
-	Wed,  8 May 2024 13:35:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.11
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715175357; cv=fail; b=NcBznXpgPnjzVc4BAHJSCIitMIWdVfLe8VvMyeyA6xNcgK3DJH+y0WmPAC/hI8u30iarKZzmYLhNXw4uCwjzWYfFC02CB5GT72kLmxFLDFE+0XMLT2uAOKpvplOxCHeMVrYYrPmFwcRhnt/88go/MmDWFnR3o9dDd++sVPZ+ovg=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715175357; c=relaxed/simple;
-	bh=dX4SHF94og3hMTQPoVfq6ZrMltz+ahXi8x4H7yJ9XxU=;
-	h=Message-ID:Date:Subject:To:CC:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=twVoXfkpOEDgD4jlWiXu2pfH3rnUK3RjySuD/vArzQB7XqYEPGG8lxm67WNM3yHuY2zZkwBkfuFtYWFMrdDciZsthjRSHvY65lPM/wYk46RpHel3+Au38cR4ncZlpIIxAzFBSnJYXAGB2HK12t7QYuHE4rxZA0kmngN2jLoTa90=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NmK+XTqB; arc=fail smtp.client-ip=192.198.163.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NmK+XTqB"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1715175356; x=1746711356;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=dX4SHF94og3hMTQPoVfq6ZrMltz+ahXi8x4H7yJ9XxU=;
-  b=NmK+XTqBu6aHJJ15EiUCCC2YuhVSPum7Mo4qL6WDwNho9bhyMeW26dOe
-   HbrQo66MHCd4S9HJbLBg6y5DVZzZwH6w49Jcp7DhI0QgiSC6t0RbGEKbC
-   N8DSBDoDCpay1S5GRKA/fn2UVfvGAN3egm+8osiUl+pzYYj6EHN5I5vee
-   t36xHsSGAcRdrN33HvvoN7PP2HI830VALoaiK1yEBczp9csrdvYv0ZZBi
-   VeGTReDETRXq4cuFOY69+BtXCUUivzLXlK0dPExwzVlg7tQXdhQByovOT
-   BL2AE9V+glERp8Pg4Die5KkDoZq4vZxVdnt/gJYXWZfeNcMOj4SDJQMKq
-   A==;
-X-CSE-ConnectionGUID: +H8HZ1zQQcSzyhd3miW4oA==
-X-CSE-MsgGUID: zAtAT01QRD2DJi27paMdxw==
-X-IronPort-AV: E=McAfee;i="6600,9927,11066"; a="21635261"
-X-IronPort-AV: E=Sophos;i="6.08,145,1712646000"; 
-   d="scan'208";a="21635261"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2024 06:35:55 -0700
-X-CSE-ConnectionGUID: yCXHWt6WRFCIqdgW2e9rhw==
-X-CSE-MsgGUID: lTQVzzqnRD+ffIJYZDkx+w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,145,1712646000"; 
-   d="scan'208";a="28763414"
-Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
-  by orviesa010.jf.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 08 May 2024 06:35:54 -0700
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35; Wed, 8 May 2024 06:35:54 -0700
-Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
- orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35 via Frontend Transport; Wed, 8 May 2024 06:35:54 -0700
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (104.47.59.169)
- by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 938FF182CC;
+	Wed,  8 May 2024 13:36:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.255
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1715175401; cv=none; b=EMFkc94F9o5a8YdhrS3EXYhqSKWIQtckcC7aq79MszXd5AD2L+WUgUx98Ld7JlobZP+D7SnLVztj/Htxn3x7wjiDXdHwYhZNylXHULLf+7zUqJJG/cTawOnNmVMk6i+lWCyRFwvoiH2/AMpq1Zrb36P51u0VrqhA7lLAGvxFXVE=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1715175401; c=relaxed/simple;
+	bh=cUhMhwCGkwKQuoCVgliZGgyA6q+XvXbjp6SmiV+ZHZo=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=dXUYSz9fEoHeq6OsISxbbptXJxhs0DcKHuj5YxB7O1xEGdha8ks6PUUoseEdd9Cmo6ekSmaYHJIZ0LHGHPQP4EzKTnVcdu4keb6u2IwvqpWPy66mbpGeXrQ53Avj0+NhWkXGy41INEPoi9hyx/SdyPIZQL/5Csv6ParO3quIVOA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.255
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.162.254])
+	by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4VZGLM3sXnz1RCcJ;
+	Wed,  8 May 2024 21:33:15 +0800 (CST)
+Received: from dggpemm500005.china.huawei.com (unknown [7.185.36.74])
+	by mail.maildlp.com (Postfix) with ESMTPS id 787D41800B8;
+	Wed,  8 May 2024 21:36:35 +0800 (CST)
+Received: from localhost.localdomain (10.69.192.56) by
+ dggpemm500005.china.huawei.com (7.185.36.74) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.35; Wed, 8 May 2024 06:35:53 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=XM9nqkc35CGVcR0aikji2+viBf/GareMGkcvHpf/9tXxj9Y/e86z6gb2yyXrSQgCXzBB5AYMZ3qBPO5OylegnLiDYWlZqvrExsRQIXr0nmo5UIp+5GlZuxCReORuJ44IGk00z9QMUxgABQI7UtW8oHFWCYYVXYV2rPGW2U6EsfUhBNVsXqWuvVN0hXK5/5yxTaJ1C108ZacafI3iRfw0sH5k/FNeKrqhCEm3QWBa0IvIo3IEt4fIiQmqN2hHvuuScr5Si0uJm0tfrtLVLsv8B4jx1RQnpyq8ITuycPYR6g4guIxBsyRkd7g82XhWQdkTEHtxtHSgozyVYz9CCLROrg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=UqWsqt1FVKG9j02i+BMRoZYlwqQlTGZ1rKQqeWTBwo4=;
- b=CLa8dCSsYTo4YXPt79Ld/LGuTIa6SO8ZHJM7VA2OC1PlHkDTdiF4w54qH902XKaKVSaSXs41B1d6uA7yutc7wbV40vumx9YjPsnPlfRN69d6oSp0E217rLpXZtXA97rOj4OgIhcgfNYVYM+nRz3OuD+l2BQQbXVScLG7jBJqHyfXcb/1xZWkVc0p5Jtj/9YCH3tnzjWaXCMUEWSggvAJYlzjVy/7w+RlkB2QOdx7DG3ivhRtxzh8e0vaB6T7rJ9W4PvgkMDv8sgqJJM5chGLMvYQkWgfsUm7MK9Dp80k5kkjR4WowDTi1UTc5l0DcZd1yVV4nHP4Yav136J0g4/GQg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from DS0PR11MB8718.namprd11.prod.outlook.com (2603:10b6:8:1b9::20)
- by SA2PR11MB4874.namprd11.prod.outlook.com (2603:10b6:806:f9::23) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7544.45; Wed, 8 May
- 2024 13:35:52 +0000
-Received: from DS0PR11MB8718.namprd11.prod.outlook.com
- ([fe80::4b3b:9dbe:f68c:d808]) by DS0PR11MB8718.namprd11.prod.outlook.com
- ([fe80::4b3b:9dbe:f68c:d808%4]) with mapi id 15.20.7544.041; Wed, 8 May 2024
- 13:35:52 +0000
-Message-ID: <6ac025de-9264-4510-ba7f-f9a56c564a80@intel.com>
-Date: Wed, 8 May 2024 15:35:26 +0200
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v1 1/1] net: intel: Use *-y instead of *-objs in
- Makefile
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-CC: Jacob Keller <jacob.e.keller@intel.com>,
-	<intel-wired-lan@lists.osuosl.org>, <netdev@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>, Jesse Brandeburg
-	<jesse.brandeburg@intel.com>, Tony Nguyen <anthony.l.nguyen@intel.com>,
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, "Richard
- Cochran" <richardcochran@gmail.com>, Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>, Jesper Dangaard Brouer
-	<hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>
-References: <20240508132315.1121086-1-andriy.shevchenko@linux.intel.com>
-From: Alexander Lobakin <aleksander.lobakin@intel.com>
-Content-Language: en-US
-In-Reply-To: <20240508132315.1121086-1-andriy.shevchenko@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: WA0P291CA0007.POLP291.PROD.OUTLOOK.COM
- (2603:10a6:1d0:1::11) To DS0PR11MB8718.namprd11.prod.outlook.com
- (2603:10b6:8:1b9::20)
+ 15.1.2507.35; Wed, 8 May 2024 21:36:35 +0800
+From: Yunsheng Lin <linyunsheng@huawei.com>
+To: <davem@davemloft.net>, <kuba@kernel.org>, <pabeni@redhat.com>
+CC: <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>, Yunsheng Lin
+	<linyunsheng@huawei.com>, Alexander Duyck <alexander.duyck@gmail.com>,
+	Matthias Brugger <matthias.bgg@gmail.com>, AngeloGioacchino Del Regno
+	<angelogioacchino.delregno@collabora.com>, Alexei Starovoitov
+	<ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Jesper Dangaard
+ Brouer <hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-mediatek@lists.infradead.org>,
+	<bpf@vger.kernel.org>
+Subject: [PATCH net-next v3 00/13] First try to replace page_frag with page_frag_cache
+Date: Wed, 8 May 2024 21:33:55 +0800
+Message-ID: <20240508133408.54708-1-linyunsheng@huawei.com>
+X-Mailer: git-send-email 2.33.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS0PR11MB8718:EE_|SA2PR11MB4874:EE_
-X-MS-Office365-Filtering-Correlation-Id: 9cb82ca4-316c-4f8d-5efd-08dc6f63c782
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230031|376005|366007|7416005|1800799015;
-X-Microsoft-Antispam-Message-Info: =?utf-8?B?UjA3em5tdDNHNWRyTlZ2ekNGK09PQkZybmFoeXU1N0lSWkhMekROQzVOcUpo?=
- =?utf-8?B?ZXZkNmpsTDVIUFZML3kwS2o3ZERFRzNKdHFGdk9jaFhQbFgzaEtUNGorTGkv?=
- =?utf-8?B?a0cxbFZPaU1zTVF5Qm5oWjdYMC84VXJxZHF0K2ZkVHhjTU5idk5kNWl6OWJC?=
- =?utf-8?B?TGtGMmFrcmYzZEJ4dW9xZGpINWxReWJmaEVjTmM2cThvN01XNWFXNVR2d2JI?=
- =?utf-8?B?MUNtWUUwSlo2VEV2RkhWMVBWUFZyaThFbFcwdCtDN1EyTllYd1VkREM3aHda?=
- =?utf-8?B?QkxrNTRhWklna1RpY2p4SCtyaWgwQ3YwOVBZa1EyZUhkdUtGZDFwUkx2V203?=
- =?utf-8?B?eXN1ckJhL1IvVU92b2I0UmRaVXZqTTNVQUVadWNBWDd3WEFMNkpNZnNGbUxz?=
- =?utf-8?B?VS9hUkdpL1JXYnBXSE9kbjV1Lzl5OFZjYXUxYmFxLzRYdUNCazFYYk5QSWhF?=
- =?utf-8?B?V25DalZ4cFdIbXFQRURLTFpoYnJPUVVSQjdGRVhsczZkSURxWnZYZGdZeHpk?=
- =?utf-8?B?eFJaUVpYWXM4aFBhYkNYN3J6aFFZTjJldlBzT3FlajUxS0NIUkkxR3hRakY2?=
- =?utf-8?B?VUE1YzZkQlVQZjJSYkJ2c2hZUlk5emV5K0FhUXozSXB2ZlJWSlhxVGJwWHYr?=
- =?utf-8?B?c0hpcUJUYkhoWVNRcWJaWmZKUWpwYktjZlVKOEZMc3IvZThxQ0ZycWRVRWNO?=
- =?utf-8?B?WU9yVmVCb1dlbDdRaGIrTEhsNko3c1NnQVgzeVJsR2s2NGJaWXUvNFlDaDBD?=
- =?utf-8?B?NTYycWJGeEV4Wkx6WENGdFFybkw1bjNaT2lMcUJheVhVUGNyVi9PQ3BMYmQy?=
- =?utf-8?B?RlJQbm9Yd2p1REx6WmxPNnFzckhzRGsxZ004bmY3OFRmNStPcGxrZFZ2bjFn?=
- =?utf-8?B?S0xTSC9BY00vblZjd1BYcjNkQThQSWFCZ2ZEL0Q3Ryswc1NXVWxsc3NJRlJ1?=
- =?utf-8?B?Z0dKV2ViY0VFVUNwYlVLVzBtdkx5bk9jRms1bXFUaVFNRDMyVkE4bnVQZFM4?=
- =?utf-8?B?QW8xTUJETlJhTllNeExEYTBTV2tZWmFOT3RLTGVJVHgwcnMrb0E3TVdyckU4?=
- =?utf-8?B?WjFGd05HcVVWMEQrTDlKSHdmL2JCMlBmZU5CdUlRZTIzVWVEOVRrOTVIUElp?=
- =?utf-8?B?TVl0eE1zOHcrSjdtS0pOeGMrRlhQOFFYNWNOeWxFelI0WVB1SWNRekFzOEhk?=
- =?utf-8?B?eUpNMXZVaHFIY3p3ZWM1Y2VhbUJtUUg1Wi9wL2MxS3Z6dCs3Q3I1b1l3SnBZ?=
- =?utf-8?B?ZXhoMnk3WVI4cm5STzZIQ0twT3MzR1ZieG9JdG41SlBFQktpTTRsanA3aStq?=
- =?utf-8?B?MCtKNExzbXZaU0J4ajFTVmlVcTJReVNsUFlqNGgzZ20yRnVHMGhaSGhBRCtI?=
- =?utf-8?B?M29TU0I2Y2NndGtHWVhvc0tUKzcxRWNXaHpUL3hKMERWR0phK2MyOFVuMCtD?=
- =?utf-8?B?aU1aZGIraTcvUE16V2xiM01pVDF1UnVzeHNXci9NcW4vMm8zYnhXWUxReExX?=
- =?utf-8?B?VTBFUzg5eGw1MzhBOVVNajBaSTJMV09IdFRZcHZhSERJWUk5OCtPM3h0aXk0?=
- =?utf-8?B?TmRhNlZJYWpZd2ZFVkhTSDhQWjlxUTlIcUdPVnBPZkVXWnR2SWJTZnN0Mlpy?=
- =?utf-8?B?VDA3SXdWV1AxZGFuaDZyelNoSys1UE90Y1l3cUpJYmJDMVp1aEYzbVlPK1pa?=
- =?utf-8?B?WkJROTJFRnJCSlRucGRFMkhqVmdzTFVZS3EwNEw2WU9XRHB6eTdmT1pBPT0=?=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR11MB8718.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(376005)(366007)(7416005)(1800799015);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?V2pvcnNqRDBUZUMzNjhvTU13OVRKQngzd1hiYW5iWjZpeGhVNnFUUGtHc1N2?=
- =?utf-8?B?YU1XMk1wZThPVmorS1BpYWlJM1ZUbUxVdGlYMUQzdWJxcG0rTHIrRWdnU2E5?=
- =?utf-8?B?T21SdW5PRGYxQkhQNFJ0aUZORW13b0U3N0dkSDhVdEJNTmh6RGpISm1US3NU?=
- =?utf-8?B?T2xDWHg5Q0d3T0tlRlFZVUZheXY1MzNSMVp4VHhBUWxzb08rZDlUdXlJR3g2?=
- =?utf-8?B?SHNhQ0N2RUJsZDUxV3prRWhSZEsyUWdJaTJ6OUkxdVBKcjFHMk02TFN1L1gx?=
- =?utf-8?B?Ty83RXFoTTdwcTgya0lUNHhJT29vMVBaOG82TFlQVEdrd0Y3UDRPWTZueEgr?=
- =?utf-8?B?UEJVcSt1akVxQVc3TmkxcDZOUXEyWGtkcWN4QTI0ZWhHSXpTYWc3YnQwQm1J?=
- =?utf-8?B?R01Od25jajYreHhsYzczSk9WR2E5QlZuci8zWHgyVUkrNW5PMmU4bzdzczBK?=
- =?utf-8?B?WjM4S2ptT0NqWU80eXg2ZmkzVENNZEVUOVR2YWhaSGtqOWVXS0p0TTFrRDA1?=
- =?utf-8?B?M3JJcXZPUHA0NHF5UGs1WmpRNk1pN0R3T3lVajRhbTFpODQ3KysrVU85eHpR?=
- =?utf-8?B?MWQ5UVJFMkhkbVAyMXllVzl3di80aDg0bUtGeFRMU0VyeWpLNlRqS05rOHJo?=
- =?utf-8?B?cnBJTlNMeHl0MHNYNmJleXlLajhxb3dESzUzcnl2c3I3RThoektrRUVQcGxm?=
- =?utf-8?B?eS9uZmpiS0tSZGdvanpKa0NuT3hNWUdHb0dDekxMdkNSakRlemMvdGUvZUxB?=
- =?utf-8?B?dTlTVm05M3FnYkdORGttbDUxdDdjTjFPR2NaYTVScHhoS3F3M2REeFRJaTFi?=
- =?utf-8?B?a0NJMlZuOHZ5NDZhMHNWcElKdnh6SFhEN0FQc3B3VzNZcFpFVVVscDRFWG5h?=
- =?utf-8?B?TjBvbFJOejFzWmNBRkVkMS8rU0Y4REpwUUZtSDJHYkx5bzZGc2RtSWlVeDA1?=
- =?utf-8?B?MWdFTVlJUHZydy9qSE1McklTTGltdVdQZDk3SW5pSlVJakp3L0FIc1o5OGZS?=
- =?utf-8?B?Tmp1RDRrcWtKdDFDaUJLcFd2Qkd6SEVKbnEvb1R5K3crU2dCaitmSHhXOWVS?=
- =?utf-8?B?N3kxNnlGSkRtbndrd3VTcHFlaVB2U3BKbHNzcGxORk5yenR1YlpqTlBnMENt?=
- =?utf-8?B?TXZOSzlQcmR4anRCdlBKSWc5UVNVRUxTeXBPeWowRDBUZ3lCc2JpZHRCbHpt?=
- =?utf-8?B?Z2cvYXNZeEoyTDQ1N2dJY0NHaVQ1WFZzV0FzOHVUeUFJWk4yNzIwTFhHSDFk?=
- =?utf-8?B?TENZMHI1VEp2T3ZsWmxMWHljdzFYQ0l3ajlRYWV1Zy9xNUdyS1lub0FnVnRE?=
- =?utf-8?B?UVZjMU40eEZ2Rjg5WldReG5aNk9sR1hPam5NTW5LOUxjZStRYUo1cXNxT3Br?=
- =?utf-8?B?TStraGF6RWw4aXZ0dUtPVEdJbXI0QnhKQ0pzNG9OWmVzd0p3am4zZXRxejVX?=
- =?utf-8?B?SlRabmp6bzNkSU5McTNReVFQZ0tPYzJRVXliaHAvM1NJR0VJNUhaYUJZTjNs?=
- =?utf-8?B?bTBxNVJZUmdQT1A2K0tFOXdpWHd5TmczeFNKSm9qaXg3dnE4TmdnblFPbzlm?=
- =?utf-8?B?cG5HbXdCSkkwV25NMmlMa2sraWFReHFHS0xsMWRPMzB6ZWdxeUQ2M0NKSW9l?=
- =?utf-8?B?ZG1ic25BZDk5Z0VzNzIxeGRsWDhQREtUdzhTNmlxZG00YWVrMHJOdkRpQzRk?=
- =?utf-8?B?QzJ5dnp5dUZyZVJERlY5NDFkaGtlS3VCMmR2cXp3Rm9Mb0hEZktPMXZnMjVp?=
- =?utf-8?B?VlZGS0ZBd29RQjVLWDJka1ZrdXRVeFlYYkducGFnWmJqR04weWlveXg0Rm5E?=
- =?utf-8?B?c3diMnpIOVFmS0F3dDREcHVESEJZc2FVeUN4bkFhZ3Z6NVpqSldMNXpWMEhv?=
- =?utf-8?B?am5ERndCTmdXWmwvR0FaVUtOZ3phWFlGMXkwQmNaU0cyMkNudzRxemZiV095?=
- =?utf-8?B?WCs2c2hMMkxMUzJsQUJrSktyN1Q5Y2RMRTRxZXk3VmJ3ZkhKMHNOZ1U3U3VX?=
- =?utf-8?B?WThxWnQ1Y3J2ZzRPemFZcDMrVlI0TjFoNEFaT2lKcnFXTjBkUFMyNmZpbEkx?=
- =?utf-8?B?Q1JUNlE2S2lOZHZ5RlZyYWRFRzlWeVhHMUFCZ1ZYVFdnQTR0YStadGxWT21q?=
- =?utf-8?B?YUhteS9ZUlZ3N1ZDWDZrMUF1S3ZrYTF5WkNrMVF3UEJ3UGRwaUtlbEJBOWtW?=
- =?utf-8?B?OGc9PQ==?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9cb82ca4-316c-4f8d-5efd-08dc6f63c782
-X-MS-Exchange-CrossTenant-AuthSource: DS0PR11MB8718.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 May 2024 13:35:52.1930
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 7l6ps/GV4pDCDm9SbPVee6gQJiPrF8ogL3h0UH03TQwws5vcwiIc6y53XSCMt38oERgZfK0gCzHPe8rNfKoIH+T9GzjIBiwzNe7wzC6nn80=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA2PR11MB4874
-X-OriginatorOrg: intel.com
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggpemm500005.china.huawei.com (7.185.36.74)
 
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Date: Wed, 8 May 2024 16:23:15 +0300
+After [1], there are still two implementations for page frag:
 
-> *-objs suffix is reserved rather for (user-space) host programs while
-> usually *-y suffix is used for kernel drivers (although *-objs works
-> for that purpose for now).
-> 
-> Let's correct the old usages of *-objs in Makefiles.
+1. mm/page_alloc.c: net stack seems to be using it in the
+   rx part with 'struct page_frag_cache' and the main API
+   being page_frag_alloc_align().
+2. net/core/sock.c: net stack seems to be using it in the
+   tx part with 'struct page_frag' and the main API being
+   skb_page_frag_refill().
 
-Wait, I was sure I've seen somewhere that -objs is more new and
-preferred over -y. See recent dimlib comment where Florian changed -y to
--objs for example.
-Any documentation reference that -objs is for userspace and we should
-clearly use -y?
+This patchset tries to unfiy the page frag implementation
+by replacing page_frag with page_frag_cache for sk_page_frag()
+first. net_high_order_alloc_disable_key for the implementation
+in net/core/sock.c doesn't seems matter that much now have
+have pcp support for high-order pages in commit 44042b449872
+("mm/page_alloc: allow high-order pages to be stored on the
+per-cpu lists").
 
-Thanks,
-Olek
+As the related change is mostly related to networking, so
+targeting the net-next. And will try to replace the rest
+of page_frag in the follow patchset.
+
+After this patchset:
+1. Unify the page frag implementation by taking the best out of
+   two the existing implementations: we are able to save some space
+   for the 'page_frag_cache' API user, and avoid 'get_page()' for
+   the old 'page_frag' API user.
+2. Future bugfix and performance can be done in one place, hence
+   improving maintainability of page_frag's implementation.
+
+Kernel Image changing:
+    Linux Kernel   total |      text      data        bss
+    ------------------------------------------------------
+    after     44893035 |  27084547   17042328     766160
+    before    44896899 |  27088459   17042280     766160
+    delta        -3864 |     -3912        +48         +0
+
+Performance validation:
+1. Using micro-benchmark ko added in patch 1 to test aligned and
+   non-aligned API performance impact for the existing users, there
+   is no notiable performance degradation. Instead we have some minor
+   performance boot for both aligned and non-aligned API after this
+   patchset as below.
+
+2. Use the below netcat test case, we also have some minor
+   performance boot for repalcing 'page_frag' with 'page_frag_cache'
+   after this patchset.
+   server: nc -l -k 1234 > /dev/null
+   client: perf stat -r 30 -- head -c 51200000000 /dev/zero | nc -N 127.0.0.1 1234
+
+
+In order to avoid performance noise as much as possible, the testing
+is done in system without any other laod and have enough iterations to
+prove the data is stable enogh, complete log for testing is below:
+
+*After* this patchset:
+Performance counter stats for 'insmod ./page_frag_test.ko' (200 runs):
+
+         17.959047      task-clock (msec)         #    0.001 CPUs utilized            ( +-  0.16% )
+                 7      context-switches          #    0.371 K/sec                    ( +-  0.52% )
+                 1      cpu-migrations            #    0.037 K/sec                    ( +-  5.25% )
+                84      page-faults               #    0.005 M/sec                    ( +-  0.10% )
+          46630340      cycles                    #    2.596 GHz                      ( +-  0.16% )
+          60991298      instructions              #    1.31  insn per cycle           ( +-  0.03% )
+          14778609      branches                  #  822.906 M/sec                    ( +-  0.03% )
+             21461      branch-misses             #    0.15% of all branches          ( +-  0.35% )
+
+      25.071309168 seconds time elapsed                                          ( +-  0.42% )
+
+Performance counter stats for 'insmod ./page_frag_test.ko test_align=1' (200 runs):
+
+         17.518324      task-clock (msec)         #    0.001 CPUs utilized            ( +-  0.22% )
+                 7      context-switches          #    0.397 K/sec                    ( +-  0.22% )
+                 0      cpu-migrations            #    0.014 K/sec                    ( +- 12.78% )
+                84      page-faults               #    0.005 M/sec                    ( +-  0.10% )
+          45494458      cycles                    #    2.597 GHz                      ( +-  0.22% )
+          61059177      instructions              #    1.34  insn per cycle           ( +-  0.02% )
+          14792330      branches                  #  844.392 M/sec                    ( +-  0.02% )
+             21132      branch-misses             #    0.14% of all branches          ( +-  0.17% )
+
+      26.156288028 seconds time elapsed                                          ( +-  0.41% )
+
+ perf stat -r 30 -- head -c 51200000000 /dev/zero | nc -N 127.0.0.1 1234
+ Performance counter stats for 'head -c 51200000000 /dev/zero' (30 runs):
+
+         107793.53 msec task-clock                       #    0.881 CPUs utilized               ( +-  0.36% )
+            380421      context-switches                 #    3.529 K/sec                       ( +-  0.32% )
+               374      cpu-migrations                   #    3.470 /sec                        ( +-  1.31% )
+                74      page-faults                      #    0.686 /sec                        ( +-  0.28% )
+       92758718093      cycles                           #    0.861 GHz                         ( +-  0.48% )  (69.47%)
+        7035559641      stalled-cycles-frontend          #    7.58% frontend cycles idle        ( +-  1.19% )  (69.65%)
+       33668082825      stalled-cycles-backend           #   36.30% backend cycles idle         ( +-  0.84% )  (70.18%)
+       52424770535      instructions                     #    0.57  insn per cycle
+                                                  #    0.64  stalled cycles per insn     ( +-  0.26% )  (61.93%)
+       13240874953      branches                         #  122.836 M/sec                       ( +-  0.40% )  (60.36%)
+         208178019      branch-misses                    #    1.57% of all branches             ( +-  0.65% )  (68.42%)
+
+           122.294 +- 0.402 seconds time elapsed  ( +-  0.33% )
+
+
+*Before* this patchset:
+ Performance counter stats for 'insmod ./page_frag_test_frag_page_v3_org.ko' (200 runs):
+
+         17.878013      task-clock (msec)         #    0.001 CPUs utilized            ( +-  0.02% )
+                 7      context-switches          #    0.384 K/sec                    ( +-  0.37% )
+                 0      cpu-migrations            #    0.002 K/sec                    ( +- 34.73% )
+                83      page-faults               #    0.005 M/sec                    ( +-  0.11% )
+          46428731      cycles                    #    2.597 GHz                      ( +-  0.02% )
+          61080812      instructions              #    1.32  insn per cycle           ( +-  0.01% )
+          14802110      branches                  #  827.951 M/sec                    ( +-  0.01% )
+             33011      branch-misses             #    0.22% of all branches          ( +-  0.10% )
+
+      26.923903379 seconds time elapsed                                          ( +-  0.32% )
+
+
+ Performance counter stats for 'insmod ./page_frag_test_frag_page_v3_org.ko test_align=1' (200 runs):
+
+         17.579978      task-clock (msec)         #    0.001 CPUs utilized            ( +-  0.05% )
+                 7      context-switches          #    0.393 K/sec                    ( +-  0.31% )
+                 0      cpu-migrations            #    0.014 K/sec                    ( +- 12.96% )
+                83      page-faults               #    0.005 M/sec                    ( +-  0.10% )
+          45649145      cycles                    #    2.597 GHz                      ( +-  0.05% )
+          60999424      instructions              #    1.34  insn per cycle           ( +-  0.03% )
+          14778647      branches                  #  840.652 M/sec                    ( +-  0.03% )
+             33148      branch-misses             #    0.22% of all branches          ( +-  0.11% )
+
+      27.454413570 seconds time elapsed                                          ( +-  0.48% )
+
+ perf stat -r 30 -- head -c 51200000000 /dev/zero | nc -N 127.0.0.1 1234
+ Performance counter stats for 'head -c 51200000000 /dev/zero' (30 runs):
+
+         110198.93 msec task-clock                       #    0.884 CPUs utilized               ( +-  0.83% )
+            387680      context-switches                 #    3.518 K/sec                       ( +-  0.85% )
+               366      cpu-migrations                   #    3.321 /sec                        ( +- 11.38% )
+                74      page-faults                      #    0.672 /sec                        ( +-  0.27% )
+       92978008685      cycles                           #    0.844 GHz                         ( +-  0.49% )  (64.93%)
+        7339938950      stalled-cycles-frontend          #    7.89% frontend cycles idle        ( +-  1.48% )  (67.15%)
+       34783792329      stalled-cycles-backend           #   37.41% backend cycles idle         ( +-  1.52% )  (68.96%)
+       51704527141      instructions                     #    0.56  insn per cycle
+                                                  #    0.67  stalled cycles per insn     ( +-  0.37% )  (68.28%)
+       12865503633      branches                         #  116.748 M/sec                       ( +-  0.88% )  (66.11%)
+         212414695      branch-misses                    #    1.65% of all branches             ( +-  0.45% )  (64.57%)
+
+           124.664 +- 0.990 seconds time elapsed  ( +-  0.79% )
+
+
+Note, ipv4-udp, ipv6-tcp and ipv6-udp is also tested with the below script:
+nc -u -l -k 1234 > /dev/null
+perf stat -r 4 -- head -c 51200000000 /dev/zero | nc -N -u 127.0.0.1 1234
+
+nc -l6 -k 1234 > /dev/null
+perf stat -r 4 -- head -c 51200000000 /dev/zero | nc -N ::1 1234
+
+nc -l6 -k -u 1234 > /dev/null
+perf stat -r 4 -- head -c 51200000000 /dev/zero | nc -u -N ::1 1234
+
+CC: Alexander Duyck <alexander.duyck@gmail.com>
+
+Change log:
+v3:
+   1. Use new layout for 'struct page_frag_cache' as the discussion
+      with Alexander and other sugeestions from Alexander.
+   2. Add probe API to address Mat' comment about mptcp use case.
+   3. Some doc updating according to Bagas' suggestion.
+
+v2:
+   1. reorder test module to patch 1.
+   2. split doc and maintainer updating to two patches.
+   3. refactor the page_frag before moving.
+   4. fix a type and 'static' warning in test module.
+   5. add a patch for xtensa arch to enable using get_order() in
+      BUILD_BUG_ON().
+   6. Add test case and performance data for the socket code.
+
+
+Yunsheng Lin (13):
+  mm: page_frag: add a test module for page_frag
+  xtensa: remove the get_order() implementation
+  mm: page_frag: use free_unref_page() to free page fragment
+  mm: move the page fragment allocator from page_alloc into its own file
+  mm: page_frag: use initial zero offset for page_frag_alloc_align()
+  mm: page_frag: add '_va' suffix to page_frag API
+  mm: page_frag: avoid caller accessing 'page_frag_cache' directly
+  mm: page_frag: reuse existing space for 'size' and 'pfmemalloc'
+  net: introduce the skb_copy_to_va_nocache() helper
+  mm: page_frag: introduce prepare/probe/commit API
+  net: replace page_frag with page_frag_cache
+  mm: page_frag: update documentation for page_frag
+  mm: page_frag: add a entry in MAINTAINERS for page_frag
+
+ Documentation/mm/page_frags.rst               | 156 ++++++-
+ MAINTAINERS                                   |  11 +
+ arch/xtensa/include/asm/page.h                |  18 -
+ .../chelsio/inline_crypto/chtls/chtls.h       |   3 -
+ .../chelsio/inline_crypto/chtls/chtls_io.c    | 100 ++---
+ .../chelsio/inline_crypto/chtls/chtls_main.c  |   3 -
+ drivers/net/ethernet/google/gve/gve_rx.c      |   4 +-
+ drivers/net/ethernet/intel/ice/ice_txrx.c     |   2 +-
+ drivers/net/ethernet/intel/ice/ice_txrx.h     |   2 +-
+ drivers/net/ethernet/intel/ice/ice_txrx_lib.c |   2 +-
+ .../net/ethernet/intel/ixgbevf/ixgbevf_main.c |   4 +-
+ .../marvell/octeontx2/nic/otx2_common.c       |   2 +-
+ drivers/net/ethernet/mediatek/mtk_wed_wo.c    |   4 +-
+ drivers/net/tun.c                             |  28 +-
+ drivers/nvme/host/tcp.c                       |   8 +-
+ drivers/nvme/target/tcp.c                     |  22 +-
+ drivers/vhost/net.c                           |   8 +-
+ include/linux/gfp.h                           |  22 -
+ include/linux/mm_types.h                      |  18 -
+ include/linux/page_frag_cache.h               | 278 +++++++++++++
+ include/linux/sched.h                         |   4 +-
+ include/linux/skbuff.h                        |   3 +-
+ include/net/sock.h                            |  29 +-
+ kernel/bpf/cpumap.c                           |   2 +-
+ kernel/exit.c                                 |   3 +-
+ kernel/fork.c                                 |   3 +-
+ mm/Kconfig.debug                              |   8 +
+ mm/Makefile                                   |   2 +
+ mm/page_alloc.c                               | 136 -------
+ mm/page_frag_cache.c                          | 337 ++++++++++++++++
+ mm/page_frag_test.c                           | 379 ++++++++++++++++++
+ net/core/skbuff.c                             |  56 +--
+ net/core/skmsg.c                              |  22 +-
+ net/core/sock.c                               |  46 ++-
+ net/core/xdp.c                                |   2 +-
+ net/ipv4/ip_output.c                          |  33 +-
+ net/ipv4/tcp.c                                |  35 +-
+ net/ipv4/tcp_output.c                         |  28 +-
+ net/ipv6/ip6_output.c                         |  33 +-
+ net/kcm/kcmsock.c                             |  30 +-
+ net/mptcp/protocol.c                          |  70 ++--
+ net/rxrpc/conn_object.c                       |   4 +-
+ net/rxrpc/local_object.c                      |   4 +-
+ net/rxrpc/txbuf.c                             |  15 +-
+ net/sched/em_meta.c                           |   2 +-
+ net/sunrpc/svcsock.c                          |  12 +-
+ net/tls/tls_device.c                          | 139 ++++---
+ 47 files changed, 1576 insertions(+), 556 deletions(-)
+ create mode 100644 include/linux/page_frag_cache.h
+ create mode 100644 mm/page_frag_cache.c
+ create mode 100644 mm/page_frag_test.c
+
+-- 
+2.33.0
+
