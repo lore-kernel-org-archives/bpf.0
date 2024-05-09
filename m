@@ -1,40 +1,40 @@
 Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0031B15278D
-	for <bpf@vger.kernel.org>; Thu,  9 May 2024 13:40:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5304915278D
+	for <bpf@vger.kernel.org>; Thu,  9 May 2024 13:40:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.153.30
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715262057; cv=none; b=NiU1+C8cp8K/OwEFZWxiCg4Typs2HviCSPPb69dOcB+oMzwxPpHcjIB3XIEQsqEqXQWsoQcbn6DjVvQ9Z/eZLXwNCiF0VvT60pG+7GkF8EqsI89ICmsNmIAhtGL5oCWldAqJXuNjvKUOaXhV/kgMN4Uxq82urgUC47CXNE1wQR8=
+	t=1715262060; cv=none; b=WRKnmd8ru2DldNZNuGnkZfm9UqIItsF/dfV0i+VASQJOVVl+u6XZg3jMYefXqgygQllW+XdaU0iLnLHOa9XcrImtrfDaD2v4wPAfhd/W63gGgou2ZD0x6qJZjsPmhbZOR1k5ToVBLyNZNMbcqeVdp8/QAjYSRPEPtOqHtSRFsGM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715262057; c=relaxed/simple;
-	bh=xkUA+ZdoaRrxiJJpJG9Gxwc0ZruKOevYi79DYLrp5Ec=;
+	s=arc-20240116; t=1715262060; c=relaxed/simple;
+	bh=66Oh1Qkhcs+js50B13/qSi+ZF1VuESgstARP/jc7WLs=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=sv2yrYbVQhfdHlJnubb+szbaPBrHLAFVRqSxkQCrbC4XpHpU5A1gU7YTq7Ju0IVGs1Lu3cI9PQ9vEI8Wagb+lyQCumNa6Avt9W+Cd3LJs4+AzG/bdUgE6ekFUkNm8xc6QhDiFcgSeKMb4MZdq91BCsrqn4obyGZJkHK2udpxTiY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com; spf=pass smtp.mailfrom=meta.com; dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b=FSkIeMM6; arc=none smtp.client-ip=67.231.153.30
+	 MIME-Version:Content-Type; b=KniAECfjIqxDa8PO6o1l6UltzXSbkr0H0QtsU0yCzWhRDXyNPhroTxOrkFTk7kdWu9c8UpBrtrKMqp3V2XzFO2QRQ4DsNB5uy0+sw5qKkRwtQvp70uq2cpkMaV7iEn8W3O0sQVLkX99VGc/uepnQOBIbvTbkALPCJpJ2+fvH7Yc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com; spf=pass smtp.mailfrom=meta.com; dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b=d6iSfsaT; arc=none smtp.client-ip=67.231.153.30
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b="FSkIeMM6"
+	dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b="d6iSfsaT"
 Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
-	by m0001303.ppops.net (8.17.1.19/8.17.1.19) with ESMTP id 449DOpCB001589;
+	by m0001303.ppops.net (8.17.1.19/8.17.1.19) with ESMTP id 449DOpCA001589;
 	Thu, 9 May 2024 06:40:45 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
- content-type : content-transfer-encoding; s=s2048-2021-q4;
- bh=RAtc41c5KP/0D5YtkuiplfaJKKlNf+QL4ZD3+asfYjU=;
- b=FSkIeMM6V7JYLIZ9YkwwR0S+E0wzLvIXOOLrpCQLTHO2qQIVL7knrtalllUlbAxQY/ED
- 2VYTZtLxM9CpBsx1rOoj5K6IenGy5bnqPm1ZYhtvTjqft6dq2TS+48ceAPXMN43Wy96U
- OvevQDSlJyWDKPs2j0C+btyDPF6AKv8/kWezEZYEWHmIiRn6O3JRreBu1QZR3nd/uoJ2
- 6igLwHP4WO9eHWvr1Zc2eqj9lecLdGQnkOtGVdELUtF5SzE7rwsytBRdKdVQOtUbwxjf
- 2fGSLJMXierhZVhWPKXT48Eg7Wvz5PGc9pOqG6R49cAaQpLANX4yFaJ5JNj7YDN8Yeig uw== 
+ content-transfer-encoding : content-type; s=s2048-2021-q4;
+ bh=qQiZf+I1XtZhlent6hRaa/2097qMmkLH+mwxyspjAuM=;
+ b=d6iSfsaTOKC8sBXyh90fFDsaBpW6pwf05f+9+TD+eatYHsHSZ53p/fdzC8nb+QdAhCCr
+ MQ0qCk+NjHAgwFvkO8LQgaomiBD+KHMCr3AqCNaFZQKuowkGXJFDvCTMnSM9kw23689b
+ Uh/6fxFtfzhJEIvKDajxRZs073oU4wcVjDQchdJu7u00mcF+wJvEh8wKgASebPCFJ91S
+ Q8W2nqKEdxOf41nB6V0kg/sHK/YgXYN0mLd5arVBQ0NqzWyaDgh9s//Z730h8YS2MTlw
+ kjWY6fGjnpXVG1Lk4Btz90eltiy8VsAkmFUJGA4oR4NkBSWILcWtLjVuANENira7vhpD dg== 
 Received: from maileast.thefacebook.com ([163.114.130.16])
-	by m0001303.ppops.net (PPS) with ESMTPS id 3y0e7umtpu-12
+	by m0001303.ppops.net (PPS) with ESMTPS id 3y0e7umtpu-11
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
 	Thu, 09 May 2024 06:40:45 -0700
 Received: from devvm4158.cln0.facebook.com (2620:10d:c0a8:1b::8e35) by
  mail.thefacebook.com (2620:10d:c0a8:83::8) with Microsoft SMTP Server id
- 15.1.2507.35; Thu, 9 May 2024 13:40:37 +0000
+ 15.1.2507.35; Thu, 9 May 2024 13:40:36 +0000
 From: Vadim Fedorenko <vadfed@meta.com>
 To: Vadim Fedorenko <vadim.fedorenko@linux.dev>,
         Martin KaFai Lau
@@ -45,9 +45,9 @@ To: Vadim Fedorenko <vadim.fedorenko@linux.dev>,
         Mykola Lysenko <mykolal@fb.com>, Jakub
  Kicinski <kuba@kernel.org>
 CC: Vadim Fedorenko <vadfed@meta.com>, <bpf@vger.kernel.org>
-Subject: [PATCH bpf-next 4/4] selftests: bpf: crypto: adjust bench to use nullable IV
-Date: Thu, 9 May 2024 06:40:23 -0700
-Message-ID: <20240509134023.1289303-5-vadfed@meta.com>
+Subject: [PATCH bpf-next 2/4] bpf: crypto: make state and IV dynptr nullable
+Date: Thu, 9 May 2024 06:40:21 -0700
+Message-ID: <20240509134023.1289303-3-vadfed@meta.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240509134023.1289303-1-vadfed@meta.com>
 References: <20240509134023.1289303-1-vadfed@meta.com>
@@ -57,89 +57,61 @@ List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-GUID: m-uuxzaqkE8e6zCmNSDzSxiw9Wm1YnzP
-X-Proofpoint-ORIG-GUID: m-uuxzaqkE8e6zCmNSDzSxiw9Wm1YnzP
+Content-Type: text/plain
+X-Proofpoint-GUID: 1O6g5ou1edw3_NplFl5mfPQJyHv5eLRb
+X-Proofpoint-ORIG-GUID: 1O6g5ou1edw3_NplFl5mfPQJyHv5eLRb
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.650,FMLib:17.11.176.26
  definitions=2024-05-09_06,2024-05-09_01,2023-05-22_02
 
-The bench shows some improvements, around 4% faster on decrypt.
-
-Before:
-
-Benchmark 'crypto-decrypt' started.
-Iter   0 (325.719us): hits    5.105M/s (  5.105M/prod), drops 0.000M/s, total operations    5.105M/s
-Iter   1 (-17.295us): hits    5.224M/s (  5.224M/prod), drops 0.000M/s, total operations    5.224M/s
-Iter   2 (  5.504us): hits    4.630M/s (  4.630M/prod), drops 0.000M/s, total operations    4.630M/s
-Iter   3 (  9.239us): hits    5.148M/s (  5.148M/prod), drops 0.000M/s, total operations    5.148M/s
-Iter   4 ( 37.885us): hits    5.198M/s (  5.198M/prod), drops 0.000M/s, total operations    5.198M/s
-Iter   5 (-53.282us): hits    5.167M/s (  5.167M/prod), drops 0.000M/s, total operations    5.167M/s
-Iter   6 (-17.809us): hits    5.186M/s (  5.186M/prod), drops 0.000M/s, total operations    5.186M/s
-Summary: hits    5.092 ± 0.228M/s (  5.092M/prod), drops    0.000 ±0.000M/s, total operations    5.092 ± 0.228M/s
-
-After:
-
-Benchmark 'crypto-decrypt' started.
-Iter   0 (268.912us): hits    5.312M/s (  5.312M/prod), drops 0.000M/s, total operations    5.312M/s
-Iter   1 (124.869us): hits    5.354M/s (  5.354M/prod), drops 0.000M/s, total operations    5.354M/s
-Iter   2 (-36.801us): hits    5.334M/s (  5.334M/prod), drops 0.000M/s, total operations    5.334M/s
-Iter   3 (254.628us): hits    5.334M/s (  5.334M/prod), drops 0.000M/s, total operations    5.334M/s
-Iter   4 (-77.691us): hits    5.275M/s (  5.275M/prod), drops 0.000M/s, total operations    5.275M/s
-Iter   5 (-164.510us): hits    5.313M/s (  5.313M/prod), drops 0.000M/s, total operations    5.313M/s
-Iter   6 (-81.376us): hits    5.346M/s (  5.346M/prod), drops 0.000M/s, total operations    5.346M/s
-Summary: hits    5.326 ± 0.029M/s (  5.326M/prod), drops    0.000 ±0.000M/s, total operations    5.326 ± 0.029M/s
+Some ciphers do not require state and IV buffer, but with current
+implementation 0-sized dynptr is always needed. With adjustment to
+verifier we can provide NULL instead of 0-sized dynptr. Make crypto
+kfuncs ready for this.
 
 Signed-off-by: Vadim Fedorenko <vadfed@meta.com>
 ---
- tools/testing/selftests/bpf/progs/crypto_bench.c | 10 ++++------
- 1 file changed, 4 insertions(+), 6 deletions(-)
+ kernel/bpf/crypto.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/progs/crypto_bench.c b/tools/testing/selftests/bpf/progs/crypto_bench.c
-index e61fe0882293..4ac956b26240 100644
---- a/tools/testing/selftests/bpf/progs/crypto_bench.c
-+++ b/tools/testing/selftests/bpf/progs/crypto_bench.c
-@@ -57,7 +57,7 @@ int crypto_encrypt(struct __sk_buff *skb)
+diff --git a/kernel/bpf/crypto.c b/kernel/bpf/crypto.c
+index 2bee4af91e38..4f4446c34b3c 100644
+--- a/kernel/bpf/crypto.c
++++ b/kernel/bpf/crypto.c
+@@ -275,7 +275,7 @@ static int bpf_crypto_crypt(const struct bpf_crypto_ctx *ctx,
+ 	if (__bpf_dynptr_is_rdonly(dst))
+ 		return -EINVAL;
+ 
+-	siv_len = __bpf_dynptr_size(siv);
++	siv_len = siv ? __bpf_dynptr_size(siv) : 0;
+ 	src_len = __bpf_dynptr_size(src);
+ 	dst_len = __bpf_dynptr_size(dst);
+ 	if (!src_len || !dst_len)
+@@ -313,9 +313,9 @@ static int bpf_crypto_crypt(const struct bpf_crypto_ctx *ctx,
+ __bpf_kfunc int bpf_crypto_decrypt(struct bpf_crypto_ctx *ctx,
+ 				   const struct bpf_dynptr_kern *src,
+ 				   const struct bpf_dynptr_kern *dst,
+-				   const struct bpf_dynptr_kern *siv)
++				   const struct bpf_dynptr_kern *siv__nullable)
  {
- 	struct __crypto_ctx_value *v;
- 	struct bpf_crypto_ctx *ctx;
--	struct bpf_dynptr psrc, pdst, iv;
-+	struct bpf_dynptr psrc, pdst;
+-	return bpf_crypto_crypt(ctx, src, dst, siv, true);
++	return bpf_crypto_crypt(ctx, src, dst, siv__nullable, true);
+ }
  
- 	v = crypto_ctx_value_lookup();
- 	if (!v) {
-@@ -73,9 +73,8 @@ int crypto_encrypt(struct __sk_buff *skb)
- 
- 	bpf_dynptr_from_skb(skb, 0, &psrc);
- 	bpf_dynptr_from_mem(dst, len, 0, &pdst);
--	bpf_dynptr_from_mem(dst, 0, 0, &iv);
- 
--	status = bpf_crypto_encrypt(ctx, &psrc, &pdst, &iv);
-+	status = bpf_crypto_encrypt(ctx, &psrc, &pdst, NULL);
- 	__sync_add_and_fetch(&hits, 1);
- 
- 	return 0;
-@@ -84,7 +83,7 @@ int crypto_encrypt(struct __sk_buff *skb)
- SEC("tc")
- int crypto_decrypt(struct __sk_buff *skb)
+ /**
+@@ -330,9 +330,9 @@ __bpf_kfunc int bpf_crypto_decrypt(struct bpf_crypto_ctx *ctx,
+ __bpf_kfunc int bpf_crypto_encrypt(struct bpf_crypto_ctx *ctx,
+ 				   const struct bpf_dynptr_kern *src,
+ 				   const struct bpf_dynptr_kern *dst,
+-				   const struct bpf_dynptr_kern *siv)
++				   const struct bpf_dynptr_kern *siv__nullable)
  {
--	struct bpf_dynptr psrc, pdst, iv;
-+	struct bpf_dynptr psrc, pdst;
- 	struct __crypto_ctx_value *v;
- 	struct bpf_crypto_ctx *ctx;
+-	return bpf_crypto_crypt(ctx, src, dst, siv, false);
++	return bpf_crypto_crypt(ctx, src, dst, siv__nullable, false);
+ }
  
-@@ -98,9 +97,8 @@ int crypto_decrypt(struct __sk_buff *skb)
- 
- 	bpf_dynptr_from_skb(skb, 0, &psrc);
- 	bpf_dynptr_from_mem(dst, len, 0, &pdst);
--	bpf_dynptr_from_mem(dst, 0, 0, &iv);
- 
--	status = bpf_crypto_decrypt(ctx, &psrc, &pdst, &iv);
-+	status = bpf_crypto_decrypt(ctx, &psrc, &pdst, NULL);
- 	__sync_add_and_fetch(&hits, 1);
- 
- 	return 0;
+ __bpf_kfunc_end_defs();
 -- 
 2.43.0
 
