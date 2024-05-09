@@ -1,117 +1,103 @@
-Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f174.google.com (mail-qk1-f174.google.com [209.85.222.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5304915278D
-	for <bpf@vger.kernel.org>; Thu,  9 May 2024 13:40:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.153.30
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BA661514F4;
+	Thu,  9 May 2024 13:41:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715262060; cv=none; b=WRKnmd8ru2DldNZNuGnkZfm9UqIItsF/dfV0i+VASQJOVVl+u6XZg3jMYefXqgygQllW+XdaU0iLnLHOa9XcrImtrfDaD2v4wPAfhd/W63gGgou2ZD0x6qJZjsPmhbZOR1k5ToVBLyNZNMbcqeVdp8/QAjYSRPEPtOqHtSRFsGM=
+	t=1715262105; cv=none; b=LTB/SyhlApWdAY6wvVIrXAFAv9d7XHm0xhEeIRROBTGNf5Z28Ddi4s0JUH8G5WT/oPTAbdv7KAYoSd5qD/4Czf2HDQfF9VA5B1p+RFXVsBk9Wp8yDZyswyw7qREIqs4F7QttVujuBt3Q4/NZah/C5CFL5p7B6BUD8oHb6GbLjac=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715262060; c=relaxed/simple;
-	bh=66Oh1Qkhcs+js50B13/qSi+ZF1VuESgstARP/jc7WLs=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=KniAECfjIqxDa8PO6o1l6UltzXSbkr0H0QtsU0yCzWhRDXyNPhroTxOrkFTk7kdWu9c8UpBrtrKMqp3V2XzFO2QRQ4DsNB5uy0+sw5qKkRwtQvp70uq2cpkMaV7iEn8W3O0sQVLkX99VGc/uepnQOBIbvTbkALPCJpJ2+fvH7Yc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com; spf=pass smtp.mailfrom=meta.com; dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b=d6iSfsaT; arc=none smtp.client-ip=67.231.153.30
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
+	s=arc-20240116; t=1715262105; c=relaxed/simple;
+	bh=byWCUfWH9G9t798Z/UalQqwNars7ub6qY+Y8p84jINs=;
+	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
+	 Mime-Version:Content-Type; b=Hr/t3UoCwnUuzVHJyHIIGSjsqakGdGXRGMMtksVfLHzSodatFh5LzJ7zcv7zkKaJFBk0pTrPRWRnDFxA46uyYe9pMdw7USUaBf1Tu+y1dbXPlglKnKbIVMk7PfADjkxRJiGjlK/m/kjn4MEJWWTQaN+V1Vl/fed1D3/mGbNwU78=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=C4hvl+jf; arc=none smtp.client-ip=209.85.222.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b="d6iSfsaT"
-Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
-	by m0001303.ppops.net (8.17.1.19/8.17.1.19) with ESMTP id 449DOpCA001589;
-	Thu, 9 May 2024 06:40:45 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=s2048-2021-q4;
- bh=qQiZf+I1XtZhlent6hRaa/2097qMmkLH+mwxyspjAuM=;
- b=d6iSfsaTOKC8sBXyh90fFDsaBpW6pwf05f+9+TD+eatYHsHSZ53p/fdzC8nb+QdAhCCr
- MQ0qCk+NjHAgwFvkO8LQgaomiBD+KHMCr3AqCNaFZQKuowkGXJFDvCTMnSM9kw23689b
- Uh/6fxFtfzhJEIvKDajxRZs073oU4wcVjDQchdJu7u00mcF+wJvEh8wKgASebPCFJ91S
- Q8W2nqKEdxOf41nB6V0kg/sHK/YgXYN0mLd5arVBQ0NqzWyaDgh9s//Z730h8YS2MTlw
- kjWY6fGjnpXVG1Lk4Btz90eltiy8VsAkmFUJGA4oR4NkBSWILcWtLjVuANENira7vhpD dg== 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-	by m0001303.ppops.net (PPS) with ESMTPS id 3y0e7umtpu-11
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-	Thu, 09 May 2024 06:40:45 -0700
-Received: from devvm4158.cln0.facebook.com (2620:10d:c0a8:1b::8e35) by
- mail.thefacebook.com (2620:10d:c0a8:83::8) with Microsoft SMTP Server id
- 15.1.2507.35; Thu, 9 May 2024 13:40:36 +0000
-From: Vadim Fedorenko <vadfed@meta.com>
-To: Vadim Fedorenko <vadim.fedorenko@linux.dev>,
-        Martin KaFai Lau
-	<martin.lau@linux.dev>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        "Alexei
- Starovoitov" <ast@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>, Jakub
- Kicinski <kuba@kernel.org>
-CC: Vadim Fedorenko <vadfed@meta.com>, <bpf@vger.kernel.org>
-Subject: [PATCH bpf-next 2/4] bpf: crypto: make state and IV dynptr nullable
-Date: Thu, 9 May 2024 06:40:21 -0700
-Message-ID: <20240509134023.1289303-3-vadfed@meta.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240509134023.1289303-1-vadfed@meta.com>
-References: <20240509134023.1289303-1-vadfed@meta.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="C4hvl+jf"
+Received: by mail-qk1-f174.google.com with SMTP id af79cd13be357-792c34f891eso20209385a.1;
+        Thu, 09 May 2024 06:41:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1715262103; x=1715866903; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=q/hDoEEEO+Anwz6S3zgshZvUzJLkImXA0wUVfV3KGBY=;
+        b=C4hvl+jfhFTh5fKDxniDVYXjJuR6PAcXUe3yrKecKq9tHN8eUeUWAppSh6ij89U7xX
+         FEKMArdZVNE+WR3cpmum+hkRmJlz7BJr2Y54EqK8+4Mdd2RlbHcH/Ypm/yKMGRq8iAud
+         NZohwae9L0xHPTV5IjYgXesfg5wvk/n09HWDntMHzX2XBWdQf0WEaznMKHFNRdPT956k
+         e7IzePCVb1wmTHmOtNkYtumDAQMzhOHbwpdL68JpNdNQvus07VNSZqR1OOwgsReXIqDJ
+         gj5BBvWec54ETJXCX4SlT8IscwENu9/t1yual1HUUon/KgQLczNphOOGQBahgJBTxxTL
+         kLaA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1715262103; x=1715866903;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=q/hDoEEEO+Anwz6S3zgshZvUzJLkImXA0wUVfV3KGBY=;
+        b=IRK8ag25z9Tu7rqQyzrrfzgQ2rb0g+nWQz5Eh9V0sAWsMkN1LtycClvBA/nxJTWCTS
+         fB6Gwz+aBje/CW0/xd0vrD537kh7yzYcCxhNAxG6Scd9+VQLdTpKQpFE9d6F0QgQGjXD
+         nlLTCGJZb39IIwPIoutnJZdlu0xv+42IKAiIpnz1FqGeGEoLqVkp6rxzUHnYcGLSMlba
+         smvHDVAyHE8hnWwZvun3Yk7AHP9hfXrFhV8NTPGDPHBY2pW9cawjR3Zqj0ZPTBvj4NCg
+         URMTcfRu+EH/8Dfw+so41xUARbuLRKKmXemsVqp5tH+yQ3fGtIWirIjaWF9M08rmbt1E
+         n2/Q==
+X-Forwarded-Encrypted: i=1; AJvYcCX0TepOL0eynDPRIkG74RQhJCphU1bwKBjCaI5sf84pjW3sDlUrZopmZIZJjhZBbaLElk4fKnygazWYMBqxrSVsCcEGO2uCdLKKjFoc/dsXnZPiH30J9TFs/Fsjlr7qmRExGXGURvMaEsJApxLT81VENJB4z/8P9Kue
+X-Gm-Message-State: AOJu0YzlEZlwhlzKRhkaMXqLm0yP2hHli68JlYvwwM5P+/5XmFuohXjb
+	ceBL1xonJGgm/nQp6mwubItxa2/pkyz0K5w8hpC15tyEZ8RCnV+r
+X-Google-Smtp-Source: AGHT+IEC6zx5G5aGb3z2zBxSi/6jyKi3pIt3NFO1UVMHHOItQUwIpMf6Iy2ywJx3RO14fJpdZhA0sw==
+X-Received: by 2002:a37:c243:0:b0:792:960c:80cd with SMTP id af79cd13be357-792b276b341mr626867185a.74.1715262103063;
+        Thu, 09 May 2024 06:41:43 -0700 (PDT)
+Received: from localhost (164.146.150.34.bc.googleusercontent.com. [34.150.146.164])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-792bf310848sm68698485a.110.2024.05.09.06.41.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 May 2024 06:41:42 -0700 (PDT)
+Date: Thu, 09 May 2024 09:41:42 -0400
+From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+To: Abhishek Chauhan <quic_abchauha@quicinc.com>, 
+ "David S. Miller" <davem@davemloft.net>, 
+ Eric Dumazet <edumazet@google.com>, 
+ Jakub Kicinski <kuba@kernel.org>, 
+ Paolo Abeni <pabeni@redhat.com>, 
+ netdev@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, 
+ Andrew Halaney <ahalaney@redhat.com>, 
+ Willem de Bruijn <willemdebruijn.kernel@gmail.com>, 
+ Martin KaFai Lau <martin.lau@kernel.org>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, 
+ Daniel Borkmann <daniel@iogearbox.net>, 
+ bpf <bpf@vger.kernel.org>
+Cc: kernel@quicinc.com
+Message-ID: <663cd29678007_12691429440@willemb.c.googlers.com.notmuch>
+In-Reply-To: <20240508215842.2449798-3-quic_abchauha@quicinc.com>
+References: <20240508215842.2449798-1-quic_abchauha@quicinc.com>
+ <20240508215842.2449798-3-quic_abchauha@quicinc.com>
+Subject: Re: [RFC PATCH bpf-next v7 2/3] net: Add additional bit to support
+ clockid_t timestamp type
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Proofpoint-GUID: 1O6g5ou1edw3_NplFl5mfPQJyHv5eLRb
-X-Proofpoint-ORIG-GUID: 1O6g5ou1edw3_NplFl5mfPQJyHv5eLRb
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.650,FMLib:17.11.176.26
- definitions=2024-05-09_06,2024-05-09_01,2023-05-22_02
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: 7bit
 
-Some ciphers do not require state and IV buffer, but with current
-implementation 0-sized dynptr is always needed. With adjustment to
-verifier we can provide NULL instead of 0-sized dynptr. Make crypto
-kfuncs ready for this.
+Abhishek Chauhan wrote:
+> tstamp_type is now set based on actual clockid_t compressed
+> into 2 bits.
+> 
+> To make the design scalable for future needs this commit bring in
+> the change to extend the tstamp_type:1 to tstamp_type:2 to support
+> other clockid_t timestamp.
+> 
+> We now support CLOCK_TAI as part of tstamp_type as part of this
+> commit with exisiting support CLOCK_MONOTONIC and CLOCK_REALTIME.
+> 
+> Link: https://lore.kernel.org/netdev/bc037db4-58bb-4861-ac31-a361a93841d3@linux.dev/
+> Signed-off-by: Abhishek Chauhan <quic_abchauha@quicinc.com>
 
-Signed-off-by: Vadim Fedorenko <vadfed@meta.com>
----
- kernel/bpf/crypto.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+Reviewed-by: Willem de Bruijn <willemb@google.com>
 
-diff --git a/kernel/bpf/crypto.c b/kernel/bpf/crypto.c
-index 2bee4af91e38..4f4446c34b3c 100644
---- a/kernel/bpf/crypto.c
-+++ b/kernel/bpf/crypto.c
-@@ -275,7 +275,7 @@ static int bpf_crypto_crypt(const struct bpf_crypto_ctx *ctx,
- 	if (__bpf_dynptr_is_rdonly(dst))
- 		return -EINVAL;
- 
--	siv_len = __bpf_dynptr_size(siv);
-+	siv_len = siv ? __bpf_dynptr_size(siv) : 0;
- 	src_len = __bpf_dynptr_size(src);
- 	dst_len = __bpf_dynptr_size(dst);
- 	if (!src_len || !dst_len)
-@@ -313,9 +313,9 @@ static int bpf_crypto_crypt(const struct bpf_crypto_ctx *ctx,
- __bpf_kfunc int bpf_crypto_decrypt(struct bpf_crypto_ctx *ctx,
- 				   const struct bpf_dynptr_kern *src,
- 				   const struct bpf_dynptr_kern *dst,
--				   const struct bpf_dynptr_kern *siv)
-+				   const struct bpf_dynptr_kern *siv__nullable)
- {
--	return bpf_crypto_crypt(ctx, src, dst, siv, true);
-+	return bpf_crypto_crypt(ctx, src, dst, siv__nullable, true);
- }
- 
- /**
-@@ -330,9 +330,9 @@ __bpf_kfunc int bpf_crypto_decrypt(struct bpf_crypto_ctx *ctx,
- __bpf_kfunc int bpf_crypto_encrypt(struct bpf_crypto_ctx *ctx,
- 				   const struct bpf_dynptr_kern *src,
- 				   const struct bpf_dynptr_kern *dst,
--				   const struct bpf_dynptr_kern *siv)
-+				   const struct bpf_dynptr_kern *siv__nullable)
- {
--	return bpf_crypto_crypt(ctx, src, dst, siv, false);
-+	return bpf_crypto_crypt(ctx, src, dst, siv__nullable, false);
- }
- 
- __bpf_kfunc_end_defs();
--- 
-2.43.0
-
+For the non-BPF parts.
