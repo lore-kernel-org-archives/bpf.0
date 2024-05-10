@@ -1,56 +1,56 @@
-Received: from mail-qt1-f181.google.com (mail-qt1-f181.google.com [209.85.160.181])
+Received: from mail-oo1-f48.google.com (mail-oo1-f48.google.com [209.85.161.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F169E4E1A2;
-	Fri, 10 May 2024 19:24:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F36174D135;
+	Fri, 10 May 2024 19:24:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715369060; cv=none; b=nQTabKKPsbGuWAe63JVnBv2zhIdGoa0yG3SaXF9Xi9nuuyyCk9cckTG30bEzGlsH6Mmk6UIIXfiv5Zo+ETfbVfo3ytsGynOVO/b0EZuG8IJhkWQmr0CwHHE62HFoc+7j1T9r0/ASNI/h5L4sZrecxXyV+cLlfnS4+LNXBC/N/eA=
+	t=1715369060; cv=none; b=KoVnpH7JN3E/t6O/pUYfLTS46l4n/9X4JIyiXXK44nRAr8PEc2agZGTRf8739M5SStTYByRYuteEprYn60N4L08/dJiL9eylqp9dKSEIkuv8KQqD1QH5xj2RXfYYr8jSyLtj404zvf+0xSybHRCe2EGdDacrLdAQJBZN+2cuxDc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1715369060; c=relaxed/simple;
-	bh=CR7ZGBrrR73rmPsA8ZlyLKpezlNbf+aOQYW9pxfs1sQ=;
+	bh=FwrEGylC4YNlzqjMfKbV8tttqeM65gtqhap5vUcMyrU=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=iMQhqIXlpmwzsZeddpwUsg29LKKh8MrYOKgwMly0wqz4OJTGf3xePoeF4M+huZnMDHekoANyPby4vLIzEUMogiB3LkRInOyr3q6f98z/kHFapDtbyVJP0U7LzVzBPmIdYvAw31n/Y7yTsmaIHHuDzAIzS0/waUClpISN4B5zEHI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JeNCyg5x; arc=none smtp.client-ip=209.85.160.181
+	 MIME-Version; b=R1P4YV6SYxccosNBy1Vk3L8HbCNsyAciPUzdUo97VpstnZUgiGhcQP+lIWIzP43mUO/KPPA7+AOw4wX8JOJitTmAga+YjC32RNb1D9N+iUMMRpJueTgDRgPgEtNLG+wbUU3ojk8JC2JKy4/fiLD0cIXFhB1QpWNvxSjG+50QoNU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XAVp5N2n; arc=none smtp.client-ip=209.85.161.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JeNCyg5x"
-Received: by mail-qt1-f181.google.com with SMTP id d75a77b69052e-43dfcbc4893so7532801cf.2;
-        Fri, 10 May 2024 12:24:18 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XAVp5N2n"
+Received: by mail-oo1-f48.google.com with SMTP id 006d021491bc7-5b283d2b1b4so593102eaf.0;
+        Fri, 10 May 2024 12:24:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1715369058; x=1715973858; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1715369057; x=1715973857; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=m9a/RePxiUW4k3uhOxmW6u08M40VUxUFwzco5EbUNc0=;
-        b=JeNCyg5xuDt/th2C7VAkAhXdaTaAiXaLqO+rzXAbDtOCvnkrkbUE4LDVZbKXC0NqrT
-         hPNEyO0mudmNpLjEnYsGomvgSiT+MY3Jd7ZNh8Sq2j+mMmPx+u5xxOM638IIvEIph4jy
-         F18h8Fl+PicJ79mem5eInejQI8fSACFbGMmaPc7EzUCAIl3lAIbvfMi+slPPfxOY6dEP
-         E8xBGKL6uEtturW4vWPcJiv9ErUy+lJp/gDbcxTjOmBzqU6jutSFKhCe/KgxKGvce6gJ
-         k9XKA7a4xnQnEXp3olvQ5+OYy8oc28Brv5+z1hz+SNIEdmnrhPGBlTlq9rPPq7cZeSBr
-         MZmw==
+        bh=tIUJawt0aviLgC4egL3XBtE2Jfbiei8RIU4+1Vt6Fpc=;
+        b=XAVp5N2nqaDpSnG+rmmTpc8adf7Rhy+s+09d5I+4jNgajNoboEbPNosw6i5JbENKWz
+         b1sFCo6sbfG+BUBH7lkNVEawKXbRU8qmdyM4ZoAtqQBn3j12UBioxTpzKJg/WkXMY3VC
+         3kT05e5DaMe4IMOxUK21auZ+MbrzidUiXNfidlsFEYhvhtFAF7+uLrRy6VO82ugmiIzv
+         T85fk4PJNADA5ZJc38EjOUIy8gwcIIJNopHTktB/nkFlRQwjwpz+iWHOBNPjWTWKspP5
+         Ca7XtIM3yiodyUvrRvt3fdurropCU0G/Na8+HjLBZxLFeFLjcTzPgPtiL474I7uiJfkD
+         YZow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715369058; x=1715973858;
+        d=1e100.net; s=20230601; t=1715369057; x=1715973857;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=m9a/RePxiUW4k3uhOxmW6u08M40VUxUFwzco5EbUNc0=;
-        b=vCbf14aSswJuwYSVDayfYgkv+sye3E/HFQuYsUKUoCDGsv8ZUAYcABeabYoWHCtFl/
-         lYoOl9BXKBuz8JhFmeMSR+G8o+vS9iem5zD6B533abx3EfdfM/AQETujU05BTvA1oafc
-         p083/DHjBbQhF0lVyJkwJtYPkyCSc6Zl1oQ9U3tdEHMzr46Cmws4Hz7XzqvV0wcKs3Kx
-         0jSydOoP2MHfhxaiiAMTDgbHdf9QhHEARnv+bO/zUidqwzjJJiL6qMgGF0Aw96iEdHjk
-         gpYhMkmD+gZ7DTyYzX5ylveeFhQ308wCvOKzDtqZ3nIwXOHe4lpzUFPOsvPX8cZVPL8C
-         DFdw==
-X-Gm-Message-State: AOJu0YyWO24QTHx38UiqWv9ZVvt7clihS5T29DYy76kXGEWMYQH4Auvf
-	wYjWx2XmNyuopnBNPFkgUXmvHSOXsIaCNFrEFEvLAbECPymEyPQc8i2seg==
-X-Google-Smtp-Source: AGHT+IHGYwgAYVc1lAXO8jJHVThO9Wh4re+Kr0NbMB6VMM2aDHzcaVGso/h6KW7cH7FrINXv2pe3tw==
-X-Received: by 2002:a05:622a:5c8c:b0:43a:dbbb:a19d with SMTP id d75a77b69052e-43dfdb72e46mr44227511cf.33.1715369057814;
-        Fri, 10 May 2024 12:24:17 -0700 (PDT)
+        bh=tIUJawt0aviLgC4egL3XBtE2Jfbiei8RIU4+1Vt6Fpc=;
+        b=DeEtMLr7TGy14sdTioq7KGruzVjSPLYN6IbJ7g0HkQikj4jxfYpq61xNsbLvZE+beX
+         Ua/1V6aFkT+EV2LGmjar3nGWujOXVNhokPNfMG6rN5jr9PUcJ4ruy24ul/pA7P2YKCjW
+         BlLTGBmH7HE/Cch+jRMdZg3IN7I3Bth2Zi1Y6RSVgE0jLsbZmYvjBKCfZttW28/JSprs
+         dNfAoAEGis0bGMXWiGGBU0p5mRs1uqlYKhF/s41Tr/wR2rJxMIwKn5xbYZTHUImASB9O
+         Q0/v/OHfFFLnKz/LIJLqAfQ0hcgnx3cZiOMqb62CGfhogGA7xfKdWB+fO4UTPD4AIWGp
+         taNA==
+X-Gm-Message-State: AOJu0Yw26s6kflrl4XdtSGNGgyP5eKQRH/kwMaKUgwRVvfESIu6lqR+Z
+	wSF8wU7Ru0/5fmKWvbSW0mVKFEywXs470wVhLPkV0T5Un68R2JqNmyZYcg==
+X-Google-Smtp-Source: AGHT+IFRabZ/ZaL16AoNnu91bmRwZobadIDbFxADs+tZHXq49BQ/zQH1oRJadPFcuDMxL8H3aY8T/A==
+X-Received: by 2002:a05:6358:63a4:b0:18f:8613:12b8 with SMTP id e5c5f4694b2df-193bb3fd3e1mr424120555d.5.1715369056581;
+        Fri, 10 May 2024 12:24:16 -0700 (PDT)
 Received: from n36-183-057.byted.org ([147.160.184.83])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-43df5b46a26sm23863251cf.80.2024.05.10.12.24.17
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-43df5b46a26sm23863251cf.80.2024.05.10.12.24.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 May 2024 12:24:17 -0700 (PDT)
+        Fri, 10 May 2024 12:24:16 -0700 (PDT)
 From: Amery Hung <ameryhung@gmail.com>
 X-Google-Original-From: Amery Hung <amery.hung@bytedance.com>
 To: netdev@vger.kernel.org
@@ -67,9 +67,9 @@ Cc: bpf@vger.kernel.org,
 	xiyou.wangcong@gmail.com,
 	yepeilin.cs@gmail.com,
 	ameryhung@gmail.com
-Subject: [RFC PATCH v8 07/20] bpf: Allow adding kernel objects to collections
-Date: Fri, 10 May 2024 19:23:59 +0000
-Message-Id: <20240510192412.3297104-8-amery.hung@bytedance.com>
+Subject: [RFC PATCH v8 05/20] bpf: Generate btf_struct_metas for kernel BTF
+Date: Fri, 10 May 2024 19:23:57 +0000
+Message-Id: <20240510192412.3297104-6-amery.hung@bytedance.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20240510192412.3297104-1-amery.hung@bytedance.com>
 References: <20240510192412.3297104-1-amery.hung@bytedance.com>
@@ -81,88 +81,163 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-To allow adding/removing kernel objects to/from collections, we teach the
-verifier that a graph node can be in a trusted kptr in addition to local
-objects. Besides, a kernel graph value removed from a collection should
-still be a trusted kptr.
+Currently, only program BTF from the user may contain special BTF fields
+(e.g., bpf_list_head, bpf_spin_lock, and bpf_timer). To support adding
+kernel objects to collections, we will need specical BTF fields (i.e.,
+graph nodes) in kernel structures as well. This patch takes the first
+step by finding these fields and build metadata for kernel BTF.
+
+Unlike parsing program BTF, where we go through all types, an allowlist
+specifying kernel structures that contain special BTF fields is used.
+This to avoid wasting time parsing most kernel types that does not have
+any special BTF field.
 
 Signed-off-by: Amery Hung <amery.hung@bytedance.com>
 ---
- include/linux/bpf_verifier.h |  8 +++++++-
- kernel/bpf/verifier.c        | 18 ++++++++++++------
- 2 files changed, 19 insertions(+), 7 deletions(-)
+ kernel/bpf/btf.c | 63 +++++++++++++++++++++++++++++++++++++++++++++---
+ 1 file changed, 59 insertions(+), 4 deletions(-)
 
-diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index 7cb1b75eee38..edb306ef4c61 100644
---- a/include/linux/bpf_verifier.h
-+++ b/include/linux/bpf_verifier.h
-@@ -864,9 +864,15 @@ static inline bool type_is_ptr_alloc_obj(u32 type)
- 	return base_type(type) == PTR_TO_BTF_ID && type_flag(type) & MEM_ALLOC;
- }
+diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+index e462fb4a4598..5ee6ccc2fab7 100644
+--- a/kernel/bpf/btf.c
++++ b/kernel/bpf/btf.c
+@@ -5380,6 +5380,11 @@ static const char *alloc_obj_fields[] = {
+ 	"bpf_refcount",
+ };
  
-+static inline bool type_is_ptr_trusted(u32 type)
-+{
-+	return base_type(type) == PTR_TO_BTF_ID && type_flag(type) & PTR_TRUSTED;
-+}
++/* kernel structures with special BTF fields*/
++static const char *kstructs_with_special_btf[] = {
++	"unused",
++};
 +
- static inline bool type_is_non_owning_ref(u32 type)
+ static struct btf_struct_metas *
+ btf_parse_struct_metas(struct bpf_verifier_log *log, struct btf *btf)
  {
--	return type_is_ptr_alloc_obj(type) && type_flag(type) & NON_OWN_REF;
-+	return (type_is_ptr_alloc_obj(type) || type_is_ptr_trusted(type)) &&
-+	       type_flag(type) & NON_OWN_REF;
- }
+@@ -5391,6 +5396,7 @@ btf_parse_struct_metas(struct bpf_verifier_log *log, struct btf *btf)
+ 		} _arr;
+ 	} aof;
+ 	struct btf_struct_metas *tab = NULL;
++	bool btf_is_base_kernel;
+ 	int i, n, id, ret;
  
- static inline bool type_is_pkt_pointer(enum bpf_reg_type type)
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 2d4a55ead85b..f01d2b876a2e 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -413,7 +413,8 @@ static struct btf_record *reg_btf_record(const struct bpf_reg_state *reg)
+ 	BUILD_BUG_ON(offsetof(struct btf_id_set, cnt) != 0);
+@@ -5412,16 +5418,25 @@ btf_parse_struct_metas(struct bpf_verifier_log *log, struct btf *btf)
+ 		return NULL;
+ 	sort(&aof.set.ids, aof.set.cnt, sizeof(aof.set.ids[0]), btf_id_cmp_func, NULL);
  
- 	if (reg->type == PTR_TO_MAP_VALUE) {
- 		rec = reg->map_ptr->record;
--	} else if (type_is_ptr_alloc_obj(reg->type)) {
-+	} else if (type_is_ptr_alloc_obj(reg->type) || type_is_ptr_trusted(reg->type) ||
-+		   reg->type == PTR_TO_BTF_ID) {
- 		meta = btf_find_struct_meta(reg->btf, reg->btf_id);
- 		if (meta)
- 			rec = meta->record;
-@@ -1860,7 +1861,8 @@ static void mark_reg_graph_node(struct bpf_reg_state *regs, u32 regno,
- 				struct btf_field_graph_root *ds_head)
+-	n = btf_nr_types(btf);
++	btf_is_base_kernel = btf_is_kernel(btf) && !btf_is_module(btf);
++	n = btf_is_base_kernel ? ARRAY_SIZE(kstructs_with_special_btf) : btf_nr_types(btf);
+ 	for (i = 1; i < n; i++) {
+ 		struct btf_struct_metas *new_tab;
+ 		const struct btf_member *member;
+ 		struct btf_struct_meta *type;
+ 		struct btf_record *record;
+ 		const struct btf_type *t;
+-		int j, tab_cnt;
++		int j, tab_cnt, id;
+ 
+-		t = btf_type_by_id(btf, i);
++		id = btf_is_base_kernel ?
++		     btf_find_by_name_kind(btf, kstructs_with_special_btf[i],
++					   BTF_KIND_STRUCT) : i;
++		if (id < 0) {
++			ret = -EINVAL;
++			goto free;
++		}
++
++		t = btf_type_by_id(btf, id);
+ 		if (!t) {
+ 			ret = -EINVAL;
+ 			goto free;
+@@ -5449,7 +5464,7 @@ btf_parse_struct_metas(struct bpf_verifier_log *log, struct btf *btf)
+ 		tab = new_tab;
+ 
+ 		type = &tab->types[tab->cnt];
+-		type->btf_id = i;
++		type->btf_id = id;
+ 		record = btf_parse_fields(btf, t, BPF_SPIN_LOCK | BPF_LIST_HEAD | BPF_LIST_NODE |
+ 						  BPF_RB_ROOT | BPF_RB_NODE | BPF_REFCOUNT |
+ 						  BPF_KPTR, t->size);
+@@ -5967,6 +5982,7 @@ BTF_ID(struct, bpf_ctx_convert)
+ 
+ struct btf *btf_parse_vmlinux(void)
  {
- 	__mark_reg_known_zero(&regs[regno]);
--	regs[regno].type = PTR_TO_BTF_ID | MEM_ALLOC;
-+	regs[regno].type = btf_is_kernel(ds_head->btf) ? PTR_TO_BTF_ID | PTR_TRUSTED :
-+							 PTR_TO_BTF_ID | MEM_ALLOC;
- 	regs[regno].btf = ds_head->btf;
- 	regs[regno].btf_id = ds_head->value_btf_id;
- 	regs[regno].off = ds_head->node_offset;
-@@ -11931,8 +11933,10 @@ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_kfunc_call_
- 				return ret;
- 			break;
- 		case KF_ARG_PTR_TO_LIST_NODE:
--			if (reg->type != (PTR_TO_BTF_ID | MEM_ALLOC)) {
--				verbose(env, "arg#%d expected pointer to allocated object\n", i);
-+			if (reg->type != (PTR_TO_BTF_ID | MEM_ALLOC) &&
-+			    reg->type != (PTR_TO_BTF_ID | PTR_TRUSTED) &&
-+			    reg->type != PTR_TO_BTF_ID) {
-+				verbose(env, "arg#%d expected pointer to allocated object or trusted pointer\n", i);
- 				return -EINVAL;
- 			}
- 			if (!reg->ref_obj_id) {
-@@ -11954,8 +11958,10 @@ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_kfunc_call_
- 					return -EINVAL;
- 				}
- 			} else {
--				if (reg->type != (PTR_TO_BTF_ID | MEM_ALLOC)) {
--					verbose(env, "arg#%d expected pointer to allocated object\n", i);
-+				if (reg->type != (PTR_TO_BTF_ID | MEM_ALLOC) &&
-+				    reg->type != (PTR_TO_BTF_ID | PTR_TRUSTED) &&
-+				    reg->type != PTR_TO_BTF_ID) {
-+					verbose(env, "arg#%d expected pointer to allocated object or trusted pointer\n", i);
- 					return -EINVAL;
- 				}
- 				if (!reg->ref_obj_id) {
++	struct btf_struct_metas *struct_meta_tab;
+ 	struct btf_verifier_env *env = NULL;
+ 	struct bpf_verifier_log *log;
+ 	struct btf *btf = NULL;
+@@ -6009,6 +6025,23 @@ struct btf *btf_parse_vmlinux(void)
+ 	if (err)
+ 		goto errout;
+ 
++	struct_meta_tab = btf_parse_struct_metas(&env->log, btf);
++	if (IS_ERR(struct_meta_tab)) {
++		err = PTR_ERR(struct_meta_tab);
++		goto errout;
++	}
++	btf->struct_meta_tab = struct_meta_tab;
++
++	if (struct_meta_tab) {
++		int i;
++
++		for (i = 0; i < struct_meta_tab->cnt; i++) {
++			err = btf_check_and_fixup_fields(struct_meta_tab->types[i].record);
++			if (err < 0)
++				goto errout_meta;
++		}
++	}
++
+ 	/* btf_parse_vmlinux() runs under bpf_verifier_lock */
+ 	bpf_ctx_convert.t = btf_type_by_id(btf, bpf_ctx_convert_btf_id[0]);
+ 
+@@ -6021,6 +6054,8 @@ struct btf *btf_parse_vmlinux(void)
+ 	btf_verifier_env_free(env);
+ 	return btf;
+ 
++errout_meta:
++	btf_free_struct_meta_tab(btf);
+ errout:
+ 	btf_verifier_env_free(env);
+ 	if (btf) {
+@@ -6034,6 +6069,7 @@ struct btf *btf_parse_vmlinux(void)
+ 
+ static struct btf *btf_parse_module(const char *module_name, const void *data, unsigned int data_size)
+ {
++	struct btf_struct_metas *struct_meta_tab;
+ 	struct btf_verifier_env *env = NULL;
+ 	struct bpf_verifier_log *log;
+ 	struct btf *btf = NULL, *base_btf;
+@@ -6091,10 +6127,29 @@ static struct btf *btf_parse_module(const char *module_name, const void *data, u
+ 	if (err)
+ 		goto errout;
+ 
++	struct_meta_tab = btf_parse_struct_metas(&env->log, btf);
++	if (IS_ERR(struct_meta_tab)) {
++		err = PTR_ERR(struct_meta_tab);
++		goto errout;
++	}
++	btf->struct_meta_tab = struct_meta_tab;
++
++	if (struct_meta_tab) {
++		int i;
++
++		for (i = 0; i < struct_meta_tab->cnt; i++) {
++			err = btf_check_and_fixup_fields(struct_meta_tab->types[i].record);
++			if (err < 0)
++				goto errout_meta;
++		}
++	}
++
+ 	btf_verifier_env_free(env);
+ 	refcount_set(&btf->refcnt, 1);
+ 	return btf;
+ 
++errout_meta:
++	btf_free_struct_meta_tab(btf);
+ errout:
+ 	btf_verifier_env_free(env);
+ 	if (btf) {
 -- 
 2.20.1
 
