@@ -1,487 +1,263 @@
-Received: from sonic312-30.consmr.mail.ne1.yahoo.com (sonic312-30.consmr.mail.ne1.yahoo.com [66.163.191.211])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E47701798C
-	for <bpf@vger.kernel.org>; Fri, 10 May 2024 17:18:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.163.191.211
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715361501; cv=none; b=s2dJilA5Dq1W5CZ9e1vvB9MprNaDE8t+Y0kLtXzcX6waLlMOyNiTak9P8FqsgkhREsURhffiVNU1xLYYuLIK1D58ZjtYf6xfTBNNzd5lJcjCGl/09KB0rIyHiGI55jNh02ICbHuNqP1ntfWo/TMbG0bndxOIpGGsbx3N+J9iKoQ=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715361501; c=relaxed/simple;
-	bh=9OM9BxBAlcx9JR6tbcOD4pzf/znKRwGdvp1zRai5QQI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=NpbJAv8ncI4rY/zY3Ka+lko4RTAIVseXHZQXOgFWUG3D4PEQ0b7v6sNXSGMOZmzdVVVqQAMeanPZHSTR68Tb84xsT4KQkmdTbNtt3Z2QWcRv3vNJAH7/UpU6Rj8dxF8/zveQRDHNq/y1Vpt2zo670Kpmp0KkJdA+QA88Qbio7no=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com; spf=none smtp.mailfrom=schaufler-ca.com; dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b=dRm22nbh; arc=none smtp.client-ip=66.163.191.211
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=schaufler-ca.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 661F417580
+	for <bpf@vger.kernel.org>; Fri, 10 May 2024 17:25:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.177.32
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1715361915; cv=fail; b=LW3mwDF9vRbXVNz9qEeBRHSK1s9HGaps/GlaMIbcUbZFF5zoPvPgWOb89U/TSkzVen7BV/NncZXYUWIOkPrX5uAtkq033BkH8XugnGD1UqWQ78y8i/3asEcoZ6Y5pzPBxy1OtMKefAXZiqoppwDdI9nSKbF5l1givET8gXTpEVM=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1715361915; c=relaxed/simple;
+	bh=b+3Q7rQaHCa+CMFfcizFKDUVNfcjMpAw90Z9C3UYnYY=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 Content-Type:MIME-Version; b=KuU75td4nx4Wu7Th+XndsOQa5aPjfN/MrcpP+tdUDpwKU+l3l7ORdVf1nzhW6t1hu9cO6uFXtBCG6F/6fFLNqfA/3F298L7tax/etK9jIo+Z1EWzXwyCrn0ZBQ8SKNcolT8g3rGTQy4H10FS1j39dTKU2sh+AhTZnbBm+O0t6Hk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=DZiivurh; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=EPQqGJte; arc=fail smtp.client-ip=205.220.177.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b="dRm22nbh"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1715361499; bh=CUIC893JPgLDznQixg4v/EZ5F/YydGgEBAttMNitzmw=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=dRm22nbhscMbxQXBC8Yj8PjYp7e23LVuZfjGBMNMjzH1MpXEX0mHtOmeanxzcCUS6Kv7TaxSdJEdY4SxCjgNMdG8Sc+JqZ+QfHxiwi0jEbb9bEqd02yiVVWvn/JsDpNvAES8wL13v6Pi4e3TMfqPX87En3SKekU8mGTbcuabmFg8zlowmpO3o/6+ZuvOID/63c/ayyrgzkh/WSxc2QXAMI4srN476511DGdsi4xKTUCZWo5VfGN3uWSwnHJN0/BDpDEspstdKreJvI26tXlki99hsPzXwlNfKGjfVjwDNr1spX3fTYuNaIP7XNJTpMw4zEXX4e7FC/d36SSNGBucfw==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1715361499; bh=hyhr26Wn0CG8BayFRr90BB9hsisAnVbpX0q3WGfyDUe=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=kjpUszS5ry8vF5krQ0wrG9oPNIcD82FhazUtjKvEgNk6INQZorvbKTglLwwXDTsP4Dg6tUEt7npHTYAv191nldNH+UI5dm9n4xiDrfCIWqlVjnx4KN2/mZDXLpmfrxMtXUfby+KVxi4dUVGci9GqgRbUqXBJVhQ7/M6HP9bSMjMa1rnlCcXjJoVhRevJ8xArAeDzEFtdFgg6aMq6upGNGBparJJp9Pn7xpHHRf7UprF2qt53fVR2WiJ440sNt1UthXOtj9zIsjuoSLfR8DoSppmrTGOOeDq7otwV/UekVvct9Je12lX3PZ/j6S0re66Z2hJ+elcjyQez+o2sLuvdPQ==
-X-YMail-OSG: 35ELR_UVM1mHruWrgaICnKwC5i_Twag6Dci4Mr3Pq27ckQQ4GhDyqraD0UPM9BU
- iS7CFXPU27WwDFdnV4lbBi4qm5fvClrtBI.La58Ro33.cVHr9glT76xubCfW7aw.SPI83lWEnORO
- Eb.T.rXHEUIKtOvm_uvksGG0yWMCIt1lY_t.R1H471TUkiyqZmrjlcUw.Sl4APmmtsRm4v5t3Bfm
- HIRONtxbpVB_2qgWCRvwliKZfTQh_7_qa6nD8DTu3if7Tqz6nvMgSGAhbdQSU4WevjP3dbbKHbZL
- JkEDknKRsOpAUt3rskfISGjjT45h6AVrRzf4vIEwmbnBw64AoLtzftOgyRanq4zAgEDXjQQXBA7i
- GTSEFomoIQ7WGIhEQ8uAvGufM7KSqykDY7QswGXQzQey.vgpZSTZrOc8BqlOmUcwCLM8J90d36yK
- U1y7AtkqRNhx9NT_O0hKi_5oviRPjTUAR_sXRQpiLxz6kgdFwjms.HXoo2PSSbwMDZiPuwpvPSel
- BFRLCUV5ju.Uwe3vNPMnhAdIppD47yDSAeNwn2W8Z60d.wJIm1J_LhKkK6qF5cGJVpn0oFeuFiT7
- H65WvEXedzwbsO.Emx_nzMBGIiCSOpaF4fNPJm.L7rtyGGBoHI7.C4dNkxsyfFN2uoRnYq_HlBsi
- hIBOQ.XTrNEZvXxc9AQAdf79gKvNArq2WRG5zBAwd.MeS6QBT1Bcs4Z42coNbgJYGpK8UoGhSoZ5
- vVuERwMZzDBwzO36TcQu.trajkqukWmSCx9mU3PlDMsqfV01eqNixsbQekmyndxUmHeIzUVCyLxB
- Gvzhzz1q0rDkEiOCx0sOSVjIhEaNMEvksi9EJMlL2jXj4VGMQUWAwTMKsVTnrjP16C6_9wJCQSPk
- 5TW0OvOqRo_CaFW.rpN6NWufPMTrGOkdg5m7yH39QKbQ2sJTs2TzZ1mDE7HK5zJEK3ly8t.XHbb_
- 2zmbWwG53GiHU1Nidocg5PUJ3.9ANh7dUYHg7W3zuu_Ph3huhy7ikbqtQm9n_fmQZYEwmQDk9oBU
- b4O29Vp2yUqcqJSLqtWF6qNWijKsV57cnaQuWhXlz6g1y1JoMwT6026T_nXVanpBVNlGi6OGpKmP
- 0Ux.J.t9A4kCuRKW93wXJNRBMO_VO_IKSJ7RLYfoDkuUK2vMofiBwvQbBMocc7HQ.5HuZH7Q5S7c
- ti6Vlj2K9ntV1SB3vJ7JN3IzwgyhCkbeP6G7lsfY3rYpIBEb6q5OCSKEcpwqTxBK9O8aIngs6lqN
- 6bpaDTV_EmUxet9fL60aLjVLRBxobWY3kOxe8eN2yLzQpO.uikafFG_RZjmuhi4WI_xj4oAgZG1I
- hlHhU0B.SHDnnKsx3QHVZXhuXrTxXWR0wAgM9Wl2BuJKtYLHe0QooULGPNAO.Ymqr7_oc0h8_pu6
- MWty2vffyKs5HmfVhIcLkQ.h21Zafvuk6NA5yDZBgEVordKJpliELAjjPWI5H3GmQmC70VzLwC48
- Wtz8IDS3m1hBql0fqK5t9f9hsOohgyS5yk8dC1ne6W97VNMw_DYouhXUSKR2trzTwne0hckhPQlp
- 6HBsh2IIuEO91xQO_x2YoMw_6S3dLAfqtufwtKuhpQXe9QSXOMf5D3BIqzq_pqGEguXfPrMiKaTm
- W2GnN0EASOGXYk8HU6yVzH07MH1b9s0TWXHic_hMp79uYhh3J92oTuOu7C3NAHKONFI5Q8u9PA5.
- sjzHyILbBIaK4MJI7CYCqBXbGI0D3mrXBcPpdgRGyLclJE7f0oJglheSdjoyxs8xFnzDIX1laEo7
- b58_8duyZnolTcQVK0kCp08pPn0G8GQSp.82FeG2lKwp8MGXt5KjqSRyaOuKrI.8ZrOkJtPcvs0s
- lJeRh3wOKQkPn9GndYdDieko6Fx8zqu2r0RpbIgbtPkTsY4QvHsJxIhOmhDLSXgj13s5Q72hbeup
- 7Bj.e62jrm2AJVuoP4104jZvDp1Rmvdt3xSpZEiUjSXjENuP2JzDj_DoYuiDHymdUMKpVDCuzUIz
- cBFADmXk97jmX5vX8QyOdEfYU3VwekP5LkLFpLqSVTNkUq60Eil3Ibcm5kuV2is3cMcuero_QFOf
- i7NgIwnmIU8U7nhAXaTOOJbFwoCxApxW_kltf7TfAomvO43m65wSOtSHslKIaYHfr9pzzSNzI.dD
- M68jvzNY_sdaK6lX781G.NcG.pewgUXXwFxArqTZJm41gUPrZsgb1S06.TQ3UGyMVwvLr82RR1_X
- RkBp7O6AG4HsbMSKzUdGrs_3UaSyuS1xdL1HRiDlcOnTj0riURK1woX1Yuw8JN9lPQLO5ZYDoLHe
- wvKbPhQd5TmqLGD0FWw--
-X-Sonic-MF: <casey@schaufler-ca.com>
-X-Sonic-ID: 5ea9c975-ad2a-4336-8106-2f9539c66b01
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic312.consmr.mail.ne1.yahoo.com with HTTP; Fri, 10 May 2024 17:18:19 +0000
-Received: by hermes--production-gq1-59c575df44-2njcf (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 02e28cfe366f359f4bff8812dfd7f276;
-          Fri, 10 May 2024 17:08:05 +0000 (UTC)
-Message-ID: <62a282e2-4cd5-4222-a223-9d38822a6b38@schaufler-ca.com>
-Date: Fri, 10 May 2024 10:08:03 -0700
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="DZiivurh";
+	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="EPQqGJte"
+Received: from pps.filterd (m0333520.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 44AGiiQa030825;
+	Fri, 10 May 2024 17:25:11 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : in-reply-to : references : date : message-id : content-type :
+ content-transfer-encoding : mime-version; s=corp-2023-11-20;
+ bh=D7YJxyynhz4GjDYyVrdsvyg8eTur6K5Z4WlJ1yRCqJY=;
+ b=DZiivurhiwqhQsDTqB+yzWIu7PhRMuW5vpYvXU05+g9JdO8laGa56EzLR8YUZVXYurpc
+ tGbcMBup2gbjOx6eUg2ppTvwikZ/+pg84ePgbKNgfJRF81ZV9QtbtJCmTCFEXIY4nXGH
+ aw9Nu0UOZZAf3KRpCl4qRkOEm9ej23l695SbxCTG61QJ529cz/SdcKsBujl/BU4bFUJ4
+ riNoAOUIdUTcZSV5spLJ0iZClHaX9okg9TmM9+20857UwHxLrPVqDx04kQ34ZFR/U2JJ
+ CmD/7y3UvnyY80V1CQVZYpz64pf1V7SnnLbMXXQAX6QzOs5wqAhowR4uS6fewJN47Grq vA== 
+Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3y1a0j9n1f-7
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 10 May 2024 17:25:10 +0000
+Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 44AGBW4Q017810;
+	Fri, 10 May 2024 17:16:49 GMT
+Received: from nam11-co1-obe.outbound.protection.outlook.com (mail-co1nam11lp2169.outbound.protection.outlook.com [104.47.56.169])
+	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3xysfq4n3n-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 10 May 2024 17:16:49 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=J6ixJ4Eue85gmHg7ilDBRlI5OUo0OVzv8qCb7KtLYK3D96Omx0FPdIZKJ9TFBOj3kv8ak0FGsqfWS6tSZdPcyx+f1UAQ5kM1CHQ4+WlqSBkIyUEjLKj5Dw9w/rCwWGmUdM12OWIIyFvOBpOODlb9WiiXD9trBEKimVJBtCG2BJPGlY/5EMxT++eBsZf0ge8HTMtOe5T5Knshu+Wd03r6Lu+CrDs0coweBNE+0rrUxmEX8z4HxjvdJ3SCqgHljbolF0yf+IztSIb/uIzsiJV9ndw++zGjdB3dXWqde6a7AKVMFlhytZyAvq6JEWw0QnPBtLmZz/Z6+NCoYKbTmJ4BzA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=D7YJxyynhz4GjDYyVrdsvyg8eTur6K5Z4WlJ1yRCqJY=;
+ b=VD1kVJ7bta/iwM5z/9YrRVpW58Da8Qbm8jHp2n09xfID2A5Z5g5m5Fas1Mp6BbIEflcvanQzrrLwzwi+u4TMNum6/v6FWYlzWPQ3yuHy9ZTNA3TemP5hsj5Jnw+UPI5Z79GgCjZk06xsJOGib+2ZHyVOMAw7ldHpV5yi5gfPrAes/a1be49bMtqOZFZINzchK2gActQiscasvz8kEz9/HvFeSA97TkiZUryTjZOMnvUw/dqR+gSxhZzz7dZfuboV29kAkVAFhkX7nunZfH2OL6Ijtuz2Fdf65GN/CopmsHJVJ7Ysj2gNQcHWsanjwTbWxiGw0eTe1nXCUrpX6EbVng==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=D7YJxyynhz4GjDYyVrdsvyg8eTur6K5Z4WlJ1yRCqJY=;
+ b=EPQqGJteUwq4ERBURqwQ565REjkW5EKxdjtHE7lRF9FSxUEmS9UVVYtBF7BxAVfSwLmqq2kY7VA4ZiFAjwBIiBIhkHcwDgzYWtzIIQDsRKqsCZqDzp3+RvsP8CJuWPvFAtQwMc2vxBP1g5b9Re6tpyhEqP+y6CGlJcpdcB7RNF0=
+Received: from DM6PR10MB3113.namprd10.prod.outlook.com (2603:10b6:5:1a7::12)
+ by MW4PR10MB6584.namprd10.prod.outlook.com (2603:10b6:303:226::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7544.41; Fri, 10 May
+ 2024 17:16:46 +0000
+Received: from DM6PR10MB3113.namprd10.prod.outlook.com
+ ([fe80::e0b9:12d5:badd:6fe0]) by DM6PR10MB3113.namprd10.prod.outlook.com
+ ([fe80::e0b9:12d5:badd:6fe0%7]) with mapi id 15.20.7544.049; Fri, 10 May 2024
+ 17:16:46 +0000
+From: "Jose E. Marchesi" <jose.marchesi@oracle.com>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: bpf <bpf@vger.kernel.org>, David Faust <david.faust@oracle.com>,
+        Cupertino Miranda <cupertino.miranda@oracle.com>
+Subject: Re: [PATCH bpf-next] bpf: make list_for_each_entry portable
+In-Reply-To: <CAADnVQ+-w1cD83mE0u0QhCP4cCvSSB1-GNoqErYRRhtxcwkTmg@mail.gmail.com>
+	(Alexei Starovoitov's message of "Fri, 10 May 2024 10:03:51 -0700")
+References: <20240509084650.17546-1-jose.marchesi@oracle.com>
+	<CAADnVQJRpCX+vmwCu3xYz+V4Bq1gn3vnCAZk3CAJcB3KUq_-Cg@mail.gmail.com>
+	<874jb62ht9.fsf@oracle.com>
+	<CAADnVQ+-w1cD83mE0u0QhCP4cCvSSB1-GNoqErYRRhtxcwkTmg@mail.gmail.com>
+Date: Fri, 10 May 2024 19:16:42 +0200
+Message-ID: <87plttsi2t.fsf@oracle.com>
+User-Agent: Gnus/5.13 (Gnus v5.13)
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-ClientProxiedBy: LO4P123CA0502.GBRP123.PROD.OUTLOOK.COM
+ (2603:10a6:600:1ab::21) To DM6PR10MB3113.namprd10.prod.outlook.com
+ (2603:10b6:5:1a7::12)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v11 4/5] security: Update non standard hooks to use static
- calls
-To: KP Singh <kpsingh@kernel.org>, linux-security-module@vger.kernel.org,
- bpf@vger.kernel.org
-Cc: ast@kernel.org, paul@paul-moore.com, andrii@kernel.org,
- keescook@chromium.org, daniel@iogearbox.net, renauld@google.com,
- revest@chromium.org, song@kernel.org,
- Casey Schaufler <casey@schaufler-ca.com>
-References: <20240509201421.905965-1-kpsingh@kernel.org>
- <20240509201421.905965-5-kpsingh@kernel.org>
-Content-Language: en-US
-From: Casey Schaufler <casey@schaufler-ca.com>
-In-Reply-To: <20240509201421.905965-5-kpsingh@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Mailer: WebService/1.1.22321 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6PR10MB3113:EE_|MW4PR10MB6584:EE_
+X-MS-Office365-Filtering-Correlation-Id: b81bf3c2-02c6-4665-19b0-08dc7114f88b
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230031|376005|366007|1800799015;
+X-Microsoft-Antispam-Message-Info: 
+	=?utf-8?B?VThYTlpiMGdGME81cjZrQ1laTlNSN2JKNzFaaWxsYjU0M1pXTzdNVGF5bXkz?=
+ =?utf-8?B?dHFiaXJORmYwQkxtSGxRYTBaeWEybklMK2kvVDZUNnVud0d6NmxnZC9UTW94?=
+ =?utf-8?B?NTFYZkJ0Uk5WQW9nSlhZSml3VGRKL2Y2KysyVHdBT3VyVldrZUVFNTVxZk9M?=
+ =?utf-8?B?S2NNcVd3M01OMy9lMTVzKy9Ca05jdG5PRjZMd3RRTGFieFFGQ1Bza1ErTnNZ?=
+ =?utf-8?B?d1l3RWcvNWRuRmlnVTFhNHNpeGxhdnVnenVmQTMyYU82VXdZTGMxeEZNUi9w?=
+ =?utf-8?B?aU8yaWorYktaSm1VcHVodThWYWdCRUpxTXJlMnlUeStiR3owekczUi9oK1BQ?=
+ =?utf-8?B?TmRHaHErNFFaRkhUZm0zSFdPVldOTWd1SW42Vm4rd1RoeGJCeDZPUU5ud3o2?=
+ =?utf-8?B?eVowbGpOQjNEbzl0NU56Y2Z4YmF5TFIrci9WRFd1WkJPZXoyand5ZUJwQzVq?=
+ =?utf-8?B?Uk9UbVBGWm8yazlRZTFUU0VnaFRyNXdsSjRKdmNHTHgrTkNpNjF5ZXcyMkVK?=
+ =?utf-8?B?dWxYVmxpbHB5Z20waENuL2MxdGdIclpCcUJUdjZTQzFSeURQSlRQUklWM05J?=
+ =?utf-8?B?TFcwZXFrMlBSZGFOd2ZiTUpMOFJTZVZnd0grdXRQTllEQTIxS2NRSXp0Qko1?=
+ =?utf-8?B?VENQeklUeFl0U3Blekt3dHlwZmQ0dDlMVlNta0ErVlFFSWdHZTJLTkYrRG83?=
+ =?utf-8?B?SjlNQkJvbk9BaEZrZ2twWnhlTDhMNHFMelNUNmh1aEZOcXM4S0YxT1kzbHRO?=
+ =?utf-8?B?SjJ6TEhOUnFldzlqOFpFOEwrbTdkbTJWdlU5TEF2UXo0UWxaU0JXQW45QkY0?=
+ =?utf-8?B?TzMwWCtrbHJudWJEamxHWkdNaWhmN0dYQVM3QTNibkc2aWtLSUpBYmFWTVFn?=
+ =?utf-8?B?SmltVTVLVnQxait1QVVjblJzTFdQajlPcnplTXJwN3FTOTVMM0psY0xVQ090?=
+ =?utf-8?B?VEdPNVBOZXkyQjNkM2xjZTlNMVdUYVl4enNubUQrWjRDZlB4SlM5dG1yMzF4?=
+ =?utf-8?B?cW9VdURGeG53eFg2ekVDWUtCMGFRYm0xMGsyRjZzSXJBVUg0b0d5TG15Y01t?=
+ =?utf-8?B?QXl6U3ZFTmRmd25EOU5pOHlTcTB5T3NEUFpobzBzeHJQaDB1Y0QzT3k1ajgv?=
+ =?utf-8?B?Y0I1clgxRFcxT0M1c2Jud3dlL2lkdUNLaVhKY0MrdE1iZ1FUR2l2VGJiZVd5?=
+ =?utf-8?B?SFJUcTZFYjlhL0txOS9sMk9WSGEyNHo2bHhrRk91TERpbjdMaEdCS2JhN2Zu?=
+ =?utf-8?B?VEY2OW4xbnhCWmIrL0ZhVldGUWg0LzVTc1hyZFBLbUdnUEN2UjhCRm9HdWpu?=
+ =?utf-8?B?a3luV1U3K09lckI0K0hFQXlFQ2VRTzhpN1l5djU2ZmptTGswMlJqOGtOSXhF?=
+ =?utf-8?B?ODkzQ0ZNR1hyS29Mbmx4YWZFM3JRdHVlM0RJM1Y5cStZVXJvUndXZVl1U1hH?=
+ =?utf-8?B?MFY0RDhjVHZaYlNDZXBFZzJURmlCU3k0KzVFRXNwWjJvZTFPblFjVkc0UlpU?=
+ =?utf-8?B?YndvUkNwS3FHTHFLdjFRbDR0MGFZcjFDOGVDd0Q3TXBTTDFLczcxdmEyejRa?=
+ =?utf-8?B?anZrQkc1d2VZU1BhMmJpK3NJS0xVNnVvR1JKRHhxZDBIbU5SWnMzYW1GZmxu?=
+ =?utf-8?B?Q2tqTVM3K0ppOWNrR1lFNTlaN2NvM3VYaHc2Ym1hWDl2QzV1QU5ocEd2b3ZG?=
+ =?utf-8?B?WDhMR0FXSEVUOE1CbmVPa0JiV0YxbXJCdEVIQjkvWlJIWXZMYkhYU29RPT0=?=
+X-Forefront-Antispam-Report: 
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR10MB3113.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(376005)(366007)(1800799015);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: 
+	=?utf-8?B?RExtSTBNNkd6dWxiOXg2R2ZndThLb2h0MHR1a1QzcnJjaTNwb2RqejBhNlZl?=
+ =?utf-8?B?bksxQkQ0UXJYQkE0V3ZtQ3lGeGxqK1NJL1ZzZkJOU3Fxc0tkV3F1ZzR3ZVRj?=
+ =?utf-8?B?YUllbnFyQ3VKR3JhUkhpczNmWGJvT2ZQdE83QnNUUzFFaDJUOFRESUk0VGVG?=
+ =?utf-8?B?ay9GaG9XQUVzT2ZWWTlSeVdpdXVValpzVkQxMkNKVGVaNzFDSVhyczkrb3V1?=
+ =?utf-8?B?UERaSDA4YnBJN2J0RmJXKzZRNk1teWg1SzVHUVJzdHpiNUZlekhUTnlnZitF?=
+ =?utf-8?B?eE1KcFdhK0NuaEhhRFdmRUJyeVdrTFhSTStFN29iZHk1ZDMyQ3ZFZnA4T3Fo?=
+ =?utf-8?B?c0Z4c1RINjlEM1BwcXlnZXZzYnVoSVhCdnZsU1ZHL1lxWWxrRE9GaFByWlh5?=
+ =?utf-8?B?a2F0L25wQ0hJQmc1cllXUDV1QldQNHRTai9XalBjYWhZTmJKNUNza3MzK3lm?=
+ =?utf-8?B?U1ZCVGlITzdtbWc2UkNUZlF5VVY0YmhNUGVrTWJEV1V3RW5zelJoS0hDMGpW?=
+ =?utf-8?B?WGhzemVKdFJPV0xFSmoxN2UzZ1dDWGFnVzFjM1BCNktjaDE0ZW5VNFVJY1ZF?=
+ =?utf-8?B?WVJ6SEM3Mk0rdXdsYmxkRDF6Tm1BV0h1VHlFY3g2TWtGbktVRWlEajcrbFd5?=
+ =?utf-8?B?S21TKzg1OW56RFVxbjhNTjVyVXErUVBSQVVBeTBoNHp2c3dnTy8yY01vYWpz?=
+ =?utf-8?B?alVpSVk1U1pJL0F4WkVUczJ6Kyt1dzBPdGx6Sk9kZElESTJId0YzOFNVWGxT?=
+ =?utf-8?B?QkRuTU1wR1VhTmx2ZmZhM1BaZmJod2xDVmFyZEVYWmUzMTl4SWpKMXNZTXRE?=
+ =?utf-8?B?TEZxL2dnbmlZQk9mQ1ZUaUZTZ1JIUVZNOU15OWlVc2FhZi9aZE1wSGdiRFpp?=
+ =?utf-8?B?Uzc5amdMZVZqa1BvdWdWYUxlMFRjbEJaZ2Jrc2hucTAzSzY2THYrT3QwTTlt?=
+ =?utf-8?B?Sy9vVHU5eTIzWWZsTG4wTjl4UUF5dldTQ2pRQ2k3Y29mNGZ5OVg1VXJpb2NJ?=
+ =?utf-8?B?a3Y2WUZCMDJFNE1rR2VMckhhV1BYVHdmVDB1N2NqYk5tUysxa3RRL3pXdzZU?=
+ =?utf-8?B?N1pDUWl4cmFhMFlDQXpEdkN5VHBDMTNsZ2ZwNkFIbkJKMlRDckN4R3JUSzBQ?=
+ =?utf-8?B?K1ZDTzB2VHpqS1M5M29HK2tpSDdEK296ZzN3SWRvbzFtRjg2WTErbFdjV2xT?=
+ =?utf-8?B?K3Mwakk1bFhBdnp2Q1ZwajRKb09BcU4waDJBYTJVZHJTbjRGcmJnT2tIR3hN?=
+ =?utf-8?B?bXVjUy9mVzhEN1BZSStmdkhZcy9RcldJRlp0amg3NGZteWVIT0RGdFNvbi9B?=
+ =?utf-8?B?MzR0ellhcEpRVm9yV1JKQ0ZEQWlOSkVnM04vdGRZNWtUZzhhcFV5ZllRM09R?=
+ =?utf-8?B?VzBHS20wRkR5TG10TmkrelVOcU9DTDFSRXBJT0Y3eXRDRVRIQ0VJUlluSWZm?=
+ =?utf-8?B?YkoyUzFtWTBJNkFYelZpemZCcUdZQzVrS0ZmZWwxQk4yRFNXclJLOS9HaUxW?=
+ =?utf-8?B?SUR0RzJ5RGpxSTA2WEVrbWJWUDA2dHlvQWMyQVhWMlFEWFl3aXAyQTJhZ28y?=
+ =?utf-8?B?SkdpTU8weGtLZ3lKL011ckdjcXFLM0hISFhxcjNYN3hhUzNqNWwwOTY1RElh?=
+ =?utf-8?B?c1VvSy8zTFJRQ2J0d1I0WGxyNVFjYm9uKys0bzNBY1BrQlFDa2dzYytWYTRX?=
+ =?utf-8?B?SjdJUHR6bzBFT1hJcUlGcmJhMi9jSUFlRUxvajlLZlhPUXdXSXZRNHJoRmNs?=
+ =?utf-8?B?U1ZMc3h5djdvaWZROEl2c1lUaEJtQVJmZ28yd01TRGdTR2JUeEliT2ttZWs1?=
+ =?utf-8?B?anRXRGpENkVkYkMyWGtiTlJ2MG1Jby8vNWJzMDYyNk5FUlJGM1ZVa3RwaUpj?=
+ =?utf-8?B?VU90Ui9UY25uVHU2MkJmWW5HMHlkSHN2djA3VDQ0czlZckIvUEhFZytmVkU5?=
+ =?utf-8?B?eWJGc2NpYVlwMGcwdk9CWUhXWXNlZXl0R0YzQWFYczQyZmJGWW1wSFRVbnlD?=
+ =?utf-8?B?Mm9FMVV1UGYyVjBFSzBBN3pramJwbmNYUDVIVGJ0elY5VkViNGM1aTZHTk9n?=
+ =?utf-8?B?cS9XdEZPd29DRHo2WnZqZUNoQXFFZlZlRnk4bktrYzc2YUdJOCsranM0LzJH?=
+ =?utf-8?B?WW9KTVN6VndOVUlOZTNwSHNZUmtjSDJPZHdoVEM0eWZqalZzR2Jlck5XazVo?=
+ =?utf-8?B?ckE9PQ==?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: 
+	R3QXHcsVa1+12ZFaew7jwcB2G0NhYyZePUWxI0ZrXMhwONb0+NgDztCwRcc/eZlclx8ya4SYj+BL+GPHf8bqm6scnEBzOcGmYhrFmSp+zX79ZgOVAc1G2yc1VziAdqfc+Uq9yQb8nsrg5QdJz7AFe82JgNLQ6VDtHu0wwL7pcKzgrnmhRSujU0XJ1xmd8zF4ImCAvn9OfB33nHO6ivyIJ+RiLPCy2gEBjXiQoQMEdQh7Yu0uS4sj+5cHH0iHt+6UkhmXfVPuQO//HJ6akRep+WesTAzQIsx/yiIx+DBiQHaKnoExiAHMsOETGA7f5cKg/Ofsswdpg67cBXjdQBrdJtY0dIRo33dp9kwlyFQJfB3y1dqUWOd3hVyWPLAwmoFUu7xIVb6qHSpgfZzAb0U1TPf0OVgup1yLdZqCExe7jYM9nhD/gLAn0NH4DHbj6BFSfpCM8SUkYOm9O2ZbDbQb1CxAXG43oFH3ECNs5R42H5FSIaEX9uwaVUhqFYBtS/Pz2wdBltWchQN5vbGoOBRyh/96Muu8VL+k7QU2hydRw7p7qzJLggBRk5eiN74O/Hr5iYXhCdHGAd5hJrBNJeZcIKxBHxUM54Zy33amXYyyO8A=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b81bf3c2-02c6-4665-19b0-08dc7114f88b
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR10MB3113.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 May 2024 17:16:46.5004
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: B9a5hEp+XBeW/B0AqG3xLi4t4JS5N623a/W/65xDfZcElK2UYKCMlIvX4RXDS/hMNp8n41zFOsyZJyNDabwDRRTAwxoke3epZQ1tS2VenKk=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR10MB6584
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.650,FMLib:17.11.176.26
+ definitions=2024-05-10_12,2024-05-10_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 adultscore=0 malwarescore=0
+ mlxlogscore=999 phishscore=0 mlxscore=0 suspectscore=0 spamscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2405010000
+ definitions=main-2405100124
+X-Proofpoint-ORIG-GUID: W41_xVsfCZYrJdBMJ3SwzG6Txct6cqIl
+X-Proofpoint-GUID: W41_xVsfCZYrJdBMJ3SwzG6Txct6cqIl
 
-On 5/9/2024 1:14 PM, KP Singh wrote:
-> There are some LSM hooks which do not use the common pattern followed
-> by other LSM hooks and thus cannot use call_{int, void}_hook macros and
-> instead use lsm_for_each_hook macro which still results in indirect
-> call.
+
+> On Fri, May 10, 2024 at 1:27=E2=80=AFAM Jose E. Marchesi
+> <jose.marchesi@oracle.com> wrote:
+>>
+>>
+>> > On Thu, May 9, 2024 at 1:47=E2=80=AFAM Jose E. Marchesi
+>> > <jose.marchesi@oracle.com> wrote:
+>> >> +/* A `break' executed in the head of a `for' loop statement is bound
+>> >> +   to the current loop in clang, but it is bound to the enclosing lo=
+op
+>> >> +   in GCC.  Note both compilers optimize the outer loop out with -O1
+>> >> +   and higher.  This macro shall be used to annotate any loop that
+>> >> +   uses cond_break within its header.  */
+>> >> +#ifdef __clang__
+>> >> +#define __compat_break
+>> >> +#else
+>> >> +#define __compat_break for (int __control =3D 1; __control; --__cont=
+rol)
+>> >> +#endif
+>> > ..
+>> >> +       __compat_break
+>> >>         for (i =3D zero; i < cnt; cond_break, i++) {
+>> >>                 struct elem __arena *n =3D bpf_alloc(sizeof(*n));
+>> >
+>> > This is too ugly. It ruins the readability of the code.
+>> > Let's introduce can_loop macro similar to cond_break
+>> > that returns 0 or 1 instead of break/continue and use it as:
+>> >
+>> >         for (i =3D zero; i < cnt && can_loop; i++) {
+>> >
+>> > pw-bot: cr
+>>
+>> I went with the ugliness because I was trying to avoid rewriting the
+>> loops in the tests, assuming the tests were actually testing using
+>> cond_break in these particular locations would result in a particular
+>> number of iterations.
+>>
+>> The loops
+>>
+>>   for (i =3D zero; i < cnt; cond_break, i++) BODY
+>>
+>> and
+>>
+>>   for (i =3D zero; i < cnt && can_loop; i++) BODY
+>>
+>> are not equivalent if can_loop implements the same logic than
+>> cond_break.
 >
-> There is one additional generalizable pattern where a hook matching an
-> lsmid is called and the indirect calls for these are addressed with the
-> newly added call_hook_with_lsmid macro which internally uses an
-> implementation similar to call_int_hook but has an additional check that
-> matches the lsmid.
+> It's off by one and it's fine.
+> The loops don't and shouldn't expect the precise number allowed
+> by may_goto.
+
+Ok, understood.
+
+I assume you also want to use can_loop also in the definition of
+list_for_each_entry?
+
+> btw there are tests that use cond_break inside {}.
+> They don't need to change.
+
+Yes I noticed these.  Won't touch them.
+
 >
-> For the generic case the lsm_for_each_hook macro is updated to accept
-> logic before and after the invocation of the LSM hook (static call) in
-> the unrolled loop.
+>>
+>> The may_goto instructions are somehow patched at run-time, and in a
+>> predictable way since the tests are checking for explicit iteration
+>> counts, right?
 >
-> Signed-off-by: KP Singh <kpsingh@kernel.org>
-
-A couple of comments below, nonetheless ...
-
-Reviewed-by: Casey Schaufler <casey@schaufler-ca.com>
-
-> ---
->  security/security.c | 229 ++++++++++++++++++++++++--------------------
->  1 file changed, 125 insertions(+), 104 deletions(-)
->
-> diff --git a/security/security.c b/security/security.c
-> index 39ffe949e509..491b807a8a63 100644
-> --- a/security/security.c
-> +++ b/security/security.c
-> @@ -945,10 +945,41 @@ out:									\
->  	RC;								\
->  })
->  
-> -#define lsm_for_each_hook(scall, NAME)					\
-> -	for (scall = static_calls_table.NAME;				\
-> -	     scall - static_calls_table.NAME < MAX_LSM_COUNT; scall++)  \
-> -		if (static_key_enabled(&scall->active->key))
-> +/*
-> + * Can be used in the context passed to lsm_for_each_hook to get the lsmid of the
-> + * current hook
-> + */
-> +#define current_lsmid() _hook_lsmid
-> +
-> +#define __CALL_HOOK(NUM, HOOK, RC, BODY_BEFORE, BODY_AFTER, ...)	     \
-> +do {									     \
-> +	int __maybe_unused _hook_lsmid;					     \
-> +									     \
-> +	if (static_branch_unlikely(&SECURITY_HOOK_ACTIVE_KEY(HOOK, NUM))) {  \
-> +		_hook_lsmid = static_calls_table.HOOK[NUM].hl->lsmid->id;    \
-> +		BODY_BEFORE						     \
-> +		RC = static_call(LSM_STATIC_CALL(HOOK, NUM))(__VA_ARGS__);   \
-> +		BODY_AFTER						     \
-> +	}								     \
-> +} while (0);
-> +
-> +#define lsm_for_each_hook(HOOK, RC, BODY, ...)	\
-> +	LSM_LOOP_UNROLL(__CALL_HOOK, HOOK, RC, ;, BODY, __VA_ARGS__)
-> +
-> +#define call_hook_with_lsmid(HOOK, LSMID, ...)				\
-> +({									\
-> +	__label__ out;							\
-> +	int RC = LSM_RET_DEFAULT(HOOK);					\
-> +									\
-> +	LSM_LOOP_UNROLL(__CALL_HOOK, HOOK, RC, {			\
-> +		if (current_lsmid() != LSMID)				\
-> +			continue;					\
-> +	}, {								\
-> +		goto out;						\
-> +	}, __VA_ARGS__);						\
-> +out:									\
-> +	RC;								\
-> +})
-
-I like how clean these macros look ...
-
->  
->  /* Security operations */
->  
-> @@ -1184,7 +1215,6 @@ int security_settime64(const struct timespec64 *ts, const struct timezone *tz)
->   */
->  int security_vm_enough_memory_mm(struct mm_struct *mm, long pages)
->  {
-> -	struct lsm_static_call *scall;
->  	int cap_sys_admin = 1;
->  	int rc;
->  
-> @@ -1195,13 +1225,18 @@ int security_vm_enough_memory_mm(struct mm_struct *mm, long pages)
->  	 * agree that it should be set it will. If any module
->  	 * thinks it should not be set it won't.
->  	 */
-> -	lsm_for_each_hook(scall, vm_enough_memory) {
-> -		rc = scall->hl->hook.vm_enough_memory(mm, pages);
-> -		if (rc <= 0) {
-> -			cap_sys_admin = 0;
-> -			break;
-> -		}
-> -	}
-> +
-> +	lsm_for_each_hook(
-> +		vm_enough_memory, rc,
-> +		{
-> +			if (rc <= 0) {
-> +				cap_sys_admin = 0;
-> +				goto out;
-> +			}
-> +		},
-> +		mm, pages);
-> +
-> +out:
-
-... but the invocations are quite hideous. Because this looks like code that's
-messed up I would like to see it commented, perhaps something like
-
-+
-+	lsm_for_each_hook(
-+		vm_enough_memory, rc,
-+		/* BLOCK BEFORE */
-+		{
-+			if (rc <= 0) {
-+				cap_sys_admin = 0;
-+				goto out;
-+			}
-+		},
-+		/* END BLOCK BEFORE */
-+		mm, pages);
-+
-+out:
-
->  	return __vm_enough_memory(mm, pages, cap_sys_admin);
->  }
->  
-> @@ -1343,17 +1378,19 @@ int security_fs_context_dup(struct fs_context *fc, struct fs_context *src_fc)
->  int security_fs_context_parse_param(struct fs_context *fc,
->  				    struct fs_parameter *param)
->  {
-> -	struct lsm_static_call *scall;
-> -	int trc;
-> +	int trc = LSM_RET_DEFAULT(fs_context_parse_param);
->  	int rc = -ENOPARAM;
->  
-> -	lsm_for_each_hook(scall, fs_context_parse_param) {
-> -		trc = scall->hl->hook.fs_context_parse_param(fc, param);
-> -		if (trc == 0)
-> -			rc = 0;
-> -		else if (trc != -ENOPARAM)
-> -			return trc;
-> -	}
-> +	lsm_for_each_hook(
-> +		fs_context_parse_param, trc,
-> +		{
-> +			if (trc == 0)
-> +				rc = 0;
-> +			else if (trc != -ENOPARAM)
-> +				return trc;
-> +		},
-> +		fc, param);
-> +
->  	return rc;
->  }
->  
-> @@ -1578,15 +1615,17 @@ int security_sb_set_mnt_opts(struct super_block *sb,
->  			     unsigned long kern_flags,
->  			     unsigned long *set_kern_flags)
->  {
-> -	struct lsm_static_call *scall;
->  	int rc = mnt_opts ? -EOPNOTSUPP : LSM_RET_DEFAULT(sb_set_mnt_opts);
->  
-> -	lsm_for_each_hook(scall, sb_set_mnt_opts) {
-> -		rc = scall->hl->hook.sb_set_mnt_opts(sb, mnt_opts, kern_flags,
-> -					      set_kern_flags);
-> -		if (rc != LSM_RET_DEFAULT(sb_set_mnt_opts))
-> -			break;
-> -	}
-> +	lsm_for_each_hook(
-> +		sb_set_mnt_opts, rc,
-> +		{
-> +			if (rc != LSM_RET_DEFAULT(sb_set_mnt_opts))
-> +				goto out;
-> +		},
-> +		sb, mnt_opts, kern_flags, set_kern_flags);
-> +
-> +out:
->  	return rc;
->  }
->  EXPORT_SYMBOL(security_sb_set_mnt_opts);
-> @@ -1777,7 +1816,6 @@ int security_inode_init_security(struct inode *inode, struct inode *dir,
->  				 const struct qstr *qstr,
->  				 const initxattrs initxattrs, void *fs_data)
->  {
-> -	struct lsm_static_call *scall;
->  	struct xattr *new_xattrs = NULL;
->  	int ret = -EOPNOTSUPP, xattr_count = 0;
->  
-> @@ -1795,18 +1833,19 @@ int security_inode_init_security(struct inode *inode, struct inode *dir,
->  			return -ENOMEM;
->  	}
->  
-> -	lsm_for_each_hook(scall, inode_init_security) {
-> -		ret = scall->hl->hook.inode_init_security(inode, dir, qstr, new_xattrs,
-> -						  &xattr_count);
-> -		if (ret && ret != -EOPNOTSUPP)
-> -			goto out;
-> +	lsm_for_each_hook(
-> +		inode_init_security, ret,
-> +		{
->  		/*
->  		 * As documented in lsm_hooks.h, -EOPNOTSUPP in this context
->  		 * means that the LSM is not willing to provide an xattr, not
->  		 * that it wants to signal an error. Thus, continue to invoke
->  		 * the remaining LSMs.
->  		 */
-> -	}
-> +			if (ret && ret != -EOPNOTSUPP)
-> +				goto out;
-> +		},
-> +		inode, dir, qstr, new_xattrs, &xattr_count);
->  
->  	/* If initxattrs() is NULL, xattr_count is zero, skip the call. */
->  	if (!xattr_count)
-> @@ -3601,16 +3640,19 @@ int security_task_prctl(int option, unsigned long arg2, unsigned long arg3,
->  {
->  	int thisrc;
->  	int rc = LSM_RET_DEFAULT(task_prctl);
-> -	struct lsm_static_call *scall;
-> -
-> -	lsm_for_each_hook(scall, task_prctl) {
-> -		thisrc = scall->hl->hook.task_prctl(option, arg2, arg3, arg4, arg5);
-> -		if (thisrc != LSM_RET_DEFAULT(task_prctl)) {
-> -			rc = thisrc;
-> -			if (thisrc != 0)
-> -				break;
-> -		}
-> -	}
-> +
-> +	lsm_for_each_hook(
-> +		task_prctl, thisrc,
-> +		{
-> +			if (thisrc != LSM_RET_DEFAULT(task_prctl)) {
-> +				rc = thisrc;
-> +				if (thisrc != 0)
-> +					goto out;
-> +			}
-> +		},
-> +		option, arg2, arg3, arg4, arg5);
-> +
-> +out:
->  	return rc;
->  }
->  
-> @@ -4010,7 +4052,6 @@ EXPORT_SYMBOL(security_d_instantiate);
->  int security_getselfattr(unsigned int attr, struct lsm_ctx __user *uctx,
->  			 u32 __user *size, u32 flags)
->  {
-> -	struct lsm_static_call *scall;
->  	struct lsm_ctx lctx = { .id = LSM_ID_UNDEF, };
->  	u8 __user *base = (u8 __user *)uctx;
->  	u32 entrysize;
-> @@ -4048,31 +4089,40 @@ int security_getselfattr(unsigned int attr, struct lsm_ctx __user *uctx,
->  	 * In the usual case gather all the data from the LSMs.
->  	 * In the single case only get the data from the LSM specified.
->  	 */
-> -	lsm_for_each_hook(scall, getselfattr) {
-> -		if (single && lctx.id != scall->hl->lsmid->id)
-> -			continue;
-> -		entrysize = left;
-> -		if (base)
-> -			uctx = (struct lsm_ctx __user *)(base + total);
-> -		rc = scall->hl->hook.getselfattr(attr, uctx, &entrysize, flags);
-> -		if (rc == -EOPNOTSUPP) {
-> -			rc = 0;
-> -			continue;
-> -		}
-> -		if (rc == -E2BIG) {
-> -			rc = 0;
-> -			left = 0;
-> -			toobig = true;
-> -		} else if (rc < 0)
-> -			return rc;
-> -		else
-> -			left -= entrysize;
-> +	LSM_LOOP_UNROLL(
-> +		__CALL_HOOK, getselfattr, rc,
-> +		/* BODY_BEFORE */
-> +		{
-> +			if (single && lctx.id != current_lsmid())
-> +				continue;
-> +			entrysize = left;
-> +			if (base)
-> +				uctx = (struct lsm_ctx __user *)(base + total);
-> +		},
-> +		/* BODY_AFTER */
-> +		{
-> +			if (rc == -EOPNOTSUPP) {
-> +				rc = 0;
-> +			} else {
-> +				if (rc == -E2BIG) {
-> +					rc = 0;
-> +					left = 0;
-> +					toobig = true;
-> +				} else if (rc < 0)
-> +					return rc;
-> +				else
-> +					left -= entrysize;
-> +
-> +				total += entrysize;
-> +				count += rc;
-> +				if (single)
-> +					goto out;
-> +			}
-> +		},
-> +		attr, uctx, &entrysize, flags);
-> +
-> +out:
->  
-> -		total += entrysize;
-> -		count += rc;
-> -		if (single)
-> -			break;
-> -	}
->  	if (put_user(total, size))
->  		return -EFAULT;
->  	if (toobig)
-> @@ -4103,9 +4153,8 @@ int security_getselfattr(unsigned int attr, struct lsm_ctx __user *uctx,
->  int security_setselfattr(unsigned int attr, struct lsm_ctx __user *uctx,
->  			 u32 size, u32 flags)
->  {
-> -	struct lsm_static_call *scall;
->  	struct lsm_ctx *lctx;
-> -	int rc = LSM_RET_DEFAULT(setselfattr);
-> +	int rc;
->  	u64 required_len;
->  
->  	if (flags)
-> @@ -4126,11 +4175,7 @@ int security_setselfattr(unsigned int attr, struct lsm_ctx __user *uctx,
->  		goto free_out;
->  	}
->  
-> -	lsm_for_each_hook(scall, setselfattr)
-> -		if ((scall->hl->lsmid->id) == lctx->id) {
-> -			rc = scall->hl->hook.setselfattr(attr, lctx, size, flags);
-> -			break;
-> -		}
-> +	rc = call_hook_with_lsmid(setselfattr, lctx->id, attr, lctx, size, flags);
->  
->  free_out:
->  	kfree(lctx);
-> @@ -4151,14 +4196,7 @@ int security_setselfattr(unsigned int attr, struct lsm_ctx __user *uctx,
->  int security_getprocattr(struct task_struct *p, int lsmid, const char *name,
->  			 char **value)
->  {
-> -	struct lsm_static_call *scall;
-> -
-> -	lsm_for_each_hook(scall, getprocattr) {
-> -		if (lsmid != 0 && lsmid != scall->hl->lsmid->id)
-> -			continue;
-> -		return scall->hl->hook.getprocattr(p, name, value);
-> -	}
-> -	return LSM_RET_DEFAULT(getprocattr);
-> +	return call_hook_with_lsmid(getprocattr, lsmid, p, name, value);
->  }
->  
->  /**
-> @@ -4175,14 +4213,7 @@ int security_getprocattr(struct task_struct *p, int lsmid, const char *name,
->   */
->  int security_setprocattr(int lsmid, const char *name, void *value, size_t size)
->  {
-> -	struct lsm_static_call *scall;
-> -
-> -	lsm_for_each_hook(scall, setprocattr) {
-> -		if (lsmid != 0 && lsmid != scall->hl->lsmid->id)
-> -			continue;
-> -		return scall->hl->hook.setprocattr(name, value, size);
-> -	}
-> -	return LSM_RET_DEFAULT(setprocattr);
-> +	return call_hook_with_lsmid(setprocattr, lsmid, name, value, size);
->  }
->  
->  /**
-> @@ -5267,23 +5298,13 @@ int security_xfrm_state_pol_flow_match(struct xfrm_state *x,
->  				       struct xfrm_policy *xp,
->  				       const struct flowi_common *flic)
->  {
-> -	struct lsm_static_call *scall;
-> -	int rc = LSM_RET_DEFAULT(xfrm_state_pol_flow_match);
-> -
->  	/*
->  	 * Since this function is expected to return 0 or 1, the judgment
->  	 * becomes difficult if multiple LSMs supply this call. Fortunately,
->  	 * we can use the first LSM's judgment because currently only SELinux
->  	 * supplies this call.
-> -	 *
-> -	 * For speed optimization, we explicitly break the loop rather than
-> -	 * using the macro
->  	 */
-> -	lsm_for_each_hook(scall, xfrm_state_pol_flow_match) {
-> -		rc = scall->hl->hook.xfrm_state_pol_flow_match(x, xp, flic);
-> -		break;
-> -	}
-> -	return rc;
-> +	return call_int_hook(xfrm_state_pol_flow_match, x, xp, flic);
->  }
->  
->  /**
+> They're patched by the verifier, but they're unpredictable.
+> Right now it's a simpler counter, but sooner or later
+> it will be time based.
