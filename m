@@ -1,272 +1,138 @@
-Received: from mail-oa1-f52.google.com (mail-oa1-f52.google.com [209.85.160.52])
+Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47BB013AA54
-	for <bpf@vger.kernel.org>; Fri, 10 May 2024 01:13:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAC6F148FED
+	for <bpf@vger.kernel.org>; Fri, 10 May 2024 02:36:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715303606; cv=none; b=plEIOkBIn1FL3gfNLu9seCNMp+cpbc9Q12Zfn7OaWLRC008YS2dWUCBtqaW5v0YtXltz1T3BhD+jAZzQjXhuWbVUX5w1ecRASzOAgITB6VTB7puCaOV37yD/vcyJjp49S1dNbvdGcXg5sozAfrU/jPlUu11SeWytHnOdK4H8dic=
+	t=1715308609; cv=none; b=qTVhu+VuW/RtC6Asdy9WYg3xBZTrPrSE8YXLo2997krViahFxo3AkdtA6Tj7x2hIw3/3HNkXLJDn/+0p2PQDA4h4gm1ihBFUz96WeQvlDdO7uoT8m/znBAzUHuwPUdA2CdHKO5wnyVEwTAixXCzKYGYf0JIwwzxS/s3q3JQ3iME=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715303606; c=relaxed/simple;
-	bh=184HSHS8K1pDQhxH155teo7Hn+PjBBhq6NMvMs9ANKc=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=fCvTOEXO0bx0Z6wOB/D1hIs4SP47nvoUs3QyHxiXRkJwGdOPL/EGRxt1QiqrnBsMG6KT3hJS/QvvFZE2uO2A6Xb6Ud3eGymablD8rG9NvFoW1TQecWBN61/vOMZt6FM7ZTKEndltfAuRdmNJfp90i73o0ivpeiWHgffZVx4KzvQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=baLtnvEr; arc=none smtp.client-ip=209.85.160.52
+	s=arc-20240116; t=1715308609; c=relaxed/simple;
+	bh=BazKg6kdvOWpi3sThSrdS2tQkJ3WiWEouGvPuG7WPl0=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=uDWJH8KUWcmx6ad7tNhbKkkzKAfFJFvxBSxipxYfieMYfhB0hJpUB9uAYLQFC/hsrZjXBgfYmHMrDFBiIlkj8tiFww9e9ONxCfBcVfYBRh7NqtFjUKBn9eDiO9OQbbpXkwKrFD8CXrRei9LA0IGuDUKMszM72993hBYjcUBd2zU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LttpO47x; arc=none smtp.client-ip=209.85.210.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="baLtnvEr"
-Received: by mail-oa1-f52.google.com with SMTP id 586e51a60fabf-22e6b61d652so830538fac.0
-        for <bpf@vger.kernel.org>; Thu, 09 May 2024 18:13:24 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LttpO47x"
+Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-6f460e05101so1160142b3a.1
+        for <bpf@vger.kernel.org>; Thu, 09 May 2024 19:36:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1715303603; x=1715908403; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EWwzY90xebc6YceOSeyo6ErhBa/XYlP1DhvcruTgZXw=;
-        b=baLtnvErRVNdoe0m0WHOSCzEy/68LsMXkKEIFBWoT/73+nTVcXPsorCCICETzsctAv
-         U4tUKcn25KkzWUnRRA6f4eEUjTK32p4YNcIc4vuYDUf5X+rtwDYSuR30qSxGO0dLlr87
-         f2MbFfP2mGufQUBnmT8lB8n0YrR8CYOWUAcvJe2DWiVfWKQLyXj4dRleGa8cLyTqcJyQ
-         6Rn4rS+TNFMwLPkQJinRv7WKx+AEoqaAyFEdN3mf+HYL0Rbw+woSlXsOdUX1J7OedVk1
-         3zSl89JN68sm9/n/TqpDhmDMwd+exvBBeSK7hi7aOi8SRBJusGqsXjg1QQ/S28gZc5Qj
-         05vw==
+        d=gmail.com; s=20230601; t=1715308607; x=1715913407; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=0u9zuz177f026pbOUvgny+KKXphuj26JUvNsd2SYpGc=;
+        b=LttpO47xUC//qBjM14eFgtAdvtNe+ZebeYTmGwagmSIUbbBZTNaKMxdc7TE5XUe4pA
+         9dJiUMErpNbMSjebxzXCmp8w3eNsSLg/fz4WyGI9PgcPo4w0TGqrkkL3ykzuH/Lh8lUs
+         +XXvj3XCy92WllxCSHKZaJkW5JFMHxEnlIUD1yFkSn5dVV5r/NeVI7DRIO2dgAExlUUz
+         6e8h1NWdUOpy8x6dQFvOGcWdMYtcmKStd2TkAWXqGUaNHcjxTO2yK5DC9XObE0HR6KEl
+         2XPPv/l1DB3qp5GXgaktgrhpu8PylnRd+b3WWGkWVaLn4zCyql7AIqr0QBkCfLibxE2+
+         PHuw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715303603; x=1715908403;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=EWwzY90xebc6YceOSeyo6ErhBa/XYlP1DhvcruTgZXw=;
-        b=V0JV3MSL0Uz9aDjVAUsDOqBlSactycNM/wMFqURGJOp+9og73FoLLKgm4gThbl90CE
-         P2ZzkNEz+0AJRL5r+Gy531eVe271On2qWKA+VKwd4r3cV1Xp8EXwjAqAIYpGE+LoAQSf
-         zsSRlV3BCbw2RyaqlUMrqK3dO5u75FcaxTgToSomj4PreUlzScXCDVvgeRRh2Rbcr9Al
-         d99mNnTdHJW2RVSuJK9rU7P5b2GEUR/vXstrOMt3TZ1W6UfIwiPrl8rQxA6OoKNGoZSX
-         d+BM+yhccoUAddUEB8TseKzQXi3jSjCyyEdtpOOVeclULnMSS7ddqL55wtl32uXjnFhv
-         Ao4Q==
-X-Gm-Message-State: AOJu0Yzq7hkNnzraMOrIy0bhTgTRCfksNZXGuwryRBon8Y0bIIeP4M4y
-	crtZxqm5Z9vspp4SP6Q7G9rNSxnIKFXah+ZwezYevfj1IA1FqScnDCoLmQ==
-X-Google-Smtp-Source: AGHT+IGNEaUqfIpH6yLWtWhfLulMJc7Cs7w5uNdPdjbj7ui5ocypNOXn2KgxVrsIkRfiYBC64IXAsQ==
-X-Received: by 2002:a05:6870:648f:b0:233:d4b3:9b30 with SMTP id 586e51a60fabf-24172a2371dmr1635109fac.1.1715303603078;
-        Thu, 09 May 2024 18:13:23 -0700 (PDT)
-Received: from kickker.attlocal.net ([2600:1700:6cf8:1240:66fe:82c7:2d03:7176])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-6f0e01a8b23sm476874a34.6.2024.05.09.18.13.22
+        d=1e100.net; s=20230601; t=1715308607; x=1715913407;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=0u9zuz177f026pbOUvgny+KKXphuj26JUvNsd2SYpGc=;
+        b=o3q8MAlom2hFpbWnY4cXXIcs7m5O68xbrJ4BMXZsbNzYUZb7mYBpiAvi2dodZiq3fn
+         laOov3YlOOqaipxKb9MXiz9czyRfiKi+/dRJLsWDx2LQe2XSRMXHwZjRUPN9NwHH6ahA
+         s1/rRJ6PMlIac0I++dm+o+ITlJ+FwaYWElTATqbGzOP0eLhMWTdOq3h80GbGt0ve6F2j
+         kvAMWiFGRvtfg4d5/ajuNe6S8dWLgRo/CpgrmhOqabQ2tq/pWAQu9094d8oBkRqXjjaX
+         UhyGTpWLYiax1vYm0RTLvRExjJQ8RIacalB/UWo5XaEnt63BsLn/+cLo44s9L7ephIkP
+         S80g==
+X-Forwarded-Encrypted: i=1; AJvYcCU+BhF943SPgUfuB62LUkyVkdqjD13ns4jDwgErMcCmiAc0jF8aAxHAq6NF0ibjnYCnbtNYOe3lW3LaMVZ0D+vOOKzT
+X-Gm-Message-State: AOJu0YxCVRQ4Ol5e1VwKuY+PpWlQbic7KMc9ZEHMTuUgcT0uONSXKJru
+	cUisP0oPcUPW5gnFdfyT+daYu5ZWDU3KtjR3CB5Jq7zMtI4uI9K5
+X-Google-Smtp-Source: AGHT+IGGAUgLnj1TdxdhMPqqHQqobQYg2V2qX3PearUBXFdsgrk7TMMaUmTd2JmFSvHcHnxCYrNKAQ==
+X-Received: by 2002:a05:6a00:984:b0:6f3:e6c3:eadf with SMTP id d2e1a72fcca58-6f4df44ca45mr2266377b3a.15.1715308606779;
+        Thu, 09 May 2024 19:36:46 -0700 (PDT)
+Received: from ?IPv6:2604:3d08:6979:1160::3424? ([2604:3d08:6979:1160::3424])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-6341134705dsm2030863a12.85.2024.05.09.19.36.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 May 2024 18:13:22 -0700 (PDT)
-From: Kui-Feng Lee <thinker.li@gmail.com>
-To: bpf@vger.kernel.org,
-	ast@kernel.org,
-	martin.lau@linux.dev,
-	song@kernel.org,
-	kernel-team@meta.com,
-	andrii@kernel.org
-Cc: sinquersw@gmail.com,
-	kuifeng@meta.com,
-	Kui-Feng Lee <thinker.li@gmail.com>
-Subject: [PATCH bpf-next v5 8/9] selftests/bpf: Test global bpf_rb_root arrays and fields in nested struct types.
-Date: Thu,  9 May 2024 18:13:11 -0700
-Message-Id: <20240510011312.1488046-9-thinker.li@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240510011312.1488046-1-thinker.li@gmail.com>
-References: <20240510011312.1488046-1-thinker.li@gmail.com>
+        Thu, 09 May 2024 19:36:46 -0700 (PDT)
+Message-ID: <164f53620337d23140d602a6e5a1aba00612143b.camel@gmail.com>
+Subject: Re: [PATCH bpf-next v4 5/9] bpf: look into the types of the fields
+ of a struct type recursively.
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Kui-Feng Lee <thinker.li@gmail.com>, bpf@vger.kernel.org,
+ ast@kernel.org,  martin.lau@linux.dev, song@kernel.org,
+ kernel-team@meta.com, andrii@kernel.org
+Cc: sinquersw@gmail.com, kuifeng@meta.com
+Date: Thu, 09 May 2024 19:36:45 -0700
+In-Reply-To: <20240508063218.2806447-6-thinker.li@gmail.com>
+References: <20240508063218.2806447-1-thinker.li@gmail.com>
+	 <20240508063218.2806447-6-thinker.li@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4-0ubuntu2 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-Make sure global arrays of bpf_rb_root and fields of bpf_rb_root in nested
-struct types work correctly.
+On Tue, 2024-05-07 at 23:32 -0700, Kui-Feng Lee wrote:
+> The verifier has field information for specific special types, such as
+> kptr, rbtree root, and list head. These types are handled
+> differently. However, we did not previously examine the types of fields o=
+f
+> a struct type variable. Field information records were not generated for
+> the kptrs, rbtree roots, and linked_list heads that are not located at th=
+e
+> outermost struct type of a variable.
+>=20
+> For example,
+>=20
+>   struct A {
+>     struct task_struct __kptr * task;
+>   };
+>=20
+>   struct B {
+>     struct A mem_a;
+>   }
+>=20
+>   struct B var_b;
+>=20
+> It did not examine "struct A" so as not to generate field information for
+> the kptr in "struct A" for "var_b".
+>=20
+> This patch enables BPF programs to define fields of these special types i=
+n
+> a struct type other than the direct type of a variable or in a struct typ=
+e
+> that is the type of a field in the value type of a map.
+>=20
+> Signed-off-by: Kui-Feng Lee <thinker.li@gmail.com>
+> ---
 
-Signed-off-by: Kui-Feng Lee <thinker.li@gmail.com>
----
- .../testing/selftests/bpf/prog_tests/rbtree.c | 47 +++++++++++
- tools/testing/selftests/bpf/progs/rbtree.c    | 77 +++++++++++++++++++
- 2 files changed, 124 insertions(+)
+Acked-by: Eduard Zingerman <eddyz87@gmail.com>
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/rbtree.c b/tools/testing/selftests/bpf/prog_tests/rbtree.c
-index e9300c96607d..9818f06c97c5 100644
---- a/tools/testing/selftests/bpf/prog_tests/rbtree.c
-+++ b/tools/testing/selftests/bpf/prog_tests/rbtree.c
-@@ -31,6 +31,28 @@ static void test_rbtree_add_nodes(void)
- 	rbtree__destroy(skel);
- }
- 
-+static void test_rbtree_add_nodes_nested(void)
-+{
-+	LIBBPF_OPTS(bpf_test_run_opts, opts,
-+		    .data_in = &pkt_v4,
-+		    .data_size_in = sizeof(pkt_v4),
-+		    .repeat = 1,
-+	);
-+	struct rbtree *skel;
-+	int ret;
-+
-+	skel = rbtree__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "rbtree__open_and_load"))
-+		return;
-+
-+	ret = bpf_prog_test_run_opts(bpf_program__fd(skel->progs.rbtree_add_nodes_nested), &opts);
-+	ASSERT_OK(ret, "rbtree_add_nodes_nested run");
-+	ASSERT_OK(opts.retval, "rbtree_add_nodes_nested retval");
-+	ASSERT_EQ(skel->data->less_callback_ran, 1, "rbtree_add_nodes_nested less_callback_ran");
-+
-+	rbtree__destroy(skel);
-+}
-+
- static void test_rbtree_add_and_remove(void)
- {
- 	LIBBPF_OPTS(bpf_test_run_opts, opts,
-@@ -53,6 +75,27 @@ static void test_rbtree_add_and_remove(void)
- 	rbtree__destroy(skel);
- }
- 
-+static void test_rbtree_add_and_remove_array(void)
-+{
-+	LIBBPF_OPTS(bpf_test_run_opts, opts,
-+		    .data_in = &pkt_v4,
-+		    .data_size_in = sizeof(pkt_v4),
-+		    .repeat = 1,
-+	);
-+	struct rbtree *skel;
-+	int ret;
-+
-+	skel = rbtree__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "rbtree__open_and_load"))
-+		return;
-+
-+	ret = bpf_prog_test_run_opts(bpf_program__fd(skel->progs.rbtree_add_and_remove_array), &opts);
-+	ASSERT_OK(ret, "rbtree_add_and_remove_array");
-+	ASSERT_OK(opts.retval, "rbtree_add_and_remove_array retval");
-+
-+	rbtree__destroy(skel);
-+}
-+
- static void test_rbtree_first_and_remove(void)
- {
- 	LIBBPF_OPTS(bpf_test_run_opts, opts,
-@@ -104,8 +147,12 @@ void test_rbtree_success(void)
- {
- 	if (test__start_subtest("rbtree_add_nodes"))
- 		test_rbtree_add_nodes();
-+	if (test__start_subtest("rbtree_add_nodes_nested"))
-+		test_rbtree_add_nodes_nested();
- 	if (test__start_subtest("rbtree_add_and_remove"))
- 		test_rbtree_add_and_remove();
-+	if (test__start_subtest("rbtree_add_and_remove_array"))
-+		test_rbtree_add_and_remove_array();
- 	if (test__start_subtest("rbtree_first_and_remove"))
- 		test_rbtree_first_and_remove();
- 	if (test__start_subtest("rbtree_api_release_aliasing"))
-diff --git a/tools/testing/selftests/bpf/progs/rbtree.c b/tools/testing/selftests/bpf/progs/rbtree.c
-index b09f4fffe57c..a3620c15c136 100644
---- a/tools/testing/selftests/bpf/progs/rbtree.c
-+++ b/tools/testing/selftests/bpf/progs/rbtree.c
-@@ -13,6 +13,15 @@ struct node_data {
- 	struct bpf_rb_node node;
- };
- 
-+struct root_nested_inner {
-+	struct bpf_spin_lock glock;
-+	struct bpf_rb_root root __contains(node_data, node);
-+};
-+
-+struct root_nested {
-+	struct root_nested_inner inner;
-+};
-+
- long less_callback_ran = -1;
- long removed_key = -1;
- long first_data[2] = {-1, -1};
-@@ -20,6 +29,9 @@ long first_data[2] = {-1, -1};
- #define private(name) SEC(".data." #name) __hidden __attribute__((aligned(8)))
- private(A) struct bpf_spin_lock glock;
- private(A) struct bpf_rb_root groot __contains(node_data, node);
-+private(A) struct bpf_rb_root groot_array[2] __contains(node_data, node);
-+private(A) struct bpf_rb_root groot_array_one[1] __contains(node_data, node);
-+private(B) struct root_nested groot_nested;
- 
- static bool less(struct bpf_rb_node *a, const struct bpf_rb_node *b)
- {
-@@ -71,6 +83,12 @@ long rbtree_add_nodes(void *ctx)
- 	return __add_three(&groot, &glock);
- }
- 
-+SEC("tc")
-+long rbtree_add_nodes_nested(void *ctx)
-+{
-+	return __add_three(&groot_nested.inner.root, &groot_nested.inner.glock);
-+}
-+
- SEC("tc")
- long rbtree_add_and_remove(void *ctx)
- {
-@@ -109,6 +127,65 @@ long rbtree_add_and_remove(void *ctx)
- 	return 1;
- }
- 
-+SEC("tc")
-+long rbtree_add_and_remove_array(void *ctx)
-+{
-+	struct bpf_rb_node *res1 = NULL, *res2 = NULL, *res3 = NULL;
-+	struct node_data *nodes[3][2] = {{NULL, NULL}, {NULL, NULL}, {NULL, NULL}};
-+	struct node_data *n;
-+	long k1 = -1, k2 = -1, k3 = -1;
-+	int i, j;
-+
-+	for (i = 0; i < 3; i++) {
-+		for (j = 0; j < 2; j++) {
-+			nodes[i][j] = bpf_obj_new(typeof(*nodes[i][j]));
-+			if (!nodes[i][j])
-+				goto err_out;
-+			nodes[i][j]->key = i * 2 + j;
-+		}
-+	}
-+
-+	bpf_spin_lock(&glock);
-+	for (i = 0; i < 2; i++)
-+		for (j = 0; j < 2; j++)
-+			bpf_rbtree_add(&groot_array[i], &nodes[i][j]->node, less);
-+	for (j = 0; j < 2; j++)
-+		bpf_rbtree_add(&groot_array_one[0], &nodes[2][j]->node, less);
-+	res1 = bpf_rbtree_remove(&groot_array[0], &nodes[0][0]->node);
-+	res2 = bpf_rbtree_remove(&groot_array[1], &nodes[1][0]->node);
-+	res3 = bpf_rbtree_remove(&groot_array_one[0], &nodes[2][0]->node);
-+	bpf_spin_unlock(&glock);
-+
-+	if (res1) {
-+		n = container_of(res1, struct node_data, node);
-+		k1 = n->key;
-+		bpf_obj_drop(n);
-+	}
-+	if (res2) {
-+		n = container_of(res2, struct node_data, node);
-+		k2 = n->key;
-+		bpf_obj_drop(n);
-+	}
-+	if (res3) {
-+		n = container_of(res3, struct node_data, node);
-+		k3 = n->key;
-+		bpf_obj_drop(n);
-+	}
-+	if (k1 != 0 || k2 != 2 || k3 != 4)
-+		return 2;
-+
-+	return 0;
-+
-+err_out:
-+	for (i = 0; i < 3; i++) {
-+		for (j = 0; j < 2; j++) {
-+			if (nodes[i][j])
-+				bpf_obj_drop(nodes[i][j]);
-+		}
-+	}
-+	return 1;
-+}
-+
- SEC("tc")
- long rbtree_first_and_remove(void *ctx)
- {
--- 
-2.34.1
+[...]
 
+> @@ -3555,6 +3597,17 @@ static int btf_find_field_one(const struct btf *bt=
+f,
+> =20
+>  	field_type =3D btf_get_field_type(__btf_name_by_offset(btf, var_type->n=
+ame_off),
+>  					field_mask, seen_mask, &align, &sz);
+> +	/* Look into variables of struct types */
+> +	if ((field_type =3D=3D BPF_KPTR_REF || !field_type) &&
+> +	    __btf_type_is_struct(var_type)) {
+
+Nit: this check looks a bit ugly, but I can't suggest a good
+     refactoring for btf_get_field_type() at the moment.
+
+> +		sz =3D var_type->size;
+> +		if (expected_size && expected_size !=3D sz * nelems)
+> +			return 0;
+> +		ret =3D btf_find_nested_struct(btf, var_type, off, nelems, field_mask,
+> +					     &info[0], info_cnt);
+> +		return ret;
+> +	}
+> +
+>  	if (field_type =3D=3D 0)
+>  		return 0;
+>  	if (field_type < 0)
