@@ -1,48 +1,50 @@
 Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAB51364
-	for <bpf@vger.kernel.org>; Fri, 10 May 2024 10:31:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E591364
+	for <bpf@vger.kernel.org>; Fri, 10 May 2024 10:31:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.177.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715337093; cv=none; b=IL0mzX8HEDRD/wkJRlEWBEo8Bra+t7JZlF2lZ/46ML0tr7w9kNp2jKzrDKZCNoMGTiOFRvTM3hJMkPD9oGAYSYG1+qULhuZ1+RXVjtxcv0UZybY33wigOR5k7WTrzI7teJiQfl7qNBhTWY2tDGkY5+IInuMTXJpgHQsRHcl3aNA=
+	t=1715337098; cv=none; b=tuxA2CeTTjk3qH9omdhbUIlSAYR4c5pkbQFIdQxxJ33vdTKg8yG2HjmxFg/vv0p129blS3iGTo84IOdj5F91GJOrhppQadycfKebz/gFiV7k9X4DPAjmNnSt8rnRg4h1MoOQSLpRvkks+ovK7t7K4ENUzEaOswUQVvrAK6DdlGA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715337093; c=relaxed/simple;
-	bh=K01A7kcqR6gr8MEPdsxIlRVWI/rPh6u2Pn5vK6nghzM=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=sKp9fmdi3up6j0NJL3vCtvYRmB0PRDGmXHN+El8VmfdAw45BAzUK/9vPx6yNKzE2+64PVrO8W6lIMmf+lD6pg8BgBiewa0wZf2k1SZ0PVFBhd3jQAQ/hMcof55OTSE4fx1RB/cyqnMQln2KJcPL2VPhxPHOJ3nzB/5+tHX4E/S8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=XMCFrf87; arc=none smtp.client-ip=205.220.177.32
+	s=arc-20240116; t=1715337098; c=relaxed/simple;
+	bh=Lu0eOBGIu8MNznZieN2LLBnGj7jlgZurq6T25UqSK3o=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=pBDZaW/jkleXzKBrz8XWsuJyGb5AVZr2pMX7wMsq4g+kq3qTZEgEm+Bvl1t+eXjN96k4rW481HeMxWPfkOOZ1EW2iwlNpotI33CCAZJ1M3+o9NFS3aQNSQi0J+izVvPElLMAXlHhdhppIgyxxzfoNOjlMX4iFnK/KytLY7C7ZUU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=TVLRrB59; arc=none smtp.client-ip=205.220.177.32
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=oracle.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="XMCFrf87"
-Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 44AAT3xj013224;
-	Fri, 10 May 2024 10:31:02 GMT
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="TVLRrB59"
+Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 44AAT4jS003371;
+	Fri, 10 May 2024 10:31:14 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding;
- s=corp-2023-11-20; bh=TbSfEBm3rS7HADLUbXO69+q7Ik7iGFnzyL0Gww533Z4=;
- b=XMCFrf87/QPCt1cMJrhZW7+Of/Zb7oIoFP9GtSFKxfuZ0nPxVmhd8NrAPZthNhruLOXT
- pn6RnL2FoZqgTy7kOBbpCOdutTb8EykMRnu+sC3fzLf+e00Ywqp3IRSdWfeeD+X4FtWI
- mkxOTN3VcCxBiX4Kv1I2sJcCqQil/ORJrGSY+iTHR9Qo7a+Qda8JI/MTJ2jE1rG8WC9o
- qQlbGR80DJoYUbsghuxg+w/prmCjzJkjufNhtbxkNFknyotugQe2NokwsXosCifXJBKb
- MMu/ch+BWiyddyoox50CYVeDrmJpLA3Jg6xqfV7HTd+DX1zYn3TXRHXcHcJmWuekFoPc Rw== 
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding; s=corp-2023-11-20;
+ bh=fhGdVuHoMZxVgqRziuSFyqySG+M0JMa8TseVzMQvlH0=;
+ b=TVLRrB59Me1ivGqKOi2MESU05+LOTFmHWDaGD4cI+cHRi62ZMwvuSVfiyvZ9hiMbenm+
+ rjGVpWKU0Hug3Bp5FEzYij803XmgcuJE3Q+dXrTocA+I2ZUO05EHuTS2pslkWj+eGxvt
+ z8ZFLdWyCxBRczlC/YP6LInlBQRPrl+PrF4324ujoXl1roSf64ZMLdPz18HErt4bw3qk
+ OicXPZAmIr+zZd6fRPh8yoSzDkEyFzFPi7XOWX+iXOB0Kw+CK6j1c935FCvbSntjaEu6
+ diaOiaGhZbKh5sYzq9d9faeEh8jVBZgPmP/AdnrSD/G115uHxQpMoa8CvP7W/wLd7bdM 0w== 
 Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3y17x7rtkh-1
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3y1hps80uv-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 10 May 2024 10:31:02 +0000
+	Fri, 10 May 2024 10:31:14 +0000
 Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 44A9fMmk019784;
-	Fri, 10 May 2024 10:31:01 GMT
+	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 44AANoIP019720;
+	Fri, 10 May 2024 10:31:13 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3xysfpcmd4-1
+	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3xysfpcmqw-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 10 May 2024 10:31:01 +0000
+	Fri, 10 May 2024 10:31:13 +0000
 Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 44AAV0hR011786;
-	Fri, 10 May 2024 10:31:00 GMT
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 44AAV0hV011786;
+	Fri, 10 May 2024 10:31:12 GMT
 Received: from bpf.uk.oracle.com (dhcp-10-175-161-199.vpn.oracle.com [10.175.161.199])
-	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 3xysfpcm4p-1;
-	Fri, 10 May 2024 10:31:00 +0000
+	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 3xysfpcm4p-3;
+	Fri, 10 May 2024 10:31:12 +0000
 From: Alan Maguire <alan.maguire@oracle.com>
 To: andrii@kernel.org, jolsa@kernel.org, acme@redhat.com,
         quentin@isovalent.com
@@ -52,10 +54,12 @@ Cc: eddyz87@gmail.com, mykolal@fb.com, ast@kernel.org, daniel@iogearbox.net,
         haoluo@google.com, houtao1@huawei.com, bpf@vger.kernel.org,
         masahiroy@kernel.org, mcgrof@kernel.org, nathan@kernel.org,
         Alan Maguire <alan.maguire@oracle.com>
-Subject: [PATCH v3 bpf-next 00/11] bpf: support resilient split BTF
-Date: Fri, 10 May 2024 11:30:41 +0100
-Message-Id: <20240510103052.850012-1-alan.maguire@oracle.com>
+Subject: [PATCH v3 bpf-next 02/11] selftests/bpf: test distilled base, split BTF generation
+Date: Fri, 10 May 2024 11:30:43 +0100
+Message-Id: <20240510103052.850012-3-alan.maguire@oracle.com>
 X-Mailer: git-send-email 2.39.3
+In-Reply-To: <20240510103052.850012-1-alan.maguire@oracle.com>
+References: <20240510103052.850012-1-alan.maguire@oracle.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -70,200 +74,308 @@ X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 bulk
  suspectscore=0 spamscore=0 malwarescore=0 mlxlogscore=999 adultscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2405010000
  definitions=main-2405100074
-X-Proofpoint-GUID: taKNJrEoR-ehZacRUcE45Ss1rGH3549s
-X-Proofpoint-ORIG-GUID: taKNJrEoR-ehZacRUcE45Ss1rGH3549s
+X-Proofpoint-GUID: SJXIgAa_BGD1x6BqfFSDhxPL1oC5VHSs
+X-Proofpoint-ORIG-GUID: SJXIgAa_BGD1x6BqfFSDhxPL1oC5VHSs
 
-Split BPF Type Format (BTF) provides huge advantages in that kernel
-modules only have to provide type information for types that they do not
-share with the core kernel; for core kernel types, split BTF refers to
-core kernel BTF type ids.  So for a STRUCT sk_buff, a module that
-uses that structure (or a pointer to it) simply needs to refer to the
-core kernel type id, saving the need to define the structure and its many
-dependents.  This cuts down on duplication and makes BTF as compact
-as possible.
+Test generation of split+distilled base BTF, ensuring that
 
-However, there is a downside.  This scheme requires the references from
-split BTF to base BTF to be valid not just at encoding time, but at use
-time (when the module is loaded).  Even a small change in kernel types
-can perturb the type ids in core kernel BTF, and due to pahole's
-parallel processing of compilation units, even an unchanged kernel can
-have different type ids if BTF is re-generated.  So we have a robustness
-problem for split BTF for cases where a module is not always compiled at
-the same time as the kernel.  This problem is particularly acute for
-distros which generally want module builders to be able to compile a
-module for the lifetime of a Linux stable-based release, and have it
-continue to be valid over the lifetime of that release, even as changes
-in data structures (and hence BTF types) accrue.  Today it's not
-possible to generate BTF for modules that works beyond the initial
-kernel it is compiled against - kernel bugfixes etc invalidate the split
-BTF references to vmlinux BTF, and BTF is no longer usable for the
-module.
+- base BTF STRUCTs which are embedded in split BTF structs are
+  represented as 0-member sized structs, allowing size checking
+- FWDs are used in place of full named struct/union declarations
+- FWDs are used in place of full named enum declarations
+- anonymous struct/unions are represented in full in split BTF
+- anonymous enums are represented in full in split BTF
+- types unreferenced from split BTF are not present in distilled
+  base BTF
 
-The goal of this series is to provide options to provide additional
-context for cases like this.  That context comes in the form of
-distilled base BTF; it stands in for the base BTF, and contains
-information about the types referenced from split BTF, but not their
-full descriptions.  The modified split BTF will refer to type ids in
-this .BTF.base section, and when the kernel loads such modules it
-will use that base BTF to map references from split BTF to the
-current vmlinux BTF - a process of relocating split BTF with the
-currently-running kernel's vmlinux base BTF.
+Also test that with vmlinux BTF and split BTF based upon it,
+we only represent needed base types referenced from split BTF
+in distilled base.
 
-A module builder - using this series along with the pahole changes -
-can then build a module with distilled base BTF via an out-of-tree
-module build, i.e.
-
-make -C . M=path/2/module
-
-The module will have a .BTF section (the split BTF) and a
-.BTF.base section.  The latter is small in size - distilled base
-BTF does not need full struct/union/enum information for named
-types for example.  For 2667 modules built with distilled base BTF,
-the average size observed was 1556 bytes (stddev 1563).  The overall
-size added to this 2667 modules was 5.3Mb.
-
-Note that for the in-tree modules, this approach is not needed as
-split and base BTF in the case of in-tree modules are always built
-and re-built together.
-
-The series first focuses on generating split BTF with distilled base
-BTF, and provides btf__parse_opts() which allows specification
-of the section name from which to read BTF data, since we now have
-both .BTF and .BTF.base sections that can contain such data.
-
-Then we add support to resolve_btfids for generating the .BTF.ids
-section with reference to the .BTF.base section - this ensures the
-.BTF.ids match those used in the split/base BTF.
-
-Finally the series provides the mechanism for relocating split BTF with
-a new base; the distilled base BTF is used to map the references to base
-BTF in the split BTF to the new base.  For the kernel, this relocation
-process happens at module load time, and we relocate split BTF
-references to point at types in the current vmlinux BTF.  As part of
-this, .BTF.ids references need to be mapped also.
-
-So concretely, what happens is
-
-- we generate split BTF in the .BTF section of a module that refers to
-  types in the .BTF.base section as base types; the latter are not full
-  type descriptions but provide information about the base type.  So
-  a STRUCT sk_buff would be represented as a FWD struct sk_buff in
-  distilled base BTF for example.
-- when the module is loaded, the split BTF is relocated with vmlinux
-  BTF; in the case of the FWD struct sk_buff, we find the STRUCT sk_buff
-  in vmlinux BTF and map all split BTF references to the distilled base
-  FWD sk_buff, replacing them with references to the vmlinux BTF
-  STRUCT sk_buff.
-
-Support is also added to bpftool to be able to display split BTF
-relative to its .BTF.base section, and also to display the relocated
-form via the "-R path_to_base_btf".
-
-A previous approach to this problem [1] utilized standalone BTF for such
-cases - where the BTF is not defined relative to base BTF so there is no
-relocation required.  The problem with that approach is that from
-the verifier perspective, some types are special, and having a custom
-representation of a core kernel type that did not necessarily match the
-current representation is not tenable.  So the approach taken here was
-to preserve the split BTF model while minimizing the representation of
-the context needed to relocate split and current vmlinux BTF.
-
-To generate distilled .BTF.base sections the associated dwarves
-patch (to be applied on the "next" branch there) is needed.
-Without it, things will still work but bpf_testmod will not be built
-with a .BTF.base section.
-
-Changes since v2[3]:
-
-- submitted patch to use --btf_features in Makefile.btf for pahole
-  v1.26 and later separately (Andrii).  That has landed in bpf-next
-  now.
-- distilled base now encodes ENUM64 as fwd ENUM (size 8), eliminating
-  the need for support for ENUM64 in btf__add_fwd (patch 1, Andrii)
-- moved to distilling only named types, augmenting split BTF with
-  associated reference types; this simplifies greatly the distilled
-  base BTF and the mapping operation between distilled and base
-  BTF when relocating (most of the series changes, Andrii)
-- relocation now iterates over base BTF, looking for matches based
-  on name in distilled BTF.  Distilled BTF is pre-sorted by name
-  (Andrii, patch 8)
-- removed most redundant compabitiliby checks aside from struct
-  size for base types/embedded structs and kind compatibility
-  (since we only match on name) (Andrii, patch 8)
-- btf__parse_opts() now replaces btf_parse() internally in libbpf
-  (Eduard, patch 3)
-
-Changes since RFC [4]:
-
-- updated terminology; we replace clunky "base reference" BTF with
-  distilling base BTF into a .BTF.base section. Similarly BTF
-  reconcilation becomes BTF relocation (Andrii, most patches)
-- add distilled base BTF by default for out-of-tree modules
-  (Alexei, patch 8)
-- distill algorithm updated to record size of embedded struct/union
-  by recording it as a 0-vlen STRUCT/UNION with size preserved
-  (Andrii, patch 2)
-- verify size match on relocation for such STRUCT/UNIONs (Andrii,
-  patch 9)
-- with embedded STRUCT/UNION recording size, we can have bpftool
-  dump a header representation using .BTF.base + .BTF sections
-  rather than special-casing and refusing to use "format c" for
-  that case (patch 5)
-- match enum with enum64 and vice versa (Andrii, patch 9)
-- ensure that resolve_btfids works with BTF without .BTF.base
-  section (patch 7)
-- update tests to cover embedded types, arrays and function
-  prototypes (patches 3, 12)
-
-
-[1] https://lore.kernel.org/bpf/20231112124834.388735-14-alan.maguire@oracle.com/
-[2] https://lore.kernel.org/bpf/20240501175035.2476830-1-alan.maguire@oracle.com/
-[3] https://lore.kernel.org/bpf/20240424154806.3417662-1-alan.maguire@oracle.com/
-[4] https://lore.kernel.org/bpf/20240322102455.98558-1-alan.maguire@oracle.com/
-
-Alan Maguire (11):
-  libbpf: add btf__distill_base() creating split BTF with distilled base
-    BTF
-  selftests/bpf: test distilled base, split BTF generation
-  libbpf: add btf__parse_opts() API for flexible BTF parsing
-  bpftool: support displaying raw split BTF using base BTF section as
-    base
-  resolve_btfids: use .BTF.base ELF section as base BTF if -B option is
-    used
-  kbuild, bpf: add module-specific pahole/resolve_btfids flags for
-    distilled base BTF
-  libbpf: split BTF relocation
-  selftests/bpf: extend distilled BTF tests to cover BTF relocation
-  module, bpf: store BTF base pointer in struct module
-  libbpf,bpf: share BTF relocate-related code with kernel
-  bpftool: support displaying relocated-with-base split BTF
-
- include/linux/btf.h                           |  32 +
- include/linux/module.h                        |   2 +
- kernel/bpf/Makefile                           |   8 +
- kernel/bpf/btf.c                              | 227 +++++--
- kernel/module/main.c                          |   5 +-
- scripts/Makefile.btf                          |   7 +
- scripts/Makefile.modfinal                     |   4 +-
- .../bpf/bpftool/Documentation/bpftool-btf.rst |  15 +-
- tools/bpf/bpftool/bash-completion/bpftool     |   7 +-
- tools/bpf/bpftool/btf.c                       |  19 +-
- tools/bpf/bpftool/main.c                      |  14 +-
- tools/bpf/bpftool/main.h                      |   2 +
- tools/bpf/resolve_btfids/main.c               |  28 +-
- tools/lib/bpf/Build                           |   2 +-
- tools/lib/bpf/btf.c                           | 584 +++++++++++++-----
- tools/lib/bpf/btf.h                           |  59 ++
- tools/lib/bpf/btf_common.c                    | 146 +++++
- tools/lib/bpf/btf_relocate.c                  | 296 +++++++++
- tools/lib/bpf/libbpf.map                      |   3 +
- tools/lib/bpf/libbpf_internal.h               |   2 +
- .../selftests/bpf/prog_tests/btf_distill.c    | 337 ++++++++++
- 21 files changed, 1588 insertions(+), 211 deletions(-)
- create mode 100644 tools/lib/bpf/btf_common.c
- create mode 100644 tools/lib/bpf/btf_relocate.c
+Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
+---
+ .../selftests/bpf/prog_tests/btf_distill.c    | 272 ++++++++++++++++++
+ 1 file changed, 272 insertions(+)
  create mode 100644 tools/testing/selftests/bpf/prog_tests/btf_distill.c
 
+diff --git a/tools/testing/selftests/bpf/prog_tests/btf_distill.c b/tools/testing/selftests/bpf/prog_tests/btf_distill.c
+new file mode 100644
+index 000000000000..400df8740943
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/btf_distill.c
+@@ -0,0 +1,272 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2024, Oracle and/or its affiliates. */
++
++#include <test_progs.h>
++#include <bpf/btf.h>
++#include "btf_helpers.h"
++
++/* Fabricate base, split BTF with references to base types needed; then create
++ * split BTF with distilled base BTF and ensure expectations are met:
++ *  - only referenced base types from split BTF are present
++ *  - struct/union/enum are represented as FWDs unless anonymous, when they
++ *    are represented in full, or if embedded in a split BTF struct, in which
++ *    case they are represented by a STRUCT with specified size and vlen=0.
++ */
++static void test_distilled_base(void)
++{
++	struct btf *btf1 = NULL, *btf2 = NULL, *btf3 = NULL, *btf4 = NULL;
++
++	btf1 = btf__new_empty();
++	if (!ASSERT_OK_PTR(btf1, "empty_main_btf"))
++		return;
++
++	btf__add_int(btf1, "int", 4, BTF_INT_SIGNED);	/* [1] int */
++	btf__add_ptr(btf1, 1);				/* [2] ptr to int */
++	btf__add_struct(btf1, "s1", 8);			/* [3] struct s1 { */
++	btf__add_field(btf1, "f1", 2, 0, 0);		/*      int *f1; */
++							/* } */
++	btf__add_struct(btf1, "", 12);			/* [4] struct { */
++	btf__add_field(btf1, "f1", 1, 0, 0);		/*	int f1; */
++	btf__add_field(btf1, "f2", 3, 32, 0);		/*	struct s1 f2; */
++							/* } */
++	btf__add_int(btf1, "unsigned int", 4, 0);	/* [5] unsigned int */
++	btf__add_union(btf1, "u1", 12);			/* [6] union u1 { */
++	btf__add_field(btf1, "f1", 1, 0, 0);		/*	int f1; */
++	btf__add_field(btf1, "f2", 2, 0, 0);		/*	int *f2; */
++							/* } */
++	btf__add_union(btf1, "", 4);			/* [7] union { */
++	btf__add_field(btf1, "f1", 1, 0, 0);		/*	int f1; */
++							/* } */
++	btf__add_enum(btf1, "e1", 4);			/* [8] enum e1 { */
++	btf__add_enum_value(btf1, "v1", 1);		/*	v1 = 1; */
++							/* } */
++	btf__add_enum(btf1, "", 4);			/* [9] enum { */
++	btf__add_enum_value(btf1, "av1", 2);		/*	av1 = 2; */
++							/* } */
++	btf__add_enum64(btf1, "e641", 8, true);		/* [10] enum64 { */
++	btf__add_enum64_value(btf1, "v1", 1024);	/*	v1 = 1024; */
++							/* } */
++	btf__add_enum64(btf1, "", 8, true);		/* [11] enum64 { */
++	btf__add_enum64_value(btf1, "v1", 1025);	/*	v1 = 1025; */
++							/* } */
++	btf__add_struct(btf1, "unneeded", 4);		/* [12] struct unneeded { */
++	btf__add_field(btf1, "f1", 1, 0, 0);		/*	int f1; */
++							/* } */
++	btf__add_struct(btf1, "embedded", 4);		/* [13] struct embedded { */
++	btf__add_field(btf1, "f1", 1, 0, 0);		/*	int f1; */
++							/* } */
++	btf__add_func_proto(btf1, 1);			/* [14] int (*)(int *p1); */
++	btf__add_func_param(btf1, "p1", 1);
++
++	btf__add_array(btf1, 1, 1, 3);			/* [15] int [3]; */
++
++	btf__add_struct(btf1, "from_proto", 4);		/* [16] struct from_proto { */
++	btf__add_field(btf1, "f1", 1, 0, 0);		/*	int f1; */
++							/* } */
++	VALIDATE_RAW_BTF(
++		btf1,
++		"[1] INT 'int' size=4 bits_offset=0 nr_bits=32 encoding=SIGNED",
++		"[2] PTR '(anon)' type_id=1",
++		"[3] STRUCT 's1' size=8 vlen=1\n"
++		"\t'f1' type_id=2 bits_offset=0",
++		"[4] STRUCT '(anon)' size=12 vlen=2\n"
++		"\t'f1' type_id=1 bits_offset=0\n"
++		"\t'f2' type_id=3 bits_offset=32",
++		"[5] INT 'unsigned int' size=4 bits_offset=0 nr_bits=32 encoding=(none)",
++		"[6] UNION 'u1' size=12 vlen=2\n"
++		"\t'f1' type_id=1 bits_offset=0\n"
++		"\t'f2' type_id=2 bits_offset=0",
++		"[7] UNION '(anon)' size=4 vlen=1\n"
++		"\t'f1' type_id=1 bits_offset=0",
++		"[8] ENUM 'e1' encoding=UNSIGNED size=4 vlen=1\n"
++		"\t'v1' val=1",
++		"[9] ENUM '(anon)' encoding=UNSIGNED size=4 vlen=1\n"
++		"\t'av1' val=2",
++		"[10] ENUM64 'e641' encoding=SIGNED size=8 vlen=1\n"
++		"\t'v1' val=1024",
++		"[11] ENUM64 '(anon)' encoding=SIGNED size=8 vlen=1\n"
++		"\t'v1' val=1025",
++		"[12] STRUCT 'unneeded' size=4 vlen=1\n"
++		"\t'f1' type_id=1 bits_offset=0",
++		"[13] STRUCT 'embedded' size=4 vlen=1\n"
++		"\t'f1' type_id=1 bits_offset=0",
++		"[14] FUNC_PROTO '(anon)' ret_type_id=1 vlen=1\n"
++		"\t'p1' type_id=1",
++		"[15] ARRAY '(anon)' type_id=1 index_type_id=1 nr_elems=3",
++		"[16] STRUCT 'from_proto' size=4 vlen=1\n"
++		"\t'f1' type_id=1 bits_offset=0");
++
++	btf2 = btf__new_empty_split(btf1);
++	if (!ASSERT_OK_PTR(btf2, "empty_split_btf"))
++		goto cleanup;
++
++	btf__add_ptr(btf2, 3);				/* [17] ptr to struct s1 */
++	/* add ptr to struct anon */
++	btf__add_ptr(btf2, 4);				/* [18] ptr to struct (anon) */
++	btf__add_const(btf2, 6);			/* [19] const union u1 */
++	btf__add_restrict(btf2, 7);			/* [20] restrict union (anon) */
++	btf__add_volatile(btf2, 8);			/* [21] volatile enum e1 */
++	btf__add_typedef(btf2, "et", 9);		/* [22] typedef enum (anon) */
++	btf__add_const(btf2, 10);			/* [23] const enum64 e641 */
++	btf__add_ptr(btf2, 11);				/* [24] restrict enum64 (anon) */
++	btf__add_struct(btf2, "with_embedded", 4);	/* [25] struct with_embedded { */
++	btf__add_field(btf2, "f1", 13, 0, 0);		/*	struct embedded f1; */
++							/* } */
++	btf__add_func(btf2, "fn", BTF_FUNC_STATIC, 14);	/* [26] int fn(int p1); */
++	btf__add_typedef(btf2, "arraytype", 15);	/* [27] typedef int[3] foo; */
++	btf__add_func_proto(btf2, 1);			/* [28] int (*)(struct from proto p1); */
++	btf__add_func_param(btf2, "p1", 16);
++
++	VALIDATE_RAW_BTF(
++		btf2,
++		"[1] INT 'int' size=4 bits_offset=0 nr_bits=32 encoding=SIGNED",
++		"[2] PTR '(anon)' type_id=1",
++		"[3] STRUCT 's1' size=8 vlen=1\n"
++		"\t'f1' type_id=2 bits_offset=0",
++		"[4] STRUCT '(anon)' size=12 vlen=2\n"
++		"\t'f1' type_id=1 bits_offset=0\n"
++		"\t'f2' type_id=3 bits_offset=32",
++		"[5] INT 'unsigned int' size=4 bits_offset=0 nr_bits=32 encoding=(none)",
++		"[6] UNION 'u1' size=12 vlen=2\n"
++		"\t'f1' type_id=1 bits_offset=0\n"
++		"\t'f2' type_id=2 bits_offset=0",
++		"[7] UNION '(anon)' size=4 vlen=1\n"
++		"\t'f1' type_id=1 bits_offset=0",
++		"[8] ENUM 'e1' encoding=UNSIGNED size=4 vlen=1\n"
++		"\t'v1' val=1",
++		"[9] ENUM '(anon)' encoding=UNSIGNED size=4 vlen=1\n"
++		"\t'av1' val=2",
++		"[10] ENUM64 'e641' encoding=SIGNED size=8 vlen=1\n"
++		"\t'v1' val=1024",
++		"[11] ENUM64 '(anon)' encoding=SIGNED size=8 vlen=1\n"
++		"\t'v1' val=1025",
++		"[12] STRUCT 'unneeded' size=4 vlen=1\n"
++		"\t'f1' type_id=1 bits_offset=0",
++		"[13] STRUCT 'embedded' size=4 vlen=1\n"
++		"\t'f1' type_id=1 bits_offset=0",
++		"[14] FUNC_PROTO '(anon)' ret_type_id=1 vlen=1\n"
++		"\t'p1' type_id=1",
++		"[15] ARRAY '(anon)' type_id=1 index_type_id=1 nr_elems=3",
++		"[16] STRUCT 'from_proto' size=4 vlen=1\n"
++		"\t'f1' type_id=1 bits_offset=0",
++		"[17] PTR '(anon)' type_id=3",
++		"[18] PTR '(anon)' type_id=4",
++		"[19] CONST '(anon)' type_id=6",
++		"[20] RESTRICT '(anon)' type_id=7",
++		"[21] VOLATILE '(anon)' type_id=8",
++		"[22] TYPEDEF 'et' type_id=9",
++		"[23] CONST '(anon)' type_id=10",
++		"[24] PTR '(anon)' type_id=11",
++		"[25] STRUCT 'with_embedded' size=4 vlen=1\n"
++		"\t'f1' type_id=13 bits_offset=0",
++		"[26] FUNC 'fn' type_id=14 linkage=static",
++		"[27] TYPEDEF 'arraytype' type_id=15",
++		"[28] FUNC_PROTO '(anon)' ret_type_id=1 vlen=1\n"
++		"\t'p1' type_id=16");
++
++	if (!ASSERT_EQ(0, btf__distill_base(btf2, &btf3, &btf4),
++		       "distilled_base") ||
++	    !ASSERT_OK_PTR(btf3, "distilled_base") ||
++	    !ASSERT_OK_PTR(btf4, "distilled_split") ||
++	    !ASSERT_EQ(8, btf__type_cnt(btf3), "distilled_base_type_cnt"))
++		goto cleanup;
++
++	VALIDATE_RAW_BTF(
++		btf4,
++		"[1] INT 'int' size=4 bits_offset=0 nr_bits=32 encoding=SIGNED",
++		"[2] FWD 's1' fwd_kind=struct",
++		"[3] FWD 'u1' fwd_kind=union",
++		"[4] ENUM 'e1' encoding=UNSIGNED size=4 vlen=0",
++		"[5] ENUM 'e641' encoding=UNSIGNED size=8 vlen=0",
++		"[6] STRUCT 'embedded' size=4 vlen=0",
++		"[7] FWD 'from_proto' fwd_kind=struct",
++		/* split BTF; these types should match split BTF above from 17-28, with
++		 * updated type id references
++		 */
++		"[8] PTR '(anon)' type_id=2",
++		"[9] PTR '(anon)' type_id=20",
++		"[10] CONST '(anon)' type_id=3",
++		"[11] RESTRICT '(anon)' type_id=21",
++		"[12] VOLATILE '(anon)' type_id=4",
++		"[13] TYPEDEF 'et' type_id=22",
++		"[14] CONST '(anon)' type_id=5",
++		"[15] PTR '(anon)' type_id=23",
++		"[16] STRUCT 'with_embedded' size=4 vlen=1\n"
++		"\t'f1' type_id=6 bits_offset=0",
++		"[17] FUNC 'fn' type_id=24 linkage=static",
++		"[18] TYPEDEF 'arraytype' type_id=25",
++		"[19] FUNC_PROTO '(anon)' ret_type_id=1 vlen=1\n"
++		"\t'p1' type_id=7",
++		/* split BTF types added from original base BTF below */
++		"[20] STRUCT '(anon)' size=12 vlen=2\n"
++		"\t'f1' type_id=1 bits_offset=0\n"
++		"\t'f2' type_id=2 bits_offset=32",
++		"[21] UNION '(anon)' size=4 vlen=1\n"
++		"\t'f1' type_id=1 bits_offset=0",
++		"[22] ENUM '(anon)' encoding=UNSIGNED size=4 vlen=1\n"
++		"\t'av1' val=2",
++		"[23] ENUM64 '(anon)' encoding=SIGNED size=8 vlen=1\n"
++		"\t'v1' val=1025",
++		"[24] FUNC_PROTO '(anon)' ret_type_id=1 vlen=1\n"
++		"\t'p1' type_id=1",
++		"[25] ARRAY '(anon)' type_id=1 index_type_id=1 nr_elems=3");
++
++cleanup:
++	btf__free(btf4);
++	btf__free(btf3);
++	btf__free(btf2);
++	btf__free(btf1);
++}
++
++/* create split reference BTF from vmlinux + split BTF with a few type references;
++ * ensure the resultant split reference BTF is as expected, containing only types
++ * needed to disambiguate references from split BTF.
++ */
++static void test_distilled_base_vmlinux(void)
++{
++	struct btf *split_btf = NULL, *vmlinux_btf = btf__load_vmlinux_btf();
++	struct btf *split_dist = NULL, *base_dist = NULL;
++	__s32 int_id, sk_buff_id;
++
++	if (!ASSERT_OK_PTR(vmlinux_btf, "load_vmlinux"))
++		return;
++	int_id = btf__find_by_name_kind(vmlinux_btf, "int", BTF_KIND_INT);
++	if (!ASSERT_GT(int_id, 0, "find_int"))
++		goto cleanup;
++	sk_buff_id = btf__find_by_name_kind(vmlinux_btf, "sk_buff", BTF_KIND_STRUCT);
++	if (!ASSERT_GT(sk_buff_id, 0, "find_sk_buff_id"))
++		goto cleanup;
++	split_btf = btf__new_empty_split(vmlinux_btf);
++	if (!ASSERT_OK_PTR(split_btf, "new_split"))
++		goto cleanup;
++	btf__add_typedef(split_btf, "myint", int_id);
++	btf__add_ptr(split_btf, sk_buff_id);
++
++	if (!ASSERT_EQ(btf__distill_base(split_btf, &base_dist, &split_dist), 0,
++		       "distill_vmlinux_base"))
++		goto cleanup;
++
++	if (!ASSERT_OK_PTR(split_dist, "split_distilled") ||
++	    !ASSERT_OK_PTR(base_dist, "base_dist"))
++		goto cleanup;
++	VALIDATE_RAW_BTF(
++		split_dist,
++		"[1] INT 'int' size=4 bits_offset=0 nr_bits=32 encoding=SIGNED",
++		"[2] FWD 'sk_buff' fwd_kind=struct",
++		"[3] TYPEDEF 'myint' type_id=1",
++		"[4] PTR '(anon)' type_id=2");
++
++cleanup:
++	btf__free(split_dist);
++	btf__free(base_dist);
++	btf__free(split_btf);
++	btf__free(vmlinux_btf);
++}
++
++void test_btf_distill(void)
++{
++	if (test__start_subtest("distilled_base"))
++		test_distilled_base();
++	if (test__start_subtest("distilled_base_vmlinux"))
++		test_distilled_base_vmlinux();
++}
 -- 
 2.31.1
 
