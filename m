@@ -1,54 +1,54 @@
-Received: from mail-qv1-f73.google.com (mail-qv1-f73.google.com [209.85.219.73])
+Received: from mail-yb1-f201.google.com (mail-yb1-f201.google.com [209.85.219.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93BFC45034
-	for <bpf@vger.kernel.org>; Fri, 10 May 2024 19:09:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B99872770C
+	for <bpf@vger.kernel.org>; Fri, 10 May 2024 19:14:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715368164; cv=none; b=GlJ8yi7sWmcyk1HF+4ZMzg/zpGwKxrIY8KNLwX1xeT+5HWsF6cqYF3xw2FymddE4qyQvcpNadwl61CesUl4vhH2ms5Wz4Z9j5hsFrEIWZtIbUuvbKVcY3ED8IeiVc7sfVV5ZsqcqVjmxEmgc0OqR+xGUpF0T6ZqBX5+/0ePsE7I=
+	t=1715368482; cv=none; b=QvxxFQUgQu7cvtJ4ExVnl1S8vYkGqPdsXOgpvhQT2CKWfU8dhbzsFCfgsmELP0GVoJlaBtnSqnvDOOX6yoXQlpTxV3kHKwi+fsDYWH9VqdrXJvL3pnsx7qoVf1lEGrKOqGHYKlpy1yZJigzmQFK0Ubvv7O2yuYjEdNNZJheq1tA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715368164; c=relaxed/simple;
-	bh=046+K2rooJaiWehncD1DjTIcHY7f2phEuhcBFTeaDGU=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=eimTsB/u6vNS4e/yMhVl5QDsw+fisORJ2Ka7m9oAqtKhIN5KhdHpq8Qe2chgD4ownaeCwqwTtaEVPpQGjJVHDDeh+3yQzu1EL6G4M4zVMIfp7rlFMYmN4yMYnEObRTS//MD9mUgx4+SEzGilqTrf6OL1MB3cNY5V7DjsZgZUxnc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jrife.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=NB5PNy7q; arc=none smtp.client-ip=209.85.219.73
+	s=arc-20240116; t=1715368482; c=relaxed/simple;
+	bh=lM7Ffa7a34WiHH98qjX1e31MHrDcWjJyEDQyUEnhRS8=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=ppUhdN0wwpNWb2NTfN1VnYhy8lQMIgZQZGQUjVZTH1UPL7HFj0LJKCa/+bvUJyCRGAN8Hr20LRutC1L2kgENU/n/+e400w1QKtU0rPqE8gJUfW5A8aZYSH6MNIumCBRPJzYDr9e3fkQZMNDmdzXvqRSS5n0wWYIx8SwHtI6YGAo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--yabinc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=XFlNaoYV; arc=none smtp.client-ip=209.85.219.201
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--jrife.bounces.google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--yabinc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="NB5PNy7q"
-Received: by mail-qv1-f73.google.com with SMTP id 6a1803df08f44-6a0dd95cbc6so24464396d6.1
-        for <bpf@vger.kernel.org>; Fri, 10 May 2024 12:09:22 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="XFlNaoYV"
+Received: by mail-yb1-f201.google.com with SMTP id 3f1490d57ef6-dbf216080f5so3883319276.1
+        for <bpf@vger.kernel.org>; Fri, 10 May 2024 12:14:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1715368161; x=1715972961; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1715368479; x=1715973279; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=hZP8DSrrJ7HH0ntIonPMO4nthwrGJnEqqpwjTbUOSDM=;
-        b=NB5PNy7qMHzd8wCX6G5iIeqqVEMik50vHBuQiGep+S2xlxFYv5XD5qwwpAsc8EQT0a
-         hJcI+VkvqunSneIoNmYAZa8cYm194GI/QjQFNQ6q13ULMfpAw2VspUcH+OsEL9jzJN2S
-         gVobOL/MIRjqQVIz5+8CWfqWj8Z/u/bnItwet3B1ePCgrJ9q5Fli8J3Vc8uOnu6vpJKF
-         TpLWUR2vtazc89Q2MOzakXspZScGf5fsHe4yjJOXUZ1hgTI5ZthUWHkKBH+dwN+NJmZ+
-         x07b0mSpwg9FdBtt6MWl+pg4ybsUWYEC9HGg6eHMzh9ETGnw8dKGzbKtp10+X4hBzaoh
-         ag5g==
+        bh=EylM3vFA7lZulI4V1G3R5cUfH0kthc6cGsP9Vyzx3vo=;
+        b=XFlNaoYVzX9GjKEIbuq5Fy7cLywGJafcvsi6kKz8WNpklVpqdYtAGqbO7N4prS0sNF
+         XT4jN1+sRE+cwCeEVllNgQ2l83OR6DFtFiirFfVig9DU/iqPll339FfWKhPL/BMlmFky
+         ccskUr0N7ZHPkrl/ILuMx0WJ6VrCmpIVjDEh/+/M8pQB38gcDBsHPPbzGvbreqnu1tMN
+         OlEgCZjxSbDRzcv8VRo91CN0RH/6POcJKkkdHvI31afQL0/doGUQN/pe7uIpqjsH++TI
+         CpVCE96lXXbgfBXY4lRGrFe9D29yS0myaczzhUR3w9jJC/qOkBHBEeyhn1BWBZU8cE7v
+         noPQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715368161; x=1715972961;
+        d=1e100.net; s=20230601; t=1715368479; x=1715973279;
         h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=hZP8DSrrJ7HH0ntIonPMO4nthwrGJnEqqpwjTbUOSDM=;
-        b=stUnJQuEo815bPe/3n2wSHc5ayozj55DYnps0FfPzQogQGQ2tWdErEbEwqBZdWyR0o
-         MsGG9g3iFeFhraW3vBmdc3rxSdcRwDkwIbB6vQbkQGecUQiS152nEuNYTQROBdFiZv9L
-         ueClwdxodGBG40H2UniUN9Up+g2s9qMfRpddwkvm1tT2YqQMp/N2CZ/PXAe2u/w1uyRA
-         FPfQCGe0MgXcJpGkYULIifs8ikWbJ88TZSZtXW0IaGUtTqL0apPd9AzvbSQxcNRrSs0+
-         A42gEvmB8dP1cz6sqy5ENY4XdLn7gA1aYq+PyfB929mMYu5s56W0lKW/HMAAyXGw1LD9
-         A2YQ==
-X-Gm-Message-State: AOJu0YxLrFuBHC8DX6Wo3cLEy63NknFiaiveMD+Qrzu0RsMROMULU6rN
-	wwb5pOStQh4WyrkK6ZOMxOC02EGOGcB0E+5KUma2RDfYKQw0iX366nL71v1pHRiK4oXpyZSbBaN
-	3cYYQS07pdvxar5lgwy/bEcy73b6X4jiQSPRx1dRLzjmj0bw1ooJzGNzz47b1t4FYgOIM61nb2O
-	pqya0//QQdW/+zJKjP0ql/8Gs=
-X-Google-Smtp-Source: AGHT+IGGsXZTPzxHdEkJ5KE1P5Ipo87Hv5nbFQ8da3X3dwC+l4U11PMrYCVwh4lKpb4TjrVQnINN73hlnA==
-X-Received: from jrife.c.googlers.com ([fda3:e722:ac3:cc00:2b:ff92:c0a8:9f])
- (user=jrife job=sendgmr) by 2002:a92:dd01:0:b0:36c:2ed4:8d4c with SMTP id
- e9e14a558f8ab-36cc14fde56mr743125ab.4.1715367768757; Fri, 10 May 2024
- 12:02:48 -0700 (PDT)
-Date: Fri, 10 May 2024 14:02:17 -0500
+        bh=EylM3vFA7lZulI4V1G3R5cUfH0kthc6cGsP9Vyzx3vo=;
+        b=Pk9tYPI5NssQysgKVMjbPeii1kcCX0SWbbu6Ax1dDuO+6xM9UOB74sBif3aWxmPiGV
+         yM3AbS9H2YGSzS6dQ8DWoKMWANai8lRAIHb8cnCMmZIA/mzTuYIjTztuC8oevjyjqSqZ
+         K1ECfVpxJ28IqihG+C18CnPQWmQvHnYfSZK8kHg5uH0/dZNW80/P0i+zTCiT4y2ZCDV8
+         ZPuO+6An27BhhBK5+c84F1uoIcy6V4DHQbGy+R2oTjDVONM7Zyk1nfOIvinjosaPj7v1
+         a9KmMP4BEhabg9SNS7NPiIQHBrWbzw6WZSp4Hr5XdTRiiZW0ktrScT5aRyZRnrpBJmMZ
+         sduA==
+X-Forwarded-Encrypted: i=1; AJvYcCWKpeOI/riUVmVB3jC8apjrURnLDxxPZyjZ830VDM/msAOTd7nyaCdLx+qLESbQEQ4qmCAVx37nwtS/HMFk4242y+Q9
+X-Gm-Message-State: AOJu0YyLGmdkK2XWxHcqK2bazmg+kBhwH4cvTLkLuW2yVwgMWv+LhZ7F
+	dPO/H1KYxWqO8A96RWFqEkw1x7xsXTX2pG4bDGFVv0L/L8be6C//h1ZxwVHccjHZbT9OJ4aGISU
+	A
+X-Google-Smtp-Source: AGHT+IFayfrPaX7uaHZYOl6bplU+LYQx3Ktr5lITHr1i7FA2htt6wI5T6hzwgjkNUc0yOZw0xjOlsYU+OnQ=
+X-Received: from yabinc-desktop.mtv.corp.google.com ([2620:15c:211:202:d3a5:c745:caa1:83ed])
+ (user=yabinc job=sendgmr) by 2002:a05:6902:110e:b0:dcc:f01f:65e1 with SMTP id
+ 3f1490d57ef6-dee4f506107mr928748276.8.1715368478676; Fri, 10 May 2024
+ 12:14:38 -0700 (PDT)
+Date: Fri, 10 May 2024 12:14:20 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -56,89 +56,66 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 X-Mailer: git-send-email 2.45.0.118.g7fe29c98d7-goog
-Message-ID: <20240510190246.3247730-1-jrife@google.com>
-Subject: [PATCH v1 bpf-next 00/17] Retire progs/test_sock_addr.c
-From: Jordan Rife <jrife@google.com>
-To: bpf@vger.kernel.org
-Cc: Jordan Rife <jrife@google.com>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>, 
-	Geliang Tang <tanggeliang@kylinos.cn>, Daan De Meyer <daan.j.demeyer@gmail.com>, 
-	Shung-Hsi Yu <shung-hsi.yu@suse.com>, linux-kselftest@vger.kernel.org
+Message-ID: <20240510191423.2297538-1-yabinc@google.com>
+Subject: [PATCH v4 0/3] perf/core: Check sample_type in sample data saving
+ helper functions
+From: Yabin Cui <yabinc@google.com>
+To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
+	Mark Rutland <mark.rutland@arm.com>, 
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>
+Cc: linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	bpf@vger.kernel.org, Yabin Cui <yabinc@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-This patch series migrates remaining tests from bpf/test_sock_addr.c to
-prog_tests/sock_addr.c and progs/verifier_sock_addr.c in order to fully
-retire the old-style test program and expands test coverage to test
-previously untested scenarios related to sockaddr hooks.
+Hello,
 
-This is a continuation of the work started recently during the expansion
-of prog_tests/sock_addr.c.
+We use helper functions to save raw data, callchain and branch stack in
+perf_sample_data. These functions update perf_sample_data->dyn_size without
+checking event->attr.sample_type, which may result in unused space allocated in
+sample records. To prevent this from happening, this patchset enforces checking
+sample_type of an event in these helper functions.
 
-Link: https://lore.kernel.org/bpf/20240429214529.2644801-1-jrife@google.com/T/#u
+Thanks,
+Yabin
 
-=======
-Patches
-=======
-* Patch 1 moves tests that check valid return values for recvmsg hooks
-  into progs/verifier_sock_addr.c, a new addition to the verifier test
-  suite.
-* Patches 2-5 lay the groundwork for test migration, enabling
-  prog_tests/sock_addr.c to handle more test dimensions.
-* Patches 6-11 move existing tests to prog_tests/sock_addr.c.
-* Patch 12 removes some redundant test cases.
-* Patches 14-17 expand on existing test coverage.
 
-Jordan Rife (17):
-  selftests/bpf: Migrate recvmsg* return code tests to
-    verifier_sock_addr.c
-  selftests/bpf: Use program name for skel load/destroy functions
-  selftests/bpf: Handle LOAD_REJECT test cases
-  selftests/bpf: Handle ATTACH_REJECT test cases
-  selftests/bpf: Handle SYSCALL_EPERM and SYSCALL_ENOTSUPP test cases
-  selftests/bpf: Migrate WILDCARD_IP test
-  selftests/bpf: Migrate sendmsg deny test cases
-  selftests/bpf: Migrate sendmsg6 v4 mapped address tests
-  selftests/bpf: Migrate wildcard destination rewrite test
-  selftests/bpf: Migrate expected_attach_type tests
-  selftests/bpf: Migrate ATTACH_REJECT test cases
-  selftests/bpf: Remove redundant sendmsg test cases
-  selftests/bpf: Retire test_sock_addr.(c|sh)
-  selftests/bpf: Expand sockaddr program return value tests
-  sefltests/bpf: Expand sockaddr hook deny tests
-  selftests/bpf: Expand getsockname and getpeername tests
-  selftests/bpf: Expand ATTACH_REJECT tests
+Changes since v1:
+ - Check event->attr.sample_type & PERF_SAMPLE_RAW before
+   calling perf_sample_save_raw_data().
+ - Subject has been changed to reflect the change of solution.
 
- tools/testing/selftests/bpf/.gitignore        |    1 -
- tools/testing/selftests/bpf/Makefile          |    4 +-
- .../selftests/bpf/prog_tests/sock_addr.c      | 1821 +++++++++++++++--
- .../selftests/bpf/prog_tests/verifier.c       |    2 +
- .../testing/selftests/bpf/progs/bind4_prog.c  |    6 +
- .../testing/selftests/bpf/progs/bind6_prog.c  |    6 +
- .../selftests/bpf/progs/connect4_prog.c       |    6 +
- .../selftests/bpf/progs/connect6_prog.c       |    6 +
- .../selftests/bpf/progs/connect_unix_prog.c   |    6 +
- .../selftests/bpf/progs/getpeername4_prog.c   |   24 +
- .../selftests/bpf/progs/getpeername6_prog.c   |   31 +
- .../selftests/bpf/progs/getsockname4_prog.c   |   24 +
- .../selftests/bpf/progs/getsockname6_prog.c   |   31 +
- .../selftests/bpf/progs/sendmsg4_prog.c       |    6 +
- .../selftests/bpf/progs/sendmsg6_prog.c       |   57 +
- .../selftests/bpf/progs/sendmsg_unix_prog.c   |    6 +
- .../selftests/bpf/progs/verifier_sock_addr.c  |  331 +++
- tools/testing/selftests/bpf/test_sock_addr.c  | 1140 -----------
- tools/testing/selftests/bpf/test_sock_addr.sh |   58 -
- 19 files changed, 2142 insertions(+), 1424 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/progs/getpeername4_prog.c
- create mode 100644 tools/testing/selftests/bpf/progs/getpeername6_prog.c
- create mode 100644 tools/testing/selftests/bpf/progs/getsockname4_prog.c
- create mode 100644 tools/testing/selftests/bpf/progs/getsockname6_prog.c
- create mode 100644 tools/testing/selftests/bpf/progs/verifier_sock_addr.c
- delete mode 100644 tools/testing/selftests/bpf/test_sock_addr.c
- delete mode 100755 tools/testing/selftests/bpf/test_sock_addr.sh
+Changes since v2:
+ - Move sample_type check into perf_sample_save_raw_data().
+ - (New patch) Move sample_type check into perf_sample_save_callchain().
+ - (New patch) Move sample_type check into perf_sample_save_brstack().
+
+Changes since v3:
+ - Fix -Werror=implicit-function-declaration by moving has_branch_stack().
+
+Original commit message from v1:
+  perf/core: Trim dyn_size if raw data is absent
+
+Original commit message from v2/v3:
+  perf/core: Save raw sample data conditionally based on sample type
+
+Yabin Cui (3):
+  perf/core: Save raw sample data conditionally based on sample type
+  perf/core: Check sample_type in perf_sample_save_callchain
+  perf/core: Check sample_type in perf_sample_save_brstack
+
+ arch/s390/kernel/perf_cpum_cf.c    |  2 +-
+ arch/s390/kernel/perf_pai_crypto.c |  2 +-
+ arch/s390/kernel/perf_pai_ext.c    |  2 +-
+ arch/x86/events/amd/core.c         |  3 +--
+ arch/x86/events/amd/ibs.c          |  5 ++---
+ arch/x86/events/core.c             |  3 +--
+ arch/x86/events/intel/ds.c         |  9 +++-----
+ include/linux/perf_event.h         | 20 ++++++++++++-----
+ kernel/events/core.c               | 35 +++++++++++++++---------------
+ kernel/trace/bpf_trace.c           | 11 +++++-----
+ 10 files changed, 49 insertions(+), 43 deletions(-)
 
 -- 
 2.45.0.118.g7fe29c98d7-goog
