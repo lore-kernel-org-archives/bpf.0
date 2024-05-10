@@ -1,56 +1,56 @@
-Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
+Received: from mail-qt1-f169.google.com (mail-qt1-f169.google.com [209.85.160.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E44C502AE;
-	Fri, 10 May 2024 19:24:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FBEA5101A;
+	Fri, 10 May 2024 19:24:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715369063; cv=none; b=bEstblHrVlv02oKEc7muCNjDT8dK3CwRQjlDPyZ7Db2nK8/vQWGSg5NVGz9Lr+5AVm02jjmbuK7QBFdVPxbJ3j4hnlDLrV91BjiM81mFPx0P2NYnaMgAbdfZHViSZ+qxKTp3D/6xJTGd/ko0A9j4D4wnx1LgchSdReTLsn0Ek8s=
+	t=1715369063; cv=none; b=DU081i9VafDQ6pPKh2o5BirEKzQ9cwsyLMlyjxfXoih1PgFvyW+FLxlo/nJuPT37SD1Ll4bHz6mjaaT5ViFNPQ3A1HmQvcw7cBRrA+UQXTvJ5xVzVPekQMWbpOrg+Q9wopOGxSllxmkqGK4JpDfQ/m6xWcRAf8WD2UVeoNJ8PAg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1715369063; c=relaxed/simple;
-	bh=kTydXBETpjr1D6XSLVXfwnOa/+Brli4WffZu0T51Xcc=;
+	bh=LeBqbzZw3U0iZrWXjjzjdcbkZuvBR+k7Yi2U/7a0FQc=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=ClY5ii+gTKJTNSftcJ5FYXhtdOOW8iS1xkGE/ciS0Ufs3xDUm+rCW5TC+QL+zgxt3mEQ34QokSV9MaFOe7NKICdCS7xEdC3ZlO1LYSs4Qrfy7jyJIsfawmUlz5aQpT1EyxhZ5fNB+D5QTlSt8vBabYmmsw44R116Z2HnCcWXRbo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZiJDmb7y; arc=none smtp.client-ip=209.85.160.177
+	 MIME-Version; b=tLPXAddMMneW3Kg3flVEFqKHpvoNoshipOsEvyBURgVelRJPhjys5hadaXnlPHAXr2fYHSYcZUrinj8YNNk8R03wk5RYSQH56GNEjnyoc1pZQ7cbUWCzrzfJPeW+7OMmkx3oeVC0H9zLLvtbohG9o2LoANC7fC36ydK1/2erE+g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RGqzDaqz; arc=none smtp.client-ip=209.85.160.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZiJDmb7y"
-Received: by mail-qt1-f177.google.com with SMTP id d75a77b69052e-43ddbdf2439so15427251cf.0;
-        Fri, 10 May 2024 12:24:20 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RGqzDaqz"
+Received: by mail-qt1-f169.google.com with SMTP id d75a77b69052e-43dfcbc4893so7533351cf.2;
+        Fri, 10 May 2024 12:24:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1715369059; x=1715973859; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1715369061; x=1715973861; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=hveCu8ucfpTFonbjNBtsRxV1gZi43mXbiPaT0dPNXp0=;
-        b=ZiJDmb7yHLGoQXPfP2+TiGJp0b7qvTf0lfW4dPox75TJWhN4GII0Dh6RpE/1yhDhvJ
-         4tUBqNfF5YHFn2qXlH7bnU6dYfxMeBbZmwFXOv7/YUkUmpg6codlRjnnGb4R2eM0vBQU
-         gFD8FkD34LotUb2cn+hcQE3tWvqCEgJH/nBsJEYSizPzSvp35BQs4a4LhjnbpUlUc5Ym
-         iNExZyAk3yNaeafLMRt2TwAFjWGgPzyyZZ624MVq9JXBaOQd94y6TfNo2XYtA5hMt3cG
-         puWDh3mQvvNwLn5lxXvrwdrQ1rUnmoic75aryniswcUCkQgf+6U0vCBvYMPQZu2uV1zx
-         CZ9g==
+        bh=cBGyuSo6Z3xNghSqlZ8Vpcr9iM+DD2u0q7FNLP4Iug4=;
+        b=RGqzDaqzfki62ABdGBPI3eLANwr61/VG8Z8Nc5C1aPq3T9TVbJsXOeT9qktPE10g6f
+         I0MLlyZaMvz7mQgLGJ6XIm9xv9G/uEFUfMcDcyL1PCu42VzotEd8G8eJv7CrJUSOmb1x
+         TPwn/3rQ+e5jgsKDZlficQVF7e6cDOZiVpwpNm6+RisDMjlcZCFAwTmoXpXNkxOkXAJO
+         t6qLg4ohHRSRks1M5l5TZPHyTGxz9u3nDwth4okYn5J+METk0Wmn4Myf1IJrXBJ2Wfq3
+         bqfWfwgoiLljrzr8kdMv1xuKETAxdkaVppWNURLRWA8Y4LHkAYXNpaxX6ExVbNri8wQf
+         F2rQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715369059; x=1715973859;
+        d=1e100.net; s=20230601; t=1715369061; x=1715973861;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=hveCu8ucfpTFonbjNBtsRxV1gZi43mXbiPaT0dPNXp0=;
-        b=q08qTMIK4kvK1Q18NQpe34jwAGgi+u+F8Alte4zPnNvx4pBm6pKBcGkGjJarVjwq/R
-         X0Wgtvnwcm6gBOr7G4299HWNquXMbLlM14YpvPNs1elDuoNsBB6Kf6gaFyJqnVNtVFgv
-         EfjOTDvqpApKEKBR9RV8+4+0nd3kZFHmv0/FcID6QWRXi4vtJtMvOJAobrf811i0ODcT
-         7fuy6OdMOyWtfDOwCC9EEMrKJCL1CGqWHqsbp1lDpXGa89Wph59gnhUbisWT5R9I08RF
-         a3Yi3KEqgwOEKGBJtHZzb7PVxXrdTdQOYFqGmBa7D7UEhnbM0lbtd3ksLbPd4pBqDDe0
-         1+ow==
-X-Gm-Message-State: AOJu0YyjpAjZl0s9CAJSHeuFO6Xs06L7B6tryR9bb9o2eIS2ZLcnXRKt
-	xiqcsNlG8XZiuvoiOGCBXtoq6Edoh4iy5CEqm/7SNowh3f08tfhQnDAYiw==
-X-Google-Smtp-Source: AGHT+IEEHrBSdl5u3GgPumiQKHpYQuCPrumgKyDcajkj29MvZpj15ouVgIcL2/m2WJY86iJ5NeCucg==
-X-Received: by 2002:ac8:7f51:0:b0:43d:d970:b3f1 with SMTP id d75a77b69052e-43dfdd0c647mr36136851cf.61.1715369059163;
-        Fri, 10 May 2024 12:24:19 -0700 (PDT)
+        bh=cBGyuSo6Z3xNghSqlZ8Vpcr9iM+DD2u0q7FNLP4Iug4=;
+        b=gCOvCZQUiGW+4Rix74hcnlPKWSkqg1BWs5H0pcjh3TR+g6MK8yikBsDDqpMrKtNkIi
+         /JtI5m2c/aO/yvcfw3e3AJbKD37boaxmsDm+ac7hWeS19TQ597XzHjXy2SJn73KoHOk0
+         Owxvwjs2FHE4PZJqKrGcQw195kytMoSzOdeuPDBd/8YY2iFANyLcsgXfWqZ6LdohL3RR
+         GPgIKqv5wpY/Xwco1ZOhdCZ8x9a1MI8tqJxBejtynZSYzY/k9Kglu5+MTy7xfipyeV1i
+         Ri0nrRK2wCpo+QX/RHHEs4GZHSe91ocI2XsARZkS9GT742KZKHEo314QCEEJuQPOGioo
+         bZHQ==
+X-Gm-Message-State: AOJu0YxQ+W0Sw+OwtT4Qmk9qp18O3R2cn/ErnHzUQ5o3uRJng8RO+USd
+	BthpKTAGVT5llkzIjMdcL2eymYiq1rki7G4fYhpB9s/MhBc+BAWhk6rwBw==
+X-Google-Smtp-Source: AGHT+IE0oa2Da+xPsupq02++/jgXnqa3Pf33AC8D1GF4Fk7EhmExrwo1QS4AXXqaZvrIyFsEF0KQ7A==
+X-Received: by 2002:ac8:7fd3:0:b0:43a:db0c:e7f0 with SMTP id d75a77b69052e-43dfdb6e62fmr37471621cf.29.1715369061044;
+        Fri, 10 May 2024 12:24:21 -0700 (PDT)
 Received: from n36-183-057.byted.org ([147.160.184.83])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-43df5b46a26sm23863251cf.80.2024.05.10.12.24.18
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-43df5b46a26sm23863251cf.80.2024.05.10.12.24.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 May 2024 12:24:18 -0700 (PDT)
+        Fri, 10 May 2024 12:24:20 -0700 (PDT)
 From: Amery Hung <ameryhung@gmail.com>
 X-Google-Original-From: Amery Hung <amery.hung@bytedance.com>
 To: netdev@vger.kernel.org
@@ -67,9 +67,9 @@ Cc: bpf@vger.kernel.org,
 	xiyou.wangcong@gmail.com,
 	yepeilin.cs@gmail.com,
 	ameryhung@gmail.com
-Subject: [RFC PATCH v8 09/20] bpf: Find special BTF fields in union
-Date: Fri, 10 May 2024 19:24:01 +0000
-Message-Id: <20240510192412.3297104-10-amery.hung@bytedance.com>
+Subject: [RFC PATCH v8 12/20] selftests/bpf: Modify linked_list tests to work with macro-ified removes
+Date: Fri, 10 May 2024 19:24:04 +0000
+Message-Id: <20240510192412.3297104-13-amery.hung@bytedance.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20240510192412.3297104-1-amery.hung@bytedance.com>
 References: <20240510192412.3297104-1-amery.hung@bytedance.com>
@@ -81,157 +81,77 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This patch looks into unions when parsing BTF. While we would like to
-support adding a skb to bpf collections, the bpf graph node in sk_buff
-will happen to be in a union due to space constraint. Therefore,
+Since a hidden arguement is added to bpf list remove kfuncs, and
+bpf_list_pop_back/front are macrofied, we modify selftests so that it can
+be compiled.
 
 Signed-off-by: Amery Hung <amery.hung@bytedance.com>
 ---
- kernel/bpf/btf.c | 74 +++++++++++++++++++++++++++++++++++++++++-------
- 1 file changed, 64 insertions(+), 10 deletions(-)
+ .../selftests/bpf/progs/linked_list_fail.c      | 17 +++++++++--------
+ 1 file changed, 9 insertions(+), 8 deletions(-)
 
-diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index 37fb6143da79..25a5dc840ac3 100644
---- a/kernel/bpf/btf.c
-+++ b/kernel/bpf/btf.c
-@@ -3305,7 +3305,7 @@ static int btf_find_struct(const struct btf *btf, const struct btf_type *t,
- 			   u32 off, int sz, enum btf_field_type field_type,
- 			   struct btf_field_info *info)
+diff --git a/tools/testing/selftests/bpf/progs/linked_list_fail.c b/tools/testing/selftests/bpf/progs/linked_list_fail.c
+index 5f8063ecc448..d260f80ea64d 100644
+--- a/tools/testing/selftests/bpf/progs/linked_list_fail.c
++++ b/tools/testing/selftests/bpf/progs/linked_list_fail.c
+@@ -49,8 +49,7 @@
+ 	int test##_missing_lock_##op(void *ctx)             \
+ 	{                                                   \
+ 		INIT;                                       \
+-		void (*p)(void *) = (void *)&bpf_list_##op; \
+-		p(hexpr);                                   \
++		bpf_list_##op(hexpr);                       \
+ 		return 0;                                   \
+ 	}
+ 
+@@ -96,9 +95,8 @@ CHECK(inner_map, push_back, &iv->head, &f->node2);
+ 	int test##_incorrect_lock_##op(void *ctx)           \
+ 	{                                                   \
+ 		INIT;                                       \
+-		void (*p)(void *) = (void *)&bpf_list_##op; \
+ 		bpf_spin_lock(lexpr);                       \
+-		p(hexpr);                                   \
++		bpf_list_##op(hexpr);                       \
+ 		return 0;                                   \
+ 	}
+ 
+@@ -576,7 +574,7 @@ int incorrect_head_off2(void *ctx)
+ }
+ 
+ static __always_inline
+-int pop_ptr_off(void *(*op)(void *head))
++int pop_ptr_off(bool pop_front)
  {
--	if (!__btf_type_is_struct(t))
-+	if (!btf_type_is_struct(t))
- 		return BTF_FIELD_IGNORE;
- 	if (t->size != sz)
- 		return BTF_FIELD_IGNORE;
-@@ -3497,6 +3497,24 @@ static int btf_get_field_type(const char *name, u32 field_mask, u32 *seen_mask,
- 	return type;
+ 	struct {
+ 		struct bpf_list_head head __contains(foo, node2);
+@@ -588,7 +586,10 @@ int pop_ptr_off(void *(*op)(void *head))
+ 	if (!p)
+ 		return 0;
+ 	bpf_spin_lock(&p->lock);
+-	n = op(&p->head);
++	if (pop_front)
++		n = bpf_list_pop_front(&p->head);
++	else
++		n = bpf_list_pop_back(&p->head);
+ 	bpf_spin_unlock(&p->lock);
+ 
+ 	if (!n)
+@@ -600,13 +601,13 @@ int pop_ptr_off(void *(*op)(void *head))
+ SEC("?tc")
+ int pop_front_off(void *ctx)
+ {
+-	return pop_ptr_off((void *)bpf_list_pop_front);
++	return pop_ptr_off(true);
  }
  
-+static int btf_get_union_field_types(const struct btf *btf, const struct btf_type *u,
-+				     u32 field_mask, u32 *seen_mask, int *align, int *sz)
-+{
-+	int i, field_type, field_types = 0;
-+	const struct btf_member *member;
-+	const struct btf_type *t;
-+
-+	for_each_member(i, u, member) {
-+		t = btf_type_by_id(btf, member->type);
-+		field_type = btf_get_field_type(__btf_name_by_offset(btf, t->name_off),
-+						field_mask, seen_mask, align, sz);
-+		if (field_type == 0 || field_type == BPF_KPTR_REF)
-+			continue;
-+		field_types = field_types | field_type;
-+	}
-+	return field_types;
-+}
-+
- #undef field_mask_test_name
- 
- static int btf_find_struct_field(const struct btf *btf,
-@@ -3512,8 +3530,12 @@ static int btf_find_struct_field(const struct btf *btf,
- 		const struct btf_type *member_type = btf_type_by_id(btf,
- 								    member->type);
- 
--		field_type = btf_get_field_type(__btf_name_by_offset(btf, member_type->name_off),
--						field_mask, &seen_mask, &align, &sz);
-+		field_type = BTF_INFO_KIND(member_type->info) == BTF_KIND_UNION ?
-+			btf_get_union_field_types(btf, member_type, field_mask,
-+						  &seen_mask, &align, &sz) :
-+			btf_get_field_type(__btf_name_by_offset(btf, member_type->name_off),
-+					   field_mask, &seen_mask, &align, &sz);
-+
- 		if (field_type == 0)
- 			continue;
- 		if (field_type < 0)
-@@ -3521,8 +3543,7 @@ static int btf_find_struct_field(const struct btf *btf,
- 
- 		off = __btf_member_bit_offset(t, member);
- 		if (off % 8)
--			/* valid C code cannot generate such BTF */
--			return -EINVAL;
-+			continue;
- 		off /= 8;
- 		if (off % align)
- 			continue;
-@@ -3737,6 +3758,20 @@ static int btf_parse_kptr(const struct btf *btf, struct btf_field *field,
- 	return ret;
+ SEC("?tc")
+ int pop_back_off(void *ctx)
+ {
+-	return pop_ptr_off((void *)bpf_list_pop_back);
++	return pop_ptr_off(false);
  }
  
-+static const struct btf_type *
-+btf_find_member_by_name(const struct btf *btf, const struct btf_type *t,
-+			const char *member_name)
-+{
-+	const struct btf_member *member;
-+	int i;
-+
-+	for_each_member(i, t, member) {
-+		if (!strcmp(member_name, __btf_name_by_offset(btf, member->name_off)))
-+			return btf_type_by_id(btf, member->type);
-+	}
-+	return NULL;
-+}
-+
- static int btf_parse_graph_root(struct btf_field *field,
- 				struct btf_field_info *info,
- 				const char *node_type_name,
-@@ -3754,18 +3789,27 @@ static int btf_parse_graph_root(struct btf_field *field,
- 	 * verify its type.
- 	 */
- 	for_each_member(i, t, member) {
--		if (strcmp(info->graph_root.node_name,
--			   __btf_name_by_offset(btf, member->name_off)))
-+		const struct btf_type *member_type = btf_type_by_id(btf, member->type);
-+
-+		if (BTF_INFO_KIND(member_type->info) == BTF_KIND_UNION) {
-+			member_type = btf_find_member_by_name(btf, member_type,
-+							      info->graph_root.node_name);
-+			if (!member_type)
-+				continue;
-+		} else if (strcmp(info->graph_root.node_name,
-+				  __btf_name_by_offset(btf, member->name_off))) {
- 			continue;
-+		}
-+
- 		/* Invalid BTF, two members with same name */
- 		if (n)
- 			return -EINVAL;
--		n = btf_type_by_id(btf, member->type);
-+		n = member_type;
- 		if (!__btf_type_is_struct(n))
- 			return -EINVAL;
- 		if (strcmp(node_type_name, __btf_name_by_offset(btf, n->name_off)))
- 			return -EINVAL;
--		offset = __btf_member_bit_offset(n, member);
-+		offset = __btf_member_bit_offset(member_type, member);
- 		if (offset % 8)
- 			return -EINVAL;
- 		offset /= 8;
-@@ -5440,7 +5484,7 @@ btf_parse_struct_metas(struct bpf_verifier_log *log, struct btf *btf)
- 		const struct btf_member *member;
- 		struct btf_struct_meta *type;
- 		struct btf_record *record;
--		const struct btf_type *t;
-+		const struct btf_type *t, *member_type;
- 		int j, tab_cnt, id;
- 
- 		id = btf_is_base_kernel ?
-@@ -5462,6 +5506,16 @@ btf_parse_struct_metas(struct bpf_verifier_log *log, struct btf *btf)
- 		cond_resched();
- 
- 		for_each_member(j, t, member) {
-+			member_type = btf_type_by_id(btf, member->type);
-+			if (BTF_INFO_KIND(member_type->info) == BTF_KIND_UNION) {
-+				const struct btf_member *umember;
-+				int k;
-+
-+				for_each_member(k, member_type, umember) {
-+					if (btf_id_set_contains(&aof.set, umember->type))
-+						goto parse;
-+				}
-+			}
- 			if (btf_id_set_contains(&aof.set, member->type))
- 				goto parse;
- 		}
+ SEC("?tc")
 -- 
 2.20.1
 
