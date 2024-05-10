@@ -1,56 +1,56 @@
-Received: from mail-qt1-f169.google.com (mail-qt1-f169.google.com [209.85.160.169])
+Received: from mail-qt1-f170.google.com (mail-qt1-f170.google.com [209.85.160.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF447481CD;
-	Fri, 10 May 2024 19:24:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E400D50A87;
+	Fri, 10 May 2024 19:24:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715369065; cv=none; b=VzFRIYF4jP8V+A7sd4jO6k4xQSkedQxPpEuCWmHi8+jNS8LNe4WSehbTVvYQAQu9dSarLFMqxzBidWGlIY3HT+iozJGsUb1zONZNilH2rlcJMJnjkpMkgTjv4omBEK14oibc6NV4Km+AtTD+V0R7+3vCKJU+Y+gJT9pI8f4zCTw=
+	t=1715369065; cv=none; b=pcJP0Bf7Md3T2kPxy86be2+qBkqZXX60c0+PV2xNstnXvZ35rD8vukZGBst/UHE3AUvXDNttojwmMXUCDYtjhlfM4t3qqWVayeo34VmMv8HUD34tjma/W36wgpmKQOss2KZUlWDxFU8WAHKOytFpc8TzKgrpScjBE9iaP0VdMuY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1715369065; c=relaxed/simple;
-	bh=LY1V7Kf2blJsc6F2WFAacV0Wv+CpTA4aPumqXFb7W64=;
+	bh=0ABJ9EGtHlMzRO8t2wR9+4kAyrBkPtWe5FOnV9rV9/o=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=WV1cyVo4jUjg87xNz6aDOuV3ycV6vpajOqJsyQ40rUdNg+Ycv+8J2wM8pTr5aFTB8xv0FlZEgl45FI7gzkyLai5H4MXNWEnn3cbvmcry374mEe1Xqw2+mRSI6oP7O/nrf8c1Pp6NwTUr5+6Ju5A69WNr/buhoaRwBsTth53qKMI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XcasTyOC; arc=none smtp.client-ip=209.85.160.169
+	 MIME-Version; b=gQuHDDnL7hCprpR9ziZG5GoIOaXU0TIgZ2ugGddZ5Inlg2aMrQrVtlswzgLbA7wlJMoKD8suKRO8R+t4fiUZ9xlX8B5Qukd713B80hosiyHspABBkEOCexC9q7nb5cjOJutBSJdqEIsGvkqprA8Cnj4b9UHrhk0vSlOIOc/Kd9E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Nq1djXYV; arc=none smtp.client-ip=209.85.160.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XcasTyOC"
-Received: by mail-qt1-f169.google.com with SMTP id d75a77b69052e-43df2c8eeb1so12264101cf.3;
-        Fri, 10 May 2024 12:24:22 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Nq1djXYV"
+Received: by mail-qt1-f170.google.com with SMTP id d75a77b69052e-43de92e234dso24396381cf.1;
+        Fri, 10 May 2024 12:24:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1715369062; x=1715973862; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1715369061; x=1715973861; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=sKOlmTw+sd2NVyMctGsaaUsDDNJLitT8EajX7p1i1os=;
-        b=XcasTyOCKZf+R636OKZhuhvB1NkD9GkLeHQeORcEoC1UCY2EVgXBtbubcg3wy1FDvC
-         SDxfQyp93qd0b462dG1Wtg/mD+v5JhfG9dttjLfj6ZZuYemw/E8hHbdfNJxI+6iPouVz
-         pyBFYGc+vqCHWmBCJcR5lfeV1luPtPQehJ3FW8zTL5Gk7M0W2lfvotFKZB3b85XGCvv/
-         as9ARkDAxE4UYpzNomaKv9Vv//5WVhY2hfH6LTcTOA55iBBZRzrSEra79p3OrLx2OKpB
-         mUQvjqBV7LGx8h1zaBif1Dn/a74V1JGON2R6Lz1/f482KsaMzpPlQXSsc4DUzyV/rxYV
-         eLJA==
+        bh=BY/IGGUIFdyzwo5w0wCes/hxX7mNMzc6kH+nYlLXTM0=;
+        b=Nq1djXYVzp+i3KaMRrW72BOZutNurQV2l1C59sah9hzXibjIwpMf1V5tkRjo3alQpY
+         w6ivTkWvpGAjCpSBDSZfTBe4udGmrCbCscZSDM80a/To53poQP8BP7ulp78Ce67GIae7
+         LHFcMxO2Bpv9EbPXtK5x8I282QmB9d3BSKEEuMgr4VV56I/H2MtVh4rYYcAHpDrhvITP
+         NpiyeNHNDBkHdO6uX3gZ3XO2vPFJDSFfRRg701IJFwKP7+3vXuRHm81MZHJPCtqKUGz/
+         LR6AWeug7P/yPFlDvgBsUVYArT0adGqzQKun/Qekx1whM5W9DxrxO5uFx5iVy52WaOkg
+         a3Fg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715369062; x=1715973862;
+        d=1e100.net; s=20230601; t=1715369061; x=1715973861;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=sKOlmTw+sd2NVyMctGsaaUsDDNJLitT8EajX7p1i1os=;
-        b=jyZUBtW+Gqb0NSTXAC1+9coxFHQRnZcWu/2OqlWbpGHZA+RIMI4emNuxkIZ4mJuhRV
-         6BwL51W4viUYk33/t0amhC0Bna8zZtoda80HHD8kU0et6M8KDJFPz0qZHXJfuBdWSUwG
-         tEswAdoLVnrtj81av7TqY7hRNC18bbHhNVtOd96eRnhp8Q1VDQ3+tj3hYLrHV1fanoJ8
-         tN4uEQJJ6TCgRFRLrEMP05PEgK/pYDFCIUjQlcHp/C+PFNxsX/Xw5qBdmiq7kHdNGgNP
-         uSnTEZVaxycTDcUp9b+CCcJ0E1C6nOavSy58DoBGCTgUfTThEHSxOuKwjw51CBeG5yHl
-         uj/A==
-X-Gm-Message-State: AOJu0YzOVQE+6VyyEH4TEpfWNzWWI5nggvVD0K0nKjgJ+6B4VC2YaPP6
-	thakhvS2+74PyKrUsoOH8G+CPA/KQWxSE+TY1OCkXrJafn26S+NF3eIPDg==
-X-Google-Smtp-Source: AGHT+IHB2xYdVTlU/wbS5FaQ3yjXwz2Urpm6eofRY6HgxVKZL6Qa9C2cpbXO4gJevnHVV4AF7+U7cg==
-X-Received: by 2002:a05:622a:8b:b0:43a:d430:b678 with SMTP id d75a77b69052e-43dfdb170a3mr34517901cf.32.1715369061626;
-        Fri, 10 May 2024 12:24:21 -0700 (PDT)
+        bh=BY/IGGUIFdyzwo5w0wCes/hxX7mNMzc6kH+nYlLXTM0=;
+        b=q7UDYPSuguqlcx1ok+d3EL5g7ENMiSBi4UQV+EPIX6gJOcoKoliekxU/ZHmP9eXDP5
+         RdEBz7XjzXA1y0vCmppyhA5rOmZVVqJRq/bQysnmzgRYdnDv9shCsn1Eg6oQVCNtlQNC
+         a2sorryg+S89CDsJODvSsKIrWtRvoQT8sk8u7LOX8usmAg87SwOBSqSz+7efZnSwoXUq
+         V0Rxnoi5V96ng5Lg3u6pxB5fTyARPdQBneEMquBGRVmYmXzCl97Z9HpDvjsu9gxn3w9F
+         fnkCiNWmXLlbciy0uyb0spxe3RSyTyVaThuczqfqMVvqQQSpDCXP/Ho4latFQCCGJzK2
+         so/Q==
+X-Gm-Message-State: AOJu0Yzkfj3ziNTq8VtkIdG9zebbFxvBOnx4Yccv1XKtBv07GP0kPFQU
+	4o+906/qAMX9nK82aCNk1aTApXoHw7qT+gEJPr7INnn3+Y/EHsP9RHTE4w==
+X-Google-Smtp-Source: AGHT+IHDloUvoXMyn50szuMjCDLkltoo8/ncszUXxwdABD5IOz67IM+jNMNmQPUpiaJOeVDcnFmYjQ==
+X-Received: by 2002:a05:622a:152:b0:43a:f5db:88b8 with SMTP id d75a77b69052e-43dfce260ebmr58982781cf.24.1715369059804;
+        Fri, 10 May 2024 12:24:19 -0700 (PDT)
 Received: from n36-183-057.byted.org ([147.160.184.83])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-43df5b46a26sm23863251cf.80.2024.05.10.12.24.21
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-43df5b46a26sm23863251cf.80.2024.05.10.12.24.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 May 2024 12:24:21 -0700 (PDT)
+        Fri, 10 May 2024 12:24:19 -0700 (PDT)
 From: Amery Hung <ameryhung@gmail.com>
 X-Google-Original-From: Amery Hung <amery.hung@bytedance.com>
 To: netdev@vger.kernel.org
@@ -67,9 +67,9 @@ Cc: bpf@vger.kernel.org,
 	xiyou.wangcong@gmail.com,
 	yepeilin.cs@gmail.com,
 	ameryhung@gmail.com
-Subject: [RFC PATCH v8 13/20] bpf: net_sched: Support implementation of Qdisc_ops in bpf
-Date: Fri, 10 May 2024 19:24:05 +0000
-Message-Id: <20240510192412.3297104-14-amery.hung@bytedance.com>
+Subject: [RFC PATCH v8 10/20] bpf: Introduce exclusive-ownership list and rbtree nodes
+Date: Fri, 10 May 2024 19:24:02 +0000
+Message-Id: <20240510192412.3297104-11-amery.hung@bytedance.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20240510192412.3297104-1-amery.hung@bytedance.com>
 References: <20240510192412.3297104-1-amery.hung@bytedance.com>
@@ -81,703 +81,373 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This patch enables users to implement a qdisc using bpf. The last few
-patches in this series has prepared struct_ops to support core methods
-in Qdisc_ops. The recent advancement in bpf such as local objects,
-bpf list and bpf rbtree has also provided powerful and flexible building
-blocks to realize sophisticated scheduling algorithms. Therefore, in this
-patch, we start allowing qdisc to be implemented using bpf struct_ops.
-Users can implement .enqueue and .dequeue in Qdisc_ops in bpf and register
-the qdisc dynamically into the kernel.
+This patch reintroduces the semantic of exclusive ownership of a
+reference. The main motivation is to save spaces and avoid changing
+kernel structure layout. Existing bpf graph nodes add an additional
+owner field to list_head and rb_node to safely support shared ownership
+of a reference. The previous patch supports adding kernel objects to
+collections by including bpf_list_node or bpf_rb_node in a kernel
+structure same as user-defined local objects. However, some kernel
+objects' layout have been optimized through out the years and cannot be
+easily changed. For example, a bpf_rb_node cannot be added in the union
+at offset=0 in sk_buff since bpf_rb_node is larger than other members.
+Exclusive ownership solves the problem as "owner" is no longer needed
+and both graph nodes can be at the same offset.
 
-To further make bpf qdisc easy to use, a qdisc watchdog and a class hash
-table are included by default. They are taken care of by bpf qdisc infra
-with predefined Qdisc_ops and Qdisc_class_ops methods. In the next few
-patches, kfuncs will be introduced for users to really make use of them,
-and more ops will be supported.
+To achieve this, bpf_list_excl_node and bpf_rb_excl_node are first
+introduced. They simply wrap list_head and rb_node, and serve as
+annotations in BTF. Then, we make sure that they cannot co-exist with
+bpf_refcount, bpf_list_node and bpf_rb_nodes in the same structure when
+parsing btf. This will prevent the user from acquiring more than one
+reference to a object with a exclusive node.
 
-Signed-off-by: Cong Wang <cong.wang@bytedance.com>
-Co-developed-by: Amery Hung <amery.hung@bytedance.com>
+No exclusive node can be added to collection yet. We will teach the
+verifier to accept exclusive nodes as valid nodes and then skip the
+ownership checks in graph kfuncs.
+
 Signed-off-by: Amery Hung <amery.hung@bytedance.com>
 ---
- include/linux/btf.h     |   1 +
- kernel/bpf/btf.c        |   2 +-
- net/sched/Makefile      |   4 +
- net/sched/bpf_qdisc.c   | 563 ++++++++++++++++++++++++++++++++++++++++
- net/sched/sch_api.c     |   7 +-
- net/sched/sch_generic.c |   3 +-
- 6 files changed, 575 insertions(+), 5 deletions(-)
- create mode 100644 net/sched/bpf_qdisc.c
+ include/linux/bpf.h          | 27 ++++++++++++---
+ include/linux/rbtree_types.h |  4 +++
+ include/linux/types.h        |  4 +++
+ kernel/bpf/btf.c             | 64 +++++++++++++++++++++++++++++++++---
+ kernel/bpf/syscall.c         | 20 +++++++++--
+ 5 files changed, 108 insertions(+), 11 deletions(-)
 
-diff --git a/include/linux/btf.h b/include/linux/btf.h
-index 2579b8a51172..2d01a921f604 100644
---- a/include/linux/btf.h
-+++ b/include/linux/btf.h
-@@ -520,6 +520,7 @@ const struct btf_type *btf_type_by_id(const struct btf *btf, u32 type_id);
- const char *btf_name_by_offset(const struct btf *btf, u32 offset);
- struct btf *btf_parse_vmlinux(void);
- struct btf *bpf_prog_get_target_btf(const struct bpf_prog *prog);
-+u32 get_ctx_arg_idx(struct btf *btf, const struct btf_type *func_proto, int off);
- u32 *btf_kfunc_id_set_contains(const struct btf *btf, u32 kfunc_btf_id,
- 			       const struct bpf_prog *prog);
- u32 *btf_kfunc_is_modify_return(const struct btf *btf, u32 kfunc_btf_id,
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 6aabca1581fe..49c29c823fb3 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -197,11 +197,16 @@ enum btf_field_type {
+ 	BPF_KPTR       = BPF_KPTR_UNREF | BPF_KPTR_REF | BPF_KPTR_PERCPU,
+ 	BPF_LIST_HEAD  = (1 << 5),
+ 	BPF_LIST_NODE  = (1 << 6),
+-	BPF_RB_ROOT    = (1 << 7),
+-	BPF_RB_NODE    = (1 << 8),
+-	BPF_GRAPH_NODE = BPF_RB_NODE | BPF_LIST_NODE,
++	BPF_LIST_EXCL_NODE = (1 << 7),
++	BPF_RB_ROOT    = (1 << 8),
++	BPF_RB_NODE    = (1 << 9),
++	BPF_RB_EXCL_NODE = (1 << 10),
++	BPF_GRAPH_EXCL_NODE = BPF_RB_EXCL_NODE | BPF_LIST_EXCL_NODE,
++	BPF_GRAPH_NODE = BPF_RB_NODE | BPF_LIST_NODE |
++			 BPF_RB_EXCL_NODE | BPF_LIST_EXCL_NODE,
+ 	BPF_GRAPH_ROOT = BPF_RB_ROOT | BPF_LIST_HEAD,
+-	BPF_REFCOUNT   = (1 << 9),
++	BPF_GRAPH_NODE_OR_ROOT = BPF_GRAPH_NODE | BPF_GRAPH_ROOT,
++	BPF_REFCOUNT   = (1 << 11),
+ };
+ 
+ typedef void (*btf_dtor_kfunc_t)(void *);
+@@ -321,10 +326,14 @@ static inline const char *btf_field_type_name(enum btf_field_type type)
+ 		return "bpf_list_head";
+ 	case BPF_LIST_NODE:
+ 		return "bpf_list_node";
++	case BPF_LIST_EXCL_NODE:
++		return "bpf_list_excl_node";
+ 	case BPF_RB_ROOT:
+ 		return "bpf_rb_root";
+ 	case BPF_RB_NODE:
+ 		return "bpf_rb_node";
++	case BPF_RB_EXCL_NODE:
++		return "bpf_rb_excl_node";
+ 	case BPF_REFCOUNT:
+ 		return "bpf_refcount";
+ 	default:
+@@ -348,10 +357,14 @@ static inline u32 btf_field_type_size(enum btf_field_type type)
+ 		return sizeof(struct bpf_list_head);
+ 	case BPF_LIST_NODE:
+ 		return sizeof(struct bpf_list_node);
++	case BPF_LIST_EXCL_NODE:
++		return sizeof(struct bpf_list_excl_node);
+ 	case BPF_RB_ROOT:
+ 		return sizeof(struct bpf_rb_root);
+ 	case BPF_RB_NODE:
+ 		return sizeof(struct bpf_rb_node);
++	case BPF_RB_EXCL_NODE:
++		return sizeof(struct bpf_rb_excl_node);
+ 	case BPF_REFCOUNT:
+ 		return sizeof(struct bpf_refcount);
+ 	default:
+@@ -375,10 +388,14 @@ static inline u32 btf_field_type_align(enum btf_field_type type)
+ 		return __alignof__(struct bpf_list_head);
+ 	case BPF_LIST_NODE:
+ 		return __alignof__(struct bpf_list_node);
++	case BPF_LIST_EXCL_NODE:
++		return __alignof__(struct bpf_list_excl_node);
+ 	case BPF_RB_ROOT:
+ 		return __alignof__(struct bpf_rb_root);
+ 	case BPF_RB_NODE:
+ 		return __alignof__(struct bpf_rb_node);
++	case BPF_RB_EXCL_NODE:
++		return __alignof__(struct bpf_rb_excl_node);
+ 	case BPF_REFCOUNT:
+ 		return __alignof__(struct bpf_refcount);
+ 	default:
+@@ -396,10 +413,12 @@ static inline void bpf_obj_init_field(const struct btf_field *field, void *addr)
+ 		refcount_set((refcount_t *)addr, 1);
+ 		break;
+ 	case BPF_RB_NODE:
++	case BPF_RB_EXCL_NODE:
+ 		RB_CLEAR_NODE((struct rb_node *)addr);
+ 		break;
+ 	case BPF_LIST_HEAD:
+ 	case BPF_LIST_NODE:
++	case BPF_LIST_EXCL_NODE:
+ 		INIT_LIST_HEAD((struct list_head *)addr);
+ 		break;
+ 	case BPF_RB_ROOT:
+diff --git a/include/linux/rbtree_types.h b/include/linux/rbtree_types.h
+index 45b6ecde3665..fc5185991fb1 100644
+--- a/include/linux/rbtree_types.h
++++ b/include/linux/rbtree_types.h
+@@ -28,6 +28,10 @@ struct rb_root_cached {
+ 	struct rb_node *rb_leftmost;
+ };
+ 
++struct bpf_rb_excl_node {
++	struct rb_node rb_node;
++};
++
+ #define RB_ROOT (struct rb_root) { NULL, }
+ #define RB_ROOT_CACHED (struct rb_root_cached) { {NULL, }, NULL }
+ 
+diff --git a/include/linux/types.h b/include/linux/types.h
+index 2bc8766ba20c..71429cd80ce2 100644
+--- a/include/linux/types.h
++++ b/include/linux/types.h
+@@ -202,6 +202,10 @@ struct hlist_node {
+ 	struct hlist_node *next, **pprev;
+ };
+ 
++struct bpf_list_excl_node {
++	struct list_head list_head;
++};
++
+ struct ustat {
+ 	__kernel_daddr_t	f_tfree;
+ #ifdef CONFIG_ARCH_32BIT_USTAT_F_TINODE
 diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index 6a9c1671c8f4..edfaba046427 100644
+index 25a5dc840ac3..a641c716e0fa 100644
 --- a/kernel/bpf/btf.c
 +++ b/kernel/bpf/btf.c
-@@ -6304,7 +6304,7 @@ static bool is_int_ptr(struct btf *btf, const struct btf_type *t)
- 	return btf_type_is_int(t);
- }
+@@ -3484,6 +3484,8 @@ static int btf_get_field_type(const char *name, u32 field_mask, u32 *seen_mask,
+ 	field_mask_test_name(BPF_RB_ROOT,   "bpf_rb_root");
+ 	field_mask_test_name(BPF_RB_NODE,   "bpf_rb_node");
+ 	field_mask_test_name(BPF_REFCOUNT,  "bpf_refcount");
++	field_mask_test_name(BPF_LIST_EXCL_NODE, "bpf_list_excl_node");
++	field_mask_test_name(BPF_RB_EXCL_NODE,   "bpf_rb_excl_node");
  
--static u32 get_ctx_arg_idx(struct btf *btf, const struct btf_type *func_proto,
-+u32 get_ctx_arg_idx(struct btf *btf, const struct btf_type *func_proto,
- 			   int off)
+ 	/* Only return BPF_KPTR when all other types with matchable names fail */
+ 	if (field_mask & BPF_KPTR) {
+@@ -3504,6 +3506,8 @@ static int btf_get_union_field_types(const struct btf *btf, const struct btf_typ
+ 	const struct btf_member *member;
+ 	const struct btf_type *t;
+ 
++	field_mask &= BPF_GRAPH_EXCL_NODE;
++
+ 	for_each_member(i, u, member) {
+ 		t = btf_type_by_id(btf, member->type);
+ 		field_type = btf_get_field_type(__btf_name_by_offset(btf, t->name_off),
+@@ -3552,13 +3556,28 @@ static int btf_find_struct_field(const struct btf *btf,
+ 		case BPF_SPIN_LOCK:
+ 		case BPF_TIMER:
+ 		case BPF_LIST_NODE:
++		case BPF_LIST_EXCL_NODE:
+ 		case BPF_RB_NODE:
++		case BPF_RB_EXCL_NODE:
+ 		case BPF_REFCOUNT:
+ 			ret = btf_find_struct(btf, member_type, off, sz, field_type,
+ 					      idx < info_cnt ? &info[idx] : &tmp);
+ 			if (ret < 0)
+ 				return ret;
+ 			break;
++		case BPF_GRAPH_EXCL_NODE:
++			ret = btf_find_struct(btf, member_type, off, sz,
++					      BPF_LIST_EXCL_NODE,
++					      idx < info_cnt ? &info[idx] : &tmp);
++			if (ret < 0)
++				return ret;
++			++idx;
++			ret = btf_find_struct(btf, member_type, off, sz,
++					      BPF_RB_EXCL_NODE,
++					      idx < info_cnt ? &info[idx] : &tmp);
++			if (ret < 0)
++				return ret;
++			break;
+ 		case BPF_KPTR_UNREF:
+ 		case BPF_KPTR_REF:
+ 		case BPF_KPTR_PERCPU:
+@@ -3619,7 +3638,9 @@ static int btf_find_datasec_var(const struct btf *btf, const struct btf_type *t,
+ 		case BPF_SPIN_LOCK:
+ 		case BPF_TIMER:
+ 		case BPF_LIST_NODE:
++		case BPF_LIST_EXCL_NODE:
+ 		case BPF_RB_NODE:
++		case BPF_RB_EXCL_NODE:
+ 		case BPF_REFCOUNT:
+ 			ret = btf_find_struct(btf, var_type, off, sz, field_type,
+ 					      idx < info_cnt ? &info[idx] : &tmp);
+@@ -3827,14 +3848,24 @@ static int btf_parse_graph_root(struct btf_field *field,
+ 
+ static int btf_parse_list_head(struct btf_field *field, struct btf_field_info *info)
  {
- 	const struct btf_param *args;
-diff --git a/net/sched/Makefile b/net/sched/Makefile
-index 82c3f78ca486..2094e6e74158 100644
---- a/net/sched/Makefile
-+++ b/net/sched/Makefile
-@@ -63,6 +63,10 @@ obj-$(CONFIG_NET_SCH_CBS)	+= sch_cbs.o
- obj-$(CONFIG_NET_SCH_ETF)	+= sch_etf.o
- obj-$(CONFIG_NET_SCH_TAPRIO)	+= sch_taprio.o
- 
-+ifeq ($(CONFIG_BPF_JIT),y)
-+obj-$(CONFIG_BPF_SYSCALL)	+= bpf_qdisc.o
-+endif
-+
- obj-$(CONFIG_NET_CLS_U32)	+= cls_u32.o
- obj-$(CONFIG_NET_CLS_ROUTE4)	+= cls_route.o
- obj-$(CONFIG_NET_CLS_FW)	+= cls_fw.o
-diff --git a/net/sched/bpf_qdisc.c b/net/sched/bpf_qdisc.c
-new file mode 100644
-index 000000000000..53e9b0f1fbd8
---- /dev/null
-+++ b/net/sched/bpf_qdisc.c
-@@ -0,0 +1,563 @@
-+#include <linux/types.h>
-+#include <linux/bpf_verifier.h>
-+#include <linux/bpf.h>
-+#include <linux/btf.h>
-+#include <linux/filter.h>
-+#include <net/pkt_sched.h>
-+#include <net/pkt_cls.h>
-+
-+static struct bpf_struct_ops bpf_Qdisc_ops;
-+
-+static u32 unsupported_ops[] = {
-+	offsetof(struct Qdisc_ops, init),
-+	offsetof(struct Qdisc_ops, reset),
-+	offsetof(struct Qdisc_ops, destroy),
-+	offsetof(struct Qdisc_ops, change),
-+	offsetof(struct Qdisc_ops, attach),
-+	offsetof(struct Qdisc_ops, change_real_num_tx),
-+	offsetof(struct Qdisc_ops, dump),
-+	offsetof(struct Qdisc_ops, dump_stats),
-+	offsetof(struct Qdisc_ops, ingress_block_set),
-+	offsetof(struct Qdisc_ops, egress_block_set),
-+	offsetof(struct Qdisc_ops, ingress_block_get),
-+	offsetof(struct Qdisc_ops, egress_block_get),
-+};
-+
-+struct sch_bpf_class {
-+	struct Qdisc_class_common common;
-+	struct Qdisc *qdisc;
-+
-+	unsigned int drops;
-+	unsigned int overlimits;
-+	struct gnet_stats_basic_sync bstats;
-+};
-+
-+struct bpf_sched_data {
-+	struct tcf_proto __rcu *filter_list; /* optional external classifier */
-+	struct tcf_block *block;
-+	struct Qdisc_class_hash clhash;
-+	struct qdisc_watchdog watchdog;
-+};
-+
-+struct bpf_sk_buff_ptr {
-+	struct sk_buff *skb;
-+};
-+
-+static int bpf_qdisc_init(struct btf *btf)
-+{
-+	return 0;
-+}
-+
-+static int sch_bpf_graft(struct Qdisc *sch, unsigned long arg, struct Qdisc *new,
-+			 struct Qdisc **old, struct netlink_ext_ack *extack)
-+{
-+	struct sch_bpf_class *cl = (struct sch_bpf_class *)arg;
-+
-+	if (new)
-+		*old = qdisc_replace(sch, new, &cl->qdisc);
-+	return 0;
-+}
-+
-+static struct Qdisc *sch_bpf_leaf(struct Qdisc *sch, unsigned long arg)
-+{
-+	struct sch_bpf_class *cl = (struct sch_bpf_class *)arg;
-+
-+	return cl->qdisc;
-+}
-+
-+static struct sch_bpf_class *sch_bpf_find(struct Qdisc *sch, u32 classid)
-+{
-+	struct bpf_sched_data *q = qdisc_priv(sch);
-+	struct Qdisc_class_common *clc;
-+
-+	clc = qdisc_class_find(&q->clhash, classid);
-+	if (!clc)
-+		return NULL;
-+	return container_of(clc, struct sch_bpf_class, common);
-+}
-+
-+static unsigned long sch_bpf_search(struct Qdisc *sch, u32 handle)
-+{
-+	return (unsigned long)sch_bpf_find(sch, handle);
-+}
-+
-+static int sch_bpf_change_class(struct Qdisc *sch, u32 classid,
-+				u32 parentid, struct nlattr **tca,
-+				unsigned long *arg,
-+				struct netlink_ext_ack *extack)
-+{
-+	struct sch_bpf_class *cl = (struct sch_bpf_class *)*arg;
-+	struct bpf_sched_data *q = qdisc_priv(sch);
-+
-+	if (!cl) {
-+		if (classid == 0 || TC_H_MAJ(classid ^ sch->handle) != 0 ||
-+		    sch_bpf_find(sch, classid))
-+			return -EINVAL;
-+
-+		cl = kzalloc(sizeof(*cl), GFP_KERNEL);
-+		if (!cl)
-+			return -ENOBUFS;
-+
-+		cl->common.classid = classid;
-+		gnet_stats_basic_sync_init(&cl->bstats);
-+		qdisc_class_hash_insert(&q->clhash, &cl->common);
-+	}
-+
-+	qdisc_class_hash_grow(sch, &q->clhash);
-+	*arg = (unsigned long)cl;
-+	return 0;
-+}
-+
-+static int sch_bpf_delete(struct Qdisc *sch, unsigned long arg,
-+			  struct netlink_ext_ack *extack)
-+{
-+	struct sch_bpf_class *cl = (struct sch_bpf_class *)arg;
-+	struct bpf_sched_data *q = qdisc_priv(sch);
-+
-+	qdisc_class_hash_remove(&q->clhash, &cl->common);
-+	if (cl->qdisc)
-+		qdisc_put(cl->qdisc);
-+	return 0;
-+}
-+
-+static struct tcf_block *sch_bpf_tcf_block(struct Qdisc *sch, unsigned long cl,
-+					   struct netlink_ext_ack *extack)
-+{
-+	struct bpf_sched_data *q = qdisc_priv(sch);
-+
-+	if (cl)
-+		return NULL;
-+	return q->block;
-+}
-+
-+static unsigned long sch_bpf_bind(struct Qdisc *sch, unsigned long parent,
-+				  u32 classid)
-+{
-+	return 0;
-+}
-+
-+static void sch_bpf_unbind(struct Qdisc *q, unsigned long cl)
-+{
-+}
-+
-+static int sch_bpf_dump_class(struct Qdisc *sch, unsigned long arg,
-+			      struct sk_buff *skb, struct tcmsg *tcm)
-+{
-+	return 0;
-+}
-+
-+static int
-+sch_bpf_dump_class_stats(struct Qdisc *sch, unsigned long arg, struct gnet_dump *d)
-+{
-+	struct sch_bpf_class *cl = (struct sch_bpf_class *)arg;
-+	struct gnet_stats_queue qs = {
-+		.drops = cl->drops,
-+		.overlimits = cl->overlimits,
-+	};
-+	__u32 qlen = 0;
-+
-+	if (cl->qdisc)
-+		qdisc_qstats_qlen_backlog(cl->qdisc, &qlen, &qs.backlog);
-+	else
-+		qlen = 0;
-+
-+	if (gnet_stats_copy_basic(d, NULL, &cl->bstats, true) < 0 ||
-+	    gnet_stats_copy_queue(d, NULL, &qs, qlen) < 0)
-+		return -1;
-+	return 0;
-+}
-+
-+static void sch_bpf_walk(struct Qdisc *sch, struct qdisc_walker *arg)
-+{
-+	struct bpf_sched_data *q = qdisc_priv(sch);
-+	struct sch_bpf_class *cl;
-+	unsigned int i;
-+
-+	if (arg->stop)
-+		return;
-+
-+	for (i = 0; i < q->clhash.hashsize; i++) {
-+		hlist_for_each_entry(cl, &q->clhash.hash[i], common.hnode) {
-+			if (arg->count < arg->skip) {
-+				arg->count++;
-+				continue;
-+			}
-+			if (arg->fn(sch, (unsigned long)cl, arg) < 0) {
-+				arg->stop = 1;
-+				return;
-+			}
-+			arg->count++;
-+		}
-+	}
-+}
-+
-+static int bpf_qdisc_init_op(struct Qdisc *sch, struct nlattr *opt,
-+			struct netlink_ext_ack *extack)
-+{
-+	struct bpf_sched_data *q = qdisc_priv(sch);
+-	return btf_parse_graph_root(field, info, "bpf_list_node",
+-				    __alignof__(struct bpf_list_node));
 +	int err;
 +
-+	qdisc_watchdog_init(&q->watchdog, sch);
++	err = btf_parse_graph_root(field, info, "bpf_list_node",
++				   __alignof__(struct bpf_list_node));
 +
-+	err = tcf_block_get(&q->block, &q->filter_list, sch, extack);
-+	if (err)
-+		return err;
++	return err ? btf_parse_graph_root(field, info, "bpf_list_excl_node",
++					  __alignof__(struct bpf_list_excl_node)) : 0;
+ }
+ 
+ static int btf_parse_rb_root(struct btf_field *field, struct btf_field_info *info)
+ {
+-	return btf_parse_graph_root(field, info, "bpf_rb_node",
+-				    __alignof__(struct bpf_rb_node));
++	int err;
 +
-+	err = qdisc_class_hash_init(&q->clhash);
-+	if (err < 0)
-+		return err;
++	err = btf_parse_graph_root(field, info, "bpf_rb_node",
++				   __alignof__(struct bpf_rb_node));
 +
-+	return 0;
-+}
++	return err ? btf_parse_graph_root(field, info, "bpf_rb_excl_node",
++					  __alignof__(struct bpf_rb_excl_node)) : 0;
+ }
+ 
+ static int btf_field_cmp(const void *_a, const void *_b, const void *priv)
+@@ -3864,6 +3895,7 @@ struct btf_record *btf_parse_fields(const struct btf *btf, const struct btf_type
+ 		return NULL;
+ 
+ 	cnt = ret;
 +
-+static void bpf_qdisc_reset_op(struct Qdisc *sch)
-+{
-+	struct bpf_sched_data *q = qdisc_priv(sch);
-+	struct sch_bpf_class *cl;
-+	unsigned int i;
-+
-+	for (i = 0; i < q->clhash.hashsize; i++) {
-+		hlist_for_each_entry(cl, &q->clhash.hash[i], common.hnode) {
-+			if (cl->qdisc)
-+				qdisc_reset(cl->qdisc);
-+		}
+ 	/* This needs to be kzalloc to zero out padding and unused fields, see
+ 	 * comment in btf_record_equal.
+ 	 */
+@@ -3881,7 +3913,9 @@ struct btf_record *btf_parse_fields(const struct btf *btf, const struct btf_type
+ 			ret = -EFAULT;
+ 			goto end;
+ 		}
+-		if (info_arr[i].off < next_off) {
++		if (info_arr[i].off < next_off &&
++		    !(info_arr[i].off == info_arr[i - 1].off &&
++		     (info_arr[i].type | info_arr[i - 1].type) == BPF_GRAPH_EXCL_NODE)) {
+ 			ret = -EEXIST;
+ 			goto end;
+ 		}
+@@ -3925,6 +3959,8 @@ struct btf_record *btf_parse_fields(const struct btf *btf, const struct btf_type
+ 			if (ret < 0)
+ 				goto end;
+ 			break;
++		case BPF_LIST_EXCL_NODE:
++		case BPF_RB_EXCL_NODE:
+ 		case BPF_LIST_NODE:
+ 		case BPF_RB_NODE:
+ 			break;
+@@ -3949,6 +3985,21 @@ struct btf_record *btf_parse_fields(const struct btf *btf, const struct btf_type
+ 		goto end;
+ 	}
+ 
++	if (rec->refcount_off >= 0 &&
++	    (btf_record_has_field(rec, BPF_LIST_EXCL_NODE) ||
++	     btf_record_has_field(rec, BPF_RB_EXCL_NODE))) {
++		ret = -EINVAL;
++		goto end;
 +	}
 +
-+	qdisc_watchdog_cancel(&q->watchdog);
-+}
-+
-+static void bpf_qdisc_destroy_class(struct Qdisc *sch, struct sch_bpf_class *cl)
-+{
-+	if (cl->qdisc)
-+		qdisc_put(cl->qdisc);
-+	kfree(cl);
-+}
-+
-+static void bpf_qdisc_destroy_op(struct Qdisc *sch)
-+{
-+	struct bpf_sched_data *q = qdisc_priv(sch);
-+	struct sch_bpf_class *cl;
-+	struct hlist_node *next;
-+	unsigned int i;
-+
-+	qdisc_watchdog_cancel(&q->watchdog);
-+	tcf_block_put(q->block);
-+
-+	for (i = 0; i < q->clhash.hashsize; i++) {
-+		hlist_for_each_entry_safe(cl, next, &q->clhash.hash[i],
-+					  common.hnode) {
-+			qdisc_class_hash_remove(&q->clhash,
-+						&cl->common);
-+			bpf_qdisc_destroy_class(sch, cl);
-+		}
++	if ((btf_record_has_field(rec, BPF_LIST_EXCL_NODE) ||
++	     btf_record_has_field(rec, BPF_RB_EXCL_NODE)) &&
++	    (btf_record_has_field(rec, BPF_LIST_NODE) ||
++	     btf_record_has_field(rec, BPF_RB_NODE))) {
++		ret = -EINVAL;
++		goto end;
 +	}
 +
-+	qdisc_class_hash_destroy(&q->clhash);
-+}
-+
-+static const struct Qdisc_class_ops sch_bpf_class_ops = {
-+	.graft		=	sch_bpf_graft,
-+	.leaf		=	sch_bpf_leaf,
-+	.find		=	sch_bpf_search,
-+	.change		=	sch_bpf_change_class,
-+	.delete		=	sch_bpf_delete,
-+	.tcf_block	=	sch_bpf_tcf_block,
-+	.bind_tcf	=	sch_bpf_bind,
-+	.unbind_tcf	=	sch_bpf_unbind,
-+	.dump		=	sch_bpf_dump_class,
-+	.dump_stats	=	sch_bpf_dump_class_stats,
-+	.walk		=	sch_bpf_walk,
-+};
-+
-+static const struct bpf_func_proto *
-+bpf_qdisc_get_func_proto(enum bpf_func_id func_id,
-+			 const struct bpf_prog *prog)
-+{
-+	switch (func_id) {
-+	default:
-+		return bpf_base_func_proto(func_id, prog);
+ 	sort_r(rec->fields, rec->cnt, sizeof(struct btf_field), btf_field_cmp,
+ 	       NULL, rec);
+ 
+@@ -5434,8 +5485,10 @@ static const char *alloc_obj_fields[] = {
+ 	"bpf_spin_lock",
+ 	"bpf_list_head",
+ 	"bpf_list_node",
++	"bpf_list_excl_node",
+ 	"bpf_rb_root",
+ 	"bpf_rb_node",
++	"bpf_rb_excl_node",
+ 	"bpf_refcount",
+ };
+ 
+@@ -5536,6 +5589,7 @@ btf_parse_struct_metas(struct bpf_verifier_log *log, struct btf *btf)
+ 		type->btf_id = id;
+ 		record = btf_parse_fields(btf, t, BPF_SPIN_LOCK | BPF_LIST_HEAD | BPF_LIST_NODE |
+ 						  BPF_RB_ROOT | BPF_RB_NODE | BPF_REFCOUNT |
++						  BPF_LIST_EXCL_NODE | BPF_RB_EXCL_NODE |
+ 						  BPF_KPTR, t->size);
+ 		/* The record cannot be unset, treat it as an error if so */
+ 		if (IS_ERR_OR_NULL(record)) {
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index 9e93d48efe19..25fad6293720 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -528,13 +528,23 @@ struct btf_field *btf_record_find(const struct btf_record *rec, u32 offset,
+ 				  u32 field_mask)
+ {
+ 	struct btf_field *field;
++	u32 i;
+ 
+ 	if (IS_ERR_OR_NULL(rec) || !(rec->field_mask & field_mask))
+ 		return NULL;
+ 	field = bsearch(&offset, rec->fields, rec->cnt, sizeof(rec->fields[0]), btf_field_cmp);
+-	if (!field || !(field->type & field_mask))
++	if (!field)
+ 		return NULL;
+-	return field;
++	if (field->type & field_mask)
++		return field;
++	if (field->type & BPF_GRAPH_EXCL_NODE && field_mask & BPF_GRAPH_EXCL_NODE) {
++		i = field - rec->fields;
++		if (i > 0 && (field - 1)->type & field_mask)
++			return field - 1;
++		if (i < rec->cnt - 1 && (field + 1)->type & field_mask)
++			return field + 1;
 +	}
-+}
-+
-+BTF_ID_LIST_SINGLE(bpf_sk_buff_ids, struct, sk_buff)
-+BTF_ID_LIST_SINGLE(bpf_sk_buff_ptr_ids, struct, bpf_sk_buff_ptr)
-+
-+static bool bpf_qdisc_is_valid_access(int off, int size,
-+				      enum bpf_access_type type,
-+				      const struct bpf_prog *prog,
-+				      struct bpf_insn_access_aux *info)
-+{
-+	struct btf *btf = prog->aux->attach_btf;
-+	u32 arg;
-+
-+	arg = get_ctx_arg_idx(btf, prog->aux->attach_func_proto, off);
-+	if (!strcmp(prog->aux->attach_func_name, "enqueue")) {
-+		if (arg == 2) {
-+			info->reg_type = PTR_TO_BTF_ID | PTR_TRUSTED;
-+			info->btf = btf;
-+			info->btf_id = bpf_sk_buff_ptr_ids[0];
-+			return true;
-+		}
-+	}
-+
-+	return bpf_tracing_btf_ctx_access(off, size, type, prog, info);
-+}
-+
-+static int bpf_qdisc_btf_struct_access(struct bpf_verifier_log *log,
-+					const struct bpf_reg_state *reg,
-+					int off, int size)
-+{
-+	const struct btf_type *t, *skbt;
-+	size_t end;
-+
-+	skbt = btf_type_by_id(reg->btf, bpf_sk_buff_ids[0]);
-+	t = btf_type_by_id(reg->btf, reg->btf_id);
-+	if (t != skbt) {
-+		bpf_log(log, "only read is supported\n");
-+		return -EACCES;
-+	}
-+
-+	switch (off) {
-+	case offsetof(struct sk_buff, tstamp):
-+		end = offsetofend(struct sk_buff, tstamp);
-+		break;
-+	case offsetof(struct sk_buff, priority):
-+		end = offsetofend(struct sk_buff, priority);
-+		break;
-+	case offsetof(struct sk_buff, mark):
-+		end = offsetofend(struct sk_buff, mark);
-+		break;
-+	case offsetof(struct sk_buff, queue_mapping):
-+		end = offsetofend(struct sk_buff, queue_mapping);
-+		break;
-+	case offsetof(struct sk_buff, cb) + offsetof(struct qdisc_skb_cb, tc_classid):
-+		end = offsetof(struct sk_buff, cb) +
-+		      offsetofend(struct qdisc_skb_cb, tc_classid);
-+		break;
-+	case offsetof(struct sk_buff, cb) + offsetof(struct qdisc_skb_cb, data[0]) ...
-+	     offsetof(struct sk_buff, cb) + offsetof(struct qdisc_skb_cb,
-+						     data[QDISC_CB_PRIV_LEN - 1]):
-+		end = offsetof(struct sk_buff, cb) +
-+		      offsetofend(struct qdisc_skb_cb, data[QDISC_CB_PRIV_LEN - 1]);
-+		break;
-+	case offsetof(struct sk_buff, tc_index):
-+		end = offsetofend(struct sk_buff, tc_index);
-+		break;
-+	default:
-+		bpf_log(log, "no write support to sk_buff at off %d\n", off);
-+		return -EACCES;
-+	}
-+
-+	if (off + size > end) {
-+		bpf_log(log,
-+			"write access at off %d with size %d beyond the member of sk_buff ended at %zu\n",
-+			off, size, end);
-+		return -EACCES;
-+	}
-+
-+	return 0;
-+}
-+
-+static const struct bpf_verifier_ops bpf_qdisc_verifier_ops = {
-+	.get_func_proto		= bpf_qdisc_get_func_proto,
-+	.is_valid_access	= bpf_qdisc_is_valid_access,
-+	.btf_struct_access	= bpf_qdisc_btf_struct_access,
-+};
-+
-+static int bpf_qdisc_init_member(const struct btf_type *t,
-+				 const struct btf_member *member,
-+				 void *kdata, const void *udata)
-+{
-+	const struct Qdisc_ops *uqdisc_ops;
-+	struct Qdisc_ops *qdisc_ops;
-+	u32 moff;
-+
-+	uqdisc_ops = (const struct Qdisc_ops *)udata;
-+	qdisc_ops = (struct Qdisc_ops *)kdata;
-+
-+	moff = __btf_member_bit_offset(t, member) / 8;
-+	switch (moff) {
-+	case offsetof(struct Qdisc_ops, cl_ops):
-+		if (uqdisc_ops->cl_ops)
-+			return -EINVAL;
-+
-+		qdisc_ops->cl_ops = &sch_bpf_class_ops;
-+		return 1;
-+	case offsetof(struct Qdisc_ops, priv_size):
-+		if (uqdisc_ops->priv_size)
-+			return -EINVAL;
-+		qdisc_ops->priv_size = sizeof(struct bpf_sched_data);
-+		return 1;
-+	case offsetof(struct Qdisc_ops, init):
-+		qdisc_ops->init = bpf_qdisc_init_op;
-+		return 1;
-+	case offsetof(struct Qdisc_ops, reset):
-+		qdisc_ops->reset = bpf_qdisc_reset_op;
-+		return 1;
-+	case offsetof(struct Qdisc_ops, destroy):
-+		qdisc_ops->destroy = bpf_qdisc_destroy_op;
-+		return 1;
-+	case offsetof(struct Qdisc_ops, peek):
-+		if (!uqdisc_ops->peek)
-+			qdisc_ops->peek = qdisc_peek_dequeued;
-+		return 1;
-+	case offsetof(struct Qdisc_ops, id):
-+		if (bpf_obj_name_cpy(qdisc_ops->id, uqdisc_ops->id,
-+				     sizeof(qdisc_ops->id)) <= 0)
-+			return -EINVAL;
-+		return 1;
-+	}
-+
-+	return 0;
-+}
-+
-+static bool is_unsupported(u32 member_offset)
-+{
-+	unsigned int i;
-+
-+	for (i = 0; i < ARRAY_SIZE(unsupported_ops); i++) {
-+		if (member_offset == unsupported_ops[i])
-+			return true;
-+	}
-+
-+	return false;
-+}
-+
-+static int bpf_qdisc_check_member(const struct btf_type *t,
-+				  const struct btf_member *member,
-+				  const struct bpf_prog *prog)
-+{
-+	if (is_unsupported(__btf_member_bit_offset(t, member) / 8))
-+		return -ENOTSUPP;
-+	return 0;
-+}
-+
-+static int bpf_qdisc_validate(void *kdata)
-+{
-+	return 0;
-+}
-+
-+static int bpf_qdisc_reg(void *kdata)
-+{
-+	return register_qdisc(kdata);
-+}
-+
-+static void bpf_qdisc_unreg(void *kdata)
-+{
-+	return unregister_qdisc(kdata);
-+}
-+
-+static int Qdisc_ops__enqueue(struct sk_buff *skb__ref_acquired, struct Qdisc *sch,
-+			       struct sk_buff **to_free)
-+{
-+	return 0;
-+}
-+
-+static struct sk_buff *Qdisc_ops__dequeue(struct Qdisc *sch)
-+{
 +	return NULL;
-+}
-+
-+static struct sk_buff *Qdisc_ops__peek(struct Qdisc *sch)
-+{
-+	return NULL;
-+}
-+
-+static int Qdisc_ops__init(struct Qdisc *sch, struct nlattr *arg,
-+			    struct netlink_ext_ack *extack)
-+{
-+	return 0;
-+}
-+
-+static void Qdisc_ops__reset(struct Qdisc *sch)
-+{
-+}
-+
-+static void Qdisc_ops__destroy(struct Qdisc *sch)
-+{
-+}
-+
-+static int Qdisc_ops__change(struct Qdisc *sch, struct nlattr *arg,
-+			      struct netlink_ext_ack *extack)
-+{
-+	return 0;
-+}
-+
-+static void Qdisc_ops__attach(struct Qdisc *sch)
-+{
-+}
-+
-+static int Qdisc_ops__change_tx_queue_len(struct Qdisc *sch, unsigned int new_len)
-+{
-+	return 0;
-+}
-+
-+static void Qdisc_ops__change_real_num_tx(struct Qdisc *sch, unsigned int new_real_tx)
-+{
-+}
-+
-+static int Qdisc_ops__dump(struct Qdisc *sch, struct sk_buff *skb)
-+{
-+	return 0;
-+}
-+
-+static int Qdisc_ops__dump_stats(struct Qdisc *sch, struct gnet_dump *d)
-+{
-+	return 0;
-+}
-+
-+static void Qdisc_ops__ingress_block_set(struct Qdisc *sch, u32 block_index)
-+{
-+}
-+
-+static void Qdisc_ops__egress_block_set(struct Qdisc *sch, u32 block_index)
-+{
-+}
-+
-+static u32 Qdisc_ops__ingress_block_get(struct Qdisc *sch)
-+{
-+	return 0;
-+}
-+
-+static u32 Qdisc_ops__egress_block_get(struct Qdisc *sch)
-+{
-+	return 0;
-+}
-+
-+static struct Qdisc_ops __bpf_ops_qdisc_ops = {
-+	.enqueue = Qdisc_ops__enqueue,
-+	.dequeue = Qdisc_ops__dequeue,
-+	.peek = Qdisc_ops__peek,
-+	.init = Qdisc_ops__init,
-+	.reset = Qdisc_ops__reset,
-+	.destroy = Qdisc_ops__destroy,
-+	.change = Qdisc_ops__change,
-+	.attach = Qdisc_ops__attach,
-+	.change_tx_queue_len = Qdisc_ops__change_tx_queue_len,
-+	.change_real_num_tx = Qdisc_ops__change_real_num_tx,
-+	.dump = Qdisc_ops__dump,
-+	.dump_stats = Qdisc_ops__dump_stats,
-+	.ingress_block_set = Qdisc_ops__ingress_block_set,
-+	.egress_block_set = Qdisc_ops__egress_block_set,
-+	.ingress_block_get = Qdisc_ops__ingress_block_get,
-+	.egress_block_get = Qdisc_ops__egress_block_get,
-+};
-+
-+static struct bpf_struct_ops bpf_Qdisc_ops = {
-+	.verifier_ops = &bpf_qdisc_verifier_ops,
-+	.reg = bpf_qdisc_reg,
-+	.unreg = bpf_qdisc_unreg,
-+	.check_member = bpf_qdisc_check_member,
-+	.init_member = bpf_qdisc_init_member,
-+	.init = bpf_qdisc_init,
-+	.validate = bpf_qdisc_validate,
-+	.name = "Qdisc_ops",
-+	.cfi_stubs = &__bpf_ops_qdisc_ops,
-+	.owner = THIS_MODULE,
-+};
-+
-+static int __init bpf_qdisc_kfunc_init(void)
-+{
-+	return register_bpf_struct_ops(&bpf_Qdisc_ops, Qdisc_ops);
-+}
-+late_initcall(bpf_qdisc_kfunc_init);
-diff --git a/net/sched/sch_api.c b/net/sched/sch_api.c
-index 65e05b0c98e4..3b5ada5830cd 100644
---- a/net/sched/sch_api.c
-+++ b/net/sched/sch_api.c
-@@ -25,6 +25,7 @@
- #include <linux/hrtimer.h>
- #include <linux/slab.h>
- #include <linux/hashtable.h>
-+#include <linux/bpf.h>
+ }
  
- #include <net/net_namespace.h>
- #include <net/sock.h>
-@@ -358,7 +359,7 @@ static struct Qdisc_ops *qdisc_lookup_ops(struct nlattr *kind)
- 		read_lock(&qdisc_mod_lock);
- 		for (q = qdisc_base; q; q = q->next) {
- 			if (nla_strcmp(kind, q->id) == 0) {
--				if (!try_module_get(q->owner))
-+				if (!bpf_try_module_get(q, q->owner))
- 					q = NULL;
- 				break;
- 			}
-@@ -1282,7 +1283,7 @@ static struct Qdisc *qdisc_create(struct net_device *dev,
- 				/* We will try again qdisc_lookup_ops,
- 				 * so don't keep a reference.
- 				 */
--				module_put(ops->owner);
-+				bpf_module_put(ops, ops->owner);
- 				err = -EAGAIN;
- 				goto err_out;
- 			}
-@@ -1392,7 +1393,7 @@ static struct Qdisc *qdisc_create(struct net_device *dev,
- 	netdev_put(dev, &sch->dev_tracker);
- 	qdisc_free(sch);
- err_out2:
--	module_put(ops->owner);
-+	bpf_module_put(ops, ops->owner);
- err_out:
- 	*errp = err;
- 	return NULL;
-diff --git a/net/sched/sch_generic.c b/net/sched/sch_generic.c
-index ff5336493777..f4343653db0f 100644
---- a/net/sched/sch_generic.c
-+++ b/net/sched/sch_generic.c
-@@ -24,6 +24,7 @@
- #include <linux/if_vlan.h>
- #include <linux/skb_array.h>
- #include <linux/if_macvlan.h>
-+#include <linux/bpf.h>
- #include <net/sch_generic.h>
- #include <net/pkt_sched.h>
- #include <net/dst.h>
-@@ -1067,7 +1068,7 @@ static void __qdisc_destroy(struct Qdisc *qdisc)
- 	if (ops->destroy)
- 		ops->destroy(qdisc);
- 
--	module_put(ops->owner);
-+	bpf_module_put(ops, ops->owner);
- 	netdev_put(dev, &qdisc->dev_tracker);
- 
- 	trace_qdisc_destroy(qdisc);
+ void btf_record_free(struct btf_record *rec)
+@@ -554,8 +564,10 @@ void btf_record_free(struct btf_record *rec)
+ 			break;
+ 		case BPF_LIST_HEAD:
+ 		case BPF_LIST_NODE:
++		case BPF_LIST_EXCL_NODE:
+ 		case BPF_RB_ROOT:
+ 		case BPF_RB_NODE:
++		case BPF_RB_EXCL_NODE:
+ 		case BPF_SPIN_LOCK:
+ 		case BPF_TIMER:
+ 		case BPF_REFCOUNT:
+@@ -603,8 +615,10 @@ struct btf_record *btf_record_dup(const struct btf_record *rec)
+ 			break;
+ 		case BPF_LIST_HEAD:
+ 		case BPF_LIST_NODE:
++		case BPF_LIST_EXCL_NODE:
+ 		case BPF_RB_ROOT:
+ 		case BPF_RB_NODE:
++		case BPF_RB_EXCL_NODE:
+ 		case BPF_SPIN_LOCK:
+ 		case BPF_TIMER:
+ 		case BPF_REFCOUNT:
+@@ -711,7 +725,9 @@ void bpf_obj_free_fields(const struct btf_record *rec, void *obj)
+ 			bpf_rb_root_free(field, field_ptr, obj + rec->spin_lock_off);
+ 			break;
+ 		case BPF_LIST_NODE:
++		case BPF_LIST_EXCL_NODE:
+ 		case BPF_RB_NODE:
++		case BPF_RB_EXCL_NODE:
+ 		case BPF_REFCOUNT:
+ 			break;
+ 		default:
 -- 
 2.20.1
 
