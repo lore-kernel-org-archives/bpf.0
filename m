@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3869D17E;
-	Mon, 13 May 2024 00:20:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 386D6368
+	for <bpf@vger.kernel.org>; Mon, 13 May 2024 00:20:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715559632; cv=none; b=KFgxSXGmIGI/EF7fS4e9gz1LRy0XMlJbSLnPrbLpn/cnr6bBdXvjbJfCrQ6QNvbj34UWAKAgOXm7yg5GP5zuNbssaVJtZIG6X4iBmZ8yZwmh4p7MrCnJ9gZ/ngZckCVEvnVDWQ6TwjEhjxlcmTnaxQs7rlruCs5spHGdfj0ieyQ=
+	t=1715559632; cv=none; b=OiFUgwAgcfjz8j28FItTbWehDyJZTzuSh6dA+B1b/0E/FsykvMEVdYFRusKhDySWiUealxzd3RLSVEJs7mmB24Aai6gmkpr99uitAOtVVUxnP5kRi8DdubR+0bnNxeg9BCOD8nsPp/A1ybRpr9litKkHwar2XgMAS6KsKyyVs+Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1715559632; c=relaxed/simple;
-	bh=kj/4PYLOVTBmauMmprd2H/etKpbijrodTuQAU8lxzLM=;
+	bh=B0M8aeR2hQpp7jsq28G2tX54mo9+kK2izID6zRdyfu0=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=QNclMsrdXj0otP82GdeRFIzEFwhOlcoehflzV4YEMEtn42fCJdUzHLj/xmOWxbjiQjAf31b6aGchrY/tYyeM3bZxVT3KptZSboKfnQmPCePV5Vn0mSIzZnbEX4SDo/eM1/KvxjquJwDmGwCvibeY+ZMHqPT1YJWzxgko9bvDIqk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qjMaNkpt; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=HvqcAMzbgQdou1gzTJbXKHPk8O/1I4QfXbqMceBV3KksGSQ3S47cABqnACbD9+BVo6bYUBn76uluNGWlcfxaVk+iGfSuovLhN+wtCCZDqvf/g5ylb+p+aiYAWjOtgwPKnUL/u1oeLU9swnJGR21SursfSCe2kzrO5PKyfpkPNyc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=K5Wtvl+n; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qjMaNkpt"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id C3FB6C4AF09;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="K5Wtvl+n"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id B8FB6C32782;
 	Mon, 13 May 2024 00:20:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1715559631;
-	bh=kj/4PYLOVTBmauMmprd2H/etKpbijrodTuQAU8lxzLM=;
+	bh=B0M8aeR2hQpp7jsq28G2tX54mo9+kK2izID6zRdyfu0=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=qjMaNkptHJGxNhVRxgzc8pmHEp/T+FU/MN4WajVXzYAj4luLvIz0aQTwujnq8U47A
-	 naaaS93dB2IKa8R+5H0IUL10/V2G2+DMs1ViVLZQyAghioeoOWGChZ4SO1C1iIuO5F
-	 8vBpxpwYWrfih8nKSsiB8pRuuNy0f4IaEpwlmToBT7xK9ILqk/oViMQF5wTvlDm4Ls
-	 hOZEgOaUNZEO/QxQl6tP+nsdVq7jn39Hej+CwTzSxVmqWJ3GCTG5VzT9WgiNjxx1vF
-	 rcocAlLGqqRq6X5/2VW7110kMrUeQXQk2ihMgnH07UlzhPBQCpiuvtOI/+nzqrgMW0
-	 Z7UWu7koVTZ3Q==
+	b=K5Wtvl+nECtKMmQOhaW/zyIP/828JO7VvoUa9roa88endPVZrRGcG0LowFcVEVf4E
+	 kaC2j9Adihx2DLcqPkFo67VybO1tUf9JQGrG+aaZEJ9CGbiB/fJJdjyK3lsuQJtXi+
+	 y3eX0BbRrVkxrl6GJGctZ8oo3IG5+dj9rytHMgO4C8/F/B/u/bxqdFaVMTTFoXfasX
+	 z9yXgrTnjmu4sJD37AIa4uxp2iak4ZIkQJ/AszaLNDd9StS00J3M4puJgUI5HaxLPK
+	 6bHUiLGbXpXWgqEsyzvz9UiV/kCWA+kfHpebvbSfzphzvXW6lZOqDzr9BLdN4OVqF4
+	 70M+avXDAPWDA==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B1598C43153;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id A6365C43444;
 	Mon, 13 May 2024 00:20:31 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
@@ -37,38 +37,42 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next] tools: remove redundant ethtool.h from tooling infra
+Subject: Re: [PATCH bpf-next] bpf: avoid gcc overflow warning in test_xdp_vlan.c
 From: patchwork-bot+netdevbpf@kernel.org
 Message-Id: 
- <171555963172.28854.10245907823767156482.git-patchwork-notify@kernel.org>
+ <171555963167.28854.5804115900768160470.git-patchwork-notify@kernel.org>
 Date: Mon, 13 May 2024 00:20:31 +0000
-References: <20240508104123.434769-1-tushar.vyavahare@intel.com>
-In-Reply-To: <20240508104123.434769-1-tushar.vyavahare@intel.com>
-To: Tushar Vyavahare <tushar.vyavahare@intel.com>
-Cc: bpf@vger.kernel.org, daniel@iogearbox.net, netdev@vger.kernel.org,
- bjorn@kernel.org, magnus.karlsson@intel.com, maciej.fijalkowski@intel.com,
- jonathan.lemon@gmail.com, davem@davemloft.net, kuba@kernel.org,
- pabeni@redhat.com, ast@kernel.org, tirthendu.sarkar@intel.com
+References: <20240508193512.152759-1-david.faust@oracle.com>
+In-Reply-To: <20240508193512.152759-1-david.faust@oracle.com>
+To: David Faust <david.faust@oracle.com>
+Cc: bpf@vger.kernel.org, jose.marchesi@oracle.com,
+ cupertino.miranda@oracle.com, eddyz87@gmail.com, yonghong.song@linux.dev
 
 Hello:
 
 This patch was applied to bpf/bpf-next.git (master)
 by Alexei Starovoitov <ast@kernel.org>:
 
-On Wed,  8 May 2024 10:41:23 +0000 you wrote:
-> Remove the redundant ethtool.h header file from tools/include/uapi/linux.
-> The file is unnecessary as the system uses the kernel's
-> include/uapi/linux/ethtool.h directly.
+On Wed,  8 May 2024 12:35:12 -0700 you wrote:
+> This patch fixes an integer overflow warning raised by GCC in
+> xdp_prognum1 of progs/test_xdp_vlan.c:
 > 
-> Signed-off-by: Tushar Vyavahare <tushar.vyavahare@intel.com>
-> ---
->  tools/include/uapi/linux/ethtool.h | 2271 ----------------------------
->  1 file changed, 2271 deletions(-)
->  delete mode 100644 tools/include/uapi/linux/ethtool.h
+>   GCC-BPF  [test_maps] test_xdp_vlan.bpf.o
+> progs/test_xdp_vlan.c: In function 'xdp_prognum1':
+> progs/test_xdp_vlan.c:163:25: error: integer overflow in expression
+>  '(short int)(((__builtin_constant_p((int)vlan_hdr->h_vlan_TCI)) != 0
+>    ? (int)(short unsigned int)((short int)((int)vlan_hdr->h_vlan_TCI
+>    << 8 >> 8) << 8 | (short int)((int)vlan_hdr->h_vlan_TCI << 0 >> 8
+>    << 0)) & 61440 : (int)__builtin_bswap16(vlan_hdr->h_vlan_TCI)
+>    & 61440) << 8 >> 8) << 8' of type 'short int' results in '0' [-Werror=overflow]
+>   163 |                         bpf_htons((bpf_ntohs(vlan_hdr->h_vlan_TCI) & 0xf000)
+>       |                         ^~~~~~~~~
+> 
+> [...]
 
 Here is the summary with links:
-  - [bpf-next] tools: remove redundant ethtool.h from tooling infra
-    https://git.kernel.org/bpf/bpf-next/c/bbe91a9f6889
+  - [bpf-next] bpf: avoid gcc overflow warning in test_xdp_vlan.c
+    https://git.kernel.org/bpf/bpf-next/c/792a04bed41c
 
 You are awesome, thank you!
 -- 
