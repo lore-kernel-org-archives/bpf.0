@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D0E82A1A4
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D09A101CA
 	for <bpf@vger.kernel.org>; Mon, 13 May 2024 00:00:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715558430; cv=none; b=PnzixQfFhjlTud6fftkIvEHdht+J2NiZ9myqciC6jM7vbl6aGJ3ck7GdrRJXiiKx0/AG1VWjpgiCPPCLuoMuZfLeAIn+UfJY2nKPdESantxVbp6rHqQe92gyljHgmrAFNi1L9v/X5hZ9pNOLXh1/+6v+5CCgHsqOCyjY+UhJ0xY=
+	t=1715558430; cv=none; b=QqLLpWx9crd3Lu+VV8JmQl4/qWDbiC6xkpo0+X5H5NSFZHXoIrtffKD8KLlGIpeRmki5cSUGLd3h1gH8rgSc9n0lda9u7EEVFJtqZeDasm7Fj4MS5/YOZYIdGOQpnHkcEg32qptiu5jKNOgveQPrvuytzzNPwYX5hLbK6lQP1Ro=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1715558430; c=relaxed/simple;
-	bh=LhdYkC0qbftljk8QqStc8yJRl81lvAVfmzyVKqOIP0g=;
+	bh=Ac7deBypVTjZbqSL/noIFbQe1zlip1Qlx3oo2hzHumQ=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=NrYkF6Rwx9F1sOCbuk4u8wSxDLyBcPfQoF2hbz1m5kAzYA33awffbtooIPLMAVUh7naGYWwuXNRs28Zr8Ex9iKx6w+HLFbCABIYfVCUVq8LukwPfphAF4F0/oMsv/YOaBFnGIvFiuYejLN0V5onMFVwVz2xY0U/wXSA4WEJ+uxk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jA3p2M0N; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=Qn+kR+dC//tLbHO3h9r4X+iL4Y0CszyZOlwGhklvGdMEloQlUbgY8+EhF1Lf4aLW7/g03NmyJ7SGAp2owwt2Kc5Q+bxH1ESoKvVEugBLPCjyFIZfdmC6y9x4VGARt6033Nypufvpev7M8NIsKKx37hMvy42uCnPXH5+4kQ2lcKo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jG8pl/OO; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jA3p2M0N"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id F1254C4AF11;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jG8pl/OO"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id E1A32C32783;
 	Mon, 13 May 2024 00:00:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1715558430;
-	bh=LhdYkC0qbftljk8QqStc8yJRl81lvAVfmzyVKqOIP0g=;
+	s=k20201202; t=1715558429;
+	bh=Ac7deBypVTjZbqSL/noIFbQe1zlip1Qlx3oo2hzHumQ=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=jA3p2M0NdgP9ZPkjdJrO+3Ak7Q/cwEqJjn9HOCdxL2yu+aJEkWkMq4z3Pcc7W2BD5
-	 O6mS4/+hrAAajdJjW7eQJevJsNpmnBHvL9SVQ2IDq4HI29riJbpB+HnivvGRclX03M
-	 HqPCkgRIgY9g05AZv3xbskmWTNPUqelqjnjsvJBe0sXuJ1GgOTPesrydCNgtQWXElc
-	 87FqtnGI4bMngpSS8TuIH9acmVQrQusaovg3UHLbU6noc8P6jOYebuIDifq6v3OSxx
-	 834B/bttz9UrTIqgXHWU6IZgqOMSEP/Z1EbObmES+Jz0hts4NM8RiLgMuxC8s17v7w
-	 qVbkz9aC4D8XQ==
+	b=jG8pl/OOo4Zq3316iaMvewYn9kigB5PXabuBwe8F6f3v9I++6uJiVnLLDIAKDRcBU
+	 guQHCjk/+kQc5IbQ6kFE9vHlz5sR0tVCvaHMMgRLP8SJizm/DZ/WU3d/5Qzg4GFEbU
+	 VMkdC8r+OdBcpKx+XI0V/PgyPV9XR7Jk245pa/nnczL24o6j7gqxgRydycsYOd+zr0
+	 rMkBj0DlqCTuVnNwp6NZcQmu6mfgChYTN6vlvV+gzkSmiP9SxpqKiwxmfktnR6lnxh
+	 Aa/KWN/Ybcpc3E5vWqUjA2S9xFdEy/yoRfWrKHjjJftGdDZ2RCpyaag2A8nrC+9ppZ
+	 97pDK5Kfuusvg==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id DFFD0C4339F;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id CD5E7C4333D;
 	Mon, 13 May 2024 00:00:29 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
@@ -37,39 +37,37 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v2] s390/bpf: Emit a barrier for BPF_FETCH
- instructions
+Subject: Re: [PATCH bpf-next v2] ARC: Add eBPF JIT support
 From: patchwork-bot+netdevbpf@kernel.org
 Message-Id: 
- <171555842991.18024.15096430616731560463.git-patchwork-notify@kernel.org>
+ <171555842983.18024.4891712787415544525.git-patchwork-notify@kernel.org>
 Date: Mon, 13 May 2024 00:00:29 +0000
-References: <20240507000557.12048-1-iii@linux.ibm.com>
-In-Reply-To: <20240507000557.12048-1-iii@linux.ibm.com>
-To: Ilya Leoshkevich <iii@linux.ibm.com>
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
- bpf@vger.kernel.org, hca@linux.ibm.com, gor@linux.ibm.com,
- agordeev@linux.ibm.com, puranjay12@gmail.com
+References: <20240430145604.38592-1-list+bpf@vahedi.org>
+In-Reply-To: <20240430145604.38592-1-list+bpf@vahedi.org>
+To: Shahab Vahedi <list+bpf@vahedi.org>
+Cc: bpf@vger.kernel.org, shahab@synopsys.com, vgupta@kernel.org,
+ bjorn@kernel.org, linux-snps-arc@lists.infradead.org
 
 Hello:
 
 This patch was applied to bpf/bpf-next.git (master)
 by Alexei Starovoitov <ast@kernel.org>:
 
-On Tue,  7 May 2024 02:02:49 +0200 you wrote:
-> BPF_ATOMIC_OP() macro documentation states that "BPF_ADD | BPF_FETCH"
-> should be the same as atomic_fetch_add(), which is currently not the
-> case on s390x: the serialization instruction "bcr 14,0" is missing.
-> This applies to "and", "or" and "xor" variants too.
+On Tue, 30 Apr 2024 16:56:04 +0200 you wrote:
+> From: Shahab Vahedi <shahab@synopsys.com>
 > 
-> s390x is allowed to reorder stores with subsequent fetches from
-> different addresses, so code relying on BPF_FETCH acting as a barrier,
-> for example:
+> This will add eBPF JIT support to the 32-bit ARCv2 processors. The
+> implementation is qualified by running the BPF tests on a Synopsys HSDK
+> board with "ARC HS38 v2.1c at 500 MHz" as the 4-core CPU.
+> 
+> The test_bpf.ko reports 2-10 fold improvements in execution time of its
+> tests. For instance:
 > 
 > [...]
 
 Here is the summary with links:
-  - [bpf-next,v2] s390/bpf: Emit a barrier for BPF_FETCH instructions
-    https://git.kernel.org/bpf/bpf-next/c/68378982f0b2
+  - [bpf-next,v2] ARC: Add eBPF JIT support
+    https://git.kernel.org/bpf/bpf-next/c/f122668ddcce
 
 You are awesome, thank you!
 -- 
