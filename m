@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D1292A1AA;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D1542AD11;
 	Mon, 13 May 2024 00:00:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715558430; cv=none; b=kPpvEucJGfTjkE/woLD/Cq+GGv+E/NihGPUTF/D6FW/Oz/LEd+9pOzfpnXTAHne1pSfL86oJ/g5nQT3Tv93ibIiLd0pzxuu9zzPJ+/WeDqF3KAxtlCqEQiWEcI4nMclgfPdE8DcF3geooHOpJrgCX8xTtsasooyJXp7q2FT0rqY=
+	t=1715558430; cv=none; b=FMYTLMkHTbAOyyl+5ztbW2DL0Jnj+HqP0+988EdQoskkwjjldjY/+2LatDGS6sRf7MG8amdzvfNWvVO+Seju2fKjE2DHP0Vzu/dJEyIpAaoc/u81GbrhtNo1idQDi/QMdWXDJScSVmma4qPSpMOYQq3c2rFTxrnQc/+wEpdpNNo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1715558430; c=relaxed/simple;
-	bh=e2NpOR2CweEKvqvlaEK0pm/6D2en3jgIpSgJ46eRceA=;
+	bh=eO6sFEl5M7WFZuUj5gBLKwD35udWKP6eAoJ2iuvpeOg=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=WH/O8K2C454s0D4mR8+gqcJ4SXzh8xL8znqMuxbVkW+njNbLRk09uGFFufEf2101fWSuI49FUY5xELmHPfJeF+c4ci8QXkAWTdxLsRyeT9fGMpXd9ns2+zrSHPvUx0CJHmuTpp8t1gRtAl4qcJC01ccUz3rUbpZJvPFgVSZN9vI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YzAXZuL2; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=TCk3teBTKjQJNO8mnxhehrP18ZSk68rwnxueuCnJebddqUqj+oYPzWht4Qix6/V0OZC23wDets5F7cp0YtFRASw0IfRJMtTYG7eeYv+wM2XlKdicWHXW03Bzw7dGAkTXpSJ6KmOwjsuVvzGW9AlInOTXcZ5D0rBAkGUGUbPxuXY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=F6zZX02F; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YzAXZuL2"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id CD42FC4AF08;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="F6zZX02F"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id C25A7C32782;
 	Mon, 13 May 2024 00:00:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1715558429;
-	bh=e2NpOR2CweEKvqvlaEK0pm/6D2en3jgIpSgJ46eRceA=;
+	bh=eO6sFEl5M7WFZuUj5gBLKwD35udWKP6eAoJ2iuvpeOg=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=YzAXZuL24mQqZ0qK+/OMp07ToKUNqmOycs4b2wBwgP7vFX80wU8v2wXxnQRnH2Sj4
-	 e45QZoxmPPjHGl5GwA+KAICSLYQVPKKfG22iKb2qBt/VTRs+ybs3O19PMCYinRzFeG
-	 LuAruWUGwELm28J/rVCEAcFioBIV/iTGL3iyurJSVGSl7n2lEetRQE7T0rtWPSgcwu
-	 z/prxpV4gNm3PtKqD6rONtXOXpJ9w64BBt9ilE80dCX2HeOJQxVhkYYEVGuB2iDXbm
-	 QofhHKbCDcASOT8eSd2NEI4AAy765DtUJz80wRTBOdP1YWraBs9YeL4ACmrBLza+KZ
-	 kSyrtKPuQ4Cyw==
+	b=F6zZX02FcPQotnOy85Fv/Y+zJ69/PF0J/2LyjADRYsLH7KtiYm9YF32v0uuQCYJWK
+	 xykadcmOrjnUMs0Nsdgf3hLws4jmQzG74s7D4ilvW4UcLF1WYtOaSx08JI+/DEJhcv
+	 S7qgk5YhSOqieH3OHu/WCOypGZ5JWQL79lNuZkuBGOZ3uKJWB83Md+B2BZtotGSQd/
+	 pRW2SdQCwR3klmjohMtKYIt/79L7Z2ruSarP/l8iUdXqv53t/4Oj0WT0vKdGnc5X5E
+	 yYuUjda8a7XRxYBdrhNZZrilh5HO78Kq22OLtjme/tXPrIwJ5RsfDLgv1QWZnP4SmT
+	 qHM597QbUh7Og==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id BBEF1C43444;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B03C3C43336;
 	Mon, 13 May 2024 00:00:29 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
@@ -37,42 +37,50 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf] riscv, bpf: make some atomic operations fully ordered
+Subject: Re: [PATCH bpf-next v6 0/4] bpf: Inline helpers in arm64 and riscv JITs
 From: patchwork-bot+netdevbpf@kernel.org
 Message-Id: 
- <171555842976.18024.13752863594876761911.git-patchwork-notify@kernel.org>
+ <171555842971.18024.5994245773855857236.git-patchwork-notify@kernel.org>
 Date: Mon, 13 May 2024 00:00:29 +0000
-References: <20240505201633.123115-1-puranjay@kernel.org>
-In-Reply-To: <20240505201633.123115-1-puranjay@kernel.org>
+References: <20240502151854.9810-1-puranjay@kernel.org>
+In-Reply-To: <20240502151854.9810-1-puranjay@kernel.org>
 To: Puranjay Mohan <puranjay@kernel.org>
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
- martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
- yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
- sdf@google.com, haoluo@google.com, jolsa@kernel.org, bjorn@kernel.org,
- pulehui@huawei.com, paulmck@kernel.org, paul.walmsley@sifive.com,
- palmer@dabbelt.com, aou@eecs.berkeley.edu, bpf@vger.kernel.org,
- linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
- puranjay12@gmail.com
+Cc: catalin.marinas@arm.com, will@kernel.org, ast@kernel.org,
+ daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev,
+ eddyz87@gmail.com, song@kernel.org, yonghong.song@linux.dev,
+ john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+ haoluo@google.com, jolsa@kernel.org, zlim.lnx@gmail.com, xukuohai@huawei.com,
+ revest@chromium.org, linux-arm-kernel@lists.infradead.org,
+ linux-kernel@vger.kernel.org, bpf@vger.kernel.org, memxor@gmail.com,
+ bjorn@kernel.org, puranjay12@gmail.com
 
 Hello:
 
-This patch was applied to bpf/bpf-next.git (master)
+This series was applied to bpf/bpf-next.git (master)
 by Alexei Starovoitov <ast@kernel.org>:
 
-On Sun,  5 May 2024 20:16:33 +0000 you wrote:
-> The BPF atomic operations with the BPF_FETCH modifier along with
-> BPF_XCHG and BPF_CMPXCHG are fully ordered but the RISC-V JIT implements
-> all atomic operations except BPF_CMPXCHG with relaxed ordering.
+On Thu,  2 May 2024 15:18:50 +0000 you wrote:
+> Changes in v5 -> v6:
+> arm64 v5: https://lore.kernel.org/all/20240430234739.79185-1-puranjay@kernel.org/
+> riscv v2: https://lore.kernel.org/all/20240430175834.33152-1-puranjay@kernel.org/
+> - Combine riscv and arm64 changes in single series
+> - Some coding style fixes
 > 
-> Section 8.1 of the "The RISC-V Instruction Set Manual Volume I:
-> Unprivileged ISA" [1], titled, "Specifying Ordering of Atomic
-> Instructions" says:
+> Changes in v4 -> v5:
+> v4: https://lore.kernel.org/all/20240429131647.50165-1-puranjay@kernel.org/
+> - Implement the inlining of the bpf_get_smp_processor_id() in the JIT.
 > 
 > [...]
 
 Here is the summary with links:
-  - [bpf] riscv, bpf: make some atomic operations fully ordered
-    https://git.kernel.org/bpf/bpf-next/c/20a759df3bba
+  - [bpf-next,v6,1/4] riscv, bpf: add internal-only MOV instruction to resolve per-CPU addrs
+    https://git.kernel.org/bpf/bpf-next/c/19c56d4e5be1
+  - [bpf-next,v6,2/4] riscv, bpf: inline bpf_get_smp_processor_id()
+    https://git.kernel.org/bpf/bpf-next/c/2ddec2c80b44
+  - [bpf-next,v6,3/4] arm64, bpf: add internal-only MOV instruction to resolve per-CPU addrs
+    https://git.kernel.org/bpf/bpf-next/c/7a4c32222b0e
+  - [bpf-next,v6,4/4] bpf, arm64: inline bpf_get_smp_processor_id() helper
+    https://git.kernel.org/bpf/bpf-next/c/75fe4c0b3e18
 
 You are awesome, thank you!
 -- 
