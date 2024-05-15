@@ -1,122 +1,81 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3098F156236
-	for <bpf@vger.kernel.org>; Wed, 15 May 2024 15:28:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51C6015622F
+	for <bpf@vger.kernel.org>; Wed, 15 May 2024 15:29:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.71
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715786883; cv=none; b=Dp2Ym2CD9xreQL2mDgALkfHu3IGxqkO5d296FYNRfTosfko3piAZiqGVrQ11wZoaCAjgTN05OqK86rOWv1Wz1dba8aXSMJqq+ZOgCARTog2Tniylpy+Rr7uG5iBCZWX0x9RxRLKmejOtDi9SBUY+dmCwyp4qAWdlBgyezvzn4gk=
+	t=1715786945; cv=none; b=BSIG/bvvIiUvBSwRryRmc8Xa6T/njaJMJqL8knMiITUM9/kB+GG2yuzQ2RWtjzq1ojI37cEidjF+3ZzdS483ClsChTWvK4Uu+H9hzdRRQ2MoMuB0z7HXrFd+JPiFvdrJ3QSww5ivmuIHM/4lnaUDdD/hgbG6Qeg8xdFNHp9AC8E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715786883; c=relaxed/simple;
-	bh=C8kKQKOtylTtvVHkjEFur6xMaFsKzbM5ZDTUlRRicm4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QtOo/OmHiQZ0p/I9zoUqELDFTLgWP31DBflrTeIlciNWn4OkpE4MqsNq17sAZ78aMKyYojldyan71L9rBeNixtQze6tsyJ7Qdh1O/Olcbe28LReOsVib2lgXZjCcYURzCmOIvzOyPMQ1w/zG/4wG64jBhnugcjkbs9axjvqz0Ns=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=LKzKGh93; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="LKzKGh93"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1715786880;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=uInC5hWDwqGcx7P6rLG2USi6e9+2nLZVOslbhOtiZQ8=;
-	b=LKzKGh93tvBFeZ+m9DLl6inrNboW+4rP3q2fDHZP9Ymxc1YmqyO0qDncW7Ki7ZYhjrzBGR
-	m4sqDUgoqYHbXoI9rSDRQdItoHYFLgu2VP83havmMx40bTp+HLUL7lSmjCY+NM6kZrrUiu
-	JsII/6VjL6dIhBIg2oXq5E6BQK6PB2k=
-Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
- by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-159-OKrgi6wzN1OJxJUn5UMrTA-1; Wed,
- 15 May 2024 11:27:42 -0400
-X-MC-Unique: OKrgi6wzN1OJxJUn5UMrTA-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4ABD71C0513F;
-	Wed, 15 May 2024 15:27:41 +0000 (UTC)
-Received: from dhcp-27-174.brq.redhat.com (unknown [10.45.226.39])
-	by smtp.corp.redhat.com (Postfix) with SMTP id 7395F3C27;
-	Wed, 15 May 2024 15:27:36 +0000 (UTC)
-Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
-	oleg@redhat.com; Wed, 15 May 2024 17:26:15 +0200 (CEST)
-Date: Wed, 15 May 2024 17:26:09 +0200
-From: Oleg Nesterov <oleg@redhat.com>
-To: Jiri Olsa <olsajiri@gmail.com>
-Cc: Deepak Gupta <debug@rivosinc.com>,
-	"Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
-	"songliubraving@fb.com" <songliubraving@fb.com>,
-	"luto@kernel.org" <luto@kernel.org>,
-	"mhiramat@kernel.org" <mhiramat@kernel.org>,
-	"andrii@kernel.org" <andrii@kernel.org>,
-	"john.fastabend@gmail.com" <john.fastabend@gmail.com>,
-	"linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"mingo@redhat.com" <mingo@redhat.com>,
-	"rostedt@goodmis.org" <rostedt@goodmis.org>,
-	"ast@kernel.org" <ast@kernel.org>,
-	"tglx@linutronix.de" <tglx@linutronix.de>,
-	"linux-man@vger.kernel.org" <linux-man@vger.kernel.org>,
-	"yhs@fb.com" <yhs@fb.com>,
-	"daniel@iogearbox.net" <daniel@iogearbox.net>,
-	"peterz@infradead.org" <peterz@infradead.org>,
-	"linux-trace-kernel@vger.kernel.org" <linux-trace-kernel@vger.kernel.org>,
-	"bp@alien8.de" <bp@alien8.de>,
-	"bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-	"x86@kernel.org" <x86@kernel.org>
-Subject: Re: [PATCHv5 bpf-next 6/8] x86/shstk: Add return uprobe support
-Message-ID: <20240515152609.GD6821@redhat.com>
-References: <ZjyJsl_u_FmYHrki@krava>
- <a8b7be15e6dbb1e8f2acaee7dae21fec7775194c.camel@intel.com>
- <Zj_enIB_J6pGJ6Nu@krava>
- <20240513185040.416d62bc4a71e79367c1cd9c@kernel.org>
- <c56ae75e9cf0878ac46185a14a18f6ff7e8f891a.camel@intel.com>
- <ZkKE3qT1X_Jirb92@krava>
- <3e15152888d543d2ee4e5a1d75298c80aa946659.camel@intel.com>
- <ZkQTgQ3aKU4MAjPu@debug.ba.rivosinc.com>
- <20240515111919.GA6821@redhat.com>
- <ZkTIU1QUAJF0f0KK@krava>
+	s=arc-20240116; t=1715786945; c=relaxed/simple;
+	bh=PqF49Gws6c8IE8QBsjCzrN5yCRLZFu/Gy9G1aU4u6TQ=;
+	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
+	 Content-Type; b=HtJVml2yu4CdiGn4E0uhKCIHfzknPKonlsMu72JG5rrD4kDbZL2HEgLza43diZWvhxlCi8+UNColmX2obAxpGCJm0+IjYJh5+kQg9AeAjGruRF/IZMX8s/NAhsqPf1YIqFTwNqKjdKLdxa6WmLz6y8KK/gr5YQMKxo4eMpzFvqY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.71
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-io1-f71.google.com with SMTP id ca18e2360f4ac-7e1bbace584so654148739f.1
+        for <bpf@vger.kernel.org>; Wed, 15 May 2024 08:29:04 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1715786943; x=1716391743;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=qNhrORouLQq0zE8Q1N3mawbELctD4U2yYjN8CbPX7CM=;
+        b=RSt0w530zgQgEH8ITiEQ0VVeT3WXKARbj9aPUIG9xbXV6hkZDVXBWpBP9hJGj9EGTx
+         364ioeCkHah0eqD6j3pWdJmoYX7hZ9qNv488nMKGLpavBpzHOQd65+jUcBKgITSm4fIS
+         ptQovqyPS6+aCZQigkVUo5ApwKj3qN0/OB1XRGb5tk3OkUvrs2B2IWmocqkH4iTMo/a1
+         WMsqHueNgBUfiVVYVlv4dkK/7jKOVKjUOLFVFTp2SXvZYnyysjZoSelkYkafdTmzNlqR
+         R2lcMXutGMmpUBciGrUQnfUvF3JgZfRhBRDHlZel8Yr35B0DaTB/jww6iFcS2cPNTCwx
+         fd2g==
+X-Forwarded-Encrypted: i=1; AJvYcCXZav4mAsepcA0PaiCq0TI71N3CA+qJCDeJUhksti4+UusuWnl7VMdwicaL6Ab2peK1xCJGPz4ShdEkaGeINSsr4YyP
+X-Gm-Message-State: AOJu0YwY+46yU9UFh789L3z2owbEZIMGOCY5gb1P4UMvpF1u8d/dNClk
+	ox4geGyFi3/s9fLzPflIoQikATV6pON7X7kQ4RoCqoaXOZZugcfe0VBB8GaldDKxbEtqbzOk6fU
+	SRUpIodZVQTXX6GqazFJW6w6yKaMDlCcDJ01xRaWC/jpYXwKePaeSp8Y=
+X-Google-Smtp-Source: AGHT+IH+Xte0typid77mQsPKT2woVUNNSCR05/igZC6Db/CLD0HuhNNjfiuJzefv2sWGB81JP6W0lDIe2IrKsModHuY5ZxKJgzzk
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZkTIU1QUAJF0f0KK@krava>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.1
+X-Received: by 2002:a05:6638:8725:b0:488:cdbc:72c0 with SMTP id
+ 8926c6da1cb9f-489586993ecmr1725942173.2.1715786943579; Wed, 15 May 2024
+ 08:29:03 -0700 (PDT)
+Date: Wed, 15 May 2024 08:29:03 -0700
+In-Reply-To: <000000000000b97fba06156dc57b@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000485a2d06187fc7a7@google.com>
+Subject: Re: [syzbot] [bpf?] KASAN: stack-out-of-bounds Read in hash
+From: syzbot <syzbot+9459b5d7fab774cf182f@syzkaller.appspotmail.com>
+To: alexei.starovoitov@gmail.com, andrii@kernel.org, ast@kernel.org, 
+	bpf@vger.kernel.org, daniel@iogearbox.net, eddyz87@gmail.com, 
+	haoluo@google.com, houtao@huaweicloud.com, joannekoong@fb.com, 
+	john.fastabend@gmail.com, jolsa@kernel.org, kafai@fb.com, kpsingh@kernel.org, 
+	linux-kernel@vger.kernel.org, martin.lau@linux.dev, netdev@vger.kernel.org, 
+	sdf@google.com, song@kernel.org, songliubraving@fb.com, 
+	syzkaller-bugs@googlegroups.com, yhs@fb.com, yonghong.song@linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-On 05/15, Jiri Olsa wrote:
->
-> On Wed, May 15, 2024 at 01:19:20PM +0200, Oleg Nesterov wrote:
-> > Let me ask a couple of really stupid questions. What if the shadow stack
-> > is "shorter" than the normal stack? I mean,
-> >
-> > 	enable_shstk()
-> > 	{
-> > 		prctl(ARCH_SHSTK_SHSTK);
+syzbot has bisected this issue to:
 
-I meant ARCH_SHSTK_ENABLE, of course
+commit 9330986c03006ab1d33d243b7cfe598a7a3c1baa
+Author: Joanne Koong <joannekoong@fb.com>
+Date:   Wed Oct 27 23:45:00 2021 +0000
 
-> > 	}
-> >
-> > what happens when enable_shstk() returns?
->
-> I think it will crash, there's explanation in the comment in
-> tools/testing/selftests/x86/test_shadow_stack.c test
+    bpf: Add bloom filter map implementation
 
-OK, thanks...
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=1543bd5c980000
+start commit:   443574b03387 riscv, bpf: Fix kfunc parameters incompatibil..
+git tree:       bpf
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=1743bd5c980000
+console output: https://syzkaller.appspot.com/x/log.txt?x=1343bd5c980000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=6fb1be60a193d440
+dashboard link: https://syzkaller.appspot.com/bug?extid=9459b5d7fab774cf182f
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13d86795180000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=143eff76180000
 
-But test_shadow_stack.c doesn't do ARCH_PRCTL(ARCH_SHSTK_DISABLE) if
-all the tests succeed ? Confused but nevermind.
+Reported-by: syzbot+9459b5d7fab774cf182f@syzkaller.appspotmail.com
+Fixes: 9330986c0300 ("bpf: Add bloom filter map implementation")
 
-> > And what is the purpose of fpregs_lock_and_load() ? Why do we need to
-> > fpregs_restore_userregs() in shstk_setup() and other places?
-> >
-> > Oleg.
-> >
->
-
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
