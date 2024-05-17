@@ -1,34 +1,34 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3ED409441
-	for <bpf@vger.kernel.org>; Fri, 17 May 2024 03:00:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C346D9470
+	for <bpf@vger.kernel.org>; Fri, 17 May 2024 03:10:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715914832; cv=none; b=IHl9mm/xg4jFrqqtOVe1tqmBmpEBiojLvTIVAzEnwmlY7m7xkcCkFJEvdjafdivskiutZf0MwZM9mkNTSwoBatAmijMBs1ivscre9tHNxfmVGgD7wMBYsk7bjYMw4+RoXFz3WGFp4WvnXzHFRqsPIMowVyiKmNkoVmEWGCFHILw=
+	t=1715915429; cv=none; b=a8yQn2n2vjrH+jMg+CyI3GmKj9zPOMUuxnf9adCnSDzXcCIEFwe1Bsgi0tvnK2ZYJy2aU/2LMaLYXiDQgtmmGNjWS5qHG7eq7XLVIkEddwGtEHnjZP5f1DP1aO5yy51Qg4qr6rid6gf/31VmNEiOAQfbV+h9Ds7bz7CJab5cyLo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715914832; c=relaxed/simple;
-	bh=/jb7e/3zSCVOvJ6NxCcAeONPBGNWQAlpOy7z/klBQPU=;
+	s=arc-20240116; t=1715915429; c=relaxed/simple;
+	bh=8vPMdZoLViTgzL393LTbDVDbffZPUaU8l8Jyemsh2W8=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=bQcHlTmfyklqiiPrOHaVeBJ+n78VZi605bEdavDdpnan9vFyKiHY6O6A/xpnvwfTvtBzKGymSvIMj0nUDGYjAQR97xY5Q7S7jvCCvlgEYH/d4WlxlLHJcgkmo42b2t49/nyt7P8MsuTS7VJ8gdk6RIm1dABaPJ1QYX5rC5Nn9sE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gQBaCdFK; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=MWe2h9z1H6gLDiYUb0MDpXH6FtUmHJXhq5e2OYOw+BHUccWmvIwSgAb1pOi7aXLZYYk8GnVl4xoUUA52i8RO6FQnLmaB5MrEymqO/SMLPmKEBljAFs4uw8fnME/yqKYkpo1UFg2c7XaqwFU3Og1KZHoxxZRVL64KoEZoD6mp4PQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZB4dO+bP; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gQBaCdFK"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id A7083C32781;
-	Fri, 17 May 2024 03:00:30 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZB4dO+bP"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 59CC0C4AF08;
+	Fri, 17 May 2024 03:10:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1715914830;
-	bh=/jb7e/3zSCVOvJ6NxCcAeONPBGNWQAlpOy7z/klBQPU=;
+	s=k20201202; t=1715915429;
+	bh=8vPMdZoLViTgzL393LTbDVDbffZPUaU8l8Jyemsh2W8=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=gQBaCdFKhthumm0v2jz473adruCNMX4J37sO2Ez3NtOOTIdfGl6VyM8zGFjVbDO46
-	 CKFWb1gDo+N056AJG0HwL1vnWn2GHBrUgdl3s0Qrnw6QNa3W5yuAbWgGkEmG+G6QsL
-	 IPzxvS0OkC72Q8+ks/Yxbi9HImM2CL8A9vWJOrgA18T77LaD+nd3P/AlquOfhBfM7+
-	 eyW5ECDbe08gbehTbwGBKrXVThAQJt24Bcr2pZsz5VbZSixEOUyAnqchgUnit6o2tb
-	 NrkmcN7t60qOQzxQT3/HNGmEVXjdScpR4tJWte/dsP5pW01WOr9B5QXEMaJP2OJF6Y
-	 wksOhqVGqH8Sw==
+	b=ZB4dO+bP4PRTV7R5AXdg9BUsdkh7K7X2XL0hXOYxE0XRxVf6ufZAMmxrgjMOBMqNF
+	 MT2hK4bZiFsLFLmVX1EyNOJhk4s1YEUJfUdy4+MuylXQC59FQQanfxRnKhyiq1ayyX
+	 wPIWNxeMQIzGS9LGbvfvAL60a08IruwY7ASbWbVMg9vUXVXdWlAmhflGtmTpowsReR
+	 sDcJaazzL9tnnxo9MOQSykcZ9zRwfalW9gGtCJDQb7wTaC0yuKpYyVFUNKDeGA/v3w
+	 n5wYU+8nKhEoV15rncfQqxxhxpQmzvM/989XRKB6XiDdQUbYb1akiKMgdP3PBcz+lu
+	 +zi4J3s6fWDdw==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 95CFFC41620;
-	Fri, 17 May 2024 03:00:30 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 495F5C41620;
+	Fri, 17 May 2024 03:10:29 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -37,37 +37,38 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v4 bpf-next] bpftool: introduce btf c dump sorting
+Subject: Re: [PATCH bpf-next] kbuild, bpf: use test-ge check for v1.25-only pahole
 From: patchwork-bot+netdevbpf@kernel.org
 Message-Id: 
- <171591483060.14098.7925767286434481245.git-patchwork-notify@kernel.org>
-Date: Fri, 17 May 2024 03:00:30 +0000
-References: <20240514131221.20585-1-yatsenko@meta.com>
-In-Reply-To: <20240514131221.20585-1-yatsenko@meta.com>
-To: None <"Mykyta Yatsenkomykyta.yatsenko5"@gmail.com>
-Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
- daniel@iogearbox.net, kafai@meta.com, kernel-team@meta.com, qmo@kernel.org,
- yatsenko@meta.com
+ <171591542929.18753.3063348546415616055.git-patchwork-notify@kernel.org>
+Date: Fri, 17 May 2024 03:10:29 +0000
+References: <20240514162716.2448265-1-alan.maguire@oracle.com>
+In-Reply-To: <20240514162716.2448265-1-alan.maguire@oracle.com>
+To: Alan Maguire <alan.maguire@oracle.com>
+Cc: andrii@kernel.org, jolsa@kernel.org, acme@redhat.com, eddyz87@gmail.com,
+ ast@kernel.org, daniel@iogearbox.net, martin.lau@linux.dev, song@kernel.org,
+ yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
+ sdf@google.com, haoluo@google.com, bpf@vger.kernel.org, masahiroy@kernel.org
 
 Hello:
 
 This patch was applied to bpf/bpf-next.git (master)
 by Andrii Nakryiko <andrii@kernel.org>:
 
-On Tue, 14 May 2024 14:12:21 +0100 you wrote:
-> From: Mykyta Yatsenko <yatsenko@meta.com>
+On Tue, 14 May 2024 17:27:16 +0100 you wrote:
+> There is no need to set the pahole v1.25-only flags in an
+> "ifeq" version clause; we are already in a <= v1.25 branch
+> of "ifeq", so that combined with a "test-ge" v1.25 ensures the
+> flags will be applied for v1.25 only.
 > 
-> Sort bpftool c dump output; aiming to simplify vmlinux.h diffing and
-> forcing more natural type definitions ordering.
-> 
-> Definitions are sorted first by their BTF kind ranks, then by their base
-> type name and by their own name.
+> Suggested-by: Masahiro Yamada <masahiroy@kernel.org>
+> Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
 > 
 > [...]
 
 Here is the summary with links:
-  - [v4,bpf-next] bpftool: introduce btf c dump sorting
-    https://git.kernel.org/bpf/bpf-next/c/45053110e260
+  - [bpf-next] kbuild, bpf: use test-ge check for v1.25-only pahole
+    https://git.kernel.org/bpf/bpf-next/c/0545f3c64add
 
 You are awesome, thank you!
 -- 
