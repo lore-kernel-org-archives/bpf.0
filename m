@@ -1,168 +1,179 @@
-Received: from mail.ietf.org (mail.ietf.org [50.223.129.194])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f194.google.com (mail-pl1-f194.google.com [209.85.214.194])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33D3354673
-	for <bpf@vger.kernel.org>; Fri, 17 May 2024 15:35:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=50.223.129.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5248112F5A9;
+	Fri, 17 May 2024 15:40:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715960105; cv=none; b=j/adLel+G/SCyhs4u8vPFJeD6LOcS45dm2NTMrcqGrU7r7bG2UiSCi7Sx+8SOoPpHGrd+AeEycnT+1VhSRngOySfVhH8AeN08eIyMXU97/d15j6v7ixcC7BSmSulW6qSBmbBF3Zzd1SoELeSUNx+nuZnf63sa4TVNAnvur1VsLo=
+	t=1715960439; cv=none; b=dRKzplkEDPpCA66HGRt+ycJIpdfq7BL615PN4n4lij8Bl+n5b3MvbtCLT9x1A+DL8gV04ybQixNI5rLtjXMXh44KdKyhaz0MbkSUyNK75TrMqSCh2hZQTz8vQbrm+bZ0SBhgxEED+KjsPsPH2kKWiWww+kFb19AMYFhIaTqwOVQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715960105; c=relaxed/simple;
-	bh=nj48mcF7ntqeKT5K10mLaxwH7gG5FYJhrEpbQbuF3RM=;
-	h=To:Date:Message-Id:MIME-Version:CC:Subject:Content-Type:From; b=M0FUbtZ0GlOd5Uodr3u8f3GMpaXZIJ+6BQCRqjzkEaev0P5VJHApeMBtyvlv2Ie21l0OIG/owVFvZ8lOKwHFYEu/pxk7eZrjo78BpAgaJwEnqL3eBMqKRNxEpzlHtYDwhiPMpUXX9lXsBiSLAaoTsRJnEGLnr/qGwNH2VUzpJ5o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=dmarc.ietf.org; spf=pass smtp.mailfrom=ietf.org; dkim=pass (1024-bit key) header.d=ietf.org header.i=@ietf.org header.b=FxcULPk4; dkim=fail (1024-bit key) header.d=ietf.org header.i=@ietf.org header.b=MvC9gGmL reason="signature verification failed"; dkim=fail (2048-bit key) header.d=googlemail.com header.i=@googlemail.com header.b=Ja5BDERg reason="signature verification failed"; arc=none smtp.client-ip=50.223.129.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=dmarc.ietf.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ietf.org
+	s=arc-20240116; t=1715960439; c=relaxed/simple;
+	bh=iNsDA5SLvPhu0JbRwQ06u+xbMDVE3hHQVYQf02Bb1H0=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=tyUA5M+cTPveD5vGrb3UicsbPxY8cq9aMc1HHu+VMWba5D/gI16FGOEFA4JqzZ/Z6zolGk9G0ygz41FNebho8KIhCeLyApB3ypgcGcKd75F8fs40HZEXTlGwYSkx8XpluHAAOGl6ay0IJ4wPYZVzJtAo0Wn1OZ4z7SUI79hs0Yw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=efgBE+zA; arc=none smtp.client-ip=209.85.214.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ietf.org header.i=@ietf.org header.b="FxcULPk4";
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=ietf.org header.i=@ietf.org header.b="MvC9gGmL";
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=googlemail.com header.i=@googlemail.com header.b="Ja5BDERg"
-Received: from ietfa.amsl.com (localhost [IPv6:::1])
-	by ietfa.amsl.com (Postfix) with ESMTP id 90AEAC1D4A8D
-	for <bpf@vger.kernel.org>; Fri, 17 May 2024 08:35:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ietf.org; s=ietf1;
-	t=1715960102; bh=nj48mcF7ntqeKT5K10mLaxwH7gG5FYJhrEpbQbuF3RM=;
-	h=To:Date:CC:Subject:List-Id:List-Archive:List-Help:List-Owner:
-	 List-Post:List-Subscribe:List-Unsubscribe:From;
-	b=FxcULPk4Y9ps4+oZkZbnek6DI+1KlK203/zjYRZO0wOndQCDVOEPxe1/EZiAKjhAh
-	 2t9f0xzzuDmH7IVD37gyoUgQ+T00v4om6DK+rs1atrscozNVeNKIMQDk6duk03HMkz
-	 fWakrxPYl+V2Ie0EsYi1tz+U5bUIyzlPcfDkkrHg=
-Received: from ietfa.amsl.com (localhost [IPv6:::1])
- by ietfa.amsl.com (Postfix) with ESMTP id 78E78C14F61E
- for <bpf@vger.kernel.org>; Fri, 17 May 2024 08:35:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ietf.org; s=ietf1;
- t=1715960102; bh=nj48mcF7ntqeKT5K10mLaxwH7gG5FYJhrEpbQbuF3RM=;
- h=From:To:Date:CC:Subject:List-Id:List-Archive:List-Help:List-Owner:
- List-Post:List-Subscribe:List-Unsubscribe;
- b=MvC9gGmLZyt90Je40PqZzJR+x+KH76krpOkGN2C3LPt1+FACvSrsHwnFqP2YhCeKL
- v9yF9aVdOOvbZxKd4ZYGj/oZuzOQcbE9lUz+2l8+hwMWLAKaBgVznrNvPZXWKiLH+r
- PpzYMLCR2XJCNvf29k6VKtimVnvR9GA3NMj3kuoA=
-Received: from localhost (localhost [127.0.0.1])
- by ietfa.amsl.com (Postfix) with ESMTP id BDD48C14EB1E
- for <bpf@ietfa.amsl.com>; Fri, 17 May 2024 08:34:53 -0700 (PDT)
-X-Virus-Scanned: amavisd-new at amsl.com
-X-Spam-Flag: NO
-X-Spam-Score: -6.845
-X-Spam-Level: 
-Authentication-Results: ietfa.amsl.com (amavisd-new); dkim=pass (2048-bit key)
- header.d=googlemail.com
-Received: from mail.ietf.org ([50.223.129.194])
- by localhost (ietfa.amsl.com [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id QrHruz1q_aLy for <bpf@ietfa.amsl.com>;
- Fri, 17 May 2024 08:34:49 -0700 (PDT)
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com
- [IPv6:2607:f8b0:4864:20::1035])
- (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
- key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest
- SHA256) (No client certificate requested)
- by ietfa.amsl.com (Postfix) with ESMTPS id ECEF4C14F5E5
- for <bpf@ietf.org>; Fri, 17 May 2024 08:34:49 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id
- 98e67ed59e1d1-2b27eec1eb1so47898a91.0
- for <bpf@ietf.org>; Fri, 17 May 2024 08:34:49 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="efgBE+zA"
+Received: by mail-pl1-f194.google.com with SMTP id d9443c01a7336-1eb0e08bfd2so12868965ad.1;
+        Fri, 17 May 2024 08:40:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=googlemail.com; s=20230601; t=1715960089; x=1716564889;
- darn=ietf.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=gu9rHXjrQNiuEdfil+6Qxyl1dIA+C1Ezul/fpNnbzX0=;
- b=Ja5BDERgBgTifhW7xvsOa3m4ShkcGP8/G+OTPkx6tDFE7P6sgPVyf0v1rJ6asnHZ4D
- RMoOZZwQ2NIpsyNG+0S4pKqaC1OVZfNQFWPeY5wTCW/tTmlXWnZxyQZTOAT8booRC3DH
- JjijTwCigToFFrmf5QfeY7a4IH2OIazlp9yAlqPVOAeSp2gQDdK3gSh3hh4HkCPefx3h
- esc7/GRcTzzutRRokdIOgr5FvnLjTIk5hQfo0ipPv6q3nNTjp7uWJtJn/0PPoIQY5u3E
- m+3B0tYyxxg5AGS6rFex8I7Ti49uKNZoOH9sNQVX7nDoFRBbfEIh2ZOLgJfYOlewu5fC
- 3uoQ==
+        d=gmail.com; s=20230601; t=1715960437; x=1716565237; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=KeBHstQjIre4Wfpl7kdLCjbinS3o2KJnHNzvvNjFeMA=;
+        b=efgBE+zAOPgMAKpKlPDdN+a1doIdMBMnA5PCJe5gL/1y8bYfNlHc06+ssAStNXrvpN
+         /xuInGfFxot7ehI8gDm7OdWH/7EGSa+FbNwk5C4DG5Jc2rAwEDYGEu10gFKgH1YbFcJX
+         uINa+/7EWO2WDBPqSzG0RJhVrPq54daq6VdxFqqEtNDXFeIx4RQwk9Yla5TXOnBIKkVS
+         /yXgxp4oJsTT+2G/8nKPeVrxgCoRZ/phmZSjWv9Ahb+Odu5ZJOfFwL5LgPRdMU5yPKXZ
+         p8/o4ze3yJyXY4emVi33GM5Xr5Zw+PlXhJ7pgWm5VlFg5umQJWt59UQyFw0SAbsxhoaF
+         5y0g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1715960089; x=1716564889;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=gu9rHXjrQNiuEdfil+6Qxyl1dIA+C1Ezul/fpNnbzX0=;
- b=jupc6dtcKWdsUXBzkhV+63KetRk6zbXFzE6QzrZR6O8JUIEI9pqBXbao2lwSfJjfQB
- StaAVPlMUfOl23i35BYsT9G2v3FLUoIrJcbP7AddRAkHYuOM5Um1w/7JV5l5nggfGrc9
- d3JzOinAvlTFXxB9CqK8ffokFKMOMw09BBtu4QLnHRjsn7sGOUgBH3DDUl1HeAVpx+Ud
- 2f2juso89U9Ft8qOl08o/MMEPmFauKoQYF3IYpX8VqWQDKrAb/YrjxwH1BQvx9Og+mMZ
- 4JrUBZ2k9OOnrlAlvZDwu7rbLCA406KAzE8D2beqeA/W3PVH3EI19QPhtkOSOqGeVxxb
- xaYg==
-X-Gm-Message-State: AOJu0YxoQJAgOO7v09IYZ2C/yD2u2f7K81SXRePoALP+DJ0I7s4yQdWe
- 6kqi/79tZ7CsX2c4QmU5GOhJfXkyjGR90lNU85PoIe0yTqd7wAl7
-X-Google-Smtp-Source: AGHT+IEmwrGI+mO352Ret0QmpEQXcshi8dtdOKXoKXqgkRXtzbmexGrV7Gnc7qYFKDIm26al4/xBrw==
-X-Received: by 2002:a17:90a:ea12:b0:2b2:7c52:e175 with SMTP id
- 98e67ed59e1d1-2b6cceef2f7mr20254508a91.31.1715960088955;
- Fri, 17 May 2024 08:34:48 -0700 (PDT)
-Received: from ubuntu2310.lan (c-67-170-74-237.hsd1.wa.comcast.net.
- [67.170.74.237]) by smtp.gmail.com with ESMTPSA id
- 98e67ed59e1d1-2b628ca5124sm17494864a91.43.2024.05.17.08.34.47
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 17 May 2024 08:34:48 -0700 (PDT)
-X-Google-Original-From: Dave Thaler <dthaler1968@gmail.com>
-To: bpf@vger.kernel.org
-Date: Fri, 17 May 2024 08:34:45 -0700
-Message-ID: <20240517153445.3914-1-dthaler1968@gmail.com>
-X-Mailer: git-send-email 2.40.1
+        d=1e100.net; s=20230601; t=1715960437; x=1716565237;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=KeBHstQjIre4Wfpl7kdLCjbinS3o2KJnHNzvvNjFeMA=;
+        b=BuXnFlWVr+UD+awvsJlTkkdw1w8TbSr+UBU7+JWUEBTKJkACFtIBsD9M4cN3tCR6Ta
+         KgQ5uM805FO2tG4EOmY1GsGFxXBcr5kBwXCRRv2XBxlV7HvvOSr96SVYafooPnKfx/Uj
+         f8Qwz1vFOofGkEsAOkZZ4mjAaCn4qJ4l7lQ0QNfW81z6BD3CYpEt4E0deXQ6+rQp3HJt
+         GGoE05nIlqs2woojCHSQhO0aNPHBp2HazNuvfOAft2CCY2f8Ixrcut8iBYc4Hb9KEIw+
+         Uh9bSJlySEosTuMly5M8TCjGX7iSrnWQAVdW0Xp6Tw/QgdelT3bLRrVerDpX7iBNGS9T
+         ClOg==
+X-Forwarded-Encrypted: i=1; AJvYcCWIFZ5nUeLzRHcqOmXiJFh+0vLGKB3jaDddPJ9bPdZTUWfUAF0WOkHk/vgA5kt3CxNHM061og0Zjz2uC2JRQZRCQyff3Uiml4ngdwbUv8tG1XwaAVe8K1p4jWhAOR4ryV1Xsu8DykkyUOdN+TI4MXyGdxY+S6SYoizs
+X-Gm-Message-State: AOJu0YxTD2v+vRZouAMyfMN4mUmvBjDALfGypfdXoJaw3D42pKp6E0po
+	zwG7GPp7Wv/e+vRJg2IzOYLwHHSTe953e6NU+XMTgmyfytflrZY4
+X-Google-Smtp-Source: AGHT+IFAxssLZ3RlB8pKZO/643cGL8ZseaQ/GUvaESDKuEXqQJ08vNFDKkMH7OAtEz24bk4QezyrPA==
+X-Received: by 2002:a05:6a00:1824:b0:6ec:ff1b:aa0b with SMTP id d2e1a72fcca58-6f4e02d3698mr24977798b3a.18.1715960437452;
+        Fri, 17 May 2024 08:40:37 -0700 (PDT)
+Received: from localhost.localdomain ([2409:8a00:26be:370:d9bb:b9a0:16e:48c8])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-6f66e4bed05sm6328779b3a.100.2024.05.17.08.40.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 May 2024 08:40:37 -0700 (PDT)
+From: Fred Li <dracodingfly@gmail.com>
+To: dracodingfly@gmail.com
+Cc: andrii@kernel.org,
+	ast@kernel.org,
+	bpf@vger.kernel.org,
+	daniel@iogearbox.net,
+	davem@davemloft.net,
+	john.fastabend@gmail.com,
+	kafai@fb.com,
+	kpsingh@kernel.org,
+	kuba@kernel.org,
+	linux-kernel@vger.kernel.org,
+	netdev@vger.kernel.org,
+	songliubraving@fb.com,
+	yhs@fb.com
+Subject: [PATCH] test_bpf: Add an skb_segment test for a non linear frag_list whose head_frag=1 and gso_size was mangled
+Date: Fri, 17 May 2024 23:40:28 +0800
+Message-Id: <20240517154028.70588-1-dracodingfly@gmail.com>
+X-Mailer: git-send-email 2.32.1 (Apple Git-133)
+In-Reply-To: <20240515144313.61680-1-dracodingfly@gmail.com>
+References: <20240515144313.61680-1-dracodingfly@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-ID-Hash: FCNFA6O74P2HVGMO6HLIRXHCMXSMV76P
-X-Message-ID-Hash: FCNFA6O74P2HVGMO6HLIRXHCMXSMV76P
-X-MailFrom: dthaler1968@googlemail.com
-X-Mailman-Rule-Misses: dmarc-mitigation; no-senders; approved; emergency;
- loop; banned-address; member-moderation; nonmember-moderation; administrivia; 
- implicit-dest; max-recipients; max-size; news-moderation; no-subject;
- digests; suspicious-header
-CC: bpf@ietf.org, Dave Thaler <dthaler1968@gmail.com>,
- Dave Thaler <dthaler1968@googlemail.com>
-X-Mailman-Version: 3.3.9rc4
-Precedence: list
-Subject: =?utf-8?q?=5BBpf=5D_=5BPATCH_bpf-next=5D_bpf=2C_docs=3A_Move_sentence_about_?=
- =?utf-8?q?returning_R0_to_abi=2Erst?=
-Archived-At: <https://mailarchive.ietf.org/arch/msg/bpf/RHjXOXRkTc3i5F_wXQjL4MNQvks>
-List-Archive: <https://mailarchive.ietf.org/arch/browse/bpf>
-List-Help: <mailto:bpf-request@ietf.org?subject=help>
-List-Owner: <mailto:bpf-owner@ietf.org>
-List-Post: <mailto:bpf@ietf.org>
-X-Mailman-Copy: yes
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
-X-Original-From: Dave Thaler <dthaler1968@googlemail.com>
-From: Dave Thaler <dthaler1968=40googlemail.com@dmarc.ietf.org>
-Message-ID: <20240517153445.GQLLkuy5ixr34yB8d9nb8WYxf-qoATP-wNE-mZBf0I4@z>
+Content-Transfer-Encoding: 8bit
 
-QXMgZGlzY3Vzc2VkIGF0IExTRi9NTS9CUEYsIHRoZSBzZW50ZW5jZSBhYm91dCB1c2luZyBSMCBm
-b3IgcmV0dXJuaW5nDQp2YWx1ZXMgZnJvbSBjYWxscyBpcyBwYXJ0IG9mIHRoZSBjYWxsaW5nIGNv
-bnZlbnRpb24gYW5kIGJlbG9uZ3MgaW4NCmFiaS5yc3QuICBBbnkgZnVydGhlciBhZGRpdGlvbnMg
-b3IgY2xhcmlmaWNhdGlvbnMgdG8gdGhpcyB0ZXh0IGFyZSBsZWZ0DQpmb3IgZnV0dXJlIHBhdGNo
-ZXMgb24gYWJpLnJzdC4gIFRoZSBjdXJyZW50IHBhdGNoIGlzIHNpbXBseSB0byB1bmJsb2NrDQpw
-cm9ncmVzc2lvbiBvZiBpbnN0cnVjdGlvbi1zZXQucnN0IHRvIGEgc3RhbmRhcmQuDQoNCkluIGNv
-bnRyYXN0LCB0aGUgcmVzdHJpY3Rpb24gb2YgcmVnaXN0ZXIgbnVtYmVycyB0byB0aGUgcmFuZ2Ug
-MC0xMA0KaXMgdW50b3VjaGVkLCBsZWZ0IGluIHRoZSBpbnN0cnVjdGlvbi1zZXQucnN0IGRlZmlu
-aXRpb24gb2YgdGhlDQpzcmNfcmVnIGFuZCBkc3RfcmVnIGZpZWxkcy4NCg0KU2lnbmVkLW9mZi1i
-eTogRGF2ZSBUaGFsZXIgPGR0aGFsZXIxOTY4QGdvb2dsZW1haWwuY29tPg0KLS0tDQogRG9jdW1l
-bnRhdGlvbi9icGYvc3RhbmRhcmRpemF0aW9uL2FiaS5yc3QgICAgICAgICAgICAgfCAzICsrKw0K
-IERvY3VtZW50YXRpb24vYnBmL3N0YW5kYXJkaXphdGlvbi9pbnN0cnVjdGlvbi1zZXQucnN0IHwg
-MyAtLS0NCiAyIGZpbGVzIGNoYW5nZWQsIDMgaW5zZXJ0aW9ucygrKSwgMyBkZWxldGlvbnMoLSkN
-Cg0KZGlmZiAtLWdpdCBhL0RvY3VtZW50YXRpb24vYnBmL3N0YW5kYXJkaXphdGlvbi9hYmkucnN0
-IGIvRG9jdW1lbnRhdGlvbi9icGYvc3RhbmRhcmRpemF0aW9uL2FiaS5yc3QNCmluZGV4IDBjMmUx
-MGVlYi4uNDE1MTQxMzdjIDEwMDY0NA0KLS0tIGEvRG9jdW1lbnRhdGlvbi9icGYvc3RhbmRhcmRp
-emF0aW9uL2FiaS5yc3QNCisrKyBiL0RvY3VtZW50YXRpb24vYnBmL3N0YW5kYXJkaXphdGlvbi9h
-YmkucnN0DQpAQCAtMjMsMyArMjMsNiBAQCBUaGUgQlBGIGNhbGxpbmcgY29udmVudGlvbiBpcyBk
-ZWZpbmVkIGFzOg0KIA0KIFIwIC0gUjUgYXJlIHNjcmF0Y2ggcmVnaXN0ZXJzIGFuZCBCUEYgcHJv
-Z3JhbXMgbmVlZHMgdG8gc3BpbGwvZmlsbCB0aGVtIGlmDQogbmVjZXNzYXJ5IGFjcm9zcyBjYWxs
-cy4NCisNCitUaGUgQlBGIHByb2dyYW0gbmVlZHMgdG8gc3RvcmUgdGhlIHJldHVybiB2YWx1ZSBp
-bnRvIHJlZ2lzdGVyIFIwIGJlZm9yZSBkb2luZyBhbg0KK2BgRVhJVGBgLg0KZGlmZiAtLWdpdCBh
-L0RvY3VtZW50YXRpb24vYnBmL3N0YW5kYXJkaXphdGlvbi9pbnN0cnVjdGlvbi1zZXQucnN0IGIv
-RG9jdW1lbnRhdGlvbi9icGYvc3RhbmRhcmRpemF0aW9uL2luc3RydWN0aW9uLXNldC5yc3QNCmlu
-ZGV4IDk5NzU2MGFiYS4uYzBkN2Q3NGUwIDEwMDY0NA0KLS0tIGEvRG9jdW1lbnRhdGlvbi9icGYv
-c3RhbmRhcmRpemF0aW9uL2luc3RydWN0aW9uLXNldC5yc3QNCisrKyBiL0RvY3VtZW50YXRpb24v
-YnBmL3N0YW5kYXJkaXphdGlvbi9pbnN0cnVjdGlvbi1zZXQucnN0DQpAQCAtNDc1LDkgKzQ3NSw2
-IEBAIHRoZSBqdW1wIGluc3RydWN0aW9uLiAgVGh1cyAnUEMgKz0gMScgc2tpcHMgZXhlY3V0aW9u
-IG9mIHRoZSBuZXh0DQogaW5zdHJ1Y3Rpb24gaWYgaXQncyBhIGJhc2ljIGluc3RydWN0aW9uIG9y
-IHJlc3VsdHMgaW4gdW5kZWZpbmVkIGJlaGF2aW9yDQogaWYgdGhlIG5leHQgaW5zdHJ1Y3Rpb24g
-aXMgYSAxMjgtYml0IHdpZGUgaW5zdHJ1Y3Rpb24uDQogDQotVGhlIEJQRiBwcm9ncmFtIG5lZWRz
-IHRvIHN0b3JlIHRoZSByZXR1cm4gdmFsdWUgaW50byByZWdpc3RlciBSMCBiZWZvcmUgZG9pbmcg
-YW4NCi1gYEVYSVRgYC4NCi0NCiBFeGFtcGxlOg0KIA0KIGBge0pTR0UsIFgsIEpNUDMyfWBgIG1l
-YW5zOjoNCi0tIA0KMi40MC4xDQoNCi0tIApCcGYgbWFpbGluZyBsaXN0IC0tIGJwZkBpZXRmLm9y
-ZwpUbyB1bnN1YnNjcmliZSBzZW5kIGFuIGVtYWlsIHRvIGJwZi1sZWF2ZUBpZXRmLm9yZwo=
+The patch was based on kernel 6.6.8, the skb properties as
+mentioned in [1]. This test will cause system crash without
+the patch described in [1].
+
+[1] https://lore.kernel.org/netdev/20240515144313.61680-1-dracodingfly@gmail.com/
+
+Signed-off-by: Fred Li <dracodingfly@gmail.com>
+---
+ lib/test_bpf.c | 64 ++++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 64 insertions(+)
+
+diff --git a/lib/test_bpf.c b/lib/test_bpf.c
+index ecde42162..a38d2d09c 100644
+--- a/lib/test_bpf.c
++++ b/lib/test_bpf.c
+@@ -14706,6 +14706,63 @@ static __init struct sk_buff *build_test_skb_linear_no_head_frag(void)
+ 	return NULL;
+ }
+ 
++static __init struct sk_buff *build_test_skb_head_frag(void)
++{
++	u32 headroom = 192, doffset = 66, alloc_size = 1536;
++	struct sk_buff *skb[2];
++	struct page *page[17];
++	int i, data_size = 125;
++	int j;
++
++	skb[0] = dev_alloc_skb(headroom + alloc_size);
++	if (!skb[0])
++		return NULL;
++
++	skb_reserve(skb[0], headroom + doffset);
++	skb_put(skb[0], data_size);
++	skb[0]->mac_header = 192;
++
++	skb[0]->protocol = htons(ETH_P_IP);
++	skb[0]->network_header = 206;
++
++	for (i = 0; i < 17; i++) {
++		page[i] = alloc_page(GFP_KERNEL);
++		if (!page[i])
++			goto err_page;
++
++		skb_add_rx_frag(skb[0], i, page[i], 0, data_size, data_size);
++	}
++
++	skb[1] = dev_alloc_skb(headroom + alloc_size);
++	if (!skb[1])
++		goto err_page;
++
++	skb_reserve(skb[1], headroom + doffset);
++	skb_put(skb[1], data_size);
++
++	/* setup shinfo */
++	skb_shinfo(skb[0])->gso_size = 75;
++	skb_shinfo(skb[0])->gso_type = SKB_GSO_TCPV4;
++	skb_shinfo(skb[0])->gso_type |= SKB_GSO_UDP_TUNNEL|SKB_GSO_TCP_FIXEDID|SKB_GSO_DODGY;
++	skb_shinfo(skb[0])->gso_segs = 0;
++	skb_shinfo(skb[0])->frag_list = skb[1];
++	skb_shinfo(skb[0])->hwtstamps.hwtstamp = 1000;
++
++	/* adjust skb[0]'s len */
++	skb[0]->len += skb[1]->len;
++	skb[0]->data_len += skb[1]->len;
++	skb[0]->truesize += skb[1]->truesize;
++
++	return skb[0];
++
++err_page:
++	kfree_skb(skb[0]);
++	for (j = 0; j < i; j++)
++		__free_page(page[j]);
++
++	return NULL;
++}
++
+ struct skb_segment_test {
+ 	const char *descr;
+ 	struct sk_buff *(*build_skb)(void);
+@@ -14727,6 +14784,13 @@ static struct skb_segment_test skb_segment_tests[] __initconst = {
+ 			    NETIF_F_LLTX | NETIF_F_GRO |
+ 			    NETIF_F_IPV6_CSUM | NETIF_F_RXCSUM |
+ 			    NETIF_F_HW_VLAN_STAG_TX
++	},
++	{
++		.descr = "gso_with_head_frag",
++		.build_skb = build_test_skb_head_frag,
++		.features = NETIF_F_SG | NETIF_F_HW_CSUM | NETIF_F_GSO_SHIFT |
++			    NETIF_F_TSO_ECN | NETIF_F_TSO_MANGLEID | NETIF_F_TSO6 |
++			    NETIF_F_GSO_SCTP | NETIF_F_GSO_UDP_L4 | NETIF_F_GSO_FRAGLIST
+ 	}
+ };
+ 
+-- 
+2.33.0
+
