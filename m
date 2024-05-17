@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3442946C;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C340D8F45;
 	Fri, 17 May 2024 03:10:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715915429; cv=none; b=cr9h65WZuVyEuHd0scY16aMxJigZwwqf7j9P6GMv+S/BIGDeb5Bbq8LPI1LtQRtrtaY1HtBrrvaRVh0qbPbTFrs9+aoOIf6uZ4huqfGzjGjXeTS449RgqjObcHOf0eoKUwRcGgKpJns0MYDxnOdMj8wVbSVxFVDE83blfsjix4c=
+	t=1715915429; cv=none; b=Hz09ewUgiwfuL7tlxFQFo1nOwqrWkm4/4bdoU6hF8Z70tfn/O3Qjz3FUe6TTSFuTFDB7ywlr6UH5LNI8oR1y/p9n2gNX1+uylQZHG3M/R+c3DwN5U3XTKwpeE6DwnCZ/rYdfcZuy3Np2wv78oASFD9n7V+DByOvGRsxvWODUl00=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1715915429; c=relaxed/simple;
-	bh=ho+G++EVa3pSaTwY5Pr6aRDUUn1h16fhxowMP9wah9w=;
+	bh=ewr5LqD6aFBNjgSdsKy+jHQsXVziy9ZAzxRTdgAdHuI=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=H+k5w2VxnUG+v7Wh3MHvurXkQ9ulQr6wuJK028a1y8bTq0TVLQeFhFK+EVW3oAWakh+KZlQb1CHgukBOuhNIxLKarO/X7xLZWqcR6lIg/J9+3QQVBdHOHNfZYvDtl3xacIWa3tynqpGvI19dm9xhBhFkf/dR8rubhEJP+yLUTB0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=F+EXJe2f; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=I5OBZCBSTwsiQTEpqu7oBLeV/z7jYk/kqLcNdV0xx9xTOxbp3aWosGRcyIKIfEBOxkGUHx5bPNqjgalUoxxwCtZ1QtaDgV5CEln5cw4gyM3yZDIBtzsrhDCbGJ6kiwg9Yxs6p9P8s1x/qym08YVcYCkUMN55NEtgXPyIGKCT6yE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XjplShAr; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="F+EXJe2f"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 50129C2BD11;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XjplShAr"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 69B8FC4AF07;
 	Fri, 17 May 2024 03:10:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1715915429;
-	bh=ho+G++EVa3pSaTwY5Pr6aRDUUn1h16fhxowMP9wah9w=;
+	bh=ewr5LqD6aFBNjgSdsKy+jHQsXVziy9ZAzxRTdgAdHuI=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=F+EXJe2fHkNcV1svRvTMGHSJdM8zYNj2ZHDEHGfISsymLG1bqSGAfTb+p4FlKA+U7
-	 gHxkKzGZygrugdMNqmy2MemC8eu6c80P1VlwFeS2UayiJ3TaF5RchXrdHwSQftAibQ
-	 9ilmVfajEM+zlkvxEWQkq1iRHb8SnbNY82ZDcop8xXshg9VZ3zT+Swt0egi2caQEld
-	 XR6qCgYDqSkBW6i0ua9r3lyImyN3Sc9GjIbbqYWPvQ6bse+qLoLMwtvnZR99wxJR/0
-	 WuHpcVo0eMMAbrLMTojdWfegHE5av6LjhyX/Zq9VIpOmr9ZGK85B7fL2gKrqTJ7ucK
-	 PoYCfKoQiigew==
+	b=XjplShArF2rnbwlAcmCYgpwnFooZFoYCqSus3hGCZDTxetj1qdVHEuf8wyO2YeMwH
+	 c4foFnFpDd49rjAHa1XsZhx0YgBAjXhJ7Qt4SbiRENDP2jAxodfj/RghV/Rvs2fbKK
+	 ZonfRiZg0ggqwa5C1CZWzt7S2UuYjczeDlfbNsTdLuCFhqnNxTRToJR985arGj6oc5
+	 ioORWRwJ6O2l6+tyRFwcMiYBKbqAmMCLdsAdMCH7dWK9y7Ex8fHYk0e+tDNUmm2Q/q
+	 F2tytl+mhrLKNTswwhUbx5RI5JLeoRd+cCUGUbDK8NkCsMTgfvVmkoI0VpdIB/EOtC
+	 Z4b/x+4w5UItQ==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 3D540C54BBB;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 546A2C54BDC;
 	Fri, 17 May 2024 03:10:29 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
@@ -37,37 +37,36 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] bpf: fix order of args in call to bpf_map_kvcalloc
+Subject: Re: [PATCH bpf-next] bpftool: fix make dependencies for vmlinux.h
 From: patchwork-bot+netdevbpf@kernel.org
 Message-Id: 
- <171591542924.18753.7459839871800509964.git-patchwork-notify@kernel.org>
+ <171591542934.18753.10218221858654904278.git-patchwork-notify@kernel.org>
 Date: Fri, 17 May 2024 03:10:29 +0000
-References: <20240516072411.42016-1-sheharyaar48@gmail.com>
-In-Reply-To: <20240516072411.42016-1-sheharyaar48@gmail.com>
-To: Mohammad Shehar Yaar Tausif <sheharyaar48@gmail.com>
-Cc: martin.lau@linux.dev, ast@kernel.org, daniel@iogearbox.net,
- andrii@kernel.org, eddyz87@gmail.com, song@kernel.org,
- yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
- sdf@google.com, haoluo@google.com, jolsa@kernel.org, bpf@vger.kernel.org,
- linux-kernel@vger.kernel.org
+References: <20240513112658.43691-1-asavkov@redhat.com>
+In-Reply-To: <20240513112658.43691-1-asavkov@redhat.com>
+To: Artem Savkov <asavkov@redhat.com>
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+ bpf@vger.kernel.org, netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+ jstancek@redhat.com
 
 Hello:
 
 This patch was applied to bpf/bpf-next.git (master)
 by Andrii Nakryiko <andrii@kernel.org>:
 
-On Thu, 16 May 2024 12:54:11 +0530 you wrote:
-> The original function call passed size of smap->bucket before the number of
-> buckets which raises the error 'calloc-transposed-args' on compilation.
+On Mon, 13 May 2024 13:26:58 +0200 you wrote:
+> With pre-generated vmlinux.h there is no dependency on neither vmlinux
+> nor bootstrap bpftool. Define dependencies separately for both modes.
+> This avoids needless rebuilds in some corner cases.
 > 
-> Signed-off-by: Mohammad Shehar Yaar Tausif <sheharyaar48@gmail.com>
-> ---
->  kernel/bpf/bpf_local_storage.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+> Suggested-by: Jan Stancek <jstancek@redhat.com>
+> Signed-off-by: Artem Savkov <asavkov@redhat.com>
+> 
+> [...]
 
 Here is the summary with links:
-  - bpf: fix order of args in call to bpf_map_kvcalloc
-    https://git.kernel.org/bpf/bpf-next/c/71ed6c266348
+  - [bpf-next] bpftool: fix make dependencies for vmlinux.h
+    https://git.kernel.org/bpf/bpf-next/c/83eea61776c9
 
 You are awesome, thank you!
 -- 
