@@ -1,45 +1,43 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4C181AAA5
-	for <bpf@vger.kernel.org>; Fri, 17 May 2024 07:57:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7379A20312
+	for <bpf@vger.kernel.org>; Fri, 17 May 2024 07:57:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715932627; cv=none; b=r1lD3010FxjiIVaEXlZwdL52geauslnmCNvJ3A7O3zcVYn3gPR1KKmiyHLccAbBDc8lad0Elqe3yOeKSbMyQVbsgxaT75qhOx9Tsg8imxE49saWNABWA/SFHsl3GrUwEkgWzSMBJ3upju1nWS3DiiGY+uRLMwwnvBgas8GTgVHs=
+	t=1715932628; cv=none; b=HE4eQPhJkHt6BmYdX9Hin4be28uF6BMda4ucT+UVf5wsrdIv4YSahlYexp6YUUa4Z9aFzNXPvBNXo23X3QDgOOWIk7EgCMnnni7R+R7cQjAuiN76/tWlCi7CoQcXvqNleFaSoNMk4OAeaaKb1JzTK5PZClnQorZHNQ+z/nCLuv0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715932627; c=relaxed/simple;
-	bh=0Zhpfwr2bblfm7k3g5cvVUI3dQpNdm2TqtvTSVzfgYM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=jhYE6Kfy09ngUjB8G7DClcExN9my4gUjWb2cCN8aPw6hiaE2ByZrTGNW3Yut4eXzN3CgQoOXlyCspmpz/EJilYYESrdzZ3B+o8zGcdmxw1m6Z3NzyV+ExNUStxoiSQTRlEJfCaawhh8ws0pMbBelXVKfGTTkQt0yziGIBuRBe9w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=JVAjOPT0; arc=none smtp.client-ip=170.10.129.124
+	s=arc-20240116; t=1715932628; c=relaxed/simple;
+	bh=9avGdIlGtkZAGVzBwd2BMqnvGgEnWpUrqWA8fO7+YJE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ks1ah8OJzhp5aKtOsjkBW3FfsyeOuqkk5mu/dX75iexPTsEy+t43RIiKuym0DbUTwEHUms9kh3y2+2i6u8XdIxQ7vRw5o8K+l+RzOO2amCWiX5GCSztln6MldSK6Vxu0TG3DAnM6ApFxw5Xa+5fOHTddDrpLQh7ly5fpupPa7vg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=FiATHhCx; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="JVAjOPT0"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="FiATHhCx"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1715932624;
+	s=mimecast20190719; t=1715932625;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=5CsmDbbLDOx1vnhJg69VuCy0uaob3Dg5hNF61pmV/Vg=;
-	b=JVAjOPT08W1HIekJDx0EewE6euPdT7iAlrNNfBBrwuZVl1TBnOl5yFE1nw/YWOfNRGKT2B
-	90INl4S7HYfYinlmMMkm6xKss1iqBmRjaUkqUqgBaf5yzaytLtFMqL0Nn7jyDPLiKMVutd
-	1LZf3wYI3g5rr608ib4C2Swzs2gLo18=
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=Z28RdGIa/jW2W1Epz9g0bmIp4vT2NvFeG3FHmL5nW28=;
+	b=FiATHhCxa6kE5FKqUIOhisCyZavQpFjv+y7w3QT+3uL15Uxiq4n4uiNeIbdPXwhQqNAU8U
+	j/xH+CQCDnMpjIY/WjISNjjDELUUx8V+loDFnBYsKmXlEZhL8Ci2A0KDxxaOlAA/lL8Sg0
+	HZV2XGUudiSjDawSANHW/eOi5e+j+7Y=
 Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
  [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-315-HFKoaS62NtCAXc51ApmXvA-1; Fri, 17 May 2024 03:57:01 -0400
-X-MC-Unique: HFKoaS62NtCAXc51ApmXvA-1
+ us-mta-58-QBvbkxxENZiprvS6x8DnGQ-1; Fri, 17 May 2024 03:56:57 -0400
+X-MC-Unique: QBvbkxxENZiprvS6x8DnGQ-1
 Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id DAEC5802079;
-	Fri, 17 May 2024 07:57:00 +0000 (UTC)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4D06F101A525;
+	Fri, 17 May 2024 07:56:57 +0000 (UTC)
 Received: from alecto.usersys.redhat.com (unknown [10.43.17.36])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 4E28F740F;
-	Fri, 17 May 2024 07:56:59 +0000 (UTC)
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 52D6F51BF;
+	Fri, 17 May 2024 07:56:55 +0000 (UTC)
 From: Artem Savkov <asavkov@redhat.com>
 To: Michael Ellerman <mpe@ellerman.id.au>,
 	Nicholas Piggin <npiggin@gmail.com>,
@@ -53,11 +51,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	netdev@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Artem Savkov <asavkov@redhat.com>
-Subject: [PATCH 2/5] powerpc64/bpf: jit support for unconditional byte swap
-Date: Fri, 17 May 2024 09:56:47 +0200
-Message-ID: <20240517075650.248801-3-asavkov@redhat.com>
-In-Reply-To: <20240517075650.248801-1-asavkov@redhat.com>
-References: <20240517075650.248801-1-asavkov@redhat.com>
+Subject: [PATCH 0/5] powerpc64/bpf: jit support for cpuv4 instructions
+Date: Fri, 17 May 2024 09:56:45 +0200
+Message-ID: <20240517075650.248801-1-asavkov@redhat.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -67,32 +63,21 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.5
 
-Add jit support for unconditional byte swap. Tested using BSWAP tests
-from test_bpf module.
+Add support for recently added cpuv4 instructions fixing test_bpf module
+failures. This is mostly based on 8ecf3c1dab1c6 (powerpc/bpf/32: Fix
+failing test_bpf tests, 2024-03-05)
 
-Signed-off-by: Artem Savkov <asavkov@redhat.com>
----
- arch/powerpc/net/bpf_jit_comp64.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Artem Savkov (5):
+  powerpc64/bpf: jit support for 32bit offset jmp instruction
+  powerpc64/bpf: jit support for unconditional byte swap
+  powerpc64/bpf: jit support for sign extended load
+  powerpc64/bpf: jit support for sign extended mov
+  powerpc64/bpf: jit support for signed division and modulo
 
-diff --git a/arch/powerpc/net/bpf_jit_comp64.c b/arch/powerpc/net/bpf_jit_comp64.c
-index 3071205782b15..97191cf091bbf 100644
---- a/arch/powerpc/net/bpf_jit_comp64.c
-+++ b/arch/powerpc/net/bpf_jit_comp64.c
-@@ -699,11 +699,12 @@ int bpf_jit_build_body(struct bpf_prog *fp, u32 *image, u32 *fimage, struct code
- 		 */
- 		case BPF_ALU | BPF_END | BPF_FROM_LE:
- 		case BPF_ALU | BPF_END | BPF_FROM_BE:
-+		case BPF_ALU64 | BPF_END | BPF_FROM_LE:
- #ifdef __BIG_ENDIAN__
- 			if (BPF_SRC(code) == BPF_FROM_BE)
- 				goto emit_clear;
- #else /* !__BIG_ENDIAN__ */
--			if (BPF_SRC(code) == BPF_FROM_LE)
-+			if (BPF_CLASS(code) == BPF_ALU && BPF_SRC(code) == BPF_FROM_LE)
- 				goto emit_clear;
- #endif
- 			switch (imm) {
--- 
+ arch/powerpc/include/asm/ppc-opcode.h |   2 +
+ arch/powerpc/net/bpf_jit_comp64.c     | 118 +++++++++++++++++++-------
+ 2 files changed, 90 insertions(+), 30 deletions(-)
+
+--
 2.45.0
 
