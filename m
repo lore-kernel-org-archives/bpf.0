@@ -1,151 +1,150 @@
-Received: from mail.ietf.org (mail.ietf.org [50.223.129.194])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F16413DBAC
-	for <bpf@vger.kernel.org>; Fri, 17 May 2024 17:16:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=50.223.129.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B50213E028;
+	Fri, 17 May 2024 17:36:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715966214; cv=none; b=twBKjxnHxxnYZHgrMfPvb9HxwRdom45MkJELgfv8WlraPoCwiGRQgeyl7ulTV8dnw2FdfCFjM6ZFKoJubauPUGmZPhJjjlupUrjQPjzC1Fbun1mzR61jbrXl4fQatM9JcGWoLVoAbRKMXQay23zNDXQ5usvcUr4f7y+2qKH6OCA=
+	t=1715967401; cv=none; b=VGD+W1XxUso2VlvuOvz4lxOKEOG1+CgMdYH21RRFwrGzncpE6uX2rvfoTeeEHPH29OY+v7d//yMlX7Zpm1LmdWg/0Q0Ow6NTNHQM5w2kDcyPbB/vgn1f05c54oSM9ndNq8DwMOIyRgbeC12qwPOBes4JNFpurb5I1nclEbQAOg4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715966214; c=relaxed/simple;
-	bh=NhDDO7dXiqQJB+jJAel1zgsMjyNqf1hpJEh6ag2VeO0=;
-	h=To:References:In-Reply-To:Date:Message-ID:MIME-Version:CC:Subject:
-	 Content-Type:From; b=eBLMlc1L1qH/9xIs1I4SV+ciIwNK+qGQkMspMNQp3ZSNGCHEIKDEmH+yisbVG8LgdiNXjVNKOJauGUNdF4INu6dTKQ3LNlAgfJclLX/dw4n+MxK4t41dknoFu6NkDuW8tAV8Utv1hP+3VLAtQ1tjX9jGw9+T9Fg8SJqJPo/T0Zo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=dmarc.ietf.org; spf=pass smtp.mailfrom=ietf.org; dkim=pass (1024-bit key) header.d=ietf.org header.i=@ietf.org header.b=bZWIi4y+; dkim=fail (1024-bit key) header.d=ietf.org header.i=@ietf.org header.b=YnvUmkY8 reason="signature verification failed"; dkim=fail (2048-bit key) header.d=googlemail.com header.i=@googlemail.com header.b=h0kfOKvp reason="signature verification failed"; arc=none smtp.client-ip=50.223.129.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=dmarc.ietf.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ietf.org
+	s=arc-20240116; t=1715967401; c=relaxed/simple;
+	bh=l7K75G8hEZf6Nf3Gd+zb5LouEwarRLauIdJPMoFivlA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=HHDU2a+DAWtPRcmt4C6PNdPbseXKcMelAX2wzvQMYCRqxHPakEdRVvQff3WPguwpodBLpV7fPbdCvZ94NfW0WSvQDuc0Gmbi/M37I2hQcmH6pFp7wlAmn5n+co7hQSDkGkpVMKwa0McBxDQvO/xYNevxFiLG7sf4OWnflrwmeZQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=emn3CkST; arc=none smtp.client-ip=209.85.214.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ietf.org header.i=@ietf.org header.b="bZWIi4y+";
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=ietf.org header.i=@ietf.org header.b="YnvUmkY8";
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=googlemail.com header.i=@googlemail.com header.b="h0kfOKvp"
-Received: from ietfa.amsl.com (localhost [IPv6:::1])
-	by ietfa.amsl.com (Postfix) with ESMTP id 84346C169407
-	for <bpf@vger.kernel.org>; Fri, 17 May 2024 10:16:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ietf.org; s=ietf1;
-	t=1715966212; bh=NhDDO7dXiqQJB+jJAel1zgsMjyNqf1hpJEh6ag2VeO0=;
-	h=To:References:In-Reply-To:Date:CC:Subject:List-Id:List-Archive:
-	 List-Help:List-Owner:List-Post:List-Subscribe:List-Unsubscribe:
-	 From;
-	b=bZWIi4y+69qUbosuqDQG8z7PXTL733YIP14UoEPYbYLeQBYChkny8EyIB+z9CArpN
-	 3hG9hwGW+KgHIIIBHxztFV/G5SOtVnRV2wDNBeeuSZ9dkt6sdVvWEKaIaj0l1fb2NA
-	 NKtYRnXVlvsTe1iQr8KTDILzYrru277+QOnFkrEc=
-Received: from ietfa.amsl.com (localhost [IPv6:::1])
- by ietfa.amsl.com (Postfix) with ESMTP id C9CBEC1D5C76
- for <bpf@vger.kernel.org>; Fri, 17 May 2024 10:16:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ietf.org; s=ietf1;
- t=1715966211; bh=NhDDO7dXiqQJB+jJAel1zgsMjyNqf1hpJEh6ag2VeO0=;
- h=From:To:References:In-Reply-To:Date:CC:Subject:List-Id:
- List-Archive:List-Help:List-Owner:List-Post:List-Subscribe:
- List-Unsubscribe;
- b=YnvUmkY8OH7bZHVtG/tVcycyNswXqUK7dXkCGHzHTVu1LhjJGKszIsqWLIbUPgY+O
- 44YPsFDHaJowaBiNu5UGsRg+5y14An9lVSOhxeAB3kiBqW4NAzyTNJ7Njoe/h1DJPR
- w4umJ8+cPjcX5hvtf6aTYaOpaiI17ZoqtJ7N/B+Y=
-Received: from localhost (localhost [127.0.0.1])
- by ietfa.amsl.com (Postfix) with ESMTP id 35709C151094
- for <bpf@ietfa.amsl.com>; Fri, 17 May 2024 10:16:40 -0700 (PDT)
-X-Virus-Scanned: amavisd-new at amsl.com
-X-Spam-Flag: NO
-X-Spam-Score: -1.845
-X-Spam-Level: 
-Authentication-Results: ietfa.amsl.com (amavisd-new); dkim=pass (2048-bit key)
- header.d=googlemail.com
-Received: from mail.ietf.org ([50.223.129.194])
- by localhost (ietfa.amsl.com [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id NkTFR4a9bOOq for <bpf@ietfa.amsl.com>;
- Fri, 17 May 2024 10:16:36 -0700 (PDT)
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com
- [IPv6:2607:f8b0:4864:20::62a])
- (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
- key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest
- SHA256) (No client certificate requested)
- by ietfa.amsl.com (Postfix) with ESMTPS id 64200C151993
- for <bpf@ietf.org>; Fri, 17 May 2024 10:16:36 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id
- d9443c01a7336-1ed96772f92so15513615ad.0
- for <bpf@ietf.org>; Fri, 17 May 2024 10:16:36 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="emn3CkST"
+Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-1ee954e0aa6so16680785ad.3;
+        Fri, 17 May 2024 10:36:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=googlemail.com; s=20230601; t=1715966195; x=1716570995;
- darn=ietf.org;
- h=thread-index:content-language:content-transfer-encoding
- :mime-version:message-id:date:subject:in-reply-to:references:cc:to
- :from:from:to:cc:subject:date:message-id:reply-to;
- bh=BnExOqV+7uRXHFu/y7RSrNtAFBzF2jJxaME1kcwkiDw=;
- b=h0kfOKvp+duPClAluw+LS1+QnzYc5KoFsHEggTqAZP/8qjdxrgSc5g46LEAgBLDmGW
- I6ppnevBOpa7F9wnfWA7sL1t70CI0mksgHuOAjcimMVuNTYDpuz55vlijyUx1XNwYzzy
- 3tE2e2IYS6pPYoc/1ITgflVfRSrXDyMK17brd0mCtGsU6BmxQ3UdUwlCM6kVFCCiSqvP
- iPlh61f3pT+dYHY/oRwdI405cCpoamI66spML9gcJzhwrFGyIa1Csm4Rw/zO55Z6Fve4
- P6ts84YZhuZia8LRuufAGWDlUZ8SqoNc83F9HTPdnCmiaR9mh5Fn5bjz0u84fMC4lFzf
- U/Vw==
+        d=gmail.com; s=20230601; t=1715967399; x=1716572199; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=rzMfxbAB8QJEcJdIySGROcUOqAKXWq8nqUdcExbi1Zk=;
+        b=emn3CkSTmGwb7Ev6REZ9Z3U3XD4Y+jPjdTTKRrd1xunPWgI+cGM6iP3TELOI5V8ATa
+         VbiGe+xcAirEDS5iorMu2B+VEBPivgYYBJAFyyk/dtcE+BdDAEcBR/OSDeMAia+M02aV
+         JtJr53ZjOlMBaf51DPBBJSXIlVEj8/ta7pTQaBfTGVSwemtnu9tMYnJUuHNl2FkBsWa2
+         RY29x4C0oql3h5xd/BScqyiM9KMAjCxcwhA5cszmGMdkeAyAQyWwOl4SEGtmK+Cfk17e
+         ZUmUwjzXpEuOreMImVvNFBtQTMD0YnZzxGLGWYMvA88gK3n/MpOcCwIl6WzZ4yooz3JS
+         JzXA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1715966195; x=1716570995;
- h=thread-index:content-language:content-transfer-encoding
- :mime-version:message-id:date:subject:in-reply-to:references:cc:to
- :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=BnExOqV+7uRXHFu/y7RSrNtAFBzF2jJxaME1kcwkiDw=;
- b=J+EvKGkYj6iYcjaDOlsKz2W3KlLS8RelHZgEhn65vakcudttAros5Rnm+XbxIM/eeV
- m5ryhrtzzSvKYmNrr0G1bQ/7+mzGNBGAt2rJQBn9y2a4gVdqrz31awxSX4KiSrNbaGb0
- 7+nHricXWhq10U3ELuu9FexmlPcVTs8sTw8J/QtIz/u7S/bIoFJVBiFSatueDHiH/9lL
- +2BRPqPOO2Y8mHD+qP3VGWAluGYMOmDXHYdmDy857HEFB9TqtCHwYUUJRx4oigJcJIN+
- wo8/VFkPnoc/wNo0S32hbtK6EoKkBm6RuwTgGyv9LE5HDr1EXDIbDkPB85QrPaf7VEUz
- AxfQ==
-X-Gm-Message-State: AOJu0YzTdiEDoufH4pyQJn/iolTAMsA61JeNzCY7xYuDSYsCc/1AP7Tn
- 7SQY8y6byyps7XOxuV5Os6I8b2b+B1IkEJPmQGrsFjLIUVTYfBJFXXyJRg==
-X-Google-Smtp-Source: AGHT+IGpjVtNLxkEf8zt1iFoHwywFhxbIYluUtfkvFJ0mJcM41xIhJ56sgOXLjB4ZF9DoAbBCT3Mpw==
-X-Received: by 2002:a17:903:2404:b0:1e2:c8f9:4cd7 with SMTP id
- d9443c01a7336-1ef44059612mr184043395ad.64.1715966195176;
- Fri, 17 May 2024 10:16:35 -0700 (PDT)
-Received: from ArmidaleLaptop (c-67-170-74-237.hsd1.wa.comcast.net.
- [67.170.74.237]) by smtp.gmail.com with ESMTPSA id
- d9443c01a7336-1ef0bf31420sm159465345ad.172.2024.05.17.10.16.33
- (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
- Fri, 17 May 2024 10:16:34 -0700 (PDT)
-X-Google-Original-From: <dthaler1968@gmail.com>
-To: "'Dave Thaler'" <dthaler1968@googlemail.com>,
-	<bpf@vger.kernel.org>
-References: <20240517165855.4688-1-dthaler1968@gmail.com>
-In-Reply-To: <20240517165855.4688-1-dthaler1968@gmail.com>
-Date: Fri, 17 May 2024 10:16:32 -0700
-Message-ID: <05d601daa87d$f7a3daa0$e6eb8fe0$@gmail.com>
+        d=1e100.net; s=20230601; t=1715967399; x=1716572199;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=rzMfxbAB8QJEcJdIySGROcUOqAKXWq8nqUdcExbi1Zk=;
+        b=tRaBInC5CBZVJiTyNhPeAMF0Mv8ZyhDngT/Ke4lsBz6dnWLTVbrxiYmDGKR3474tHa
+         Jw0S2Pd1w9vB5TttyIKUZ3vkElFqN8D82iwb6kL7vCXbWz+ZO+kOgSp2q2lMeYG13wJ3
+         Pd4jLhwNb/5j//D5V0kA6eEHTeRPM+KlHNN2ZXDOKj2sqnyMigDYM3Yyxzog0n99DW50
+         DbdwYUgj+mBGDnl1Wi3MfB/KObA9dlYM5hJ0VYDOGEqfhhsM9xkE6J3r09MMgCufkcSJ
+         MFPDLIL9Qyg8pNl52R6ymP0RQyefKT1UiQ+E7Y0jutAqKo/SZ6YeNcoI1ileC9aAa4W0
+         uyJQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUeikZ+5A7mGmqeVlRxUOHe3Z4BVx7A6SdRIJ9KlcdOS9QSNvCDsre7aHGEDTt/hTkAM3qO0uM2xeP+jtEHZh5JsSeK9A/+tFrYQA1Gt+sOL3ewNO6LlYK9y7DD7mpAtqpfD7DjXB75ufvKHVU6kM3a/elOuYDfutBUvo4a9bI4BCb2VDcyzEXzDexUc9t0in/T8C2XOhPKn7wWpdtpjhPEZSUvfBbj5JIuV5SOt4ozapoAEBa6p9eoNzUqVSV+FTR0IAeRERSnOL6XqGk495fk7J/QsGArESB7IkyWGLl2UfJVr+STIxS8eHdJJiLcNAzso4UUQBPch6E8dfNENIPvXxQAsave+ZjX9aqXjIT96Hz/aHminfcbngd99gozkR8JcHcG37i5SZidszxbbVcf9ugBd6iBJBSvP3YPM6hIvwhrKlXpceN2VyhqUDGta0Y2tQ8Y92YBThBW9tUwaEcwpwLLtnkcoENUdMSzNo1PisKVaRS0s0oNoAWHaeTm033idWAzW8Z6AMcGqpdUZef30iZpnny7DOCCRdx6bdPIPfc8m8lwMbo6DXkdKIQnaqlplZsK6CLKNgppIYSJ7U793bTJTH44UOdcWLKNUTDeK1XJMU+un4iEAjTM4sbk5xfiplNYftumz3+FD+ZUcLZWXKJBMvMx7eT5NA18jT46CIW4oBwdkZsngjutYGEYxbL/3oE5mRVrHB1dgdQB0YljgIrh2vfVWMnSdGUfmhbsUn3exZybXMRR9PJNk7TMh60ZKjaGM3YyEgvEgQVWpZ4sxK1fHIUzkaJHi56sH9Vb1HRQuX6pNOHreK/nEi3g6aW7gIA7T1ww4N6bLeNtZRSJMBfQ7RJIfpa4nB66EJI9p+xXnabbY1FucmTW2fAhf83tzqzRTLEML3+RBqx6xPn5uR2l/K2m0V/YFHhfHKN5kNYIOcc0Y+KpHUPL2A==
+X-Gm-Message-State: AOJu0YyVJKJDHI54++5KLrCtRmLug9WO1yHYT9xtbae1yHeJBFY7OAOO
+	4meyTffhXTst2nI7rjVckVaPWZ7pOCdtS8zLnwvw9MCn/zh6jfsS
+X-Google-Smtp-Source: AGHT+IHJ9PZtASiLb9HJkYrHy1DRhdQlVEuKbRr0NYIRv4Tx+av91BIA0wx1gBcIQQlm9sd2COIQnQ==
+X-Received: by 2002:a17:90a:9606:b0:2b9:a299:928e with SMTP id 98e67ed59e1d1-2b9a29994c9mr10436893a91.24.1715967398710;
+        Fri, 17 May 2024 10:36:38 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2b67105666csm15749258a91.8.2024.05.17.10.36.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 May 2024 10:36:38 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Fri, 17 May 2024 10:36:37 -0700
+From: Guenter Roeck <linux@roeck-us.net>
+To: Steven Rostedt <rostedt@goodmis.org>
+Cc: LKML <linux-kernel@vger.kernel.org>,
+	Linux trace kernel <linux-trace-kernel@vger.kernel.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Linus Torvalds <torvalds@linux-foundation.org>,
+	linuxppc-dev@lists.ozlabs.org, kvm@vger.kernel.org,
+	linux-block@vger.kernel.org, linux-cxl@vger.kernel.org,
+	linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+	amd-gfx@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+	intel-xe@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+	freedreno@lists.freedesktop.org, virtualization@lists.linux.dev,
+	linux-rdma@vger.kernel.org, linux-pm@vger.kernel.org,
+	iommu@lists.linux.dev, linux-tegra@vger.kernel.org,
+	netdev@vger.kernel.org, linux-hyperv@vger.kernel.org,
+	ath10k@lists.infradead.org, linux-wireless@vger.kernel.org,
+	ath11k@lists.infradead.org, ath12k@lists.infradead.org,
+	brcm80211@lists.linux.dev, brcm80211-dev-list.pdl@broadcom.com,
+	linux-usb@vger.kernel.org, linux-bcachefs@vger.kernel.org,
+	linux-nfs@vger.kernel.org, ocfs2-devel@lists.linux.dev,
+	linux-cifs@vger.kernel.org, linux-xfs@vger.kernel.org,
+	linux-edac@vger.kernel.org, selinux@vger.kernel.org,
+	linux-btrfs@vger.kernel.org, linux-erofs@lists.ozlabs.org,
+	linux-f2fs-devel@lists.sourceforge.net, linux-hwmon@vger.kernel.org,
+	io-uring@vger.kernel.org, linux-sound@vger.kernel.org,
+	bpf@vger.kernel.org, linux-wpan@vger.kernel.org,
+	dev@openvswitch.org, linux-s390@vger.kernel.org,
+	tipc-discussion@lists.sourceforge.net,
+	Julia Lawall <Julia.Lawall@inria.fr>
+Subject: Re: [PATCH] tracing/treewide: Remove second parameter of
+ __assign_str()
+Message-ID: <5080f4c5-e0b3-4c2e-9732-f673d7e6ca66@roeck-us.net>
+References: <20240516133454.681ba6a0@rorschach.local.home>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Mailer: Microsoft Outlook 16.0
-Content-Language: en-us
-Thread-Index: AQMNxtSz5Xxdo4l4z3k03OfsZBHpa681bcTw
-Message-ID-Hash: JFKLYMP7RLZWFPSEDFF4MPEM3EWO5P2U
-X-Message-ID-Hash: JFKLYMP7RLZWFPSEDFF4MPEM3EWO5P2U
-X-MailFrom: dthaler1968@googlemail.com
-X-Mailman-Rule-Misses: dmarc-mitigation; no-senders; approved; emergency;
- loop; banned-address; member-moderation; nonmember-moderation; administrivia; 
- implicit-dest; max-recipients; max-size; news-moderation; no-subject;
- digests; suspicious-header
-CC: bpf@ietf.org
-X-Mailman-Version: 3.3.9rc4
-Precedence: list
-Subject: =?utf-8?q?=5BBpf=5D_Re=3A_=5BPATCH_bpf-next=5D_bpf=2C_docs=3A_Use_RFC_2119_l?=
- =?utf-8?q?anguage_for_ISA_requirements?=
-Archived-At: <https://mailarchive.ietf.org/arch/msg/bpf/WZbjxWl61Va5uWnpG-E7xeop5aY>
-List-Archive: <https://mailarchive.ietf.org/arch/browse/bpf>
-List-Help: <mailto:bpf-request@ietf.org?subject=help>
-List-Owner: <mailto:bpf-owner@ietf.org>
-List-Post: <mailto:bpf@ietf.org>
-X-Mailman-Copy: yes
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
-X-Original-From: dthaler1968@googlemail.com
-From: dthaler1968=40googlemail.com@dmarc.ietf.org
-Message-ID: <20240517171632.81Cc_ltHuviDVACcuPYKLwDnTdUaliRwZI-H8mc_wQU@z>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240516133454.681ba6a0@rorschach.local.home>
 
-Wy4uLl0NCj4gIFBsYXRmb3JtcyB0aGF0IHN1cHBvcnQgdGhlIEJQRiBUeXBlIEZvcm1hdCAoQlRG
-KSBzdXBwb3J0IGlkZW50aWZ5aW5nICBhDQpoZWxwZXINCj4gZnVuY3Rpb24gYnkgYSBCVEYgSUQg
-ZW5jb2RlZCBpbiB0aGUgJ2ltbScgZmllbGQsIHdoZXJlIHRoZSBCVEYgSUQNCi1pZGVudGlmaWVz
-IHRoZQ0KPiBoZWxwZXIgbmFtZSBhbmQgdHlwZS4NCj4gK2lkZW50aWZpZXMgdGhlIGhlbHBlciBu
-YW1lIGFuZCB0eXBlLiAgRnVydGhlciBkb2N1bWVudGF0aW9uIG9mIEJURiBpcw0KPiArb3V0c2lk
-ZSB0aGUgc2NvcGUgb2YgdGhpcyBkb2N1bWVudCBhbmQgaXMgbGVmdCBmb3IgZnV0dXJlIHdvcmsu
-DQoNClBlcmhhcHMgd2Ugc2hvdWxkIGluZm9ybWF0aXZlbHkgcmVmZXJlbmNlDQpodHRwczovL3d3
-dy5rZXJuZWwub3JnL2RvYy9odG1sL2xhdGVzdC9icGYvYnRmLmh0bWwgZm9yIG5vdz8NCg0KRGF2
-ZQ0KDQotLSAKQnBmIG1haWxpbmcgbGlzdCAtLSBicGZAaWV0Zi5vcmcKVG8gdW5zdWJzY3JpYmUg
-c2VuZCBhbiBlbWFpbCB0byBicGYtbGVhdmVAaWV0Zi5vcmcK
+On Thu, May 16, 2024 at 01:34:54PM -0400, Steven Rostedt wrote:
+> From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+> 
+> [
+>    This is a treewide change. I will likely re-create this patch again in
+>    the second week of the merge window of v6.10 and submit it then. Hoping
+>    to keep the conflicts that it will cause to a minimum.
+> ]
+> 
+> With the rework of how the __string() handles dynamic strings where it
+> saves off the source string in field in the helper structure[1], the
+> assignment of that value to the trace event field is stored in the helper
+> value and does not need to be passed in again.
+> 
+> This means that with:
+> 
+>   __string(field, mystring)
+> 
+> Which use to be assigned with __assign_str(field, mystring), no longer
+> needs the second parameter and it is unused. With this, __assign_str()
+> will now only get a single parameter.
+> 
+> There's over 700 users of __assign_str() and because coccinelle does not
+> handle the TRACE_EVENT() macro I ended up using the following sed script:
+> 
+>   git grep -l __assign_str | while read a ; do
+>       sed -e 's/\(__assign_str([^,]*[^ ,]\) *,[^;]*/\1)/' $a > /tmp/test-file;
+>       mv /tmp/test-file $a;
+>   done
+> 
+> I then searched for __assign_str() that did not end with ';' as those
+> were multi line assignments that the sed script above would fail to catch.
+> 
+
+Building csky:allmodconfig (and others) ... failed
+--------------
+Error log:
+In file included from include/trace/trace_events.h:419,
+                 from include/trace/define_trace.h:102,
+                 from drivers/cxl/core/trace.h:737,
+                 from drivers/cxl/core/trace.c:8:
+drivers/cxl/core/./trace.h:383:1: error: macro "__assign_str" passed 2 arguments, but takes just 1
+
+This is with the patch applied on top of v6.9-8410-gff2632d7d08e.
+So far that seems to be the only build failure.
+Introduced with commit 6aec00139d3a8 ("cxl/core: Add region info to
+cxl_general_media and cxl_dram events"). Guess we'll see more of those
+towards the end of the commit window.
+
+Guenter
