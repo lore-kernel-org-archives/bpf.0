@@ -1,28 +1,27 @@
 Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9078A2F24;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 907FF10A39;
 	Sat, 18 May 2024 09:28:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716024500; cv=none; b=f3ox/cR1r6gK48mE1nZcaW1IWvQO8qSGG+VwcIsK51yGu0CElLib9Dx2p6MwcfTEW2jpAz8jueDiZ+4XgU6lcKDLcbDz0wS7ciia/LxoUQxERcg1frVHIUr2UkL4AXLEKdwY0lR1Uu+4GOSiIlLB10VXd/2MtX3UUkdTlzUwrdQ=
+	t=1716024501; cv=none; b=QxGAL9cegqXG9LLvS/TbcOfV1V4verH3nNzV8HD+hnvGHa4PIEbO6SVc2G+HNq95CSUpzqMqBqNXwg636KK+duHEJ26egTK7/uiEcurQhZxbuHc6ffkURDq40MDQ66j+ZHYw3gGWkyJIh8CByf8uqew2VKXJ+b+JuksjNY2RRTM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716024500; c=relaxed/simple;
-	bh=Qj9srUgJfDaLZ1gYdyzhP8Sp4CunC6bd3aUfaVliQAc=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=T/e31AaMVvyXb0ZYG3/5EwCS4PR59wBCNhxArrqI4ESUckFe6Gd9fdd5auFQrSLIlTiKVO9GeLyz00X1AtEqItShAc0S0ChM976+H6ImEFob8pu5f6mdwkqmaoPtoKkekXNt+7iG9gSLvCCp2bbQtiuW3xUlB5wUd8CqfPOa2BY=
+	s=arc-20240116; t=1716024501; c=relaxed/simple;
+	bh=KldK1Do+NzU9yPXnEUpSwUlsweS5dKV8/imy6lmdY0I=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=OItUOwa2WO4IMoeUT7oLEzycIYJxnvVXOGX5rm8WTTEXhEwp1mOO45iO7SBm8Oh87cCm+Xw2H5VyqDOohfJn10fMgyhsMq/Hq00ZyBdib+PldXsCYvb70DzvnBqabrAVNrE8g30uRuyYmWBk6i16J/WHVz08qTykZ2zGkKzRous=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.235])
-	by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4VhJQr3dyPz4f3lV7;
+Received: from mail.maildlp.com (unknown [172.19.163.216])
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4VhJQr22G4z4f3lVg;
 	Sat, 18 May 2024 17:28:04 +0800 (CST)
 Received: from mail02.huawei.com (unknown [10.116.40.75])
-	by mail.maildlp.com (Postfix) with ESMTP id C9BFA1A0B58;
+	by mail.maildlp.com (Postfix) with ESMTP id 93DDE1A01B9;
 	Sat, 18 May 2024 17:28:14 +0800 (CST)
 Received: from ultra.huawei.com (unknown [10.90.53.71])
-	by APP2 (Coremail) with SMTP id Syh0CgBnwvWtdEhmbxE_NQ--.58131S4;
-	Sat, 18 May 2024 17:28:14 +0800 (CST)
+	by APP2 (Coremail) with SMTP id Syh0CgBnwvWtdEhmbxE_NQ--.58131S2;
+	Sat, 18 May 2024 17:28:13 +0800 (CST)
 From: Pu Lehui <pulehui@huaweicloud.com>
 To: bpf@vger.kernel.org,
 	linux-riscv@lists.infradead.org,
@@ -44,115 +43,66 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Puranjay Mohan <puranjay@kernel.org>,
 	Palmer Dabbelt <palmer@dabbelt.com>,
 	Pu Lehui <pulehui@gmail.com>
-Subject: [PATCH bpf-next v2 2/3] riscv, bpf: Fix out-of-bounds issue when preparing trampoline image
-Date: Sat, 18 May 2024 09:29:16 +0000
-Message-Id: <20240518092917.2771703-3-pulehui@huaweicloud.com>
+Subject: [PATCH bpf-next v2 0/3] Use bpf_prog_pack for RV64 bpf trampoline
+Date: Sat, 18 May 2024 09:29:14 +0000
+Message-Id: <20240518092917.2771703-1-pulehui@huaweicloud.com>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240518092917.2771703-1-pulehui@huaweicloud.com>
-References: <20240518092917.2771703-1-pulehui@huaweicloud.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:Syh0CgBnwvWtdEhmbxE_NQ--.58131S4
-X-Coremail-Antispam: 1UD129KBjvJXoWxAw47ZF18Kw1kAr43XF1UZFb_yoW5Ar4kpF
-	48Cw15ur4kXr1fK34kJw4UXr1akayvvasF9FZxGrZIya4FqrZxGr1rtw4akFWFkr95uF4r
-	JFsFvFn8u3WDA3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUBFb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUXw
-	A2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
-	w2x7M28EF7xvwVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
-	W8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v2
-	6rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMc
-	Ij6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_
-	Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij64
-	vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8G
-	jcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE2I
-	x0cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26F4j6r4UJwCI42IY6xAI
-	w20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x
-	0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZFpf9x07UHuWLUUUUU=
+X-CM-TRANSID:Syh0CgBnwvWtdEhmbxE_NQ--.58131S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7Kr43KF1rCFy8Ww4xtw1DZFb_yoW8GFy3pF
+	43Ww13Cw1UXr9rWws3W3yUZF1Sqw48X347GrnrJ34rCF4YvFW8urnY9FWFvFyrWF95C3W0
+	yr1j9Fy5u3WUZ37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUkIb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I
+	0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+	x7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+	0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IY
+	c2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s
+	026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF
+	0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0x
+	vE42xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I8E
+	87Iv6xkF7I0E14v26r4UJVWxJrUvcSsGvfC2KfnxnUUI43ZEXa7IUbG2NtUUUUU==
 X-CM-SenderInfo: psxovxtxl6x35dzhxuhorxvhhfrp/
 
-From: Pu Lehui <pulehui@huawei.com>
+We used bpf_prog_pack to aggregate bpf programs into huge page to
+relieve the iTLB pressure on the system. We can apply it to bpf
+trampoline, as Song had been implemented it in core and x86 [0]. This
+patch is going to use bpf_prog_pack to RV64 bpf trampoline. Since Song
+and Puranjay have done a lot of work for bpf_prog_pack on RV64,
+implementing this function will be easy. But one thing to mention is
+that emit_call in RV64 will generate the maximum number of instructions
+during dry run, but during real patching it may be optimized to 1
+instruction due to distance. This is no problem as it does not overflow
+the allocated RO image.
 
-We get the size of the trampoline image during the dry run phase and
-allocate memory based on that size. The allocated image will then be
-populated with instructions during the real patch phase. But after
-commit 26ef208c209a ("bpf: Use arch_bpf_trampoline_size"), the `im`
-argument is inconsistent in the dry run and real patch phase. This may
-cause emit_imm in RV64 to generate a different number of instructions
-when generating the 'im' address, potentially causing out-of-bounds
-issues. Let's emit the maximum number of instructions for the "im"
-address during dry run to fix this problem.
+Tests about regular trampoline and struct_ops trampoline have passed, as
+well as "test_verifier" with no failure cases.
 
-Fixes: 26ef208c209a ("bpf: Use arch_bpf_trampoline_size")
-Signed-off-by: Pu Lehui <pulehui@huawei.com>
----
- arch/riscv/net/bpf_jit_comp64.c | 18 +++++++++++++-----
- 1 file changed, 13 insertions(+), 5 deletions(-)
+Link: https://lore.kernel.org/all/20231206224054.492250-1-song@kernel.org [0]
 
-diff --git a/arch/riscv/net/bpf_jit_comp64.c b/arch/riscv/net/bpf_jit_comp64.c
-index 79a001d5533e..212b015e09b7 100644
---- a/arch/riscv/net/bpf_jit_comp64.c
-+++ b/arch/riscv/net/bpf_jit_comp64.c
-@@ -16,6 +16,8 @@
- #include "bpf_jit.h"
- 
- #define RV_FENTRY_NINSNS 2
-+/* imm that allows emit_imm to emit max count insns */
-+#define RV_MAX_COUNT_IMM 0x7FFF7FF7FF7FF7FF
- 
- #define RV_REG_TCC RV_REG_A6
- #define RV_REG_TCC_SAVED RV_REG_S6 /* Store A6 in S6 if program do calls */
-@@ -915,7 +917,7 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tramp_image *im,
- 		orig_call += RV_FENTRY_NINSNS * 4;
- 
- 	if (flags & BPF_TRAMP_F_CALL_ORIG) {
--		emit_imm(RV_REG_A0, (const s64)im, ctx);
-+		emit_imm(RV_REG_A0, ctx->insns ? (const s64)im : RV_MAX_COUNT_IMM, ctx);
- 		ret = emit_call((const u64)__bpf_tramp_enter, true, ctx);
- 		if (ret)
- 			return ret;
-@@ -976,7 +978,7 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tramp_image *im,
- 
- 	if (flags & BPF_TRAMP_F_CALL_ORIG) {
- 		im->ip_epilogue = ctx->insns + ctx->ninsns;
--		emit_imm(RV_REG_A0, (const s64)im, ctx);
-+		emit_imm(RV_REG_A0, ctx->insns ? (const s64)im : RV_MAX_COUNT_IMM, ctx);
- 		ret = emit_call((const u64)__bpf_tramp_exit, true, ctx);
- 		if (ret)
- 			goto out;
-@@ -1045,6 +1047,7 @@ int arch_prepare_bpf_trampoline(struct bpf_tramp_image *im, void *image,
- {
- 	int ret;
- 	struct rv_jit_context ctx;
-+	u32 size = image_end - image;
- 
- 	ctx.ninsns = 0;
- 	/*
-@@ -1058,11 +1061,16 @@ int arch_prepare_bpf_trampoline(struct bpf_tramp_image *im, void *image,
- 	ctx.ro_insns = image;
- 	ret = __arch_prepare_bpf_trampoline(im, m, tlinks, func_addr, flags, &ctx);
- 	if (ret < 0)
--		return ret;
-+		goto out;
- 
--	bpf_flush_icache(ctx.insns, ctx.insns + ctx.ninsns);
-+	if (WARN_ON(size < ninsns_rvoff(ctx.ninsns))) {
-+		ret = -E2BIG;
-+		goto out;
-+	}
- 
--	return ninsns_rvoff(ret);
-+	bpf_flush_icache(image, image_end);
-+out:
-+	return ret < 0 ? ret : size;
- }
- 
- int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
+v2:
+- Emit max number of insns for the "im" addr during dry run to solve OOB issue. (Song)
+
+v1: https://lore.kernel.org/all/20240123103241.2282122-1-pulehui@huaweicloud.com/
+
+Pu Lehui (3):
+  bpf: Use precise image size for struct_ops trampoline
+  riscv, bpf: Fix out-of-bounds issue when preparing trampoline image
+  riscv, bpf: Use bpf_prog_pack for RV64 bpf trampoline
+
+ arch/riscv/net/bpf_jit_comp64.c | 57 +++++++++++++++++++++++----------
+ kernel/bpf/bpf_struct_ops.c     |  2 +-
+ 2 files changed, 41 insertions(+), 18 deletions(-)
+
 -- 
 2.34.1
 
