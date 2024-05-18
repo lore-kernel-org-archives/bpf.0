@@ -1,129 +1,101 @@
-Received: from mail-oi1-f180.google.com (mail-oi1-f180.google.com [209.85.167.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45080637
-	for <bpf@vger.kernel.org>; Sat, 18 May 2024 00:17:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6931C161
+	for <bpf@vger.kernel.org>; Sat, 18 May 2024 00:30:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.145.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715991442; cv=none; b=doz3zlhzK3AIYJJn04lXL3f3t3Cnjag1ePlDY6yJaWgxcDRQ0XfyZS8hc4fqn1K5hBzxO+SEZFO0bCfUERDhYTWT+EBUeXzczOm86UO9Y/DdBWsk/7T++CG/Gw1iDbaofBjw8ahDOeI+2X1dQo5LCrmP44JkR3crvXIuB8A1N34=
+	t=1715992221; cv=none; b=B4c6rwS/mMyyVyIZASbm49fQt1gX/MANABayBEGV2zixKLX1NY0FOpyVzSnJvzW3oTE8uQtl5lkD57pxyVPpNZIn+axUqcY7W7YbAPPxgYNgBMzdo2bKaYHsHAN1I0izB+KANsI1SSx7gNK2PGi+JHK634BSkz2c1tfd4hXz0iw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715991442; c=relaxed/simple;
-	bh=Ns+G8cIhe6RmVb+HVSbykTeCqAmMxrZ97rwaVohwt5Y=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Yz7Xxi8vbPN7QvmBOUz82b/TGka8CmO9uZWzMPFMaF/YkiOkJKTPonJCERLpz1fAZBMD3t2GU4tZrIyraXeHEcgIFbN01f8sl+Axk4CEfQ2YIsyJEv7EtF+yJo2qov3k7p4XPlG0/5aawVIblv7Gv/4RscREfDP3E2AG8WXfFjQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=lMUePSnb; arc=none smtp.client-ip=209.85.167.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+	s=arc-20240116; t=1715992221; c=relaxed/simple;
+	bh=R+t5eDT6OlX3s0V50wx16DQ3NKCxGDeesfI16J18Khk=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=nhJSaaZaf0J9kLMg6hQ+/1rY5eYDmw8XDtJ7GARuxXbdcZd4tMpS802+UrmSSdFC/BAWYZ+MiQRG10kMprguLU32XGAa8gngFvnfE0IhNfb77oGeHO9X+9ush7SwoKxh2Y0LfmZ8OVKNKEKP2xt7mpYxN8p/1dr60QU2EdVT5o4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com; spf=pass smtp.mailfrom=meta.com; dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b=GQMa2GO6; arc=none smtp.client-ip=67.231.145.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="lMUePSnb"
-Received: by mail-oi1-f180.google.com with SMTP id 5614622812f47-3c9c41cdd32so404014b6e.0
-        for <bpf@vger.kernel.org>; Fri, 17 May 2024 17:17:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1715991440; x=1716596240; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Y9uz2Ul+URJ48Z5Jx7gMVO+5xGSwUIqgOXMNbHju8Pw=;
-        b=lMUePSnb4ZLjYlwcRNMrOv9l6chcHbRsetb85sTqYaY6R0uPklcW4TEvq6d4pb9UZQ
-         xg/U9TPqPtDAY2edJ3GnBmcHKnK4DTIdE6OiATD1ZUI5HPozJGnJmhgq1muZ5EO4TTvg
-         vmD2ADVwkiKkyYU8BFtmmiGmWqwTAvVMRuf64=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715991440; x=1716596240;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Y9uz2Ul+URJ48Z5Jx7gMVO+5xGSwUIqgOXMNbHju8Pw=;
-        b=fMu8b2Hbn9+Ty8yr90t6NVQVN7QQDVI6Rhf6mkI3jpTtG3WMDN5kbcv0L45nyWFGKR
-         ufkHXbNPIJkSfCEQMMZEVRav/s06Nnn74dBza6ttBki56qxPSh4JQLx3Qm2LCrrep8UM
-         OOEzAdZLplNIerA5l1rnFmjTV1ZS5d+V/Ewt9JWivIpvH5iUufWQMAnWdzJcHBpOgpxi
-         Dl2BtuRwtKWwAR8HRe+D0Wpp5vt9cdjhuW22KoJ+cMZnpxKIpMWzI57nJoFU7Qq4wK5B
-         UyoQe4hWkJNO+2CX4X+ST5rulcMOtel2T6r7DMB9JPs8tW+bX35xJhuLU4BNhGicwp27
-         nHMw==
-X-Forwarded-Encrypted: i=1; AJvYcCU7VwMhH5Wx4CBoQzancAKXRbk/ecjcaoBs6nkq4xgn9cL0c9aDTWlGh+S9vJEcXZkONdyQeLo7jDiJeDp57zSKtyHr
-X-Gm-Message-State: AOJu0Yxfpfu1LkuKIaRvQBvQrt+m1R/2yu1U5O0xop4ZQfq7DGU8wZYt
-	wPzQAOCMLWKgMa91IhfcWq91TsZUUiNqQTYXT7RrmfmvsywB7jjrlPvLf2l7ng==
-X-Google-Smtp-Source: AGHT+IGkwd9uH0wGwcMxYF5ilve69uK7EUyk8Nm8aqaKGpupfm5tsNPxwjiWxHQwx+6ecqpoiq+xvg==
-X-Received: by 2002:a05:6358:724d:b0:192:6a66:63fa with SMTP id e5c5f4694b2df-193bb3fc727mr2661027055d.5.1715991440326;
-        Fri, 17 May 2024 17:17:20 -0700 (PDT)
-Received: from www.outflux.net ([198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-63d9a97247fsm11586021a12.36.2024.05.17.17.17.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 May 2024 17:17:19 -0700 (PDT)
-From: Kees Cook <keescook@chromium.org>
-To: Jiri Kosina <jikos@kernel.org>
-Cc: Kees Cook <keescook@chromium.org>,
-	Benjamin Tissoires <bentiss@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	linux-input@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org,
-	linux-hardening@vger.kernel.org
-Subject: [PATCH] selftests: hid: Do not open-code TEST_HARNESS_MAIN
-Date: Fri, 17 May 2024 17:17:16 -0700
-Message-Id: <20240518001715.work.698-kees@kernel.org>
-X-Mailer: git-send-email 2.34.1
+	dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b="GQMa2GO6"
+Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
+	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 44HLeJQG000814
+	for <bpf@vger.kernel.org>; Fri, 17 May 2024 17:30:18 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=s2048-2021-q4;
+ bh=vtuucQ3ApEEh7t+z1rK+z0xIwbpF+2cv6NNtBH/Lj/U=;
+ b=GQMa2GO6a1yrb8JxpYo98aB1nypC281eVSRpCqZ1alQo/O2wICLr6vG0QVgKbSB3h46s
+ Jyhmc1Ymjrwj8MWig5sDni0xWyCXMVjFrsRKnb9iEcAJKWZjMV6gGORoHu+/KXLh+D93
+ TXomGGZ2+J+TkcNr9dykjRbX8KRahuIGo38G+CtnVGa56ks6iNNWZRw6AXs3TlAyOHPL
+ RMX6lTzpJcWALXrMH0KrcoS1U2S0JNSDFciQj/cPRD8rRpzji3K2cu2B0XEaRp7H5OE3
+ ZAMiiQNBJiXCUgaY2AqVQlxIMmMIGpAvRHZqK+CZIJ3gnqC/6KWSnF02hQmqOTR/i0eu Hg== 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3y61xswd5k-3
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <bpf@vger.kernel.org>; Fri, 17 May 2024 17:30:18 -0700
+Received: from twshared19845.02.ash8.facebook.com (2620:10d:c0a8:1b::30) by
+ mail.thefacebook.com (2620:10d:c0a8:83::8) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.35; Sat, 18 May 2024 00:30:15 +0000
+Received: by devbig031.nha1.facebook.com (Postfix, from userid 398628)
+	id 6028B1196E99; Fri, 17 May 2024 17:30:05 -0700 (PDT)
+From: Raman Shukhau <ramasha@meta.com>
+To: <bpf@vger.kernel.org>, <ast@kernel.org>, <martin.lau@linux.dev>
+CC: Raman Shukhau <ramasha@meta.com>
+Subject: [PATCH bpf-next 1/3] net: Fix for bpf_sysctl_set_new_value
+Date: Fri, 17 May 2024 17:29:40 -0700
+Message-ID: <20240518002942.3692677-2-ramasha@meta.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20240518002942.3692677-1-ramasha@meta.com>
+References: <20240518002942.3692677-1-ramasha@meta.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1268; i=keescook@chromium.org;
- h=from:subject:message-id; bh=Ns+G8cIhe6RmVb+HVSbykTeCqAmMxrZ97rwaVohwt5Y=;
- b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBmR/OLA80fqaRGBX/36O8wyiGjoPwOVeOd9ptC3
- MGG6b2Ugf+JAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCZkfziwAKCRCJcvTf3G3A
- Ju8UD/9pg/NJ7jGrKd81q/3/ZDtc2AGfZ45BLounkSac+UTpI9uCv/ndnDRxYx6emDItyNIZqKP
- LpK3xTUzPVSGcxkiq0R9SKrSF54gZfNutwM5CyFKQ9/p/0g1/4krpOBZNIgV2vszsdMY0EZqVvj
- 5hzqz0n9RvOzpHYlkPAKoZ+Y/IQdXL8kh90VFqrOSkVFjPX32V7Fw2B9COoEfciPPYAAhx0PZ7O
- aONMXVAZBKSdrp4y1jjZprF6y40y2at9BP6lKtdIKMv0xoxyLSWyVT+0W/WoZK7GLWquONBO6xu
- T3kolc3gHYo5uYK09l3LD0HBEBAgiVkBcOOMdbU9zsPHkLJfX05AYI5Aj1VwXUivuC8PKZRwXP6
- zklQ8F05oLfPx0dd2RFG4AFl8P6Ls9V1NjdZjgtdAawU4+LQ3r0AJeSH+1ozbn+7VayiOOQ8xUx
- 9iFf8RXtIhdmKllLOCn+SMCiklwT2+shmwcBL77HTNPLzCVcb6h+TIbJAM2FDrljEzq7DjJvXzm
- VIgKFT5HFm93snLTm9BOZGBs+Boh8+MOtRxZYLKggabV5Rxr6wI7xLnr3pmVeWpekuG5m2xhP0U
- Rjc/5ZLIG3u2KdX7ujZcPc6Cw9uqjm4Rf3tTMg2RbGOJ/0UVbjlEavS0YHtE5CQ4/r3zWBszBuN
- B4BtEWN 7x/h6wDg==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-ORIG-GUID: DcYCd_K3y7gtHHGaTBrQKUP4t65ycFyT
+X-Proofpoint-GUID: DcYCd_K3y7gtHHGaTBrQKUP4t65ycFyT
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.650,FMLib:17.11.176.26
+ definitions=2024-05-17_11,2024-05-17_03,2023-05-22_02
 
-Avoid open-coding TEST_HARNESS_MAIN. (It might change, for example.)
+Call to bpf_sysctl_set_new_value doesn't change final value
+of the parameter, when called from cgroup/syscall bpf handler. No error
+thrown in this case, new value is simply ignored and original value, sent
+to sysctl, is set. Example (see test added to this change for BPF handler
+logic):
 
-Signed-off-by: Kees Cook <keescook@chromium.org>
+sysctl -w net.ipv4.ip_local_reserved_ports =3D 11111
+... cgroup/syscal handler call bpf_sysctl_set_new_value	and set 22222
+sysctl net.ipv4.ip_local_reserved_ports
+... returns 11111
+
+Return value check is incorrect in __cgroup_bpf_run_filter_sysctl
+specifically for the case when new value is set, as bpf_prog_run_array_cg
+return 0 on success.
+
+Signed-off-by: Raman Shukhau <ramasha@meta.com>
 ---
-Cc: Jiri Kosina <jikos@kernel.org>
-Cc: Benjamin Tissoires <bentiss@kernel.org>
-Cc: Shuah Khan <shuah@kernel.org>
-Cc: Masahiro Yamada <masahiroy@kernel.org>
-Cc: linux-input@vger.kernel.org
-Cc: linux-kselftest@vger.kernel.org
----
- tools/testing/selftests/hid/hid_bpf.c | 12 +++---------
- 1 file changed, 3 insertions(+), 9 deletions(-)
+ kernel/bpf/cgroup.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/hid/hid_bpf.c b/tools/testing/selftests/hid/hid_bpf.c
-index f825623e3edc..943fa62a4f78 100644
---- a/tools/testing/selftests/hid/hid_bpf.c
-+++ b/tools/testing/selftests/hid/hid_bpf.c
-@@ -961,17 +961,11 @@ static int libbpf_print_fn(enum libbpf_print_level level,
- 	return 0;
- }
- 
--static void __attribute__((constructor)) __constructor_order_last(void)
--{
--	if (!__constructor_order)
--		__constructor_order = _CONSTRUCTOR_ORDER_BACKWARD;
--}
--
--int main(int argc, char **argv)
-+static void __attribute__((constructor)) __one_time_init(void)
- {
- 	/* Use libbpf 1.0 API mode */
- 	libbpf_set_strict_mode(LIBBPF_STRICT_ALL);
- 	libbpf_set_print(libbpf_print_fn);
--
--	return test_harness_run(argc, argv);
- }
-+
-+TEST_HARNESS_MAIN
--- 
-2.34.1
+diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
+index 8ba73042a239..bfc36e7ca6f6 100644
+--- a/kernel/bpf/cgroup.c
++++ b/kernel/bpf/cgroup.c
+@@ -1739,7 +1739,7 @@ int __cgroup_bpf_run_filter_sysctl(struct ctl_table=
+_header *head,
+=20
+ 	kfree(ctx.cur_val);
+=20
+-	if (ret =3D=3D 1 && ctx.new_updated) {
++	if (ret =3D=3D 0 && ctx.new_updated) {
+ 		kfree(*buf);
+ 		*buf =3D ctx.new_val;
+ 		*pcount =3D ctx.new_len;
+--=20
+2.43.0
 
