@@ -1,53 +1,50 @@
 Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49CDA1BDC3
-	for <bpf@vger.kernel.org>; Mon, 20 May 2024 09:14:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CF071C6B7
+	for <bpf@vger.kernel.org>; Mon, 20 May 2024 09:14:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.145.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716196485; cv=none; b=C9/6GJJ4EYmXass4+KDm/dtlxm9lZznygZfkjJuUmD9pW7pcEb1YmCR/0RqSGB9/P55pLH6rLetMISn+408XQwNkbowCu9GUP272COBGiMlu4gzuFBox0CXKwEvUjBe9MA9e5vX/gcwHvw6hm2IYJ+KjBcD9IcZJfKWUv6Mpz/8=
+	t=1716196486; cv=none; b=r26mOFL6OikDu/unTv6yp4ln72uKFjO/MCMPvAKlaPbZcs96zDmEXp0PvQ4nl9zOymJgGAcz4iJzi9yULNp3EMiQ99LdZMu8wAISQ5S1FXFtsESyip2Y+/812Y1RYmyJU1TTRA+RDG2+lps9qMbdU/YFakEik8S62CPDI3EumpI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716196485; c=relaxed/simple;
-	bh=lrWL79RThte4qel0gz4M4Tq+kmbIhbx0A4+OiG68zbY=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=m5+CLsjiL61qMvPcjTrELV9Cg7vg/IV0QzWnsA2UWgjndbftODwL4FG+mSsFheJZtUpkwBCHJW+zdwIVpTCIyVTYZZJOfWUrgxWn9sD8SIUVdwTGBWtETIIp+n8Dt8jc6Z0lTttGk0jSFTSJtAnpz4qaNxaKr+msDNvIcsgXN3g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com; spf=pass smtp.mailfrom=meta.com; dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b=c3+WwBHx; arc=none smtp.client-ip=67.231.145.42
+	s=arc-20240116; t=1716196486; c=relaxed/simple;
+	bh=cs1RbC6IvMaqIy/X+tiw47UbU1V5ro7RrA6h+2yzU7U=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=BxN9ZV+9WDbqdilkuwC4puaH3LqXovChHafSOhMewzJYs/qDkSC/jx9Ka0traCaG45oHwdPb52R1JfuGWJ7WUn5MmaUh+WjzMWoBD1v4VWpRWnBPHUSM7fIWs9X19CczuzWyQwFfK4TBB0Ro+TGLLLGU5j803EpPihK9Z+rmIx4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com; spf=pass smtp.mailfrom=meta.com; dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b=TOfxlPKx; arc=none smtp.client-ip=67.231.145.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b="c3+WwBHx"
-Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 44K5A3Vp014821
-	for <bpf@vger.kernel.org>; Mon, 20 May 2024 02:14:43 -0700
+	dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b="TOfxlPKx"
+Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
+	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 44K4KNnF003187
+	for <bpf@vger.kernel.org>; Mon, 20 May 2024 02:14:44 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=s2048-2021-q4;
- bh=33HTu18De3TvEGiVutJxNjhhHd+G6R0/cMZ38cBJL4M=;
- b=c3+WwBHx0jVb1+vmE4Ww+QATWoh/CnFbCUt95ncnKDWkQVBYBWc8ph43YvHllnldk4RP
- 2o0YShwdC80SCL4hB+AvlfS09a0S/JZ/9YxWffHqm9SzEVXR6KwvC+X5TSOp3Kk6PVTF
- BHdhOV3h5mxLYa1MYuM4Bu3E4vPVcGlyDT1xfctZZ9h9xWDWl7w6sGbjThgw6bHOFRHg
- 43otdC798ssCfPcqw2B4/aKOvbtY5jxGJgxKzBqp8HopQxw27fzBcoah1KIkESWk+Obp
- 5Qn3cRVc47/0BUXs47is9plALLnIbjJfPZwzmu7TURiAnT6FxfI4ra5F/nZ5Zgs463hq zg== 
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=s2048-2021-q4;
+ bh=WotpMEArL0j0HF7NgXM8Ih6AN+DeYoTyCV24dTOV4SA=;
+ b=TOfxlPKxSadZqP/NOdjInmWG/zJsXCH8W0nSnxp1HN61N7dDfRp78mRChUFdp73yYTW3
+ X7WmUY8xp105I2GwaYjZj5rZuur1ykoAXSoab1kd4tZKv2KrYWlHSSQmm4DWB2HAiEo1
+ mMN8cHVy3udLSv1qncGb4OlvMC9lqTQoadFPm0t/GcEyVbLePAwB7rHn/oka8R/ch/Ga
+ ssg7+JBrQDd9P4Cum4iVl0qaGqtWUdTOJtLxrxSs18XG4Jcb8Ib39EMMwqLjUrYeo3kv
+ RmAO0+pAuwHlyVMjG9nX+pyNqZ/6Ur+/PLp85S9tG/gzT0/EDS8c5vyevPzq6BU3q2uB 6Q== 
 Received: from mail.thefacebook.com ([163.114.132.120])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3y804d8rbb-7
+	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3y7yd28vj8-4
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <bpf@vger.kernel.org>; Mon, 20 May 2024 02:14:43 -0700
-Received: from twshared38934.02.ash8.facebook.com (2620:10d:c085:108::150d) by
- mail.thefacebook.com (2620:10d:c085:21d::8) with Microsoft SMTP Server
+	for <bpf@vger.kernel.org>; Mon, 20 May 2024 02:14:44 -0700
+Received: from twshared0252.08.ash9.facebook.com (2620:10d:c085:208::f) by
+ mail.thefacebook.com (2620:10d:c085:11d::8) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35; Mon, 20 May 2024 02:14:40 -0700
+ 15.1.2507.35; Mon, 20 May 2024 09:14:43 +0000
 Received: by devbig031.nha1.facebook.com (Postfix, from userid 398628)
-	id 20B0F1349DC6; Mon, 20 May 2024 02:14:40 -0700 (PDT)
+	id 223711349D7F; Mon, 20 May 2024 02:14:35 -0700 (PDT)
 From: Raman Shukhau <ramasha@meta.com>
 To: <bpf@vger.kernel.org>, <ast@kernel.org>, <andrii@kernel.org>,
         <daniel@iogearbox.net>
 CC: Raman Shukhau <ramasha@meta.com>
-Subject: [PATCH v2 bpf-next 2/3] net: Improvement for bpf_sysctl_set_new_value
-Date: Mon, 20 May 2024 02:14:23 -0700
-Message-ID: <20240520091424.2427762-3-ramasha@meta.com>
+Subject: [PATCH v2 bpf-next 0/3] Fix and improvement for bpf_sysctl_set_new_value
+Date: Mon, 20 May 2024 02:14:21 -0700
+Message-ID: <20240520091424.2427762-1-ramasha@meta.com>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240520091424.2427762-1-ramasha@meta.com>
-References: <20240520091424.2427762-1-ramasha@meta.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -57,59 +54,42 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-X-Proofpoint-GUID: K3YybKGhzd6HvaL9wIIKMW4Z8q1vrWRp
-X-Proofpoint-ORIG-GUID: K3YybKGhzd6HvaL9wIIKMW4Z8q1vrWRp
+X-Proofpoint-ORIG-GUID: 7ceYhXo7VPJ1m0AH-zqi69W0sFSH1bIv
+X-Proofpoint-GUID: 7ceYhXo7VPJ1m0AH-zqi69W0sFSH1bIv
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.650,FMLib:17.11.176.26
  definitions=2024-05-20_04,2024-05-17_03,2023-05-22_02
 
-When bpf_sysctl_set_new_value is called in cgroup/sysctl handler, updated
-"new_len" is provided back to proc_sys_call_handler. But
-proc_sys_call_handler	expects this value NOT to include \0 symbol, e.g.
-if user do:
+Changes v1 =3D> v2:
+1. corrected copyright comments
+2. unsigned int for sysctl name to prevent build test error:
+   "R2 min value is negative, either use unsigned or 'var &=3D const'"
 
-open("/proc/sys/net/ipv4/ip_local_reserved_ports", ...)
-write(fd, "11111", sizeof("22222"))
+Fix and improvement for bpf_sysctl_set_new_value
 
-or
+This patch set is doing several changes around bpf_sysctl_set_new_value
+(1 fix, 1 improvement, 1 test):
+1. Fix is for return value check, when sysctl value is updated from BPF
+  handler with call to bpf_sysctl_set_new_value.
+2. Improvement for bpf_sysctl_set_new_value to match behavior with
+  sysctl write call. Result value shouldn't include "\0", otherwise
+  proc_sys_call_handler rejects value.
+3. New cgrp_sysctl test suite is added. It has single test to check
+  behavior of bpf_sysctl_set_new_value and is called from BPF
+  test_progs test suite.
 
-echo -n "11111" > /proc/sys/net/ipv4/ip_local_reserved_ports
+Raman Shukhau (3):
+  net: Fix for bpf_sysctl_set_new_value
+  net: Improvement for bpf_sysctl_set_new_value
+  net: new cgrp_sysctl test suite
 
-or
+ kernel/bpf/cgroup.c                           |   7 +-
+ .../selftests/bpf/prog_tests/cgrp_sysctl.c    | 103 ++++++++++++++++++
+ .../testing/selftests/bpf/progs/cgrp_sysctl.c |  51 +++++++++
+ 3 files changed, 159 insertions(+), 2 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/cgrp_sysctl.c
+ create mode 100644 tools/testing/selftests/bpf/progs/cgrp_sysctl.c
 
-sysctl -w	net.ipv4.ip_local_reserved_ports=3D11111
-
-proc_sys_call_handler receives count equal to `5`. if BPF handler code
-doesn't account for that, new value will be rejected by
-proc_sys_call_handler with EINVAL error.
-
-To make behavior consistent for bpf_sysctl_set_new_value, this change
-adjust `new_len` with `-1`, if `\0` passed as last character.
-Alternatively, using `sizeof("11111") - 1` in BPF handler should work,
-but it might not be obvious and spark confusion.
-
-Signed-off-by: Raman Shukhau <ramasha@meta.com>
----
- kernel/bpf/cgroup.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
-
-diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
-index bfc36e7ca6f6..23736aed1b53 100644
---- a/kernel/bpf/cgroup.c
-+++ b/kernel/bpf/cgroup.c
-@@ -1742,7 +1742,10 @@ int __cgroup_bpf_run_filter_sysctl(struct ctl_tabl=
-e_header *head,
- 	if (ret =3D=3D 0 && ctx.new_updated) {
- 		kfree(*buf);
- 		*buf =3D ctx.new_val;
--		*pcount =3D ctx.new_len;
-+		if (!(*buf)[ctx.new_len])
-+			*pcount =3D ctx.new_len - 1;
-+		else
-+			*pcount =3D ctx.new_len;
- 	} else {
- 		kfree(ctx.new_val);
- 	}
 --=20
 2.43.0
 
