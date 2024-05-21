@@ -1,273 +1,110 @@
-Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
+Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41C93182DB
-	for <bpf@vger.kernel.org>; Tue, 21 May 2024 16:14:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E22D64C66
+	for <bpf@vger.kernel.org>; Tue, 21 May 2024 16:19:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716308042; cv=none; b=L8yuPqrpj9QH4mFt6JPyWoXa1vtE7AhI+aNwwcniEXylCX2j4G+4FpvZm91/OA5ZdzyPLv7GTMfhWjRo6eFh28zOHVf7nfRD+Tbp7A7deYf1upQ0lNgZ47uUh/zdJMA7vRoIuN0KrS587vpO8lwF4fc6J38l7q6eLPBGEarhkpw=
+	t=1716308384; cv=none; b=RuAuofGMjYSzxGUxF7iZnQD0HsK1UWOh3PivWcciyQuZjmvPZI1r6bc6EwmHeTUKeVVBshUOzXwkB7jfPkbifRNAz9eeYoOyCpxAojwDjPblpVwpmHejdGyOdOjKU1Bvxcc3Qw52avUOg2wHln4INReglUeTKmyOz0s+YYH8rok=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716308042; c=relaxed/simple;
-	bh=BsCWv3xfDAdSJcM0cts3uJysCb8K5lzo1Os/E8MkZy4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=apqbq03KCIqtGmIheA7paIaaM2BVD9P7tEb3nud0smjWAimaM7NkGf0iHzIJfAMjoEOrE8I05Zl3VCk+s9nUZ8/9ogZuPQ36uLdcx/Xuo0B9/9zxhnWmoHpsN9I4KFhPprKuHKjhfBJNYtXm6h1PQDu0zV13wwjIpL9E82Pd9e4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Aic2Z0Vo; arc=none smtp.client-ip=209.85.215.180
+	s=arc-20240116; t=1716308384; c=relaxed/simple;
+	bh=wvroEoVEhaV92iXAqzB/u+ZllHGQlM9QZfVpy13fCQI=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=Ij/N0ef79YxEppaRcKFljpQHtfm4J43mJdTjnmf+/2JA1Y2xdxA0aqRp4B7Aa5OljsZkBdtGkcHJvdcsxv82GTlSVR5dEARbWgzr7bRehaG72k+VRHFQbOAK9/naqPlJGo5Xe5CCY87pOezo6evECXkbnLOfjnkDHZujrsKK0R8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eVTSqy5o; arc=none smtp.client-ip=209.85.215.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Aic2Z0Vo"
-Received: by mail-pg1-f180.google.com with SMTP id 41be03b00d2f7-65c5a29f7f0so1565736a12.1
-        for <bpf@vger.kernel.org>; Tue, 21 May 2024 09:14:01 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eVTSqy5o"
+Received: by mail-pg1-f172.google.com with SMTP id 41be03b00d2f7-656d8b346d2so1471110a12.2
+        for <bpf@vger.kernel.org>; Tue, 21 May 2024 09:19:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1716308040; x=1716912840; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zm7lOOnWHrNWseibicdBmhD9UcAvPkpSfcVgr1RIqZY=;
-        b=Aic2Z0VoRM7NqTcCdYN/jguJSmLhxvSGn/gWpSd9tTdrAHkrD+es7wTYEvQ8uZU3TJ
-         rZ3+7iZiM0YYTkF5irh14XM4UeARPnd9Z0JEoRJL/wUcw6NuV3lhYyrrawH9w5hZkdq7
-         Kag0xmHoDMBJsLJqWutj65q8g0AqWVS7O0kdF/anOU7PhaV5as5UEO8y8FzybXBnZNAp
-         0LlKYyUEfMnAoJshT0xEmDbwJuOT7oeidUTcQjsAWKBf38eCM08K5y04BCvnq/zlc5/b
-         WwIrzs+0zeVPWrdmKPkhDgWsx3gQsBEtwpG9NsGfQAB58hYsPbg/XDeIh11wgTsef4T0
-         UDmw==
+        d=gmail.com; s=20230601; t=1716308382; x=1716913182; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=eNFK/UpQQJeUWPv9gZBtmOUb/BKOfMOKTFPirHiD6BE=;
+        b=eVTSqy5oK1L1o2Ke0nx9+CWN5/LlzNh1n+dwojuHDk5qMBJh8MnXWUIP3hS0rqlDjP
+         BzsS21Tx5ohwO/6pmCPzvZ4rMPd7i4IRZjnZxd8kT+pPUhor5PZGjtYqvzhkv0ys5Mfj
+         D9EeGPHKc8Us6sg058ipFvgzHjZ4xVFHK54Wf1K1Qy0ajPyubdNUjqnuJVHs5mfGChcb
+         Y5oqYwq48bKhSpa1IkSxLA27dLvVSIM3TRNVyf1J+3MYMghrvv91EbKh5oYlpnK+z4E1
+         mnst7UvMn40+NeUlcZFHq1LbrAf2Eh9TvUDONek3ADw14/OMWB0BUQqZfwzGnYsa49/y
+         JTsg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1716308040; x=1716912840;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=zm7lOOnWHrNWseibicdBmhD9UcAvPkpSfcVgr1RIqZY=;
-        b=rxzli0JJ+N09NZYWEx801IEaj47bvXKrHLqr284n15WDA/dKWfhCTtCEUaI8dndMST
-         iF5cyGASm+YU4+wFNwNjJtH2MOCHlLhFn7JLCoIkimXajlYleuxDi15QRpL3cnlRMJY5
-         ftJbrLc2Q9ZtdAOUkyW7GRZ06uX3qg6R8mX9nB5xUpC7VA1/Nedo1N4Q/9vB6KQf6dI7
-         SrrtELb7CGMI7TnhIH/46p0AmXayJVAF+4wX2d7q2yJ93v2M8dubLZUGqEYPkf8MQRp1
-         XTAoym4/UXSKleiYWcNqrlHZs23usf6COL8BniSR4e5jGjVnldm7WgWDRQYnNcTsfn/r
-         HjWg==
-X-Forwarded-Encrypted: i=1; AJvYcCUGJ6LEm99W0xrbACGLFZqEarsIK52RDY60wtHwDQxzsbxLC4IRV0hcv3DazFmGW6YtuzRlTmhzS52C39h0cplmreKs
-X-Gm-Message-State: AOJu0YyH1Q3uXeBPacw6TWTPuCFHPgOUyI2pCbp2HWN3d+lRtT9KCG4M
-	lhLf9wS3Q77IlZTXyDJdO0wB1y5K8A5QwzVK/pIy3Pyr2CfFJ1bL/Om4q0QQ0Lr3uSluKbjuWPr
-	qIY0lm/n6wDllAT8TiQetZPwKKRI=
-X-Google-Smtp-Source: AGHT+IElBn/vn/g3UMuhL/27l3WpiRIxlFtxMwc0VDKaisicRu1s0vdByK0UhTabWfbcgejgOMDk2BcYtD+4ltd8iVI=
-X-Received: by 2002:a17:90a:7789:b0:2a5:f70c:9ec6 with SMTP id
- 98e67ed59e1d1-2b6cc97d18fmr29327113a91.24.1716308040362; Tue, 21 May 2024
- 09:14:00 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1716308382; x=1716913182;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=eNFK/UpQQJeUWPv9gZBtmOUb/BKOfMOKTFPirHiD6BE=;
+        b=UtNEQDMdP43cnD185P6l3E3t8N8QuQSrkRCFv+9qyXHXhrjas1yekEwdqNMc802acO
+         1dHNoSg9WhYnmJG6UZwK6Ds/IvtNxL2GDWVThXyv8aRPB+4Hqppb3t+0Axs53s3NR+Kd
+         zrHFkTlGrgClVwesV6Y/l03koUgwOGVLF4HtkixhkzwbjcynJqufZCtd5WkasrA3gxrm
+         g7CZ1QblwZa3MqBljtlbsw8D0rmMKyek6OWaXYHlty4vJ6batM8lpjnf2wBJnuxDO/ZV
+         fmvS/ppUGc+swmRnRyxXV3M2ftcxwoIX3lQA0dppbgc8CubYIlYjyEOQQ1Yyf22cy6Pe
+         0/eQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVCBkvGfZo5tMbHKJz9vKFjy5M9Wi8A60RF7nsqHeuye6kkguOjwrGR8YkI2srRZOJoTTb/xto/XFV0aYndC1mfbCI6
+X-Gm-Message-State: AOJu0Yx5sRYWlkKqryCwqkeWhpOSUi1BlpyvWVHmUU5XxHwRUOdHs1wO
+	2M7BxO/PuGQyQmm/PPS01rOkZcBQUEqXgeRylJ8AWKpqN0bz7IqQ
+X-Google-Smtp-Source: AGHT+IGRwlaF6DjfYY4eMRziEx+cUyFUFumrzVMXR3qMubJ8Y0oeYE4WFtOMxBnoiTe43hcWUxyNew==
+X-Received: by 2002:a17:90a:f495:b0:2b3:28be:ddfa with SMTP id 98e67ed59e1d1-2b6cceef302mr29410184a91.38.1716308382119;
+        Tue, 21 May 2024 09:19:42 -0700 (PDT)
+Received: from ?IPv6:2604:3d08:6979:1160::3424? ([2604:3d08:6979:1160::3424])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2bd7f6c90f0sm3841769a91.2.2024.05.21.09.19.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 May 2024 09:19:41 -0700 (PDT)
+Message-ID: <81bbbbad95244dd74801497414c2cdad88815f83.camel@gmail.com>
+Subject: Re: [PATCH v4 bpf-next 00/11] bpf: support resilient split BTF
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Alan Maguire <alan.maguire@oracle.com>, andrii@kernel.org,
+ jolsa@kernel.org,  acme@redhat.com, quentin@isovalent.com
+Cc: mykolal@fb.com, ast@kernel.org, daniel@iogearbox.net,
+ martin.lau@linux.dev,  song@kernel.org, yonghong.song@linux.dev,
+ john.fastabend@gmail.com,  kpsingh@kernel.org, sdf@google.com,
+ haoluo@google.com, houtao1@huawei.com,  bpf@vger.kernel.org,
+ masahiroy@kernel.org, mcgrof@kernel.org, nathan@kernel.org
+Date: Tue, 21 May 2024 09:19:40 -0700
+In-Reply-To: <3ae296b2-402a-4e17-b874-e067c57fc091@oracle.com>
+References: <20240517102246.4070184-1-alan.maguire@oracle.com>
+	 <b647e0d1d225f9d21e78c6ffedb722507f42eff0.camel@gmail.com>
+	 <3ae296b2-402a-4e17-b874-e067c57fc091@oracle.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4-0ubuntu2 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240520234720.1748918-1-andrii@kernel.org> <20240520234720.1748918-6-andrii@kernel.org>
- <CAEf4BzaZxUV4t5T8itBydzgm2r4XKThZ9WQLgsJ9auZEfQTntg@mail.gmail.com> <Zkxxqayh9VtHGQuj@krava>
-In-Reply-To: <Zkxxqayh9VtHGQuj@krava>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Tue, 21 May 2024 09:13:48 -0700
-Message-ID: <CAEf4Bza0BE9rUFdHWETKTH4-hVGnmGo73Q5EZQkwZ+u_pQP0Pg@mail.gmail.com>
-Subject: Re: [PATCH bpf 5/5] selftests/bpf: extend multi-uprobe tests with USDTs
-To: Jiri Olsa <olsajiri@gmail.com>
-Cc: Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org, ast@kernel.org, 
-	daniel@iogearbox.net, martin.lau@kernel.org, kernel-team@meta.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Tue, May 21, 2024 at 3:04=E2=80=AFAM Jiri Olsa <olsajiri@gmail.com> wrot=
-e:
->
-> On Mon, May 20, 2024 at 09:54:40PM -0700, Andrii Nakryiko wrote:
-> > On Mon, May 20, 2024 at 4:47=E2=80=AFPM Andrii Nakryiko <andrii@kernel.=
-org> wrote:
-> > >
-> > > Validate libbpf's USDT-over-multi-uprobe logic by adding USDTs to
-> > > existing multi-uprobe tests. This checks correct libbpf fallback to
-> > > singular uprobes (when run on older kernels with buggy PID filtering)=
-.
-> > > We reuse already established child process and child thread testing
-> > > infrastructure, so additions are minimal. These test fail on either
-> > > older kernels or older version of libbpf that doesn't detect PID
-> > > filtering problems.
-> > >
-> > > Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
-> > > ---
-> > >  .../bpf/prog_tests/uprobe_multi_test.c        | 22 +++++++++++++
-> > >  .../selftests/bpf/progs/uprobe_multi.c        | 33 +++++++++++++++++=
---
-> > >  2 files changed, 53 insertions(+), 2 deletions(-)
-> > >
-> > > diff --git a/tools/testing/selftests/bpf/prog_tests/uprobe_multi_test=
-.c b/tools/testing/selftests/bpf/prog_tests/uprobe_multi_test.c
-> > > index 677232d31432..85d46e568e90 100644
-> > > --- a/tools/testing/selftests/bpf/prog_tests/uprobe_multi_test.c
-> > > +++ b/tools/testing/selftests/bpf/prog_tests/uprobe_multi_test.c
-> > > @@ -8,6 +8,7 @@
-> > >  #include "uprobe_multi_usdt.skel.h"
-> > >  #include "bpf/libbpf_internal.h"
-> > >  #include "testing_helpers.h"
-> > > +#include "../sdt.h"
-> > >
-> > >  static char test_data[] =3D "test_data";
-> > >
-> > > @@ -26,6 +27,11 @@ noinline void uprobe_multi_func_3(void)
-> > >         asm volatile ("");
-> > >  }
-> > >
-> > > +noinline void usdt_trigger(void)
-> > > +{
-> > > +       STAP_PROBE(test, pid_filter_usdt);
-> > > +}
-> > > +
-> > >  struct child {
-> > >         int go[2];
-> > >         int c2p[2]; /* child -> parent channel */
-> > > @@ -269,8 +275,24 @@ __test_attach_api(const char *binary, const char=
- *pattern, struct bpf_uprobe_mul
-> > >         if (!ASSERT_OK_PTR(skel->links.uprobe_extra, "bpf_program__at=
-tach_uprobe_multi"))
-> > >                 goto cleanup;
-> > >
-> > > +       /* Attach (uprobe-backed) USDTs */
-> > > +       skel->links.usdt_pid =3D bpf_program__attach_usdt(skel->progs=
-.usdt_pid, pid, binary,
-> > > +                                                       "test", "pid_=
-filter_usdt", NULL);
-> > > +       if (!ASSERT_OK_PTR(skel->links.usdt_pid, "attach_usdt_pid"))
-> > > +               goto cleanup;
-> > > +
-> > > +       skel->links.usdt_extra =3D bpf_program__attach_usdt(skel->pro=
-gs.usdt_extra, -1, binary,
-> > > +                                                         "test", "pi=
-d_filter_usdt", NULL);
-> > > +       if (!ASSERT_OK_PTR(skel->links.usdt_extra, "attach_usdt_extra=
-"))
-> > > +               goto cleanup;
-> > > +
-> > >         uprobe_multi_test_run(skel, child);
-> > >
-> > > +       ASSERT_FALSE(skel->bss->bad_pid_seen_usdt, "bad_pid_seen_usdt=
-");
-> > > +       if (child) {
-> > > +               ASSERT_EQ(skel->bss->child_pid_usdt, child->pid, "usd=
-t_multi_child_pid");
-> > > +               ASSERT_EQ(skel->bss->child_tid_usdt, child->tid, "usd=
-t_multi_child_tid");
-> > > +       }
-> > >  cleanup:
-> > >         uprobe_multi__destroy(skel);
-> > >  }
-> > > diff --git a/tools/testing/selftests/bpf/progs/uprobe_multi.c b/tools=
-/testing/selftests/bpf/progs/uprobe_multi.c
-> > > index 86a7ff5d3726..44190efcdba2 100644
-> > > --- a/tools/testing/selftests/bpf/progs/uprobe_multi.c
-> > > +++ b/tools/testing/selftests/bpf/progs/uprobe_multi.c
-> > > @@ -1,8 +1,8 @@
-> > >  // SPDX-License-Identifier: GPL-2.0
-> > > -#include <linux/bpf.h>
-> > > +#include "vmlinux.h"
-> > >  #include <bpf/bpf_helpers.h>
-> > >  #include <bpf/bpf_tracing.h>
-> > > -#include <stdbool.h>
-> > > +#include <bpf/usdt.bpf.h>
-> > >
-> > >  char _license[] SEC("license") =3D "GPL";
-> > >
-> > > @@ -23,9 +23,12 @@ __u64 uprobe_multi_sleep_result =3D 0;
-> > >  int pid =3D 0;
-> > >  int child_pid =3D 0;
-> > >  int child_tid =3D 0;
-> > > +int child_pid_usdt =3D 0;
-> > > +int child_tid_usdt =3D 0;
-> > >
-> > >  int expect_pid =3D 0;
-> > >  bool bad_pid_seen =3D false;
-> > > +bool bad_pid_seen_usdt =3D false;
-> > >
-> > >  bool test_cookie =3D false;
-> > >  void *user_ptr =3D 0;
-> > > @@ -112,3 +115,29 @@ int uprobe_extra(struct pt_regs *ctx)
-> > >         /* we need this one just to mix PID-filtered and global uprob=
-es */
-> > >         return 0;
-> > >  }
-> > > +
-> > > +SEC("usdt")
-> > > +int usdt_pid(struct pt_regs *ctx)
-> > > +{
-> > > +       __u64 cur_pid_tgid =3D bpf_get_current_pid_tgid();
-> > > +       __u32 cur_pid;
-> > > +
-> > > +       cur_pid =3D cur_pid_tgid >> 32;
-> > > +       if (pid && cur_pid !=3D pid)
-> > > +               return 0;
-> > > +
-> > > +       if (expect_pid && cur_pid !=3D expect_pid)
-> > > +               bad_pid_seen_usdt =3D true;
-> > > +
-> > > +       child_pid_usdt =3D cur_pid_tgid >> 32;
-> > > +       child_tid_usdt =3D (__u32)cur_pid_tgid;
-> > > +
-> > > +       return 0;
-> > > +}
-> > > +
-> > > +SEC("usdt")
-> > > +int usdt_extra(struct pt_regs *ctx)
-> > > +{
-> > > +       /* we need this one just to mix PID-filtered and global USDT =
-probes */
-> > > +       return 0;
-> > > +}
-> > > --
-> > > 2.43.0
-> > >
-> >
-> > I lost the following during the final rebase before submitting,
-> > sigh... With the piece below tests are passing again:
-> >
-> > diff --git a/tools/testing/selftests/bpf/prog_tests/uprobe_multi_test.c
-> > b/tools/testing/selftests/bpf/prog_tests/uprobe_multi_test.c
-> > index 85d46e568e90..bf6ca8e3eb13 100644
-> > --- a/tools/testing/selftests/bpf/prog_tests/uprobe_multi_test.c
-> > +++ b/tools/testing/selftests/bpf/prog_tests/uprobe_multi_test.c
-> > @@ -96,6 +96,7 @@ static struct child *spawn_child(void)
-> >                 uprobe_multi_func_1();
-> >                 uprobe_multi_func_2();
-> >                 uprobe_multi_func_3();
-> > +               usdt_trigger();
-> >
-> >                 exit(errno);
-> >         }
-> > @@ -123,6 +124,7 @@ static void *child_thread(void *ctx)
-> >         uprobe_multi_func_1();
-> >         uprobe_multi_func_2();
-> >         uprobe_multi_func_3();
-> > +       usdt_trigger();
-> >
-> >         err =3D 0;
-> >         pthread_exit(&err);
-> > @@ -188,6 +190,7 @@ static void uprobe_multi_test_run(struct
-> > uprobe_multi *skel, struct child *child
-> >                 uprobe_multi_func_1();
-> >                 uprobe_multi_func_2();
-> >                 uprobe_multi_func_3();
-> > +               usdt_trigger();
-> >         }
-> >
-> >         if (child)
-> >
-> >
-> > I'll wait till tomorrow for any feedback and will post v2.
->
-> tests are passing for me with the changes above
->
-> >
-> > I'm also curious about logistics? Do we want to get everything through
-> > the bpf tree? Or bpf-next? Or split somehow? Thoughts?
-> >
-> > I think the fix in patch #1 is important enough to backport to stable
-> > kernels (multi-uprobes went into upstream v6.6 kernel, FYI).
->
-> agreed, perhaps also the patch #3 for libbpf detection?
+On Tue, 2024-05-21 at 10:15 +0100, Alan Maguire wrote:
 
-no one should be building libbpf from kernel sources, Github is the
-authoritative source code for packaging. So I think it's not necessary
-to backport libbpf. Tests will keep passing with just patch #1.
+[...]
 
->
-> jirka
+> This is a neat approach, and as you say it eliminates the need to modify
+> bpftool to handle distilled base BTF and relocation.  The only wrinkle
+> is resolve_btfids; we call resolve_btfids for modules with a "-B
+> vmlinux" argument, so in that case we'd be calling btf_parse_elf() with
+> both a split and base BTF. According to the approach outlined above,
+> we'd relocate split BTF - originally relative to .BTF.base - to be
+> relative to vmlinux BTF, but in the case of resolve_btfids we don't want
+> that relocation. We want the BTF ids to reflect the distilled base BTF
+> ids since they will be relocated later on module load along with the
+> split BTF references themselves.
+
+You are correct, I missed this detail, resolve_btfids needs distilled
+base instead of vmlinux for out of tree modules.
+
+> We can handle this by having a -R flag to skip relocation; it would
+> simply ensure we first try calling btf__parse(), falling back to
+> btf__parse_split(); we need the fallback logic as it is possible the
+> pahole version didn't add .BTF.base sections. This logic would only be
+> activated for out-of-tree module builds so seems acceptable to me. If
+> that makes sense, with your permission I can rework the series to
+> include your BTF parsing patch.
+
+Makes sense to me, but I'm curious whether you and Andrii consider
+this a good interface, compared to _opts version.
+
+Thanks,
+Eduard
