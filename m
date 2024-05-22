@@ -1,96 +1,98 @@
-Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com [209.85.215.170])
+Received: from mail-qk1-f175.google.com (mail-qk1-f175.google.com [209.85.222.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 112851419BA
-	for <bpf@vger.kernel.org>; Wed, 22 May 2024 18:07:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 923711BF40
+	for <bpf@vger.kernel.org>; Wed, 22 May 2024 18:21:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716401251; cv=none; b=FFdB6xbnyIFbS+Miy9oJHoCyRa2NmEGBWK49FLqymaKF87Lq9E6arglaUvd4vFHCk2ih0fcgabbsFOBlY06XODnzw7JRGDpAlbC7R0nsprh7byJ4pSrQagOWzI7iskKKNDcCPTAuPBU9IdnmMVImo3Bg1EgMt8aD0Wgt3L7kSUw=
+	t=1716402097; cv=none; b=CS2If2QQrPZp4MkrtFJ1hjYftQ1wGDG1xT/UzrAnOK9LxAh5+0z4wl4ZcCj9MqKdoxRoLtfB6XdwjLQ/GdOWrL4WR3ZorMnFAS65uW5yRpJ8nk7PB9fzuW9WYJMVMuHVE8/dKrlgfDpcDtR67APj1GswXr75/vZQkrk0jGJf9S8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716401251; c=relaxed/simple;
-	bh=Vf0E9CDIMJ96KkJh8eTeS1AgoDQu+hRLoAvGoMJQSyk=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=txfweX5s1TT9fITFXEZltYOe+jD1mKaFtOIy2GfBpQuHATtbM1G9P5LKGbjfLPRGaTLoA5SX3slgeL58jEjkVicf8cFUUvAD7RUK6ICpZB3kHSJwydGgttpHTvhJDV1nrcixCNOvXapNtJ2GB/CAg4p6WlZAnZyCOlXh3D0+j2g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ObmbgP2v; arc=none smtp.client-ip=209.85.215.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+	s=arc-20240116; t=1716402097; c=relaxed/simple;
+	bh=ko5WsgRc5I9vEWJbi0+a+Fs851AshJz1K+UozTOt1Is=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=RBxGYQHV8v59mb7C2HG/sy6qiyeWLH3pEbPCl16RKiiFcUvZ1bywpvPEHUb+SYqTk1ITfXXN1P41dgDPZwYAbc40gbJOGeaPEoZDgZhZSDx+FeeBoWl3lp3OyJWXHiLn4SMQVpIy3nPJLMpaLcM6N2mslItK5XLHy4lJugLdXc4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=manifault.com; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.222.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=manifault.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ObmbgP2v"
-Received: by mail-pg1-f170.google.com with SMTP id 41be03b00d2f7-5d4d15ec7c5so2438871a12.1
-        for <bpf@vger.kernel.org>; Wed, 22 May 2024 11:07:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1716401249; x=1717006049; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=Vf0E9CDIMJ96KkJh8eTeS1AgoDQu+hRLoAvGoMJQSyk=;
-        b=ObmbgP2vDvrcq9J8ZWIPW7Qd8TTlby4PHu6iNCxWyQBE5PA/Jq2rjzKaEw6ECx3lAn
-         KvqeF1BOTxYSKp5oJTLisuymFviJn99DNg86gyWduRdxB6prxsFf1CtnOlPGsXNpi7mS
-         Uh/WnAnFMjCaDS8v+Nvx/DcYI7hIbmxVMgOF7fn5JHkzJRniamYvRm2BaO2LV6gOhl9K
-         ev/esueTmIisZCMJJTWR3n1+sNAVEE2MRldi0Tyw3KLO3V+jxbSRsri/WBBsMOqhsD1E
-         u87gWnNyDZnihZTmEsYjfyVSJSdFdMGkN7V9PC5UZDouZCo9kgQaVQOyQRal0jfRV/5j
-         2WLw==
+Received: by mail-qk1-f175.google.com with SMTP id af79cd13be357-792b8bca915so451083685a.2
+        for <bpf@vger.kernel.org>; Wed, 22 May 2024 11:21:35 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1716401249; x=1717006049;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Vf0E9CDIMJ96KkJh8eTeS1AgoDQu+hRLoAvGoMJQSyk=;
-        b=k3T2H2LdnHacud6hi7eHb/6JyVuQAV+xalmWvLXBlXVc5/C11C7oiPQBh5SrDXwCb2
-         7G036lXmkZ8se9vba7TasotGHMtCkBlwHz1joALkl6n9d/lNM/TtNUPRE94TuNo1uDcY
-         HcTycgfEfu21LdPs/BH5MW9ZMVxJbUwGvz8F7Y9UQshKNR4I5XSMDgjB2JPpL92FFE83
-         wq+0CIu7xAvjO40Pqn41/I4ZlKrFmn7VQtoBdkYCVL97/rWh1xP0DdAqhYYu05RRFbAF
-         g5E9KdYN3pagKiPRjZVonrrjxuKhEtSq6m22KbSPLFnw2CDCS1Yz71ld2fkTx1bJYxBx
-         WdkA==
-X-Gm-Message-State: AOJu0YxKvXWO95lePJ5u0nkLy8wcY2JpggESOWIRXMD6r7fmoJ871MGt
-	OD3u3wPPmiEknx5IRipG7UR7iPjkYDbKfWXRhmeHQmZsJ0yFdHyf
-X-Google-Smtp-Source: AGHT+IGL3pSC1RadK2Q7wcIqHikZZBKvBsJOUg04G76O97y6mBanL80B2qU+aURCs1MjdhfCEQM0/w==
-X-Received: by 2002:a17:90a:db42:b0:2b3:28be:ede3 with SMTP id 98e67ed59e1d1-2bd9f5c0d9dmr3018819a91.47.1716401249165;
-        Wed, 22 May 2024 11:07:29 -0700 (PDT)
-Received: from ?IPv6:2604:3d08:6979:1160::3424? ([2604:3d08:6979:1160::3424])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2bdd9f2a180sm63810a91.47.2024.05.22.11.07.28
+        d=1e100.net; s=20230601; t=1716402094; x=1717006894;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ko5WsgRc5I9vEWJbi0+a+Fs851AshJz1K+UozTOt1Is=;
+        b=S+qi1y37eld1hx+EsF2yc0wCX3iwZCj4bB3FcE0cZ7JCnQdBAf/Mon96h96c+tYTR9
+         +t19J4lTTo09Uwr+jGAZHg3gpIgcjTTh63nVK5aGKhzFumPRz474f5pIooMHxh68IVDt
+         L4IzCtSriNz4xVlYZv9gWJcl2Guy4ZXlu/y6+zHRSvw3IG6FARsE7uCTgOmho3DBo6RN
+         4iPU81YZZDS0v216C2Tc18rXVnJjvKhz3JkPrY0JFs1278KyG5IWC4LLD8l/MErhvjIM
+         BMIbzTVwQV4HSiW/mKr6mpMeVLZ0qIPEDnB+mdmN8fflqSXsOimk0dcPz4AmejWVIwbA
+         3jlA==
+X-Gm-Message-State: AOJu0YyD7W89L44NAC7Edf376WLc67xO1xh0WXEINinWX6CKe8wL6E6i
+	1fSnIM5VFSCn7lNcHhvG/OAhoXSla540STOgR3W10+Fqbq6rH5c/
+X-Google-Smtp-Source: AGHT+IFYxeNiB8g6QFxEj7wJcUYAxoIhRHKYsm7YN0Sa6xDSgrw0pOUycThO5PmaPK6z4JWNSkGEUQ==
+X-Received: by 2002:a05:620a:55ae:b0:792:741b:3a27 with SMTP id af79cd13be357-794994b60f4mr302103885a.53.1716402094092;
+        Wed, 22 May 2024 11:21:34 -0700 (PDT)
+Received: from maniforge (c-76-136-75-40.hsd1.il.comcast.net. [76.136.75.40])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-792bf310bc3sm1419500485a.99.2024.05.22.11.21.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 May 2024 11:07:28 -0700 (PDT)
-Message-ID: <d13c923a07d91391e7c4adc6a6dfff7279ab6a4b.camel@gmail.com>
-Subject: Re: [PATCH bpf-next v2 4/4] selftests: bpf: crypto: adjust bench to
- use nullable IV
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Martin KaFai Lau <martin.lau@linux.dev>
-Cc: bpf@vger.kernel.org, Vadim Fedorenko <vadim.fedorenko@linux.dev>, Andrii
- Nakryiko <andrii@kernel.org>, Alexei Starovoitov <ast@kernel.org>, Mykola
- Lysenko <mykolal@fb.com>,  Jakub Kicinski <kuba@kernel.org>
-Date: Wed, 22 May 2024 11:07:27 -0700
-In-Reply-To: <73add1b3-b1e4-4d83-85b3-5be45f2658d6@linux.dev>
-References: <20240510122823.1530682-1-vadfed@meta.com>
-	 <20240510122823.1530682-5-vadfed@meta.com>
-	 <73add1b3-b1e4-4d83-85b3-5be45f2658d6@linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4-0ubuntu2 
+        Wed, 22 May 2024 11:21:33 -0700 (PDT)
+Date: Wed, 22 May 2024 13:21:31 -0500
+From: David Vernet <void@manifault.com>
+To: Dave Thaler <dthaler1968@googlemail.com>
+Cc: bpf@vger.kernel.org, bpf@ietf.org, Dave Thaler <dthaler1968@gmail.com>
+Subject: Re: [PATCH bpf-next v2] bpf, docs: clarify sign extension of 64-bit
+ use of 32-bit imm
+Message-ID: <20240522182131.GA41164@maniforge>
+References: <20240520215255.10595-1-dthaler1968@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="efIhC89kt0lWJZM8"
+Content-Disposition: inline
+In-Reply-To: <20240520215255.10595-1-dthaler1968@gmail.com>
+User-Agent: Mutt/2.2.13 (00d56288) (2024-03-09)
 
-On Wed, 2024-05-22 at 11:01 -0700, Martin KaFai Lau wrote:
 
+--efIhC89kt0lWJZM8
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-[...]
+On Mon, May 20, 2024 at 02:52:55PM -0700, Dave Thaler wrote:
+> imm is defined as a 32-bit signed integer.
+>=20
+> {MOV, K, ALU64} says it does "dst =3D src" (where src is 'imm') and it
+> does do dst =3D (s64)imm, which in that sense does sign extend imm. The M=
+OVSX
+> instruction is explained as sign extending, so added the example of
+> {MOV, K, ALU64} to make this more clear.
+>=20
+> {JLE, K, JMP} says it does "PC +=3D offset if dst <=3D src" (where src is=
+ 'imm',
+> and the comparison is unsigned). This was apparently ambiguous to some
+> readers as to whether the comparison was "dst <=3D (u64)(u32)imm" or
+> "dst <=3D (u64)(s64)imm" so added an example to make this more clear.
+>=20
+> v1 -> v2: Address comments from Yonghong
+>=20
+> Signed-off-by: Dave Thaler <dthaler1968@googlemail.com>
 
-> Inlining it would be nice (as Eduard mentioned in another thread). I also=
- wonder=20
-> if Eduard's work on the no caller saved registers could help the dynptr k=
-func? I=20
-> think the dynptr kfunc optimization could be a followup.
+Acked-by: David Vernet <void@manifault.com>
 
-For the context:
-https://clang.llvm.org/docs/AttributeReference.html#no-caller-saved-registe=
-rs
+--efIhC89kt0lWJZM8
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Basically the attribute says that compiler does not need
-to save all r0-r5 registers for some function calls.
-My changes for LLVM/verifier are not public yet,
-I'll try to speedup.
+-----BEGIN PGP SIGNATURE-----
 
+iHUEARYKAB0WIQRBxU1So5MTLwphjdFZ5LhpZcTzZAUCZk43qwAKCRBZ5LhpZcTz
+ZAVwAP0QevFkqXGOT8QtAEdQfzTlozxFu4FCnoTP3coMnGphwQEAvt0ZVubRouOs
+vsUXVCiw9Ah1AF9w7Ux9zskyuVMyzQ8=
+=Qjps
+-----END PGP SIGNATURE-----
+
+--efIhC89kt0lWJZM8--
