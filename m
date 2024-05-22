@@ -1,103 +1,100 @@
-Received: from vmicros1.altlinux.org (vmicros1.altlinux.org [194.107.17.57])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A7565224CF;
-	Wed, 22 May 2024 01:19:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.107.17.57
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F0F2DF5B;
+	Wed, 22 May 2024 01:38:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716340750; cv=none; b=KVzrFcZZWsmM+YeH/p0xBs6R2oa/EhRp/K3C4pgXiFcOLpmzvgVUnGnaUCnq88U93lp3xbH6eOHOrgSm6g0lKuV2DzsZBbgN0LAaLpkGMSEc4djaeaLFIF0LTxHz6xsv1Unzq4bTQ/wEcOe16UdZOUDpdl/COql3srwWuyzyzg0=
+	t=1716341928; cv=none; b=DKOgBi1OFrhZGxMAJPUnoymnTXl1+pnF15GZHu93Ce3Gcf3myYQvGOca/z7NguQOMQPa3eJCLcRYfHwE5JVpeOOLzB2qM3sBR3cPwgnmeLqDXx820GQtpmIyq4odcKADiJTAvmKE99MqQi+VNlMXl3tQFT5RMUI/DBXccMRFL4M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716340750; c=relaxed/simple;
-	bh=weadA3+mmgcWotP/FdF0QwQETssaX/ZYIE9jI5omFJQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=F2HDFXgoeXSeKoaWKoO9PYY3W4Xrkmw2vhYGC3s9fQEVXgpQWeFgbPJ6zZWsAkYoQ8JbyZbN57ul3QEUtI78x1EODSP+Imz0Urw6N66eUYUwOfCYgEVW7MrYK/7m6/EM5nxDc1sZfthiTiZ7Cknd/MF6duzd3v0y6TGg4bxBxnI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=altlinux.org; spf=pass smtp.mailfrom=altlinux.org; arc=none smtp.client-ip=194.107.17.57
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=altlinux.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=altlinux.org
-Received: from imap.altlinux.org (imap.altlinux.org [194.107.17.38])
-	by vmicros1.altlinux.org (Postfix) with ESMTP id 3D4EC72C8F5;
-	Wed, 22 May 2024 04:10:31 +0300 (MSK)
-Received: from altlinux.org (sole.flsd.net [185.75.180.6])
-	by imap.altlinux.org (Postfix) with ESMTPSA id 2249B36D0168;
-	Wed, 22 May 2024 04:10:31 +0300 (MSK)
-Date: Wed, 22 May 2024 04:10:31 +0300
-From: Vitaly Chikunov <vt@altlinux.org>
-To: Edward Liaw <edliaw@google.com>, Mark Brown <broonie@kernel.org>
-Cc: shuah@kernel.org,
-	=?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>,
-	=?utf-8?Q?G=C3=BCnther?= Noack <gnoack@google.com>,
-	Christian Brauner <brauner@kernel.org>,
-	Richard Cochran <richardcochran@gmail.com>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	"David S. Miller" <davem@davemloft.net>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Kees Cook <keescook@chromium.org>,
-	Andy Lutomirski <luto@amacapital.net>,
-	Will Drewry <wad@chromium.org>, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, kernel-team@android.com,
-	linux-security-module@vger.kernel.org, netdev@vger.kernel.org,
-	linux-riscv@lists.infradead.org, bpf@vger.kernel.org
-Subject: Re: [PATCH v5 02/68] kselftest: Desecalate reporting of missing
- _GNU_SOURCE
-Message-ID: <20240522011031.nps5dejrgk5b442y@altlinux.org>
-References: <20240522005913.3540131-1-edliaw@google.com>
- <20240522005913.3540131-3-edliaw@google.com>
+	s=arc-20240116; t=1716341928; c=relaxed/simple;
+	bh=D2SjqfOGPe5xouIRl6RPiNZsyBIkS56bzwVN0xMp4jc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=rlbuMoLf1V3stpza+CvNPuY0jHo1XqUttDdXw9FU8JWTiBTSbpP1yJyk87KuajISrmSL6JcS59MSORC8f4pyTT/DYIpWSimkaR7qwYniY904kYdJ+wFORHDzcie53cYKrMocUrY9FY5EgOltniOFnZHM4b/w/spcQeVWLgNj9E0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jCeo3ylA; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jCeo3ylA"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0059FC2BD11;
+	Wed, 22 May 2024 01:38:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1716341928;
+	bh=D2SjqfOGPe5xouIRl6RPiNZsyBIkS56bzwVN0xMp4jc=;
+	h=From:To:Cc:Subject:Date:From;
+	b=jCeo3ylAH4qbXibrOW/lqDe1CEdwx6TtGht1HYRm3pbCmObmFymIBP4bJm2+ai2k7
+	 JbY4jAVS3WwQ30X507X8OPy+2cC5lf5NsOTUH14vHJEZKRtmC45tpsfHXdtxw+ANU8
+	 7BKCzvlY56W7EI+XPXvg0Fx5qOm7kEfrIcU/0aIe8p12jxfJ191agkCln/8+WA3s+U
+	 JU1cWLptuQAfNL1VhYWIGJjSrl3dDcoFKy+WK2vGIu/YR+hQQxiST+WZ0NBO4pdkov
+	 WBGLiQ8pb6FWu68hu0Y+jJLqvuD6Dx50HjF2YMbbaV3FyzizUqG944/UdmSvouUZK0
+	 PO7ZBfdUV0Opg==
+From: Andrii Nakryiko <andrii@kernel.org>
+To: linux-trace-kernel@vger.kernel.org,
+	rostedt@goodmis.org,
+	mhiramat@kernel.org
+Cc: x86@kernel.org,
+	peterz@infradead.org,
+	mingo@redhat.com,
+	tglx@linutronix.de,
+	bpf@vger.kernel.org,
+	rihams@fb.com,
+	linux-perf-users@vger.kernel.org,
+	Andrii Nakryiko <andrii@kernel.org>
+Subject: [PATCH v2 0/4] Fix user stack traces captured from uprobes
+Date: Tue, 21 May 2024 18:38:41 -0700
+Message-ID: <20240522013845.1631305-1-andrii@kernel.org>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=koi8-r
-Content-Disposition: inline
-In-Reply-To: <20240522005913.3540131-3-edliaw@google.com>
+Content-Transfer-Encoding: 8bit
 
-On Wed, May 22, 2024 at 12:56:48AM +0000, Edward Liaw wrote:
-> From: Mark Brown <broonie@kernel.org>
-> 
-> Commit daef47b89efd0b7 ("selftests: Compile kselftest headers with
-> -D_GNU_SOURCE") adds a static_assert() which means that things which
-> would be warnings about undeclared functions get escalated into build
-> failures.  While we do actually want _GNU_SOURCE to be defined for users
-> of kselftest_harness we haven't actually done that yet and this is
-> causing widespread build breaks which were previously warnings about
-> uses of asprintf() without prototypes, including causing other test
-> programs in the same directory to fail to build.
-> 
-> Since the build failures that are introduced cause additional issues due
-> to make stopping builds early replace the static_assert() with a
-> missing without making the error more severe than it already was.  This
-> will be moot once the issue is fixed properly but reduces the disruption
-> while that happens.
-> 
-> Signed-off-by: Mark Brown <broonie@kernel.org>
-> Reviewed-by: Kees Cook <keescook@chromium.org>
-> ---
->  tools/testing/selftests/kselftest_harness.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/kselftest_harness.h b/tools/testing/selftests/kselftest_harness.h
-> index b634969cbb6f..8e53686b71cb 100644
-> --- a/tools/testing/selftests/kselftest_harness.h
-> +++ b/tools/testing/selftests/kselftest_harness.h
-> @@ -51,7 +51,7 @@
->  #define __KSELFTEST_HARNESS_H
->  
->  #ifndef _GNU_SOURCE
-> -#define _GNU_SOURCE
-> +#warning kselftest harness requires _GNU_SOURCE to be defined
+This patch set reports two issues with captured stack traces.
 
-Maybe this should be `#error` if it really requires?
+First issue, fixed in patch #2, deals with fixing up uretprobe trampoline
+addresses in captured stack trace. This issue happens when there are pending
+return probes, for which kernel hijacks some of the return addresses on user
+stacks. The code is matching those special uretprobe trampoline addresses with
+the list of pending return probe instances and replaces them with actual
+return addresses. This is the same fixup logic that fprobe/kretprobe has for
+kernel stack traces.
 
-Thanks,
+Second issue, which patch #3 is fixing with the help of heuristic, is having
+to do with capturing user stack traces in entry uprobes. At the very entrance
+to user function, frame pointer in rbp register is not yet setup, so actual
+caller return address is still pointed to by rsp. Patch is using a simple
+heuristic, looking for `push %rbp` instruction, to fetch this extra direct
+caller return address, before proceeding to unwind the stack using rbp.
 
->  #endif
->  #include <asm/types.h>
->  #include <ctype.h>
-> -- 
-> 2.45.1.288.g0e0cd299f1-goog
-> 
+Patch #4 adds tests into BPF selftests, that validate that captured stack
+traces at various points is what we expect to get. This patch, while being BPF
+selftests, is isolated from any other BPF selftests changes and can go in
+through non-BPF tree without the risk of merge conflicts.
+
+Patches are based on latest linux-trace/probes/for-next.
+
+v1->v2:
+  - fixed GCC aggressively inlining test_uretprobe_stack() function (BPF CI);
+  - fixed comments (Peter).
+
+Andrii Nakryiko (4):
+  uprobes: rename get_trampoline_vaddr() and make it global
+  perf,uprobes: fix user stack traces in the presence of pending
+    uretprobes
+  perf,x86: avoid missing caller address in stack traces captured in
+    uprobe
+  selftests/bpf: add test validating uprobe/uretprobe stack traces
+
+ arch/x86/events/core.c                        |  20 ++
+ include/linux/uprobes.h                       |   3 +
+ kernel/events/callchain.c                     |  43 +++-
+ kernel/events/uprobes.c                       |  17 +-
+ .../bpf/prog_tests/uretprobe_stack.c          | 186 ++++++++++++++++++
+ .../selftests/bpf/progs/uretprobe_stack.c     |  96 +++++++++
+ 6 files changed, 361 insertions(+), 4 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/uretprobe_stack.c
+ create mode 100644 tools/testing/selftests/bpf/progs/uretprobe_stack.c
+
+-- 
+2.43.0
+
