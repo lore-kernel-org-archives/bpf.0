@@ -1,177 +1,155 @@
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2085.outbound.protection.outlook.com [40.107.243.85])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7E5D2901;
-	Thu, 23 May 2024 02:29:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.243.85
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716431349; cv=fail; b=HkxhSNPbc3/QQRim+LPp2t0aQj/Jl7pR1bKk6N6WE2FY65/zh5N0R1cNb2wmsQ0JJJIfwDtPFTAjCBbl3i68B3BpbstTaHFIWHADLjB9yLoBqUgkIXkKDgdJMeDDjcakRh+Kd/V9EWUjkidJyG8sCL2dnAnfNvyPbWJp6yVni64=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716431349; c=relaxed/simple;
-	bh=Kth35OVTQBfcgCEasmGO5GrnJroQ2JUyU/EoeS9XYd8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=BENazR7ue4AKFTmDjS7xyeZG2N8relv4uE+5uO7L7ohnah6YKrv7tiQLEdNB/ZeRjbV1X0BqhaARTXT8cALZIkT4TfnPsNYHx/XYEQQ67hrShGR/7tRsZ2BXvRKowygphvFbdwS05+Csbj+gG8UJDI+YjfBeq5v61wfEzOOw4vA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=f0ba2GBa; arc=fail smtp.client-ip=40.107.243.85
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18CF213AD0D
+	for <bpf@vger.kernel.org>; Thu, 23 May 2024 02:32:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.53
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1716431531; cv=none; b=kmKrbTH3UQMrNgVu/uhrVs7EU+fPBWgyJRBXGP0jC0eDudlW5ZoYoe+Ersn1zrvlab6w/oVsmM6vKHKZMlXh3U548x7tC1w1Kw+pUjazBFcWdVu5zt+WW3mi6exeYufKMJTECnna7j7O/49g00GAPgnw0rzd1/maJQJClmg3OQs=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1716431531; c=relaxed/simple;
+	bh=oF1bWw2URxXrpYBpVRIgUnmX4mZEmq50YtKBNSTcwgs=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=qC0V8KiXDf+5n3C0kNMs9WM0tBp3UdF0K9UazKsar43N1CaYgSq3JLX8XDtBHfOU/Y0DNUXT49dhY6zT4J5JTJNInyhI4dwd1rFDfZ+R8TeLLSBBhp00VehxuK7VJ74r8+D8CqxGiQBB9CjQ5k2AH+cA65hX03qqEcNAd1pWTVI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=k7R9Jhi1; arc=none smtp.client-ip=209.85.221.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="f0ba2GBa"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=N9seY1n6WqpV0LecKtPypWVfDUTEJUOfoxJYDZp7xOhl6+YbqAGg8BJTNqFKRV+JrubRNl2F9OJ3eiCCWzucRlCbE5vplfbbEJzvNH+MXoo9iRy/qIC5YpcNvs7f7a8AIp/YxiZTQvChbZTiene+ak13jZd5wjbP7ArhxPZW+7DgskuoKiZs4r4rpEAT/kQk1Us2RJkyvn+jsxSxCp+ZkbxLfBkBz9haJNPn8/nhDn2AP+5V2GKY5P7hWOceN8u/7Nlk1x5H3iPrGXqLhmUOv5aHzdl/+Xe/2D61Zwo6CWZLFSAHUsUBbDEIAoujvIzfphYyLm+QXrmojOAN0nyZXA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=t5PZteq1ir9VyDK7/kE82+oQab2J/vlu29EWaM/TSUY=;
- b=Irl2zzGTlHIzoh4QAi/b2gVd7SJkyx41UgGZwnhy3wXjlQU3RLNIjRwBWM9Z3BRULEESKFatxg+RNxVy+p9Bgdj+L+EjlR/llKog7Oe2RK+N15KaOewwPlMEO/rp9vZXHzM541KZhEHOEJ5BYiErmp5A17XoUHOkhHCU5CMUTBN4Zp4xq6oSLmvPI0wOUmq/5oYfEU/62bImftlDP0/F2nK2GKNgyKUP7H0osq2pTYFiLjYr9NjHXG8tV8xMOZ3ubnwhmQPzXdABWuEB8E91HcK+jZ/aqL8hClCgTTAO76dF9E9byqxUtLr10/w1tA/sLHHuloEu8GvBXyZPQNVekw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.161) smtp.rcpttodomain=google.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=t5PZteq1ir9VyDK7/kE82+oQab2J/vlu29EWaM/TSUY=;
- b=f0ba2GBa7wbqnN4qHNDgGwKZsAVfxkX3h2sVkf58OJfudEcXqcGjtA7sQoEBICkNjW9p74IPqcsKTY6GFxXJGk2mpla66JpBKgxOEKmplfl3euHDkZCD9X2OR6TkePqQ+WWVHFySARzb8cOu1l4f3fhxD+3FN4aPRoKt1X0YBh/5hhpfHMOIw5/TcT8fRf1f/9rKPwqxhwAGFM9Z097tPtTTqaonmuUKgtmPVbPYFIYLDbF6JeB7DEYirgcaIcfnAZj5af5iTeErOYKhSgc3ImblDWvjj6211VWtuulOWNe5tFlAf7iTPJHbLsaJAnZo/TgE4sLVt+yDcL7u/7LqBA==
-Received: from DM6PR06CA0020.namprd06.prod.outlook.com (2603:10b6:5:120::33)
- by SJ1PR12MB6220.namprd12.prod.outlook.com (2603:10b6:a03:455::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7587.36; Thu, 23 May
- 2024 02:29:04 +0000
-Received: from DS1PEPF00017097.namprd05.prod.outlook.com
- (2603:10b6:5:120:cafe::e2) by DM6PR06CA0020.outlook.office365.com
- (2603:10b6:5:120::33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7611.19 via Frontend
- Transport; Thu, 23 May 2024 02:29:04 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.161) by
- DS1PEPF00017097.mail.protection.outlook.com (10.167.18.101) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.7611.14 via Frontend Transport; Thu, 23 May 2024 02:29:04 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Wed, 22 May
- 2024 19:28:50 -0700
-Received: from [10.110.48.28] (10.126.231.35) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Wed, 22 May
- 2024 19:28:49 -0700
-Message-ID: <9e2677ec-1d54-4969-907b-112b71ef8dd3@nvidia.com>
-Date: Wed, 22 May 2024 19:28:48 -0700
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="k7R9Jhi1"
+Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-354f8a0cd08so450985f8f.2
+        for <bpf@vger.kernel.org>; Wed, 22 May 2024 19:32:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1716431528; x=1717036328; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=sz3lWCUar1jpVGocpj1Lgnbxz6jeZMljCIFx4rYuFDo=;
+        b=k7R9Jhi1DXzk2Fp9TQ4UiM70HUISVk6C8RpgthUdjeewu2KDh0UJMk+cRtONPwwyy2
+         0LuXtdnG4nMC6DsPPZCLAB8dVUGyu0yAPLk1gYKf5WqYklWBK+DtJGPiE1/6O3gb+4z4
+         0aG6kgLkQpJbx+Uj+STTVQhf+/aMiW6vo7x9sNBd+o9n+S5AQpS7luIlf5RT4irn6WdD
+         kwc/XzJ484MjWnvICWzywl3V6R9hC6i5rNE6rg1jkqHmqlSaeT5PdXqJdjbRJobRONew
+         6l4rdEW18gJsUdDnnJvUdadgb4i3UHuM/3k85EnYUdI5jnPze/cxNgWwu2KXCdyrmY5w
+         BZpA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1716431528; x=1717036328;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=sz3lWCUar1jpVGocpj1Lgnbxz6jeZMljCIFx4rYuFDo=;
+        b=HxC21lh0sPqmzaSyK8fhwbh9dPBUfQFEaGO2ey48Dzcnt9ZOAi38HNDZwBXktpjRtv
+         hBw2S3dpaUA4JRaIGF9mJRrPjbKWyfvKEHInP9WD8hx7FRTI0yA1CYogsf5RMeeW29MB
+         gRiV46045CwbvrbTYZQc57FlHPgQOE2GHPpDOnpzHsmVSsprDBnkNRWrx2i7Qn5/6ykr
+         /1KH1VHbd2R99ILqX98YfIag/9CTFGJWTj4yXUIao1WxnXJhEbUcXhz2XEB+S26aj3Z5
+         FFHvm5bc9Wyhrklv7KI79jZ4asON6wximRAg+RumeDBhTHNTiJ5QlWEW6qds2x11tAkE
+         I7+Q==
+X-Gm-Message-State: AOJu0YzEFg3aNIGPg3bN/3tj+YizsL6y5DgveOhQ4ZUF8pJK4XrUM9Lj
+	pePlZ25Z6mv7xvpR0c5ZvgdkwuhWdDLu69h/33MwLpeMXK+GiDqM5lcykWc9+fgdPCkEbjajEmu
+	PBhb/tL0lx2sY0BvJoeRxX5Hfmpo=
+X-Google-Smtp-Source: AGHT+IH91P3Wt0vkfopQDpnu9WIflJRJVYIpmLl8d3mWopH4B7+ALDAv4xLO5n40pF636Ilo/MiDWHH4ti9BA/Wy1ts=
+X-Received: by 2002:a5d:45d1:0:b0:352:5f74:6998 with SMTP id
+ ffacd0b85a97d-354d8cf8f82mr3092482f8f.18.1716431528138; Wed, 22 May 2024
+ 19:32:08 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 02/68] kselftest: Desecalate reporting of missing
- _GNU_SOURCE
-To: Edward Liaw <edliaw@google.com>, Mark Brown <broonie@kernel.org>
-CC: <shuah@kernel.org>, =?UTF-8?Q?Micka=C3=ABl_Sala=C3=BCn?=
-	<mic@digikod.net>, =?UTF-8?Q?G=C3=BCnther_Noack?= <gnoack@google.com>,
-	Christian Brauner <brauner@kernel.org>, Richard Cochran
-	<richardcochran@gmail.com>, Paul Walmsley <paul.walmsley@sifive.com>, "Palmer
- Dabbelt" <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, "Alexei
- Starovoitov" <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, "David
- S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, "Jesper
- Dangaard Brouer" <hawk@kernel.org>, John Fastabend
-	<john.fastabend@gmail.com>, Kees Cook <keescook@chromium.org>, Andy
- Lutomirski <luto@amacapital.net>, Will Drewry <wad@chromium.org>,
-	<linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-	<kernel-team@android.com>, <linux-security-module@vger.kernel.org>,
-	<netdev@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
-	<bpf@vger.kernel.org>
-References: <20240522005913.3540131-1-edliaw@google.com>
- <20240522005913.3540131-3-edliaw@google.com>
- <94b73291-5b8a-480d-942d-cfc72971c2f5@sirena.org.uk>
- <CAG4es9WAASaSG+Xgp31-kLT3G8wpeT5vAqbCA4r=Z8G_zAF73w@mail.gmail.com>
-Content-Language: en-US
-From: John Hubbard <jhubbard@nvidia.com>
-In-Reply-To: <CAG4es9WAASaSG+Xgp31-kLT3G8wpeT5vAqbCA4r=Z8G_zAF73w@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: rnnvmail203.nvidia.com (10.129.68.9) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS1PEPF00017097:EE_|SJ1PR12MB6220:EE_
-X-MS-Office365-Filtering-Correlation-Id: 3aceb185-6cf6-42d0-9f33-08dc7ad01d6d
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230031|7416005|1800799015|82310400017|36860700004|376005;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?czJPOHNDanBmT0FVVFNaVzlTdnpIVmVGcUpqcHYyY2I1SDh3MVU0U2piRnZM?=
- =?utf-8?B?SGNyWDNLRW9BUHc5UUdpZVExaTZVcmE3emlxS0c4N1gvWWozNmlMUEZmWWhl?=
- =?utf-8?B?S25MaHVFcDVnRGpXODhqT3YvdWFkL2V1Wktaaml3T3RZcUhpWitaTjAzdTJB?=
- =?utf-8?B?QVhMN211L0lneTUzSk92RnRIYkFOczRra3l5SWJaRkVtdDVBbUU2TDIwVDIr?=
- =?utf-8?B?ZFlwcXBEVWxtUDY5NWthRHVnT2ErN3ZYb01UY0wvS0JHS084ZlBwcWw2SU9u?=
- =?utf-8?B?MEhZRkZvTmpRcm93ZU9DOHk4NmJGOHJlekJ6T0k5cEh5TUpMZTdxQkhHV3I3?=
- =?utf-8?B?aG9HYVpzOGd0YnhDQzBTSWVPaG10Rkl2clR4QVRoU05CSVR5ZmljV1FRY1NF?=
- =?utf-8?B?TFZwckRyUGpHYXcrakJibVlZbjkvSElhdkJtMy9JSmdSdFRhWjNab0VyWUVz?=
- =?utf-8?B?Vnd1QUkxL2RJR0dwWVJxT0dCbXFGZHhDS2M5UDZYdXp3U0FOTjN3alk5bWJ0?=
- =?utf-8?B?c2xNZVEvRUp5N1dYVDlDcXpHMGthTWhobWsvTTh5MU5QN2dYOW1ZS0lMcFY2?=
- =?utf-8?B?TGFNMk9Pd2tjRzJGZ3plMDFlcDV2eUNiZXg0b3NERjltYkM0TDBuMG9OQXZq?=
- =?utf-8?B?Y1RKU0JhanorVmRvVHlJNUVVeU4xNXVmcE9yT0ZPMlE5UlJKOUYrK3h4ODVv?=
- =?utf-8?B?RDllVG9uMCtUNDBGU1I3SWI3RTkyMmdBWkRZQmVDbFFSZXRNczZwcmViQUtQ?=
- =?utf-8?B?VUl1T3dVK2ZuajhEVERqblVaTDVqTUhxMmNjOHFQcVVaZ1o5S0hyUVVlNVFZ?=
- =?utf-8?B?enlzbUF3V09ZNXJGVTFXMi9aeTgvOU8zam8xMm01SFd2by8zcmpwQWJlQU11?=
- =?utf-8?B?NUhFT0QwdUFHOFRrb1hxWjVTeTVUc1BUUDVmWlFLMHdXY2ZlVFBPaVZhalVs?=
- =?utf-8?B?S2hIUlJUYzdGVVpMSnN1VVZIbXN0RjdMbXkydGQ4TGZhRXFxTWE5U05JZ2wy?=
- =?utf-8?B?T3UwNzArWWJjblF6b1BNUW8wV0tjTE41aW9pdFM0NlU5OXZmejE3OENWVVli?=
- =?utf-8?B?MElxdVFsblUrdGl2NDFIQ25TUEdjV2VNRlFRNGZySUhxMGdTc0Q0cm1Lblhn?=
- =?utf-8?B?T2dxSHlhcTRCZzRaNG0weGtmYm9QSTlOajJkL0xHZE5sbzJsU2pxbkhtQjFL?=
- =?utf-8?B?eW5qd25HTkVOODVuYzRtaitybTFqNndYWnYyK1crOGRQb1VuR3NqbjJIM09H?=
- =?utf-8?B?ZStEUlFkdnJFRTNwMVAvYVAzTGhwanhpTGJyd095Mk5VR2FCMUVEWWZ1bDl0?=
- =?utf-8?B?NThIL2dUeTNWS1FvVGZKVVVsV0xTb3RrNVI3VllVSDhSb3lkN2hzK3JjdmdM?=
- =?utf-8?B?NlRkb1E0T29MYkYwOURocGF5S3VjNDVBT3dKRXFaSjliTVZGQ0ducUZlUDdR?=
- =?utf-8?B?Q0Q2eDkyOVlwTVo4eU1UQVJjekUxRDE0OGpzM2RVK1Z6ejhpTkcyUGNLaVhR?=
- =?utf-8?B?L1VsdWxocE5ienhTRVcyQm5TZTRMaHh4M203aFQyWlJSTXBidjViWHhkS2NS?=
- =?utf-8?B?S3IwRWVDZ284ajlCbUZVRHcxblpnOXU5U21JelRDS1hzN21sYThBRmVFdVpr?=
- =?utf-8?B?b2N3M0lFWm9uYnpoZTFWTkozUFZqdUtqNkxSaU5icHptc1Z0b1RnUXFqbkFE?=
- =?utf-8?B?NG1WM04xUmRUeWdUNVg2R2thWGtQOWp2eEpvNkxNZHY0WTV3T3ZmYmZxSjQ4?=
- =?utf-8?B?MDBxc29NTElTcWozU1BFd3RJbjFwTTZEZG5Qd09NeFAxS3ZHVDVhMkJKeUcz?=
- =?utf-8?B?RzZOc3lkSlI2cTFndG9nYkpJM1VLWnk4TWJJbmV2Zm9PNFUvK2t0N2tXU1l0?=
- =?utf-8?Q?C2SygUAB9yeUr?=
-X-Forefront-Antispam-Report:
-	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230031)(7416005)(1800799015)(82310400017)(36860700004)(376005);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 May 2024 02:29:04.3714
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3aceb185-6cf6-42d0-9f33-08dc7ad01d6d
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	DS1PEPF00017097.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ1PR12MB6220
+References: <20240522024713.59136-1-alexei.starovoitov@gmail.com> <15a3deb272983d2d165dd1ac0d1a7750b200a922.camel@gmail.com>
+In-Reply-To: <15a3deb272983d2d165dd1ac0d1a7750b200a922.camel@gmail.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Wed, 22 May 2024 19:31:56 -0700
+Message-ID: <CAADnVQK4iERDy8AC1ZbOLB3ZxQCGaiTEEZsH=Ojdxfqi=xWAwQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] bpf: Relax precision marking in open coded iters
+ and may_goto loop.
+To: Eduard Zingerman <eddyz87@gmail.com>
+Cc: bpf <bpf@vger.kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@kernel.org>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Kernel Team <kernel-team@fb.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 5/22/24 10:46 AM, Edward Liaw wrote:
-> On Wed, May 22, 2024 at 4:21 AM Mark Brown <broonie@kernel.org> wrote:
->> On Wed, May 22, 2024 at 12:56:48AM +0000, Edward Liaw wrote:
-...
->> You've not provided a Signed-off-by for this so people can't do anything
->> with it, please see Documentation/process/submitting-patches.rst for
->> details on what this is and why it's important.
-> 
-> Sorry, my mistake, I forgot to add it after cherry-picking.  If added
+On Wed, May 22, 2024 at 5:02=E2=80=AFPM Eduard Zingerman <eddyz87@gmail.com=
+> wrote:
+>
+> On Tue, 2024-05-21 at 19:47 -0700, Alexei Starovoitov wrote:
+>
+> [...]
+>
+> > Skipping precision mark at if (i > 1000) keeps 'i' imprecise,
+> > but arr[i] will mark 'i' as precise anyway, because 'arr' is a map.
+> > On the next iteration of the loop the patch does copy_precision()
+> > that copies precision markings for top of the loop into next state
+> > of the loop. So on the next iteration 'i' will be seen as precise.
+>
+> Could you please elaborate a bit on why copy_precision() is necessary?
+> In general, the main idea of the patch is to skip precision marks in
+> certain cases, meaning that strictly more branches would be explored,
+> and it does not seem that copy_precision() is needed for safety reasons.
+>
+> I tried turning copy_precision() off and see a single test failing:
+>
+>     $ ./test_progs -vvv -a iters/task_vma
+>     ...
+>     ; bpf_for_each(task_vma, vma, task, 0) { @ iters_task_vma.c:30
+>     35: (55) if r0 !=3D 0x0 goto pc-15 21: R0_w=3Dptr_vm_area_struct(id=
+=3D1002) R6=3D1000 R10=3Dfp0 fp-8=3Diter_task_vma(ref_id=3D1,state=3Dactive=
+,depth=3D1001) refs=3D1
+>     ; if (bpf_cmp_unlikely(seen, >=3D, 1000)) @ iters_task_vma.c:31
+>     21: (35) if r6 >=3D 0x3e8 goto pc+14    ; R6=3D1000 refs=3D1
+>     ; vm_ranges[seen].vm_start =3D vma->vm_start; @ iters_task_vma.c:34
+>     22: (bf) r1 =3D r6
+>     REG INVARIANTS VIOLATION (alu): range bounds violation u64=3D[0x3e8, =
+0x3e7] s64=3D[0x3e8, 0x3e7] u32=3D[0x3e8, 0x3e7] s32=3D[0x3e8, 0x3e8] var_o=
+ff=3D(0x3e8, 0x0)
+>     23: R1_w=3D1000 R6=3D1000 refs=3D1
+>     23: (67) r1 <<=3D 4                     ; R1_w=3D16000 refs=3D1
+>     24: (18) r2 =3D 0xffffc90000342008      ; R2_w=3Dmap_value(map=3Diter=
+s_ta.bss,ks=3D4,vs=3D16008,off=3D8) refs=3D1
+>     26: (0f) r2 +=3D r1                     ; R1_w=3D16000 R2_w=3Dmap_val=
+ue(map=3Diters_ta.bss,ks=3D4,vs=3D16008,off=3D16008) refs=3D1
+>     27: (79) r1 =3D *(u64 *)(r0 +0)         ; R0_w=3Dptr_vm_area_struct(i=
+d=3D1002) R1_w=3Dscalar() refs=3D1
+>     28: (7b) *(u64 *)(r2 +0) =3D r1
+>     invalid access to map value, value_size=3D16008 off=3D16008 size=3D8
+>     R2 min value is outside of the allowed memory range
+>     processed 27035 insns (limit 1000000) max_states_per_insn 65 total_st=
+ates 2003 peak_states 1008 mark_read 2
 
-Adding this to your .gitconfig would cover you for cases like this, I think
-it's pretty common to do this:
+Exactly. It's failing without copy_precision().
+I didn't add an additional selftest, but I tried to explain
+the idea in the commit log.
 
-[format]
-     signoff = true
+That's the case where the verifier processes open coded iter
+with a bounded loop logic.
+Try:
+-               if (bpf_cmp_unlikely(seen, >=3D, 1000))
++               if (bpf_cmp_unlikely(seen, =3D=3D, 1000))
 
+and it will also pass.
+In both cases there will be 27038 processed insn.
+All 1k iterations will be checked by the verifier.
 
+That's the main idea.
+Let users right normal loops for (i=3D0; i < 1000 && can_loop; ...)
+and if there is no map value access through 'i' the loop
+will converge quickly as may_goto.
+If not bounded loop logic will quick in for arr[i].
+Just like it did for vm_ranges[seen] in this test.
 
-thanks,
--- 
-John Hubbard
-NVIDIA
+> I wonder, what if we forgo the 'ignore_bad_range' flag and instead
+> consider branches with invalid range as impossible?
+> E.g. when pred =3D=3D -2. Or when prediction says that branch would be
+> taken and another branch leads to invalid range.
 
+That sounds pretty much like is_branch_taken.
+If we don't explore another branch we have to mark the register as precise.
+
+> I'll give it a try later this evening, but still curious about the
+> reasoning behind copy_precision().
+
+copy_precision() is kinda the main idea.
+Once loop iteration copies precision from header of the loop
+the if (dst_reg->precise || src_reg->precise) logic kicks in and
+is_branch_taken() starts to work and it becomes bounded loop like
+where every iteration states are different.
