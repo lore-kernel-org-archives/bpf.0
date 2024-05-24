@@ -1,46 +1,49 @@
 Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D64FC83A0D;
-	Fri, 24 May 2024 16:36:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 738AF8626E;
+	Fri, 24 May 2024 16:36:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716568585; cv=none; b=PI8WbDcX53Bc26GzvFpAyzDaylZsVsfwUgkKGVzMtzcWz0sVhziHw97UOfKVfOvIZYXMCDUoNJsynxnxNaonaCLKi8BFP3Lzx02NAfAqp5lLpwZW1xrBn9NyIa+ay0HwY3s3ZT3yhlM7IhW9oqI2X5W5Svsd4nbxHTKZjyY4Q/Q=
+	t=1716568586; cv=none; b=K75gkhWT4HfVMEzfBOOBtxme6Svz6rFKu/mtHECCrw2dU3TZcRa+wE7WfIm5Avbxt///oFQKP7coOz43L0p9pzIJwfkt5f/E97Jl5gFB2jvmpVt8IsxYqZn14ogJrmLBnaEJl8Ib0YtyTnM2nKvHK9I89Fi1sY5d4vY87I71Ol4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716568585; c=relaxed/simple;
-	bh=r7dbGSZS+UZxQmd3Kum0wG+KGiCY04G8988SN7eCPYU=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=N8B4GchYrIygl7atApHMWpPatmjkjws2ErHM/yp9TI6CtdYTFDbw5+jc6FhVKVCS8trKgKvDoAmVlBo2cBwsw5KRcoJPPbGaAtz0FH6g8fj0fZZga5s9dB0xn+Wewg1ql/B8sUlMiyC+5pFGlytoQNacm4rTBal+uUm+XMGC+7U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=IedWzaQm; arc=none smtp.client-ip=213.133.104.62
+	s=arc-20240116; t=1716568586; c=relaxed/simple;
+	bh=w269uJgL/6srq6AvmZxPTl4S/c4SeZbYLim5mBI2eZ8=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=VefUBx3ul98NlBR00g0xPHBRFiVAIMQ+dvWQjCZQ5g9pdjFjtKK0u8XbkkWnKOZEZMvQDzdBoxEMnvXC48YF6GGj7Qi+/NzexcjFdqyU6pB2LSDqMmzUumZ9+Zp3DTt9TnI7AKzqkknagrc3sl80kCPhVBN2/ihW7p4pYUrhCuE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=p3y5mNMA; arc=none smtp.client-ip=213.133.104.62
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="IedWzaQm"
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="p3y5mNMA"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:MIME-Version:
-	Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:In-Reply-To:References;
-	bh=cDjjizADC9QJgiIBgN8vyRB9H0Mk619r0v3k1gZ+FbA=; b=IedWzaQmn1IvPQ+7sDOzFzz1uy
-	9fQ/iLb6V5VjCq8w7gZd7lTz0Y/m/dX6IqQKCBIavXD12Zm3CrJzvaIe/JTdTUY4TXuH1ja0mw5q7
-	1+GTdZciuuGbYTdnJez2MpOIKtplCnnOmwfAb9wjOPkP1I8LcyFClLpvmPCXzkvOKUPBn/kdrRCIQ
-	QIV4REcapCAuprreDglCtheHVjpoIsQRl0lKSDtApqpAWoxxum0JCIOpwk8mxJ9fEKOdRRX5M5Ovk
-	YvxGReD7KfD+jkqQ6ULgAI91zsmOk6OIVUr3LFVQZGSLZqbbgkKUyAhYfnncG962gie4b8vg1xgu8
-	w3D45ckg==;
+	References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
+	Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=kAbJO+vdvUjq+hTE2Bsysmwx578XHIgNMugClGwrJts=; b=p3y5mNMA/GUtoRqZ8hzLo6lmT4
+	RaBNYLWgzpFCXMbtdbjH9I5/7hyb4o9gz7TR5JTPwJgCMH/RIgLUe6+BvCYKm85Z6LWW8pVhI03t8
+	QfdM7pFRlD+eBi0q1oCX8QH9/R42uh60L058kzLo5+Uh0+9QzM7hYZ3fBmkIqb9DkandAKVIX8/sJ
+	/IZgHC3QgZ1142B8aPnKcaypmJYxnLa8TgQq508TqVpVFoz3vuLjOfGiaIlru5zPf+i7DFmrDQz4J
+	etpsU8xpplNr2C2byKEDymEdvLG0652vU+3q+AVnuZG5ayrIMxXYjWv7beHfCda2r3e7fSOL7uSr0
+	YxpgRvtg==;
 Received: from 14.248.197.178.dynamic.dsl-lte-bonding.zhbmb00p-msn.res.cust.swisscom.ch ([178.197.248.14] helo=localhost)
 	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.94.2)
 	(envelope-from <daniel@iogearbox.net>)
-	id 1sAXu1-000IRK-JE; Fri, 24 May 2024 18:36:21 +0200
+	id 1sAXu2-000IRd-JY; Fri, 24 May 2024 18:36:22 +0200
 From: Daniel Borkmann <daniel@iogearbox.net>
 To: martin.lau@kernel.org
 Cc: razor@blackwall.org,
 	bpf@vger.kernel.org,
 	netdev@vger.kernel.org,
 	Daniel Borkmann <daniel@iogearbox.net>
-Subject: [PATCH bpf v2 1/4] netkit: Fix setting mac address in l2 mode
-Date: Fri, 24 May 2024 18:36:16 +0200
-Message-Id: <20240524163619.26001-1-daniel@iogearbox.net>
+Subject: [PATCH bpf v2 3/4] selftests/bpf: Add netkit tests for mac address
+Date: Fri, 24 May 2024 18:36:18 +0200
+Message-Id: <20240524163619.26001-3-daniel@iogearbox.net>
 X-Mailer: git-send-email 2.21.0
+In-Reply-To: <20240524163619.26001-1-daniel@iogearbox.net>
+References: <20240524163619.26001-1-daniel@iogearbox.net>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -51,91 +54,35 @@ Content-Transfer-Encoding: 8bit
 X-Authenticated-Sender: daniel@iogearbox.net
 X-Virus-Scanned: Clear (ClamAV 0.103.10/27285/Fri May 24 10:30:55 2024)
 
-When running Cilium connectivity test suite with netkit in L2 mode, we
-found that it is expected to be able to specify a custom MAC address for
-the devices, in particular, cilium-cni obtains the specified MAC address
-by querying the endpoint and sets the MAC address of the interface inside
-the Pod. Thus, fix the missing support in netkit for L2 mode.
+This adds simple tests around setting MAC addresses in the different
+netkit modes.
 
-Fixes: 35dfaad7188c ("netkit, bpf: Add bpf programmable net device")
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Acked-by: Nikolay Aleksandrov <razor@blackwall.org>
 ---
- drivers/net/netkit.c | 26 +++++++++++++++++++++-----
- 1 file changed, 21 insertions(+), 5 deletions(-)
+ tools/testing/selftests/bpf/prog_tests/tc_netkit.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/drivers/net/netkit.c b/drivers/net/netkit.c
-index a4d2e76a8d58..272894053e2c 100644
---- a/drivers/net/netkit.c
-+++ b/drivers/net/netkit.c
-@@ -155,6 +155,16 @@ static void netkit_set_multicast(struct net_device *dev)
- 	/* Nothing to do, we receive whatever gets pushed to us! */
- }
- 
-+static int netkit_set_macaddr(struct net_device *dev, void *sa)
-+{
-+	struct netkit *nk = netkit_priv(dev);
+diff --git a/tools/testing/selftests/bpf/prog_tests/tc_netkit.c b/tools/testing/selftests/bpf/prog_tests/tc_netkit.c
+index 15ee7b2fc410..18b2e969a456 100644
+--- a/tools/testing/selftests/bpf/prog_tests/tc_netkit.c
++++ b/tools/testing/selftests/bpf/prog_tests/tc_netkit.c
+@@ -73,6 +73,16 @@ static int create_netkit(int mode, int policy, int peer_policy, int *ifindex,
+ 			 "up primary");
+ 	ASSERT_OK(system("ip addr add dev " netkit_name " 10.0.0.1/24"),
+ 			 "addr primary");
 +
-+	if (nk->mode != NETKIT_L2)
-+		return -EOPNOTSUPP;
-+
-+	return eth_mac_addr(dev, sa);
-+}
-+
- static void netkit_set_headroom(struct net_device *dev, int headroom)
- {
- 	struct netkit *nk = netkit_priv(dev), *nk2;
-@@ -198,6 +208,7 @@ static const struct net_device_ops netkit_netdev_ops = {
- 	.ndo_start_xmit		= netkit_xmit,
- 	.ndo_set_rx_mode	= netkit_set_multicast,
- 	.ndo_set_rx_headroom	= netkit_set_headroom,
-+	.ndo_set_mac_address	= netkit_set_macaddr,
- 	.ndo_get_iflink		= netkit_get_iflink,
- 	.ndo_get_peer_dev	= netkit_peer_dev,
- 	.ndo_get_stats64	= netkit_get_stats,
-@@ -300,9 +311,11 @@ static int netkit_validate(struct nlattr *tb[], struct nlattr *data[],
- 
- 	if (!attr)
- 		return 0;
--	NL_SET_ERR_MSG_ATTR(extack, attr,
--			    "Setting Ethernet address is not supported");
--	return -EOPNOTSUPP;
-+	if (nla_len(attr) != ETH_ALEN)
-+		return -EINVAL;
-+	if (!is_valid_ether_addr(nla_data(attr)))
-+		return -EADDRNOTAVAIL;
-+	return 0;
- }
- 
- static struct rtnl_link_ops netkit_link_ops;
-@@ -365,6 +378,9 @@ static int netkit_new_link(struct net *src_net, struct net_device *dev,
- 		strscpy(ifname, "nk%d", IFNAMSIZ);
- 		ifname_assign_type = NET_NAME_ENUM;
- 	}
-+	if (mode != NETKIT_L2 &&
-+	    (tb[IFLA_ADDRESS] || tbp[IFLA_ADDRESS]))
-+		return -EOPNOTSUPP;
- 
- 	net = rtnl_link_get_net(src_net, tbp);
- 	if (IS_ERR(net))
-@@ -379,7 +395,7 @@ static int netkit_new_link(struct net *src_net, struct net_device *dev,
- 
- 	netif_inherit_tso_max(peer, dev);
- 
--	if (mode == NETKIT_L2)
-+	if (mode == NETKIT_L2 && !(ifmp && tbp[IFLA_ADDRESS]))
- 		eth_hw_addr_random(peer);
- 	if (ifmp && dev->ifindex)
- 		peer->ifindex = ifmp->ifi_index;
-@@ -402,7 +418,7 @@ static int netkit_new_link(struct net *src_net, struct net_device *dev,
- 	if (err < 0)
- 		goto err_configure_peer;
- 
--	if (mode == NETKIT_L2)
-+	if (mode == NETKIT_L2 && !tb[IFLA_ADDRESS])
- 		eth_hw_addr_random(dev);
- 	if (tb[IFLA_IFNAME])
- 		nla_strscpy(dev->name, tb[IFLA_IFNAME], IFNAMSIZ);
++	if (mode == NETKIT_L3) {
++		ASSERT_EQ(system("ip link set dev " netkit_name
++				 " addr ee:ff:bb:cc:aa:dd 2> /dev/null"), 512,
++				 "set hwaddress");
++	} else {
++		ASSERT_OK(system("ip link set dev " netkit_name
++				 " addr ee:ff:bb:cc:aa:dd"),
++				 "set hwaddress");
++	}
+ 	if (same_netns) {
+ 		ASSERT_OK(system("ip link set dev " netkit_peer " up"),
+ 				 "up peer");
 -- 
 2.34.1
 
