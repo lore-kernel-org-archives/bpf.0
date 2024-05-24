@@ -1,150 +1,94 @@
-Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
+Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D593E86643
-	for <bpf@vger.kernel.org>; Fri, 24 May 2024 14:15:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 309E08562C
+	for <bpf@vger.kernel.org>; Fri, 24 May 2024 14:15:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716560112; cv=none; b=UuvHskmNOT2RrfJrWTT//cWWUzRXUJawucqc0Z7q6iAriOqRwYzEtsQBFbgGXMIwMVrv29nblTQxXovQKfX5cstYevYaVuwYCD+48ll2skQpXjKjpuB3H+AhjTSjbHUKmWz00HjTk/vq15R2Nv2KXzxqUKjEj5nqXUoyhmUoBe4=
+	t=1716560119; cv=none; b=UTFyBNwDgoqs1+A8LtJh9ofga2PggZHBiDm0BTWMCe6zHXU0HzmMBDeIVGO4oLwi3JmrILZ/+1nB7+SKJhlbxeyi/t1KsWEicJj1L6UFi9ytO4mcb8VbkEMUjsS4W8rqNNO8K1WcYFaurJ+4TpS9xK0Gj3PbE3DIg+vKiirDOmE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716560112; c=relaxed/simple;
-	bh=Ncsyl74jMB4y+2C/6f3XjyjhbV9IDOKTgeQe/duHYi8=;
-	h=From:To:Cc:References:In-Reply-To:Subject:Date:Message-ID:
-	 MIME-Version:Content-Type; b=uUMc91dpjY2pySurLMJhiJFt3Ilb6N1FlYvx8HR9B1soWrLwA3dRsKJBCQIvmT7H/9uIIDPQdiZlZpnnOeFugao4WJyOqHNjqaj0g5CrsG8fEQn+k268EG/+Ku3aqe14/YZpBju0qPiGQdTsKY2lrZYCkw6uTsmgROXwZAkXvWI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=googlemail.com; spf=pass smtp.mailfrom=googlemail.com; dkim=pass (2048-bit key) header.d=googlemail.com header.i=@googlemail.com header.b=ICXuCUSO; arc=none smtp.client-ip=209.85.214.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=googlemail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=googlemail.com
+	s=arc-20240116; t=1716560119; c=relaxed/simple;
+	bh=3oyL1xg979Wd3JmqihENBu4Vnp+k+yMhGiZu/42vP/o=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=eizMqLq+6uikoljIka/+9QQOLQC0sDjOmgFOHZRuwkrMFjbe3EFnciKzDMLl/YaU1e3lAG+qvbVZL/x59iEZjzpuwEsVNTZwKU8+fqNAAJVq+EM/xoZ65bNgcRWAkP1cOLkfmAW11WcsYDyBCd0DihYZjc/PhRBNg43R4tLenNc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=blackwall.org; spf=none smtp.mailfrom=blackwall.org; dkim=pass (2048-bit key) header.d=blackwall-org.20230601.gappssmtp.com header.i=@blackwall-org.20230601.gappssmtp.com header.b=w2eY3gpI; arc=none smtp.client-ip=209.85.218.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=blackwall.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=blackwall.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=googlemail.com header.i=@googlemail.com header.b="ICXuCUSO"
-Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-1f304533064so23227895ad.0
-        for <bpf@vger.kernel.org>; Fri, 24 May 2024 07:15:10 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=blackwall-org.20230601.gappssmtp.com header.i=@blackwall-org.20230601.gappssmtp.com header.b="w2eY3gpI"
+Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-a6265d48ec3so111839166b.0
+        for <bpf@vger.kernel.org>; Fri, 24 May 2024 07:15:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20230601; t=1716560110; x=1717164910; darn=vger.kernel.org;
-        h=thread-index:content-language:content-transfer-encoding
-         :mime-version:message-id:date:subject:in-reply-to:references:cc:to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=KSpHyoXQyrWQ7YpniL++kWwmn1IU/Ue+KamaV2Z1ewg=;
-        b=ICXuCUSOb4wjKppaWzqmfhNgO6S3RW5d09IgaK64A18Y7J98Mkz1R7y3f8Tt6zrkUY
-         aZ/9I3R5QfBfSBizJsPKqzZgcJHRqgJhY6uimV1kipZHsCITgXPD6s+rqlidVl8i4Lni
-         iq6oHqvENK+OHSL4WUBC+MDvONCCukSG2pGMUj4iZmJbPjqXSQOA+ywO6dqAnjFdOc4q
-         fDqhHHi+Cd6IJgOeywiyTDxlrTFdrew++z0CcWP5/sXVVn/2X31n1Gzzxr8f8/Lr4mhk
-         xsy4WIjdNIIvOjMMv/Y+W3cqjxfr5Hx7neVUZZihS9YcXMdn+wn3FBULFhwBik3/vw1G
-         tGag==
+        d=blackwall-org.20230601.gappssmtp.com; s=20230601; t=1716560116; x=1717164916; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=bzH9/kd4g2Cv9SF58a2TQf0rXcjP1nTT2vaKMFNbqB8=;
+        b=w2eY3gpI11fWOWyHAyD0HJ78a9x6kByT8Y0ozlox4j0FPw3MV5uivr+bi8WM14fnem
+         nwE/Rmto8M3Dpx7WHnMHzxKuL+yxqJzhCl6uOz+M5fgiuYm3lkDH9wTlOitxmqBnIhfN
+         rXdNnJTHArK7ED/FGTCUoKjXT6sGJKzkkr7gfd116NY/ja36dFa5ULzq2h5zuzMVWnXS
+         CuGfz9AKQp10euoM7xufWPihAKuR1AaNOaD7yIVinWXWiYOffkn6u8bYu4NdyKmbLyEb
+         nW/mWV79cWrNQ3i1XSPVtBGsbzJpwffSKfzA9x96pdXrgWk23ig/FhZeSOnBKc95mY3F
+         pmNw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1716560110; x=1717164910;
-        h=thread-index:content-language:content-transfer-encoding
-         :mime-version:message-id:date:subject:in-reply-to:references:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=KSpHyoXQyrWQ7YpniL++kWwmn1IU/Ue+KamaV2Z1ewg=;
-        b=fjMq4Z+hvQm6B05+LXI2S2FZHvX9rEPdK2BEbxHttaIduGrE/7ULynGfsKDgbB77zY
-         517fV/ewr4dTSlCTV1i9e6fqOEw0DNvaqE0dpG/LrNkC9SxDBjPx3smIyFwzyCkdHz63
-         SrBycF5Lq06H9jlQvVnS/41BuDpSN30mnfKywxn8tZwcCrZFweU+hc8RPt7+gDLpXBNH
-         TLDYQI9sYCQKUfMV9vcHZO5bnsTOG2sq9nT2C98X6BUj6i1vljVsk8UNMO+fzK9Tz5By
-         k/SIXKWrggrHHCnXJresdVsQrxSPKHHiWhWXCgbBJLtlZurVE/1x6up667aKAiwvie64
-         oURA==
-X-Forwarded-Encrypted: i=1; AJvYcCX9XuMyuq+EadFn6N7k2zmCjagCbQoUCWBpCzAGNIgOj7mUcnc4mT5iG+Xdp7XpsBcNU2XG/z13GWqP6vyakfTAJR3E
-X-Gm-Message-State: AOJu0YyGjpRASM6wZ633VOr1v6yMDFbamggSnfWkRMSoWAiunv3tsG4D
-	u9q1TF2+lHsvSvjoMC+tsPYSXSXpgafQz/pQVSV2uadPtyI8Kz6kX1/TQgyb
-X-Google-Smtp-Source: AGHT+IHxaxG3/nqN+f1ZywQsH++WuHgrLdfQcwjzXk7qipY/6uFHmnx/buQ4Ri15+XVWmTuHBCSYMw==
-X-Received: by 2002:a17:902:e749:b0:1f3:642:9f5a with SMTP id d9443c01a7336-1f339ef522cmr76574365ad.6.1716560110109;
-        Fri, 24 May 2024 07:15:10 -0700 (PDT)
-Received: from ArmidaleLaptop (c-67-170-74-237.hsd1.wa.comcast.net. [67.170.74.237])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1f44c7c379dsm14353155ad.102.2024.05.24.07.15.08
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 24 May 2024 07:15:09 -0700 (PDT)
-From: dthaler1968@googlemail.com
-X-Google-Original-From: <dthaler1968@gmail.com>
-To: <bpf@ietf.org>,
-	<bpf@vger.kernel.org>
-Cc: <draft-ietf-bpf-isa.all@ietf.org>,
-	"'Ines Robles'" <mariainesrobles@googlemail.com>
-References: <171588680595.59757.9400896368334392439@ietfa.amsl.com>
-In-Reply-To: <171588680595.59757.9400896368334392439@ietfa.amsl.com>
-Subject: RE: Genart last call review of draft-ietf-bpf-isa-02
-Date: Fri, 24 May 2024 07:15:07 -0700
-Message-ID: <0ce301daade4$c8a890d0$59f9b270$@gmail.com>
+        d=1e100.net; s=20230601; t=1716560116; x=1717164916;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=bzH9/kd4g2Cv9SF58a2TQf0rXcjP1nTT2vaKMFNbqB8=;
+        b=YmbhXqpnhkBW+wZXyzEqTReShVRP1rsTpb7NDnsMCqeCNYMJS11D0F+13wM5JP71hY
+         Iu1uHRpy3o69ouzA9HDgIHFmfgotnTIjx08AgEQ21coeAMpjOABVR9wEJxMYhoqOco1/
+         KYXi77ke4TiGNPPBgqgtZBl3ABFbA6LP4g7X+ZbS8Q01Jm0k1tscKCg8wKCg6Brjviwz
+         JB+Az4O6h7U0EWKxcvzvxcMz7NUidpeorCYUkBRSqDP1QuT0Xn4O0PPnymvljDKei+Mw
+         eEdyPXHWdM4rAoSyiQZuNy+njnQwifiG4G/eDSF1dQrFyOBm95qLwh4FcSYjzBFoGx7k
+         LyYQ==
+X-Gm-Message-State: AOJu0YxuDI8rVzW/DhNDFLB71UzfGyFhbaJBpyE8y7S2KwLSO8cKnRVX
+	iQ4PzAMk6PEkmHWh6VEBtKaisQy4/wGfBFjsFnQVCJ4Oo6fG71OBbFF0BcfvesY=
+X-Google-Smtp-Source: AGHT+IGW2my8QyFWm1svam7c8xLj4ilWKCOALaSOb4lBdLbBSSDNHKB6XgBLJ47V+U2VDEkOGE8lJA==
+X-Received: by 2002:a17:907:170c:b0:a59:efd3:9d with SMTP id a640c23a62f3a-a628cd3826amr25637766b.58.1716560116405;
+        Fri, 24 May 2024 07:15:16 -0700 (PDT)
+Received: from [172.20.4.8] (92-64-183-131.biz.kpn.net. [92.64.183.131])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a626cc8da2asm138130466b.179.2024.05.24.07.15.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 24 May 2024 07:15:15 -0700 (PDT)
+Message-ID: <984f7580-890d-4644-b8ad-144505a882e4@blackwall.org>
+Date: Fri, 24 May 2024 17:15:14 +0300
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain;
-	charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-X-Mailer: Microsoft Outlook 16.0
-Content-Language: en-us
-Thread-Index: AQHhYwHWHvkDI0nYzQ93mgSzZBpWQrGZAimg
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf 3/5] netkit: Fix syncing peer device mtu with primary
+Content-Language: en-US
+To: Daniel Borkmann <daniel@iogearbox.net>, martin.lau@kernel.org
+Cc: bpf@vger.kernel.org, netdev@vger.kernel.org, Joe Stringer <joe@cilium.io>
+References: <20240524130115.9854-1-daniel@iogearbox.net>
+ <20240524130115.9854-3-daniel@iogearbox.net>
+From: Nikolay Aleksandrov <razor@blackwall.org>
+In-Reply-To: <20240524130115.9854-3-daniel@iogearbox.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-> -----Original Message-----
-> From: Ines Robles via Datatracker <noreply@ietf.org>
-> Sent: Thursday, May 16, 2024 12:13 PM
-> To: gen-art@ietf.org
-> Cc: bpf@ietf.org; draft-ietf-bpf-isa.all@ietf.org; last-call@ietf.org
-> Subject: Genart last call review of draft-ietf-bpf-isa-02
->=20
-> Reviewer: Ines Robles
-> Review result: Ready with Nits
->=20
-> I am the assigned Gen-ART reviewer for this draft. The General Area =
-Review
-> Team (Gen-ART) reviews all IETF documents being processed by the IESG =
-for
-> the IETF Chair.  Please treat these comments just like any other last =
-call
-> comments.
->=20
-> For more information, please see the FAQ at
->=20
-> <https://wiki.ietf.org/en/group/gen/GenArtFAQ>.
->=20
-> Document: draft-ietf-bpf-isa-02
-> Reviewer: Ines Robles
-> Review Date: 2024-05-16
-> IETF LC End Date: 2024-05-16
-> IESG Telechat date: Not scheduled for a telechat
->=20
-> Summary:
->=20
-> This document specifies the BPF instruction set architecture (ISA). =
-The document
-> is clear and well-written. No major issues were found, just some minor
-> suggestions.
->=20
-> Major issues: None
-> Minor issues: None
-> Nits/editorial comments:
->=20
-> * In the introduction, maybe?: "eBPF (which is no longer an acronym =
-for anything),
-> also commonly referred to as BPF" --> eBPF (which originally stood for =
-"extended
-> Berkeley Packet Filter" but is no longer an acronym), also commonly =
-referred to as
-> BPF...
+On 5/24/24 16:01, Daniel Borkmann wrote:
+> Implement the ndo_change_mtu callback in netkit in order to align the MTU
+> to the primary device. This is needed in order to sync MTUs to the latter
+> from the control plane (e.g. Cilium) which does not have access into the
+> Pod's netns.
+> 
+> Fixes: 35dfaad7188c ("netkit, bpf: Add bpf programmable net device")
+> Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+> Cc: Joe Stringer <joe@cilium.io>
+> ---
+>  drivers/net/netkit.c | 20 ++++++++++++++++++++
+>  1 file changed, 20 insertions(+)
+> 
 
-This sounds reasonable to me but at one point the BPF Steering Committee =
-(BSC)
-discussed the text to appear on the eBPF Foundation website at
-https://ebpf.foundation/ebpf-resources/
-(which is where the present text there came from), and at the time they =
-did not want
-to state the expansion.
-
-https://ebpf.io/what-is-ebpf/#what-do-ebpf-and-bpf-stand-for on the =
-other hand does.
-
-What do others think about Ines's suggestion?
-=20
-> * It would be nice to add caption to the tables (from Table 3 to Table =
-18).
-
-Can do.
-
-> Thanks for this document,
->=20
-> Ines
-
-Thanks for the review,
-Dave
+This one has unexpected behaviour IMO. If the app sets the MTU and we
+silently overwrite, then it may continue working and thinking the MTU
+was changed leading to unexpected problems. I think it'd be better to
+keep the MTU synced explicitly (e.g. when set on main device, then
+set it on peer as well) and error out when trying to set it without
+the proper capabilities.
 
