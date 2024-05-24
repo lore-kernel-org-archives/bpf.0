@@ -1,123 +1,125 @@
-Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com [209.85.128.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D657F328DB;
-	Fri, 24 May 2024 07:43:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5710682D7A;
+	Fri, 24 May 2024 07:52:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716536598; cv=none; b=LnFj04bdzmeGlEyLr6SmtZUtxT15YrbXJguGSUyATUJl2CBiyPDB26iHrX01dIo5cqQQxn92Hu85zFou5WzjaIkCVPh5wthebj6bZYAfvCmo/eEmS5YyiSNW2//w8h237rd5+dfbYa1L+4USHeZwB9QR5AlEbXrsupqrVjOwC0A=
+	t=1716537179; cv=none; b=Ji0H3/x7bmVPqOx7ll/OJUth5mFzpVYeGOo5VFcUgP3GDVk57fRhsL0lQMe5zPONwM1ZIcUPjlEdF/B4GiRfkjJJeybZBl27rrBc/3RIunz6oEK/x7R5uPKAGEBVYJpgT1X9KFDMTPYH/hnHg4fd0zt5FRrHRCljbi0Kcz7FYO8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716536598; c=relaxed/simple;
-	bh=EEAPAkvRWTP87ptJdkXmynH7J+7oWnWgXa8qzJjCnUI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=i/Wc6f80qsYvhNBpbkbY14AhuXil5ugeJ6m2cDxTVouITBhFrtnpt+4MCDx8f84T1K16z5qAtg/fcYetGIppUtZ2gOIgt6rkkNaFQUtkkH8t8WiSa9fpFwY/IpsRKPQQfkwZ0bPM3QWYBaJO0uKD6KPYrb0ssoimJL3rtzCppHM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BgmhP/FF; arc=none smtp.client-ip=209.85.128.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1716537179; c=relaxed/simple;
+	bh=ch+MbRPZTGBQUr5ZCA23iXr8FmFMlS0SQtrDDjy1Y0M=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=YDB3XaxomhMXT1AOP5L1F0M71YQCnjduiLrAgS975L58HW5uzLnfh//6Q0Zu6vRDWk/Ji4WceEQR7PIxLNeCeiCa7rYERkhqfKD5V5FTrLHs6iNcg/6oZnIW87B74pn9Ra012mfEnTBCQ4eEx3cuOWdSPX+nfci3q4RQyT7cSe8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YcqIBrSo; arc=none smtp.client-ip=192.198.163.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BgmhP/FF"
-Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-62a082720f0so6218867b3.1;
-        Fri, 24 May 2024 00:43:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1716536596; x=1717141396; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8+5o0jnvfHIMGelQ8b/lLWEj2CJxrw/Z+KD+l+PaAQk=;
-        b=BgmhP/FFu5vBHzEvhKmIZTVicCcbO0W0HGcuxoEkrYO9d+30s1cEVHBseD6seKN3Cc
-         g6gp1PShJXVxyA9HnEktWk8xvzpUIYAy/dIOXfTiQUuyrmV3WJXYjVT5pRZ1lvDMjrW3
-         aV80M/5ydSyPBJgvhwj6rZ8nJT7rY//lrr4lTTbIY+mCzQVTDiL/IEyHvzGVMHiXzdoT
-         5hghpe8eMLCMFH//xfVZXR5WH+PfM/uMHzzNm6tpcKUf1UgN5vGp08bSQ+5q9nFgY03Z
-         BRETdqqS+sf9hnDg0/xrGephcLjC3lhnDwaS6ZCO3myKNO/epwcdRmgFO90qz5ewSf1V
-         KEcQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1716536596; x=1717141396;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=8+5o0jnvfHIMGelQ8b/lLWEj2CJxrw/Z+KD+l+PaAQk=;
-        b=o+kqHi57tR9RFV75p7Ojy2AL7LIRho3SAi3Y4USwRATTuKLg8fTBv/il4vjH/Fz++a
-         jE1pdlK8zJn0L/O06l+r+uZimDHOSJMJmiR5e4IAu1k4Io++hT3DX/SPmO8lDymkGUwx
-         WOQrOglKWn+WaGIpsjJVjltRDjOnn7eyG3DHi+rO2JfHQzkIKHR/mMoaHYJr8Csd7vcD
-         W5PFgcKyEnpAL7XljFiMUYU82cGkiHxYVFf0DgfsSgAU6W+z3wdrfs2EnzIhwuapQgkG
-         HdQCbtWWB6ovQodtcQHOAj4uQKnH3DsuDOPSylrUdc5ItpAZvnSIn4KH2x/fS5og6Oke
-         vN2A==
-X-Forwarded-Encrypted: i=1; AJvYcCXJqqfjSDO9OVvZfi9f09AJN28/06Lpufndv+rQDMhfPgaJ0ouYHWInlwSHNH9Ey8LTlQdCuAB43/dTfXcveZflyPoafAsGmZQvMS+A
-X-Gm-Message-State: AOJu0YyvnBR1trdpRBBiU37w6OP1gQoEyx7CnWsXzlTaDJY0jeAXESHn
-	eEp6yS7s0hp5zCPvO/dtDyUVqKO0doUOAowN4IQelyogDquiLRASPCn+5P3cllCRfkDQ2w/Q2Af
-	6hmYKbJ439dCVNsKRL439znwf7SM=
-X-Google-Smtp-Source: AGHT+IFUF3ICaiQTE3zr4leR5Pkgem+HIQRPp295oMXpzO1jFJa/rHWdUCrzDilFW5dbZDoWbiLbuNViNj8R7nTRSAA=
-X-Received: by 2002:a0d:e8c4:0:b0:619:da17:87be with SMTP id
- 00721157ae682-62a08ee8ad9mr13994687b3.42.1716536595834; Fri, 24 May 2024
- 00:43:15 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YcqIBrSo"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1716537178; x=1748073178;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=ch+MbRPZTGBQUr5ZCA23iXr8FmFMlS0SQtrDDjy1Y0M=;
+  b=YcqIBrSorjaqPGS9xYxFnc+A145D83oPgTTnsy18f5uEUuBysMo3O5Vk
+   gCxmmIAmWdgEjFIG2Q6pdObblH6C8/rnScCfw7x998JgyRq8KJzGFKXUR
+   pN/yBTua7plcHNC/xLw6Zv6HeP8xRGl/wg3ANI1LLUqmHOUcCrD74qI/X
+   mXwahMX9FoTONQAnZT26EqurwnC0jfmwZoz6Z69MZnt3vnjyEf61vM6qs
+   JkZp8OXGam4L5OaJMn5fak6a/Lb3xm+kivVFiyyN8KbEIxZDhp0cjhkbB
+   o3P3O5PzGXoSt9GJnl/MEsbXtYEnb0sU/VKPdNCHpv9ldlAAmGPt69ur9
+   g==;
+X-CSE-ConnectionGUID: vaNWmLemQr6LCbm9ogJzBg==
+X-CSE-MsgGUID: 8hFIiiosSvOByXHHObk4Rw==
+X-IronPort-AV: E=McAfee;i="6600,9927,11081"; a="15845955"
+X-IronPort-AV: E=Sophos;i="6.08,184,1712646000"; 
+   d="scan'208";a="15845955"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2024 00:52:57 -0700
+X-CSE-ConnectionGUID: Re7qkzs6RuCEsJ3DEFCn2w==
+X-CSE-MsgGUID: 9CFGnEvqQjKWmLYUyFkJjQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,184,1712646000"; 
+   d="scan'208";a="33953892"
+Received: from xiao-desktop.sh.intel.com ([10.239.46.158])
+  by fmviesa006.fm.intel.com with ESMTP; 24 May 2024 00:52:51 -0700
+From: Xiao Wang <xiao.w.wang@intel.com>
+To: paul.walmsley@sifive.com,
+	palmer@dabbelt.com,
+	aou@eecs.berkeley.edu,
+	luke.r.nels@gmail.com,
+	xi.wang@gmail.com,
+	bjorn@kernel.org
+Cc: ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	martin.lau@linux.dev,
+	eddyz87@gmail.com,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	john.fastabend@gmail.com,
+	kpsingh@kernel.org,
+	sdf@google.com,
+	haoluo@google.com,
+	jolsa@kernel.org,
+	linux-riscv@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org,
+	pulehui@huawei.com,
+	puranjay@kernel.org,
+	haicheng.li@intel.com,
+	Xiao Wang <xiao.w.wang@intel.com>
+Subject: [PATCH bpf-next v4 0/2] riscv, bpf: Introduce Zba optimization
+Date: Fri, 24 May 2024 15:55:41 +0800
+Message-Id: <20240524075543.4050464-1-xiao.w.wang@intel.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <o89373n4-3oq5-25qr-op7n-55p9657r96o8@vanv.qr> <CAHk-=wjxdtkFMB8BPYpU3JedjAsva3XXuzwxtzKoMwQ2e8zRzw@mail.gmail.com>
- <ZkvO-h7AsWnj4gaZ@slm.duckdns.org> <CALOAHbCYpV1ubO3Z3hjMWCQnSmGd9-KYARY29p9OnZxMhXKs4g@mail.gmail.com>
- <CAHk-=wj9gFa31JiMhwN6aw7gtwpkbAJ76fYvT5wLL_tMfRF77g@mail.gmail.com>
- <CALOAHbAmHTGxTLVuR5N+apSOA29k08hky5KH9zZDY8yg2SAG8Q@mail.gmail.com>
- <CAHk-=wjAmmHUg6vho1KjzQi2=psR30+CogFd4aXrThr2gsiS4g@mail.gmail.com>
- <CALOAHbAAAU9MTQFc56GYoYWR3TsLbkncp5QrrwHMbqJ9SECivw@mail.gmail.com> <CAHk-=whwtEFJnDVrkkMtb6SWcmBQMK8+qXGtqvBO+xH8y2i6nA@mail.gmail.com>
-In-Reply-To: <CAHk-=whwtEFJnDVrkkMtb6SWcmBQMK8+qXGtqvBO+xH8y2i6nA@mail.gmail.com>
-From: Yafang Shao <laoar.shao@gmail.com>
-Date: Fri, 24 May 2024 15:42:39 +0800
-Message-ID: <CALOAHbD0LdbQTWyvDiLcgGupcQJKmadzWhoZiUTj126Rqqn6fQ@mail.gmail.com>
-Subject: Re: [PATCH workqueue/for-6.10-fixes] workqueue: Refactor worker ID
- formatting and make wq_worker_comm() use full ID string
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: bpf <bpf@vger.kernel.org>, Tejun Heo <tj@kernel.org>, Jan Engelhardt <jengelh@inai.de>, 
-	Craig Small <csmall@enc.com.au>, linux-kernel@vger.kernel.org, 
-	Lai Jiangshan <jiangshanlai@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Thu, May 23, 2024 at 11:55=E2=80=AFPM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> On Thu, 23 May 2024 at 06:04, Yafang Shao <laoar.shao@gmail.com> wrote:
-> >
-> > If it's not urgent and no one else will handle it, I'll take care of
-> > it. However, I might not be able to complete it quickly.
->
-> It's not urgent. In fact, I'm not convinced we need to even increase
-> the current comm[] size, since for normal user programs the main way
-> 'ps' and friends get it is by just reading the full command line etc.
->
-> But I think it would be good to at least do the cleanup and walk away
-> from the bare hardcoded memcpy() so that we can move in that
-> direction.
+The riscv Zba extension provides instructions to accelerate the generation
+of addresses that index into arrays of basic data types, bpf JIT generated
+insn counts could be reduced by leveraging Zba for address calculation.
 
-Certainly, let's start with the cleanup.
+The first patch introduces RISCV_ISA_ZBA Kconfig option and uses Zba add.uw
+insn to optimize zextw operation.
 
-Actually, there are already helpers for this: get_task_comm() and
-__get_task_comm(). We can simply replace the memcpy() with one of
-these. If the task_lock() in __get_task_comm() is a concern, we could
-consider adding a new __get_current_comm().
+The second patch uses Zba shift-and-add insns to optimize address
+calculation for array of unsigned long data.
 
-It's important to note that people may continue to directly access
-task->comm in new code, even if we've added a comment to avoid that:
+Thanks,
+Xiao
 
-    struct task_struct {
-        ...
-        /*
-         * executable name, excluding path.
-         *
-         * - normally initialized setup_new_exec()
-         * - access it with [gs]et_task_comm()
-         * - lock it with task_lock()
-         */
-        char                            comm[TASK_COMM_LEN];
-        ...
-    }
+v4:
+* Combine the second patch (previously v1) and the first patch into a series. (Bjorn)
+* Rebase the second patch on bpf-next tree.
+* Link to v3: https://lore.kernel.org/bpf/20240516090430.493122-1-xiao.w.wang@intel.com/
 
-We might add a rule in checkpatch.pl to warn against this, but that=E2=80=
-=99s
-not an ideal solution.
+v3:
+* Remove the Kconfig dependencies on TOOLCHAIN_HAS_ZBA and
+  RISCV_ALTERNATIVE. (Andrew)
+* Link to v2: https://lore.kernel.org/bpf/20240511023436.3282285-1-xiao.w.wang@intel.com/
 
---=20
-Regards
-Yafang
+v2:
+* Add Zba description in the Kconfig. (Lehui)
+* Reword the Kconfig help message to make it clearer. (Conor)
+* Link to v1: https://lore.kernel.org/bpf/20240507104528.435980-1-xiao.w.wang@intel.com/
+
+Xiao Wang (2):
+  riscv, bpf: Optimize zextw insn with Zba extension
+  riscv, bpf: Introduce shift add helper with Zba optimization
+
+ arch/riscv/Kconfig              | 12 ++++++++
+ arch/riscv/net/bpf_jit.h        | 51 +++++++++++++++++++++++++++++++++
+ arch/riscv/net/bpf_jit_comp32.c |  3 +-
+ arch/riscv/net/bpf_jit_comp64.c |  9 ++----
+ 4 files changed, 67 insertions(+), 8 deletions(-)
+
+
+base-commit: 5c1672705a1a2389f5ad78e0fea6f08ed32d6f18
+-- 
+2.25.1
+
