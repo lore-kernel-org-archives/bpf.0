@@ -1,194 +1,102 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F2E86FCC;
-	Fri, 24 May 2024 07:53:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F41006FCC;
+	Fri, 24 May 2024 07:54:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716537191; cv=none; b=DagKg1EkS3VZRoBuyqaqUDgj1Scir6B4BZvP8z5CBug5IdAULvdtFLWMCi9G/PiovKHFbdfnNbxpjHN2+OzJRt1MUpWW61+J9GA69KZQSCI171kEXlN3u+7J54O6QJ3M1lZC4+nXd2T3SzA6zzFElmVJapk2if0T35zzbjzPdAo=
+	t=1716537282; cv=none; b=dIPd1Z6QMq6vHPLOn94zqgVCRj1c/Y+2XWQxWtRKuixADenKZ9E7VHjEykI1GeAPNFb24Rju/6oKRRrzKOQ/cjEDpoF2b8yW+YzeaPrmtL5utOi7Vu+S4pHWJmwRSpaUc81SeDL6MCGqsiBANBhK6tCv6XHBQX0qMDfHM9Dzp5o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716537191; c=relaxed/simple;
-	bh=24rp/WrT9pHPUaGJNcHcPwIVsZW4SZ2btnKiehAt6f4=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=sfwuUhGPmjtzoCx5o1ZG14KylSDXqj9JEvDGUt7eGR5Ir48N6jJTZQ6lwqijquJVIDPBpBtGe8/SUOWXSWfB3z5P2EjKnYZ86v4aSjPe0zzNX21nx9+zcyHT2MtK3ZEfVtmGZnlIfQjrA4SZQ/Gfbxb4VHWARvR0n81v71U0OCY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mFGme1kC; arc=none smtp.client-ip=192.198.163.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1716537282; c=relaxed/simple;
+	bh=AQWIfTfzqOdbhk0hDPdwIJF63BEKo8joJ/woMW6honc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=JZuw7v9ORP7t0L3yA8g6iTDSYQFQKKsP0W/F5gdqXeFz4sz3NdVojmjjAo3VsR22aJGWte6PgATzRPzcIe5MK5Nps+vLZbmp/vU/1xXk0EfzxWp7veediN7BsSej736EdazVoi7U0HlYcZEmUfS65HFCqFUBsevl3PmjxJnmEtU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=uMeyXc1H; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=+ZG5WGa9; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mFGme1kC"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1716537189; x=1748073189;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=24rp/WrT9pHPUaGJNcHcPwIVsZW4SZ2btnKiehAt6f4=;
-  b=mFGme1kCTEgr37ucOTwq0YBFHzic8yNSmlti0hKEJkjVVl85JRV6Y61J
-   yoz9jnm0XpPS1ocXSH7dYff4u8IY7X+NTxqc383DgyELMnxYSHSgvc6nC
-   w8Jw37m48/VGqbPEAYHnJwEo78XFcSjAElgsNp42xOlM6mrHNw5/86SvA
-   VOIISl6uyrC4z7w/R2HOd/d6UIIulUx+KTe0QbJL/c37rr5QJyaOopNQo
-   3SpIMItZ0DyHOth6TwWgFyZnOe2Igt918GM1gDQsUx3wFaeQ5RhrhKUK/
-   NWSPIVbPve7fd1RWeNwgsaCUZzlW9fdlgPNuPv8nlRfHgbB9HBAphIphK
-   g==;
-X-CSE-ConnectionGUID: WjAKBFm+SlKo7dKMQL3hXQ==
-X-CSE-MsgGUID: +ydOb32yQW+zygMRWTJ9hg==
-X-IronPort-AV: E=McAfee;i="6600,9927,11081"; a="15846002"
-X-IronPort-AV: E=Sophos;i="6.08,184,1712646000"; 
-   d="scan'208";a="15846002"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2024 00:53:09 -0700
-X-CSE-ConnectionGUID: hoI+mS1CT/i21woqbc6A6w==
-X-CSE-MsgGUID: ZE0unwlWR/KX39Mr84rR0g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,184,1712646000"; 
-   d="scan'208";a="33953931"
-Received: from xiao-desktop.sh.intel.com ([10.239.46.158])
-  by fmviesa006.fm.intel.com with ESMTP; 24 May 2024 00:53:03 -0700
-From: Xiao Wang <xiao.w.wang@intel.com>
-To: paul.walmsley@sifive.com,
-	palmer@dabbelt.com,
-	aou@eecs.berkeley.edu,
-	luke.r.nels@gmail.com,
-	xi.wang@gmail.com,
-	bjorn@kernel.org
-Cc: ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	martin.lau@linux.dev,
-	eddyz87@gmail.com,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	john.fastabend@gmail.com,
-	kpsingh@kernel.org,
-	sdf@google.com,
-	haoluo@google.com,
-	jolsa@kernel.org,
-	linux-riscv@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org,
-	pulehui@huawei.com,
-	puranjay@kernel.org,
-	haicheng.li@intel.com,
-	Xiao Wang <xiao.w.wang@intel.com>
-Subject: [PATCH bpf-next v4 2/2] riscv, bpf: Introduce shift add helper with Zba optimization
-Date: Fri, 24 May 2024 15:55:43 +0800
-Message-Id: <20240524075543.4050464-3-xiao.w.wang@intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20240524075543.4050464-1-xiao.w.wang@intel.com>
-References: <20240524075543.4050464-1-xiao.w.wang@intel.com>
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="uMeyXc1H";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="+ZG5WGa9"
+Date: Fri, 24 May 2024 09:54:36 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1716537278;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Quo18N2mmMPeVXpuHfcBQuoUjpytv9zJfnyZAoBrUVk=;
+	b=uMeyXc1HjFcnaUyLvgRwOwm82KtAhhWBKQNpBghl0LQW5k/ovxecYJa1N42lABtcqiG3LZ
+	ClT8pFrFZLMC9ZC6SCJNvQSHvm3nPqTy4AavHN0jkqnRz+RfhaljuE0WAEqRJ3jJq987vR
+	wegatQnhb2wLNBEurd5bPdVDTPU09fnOM3MA9O1OBpuwlRyYGtZviJMuq59aLYoY5EnETQ
+	VqktWrcPqYjH3HjUNGblDowgLnrpfFAdjN1nU2RYCvEkPsECk+YbfUpesr7KSsRCEegObA
+	Hf7JuGckCav82Y29coefjsTNi7fb/Yu+Fsns/EcLmmYQdm4JCjXiQRvL3XpY6g==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1716537278;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Quo18N2mmMPeVXpuHfcBQuoUjpytv9zJfnyZAoBrUVk=;
+	b=+ZG5WGa9tN7ZP5kLzEFpKTRaySsoOrRKvi2ByisggOcrg1bQAPSjmZVZTFUnfVp2u0ooYJ
+	WeM2muSII4AOL+Dw==
+From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To: Jesper Dangaard Brouer <hawk@kernel.org>
+Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+	Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
+	LKML <linux-kernel@vger.kernel.org>,
+	Network Development <netdev@vger.kernel.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Boqun Feng <boqun.feng@gmail.com>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Frederic Weisbecker <frederic@kernel.org>,
+	Ingo Molnar <mingo@redhat.com>, Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Waiman Long <longman@redhat.com>, Will Deacon <will@kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>, Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+	Stanislav Fomichev <sdf@google.com>,
+	Yonghong Song <yonghong.song@linux.dev>, bpf <bpf@vger.kernel.org>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>
+Subject: Re: [PATCH net-next 14/15 v2] net: Reference bpf_redirect_info via
+ task_struct on PREEMPT_RT.
+Message-ID: <20240524075436.YmcT7GSd@linutronix.de>
+References: <CAADnVQJkiwaYXUo+LyKoV96VFFCFL0VY5Jgpuv_0oypksrnciA@mail.gmail.com>
+ <20240507123636.cTnT7TvU@linutronix.de>
+ <93062ce7-8dfa-48a9-a4ad-24c5a3993b41@kernel.org>
+ <20240510162121.f-tvqcyf@linutronix.de>
+ <20240510162214.zNWRKgFU@linutronix.de>
+ <4949dca0-377a-45b1-a0fd-17bdf5a6ab10@kernel.org>
+ <20240514054345.DZkx7fJs@linutronix.de>
+ <e4123697-3e6e-4d4a-8b06-f69e1c453225@kernel.org>
+ <20240517161553.SSh4BNQO@linutronix.de>
+ <e3e21c87-d210-4360-8beb-25c6a04ce581@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <e3e21c87-d210-4360-8beb-25c6a04ce581@kernel.org>
 
-Zba extension is very useful for generating addresses that index into array
-of basic data types. This patch introduces sh2add and sh3add helpers for
-RV32 and RV64 respectively, to accelerate addressing for array of unsigned
-long data.
+On 2024-05-22 09:09:45 [+0200], Jesper Dangaard Brouer wrote:
+> 
+> Yes, except I had to guess how the workload was split between CPUs ;-)
+> 
+> Thanks for doing these benchmarks! :-)
 
-Signed-off-by: Xiao Wang <xiao.w.wang@intel.com>
----
- arch/riscv/net/bpf_jit.h        | 33 +++++++++++++++++++++++++++++++++
- arch/riscv/net/bpf_jit_comp32.c |  3 +--
- arch/riscv/net/bpf_jit_comp64.c |  9 +++------
- 3 files changed, 37 insertions(+), 8 deletions(-)
+Thank you for all the explanations and walking me through it.
+I'm going to update the patches as discussed and redo the numbers as
+suggested here.
+Thanks.
 
-diff --git a/arch/riscv/net/bpf_jit.h b/arch/riscv/net/bpf_jit.h
-index 97041b58237a..1d1c78d4cff1 100644
---- a/arch/riscv/net/bpf_jit.h
-+++ b/arch/riscv/net/bpf_jit.h
-@@ -742,6 +742,17 @@ static inline u16 rvc_swsp(u32 imm8, u8 rs2)
- 	return rv_css_insn(0x6, imm, rs2, 0x2);
- }
- 
-+/* RVZBA instructions. */
-+static inline u32 rvzba_sh2add(u8 rd, u8 rs1, u8 rs2)
-+{
-+	return rv_r_insn(0x10, rs2, rs1, 0x4, rd, 0x33);
-+}
-+
-+static inline u32 rvzba_sh3add(u8 rd, u8 rs1, u8 rs2)
-+{
-+	return rv_r_insn(0x10, rs2, rs1, 0x6, rd, 0x33);
-+}
-+
- /* RVZBB instructions. */
- static inline u32 rvzbb_sextb(u8 rd, u8 rs1)
- {
-@@ -1095,6 +1106,28 @@ static inline void emit_sw(u8 rs1, s32 off, u8 rs2, struct rv_jit_context *ctx)
- 		emit(rv_sw(rs1, off, rs2), ctx);
- }
- 
-+static inline void emit_sh2add(u8 rd, u8 rs1, u8 rs2, struct rv_jit_context *ctx)
-+{
-+	if (rvzba_enabled()) {
-+		emit(rvzba_sh2add(rd, rs1, rs2), ctx);
-+		return;
-+	}
-+
-+	emit_slli(rd, rs1, 2, ctx);
-+	emit_add(rd, rd, rs2, ctx);
-+}
-+
-+static inline void emit_sh3add(u8 rd, u8 rs1, u8 rs2, struct rv_jit_context *ctx)
-+{
-+	if (rvzba_enabled()) {
-+		emit(rvzba_sh3add(rd, rs1, rs2), ctx);
-+		return;
-+	}
-+
-+	emit_slli(rd, rs1, 3, ctx);
-+	emit_add(rd, rd, rs2, ctx);
-+}
-+
- /* RV64-only helper functions. */
- #if __riscv_xlen == 64
- 
-diff --git a/arch/riscv/net/bpf_jit_comp32.c b/arch/riscv/net/bpf_jit_comp32.c
-index f5ba73bb153d..592dd86fbf81 100644
---- a/arch/riscv/net/bpf_jit_comp32.c
-+++ b/arch/riscv/net/bpf_jit_comp32.c
-@@ -811,8 +811,7 @@ static int emit_bpf_tail_call(int insn, struct rv_jit_context *ctx)
- 	 * if (!prog)
- 	 *   goto out;
- 	 */
--	emit(rv_slli(RV_REG_T0, lo(idx_reg), 2), ctx);
--	emit(rv_add(RV_REG_T0, RV_REG_T0, lo(arr_reg)), ctx);
-+	emit_sh2add(RV_REG_T0, lo(idx_reg), lo(arr_reg), ctx);
- 	off = offsetof(struct bpf_array, ptrs);
- 	if (is_12b_check(off, insn))
- 		return -1;
-diff --git a/arch/riscv/net/bpf_jit_comp64.c b/arch/riscv/net/bpf_jit_comp64.c
-index 79a001d5533e..30ede3ce42d1 100644
---- a/arch/riscv/net/bpf_jit_comp64.c
-+++ b/arch/riscv/net/bpf_jit_comp64.c
-@@ -380,8 +380,7 @@ static int emit_bpf_tail_call(int insn, struct rv_jit_context *ctx)
- 	 * if (!prog)
- 	 *     goto out;
- 	 */
--	emit_slli(RV_REG_T2, RV_REG_A2, 3, ctx);
--	emit_add(RV_REG_T2, RV_REG_T2, RV_REG_A1, ctx);
-+	emit_sh3add(RV_REG_T2, RV_REG_A2, RV_REG_A1, ctx);
- 	off = offsetof(struct bpf_array, ptrs);
- 	if (is_12b_check(off, insn))
- 		return -1;
-@@ -1097,12 +1096,10 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
- 			/* Load current CPU number in T1 */
- 			emit_ld(RV_REG_T1, offsetof(struct thread_info, cpu),
- 				RV_REG_TP, ctx);
--			/* << 3 because offsets are 8 bytes */
--			emit_slli(RV_REG_T1, RV_REG_T1, 3, ctx);
- 			/* Load address of __per_cpu_offset array in T2 */
- 			emit_addr(RV_REG_T2, (u64)&__per_cpu_offset, extra_pass, ctx);
--			/* Add offset of current CPU to  __per_cpu_offset */
--			emit_add(RV_REG_T1, RV_REG_T2, RV_REG_T1, ctx);
-+			/* Get address of __per_cpu_offset[cpu] in T1 */
-+			emit_sh3add(RV_REG_T1, RV_REG_T1, RV_REG_T2, ctx);
- 			/* Load __per_cpu_offset[cpu] in T1 */
- 			emit_ld(RV_REG_T1, 0, RV_REG_T1, ctx);
- 			/* Add the offset to Rd */
--- 
-2.25.1
+> --Jesper
 
+Sebastian
