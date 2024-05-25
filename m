@@ -1,34 +1,34 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3459F85934
-	for <bpf@vger.kernel.org>; Sat, 25 May 2024 17:50:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 532AA58ABC
+	for <bpf@vger.kernel.org>; Sat, 25 May 2024 17:50:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716659432; cv=none; b=kDuLZJjBN/D/ROBOYghpFMH92Q5Ecp1S051UMqzbsIHlpr8DWvw0gqidBzMBYXJETOSRVWkBfMFc9Dn8PKPWJVnovwW0TopV6ylfSlI+80IV/+CRsQ825s8B0jNeoiJSr2/pLORKi/RRV1hv3R9UJauQe/PzivompYUGjCztCuw=
+	t=1716659433; cv=none; b=J7QTnQlozyFaH78V42M34J2NFbHgkMnrCm2FdwxLjAozW8uhwYs1VtHDbXxhj9vos08EYzBbyg6dO1Ga8oNHDh9izRPgdm+zwKXdmBH1TN4L0V2WkwiiYgKDpRs34iQ38vXH1eYFNPxH4hsgejfO8rUqpy1mbj4p/b5WbleOVn4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716659432; c=relaxed/simple;
-	bh=hCkznmaAgLnkcfUVo3YOftwDJRio1M+oTAJtlzMy4Mo=;
+	s=arc-20240116; t=1716659433; c=relaxed/simple;
+	bh=eH7MQF8SqhNKTYJTQ/KCW8dc50zXPvO3JXyabW9f7+E=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=t11KZWXnfIP6yK6HthvMqX5o6WvVxM+AUGKCoYzTaNO0BwsUTnYuzzoUeluj1FinKifrI1WOoX6fhmeHGh4RCm7xIxASfk7e3Bwej5yKd00A92l0cMJnzmx7RE9hyl8FTDlTc6JXa3hTU+fYQd50qHsakn8gPYTpfcNo9g5weX8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mBGL2reV; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=kAvSSkLpuaN2Dsiyzi9S4Qdi8k5dQVwU+0k07gRHGBb+GfkmzPoodC3wx+YwG5Z2WhcwMa+zAO/hBrpV8UdOaUHYtWbX0whB4hbx1ZMBd2Hsn1NCEaejAMP8z31uHFtBL3z/j00a9eNmL/ZbdnvIJMTWiAvwemL88pOz9gTlqwM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uNx8xB+h; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mBGL2reV"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id C3398C2BD11;
-	Sat, 25 May 2024 17:50:31 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uNx8xB+h"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 27D7DC2BD11;
+	Sat, 25 May 2024 17:50:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1716659431;
-	bh=hCkznmaAgLnkcfUVo3YOftwDJRio1M+oTAJtlzMy4Mo=;
+	s=k20201202; t=1716659433;
+	bh=eH7MQF8SqhNKTYJTQ/KCW8dc50zXPvO3JXyabW9f7+E=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=mBGL2reV19AqiFoyfE6Bi3hxyhqQ1E+gf3giBVsS77yQrql/SB2+aTfMSdZovGwNh
-	 ihPIV1clZJtevEg+bY6XhxgLgq/OHkqw/pdptHbgMioKbZa5UU9iedtypKx70HZB/9
-	 5OsLEbaohLpW97rURceBXqEt3t2wuCxhx1a5LqtDKBeNCAgl8Ob6fdrJ95C7q8yl7u
-	 CmDgnfFxsej/0qOh2LWPTcGqNoeKpy5RSV+ZdKkNhDzvBbxcszkp40Wkp+ZyHDiz2d
-	 uQGOYLmcNDCduN1n7T1dbO/bQrHullcy69/2dpBmOPSxZHh1VVR4tL6uZXte6rX0DM
-	 x35TRWT+MkWCQ==
+	b=uNx8xB+hpTCe9qWm2U/Y7iOhXAswkH+uWgbmcc+6hx5CgRj9SzgMCLrR7eHYVugr7
+	 aADrW+cxaQxemAiLgQR8eYm/RWbgLaF0q979z4mt+2t2uqHuBybDGTa3YNpZmaIk8T
+	 nlcnSajb9QHc6+CKxwslnnVxmU+bMqPC+pM1kNYWNXI5gqOTxrwM4pXAkmRpq0qlvz
+	 JrIbHvYsS5CA2q9k3LKa9zOHXqtE7h2wGvSqIuoqUriuq5QC5zI/OUZKRG40nGq5i0
+	 U+WGIE+PvHPNE42HeCGx/W/wSxyB80+M1GtZ1QoWC6gt5Y9nCc4t8TKPuMwHaB4lUs
+	 fsteyg5qYrRSQ==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B90E2C54BB3;
-	Sat, 25 May 2024 17:50:31 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 1E171C43333;
+	Sat, 25 May 2024 17:50:33 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -37,45 +37,35 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v2 bpf 0/5] Fix BPF multi-uprobe PID filtering logic
+Subject: Re: [PATCH bpf-next] bpf, docs: Clarify call local offset
 From: patchwork-bot+netdevbpf@kernel.org
 Message-Id: 
- <171665943175.11416.9298090720554703908.git-patchwork-notify@kernel.org>
-Date: Sat, 25 May 2024 17:50:31 +0000
-References: <20240521163401.3005045-1-andrii@kernel.org>
-In-Reply-To: <20240521163401.3005045-1-andrii@kernel.org>
-To: Andrii Nakryiko <andrii@kernel.org>
-Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
- martin.lau@kernel.org, kernel-team@meta.com
+ <171665943311.11416.10113985377422205193.git-patchwork-notify@kernel.org>
+Date: Sat, 25 May 2024 17:50:33 +0000
+References: <20240525153332.21355-1-dthaler1968@gmail.com>
+In-Reply-To: <20240525153332.21355-1-dthaler1968@gmail.com>
+To: Dave Thaler <dthaler1968@googlemail.com>
+Cc: bpf@vger.kernel.org, bpf@ietf.org, dthaler1968@gmail.com
 
 Hello:
 
-This series was applied to bpf/bpf.git (master)
+This patch was applied to bpf/bpf-next.git (master)
 by Alexei Starovoitov <ast@kernel.org>:
 
-On Tue, 21 May 2024 09:33:56 -0700 you wrote:
-> It turns out that current implementation of multi-uprobe PID filtering logic
-> is broken. It filters by thread, while the promise is filtering by process.
-> Patch #1 fixes the logic trivially. The rest is testing and mitigations that
-> are necessary for libbpf to not break users of USDT programs.
+On Sat, 25 May 2024 08:33:32 -0700 you wrote:
+> In the Jump instructions section it explains that the offset is
+> "relative to the instruction following the jump instruction".
+> But the program-local section confusingly said "referenced by
+> offset from the call instruction, similar to JA".
 > 
-> v1->v2:
->   - fix selftest in last patch (CI);
->   - use semicolon in patch #3 (Jiri).
+> This patch updates that sentence with consistent wording, saying
+> it's relative to the instruction following the call instruction.
 > 
 > [...]
 
 Here is the summary with links:
-  - [v2,bpf,1/5] bpf: fix multi-uprobe PID filtering logic
-    https://git.kernel.org/bpf/bpf/c/46ba0e49b642
-  - [v2,bpf,2/5] bpf: remove unnecessary rcu_read_{lock,unlock}() in multi-uprobe attach logic
-    https://git.kernel.org/bpf/bpf/c/4a8f635a6054
-  - [v2,bpf,3/5] libbpf: detect broken PID filtering logic for multi-uprobe
-    https://git.kernel.org/bpf/bpf/c/04d939a2ab22
-  - [v2,bpf,4/5] selftests/bpf: extend multi-uprobe tests with child thread case
-    https://git.kernel.org/bpf/bpf/c/70342420a1cf
-  - [v2,bpf,5/5] selftests/bpf: extend multi-uprobe tests with USDTs
-    https://git.kernel.org/bpf/bpf/c/198034a87dfe
+  - [bpf-next] bpf, docs: Clarify call local offset
+    https://git.kernel.org/bpf/bpf-next/c/f980f13e4eb2
 
 You are awesome, thank you!
 -- 
