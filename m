@@ -1,141 +1,66 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-175.mta0.migadu.com (out-175.mta0.migadu.com [91.218.175.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8F37487A5;
-	Sat, 25 May 2024 16:43:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFE3FF4FC
+	for <bpf@vger.kernel.org>; Sat, 25 May 2024 16:47:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716655423; cv=none; b=c118QrdgyCSlZZlJnLdBDX7fiRLEquiUEm0LeVsb8LrSHs4GYduz2hgHKsSFbn2RQ4ohtnB2VllrxL/9y1F07Pde3aF0Y5DaH7wifqneblD195a6jm4UKibZFKhWeyD1P7yry5/quMm7dDtNj7RQprj5k4m4cX/TQR3153UuuxE=
+	t=1716655673; cv=none; b=EknhqXE5aDI+l8d6ODeVC3cCrOFVGWcdRpDZYzB37F/rieR/BUupftaNQsLtcFpfDoiZ0V4Y6eWccQQBX9AbbX4kxgoV75PV9D5L7C+vINyI6t/ggHRroyuxLnD20slxJSlb3MSJ/908CSMp0ufGxva4+hD2ZzHcg/+Hgr9jGJE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716655423; c=relaxed/simple;
-	bh=BYvRVlfnOcEYCohSU9+i09Mb94lZWB25nxoPHqEd0Lo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=I2O1ILAelfdsVYL3Js5DIXexgzRzDwGE/mpoWZVOb7KBJTFoHPn317XKWDT96ho7mNz8auqD2zAsMi764+sOcc+jGSumgxTpMrtJhp00EQrgQbuQ2xWguyHLakIHqPOT2zBgs/LpVZA0a81vlDU9ULp8hkScxGSueihonK8XmmQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VQqtpjF9; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1716655673; c=relaxed/simple;
+	bh=2OHeLUnmbZjbaUZnPFFJJgxuAYMZJl3JfL88n959kPA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=s/96x4fefebhoTRZ/mH6XzWDmLRdDbrwxyw5y87DzSNm16RlLtJj4ODTUeQVRoZngTzhGsvuRyAuxUVwxSzWI9w2fDKpMHQ1ZHaozvNKcATViWYvC3hfytkZNlHnL+zkvPx5NKsll58zuVF9CHYFJq86/uTFLkJniaKQnBMI3XE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=YsA6NCRJ; arc=none smtp.client-ip=91.218.175.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VQqtpjF9"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48C50C32782;
-	Sat, 25 May 2024 16:43:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1716655423;
-	bh=BYvRVlfnOcEYCohSU9+i09Mb94lZWB25nxoPHqEd0Lo=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=VQqtpjF9ci4TPs43sML4DRO6vWzmik2gcCGgE+GkYfnYvRG/M+vOkmXt+6stMhwLt
-	 VTNDWHqvhai/cNU8SVheBNeFZLQZQKKQ6eUsnjdXbGEnDgOqpCxX27+SmipVMXryKz
-	 EH7epCNj8esHUS2vIuo94Dz7LJrk8QKQ5SKjer8RnLDZzbQPxbP7ex0PSCGLVvtXLp
-	 oLK7Lj3G0rPSrcBo1UWKqNTSX8DDrMliwuD7cPivwdenX4u8vQQ2M0jHZgho9/3DQS
-	 HuoTNoL4W941MxLn9HjS8SlINoIOsulBKr3rF7DqEGHAbIYzKIWUtkEN/zV78liRi4
-	 pDb65u3yAlOdw==
-Received: by mail-lj1-f173.google.com with SMTP id 38308e7fff4ca-2e6f2534e41so85398291fa.0;
-        Sat, 25 May 2024 09:43:43 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVb4q7tbW0A0+UPZEO/cPjyY0sk69EgM1tDnUrOFDe1J/Mcb9txjLX31CD6Vk8W+eWjfSDIq9LpXk343dFQxonpQgcKbG4N25Koz6YhyuDBGb9VoQTVziunPn/W9rkF5IRAHirDAJriWV/uF+FfaFO0nWzUGl8OnwUSHcFnhg==
-X-Gm-Message-State: AOJu0YwvLOm7idn3Ql73J0Wx2yNwn77pj/o3D72YlT/IldUD4H2avBBN
-	x1D0f5WJrqCvXMreW6VfUYHX4dWvSBCpR00EzzxVgDjQzF+PTIQpT3QiUuF0v8etm0G9uhe7+ye
-	QP6n1jpQhErmYwU4nH0Jo31F8wsA=
-X-Google-Smtp-Source: AGHT+IGho3f8KKeAWOOGieu1BeXrWfXkamAMqAEvp1bl5gSAUC88VYD3wLf3Li0DW8C4rCu3GIr+nmE3+gU7YXcmSu0=
-X-Received: by 2002:ac2:4e10:0:b0:51b:e0f0:e4f8 with SMTP id
- 2adb3069b0e04-52964bb0ea4mr4203773e87.31.1716655422028; Sat, 25 May 2024
- 09:43:42 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="YsA6NCRJ"
+X-Envelope-To: dthaler1968@googlemail.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1716655668;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=2OHeLUnmbZjbaUZnPFFJJgxuAYMZJl3JfL88n959kPA=;
+	b=YsA6NCRJRGkxXhv82Mu4j3UzOod3SIQqEGyI266HZMo+KSpawxlahW+oHgJoEdskmRejXg
+	NQjG39ut2gWxPX2YlKePOaxHL0ppDt+OoItTLRplsJY3WRhegP451TjXvNLBaQ8MgJdkX7
+	G0ui/NgC1I3O1qoNgLzNriA4MeMOrso=
+X-Envelope-To: bpf@vger.kernel.org
+X-Envelope-To: bpf@ietf.org
+X-Envelope-To: dthaler1968@gmail.com
+Message-ID: <317b6459-43e9-44b5-a7ee-3af094a131a0@linux.dev>
+Date: Sat, 25 May 2024 09:47:41 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240522114755.318238-1-masahiroy@kernel.org> <20240522114755.318238-3-masahiroy@kernel.org>
- <CAMj1kXHwEMxAhj=zCBRCAxE8MXhzT95CTtAin+fPQr3DSJ46fA@mail.gmail.com>
-In-Reply-To: <CAMj1kXHwEMxAhj=zCBRCAxE8MXhzT95CTtAin+fPQr3DSJ46fA@mail.gmail.com>
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Sun, 26 May 2024 01:43:05 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAQCq+hGm2CJz149fiCs5sOAZ15HmeYbmWK0h70KF5sFxw@mail.gmail.com>
-Message-ID: <CAK7LNAQCq+hGm2CJz149fiCs5sOAZ15HmeYbmWK0h70KF5sFxw@mail.gmail.com>
-Subject: Re: [PATCH 2/3] kbuild: remove PROVIDE() for kallsyms symbols
-To: Ard Biesheuvel <ardb@kernel.org>
-Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	bpf@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>, Nathan Chancellor <nathan@kernel.org>, 
-	Nicolas Schier <nicolas@fjasle.eu>, linux-arch@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH bpf-next] bpf, docs: Clarify call local offset
+Content-Language: en-GB
+To: Dave Thaler <dthaler1968@googlemail.com>, bpf@vger.kernel.org
+Cc: bpf@ietf.org, Dave Thaler <dthaler1968@gmail.com>
+References: <20240525153332.21355-1-dthaler1968@gmail.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <20240525153332.21355-1-dthaler1968@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-On Thu, May 23, 2024 at 6:32=E2=80=AFPM Ard Biesheuvel <ardb@kernel.org> wr=
-ote:
+
+On 5/25/24 9:33 AM, Dave Thaler wrote:
+> In the Jump instructions section it explains that the offset is
+> "relative to the instruction following the jump instruction".
+> But the program-local section confusingly said "referenced by
+> offset from the call instruction, similar to JA".
 >
-> On Wed, 22 May 2024 at 13:48, Masahiro Yamada <masahiroy@kernel.org> wrot=
-e:
-> >
-> > This reimplements commit 951bcae6c5a0 ("kallsyms: Avoid weak references
-> > for kallsyms symbols").
-> >
-> > I am not a big fan of PROVIDE() because it always satisfies the linker
-> > even in situations that should result in a link error. In other words,
-> > it can potentially shift a compile-time error into a run-time error.
-> >
+> This patch updates that sentence with consistent wording, saying
+> it's relative to the instruction following the call instruction.
 >
-> I don't disagree. However, I did realize that, in this particular
-> case, we could at least make the preliminary symbol definitions
-> conditional on CONFIG_KALLSYMS rather than always providing them.
+> Signed-off-by: Dave Thaler <dthaler1968@gmail.com>
 
+Acked-by: Yonghong Song <yonghong.song@linux.dev>
 
-Fair enough. I am fine with dropping this statement.
-
-
-
-
->
-> This approach is also fine with me, though.
->
->
-> > Duplicating kallsyms_* in vmlinux.lds.h also reduces maintainability.
-> >
-> > As an alternative solution, this commit prepends one more kallsyms step=
-.
-> >
-> >     KSYMS   .tmp_vmlinux.kallsyms0.S          # added
-> >     AS      .tmp_vmlinux.kallsyms0.o          # added
-> >     LD      .tmp_vmlinux.btf
-> >     BTF     .btf.vmlinux.bin.o
-> >     LD      .tmp_vmlinux.kallsyms1
-> >     NM      .tmp_vmlinux.kallsyms1.syms
-> >     KSYMS   .tmp_vmlinux.kallsyms1.S
-> >     AS      .tmp_vmlinux.kallsyms1.o
-> >     LD      .tmp_vmlinux.kallsyms2
-> >     NM      .tmp_vmlinux.kallsyms2.syms
-> >     KSYMS   .tmp_vmlinux.kallsyms2.S
-> >     AS      .tmp_vmlinux.kallsyms2.o
-> >     LD      vmlinux
-> >
-> > Step 0 takes /dev/null as input, and generates .tmp_vmlinux.kallsyms0.o=
-,
-> > which has a valid kallsyms format with the empty symbol list, and can b=
-e
-> > linked to vmlinux. Since it is really small, the added compile-time cos=
-t
-> > is negligible.
-> >
->
-> OK, so the number of linker invocations is the same, right? The
-> difference is that the kallsyms symbol references are satisfied by a
-> dummy object?
-
-
-Correct.
-
-In 3/3, I even reduce the number of link steps
-when both CONFIG_DEBUG_INFO_BTF and CONFIG_KALLSYMS are enabled.
-
-
-
-
-
->
-> That seems reasonable to me.
->
-> For the series,
->
-> Acked-by: Ard Biesheuvel <ardb@kernel.org>
->
-
-
---=20
-Best Regards
-Masahiro Yamada
