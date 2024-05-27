@@ -1,35 +1,56 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6AE426AE7
-	for <bpf@vger.kernel.org>; Mon, 27 May 2024 17:40:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 640E2DDA9;
+	Mon, 27 May 2024 19:00:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.153.30
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716831629; cv=none; b=BYDrxpn8+CIGf+ujrG6bz/6HbVrLjdId1c5SoUk2Ih4jxhhyT3OuJybCqLx5hQhxsI5xheH77nqwplBkMd3u1UbT8Rde8uNNEAYzgZoS4RJeSe4L7tRyADmvvX6DC+erxRimeWgRxGtzLcOoTN04HS/mk5k7G5UFFWECP9pENSI=
+	t=1716836460; cv=none; b=eqvzIcwDiJz0xtlVOQa93kiyPIrsST8ukI0XGjW/+S/xzdAWRPImSsQojKidZ5ehvgYy7Z9p6c1gOe7lxZEQCZmxM4dO1+pRtxw2stywG0FID/YgCL92AsvTSYZT48fantUkEadqGJzWGPLvlhDXg7FiUEGFbIgImUcRojyT4eY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716831629; c=relaxed/simple;
-	bh=w8k+EbrC/IoYe5lFJcQn6H8061FSPmi2dbOzPiYBN+k=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=tFqaFEoYveuNov5eM/UgIap1BcQJv3Nyi/CSm87pxg5lgU1MyPOfTrGM1+EOo2WEXsh6RAWhXU3ARETYpL3mZoPA5Xa38kkP8CxaFoL+2B2eKkhe7zip0hCPxSN7auPY2gH0LsWq02rxUk5DqH8YidcnrTLchhw2ljfWYehTsi8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=m452EQJj; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="m452EQJj"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 59914C32789;
-	Mon, 27 May 2024 17:40:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1716831629;
-	bh=w8k+EbrC/IoYe5lFJcQn6H8061FSPmi2dbOzPiYBN+k=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=m452EQJjv0mrYiGSC1y3LQcaxUPavFg3XooBID7dZqSaX3nV3wYmWwaYdNIWNGMAm
-	 L4wp2znEB//J6YTPFVEXcRtTZIJdK+ZQ83qggc1aTWd9znk+ArOpO3ve5q+W4impCy
-	 jK2mEDEga+VYnEFJy3kfSuYgEGXtVU38BhHFEFoqaHGFgaRaAOtgo4MVuecrjSeYVy
-	 w7XoVMhavgkR2g02moetyh8UQU9kLQ1bM7q4qZcQrAGxXanUrSdySInMGgpDyfPi2g
-	 AJ3xPEwWD8s6/PRJfGg0a2vAQ7F1et+Z0RwXBSGN2Qn1D+D5O+1I/Wr4Q1NL0EM5Jj
-	 wJpQsTwrcz0SQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 47D70D40196;
-	Mon, 27 May 2024 17:40:29 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1716836460; c=relaxed/simple;
+	bh=c0wTFKp9XQXRgUFgtFgR9AuRbrYxnV5EJTEpQx/c25k=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=tXY+bOM+fcbmjSZ+nTpcjKxwxNsCdfUeujQKNbIqGGcnWYJ0AvO+UNd4McGNwmkI8EHwhUhdjwzPUha4Q/EXnPYUMU8wO7h1KudVILUvwd9fH6+KSL5hHfrMqLoC1hmgK5+BYIwBDe0DiAfnQ8ACndFY7mbriX5wjWoqfKmj/QA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com; spf=pass smtp.mailfrom=meta.com; arc=none smtp.client-ip=67.231.153.30
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
+Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
+	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 44RIQb8T007199;
+	Mon, 27 May 2024 12:00:24 -0700
+DKIM-Signature: =?UTF-8?Q?v=3D1;_a=3Drsa-sha256;_c=3Drelaxed/relaxed;_d=3Dmeta.com;_h=3Dc?=
+ =?UTF-8?Q?c:content-transfer-encoding:content-type:date:from:in-reply-to:?=
+ =?UTF-8?Q?message-id:mime-version:references:subject:to;_s=3Ds2048-2021-q?=
+ =?UTF-8?Q?4;_bh=3D7geuP4fh0kfWIQEG10bAFf8y5oNk1kPaQirayNWOM44=3D;_b=3DPP/?=
+ =?UTF-8?Q?8OkqGURhdvgDRtEzPLuATNDLoKjQCiuN0jBlXEOkW2gdyt1fh2C6yjcssjnADwn?=
+ =?UTF-8?Q?1H_IULvEAgv4H8H/gOzJjc1XGyEr9t+zt9k1YSbjIbEfOHLD7z8t6cFNJ2rARa2?=
+ =?UTF-8?Q?ozVfw+kd_w2iuOFxmx0TPVQD9XgNtCjYhesqxx7fcGLmuZ4hhAdh2EWxNHKm1ty?=
+ =?UTF-8?Q?LJRpMSfosGhiu1_6mTZkq+JZ6rCaMny0LGiNWLK0pqc/gzL+HibYTH5MDi4GrHp?=
+ =?UTF-8?Q?cw0CDMNPmW8npEdIy6nL_zi4+Owe8ET9xd6qAp93vmxGq7Zoo5gu6IWkQf3ASYk?=
+ =?UTF-8?Q?xdziDv6dJg5OdI4AZJ3VQwEOlA_uA=3D=3D_?=
+Received: from maileast.thefacebook.com ([163.114.130.16])
+	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3ybdr3234w-3
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+	Mon, 27 May 2024 12:00:24 -0700
+Received: from devvm4158.cln0.facebook.com (2620:10d:c0a8:1b::30) by
+ mail.thefacebook.com (2620:10d:c0a9:6f::237c) with Microsoft SMTP Server id
+ 15.2.1544.11; Mon, 27 May 2024 19:00:22 +0000
+From: Vadim Fedorenko <vadfed@meta.com>
+To: Vadim Fedorenko <vadim.fedorenko@linux.dev>,
+        Martin KaFai Lau
+	<martin.lau@linux.dev>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        "Alexei
+ Starovoitov" <ast@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>, Jakub
+ Kicinski <kuba@kernel.org>
+CC: Vadim Fedorenko <vadfed@meta.com>, <bpf@vger.kernel.org>,
+        <netdev@vger.kernel.org>
+Subject: [PATCH bpf-next v3 2/2] selftests: bpf: validate CHECKSUM_COMPLETE option
+Date: Mon, 27 May 2024 11:59:28 -0700
+Message-ID: <20240527185928.1871649-2-vadfed@meta.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20240527185928.1871649-1-vadfed@meta.com>
+References: <20240527185928.1871649-1-vadfed@meta.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -37,46 +58,62 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf 0/3] Block deletes from sockmap for tracing programs
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <171683162928.10914.15797940779296702902.git-patchwork-notify@kernel.org>
-Date: Mon, 27 May 2024 17:40:29 +0000
-References: <20240527-sockmap-verify-deletes-v1-0-944b372f2101@cloudflare.com>
-In-Reply-To: <20240527-sockmap-verify-deletes-v1-0-944b372f2101@cloudflare.com>
-To: Jakub Sitnicki <jakub@cloudflare.com>
-Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
- john.fastabend@gmail.com, hdanton@sina.com,
- penguin-kernel@i-love.sakura.ne.jp, kernel-team@cloudflare.com,
- syzbot+ec941d6e24f633a59172@syzkaller.appspotmail.com
+Content-Type: text/plain
+X-Proofpoint-GUID: N8rjF6Oi7ZTwtRAAQkoqWuYf5bPMlzjO
+X-Proofpoint-ORIG-GUID: N8rjF6Oi7ZTwtRAAQkoqWuYf5bPMlzjO
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.650,FMLib:17.12.28.16
+ definitions=2024-05-27_04,2024-05-27_01,2024-05-17_01
 
-Hello:
+Adjust skb program test to run with checksum validation.
 
-This series was applied to bpf/bpf.git (master)
-by Daniel Borkmann <daniel@iogearbox.net>:
+Signed-off-by: Vadim Fedorenko <vadfed@meta.com>
+---
+ .../selftests/bpf/prog_tests/test_skb_pkt_end.c       |  1 +
+ tools/testing/selftests/bpf/progs/skb_pkt_end.c       | 11 ++++++++++-
+ 2 files changed, 11 insertions(+), 1 deletion(-)
 
-On Mon, 27 May 2024 13:20:06 +0200 you wrote:
-> We have seen a few syzkaller reports of locking violations triggered by
-> map_delete from sockmap/sockhash from an unexpected code path, for instance
-> when irqs were disabled, or during a kfree inside a map_update.
-> 
-> The consensus is [1] to block map_delete op in the verifier for programs
-> which are not allowed to update sockmap/sockhash already today, instead of
-> trying to make sockmap deletes lock-safe in every possible context.
-> 
-> [...]
-
-Here is the summary with links:
-  - [bpf,1/3] bpf: Allow delete from sockmap/sockhash only if update is allowed
-    https://git.kernel.org/bpf/bpf/c/98e948fb60d4
-  - [bpf,2/3] Revert "bpf, sockmap: Prevent lock inversion deadlock in map delete elem"
-    https://git.kernel.org/bpf/bpf/c/3b9ce0491a43
-  - [bpf,3/3] selftests/bpf: Cover verifier checks for mutating sockmap/sockhash
-    https://git.kernel.org/bpf/bpf/c/a63bf556160f
-
-You are awesome, thank you!
+diff --git a/tools/testing/selftests/bpf/prog_tests/test_skb_pkt_end.c b/tools/testing/selftests/bpf/prog_tests/test_skb_pkt_end.c
+index ae93411fd582..09ca13bdf6ca 100644
+--- a/tools/testing/selftests/bpf/prog_tests/test_skb_pkt_end.c
++++ b/tools/testing/selftests/bpf/prog_tests/test_skb_pkt_end.c
+@@ -11,6 +11,7 @@ static int sanity_run(struct bpf_program *prog)
+ 		.data_in = &pkt_v4,
+ 		.data_size_in = sizeof(pkt_v4),
+ 		.repeat = 1,
++		.flags = BPF_F_TEST_SKB_CHECKSUM_COMPLETE,
+ 	);
+ 
+ 	prog_fd = bpf_program__fd(prog);
+diff --git a/tools/testing/selftests/bpf/progs/skb_pkt_end.c b/tools/testing/selftests/bpf/progs/skb_pkt_end.c
+index db4abd2682fc..3bb4451524a1 100644
+--- a/tools/testing/selftests/bpf/progs/skb_pkt_end.c
++++ b/tools/testing/selftests/bpf/progs/skb_pkt_end.c
+@@ -33,6 +33,8 @@ int main_prog(struct __sk_buff *skb)
+ 	struct iphdr *ip = NULL;
+ 	struct tcphdr *tcp;
+ 	__u8 proto = 0;
++	int urg_ptr;
++	u32 offset;
+ 
+ 	if (!(ip = get_iphdr(skb)))
+ 		goto out;
+@@ -48,7 +50,14 @@ int main_prog(struct __sk_buff *skb)
+ 	if (!tcp)
+ 		goto out;
+ 
+-	return tcp->urg_ptr;
++	urg_ptr = tcp->urg_ptr;
++
++	/* Checksum validation part */
++	proto++;
++	offset = sizeof(struct ethhdr) + offsetof(struct iphdr, protocol);
++	bpf_skb_store_bytes(skb, offset, &proto, sizeof(proto), BPF_F_RECOMPUTE_CSUM);
++
++	return urg_ptr;
+ out:
+ 	return -1;
+ }
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.43.0
 
