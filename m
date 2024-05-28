@@ -1,126 +1,123 @@
-Received: from mail-qt1-f174.google.com (mail-qt1-f174.google.com [209.85.160.174])
+Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com [209.85.167.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA5B97D07D;
-	Tue, 28 May 2024 17:24:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F65D17E8E6
+	for <bpf@vger.kernel.org>; Tue, 28 May 2024 17:30:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716917079; cv=none; b=maui89gzaBihvKVQ6LZnStWFRMiu83n9P54orIOdWUYsTTH0YKEmSX6l/VC0zqfsieFE6MX/n81L/fjIZGOQbkKSBgAFzAKXycrkCCbqFWqzGmjsjKWBtLnyJ5Jmt72uuQVrmDEXTcOJopF99XdNOK+aBmm1htpdigbDrNHDwLw=
+	t=1716917405; cv=none; b=Div9qymdV5cc3GCceYtiKAu1DiDIKIglhUMXxX9dguUiLrX0gvlpKs4K2uNH/741j6iisoeK0oJu267dxaWMYoEUgrLrMRabyUCg/G7nWjpbziE5GfJbv+DxewCt8YkEak/cz4jhYX7A+JPMj+j+zFpLLbABVFP0RB+EM/aodoo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716917079; c=relaxed/simple;
-	bh=JpfOrfm/RN6ZNydj18l4u8gIZn6ywPDO/Ii8ISAxU9g=;
-	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 Mime-Version:Content-Type; b=JNeIB/LRvk4rimzHQwPK34YoX9IBUPra9/atBWDSAVQ8/6Xh6oKdlz0Qoxu69Ay9r8gK+VdniCwq9v0uZp9mzKsIQ1rfH40AMrvt7AyeYXhMhUq2t22tKXXpW2ZC/93Lc9Gbmd3K5jfpHFkwIVTLSitJ9sBhiZVJtEKSUjr90RQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Mok5sHVq; arc=none smtp.client-ip=209.85.160.174
+	s=arc-20240116; t=1716917405; c=relaxed/simple;
+	bh=SDIJuBOV5D7TPGjzAt5Zz3JTUBGaBIPlFRdauQnVL0M=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Cwi14j2+Mc4PV/uUOPsDfGEIcYwv4SUireFMz0uey0BSBugxjiw8EWR0QJpqxAVopTnQ8eGeGi9T//QtIbuSwDq8ERsgoEoqHC5QBXrfpz6lg6lvC8BEoCwwKJ42zjXK7NRS4/C9NIvBLSzGIuPY9YyfNmNazdEnH+rW/k6ohE8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BHJfibjK; arc=none smtp.client-ip=209.85.167.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Mok5sHVq"
-Received: by mail-qt1-f174.google.com with SMTP id d75a77b69052e-43fb094da40so297991cf.0;
-        Tue, 28 May 2024 10:24:37 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BHJfibjK"
+Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-529648cd69dso241040e87.2
+        for <bpf@vger.kernel.org>; Tue, 28 May 2024 10:30:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1716917076; x=1717521876; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1716917402; x=1717522202; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ThOVm46gYp9/Cn7ASNZ0mQAfmQpKcIWWQc+98ymb318=;
-        b=Mok5sHVqgQRDScxstnDJJladEh+s+Hgi9F7K+UcKsm4+c0CCtlAIvVaB7mlH6MljXl
-         GRH7ISpBI6cRao3nrXJWUgPdGuIFjGZgde9OZBMsbsaCFyp7gxvT8Wl7m77Iu4pIxfWS
-         5yUnOPJOuQdjnHv99FTPV09R5QBaxMEWPjaSTnPS7blSvmOi/dscHTG7Rfk8w6CGPzle
-         sHEqEDXufY09efL5D2AY0PWUJLzl1kohW3AVZE1/TL4cZ8g/1Rw+w8eWDTDpMLdxTPK5
-         3v0q1m3XphWnS3oar5UxG74fEMF2ink+suib3w5dURhqJ1cj/1UPfWodF7kbnNaGOi1l
-         TVoA==
+        bh=b7OeA641zFpMpjc2geYL3Cgq7EpWyJRiF2B77FMBQKk=;
+        b=BHJfibjKQKsPtix1P8GIMYxSqDuujDQIQ6DmSd0h+lh3AjrsIb63d5EudSdYoBJ8f1
+         jUG2EL2Kz/l1Sw5swYWdvzd/qvod+B5CTs/62QXhgWbI+gZcXbmR1WF4E5uSonckaZVY
+         0VKvfOb5JMvnYx6eJde9pF5+NXGT1XKTPcfOCje0aXcQScFhsH4h88SMA/IE/zzorNQR
+         hpkXwYgDUh1NxaUXu+msEAR9ftmBYvgIfoV8jGIA34cUZaULQbnlcyStOOHhJAT+novv
+         psmFhU0QI+YODaHI8RsO+LzMh07JGyIqB5mLirUKy2bhhQ9LUARc/DaIfqE5Q3VOuIBi
+         u3tQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1716917076; x=1717521876;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=ThOVm46gYp9/Cn7ASNZ0mQAfmQpKcIWWQc+98ymb318=;
-        b=rnku5NdqDYxdA86Eda/FR7n9q2pnN26rW9QbJQfagdF9KUcbi2rYiGw9ITbpjOUp8M
-         0x/S3nQAYLSPH2EPzS/ABvvLv5Mk2dQByX0Ov8a9pFjbJgIL85xAAqvSlwtj0nfsJ7aW
-         UI6jugaiaSS+tGWSUUmmHEd8HiOywDRI7so/JRfuUEednmS6c42Pgc6S0a1E1RmU4QsR
-         dauQZ7mNKCs3XF8L3Rcqbis01/6biri06fnREf9bk+dB68elrcsGqQblWmz498nCzBoj
-         EpFUrfRlmnR+DMwk3Up8vZHb/qQR4liS6Mcc4cgLU3htOLy19PHM0ksVPoutdCUImm+V
-         g63Q==
-X-Forwarded-Encrypted: i=1; AJvYcCX4EQnptR0KGOKDvepvOK0RsvKKbknRtyh1aiMK3ZnL+inlshb1cKu4Ixfg+J+xhuIzUzvCr+DYqYBGP4XuhxAHsjq3kcJ7vQmegjJbFsT8bIYJNBdRC2bxQ7WSuicc4Nw23bv25MQAECm2i2BUaKfs+IrBy4hwgs4q
-X-Gm-Message-State: AOJu0YytZaukA/uvgOBVqgptJGCkvrDQp9+VwtpEIgYf4pukgb9v0kgr
-	KPlUuLIIzi71aRN6to1XEdXj4wqfLvh2lIAP9BFwbKjiJgyz6nBu
-X-Google-Smtp-Source: AGHT+IHmE7KwWW/A6BnWKuk+2M8Ye5aS8UEuzeJBkO8gGRyfB9v09wmMfK5BrpYl8vMuNh2Iux6GXg==
-X-Received: by 2002:a05:622a:1346:b0:43c:7755:961c with SMTP id d75a77b69052e-43fa7431750mr305065511cf.5.1716917076577;
-        Tue, 28 May 2024 10:24:36 -0700 (PDT)
-Received: from localhost (112.49.199.35.bc.googleusercontent.com. [35.199.49.112])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-43fd54f4a5dsm11821051cf.97.2024.05.28.10.24.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 May 2024 10:24:35 -0700 (PDT)
-Date: Tue, 28 May 2024 13:24:35 -0400
-From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-To: "Abhishek Chauhan (ABC)" <quic_abchauha@quicinc.com>, 
- "David S. Miller" <davem@davemloft.net>, 
- Eric Dumazet <edumazet@google.com>, 
- Jakub Kicinski <kuba@kernel.org>, 
- Paolo Abeni <pabeni@redhat.com>, 
- netdev@vger.kernel.org, 
- linux-kernel@vger.kernel.org, 
- Andrew Halaney <ahalaney@redhat.com>, 
- Willem de Bruijn <willemdebruijn.kernel@gmail.com>, 
- Martin KaFai Lau <martin.lau@kernel.org>, 
- Martin KaFai Lau <martin.lau@linux.dev>, 
- Daniel Borkmann <daniel@iogearbox.net>, 
- bpf <bpf@vger.kernel.org>
-Cc: kernel@quicinc.com, 
- Willem de Bruijn <willemb@google.com>
-Message-ID: <665613536e82e_2a1fb929437@willemb.c.googlers.com.notmuch>
-In-Reply-To: <6bdba7b6-fd22-4ea5-a356-12268674def1@quicinc.com>
-References: <20240509211834.3235191-1-quic_abchauha@quicinc.com>
- <20240509211834.3235191-2-quic_abchauha@quicinc.com>
- <6bdba7b6-fd22-4ea5-a356-12268674def1@quicinc.com>
-Subject: Re: [PATCH bpf-next v8 1/3] net: Rename mono_delivery_time to
- tstamp_type for scalabilty
+        d=1e100.net; s=20230601; t=1716917402; x=1717522202;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=b7OeA641zFpMpjc2geYL3Cgq7EpWyJRiF2B77FMBQKk=;
+        b=cxSwDcPHAB7psRB6d789gZtLUbKzKqa8Fsp1M+vB/ggNQGOS73I0pLKQpzl3O3Xqao
+         pC5CXEHyFe355PCHl2k76TDSeQ6EiPWUlMmqh7mre7vpOPy3Yv3kBVmGKgVnYWPy+/Gi
+         oCAQSH5I2ILIhYwVcg/ZgHqFB2eoLrXwv140g7YncWndpJVErI+61cnNo6W46vurcbOs
+         1dYpsmfsce2GmKfL3s+qW/WT2wSAkJrrZyrh3nUE29EGgLpbMct/7McVAEcr+vYSz/il
+         Ss8YuFH8gr5fV6QzQdBnFSkny6PsJGGo77Ii2QB3ROH2f1ajaKRHfgWpgrfTquBYPs6r
+         nJ7Q==
+X-Forwarded-Encrypted: i=1; AJvYcCWEMJQdXACjqbu5de3CKkwURwLSgmk5ymEMLJ9UAHe+VeLuZdEont7v+LvZWaWXLXOCqOHxQoKVHFjFpKoUgJU+V+mT
+X-Gm-Message-State: AOJu0Yw2kXJttdV3O8ghI8OODcbtc2bhgNvupZcCjjZ3RrUGHw0UOWpE
+	409gtqGZi+SpKXUYAYiVrWx/n8U31GE3I590qUCSnfoNzjCqd5xlI0sW9HT/DqNrpaMbMuWYExy
+	YiWVFUaHSxsYfdpiaVdCiORmjSP2znQgD
+X-Google-Smtp-Source: AGHT+IH6mKa5yx1rre9qKe1AnXrjVEsskOmjedKaCWbuzXB+Ac4qx4PbU12UxZl9XoSi73QdzN2IVw0UBCgUm7mEDDg=
+X-Received: by 2002:a05:6512:b10:b0:516:c5c2:cba8 with SMTP id
+ 2adb3069b0e04-52964eac446mr14770807e87.12.1716917402228; Tue, 28 May 2024
+ 10:30:02 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+References: <PH0PR21MB19101A296E6A180AD99EDD3898F12@PH0PR21MB1910.namprd21.prod.outlook.com>
+ <PH0PR21MB191058745A71A705F199B19A98F12@PH0PR21MB1910.namprd21.prod.outlook.com>
+In-Reply-To: <PH0PR21MB191058745A71A705F199B19A98F12@PH0PR21MB1910.namprd21.prod.outlook.com>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Tue, 28 May 2024 10:29:47 -0700
+Message-ID: <CAEf4BzZf=7Sb9Zf7Bt_oJh=Pq6b=03wspmr8iJSY-KRyJVZ3nw@mail.gmail.com>
+Subject: Re: [Bpf] Re: Writing into a ring buffer map from user space
+To: Shankar Seal <Shankar.Seal=40microsoft.com@dmarc.ietf.org>
+Cc: "bpf@ietf.org" <bpf@ietf.org>, "bpf@vger.kernel.org" <bpf@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Abhishek Chauhan (ABC) wrote:
+On Tue, May 28, 2024 at 9:32=E2=80=AFAM Shankar Seal
+<Shankar.Seal=3D40microsoft.com@dmarc.ietf.org> wrote:
+>
+> Adding bpf@vger.kernel.org
+>
+> A common use case of an BPF ring buffer map to use as a queue of events g=
+enerated by BPF programs that can be read in-order by user space applicatio=
+ns. I have a scenario requirement for a user space application to write int=
+o a ring buffer (or similar) map, such that events by BPF programs in kerne=
+l and user space applications are interleaved in the order they were genera=
+ted, that can be consumed by another user space application
+>
+> I would like to implement this new feature in the https://github.com/micr=
+osoft/ebpf-for-windows project. But before I go ahead with the implementati=
+on, I wanted to check if there is any way to accomplish this in Linux today=
+? If not, is there any reason why this should not be done?
 
-> > +static inline void skb_set_delivery_type_by_clockid(struct sk_buff *skb,
-> > +						    ktime_t kt, clockid_t clockid)
-> > +{
-> > +	u8 tstamp_type = SKB_CLOCK_REALTIME;
-> > +
-> > +	switch (clockid) {
-> > +	case CLOCK_REALTIME:
-> > +		break;
-> > +	case CLOCK_MONOTONIC:
-> > +		tstamp_type = SKB_CLOCK_MONOTONIC;
-> > +		break;
-> > +	default:
-> 
-> Willem and Martin, I was thinking we should remove this warn_on_once from below line. Some systems also use panic on warn. 
-> So i think this might result in unnecessary crashes. 
-> 
-> Let me know what you think. 
-> 
-> Logs which are complaining. 
-> https://syzkaller.appspot.com/x/log.txt?x=118c3ae8980000
+Yes, there is. See user_ring_buffer ([0], [1]).
 
-I received reports too. Agreed that we need to fix these reports.
+  [0] https://github.com/torvalds/linux/blob/master/tools/testing/selftests=
+/bpf/prog_tests/user_ringbuf.c
+  [1] https://github.com/torvalds/linux/blob/master/tools/testing/selftests=
+/bpf/progs/user_ringbuf_success.c
 
-The alternative is to limit sk_clockid to supported ones, by failing
-setsockopt SO_TXTIME on an unsupported clock.
-
-That changes established ABI behavior. But I don't see how another
-clock can be used in any realistic way anyway.
-
-Putting it out there as an option. It's riskier, but in the end I
-believe a better fix than just allowing this state to continue.
-
-A third option would be to not fail the system call, but silently
-fall back to CLOCK_REALTIME. Essentially what happens in the datapath
-in skb_set_delivery_type_by_clockid now. That is surprising behavior,
-we should not do that.
+>
+> Thanks,
+> Shankar
+> =E0=A6=B6=E0=A6=82=E0=A6=95=E0=A6=B0 =E0=A6=B6=E0=A7=80=E0=A6=B2
+>
+>
+>
+> ________________________________
+> From: Shankar Seal
+> Sent: Tuesday, May 28, 2024 12:40 AM
+> To: bpf@ietf.org <bpf@ietf.org>
+> Subject: Writing into a ring buffer map from user space
+>
+>
+> I have a scenario requirement for a user space application to write into =
+a ring buffer eBPF map that I would like to implement in the https://github=
+.com/microsoft/ebpf-for-windows project. Is there any way to accomplish thi=
+s in Linux today? If not, is there any reason why this should not be done?
+>
+>
+> Thanks,
+> Shankar
+> =E0=A6=B6=E0=A6=82=E0=A6=95=E0=A6=B0 =E0=A6=B6=E0=A7=80=E0=A6=B2
+>
+>
+>
+> --
+> Bpf mailing list -- bpf@ietf.org
+> To unsubscribe send an email to bpf-leave@ietf.org
