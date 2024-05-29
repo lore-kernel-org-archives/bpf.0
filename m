@@ -1,358 +1,351 @@
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f80.google.com (mail-io1-f80.google.com [209.85.166.80])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B5781A0B08;
-	Wed, 29 May 2024 16:29:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25B0D1836E3
+	for <bpf@vger.kernel.org>; Wed, 29 May 2024 16:52:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.80
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717000185; cv=none; b=XQkjmLmpHwpEbXg7ar9Fq/kYFi/l+2kM39D9yrLlBStWYIPHO1TRzwC2TgOwcohlu7UDXyjLS5q2fmypm1ACI3q8SA4LwNM1C50pC0KAE3JrebErkCZrQGi1cvn4twFbd5BUofQ3bL+s7Mgi5mI4xndKNCwxlTrxW2UTq89E/qc=
+	t=1717001550; cv=none; b=mOBun0zEiRoVcmjxlQ0VVM2YsRqazXEf6SmnGN0ZI6jJ/PODUgJ67mW6/nyMPYIhFcnQ7zKL+q4576u8sF5AA1mjoXjo4UCp+KfW94BDxTDoDtpSg/PFcEqOURqfXqlL6Hh0D/z/rInwmYCo3FYW9vANg9VAboXkfo7gU+wSkw8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717000185; c=relaxed/simple;
-	bh=K+N7SScThVDvFeOZ74YnMYdDplqfJcdqL7SNISd4pK4=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ciz42QNHNsp5xl6DvHqXqk4sFcb27/tNneFC/uvGR8BQp+UOa9Z/WfI2fuK/YcdCpUF6MJYK1uLc3B6zAJcmsO2nzoPB3Kp01BBt+RwtEWhd6xI2crnvaPqr6DGg5q5XgkviTwM5LgxFuBZtEBkyNvrTlzCNJAtJqEgRJd56FFM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=aqMgYRrP; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=Q+CJ7f0x; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="aqMgYRrP";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="Q+CJ7f0x"
-From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1717000180;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=q5Jik/z8apqNPvVA8Qi90r3XumHNfaJX3DcXJHJQJHI=;
-	b=aqMgYRrP64DXOPYtPPQCSWCqPFMeMTjwo5GFvoJXNLlvkR/r1KxZgxYAR9XgTB/C6h4wEM
-	4/SzMjLdBa8SujwpQ2i2tU48Lrz6JQLWaLOE+BB4uHD3L24/LYjakkogordVvvOpilffnD
-	CKI+3wG9PqbLGBXhOpvqfcOcx9+Z8ppXux66gfAOfccoTcs1JI5CYZ2Z5wQJSHVmeWzAN+
-	8yNktZExpm39+A2PfJUur5nRjMM/HOsxKx/G4ZAbSjphPqGmhRfGvNt+QaVLtQMertEkEE
-	ADeDpbKVrAyz9TDs6U2El0bN1PYa4QVJT/Sy5N+wZpOfANfhD+nS97x23yUNFw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1717000180;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=q5Jik/z8apqNPvVA8Qi90r3XumHNfaJX3DcXJHJQJHI=;
-	b=Q+CJ7f0xbTjRfywlvsqTb7BHffgDbBdhPdcv4zOq00FSoxJw5/FGIagrFYl+oloRl9nzLs
-	jCogmtNgyx8r/BBg==
-To: linux-kernel@vger.kernel.org,
-	netdev@vger.kernel.org
-Cc: "David S. Miller" <davem@davemloft.net>,
-	Boqun Feng <boqun.feng@gmail.com>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Frederic Weisbecker <frederic@kernel.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Waiman Long <longman@redhat.com>,
-	Will Deacon <will@kernel.org>,
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-	=?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Hao Luo <haoluo@google.com>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	Jiri Olsa <jolsa@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Jonathan Lemon <jonathan.lemon@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-	Magnus Karlsson <magnus.karlsson@intel.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Stanislav Fomichev <sdf@google.com>,
-	=?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	bpf@vger.kernel.org
-Subject: [PATCH v3 net-next 15/15] net: Move per-CPU flush-lists to bpf_net_context on PREEMPT_RT.
-Date: Wed, 29 May 2024 18:02:38 +0200
-Message-ID: <20240529162927.403425-16-bigeasy@linutronix.de>
-In-Reply-To: <20240529162927.403425-1-bigeasy@linutronix.de>
-References: <20240529162927.403425-1-bigeasy@linutronix.de>
+	s=arc-20240116; t=1717001550; c=relaxed/simple;
+	bh=Slhcrvv302EnCSIhqJfoPNA7hpktgf8zQEUdvKzSNcI=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=iV2KoizRJfBVbfFLTGWxZJ4VlYFONXTv2Z8435ZSdJ1h9Fv/4K/IYJ0SMxdOXpxEBIVkbHNbd+Bh2RLSmwXcfUsZeD4JpArP34Q+8tYX2jPoQmtgfRaheNT1bbdkh7wlT8O1dHhUpm5Mgg+pku9OI6kCKD1G3/1ApJQPh3U+iL8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.80
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-io1-f80.google.com with SMTP id ca18e2360f4ac-7e8e558d366so276805039f.1
+        for <bpf@vger.kernel.org>; Wed, 29 May 2024 09:52:27 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1717001547; x=1717606347;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=4sZTA5pQPWMEXkgbdcJ37UQpB/o8YbjkC8POOYah4lU=;
+        b=cm1smAzvLGEMLub7zof9A/4cINgVM8Zg4XoDZq6gMFoBSTa7MhUBrKEGKg83OCGWRY
+         HSU3ZfFLCd2XucmgQylYpHk7UFL+47OJV9Lt6idPIojhLURbPlNFfkb3Y9rkq0zGhQVY
+         FKBRLyup5rR8cq/wwgKcscSEfK9q1Us8vrb6r7nXD7Jnh4DgP+MhT5IqZ09Ei8W575qH
+         Jum/Rh0EQ3ikwWpgXmFHyMPh6CcaDOs287jPkumWTSTZNJgNyg3KDfC58/Irdroc+oLI
+         RDf7bryGuwEnBa/CDQrpAncDBEZ7RCzbD/UhNqj29JlkASbyP18TJKg/yMzsQ5xk3jV/
+         gqbg==
+X-Forwarded-Encrypted: i=1; AJvYcCWY1FngLmvBx3CV0E/ZZaLw7Y26IPlhebUuslzMtdxp7AxXKNXEBKjGzFc1z/mpot4NX9Rk1rBJw6tHI08QAgnDI4IT
+X-Gm-Message-State: AOJu0YzufPYzyMpHAc9bQFSR4zIFYAfGFCTTwefR5W2bDuOhG3Ixw9uD
+	Gu6VHhboQLwCfhYLaLLp9vHi8vyTlzRKqDLK6XwHffUv5uk6p0fj0ryKmYTGEdwbNi+UoV/pfTf
+	W/3gNfkatINXGhXD7UHYFy5MWlCk9eTIYDZcvJ+1qmwMWc7So9Id+P0k=
+X-Google-Smtp-Source: AGHT+IH3XwZS15k45nnmsowxNeIkYj7USUbdOSEIJt3hAuM8IubBzg1dlestczF+3CZe2IL2stayfWFH4vJDI04WFU6beEaQuPHJ
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+X-Received: by 2002:a02:b89a:0:b0:48a:40e5:3ba5 with SMTP id
+ 8926c6da1cb9f-4b03fba9c19mr558930173.5.1717001546276; Wed, 29 May 2024
+ 09:52:26 -0700 (PDT)
+Date: Wed, 29 May 2024 09:52:26 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000003eb50e06199a9324@google.com>
+Subject: [syzbot] [bpf?] [net?] possible deadlock in sk_psock_skb_ingress_enqueue
+From: syzbot <syzbot+53cf0afa7b308038a6db@syzkaller.appspotmail.com>
+To: andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org, 
+	daniel@iogearbox.net, davem@davemloft.net, edumazet@google.com, 
+	jakub@cloudflare.com, john.fastabend@gmail.com, kuba@kernel.org, 
+	linux-kernel@vger.kernel.org, netdev@vger.kernel.org, pabeni@redhat.com, 
+	syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 
-The per-CPU flush lists, which are accessed from within the NAPI callback
-(xdp_do_flush() for instance), are per-CPU. There are subject to the
-same problem as struct bpf_redirect_info.
+Hello,
 
-Add the per-CPU lists cpu_map_flush_list, dev_map_flush_list and
-xskmap_map_flush_list to struct bpf_net_context. Add wrappers for the
-access.
+syzbot found the following issue on:
 
-Cc: "Bj=C3=B6rn T=C3=B6pel" <bjorn@kernel.org>
-Cc: Alexei Starovoitov <ast@kernel.org>
-Cc: Andrii Nakryiko <andrii@kernel.org>
-Cc: Eduard Zingerman <eddyz87@gmail.com>
-Cc: Hao Luo <haoluo@google.com>
-Cc: Jesper Dangaard Brouer <hawk@kernel.org>
-Cc: Jiri Olsa <jolsa@kernel.org>
-Cc: John Fastabend <john.fastabend@gmail.com>
-Cc: Jonathan Lemon <jonathan.lemon@gmail.com>
-Cc: KP Singh <kpsingh@kernel.org>
-Cc: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Cc: Magnus Karlsson <magnus.karlsson@intel.com>
-Cc: Martin KaFai Lau <martin.lau@linux.dev>
-Cc: Song Liu <song@kernel.org>
-Cc: Stanislav Fomichev <sdf@google.com>
-Cc: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
-Cc: Yonghong Song <yonghong.song@linux.dev>
-Cc: bpf@vger.kernel.org
-Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+HEAD commit:    44382b3ed6b2 bpf: Fix potential integer overflow in resolv..
+git tree:       bpf
+console output: https://syzkaller.appspot.com/x/log.txt?x=1556297c980000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=17ffd15f654c98ba
+dashboard link: https://syzkaller.appspot.com/bug?extid=53cf0afa7b308038a6db
+compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
+
+Unfortunately, I don't have any reproducer for this issue yet.
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/e2dad9cbbe0c/disk-44382b3e.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/f67186323c24/vmlinux-44382b3e.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/02d46501b164/bzImage-44382b3e.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+53cf0afa7b308038a6db@syzkaller.appspotmail.com
+
+======================================================
+WARNING: possible circular locking dependency detected
+6.9.0-syzkaller-08559-g44382b3ed6b2 #0 Not tainted
+------------------------------------------------------
+syz-executor.3/7164 is trying to acquire lock:
+ffff88804a4d7858 (&ei->socket.wq.wait){..-.}-{2:2}, at: __wake_up_common_lock+0x25/0x1e0 kernel/sched/wait.c:105
+
+but task is already holding lock:
+ffff88801e9623f0 (clock-AF_UNIX){++..}-{2:2}, at: sk_psock_data_ready include/linux/skmsg.h:468 [inline]
+ffff88801e9623f0 (clock-AF_UNIX){++..}-{2:2}, at: sk_psock_skb_ingress_enqueue+0x328/0x450 net/core/skmsg.c:555
+
+which lock already depends on the new lock.
+
+
+the existing dependency chain (in reverse order) is:
+
+-> #5 (clock-AF_UNIX){++..}-{2:2}:
+       lock_acquire+0x1ed/0x550 kernel/locking/lockdep.c:5754
+       __raw_write_lock_bh include/linux/rwlock_api_smp.h:202 [inline]
+       _raw_write_lock_bh+0x35/0x50 kernel/locking/spinlock.c:334
+       sk_psock_drop+0x34/0x500 net/core/skmsg.c:837
+       __sock_map_delete net/core/sock_map.c:435 [inline]
+       sock_map_delete_elem+0x1a2/0x250 net/core/sock_map.c:461
+       0xffffffffa00017f2
+       bpf_dispatcher_nop_func include/linux/bpf.h:1243 [inline]
+       __bpf_prog_run include/linux/filter.h:682 [inline]
+       bpf_prog_run include/linux/filter.h:698 [inline]
+       __bpf_trace_run kernel/trace/bpf_trace.c:2403 [inline]
+       bpf_trace_run8+0x564/0x630 kernel/trace/bpf_trace.c:2450
+       __bpf_trace_jbd2_handle_stats+0x47/0x60 include/trace/events/jbd2.h:210
+       trace_jbd2_handle_stats include/trace/events/jbd2.h:210 [inline]
+       jbd2_journal_stop+0xd0a/0xd80 fs/jbd2/transaction.c:1869
+       __ext4_journal_stop+0xfd/0x1a0 fs/ext4/ext4_jbd2.c:134
+       ext4_create+0x2f9/0x550 fs/ext4/namei.c:2843
+       lookup_open fs/namei.c:3505 [inline]
+       open_last_lookups fs/namei.c:3574 [inline]
+       path_openat+0x1425/0x3240 fs/namei.c:3804
+       do_filp_open+0x235/0x490 fs/namei.c:3834
+       do_sys_openat2+0x13e/0x1d0 fs/open.c:1406
+       do_sys_open fs/open.c:1421 [inline]
+       __do_sys_openat fs/open.c:1437 [inline]
+       __se_sys_openat fs/open.c:1432 [inline]
+       __x64_sys_openat+0x247/0x2a0 fs/open.c:1432
+       do_syscall_x64 arch/x86/entry/common.c:52 [inline]
+       do_syscall_64+0xf5/0x240 arch/x86/entry/common.c:83
+       entry_SYSCALL_64_after_hwframe+0x77/0x7f
+
+-> #4 (&stab->lock){+...}-{2:2}:
+       lock_acquire+0x1ed/0x550 kernel/locking/lockdep.c:5754
+       __raw_spin_lock_bh include/linux/spinlock_api_smp.h:126 [inline]
+       _raw_spin_lock_bh+0x35/0x50 kernel/locking/spinlock.c:178
+       spin_lock_bh include/linux/spinlock.h:356 [inline]
+       __sock_map_delete net/core/sock_map.c:429 [inline]
+       sock_map_delete_elem+0x175/0x250 net/core/sock_map.c:461
+       bpf_prog_10a0f827fc0335db+0x3/0x21
+       bpf_dispatcher_nop_func include/linux/bpf.h:1243 [inline]
+       __bpf_prog_run include/linux/filter.h:691 [inline]
+       bpf_prog_run include/linux/filter.h:698 [inline]
+       __bpf_trace_run kernel/trace/bpf_trace.c:2403 [inline]
+       bpf_trace_run4+0x334/0x590 kernel/trace/bpf_trace.c:2446
+       trace_mmap_lock_acquire_returned include/trace/events/mmap_lock.h:52 [inline]
+       __mmap_lock_do_trace_acquire_returned+0x5c8/0x630 mm/mmap_lock.c:237
+       __mmap_lock_trace_acquire_returned include/linux/mmap_lock.h:36 [inline]
+       mmap_read_trylock include/linux/mmap_lock.h:166 [inline]
+       get_mmap_lock_carefully mm/memory.c:5628 [inline]
+       lock_mm_and_find_vma+0x213/0x2f0 mm/memory.c:5688
+       do_user_addr_fault arch/x86/mm/fault.c:1355 [inline]
+       handle_page_fault arch/x86/mm/fault.c:1475 [inline]
+       exc_page_fault+0x1a9/0x8a0 arch/x86/mm/fault.c:1533
+       asm_exc_page_fault+0x26/0x30 arch/x86/include/asm/idtentry.h:623
+       rep_movs_alternative+0x4a/0x70 arch/x86/lib/copy_user_64.S:65
+       copy_user_generic arch/x86/include/asm/uaccess_64.h:110 [inline]
+       raw_copy_to_user arch/x86/include/asm/uaccess_64.h:131 [inline]
+       copy_to_user_iter lib/iov_iter.c:25 [inline]
+       iterate_ubuf include/linux/iov_iter.h:29 [inline]
+       iterate_and_advance2 include/linux/iov_iter.h:245 [inline]
+       iterate_and_advance include/linux/iov_iter.h:271 [inline]
+       _copy_to_iter+0x26b/0x1960 lib/iov_iter.c:185
+       copy_page_to_iter+0xb1/0x160 lib/iov_iter.c:362
+       pipe_read+0x59c/0x13e0 fs/pipe.c:327
+       call_read_iter include/linux/fs.h:2114 [inline]
+       new_sync_read fs/read_write.c:395 [inline]
+       vfs_read+0x97b/0xb70 fs/read_write.c:476
+       ksys_read+0x1a0/0x2c0 fs/read_write.c:619
+       do_syscall_x64 arch/x86/entry/common.c:52 [inline]
+       do_syscall_64+0xf5/0x240 arch/x86/entry/common.c:83
+       entry_SYSCALL_64_after_hwframe+0x77/0x7f
+
+-> #3 (lock#10){+.+.}-{2:2}:
+       lock_acquire+0x1ed/0x550 kernel/locking/lockdep.c:5754
+       local_lock_acquire include/linux/local_lock_internal.h:29 [inline]
+       __mmap_lock_do_trace_acquire_returned+0xa8/0x630 mm/mmap_lock.c:237
+       __mmap_lock_trace_acquire_returned include/linux/mmap_lock.h:36 [inline]
+       mmap_read_trylock include/linux/mmap_lock.h:166 [inline]
+       stack_map_get_build_id_offset+0x9b2/0x9d0 kernel/bpf/stackmap.c:141
+       __bpf_get_stack+0x4ad/0x5a0 kernel/bpf/stackmap.c:449
+       ____bpf_get_stack_raw_tp kernel/trace/bpf_trace.c:1994 [inline]
+       bpf_get_stack_raw_tp+0x1a3/0x240 kernel/trace/bpf_trace.c:1984
+       bpf_prog_9dc0996bccb7470f+0x16/0x6c
+       bpf_dispatcher_nop_func include/linux/bpf.h:1243 [inline]
+       __bpf_prog_run include/linux/filter.h:691 [inline]
+       bpf_prog_run include/linux/filter.h:698 [inline]
+       __bpf_trace_run kernel/trace/bpf_trace.c:2403 [inline]
+       bpf_trace_run2+0x2ec/0x540 kernel/trace/bpf_trace.c:2444
+       trace_tlb_flush+0x118/0x140 include/trace/events/tlb.h:38
+       switch_mm_irqs_off+0x7cb/0xae0
+       context_switch kernel/sched/core.c:5392 [inline]
+       __schedule+0x1066/0x4a50 kernel/sched/core.c:6745
+       preempt_schedule_common+0x84/0xd0 kernel/sched/core.c:6924
+       preempt_schedule+0xe1/0xf0 kernel/sched/core.c:6948
+       preempt_schedule_thunk+0x1a/0x30 arch/x86/entry/thunk.S:12
+       __raw_spin_unlock include/linux/spinlock_api_smp.h:143 [inline]
+       _raw_spin_unlock+0x3e/0x50 kernel/locking/spinlock.c:186
+       spin_unlock include/linux/spinlock.h:391 [inline]
+       futex_wake+0x516/0x5c0 kernel/futex/waitwake.c:198
+       do_futex+0x392/0x560 kernel/futex/syscalls.c:107
+       __do_sys_futex kernel/futex/syscalls.c:179 [inline]
+       __se_sys_futex+0x3f9/0x480 kernel/futex/syscalls.c:160
+       do_syscall_x64 arch/x86/entry/common.c:52 [inline]
+       do_syscall_64+0xf5/0x240 arch/x86/entry/common.c:83
+       entry_SYSCALL_64_after_hwframe+0x77/0x7f
+
+-> #2 (&rq->__lock){-.-.}-{2:2}:
+       lock_acquire+0x1ed/0x550 kernel/locking/lockdep.c:5754
+       _raw_spin_lock_nested+0x31/0x40 kernel/locking/spinlock.c:378
+       raw_spin_rq_lock_nested+0x2a/0x140 kernel/sched/core.c:559
+       raw_spin_rq_lock kernel/sched/sched.h:1406 [inline]
+       rq_lock kernel/sched/sched.h:1702 [inline]
+       task_fork_fair+0x61/0x1e0 kernel/sched/fair.c:12709
+       sched_cgroup_fork+0x37c/0x410 kernel/sched/core.c:4844
+       copy_process+0x2217/0x3dc0 kernel/fork.c:2499
+       kernel_clone+0x226/0x8f0 kernel/fork.c:2797
+       user_mode_thread+0x132/0x1a0 kernel/fork.c:2875
+       rest_init+0x23/0x300 init/main.c:707
+       start_kernel+0x47a/0x500 init/main.c:1084
+       x86_64_start_reservations+0x2a/0x30 arch/x86/kernel/head64.c:507
+       x86_64_start_kernel+0x99/0xa0 arch/x86/kernel/head64.c:488
+       common_startup_64+0x13e/0x147
+
+-> #1 (&p->pi_lock){-.-.}-{2:2}:
+       lock_acquire+0x1ed/0x550 kernel/locking/lockdep.c:5754
+       __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:110 [inline]
+       _raw_spin_lock_irqsave+0xd5/0x120 kernel/locking/spinlock.c:162
+       class_raw_spinlock_irqsave_constructor include/linux/spinlock.h:553 [inline]
+       try_to_wake_up+0xb0/0x1470 kernel/sched/core.c:4262
+       autoremove_wake_function+0x16/0x110 kernel/sched/wait.c:384
+       __wake_up_common kernel/sched/wait.c:89 [inline]
+       __wake_up_common_lock+0x130/0x1e0 kernel/sched/wait.c:106
+       sock_def_readable+0x20f/0x5b0 net/core/sock.c:3353
+       unix_dgram_sendmsg+0x148e/0x1f80 net/unix/af_unix.c:2113
+       sock_sendmsg_nosec net/socket.c:730 [inline]
+       __sock_sendmsg+0x221/0x270 net/socket.c:745
+       __sys_sendto+0x3a4/0x4f0 net/socket.c:2191
+       __do_sys_sendto net/socket.c:2203 [inline]
+       __se_sys_sendto net/socket.c:2199 [inline]
+       __x64_sys_sendto+0xde/0x100 net/socket.c:2199
+       do_syscall_x64 arch/x86/entry/common.c:52 [inline]
+       do_syscall_64+0xf5/0x240 arch/x86/entry/common.c:83
+       entry_SYSCALL_64_after_hwframe+0x77/0x7f
+
+-> #0 (&ei->socket.wq.wait){..-.}-{2:2}:
+       check_prev_add kernel/locking/lockdep.c:3134 [inline]
+       check_prevs_add kernel/locking/lockdep.c:3253 [inline]
+       validate_chain+0x18cb/0x58e0 kernel/locking/lockdep.c:3869
+       __lock_acquire+0x1346/0x1fd0 kernel/locking/lockdep.c:5137
+       lock_acquire+0x1ed/0x550 kernel/locking/lockdep.c:5754
+       __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:110 [inline]
+       _raw_spin_lock_irqsave+0xd5/0x120 kernel/locking/spinlock.c:162
+       __wake_up_common_lock+0x25/0x1e0 kernel/sched/wait.c:105
+       sock_def_readable+0x20f/0x5b0 net/core/sock.c:3353
+       sk_psock_skb_ingress_enqueue+0x388/0x450 net/core/skmsg.c:555
+       sk_psock_skb_ingress_self+0x292/0x340 net/core/skmsg.c:606
+       sk_psock_verdict_apply+0x3bd/0x460 net/core/skmsg.c:1008
+       sk_psock_verdict_recv+0x335/0x590 net/core/skmsg.c:1202
+       unix_read_skb+0xd9/0x180 net/unix/af_unix.c:2502
+       sk_psock_verdict_data_ready+0xab/0x390 net/core/skmsg.c:1223
+       unix_dgram_sendmsg+0x148e/0x1f80 net/unix/af_unix.c:2113
+       sock_sendmsg_nosec net/socket.c:730 [inline]
+       __sock_sendmsg+0x221/0x270 net/socket.c:745
+       ____sys_sendmsg+0x525/0x7d0 net/socket.c:2584
+       ___sys_sendmsg net/socket.c:2638 [inline]
+       __sys_sendmsg+0x2b0/0x3a0 net/socket.c:2667
+       do_syscall_x64 arch/x86/entry/common.c:52 [inline]
+       do_syscall_64+0xf5/0x240 arch/x86/entry/common.c:83
+       entry_SYSCALL_64_after_hwframe+0x77/0x7f
+
+other info that might help us debug this:
+
+Chain exists of:
+  &ei->socket.wq.wait --> &stab->lock --> clock-AF_UNIX
+
+ Possible unsafe locking scenario:
+
+       CPU0                    CPU1
+       ----                    ----
+  rlock(clock-AF_UNIX);
+                               lock(&stab->lock);
+                               lock(clock-AF_UNIX);
+  lock(&ei->socket.wq.wait);
+
+ *** DEADLOCK ***
+
+3 locks held by syz-executor.3/7164:
+ #0: ffffffff8e333d20 (rcu_read_lock){....}-{1:2}, at: rcu_lock_acquire include/linux/rcupdate.h:329 [inline]
+ #0: ffffffff8e333d20 (rcu_read_lock){....}-{1:2}, at: rcu_read_lock include/linux/rcupdate.h:781 [inline]
+ #0: ffffffff8e333d20 (rcu_read_lock){....}-{1:2}, at: sk_psock_verdict_recv+0x4d/0x590 net/core/skmsg.c:1185
+ #1: ffff88801e9623f0 (clock-AF_UNIX){++..}-{2:2}, at: sk_psock_data_ready include/linux/skmsg.h:468 [inline]
+ #1: ffff88801e9623f0 (clock-AF_UNIX){++..}-{2:2}, at: sk_psock_skb_ingress_enqueue+0x328/0x450 net/core/skmsg.c:555
+ #2: ffffffff8e333d20 (rcu_read_lock){....}-{1:2}, at: rcu_lock_acquire include/linux/rcupdate.h:329 [inline]
+ #2: ffffffff8e333d20 (rcu_read_lock){....}-{1:2}, at: rcu_read_lock include/linux/rcupdate.h:781 [inline]
+ #2: ffffffff8e333d20 (rcu_read_lock){....}-{1:2}, at: sock_def_readable+0xd7/0x5b0 net/core/sock.c:3350
+
+stack backtrace:
+CPU: 0 PID: 7164 Comm: syz-executor.3 Not tainted 6.9.0-syzkaller-08559-g44382b3ed6b2 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/02/2024
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0x241/0x360 lib/dump_stack.c:114
+ check_noncircular+0x36a/0x4a0 kernel/locking/lockdep.c:2187
+ check_prev_add kernel/locking/lockdep.c:3134 [inline]
+ check_prevs_add kernel/locking/lockdep.c:3253 [inline]
+ validate_chain+0x18cb/0x58e0 kernel/locking/lockdep.c:3869
+ __lock_acquire+0x1346/0x1fd0 kernel/locking/lockdep.c:5137
+ lock_acquire+0x1ed/0x550 kernel/locking/lockdep.c:5754
+ __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:110 [inline]
+ _raw_spin_lock_irqsave+0xd5/0x120 kernel/locking/spinlock.c:162
+ __wake_up_common_lock+0x25/0x1e0 kernel/sched/wait.c:105
+ sock_def_readable+0x20f/0x5b0 net/core/sock.c:3353
+ sk_psock_skb_ingress_enqueue+0x388/0x450 net/core/skmsg.c:555
+ sk_psock_skb_ingress_self+0x292/0x340 net/core/skmsg.c:606
+ sk_psock_verdict_apply+0x3bd/0x460 net/core/skmsg.c:1008
+ sk_psock_verdict_recv+0x335/0x590 net/core/skmsg.c:1202
+ unix_read_skb+0xd9/0x180 net/unix/af_unix.c:2502
+ sk_psock_verdict_data_ready+0xab/0x390 net/core/skmsg.c:1223
+ unix_dgram_sendmsg+0x148e/0x1f80 net/unix/af_unix.c:2113
+ sock_sendmsg_nosec net/socket.c:730 [inline]
+ __sock_sendmsg+0x221/0x270 net/socket.c:745
+ ____sys_sendmsg+0x525/0x7d0 net/socket.c:2584
+ ___sys_sendmsg net/socket.c:2638 [inline]
+ __sys_sendmsg+0x2b0/0x3a0 net/socket.c:2667
+ do_syscall_x64 arch/x86/entry/common.c:52 [inline]
+ do_syscall_64+0xf5/0x240 arch/x86/entry/common.c:83
+ entry_SYSCALL_64_after_hwframe+0x77/0x7f
+RIP: 0033:0x7f8f8967cee9
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 e1 20 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b0 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f8f891de0c8 EFLAGS: 00000246 ORIG_RAX: 000000000000002e
+RAX: ffffffffffffffda RBX: 00007f8f897ac050 RCX: 00007f8f8967cee9
+RDX: 0000000000000000 RSI: 0000000020000500 RDI: 0000000000000004
+RBP: 00007f8f896c949e R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 000000000000006e R14: 00007f8f897ac050 R15: 00007ffc340af978
+ </TASK>
+
+
 ---
- include/linux/filter.h | 32 ++++++++++++++++++++++++++++++++
- kernel/bpf/cpumap.c    | 19 +++----------------
- kernel/bpf/devmap.c    | 11 +++--------
- net/xdp/xsk.c          | 12 ++++--------
- 4 files changed, 42 insertions(+), 32 deletions(-)
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-diff --git a/include/linux/filter.h b/include/linux/filter.h
-index a0d0ea356f925..f94115d154890 100644
---- a/include/linux/filter.h
-+++ b/include/linux/filter.h
-@@ -746,6 +746,9 @@ struct bpf_redirect_info {
-=20
- struct bpf_net_context {
- 	struct bpf_redirect_info ri;
-+	struct list_head cpu_map_flush_list;
-+	struct list_head dev_map_flush_list;
-+	struct list_head xskmap_map_flush_list;
- };
-=20
- static inline struct bpf_net_context *bpf_net_ctx_set(struct bpf_net_conte=
-xt *bpf_net_ctx)
-@@ -754,6 +757,14 @@ static inline struct bpf_net_context *bpf_net_ctx_set(=
-struct bpf_net_context *bp
-=20
- 	if (tsk->bpf_net_context !=3D NULL)
- 		return NULL;
-+
-+	if (IS_ENABLED(CONFIG_BPF_SYSCALL)) {
-+		INIT_LIST_HEAD(&bpf_net_ctx->cpu_map_flush_list);
-+		INIT_LIST_HEAD(&bpf_net_ctx->dev_map_flush_list);
-+	}
-+	if (IS_ENABLED(CONFIG_XDP_SOCKETS))
-+		INIT_LIST_HEAD(&bpf_net_ctx->xskmap_map_flush_list);
-+
- 	tsk->bpf_net_context =3D bpf_net_ctx;
- 	return bpf_net_ctx;
- }
-@@ -776,6 +787,27 @@ static inline struct bpf_redirect_info *bpf_net_ctx_ge=
-t_ri(void)
- 	return &bpf_net_ctx->ri;
- }
-=20
-+static inline struct list_head *bpf_net_ctx_get_cpu_map_flush_list(void)
-+{
-+	struct bpf_net_context *bpf_net_ctx =3D bpf_net_ctx_get();
-+
-+	return &bpf_net_ctx->cpu_map_flush_list;
-+}
-+
-+static inline struct list_head *bpf_net_ctx_get_dev_flush_list(void)
-+{
-+	struct bpf_net_context *bpf_net_ctx =3D bpf_net_ctx_get();
-+
-+	return &bpf_net_ctx->dev_map_flush_list;
-+}
-+
-+static inline struct list_head *bpf_net_ctx_get_xskmap_flush_list(void)
-+{
-+	struct bpf_net_context *bpf_net_ctx =3D bpf_net_ctx_get();
-+
-+	return &bpf_net_ctx->xskmap_map_flush_list;
-+}
-+
- DEFINE_FREE(bpf_net_ctx_clear, struct bpf_net_context *, bpf_net_ctx_clear=
-(_T));
-=20
- /* flags for bpf_redirect_info kern_flags */
-diff --git a/kernel/bpf/cpumap.c b/kernel/bpf/cpumap.c
-index 66974bd027109..068e994ed781a 100644
---- a/kernel/bpf/cpumap.c
-+++ b/kernel/bpf/cpumap.c
-@@ -79,8 +79,6 @@ struct bpf_cpu_map {
- 	struct bpf_cpu_map_entry __rcu **cpu_map;
- };
-=20
--static DEFINE_PER_CPU(struct list_head, cpu_map_flush_list);
--
- static struct bpf_map *cpu_map_alloc(union bpf_attr *attr)
- {
- 	u32 value_size =3D attr->value_size;
-@@ -709,7 +707,7 @@ static void bq_flush_to_queue(struct xdp_bulk_queue *bq)
-  */
- static void bq_enqueue(struct bpf_cpu_map_entry *rcpu, struct xdp_frame *x=
-dpf)
- {
--	struct list_head *flush_list =3D this_cpu_ptr(&cpu_map_flush_list);
-+	struct list_head *flush_list =3D bpf_net_ctx_get_cpu_map_flush_list();
- 	struct xdp_bulk_queue *bq =3D this_cpu_ptr(rcpu->bulkq);
-=20
- 	if (unlikely(bq->count =3D=3D CPU_MAP_BULK_SIZE))
-@@ -761,7 +759,7 @@ int cpu_map_generic_redirect(struct bpf_cpu_map_entry *=
-rcpu,
-=20
- void __cpu_map_flush(void)
- {
--	struct list_head *flush_list =3D this_cpu_ptr(&cpu_map_flush_list);
-+	struct list_head *flush_list =3D bpf_net_ctx_get_cpu_map_flush_list();
- 	struct xdp_bulk_queue *bq, *tmp;
-=20
- 	list_for_each_entry_safe(bq, tmp, flush_list, flush_node) {
-@@ -775,20 +773,9 @@ void __cpu_map_flush(void)
- #ifdef CONFIG_DEBUG_NET
- bool cpu_map_check_flush(void)
- {
--	if (list_empty(this_cpu_ptr(&cpu_map_flush_list)))
-+	if (list_empty(bpf_net_ctx_get_cpu_map_flush_list()))
- 		return false;
- 	__cpu_map_flush();
- 	return true;
- }
- #endif
--
--static int __init cpu_map_init(void)
--{
--	int cpu;
--
--	for_each_possible_cpu(cpu)
--		INIT_LIST_HEAD(&per_cpu(cpu_map_flush_list, cpu));
--	return 0;
--}
--
--subsys_initcall(cpu_map_init);
-diff --git a/kernel/bpf/devmap.c b/kernel/bpf/devmap.c
-index 4e2cdbb5629f2..9a66ac78a22ad 100644
---- a/kernel/bpf/devmap.c
-+++ b/kernel/bpf/devmap.c
-@@ -83,7 +83,6 @@ struct bpf_dtab {
- 	u32 n_buckets;
- };
-=20
--static DEFINE_PER_CPU(struct list_head, dev_flush_list);
- static DEFINE_SPINLOCK(dev_map_lock);
- static LIST_HEAD(dev_map_list);
-=20
-@@ -408,7 +407,7 @@ static void bq_xmit_all(struct xdp_dev_bulk_queue *bq, =
-u32 flags)
-  */
- void __dev_flush(void)
- {
--	struct list_head *flush_list =3D this_cpu_ptr(&dev_flush_list);
-+	struct list_head *flush_list =3D bpf_net_ctx_get_dev_flush_list();
- 	struct xdp_dev_bulk_queue *bq, *tmp;
-=20
- 	list_for_each_entry_safe(bq, tmp, flush_list, flush_node) {
-@@ -422,7 +421,7 @@ void __dev_flush(void)
- #ifdef CONFIG_DEBUG_NET
- bool dev_check_flush(void)
- {
--	if (list_empty(this_cpu_ptr(&dev_flush_list)))
-+	if (list_empty(bpf_net_ctx_get_dev_flush_list()))
- 		return false;
- 	__dev_flush();
- 	return true;
-@@ -453,7 +452,7 @@ static void *__dev_map_lookup_elem(struct bpf_map *map,=
- u32 key)
- static void bq_enqueue(struct net_device *dev, struct xdp_frame *xdpf,
- 		       struct net_device *dev_rx, struct bpf_prog *xdp_prog)
- {
--	struct list_head *flush_list =3D this_cpu_ptr(&dev_flush_list);
-+	struct list_head *flush_list =3D bpf_net_ctx_get_dev_flush_list();
- 	struct xdp_dev_bulk_queue *bq =3D this_cpu_ptr(dev->xdp_bulkq);
-=20
- 	if (unlikely(bq->count =3D=3D DEV_MAP_BULK_SIZE))
-@@ -1156,15 +1155,11 @@ static struct notifier_block dev_map_notifier =3D {
-=20
- static int __init dev_map_init(void)
- {
--	int cpu;
--
- 	/* Assure tracepoint shadow struct _bpf_dtab_netdev is in sync */
- 	BUILD_BUG_ON(offsetof(struct bpf_dtab_netdev, dev) !=3D
- 		     offsetof(struct _bpf_dtab_netdev, dev));
- 	register_netdevice_notifier(&dev_map_notifier);
-=20
--	for_each_possible_cpu(cpu)
--		INIT_LIST_HEAD(&per_cpu(dev_flush_list, cpu));
- 	return 0;
- }
-=20
-diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
-index 727aa20be4bde..8b0b557408fc2 100644
---- a/net/xdp/xsk.c
-+++ b/net/xdp/xsk.c
-@@ -35,8 +35,6 @@
- #define TX_BATCH_SIZE 32
- #define MAX_PER_SOCKET_BUDGET (TX_BATCH_SIZE)
-=20
--static DEFINE_PER_CPU(struct list_head, xskmap_flush_list);
--
- void xsk_set_rx_need_wakeup(struct xsk_buff_pool *pool)
- {
- 	if (pool->cached_need_wakeup & XDP_WAKEUP_RX)
-@@ -375,7 +373,7 @@ static int xsk_rcv(struct xdp_sock *xs, struct xdp_buff=
- *xdp)
-=20
- int __xsk_map_redirect(struct xdp_sock *xs, struct xdp_buff *xdp)
- {
--	struct list_head *flush_list =3D this_cpu_ptr(&xskmap_flush_list);
-+	struct list_head *flush_list =3D bpf_net_ctx_get_xskmap_flush_list();
- 	int err;
-=20
- 	err =3D xsk_rcv(xs, xdp);
-@@ -390,7 +388,7 @@ int __xsk_map_redirect(struct xdp_sock *xs, struct xdp_=
-buff *xdp)
-=20
- void __xsk_map_flush(void)
- {
--	struct list_head *flush_list =3D this_cpu_ptr(&xskmap_flush_list);
-+	struct list_head *flush_list =3D bpf_net_ctx_get_xskmap_flush_list();
- 	struct xdp_sock *xs, *tmp;
-=20
- 	list_for_each_entry_safe(xs, tmp, flush_list, flush_node) {
-@@ -402,7 +400,7 @@ void __xsk_map_flush(void)
- #ifdef CONFIG_DEBUG_NET
- bool xsk_map_check_flush(void)
- {
--	if (list_empty(this_cpu_ptr(&xskmap_flush_list)))
-+	if (list_empty(bpf_net_ctx_get_xskmap_flush_list()))
- 		return false;
- 	__xsk_map_flush();
- 	return true;
-@@ -1775,7 +1773,7 @@ static struct pernet_operations xsk_net_ops =3D {
-=20
- static int __init xsk_init(void)
- {
--	int err, cpu;
-+	int err;
-=20
- 	err =3D proto_register(&xsk_proto, 0 /* no slab */);
- 	if (err)
-@@ -1793,8 +1791,6 @@ static int __init xsk_init(void)
- 	if (err)
- 		goto out_pernet;
-=20
--	for_each_possible_cpu(cpu)
--		INIT_LIST_HEAD(&per_cpu(xskmap_flush_list, cpu));
- 	return 0;
-=20
- out_pernet:
---=20
-2.45.1
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
 
+If the report is already addressed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want to overwrite report's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the report is a duplicate of another one, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
