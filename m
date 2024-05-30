@@ -1,30 +1,30 @@
 Received: from out30-133.freemail.mail.aliyun.com (out30-133.freemail.mail.aliyun.com [115.124.30.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 175601779BB;
-	Thu, 30 May 2024 11:24:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0331617FACC;
+	Thu, 30 May 2024 11:24:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717068262; cv=none; b=ln2YX+uODke94klMWZGKpBa4oqz1yvMzbOmLtuM37ToYQuvJJJ3Ts3teLQ0Fvx/SBTMgFgBAVuwjpaszVi+RLNDmGzup0IrFM0weRb3X7uMv8yeQp6ynpSLbRgUA6S6+QHHbCa5i7X96D5lWUrMRUGatJyS8hO/EHTuKjO7vJ0I=
+	t=1717068263; cv=none; b=MfcDT31rXdmnjA2Fnt/dBrmT4RBv35D8SYfUnFdrmBbEI6ZhV7Av47UKeTvGF+189xB7nL8iJxpOZyqpkdjSwoQNL8sNq3Jk9qvpBrkLKBBpGdmbRB4k+wVGDswrTslqvUGogBMOtb9SlbgkLcMA5ZZ/Svq016xBzYi3ZdKU6Kg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717068262; c=relaxed/simple;
-	bh=Zdb1GWr7PeiI7ct6T0jO3OunX52i68pI0x9TPMix4oQ=;
+	s=arc-20240116; t=1717068263; c=relaxed/simple;
+	bh=vK2lnPXrFgi4vN1pvQNFjeduefPWbc9wVyj9JcUiBA8=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=HX+t0M3XUSwvAOnl2ej6sJ+RT/P444BSq8dTDcgHMikbSHqySxFtQtSFtU0pSoJOoJJ1v0EktxN94xE/YmdBCBqRBzgMUw9MAr9faYuKjIXHC8ZLjNHsNCFihTVXiy5IGrXGnBhU/PPK+MlIkvEZx2G9LOAK5lke1yIS0dq2c4s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=Ks5FUj9N; arc=none smtp.client-ip=115.124.30.133
+	 MIME-Version; b=kjhA4GV4uT3W3Pimi9X1I8PDfZcAj3bSfj7FMVnFbwefz49Rw38NQlKEQ1N0Y70lrrc+eVKI2+Bbw5OxILaonPTKYLloJj1Rh029LI9YM9amuqwrV+wrl63gsIa5iT0JXDFqQJuMPQ01itgsPHsMCFB0miiFuJFmYDIZej+CGNU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=xe0ZKpeZ; arc=none smtp.client-ip=115.124.30.133
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="Ks5FUj9N"
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="xe0ZKpeZ"
 DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
 	d=linux.alibaba.com; s=default;
-	t=1717068251; h=From:To:Subject:Date:Message-Id:MIME-Version;
-	bh=TIMrPzpMJh2GcPqD9+DKRytFNSJoZR+IJw9N4Fv2Vc8=;
-	b=Ks5FUj9NHtipnkcG6GsIfz5MDDjzOTvvsCqu0oA7pkfDWE+1d33uX8JSxLLR/wmqAqiCzpbCpEywHp1t9FYCFOA+2CAh+axQ4PqhHGjvHLYtq4Gvyb8dVgXy/QL0qIYUo55rb8m4GMHIsSgjjMR+j0NKlqHgPlL9ZPrtSGMkCbU=
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R451e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033037067109;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=15;SR=0;TI=SMTPD_---0W7Ws87X_1717068250;
-Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0W7Ws87X_1717068250)
+	t=1717068258; h=From:To:Subject:Date:Message-Id:MIME-Version;
+	bh=NE5xMR+GAAqdD3lWIpQVtq+5ZyPXa19FRaSZUNahye8=;
+	b=xe0ZKpeZJF1cNsJ1FjXo13lsyP4rc0Iz3643stka5OmEiUI2t/KjEQ2uiueP+wQsy0YylelGSk6WtMwoSKdOo7dLh2hP+jrzbur5PrMJh/GPrhup1sw97p31GNolBzsrUSDgzBGOmh6BY65O40o3n0D5W8SdHutSp7clpWMD1ws=
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R141e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033037067110;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=15;SR=0;TI=SMTPD_---0W7Wnmnq_1717068257;
+Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0W7Wnmnq_1717068257)
           by smtp.aliyun-inc.com;
-          Thu, 30 May 2024 19:24:11 +0800
+          Thu, 30 May 2024 19:24:17 +0800
 From: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
 To: netdev@vger.kernel.org
 Cc: "David S. Miller" <davem@davemloft.net>,
@@ -41,9 +41,9 @@ Cc: "David S. Miller" <davem@davemloft.net>,
 	John Fastabend <john.fastabend@gmail.com>,
 	virtualization@lists.linux.dev,
 	bpf@vger.kernel.org
-Subject: [PATCH net-next v2 04/12] virtio_net: separate virtnet_rx_resize()
-Date: Thu, 30 May 2024 19:23:58 +0800
-Message-Id: <20240530112406.94452-5-xuanzhuo@linux.alibaba.com>
+Subject: [PATCH net-next v2 11/12] virtio_ring: virtqueue_set_dma_premapped() support to disable
+Date: Thu, 30 May 2024 19:24:05 +0800
+Message-Id: <20240530112406.94452-12-xuanzhuo@linux.alibaba.com>
 X-Mailer: git-send-email 2.32.0.3.g01195cf9f
 In-Reply-To: <20240530112406.94452-1-xuanzhuo@linux.alibaba.com>
 References: <20240530112406.94452-1-xuanzhuo@linux.alibaba.com>
@@ -56,85 +56,78 @@ MIME-Version: 1.0
 X-Git-Hash: fcf606ca5ff8
 Content-Transfer-Encoding: 8bit
 
-This patch separates two sub-functions from virtnet_rx_resize():
+virtio-net sq will only enable premapped mode when the sq is bound to
+the af-xdp.
 
-* virtnet_rx_pause
-* virtnet_rx_resume
-
-Then the subsequent reset rx for xsk can share these two functions.
+So we need the helper (virtqueue_set_dma_premapped) to enable the
+premapped mode when af-xdp binds to the sq. And to disable the
+premapped mode when af-xdp unbinds to the sq.
 
 Signed-off-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-Acked-by: Jason Wang <jasowang@redhat.com>
 ---
- drivers/net/virtio/virtnet.h      |  3 +++
- drivers/net/virtio/virtnet_main.c | 29 +++++++++++++++++++++--------
- 2 files changed, 24 insertions(+), 8 deletions(-)
+ drivers/net/virtio/virtnet_main.c | 2 +-
+ drivers/virtio/virtio_ring.c      | 7 ++++---
+ include/linux/virtio.h            | 2 +-
+ 3 files changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/net/virtio/virtnet.h b/drivers/net/virtio/virtnet.h
-index d4cc4ddb0786..b0f2ae4bd1c4 100644
---- a/drivers/net/virtio/virtnet.h
-+++ b/drivers/net/virtio/virtnet.h
-@@ -236,4 +236,7 @@ struct virtnet_info {
- 
- 	u64 device_stats_cap;
- };
-+
-+void virtnet_rx_pause(struct virtnet_info *vi, struct virtnet_rq *rq);
-+void virtnet_rx_resume(struct virtnet_info *vi, struct virtnet_rq *rq);
- #endif
 diff --git a/drivers/net/virtio/virtnet_main.c b/drivers/net/virtio/virtnet_main.c
-index fc28fadf944e..a2bf576e644c 100644
+index 68b90ee788bd..60ef7bb2228d 100644
 --- a/drivers/net/virtio/virtnet_main.c
 +++ b/drivers/net/virtio/virtnet_main.c
-@@ -2378,28 +2378,41 @@ static netdev_tx_t start_xmit(struct sk_buff *skb, struct net_device *dev)
- 	return NETDEV_TX_OK;
+@@ -707,7 +707,7 @@ static void virtnet_rq_set_premapped(struct virtnet_info *vi)
+ 
+ 	for (i = 0; i < vi->max_queue_pairs; i++)
+ 		/* error should never happen */
+-		BUG_ON(virtqueue_set_dma_premapped(vi->rq[i].vq));
++		BUG_ON(virtqueue_set_dma_premapped(vi->rq[i].vq, true));
  }
  
--static int virtnet_rx_resize(struct virtnet_info *vi,
--			     struct virtnet_rq *rq, u32 ring_num)
-+void virtnet_rx_pause(struct virtnet_info *vi, struct virtnet_rq *rq)
+ static void virtnet_rq_unmap_free_buf(struct virtqueue *vq, void *buf)
+diff --git a/drivers/virtio/virtio_ring.c b/drivers/virtio/virtio_ring.c
+index cdcd8ae63c71..37c9c5b55864 100644
+--- a/drivers/virtio/virtio_ring.c
++++ b/drivers/virtio/virtio_ring.c
+@@ -2764,8 +2764,9 @@ EXPORT_SYMBOL_GPL(virtqueue_resize);
+ /**
+  * virtqueue_set_dma_premapped - set the vring premapped mode
+  * @_vq: the struct virtqueue we're talking about.
++ * @premapped: bool enable/disable the premapped mode
+  *
+- * Enable the premapped mode of the vq.
++ * Enable/disable the premapped mode of the vq.
+  *
+  * The vring in premapped mode does not do dma internally, so the driver must
+  * do dma mapping in advance. The driver must pass the dma_address through
+@@ -2782,7 +2783,7 @@ EXPORT_SYMBOL_GPL(virtqueue_resize);
+  * 0: success.
+  * -EINVAL: too late to enable premapped mode, the vq already contains buffers.
+  */
+-int virtqueue_set_dma_premapped(struct virtqueue *_vq)
++int virtqueue_set_dma_premapped(struct virtqueue *_vq, bool premapped)
  {
- 	bool running = netif_running(vi->dev);
--	int err, qindex;
--
--	qindex = rq - vi->rq;
- 
- 	if (running) {
- 		napi_disable(&rq->napi);
- 		cancel_work_sync(&rq->dim.work);
+ 	struct vring_virtqueue *vq = to_vvq(_vq);
+ 	u32 num;
+@@ -2796,7 +2797,7 @@ int virtqueue_set_dma_premapped(struct virtqueue *_vq)
+ 		return -EINVAL;
  	}
-+}
  
--	err = virtqueue_resize(rq->vq, ring_num, virtnet_rq_unmap_free_buf);
--	if (err)
--		netdev_err(vi->dev, "resize rx fail: rx queue index: %d err: %d\n", qindex, err);
-+void virtnet_rx_resume(struct virtnet_info *vi, struct virtnet_rq *rq)
-+{
-+	bool running = netif_running(vi->dev);
+-	vq->premapped = true;
++	vq->premapped = premapped;
  
- 	if (!try_fill_recv(vi, rq, GFP_KERNEL))
- 		schedule_delayed_work(&vi->refill, 0);
+ 	END_USE(vq);
  
- 	if (running)
- 		virtnet_napi_enable(rq->vq, &rq->napi);
-+}
-+
-+static int virtnet_rx_resize(struct virtnet_info *vi,
-+			     struct virtnet_rq *rq, u32 ring_num)
-+{
-+	int err, qindex;
-+
-+	qindex = rq - vi->rq;
-+
-+	virtnet_rx_pause(vi, rq);
-+
-+	err = virtqueue_resize(rq->vq, ring_num, virtnet_rq_unmap_free_buf);
-+	if (err)
-+		netdev_err(vi->dev, "resize rx fail: rx queue index: %d err: %d\n", qindex, err);
-+
-+	virtnet_rx_resume(vi, rq);
- 	return err;
- }
+diff --git a/include/linux/virtio.h b/include/linux/virtio.h
+index 6e57098c457e..38e18a764573 100644
+--- a/include/linux/virtio.h
++++ b/include/linux/virtio.h
+@@ -81,7 +81,7 @@ bool virtqueue_enable_cb(struct virtqueue *vq);
+ 
+ unsigned virtqueue_enable_cb_prepare(struct virtqueue *vq);
+ 
+-int virtqueue_set_dma_premapped(struct virtqueue *_vq);
++int virtqueue_set_dma_premapped(struct virtqueue *_vq, bool premapped);
+ 
+ bool virtqueue_poll(struct virtqueue *vq, unsigned);
  
 -- 
 2.32.0.3.g01195cf9f
