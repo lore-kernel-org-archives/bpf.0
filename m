@@ -1,400 +1,293 @@
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27920161B4D;
-	Fri, 31 May 2024 16:33:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.177.32
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717173216; cv=fail; b=NIX2Fkid39F71dVyNc1K9FL0O0EgJ0T7WcrRS08IGwjTAwJ155D1q92wBzsFy9csHOPS5drTZdNj9lNqWC2juMS8zd8+q+kZgbWwLYXB47gqV/Pm1n+na62uyeivhbmzp1u2divLQa92PGbRo4yvxMy5YTYhlNY7lM7DCeNeRng=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717173216; c=relaxed/simple;
-	bh=rm6/bFIL6p1MHxYBTQ/ROrm717XpKX2PmgkMitR2IYU=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=XqTZPkngwEeqMRSdm6CS/kXPj0tcHIweD9b1XbkluMnvqTpYpamlnBH0Z6ErfwXtop1R8OLfxOIUyr61e/xdGfG59nK+a0htuhgjwBIGBlP/BgzvyFIkM9RTtYnxZVCi0dE1oizV67QRBzijS0g4WNIK95YVvMHBMTabHOzU0Hk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; arc=fail smtp.client-ip=205.220.177.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 44V9T2EM019194;
-	Fri, 31 May 2024 16:33:19 GMT
-DKIM-Signature: =?UTF-8?Q?v=3D1;_a=3Drsa-sha256;_c=3Drelaxed/relaxed;_d=3Doracle.com;_h?=
- =?UTF-8?Q?=3Dcc:content-transfer-encoding:content-type:date:from:in-reply?=
- =?UTF-8?Q?-to:message-id:mime-version:references:subject:to;_s=3Dcorp-202?=
- =?UTF-8?Q?3-11-20;_bh=3D4FXhuH3znV7KCQLXqKilTUAjWsm/phpAGBkoe5rd4bo=3D;_b?=
- =?UTF-8?Q?=3DbmhSaa1b7KHlFQcbcbpCD/0eUX9stddVrHHC+F4G1HxkBDurMCAD8JroyHts?=
- =?UTF-8?Q?1irSEId5_7OZwhVB/Mlwx8KaaMqE7Qg4WpVQQkGT6SBixcyr5AFRv76hbQk8Jms?=
- =?UTF-8?Q?J1zFKK4Tz1wNkd_ajpfJJqlQsb8rP7VTjXJ5dRGeaUw5fPfWTfnv1Ak2PhWy8Nl?=
- =?UTF-8?Q?bmRHtXHfU48338Yo/3Nz_/sZcZv2nRQ4VTH89NlyMVcZHOaOAYU/qQg51IX3SwD?=
- =?UTF-8?Q?Ju98Ha5KY2cxsyBIRwd9sCljOE_Msdi5q7WA7XlYSKJSxNW4fxTwleHr22TAbgu?=
- =?UTF-8?Q?FKE9093ffFCg6NAj30Z/GIQ2hoDraOdd_sg=3D=3D_?=
-Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3yb8fckk7k-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 31 May 2024 16:33:19 +0000
-Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 44VFaLYY006199;
-	Fri, 31 May 2024 16:33:18 GMT
-Received: from nam11-co1-obe.outbound.protection.outlook.com (mail-co1nam11lp2168.outbound.protection.outlook.com [104.47.56.168])
-	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3yd7c8kmkf-2
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 31 May 2024 16:33:17 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=dUdkZP/Of3YJrHRueIbiKTU0A4K4MFBb30WH3yzwb5o3nQdo4a3xVfkvvrgb2l3DOtrxtq9cqZEtBh6Pou/f93wvRIW0k+Tmw6DQc96NlJc6dsLrxjDRLor6g/lnFR2IwQz3wIOvuoS+jD9jta/es32Dog6Bh3xLCjZn9gTi/HcxlyiCpo/veSAc8ZPqVli6xzYoupmibW6QPJmVmTBvA/lW0foqLBBgqy5eDR8JHomolu2R4sGCqb5ixp6wP0dbi1lwvI5j6P43Bcv+FXxw5HKCzCuqGj9WzxSjD1PbuhU+bfM9d4vQ1exREKYDF/9z1Qu6ULgPJCb9D0XLnfRDDg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=4FXhuH3znV7KCQLXqKilTUAjWsm/phpAGBkoe5rd4bo=;
- b=UtpEqIYwmgvuH7BsfAw4rCbsMkOImVJBhe+2S8gQ+P3nH19xReIYGpVepgYkQwoWyj8gbBamWoeCEfWH7FGa7CKLZhh+gT6WApqA+sBITATXdqqtXML6fTwvd0YCUQsQY9WineP69lwhjYTSpXDW2cf03Pqk7o+2PJ9Ma+l2Qgit1jIpnwSTl4S5Q+LC7qEeK/lSw4/BWOaIX1tmv6Fk43S62b2Uc3i691cQ1Lr6j0O5cz7YJ6KEsmlwuwa/wXuh2xa+mMQB6hSuwUkSdtBrxk0uXHg+1jEkgNLFgWXv4A8NUtsDfEHXWOqEKAY0GjgtQQqfImBJ8SVkzMlFo9SvvA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7725156242;
+	Fri, 31 May 2024 16:37:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.181
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1717173477; cv=none; b=SnnQsAOvKIqloKXGxQy3O7KUWuLTxWlqaw+0ZRKfeLX2h3nJwfZp6bohXjCFoifA6WyC2rVtVASnEn6R8LnVba43q3UQmhGLUC2sdmAZ91W6g0lIzszd1P1Me16jPMQyjhWUqwr+j0NckaqQQ32Ks0k/6hNF0icSWY2VUhx/4L8=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1717173477; c=relaxed/simple;
+	bh=4m0X1EqwFd+yuWmMO8eiV36fPx3yKbFp0wEvOBJDNAI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Content-Type; b=LfwbJ2q0o4yBaB/bOmJjn4kB8xvKhd2VSAOCO4Wrb9i+Ifhsax10nDAgRc3TWxp9aXUtOtS0s+zjiojP+RSQKrEtDdiMcLJR+/PMT2H26z9SISfX8F3W8uN0phThYi/eboOqqP/zwKFoweYrCC4Dyxzm8Z/82GngnN6sA4+qsgE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JRtASc+e; arc=none smtp.client-ip=209.85.215.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JRtASc+e"
+Received: by mail-pg1-f181.google.com with SMTP id 41be03b00d2f7-60585faa69fso1499456a12.1;
+        Fri, 31 May 2024 09:37:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=4FXhuH3znV7KCQLXqKilTUAjWsm/phpAGBkoe5rd4bo=;
- b=yQemrvhqkCvhAxLoGKnlN+xsOyXHnxJ8mE58v/Pwy/QbUD13PGEMPSBWC/h4qSQPuR2PrqAqfEpbFY7JZi8q0U3vLhhAbHSVNoPGETOxt2OotI4isPfWt/iIxy/rnKcYdVya/De1B6j1RQevdXMD5n9C0eKMs//Qb4hYOWaLOT0=
-Received: from DS0PR10MB7933.namprd10.prod.outlook.com (2603:10b6:8:1b8::15)
- by SA1PR10MB6318.namprd10.prod.outlook.com (2603:10b6:806:251::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7633.24; Fri, 31 May
- 2024 16:32:46 +0000
-Received: from DS0PR10MB7933.namprd10.prod.outlook.com
- ([fe80::2561:85b0:ae8f:9490]) by DS0PR10MB7933.namprd10.prod.outlook.com
- ([fe80::2561:85b0:ae8f:9490%7]) with mapi id 15.20.7633.021; Fri, 31 May 2024
- 16:32:46 +0000
-From: "Liam R. Howlett" <Liam.Howlett@oracle.com>
-To: Suren Baghdasaryan <surenb@google.com>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: Vlastimil Babka <vbabka@suse.cz>, sidhartha.kumar@oracle.com,
-        Matthew Wilcox <willy@infradead.org>,
-        Lorenzo Stoakes <lstoakes@gmail.com>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        linux-fsdevel@vger.kernel.org, bpf@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: [RFC PATCH 2/5] mm/mmap: Split do_vmi_align_munmap() into a gather and complete operation
-Date: Fri, 31 May 2024 12:32:14 -0400
-Message-ID: <20240531163217.1584450-3-Liam.Howlett@oracle.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240531163217.1584450-1-Liam.Howlett@oracle.com>
-References: <20240531163217.1584450-1-Liam.Howlett@oracle.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: YT1PR01CA0082.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b01:2d::21) To DS0PR10MB7933.namprd10.prod.outlook.com
- (2603:10b6:8:1b8::15)
+        d=gmail.com; s=20230601; t=1717173475; x=1717778275; darn=vger.kernel.org;
+        h=content-transfer-encoding:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=I9OsVhc7MRu17ZxqE7Uec7qOOSBjzF0OYY1R4Nallcs=;
+        b=JRtASc+ekw9uUCeLMdNPCZucYWLm7o7Q7yXfCjdUxcP6BQKsmubeRXXduUw6RZV0fa
+         BesHRm4xIz03hdDeTXTF1hWwm00Lp2YEcqykPKx0PTqGJAG4YmRBaG2G/7Zuf25cCH71
+         RTsa51MtMIV/8a/s7jpvr6mpay7/uq1TEcIH6n8BZXayna9ac2IM7w+bGRuclWMQK0RO
+         jRz44c1O3wKpcUuN4cDDiJSIXOaEyIW1cJOJautsoQZHIydVELiFPtuH5RaGsrwy2xm+
+         7swaXx2KqzscH6K35ypXP6wVDCM+YFY3CDVJTqPDD6DhkCLfGtCEIJKhrSI0Q8ivtNpo
+         50pw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1717173475; x=1717778275;
+        h=content-transfer-encoding:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=I9OsVhc7MRu17ZxqE7Uec7qOOSBjzF0OYY1R4Nallcs=;
+        b=RgU15iq6fD1Tv3W+0OqL1zmCKbPBFHcOcnpikK7oCQ2AQuFxBAoWdJ1TjrXcTJbmWZ
+         0tDxBy3F1JfWi4AHGWyqGL/SIhJVvs5stE5hYQ8oUIVsfGp8m55HIplQOPIHLR3gYxvd
+         Fl8nQdTJ5g9OR4GR+/Omz/SoocgZMRSH1jg1wMIF7z9W0NRFgbZhvqNY+CpwSAGMAzVE
+         zsq4dUK2RN7110ux2Nx63xIghIqQF2VGKwvYh9NZQbh9bF4SzFK5lldHNo4TdzHMk90g
+         C0S+65I0yamfyKfiXndQH7hRkTYau4IFNMld+K+UiDHo6wKwb5rgynQI9NH8nPmG7T84
+         lKqw==
+X-Forwarded-Encrypted: i=1; AJvYcCWtSbUm0J9X6rggGqNFlu8x37s4Ab+9O4iTwT5YFIATOhVJNHNkyA9BDR2ENwTK8+Rp0+xS/0IOphiZcnCQp7pEgypAPB10wh9MKKn6MG1+9D4D5Qw1MtDlcFj0sMrozzSB5MTNRKkXASZnRjIQFujLrFszEOSp84qIMhB7PT6H1Q==
+X-Gm-Message-State: AOJu0YxXsFrKOnA+XdBRq17ZEopEdzakGhz0pIDWDNOMPZaI0fNKPMij
+	mL4QI7Au0TjF5Jh15IKhW3yTibLvLh7kfbAU3k5kjIHOPUWnEGmwIJzIEkoC7bNUdXoigmgBfZJ
+	bMrbR6rtXd+25uf5ErvLSw4Mf5Fc=
+X-Google-Smtp-Source: AGHT+IF7FL1AYCjP1BwUnG05McUJ4KkwiviRElNE88xHJCWG+NZK2inRtrMj/0pKr5HBygGg0ozDqiOuo4p2k7eRfYU=
+X-Received: by 2002:a17:90a:3482:b0:2c0:19bd:543a with SMTP id
+ 98e67ed59e1d1-2c1c43ee447mr3657114a91.9.1717173474799; Fri, 31 May 2024
+ 09:37:54 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS0PR10MB7933:EE_|SA1PR10MB6318:EE_
-X-MS-Office365-Filtering-Correlation-Id: efe14402-7f27-471b-ed3b-08dc818f4dee
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230031|1800799015|376005|366007;
-X-Microsoft-Antispam-Message-Info: 
-	=?us-ascii?Q?XMuHApLxl3QAI/5/yy5cUGp18ToelNpi9Zm/Fuj+U1EmnzFZjiZpOQ7AbfiS?=
- =?us-ascii?Q?hEEZG4UabSwvdyzCp0KyYVOnV5GBGusZJ+IKdiBiq9iYu+EInZoXhM26uWD/?=
- =?us-ascii?Q?mApuMgpO3h6yig3FvnpB2WUEULM++ian6BmkQ4DnLGaTAEjRQXP84GTHQqtc?=
- =?us-ascii?Q?AEcZEBzSU+J3YiBymnl6CkrT63Zc3ciQKKUhO39DWc6lDBk4TKfECr6H8om+?=
- =?us-ascii?Q?qfLmpYQqceeC+Pm5BKqTWK4tFdEdGdH7PLp1jqbbuVNUCdku+HXpWdfGYKLA?=
- =?us-ascii?Q?5W8caV2ZMiNFx+vH9wajITF1UAH+FUaxlG1RAwuaEJXDeyilz8M0pGqxOfGR?=
- =?us-ascii?Q?0MBUllcnon/oybUJYTfC7JFGAP32niCGjHsK9kDN2t0fTj1KnR00s8e9EssV?=
- =?us-ascii?Q?+hgPEgIoyzjHXYhI67ufbwyIQsNIpBWNo428EjV30Cx5TGoTsscVwBtqFk+x?=
- =?us-ascii?Q?jPZo8OYEscKhR85LdNVrC0Z/eXFq2tb2K2mjEDDo86PLZBSJPIwn9juFzG5T?=
- =?us-ascii?Q?e9Mwqsnmx6GHqIh+X0OC3wA0nue0FreEO9jA55G+Wgb5/T2kcQct07xN7ynK?=
- =?us-ascii?Q?ZWdrbHyJxo73QEjmtX8zjeyN3Ng4kkiX2CnoSOffSi4OV10QUlEbSSVU0TDj?=
- =?us-ascii?Q?osDDKuTP6y9fwewEnVah1pmlLbnS6kowqWKU0nzK4BbCeWLpSn0tbIiBRiha?=
- =?us-ascii?Q?HR1R/YSwGFuqrw4jYci+4zZ/qCA5ypI72yNrh7BxNG6ewvOzioPac/CRRIfU?=
- =?us-ascii?Q?WVgyh9YD0R7hE5mkcMC8lz4zjAricOQzep2FT9h5gMcgvO8quIoXIBU6YoVu?=
- =?us-ascii?Q?bw3YPREkh2A9hV/V4Nug5GZquH1NzhqoLX/xREESYvdbDZlyf8FCS6McqioM?=
- =?us-ascii?Q?8romyl57ZDcEzDJ9Peooljz/uP7rfncGYLoRxTSaYHbcYakRPZ7KHn87sRBc?=
- =?us-ascii?Q?3f42xOe+sHbjy2VUYDMeoMfnCrVMWNDPdiIUIPCIjYdvy3bWc7bEFxWWJyBO?=
- =?us-ascii?Q?8dFwBevvMOEvJFCCSq/FtY/GFSdcUphm4TVnVO07uUVI5MKnQ78gbvFSxKIP?=
- =?us-ascii?Q?I9cUSYcJl3fR0AmRK1dXCKU00YxTSaUiK+RH9NiSwHOH1knkaLvXoWSaT6u/?=
- =?us-ascii?Q?+F6ZIYvVRwwACsXzneNzLUPUxiiB/wbD/tJz/lXgbF39YGvOF0MsQqXR1ljb?=
- =?us-ascii?Q?8B94ovqLnLUHa/641mdMyxtxdPzTnp+b/62bBxrAe65lKhEgYdB5ZErp+DsH?=
- =?us-ascii?Q?Q20JbRdag+EioOqho4VWUNaHY5MfgcVYK1dKGVHF/g=3D=3D?=
-X-Forefront-Antispam-Report: 
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR10MB7933.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(1800799015)(376005)(366007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: 
-	=?us-ascii?Q?R1Lhe4WQRxri8XnNvL0aUgRoywxjSMc5smfh80jbeOvVl/iVJgUjTSLAeqTV?=
- =?us-ascii?Q?f8VwredilUTfbONHlF1i7Q/LRC2Mrpvl4TLfuKQNK+knB7ESk0COpBeFxkW7?=
- =?us-ascii?Q?Me1imFcCCQAbyfa8w/QrNG33mKGIeuvzQe4cKuLM0TWWOR+H6+6OdezbJs2E?=
- =?us-ascii?Q?JWze8+stfdgWocu9Q66M2COiWhqzlRqUiQgf3MOG1lC3u02w7M6xK4zn1aaw?=
- =?us-ascii?Q?g6iaXZBpsNX7vJjXOahXnPZpwxTse9roNpLXvk4StFbXnSC1/wPBAjja1eCJ?=
- =?us-ascii?Q?3aIWd6R6BhXtwphQRs9wAHA5s3gLFq9kz1Z7sSaV22qfr/60bfD8talGdwQu?=
- =?us-ascii?Q?8PMBKxu76ox21OvxqzHVsurUap+6fLM7eVapMSnbATPNpt83JfzNn5ZbqeJo?=
- =?us-ascii?Q?3I2kpBR03k13ytlsklRatk/Y6i5CXLuuCBAdAeWXhUiUcKLDdzbr4l+Pnnq8?=
- =?us-ascii?Q?j+LGe1XXtBqCu2Db1xnsW2Z5SoUTHlzQZqWk95Hre6j31+mA6TkPuLn5WhD/?=
- =?us-ascii?Q?9rwACwXkMoiXrXXhbpHKKGssSTUBmG8XmBVwntTV1HPHDu4VGVLLmENqQyId?=
- =?us-ascii?Q?IYKEJp/m/N9HpVXiyx9W95hvGf80+K3II5pWXEQxctlBbJS7M+FAhE7k4Toy?=
- =?us-ascii?Q?se8ANGkCFAiaygHkHtrDbHtmyp9xOa2F5gRA69ruX6Bj1Edhmx/EsuH92kl8?=
- =?us-ascii?Q?3OPUFSdCly31G878OL9Hmkzv9m9RWyAJa+reLCuLHHGQz2rFQONu8RjuXh03?=
- =?us-ascii?Q?26NCFksLmYlwtVZb4HKiS+/gJwdVuojv5yjaq4mgadg5jZVe3cHIfmRgGMPK?=
- =?us-ascii?Q?IcaE1n6wd5AstFazviH8XNJPX7WAmQOoRo14bGruyOnk8wakB0Lefe+3hNz8?=
- =?us-ascii?Q?HK+hvrMQE8Z/aw/ecmX1bR79bXmjlTCuv1KYZaV8+ttp8KGQlNABXnY0yJuI?=
- =?us-ascii?Q?loaCmwvCZ8Rf5dgc08nK8dhQh2zNvOAyrVEYd4BFApp/mAqfcgwPW59adxbO?=
- =?us-ascii?Q?5XkFn58F5VrSYfS5BC5QDwOR7mFJwsOG8x/SVEUCvVp6JZBatQSiKIb8gke7?=
- =?us-ascii?Q?U+3ZMEZQ9jE9xvyeTJA6GYuQZB6lnMj90jqDU7hnNLhu+L/HvZXeqKR0IDrF?=
- =?us-ascii?Q?fcv9ScaqhI7clNnwAiXSJM2PooGekoqqgZQcGiM+NF9r6aT0zHBrwrBTqbhn?=
- =?us-ascii?Q?N/Rd2WrgHNLhslGtY8phUV0paSEur7zM+glatmLzcllYBc3KoIIrMwn51Ty2?=
- =?us-ascii?Q?bzv1DsqKrdt5jpUfzzG/wW2mo2/csT3+B1sWTKMP1Mo4AtGXzJ5sXATfAezB?=
- =?us-ascii?Q?GdewNzmput1uKHMBRwgwQ4Rw9GogY2S4FnFz/Ad0SReR4UeFl7EmryZoTjEV?=
- =?us-ascii?Q?tyKb1ppp0bh61wLO1G7/QA/Uo0z3y1ACdOWXgyap772/PP3dFj5Dgdrjdk8i?=
- =?us-ascii?Q?8YeZcgwHcpxU4UrC0cD+Fn3s3NqrXw4TbA4bUnP854zCgQkj4kjYM/yn8rFH?=
- =?us-ascii?Q?CCCj56lB9rmvH8VO/2Yv3czCIKkHqkHnJI9FFnoyxGmld3bZHHCAKsJME9YB?=
- =?us-ascii?Q?14XmkCHrVEiqFsrBkFaOjZb4q44sf4319UVfEn7A?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: 
-	t4BWhhr6ZsDxooWz6kcB6GvzGQOy17EkG1Vp33TKmUqcqBE0HsNMq9U+fGJgDlDIA2Kt6oMk+8+ih1seZB+ThJdT+D+NMM27CyNUaAaTcOsp2xlxW7kU2BfhrlZGMI7tVp2N/C/dwGk2nbAYVv8iMuMLp4sQmLH0riKfXKKpLShlHs+Ss7EmDHJ0csOf0C+FyVQtkargZSzNtHEZNgtKKK8N2C6R7tPygoAPLpXSV+lEkr+lgSFMx4/XfisgO3fEs7ccIbGRPEQyQz6kHB0gTaCHRRthgLkYFnI76Xas+zY9QsFrKJqO7lqR8T/vZNiTe9K5Jge0I5SmDnJPySOXZLKjFFKeL2FW+/LfLuRQhSJyvZb9tLHhw1hUt53MOMoBDiXTMohPw9+/Smyftga6HS4wABOTg3hNzAESv1JnM1I+sqhA3ESjmTre+EqggqKIns73v6Sd3jCPbfOF23JSNSyV2QRuVj8EZrMD3x+8dwMsF8udwRr9dxaIlQV8glHFhf4FtzOmW8yqouSax+SYdGfPYVzebmIBzGJ9uFANF6uykc/2E0a3R4bN88Cbud2gBcUcPvh5hTXkbf8mmSQH7jChfch4mqPNChBHEBIyRTE=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: efe14402-7f27-471b-ed3b-08dc818f4dee
-X-MS-Exchange-CrossTenant-AuthSource: DS0PR10MB7933.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 May 2024 16:32:46.8486
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 62O5WHhUf8tKBX6aHjI7xvi7rCdIzdX37yVgRwJiLORMsefJiV+h6zxz9JqOatvf4rPDO8LmCcX5hu9zzAZrgw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR10MB6318
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.650,FMLib:17.12.28.16
- definitions=2024-05-31_12,2024-05-30_01,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 malwarescore=0 bulkscore=0
- suspectscore=0 mlxscore=0 adultscore=0 spamscore=0 mlxlogscore=999
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2405010000
- definitions=main-2405310125
-X-Proofpoint-GUID: jtQTfN2JonQERTfMAMf_FtcFY6I-HA3J
-X-Proofpoint-ORIG-GUID: jtQTfN2JonQERTfMAMf_FtcFY6I-HA3J
+References: <20240524041032.1048094-1-andrii@kernel.org> <20240524041032.1048094-5-andrii@kernel.org>
+ <eciqv22jtpw6uveqih3jarjqulm5g3nxhlec5ytk2pltlltxnw@47agja2den2b>
+ <CAEf4BzbphUBPnA7iDz5pis17GRwzpqsduftV_JHyf1Ce0MMqzw@mail.gmail.com> <gkhzuurhqhtozk6u53ufkesbhtjse5ba6kovqm7mnzrqe3szma@3tpbspq7hxjl>
+In-Reply-To: <gkhzuurhqhtozk6u53ufkesbhtjse5ba6kovqm7mnzrqe3szma@3tpbspq7hxjl>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Fri, 31 May 2024 09:37:42 -0700
+Message-ID: <CAEf4BzZPSVG685pFpBY3Ng1CyXKGTMBNcKNzAdBHYGg_xbEJtw@mail.gmail.com>
+Subject: Re: [PATCH v2 4/9] fs/procfs: use per-VMA RCU-protected locking in
+ PROCMAP_QUERY API
+To: "Liam R. Howlett" <Liam.Howlett@oracle.com>, Andrii Nakryiko <andrii.nakryiko@gmail.com>, 
+	Andrii Nakryiko <andrii@kernel.org>, linux-fsdevel@vger.kernel.org, brauner@kernel.org, 
+	viro@zeniv.linux.org.uk, akpm@linux-foundation.org, 
+	linux-kernel@vger.kernel.org, bpf@vger.kernel.org, gregkh@linuxfoundation.org, 
+	linux-mm@kvack.org, surenb@google.com, rppt@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Split the munmap function into a gathering of vmas and a cleanup of the
-gathered vmas.  This is necessary for the later patches in the series.
+On Fri, May 31, 2024 at 6:38=E2=80=AFAM Liam R. Howlett <Liam.Howlett@oracl=
+e.com> wrote:
+>
+> * Andrii Nakryiko <andrii.nakryiko@gmail.com> [240528 16:37]:
+> > On Fri, May 24, 2024 at 12:48=E2=80=AFPM Liam R. Howlett
+> > <Liam.Howlett@oracle.com> wrote:
+> > >
+> > > * Andrii Nakryiko <andrii@kernel.org> [240524 00:10]:
+> > > > Attempt to use RCU-protected per-VAM lock when looking up requested=
+ VMA
+> > > > as much as possible, only falling back to mmap_lock if per-VMA lock
+> > > > failed. This is done so that querying of VMAs doesn't interfere wit=
+h
+> > > > other critical tasks, like page fault handling.
+> > > >
+> > > > This has been suggested by mm folks, and we make use of a newly add=
+ed
+> > > > internal API that works like find_vma(), but tries to use per-VMA l=
+ock.
+> > >
+> > > Thanks for doing this.
+> > >
+> > > >
+> > > > Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+> > > > ---
+> > > >  fs/proc/task_mmu.c | 42 ++++++++++++++++++++++++++++++++++--------
+> > > >  1 file changed, 34 insertions(+), 8 deletions(-)
+> > > >
+> > > > diff --git a/fs/proc/task_mmu.c b/fs/proc/task_mmu.c
+> > > > index 8ad547efd38d..2b14d06d1def 100644
+> > > > --- a/fs/proc/task_mmu.c
+> > > > +++ b/fs/proc/task_mmu.c
+> > > > @@ -389,12 +389,30 @@ static int pid_maps_open(struct inode *inode,=
+ struct file *file)
+> > > >  )
+> > > >
+> > > >  static struct vm_area_struct *query_matching_vma(struct mm_struct =
+*mm,
+> > > > -                                              unsigned long addr, =
+u32 flags)
+> > > > +                                              unsigned long addr, =
+u32 flags,
+> > > > +                                              bool *mm_locked)
+> > > >  {
+> > > >       struct vm_area_struct *vma;
+> > > > +     bool mmap_locked;
+> > > > +
+> > > > +     *mm_locked =3D mmap_locked =3D false;
+> > > >
+> > > >  next_vma:
+> > > > -     vma =3D find_vma(mm, addr);
+> > > > +     if (!mmap_locked) {
+> > > > +             /* if we haven't yet acquired mmap_lock, try to use l=
+ess disruptive per-VMA */
+> > > > +             vma =3D find_and_lock_vma_rcu(mm, addr);
+> > > > +             if (IS_ERR(vma)) {
+> > >
+> > > There is a chance that find_and_lock_vma_rcu() will return NULL when
+> > > there should never be a NULL.
+> > >
+> > > If you follow the MAP_FIXED call to mmap(), you'll land in map_region=
+()
+> > > which does two operations: munmap(), then the mmap().  Since this was
+> > > behind a lock, it was fine.  Now that we're transitioning to rcu
+> > > readers, it's less ideal.  We have a race where we will see that gap.
+> > > In this implementation we may return NULL if the MAP_FIXED is at the =
+end
+> > > of the address space.
+> > >
+> > > It might also cause issues if we are searching for a specific address
+> > > and we will skip a VMA that is currently being inserted by MAP_FIXED.
+> > >
+> > > The page fault handler doesn't have this issue as it looks for a
+> > > specific address then falls back to the lock if one is not found.
+> > >
+> > > This problem needs to be fixed prior to shifting the existing proc ma=
+ps
+> > > file to using rcu read locks as well.  We have a solution that isn't
+> > > upstream or on the ML, but is being tested and will go upstream.
+> >
+> > Ok, any ETA for that? Can it be retrofitted into
+> > find_and_lock_vma_rcu() once the fix lands? It's not ideal, but I
+> > think it's acceptable (for now) for this new API to have this race,
+> > given it seems quite unlikely to be hit in practice.
+> >
+> > Worst case, we can leave the per-VMA RCU-protected bits out until we
+> > have this solution in place, and then add it back when ready.
+>
+> I've sent the patches to Suren for testing on the /proc/<pid>/maps he is
+> doing as he could recreate this issue, but I think he is busy with other
+> things.  They are isolated to the mm changes so I can send you the same
+> patches to include in this patch set.  This does increase the risk of
+> issues with the patch set, so you can have a look and decide how you
+> want to proceed.
 
-Signed-off-by: Liam R. Howlett <Liam.Howlett@oracle.com>
----
- mm/mmap.c | 143 ++++++++++++++++++++++++++++++++++++++----------------
- 1 file changed, 101 insertions(+), 42 deletions(-)
+Please do send them, without seeing them it's hard to make a judgement
+call if it's ok to proceed without them. If the changes are
+transparent to the rest of my changes in this patch set, of course I'd
+prefer to keep it simpler and land them separately.
 
-diff --git a/mm/mmap.c b/mm/mmap.c
-index 31d464e6a656..fad40d604c64 100644
---- a/mm/mmap.c
-+++ b/mm/mmap.c
-@@ -2340,6 +2340,7 @@ static inline void remove_mt(struct mm_struct *mm, struct ma_state *mas)
- 
- 		if (vma->vm_flags & VM_ACCOUNT)
- 			nr_accounted += nrpages;
-+
- 		vm_stat_account(mm, vma->vm_flags, -nrpages);
- 		remove_vma(vma, false);
- 	}
-@@ -2545,33 +2546,45 @@ struct vm_area_struct *vma_merge_extend(struct vma_iterator *vmi,
- 			 vma->vm_userfaultfd_ctx, anon_vma_name(vma));
- }
- 
-+
-+static inline void abort_munmap_vmas(struct ma_state *mas_detach)
-+{
-+	struct vm_area_struct *vma;
-+	int limit;
-+
-+	limit = mas_detach->index;
-+	mas_set(mas_detach, 0);
-+	/* Re-attach any detached VMAs */
-+	mas_for_each(mas_detach, vma, limit)
-+		vma_mark_detached(vma, false);
-+
-+	__mt_destroy(mas_detach->tree);
-+}
-+
- /*
-- * do_vmi_align_munmap() - munmap the aligned region from @start to @end.
-+ * vmi_gather_munmap_vmas() - Put all VMAs within a range into a maple tree
-+ * for removal at a later date.  Handles splitting first and last if necessary
-+ * and marking the vmas as isolated.
-+ *
-  * @vmi: The vma iterator
-  * @vma: The starting vm_area_struct
-  * @mm: The mm_struct
-  * @start: The aligned start address to munmap.
-  * @end: The aligned end address to munmap.
-  * @uf: The userfaultfd list_head
-- * @unlock: Set to true to drop the mmap_lock.  unlocking only happens on
-- * success.
-+ * @mas_detach: The maple state tracking the detached tree
-  *
-- * Return: 0 on success and drops the lock if so directed, error and leaves the
-- * lock held otherwise.
-+ * Return: 0 on success
-  */
- static int
--do_vmi_align_munmap(struct vma_iterator *vmi, struct vm_area_struct *vma,
-+vmi_gather_munmap_vmas(struct vma_iterator *vmi, struct vm_area_struct *vma,
- 		    struct mm_struct *mm, unsigned long start,
--		    unsigned long end, struct list_head *uf, bool unlock)
-+		    unsigned long end, struct list_head *uf,
-+		    struct ma_state *mas_detach, unsigned long *locked_vm)
- {
--	struct vm_area_struct *prev, *next = NULL;
--	struct maple_tree mt_detach;
--	int count = 0;
-+	struct vm_area_struct *next = NULL;
- 	int error = -ENOMEM;
--	unsigned long locked_vm = 0;
--	MA_STATE(mas_detach, &mt_detach, 0, 0);
--	mt_init_flags(&mt_detach, vmi->mas.tree->ma_flags & MT_FLAGS_LOCK_MASK);
--	mt_on_stack(mt_detach);
-+	int count = 0;
- 
- 	/*
- 	 * If we need to split any vma, do it now to save pain later.
-@@ -2610,15 +2623,14 @@ do_vmi_align_munmap(struct vma_iterator *vmi, struct vm_area_struct *vma,
- 				goto end_split_failed;
- 		}
- 		vma_start_write(next);
--		mas_set(&mas_detach, count);
--		error = mas_store_gfp(&mas_detach, next, GFP_KERNEL);
-+		mas_set(mas_detach, count++);
-+		if (next->vm_flags & VM_LOCKED)
-+			*locked_vm += vma_pages(next);
-+
-+		error = mas_store_gfp(mas_detach, next, GFP_KERNEL);
- 		if (error)
- 			goto munmap_gather_failed;
- 		vma_mark_detached(next, true);
--		if (next->vm_flags & VM_LOCKED)
--			locked_vm += vma_pages(next);
--
--		count++;
- 		if (unlikely(uf)) {
- 			/*
- 			 * If userfaultfd_unmap_prep returns an error the vmas
-@@ -2643,7 +2655,7 @@ do_vmi_align_munmap(struct vma_iterator *vmi, struct vm_area_struct *vma,
- #if defined(CONFIG_DEBUG_VM_MAPLE_TREE)
- 	/* Make sure no VMAs are about to be lost. */
- 	{
--		MA_STATE(test, &mt_detach, 0, 0);
-+		MA_STATE(test, mas_detach->tree, 0, 0);
- 		struct vm_area_struct *vma_mas, *vma_test;
- 		int test_count = 0;
- 
-@@ -2663,13 +2675,29 @@ do_vmi_align_munmap(struct vma_iterator *vmi, struct vm_area_struct *vma,
- 	while (vma_iter_addr(vmi) > start)
- 		vma_iter_prev_range(vmi);
- 
--	error = vma_iter_clear_gfp(vmi, start, end, GFP_KERNEL);
--	if (error)
--		goto clear_tree_failed;
-+	return 0;
- 
--	/* Point of no return */
--	mm->locked_vm -= locked_vm;
-+userfaultfd_error:
-+munmap_gather_failed:
-+end_split_failed:
-+	abort_munmap_vmas(mas_detach);
-+start_split_failed:
-+map_count_exceeded:
-+	return error;
-+}
-+
-+static void
-+vmi_complete_munmap_vmas(struct vma_iterator *vmi, struct vm_area_struct *vma,
-+		struct mm_struct *mm, unsigned long start,
-+		unsigned long end, bool unlock, struct ma_state *mas_detach,
-+		unsigned long locked_vm)
-+{
-+	struct vm_area_struct *prev, *next;
-+	int count;
-+
-+	count = mas_detach->index + 1;
- 	mm->map_count -= count;
-+	mm->locked_vm -= locked_vm;
- 	if (unlock)
- 		mmap_write_downgrade(mm);
- 
-@@ -2682,30 +2710,61 @@ do_vmi_align_munmap(struct vma_iterator *vmi, struct vm_area_struct *vma,
- 	 * We can free page tables without write-locking mmap_lock because VMAs
- 	 * were isolated before we downgraded mmap_lock.
- 	 */
--	mas_set(&mas_detach, 1);
--	unmap_region(mm, &mas_detach, vma, prev, next, start, end, count,
-+	mas_set(mas_detach, 1);
-+	unmap_region(mm, mas_detach, vma, prev, next, start, end, count,
- 		     !unlock);
- 	/* Statistics and freeing VMAs */
--	mas_set(&mas_detach, 0);
--	remove_mt(mm, &mas_detach);
-+	mas_set(mas_detach, 0);
-+	remove_mt(mm, mas_detach);
- 	validate_mm(mm);
- 	if (unlock)
- 		mmap_read_unlock(mm);
- 
--	__mt_destroy(&mt_detach);
--	return 0;
-+	__mt_destroy(mas_detach->tree);
-+}
- 
--clear_tree_failed:
--userfaultfd_error:
--munmap_gather_failed:
--end_split_failed:
--	mas_set(&mas_detach, 0);
--	mas_for_each(&mas_detach, next, end)
--		vma_mark_detached(next, false);
-+/*
-+ * do_vmi_align_munmap() - munmap the aligned region from @start to @end.
-+ * @vmi: The vma iterator
-+ * @vma: The starting vm_area_struct
-+ * @mm: The mm_struct
-+ * @start: The aligned start address to munmap.
-+ * @end: The aligned end address to munmap.
-+ * @uf: The userfaultfd list_head
-+ * @unlock: Set to true to drop the mmap_lock.  unlocking only happens on
-+ * success.
-+ *
-+ * Return: 0 on success and drops the lock if so directed, error and leaves the
-+ * lock held otherwise.
-+ */
-+static int
-+do_vmi_align_munmap(struct vma_iterator *vmi, struct vm_area_struct *vma,
-+		    struct mm_struct *mm, unsigned long start,
-+		    unsigned long end, struct list_head *uf, bool unlock)
-+{
-+	struct maple_tree mt_detach;
-+	MA_STATE(mas_detach, &mt_detach, 0, 0);
-+	mt_init_flags(&mt_detach, vmi->mas.tree->ma_flags & MT_FLAGS_LOCK_MASK);
-+	mt_on_stack(mt_detach);
-+	int error;
-+	unsigned long locked_vm = 0;
- 
--	__mt_destroy(&mt_detach);
--start_split_failed:
--map_count_exceeded:
-+	error = vmi_gather_munmap_vmas(vmi, vma, mm, start, end, uf,
-+				       &mas_detach, &locked_vm);
-+	if (error)
-+		goto gather_failed;
-+
-+	error = vma_iter_clear_gfp(vmi, start, end, GFP_KERNEL);
-+	if (error)
-+		goto clear_area_failed;
-+
-+	vmi_complete_munmap_vmas(vmi, vma, mm, start, end, unlock, &mas_detach,
-+				 locked_vm);
-+	return 0;
-+
-+clear_area_failed:
-+	abort_munmap_vmas(&mas_detach);
-+gather_failed:
- 	validate_mm(mm);
- 	return error;
- }
--- 
-2.43.0
+>
+> >
+> > >
+> > > > +                     /* failed to take per-VMA lock, fallback to m=
+map_lock */
+> > > > +                     if (mmap_read_lock_killable(mm))
+> > > > +                             return ERR_PTR(-EINTR);
+> > > > +
+> > > > +                     *mm_locked =3D mmap_locked =3D true;
+> > > > +                     vma =3D find_vma(mm, addr);
+> > >
+> > > If you lock the vma here then drop the mmap lock, then you should be
+> > > able to simplify the code by avoiding the passing of the mmap_locked
+> > > variable around.
+> > >
+> > > It also means we don't need to do an unlokc_vma() call, which indicat=
+es
+> > > we are going to end the vma read but actually may be unlocking the mm=
+.
+> > >
+> > > This is exactly why I think we need a common pattern and infrastructu=
+re
+> > > to do this sort of walking.
+> > >
+> > > Please have a look at userfaultfd patches here [1].  Note that
+> > > vma_start_read() cannot be used in the mmap_read_lock() critical
+> > > section.
+> >
+> > Ok, so you'd like me to do something like below, right?
+> >
+> > vma =3D find_vma(mm, addr);
+> > if (vma)
+> >     down_read(&vma->vm_lock->lock)
+> > mmap_read_unlock(mm);
+> >
+> > ... and for the rest of logic always assume having per-VMA lock. ...
+> >
+> >
+> > The problem here is that I think we can't assume per-VMA lock, because
+> > it's gated by CONFIG_PER_VMA_LOCK, so I think we'll have to deal with
+> > this mmap_locked flag either way. Or am I missing anything?
+>
+> The per-vma lock being used depends on the CONFIG_PER_VMA_LOCK, so that
+> flag tells us which lock has been taken.
+>
+> >
+> > I don't think the flag makes things that much worse, tbh, but I'm
+> > happy to accommodate any better solution that would work regardless of
+> > CONFIG_PER_VMA_LOCK.
+> >
+> > >
+> > > > +             }
+> > > > +     } else {
+> > > > +             /* if we have mmap_lock, get through the search as fa=
+st as possible */
+> > > > +             vma =3D find_vma(mm, addr);
+> > >
+> > > I think the only way we get here is if we are contending on the mmap
+> > > lock.  This is actually where we should try to avoid holding the lock=
+?
+> > >
+> > > > +     }
+> > > >
+> > > >       /* no VMA found */
+> > > >       if (!vma)
+> > > > @@ -428,18 +446,25 @@ static struct vm_area_struct *query_matching_=
+vma(struct mm_struct *mm,
+> > > >  skip_vma:
+> > > >       /*
+> > > >        * If the user needs closest matching VMA, keep iterating.
+> > > > +      * But before we proceed we might need to unlock current VMA.
+> > > >        */
+> > > >       addr =3D vma->vm_end;
+> > > > +     if (!mmap_locked)
+> > > > +             vma_end_read(vma);
+> > > >       if (flags & PROCMAP_QUERY_COVERING_OR_NEXT_VMA)
+> > > >               goto next_vma;
+> > > >  no_vma:
+> > > > -     mmap_read_unlock(mm);
+> > > > +     if (mmap_locked)
+> > > > +             mmap_read_unlock(mm);
+> > > >       return ERR_PTR(-ENOENT);
+> > > >  }
+> > > >
+> > > > -static void unlock_vma(struct vm_area_struct *vma)
+> > > > +static void unlock_vma(struct vm_area_struct *vma, bool mm_locked)
+> > >
+> > > Confusing function name, since it may not be doing anything with the
+> > > vma lock.
+> >
+> > Would "unlock_vma_or_mm()" be ok?
+>
+> The way that seemed most clear in the userfaultfd code
+> (/mm/userfaultfd.c), seemed to focus on what we were undoing instead of
+> the lock we were unlocking.  Instead of saying "unlock one or the other"
+> we have "uffd_mfill_unlock()", and have two versions of that function
+> that take the same argument.  This way we can have the same blocks of
+> code calling the same thing, with a different lock/unlock happening
+> based on the CONFIG_PER_VMA_LOCK compile time option.  If that makes
+> sense to you, then I'd prefer it over the other options - none are
+> ideal.
 
+ok, two implementations of the same function sounds fine to me, I'll
+do that in the next revision, thanks!
+
+>
+> Note that people didn't like the "unlock_" name, even on static
+> functions as it implies it can be used everywhere and may conflict with
+> a global function in the future [1].
+
+yep, ack
+
+>
+> [1] https://lore.kernel.org/linux-mm/20240426144506.1290619-4-willy@infra=
+dead.org/
+>
+> Thanks,
+> Liam
