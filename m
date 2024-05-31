@@ -1,221 +1,236 @@
-Received: from air.basealt.ru (air.basealt.ru [194.107.17.39])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F0255223;
-	Fri, 31 May 2024 14:19:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.107.17.39
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2E43848D;
+	Fri, 31 May 2024 14:21:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717165143; cv=none; b=PADkoaJ5jTX7LZT3crtv1M5z1xlgQLMYqBTPgjRyiFNHmqdR22JYCRzttYar4Fgg0QQQ4Fc8ikYpiBlTysCuQscouzVZ6uO8igymP7M2s7RkO9rui5hWq+aKTo6Fs/8ZzLxiOCpaxVfBYJDPIDoY4Kqwiadnxdxwh2WjivHWqTM=
+	t=1717165314; cv=none; b=HDs01QG4mPUIdF4wzpZ9sz1LyirkBYtT2+2u/FM3EwhMFw9pvG8uPmNvSXpOZKebJEVuSDhFCSLM10HPbpRS464sykDoa6LkAeNG82dswpgsgDQc7roN7a0MaHRlkGVB+IGL2PevEEGohjRK6ZZ33qaP+GUPnQejVeipXmNW/TM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717165143; c=relaxed/simple;
-	bh=JT+k5vBla9pCvA+88JA8M/bvAVz/OQ3maxqsiTzy9I8=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=QDz7FToI/d7vCRxPbU+zcEXMavFJeY5gThula4sv491MqzlOCf+VoruX8ZNuxhqeIydNuJojS6dFlX+BgmzZhqxS7ByxxqYsE0tCbwwv7triyVubCKj0pvGKpmWOx6QG5f6vtYJAo18sHUh51vl1+XJPN+q+cJWTRjGtj4g+Tf4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=altlinux.org; spf=pass smtp.mailfrom=altlinux.org; arc=none smtp.client-ip=194.107.17.39
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=altlinux.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=altlinux.org
-Received: by air.basealt.ru (Postfix, from userid 490)
-	id 8C0192F20243; Fri, 31 May 2024 14:18:52 +0000 (UTC)
-X-Spam-Level: 
-Received: from altlinux.malta.altlinux.ru (obninsk.basealt.ru [217.15.195.17])
-	by air.basealt.ru (Postfix) with ESMTPSA id 2C79E2F2023F;
-	Fri, 31 May 2024 14:18:52 +0000 (UTC)
-From: kovalev@altlinux.org
-To: stable@vger.kernel.org
-Cc: bpf@vger.kernel.org,
-	kovalev@altlinux.org,
-	dutyrok@altlinux.org,
-	oficerovas@altlinux.org
-Subject: [PATCH v2 5.15.y 1/2] bpf: Convert BPF_DISPATCHER to use static_call() (not ftrace)
-Date: Fri, 31 May 2024 17:18:45 +0300
-Message-Id: <20240531141846.50821-2-kovalev@altlinux.org>
-X-Mailer: git-send-email 2.33.8
-In-Reply-To: <20240531141846.50821-1-kovalev@altlinux.org>
-References: <20240531141846.50821-1-kovalev@altlinux.org>
+	s=arc-20240116; t=1717165314; c=relaxed/simple;
+	bh=8nEyMcmOODdeONTsC8wpVc94p9KoyJfbS8L/Ynv2Hhk=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=hJ2ltyA20UKI2gaPs4oCkM+ippCPDGDTHlviIPLv3m38jB0ZqXToEkMG0QBxyaZl1Ip9cmWiuVx3/ihijl49o0e78/cg8dhF1n/Q74jm6ndtKzVCfU+C+Oszjvav5wA4jK44QoQK1WDeZYtNCGOqUi0urmg14WA7B8AHgViEOLo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fke6JQ1y; arc=none smtp.client-ip=209.85.208.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fke6JQ1y"
+Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-5785f7347cdso2211863a12.0;
+        Fri, 31 May 2024 07:21:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1717165311; x=1717770111; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=pomN/Xpb8FWb9W5YcIsXIJHRyYmucfPDfmz7UT/s81k=;
+        b=fke6JQ1y5W29hs0g5PQGywiV8vH0wgZlxXgkPIytnM+qkiby6pNrOG/J+58oUY9O1W
+         VAKJ3bOku7bjZN8Wry5aKdSE1Q6ZZqHZWzYRJvRmWFYmb7tHrWJP0gC2oUcidDeYnGcB
+         RDWogUcwtTZg3Xgm/XmSlWgJYBvjfNQqkgXnnGfZ2tevXA0mWpM5EUO0fNL3aSkmW+XJ
+         f4Q0GkF8pnGCvFYwjOhg449o5m2LmQLK+IBpDDw8ECqmR0R9nMGbGDOxIT9j0avjCGI8
+         J/gNAmqSv85wUBn43gRoVzKO2keACqlCxR5QWkpAPmTHZ2TdHKaQWqiMCf85TC+pFye8
+         Fw/g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1717165311; x=1717770111;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=pomN/Xpb8FWb9W5YcIsXIJHRyYmucfPDfmz7UT/s81k=;
+        b=QBdxwYGw7l8i+wXgyLO1GtNi7o24sWU6/TmMFueK+qOLWlAQ3M7IWfCZ4H6+3GETbN
+         aVlY1NxaM67TsEt6EQkyaCB772BFvhtyNHJ7TuvRtnY1IZ+LkK0NNbSTykcAW0OK+lk0
+         Y+XpdrjIuVSdPq9kQ9h4GyDLiZLoKFN7xLTnsLJ2kO+xqKrCNBKteKGfWJw2VjuPa7em
+         3KWfBR/ItZO2J1PGxfsthk+i0WDmFfybolvkSVvNgV1WssUbTGQn+hLbn8pbB1TyjsEa
+         DhkopZNl/m+jRhUWV6FBUr1Lv7b2Gwcn3NyPEuu6VGdDPiga+AdwIu9X/AOraQqEcIcZ
+         1s0A==
+X-Forwarded-Encrypted: i=1; AJvYcCXQHhKlsVGsHub5g6dvx9nj+goG65rw3dxFXkAz2e7OJJoTjdyu/OR6INlhb9n9DFEcG1M9no6uXaOrBCg5AKq4FUY2FyauEYLQjaCsbDcwoXWd4iC6KzKcoDKMgw==
+X-Gm-Message-State: AOJu0Yyv7mSEnGnURiFr4dQU5u9xn4oRwFExNO7Pny5g5WKpPDVWJCvY
+	Ycq1TFWL2P9ufdmQ47C9yMFzrq5ZneTEBgNj8ph9SuTRx+flVteGmeN4kg==
+X-Google-Smtp-Source: AGHT+IEdXgW242Z55RqPRhsU1BQxlRoYArOwcgQ43rDC35kpI+4v/jqAi4NAjE2RpAluKwGZFvYqOA==
+X-Received: by 2002:a17:906:158c:b0:a66:c400:ff22 with SMTP id a640c23a62f3a-a681f87e614mr139455566b.5.1717165310608;
+        Fri, 31 May 2024 07:21:50 -0700 (PDT)
+Received: from krava (2001-1ae9-1c2-4c00-726e-c10f-8833-ff22.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:726e:c10f:8833:ff22])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a685e3cccd4sm63492966b.179.2024.05.31.07.21.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 31 May 2024 07:21:50 -0700 (PDT)
+From: Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date: Fri, 31 May 2024 16:21:48 +0200
+To: Tony Ambardar <tony.ambardar@gmail.com>
+Cc: Jiri Olsa <olsajiri@gmail.com>, Hengqi Chen <hengqi.chen@gmail.com>,
+	bpf@vger.kernel.org, dwarves@vger.kernel.org,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>
+Subject: Re: Problem with BTF generation on mips64el
+Message-ID: <Zlnc_Kkd2o6ADgkO@krava>
+References: <ZlkoM6/PSxVcGM6X@kodidev-ubuntu>
+ <CAEyhmHT_1N3xwLO2BwVK97ebrABJv52d5dWxzvuNNcF-OF5gKw@mail.gmail.com>
+ <ZlmGoT9KiYLZd91S@krava>
+ <Zlm2UNWHrGtRROGS@kodidev-ubuntu>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <Zlm2UNWHrGtRROGS@kodidev-ubuntu>
 
-From: Peter Zijlstra <peterz@infradead.org>
+On Fri, May 31, 2024 at 04:36:48AM -0700, Tony Ambardar wrote:
+> Hi Jiri,
+> 
+> On Fri, May 31, 2024 at 10:13:21AM +0200, Jiri Olsa wrote:
+> > On Fri, May 31, 2024 at 10:17:53AM +0800, Hengqi Chen wrote:
+> > > Hi Tony,
+> > > 
+> > > On Fri, May 31, 2024 at 9:30 AM Tony Ambardar <tony.ambardar@gmail.com> wrote:
+> > > >
+> > > > Hello,
+> > > >
+> > > > For some time now I'm seeing multiple issues during BTF generation while
+> > > > building recent kernels targeting mips64el, and would appreciate some help
+> > > > to understand and fix the problems.
+> > > >
+> > > > Some relate to resolve_btfids:
+> > > >
+> > > > >   LD      vmlinux
+> > > > >   BTFIDS  vmlinux
+> > > > > WARN: resolve_btfids: unresolved symbol bpf_verify_pkcs7_signature
+> > > > > WARN: resolve_btfids: unresolved symbol bpf_session_cookie
+> > > > > WARN: resolve_btfids: unresolved symbol bpf_lookup_user_key
+> > > > > WARN: resolve_btfids: unresolved symbol bpf_lookup_system_key
+> > > > > WARN: resolve_btfids: unresolved symbol bpf_key_put
+> > > > > WARN: resolve_btfids: unresolved symbol bpf_iter_task_next
+> > > > > WARN: resolve_btfids: unresolved symbol bpf_iter_css_task_new
+> > > > > WARN: resolve_btfids: unresolved symbol bpf_get_file_xattr
+> > > > > WARN: resolve_btfids: unresolved symbol bpf_ct_insert_entry
+> > > > > WARN: resolve_btfids: unresolved symbol bpf_cgroup_release
+> > > > > WARN: resolve_btfids: unresolved symbol bpf_cgroup_from_id
+> > > > > WARN: resolve_btfids: unresolved symbol bpf_cgroup_acquire
+> > > > > WARN: resolve_btfids: unresolved symbol bpf_arena_free_pages
+> > > > >   NM      System.map
+> > > > >   SORTTAB vmlinux
+> > > > >   OBJCOPY vmlinux.32
+> > > >
+> > > > These do not appear to be #ifdef-related and have similar past reports [1].
+> > 
+> > I can reproduce the warning just for bpf_session_cookie,
+> > which has fix in progress:
+> >   https://lore.kernel.org/bpf/20240531071557.MvfIqkn7@linutronix.de/T/#t
+> 
+> I gather there are different root causes for these warnings. From the link,
+> the issue with bpf_session_cookie seems related to conditional compilation,
+> which have come up before on the mailing list IIRC.
+> 
+> In comparison, consider my above warning for bpf_key_put, which is defined
+> in kernel/trace/bpf_trace.c. This kfunc is guarded by CONFIG_KEY, which is
+> enabled in my config and so not the issue. I can in fact see the global
+> text symbol for bpf_key_put in bpf_trace.o, but not in vmlinux.
 
-[ Upstream commit c86df29d11dfba27c0a1f5039cd6fe387fbf4239 ]
+yes, that would be a problem, the resolve_btfids goes through the BTF
+lists and needs to resolve the function in vmlinux, when it's not there,
+it will output the warning above
 
-The dispatcher function is currently abusing the ftrace __fentry__
-call location for its own purposes -- this obviously gives trouble
-when the dispatcher and ftrace are both in use.
+> 
+> So I suspect the warnings might come from linker or optimization problems,
+> or perhaps even an issue related to the __bpf_kfunc annotation. WDYT?
 
-A previous solution tried using __attribute__((patchable_function_entry()))
-which works, except it is GCC-8+ only, breaking the build on the
-earlier still supported compilers. Instead use static_call() -- which
-has its own annotations and does not conflict with ftrace -- to
-rewrite the dispatch function.
+I can reproduce now resolve_btfids warnings:
 
-By using: return static_call()(ctx, insni, bpf_func) you get a perfect
-forwarding tail call as function body (iow a single jmp instruction).
-By having the default static_call() target be bpf_dispatcher_nop_func()
-it retains the default behaviour (an indirect call to the argument
-function). Only once a dispatcher program is attached is the target
-rewritten to directly call the JIT'ed image.
+  LD      vmlinux
+  BTFIDS  vmlinux
+WARN: resolve_btfids: unresolved symbol bpf_verify_pkcs7_signature
+WARN: resolve_btfids: unresolved symbol bpf_session_is_return
+WARN: resolve_btfids: unresolved symbol bpf_session_cookie
+WARN: resolve_btfids: unresolved symbol bpf_lookup_user_key
+WARN: resolve_btfids: unresolved symbol bpf_lookup_system_key
+WARN: resolve_btfids: unresolved symbol bpf_key_put
+WARN: resolve_btfids: unresolved symbol bpf_iter_task_next
+WARN: resolve_btfids: unresolved symbol bpf_iter_css_task_new
+WARN: resolve_btfids: unresolved symbol bpf_get_file_xattr
+WARN: resolve_btfids: unresolved symbol bpf_ct_insert_entry
+WARN: resolve_btfids: unresolved symbol bpf_cgroup_release
+WARN: resolve_btfids: unresolved symbol bpf_cgroup_from_id
+WARN: resolve_btfids: unresolved symbol bpf_cgroup_acquire
+WARN: resolve_btfids: unresolved symbol bpf_arena_free_pages
 
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Tested-by: Björn Töpel <bjorn@kernel.org>
-Tested-by: Jiri Olsa <jolsa@kernel.org>
-Acked-by: Björn Töpel <bjorn@kernel.org>
-Acked-by: Jiri Olsa <jolsa@kernel.org>
-Link: https://lkml.kernel.org/r/Y1/oBlK0yFk5c/Im@hirez.programming.kicks-ass.net
-Link: https://lore.kernel.org/bpf/20221103120647.796772565@infradead.org
-Signed-off-by: Vasiliy Kovalev <kovalev@altlinux.org>
----
- include/linux/bpf.h     | 39 ++++++++++++++++++++++++++++++++++++++-
- kernel/bpf/dispatcher.c | 22 ++++++++--------------
- 2 files changed, 46 insertions(+), 15 deletions(-)
+when I call bpf_key_put to make it 'used' it stays in vmlinux, so I wonder
+the __bpf_kfunc flags do not work properly on this cross compile chain..
+and linker just optimize it away?
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 4236de05a8e70..ea75e8ac40a24 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -23,6 +23,7 @@
- #include <linux/slab.h>
- #include <linux/percpu-refcount.h>
- #include <linux/bpfptr.h>
-+#include <linux/static_call.h>
- 
- struct bpf_verifier_env;
- struct bpf_verifier_log;
-@@ -779,6 +780,10 @@ struct bpf_dispatcher {
- 	void *image;
- 	u32 image_off;
- 	struct bpf_ksym ksym;
-+#ifdef CONFIG_HAVE_STATIC_CALL
-+	struct static_call_key *sc_key;
-+	void *sc_tramp;
-+#endif
- };
- 
- static __always_inline __nocfi unsigned int bpf_dispatcher_nop_func(
-@@ -796,6 +801,34 @@ struct bpf_trampoline *bpf_trampoline_get(u64 key,
- 					  struct bpf_attach_target_info *tgt_info);
- void bpf_trampoline_put(struct bpf_trampoline *tr);
- int arch_prepare_bpf_dispatcher(void *image, s64 *funcs, int num_funcs);
-+
-+/*
-+ * When the architecture supports STATIC_CALL replace the bpf_dispatcher_fn
-+ * indirection with a direct call to the bpf program. If the architecture does
-+ * not have STATIC_CALL, avoid a double-indirection.
-+ */
-+#ifdef CONFIG_HAVE_STATIC_CALL
-+
-+#define __BPF_DISPATCHER_SC_INIT(_name)				\
-+	.sc_key = &STATIC_CALL_KEY(_name),			\
-+	.sc_tramp = STATIC_CALL_TRAMP_ADDR(_name),
-+
-+#define __BPF_DISPATCHER_SC(name)				\
-+	DEFINE_STATIC_CALL(bpf_dispatcher_##name##_call, bpf_dispatcher_nop_func)
-+
-+#define __BPF_DISPATCHER_CALL(name)				\
-+	static_call(bpf_dispatcher_##name##_call)(ctx, insnsi, bpf_func)
-+
-+#define __BPF_DISPATCHER_UPDATE(_d, _new)			\
-+	__static_call_update((_d)->sc_key, (_d)->sc_tramp, (_new))
-+
-+#else
-+#define __BPF_DISPATCHER_SC_INIT(name)
-+#define __BPF_DISPATCHER_SC(name)
-+#define __BPF_DISPATCHER_CALL(name)		bpf_func(ctx, insnsi)
-+#define __BPF_DISPATCHER_UPDATE(_d, _new)
-+#endif
-+
- #define BPF_DISPATCHER_INIT(_name) {				\
- 	.mutex = __MUTEX_INITIALIZER(_name.mutex),		\
- 	.func = &_name##_func,					\
-@@ -807,20 +840,23 @@ int arch_prepare_bpf_dispatcher(void *image, s64 *funcs, int num_funcs);
- 		.name  = #_name,				\
- 		.lnode = LIST_HEAD_INIT(_name.ksym.lnode),	\
- 	},							\
-+	__BPF_DISPATCHER_SC_INIT(_name##_call)			\
- }
- 
- #define DEFINE_BPF_DISPATCHER(name)					\
-+	__BPF_DISPATCHER_SC(name);					\
- 	noinline __nocfi unsigned int bpf_dispatcher_##name##_func(	\
- 		const void *ctx,					\
- 		const struct bpf_insn *insnsi,				\
- 		unsigned int (*bpf_func)(const void *,			\
- 					 const struct bpf_insn *))	\
- 	{								\
--		return bpf_func(ctx, insnsi);				\
-+		return __BPF_DISPATCHER_CALL(name);			\
- 	}								\
- 	EXPORT_SYMBOL(bpf_dispatcher_##name##_func);			\
- 	struct bpf_dispatcher bpf_dispatcher_##name =			\
- 		BPF_DISPATCHER_INIT(bpf_dispatcher_##name);
-+
- #define DECLARE_BPF_DISPATCHER(name)					\
- 	unsigned int bpf_dispatcher_##name##_func(			\
- 		const void *ctx,					\
-@@ -828,6 +864,7 @@ int arch_prepare_bpf_dispatcher(void *image, s64 *funcs, int num_funcs);
- 		unsigned int (*bpf_func)(const void *,			\
- 					 const struct bpf_insn *));	\
- 	extern struct bpf_dispatcher bpf_dispatcher_##name;
-+
- #define BPF_DISPATCHER_FUNC(name) bpf_dispatcher_##name##_func
- #define BPF_DISPATCHER_PTR(name) (&bpf_dispatcher_##name)
- void bpf_dispatcher_change_prog(struct bpf_dispatcher *d, struct bpf_prog *from,
-diff --git a/kernel/bpf/dispatcher.c b/kernel/bpf/dispatcher.c
-index 2444bd15cc2d0..23042cfb5e809 100644
---- a/kernel/bpf/dispatcher.c
-+++ b/kernel/bpf/dispatcher.c
-@@ -4,6 +4,7 @@
- #include <linux/hash.h>
- #include <linux/bpf.h>
- #include <linux/filter.h>
-+#include <linux/static_call.h>
- 
- /* The BPF dispatcher is a multiway branch code generator. The
-  * dispatcher is a mechanism to avoid the performance penalty of an
-@@ -104,17 +105,11 @@ static int bpf_dispatcher_prepare(struct bpf_dispatcher *d, void *image)
- 
- static void bpf_dispatcher_update(struct bpf_dispatcher *d, int prev_num_progs)
- {
--	void *old, *new;
--	u32 noff;
--	int err;
--
--	if (!prev_num_progs) {
--		old = NULL;
--		noff = 0;
--	} else {
--		old = d->image + d->image_off;
-+	void *new;
-+	u32 noff = 0;
-+
-+	if (prev_num_progs)
- 		noff = d->image_off ^ (PAGE_SIZE / 2);
--	}
- 
- 	new = d->num_progs ? d->image + noff : NULL;
- 	if (new) {
-@@ -122,11 +117,10 @@ static void bpf_dispatcher_update(struct bpf_dispatcher *d, int prev_num_progs)
- 			return;
- 	}
- 
--	err = bpf_arch_text_poke(d->func, BPF_MOD_JUMP, old, new);
--	if (err || !new)
--		return;
-+	__BPF_DISPATCHER_UPDATE(d, new ?: &bpf_dispatcher_nop_func);
- 
--	d->image_off = noff;
-+	if (new)
-+		d->image_off = noff;
- }
- 
- void bpf_dispatcher_change_prog(struct bpf_dispatcher *d, struct bpf_prog *from,
--- 
-2.33.8
+#define __bpf_kfunc __used noinline
 
+thanks,
+jirka
+
+> 
+> > 
+> > > >
+> > > > I also see many pahole failures during BTF encoding of modules, such as:
+> > > >
+> > > > >   CC [M]  net/ipv6/netfilter/nft_fib_ipv6.mod.o
+> > > > >   CC [M]  net/ipv6/netfilter/ip6t_REJECT.mod.o
+> > > > >   CC [M]  net/psample/psample.mod.o
+> > > > >   LD [M]  crypto/cmac.ko
+> > > > >   BTF [M] crypto/cmac.ko
+> > > > > die__process: DW_TAG_compile_unit, DW_TAG_type_unit, DW_TAG_partial_unit
+> > > > > or DW_TAG_skeleton_unit expected got member (0xd)!
+> > > 
+> > > The issue seems to be related to elfutils. Have you tried build from
+> > > the latest elfutils source ?
+> > > I saw the latest MIPS backend in elfutils already implemented the
+> > > reloc_simple_type hook.
+> > 
+> > hi,
+> > +1, could you also check the pahole version you used?
+> 
+> No luck I'm afraid with using the latest elfutils as suggested.
+> 
+> I used pahole v1.26 in my original testing for this bug report, as noted
+> below (might have been buried a bit).
+> 
+> > 
+> > jirka
+> > 
+> > SNIP
+> >
+> > > > Details of the git commit and build environment are as follows:
+> > > >
+> > > > > $ git log -1 --oneline  bpf/master
+> > > > > 9dfdb706e164 (bpf/master) selftests/bpf: fix inet_csk_accept prototype in
+> > > > > test_sk_storage_tracing.c
+> > > > >
+> > > > > $ lsb_release -a
+> > > > > Description:    Ubuntu 22.04.4 LTS
+> > > > >
+> > > > > $ cat gcc-compile.txt
+> > > > > ARCH=mips CROSS_COMPILE=mips64el-linux-gnuabi64- CC="ccache ${CROSS_COMPILE}gcc" make -j6
+> > > > >
+> > > > > $ mips64el-linux-gnuabi64-gcc --version
+> > > > > mips64el-linux-gnuabi64-gcc (Ubuntu 10.3.0-1ubuntu1) 10.3.0
+> > > > >
+> > > > > $ mips64el-linux-gnuabi64-ld --version
+> > > > > GNU ld (GNU Binutils for Ubuntu) 2.38
+> > > > >
+> > > > > $ pahole --version
+> > > > > v1.26
+> > 
+> > SNIP
+> >
+> > > > I'd be grateful if some of the BTF/pahole experts could please review this
+> > > > issue and share next steps or other details I might provide.
+> > > >
+> > > > Thanks,
+> > > > Tony Ambardar
+> > > >
+> > > > Link: https://lore.kernel.org/all/202401211357.OCX9yllM-lkp@intel.com/ [1]
+> > > > Link: https://github.com/acmel/dwarves/issues/45 [2]
+> > > 
+> > > Cheers,
+> > > Hengqi
+> 
+> Thanks,
+> Tony
