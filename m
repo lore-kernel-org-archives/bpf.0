@@ -1,84 +1,95 @@
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from air.basealt.ru (air.basealt.ru [194.107.17.39])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4C70155C8E
-	for <bpf@vger.kernel.org>; Fri, 31 May 2024 14:04:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EFBC7FF;
+	Fri, 31 May 2024 14:19:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.107.17.39
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717164267; cv=none; b=G7vDxKQbsuL1zecI5LTwKv/taKK5bX1qoTn/kYmpGCeE+sxMkklWfBrFFqjYxi+teBc/HMTtrPARpfrJE30gfQLdpwQRabIpT630+aoV4eK7/wkKXGNS9WGK0P/d9MfqQiwFyTVxZDF4fEwJz6J0huscU4Tt9XQh1QqvmqwpFdo=
+	t=1717165142; cv=none; b=goRBYDHWb6TAVRwO6cxfZl0HOnv6QHKewkmg/hb+NWd0n4rtLWUscYVCO7zRvuE69zkn8Xj9YEcndYZfPzwQQ5y+lTFtlDnS+ro1+0aFPUc/yWi2iJQBZTFqBmVhtfzDTFh3n8dp/YrKm/igjT1HBnLB2s2DQpTRWj8o2Hauldc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717164267; c=relaxed/simple;
-	bh=8GRCQRREu/a8suBoLZZudj2TNv9gRvaeYKvdE0P7F/E=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RB7fiDo1SBvfhIi9deuT0bgV0qhiRm99ExpZYJDUEkd6ZGxDk08qMevqYNgCK7/6DbqMTnNKvbb0AHCHrHaz3vUH/il7rOM5YtvMe0NGjcHKUJu0IHpqFKgz0bEgDaar3ELLEN/6q1mICX5XqLQJYrR4VHPDTvEwVYx0qm59+Zo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=MvwYYmfI; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=MMyDTBqz; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="MvwYYmfI";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="MMyDTBqz"
-Date: Fri, 31 May 2024 16:04:22 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1717164264;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Yirm/bZIzspb7k1OWDprXVCQbgxdulBR1AgIM8MxfXc=;
-	b=MvwYYmfI1ywEVsvpkazVHfpoOs2Tv7OIqdbGkj4NicKrF5C3FLhKHCY/6FPLoNJRs2fEDw
-	SJDL2PaqRHjRqC13QKARzbwdW1JKp3QTPN7dhaQz7GrK1/BA3pym/7DWADNmiAG3kGzfxw
-	mDvu18/fnY3b70Q2kTGFn7koV/XnDoL2vG+OVk5KIHQzACXXEjBg0yGexJDdYOqIl1HmvA
-	LVABwrQCcYcQvotFbdy24yktKuzQXVHksJpU4LPsp9aanILDoCG6xifB9AMcMBcYRTh9bw
-	0lcze4R0QtIUIl3ceaRqF7qhOJ/GaJgTdGJCqAindKTZsSmIYZFNzt+Xc7Ul5w==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1717164264;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Yirm/bZIzspb7k1OWDprXVCQbgxdulBR1AgIM8MxfXc=;
-	b=MMyDTBqzQcQzjGJV6zQfGfocqbSDrjRfvfqFRUpQ7TyvXkfp3F9lsBcg/ollOWjIFduYAP
-	2Ul0XOGkcHUZIDDg==
-From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To: Jiri Olsa <olsajiri@gmail.com>
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
-	Martin KaFai Lau <kafai@fb.com>, Song Liu <songliubraving@fb.com>,
-	Yonghong Song <yhs@fb.com>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@chromium.org>,
-	Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>
-Subject: Re: [PATCH bpf] bpf: Make session kfuncs global
-Message-ID: <20240531140422.w6TjGRAt@linutronix.de>
-References: <20240531101550.2768801-1-jolsa@kernel.org>
- <20240531103931.p4f3YsBZ@linutronix.de>
- <ZlmpoWed0NmeZblH@krava>
- <20240531104922.ZgOadg-G@linutronix.de>
- <ZlmzmstEQSMp-6_i@krava>
+	s=arc-20240116; t=1717165142; c=relaxed/simple;
+	bh=aF3eWbuN1JPyvYrTyC0cWHxZwRQ8WNZPKTCkF693fJE=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=bP95j1SgTF4d4qmiCPCFOjIR60XyMQ7c2ktFblrVYlRq17Vnaf1Z81yQX47CcLbnnW5dNi2zDfbevwvdZaWIHHmXTdklS4jBYA/Bu6D+MhlqRozRG1sk36mGlxTHa4nA487F1xaNwnugcIlUR6CTIrFn6oibTMqkmQmdaYSneAM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=altlinux.org; spf=pass smtp.mailfrom=altlinux.org; arc=none smtp.client-ip=194.107.17.39
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=altlinux.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=altlinux.org
+Received: by air.basealt.ru (Postfix, from userid 490)
+	id 996692F2023F; Fri, 31 May 2024 14:18:52 +0000 (UTC)
+X-Spam-Level: 
+Received: from altlinux.malta.altlinux.ru (obninsk.basealt.ru [217.15.195.17])
+	by air.basealt.ru (Postfix) with ESMTPSA id 37CFF2F20241;
+	Fri, 31 May 2024 14:18:52 +0000 (UTC)
+From: kovalev@altlinux.org
+To: stable@vger.kernel.org
+Cc: bpf@vger.kernel.org,
+	kovalev@altlinux.org,
+	dutyrok@altlinux.org,
+	oficerovas@altlinux.org
+Subject: [PATCH v2 5.15.y 2/2] bpf: Add explicit cast to 'void *' for __BPF_DISPATCHER_UPDATE()
+Date: Fri, 31 May 2024 17:18:46 +0300
+Message-Id: <20240531141846.50821-3-kovalev@altlinux.org>
+X-Mailer: git-send-email 2.33.8
+In-Reply-To: <20240531141846.50821-1-kovalev@altlinux.org>
+References: <20240531141846.50821-1-kovalev@altlinux.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <ZlmzmstEQSMp-6_i@krava>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On 2024-05-31 13:25:14 [+0200], Jiri Olsa wrote:
-> ah there's also CONFIG_KPROBE=n
-> 
-> kernel/trace/bpf_trace.c is enabled with CONFIG_BPF_EVENTS,
-> which has:
-> 
->         depends on BPF_SYSCALL
->         depends on (KPROBE_EVENTS || UPROBE_EVENTS) && PERF_EVENTS
-> 
-> so I think we chould combine both like below
+From: Nathan Chancellor <nathan@kernel.org>
 
-Yes, this would work.
+[ Upstream commit a679120edfcf3d63f066f53afd425d51b480e533 ]
 
-Tested-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+When building with clang:
 
-> jirka
+  kernel/bpf/dispatcher.c:126:33: error: pointer type mismatch ('void *' and 'unsigned int (*)(const void *, const struct bpf_insn *, bpf_func_t)' (aka 'unsigned int (*)(const void *, const struct bpf_insn *, unsigned int (*)(const void *, const struct bpf_insn *))')) [-Werror,-Wpointer-type-mismatch]
+          __BPF_DISPATCHER_UPDATE(d, new ?: &bpf_dispatcher_nop_func);
+                                     ~~~ ^  ~~~~~~~~~~~~~~~~~~~~~~~~
+  ./include/linux/bpf.h:1045:54: note: expanded from macro '__BPF_DISPATCHER_UPDATE'
+          __static_call_update((_d)->sc_key, (_d)->sc_tramp, (_new))
+                                                              ^~~~
+  1 error generated.
 
-Sebastian
+The warning is pointing out that the type of new ('void *') and
+&bpf_dispatcher_nop_func are not compatible, which could have side
+effects coming out of a conditional operator due to promotion rules.
+
+Add the explicit cast to 'void *' to make it clear that this is
+expected, as __BPF_DISPATCHER_UPDATE() expands to a call to
+__static_call_update(), which expects a 'void *' as its final argument.
+
+Fixes: c86df29d11df ("bpf: Convert BPF_DISPATCHER to use static_call() (not ftrace)")
+Link: https://github.com/ClangBuiltLinux/linux/issues/1755
+Reported-by: kernel test robot <lkp@intel.com>
+Reported-by: "kernelci.org bot" <bot@kernelci.org>
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+Acked-by: Björn Töpel <bjorn@kernel.org>
+Acked-by: Yonghong Song <yhs@fb.com>
+Link: https://lore.kernel.org/r/20221107170711.42409-1-nathan@kernel.org
+Signed-off-by: Martin KaFai Lau <martin.lau@kernel.org>
+Signed-off-by: Vasiliy Kovalev <kovalev@altlinux.org>
+---
+ kernel/bpf/dispatcher.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/kernel/bpf/dispatcher.c b/kernel/bpf/dispatcher.c
+index 23042cfb5e809..9959201efc316 100644
+--- a/kernel/bpf/dispatcher.c
++++ b/kernel/bpf/dispatcher.c
+@@ -117,7 +117,7 @@ static void bpf_dispatcher_update(struct bpf_dispatcher *d, int prev_num_progs)
+ 			return;
+ 	}
+ 
+-	__BPF_DISPATCHER_UPDATE(d, new ?: &bpf_dispatcher_nop_func);
++	__BPF_DISPATCHER_UPDATE(d, new ?: (void *)&bpf_dispatcher_nop_func);
+ 
+ 	if (new)
+ 		d->image_off = noff;
+-- 
+2.33.8
+
