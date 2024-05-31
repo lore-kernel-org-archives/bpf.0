@@ -1,222 +1,121 @@
-Received: from air.basealt.ru (air.basealt.ru [194.107.17.39])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB92A20B34;
-	Fri, 31 May 2024 14:22:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.107.17.39
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE23B3EA86;
+	Fri, 31 May 2024 14:35:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717165358; cv=none; b=jxLu+ruLG00bjiSu+hDeJf79GhOzKk6QKt5ywhNFJsr6BFCwKOIrrpHbODW47/NJzu8RKcoqRsypsnbwr/3bk8V1IEdQoUjvJV5ZGYPsvAXvThyJyD74vWVroyNOStoZDxnHNGRB+tfjzZwtObt378BFhORpY5r9Q8G6bxM/OMU=
+	t=1717166157; cv=none; b=i/glmwqo9DJ48rquNN9tfSoYhI9S5CP9CLfOm+iTo5UFwb1rjycX9rcKzydrcywr0Gpuhtt4vYHqh37XFcjG4O+hSm2YaLzUlpjyzvcnixKOpK1FFQKzGrVT9zh9O8VeX2VkSgnF1+IZjuMnpITd1NoheNUAf1njNsRWMPFgQKI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717165358; c=relaxed/simple;
-	bh=DrH+77i5wmV2sWNd9DVAO5Ms5FxE6ZoVWh5X6bEtYFE=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=YRV8imFrnm3Z/THnyvtWJKcIPUgl0OglnJsgno36X/FRnHrH4SN+xZSZLSM+Xx23Vv1m9nVXXf+i9oFDTRTHOWhrHyeBMrf3vAMrPXksoccrbY5zaJXgaRnC0Ub0Am3KxBGv0QN3hIHIKDg0LT/HJMQWta9pYwPh797/atj2Yz8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=altlinux.org; spf=pass smtp.mailfrom=altlinux.org; arc=none smtp.client-ip=194.107.17.39
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=altlinux.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=altlinux.org
-Received: by air.basealt.ru (Postfix, from userid 490)
-	id C76FF2F20245; Fri, 31 May 2024 14:22:34 +0000 (UTC)
-X-Spam-Level: 
-Received: from altlinux.malta.altlinux.ru (obninsk.basealt.ru [217.15.195.17])
-	by air.basealt.ru (Postfix) with ESMTPSA id 54FAC2F20242;
-	Fri, 31 May 2024 14:22:34 +0000 (UTC)
-From: kovalev@altlinux.org
-To: stable@vger.kernel.org
-Cc: bpf@vger.kernel.org,
-	lvc-project@linuxtesting.org,
-	kovalev@altlinux.org,
-	dutyrok@altlinux.org,
-	oficerovas@altlinux.org
-Subject: [PATCH v2 5.10.y 1/2] bpf: Convert BPF_DISPATCHER to use static_call() (not ftrace)
-Date: Fri, 31 May 2024 17:22:30 +0300
-Message-Id: <20240531142231.51068-2-kovalev@altlinux.org>
-X-Mailer: git-send-email 2.33.8
-In-Reply-To: <20240531142231.51068-1-kovalev@altlinux.org>
-References: <20240531142231.51068-1-kovalev@altlinux.org>
+	s=arc-20240116; t=1717166157; c=relaxed/simple;
+	bh=/Ltdv79q3skkml0ifKj3D0gZrv9LGfP0o2gnIsRp+6E=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Mson6biAPtxnYviketqfsJwQ7ivqHxqdNDLQgsQjfDQPfsnxlZNf9XuQF67Ly1ERpPo+yvM8Se8baJ0aVdnUqhcN8K+he2mCSiE+nqibNb/neeCvcHIDBDQ3nl1gmYOUU2AI6CS5JupOcZ033WEKi+GmUeYksZQuJpHeRgP3VJc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LD3tAu+e; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LD3tAu+e"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A26BC116B1;
+	Fri, 31 May 2024 14:35:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1717166156;
+	bh=/Ltdv79q3skkml0ifKj3D0gZrv9LGfP0o2gnIsRp+6E=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=LD3tAu+e2GZhlS16l95NYRLhYtJf/bC/FGtKdWqvEJMCGTvsCjzT1oSP4xYjJFXtO
+	 nKkOW0K18ohGEohKEyNOS4W6L+8uNkx3i2ekTEkr5wxwJ+mDlDFpHj82h3wuX7zoIp
+	 v3+sqmTSVOgciQfMyPng5hhEwV/YYGPF54tmOaShwx1ggme3/TiWNGBrF+Xji3teHQ
+	 nwBTWqNeo1OLQ4ZbQAdbF/X8lv8vvXNz4cv+MUsCwHQQxqV9HpS+NfDS2t8D6Z/HMK
+	 EBomR6Du7bgyetQGT3GTgb/4n5KwpFEdMYA87cJLSlMXoZpRJPLiySkY75nHdLHkJa
+	 3aAhimH/2aCxA==
+Date: Fri, 31 May 2024 22:35:46 +0800
+From: Geliang Tang <geliang@kernel.org>
+To: Jakub Sitnicki <jakub@cloudflare.com>,
+	John Fastabend <john.fastabend@gmail.com>
+Cc: Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Mykola Lysenko <mykolal@fb.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
+	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+	Shuah Khan <shuah@kernel.org>, bpf@vger.kernel.org,
+	mptcp@lists.linux.dev, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH bpf-next 3/8] selftests/bpf: Use bpf_link attachments in
+ test_sockmap
+Message-ID: <ZlngQqfkS-R1PNqk@T480>
+References: <cover.1716446893.git.tanggeliang@kylinos.cn>
+ <32cf8376a810e2e9c719f8e4cfb97132ed2d1f9c.1716446893.git.tanggeliang@kylinos.cn>
+ <6654beff96840_23de2086e@john.notmuch>
+ <87wmnfujwg.fsf@cloudflare.com>
+ <577531139c4db3cb35f3f40e23587bcb9815b0ba.camel@kernel.org>
+ <66590f821d120_e5072085a@john.notmuch>
+ <87wmnaw7x8.fsf@cloudflare.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87wmnaw7x8.fsf@cloudflare.com>
 
-From: Peter Zijlstra <peterz@infradead.org>
+On Fri, May 31, 2024 at 01:13:39PM +0200, Jakub Sitnicki wrote:
+> On Thu, May 30, 2024 at 04:45 PM -07, John Fastabend wrote:
+> > Geliang Tang wrote:
+> >> On Mon, 2024-05-27 at 21:36 +0200, Jakub Sitnicki wrote:
+> >> > On Mon, May 27, 2024 at 10:12 AM -07, John Fastabend wrote:
+> >> > > Geliang Tang wrote:
+> 
+> [...]
+> 
+> >> > > The one advantage of test_sockmap is we can have it run for longer
+> >> > > runs by pushing different options through so might be worth keeping
+> >> > > just for that.
+> >> > > 
+> >> > > If you really want links here I'm OK with that I guess just asking.
+> >> > 
+> >> > It was me who suggested the switch to bpf_link in reaction to a
+> >> > series
+> >> > of cleanups to prog_type and prog_attach_type submitted by Geliang.
+> >> 
+> >> Yes, patches 3-5 address Jakub's suggestion: switching attachments to
+> >> bpf_link.
+> >
+> > OK. Lets just take them the series lgtm. Jakub any other comments?
+> 
+> Gave it a run - all looks well. Thanks for the patches.
+> 
+> Geliang, is there some MPTCP+sockmap use-case you're working towards?
 
-[ Upstream commit c86df29d11dfba27c0a1f5039cd6fe387fbf4239 ]
+Yes, indeed. I have been working on a task related to MPTCP+sockmap
+recently, at least related to this test_sockmap.c selftest. We recently
+received an issue with MPTCP [1], that is TLS cannot be set on MPTCP
+sockets. The reason is that both MPTCP and TLS are implemented on TCP ULP.
+And each socket only supports one type of TCP ULP.
 
-The dispatcher function is currently abusing the ftrace __fentry__
-call location for its own purposes -- this obviously gives trouble
-when the dispatcher and ftrace are both in use.
+I simply modified this test_sockmap.c selftest to support MPTCP, so that
+it can be used as the first version of test for MPTCP+TLS. So I spent some
+time reading and debugging this test.
 
-A previous solution tried using __attribute__((patchable_function_entry()))
-which works, except it is GCC-8+ only, breaking the build on the
-earlier still supported compilers. Instead use static_call() -- which
-has its own annotations and does not conflict with ftrace -- to
-rewrite the dispatch function.
+The development of MPTCP+TLS is still ongoing, and currently only setsockopt
+part has been successfully supported. The idea is simple, use an array of
+tcp_ulp_ops in a socket, instead of a single one:
 
-By using: return static_call()(ctx, insni, bpf_func) you get a perfect
-forwarding tail call as function body (iow a single jmp instruction).
-By having the default static_call() target be bpf_dispatcher_nop_func()
-it retains the default behaviour (an indirect call to the argument
-function). Only once a dispatcher program is attached is the target
-rewritten to directly call the JIT'ed image.
+struct inet_connection_sock {
+      ... ...
+      const struct tcp_ulp_ops  *icsk_ulp_ops[ULP_INDEX_MAX];
+      void __rcu                *icsk_ulp_data[ULP_INDEX_MAX];
+}
 
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Tested-by: Björn Töpel <bjorn@kernel.org>
-Tested-by: Jiri Olsa <jolsa@kernel.org>
-Acked-by: Björn Töpel <bjorn@kernel.org>
-Acked-by: Jiri Olsa <jolsa@kernel.org>
-Link: https://lkml.kernel.org/r/Y1/oBlK0yFk5c/Im@hirez.programming.kicks-ass.net
-Link: https://lore.kernel.org/bpf/20221103120647.796772565@infradead.org
-Signed-off-by: Vasiliy Kovalev <kovalev@altlinux.org>
----
- include/linux/bpf.h     | 39 ++++++++++++++++++++++++++++++++++++++-
- kernel/bpf/dispatcher.c | 22 ++++++++--------------
- 2 files changed, 46 insertions(+), 15 deletions(-)
+The entire patch is in my commit "mptcp: tls support" [2]. It's not finish
+yet, but I really want to hear your opinions, especially John's.
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index a75faf437e750..2c4a08699de21 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -21,6 +21,7 @@
- #include <linux/kallsyms.h>
- #include <linux/capability.h>
- #include <linux/percpu-refcount.h>
-+#include <linux/static_call.h>
- 
- struct bpf_verifier_env;
- struct bpf_verifier_log;
-@@ -659,6 +660,10 @@ struct bpf_dispatcher {
- 	void *image;
- 	u32 image_off;
- 	struct bpf_ksym ksym;
-+#ifdef CONFIG_HAVE_STATIC_CALL
-+	struct static_call_key *sc_key;
-+	void *sc_tramp;
-+#endif
- };
- 
- static __always_inline unsigned int bpf_dispatcher_nop_func(
-@@ -676,6 +681,34 @@ struct bpf_trampoline *bpf_trampoline_get(u64 key,
- 					  struct bpf_attach_target_info *tgt_info);
- void bpf_trampoline_put(struct bpf_trampoline *tr);
- int arch_prepare_bpf_dispatcher(void *image, s64 *funcs, int num_funcs);
-+
-+/*
-+ * When the architecture supports STATIC_CALL replace the bpf_dispatcher_fn
-+ * indirection with a direct call to the bpf program. If the architecture does
-+ * not have STATIC_CALL, avoid a double-indirection.
-+ */
-+#ifdef CONFIG_HAVE_STATIC_CALL
-+
-+#define __BPF_DISPATCHER_SC_INIT(_name)				\
-+	.sc_key = &STATIC_CALL_KEY(_name),			\
-+	.sc_tramp = STATIC_CALL_TRAMP_ADDR(_name),
-+
-+#define __BPF_DISPATCHER_SC(name)				\
-+	DEFINE_STATIC_CALL(bpf_dispatcher_##name##_call, bpf_dispatcher_nop_func)
-+
-+#define __BPF_DISPATCHER_CALL(name)				\
-+	static_call(bpf_dispatcher_##name##_call)(ctx, insnsi, bpf_func)
-+
-+#define __BPF_DISPATCHER_UPDATE(_d, _new)			\
-+	__static_call_update((_d)->sc_key, (_d)->sc_tramp, (_new))
-+
-+#else
-+#define __BPF_DISPATCHER_SC_INIT(name)
-+#define __BPF_DISPATCHER_SC(name)
-+#define __BPF_DISPATCHER_CALL(name)		bpf_func(ctx, insnsi)
-+#define __BPF_DISPATCHER_UPDATE(_d, _new)
-+#endif
-+
- #define BPF_DISPATCHER_INIT(_name) {				\
- 	.mutex = __MUTEX_INITIALIZER(_name.mutex),		\
- 	.func = &_name##_func,					\
-@@ -687,20 +720,23 @@ int arch_prepare_bpf_dispatcher(void *image, s64 *funcs, int num_funcs);
- 		.name  = #_name,				\
- 		.lnode = LIST_HEAD_INIT(_name.ksym.lnode),	\
- 	},							\
-+	__BPF_DISPATCHER_SC_INIT(_name##_call)			\
- }
- 
- #define DEFINE_BPF_DISPATCHER(name)					\
-+	__BPF_DISPATCHER_SC(name);					\
- 	noinline unsigned int bpf_dispatcher_##name##_func(		\
- 		const void *ctx,					\
- 		const struct bpf_insn *insnsi,				\
- 		unsigned int (*bpf_func)(const void *,			\
- 					 const struct bpf_insn *))	\
- 	{								\
--		return bpf_func(ctx, insnsi);				\
-+		return __BPF_DISPATCHER_CALL(name);			\
- 	}								\
- 	EXPORT_SYMBOL(bpf_dispatcher_##name##_func);			\
- 	struct bpf_dispatcher bpf_dispatcher_##name =			\
- 		BPF_DISPATCHER_INIT(bpf_dispatcher_##name);
-+
- #define DECLARE_BPF_DISPATCHER(name)					\
- 	unsigned int bpf_dispatcher_##name##_func(			\
- 		const void *ctx,					\
-@@ -708,6 +744,7 @@ int arch_prepare_bpf_dispatcher(void *image, s64 *funcs, int num_funcs);
- 		unsigned int (*bpf_func)(const void *,			\
- 					 const struct bpf_insn *));	\
- 	extern struct bpf_dispatcher bpf_dispatcher_##name;
-+
- #define BPF_DISPATCHER_FUNC(name) bpf_dispatcher_##name##_func
- #define BPF_DISPATCHER_PTR(name) (&bpf_dispatcher_##name)
- void bpf_dispatcher_change_prog(struct bpf_dispatcher *d, struct bpf_prog *from,
-diff --git a/kernel/bpf/dispatcher.c b/kernel/bpf/dispatcher.c
-index 2444bd15cc2d0..23042cfb5e809 100644
---- a/kernel/bpf/dispatcher.c
-+++ b/kernel/bpf/dispatcher.c
-@@ -4,6 +4,7 @@
- #include <linux/hash.h>
- #include <linux/bpf.h>
- #include <linux/filter.h>
-+#include <linux/static_call.h>
- 
- /* The BPF dispatcher is a multiway branch code generator. The
-  * dispatcher is a mechanism to avoid the performance penalty of an
-@@ -104,17 +105,11 @@ static int bpf_dispatcher_prepare(struct bpf_dispatcher *d, void *image)
- 
- static void bpf_dispatcher_update(struct bpf_dispatcher *d, int prev_num_progs)
- {
--	void *old, *new;
--	u32 noff;
--	int err;
--
--	if (!prev_num_progs) {
--		old = NULL;
--		noff = 0;
--	} else {
--		old = d->image + d->image_off;
-+	void *new;
-+	u32 noff = 0;
-+
-+	if (prev_num_progs)
- 		noff = d->image_off ^ (PAGE_SIZE / 2);
--	}
- 
- 	new = d->num_progs ? d->image + noff : NULL;
- 	if (new) {
-@@ -122,11 +117,10 @@ static void bpf_dispatcher_update(struct bpf_dispatcher *d, int prev_num_progs)
- 			return;
- 	}
- 
--	err = bpf_arch_text_poke(d->func, BPF_MOD_JUMP, old, new);
--	if (err || !new)
--		return;
-+	__BPF_DISPATCHER_UPDATE(d, new ?: &bpf_dispatcher_nop_func);
- 
--	d->image_off = noff;
-+	if (new)
-+		d->image_off = noff;
- }
- 
- void bpf_dispatcher_change_prog(struct bpf_dispatcher *d, struct bpf_prog *from,
--- 
-2.33.8
+[1]
+https://github.com/multipath-tcp/mptcp_net-next/issues/480
+[2]
+https://github.com/geliangtang/mptcp_net-next/commit/bba00a6cde75bab5a2c1c196d49812b4ed6addb0
 
+Thanks,
+-Geliang
