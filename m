@@ -1,31 +1,31 @@
-Received: from out-174.mta1.migadu.com (out-174.mta1.migadu.com [95.215.58.174])
+Received: from out-183.mta1.migadu.com (out-183.mta1.migadu.com [95.215.58.183])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D1D9134BC;
-	Fri, 31 May 2024 23:44:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D754084FD8
+	for <bpf@vger.kernel.org>; Fri, 31 May 2024 23:50:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.183
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717199068; cv=none; b=PL97nM1tzgeWJRQbjA/jZ7XZuxXLg+AYFSXZs4g8Es0yXcW0pHlyEns1LwDdMj+eI62a/pYksoS+Ejh6M2y86y+pNjfhdiLML7Rkb71NYOjqPHACvVeWVYZhli8tzTwpTMNUan2FR1LWFfFOQbo/IiI/CIkt68ptKNVosDuhXzc=
+	t=1717199421; cv=none; b=tKBujvhsNG8Tx6YL3REXa42OM1ykscrfR6V6TDIyA8syI5RBSuSw+XvAIDUIJo8oyT6A28P4bzy/yVYLBiXzqfPr20ffHVIqzC0nliub8p2LbWquDxfmkqq5dDQ5BEX3TpU4+F1ZN3az+uLlrxLI9sfZ/kdoY8u9HUdWYYu7K9w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717199068; c=relaxed/simple;
-	bh=+1lYI39XvWKgc3DpuRrlaTX27AIFQ1b7IGpUMM1waoU=;
+	s=arc-20240116; t=1717199421; c=relaxed/simple;
+	bh=dZ7ulaDL1L2Ln+oRixcSBYL60i42q924rAbH5hzLhbE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cjbvYtJKkQsb3YYlhFxORYgduQZMH4M/q6GtvcHuSXKO6+yXpgUcQhWXllejqMxYd2ziJ23FfzUk88Saya5MA0FM5TJcZB2nntuNwbLNbnSQEuFk0R2QJcO1wUw0/5eTk/c9M+ZkpYRCwVpgg2pvGPq7ixOSUNr/EhG3budVzOw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=JM4VUaWy; arc=none smtp.client-ip=95.215.58.174
+	 Content-Type:Content-Disposition:In-Reply-To; b=VvxFA1h/oZCLTz1t+BDBasihL1DWVNWfg6R22PxCu0sZvRGQWrbkXGh/RSkWKX8x0vEEP7gfVFmgnG+dO1kKw2tGryS+eLZr8bwKCKH/o+DNXveUC/yrlgvU32GQpW9slpxfI1NvWJt/WQVfZltBndDoMEvBx9Qr9z2Rbm+K+ws=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=VZZYs8IA; arc=none smtp.client-ip=95.215.58.183
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="JM4VUaWy"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="VZZYs8IA"
 X-Envelope-To: vbabka@suse.cz
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1717199064;
+	t=1717199416;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=QQSw4uPQgRlAk3kSFCT2kJLdIQ/8AieJ62AywbPlN10=;
-	b=JM4VUaWyXQA4oPsqLQCYJRQ+U5ltEWNYbqydiC0118Lvw8ARSRQKxDtoz/LXNP3l36eZfL
-	/0+mD9xqfT1uKyARczwtW716OzeJDqc/dzWzcB7fmug0ExijVA7JmuW/f4IgXve4nDh6uQ
-	An09w1e8j9woSKGsMHLCxhQsgpbmDFs=
+	bh=OOzuz+/J94mPHKcym5sz7qWGkxJUxusMsJxo0OWXA48=;
+	b=VZZYs8IAXHU6CDmJjarLjJsXvhN8jM9uiQvKBToynuQEa8o1avQIzeaqUnTzdhZ9zKuNxU
+	O6yvG6sRdeRcoieO77vPyOTnuteFJMbfS+DqkRWuzyCIhFKxPHHZU/66DtrUdFmwhr4mUb
+	DlGemm0en859BbplOObWVKtDfyn4FJ0=
 X-Envelope-To: akinobu.mita@gmail.com
 X-Envelope-To: cl@linux.com
 X-Envelope-To: rientjes@google.com
@@ -44,7 +44,7 @@ X-Envelope-To: linux-kernel@vger.kernel.org
 X-Envelope-To: linux-mm@kvack.org
 X-Envelope-To: bpf@vger.kernel.org
 X-Envelope-To: linux-trace-kernel@vger.kernel.org
-Date: Fri, 31 May 2024 16:44:16 -0700
+Date: Fri, 31 May 2024 16:50:11 -0700
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 From: Roman Gushchin <roman.gushchin@linux.dev>
 To: Vlastimil Babka <vbabka@suse.cz>
@@ -62,10 +62,11 @@ Cc: Akinobu Mita <akinobu.mita@gmail.com>, Christoph Lameter <cl@linux.com>,
 	Hyeonggon Yoo <42.hyeyoo@gmail.com>, linux-kernel@vger.kernel.org,
 	linux-mm@kvack.org, bpf@vger.kernel.org,
 	linux-trace-kernel@vger.kernel.org
-Subject: Re: [PATCH RFC 3/4] mm, slab: add static key for should_failslab()
-Message-ID: <Zlpg0OFOsOSxrh9I@P9FQF9L96D.corp.robot.car>
+Subject: Re: [PATCH RFC 4/4] mm, page_alloc: add static key for
+ should_fail_alloc_page()
+Message-ID: <ZlpiMx96XRHU9508@P9FQF9L96D.corp.robot.car>
 References: <20240531-fault-injection-statickeys-v1-0-a513fd0a9614@suse.cz>
- <20240531-fault-injection-statickeys-v1-3-a513fd0a9614@suse.cz>
+ <20240531-fault-injection-statickeys-v1-4-a513fd0a9614@suse.cz>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -74,22 +75,17 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240531-fault-injection-statickeys-v1-3-a513fd0a9614@suse.cz>
+In-Reply-To: <20240531-fault-injection-statickeys-v1-4-a513fd0a9614@suse.cz>
 X-Migadu-Flow: FLOW_OUT
 
-On Fri, May 31, 2024 at 11:33:34AM +0200, Vlastimil Babka wrote:
-> Since commit 4f6923fbb352 ("mm: make should_failslab always available for
-> fault injection") should_failslab() is unconditionally a noinline
-> function. This adds visible overhead to the slab allocation hotpath,
-> even if the function is empty. With CONFIG_FAILSLAB=y there's additional
-> overhead when the functionality is not enabled by a boot parameter or
-> debugfs.
-> 
-> The overhead can be eliminated with a static key around the callsite.
-> Fault injection and error injection frameworks can now be told that the
-> this function has a static key associated, and are able to enable and
-> disable it accordingly.
+On Fri, May 31, 2024 at 11:33:35AM +0200, Vlastimil Babka wrote:
+> Similarly to should_failslab(), remove the overhead of calling the
+> noinline function should_fail_alloc_page() with a static key that guards
+> the allocation hotpath callsite and is controlled by the fault and error
+> injection frameworks.
 > 
 > Signed-off-by: Vlastimil Babka <vbabka@suse.cz>
 
 Reviewed-by: Roman Gushchin <roman.gushchin@linux.dev>
+
+Thanks!
