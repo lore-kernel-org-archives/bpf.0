@@ -1,26 +1,26 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90AD4208C4;
-	Sun,  2 Jun 2024 03:37:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 608BD2BD0F;
+	Sun,  2 Jun 2024 03:37:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717299445; cv=none; b=tygtUxWUxVWu0ovX8d8GTc0wZCg8vb9Wk7ycEsTcbxrQ+amHzGHll0QA0csPmEoolcJRJOZZp5TgrtB/+nJsVPfeSI8wSovqlHFQjydG0PEabOTRaD5Z1DGDdWC8WgHwH+efe2hh1SlFdrvpFLalVBpZCQNA4mAUd1dpotFBPjE=
+	t=1717299446; cv=none; b=ZD50P8bYP328sZ9Tg4oWYhNmLbtYMgU1jR/6SEoJAAIvM+xDbWAs7w+EyXBjtJf1CWokhPi2iaviOV+M6blYauoQ7UgvID0xDcQ+NPEr4b1tWRFGB0w41/iRJfKqZ07X7JzjWzMy29xBXI8LvDLOoOy5oEOFJyMKsvkUms9eDjc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717299445; c=relaxed/simple;
-	bh=onmnptRPHMLbof5HYGb+W45EMoWIMr+zQx72xT7POs0=;
+	s=arc-20240116; t=1717299446; c=relaxed/simple;
+	bh=RcRavuCzGHOOIG2b1OsJuToXe82mFmzkJ0VhaZCnWqg=;
 	h=Message-ID:Date:From:To:Cc:Subject:References:MIME-Version:
-	 Content-Type; b=kN+/zoDpUpgWyx6Jgy7QgUy4W75nBM1D4eaPVbugagkpZSxBETe/6HAM2VJwgvPEJezxNzrlUqZdMuVmI8u/8xAi1aK/P4fal8d0SLi0hY9/B1EIkfHuaMoc+v+lSE//dYRtMRweoGTcOLiFEX0bX75I7g+Uokmwa6SSCcmag28=
+	 Content-Type; b=TRDULX41v/+4AYfSFmJiHUQi2xv9EYwFprgldhVB9rzybwG0HUH5u0lvGzwDaxkCAJnFX+odAERYyYWy7FD0o2rXKp8UzrrgXA5FnWzOk54mbI6ku4yy89UyvauDZ+F/55NcFG0CRqvaOLJtMYtWTjhA5QCv2ygX0GLjD9noRcY=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61D0DC4AF18;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA666C4AF0E;
 	Sun,  2 Jun 2024 03:37:25 +0000 (UTC)
 Received: from rostedt by gandalf with local (Exim 4.97)
 	(envelope-from <rostedt@goodmis.org>)
-	id 1sDc3E-000000094NR-2sof;
-	Sat, 01 Jun 2024 23:38:32 -0400
-Message-ID: <20240602033832.548134509@goodmis.org>
+	id 1sDc3F-000000094OQ-02Z0;
+	Sat, 01 Jun 2024 23:38:33 -0400
+Message-ID: <20240602033832.870736657@goodmis.org>
 User-Agent: quilt/0.68
-Date: Sat, 01 Jun 2024 23:37:53 -0400
+Date: Sat, 01 Jun 2024 23:37:55 -0400
 From: Steven Rostedt <rostedt@goodmis.org>
 To: linux-kernel@vger.kernel.org,
  linux-trace-kernel@vger.kernel.org
@@ -41,7 +41,7 @@ Cc: Masami Hiramatsu <mhiramat@kernel.org>,
  Peter Zijlstra <peterz@infradead.org>,
  Thomas Gleixner <tglx@linutronix.de>,
  Guo Ren <guoren@kernel.org>
-Subject: [PATCH v2 09/27] ftrace: Allow ftrace startup flags to exist without dynamic ftrace
+Subject: [PATCH v2 11/27] ftrace: Allow subops filtering to be modified
 References: <20240602033744.563858532@goodmis.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -51,62 +51,191 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 
-From: "Steven Rostedt (VMware)" <rostedt@goodmis.org>
+From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
 
-Some of the flags for ftrace_startup() may be exposed even when
-CONFIG_DYNAMIC_FTRACE is not configured in. This is fine as the difference
-between dynamic ftrace and static ftrace is done within the internals of
-ftrace itself. No need to have use cases fail to compile because dynamic
-ftrace is disabled.
+The subops filters use a "manager" ops to enable and disable its filters.
+The manager ops can handle more than one subops, and its filter is what
+controls what functions get set. Add a ftrace_hash_move_and_update_subops()
+function that will update the manager ops when the subops filters change.
 
-This change is needed to move some of the logic of what is passed to
-ftrace_startup() out of the parameters of ftrace_startup().
-
-Link: https://lore.kernel.org/linux-trace-kernel/171509100890.162236.4362350342549122222.stgit@devnote2
-
-Signed-off-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
-Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 ---
- include/linux/ftrace.h | 18 +++++++++---------
- 1 file changed, 9 insertions(+), 9 deletions(-)
+ include/linux/ftrace.h |  3 ++
+ kernel/trace/ftrace.c  | 96 ++++++++++++++++++++++++++++++++++++++----
+ 2 files changed, 90 insertions(+), 9 deletions(-)
 
 diff --git a/include/linux/ftrace.h b/include/linux/ftrace.h
-index fd656e6d6b7c..586018744785 100644
+index 978a1d3b270a..63238a9a9270 100644
 --- a/include/linux/ftrace.h
 +++ b/include/linux/ftrace.h
-@@ -509,6 +509,15 @@ static inline void stack_tracer_disable(void) { }
- static inline void stack_tracer_enable(void) { }
+@@ -227,6 +227,7 @@ ftrace_func_t ftrace_ops_get_func(struct ftrace_ops *ops);
+  *             ftrace_enabled.
+  * DIRECT - Used by the direct ftrace_ops helper for direct functions
+  *            (internal ftrace only, should not be used by others)
++ * SUBOP  - Is controlled by another op in field managed.
+  */
+ enum {
+ 	FTRACE_OPS_FL_ENABLED			= BIT(0),
+@@ -247,6 +248,7 @@ enum {
+ 	FTRACE_OPS_FL_TRACE_ARRAY		= BIT(15),
+ 	FTRACE_OPS_FL_PERMANENT                 = BIT(16),
+ 	FTRACE_OPS_FL_DIRECT			= BIT(17),
++	FTRACE_OPS_FL_SUBOP			= BIT(18),
+ };
+ 
+ #ifndef CONFIG_DYNAMIC_FTRACE_WITH_ARGS
+@@ -336,6 +338,7 @@ struct ftrace_ops {
+ 	struct list_head		list;
+ 	struct list_head		subop_list;
+ 	ftrace_ops_func_t		ops_func;
++	struct ftrace_ops		*managed;
+ #ifdef CONFIG_DYNAMIC_FTRACE_WITH_DIRECT_CALLS
+ 	unsigned long			direct_call;
  #endif
- 
-+enum {
-+	FTRACE_UPDATE_CALLS		= (1 << 0),
-+	FTRACE_DISABLE_CALLS		= (1 << 1),
-+	FTRACE_UPDATE_TRACE_FUNC	= (1 << 2),
-+	FTRACE_START_FUNC_RET		= (1 << 3),
-+	FTRACE_STOP_FUNC_RET		= (1 << 4),
-+	FTRACE_MAY_SLEEP		= (1 << 5),
-+};
-+
- #ifdef CONFIG_DYNAMIC_FTRACE
- 
- void ftrace_arch_code_modify_prepare(void);
-@@ -603,15 +612,6 @@ void ftrace_set_global_notrace(unsigned char *buf, int len, int reset);
- void ftrace_free_filter(struct ftrace_ops *ops);
- void ftrace_ops_set_global_filter(struct ftrace_ops *ops);
- 
--enum {
--	FTRACE_UPDATE_CALLS		= (1 << 0),
--	FTRACE_DISABLE_CALLS		= (1 << 1),
--	FTRACE_UPDATE_TRACE_FUNC	= (1 << 2),
--	FTRACE_START_FUNC_RET		= (1 << 3),
--	FTRACE_STOP_FUNC_RET		= (1 << 4),
--	FTRACE_MAY_SLEEP		= (1 << 5),
--};
+diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
+index 38fb2a634b04..e447b04c0c9c 100644
+--- a/kernel/trace/ftrace.c
++++ b/kernel/trace/ftrace.c
+@@ -3424,7 +3424,8 @@ int ftrace_startup_subops(struct ftrace_ops *ops, struct ftrace_ops *subops, int
+ 		} else {
+ 			free_ftrace_hash(save_filter_hash);
+ 			free_ftrace_hash(save_notrace_hash);
+-			subops->flags |= FTRACE_OPS_FL_ENABLED;
++			subops->flags |= FTRACE_OPS_FL_ENABLED | FTRACE_OPS_FL_SUBOP;
++			subops->managed = ops;
+ 		}
+ 		return ret;
+ 	}
+@@ -3478,11 +3479,12 @@ int ftrace_startup_subops(struct ftrace_ops *ops, struct ftrace_ops *subops, int
+ 	ret = ftrace_update_ops(ops, filter_hash, notrace_hash);
+ 	free_ftrace_hash(filter_hash);
+ 	free_ftrace_hash(notrace_hash);
+-	if (ret < 0)
++	if (ret < 0) {
+ 		list_del(&subops->list);
+-	else
+-		subops->flags |= FTRACE_OPS_FL_ENABLED;
 -
- /*
-  * The FTRACE_UPDATE_* enum is used to pass information back
-  * from the ftrace_update_record() and ftrace_test_record()
++	} else {
++		subops->flags |= FTRACE_OPS_FL_ENABLED | FTRACE_OPS_FL_SUBOP;
++		subops->managed = ops;
++	}
+ 	return ret;
+ }
+ 
+@@ -3527,6 +3529,8 @@ int ftrace_shutdown_subops(struct ftrace_ops *ops, struct ftrace_ops *subops, in
+ 		free_ftrace_hash(ops->func_hash->notrace_hash);
+ 		ops->func_hash->filter_hash = EMPTY_HASH;
+ 		ops->func_hash->notrace_hash = EMPTY_HASH;
++		subops->flags &= ~(FTRACE_OPS_FL_ENABLED | FTRACE_OPS_FL_SUBOP);
++		subops->managed = NULL;
+ 
+ 		return 0;
+ 	}
+@@ -3542,16 +3546,65 @@ int ftrace_shutdown_subops(struct ftrace_ops *ops, struct ftrace_ops *subops, in
+ 	}
+ 
+ 	ret = ftrace_update_ops(ops, filter_hash, notrace_hash);
+-	if (ret < 0)
++	if (ret < 0) {
+ 		list_add(&subops->list, &ops->subop_list);
+-	else
+-		subops->flags &= ~FTRACE_OPS_FL_ENABLED;
+-
++	} else {
++		subops->flags &= ~(FTRACE_OPS_FL_ENABLED | FTRACE_OPS_FL_SUBOP);
++		subops->managed = NULL;
++	}
+ 	free_ftrace_hash(filter_hash);
+ 	free_ftrace_hash(notrace_hash);
+ 	return ret;
+ }
+ 
++static int ftrace_hash_move_and_update_subops(struct ftrace_ops *subops,
++					      struct ftrace_hash **orig_subhash,
++					      struct ftrace_hash *hash,
++					      int enable)
++{
++	struct ftrace_ops *ops = subops->managed;
++	struct ftrace_hash **orig_hash;
++	struct ftrace_hash *save_hash;
++	struct ftrace_hash *new_hash;
++	int ret;
++
++	/* Manager ops can not be subops (yet) */
++	if (WARN_ON_ONCE(!ops || ops->flags & FTRACE_OPS_FL_SUBOP))
++		return -EINVAL;
++
++	/* Move the new hash over to the subops hash */
++	save_hash = *orig_subhash;
++	*orig_subhash = __ftrace_hash_move(hash);
++	if (!*orig_subhash) {
++		*orig_subhash = save_hash;
++		return -ENOMEM;
++	}
++
++	/* Create a new_hash to hold the ops new functions */
++	if (enable) {
++		orig_hash = &ops->func_hash->filter_hash;
++		new_hash = append_hashes(ops);
++	} else {
++		orig_hash = &ops->func_hash->notrace_hash;
++		new_hash = intersect_hashes(ops);
++	}
++
++	/* Move the hash over to the new hash */
++	ret = ftrace_hash_move_and_update_ops(ops, orig_hash, new_hash, enable);
++
++	free_ftrace_hash(new_hash);
++
++	if (ret) {
++		/* Put back the original hash */
++		free_ftrace_hash_rcu(*orig_subhash);
++		*orig_subhash = save_hash;
++	} else {
++		free_ftrace_hash_rcu(save_hash);
++	}
++	return ret;
++}
++
++
+ static u64		ftrace_update_time;
+ unsigned long		ftrace_update_tot_cnt;
+ unsigned long		ftrace_number_of_pages;
+@@ -4770,8 +4823,33 @@ static int ftrace_hash_move_and_update_ops(struct ftrace_ops *ops,
+ {
+ 	struct ftrace_ops_hash old_hash_ops;
+ 	struct ftrace_hash *old_hash;
++	struct ftrace_ops *op;
+ 	int ret;
+ 
++	if (ops->flags & FTRACE_OPS_FL_SUBOP)
++		return ftrace_hash_move_and_update_subops(ops, orig_hash, hash, enable);
++
++	/*
++	 * If this ops is not enabled, it could be sharing its filters
++	 * with a subop. If that's the case, update the subop instead of
++	 * this ops. Shared filters are only allowed to have one ops set
++	 * at a time, and if we update the ops that is not enabled,
++	 * it will not affect subops that share it.
++	 */
++	if (!(ops->flags & FTRACE_OPS_FL_ENABLED)) {
++		/* Check if any other manager subops maps to this hash */
++		do_for_each_ftrace_op(op, ftrace_ops_list) {
++			struct ftrace_ops *subops;
++
++			list_for_each_entry(subops, &op->subop_list, list) {
++				if ((subops->flags & FTRACE_OPS_FL_ENABLED) &&
++				     subops->func_hash == ops->func_hash) {
++					return ftrace_hash_move_and_update_subops(subops, orig_hash, hash, enable);
++				}
++			}
++		} while_for_each_ftrace_op(op);
++	}
++
+ 	old_hash = *orig_hash;
+ 	old_hash_ops.filter_hash = ops->func_hash->filter_hash;
+ 	old_hash_ops.notrace_hash = ops->func_hash->notrace_hash;
 -- 
 2.43.0
 
