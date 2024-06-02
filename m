@@ -1,126 +1,112 @@
-Received: from out01.mta.xmission.com (out01.mta.xmission.com [166.70.13.231])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 341B6328DB;
-	Sun,  2 Jun 2024 18:41:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=166.70.13.231
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F1B26EB4C;
+	Sun,  2 Jun 2024 19:12:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717353671; cv=none; b=bn0DOsU6nmiXFHLjiOSWYtrwuZ6nSWWlBqbABbEB1VQrdVz/IZ6JGqbjh4RJ3k0X0uAHcSPvuU7ro0SRKbuHikaJndI+BMDNow3V2UDDa3KdJsyZkps6Wmc6t4sFd5AV3uMMFuC/y7EUzjxZ256a8VQjxUo8ya2VbgZ1sZ+BNRA=
+	t=1717355564; cv=none; b=VCoXZdy/r16m8RZRntPyfPwPme5axBKMokC3ixlCdgZh+E0tL8QSwG6SaNfr8/D4IaAVR+8e8ez5OyHBOvkZF3/75rYmoTL+EudAKXkommL6tFsHT7Cn7i3YbOUWbc25mAb4VhAab7zb/2CldxdvsYR9xubgBkriRi5zWi+Y7xc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717353671; c=relaxed/simple;
-	bh=eGg3c9C8/Bhq0WgBY61Ni0ok6O/Iz1o8Lhi2ZxZ9LPM=;
-	h=From:To:Cc:References:Date:In-Reply-To:Message-ID:MIME-Version:
-	 Content-Type:Subject; b=jFgZHFgBOX+Nnajk/qZ8znPmNxhbVrR+xErizhRxbod4FgG+oNdw8QSwjCzvDE6HJrPNL1ff/X6G3ALYCM2ZmwvFofoQ+sIL7rhzuzaIBcMhxu5WchC85wKB9lusSyN+0pyOvpk/QgLSA++6iCPy/FKdOqyIcZKSvNMsa/a3L9Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=xmission.com; spf=pass smtp.mailfrom=xmission.com; arc=none smtp.client-ip=166.70.13.231
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=xmission.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=xmission.com
-Received: from in02.mta.xmission.com ([166.70.13.52]:55724)
-	by out01.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.93)
-	(envelope-from <ebiederm@xmission.com>)
-	id 1sDpSX-005b58-9E; Sun, 02 Jun 2024 11:57:33 -0600
-Received: from ip68-227-168-167.om.om.cox.net ([68.227.168.167]:33916 helo=email.froward.int.ebiederm.org.xmission.com)
-	by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.93)
-	(envelope-from <ebiederm@xmission.com>)
-	id 1sDpSV-00HTHK-GO; Sun, 02 Jun 2024 11:57:32 -0600
-From: "Eric W. Biederman" <ebiederm@xmission.com>
-To: Yafang Shao <laoar.shao@gmail.com>
-Cc: torvalds@linux-foundation.org,  linux-mm@kvack.org,
-  linux-fsdevel@vger.kernel.org,  linux-trace-kernel@vger.kernel.org,
-  audit@vger.kernel.org,  linux-security-module@vger.kernel.org,
-  selinux@vger.kernel.org,  bpf@vger.kernel.org,  Alexander Viro
- <viro@zeniv.linux.org.uk>,  Christian Brauner <brauner@kernel.org>,  Jan
- Kara <jack@suse.cz>,  Kees Cook <keescook@chromium.org>
-References: <20240602023754.25443-1-laoar.shao@gmail.com>
-	<20240602023754.25443-2-laoar.shao@gmail.com>
-	<87ikysdmsi.fsf@email.froward.int.ebiederm.org>
-	<CALOAHbAASdjLjfDv5ZH7uj=oChKE6iYnwjKFMu6oabzqfs2QUw@mail.gmail.com>
-Date: Sun, 02 Jun 2024 12:56:52 -0500
-In-Reply-To: <CALOAHbAASdjLjfDv5ZH7uj=oChKE6iYnwjKFMu6oabzqfs2QUw@mail.gmail.com>
-	(Yafang Shao's message of "Sun, 2 Jun 2024 14:56:23 +0800")
-Message-ID: <87o78jxm6z.fsf@email.froward.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+	s=arc-20240116; t=1717355564; c=relaxed/simple;
+	bh=qHG8QH+/mqunfB8u59RD3z93f1SMBtf8VW7kHlq4QEY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=OtwGw9JaDf6yqq29dq4E1PpcrMpV1+n+c/2YdlwekwfT3xmBzhmxiaBZ0is9qqDYkaXhMLl4alLKxsf0Lfc2cr/1hJUhuOgeic8hYhoy/hV1rmHcH6wWki1XQJqfVi8gQvwxQp/OKLHe9fsq02EmDcM3tG9fRGY2VWUkqQAoUSw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jAHNBO8I; arc=none smtp.client-ip=209.85.221.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jAHNBO8I"
+Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-35dce6102f4so2394540f8f.3;
+        Sun, 02 Jun 2024 12:12:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1717355561; x=1717960361; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=PuI3t+WrtTWNm+6l5EAvTGHIgvRSvsmXgaFgYPKJXa0=;
+        b=jAHNBO8IIrqXefUcl+YtE+l9Pc7UURhNR20P7bY/vv3MLi7KcdzkkRvPtrMAzlKZnu
+         nG9wIHayeysYnwMTg/9thinZD49r5Du8dreOBtongIoLUY8qQuxNXUrMhdS4Ff7kqqsX
+         BjGaGovIyXfuQm+QLXWSUy/vVaiRrA8WYPOPDXK+fbf9bgq17CnrIEkGKiv8GTxozGmk
+         W065xurskAnhle+imEAnQhlIFA05PIzkaDS/JotIdDfYz7+kvPjXIV50Vs1/45FRNS2q
+         70xpaT6Ft43CLm6RjCuV9Bw1QraotOUvwKivtGBS6H2k36oTpu55U0lT3DQchCkq2fOB
+         FTZg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1717355561; x=1717960361;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=PuI3t+WrtTWNm+6l5EAvTGHIgvRSvsmXgaFgYPKJXa0=;
+        b=AVeDxSbrW2gcsjwXhOVuAMEy4JTwTsPrvKHlO4F7cMuzfz0WLVV04MhE55MeHSqMPz
+         S9JcEz6D4UP+/GBbZUjHWnfOFrYoEqgifPZNYh0SDaoJG7ydvSIXtYzTnHl3L+EcWqKc
+         7u4UPMg/IBM8lQCiY1hxwE6w1pi13A2a2/4ufwYDI9hyrF4fK61HOZpzTCsl33aRHAy8
+         WkHW/dqVbxVTCSj+F0bX6hMwqdgFOpp7bjUi+soV13hEaWKzdy0kSTjTWTWWp1qnRSsP
+         vOCusZw0OAczz/RJpjbyfn6qcb303TGJ0iEPFJ0fzMYEwaNU3mBu330L/p49zyaPSm/C
+         EnpQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXIFBg8mKLNv58p3QNRT+ttIc1R/eivjbTGL01lwQx2THQ54Cs/8XBBp/6C87MAxfCxYJdz8CxFBEvizMWp/pwueMcn5QvD9DWN/lfxSYQwf8FjJOmBVLlUpWA8f1+XNA2Zr04W2h4WeWrar18wYmM+T+Q2MukdPfZz5F916z5pCamkUr/F
+X-Gm-Message-State: AOJu0Ywuvqn8kxfXwSfj5Z5kXtACuydI+Evwvidvr67+llHAPFCSyek+
+	1HeCM/NqK/C6I50gWtq9/MIkox2/+ELlaYy3shEaIcAgmGNjuoSKfXyNJxY67P/fosnQU2awwec
+	jEu1cZ0pTkbCqfHRNvWMNfgdqvbm6KA==
+X-Google-Smtp-Source: AGHT+IFiy+Aq8rpwIXmxDOwPQr1QKSTA4FIutEelVYoty2l83FpwAbV8qqzqWM9bFCW6U2zGoJG7p6ue910tqwHWFlM=
+X-Received: by 2002:adf:f7cd:0:b0:355:2ae:d88d with SMTP id
+ ffacd0b85a97d-35e0f285b12mr5495442f8f.34.1717355561135; Sun, 02 Jun 2024
+ 12:12:41 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+References: <20240531-fault-injection-statickeys-v1-0-a513fd0a9614@suse.cz>
+ <20240531-fault-injection-statickeys-v1-3-a513fd0a9614@suse.cz>
+ <CAADnVQJ=bNg9nWQPXGjJ11pZnmjntt=zLBqtJng3328T1L-u0g@mail.gmail.com> <dd02a8cd-a554-4756-b229-656bfc218954@suse.cz>
+In-Reply-To: <dd02a8cd-a554-4756-b229-656bfc218954@suse.cz>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Sun, 2 Jun 2024 12:12:29 -0700
+Message-ID: <CAADnVQ+7=fAYh=Wk4eiOdQWfeZ5biLG9+YRDFH+t=3tX3RFA7Q@mail.gmail.com>
+Subject: Re: [PATCH RFC 3/4] mm, slab: add static key for should_failslab()
+To: Vlastimil Babka <vbabka@suse.cz>
+Cc: Akinobu Mita <akinobu.mita@gmail.com>, Christoph Lameter <cl@linux.com>, 
+	David Rientjes <rientjes@google.com>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	"Naveen N. Rao" <naveen.n.rao@linux.ibm.com>, 
+	Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>, "David S. Miller" <davem@davemloft.net>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Steven Rostedt <rostedt@goodmis.org>, 
+	Mark Rutland <mark.rutland@arm.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Roman Gushchin <roman.gushchin@linux.dev>, Hyeonggon Yoo <42.hyeyoo@gmail.com>, 
+	LKML <linux-kernel@vger.kernel.org>, linux-mm <linux-mm@kvack.org>, 
+	bpf <bpf@vger.kernel.org>, 
+	linux-trace-kernel <linux-trace-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-XM-SPF: eid=1sDpSV-00HTHK-GO;;;mid=<87o78jxm6z.fsf@email.froward.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.227.168.167;;;frm=ebiederm@xmission.com;;;spf=pass
-X-XM-AID: U2FsdGVkX1/H+WMELW2v4o3gxreTIa+W60BpyDuHpZ4=
-X-SA-Exim-Connect-IP: 68.227.168.167
-X-SA-Exim-Mail-From: ebiederm@xmission.com
-X-Spam-Level: **
-X-Spam-Report: 
-	* -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
-	*  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-	*      [score: 0.4999]
-	*  1.5 XMNoVowels Alpha-numberic number with no vowels
-	*  0.7 XMSubLong Long Subject
-	*  0.0 XM_B_Unicode BODY: Testing for specific types of unicode
-	*  0.0 T_TM2_M_HEADER_IN_MSG BODY: No description available.
-	* -0.0 DCC_CHECK_NEGATIVE Not listed in DCC
-	*      [sa05 1397; Body=1 Fuz1=1 Fuz2=1]
-	*  0.0 T_TooManySym_03 6+ unique symbols in subject
-	*  0.0 T_TooManySym_02 5+ unique symbols in subject
-	*  0.0 T_TooManySym_01 4+ unique symbols in subject
-X-Spam-DCC: XMission; sa05 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: **;Yafang Shao <laoar.shao@gmail.com>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 379 ms - load_scoreonly_sql: 0.13 (0.0%),
-	signal_user_changed: 14 (3.8%), b_tie_ro: 12 (3.2%), parse: 1.77
-	(0.5%), extract_message_metadata: 19 (4.9%), get_uri_detail_list: 1.98
-	(0.5%), tests_pri_-2000: 19 (5.1%), tests_pri_-1000: 3.6 (1.0%),
-	tests_pri_-950: 1.64 (0.4%), tests_pri_-900: 1.36 (0.4%),
-	tests_pri_-90: 59 (15.6%), check_bayes: 57 (15.0%), b_tokenize: 8
-	(2.2%), b_tok_get_all: 9 (2.4%), b_comp_prob: 2.9 (0.8%),
-	b_tok_touch_all: 33 (8.7%), b_finish: 1.00 (0.3%), tests_pri_0: 243
-	(64.3%), check_dkim_signature: 0.89 (0.2%), check_dkim_adsp: 3.4
-	(0.9%), poll_dns_idle: 0.89 (0.2%), tests_pri_10: 2.6 (0.7%),
-	tests_pri_500: 8 (2.0%), rewrite_mail: 0.00 (0.0%)
-Subject: Re: [PATCH 1/6] fs/exec: Drop task_lock() inside __get_task_comm()
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 
-Yafang Shao <laoar.shao@gmail.com> writes:
-
-> On Sun, Jun 2, 2024 at 11:52=E2=80=AFAM Eric W. Biederman <ebiederm@xmiss=
-ion.com> wrote:
->>
->> Yafang Shao <laoar.shao@gmail.com> writes:
->>
->> > Quoted from Linus [0]:
->> >
->> >   Since user space can randomly change their names anyway, using locki=
-ng
->> >   was always wrong for readers (for writers it probably does make sense
->> >   to have some lock - although practically speaking nobody cares there
->> >   either, but at least for a writer some kind of race could have
->> >   long-term mixed results
->>
->> Ugh.
->> Ick.
->>
->> This code is buggy.
->>
->> I won't argue that Linus is wrong, about removing the
->> task_lock.
->>
->> Unfortunately strscpy_pad does not work properly with the
->> task_lock removed, and buf_size larger that TASK_COMM_LEN.
->> There is a race that will allow reading past the end
->> of tsk->comm, if we read while tsk->common is being
->> updated.
+On Sat, Jun 1, 2024 at 1:57=E2=80=AFPM Vlastimil Babka <vbabka@suse.cz> wro=
+te:
 >
-> It appears so. Thanks for pointing it out. Additionally, other code,
-> such as the BPF helper bpf_get_current_comm(), also uses strscpy_pad()
-> directly without the task_lock. It seems we should change that as
-> well.
+> On 5/31/24 6:43 PM, Alexei Starovoitov wrote:
+> > On Fri, May 31, 2024 at 2:33=E2=80=AFAM Vlastimil Babka <vbabka@suse.cz=
+> wrote:
+> >>         might_alloc(flags);
+> >>
+> >> -       if (unlikely(should_failslab(s, flags)))
+> >> -               return NULL;
+> >> +       if (static_branch_unlikely(&should_failslab_active)) {
+> >> +               if (should_failslab(s, flags))
+> >> +                       return NULL;
+> >> +       }
+> >
+> > makes sense.
+> > Acked-by: Alexei Starovoitov <ast@kernel.org>
+>
+> Thanks :) but please note the cover letter where I explain how I need hel=
+p
+> with the bpftrace side (and ftrace, but that seems sorted). Without that
+> part, bpftrace will silently stop doing the injection as the static key w=
+ill
+> remain disabled.
 
-Which suggests that we could really use a helper that handles all of
-the tricky business of reading the tsk->comm lock-free.
-
-Eric
+Right. That part was clear. Once this set lands we can add
+static key on/off logic either in the kernel directly, or in libbpf.
+In the kernel is certainly cleaner.
+How will ftrace handle it? I couldn't figure it out from this set.
+Ideally key toggle should be a part of generic kprobe attach logic
+and not bpf specific, then both bpf and kprobe will work.
