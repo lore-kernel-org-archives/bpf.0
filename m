@@ -1,111 +1,126 @@
-Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out01.mta.xmission.com (out01.mta.xmission.com [166.70.13.231])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65ADE39FDD;
-	Sun,  2 Jun 2024 18:27:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 341B6328DB;
+	Sun,  2 Jun 2024 18:41:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=166.70.13.231
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717352840; cv=none; b=soOFBSjEJM2FacyASRzfwh0OnfwL1IpkUrlpWoNOQ+YqQ/JqVZQHiEBSXdo3FLHDAdxFMNST+b5ElI0/GcgJ9F6FUnoswrPI6VdJtd7PFdA5mzzbKzezuELEfXP68kd4yctDMt07LgdOJHf/3EX0n5YCnegyV8aQqJohnK8DQS4=
+	t=1717353671; cv=none; b=bn0DOsU6nmiXFHLjiOSWYtrwuZ6nSWWlBqbABbEB1VQrdVz/IZ6JGqbjh4RJ3k0X0uAHcSPvuU7ro0SRKbuHikaJndI+BMDNow3V2UDDa3KdJsyZkps6Wmc6t4sFd5AV3uMMFuC/y7EUzjxZ256a8VQjxUo8ya2VbgZ1sZ+BNRA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717352840; c=relaxed/simple;
-	bh=OlfH/fy/yrVPChwsu+/wusMIhTqj5QvM8psAgNsK0eY=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=K/ly8iZXkfKy/hALBAN4QAjMH476no/UulPuTagB2EvI6oFI+ji3Yf8KYoviE+8QTu5O70+F6LITVbIVQ7NJTC35lQbDd8suKcXEHDfV7pjPVyNwLhCeX+cA4GykBVNdnyA+3E6Xb54rsRzPMnvny/0GyNk2GQki1pNfhCEbL00=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LstfUTUH; arc=none smtp.client-ip=209.85.210.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LstfUTUH"
-Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-70255d5ddb8so845305b3a.0;
-        Sun, 02 Jun 2024 11:27:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1717352838; x=1717957638; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=cz4RbsfTPwYac1XpECU+5e1PfNtGMLY5PUzwpA6s3+Q=;
-        b=LstfUTUHLlrvQH3EH24FjRuA4+LvOFVVyVZTcLWe4Tz/iGQi8fEwaP83xPVpMu1IJk
-         9A++o0FI2+Bf8KDkZOeZPEIKre6gso69Doi+lbgt01HyID4SltkQyWslZtfQ4sDnz00f
-         dVIpf5DB502S01wgR9Y5vWw7YwsfGNgX4jR8sErdRU4jwl35LWGPM5nU8oC3eP+ZMTt6
-         caUwOgkC9GylfyiZeYn7bkiSTSwwiQecHhmlpLvsrNbWlHWL+rw9F/RjZJ47XQourOMG
-         dyeGlZQK0ZI3WPPlPnb4AQJL6Sb9ijA/xLq0ex1+cgNJnN9R42Yp2FlQBupo32E1yZX5
-         Tb5A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717352838; x=1717957638;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=cz4RbsfTPwYac1XpECU+5e1PfNtGMLY5PUzwpA6s3+Q=;
-        b=Eq6QOkwvnaO2hlxgSzIHLe5FpVDKbMusB+TCw7KQo1OPSMLATdvpKH/u9MYqfNWbCI
-         HtzbHL5KAA/QxQ1tdQn0hjZtZZ8MZfsorZ8omJcWqdBBPDCM+dcv/2c31yPNwA8lC2/Z
-         me2uI3H74ycDAz5WVFYNHYf4od0cXhWXjmHi8eututTyOmGnYe/x39Bh+DzVHxyfL5kz
-         XJzYUYvVXPErNnb4xSGfMyK2BLlSWdFlZAgZGzK9w+FDPA9jnpFONlMiH7JVGxMliLWA
-         5BOBa3szxyQAipTPEjA+tW2Rb9gJlwy9STa9xLS3SrJRDHVLtfakrG61AkUXnYZ1FNJS
-         IHUQ==
-X-Gm-Message-State: AOJu0Yx4godYR5tnlno+dgaVN0W0MftSTAP+HtIaj74d0pKFUEc0T5US
-	oZrHC0xRIPwQv0Nf/zLIE6mzbJTX2ONtJflYaaQkCnLW7Q4p+pB8VFTfxQ==
-X-Google-Smtp-Source: AGHT+IHfcjaBCK58T8HD+hNvaaffVC3TQmTmd0kTZWY2jqIb2/tRw4wrWTEr9/w8bkUflBqJfw7XKA==
-X-Received: by 2002:a05:6a00:9283:b0:702:5f69:54e0 with SMTP id d2e1a72fcca58-7025f695787mr3866593b3a.14.1717352838115;
-        Sun, 02 Jun 2024 11:27:18 -0700 (PDT)
-Received: from pop-os.hsd1.ca.comcast.net ([2601:647:6881:9060:ca2c:f1d4:4d:74a3])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-702423cf27fsm4387564b3a.12.2024.06.02.11.27.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 02 Jun 2024 11:27:17 -0700 (PDT)
-From: Cong Wang <xiyou.wangcong@gmail.com>
-To: netdev@vger.kernel.org
-Cc: bpf@vger.kernel.org,
-	Cong Wang <cong.wang@bytedance.com>,
-	syzbot+1989ee16d94720836244@syzkaller.appspotmail.com,
-	Andrii Nakryiko <andrii@kernel.org>
-Subject: [Patch bpf] bpf: fix a potential use-after-free in bpf_link_free()
-Date: Sun,  2 Jun 2024 11:27:03 -0700
-Message-Id: <20240602182703.207276-1-xiyou.wangcong@gmail.com>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1717353671; c=relaxed/simple;
+	bh=eGg3c9C8/Bhq0WgBY61Ni0ok6O/Iz1o8Lhi2ZxZ9LPM=;
+	h=From:To:Cc:References:Date:In-Reply-To:Message-ID:MIME-Version:
+	 Content-Type:Subject; b=jFgZHFgBOX+Nnajk/qZ8znPmNxhbVrR+xErizhRxbod4FgG+oNdw8QSwjCzvDE6HJrPNL1ff/X6G3ALYCM2ZmwvFofoQ+sIL7rhzuzaIBcMhxu5WchC85wKB9lusSyN+0pyOvpk/QgLSA++6iCPy/FKdOqyIcZKSvNMsa/a3L9Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=xmission.com; spf=pass smtp.mailfrom=xmission.com; arc=none smtp.client-ip=166.70.13.231
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=xmission.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=xmission.com
+Received: from in02.mta.xmission.com ([166.70.13.52]:55724)
+	by out01.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.93)
+	(envelope-from <ebiederm@xmission.com>)
+	id 1sDpSX-005b58-9E; Sun, 02 Jun 2024 11:57:33 -0600
+Received: from ip68-227-168-167.om.om.cox.net ([68.227.168.167]:33916 helo=email.froward.int.ebiederm.org.xmission.com)
+	by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.93)
+	(envelope-from <ebiederm@xmission.com>)
+	id 1sDpSV-00HTHK-GO; Sun, 02 Jun 2024 11:57:32 -0600
+From: "Eric W. Biederman" <ebiederm@xmission.com>
+To: Yafang Shao <laoar.shao@gmail.com>
+Cc: torvalds@linux-foundation.org,  linux-mm@kvack.org,
+  linux-fsdevel@vger.kernel.org,  linux-trace-kernel@vger.kernel.org,
+  audit@vger.kernel.org,  linux-security-module@vger.kernel.org,
+  selinux@vger.kernel.org,  bpf@vger.kernel.org,  Alexander Viro
+ <viro@zeniv.linux.org.uk>,  Christian Brauner <brauner@kernel.org>,  Jan
+ Kara <jack@suse.cz>,  Kees Cook <keescook@chromium.org>
+References: <20240602023754.25443-1-laoar.shao@gmail.com>
+	<20240602023754.25443-2-laoar.shao@gmail.com>
+	<87ikysdmsi.fsf@email.froward.int.ebiederm.org>
+	<CALOAHbAASdjLjfDv5ZH7uj=oChKE6iYnwjKFMu6oabzqfs2QUw@mail.gmail.com>
+Date: Sun, 02 Jun 2024 12:56:52 -0500
+In-Reply-To: <CALOAHbAASdjLjfDv5ZH7uj=oChKE6iYnwjKFMu6oabzqfs2QUw@mail.gmail.com>
+	(Yafang Shao's message of "Sun, 2 Jun 2024 14:56:23 +0800")
+Message-ID: <87o78jxm6z.fsf@email.froward.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-XM-SPF: eid=1sDpSV-00HTHK-GO;;;mid=<87o78jxm6z.fsf@email.froward.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.227.168.167;;;frm=ebiederm@xmission.com;;;spf=pass
+X-XM-AID: U2FsdGVkX1/H+WMELW2v4o3gxreTIa+W60BpyDuHpZ4=
+X-SA-Exim-Connect-IP: 68.227.168.167
+X-SA-Exim-Mail-From: ebiederm@xmission.com
+X-Spam-Level: **
+X-Spam-Report: 
+	* -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
+	*  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+	*      [score: 0.4999]
+	*  1.5 XMNoVowels Alpha-numberic number with no vowels
+	*  0.7 XMSubLong Long Subject
+	*  0.0 XM_B_Unicode BODY: Testing for specific types of unicode
+	*  0.0 T_TM2_M_HEADER_IN_MSG BODY: No description available.
+	* -0.0 DCC_CHECK_NEGATIVE Not listed in DCC
+	*      [sa05 1397; Body=1 Fuz1=1 Fuz2=1]
+	*  0.0 T_TooManySym_03 6+ unique symbols in subject
+	*  0.0 T_TooManySym_02 5+ unique symbols in subject
+	*  0.0 T_TooManySym_01 4+ unique symbols in subject
+X-Spam-DCC: XMission; sa05 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: **;Yafang Shao <laoar.shao@gmail.com>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 379 ms - load_scoreonly_sql: 0.13 (0.0%),
+	signal_user_changed: 14 (3.8%), b_tie_ro: 12 (3.2%), parse: 1.77
+	(0.5%), extract_message_metadata: 19 (4.9%), get_uri_detail_list: 1.98
+	(0.5%), tests_pri_-2000: 19 (5.1%), tests_pri_-1000: 3.6 (1.0%),
+	tests_pri_-950: 1.64 (0.4%), tests_pri_-900: 1.36 (0.4%),
+	tests_pri_-90: 59 (15.6%), check_bayes: 57 (15.0%), b_tokenize: 8
+	(2.2%), b_tok_get_all: 9 (2.4%), b_comp_prob: 2.9 (0.8%),
+	b_tok_touch_all: 33 (8.7%), b_finish: 1.00 (0.3%), tests_pri_0: 243
+	(64.3%), check_dkim_signature: 0.89 (0.2%), check_dkim_adsp: 3.4
+	(0.9%), poll_dns_idle: 0.89 (0.2%), tests_pri_10: 2.6 (0.7%),
+	tests_pri_500: 8 (2.0%), rewrite_mail: 0.00 (0.0%)
+Subject: Re: [PATCH 1/6] fs/exec: Drop task_lock() inside __get_task_comm()
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 
-From: Cong Wang <cong.wang@bytedance.com>
+Yafang Shao <laoar.shao@gmail.com> writes:
 
-After commit 1a80dbcb2dba, bpf_link can be freed by
-link->ops->dealloc_deferred, but the code still tests and uses
-link->ops->dealloc afterward, which leads to a use-after-free as
-reported by syzbot. Actually, one of them should be sufficient, so
-just call one of them instead of both. Also add a WARN_ON() in case
-of any problematic implementation.
+> On Sun, Jun 2, 2024 at 11:52=E2=80=AFAM Eric W. Biederman <ebiederm@xmiss=
+ion.com> wrote:
+>>
+>> Yafang Shao <laoar.shao@gmail.com> writes:
+>>
+>> > Quoted from Linus [0]:
+>> >
+>> >   Since user space can randomly change their names anyway, using locki=
+ng
+>> >   was always wrong for readers (for writers it probably does make sense
+>> >   to have some lock - although practically speaking nobody cares there
+>> >   either, but at least for a writer some kind of race could have
+>> >   long-term mixed results
+>>
+>> Ugh.
+>> Ick.
+>>
+>> This code is buggy.
+>>
+>> I won't argue that Linus is wrong, about removing the
+>> task_lock.
+>>
+>> Unfortunately strscpy_pad does not work properly with the
+>> task_lock removed, and buf_size larger that TASK_COMM_LEN.
+>> There is a race that will allow reading past the end
+>> of tsk->comm, if we read while tsk->common is being
+>> updated.
+>
+> It appears so. Thanks for pointing it out. Additionally, other code,
+> such as the BPF helper bpf_get_current_comm(), also uses strscpy_pad()
+> directly without the task_lock. It seems we should change that as
+> well.
 
-Reported-by: syzbot+1989ee16d94720836244@syzkaller.appspotmail.com
-Fixes: 1a80dbcb2dba ("bpf: support deferring bpf_link dealloc to after RCU grace period")
-Cc: Andrii Nakryiko <andrii@kernel.org>
-Signed-off-by: Cong Wang <cong.wang@bytedance.com>
----
- kernel/bpf/syscall.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Which suggests that we could really use a helper that handles all of
+the tricky business of reading the tsk->comm lock-free.
 
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index 2222c3ff88e7..d8f244069495 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -2998,6 +2998,7 @@ static int bpf_obj_get(const union bpf_attr *attr)
- void bpf_link_init(struct bpf_link *link, enum bpf_link_type type,
- 		   const struct bpf_link_ops *ops, struct bpf_prog *prog)
- {
-+	WARN_ON(ops->dealloc && ops->dealloc_deferred);
- 	atomic64_set(&link->refcnt, 1);
- 	link->type = type;
- 	link->id = 0;
-@@ -3074,8 +3075,7 @@ static void bpf_link_free(struct bpf_link *link)
- 			call_rcu_tasks_trace(&link->rcu, bpf_link_defer_dealloc_mult_rcu_gp);
- 		else
- 			call_rcu(&link->rcu, bpf_link_defer_dealloc_rcu_gp);
--	}
--	if (link->ops->dealloc)
-+	} else if (link->ops->dealloc)
- 		link->ops->dealloc(link);
- }
- 
--- 
-2.34.1
-
+Eric
