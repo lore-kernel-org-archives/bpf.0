@@ -1,126 +1,137 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9510226AD5;
-	Mon,  3 Jun 2024 14:46:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3696426AD5;
+	Mon,  3 Jun 2024 14:51:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717425995; cv=none; b=A25MAXrOCRuC5fo13kzjynsDI9Jb83rQOQMRhEyjakp2Amk4ru43FbFXMyRSdd/wf9zPab0hbPu7xBc3PtMU/xh7Q3ycf6+lYNE6w5O84dj9MeA36tLeCXVH+BkjqTdC0fEYMtsaps7EJqFX7Hr/0X+B2JWCvQSuh82eo6HogMo=
+	t=1717426308; cv=none; b=YEZTsF7fynYMri1aMZHdwx/LhCeGq1zg+FJlx6TEPNQeM5mjKGwtw830xEUtszhtnfsT29bWD9G+oZ/5VewSKOWnNFT0KZ7a9b42AbsYyKSEhSrWqrtJr2wTeqfYobUzwcoUOiEIsAAsFG6qOxJrmZ0azk8IitQGgNS9Rl4N8Po=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717425995; c=relaxed/simple;
-	bh=ANoxgMGV23DkMPB+4QIDz19SbnyYNPj5Qnure/xMmD4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Pm3aAFiNg7TGl4CzMpQ7c4KOZvr9P8Na6N6XwfMIb6vCXq7whn9YjZvYZOAS+EPpOe+ZoKHyn0YmqqhqjVX9ShETwfFv9jyVUcfGsg64guI52ZAXvxRf6CtcrI/7laI/gaXKCHAOrwCFhUODOdxZo9RJ0N7paP8DteSKt6haI84=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QH+jBWqR; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QH+jBWqR"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B773C2BD10;
-	Mon,  3 Jun 2024 14:46:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1717425995;
-	bh=ANoxgMGV23DkMPB+4QIDz19SbnyYNPj5Qnure/xMmD4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=QH+jBWqRfXKPzVvMLrt/S0t+n4P8iWA2G++uF/Dish3I5Q7/sjB9D5UVTlnJNFW/H
-	 37tdH0Qh9/9Ec+8CLlfHOIyYH0YlHVWcvjdK9cROxShqg2+cOEWqETrOpWjMf3iv/L
-	 oeTUWg+SggFpClTaREfm3SidfDa2aF8X1TrPqc/H9UwnDTwOHS8Ck4PDquOyp2R+7g
-	 eTErNUnwUU8wI4NVH12/2GAXCfHT6g9R037RR1xiR9Pyj/V2BNcxW1pzvV6z8jMIEY
-	 rKnHffMDr9enMwzNcl814qV+tulBnhkzu5Zf/GONt3wBp3aoB9FWoQsgqwW9MA3u4A
-	 +5S9Up44+S2DA==
-Date: Mon, 3 Jun 2024 16:46:31 +0200
-From: Benjamin Tissoires <bentiss@kernel.org>
-To: Al Viro <viro@zeniv.linux.org.uk>
-Cc: linux-fsdevel@vger.kernel.org, bpf@vger.kernel.org
-Subject: Re: [RFC] misuse of descriptor tables in HID-BPF
-Message-ID: <xghiytd7462sujj5lw65jcrc3c5yoq35cstumkk7tvq2a5wl7y@3c2ori7znd62>
-References: <20240602234048.GF1629371@ZenIV>
+	s=arc-20240116; t=1717426308; c=relaxed/simple;
+	bh=ca60k8sUpBG2JQiZ8IbblhTHdpHysARDcXRKjwBesDY=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=BpmcYU3BBHYlwy7vJzza/szz4dcMX/mouapImVsXlg3Enp0PXORTEIuicEd26v7ndT5/7y49u86abSvlFSrwv6JQHF3NKjaSuK44Kpx6Fc7NGa504IRecDzH80fH04+y94egcVxaMXO4mT/f8sC2HgkziiTUlgC6RczdNhEoU0Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59847C2BD10;
+	Mon,  3 Jun 2024 14:51:42 +0000 (UTC)
+Date: Mon, 3 Jun 2024 10:52:50 -0400
+From: Steven Rostedt <rostedt@goodmis.org>
+To: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+Cc: linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, Mark
+ Rutland <mark.rutland@arm.com>, Mathieu Desnoyers
+ <mathieu.desnoyers@efficios.com>, Andrew Morton
+ <akpm@linux-foundation.org>, Alexei Starovoitov
+ <alexei.starovoitov@gmail.com>, Florent Revest <revest@chromium.org>,
+ Martin KaFai Lau <martin.lau@linux.dev>, bpf <bpf@vger.kernel.org>, Sven
+ Schnelle <svens@linux.ibm.com>, Alexei Starovoitov <ast@kernel.org>, Jiri
+ Olsa <jolsa@kernel.org>, Arnaldo Carvalho de Melo <acme@kernel.org>, Daniel
+ Borkmann <daniel@iogearbox.net>, Alan Maguire <alan.maguire@oracle.com>,
+ Peter Zijlstra <peterz@infradead.org>, Thomas Gleixner
+ <tglx@linutronix.de>, Guo Ren <guoren@kernel.org>
+Subject: Re: [PATCH v2 11/27] ftrace: Allow subops filtering to be modified
+Message-ID: <20240603105250.52ea24f2@gandalf.local.home>
+In-Reply-To: <20240603113723.b192c8c346e0ed55cb94b61a@kernel.org>
+References: <20240602033744.563858532@goodmis.org>
+	<20240602033832.870736657@goodmis.org>
+	<20240603113723.b192c8c346e0ed55cb94b61a@kernel.org>
+X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240602234048.GF1629371@ZenIV>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Hi Al,
+On Mon, 3 Jun 2024 11:37:23 +0900
+Masami Hiramatsu (Google) <mhiramat@kernel.org> wrote:
 
-On Jun 03 2024, Al Viro wrote:
-> static int hid_bpf_insert_prog(int prog_fd, struct bpf_prog *prog)
-> {
->         int i, index = -1, map_fd = -1, err = -EINVAL;
+> On Sat, 01 Jun 2024 23:37:55 -0400
+> Steven Rostedt <rostedt@goodmis.org> wrote:
 > 
->         /* retrieve a fd of our prog_array map in BPF */
->         map_fd = skel_map_get_fd_by_id(jmp_table.map->id);
+> [...]
+> >  
+> > +static int ftrace_hash_move_and_update_subops(struct ftrace_ops *subops,
+> > +					      struct ftrace_hash **orig_subhash,
+> > +					      struct ftrace_hash *hash,
+> > +					      int enable)
+> > +{
+> > +	struct ftrace_ops *ops = subops->managed;
+> > +	struct ftrace_hash **orig_hash;
+> > +	struct ftrace_hash *save_hash;
+> > +	struct ftrace_hash *new_hash;
+> > +	int ret;
+> > +
+> > +	/* Manager ops can not be subops (yet) */
+> > +	if (WARN_ON_ONCE(!ops || ops->flags & FTRACE_OPS_FL_SUBOP))
+> > +		return -EINVAL;  
 > 
-> 	...
-> 
->         /* insert the program in the jump table */
->         err = skel_map_update_elem(map_fd, &index, &prog_fd, 0);
->         if (err)
->                 goto out;
-> 
-> 	...
-> 
->         if (err < 0)
->                 __hid_bpf_do_release_prog(map_fd, index);
->         if (map_fd >= 0)
->                 close_fd(map_fd);
->         return err;
-> }
-> 
-> What.  The.  Hell?
+> This does return if ops->flags & FTRACE_OPS_FL_SUBOP, but --> (1)
 
-TL;DR: I'm getting rid of that code in (hopefully v6.11), so any bad
-justification I can come up with can safely be ignored.
+Yes, because what is passed in is "subops" and "ops" is subops->managed.
 
 > 
-> Folks, descriptor table is a shared object.  It is NOT safe to use
-> as a scratchpad.
+> > +
+> > +	/* Move the new hash over to the subops hash */
+> > +	save_hash = *orig_subhash;
+> > +	*orig_subhash = __ftrace_hash_move(hash);
+> > +	if (!*orig_subhash) {
+> > +		*orig_subhash = save_hash;
+> > +		return -ENOMEM;
+> > +	}
+> > +
+> > +	/* Create a new_hash to hold the ops new functions */
+> > +	if (enable) {
+> > +		orig_hash = &ops->func_hash->filter_hash;
+> > +		new_hash = append_hashes(ops);
+> > +	} else {
+> > +		orig_hash = &ops->func_hash->notrace_hash;
+> > +		new_hash = intersect_hashes(ops);
+> > +	}
+> > +
+> > +	/* Move the hash over to the new hash */
+> > +	ret = ftrace_hash_move_and_update_ops(ops, orig_hash, new_hash, enable);  
 > 
-> Another thread might do whatever it bloody wants to anything inserted
-> there.  It may close your descriptor, it may replace it with something
-> entirely unrelated to what you've placed there, etc.
+> This also a bit wired to me. maybe we need simple version like
 > 
-> This is fundamentally broken.  The same goes for anything that tries
-> to play similar games.  Don't use descriptor tables that way.
+> `__ftrace_hash_move_and_update_ops()`
 > 
-> Kernel-side descriptors should be used only for marshalling - they can
-> be passed by userland (and should be resolved to struct file *, with
-> no expectations that repeated call of fget() would yield the same
-> pointer) and they can be returned _to_ userland - after you've allocated
-> them and associated them with struct file *.
+> And call it from ftrace_hash_move_and_update_ops() and here?
 
-I think the situation is not as bad as you think it is.
-First these fds are not actually struct file * but bpf objects. So the
-users of them should be rather small. Threading in this case is probably
-fine because this only happens under a mutex lock.
-
-And last, and I think that's the biggest point here, we are not really
-"in the kernel". The code is executed in the kernel, but it's coming
-from a syscall bpf program, and as such we are in a blurry state between
-userspace and kernel space. Then, the bpf API uses fds because we are
-effectively going through the userspace API from within the kernel to
-populate the maps. At any point here we don't assume the fd is safe.
-Whenever the call to skel_map_update_elem() is done, the kernel emits
-an equivalent of a syscall to this kernel function, and as such the
-actual kernel code behind it treats everything like a kernel code should.
-
-Efectively, this use of fds is to pass information from/to userland :)
-
-But I agree, the whole logic of this file is weird, and not clean.
-
-Luckily, with the help of the bpf folks, I came to a better solution,
-with bpf_struct_ops[0].
+We could do that. I almost did due to other issues but I reworked the code
+where I didn't need to.
 
 > 
-> Using them as handles for internal objects is an equivalent of playing
-> in the traffic - think of it as evolution in action.
+> > +
+> > +	free_ftrace_hash(new_hash);
+> > +
+> > +	if (ret) {
+> > +		/* Put back the original hash */
+> > +		free_ftrace_hash_rcu(*orig_subhash);
+> > +		*orig_subhash = save_hash;
+> > +	} else {
+> > +		free_ftrace_hash_rcu(save_hash);
+> > +	}
+> > +	return ret;
+> > +}
+> > +
+> > +
+> >  static u64		ftrace_update_time;
+> >  unsigned long		ftrace_update_tot_cnt;
+> >  unsigned long		ftrace_number_of_pages;
+> > @@ -4770,8 +4823,33 @@ static int ftrace_hash_move_and_update_ops(struct ftrace_ops *ops,
+> >  {
+> >  	struct ftrace_ops_hash old_hash_ops;
+> >  	struct ftrace_hash *old_hash;
+> > +	struct ftrace_ops *op;
+> >  	int ret;
+> >  
+> > +	if (ops->flags & FTRACE_OPS_FL_SUBOP)
+> > +		return ftrace_hash_move_and_update_subops(ops, orig_hash, hash, enable);  
+> 
+> (1) This calls ftrace_hash_move_and_update_subops() if ops->flags & FTRACE_OPS_FL_SUBOP ?
 
-Which now raises the question: should I ask for the bpf_struct_ops
-conversion to be backported in stable, because that code is too ugly?
+Yes, because ops turns into subops, and the ops above it is its manager ops.
 
-Cheers,
-Benjamin
-
-[0] https://lore.kernel.org/bpf/20240528-hid_bpf_struct_ops-v1-0-8c6663df27d8@kernel.org/
+-- Steve
