@@ -1,26 +1,26 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2323613C916;
-	Mon,  3 Jun 2024 19:07:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A34F13C9A4;
+	Mon,  3 Jun 2024 19:07:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717441633; cv=none; b=VWinIqs/awjZCr1Mnz2QAij5ZP98o+G7qF6XfS4san+3Ak4LcNd5QF60MPvefpLRzRiWCy5OyHjVQ8cHmNk4msWuOVAPcncfjVkatqSz4StW6ChLX89ZY+S2NwsLVKYcgHILoFXp3gSd1D7IpX5EBLc6xqX8ljfIRHGLBZtazYg=
+	t=1717441633; cv=none; b=G/c4astVoaN8ozwTnnArXXPTwDy577I+++zO2Bp99ozo6P3vhpQs9n22xuS7jvplHZzImN3gBFMa+srYeUGxpZJ9JvwE7H/cfuAMUDcoIUvj5PB/3jH+MPN5pceTzjZzsDUISwj7U6Y1VXMD1NscNtQpgGVvCmoqeA05BRmvIvk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1717441633; c=relaxed/simple;
-	bh=ZfNO8NE2Nzh1STTRdMH1RJ/X4coqgh6rfCK3xJTe+wU=;
+	bh=RBw53ycHF+DElS6M+SUgA8ingNid6OrS+4Pj7y1fIh8=;
 	h=Message-ID:Date:From:To:Cc:Subject:References:MIME-Version:
-	 Content-Type; b=mam+3D0DlWIJil/lYaP2Ye3aRJU216bBy/s10NaIqT88urkWy7d3Mh0n2CQAVsjrldCkCblEVEzYe4j1qm9zkZQcY7OUySObuA4KfqifpDcBbiyITW1dt3fomucXUtUuAmVPRjqpOTh29lC8+zecrYW8047R+vU06MRVSbhnk3c=
+	 Content-Type; b=MssF+qHmpLUfFZN+qoDxCqpJt0El1dNFvI9HW7wFwhic/gNNoU1JwYP6IXH7V4ebYcQfdRYEGvIOOh2H5S4e+t6T3wwqYnr7P/J9lg/Qzp7Ut74stzK293d3ChgxKWtiSqtaeCDFdkZE3cyec8mt4ekA+2yKl2wN5xGuV/d2EQk=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B8E4C4AF13;
-	Mon,  3 Jun 2024 19:07:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D17BC4DDE7;
+	Mon,  3 Jun 2024 19:07:12 +0000 (UTC)
 Received: from rostedt by gandalf with local (Exim 4.97)
 	(envelope-from <rostedt@goodmis.org>)
-	id 1sED2c-00000009Tqx-2jZG;
-	Mon, 03 Jun 2024 15:08:22 -0400
-Message-ID: <20240603190822.508431129@goodmis.org>
+	id 1sED2d-00000009TtR-1tkU;
+	Mon, 03 Jun 2024 15:08:23 -0400
+Message-ID: <20240603190823.308806126@goodmis.org>
 User-Agent: quilt/0.68
-Date: Mon, 03 Jun 2024 15:07:14 -0400
+Date: Mon, 03 Jun 2024 15:07:19 -0400
 From: Steven Rostedt <rostedt@goodmis.org>
 To: linux-kernel@vger.kernel.org,
  linux-trace-kernel@vger.kernel.org
@@ -41,7 +41,7 @@ Cc: Masami Hiramatsu <mhiramat@kernel.org>,
  Peter Zijlstra <peterz@infradead.org>,
  Thomas Gleixner <tglx@linutronix.de>,
  Guo Ren <guoren@kernel.org>
-Subject: [PATCH v3 10/27] ftrace: Add subops logic to allow one ops to manage many
+Subject: [PATCH v3 15/27] function_graph: Add "task variables" per task for fgraph_ops
 References: <20240603190704.663840775@goodmis.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -51,526 +51,169 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 
-From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+From: "Steven Rostedt (VMware)" <rostedt@goodmis.org>
 
-There are cases where a single system will use a single function callback
-to handle multiple users. For example, to allow function_graph tracer to
-have multiple users where each can trace their own set of functions, it is
-useful to only have one ftrace_ops registered to ftrace that will call a
-function by the function_graph tracer to handle the multiplexing with the
-different registered  function_graph tracers.
+Add a "task variables" array on the tasks shadow ret_stack that is the
+size of longs for each possible registered fgraph_ops. That's a total
+of 16, taking up 8 * 16 = 128 bytes (out of a page size 4k).
 
-Add a "subop_list" to the ftrace_ops that will hold a list of other
-ftrace_ops that the top ftrace_ops will manage.
+This will allow for fgraph_ops to do specific features on a per task basis
+having a way to maintain state for each task.
 
-The function ftrace_startup_subops() that takes the manager ftrace_ops and
-a subop ftrace_ops it will manage. If there are no subops with the
-ftrace_ops yet, it will copy the ftrace_ops subop filters to the manager
-ftrace_ops and register that with ftrace_startup(), and adds the subop to
-its subop_list. If the manager ops already has something registered, it
-will then merge the new subop filters with what it has and enable the new
-functions that covers all the subops it has.
+Co-developed with Masami Hiramatsu:
+Link: https://lore.kernel.org/linux-trace-kernel/171509104383.162236.12239656156685718550.stgit@devnote2
 
-To remove a subop, ftrace_shutdown_subops() is called which will use the
-subop_list of the manager ops to rebuild all the functions it needs to
-trace, and update the ftrace records to only call the functions it now has
-registered. If there are no more functions registered, it will then call
-ftrace_shutdown() to disable itself completely.
-
-Note, it is up to the manager ops callback to always make sure that the
-subops callbacks are called if its filter matches, as there are times in
-the update where the callback could be calling more functions than those
-that are currently registered.
-
-This could be updated to handle other systems other than function_graph,
-for example, fprobes could use this (but will need an interface to call
-ftrace_startup_subops()).
-
+Signed-off-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
+Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 ---
- include/linux/ftrace.h         |   1 +
- kernel/trace/fgraph.c          |   3 +-
- kernel/trace/ftrace.c          | 401 ++++++++++++++++++++++++++++++++-
- kernel/trace/ftrace_internal.h |   1 +
- kernel/trace/trace.h           |   1 +
- 5 files changed, 405 insertions(+), 2 deletions(-)
+ include/linux/ftrace.h |  1 +
+ kernel/trace/fgraph.c  | 74 +++++++++++++++++++++++++++++++++++++++++-
+ 2 files changed, 74 insertions(+), 1 deletion(-)
 
 diff --git a/include/linux/ftrace.h b/include/linux/ftrace.h
-index 586018744785..978a1d3b270a 100644
+index e31ec8516de1..82cfc8e09cfd 100644
 --- a/include/linux/ftrace.h
 +++ b/include/linux/ftrace.h
-@@ -334,6 +334,7 @@ struct ftrace_ops {
- 	unsigned long			trampoline;
- 	unsigned long			trampoline_size;
- 	struct list_head		list;
-+	struct list_head		subop_list;
- 	ftrace_ops_func_t		ops_func;
- #ifdef CONFIG_DYNAMIC_FTRACE_WITH_DIRECT_CALLS
- 	unsigned long			direct_call;
+@@ -1089,6 +1089,7 @@ ftrace_graph_get_ret_stack(struct task_struct *task, int skip);
+ 
+ unsigned long ftrace_graph_ret_addr(struct task_struct *task, int *idx,
+ 				    unsigned long ret, unsigned long *retp);
++unsigned long *fgraph_get_task_var(struct fgraph_ops *gops);
+ 
+ /*
+  * Sometimes we don't want to trace a function with the function
 diff --git a/kernel/trace/fgraph.c b/kernel/trace/fgraph.c
-index 54ed2ed2036b..e39042c40937 100644
+index 7fd9b03bd170..baa08249ffd5 100644
 --- a/kernel/trace/fgraph.c
 +++ b/kernel/trace/fgraph.c
-@@ -21,7 +21,8 @@
- #ifdef CONFIG_DYNAMIC_FTRACE
- #define ASSIGN_OPS_HASH(opsname, val) \
- 	.func_hash		= val, \
--	.local_hash.regex_lock	= __MUTEX_INITIALIZER(opsname.local_hash.regex_lock),
-+	.local_hash.regex_lock	= __MUTEX_INITIALIZER(opsname.local_hash.regex_lock), \
-+	.subop_list		= LIST_HEAD_INIT(opsname.subop_list),
- #else
- #define ASSIGN_OPS_HASH(opsname, val)
- #endif
-diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
-index b85f00b0ffe7..63b8d1fe1dd8 100644
---- a/kernel/trace/ftrace.c
-+++ b/kernel/trace/ftrace.c
-@@ -74,7 +74,8 @@
- #ifdef CONFIG_DYNAMIC_FTRACE
- #define INIT_OPS_HASH(opsname)	\
- 	.func_hash		= &opsname.local_hash,			\
--	.local_hash.regex_lock	= __MUTEX_INITIALIZER(opsname.local_hash.regex_lock),
-+	.local_hash.regex_lock	= __MUTEX_INITIALIZER(opsname.local_hash.regex_lock), \
-+	.subop_list		= LIST_HEAD_INIT(opsname.subop_list),
- #else
- #define INIT_OPS_HASH(opsname)
- #endif
-@@ -161,6 +162,7 @@ static inline void ftrace_ops_init(struct ftrace_ops *ops)
- #ifdef CONFIG_DYNAMIC_FTRACE
- 	if (!(ops->flags & FTRACE_OPS_FL_INITIALIZED)) {
- 		mutex_init(&ops->local_hash.regex_lock);
-+		INIT_LIST_HEAD(&ops->subop_list);
- 		ops->func_hash = &ops->local_hash;
- 		ops->flags |= FTRACE_OPS_FL_INITIALIZED;
- 	}
-@@ -3164,6 +3166,403 @@ int ftrace_shutdown(struct ftrace_ops *ops, int command)
- 	return 0;
+@@ -54,6 +54,10 @@
+  * on the return of the function being traced, this is what will be on the
+  * task's shadow ret_stack: (the stack grows upward)
+  *
++ *  ret_stack[SHADOW_STACK_OFFSET]
++ * | SHADOW_STACK_TASK_VARS(ret_stack)[15]      |
++ * ...
++ * | SHADOW_STACK_TASK_VARS(ret_stack)[0]       |
+  *  ret_stack[SHADOW_STACK_MAX_OFFSET]
+  * ...
+  * |                                            | <- task->curr_ret_stack
+@@ -116,11 +120,19 @@ enum {
+ #define SHADOW_STACK_SIZE	(PAGE_SIZE)
+ #define SHADOW_STACK_OFFSET	(SHADOW_STACK_SIZE / sizeof(long))
+ /* Leave on a buffer at the end */
+-#define SHADOW_STACK_MAX_OFFSET (SHADOW_STACK_OFFSET - (FGRAPH_FRAME_OFFSET + 1))
++#define SHADOW_STACK_MAX_OFFSET				\
++	(SHADOW_STACK_OFFSET - (FGRAPH_FRAME_OFFSET + 1 + FGRAPH_ARRAY_SIZE))
+ 
+ /* RET_STACK():		Return the frame from a given @offset from task @t */
+ #define RET_STACK(t, offset) ((struct ftrace_ret_stack *)(&(t)->ret_stack[offset]))
+ 
++/*
++ * Each fgraph_ops has a reservered unsigned long at the end (top) of the
++ * ret_stack to store task specific state.
++ */
++#define SHADOW_STACK_TASK_VARS(ret_stack) \
++	((unsigned long *)(&(ret_stack)[SHADOW_STACK_OFFSET - FGRAPH_ARRAY_SIZE]))
++
+ DEFINE_STATIC_KEY_FALSE(kill_ftrace_graph);
+ int ftrace_graph_active;
+ 
+@@ -211,6 +223,44 @@ static void return_run(struct ftrace_graph_ret *trace, struct fgraph_ops *ops)
+ {
  }
  
-+/* Simply make a copy of @src and return it */
-+static struct ftrace_hash *copy_hash(struct ftrace_hash *src)
++static void ret_stack_set_task_var(struct task_struct *t, int idx, long val)
 +{
-+	if (ftrace_hash_empty(src))
-+		return EMPTY_HASH;
++	unsigned long *gvals = SHADOW_STACK_TASK_VARS(t->ret_stack);
 +
-+	return alloc_and_copy_ftrace_hash(src->size_bits, src);
++	gvals[idx] = val;
 +}
 +
-+/*
-+ * Append @new_hash entries to @hash:
-+ *
-+ *  If @hash is the EMPTY_HASH then it traces all functions and nothing
-+ *  needs to be done.
-+ *
-+ *  If @new_hash is the EMPTY_HASH, then make *hash the EMPTY_HASH so
-+ *  that it traces everything.
-+ *
-+ *  Otherwise, go through all of @new_hash and add anything that @hash
-+ *  doesn't already have, to @hash.
-+ *
-+ *  The filter_hash updates uses just the append_hash() function
-+ *  and the notrace_hash does not.
-+ */
-+static int append_hash(struct ftrace_hash **hash, struct ftrace_hash *new_hash)
++static unsigned long *
++ret_stack_get_task_var(struct task_struct *t, int idx)
 +{
-+	struct ftrace_func_entry *entry;
-+	int size;
-+	int i;
++	unsigned long *gvals = SHADOW_STACK_TASK_VARS(t->ret_stack);
 +
-+	/* An empty hash does everything */
-+	if (ftrace_hash_empty(*hash))
-+		return 0;
-+
-+	/* If new_hash has everything make hash have everything */
-+	if (ftrace_hash_empty(new_hash)) {
-+		free_ftrace_hash(*hash);
-+		*hash = EMPTY_HASH;
-+		return 0;
-+	}
-+
-+	size = 1 << new_hash->size_bits;
-+	for (i = 0; i < size; i++) {
-+		hlist_for_each_entry(entry, &new_hash->buckets[i], hlist) {
-+			/* Only add if not already in hash */
-+			if (!__ftrace_lookup_ip(*hash, entry->ip) &&
-+			    add_hash_entry(*hash, entry->ip) == NULL)
-+				return -ENOMEM;
-+		}
-+	}
-+	return 0;
++	return &gvals[idx];
 +}
 +
-+/*
-+ * Add to @hash only those that are in both @new_hash1 and @new_hash2
-+ *
-+ * The notrace_hash updates uses just the intersect_hash() function
-+ * and the filter_hash does not.
-+ */
-+static int intersect_hash(struct ftrace_hash **hash, struct ftrace_hash *new_hash1,
-+			  struct ftrace_hash *new_hash2)
++static void ret_stack_init_task_vars(unsigned long *ret_stack)
 +{
-+	struct ftrace_func_entry *entry;
-+	int size;
-+	int i;
++	unsigned long *gvals = SHADOW_STACK_TASK_VARS(ret_stack);
 +
-+	/*
-+	 * If new_hash1 or new_hash2 is the EMPTY_HASH then make the hash
-+	 * empty as well as empty for notrace means none are notraced.
-+	 */
-+	if (ftrace_hash_empty(new_hash1) || ftrace_hash_empty(new_hash2)) {
-+		free_ftrace_hash(*hash);
-+		*hash = EMPTY_HASH;
-+		return 0;
-+	}
-+
-+	size = 1 << new_hash1->size_bits;
-+	for (i = 0; i < size; i++) {
-+		hlist_for_each_entry(entry, &new_hash1->buckets[i], hlist) {
-+			/* Only add if in both @new_hash1 and @new_hash2 */
-+			if (__ftrace_lookup_ip(new_hash2, entry->ip) &&
-+			    add_hash_entry(*hash, entry->ip) == NULL)
-+				return -ENOMEM;
-+		}
-+	}
-+	/* If nothing intersects, make it the empty set */
-+	if (ftrace_hash_empty(*hash)) {
-+		free_ftrace_hash(*hash);
-+		*hash = EMPTY_HASH;
-+	}
-+	return 0;
-+}
-+
-+/* Return a new hash that has a union of all @ops->filter_hash entries */
-+static struct ftrace_hash *append_hashes(struct ftrace_ops *ops)
-+{
-+	struct ftrace_hash *new_hash;
-+	struct ftrace_ops *subops;
-+	int ret;
-+
-+	new_hash = alloc_ftrace_hash(ops->func_hash->filter_hash->size_bits);
-+	if (!new_hash)
-+		return NULL;
-+
-+	list_for_each_entry(subops, &ops->subop_list, list) {
-+		ret = append_hash(&new_hash, subops->func_hash->filter_hash);
-+		if (ret < 0) {
-+			free_ftrace_hash(new_hash);
-+			return NULL;
-+		}
-+		/* Nothing more to do if new_hash is empty */
-+		if (ftrace_hash_empty(new_hash))
-+			break;
-+	}
-+	return new_hash;
-+}
-+
-+/* Make @ops trace evenything except what all its subops do not trace */
-+static struct ftrace_hash *intersect_hashes(struct ftrace_ops *ops)
-+{
-+	struct ftrace_hash *new_hash = NULL;
-+	struct ftrace_ops *subops;
-+	int size_bits;
-+	int ret;
-+
-+	list_for_each_entry(subops, &ops->subop_list, list) {
-+		struct ftrace_hash *next_hash;
-+
-+		if (!new_hash) {
-+			size_bits = subops->func_hash->notrace_hash->size_bits;
-+			new_hash = alloc_and_copy_ftrace_hash(size_bits, ops->func_hash->notrace_hash);
-+			if (!new_hash)
-+				return NULL;
-+			continue;
-+		}
-+		size_bits = new_hash->size_bits;
-+		next_hash = new_hash;
-+		new_hash = alloc_ftrace_hash(size_bits);
-+		ret = intersect_hash(&new_hash, next_hash, subops->func_hash->notrace_hash);
-+		free_ftrace_hash(next_hash);
-+		if (ret < 0) {
-+			free_ftrace_hash(new_hash);
-+			return NULL;
-+		}
-+		/* Nothing more to do if new_hash is empty */
-+		if (ftrace_hash_empty(new_hash))
-+			break;
-+	}
-+	return new_hash;
-+}
-+
-+static bool ops_equal(struct ftrace_hash *A, struct ftrace_hash *B)
-+{
-+	struct ftrace_func_entry *entry;
-+	int size;
-+	int i;
-+
-+	if (ftrace_hash_empty(A))
-+		return ftrace_hash_empty(B);
-+
-+	if (ftrace_hash_empty(B))
-+		return ftrace_hash_empty(A);
-+
-+	if (A->count != B->count)
-+		return false;
-+
-+	size = 1 << A->size_bits;
-+	for (i = 0; i < size; i++) {
-+		hlist_for_each_entry(entry, &A->buckets[i], hlist) {
-+			if (!__ftrace_lookup_ip(B, entry->ip))
-+				return false;
-+		}
-+	}
-+
-+	return true;
-+}
-+
-+static int ftrace_hash_move_and_update_ops(struct ftrace_ops *ops,
-+					   struct ftrace_hash **orig_hash,
-+					   struct ftrace_hash *hash,
-+					   int enable);
-+
-+static int ftrace_update_ops(struct ftrace_ops *ops, struct ftrace_hash *filter_hash,
-+			     struct ftrace_hash *notrace_hash)
-+{
-+	int ret;
-+
-+	if (!ops_equal(filter_hash, ops->func_hash->filter_hash)) {
-+		ret = ftrace_hash_move_and_update_ops(ops, &ops->func_hash->filter_hash,
-+						      filter_hash, 1);
-+		if (ret < 0)
-+			return ret;
-+	}
-+
-+	if (!ops_equal(notrace_hash, ops->func_hash->notrace_hash)) {
-+		ret = ftrace_hash_move_and_update_ops(ops, &ops->func_hash->notrace_hash,
-+						      notrace_hash, 0);
-+		if (ret < 0)
-+			return ret;
-+	}
-+
-+	return 0;
++	memset(gvals, 0, sizeof(*gvals) * FGRAPH_ARRAY_SIZE);
 +}
 +
 +/**
-+ * ftrace_startup_subops - enable tracing for subops of an ops
-+ * @ops: Manager ops (used to pick all the functions of its subops)
-+ * @subops: A new ops to add to @ops
-+ * @command: Extra commands to use to enable tracing
++ * fgraph_get_task_var - retrieve a task specific state variable
++ * @gops: The ftrace_ops that owns the task specific variable
 + *
-+ * The @ops is a manager @ops that has the filter that includes all the functions
-+ * that its list of subops are tracing. Adding a new @subops will add the
-+ * functions of @subops to @ops.
++ * Every registered fgraph_ops has a task state variable
++ * reserved on the task's ret_stack. This function returns the
++ * address to that variable.
++ *
++ * Returns the address to the fgraph_ops @gops tasks specific
++ * unsigned long variable.
 + */
-+int ftrace_startup_subops(struct ftrace_ops *ops, struct ftrace_ops *subops, int command)
++unsigned long *fgraph_get_task_var(struct fgraph_ops *gops)
 +{
-+	struct ftrace_hash *filter_hash;
-+	struct ftrace_hash *notrace_hash;
-+	struct ftrace_hash *save_filter_hash;
-+	struct ftrace_hash *save_notrace_hash;
-+	int size_bits;
-+	int ret;
-+
-+	if (unlikely(ftrace_disabled))
-+		return -ENODEV;
-+
-+	ftrace_ops_init(ops);
-+	ftrace_ops_init(subops);
-+
-+	if (WARN_ON_ONCE(subops->flags & FTRACE_OPS_FL_ENABLED))
-+		return -EBUSY;
-+
-+	/* Make everything canonical (Just in case!) */
-+	if (!ops->func_hash->filter_hash)
-+		ops->func_hash->filter_hash = EMPTY_HASH;
-+	if (!ops->func_hash->notrace_hash)
-+		ops->func_hash->notrace_hash = EMPTY_HASH;
-+	if (!subops->func_hash->filter_hash)
-+		subops->func_hash->filter_hash = EMPTY_HASH;
-+	if (!subops->func_hash->notrace_hash)
-+		subops->func_hash->notrace_hash = EMPTY_HASH;
-+
-+	/* For the first subops to ops just enable it normally */
-+	if (list_empty(&ops->subop_list)) {
-+		/* Just use the subops hashes */
-+		filter_hash = copy_hash(subops->func_hash->filter_hash);
-+		notrace_hash = copy_hash(subops->func_hash->notrace_hash);
-+		if (!filter_hash || !notrace_hash) {
-+			free_ftrace_hash(filter_hash);
-+			free_ftrace_hash(notrace_hash);
-+			return -ENOMEM;
-+		}
-+
-+		save_filter_hash = ops->func_hash->filter_hash;
-+		save_notrace_hash = ops->func_hash->notrace_hash;
-+
-+		ops->func_hash->filter_hash = filter_hash;
-+		ops->func_hash->notrace_hash = notrace_hash;
-+		list_add(&subops->list, &ops->subop_list);
-+		ret = ftrace_startup(ops, command);
-+		if (ret < 0) {
-+			list_del(&subops->list);
-+			ops->func_hash->filter_hash = save_filter_hash;
-+			ops->func_hash->notrace_hash = save_notrace_hash;
-+			free_ftrace_hash(filter_hash);
-+			free_ftrace_hash(notrace_hash);
-+		} else {
-+			free_ftrace_hash(save_filter_hash);
-+			free_ftrace_hash(save_notrace_hash);
-+			subops->flags |= FTRACE_OPS_FL_ENABLED;
-+		}
-+		return ret;
-+	}
-+
-+	/*
-+	 * Here there's already something attached. Here are the rules:
-+	 *   o If either filter_hash is empty then the final stays empty
-+	 *      o Otherwise, the final is a superset of both hashes
-+	 *   o If either notrace_hash is empty then the final stays empty
-+	 *      o Otherwise, the final is an intersection between the hashes
-+	 */
-+	if (ftrace_hash_empty(ops->func_hash->filter_hash) ||
-+	    ftrace_hash_empty(subops->func_hash->filter_hash)) {
-+		filter_hash = EMPTY_HASH;
-+	} else {
-+		size_bits = max(ops->func_hash->filter_hash->size_bits,
-+				subops->func_hash->filter_hash->size_bits);
-+		filter_hash = alloc_and_copy_ftrace_hash(size_bits, ops->func_hash->filter_hash);
-+		if (!filter_hash)
-+			return -ENOMEM;
-+		ret = append_hash(&filter_hash, subops->func_hash->filter_hash);
-+		if (ret < 0) {
-+			free_ftrace_hash(filter_hash);
-+			return ret;
-+		}
-+	}
-+
-+	if (ftrace_hash_empty(ops->func_hash->notrace_hash) ||
-+	    ftrace_hash_empty(subops->func_hash->notrace_hash)) {
-+		notrace_hash = EMPTY_HASH;
-+	} else {
-+		size_bits = max(ops->func_hash->filter_hash->size_bits,
-+				subops->func_hash->filter_hash->size_bits);
-+		notrace_hash = alloc_ftrace_hash(size_bits);
-+		if (!notrace_hash) {
-+			free_ftrace_hash(filter_hash);
-+			return -ENOMEM;
-+		}
-+
-+		ret = intersect_hash(&notrace_hash, ops->func_hash->filter_hash,
-+				     subops->func_hash->filter_hash);
-+		if (ret < 0) {
-+			free_ftrace_hash(filter_hash);
-+			free_ftrace_hash(notrace_hash);
-+			return ret;
-+		}
-+	}
-+
-+	list_add(&subops->list, &ops->subop_list);
-+
-+	ret = ftrace_update_ops(ops, filter_hash, notrace_hash);
-+	free_ftrace_hash(filter_hash);
-+	free_ftrace_hash(notrace_hash);
-+	if (ret < 0)
-+		list_del(&subops->list);
-+	else
-+		subops->flags |= FTRACE_OPS_FL_ENABLED;
-+
-+	return ret;
++	return ret_stack_get_task_var(current, gops->idx);
 +}
 +
-+/**
-+ * ftrace_shutdown_subops - Remove a subops from a manager ops
-+ * @ops: A manager ops to remove @subops from
-+ * @subops: The subops to remove from @ops
-+ * @command: Any extra command flags to add to modifying the text
-+ *
-+ * Removes the functions being traced by the @subops from @ops. Note, it
-+ * will not affect functions that are being traced by other subops that
-+ * still exist in @ops.
-+ *
-+ * If the last subops is removed from @ops, then @ops is shutdown normally.
-+ */
-+int ftrace_shutdown_subops(struct ftrace_ops *ops, struct ftrace_ops *subops, int command)
+ /*
+  * @offset: The offset into @t->ret_stack to find the ret_stack entry
+  * @frame_offset: Where to place the offset into @t->ret_stack of that entry
+@@ -766,6 +816,7 @@ static int alloc_retstack_tasklist(unsigned long **ret_stack_list)
+ 
+ 		if (t->ret_stack == NULL) {
+ 			atomic_set(&t->trace_overrun, 0);
++			ret_stack_init_task_vars(ret_stack_list[start]);
+ 			t->curr_ret_stack = 0;
+ 			t->curr_ret_depth = -1;
+ 			/* Make sure the tasks see the 0 first: */
+@@ -826,6 +877,7 @@ static void
+ graph_init_task(struct task_struct *t, unsigned long *ret_stack)
+ {
+ 	atomic_set(&t->trace_overrun, 0);
++	ret_stack_init_task_vars(ret_stack);
+ 	t->ftrace_timestamp = 0;
+ 	t->curr_ret_stack = 0;
+ 	t->curr_ret_depth = -1;
+@@ -959,6 +1011,24 @@ static int start_graph_tracing(void)
+ 	return ret;
+ }
+ 
++static void init_task_vars(int idx)
 +{
-+	struct ftrace_hash *filter_hash;
-+	struct ftrace_hash *notrace_hash;
-+	int ret;
++	struct task_struct *g, *t;
++	int cpu;
 +
-+	if (unlikely(ftrace_disabled))
-+		return -ENODEV;
-+
-+	if (WARN_ON_ONCE(!(subops->flags & FTRACE_OPS_FL_ENABLED)))
-+		return -EINVAL;
-+
-+	list_del(&subops->list);
-+
-+	if (list_empty(&ops->subop_list)) {
-+		/* Last one, just disable the current ops */
-+
-+		ret = ftrace_shutdown(ops, command);
-+		if (ret < 0) {
-+			list_add(&subops->list, &ops->subop_list);
-+			return ret;
-+		}
-+
-+		subops->flags &= ~FTRACE_OPS_FL_ENABLED;
-+
-+		free_ftrace_hash(ops->func_hash->filter_hash);
-+		free_ftrace_hash(ops->func_hash->notrace_hash);
-+		ops->func_hash->filter_hash = EMPTY_HASH;
-+		ops->func_hash->notrace_hash = EMPTY_HASH;
-+
-+		return 0;
++	for_each_online_cpu(cpu) {
++		if (idle_task(cpu)->ret_stack)
++			ret_stack_set_task_var(idle_task(cpu), idx, 0);
 +	}
 +
-+	/* Rebuild the hashes without subops */
-+	filter_hash = append_hashes(ops);
-+	notrace_hash = intersect_hashes(ops);
-+	if (!filter_hash || !notrace_hash) {
-+		free_ftrace_hash(filter_hash);
-+		free_ftrace_hash(notrace_hash);
-+		list_add(&subops->list, &ops->subop_list);
-+		return -ENOMEM;
++	read_lock(&tasklist_lock);
++	for_each_process_thread(g, t) {
++		if (t->ret_stack)
++			ret_stack_set_task_var(t, idx, 0);
 +	}
-+
-+	ret = ftrace_update_ops(ops, filter_hash, notrace_hash);
-+	if (ret < 0)
-+		list_add(&subops->list, &ops->subop_list);
-+	else
-+		subops->flags &= ~FTRACE_OPS_FL_ENABLED;
-+
-+	free_ftrace_hash(filter_hash);
-+	free_ftrace_hash(notrace_hash);
-+	return ret;
++	read_unlock(&tasklist_lock);
 +}
 +
- static u64		ftrace_update_time;
- unsigned long		ftrace_update_tot_cnt;
- unsigned long		ftrace_number_of_pages;
-diff --git a/kernel/trace/ftrace_internal.h b/kernel/trace/ftrace_internal.h
-index 19eddcb91584..cdfd12c44ab4 100644
---- a/kernel/trace/ftrace_internal.h
-+++ b/kernel/trace/ftrace_internal.h
-@@ -15,6 +15,7 @@ extern struct ftrace_ops global_ops;
- int ftrace_startup(struct ftrace_ops *ops, int command);
- int ftrace_shutdown(struct ftrace_ops *ops, int command);
- int ftrace_ops_test(struct ftrace_ops *ops, unsigned long ip, void *regs);
-+int ftrace_shutdown_subops(struct ftrace_ops *ops, struct ftrace_ops *subops, int command);
+ int register_ftrace_graph(struct fgraph_ops *gops)
+ {
+ 	int command = 0;
+@@ -997,6 +1067,8 @@ int register_ftrace_graph(struct fgraph_ops *gops)
+ 		ftrace_graph_return = return_run;
+ 		ftrace_graph_entry = entry_run;
+ 		command = FTRACE_START_FUNC_RET;
++	} else {
++		init_task_vars(gops->idx);
+ 	}
  
- #else /* !CONFIG_DYNAMIC_FTRACE */
- 
-diff --git a/kernel/trace/trace.h b/kernel/trace/trace.h
-index a5070f9b977b..9a70beb2cc46 100644
---- a/kernel/trace/trace.h
-+++ b/kernel/trace/trace.h
-@@ -1136,6 +1136,7 @@ extern int ftrace_set_filter(struct ftrace_ops *ops, unsigned char *buf,
- 			     int len, int reset);
- extern int ftrace_set_notrace(struct ftrace_ops *ops, unsigned char *buf,
- 			      int len, int reset);
-+extern int ftrace_startup_subops(struct ftrace_ops *ops, struct ftrace_ops *subops, int command);
- #else
- struct ftrace_func_command;
- 
+ 	/* Always save the function, and reset at unregistering */
 -- 
 2.43.0
 
