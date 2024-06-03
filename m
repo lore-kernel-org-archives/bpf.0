@@ -1,165 +1,432 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7C57139568;
-	Mon,  3 Jun 2024 18:56:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83B82137923;
+	Mon,  3 Jun 2024 19:07:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717440990; cv=none; b=ri0mX0RRVy4vzOgDWr+tFwIx3q3XpuXT8/vgPiXmIqCbZ6dxYrGHcHJvCJC3HQM6iBW/YVhRnY2t1HqfNUBUJJ5a59zaPcGYrd106K9cN7TtdMi+7nJ73WeBLc03+kTRatWVM79NPuKvLq9ShE7oofUVKx7ygmQnWQxBDx7RacI=
+	t=1717441630; cv=none; b=Bctr+NJ0B2dyLJ5o6VgquTzkRV8UqNzK6/DlbJZrVXemkzYJPRc7Ar4+w0yOpudMh2BSKxl/QYZujQktckNTpcBjk5D7uK87vAbSWw5a1ptL4h/3fFQpEfynCUMiqr7KTA3Q1EhqezBHnJEn1KsB1DgYvKgVBDjcEkEEVs7aEaY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717440990; c=relaxed/simple;
-	bh=mQUeynsA1hCoLIuqXaZMidYcSSx7+hiPX4gB4B5Gzxc=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To; b=BeJyBNVe+GZUVYbpCTikK+vDc01rPJrPEo9ZPPfYh/wzb375w0swd36izf3JBL494Uthx8nCuPTgJPTMWcyPCYGJgzghoK/mtNYwCTpEnucylelh5gjtCLccgas477zHPd+mkVKli0R7Eq1AgsAbOjF04xwq3ps/STOyuFjPW98=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IFOI3/OU; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IFOI3/OU"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40310C2BD10;
-	Mon,  3 Jun 2024 18:56:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1717440989;
-	bh=mQUeynsA1hCoLIuqXaZMidYcSSx7+hiPX4gB4B5Gzxc=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:From;
-	b=IFOI3/OUiur+QsHtc/r94fWKtsR/eV5g7H6lneT+e8Q6UGHWjG7VzprEPHZwzw0zF
-	 ww0VmfJoWXQfc6FCQMeTeeyrsfuTvJhEsFuOPL6p35jzp0IgEPJEV4qm73aaUrOpGx
-	 fC1l6Dyj0AEc+YWWIsdgr4g2fGCi12XJS3Vf6hT6ULEkLMjaZUrmdabaF72vyKoZxU
-	 yi04hMmPlrrkle2UK1PzKO9oV/2V8Y1db8hfz5iyOs579XcJnO0Zajp4rA/5nbJ8tK
-	 UjYE/igET+Aw+ZEvxuGwjh5CKP9IxavCTk1E9q+TBGo5rHkXbM3kpDLKucKndBwV8a
-	 w3eo8Q99kG26w==
-Date: Mon, 3 Jun 2024 13:56:27 -0500
-From: Bjorn Helgaas <helgaas@kernel.org>
-To: Frank Li <Frank.li@nxp.com>
-Cc: Robin Murphy <robin.murphy@arm.com>, Richard Zhu <hongxing.zhu@nxp.com>,
-	Lucas Stach <l.stach@pengutronix.de>,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-	Rob Herring <robh@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
-	Shawn Guo <shawnguo@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>,
-	NXP Linux Team <linux-imx@nxp.com>,
-	Philipp Zabel <p.zabel@pengutronix.de>,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	Mark Brown <broonie@kernel.org>,
-	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>, linux-pci@vger.kernel.org,
-	imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-	devicetree@vger.kernel.org, Will Deacon <will@kernel.org>,
-	Joerg Roedel <joro@8bytes.org>, Jason Gunthorpe <jgg@ziepe.ca>,
-	Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-	Marc Zyngier <maz@kernel.org>
-Subject: Re: [PATCH v5 08/12] PCI: imx6: Config look up table(LUT) to support
- MSI ITS and IOMMU for i.MX95
-Message-ID: <20240603185627.GA687746@bhelgaas>
+	s=arc-20240116; t=1717441630; c=relaxed/simple;
+	bh=gYmnuxroUnKcPJEbo40Fe17qNPPlV/8BKIflXLRQpJg=;
+	h=Message-ID:Date:From:To:Cc:Subject:References:MIME-Version:
+	 Content-Type; b=Vgr7OVs/RrguIkZsjFgQfnKA/YcGSuuOPBoUZPDBP7g5RlOCNmfkyV0Vnh/rtVMtvfH9z38MtDaAX+PBPvBVceyg4UNygoFPn5S1is9U9bXtari7khpcROhYnO1CayPsjev1hq0JQydY3KfXUc3Ulm4T7t0kTRCwWBJ6WevTKzs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42CD7C32786;
+	Mon,  3 Jun 2024 19:07:10 +0000 (UTC)
+Received: from rostedt by gandalf with local (Exim 4.97)
+	(envelope-from <rostedt@goodmis.org>)
+	id 1sED2b-00000009TmW-0t2L;
+	Mon, 03 Jun 2024 15:08:21 -0400
+Message-ID: <20240603190821.073111754@goodmis.org>
+User-Agent: quilt/0.68
+Date: Mon, 03 Jun 2024 15:07:05 -0400
+From: Steven Rostedt <rostedt@goodmis.org>
+To: linux-kernel@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org
+Cc: Masami Hiramatsu <mhiramat@kernel.org>,
+ Mark Rutland <mark.rutland@arm.com>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+ Florent Revest <revest@chromium.org>,
+ Martin KaFai Lau <martin.lau@linux.dev>,
+ bpf <bpf@vger.kernel.org>,
+ Sven Schnelle <svens@linux.ibm.com>,
+ Alexei Starovoitov <ast@kernel.org>,
+ Jiri Olsa <jolsa@kernel.org>,
+ Arnaldo Carvalho de Melo <acme@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>,
+ Alan Maguire <alan.maguire@oracle.com>,
+ Peter Zijlstra <peterz@infradead.org>,
+ Thomas Gleixner <tglx@linutronix.de>,
+ Guo Ren <guoren@kernel.org>
+Subject: [PATCH v3 01/27] function_graph: Convert ret_stack to a series of longs
+References: <20240603190704.663840775@goodmis.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Zl4OpTfcfqMHELiX@lizhi-Precision-Tower-5810>
+Content-Type: text/plain; charset=UTF-8
 
-On Mon, Jun 03, 2024 at 02:42:45PM -0400, Frank Li wrote:
-> On Mon, Jun 03, 2024 at 12:19:21PM -0500, Bjorn Helgaas wrote:
-> > On Fri, May 31, 2024 at 03:58:49PM +0100, Robin Murphy wrote:
-> > > On 2024-05-31 12:08 am, Bjorn Helgaas wrote:
-> > > > [+cc IOMMU and pcie-apple.c folks for comment]
-> > > > 
-> > > > On Tue, May 28, 2024 at 03:39:21PM -0400, Frank Li wrote:
-> > > > > For the i.MX95, configuration of a LUT is necessary to convert Bus Device
-> > > > > Function (BDF) to stream IDs, which are utilized by both IOMMU and ITS.
-> > > > > This involves examining the msi-map and smmu-map to ensure consistent
-> > > > > mapping of PCI BDF to the same stream IDs. Subsequently, LUT-related
-> > > > > registers are configured. In the absence of an msi-map, the built-in MSI
-> > > > > controller is utilized as a fallback.
-> > > > > 
-> > > > > Additionally, register a PCI bus notifier to trigger imx_pcie_add_device()
-> > > > > upon the appearance of a new PCI device and when the bus is an iMX6 PCI
-> > > > > controller. This function configures the correct LUT based on Device Tree
-> > > > > Settings (DTS).
-> > > > 
-> > > > This scheme is pretty similar to apple_pcie_bus_notifier().  If we
-> > > > have to do this, I wish it were *more* similar, i.e., copy the
-> > > > function names, bitmap tracking, code structure, etc.
-> > > > 
-> > > > I don't really know how stream IDs work, but I assume they are used on
-> > > > most or all arm64 platforms, so I'm a little surprised that of all the
-> > > > PCI host drivers used on arm64, only pcie-apple.c and pci-imx6.c need
-> > > > this notifier.
-> > > 
-> > > This is one of those things that's mostly at the mercy of the PCIe root
-> > > complex implementation. Typically the SMMU StreamID and/or GIC ITS DeviceID
-> > > is derived directly from the PCI RID, sometimes with additional high-order
-> > > bits hard-wired to disambiguate PCI segments. I believe this RID-translation
-> > > LUT is a particular feature of the the Synopsys IP - I know there's also one
-> > > on the NXP Layerscape platforms, but on those it's programmed by the
-> > > bootloader, which also generates the appropriate "msi-map" and "iommu-map"
-> > > properties to match. Ideally that's what i.MX should do as well, but hey.
-> > 
-> > Maybe this RID-translation is a feature of i.MX, not of Synopsys?  I
-> > see that the LUT CSR accesses use IMX95_* definitions.
-> 
-> Yes, it convert 16bit RID to 6bit stream id.
+From: "Steven Rostedt (VMware)" <rostedt@goodmis.org>
 
-IIUC, you're saying this is not a Synopsys feature, it's an i.MX
-feature.
+In order to make it possible to have multiple callbacks registered with the
+function_graph tracer, the retstack needs to be converted from an array of
+ftrace_ret_stack structures to an array of longs. This will allow to store
+the list of callbacks on the stack for the return side of the functions.
 
-> > > If it's really necessary to do this programming from Linux, then there's
-> > > still no point in it being dynamic - the mappings cannot ever change, since
-> > > the rest of the kernel believes that what the DT said at boot time was
-> > > already a property of the hardware. It would be a lot more logical, and
-> > > likely simpler, for the driver to just read the relevant map property and
-> > > program the entire LUT to match, all in one go at controller probe time.
-> > > Rather like what's already commonly done with the parsing of "dma-ranges" to
-> > > program address-translation LUTs for inbound windows.
-> > > 
-> > > Plus that would also give a chance of safely dealing with bad DTs specifying
-> > > invalid ID mappings (by refusing to probe at all). As it is, returning an
-> > > error from a child's BUS_NOTIFY_ADD_DEVICE does nothing except prevent any
-> > > further notifiers from running at that point - the device will still be
-> > > added, allowed to bind a driver, and able to start sending DMA/MSI traffic
-> > > without the controller being correctly programmed, which at best won't work
-> > > and at worst may break the whole system.
-> > 
-> > Frank, could the imx LUT be programmed once at boot-time instead of at
-> > device-add time?  I'm guessing maybe not because apparently there is a
-> > risk of running out of LUT entries?
-> 
-> It is not good idea to depend on boot loader so much.
+Link: https://lore.kernel.org/linux-trace-kernel/171509092742.162236.4427737821399314856.stgit@devnote2
 
-I meant "could this be programmed once when the Linux imx host
-controller driver is probed?"  But from the below, it sounds like
-that's not possible in general because you don't have enough stream
-IDs to do that.
+Signed-off-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
+Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+---
+ include/linux/sched.h |   2 +-
+ kernel/trace/fgraph.c | 136 +++++++++++++++++++++++++-----------------
+ 2 files changed, 83 insertions(+), 55 deletions(-)
 
-> Some hot plug devics
-> (SD7.0) may plug after system boot. Two PCIe instances shared one set
-> of 6bits stream id (total 64). Assume total 16 assign to two PCIe
-> controllers. each have 8 stream id. If use uboot assign it static, each
-> PCIe controller have below 8 devices.  It will be failrue one controller
-> connect 7, another connect 9. but if dynamtic alloc when devices add, both
-> controller can work.
-> 
-> Although we have not so much devices now,  this way give us possility to
-> improve it in future.
-> 
-> > It sounds like the consequences of running out of LUT entries are
-> > catastrophic, e.g., memory corruption from mis-directed DMA?  If
-> > that's possible, I think we need to figure out how to prevent the
-> > device from being used, not just dev_warn() about it.
-> 
-> Yes, but so far, we have not met such problem now. We can improve it when
-> we really face such problem.
+diff --git a/include/linux/sched.h b/include/linux/sched.h
+index 61591ac6eab6..352939dab3a5 100644
+--- a/include/linux/sched.h
++++ b/include/linux/sched.h
+@@ -1402,7 +1402,7 @@ struct task_struct {
+ 	int				curr_ret_depth;
+ 
+ 	/* Stack of return addresses for return function tracing: */
+-	struct ftrace_ret_stack		*ret_stack;
++	unsigned long			*ret_stack;
+ 
+ 	/* Timestamp for last schedule: */
+ 	unsigned long long		ftrace_timestamp;
+diff --git a/kernel/trace/fgraph.c b/kernel/trace/fgraph.c
+index a130b2d898f7..c62e6db718a0 100644
+--- a/kernel/trace/fgraph.c
++++ b/kernel/trace/fgraph.c
+@@ -25,6 +25,30 @@
+ #define ASSIGN_OPS_HASH(opsname, val)
+ #endif
+ 
++/*
++ * FGRAPH_FRAME_SIZE:	Size in bytes of the meta data on the shadow stack
++ * FGRAPH_FRAME_OFFSET:	Size in long words of the meta data frame
++ * SHADOW_STACK_SIZE:	The size in bytes of the entire shadow stack
++ * SHADOW_STACK_OFFSET:	The size in long words of the shadow stack
++ * SHADOW_STACK_MAX_OFFSET: The max offset of the stack for a new frame to be added
++ */
++#define FGRAPH_FRAME_SIZE	sizeof(struct ftrace_ret_stack)
++#define FGRAPH_FRAME_OFFSET	(ALIGN(FGRAPH_FRAME_SIZE, sizeof(long)) / sizeof(long))
++#define SHADOW_STACK_SIZE (PAGE_SIZE)
++#define SHADOW_STACK_OFFSET			\
++	(ALIGN(SHADOW_STACK_SIZE, sizeof(long)) / sizeof(long))
++/* Leave on a buffer at the end */
++#define SHADOW_STACK_MAX_INDEX (SHADOW_STACK_OFFSET - FGRAPH_FRAME_OFFSET)
++
++/*
++ * RET_STACK():		Return the frame from a given @offset from task @t
++ * RET_STACK_INC():	Reserve one frame size on the stack.
++ * RET_STACK_DEC():	Remove one frame size from the stack.
++ */
++#define RET_STACK(t, index) ((struct ftrace_ret_stack *)(&(t)->ret_stack[index]))
++#define RET_STACK_INC(c) ({ c += FGRAPH_FRAME_OFFSET; })
++#define RET_STACK_DEC(c) ({ c -= FGRAPH_FRAME_OFFSET; })
++
+ DEFINE_STATIC_KEY_FALSE(kill_ftrace_graph);
+ int ftrace_graph_active;
+ 
+@@ -69,6 +93,7 @@ static int
+ ftrace_push_return_trace(unsigned long ret, unsigned long func,
+ 			 unsigned long frame_pointer, unsigned long *retp)
+ {
++	struct ftrace_ret_stack *ret_stack;
+ 	unsigned long long calltime;
+ 	int index;
+ 
+@@ -85,23 +110,25 @@ ftrace_push_return_trace(unsigned long ret, unsigned long func,
+ 	smp_rmb();
+ 
+ 	/* The return trace stack is full */
+-	if (current->curr_ret_stack == FTRACE_RETFUNC_DEPTH - 1) {
++	if (current->curr_ret_stack >= SHADOW_STACK_MAX_INDEX) {
+ 		atomic_inc(&current->trace_overrun);
+ 		return -EBUSY;
+ 	}
+ 
+ 	calltime = trace_clock_local();
+ 
+-	index = ++current->curr_ret_stack;
++	index = current->curr_ret_stack;
++	RET_STACK_INC(current->curr_ret_stack);
++	ret_stack = RET_STACK(current, index);
+ 	barrier();
+-	current->ret_stack[index].ret = ret;
+-	current->ret_stack[index].func = func;
+-	current->ret_stack[index].calltime = calltime;
++	ret_stack->ret = ret;
++	ret_stack->func = func;
++	ret_stack->calltime = calltime;
+ #ifdef HAVE_FUNCTION_GRAPH_FP_TEST
+-	current->ret_stack[index].fp = frame_pointer;
++	ret_stack->fp = frame_pointer;
+ #endif
+ #ifdef HAVE_FUNCTION_GRAPH_RET_ADDR_PTR
+-	current->ret_stack[index].retp = retp;
++	ret_stack->retp = retp;
+ #endif
+ 	return 0;
+ }
+@@ -137,7 +164,7 @@ int function_graph_enter(unsigned long ret, unsigned long func,
+ 
+ 	return 0;
+  out_ret:
+-	current->curr_ret_stack--;
++	RET_STACK_DEC(current->curr_ret_stack);
+  out:
+ 	current->curr_ret_depth--;
+ 	return -EBUSY;
+@@ -148,11 +175,13 @@ static void
+ ftrace_pop_return_trace(struct ftrace_graph_ret *trace, unsigned long *ret,
+ 			unsigned long frame_pointer)
+ {
++	struct ftrace_ret_stack *ret_stack;
+ 	int index;
+ 
+ 	index = current->curr_ret_stack;
++	RET_STACK_DEC(index);
+ 
+-	if (unlikely(index < 0 || index >= FTRACE_RETFUNC_DEPTH)) {
++	if (unlikely(index < 0 || index > SHADOW_STACK_MAX_INDEX)) {
+ 		ftrace_graph_stop();
+ 		WARN_ON(1);
+ 		/* Might as well panic, otherwise we have no where to go */
+@@ -160,6 +189,7 @@ ftrace_pop_return_trace(struct ftrace_graph_ret *trace, unsigned long *ret,
+ 		return;
+ 	}
+ 
++	ret_stack = RET_STACK(current, index);
+ #ifdef HAVE_FUNCTION_GRAPH_FP_TEST
+ 	/*
+ 	 * The arch may choose to record the frame pointer used
+@@ -175,22 +205,22 @@ ftrace_pop_return_trace(struct ftrace_graph_ret *trace, unsigned long *ret,
+ 	 * Note, -mfentry does not use frame pointers, and this test
+ 	 *  is not needed if CC_USING_FENTRY is set.
+ 	 */
+-	if (unlikely(current->ret_stack[index].fp != frame_pointer)) {
++	if (unlikely(ret_stack->fp != frame_pointer)) {
+ 		ftrace_graph_stop();
+ 		WARN(1, "Bad frame pointer: expected %lx, received %lx\n"
+ 		     "  from func %ps return to %lx\n",
+ 		     current->ret_stack[index].fp,
+ 		     frame_pointer,
+-		     (void *)current->ret_stack[index].func,
+-		     current->ret_stack[index].ret);
++		     (void *)ret_stack->func,
++		     ret_stack->ret);
+ 		*ret = (unsigned long)panic;
+ 		return;
+ 	}
+ #endif
+ 
+-	*ret = current->ret_stack[index].ret;
+-	trace->func = current->ret_stack[index].func;
+-	trace->calltime = current->ret_stack[index].calltime;
++	*ret = ret_stack->ret;
++	trace->func = ret_stack->func;
++	trace->calltime = ret_stack->calltime;
+ 	trace->overrun = atomic_read(&current->trace_overrun);
+ 	trace->depth = current->curr_ret_depth--;
+ 	/*
+@@ -251,7 +281,7 @@ static unsigned long __ftrace_return_to_handler(struct fgraph_ret_regs *ret_regs
+ 	 * curr_ret_stack is after that.
+ 	 */
+ 	barrier();
+-	current->curr_ret_stack--;
++	RET_STACK_DEC(current->curr_ret_stack);
+ 
+ 	if (unlikely(!ret)) {
+ 		ftrace_graph_stop();
+@@ -294,12 +324,13 @@ unsigned long ftrace_return_to_handler(unsigned long frame_pointer)
+ struct ftrace_ret_stack *
+ ftrace_graph_get_ret_stack(struct task_struct *task, int idx)
+ {
+-	idx = task->curr_ret_stack - idx;
++	int index = task->curr_ret_stack;
+ 
+-	if (idx >= 0 && idx <= task->curr_ret_stack)
+-		return &task->ret_stack[idx];
++	index -= FGRAPH_FRAME_OFFSET * (idx + 1);
++	if (index < 0)
++		return NULL;
+ 
+-	return NULL;
++	return RET_STACK(task, index);
+ }
+ 
+ /**
+@@ -321,18 +352,20 @@ ftrace_graph_get_ret_stack(struct task_struct *task, int idx)
+ unsigned long ftrace_graph_ret_addr(struct task_struct *task, int *idx,
+ 				    unsigned long ret, unsigned long *retp)
+ {
++	struct ftrace_ret_stack *ret_stack;
+ 	int index = task->curr_ret_stack;
+ 	int i;
+ 
+ 	if (ret != (unsigned long)dereference_kernel_function_descriptor(return_to_handler))
+ 		return ret;
+ 
+-	if (index < 0)
+-		return ret;
++	RET_STACK_DEC(index);
+ 
+-	for (i = 0; i <= index; i++)
+-		if (task->ret_stack[i].retp == retp)
+-			return task->ret_stack[i].ret;
++	for (i = index; i >= 0; RET_STACK_DEC(i)) {
++		ret_stack = RET_STACK(task, i);
++		if (ret_stack->retp == retp)
++			return ret_stack->ret;
++	}
+ 
+ 	return ret;
+ }
+@@ -346,14 +379,15 @@ unsigned long ftrace_graph_ret_addr(struct task_struct *task, int *idx,
+ 		return ret;
+ 
+ 	task_idx = task->curr_ret_stack;
++	RET_STACK_DEC(task_idx);
+ 
+ 	if (!task->ret_stack || task_idx < *idx)
+ 		return ret;
+ 
+ 	task_idx -= *idx;
+-	(*idx)++;
++	RET_STACK_INC(*idx);
+ 
+-	return task->ret_stack[task_idx].ret;
++	return RET_STACK(task, task_idx);
+ }
+ #endif /* HAVE_FUNCTION_GRAPH_RET_ADDR_PTR */
+ 
+@@ -391,7 +425,7 @@ trace_func_graph_ent_t ftrace_graph_entry = ftrace_graph_entry_stub;
+ static trace_func_graph_ent_t __ftrace_graph_entry = ftrace_graph_entry_stub;
+ 
+ /* Try to assign a return stack array on FTRACE_RETSTACK_ALLOC_SIZE tasks. */
+-static int alloc_retstack_tasklist(struct ftrace_ret_stack **ret_stack_list)
++static int alloc_retstack_tasklist(unsigned long **ret_stack_list)
+ {
+ 	int i;
+ 	int ret = 0;
+@@ -399,10 +433,7 @@ static int alloc_retstack_tasklist(struct ftrace_ret_stack **ret_stack_list)
+ 	struct task_struct *g, *t;
+ 
+ 	for (i = 0; i < FTRACE_RETSTACK_ALLOC_SIZE; i++) {
+-		ret_stack_list[i] =
+-			kmalloc_array(FTRACE_RETFUNC_DEPTH,
+-				      sizeof(struct ftrace_ret_stack),
+-				      GFP_KERNEL);
++		ret_stack_list[i] = kmalloc(SHADOW_STACK_SIZE, GFP_KERNEL);
+ 		if (!ret_stack_list[i]) {
+ 			start = 0;
+ 			end = i;
+@@ -420,9 +451,9 @@ static int alloc_retstack_tasklist(struct ftrace_ret_stack **ret_stack_list)
+ 
+ 		if (t->ret_stack == NULL) {
+ 			atomic_set(&t->trace_overrun, 0);
+-			t->curr_ret_stack = -1;
++			t->curr_ret_stack = 0;
+ 			t->curr_ret_depth = -1;
+-			/* Make sure the tasks see the -1 first: */
++			/* Make sure the tasks see the 0 first: */
+ 			smp_wmb();
+ 			t->ret_stack = ret_stack_list[start++];
+ 		}
+@@ -442,6 +473,7 @@ ftrace_graph_probe_sched_switch(void *ignore, bool preempt,
+ 				struct task_struct *next,
+ 				unsigned int prev_state)
+ {
++	struct ftrace_ret_stack *ret_stack;
+ 	unsigned long long timestamp;
+ 	int index;
+ 
+@@ -466,8 +498,11 @@ ftrace_graph_probe_sched_switch(void *ignore, bool preempt,
+ 	 */
+ 	timestamp -= next->ftrace_timestamp;
+ 
+-	for (index = next->curr_ret_stack; index >= 0; index--)
+-		next->ret_stack[index].calltime += timestamp;
++	for (index = next->curr_ret_stack - FGRAPH_FRAME_OFFSET; index >= 0; ) {
++		ret_stack = RET_STACK(next, index);
++		ret_stack->calltime += timestamp;
++		index -= FGRAPH_FRAME_OFFSET;
++	}
+ }
+ 
+ static int ftrace_graph_entry_test(struct ftrace_graph_ent *trace)
+@@ -510,10 +545,10 @@ void update_function_graph_func(void)
+ 		ftrace_graph_entry = __ftrace_graph_entry;
+ }
+ 
+-static DEFINE_PER_CPU(struct ftrace_ret_stack *, idle_ret_stack);
++static DEFINE_PER_CPU(unsigned long *, idle_ret_stack);
+ 
+ static void
+-graph_init_task(struct task_struct *t, struct ftrace_ret_stack *ret_stack)
++graph_init_task(struct task_struct *t, unsigned long *ret_stack)
+ {
+ 	atomic_set(&t->trace_overrun, 0);
+ 	t->ftrace_timestamp = 0;
+@@ -528,7 +563,7 @@ graph_init_task(struct task_struct *t, struct ftrace_ret_stack *ret_stack)
+  */
+ void ftrace_graph_init_idle_task(struct task_struct *t, int cpu)
+ {
+-	t->curr_ret_stack = -1;
++	t->curr_ret_stack = 0;
+ 	t->curr_ret_depth = -1;
+ 	/*
+ 	 * The idle task has no parent, it either has its own
+@@ -538,14 +573,11 @@ void ftrace_graph_init_idle_task(struct task_struct *t, int cpu)
+ 		WARN_ON(t->ret_stack != per_cpu(idle_ret_stack, cpu));
+ 
+ 	if (ftrace_graph_active) {
+-		struct ftrace_ret_stack *ret_stack;
++		unsigned long *ret_stack;
+ 
+ 		ret_stack = per_cpu(idle_ret_stack, cpu);
+ 		if (!ret_stack) {
+-			ret_stack =
+-				kmalloc_array(FTRACE_RETFUNC_DEPTH,
+-					      sizeof(struct ftrace_ret_stack),
+-					      GFP_KERNEL);
++			ret_stack = kmalloc(SHADOW_STACK_SIZE, GFP_KERNEL);
+ 			if (!ret_stack)
+ 				return;
+ 			per_cpu(idle_ret_stack, cpu) = ret_stack;
+@@ -559,15 +591,13 @@ void ftrace_graph_init_task(struct task_struct *t)
+ {
+ 	/* Make sure we do not use the parent ret_stack */
+ 	t->ret_stack = NULL;
+-	t->curr_ret_stack = -1;
++	t->curr_ret_stack = 0;
+ 	t->curr_ret_depth = -1;
+ 
+ 	if (ftrace_graph_active) {
+-		struct ftrace_ret_stack *ret_stack;
++		unsigned long *ret_stack;
+ 
+-		ret_stack = kmalloc_array(FTRACE_RETFUNC_DEPTH,
+-					  sizeof(struct ftrace_ret_stack),
+-					  GFP_KERNEL);
++		ret_stack = kmalloc(SHADOW_STACK_SIZE, GFP_KERNEL);
+ 		if (!ret_stack)
+ 			return;
+ 		graph_init_task(t, ret_stack);
+@@ -576,7 +606,7 @@ void ftrace_graph_init_task(struct task_struct *t)
+ 
+ void ftrace_graph_exit_task(struct task_struct *t)
+ {
+-	struct ftrace_ret_stack	*ret_stack = t->ret_stack;
++	unsigned long *ret_stack = t->ret_stack;
+ 
+ 	t->ret_stack = NULL;
+ 	/* NULL must become visible to IRQs before we free it: */
+@@ -588,12 +618,10 @@ void ftrace_graph_exit_task(struct task_struct *t)
+ /* Allocate a return stack for each task */
+ static int start_graph_tracing(void)
+ {
+-	struct ftrace_ret_stack **ret_stack_list;
++	unsigned long **ret_stack_list;
+ 	int ret, cpu;
+ 
+-	ret_stack_list = kmalloc_array(FTRACE_RETSTACK_ALLOC_SIZE,
+-				       sizeof(struct ftrace_ret_stack *),
+-				       GFP_KERNEL);
++	ret_stack_list = kmalloc(SHADOW_STACK_SIZE, GFP_KERNEL);
+ 
+ 	if (!ret_stack_list)
+ 		return -ENOMEM;
+-- 
+2.43.0
 
-If this controller can only support DMA from a limited number of
-endpoints below it, I think we should figure out how to enforce that
-directly.  Maybe we can prevent drivers from enabling bus mastering or
-something.  I'm not happy with the idea of waiting for and debugging a
-report of data corruption.
 
-Bjorn
