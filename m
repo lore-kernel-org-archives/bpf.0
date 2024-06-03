@@ -1,64 +1,80 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3F76B65F;
-	Mon,  3 Jun 2024 15:06:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28A6B2566;
+	Mon,  3 Jun 2024 15:10:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717427204; cv=none; b=bIK3OLEV29eTIuTrqnx/TGlQWZsWHSxKWcT2a98WaNMMAi2+pRWmx4O5yqvxB/rcCyyV7IEXHLils9hDrwMqFJB/0+v1VN/uuKgYafBPjYYpqFlCmVhmWTN/7mmQCcByF4ECr4mWjJujYPNKmIziOeyBCiaecLgXBpcxL2Q1fZw=
+	t=1717427429; cv=none; b=ZvWkmpOgYUjJwGgZpPRxW2wPV6rnroHNZ1TvctlQy0ujiJy+e2eujf9xlktDjbIMm/kjdgAuqeQQu1UXX+Hm3tXR0999no5oz83gQRO50FXKpDf2DOq+iocRvmiUJOqbnnv9nUpwTd2mW1/Gtbexu/DkeOh3xMVt9a8lU4ciFPA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717427204; c=relaxed/simple;
-	bh=iUbp+NolNrOyeGaLe38w93IfAyLn+xoITcXsa+1tWFs=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=RsObjngHzkVN2KmG9jXos8dyUkh1Nw4ETMTC+R5HSiegZO97iWVygsVKgmGJa+nyuzp2jioOipC/PS76wo1y9nxqD2v6eMAs9ZBVYA0m45rPuRCnXA2Nkjd0xmqsEpa22ArkT5Q307GbQLJ6d9tr3cSZ4zL8b7p3EDyEKVHtDeo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78388C2BD10;
-	Mon,  3 Jun 2024 15:06:42 +0000 (UTC)
-Date: Mon, 3 Jun 2024 11:07:52 -0400
-From: Steven Rostedt <rostedt@goodmis.org>
-To: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-Cc: linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, Mark
- Rutland <mark.rutland@arm.com>, Mathieu Desnoyers
- <mathieu.desnoyers@efficios.com>, Andrew Morton
- <akpm@linux-foundation.org>, Alexei Starovoitov
- <alexei.starovoitov@gmail.com>, Florent Revest <revest@chromium.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, bpf <bpf@vger.kernel.org>, Sven
- Schnelle <svens@linux.ibm.com>, Alexei Starovoitov <ast@kernel.org>, Jiri
- Olsa <jolsa@kernel.org>, Arnaldo Carvalho de Melo <acme@kernel.org>, Daniel
- Borkmann <daniel@iogearbox.net>, Alan Maguire <alan.maguire@oracle.com>,
- Peter Zijlstra <peterz@infradead.org>, Thomas Gleixner
- <tglx@linutronix.de>, Guo Ren <guoren@kernel.org>
-Subject: Re: [PATCH v2 24/27] function_graph: Use static_call and branch to
- optimize entry function
-Message-ID: <20240603110752.6b722aac@gandalf.local.home>
-In-Reply-To: <20240603110018.1cdd6746@gandalf.local.home>
-References: <20240602033744.563858532@goodmis.org>
-	<20240602033834.997761817@goodmis.org>
-	<20240603121107.42f98858ebb790805f75c9b1@kernel.org>
-	<20240603110018.1cdd6746@gandalf.local.home>
-X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1717427429; c=relaxed/simple;
+	bh=GlNOvuQUEAdDAvBr6ZbKOOB9bgYoYbx3+leL6mWg5h8=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=m09D97HOy1hVtAHUZQfI/QrLEDo/3PxhVBDHAmmo8im8jCX3lEBRoa/XPkcrgrD5pamA6ZaZnXKTfForUNhemu+EPO2OGNXhd98sW+aHyx6cdFvmozMpLDNh/96BxvgIObMr7mCopo1wsVr3XJ16bDbfIWnBKfM+ltSdnKOOkrY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tr8drdox; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tr8drdox"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 9C149C4AF07;
+	Mon,  3 Jun 2024 15:10:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1717427428;
+	bh=GlNOvuQUEAdDAvBr6ZbKOOB9bgYoYbx3+leL6mWg5h8=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=tr8drdoxFouaCbs7cc9FMdaaJLkzs7Z+gGB54fjJATuiTzZcJq/Tajpze+U+MGgOF
+	 17uMMAYQQnqX8LsBxQxSBXf4qGt3osRynrKjf2DjH05ZejSyXgWrmSa580SWW1RVVW
+	 JsOcJtUTdVgV7r0wHHfmTVY9GGoBN7zFVUavES7Hn2WXE6+inlNlnLZse/OlZ9D4Bh
+	 5kBFIdp428lpSULzVhlwFChRoZ8eNL7FhxbZWhwtEcCv3n3wOcKAY24eTm3vKO8WFm
+	 h0yxnuJz/aLuWn84LyzreCzjVEhBHnzZwIcYa9T42QTUKqKbgjlrV2RdBbrVQVwZNr
+	 FPAZa7a2twAug==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 82B06C43617;
+	Mon,  3 Jun 2024 15:10:28 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] bpf, devmap: Remove unnecessary if check in for loop
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <171742742853.507.2337578817446243881.git-patchwork-notify@kernel.org>
+Date: Mon, 03 Jun 2024 15:10:28 +0000
+References: <20240529101900.103913-2-thorsten.blum@toblux.com>
+In-Reply-To: <20240529101900.103913-2-thorsten.blum@toblux.com>
+To: Thorsten Blum <thorsten.blum@toblux.com>
+Cc: ast@kernel.org, daniel@iogearbox.net, davem@davemloft.net,
+ kuba@kernel.org, hawk@kernel.org, john.fastabend@gmail.com,
+ andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
+ yonghong.song@linux.dev, kpsingh@kernel.org, sdf@google.com,
+ haoluo@google.com, jolsa@kernel.org, netdev@vger.kernel.org,
+ bpf@vger.kernel.org, linux-kernel@vger.kernel.org
 
-On Mon, 3 Jun 2024 11:00:18 -0400
-Steven Rostedt <rostedt@goodmis.org> wrote:
+Hello:
 
-> Yes, but that gets a bit complex, and requires the changing of all archs.
-> If it starts to become a problem, I rather add that as a feature. That is,
-> we can always go back to it. But for now, lets keep the complexity down.
+This patch was applied to bpf/bpf.git (master)
+by Daniel Borkmann <daniel@iogearbox.net>:
 
-And if we were to go the route of calling a single fgraph_ops caller, I
-would want it choreographed with ftrace, such that the direct caller calls
-a different fgraph function only if it has only one graph caller on it and
-the fgraph loop function if a function has more than one. Just like the
-ftrace code does.
+On Wed, 29 May 2024 12:19:01 +0200 you wrote:
+> The iterator variable dst cannot be NULL and the if check can be
+> removed.
+> 
+> Remove it and fix the following Coccinelle/coccicheck warning reported
+> by itnull.cocci:
+> 
+> 	ERROR: iterator variable bound on line 762 cannot be NULL
+> 
+> [...]
 
-If we are going to go that route, let's do it right.
+Here is the summary with links:
+  - bpf, devmap: Remove unnecessary if check in for loop
+    https://git.kernel.org/bpf/bpf/c/2317dc2c22cc
 
--- Steve
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
