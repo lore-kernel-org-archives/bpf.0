@@ -1,152 +1,151 @@
-Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
+Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A619129E8E;
-	Mon,  3 Jun 2024 12:16:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83A56286A6;
+	Mon,  3 Jun 2024 12:52:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717417016; cv=none; b=h7QVtPP9DbPlRmGFsW7UWceqq1qvGc1auDaTMQYB0y6mi+H0SDTlCtAh/VqYNCAl7k8JLKXAfRvT/J/wodZ2O2WkryoPN7Sn4WVzkaiI9AgorH+G3nhB0fm6YbWQqqLWquBXxrubMfPN1Pp+elb8zvhUkLXXOIY+h3aPd5CUIVk=
+	t=1717419162; cv=none; b=hBrB8hbcAPmq+hF/yGCDQfxmNLa9t6Ynw6rz+kFGpJD8Rtf9Qk6ftm2HNE34uoU41r5m4vjeuIrlSDGN5PWL8SLZOb6tJOaemJaw/F0WW4mGi2nffMZY9BDo6kKi44z/u/kqn3fZWKKnHMwIepuFgi5+/qxsqzd7oGai4ZJCJoQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717417016; c=relaxed/simple;
-	bh=gAwp8yYUnceVBn5scRDmLBn983/3nY5FUXQpnAfxA4I=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=jaDUCjZGsfwatOBpQOmLAPsDFch1e4DWbkZWo1OYHy1fFymV95OGPTarXXPq2SBsxHdk1jwm8LLfc93ZZG9fg1/aqragURlFAxcgvEQqvO4Tqb7qBC02warCr++IU+osK2p6P8DofbZ+mgzWd3fGpPrXIc+FamfN16DwsbUb8kA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ezy40xEY; arc=none smtp.client-ip=209.85.214.176
+	s=arc-20240116; t=1717419162; c=relaxed/simple;
+	bh=RQVuKO8KsmnX+HwIJQMFQ5nya3BRk3afvXUxYEj9As8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=JzCP0Y8JsADxqLjwPxQgrU/i+cKAnGqcPnDN2IsPm8nyjFCoq/3nzWNdJbTofF8MaPfESkHko30A+bkF27tIYu+5qN5ZPynRR24ITNlzM2VKWD2MFoOW1okzQ+klUIxZr70fmyq9ckz0Cxsa9Rvwx6amXryvMtU8wRTgJabQ9IE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TDNXqg0d; arc=none smtp.client-ip=209.85.208.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ezy40xEY"
-Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-1f480624d0fso31811415ad.1;
-        Mon, 03 Jun 2024 05:16:54 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TDNXqg0d"
+Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-57a1fe63947so3594221a12.1;
+        Mon, 03 Jun 2024 05:52:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1717417014; x=1718021814; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=dV9DumgWigNz8izFoAXbyFQWDVcRbsgIhRa9w5EE8so=;
-        b=Ezy40xEYPaFhezMeejSvFt2kZ+MgZYhbDIyuKQV+vZsJIYR2Vt+qlVTSjOi92h28gS
-         6HH2bYiqEAH75hlGgr/VkDnKj59r2iTmbW6h/3rIZ8OczCwuMP/BciHeTDXIwu1YGYUU
-         3ShiXRoTVB9WmtClWh1ejp+ISa4Cqc4JtsEMT9PmdNkag8u5HUSpVRl1EBH7q9Zzuthd
-         MmFVlw5S55Q/TZAoEFk0WMUCUuALbT0Kx81LIHNtgfAhOlmOdawgW8PokhKz4uVX/K5L
-         b2YW6/Yft/Gw6256jpwEJckiM+iRHbuqtvLNy0JLatvFf7tPSNAI7vRJErXcQ4K1329W
-         u/qg==
+        d=gmail.com; s=20230601; t=1717419159; x=1718023959; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=yfniF8fjsy176YDZGpwH9nU2UAljfW8YFG1uj+a6gnk=;
+        b=TDNXqg0dX/3loM6vbYTEyr1NEGurqH87sB+5Oad9YsQO8kzzevhnRIRepwpE7gcsTD
+         e35nWwMYzenHkE5RIg/I3W++ZCaUWmCHDc1PYl8lKDIvH83bHoZYpGMASE03KWWrSjji
+         CjyrVXtKVNa7ohmdSp8PJQPjpdJzHNBGK4rUgrNIwizcuiq7I0JxYEIdqWHlzdo0/+sD
+         m/0PtAF1kQlVSAjGBJK8iuo/OnY04hxEm+FLtW3zpw3TIH9jYpFgBSJ2faayxzSEB1xe
+         uMfTNgUHmWmwXabtHngny8PAph91C3UmTyfTr7thPkahB2ma8jCLC4QZGgwTjvsohHff
+         xwqQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717417014; x=1718021814;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=dV9DumgWigNz8izFoAXbyFQWDVcRbsgIhRa9w5EE8so=;
-        b=kh4Rul2Rx+2JK/bHppAL4AjuGJ7V0cpQXGwbvBOf5uZgPZ279nz4/nOd0y42Mi76Zn
-         Ht9bxHm8retdGu4lpebSWiKkdSHxz0moatwcHqc7AjdV3ULiee7zXclBuwPptJp7JjI+
-         JU5nahtcOCIONrO/o6SeqvcgcclYxen6NXze7EHv6q/1jsd5PkaD2Tj7rClhYh6QfihE
-         sH/ONPQMxp/GrqBR89QlBg72vFz/n23/jGvtxngI/7cd/C2i1qiz+SZmu/LZVvYVE6Zj
-         45wabiVagrfcgQo6buR5NNchqV7Bbeq0+HyHR6PdR9GYiAUi8Fqyyi4c3UIRft+AY7E4
-         qauA==
-X-Forwarded-Encrypted: i=1; AJvYcCWL1PJxPjF8FJbeh9821nplamOHt7ZY7qNhmg4v/G0FNAVSqbY3K/d7ozPmSLO0VqTjp1muD3307hM0NQ6TmLXumjsd2hJ+
-X-Gm-Message-State: AOJu0YwUZXcUGIv/4bwUaNZKPViLWa+UR+Qljs1ADwLTz06LLN10tcUQ
-	lNGaq5P5Ihnu3jWFRAvyPH59YywWtneOFFmrjiYFbI2pjm9Mx/1SFDHIRnOj
-X-Google-Smtp-Source: AGHT+IGdxb+vI/H6XZG0Ofw/pjF/mGH+P4AD2GKh7+hySgsW8eiq5miB/tAJIU7b2PA+6FyFrFVPxw==
-X-Received: by 2002:a17:90a:e00a:b0:2bd:fa57:b35c with SMTP id 98e67ed59e1d1-2c1dc590a25mr7119648a91.28.1717417013620;
-        Mon, 03 Jun 2024 05:16:53 -0700 (PDT)
-Received: from localhost.localdomain (69-172-146-21.cable.teksavvy.com. [69.172.146.21])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2c1a776f526sm8340820a91.13.2024.06.03.05.16.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Jun 2024 05:16:53 -0700 (PDT)
-From: Tony Ambardar <tony.ambardar@gmail.com>
-X-Google-Original-From: Tony Ambardar <Tony.Ambardar@gmail.com>
-To: bpf@vger.kernel.org
-Cc: Tony Ambardar <Tony.Ambardar@gmail.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@google.com>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	kernel test robot <lkp@intel.com>,
-	stable@vger.kernel.org
-Subject: [PATCH bpf v1 2/2] bpf: Harden __bpf_kfunc tag against linker kfunc removal
-Date: Mon,  3 Jun 2024 05:16:44 -0700
-Message-Id: <5ed38a5ed9e30232682ac9a57a9ca4bc0a1b9bd3.1717413886.git.Tony.Ambardar@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <cover.1717413886.git.Tony.Ambardar@gmail.com>
-References: <Zl2GtXy7+Xfr66lX@kodidev-ubuntu> <cover.1717413886.git.Tony.Ambardar@gmail.com>
+        d=1e100.net; s=20230601; t=1717419159; x=1718023959;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=yfniF8fjsy176YDZGpwH9nU2UAljfW8YFG1uj+a6gnk=;
+        b=u25CydszaufKfcB2/I18ZPBtqNFaIDHz1T5R9Q2Kl0Ki7T4ZKAwNzj/M5BmKD3XmCb
+         LmtTcQJKVBOXA49Q/G6C6y4FUKUlASPF79RaoLFt8v17VdN20SmptVaGVsJF3TOAL0oX
+         fZSJkRm/+oVbp2nD6Isk75sUcCqFhB5aMfWyECMu6Z9I80+ZCxvNhv9km4Qg1BF3gkQF
+         9PGsEi6DZPKeLST8SsdTU7sj0/nE7aLPsze1TmdxCT4Oi3QwUPoEN5L++3HMkEmd5mQ7
+         dQf+ZacAe324iygpFgq+2XCbCq21I+/uAhhpIzYAFfqjUCuhh0WogjstPHndOY4G7lRv
+         770g==
+X-Forwarded-Encrypted: i=1; AJvYcCWxw9rRkDB0Ogq5peLF4uM8jksb5/RtXSVu8ITqP2Etf3tLyGu+DWlW1dC+Zz2kGkoshPRsqdqePi/0fqen2YacgddH3J5glwTMXdAhjdX/agIuDjMAWLo+VY81ypL4Jt4VtnFmH/q2obWvnxz4gs0ZjwkfUrzb7Zc7fEf0eFs5YY+ab+is2zHMVlvRUNFllAoN493jnbwkorxZVc2+fG4+biCgDD3mS/Ln+w3YHUzN2q2TGVo+sgWVfkmAgYLL+njjpwQKCuIQgMMc4q+bq4l2I8yGuEQ2uTvZQG5pOX2kTlXr3OD266ValHOnniLgQlQP2pVwxa2g7Ae5Ci4WFavLWY5RbC6xgkyt/ThfdA54olLUvmuAUVgwUgGfYPZixx/GdoWPfsVf4rqEBizzCenvpeQFgLcrYpFzOkCfwEH6pd92OUltjgem5zpPQJIw0NxAKaAic4Ejs8SDNzSuHJH8jFoPJbApd6sOfZboxmIZJDYYoIQHBiEyWNSRRbwhxZx+zYD9OQ==
+X-Gm-Message-State: AOJu0YyMk7f/HGvHRoBNrtTmSTQhhL7dLdBoe3vGrkHSQvcZCq+G46QV
+	Ptgn7ehM2OwFl+HGMzvZWG329x/hS0LtTkpQ6wvQ7HDPTBfowNCy0NeWUGFe
+X-Google-Smtp-Source: AGHT+IHWekmH9nbBwxtAyBA3aP0bAtq3ZvyaOoiHlV8Yt/cXh+LsKG2d/23Eymxd3zWFCpXjqiJUYw==
+X-Received: by 2002:a50:9b19:0:b0:56e:238e:372c with SMTP id 4fb4d7f45d1cf-57a3653a3d7mr5229810a12.26.1717419158381;
+        Mon, 03 Jun 2024 05:52:38 -0700 (PDT)
+Received: from [192.168.42.59] ([163.114.131.193])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-57a31b990easm5173294a12.6.2024.06.03.05.52.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 03 Jun 2024 05:52:38 -0700 (PDT)
+Message-ID: <fb8fd578-96b8-45b9-b6a9-fe407157122f@gmail.com>
+Date: Mon, 3 Jun 2024 13:52:41 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v10 01/14] netdev: add netdev_rx_queue_restart()
+To: Mina Almasry <almasrymina@google.com>, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
+ linux-parisc@vger.kernel.org, sparclinux@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+ bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org
+Cc: "David S. Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>, Donald Hunter <donald.hunter@gmail.com>,
+ Jonathan Corbet <corbet@lwn.net>,
+ Richard Henderson <richard.henderson@linaro.org>,
+ Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner
+ <mattst88@gmail.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+ "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+ Helge Deller <deller@gmx.de>, Andreas Larsson <andreas@gaisler.com>,
+ Jesper Dangaard Brouer <hawk@kernel.org>,
+ Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+ Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
+ <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
+ <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Steffen Klassert
+ <steffen.klassert@secunet.com>, Herbert Xu <herbert@gondor.apana.org.au>,
+ David Ahern <dsahern@kernel.org>,
+ Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+ Shuah Khan <shuah@kernel.org>, Sumit Semwal <sumit.semwal@linaro.org>,
+ =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+ David Wei <dw@davidwei.uk>, Jason Gunthorpe <jgg@ziepe.ca>,
+ Yunsheng Lin <linyunsheng@huawei.com>, Shailend Chand <shailend@google.com>,
+ Harshitha Ramamurthy <hramamurthy@google.com>,
+ Shakeel Butt <shakeel.butt@linux.dev>, Jeroen de Borst
+ <jeroendb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>
+References: <20240530201616.1316526-1-almasrymina@google.com>
+ <20240530201616.1316526-2-almasrymina@google.com>
+Content-Language: en-US
+From: Pavel Begunkov <asml.silence@gmail.com>
+In-Reply-To: <20240530201616.1316526-2-almasrymina@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-BPF kfuncs are often not directly referenced and may be inadvertently
-removed by optimization steps during kernel builds, thus the __bpf_kfunc
-tag mitigates against this removal by including the __used macro. However,
-this macro alone does not prevent removal during linking, and may still
-yield build warnings (e.g. on mips64el):
+On 5/30/24 21:16, Mina Almasry wrote:
+> Add netdev_rx_queue_restart() function to netdev_rx_queue.h
+> 
+> Signed-off-by: David Wei <dw@davidwei.uk>
+> Signed-off-by: Mina Almasry <almasrymina@google.com>
+> 
+> ---
+...
+> diff --git a/net/core/netdev_rx_queue.c b/net/core/netdev_rx_queue.c
+> new file mode 100644
+> index 0000000000000..b3899358e5a9c
+> --- /dev/null
+> +++ b/net/core/netdev_rx_queue.c
+> @@ -0,0 +1,74 @@
+> +// SPDX-License-Identifier: GPL-2.0-or-later
+> +
+> +#include <linux/netdevice.h>
+> +#include <net/netdev_queues.h>
+> +#include <net/netdev_rx_queue.h>
+> +
+> +int netdev_rx_queue_restart(struct net_device *dev, unsigned int rxq_idx)
+> +{
+> +	void *new_mem, *old_mem;
+> +	int err;
 
-    LD      vmlinux
-    BTFIDS  vmlinux
-  WARN: resolve_btfids: unresolved symbol bpf_verify_pkcs7_signature
-  WARN: resolve_btfids: unresolved symbol bpf_lookup_user_key
-  WARN: resolve_btfids: unresolved symbol bpf_lookup_system_key
-  WARN: resolve_btfids: unresolved symbol bpf_key_put
-  WARN: resolve_btfids: unresolved symbol bpf_iter_task_next
-  WARN: resolve_btfids: unresolved symbol bpf_iter_css_task_new
-  WARN: resolve_btfids: unresolved symbol bpf_get_file_xattr
-  WARN: resolve_btfids: unresolved symbol bpf_ct_insert_entry
-  WARN: resolve_btfids: unresolved symbol bpf_cgroup_release
-  WARN: resolve_btfids: unresolved symbol bpf_cgroup_from_id
-  WARN: resolve_btfids: unresolved symbol bpf_cgroup_acquire
-  WARN: resolve_btfids: unresolved symbol bpf_arena_free_pages
-    NM      System.map
-    SORTTAB vmlinux
-    OBJCOPY vmlinux.32
+I believe it should also do:
 
-Update the __bpf_kfunc tag to better guard against linker optimization by
-including the new __retain compiler macro, which fixes the warnings above.
+if (!dev->queue_mgmt_ops)
+	return -EOPNOTSUPP;
 
-Verify the __retain macro with readelf by checking object flags for 'R':
+> +
+> +	if (!dev->queue_mgmt_ops->ndo_queue_stop ||
+> +	    !dev->queue_mgmt_ops->ndo_queue_mem_free ||
+> +	    !dev->queue_mgmt_ops->ndo_queue_mem_alloc ||
+> +	    !dev->queue_mgmt_ops->ndo_queue_start)
+> +		return -EOPNOTSUPP;
+> +
+> +	DEBUG_NET_WARN_ON_ONCE(!rtnl_is_locked());
 
-  $ readelf -Wa kernel/trace/bpf_trace.o
-  Section Headers:
-    [Nr]  Name              Type     Address  Off  Size ES Flg Lk Inf Al
-  ...
-    [178] .text.bpf_key_put PROGBITS 00000000 6420 0050 00 AXR  0   0  8
-  ...
-  Key to Flags:
-  ...
-    R (retain), D (mbind), p (processor specific)
-
-Link: https://lore.kernel.org/bpf/ZlmGoT9KiYLZd91S@krava/T/
-Reported-by: kernel test robot <lkp@intel.com>
-Closes: https://lore.kernel.org/r/202401211357.OCX9yllM-lkp@intel.com/
-Fixes: 57e7c169cd6a ("bpf: Add __bpf_kfunc tag for marking kernel functions as kfuncs")
-Cc: stable@vger.kernel.org # v6.6+
-Signed-off-by: Tony Ambardar <Tony.Ambardar@gmail.com>
----
- include/linux/btf.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/include/linux/btf.h b/include/linux/btf.h
-index f9e56fd12a9f..7c3e40c3295e 100644
---- a/include/linux/btf.h
-+++ b/include/linux/btf.h
-@@ -82,7 +82,7 @@
-  * as to avoid issues such as the compiler inlining or eliding either a static
-  * kfunc, or a global kfunc in an LTO build.
-  */
--#define __bpf_kfunc __used noinline
-+#define __bpf_kfunc __used __retain noinline
- 
- #define __bpf_kfunc_start_defs()					       \
- 	__diag_push();							       \
 -- 
-2.34.1
-
+Pavel Begunkov
