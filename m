@@ -1,26 +1,26 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E7C414A633;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A87914B07A;
 	Tue,  4 Jun 2024 14:42:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717512139; cv=none; b=fLRG1SLSRgd7RDoe6wygd012KF7rLk8W0SNEkKJzAoJF4tdLueLVdUpk7XXwAX+yknjjbfD1yRLS9nZPOFl/m8n3YHyw1bgPx+iJEg/65SB/BQrUHXWGrAvgexmXyQIMALGqTemofm1Bv2Xe48LJSKmLyFiP480P/5b3kKoYVLU=
+	t=1717512140; cv=none; b=pjuQoygkiThCidezu3OdRNfEJZdyaEVkJrsuCSXpdM4+CsvspQLp4Fw6dAhXrePe3g5LMianro8Q+RfTIP/kRNsqfxqhR2tQEyXZxF32sG4rwekq0Z/ZKPm9cRVEtJDlFqgxtAvMLGv6hdrvLFdyDHkAOfdetg84L3hg3Jjxcrw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717512139; c=relaxed/simple;
-	bh=72PZE7jo4rhH6rkropdR1LoNIVfrBlRAv33/Lvh0aFw=;
+	s=arc-20240116; t=1717512140; c=relaxed/simple;
+	bh=395fk8BtpJ1/aVzTVpOcPZBJz0c012Ont4Ro29hIzqw=;
 	h=Message-ID:Date:From:To:Cc:Subject:References:MIME-Version:
-	 Content-Type; b=g360FhPNeouxj7qJnUqsO0nVu5HwjHjcFWkABQFPsM4COUN6qRzzV7jQ3BSVPmFNkCPZkgWEy4u/2OfdlcnfH5OhKnKlThwneoU8E/w75lIVkUny8qprHILSjUbKlj+oe7NXU8ABR1q62B9kW2gX4zNzrgtsW7qDvB142BNDQE0=
+	 Content-Type; b=Kxy/Tw4DSbmO5YNvR1ThR8Wp856z0Q1lBelPBDu0dHiKpBdu4OBGSLHorkMgjEnM3MbYK+fEplICI2KMtrrCLri5hUOwEoKI+e9Xsnfw7FGFUUjlYUgAOLOLIHssQNlVVBFCFuxqzWxGqIbAOvcuPtv7O+81/lc5/AI1QV87d0g=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8829CC32786;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15406C4AF10;
 	Tue,  4 Jun 2024 14:42:19 +0000 (UTC)
 Received: from rostedt by gandalf with local (Exim 4.97)
 	(envelope-from <rostedt@goodmis.org>)
-	id 1sEVMg-00000000Z6V-1wl4;
+	id 1sEVMg-00000000Z5V-0ajs;
 	Tue, 04 Jun 2024 10:42:18 -0400
-Message-ID: <20240604144218.325348498@goodmis.org>
+Message-ID: <20240604144218.003617145@goodmis.org>
 User-Agent: quilt/0.68
-Date: Tue, 04 Jun 2024 10:41:30 -0400
+Date: Tue, 04 Jun 2024 10:41:28 -0400
 From: Steven Rostedt <rostedt@goodmis.org>
 To: linux-kernel@vger.kernel.org
 Cc: Masami Hiramatsu <mhiramat@kernel.org>,
@@ -40,7 +40,8 @@ Cc: Masami Hiramatsu <mhiramat@kernel.org>,
  Peter Zijlstra <peterz@infradead.org>,
  Thomas Gleixner <tglx@linutronix.de>,
  Guo Ren <guoren@kernel.org>
-Subject: [for-next][PATCH 27/27] selftests/ftrace: Add fgraph-multi.tc test
+Subject: [for-next][PATCH 25/27] function_graph: Use static_call and branch to optimize return
+ function
 References: <20240604144103.293353991@goodmis.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -52,11 +53,16 @@ Content-Type: text/plain; charset=UTF-8
 
 From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
 
-Add a test that creates 3 instances and enables function_graph tracer in
-each as well as the top instance, where each will enable a filter (but one
-that traces all functions) and check that they are filtering properly.
+In most cases function graph is used by a single user. Instead of calling
+a loop to call function graph callbacks in this case, call the function
+return callback directly.
 
-Link: https://lore.kernel.org/linux-trace-kernel/20240603190825.252845939@goodmis.org
+Use the static_key that is set when the function graph tracer has less
+than 2 callbacks registered. It will do the direct call in that case, and
+will do the loop over all callers when there are 2 or more callbacks
+registered.
+
+Link: https://lore.kernel.org/linux-trace-kernel/20240603190824.921460797@goodmis.org
 
 Cc: Masami Hiramatsu <mhiramat@kernel.org>
 Cc: Mark Rutland <mark.rutland@arm.com>
@@ -78,119 +84,77 @@ Cc: Guo Ren <guoren@kernel.org>
 Reviewed-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 ---
- .../ftrace/test.d/ftrace/fgraph-multi.tc      | 103 ++++++++++++++++++
- 1 file changed, 103 insertions(+)
- create mode 100644 tools/testing/selftests/ftrace/test.d/ftrace/fgraph-multi.tc
+ kernel/trace/fgraph.c | 23 ++++++++++++++++++-----
+ 1 file changed, 18 insertions(+), 5 deletions(-)
 
-diff --git a/tools/testing/selftests/ftrace/test.d/ftrace/fgraph-multi.tc b/tools/testing/selftests/ftrace/test.d/ftrace/fgraph-multi.tc
-new file mode 100644
-index 000000000000..ff88f97e41fb
---- /dev/null
-+++ b/tools/testing/selftests/ftrace/test.d/ftrace/fgraph-multi.tc
-@@ -0,0 +1,103 @@
-+#!/bin/sh
-+# SPDX-License-Identifier: GPL-2.0
-+# description: ftrace - function graph filters
-+# requires: set_ftrace_filter function_graph:tracer
-+
-+# Make sure that function graph filtering works
-+
-+INSTANCE1="instances/test1_$$"
-+INSTANCE2="instances/test2_$$"
-+INSTANCE3="instances/test3_$$"
-+
-+WD=`pwd`
-+
-+do_reset() {
-+    cd $WD
-+    if [ -d $INSTANCE1 ]; then
-+	echo nop > $INSTANCE1/current_tracer
-+	rmdir $INSTANCE1
-+    fi
-+    if [ -d $INSTANCE2 ]; then
-+	echo nop > $INSTANCE2/current_tracer
-+	rmdir $INSTANCE2
-+    fi
-+    if [ -d $INSTANCE3 ]; then
-+	echo nop > $INSTANCE3/current_tracer
-+	rmdir $INSTANCE3
-+    fi
-+}
-+
-+mkdir $INSTANCE1
-+if ! grep -q function_graph $INSTANCE1/available_tracers; then
-+    echo "function_graph not allowed with instances"
-+    rmdir $INSTANCE1
-+    exit_unsupported
-+fi
-+
-+mkdir $INSTANCE2
-+mkdir $INSTANCE3
-+
-+fail() { # msg
-+    do_reset
-+    echo $1
-+    exit_fail
-+}
-+
-+disable_tracing
-+clear_trace
-+
-+do_test() {
-+    REGEX=$1
-+    TEST=$2
-+
-+    # filter something, schedule is always good
-+    if ! echo "$REGEX" > set_ftrace_filter; then
-+	fail "can not enable filter $REGEX"
-+    fi
-+
-+    echo > trace
-+    echo function_graph > current_tracer
-+    enable_tracing
-+    sleep 1
-+    # search for functions (has "{" or ";" on the line)
-+    echo 0 > tracing_on
-+    count=`cat trace | grep -v '^#' | grep -e '{' -e ';' | grep -v "$TEST" | wc -l`
-+    echo 1 > tracing_on
-+    if [ $count -ne 0 ]; then
-+	fail "Graph filtering not working by itself against $TEST?"
-+    fi
-+
-+    # Make sure we did find something
-+    echo 0 > tracing_on
-+    count=`cat trace | grep -v '^#' | grep -e '{' -e ';' | grep "$TEST" | wc -l`
-+    echo 1 > tracing_on
-+    if [ $count -eq 0 ]; then
-+	fail "No traces found with $TEST?"
-+    fi
-+}
-+
-+do_test '*sched*' 'sched'
-+cd $INSTANCE1
-+do_test '*lock*' 'lock'
-+cd $WD
-+cd $INSTANCE2
-+do_test '*rcu*' 'rcu'
-+cd $WD
-+cd $INSTANCE3
-+echo function_graph > current_tracer
-+
-+sleep 1
-+count=`cat trace | grep -v '^#' | grep -e '{' -e ';' | grep "$TEST" | wc -l`
-+if [ $count -eq 0 ]; then
-+    fail "No traces found with all tracing?"
-+fi
-+
-+cd $WD
-+echo nop > current_tracer
-+echo nop > $INSTANCE1/current_tracer
-+echo nop > $INSTANCE2/current_tracer
-+echo nop > $INSTANCE3/current_tracer
-+
-+do_reset
-+
-+exit 0
+diff --git a/kernel/trace/fgraph.c b/kernel/trace/fgraph.c
+index 7c3b0261b1bb..4bf91eebbb08 100644
+--- a/kernel/trace/fgraph.c
++++ b/kernel/trace/fgraph.c
+@@ -514,6 +514,7 @@ static struct fgraph_ops fgraph_stub = {
+ 
+ static struct fgraph_ops *fgraph_direct_gops = &fgraph_stub;
+ DEFINE_STATIC_CALL(fgraph_func, ftrace_graph_entry_stub);
++DEFINE_STATIC_CALL(fgraph_retfunc, ftrace_graph_ret_stub);
+ DEFINE_STATIC_KEY_TRUE(fgraph_do_direct);
+ 
+ /**
+@@ -808,13 +809,21 @@ static unsigned long __ftrace_return_to_handler(struct fgraph_ret_regs *ret_regs
+ 
+ 	bitmap = get_bitmap_bits(current, offset);
+ 
+-	for_each_set_bit(i, &bitmap, sizeof(bitmap) * BITS_PER_BYTE) {
+-		struct fgraph_ops *gops = fgraph_array[i];
++#ifdef CONFIG_HAVE_STATIC_CALL
++	if (static_branch_likely(&fgraph_do_direct)) {
++		if (test_bit(fgraph_direct_gops->idx, &bitmap))
++			static_call(fgraph_retfunc)(&trace, fgraph_direct_gops);
++	} else
++#endif
++	{
++		for_each_set_bit(i, &bitmap, sizeof(bitmap) * BITS_PER_BYTE) {
++			struct fgraph_ops *gops = fgraph_array[i];
+ 
+-		if (gops == &fgraph_stub)
+-			continue;
++			if (gops == &fgraph_stub)
++				continue;
+ 
+-		gops->retfunc(&trace, gops);
++			gops->retfunc(&trace, gops);
++		}
+ 	}
+ 
+ 	/*
+@@ -1232,17 +1241,20 @@ static void init_task_vars(int idx)
+ static void ftrace_graph_enable_direct(bool enable_branch)
+ {
+ 	trace_func_graph_ent_t func = NULL;
++	trace_func_graph_ret_t retfunc = NULL;
+ 	int i;
+ 
+ 	for_each_set_bit(i, &fgraph_array_bitmask,
+ 			 sizeof(fgraph_array_bitmask) * BITS_PER_BYTE) {
+ 		func = fgraph_array[i]->entryfunc;
++		retfunc = fgraph_array[i]->retfunc;
+ 		fgraph_direct_gops = fgraph_array[i];
+ 	 }
+ 	if (WARN_ON_ONCE(!func))
+ 		return;
+ 
+ 	static_call_update(fgraph_func, func);
++	static_call_update(fgraph_retfunc, retfunc);
+ 	if (enable_branch)
+ 		static_branch_disable(&fgraph_do_direct);
+ }
+@@ -1252,6 +1264,7 @@ static void ftrace_graph_disable_direct(bool disable_branch)
+ 	if (disable_branch)
+ 		static_branch_disable(&fgraph_do_direct);
+ 	static_call_update(fgraph_func, ftrace_graph_entry_stub);
++	static_call_update(fgraph_retfunc, ftrace_graph_ret_stub);
+ 	fgraph_direct_gops = &fgraph_stub;
+ }
+ 
 -- 
 2.43.0
 
