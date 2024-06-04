@@ -1,26 +1,26 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E90E614A4D2;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B74514A4DD;
 	Tue,  4 Jun 2024 14:42:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717512139; cv=none; b=V65BHnEpejLQh5HmS5NigVAdbdrFnsmGIPis0BScprhKurXMQ5WbLI40UilVpET49AfMjfutMo7DfqeBAWf9JnY9zxWDzsiksR6+PQ6SX1Df4yGHcLSrYKa2ASucMyyTa5a/HisOSxSDt/4yLHj/nPpYNklldMS2Qbk7n0F+Yss=
+	t=1717512139; cv=none; b=CI7XWnsPcPKqSe1CDW7yYsQqtngSYIIE3bALhSo/nKEDrPHR/HbPIcxjIvcK4PbdryxEO22U0Z8eNBv0CL4a+uYpJZiWUkzspWAkLZHdp35xSfZFRNSaSDaqPQYpnbM7K2fVoqSXSrFsO1JqxqiH09N5FvpYcG99mj6TEI34/pk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1717512139; c=relaxed/simple;
-	bh=56JCgjcovGpheHGmVusKM6l0Qf+zYRUv21D8Cc+FmmI=;
+	bh=DODPJgC5iTA3XbUH1M3g3CyluOcqeSJmFe7rf8Joak8=;
 	h=Message-ID:Date:From:To:Cc:Subject:References:MIME-Version:
-	 Content-Type; b=kfat4RMUorb/3tmtzH3CxVk+BBhQCNZnH313QUD/Tl+61wPcnXyrkpSeOt0wbBWuzG73nPcZ3ALvsGNsZ2NF7sjh1qjD6SuGejhIHKhW1TQp8bOIRb3BEms3m1yK2B2lEjff24f41Bn/vnFP/kyz7URTDpIvjSP2pQcaYQZRuw4=
+	 Content-Type; b=jqZwdOyi+CYCUE5aoy4IQczzxk0Vrl7j+0O0tgtgjmCbvoMOLoC4quHg/SUeAsHzhItyP/zsxYpRerLfKfjzIUa4AK825EBhTo2rpkdl7cm8vYcYVIQ3lk4zw8hhQxddTID55qi+Wj/XDOoZyqkd/RF4T4+HCh35Z//hfjxw+a8=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5277C4AF0B;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42F3EC4AF13;
 	Tue,  4 Jun 2024 14:42:18 +0000 (UTC)
 Received: from rostedt by gandalf with local (Exim 4.97)
 	(envelope-from <rostedt@goodmis.org>)
-	id 1sEVMf-00000000Z50-47s2;
+	id 1sEVMf-00000000Z3V-24Ne;
 	Tue, 04 Jun 2024 10:42:17 -0400
-Message-ID: <20240604144217.838674367@goodmis.org>
+Message-ID: <20240604144217.350436921@goodmis.org>
 User-Agent: quilt/0.68
-Date: Tue, 04 Jun 2024 10:41:27 -0400
+Date: Tue, 04 Jun 2024 10:41:24 -0400
 From: Steven Rostedt <rostedt@goodmis.org>
 To: linux-kernel@vger.kernel.org
 Cc: Masami Hiramatsu <mhiramat@kernel.org>,
@@ -40,7 +40,7 @@ Cc: Masami Hiramatsu <mhiramat@kernel.org>,
  Peter Zijlstra <peterz@infradead.org>,
  Thomas Gleixner <tglx@linutronix.de>,
  Guo Ren <guoren@kernel.org>
-Subject: [for-next][PATCH 24/27] function_graph: Use static_call and branch to optimize entry function
+Subject: [for-next][PATCH 21/27] ftrace: Add multiple fgraph storage selftest
 References: <20240604144103.293353991@goodmis.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -50,19 +50,16 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 
-From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+From: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
 
-In most cases function graph is used by a single user. Instead of calling
-a loop to call function graph callbacks in this case, call the function
-entry callback directly.
+Add a selftest for multiple function graph tracer with storage on a same
+function. In this case, the shadow stack entry will be shared among those
+fgraph with different data storage. So this will ensure the fgraph will
+not mixed those storage data.
 
-Add a static_key that will be used to set the function graph logic to
-either do the loop (when more than one callback is registered) or to call
-the callback directly if there is only one registered callback.
+Link: https://lore.kernel.org/linux-trace-kernel/171509111465.162236.3795819216426570800.stgit@devnote2
+Link: https://lore.kernel.org/linux-trace-kernel/20240603190824.284049716@goodmis.org
 
-Link: https://lore.kernel.org/linux-trace-kernel/20240603190824.766858241@goodmis.org
-
-Cc: Masami Hiramatsu <mhiramat@kernel.org>
 Cc: Mark Rutland <mark.rutland@arm.com>
 Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 Cc: Andrew Morton <akpm@linux-foundation.org>
@@ -80,146 +77,278 @@ Cc: Peter Zijlstra <peterz@infradead.org>
 Cc: Thomas Gleixner <tglx@linutronix.de>
 Cc: Guo Ren <guoren@kernel.org>
 Reviewed-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Suggested-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 ---
- kernel/trace/fgraph.c | 77 ++++++++++++++++++++++++++++++++++++-------
- 1 file changed, 66 insertions(+), 11 deletions(-)
+ kernel/trace/trace_selftest.c | 171 +++++++++++++++++++++++++---------
+ 1 file changed, 126 insertions(+), 45 deletions(-)
 
-diff --git a/kernel/trace/fgraph.c b/kernel/trace/fgraph.c
-index 4d566a0a741d..7c3b0261b1bb 100644
---- a/kernel/trace/fgraph.c
-+++ b/kernel/trace/fgraph.c
-@@ -11,6 +11,7 @@
- #include <linux/jump_label.h>
- #include <linux/suspend.h>
- #include <linux/ftrace.h>
-+#include <linux/static_call.h>
- #include <linux/slab.h>
- 
- #include <trace/events/sched.h>
-@@ -511,6 +512,10 @@ static struct fgraph_ops fgraph_stub = {
- 	.retfunc = ftrace_graph_ret_stub,
- };
- 
-+static struct fgraph_ops *fgraph_direct_gops = &fgraph_stub;
-+DEFINE_STATIC_CALL(fgraph_func, ftrace_graph_entry_stub);
-+DEFINE_STATIC_KEY_TRUE(fgraph_do_direct);
-+
- /**
-  * ftrace_graph_stop - set to permanently disable function graph tracing
-  *
-@@ -636,21 +641,34 @@ int function_graph_enter(unsigned long ret, unsigned long func,
- 	if (offset < 0)
- 		goto out;
- 
--	for_each_set_bit(i, &fgraph_array_bitmask,
--			 sizeof(fgraph_array_bitmask) * BITS_PER_BYTE) {
--		struct fgraph_ops *gops = fgraph_array[i];
--		int save_curr_ret_stack;
+diff --git a/kernel/trace/trace_selftest.c b/kernel/trace/trace_selftest.c
+index fcdc744c245e..369efc569238 100644
+--- a/kernel/trace/trace_selftest.c
++++ b/kernel/trace/trace_selftest.c
+@@ -762,28 +762,32 @@ trace_selftest_startup_function(struct tracer *trace, struct trace_array *tr)
+ #define SHORT_NUMBER 12345
+ #define WORD_NUMBER 1234567890
+ #define LONG_NUMBER 1234567890123456789LL
 -
--		if (gops == &fgraph_stub)
--			continue;
-+#ifdef CONFIG_HAVE_STATIC_CALL
-+	if (static_branch_likely(&fgraph_do_direct)) {
-+		int save_curr_ret_stack = current->curr_ret_stack;
+-static int fgraph_store_size __initdata;
+-static const char *fgraph_store_type_name __initdata;
+-static char *fgraph_error_str __initdata;
+-static char fgraph_error_str_buf[128] __initdata;
++#define ERRSTR_BUFLEN 128
++
++struct fgraph_fixture {
++	struct fgraph_ops gops;
++	int store_size;
++	const char *store_type_name;
++	char error_str_buf[ERRSTR_BUFLEN];
++	char *error_str;
++};
  
--		save_curr_ret_stack = current->curr_ret_stack;
--		if (ftrace_ops_test(&gops->ops, func, NULL) &&
--		    gops->entryfunc(&trace, gops))
--			bitmap |= BIT(i);
-+		if (static_call(fgraph_func)(&trace, fgraph_direct_gops))
-+			bitmap |= BIT(fgraph_direct_gops->idx);
- 		else
- 			/* Clear out any saved storage */
- 			current->curr_ret_stack = save_curr_ret_stack;
-+	} else
-+#endif
-+	{
-+		for_each_set_bit(i, &fgraph_array_bitmask,
-+					 sizeof(fgraph_array_bitmask) * BITS_PER_BYTE) {
-+			struct fgraph_ops *gops = fgraph_array[i];
-+			int save_curr_ret_stack;
-+
-+			if (gops == &fgraph_stub)
-+				continue;
-+
-+			save_curr_ret_stack = current->curr_ret_stack;
-+			if (ftrace_ops_test(&gops->ops, func, NULL) &&
-+			    gops->entryfunc(&trace, gops))
-+				bitmap |= BIT(i);
-+			else
-+				/* Clear out any saved storage */
-+				current->curr_ret_stack = save_curr_ret_stack;
-+		}
- 	}
- 
- 	if (!bitmap)
-@@ -1155,6 +1173,8 @@ void fgraph_update_pid_func(void)
- 			gops = container_of(op, struct fgraph_ops, ops);
- 			gops->entryfunc = ftrace_pids_enabled(op) ?
- 				fgraph_pid_func : gops->saved_func;
-+			if (ftrace_graph_active == 1)
-+				static_call_update(fgraph_func, gops->entryfunc);
- 		}
- 	}
- }
-@@ -1209,6 +1229,32 @@ static void init_task_vars(int idx)
- 	read_unlock(&tasklist_lock);
- }
- 
-+static void ftrace_graph_enable_direct(bool enable_branch)
-+{
-+	trace_func_graph_ent_t func = NULL;
-+	int i;
-+
-+	for_each_set_bit(i, &fgraph_array_bitmask,
-+			 sizeof(fgraph_array_bitmask) * BITS_PER_BYTE) {
-+		func = fgraph_array[i]->entryfunc;
-+		fgraph_direct_gops = fgraph_array[i];
-+	 }
-+	if (WARN_ON_ONCE(!func))
-+		return;
-+
-+	static_call_update(fgraph_func, func);
-+	if (enable_branch)
-+		static_branch_disable(&fgraph_do_direct);
-+}
-+
-+static void ftrace_graph_disable_direct(bool disable_branch)
-+{
-+	if (disable_branch)
-+		static_branch_disable(&fgraph_do_direct);
-+	static_call_update(fgraph_func, ftrace_graph_entry_stub);
-+	fgraph_direct_gops = &fgraph_stub;
-+}
-+
- int register_ftrace_graph(struct fgraph_ops *gops)
+ static __init int store_entry(struct ftrace_graph_ent *trace,
+ 			      struct fgraph_ops *gops)
  {
- 	int command = 0;
-@@ -1235,7 +1281,11 @@ int register_ftrace_graph(struct fgraph_ops *gops)
+-	const char *type = fgraph_store_type_name;
+-	int size = fgraph_store_size;
++	struct fgraph_fixture *fixture = container_of(gops, struct fgraph_fixture, gops);
++	const char *type = fixture->store_type_name;
++	int size = fixture->store_size;
+ 	void *p;
  
- 	ftrace_graph_active++;
+ 	p = fgraph_reserve_data(gops->idx, size);
+ 	if (!p) {
+-		snprintf(fgraph_error_str_buf, sizeof(fgraph_error_str_buf),
++		snprintf(fixture->error_str_buf, ERRSTR_BUFLEN,
+ 			 "Failed to reserve %s\n", type);
+-		fgraph_error_str = fgraph_error_str_buf;
+ 		return 0;
+ 	}
  
-+	if (ftrace_graph_active == 2)
-+		ftrace_graph_disable_direct(true);
+-	switch (fgraph_store_size) {
++	switch (size) {
+ 	case 1:
+ 		*(char *)p = BYTE_NUMBER;
+ 		break;
+@@ -804,7 +808,8 @@ static __init int store_entry(struct ftrace_graph_ent *trace,
+ static __init void store_return(struct ftrace_graph_ret *trace,
+ 				struct fgraph_ops *gops)
+ {
+-	const char *type = fgraph_store_type_name;
++	struct fgraph_fixture *fixture = container_of(gops, struct fgraph_fixture, gops);
++	const char *type = fixture->store_type_name;
+ 	long long expect = 0;
+ 	long long found = -1;
+ 	int size;
+@@ -812,20 +817,18 @@ static __init void store_return(struct ftrace_graph_ret *trace,
+ 
+ 	p = fgraph_retrieve_data(gops->idx, &size);
+ 	if (!p) {
+-		snprintf(fgraph_error_str_buf, sizeof(fgraph_error_str_buf),
++		snprintf(fixture->error_str_buf, ERRSTR_BUFLEN,
+ 			 "Failed to retrieve %s\n", type);
+-		fgraph_error_str = fgraph_error_str_buf;
+ 		return;
+ 	}
+-	if (fgraph_store_size > size) {
+-		snprintf(fgraph_error_str_buf, sizeof(fgraph_error_str_buf),
++	if (fixture->store_size > size) {
++		snprintf(fixture->error_str_buf, ERRSTR_BUFLEN,
+ 			 "Retrieved size %d is smaller than expected %d\n",
+-			 size, (int)fgraph_store_size);
+-		fgraph_error_str = fgraph_error_str_buf;
++			 size, (int)fixture->store_size);
+ 		return;
+ 	}
+ 
+-	switch (fgraph_store_size) {
++	switch (fixture->store_size) {
+ 	case 1:
+ 		expect = BYTE_NUMBER;
+ 		found = *(char *)p;
+@@ -845,45 +848,44 @@ static __init void store_return(struct ftrace_graph_ret *trace,
+ 	}
+ 
+ 	if (found != expect) {
+-		snprintf(fgraph_error_str_buf, sizeof(fgraph_error_str_buf),
++		snprintf(fixture->error_str_buf, ERRSTR_BUFLEN,
+ 			 "%s returned not %lld but %lld\n", type, expect, found);
+-		fgraph_error_str = fgraph_error_str_buf;
+ 		return;
+ 	}
+-	fgraph_error_str = NULL;
++	fixture->error_str = NULL;
+ }
+ 
+-static struct fgraph_ops store_bytes __initdata = {
+-	.entryfunc		= store_entry,
+-	.retfunc		= store_return,
+-};
+-
+-static int __init test_graph_storage_type(const char *name, int size)
++static int __init init_fgraph_fixture(struct fgraph_fixture *fixture)
+ {
+ 	char *func_name;
+ 	int len;
+-	int ret;
+ 
+-	fgraph_store_type_name = name;
+-	fgraph_store_size = size;
++	snprintf(fixture->error_str_buf, ERRSTR_BUFLEN,
++		 "Failed to execute storage %s\n", fixture->store_type_name);
++	fixture->error_str = fixture->error_str_buf;
+ 
+-	snprintf(fgraph_error_str_buf, sizeof(fgraph_error_str_buf),
+-		 "Failed to execute storage %s\n", name);
+-	fgraph_error_str = fgraph_error_str_buf;
++	func_name = "*" __stringify(DYN_FTRACE_TEST_NAME);
++	len = strlen(func_name);
 +
- 	if (ftrace_graph_active == 1) {
-+		ftrace_graph_enable_direct(false);
- 		register_pm_notifier(&ftrace_suspend_notifier);
- 		ret = start_graph_tracing();
- 		if (ret)
-@@ -1292,6 +1342,11 @@ void unregister_ftrace_graph(struct fgraph_ops *gops)
- 
- 	ftrace_shutdown_subops(&graph_ops, &gops->ops, command);
- 
-+	if (ftrace_graph_active == 1)
-+		ftrace_graph_enable_direct(true);
-+	else if (!ftrace_graph_active)
-+		ftrace_graph_disable_direct(false);
++	return ftrace_set_filter(&fixture->gops.ops, func_name, len, 1);
++}
 +
- 	if (!ftrace_graph_active) {
- 		ftrace_graph_return = ftrace_stub_graph;
- 		ftrace_graph_entry = ftrace_graph_entry_stub;
++/* Test fgraph storage for each size */
++static int __init test_graph_storage_single(struct fgraph_fixture *fixture)
++{
++	int size = fixture->store_size;
++	int ret;
+ 
+ 	pr_cont("PASSED\n");
+ 	pr_info("Testing fgraph storage of %d byte%s: ", size, size > 1 ? "s" : "");
+ 
+-	func_name = "*" __stringify(DYN_FTRACE_TEST_NAME);
+-	len = strlen(func_name);
+-
+-	ret = ftrace_set_filter(&store_bytes.ops, func_name, len, 1);
++	ret = init_fgraph_fixture(fixture);
+ 	if (ret && ret != -ENODEV) {
+ 		pr_cont("*Could not set filter* ");
+ 		return -1;
+ 	}
+ 
+-	ret = register_ftrace_graph(&store_bytes);
++	ret = register_ftrace_graph(&fixture->gops);
+ 	if (ret) {
+ 		pr_warn("Failed to init store_bytes fgraph tracing\n");
+ 		return -1;
+@@ -891,30 +893,109 @@ static int __init test_graph_storage_type(const char *name, int size)
+ 
+ 	DYN_FTRACE_TEST_NAME();
+ 
+-	unregister_ftrace_graph(&store_bytes);
++	unregister_ftrace_graph(&fixture->gops);
+ 
+-	if (fgraph_error_str) {
+-		pr_cont("*** %s ***", fgraph_error_str);
++	if (fixture->error_str) {
++		pr_cont("*** %s ***", fixture->error_str);
+ 		return -1;
+ 	}
+ 
+ 	return 0;
+ }
++
++static struct fgraph_fixture store_bytes[4] __initdata = {
++	[0] = {
++		.gops = {
++			.entryfunc		= store_entry,
++			.retfunc		= store_return,
++		},
++		.store_size = 1,
++		.store_type_name = "byte",
++	},
++	[1] = {
++		.gops = {
++			.entryfunc		= store_entry,
++			.retfunc		= store_return,
++		},
++		.store_size = 2,
++		.store_type_name = "short",
++	},
++	[2] = {
++		.gops = {
++			.entryfunc		= store_entry,
++			.retfunc		= store_return,
++		},
++		.store_size = 4,
++		.store_type_name = "word",
++	},
++	[3] = {
++		.gops = {
++			.entryfunc		= store_entry,
++			.retfunc		= store_return,
++		},
++		.store_size = 8,
++		.store_type_name = "long long",
++	},
++};
++
++static __init int test_graph_storage_multi(void)
++{
++	struct fgraph_fixture *fixture;
++	bool printed = false;
++	int i, ret;
++
++	pr_cont("PASSED\n");
++	pr_info("Testing multiple fgraph storage on a function: ");
++
++	for (i = 0; i < ARRAY_SIZE(store_bytes); i++) {
++		fixture = &store_bytes[i];
++		ret = init_fgraph_fixture(fixture);
++		if (ret && ret != -ENODEV) {
++			pr_cont("*Could not set filter* ");
++			printed = true;
++			goto out;
++		}
++
++		ret = register_ftrace_graph(&fixture->gops);
++		if (ret) {
++			pr_warn("Failed to init store_bytes fgraph tracing\n");
++			printed = true;
++			goto out;
++		}
++	}
++
++	DYN_FTRACE_TEST_NAME();
++out:
++	while (--i >= 0) {
++		fixture = &store_bytes[i];
++		unregister_ftrace_graph(&fixture->gops);
++
++		if (fixture->error_str && !printed) {
++			pr_cont("*** %s ***", fixture->error_str);
++			printed = true;
++		}
++	}
++	return printed ? -1 : 0;
++}
++
+ /* Test the storage passed across function_graph entry and return */
+ static __init int test_graph_storage(void)
+ {
+ 	int ret;
+ 
+-	ret = test_graph_storage_type("byte", 1);
++	ret = test_graph_storage_single(&store_bytes[0]);
++	if (ret)
++		return ret;
++	ret = test_graph_storage_single(&store_bytes[1]);
+ 	if (ret)
+ 		return ret;
+-	ret = test_graph_storage_type("short", 2);
++	ret = test_graph_storage_single(&store_bytes[2]);
+ 	if (ret)
+ 		return ret;
+-	ret = test_graph_storage_type("word", 4);
++	ret = test_graph_storage_single(&store_bytes[3]);
+ 	if (ret)
+ 		return ret;
+-	ret = test_graph_storage_type("long long", 8);
++	ret = test_graph_storage_multi();
+ 	if (ret)
+ 		return ret;
+ 	return 0;
 -- 
 2.43.0
 
