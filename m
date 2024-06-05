@@ -1,62 +1,61 @@
-Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9D5E14A082;
-	Wed,  5 Jun 2024 20:50:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CF8A15F30F;
+	Wed,  5 Jun 2024 21:01:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717620614; cv=none; b=o3RANy3ojfn8hfPoEcjeKUhIXFkOCfYKNosn9iAsJaeIiUbqqRSJJNUEDS23nLdfqDDsV5oEdRLkPYsz7BXNB4opRcR5aK4QcIYI+CAobzRdmHWz6SZtRBxw/TSbesK7zvM9zCtoUW3HjUEHoygwdg0gljv/5gJNSwZcqAjGPXc=
+	t=1717621287; cv=none; b=QrZ27wKoTzgZDx4+HTrhucULPfo8msVZkC4GNu7FA4gX6s8cLkGAzfhCiOzyL2P1W1JleI3czZXpRtPm7wv3knVWLpEgc5cJOkr/YdG2TJys/12J4BS99qEV3WBFbOWZs0ikQ6hDVQauSDb7OfFgQmXwXbvxPBGeg6kSniNkOj0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717620614; c=relaxed/simple;
-	bh=nFqzopE4yIBU+n0lvWvqybJhFArNaPc2r8aTMdrpla8=;
+	s=arc-20240116; t=1717621287; c=relaxed/simple;
+	bh=TPSfXDJGTWIMSUF3vFBgVX55rJYpyau9urwiUFj8xvE=;
 	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bN1qyYJSgMhxo2EPpJVyNsZ5dJcUSP/xZYL1rmklwJqqKZ+yBw10gJpIW/EHEhZ50lpfxY1RPsPcJEmZYDerxHQ9cLsX+06Y+nUvtKCUJPdS4hZsmljymrwyjvdQAJsCBZjpvHYQaQdrzD9iVl+d78UOW0ablX+Wh61pBSqQXqw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AXGTHy/Z; arc=none smtp.client-ip=209.85.218.48
+	 Content-Type:Content-Disposition:In-Reply-To; b=Lv+yTSI+582cs3nOr5ltngu+7+iH5e6rUM2t4caRH9ATXo09bPvldt+RbSVm4SeeE0vX4CKmoNkCWrt+G0ByyVawPRnn4baIEBdC4TrhHYCbKsW1OtNNYnUxnEbHPbzI2qosBygK/P6aqenQBjFAxT82/Hs+9xLEH+JKJZfrrrc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=S+9SPlJH; arc=none smtp.client-ip=209.85.221.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AXGTHy/Z"
-Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-a683868f463so26430666b.0;
-        Wed, 05 Jun 2024 13:50:12 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="S+9SPlJH"
+Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-35e4aaa0f33so262798f8f.0;
+        Wed, 05 Jun 2024 14:01:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1717620611; x=1718225411; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1717621284; x=1718226084; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=YLuQSn22Q0XbzYMrmg3FlopJe7yv4Si8pGo0Hy2H0g4=;
-        b=AXGTHy/ZZtXvT5ln8g0Crzfwm3BkKdd571BEIKt4WLWFs/E2ulucMCZK3aIyAVfZAs
-         0m7hKpwE2IzO1/H7WMeU2fF0G3g0uogoutvDIkFcQ/3FZ5I8r9PKWCSl2rYbVGbuzDtY
-         aOR2uAB/m4f3etA6W7PnsAFjT6q4v8CUQG6eBsCwJKmtomat2gCp3pRg8+UwDZ70jdk4
-         viHQY3NqiU2smPhBpBAEEjEq89/nccz0KHWpJpa4oZj0SlTMpDRiBGXSnkHujzHWvdqv
-         FK46b1Rf9kTDQ1PqHc6n9CCm5dgqDWGRaVOvRiyB+4YYkFhLTJXRBRpT1shAYIZhkegb
-         B+fQ==
+        bh=QPJbSr0brM/HxZcgIyd9JYBo30Gl5LizEvrWrWRCKGs=;
+        b=S+9SPlJHb9SP4jYfVB1Xgo+6KVUhBXrcCtso/V67ipSqn2owYwcM7tb6+oGO/I2qPa
+         9iS4KX2Z6Bo2LVBcfh+21eAbKl1Fk7WhPFgR489hHA1OBCcA0wZFKJ5wAyu3xay0phxL
+         hPTRdFcBcn0vPLfda7iW6gNGZMlZE28xnBepK9Cw0AzSLNgKv8Uc6IfsKCYASjY3/jKp
+         kl3TGGk92VzsknSLAtVidE9eZZBTYbAZI/qSUTY/3jBTQHMSNUitGw7qHd0R8CfFViAD
+         LiY4YC/qw/N3XEOVxbPlCNaavI8BFuvnJJy89ZNLdOUE3AFZOed6fsNa16NkQfvhfz9N
+         SNvQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717620611; x=1718225411;
+        d=1e100.net; s=20230601; t=1717621284; x=1718226084;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=YLuQSn22Q0XbzYMrmg3FlopJe7yv4Si8pGo0Hy2H0g4=;
-        b=VmtKdu75toY+Myi4BBFFQB7TBW9oVWP3/11oMY2BF8sG5Al8O2xhl2Je4Enmty0G3m
-         18Kd6I6VehFWmCKcB2x/m2+XZKEUrJ6Pj8nnhjz+VPZzuDIkr4+deEEd6L0l019h09R+
-         Xw7kSBrbuJk7mTNgLz4kQcYOkux8VV4jWgniRXpi7oH9PEL+Xxj9UJJ7X1SS0PuHHMAe
-         lt65/mcupteK+UCZ5LFKzrlWqQLV7PNLL4zSd09oEsim3JfbdVkoHV3E0PU5iMGaIvmZ
-         zFf7q3K8m/oXToNMNPHggX552PCpOmR8KKvLwn9sw5Xam8QV7tWvtaZ/YgydZyKTO9fb
-         mrBQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUagUSLodPVvw7OrSysj+qL6jzFpKUXrjom/qvGSWQnHvk/GfLc62sAo0yAcux4UkS+pwSZxYANWN8R0v7If6Wa1nhGaeRuY4WOPGLuthM6zWf7QnYSJCUXu5l7KC5aG7QJFgdbiT9hLIrEiO5q6a3S8jeHqDl83btpBdcZZcReUUuoWfhv
-X-Gm-Message-State: AOJu0Yy54A4t9a3KQP3Kgq4ZRosOotjoXcl1yhHZaR0Ox0OqqioI5mW+
-	yiMDMNR54874yb6Kp0j0dKnlBsLJtAP/9+zoGVmedKsKOwB3ydrH
-X-Google-Smtp-Source: AGHT+IF8cE1+5XhbMdO8HMQL7oNYqClJi3lw8FCpx+dmiOec2u+4Kd1Br9QIWGuYo31IHdqZOhwbWw==
-X-Received: by 2002:a17:906:840a:b0:a68:e1a8:9d2b with SMTP id a640c23a62f3a-a69a024f584mr230170466b.68.1717620610955;
-        Wed, 05 Jun 2024 13:50:10 -0700 (PDT)
+        bh=QPJbSr0brM/HxZcgIyd9JYBo30Gl5LizEvrWrWRCKGs=;
+        b=CuqXxUWJX2AHRRQgQEOvNm/RHwvwQGyryed29q7DI8UAOPQl0W3iFSq8vwTzS7UpX/
+         3lmAhGvOQD1bMccraFGfYYEFvclnpWhJc4F/gFVO5KhqAdHeJYGD1PGRgGPU+SHwz70i
+         32E9+PWQpLE8UH9AF+bnu4r0VJdr9BnkZBt2XlQiZQd4YiXDALyoXMvI7x+1c3BcV2cu
+         MML9gWUACIvCL/xYxyUkptEw1eP5p4TNMaVmlou7fd8wRAoyjL6dQG8sNCnY994UNIKD
+         9ZR8KX8qtn3u2keDkIioY9r2pbZFnQzv88sI6nngjwHoRSkNtjA17BVRAkIUJI+ZX9JA
+         fx8A==
+X-Forwarded-Encrypted: i=1; AJvYcCWMi9CqAW+pjHSI2RtV41fBxjY+KIjQeJGDkhQQffaSalEcnnWzerEnBXoaiTGFbcP/LDfZzp9a/sGR7iSBj6TH04XrkjhfIOuHw6AQAxLXND5qlr6G+7tRRr3qnLYpXbGdSGQ4SmCaw8ht9V9gTavuKrZG1SYoB13nQRWYubz4JxL3jXhG
+X-Gm-Message-State: AOJu0YyjMxGKuUi8JcgoTl1wT0oJ7Gc+CIL1JPDGL84ZdW4b+YOBrRdQ
+	+3JNaIP71IOBi1gXy9sQuCDTVZootpPV/a6Oe5Rupe+C1AzLTBH3
+X-Google-Smtp-Source: AGHT+IHabqkIBd/I9/cwYKH0t5gb0Si4YN9cnDv5QFLWNg3ZF/c2YFNROHCJq5sq6KWb0suC7tloDQ==
+X-Received: by 2002:adf:e3c5:0:b0:35e:eaf:697e with SMTP id ffacd0b85a97d-35e8ef080c3mr2916169f8f.28.1717621283807;
+        Wed, 05 Jun 2024 14:01:23 -0700 (PDT)
 Received: from krava ([83.240.63.158])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a68ba7fd6besm679871766b.190.2024.06.05.13.50.09
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-35dd04ca981sm15560711f8f.33.2024.06.05.14.01.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Jun 2024 13:50:10 -0700 (PDT)
+        Wed, 05 Jun 2024 14:01:23 -0700 (PDT)
 From: Jiri Olsa <olsajiri@gmail.com>
 X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Wed, 5 Jun 2024 22:50:08 +0200
-To: Oleg Nesterov <oleg@redhat.com>
-Cc: Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-	Peter Zijlstra <peterz@infradead.org>,
+Date: Wed, 5 Jun 2024 23:01:21 +0200
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: Oleg Nesterov <oleg@redhat.com>, Peter Zijlstra <peterz@infradead.org>,
 	Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
@@ -70,11 +69,10 @@ Cc: Andrii Nakryiko <andrii.nakryiko@gmail.com>,
 	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org
 Subject: Re: [RFC bpf-next 01/10] uprobe: Add session callbacks to
  uprobe_consumer
-Message-ID: <ZmDPQH2uiPYTA_df@krava>
+Message-ID: <ZmDSIfnU4vUMCBz9@krava>
 References: <20240604200221.377848-1-jolsa@kernel.org>
  <20240604200221.377848-2-jolsa@kernel.org>
  <CAEf4BzbzgTzvnPRJ24gdhuxN02_w8iNNFn4URh0vEp-t69oPnA@mail.gmail.com>
- <20240605175619.GH25006@redhat.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -83,64 +81,75 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240605175619.GH25006@redhat.com>
+In-Reply-To: <CAEf4BzbzgTzvnPRJ24gdhuxN02_w8iNNFn4URh0vEp-t69oPnA@mail.gmail.com>
 
-On Wed, Jun 05, 2024 at 07:56:19PM +0200, Oleg Nesterov wrote:
-> On 06/05, Andrii Nakryiko wrote:
+On Wed, Jun 05, 2024 at 10:25:56AM -0700, Andrii Nakryiko wrote:
+
+SNIP
+
+> > ---
+> >  include/linux/uprobes.h | 18 +++++++++++
+> >  kernel/events/uprobes.c | 69 +++++++++++++++++++++++++++++++++++------
+> >  2 files changed, 78 insertions(+), 9 deletions(-)
 > >
-> > so any such
-> > limitations will cause problems, issue reports, investigation, etc.
-> 
-> Agreed...
-> 
-> > As one possible solution, what if we do
+> > diff --git a/include/linux/uprobes.h b/include/linux/uprobes.h
+> > index f46e0ca0169c..a2f2d5ac3cee 100644
+> > --- a/include/linux/uprobes.h
+> > +++ b/include/linux/uprobes.h
+> > @@ -34,6 +34,12 @@ enum uprobe_filter_ctx {
+> >  };
 > >
-> > struct return_instance {
-> >     ...
-> >     u64 session_cookies[];
-> > };
+> >  struct uprobe_consumer {
+> > +       /*
+> > +        * The handler callback return value controls removal of the uprobe.
+> > +        *  0 on success, uprobe stays
+> > +        *  1 on failure, remove the uprobe
+> > +        *    console warning for anything else
+> > +        */
+> >         int (*handler)(struct uprobe_consumer *self, struct pt_regs *regs);
+> >         int (*ret_handler)(struct uprobe_consumer *self,
+> >                                 unsigned long func,
+> > @@ -42,6 +48,17 @@ struct uprobe_consumer {
+> >                                 enum uprobe_filter_ctx ctx,
+> >                                 struct mm_struct *mm);
 > >
-> > and allocate sizeof(struct return_instance) + 8 *
-> > <num-of-session-consumers> and then at runtime pass
-> > &session_cookies[i] as data pointer to session-aware callbacks?
+> > +       /* The handler_session callback return value controls execution of
+> > +        * the return uprobe and ret_handler_session callback.
+> > +        *  0 on success
+> > +        *  1 on failure, DO NOT install/execute the return uprobe
+> > +        *    console warning for anything else
+> > +        */
+> > +       int (*handler_session)(struct uprobe_consumer *self, struct pt_regs *regs,
+> > +                              unsigned long *data);
+> > +       int (*ret_handler_session)(struct uprobe_consumer *self, unsigned long func,
+> > +                                  struct pt_regs *regs, unsigned long *data);
+> > +
 > 
-> I too thought about this, but I guess it is not that simple.
-> 
-> Just for example. Suppose we have 2 session-consumers C1 and C2.
-> What if uprobe_unregister(C1) comes before the probed function
-> returns?
-> 
-> We need something like map_cookie_to_consumer().
+> We should try to avoid an alternative set of callbacks, IMO. Let's
+> extend existing ones with `unsigned long *data`, but specify that
+> unless consumer sets some flag on registration that it needs a session
+> cookie, we'll pass NULL here? Or just allocate cookie data for each
+> registered consumer for simplicity, don't know; given we don't expect
+> many consumers on exactly the same uprobe, it might be ok to keep it
+> simple.
+>
 
-I guess we could have hash table in return_instance that gets 'consumer -> cookie' ?
-
-return instance is freed after the consumers' return handlers are executed,
-so there's no leak if some consumer gets unregistered before that
-
-> 
-> > > +       /* The handler_session callback return value controls execution of
-> > > +        * the return uprobe and ret_handler_session callback.
-> > > +        *  0 on success
-> > > +        *  1 on failure, DO NOT install/execute the return uprobe
-> > > +        *    console warning for anything else
-> > > +        */
-> > > +       int (*handler_session)(struct uprobe_consumer *self, struct pt_regs *regs,
-> > > +                              unsigned long *data);
-> > > +       int (*ret_handler_session)(struct uprobe_consumer *self, unsigned long func,
-> > > +                                  struct pt_regs *regs, unsigned long *data);
-> > > +
-> >
-> > We should try to avoid an alternative set of callbacks, IMO. Let's
-> > extend existing ones with `unsigned long *data`,
-> 
-> Oh yes, agreed.
-> 
-> And the comment about the return value looks confusing too. I mean, the
-> logic doesn't differ from the ret-code from ->handler().
-> 
-> "DO NOT install/execute the return uprobe" is not true if another
-> non-session-consumer returns 0.
-
-well they are meant to be exclusive, so there'd be no other non-session-consumer
+ah, I did not want to break existing users.. but it's not uapi,
+so we're good, ok makes sense
 
 jirka
+ 
+> 
+> >         struct uprobe_consumer *next;
+> >  };
+> >
+> > @@ -85,6 +102,7 @@ struct return_instance {
+> >         unsigned long           func;
+> >         unsigned long           stack;          /* stack pointer */
+> >         unsigned long           orig_ret_vaddr; /* original return address */
+> > +       unsigned long           data;
+> >         bool                    chained;        /* true, if instance is nested */
+> >
+> >         struct return_instance  *next;          /* keep as stack */
+
+SNIP
