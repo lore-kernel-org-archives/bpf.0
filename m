@@ -1,1457 +1,1326 @@
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f170.google.com (mail-lj1-f170.google.com [209.85.208.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FFAC19D079;
-	Wed,  5 Jun 2024 13:36:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.188
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD812BA50
+	for <bpf@vger.kernel.org>; Wed,  5 Jun 2024 13:48:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717594599; cv=none; b=fWm9qlkqaTwR0ReBj/xNHU4NDTdxe5tF68S74OZNWoUgVzA2Fa5FrE1tSU6woNCU5q4G2/X17mvfx6Is8V6A/yn+dhWXu0Rq0r1IXnswNlb55tnBPsiHadF4N4QGZROY1cvBcFqLO0lFPv+RfYw/InhE+Y7YRd+MyCDex6h3PqI=
+	t=1717595328; cv=none; b=ltur2wKP/QUGRaYf+8lqnVgiqbcPQjm7gW1TkJAEL47uzIkOesozZunJL81+Y0ptxD94JlRHgvIl+J1Qkuf9rUz4h1jVoWPBw43FhUVPmLG2B+lY5BwXP81wYIi5O3df2pFb5WuuzQ/4H0Ep1LNRGR6m6U1bz6H9p2gWjBQql08=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717594599; c=relaxed/simple;
-	bh=SoIG+2knsZK5JzKHOOjN3dEZ9pjX+pPjub1j4XitK+M=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=M72QwWY9QevE3MfwhqkP7LDxdL2OAMSUcv2YnNfLqbnXXr6Z26qXsW4+13HanGYMwETT2OcCiw8navY4dxhgRLlUyDbM1KctU1tMInMfuQ1b99t8mTDgKB2dlyzvHvLCAd4GsThCRhIlZcFzqVUMNIziiniag1f5Fq6p53QrfkY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.188
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.163.252])
-	by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4VvT012KtDzmXj8;
-	Wed,  5 Jun 2024 21:32:01 +0800 (CST)
-Received: from dggpemm500005.china.huawei.com (unknown [7.185.36.74])
-	by mail.maildlp.com (Postfix) with ESMTPS id 9BED918007A;
-	Wed,  5 Jun 2024 21:36:34 +0800 (CST)
-Received: from localhost.localdomain (10.69.192.56) by
- dggpemm500005.china.huawei.com (7.185.36.74) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.39; Wed, 5 Jun 2024 21:36:34 +0800
-From: Yunsheng Lin <linyunsheng@huawei.com>
-To: <davem@davemloft.net>, <kuba@kernel.org>, <pabeni@redhat.com>
-CC: <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>, Yunsheng Lin
-	<linyunsheng@huawei.com>, Alexander Duyck <alexander.duyck@gmail.com>, Mat
- Martineau <martineau@kernel.org>, Ayush Sawal <ayush.sawal@chelsio.com>, Eric
- Dumazet <edumazet@google.com>, Willem de Bruijn
-	<willemdebruijn.kernel@gmail.com>, Jason Wang <jasowang@redhat.com>, Ingo
- Molnar <mingo@redhat.com>, Peter Zijlstra <peterz@infradead.org>, Juri Lelli
-	<juri.lelli@redhat.com>, Vincent Guittot <vincent.guittot@linaro.org>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>, Steven Rostedt
-	<rostedt@goodmis.org>, Ben Segall <bsegall@google.com>, Mel Gorman
-	<mgorman@suse.de>, Daniel Bristot de Oliveira <bristot@redhat.com>, Valentin
- Schneider <vschneid@redhat.com>, John Fastabend <john.fastabend@gmail.com>,
-	Jakub Sitnicki <jakub@cloudflare.com>, David Ahern <dsahern@kernel.org>,
-	Matthieu Baerts <matttbe@kernel.org>, Geliang Tang <geliang@kernel.org>,
-	Jamal Hadi Salim <jhs@mojatatu.com>, Cong Wang <xiyou.wangcong@gmail.com>,
-	Jiri Pirko <jiri@resnulli.us>, Boris Pismenny <borisp@nvidia.com>,
-	<bpf@vger.kernel.org>, <mptcp@lists.linux.dev>
-Subject: [PATCH net-next v6 13/15] net: replace page_frag with page_frag_cache
-Date: Wed, 5 Jun 2024 21:33:03 +0800
-Message-ID: <20240605133306.11272-14-linyunsheng@huawei.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20240605133306.11272-1-linyunsheng@huawei.com>
-References: <20240605133306.11272-1-linyunsheng@huawei.com>
+	s=arc-20240116; t=1717595328; c=relaxed/simple;
+	bh=XFewc8dMX43PJh/Rdk/ILLYQRc6E3A0f9oixHk8ldAw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=RCOAzUw6UbjrW17S67ceBdOaZPt95Vipa3YlsXi7+i/cDJ3NgaL/UV4h7Hsi387+q66h8gv9d5ZDweja40EdRjKFfGlhes2q3thH6J/hboA89KLlrR03h2ScWtZ1UZYXpUsxsmh/C1VIVbw7M78s1vs0Cq+lE4hxFPiQn8PKRvY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DbXuoz/q; arc=none smtp.client-ip=209.85.208.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DbXuoz/q"
+Received: by mail-lj1-f170.google.com with SMTP id 38308e7fff4ca-2eabd22d404so24338881fa.2
+        for <bpf@vger.kernel.org>; Wed, 05 Jun 2024 06:48:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1717595324; x=1718200124; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=P9sfNby63HYWcHJWR2sKI5m5rNyvM8SgOsPxP8CwK4Q=;
+        b=DbXuoz/ql0S+0g5ZU7jC9tO56Fr/yDWjX2YkbeSj9FLQzpVdHGHl0lIKp6VClcBsOg
+         OOrXWd7Hr4CLWco3V/C4XKaQs4Begq61iPBg/HJ4sCCfJyFGhyyfZFcAED7NJY9P8QUo
+         jqyo36W/Ce1LtwNgeqq6TnanlnB28w9x1RbPS8/gK+QaygD0THHaKuZ2hduz5OVSlQ97
+         Fw6ctT0JE3WnEXLQafddr4oCdmk7+9bvrrjvENK4PC5/4LBXUm5MqXVwSdesEVavjqa0
+         S31BI40rBIxxflT5ko3uzuL5z23W6oMUiaODHvab5hnz8bDEalKiMeyCHeTDnjJfanB4
+         gEFw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1717595324; x=1718200124;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=P9sfNby63HYWcHJWR2sKI5m5rNyvM8SgOsPxP8CwK4Q=;
+        b=g1N1GOJp45AQBrXHQGUcYklUDJsdz/6PKALpVgfNt1gCog1EHQzFQpSUrHSBqIA5qf
+         fEBlehxn09kixBy25N044nVgKx/ajOObF0lVv97PVTI3yNWGDQod0ioRiEsaXo7PoPK8
+         Yzz7RVrQv9c/Ax5LQ8gM/+HZXRJDYvdz+MG0W6liVHe1VubKb37v+xAes2kdvVtYBBF8
+         18cDW+vQfjCKHIu+9j1ida6Ht39l1S5M6K4+Dsmzh7p6qkrUIbKp6N3g8PWiL6a+z7HZ
+         QbadMYDK4tCNViq4Pa9ct5LSge9q3MOxtGsujVJl/EyLNo0Qu9cvzGB3P7Wt/Q9ByxXa
+         dzhQ==
+X-Gm-Message-State: AOJu0YyKCMSY1jPCrNSnNQrD2BSDrZ/1ZqvYWbGBKndzjfI9Vnqw+5wK
+	NGtJxEKD7+/kXT4bAH9ZEG7/HwPUfnWnwwZQ1NL2PSLf3w07LABZausshvy0PrXuh+MGa6R8nhe
+	ZOIFpZGS68RpznLwrIjELH7F/8ctdSw==
+X-Google-Smtp-Source: AGHT+IHY691PhtqK1ZxJ0ABNHEPA8tkdc46hSOtU+Z6zmfrgDGkyuAfG5/kHAHp3EWFiEuY2QrV/Hi+f7TZ9WAaHi9o=
+X-Received: by 2002:a2e:8941:0:b0:2e9:87bb:1ce8 with SMTP id
+ 38308e7fff4ca-2eac7a4c834mr15685901fa.35.1717595323350; Wed, 05 Jun 2024
+ 06:48:43 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpemm500005.china.huawei.com (7.185.36.74)
+References: <20220917153125.2001645-1-houtao@huaweicloud.com> <20220917153125.2001645-7-houtao@huaweicloud.com>
+In-Reply-To: <20220917153125.2001645-7-houtao@huaweicloud.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Wed, 5 Jun 2024 06:48:31 -0700
+Message-ID: <CAADnVQ+0eTwL_iJo8Y79GHB-8zAgNCV7Ka9Mza1b+8ENOShBvw@mail.gmail.com>
+Subject: qp-trie? Re: [PATCH bpf-next 06/10] bpf: Add support for qp-trie map
+To: Hou Tao <houtao@huaweicloud.com>
+Cc: bpf <bpf@vger.kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
+	Song Liu <songliubraving@fb.com>, Hao Luo <haoluo@google.com>, Yonghong Song <yhs@fb.com>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai Lau <kafai@fb.com>, 
+	KP Singh <kpsingh@kernel.org>, "David S . Miller" <davem@davemloft.net>, 
+	Jakub Kicinski <kuba@kernel.org>, Stanislav Fomichev <sdf@google.com>, Jiri Olsa <jolsa@kernel.org>, 
+	John Fastabend <john.fastabend@gmail.com>, Lorenz Bauer <oss@lmb.io>, 
+	"Paul E . McKenney" <paulmck@kernel.org>, Hou Tao <houtao1@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Use the newly introduced prepare/probe/commit API to
-replace page_frag with page_frag_cache for sk_page_frag().
+Hi Hou,
 
-CC: Alexander Duyck <alexander.duyck@gmail.com>
-Signed-off-by: Yunsheng Lin <linyunsheng@huawei.com>
-Acked-by: Mat Martineau <martineau@kernel.org>
----
- .../chelsio/inline_crypto/chtls/chtls.h       |   3 -
- .../chelsio/inline_crypto/chtls/chtls_io.c    | 100 ++++---------
- .../chelsio/inline_crypto/chtls/chtls_main.c  |   3 -
- drivers/net/tun.c                             |  44 ++----
- include/linux/sched.h                         |   3 +-
- include/net/sock.h                            |  14 +-
- kernel/exit.c                                 |   3 +-
- kernel/fork.c                                 |   3 +-
- net/core/skbuff.c                             |  59 +++++---
- net/core/skmsg.c                              |  22 +--
- net/core/sock.c                               |  46 ++++--
- net/ipv4/ip_output.c                          |  33 +++--
- net/ipv4/tcp.c                                |  35 ++---
- net/ipv4/tcp_output.c                         |  28 ++--
- net/ipv6/ip6_output.c                         |  33 +++--
- net/kcm/kcmsock.c                             |  30 ++--
- net/mptcp/protocol.c                          |  67 +++++----
- net/sched/em_meta.c                           |   2 +-
- net/tls/tls_device.c                          | 137 ++++++++++--------
- 19 files changed, 346 insertions(+), 319 deletions(-)
+Are you still working on qp-trie ?
+All prerequisites (like bpf_mem_alloc support) have landed.
+Anything keeping you from respinning this set?
 
-diff --git a/drivers/net/ethernet/chelsio/inline_crypto/chtls/chtls.h b/drivers/net/ethernet/chelsio/inline_crypto/chtls/chtls.h
-index 7ff82b6778ba..fe2b6a8ef718 100644
---- a/drivers/net/ethernet/chelsio/inline_crypto/chtls/chtls.h
-+++ b/drivers/net/ethernet/chelsio/inline_crypto/chtls/chtls.h
-@@ -234,7 +234,6 @@ struct chtls_dev {
- 	struct list_head list_node;
- 	struct list_head rcu_node;
- 	struct list_head na_node;
--	unsigned int send_page_order;
- 	int max_host_sndbuf;
- 	u32 round_robin_cnt;
- 	struct key_map kmap;
-@@ -453,8 +452,6 @@ enum {
- 
- /* The ULP mode/submode of an skbuff */
- #define skb_ulp_mode(skb)  (ULP_SKB_CB(skb)->ulp_mode)
--#define TCP_PAGE(sk)   (sk->sk_frag.page)
--#define TCP_OFF(sk)    (sk->sk_frag.offset)
- 
- static inline struct chtls_dev *to_chtls_dev(struct tls_toe_device *tlsdev)
- {
-diff --git a/drivers/net/ethernet/chelsio/inline_crypto/chtls/chtls_io.c b/drivers/net/ethernet/chelsio/inline_crypto/chtls/chtls_io.c
-index d567e42e1760..334381c1587f 100644
---- a/drivers/net/ethernet/chelsio/inline_crypto/chtls/chtls_io.c
-+++ b/drivers/net/ethernet/chelsio/inline_crypto/chtls/chtls_io.c
-@@ -825,12 +825,6 @@ void skb_entail(struct sock *sk, struct sk_buff *skb, int flags)
- 	ULP_SKB_CB(skb)->flags = flags;
- 	__skb_queue_tail(&csk->txq, skb);
- 	sk->sk_wmem_queued += skb->truesize;
--
--	if (TCP_PAGE(sk) && TCP_OFF(sk)) {
--		put_page(TCP_PAGE(sk));
--		TCP_PAGE(sk) = NULL;
--		TCP_OFF(sk) = 0;
--	}
- }
- 
- static struct sk_buff *get_tx_skb(struct sock *sk, int size)
-@@ -882,16 +876,12 @@ static void push_frames_if_head(struct sock *sk)
- 		chtls_push_frames(csk, 1);
- }
- 
--static int chtls_skb_copy_to_page_nocache(struct sock *sk,
--					  struct iov_iter *from,
--					  struct sk_buff *skb,
--					  struct page *page,
--					  int off, int copy)
-+static int chtls_skb_copy_to_va_nocache(struct sock *sk, struct iov_iter *from,
-+					struct sk_buff *skb, char *va, int copy)
- {
- 	int err;
- 
--	err = skb_do_copy_data_nocache(sk, skb, from, page_address(page) +
--				       off, copy, skb->len);
-+	err = skb_do_copy_data_nocache(sk, skb, from, va, copy, skb->len);
- 	if (err)
- 		return err;
- 
-@@ -1114,82 +1104,44 @@ int chtls_sendmsg(struct sock *sk, struct msghdr *msg, size_t size)
- 			if (err)
- 				goto do_fault;
- 		} else {
-+			struct page_frag_cache *pfrag = &sk->sk_frag;
- 			int i = skb_shinfo(skb)->nr_frags;
--			struct page *page = TCP_PAGE(sk);
--			int pg_size = PAGE_SIZE;
--			int off = TCP_OFF(sk);
--			bool merge;
--
--			if (page)
--				pg_size = page_size(page);
--			if (off < pg_size &&
--			    skb_can_coalesce(skb, i, page, off)) {
-+			unsigned int offset, fragsz;
-+			bool merge = false;
-+			struct page *page;
-+			void *va;
-+
-+			fragsz = 32U;
-+			page = page_frag_alloc_prepare(pfrag, &offset, &fragsz,
-+						       &va, sk->sk_allocation);
-+			if (unlikely(!page))
-+				goto wait_for_memory;
-+
-+			if (skb_can_coalesce(skb, i, page, offset))
- 				merge = true;
--				goto copy;
--			}
--			merge = false;
--			if (i == (is_tls_tx(csk) ? (MAX_SKB_FRAGS - 1) :
--			    MAX_SKB_FRAGS))
-+			else if (i == (is_tls_tx(csk) ? (MAX_SKB_FRAGS - 1) :
-+				       MAX_SKB_FRAGS))
- 				goto new_buf;
- 
--			if (page && off == pg_size) {
--				put_page(page);
--				TCP_PAGE(sk) = page = NULL;
--				pg_size = PAGE_SIZE;
--			}
--
--			if (!page) {
--				gfp_t gfp = sk->sk_allocation;
--				int order = cdev->send_page_order;
--
--				if (order) {
--					page = alloc_pages(gfp | __GFP_COMP |
--							   __GFP_NOWARN |
--							   __GFP_NORETRY,
--							   order);
--					if (page)
--						pg_size <<= order;
--				}
--				if (!page) {
--					page = alloc_page(gfp);
--					pg_size = PAGE_SIZE;
--				}
--				if (!page)
--					goto wait_for_memory;
--				off = 0;
--			}
--copy:
--			if (copy > pg_size - off)
--				copy = pg_size - off;
-+			copy = min_t(int, copy, fragsz);
- 			if (is_tls_tx(csk))
- 				copy = min_t(int, copy, csk->tlshws.txleft);
- 
--			err = chtls_skb_copy_to_page_nocache(sk, &msg->msg_iter,
--							     skb, page,
--							     off, copy);
--			if (unlikely(err)) {
--				if (!TCP_PAGE(sk)) {
--					TCP_PAGE(sk) = page;
--					TCP_OFF(sk) = 0;
--				}
-+			err = chtls_skb_copy_to_va_nocache(sk, &msg->msg_iter,
-+							   skb, va, copy);
-+			if (unlikely(err))
- 				goto do_fault;
--			}
-+
- 			/* Update the skb. */
- 			if (merge) {
- 				skb_frag_size_add(
- 						&skb_shinfo(skb)->frags[i - 1],
- 						copy);
-+				page_frag_alloc_commit_noref(pfrag, copy);
- 			} else {
--				skb_fill_page_desc(skb, i, page, off, copy);
--				if (off + copy < pg_size) {
--					/* space left keep page */
--					get_page(page);
--					TCP_PAGE(sk) = page;
--				} else {
--					TCP_PAGE(sk) = NULL;
--				}
-+				skb_fill_page_desc(skb, i, page, offset, copy);
-+				page_frag_alloc_commit(pfrag, copy);
- 			}
--			TCP_OFF(sk) = off + copy;
- 		}
- 		if (unlikely(skb->len == mss))
- 			tx_skb_finalize(skb);
-diff --git a/drivers/net/ethernet/chelsio/inline_crypto/chtls/chtls_main.c b/drivers/net/ethernet/chelsio/inline_crypto/chtls/chtls_main.c
-index 455a54708be4..ba88b2fc7cd8 100644
---- a/drivers/net/ethernet/chelsio/inline_crypto/chtls/chtls_main.c
-+++ b/drivers/net/ethernet/chelsio/inline_crypto/chtls/chtls_main.c
-@@ -34,7 +34,6 @@ static DEFINE_MUTEX(notify_mutex);
- static RAW_NOTIFIER_HEAD(listen_notify_list);
- static struct proto chtls_cpl_prot, chtls_cpl_protv6;
- struct request_sock_ops chtls_rsk_ops, chtls_rsk_opsv6;
--static uint send_page_order = (14 - PAGE_SHIFT < 0) ? 0 : 14 - PAGE_SHIFT;
- 
- static void register_listen_notifier(struct notifier_block *nb)
- {
-@@ -273,8 +272,6 @@ static void *chtls_uld_add(const struct cxgb4_lld_info *info)
- 	INIT_WORK(&cdev->deferq_task, process_deferq);
- 	spin_lock_init(&cdev->listen_lock);
- 	spin_lock_init(&cdev->idr_lock);
--	cdev->send_page_order = min_t(uint, get_order(32768),
--				      send_page_order);
- 	cdev->max_host_sndbuf = 48 * 1024;
- 
- 	if (lldi->vr->key.size)
-diff --git a/drivers/net/tun.c b/drivers/net/tun.c
-index 9254bca2813d..8d3ab2561156 100644
---- a/drivers/net/tun.c
-+++ b/drivers/net/tun.c
-@@ -1598,21 +1598,19 @@ static bool tun_can_build_skb(struct tun_struct *tun, struct tun_file *tfile,
- }
- 
- static struct sk_buff *__tun_build_skb(struct tun_file *tfile,
--				       struct page_frag *alloc_frag, char *buf,
--				       int buflen, int len, int pad)
-+				       char *buf, int buflen, int len, int pad)
- {
- 	struct sk_buff *skb = build_skb(buf, buflen);
- 
--	if (!skb)
-+	if (!skb) {
-+		page_frag_free_va(buf);
- 		return ERR_PTR(-ENOMEM);
-+	}
- 
- 	skb_reserve(skb, pad);
- 	skb_put(skb, len);
- 	skb_set_owner_w(skb, tfile->socket.sk);
- 
--	get_page(alloc_frag->page);
--	alloc_frag->offset += buflen;
--
- 	return skb;
- }
- 
-@@ -1660,7 +1658,7 @@ static struct sk_buff *tun_build_skb(struct tun_struct *tun,
- 				     struct virtio_net_hdr *hdr,
- 				     int len, int *skb_xdp)
- {
--	struct page_frag *alloc_frag = &current->task_frag;
-+	struct page_frag_cache *alloc_frag = &current->task_frag;
- 	struct bpf_prog *xdp_prog;
- 	int buflen = SKB_DATA_ALIGN(sizeof(struct skb_shared_info));
- 	char *buf;
-@@ -1675,16 +1673,16 @@ static struct sk_buff *tun_build_skb(struct tun_struct *tun,
- 	buflen += SKB_DATA_ALIGN(len + pad);
- 	rcu_read_unlock();
- 
--	alloc_frag->offset = ALIGN((u64)alloc_frag->offset, SMP_CACHE_BYTES);
--	if (unlikely(!skb_page_frag_refill(buflen, alloc_frag, GFP_KERNEL)))
-+	buf = page_frag_alloc_va_align(alloc_frag, buflen, GFP_KERNEL,
-+				       SMP_CACHE_BYTES);
-+	if (unlikely(!buf))
- 		return ERR_PTR(-ENOMEM);
- 
--	buf = (char *)page_address(alloc_frag->page) + alloc_frag->offset;
--	copied = copy_page_from_iter(alloc_frag->page,
--				     alloc_frag->offset + pad,
--				     len, from);
--	if (copied != len)
-+	copied = copy_from_iter(buf + pad, len, from);
-+	if (copied != len) {
-+		page_frag_alloc_abort(alloc_frag, buflen);
- 		return ERR_PTR(-EFAULT);
-+	}
- 
- 	/* There's a small window that XDP may be set after the check
- 	 * of xdp_prog above, this should be rare and for simplicity
-@@ -1692,8 +1690,7 @@ static struct sk_buff *tun_build_skb(struct tun_struct *tun,
- 	 */
- 	if (hdr->gso_type || !xdp_prog) {
- 		*skb_xdp = 1;
--		return __tun_build_skb(tfile, alloc_frag, buf, buflen, len,
--				       pad);
-+		return __tun_build_skb(tfile, buf, buflen, len, pad);
- 	}
- 
- 	*skb_xdp = 0;
-@@ -1709,20 +1706,10 @@ static struct sk_buff *tun_build_skb(struct tun_struct *tun,
- 		xdp_prepare_buff(&xdp, buf, pad, len, false);
- 
- 		act = bpf_prog_run_xdp(xdp_prog, &xdp);
--		if (act == XDP_REDIRECT || act == XDP_TX) {
--			get_page(alloc_frag->page);
--			alloc_frag->offset += buflen;
--		}
- 		err = tun_xdp_act(tun, xdp_prog, &xdp, act);
--		if (err < 0) {
--			if (act == XDP_REDIRECT || act == XDP_TX)
--				put_page(alloc_frag->page);
--			goto out;
--		}
--
- 		if (err == XDP_REDIRECT)
- 			xdp_do_flush();
--		if (err != XDP_PASS)
-+		if (err != XDP_PASS || err < 0)
- 			goto out;
- 
- 		pad = xdp.data - xdp.data_hard_start;
-@@ -1731,11 +1718,12 @@ static struct sk_buff *tun_build_skb(struct tun_struct *tun,
- 	rcu_read_unlock();
- 	local_bh_enable();
- 
--	return __tun_build_skb(tfile, alloc_frag, buf, buflen, len, pad);
-+	return __tun_build_skb(tfile, buf, buflen, len, pad);
- 
- out:
- 	rcu_read_unlock();
- 	local_bh_enable();
-+	page_frag_alloc_abort(alloc_frag, buflen);
- 	return NULL;
- }
- 
-diff --git a/include/linux/sched.h b/include/linux/sched.h
-index 61591ac6eab6..2735cdcddd03 100644
---- a/include/linux/sched.h
-+++ b/include/linux/sched.h
-@@ -45,6 +45,7 @@
- #include <linux/rv.h>
- #include <linux/livepatch_sched.h>
- #include <linux/uidgid_types.h>
-+#include <linux/page_frag_cache.h>
- #include <asm/kmap_size.h>
- 
- /* task_struct member predeclarations (sorted alphabetically): */
-@@ -1344,7 +1345,7 @@ struct task_struct {
- 	/* Cache last used pipe for splice(): */
- 	struct pipe_inode_info		*splice_pipe;
- 
--	struct page_frag		task_frag;
-+	struct page_frag_cache		task_frag;
- 
- #ifdef CONFIG_TASK_DELAY_ACCT
- 	struct task_delay_info		*delays;
-diff --git a/include/net/sock.h b/include/net/sock.h
-index 7541f8dd1746..b14a949658eb 100644
---- a/include/net/sock.h
-+++ b/include/net/sock.h
-@@ -461,7 +461,7 @@ struct sock {
- 	struct sk_buff_head	sk_write_queue;
- 	u32			sk_dst_pending_confirm;
- 	u32			sk_pacing_status; /* see enum sk_pacing */
--	struct page_frag	sk_frag;
-+	struct page_frag_cache	sk_frag;
- 	struct timer_list	sk_timer;
- 
- 	unsigned long		sk_pacing_rate; /* bytes per second */
-@@ -2504,7 +2504,7 @@ static inline void sk_stream_moderate_sndbuf(struct sock *sk)
-  * Return: a per task page_frag if context allows that,
-  * otherwise a per socket one.
-  */
--static inline struct page_frag *sk_page_frag(struct sock *sk)
-+static inline struct page_frag_cache *sk_page_frag(struct sock *sk)
- {
- 	if (sk->sk_use_task_frag)
- 		return &current->task_frag;
-@@ -2512,7 +2512,15 @@ static inline struct page_frag *sk_page_frag(struct sock *sk)
- 	return &sk->sk_frag;
- }
- 
--bool sk_page_frag_refill(struct sock *sk, struct page_frag *pfrag);
-+struct page *sk_page_frag_alloc_prepare(struct sock *sk,
-+					struct page_frag_cache *pfrag,
-+					unsigned int *size,
-+					unsigned int *offset, void **va);
-+
-+struct page *sk_page_frag_alloc_pg_prepare(struct sock *sk,
-+					   struct page_frag_cache *pfrag,
-+					   unsigned int *size,
-+					   unsigned int *offset);
- 
- /*
-  *	Default write policy as shown to user space via poll/select/SIGIO
-diff --git a/kernel/exit.c b/kernel/exit.c
-index f95a2c1338a8..df6afc37129b 100644
---- a/kernel/exit.c
-+++ b/kernel/exit.c
-@@ -909,8 +909,7 @@ void __noreturn do_exit(long code)
- 	if (tsk->splice_pipe)
- 		free_pipe_info(tsk->splice_pipe);
- 
--	if (tsk->task_frag.page)
--		put_page(tsk->task_frag.page);
-+	page_frag_cache_drain(&tsk->task_frag);
- 
- 	exit_task_stack_account(tsk);
- 
-diff --git a/kernel/fork.c b/kernel/fork.c
-index 99076dbe27d8..d25bd5a4942a 100644
---- a/kernel/fork.c
-+++ b/kernel/fork.c
-@@ -79,6 +79,7 @@
- #include <linux/tty.h>
- #include <linux/fs_struct.h>
- #include <linux/magic.h>
-+#include <linux/page_frag_cache.h>
- #include <linux/perf_event.h>
- #include <linux/posix-timers.h>
- #include <linux/user-return-notifier.h>
-@@ -1159,10 +1160,10 @@ static struct task_struct *dup_task_struct(struct task_struct *orig, int node)
- 	tsk->btrace_seq = 0;
- #endif
- 	tsk->splice_pipe = NULL;
--	tsk->task_frag.page = NULL;
- 	tsk->wake_q.next = NULL;
- 	tsk->worker_private = NULL;
- 
-+	page_frag_cache_init(&tsk->task_frag);
- 	kcov_task_init(tsk);
- 	kmsan_task_create(tsk);
- 	kmap_local_fork(tsk);
-diff --git a/net/core/skbuff.c b/net/core/skbuff.c
-index caee22db1cc7..b99a809a5d51 100644
---- a/net/core/skbuff.c
-+++ b/net/core/skbuff.c
-@@ -3018,25 +3018,6 @@ static void sock_spd_release(struct splice_pipe_desc *spd, unsigned int i)
- 	put_page(spd->pages[i]);
- }
- 
--static struct page *linear_to_page(struct page *page, unsigned int *len,
--				   unsigned int *offset,
--				   struct sock *sk)
--{
--	struct page_frag *pfrag = sk_page_frag(sk);
--
--	if (!sk_page_frag_refill(sk, pfrag))
--		return NULL;
--
--	*len = min_t(unsigned int, *len, pfrag->size - pfrag->offset);
--
--	memcpy(page_address(pfrag->page) + pfrag->offset,
--	       page_address(page) + *offset, *len);
--	*offset = pfrag->offset;
--	pfrag->offset += *len;
--
--	return pfrag->page;
--}
--
- static bool spd_can_coalesce(const struct splice_pipe_desc *spd,
- 			     struct page *page,
- 			     unsigned int offset)
-@@ -3047,6 +3028,38 @@ static bool spd_can_coalesce(const struct splice_pipe_desc *spd,
- 		 spd->partial[spd->nr_pages - 1].len == offset);
- }
- 
-+static bool spd_fill_linear_page(struct splice_pipe_desc *spd,
-+				 struct page *page, unsigned int offset,
-+				 unsigned int *len, struct sock *sk)
-+{
-+	struct page_frag_cache *pfrag = sk_page_frag(sk);
-+	unsigned int frag_len, frag_offset;
-+	struct page *frag_page;
-+	void *va;
-+
-+	frag_page = sk_page_frag_alloc_prepare(sk, pfrag, &frag_offset,
-+					       &frag_len, &va);
-+	if (!frag_page)
-+		return true;
-+
-+	*len = min_t(unsigned int, *len, frag_len);
-+	memcpy(va, page_address(page) + offset, *len);
-+
-+	if (spd_can_coalesce(spd, frag_page, frag_offset)) {
-+		spd->partial[spd->nr_pages - 1].len += *len;
-+		page_frag_alloc_commit_noref(pfrag, *len);
-+		return false;
-+	}
-+
-+	page_frag_alloc_commit(pfrag, *len);
-+	spd->pages[spd->nr_pages] = frag_page;
-+	spd->partial[spd->nr_pages].len = *len;
-+	spd->partial[spd->nr_pages].offset = frag_offset;
-+	spd->nr_pages++;
-+
-+	return false;
-+}
-+
- /*
-  * Fill page/offset/length into spd, if it can hold more pages.
-  */
-@@ -3059,11 +3072,9 @@ static bool spd_fill_page(struct splice_pipe_desc *spd,
- 	if (unlikely(spd->nr_pages == MAX_SKB_FRAGS))
- 		return true;
- 
--	if (linear) {
--		page = linear_to_page(page, len, &offset, sk);
--		if (!page)
--			return true;
--	}
-+	if (linear)
-+		return spd_fill_linear_page(spd, page, offset, len,  sk);
-+
- 	if (spd_can_coalesce(spd, page, offset)) {
- 		spd->partial[spd->nr_pages - 1].len += *len;
- 		return false;
-diff --git a/net/core/skmsg.c b/net/core/skmsg.c
-index fd20aae30be2..ced167d5ba6c 100644
---- a/net/core/skmsg.c
-+++ b/net/core/skmsg.c
-@@ -27,23 +27,25 @@ static bool sk_msg_try_coalesce_ok(struct sk_msg *msg, int elem_first_coalesce)
- int sk_msg_alloc(struct sock *sk, struct sk_msg *msg, int len,
- 		 int elem_first_coalesce)
- {
--	struct page_frag *pfrag = sk_page_frag(sk);
-+	struct page_frag_cache *pfrag = sk_page_frag(sk);
- 	u32 osize = msg->sg.size;
- 	int ret = 0;
- 
- 	len -= msg->sg.size;
- 	while (len > 0) {
-+		unsigned int frag_offset, frag_len;
- 		struct scatterlist *sge;
--		u32 orig_offset;
-+		struct page *page;
- 		int use, i;
- 
--		if (!sk_page_frag_refill(sk, pfrag)) {
-+		page = sk_page_frag_alloc_pg_prepare(sk, pfrag, &frag_offset,
-+						     &frag_len);
-+		if (!page) {
- 			ret = -ENOMEM;
- 			goto msg_trim;
- 		}
- 
--		orig_offset = pfrag->offset;
--		use = min_t(int, len, pfrag->size - orig_offset);
-+		use = min_t(int, len, frag_len);
- 		if (!sk_wmem_schedule(sk, use)) {
- 			ret = -ENOMEM;
- 			goto msg_trim;
-@@ -54,9 +56,10 @@ int sk_msg_alloc(struct sock *sk, struct sk_msg *msg, int len,
- 		sge = &msg->sg.data[i];
- 
- 		if (sk_msg_try_coalesce_ok(msg, elem_first_coalesce) &&
--		    sg_page(sge) == pfrag->page &&
--		    sge->offset + sge->length == orig_offset) {
-+		    sg_page(sge) == page &&
-+		    sge->offset + sge->length == frag_offset) {
- 			sge->length += use;
-+			page_frag_alloc_commit_noref(pfrag, use);
- 		} else {
- 			if (sk_msg_full(msg)) {
- 				ret = -ENOSPC;
-@@ -65,14 +68,13 @@ int sk_msg_alloc(struct sock *sk, struct sk_msg *msg, int len,
- 
- 			sge = &msg->sg.data[msg->sg.end];
- 			sg_unmark_end(sge);
--			sg_set_page(sge, pfrag->page, use, orig_offset);
--			get_page(pfrag->page);
-+			sg_set_page(sge, page, use, frag_offset);
-+			page_frag_alloc_commit(pfrag, use);
- 			sk_msg_iter_next(msg, end);
- 		}
- 
- 		sk_mem_charge(sk, use);
- 		msg->sg.size += use;
--		pfrag->offset += use;
- 		len -= use;
- 	}
- 
-diff --git a/net/core/sock.c b/net/core/sock.c
-index 8629f9aecf91..0c00edef33d7 100644
---- a/net/core/sock.c
-+++ b/net/core/sock.c
-@@ -2191,10 +2191,7 @@ static void __sk_destruct(struct rcu_head *head)
- 		pr_debug("%s: optmem leakage (%d bytes) detected\n",
- 			 __func__, atomic_read(&sk->sk_omem_alloc));
- 
--	if (sk->sk_frag.page) {
--		put_page(sk->sk_frag.page);
--		sk->sk_frag.page = NULL;
--	}
-+	page_frag_cache_drain(&sk->sk_frag);
- 
- 	/* We do not need to acquire sk->sk_peer_lock, we are the last user. */
- 	put_cred(sk->sk_peer_cred);
-@@ -2935,16 +2932,43 @@ bool skb_page_frag_refill(unsigned int sz, struct page_frag *pfrag, gfp_t gfp)
- }
- EXPORT_SYMBOL(skb_page_frag_refill);
- 
--bool sk_page_frag_refill(struct sock *sk, struct page_frag *pfrag)
-+struct page *sk_page_frag_alloc_prepare(struct sock *sk,
-+					struct page_frag_cache *pfrag,
-+					unsigned int *offset,
-+					unsigned int *size, void **va)
- {
--	if (likely(skb_page_frag_refill(32U, pfrag, sk->sk_allocation)))
--		return true;
-+	struct page *page;
-+
-+	*size = 32U;
-+	page = page_frag_alloc_prepare(pfrag, offset, size, va,
-+				       sk->sk_allocation);
-+	if (likely(page))
-+		return page;
- 
- 	sk_enter_memory_pressure(sk);
- 	sk_stream_moderate_sndbuf(sk);
--	return false;
-+	return NULL;
-+}
-+EXPORT_SYMBOL(sk_page_frag_alloc_prepare);
-+
-+struct page *sk_page_frag_alloc_pg_prepare(struct sock *sk,
-+					   struct page_frag_cache *pfrag,
-+					   unsigned int *offset,
-+					   unsigned int *size)
-+{
-+	struct page *page;
-+
-+	*size = 32U;
-+	page = page_frag_alloc_pg_prepare(pfrag, offset, size,
-+					  sk->sk_allocation);
-+	if (likely(page))
-+		return page;
-+
-+	sk_enter_memory_pressure(sk);
-+	sk_stream_moderate_sndbuf(sk);
-+	return NULL;
- }
--EXPORT_SYMBOL(sk_page_frag_refill);
-+EXPORT_SYMBOL(sk_page_frag_alloc_pg_prepare);
- 
- void __lock_sock(struct sock *sk)
- 	__releases(&sk->sk_lock.slock)
-@@ -3478,8 +3502,8 @@ void sock_init_data_uid(struct socket *sock, struct sock *sk, kuid_t uid)
- 	sk->sk_error_report	=	sock_def_error_report;
- 	sk->sk_destruct		=	sock_def_destruct;
- 
--	sk->sk_frag.page	=	NULL;
--	sk->sk_frag.offset	=	0;
-+	page_frag_cache_init(&sk->sk_frag);
-+
- 	sk->sk_peek_off		=	-1;
- 
- 	sk->sk_peer_pid 	=	NULL;
-diff --git a/net/ipv4/ip_output.c b/net/ipv4/ip_output.c
-index 9500031a1f55..eeb6a64a8250 100644
---- a/net/ipv4/ip_output.c
-+++ b/net/ipv4/ip_output.c
-@@ -952,7 +952,7 @@ static int __ip_append_data(struct sock *sk,
- 			    struct flowi4 *fl4,
- 			    struct sk_buff_head *queue,
- 			    struct inet_cork *cork,
--			    struct page_frag *pfrag,
-+			    struct page_frag_cache *pfrag,
- 			    int getfrag(void *from, char *to, int offset,
- 					int len, int odd, struct sk_buff *skb),
- 			    void *from, int length, int transhdrlen,
-@@ -1228,31 +1228,38 @@ static int __ip_append_data(struct sock *sk,
- 			wmem_alloc_delta += copy;
- 		} else if (!zc) {
- 			int i = skb_shinfo(skb)->nr_frags;
-+			unsigned int frag_offset, frag_size;
-+			struct page *page;
-+			void *va;
- 
- 			err = -ENOMEM;
--			if (!sk_page_frag_refill(sk, pfrag))
-+			page = sk_page_frag_alloc_prepare(sk, pfrag,
-+							  &frag_offset,
-+							  &frag_size, &va);
-+			if (!page)
- 				goto error;
- 
- 			skb_zcopy_downgrade_managed(skb);
--			if (!skb_can_coalesce(skb, i, pfrag->page,
--					      pfrag->offset)) {
-+			copy = min_t(int, copy, frag_size);
-+
-+			if (!skb_can_coalesce(skb, i, page, frag_offset)) {
- 				err = -EMSGSIZE;
- 				if (i == MAX_SKB_FRAGS)
- 					goto error;
- 
--				__skb_fill_page_desc(skb, i, pfrag->page,
--						     pfrag->offset, 0);
-+				__skb_fill_page_desc(skb, i, page, frag_offset,
-+						     copy);
- 				skb_shinfo(skb)->nr_frags = ++i;
--				get_page(pfrag->page);
-+				page_frag_alloc_commit(pfrag, copy);
-+			} else {
-+				skb_frag_size_add(
-+					&skb_shinfo(skb)->frags[i - 1], copy);
-+				page_frag_alloc_commit_noref(pfrag, copy);
- 			}
--			copy = min_t(int, copy, pfrag->size - pfrag->offset);
--			if (getfrag(from,
--				    page_address(pfrag->page) + pfrag->offset,
--				    offset, copy, skb->len, skb) < 0)
-+
-+			if (getfrag(from, va, offset, copy, skb->len, skb) < 0)
- 				goto error_efault;
- 
--			pfrag->offset += copy;
--			skb_frag_size_add(&skb_shinfo(skb)->frags[i - 1], copy);
- 			skb_len_add(skb, copy);
- 			wmem_alloc_delta += copy;
- 		} else {
-diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
-index 681b54e1f3a6..92e0cbfedd4e 100644
---- a/net/ipv4/tcp.c
-+++ b/net/ipv4/tcp.c
-@@ -1183,13 +1183,17 @@ int tcp_sendmsg_locked(struct sock *sk, struct msghdr *msg, size_t size)
- 		if (zc == 0) {
- 			bool merge = true;
- 			int i = skb_shinfo(skb)->nr_frags;
--			struct page_frag *pfrag = sk_page_frag(sk);
--
--			if (!sk_page_frag_refill(sk, pfrag))
-+			struct page_frag_cache *pfrag = sk_page_frag(sk);
-+			unsigned int frag_offset, frag_size;
-+			struct page *page;
-+			void *va;
-+
-+			page = sk_page_frag_alloc_prepare(sk, pfrag, &frag_offset,
-+							  &frag_size, &va);
-+			if (!page)
- 				goto wait_for_space;
- 
--			if (!skb_can_coalesce(skb, i, pfrag->page,
--					      pfrag->offset)) {
-+			if (!skb_can_coalesce(skb, i, page, frag_offset)) {
- 				if (i >= READ_ONCE(net_hotdata.sysctl_max_skb_frags)) {
- 					tcp_mark_push(tp, skb);
- 					goto new_segment;
-@@ -1197,7 +1201,7 @@ int tcp_sendmsg_locked(struct sock *sk, struct msghdr *msg, size_t size)
- 				merge = false;
- 			}
- 
--			copy = min_t(int, copy, pfrag->size - pfrag->offset);
-+			copy = min_t(int, copy, frag_size);
- 
- 			if (unlikely(skb_zcopy_pure(skb) || skb_zcopy_managed(skb))) {
- 				if (tcp_downgrade_zcopy_pure(sk, skb))
-@@ -1209,22 +1213,19 @@ int tcp_sendmsg_locked(struct sock *sk, struct msghdr *msg, size_t size)
- 			if (!copy)
- 				goto wait_for_space;
- 
--			err = skb_copy_to_page_nocache(sk, &msg->msg_iter, skb,
--						       pfrag->page,
--						       pfrag->offset,
--						       copy);
-+			err = skb_copy_to_va_nocache(sk, &msg->msg_iter, skb,
-+						     va, copy);
- 			if (err)
- 				goto do_error;
- 
- 			/* Update the skb. */
- 			if (merge) {
- 				skb_frag_size_add(&skb_shinfo(skb)->frags[i - 1], copy);
-+				page_frag_alloc_commit_noref(pfrag, copy);
- 			} else {
--				skb_fill_page_desc(skb, i, pfrag->page,
--						   pfrag->offset, copy);
--				page_ref_inc(pfrag->page);
-+				skb_fill_page_desc(skb, i, page, frag_offset, copy);
-+				page_frag_alloc_commit(pfrag, copy);
- 			}
--			pfrag->offset += copy;
- 		} else if (zc == MSG_ZEROCOPY)  {
- 			/* First append to a fragless skb builds initial
- 			 * pure zerocopy skb
-@@ -3122,11 +3123,7 @@ int tcp_disconnect(struct sock *sk, int flags)
- 
- 	WARN_ON(inet->inet_num && !icsk->icsk_bind_hash);
- 
--	if (sk->sk_frag.page) {
--		put_page(sk->sk_frag.page);
--		sk->sk_frag.page = NULL;
--		sk->sk_frag.offset = 0;
--	}
-+	page_frag_cache_drain(&sk->sk_frag);
- 	sk_error_report(sk);
- 	return 0;
- }
-diff --git a/net/ipv4/tcp_output.c b/net/ipv4/tcp_output.c
-index 95618d0e78e4..5cba1d1a0f81 100644
---- a/net/ipv4/tcp_output.c
-+++ b/net/ipv4/tcp_output.c
-@@ -3968,9 +3968,12 @@ static int tcp_send_syn_data(struct sock *sk, struct sk_buff *syn)
- 	struct inet_connection_sock *icsk = inet_csk(sk);
- 	struct tcp_sock *tp = tcp_sk(sk);
- 	struct tcp_fastopen_request *fo = tp->fastopen_req;
--	struct page_frag *pfrag = sk_page_frag(sk);
-+	struct page_frag_cache *pfrag = sk_page_frag(sk);
-+	unsigned int offset, size;
- 	struct sk_buff *syn_data;
- 	int space, err = 0;
-+	struct page *page;
-+	void *va;
- 
- 	tp->rx_opt.mss_clamp = tp->advmss;  /* If MSS is not cached */
- 	if (!tcp_fastopen_cookie_check(sk, &tp->rx_opt.mss_clamp, &fo->cookie))
-@@ -3989,30 +3992,31 @@ static int tcp_send_syn_data(struct sock *sk, struct sk_buff *syn)
- 
- 	space = min_t(size_t, space, fo->size);
- 
--	if (space &&
--	    !skb_page_frag_refill(min_t(size_t, space, PAGE_SIZE),
--				  pfrag, sk->sk_allocation))
--		goto fallback;
-+	if (space) {
-+		size = min_t(size_t, space, PAGE_SIZE);
-+		page = page_frag_alloc_prepare(pfrag, &offset, &size, &va,
-+					       sk->sk_allocation);
-+		if (!page)
-+			goto fallback;
-+	}
-+
- 	syn_data = tcp_stream_alloc_skb(sk, sk->sk_allocation, false);
- 	if (!syn_data)
- 		goto fallback;
- 	memcpy(syn_data->cb, syn->cb, sizeof(syn->cb));
- 	if (space) {
--		space = min_t(size_t, space, pfrag->size - pfrag->offset);
-+		space = min_t(size_t, space, size);
- 		space = tcp_wmem_schedule(sk, space);
- 	}
- 	if (space) {
--		space = copy_page_from_iter(pfrag->page, pfrag->offset,
--					    space, &fo->data->msg_iter);
-+		space = _copy_from_iter(va, space, &fo->data->msg_iter);
- 		if (unlikely(!space)) {
- 			tcp_skb_tsorted_anchor_cleanup(syn_data);
- 			kfree_skb(syn_data);
- 			goto fallback;
- 		}
--		skb_fill_page_desc(syn_data, 0, pfrag->page,
--				   pfrag->offset, space);
--		page_ref_inc(pfrag->page);
--		pfrag->offset += space;
-+		skb_fill_page_desc(syn_data, 0, page, offset, space);
-+		page_frag_alloc_commit(pfrag, space);
- 		skb_len_add(syn_data, space);
- 		skb_zcopy_set(syn_data, fo->uarg, NULL);
- 	}
-diff --git a/net/ipv6/ip6_output.c b/net/ipv6/ip6_output.c
-index 27d8725445e3..6c9feb092654 100644
---- a/net/ipv6/ip6_output.c
-+++ b/net/ipv6/ip6_output.c
-@@ -1404,7 +1404,7 @@ static int __ip6_append_data(struct sock *sk,
- 			     struct sk_buff_head *queue,
- 			     struct inet_cork_full *cork_full,
- 			     struct inet6_cork *v6_cork,
--			     struct page_frag *pfrag,
-+			     struct page_frag_cache *pfrag,
- 			     int getfrag(void *from, char *to, int offset,
- 					 int len, int odd, struct sk_buff *skb),
- 			     void *from, size_t length, int transhdrlen,
-@@ -1745,32 +1745,39 @@ static int __ip6_append_data(struct sock *sk,
- 			copy = err;
- 			wmem_alloc_delta += copy;
- 		} else if (!zc) {
-+			unsigned int frag_offset, frag_size;
- 			int i = skb_shinfo(skb)->nr_frags;
-+			struct page *page;
-+			void *va;
- 
- 			err = -ENOMEM;
--			if (!sk_page_frag_refill(sk, pfrag))
-+			page = sk_page_frag_alloc_prepare(sk, pfrag,
-+							  &frag_offset,
-+							  &frag_size, &va);
-+			if (!page)
- 				goto error;
- 
- 			skb_zcopy_downgrade_managed(skb);
--			if (!skb_can_coalesce(skb, i, pfrag->page,
--					      pfrag->offset)) {
-+			copy = min_t(int, copy, frag_size);
-+
-+			if (!skb_can_coalesce(skb, i, page, frag_offset)) {
- 				err = -EMSGSIZE;
- 				if (i == MAX_SKB_FRAGS)
- 					goto error;
- 
--				__skb_fill_page_desc(skb, i, pfrag->page,
--						     pfrag->offset, 0);
-+				__skb_fill_page_desc(skb, i, page, frag_offset,
-+						     copy);
- 				skb_shinfo(skb)->nr_frags = ++i;
--				get_page(pfrag->page);
-+				page_frag_alloc_commit(pfrag, copy);
-+			} else {
-+				skb_frag_size_add(
-+					&skb_shinfo(skb)->frags[i - 1], copy);
-+				page_frag_alloc_commit_noref(pfrag, copy);
- 			}
--			copy = min_t(int, copy, pfrag->size - pfrag->offset);
--			if (getfrag(from,
--				    page_address(pfrag->page) + pfrag->offset,
--				    offset, copy, skb->len, skb) < 0)
-+
-+			if (getfrag(from, va, offset, copy, skb->len, skb) < 0)
- 				goto error_efault;
- 
--			pfrag->offset += copy;
--			skb_frag_size_add(&skb_shinfo(skb)->frags[i - 1], copy);
- 			skb->len += copy;
- 			skb->data_len += copy;
- 			skb->truesize += copy;
-diff --git a/net/kcm/kcmsock.c b/net/kcm/kcmsock.c
-index 2f191e50d4fc..e52ddf716fa5 100644
---- a/net/kcm/kcmsock.c
-+++ b/net/kcm/kcmsock.c
-@@ -803,13 +803,17 @@ static int kcm_sendmsg(struct socket *sock, struct msghdr *msg, size_t len)
- 	while (msg_data_left(msg)) {
- 		bool merge = true;
- 		int i = skb_shinfo(skb)->nr_frags;
--		struct page_frag *pfrag = sk_page_frag(sk);
--
--		if (!sk_page_frag_refill(sk, pfrag))
-+		struct page_frag_cache *pfrag = sk_page_frag(sk);
-+		unsigned int offset, size;
-+		struct page *page;
-+		void *va;
-+
-+		page = sk_page_frag_alloc_prepare(sk, pfrag, &offset, &size,
-+						  &va);
-+		if (!page)
- 			goto wait_for_memory;
- 
--		if (!skb_can_coalesce(skb, i, pfrag->page,
--				      pfrag->offset)) {
-+		if (!skb_can_coalesce(skb, i, page, offset)) {
- 			if (i == MAX_SKB_FRAGS) {
- 				struct sk_buff *tskb;
- 
-@@ -850,15 +854,12 @@ static int kcm_sendmsg(struct socket *sock, struct msghdr *msg, size_t len)
- 			if (head != skb)
- 				head->truesize += copy;
- 		} else {
--			copy = min_t(int, msg_data_left(msg),
--				     pfrag->size - pfrag->offset);
-+			copy = min_t(int, msg_data_left(msg), size);
- 			if (!sk_wmem_schedule(sk, copy))
- 				goto wait_for_memory;
- 
--			err = skb_copy_to_page_nocache(sk, &msg->msg_iter, skb,
--						       pfrag->page,
--						       pfrag->offset,
--						       copy);
-+			err = skb_copy_to_va_nocache(sk, &msg->msg_iter, skb,
-+						     va, copy);
- 			if (err)
- 				goto out_error;
- 
-@@ -866,13 +867,12 @@ static int kcm_sendmsg(struct socket *sock, struct msghdr *msg, size_t len)
- 			if (merge) {
- 				skb_frag_size_add(
- 					&skb_shinfo(skb)->frags[i - 1], copy);
-+				page_frag_alloc_commit_noref(pfrag, copy);
- 			} else {
--				skb_fill_page_desc(skb, i, pfrag->page,
--						   pfrag->offset, copy);
--				get_page(pfrag->page);
-+				skb_fill_page_desc(skb, i, page, offset, copy);
-+				page_frag_alloc_commit(pfrag, copy);
- 			}
- 
--			pfrag->offset += copy;
- 		}
- 
- 		copied += copy;
-diff --git a/net/mptcp/protocol.c b/net/mptcp/protocol.c
-index 7d44196ec5b6..d66fd66b860e 100644
---- a/net/mptcp/protocol.c
-+++ b/net/mptcp/protocol.c
-@@ -960,17 +960,16 @@ static bool mptcp_skb_can_collapse_to(u64 write_seq,
- }
- 
- /* we can append data to the given data frag if:
-- * - there is space available in the backing page_frag
-- * - the data frag tail matches the current page_frag free offset
-+ * - the data frag tail matches the current page and offset
-  * - the data frag end sequence number matches the current write seq
-  */
- static bool mptcp_frag_can_collapse_to(const struct mptcp_sock *msk,
--				       const struct page_frag *pfrag,
-+				       const struct page *page,
-+				       const unsigned int offset,
- 				       const struct mptcp_data_frag *df)
- {
--	return df && pfrag->page == df->page &&
--		pfrag->size - pfrag->offset > 0 &&
--		pfrag->offset == (df->offset + df->data_len) &&
-+	return df && page == df->page &&
-+		offset == (df->offset + df->data_len) &&
- 		df->data_seq + df->data_len == msk->write_seq;
- }
- 
-@@ -1085,30 +1084,36 @@ static void mptcp_enter_memory_pressure(struct sock *sk)
- /* ensure we get enough memory for the frag hdr, beyond some minimal amount of
-  * data
-  */
--static bool mptcp_page_frag_refill(struct sock *sk, struct page_frag *pfrag)
-+static struct page *mptcp_page_frag_alloc_prepare(struct sock *sk,
-+						  struct page_frag_cache *pfrag,
-+						  unsigned int *offset,
-+						  unsigned int *size, void **va)
- {
--	if (likely(skb_page_frag_refill(32U + sizeof(struct mptcp_data_frag),
--					pfrag, sk->sk_allocation)))
--		return true;
-+	struct page *page;
-+
-+	page = page_frag_alloc_prepare(pfrag, offset, size, va,
-+				       sk->sk_allocation);
-+	if (likely(page))
-+		return page;
- 
- 	mptcp_enter_memory_pressure(sk);
--	return false;
-+	return NULL;
- }
- 
- static struct mptcp_data_frag *
--mptcp_carve_data_frag(const struct mptcp_sock *msk, struct page_frag *pfrag,
--		      int orig_offset)
-+mptcp_carve_data_frag(const struct mptcp_sock *msk, struct page *page,
-+		      unsigned int orig_offset)
- {
- 	int offset = ALIGN(orig_offset, sizeof(long));
- 	struct mptcp_data_frag *dfrag;
- 
--	dfrag = (struct mptcp_data_frag *)(page_to_virt(pfrag->page) + offset);
-+	dfrag = (struct mptcp_data_frag *)(page_to_virt(page) + offset);
- 	dfrag->data_len = 0;
- 	dfrag->data_seq = msk->write_seq;
- 	dfrag->overhead = offset - orig_offset + sizeof(struct mptcp_data_frag);
- 	dfrag->offset = offset + sizeof(struct mptcp_data_frag);
- 	dfrag->already_sent = 0;
--	dfrag->page = pfrag->page;
-+	dfrag->page = page;
- 
- 	return dfrag;
- }
-@@ -1793,7 +1798,7 @@ static u32 mptcp_send_limit(const struct sock *sk)
- static int mptcp_sendmsg(struct sock *sk, struct msghdr *msg, size_t len)
- {
- 	struct mptcp_sock *msk = mptcp_sk(sk);
--	struct page_frag *pfrag;
-+	struct page_frag_cache *pfrag;
- 	size_t copied = 0;
- 	int ret = 0;
- 	long timeo;
-@@ -1832,9 +1837,12 @@ static int mptcp_sendmsg(struct sock *sk, struct msghdr *msg, size_t len)
- 	while (msg_data_left(msg)) {
- 		int total_ts, frag_truesize = 0;
- 		struct mptcp_data_frag *dfrag;
-+		unsigned int offset = 0, size;
- 		bool dfrag_collapsed;
--		size_t psize, offset;
-+		struct page *page;
- 		u32 copy_limit;
-+		size_t psize;
-+		void *va;
- 
- 		/* ensure fitting the notsent_lowat() constraint */
- 		copy_limit = mptcp_send_limit(sk);
-@@ -1845,21 +1853,27 @@ static int mptcp_sendmsg(struct sock *sk, struct msghdr *msg, size_t len)
- 		 * page allocator
- 		 */
- 		dfrag = mptcp_pending_tail(sk);
--		dfrag_collapsed = mptcp_frag_can_collapse_to(msk, pfrag, dfrag);
-+		size = 1;
-+		page = page_frag_alloc_probe(pfrag, &offset, &size, &va);
-+		dfrag_collapsed = mptcp_frag_can_collapse_to(msk, page, offset,
-+							     dfrag);
- 		if (!dfrag_collapsed) {
--			if (!mptcp_page_frag_refill(sk, pfrag))
-+			size = 32U + sizeof(struct mptcp_data_frag);
-+			page = mptcp_page_frag_alloc_prepare(sk, pfrag, &offset,
-+							     &size, &va);
-+			if (!page)
- 				goto wait_for_memory;
- 
--			dfrag = mptcp_carve_data_frag(msk, pfrag, pfrag->offset);
-+			dfrag = mptcp_carve_data_frag(msk, page, offset);
- 			frag_truesize = dfrag->overhead;
-+			va += dfrag->overhead;
- 		}
- 
- 		/* we do not bound vs wspace, to allow a single packet.
- 		 * memory accounting will prevent execessive memory usage
- 		 * anyway
- 		 */
--		offset = dfrag->offset + dfrag->data_len;
--		psize = pfrag->size - offset;
-+		psize = size - frag_truesize;
- 		psize = min_t(size_t, psize, msg_data_left(msg));
- 		psize = min_t(size_t, psize, copy_limit);
- 		total_ts = psize + frag_truesize;
-@@ -1867,8 +1881,7 @@ static int mptcp_sendmsg(struct sock *sk, struct msghdr *msg, size_t len)
- 		if (!sk_wmem_schedule(sk, total_ts))
- 			goto wait_for_memory;
- 
--		ret = do_copy_data_nocache(sk, psize, &msg->msg_iter,
--					   page_address(dfrag->page) + offset);
-+		ret = do_copy_data_nocache(sk, psize, &msg->msg_iter, va);
- 		if (ret)
- 			goto do_error;
- 
-@@ -1877,7 +1890,6 @@ static int mptcp_sendmsg(struct sock *sk, struct msghdr *msg, size_t len)
- 		copied += psize;
- 		dfrag->data_len += psize;
- 		frag_truesize += psize;
--		pfrag->offset += frag_truesize;
- 		WRITE_ONCE(msk->write_seq, msk->write_seq + psize);
- 
- 		/* charge data on mptcp pending queue to the msk socket
-@@ -1885,11 +1897,14 @@ static int mptcp_sendmsg(struct sock *sk, struct msghdr *msg, size_t len)
- 		 */
- 		sk_wmem_queued_add(sk, frag_truesize);
- 		if (!dfrag_collapsed) {
--			get_page(dfrag->page);
-+			page_frag_alloc_commit(pfrag, frag_truesize);
- 			list_add_tail(&dfrag->list, &msk->rtx_queue);
- 			if (!msk->first_pending)
- 				WRITE_ONCE(msk->first_pending, dfrag);
-+		} else {
-+			page_frag_alloc_commit_noref(pfrag, frag_truesize);
- 		}
-+
- 		pr_debug("msk=%p dfrag at seq=%llu len=%u sent=%u new=%d", msk,
- 			 dfrag->data_seq, dfrag->data_len, dfrag->already_sent,
- 			 !dfrag_collapsed);
-diff --git a/net/sched/em_meta.c b/net/sched/em_meta.c
-index 8996c73c9779..4da465af972f 100644
---- a/net/sched/em_meta.c
-+++ b/net/sched/em_meta.c
-@@ -590,7 +590,7 @@ META_COLLECTOR(int_sk_sendmsg_off)
- 		*err = -1;
- 		return;
- 	}
--	dst->value = sk->sk_frag.offset;
-+	dst->value = page_frag_cache_page_offset(&sk->sk_frag);
- }
- 
- META_COLLECTOR(int_sk_write_pend)
-diff --git a/net/tls/tls_device.c b/net/tls/tls_device.c
-index ab6e694f7bc2..8dc0881347ad 100644
---- a/net/tls/tls_device.c
-+++ b/net/tls/tls_device.c
-@@ -257,24 +257,42 @@ static void tls_device_resync_tx(struct sock *sk, struct tls_context *tls_ctx,
- }
- 
- static void tls_append_frag(struct tls_record_info *record,
--			    struct page_frag *pfrag,
--			    int size)
-+			    struct page_frag_cache *pfrag, struct page *page,
-+			    unsigned int offset, unsigned int size)
- {
- 	skb_frag_t *frag;
- 
- 	frag = &record->frags[record->num_frags - 1];
--	if (skb_frag_page(frag) == pfrag->page &&
--	    skb_frag_off(frag) + skb_frag_size(frag) == pfrag->offset) {
-+	if (skb_frag_page(frag) == page &&
-+	    skb_frag_off(frag) + skb_frag_size(frag) == offset) {
- 		skb_frag_size_add(frag, size);
-+		page_frag_alloc_commit_noref(pfrag, size);
- 	} else {
- 		++frag;
--		skb_frag_fill_page_desc(frag, pfrag->page, pfrag->offset,
--					size);
-+		skb_frag_fill_page_desc(frag, page, offset, size);
- 		++record->num_frags;
--		get_page(pfrag->page);
-+		page_frag_alloc_commit(pfrag, size);
-+	}
-+
-+	record->len += size;
-+}
-+
-+static void tls_append_page(struct tls_record_info *record, struct page *page,
-+			    unsigned int offset, unsigned int size)
-+{
-+	skb_frag_t *frag;
-+
-+	frag = &record->frags[record->num_frags - 1];
-+	if (skb_frag_page(frag) == page &&
-+	    skb_frag_off(frag) + skb_frag_size(frag) == offset) {
-+		skb_frag_size_add(frag, size);
-+	} else {
-+		++frag;
-+		skb_frag_fill_page_desc(frag, page, offset, size);
-+		++record->num_frags;
-+		get_page(page);
- 	}
- 
--	pfrag->offset += size;
- 	record->len += size;
- }
- 
-@@ -315,11 +333,12 @@ static int tls_push_record(struct sock *sk,
- static void tls_device_record_close(struct sock *sk,
- 				    struct tls_context *ctx,
- 				    struct tls_record_info *record,
--				    struct page_frag *pfrag,
-+				    struct page_frag_cache *pfrag,
- 				    unsigned char record_type)
- {
- 	struct tls_prot_info *prot = &ctx->prot_info;
--	struct page_frag dummy_tag_frag;
-+	unsigned int offset, size;
-+	struct page *page;
- 
- 	/* append tag
- 	 * device will fill in the tag, we just need to append a placeholder
-@@ -327,13 +346,14 @@ static void tls_device_record_close(struct sock *sk,
- 	 * increases frag count)
- 	 * if we can't allocate memory now use the dummy page
- 	 */
--	if (unlikely(pfrag->size - pfrag->offset < prot->tag_size) &&
--	    !skb_page_frag_refill(prot->tag_size, pfrag, sk->sk_allocation)) {
--		dummy_tag_frag.page = dummy_page;
--		dummy_tag_frag.offset = 0;
--		pfrag = &dummy_tag_frag;
-+	size = prot->tag_size;
-+	page = page_frag_alloc_pg_prepare(pfrag, &offset, &size,
-+					  sk->sk_allocation);
-+	if (unlikely(!page)) {
-+		tls_append_page(record, dummy_page, 0, prot->tag_size);
-+	} else {
-+		tls_append_frag(record, pfrag, page, offset, prot->tag_size);
- 	}
--	tls_append_frag(record, pfrag, prot->tag_size);
- 
- 	/* fill prepend */
- 	tls_fill_prepend(ctx, skb_frag_address(&record->frags[0]),
-@@ -341,57 +361,52 @@ static void tls_device_record_close(struct sock *sk,
- 			 record_type);
- }
- 
--static int tls_create_new_record(struct tls_offload_context_tx *offload_ctx,
--				 struct page_frag *pfrag,
-+static int tls_create_new_record(struct sock *sk,
-+				 struct tls_offload_context_tx *offload_ctx,
-+				 struct page_frag_cache *pfrag,
- 				 size_t prepend_size)
- {
- 	struct tls_record_info *record;
-+	unsigned int offset;
-+	struct page *page;
- 	skb_frag_t *frag;
- 
- 	record = kmalloc(sizeof(*record), GFP_KERNEL);
- 	if (!record)
- 		return -ENOMEM;
- 
--	frag = &record->frags[0];
--	skb_frag_fill_page_desc(frag, pfrag->page, pfrag->offset,
--				prepend_size);
--
--	get_page(pfrag->page);
--	pfrag->offset += prepend_size;
-+	page = page_frag_alloc_pg(pfrag, &offset, prepend_size,
-+				  sk->sk_allocation);
-+	if (!page) {
-+		kfree(record);
-+		READ_ONCE(sk->sk_prot)->enter_memory_pressure(sk);
-+		sk_stream_moderate_sndbuf(sk);
-+		return -ENOMEM;
-+	}
- 
-+	frag = &record->frags[0];
-+	skb_frag_fill_page_desc(frag, page, offset, prepend_size);
- 	record->num_frags = 1;
- 	record->len = prepend_size;
- 	offload_ctx->open_record = record;
- 	return 0;
- }
- 
--static int tls_do_allocation(struct sock *sk,
--			     struct tls_offload_context_tx *offload_ctx,
--			     struct page_frag *pfrag,
--			     size_t prepend_size)
-+static struct page *tls_do_allocation(struct sock *sk,
-+				      struct tls_offload_context_tx *ctx,
-+				      struct page_frag_cache *pfrag,
-+				      size_t prepend_size, unsigned int *offset,
-+				      unsigned int *size, void **va)
- {
--	int ret;
--
--	if (!offload_ctx->open_record) {
--		if (unlikely(!skb_page_frag_refill(prepend_size, pfrag,
--						   sk->sk_allocation))) {
--			READ_ONCE(sk->sk_prot)->enter_memory_pressure(sk);
--			sk_stream_moderate_sndbuf(sk);
--			return -ENOMEM;
--		}
-+	if (!ctx->open_record) {
-+		int ret;
- 
--		ret = tls_create_new_record(offload_ctx, pfrag, prepend_size);
-+		ret = tls_create_new_record(sk, ctx, pfrag, prepend_size);
- 		if (ret)
--			return ret;
--
--		if (pfrag->size > pfrag->offset)
--			return 0;
-+			return NULL;
- 	}
- 
--	if (!sk_page_frag_refill(sk, pfrag))
--		return -ENOMEM;
--
--	return 0;
-+	return sk_page_frag_alloc_prepare(sk, pfrag, offset, size, va);
- }
- 
- static int tls_device_copy_data(void *addr, size_t bytes, struct iov_iter *i)
-@@ -428,8 +443,8 @@ static int tls_push_data(struct sock *sk,
- 	struct tls_prot_info *prot = &tls_ctx->prot_info;
- 	struct tls_offload_context_tx *ctx = tls_offload_ctx_tx(tls_ctx);
- 	struct tls_record_info *record;
-+	struct page_frag_cache *pfrag;
- 	int tls_push_record_flags;
--	struct page_frag *pfrag;
- 	size_t orig_size = size;
- 	u32 max_open_record_len;
- 	bool more = false;
-@@ -466,8 +481,13 @@ static int tls_push_data(struct sock *sk,
- 	max_open_record_len = TLS_MAX_PAYLOAD_SIZE +
- 			      prot->prepend_size;
- 	do {
--		rc = tls_do_allocation(sk, ctx, pfrag, prot->prepend_size);
--		if (unlikely(rc)) {
-+		unsigned int frag_offset, frag_size;
-+		struct page *page;
-+		void *va;
-+
-+		page = tls_do_allocation(sk, ctx, pfrag, prot->prepend_size,
-+					 &frag_offset, &frag_size, &va);
-+		if (unlikely(!page)) {
- 			rc = sk_stream_wait_memory(sk, &timeo);
- 			if (!rc)
- 				continue;
-@@ -495,8 +515,8 @@ static int tls_push_data(struct sock *sk,
- 
- 		copy = min_t(size_t, size, max_open_record_len - record->len);
- 		if (copy && (flags & MSG_SPLICE_PAGES)) {
--			struct page_frag zc_pfrag;
--			struct page **pages = &zc_pfrag.page;
-+			struct page *splice_page;
-+			struct page **pages = &splice_page;
- 			size_t off;
- 
- 			rc = iov_iter_extract_pages(iter, &pages,
-@@ -508,24 +528,21 @@ static int tls_push_data(struct sock *sk,
- 			}
- 			copy = rc;
- 
--			if (WARN_ON_ONCE(!sendpage_ok(zc_pfrag.page))) {
-+			if (WARN_ON_ONCE(!sendpage_ok(splice_page))) {
- 				iov_iter_revert(iter, copy);
- 				rc = -EIO;
- 				goto handle_error;
- 			}
- 
--			zc_pfrag.offset = off;
--			zc_pfrag.size = copy;
--			tls_append_frag(record, &zc_pfrag, copy);
-+			tls_append_page(record, splice_page, off, copy);
- 		} else if (copy) {
--			copy = min_t(size_t, copy, pfrag->size - pfrag->offset);
-+			copy = min_t(size_t, copy, frag_size);
- 
--			rc = tls_device_copy_data(page_address(pfrag->page) +
--						  pfrag->offset, copy,
--						  iter);
-+			rc = tls_device_copy_data(va, copy, iter);
- 			if (rc)
- 				goto handle_error;
--			tls_append_frag(record, pfrag, copy);
-+
-+			tls_append_frag(record, pfrag, page, frag_offset, copy);
- 		}
- 
- 		size -= copy;
--- 
-2.30.0
+Thanks!
 
+On Sat, Sep 17, 2022 at 8:13=E2=80=AFAM Hou Tao <houtao@huaweicloud.com> wr=
+ote:
+>
+> From: Hou Tao <houtao1@huawei.com>
+>
+> The initial motivation for qp-trie map is to reduce memory usage for
+> string keys specially those with large differencies in length. Moreover
+> as a big-endian lexicographic-ordered map, qp-trie can also be used for
+> any binary data with fixed or variable length.
+>
+> The memory efficiency of qp-tries comes partly from the design of qp-trie
+> which doesn't save key for branch node and uses sparse array to save leaf
+> nodes, partly comes from the support of bpf_dynptr-typed key: only the
+> used part in key is saved.
+>
+> But the memory efficiency and ordered keys come with cost: for strings
+> (e.g. symbol names in /proc/kallsyms) the lookup performance of qp-trie
+> is about 30% or more slower compared with hash-table. But the lookup
+> performance is not always bad than hash-table, for randomly generated
+> binary data set with big differencies in length, the lookup performance
+> of qp-trie will be twice as good as hash-table as showed in the
+> following benchmark.
+>
+> Signed-off-by: Hou Tao <houtao1@huawei.com>
+> ---
+>  include/linux/bpf_types.h      |    1 +
+>  include/uapi/linux/bpf.h       |    1 +
+>  kernel/bpf/Makefile            |    1 +
+>  kernel/bpf/bpf_qp_trie.c       | 1055 ++++++++++++++++++++++++++++++++
+>  tools/include/uapi/linux/bpf.h |    1 +
+>  5 files changed, 1059 insertions(+)
+>  create mode 100644 kernel/bpf/bpf_qp_trie.c
+>
+> diff --git a/include/linux/bpf_types.h b/include/linux/bpf_types.h
+> index 2b9112b80171..a73d47f83d74 100644
+> --- a/include/linux/bpf_types.h
+> +++ b/include/linux/bpf_types.h
+> @@ -126,6 +126,7 @@ BPF_MAP_TYPE(BPF_MAP_TYPE_STRUCT_OPS, bpf_struct_ops_=
+map_ops)
+>  #endif
+>  BPF_MAP_TYPE(BPF_MAP_TYPE_RINGBUF, ringbuf_map_ops)
+>  BPF_MAP_TYPE(BPF_MAP_TYPE_BLOOM_FILTER, bloom_filter_map_ops)
+> +BPF_MAP_TYPE(BPF_MAP_TYPE_QP_TRIE, qp_trie_map_ops)
+>
+>  BPF_LINK_TYPE(BPF_LINK_TYPE_RAW_TRACEPOINT, raw_tracepoint)
+>  BPF_LINK_TYPE(BPF_LINK_TYPE_TRACING, tracing)
+> diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+> index 77a2828f8148..e35e70b5cf0d 100644
+> --- a/include/uapi/linux/bpf.h
+> +++ b/include/uapi/linux/bpf.h
+> @@ -928,6 +928,7 @@ enum bpf_map_type {
+>         BPF_MAP_TYPE_INODE_STORAGE,
+>         BPF_MAP_TYPE_TASK_STORAGE,
+>         BPF_MAP_TYPE_BLOOM_FILTER,
+> +       BPF_MAP_TYPE_QP_TRIE,
+>  };
+>
+>  /* Note that tracing related programs such as
+> diff --git a/kernel/bpf/Makefile b/kernel/bpf/Makefile
+> index 341c94f208f4..8419f44fea50 100644
+> --- a/kernel/bpf/Makefile
+> +++ b/kernel/bpf/Makefile
+> @@ -10,6 +10,7 @@ obj-$(CONFIG_BPF_SYSCALL) +=3D syscall.o verifier.o ino=
+de.o helpers.o tnum.o bpf_i
+>  obj-$(CONFIG_BPF_SYSCALL) +=3D hashtab.o arraymap.o percpu_freelist.o bp=
+f_lru_list.o lpm_trie.o map_in_map.o bloom_filter.o
+>  obj-$(CONFIG_BPF_SYSCALL) +=3D local_storage.o queue_stack_maps.o ringbu=
+f.o
+>  obj-$(CONFIG_BPF_SYSCALL) +=3D bpf_local_storage.o bpf_task_storage.o
+> +obj-$(CONFIG_BPF_SYSCALL) +=3D bpf_qp_trie.o
+>  obj-${CONFIG_BPF_LSM}    +=3D bpf_inode_storage.o
+>  obj-$(CONFIG_BPF_SYSCALL) +=3D disasm.o
+>  obj-$(CONFIG_BPF_JIT) +=3D trampoline.o
+> diff --git a/kernel/bpf/bpf_qp_trie.c b/kernel/bpf/bpf_qp_trie.c
+> new file mode 100644
+> index 000000000000..4f56f69360ce
+> --- /dev/null
+> +++ b/kernel/bpf/bpf_qp_trie.c
+> @@ -0,0 +1,1055 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Derived from qp.c in https://github.com/fanf2/qp.git
+> + *
+> + * Copyright (C) 2022. Huawei Technologies Co., Ltd
+> + */
+> +#include <linux/kernel.h>
+> +#include <linux/types.h>
+> +#include <linux/spinlock.h>
+> +#include <linux/rcupdate.h>
+> +#include <linux/bpf.h>
+> +#include <linux/btf.h>
+> +#include <linux/btf_ids.h>
+> +
+> +/* qp-trie (quadbit popcount trie) is a memory efficient trie. Unlike
+> + * normal trie which uses byte as lookup key, qp-trie interprets its key=
+s
+> + * as quadbit/nibble array and uses one nibble each time during lookup.
+> + * The most significant nibble (upper nibble) of byte N in the key will
+> + * be the 2*N element of nibble array, and the least significant nibble
+> + * (lower nibble) of byte N will be the 2*N+1 element in nibble array.
+> + *
+> + * For normal trie, it may have 256 child nodes, and for qp-trie one bra=
+nch
+> + * node may have 17 child nodes. #0 child node is special because it mus=
+t
+> + * be a leaf node and its key is the same as the branch node. #1~#16 chi=
+ld
+> + * nodes represent leaf nodes or branch nodes which have different keys
+> + * with parent node. The key of branch node is the common prefix for the=
+se
+> + * child nodes, and the index of child node minus one is the value of fi=
+rst
+> + * different nibble between these child nodes.
+> + *
+> + * qp-trie reduces memory usage through two methods:
+> + * (1) Branch node doesn't store the key. It only stores the position of
+> + *     the first nibble which differentiates child nodes.
+> + * (2) Branch node doesn't store all 17 child nodes. It uses a bitmap an=
+d
+> + *     popcount() to implement a sparse array and only allocates memory
+> + *     for those present children.
+> + *
+> + * Like normal trie, qp-trie is also ordered and is in big-endian
+> + * lexicographic order. If traverse qp-trie in a depth-first way, it wil=
+l
+> + * return a string of ordered keys.
+> + *
+> + * The following diagrams show the construction of a tiny qp-trie:
+> + *
+> + * (1) insert abc
+> + *
+> + *          [ leaf node: abc ]
+> + *
+> + * (2) insert abc_d
+> + *
+> + * The first different nibble between "abc" and "abc_d" is the upper nib=
+ble
+> + * of character '_' (0x5), and its position in nibble array is 6
+> + * (starts from 0).
+> + *
+> + *          [ branch node ] bitmap: 0x41 diff pos: 6
+> + *                 |
+> + *                 *
+> + *             children
+> + *          [0]        [6]
+> + *           |          |
+> + *       [leaf: abc] [leaf: abc_d]
+> + *
+> + * (3) insert abc_e
+> + *
+> + * The first different nibble between "abc_d" and "abc_e" is the lower
+> + * nibble of character 'd'/'e', and its position in array is 9.
+> + *
+> + *          [ branch node ] bitmap: 0x41 diff pos: 6
+> + *                 |
+> + *                 *
+> + *             children
+> + *          [0]        [6]
+> + *           |          |
+> + *       [leaf: abc]    |
+> + *                      *
+> + *                [ branch node ] bitmap: 0x60 diff pos: 9
+> + *                      |
+> + *                      *
+> + *                   children
+> + *                [5]        [6]
+> + *                 |          |
+> + *          [leaf: abc_d]  [leaf: abc_e]
+> + */
+> +
+> +#define QP_TRIE_MANDATORY_FLAG_MASK (BPF_F_NO_PREALLOC | BPF_F_DYNPTR_KE=
+Y)
+> +#define QP_TRIE_CREATE_FLAG_MASK (QP_TRIE_MANDATORY_FLAG_MASK | BPF_F_NU=
+MA_NODE | \
+> +                                 BPF_F_ACCESS_MASK)
+> +
+> +/* bit[0] of nodes in qp_trie_branch is used to tell node type:
+> + *
+> + * bit[0]: 0-branch node
+> + * bit[0]: 1-leaf node
+> + *
+> + * Size of qp_trie_branch is already 2-bytes aligned, so only need to ma=
+ke
+> + * allocation of leaf node to be 2-bytes aligned.
+> + */
+> +#define QP_TRIE_LEAF_NODE_MASK 1UL
+> +#define QP_TRIE_LEAF_ALLOC_ALIGN 2
+> +
+> +/* To reduce memory usage, only qp_trie_branch is RCU-freed. To handle
+> + * freeing of the last leaf node, an extra qp_trie_branch node is
+> + * allocated. The branch node has only one child and its index is 0. It
+> + * is set as root node after adding the first leaf node.
+> + */
+> +#define QP_TRIE_ROOT_NODE_INDEX 0
+> +#define QP_TRIE_NON_ROOT_NODE_MASK 1
+> +
+> +#define QP_TRIE_NIBBLE_SHIFT 1
+> +#define QP_TRIE_BYTE_INDEX_SHIFT 2
+> +
+> +#define QP_TRIE_TWIGS_FREE_NONE_IDX 17
+> +
+> +struct qp_trie_branch {
+> +       /* The bottom two bits of index are used as special flags:
+> +        *
+> +        * bit[0]: 0-root, 1-not root
+> +        * bit[1]: 0-upper nibble, 1-lower nibble
+> +        *
+> +        * bit[2:31]: byte index for key
+> +        */
+> +       unsigned int index;
+> +       /* 17 bits are used to accommodate arbitrary keys, even when ther=
+e are
+> +        * zero-bytes in these keys.
+> +        *
+> +        * bit[0]: a leaf node has the same key as the prefix of parent n=
+ode
+> +        * bit[N]: a child node with the value of nibble at index as (N -=
+ 1)
+> +        */
+> +       unsigned int bitmap:17;
+> +       /* The index of leaf node will be RCU-freed together */
+> +       unsigned int to_free_idx:5;
+> +       struct qp_trie_branch __rcu *parent;
+> +       struct rcu_head rcu;
+> +       void __rcu *nodes[0];
+> +};
+> +
+> +#define QP_TRIE_NR_SUBTREE 256
+> +
+> +struct qp_trie {
+> +       struct bpf_map map;
+> +       atomic_t entries;
+> +       void __rcu *roots[QP_TRIE_NR_SUBTREE];
+> +       spinlock_t locks[QP_TRIE_NR_SUBTREE];
+> +};
+> +
+> +/* Internally use qp_trie_key instead of bpf_dynptr_kern
+> + * to reduce memory usage
+> + */
+> +struct qp_trie_key {
+> +       /* the length of blob data */
+> +       unsigned int len;
+> +       /* blob data */
+> +       unsigned char data[0];
+> +};
+> +
+> +struct qp_trie_diff {
+> +       unsigned int index;
+> +       unsigned int sibling_bm;
+> +       unsigned int new_bm;
+> +};
+> +
+> +static inline void *to_child_node(const struct qp_trie_key *key)
+> +{
+> +       return (void *)((long)key | QP_TRIE_LEAF_NODE_MASK);
+> +}
+> +
+> +static inline struct qp_trie_key *to_leaf_node(void *node)
+> +{
+> +       return (void *)((long)node & ~QP_TRIE_LEAF_NODE_MASK);
+> +}
+> +
+> +static inline bool is_branch_node(void *node)
+> +{
+> +       return !((long)node & QP_TRIE_LEAF_NODE_MASK);
+> +}
+> +
+> +static inline bool is_same_key(const struct qp_trie_key *k, const unsign=
+ed char *data,
+> +                              unsigned int len)
+> +{
+> +       return k->len =3D=3D len && !memcmp(k->data, data, len);
+> +}
+> +
+> +static inline void *qp_trie_leaf_value(const struct qp_trie_key *key)
+> +{
+> +       return (void *)key + sizeof(*key) + key->len;
+> +}
+> +
+> +static inline unsigned int calc_twig_index(unsigned int mask, unsigned i=
+nt bitmap)
+> +{
+> +       return hweight32(mask & (bitmap - 1));
+> +}
+> +
+> +static inline unsigned int calc_twig_nr(unsigned int bitmap)
+> +{
+> +       return hweight32(bitmap);
+> +}
+> +
+> +static inline unsigned int nibble_to_bitmap(unsigned char nibble)
+> +{
+> +       return 1U << (nibble + 1);
+> +}
+> +
+> +static inline unsigned int index_to_byte_index(unsigned int index)
+> +{
+> +       return index >> QP_TRIE_BYTE_INDEX_SHIFT;
+> +}
+> +
+> +static inline unsigned int calc_br_bitmap(unsigned int index, const unsi=
+gned char *data,
+> +                                         unsigned int len)
+> +{
+> +       unsigned int byte;
+> +       unsigned char nibble;
+> +
+> +       if (index =3D=3D QP_TRIE_ROOT_NODE_INDEX)
+> +               return 1;
+> +
+> +       byte =3D index_to_byte_index(index);
+> +       if (byte >=3D len)
+> +               return 1;
+> +
+> +       nibble =3D data[byte];
+> +       /* lower nibble */
+> +       if ((index >> QP_TRIE_NIBBLE_SHIFT) & 1)
+> +               nibble &=3D 0xf;
+> +       else
+> +               nibble >>=3D 4;
+> +       return nibble_to_bitmap(nibble);
+> +}
+> +
+> +static void qp_trie_free_twigs_rcu(struct rcu_head *rcu)
+> +{
+> +       struct qp_trie_branch *twigs =3D container_of(rcu, struct qp_trie=
+_branch, rcu);
+> +       unsigned int idx =3D twigs->to_free_idx;
+> +
+> +       if (idx !=3D QP_TRIE_TWIGS_FREE_NONE_IDX)
+> +               kfree(to_leaf_node(rcu_access_pointer(twigs->nodes[idx]))=
+);
+> +       kfree(twigs);
+> +}
+> +
+> +static void qp_trie_branch_free(struct qp_trie_branch *twigs, unsigned i=
+nt to_free_idx)
+> +{
+> +       twigs->to_free_idx =3D to_free_idx;
+> +       call_rcu(&twigs->rcu, qp_trie_free_twigs_rcu);
+> +}
+> +
+> +static inline struct qp_trie_branch *
+> +qp_trie_branch_new(struct bpf_map *map, unsigned int nr)
+> +{
+> +       struct qp_trie_branch *a;
+> +
+> +       a =3D bpf_map_kmalloc_node(map, sizeof(*a) + nr * sizeof(*a->node=
+s),
+> +                                GFP_NOWAIT | __GFP_NOWARN, map->numa_nod=
+e);
+> +       return a;
+> +}
+> +
+> +static inline void qp_trie_assign_parent(struct qp_trie_branch *parent, =
+void *node)
+> +{
+> +       if (is_branch_node(node))
+> +               rcu_assign_pointer(((struct qp_trie_branch *)node)->paren=
+t, parent);
+> +}
+> +
+> +static void qp_trie_update_parent(struct qp_trie_branch *parent, unsigne=
+d int nr)
+> +{
+> +       unsigned int i;
+> +
+> +       for (i =3D 0; i < nr; i++)
+> +               qp_trie_assign_parent(parent, rcu_dereference_protected(p=
+arent->nodes[i], 1));
+> +}
+> +
+> +/* new_node can be either a leaf node or a branch node */
+> +static struct qp_trie_branch *
+> +qp_trie_branch_replace(struct bpf_map *map, struct qp_trie_branch *old, =
+unsigned int bitmap,
+> +                      void *new_node)
+> +{
+> +       unsigned int nr =3D calc_twig_nr(old->bitmap);
+> +       unsigned int p =3D calc_twig_index(old->bitmap, bitmap);
+> +       struct qp_trie_branch *twigs;
+> +
+> +       twigs =3D qp_trie_branch_new(map, nr);
+> +       if (!twigs)
+> +               return NULL;
+> +
+> +       if (p)
+> +               memcpy(twigs->nodes, old->nodes, p * sizeof(*twigs->nodes=
+));
+> +
+> +       rcu_assign_pointer(twigs->nodes[p], new_node);
+> +
+> +       if (nr - 1 > p)
+> +               memcpy(&twigs->nodes[p+1], &old->nodes[p+1], (nr - 1 - p)=
+ * sizeof(*twigs->nodes));
+> +
+> +       twigs->index =3D old->index;
+> +       twigs->bitmap =3D old->bitmap;
+> +       /* twigs will not be visible to reader until rcu_assign_pointer()=
+, so
+> +        * use RCU_INIT_POINTER() here.
+> +        */
+> +       RCU_INIT_POINTER(twigs->parent, old->parent);
+> +
+> +       /* Initialize ->parent of parent node first, then update ->parent=
+ for
+> +        * child nodes after parent node is fully initialized.
+> +        */
+> +       qp_trie_update_parent(twigs, nr);
+> +
+> +       return twigs;
+> +}
+> +
+> +static struct qp_trie_branch *
+> +qp_trie_branch_insert(struct bpf_map *map, struct qp_trie_branch *old, u=
+nsigned int bitmap,
+> +                     const struct qp_trie_key *new)
+> +{
+> +       unsigned int nr =3D calc_twig_nr(old->bitmap);
+> +       unsigned int p =3D calc_twig_index(old->bitmap, bitmap);
+> +       struct qp_trie_branch *twigs;
+> +
+> +       twigs =3D qp_trie_branch_new(map, nr + 1);
+> +       if (!twigs)
+> +               return NULL;
+> +
+> +       if (p)
+> +               memcpy(twigs->nodes, old->nodes, p * sizeof(*twigs->nodes=
+));
+> +
+> +       rcu_assign_pointer(twigs->nodes[p], to_child_node(new));
+> +
+> +       if (nr > p)
+> +               memcpy(&twigs->nodes[p+1], &old->nodes[p], (nr - p) * siz=
+eof(*twigs->nodes));
+> +
+> +       twigs->bitmap =3D old->bitmap | bitmap;
+> +       twigs->index =3D old->index;
+> +       RCU_INIT_POINTER(twigs->parent, old->parent);
+> +
+> +       qp_trie_update_parent(twigs, nr + 1);
+> +
+> +       return twigs;
+> +}
+> +
+> +static struct qp_trie_branch *
+> +qp_trie_branch_remove(struct bpf_map *map, struct qp_trie_branch *old, u=
+nsigned int bitmap)
+> +{
+> +       unsigned int nr =3D calc_twig_nr(old->bitmap);
+> +       unsigned int p =3D calc_twig_index(old->bitmap, bitmap);
+> +       struct qp_trie_branch *twigs;
+> +
+> +       twigs =3D qp_trie_branch_new(map, nr - 1);
+> +       if (!twigs)
+> +               return NULL;
+> +
+> +       if (p)
+> +               memcpy(twigs->nodes, old->nodes, p * sizeof(*twigs->nodes=
+));
+> +       if (nr - 1 > p)
+> +               memcpy(&twigs->nodes[p], &old->nodes[p+1], (nr - 1 - p) *=
+ sizeof(*twigs->nodes));
+> +
+> +       twigs->bitmap =3D old->bitmap & ~bitmap;
+> +       twigs->index =3D old->index;
+> +       RCU_INIT_POINTER(twigs->parent, old->parent);
+> +
+> +       qp_trie_update_parent(twigs, nr - 1);
+> +
+> +       return twigs;
+> +}
+> +
+> +static struct qp_trie_key *
+> +qp_trie_init_leaf_node(struct bpf_map *map, const struct bpf_dynptr_kern=
+ *k, void *v)
+> +{
+> +       unsigned int key_size, total;
+> +       struct qp_trie_key *new;
+> +
+> +       key_size =3D bpf_dynptr_get_size(k);
+> +       if (!key_size || key_size > (u32)map->map_extra)
+> +               return ERR_PTR(-EINVAL);
+> +
+> +       total =3D round_up(sizeof(*new) + key_size + map->value_size, QP_=
+TRIE_LEAF_ALLOC_ALIGN);
+> +       new =3D bpf_map_kmalloc_node(map, total, GFP_NOWAIT | __GFP_NOWAR=
+N, map->numa_node);
+> +       if (!new)
+> +               return ERR_PTR(-ENOMEM);
+> +
+> +       new->len =3D key_size;
+> +       memcpy(new->data, k->data + k->offset, key_size);
+> +       memcpy((void *)&new[1] + key_size, v, map->value_size);
+> +
+> +       return new;
+> +}
+> +
+> +static bool calc_prefix_len(const struct qp_trie_key *s_key, const struc=
+t qp_trie_key *n_key,
+> +                           unsigned int *index)
+> +{
+> +       unsigned int i, len =3D min(s_key->len, n_key->len);
+> +       unsigned char diff =3D 0;
+> +
+> +       for (i =3D 0; i < len; i++) {
+> +               diff =3D s_key->data[i] ^ n_key->data[i];
+> +               if (diff)
+> +                       break;
+> +       }
+> +
+> +       *index =3D (i << QP_TRIE_BYTE_INDEX_SHIFT) | QP_TRIE_NON_ROOT_NOD=
+E_MASK;
+> +       if (!diff)
+> +               return s_key->len =3D=3D n_key->len;
+> +
+> +       *index +=3D (diff & 0xf0) ? 0 : (1U << QP_TRIE_NIBBLE_SHIFT);
+> +       return false;
+> +}
+> +
+> +static int qp_trie_new_branch(struct qp_trie *trie, struct qp_trie_branc=
+h __rcu **parent,
+> +                             unsigned int bitmap, void *sibling, struct =
+qp_trie_diff *d,
+> +                             const struct qp_trie_key *leaf)
+> +{
+> +       struct qp_trie_branch *new_child_twigs, *new_twigs, *old_twigs;
+> +       struct bpf_map *map;
+> +       unsigned int iip;
+> +       int err;
+> +
+> +       map =3D &trie->map;
+> +       if (atomic_inc_return(&trie->entries) > map->max_entries) {
+> +               err =3D -ENOSPC;
+> +               goto dec_entries;
+> +       }
+> +
+> +       new_child_twigs =3D qp_trie_branch_new(map, 2);
+> +       if (!new_child_twigs) {
+> +               err =3D -ENOMEM;
+> +               goto dec_entries;
+> +       }
+> +
+> +       new_child_twigs->index =3D d->index;
+> +       new_child_twigs->bitmap =3D d->sibling_bm | d->new_bm;
+> +
+> +       iip =3D calc_twig_index(new_child_twigs->bitmap, d->sibling_bm);
+> +       RCU_INIT_POINTER(new_child_twigs->nodes[iip], sibling);
+> +       rcu_assign_pointer(new_child_twigs->nodes[!iip], to_child_node(le=
+af));
+> +       RCU_INIT_POINTER(new_child_twigs->parent, NULL);
+> +
+> +       old_twigs =3D rcu_dereference_protected(*parent, 1);
+> +       new_twigs =3D qp_trie_branch_replace(map, old_twigs, bitmap, new_=
+child_twigs);
+> +       if (!new_twigs) {
+> +               err =3D -ENOMEM;
+> +               goto free_child_twigs;
+> +       }
+> +
+> +       qp_trie_assign_parent(new_child_twigs, sibling);
+> +       rcu_assign_pointer(*parent, new_twigs);
+> +       qp_trie_branch_free(old_twigs, QP_TRIE_TWIGS_FREE_NONE_IDX);
+> +
+> +       return 0;
+> +
+> +free_child_twigs:
+> +       kfree(new_child_twigs);
+> +dec_entries:
+> +       atomic_dec(&trie->entries);
+> +       return err;
+> +}
+> +
+> +static int qp_trie_ext_branch(struct qp_trie *trie, struct qp_trie_branc=
+h __rcu **parent,
+> +                             const struct qp_trie_key *new, unsigned int=
+ bitmap)
+> +{
+> +       struct qp_trie_branch *old_twigs, *new_twigs;
+> +       struct bpf_map *map;
+> +       int err;
+> +
+> +       map =3D &trie->map;
+> +       if (atomic_inc_return(&trie->entries) > map->max_entries) {
+> +               err =3D -ENOSPC;
+> +               goto dec_entries;
+> +       }
+> +
+> +       old_twigs =3D rcu_dereference_protected(*parent, 1);
+> +       new_twigs =3D qp_trie_branch_insert(map, old_twigs, bitmap, new);
+> +       if (!new_twigs) {
+> +               err =3D -ENOMEM;
+> +               goto dec_entries;
+> +       }
+> +
+> +       rcu_assign_pointer(*parent, new_twigs);
+> +       qp_trie_branch_free(old_twigs, QP_TRIE_TWIGS_FREE_NONE_IDX);
+> +
+> +       return 0;
+> +
+> +dec_entries:
+> +       atomic_dec(&trie->entries);
+> +       return err;
+> +}
+> +
+> +static int qp_trie_add_leaf_node(struct qp_trie *trie, struct qp_trie_br=
+anch __rcu **parent,
+> +                                const struct qp_trie_key *new)
+> +{
+> +       struct bpf_map *map =3D &trie->map;
+> +       struct qp_trie_branch *twigs;
+> +       int err;
+> +
+> +       if (atomic_inc_return(&trie->entries) > map->max_entries) {
+> +               err =3D -ENOSPC;
+> +               goto dec_entries;
+> +       }
+> +
+> +       twigs =3D qp_trie_branch_new(map, 1);
+> +       if (!twigs) {
+> +               err =3D -ENOMEM;
+> +               goto dec_entries;
+> +       }
+> +       twigs->index =3D QP_TRIE_ROOT_NODE_INDEX;
+> +       twigs->bitmap =3D 1;
+> +       RCU_INIT_POINTER(twigs->parent, NULL);
+> +       rcu_assign_pointer(twigs->nodes[0], to_child_node(new));
+> +
+> +       rcu_assign_pointer(*parent, twigs);
+> +
+> +       return 0;
+> +dec_entries:
+> +       atomic_dec(&trie->entries);
+> +       return err;
+> +}
+> +
+> +static int qp_trie_rep_leaf_node(struct qp_trie *trie, struct qp_trie_br=
+anch __rcu **parent,
+> +                                const struct qp_trie_key *new, unsigned =
+int bitmap)
+> +{
+> +       struct qp_trie_branch *old_twigs, *new_twigs;
+> +       struct bpf_map *map =3D &trie->map;
+> +
+> +       /* Only branch node is freed by RCU, so replace the old branch no=
+de
+> +        * and free the old leaf node together with the old branch node.
+> +        */
+> +       old_twigs =3D rcu_dereference_protected(*parent, 1);
+> +       new_twigs =3D qp_trie_branch_replace(map, old_twigs, bitmap, to_c=
+hild_node(new));
+> +       if (!new_twigs)
+> +               return -ENOMEM;
+> +
+> +       rcu_assign_pointer(*parent, new_twigs);
+> +
+> +       qp_trie_branch_free(old_twigs, calc_twig_index(old_twigs->bitmap,=
+ bitmap));
+> +
+> +       return 0;
+> +}
+> +
+> +static int qp_trie_remove_leaf(struct qp_trie *trie, struct qp_trie_bran=
+ch __rcu **parent,
+> +                              unsigned int bitmap, const struct qp_trie_=
+key *node)
+> +{
+> +       struct bpf_map *map =3D &trie->map;
+> +       struct qp_trie_branch *new, *old;
+> +       unsigned int nr;
+> +
+> +       old =3D rcu_dereference_protected(*parent, 1);
+> +       nr =3D calc_twig_nr(old->bitmap);
+> +       if (nr > 2) {
+> +               new =3D qp_trie_branch_remove(map, old, bitmap);
+> +               if (!new)
+> +                       return -ENOMEM;
+> +       } else {
+> +               new =3D NULL;
+> +       }
+> +
+> +       rcu_assign_pointer(*parent, new);
+> +
+> +       qp_trie_branch_free(old, calc_twig_index(old->bitmap, bitmap));
+> +
+> +       atomic_dec(&trie->entries);
+> +
+> +       return 0;
+> +}
+> +
+> +static int qp_trie_merge_node(struct qp_trie *trie, struct qp_trie_branc=
+h __rcu **grand_parent,
+> +                             struct qp_trie_branch *parent, unsigned int=
+ parent_bitmap,
+> +                             unsigned int bitmap)
+> +{
+> +       struct qp_trie_branch *old_twigs, *new_twigs;
+> +       struct bpf_map *map =3D &trie->map;
+> +       void *new_sibling;
+> +       unsigned int iip;
+> +
+> +       iip =3D calc_twig_index(parent->bitmap, bitmap);
+> +       new_sibling =3D rcu_dereference_protected(parent->nodes[!iip], 1)=
+;
+> +
+> +       old_twigs =3D rcu_dereference_protected(*grand_parent, 1);
+> +       new_twigs =3D qp_trie_branch_replace(map, old_twigs, parent_bitma=
+p, new_sibling);
+> +       if (!new_twigs)
+> +               return -ENOMEM;
+> +
+> +       rcu_assign_pointer(*grand_parent, new_twigs);
+> +
+> +       qp_trie_branch_free(old_twigs, QP_TRIE_TWIGS_FREE_NONE_IDX);
+> +       qp_trie_branch_free(parent, iip);
+> +
+> +       atomic_dec(&trie->entries);
+> +
+> +       return 0;
+> +}
+> +
+> +static int qp_trie_alloc_check(union bpf_attr *attr)
+> +{
+> +       if (!bpf_capable())
+> +               return -EPERM;
+> +
+> +       if ((attr->map_flags & QP_TRIE_MANDATORY_FLAG_MASK) !=3D QP_TRIE_=
+MANDATORY_FLAG_MASK ||
+> +           attr->map_flags & ~QP_TRIE_CREATE_FLAG_MASK ||
+> +           !bpf_map_flags_access_ok(attr->map_flags))
+> +               return -EINVAL;
+> +
+> +       if (!attr->max_entries || !attr->value_size)
+> +               return -EINVAL;
+> +
+> +       /* Key and value are allocated together in qp_trie_init_leaf_node=
+() */
+> +       if (round_up((u64)sizeof(struct qp_trie_key) + (u32)attr->map_ext=
+ra + attr->value_size,
+> +                    QP_TRIE_LEAF_ALLOC_ALIGN) >=3D KMALLOC_MAX_SIZE)
+> +               return -E2BIG;
+> +
+> +       return 0;
+> +}
+> +
+> +static struct bpf_map *qp_trie_alloc(union bpf_attr *attr)
+> +{
+> +       struct qp_trie *trie;
+> +       unsigned int i;
+> +
+> +       trie =3D bpf_map_area_alloc(sizeof(*trie), bpf_map_attr_numa_node=
+(attr));
+> +       if (!trie)
+> +               return ERR_PTR(-ENOMEM);
+> +
+> +       /* roots are zeroed by bpf_map_area_alloc() */
+> +       for (i =3D 0; i < QP_TRIE_NR_SUBTREE; i++)
+> +               spin_lock_init(&trie->locks[i]);
+> +
+> +       atomic_set(&trie->entries, 0);
+> +       bpf_map_init_from_attr(&trie->map, attr);
+> +
+> +       return &trie->map;
+> +}
+> +
+> +static void qp_trie_free_subtree(void *root)
+> +{
+> +       struct qp_trie_branch *parent =3D NULL;
+> +       struct qp_trie_key *cur =3D NULL;
+> +       void *node =3D root;
+> +
+> +       /*
+> +        * Depth-first deletion
+> +        *
+> +        * 1. find left-most key and its parent
+> +        * 2. get next sibling Y from parent
+> +        * (a) Y is leaf node: continue
+> +        * (b) Y is branch node: goto step 1
+> +        * (c) no more sibling: backtrace upwards if parent is not NULL a=
+nd
+> +        *     goto step 1
+> +        */
+> +       do {
+> +               while (is_branch_node(node)) {
+> +                       parent =3D node;
+> +                       node =3D rcu_dereference_raw(parent->nodes[0]);
+> +               }
+> +
+> +               cur =3D to_leaf_node(node);
+> +               while (parent) {
+> +                       unsigned int iip, bitmap, nr;
+> +                       void *ancestor;
+> +
+> +                       bitmap =3D calc_br_bitmap(parent->index, cur->dat=
+a, cur->len);
+> +                       iip =3D calc_twig_index(parent->bitmap, bitmap) +=
+ 1;
+> +                       nr =3D calc_twig_nr(parent->bitmap);
+> +
+> +                       for (; iip < nr; iip++) {
+> +                               kfree(cur);
+> +
+> +                               node =3D rcu_dereference_raw(parent->node=
+s[iip]);
+> +                               if (is_branch_node(node))
+> +                                       break;
+> +
+> +                               cur =3D to_leaf_node(node);
+> +                       }
+> +                       if (iip < nr)
+> +                               break;
+> +
+> +                       ancestor =3D rcu_dereference_raw(parent->parent);
+> +                       kfree(parent);
+> +                       parent =3D ancestor;
+> +               }
+> +       } while (parent);
+> +
+> +       kfree(cur);
+> +}
+> +
+> +static void qp_trie_free(struct bpf_map *map)
+> +{
+> +       struct qp_trie *trie =3D container_of(map, struct qp_trie, map);
+> +       unsigned int i;
+> +
+> +       /* Wait for the pending qp_trie_free_twigs_rcu() */
+> +       rcu_barrier();
+> +
+> +       for (i =3D 0; i < ARRAY_SIZE(trie->roots); i++) {
+> +               void *root =3D rcu_dereference_raw(trie->roots[i]);
+> +
+> +               if (root)
+> +                       qp_trie_free_subtree(root);
+> +       }
+> +       bpf_map_area_free(trie);
+> +}
+> +
+> +static inline void qp_trie_copy_leaf(const struct qp_trie_key *leaf, str=
+uct bpf_dynptr_kern *key)
+> +{
+> +       memcpy(key->data + key->offset, leaf->data, leaf->len);
+> +       bpf_dynptr_set_size(key, leaf->len);
+> +}
+> +
+> +static void qp_trie_copy_min_key_from(void *root, struct bpf_dynptr_kern=
+ *key)
+> +{
+> +       void *node;
+> +
+> +       node =3D root;
+> +       while (is_branch_node(node))
+> +               node =3D rcu_dereference(((struct qp_trie_branch *)node)-=
+>nodes[0]);
+> +
+> +       qp_trie_copy_leaf(to_leaf_node(node), key);
+> +}
+> +
+> +static int qp_trie_lookup_min_key(struct qp_trie *trie, unsigned int fro=
+m,
+> +                                 struct bpf_dynptr_kern *key)
+> +{
+> +       unsigned int i;
+> +
+> +       for (i =3D from; i < ARRAY_SIZE(trie->roots); i++) {
+> +               void *root =3D rcu_dereference(trie->roots[i]);
+> +
+> +               if (root) {
+> +                       qp_trie_copy_min_key_from(root, key);
+> +                       return 0;
+> +               }
+> +       }
+> +
+> +       return -ENOENT;
+> +}
+> +
+> +static int qp_trie_next_twigs_index(struct qp_trie_branch *twigs, unsign=
+ed int bitmap)
+> +{
+> +       unsigned int idx, nr, next;
+> +
+> +       /* bitmap may not in twigs->bitmap */
+> +       idx =3D calc_twig_index(twigs->bitmap, bitmap);
+> +       nr =3D calc_twig_nr(twigs->bitmap);
+> +
+> +       next =3D idx;
+> +       if (twigs->bitmap & bitmap)
+> +               next +=3D 1;
+> +
+> +       if (next >=3D nr)
+> +               return -1;
+> +       return next;
+> +}
+> +
+> +static int qp_trie_lookup_next_node(struct qp_trie *trie, const struct b=
+pf_dynptr_kern *key,
+> +                                   struct bpf_dynptr_kern *next_key)
+> +{
+> +       const struct qp_trie_key *found;
+> +       struct qp_trie_branch *parent;
+> +       const unsigned char *data;
+> +       unsigned int data_len;
+> +       void *node, *next;
+> +
+> +       /* Non-existent key, so restart from the beginning */
+> +       data =3D key->data + key->offset;
+> +       node =3D rcu_dereference(trie->roots[*data]);
+> +       if (!node)
+> +               return qp_trie_lookup_min_key(trie, 0, next_key);
+> +
+> +       parent =3D NULL;
+> +       data_len =3D bpf_dynptr_get_size(key);
+> +       while (is_branch_node(node)) {
+> +               struct qp_trie_branch *br =3D node;
+> +               unsigned int iip, bitmap;
+> +
+> +               bitmap =3D calc_br_bitmap(br->index, data, data_len);
+> +               if (bitmap & br->bitmap)
+> +                       iip =3D calc_twig_index(br->bitmap, bitmap);
+> +               else
+> +                       iip =3D 0;
+> +
+> +               parent =3D br;
+> +               node =3D rcu_dereference(br->nodes[iip]);
+> +       }
+> +       found =3D to_leaf_node(node);
+> +       if (!is_same_key(found, data, data_len))
+> +               return qp_trie_lookup_min_key(trie, 0, next_key);
+> +
+> +       /* Pair with store release in rcu_assign_pointer(*parent, twigs) =
+to
+> +        * ensure reading node->parent will not return the old parent if
+> +        * the node is found by following the newly-created parent.
+> +        */
+> +       smp_rmb();
+> +
+> +       next =3D NULL;
+> +       while (parent) {
+> +               unsigned int bitmap;
+> +               int next_idx;
+> +
+> +               bitmap =3D calc_br_bitmap(parent->index, data, data_len);
+> +               next_idx =3D qp_trie_next_twigs_index(parent, bitmap);
+> +               if (next_idx >=3D 0) {
+> +                       next =3D rcu_dereference(parent->nodes[next_idx])=
+;
+> +                       break;
+> +               }
+> +               parent =3D rcu_dereference(parent->parent);
+> +       }
+> +
+> +       /* Goto next sub-tree */
+> +       if (!next)
+> +               return qp_trie_lookup_min_key(trie, *data + 1, next_key);
+> +
+> +       if (!is_branch_node(next))
+> +               qp_trie_copy_leaf(to_leaf_node(next), next_key);
+> +       else
+> +               qp_trie_copy_min_key_from(next, next_key);
+> +
+> +       return 0;
+> +}
+> +
+> +/* Called from syscall */
+> +static int qp_trie_get_next_key(struct bpf_map *map, void *key, void *ne=
+xt_key)
+> +{
+> +       struct qp_trie *trie =3D container_of(map, struct qp_trie, map);
+> +       int err;
+> +
+> +       if (!key)
+> +               err =3D qp_trie_lookup_min_key(trie, 0, next_key);
+> +       else
+> +               err =3D qp_trie_lookup_next_node(trie, key, next_key);
+> +       return err;
+> +}
+> +
+> +/* Called from syscall or from eBPF program */
+> +static void *qp_trie_lookup_elem(struct bpf_map *map, void *key)
+> +{
+> +       struct qp_trie *trie =3D container_of(map, struct qp_trie, map);
+> +       const struct bpf_dynptr_kern *dynptr_key =3D key;
+> +       const struct qp_trie_key *found;
+> +       const unsigned char *data;
+> +       unsigned int data_len;
+> +       void *node, *value;
+> +
+> +       /* Dynptr with zero length is possible, but is invalid for qp-tri=
+e */
+> +       data_len =3D bpf_dynptr_get_size(dynptr_key);
+> +       if (!data_len)
+> +               return NULL;
+> +
+> +       data =3D dynptr_key->data + dynptr_key->offset;
+> +       node =3D rcu_dereference_check(trie->roots[*data], rcu_read_lock_=
+bh_held());
+> +       if (!node)
+> +               return NULL;
+> +
+> +       value =3D NULL;
+> +       while (is_branch_node(node)) {
+> +               struct qp_trie_branch *br =3D node;
+> +               unsigned int bitmap;
+> +               unsigned int iip;
+> +
+> +               /* When byte index equals with key len, the target key
+> +                * may be in twigs->nodes[0].
+> +                */
+> +               if (index_to_byte_index(br->index) > data_len)
+> +                       goto done;
+> +
+> +               bitmap =3D calc_br_bitmap(br->index, data, data_len);
+> +               if (!(bitmap & br->bitmap))
+> +                       goto done;
+> +
+> +               iip =3D calc_twig_index(br->bitmap, bitmap);
+> +               node =3D rcu_dereference_check(br->nodes[iip], rcu_read_l=
+ock_bh_held());
+> +       }
+> +
+> +       found =3D to_leaf_node(node);
+> +       if (is_same_key(found, data, data_len))
+> +               value =3D qp_trie_leaf_value(found);
+> +done:
+> +       return value;
+> +}
+> +
+> +/* Called from syscall or from eBPF program */
+> +static int qp_trie_update_elem(struct bpf_map *map, void *key, void *val=
+ue, u64 flags)
+> +{
+> +       struct qp_trie *trie =3D container_of(map, struct qp_trie, map);
+> +       const struct qp_trie_key *leaf_key, *new_key;
+> +       struct qp_trie_branch __rcu **parent;
+> +       struct qp_trie_diff d;
+> +       unsigned int bitmap;
+> +       void __rcu **node;
+> +       spinlock_t *lock;
+> +       unsigned char c;
+> +       bool equal;
+> +       int err;
+> +
+> +       if (flags > BPF_EXIST)
+> +               return -EINVAL;
+> +
+> +       /* The content of key may change, so copy it firstly */
+> +       new_key =3D qp_trie_init_leaf_node(map, key, value);
+> +       if (IS_ERR(new_key))
+> +               return PTR_ERR(new_key);
+> +
+> +       c =3D new_key->data[0];
+> +       lock =3D &trie->locks[c];
+> +       spin_lock(lock);
+> +       parent =3D (struct qp_trie_branch __rcu **)&trie->roots[c];
+> +       if (!rcu_dereference_protected(*parent, 1)) {
+> +               if (flags =3D=3D BPF_EXIST) {
+> +                       err =3D -ENOENT;
+> +                       goto unlock;
+> +               }
+> +               err =3D qp_trie_add_leaf_node(trie, parent, new_key);
+> +               goto unlock;
+> +       }
+> +
+> +       bitmap =3D 1;
+> +       node =3D &rcu_dereference_protected(*parent, 1)->nodes[0];
+> +       while (is_branch_node(rcu_dereference_protected(*node, 1))) {
+> +               struct qp_trie_branch *br =3D rcu_dereference_protected(*=
+node, 1);
+> +               unsigned int iip;
+> +
+> +               bitmap =3D calc_br_bitmap(br->index, new_key->data, new_k=
+ey->len);
+> +               if (bitmap & br->bitmap)
+> +                       iip =3D calc_twig_index(br->bitmap, bitmap);
+> +               else
+> +                       iip =3D 0;
+> +               parent =3D (struct qp_trie_branch __rcu **)node;
+> +               node =3D &br->nodes[iip];
+> +       }
+> +
+> +       leaf_key =3D to_leaf_node(rcu_dereference_protected(*node, 1));
+> +       equal =3D calc_prefix_len(leaf_key, new_key, &d.index);
+> +       if (equal) {
+> +               if (flags =3D=3D BPF_NOEXIST) {
+> +                       err =3D -EEXIST;
+> +                       goto unlock;
+> +               }
+> +               err =3D qp_trie_rep_leaf_node(trie, parent, new_key, bitm=
+ap);
+> +               goto unlock;
+> +       }
+> +
+> +       d.sibling_bm =3D calc_br_bitmap(d.index, leaf_key->data, leaf_key=
+->len);
+> +       d.new_bm =3D calc_br_bitmap(d.index, new_key->data, new_key->len)=
+;
+> +
+> +       bitmap =3D 1;
+> +       parent =3D (struct qp_trie_branch __rcu **)&trie->roots[c];
+> +       node =3D &rcu_dereference_protected(*parent, 1)->nodes[0];
+> +       while (is_branch_node(rcu_dereference_protected(*node, 1))) {
+> +               struct qp_trie_branch *br =3D rcu_dereference_protected(*=
+node, 1);
+> +               unsigned int iip;
+> +
+> +               if (d.index < br->index)
+> +                       goto new_branch;
+> +
+> +               parent =3D (struct qp_trie_branch __rcu **)node;
+> +               if (d.index =3D=3D br->index) {
+> +                       if (flags =3D=3D BPF_EXIST) {
+> +                               err =3D -ENOENT;
+> +                               goto unlock;
+> +                       }
+> +                       err =3D qp_trie_ext_branch(trie, parent, new_key,=
+ d.new_bm);
+> +                       goto unlock;
+> +               }
+> +
+> +               bitmap =3D calc_br_bitmap(br->index, new_key->data, new_k=
+ey->len);
+> +               iip =3D calc_twig_index(br->bitmap, bitmap);
+> +               node =3D &br->nodes[iip];
+> +       }
+> +
+> +new_branch:
+> +       if (flags =3D=3D BPF_EXIST) {
+> +               err =3D -ENOENT;
+> +               goto unlock;
+> +       }
+> +       err =3D qp_trie_new_branch(trie, parent, bitmap, rcu_dereference_=
+protected(*node, 1),
+> +                                &d, new_key);
+> +unlock:
+> +       spin_unlock(lock);
+> +       if (err)
+> +               kfree(new_key);
+> +       return err;
+> +}
+> +
+> +/* Called from syscall or from eBPF program */
+> +static int qp_trie_delete_elem(struct bpf_map *map, void *key)
+> +{
+> +       struct qp_trie *trie =3D container_of(map, struct qp_trie, map);
+> +       unsigned int bitmap, parent_bitmap, data_len, nr;
+> +       struct qp_trie_branch __rcu **parent, **grand_parent;
+> +       const struct bpf_dynptr_kern *dynptr_key;
+> +       const struct qp_trie_key *found;
+> +       const unsigned char *data;
+> +       void __rcu **node;
+> +       spinlock_t *lock;
+> +       unsigned char c;
+> +       int err;
+> +
+> +       dynptr_key =3D key;
+> +       data_len =3D bpf_dynptr_get_size(dynptr_key);
+> +       if (!data_len)
+> +               return -EINVAL;
+> +
+> +       err =3D -ENOENT;
+> +       data =3D dynptr_key->data + dynptr_key->offset;
+> +       c =3D *data;
+> +       lock =3D &trie->locks[c];
+> +       spin_lock(lock);
+> +       parent =3D (struct qp_trie_branch __rcu **)&trie->roots[c];
+> +       if (!*parent)
+> +               goto unlock;
+> +
+> +       grand_parent =3D NULL;
+> +       parent_bitmap =3D bitmap =3D 1;
+> +       node =3D &rcu_dereference_protected(*parent, 1)->nodes[0];
+> +       while (is_branch_node(rcu_dereference_protected(*node, 1))) {
+> +               struct qp_trie_branch *br =3D rcu_dereference_protected(*=
+node, 1);
+> +               unsigned int iip;
+> +
+> +               if (index_to_byte_index(br->index) > data_len)
+> +                       goto unlock;
+> +
+> +               parent_bitmap =3D bitmap;
+> +               bitmap =3D calc_br_bitmap(br->index, data, data_len);
+> +               if (!(bitmap & br->bitmap))
+> +                       goto unlock;
+> +
+> +               grand_parent =3D parent;
+> +               parent =3D (struct qp_trie_branch __rcu **)node;
+> +               iip =3D calc_twig_index(br->bitmap, bitmap);
+> +               node =3D &br->nodes[iip];
+> +       }
+> +
+> +       found =3D to_leaf_node(rcu_dereference_protected(*node, 1));
+> +       if (!is_same_key(found, data, data_len))
+> +               goto unlock;
+> +
+> +       nr =3D calc_twig_nr(rcu_dereference_protected(*parent, 1)->bitmap=
+);
+> +       if (nr !=3D 2)
+> +               err =3D qp_trie_remove_leaf(trie, parent, bitmap, found);
+> +       else
+> +               err =3D qp_trie_merge_node(trie, grand_parent, rcu_derefe=
+rence_protected(*parent, 1),
+> +                                        parent_bitmap, bitmap);
+> +unlock:
+> +       spin_unlock(lock);
+> +       return err;
+> +}
+> +
+> +static int qp_trie_check_btf(const struct bpf_map *map,
+> +                            const struct btf *btf,
+> +                            const struct btf_type *key_type,
+> +                            const struct btf_type *value_type)
+> +{
+> +       return 0;
+> +}
+> +
+> +BTF_ID_LIST_SINGLE(qp_trie_map_btf_ids, struct, qp_trie)
+> +const struct bpf_map_ops qp_trie_map_ops =3D {
+> +       .map_alloc_check =3D qp_trie_alloc_check,
+> +       .map_alloc =3D qp_trie_alloc,
+> +       .map_free =3D qp_trie_free,
+> +       .map_get_next_key =3D qp_trie_get_next_key,
+> +       .map_lookup_elem =3D qp_trie_lookup_elem,
+> +       .map_update_elem =3D qp_trie_update_elem,
+> +       .map_delete_elem =3D qp_trie_delete_elem,
+> +       .map_meta_equal =3D bpf_map_meta_equal,
+> +       .map_check_btf =3D qp_trie_check_btf,
+> +       .map_btf_id =3D &qp_trie_map_btf_ids[0],
+> +};
+> diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bp=
+f.h
+> index 600c3fcee37a..1591f0df46f3 100644
+> --- a/tools/include/uapi/linux/bpf.h
+> +++ b/tools/include/uapi/linux/bpf.h
+> @@ -928,6 +928,7 @@ enum bpf_map_type {
+>         BPF_MAP_TYPE_INODE_STORAGE,
+>         BPF_MAP_TYPE_TASK_STORAGE,
+>         BPF_MAP_TYPE_BLOOM_FILTER,
+> +       BPF_MAP_TYPE_QP_TRIE,
+>  };
+>
+>  /* Note that tracing related programs such as
+> --
+> 2.29.2
+>
