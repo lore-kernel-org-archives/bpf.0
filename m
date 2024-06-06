@@ -1,96 +1,115 @@
-Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
+Received: from mail-qk1-f179.google.com (mail-qk1-f179.google.com [209.85.222.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03E8344C68
-	for <bpf@vger.kernel.org>; Thu,  6 Jun 2024 05:36:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 745D03EA72
+	for <bpf@vger.kernel.org>; Thu,  6 Jun 2024 08:26:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717652219; cv=none; b=CVrbYa/PmnZEO/9BFVQfibIaBm67eMw7gCEMjGkgQjHQgxCWeErOgUuqyZ33U2D7iE+YmFij8P8tvUolk/MkgV1Ffg94XhpFwn2hD9+cWJGom6IsUzu9sGAmHnQ/QYDF9dcdBlpioJOp3z+LSs2D5p9ICdJsr1Rc/qPpMt2dIi4=
+	t=1717662405; cv=none; b=apS9a8S+hafae/mMrVwbf0oMuo4UOEuZFHcjI2NlKK0jDk18B33fxgYDWHlb9UzuGjaIKZIaEdb6kt2o86rOxMg3/Oq5k59w5weh1nviLev7ebLt0KfpR9lQNKYMQXYsLTLKEw9ynrFZ9jOUGW0LlrDj62ItugPvvO9Rw1cFxFA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717652219; c=relaxed/simple;
-	bh=ZElMrsoHp2J/iUIPHZOKnAqjVwXfoRwwboo6IEeM+RM=;
+	s=arc-20240116; t=1717662405; c=relaxed/simple;
+	bh=n0pZueRUmpdvtloIPpgcxNu/B7/nDsSTEeurRzHnHsE=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=oUwEFUoazStWjyTBG0tzXlcdXfhHN2tlVsfCAO3DCTGASeEdLSD0eH8MtqSJvXi+mS3kAFUjHEl+fFP094cw8V3PEzqejaur2DgkpRhrWq7/jmTYLACvSnQphPZHTArX+xrYQWmViF9OgFVgYPgpq30jOFTUSzmD95yDQQUKdHU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GPPmNntE; arc=none smtp.client-ip=209.85.221.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 To:Cc:Content-Type; b=GK9I5s85O+dEVQndNFXwzicby5i8JoAOg3sHWGitagnHAPQC2vg0iwB/Ax4KWVk8D9yhdtf2McKEhhTNyWnGTftTw88Hlyaz7ZCHSnLezB/p0ooiUjyPCKBb3Rd2kE5LFPyQQFhjVbjS6QxOxIm1EpAXbYiMIYhYXgdcXzSb7Xo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=4sLwLe/V; arc=none smtp.client-ip=209.85.222.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GPPmNntE"
-Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-35ef3a037a0so217524f8f.0
-        for <bpf@vger.kernel.org>; Wed, 05 Jun 2024 22:36:57 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="4sLwLe/V"
+Received: by mail-qk1-f179.google.com with SMTP id af79cd13be357-7951cf70432so46865085a.3
+        for <bpf@vger.kernel.org>; Thu, 06 Jun 2024 01:26:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1717652216; x=1718257016; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KsgalRlq7qQFolT7eFF6rV07ZLhqbx2B/EvfSGbQTW4=;
-        b=GPPmNntEtdIGxfU1g/+XmS0+03rGKCPtI0hErxm6q4WiPJ48VVYUufPtEvwsMjdBFh
-         S8IvbJZdRmIqJ7HiAG6zjWo9qBHzEJdvr4ByWqL/0XfoaZQCp0bgo0B9Tljlcf0lzHL5
-         XV9wnRR8aOB66T4e9ZkntBUc/gkD+gQevr5zE802P5MnqrsUgrOapMLTLdFdfaxBHk7U
-         MpCwcqelhlo1C5zZAsx0L7LHQRQGNsDhl3hehcTE/BkJ6W/N3gzIPeFrqt5t7NOBE8Xn
-         AYAsFS2c2AKy8zxIZ84/+05D0cCOVG7uEkUyZPTHH8deNhDgap/Cb23UdiUFfPxR6VDH
-         vDHw==
+        d=google.com; s=20230601; t=1717662403; x=1718267203; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=KAoWLPLPpZp/YDC/UyXezS+9/hRBrQtfl1bKW+wACuw=;
+        b=4sLwLe/VCU1z+LGkTU/t4s4Cd1FwfbmOkfVfCrOwYJcYfEqjjOHAKAHy8TKNTS4fkR
+         q8ZTin+epAoNF1aZq1Fi7VlUJyQJRPQMWIqdCbNx0u6CHHUGj6j/His/PmZWQOi+iV84
+         Cst8iVnSuBzxMPuobisSYOVjd+GMvbaU73+0zK19uKHrt35eSSkxnkapG/CTSAph0B0F
+         V7jsjbZ3MIULy4Yl+0/z54IQxl7pYzMH2qI7SwCkwTqB5UQ0hfIxUtZjewsbFfWH//GU
+         oLmhXN6O/K6fymHf7F2Jn8megNtSVGl95et4im40bONWGV+gcIOoinUjMC090iI9EI5J
+         OKwg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1717652216; x=1718257016;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=KsgalRlq7qQFolT7eFF6rV07ZLhqbx2B/EvfSGbQTW4=;
-        b=be4TlNfM9qzgqHql1W3Gy7FDvVml7ey+zdaRYQVGu7+yLOBenE1OQ+QCc5+FpLgF/5
-         MWQWe0DIiJeR7J0FnvTH3OctXFESfS3P9/9MPKVVgPwMAy9F7aUA6rNv9N/yJIqj6nUf
-         Su3iKXz+wgWKbi2dwCmpzrIKKowVVULBWiMsIhY/RD/fMb7CYEId8a4CtiSCBr2ZiQBw
-         v3PJjbwYO7hAepOg8KD2NsR+5BmmYsI8ONJfTwguzdveC7qgeHkNqAnxchdcrU1ukfl0
-         9pCqHRFrRhfoCFH+Hz7AjpF9VWQPpl3Yy6hlbgOxooab3JZnV8xyvtg0GqkGfvvGLxga
-         PWRg==
-X-Gm-Message-State: AOJu0Yz2cPsxno9CMwuz9BGRe2SMVsZ0DvvoZI1NYjp++W/ROyHA9yqd
-	1A4l/kyVcIYc82mPsrI4nHHjyJolaOVaMLu9hnFTKEu/uhptDYIdZTsG/ZXGKWaxZqH1Eg1r6GZ
-	tojpnnIa3WJY17RRlyYRhFGMIPj1DEg==
-X-Google-Smtp-Source: AGHT+IGls5GdqwIzv3lEtNYzpAbxSI18zsMCMk8YqjrTcBkgF+PI7TF7aJO0yY1c5CBBt+HB9e28zMM50aiJ+qNyheE=
-X-Received: by 2002:a5d:4e50:0:b0:354:f5f2:1997 with SMTP id
- ffacd0b85a97d-35ef0d7209cmr1322473f8f.3.1717652215909; Wed, 05 Jun 2024
- 22:36:55 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1717662403; x=1718267203;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=KAoWLPLPpZp/YDC/UyXezS+9/hRBrQtfl1bKW+wACuw=;
+        b=h4biNc3imSRGQXG5CavJPMzFRKc6QMsLnmWMYa7tDvEFvSp24vc2XaEvQrpY12wrgc
+         U/47p2zhO+1EqXH+aevociRxDce5QQQQN2wg7kJCenV6SEVTjVJNvEVt4eEVwjgz/QJc
+         P0O6yAX/ejEiyA/gFz0uhY/vXfHcJ+vCAmGawnkwguQzqaQTYgd186zfuq6mjFBNIHYk
+         7uSWCKJtUvrDVEEU9ZcJESgd7U0Zf563i9DgfT39Cto1uaH0kzT0WaYKgYRW9yTgUvi1
+         qjltiDR152YMIXzzRkdfTYlHi43tGRmIkyBTYxGJ2cqjF2SqyS1Hu9IQyziFncG7vIN0
+         J/VQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVqml0fCj3N7TEM696y6gjFBLalESpzhr5JaZ7R3YXNQAEyPBBC2qv2R1eft3yEIAfVDd8OO5gnqVBu68T9fkJxzvj3
+X-Gm-Message-State: AOJu0YxHQgsDDLgYV72Ins1Wj2ZzfYaGKv0SR+5j4SW66w/LzFUB0vPC
+	keV6A1PkHCWEU3pHorPbOy4khhSn7K+RqPQZde/XhqD7LYAxzvpzzZnL4v9NWgeu2scs94fjQVg
+	uqJJ/wzQM83mlgdPUSCIdiasNlSajoge77Xpq
+X-Google-Smtp-Source: AGHT+IHSPl2srWABU7TtuEx6MInqkT/TqH/zLF1tN13BVl/h67uv526s9BJchBKedf9gNhwL02Rx2Ai332/cTTjwml8=
+X-Received: by 2002:a05:6214:3911:b0:6af:c66a:d5a8 with SMTP id
+ 6a1803df08f44-6b030aa0653mr52388716d6.51.1717662403007; Thu, 06 Jun 2024
+ 01:26:43 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20220917153125.2001645-1-houtao@huaweicloud.com>
- <20220917153125.2001645-7-houtao@huaweicloud.com> <CAADnVQ+0eTwL_iJo8Y79GHB-8zAgNCV7Ka9Mza1b+8ENOShBvw@mail.gmail.com>
- <3a21310f-e5ec-c9fb-86a8-6eeecb0b6975@huaweicloud.com> <CAADnVQK0U8pdW0NAno5fS7RYpZcPDWxNHXYaunw4foP9JFLZnQ@mail.gmail.com>
- <8038fc1b-1d73-c8df-9cd1-2dfcde8360fc@huaweicloud.com>
-In-Reply-To: <8038fc1b-1d73-c8df-9cd1-2dfcde8360fc@huaweicloud.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Wed, 5 Jun 2024 22:36:44 -0700
-Message-ID: <CAADnVQJV6XQgFjEx1pCVxcnXegB7Zeo5KZgZowCrvCoVef8imA@mail.gmail.com>
-Subject: Re: qp-trie? Re: [PATCH bpf-next 06/10] bpf: Add support for qp-trie map
-To: Hou Tao <houtao@huaweicloud.com>
-Cc: bpf <bpf@vger.kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
-	Song Liu <songliubraving@fb.com>, Hao Luo <haoluo@google.com>, Yonghong Song <yhs@fb.com>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai Lau <kafai@fb.com>, 
-	KP Singh <kpsingh@kernel.org>, "David S . Miller" <davem@davemloft.net>, 
-	Jakub Kicinski <kuba@kernel.org>, Stanislav Fomichev <sdf@google.com>, Jiri Olsa <jolsa@kernel.org>, 
-	John Fastabend <john.fastabend@gmail.com>, Lorenz Bauer <oss@lmb.io>, 
-	"Paul E . McKenney" <paulmck@kernel.org>, Hou Tao <houtao1@huawei.com>
+References: <20230810123057.43407-1-xuanzhuo@linux.alibaba.com>
+ <20230810123057.43407-5-xuanzhuo@linux.alibaba.com> <0b726a75574ad98200b815f173e59a5378e9df04.camel@linux.ibm.com>
+ <1717644183.6895547-1-xuanzhuo@linux.alibaba.com>
+In-Reply-To: <1717644183.6895547-1-xuanzhuo@linux.alibaba.com>
+From: Alexander Potapenko <glider@google.com>
+Date: Thu, 6 Jun 2024 10:26:06 +0200
+Message-ID: <CAG_fn=Uvfeg7LGQGjTy4qDSoYis39OeyA3W7=FgOAU+isk5Acg@mail.gmail.com>
+Subject: Re: [PATCH vhost v13 04/12] virtio_ring: support add premapped buf
+To: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+Cc: Ilya Leoshkevich <iii@linux.ibm.com>, "Michael S. Tsirkin" <mst@redhat.com>, Jason Wang <jasowang@redhat.com>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Jesper Dangaard Brouer <hawk@kernel.org>, 
+	John Fastabend <john.fastabend@gmail.com>, netdev@vger.kernel.org, bpf@vger.kernel.org, 
+	Christoph Hellwig <hch@infradead.org>, virtualization@lists.linux-foundation.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jun 5, 2024 at 9:32=E2=80=AFPM Hou Tao <houtao@huaweicloud.com> wro=
-te:
 >
-> OK. I will postpone the change, but I still think posting a RFC for
-> discussion may also benefit the generalization of bpf_ma in slub,  andI
-> could do that later.
+> Could you try this?
 
-Yeah. RFC is always fine.
+(resending without HTML, sorry for inconvenience).
+Hi Xuan,
 
-> > Please prioritize qp-trie. It's more urgent.
-> > At LPC multiple folks requested a good data structure to store
-> > variable length objects.
-> > .
+What kernel revision does this patch apply to? I tried it against
+v6.10-rc2, and only the first hunk applied.
+However this seems to fix the problem, at least the kernel boots
+without warnings now.
+
+> Thanks.
 >
-> OK. Will do qp-trie first. Could you elaborate one possible use case for
-> the "variable length objects" thing ?
-
-I hope strings are just a subset of "variable length things" that
-qp-trie can hold.
+> diff --git a/drivers/virtio/virtio_ring.c b/drivers/virtio/virtio_ring.c
+> index 37c9c5b55864..cb280b66c7a2 100644
+> --- a/drivers/virtio/virtio_ring.c
+> +++ b/drivers/virtio/virtio_ring.c
+> @@ -3119,8 +3119,10 @@ dma_addr_t virtqueue_dma_map_single_attrs(struct virtqueue *_vq, void *ptr,
+>  {
+>         struct vring_virtqueue *vq = to_vvq(_vq);
+>
+> -       if (!vq->use_dma_api)
+> +       if (!vq->use_dma_api) {
+> +               kmsan_handle_dma(virt_to_page(ptr), offset_in_page(ptr), size, dir);
+>                 return (dma_addr_t)virt_to_phys(ptr);
+> +       }
+>
+>         return dma_map_single_attrs(vring_dma_dev(vq), ptr, size, dir, attrs);
+>  }
+> @@ -3171,8 +3173,10 @@ dma_addr_t virtqueue_dma_map_page_attrs(struct virtqueue *_vq, struct page *page
+>  {
+>         struct vring_virtqueue *vq = to_vvq(_vq);
+>
+> -       if (!vq->use_dma_api)
+> +       if (!vq->use_dma_api) {
+> +               kmsan_handle_dma(page, offset, size, dir);
+>                 return page_to_phys(page) + offset;
+> +       }
+>
+>         return dma_map_page_attrs(vring_dma_dev(vq), page, offset, size, dir, attrs);
+>  }
