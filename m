@@ -1,40 +1,39 @@
 Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 979CE190484;
-	Thu,  6 Jun 2024 14:59:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45D28160883;
+	Thu,  6 Jun 2024 14:59:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.145.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717685960; cv=none; b=atehGobmUYwHoQNP9o4jtrSnglspT/Ors0siwzz1XHeGfI5RsXz9BpGVzKqp8WimQWmLV4VrYf2wsMRi+bOTK7gZlxEeqwmAoKTKJxq3nPts7XeWopYkIAucK48JCKN8HUv1pMsyjbWpxh5cNCcE+QIRxHSg4mhgx40PLMALbtc=
+	t=1717685960; cv=none; b=gh136ijCWKHjvDmyWyhDOmunqBRq8mMAS1zJ/4LdjMojGZrQRq9DYrCjEr8dhXi4PcQ07k7aGahqH7oTf8oQRmv44lxHYCvpSNzdFWlfio66EhNWmi/vqr+L6i36FDoU2m1VK/c/EtcZisyeSxVeG+d0gDqik2jYp/YmeDNVocU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1717685960; c=relaxed/simple;
-	bh=c0wTFKp9XQXRgUFgtFgR9AuRbrYxnV5EJTEpQx/c25k=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=jlbgk0QSleMY1pttS7DqGY1ktLe5jlV62O3NTrOxdsKWx1AI9W/dX+UNxGdiWfvIA4nlauq1QW3gDiNeMP6NfMykYid6NBxEAc59mQG6x4LZyXA5q1TMf1CJoriB6YpufqLzqD3LJa+et2/5PN9oWJZx+d9G35EoOy7bzwVy1lQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com; spf=pass smtp.mailfrom=meta.com; dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b=Q33ogIek; arc=none smtp.client-ip=67.231.145.42
+	bh=BRGnyOwwjTHwr0xT9vdi9DzwEcX4YRBHEHgtn2zbuM4=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=iufVGveZfHJoQxanP9srshypgW4EbYMOW7SpOFrBDTAnKtB/1jyrGFMM7HfGCVf9uMh7Kvf4qSIopDW1aMyV8PMsIQbFmwGIPzVJHchksYWLhG30tnwsrHj+S1Xj9VE9hHPWcJ9MCJnUca7eP+9ZYFa6VXI8o+h6E1Lb+neuLYU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com; spf=pass smtp.mailfrom=meta.com; dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b=IN9jBHxm; arc=none smtp.client-ip=67.231.145.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b="Q33ogIek"
+	dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b="IN9jBHxm"
 Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 4566pTZp005391;
-	Thu, 6 Jun 2024 07:59:03 -0700
+	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 4566pTZn005391;
+	Thu, 6 Jun 2024 07:59:01 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=cc :
- content-transfer-encoding : content-type : date : from : in-reply-to :
- message-id : mime-version : references : subject : to; s=s2048-2021-q4;
- bh=7geuP4fh0kfWIQEG10bAFf8y5oNk1kPaQirayNWOM44=;
- b=Q33ogIek5OeKnI6bagw3YNzsl5S41/DsV+Dv15KQf0lm1HN71iEhBC++Lt5hqdWipcHG
- nGqRNOapLxSorn5xiERMgO9oxxUt5YrxKh6T2eJGXM4mORQQVUTi+a3IBp93yGWfaWXi
- 0PxecDoEI5Nv/GMhvN+VYLLBbKpU513qJM8HfxCdkFxQZ4QtUDEf6PSMIKtlFCC0wt/W
- 6t11wheJX87N8C7hoJDJUvJfPBSGugFkFPdgHFSIa+5s9JOVxszXCNiSNxM0wA+qGv0e
- s49i4WYMdxccFzL2KOofgU31cL9fwFDdK9e+HRrHcfAhuqiDXF1ioQ1mcolOG23FmEZQ sQ== 
+ content-transfer-encoding : content-type : date : from : message-id :
+ mime-version : subject : to; s=s2048-2021-q4;
+ bh=cKMJQJ4Rp5oacvYwiEuAS+UkHPdvMyAPI0+A5pHgks8=;
+ b=IN9jBHxmp0bO5MW50AqWGl7BKg2tuRREdahIhVIKM6MUcU6wyF2nmYUuEOKW74DaFTuV
+ Dp3hHCAHiM3MCipPJOBac4TdrQKiPdcfhF55w8NcIRgissLoEcjZMmS1pmpcWteQYvNP
+ lIRY01RYAOnNKb3SdvBc8598ZtZobr6Rgh1wCVuM0UWAE2pI+jY2Py6I/jaXoCtb0P8j
+ A0TKPNGzg0qjb9cRS5AmVtZGXwKQVKUlISvDHkN76nfhGDMYphjNwnYbpemJPmuNw7GJ
+ g6lv/gAAfRh+oLjJJvAiCps9E+e5BKs3yvgiID8klmuCpIk6qqTOiznbVq4Tvszn8Utq 2A== 
 Received: from maileast.thefacebook.com ([163.114.130.16])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3yk875tj41-5
+	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3yk875tj41-3
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-	Thu, 06 Jun 2024 07:59:02 -0700
+	Thu, 06 Jun 2024 07:59:01 -0700
 Received: from devvm4158.cln0.facebook.com (2620:10d:c0a8:fe::f072) by
  mail.thefacebook.com (2620:10d:c0a9:6f::237c) with Microsoft SMTP Server id
- 15.2.1544.11; Thu, 6 Jun 2024 14:58:59 +0000
+ 15.2.1544.11; Thu, 6 Jun 2024 14:58:58 +0000
 From: Vadim Fedorenko <vadfed@meta.com>
 To: Vadim Fedorenko <vadim.fedorenko@linux.dev>,
         Daniel Borkmann
@@ -48,12 +47,10 @@ CC: Vadim Fedorenko <vadfed@meta.com>,
         Martin KaFai Lau
 	<martin.lau@linux.dev>, <bpf@vger.kernel.org>,
         <netdev@vger.kernel.org>
-Subject: [PATCH bpf-next v4 2/2] selftests: bpf: validate CHECKSUM_COMPLETE option
-Date: Thu, 6 Jun 2024 07:58:51 -0700
-Message-ID: <20240606145851.229116-2-vadfed@meta.com>
+Subject: [PATCH bpf-next v4 1/2] bpf: add CHECKSUM_COMPLETE to bpf test progs
+Date: Thu, 6 Jun 2024 07:58:50 -0700
+Message-ID: <20240606145851.229116-1-vadfed@meta.com>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240606145851.229116-1-vadfed@meta.com>
-References: <20240606145851.229116-1-vadfed@meta.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -62,61 +59,120 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: CD0x0H452-U2i3iqtN4Vyoo80et3mgfA
-X-Proofpoint-GUID: CD0x0H452-U2i3iqtN4Vyoo80et3mgfA
+X-Proofpoint-ORIG-GUID: QFiacBrSKKvzZpKxfZADse4zWTlejvvK
+X-Proofpoint-GUID: QFiacBrSKKvzZpKxfZADse4zWTlejvvK
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
  definitions=2024-06-06_01,2024-06-06_02,2024-05-17_01
 
-Adjust skb program test to run with checksum validation.
+Add special flag to validate that TC BPF program properly updates
+checksum information in skb.
 
 Signed-off-by: Vadim Fedorenko <vadfed@meta.com>
 ---
- .../selftests/bpf/prog_tests/test_skb_pkt_end.c       |  1 +
- tools/testing/selftests/bpf/progs/skb_pkt_end.c       | 11 ++++++++++-
- 2 files changed, 11 insertions(+), 1 deletion(-)
+v3 -> v4:
+ - use network header offset as starting point for checksum
+ - use folded checksum values to compare results
+v2 -> v3:
+ - remove BIT() macro from uapi bpf.h
+ - change error code to EBADMSG
+v1 -> v2:
+ - clean unused variable
+---
+ include/uapi/linux/bpf.h       |  2 ++
+ net/bpf/test_run.c             | 28 +++++++++++++++++++++++++++-
+ tools/include/uapi/linux/bpf.h |  2 ++
+ 3 files changed, 31 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/test_skb_pkt_end.c b/tools/testing/selftests/bpf/prog_tests/test_skb_pkt_end.c
-index ae93411fd582..09ca13bdf6ca 100644
---- a/tools/testing/selftests/bpf/prog_tests/test_skb_pkt_end.c
-+++ b/tools/testing/selftests/bpf/prog_tests/test_skb_pkt_end.c
-@@ -11,6 +11,7 @@ static int sanity_run(struct bpf_program *prog)
- 		.data_in = &pkt_v4,
- 		.data_size_in = sizeof(pkt_v4),
- 		.repeat = 1,
-+		.flags = BPF_F_TEST_SKB_CHECKSUM_COMPLETE,
- 	);
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index 25ea393cf084..35bcf52dbc65 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -1425,6 +1425,8 @@ enum {
+ #define BPF_F_TEST_RUN_ON_CPU	(1U << 0)
+ /* If set, XDP frames will be transmitted after processing */
+ #define BPF_F_TEST_XDP_LIVE_FRAMES	(1U << 1)
++/* If set, apply CHECKSUM_COMPLETE to skb and validate the checksum */
++#define BPF_F_TEST_SKB_CHECKSUM_COMPLETE	(1U << 2)
  
- 	prog_fd = bpf_program__fd(prog);
-diff --git a/tools/testing/selftests/bpf/progs/skb_pkt_end.c b/tools/testing/selftests/bpf/progs/skb_pkt_end.c
-index db4abd2682fc..3bb4451524a1 100644
---- a/tools/testing/selftests/bpf/progs/skb_pkt_end.c
-+++ b/tools/testing/selftests/bpf/progs/skb_pkt_end.c
-@@ -33,6 +33,8 @@ int main_prog(struct __sk_buff *skb)
- 	struct iphdr *ip = NULL;
- 	struct tcphdr *tcp;
- 	__u8 proto = 0;
-+	int urg_ptr;
-+	u32 offset;
+ /* type for BPF_ENABLE_STATS */
+ enum bpf_stats_type {
+diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
+index f6aad4ed2ab2..c87df2c4cd57 100644
+--- a/net/bpf/test_run.c
++++ b/net/bpf/test_run.c
+@@ -977,7 +977,8 @@ int bpf_prog_test_run_skb(struct bpf_prog *prog, const union bpf_attr *kattr,
+ 	void *data;
+ 	int ret;
  
- 	if (!(ip = get_iphdr(skb)))
- 		goto out;
-@@ -48,7 +50,14 @@ int main_prog(struct __sk_buff *skb)
- 	if (!tcp)
- 		goto out;
+-	if (kattr->test.flags || kattr->test.cpu || kattr->test.batch_size)
++	if ((kattr->test.flags & ~BPF_F_TEST_SKB_CHECKSUM_COMPLETE) ||
++	    kattr->test.cpu || kattr->test.batch_size)
+ 		return -EINVAL;
  
--	return tcp->urg_ptr;
-+	urg_ptr = tcp->urg_ptr;
+ 	data = bpf_test_init(kattr, kattr->test.data_size_in,
+@@ -1025,6 +1026,7 @@ int bpf_prog_test_run_skb(struct bpf_prog *prog, const union bpf_attr *kattr,
+ 
+ 	skb_reserve(skb, NET_SKB_PAD + NET_IP_ALIGN);
+ 	__skb_put(skb, size);
 +
-+	/* Checksum validation part */
-+	proto++;
-+	offset = sizeof(struct ethhdr) + offsetof(struct iphdr, protocol);
-+	bpf_skb_store_bytes(skb, offset, &proto, sizeof(proto), BPF_F_RECOMPUTE_CSUM);
+ 	if (ctx && ctx->ifindex > 1) {
+ 		dev = dev_get_by_index(net, ctx->ifindex);
+ 		if (!dev) {
+@@ -1060,9 +1062,19 @@ int bpf_prog_test_run_skb(struct bpf_prog *prog, const union bpf_attr *kattr,
+ 		__skb_push(skb, hh_len);
+ 	if (is_direct_pkt_access)
+ 		bpf_compute_data_pointers(skb);
 +
-+	return urg_ptr;
- out:
- 	return -1;
- }
+ 	ret = convert___skb_to_skb(skb, ctx);
+ 	if (ret)
+ 		goto out;
++
++	if (kattr->test.flags & BPF_F_TEST_SKB_CHECKSUM_COMPLETE) {
++		const int off = skb_network_offset(skb);
++		int len = skb->len - off;
++
++		skb->csum = skb_checksum(skb, off, len, 0);
++		skb->ip_summed = CHECKSUM_COMPLETE;
++	}
++
+ 	ret = bpf_test_run(prog, skb, repeat, &retval, &duration, false);
+ 	if (ret)
+ 		goto out;
+@@ -1077,6 +1089,20 @@ int bpf_prog_test_run_skb(struct bpf_prog *prog, const union bpf_attr *kattr,
+ 		}
+ 		memset(__skb_push(skb, hh_len), 0, hh_len);
+ 	}
++
++	if (kattr->test.flags & BPF_F_TEST_SKB_CHECKSUM_COMPLETE) {
++		const int off = skb_network_offset(skb);
++		int len = skb->len - off;
++		__wsum csum;
++
++		csum = skb_checksum(skb, off, len, 0);
++
++		if (csum_fold(skb->csum) != csum_fold(csum)) {
++			ret = -EBADMSG;
++			goto out;
++		}
++	}
++
+ 	convert_skb_to___skb(skb, ctx);
+ 
+ 	size = skb->len;
+diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
+index 25ea393cf084..35bcf52dbc65 100644
+--- a/tools/include/uapi/linux/bpf.h
++++ b/tools/include/uapi/linux/bpf.h
+@@ -1425,6 +1425,8 @@ enum {
+ #define BPF_F_TEST_RUN_ON_CPU	(1U << 0)
+ /* If set, XDP frames will be transmitted after processing */
+ #define BPF_F_TEST_XDP_LIVE_FRAMES	(1U << 1)
++/* If set, apply CHECKSUM_COMPLETE to skb and validate the checksum */
++#define BPF_F_TEST_SKB_CHECKSUM_COMPLETE	(1U << 2)
+ 
+ /* type for BPF_ENABLE_STATS */
+ enum bpf_stats_type {
 -- 
 2.43.0
 
