@@ -1,56 +1,58 @@
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+Received: from smtp-fw-80008.amazon.com (smtp-fw-80008.amazon.com [99.78.197.219])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45D28160883;
-	Thu,  6 Jun 2024 14:59:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.145.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A52114683;
+	Thu,  6 Jun 2024 15:31:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=99.78.197.219
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717685960; cv=none; b=gh136ijCWKHjvDmyWyhDOmunqBRq8mMAS1zJ/4LdjMojGZrQRq9DYrCjEr8dhXi4PcQ07k7aGahqH7oTf8oQRmv44lxHYCvpSNzdFWlfio66EhNWmi/vqr+L6i36FDoU2m1VK/c/EtcZisyeSxVeG+d0gDqik2jYp/YmeDNVocU=
+	t=1717687911; cv=none; b=onNh5EC6BEfcgYm1/jvJpnkBBX8Dx2N1BE175dTMpxeKqGVd7bKbjl6sBXCk/l6KYc/oHzB/8Kcb973eUj3+inSBIB+GpamOQ1/7ftLgjA9+uSGegraE4SUfnarOC06grbUi6UsZ6N8AiaOammeU0iTL+iptL/v7jTm8pW/XLhY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717685960; c=relaxed/simple;
-	bh=BRGnyOwwjTHwr0xT9vdi9DzwEcX4YRBHEHgtn2zbuM4=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=iufVGveZfHJoQxanP9srshypgW4EbYMOW7SpOFrBDTAnKtB/1jyrGFMM7HfGCVf9uMh7Kvf4qSIopDW1aMyV8PMsIQbFmwGIPzVJHchksYWLhG30tnwsrHj+S1Xj9VE9hHPWcJ9MCJnUca7eP+9ZYFa6VXI8o+h6E1Lb+neuLYU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com; spf=pass smtp.mailfrom=meta.com; dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b=IN9jBHxm; arc=none smtp.client-ip=67.231.145.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
+	s=arc-20240116; t=1717687911; c=relaxed/simple;
+	bh=DtanzRsthCcn3+G1Cn9fimpb6JHqO6rQCVVL4tx+BEc=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=rY2eOKu6B++DBCGEHunrdwjLK6vVpyUzLg+dk2BPupvNFgipYb8mmNpTd/59mhEtOtFbfU1VLNxQT+NxvRPMmiisVsK3CZUtLvUIZrryZOjsryKnwMmo4TA0XUTDSq9J1QyF/MXxAdYYTTAHuubCfwdw6CVNr9VQJnrl3B6xTrU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.co.jp; dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b=ea/6DwlU; arc=none smtp.client-ip=99.78.197.219
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.co.jp
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b="IN9jBHxm"
-Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 4566pTZn005391;
-	Thu, 6 Jun 2024 07:59:01 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=cc :
- content-transfer-encoding : content-type : date : from : message-id :
- mime-version : subject : to; s=s2048-2021-q4;
- bh=cKMJQJ4Rp5oacvYwiEuAS+UkHPdvMyAPI0+A5pHgks8=;
- b=IN9jBHxmp0bO5MW50AqWGl7BKg2tuRREdahIhVIKM6MUcU6wyF2nmYUuEOKW74DaFTuV
- Dp3hHCAHiM3MCipPJOBac4TdrQKiPdcfhF55w8NcIRgissLoEcjZMmS1pmpcWteQYvNP
- lIRY01RYAOnNKb3SdvBc8598ZtZobr6Rgh1wCVuM0UWAE2pI+jY2Py6I/jaXoCtb0P8j
- A0TKPNGzg0qjb9cRS5AmVtZGXwKQVKUlISvDHkN76nfhGDMYphjNwnYbpemJPmuNw7GJ
- g6lv/gAAfRh+oLjJJvAiCps9E+e5BKs3yvgiID8klmuCpIk6qqTOiznbVq4Tvszn8Utq 2A== 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3yk875tj41-3
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-	Thu, 06 Jun 2024 07:59:01 -0700
-Received: from devvm4158.cln0.facebook.com (2620:10d:c0a8:fe::f072) by
- mail.thefacebook.com (2620:10d:c0a9:6f::237c) with Microsoft SMTP Server id
- 15.2.1544.11; Thu, 6 Jun 2024 14:58:58 +0000
-From: Vadim Fedorenko <vadfed@meta.com>
-To: Vadim Fedorenko <vadim.fedorenko@linux.dev>,
-        Daniel Borkmann
-	<daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        "Alexei
- Starovoitov" <ast@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>, Jakub
- Kicinski <kuba@kernel.org>
-CC: Vadim Fedorenko <vadfed@meta.com>,
-        Martin KaFai Lau
-	<martin.lau@linux.dev>, <bpf@vger.kernel.org>,
-        <netdev@vger.kernel.org>
-Subject: [PATCH bpf-next v4 1/2] bpf: add CHECKSUM_COMPLETE to bpf test progs
-Date: Thu, 6 Jun 2024 07:58:50 -0700
-Message-ID: <20240606145851.229116-1-vadfed@meta.com>
-X-Mailer: git-send-email 2.43.0
+	dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b="ea/6DwlU"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1717687909; x=1749223909;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=y7Y+PvGO0CQloWLoTsu6I+HdcAyeqFwEd7a0MUZvlLw=;
+  b=ea/6DwlUlpn34dmzZ5AgriF5J+eUGjr+8QT9kuYKWaKRL84WlJ73SLdJ
+   1GAOJYhBpFyGNd5IGyYKx7qj4ce3O881jp2OAMJxzUQgW4aOCq7XCZOkS
+   Op2tQBo6h+X/G69+5AOPzZYJuuKB+s0/l3NtA09PGwZEbOWZkzSeluigp
+   8=;
+X-IronPort-AV: E=Sophos;i="6.08,219,1712620800"; 
+   d="scan'208";a="94859207"
+Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO smtpout.prod.us-west-2.prod.farcaster.email.amazon.dev) ([10.25.36.214])
+  by smtp-border-fw-80008.pdx80.corp.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2024 15:31:47 +0000
+Received: from EX19MTAUWA001.ant.amazon.com [10.0.38.20:2940]
+ by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.20.12:2525] with esmtp (Farcaster)
+ id 440a231d-40e0-4ddf-bfe8-fcb3c2c616ac; Thu, 6 Jun 2024 15:31:46 +0000 (UTC)
+X-Farcaster-Flow-ID: 440a231d-40e0-4ddf-bfe8-fcb3c2c616ac
+Received: from EX19D004ANA001.ant.amazon.com (10.37.240.138) by
+ EX19MTAUWA001.ant.amazon.com (10.250.64.217) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1258.34; Thu, 6 Jun 2024 15:31:44 +0000
+Received: from 88665a182662.ant.amazon.com (10.106.101.18) by
+ EX19D004ANA001.ant.amazon.com (10.37.240.138) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1258.34; Thu, 6 Jun 2024 15:31:42 +0000
+From: Kuniyuki Iwashima <kuniyu@amazon.com>
+To: <devnull+vincent.whitchurch.datadoghq.com@kernel.org>
+CC: <bpf@vger.kernel.org>, <jakub@cloudflare.com>, <john.fastabend@gmail.com>,
+	<netdev@vger.kernel.org>, <vincent.whitchurch@datadoghq.com>,
+	<kuniyu@amazon.com>
+Subject: Re: [PATCH bpf-next 1/5] net: Add splice_read to prot
+Date: Thu, 6 Jun 2024 08:31:33 -0700
+Message-ID: <20240606153133.68761-1-kuniyu@amazon.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20240606-sockmap-splice-v1-1-4820a2ab14b5@datadoghq.com>
+References: <20240606-sockmap-splice-v1-1-4820a2ab14b5@datadoghq.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -59,120 +61,97 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: QFiacBrSKKvzZpKxfZADse4zWTlejvvK
-X-Proofpoint-GUID: QFiacBrSKKvzZpKxfZADse4zWTlejvvK
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-06-06_01,2024-06-06_02,2024-05-17_01
+X-ClientProxiedBy: EX19D038UWB004.ant.amazon.com (10.13.139.177) To
+ EX19D004ANA001.ant.amazon.com (10.37.240.138)
 
-Add special flag to validate that TC BPF program properly updates
-checksum information in skb.
+From: Vincent Whitchurch via B4 Relay <devnull+vincent.whitchurch.datadoghq.com@kernel.org>
+Date: Thu, 06 Jun 2024 11:27:52 +0200
+> From: Vincent Whitchurch <vincent.whitchurch@datadoghq.com>
+> 
+> The TCP BPF code will need to override splice_read(), so add it to prot.
+> 
+> Signed-off-by: Vincent Whitchurch <vincent.whitchurch@datadoghq.com>
+> ---
+>  include/net/inet_common.h |  3 +++
+>  include/net/sock.h        |  3 +++
+>  net/ipv4/af_inet.c        | 18 +++++++++++++++++-
+>  net/ipv4/tcp_ipv4.c       |  1 +
+>  net/ipv6/af_inet6.c       |  2 +-
+>  net/ipv6/tcp_ipv6.c       |  1 +
+>  6 files changed, 26 insertions(+), 2 deletions(-)
+> 
+> diff --git a/include/net/inet_common.h b/include/net/inet_common.h
+> index c17a6585d0b0..2a6480d0d575 100644
+> --- a/include/net/inet_common.h
+> +++ b/include/net/inet_common.h
+> @@ -35,6 +35,9 @@ void __inet_accept(struct socket *sock, struct socket *newsock,
+>  		   struct sock *newsk);
+>  int inet_send_prepare(struct sock *sk);
+>  int inet_sendmsg(struct socket *sock, struct msghdr *msg, size_t size);
+> +ssize_t inet_splice_read(struct socket *sk, loff_t *ppos,
+> +			 struct pipe_inode_info *pipe, size_t len,
+> +			 unsigned int flags);
+>  void inet_splice_eof(struct socket *sock);
+>  int inet_recvmsg(struct socket *sock, struct msghdr *msg, size_t size,
+>  		 int flags);
+> diff --git a/include/net/sock.h b/include/net/sock.h
+> index 5f4d0629348f..a152552a64a5 100644
+> --- a/include/net/sock.h
+> +++ b/include/net/sock.h
+> @@ -1238,6 +1238,9 @@ struct proto {
+>  					   size_t len);
+>  	int			(*recvmsg)(struct sock *sk, struct msghdr *msg,
+>  					   size_t len, int flags, int *addr_len);
+> +	ssize_t			(*splice_read)(struct socket *sock,  loff_t *ppos,
+> +					       struct pipe_inode_info *pipe, size_t len,
+> +					       unsigned int flags);
+>  	void			(*splice_eof)(struct socket *sock);
+>  	int			(*bind)(struct sock *sk,
+>  					struct sockaddr *addr, int addr_len);
+> diff --git a/net/ipv4/af_inet.c b/net/ipv4/af_inet.c
+> index e03ba4a21c39..c9a23296ac82 100644
+> --- a/net/ipv4/af_inet.c
+> +++ b/net/ipv4/af_inet.c
+> @@ -870,6 +870,21 @@ void inet_splice_eof(struct socket *sock)
+>  }
+>  EXPORT_SYMBOL_GPL(inet_splice_eof);
+>  
+> +ssize_t inet_splice_read(struct socket *sock, loff_t *ppos,
+> +			 struct pipe_inode_info *pipe, size_t len,
+> +			 unsigned int flags)
+> +{
+> +	const struct proto *prot;
+> +	struct sock *sk = sock->sk;
+> +
+> +	prot = READ_ONCE(sk->sk_prot);
+> +	if (prot->splice_read)
+> +		return prot->splice_read(sock, ppos, pipe, len, flags);
 
-Signed-off-by: Vadim Fedorenko <vadfed@meta.com>
----
-v3 -> v4:
- - use network header offset as starting point for checksum
- - use folded checksum values to compare results
-v2 -> v3:
- - remove BIT() macro from uapi bpf.h
- - change error code to EBADMSG
-v1 -> v2:
- - clean unused variable
----
- include/uapi/linux/bpf.h       |  2 ++
- net/bpf/test_run.c             | 28 +++++++++++++++++++++++++++-
- tools/include/uapi/linux/bpf.h |  2 ++
- 3 files changed, 31 insertions(+), 1 deletion(-)
+INDIRECT_CALL_1() (or _2() in the next patch) can be used.
 
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index 25ea393cf084..35bcf52dbc65 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -1425,6 +1425,8 @@ enum {
- #define BPF_F_TEST_RUN_ON_CPU	(1U << 0)
- /* If set, XDP frames will be transmitted after processing */
- #define BPF_F_TEST_XDP_LIVE_FRAMES	(1U << 1)
-+/* If set, apply CHECKSUM_COMPLETE to skb and validate the checksum */
-+#define BPF_F_TEST_SKB_CHECKSUM_COMPLETE	(1U << 2)
- 
- /* type for BPF_ENABLE_STATS */
- enum bpf_stats_type {
-diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
-index f6aad4ed2ab2..c87df2c4cd57 100644
---- a/net/bpf/test_run.c
-+++ b/net/bpf/test_run.c
-@@ -977,7 +977,8 @@ int bpf_prog_test_run_skb(struct bpf_prog *prog, const union bpf_attr *kattr,
- 	void *data;
- 	int ret;
- 
--	if (kattr->test.flags || kattr->test.cpu || kattr->test.batch_size)
-+	if ((kattr->test.flags & ~BPF_F_TEST_SKB_CHECKSUM_COMPLETE) ||
-+	    kattr->test.cpu || kattr->test.batch_size)
- 		return -EINVAL;
- 
- 	data = bpf_test_init(kattr, kattr->test.data_size_in,
-@@ -1025,6 +1026,7 @@ int bpf_prog_test_run_skb(struct bpf_prog *prog, const union bpf_attr *kattr,
- 
- 	skb_reserve(skb, NET_SKB_PAD + NET_IP_ALIGN);
- 	__skb_put(skb, size);
-+
- 	if (ctx && ctx->ifindex > 1) {
- 		dev = dev_get_by_index(net, ctx->ifindex);
- 		if (!dev) {
-@@ -1060,9 +1062,19 @@ int bpf_prog_test_run_skb(struct bpf_prog *prog, const union bpf_attr *kattr,
- 		__skb_push(skb, hh_len);
- 	if (is_direct_pkt_access)
- 		bpf_compute_data_pointers(skb);
-+
- 	ret = convert___skb_to_skb(skb, ctx);
- 	if (ret)
- 		goto out;
-+
-+	if (kattr->test.flags & BPF_F_TEST_SKB_CHECKSUM_COMPLETE) {
-+		const int off = skb_network_offset(skb);
-+		int len = skb->len - off;
-+
-+		skb->csum = skb_checksum(skb, off, len, 0);
-+		skb->ip_summed = CHECKSUM_COMPLETE;
-+	}
-+
- 	ret = bpf_test_run(prog, skb, repeat, &retval, &duration, false);
- 	if (ret)
- 		goto out;
-@@ -1077,6 +1089,20 @@ int bpf_prog_test_run_skb(struct bpf_prog *prog, const union bpf_attr *kattr,
- 		}
- 		memset(__skb_push(skb, hh_len), 0, hh_len);
- 	}
-+
-+	if (kattr->test.flags & BPF_F_TEST_SKB_CHECKSUM_COMPLETE) {
-+		const int off = skb_network_offset(skb);
-+		int len = skb->len - off;
-+		__wsum csum;
-+
-+		csum = skb_checksum(skb, off, len, 0);
-+
-+		if (csum_fold(skb->csum) != csum_fold(csum)) {
-+			ret = -EBADMSG;
-+			goto out;
-+		}
-+	}
-+
- 	convert_skb_to___skb(skb, ctx);
- 
- 	size = skb->len;
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-index 25ea393cf084..35bcf52dbc65 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -1425,6 +1425,8 @@ enum {
- #define BPF_F_TEST_RUN_ON_CPU	(1U << 0)
- /* If set, XDP frames will be transmitted after processing */
- #define BPF_F_TEST_XDP_LIVE_FRAMES	(1U << 1)
-+/* If set, apply CHECKSUM_COMPLETE to skb and validate the checksum */
-+#define BPF_F_TEST_SKB_CHECKSUM_COMPLETE	(1U << 2)
- 
- /* type for BPF_ENABLE_STATS */
- enum bpf_stats_type {
--- 
-2.43.0
 
+> +
+> +	return -EINVAL;
+> +}
+> +EXPORT_SYMBOL_GPL(inet_splice_read);
+> +
+>  INDIRECT_CALLABLE_DECLARE(int udp_recvmsg(struct sock *, struct msghdr *,
+>  					  size_t, int, int *));
+>  int inet_recvmsg(struct socket *sock, struct msghdr *msg, size_t size,
+> @@ -1073,7 +1088,7 @@ const struct proto_ops inet_stream_ops = {
+>  	.mmap		   = tcp_mmap,
+>  #endif
+>  	.splice_eof	   = inet_splice_eof,
+> -	.splice_read	   = tcp_splice_read,
+> +	.splice_read	   = inet_splice_read,
+>  	.set_peek_off      = sk_set_peek_off,
+>  	.read_sock	   = tcp_read_sock,
+>  	.read_skb	   = tcp_read_skb,
+> @@ -1107,6 +1122,7 @@ const struct proto_ops inet_dgram_ops = {
+>  	.recvmsg	   = inet_recvmsg,
+>  	.mmap		   = sock_no_mmap,
+>  	.splice_eof	   = inet_splice_eof,
+> +	.splice_read	   = inet_splice_read,
+
+Does SOCK_DGRAM need this change ?  If no, inet_splice_read() can
+return splice_read() directly.
