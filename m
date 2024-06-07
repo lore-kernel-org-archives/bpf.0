@@ -1,68 +1,113 @@
-Received: from smtp.gentoo.org (woodpecker.gentoo.org [140.211.166.183])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97EAB14285;
-	Fri,  7 Jun 2024 07:03:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=140.211.166.183
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0985B155342;
+	Fri,  7 Jun 2024 07:04:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717743802; cv=none; b=aAbWZUk5xWSUKbgvim9ul5aI/2N/GwxpNPG0iQRNFaNROge15cT05CUaqfrod8rk3i5LDNI57+aLOe3PlV1XEHlEiWEdzPQiOV9iREvgQvyMpubNhjaq1FzVbzxuZOqQBxVzbnGjMcpiTCcIHuEYFd3DhX5bjFTN82J62E0B+Mc=
+	t=1717743878; cv=none; b=obyL9p65U4tn6xp+hT/Ma02Feqcp9N8tnadOVf2+4S4SXG3dUOzcklc3lWCjqt80RCW6s3cWK1qmSJveyJQsHqpijDkq1V9+Cdfw9YRMJ6gubIV+d37dEHC6ni87waXK03Fpi7iFHPm3Si5mwgveH+d3agATRdLqXHoMBtGj5ws=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717743802; c=relaxed/simple;
-	bh=wO2PzPoCQezCTD7afEp5BVpC169bwHolDmN76PUgCNM=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=PKRc05veqdXNfCfAo0xsmFSS8+1wPqnhJdjIuJytJoUdensVufFKDI/3vTxvWAdiDM+jG6vBpaDSdwA5iMYecdgC5be47LYrD7N6nqjFe/Y+gVmn541eLVwPGN6TqZyYg3/DsOsINFb4z0b+dMbDyye9hwx9tWtZCcmcM6jGROk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gentoo.org; spf=pass smtp.mailfrom=gentoo.org; arc=none smtp.client-ip=140.211.166.183
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gentoo.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gentoo.org
-Message-ID: <f3fb90a2-5822-4cb9-ba5a-023f74f2e806@gentoo.org>
-Date: Fri, 7 Jun 2024 09:03:14 +0200
+	s=arc-20240116; t=1717743878; c=relaxed/simple;
+	bh=DjKGXeuA0iicBNAujBOCeL9L9FyYM7749w3HflY304w=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=WEWp0C9JJDSrPPqtIip1ulj7FrZvUPLhFcSrxME/iUzxI2F7C5DSkpZcE6mjLXBYCTAf2DokyZTmcDhnba5yTyhbUiqTsNr54LiLZiKC4x1H8lmAVtjdAhOu6x+gbVQ0chglFFx++sY38WsOizcFfkHIRfJ5UOezCcSRB84hzlg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=B5HLJwEv; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=++wmqx7Y; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="B5HLJwEv";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="++wmqx7Y"
+From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1717743875;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=9Rw/2cnJ+Iso5XuGakDzbFuKdfRtLkLToskmRVbIvD0=;
+	b=B5HLJwEvbdDL67cuRIMH83NhrazvRRXf+GheNgAmOm55GFKplqHb+BbUEsCBGCDzSoB6Er
+	QydhiOZLFgZ3Hipkfky6VhwXvko44Hx6c+wPRT4pkn2ncJLL9ohv9N11zECApg8ASZbS0e
+	b68/B+285+0wlsvcsfTMRH8kL7I5WNeyfayOAn4U1lX9/uXVOv9W5qz7Z5hEiC5EjkcQQi
+	/GjqOWYbiHBXYuq0qDXhnH6laZh1kJQGmgmt9Ngc9yX103XQ7slpJn8xHyeULjMdWiRxKb
+	CBLL01qb8GSsWpr+c3jCQo0SvOA7PLTLYVuE7E2iOHIqI2P8q45Jfq+jEGIJZw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1717743875;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=9Rw/2cnJ+Iso5XuGakDzbFuKdfRtLkLToskmRVbIvD0=;
+	b=++wmqx7YYOcpm43Q2FciC5wWxVvP11ecY2irqKPWzmX6ZuP6Ox+DFcX/JvxKtrmnP43oSi
+	befjcvacY4waRuCw==
+To: linux-kernel@vger.kernel.org,
+	netdev@vger.kernel.org
+Cc: "David S. Miller" <davem@davemloft.net>,
+	Daniel Bristot de Oliveira <bristot@kernel.org>,
+	Boqun Feng <boqun.feng@gmail.com>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Frederic Weisbecker <frederic@kernel.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Waiman Long <longman@redhat.com>,
+	Will Deacon <will@kernel.org>,
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+	bpf@vger.kernel.org
+Subject: [PATCH v5 net-next 11/15] lwt: Don't disable migration prio invoking BPF.
+Date: Fri,  7 Jun 2024 08:53:14 +0200
+Message-ID: <20240607070427.1379327-12-bigeasy@linutronix.de>
+In-Reply-To: <20240607070427.1379327-1-bigeasy@linutronix.de>
+References: <20240607070427.1379327-1-bigeasy@linutronix.de>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: Matthias Schwarzott <zzam@gentoo.org>
-Subject: Re: ANNOUNCE: pahole v1.26 (more holes, --bpf_features,
- --contains_enum)
-To: Domenico Andreoli <domenico.andreoli@linux.com>,
- Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc: dwarves@vger.kernel.org,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- bpf@vger.kernel.org, Alan Maguire <alan.maguire@oracle.com>,
- Andrii Nakryiko <andrii@kernel.org>, Jiri Olsa <jolsa@kernel.org>,
- Jan Engelhardt <jengelh@inai.de>, Viktor Malik <vmalik@redhat.com>,
- Eduard Zingerman <eddyz87@gmail.com>, J B <jb.1234abcd@gmail.com>
-References: <YbC5MC+h+PkDZten@kernel.org> <ZkXTmTvII2PDqVvx@localhost>
-Content-Language: en-GB, de-DE
-In-Reply-To: <ZkXTmTvII2PDqVvx@localhost>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
 
-Am 16.05.24 um 11:36 schrieb Domenico Andreoli:
-> On Wed, Feb 28, 2024 at 04:39:21PM -0300, Arnaldo Carvalho de Melo wrote:
->> Hi,
->>   
->> 	The v1.26 release of pahole and its friends is out, showing more
-[...]
->>
->> tarball + gpg signature:
->>
->>     https://fedorapeople.org/~acme/dwarves/dwarves-1.26.tar.xz
->>     https://fedorapeople.org/~acme/dwarves/dwarves-1.26.tar.bz2
->>     https://fedorapeople.org/~acme/dwarves/dwarves-1.26.tar.sign
-> 
-> Which key do you use to sign this?          ^^^^^^^^^^^^^^^^^^^^^
+There is no need to explicitly disable migration if bottom halves are
+also disabled. Disabling BH implies disabling migration.
 
-Hi!
+Remove migrate_disable() and rely solely on disabling BH to remain on
+the same CPU.
 
-I found the matching key in git on kernel.org:
+Cc: bpf@vger.kernel.org
+Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+---
+ net/core/lwt_bpf.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-https://git.kernel.org/pub/scm/docs/kernel/pgpkeys.git/plain/keys/D65016F35352AA40.asc
-
-The gentoo package uses this key for verification now.
-
-Regards
-Matthias
+diff --git a/net/core/lwt_bpf.c b/net/core/lwt_bpf.c
+index 4a0797f0a154b..a94943681e5aa 100644
+--- a/net/core/lwt_bpf.c
++++ b/net/core/lwt_bpf.c
+@@ -40,10 +40,9 @@ static int run_lwt_bpf(struct sk_buff *skb, struct bpf_l=
+wt_prog *lwt,
+ {
+ 	int ret;
+=20
+-	/* Migration disable and BH disable are needed to protect per-cpu
+-	 * redirect_info between BPF prog and skb_do_redirect().
++	/* Disabling BH is needed to protect per-CPU bpf_redirect_info between
++	 * BPF prog and skb_do_redirect().
+ 	 */
+-	migrate_disable();
+ 	local_bh_disable();
+ 	bpf_compute_data_pointers(skb);
+ 	ret =3D bpf_prog_run_save_cb(lwt->prog, skb);
+@@ -78,7 +77,6 @@ static int run_lwt_bpf(struct sk_buff *skb, struct bpf_lw=
+t_prog *lwt,
+ 	}
+=20
+ 	local_bh_enable();
+-	migrate_enable();
+=20
+ 	return ret;
+ }
+--=20
+2.45.1
 
