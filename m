@@ -1,143 +1,145 @@
-Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1176137747
-	for <bpf@vger.kernel.org>; Mon, 10 Jun 2024 15:41:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D3AB13C3E6;
+	Mon, 10 Jun 2024 15:45:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718034104; cv=none; b=OSftjjZfyHx2oJi63tXpKETfTEy/7Kw7WzCzfdEREX0Pjo+3rvf5DqOoEE+L2ys0LcJrAEjPOfdEA+Gk2fmCDg5OhocLG+0cgZ1XRvVXlYtn/ik3Bqh9mB/wo+T3GVFSRSkIZ/nVQtFL/lKwLuvDRpFmdBvgQ+MwqdQemDkcogo=
+	t=1718034303; cv=none; b=D92HjTXZwUv+XrxfvyeZevmENLnGnrFXaozl8ESVOvFDZcz76cM2yVGyxRCtD2zXd4vXP1Af9ToTiZU6TIwJNabuo4tJXcCCjz4s9xc/7xCUuKWTQRkZ9CKZTSY23aV8MV1Y8dAzIXJuh/rgEW1zpqH4oU5KOs8L6jSUF7+kumY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718034104; c=relaxed/simple;
-	bh=NH9qOe8AuGn3R+TevtlS2pqQNAL05iIcoVXpQ7CPaGI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=nq7awHv3busKPTVGMStIGp5Ja9LbjSDPqE30a+r8/iGu6KJn0tzoB3kdH+vMrMUt9KF8c2Umem/v88xGoCkq4sws1mXPYnRPG0NEWEK6mUJCxmFRFNsKsR8z897OAwpzorcoCQgjJ3RHdUH6AvWZ/OYXPPAyeY8u9K1ibVUcjlc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=NBC3BjeV; arc=none smtp.client-ip=209.85.208.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1718034303; c=relaxed/simple;
+	bh=ds9g/JKEqawI/ajkSavWOl6Obm7xM2HBK3q/teNQHeQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ACs58CJNvdr/S5T3txQlRAb+A7V5f0LXiIip69Hi8gzzKefcgnoRsnKpq9uLQqQmBnKR1CfAPsiEkO3p2sXO+gH4IdLNwnTKVsa5m3nbd+my1EbZG15LSvyO+cDooc426IqxdE82SFamYvEWZELUICCRb+c9XrrOiuyPyg3qAnA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VWn/11Ul; arc=none smtp.client-ip=198.175.65.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="NBC3BjeV"
-Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-57c83100c5fso1327313a12.3
-        for <bpf@vger.kernel.org>; Mon, 10 Jun 2024 08:41:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1718034100; x=1718638900; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=NH9qOe8AuGn3R+TevtlS2pqQNAL05iIcoVXpQ7CPaGI=;
-        b=NBC3BjeV43Tto6rj7jzWS0apRPZAnZhJNBOou0IKmm3h/8DlAdjhG4Y5gsqiMZ3pAd
-         eHigC7Qcovtju7HZ8zQbCH+6Mddcwh9xzZyF87jwWeINqrgM1FR10aoNpM9dZICtDvyc
-         xpf/0lnr4kBXB8f4u7FUjoUTnij835IuH9nXp7+XMaRWHJ0DuFWMNuTFhWOjApFRaXYT
-         7RG3m7uf6qb1wB3E+GyK9gA7GBP6oTu3azHkQzuLULoMA/9i+b2aihNWU9FBTH7e5imH
-         Ehtos6vd4QKW9+lJTwoCRJli+5DpQDQDQZAogzlY1LO+FpPUy3lqrKWKLqAw+vVHctXA
-         UdOQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718034100; x=1718638900;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=NH9qOe8AuGn3R+TevtlS2pqQNAL05iIcoVXpQ7CPaGI=;
-        b=bEQ8SNYPgV+160dKM+oZAHTerOGNOMW4W6diX50zFit7rcMmvrp108UmNLFjVHGexD
-         QDUQfiX2HSU8uPClbAVbnErJ4uQeqUudEk+Wclr5U1J4dTzBlFJoQF0A67iFpkov5l9w
-         zQnOIMo03ElU9xCyYJH1lsEISCCh3632eIYtJr9G9A+sgZ7q/TAo2vj2c3xgY791Yl2G
-         i/jszFUVxSNXa5HNmtO0MDYY6okqW9Rg2/YQVx3qMtUMnqKy9nLnw4+btB8s+cukFL8q
-         1RYs7RcXBOZrybchXI0Kx2psqQZpO+T4SQDcGN8CEFdRy51yElw1KgG+DbzsyBqm9rd+
-         nMDg==
-X-Forwarded-Encrypted: i=1; AJvYcCX0jnwuf/10oOKYkmMZlSccF13cVZ5BE0RE5fqXInM7MK7LLTPRQ8+cjyRiprlFSum4yWx9vHnz5k8XB351PRGGtNcN
-X-Gm-Message-State: AOJu0YxwmilO3NeXYfzCrfVTGnJKZXQyVcVKdU7DrJPT83qj2nM+A/WT
-	k+Um4Cy19mqCSdgqCHu7tkh3uDGe1ipwtmqT+jkPqsqo//72MYYeQKhG6ew2+Gyk7W35WTAwsKj
-	3njXlGUOnqaL6cnR156i8UfaCh2uZp7Vx+FAr
-X-Google-Smtp-Source: AGHT+IGhBtLDJFK2P+RcfVlyA2ZAGso96YWHpocomofOltg8xljfiwSKPnAsDJBDqZd1U8grgl7y/Dr4+a+0D+ppdnU=
-X-Received: by 2002:a17:906:8888:b0:a6f:279b:37ca with SMTP id
- a640c23a62f3a-a6f279b38b3mr91530566b.51.1718034099331; Mon, 10 Jun 2024
- 08:41:39 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VWn/11Ul"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1718034301; x=1749570301;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=ds9g/JKEqawI/ajkSavWOl6Obm7xM2HBK3q/teNQHeQ=;
+  b=VWn/11Ul9DNMz5/EQxd2uxjzzOkShnIR7MSRgf2PgHQqVjw43+kjFJAo
+   Krg4WH9mf1z7+va/jQUasj11Mj5RR9xVxJ5mbkmfG2sh718gsj9E+nR2e
+   JQepmskEgcK1V0+eE8S0iJCcD447z7nZcJ9ZiYRCtla517qNwoOky1Ay/
+   IcQ5nafWFq7uIF+ZIXrz0nVFNyQEv3tWlmlq6ecO5lzqEzo0TgB4yO/+d
+   8jLIHOg3kNt1JlRfj14AmrIxNgydQqzhsoYJ7FdLXsm6/8EI6rEsIjzUR
+   IeVpfV7FE3zx7Hvs/QJPjOo+QANEDa6CocmE07A3MreAho9AqkQvhbN95
+   Q==;
+X-CSE-ConnectionGUID: psWTxMC2Sr2ReAiBFTdxBA==
+X-CSE-MsgGUID: 8pdGu4WxT22ze9YX4NAV0A==
+X-IronPort-AV: E=McAfee;i="6600,9927,11099"; a="26119830"
+X-IronPort-AV: E=Sophos;i="6.08,227,1712646000"; 
+   d="scan'208";a="26119830"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2024 08:45:00 -0700
+X-CSE-ConnectionGUID: YSJi+AyAS96z2cNVxtFXyg==
+X-CSE-MsgGUID: 5mxwVqsETaORA2iS9NgDPw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.08,227,1712646000"; 
+   d="scan'208";a="43679757"
+Received: from irvmail002.ir.intel.com ([10.43.11.120])
+  by fmviesa004.fm.intel.com with ESMTP; 10 Jun 2024 08:44:55 -0700
+Received: from lincoln.igk.intel.com (lincoln.igk.intel.com [10.102.21.235])
+	by irvmail002.ir.intel.com (Postfix) with ESMTP id 4A7AE312D4;
+	Mon, 10 Jun 2024 16:44:40 +0100 (IST)
+From: Larysa Zaremba <larysa.zaremba@intel.com>
+To: intel-wired-lan@lists.osuosl.org
+Cc: Larysa Zaremba <larysa.zaremba@intel.com>,
+	Jesse Brandeburg <jesse.brandeburg@intel.com>,
+	Tony Nguyen <anthony.l.nguyen@intel.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org,
+	magnus.karlsson@intel.com,
+	Michal Kubiak <michal.kubiak@intel.com>
+Subject: [PATCH iwl-net 0/3] ice: fix synchronization between .ndo_bpf() and reset
+Date: Mon, 10 Jun 2024 17:37:12 +0200
+Message-ID: <20240610153716.31493-1-larysa.zaremba@intel.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240530201616.1316526-3-almasrymina@google.com>
- <ZlqzER_ufrhlB28v@infradead.org> <CAHS8izMU_nMEr04J9kXiX6rJqK4nQKA+W-enKLhNxvK7=H2pgA@mail.gmail.com>
- <5aee4bba-ca65-443c-bd78-e5599b814a13@gmail.com> <CAHS8izNmT_NzgCu1pY1RKgJh+kP2rCL_90Gqau2Pkd3-48Q1_w@mail.gmail.com>
- <eb237e6e-3626-4435-8af5-11ed3931b0ac@gmail.com> <be2d140f-db0f-4d15-967c-972ea6586b5c@kernel.org>
- <20240607145247.GG791043@ziepe.ca> <45803740-442c-4298-b47e-2d87ae5a6012@davidwei.uk>
- <54975459-7a5a-46ff-a9ae-dc16ceffbab4@gmail.com> <20240610121625.GI791043@ziepe.ca>
- <cdbc0d5f-bfbc-4f58-a6dd-c13b0bb5ff1c@amd.com>
-In-Reply-To: <cdbc0d5f-bfbc-4f58-a6dd-c13b0bb5ff1c@amd.com>
-From: Mina Almasry <almasrymina@google.com>
-Date: Mon, 10 Jun 2024 08:41:25 -0700
-Message-ID: <CAHS8izNwmXQTLc9VADpushYKyeJ4ZY4G9aV47W2-1St65-tKUg@mail.gmail.com>
-Subject: Re: [PATCH net-next v10 02/14] net: page_pool: create hooks for
- custom page providers
-To: =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
-Cc: Jason Gunthorpe <jgg@ziepe.ca>, Pavel Begunkov <asml.silence@gmail.com>, David Wei <dw@davidwei.uk>, 
-	David Ahern <dsahern@kernel.org>, Christoph Hellwig <hch@infradead.org>, netdev@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org, 
-	linux-parisc@vger.kernel.org, sparclinux@vger.kernel.org, 
-	linux-trace-kernel@vger.kernel.org, linux-arch@vger.kernel.org, 
-	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Donald Hunter <donald.hunter@gmail.com>, Jonathan Corbet <corbet@lwn.net>, 
-	Richard Henderson <richard.henderson@linaro.org>, Ivan Kokshaysky <ink@jurassic.park.msu.ru>, 
-	Matt Turner <mattst88@gmail.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>, 
-	Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer <hawk@kernel.org>, 
-	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven Rostedt <rostedt@goodmis.org>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Steffen Klassert <steffen.klassert@secunet.com>, 
-	Herbert Xu <herbert@gondor.apana.org.au>, 
-	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Shuah Khan <shuah@kernel.org>, 
-	Sumit Semwal <sumit.semwal@linaro.org>, Yunsheng Lin <linyunsheng@huawei.com>, 
-	Shailend Chand <shailend@google.com>, Harshitha Ramamurthy <hramamurthy@google.com>, 
-	Shakeel Butt <shakeel.butt@linux.dev>, Jeroen de Borst <jeroendb@google.com>, 
-	Praveen Kaligineedi <pkaligineedi@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Mon, Jun 10, 2024 at 5:38=E2=80=AFAM Christian K=C3=B6nig
-<christian.koenig@amd.com> wrote:
->
-> Am 10.06.24 um 14:16 schrieb Jason Gunthorpe:
-> > On Mon, Jun 10, 2024 at 02:07:01AM +0100, Pavel Begunkov wrote:
-> >> On 6/10/24 01:37, David Wei wrote:
-> >>> On 2024-06-07 17:52, Jason Gunthorpe wrote:
-> >>>> IMHO it seems to compose poorly if you can only use the io_uring
-> >>>> lifecycle model with io_uring registered memory, and not with DMABUF
-> >>>> memory registered through Mina's mechanism.
-> >>> By this, do you mean io_uring must be exclusively used to use this
-> >>> feature?
-> >>>
-> >>> And you'd rather see the two decoupled, so userspace can register w/ =
-say
-> >>> dmabuf then pass it to io_uring?
-> >> Personally, I have no clue what Jason means. You can just as
-> >> well say that it's poorly composable that write(2) to a disk
-> >> cannot post a completion into a XDP ring, or a netlink socket,
-> >> or io_uring's main completion queue, or name any other API.
-> > There is no reason you shouldn't be able to use your fast io_uring
-> > completion and lifecycle flow with DMABUF backed memory. Those are not
-> > widly different things and there is good reason they should work
-> > together.
->
-> Well there is the fundamental problem that you can't use io_uring to
-> implement the semantics necessary for a dma_fence.
->
-> That's why we had to reject the io_uring work on DMA-buf sharing from
-> Google a few years ago.
->
+Fix the problems that are triggered by tx_timeout and ice_xdp() calls,
+including both pool and program operations.
 
-Any chance someone can link me to this? io_uring, as far as my
-primitive understanding goes, is not yet very adopted at Google, and
-I'm curious what this effort is.
+PF reset can be triggered asynchronously, e.g. by tx_timeout. With some
+unfortunate timings both reset and .ndo_bpf will try to access and modify
+XDP rings at the same time, causing system crash, such as the one below:
 
---=20
-Thanks,
-Mina
+[ +1.999878] ice 0000:b1:00.0: Registered XDP mem model MEM_TYPE_XSK_BUFF_POOL on Rx ring 14
+[ +2.002992] ice 0000:b1:00.0: Registered XDP mem model MEM_TYPE_XSK_BUFF_POOL on Rx ring 18
+[Mar15 18:17] ice 0000:b1:00.0 ens801f0np0: NETDEV WATCHDOG: CPU: 38: transmit queue 14 timed out 80692736 ms
+[ +0.000093] ice 0000:b1:00.0 ens801f0np0: tx_timeout: VSI_num: 6, Q 14, NTC: 0x0, HW_HEAD: 0x0, NTU: 0x0, INT: 0x4000001
+[ +0.000012] ice 0000:b1:00.0 ens801f0np0: tx_timeout recovery level 1, txqueue 14
+[ +0.394718] ice 0000:b1:00.0: PTP reset successful
+[ +0.006184] BUG: kernel NULL pointer dereference, address: 0000000000000098
+[ +0.000045] #PF: supervisor read access in kernel mode
+[ +0.000023] #PF: error_code(0x0000) - not-present page
+[ +0.000023] PGD 0 P4D 0
+[ +0.000018] Oops: 0000 [#1] PREEMPT SMP NOPTI
+[ +0.000023] CPU: 38 PID: 7540 Comm: kworker/38:1 Not tainted 6.8.0-rc7 #1
+[ +0.000031] Hardware name: Intel Corporation S2600WFT/S2600WFT, BIOS SE5C620.86B.02.01.0014.082620210524 08/26/2021
+[ +0.000036] Workqueue: ice ice_service_task [ice]
+[ +0.000183] RIP: 0010:ice_clean_tx_ring+0xa/0xd0 [ice]
+[...]
+[ +0.000013] Call Trace:
+[ +0.000016] <TASK>
+[ +0.000014] ? __die+0x1f/0x70
+[ +0.000029] ? page_fault_oops+0x171/0x4f0
+[ +0.000029] ? schedule+0x3b/0xd0
+[ +0.000027] ? exc_page_fault+0x7b/0x180
+[ +0.000022] ? asm_exc_page_fault+0x22/0x30
+[ +0.000031] ? ice_clean_tx_ring+0xa/0xd0 [ice]
+[ +0.000194] ice_free_tx_ring+0xe/0x60 [ice]
+[ +0.000186] ice_destroy_xdp_rings+0x157/0x310 [ice]
+[ +0.000151] ice_vsi_decfg+0x53/0xe0 [ice]
+[ +0.000180] ice_vsi_rebuild+0x239/0x540 [ice]
+[ +0.000186] ice_vsi_rebuild_by_type+0x76/0x180 [ice]
+[ +0.000145] ice_rebuild+0x18c/0x840 [ice]
+[ +0.000145] ? delay_tsc+0x4a/0xc0
+[ +0.000022] ? delay_tsc+0x92/0xc0
+[ +0.000020] ice_do_reset+0x140/0x180 [ice]
+[ +0.000886] ice_service_task+0x404/0x1030 [ice]
+[ +0.000824] process_one_work+0x171/0x340
+[ +0.000685] worker_thread+0x277/0x3a0
+[ +0.000675] ? preempt_count_add+0x6a/0xa0
+[ +0.000677] ? _raw_spin_lock_irqsave+0x23/0x50
+[ +0.000679] ? __pfx_worker_thread+0x10/0x10
+[ +0.000653] kthread+0xf0/0x120
+[ +0.000635] ? __pfx_kthread+0x10/0x10
+[ +0.000616] ret_from_fork+0x2d/0x50
+[ +0.000612] ? __pfx_kthread+0x10/0x10
+[ +0.000604] ret_from_fork_asm+0x1b/0x30
+[ +0.000604] </TASK>
+
+Larysa Zaremba (3):
+  ice: synchronize XDP setup with reset
+  ice: fix locking in ice_xsk_pool_setup()
+  ice: make NAPI setting code aware that rtnl-locked request is waiting
+
+ drivers/net/ethernet/intel/ice/ice.h      |  2 ++
+ drivers/net/ethernet/intel/ice/ice_lib.c  | 23 ++++++++++---
+ drivers/net/ethernet/intel/ice/ice_main.c | 39 ++++++++++++++++++++---
+ drivers/net/ethernet/intel/ice/ice_xsk.c  | 12 ++-----
+ 4 files changed, 57 insertions(+), 19 deletions(-)
+
+-- 
+2.43.0
+
