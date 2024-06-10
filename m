@@ -1,243 +1,143 @@
-Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
+Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FC5714532C;
-	Mon, 10 Jun 2024 15:17:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1176137747
+	for <bpf@vger.kernel.org>; Mon, 10 Jun 2024 15:41:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718032660; cv=none; b=p9S/SQK1xH4i0JWL7425UujEmxUl9oB96imiH6I2UmQSBkEkopPlzsNvn0MbUksBzgqIRJkPrT6iynWPWAaGGp0PBfVt1/ITLYP2Miz9TMZYxXsmaqKcstUwlSiwlE1xlD0kewemXnpa1I8cNYH+WBKyh/ROqZdTQqnwNOluYmE=
+	t=1718034104; cv=none; b=OSftjjZfyHx2oJi63tXpKETfTEy/7Kw7WzCzfdEREX0Pjo+3rvf5DqOoEE+L2ys0LcJrAEjPOfdEA+Gk2fmCDg5OhocLG+0cgZ1XRvVXlYtn/ik3Bqh9mB/wo+T3GVFSRSkIZ/nVQtFL/lKwLuvDRpFmdBvgQ+MwqdQemDkcogo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718032660; c=relaxed/simple;
-	bh=Tdtqib5LHMViVt4cUpFEK2fjp1qN5cOoyKP6PM/xiMQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=fRS25QayneifsbGuGMIrIsNdjEMa7LRgPrx+NNnUZdwo4SJfgg018NgkAXmF/HhxfJmTU/NRxJBZZRNcxv9+HTnLL4VglIgxO9UOHUFbIDPGirR8w5bkILbzSO7wVtuHyoRhxbHcNtCeDhY1YyEYhuLxMT4/RRBTWy4qOzhQkbQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JfbF9L6q; arc=none smtp.client-ip=209.85.218.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1718034104; c=relaxed/simple;
+	bh=NH9qOe8AuGn3R+TevtlS2pqQNAL05iIcoVXpQ7CPaGI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=nq7awHv3busKPTVGMStIGp5Ja9LbjSDPqE30a+r8/iGu6KJn0tzoB3kdH+vMrMUt9KF8c2Umem/v88xGoCkq4sws1mXPYnRPG0NEWEK6mUJCxmFRFNsKsR8z897OAwpzorcoCQgjJ3RHdUH6AvWZ/OYXPPAyeY8u9K1ibVUcjlc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=NBC3BjeV; arc=none smtp.client-ip=209.85.208.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JfbF9L6q"
-Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-a6f1c4800easo147793266b.3;
-        Mon, 10 Jun 2024 08:17:38 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="NBC3BjeV"
+Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-57c83100c5fso1327313a12.3
+        for <bpf@vger.kernel.org>; Mon, 10 Jun 2024 08:41:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1718032657; x=1718637457; darn=vger.kernel.org;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Fymq8SwQCYCfB365IAB5NgGdsT8hiwbArITfskToqFA=;
-        b=JfbF9L6qzTimm8lP+HAE99p7EafCaxocPHmzctpQMvsSQpzIn+6C4KwYeUDoxTxxf9
-         aKYFjFOGdchlR1zTLZFSaJKVHSqPfOmHWGsXcIimCfZznPAB5QOTTDjQq91I7FR6GY4G
-         5zsrgCrI9b5hB5HKURsEF8oLBr8MUZVBdKCv9VbtLHVfxF67H1E4YVS0rfVI5CyTBiUn
-         KDJpxl4BrA2+vph4ZM9pQJMeWrCEM1y+4wn3mVpO5fdMwaRMpBjzi77rCTVE0MMaa+vJ
-         M1fvN+1PfD6LwogK+G1WtHBM9MBbOKF5vKic57JkEjWPXzkaNw9kOHx55LitF/n7GzsM
-         3PrQ==
+        d=google.com; s=20230601; t=1718034100; x=1718638900; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=NH9qOe8AuGn3R+TevtlS2pqQNAL05iIcoVXpQ7CPaGI=;
+        b=NBC3BjeV43Tto6rj7jzWS0apRPZAnZhJNBOou0IKmm3h/8DlAdjhG4Y5gsqiMZ3pAd
+         eHigC7Qcovtju7HZ8zQbCH+6Mddcwh9xzZyF87jwWeINqrgM1FR10aoNpM9dZICtDvyc
+         xpf/0lnr4kBXB8f4u7FUjoUTnij835IuH9nXp7+XMaRWHJ0DuFWMNuTFhWOjApFRaXYT
+         7RG3m7uf6qb1wB3E+GyK9gA7GBP6oTu3azHkQzuLULoMA/9i+b2aihNWU9FBTH7e5imH
+         Ehtos6vd4QKW9+lJTwoCRJli+5DpQDQDQZAogzlY1LO+FpPUy3lqrKWKLqAw+vVHctXA
+         UdOQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718032657; x=1718637457;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Fymq8SwQCYCfB365IAB5NgGdsT8hiwbArITfskToqFA=;
-        b=MmYDzjSAEmkLccfEqE4OOqh233haVT/acnEgMiyaRFe2A0Y1jrXL3p/PzlJD5HO67x
-         1/K8K2WOfkVj6B3sSc1O6e8HkdnYQt+nZ+3Fqo+3SktgfUymjPm3P8rW0SiuCqtv8opa
-         6Sgrc+d09GAsxDinL40KsmMpdl46IxnjzCKH5enUwG6BbA4QYwIXGW1KRp9nxAuN0pkD
-         BIaGnfllzT0UtvBbF7IFGtNmPKzlgKVmgYMz+VJaAKm4dYdUdB1Xt6/JGbuyMTzOj3df
-         WCEOuwHduFyTXZRgypBGWecLG35JUYB9H1tu15q0eTLIgDs6uh+1klVY7Ew9NZhk+xP3
-         fl5Q==
-X-Forwarded-Encrypted: i=1; AJvYcCUL/nhgUDB45Jda0p+cD52jUn+sGsqK9Un88DS7JxfeYJIcMd4Z3fEtlgLgXvGQj45GhZe+Xlgx1veTdf0acMDe3/OBmJORzACxiwmkS6U=
-X-Gm-Message-State: AOJu0YwBDqj9wKV2lYKonPBdAnLeN2FmUs/Mtz+GmYCbMlrDxHKm0+8G
-	085ej0LD2zKXxBC2cHSBQtkV+Rwvff/9Yw4fCsKKVCFeQr0SOmRtVPsoKA==
-X-Google-Smtp-Source: AGHT+IG06XUcvlk9bCYu4wSI8vpzjcPs4+rkG+K/1JsbJfRtjnQe1VpwZPZ4QDfUBMAcDzjKUYF5vw==
-X-Received: by 2002:a17:906:d189:b0:a6e:f66a:e0d7 with SMTP id a640c23a62f3a-a6ef66ae1eamr483806566b.15.1718032657027;
-        Mon, 10 Jun 2024 08:17:37 -0700 (PDT)
-Received: from ddolgov-thinkpadt14sgen1.rmtde.csb (dslb-178-012-035-234.178.012.pools.vodafone-ip.de. [178.12.35.234])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a6c806eab0asm647169666b.134.2024.06.10.08.17.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Jun 2024 08:17:36 -0700 (PDT)
-Date: Mon, 10 Jun 2024 17:17:35 +0200
-From: Dmitry Dolgov <9erthalion6@gmail.com>
-To: bpf@vger.kernel.org, linux-rt-users@vger.kernel.org
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org
-Subject: bpf_ringbuf_reserve deadlock on rt kernels
-Message-ID: <jxkyec5jd54r3cmel4e3pep4ebo3pd4xgedwtb7gj65fntf4s7@om5r3mowjknb>
+        d=1e100.net; s=20230601; t=1718034100; x=1718638900;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=NH9qOe8AuGn3R+TevtlS2pqQNAL05iIcoVXpQ7CPaGI=;
+        b=bEQ8SNYPgV+160dKM+oZAHTerOGNOMW4W6diX50zFit7rcMmvrp108UmNLFjVHGexD
+         QDUQfiX2HSU8uPClbAVbnErJ4uQeqUudEk+Wclr5U1J4dTzBlFJoQF0A67iFpkov5l9w
+         zQnOIMo03ElU9xCyYJH1lsEISCCh3632eIYtJr9G9A+sgZ7q/TAo2vj2c3xgY791Yl2G
+         i/jszFUVxSNXa5HNmtO0MDYY6okqW9Rg2/YQVx3qMtUMnqKy9nLnw4+btB8s+cukFL8q
+         1RYs7RcXBOZrybchXI0Kx2psqQZpO+T4SQDcGN8CEFdRy51yElw1KgG+DbzsyBqm9rd+
+         nMDg==
+X-Forwarded-Encrypted: i=1; AJvYcCX0jnwuf/10oOKYkmMZlSccF13cVZ5BE0RE5fqXInM7MK7LLTPRQ8+cjyRiprlFSum4yWx9vHnz5k8XB351PRGGtNcN
+X-Gm-Message-State: AOJu0YxwmilO3NeXYfzCrfVTGnJKZXQyVcVKdU7DrJPT83qj2nM+A/WT
+	k+Um4Cy19mqCSdgqCHu7tkh3uDGe1ipwtmqT+jkPqsqo//72MYYeQKhG6ew2+Gyk7W35WTAwsKj
+	3njXlGUOnqaL6cnR156i8UfaCh2uZp7Vx+FAr
+X-Google-Smtp-Source: AGHT+IGhBtLDJFK2P+RcfVlyA2ZAGso96YWHpocomofOltg8xljfiwSKPnAsDJBDqZd1U8grgl7y/Dr4+a+0D+ppdnU=
+X-Received: by 2002:a17:906:8888:b0:a6f:279b:37ca with SMTP id
+ a640c23a62f3a-a6f279b38b3mr91530566b.51.1718034099331; Mon, 10 Jun 2024
+ 08:41:39 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20240530201616.1316526-3-almasrymina@google.com>
+ <ZlqzER_ufrhlB28v@infradead.org> <CAHS8izMU_nMEr04J9kXiX6rJqK4nQKA+W-enKLhNxvK7=H2pgA@mail.gmail.com>
+ <5aee4bba-ca65-443c-bd78-e5599b814a13@gmail.com> <CAHS8izNmT_NzgCu1pY1RKgJh+kP2rCL_90Gqau2Pkd3-48Q1_w@mail.gmail.com>
+ <eb237e6e-3626-4435-8af5-11ed3931b0ac@gmail.com> <be2d140f-db0f-4d15-967c-972ea6586b5c@kernel.org>
+ <20240607145247.GG791043@ziepe.ca> <45803740-442c-4298-b47e-2d87ae5a6012@davidwei.uk>
+ <54975459-7a5a-46ff-a9ae-dc16ceffbab4@gmail.com> <20240610121625.GI791043@ziepe.ca>
+ <cdbc0d5f-bfbc-4f58-a6dd-c13b0bb5ff1c@amd.com>
+In-Reply-To: <cdbc0d5f-bfbc-4f58-a6dd-c13b0bb5ff1c@amd.com>
+From: Mina Almasry <almasrymina@google.com>
+Date: Mon, 10 Jun 2024 08:41:25 -0700
+Message-ID: <CAHS8izNwmXQTLc9VADpushYKyeJ4ZY4G9aV47W2-1St65-tKUg@mail.gmail.com>
+Subject: Re: [PATCH net-next v10 02/14] net: page_pool: create hooks for
+ custom page providers
+To: =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
+Cc: Jason Gunthorpe <jgg@ziepe.ca>, Pavel Begunkov <asml.silence@gmail.com>, David Wei <dw@davidwei.uk>, 
+	David Ahern <dsahern@kernel.org>, Christoph Hellwig <hch@infradead.org>, netdev@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org, 
+	linux-parisc@vger.kernel.org, sparclinux@vger.kernel.org, 
+	linux-trace-kernel@vger.kernel.org, linux-arch@vger.kernel.org, 
+	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Donald Hunter <donald.hunter@gmail.com>, Jonathan Corbet <corbet@lwn.net>, 
+	Richard Henderson <richard.henderson@linaro.org>, Ivan Kokshaysky <ink@jurassic.park.msu.ru>, 
+	Matt Turner <mattst88@gmail.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>, 
+	Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer <hawk@kernel.org>, 
+	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven Rostedt <rostedt@goodmis.org>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Steffen Klassert <steffen.klassert@secunet.com>, 
+	Herbert Xu <herbert@gondor.apana.org.au>, 
+	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Shuah Khan <shuah@kernel.org>, 
+	Sumit Semwal <sumit.semwal@linaro.org>, Yunsheng Lin <linyunsheng@huawei.com>, 
+	Shailend Chand <shailend@google.com>, Harshitha Ramamurthy <hramamurthy@google.com>, 
+	Shakeel Butt <shakeel.butt@linux.dev>, Jeroen de Borst <jeroendb@google.com>, 
+	Praveen Kaligineedi <pkaligineedi@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi,
+On Mon, Jun 10, 2024 at 5:38=E2=80=AFAM Christian K=C3=B6nig
+<christian.koenig@amd.com> wrote:
+>
+> Am 10.06.24 um 14:16 schrieb Jason Gunthorpe:
+> > On Mon, Jun 10, 2024 at 02:07:01AM +0100, Pavel Begunkov wrote:
+> >> On 6/10/24 01:37, David Wei wrote:
+> >>> On 2024-06-07 17:52, Jason Gunthorpe wrote:
+> >>>> IMHO it seems to compose poorly if you can only use the io_uring
+> >>>> lifecycle model with io_uring registered memory, and not with DMABUF
+> >>>> memory registered through Mina's mechanism.
+> >>> By this, do you mean io_uring must be exclusively used to use this
+> >>> feature?
+> >>>
+> >>> And you'd rather see the two decoupled, so userspace can register w/ =
+say
+> >>> dmabuf then pass it to io_uring?
+> >> Personally, I have no clue what Jason means. You can just as
+> >> well say that it's poorly composable that write(2) to a disk
+> >> cannot post a completion into a XDP ring, or a netlink socket,
+> >> or io_uring's main completion queue, or name any other API.
+> > There is no reason you shouldn't be able to use your fast io_uring
+> > completion and lifecycle flow with DMABUF backed memory. Those are not
+> > widly different things and there is good reason they should work
+> > together.
+>
+> Well there is the fundamental problem that you can't use io_uring to
+> implement the semantics necessary for a dma_fence.
+>
+> That's why we had to reject the io_uring work on DMA-buf sharing from
+> Google a few years ago.
+>
 
-we're facing an interesting issue with a BPF program that writes into a
-bpf_ringbuf from different CPUs on an RT kernel. Here is my attempt to
-reproduce on QEMU:
+Any chance someone can link me to this? io_uring, as far as my
+primitive understanding goes, is not yet very adopted at Google, and
+I'm curious what this effort is.
 
-    ======================================================
-    WARNING: possible circular locking dependency detected
-    6.9.0-rt5-g66834e17536e #3 Not tainted
-    ------------------------------------------------------
-    swapper/4/0 is trying to acquire lock:
-    ffffc90006b4d118 (&lock->wait_lock){....}-{2:2}, at: rt_spin_lock+0x6d/0x100
-
-    but task is already holding lock:
-    ffffc90006b4d158 (&rb->spinlock){....}-{2:2}, at: __bpf_ringbuf_reserve+0x5a/0xf0
-
-    which lock already depends on the new lock.
-
-
-    the existing dependency chain (in reverse order) is:
-
-    -> #3 (&rb->spinlock){....}-{2:2}:
-           lock_acquire+0xc5/0x300
-           rt_spin_lock+0x2a/0x100
-           __bpf_ringbuf_reserve+0x5a/0xf0
-           bpf_prog_abf021cf8a50b730_sched_switch+0x281/0x70d
-           bpf_trace_run4+0xae/0x1e0
-           __schedule+0x42c/0xca0
-           preempt_schedule_notrace+0x37/0x60
-           preempt_schedule_notrace_thunk+0x1a/0x30
-           rcu_is_watching+0x32/0x40
-           __flush_work+0x30b/0x480
-           n_tty_poll+0x131/0x1d0
-           tty_poll+0x54/0x90
-           do_select+0x490/0x9b0
-           core_sys_select+0x238/0x620
-           kern_select+0x101/0x190
-           __x64_sys_select+0x21/0x30
-           do_syscall_64+0xbc/0x1d0
-           entry_SYSCALL_64_after_hwframe+0x77/0x7f
-
-    -> #2 (&rq->__lock){-...}-{2:2}:
-           lock_acquire+0xc5/0x300
-           _raw_spin_lock_nested+0x2e/0x40
-           raw_spin_rq_lock_nested+0x15/0x30
-           task_fork_fair+0x3e/0xb0
-           sched_cgroup_fork+0xe9/0x110
-           copy_process+0x1b76/0x2fd0
-           kernel_clone+0xab/0x3e0
-           user_mode_thread+0x5f/0x90
-           rest_init+0x1e/0x160
-           start_kernel+0x61d/0x620
-           x86_64_start_reservations+0x24/0x30
-           x86_64_start_kernel+0x8c/0x90
-           common_startup_64+0x13e/0x148
-
-    -> #1 (&p->pi_lock){-...}-{2:2}:
-           lock_acquire+0xc5/0x300
-           _raw_spin_lock+0x30/0x40
-           rtlock_slowlock_locked+0x130/0x1c70
-           rt_spin_lock+0x78/0x100
-           prepare_to_wait_event+0x1a/0x140
-           wake_up_and_wait_for_irq_thread_ready+0xc3/0xe0
-           __setup_irq+0x374/0x660
-           request_threaded_irq+0xe5/0x180
-           acpi_os_install_interrupt_handler+0xb7/0xe0
-           acpi_ev_install_xrupt_handlers+0x22/0x90
-           acpi_init+0x8f/0x4d0
-           do_one_initcall+0x73/0x2d0
-           kernel_init_freeable+0x24a/0x290
-           kernel_init+0x1a/0x130
-           ret_from_fork+0x31/0x50
-           ret_from_fork_asm+0x1a/0x30
-
-    -> #0 (&lock->wait_lock){....}-{2:2}:
-           check_prev_add+0xeb/0xd80
-           __lock_acquire+0x113e/0x15b0
-           lock_acquire+0xc5/0x300
-           _raw_spin_lock_irqsave+0x3c/0x60
-           rt_spin_lock+0x6d/0x100
-           __bpf_ringbuf_reserve+0x5a/0xf0
-           bpf_prog_abf021cf8a50b730_sched_switch+0x281/0x70d
-           bpf_trace_run4+0xae/0x1e0
-           __schedule+0x42c/0xca0
-           schedule_idle+0x20/0x40
-           cpu_startup_entry+0x29/0x30
-           start_secondary+0xfa/0x100
-           common_startup_64+0x13e/0x148
-
-    other info that might help us debug this:
-
-    Chain exists of:
-      &lock->wait_lock --> &rq->__lock --> &rb->spinlock
-
-     Possible unsafe locking scenario:
-
-           CPU0                    CPU1
-           ----                    ----
-      lock(&rb->spinlock);
-                                   lock(&rq->__lock);
-                                   lock(&rb->spinlock);
-      lock(&lock->wait_lock);
-
-     *** DEADLOCK ***
-
-    3 locks held by swapper/4/0:
-     #0: ffff88813bd32558 (&rq->__lock){-...}-{2:2}, at: __schedule+0xc4/0xca0
-     #1: ffffffff83590540 (rcu_read_lock){....}-{1:2}, at: bpf_trace_run4+0x6c/0x1e0
-     #2: ffffc90006b4d158 (&rb->spinlock){....}-{2:2}, at: __bpf_ringbuf_reserve+0x5a/0xf0
-
-    stack backtrace:
-    CPU: 4 PID: 0 Comm: swapper/4 Not tainted 6.9.0-rt5-g66834e17536e #3
-    Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.16.3-2.fc40 04/01/2014
-    Call Trace:
-     <TASK>
-     dump_stack_lvl+0x6f/0xb0
-     print_circular_bug.cold+0x178/0x1be
-     check_noncircular+0x14e/0x170
-     check_prev_add+0xeb/0xd80
-     __lock_acquire+0x113e/0x15b0
-     lock_acquire+0xc5/0x300
-     ? rt_spin_lock+0x6d/0x100
-     _raw_spin_lock_irqsave+0x3c/0x60
-     ? rt_spin_lock+0x6d/0x100
-     rt_spin_lock+0x6d/0x100
-     __bpf_ringbuf_reserve+0x5a/0xf0
-     bpf_prog_abf021cf8a50b730_sched_switch+0x281/0x70d
-     bpf_trace_run4+0xae/0x1e0
-     __schedule+0x42c/0xca0
-     schedule_idle+0x20/0x40
-     cpu_startup_entry+0x29/0x30
-     start_secondary+0xfa/0x100
-     common_startup_64+0x13e/0x148
-     </TASK>
-    CPU: 1 PID: 160 Comm: screen Not tainted 6.9.0-rt5-g66834e17536e #3
-    Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.16.3-2.fc40 04/01/2014
-    Call Trace:
-     <TASK>
-     dump_stack_lvl+0x6f/0xb0
-     __might_resched.cold+0xcc/0xdf
-     rt_spin_lock+0x4c/0x100
-     ? __bpf_ringbuf_reserve+0x5a/0xf0
-     __bpf_ringbuf_reserve+0x5a/0xf0
-     bpf_prog_abf021cf8a50b730_sched_switch+0x281/0x70d
-     bpf_trace_run4+0xae/0x1e0
-     __schedule+0x42c/0xca0
-     preempt_schedule_notrace+0x37/0x60
-     preempt_schedule_notrace_thunk+0x1a/0x30
-     ? __flush_work+0x84/0x480
-     rcu_is_watching+0x32/0x40
-     __flush_work+0x30b/0x480
-     n_tty_poll+0x131/0x1d0
-     tty_poll+0x54/0x90
-     do_select+0x490/0x9b0
-     ? __bfs+0x136/0x230
-     ? do_select+0x26d/0x9b0
-     ? __pfx_pollwake+0x10/0x10
-     ? __pfx_pollwake+0x10/0x10
-     ? core_sys_select+0x238/0x620
-     core_sys_select+0x238/0x620
-     kern_select+0x101/0x190
-     __x64_sys_select+0x21/0x30
-     do_syscall_64+0xbc/0x1d0
-     entry_SYSCALL_64_after_hwframe+0x77/0x7f
-
-The BPF program in question is attached to sched_switch. The issue seems
-to be similar to a couple of syzkaller reports [1], [2], although the
-latter one is about nested progs, which seems to be not the case here.
-Talking about nested progs, applying a similar approach as in [3]
-reworked for bpf_ringbuf, elliminates the issue.
-
-Do I miss anything, is it a known issue? Any ideas how to address that?
-
-[1]: https://lore.kernel.org/all/0000000000000656bf061a429057@google.com/
-[2]: https://lore.kernel.org/lkml/0000000000004aa700061379547e@google.com/
-[3]: https://lore.kernel.org/bpf/20240514124052.1240266-2-sidchintamaneni@gmail.com/
+--=20
+Thanks,
+Mina
