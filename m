@@ -1,70 +1,89 @@
-Received: from mx0a-00823401.pphosted.com (mx0a-00823401.pphosted.com [148.163.148.104])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com [209.85.128.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BD5C2230F;
-	Mon, 10 Jun 2024 19:34:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.148.104
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E27B14F131
+	for <bpf@vger.kernel.org>; Mon, 10 Jun 2024 20:12:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718048095; cv=none; b=eoNpzWaJpPUSV2L/w1edUJmGEzF2XCIeVuUqHqSarNI/gqv+yZtfyLlZOOZECmEo1Ov/Jl9pHhja1DPlhnXDO7su8nfhr5esGXzN7nu7C55jch46Z8YtWXMHOAtn6DIeijNhP/0OKhVII1PY3ZtCwDYKsm5Rs7xDPEEg5HtaAI8=
+	t=1718050350; cv=none; b=Eqg+2li87mMj0L9M/EANXsi9RpjX9ts+FsSJbDfnj57udddEwdflNUvoW+KRytYHDFU54v14mk1EFp4z086MACZy1HSepiFNMXtxJTaZgeHjAngW7CuKchwCvvj9ePkV8OzwcDU38B6PMDXIawLEzVkEQg5ICvzSMN0UH3dW/Rc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718048095; c=relaxed/simple;
-	bh=iSlArSiy4r9V/ntgrh4SI4jK9M/oixVSelyA9EMIjfQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=i18shE8UW+8Eu2cTt3TXhkwRIXCqa1EqGwQUcAFRgrur7owmwdUIXp6x/S0rCTW7AOEKOwtopvzPSraIdiaWiYcnIcohvHsZIO2Ky+E6ONNOxOKkf8KRrbfpGkoGAC6qZxyZU5UUDMQzqEKeM4KV245DRQ8n0oW2rBeFKujQBtE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=motorola.com; spf=pass smtp.mailfrom=motorola.com; dkim=pass (2048-bit key) header.d=motorola.com header.i=@motorola.com header.b=gPqWTyCL; arc=none smtp.client-ip=148.163.148.104
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=motorola.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=motorola.com
+	s=arc-20240116; t=1718050350; c=relaxed/simple;
+	bh=b7+MwoWNMLPQ7YyhI/4+4s4P3K4STGUIbLhPZG0Mamc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=U1Ksp9aMobKGY5Nomh1ky6KiPYtSN150cpkubwM9YSQ/S0WiBGXOgi/DnELIcnwBBHtJqxZoHjJvujWFsQNDElFdhHe6QHBmqC+gi/3N28ErHv2shcjFCzAkGXG2gcRrFXC1yK+TNaQ+r7Wh4NAMG9NJ5DNsyuHlle92QUxaULY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=toxicpanda.com; spf=none smtp.mailfrom=toxicpanda.com; dkim=pass (2048-bit key) header.d=toxicpanda-com.20230601.gappssmtp.com header.i=@toxicpanda-com.20230601.gappssmtp.com header.b=LYwY4ug2; arc=none smtp.client-ip=209.85.128.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=toxicpanda.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=toxicpanda.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=motorola.com header.i=@motorola.com header.b="gPqWTyCL"
-Received: from pps.filterd (m0355087.ppops.net [127.0.0.1])
-	by mx0a-00823401.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 45ABZrwt014133;
-	Mon, 10 Jun 2024 18:05:05 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=motorola.com; h=
-	cc:content-type:date:from:message-id:mime-version:subject:to; s=
-	DKIM202306; bh=2Gnp3PO7oU3dzU8H0CiRDGU9SqVqHXr7nHqbHwRrpoI=; b=g
-	PqWTyCL08I1N1ID/+RSvgaTdHLhCFmZrFRumuHAWaXMs5xfa16+338NCZVNm+KHb
-	DjGeQ68GayAEF4bQHJeTAMBTf6bbhjwiORLA8/MpXRycRk7rc5t3rgCaFiOI2e1I
-	LCaw8Q28thG5bjACawtrE0oHoIeMwqPEyDgn0M2TR6D3fVo4Oc0kOfElIqEeaJnv
-	stQuTB1zOY0doh15A5tCYUKf2uuD8g4I44+pGonMyPZ08VSTguPQHeQX9XrxoPEH
-	zJcwz9SpZ5X/rDtbv1CxSnwZu9V5iUe1F8DRVIfxodzMUPiHFoAeQniJW+r2uMi0
-	joDM2Omegj6pLM4hhZUbw==
-Received: from va32lpfpp03.lenovo.com ([104.232.228.23])
-	by mx0a-00823401.pphosted.com (PPS) with ESMTPS id 3yn45gt5mt-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 10 Jun 2024 18:05:04 +0000 (GMT)
-Received: from va32lmmrp01.lenovo.com (va32lmmrp01.mot.com [10.62.177.113])
-	(using TLSv1.2 with cipher ADH-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by va32lpfpp03.lenovo.com (Postfix) with ESMTPS id 4Vyfpl4n6rz4xlJn;
-	Mon, 10 Jun 2024 18:05:03 +0000 (UTC)
-Received: from ilclasset02 (ilclasset02.mot.com [100.64.49.13])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: mbland)
-	by va32lmmrp01.lenovo.com (Postfix) with ESMTPSA id 4Vyfpl0VB7z2VZRs;
-	Mon, 10 Jun 2024 18:05:03 +0000 (UTC)
-Date: Mon, 10 Jun 2024 13:05:01 -0500
-From: Maxwell Bland <mbland@motorola.com>
-To: "open list:BPF [GENERAL] (Safe Dynamic Programs and Tools)" <bpf@vger.kernel.org>
-Cc: Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-        Yonghong Song <yonghong.song@linux.dev>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Zi Shen Lim <zlim.lnx@gmail.com>, Mark Rutland <mark.rutland@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Mark Brown <broonie@kernel.org>, linux-arm-kernel@lists.infradead.org,
-        open list <linux-kernel@vger.kernel.org>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Puranjay Mohan <puranjay12@gmail.com>
-Subject: [PATCH bpf-next v5 0/3] Support kCFI + BPF on arm64
-Message-ID: <mafwhrai2nz3u4wn4fu72kvzjm6krs57klc3qqvd2sz2mham6d@x4ukf6xqp4f4>
+	dkim=pass (2048-bit key) header.d=toxicpanda-com.20230601.gappssmtp.com header.i=@toxicpanda-com.20230601.gappssmtp.com header.b="LYwY4ug2"
+Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-62a2424ec39so49314717b3.1
+        for <bpf@vger.kernel.org>; Mon, 10 Jun 2024 13:12:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=toxicpanda-com.20230601.gappssmtp.com; s=20230601; t=1718050348; x=1718655148; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=q8U88OhWZh1tCo+0WQ1tID8xLxoIwnJftDZHFtRwK3o=;
+        b=LYwY4ug2iL/vJ4DIUm0/Hp2MvpGURHFsHfCR8hKgvsmAqgzRPxBeFZzp5Tfo48EbCo
+         Euj3YFKE98R3xDK+TVi4X08MQrChZxoR0ZdwAIKYcBEyuT6J6pRA6MFIWpmGlK1QH6yk
+         ayaE24UINt0NKI07iU6nbvvP+ur4CK0DddjWE0Gtpl8JlrD2yRSechl/xjLYVx0XPb6G
+         i76retKit/NIZmraE8AuogV1B4ponmQt72v7gY3tzehh7ckEOuDJ8LHGOKzXVFo5n2E+
+         4LMkjHweMxF1v6LeN1NaZpvEMI8QBe5KxGttDTh645mywME2cc7oJs1j5M/rPYABPg7M
+         UNcA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1718050348; x=1718655148;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=q8U88OhWZh1tCo+0WQ1tID8xLxoIwnJftDZHFtRwK3o=;
+        b=CXxdlMpM964S7dH8lEJxNLKOyyiVH3/Mk4yQnJ9jTag0Bra0iu7/o80mRDQRE/Ru2K
+         O4oYx2wnclPPzVk59n1TQn3THlNjVCUKQkazckHv3VlHLiC6JBrdVk+ZMhI1LyWtvfA1
+         BIO7JNwqPhlAw+LXvb4QTIOqT3Pi4/T1wq9DHxMxy6rwEypIAcyCmOKLMDLLlhByrrEi
+         yfT9gTKnOov2SQr26+q+6oYavw36skFLXamAxzEBqmwVAhO0M2/ZK5dMGA8D7BNwiUBd
+         ABydnGCwxe/CjtfRCxSZD5892GRgfYHOajDgRHB/7mGmcJMMqFpaVT+F74NI9BHwAru3
+         Bg0A==
+X-Forwarded-Encrypted: i=1; AJvYcCXGUj6s2ppTKDyn0B9TfeAZCoslKtjjub0cGx/oGlaHkjIXs4uIieX01xxKClF3P191A6q/+vSgBt7xLUBBuyQ4i3X7
+X-Gm-Message-State: AOJu0YzZnEvSdxxZ0X1rvrsiWyNxtF7I0mSO36o3THFXkf0g7dV7Np9B
+	z5tFIliTNZsetZ4/l8Ga+yDtIa9jzwapbeaACpiybJaBOtmWGLZEGDh6xsF2Ifx0Gr2P92AmAlU
+	dhkA=
+X-Google-Smtp-Source: AGHT+IHAq2uat/BxStlvycvWIMemf9chq6bKvr5RgwVh7JekY7oKEJ33MFsCJYBOa4s18l+17nIrDA==
+X-Received: by 2002:a81:ef0e:0:b0:61a:f206:bad6 with SMTP id 00721157ae682-62cd55f6755mr90104707b3.30.1718050348318;
+        Mon, 10 Jun 2024 13:12:28 -0700 (PDT)
+Received: from localhost (syn-076-182-020-124.res.spectrum.com. [76.182.20.124])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-62ccaef2825sm17372997b3.139.2024.06.10.13.12.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Jun 2024 13:12:27 -0700 (PDT)
+Date: Mon, 10 Jun 2024 16:12:27 -0400
+From: Josef Bacik <josef@toxicpanda.com>
+To: Jonathan Calmels <jcalmels@3xx0.net>
+Cc: brauner@kernel.org, ebiederm@xmission.com,
+	Jonathan Corbet <corbet@lwn.net>, Paul Moore <paul@paul-moore.com>,
+	James Morris <jmorris@namei.org>,
+	"Serge E. Hallyn" <serge@hallyn.com>, KP Singh <kpsingh@kernel.org>,
+	Matt Bobrowski <mattbobrowski@google.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>, Luis Chamberlain <mcgrof@kernel.org>,
+	Kees Cook <kees@kernel.org>, Joel Granados <j.granados@samsung.com>,
+	John Johansen <john.johansen@canonical.com>,
+	David Howells <dhowells@redhat.com>,
+	Jarkko Sakkinen <jarkko@kernel.org>,
+	Stephen Smalley <stephen.smalley.work@gmail.com>,
+	Ondrej Mosnacek <omosnace@redhat.com>,
+	Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+	containers@lists.linux.dev, linux-kernel@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-security-module@vger.kernel.org, bpf@vger.kernel.org,
+	apparmor@lists.ubuntu.com, keyrings@vger.kernel.org,
+	selinux@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v2 0/4] Introduce user namespace capabilities
+Message-ID: <20240610201227.GD235772@perftesting>
+References: <20240609104355.442002-1-jcalmels@3xx0.net>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -73,85 +92,63 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Proofpoint-ORIG-GUID: yExqa3DDXgG_6TxFLeimNwxPhcMuFVJh
-X-Proofpoint-GUID: yExqa3DDXgG_6TxFLeimNwxPhcMuFVJh
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-06-10_04,2024-06-10_01,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 impostorscore=0
- mlxscore=0 malwarescore=0 suspectscore=0 clxscore=1011 mlxlogscore=999
- phishscore=0 bulkscore=0 priorityscore=1501 adultscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2405170001 definitions=main-2406100136
-Message-ID: <20240610180501.7hHNblJ8Tncm6dfcoMmhBL37zDuP3x-QXpsplPn1NME@z>
+In-Reply-To: <20240609104355.442002-1-jcalmels@3xx0.net>
 
-Adds CFI checks to BPF dispatchers on aarch64.
+On Sun, Jun 09, 2024 at 03:43:33AM -0700, Jonathan Calmels wrote:
+> This patch series introduces a new user namespace capability set, as
+> well as some plumbing around it (i.e. sysctl, secbit, lsm support).
+> 
+> First patch goes over the motivations for this as well as prior art.
+> 
+> In summary, while user namespaces are a great success today in that they
+> avoid running a lot of code as root, they also expand the attack surface
+> of the kernel substantially which is often abused by attackers. 
+> Methods exist to limit the creation of such namespaces [1], however,
+> application developers often need to assume that user namespaces are
+> available for various tasks such as sandboxing. Thus, instead of
+> restricting the creation of user namespaces, we offer ways for userspace
+> to limit the capabilities granted to them.
+> 
+> Why a new capability set and not something specific to the userns (e.g.
+> ioctl_ns)?
+> 
+>     1. We can't really expect userspace to patch every single callsite
+>     and opt-in this new security mechanism. 
+> 
+>     2. We don't necessarily want policies enforced at said callsites.
+>     For example a service like systemd-machined or a PAM session need to
+>     be able to place restrictions on any namespace spawned under it.
+> 
+>     3. We would need to come up with inheritance rules, querying
+>     capabilities, etc. At this point we're just reinventing capability
+>     sets.
+> 
+>     4. We can easily define interactions between capability sets, thus
+>     helping with adoption (patch 2 is an example of this)
+> 
+> Some examples of how this could be leveraged in userspace:
+> 
+>     - Prevent user from getting CAP_NET_ADMIN in user namespaces under SSH:
+>         echo "auth optional pam_cap.so" >> /etc/pam.d/sshd
+>         echo "!cap_net_admin $USER"     >> /etc/security/capability.conf
+>         capsh --secbits=$((1 << 8)) -- -c /usr/sbin/sshd
+> 
+>     - Prevent containers from ever getting CAP_DAC_OVERRIDE:
+>         systemd-run -p CapabilityBoundingSet=~CAP_DAC_OVERRIDE \
+>                     -p SecureBits=userns-strict-caps \
+>                     /usr/bin/dockerd
+>         systemd-run -p UserNSCapabilities=~CAP_DAC_OVERRIDE \
+>                     /usr/bin/incusd
+> 
+>     - Kernel could be vulnerable to CAP_SYS_RAWIO exploits, prevent it:
+>         sysctl -w cap_bound_userns_mask=0x1fffffdffff
+> 
+>     - Drop CAP_SYS_ADMIN for this shell and all the user namespaces below it:
+>         bwrap --unshare-user --cap-drop CAP_SYS_ADMIN /bin/sh
+> 
 
-E.g.
-	<bpf_dispatcher_*_func>:
-	paciasp
-	stp x29, x30, [sp, #-0x10]!
-	mov x29, sp
-	+ ldur w16, [x2, #-0x4]
-	+ movk w17, #0x1881
-	+ movk w17, #0xd942, lsl #16
-	+ cmp w16, w17
-	+ b.eq <bpf_dispatcher_*_func+0x24>
-	+ brk #0x8222
-	blr x2
-	ldp x29, x30, [sp], #0x10
-	autiasp
-	ret
+Where are the tests for this patchset?  I see you updated the bpf tests for the
+bpf lsm bits, but there's nothing to validate this new behavior or exercise the
+new ioctl you've added.  Thanks,
 
-Changes in v4->v5
-https://lore.kernel.org/all/wtb6czzpvtqq23t4g6hf7on257dtxzdb4fa4nuq3dtq32odmli@xoyyrtthafar/
-- Fix failing BPF selftests from misplaced variable declaration
-
-Changes in v3->v4
-https://lore.kernel.org/all/fhdcjdzqdqnoehenxbipfaorseeamt3q7fbm7ghe6z5s2chif5@lrhtasolawud/
-- Fix authorship attribution.
-
-Changes in v2->v3:
-https://lore.kernel.org/all/20240324211518.93892-1-puranjay12@gmail.com/
-- Simplify cfi_get_func_hash to avoid needless failure case
-- Use DEFINE_CFI_TYPE as suggested by Mark Rutland
-
-Changes in v1->v2:
-https://lore.kernel.org/bpf/20240227151115.4623-1-puranjay12@gmail.com/
-- Rebased on latest bpf-next/master
-
-Mark Rutland (1):
-  cfi: add C CFI type macro
-
-Maxwell Bland (1):
-  arm64/cfi,bpf: Use DEFINE_CFI_TYPE in arm64
-
-Puranjay Mohan (1):
-  arm64/cfi,bpf: Support kCFI + BPF on arm64
-
- arch/arm64/include/asm/cfi.h    | 23 ++++++++++++++++++++++
- arch/arm64/kernel/alternative.c | 18 +++++++++++++++++
- arch/arm64/net/bpf_jit_comp.c   | 21 +++++++++++++++++---
- arch/riscv/kernel/cfi.c         | 34 ++------------------------------
- arch/x86/kernel/alternative.c   | 35 +++------------------------------
- include/linux/cfi_types.h       | 23 ++++++++++++++++++++++
- 6 files changed, 87 insertions(+), 67 deletions(-)
- create mode 100644 arch/arm64/include/asm/cfi.h
-
---
-
-Sorry for the extreme delay Puranjay and other maintainers on the
-submission for this. The past month I was on incident response rotation
-here at Moto and my hands were full with scripting build scanning steps
-and other product deployment nonsense. Better late than never, though,
-if these changes have not been merged yet. (-:
-
-Tested on a cortex-a76 qemu instance and self-tests are matching the
-baseline bpf-next success rate (Summary: 509/3700 PASSED, 77 SKIPPED, 37
-FAILED).
-
-Thanks for your review and regards,
-Maxwell
-
-2.39.2
-
+Josef
