@@ -1,107 +1,85 @@
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail.andestech.com (59-120-53-16.hinet-ip.hinet.net [59.120.53.16])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91B5B17C213;
-	Tue, 11 Jun 2024 12:55:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.188
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5F5024211;
+	Tue, 11 Jun 2024 13:16:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=59.120.53.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718110509; cv=none; b=pAu9hPpfZW7VPLruqOjO2cFL+qxlACPjG/SU8p4NCFfDNNsT6KG2ndG+Dla2acVIlGYx2vo+03y+JZgWwhxXfhIqu14xmkQ1ZxBDrFgsrz+zFq1TkMaxjs5EnY9DQ5oCm+qXrrXrJeMNZJHi7miE0G9Na3pi07cuLjhbRV2iCk4=
+	t=1718111779; cv=none; b=K4bOxYMY6/rvsUgtri7UCWq4haNm0d4FxHiqtowo0vn/ZNuHDltHZb1lrHwoWUo0b6neYqTcj8RRmo3K2Ap3JAN7iSMOGTT1ltla0znjxGioM0s/c8SdxuP2wrZ47g229YK190fL6oCmuSOOL8f4tB1p4aS0PzVR4vnuy2Vr+rs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718110509; c=relaxed/simple;
-	bh=eYrvKMxUbrYpLpniWRPV/2AluAC4D7yDbMQ8qAp2zYI=;
-	h=Subject:To:CC:References:From:Message-ID:Date:MIME-Version:
-	 In-Reply-To:Content-Type; b=ke1SAR8d27wENgp0422MPOC4hsNrXNkTY/Un3GN5OpvcdyY07IZkgj8XkyI/qOgaAF7uxwe4y9Cm5GJGkXi3i1b2YwVv5mrKp100SJyVrJUyMtwvUgDC+DkvYa1Wsjght8H6IAyz8VvigJhlJq594ZjdEkTZRBinPpMIfY2wP6s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.188
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.163.174])
-	by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Vz7n82Tb6zmZD4;
-	Tue, 11 Jun 2024 20:50:20 +0800 (CST)
-Received: from dggpemf200006.china.huawei.com (unknown [7.185.36.61])
-	by mail.maildlp.com (Postfix) with ESMTPS id C5926140156;
-	Tue, 11 Jun 2024 20:55:02 +0800 (CST)
-Received: from [10.69.30.204] (10.69.30.204) by dggpemf200006.china.huawei.com
- (7.185.36.61) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Tue, 11 Jun
- 2024 20:55:02 +0800
-Subject: Re: [PATCH net-next v7 00/15] First try to replace page_frag with
- page_frag_cache
-To: <davem@davemloft.net>, <kuba@kernel.org>, <pabeni@redhat.com>, Alexander
- Duyck <alexander.duyck@gmail.com>
-CC: <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>, Alexei
- Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Jesper
- Dangaard Brouer <hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>,
-	Matthias Brugger <matthias.bgg@gmail.com>, AngeloGioacchino Del Regno
-	<angelogioacchino.delregno@collabora.com>, <bpf@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-mediatek@lists.infradead.org>
-References: <20240607123819.40694-1-linyunsheng@huawei.com>
-From: Yunsheng Lin <linyunsheng@huawei.com>
-Message-ID: <e9b01c2c-5dbb-0c43-49bc-10d31545acda@huawei.com>
-Date: Tue, 11 Jun 2024 20:55:02 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101
- Thunderbird/52.2.0
+	s=arc-20240116; t=1718111779; c=relaxed/simple;
+	bh=A8/SxLeo0g/QJrVx1kZZfMcvIx9lsikrYLFelitJ4Hg=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=eKncQzlagRoCh+QoJYemT4dCA81cMqf2r1Y4/yRXNOZKFrM2i/d4iu67K9Zdn9SUTbUeRR4j3LcUPjfpQLc96eD9P2eDQ/apfjLlB9HleHCc9LRvy8krLRLmUqVGq4CxDPYzyiFJzHWgm5sZurlfp2wnn6Oa2ykiiCWC1kr9jPo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=andestech.com; spf=pass smtp.mailfrom=andestech.com; arc=none smtp.client-ip=59.120.53.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=andestech.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=andestech.com
+Received: from swlinux02.andestech.com (10.0.15.183) by ATCPCS34.andestech.com
+ (10.0.1.134) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.7; Tue, 11 Jun
+ 2024 21:13:06 +0800
+From: Leo Yu-Chi Liang <ycliang@andestech.com>
+To: <akpm@linux-foundation.org>, <urezki@gmail.com>, <hch@infradead.org>,
+	<lstoakes@gmail.com>, <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
+	<bpf@vger.kernel.org>, <rick.p.edgecombe@intel.com>
+CC: <patrick@andestech.com>, Leo Yu-Chi Liang <ycliang@andestech.com>
+Subject: [RFC PATCH 1/1] mm/vmalloc: Modify permission reset procedure to avoid invalid access
+Date: Tue, 11 Jun 2024 21:13:01 +0800
+Message-ID: <20240611131301.2988047-1-ycliang@andestech.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20240607123819.40694-1-linyunsheng@huawei.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggpemf200006.china.huawei.com (7.185.36.61)
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: ATCPCS33.andestech.com (10.0.1.100) To
+ ATCPCS34.andestech.com (10.0.1.134)
 
+The previous reset procedure is
+1. Set direct map attribute to invalid
+2. Flush TLB
+3. Reset direct map attribute to default
 
-On 2024/6/7 20:38, Yunsheng Lin wrote:
+It is possible that kernel forks another process
+on another core that access the invalid mappings after
+sync_kernel_mappings.
 
-...
+We could reproduce this scenario by running LTP/bpf_prog
+multiple times on RV32 kernel on QEMU.
 
-> 
-> CC: Alexander Duyck <alexander.duyck@gmail.com>
+Therefore, the following procedure is proposed
+to avoid mappings being invalid.
+1. Reset direct map attribute to default
+2. Flush TLB
 
-Hi, Alexander & Networking Maintainers
-   Any suggestion or comment about this version?
-   Thanks.
+Signed-off-by: Leo Yu-Chi Liang <ycliang@andestech.com>
+---
+ mm/vmalloc.c | 9 ++-------
+ 1 file changed, 2 insertions(+), 7 deletions(-)
 
-> 
-> 1. https://lore.kernel.org/all/20240228093013.8263-1-linyunsheng@huawei.com/
-> 
-> Change log:
-> V7: Fix doc build warning and error.
-> 
-> V6:
->    1. Fix some typo and compiler error for x86 pointed out by Jakub and
->       Simon.
->    2. Add two refactoring and optimization patches.
-> 
-> V5:
->    1. Add page_frag_alloc_pg() API for tls_device.c case and refactor
->       some implementation, update kernel bin size changing as bin size
->       is increased after that.
->    2. Add ack from Mat.
-> 
-> RFC v4:
->    1. Update doc according to Randy and Mat's suggestion.
->    2. Change probe API to "probe" for a specific amount  of available space,
->       rather than "nonzero" space according to Mat's suggestion.
->    3. Retest and update the test result.
-> 
-> v3:
->    1. Use new layout for 'struct page_frag_cache' as the discussion
->       with Alexander and other sugeestions from Alexander.
->    2. Add probe API to address Mat' comment about mptcp use case.
->    3. Some doc updating according to Bagas' suggestion.
-> 
-> v2:
->    1. reorder test module to patch 1.
->    2. split doc and maintainer updating to two patches.
->    3. refactor the page_frag before moving.
->    4. fix a type and 'static' warning in test module.
->    5. add a patch for xtensa arch to enable using get_order() in
->       BUILD_BUG_ON().
->    6. Add test case and performance data for the socket code.
-> 
-> 
+diff --git a/mm/vmalloc.c b/mm/vmalloc.c
+index 45e1506d58c3..58ef2fc51e43 100644
+--- a/mm/vmalloc.c
++++ b/mm/vmalloc.c
+@@ -3248,14 +3248,9 @@ static void vm_reset_perms(struct vm_struct *area)
+ 		}
+ 	}
+ 
+-	/*
+-	 * Set direct map to something invalid so that it won't be cached if
+-	 * there are any accesses after the TLB flush, then flush the TLB and
+-	 * reset the direct map permissions to the default.
+-	 */
+-	set_area_direct_map(area, set_direct_map_invalid_noflush);
+-	_vm_unmap_aliases(start, end, flush_dmap);
++	/* Reset direct map permissions to default, then flush the TLB */
+ 	set_area_direct_map(area, set_direct_map_default_noflush);
++	_vm_unmap_aliases(start, end, flush_dmap);
+ }
+ 
+ static void delayed_vfree_work(struct work_struct *w)
+-- 
+2.34.1
 
