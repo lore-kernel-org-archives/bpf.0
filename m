@@ -1,258 +1,181 @@
-Received: from lf-2-36.ptr.blmpb.com (lf-2-36.ptr.blmpb.com [101.36.218.36])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77E35208A8
-	for <bpf@vger.kernel.org>; Wed, 12 Jun 2024 03:24:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=101.36.218.36
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2EB563BF;
+	Wed, 12 Jun 2024 03:39:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718162687; cv=none; b=T0Jq5qXy9dE5ywJs+QnSb4SSHGhaVWGCBu2mI5x7qD7UoWmVtfuK5aZubhQER7Bfab8UQwJvgAD83GDVccZgOgS4Bg8vz1j6/5br6qKDd45cT/z+gKl8Qx8brO/fH9eBNsFqsO7KcKCwmJU0WKqumJhBANPeg0YkxitFSUDosZw=
+	t=1718163562; cv=none; b=Xj1YE6itdjF4UFCKSc13EzAGbaYr2D2gBNJqp5ADcH2bHG5GdrJE00nnwVJAjzdHxsNivTKAAevJEy6GUr6XB+0F4twfQq2RaDYui8MPFrncu7XC3C8wDVcp5nHRLQLxhr3LassHTEKNqTQ4SXFS5xuttORVbHllums/CDgjxQo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718162687; c=relaxed/simple;
-	bh=kgp3NkghzOefzkOS2KGRWV5D4StUnIyV3p4BlRfFHw0=;
-	h=Mime-Version:Content-Type:In-Reply-To:Cc:Date:Subject:Message-Id:
-	 References:To:From; b=X7AIUsAAU0596FhZyDrpY0m0Q3fQ5Ceild0rFRHfZEceg2FUdwiDaOabp4mIpQpE7Ruv0f6zNcakmBEYjH5cg6jEEGOqraOZ2/vJpxowoV4z9zGfG1aOmS+m56WJ4bJWuUJM9hGhqwPMgjX5KhP0jRQ4EQN/GQYrd/hV5eyJIvk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=oss.cipunited.com; spf=pass smtp.mailfrom=oss.cipunited.com; dkim=pass (2048-bit key) header.d=oss.cipunited.com header.i=@oss.cipunited.com header.b=Wdl0BT3q; arc=none smtp.client-ip=101.36.218.36
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=oss.cipunited.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.cipunited.com
+	s=arc-20240116; t=1718163562; c=relaxed/simple;
+	bh=kCHLhjfWOErMWtccEkpMiZ0dqi402JQBcE0Ura3iAIA=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=s17qIkemt8XwLd0pKAheCsBq6YGZONkyc1srKoYzWgrT2yWnsX2A4JYvu1XOPuZIeTgQixa9GS1IxEUQLfm/Ly9arHqnDjv+ssr2dP9r1u1FbmGaQ0PxNzwCz5W8GLWF2UJfAuqtBP+qEwI4VncKy3IMqnieT8hNsoKpneECfEQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=spiEw1oJ; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oss.cipunited.com header.i=@oss.cipunited.com header.b="Wdl0BT3q"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
- s=feishu2303200042; d=oss.cipunited.com; t=1718159948;
-  h=from:subject:mime-version:from:date:message-id:subject:to:cc:
- reply-to:content-type:mime-version:in-reply-to:message-id;
- bh=2+Fz/PQ5wZ//fbujJB00EmLF+iGqzP4nPBqg4JDrJs8=;
- b=Wdl0BT3qKmKFd3DAP2XU/6UowjkRfUsbU3avAT4RcIxP8xk2r2XF1iNnj/Tp7Ax1M1P3qW
- gN77a9VP14pDEvXFztRYj6aiIe6nyAC8QCzaff+pvx8QXD1MeIisi/PLoQTPqFNNoeGNED
- TuPIIvhjxMZVM7fvLkFj/XO0dEKVDUQuMYPOjl/6DYAfHFPSG0ie+nKcg3EY9/E0LRpYo7
- anygXIycuZC/sjsQn71juf8c6WX1icBmPAQZmr23zpjg3QEJze4n6q5UifS9knMNia56Zm
- Neav7LSErQxhqfD5Y3n/Q8pRCVSmUEgzzO8jI2Q+m67hhDkInddyY6EOOx+TIQ==
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="spiEw1oJ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0D1CC2BD10;
+	Wed, 12 Jun 2024 03:39:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1718163561;
+	bh=kCHLhjfWOErMWtccEkpMiZ0dqi402JQBcE0Ura3iAIA=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+	b=spiEw1oJbB9hmrc+s3oX2ADCAe/8FkMxVzWRwWG522Q+zZhAq/qGG0YYIkcm6aL1V
+	 /HwKjImfnQ0kcUfdIXeOXEweN1m+OhAcIjH/FEFoxtsW0Qjq3hXVBGCpcJN+i042pB
+	 YvpHhhRQWlyUqpZXTFu7USAnZeuIRQWyqCoNHHvGvRTMA3GJ7dkeK/0RHCHkXBtX6s
+	 kfr4sq1ZucI3BcOFBKg7wL2BsYkg6kxStmdVIiaKLZzsY6MWbQe7CmRw+C6Sg/ILFe
+	 OF8u4meMOFFNYlaDr/YPX3NPw3EzaSD7w3yVfVgF/V7tsSOAPpsrzPzS15LNN9F+VM
+	 STWseuYIJfrPQ==
+Message-ID: <cc489496784f5d023dee99a2f3ab512e0ab20b48.camel@kernel.org>
+Subject: Re: [PATCH bpf-next 1/5] selftests/bpf: Drop type from
+ network_helper_opts
+From: Geliang Tang <geliang@kernel.org>
+To: Eduard Zingerman <eddyz87@gmail.com>, Andrii Nakryiko
+ <andrii@kernel.org>,  Mykola Lysenko <mykolal@fb.com>, Alexei Starovoitov
+ <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai Lau
+ <martin.lau@linux.dev>, Song Liu <song@kernel.org>, Yonghong Song
+ <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, KP
+ Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo
+ <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,  Shuah Khan
+ <shuah@kernel.org>
+Cc: Geliang Tang <tanggeliang@kylinos.cn>, bpf@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Date: Wed, 12 Jun 2024 11:39:12 +0800
+In-Reply-To: <90648db3ed02c6f75ce2f90cf6651c8a6f0123a0.camel@gmail.com>
+References: <cover.1718070939.git.tanggeliang@kylinos.cn>
+	 <b80ca04f4f1e65e4b796331c48283ea282fe7ee0.1718070939.git.tanggeliang@kylinos.cn>
+	 <90648db3ed02c6f75ce2f90cf6651c8a6f0123a0.camel@gmail.com>
+Autocrypt: addr=geliang@kernel.org; prefer-encrypt=mutual;
+ keydata=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
+ TO0tfEdfAX7IENcV87h2yAFBZkaA==
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.52.0-1build2 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-In-Reply-To: <Zmfwhn6inA2m1ftm@kodidev-ubuntu>
-Cc: "Mark Wielaard" <mjw@redhat.com>, "Hengqi Chen" <hengqi.chen@gmail.com>, 
-	<bpf@vger.kernel.org>, <dwarves@vger.kernel.org>, 
-	"Alexei Starovoitov" <ast@kernel.org>, 
-	"Daniel Borkmann" <daniel@iogearbox.net>, 
-	"Andrii Nakryiko" <andrii@kernel.org>
-Date: Wed, 12 Jun 2024 10:39:02 +0800
-User-Agent: Mozilla Thunderbird
-Content-Language: en-US
-X-Lms-Return-Path: <lba+266690a4b+78e30c+vger.kernel.org+ying.huang@oss.cipunited.com>
-X-Original-From: Ying Huang <ying.huang@oss.cipunited.com>
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: elfutils DWARF problem was: Re: Problem with BTF generation on mips64el
-Message-Id: <9b6e3f83-07a6-47fe-a033-8b94e53c98f2@oss.cipunited.com>
-References: <ZlkoM6/PSxVcGM6X@kodidev-ubuntu> <CAEyhmHT_1N3xwLO2BwVK97ebrABJv52d5dWxzvuNNcF-OF5gKw@mail.gmail.com> <ZlmrQqQSJyNH7fVF@kodidev-ubuntu> <Zln1kZnu2Xxeyngj@x1> <Zl2m4RP7BwhZ0J6l@kodidev-ubuntu> <Zl3Zp5r9m6X_i_J4@x1> <Zl4AHfG6Gg5Htdgc@x1> <20240603191833.GD4421@gnu.wildebeest.org> <Zl6OTJXw0LH6uWIN@kodidev-ubuntu> <Zmfwhn6inA2m1ftm@kodidev-ubuntu>
-Received: from [192.168.8.113] ([171.15.156.97]) by smtp.feishu.cn with ESMTPS; Wed, 12 Jun 2024 10:39:06 +0800
-To: "Tony Ambardar" <tony.ambardar@gmail.com>, 
-	"Mark Wielaard" <mark@klomp.org>, 
-	"Arnaldo Carvalho de Melo" <acme@kernel.org>
-From: "Ying Huang" <ying.huang@oss.cipunited.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Hi Tony,
+On Tue, 2024-06-11 at 14:20 -0700, Eduard Zingerman wrote:
+> On Tue, 2024-06-11 at 09:59 +0800, Geliang Tang wrote:
+> > From: Geliang Tang <tanggeliang@kylinos.cn>
+> > 
+> > The opts.{type, noconnect, must_fail} is at least a bit non
+> > intuitive or
+> > unnecessary. The only use case now is in
+> > test_bpf_ip_check_defrag_ok which
+> > ends up bypassing most (or at least some) of the
+> > connect_to_fd_opts()
+> > logic. It's much better that test should have its own
+> > connect_to_fd_opts()
+> > instead.
+> > 
+> > This patch adds a new helper named __connect_to_fd_opts() to do
+> > this. It
+> > accepts a new "type" parameter, then opts->type can be replaced by
+> > "type"
+> > parameter in this helper. In test_bpf_ip_check_defrag_ok, different
+> > types
+> > are passed to it. And the strcut member "type" of
+> > network_helper_opts can
+> > be dropped now.
+> > 
+> > Then connect_to_fd_opts can implement as a wrapper of this new
+> > helper.
+> > 
+> > Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
+> > ---
+> 
+> Patches #1,2,3 trade options specified as struct fields for options
+> specified as function parameters. Tbh, this seems to be an
+> opinionated
+> stylistic change, what is the need for it?
 
-Thanks for your fix about the conflict and test about the whole patch.
+Thanks for your review.
 
-Now, there is currently one test case that has not been added, which is
+Patches 1-3 address Martin's comment for "Drop type parameter of
+start_server_addr" [1].
 
-tests/run-backtrace-core-mips.sh.
+Since opts.{type, noconnect} are only used in ip_check_defrag.c and
+opts.must_fail is only used in cgroup_v1v2.c, they are not generic
+enough to be added into network_helper_opts. So this set removes them
+from network_helper_opts and use them as function parameters.
+
 Thanks,
-Ying
-=E5=9C=A8 2024/6/11 14:36, Tony Ambardar =E5=86=99=E9=81=93:
-> On Mon, Jun 03, 2024 at 08:47:24PM -0700, Tony Ambardar wrote:
->> Hi Mark,
->>
->> On Mon, Jun 03, 2024 at 09:18:33PM +0200, Mark Wielaard wrote:
->>> On Mon, Jun 03, 2024 at 02:40:45PM -0300, Arnaldo Carvalho de Melo wrot=
-e:
->>>> Couldn't find a way to ask eu-readelf for more verbose output, where w=
-e
->>>> could perhaps get some clue as to why it produces nothing while binuti=
-ls
->>>> readelf manages to grok it, Mark, do you know some other way to ask
->>>> eu-readelf to produce more debug output?
->>>>
->>>> I'm unsure if the netdevsim.ko file was left in a semi encoded BTF sta=
-te
->>>> that then made eu-readelf to not be able to process it while pahole,
->>>> that uses eltuils' libraries, was able to process the first two CUs fo=
-r
->>>> a kernel module and all the CUs for the vmlinux file :-\
->>>>
->>>> Mark, the whole thread is available at:
->>>>
->>>> https://lore.kernel.org/all/Zl3Zp5r9m6X_i_J4@x1/T/#u
->>> I haven't looked at the vmlinux file. But for the .ko file the issue
->>> is that the elfutils MIPS backend isn't complete. Specifically MIPS
->>> relocations aren't recognized (and so cannot be applied). There are
->>> some pending patches which try to fix that:
->>>
->>> https://patchwork.sourceware.org/project/elfutils/list/?series=3D31601
->> Earlier in the thread, Hengqi Chen pointed out the latest elfutils backe=
-nd
->> work for MIPS, and I locally rebuilt elfutils and then pahole from their
->> respective next/main branches. For elfutils, main (935ee131cf7c) include=
-s
->>
->>   e259f126 Support Mips architecture
->>   f2acb069 stack: Fix stack unwind failure on mips
->>   db33cb0c backends: Add register_info, return_value_location, core_note=
- mips
->>
->> which partially applies the patchwork series but leaves out the support =
-for
->> readelf, strip, and elflint.
->>
->> I believe this means the vmlinux and .ko files I shared are OK, or is th=
-ere
->> more backend work needed for MIPS?
->>
->> The bits missing in eu-readelf would explain the blank output both Arnal=
-do
->> and I see from "$ eu-readelf -winfo vmlinux". I tried rebuilding with th=
-e
->> patchwork readelf patch locally but ran into merge conflicts.
->>
->> CCing Ying Huang for any more insight.
->>
->> Thanks,
->> Tony
-> Hello all,
->
-> A short update, starting with answering my own question.
->
-> No, apparently the above commits *do not* complete the backend work. Ying
-> Huang submitted additional related patches since March 5: [1][2]
->
->     strip: Adapt src/strip -o -f on mips
->     readelf: Adapt src/readelf -h/-S/-r/-w/-l/-d/-a on mips
->     elflint: adapt src/elflint --gnu src/nm on mips
->     test: Add mips in run-allregs.sh and run-readelf-mixed-corenote.sh
->
-> Despite the titles, these patches do include core backend changes for MIP=
-S.
-> I resolved the various merge conflicts [3], rebuilt elfutils, and reteste=
-d
-> kernel builds to now find:
->
->   - pahole is able to read DWARF[45] info and create .BTF for modules
->   - resolve_btfids can successfully patch .BTF_ids in modules
->   - kernel successfully loads modules with BTF and kfuncs (tested 6.6 LTS=
-)
->
-> Huzzah!
->
->
-> Ying:
->
-> Thank you for developing these MIPS patches. In your view, are the MIPS
-> changes now complete, or do you plan further updates that might improve o=
-r
-> impact parsing DWARF debug/reloc info in apps like pahole?
->
->
-> Mark:
->
-> Given that BTF usage on Linux/MIPS is basically broken without these
-> patches, could I request some of your review time for them to be merged? =
-If
-> it's helpful, my branch [3] includes all patches with conflicts fixed, an=
-d
-> I also successfully ran the elfutils self-tests (including MIPS from Ying=
-).
-> Please feel free to add for these patches:
->
->     Tested-by: Tony Ambardar <Tony.Ambardar@gmail.com>
->
->
-> Arnaldo:
->
-> Your stepping through DWARF/reloc diagnostics earlier was helpful. Thanks=
-!
-> I reran your tests with the updated elfutils and latest pahole (pre-1.27)=
-,
-> and then found:
->
->   - everything that worked before, still works
->   - your observations from "btfdiff vmlinux" and 'struct dma_chan' persis=
-t
->   - we now see expected output from "eu-readelf -winfo netdevsim.ko"
->
-> Regarding pahole, DWARF parsing and BTF generation now works:
-> (with no more die__process: error messages seen)
->
->     kodidev:~/linux$ pahole -F dwarf netdevsim.ko |wc -l
->     14504
->
-> but strangely pahole still doesn't read its own generated BTF:
->
->     kodidev:~/linux$ pahole -F btf netdevsim.ko
->     libbpf: Invalid BTF string section
->     pahole: file 'netdevsim.ko' has no btf type information.
->
-> Poking inside a little further:
->    =20
->     kodidev:~/linux$ ltrace -S pahole -F btf netdevsim.ko
->     [...]
->     argp_parse(0x563d47da42a0, 4, 0x7ffd5e552698, 0 <unfinished ...>
->     SYS_318(0x7fc385bf84d8, 8, 1, 0x7fc385ce9908)    =3D 8
->     SYS_brk(0)                                       =3D 0x563d47e37000
->     SYS_brk(0x563d47e58000)                          =3D 0x563d47e58000
->     <... argp_parse resumed> )                       =3D 0
->     dwarves__init(0x20000, 0, -4096, 213)            =3D 0
->     dwarves__resolve_cacheline_size(0x563d47da40c0, 0, 24, 213) =3D 64
->     cus__new(5, 0, 64, 213)                          =3D 0x563d47e372a0
->     memset(0x563d47da44c0, ' ', 127)                 =3D 0x563d47da44c0
->     strlen("/sys/kernel/btf/")                       =3D 16
->     strncmp("netdevsim.ko", "/sys/kernel/btf/", 16)  =3D 63
->     cus__load_files(0x563d47e372a0, 0x563d47da40c0, 0x7ffd5e5526b0,
->     0x563d47da40c0 <unfinished ...>
->     SYS_openat(0xffffff9c, 0x7ffd5e554603, 0x80000, 0) =3D 3
->     SYS_newfstatat(3, 0x7fc385baf44f, 0x7ffd5e552210, 4096) =3D 0
->     SYS_read(3, "\177ELF\002\001\001", 4096)         =3D 4096
->     SYS_close(3)                                     =3D 0
->     SYS_openat(0xffffff9c, 0x7ffd5e554603, 0x80000, 0) =3D 3
->     SYS_fcntl(3, 1, 0, 0x7fc3859de2f0)               =3D 1
->     SYS_newfstatat(3, 0x7fc385baf44f, 0x7ffd5e5521f0, 4096) =3D 0
->     SYS_pread(3, 0x7ffd5e5521f0, 64, 0)              =3D 64
->     SYS_pread(3, 0x563d47e3e470, 3520, 0x4f60c8)     =3D 3520
->     SYS_pread(3, 0x563d47e3f240, 525, 0x4f5eb8)      =3D 525
->     SYS_pread(3, 0x563d47e3f460, 0x45dd, 0x2b1fb6)   =3D 0x45dd
->     SYS_write(2, "libbpf: Invalid BTF string secti"..., 35libbpf: Invalid=
- BTF
->     string section
->     ) =3D 35
->     SYS_close(3)                                     =3D 0
->     <... cus__load_files resumed> )                  =3D 0xffffffff
->     access("netdevsim.ko", 4 <unfinished ...>
->     SYS_access("netdevsim.ko", 04)                   =3D 0
->     <... access resumed> )                           =3D 0
->     fprintf(0x7fc385bf26a0, "pahole: file '%s' has no %s type"...,
->     "netdevsim.ko", "btf" <unfinished ...>
->     SYS_write(2, "pahole: file 'netdevsim.ko' has "..., 57pahole: file
->     'netdevsim.ko' has no btf type information.
->     ) =3D 57
->     <... fprintf resumed> )                          =3D 57
->     SYS_exit_group(1 <no return ...>
->     +++ exited (status 1) +++
->
-> Could you help investigate this further? Maybe a libbpf issue? For the
-> record, I also tried building pahole with embedded libbpf 1.4.3 without
-> any change. (side note: please make pahole --version also cover libbpf)
->
->
-> Many thanks everyone for your help,
-> Tony
->
-> [1]: https://patchwork.sourceware.org/project/elfutils/list/?series=3D316=
-01
-> [2]: https://patchwork.sourceware.org/project/elfutils/list/?series=3D343=
-10
-> [3]:
-> https://github.com/guidosarducci/elfutils/commits/main-fix-mips-support-r=
-eloc/
+-Geliang
+
+[1]
+https://patchwork.kernel.org/project/netdevbpf/patch/65dd42dd91d678740e9c05e32852f5e01ba2b7bc.1716369375.git.tanggeliang@kylinos.cn/
+
+> 
+> If anything, I think that this is less readable:
+> 
+> > +	client_rx_fd = __connect_to_fd_opts(srv_fd, 0, &rx_opts);
+> 
+> compared to this:
+> 
+> >  	struct network_helper_opts tx_ops = {
+> >  		.timeout_ms = 1000,
+> > -		.type = SOCK_RAW,
+> >  		.proto = IPPROTO_RAW,
+> >  		.noconnect = true,
+> >  	};
+> ...
+> > -	client_rx_fd = connect_to_fd_opts(srv_fd, &rx_opts);
+> 
+> (given that by patch #3 three parameters are added to
+>  __connect_to_fd_opts() *and* it also accepts options).
+> 
+> [...]
+
