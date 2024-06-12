@@ -1,82 +1,158 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D949B4315D;
-	Wed, 12 Jun 2024 21:09:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F104F21360
+	for <bpf@vger.kernel.org>; Wed, 12 Jun 2024 22:40:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718226577; cv=none; b=QxlVB06q7XksvluHV/x6CpHsIbJkxFUWA/778xEYiXxggu0QJu8600smtH/+K9ozxN9NRz7rFT8Xn9+1nZXXrSkwlT5HX5JudJ/2baHdAgXCCgZ1lGpecUKXE8j0gTgJpOC40jmLgo6+j33jrU4Pf2ogglAtR4ORdVQZ4skcXxw=
+	t=1718232009; cv=none; b=m1GjPn1xglyqIwCxn4tp7V3iNXGQWYVvwQb3TlebS9lodeub0Eeo0j7q1IpD3heNQoCxiltI9u8lBs6x8r7X2D+xWWGkGJ6PUSkrUy6jUvDQKCsMUJTJzd9e2Qj4Fm/f0xB3SZ9y0KUxrn8bOO2gtGa5hLuPu6+POse+yPz+ffs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718226577; c=relaxed/simple;
-	bh=p/mXOYAvIuYsfLPdV+2dCK5EknA6B/HSfkaHVfEQato=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=muwwGA8FEtadBYVxW2VrRWI7vK7mzJIsN+lroo823BAFKA8S/mP2Gu+taFT8Kie1Bm4ZV+FEqVDvg788CjsAneIEHPK6havDBhpyAJz2+2A51CQxyCETetCRbF8rCNOwRP9S8B5v8m+xqe3mkj3XDVyZTXB+N5I0bv1xJOAZ4V0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QlF6deoA; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1718232009; c=relaxed/simple;
+	bh=RoDjvHSTMs1HH6Q5BPX7XJO1Cc9JRo9su++PhdD9X+Q=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=bEDS2YFiBKCYqSrFAmmmXN85WzhygyU+bzTUIVvLbJx8wnnTQpQc+TUM4LK2MSI1PzQAm8ubxD7OBoNv3aYCQGpNrxrTKNdmSTuVLuFCwxJR4fzNYJE76TL9SfudZNQWEoKliioxsR7r8aJuSLsYUtgIogCW1wtXFc+949iRiTY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=Bbzc5t1B; arc=none smtp.client-ip=213.133.104.62
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QlF6deoA"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5B25C116B1;
-	Wed, 12 Jun 2024 21:09:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1718226576;
-	bh=p/mXOYAvIuYsfLPdV+2dCK5EknA6B/HSfkaHVfEQato=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=QlF6deoALi2EBQ2PTzXnxcW3NEVc0zVQd6HRY4xR0lmS9aEe8hLk2Ts1HsmpkWiU5
-	 2QFRDPyjhEIsalGkDUptUPth0v0OAvQzUHgJ99JOUk43vxydLlE41GbbNm4skSYcrL
-	 cjx59AuIscyowaGkOG9fFfR8jdc+axYmC2qXLpfOqPj0aUBj32b6SyTpuP/rjzoYgR
-	 J3W3ba3cpScjDHqBVKeNdYx0jPkX7iFlhbQFOXJaokA7bLqjzyMqnE1vKpkRy4RXhB
-	 v/ZO5W/iA0H8239PHoU6jp2gn0zIkIYuKG7zHrOA2qJZ3Nje6po+zF0BIhic4FG577
-	 oWuNO3YPD1ifQ==
-Date: Wed, 12 Jun 2024 14:09:35 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Larysa Zaremba <larysa.zaremba@intel.com>
-Cc: <intel-wired-lan@lists.osuosl.org>, Jesse Brandeburg
- <jesse.brandeburg@intel.com>, Tony Nguyen <anthony.l.nguyen@intel.com>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet
- <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Alexei Starovoitov
- <ast@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>, Jesper Dangaard
- Brouer <hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>, Maciej
- Fijalkowski <maciej.fijalkowski@intel.com>, <netdev@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>,
- <magnus.karlsson@intel.com>, Michal Kubiak <michal.kubiak@intel.com>
-Subject: Re: [PATCH iwl-net 0/3] ice: fix synchronization between .ndo_bpf()
- and reset
-Message-ID: <20240612140935.54981c49@kernel.org>
-In-Reply-To: <ZmlGppe04yuGHvPx@lzaremba-mobl.ger.corp.intel.com>
-References: <20240610153716.31493-1-larysa.zaremba@intel.com>
-	<20240611193837.4ffb2401@kernel.org>
-	<ZmlGppe04yuGHvPx@lzaremba-mobl.ger.corp.intel.com>
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="Bbzc5t1B"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:MIME-Version:
+	References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
+	Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=Fh0qE81JJRQPSiipR0NwBh6F9/M882+6JkDK/X69dLI=; b=Bbzc5t1Bm4j6S7g1kJgLyzB68R
+	7rhqTZhy7dbBPbW1AUQ9NLbwdXaB65FJMODgzBEF4rS6z+F09fUwyTJ+KnVFSsuNqiHLncLFEN2Bs
+	gyA3bPuJawY00cfrOBp8OxQq8U0el6LhZbc3mxFpIPRdweJz1XtGgcoHWM0v0q3eAFWijEjY7xUYr
+	lI1OYctmPPYj/fdxs9ElZ9EDE7VsqZqzhV5uP14+DuxRIgjGjv9xvzR49vTT/HFR30CIA3Luzn8Bu
+	q2cT1AYzx0TjV4Xz9QlPrfaHgC+Ff8yjBEdOUlJ/hGmUaQrh+iKELdNPDhIRBA7BrLdpAadBcY9wN
+	r0CBNtCg==;
+Received: from 34.249.197.178.dynamic.cust.swisscom.net ([178.197.249.34] helo=localhost)
+	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1sHWER-000GZT-MM; Thu, 13 Jun 2024 00:14:15 +0200
+From: Daniel Borkmann <daniel@iogearbox.net>
+To: bpf@vger.kernel.org
+Cc: jjlopezjaimez@google.com,
+	Daniel Borkmann <daniel@iogearbox.net>
+Subject: [PATCH bpf 2/2] selftests/bpf: Add test coverage for reg_set_min_max handling
+Date: Thu, 13 Jun 2024 00:14:05 +0200
+Message-Id: <20240612221405.3378-2-daniel@iogearbox.net>
+X-Mailer: git-send-email 2.21.0
+In-Reply-To: <20240612221405.3378-1-daniel@iogearbox.net>
+References: <20240612221405.3378-1-daniel@iogearbox.net>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.103.10/27304/Wed Jun 12 10:27:29 2024)
 
-On Wed, 12 Jun 2024 08:56:38 +0200 Larysa Zaremba wrote:
-> On Tue, Jun 11, 2024 at 07:38:37PM -0700, Jakub Kicinski wrote:
-> > On Mon, 10 Jun 2024 17:37:12 +0200 Larysa Zaremba wrote:  
-> > > Fix the problems that are triggered by tx_timeout and ice_xdp() calls,
-> > > including both pool and program operations.  
-> > 
-> > Is there really no way for ice to fix the locking? :(
-> > The busy loops and trylocks() are not great, and seem like duct tape.
-> 
-> The locking mechanisms I use here do not look pretty, but if I am not missing 
-> anything, the synchronization they provide must be robust.
+Add a test case for the jmp32/k fix to ensure selftests have coverage.
 
-Robust as in they may be correct here, but you lose lockdep and all
-other infra normal mutex would give you.
+Before fix:
 
-> A prettier way of protecting the same critical sections would be replacing 
-> ICE_CFG_BUSY around ice_vsi_rebuild() with rtnl_lock(), this would eliminate 
-> locking code from .ndo_bpf() altogether, ice_rebuild_pending() logic will have 
-> to stay.
-> 
-> At some point I have decided to avoid using rtnl_lock(), if I do not have to. I 
-> think this is a goal worth pursuing?
+  # ./vmtest.sh -- ./test_progs -t verifier_or_jmp32_k
+  [...]
+  ./test_progs -t verifier_or_jmp32_k
+  tester_init:PASS:tester_log_buf 0 nsec
+  process_subtest:PASS:obj_open_mem 0 nsec
+  process_subtest:PASS:specs_alloc 0 nsec
+  run_subtest:PASS:obj_open_mem 0 nsec
+  run_subtest:FAIL:unexpected_load_success unexpected success: 0
+  #492/1   verifier_or_jmp32_k/or_jmp32_k: bit ops + branch on unknown value:FAIL
+  #492     verifier_or_jmp32_k:FAIL
+  Summary: 0/0 PASSED, 0 SKIPPED, 1 FAILED
 
-Is the reset for failure recovery, rather than reconfiguration? 
-If so netif_device_detach() is generally the best way of avoiding
-getting called (I think I mentioned it to someone @intal recently).
+After fix:
+
+  # ./vmtest.sh -- ./test_progs -t verifier_or_jmp32_k
+  [...]
+  ./test_progs -t verifier_or_jmp32_k
+  #492/1   verifier_or_jmp32_k/or_jmp32_k: bit ops + branch on unknown value:OK
+  #492     verifier_or_jmp32_k:OK
+  Summary: 1/1 PASSED, 0 SKIPPED, 0 FAILED
+
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+---
+ .../selftests/bpf/prog_tests/verifier.c       |  2 +
+ .../selftests/bpf/progs/verifier_or_jmp32_k.c | 43 +++++++++++++++++++
+ 2 files changed, 45 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/progs/verifier_or_jmp32_k.c
+
+diff --git a/tools/testing/selftests/bpf/prog_tests/verifier.c b/tools/testing/selftests/bpf/prog_tests/verifier.c
+index 1c9c4ec1be11..98ef39efa77e 100644
+--- a/tools/testing/selftests/bpf/prog_tests/verifier.c
++++ b/tools/testing/selftests/bpf/prog_tests/verifier.c
+@@ -53,6 +53,7 @@
+ #include "verifier_movsx.skel.h"
+ #include "verifier_netfilter_ctx.skel.h"
+ #include "verifier_netfilter_retcode.skel.h"
++#include "verifier_or_jmp32_k.skel.h"
+ #include "verifier_precision.skel.h"
+ #include "verifier_prevent_map_lookup.skel.h"
+ #include "verifier_raw_stack.skel.h"
+@@ -170,6 +171,7 @@ void test_verifier_meta_access(void)          { RUN(verifier_meta_access); }
+ void test_verifier_movsx(void)                 { RUN(verifier_movsx); }
+ void test_verifier_netfilter_ctx(void)        { RUN(verifier_netfilter_ctx); }
+ void test_verifier_netfilter_retcode(void)    { RUN(verifier_netfilter_retcode); }
++void test_verifier_or_jmp32_k(void)           { RUN(verifier_or_jmp32_k); }
+ void test_verifier_precision(void)            { RUN(verifier_precision); }
+ void test_verifier_prevent_map_lookup(void)   { RUN(verifier_prevent_map_lookup); }
+ void test_verifier_raw_stack(void)            { RUN(verifier_raw_stack); }
+diff --git a/tools/testing/selftests/bpf/progs/verifier_or_jmp32_k.c b/tools/testing/selftests/bpf/progs/verifier_or_jmp32_k.c
+new file mode 100644
+index 000000000000..c02c3a647e59
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/verifier_or_jmp32_k.c
+@@ -0,0 +1,43 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#include <linux/bpf.h>
++#include <bpf/bpf_helpers.h>
++#include "bpf_misc.h"
++
++SEC("socket")
++__description("or_jmp32_k: bit ops + branch on unknown value")
++__failure
++__msg("R0 invalid mem access 'scalar'")
++__naked void or_jmp32_k(void)
++{
++	asm volatile ("					\
++	r0 = 0xffffffff;				\
++	r0 /= 1;					\
++	r1 = 0;						\
++	w1 = -1;					\
++	w1 >>= 1;					\
++	w0 &= w1;					\
++	w0 |= 2;					\
++	if w0 != 0x7ffffffd goto l2;			\
++	r0 = 1;						\
++	exit;						\
++l4:							\
++	r0 = 5;						\
++	*(u64*)(r0 - 8) = r0;				\
++	exit;						\
++l3:							\
++	w0 -= 0xe;					\
++	if w0 == 1 goto l4;				\
++	r0 = 4;						\
++	exit;						\
++l2:							\
++	w0 -= 0x7ffffff0;				\
++	if w0 s>= 0xe goto l3;				\
++	r0 = 3;						\
++	exit;						\
++"	:
++	:
++	: __clobber_all);
++}
++
++char _license[] SEC("license") = "GPL";
+-- 
+2.43.0
+
