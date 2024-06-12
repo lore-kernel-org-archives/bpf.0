@@ -1,191 +1,251 @@
-Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-00823401.pphosted.com (mx0b-00823401.pphosted.com [148.163.152.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CBC6824A6
-	for <bpf@vger.kernel.org>; Wed, 12 Jun 2024 18:33:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44AC14A9B0;
+	Wed, 12 Jun 2024 18:40:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.152.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718217225; cv=none; b=NKqKMjsERSjYlavpJsOqxA0bCfHqMesYlgXBLQ1A6BvHk3OR24asC/LD0fNEdqDYZV3Fi1qS3CqU41S/m9GRMmQPsq94mqTg1FFmEtXzGyIKu3Bwo8fmbnX+WiVxn4Dlju6O59jgZmck78CBwFP4nnIzhB1zQ/eR/zrt1DU6cpo=
+	t=1718217605; cv=none; b=JqmdIf7frGpUvS7LY3PPar0NzStQb4gM6RNAoQVc2LfqfCb9RN5IEvTodMdPI0J3Uizoswh+sBezsFT8liAMrbzWZfQJjnB0YTNL+aiIM82AB1WqLNcSiqoDrAJCPwbIA+MX6+ELpHm49x+YqZk+GL7jP+UeojskOmFkN12eAlw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718217225; c=relaxed/simple;
-	bh=/Y3F4sCd7/hxoSnGLA3j5vPDaNT/PzOL30m0ArVq/VY=;
-	h=Date:In-Reply-To:Message-Id:Mime-Version:References:Subject:From:
-	 To:Content-Type; b=k0xDCtSYBehx4r9Yl78PnFFITD/TbnJjCk8GngkbuLVNThrIwk//WKOt8cGo035ISmu12w1UrHfxXVCwlFV+jSHvMnXz0BDc/Lm4+eK5UbT84raK4VsJpaQ3gVnfiMvgXxqjSzw69/zFa/Xh3bZZQ6pHmsWI/oXas5j6e6KXTl8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=rP/sws8v; arc=none smtp.client-ip=209.85.128.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
+	s=arc-20240116; t=1718217605; c=relaxed/simple;
+	bh=Bjuj+h31fXZSJTP947nQ6wd95zco9N/KLLRlENy27RI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=anyLKl4UwCzwaP1IPyITo+QngT85qFujnB/o2JaaixlYOteptfaYCjUZ2pOP8z8i+7KjjcmwgHSp5SAytjL1Ok0eVr8roC0oKFu+bRpL5PjEg9Vceq2Nsrt2Dx/9ceugSbygtIyqI8mfryUZn3dn5P8Nb6NqS0j5glwEutqsBNE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=motorola.com; spf=pass smtp.mailfrom=motorola.com; dkim=pass (2048-bit key) header.d=motorola.com header.i=@motorola.com header.b=u+K8j4Zl; arc=none smtp.client-ip=148.163.152.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=motorola.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=motorola.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="rP/sws8v"
-Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-627dd6a56caso2716987b3.3
-        for <bpf@vger.kernel.org>; Wed, 12 Jun 2024 11:33:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1718217223; x=1718822023; darn=vger.kernel.org;
-        h=to:from:subject:references:mime-version:message-id:in-reply-to:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=qcvOQ2AYZ7WMCcNf48y0Z4WIFFdDS7XM+Tp2DrQsPX4=;
-        b=rP/sws8vcz6H1pxHy8tHHDH0Rk57fIR3h3Zo8Qchjpvy5rLlMggauUc1OF79xyXUGQ
-         wfBkC47pVUG+d+2HeRET01bquauFbdzzKTF/hdrD0x2en8s1rvpz2JDrx4usTZzXRUrV
-         P3+cmDWt9u962ezC0pV1xMINUx0InDc4R2R1DbnviG2E7ffRVDydbaT792Dk4nOvcjT8
-         UQ57n+RF8/mCN33Qcn8WEZYFfbnz66uaFt0zVIINbmM1O+Mb5oWlSHqWMPoudT9d6xQ6
-         MiaeRTiaomH3yI37BcYDAR2OOUeldVnSqoxaJcutMimYBG896v4VUW2hQ92CuOVr9N8+
-         gLBg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718217223; x=1718822023;
-        h=to:from:subject:references:mime-version:message-id:in-reply-to:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=qcvOQ2AYZ7WMCcNf48y0Z4WIFFdDS7XM+Tp2DrQsPX4=;
-        b=RIwwV1rEixZbio/xx5I0mvLFi5Tsd2XlfFPvU0032bAEYHieXnpu76O6OwD0fd9z0o
-         cbMlFRIWUCiNu/REjjeJ0gI41CZaeKmZwvC/CeIiEL2pUaxlXs0mZeFU3LzyfaAETtV+
-         st6ZuV2UYQni+f/sIdnUm7hEW+KIufuduy1+8VG5DacG7yrPyo7N58PNf0ml0HKdZ0Kt
-         hDY3wIzeP1KnLtp39L8pn4iRWyCzuPv3esyg47Uw/R9DIy1gDDiG8f4d5cS2F03WqO1x
-         b4E7iP2nnZ8Wh81MY+lwF66SLdz8O7mS+Tm4k5UyPSn+Bvymc4/c43xXp0rqEPY65SJh
-         joOw==
-X-Forwarded-Encrypted: i=1; AJvYcCUu0IcetbB2WDTqAbIcuYOXOqSyrtB/TDAzKrh4ysVjwvY3XlC/da1l5xhH4Dnelh0o1/vQzlWSGftRBOcU+Qo8MwdN
-X-Gm-Message-State: AOJu0YzlRM3e1MeWOa7uMMIjkSwvEyQgouaHU+1th7LfnETpOPBuCZ7g
-	0CjLtZtZYcJIMxaMPX3vK73WbVgF8SpT26xHu1l9c9c61Co56fa136LpcxrPhuhKUwbBN4SooHZ
-	7XWgkvw==
-X-Google-Smtp-Source: AGHT+IEdZtuxFCkd4xeaZMVA0551v1r2/AOz8THV3+MN9PWe9shK7np3c1wiSt7RmdoT82E3zDdATSpfd0ve
-X-Received: from irogers.svl.corp.google.com ([2620:15c:2a3:200:959d:4302:db0e:d12a])
- (user=irogers job=sendgmr) by 2002:a05:690c:88:b0:62f:22cd:7082 with SMTP id
- 00721157ae682-62fbb7f3b47mr6200647b3.5.1718217222801; Wed, 12 Jun 2024
- 11:33:42 -0700 (PDT)
-Date: Wed, 12 Jun 2024 11:32:05 -0700
-In-Reply-To: <20240612183205.3120248-1-irogers@google.com>
-Message-Id: <20240612183205.3120248-8-irogers@google.com>
+	dkim=pass (2048-bit key) header.d=motorola.com header.i=@motorola.com header.b="u+K8j4Zl"
+Received: from pps.filterd (m0355092.ppops.net [127.0.0.1])
+	by mx0b-00823401.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 45CCP1ED025711;
+	Wed, 12 Jun 2024 15:30:08 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=motorola.com; h=
+	cc:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=DKIM202306; bh=8WJALL82Sk9HW31XdlI5/qJ
+	F14ASSC7G53mFaIDlTHE=; b=u+K8j4Zl0SL5R8jo7tx1yB96WVYiDjz3XIHWfj3
+	jgzaoZjTVDGWEuOcXRIn4az7tt5yUowZK5vqHhb+RLyTlkTvN2MXO3sza5Xk9RLU
+	QXq9+ZI8EbevxNapOgfwB+BcWL4Vij8sOh8DgrGx8CLNUB80KZ1qaZXb95hhJrEL
+	I0FtV5FwJnr+wsMj7f/CgtBcQzTf1YTgzccP3sKoBcvYNNOS3R5mt69ww4H3xKJY
+	WdsaNxHr/+2QMWDTGobddDW1bKCcl5wMNq/MJWHlRlmzJRg8TuzphID8tRTSgZwp
+	WoqugM4TfrnWSgvoQW0hOgiE6Bpa2ouiVPIpS9FHDmIEeGw==
+Received: from va32lpfpp04.lenovo.com ([104.232.228.24])
+	by mx0b-00823401.pphosted.com (PPS) with ESMTPS id 3yn5mcqfpp-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 12 Jun 2024 15:30:08 +0000 (GMT)
+Received: from ilclmmrp01.lenovo.com (ilclmmrp01.mot.com [100.65.83.165])
+	(using TLSv1.2 with cipher ADH-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by va32lpfpp04.lenovo.com (Postfix) with ESMTPS id 4VzqH4149Fzg1bn;
+	Wed, 12 Jun 2024 15:30:08 +0000 (UTC)
+Received: from ilclasset02 (ilclasset02.mot.com [100.64.49.13])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: mbland)
+	by ilclmmrp01.lenovo.com (Postfix) with ESMTPSA id 4VzqH36rykz3nd88;
+	Wed, 12 Jun 2024 15:30:07 +0000 (UTC)
+Date: Wed, 12 Jun 2024 10:30:06 -0500
+From: Maxwell Bland <mbland@motorola.com>
+To: "open list:BPF [GENERAL] (Safe Dynamic Programs and Tools)" <bpf@vger.kernel.org>
+Cc: Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+        Yonghong Song <yonghong.song@linux.dev>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Zi Shen Lim <zlim.lnx@gmail.com>, Mark Rutland <mark.rutland@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Mark Brown <broonie@kernel.org>, linux-arm-kernel@lists.infradead.org,
+        open list <linux-kernel@vger.kernel.org>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Puranjay Mohan <puranjay12@gmail.com>
+Subject: [PATCH bpf-next v6 1/3] cfi: add C CFI type macro
+Message-ID: <q2zpwapuc5nisffwmztl2pdfutf4voy34tstmy6yiosfx4baa7@u6cvs5dp4dyg>
+References: <illfkwuxwq3adca2h4shibz2xub62kku3g2wte4sqp7xj7cwkb@ckn3qg7zxjuv>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20240612183205.3120248-1-irogers@google.com>
-X-Mailer: git-send-email 2.45.2.505.gda0bf45e8d-goog
-Subject: [PATCH v1 7/7] perf python: Clean up build dependencies
-From: Ian Rogers <irogers@google.com>
-To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
-	Mark Rutland <mark.rutland@arm.com>, 
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, 
-	Kan Liang <kan.liang@linux.intel.com>, John Garry <john.g.garry@oracle.com>, 
-	Will Deacon <will@kernel.org>, James Clark <james.clark@arm.com>, 
-	Mike Leach <mike.leach@linaro.org>, Leo Yan <leo.yan@linux.dev>, Guo Ren <guoren@kernel.org>, 
-	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Albert Ou <aou@eecs.berkeley.edu>, Suzuki K Poulose <suzuki.poulose@arm.com>, 
-	Yicong Yang <yangyicong@hisilicon.com>, Jonathan Cameron <jonathan.cameron@huawei.com>, 
-	Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
-	Wedson Almeida Filho <wedsonaf@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
-	"=?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?=" <bjorn3_gh@protonmail.com>, Benno Lossin <benno.lossin@proton.me>, 
-	Andreas Hindborg <a.hindborg@samsung.com>, Alice Ryhl <aliceryhl@google.com>, 
-	Nick Terrell <terrelln@fb.com>, Ravi Bangoria <ravi.bangoria@amd.com>, 
-	Kees Cook <keescook@chromium.org>, Andrei Vagin <avagin@google.com>, 
-	Athira Jajeev <atrajeev@linux.vnet.ibm.com>, Oliver Upton <oliver.upton@linux.dev>, 
-	Ze Gao <zegao2021@gmail.com>, linux-kernel@vger.kernel.org, 
-	linux-perf-users@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-csky@vger.kernel.org, linux-riscv@lists.infradead.org, 
-	coresight@lists.linaro.org, rust-for-linux@vger.kernel.org, 
-	bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <illfkwuxwq3adca2h4shibz2xub62kku3g2wte4sqp7xj7cwkb@ckn3qg7zxjuv>
+X-Proofpoint-GUID: BKW5k9w-_tNY6AftGe2uCC95v5P6L0jn
+X-Proofpoint-ORIG-GUID: BKW5k9w-_tNY6AftGe2uCC95v5P6L0jn
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-06-12_08,2024-06-12_02,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 spamscore=0
+ clxscore=1015 malwarescore=0 mlxlogscore=999 mlxscore=0 lowpriorityscore=0
+ bulkscore=0 impostorscore=0 adultscore=0 phishscore=0 priorityscore=1501
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2405170001
+ definitions=main-2406120111
 
-The python build now depends on libraries and doesn't use
-python-ext-sources except for the util/python.c dependency. Switch to
-just directly depending on that file and util/setup.py. This allows
-the removal of python-ext-sources.
+From: Mark Rutland <mark.rutland@arm.com>
 
-Signed-off-by: Ian Rogers <irogers@google.com>
+Currently x86 and riscv open-code 4 instances of the same logic to
+define a u32 variable with the KCFI typeid of a given function.
+
+Replace the duplicate logic with a common macro.
+
+Signed-off-by: Mark Rutland <mark.rutland@arm.com>
+Signed-off-by: Maxwell Bland <mbland@motorola.com>
 ---
- tools/perf/Makefile.perf           | 10 +-----
- tools/perf/util/python-ext-sources | 53 ------------------------------
- 2 files changed, 1 insertion(+), 62 deletions(-)
- delete mode 100644 tools/perf/util/python-ext-sources
+ arch/riscv/kernel/cfi.c       | 35 +++--------------------------------
+ arch/x86/kernel/alternative.c | 35 +++--------------------------------
+ include/linux/cfi_types.h     | 23 +++++++++++++++++++++++
+ 3 files changed, 29 insertions(+), 64 deletions(-)
 
-diff --git a/tools/perf/Makefile.perf b/tools/perf/Makefile.perf
-index 6f66d3a7ffb2..918b851b2e0d 100644
---- a/tools/perf/Makefile.perf
-+++ b/tools/perf/Makefile.perf
-@@ -380,14 +380,6 @@ python-clean := $(call QUIET_CLEAN, python) $(RM) -r $(PYTHON_EXTBUILD) $(OUTPUT
- # Use the detected configuration
- -include $(OUTPUT).config-detected
+diff --git a/arch/riscv/kernel/cfi.c b/arch/riscv/kernel/cfi.c
+index 64bdd3e1ab8c..e7aec5f36dd5 100644
+--- a/arch/riscv/kernel/cfi.c
++++ b/arch/riscv/kernel/cfi.c
+@@ -4,6 +4,7 @@
+  *
+  * Copyright (C) 2023 Google LLC
+  */
++#include <linux/cfi_types.h>
+ #include <linux/cfi.h>
+ #include <asm/insn.h>
  
--ifeq ($(CONFIG_LIBTRACEEVENT),y)
--  PYTHON_EXT_SRCS := $(shell grep -v ^\# util/python-ext-sources)
--else
--  PYTHON_EXT_SRCS := $(shell grep -v ^\#\\\|util/trace-event.c\\\|util/trace-event-parse.c util/python-ext-sources)
--endif
+@@ -82,41 +83,11 @@ struct bpf_insn;
+ /* Must match bpf_func_t / DEFINE_BPF_PROG_RUN() */
+ extern unsigned int __bpf_prog_runX(const void *ctx,
+ 				    const struct bpf_insn *insn);
 -
--PYTHON_EXT_DEPS := util/python-ext-sources util/setup.py $(LIBAPI)
+-/*
+- * Force a reference to the external symbol so the compiler generates
+- * __kcfi_typid.
+- */
+-__ADDRESSABLE(__bpf_prog_runX);
 -
- SCRIPTS = $(patsubst %.sh,%,$(SCRIPT_SH))
+-/* u32 __ro_after_init cfi_bpf_hash = __kcfi_typeid___bpf_prog_runX; */
+-asm (
+-"	.pushsection	.data..ro_after_init,\"aw\",@progbits	\n"
+-"	.type	cfi_bpf_hash,@object				\n"
+-"	.globl	cfi_bpf_hash					\n"
+-"	.p2align	2, 0x0					\n"
+-"cfi_bpf_hash:							\n"
+-"	.word	__kcfi_typeid___bpf_prog_runX			\n"
+-"	.size	cfi_bpf_hash, 4					\n"
+-"	.popsection						\n"
+-);
++DEFINE_CFI_TYPE(cfi_bpf_hash, __bpf_prog_runX);
  
- PROGRAMS += $(OUTPUT)perf
-@@ -715,7 +707,7 @@ all: shell_compatibility_test $(ALL_PROGRAMS) $(LANG_BINDINGS) $(OTHER_PROGRAMS)
- # Create python binding output directory if not already present
- $(shell [ -d '$(OUTPUT)python' ] || mkdir -p '$(OUTPUT)python')
- 
--$(OUTPUT)python/perf$(PYTHON_EXTENSION_SUFFIX): $(PYTHON_EXT_SRCS) $(PYTHON_EXT_DEPS) $(PERFLIBS)
-+$(OUTPUT)python/perf$(PYTHON_EXTENSION_SUFFIX): util/python.c util/setup.py $(PERFLIBS)
- 	$(QUIET_GEN)LDSHARED="$(CC) -pthread -shared" \
-         CFLAGS='$(CFLAGS)' LDFLAGS='$(LDFLAGS) $(LIBS)' \
- 	  $(PYTHON_WORD) util/setup.py \
-diff --git a/tools/perf/util/python-ext-sources b/tools/perf/util/python-ext-sources
-deleted file mode 100644
-index 1bec945f4838..000000000000
---- a/tools/perf/util/python-ext-sources
-+++ /dev/null
-@@ -1,53 +0,0 @@
--#
--# List of files needed by perf python extension
--#
--# Each source file must be placed on its own line so that it can be
--# processed by Makefile and util/setup.py accordingly.
--#
+ /* Must match bpf_callback_t */
+ extern u64 __bpf_callback_fn(u64, u64, u64, u64, u64);
 -
--util/python.c
--../lib/ctype.c
--util/cap.c
--util/evlist.c
--util/evsel.c
--util/evsel_fprintf.c
--util/perf_event_attr_fprintf.c
--util/cpumap.c
--util/memswap.c
--util/mmap.c
--util/namespaces.c
--../lib/bitmap.c
--../lib/find_bit.c
--../lib/list_sort.c
--../lib/hweight.c
--../lib/string.c
--../lib/vsprintf.c
--util/thread_map.c
--util/util.c
--util/cgroup.c
--util/parse-branch-options.c
--util/rblist.c
--util/counts.c
--util/print_binary.c
--util/strlist.c
--util/trace-event.c
--util/trace-event-parse.c
--../lib/rbtree.c
--util/string.c
--util/symbol_fprintf.c
--util/units.c
--util/affinity.c
--util/rwsem.c
--util/hashmap.c
--util/perf_regs.c
--util/fncache.c
--util/rlimit.c
--util/perf-regs-arch/perf_regs_aarch64.c
--util/perf-regs-arch/perf_regs_arm.c
--util/perf-regs-arch/perf_regs_csky.c
--util/perf-regs-arch/perf_regs_loongarch.c
--util/perf-regs-arch/perf_regs_mips.c
--util/perf-regs-arch/perf_regs_powerpc.c
--util/perf-regs-arch/perf_regs_riscv.c
--util/perf-regs-arch/perf_regs_s390.c
--util/perf-regs-arch/perf_regs_x86.c
+-__ADDRESSABLE(__bpf_callback_fn);
+-
+-/* u32 __ro_after_init cfi_bpf_subprog_hash = __kcfi_typeid___bpf_callback_fn; */
+-asm (
+-"	.pushsection	.data..ro_after_init,\"aw\",@progbits	\n"
+-"	.type	cfi_bpf_subprog_hash,@object			\n"
+-"	.globl	cfi_bpf_subprog_hash				\n"
+-"	.p2align	2, 0x0					\n"
+-"cfi_bpf_subprog_hash:						\n"
+-"	.word	__kcfi_typeid___bpf_callback_fn			\n"
+-"	.size	cfi_bpf_subprog_hash, 4				\n"
+-"	.popsection						\n"
+-);
++DEFINE_CFI_TYPE(cfi_bpf_subprog_hash, __bpf_callback_fn);
+ 
+ u32 cfi_get_func_hash(void *func)
+ {
+diff --git a/arch/x86/kernel/alternative.c b/arch/x86/kernel/alternative.c
+index 89de61243272..933d0c13a0d8 100644
+--- a/arch/x86/kernel/alternative.c
++++ b/arch/x86/kernel/alternative.c
+@@ -1,6 +1,7 @@
+ // SPDX-License-Identifier: GPL-2.0-only
+ #define pr_fmt(fmt) "SMP alternatives: " fmt
+ 
++#include <linux/cfi_types.h>
+ #include <linux/module.h>
+ #include <linux/sched.h>
+ #include <linux/perf_event.h>
+@@ -901,41 +902,11 @@ struct bpf_insn;
+ /* Must match bpf_func_t / DEFINE_BPF_PROG_RUN() */
+ extern unsigned int __bpf_prog_runX(const void *ctx,
+ 				    const struct bpf_insn *insn);
+-
+-/*
+- * Force a reference to the external symbol so the compiler generates
+- * __kcfi_typid.
+- */
+-__ADDRESSABLE(__bpf_prog_runX);
+-
+-/* u32 __ro_after_init cfi_bpf_hash = __kcfi_typeid___bpf_prog_runX; */
+-asm (
+-"	.pushsection	.data..ro_after_init,\"aw\",@progbits	\n"
+-"	.type	cfi_bpf_hash,@object				\n"
+-"	.globl	cfi_bpf_hash					\n"
+-"	.p2align	2, 0x0					\n"
+-"cfi_bpf_hash:							\n"
+-"	.long	__kcfi_typeid___bpf_prog_runX			\n"
+-"	.size	cfi_bpf_hash, 4					\n"
+-"	.popsection						\n"
+-);
++DEFINE_CFI_TYPE(cfi_bpf_hash, __bpf_prog_runX);
+ 
+ /* Must match bpf_callback_t */
+ extern u64 __bpf_callback_fn(u64, u64, u64, u64, u64);
+-
+-__ADDRESSABLE(__bpf_callback_fn);
+-
+-/* u32 __ro_after_init cfi_bpf_subprog_hash = __kcfi_typeid___bpf_callback_fn; */
+-asm (
+-"	.pushsection	.data..ro_after_init,\"aw\",@progbits	\n"
+-"	.type	cfi_bpf_subprog_hash,@object			\n"
+-"	.globl	cfi_bpf_subprog_hash				\n"
+-"	.p2align	2, 0x0					\n"
+-"cfi_bpf_subprog_hash:						\n"
+-"	.long	__kcfi_typeid___bpf_callback_fn			\n"
+-"	.size	cfi_bpf_subprog_hash, 4				\n"
+-"	.popsection						\n"
+-);
++DEFINE_CFI_TYPE(cfi_bpf_subprog_hash, __bpf_callback_fn);
+ 
+ u32 cfi_get_func_hash(void *func)
+ {
+diff --git a/include/linux/cfi_types.h b/include/linux/cfi_types.h
+index 6b8713675765..f510e62ca8b1 100644
+--- a/include/linux/cfi_types.h
++++ b/include/linux/cfi_types.h
+@@ -41,5 +41,28 @@
+ 	SYM_TYPED_START(name, SYM_L_GLOBAL, SYM_A_ALIGN)
+ #endif
+ 
++#else /* __ASSEMBLY__ */
++
++#ifdef CONFIG_CFI_CLANG
++#define DEFINE_CFI_TYPE(name, func)						\
++	/*									\
++	 * Force a reference to the function so the compiler generates		\
++	 * __kcfi_typeid_<func>.						\
++	 */									\
++	__ADDRESSABLE(func);							\
++	/* u32 name = __kcfi_typeid_<func> */					\
++	extern u32 name;							\
++	asm (									\
++	"	.pushsection	.data..ro_after_init,\"aw\",@progbits	\n"	\
++	"	.type	" #name ",@object				\n"	\
++	"	.globl	" #name "					\n"	\
++	"	.p2align	2, 0x0					\n"	\
++	#name ":							\n"	\
++	"	.long	__kcfi_typeid_" #func "				\n"	\
++	"	.size	" #name ", 4					\n"	\
++	"	.popsection						\n"	\
++	);
++#endif
++
+ #endif /* __ASSEMBLY__ */
+ #endif /* _LINUX_CFI_TYPES_H */
 -- 
-2.45.2.505.gda0bf45e8d-goog
+2.43.0
 
