@@ -1,179 +1,104 @@
-Received: from mail-lj1-f175.google.com (mail-lj1-f175.google.com [209.85.208.175])
+Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 419C4FBF3;
-	Wed, 12 Jun 2024 17:48:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CFC9181312;
+	Wed, 12 Jun 2024 18:07:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718214538; cv=none; b=POet4kmikJI2W3IRPlOiCVHaaRTTL8tWI279hhaL9nr5hcLbsWU8FMBi3TsoyJn9qqbOL/5HS4EVYckOcnCV17YDsiaKIHH/BjKaI0+Vf8fUwTN4fpGHL5Q0zpCySZ6op4SrigaZBbz7HZP+AUMPj2HspLgnPr6bZp2+da/SaeE=
+	t=1718215681; cv=none; b=H0p1twHCsX02vc7otRFook1JXJsvkyq/SfWv0VMbNGeR2JNsDE59iD9Vngp9nVmjbpSOiT+SiLyXPSIM8wo3Y0mIhabGaBbcdm4AzFjGozF1kK1fT/eOb7vG5Rm1Ihybx7p0BvRspvYvX1nqbjuTsq1yTNkNPhcQINSomTSI8sE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718214538; c=relaxed/simple;
-	bh=6bhxDbJUU+W20aR7IgKPzHvfQW5ALys80/3bU+QOtN8=;
+	s=arc-20240116; t=1718215681; c=relaxed/simple;
+	bh=UvHxczzQg4EGAxqN7YDDFJiegaC39sY8/1yzi4kLlVY=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=i5LwxPf81yuqsN5SL88RBt6hXD/MW0SWd8AOr5OP1AQYdFuuBo0JLPqJeFx31JCG10+gOqFhGFbfjs+PtsFQp/QUsyt/bMoWWlQY1xfLAINI04AcLCfxPwovrN74nFvBDeyG+QZjA6FE87RN+twBUxxGTPMHsqN73So6a9Op5Rs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XlK+VWVL; arc=none smtp.client-ip=209.85.208.175
+	 To:Cc:Content-Type; b=d8gIlH5sjxxwkxeGCHhzezaMGUEz3p5wEC2wH43TXSAsQFI+Fq5hUaPiLHDZo+XYJhyAO1EPvzpUOyVgHBgLCPj8+5VTY971telrbDtyM7MM0fgcliL8NiKzV5GxsM9PGIGGFP4sf7gt/TnFI5WpqqhDPfSQdRvUBA3SFp9xGfs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OOcF6+Ys; arc=none smtp.client-ip=209.85.221.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XlK+VWVL"
-Received: by mail-lj1-f175.google.com with SMTP id 38308e7fff4ca-2ebf961e504so463291fa.2;
-        Wed, 12 Jun 2024 10:48:55 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OOcF6+Ys"
+Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-35f225ac23bso184764f8f.0;
+        Wed, 12 Jun 2024 11:07:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1718214534; x=1718819334; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1718215678; x=1718820478; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=sWRq3PAWFykXw/wg8pUX9HlfeUGFcprx4t2KU6HQHu8=;
-        b=XlK+VWVLEAdF6mNKfj8FvjvQUEO3PpTmYYGHpo3kssMprivZ3VZ9b5BKcia3FkFFUT
-         +3Z4yyoZM3ej+bwXfWpPWl2tXma6G/fHv9hUs2UNUoUsAExLb9NV0aVfQgaJzrWcR9ZS
-         zaHQk03HvuI3NQmV7r+7CHsxQjsNtneEHE+I8yYWfQ8+dWz6E85pEmOUmyLFHESURMMu
-         z2IVZY2Mv1NRBdgS6zF959CA0Uq3MVwDr4CteAiGvFcD8Q2NmSztJdyDSky0TbhqjGMI
-         sgIHx/xYgo+PUnKN6rTYg8/AcKVhaRGL5Zbx6gCs0jMg9tGCappxGefmf6fzQIb7IqBP
-         SKFA==
+        bh=j2KvIJWno4Stgu8w7sh9JsxW4Akq08TY0yFh2XkaJLI=;
+        b=OOcF6+YsiTr/1sFCIQFd6D4FgwMkZxOCpBSyT5HdiiROAOavGUsxlr1UNW7j4vHQf2
+         QN9ZHQ81fR4tBqYjDVK84wC619MHXL29O94LHQPLrH20L2Jbfma144pQqP50N78qeAyA
+         hJ6aTjdjsT83bM2rbDA6XrqHXk+TdzLmOqR72cTBr+Bj2TtmOGm0XLAokrvAeg7SKt4n
+         yU0CdLDPanBXmxeSgm660thoK7WESKxmnHV48ynXYa7RbabYC/KAfoZGQCaylr8/l4df
+         4srOaLadqrGyz5t5TO7RMxVWOJ9NuXmRGqRSGDsXjuwkaLxeY9KYlH4LSvvy23pRnu4R
+         m/VQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718214534; x=1718819334;
+        d=1e100.net; s=20230601; t=1718215678; x=1718820478;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=sWRq3PAWFykXw/wg8pUX9HlfeUGFcprx4t2KU6HQHu8=;
-        b=KY+h0R5j6dt/y/jt/RJW8CWTbq0EEQwt/Qiov3fUzjFGlNdADodM0Iyy8TVLMeBEQH
-         iALyDVmOsxNPQudrLdhMumihAHhGoFeKlUX/oVWVWcgQuuqBfJVlQ99HjDz0IvM++T5t
-         QLVUfZviavwVX5idxIeFMDQwRwdpwoV8tjCDU/rbvjI4QymIKVI6Kh66NawTmytgaHec
-         beUUT0RJJtVdQiU3sjImaJLAH2UkjDIt9rysELRVelztxNHDFTqRDUhNoTsiGTLBWe//
-         03mJEFwrWIAZtPUwXG9lzMQNe1Xkz3BiIjwsyZi0ctGxEtS/wpSHTzef6M/hxrrVJvaH
-         MbQg==
-X-Forwarded-Encrypted: i=1; AJvYcCUpjZW3zRi/m61ktaQvrd0EWh3D59SV7KGekx9c5sYmoNxA3j93eSyK0VqZ7a++rlMAXbDhB1dFjL+6IWQVvH/HIhPtAvI6N5OujTnR8UJMncuUM2nZofaqfqZQcBcdYAvRocBoqjnAkfdpX/VhiqJAQ6F4erI/r4/v1bOaX9oRCw==
-X-Gm-Message-State: AOJu0YyTjt1P44MaiFg9569xqUuFPRKNd1Jjzqhq6vcVFxyl/6ful13a
-	mxyfP+XiM/IQC1ufHMgCf9ikrEifTIhPcEFDHxKyXqmkD1+Ljb+v9WOJIckoGcEtQw3oQJGnZWa
-	AT/wl8cqsDarvHy51am1ldEhh+jA=
-X-Google-Smtp-Source: AGHT+IHA55C4BDttu7u2HKaLoMXFIz1/aGOTxtg5E/j5naZlPku4zxMaSGvkX/d3yoCc442ECzpUGWN8vYj/jbiTdss=
-X-Received: by 2002:a05:651c:20c:b0:2eb:ec25:c4af with SMTP id
- 38308e7fff4ca-2ebfc9499ebmr15663611fa.50.1718214534010; Wed, 12 Jun 2024
- 10:48:54 -0700 (PDT)
+        bh=j2KvIJWno4Stgu8w7sh9JsxW4Akq08TY0yFh2XkaJLI=;
+        b=rKs/iozrhoW1R6eRcamFp784sNA76k6eTIdVD8tjazCulUTkrWOfNYPfPdlU6HfmyK
+         SK/eiHEcfbIbYP65IPWmGUkmqIUJQfpIdrv9dbUrmcYsmiTEt0tkSPV1NvqFJA+j0VYh
+         3vhkEK9m4lyMLXZjZlYRS6MPpeYp2WFENoZEzNhcQLiy87qlieCp90akmPfXklBVqw/i
+         lk7ks6DhFA3t+HDFameLWtTzoces2/FYltmlCd5EhD1sUhS+uIA9qC2p1TvHnrllKs89
+         ANpzdrN9btSTl5crbESGTEGC7Be+jgZihOcrjnkTfLe7Sh8jlzyuTcoTP6/5HduzPocf
+         w6hQ==
+X-Forwarded-Encrypted: i=1; AJvYcCX7UVJiMZpyi93Q8kWRPn9mB7jDcHOHsUNgcmLjBmEdMuBOVrNeZGV6zKsaY+/ktUzg8/YOzpdO3LeQbQB3T7Bq8G9YLY0wBpagvT2qwP1lehdVk/v1PQw9aAi2a2DvnOIopK0N3+dVTlb1NGs/jgNVXn90lWn4f05D
+X-Gm-Message-State: AOJu0YxoOfuUWQKk3y0VHMYPoT1pBdTADoUzuVbDx/4JwT6DPVMC0oWp
+	pDz1E0QmJL1N5MojVShDi8p32mtecwcB1RDdw90nNNB9IpoNxXFGuBidL5jzwL2jmQjVIK0XUpW
+	eU8kbeA3R1vrAqC2pRJg1SPX5A/Y=
+X-Google-Smtp-Source: AGHT+IFagaa3094jY436YOqfT/9pajpP6WHk7dIsYvtAxQJkEJx4qhjJqT33Ynz5duEVjwU+cavBJQtRxGSDQ4sDvkU=
+X-Received: by 2002:adf:ecd1:0:b0:360:7280:9cbd with SMTP id
+ ffacd0b85a97d-36072809e11mr54163f8f.34.1718215678437; Wed, 12 Jun 2024
+ 11:07:58 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240605002459.4091285-1-andrii@kernel.org> <20240605002459.4091285-4-andrii@kernel.org>
- <ZmOKMgZn_ki17UYM@gmail.com> <CAEf4BzYAQwX0AQ_fbcB9kVBj3vpx0-5pPPZNYKL4VjnX_eYKpg@mail.gmail.com>
-In-Reply-To: <CAEf4BzYAQwX0AQ_fbcB9kVBj3vpx0-5pPPZNYKL4VjnX_eYKpg@mail.gmail.com>
-From: Andrei Vagin <avagin@gmail.com>
-Date: Wed, 12 Jun 2024 10:48:42 -0700
-Message-ID: <CANaxB-zLkvXWS3Fg5Ps463iF7Cb1UVr+FwKb65VFRATqbgnW+A@mail.gmail.com>
-Subject: Re: [PATCH v3 3/9] fs/procfs: implement efficient VMA querying API
- for /proc/<pid>/maps
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: Andrii Nakryiko <andrii@kernel.org>, linux-fsdevel@vger.kernel.org, brauner@kernel.org, 
-	viro@zeniv.linux.org.uk, akpm@linux-foundation.org, 
-	linux-kernel@vger.kernel.org, bpf@vger.kernel.org, gregkh@linuxfoundation.org, 
-	linux-mm@kvack.org, liam.howlett@oracle.com, surenb@google.com, 
-	rppt@kernel.org
+References: <20240612085823.28133-1-kunyu@nfschina.com>
+In-Reply-To: <20240612085823.28133-1-kunyu@nfschina.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Wed, 12 Jun 2024 11:07:46 -0700
+Message-ID: <CAADnVQLcT3dqtapsYYFAtY9rU8A7RB4aoUvbOweobOGZkbj9+A@mail.gmail.com>
+Subject: Re: [PATCH] x86: net: bpf_jit_comp32: Remove unused 'cnt' variables
+ from most functions
+To: kunyu <kunyu@nfschina.com>
+Cc: "David S. Miller" <davem@davemloft.net>, David Ahern <dsahern@kernel.org>, 
+	Wang YanQing <udknight@gmail.com>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Eddy Z <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, 
+	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, X86 ML <x86@kernel.org>, 
+	"H. Peter Anvin" <hpa@zytor.com>, Network Development <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>, 
+	LKML <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Jun 10, 2024 at 1:17=E2=80=AFAM Andrii Nakryiko
-<andrii.nakryiko@gmail.com> wrote:
+On Wed, Jun 12, 2024 at 1:59=E2=80=AFAM kunyu <kunyu@nfschina.com> wrote:
 >
-> On Fri, Jun 7, 2024 at 11:31=E2=80=AFPM Andrei Vagin <avagin@gmail.com> w=
-rote:
-> >
-> > On Tue, Jun 04, 2024 at 05:24:48PM -0700, Andrii Nakryiko wrote:
-> > > /proc/<pid>/maps file is extremely useful in practice for various tas=
-ks
-> > > involving figuring out process memory layout, what files are backing =
-any
-> > > given memory range, etc. One important class of applications that
-> > > absolutely rely on this are profilers/stack symbolizers (perf tool be=
-ing one
-> > > of them). Patterns of use differ, but they generally would fall into =
-two
-> > > categories.
-> > >
-> > > In on-demand pattern, a profiler/symbolizer would normally capture st=
-ack
-> > > trace containing absolute memory addresses of some functions, and wou=
-ld
-> > > then use /proc/<pid>/maps file to find corresponding backing ELF file=
-s
-> > > (normally, only executable VMAs are of interest), file offsets within
-> > > them, and then continue from there to get yet more information (ELF
-> > > symbols, DWARF information) to get human-readable symbolic informatio=
-n.
-> > > This pattern is used by Meta's fleet-wide profiler, as one example.
-> > >
-> > > In preprocessing pattern, application doesn't know the set of address=
-es
-> > > of interest, so it has to fetch all relevant VMAs (again, probably on=
-ly
-> > > executable ones), store or cache them, then proceed with profiling an=
-d
-> > > stack trace capture. Once done, it would do symbolization based on
-> > > stored VMA information. This can happen at much later point in time.
-> > > This patterns is used by perf tool, as an example.
-> > >
-> > > In either case, there are both performance and correctness requiremen=
-t
-> > > involved. This address to VMA information translation has to be done =
-as
-> > > efficiently as possible, but also not miss any VMA (especially in the
-> > > case of loading/unloading shared libraries). In practice, correctness
-> > > can't be guaranteed (due to process dying before VMA data can be
-> > > captured, or shared library being unloaded, etc), but any effort to
-> > > maximize the chance of finding the VMA is appreciated.
-> > >
-> > > Unfortunately, for all the /proc/<pid>/maps file universality and
-> > > usefulness, it doesn't fit the above use cases 100%.
-> > >
-> > > First, it's main purpose is to emit all VMAs sequentially, but in
-> > > practice captured addresses would fall only into a smaller subset of =
-all
-> > > process' VMAs, mainly containing executable text. Yet, library would
-> > > need to parse most or all of the contents to find needed VMAs, as the=
-re
-> > > is no way to skip VMAs that are of no use. Efficient library can do t=
-he
-> > > linear pass and it is still relatively efficient, but it's definitely=
- an
-> > > overhead that can be avoided, if there was a way to do more targeted
-> > > querying of the relevant VMA information.
-> > >
-> > > Second, it's a text based interface, which makes its programmatic use=
- from
-> > > applications and libraries more cumbersome and inefficient due to the
-> > > need to handle text parsing to get necessary pieces of information. T=
-he
-> > > overhead is actually payed both by kernel, formatting originally bina=
-ry
-> > > VMA data into text, and then by user space application, parsing it ba=
-ck
-> > > into binary data for further use.
-> >
-> > I was trying to solve all these issues in a more generic way:
-> > https://lwn.net/Articles/683371/
-> >
+> In these functions, the 'cnt' variable is not used or does not require
+> value checking, so these 'cnt' variables can be removed.
 >
-> Can you please provide a tl;dr summary of that effort?
+> Signed-off-by: kunyu <kunyu@nfschina.com>
+> ---
+>  arch/x86/net/bpf_jit_comp32.c | 27 ++-------------------------
+>  1 file changed, 2 insertions(+), 25 deletions(-)
+>
+> diff --git a/arch/x86/net/bpf_jit_comp32.c b/arch/x86/net/bpf_jit_comp32.=
+c
+> index de0f9e5f9f73..30f9b8a3faed 100644
+> --- a/arch/x86/net/bpf_jit_comp32.c
+> +++ b/arch/x86/net/bpf_jit_comp32.c
+> @@ -207,7 +207,6 @@ static inline void emit_ia32_mov_i(const u8 dst, cons=
+t u32 val, bool dstk,
+>                                    u8 **pprog)
+>  {
+>         u8 *prog =3D *pprog;
+> -       int cnt =3D 0;
 
-task_diag is a generic interface designed to efficiently gather
-information about running processes. It addresses the limitations of
-traditional /proc/PID/* files. This binary interface utilizes the
-netlink protocol, inspired by the socket diag interface. Input is
-provided as a netlink message detailing the desired information, and the
-kernel responds with a set of netlink messages containing the results.
-Compared to struct-based interfaces like this one or statx, the
-netlink-based approach can be more flexible, particularly when
-dealing with numerous optional parameters.  BTW, David Ahern made
-some adjustments in task_diag to optimize the same things that are
-targeted here.
+I don't think you bothered to compile it.
 
-task_diag hasn't been merged to the kernel. I don't remember all the
-arguments, it was some time ago. The primary concern was the
-introduction of redundant functionality. It would have been the second
-interface offering similar capabilities, without a plan to deprecate the
-older interface. Furthermore, there wasn't sufficient demand to justify
-the addition of a new interface at the time.
-
-Thanks,
-Andrei
+pw-bot: cr
