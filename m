@@ -1,80 +1,80 @@
-Received: from wflow4-smtp.messagingengine.com (wflow4-smtp.messagingengine.com [64.147.123.139])
+Received: from wfhigh8-smtp.messagingengine.com (wfhigh8-smtp.messagingengine.com [64.147.123.159])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8E12181326;
-	Wed, 12 Jun 2024 15:59:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=64.147.123.139
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54E0E1850AE;
+	Wed, 12 Jun 2024 15:59:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=64.147.123.159
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718207979; cv=none; b=f1Lfb4Qf/S5W/SBgwM44b5Vt0JABKzyuxmHNAhIPXDFLijgd4jX1D7d0DJDNezwK5PCX9T5Y4e6Wn8lFOU/s7gXZdzxLONm9ETn851IWLPqOA61XDYtAhJYx9N4Fo90RJyNQCKFFq+MY7Mf1t6wdrNaMC8yrx3Y6gM6wVkrFL7Y=
+	t=1718207982; cv=none; b=MVDZojRgprEASmalAyxhTiByg224nlyGG+MEuM533tB/uunfW2ZUd6NXJJ/CGnUjTkRemGR3mplsznAF5NQ5/9xRkFP2R1ma28yHeAquUUbdzCfL7/ozBtuycmUeGKdxjyEolivRFURBw2GRFSEX9D+zg2ZejSPU4GK0RfevkB4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718207979; c=relaxed/simple;
-	bh=TOFne6BN9+jp4V2XtWfmJB9qi/B/gw1rR+0HcAVMVvc=;
+	s=arc-20240116; t=1718207982; c=relaxed/simple;
+	bh=6au7MrpBu+3ErejQVoP0KkTLYnpWyNJm4OKAyEDW7OQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=dgagkjMRN1xaVEpwnWvkZboJFSl5XpG9cEPDzE5CobqyjMYbiotvlh+X7ue58ziVVHJ29kwR+xfs4Q6tTXbvzoa1JYU+g8F3V2IkDg7Sc8uxEdiscTDdchjqv04RMy4i6zl+4cS0Xlqp4mnBrUgtkFQspXCcqMxhQ/WHZn5VLzY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dxuuu.xyz; spf=pass smtp.mailfrom=dxuuu.xyz; dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b=eliLoaVM; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=qwQrhihj; arc=none smtp.client-ip=64.147.123.139
+	 MIME-Version; b=j8nAa+D2i2UhxdfE4EJE0uGAo1QN/AbXs1uraJcOff90l90sj3XKqcj8oWWIVVJXHdFFCXDwyrjIpJfL5VCdeGT55Oy+PUkohgqcgaC6VE/XW2ekuEAiZxwCzllKtVTXi+9eIGKwRIDCrusfDlJhukkXBnUI7SlvzxaCJyg0MK4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dxuuu.xyz; spf=pass smtp.mailfrom=dxuuu.xyz; dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b=KJ9cHO8k; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=ecTm8V3J; arc=none smtp.client-ip=64.147.123.159
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dxuuu.xyz
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dxuuu.xyz
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b="eliLoaVM";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="qwQrhihj"
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-	by mailflow.west.internal (Postfix) with ESMTP id B6A632CC0185;
-	Wed, 12 Jun 2024 11:59:35 -0400 (EDT)
+	dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b="KJ9cHO8k";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="ecTm8V3J"
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+	by mailfhigh.west.internal (Postfix) with ESMTP id 547F51800084;
+	Wed, 12 Jun 2024 11:59:39 -0400 (EDT)
 Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Wed, 12 Jun 2024 11:59:37 -0400
+  by compute2.internal (MEProxy); Wed, 12 Jun 2024 11:59:40 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
 	:cc:content-transfer-encoding:content-type:date:date:from:from
 	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=fm3; t=1718207975; x=
-	1718215175; bh=NBRZD+tUpDA7hRgb1FdxgpatpLh/bjjqfKZS5VAHywE=; b=e
-	liLoaVMxelbRHSY2KNxUfr0Zo1ncwSpU167os0IehP62611Ica5yNxgOsy6b2u0r
-	qkNIICdjCL07qV3atOKiEOFavpk6Cgq3d7T0z0WAjpIUlTt9nAd6hXU1JlTK7tGd
-	dA58/fgxebPTqgldckWz4P2yZtxpQZRRdRQ7nuw4NH4SlirxspVR4mYYlAi+OUKV
-	0JopmzxuSJDoxta+GVt9uvCUgYfiFN67N6gKX02L84dD4d+Vv3tJ15zF6CBMtpPD
-	rrxQTwkGsg5vDh3RKqf6Q1KMwS1R4dWPPLu2JNDzkP77B5XPY2QqQoHaJjIU0Mk2
-	Gibmoq1Jj1FQvb9QdjY5A==
+	:reply-to:subject:subject:to:to; s=fm3; t=1718207978; x=
+	1718294378; bh=mh+C4m8zbjflVRUrybyCTLThOPeoG/8/+kC3qdHEVEE=; b=K
+	J9cHO8kP2w/4Eo9OdJHwWgHu1ArVgmL94PBwKoXzlMuCr/vCm0O2frdKUeB1FwDQ
+	wMiuYFyy/AG68vVXxY8woD6gpbJibjvsdqmHKxDURMJOexzvyh/RFNVRXLSqbQOT
+	sJeLR8YvQHYZm8C5HBHxFQ28Y/DwfPz30i2fumLU5USlPGucG4l82DR7DNkp+hxV
+	fpwYl+zy+Q/udQhmFPJSR5EhyYYVDdWojFHAvwctKA7iW2TbbPdaTwrDo+jRCI0W
+	stHm/f6wIZWQ3n7Z6z6CXCucuwstfytjnha/Dormt+xkL6+9S1fAAueOo+5BcBmK
+	ZyeQolSK8x7HaCia8nj7A==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	messagingengine.com; h=cc:cc:content-transfer-encoding
 	:content-type:date:date:feedback-id:feedback-id:from:from
 	:in-reply-to:in-reply-to:message-id:mime-version:references
 	:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1718207975; x=
-	1718215175; bh=NBRZD+tUpDA7hRgb1FdxgpatpLh/bjjqfKZS5VAHywE=; b=q
-	wQrhihjNJNCsMO9cB68oxmWZI1wHTCo8eqNR82BJn7A/BXLQ3dSQyq2Y5zdyM23X
-	jEqbhijvpMWkfcrfuv4aesa6XeMvQkD027KSxYcs7b7i/LOIXsfuxK3bN7KLb15t
-	oVbblELqsEvwnCEJWOa08kvXSOZlsEkiNTZS/q4wlv4PVUrE5dLXd/FHsYKUI/TH
-	VKdiou4r6H2UFpmXlYXxRbwxBzcN9shNtTHc3aNW8N46LtaLjwfFmbe9++CUkBjj
-	2nmQz4Yn0zL8/vEGctyC4QuyWjpNAHKOfn3vDtT78rloCGUXkOcrzNnSPUOz6MTY
-	YB31RTWTrxiE/3/brlpSw==
-X-ME-Sender: <xms:58VpZpw4YYYClFZq7KpXgY6mfudMguwO1biD6A47eJf3kqWJ7Gcpwg>
-    <xme:58VpZpReB1BEWKDIXemXytc5yGzDDRxyYoRuziwlLov--MXOTo-n0qw8I77w3R6Bf
-    FBFdOOvUPLq4fMvBw>
-X-ME-Received: <xmr:58VpZjWV7DHMNhHpym8KK1NDXMOREuRscXeP5OgONHNp5RYyFxvUo7Mdnl9TJ3bObqreNsp5zY9HtgVM8Bu_J4pHfdP7ITwhc74lKKrC>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrfedugedgleegucetufdoteggodetrfdotf
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1718207978; x=
+	1718294378; bh=mh+C4m8zbjflVRUrybyCTLThOPeoG/8/+kC3qdHEVEE=; b=e
+	cTm8V3JlpSTqAYhiZFD5KDeM3T+O23QOR95AeD20YW0NbiHYkw57UWbl7EhFGLR4
+	7CWBFhlMetld64SicYEdhlxoxg1izWJxOI+ZzJ9Nkm4KISqapMDp8h9KE+zmF3vU
+	WeEUttAQWD9Rz0+PnrmSm1U/Yfqcv8KHvVg1EGa+zZYiM3MY020cJPIY+w13H0y2
+	jGP74eBGxZ6CTf9Xj0EYilacwrYHUmGbcla+R3STK1NNOypx0fctaD8jEa5HIKFd
+	/Pl7Ir22Q1z904qItZDUiA9lIEXu7CLE4Qw/dhOH1pjc4Gz6rJLTdrWv+3G+raK6
+	SnVsGOo1sNZ2WW5ENqyXw==
+X-ME-Sender: <xms:6sVpZkhhxJyI0XKPXmWwCgQRqDZ8YE-sHSM8mZdAyvkcC-jCBaMUxw>
+    <xme:6sVpZtA3WpWJPH2ICYJQOzK8IaQwP8CQ6XNFqvaLvQ1LKo_g6-21JEzarvPqb8_mR
+    B-qjhcBAGTdeZk0nQ>
+X-ME-Received: <xmr:6sVpZsH7rnCTRK0-lf1l1TVmI2nPLHr724y6pBJ114y3ef8IKN-0LkLUiMraW1bjtNKoe_5e0DSjcYrHXcjjNyx6IrXOZhWylPFMgK9k>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvledrfedugedgleefucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucgfrhhlucfvnfffucdljedtmdenucfjughrpefhvf
     evufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpeffrghnihgvlhcuighuuceo
     ugiguhesugiguhhuuhdrgiihiieqnecuggftrfgrthhtvghrnhepgfefgfegjefhudeike
     dvueetffelieefuedvhfehjeeljeejkefgffeghfdttdetnecuvehluhhsthgvrhfuihii
     vgepvdenucfrrghrrghmpehmrghilhhfrhhomhepugiguhesugiguhhuuhdrgiihii
-X-ME-Proxy: <xmx:58VpZriRiJdFY7-ErDuYiukEUkXCXfQWzJlE1Os6-gEXh16ueuyxLQ>
-    <xmx:58VpZrAf9VmcUjlXEplfPZ4hu571XFlchWTJB1Bg20OZ0CJYDcYvug>
-    <xmx:58VpZkI6_d5I4trR4SamqHoFq_tBuOOL8OctPwbXdT5-f5wW9PF2sA>
-    <xmx:58VpZqCrntc2x5aJda7tJCB4hqOsqTsDD-QdhPX6oYZY_dpobMDvBw>
-    <xmx:58VpZiUhvUidVyA4wsEGl7iL_ik4IONVIGYI3nzGxk3n0ad86TCWmR_7>
+X-ME-Proxy: <xmx:6sVpZlQDgOlXzYHeDJ2dWlZvTuMCMq6a2e0XfUV0775OaPlkQdTxIw>
+    <xmx:6sVpZhynMpQFoFcBN2PJkfaFpviVOKF6bSktppqXWNEiJ_U2Zd1REg>
+    <xmx:6sVpZj7ranKgMygbAXztxjCAsHTvhqr-bjtPeijkukRi_K7JkC7Prg>
+    <xmx:6sVpZuxupdrycWHSoqXi11neOGqp7LYRXsN31DtqaniHwZbHMoNGbw>
+    <xmx:6sVpZmzUMdFbPCJMbik2s78xgnP2fVCfqUgJDObVC25hNHVNegiPWMvf>
 Feedback-ID: i6a694271:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 12 Jun 2024 11:59:33 -0400 (EDT)
+ 12 Jun 2024 11:59:37 -0400 (EDT)
 From: Daniel Xu <dxu@dxuuu.xyz>
-To: andrii@kernel.org,
-	ast@kernel.org,
+To: ast@kernel.org,
 	daniel@iogearbox.net,
-	shuah@kernel.org,
-	eddyz87@gmail.com,
+	qmo@kernel.org,
+	andrii@kernel.org,
 	olsajiri@gmail.com,
 	quentin@isovalent.com,
 	alan.maguire@oracle.com,
-	acme@kernel.org
+	acme@kernel.org,
+	eddyz87@gmail.com
 Cc: martin.lau@linux.dev,
 	song@kernel.org,
 	yonghong.song@linux.dev,
@@ -83,14 +83,12 @@ Cc: martin.lau@linux.dev,
 	sdf@google.com,
 	haoluo@google.com,
 	jolsa@kernel.org,
-	mykolal@fb.com,
 	bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v5 11/12] bpf: selftests: xfrm: Opt out of using generated kfunc prototypes
-Date: Wed, 12 Jun 2024 09:58:35 -0600
-Message-ID: <afe0bb1c50487f52542cdd5230c4aef9e36ce250.1718207789.git.dxu@dxuuu.xyz>
+Subject: [PATCH bpf-next v5 12/12] bpftool: Support dumping kfunc prototypes from BTF
+Date: Wed, 12 Jun 2024 09:58:36 -0600
+Message-ID: <bf6c08f9263c4bd9d10a717de95199d766a13f61.1718207789.git.dxu@dxuuu.xyz>
 X-Mailer: git-send-email 2.44.0
 In-Reply-To: <cover.1718207789.git.dxu@dxuuu.xyz>
 References: <cover.1718207789.git.dxu@dxuuu.xyz>
@@ -102,29 +100,115 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The xfrm_info selftest locally defines an aliased type such that folks
-with CONFIG_XFRM_INTERFACE=m/n configs can still build the selftests.
-See commit aa67961f3243 ("selftests/bpf: Allow building bpf tests with CONFIG_XFRM_INTERFACE=[m|n]").
+This patch enables dumping kfunc prototypes from bpftool. This is useful
+b/c with this patch, end users will no longer have to manually define
+kfunc prototypes. For the kernel tree, this also means we can optionally
+drop kfunc prototypes from:
 
-Thus, it is simpler if this selftest opts out of using enerated kfunc
-prototypes. The preprocessor macro this commit uses will be introduced
-in the final commit.
+        tools/testing/selftests/bpf/bpf_kfuncs.h
+        tools/testing/selftests/bpf/bpf_experimental.h
+
+Example usage:
+
+        $ make PAHOLE=/home/dxu/dev/pahole/build/pahole -j30 vmlinux
+
+        $ ./tools/bpf/bpftool/bpftool btf dump file ./vmlinux format c | rg "__ksym;" | head -3
+        extern void cgroup_rstat_updated(struct cgroup *cgrp, int cpu) __weak __ksym;
+        extern void cgroup_rstat_flush(struct cgroup *cgrp) __weak __ksym;
+        extern struct bpf_key *bpf_lookup_user_key(u32 serial, u64 flags) __weak __ksym;
 
 Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
 ---
- tools/testing/selftests/bpf/progs/xfrm_info.c | 1 +
- 1 file changed, 1 insertion(+)
+ tools/bpf/bpftool/btf.c | 55 +++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 55 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/progs/xfrm_info.c b/tools/testing/selftests/bpf/progs/xfrm_info.c
-index f6a501fbba2b..a1d9f106c3f0 100644
---- a/tools/testing/selftests/bpf/progs/xfrm_info.c
-+++ b/tools/testing/selftests/bpf/progs/xfrm_info.c
-@@ -1,4 +1,5 @@
- // SPDX-License-Identifier: GPL-2.0
-+#define BPF_NO_KFUNC_PROTOTYPES
- #include "vmlinux.h"
- #include "bpf_tracing_net.h"
- #include <bpf/bpf_helpers.h>
+diff --git a/tools/bpf/bpftool/btf.c b/tools/bpf/bpftool/btf.c
+index af047dedde38..6789c7a4d5ca 100644
+--- a/tools/bpf/bpftool/btf.c
++++ b/tools/bpf/bpftool/btf.c
+@@ -20,6 +20,8 @@
+ #include "json_writer.h"
+ #include "main.h"
+ 
++#define KFUNC_DECL_TAG		"bpf_kfunc"
++
+ static const char * const btf_kind_str[NR_BTF_KINDS] = {
+ 	[BTF_KIND_UNKN]		= "UNKNOWN",
+ 	[BTF_KIND_INT]		= "INT",
+@@ -461,6 +463,49 @@ static int dump_btf_raw(const struct btf *btf,
+ 	return 0;
+ }
+ 
++static int dump_btf_kfuncs(struct btf_dump *d, const struct btf *btf)
++{
++	LIBBPF_OPTS(btf_dump_emit_type_decl_opts, opts);
++	int cnt = btf__type_cnt(btf);
++	int i;
++
++	printf("\n/* BPF kfuncs */\n");
++	printf("#ifndef BPF_NO_KFUNC_PROTOTYPES\n");
++
++	for (i = 1; i < cnt; i++) {
++		const struct btf_type *t = btf__type_by_id(btf, i);
++		const char *name;
++		int err;
++
++		if (!btf_is_decl_tag(t))
++			continue;
++
++		if (btf_decl_tag(t)->component_idx != -1)
++			continue;
++
++		name = btf__name_by_offset(btf, t->name_off);
++		if (strncmp(name, KFUNC_DECL_TAG, sizeof(KFUNC_DECL_TAG)))
++			continue;
++
++		t = btf__type_by_id(btf, t->type);
++		if (!btf_is_func(t))
++			continue;
++
++		printf("extern ");
++
++		opts.field_name = btf__name_by_offset(btf, t->name_off);
++		err = btf_dump__emit_type_decl(d, t->type, &opts);
++		if (err)
++			return err;
++
++		printf(" __weak __ksym;\n");
++	}
++
++	printf("#endif\n\n");
++
++	return 0;
++}
++
+ static void __printf(2, 0) btf_dump_printf(void *ctx,
+ 					   const char *fmt, va_list args)
+ {
+@@ -596,6 +641,12 @@ static int dump_btf_c(const struct btf *btf,
+ 	printf("#ifndef BPF_NO_PRESERVE_ACCESS_INDEX\n");
+ 	printf("#pragma clang attribute push (__attribute__((preserve_access_index)), apply_to = record)\n");
+ 	printf("#endif\n\n");
++	printf("#ifndef __ksym\n");
++	printf("#define __ksym __attribute__((section(\".ksyms\")))\n");
++	printf("#endif\n\n");
++	printf("#ifndef __weak\n");
++	printf("#define __weak __attribute__((weak))\n");
++	printf("#endif\n\n");
+ 
+ 	if (root_type_cnt) {
+ 		for (i = 0; i < root_type_cnt; i++) {
+@@ -615,6 +666,10 @@ static int dump_btf_c(const struct btf *btf,
+ 			if (err)
+ 				goto done;
+ 		}
++
++		err = dump_btf_kfuncs(d, btf);
++		if (err)
++			goto done;
+ 	}
+ 
+ 	printf("#ifndef BPF_NO_PRESERVE_ACCESS_INDEX\n");
 -- 
 2.44.0
 
