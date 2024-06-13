@@ -1,123 +1,81 @@
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B884314430C;
-	Thu, 13 Jun 2024 13:36:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.188
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B76A71459F3;
+	Thu, 13 Jun 2024 14:10:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718285806; cv=none; b=PNuZZdpw2XSX/1bN8cPS206sm5yfe+MPfO/Yn0PvNSu73wFcM2sQrgQt1wL0qAea0qVaxeTKQAe0nFaFgDqvaTzO7O/GvgNIIUi0KZCZBX2EEfz/o6MTSsLvsvMthWxAfOasIGHmGGNKKTdxGeQaPqdxx+UazIM7e1d7Uqc6TK8=
+	t=1718287848; cv=none; b=Q2Gl3aJZ2Rxdn2DpW5WzJnZnkHtSYAsN3ThzLa/pwCKZLvaqM5GFp3mBWPN3ccv9wPVwkp3alt/ImBfhT/veitG+lQ2KGAdxNMXlniFZfRZTLEUuAiW8CX6Uailnn3rdTd23NZhcprD7lI3iBMqONxAnqnTTafeyTzSEGvfs/ZE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718285806; c=relaxed/simple;
-	bh=e65AO8YkGqI6QNmDImUltk/oT8Th8lPKfyfsMwtaoc8=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=sgchlM9P2uJ9RhjZ/ewIcxoswEKhj6XCZB88RGMpbCTm0BRTGyJRaipOYC+5pUvkrJKinMfBC+qpdH5VeHac4Dpw9C5TKS7FbdyU7/zA3fKcw/BSizo1WW8h/LepIY28THZ28nmsA+F5GuihS59sXzLuE3EtmneK41GvWH6O438=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.188
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.88.105])
-	by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4W0NcC6mT1zmb2t;
-	Thu, 13 Jun 2024 21:31:55 +0800 (CST)
-Received: from dggpeml500012.china.huawei.com (unknown [7.185.36.15])
-	by mail.maildlp.com (Postfix) with ESMTPS id 761B1140258;
-	Thu, 13 Jun 2024 21:36:41 +0800 (CST)
-Received: from localhost.localdomain (10.67.175.61) by
- dggpeml500012.china.huawei.com (7.185.36.15) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.39; Thu, 13 Jun 2024 21:36:41 +0800
-From: Zheng Yejian <zhengyejian1@huawei.com>
-To: <rostedt@goodmis.org>, <mhiramat@kernel.org>, <mark.rutland@arm.com>,
-	<mpe@ellerman.id.au>, <npiggin@gmail.com>, <christophe.leroy@csgroup.eu>,
-	<naveen.n.rao@linux.ibm.com>, <tglx@linutronix.de>, <mingo@redhat.com>,
-	<bp@alien8.de>, <dave.hansen@linux.intel.com>, <x86@kernel.org>,
-	<hpa@zytor.com>, <mcgrof@kernel.org>, <mathieu.desnoyers@efficios.com>,
-	<masahiroy@kernel.org>, <nathan@kernel.org>, <nicolas@fjasle.eu>,
-	<kees@kernel.org>, <james.clark@arm.com>, <kent.overstreet@linux.dev>,
-	<yhs@fb.com>, <jpoimboe@kernel.org>, <peterz@infradead.org>
-CC: <zhengyejian1@huawei.com>, <linux-kernel@vger.kernel.org>,
-	<linux-trace-kernel@vger.kernel.org>, <linuxppc-dev@lists.ozlabs.org>,
-	<linux-modules@vger.kernel.org>, <linux-kbuild@vger.kernel.org>,
-	<bpf@vger.kernel.org>
-Subject: [PATCH 5/6] ftrace: Fix possible out-of-bound issue in ftrace_process_locs()
-Date: Thu, 13 Jun 2024 21:37:10 +0800
-Message-ID: <20240613133711.2867745-6-zhengyejian1@huawei.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20240613133711.2867745-1-zhengyejian1@huawei.com>
-References: <20240613133711.2867745-1-zhengyejian1@huawei.com>
+	s=arc-20240116; t=1718287848; c=relaxed/simple;
+	bh=dv9A01TA9xjZbgc+DNQkcTYDgrGwnMovOaQAcNnXn3k=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=gUYSsYWp+NXdzhXUzQImvbkaLX2zeLrmSzukHLiwL3K2E9RQWT3ZW61HFEsl38I+CQ+ZnAAh+7FZSA8icX+SNox7IMviJ5lmk54RgWCaj4pbUCQyN42cZ3J25lXmnP4SoPdnne+79aEvEiWuvejDAaB2Yn2Sijr78bnSMosyBa0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=egs4SJDu; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="egs4SJDu"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D53FC2BBFC;
+	Thu, 13 Jun 2024 14:10:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1718287848;
+	bh=dv9A01TA9xjZbgc+DNQkcTYDgrGwnMovOaQAcNnXn3k=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=egs4SJDumCcvLr8/Jqc+1qr2WuYchZktSRDlH1/iIjL9FbXnK0w3AZt6A+HbeaEKK
+	 KqydAZbU2Bik7JkZCZvfnEA8aRnbPA/ztR2mPbJCkung14wOFpbM2xmHsJfeV3/QrP
+	 hUBJZZc2795HhCLeo/wzKwXATuyl6/BBEWas+N/Q5YmorDTsd02PSLTsyQMxQqFvSY
+	 DaKU4z8JZ5rfDFkM6pAfiouYwy1Mkh4AyQhF6n8jWOdzlwQ5UfAlAjMhWKJ0pg0cUv
+	 q+DqDzcHt8E41sA+6IPwtwsUJpp5+LhaNwaJ6tQgPwdfhmwXd+RjMrqd1y1Nqbq8n5
+	 j2QycU/UMjryw==
+Date: Thu, 13 Jun 2024 11:10:41 -0300
+From: Arnaldo Carvalho de Melo <acme@kernel.org>
+To: Howard Chu <howardchu95@gmail.com>
+Cc: peterz@infradead.org, mingo@redhat.com, namhyung@kernel.org,
+	mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
+	jolsa@kernel.org, irogers@google.com, adrian.hunter@intel.com,
+	kan.liang@linux.intel.com, mic@digikod.net, gnoack@google.com,
+	linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-security-module@vger.kernel.org, bpf@vger.kernel.org
+Subject: Re: [PATCH v4] perf trace: BTF-based enum pretty printing
+Message-ID: <Zmr94cx8pYvXi9Hj@x1>
+References: <20240613042747.3770204-1-howardchu95@gmail.com>
+ <ZmrqQs64TvAt8XjK@x1>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- dggpeml500012.china.huawei.com (7.185.36.15)
+In-Reply-To: <ZmrqQs64TvAt8XjK@x1>
 
-In ftrace_process_locs(), a series pages are prepared and linked in
-start_pg, then fentry records are skipped or added, then unused pages
-are freed.
+On Thu, Jun 13, 2024 at 09:47:02AM -0300, Arnaldo Carvalho de Melo wrote:
+> On Thu, Jun 13, 2024 at 12:27:47PM +0800, Howard Chu wrote:
+> > perf $ ./perf trace -e landlock_add_rule
+> >      0.000 ( 0.029 ms): ldlck-test/438194 landlock_add_rule(rule_type: LANDLOCK_RULE_NET_PORT)                  = -1 EBADFD (File descriptor in bad state)
+> >      0.036 ( 0.004 ms): ldlck-test/438194 landlock_add_rule(rule_type: LANDLOCK_RULE_PATH_BENEATH)              = -1 EBADFD (File descriptor in bad state)
+> > ```
 
-However, assume that all records are skipped, currently the start_pg
-will still be in list of ftrace_pages_start but without any record.
-Then in ftrace_free_mem() index record by (pg->index - 1) will be out
-of bound.
+> > Signed-off-by: Howard Chu <howardchu95@gmail.com>
 
-To fix this issue, properly handle with unused start_pg and add
-WARN_ON_ONCE() where the records need to be indexed.
+And when someone suggests you do something and you implement it, a
+Suggested-by: tag is as documented in:
 
-Fixes: 26efd79c4624 ("ftrace: Fix possible warning on checking all pages used in ftrace_process_locs()")
-Signed-off-by: Zheng Yejian <zhengyejian1@huawei.com>
----
- kernel/trace/ftrace.c | 18 +++++++++++++++++-
- 1 file changed, 17 insertions(+), 1 deletion(-)
+⬢[acme@toolbox perf-tools-next]$ grep -A5 Suggested-by Documentation/process/submitting-patches.rst
+Using Reported-by:, Tested-by:, Reviewed-by:, Suggested-by: and Fixes:
+----------------------------------------------------------------------
 
-diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
-index 0e8628e4d296..c46c35ac9b42 100644
---- a/kernel/trace/ftrace.c
-+++ b/kernel/trace/ftrace.c
-@@ -6575,10 +6575,22 @@ static int ftrace_process_locs(struct module *mod,
- 		rec->ip = addr;
- 	}
- 
--	if (pg->next) {
-+	if (pg->index == 0) {
-+		/* No record is added on the current page, so it's unused */
-+		pg_unuse = pg;
-+	} else if (pg->next) {
-+		/* Current page has records, so it's next page is unused */
- 		pg_unuse = pg->next;
- 		pg->next = NULL;
- 	}
-+	/*
-+	 * Even the start_pg hasn't been used, that means, no record has
-+	 * been added, so restore state of ftrace_pages and just go out.
-+	 */
-+	if (pg_unuse == start_pg) {
-+		ftrace_pages->next = NULL;
-+		goto out;
-+	}
- 
- 	/* Assign the last page to ftrace_pages */
- 	ftrace_pages = pg;
-@@ -6794,6 +6806,8 @@ void ftrace_release_mod(struct module *mod)
- 	 */
- 	last_pg = &ftrace_pages_start;
- 	for (pg = ftrace_pages_start; pg; pg = *last_pg) {
-+		/* The page should have at lease one record */
-+		WARN_ON_ONCE(!pg->index);
- 		rec = &pg->records[0];
- 		if (within_module(rec->ip, mod)) {
- 			/*
-@@ -7176,6 +7190,8 @@ void ftrace_free_mem(struct module *mod, void *start_ptr, void *end_ptr)
- 		mod_map = allocate_ftrace_mod_map(mod, start, end);
- 
- 	for (pg = ftrace_pages_start; pg; last_pg = &pg->next, pg = *last_pg) {
-+		/* The page should have at lease one record */
-+		WARN_ON_ONCE(!pg->index);
- 		if (end < pg->records[0].ip ||
- 		    start >= (pg->records[pg->index - 1].ip + MCOUNT_INSN_SIZE))
- 			continue;
--- 
-2.25.1
+The Reported-by tag gives credit to people who find bugs and report them and it
+hopefully inspires them to help us again in the future. The tag is intended for
+bugs; please do not use it to credit feature requests. The tag should be
+--
+A Suggested-by: tag indicates that the patch idea is suggested by the person
+named and ensures credit to the person for the idea. Please note that this
+tag should not be added without the reporter's permission, especially if the
+idea was not posted in a public forum. That said, if we diligently credit our
+idea reporters, they will, hopefully, be inspired to help us again in the
+future.
+⬢[acme@toolbox perf-tools-next]$
 
+- Arnaldo
