@@ -1,135 +1,144 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CCB8137914;
-	Thu, 13 Jun 2024 12:59:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35CE5143C5F;
+	Thu, 13 Jun 2024 13:36:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.187
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718283550; cv=none; b=Mo1QMqWchiWwJBgw1jI81A6wxFW6X5ZaA2xT+4y82qY9f3R1jVDRXwrgNjKj2UjtrcitO9wpc4DIPfEQ+nRmRqXKzy/a67u1p+PQYrNZCprnQh8QjmGdKm9PvxgM1eWS/xFB44M18TMPz2bpe1dpj9lhC0iQsNefU7R6fF9d87k=
+	t=1718285805; cv=none; b=LFg19xWbXQBGLjngUmjk6sJMr++whhDOnqjjooPR0t9FosgOGLkiW9GA0KKxw/eMnkvCW2122Uw7+xI9aiVkATdfzZKVABFyQrZBARJ8hQ1uNS/E8yuSTh2HckFRnDIv8CBMvwpzPurpMUH6j+mS8XSujMX9yBiCL/kdmrcSjjU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718283550; c=relaxed/simple;
-	bh=etrALkXwRl8zDxAotSVCh3RhyEbTiNBpltd+VXvzvNk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=n+GbObZKTtjcK/mrWipLzdURNpy7LW+c4V9TL+kuH4HEr0CZzjSldi6Ehk/CKElcsxYkQ8OQXwUTr8VjWp5pnlfaUF4PwzbuXMaedQlqSAa9ZemeXHRVklsjS3LRwxqwPaQbkkh2IzlKu968aexzwTlYHw0D3pWUSEif2aWTcf8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=k1NWlxKM; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="k1NWlxKM"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96739C2BBFC;
-	Thu, 13 Jun 2024 12:59:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1718283550;
-	bh=etrALkXwRl8zDxAotSVCh3RhyEbTiNBpltd+VXvzvNk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=k1NWlxKMENC+Q3DhMuln06VopaAL/VXRxy5sDVDqSt4L6aFwMy1L2JXzTdhs3Kkg2
-	 C2Wv66R/o66EYxKbWHPKQNP9Q2Ewp9mXJhKwnm8y0/7r8+ONjxD0Mc46y7MkLZG6wf
-	 kEiebLSKL8Ww98b2EuFV/tlH+9KkPGi1KPVzEjygpRzr962oNqBv0z38jAl07JXinL
-	 yhHp/n3MH0fJovw7iyVKz/zm3iMHLCJUeh6iGepW0l/wiUsss7oVA0a3FDTowfypfa
-	 BehIamiT6sp6zDy1g1TnJIh7pDfTr1xTYC6+5bohSeBS2NlwxCwZ/xc74Epj+O3+6s
-	 kqwl8Y8Ta1nkg==
-Date: Thu, 13 Jun 2024 09:59:06 -0300
-From: Arnaldo Carvalho de Melo <acme@kernel.org>
-To: Howard Chu <howardchu95@gmail.com>
-Cc: peterz@infradead.org, mingo@redhat.com, namhyung@kernel.org,
-	mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
-	jolsa@kernel.org, irogers@google.com, adrian.hunter@intel.com,
-	kan.liang@linux.intel.com, mic@digikod.net, gnoack@google.com,
-	linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-security-module@vger.kernel.org, bpf@vger.kernel.org
-Subject: Re: [PATCH v4] perf trace: BTF-based enum pretty printing
-Message-ID: <ZmrtGuhdMlbssODG@x1>
-References: <20240613042747.3770204-1-howardchu95@gmail.com>
- <ZmrqQs64TvAt8XjK@x1>
+	s=arc-20240116; t=1718285805; c=relaxed/simple;
+	bh=L3kKolLqYCdCsguERH50zIApmY/jXnpJBn/Cw8AtSBc=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=dbirFXteDmHz7qFj1gpijxFlNHjPwuRPkQIjnFxVhiyFs1xu/2A9qB1CAcqd0idGO8WD9U8qV/aWt1nhE+sRwtOUvv6++Qvcm+k2KQ4l67DHfXA8ZQ61hC5TVwxaMPY/ftxrzaJthuFyCSHV49qHAJaLL4Y3/kbU60zDjL3E+gw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.187
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.163.174])
+	by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4W0Ncx4JDtzwTlf;
+	Thu, 13 Jun 2024 21:32:33 +0800 (CST)
+Received: from dggpeml500012.china.huawei.com (unknown [7.185.36.15])
+	by mail.maildlp.com (Postfix) with ESMTPS id E049B140154;
+	Thu, 13 Jun 2024 21:36:40 +0800 (CST)
+Received: from localhost.localdomain (10.67.175.61) by
+ dggpeml500012.china.huawei.com (7.185.36.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.39; Thu, 13 Jun 2024 21:36:40 +0800
+From: Zheng Yejian <zhengyejian1@huawei.com>
+To: <rostedt@goodmis.org>, <mhiramat@kernel.org>, <mark.rutland@arm.com>,
+	<mpe@ellerman.id.au>, <npiggin@gmail.com>, <christophe.leroy@csgroup.eu>,
+	<naveen.n.rao@linux.ibm.com>, <tglx@linutronix.de>, <mingo@redhat.com>,
+	<bp@alien8.de>, <dave.hansen@linux.intel.com>, <x86@kernel.org>,
+	<hpa@zytor.com>, <mcgrof@kernel.org>, <mathieu.desnoyers@efficios.com>,
+	<masahiroy@kernel.org>, <nathan@kernel.org>, <nicolas@fjasle.eu>,
+	<kees@kernel.org>, <james.clark@arm.com>, <kent.overstreet@linux.dev>,
+	<yhs@fb.com>, <jpoimboe@kernel.org>, <peterz@infradead.org>
+CC: <zhengyejian1@huawei.com>, <linux-kernel@vger.kernel.org>,
+	<linux-trace-kernel@vger.kernel.org>, <linuxppc-dev@lists.ozlabs.org>,
+	<linux-modules@vger.kernel.org>, <linux-kbuild@vger.kernel.org>,
+	<bpf@vger.kernel.org>
+Subject: [PATCH 3/6] module: kallsyms: Determine exact function size
+Date: Thu, 13 Jun 2024 21:37:08 +0800
+Message-ID: <20240613133711.2867745-4-zhengyejian1@huawei.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20240613133711.2867745-1-zhengyejian1@huawei.com>
+References: <20240613133711.2867745-1-zhengyejian1@huawei.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZmrqQs64TvAt8XjK@x1>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ dggpeml500012.china.huawei.com (7.185.36.15)
 
-On Thu, Jun 13, 2024 at 09:47:02AM -0300, Arnaldo Carvalho de Melo wrote:
-> On Thu, Jun 13, 2024 at 12:27:47PM +0800, Howard Chu wrote:
-> > changes in v4:
+When a weak type function is overridden, its symbol will be removed
+from the symbol table, but its code will not been removed. It will
+cause find_kallsyms_symbol() to compute a larger function size than
+it actually is, just because symbol of its following weak function is
+removed.
 
-> > - Add enum support to tracepoint arguments
+To fix this issue, check that an given address is within the size of
+the function found.
+
+Signed-off-by: Zheng Yejian <zhengyejian1@huawei.com>
+---
+ include/linux/module.h   |  7 +++++++
+ kernel/module/kallsyms.c | 19 +++++++++++++++++--
+ 2 files changed, 24 insertions(+), 2 deletions(-)
+
+diff --git a/include/linux/module.h b/include/linux/module.h
+index ffa1c603163c..13518f464d3f 100644
+--- a/include/linux/module.h
++++ b/include/linux/module.h
+@@ -597,6 +597,13 @@ static inline unsigned long kallsyms_symbol_value(const Elf_Sym *sym)
+ }
+ #endif
  
-> That is cool, but see below the comment as having this as a separate
-> patch.
-> 
-> Also please, on the patch that introduces ! syscall tracepoint enum args
-> BTF augmentation include examples of tracepoints being augmented. I'll
++#ifndef HAVE_ARCH_KALLSYMS_SYMBOL_TYPE
++static inline unsigned int kallsyms_symbol_type(const Elf_Sym *sym)
++{
++	return ELF_ST_TYPE(sym->st_info);
++}
++#endif
++
+ /* FIXME: It'd be nice to isolate modules during init, too, so they
+    aren't used before they (may) fail.  But presently too much code
+    (IDE & SCSI) require entry into the module during init.*/
+diff --git a/kernel/module/kallsyms.c b/kernel/module/kallsyms.c
+index 62fb57bb9f16..092ae6f43dad 100644
+--- a/kernel/module/kallsyms.c
++++ b/kernel/module/kallsyms.c
+@@ -262,6 +262,7 @@ static const char *find_kallsyms_symbol(struct module *mod,
+ 	unsigned long nextval, bestval;
+ 	struct mod_kallsyms *kallsyms = rcu_dereference_sched(mod->kallsyms);
+ 	struct module_memory *mod_mem;
++	const Elf_Sym *sym;
+ 
+ 	/* At worse, next value is at end of module */
+ 	if (within_module_init(addr, mod))
+@@ -278,9 +279,10 @@ static const char *find_kallsyms_symbol(struct module *mod,
+ 	 * starts real symbols at 1).
+ 	 */
+ 	for (i = 1; i < kallsyms->num_symtab; i++) {
+-		const Elf_Sym *sym = &kallsyms->symtab[i];
+-		unsigned long thisval = kallsyms_symbol_value(sym);
++		unsigned long thisval;
+ 
++		sym = &kallsyms->symtab[i];
++		thisval = kallsyms_symbol_value(sym);
+ 		if (sym->st_shndx == SHN_UNDEF)
+ 			continue;
+ 
+@@ -292,6 +294,13 @@ static const char *find_kallsyms_symbol(struct module *mod,
+ 		    is_mapping_symbol(kallsyms_symbol_name(kallsyms, i)))
+ 			continue;
+ 
++		if (kallsyms_symbol_type(sym) == STT_FUNC &&
++		    addr >= thisval && addr < thisval + sym->st_size) {
++			best = i;
++			bestval = thisval;
++			nextval = thisval + sym->st_size;
++			goto find;
++		}
+ 		if (thisval <= addr && thisval > bestval) {
+ 			best = i;
+ 			bestval = thisval;
+@@ -303,6 +312,12 @@ static const char *find_kallsyms_symbol(struct module *mod,
+ 	if (!best)
+ 		return NULL;
+ 
++	sym = &kallsyms->symtab[best];
++	if (kallsyms_symbol_type(sym) == STT_FUNC && sym->st_size &&
++	    addr >= kallsyms_symbol_value(sym) + sym->st_size)
++		return NULL;
++
++find:
+ 	if (size)
+ 		*size = nextval - bestval;
+ 	if (offset)
+-- 
+2.25.1
 
-You did it as a notes for v4, great, I missed that.
-
-> try here while testing the patch as-is.
-
-The landlock_add_rule continues to work, using the same test program I 
-posted when testing your v1 patch: 
-
-root@x1:~# perf trace -e landlock_add_rule
-     0.000 ( 0.016 ms): landlock_add_r/475518 landlock_add_rule(ruleset_fd: 1, rule_type: LANDLOCK_RULE_PATH_BENEATH, rule_attr: 0x7ffd790ff690) = -1 EBADFD (File descriptor in bad state)
-     0.115 ( 0.003 ms): landlock_add_r/475518 landlock_add_rule(ruleset_fd: 2, rule_type: LANDLOCK_RULE_NET_PORT, rule_attr: 0x7ffd790ff690) = -1 EBADFD (File descriptor in bad state)
-
-Now lets try with some of the !syscalls tracepoints with enum args:
-
-root@x1:~# perf trace -e timer:hrtimer_start --max-events=5
-     0.000 :0/0 timer:hrtimer_start(hrtimer: 0xffff8d4eff225050, function: 0xffffffff9e22ddd0, expires: 210588861000000, softexpires: 210588861000000, mode: HRTIMER_MODE_ABS)
-18446744073709.551 :0/0 timer:hrtimer_start(hrtimer: 0xffff8d4eff2a5050, function: 0xffffffff9e22ddd0, expires: 210588861000000, softexpires: 210588861000000, mode: HRTIMER_MODE_ABS)
-     0.007 :0/0 timer:hrtimer_start(hrtimer: 0xffff8d4eff325050, function: 0xffffffff9e22ddd0, expires: 210588861000000, softexpires: 210588861000000, mode: HRTIMER_MODE_ABS)
-     0.007 :0/0 timer:hrtimer_start(hrtimer: 0xffff8d4eff3a5050, function: 0xffffffff9e22ddd0, expires: 210588861000000, softexpires: 210588861000000, mode: HRTIMER_MODE_ABS)
-18446744073709.543 :0/0 timer:hrtimer_start(hrtimer: 0xffff8d4eff425050, function: 0xffffffff9e22ddd0, expires: 210588861000000, softexpires: 210588861000000, mode: HRTIMER_MODE_ABS)
-root@x1:~# 
-
-Cool, it works!
-
-Now lets try and use it with filters, to get something other than HRTIMER_MODE_ABS:
-
-root@x1:~# perf trace -e timer:hrtimer_start --filter='mode!=HRTIMER_MODE_ABS' --max-events=5
-No resolver (strtoul) for "mode" in "timer:hrtimer_start", can't set filter "(mode!=HRTIMER_MODE_ABS) && (common_pid != 475859 && common_pid != 4041)"
-root@x1:~#
-
-
-oops, that is the next step then :-)
-
-If I do:
-
-root@x1:~# pahole --contains_enumerator=HRTIMER_MODE_ABS
-enum hrtimer_mode {
-	HRTIMER_MODE_ABS             = 0,
-	HRTIMER_MODE_REL             = 1,
-	HRTIMER_MODE_PINNED          = 2,
-	HRTIMER_MODE_SOFT            = 4,
-	HRTIMER_MODE_HARD            = 8,
-	HRTIMER_MODE_ABS_PINNED      = 2,
-	HRTIMER_MODE_REL_PINNED      = 3,
-	HRTIMER_MODE_ABS_SOFT        = 4,
-	HRTIMER_MODE_REL_SOFT        = 5,
-	HRTIMER_MODE_ABS_PINNED_SOFT = 6,
-	HRTIMER_MODE_REL_PINNED_SOFT = 7,
-	HRTIMER_MODE_ABS_HARD        = 8,
-	HRTIMER_MODE_REL_HARD        = 9,
-	HRTIMER_MODE_ABS_PINNED_HARD = 10,
-	HRTIMER_MODE_REL_PINNED_HARD = 11,
-}
-root@x1:~#
-
-And then use the value for HRTIMER_MODE_ABS instead:
-
-root@x1:~# perf trace -e timer:hrtimer_start --filter='mode!=0' --max-events=1
-     0.000 :0/0 timer:hrtimer_start(hrtimer: 0xffff8d4eff225050, function: 0xffffffff9e22ddd0, expires: 210759990000000, softexpires: 210759990000000, mode: HRTIMER_MODE_ABS_PINNED_HARD)
-root@x1:~#
-
-Now also filtering HRTIMER_MODE_ABS_PINNED_HARD:
-
-root@x1:~# perf trace -e timer:hrtimer_start --filter='mode!=0 && mode != 10' --max-events=2
-     0.000 podman/178137 timer:hrtimer_start(hrtimer: 0xffffa2024468fda8, function: 0xffffffff9e2170c0, expires: 210886679225214, softexpires: 210886679175214, mode: HRTIMER_MODE_REL)
-    32.935 podman/5046 timer:hrtimer_start(hrtimer: 0xffffa20244fabc40, function: 0xffffffff9e2170c0, expires: 210886712159707, softexpires: 210886712109707, mode: HRTIMER_MODE_REL)
-root@x1:~#
-
-But this then should be a _third_ patch :-)
-
-We're making progress!
-
-- Arnaldo
