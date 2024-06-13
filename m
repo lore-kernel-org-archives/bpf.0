@@ -1,48 +1,91 @@
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21DE3137914
-	for <bpf@vger.kernel.org>; Thu, 13 Jun 2024 11:53:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 205AE126F32;
+	Thu, 13 Jun 2024 12:00:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718279607; cv=none; b=LidWvnm8nRpvq2VQqKPdS1rkbUuFcvpzMvzfWYs07nGX7s3JbK7J+5vubltw2vSCpdAjRoVcSdiIs1DuiBF+W8Nx2ipjpMs3dggu+V8t35vLEspDuRxwpKK7vavFz1HKymlQdd/EyxGq8MyXC0p1LSvJ2rZjRX1c7yoCda7BCUs=
+	t=1718280027; cv=none; b=WUQ92xGgwtMDidq4o+FpvP9A43EoqlABVFtbPPltUfrberprDO/savPOMQ5tKGBs7zzTSE54mp+A+mNm4rKm3fk37rzcwrSegKVM6XbhgEmKrpV+8M8DYBnB/kDGzxk3IbcXJUaa8qMicwwl0P7i85WebtiUHgJd6kVXUOiOan4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718279607; c=relaxed/simple;
-	bh=SUBeEWbi9iRFbotRv5BAo93D2cHY44IHRdb7Ba49AWM=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=ZupKim9d9/3+OyfuKNetYXMo4zePsHJoYg02zTICu/um+LP6qLwNN/nd0AkhRaMnPAl1VGo9D7gOCReeyEEdZJnVPHu+w2XnuCeiEO24c4ZsThaPcxtJIldKMIPUZ1bpFnWwdgvsDeAwAuTwjt1ZOGJ4NFyrwf2+sC9ysOj5d8Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=q+P166Hc; arc=none smtp.client-ip=213.133.104.62
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
+	s=arc-20240116; t=1718280027; c=relaxed/simple;
+	bh=OT4tYSqITjG9a5XSC5dwlh+yLmkM2xiEKd9cNw7dC6o=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Tr0byrnuKKTn1+RuzyusuaDL9E7WpUWO3iYB1X9R13b5cw94nsABZWYc1M/74WuQDKfmrDIbska+bRhaFHwYfDug/N+yxk8vqA4Hmb8us162bV6XGvEvrQSgtmaGAnqEo7QoED+YplUOIpUosE9gGovYhBQE15UlgdA5bOMbEtw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=ehaEEuNj; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="q+P166Hc"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
-	MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:In-Reply-To:References;
-	bh=G4OWiHb3vlw57g4vk3pnB/Aau4wT6BkITiks8Yezo/g=; b=q+P166HcLcBi6LeDHr2wqUrbop
-	Rl4lCd6h0+0RZ6g3NTdQd+PW5xYyQRDxHWsFaEufH7VR4VkzVfqkqvppe+ZsMRf53Td8Sofzp/YHx
-	adNv4soCRda8WaX8jm8GphZyqTpWVoFln3Esfqy4Nt0F2i4zKV6Bth/zarKKvamzSQasVqGrfoLFw
-	QaNR6QcFxzS1kpZHBunxD35d4siq+qDcvopQ/I94h+mKtTyItFgHBol7d/aat7xXKug706tikYbtc
-	fCbyEHOdf9ftRY227ZUojSdUv8EOR6tPaJ1XFIw0Qim/sGoq5CEW84wEGA02EGzh6janB1y09iNRD
-	CVUbbBIw==;
-Received: from 34.249.197.178.dynamic.cust.swisscom.net ([178.197.249.34] helo=localhost)
-	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1sHj16-000G9f-PQ; Thu, 13 Jun 2024 13:53:20 +0200
-From: Daniel Borkmann <daniel@iogearbox.net>
-To: bpf@vger.kernel.org
-Cc: alexei.starovoitov@gmail.com,
-	jjlopezjaimez@google.com,
-	andrii.nakryiko@gmail.com,
-	eddyz87@gmail.com,
-	john.fastabend@gmail.com,
-	Daniel Borkmann <daniel@iogearbox.net>
-Subject: [PATCH bpf v2 1/3] bpf: Fix reg_set_min_max corruption of fake_reg
-Date: Thu, 13 Jun 2024 13:53:08 +0200
-Message-Id: <20240613115310.25383-1-daniel@iogearbox.net>
-X-Mailer: git-send-email 2.21.0
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="ehaEEuNj"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8EB4C2BBFC;
+	Thu, 13 Jun 2024 12:00:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1718280027;
+	bh=OT4tYSqITjG9a5XSC5dwlh+yLmkM2xiEKd9cNw7dC6o=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=ehaEEuNj17g9nupo+bBByWihvpz2hQX8IwG4j91Z0iV0llhHtdRM9DLp2o2BeJ5cZ
+	 6jSXYVsDapAI9zCnyGG+Z125w0BlxLIa6ngOv9q2QnelIgdhGcbcy9kPULz4yS3SJF
+	 Mh55aznAtVLoQHUuJFyLiLg485N6kOW8LpHs7boo=
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: stable@vger.kernel.org
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	patches@lists.linux.dev,
+	Ian Rogers <irogers@google.com>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Alexandre Truong <alexandre.truong@arm.com>,
+	Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
+	Andi Kleen <ak@linux.intel.com>,
+	Andres Freund <andres@anarazel.de>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	=?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@igalia.com>,
+	Athira Jajeev <atrajeev@linux.vnet.ibm.com>,
+	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+	Colin Ian King <colin.king@intel.com>,
+	Dario Petrillo <dario.pk1@gmail.com>,
+	Darren Hart <dvhart@infradead.org>,
+	Dave Marchevsky <davemarchevsky@fb.com>,
+	Davidlohr Bueso <dave@stgolabs.net>,
+	Fangrui Song <maskray@google.com>,
+	Hewenliang <hewenliang4@huawei.com>,
+	Ingo Molnar <mingo@redhat.com>,
+	James Clark <james.clark@arm.com>,
+	Jason Wang <wangborong@cdjrlc.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Kajol Jain <kjain@linux.ibm.com>,
+	Kim Phillips <kim.phillips@amd.com>,
+	Leo Yan <leo.yan@linaro.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	=?UTF-8?q?Martin=20Li=C5=A1ka?= <mliska@suse.cz>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Pavithra Gurushankar <gpavithrasha@gmail.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Quentin Monnet <quentin@isovalent.com>,
+	Ravi Bangoria <ravi.bangoria@amd.com>,
+	Remi Bernon <rbernon@codeweavers.com>,
+	Riccardo Mancini <rickyman7@gmail.com>,
+	Song Liu <songliubraving@fb.com>,
+	Stephane Eranian <eranian@google.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Thomas Richter <tmricht@linux.ibm.com>,
+	Tom Rix <trix@redhat.com>,
+	Weiguo Li <liwg06@foxmail.com>,
+	Wenyu Liu <liuwenyu7@huawei.com>,
+	William Cohen <wcohen@redhat.com>,
+	Zechuan Chen <chenzechuan1@huawei.com>,
+	bpf@vger.kernel.org,
+	llvm@lists.linux.dev,
+	yaowenbin <yaowenbin1@huawei.com>,
+	Arnaldo Carvalho de Melo <acme@redhat.com>,
+	Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 116/202] perf ui: Update use of pthread mutex
+Date: Thu, 13 Jun 2024 13:33:34 +0200
+Message-ID: <20240613113232.237694770@linuxfoundation.org>
+X-Mailer: git-send-email 2.45.2
+In-Reply-To: <20240613113227.759341286@linuxfoundation.org>
+References: <20240613113227.759341286@linuxfoundation.org>
+User-Agent: quilt/0.67
+X-stable: review
+X-Patchwork-Hint: ignore
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -51,151 +94,384 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.10/27305/Thu Jun 13 10:33:25 2024)
 
-Juan reported that after doing some changes to buzzer [0] and implementing
-a new fuzzing strategy guided by coverage, they noticed the following in
-one of the probes:
+5.4-stable review patch.  If anyone has any objections, please let me know.
 
-  [...]
-  13: (79) r6 = *(u64 *)(r0 +0)         ; R0=map_value(ks=4,vs=8) R6_w=scalar()
-  14: (b7) r0 = 0                       ; R0_w=0
-  15: (b4) w0 = -1                      ; R0_w=0xffffffff
-  16: (74) w0 >>= 1                     ; R0_w=0x7fffffff
-  17: (5c) w6 &= w0                     ; R0_w=0x7fffffff R6_w=scalar(smin=smin32=0,smax=umax=umax32=0x7fffffff,var_off=(0x0; 0x7fffffff))
-  18: (44) w6 |= 2                      ; R6_w=scalar(smin=umin=smin32=umin32=2,smax=umax=umax32=0x7fffffff,var_off=(0x2; 0x7ffffffd))
-  19: (56) if w6 != 0x7ffffffd goto pc+1
-  REG INVARIANTS VIOLATION (true_reg2): range bounds violation u64=[0x7fffffff, 0x7ffffffd] s64=[0x7fffffff, 0x7ffffffd] u32=[0x7fffffff, 0x7ffffffd] s32=[0x7fffffff, 0x7ffffffd] var_off=(0x7fffffff, 0x0)
-  REG INVARIANTS VIOLATION (false_reg1): range bounds violation u64=[0x7fffffff, 0x7ffffffd] s64=[0x7fffffff, 0x7ffffffd] u32=[0x7fffffff, 0x7ffffffd] s32=[0x7fffffff, 0x7ffffffd] var_off=(0x7fffffff, 0x0)
-  REG INVARIANTS VIOLATION (false_reg2): const tnum out of sync with range bounds u64=[0x0, 0xffffffffffffffff] s64=[0x8000000000000000, 0x7fffffffffffffff] u32=[0x0, 0xffffffff] s32=[0x80000000, 0x7fffffff] var_off=(0x7fffffff, 0x0)
-  19: R6_w=0x7fffffff
-  20: (95) exit
+------------------
 
-  from 19 to 21: R0=0x7fffffff R6=scalar(smin=umin=smin32=umin32=2,smax=umax=smax32=umax32=0x7ffffffe,var_off=(0x2; 0x7ffffffd)) R7=map_ptr(ks=4,vs=8) R9=ctx() R10=fp0 fp-24=map_ptr(ks=4,vs=8) fp-40=mmmmmmmm
-  21: R0=0x7fffffff R6=scalar(smin=umin=smin32=umin32=2,smax=umax=smax32=umax32=0x7ffffffe,var_off=(0x2; 0x7ffffffd)) R7=map_ptr(ks=4,vs=8) R9=ctx() R10=fp0 fp-24=map_ptr(ks=4,vs=8) fp-40=mmmmmmmm
-  21: (14) w6 -= 2147483632             ; R6_w=scalar(smin=umin=umin32=2,smax=umax=0xffffffff,smin32=0x80000012,smax32=14,var_off=(0x2; 0xfffffffd))
-  22: (76) if w6 s>= 0xe goto pc+1      ; R6_w=scalar(smin=umin=umin32=2,smax=umax=0xffffffff,smin32=0x80000012,smax32=13,var_off=(0x2; 0xfffffffd))
-  23: (95) exit
+From: Ian Rogers <irogers@google.com>
 
-  from 22 to 24: R0=0x7fffffff R6_w=14 R7=map_ptr(ks=4,vs=8) R9=ctx() R10=fp0 fp-24=map_ptr(ks=4,vs=8) fp-40=mmmmmmmm
-  24: R0=0x7fffffff R6_w=14 R7=map_ptr(ks=4,vs=8) R9=ctx() R10=fp0 fp-24=map_ptr(ks=4,vs=8) fp-40=mmmmmmmm
-  24: (14) w6 -= 14                     ; R6_w=0
-  [...]
+[ Upstream commit 82aff6cc070417f26f9b02b26e63c17ff43b4044 ]
 
-What can be seen here is a register invariant violation on line 19. After
-the binary-or in line 18, the verifier knows that bit 2 is set but knows
-nothing about the rest of the content which was loaded from a map value,
-meaning, range is [2,0x7fffffff] with var_off=(0x2; 0x7ffffffd). When in
-line 19 the verifier analyzes the branch, it splits the register states
-in reg_set_min_max() into the registers of the true branch (true_reg1,
-true_reg2) and the registers of the false branch (false_reg1, false_reg2).
+Switch to the use of mutex wrappers that provide better error checking.
 
-Since the test is w6 != 0x7ffffffd, the src_reg is a known constant.
-Internally, the verifier creates a "fake" register initialized as scalar
-to the value of 0x7ffffffd, and then passes it onto reg_set_min_max(). Now,
-for line 19, it is mathematically impossible to take the false branch of
-this program, yet the verifier analyzes it. It is impossible because the
-second bit of r6 will be set due to the prior or operation and the
-constant in the condition has that bit unset (hex(fd) == binary(1111 1101).
-
-When the verifier first analyzes the false / fall-through branch, it will
-compute an intersection between the var_off of r6 and of the constant. This
-is because the verifier creates a "fake" register initialized to the value
-of the constant. The intersection result later refines both registers in
-regs_refine_cond_op():
-
-  [...]
-  t = tnum_intersect(tnum_subreg(reg1->var_off), tnum_subreg(reg2->var_off));
-  reg1->var_off = tnum_with_subreg(reg1->var_off, t);
-  reg2->var_off = tnum_with_subreg(reg2->var_off, t);
-  [...]
-
-Since the verifier is analyzing the false branch of the conditional jump,
-reg1 is equal to false_reg1 and reg2 is equal to false_reg2, i.e. the reg2
-is the "fake" register that was meant to hold a constant value. The resulting
-var_off of the intersection says that both registers now hold a known value
-of var_off=(0x7fffffff, 0x0) or in other words: this operation manages to
-make the verifier think that the "constant" value that was passed in the
-jump operation now holds a different value.
-
-Normally this would not be an issue since it should not influence the true
-branch, however, false_reg2 and true_reg2 are pointers to the same "fake"
-register. Meaning, the false branch can influence the results of the true
-branch. In line 24, the verifier assumes R6_w=0, but the actual runtime
-value in this case is 1. The fix is simply not passing in the same "fake"
-register location as inputs to reg_set_min_max(), but instead making a
-copy. Moving the fake_reg into the env also reduces stack consumption by
-120 bytes. With this, the verifier successfully rejects invalid accesses
-from the test program.
-
-  [0] https://github.com/google/buzzer
-
-Fixes: 67420501e868 ("bpf: generalize reg_set_min_max() to handle non-const register comparisons")
-Reported-by: Juan José López Jaimez <jjlopezjaimez@google.com>
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Signed-off-by: Ian Rogers <irogers@google.com>
+Cc: Adrian Hunter <adrian.hunter@intel.com>
+Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
+Cc: Alexandre Truong <alexandre.truong@arm.com>
+Cc: Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>
+Cc: Andi Kleen <ak@linux.intel.com>
+Cc: Andres Freund <andres@anarazel.de>
+Cc: Andrii Nakryiko <andrii@kernel.org>
+Cc: André Almeida <andrealmeid@igalia.com>
+Cc: Athira Jajeev <atrajeev@linux.vnet.ibm.com>
+Cc: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc: Colin Ian King <colin.king@intel.com>
+Cc: Dario Petrillo <dario.pk1@gmail.com>
+Cc: Darren Hart <dvhart@infradead.org>
+Cc: Dave Marchevsky <davemarchevsky@fb.com>
+Cc: Davidlohr Bueso <dave@stgolabs.net>
+Cc: Fangrui Song <maskray@google.com>
+Cc: Hewenliang <hewenliang4@huawei.com>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: James Clark <james.clark@arm.com>
+Cc: Jason Wang <wangborong@cdjrlc.com>
+Cc: Jiri Olsa <jolsa@kernel.org>
+Cc: Kajol Jain <kjain@linux.ibm.com>
+Cc: Kim Phillips <kim.phillips@amd.com>
+Cc: Leo Yan <leo.yan@linaro.org>
+Cc: Mark Rutland <mark.rutland@arm.com>
+Cc: Martin Liška <mliska@suse.cz>
+Cc: Masami Hiramatsu <mhiramat@kernel.org>
+Cc: Nathan Chancellor <nathan@kernel.org>
+Cc: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Pavithra Gurushankar <gpavithrasha@gmail.com>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Quentin Monnet <quentin@isovalent.com>
+Cc: Ravi Bangoria <ravi.bangoria@amd.com>
+Cc: Remi Bernon <rbernon@codeweavers.com>
+Cc: Riccardo Mancini <rickyman7@gmail.com>
+Cc: Song Liu <songliubraving@fb.com>
+Cc: Stephane Eranian <eranian@google.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Thomas Richter <tmricht@linux.ibm.com>
+Cc: Tom Rix <trix@redhat.com>
+Cc: Weiguo Li <liwg06@foxmail.com>
+Cc: Wenyu Liu <liuwenyu7@huawei.com>
+Cc: William Cohen <wcohen@redhat.com>
+Cc: Zechuan Chen <chenzechuan1@huawei.com>
+Cc: bpf@vger.kernel.org
+Cc: llvm@lists.linux.dev
+Cc: yaowenbin <yaowenbin1@huawei.com>
+Link: https://lore.kernel.org/r/20220826164242.43412-10-irogers@google.com
+Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+Stable-dep-of: 769e6a1e15bd ("perf ui browser: Don't save pointer to stack memory")
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- v1 -> v2:
-  - Reduce stack space consumption (Alexei)
+ tools/perf/ui/browser.c           | 20 ++++++++++----------
+ tools/perf/ui/browsers/annotate.c |  2 +-
+ tools/perf/ui/setup.c             |  5 +++--
+ tools/perf/ui/tui/helpline.c      |  5 ++---
+ tools/perf/ui/tui/progress.c      |  8 ++++----
+ tools/perf/ui/tui/setup.c         |  8 ++++----
+ tools/perf/ui/tui/util.c          | 18 +++++++++---------
+ tools/perf/ui/ui.h                |  4 ++--
+ 8 files changed, 35 insertions(+), 35 deletions(-)
 
- include/linux/bpf_verifier.h |  2 ++
- kernel/bpf/verifier.c        | 14 ++++++++++----
- 2 files changed, 12 insertions(+), 4 deletions(-)
-
-diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index 50aa87f8d77f..e4070fb02b11 100644
---- a/include/linux/bpf_verifier.h
-+++ b/include/linux/bpf_verifier.h
-@@ -746,6 +746,8 @@ struct bpf_verifier_env {
- 	/* Same as scratched_regs but for stack slots */
- 	u64 scratched_stack_slots;
- 	u64 prev_log_pos, prev_insn_print_pos;
-+	/* buffer used to temporary hold constants as scalar registers */
-+	struct bpf_reg_state fake_reg[2];
- 	/* buffer used to generate temporary string representations,
- 	 * e.g., in reg_type_str() to generate reg_type string
- 	 */
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 36ef8e96787e..f455548ba46c 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -15113,7 +15113,6 @@ static int check_cond_jmp_op(struct bpf_verifier_env *env,
- 	struct bpf_reg_state *regs = this_branch->frame[this_branch->curframe]->regs;
- 	struct bpf_reg_state *dst_reg, *other_branch_regs, *src_reg = NULL;
- 	struct bpf_reg_state *eq_branch_regs;
--	struct bpf_reg_state fake_reg = {};
- 	u8 opcode = BPF_OP(insn->code);
- 	bool is_jmp32;
- 	int pred = -1;
-@@ -15179,7 +15178,8 @@ static int check_cond_jmp_op(struct bpf_verifier_env *env,
- 			verbose(env, "BPF_JMP/JMP32 uses reserved fields\n");
- 			return -EINVAL;
+diff --git a/tools/perf/ui/browser.c b/tools/perf/ui/browser.c
+index 781afe42e90e0..9dc808020e824 100644
+--- a/tools/perf/ui/browser.c
++++ b/tools/perf/ui/browser.c
+@@ -268,9 +268,9 @@ void __ui_browser__show_title(struct ui_browser *browser, const char *title)
+ 
+ void ui_browser__show_title(struct ui_browser *browser, const char *title)
+ {
+-	pthread_mutex_lock(&ui__lock);
++	mutex_lock(&ui__lock);
+ 	__ui_browser__show_title(browser, title);
+-	pthread_mutex_unlock(&ui__lock);
++	mutex_unlock(&ui__lock);
+ }
+ 
+ int ui_browser__show(struct ui_browser *browser, const char *title,
+@@ -284,7 +284,7 @@ int ui_browser__show(struct ui_browser *browser, const char *title,
+ 
+ 	browser->refresh_dimensions(browser);
+ 
+-	pthread_mutex_lock(&ui__lock);
++	mutex_lock(&ui__lock);
+ 	__ui_browser__show_title(browser, title);
+ 
+ 	browser->title = title;
+@@ -295,16 +295,16 @@ int ui_browser__show(struct ui_browser *browser, const char *title,
+ 	va_end(ap);
+ 	if (err > 0)
+ 		ui_helpline__push(browser->helpline);
+-	pthread_mutex_unlock(&ui__lock);
++	mutex_unlock(&ui__lock);
+ 	return err ? 0 : -1;
+ }
+ 
+ void ui_browser__hide(struct ui_browser *browser)
+ {
+-	pthread_mutex_lock(&ui__lock);
++	mutex_lock(&ui__lock);
+ 	ui_helpline__pop();
+ 	zfree(&browser->helpline);
+-	pthread_mutex_unlock(&ui__lock);
++	mutex_unlock(&ui__lock);
+ }
+ 
+ static void ui_browser__scrollbar_set(struct ui_browser *browser)
+@@ -352,9 +352,9 @@ static int __ui_browser__refresh(struct ui_browser *browser)
+ 
+ int ui_browser__refresh(struct ui_browser *browser)
+ {
+-	pthread_mutex_lock(&ui__lock);
++	mutex_lock(&ui__lock);
+ 	__ui_browser__refresh(browser);
+-	pthread_mutex_unlock(&ui__lock);
++	mutex_unlock(&ui__lock);
+ 
+ 	return 0;
+ }
+@@ -390,10 +390,10 @@ int ui_browser__run(struct ui_browser *browser, int delay_secs)
+ 	while (1) {
+ 		off_t offset;
+ 
+-		pthread_mutex_lock(&ui__lock);
++		mutex_lock(&ui__lock);
+ 		err = __ui_browser__refresh(browser);
+ 		SLsmg_refresh();
+-		pthread_mutex_unlock(&ui__lock);
++		mutex_unlock(&ui__lock);
+ 		if (err < 0)
+ 			break;
+ 
+diff --git a/tools/perf/ui/browsers/annotate.c b/tools/perf/ui/browsers/annotate.c
+index 82207db8f97c5..d4c27ebb4b848 100644
+--- a/tools/perf/ui/browsers/annotate.c
++++ b/tools/perf/ui/browsers/annotate.c
+@@ -8,11 +8,11 @@
+ #include "../../util/hist.h"
+ #include "../../util/sort.h"
+ #include "../../util/map.h"
++#include "../../util/mutex.h"
+ #include "../../util/symbol.h"
+ #include "../../util/evsel.h"
+ #include "../../util/evlist.h"
+ #include <inttypes.h>
+-#include <pthread.h>
+ #include <linux/kernel.h>
+ #include <linux/string.h>
+ #include <linux/zalloc.h>
+diff --git a/tools/perf/ui/setup.c b/tools/perf/ui/setup.c
+index 700335cde6180..25ded88801a3d 100644
+--- a/tools/perf/ui/setup.c
++++ b/tools/perf/ui/setup.c
+@@ -1,5 +1,4 @@
+ // SPDX-License-Identifier: GPL-2.0
+-#include <pthread.h>
+ #include <dlfcn.h>
+ #include <unistd.h>
+ 
+@@ -8,7 +7,7 @@
+ #include "../util/hist.h"
+ #include "ui.h"
+ 
+-pthread_mutex_t ui__lock = PTHREAD_MUTEX_INITIALIZER;
++struct mutex ui__lock;
+ void *perf_gtk_handle;
+ int use_browser = -1;
+ 
+@@ -76,6 +75,7 @@ int stdio__config_color(const struct option *opt __maybe_unused,
+ 
+ void setup_browser(bool fallback_to_pager)
+ {
++	mutex_init(&ui__lock);
+ 	if (use_browser < 2 && (!isatty(1) || dump_trace))
+ 		use_browser = 0;
+ 
+@@ -118,4 +118,5 @@ void exit_browser(bool wait_for_ok)
+ 	default:
+ 		break;
+ 	}
++	mutex_destroy(&ui__lock);
+ }
+diff --git a/tools/perf/ui/tui/helpline.c b/tools/perf/ui/tui/helpline.c
+index 298d6af82fddd..db4952f5990bd 100644
+--- a/tools/perf/ui/tui/helpline.c
++++ b/tools/perf/ui/tui/helpline.c
+@@ -2,7 +2,6 @@
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <string.h>
+-#include <pthread.h>
+ #include <linux/kernel.h>
+ #include <linux/string.h>
+ 
+@@ -33,7 +32,7 @@ static int tui_helpline__show(const char *format, va_list ap)
+ 	int ret;
+ 	static int backlog;
+ 
+-	pthread_mutex_lock(&ui__lock);
++	mutex_lock(&ui__lock);
+ 	ret = vscnprintf(ui_helpline__last_msg + backlog,
+ 			sizeof(ui_helpline__last_msg) - backlog, format, ap);
+ 	backlog += ret;
+@@ -45,7 +44,7 @@ static int tui_helpline__show(const char *format, va_list ap)
+ 		SLsmg_refresh();
+ 		backlog = 0;
+ 	}
+-	pthread_mutex_unlock(&ui__lock);
++	mutex_unlock(&ui__lock);
+ 
+ 	return ret;
+ }
+diff --git a/tools/perf/ui/tui/progress.c b/tools/perf/ui/tui/progress.c
+index 3d74af5a7ece6..71b6c8d9474fb 100644
+--- a/tools/perf/ui/tui/progress.c
++++ b/tools/perf/ui/tui/progress.c
+@@ -45,7 +45,7 @@ static void tui_progress__update(struct ui_progress *p)
+ 	}
+ 
+ 	ui__refresh_dimensions(false);
+-	pthread_mutex_lock(&ui__lock);
++	mutex_lock(&ui__lock);
+ 	y = SLtt_Screen_Rows / 2 - 2;
+ 	SLsmg_set_color(0);
+ 	SLsmg_draw_box(y, 0, 3, SLtt_Screen_Cols);
+@@ -56,7 +56,7 @@ static void tui_progress__update(struct ui_progress *p)
+ 	bar = ((SLtt_Screen_Cols - 2) * p->curr) / p->total;
+ 	SLsmg_fill_region(y, 1, 1, bar, ' ');
+ 	SLsmg_refresh();
+-	pthread_mutex_unlock(&ui__lock);
++	mutex_unlock(&ui__lock);
+ }
+ 
+ static void tui_progress__finish(void)
+@@ -67,12 +67,12 @@ static void tui_progress__finish(void)
+ 		return;
+ 
+ 	ui__refresh_dimensions(false);
+-	pthread_mutex_lock(&ui__lock);
++	mutex_lock(&ui__lock);
+ 	y = SLtt_Screen_Rows / 2 - 2;
+ 	SLsmg_set_color(0);
+ 	SLsmg_fill_region(y, 0, 3, SLtt_Screen_Cols, ' ');
+ 	SLsmg_refresh();
+-	pthread_mutex_unlock(&ui__lock);
++	mutex_unlock(&ui__lock);
+ }
+ 
+ static struct ui_progress_ops tui_progress__ops = {
+diff --git a/tools/perf/ui/tui/setup.c b/tools/perf/ui/tui/setup.c
+index b1be59b4e2a4f..a3b8c397c24d5 100644
+--- a/tools/perf/ui/tui/setup.c
++++ b/tools/perf/ui/tui/setup.c
+@@ -29,10 +29,10 @@ void ui__refresh_dimensions(bool force)
+ {
+ 	if (force || ui__need_resize) {
+ 		ui__need_resize = 0;
+-		pthread_mutex_lock(&ui__lock);
++		mutex_lock(&ui__lock);
+ 		SLtt_get_screen_size();
+ 		SLsmg_reinit_smg();
+-		pthread_mutex_unlock(&ui__lock);
++		mutex_unlock(&ui__lock);
+ 	}
+ }
+ 
+@@ -170,10 +170,10 @@ void ui__exit(bool wait_for_ok)
+ 				    "Press any key...", 0);
+ 
+ 	SLtt_set_cursor_visibility(1);
+-	if (!pthread_mutex_trylock(&ui__lock)) {
++	if (mutex_trylock(&ui__lock)) {
+ 		SLsmg_refresh();
+ 		SLsmg_reset_smg();
+-		pthread_mutex_unlock(&ui__lock);
++		mutex_unlock(&ui__lock);
+ 	}
+ 	SLang_reset_tty();
+ 	perf_error__unregister(&perf_tui_eops);
+diff --git a/tools/perf/ui/tui/util.c b/tools/perf/ui/tui/util.c
+index b98dd0e31dc1a..8f8d00c2c1b82 100644
+--- a/tools/perf/ui/tui/util.c
++++ b/tools/perf/ui/tui/util.c
+@@ -91,7 +91,7 @@ int ui_browser__input_window(const char *title, const char *text, char *input,
+ 		t = sep + 1;
+ 	}
+ 
+-	pthread_mutex_lock(&ui__lock);
++	mutex_lock(&ui__lock);
+ 
+ 	max_len += 2;
+ 	nr_lines += 8;
+@@ -121,17 +121,17 @@ int ui_browser__input_window(const char *title, const char *text, char *input,
+ 	SLsmg_write_nstring((char *)exit_msg, max_len);
+ 	SLsmg_refresh();
+ 
+-	pthread_mutex_unlock(&ui__lock);
++	mutex_unlock(&ui__lock);
+ 
+ 	x += 2;
+ 	len = 0;
+ 	key = ui__getch(delay_secs);
+ 	while (key != K_TIMER && key != K_ENTER && key != K_ESC) {
+-		pthread_mutex_lock(&ui__lock);
++		mutex_lock(&ui__lock);
+ 
+ 		if (key == K_BKSPC) {
+ 			if (len == 0) {
+-				pthread_mutex_unlock(&ui__lock);
++				mutex_unlock(&ui__lock);
+ 				goto next_key;
+ 			}
+ 			SLsmg_gotorc(y, x + --len);
+@@ -143,7 +143,7 @@ int ui_browser__input_window(const char *title, const char *text, char *input,
  		}
--		src_reg = &fake_reg;
-+		src_reg = &env->fake_reg[0];
-+		memset(src_reg, 0, sizeof(*src_reg));
- 		src_reg->type = SCALAR_VALUE;
- 		__mark_reg_known(src_reg, insn->imm);
- 	}
-@@ -15239,10 +15239,16 @@ static int check_cond_jmp_op(struct bpf_verifier_env *env,
- 				      &other_branch_regs[insn->src_reg],
- 				      dst_reg, src_reg, opcode, is_jmp32);
- 	} else /* BPF_SRC(insn->code) == BPF_K */ {
-+		/* reg_set_min_max() can mangle the fake_reg. Make a copy
-+		 * so that these are two different memory locations. The
-+		 * src_reg is not used beyond here in context of K.
-+		 */
-+		memcpy(&env->fake_reg[1], &env->fake_reg[0],
-+		       sizeof(env->fake_reg[0]));
- 		err = reg_set_min_max(env,
- 				      &other_branch_regs[insn->dst_reg],
--				      src_reg /* fake one */,
--				      dst_reg, src_reg /* same fake one */,
-+				      &env->fake_reg[0],
-+				      dst_reg, &env->fake_reg[1],
- 				      opcode, is_jmp32);
- 	}
- 	if (err)
+ 		SLsmg_refresh();
+ 
+-		pthread_mutex_unlock(&ui__lock);
++		mutex_unlock(&ui__lock);
+ 
+ 		/* XXX more graceful overflow handling needed */
+ 		if (len == sizeof(buf) - 1) {
+@@ -211,19 +211,19 @@ void __ui__info_window(const char *title, const char *text, const char *exit_msg
+ 
+ void ui__info_window(const char *title, const char *text)
+ {
+-	pthread_mutex_lock(&ui__lock);
++	mutex_lock(&ui__lock);
+ 	__ui__info_window(title, text, NULL);
+ 	SLsmg_refresh();
+-	pthread_mutex_unlock(&ui__lock);
++	mutex_unlock(&ui__lock);
+ }
+ 
+ int ui__question_window(const char *title, const char *text,
+ 			const char *exit_msg, int delay_secs)
+ {
+-	pthread_mutex_lock(&ui__lock);
++	mutex_lock(&ui__lock);
+ 	__ui__info_window(title, text, exit_msg);
+ 	SLsmg_refresh();
+-	pthread_mutex_unlock(&ui__lock);
++	mutex_unlock(&ui__lock);
+ 	return ui__getch(delay_secs);
+ }
+ 
+diff --git a/tools/perf/ui/ui.h b/tools/perf/ui/ui.h
+index 9b6fdf06e1d2f..99f8d2fe9bc55 100644
+--- a/tools/perf/ui/ui.h
++++ b/tools/perf/ui/ui.h
+@@ -2,11 +2,11 @@
+ #ifndef _PERF_UI_H_
+ #define _PERF_UI_H_ 1
+ 
+-#include <pthread.h>
++#include "../util/mutex.h"
+ #include <stdbool.h>
+ #include <linux/compiler.h>
+ 
+-extern pthread_mutex_t ui__lock;
++extern struct mutex ui__lock;
+ extern void *perf_gtk_handle;
+ 
+ extern int use_browser;
 -- 
 2.43.0
+
+
 
