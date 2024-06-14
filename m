@@ -1,30 +1,30 @@
-Received: from out30-124.freemail.mail.aliyun.com (out30-124.freemail.mail.aliyun.com [115.124.30.124])
+Received: from out30-100.freemail.mail.aliyun.com (out30-100.freemail.mail.aliyun.com [115.124.30.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70D3E149C4A;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C210E158D87;
 	Fri, 14 Jun 2024 06:39:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.124
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.100
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718347189; cv=none; b=tnMjevjvUl7jVtpMmvT+LAjEm2oiS5ZdJOOQBBJHuoQEW1PH8tU0T9JL+n4J8qrcwzDjTE/bLMetG3H50FGLbY71UAshmec2z1y5LWvFCoURBDBNVZU3X286wkv2tPzfBz7z6hO89GDWgyHyYXjPNfSWz2OAvqoL9ZEBM0xpeXo=
+	t=1718347190; cv=none; b=SKnrkNGBINQWZ5IoDk4AMeYOoH2WNyhqEhUG3JwIvSsPA+3chpIg1yBIiWnjog4RfKgiSZn7wSjJxlQagdVasPKlUj+h3fPVpgDFzB2RxAextbWYBgMej36KZbtUUICCKXfTnyTuBcxygNEAE9MaufMHcoE9qQo/JT59OmMdn5Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718347189; c=relaxed/simple;
-	bh=JNOnnmOFu1NUWWjC8WtNGzYk18S62nPmUhl6YzbpQds=;
+	s=arc-20240116; t=1718347190; c=relaxed/simple;
+	bh=rQS7mnZgNYZTs8wY1Dwfl6b9ZybCf3uIAEXsRUTv4F4=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=kOPijKG5H+HDin1JdBVE1oLQQIm8xo7WPhNJe+P1WKezXutdAxaPX0ftFc5cSPrvdruD2uoZQL4XGK4chT6IvfFeYpRCkD3Hq0ZGoPYeRpTi63WLmzt7CmC+pI6dSFAbKo4Oat0wXvz8b55Dse5VhqzkaT0aOvVT0jDew+3v6g0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=U5MshxJo; arc=none smtp.client-ip=115.124.30.124
+	 MIME-Version; b=j3HL703mkZR6ORcgWHGqrfHxvIbWdTdKonKk5wVqGCOoDtYP3yEKiP65hscK+dEztbV4L9SSbqAhRcAfvAnLmrUYAKP9VH7Xh7DYi/nJtwI2qRQVEWtrdO8XnKLKQDM5ZF4Hnp0AhYV219TSiXZUC/qbd9gNL71RhxwCzv7w+R4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=I5hJBMgD; arc=none smtp.client-ip=115.124.30.100
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="U5MshxJo"
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="I5hJBMgD"
 DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
 	d=linux.alibaba.com; s=default;
-	t=1718347185; h=From:To:Subject:Date:Message-Id:MIME-Version;
-	bh=AsxCsmPwJLPCPz8R6ARZ0TKBqaj/tWLFeD6Lswatkas=;
-	b=U5MshxJotsTtaBkTcpVgNnGfM22mTO3cjRvrbxvS0Dv/NpUplIUBZzfSzSWtsJd9u0gV3HLfpnjmj7ygkRKZOHO8/YHMyu5CGUFdm0wi8q1mkpfgQSISooTTgr5FoYIgJFZ8ZQUCm50bh3ah1Qiv1uChQ6u6sUKyiT/L80Ik1cI=
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R121e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033045075189;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=15;SR=0;TI=SMTPD_---0W8QKgVb_1718347184;
-Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0W8QKgVb_1718347184)
+	t=1718347180; h=From:To:Subject:Date:Message-Id:MIME-Version;
+	bh=a5sz/5qr62F8OtqoIw0iDhCuO+4o5p7+tUqebg6SBto=;
+	b=I5hJBMgD+3RnimPLszVpxYGBH6tpWMqcSdWsxUDsfMWGOYdQ3OM1xnWzy6fshPma1PajVgkPIPYCMsTBKiTE99egW4Yh57sUgMCxgMMnJXpuzyRRQRLLCq85PB+TPFckoxSPQoH6BjtjDZNRX7P1L1/JplscqiAfw5RtdXgVF84=
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R171e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033045046011;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=15;SR=0;TI=SMTPD_---0W8QF6RP_1718347178;
+Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0W8QF6RP_1718347178)
           by smtp.aliyun-inc.com;
-          Fri, 14 Jun 2024 14:39:44 +0800
+          Fri, 14 Jun 2024 14:39:39 +0800
 From: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
 To: netdev@vger.kernel.org
 Cc: "Michael S. Tsirkin" <mst@redhat.com>,
@@ -41,9 +41,9 @@ Cc: "Michael S. Tsirkin" <mst@redhat.com>,
 	John Fastabend <john.fastabend@gmail.com>,
 	virtualization@lists.linux.dev,
 	bpf@vger.kernel.org
-Subject: [PATCH net-next v5 12/15] virtio_net: xsk: tx: support wakeup
-Date: Fri, 14 Jun 2024 14:39:30 +0800
-Message-Id: <20240614063933.108811-13-xuanzhuo@linux.alibaba.com>
+Subject: [PATCH net-next v5 05/15] virtio_net: separate virtnet_tx_resize()
+Date: Fri, 14 Jun 2024 14:39:23 +0800
+Message-Id: <20240614063933.108811-6-xuanzhuo@linux.alibaba.com>
 X-Mailer: git-send-email 2.32.0.3.g01195cf9f
 In-Reply-To: <20240614063933.108811-1-xuanzhuo@linux.alibaba.com>
 References: <20240614063933.108811-1-xuanzhuo@linux.alibaba.com>
@@ -56,59 +56,83 @@ MIME-Version: 1.0
 X-Git-Hash: e008fb4a0943
 Content-Transfer-Encoding: 8bit
 
-xsk wakeup is used to trigger the logic for xsk xmit by xsk framework or
-user.
+This patch separates two sub-functions from virtnet_tx_resize():
 
-Virtio-net does not support to actively generate an interruption, so it
-tries to trigger tx NAPI on the local cpu.
+* virtnet_tx_pause
+* virtnet_tx_resume
+
+Then the subsequent virtnet_tx_reset() can share these two functions.
 
 Signed-off-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+Acked-by: Jason Wang <jasowang@redhat.com>
 ---
- drivers/net/virtio_net.c | 24 ++++++++++++++++++++++++
- 1 file changed, 24 insertions(+)
+ drivers/net/virtio_net.c | 35 +++++++++++++++++++++++++++++------
+ 1 file changed, 29 insertions(+), 6 deletions(-)
 
 diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
-index 7e811f392768..9bfccef18e27 100644
+index 597d2c5fccc0..8c51947abce9 100644
 --- a/drivers/net/virtio_net.c
 +++ b/drivers/net/virtio_net.c
-@@ -1368,6 +1368,29 @@ static bool virtnet_xsk_xmit(struct send_queue *sq, struct xsk_buff_pool *pool,
- 	return sent == budget;
+@@ -2647,12 +2647,11 @@ static int virtnet_rx_resize(struct virtnet_info *vi,
+ 	return err;
  }
  
-+static int virtnet_xsk_wakeup(struct net_device *dev, u32 qid, u32 flag)
+-static int virtnet_tx_resize(struct virtnet_info *vi,
+-			     struct send_queue *sq, u32 ring_num)
++static void virtnet_tx_pause(struct virtnet_info *vi, struct send_queue *sq)
+ {
+ 	bool running = netif_running(vi->dev);
+ 	struct netdev_queue *txq;
+-	int err, qindex;
++	int qindex;
+ 
+ 	qindex = sq - vi->sq;
+ 
+@@ -2673,10 +2672,17 @@ static int virtnet_tx_resize(struct virtnet_info *vi,
+ 	netif_stop_subqueue(vi->dev, qindex);
+ 
+ 	__netif_tx_unlock_bh(txq);
++}
+ 
+-	err = virtqueue_resize(sq->vq, ring_num, virtnet_sq_free_unused_buf);
+-	if (err)
+-		netdev_err(vi->dev, "resize tx fail: tx queue index: %d err: %d\n", qindex, err);
++static void virtnet_tx_resume(struct virtnet_info *vi, struct send_queue *sq)
 +{
-+	struct virtnet_info *vi = netdev_priv(dev);
-+	struct send_queue *sq;
++	bool running = netif_running(vi->dev);
++	struct netdev_queue *txq;
++	int qindex;
 +
-+	if (!netif_running(dev))
-+		return -ENETDOWN;
++	qindex = sq - vi->sq;
 +
-+	if (qid >= vi->curr_queue_pairs)
-+		return -EINVAL;
-+
-+	sq = &vi->sq[qid];
-+
-+	if (napi_if_scheduled_mark_missed(&sq->napi))
-+		return 0;
-+
-+	local_bh_disable();
-+	virtqueue_napi_schedule(&sq->napi, sq->vq);
-+	local_bh_enable();
-+
-+	return 0;
++	txq = netdev_get_tx_queue(vi->dev, qindex);
+ 
+ 	__netif_tx_lock_bh(txq);
+ 	sq->reset = false;
+@@ -2685,6 +2691,23 @@ static int virtnet_tx_resize(struct virtnet_info *vi,
+ 
+ 	if (running)
+ 		virtnet_napi_tx_enable(vi, sq->vq, &sq->napi);
 +}
 +
- static int __virtnet_xdp_xmit_one(struct virtnet_info *vi,
- 				   struct send_queue *sq,
- 				   struct xdp_frame *xdpf)
-@@ -5706,6 +5729,7 @@ static const struct net_device_ops virtnet_netdev = {
- 	.ndo_vlan_rx_kill_vid = virtnet_vlan_rx_kill_vid,
- 	.ndo_bpf		= virtnet_xdp,
- 	.ndo_xdp_xmit		= virtnet_xdp_xmit,
-+	.ndo_xsk_wakeup         = virtnet_xsk_wakeup,
- 	.ndo_features_check	= passthru_features_check,
- 	.ndo_get_phys_port_name	= virtnet_get_phys_port_name,
- 	.ndo_set_features	= virtnet_set_features,
++static int virtnet_tx_resize(struct virtnet_info *vi, struct send_queue *sq,
++			     u32 ring_num)
++{
++	int qindex, err;
++
++	qindex = sq - vi->sq;
++
++	virtnet_tx_pause(vi, sq);
++
++	err = virtqueue_resize(sq->vq, ring_num, virtnet_sq_free_unused_buf);
++	if (err)
++		netdev_err(vi->dev, "resize tx fail: tx queue index: %d err: %d\n", qindex, err);
++
++	virtnet_tx_resume(vi, sq);
++
+ 	return err;
+ }
+ 
 -- 
 2.32.0.3.g01195cf9f
 
