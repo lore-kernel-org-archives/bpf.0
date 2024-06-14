@@ -1,248 +1,173 @@
-Received: from out30-99.freemail.mail.aliyun.com (out30-99.freemail.mail.aliyun.com [115.124.30.99])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f206.google.com (mail-il1-f206.google.com [209.85.166.206])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C23CB1836FC;
-	Fri, 14 Jun 2024 06:39:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.99
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D9CF18FC6C
+	for <bpf@vger.kernel.org>; Fri, 14 Jun 2024 08:30:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.206
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718347194; cv=none; b=RaXDY4jhTHmCsilWidlIM7DDMIRavBzIe/8b67BvCN8TG44v47FGat8fGU0qWj2t4Pqav4OiBenfPPosJd7ygItJs1pTGmiP9gu3+EzVt1R7prWDVQMxsKREMuGQOG84bvT2LOmhXbUhXU7LD9FXUaYzvXfJ7DFqUYVtbsMUwiA=
+	t=1718353822; cv=none; b=ipmhU77vAaUxCy6/l9kltD9sdQLmc8B6OnQQgOWuAb/LSseYvJHH8KIhdPeeIBGs503lsdOMFQ9exZXPHvvcdAYGNgjNp+QKD7Bdu4TgRhFDsWjosxYX1KENOBY3/5DPOEUz5l0fyvKGdPc3G/Y0SMJHT4sWhekWYC2Cks8X3Qs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718347194; c=relaxed/simple;
-	bh=lORUynQLlBgk0LIg09eEQb6gdoTTuvpHT8mCANsDWaM=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=u232DpY6dB5ip7AD97yA+Ntx10azoZFNcy5ndnHcbqAt7rWbYBnFtyFlE8y3N6BYxZuy6JKlTtxmPQY46hE15AZogU4cbN+XQcik6d+SeLTMaCn187e1YstuEoI5CafNMZJnh1j9FNdPHMfXpyOKdI99SpIUyCH+4fw1GJFTjgk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=CppM8lQw; arc=none smtp.client-ip=115.124.30.99
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="CppM8lQw"
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux.alibaba.com; s=default;
-	t=1718347184; h=From:To:Subject:Date:Message-Id:MIME-Version;
-	bh=vxhupZRiQo3CGiqsow8O30uFtigQb+2m40C54t88A7Y=;
-	b=CppM8lQwFSI4FzMe/FMo27a90PAydTCtnbAxXBhEBfkaasNZcEv4f5HXZhsFsfzxEV5pm5+6kA+a1KOHxduO6vlIFrxhOmAPMEzlO3hkcou0G4ZSWHNi90t0aBbKNV38Tui/deDifNwNspSUQ0zuE2csJtwynSja5sS41Y2cImA=
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R121e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033068173054;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=15;SR=0;TI=SMTPD_---0W8QF6TX_1718347183;
-Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0W8QF6TX_1718347183)
-          by smtp.aliyun-inc.com;
-          Fri, 14 Jun 2024 14:39:43 +0800
-From: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-To: netdev@vger.kernel.org
-Cc: "Michael S. Tsirkin" <mst@redhat.com>,
-	Jason Wang <jasowang@redhat.com>,
-	Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
-	=?UTF-8?q?Eugenio=20P=C3=A9rez?= <eperezma@redhat.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	virtualization@lists.linux.dev,
-	bpf@vger.kernel.org
-Subject: [PATCH net-next v5 11/15] virtio_net: xsk: tx: support xmit xsk buffer
-Date: Fri, 14 Jun 2024 14:39:29 +0800
-Message-Id: <20240614063933.108811-12-xuanzhuo@linux.alibaba.com>
-X-Mailer: git-send-email 2.32.0.3.g01195cf9f
-In-Reply-To: <20240614063933.108811-1-xuanzhuo@linux.alibaba.com>
-References: <20240614063933.108811-1-xuanzhuo@linux.alibaba.com>
+	s=arc-20240116; t=1718353822; c=relaxed/simple;
+	bh=TIsWinQmZcpgnuKTbf25dCpfKF6hkc9UokT1TMEEntw=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=CKtcscuI9BPygKf8lmo6MEEVWy8lzGsyAn8N9Np2wY7ypTQc7mGxHrSkmZeHYUssdYEENd9y26oIIDv6EAZIgILA9Fle07hE81xhSl5xQplORfJoAZqj6rI/Ca7D6OGc5X1xYUw9y5zgy42cXYbNLiVWpLAtGL5z2LzPRn2I/5g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.206
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-il1-f206.google.com with SMTP id e9e14a558f8ab-3746147204eso21872245ab.3
+        for <bpf@vger.kernel.org>; Fri, 14 Jun 2024 01:30:21 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1718353820; x=1718958620;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=YA1htI/BDzTzi2+wIpm6aatc4oEDGAHH/0MMFvo5/aQ=;
+        b=KXoBUXkynPrOBLEBaiXYz/obG695FTS1dTBc4WWCXbAhN8eKeob9aVWGm3Cr+b4a91
+         ZEF0Sw6W1VJxs2goHOlVwUIK0q0bDXYzuBYrRr7KWpC9NtsQRmS/CySIAjBx4N2WyIWT
+         M8STQtrKHgUYK56JPrkJOGVaOjLaS5r7v/2kIh0trlr0Zbk52ZJr9N9wOO/k4HKGm3G6
+         EGkd3JazpU6fXTuvvfzun+1IgDrM3i7hJg6OsMuerdcJP6Ug5ayhQ4rpvr7NUwa1uIRp
+         QjcfiDpkH/e0dNQomRCfA2zxn6jN3JnSXDLmHZXBxk7XIMEh6hNP24o8P/zBHtqvPPIg
+         jR6A==
+X-Forwarded-Encrypted: i=1; AJvYcCUmbCGyW6aEYWuhv7zQg3yBqC+fgIf1GTzKiLSHPj5JER9JHItixbBJfKTSurFrWaHAPb2lQMf1K5qXADXwc6XttlKW
+X-Gm-Message-State: AOJu0Yy8QOaBgN7nUNz7Puegg5pFXT+r9SjvQKgUak74JWD0DOVx7RWp
+	uHbYdmVetKfbxCPE6atBF5xAf4DfHCP2uX5VYDxUsmod0hBqtmWWs4AgnV/Ooj2DgushAAOuz6f
+	Y6rXqdUbmAOi2s1DTH7d7gSev7DAUJmkl/nrqiY0PcmYZDgtvntEdrNs=
+X-Google-Smtp-Source: AGHT+IHHPk88hCAzrFHq34yZJXX0iSXuLF/CyrXS2Wr8FiNbEKrKkLtjLpSaWTQcxuWkWSuxPROnnZ9kISsh7El3qVBMFKeVbWpQ
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Git-Hash: e008fb4a0943
-Content-Transfer-Encoding: 8bit
+X-Received: by 2002:a05:6e02:194d:b0:375:dad7:a664 with SMTP id
+ e9e14a558f8ab-375e1036551mr1448095ab.6.1718353820426; Fri, 14 Jun 2024
+ 01:30:20 -0700 (PDT)
+Date: Fri, 14 Jun 2024 01:30:20 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000010b246061ad56d2e@google.com>
+Subject: [syzbot] [bpf?] WARNING: locking bug in __pcpu_freelist_pop
+From: syzbot <syzbot+520605fec365a2b46c6f@syzkaller.appspotmail.com>
+To: andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org, 
+	daniel@iogearbox.net, eddyz87@gmail.com, haoluo@google.com, 
+	john.fastabend@gmail.com, jolsa@kernel.org, kpsingh@kernel.org, 
+	linux-kernel@vger.kernel.org, martin.lau@linux.dev, sdf@google.com, 
+	song@kernel.org, syzkaller-bugs@googlegroups.com, yonghong.song@linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-The driver's tx napi is very important for XSK. It is responsible for
-obtaining data from the XSK queue and sending it out.
+Hello,
 
-At the beginning, we need to trigger tx napi.
+syzbot found the following issue on:
 
-Signed-off-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+HEAD commit:    2ccbdf43d5e7 Merge tag 'for-linus' of git://git.kernel.org..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=13f9f9ee980000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=81c0d76ceef02b39
+dashboard link: https://syzkaller.appspot.com/bug?extid=520605fec365a2b46c6f
+compiler:       gcc (Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40
+userspace arch: i386
+
+Unfortunately, I don't have any reproducer for this issue yet.
+
+Downloadable assets:
+disk image (non-bootable): https://storage.googleapis.com/syzbot-assets/7bc7510fe41f/non_bootable_disk-2ccbdf43.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/13cdb5bfbafa/vmlinux-2ccbdf43.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/7a14f5d07f81/bzImage-2ccbdf43.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+520605fec365a2b46c6f@syzkaller.appspotmail.com
+
+------------[ cut here ]------------
+Looking for class "ead->lock" with key __key.1, but found a different class "&head->lock" with the same key
+WARNING: CPU: 2 PID: 8320 at kernel/locking/lockdep.c:932 look_up_lock_class+0x133/0x140 kernel/locking/lockdep.c:932
+Modules linked in:
+CPU: 2 PID: 8320 Comm: syz-executor.2 Not tainted 6.10.0-rc3-syzkaller-00044-g2ccbdf43d5e7 #0
+Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.2-debian-1.16.2-1 04/01/2014
+RIP: 0010:look_up_lock_class+0x133/0x140 kernel/locking/lockdep.c:932
+Code: c7 c7 20 b9 2c 8b e8 cc 53 74 f6 90 0f 0b 90 90 90 31 db eb be c6 05 f5 86 ef 04 01 90 48 c7 c7 40 bc 2c 8b e8 ae 53 74 f6 90 <0f> 0b 90 90 e9 62 ff ff ff 0f 1f 40 00 90 90 90 90 90 90 90 90 90
+RSP: 0018:ffffc90003f9f5f8 EFLAGS: 00010086
+RAX: 0000000000000000 RBX: ffffffff9427ba10 RCX: ffffc90025be5000
+RDX: 0000000000040000 RSI: ffffffff81511296 RDI: 0000000000000001
+RBP: ffffffff94ae7da0 R08: 0000000000000001 R09: 0000000000000000
+R10: 0000000000000000 R11: 20676e696b6f6f4c R12: ffffe8ffad032900
+R13: 0000000000000000 R14: 0000000000000000 R15: ffffffff94ad8be0
+FS:  0000000000000000(0000) GS:ffff88802c200000(0063) knlGS:00000000f5ee3b40
+CS:  0010 DS: 002b ES: 002b CR0: 0000000080050033
+CR2: 0000000031822000 CR3: 0000000028238000 CR4: 0000000000352ef0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ register_lock_class+0xb1/0x1230 kernel/locking/lockdep.c:1284
+ __lock_acquire+0x111/0x3b30 kernel/locking/lockdep.c:5014
+ lock_acquire kernel/locking/lockdep.c:5754 [inline]
+ lock_acquire+0x1b1/0x560 kernel/locking/lockdep.c:5719
+ __raw_spin_lock include/linux/spinlock_api_smp.h:133 [inline]
+ _raw_spin_lock+0x2e/0x40 kernel/locking/spinlock.c:154
+ ___pcpu_freelist_pop kernel/bpf/percpu_freelist.c:131 [inline]
+ __pcpu_freelist_pop+0x18b/0x9f0 kernel/bpf/percpu_freelist.c:188
+ alloc_htab_elem+0x2e2/0xad0 kernel/bpf/hashtab.c:1023
+ htab_map_update_elem+0x390/0xde0 kernel/bpf/hashtab.c:1168
+ bpf_map_update_value+0x2c1/0x6c0 kernel/bpf/syscall.c:203
+ generic_map_update_batch+0x454/0x5f0 kernel/bpf/syscall.c:1889
+ bpf_map_do_batch+0x615/0x6e0 kernel/bpf/syscall.c:5197
+ __sys_bpf+0x18cb/0x5830 kernel/bpf/syscall.c:5752
+ __do_sys_bpf kernel/bpf/syscall.c:5795 [inline]
+ __se_sys_bpf kernel/bpf/syscall.c:5793 [inline]
+ __ia32_sys_bpf+0x76/0xe0 kernel/bpf/syscall.c:5793
+ do_syscall_32_irqs_on arch/x86/entry/common.c:165 [inline]
+ __do_fast_syscall_32+0x73/0x120 arch/x86/entry/common.c:386
+ do_fast_syscall_32+0x32/0x80 arch/x86/entry/common.c:411
+ entry_SYSENTER_compat_after_hwframe+0x84/0x8e
+RIP: 0023:0xf72f1579
+Code: b8 01 10 06 03 74 b4 01 10 07 03 74 b0 01 10 08 03 74 d8 01 00 00 00 00 00 00 00 00 00 00 00 00 00 51 52 55 89 e5 0f 34 cd 80 <5d> 5a 59 c3 90 90 90 90 8d b4 26 00 00 00 00 8d b4 26 00 00 00 00
+RSP: 002b:00000000f5ee35ac EFLAGS: 00000292 ORIG_RAX: 0000000000000165
+RAX: ffffffffffffffda RBX: 000000000000001a RCX: 0000000020000300
+RDX: 0000000000000038 RSI: 0000000000000000 RDI: 0000000000000000
+RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000292 R12: 0000000000000000
+R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+ </TASK>
+----------------
+Code disassembly (best guess), 2 bytes skipped:
+   0:	10 06                	adc    %al,(%rsi)
+   2:	03 74 b4 01          	add    0x1(%rsp,%rsi,4),%esi
+   6:	10 07                	adc    %al,(%rdi)
+   8:	03 74 b0 01          	add    0x1(%rax,%rsi,4),%esi
+   c:	10 08                	adc    %cl,(%rax)
+   e:	03 74 d8 01          	add    0x1(%rax,%rbx,8),%esi
+  1e:	00 51 52             	add    %dl,0x52(%rcx)
+  21:	55                   	push   %rbp
+  22:	89 e5                	mov    %esp,%ebp
+  24:	0f 34                	sysenter
+  26:	cd 80                	int    $0x80
+* 28:	5d                   	pop    %rbp <-- trapping instruction
+  29:	5a                   	pop    %rdx
+  2a:	59                   	pop    %rcx
+  2b:	c3                   	ret
+  2c:	90                   	nop
+  2d:	90                   	nop
+  2e:	90                   	nop
+  2f:	90                   	nop
+  30:	8d b4 26 00 00 00 00 	lea    0x0(%rsi,%riz,1),%esi
+  37:	8d b4 26 00 00 00 00 	lea    0x0(%rsi,%riz,1),%esi
+
+
 ---
- drivers/net/virtio_net.c | 121 ++++++++++++++++++++++++++++++++++++++-
- 1 file changed, 119 insertions(+), 2 deletions(-)
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
-index 2767338dc060..7e811f392768 100644
---- a/drivers/net/virtio_net.c
-+++ b/drivers/net/virtio_net.c
-@@ -535,10 +535,13 @@ enum virtnet_xmit_type {
- 	VIRTNET_XMIT_TYPE_SKB,
- 	VIRTNET_XMIT_TYPE_XDP,
- 	VIRTNET_XMIT_TYPE_DMA,
-+	VIRTNET_XMIT_TYPE_XSK,
- };
- 
- #define VIRTNET_XMIT_TYPE_MASK (VIRTNET_XMIT_TYPE_SKB | VIRTNET_XMIT_TYPE_XDP \
--				| VIRTNET_XMIT_TYPE_DMA)
-+				| VIRTNET_XMIT_TYPE_DMA | VIRTNET_XMIT_TYPE_XSK)
-+
-+#define VIRTIO_XSK_FLAG_OFFSET 4
- 
- static enum virtnet_xmit_type virtnet_xmit_ptr_strip(void **ptr)
- {
-@@ -768,6 +771,10 @@ static void __free_old_xmit(struct send_queue *sq, bool in_napi,
- 			 * func again.
- 			 */
- 			goto retry;
-+
-+		case VIRTNET_XMIT_TYPE_XSK:
-+			/* Make gcc happy. DONE in subsequent commit */
-+			break;
- 		}
- 	}
- }
-@@ -1265,6 +1272,102 @@ static void check_sq_full_and_disable(struct virtnet_info *vi,
- 	}
- }
- 
-+static void *virtnet_xsk_to_ptr(u32 len)
-+{
-+	unsigned long p;
-+
-+	p = len << VIRTIO_XSK_FLAG_OFFSET;
-+
-+	return virtnet_xmit_ptr_mix((void *)p, VIRTNET_XMIT_TYPE_XSK);
-+}
-+
-+static void sg_fill_dma(struct scatterlist *sg, dma_addr_t addr, u32 len)
-+{
-+	sg->dma_address = addr;
-+	sg->length = len;
-+}
-+
-+static int virtnet_xsk_xmit_one(struct send_queue *sq,
-+				struct xsk_buff_pool *pool,
-+				struct xdp_desc *desc)
-+{
-+	struct virtnet_info *vi;
-+	dma_addr_t addr;
-+
-+	vi = sq->vq->vdev->priv;
-+
-+	addr = xsk_buff_raw_get_dma(pool, desc->addr);
-+	xsk_buff_raw_dma_sync_for_device(pool, addr, desc->len);
-+
-+	sg_init_table(sq->sg, 2);
-+
-+	sg_fill_dma(sq->sg, sq->xsk.hdr_dma_address, vi->hdr_len);
-+	sg_fill_dma(sq->sg + 1, addr, desc->len);
-+
-+	return virtqueue_add_outbuf(sq->vq, sq->sg, 2,
-+				    virtnet_xsk_to_ptr(desc->len), GFP_ATOMIC);
-+}
-+
-+static int virtnet_xsk_xmit_batch(struct send_queue *sq,
-+				  struct xsk_buff_pool *pool,
-+				  unsigned int budget,
-+				  u64 *kicks)
-+{
-+	struct xdp_desc *descs = pool->tx_descs;
-+	bool kick = false;
-+	u32 nb_pkts, i;
-+	int err;
-+
-+	budget = min_t(u32, budget, sq->vq->num_free);
-+
-+	nb_pkts = xsk_tx_peek_release_desc_batch(pool, budget);
-+	if (!nb_pkts)
-+		return 0;
-+
-+	for (i = 0; i < nb_pkts; i++) {
-+		err = virtnet_xsk_xmit_one(sq, pool, &descs[i]);
-+		if (unlikely(err)) {
-+			xsk_tx_completed(sq->xsk.pool, nb_pkts - i);
-+			break;
-+		}
-+
-+		kick = true;
-+	}
-+
-+	if (kick && virtqueue_kick_prepare(sq->vq) && virtqueue_notify(sq->vq))
-+		(*kicks)++;
-+
-+	return i;
-+}
-+
-+static bool virtnet_xsk_xmit(struct send_queue *sq, struct xsk_buff_pool *pool,
-+			     int budget)
-+{
-+	struct virtnet_info *vi = sq->vq->vdev->priv;
-+	struct virtnet_sq_free_stats stats = {};
-+	u64 kicks = 0;
-+	int sent;
-+
-+	__free_old_xmit(sq, true, &stats);
-+
-+	sent = virtnet_xsk_xmit_batch(sq, pool, budget, &kicks);
-+
-+	if (!is_xdp_raw_buffer_queue(vi, sq - vi->sq))
-+		check_sq_full_and_disable(vi, vi->dev, sq);
-+
-+	u64_stats_update_begin(&sq->stats.syncp);
-+	u64_stats_add(&sq->stats.packets, stats.packets);
-+	u64_stats_add(&sq->stats.bytes,   stats.bytes);
-+	u64_stats_add(&sq->stats.kicks,   kicks);
-+	u64_stats_add(&sq->stats.xdp_tx,  sent);
-+	u64_stats_update_end(&sq->stats.syncp);
-+
-+	if (xsk_uses_need_wakeup(pool))
-+		xsk_set_tx_need_wakeup(pool);
-+
-+	return sent == budget;
-+}
-+
- static int __virtnet_xdp_xmit_one(struct virtnet_info *vi,
- 				   struct send_queue *sq,
- 				   struct xdp_frame *xdpf)
-@@ -2707,6 +2810,7 @@ static int virtnet_poll_tx(struct napi_struct *napi, int budget)
- 	struct virtnet_info *vi = sq->vq->vdev->priv;
- 	unsigned int index = vq2txq(sq->vq);
- 	struct netdev_queue *txq;
-+	bool xsk_busy = false;
- 	int opaque;
- 	bool done;
- 
-@@ -2719,7 +2823,11 @@ static int virtnet_poll_tx(struct napi_struct *napi, int budget)
- 	txq = netdev_get_tx_queue(vi->dev, index);
- 	__netif_tx_lock(txq, raw_smp_processor_id());
- 	virtqueue_disable_cb(sq->vq);
--	free_old_xmit(sq, true);
-+
-+	if (sq->xsk.pool)
-+		xsk_busy = virtnet_xsk_xmit(sq, sq->xsk.pool, budget);
-+	else
-+		free_old_xmit(sq, true);
- 
- 	if (sq->vq->num_free >= 2 + MAX_SKB_FRAGS) {
- 		if (netif_tx_queue_stopped(txq)) {
-@@ -2730,6 +2838,11 @@ static int virtnet_poll_tx(struct napi_struct *napi, int budget)
- 		netif_tx_wake_queue(txq);
- 	}
- 
-+	if (xsk_busy) {
-+		__netif_tx_unlock(txq);
-+		return budget;
-+	}
-+
- 	opaque = virtqueue_enable_cb_prepare(sq->vq);
- 
- 	done = napi_complete_done(napi, 0);
-@@ -5715,6 +5828,10 @@ static void virtnet_sq_free_unused_buf(struct virtqueue *vq, void *buf)
- 	case VIRTNET_XMIT_TYPE_DMA:
- 		virtnet_sq_unmap(sq, &buf);
- 		goto retry;
-+
-+	case VIRTNET_XMIT_TYPE_XSK:
-+		/* Make gcc happy. DONE in subsequent commit */
-+		break;
- 	}
- }
- 
--- 
-2.32.0.3.g01195cf9f
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
 
+If the report is already addressed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want to overwrite report's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the report is a duplicate of another one, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
