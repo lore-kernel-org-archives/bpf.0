@@ -1,29 +1,30 @@
-Received: from out30-100.freemail.mail.aliyun.com (out30-100.freemail.mail.aliyun.com [115.124.30.100])
+Received: from out30-119.freemail.mail.aliyun.com (out30-119.freemail.mail.aliyun.com [115.124.30.119])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04EE412BF1B;
-	Fri, 14 Jun 2024 06:39:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D4DE1487C9;
+	Fri, 14 Jun 2024 06:39:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.119
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718347185; cv=none; b=NK+v4gln4qgKvW0M7eS0cPu07qSF2MB1XmjFpyMYBBOx9s7967/T6fTCWKHosx5pxApTbOWEQsGYQf0FQxZ3Ofymk69k/wfROh0J7AH+UID+6HxY4sC8oyu9akm23dbIEzNkS+X5uBJUPfOgDBg02bUD3UgRWvJGZAXHo5eHDUg=
+	t=1718347185; cv=none; b=hVrnvmQLUuI8Hg38rPIX1gCw4NbtA+8nbIOHNHZZfH+Ed/UkSy8xXOGEAkzmiHdvPMdxV77ghatUGxVJIgngx0NjO6SE/SIBBYJ1QB96pCFHnNXOTagDKSVe6zlCWWw6Y9eFabZVdQUuPTK/U4JZ7madcvVaNi9Ej8tqvZSntxQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1718347185; c=relaxed/simple;
-	bh=4FX3KCeo+zGJWP2jJEyhGlLX9iArK5OajLC25b5UbBA=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=u4pGWZ7wT+rQzdCT2Fdt7AuMR7P2af3ezIS4ZDx6dYeGvHVYUfeTCfFOIphZY8EPwXkkMDsc1CfB4jrd0MMng3KywWcA6rtR45rzng45eWKonFv/xWr1lY30DIr41OjK6Iw5wTWq1AXtFDsT9ht/Pl3vg9zV0ac/2EJgL7mWviU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=RLkhj48i; arc=none smtp.client-ip=115.124.30.100
+	bh=4seTsozVSv+ezpete5JyfgV166HQrZcU8nGvlj7gUss=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=HVotdssagK0mVdWZyFKI/ZOsa9AQce8mC5D8AaKKP0x+FTMBLogj35EqdRiM/UIu96l2S/xLo+p2bge4j+sNaHvIOsLGDvp0ZTALEipqNrkr06S1cYq7pWRu2SLMZ2UvCMTb0fmZHTQpr71PggvRLBG/SOghueoAj4jMmncoxso=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=O9X0ZdiR; arc=none smtp.client-ip=115.124.30.119
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="RLkhj48i"
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="O9X0ZdiR"
 DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
 	d=linux.alibaba.com; s=default;
-	t=1718347174; h=From:To:Subject:Date:Message-Id:MIME-Version;
-	bh=6ZV1Fx6Ec7LCR0Is0DJur0luS1MYJQaYAUCZ3bmYf/0=;
-	b=RLkhj48ireGb2UH2rO9GydJ0wJd/V/HygSnVxgf2i9xL982stblGDQqzdKK9+asu5qwSfAmuV++UedW2bjjOdUAyBh7ZpLF9RG8elM+dZRTjbeGkDLq/wah3mpBePKyK49rqf1QWvCGG/IvQ5Iz4uqWczokPlLIZbDDPFk91Dng=
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R651e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033037067112;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=15;SR=0;TI=SMTPD_---0W8QEk7z_1718347173;
-Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0W8QEk7z_1718347173)
+	t=1718347181; h=From:To:Subject:Date:Message-Id:MIME-Version;
+	bh=npQee9M15+Lo4pMMFfrdbZsJ16sd84cpsyzjvN2BTSw=;
+	b=O9X0ZdiRqUN+Pu1Iy2SI557ZzOv8TlcPrCGXsqmKoa1otNxkHs9tJ17gEoVOcdEg3/isV3MlvuqaOovnk+13fn8s25BzYbKE9GUFOIpLvcMai/0lXN+2WY/ZrF/i7eZ4Cp9obM8LOTSKtkHBf5qiCvyv7ncfAZ5Hy7v3A16dBlc=
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R181e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033032014031;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=15;SR=0;TI=SMTPD_---0W8QF6Rt_1718347179;
+Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0W8QF6Rt_1718347179)
           by smtp.aliyun-inc.com;
-          Fri, 14 Jun 2024 14:39:34 +0800
+          Fri, 14 Jun 2024 14:39:39 +0800
 From: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
 To: netdev@vger.kernel.org
 Cc: "Michael S. Tsirkin" <mst@redhat.com>,
@@ -40,10 +41,12 @@ Cc: "Michael S. Tsirkin" <mst@redhat.com>,
 	John Fastabend <john.fastabend@gmail.com>,
 	virtualization@lists.linux.dev,
 	bpf@vger.kernel.org
-Subject: [PATCH net-next v5 00/15] virtio-net: support AF_XDP zero copy
-Date: Fri, 14 Jun 2024 14:39:18 +0800
-Message-Id: <20240614063933.108811-1-xuanzhuo@linux.alibaba.com>
+Subject: [PATCH net-next v5 06/15] virtio_net: separate receive_buf
+Date: Fri, 14 Jun 2024 14:39:24 +0800
+Message-Id: <20240614063933.108811-7-xuanzhuo@linux.alibaba.com>
 X-Mailer: git-send-email 2.32.0.3.g01195cf9f
+In-Reply-To: <20240614063933.108811-1-xuanzhuo@linux.alibaba.com>
+References: <20240614063933.108811-1-xuanzhuo@linux.alibaba.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -53,133 +56,92 @@ MIME-Version: 1.0
 X-Git-Hash: e008fb4a0943
 Content-Transfer-Encoding: 8bit
 
-v5:
-    1. fix the comments of last version
-        http://lore.kernel.org/all/20240611114147.31320-1-xuanzhuo@linux.alibaba.com
-v4:
-    1. remove the commits that introduce the independent directory
-    2. remove the supporting for the rx merge mode (for limit 15
-       commits of net-next). Let's start with the small mode.
-    3. merge some commits and remove some not important commits
+This commit separates the function receive_buf(), then we wrap the logic
+of handling the skb to an independent function virtnet_receive_done().
+The subsequent commit will reuse it.
 
-## AF_XDP
+Signed-off-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+Acked-by: Jason Wang <jasowang@redhat.com>
+---
+ drivers/net/virtio_net.c | 56 +++++++++++++++++++++++-----------------
+ 1 file changed, 32 insertions(+), 24 deletions(-)
 
-XDP socket(AF_XDP) is an excellent bypass kernel network framework. The zero
-copy feature of xsk (XDP socket) needs to be supported by the driver. The
-performance of zero copy is very good. mlx5 and intel ixgbe already support
-this feature, This patch set allows virtio-net to support xsk's zerocopy xmit
-feature.
-
-At present, we have completed some preparation:
-
-1. vq-reset (virtio spec and kernel code)
-2. virtio-core premapped dma
-3. virtio-net xdp refactor
-
-So it is time for Virtio-Net to complete the support for the XDP Socket
-Zerocopy.
-
-Virtio-net can not increase the queue num at will, so xsk shares the queue with
-kernel.
-
-On the other hand, Virtio-Net does not support generate interrupt from driver
-manually, so when we wakeup tx xmit, we used some tips. If the CPU run by TX
-NAPI last time is other CPUs, use IPI to wake up NAPI on the remote CPU. If it
-is also the local CPU, then we wake up napi directly.
-
-This patch set includes some refactor to the virtio-net to let that to support
-AF_XDP.
-
-## performance
-
-ENV: Qemu with vhost-user(polling mode).
-Host CPU: Intel(R) Xeon(R) Platinum 8163 CPU @ 2.50GHz
-
-### virtio PMD in guest with testpmd
-
-testpmd> show port stats all
-
- ######################## NIC statistics for port 0 ########################
- RX-packets: 19531092064 RX-missed: 0     RX-bytes: 1093741155584
- RX-errors: 0
- RX-nombuf: 0
- TX-packets: 5959955552 TX-errors: 0     TX-bytes: 371030645664
-
-
- Throughput (since last show)
- Rx-pps:   8861574     Rx-bps:  3969985208
- Tx-pps:   8861493     Tx-bps:  3969962736
- ############################################################################
-
-### AF_XDP PMD in guest with testpmd
-
-testpmd> show port stats all
-
-  ######################## NIC statistics for port 0  ########################
-  RX-packets: 68152727   RX-missed: 0          RX-bytes:  3816552712
-  RX-errors: 0
-  RX-nombuf:  0
-  TX-packets: 68114967   TX-errors: 33216      TX-bytes:  3814438152
-
-  Throughput (since last show)
-  Rx-pps:      6333196          Rx-bps:   2837272088
-  Tx-pps:      6333227          Tx-bps:   2837285936
-  ############################################################################
-
-But AF_XDP consumes more CPU for tx and rx napi(100% and 86%).
-
-## maintain
-
-I am currently a reviewer for virtio-net. I commit to maintain AF_XDP support in
-virtio-net.
-
-Please review.
-
-Thanks.
-
-v3
-    1. virtio introduces helpers for virtio-net sq using premapped dma
-    2. xsk has more complete support for merge mode
-    3. fix some problems
-
-v2
-    1. wakeup uses the way of GVE. No send ipi to wakeup napi on remote cpu.
-    2. remove rcu. Because we synchronize all operat, so the rcu is not needed.
-    3. split the commit "move to virtio_net.h" in last patch set. Just move the
-       struct/api to header when we use them.
-    4. add comments for some code
-
-v1:
-    1. remove two virtio commits. Push this patchset to net-next
-    2. squash "virtio_net: virtnet_poll_tx support rescheduled" to xsk: support tx
-    3. fix some warnings
-
-
-
-
-
-Xuan Zhuo (15):
-  virtio_ring: introduce dma map api for page
-  virtio_ring: introduce vring_need_unmap_buffer
-  virtio_ring: virtqueue_set_dma_premapped() support to disable
-  virtio_net: separate virtnet_rx_resize()
-  virtio_net: separate virtnet_tx_resize()
-  virtio_net: separate receive_buf
-  virtio_net: refactor the xmit type
-  virtio_net: sq support premapped mode
-  virtio_net: xsk: bind/unbind xsk
-  virtio_net: xsk: prevent disable tx napi
-  virtio_net: xsk: tx: support xmit xsk buffer
-  virtio_net: xsk: tx: support wakeup
-  virtio_net: xsk: tx: handle the transmitted xsk buffer
-  virtio_net: xsk: rx: support fill with xsk buffer
-  virtio_net: xsk: rx: support recv small mode
-
- drivers/net/virtio_net.c     | 992 ++++++++++++++++++++++++++++++++---
- drivers/virtio/virtio_ring.c |  88 +++-
- include/linux/virtio.h       |   9 +-
- 3 files changed, 1006 insertions(+), 83 deletions(-)
-
---
+diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
+index 8c51947abce9..161694957065 100644
+--- a/drivers/net/virtio_net.c
++++ b/drivers/net/virtio_net.c
+@@ -1935,32 +1935,11 @@ static void virtio_skb_set_hash(const struct virtio_net_hdr_v1_hash *hdr_hash,
+ 	skb_set_hash(skb, __le32_to_cpu(hdr_hash->hash_value), rss_hash_type);
+ }
+ 
+-static void receive_buf(struct virtnet_info *vi, struct receive_queue *rq,
+-			void *buf, unsigned int len, void **ctx,
+-			unsigned int *xdp_xmit,
+-			struct virtnet_rq_stats *stats)
++static void virtnet_receive_done(struct virtnet_info *vi, struct receive_queue *rq,
++				 struct sk_buff *skb)
+ {
+-	struct net_device *dev = vi->dev;
+-	struct sk_buff *skb;
+ 	struct virtio_net_common_hdr *hdr;
+-
+-	if (unlikely(len < vi->hdr_len + ETH_HLEN)) {
+-		pr_debug("%s: short packet %i\n", dev->name, len);
+-		DEV_STATS_INC(dev, rx_length_errors);
+-		virtnet_rq_free_buf(vi, rq, buf);
+-		return;
+-	}
+-
+-	if (vi->mergeable_rx_bufs)
+-		skb = receive_mergeable(dev, vi, rq, buf, ctx, len, xdp_xmit,
+-					stats);
+-	else if (vi->big_packets)
+-		skb = receive_big(dev, vi, rq, buf, len, stats);
+-	else
+-		skb = receive_small(dev, vi, rq, buf, ctx, len, xdp_xmit, stats);
+-
+-	if (unlikely(!skb))
+-		return;
++	struct net_device *dev = vi->dev;
+ 
+ 	hdr = skb_vnet_common_hdr(skb);
+ 	if (dev->features & NETIF_F_RXHASH && vi->has_rss_hash_report)
+@@ -1990,6 +1969,35 @@ static void receive_buf(struct virtnet_info *vi, struct receive_queue *rq,
+ 	dev_kfree_skb(skb);
+ }
+ 
++static void receive_buf(struct virtnet_info *vi, struct receive_queue *rq,
++			void *buf, unsigned int len, void **ctx,
++			unsigned int *xdp_xmit,
++			struct virtnet_rq_stats *stats)
++{
++	struct net_device *dev = vi->dev;
++	struct sk_buff *skb;
++
++	if (unlikely(len < vi->hdr_len + ETH_HLEN)) {
++		pr_debug("%s: short packet %i\n", dev->name, len);
++		DEV_STATS_INC(dev, rx_length_errors);
++		virtnet_rq_free_buf(vi, rq, buf);
++		return;
++	}
++
++	if (vi->mergeable_rx_bufs)
++		skb = receive_mergeable(dev, vi, rq, buf, ctx, len, xdp_xmit,
++					stats);
++	else if (vi->big_packets)
++		skb = receive_big(dev, vi, rq, buf, len, stats);
++	else
++		skb = receive_small(dev, vi, rq, buf, ctx, len, xdp_xmit, stats);
++
++	if (unlikely(!skb))
++		return;
++
++	virtnet_receive_done(vi, rq, skb);
++}
++
+ /* Unlike mergeable buffers, all buffers are allocated to the
+  * same size, except for the headroom. For this reason we do
+  * not need to use  mergeable_len_to_ctx here - it is enough
+-- 
 2.32.0.3.g01195cf9f
 
