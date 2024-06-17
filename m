@@ -1,413 +1,229 @@
-Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam02on2119.outbound.protection.outlook.com [40.107.212.119])
+Received: from EUR03-VI1-obe.outbound.protection.outlook.com (mail-vi1eur03on2053.outbound.protection.outlook.com [40.107.103.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6B4B19AD74;
-	Mon, 17 Jun 2024 20:17:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.212.119
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B8DF19CCE2;
+	Mon, 17 Jun 2024 20:18:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.103.53
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718655481; cv=fail; b=d/r6OSlBqQoGIL+7iM7gb3r1fmRrkg9hISlGE/1O5AYTB8FUNEsY1yKkW65ZuVYwv2IYRrohZ18V50HgL3wCyoudfwSlu25aj+Vgnoo/U6vAZ76Q7Ugt+fO3/XcpyYYyFFKisWIZOn86UcDnC/Nxvc4yfXQTsVNDMYcc/QjTY2M=
+	t=1718655484; cv=fail; b=bPEL3NMxjWdiKxrTm6GIAZGTvAZ39FbyeiyJmjmOI+JoyXaQ31k5ejzj5kVzGMt9K1tupcMAq1Qg/IzhuxEYG9CTZhUQ1g9ZHeBZlUyR+vdap/eR3mlBZEt74LXTCowL2aPR/rpqLSfV0UHsKoGgSgMWbN2A6xJ5DlV8a8nNXyg=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718655481; c=relaxed/simple;
-	bh=qiKNJ8UVrJKAn1PBpX6jNP/5ZmROv7iV6C2/wZyK2Ns=;
-	h=From:To:Cc:Subject:Date:Message-Id:Content-Type:MIME-Version; b=hvm1G7aYUrgSqBS7D9nzgG2MrXxhBCUgSjSCOTe6v3H++IdR3BOxRbJeJFd69NpaWdO9av06q50CoGqyhIZtvcF4t2ZDKd1OJdozCdr4JY8gE77ukLw0LRbSGpj84PinBqXHOb56WiX2xjWlvA1DI8/6ah7s3MhVJBDtkavszM4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microsoft.com; spf=pass smtp.mailfrom=microsoft.com; dkim=pass (1024-bit key) header.d=microsoft.com header.i=@microsoft.com header.b=V44x4KTt; arc=fail smtp.client-ip=40.107.212.119
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microsoft.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microsoft.com
+	s=arc-20240116; t=1718655484; c=relaxed/simple;
+	bh=rdBX9SAsLGGVokztvn5vz/ebdrIJ20HWryji5UtWJnk=;
+	h=From:Date:Subject:Content-Type:Message-Id:References:In-Reply-To:
+	 To:Cc:MIME-Version; b=Zd50QhgLLxDi67xywUxgSnQ9mPK6jR5gxukXB87kGEobHOFIA0P1GPvuFA/l6IQIxrPmXyZHl2GQpSV9w8I3Sfqip7DbRuScfiYNQY60yxJSmvOgpciqGRmtEko351LRGmkHFlT4cLzOXZufhp3s7hauqpO+XU0iBRE5KB3qMtA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (1024-bit key) header.d=nxp.com header.i=@nxp.com header.b=LL8sEZLr; arc=fail smtp.client-ip=40.107.103.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=microsoft.com header.i=@microsoft.com header.b="V44x4KTt"
+	dkim=pass (1024-bit key) header.d=nxp.com header.i=@nxp.com header.b="LL8sEZLr"
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=MixjAlSDqdlVpOnwgVtitkpot1OdY8MYFirHPTFzyty/nzMLB2sbTfGtl0BkSuZHkiV5FJHHBe+EUs2T9tlYT9qzF8Ly8QfWIWTd8R0QpHPAKlqZIbJBoglhM92ovCKqKzorxlM/MkrtlOgAX+Nnn2m8UtRah4gzhUJOq+RIwtXSkE8A7S2SPnxhn174L1Ii9NttNvklMlO69Z8cTrfEIT45+2cfy/qTIU+kCdntEeATnpLvGLehiOYT3BE0o0Kl8enSJPG3LbiiVlYGBx+yayffslTWu6x3wTpBmhTzxscG0wiG50qmAo62cUuAunz58MqXELpxPIWucUk0FCCyDw==
+ b=P0gK0y2+zfrPOwAJIKXo+tOAvb5+hdgBxj8NWSDaHm6MIjVDr0+DUMGziO6/dh7MOvyrxmibOvZ4bz8b9zODqzC3EBResvEs8uXQxbyO76uqlDeDtAJcQ1QjKQf23PC/wkfksYk8DrOiI6mPhrOwsJsgUqPleWWzRCAYmicgjanodmJ2+qE3Z8aCMCLK4Yu5MB/RHfHX+zNIJM25vizQ+mM8RNhRrvED4v47VwbK30iEhSTJvMT15LO+tlzlg+/LHu7p12y61jWBG1Xn63NVr9lk7oQ13Xz5YCqGAGY38DkmyDIDz6AcQA2vdnlIZON7fPcC+eP6cpqK4fCq42cWtg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=9HYUiF36VAQygZk04mouuaiq8J+XwsDnFl/8YNF5QoI=;
- b=bwDLFCam30cPC0PT/yVdAAqYzU8p5ehP2QcAoJcMiuFuE/XHDt2VLZTiEJM5c1IPAqX0riWgfuenTqPWCtbYyuwvmbKLegEuPQzkhaDXRjJEfXGJS0jTflmXSj0PyvFxK7rTq3BKBfLBCj2LMm/GZLcWVsPoSyWTpwhm+gCeAqcc6uDhPLGWegknVqiSOl0TWfP40Z+FMmtKQeaqzva1k3cXHKRg7/nA3yKTBENE9ZG5ZTqd9NFRXWnQjeLYms/WCN4YdbgETjOtVdmd2IsW9tM4t3Dc8tMEARKdr9VEae3N+08rNWRbR/cOn8yq9mYfFFNxcXXb5T51AJilg7Zs9A==
+ bh=9MbpA0y8LU8HRpju2DUmQSRJX8UDOWjSKuL8l04o6lQ=;
+ b=cOd+4zG5VP8LJr/zth14afVs9g9C6K/5Iq/YrIeHt30ka3rk8qkhLNxln4jZwZWfuK/IN7UzQRi4T/oq9J8Wd5ZRbAuCXgVQjhOGIyUp3ln4wqBFS/mKRfN2FDsCtN0ViEqQuLnOqg3lLbcufj8c6tKU02hlWffAn80NsD/JTSIyS5Wr5NjKcBhz9gRYlJQY0wsvAkynmflV8716P0o9ZpgpZIq/hNEr+Xu6E1PDSB/1GtvmTbszbbJYaIAf2ZR0gGJkfisHV79jAqYAa4euJLhKN57oUxVCFEG18EUEsfmaNytzmVF8G24CzGgQQS0coIQ4XdT1y+2GJi+pZX5YUg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microsoft.com; dmarc=pass action=none
- header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=selector2;
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=9HYUiF36VAQygZk04mouuaiq8J+XwsDnFl/8YNF5QoI=;
- b=V44x4KTt8OAeDdqtbKsK/3NNNKuPTAmQKDacK7LETKPmKBXt0gxfPGYHXOc8pi2jVxS/Sxav5mmj2Miv8BGUOMOy3fb8/lvon6zLCwftF/BFVCSdg13h5bmBNw01grXLTKyV2rzwASelcToLullZo8qValTFBsF6ebbnl/rgTiA=
+ bh=9MbpA0y8LU8HRpju2DUmQSRJX8UDOWjSKuL8l04o6lQ=;
+ b=LL8sEZLrK5E+iaLZYkdsrc+BzuGLQuooe/RcoagPK0AjmbEsjQZijXhJQm9xTsXLiFaJltVP4dPA3W2Fox+tlF3L6fmpae9e/BgeIN7mX+VQ5oVnfZA62OsJoTp2ZPG15PpvNXmo3PoSegBAQVgLWfCvUK6ZcF7qvq+5qYyC8cQ=
 Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microsoft.com;
-Received: from BY5PR21MB1443.namprd21.prod.outlook.com (2603:10b6:a03:21f::18)
- by DS7PR21MB3551.namprd21.prod.outlook.com (2603:10b6:8:90::16) with
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from PAXPR04MB9642.eurprd04.prod.outlook.com (2603:10a6:102:240::14)
+ by PA4PR04MB7997.eurprd04.prod.outlook.com (2603:10a6:102:c9::6) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7698.7; Mon, 17 Jun
- 2024 20:17:50 +0000
-Received: from BY5PR21MB1443.namprd21.prod.outlook.com
- ([fe80::2c5a:1a34:2c8d:48ef]) by BY5PR21MB1443.namprd21.prod.outlook.com
- ([fe80::2c5a:1a34:2c8d:48ef%4]) with mapi id 15.20.7698.007; Mon, 17 Jun 2024
- 20:17:50 +0000
-From: Haiyang Zhang <haiyangz@microsoft.com>
-To: linux-hyperv@vger.kernel.org,
-	netdev@vger.kernel.org
-Cc: haiyangz@microsoft.com,
-	decui@microsoft.com,
-	stephen@networkplumber.org,
-	kys@microsoft.com,
-	paulros@microsoft.com,
-	olaf@aepfle.de,
-	vkuznets@redhat.com,
-	davem@davemloft.net,
-	wei.liu@kernel.org,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	leon@kernel.org,
-	longli@microsoft.com,
-	ssengar@linux.microsoft.com,
-	linux-rdma@vger.kernel.org,
-	daniel@iogearbox.net,
-	john.fastabend@gmail.com,
-	bpf@vger.kernel.org,
-	ast@kernel.org,
-	hawk@kernel.org,
-	tglx@linutronix.de,
-	shradhagupta@linux.microsoft.com,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v3,net-next] net: mana: Add support for page sizes other than 4KB on ARM64
-Date: Mon, 17 Jun 2024 13:17:26 -0700
-Message-Id: <1718655446-6576-1-git-send-email-haiyangz@microsoft.com>
-X-Mailer: git-send-email 1.8.3.1
-Content-Type: text/plain
-X-ClientProxiedBy: MW4PR04CA0379.namprd04.prod.outlook.com
- (2603:10b6:303:81::24) To BY5PR21MB1443.namprd21.prod.outlook.com
- (2603:10b6:a03:21f::18)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7677.30; Mon, 17 Jun
+ 2024 20:17:59 +0000
+Received: from PAXPR04MB9642.eurprd04.prod.outlook.com
+ ([fe80::9126:a61e:341d:4b06]) by PAXPR04MB9642.eurprd04.prod.outlook.com
+ ([fe80::9126:a61e:341d:4b06%2]) with mapi id 15.20.7677.030; Mon, 17 Jun 2024
+ 20:17:59 +0000
+From: Frank Li <Frank.Li@nxp.com>
+Date: Mon, 17 Jun 2024 16:16:44 -0400
+Subject: [PATCH v6 08/10] dt-bindings: imx6q-pcie: Add i.MX8Q pcie
+ compatible string
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20240617-pci2_upstream-v6-8-e0821238f997@nxp.com>
+References: <20240617-pci2_upstream-v6-0-e0821238f997@nxp.com>
+In-Reply-To: <20240617-pci2_upstream-v6-0-e0821238f997@nxp.com>
+To: Richard Zhu <hongxing.zhu@nxp.com>, 
+ Lucas Stach <l.stach@pengutronix.de>, 
+ Lorenzo Pieralisi <lpieralisi@kernel.org>, 
+ =?utf-8?q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>, 
+ Rob Herring <robh@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>, 
+ Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>, 
+ Pengutronix Kernel Team <kernel@pengutronix.de>, 
+ Fabio Estevam <festevam@gmail.com>, NXP Linux Team <linux-imx@nxp.com>, 
+ Philipp Zabel <p.zabel@pengutronix.de>, Liam Girdwood <lgirdwood@gmail.com>, 
+ Mark Brown <broonie@kernel.org>, 
+ Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
+ Conor Dooley <conor+dt@kernel.org>
+Cc: linux-pci@vger.kernel.org, imx@lists.linux.dev, 
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
+ bpf@vger.kernel.org, devicetree@vger.kernel.org, 
+ Frank Li <Frank.Li@nxp.com>, Conor Dooley <conor.dooley@microchip.com>
+X-Mailer: b4 0.13-dev-e586c
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1718655424; l=1356;
+ i=Frank.Li@nxp.com; s=20240130; h=from:subject:message-id;
+ bh=9ZkdHDkA+jFfsgNpx5r6KX8wuw07nzBbE/IHsRQRYtw=;
+ b=Ltw8SKUOhXUR/N37ex9tuFEBMGyDTCWWFRsCDE7utCebx8DrKCAg1WscVpZCindlfR1yIcs5I
+ e4P6G+RAzCtADzd3Jj9fBuGO7WOn/63jNFDCQ6zmyGqhmTQZyxu/BeW
+X-Developer-Key: i=Frank.Li@nxp.com; a=ed25519;
+ pk=I0L1sDUfPxpAkRvPKy7MdauTuSENRq+DnA+G4qcS94Q=
+X-ClientProxiedBy: SJ0PR05CA0116.namprd05.prod.outlook.com
+ (2603:10b6:a03:334::31) To PAXPR04MB9642.eurprd04.prod.outlook.com
+ (2603:10a6:102:240::14)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Sender: LKML haiyangz <lkmlhyz@microsoft.com>
-X-MS-Exchange-MessageSentRepresentingType: 2
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BY5PR21MB1443:EE_|DS7PR21MB3551:EE_
-X-MS-Office365-Filtering-Correlation-Id: ef3d5153-2ee7-4c05-80fe-08dc8f0a8f4c
-X-LD-Processed: 72f988bf-86f1-41af-91ab-2d7cd011db47,ExtAddr
+X-MS-TrafficTypeDiagnostic: PAXPR04MB9642:EE_|PA4PR04MB7997:EE_
+X-MS-Office365-Filtering-Correlation-Id: 35440926-1c41-4e77-0a46-08dc8f0a9531
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
- BCL:0;ARA:13230037|52116011|376011|366013|7416011|1800799021|38350700011;
+	BCL:0;ARA:13230037|376011|7416011|1800799021|366013|52116011|38350700011|921017;
 X-Microsoft-Antispam-Message-Info:
- =?us-ascii?Q?nttNluiRPWdqnv9cVjxEokiYlVpRweRa4VzHh1CDMRZxIef0SUHUMlP6tdXC?=
- =?us-ascii?Q?SN2nYJOpp9gCPUtWCE/iaYK85FR0g7F9ytF9KVKGrAv5w63wI5cXeZzKQFeM?=
- =?us-ascii?Q?tRbqjMdOxKhmZs1n4LHBcEOv4ODb3ql0xKUYZoD49//lmFmkBDkLzKhVi7vV?=
- =?us-ascii?Q?HqMTbiX8aUBfK8ZwCIQQsYYCpc5Vtp8Aq63r2oOqi7FGNUxHccUku2akVGNy?=
- =?us-ascii?Q?s2LAH3/IT0nI49dqGbQrLWrYeMEE26F7T6N2dU+AGMce/TanHsYpZsavUvNP?=
- =?us-ascii?Q?Q3uAX5U1FXuu+3NCHwX0vozH5FU4vC0NqY3iSobWE2wfSexEeUuDhRW2DrpB?=
- =?us-ascii?Q?HHc+jB2rXDenhwDY1pqd7/sO+miF0x1js9DGPGepOjTzJfgLEbgxPJIsqtE/?=
- =?us-ascii?Q?QKHXCGBydfTXHzgkPe7QfGS68zfp3gLX8GoozE5vpGsM/QcLO5aemX8r19hO?=
- =?us-ascii?Q?6p0mlPYT+d28nghMc1afvNRRbNvJZISjhMEilnzo/dLltE7bsXp22aFAc+EW?=
- =?us-ascii?Q?Yi3dFqZ7MBhPXhvr1kfLma/0jdCC59/uehSJ+LhAvOho4AqhM6vgLXABNbDC?=
- =?us-ascii?Q?go6oBtoyunHqLwdD7T9z5r7q+UVAw48G2Y+9rtVaBo3iXWpJllFmlUxw7OUx?=
- =?us-ascii?Q?rwu24aSrQAXxt7iYZ9VhTbS0vTlu8xiaH9nSe0ZMO6I7QP8W6JxfhVk8NEuE?=
- =?us-ascii?Q?l90G0SNdv+DtpMWLmI1upnTPE8iULzOo7KHGyf9taQ/HTrIDXbajAL2iLrh3?=
- =?us-ascii?Q?Zq6k+ffHXpFHN1uDTE5B9EDFIwjh6Nd8CwsWdCoco4AOxTkv2rbz0zkog4nL?=
- =?us-ascii?Q?CgTRL5YFP9qm17987DGgMnsvxuzU8h+xwTWQfP8dyrmNwQuysh0giEaWqzzS?=
- =?us-ascii?Q?KSIAmfec56JwjSNPrDxLMf2uvPH/wVWJtB9VRwAzu2ZpKwujE7cTY1OkwlMH?=
- =?us-ascii?Q?qgIWvLM7EYC4reNtbImwlK1Lguv0DTUrrLXhxv2+5hT6r8lxFxDmvXUXKG1S?=
- =?us-ascii?Q?7mHBek2sWWlaVjAxx3soyILOwiN0f0zUHGmVlNUPy7mof0XMc2fBJHYqs5HJ?=
- =?us-ascii?Q?nvsUUpyEWj5UcNxtQ3GzlwSHpdd/MMPb8Kaume2f8KxHBBDVe+9Ykayj033m?=
- =?us-ascii?Q?E2NnDHisJrWxGPyJ6qIhhgrnnTJ89CvhDumdzJWKDd2DoWlDcvQjIInHbVOf?=
- =?us-ascii?Q?nIfJ1bL+3/OsAsraBp8mhXHWnVU43mstAi8Gl4Oe7h3VtW9uz0g6+0MRH1rE?=
- =?us-ascii?Q?V0oBO16doRqpoGvt7hXnHtuwO6tgCJ1MH0njdl5nHOq1/o8NyjPaKTjKdHDP?=
- =?us-ascii?Q?Lzj6VSbdephU4S5X4pwh0WYxB/kDHJ80eP2fHIZK1BFPV8NeBybANFgqmLSz?=
- =?us-ascii?Q?rg/fn/c=3D?=
+	=?utf-8?B?bnJmWmhWdWJEUW9oQm9WbUFlK3B4SFVXU1dWT2JUclNSVytjMFhPZWYzREZ6?=
+ =?utf-8?B?L0ZIQnVGcjdiaHlMd1FuUDlZZVdXQ1cxU0wvVnBCMDZXMXNyQm1rL1N3US90?=
+ =?utf-8?B?TmNBTWxPMk1lL2xGU3F2aVp2bVZKcWdBNndyNUlTdzJzNkVPSVg5YVcrbE5q?=
+ =?utf-8?B?Y3pQT0xMK3RGRTU5MUw4LzNmdm5jWXRLWjBhaEM5WUM5M2kxRjVVcjJKUlR6?=
+ =?utf-8?B?eUU3ZFlCMWRlMExTZzN0ZUVMaFZtYW1EWlNiYzRsK29yV3dRelRTUDY4UW1Y?=
+ =?utf-8?B?WGh3bGl4MUxNMW9NZGdjNWVQbjNieGNkWHBQNHRlZ3J2RkhxNW95VHZ2dU56?=
+ =?utf-8?B?ell3Q28xRzlFTUpYanBDQ2tpKzBTbHFmVWl4NjJuajdKcDhOSkpaeDIxSUJF?=
+ =?utf-8?B?WklKU2s0RDMyL3YyMzFCWWdNUUNrWnJFN3lrSkgzVmQvYUtxalppVzNHZ0dJ?=
+ =?utf-8?B?citDUE95eUtXaUtRRHdJMm9OaThPMSthQndKQTU1Nk9oYnVtT2UwTnh2cHBa?=
+ =?utf-8?B?dnk1czJCZGwxOThxSmg3VDlsRXZxNDJaa2JsTGRJeXBPOG5zU05OcGN0dVlZ?=
+ =?utf-8?B?Y01vMjlwekd5dVhFTi90R25USzZGc1cybmN3UkVzL25OZWRaYnd5M2JNV0Na?=
+ =?utf-8?B?Z2paRW4vVThVdWtLSGJVV1RxWENHSEgyN05KMytTaE0vcTIvbGR0em5GVEVY?=
+ =?utf-8?B?dVdMazRTbUl5c01IWUJiV0x5aWtLQUZBWFMvU0h1blZXUGpRNHlRVEo0OXJY?=
+ =?utf-8?B?VTZkeDZ3eFpzK3FkN1hJMVJoejVvQjBoY1BUdEdiT0Z4YmZJblZVRDduLzdu?=
+ =?utf-8?B?QjArWmRjRlZIOTN4Vko2aTJZYU85Nnc2NS9EK3VORVZJZHdtQ0VsWkd2ZU9W?=
+ =?utf-8?B?dTRMWFgzRzZ5dCtKYVFBYnRNTC9NQmU2Z3VFZkV0QXFhWExhZXZMMmRtTWJX?=
+ =?utf-8?B?WHI3YlpTazRhSksvRk9KQlJTaDdkcTRLcHdWZFZEU3ZZbUhGQTEwRTVOQnRJ?=
+ =?utf-8?B?K1dvaCtldnVHSGRaaFFEMTNpSk5TWlpHUmxiektuU1VrZ3Y0amdmRXhTZ0Vs?=
+ =?utf-8?B?bEx5TjRqTUZXdzhNSWRFbWw0NmtmWDk2M0dPWFgrRUlqVlA0dWJlcEE3bS8w?=
+ =?utf-8?B?T25hVjluRWxUaE1yOUdyY3lmaStiQm5vS1N6N3FXWlJhUmJlS0YxNjJLb2ZQ?=
+ =?utf-8?B?VDZhMnV3Yit1ZUJuNXZaM0VFTm9jQmtsbld4YWxuaFF0em00UXZ1c0RRT2h0?=
+ =?utf-8?B?K0lGOXNROFpyNVFoZzJMb05jcVRsZ3RZWS9qZUFNemt2YkZtbXVJbnlBVVZv?=
+ =?utf-8?B?UnoyZWh0a1FtMzg4dEJsK2M1Z2JBMXg4NHp4ODN4MEgvKzZ2SmQ2MHNuMVhI?=
+ =?utf-8?B?dDNJWUxwSlRGc1dmMlJXdUVxRkxsUHVBUEVDZDZBQ1ZaelA3RFJRTzQ5Sll2?=
+ =?utf-8?B?RFVKVjNqRjJaY0lUMnI4b0NjWE1NOEllVjlpKzMxcFU3eWdlTVRheXM4RE9O?=
+ =?utf-8?B?d0xyUk9QcmMwSjFLQlkvVDNwYkxRWElBaXBpNm12VXNSTTE1bEYwU0ZjUGtp?=
+ =?utf-8?B?bWdQcVVkd2tHclhLUy85eTVVZGgwSTNJczdpV0ZibW5ZY3QyNE0xQ3RLVnNE?=
+ =?utf-8?B?ZEJTSUw1ajBpYjlhUUVKWnN4Y050S3F5anowMUYrUFc5aXQzRmR3c2FZVXht?=
+ =?utf-8?B?S3Q4SS9neEFPeHRlU0F3ejZZUk9sS1VKRjI5WU9PZUQrQ01CaHlRQ2JnOWY0?=
+ =?utf-8?B?bVF1ZzZydHVGWUszd0JRVktVbDVHZWdQRGJoN05lN295Qm9yNGNQb2tWWGtP?=
+ =?utf-8?B?bjNyZDQ3S0JwN0hJaytwbEl3b1dPSy9HL0o4ak10VWExUUcyQXVoTkhmdlZp?=
+ =?utf-8?Q?Q4tk+c6jJuloy?=
 X-Forefront-Antispam-Report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR21MB1443.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230037)(52116011)(376011)(366013)(7416011)(1800799021)(38350700011);DIR:OUT;SFP:1102;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB9642.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230037)(376011)(7416011)(1800799021)(366013)(52116011)(38350700011)(921017);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
- =?us-ascii?Q?MFY8AcW0EzpHW7NZUWwOc0nqteNdWBTVYwEegxrzDRjefNcpgBKDY5jjmBir?=
- =?us-ascii?Q?Vg6w2iEyNMFVjjLWUaCZR8XPIiCttcYyDovUtKvyqp7epvD6FikNubQPNegA?=
- =?us-ascii?Q?b+neu6q3quw3t2+fEg53ioSoUG0fY6OfWMpTfHoNdAL/CmsjSZIjDwn6U+qv?=
- =?us-ascii?Q?hubQF94r8XIu2Uwh5MaHfgORuHZXZFu1rm/wrIQ8P/bgRHKd83nmTqeJcYO7?=
- =?us-ascii?Q?NnECUIpVOH4MiIxwZICZtLis5Se4GjLUEz/O7L/nxU1r8fks1I3hapn61cS1?=
- =?us-ascii?Q?VMHPoYRawmiMFRJ//GIa1avLP+6QRRF2DKRBeP5aqwKCkdAfJ3G/8xJj1p8X?=
- =?us-ascii?Q?r9o92SHpdvnB+wXheBVHmip2/FvxWSnKj01EeSei7/eJhCQHagCcUbbzgHzL?=
- =?us-ascii?Q?QUsSTVNlm39hSOIf+AgWgo4HAzeaL9kYzmsOKHdYOAttOnYJgVOWTEMnx37W?=
- =?us-ascii?Q?8Cz5509awp9RJ5eXM3xAGwqIEIk1zntmjt+HMKTcwKOgXYkRcHOJomQnfeOK?=
- =?us-ascii?Q?uwUO4iRvDVSqFp/jCG/SZkODVc2WlT6gKCfbfw2O8BJSMhd3PSYGr/TsJIT/?=
- =?us-ascii?Q?60b7h8Qfe36yKGjEAxP6GLMzGaW6SPFWJBTG0sLMyQRwWeSZrLjXhzsjZXQE?=
- =?us-ascii?Q?MtDfW/4xAdLw/SwiiTyFdMfheVr9kb+9te60aXuLPay26Y/UZgsy9VNIFR0z?=
- =?us-ascii?Q?D3bC6qafEHskOqyjypSsTzQEv2tofTZ0Lzh4EQFrhY7qUK2pcGwFLQr1ZL9V?=
- =?us-ascii?Q?eok5TbhruDJHq/a3ihLydQfbHlLJEkmBBY8+Ix5dweWvrC25ke+AamGLMLMZ?=
- =?us-ascii?Q?9G2If+EAE9DISiHdMnLgAlCGWFPQiCsShbQJd/GygYzrPnK7aMBZTMiFWXe1?=
- =?us-ascii?Q?ZASvdN8ZF9M6hT11UIuAvSCO3WILpQ9sSWo8IR8AhtCYmzxEQZC1tX3gm0ca?=
- =?us-ascii?Q?MfoiDNKsMD8e2LB8UsMt2V1bXvYkoZ+jzWXz516ZBtjALsRCDHBhXYJUvqXH?=
- =?us-ascii?Q?ULlTXw/0NNNlOoKseJyVorjHP3JyhWTNMMwooJRZQAj66FBqYZzrZpXCuGHM?=
- =?us-ascii?Q?DEYzAUq7YFd3XS0DqeBQ494YAJR+CzfjQlhg+uUU7MYmGvA59x6gnBEDca01?=
- =?us-ascii?Q?Wi37Uy4bKkShMC4t7+cRiNy/fjZrHJpJCMBa1SxlVkpVWNZFFnXjcVf1vFHH?=
- =?us-ascii?Q?bT4U8QTSZxTmTW8hj/tVuvdWZteZu5A92/2eTqrbqtspSImJih2HxYMSIilg?=
- =?us-ascii?Q?bE9Pj89dD99+1S/PYACA/O7gxVTVj2ehnEWAN2Jpj2+xehQE/2GOM7AKf/9S?=
- =?us-ascii?Q?WoIz9Nheo44PZZqjyraD/kbGEby+R5IFhyqc6ziYM8GZuESpq5H3d956iINH?=
- =?us-ascii?Q?uo4hCi1/tSO4w2M8DsUQLrS3zvE2IZ7NU+2Uxbgna/SULtaDgryjtV5L356K?=
- =?us-ascii?Q?SKo8uNIISB2PVI3+SR97uqlt3OJHJUAHyiUcyw42js6/6cTe9vNJAe21MIbu?=
- =?us-ascii?Q?+Avi9cZV5VqyHQrGDHe0aMUIDK9zacOZnk/P3pI4iHhd+iy3Lzfc2+jvcNn8?=
- =?us-ascii?Q?kxugjVaaQqTHYD0Mu43NCJbAT7VDdXC2ZcbVsNMI?=
-X-OriginatorOrg: microsoft.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ef3d5153-2ee7-4c05-80fe-08dc8f0a8f4c
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR21MB1443.namprd21.prod.outlook.com
+	=?utf-8?B?WUlmQnpiemN2VHhEQ1FvRUs3RmNkVlJmUHJ2VlRIN1JoanFJY1h5dlBpd1Ar?=
+ =?utf-8?B?c1l5TjR1cWYrdGMyWkVHVzN4blRjdkdPZ2lPOEYxOHR3SnMzUnBwRmN5Qjdu?=
+ =?utf-8?B?STk5NXFTa084RGNqUHlsajZXTWY3N3NYNUJSOVJLNVVSR2JrTlpMVENkTGJN?=
+ =?utf-8?B?Z2NXS1NtbTl0MGdRQW5hUC9OWis3QjFKeWNlL0ZPam5zWlVXcUFTOEFqNTB6?=
+ =?utf-8?B?UjBOR3hrV1lRLzZBMStpU1JWOEw5KzVXVElCbHZ5aWNxNzhTZEVvQkdQdVhw?=
+ =?utf-8?B?UXZETC95VXFVTlJWWEhPSTV0aVp6ekRzWlFmRnYrQVFCRWwycFV2NWRsL2Ju?=
+ =?utf-8?B?Q2tsVU9hZDlmMDU1ZUlxdGdOK2I3dTVVN21UOVAwaVc5UkErMEg0S0NqZkJJ?=
+ =?utf-8?B?R25qZVAvL1lKNjFMR2dFWWdXSEU5OGZrRTd0LzU2UlRwOHhrbnNRT2x1bzg3?=
+ =?utf-8?B?Ky80YVorTkVhdEJrSDlvMW1vaVZaV0g3WlBxNTc5UExwS3lqaTlHRmFWZzFX?=
+ =?utf-8?B?dUt5RFNUeCtKU2l0d05xamZJN043ZXQ0VXZXN200QzVFbHNKMjRUQStYTlYy?=
+ =?utf-8?B?Q0R0N0RsUlJMaDk4M2pxdjRoV0xVNGNDTkdrTUpjeVRWbXEzY296aTJMTTdm?=
+ =?utf-8?B?Q3ZsRUlMNHRHdXBpUEtQUzlFQUc4NE4rRmJzM2JDY3g4eHAySGR6YWpIdFo0?=
+ =?utf-8?B?UWZIemhrYjgvOHRtT2pFUDJjayt0dGtDZlZMRTlMMmdwUXlqaUR4bFMzYkcy?=
+ =?utf-8?B?TDZtbExBQzRIZFI2UGY3Mzc2UU5lNzN3ODEvR0w4ZzA5ak13ci8xRis4cjdr?=
+ =?utf-8?B?ME1OQ1gzMWpKaE9SSmY3TGhPQU5UbUtNcVoyU0p1ZDNTdGdBc2p4aVMrK0Zv?=
+ =?utf-8?B?dm9RTXZWVVVsbmJlbzY1WjFkY3RLdUx5cVVybFVvN081RnRwaXI4L3dIUG1U?=
+ =?utf-8?B?elcvV3hCY2JxZDcyeW4zNGFFeDhpbUY4ZS81M01SZnc1N2JmRElkU1ZENXNY?=
+ =?utf-8?B?c1BQc0RqNlBpQnBqZGRMS3MyQnlqeVBsUGpxWE9DZjJxRkM3U1VuVG1LWHRR?=
+ =?utf-8?B?QkZ2bHJvRXdiaWM1RFVyTmw3WW9NcnRoM0lCNjJwMnluQTBrd25BVE9iSk1y?=
+ =?utf-8?B?dFc2TndFM0x0VURMM2VYd0ovVmd6VFFWNVptNUt1ckVxOWcwV0xON3hyZUZi?=
+ =?utf-8?B?ZWx1VkcxNTZSVEFBajU4a0tNYkNvZWlzY1U0aXRmN2dRY0V1SzBiNFoxMnVJ?=
+ =?utf-8?B?UE9rYnlIYklqMHB3WTlDMzFUb2tBbWd5VjZLVGhwQzVKMkZ6OHdUZmZDZVFT?=
+ =?utf-8?B?Y0x5MjNmUkVDNDlua0xFL3VidjkwODdMbjZua1RlMW9CZTNyRHVTbnpneFlr?=
+ =?utf-8?B?WHJqWFdaR1d5N242S05laENmRnFwdy9SL1lvVUxvSXdpeVFrU3pzS0YyMWNh?=
+ =?utf-8?B?MmtvM1lKOU11cXJxd1JISURVSDQySXNQb2l5UzhIK2dVQjVpRkx2NWlaVFNZ?=
+ =?utf-8?B?QnA1RVRscnBtYU1LR1A1MHVNUUN6YjF3L2VBYnN6RTZUL3NYamJsbmpLdlhW?=
+ =?utf-8?B?QVdWTEE2RnMwK1RMekVpNkhJSmlFdms0ME90RndVYXVCeVMydWlFcmJFREJV?=
+ =?utf-8?B?Z0lPZjcwSVRmQVlGMGVJOHQxQStSSzFBYmwrN254bnpaUjZ4ODlCaWorbDNt?=
+ =?utf-8?B?bFRsSjNuMWpMTWpXTS9BNXM0TC9DY2dLZ1RxMVRQUm53MU9pMWhCVUc4bitE?=
+ =?utf-8?B?V0ZWQWMvWWN0MEl0MkxEZTZIRlk2QlVrK1dtckhmaEY1L1NRTTJXQWdjYVR3?=
+ =?utf-8?B?UFBucW1aNFRyOEU4NkZJdmpsZFRxMmVTTTRTeUM2WlBXVmovS1pneFZoVldO?=
+ =?utf-8?B?Z05YKzhhcWNEK3lwY1BDY0hqb1ViYzZTVFEvTkorOTMveXJmRVZXQ0FBbEVa?=
+ =?utf-8?B?dHpSQ042YzhJcEd1d0c4T0JSSE5rcFJDclJva29GMWRsV09nWWIyUjloVlFs?=
+ =?utf-8?B?cU5pbERPNWNZTXpvbENrVmIzek1tY05SNUN6SVB6SHd1RVA0eUlVbkRNaUtO?=
+ =?utf-8?B?QWgvWUZpTFo4VmU0d2t2Tks4ZEFaMjA5ektKcSs2ZnErNU1MK2FWT3VlZmZU?=
+ =?utf-8?Q?gUDNn9AbP5ANJ3fmeJKvtNJ/3?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 35440926-1c41-4e77-0a46-08dc8f0a9531
+X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB9642.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Jun 2024 20:17:50.0928
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Jun 2024 20:17:59.6141
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 72f988bf-86f1-41af-91ab-2d7cd011db47
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 6uf9ymco/IjJYqixVQwk7hGJo2s8ApFJnn6zzcmI5XXLKdpyBi1R++G8vwC9+/dM6XiNpDqFWSOewF/frWaW9g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR21MB3551
+X-MS-Exchange-CrossTenant-UserPrincipalName: BExwOTBAoPNdLUAbOp3LjbhcRq0mdIvVyvpdLfd+uZ1chXrfg2t2T18jdSOMrlGW/kUHlSoNLS+xZgZMGx3oWQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PA4PR04MB7997
 
-As defined by the MANA Hardware spec, the queue size for DMA is 4KB
-minimal, and power of 2. And, the HWC queue size has to be exactly
-4KB.
+From: Richard Zhu <hongxing.zhu@nxp.com>
 
-To support page sizes other than 4KB on ARM64, define the minimal
-queue size as a macro separately from the PAGE_SIZE, which we always
-assumed it to be 4KB before supporting ARM64.
+Add i.MX8Q PCIe "fsl,imx8q-pcie" compatible strings. clock-names align dwc
+common naming convension.
 
-Also, add MANA specific macros and update code related to size
-alignment, DMA region calculations, etc.
-
-Signed-off-by: Haiyang Zhang <haiyangz@microsoft.com>
-
+Signed-off-by: Richard Zhu <hongxing.zhu@nxp.com>
+Acked-by: Conor Dooley <conor.dooley@microchip.com>
+Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
+Signed-off-by: Frank Li <Frank.Li@nxp.com>
 ---
-v3: Updated two lenth checks as suggested by Michael.
+ .../devicetree/bindings/pci/fsl,imx6q-pcie.yaml          | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
 
-v2: Updated alignments, naming as suggested by Michael and Paul.
-
----
- drivers/net/ethernet/microsoft/Kconfig            |  2 +-
- drivers/net/ethernet/microsoft/mana/gdma_main.c   | 10 +++++-----
- drivers/net/ethernet/microsoft/mana/hw_channel.c  | 14 +++++++-------
- drivers/net/ethernet/microsoft/mana/mana_en.c     |  8 ++++----
- drivers/net/ethernet/microsoft/mana/shm_channel.c | 13 +++++++------
- include/net/mana/gdma.h                           | 10 +++++++++-
- include/net/mana/mana.h                           |  3 ++-
- 7 files changed, 35 insertions(+), 25 deletions(-)
-
-diff --git a/drivers/net/ethernet/microsoft/Kconfig b/drivers/net/ethernet/microsoft/Kconfig
-index 286f0d5697a1..901fbffbf718 100644
---- a/drivers/net/ethernet/microsoft/Kconfig
-+++ b/drivers/net/ethernet/microsoft/Kconfig
-@@ -18,7 +18,7 @@ if NET_VENDOR_MICROSOFT
- config MICROSOFT_MANA
- 	tristate "Microsoft Azure Network Adapter (MANA) support"
- 	depends on PCI_MSI
--	depends on X86_64 || (ARM64 && !CPU_BIG_ENDIAN && ARM64_4K_PAGES)
-+	depends on X86_64 || (ARM64 && !CPU_BIG_ENDIAN)
- 	depends on PCI_HYPERV
- 	select AUXILIARY_BUS
- 	select PAGE_POOL
-diff --git a/drivers/net/ethernet/microsoft/mana/gdma_main.c b/drivers/net/ethernet/microsoft/mana/gdma_main.c
-index 1332db9a08eb..e1d70d21e207 100644
---- a/drivers/net/ethernet/microsoft/mana/gdma_main.c
-+++ b/drivers/net/ethernet/microsoft/mana/gdma_main.c
-@@ -182,7 +182,7 @@ int mana_gd_alloc_memory(struct gdma_context *gc, unsigned int length,
- 	dma_addr_t dma_handle;
- 	void *buf;
+diff --git a/Documentation/devicetree/bindings/pci/fsl,imx6q-pcie.yaml b/Documentation/devicetree/bindings/pci/fsl,imx6q-pcie.yaml
+index 8b8d77b1154b5..1e05c560d7975 100644
+--- a/Documentation/devicetree/bindings/pci/fsl,imx6q-pcie.yaml
++++ b/Documentation/devicetree/bindings/pci/fsl,imx6q-pcie.yaml
+@@ -30,6 +30,7 @@ properties:
+       - fsl,imx8mm-pcie
+       - fsl,imx8mp-pcie
+       - fsl,imx95-pcie
++      - fsl,imx8q-pcie
  
--	if (length < PAGE_SIZE || !is_power_of_2(length))
-+	if (length < MANA_PAGE_SIZE || !is_power_of_2(length))
- 		return -EINVAL;
+   clocks:
+     minItems: 3
+@@ -184,6 +185,21 @@ allOf:
+             - const: pcie_bus
+             - const: pcie_aux
  
- 	gmi->dev = gc->dev;
-@@ -717,7 +717,7 @@ EXPORT_SYMBOL_NS(mana_gd_destroy_dma_region, NET_MANA);
- static int mana_gd_create_dma_region(struct gdma_dev *gd,
- 				     struct gdma_mem_info *gmi)
- {
--	unsigned int num_page = gmi->length / PAGE_SIZE;
-+	unsigned int num_page = gmi->length / MANA_PAGE_SIZE;
- 	struct gdma_create_dma_region_req *req = NULL;
- 	struct gdma_create_dma_region_resp resp = {};
- 	struct gdma_context *gc = gd->gdma_context;
-@@ -727,10 +727,10 @@ static int mana_gd_create_dma_region(struct gdma_dev *gd,
- 	int err;
- 	int i;
- 
--	if (length < PAGE_SIZE || !is_power_of_2(length))
-+	if (length < MANA_PAGE_SIZE || !is_power_of_2(length))
- 		return -EINVAL;
- 
--	if (offset_in_page(gmi->virt_addr) != 0)
-+	if (!MANA_PAGE_ALIGNED(gmi->virt_addr))
- 		return -EINVAL;
- 
- 	hwc = gc->hwc.driver_data;
-@@ -751,7 +751,7 @@ static int mana_gd_create_dma_region(struct gdma_dev *gd,
- 	req->page_addr_list_len = num_page;
- 
- 	for (i = 0; i < num_page; i++)
--		req->page_addr_list[i] = gmi->dma_handle +  i * PAGE_SIZE;
-+		req->page_addr_list[i] = gmi->dma_handle +  i * MANA_PAGE_SIZE;
- 
- 	err = mana_gd_send_request(gc, req_msg_size, req, sizeof(resp), &resp);
- 	if (err)
-diff --git a/drivers/net/ethernet/microsoft/mana/hw_channel.c b/drivers/net/ethernet/microsoft/mana/hw_channel.c
-index bbc4f9e16c98..cafded2f9382 100644
---- a/drivers/net/ethernet/microsoft/mana/hw_channel.c
-+++ b/drivers/net/ethernet/microsoft/mana/hw_channel.c
-@@ -362,12 +362,12 @@ static int mana_hwc_create_cq(struct hw_channel_context *hwc, u16 q_depth,
- 	int err;
- 
- 	eq_size = roundup_pow_of_two(GDMA_EQE_SIZE * q_depth);
--	if (eq_size < MINIMUM_SUPPORTED_PAGE_SIZE)
--		eq_size = MINIMUM_SUPPORTED_PAGE_SIZE;
-+	if (eq_size < MANA_MIN_QSIZE)
-+		eq_size = MANA_MIN_QSIZE;
- 
- 	cq_size = roundup_pow_of_two(GDMA_CQE_SIZE * q_depth);
--	if (cq_size < MINIMUM_SUPPORTED_PAGE_SIZE)
--		cq_size = MINIMUM_SUPPORTED_PAGE_SIZE;
-+	if (cq_size < MANA_MIN_QSIZE)
-+		cq_size = MANA_MIN_QSIZE;
- 
- 	hwc_cq = kzalloc(sizeof(*hwc_cq), GFP_KERNEL);
- 	if (!hwc_cq)
-@@ -429,7 +429,7 @@ static int mana_hwc_alloc_dma_buf(struct hw_channel_context *hwc, u16 q_depth,
- 
- 	dma_buf->num_reqs = q_depth;
- 
--	buf_size = PAGE_ALIGN(q_depth * max_msg_size);
-+	buf_size = MANA_PAGE_ALIGN(q_depth * max_msg_size);
- 
- 	gmi = &dma_buf->mem_info;
- 	err = mana_gd_alloc_memory(gc, buf_size, gmi);
-@@ -497,8 +497,8 @@ static int mana_hwc_create_wq(struct hw_channel_context *hwc,
- 	else
- 		queue_size = roundup_pow_of_two(GDMA_MAX_SQE_SIZE * q_depth);
- 
--	if (queue_size < MINIMUM_SUPPORTED_PAGE_SIZE)
--		queue_size = MINIMUM_SUPPORTED_PAGE_SIZE;
-+	if (queue_size < MANA_MIN_QSIZE)
-+		queue_size = MANA_MIN_QSIZE;
- 
- 	hwc_wq = kzalloc(sizeof(*hwc_wq), GFP_KERNEL);
- 	if (!hwc_wq)
-diff --git a/drivers/net/ethernet/microsoft/mana/mana_en.c b/drivers/net/ethernet/microsoft/mana/mana_en.c
-index b89ad4afd66e..1381de866b2e 100644
---- a/drivers/net/ethernet/microsoft/mana/mana_en.c
-+++ b/drivers/net/ethernet/microsoft/mana/mana_en.c
-@@ -1904,10 +1904,10 @@ static int mana_create_txq(struct mana_port_context *apc,
- 	 *  to prevent overflow.
- 	 */
- 	txq_size = MAX_SEND_BUFFERS_PER_QUEUE * 32;
--	BUILD_BUG_ON(!PAGE_ALIGNED(txq_size));
-+	BUILD_BUG_ON(!MANA_PAGE_ALIGNED(txq_size));
- 
- 	cq_size = MAX_SEND_BUFFERS_PER_QUEUE * COMP_ENTRY_SIZE;
--	cq_size = PAGE_ALIGN(cq_size);
-+	cq_size = MANA_PAGE_ALIGN(cq_size);
- 
- 	gc = gd->gdma_context;
- 
-@@ -2204,8 +2204,8 @@ static struct mana_rxq *mana_create_rxq(struct mana_port_context *apc,
- 	if (err)
- 		goto out;
- 
--	rq_size = PAGE_ALIGN(rq_size);
--	cq_size = PAGE_ALIGN(cq_size);
-+	rq_size = MANA_PAGE_ALIGN(rq_size);
-+	cq_size = MANA_PAGE_ALIGN(cq_size);
- 
- 	/* Create RQ */
- 	memset(&spec, 0, sizeof(spec));
-diff --git a/drivers/net/ethernet/microsoft/mana/shm_channel.c b/drivers/net/ethernet/microsoft/mana/shm_channel.c
-index 5553af9c8085..0f1679ebad96 100644
---- a/drivers/net/ethernet/microsoft/mana/shm_channel.c
-+++ b/drivers/net/ethernet/microsoft/mana/shm_channel.c
-@@ -6,6 +6,7 @@
- #include <linux/io.h>
- #include <linux/mm.h>
- 
-+#include <net/mana/gdma.h>
- #include <net/mana/shm_channel.h>
- 
- #define PAGE_FRAME_L48_WIDTH_BYTES 6
-@@ -155,8 +156,8 @@ int mana_smc_setup_hwc(struct shm_channel *sc, bool reset_vf, u64 eq_addr,
- 		return err;
- 	}
- 
--	if (!PAGE_ALIGNED(eq_addr) || !PAGE_ALIGNED(cq_addr) ||
--	    !PAGE_ALIGNED(rq_addr) || !PAGE_ALIGNED(sq_addr))
-+	if (!MANA_PAGE_ALIGNED(eq_addr) || !MANA_PAGE_ALIGNED(cq_addr) ||
-+	    !MANA_PAGE_ALIGNED(rq_addr) || !MANA_PAGE_ALIGNED(sq_addr))
- 		return -EINVAL;
- 
- 	if ((eq_msix_index & VECTOR_MASK) != eq_msix_index)
-@@ -183,7 +184,7 @@ int mana_smc_setup_hwc(struct shm_channel *sc, bool reset_vf, u64 eq_addr,
- 
- 	/* EQ addr: low 48 bits of frame address */
- 	shmem = (u64 *)ptr;
--	frame_addr = PHYS_PFN(eq_addr);
-+	frame_addr = MANA_PFN(eq_addr);
- 	*shmem = frame_addr & PAGE_FRAME_L48_MASK;
- 	all_addr_h4bits |= (frame_addr >> PAGE_FRAME_L48_WIDTH_BITS) <<
- 		(frame_addr_seq++ * PAGE_FRAME_H4_WIDTH_BITS);
-@@ -191,7 +192,7 @@ int mana_smc_setup_hwc(struct shm_channel *sc, bool reset_vf, u64 eq_addr,
- 
- 	/* CQ addr: low 48 bits of frame address */
- 	shmem = (u64 *)ptr;
--	frame_addr = PHYS_PFN(cq_addr);
-+	frame_addr = MANA_PFN(cq_addr);
- 	*shmem = frame_addr & PAGE_FRAME_L48_MASK;
- 	all_addr_h4bits |= (frame_addr >> PAGE_FRAME_L48_WIDTH_BITS) <<
- 		(frame_addr_seq++ * PAGE_FRAME_H4_WIDTH_BITS);
-@@ -199,7 +200,7 @@ int mana_smc_setup_hwc(struct shm_channel *sc, bool reset_vf, u64 eq_addr,
- 
- 	/* RQ addr: low 48 bits of frame address */
- 	shmem = (u64 *)ptr;
--	frame_addr = PHYS_PFN(rq_addr);
-+	frame_addr = MANA_PFN(rq_addr);
- 	*shmem = frame_addr & PAGE_FRAME_L48_MASK;
- 	all_addr_h4bits |= (frame_addr >> PAGE_FRAME_L48_WIDTH_BITS) <<
- 		(frame_addr_seq++ * PAGE_FRAME_H4_WIDTH_BITS);
-@@ -207,7 +208,7 @@ int mana_smc_setup_hwc(struct shm_channel *sc, bool reset_vf, u64 eq_addr,
- 
- 	/* SQ addr: low 48 bits of frame address */
- 	shmem = (u64 *)ptr;
--	frame_addr = PHYS_PFN(sq_addr);
-+	frame_addr = MANA_PFN(sq_addr);
- 	*shmem = frame_addr & PAGE_FRAME_L48_MASK;
- 	all_addr_h4bits |= (frame_addr >> PAGE_FRAME_L48_WIDTH_BITS) <<
- 		(frame_addr_seq++ * PAGE_FRAME_H4_WIDTH_BITS);
-diff --git a/include/net/mana/gdma.h b/include/net/mana/gdma.h
-index c547756c4284..83963d9e804d 100644
---- a/include/net/mana/gdma.h
-+++ b/include/net/mana/gdma.h
-@@ -224,7 +224,15 @@ struct gdma_dev {
- 	struct auxiliary_device *adev;
- };
- 
--#define MINIMUM_SUPPORTED_PAGE_SIZE PAGE_SIZE
-+/* MANA_PAGE_SIZE is the DMA unit */
-+#define MANA_PAGE_SHIFT 12
-+#define MANA_PAGE_SIZE BIT(MANA_PAGE_SHIFT)
-+#define MANA_PAGE_ALIGN(x) ALIGN((x), MANA_PAGE_SIZE)
-+#define MANA_PAGE_ALIGNED(addr) IS_ALIGNED((unsigned long)(addr), MANA_PAGE_SIZE)
-+#define MANA_PFN(a) ((a) >> MANA_PAGE_SHIFT)
++  - if:
++      properties:
++        compatible:
++          enum:
++            - fsl,imx8q-pcie
++    then:
++      properties:
++        clocks:
++          maxItems: 3
++        clock-names:
++          items:
++            - const: dbi
++            - const: mstr
++            - const: slv
 +
-+/* Required by HW */
-+#define MANA_MIN_QSIZE MANA_PAGE_SIZE
+ unevaluatedProperties: false
  
- #define GDMA_CQE_SIZE 64
- #define GDMA_EQE_SIZE 16
-diff --git a/include/net/mana/mana.h b/include/net/mana/mana.h
-index 59823901b74f..e39b8676fe54 100644
---- a/include/net/mana/mana.h
-+++ b/include/net/mana/mana.h
-@@ -42,7 +42,8 @@ enum TRI_STATE {
- 
- #define MAX_SEND_BUFFERS_PER_QUEUE 256
- 
--#define EQ_SIZE (8 * PAGE_SIZE)
-+#define EQ_SIZE (8 * MANA_PAGE_SIZE)
-+
- #define LOG2_EQ_THROTTLE 3
- 
- #define MAX_PORTS_IN_MANA_DEV 256
+ examples:
+
 -- 
 2.34.1
 
