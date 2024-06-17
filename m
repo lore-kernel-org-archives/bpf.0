@@ -1,96 +1,140 @@
-Received: from mail-out.aladdin-rd.ru (mail-out.aladdin-rd.ru [91.199.251.16])
+Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CA6820B3E;
-	Mon, 17 Jun 2024 16:42:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.199.251.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A080F17C8
+	for <bpf@vger.kernel.org>; Mon, 17 Jun 2024 16:46:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718642589; cv=none; b=G/14lKUwR/4BC5wdUjUwpXI6tAJ73VYGbmGRF4qaTP0+ovdv2hl0KLLBElSZQ00n0NuhC3nxPMM31BBGFVlgC/BHSGA1tRHsYaA5nRHXGBuo8QQtv0aJPDAyNmhMH62oFefTkXF0UTy3wyJk20cAOwCUm/YX9lJCjXlyl+A019c=
+	t=1718642806; cv=none; b=PjC4XhbsgScSQ5qveGwnjaPNIfru5IKFE3jMzMUHCgl47oGLDDkPqNWD1d+5PngCArlYkdeEPhbQEFna7H+EDHhFPfiAp7Y6ZNDO4Vt1k4a6gtwLarZx6i6pwdgF/Pdx2eWePod5rHgnrGXJmD2N3EM2kjYSKi311Gs+0dUrAaI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718642589; c=relaxed/simple;
-	bh=T66CKAQdjo08E7zecAEgrpzt9lx/5uvhDB/wmiDkH54=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=UIIm8uxAaR7lzgICaBy0T7DbgES9j89+c+4xJ0Y8MP3XHggYe2dHKaanrFRlO7fyqjKIX1vjC2NXWEgwEuBgqGfH/sfJ7fDGw9raKpX32cxlSw4S5BzwAaTKYiqDALHOE5cYma/UXaRGDGcUiOAiB/KmsRn8WXCP2lyh/jMB/r8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=aladdin.ru; spf=pass smtp.mailfrom=aladdin.ru; arc=none smtp.client-ip=91.199.251.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=aladdin.ru
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aladdin.ru
-From: Daniil Dulov <d.dulov@aladdin.ru>
-To: Alexei Starovoitov <ast@kernel.org>
-CC: Daniil Dulov <d.dulov@aladdin.ru>, Daniel Borkmann <daniel@iogearbox.net>,
-	"David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
-	Jesper Dangaard Brouer <hawk@kernel.org>, John Fastabend
-	<john.fastabend@gmail.com>, Eric Dumazet <edumazet@google.com>, Paolo Abeni
-	<pabeni@redhat.com>, <netdev@vger.kernel.org>, <bpf@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <lvc-project@linuxtesting.org>
-Subject: [PATCH] xdp: remove WARN() from __xdp_reg_mem_model()
-Date: Mon, 17 Jun 2024 19:27:08 +0300
-Message-ID: <20240617162708.492159-1-d.dulov@aladdin.ru>
-X-Mailer: git-send-email 2.25.1
+	s=arc-20240116; t=1718642806; c=relaxed/simple;
+	bh=5G2SfPsrcC+3f58CwZ/WmO6YMelDQjnO2aGEcBHq5gI=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=CRXbQ9pPStyeJPoXyK6wOWSWCUuZz40ZEU/spwcjnobwQjQ8X8tH72GTDTXAgJx1OUhyCyGQjX7yXkSeLvRqTo3zfh2G+EislW+YDZ9ppWXJtEFQ/VtjOfGtnU2TqoURrX5EMnOHaXZxrLtlSiRhht/BhEODYSja7DuyrMyLHhI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ai3N53Mx; arc=none smtp.client-ip=209.85.210.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ai3N53Mx"
+Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-706192a30d4so189458b3a.3
+        for <bpf@vger.kernel.org>; Mon, 17 Jun 2024 09:46:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1718642804; x=1719247604; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=lVdPSEIaDf7Hqen7Olv8xZ/N+HJd1lr3IHNT51P6ZxY=;
+        b=ai3N53MxdfR/1hrVAM7Xob8cte9h1vNP/nya1HeXB6cIHjXlSBAFpuUA7IWssaBWmi
+         CFQmJr40ilAcoAvHRZcRwHcsJ6mWTAi/0zFuYKaXO9pv3kTnOQ2IQqrvMjaBXnLNpSbM
+         1ctc8KSPleGnmw1MbjiAtPllDL9xuuNjcOYkXCIFEaW4uJAmg0Uc+gANpxEVoDVmGt8L
+         EqKpcXe/XGLiHkZqAPsZlJv8kltDf4Bi7CEGK18lPdwdKXKb+76eQ4hdaIaxhLivxzjU
+         EDODKhZMppIbXVrDJY5kdQXQQlh3SIkC+BBKUFda+57zc/X8DzdLdabp2UqDrGnbYN3o
+         F0+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1718642804; x=1719247604;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=lVdPSEIaDf7Hqen7Olv8xZ/N+HJd1lr3IHNT51P6ZxY=;
+        b=HgE2mEKYF5oLWpNNcBTV6GMNleUgW74zKONzKw7IX0pfl6NUVHcKeXKv06CrJzfY5L
+         lNnf1YEPNIPWw9AhVYe+Nn4grIV18suE/i3QeKMJeY7JucO3Q30SWu5tSwKERc1ZXV8m
+         tF+MRWwb/PjqkRG4oU2t0EGmHDTKE1U5MlxK+IPO459unBVA2qCBlHKQGPHLN9PXLaSZ
+         Rxn1yLLaL00JkV7jghXDBe70P5UWzTxrf15jKhcTIUnBH9vZ4pmXgF+8/nmJ52wdwg5V
+         qieBdpcsD6WKsIKCvdZViNNIoO2VrwfvihIXzRGTe8Uud1OVj6XaHAC4uvFYBtzo7ppB
+         Kr8Q==
+X-Forwarded-Encrypted: i=1; AJvYcCUaol3Ez3I/nCWPqFc7c4jyqkBtv8cXs9PzGrawaVx4mY5D/iIh7FIBMV6H/+Qaz5agwe6Qcpi8ReeO/t9/LET01VSY
+X-Gm-Message-State: AOJu0YzL6CQzbsbkyGhEWk8BMq5dNWl4rpgY/t7yMPsq6fpsVmxnlONG
+	YLyu43GA2H+/JXy21kzKOBbHleFJAqDdpVrsSfWFWgI9YRKLO6KK
+X-Google-Smtp-Source: AGHT+IEPIl/8yfvYbWIrYalJIKEq70ibK8zFVOR3ft//kTamIS8vhqvO8AJqVRvrVnTtGs/2pM6afw==
+X-Received: by 2002:a05:6a20:8404:b0:1b8:b517:9bf9 with SMTP id adf61e73a8af0-1bae7ebacc5mr9733328637.25.1718642803733;
+        Mon, 17 Jun 2024 09:46:43 -0700 (PDT)
+Received: from [192.168.0.31] ([38.34.87.7])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-705ccb90a52sm7518577b3a.210.2024.06.17.09.46.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 17 Jun 2024 09:46:43 -0700 (PDT)
+Message-ID: <e022b0e53c1dd04daf3f29d07af1870bb80acf9c.camel@gmail.com>
+Subject: Re: [PATCH v6 bpf-next 8/9] libbpf,bpf: share BTF relocate-related
+ code with kernel
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Alan Maguire <alan.maguire@oracle.com>, andrii@kernel.org, ast@kernel.org
+Cc: daniel@iogearbox.net, martin.lau@linux.dev, song@kernel.org, 
+	yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org, 
+	sdf@google.com, haoluo@google.com, jolsa@kernel.org, mcgrof@kernel.org, 
+	masahiroy@kernel.org, nathan@kernel.org, mykolal@fb.com, dxu@dxuuu.xyz, 
+	bpf@vger.kernel.org
+Date: Mon, 17 Jun 2024 09:46:38 -0700
+In-Reply-To: <78d4775c-2b26-4eec-a032-a0d61052395b@oracle.com>
+References: <20240613095014.357981-1-alan.maguire@oracle.com>
+	 <20240613095014.357981-9-alan.maguire@oracle.com>
+	 <3a1dd525bee2875f370e73a0416d115018ed7e52.camel@gmail.com>
+	 <78d4775c-2b26-4eec-a032-a0d61052395b@oracle.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4-0ubuntu2 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: EXCH-2016-02.aladdin.ru (192.168.1.102) To
- EXCH-2016-01.aladdin.ru (192.168.1.101)
 
-Syzkaller reports a warning in __xdp_reg_mem_model().
+On Mon, 2024-06-17 at 14:31 +0100, Alan Maguire wrote:
 
-The warning occurs only if __mem_id_init_hash_table() returns
-an error. It returns the error in two cases:
+[...]
 
-    1. memory allocation fails;
-    2. rhashtable_init() fails when some fields of rhashtable_params
-       struct are not initialized properly.
+Hi Alan,
 
-The second case cannot happen since there is a static const
-rhashtable_params struct with valid fields. So, warning is only triggered
-when there is a problem with memory allocation.
+> great catch! I think we need
+>=20
+> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+> index da70914264fa..ef793731d40f 100644
+> --- a/kernel/bpf/btf.c
+> +++ b/kernel/bpf/btf.c
+> @@ -1676,14 +1676,8 @@ static void btf_free_kfunc_set_tab(struct btf *btf=
+)
+>=20
+>         if (!tab)
+>                 return;
+> -       /* For module BTF, we directly assign the sets being registered, =
+so
+> -        * there is nothing to free except kfunc_set_tab.
+> -        */
+> -       if (btf_is_module(btf))
+> -               goto free_tab;
+>         for (hook =3D 0; hook < ARRAY_SIZE(tab->sets); hook++)
+>                 kfree(tab->sets[hook]);
+> -free_tab:
+>         kfree(tab);
+>         btf->kfunc_set_tab =3D NULL;
+>  }
 
-Thus, there is no sense in using WARN() to handle this error and it can be
-safely removed.
+Agree
 
-WARNING: CPU: 0 PID: 5065 at net/core/xdp.c:299 __xdp_reg_mem_model+0x2d9/0x650 net/core/xdp.c:299
+[...]
 
-CPU: 0 PID: 5065 Comm: syz-executor883 Not tainted 6.8.0-syzkaller-05271-gf99c5f563c17 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/27/2024
-RIP: 0010:__xdp_reg_mem_model+0x2d9/0x650 net/core/xdp.c:299
+> > > @@ -8451,6 +8522,13 @@ int register_btf_id_dtor_kfuncs(const struct b=
+tf_id_dtor_kfunc *dtors, u32 add_c
+> > >  	btf->dtor_kfunc_tab =3D tab;
+> > > =20
+> > >  	memcpy(tab->dtors + tab->cnt, dtors, add_cnt * sizeof(tab->dtors[0]=
+));
+> > > +
+> > > +	/* remap BTF ids based on BTF relocation (if any) */
+> > > +	for (i =3D tab_cnt; i < tab_cnt + add_cnt; i++) {
+> > > +		tab->dtors[i].btf_id =3D btf_relocate_id(btf, tab->dtors[i].btf_id=
+);
+> > > +		tab->dtors[i].kfunc_btf_id =3D btf_relocate_id(btf, tab->dtors[i].=
+kfunc_btf_id);
+> >=20
+> > The register_btf_id_dtor_kfuncs() is exported and thus could to be
+> > called from the modules, that's why you update it, right?
+> > Do we want to add such call to bpf_testmod? Currently, with kernel
+> > config used for selftests, I see only identity mappings.
+> >=20
+>=20
+> Yep, we don't currently have coverage for dtors in bpf_testmod. I'll
+> look at adding that. Thanks!
 
-Call Trace:
- xdp_reg_mem_model+0x22/0x40 net/core/xdp.c:344
- xdp_test_run_setup net/bpf/test_run.c:188 [inline]
- bpf_test_run_xdp_live+0x365/0x1e90 net/bpf/test_run.c:377
- bpf_prog_test_run_xdp+0x813/0x11b0 net/bpf/test_run.c:1267
- bpf_prog_test_run+0x33a/0x3b0 kernel/bpf/syscall.c:4240
- __sys_bpf+0x48d/0x810 kernel/bpf/syscall.c:5649
- __do_sys_bpf kernel/bpf/syscall.c:5738 [inline]
- __se_sys_bpf kernel/bpf/syscall.c:5736 [inline]
- __x64_sys_bpf+0x7c/0x90 kernel/bpf/syscall.c:5736
- do_syscall_64+0xfb/0x240
- entry_SYSCALL_64_after_hwframe+0x6d/0x75
+Great, thank you!
 
-Found by Linux Verification Center (linuxtesting.org) with Syzkaller.
-
-Fixes: 8d5d88527587 ("xdp: rhashtable with allocator ID to pointer mapping")
-Signed-off-by: Daniil Dulov <d.dulov@aladdin.ru>
----
- net/core/xdp.c | 1 -
- 1 file changed, 1 deletion(-)
-
-diff --git a/net/core/xdp.c b/net/core/xdp.c
-index 41693154e426..fb2f00e3f701 100644
---- a/net/core/xdp.c
-+++ b/net/core/xdp.c
-@@ -296,7 +296,6 @@ static struct xdp_mem_allocator *__xdp_reg_mem_model(struct xdp_mem_info *mem,
- 		ret = __mem_id_init_hash_table();
- 		mutex_unlock(&mem_id_lock);
- 		if (ret < 0) {
--			WARN_ON(1);
- 			return ERR_PTR(ret);
- 		}
- 	}
--- 
-2.25.1
-
+Eduard
