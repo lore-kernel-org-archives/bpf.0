@@ -1,111 +1,120 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+Received: from mail72.out.titan.email (mail72.out.titan.email [209.209.25.165])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B4E3179BD
-	for <bpf@vger.kernel.org>; Tue, 18 Jun 2024 04:43:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 439C318C3B
+	for <bpf@vger.kernel.org>; Tue, 18 Jun 2024 05:04:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.209.25.165
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718685817; cv=none; b=EYgpqX8E96oRUoQYAMKmFRsEOGZuCzjWpH/d1aym29Rv/90Kd14ez0M3ZKnwZHkYyvCPFRMVEOHI1d+P2WO8mbVjzAptHtLP5yz8Tx0+8w7c/3L51I/pcj3udr8cD/z8ApDuHpUisnLlQchsCEIf4/HTE7qyw6rj/Gbc6FGWFSw=
+	t=1718687085; cv=none; b=OjaUAaVVTM4v6kVbSamEWBVapggBAT0iarfIvIzmBOi8VWZpEnkGD+330Dep4RzY+dihWlP2Uc3g5vFw6Ym2zHt8ry+7Xj4nSekh0Gk6LiLlUHM5trQbOZSCz7daA+rnPBC0UM/jAh7GvvGDkxiLrsXvKLT6zUH02VVj7rACPX8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718685817; c=relaxed/simple;
-	bh=tDedQ8X7Y1WH8Xb2QlbfdiiYLqWjo3JuOKrohHYQSg0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZYH2Kcid0FEliKyRKNZjPBTkWFyAfrHDuucZDP8Fx1eZm9g31BOCJU9zo+AyovmRjgnR5vdr+jFgxci/IHr4q6A70ENsZRfNvEy1jmB0htHWfv8HszYtseF5hSE53jrHOAdvDoV77EaJ1uPeb4Cda/4l0efw5VI3jnjfnPhIdmg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MnYKoPac; arc=none smtp.client-ip=192.198.163.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1718687085; c=relaxed/simple;
+	bh=86+uxPOT7jYaEUuS95xJdBl6EB62PXewhd0xF4YEMuk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=WSu8kZCYCPjQAiYbIkcHT2re0s103CH2clrhBm9l1M7ZPC6nqDG985RF8oW5g1pmRdjVpXe+ZbCuq4/Y6WsXZrNJS8McH+4T7NBniwwDL97YLnBtMsKCPPqoJm41yA2mSXwlJtHpL+o6JNQQ07boZ6QPtpMfPa3JOD2YaHkTK5M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rcpassos.me; spf=fail smtp.mailfrom=rcpassos.me; dkim=pass (1024-bit key) header.d=rcpassos.me header.i=@rcpassos.me header.b=Cvf75pCQ; arc=none smtp.client-ip=209.209.25.165
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rcpassos.me
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=rcpassos.me
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MnYKoPac"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1718685816; x=1750221816;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=tDedQ8X7Y1WH8Xb2QlbfdiiYLqWjo3JuOKrohHYQSg0=;
-  b=MnYKoPacz1O+yQ9Q6IB8XeEwNszKaNscdYV9C9Ti5fSH7GeNUwGtQmTj
-   P6iKUKXg0GZHe9yOz3noMZPBlS4E2Y+Q8mPpy1LDjnzTbHqHpI7zP+m4c
-   ivw1hNd0y754Cnd8j2jN2KUwGu1ib7SS8oDA6aUwvydC1nEn+yAl47+2I
-   ynAFROS0Y5FntVJ8Pb8VOTl42oBv+JqXZeTmF3+a8LciEHZMviYCRZxyq
-   3YHDT//lArgzEFHC31Hv1j5vcoYgpbnJ+bStGbyQo4z2dGSBV01FtsIee
-   SQWLkxW8V3wZjLdzId+I+plRYbyzzCOAHPvJYNDfUVc4E5ezwQd9yZvIa
-   w==;
-X-CSE-ConnectionGUID: eoIlkJIGQwK7smnH2ehDXw==
-X-CSE-MsgGUID: kBSurmnmTfGbmfocX5jy3g==
-X-IronPort-AV: E=McAfee;i="6700,10204,11106"; a="18453516"
-X-IronPort-AV: E=Sophos;i="6.08,246,1712646000"; 
-   d="scan'208";a="18453516"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2024 21:43:36 -0700
-X-CSE-ConnectionGUID: HM08R2CVSPKLj5p8uUAc3A==
-X-CSE-MsgGUID: /RBofxslQgOvH0rhb9YgvA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,246,1712646000"; 
-   d="scan'208";a="72624381"
-Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
-  by fmviesa001.fm.intel.com with ESMTP; 17 Jun 2024 21:43:33 -0700
-Received: from kbuild by 68891e0c336b with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sJQgs-0005DR-2i;
-	Tue, 18 Jun 2024 04:43:30 +0000
-Date: Tue, 18 Jun 2024 12:43:11 +0800
-From: kernel test robot <lkp@intel.com>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org
-Cc: oe-kbuild-all@lists.linux.dev, daniel@iogearbox.net, andrii@kernel.org,
-	martin.lau@kernel.org, memxor@gmail.com, eddyz87@gmail.com,
-	pengfei.xu@intel.com, brho@google.com, kernel-team@fb.com
-Subject: Re: [PATCH v2 bpf] bpf: Fix remap of arena.
-Message-ID: <202406181248.u80sRLXy-lkp@intel.com>
-References: <20240617171812.76634-1-alexei.starovoitov@gmail.com>
+	dkim=pass (1024-bit key) header.d=rcpassos.me header.i=@rcpassos.me header.b="Cvf75pCQ"
+Received: from smtp-out.flockmail.com (localhost [127.0.0.1])
+	by smtp-out.flockmail.com (Postfix) with ESMTP id 4D658100083;
+	Tue, 18 Jun 2024 02:35:01 +0000 (UTC)
+DKIM-Signature: a=rsa-sha256; bh=g2fj+MwQl3zZvk/rOIrcfEzkpdi9XA1fKmWFpHbh8+w=;
+	c=relaxed/relaxed; d=rcpassos.me;
+	h=cc:subject:date:to:references:mime-version:from:in-reply-to:message-id:from:to:cc:subject:date:message-id:in-reply-to:references:reply-to;
+	q=dns/txt; s=titan1; t=1718678101; v=1;
+	b=Cvf75pCQRflp5gajnX3IqSNnmEIKqUnkW6IpiK9KOA1elWxrbo9T1/t5rv2/WlKUHs9ZwPRB
+	DWHMsendXfseeWjtYAcFLFHYoRzY2rtIyhkEzk+dlHxgOpTFvkOB6qAOJPauVHaLkYlxOfUo7ZX
+	Zqpei1OE0/okNcV19BQuvbnM=
+Received: from [192.168.0.20] (unknown [179.95.148.155])
+	by smtp-out.flockmail.com (Postfix) with ESMTPA id C9D351000F8;
+	Tue, 18 Jun 2024 02:34:58 +0000 (UTC)
+Message-ID: <e86698a4-b17f-47a7-b6b8-c5b78448d4bf@rcpassos.me>
+Date: Mon, 17 Jun 2024 23:34:40 -0300
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240617171812.76634-1-alexei.starovoitov@gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next V2 0/3] Fix compiler warnings, looking for
+ suggestions
+To: Jiri Olsa <olsajiri@gmail.com>
+Cc: andrii@kernel.org, ast@kernel.org, bjorn@kernel.org, bp@alien8.de,
+ daniel@iogearbox.net, davem@davemloft.net, dsahern@kernel.org,
+ mingo@redhat.com, puranjay@kernel.org, tglx@linutronix.de, will@kernel.org,
+ xi.wang@gmail.com, bpf@vger.kernel.org
+References: <20240615022641.210320-1-rafael@rcpassos.me>
+ <Zm_3nE-ho-MDZbyp@krava>
+Content-Language: en-US
+Feedback-ID: :rafael@rcpassos.me:rcpassos.me:flockmailId
+From: Rafael Passos <rafael@rcpassos.me>
+In-Reply-To: <Zm_3nE-ho-MDZbyp@krava>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-F-Verdict: SPFVALID
+X-Titan-Src-Out: 1718678101225861812.1680.7129100453215520909@prod-use1-smtp-out1002.
+X-CMAE-Score: 0
+X-CMAE-Analysis: v=2.4 cv=T9KKTeKQ c=1 sm=1 tr=0 ts=6670f255
+	a=WPZPIP4Du+QqB6/QjpJ8/w==:117 a=WPZPIP4Du+QqB6/QjpJ8/w==:17
+	a=IkcTkHD0fZMA:10 a=MKtGQD3n3ToA:10 a=1oJP67jkp3AA:10 a=CEWIc4RMnpUA:10
+	a=o35cwU6MAAAA:8 a=NEAV23lmAAAA:8 a=VwQbUJbxAAAA:8 a=kZQDvevhITlzlJWLChAA:9
+	a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10 a=-FEs8UIgK8oA:10
+	a=---8k2CCGq07aBBJLGWX:22 a=DpOgBPUa0pETyyFpiVXn:22
+	a=AjGcO6oz07-iQ99wixmX:22
+X-Virus-Scanned: ClamAV using ClamSMTP
 
-Hi Alexei,
+On 17/06/2024 05:45, Jiri Olsa wrote:
+> On Fri, Jun 14, 2024 at 11:24:07PM -0300, Rafael Passos wrote:
+>> Hi,
+>> This patchset has a few fixes to compiler warnings.
+> curious, which compiler/setup displayed the warnings?
+>
+It took me a few tries with different configs.
+My most successful one was using gcc (14.1.1)
+  make -j24 ARCH=x86_64 W=12 2>&1 | tee warnings.log
+I dug through the Logs (with grep)looking for BPF and
+  non macro expansion warnings.
+Thanks!
 
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on bpf/master]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Alexei-Starovoitov/bpf-Fix-remap-of-arena/20240618-012054
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git master
-patch link:    https://lore.kernel.org/r/20240617171812.76634-1-alexei.starovoitov%40gmail.com
-patch subject: [PATCH v2 bpf] bpf: Fix remap of arena.
-config: x86_64-rhel-8.3 (https://download.01.org/0day-ci/archive/20240618/202406181248.u80sRLXy-lkp@intel.com/config)
-compiler: gcc-13 (Ubuntu 13.2.0-4ubuntu3) 13.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240618/202406181248.u80sRLXy-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202406181248.u80sRLXy-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   kernel/bpf/arena.c: In function 'arena_vm_open':
->> kernel/bpf/arena.c:235:27: warning: unused variable 'arena' [-Wunused-variable]
-     235 |         struct bpf_arena *arena = container_of(map, struct bpf_arena, map);
-         |                           ^~~~~
-
-
-vim +/arena +235 kernel/bpf/arena.c
-
-   231	
-   232	static void arena_vm_open(struct vm_area_struct *vma)
-   233	{
-   234		struct bpf_map *map = vma->vm_file->private_data;
- > 235		struct bpf_arena *arena = container_of(map, struct bpf_arena, map);
-   236		struct vma_list *vml = vma->vm_private_data;
-   237	
-   238		atomic_inc(&vml->mmap_count);
-   239	}
-   240	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+>> I am studying the BPF subsystem and wish to bring more tangible contributions.
+>> I would appreciate receiving suggestions on things to investigate.
+>> I also documented a bit in my blog. I could help with docs here, too.
+>> https://rcpassos.me/post/linux-ebpf-understanding-kernel-level-mechanics
+>> Thanks!
+>>
+>> Changelog V1 -> V2:
+>> - rebased all commits to updated for-next base
+>> - removes new cases of the extra parameter for bpf_jit_binary_pack_finalize
+>> - built and tested for ARM64
+>> - sent the series for the test workflow:
+>>    https://github.com/kernel-patches/bpf/pull/7198
+>>
+>>
+>> Rafael Passos (3):
+>>    bpf: remove unused parameter in bpf_jit_binary_pack_finalize
+>>    bpf: remove unused parameter in __bpf_free_used_btfs
+>>    bpf: remove redeclaration of new_n in bpf_verifier_vlog
+> lgtm, nice cleanup
+>
+> Acked-by: Jiri Olsa <jolsa@kernel.org>
+>
+> jirka
+>
+>
+>>   arch/arm64/net/bpf_jit_comp.c   | 3 +--
+>>   arch/powerpc/net/bpf_jit_comp.c | 4 ++--
+>>   arch/riscv/net/bpf_jit_core.c   | 5 ++---
+>>   arch/x86/net/bpf_jit_comp.c     | 4 ++--
+>>   include/linux/bpf.h             | 3 +--
+>>   include/linux/filter.h          | 3 +--
+>>   kernel/bpf/core.c               | 8 +++-----
+>>   kernel/bpf/log.c                | 2 +-
+>>   kernel/bpf/verifier.c           | 3 +--
+>>   9 files changed, 14 insertions(+), 21 deletions(-)
+>>
+>> -- 
+>> 2.45.2
+>>
+>>
