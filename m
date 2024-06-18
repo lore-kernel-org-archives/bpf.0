@@ -1,120 +1,114 @@
-Received: from mail72.out.titan.email (mail72.out.titan.email [209.209.25.165])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 439C318C3B
-	for <bpf@vger.kernel.org>; Tue, 18 Jun 2024 05:04:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.209.25.165
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97FE4433C2
+	for <bpf@vger.kernel.org>; Tue, 18 Jun 2024 05:39:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718687085; cv=none; b=OjaUAaVVTM4v6kVbSamEWBVapggBAT0iarfIvIzmBOi8VWZpEnkGD+330Dep4RzY+dihWlP2Uc3g5vFw6Ym2zHt8ry+7Xj4nSekh0Gk6LiLlUHM5trQbOZSCz7daA+rnPBC0UM/jAh7GvvGDkxiLrsXvKLT6zUH02VVj7rACPX8=
+	t=1718689143; cv=none; b=Z+TwZ9sCbpHdDXPwVCaomJXDylquzOctwbvLTcdxyVcjqAmC3mkevtwalRFspfjKxSjpYssZDLuJgiFN4Ws3EOmXCQrqWOKa6ueVOv41sjBF2wczBp0+wSRhdENPWwYTtahMXSNKOKe700zYdPn5KQjbbGk+VlvTUDh29aHD9JI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718687085; c=relaxed/simple;
-	bh=86+uxPOT7jYaEUuS95xJdBl6EB62PXewhd0xF4YEMuk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=WSu8kZCYCPjQAiYbIkcHT2re0s103CH2clrhBm9l1M7ZPC6nqDG985RF8oW5g1pmRdjVpXe+ZbCuq4/Y6WsXZrNJS8McH+4T7NBniwwDL97YLnBtMsKCPPqoJm41yA2mSXwlJtHpL+o6JNQQ07boZ6QPtpMfPa3JOD2YaHkTK5M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rcpassos.me; spf=fail smtp.mailfrom=rcpassos.me; dkim=pass (1024-bit key) header.d=rcpassos.me header.i=@rcpassos.me header.b=Cvf75pCQ; arc=none smtp.client-ip=209.209.25.165
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rcpassos.me
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=rcpassos.me
+	s=arc-20240116; t=1718689143; c=relaxed/simple;
+	bh=C/+HMthg4CF6B4TYUiqtD+GFjyGnDCvKWIhOP6cfwIY=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=dXwcp4PNqYuo0Imu8JgI7fT2mNhYG+iEPuwNCb5o6BQaK06EDF+VyksZb7yhgbsgcacttDjtw5KRDpmAr2RgQkUowakc8sq6GiCp4owptLcC4A4Jf2H/lGhQTLKJ3ZEXa2QBs/brFEt8CX4VXRDXAwiQafT1iVpnmJe906Qnlx0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ao7eWz3q; arc=none smtp.client-ip=209.85.210.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=rcpassos.me header.i=@rcpassos.me header.b="Cvf75pCQ"
-Received: from smtp-out.flockmail.com (localhost [127.0.0.1])
-	by smtp-out.flockmail.com (Postfix) with ESMTP id 4D658100083;
-	Tue, 18 Jun 2024 02:35:01 +0000 (UTC)
-DKIM-Signature: a=rsa-sha256; bh=g2fj+MwQl3zZvk/rOIrcfEzkpdi9XA1fKmWFpHbh8+w=;
-	c=relaxed/relaxed; d=rcpassos.me;
-	h=cc:subject:date:to:references:mime-version:from:in-reply-to:message-id:from:to:cc:subject:date:message-id:in-reply-to:references:reply-to;
-	q=dns/txt; s=titan1; t=1718678101; v=1;
-	b=Cvf75pCQRflp5gajnX3IqSNnmEIKqUnkW6IpiK9KOA1elWxrbo9T1/t5rv2/WlKUHs9ZwPRB
-	DWHMsendXfseeWjtYAcFLFHYoRzY2rtIyhkEzk+dlHxgOpTFvkOB6qAOJPauVHaLkYlxOfUo7ZX
-	Zqpei1OE0/okNcV19BQuvbnM=
-Received: from [192.168.0.20] (unknown [179.95.148.155])
-	by smtp-out.flockmail.com (Postfix) with ESMTPA id C9D351000F8;
-	Tue, 18 Jun 2024 02:34:58 +0000 (UTC)
-Message-ID: <e86698a4-b17f-47a7-b6b8-c5b78448d4bf@rcpassos.me>
-Date: Mon, 17 Jun 2024 23:34:40 -0300
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ao7eWz3q"
+Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-70417a6c328so3876212b3a.1
+        for <bpf@vger.kernel.org>; Mon, 17 Jun 2024 22:39:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1718689142; x=1719293942; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=SCmlCRI+L3cN9UNyVLLerhIovV+AquvpZtvJh7Qa5ng=;
+        b=Ao7eWz3qhdTPdft92fy0H2XqsOp8HVQlouce6YLledtHRAVIAjYafbIaZWFG5Gyo8K
+         LEvPfwS/kDflzCCmp+xZxp4Bh34m/fZPRg0upLPWjN+WBWyOhLi6P894AOHJf8K4TnD0
+         8WUoF7L+WQSxpT3Hp4PRVcNw/QpkldrOQ9wrni0uTU4IkYlD2CcZjb9eyVrkmA0y/foP
+         bnI3bCJROeKYDAQrz7ADx1K+H7DJ6QXpuUKrxdMZhXTnk+G7Q79+EnVjqffiDMAE5oAr
+         2OFo+28lIb+p/4wzyc3d7CPrN50YpZ7Jtj68SIP+YQQUus6MzUgJzcWb35OejN3SzD3M
+         NAVA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1718689142; x=1719293942;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=SCmlCRI+L3cN9UNyVLLerhIovV+AquvpZtvJh7Qa5ng=;
+        b=bf/oyONsJuub3X7rpNhEwCnvrInTqFjIw6qii58CkiIBkRaSMwb3/vZOEdbciIBLaQ
+         dJHWlSoor1zPNrPOE3PPkzRokOBl1x5C8DPUvRZanwjzCkwgudq3+3arSE342XVptSEo
+         3oL3xFFDeaJcCdwu9rm4e9wYZe9N46h5cLZC/xPAo4s+l2gM8Fmh2ReARX8QOtGlgmt/
+         4o2tr3Lz22ny/0Na3GZz5W/USNTtgiaOVudBgj+11UwHjMv1vX/K0gnvDd7DHrp8tbdS
+         6uAAkS7SZAvRY7GXKp9bZTeLewin2RljnLHFc1ROHyn6Nf1Z1hM7IwWVpkHscwt+a0XQ
+         GTOA==
+X-Forwarded-Encrypted: i=1; AJvYcCUXlRyo6BIhlhF3RkuAuGoimcG3DHAv2HTX6vW9ADGNG3M038Siz5ttU+cvSsNiF9awGAlC0WIbqmSP2x8DevbuuSdI
+X-Gm-Message-State: AOJu0Ywpk1/bvo6MGN1C3JXMXDI9ENjpTSjdwYMUYavTwRDq/3FoTQYv
+	zygmoJNMkwBKNoWH1vxQA0E31TA2Ojh8u8j6rv8o1Ec+rPoivJEL
+X-Google-Smtp-Source: AGHT+IEeB6eHZlZirYpIlYWXSZlxW4pHeZdaaimXUAXZOfXo2rDkE0kaUIlSe8XJiGvFmGkE6Obx6w==
+X-Received: by 2002:a05:6a00:458f:b0:705:c0a1:61c9 with SMTP id d2e1a72fcca58-705d70f4fbfmr9715656b3a.9.1718689141776;
+        Mon, 17 Jun 2024 22:39:01 -0700 (PDT)
+Received: from [192.168.0.31] ([38.34.87.7])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-705ccb3d1d7sm8230644b3a.134.2024.06.17.22.39.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 17 Jun 2024 22:39:01 -0700 (PDT)
+Message-ID: <28250a9a52c8a10dc7c37e15df9a9d446976e4eb.camel@gmail.com>
+Subject: Re: [PATCH 1/2] bpf: relax zero fixed offset constraint on trusted
+ pointer arguments
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Matt Bobrowski <mattbobrowski@google.com>, bpf@vger.kernel.org
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+ song@kernel.org,  kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
+ memxor@gmail.com,  void@manifault.com, jolsa@kernel.org
+Date: Mon, 17 Jun 2024 22:38:56 -0700
+In-Reply-To: <ZnA9ndnXKtHOuYMe@google.com>
+References: <ZnA9ndnXKtHOuYMe@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4-0ubuntu2 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next V2 0/3] Fix compiler warnings, looking for
- suggestions
-To: Jiri Olsa <olsajiri@gmail.com>
-Cc: andrii@kernel.org, ast@kernel.org, bjorn@kernel.org, bp@alien8.de,
- daniel@iogearbox.net, davem@davemloft.net, dsahern@kernel.org,
- mingo@redhat.com, puranjay@kernel.org, tglx@linutronix.de, will@kernel.org,
- xi.wang@gmail.com, bpf@vger.kernel.org
-References: <20240615022641.210320-1-rafael@rcpassos.me>
- <Zm_3nE-ho-MDZbyp@krava>
-Content-Language: en-US
-Feedback-ID: :rafael@rcpassos.me:rcpassos.me:flockmailId
-From: Rafael Passos <rafael@rcpassos.me>
-In-Reply-To: <Zm_3nE-ho-MDZbyp@krava>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-F-Verdict: SPFVALID
-X-Titan-Src-Out: 1718678101225861812.1680.7129100453215520909@prod-use1-smtp-out1002.
-X-CMAE-Score: 0
-X-CMAE-Analysis: v=2.4 cv=T9KKTeKQ c=1 sm=1 tr=0 ts=6670f255
-	a=WPZPIP4Du+QqB6/QjpJ8/w==:117 a=WPZPIP4Du+QqB6/QjpJ8/w==:17
-	a=IkcTkHD0fZMA:10 a=MKtGQD3n3ToA:10 a=1oJP67jkp3AA:10 a=CEWIc4RMnpUA:10
-	a=o35cwU6MAAAA:8 a=NEAV23lmAAAA:8 a=VwQbUJbxAAAA:8 a=kZQDvevhITlzlJWLChAA:9
-	a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10 a=-FEs8UIgK8oA:10
-	a=---8k2CCGq07aBBJLGWX:22 a=DpOgBPUa0pETyyFpiVXn:22
-	a=AjGcO6oz07-iQ99wixmX:22
-X-Virus-Scanned: ClamAV using ClamSMTP
 
-On 17/06/2024 05:45, Jiri Olsa wrote:
-> On Fri, Jun 14, 2024 at 11:24:07PM -0300, Rafael Passos wrote:
->> Hi,
->> This patchset has a few fixes to compiler warnings.
-> curious, which compiler/setup displayed the warnings?
->
-It took me a few tries with different configs.
-My most successful one was using gcc (14.1.1)
-  make -j24 ARCH=x86_64 W=12 2>&1 | tee warnings.log
-I dug through the Logs (with grep)looking for BPF and
-  non macro expansion warnings.
-Thanks!
+On Mon, 2024-06-17 at 13:43 +0000, Matt Bobrowski wrote:
 
->> I am studying the BPF subsystem and wish to bring more tangible contributions.
->> I would appreciate receiving suggestions on things to investigate.
->> I also documented a bit in my blog. I could help with docs here, too.
->> https://rcpassos.me/post/linux-ebpf-understanding-kernel-level-mechanics
->> Thanks!
->>
->> Changelog V1 -> V2:
->> - rebased all commits to updated for-next base
->> - removes new cases of the extra parameter for bpf_jit_binary_pack_finalize
->> - built and tested for ARM64
->> - sent the series for the test workflow:
->>    https://github.com/kernel-patches/bpf/pull/7198
->>
->>
->> Rafael Passos (3):
->>    bpf: remove unused parameter in bpf_jit_binary_pack_finalize
->>    bpf: remove unused parameter in __bpf_free_used_btfs
->>    bpf: remove redeclaration of new_n in bpf_verifier_vlog
-> lgtm, nice cleanup
->
-> Acked-by: Jiri Olsa <jolsa@kernel.org>
->
-> jirka
->
->
->>   arch/arm64/net/bpf_jit_comp.c   | 3 +--
->>   arch/powerpc/net/bpf_jit_comp.c | 4 ++--
->>   arch/riscv/net/bpf_jit_core.c   | 5 ++---
->>   arch/x86/net/bpf_jit_comp.c     | 4 ++--
->>   include/linux/bpf.h             | 3 +--
->>   include/linux/filter.h          | 3 +--
->>   kernel/bpf/core.c               | 8 +++-----
->>   kernel/bpf/log.c                | 2 +-
->>   kernel/bpf/verifier.c           | 3 +--
->>   9 files changed, 14 insertions(+), 21 deletions(-)
->>
->> -- 
->> 2.45.2
->>
->>
+[...]
+
+> * For OBJ_RELEASE and KF_RELEASE BPF helpers and kfuncs:
+>=20
+>  * If the expected argument type is of an untyped pointer i.e. void *,
+>    then we continue to enforce a zero fixed offset as we need to
+>    ensure that the correct referenced pointer is handed off correctly
+>    to the relevant deallocation routine
+>=20
+>  * If the expected argument is backed by BTF, then we relax the strict
+>    zero fixed offset and allow it only if we successfully type matched
+>    between the register and argument. A failed type match between
+>    register and argument will result in the legacy strict zero offset
+>    semantics
+>=20
+> * For KF_TRUSTED_ARGS BPF kfuncs:
+>=20
+>  * The fixed zero offset constraint has been lifted, such that
+>    KF_TRUSTED_ARGS BPF kfuncs can now accept a trusted pointer
+>    argument with a non-zero fixed offset providing that register and
+>    argument BTF has type matched successfully
+
+[...]
+
+Hi Matt,
+
+I've read this and the next patch once, but need more time to provide
+feedback. Two quick notes:
+- It seems something is wrong with the way this patch set was sent:
+  for some reason it is not organized as a single thread (e.g. on vger).
+- I see how OBJ_RELEASE arguments trigger btf_struct_ids_match() in
+  check_release_arg_reg_off(), but I don't see how KF_TRUSTED_ARGS
+  trigger similar logic.
+  Do you have some positive tests that verify newly added functionality?
+ =20
+Thanks,
+Eduard
