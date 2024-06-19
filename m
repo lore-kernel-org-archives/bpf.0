@@ -1,77 +1,82 @@
 Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0818C763EE;
-	Wed, 19 Jun 2024 22:49:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EE3082866;
+	Wed, 19 Jun 2024 22:49:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718837386; cv=none; b=BUtKH6AfPFol5RrjnTuVC01SmXzFJMrxFfo/IOYgBis7g1D1cQPb9k8lF98agsMNVRmRKusUP2AVqXw/JVcaf6b0EpfyIytHG88GHuZEqfggCKZjH/y3FVT70uX3aaaXhhyF9jJR64I0B8D/Wa7Le3WjOHTJKgf+0u7Tpaxvm0U=
+	t=1718837387; cv=none; b=ooCWMl1uMPbhEg+xCNtqBoyCULLM5NBSg4ficUlCp9Hqc4c43dB8CY2zIT6N9ccf+C5DaJ378PcsTTZKHi0HwIeK6qTVTr3xsabzUXTUgrWDM2ohNb4I2B0acANC9fHKUpqTT1MH5r4IAF31LMfKPG2Fy+e3xg+eBgv0PGeUL9Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718837386; c=relaxed/simple;
-	bh=4IjoxBVzZJmS8JiLoh/wn1D8YQJR860b55ByDowIOwo=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=lEXlBSU8K1cdcz5RJMV5tL5uWm28cR5QSEk5Y3B1WrK/ABuo0UQpvHL2rzuXbWvGeeJlm19MjxHfAiNo1RqCZhVxEaHJK0XmCHow48B1qLIGTKBTVIXtcJICR/kDojgwWlPaecnCUOGNr0majz+Fxm1YeDymU54tXikio4MRqTU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=0kuMb1IX; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=leW4/abu; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=0kuMb1IX; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=leW4/abu; arc=none smtp.client-ip=195.135.223.131
+	s=arc-20240116; t=1718837387; c=relaxed/simple;
+	bh=+HcqYdgaWT9BrUacvRJSWp4CDbAKfRkRibADsrgT2bU=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=Xr2du9jHi1mCaLJ7lThD6wAHe6VX+q0VapdsLXZ6f3R/40o4DAhvHZRMuDK/JIVjFtc/q+5ZA0wUj85tfabZP4VYzk9gRG2e4thzuvFbtPXMptyU6ALHs1ijZvQBCZ+A7YPQHvMaGasl4SN4jj9sMGCSWax1I3nkkYe9rab+X2E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=LNWxnnz1; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=roVh2sJJ; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=LNWxnnz1; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=roVh2sJJ; arc=none smtp.client-ip=195.135.223.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="0kuMb1IX";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="leW4/abu";
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="0kuMb1IX";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="leW4/abu"
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="LNWxnnz1";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="roVh2sJJ";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="LNWxnnz1";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="roVh2sJJ"
 Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id 040621F7F4;
+	by smtp-out2.suse.de (Postfix) with ESMTPS id 994E01F7F7;
 	Wed, 19 Jun 2024 22:49:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
 	t=1718837383; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=dXpB9I+5sIqz/8cfuARZ+z0gS3Du0Q3fl0hF/OPBYr0=;
-	b=0kuMb1IX53YoWWG6NQwAmpBBbCoWfiCcSkSoYNdt4Y2tVGUVtMqReM6P7WVMWLje5afdzL
-	gTBk1LPZyVwOoaJ/4ATLqYnUVi/ZBUbnvcjtB5W9fxRHXtTLhZc0zllHNvhudft4INWBq4
-	6cUEdFccxJQnRs1jizOPpXpbuVYXAG0=
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=X7+XAotVIvWS2vTh75oVQOPFwsOci6tWQZhDoSRQGx4=;
+	b=LNWxnnz1OKuGoWGrMXrwTd2enyzJN73ypy1Cuy1qZtBotKAAqp2aq65A1gK7qZ8U54E2Lz
+	FILu5L+orwbhDShXDMWDHPD659eTlwmmC78MWsxkCr/n6HetuhQ8GeFlOmDbT43Vpg8zeO
+	i6yA9AvNuoYhNrFm1SRXWVMJ9lI5Fo0=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
 	s=susede2_ed25519; t=1718837383;
 	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=dXpB9I+5sIqz/8cfuARZ+z0gS3Du0Q3fl0hF/OPBYr0=;
-	b=leW4/abuAMbJZKXYA5FC7Rvtk2vqI7C3h8HvkIOIlhDf5bUH4VtNPnzdHGU6dXIMBSqMFY
-	DAc6UaYA3fpghBBA==
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=X7+XAotVIvWS2vTh75oVQOPFwsOci6tWQZhDoSRQGx4=;
+	b=roVh2sJJLOmM0oiL35sPyLjBSwOuoRsf/nGyJvEjjBe2kt/FPev0yfzWJK/1XF1/iK2GOP
+	56CsF5e9QNpjsaBg==
 Authentication-Results: smtp-out2.suse.de;
 	none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
 	t=1718837383; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=dXpB9I+5sIqz/8cfuARZ+z0gS3Du0Q3fl0hF/OPBYr0=;
-	b=0kuMb1IX53YoWWG6NQwAmpBBbCoWfiCcSkSoYNdt4Y2tVGUVtMqReM6P7WVMWLje5afdzL
-	gTBk1LPZyVwOoaJ/4ATLqYnUVi/ZBUbnvcjtB5W9fxRHXtTLhZc0zllHNvhudft4INWBq4
-	6cUEdFccxJQnRs1jizOPpXpbuVYXAG0=
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=X7+XAotVIvWS2vTh75oVQOPFwsOci6tWQZhDoSRQGx4=;
+	b=LNWxnnz1OKuGoWGrMXrwTd2enyzJN73ypy1Cuy1qZtBotKAAqp2aq65A1gK7qZ8U54E2Lz
+	FILu5L+orwbhDShXDMWDHPD659eTlwmmC78MWsxkCr/n6HetuhQ8GeFlOmDbT43Vpg8zeO
+	i6yA9AvNuoYhNrFm1SRXWVMJ9lI5Fo0=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
 	s=susede2_ed25519; t=1718837383;
 	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=dXpB9I+5sIqz/8cfuARZ+z0gS3Du0Q3fl0hF/OPBYr0=;
-	b=leW4/abuAMbJZKXYA5FC7Rvtk2vqI7C3h8HvkIOIlhDf5bUH4VtNPnzdHGU6dXIMBSqMFY
-	DAc6UaYA3fpghBBA==
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=X7+XAotVIvWS2vTh75oVQOPFwsOci6tWQZhDoSRQGx4=;
+	b=roVh2sJJLOmM0oiL35sPyLjBSwOuoRsf/nGyJvEjjBe2kt/FPev0yfzWJK/1XF1/iK2GOP
+	56CsF5e9QNpjsaBg==
 Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id D755613AAA;
-	Wed, 19 Jun 2024 22:49:42 +0000 (UTC)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 76B2913AC3;
+	Wed, 19 Jun 2024 22:49:43 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
 	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id WLA9NIZgc2aFIAAAD6G6ig
-	(envelope-from <vbabka@suse.cz>); Wed, 19 Jun 2024 22:49:42 +0000
+	id gBasHIdgc2aFIAAAD6G6ig
+	(envelope-from <vbabka@suse.cz>); Wed, 19 Jun 2024 22:49:43 +0000
 From: Vlastimil Babka <vbabka@suse.cz>
-Subject: [PATCH v2 0/7] static key support for error injection functions
-Date: Thu, 20 Jun 2024 00:48:54 +0200
-Message-Id: <20240620-fault-injection-statickeys-v2-0-e23947d3d84b@suse.cz>
+Date: Thu, 20 Jun 2024 00:48:59 +0200
+Subject: [PATCH v2 5/7] bpf: do not create bpf_non_sleepable_error_inject
+ list when unnecessary
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -80,10 +85,9 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAFZgc2YC/33NTQ6CMBCG4auQWTumLX/BlfcwLEoZZNSA6RQiE
- u5uJXHr8v0yeWYFIc8kcEpW8DSz8DjEMIcEXG+HKyG3scEok6k8VdjZ6RGQhxu5EG9Rgg3s7rQ
- IFkVTGmOo0k0JEXh66vi145c6ds8SRr/sv2b9XX+s/sfOGhXaXKddq2xV6Owsk9DRvaHetu0DW
- GvZg8IAAAA=
+Message-Id: <20240620-fault-injection-statickeys-v2-5-e23947d3d84b@suse.cz>
+References: <20240620-fault-injection-statickeys-v2-0-e23947d3d84b@suse.cz>
+In-Reply-To: <20240620-fault-injection-statickeys-v2-0-e23947d3d84b@suse.cz>
 To: Akinobu Mita <akinobu.mita@gmail.com>, Christoph Lameter <cl@linux.com>, 
  David Rientjes <rientjes@google.com>, Alexei Starovoitov <ast@kernel.org>, 
  Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
@@ -97,200 +101,96 @@ Cc: Jiri Olsa <jolsa@kernel.org>, Roman Gushchin <roman.gushchin@linux.dev>,
  linux-mm@kvack.org, bpf@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
  Vlastimil Babka <vbabka@suse.cz>
 X-Mailer: b4 0.14.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=7736; i=vbabka@suse.cz;
- h=from:subject:message-id; bh=4IjoxBVzZJmS8JiLoh/wn1D8YQJR860b55ByDowIOwo=;
- b=owEBbQGS/pANAwAIAbvgsHXSRYiaAcsmYgBmc2BvLfdBJBx+By0E8GucZ2g3HKfEDKvwS2a6W
- RrMarTnnZWJATMEAAEIAB0WIQR7u8hBFZkjSJZITfG74LB10kWImgUCZnNgbwAKCRC74LB10kWI
- mubbB/9ggQg7IyMs277d/YJixrb73JU0tGXDmVRKqN5ZEoUbPbePJxRWpbPFf6kbPd7fuDr9YMF
- i0P2Pa+51BmvSuUnapmvQvviFUuHp8Ki7ccalMCOPz+XgGUwxe4NJWSJNOHPilzIVv+mjl4RFj2
- b05718jRByStx4iVIrz36mrp4sQNXOL2ZcP7cHGAlXoEAIiKN5SCL5NFlDyoRGh8wGPRT6f1aBm
- /gAuKeIznJTeLN+gmDk9PCV87cWQDR0Kq0pTFM4dW1sSWBu/iwxjs4sK5rzJuRUG1xAShRNeFQz
- 6OF0xI1VH4lRkSl4LUDR2hczd85Nw+nzw2r5m/DI4tgxtQsK
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1591; i=vbabka@suse.cz;
+ h=from:subject:message-id; bh=+HcqYdgaWT9BrUacvRJSWp4CDbAKfRkRibADsrgT2bU=;
+ b=owEBbQGS/pANAwAIAbvgsHXSRYiaAcsmYgBmc2B9IzDEAVKG5FXS38RcYZUyeL9j5X2CdCydU
+ Xm/auj9IMKJATMEAAEIAB0WIQR7u8hBFZkjSJZITfG74LB10kWImgUCZnNgfQAKCRC74LB10kWI
+ mieMB/0Z2oYYCWNAmVEuHX7NW7yYno6Akg2QEWBe10L/+QsV4Wfjt61ibXRZyOYv5dL16q+TyVM
+ Gofehb9TgIuIG9fzbiv/IkDt0D9UULaagQwhJUpdnLAOYxw7FRr1nYbjmJt/cNOUtR8cMo6x1PG
+ 33Gevml4l4phxiCJEnvCSO9Xum+ZBP/F3GOvVXDBDIF/vXVBhmF0iRyvefoi9o66f+guBziQc0j
+ DDNd0wet/qYXslsYfyo9XtYY9+dP/5/d9pwYbcsvP8BN9uQkE3IeYQHe/Thldx8B/855/bItiKc
+ AkAI9cbY8cY4/mKYag0vVzO6xNXmffLfuOg01lsVKyX58qWE
 X-Developer-Key: i=vbabka@suse.cz; a=openpgp;
  fpr=A940D434992C2E8E99103D50224FA7E7CC82A664
-X-Spam-Score: -2.80
-X-Spam-Level: 
-X-Spam-Flag: NO
-X-Spamd-Result: default: False [-2.80 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
+X-Spamd-Result: default: False [-3.85 / 50.00];
+	REPLY(-4.00)[];
 	SUSPICIOUS_RECIPS(1.50)[];
 	NEURAL_HAM_LONG(-1.00)[-1.000];
 	NEURAL_HAM_SHORT(-0.20)[-1.000];
 	MIME_GOOD(-0.10)[text/plain];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	FUZZY_BLOCKED(0.00)[rspamd.com];
-	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	FREEMAIL_TO(0.00)[gmail.com,linux.com,google.com,kernel.org,iogearbox.net,linux.ibm.com,intel.com,davemloft.net,goodmis.org,arm.com];
-	MIME_TRACE(0.00)[0:+];
-	ARC_NA(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[20];
-	FREEMAIL_ENVRCPT(0.00)[gmail.com];
-	FREEMAIL_CC(0.00)[kernel.org,linux.dev,gmail.com,vger.kernel.org,kvack.org,suse.cz];
+	BAYES_HAM(-0.05)[59.54%];
 	RCVD_TLS_ALL(0.00)[];
+	ARC_NA(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	TAGGED_RCPT(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TO_DN_SOME(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[20];
+	FREEMAIL_TO(0.00)[gmail.com,linux.com,google.com,kernel.org,iogearbox.net,linux.ibm.com,intel.com,davemloft.net,goodmis.org,arm.com];
+	FREEMAIL_ENVRCPT(0.00)[gmail.com];
+	MID_RHS_MATCH_FROM(0.00)[];
 	FROM_EQ_ENVFROM(0.00)[];
 	FROM_HAS_DN(0.00)[];
-	TO_DN_SOME(0.00)[];
+	FREEMAIL_CC(0.00)[kernel.org,linux.dev,gmail.com,vger.kernel.org,kvack.org,suse.cz];
+	R_RATELIMIT(0.00)[to_ip_from(RL5nkphuxq5kxo98ppmuqoc8wo)];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	FUZZY_BLOCKED(0.00)[rspamd.com];
 	RCVD_COUNT_TWO(0.00)[2];
-	TAGGED_RCPT(0.00)[];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
 	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.cz:email]
+X-Spam-Flag: NO
+X-Spam-Score: -3.85
+X-Spam-Level: 
 
-This should now be complete, but perf_events attached bpf programs are
-untested (Patch 3).
-This is spread accross several subsystems but the easiest way would be
-to go through a single tree, such as the mm tree.
+When CONFIG_FUNCTION_ERROR_INJECTION is disabled,
+within_error_injection_list() will return false for any address and the
+result of check_non_sleepable_error_inject() denylist is thus redundant.
+The bpf_non_sleepable_error_inject list thus does not need to be
+constructed at all, so #ifdef it out.
 
-As previously mentioned by myself [1] and others [2] the functions
-designed for error injection can bring visible overhead in fastpaths
-such as slab or page allocation, because even if nothing hooks into them
-at a given moment, they are noninline function calls regardless of
-CONFIG_ options since commits 4f6923fbb352 ("mm: make should_failslab
-always available for fault injection") and af3b854492f3
-("mm/page_alloc.c: allow error injection").
-
-Live patching their callsites has been also suggested in both [1] and
-[2] threads, and this is an attempt to do that with static keys that
-guard the call sites. When disabled, the error injection functions still
-exist and are noinline, but are not being called. Any of the existing
-mechanisms that can inject errors should make sure to enable the
-respective static key. I have added that support to hopefully all of
-them that can be used today.
-
-- the legacy fault injection, i.e. CONFIG_FAILSLAB and
-  CONFIG_FAIL_PAGE_ALLOC is handled in Patch 1, and can be passed the
-  address of the static key if it exists. The key will be activated if the
-  fault injection probability becomes non-zero, and deactivated in the
-  opposite transition. This also removes the overhead of the evaluation
-  (on top of the noninline function call) when these mechanisms are
-  configured in the kernel but unused at the moment.
-
-- the generic error injection using kretprobes with
-  override_function_with_return is handled in Patch 2. The
-  ALLOW_ERROR_INJECTION() annotation is extended so that static key
-  address can be passed, and the framework controls it when error
-  injection is enabled or disabled in debugfs for the function.
-
-- bpf programs can override return values of probed functions with
-  CONFIG_BPF_KPROBE_OVERRIDE=y and have prog->kprobe_override=1. They
-  can be attached to perf_event, which is handled in Patch 3, or via
-  multi_link_attach, which is handled in Patch 4. I have tested the
-  latter using a modified bcc program from commit 4f6923fbb352
-  description, but not Patch 3 using a perf_event - testing is welcome.
-
-- ftrace seems to be using override_function_with_return from
-  #define ftrace_override_function_with_return but there appear to be
-  no users, which was confirmed by Mark Rutland in the RFC thread.
-
-If anyone was crazy enough to use multiple of mechanisms above
-simultaneously, the usage of static_key_slow_inc/dec will do the right
-thing and the key will be enabled iff at least one mechanism is active.
-
-Additionally to the static key support, Patch 5 makes it possible to
-stop making the fault injection functions noninline with
-CONFIG_FUNCTION_ERROR_INJECTION=n by compiling out the BTF_ID()
-references for bpf_non_sleepable_error_inject which are unnecessary in
-that case.
-
-Patches 6 and 7 implement the static keys for the two mm fault injection
-sites in slab and page allocators. I have measured the improvement for
-the slab case, as described in Patch 6:
-
-    To demonstrate the reduced overhead of calling an empty
-    should_failslab() function, a kernel build with
-    CONFIG_FUNCTION_ERROR_INJECTION enabled but CONFIG_FAILSLAB disabled,
-    and CPU mitigations enabled, was used in a qemu-kvm (virtme-ng) on AMD
-    Ryzen 7 2700 machine, and execution of a program trying to open() a
-    non-existent file was measured 3 times:
-
-        for (int i = 0; i < 10000000; i++) {
-            open("non_existent", O_RDONLY);
-        }
-
-    After this patch, the measured real time was 4.3% smaller. Using perf
-    profiling it was verified that should_failslab was gone from the
-    profile.
-
-    With CONFIG_FAILSLAB also enabled, the patched kernel performace was
-    unaffected, as expected, while unpatched kernel's performance was worse,
-    resulting in the relative speedup being 10.5%. This means it no longer
-    needs to be an option suitable only for debug kernel builds.
-
-There might be other such fault injection callsites in hotpaths of other
-subsystems but I didn't search for them at this point. With all the
-preparations in place, it should be simple to improve them now.
-
-FAQ:
-
-Q: Does this improve only config options nobody uses in production
-anyway?
-
-A: No, the error injection hooks are unconditionally noninline functions
-even if they are empty. CONFIG_FUNCTION_ERROR_INJECTION=y is probably
-rather common, and overrides done via bpf. The goal was to eliminate
-this unnecessary overhead. But as a secondary benefit now the legacy
-fault injection options can be also enabled in production kernels
-without extra overhead.
-
-Q: Should we remove the legacy fault injection framework?
-
-A: Maybe? I didn't want to wait for that to happen, so it's just handled
-as well (Patch 1). The generic error injection handling and bpf needed
-the most effort anyway.
-
-Q: Should there be a unified way to register the kprobes that override
-return values, that would also handle the static key control?
-
-A: Possibly, but I'm not familiar with the area enough to do that. I
-found every case handled by patches 2-4 to be so different, I just
-modified them all. If a unification comes later, it should not change
-most of what's done by this patchset.
-
-[1] https://lore.kernel.org/6d5bb852-8703-4abf-a52b-90816bccbd7f@suse.cz/
-[2] https://lore.kernel.org/3j5d3p22ssv7xoaghzraa7crcfih3h2qqjlhmjppbp6f42pg2t@kg7qoicog5ye/
+This will allow to inline functions on the list when
+CONFIG_FUNCTION_ERROR_INJECTION is disabled as there will be no BTF_ID()
+reference for them.
 
 Signed-off-by: Vlastimil Babka <vbabka@suse.cz>
 ---
-Changes in v2:
-- Add error injection static key control for bpf programs with
-  kprobe_override.
-- Add separate get_injection_key() for querying (Masami Hiramatsu)
-- Compile everything out with CONFIG_FUNCTION_ERROR_INJECTION=n
-- Link to v1: https://lore.kernel.org/r/20240531-fault-injection-statickeys-v1-0-a513fd0a9614@suse.cz
+ kernel/bpf/verifier.c | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
 
----
-Vlastimil Babka (7):
-      fault-inject: add support for static keys around fault injection sites
-      error-injection: support static keys around injectable functions
-      bpf: support error injection static keys for perf_event attached progs
-      bpf: support error injection static keys for multi_link attached progs
-      bpf: do not create bpf_non_sleepable_error_inject list when unnecessary
-      mm, slab: add static key for should_failslab()
-      mm, page_alloc: add static key for should_fail_alloc_page()
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 77da1f438bec..5cd93de37d68 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -21044,6 +21044,8 @@ static int check_attach_modify_return(unsigned long addr, const char *func_name)
+ 	return -EINVAL;
+ }
+ 
++#ifdef CONFIG_FUNCTION_ERROR_INJECTION
++
+ /* list of non-sleepable functions that are otherwise on
+  * ALLOW_ERROR_INJECTION list
+  */
+@@ -21061,6 +21063,19 @@ static int check_non_sleepable_error_inject(u32 btf_id)
+ 	return btf_id_set_contains(&btf_non_sleepable_error_inject, btf_id);
+ }
+ 
++#else /* CONFIG_FUNCTION_ERROR_INJECTION */
++
++/*
++ * Pretend the denylist is empty, within_error_injection_list() will return
++ * false anyway.
++ */
++static int check_non_sleepable_error_inject(u32 btf_id)
++{
++	return 0;
++}
++
++#endif
++
+ int bpf_check_attach_target(struct bpf_verifier_log *log,
+ 			    const struct bpf_prog *prog,
+ 			    const struct bpf_prog *tgt_prog,
 
- include/asm-generic/error-injection.h | 13 ++++++-
- include/asm-generic/vmlinux.lds.h     |  2 +-
- include/linux/error-injection.h       | 12 +++++--
- include/linux/fault-inject.h          | 14 ++++++--
- kernel/bpf/verifier.c                 | 15 ++++++++
- kernel/fail_function.c                | 10 ++++++
- kernel/trace/bpf_trace.c              | 65 +++++++++++++++++++++++++++++++----
- kernel/trace/trace_kprobe.c           | 30 ++++++++++++++--
- kernel/trace/trace_probe.h            |  5 +++
- lib/error-inject.c                    | 19 ++++++++++
- lib/fault-inject.c                    | 43 ++++++++++++++++++++++-
- mm/fail_page_alloc.c                  |  3 +-
- mm/failslab.c                         |  2 +-
- mm/internal.h                         |  2 ++
- mm/page_alloc.c                       | 30 ++++++++++++++--
- mm/slab.h                             |  3 ++
- mm/slub.c                             | 30 ++++++++++++++--
- 17 files changed, 274 insertions(+), 24 deletions(-)
----
-base-commit: 1613e604df0cd359cf2a7fbd9be7a0bcfacfabd0
-change-id: 20240530-fault-injection-statickeys-66b7222e91b7
-
-Best regards,
 -- 
-Vlastimil Babka <vbabka@suse.cz>
+2.45.2
 
