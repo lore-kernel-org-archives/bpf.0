@@ -1,44 +1,44 @@
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A9521AE0A5;
-	Thu, 20 Jun 2024 13:27:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CED031B3757;
+	Thu, 20 Jun 2024 13:27:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718890059; cv=none; b=Hr74wCoyS815PRVgou3FBJ2sBTei9DtZC8b0OKGkrqvYD9OYCzeM7qA1zB/OIgIkiqBKr1UBoyxQFmrHBM3zIs/gNSIalzIr8JJ/5XbYPmvtVX8yU23lPOEX6OerWXfAUBnv/aZHD4yaeuAFDhFzLSnz+w5/UJinEfNDH72jW4U=
+	t=1718890061; cv=none; b=PZCRpkrH9zlRhkjv2ubYmW0bxzxJCZWrbDQg0Z5PkR/8bKuN5+/UzjFrgzoWjIjhBUFkTAbaok8SIPKJYj1klO85eqiErBVKLy0KWs6ym91FXgu31iJvanneKbRL5XbDJqG+fUxogaAZmfMu82CxMbIz/ZySlw20IBAwD2mwQ2A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718890059; c=relaxed/simple;
-	bh=mmb/n5Zpp12YZ/miCg0qq3L4AeVcYXceQP9aeoru8uM=;
+	s=arc-20240116; t=1718890061; c=relaxed/simple;
+	bh=pSOR2STlgJM22IKUYZ8cuI/l5Bq/SR7B2KwI5Yc4+tk=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=XcaWk0KDztYUvbGz6qvRKGmxuRdXCjziQvD7VRtycPNMmn5hF5hK0s37ZblabKCeNFvlOXrHajrvmVQ9ll6d521H8CBYVksalg31ECSp7Q7ulmFCX0Q1gf8ZQP7VMmzL5xevqpr3zaE/xDVmz+EWbL54UHI0hER2CSGfFp/ynF0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=DNz4OG6a; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=3ymlR7JR; arc=none smtp.client-ip=193.142.43.55
+	 MIME-Version:Content-Type; b=QqX8p6iB3UK6PYXXDGPp6gCgHI61fffOvAKw180D4fyCdZPMkg6cHiZsI/MV+xVQwKOjGVLwUN02a4vj6AKymbJJVCOmQ517citYC/ab4LdU8PaxHTDbFgEw7YASvuDtsrtEM5ljDWNs4mvPK3HNysT2Mm4Hv/JXKti2ebfaTMY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=m1IeG8yj; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=7MsoJ390; arc=none smtp.client-ip=193.142.43.55
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="DNz4OG6a";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="3ymlR7JR"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="m1IeG8yj";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="7MsoJ390"
 From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1718890056;
+	s=2020; t=1718890057;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=2sNhpYc6Zhv5uHBsgsP2eGCPDInHSPpYVSlYr9BEPkY=;
-	b=DNz4OG6aRuZjCTCGrx+cbR/r+tImEPpe4wq84hqsT1Y5E7U4jyVNwQue8nqtXxR4m08PnC
-	ySg3bCMgXym2zn8TuBrocZLyRUgjOKcUUri8bW4u4IvEWZrkeu2VxSNBNGluNc/rPAe2jj
-	CwORC7Mos6CUGv90/s2sI+MJjQcwah/w6IZiYAlsA0lggj/4zBxHLjeIAgGcj3ezJ/sRUO
-	X10AEGRH5LjRhDN2oYA1U68KrYJucBVDLlydyUBQwClxHPLcPuofe7Xe2zI8hALw0TIcUS
-	fuGDTgaDRBP4zegocXKnPACGpTQdL/GCKQKx7NqQO7t8hXtApootCQoGvt22ig==
+	bh=G9SOuvMTp3HS5/ebmbO+IetpLXVdSsF8sZVQlF3sm84=;
+	b=m1IeG8yjZGm5N6xF5rKE+abS4ZiHjkIy+YUpenD87y0whlKN2i/Obhv/9FEV4Bp8ENYUrW
+	yD/18+AWVtawidB4UUnWpiPNGgTyrN4BbUTbAvCrvFbS6G2Apb+oYGXlMczLXAv/1sPsmZ
+	C7fGGWRTowCu/P+Mv+UdN8WdI9HnZty3M3zZXU8sd2FhZL3mJdM61t2Y2sE0mlRT1h2Roe
+	mi/CbUZPHYtFf48kCi4VIzR0Xbgd+eUAqZMs9631OIsVxCCHNXX7ivEPsGBpqEBiIHUs/E
+	dLELBR20+RSg1wXfJR3r/TJJkptt4tyVapHCTqaBy/x6ThOTYhyXjAE0tpxkrQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1718890056;
+	s=2020e; t=1718890057;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=2sNhpYc6Zhv5uHBsgsP2eGCPDInHSPpYVSlYr9BEPkY=;
-	b=3ymlR7JRXyXarzkCfFWMcRb+f4kvlRhEK3jJw8bwCWQ4TYQvMS5CcX3rtiz14Nht6YPfkj
-	aaTCUgSedkJx0xDw==
+	bh=G9SOuvMTp3HS5/ebmbO+IetpLXVdSsF8sZVQlF3sm84=;
+	b=7MsoJ3904ydunDrq/sPx+9zWobIZIW7s+c0kw/SVrFd0slT/4BWMn1wuhSEL6NnDfNVxGQ
+	vXWBsu22KGIM0DAQ==
 To: linux-kernel@vger.kernel.org,
 	netdev@vger.kernel.org
 Cc: "David S. Miller" <davem@davemloft.net>,
@@ -55,20 +55,27 @@ Cc: "David S. Miller" <davem@davemloft.net>,
 	Waiman Long <longman@redhat.com>,
 	Will Deacon <will@kernel.org>,
 	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+	=?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
 	Alexei Starovoitov <ast@kernel.org>,
 	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
 	Hao Luo <haoluo@google.com>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
 	Jiri Olsa <jolsa@kernel.org>,
 	John Fastabend <john.fastabend@gmail.com>,
+	Jonathan Lemon <jonathan.lemon@gmail.com>,
 	KP Singh <kpsingh@kernel.org>,
+	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+	Magnus Karlsson <magnus.karlsson@intel.com>,
 	Martin KaFai Lau <martin.lau@linux.dev>,
 	Song Liu <song@kernel.org>,
 	Stanislav Fomichev <sdf@google.com>,
+	=?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
 	Yonghong Song <yonghong.song@linux.dev>,
 	bpf@vger.kernel.org
-Subject: [PATCH v9 net-next 13/15] net: Use nested-BH locking for bpf_scratchpad.
-Date: Thu, 20 Jun 2024 15:22:03 +0200
-Message-ID: <20240620132727.660738-14-bigeasy@linutronix.de>
+Subject: [PATCH v9 net-next 15/15] net: Move per-CPU flush-lists to bpf_net_context on PREEMPT_RT.
+Date: Thu, 20 Jun 2024 15:22:05 +0200
+Message-ID: <20240620132727.660738-16-bigeasy@linutronix.de>
 In-Reply-To: <20240620132727.660738-1-bigeasy@linutronix.de>
 References: <20240620132727.660738-1-bigeasy@linutronix.de>
 Precedence: bulk
@@ -77,77 +84,287 @@ List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
 
-bpf_scratchpad is a per-CPU variable and relies on disabled BH for its
-locking. Without per-CPU locking in local_bh_disable() on PREEMPT_RT
-this data structure requires explicit locking.
+The per-CPU flush lists, which are accessed from within the NAPI callback
+(xdp_do_flush() for instance), are per-CPU. There are subject to the
+same problem as struct bpf_redirect_info.
 
-Add a local_lock_t to the data structure and use local_lock_nested_bh()
-for locking. This change adds only lockdep coverage and does not alter
-the functional behaviour for !PREEMPT_RT.
+Add the per-CPU lists cpu_map_flush_list, dev_map_flush_list and
+xskmap_map_flush_list to struct bpf_net_context. Add wrappers for the
+access. The lists initialized on first usage (similar to
+bpf_net_ctx_get_ri()).
 
+Cc: "Bj=C3=B6rn T=C3=B6pel" <bjorn@kernel.org>
 Cc: Alexei Starovoitov <ast@kernel.org>
 Cc: Andrii Nakryiko <andrii@kernel.org>
+Cc: Eduard Zingerman <eddyz87@gmail.com>
 Cc: Hao Luo <haoluo@google.com>
+Cc: Jesper Dangaard Brouer <hawk@kernel.org>
 Cc: Jiri Olsa <jolsa@kernel.org>
 Cc: John Fastabend <john.fastabend@gmail.com>
+Cc: Jonathan Lemon <jonathan.lemon@gmail.com>
 Cc: KP Singh <kpsingh@kernel.org>
+Cc: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Cc: Magnus Karlsson <magnus.karlsson@intel.com>
 Cc: Martin KaFai Lau <martin.lau@linux.dev>
 Cc: Song Liu <song@kernel.org>
 Cc: Stanislav Fomichev <sdf@google.com>
+Cc: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
 Cc: Yonghong Song <yonghong.song@linux.dev>
 Cc: bpf@vger.kernel.org
+Acked-by: Jesper Dangaard Brouer <hawk@kernel.org>
+Reviewed-by: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
 Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 ---
- net/core/filter.c | 11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
+ include/linux/filter.h | 42 ++++++++++++++++++++++++++++++++++++++++++
+ kernel/bpf/cpumap.c    | 19 +++----------------
+ kernel/bpf/devmap.c    | 11 +++--------
+ net/xdp/xsk.c          | 12 ++++--------
+ 4 files changed, 52 insertions(+), 32 deletions(-)
 
-diff --git a/net/core/filter.c b/net/core/filter.c
-index ba1a739a9bedc..fbcfd563dccfd 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -1658,9 +1658,12 @@ struct bpf_scratchpad {
- 		__be32 diff[MAX_BPF_STACK / sizeof(__be32)];
- 		u8     buff[MAX_BPF_STACK];
- 	};
-+	local_lock_t	bh_lock;
+diff --git a/include/linux/filter.h b/include/linux/filter.h
+index 0a7f6e4a00b60..c0349522de8fb 100644
+--- a/include/linux/filter.h
++++ b/include/linux/filter.h
+@@ -736,6 +736,9 @@ struct bpf_nh_params {
+ /* flags for bpf_redirect_info kern_flags */
+ #define BPF_RI_F_RF_NO_DIRECT	BIT(0)	/* no napi_direct on return_frame */
+ #define BPF_RI_F_RI_INIT	BIT(1)
++#define BPF_RI_F_CPU_MAP_INIT	BIT(2)
++#define BPF_RI_F_DEV_MAP_INIT	BIT(3)
++#define BPF_RI_F_XSK_MAP_INIT	BIT(4)
+=20
+ struct bpf_redirect_info {
+ 	u64 tgt_index;
+@@ -750,6 +753,9 @@ struct bpf_redirect_info {
+=20
+ struct bpf_net_context {
+ 	struct bpf_redirect_info ri;
++	struct list_head cpu_map_flush_list;
++	struct list_head dev_map_flush_list;
++	struct list_head xskmap_map_flush_list;
  };
 =20
--static DEFINE_PER_CPU(struct bpf_scratchpad, bpf_sp);
-+static DEFINE_PER_CPU(struct bpf_scratchpad, bpf_sp) =3D {
-+	.bh_lock	=3D INIT_LOCAL_LOCK(bh_lock),
-+};
-=20
- static inline int __bpf_try_make_writable(struct sk_buff *skb,
- 					  unsigned int write_len)
-@@ -2016,6 +2019,7 @@ BPF_CALL_5(bpf_csum_diff, __be32 *, from, u32, from_s=
-ize,
- 	struct bpf_scratchpad *sp =3D this_cpu_ptr(&bpf_sp);
- 	u32 diff_size =3D from_size + to_size;
- 	int i, j =3D 0;
-+	__wsum ret;
-=20
- 	/* This is quite flexible, some examples:
- 	 *
-@@ -2029,12 +2033,15 @@ BPF_CALL_5(bpf_csum_diff, __be32 *, from, u32, from=
-_size,
- 		     diff_size > sizeof(sp->diff)))
- 		return -EINVAL;
-=20
-+	local_lock_nested_bh(&bpf_sp.bh_lock);
- 	for (i =3D 0; i < from_size / sizeof(__be32); i++, j++)
- 		sp->diff[j] =3D ~from[i];
- 	for (i =3D 0; i <   to_size / sizeof(__be32); i++, j++)
- 		sp->diff[j] =3D to[i];
-=20
--	return csum_partial(sp->diff, diff_size, seed);
-+	ret =3D csum_partial(sp->diff, diff_size, seed);
-+	local_unlock_nested_bh(&bpf_sp.bh_lock);
-+	return ret;
+ static inline struct bpf_net_context *bpf_net_ctx_set(struct bpf_net_conte=
+xt *bpf_net_ctx)
+@@ -787,6 +793,42 @@ static inline struct bpf_redirect_info *bpf_net_ctx_ge=
+t_ri(void)
+ 	return &bpf_net_ctx->ri;
  }
 =20
- static const struct bpf_func_proto bpf_csum_diff_proto =3D {
++static inline struct list_head *bpf_net_ctx_get_cpu_map_flush_list(void)
++{
++	struct bpf_net_context *bpf_net_ctx =3D bpf_net_ctx_get();
++
++	if (!(bpf_net_ctx->ri.kern_flags & BPF_RI_F_CPU_MAP_INIT)) {
++		INIT_LIST_HEAD(&bpf_net_ctx->cpu_map_flush_list);
++		bpf_net_ctx->ri.kern_flags |=3D BPF_RI_F_CPU_MAP_INIT;
++	}
++
++	return &bpf_net_ctx->cpu_map_flush_list;
++}
++
++static inline struct list_head *bpf_net_ctx_get_dev_flush_list(void)
++{
++	struct bpf_net_context *bpf_net_ctx =3D bpf_net_ctx_get();
++
++	if (!(bpf_net_ctx->ri.kern_flags & BPF_RI_F_DEV_MAP_INIT)) {
++		INIT_LIST_HEAD(&bpf_net_ctx->dev_map_flush_list);
++		bpf_net_ctx->ri.kern_flags |=3D BPF_RI_F_DEV_MAP_INIT;
++	}
++
++	return &bpf_net_ctx->dev_map_flush_list;
++}
++
++static inline struct list_head *bpf_net_ctx_get_xskmap_flush_list(void)
++{
++	struct bpf_net_context *bpf_net_ctx =3D bpf_net_ctx_get();
++
++	if (!(bpf_net_ctx->ri.kern_flags & BPF_RI_F_XSK_MAP_INIT)) {
++		INIT_LIST_HEAD(&bpf_net_ctx->xskmap_map_flush_list);
++		bpf_net_ctx->ri.kern_flags |=3D BPF_RI_F_XSK_MAP_INIT;
++	}
++
++	return &bpf_net_ctx->xskmap_map_flush_list;
++}
++
+ /* Compute the linear packet data range [data, data_end) which
+  * will be accessed by various program types (cls_bpf, act_bpf,
+  * lwt, ...). Subsystems allowing direct data access must (!)
+diff --git a/kernel/bpf/cpumap.c b/kernel/bpf/cpumap.c
+index 66974bd027109..068e994ed781a 100644
+--- a/kernel/bpf/cpumap.c
++++ b/kernel/bpf/cpumap.c
+@@ -79,8 +79,6 @@ struct bpf_cpu_map {
+ 	struct bpf_cpu_map_entry __rcu **cpu_map;
+ };
+=20
+-static DEFINE_PER_CPU(struct list_head, cpu_map_flush_list);
+-
+ static struct bpf_map *cpu_map_alloc(union bpf_attr *attr)
+ {
+ 	u32 value_size =3D attr->value_size;
+@@ -709,7 +707,7 @@ static void bq_flush_to_queue(struct xdp_bulk_queue *bq)
+  */
+ static void bq_enqueue(struct bpf_cpu_map_entry *rcpu, struct xdp_frame *x=
+dpf)
+ {
+-	struct list_head *flush_list =3D this_cpu_ptr(&cpu_map_flush_list);
++	struct list_head *flush_list =3D bpf_net_ctx_get_cpu_map_flush_list();
+ 	struct xdp_bulk_queue *bq =3D this_cpu_ptr(rcpu->bulkq);
+=20
+ 	if (unlikely(bq->count =3D=3D CPU_MAP_BULK_SIZE))
+@@ -761,7 +759,7 @@ int cpu_map_generic_redirect(struct bpf_cpu_map_entry *=
+rcpu,
+=20
+ void __cpu_map_flush(void)
+ {
+-	struct list_head *flush_list =3D this_cpu_ptr(&cpu_map_flush_list);
++	struct list_head *flush_list =3D bpf_net_ctx_get_cpu_map_flush_list();
+ 	struct xdp_bulk_queue *bq, *tmp;
+=20
+ 	list_for_each_entry_safe(bq, tmp, flush_list, flush_node) {
+@@ -775,20 +773,9 @@ void __cpu_map_flush(void)
+ #ifdef CONFIG_DEBUG_NET
+ bool cpu_map_check_flush(void)
+ {
+-	if (list_empty(this_cpu_ptr(&cpu_map_flush_list)))
++	if (list_empty(bpf_net_ctx_get_cpu_map_flush_list()))
+ 		return false;
+ 	__cpu_map_flush();
+ 	return true;
+ }
+ #endif
+-
+-static int __init cpu_map_init(void)
+-{
+-	int cpu;
+-
+-	for_each_possible_cpu(cpu)
+-		INIT_LIST_HEAD(&per_cpu(cpu_map_flush_list, cpu));
+-	return 0;
+-}
+-
+-subsys_initcall(cpu_map_init);
+diff --git a/kernel/bpf/devmap.c b/kernel/bpf/devmap.c
+index fbfdfb60db8d7..317ac2d66ebd1 100644
+--- a/kernel/bpf/devmap.c
++++ b/kernel/bpf/devmap.c
+@@ -83,7 +83,6 @@ struct bpf_dtab {
+ 	u32 n_buckets;
+ };
+=20
+-static DEFINE_PER_CPU(struct list_head, dev_flush_list);
+ static DEFINE_SPINLOCK(dev_map_lock);
+ static LIST_HEAD(dev_map_list);
+=20
+@@ -415,7 +414,7 @@ static void bq_xmit_all(struct xdp_dev_bulk_queue *bq, =
+u32 flags)
+  */
+ void __dev_flush(void)
+ {
+-	struct list_head *flush_list =3D this_cpu_ptr(&dev_flush_list);
++	struct list_head *flush_list =3D bpf_net_ctx_get_dev_flush_list();
+ 	struct xdp_dev_bulk_queue *bq, *tmp;
+=20
+ 	list_for_each_entry_safe(bq, tmp, flush_list, flush_node) {
+@@ -429,7 +428,7 @@ void __dev_flush(void)
+ #ifdef CONFIG_DEBUG_NET
+ bool dev_check_flush(void)
+ {
+-	if (list_empty(this_cpu_ptr(&dev_flush_list)))
++	if (list_empty(bpf_net_ctx_get_dev_flush_list()))
+ 		return false;
+ 	__dev_flush();
+ 	return true;
+@@ -460,7 +459,7 @@ static void *__dev_map_lookup_elem(struct bpf_map *map,=
+ u32 key)
+ static void bq_enqueue(struct net_device *dev, struct xdp_frame *xdpf,
+ 		       struct net_device *dev_rx, struct bpf_prog *xdp_prog)
+ {
+-	struct list_head *flush_list =3D this_cpu_ptr(&dev_flush_list);
++	struct list_head *flush_list =3D bpf_net_ctx_get_dev_flush_list();
+ 	struct xdp_dev_bulk_queue *bq =3D this_cpu_ptr(dev->xdp_bulkq);
+=20
+ 	if (unlikely(bq->count =3D=3D DEV_MAP_BULK_SIZE))
+@@ -1160,15 +1159,11 @@ static struct notifier_block dev_map_notifier =3D {
+=20
+ static int __init dev_map_init(void)
+ {
+-	int cpu;
+-
+ 	/* Assure tracepoint shadow struct _bpf_dtab_netdev is in sync */
+ 	BUILD_BUG_ON(offsetof(struct bpf_dtab_netdev, dev) !=3D
+ 		     offsetof(struct _bpf_dtab_netdev, dev));
+ 	register_netdevice_notifier(&dev_map_notifier);
+=20
+-	for_each_possible_cpu(cpu)
+-		INIT_LIST_HEAD(&per_cpu(dev_flush_list, cpu));
+ 	return 0;
+ }
+=20
+diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
+index 7d1c0986f9bb3..ed062e0383896 100644
+--- a/net/xdp/xsk.c
++++ b/net/xdp/xsk.c
+@@ -35,8 +35,6 @@
+ #define TX_BATCH_SIZE 32
+ #define MAX_PER_SOCKET_BUDGET (TX_BATCH_SIZE)
+=20
+-static DEFINE_PER_CPU(struct list_head, xskmap_flush_list);
+-
+ void xsk_set_rx_need_wakeup(struct xsk_buff_pool *pool)
+ {
+ 	if (pool->cached_need_wakeup & XDP_WAKEUP_RX)
+@@ -372,7 +370,7 @@ static int xsk_rcv(struct xdp_sock *xs, struct xdp_buff=
+ *xdp)
+=20
+ int __xsk_map_redirect(struct xdp_sock *xs, struct xdp_buff *xdp)
+ {
+-	struct list_head *flush_list =3D this_cpu_ptr(&xskmap_flush_list);
++	struct list_head *flush_list =3D bpf_net_ctx_get_xskmap_flush_list();
+ 	int err;
+=20
+ 	err =3D xsk_rcv(xs, xdp);
+@@ -387,7 +385,7 @@ int __xsk_map_redirect(struct xdp_sock *xs, struct xdp_=
+buff *xdp)
+=20
+ void __xsk_map_flush(void)
+ {
+-	struct list_head *flush_list =3D this_cpu_ptr(&xskmap_flush_list);
++	struct list_head *flush_list =3D bpf_net_ctx_get_xskmap_flush_list();
+ 	struct xdp_sock *xs, *tmp;
+=20
+ 	list_for_each_entry_safe(xs, tmp, flush_list, flush_node) {
+@@ -399,7 +397,7 @@ void __xsk_map_flush(void)
+ #ifdef CONFIG_DEBUG_NET
+ bool xsk_map_check_flush(void)
+ {
+-	if (list_empty(this_cpu_ptr(&xskmap_flush_list)))
++	if (list_empty(bpf_net_ctx_get_xskmap_flush_list()))
+ 		return false;
+ 	__xsk_map_flush();
+ 	return true;
+@@ -1772,7 +1770,7 @@ static struct pernet_operations xsk_net_ops =3D {
+=20
+ static int __init xsk_init(void)
+ {
+-	int err, cpu;
++	int err;
+=20
+ 	err =3D proto_register(&xsk_proto, 0 /* no slab */);
+ 	if (err)
+@@ -1790,8 +1788,6 @@ static int __init xsk_init(void)
+ 	if (err)
+ 		goto out_pernet;
+=20
+-	for_each_possible_cpu(cpu)
+-		INIT_LIST_HEAD(&per_cpu(xskmap_flush_list, cpu));
+ 	return 0;
+=20
+ out_pernet:
 --=20
 2.45.2
 
