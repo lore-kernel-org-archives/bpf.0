@@ -1,51 +1,51 @@
 Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9E3519DF6C
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD58919AD5E
 	for <bpf@vger.kernel.org>; Thu, 20 Jun 2024 09:18:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.177.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718875102; cv=none; b=ThxKpzGsvlX1RG8pFJZQ0b7jPlKbrXG6QieDoyCaDJ+D6dMRWvGpbsi70v9jC2uxKeGQe286DC4LjOC3mdqcvR9tpuUSTNhPt/ZL8aqJ9CA6r3AFrQfAi9gd34J+0Zth7Ek2BBrXPHYhtVbzmYoWFvgiw+7F44RkcI++ClRq188=
+	t=1718875103; cv=none; b=o8PMHFT2CUCbrh+KMNXDoTBbWiqheCIbXFERx/DiiThpFgomZCvb8OF/UHWmdliVnV/OVeN2pUjePEU1NtK5mbarI/55IJhSvxkX/8Bv3Ab1222AIF2/LIV2fmWBVOjsSe3gdWKKa/2P3fDq9ixD/htlWHK84Vz5JG/KKoMxaX4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718875102; c=relaxed/simple;
-	bh=E/180g0xF7dwOediP7E0OayJPSkH6c3YjmEAPp8EZ94=;
+	s=arc-20240116; t=1718875103; c=relaxed/simple;
+	bh=MLTb67WvtMU89T3my4+inkP6YNjaGuHU25I6DMuPmgM=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Vyx3fmuc5FQ/5IoBug1w6YrQoKeR/tGlDQvg/8Hc2vh9ZvGd6JsQvZjFx3VwyndiJ+EXqBdHzFJZYn6Y11EWxa6/iMVZOzfD6vTFJxV6JvBSZ8WHOmGkJ0AD3icaXGDoSB9fvbS8B5zbwbID/Un79b7iaGi9Ro1RrcbVpRdzc9Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=JdfbCddM; arc=none smtp.client-ip=205.220.177.32
+	 MIME-Version; b=fw+Tr8uP+S1ee8QyUkbDx0/nt6Y8YG4px2GCSqGGHMwG4L2s0LS3AEHG/DYzS0vzvJP8dJfy3WNDrhzOFmsTjf+EZ5QrUTNidosGu4ne9rgrhNVi5CRELI6EFQ+pN9LwF5FXZzmQvlB/kc+7lhbL5FZNxXgsS00U5NECvYiClLc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=WUu1vhD5; arc=none smtp.client-ip=205.220.177.32
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="JdfbCddM"
-Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 45K5GFIH006627;
-	Thu, 20 Jun 2024 09:17:47 GMT
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="WUu1vhD5"
+Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 45K5FU95005046;
+	Thu, 20 Jun 2024 09:17:57 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=
 	from:to:cc:subject:date:message-id:in-reply-to:references
-	:mime-version:content-transfer-encoding; s=corp-2023-11-20; bh=V
-	OKhFITiGAjpm/VDSd5ObvhNTzgrml4ujHZaysTv8Ag=; b=JdfbCddMcRGg7uyqT
-	NcCAWGAWuID/y6X0guXbTre1eOLY9qM4LEpEfc8VbYCJZs3l0KEqvHVQ0afYLZ17
-	5WKR7uJflfM8GB8AIIrjOPWUwbYh3ywJ4nfS2wJ48iuvcU/ZhGOyv7tq5riV+3b0
-	jnU4Un8GEsIG6rwTh+eLyP6ry1G+TcBDIPhYBlR37l9oBA655swDL8kdBX9QGrki
-	dP2YZo9MvqjVuw50ft7sv5g9E+Dl3l04h3KXhiYMcEUOm8OJZJEagQpFKcv53WIS
-	ElMkrlFhuInCZJj6t4hv/Dn7myWnFzh7kK3mfaUTrBtbmz3gNI9kIC4cG4Zs3HaB
-	mGkUQ==
+	:mime-version:content-transfer-encoding; s=corp-2023-11-20; bh=x
+	2crl2P7Mg7n5pPEd16UbcWkMMKpdU7B0hp+laoJBpw=; b=WUu1vhD5r5/YzW9I7
+	YGezUwvQrtWKcX3jZ6o8lliNxf+jioU1xAX2LtXFAAUNtpEWFwlI/vLsTTEckYgx
+	m/LvqIPCvMv9Udq9e6yDiI6K/WUtE04N0DTydla3pVJVzz6K55a/N9u2HOj0V3Jq
+	6kYfFItP7HOBSOb/Jm/klYP+207sJ6xUmosWyvJ5g/bv6EjlH1zzcC8j4gpeINVb
+	MXHY26GGagQNDo9ZRwZpbc5kMYulFUaqGN0B8oBCiJUAWHtC9nI7srFlVWcBw5ZU
+	hAani0Les8W8j7HyCak2M3fuh/zea0QyvKpAvTzODxvX5Ii5iCLE1IdTY2xIaMWA
+	JgmFA==
 Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3yuj9jargj-1
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3yuj9jtqka-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 20 Jun 2024 09:17:47 +0000 (GMT)
+	Thu, 20 Jun 2024 09:17:57 +0000 (GMT)
 Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 45K7MeJQ031869;
-	Thu, 20 Jun 2024 09:17:46 GMT
+	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 45K852Tm032785;
+	Thu, 20 Jun 2024 09:17:56 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3ys1da769h-1
+	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3ys1da76em-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 20 Jun 2024 09:17:46 +0000
+	Thu, 20 Jun 2024 09:17:56 +0000
 Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 45K9HdGF028275;
-	Thu, 20 Jun 2024 09:17:45 GMT
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 45K9HdGJ028275;
+	Thu, 20 Jun 2024 09:17:55 GMT
 Received: from bpf.uk.oracle.com (dhcp-10-175-186-70.vpn.oracle.com [10.175.186.70])
-	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 3ys1da764t-2;
-	Thu, 20 Jun 2024 09:17:45 +0000
+	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 3ys1da764t-4;
+	Thu, 20 Jun 2024 09:17:55 +0000
 From: Alan Maguire <alan.maguire@oracle.com>
 To: andrii@kernel.org, eddyz87@gmail.com
 Cc: acme@redhat.com, ast@kernel.org, daniel@iogearbox.net, jolsa@kernel.org,
@@ -54,11 +54,10 @@ Cc: acme@redhat.com, ast@kernel.org, daniel@iogearbox.net, jolsa@kernel.org,
         haoluo@google.com, mcgrof@kernel.org, masahiroy@kernel.org,
         nathan@kernel.org, mykolal@fb.com, thinker.li@gmail.com,
         bentiss@kernel.org, tanggeliang@kylinos.cn, bpf@vger.kernel.org,
-        Alan Maguire <alan.maguire@oracle.com>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Subject: [PATCH v2 bpf-next 1/6] libbpf: BTF relocation followup fixing naming, loop logic
-Date: Thu, 20 Jun 2024 10:17:28 +0100
-Message-ID: <20240620091733.1967885-2-alan.maguire@oracle.com>
+        Alan Maguire <alan.maguire@oracle.com>
+Subject: [PATCH v2 bpf-next 3/6] libbpf: split field iter code into its own file kernel
+Date: Thu, 20 Jun 2024 10:17:30 +0100
+Message-ID: <20240620091733.1967885-4-alan.maguire@oracle.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240620091733.1967885-1-alan.maguire@oracle.com>
 References: <20240620091733.1967885-1-alan.maguire@oracle.com>
@@ -76,187 +75,378 @@ X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 malw
  mlxlogscore=999 mlxscore=0 phishscore=0 suspectscore=0 bulkscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2405010000
  definitions=main-2406200065
-X-Proofpoint-GUID: QV5vnaNIIpg2bgHMnaZq8Ga4ONDZQf8C
-X-Proofpoint-ORIG-GUID: QV5vnaNIIpg2bgHMnaZq8Ga4ONDZQf8C
+X-Proofpoint-ORIG-GUID: eRHzzBk0dE1n_5fIUZlKczJl4ndEO4KC
+X-Proofpoint-GUID: eRHzzBk0dE1n_5fIUZlKczJl4ndEO4KC
 
-Use less verbose names in BTF relocation code and fix off-by-one error
-and typo in btf_relocate.c.  Simplify loop over matching distilled
-types, moving from assigning a _next value in loop body to moving
-match check conditions into the guard.
+This will allow it to be shared with the kernel.  No functional change.
 
-Suggested-by: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Suggested-by: Andrii Nakryiko <andrii@kernel.org>
 Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
-Acked-by: Eduard Zingerman <eddyz87@gmail.com>
 ---
- tools/lib/bpf/btf_relocate.c | 72 ++++++++++++++++--------------------
- 1 file changed, 31 insertions(+), 41 deletions(-)
+ tools/lib/bpf/Build      |   2 +-
+ tools/lib/bpf/btf.c      | 162 -------------------------------------
+ tools/lib/bpf/btf_iter.c | 169 +++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 170 insertions(+), 163 deletions(-)
+ create mode 100644 tools/lib/bpf/btf_iter.c
 
-diff --git a/tools/lib/bpf/btf_relocate.c b/tools/lib/bpf/btf_relocate.c
-index eabb8755f662..23a41fb03e0d 100644
---- a/tools/lib/bpf/btf_relocate.c
-+++ b/tools/lib/bpf/btf_relocate.c
-@@ -160,7 +160,7 @@ static int btf_mark_embedded_composite_type_ids(struct btf_relocate *r, __u32 i)
-  */
- static int btf_relocate_map_distilled_base(struct btf_relocate *r)
- {
--	struct btf_name_info *dist_base_info_sorted, *dist_base_info_sorted_end;
-+	struct btf_name_info *info, *info_end;
- 	struct btf_type *base_t, *dist_t;
- 	__u8 *base_name_cnt = NULL;
- 	int err = 0;
-@@ -169,26 +169,24 @@ static int btf_relocate_map_distilled_base(struct btf_relocate *r)
- 	/* generate a sort index array of name/type ids sorted by name for
- 	 * distilled base BTF to speed name-based lookups.
- 	 */
--	dist_base_info_sorted = calloc(r->nr_dist_base_types, sizeof(*dist_base_info_sorted));
--	if (!dist_base_info_sorted) {
-+	info = calloc(r->nr_dist_base_types, sizeof(*info));
-+	if (!info) {
- 		err = -ENOMEM;
- 		goto done;
- 	}
--	dist_base_info_sorted_end = dist_base_info_sorted + r->nr_dist_base_types;
-+	info_end = info + r->nr_dist_base_types;
- 	for (id = 0; id < r->nr_dist_base_types; id++) {
- 		dist_t = btf_type_by_id(r->dist_base_btf, id);
--		dist_base_info_sorted[id].name = btf__name_by_offset(r->dist_base_btf,
--								     dist_t->name_off);
--		dist_base_info_sorted[id].id = id;
--		dist_base_info_sorted[id].size = dist_t->size;
--		dist_base_info_sorted[id].needs_size = true;
-+		info[id].name = btf__name_by_offset(r->dist_base_btf, dist_t->name_off);
-+		info[id].id = id;
-+		info[id].size = dist_t->size;
-+		info[id].needs_size = true;
- 	}
--	qsort(dist_base_info_sorted, r->nr_dist_base_types, sizeof(*dist_base_info_sorted),
--	      cmp_btf_name_size);
-+	qsort(info, r->nr_dist_base_types, sizeof(*info), cmp_btf_name_size);
- 
- 	/* Mark distilled base struct/union members of split BTF structs/unions
- 	 * in id_map with BTF_IS_EMBEDDED; this signals that these types
--	 * need to match both name and size, otherwise embeddding the base
-+	 * need to match both name and size, otherwise embedding the base
- 	 * struct/union in the split type is invalid.
- 	 */
- 	for (id = r->nr_dist_base_types; id < r->nr_split_types; id++) {
-@@ -216,8 +214,7 @@ static int btf_relocate_map_distilled_base(struct btf_relocate *r)
- 
- 	/* Now search base BTF for matching distilled base BTF types. */
- 	for (id = 1; id < r->nr_base_types; id++) {
--		struct btf_name_info *dist_name_info, *dist_name_info_next = NULL;
--		struct btf_name_info base_name_info = {};
-+		struct btf_name_info *dist_info, base_info = {};
- 		int dist_kind, base_kind;
- 
- 		base_t = btf_type_by_id(r->base_btf, id);
-@@ -225,16 +222,16 @@ static int btf_relocate_map_distilled_base(struct btf_relocate *r)
- 		if (!base_t->name_off)
- 			continue;
- 		base_kind = btf_kind(base_t);
--		base_name_info.id = id;
--		base_name_info.name = btf__name_by_offset(r->base_btf, base_t->name_off);
-+		base_info.id = id;
-+		base_info.name = btf__name_by_offset(r->base_btf, base_t->name_off);
- 		switch (base_kind) {
- 		case BTF_KIND_INT:
- 		case BTF_KIND_FLOAT:
- 		case BTF_KIND_ENUM:
- 		case BTF_KIND_ENUM64:
- 			/* These types should match both name and size */
--			base_name_info.needs_size = true;
--			base_name_info.size = base_t->size;
-+			base_info.needs_size = true;
-+			base_info.size = base_t->size;
- 			break;
- 		case BTF_KIND_FWD:
- 			/* No size considerations for fwds. */
-@@ -248,31 +245,24 @@ static int btf_relocate_map_distilled_base(struct btf_relocate *r)
- 			 * unless corresponding _base_ types to match them are
- 			 * missing.
- 			 */
--			base_name_info.needs_size = base_name_cnt[base_t->name_off] > 1;
--			base_name_info.size = base_t->size;
-+			base_info.needs_size = base_name_cnt[base_t->name_off] > 1;
-+			base_info.size = base_t->size;
- 			break;
- 		default:
- 			continue;
- 		}
- 		/* iterate over all matching distilled base types */
--		for (dist_name_info = search_btf_name_size(&base_name_info, dist_base_info_sorted,
--							   r->nr_dist_base_types);
--		     dist_name_info != NULL; dist_name_info = dist_name_info_next) {
--			/* Are there more distilled matches to process after
--			 * this one?
--			 */
--			dist_name_info_next = dist_name_info + 1;
--			if (dist_name_info_next >= dist_base_info_sorted_end ||
--			    cmp_btf_name_size(&base_name_info, dist_name_info_next))
--				dist_name_info_next = NULL;
--
--			if (!dist_name_info->id || dist_name_info->id > r->nr_dist_base_types) {
-+		for (dist_info = search_btf_name_size(&base_info, info, r->nr_dist_base_types);
-+		     dist_info != NULL && dist_info < info_end &&
-+		     cmp_btf_name_size(&base_info, dist_info) == 0;
-+		     dist_info++) {
-+			if (!dist_info->id || dist_info->id >= r->nr_dist_base_types) {
- 				pr_warn("base BTF id [%d] maps to invalid distilled base BTF id [%d]\n",
--					id, dist_name_info->id);
-+					id, dist_info->id);
- 				err = -EINVAL;
- 				goto done;
- 			}
--			dist_t = btf_type_by_id(r->dist_base_btf, dist_name_info->id);
-+			dist_t = btf_type_by_id(r->dist_base_btf, dist_info->id);
- 			dist_kind = btf_kind(dist_t);
- 
- 			/* Validate that the found distilled type is compatible.
-@@ -319,15 +309,15 @@ static int btf_relocate_map_distilled_base(struct btf_relocate *r)
- 				/* size verification is required for embedded
- 				 * struct/unions.
- 				 */
--				if (r->id_map[dist_name_info->id] == BTF_IS_EMBEDDED &&
-+				if (r->id_map[dist_info->id] == BTF_IS_EMBEDDED &&
- 				    base_t->size != dist_t->size)
- 					continue;
- 				break;
- 			default:
- 				continue;
- 			}
--			if (r->id_map[dist_name_info->id] &&
--			    r->id_map[dist_name_info->id] != BTF_IS_EMBEDDED) {
-+			if (r->id_map[dist_info->id] &&
-+			    r->id_map[dist_info->id] != BTF_IS_EMBEDDED) {
- 				/* we already have a match; this tells us that
- 				 * multiple base types of the same name
- 				 * have the same size, since for cases where
-@@ -337,13 +327,13 @@ static int btf_relocate_map_distilled_base(struct btf_relocate *r)
- 				 * to in base BTF, so error out.
- 				 */
- 				pr_warn("distilled base BTF type '%s' [%u], size %u has multiple candidates of the same size (ids [%u, %u]) in base BTF\n",
--					base_name_info.name, dist_name_info->id,
--					base_t->size, id, r->id_map[dist_name_info->id]);
-+					base_info.name, dist_info->id,
-+					base_t->size, id, r->id_map[dist_info->id]);
- 				err = -EINVAL;
- 				goto done;
- 			}
- 			/* map id and name */
--			r->id_map[dist_name_info->id] = id;
-+			r->id_map[dist_info->id] = id;
- 			r->str_map[dist_t->name_off] = base_t->name_off;
- 		}
- 	}
-@@ -362,7 +352,7 @@ static int btf_relocate_map_distilled_base(struct btf_relocate *r)
- 	}
- done:
- 	free(base_name_cnt);
--	free(dist_base_info_sorted);
-+	free(info);
- 	return err;
+diff --git a/tools/lib/bpf/Build b/tools/lib/bpf/Build
+index 336da6844d42..e2cd558ca0b4 100644
+--- a/tools/lib/bpf/Build
++++ b/tools/lib/bpf/Build
+@@ -1,4 +1,4 @@
+ libbpf-y := libbpf.o bpf.o nlattr.o btf.o libbpf_errno.o str_error.o \
+ 	    netlink.o bpf_prog_linfo.o libbpf_probes.o hashmap.o \
+ 	    btf_dump.o ringbuf.o strset.o linker.o gen_loader.o relo_core.o \
+-	    usdt.o zip.o elf.o features.o btf_relocate.o
++	    usdt.o zip.o elf.o features.o btf_iter.o btf_relocate.o
+diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
+index ef1b2f573c1b..0c0f60cad769 100644
+--- a/tools/lib/bpf/btf.c
++++ b/tools/lib/bpf/btf.c
+@@ -5093,168 +5093,6 @@ struct btf *btf__load_module_btf(const char *module_name, struct btf *vmlinux_bt
+ 	return btf__parse_split(path, vmlinux_btf);
  }
  
+-int btf_field_iter_init(struct btf_field_iter *it, struct btf_type *t, enum btf_field_iter_kind iter_kind)
+-{
+-	it->p = NULL;
+-	it->m_idx = -1;
+-	it->off_idx = 0;
+-	it->vlen = 0;
+-
+-	switch (iter_kind) {
+-	case BTF_FIELD_ITER_IDS:
+-		switch (btf_kind(t)) {
+-		case BTF_KIND_UNKN:
+-		case BTF_KIND_INT:
+-		case BTF_KIND_FLOAT:
+-		case BTF_KIND_ENUM:
+-		case BTF_KIND_ENUM64:
+-			it->desc = (struct btf_field_desc) {};
+-			break;
+-		case BTF_KIND_FWD:
+-		case BTF_KIND_CONST:
+-		case BTF_KIND_VOLATILE:
+-		case BTF_KIND_RESTRICT:
+-		case BTF_KIND_PTR:
+-		case BTF_KIND_TYPEDEF:
+-		case BTF_KIND_FUNC:
+-		case BTF_KIND_VAR:
+-		case BTF_KIND_DECL_TAG:
+-		case BTF_KIND_TYPE_TAG:
+-			it->desc = (struct btf_field_desc) { 1, {offsetof(struct btf_type, type)} };
+-			break;
+-		case BTF_KIND_ARRAY:
+-			it->desc = (struct btf_field_desc) {
+-				2, {sizeof(struct btf_type) + offsetof(struct btf_array, type),
+-				    sizeof(struct btf_type) + offsetof(struct btf_array, index_type)}
+-			};
+-			break;
+-		case BTF_KIND_STRUCT:
+-		case BTF_KIND_UNION:
+-			it->desc = (struct btf_field_desc) {
+-				0, {},
+-				sizeof(struct btf_member),
+-				1, {offsetof(struct btf_member, type)}
+-			};
+-			break;
+-		case BTF_KIND_FUNC_PROTO:
+-			it->desc = (struct btf_field_desc) {
+-				1, {offsetof(struct btf_type, type)},
+-				sizeof(struct btf_param),
+-				1, {offsetof(struct btf_param, type)}
+-			};
+-			break;
+-		case BTF_KIND_DATASEC:
+-			it->desc = (struct btf_field_desc) {
+-				0, {},
+-				sizeof(struct btf_var_secinfo),
+-				1, {offsetof(struct btf_var_secinfo, type)}
+-			};
+-			break;
+-		default:
+-			return -EINVAL;
+-		}
+-		break;
+-	case BTF_FIELD_ITER_STRS:
+-		switch (btf_kind(t)) {
+-		case BTF_KIND_UNKN:
+-			it->desc = (struct btf_field_desc) {};
+-			break;
+-		case BTF_KIND_INT:
+-		case BTF_KIND_FLOAT:
+-		case BTF_KIND_FWD:
+-		case BTF_KIND_ARRAY:
+-		case BTF_KIND_CONST:
+-		case BTF_KIND_VOLATILE:
+-		case BTF_KIND_RESTRICT:
+-		case BTF_KIND_PTR:
+-		case BTF_KIND_TYPEDEF:
+-		case BTF_KIND_FUNC:
+-		case BTF_KIND_VAR:
+-		case BTF_KIND_DECL_TAG:
+-		case BTF_KIND_TYPE_TAG:
+-		case BTF_KIND_DATASEC:
+-			it->desc = (struct btf_field_desc) {
+-				1, {offsetof(struct btf_type, name_off)}
+-			};
+-			break;
+-		case BTF_KIND_ENUM:
+-			it->desc = (struct btf_field_desc) {
+-				1, {offsetof(struct btf_type, name_off)},
+-				sizeof(struct btf_enum),
+-				1, {offsetof(struct btf_enum, name_off)}
+-			};
+-			break;
+-		case BTF_KIND_ENUM64:
+-			it->desc = (struct btf_field_desc) {
+-				1, {offsetof(struct btf_type, name_off)},
+-				sizeof(struct btf_enum64),
+-				1, {offsetof(struct btf_enum64, name_off)}
+-			};
+-			break;
+-		case BTF_KIND_STRUCT:
+-		case BTF_KIND_UNION:
+-			it->desc = (struct btf_field_desc) {
+-				1, {offsetof(struct btf_type, name_off)},
+-				sizeof(struct btf_member),
+-				1, {offsetof(struct btf_member, name_off)}
+-			};
+-			break;
+-		case BTF_KIND_FUNC_PROTO:
+-			it->desc = (struct btf_field_desc) {
+-				1, {offsetof(struct btf_type, name_off)},
+-				sizeof(struct btf_param),
+-				1, {offsetof(struct btf_param, name_off)}
+-			};
+-			break;
+-		default:
+-			return -EINVAL;
+-		}
+-		break;
+-	default:
+-		return -EINVAL;
+-	}
+-
+-	if (it->desc.m_sz)
+-		it->vlen = btf_vlen(t);
+-
+-	it->p = t;
+-	return 0;
+-}
+-
+-__u32 *btf_field_iter_next(struct btf_field_iter *it)
+-{
+-	if (!it->p)
+-		return NULL;
+-
+-	if (it->m_idx < 0) {
+-		if (it->off_idx < it->desc.t_off_cnt)
+-			return it->p + it->desc.t_offs[it->off_idx++];
+-		/* move to per-member iteration */
+-		it->m_idx = 0;
+-		it->p += sizeof(struct btf_type);
+-		it->off_idx = 0;
+-	}
+-
+-	/* if type doesn't have members, stop */
+-	if (it->desc.m_sz == 0) {
+-		it->p = NULL;
+-		return NULL;
+-	}
+-
+-	if (it->off_idx >= it->desc.m_off_cnt) {
+-		/* exhausted this member's fields, go to the next member */
+-		it->m_idx++;
+-		it->p += it->desc.m_sz;
+-		it->off_idx = 0;
+-	}
+-
+-	if (it->m_idx < it->vlen)
+-		return it->p + it->desc.m_offs[it->off_idx++];
+-
+-	it->p = NULL;
+-	return NULL;
+-}
+-
+ int btf_ext_visit_type_ids(struct btf_ext *btf_ext, type_id_visit_fn visit, void *ctx)
+ {
+ 	const struct btf_ext_info *seg;
+diff --git a/tools/lib/bpf/btf_iter.c b/tools/lib/bpf/btf_iter.c
+new file mode 100644
+index 000000000000..c308aa60285d
+--- /dev/null
++++ b/tools/lib/bpf/btf_iter.c
+@@ -0,0 +1,169 @@
++// SPDX-License-Identifier: (LGPL-2.1 OR BSD-2-Clause)
++/* Copyright (c) 2021 Facebook */
++/* Copyright (c) 2024, Oracle and/or its affiliates. */
++
++#include "btf.h"
++#include "libbpf_internal.h"
++
++int btf_field_iter_init(struct btf_field_iter *it, struct btf_type *t,
++			enum btf_field_iter_kind iter_kind)
++{
++	it->p = NULL;
++	it->m_idx = -1;
++	it->off_idx = 0;
++	it->vlen = 0;
++
++	switch (iter_kind) {
++	case BTF_FIELD_ITER_IDS:
++		switch (btf_kind(t)) {
++		case BTF_KIND_UNKN:
++		case BTF_KIND_INT:
++		case BTF_KIND_FLOAT:
++		case BTF_KIND_ENUM:
++		case BTF_KIND_ENUM64:
++			it->desc = (struct btf_field_desc) {};
++			break;
++		case BTF_KIND_FWD:
++		case BTF_KIND_CONST:
++		case BTF_KIND_VOLATILE:
++		case BTF_KIND_RESTRICT:
++		case BTF_KIND_PTR:
++		case BTF_KIND_TYPEDEF:
++		case BTF_KIND_FUNC:
++		case BTF_KIND_VAR:
++		case BTF_KIND_DECL_TAG:
++		case BTF_KIND_TYPE_TAG:
++			it->desc = (struct btf_field_desc) { 1, {offsetof(struct btf_type, type)} };
++			break;
++		case BTF_KIND_ARRAY:
++			it->desc = (struct btf_field_desc) {
++				2, {sizeof(struct btf_type) + offsetof(struct btf_array, type),
++				sizeof(struct btf_type) + offsetof(struct btf_array, index_type)}
++			};
++			break;
++		case BTF_KIND_STRUCT:
++		case BTF_KIND_UNION:
++			it->desc = (struct btf_field_desc) {
++				0, {},
++				sizeof(struct btf_member),
++				1, {offsetof(struct btf_member, type)}
++			};
++			break;
++		case BTF_KIND_FUNC_PROTO:
++			it->desc = (struct btf_field_desc) {
++				1, {offsetof(struct btf_type, type)},
++				sizeof(struct btf_param),
++				1, {offsetof(struct btf_param, type)}
++			};
++			break;
++		case BTF_KIND_DATASEC:
++			it->desc = (struct btf_field_desc) {
++				0, {},
++				sizeof(struct btf_var_secinfo),
++				1, {offsetof(struct btf_var_secinfo, type)}
++			};
++			break;
++		default:
++			return -EINVAL;
++		}
++		break;
++	case BTF_FIELD_ITER_STRS:
++		switch (btf_kind(t)) {
++		case BTF_KIND_UNKN:
++			it->desc = (struct btf_field_desc) {};
++			break;
++		case BTF_KIND_INT:
++		case BTF_KIND_FLOAT:
++		case BTF_KIND_FWD:
++		case BTF_KIND_ARRAY:
++		case BTF_KIND_CONST:
++		case BTF_KIND_VOLATILE:
++		case BTF_KIND_RESTRICT:
++		case BTF_KIND_PTR:
++		case BTF_KIND_TYPEDEF:
++		case BTF_KIND_FUNC:
++		case BTF_KIND_VAR:
++		case BTF_KIND_DECL_TAG:
++		case BTF_KIND_TYPE_TAG:
++		case BTF_KIND_DATASEC:
++			it->desc = (struct btf_field_desc) {
++				1, {offsetof(struct btf_type, name_off)}
++			};
++			break;
++		case BTF_KIND_ENUM:
++			it->desc = (struct btf_field_desc) {
++				1, {offsetof(struct btf_type, name_off)},
++				sizeof(struct btf_enum),
++				1, {offsetof(struct btf_enum, name_off)}
++			};
++			break;
++		case BTF_KIND_ENUM64:
++			it->desc = (struct btf_field_desc) {
++				1, {offsetof(struct btf_type, name_off)},
++				sizeof(struct btf_enum64),
++				1, {offsetof(struct btf_enum64, name_off)}
++			};
++			break;
++		case BTF_KIND_STRUCT:
++		case BTF_KIND_UNION:
++			it->desc = (struct btf_field_desc) {
++				1, {offsetof(struct btf_type, name_off)},
++				sizeof(struct btf_member),
++				1, {offsetof(struct btf_member, name_off)}
++			};
++			break;
++		case BTF_KIND_FUNC_PROTO:
++			it->desc = (struct btf_field_desc) {
++				1, {offsetof(struct btf_type, name_off)},
++				sizeof(struct btf_param),
++				1, {offsetof(struct btf_param, name_off)}
++			};
++			break;
++		default:
++			return -EINVAL;
++		}
++		break;
++	default:
++		return -EINVAL;
++	}
++
++	if (it->desc.m_sz)
++		it->vlen = btf_vlen(t);
++
++	it->p = t;
++	return 0;
++}
++
++__u32 *btf_field_iter_next(struct btf_field_iter *it)
++{
++	if (!it->p)
++		return NULL;
++
++	if (it->m_idx < 0) {
++		if (it->off_idx < it->desc.t_off_cnt)
++			return it->p + it->desc.t_offs[it->off_idx++];
++		/* move to per-member iteration */
++		it->m_idx = 0;
++		it->p += sizeof(struct btf_type);
++		it->off_idx = 0;
++	}
++
++	/* if type doesn't have members, stop */
++	if (it->desc.m_sz == 0) {
++		it->p = NULL;
++		return NULL;
++	}
++
++	if (it->off_idx >= it->desc.m_off_cnt) {
++		/* exhausted this member's fields, go to the next member */
++		it->m_idx++;
++		it->p += it->desc.m_sz;
++		it->off_idx = 0;
++	}
++
++	if (it->m_idx < it->vlen)
++		return it->p + it->desc.m_offs[it->off_idx++];
++
++	it->p = NULL;
++	return NULL;
++}
 -- 
 2.31.1
 
