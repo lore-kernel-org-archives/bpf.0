@@ -1,656 +1,240 @@
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F361619DF46
-	for <bpf@vger.kernel.org>; Thu, 20 Jun 2024 09:18:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.177.32
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718875115; cv=none; b=hhfLpNtHYbeHlR76B1nipWx1g9HGZWiKLCMLcOzHuNeXjaZdiu42i1Y5jrO08M40U1z5uxLG673XKq40HlCOrOTqjAMjuGA8u/Al19uBVQKq92bhvLGB4mZmt8rZN0f4qIWpduyQMsio+JTECPYcCvImeOuS+K60r/Ni/Ckc054=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718875115; c=relaxed/simple;
-	bh=uRJtkgA83ZaCB4wGsU+b8UaNYt3VLOhYTFp263FhBio=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Dv1HwBuJhW+gJoOTyIlVY7WdD/5tpqNX/d6P0OH4TQGI83MerUSeYBfyINzQl+x/YXuG4UNRIAgb7HzYYmknRBC0WfLHM2NaIh7alVPUN1RiwVOTH3X1j+8+TRyN509MBzJmopTKMFErc+J/hRsI906MAuAe6rWmdoG/uLrwWVo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=B/w+nVaX; arc=none smtp.client-ip=205.220.177.32
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA80B19EED0
+	for <bpf@vger.kernel.org>; Thu, 20 Jun 2024 09:18:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.165.32
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1718875119; cv=fail; b=Wq9czU7FV1j9f/W/1OPzw4tDVGCStje9nCaCZNY81VL3Gtgq882TYFsVRsU3/Q47GiP8FcuoiVr6Tr2iSKTVGznfGYueY3LwMAgyEgTup7cIY71l1oDofYpaAzZvffZOWPhGLPDzD56W2qpf7Uhv+bZbnU46fket8Ibp/PhoQfU=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1718875119; c=relaxed/simple;
+	bh=pJ3YtE/pk3kkyiFWCq+YohROon0AX4xfKNusg8Dl4Vc=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=ubLphDZKzPNXlntQHz0JbNuUa/zHNkN2ZsrPsu2WuQyVXAKvZPQDv3/HCLTgvouBaruh4B9DH5o+eLUpmG9S3ncVseTSog/hQ1R5jLnSCVjaVyEy+uhrsqAc6s80yxmHl/B0dUrmnGfbbGjdDaAMYEvsxXADosmE/mY6iGbcwxw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=faTj2LwH; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=GmTSidCH; arc=fail smtp.client-ip=205.220.165.32
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="B/w+nVaX"
-Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 45K5FMSB004140;
-	Thu, 20 Jun 2024 09:18:03 GMT
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="faTj2LwH";
+	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="GmTSidCH"
+Received: from pps.filterd (m0333521.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 45K5FacV018376;
+	Thu, 20 Jun 2024 09:18:11 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=
-	from:to:cc:subject:date:message-id:in-reply-to:references
-	:mime-version:content-transfer-encoding; s=corp-2023-11-20; bh=Q
-	FXthWZO0fJKcJfeRcjEWUYbRjfa2JRKKrPIx5Hznzs=; b=B/w+nVaXsukSHssCM
-	dtrlcHjJbGPZ0ZLaGxd47Umc2UPQT+MnBmLaZyiWkd9mVfFcxmCKxanygBAgaCoh
-	7i7KPCSlhndZjDycGBgQz9JnZg94gMz8QYT1/x8k78hBbj++fFlffeui+gqg1Ylf
-	4FhhrBSIghwCgLmjpu8uJJJRqXepNQLl2Z3QuWJpVNr3wUqNdeE2isghHufXhoYv
-	cfI2dRz2VFTJfucJ9JiFpBeWSryVv8Fgz3zmxdKRqQ8dYo+RJwxXSjkC7E6SSnnL
-	j+O3Gagtr9dFp1seiRBDnxzIuT4JmnZyXG92Z+h9Z8mdXoLhO/0fMEzipgOR23gU
-	Y8JhQ==
-Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3yuj9nar5f-1
+	message-id:date:subject:to:cc:references:from:in-reply-to
+	:content-type:content-transfer-encoding:mime-version; s=
+	corp-2023-11-20; bh=xzKj+un782F9lB/wY70Se5FmVOFOZIZPuO+6gvaPFXM=; b=
+	faTj2LwH3OZjh+IEZv/yEHK7VSJTXBl6nOjFGkIXfwTuy3U3tF3LLqLXTC0h2nhJ
+	Ou6PBVws1Oew9LLL6wCnK8HkrZ77P7cvzQQLLOV6iv3rW0c8iwG0JX5j/PvFJHyC
+	+RCRpWrKo8Ql5EzZn5XcI1E9BijYeV1AiL/VWOz+6r7iKxnyUUKIXsNhiIZf0Zgq
+	lMWXk40iDOVwsd2qsc3cLnmNuUxQHdFCoIPZeicPaVVpURmek1edwIDRpcFsEoKx
+	8qMH8xmEYoFM/iSGYrja0166ANlx0jYJ+ywmguaeDgTFCDVzqpC9QZemVjAx3VLx
+	6DsNWFcbFir7w1ys0MQ0DQ==
+Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3yujc0as4x-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 20 Jun 2024 09:18:03 +0000 (GMT)
-Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 45K852Tn032785;
-	Thu, 20 Jun 2024 09:18:02 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3ys1da76g9-1
+	Thu, 20 Jun 2024 09:18:10 +0000 (GMT)
+Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 45K8MQS3034810;
+	Thu, 20 Jun 2024 09:18:09 GMT
+Received: from nam12-mw2-obe.outbound.protection.outlook.com (mail-mw2nam12lp2040.outbound.protection.outlook.com [104.47.66.40])
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3ys1daf4r5-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 20 Jun 2024 09:18:02 +0000
-Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 45K9HdGL028275;
-	Thu, 20 Jun 2024 09:18:01 GMT
-Received: from bpf.uk.oracle.com (dhcp-10-175-186-70.vpn.oracle.com [10.175.186.70])
-	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 3ys1da764t-5;
-	Thu, 20 Jun 2024 09:18:00 +0000
-From: Alan Maguire <alan.maguire@oracle.com>
-To: andrii@kernel.org, eddyz87@gmail.com
+	Thu, 20 Jun 2024 09:18:09 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=kLOrgy7f4DyCJkLw2riPpOzwPaHYr7l85wAgZnRyTG6h9R3XFhfqeNB+C8A8aifaMoi/yfxEKP5d1r2jfSbGjpBvVgzpjCP4KYwnScnGwZA9A4E8q8mI7SRav74ehnLC0TOOAO0bu+sjyW8IEaqpmYW0NtQnimNp1Y0dTp7MUZGv+n1fYzNyb03s3pkDPbiBExK71g+l6lJLakeaz3cRG9BiNXmICyCLldL/Q9Hw4AbJ9XYFkalrm29JDT8XNuxY5/K4oDQrcavhivI+IYadX7DJ0bBFBmuDg78j0hv3Or8Xp/P4VlAhRN0pLIx3u1OKDT7Qg41RzqLrHoE/UDjx5Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=xzKj+un782F9lB/wY70Se5FmVOFOZIZPuO+6gvaPFXM=;
+ b=WqfSp/VdRhV8ZkHpNmQXxpuoBEiqzT+i/lNRi9g2Ib4NyUi0iPQaAd1KZmb8gPZS6X3xuSlgpI4O53+t53ndxnsSH4Q2i+YDuj+wJ2NcwxYO9R3fXHrrtoR/lXTfs9Qb7fJM3E2cOaG4sfAJiwfgXqNxMziTB2bglOHJ08NiPz/I2iMg+8W3FwsTlqin3Xie3KnxNBhZaGb+iv1AJaYHy0CLs4elmv9mswxGca4z5TZjvp2cFZlZGLGZf1f/6LEUTn1mD6PL8SJGJ7b9vTfWPLuIzhiAcoqIryrOPq8erHe94JrWqxf9UhgMOllwFregLIVqX2C5Q3KU0duEPcA4LQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=xzKj+un782F9lB/wY70Se5FmVOFOZIZPuO+6gvaPFXM=;
+ b=GmTSidCHO6UBYYmLIs2ubQIUdaxYlIpTy9i41IT3WXwL8O5HdBRXUN3xdiSDcRydtFMiW4TJCb2534QgSyouq/Pa6+9DVOiqN/FHcAPRmyNT4VfpAXJrujlYcT2oOHQn9pihQdYaEKrq8Vp7vUATV53rlydcjfEI7kECLm+gMeM=
+Received: from BLAPR10MB5267.namprd10.prod.outlook.com (2603:10b6:208:30e::22)
+ by IA0PR10MB6843.namprd10.prod.outlook.com (2603:10b6:208:435::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7677.30; Thu, 20 Jun
+ 2024 09:18:07 +0000
+Received: from BLAPR10MB5267.namprd10.prod.outlook.com
+ ([fe80::682b:c879:9f97:a34f]) by BLAPR10MB5267.namprd10.prod.outlook.com
+ ([fe80::682b:c879:9f97:a34f%7]) with mapi id 15.20.7698.017; Thu, 20 Jun 2024
+ 09:18:06 +0000
+Message-ID: <fd9268b8-994b-4b4f-a4bb-d5852c823152@oracle.com>
+Date: Thu, 20 Jun 2024 10:17:57 +0100
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next 5/5] selftests/bpf: add kfunc_call test for
+ simple dtor in bpf_testmod
+To: Eduard Zingerman <eddyz87@gmail.com>, andrii@kernel.org
 Cc: acme@redhat.com, ast@kernel.org, daniel@iogearbox.net, jolsa@kernel.org,
         martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
         john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
         haoluo@google.com, mcgrof@kernel.org, masahiroy@kernel.org,
         nathan@kernel.org, mykolal@fb.com, thinker.li@gmail.com,
-        bentiss@kernel.org, tanggeliang@kylinos.cn, bpf@vger.kernel.org,
-        Alan Maguire <alan.maguire@oracle.com>
-Subject: [PATCH v2 bpf-next 4/6] libbpf,bpf: share BTF relocate-related code with kernel
-Date: Thu, 20 Jun 2024 10:17:31 +0100
-Message-ID: <20240620091733.1967885-5-alan.maguire@oracle.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240620091733.1967885-1-alan.maguire@oracle.com>
-References: <20240620091733.1967885-1-alan.maguire@oracle.com>
+        bentiss@kernel.org, tanggeliang@kylinos.cn, bpf <bpf@vger.kernel.org>
+References: <20240618160454.801527-1-alan.maguire@oracle.com>
+ <20240618160454.801527-6-alan.maguire@oracle.com>
+ <4321b99db5b362e278b1f37d6bd9b9a43d859d63.camel@gmail.com>
+ <76509fc5411e35a4820c333abca155b3fa4e5b84.camel@gmail.com>
+ <44779d5f-6d54-43cb-b556-d62201765c9d@oracle.com>
+ <3396181b67ff82ba8d25a620a72353989d733fc2.camel@gmail.com>
+ <9359e765-c341-4164-90fd-78feafed89d5@oracle.com>
+ <e17f8c4d644a6f4aa80de092ee29e6c1e5e77c52.camel@gmail.com>
+Content-Language: en-GB
+From: Alan Maguire <alan.maguire@oracle.com>
+In-Reply-To: <e17f8c4d644a6f4aa80de092ee29e6c1e5e77c52.camel@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: LO3P265CA0026.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:387::9) To BLAPR10MB5267.namprd10.prod.outlook.com
+ (2603:10b6:208:30e::22)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BLAPR10MB5267:EE_|IA0PR10MB6843:EE_
+X-MS-Office365-Filtering-Correlation-Id: 9586184f-137a-4665-c1e4-08dc9109e533
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230037|1800799021|376011|7416011|366013;
+X-Microsoft-Antispam-Message-Info: 
+	=?utf-8?B?TmxYbXhucldnbHQ3SS9MdEtRa3gvanNoZVNZbWhpMTdiR2txaFBQZGE1Y2NZ?=
+ =?utf-8?B?ZmVJZ0tqYVk5a2EvbnhBMG00VHhTYWJFWnA0LzJuSHk2M3dldkFsWit6S2Rv?=
+ =?utf-8?B?UVQ2TWVmVm55aDlLNzBrS2tpU282d1lNMjJGNEpoRkcxWkgzOWNvMmxoVEEr?=
+ =?utf-8?B?N2UwcVdQVm9CcStuQlFkT1lFK2VtTVQ2S2llc1VPcTMyS2hzRmx1b05JSUNQ?=
+ =?utf-8?B?YkVWOUxyUVlIbm9TTDA2T2pWQlphc1RQSlJqVnJ1RzU5MWhCaEVNa1ZGLzNy?=
+ =?utf-8?B?cjdQS0p4QzNSSHR0OTh5dzEwYXkvRjgxa1lxcVRVSnNaTDNsb3J5b2hyakcx?=
+ =?utf-8?B?TEE2VE43RGEzNFdkb1VWanhZbTZzS1dRM3dyWDFhNWQxTHhYd2JLS3NEeGVZ?=
+ =?utf-8?B?RVdvZ1dtUFl6WGVxNE04TVRJTjNiTGdVekRpeG5QZUYzNzhwL3BQeHRkaXVY?=
+ =?utf-8?B?bUMwMndmY2pLQmpWR1BCbWNDcGhpOEMwY2cycWNabEdDd0k5Z2RUalQ5OUh4?=
+ =?utf-8?B?cW55T05DYVdjVlZlTEhxajdnNkZubFBiSVk4WGh6QzhCNml4UytzMHFaWkMw?=
+ =?utf-8?B?bEhjOW1kWnRFUnF0SDl1ZjQzdnVtVVdqTU83UVQrYVBzUmtMKy9Bc3RjWHd0?=
+ =?utf-8?B?bUNiUTF4T0ZDVlluVHBkck1ucHNsY2hZbjc3VGV5UW9UNWdMMmZKVE9nSWU3?=
+ =?utf-8?B?Tkl1endyeWJWbmtoRVBEOEdkT0VWclFUNEkrK1ZZTXkyUGVyeFpVYXdKRzR2?=
+ =?utf-8?B?bGJ5QlUrNExBRmtkeEJCdFIvSysxYWh0LzM1eWZJNlcvUXhEOHF6cFRlcHps?=
+ =?utf-8?B?MmgyVzErZ0tZYnhnWVBpNXJtQVZZbk5VRFhMckhySG9hY045M3NzQWJtVTgv?=
+ =?utf-8?B?NWgrQkdWbHF4V3R4WDNmcnUzODBPNmlBSUJqekZwN2lXQzdqanBpUUU3a0ox?=
+ =?utf-8?B?WGpxQjFxSFV6SDJQdzJtN3ZmL1BtbW9GRU1jVDVvVyswcndzYzRQOGM2KzRS?=
+ =?utf-8?B?UUtLV1VQY2Z0NTRRWFRVTDZHdXdZV2hMSGh5dVBOakZPRnBvK0FlQWNGQlB4?=
+ =?utf-8?B?TFhVaER6clJuMzgyeUJ0eTN3NE5yS1BZSWxvRVlHb2Y0YlFzUjJaZ1dRclBy?=
+ =?utf-8?B?OGxZWVh2OFBWU1ovYUQ1STFuZi8zM1AwZzhjY1M1Ti9PbTU2RTg4Y3RmcTlm?=
+ =?utf-8?B?QVFqV2FJUlhxbk9xOFZUZ1VkWmxidFRZNk14MFIrRnpiUzJqelVoMDdHMUhx?=
+ =?utf-8?B?QzNweU94bk1xeFN0SU0zTlg1M3MrbGpRSkZCWXdmR0hmNTYva2JYWXNCb3dG?=
+ =?utf-8?B?N3RIOHJyMWw4bVcyejVjWDFmaDlJMG5McGpuc0gxMTlhSC9VVStYUHc4ZDlD?=
+ =?utf-8?B?bkpSU3dic3BkR1R2U3FQVHNycmdNYXg3NEZEemkzOFNKa3NPTWMyczB0MkNZ?=
+ =?utf-8?B?Qm9sZkhEVTg1ekl4U09RMkkvbWVyQzF0OTNkK2dhWC80NE1wc3hUTnN1UG1m?=
+ =?utf-8?B?bzdpTXN0OFBOYlhsRnU5NGdXWnhDWHh1TXBTUEIwU3IrUk1JNW1PQ2o5S0Zt?=
+ =?utf-8?B?UXlJdlg3Q0FXYXFzVzJaZ0FqSjdXMWM3YklaY0NGMkVnUWd2eW13WVlwUkNZ?=
+ =?utf-8?B?eXZmNzZyS0pBVi9Nd0hqTjc1bk1rMWFTTS9acm1PS2t5S0VZMk1kajkyY0JH?=
+ =?utf-8?B?RHJtK3c1YzZla2Y0WWlvcjdVSjgzRTBkRWdMbThXU0Nqek1UVUUyQkdmZnp5?=
+ =?utf-8?Q?jalDAoFg6lE6Q9aKsHhrJcteq77eavb0ZiRIzRa?=
+X-Forefront-Antispam-Report: 
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BLAPR10MB5267.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230037)(1800799021)(376011)(7416011)(366013);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: 
+	=?utf-8?B?eEplaFkzaURvalNkRUlIenAzVXhMcFluN243L3hXV0NNVXQxV0RzMG9ZVitj?=
+ =?utf-8?B?QXhtQkh3dll3N0tBL2pNZElNOEFoUXlOcGNoOFcxMkMyN2NiNXI0aWNHK2N1?=
+ =?utf-8?B?TDBPNnpJVXRQNHZxUHdQeGhuL0ZOUXMzVWhkNnliNjZLRHBPdHh0R2xOd04v?=
+ =?utf-8?B?K05OTmhrTHlIZ3QyN2pWR05Gclp6NzliYS95cVJacHpmQ0ovcDBDcXVTeHVF?=
+ =?utf-8?B?MDlsa01sMWFvT2NvNVRrcHpZNDBERURPd05RR1dzb1F0UC9LKy8wSXpBUGg1?=
+ =?utf-8?B?SjJlSmVLa2RvYVVZZ09MY00ydFRaN0xyMEgwL1pPcmhWVEVSMkRENVc3bFQ2?=
+ =?utf-8?B?VFhTMVg1MkthZitRV0QzMlIraXpYOFBOaEFud3RrNWJuWXJ2VmZwOG9BcGcz?=
+ =?utf-8?B?ZVEra05UVDN5dTRQdTBJZnhFZGlPckVrT2dWbUE2STI2eUdhMW45ZUN3THR4?=
+ =?utf-8?B?L2VPa0Y2VkRXNXhuSXFLZmgxL1ZyWjVEbEQzbUIxaDc1Um5Ra2hjV3lOb3gv?=
+ =?utf-8?B?TGJJc2hqVjNKSWFYRWp2YXROUjdXZkQ1eGVqZjZzWll4YmU0eGhMd0kvOHc4?=
+ =?utf-8?B?OSs4QWJRZzRDdW1LYmZXZ3BNYWFEbXA4NjB3YVR2TzNTOU5KNjBDOGdobXQ2?=
+ =?utf-8?B?b0pCcWZFajlCNXV0RlNDeTNBanhjVDU0MXV5VmtIa1crL2lad3pGVldHYVg3?=
+ =?utf-8?B?U2ZvQXNwM25PRzBsQzBpQ003bGM3L2QzMlJnb1JKTnJGOHNaeHNkOVNZTjE3?=
+ =?utf-8?B?RE1JbFA4NmdVc3dhTWYxUUs3ZkJ2NnpBckJRbWxIUnl2S3V1YzFiOFpmeGJG?=
+ =?utf-8?B?VVFPZUdTM1hwK1F2VWp5OElZZS9VZ09DbmFMdHE1OWVsS3Q4b1dlRXJWd1dI?=
+ =?utf-8?B?cTVJc3lHL0w0VHNZZUFpVWdhNmIyM2JWcnhPM3FoQXNGenUwQVQ1aWVnN0Q2?=
+ =?utf-8?B?VHhFYWN0azM5SDhBMExwU2ZpMG45eVpOMjFkR2gyL01YeTU2Q1ZOMGF1WmJH?=
+ =?utf-8?B?dEN1V3BiR1hkWDFIdjNPNk1GR2U5RVJlOWhJZjk3WXFab0hQMkgvUEYrY1N3?=
+ =?utf-8?B?c3hFNW9yQnRwUGFmK25HamFlZUVhMk1oVmVlb05jTWxPTDg3aWZpeXNiZitQ?=
+ =?utf-8?B?VTQ1Y1lKTnZUVGYrcnR2Z1o2R1ZWMnJORW0xRDEvRjd1STB4VnZORHBLYXVJ?=
+ =?utf-8?B?SXlJbGQ1YmZobUtLZ1U3R2s5dHJRUk5YVjFhanZaL1lMbG12Rk1UaGhtVmVh?=
+ =?utf-8?B?ZFNRZjN6SGorbnZlbnA2SkFQMGw1SWhLc2FxZnFQQStWUTRscVVFejJ2djJ2?=
+ =?utf-8?B?bm9QMzdod3FGTG1wK05uR0hEUlBCQlNWcXlXL0kzM243ZjRaVDhtaFF6cE5O?=
+ =?utf-8?B?TGlFaVE5aGJSQWQ3L09xY1lGMDVZWUI4N2VKdGw2N3RaSGtKZnJkdXdublpn?=
+ =?utf-8?B?Z1Rob2JhVnBGSitEMkh6T2tmWFhJOGJWVkdxNDdiRVpiZXpVSzRWSW1WUUxM?=
+ =?utf-8?B?TkpiVEplVUs2dWg4MWtjNlQxRjJocVljYjFkWDQ3cHB4bGRMWGZBbzBLYlJ1?=
+ =?utf-8?B?TVdraUNua29Ic20yVW4wejJCZkt1amxQSC93VVlrOEozOGIyQkg3Yy9hRHRI?=
+ =?utf-8?B?R1F0NnhTbmZ3TlZkbzU4OVJyaUhyaFkybVBocXBjUmJLK2FPUEl2WWthL0Yx?=
+ =?utf-8?B?ZFFGWWZWR0hPWW1OUWtBR1BocnV2WUkySXhLRHk3YXdKaFlxYTJFTTBINkdv?=
+ =?utf-8?B?aGRDNnZzZEFwcm5VOTJTZGNEdEtKZHgrNkJHTWhTQ1JaMUxpdFNBTStpVlVo?=
+ =?utf-8?B?OGtuNXBBQmp6cWlGUG5yU2ZPTVYxVVdLM0hDcGxSTm9mTGtUaWJZNkpSUC85?=
+ =?utf-8?B?WVBtQWM2bzhmVSs1SzVNSmR1UTBmWmtIR1RhNVZPTWVtR1dUMEorTmRuV1Q0?=
+ =?utf-8?B?SDk4SDB4UDZ3UGl3bHZDSXNNLzZHcVhHaXE5QmpsMEtMYjV6czA5eC9Ud3hm?=
+ =?utf-8?B?aXRjbTFkV0FwaUNTSVhucGFIMmlRR1B1SXNCcTkvN2tJdFlOQzBBS0IvM1c2?=
+ =?utf-8?B?bGVKS3M4RmV1YnNXWnRIc1JPTzB4WndJZVdMZVdnY2g0RmpRM29JS1g2L1Nn?=
+ =?utf-8?B?SWRoN0pPem1NdFNXRGwvWjQrRHNsR25lYTBUcElYdVluVHd3TlNVSml0ZCtB?=
+ =?utf-8?Q?l6u3qsE3dKGH2vLhlv/ySTQ=3D?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: 
+	ufqw9bA8HsZb+cxH5fKojuU8IbPlsYCXAv4hs45ILtH2D30s9EU0ssR39XmtX3WqwD+/YFbieBcl8Kh3osAl5gt751arsoUCHv8tJua/AfZP4BbONw5x4DNnj6wfZMoTyDSi/eO47pjJTl2b6/BWQYOuq2dPRW1eKb/fWtG1xmcRaJPixRrWHhm9OCGeUcPhoeloqfoz26idSZrLJR8n9iAiZJ0Klm5rXTDfH3YOh+a7uCRCxGemANF+eTyWo3qLhmb5CDKXaMUhB1jXySpXGcyVaXf4bDWEv8iKkrBCW4Mn4v1k1Yxu6coV9TL1bGHzscwJyMRYuaF/tLDl45CGE6qNozcPdxEb+yNbDWvIJj7TCEjb78a003kOiUAYcK4y9ZaVwhnQWKz/cThM8DeDMmuS21aw2gQiZSOJi//0kX94iCPDCHAQGoLRzBeZgSObBuoNo5HpN5aHcg1F6AN2Xp0XWtf2IGdnx5q72cgj15xApBJ70e2aOJ5tkwqVb9fmW+wO7d9P8g4GXJ8/ca9aX4SGXjKszFaYf5RGv/1XoamD9ulhwIYREBdjzrnG0IZixS7oEWgLzijbkvKWOKEgfnMH/XRhaYKDZnuwFA6shnQ=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9586184f-137a-4665-c1e4-08dc9109e533
+X-MS-Exchange-CrossTenant-AuthSource: BLAPR10MB5267.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Jun 2024 09:18:06.7648
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: ngTM2D50GaBlWTH7WSMWs9y1p/1LwYckvu85m7Up8C73ay9CAjYXZu7zGu2tWrmnapGf+Be+ORh2pYdWg+MEUQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PR10MB6843
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
  definitions=2024-06-20_06,2024-06-19_01,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 malwarescore=0 spamscore=0
- mlxlogscore=999 mlxscore=0 phishscore=0 suspectscore=0 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2405010000
- definitions=main-2406200065
-X-Proofpoint-GUID: CA37D3F6TSJbxGQ0na3CjA8CzvHq-Wfj
-X-Proofpoint-ORIG-GUID: CA37D3F6TSJbxGQ0na3CjA8CzvHq-Wfj
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 suspectscore=0
+ malwarescore=0 phishscore=0 spamscore=0 mlxscore=0 adultscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2405010000 definitions=main-2406200065
+X-Proofpoint-ORIG-GUID: mh5aqSdTJPAaSB7v6DHWbXBPtamPdKDr
+X-Proofpoint-GUID: mh5aqSdTJPAaSB7v6DHWbXBPtamPdKDr
 
-Share relocation implementation with the kernel.  As part of this,
-we also need the type/string iteration functions so also share
-btf_iter.c file. Relocation code in kernel and userspace is identical
-save for the impementation of the reparenting of split BTF to the
-relocated base BTF and retrieval of the BTF header from "struct btf";
-these small functions need separate user-space and kernel implementations
-for the separate "struct btf"s they operate upon.
+On 19/06/2024 21:12, Eduard Zingerman wrote:
+> On Wed, 2024-06-19 at 18:42 +0100, Alan Maguire wrote:
+> 
+> [...]
+> 
+>> Sorry, I'm not following here. So I think what you'd like is a way to
+>> verify that the dtor actually runs, is that right? The problem there is
+>> that the map cleanup gets run when the skeleton gets destroyed, but then
+>> it's too late then to collect a count value via that BPF object.
+>>
+>> The only thing I can think of is to create an additional tracing object
+>> that we separately load/attach to bpf_testmod_ctx_release() prior to
+>> running kfunc call tests to verify that the destructor fires on cleanup
+>> of the kfunc test skeletons. Is that what you have in mind? Thanks!
+> 
+> Tracing program could be an option, yes.
+> I was thinking about some map created by the driver program (the one
+> from prog_tests) that could be updated by destructor.
+> There is a question of how to pass the map FD to the kfunc,
+> probably it could be passed in a constructor for the kfunc and stored
+> in the context. But tracing program sounds good as well.
+> 
+> Again, it might be the case that checking that registration logic
+> works is sufficient. In such a case bodies of both kfunc and BPF
+> program could be empty.
+> 
 
-One other wrinkle on the kernel side is we have to map .BTF.ids in
-modules as they were generated with the type ids used at BTF encoding
-time. btf_relocate() optionally returns an array mapping from old BTF
-ids to relocated ids, so we use that to fix up these references where
-needed for kfuncs.
+I explored this further. Even adding a separate skeleton with tracing
+prog to catch release is insufficient because the map free is deferred
+and the test can have already run by the time the deferred map free is
+called. Whatever mechanism we use to detect release would be subject to
+the timing of that it seems. This seems like a recipe for a flaky test
+and I'd rather not add sleeps etc so I've stuck with the current
+approach which exercises the dtor codepaths but doesn't verify release.
+Thanks!
 
-Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
-Acked-by: Eduard Zingerman <eddyz87@gmail.com>
----
- include/linux/btf.h          |  64 +++++++++++++
- kernel/bpf/Makefile          |   8 +-
- kernel/bpf/btf.c             | 176 ++++++++++++++++++++++++-----------
- tools/lib/bpf/btf_iter.c     |   8 ++
- tools/lib/bpf/btf_relocate.c |  23 +++++
- 5 files changed, 226 insertions(+), 53 deletions(-)
-
-diff --git a/include/linux/btf.h b/include/linux/btf.h
-index 56d91daacdba..d199fa17abb4 100644
---- a/include/linux/btf.h
-+++ b/include/linux/btf.h
-@@ -140,6 +140,7 @@ extern const struct file_operations btf_fops;
- const char *btf_get_name(const struct btf *btf);
- void btf_get(struct btf *btf);
- void btf_put(struct btf *btf);
-+const struct btf_header *btf_header(const struct btf *btf);
- int btf_new_fd(const union bpf_attr *attr, bpfptr_t uattr, u32 uattr_sz);
- struct btf *btf_get_by_fd(int fd);
- int btf_get_info_by_fd(const struct btf *btf,
-@@ -212,8 +213,10 @@ int btf_get_fd_by_id(u32 id);
- u32 btf_obj_id(const struct btf *btf);
- bool btf_is_kernel(const struct btf *btf);
- bool btf_is_module(const struct btf *btf);
-+bool btf_is_vmlinux(const struct btf *btf);
- struct module *btf_try_get_module(const struct btf *btf);
- u32 btf_nr_types(const struct btf *btf);
-+struct btf *btf_base_btf(const struct btf *btf);
- bool btf_member_is_reg_int(const struct btf *btf, const struct btf_type *s,
- 			   const struct btf_member *m,
- 			   u32 expected_offset, u32 expected_size);
-@@ -339,6 +342,11 @@ static inline u8 btf_int_offset(const struct btf_type *t)
- 	return BTF_INT_OFFSET(*(u32 *)(t + 1));
- }
- 
-+static inline __u8 btf_int_bits(const struct btf_type *t)
-+{
-+	return BTF_INT_BITS(*(__u32 *)(t + 1));
-+}
-+
- static inline bool btf_type_is_scalar(const struct btf_type *t)
- {
- 	return btf_type_is_int(t) || btf_type_is_enum(t);
-@@ -478,6 +486,11 @@ static inline struct btf_param *btf_params(const struct btf_type *t)
- 	return (struct btf_param *)(t + 1);
- }
- 
-+static inline struct btf_decl_tag *btf_decl_tag(const struct btf_type *t)
-+{
-+	return (struct btf_decl_tag *)(t + 1);
-+}
-+
- static inline int btf_id_cmp_func(const void *a, const void *b)
- {
- 	const int *pa = a, *pb = b;
-@@ -515,9 +528,38 @@ static inline const struct bpf_struct_ops_desc *bpf_struct_ops_find(struct btf *
- }
- #endif
- 
-+enum btf_field_iter_kind {
-+	BTF_FIELD_ITER_IDS,
-+	BTF_FIELD_ITER_STRS,
-+};
-+
-+struct btf_field_desc {
-+	/* once-per-type offsets */
-+	int t_off_cnt, t_offs[2];
-+	/* member struct size, or zero, if no members */
-+	int m_sz;
-+	/* repeated per-member offsets */
-+	int m_off_cnt, m_offs[1];
-+};
-+
-+struct btf_field_iter {
-+	struct btf_field_desc desc;
-+	void *p;
-+	int m_idx;
-+	int off_idx;
-+	int vlen;
-+};
-+
- #ifdef CONFIG_BPF_SYSCALL
- const struct btf_type *btf_type_by_id(const struct btf *btf, u32 type_id);
-+void btf_set_base_btf(struct btf *btf, const struct btf *base_btf);
-+int btf_relocate(struct btf *btf, const struct btf *base_btf, __u32 **map_ids);
-+int btf_field_iter_init(struct btf_field_iter *it, struct btf_type *t,
-+			enum btf_field_iter_kind iter_kind);
-+__u32 *btf_field_iter_next(struct btf_field_iter *it);
-+
- const char *btf_name_by_offset(const struct btf *btf, u32 offset);
-+const char *btf_str_by_offset(const struct btf *btf, u32 offset);
- struct btf *btf_parse_vmlinux(void);
- struct btf *bpf_prog_get_target_btf(const struct bpf_prog *prog);
- u32 *btf_kfunc_id_set_contains(const struct btf *btf, u32 kfunc_btf_id,
-@@ -544,6 +586,28 @@ static inline const struct btf_type *btf_type_by_id(const struct btf *btf,
- {
- 	return NULL;
- }
-+
-+static inline void btf_set_base_btf(struct btf *btf, const struct btf *base_btf)
-+{
-+}
-+
-+static inline int btf_relocate(void *log, struct btf *btf, const struct btf *base_btf,
-+			       __u32 **map_ids)
-+{
-+	return -EOPNOTSUPP;
-+}
-+
-+static inline int btf_field_iter_init(struct btf_field_iter *it, struct btf_type *t,
-+				      enum btf_field_iter_kind iter_kind)
-+{
-+	return -EOPNOTSUPP;
-+}
-+
-+static inline __u32 *btf_field_iter_next(struct btf_field_iter *it)
-+{
-+	return NULL;
-+}
-+
- static inline const char *btf_name_by_offset(const struct btf *btf,
- 					     u32 offset)
- {
-diff --git a/kernel/bpf/Makefile b/kernel/bpf/Makefile
-index 7eb9ad3a3ae6..0291eef9ce92 100644
---- a/kernel/bpf/Makefile
-+++ b/kernel/bpf/Makefile
-@@ -50,5 +50,11 @@ endif
- obj-$(CONFIG_BPF_PRELOAD) += preload/
- 
- obj-$(CONFIG_BPF_SYSCALL) += relo_core.o
--$(obj)/relo_core.o: $(srctree)/tools/lib/bpf/relo_core.c FORCE
-+obj-$(CONFIG_BPF_SYSCALL) += btf_iter.o
-+obj-$(CONFIG_BPF_SYSCALL) += btf_relocate.o
-+
-+# Some source files are common to libbpf.
-+vpath %.c $(srctree)/kernel/bpf:$(srctree)/tools/lib/bpf
-+
-+$(obj)/%.o: %.c FORCE
- 	$(call if_changed_rule,cc_o_c)
-diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index ce4707968217..8e12cb80ba73 100644
---- a/kernel/bpf/btf.c
-+++ b/kernel/bpf/btf.c
-@@ -274,6 +274,7 @@ struct btf {
- 	u32 start_str_off; /* first string offset (0 for base BTF) */
- 	char name[MODULE_NAME_LEN];
- 	bool kernel_btf;
-+	__u32 *base_id_map; /* map from distilled base BTF -> vmlinux BTF ids */
- };
- 
- enum verifier_phase {
-@@ -530,6 +531,11 @@ static bool btf_type_is_decl_tag_target(const struct btf_type *t)
- 	       btf_type_is_var(t) || btf_type_is_typedef(t);
- }
- 
-+bool btf_is_vmlinux(const struct btf *btf)
-+{
-+	return btf->kernel_btf && !btf->base_btf;
-+}
-+
- u32 btf_nr_types(const struct btf *btf)
- {
- 	u32 total = 0;
-@@ -772,7 +778,7 @@ static bool __btf_name_char_ok(char c, bool first)
- 	return true;
- }
- 
--static const char *btf_str_by_offset(const struct btf *btf, u32 offset)
-+const char *btf_str_by_offset(const struct btf *btf, u32 offset)
- {
- 	while (offset < btf->start_str_off)
- 		btf = btf->base_btf;
-@@ -1670,14 +1676,8 @@ static void btf_free_kfunc_set_tab(struct btf *btf)
- 
- 	if (!tab)
- 		return;
--	/* For module BTF, we directly assign the sets being registered, so
--	 * there is nothing to free except kfunc_set_tab.
--	 */
--	if (btf_is_module(btf))
--		goto free_tab;
- 	for (hook = 0; hook < ARRAY_SIZE(tab->sets); hook++)
- 		kfree(tab->sets[hook]);
--free_tab:
- 	kfree(tab);
- 	btf->kfunc_set_tab = NULL;
- }
-@@ -1735,7 +1735,12 @@ static void btf_free(struct btf *btf)
- 	kvfree(btf->types);
- 	kvfree(btf->resolved_sizes);
- 	kvfree(btf->resolved_ids);
--	kvfree(btf->data);
-+	/* vmlinux does not allocate btf->data, it simply points it at
-+	 * __start_BTF.
-+	 */
-+	if (!btf_is_vmlinux(btf))
-+		kvfree(btf->data);
-+	kvfree(btf->base_id_map);
- 	kfree(btf);
- }
- 
-@@ -1764,6 +1769,23 @@ void btf_put(struct btf *btf)
- 	}
- }
- 
-+struct btf *btf_base_btf(const struct btf *btf)
-+{
-+	return btf->base_btf;
-+}
-+
-+const struct btf_header *btf_header(const struct btf *btf)
-+{
-+	return &btf->hdr;
-+}
-+
-+void btf_set_base_btf(struct btf *btf, const struct btf *base_btf)
-+{
-+	btf->base_btf = (struct btf *)base_btf;
-+	btf->start_id = btf_nr_types(base_btf);
-+	btf->start_str_off = base_btf->hdr.str_len;
-+}
-+
- static int env_resolve_init(struct btf_verifier_env *env)
- {
- 	struct btf *btf = env->btf;
-@@ -6083,23 +6105,15 @@ int get_kern_ctx_btf_id(struct bpf_verifier_log *log, enum bpf_prog_type prog_ty
- BTF_ID_LIST(bpf_ctx_convert_btf_id)
- BTF_ID(struct, bpf_ctx_convert)
- 
--struct btf *btf_parse_vmlinux(void)
-+static struct btf *btf_parse_base(struct btf_verifier_env *env, const char *name,
-+				  void *data, unsigned int data_size)
- {
--	struct btf_verifier_env *env = NULL;
--	struct bpf_verifier_log *log;
- 	struct btf *btf = NULL;
- 	int err;
- 
- 	if (!IS_ENABLED(CONFIG_DEBUG_INFO_BTF))
- 		return ERR_PTR(-ENOENT);
- 
--	env = kzalloc(sizeof(*env), GFP_KERNEL | __GFP_NOWARN);
--	if (!env)
--		return ERR_PTR(-ENOMEM);
--
--	log = &env->log;
--	log->level = BPF_LOG_KERNEL;
--
- 	btf = kzalloc(sizeof(*btf), GFP_KERNEL | __GFP_NOWARN);
- 	if (!btf) {
- 		err = -ENOMEM;
-@@ -6107,10 +6121,10 @@ struct btf *btf_parse_vmlinux(void)
- 	}
- 	env->btf = btf;
- 
--	btf->data = __start_BTF;
--	btf->data_size = __stop_BTF - __start_BTF;
-+	btf->data = data;
-+	btf->data_size = data_size;
- 	btf->kernel_btf = true;
--	snprintf(btf->name, sizeof(btf->name), "vmlinux");
-+	snprintf(btf->name, sizeof(btf->name), "%s", name);
- 
- 	err = btf_parse_hdr(env);
- 	if (err)
-@@ -6130,20 +6144,11 @@ struct btf *btf_parse_vmlinux(void)
- 	if (err)
- 		goto errout;
- 
--	/* btf_parse_vmlinux() runs under bpf_verifier_lock */
--	bpf_ctx_convert.t = btf_type_by_id(btf, bpf_ctx_convert_btf_id[0]);
--
- 	refcount_set(&btf->refcnt, 1);
- 
--	err = btf_alloc_id(btf);
--	if (err)
--		goto errout;
--
--	btf_verifier_env_free(env);
- 	return btf;
- 
- errout:
--	btf_verifier_env_free(env);
- 	if (btf) {
- 		kvfree(btf->types);
- 		kfree(btf);
-@@ -6151,19 +6156,61 @@ struct btf *btf_parse_vmlinux(void)
- 	return ERR_PTR(err);
- }
- 
-+struct btf *btf_parse_vmlinux(void)
-+{
-+	struct btf_verifier_env *env = NULL;
-+	struct bpf_verifier_log *log;
-+	struct btf *btf;
-+	int err;
-+
-+	env = kzalloc(sizeof(*env), GFP_KERNEL | __GFP_NOWARN);
-+	if (!env)
-+		return ERR_PTR(-ENOMEM);
-+
-+	log = &env->log;
-+	log->level = BPF_LOG_KERNEL;
-+	btf = btf_parse_base(env, "vmlinux", __start_BTF, __stop_BTF - __start_BTF);
-+	if (IS_ERR(btf))
-+		goto err_out;
-+
-+	/* btf_parse_vmlinux() runs under bpf_verifier_lock */
-+	bpf_ctx_convert.t = btf_type_by_id(btf, bpf_ctx_convert_btf_id[0]);
-+	err = btf_alloc_id(btf);
-+	if (err) {
-+		btf_free(btf);
-+		btf = ERR_PTR(err);
-+	}
-+err_out:
-+	btf_verifier_env_free(env);
-+	return btf;
-+}
-+
- #ifdef CONFIG_DEBUG_INFO_BTF_MODULES
- 
--static struct btf *btf_parse_module(const char *module_name, const void *data, unsigned int data_size)
-+/* If .BTF_ids section was created with distilled base BTF, both base and
-+ * split BTF ids will need to be mapped to actual base/split ids for
-+ * BTF now that it has been relocated.
-+ */
-+static __u32 btf_relocate_id(const struct btf *btf, __u32 id)
-+{
-+	if (!btf->base_btf || !btf->base_id_map)
-+		return id;
-+	return btf->base_id_map[id];
-+}
-+
-+static struct btf *btf_parse_module(const char *module_name, const void *data,
-+				    unsigned int data_size, void *base_data,
-+				    unsigned int base_data_size)
- {
-+	struct btf *btf = NULL, *vmlinux_btf, *base_btf = NULL;
- 	struct btf_verifier_env *env = NULL;
- 	struct bpf_verifier_log *log;
--	struct btf *btf = NULL, *base_btf;
--	int err;
-+	int err = 0;
- 
--	base_btf = bpf_get_btf_vmlinux();
--	if (IS_ERR(base_btf))
--		return base_btf;
--	if (!base_btf)
-+	vmlinux_btf = bpf_get_btf_vmlinux();
-+	if (IS_ERR(vmlinux_btf))
-+		return vmlinux_btf;
-+	if (!vmlinux_btf)
- 		return ERR_PTR(-EINVAL);
- 
- 	env = kzalloc(sizeof(*env), GFP_KERNEL | __GFP_NOWARN);
-@@ -6173,6 +6220,16 @@ static struct btf *btf_parse_module(const char *module_name, const void *data, u
- 	log = &env->log;
- 	log->level = BPF_LOG_KERNEL;
- 
-+	if (base_data) {
-+		base_btf = btf_parse_base(env, ".BTF.base", base_data, base_data_size);
-+		if (IS_ERR(base_btf)) {
-+			err = PTR_ERR(base_btf);
-+			goto errout;
-+		}
-+	} else {
-+		base_btf = vmlinux_btf;
-+	}
-+
- 	btf = kzalloc(sizeof(*btf), GFP_KERNEL | __GFP_NOWARN);
- 	if (!btf) {
- 		err = -ENOMEM;
-@@ -6212,12 +6269,22 @@ static struct btf *btf_parse_module(const char *module_name, const void *data, u
- 	if (err)
- 		goto errout;
- 
-+	if (base_btf != vmlinux_btf) {
-+		err = btf_relocate(btf, vmlinux_btf, &btf->base_id_map);
-+		if (err)
-+			goto errout;
-+		btf_free(base_btf);
-+		base_btf = vmlinux_btf;
-+	}
-+
- 	btf_verifier_env_free(env);
- 	refcount_set(&btf->refcnt, 1);
- 	return btf;
- 
- errout:
- 	btf_verifier_env_free(env);
-+	if (base_btf != vmlinux_btf)
-+		btf_free(base_btf);
- 	if (btf) {
- 		kvfree(btf->data);
- 		kvfree(btf->types);
-@@ -7770,7 +7837,8 @@ static int btf_module_notify(struct notifier_block *nb, unsigned long op,
- 			err = -ENOMEM;
- 			goto out;
- 		}
--		btf = btf_parse_module(mod->name, mod->btf_data, mod->btf_data_size);
-+		btf = btf_parse_module(mod->name, mod->btf_data, mod->btf_data_size,
-+				       mod->btf_base_data, mod->btf_base_data_size);
- 		if (IS_ERR(btf)) {
- 			kfree(btf_mod);
- 			if (!IS_ENABLED(CONFIG_MODULE_ALLOW_BTF_MISMATCH)) {
-@@ -8094,7 +8162,7 @@ static int btf_populate_kfunc_set(struct btf *btf, enum btf_kfunc_hook hook,
- 	bool add_filter = !!kset->filter;
- 	struct btf_kfunc_set_tab *tab;
- 	struct btf_id_set8 *set;
--	u32 set_cnt;
-+	u32 set_cnt, i;
- 	int ret;
- 
- 	if (hook >= BTF_KFUNC_HOOK_MAX) {
-@@ -8140,21 +8208,15 @@ static int btf_populate_kfunc_set(struct btf *btf, enum btf_kfunc_hook hook,
- 		goto end;
- 	}
- 
--	/* We don't need to allocate, concatenate, and sort module sets, because
--	 * only one is allowed per hook. Hence, we can directly assign the
--	 * pointer and return.
--	 */
--	if (!vmlinux_set) {
--		tab->sets[hook] = add_set;
--		goto do_add_filter;
--	}
--
- 	/* In case of vmlinux sets, there may be more than one set being
- 	 * registered per hook. To create a unified set, we allocate a new set
- 	 * and concatenate all individual sets being registered. While each set
- 	 * is individually sorted, they may become unsorted when concatenated,
- 	 * hence re-sorting the final set again is required to make binary
- 	 * searching the set using btf_id_set8_contains function work.
-+	 *
-+	 * For module sets, we need to allocate as we may need to relocate
-+	 * BTF ids.
- 	 */
- 	set_cnt = set ? set->cnt : 0;
- 
-@@ -8184,11 +8246,14 @@ static int btf_populate_kfunc_set(struct btf *btf, enum btf_kfunc_hook hook,
- 
- 	/* Concatenate the two sets */
- 	memcpy(set->pairs + set->cnt, add_set->pairs, add_set->cnt * sizeof(set->pairs[0]));
-+	/* Now that the set is copied, update with relocated BTF ids */
-+	for (i = set->cnt; i < set->cnt + add_set->cnt; i++)
-+		set->pairs[i].id = btf_relocate_id(btf, set->pairs[i].id);
-+
- 	set->cnt += add_set->cnt;
- 
- 	sort(set->pairs, set->cnt, sizeof(set->pairs[0]), btf_id_cmp_func, NULL);
- 
--do_add_filter:
- 	if (add_filter) {
- 		hook_filter = &tab->hook_filters[hook];
- 		hook_filter->filters[hook_filter->nr_filters++] = kset->filter;
-@@ -8308,7 +8373,7 @@ static int __register_btf_kfunc_id_set(enum btf_kfunc_hook hook,
- 		return PTR_ERR(btf);
- 
- 	for (i = 0; i < kset->set->cnt; i++) {
--		ret = btf_check_kfunc_protos(btf, kset->set->pairs[i].id,
-+		ret = btf_check_kfunc_protos(btf, btf_relocate_id(btf, kset->set->pairs[i].id),
- 					     kset->set->pairs[i].flags);
- 		if (ret)
- 			goto err_out;
-@@ -8372,7 +8437,7 @@ static int btf_check_dtor_kfuncs(struct btf *btf, const struct btf_id_dtor_kfunc
- 	u32 nr_args, i;
- 
- 	for (i = 0; i < cnt; i++) {
--		dtor_btf_id = dtors[i].kfunc_btf_id;
-+		dtor_btf_id = btf_relocate_id(btf, dtors[i].kfunc_btf_id);
- 
- 		dtor_func = btf_type_by_id(btf, dtor_btf_id);
- 		if (!dtor_func || !btf_type_is_func(dtor_func))
-@@ -8407,7 +8472,7 @@ int register_btf_id_dtor_kfuncs(const struct btf_id_dtor_kfunc *dtors, u32 add_c
- {
- 	struct btf_id_dtor_kfunc_tab *tab;
- 	struct btf *btf;
--	u32 tab_cnt;
-+	u32 tab_cnt, i;
- 	int ret;
- 
- 	btf = btf_get_module_btf(owner);
-@@ -8458,6 +8523,13 @@ int register_btf_id_dtor_kfuncs(const struct btf_id_dtor_kfunc *dtors, u32 add_c
- 	btf->dtor_kfunc_tab = tab;
- 
- 	memcpy(tab->dtors + tab->cnt, dtors, add_cnt * sizeof(tab->dtors[0]));
-+
-+	/* remap BTF ids based on BTF relocation (if any) */
-+	for (i = tab_cnt; i < tab_cnt + add_cnt; i++) {
-+		tab->dtors[i].btf_id = btf_relocate_id(btf, tab->dtors[i].btf_id);
-+		tab->dtors[i].kfunc_btf_id = btf_relocate_id(btf, tab->dtors[i].kfunc_btf_id);
-+	}
-+
- 	tab->cnt += add_cnt;
- 
- 	sort(tab->dtors, tab->cnt, sizeof(tab->dtors[0]), btf_id_cmp_func, NULL);
-diff --git a/tools/lib/bpf/btf_iter.c b/tools/lib/bpf/btf_iter.c
-index c308aa60285d..9a6c822c2294 100644
---- a/tools/lib/bpf/btf_iter.c
-+++ b/tools/lib/bpf/btf_iter.c
-@@ -2,8 +2,16 @@
- /* Copyright (c) 2021 Facebook */
- /* Copyright (c) 2024, Oracle and/or its affiliates. */
- 
-+#ifdef __KERNEL__
-+#include <linux/bpf.h>
-+#include <linux/btf.h>
-+
-+#define btf_var_secinfos(t)	(struct btf_var_secinfo *)btf_type_var_secinfo(t)
-+
-+#else
- #include "btf.h"
- #include "libbpf_internal.h"
-+#endif
- 
- int btf_field_iter_init(struct btf_field_iter *it, struct btf_type *t,
- 			enum btf_field_iter_kind iter_kind)
-diff --git a/tools/lib/bpf/btf_relocate.c b/tools/lib/bpf/btf_relocate.c
-index 23a41fb03e0d..2281dbbafa11 100644
---- a/tools/lib/bpf/btf_relocate.c
-+++ b/tools/lib/bpf/btf_relocate.c
-@@ -5,11 +5,34 @@
- #define _GNU_SOURCE
- #endif
- 
-+#ifdef __KERNEL__
-+#include <linux/bpf.h>
-+#include <linux/bsearch.h>
-+#include <linux/btf.h>
-+#include <linux/sort.h>
-+#include <linux/string.h>
-+#include <linux/bpf_verifier.h>
-+
-+#define btf_type_by_id				(struct btf_type *)btf_type_by_id
-+#define btf__type_cnt				btf_nr_types
-+#define btf__base_btf				btf_base_btf
-+#define btf__name_by_offset			btf_name_by_offset
-+#define btf__str_by_offset			btf_str_by_offset
-+#define btf_kflag				btf_type_kflag
-+
-+#define calloc(nmemb, sz)			kvcalloc(nmemb, sz, GFP_KERNEL | __GFP_NOWARN)
-+#define free(ptr)				kvfree(ptr)
-+#define qsort(base, num, sz, cmp)		sort(base, num, sz, cmp, NULL)
-+
-+#else
-+
- #include "btf.h"
- #include "bpf.h"
- #include "libbpf.h"
- #include "libbpf_internal.h"
- 
-+#endif /* __KERNEL__ */
-+
- struct btf;
- 
- struct btf_relocate {
--- 
-2.31.1
-
+Alan
