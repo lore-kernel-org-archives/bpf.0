@@ -1,34 +1,34 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F80582899
-	for <bpf@vger.kernel.org>; Fri, 21 Jun 2024 03:00:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 846392904;
+	Fri, 21 Jun 2024 03:50:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718938831; cv=none; b=oghWRbaMq6tzuU/uC9fw8s5RgopxnZk87TUwru0LCI2ju0oX8dYgTkoiH0hYMxpCfs58FqYJY/I27RGqOMezBWJtPBQWeMGz/A7XTGJDGSEDWd7MqqINnME0UbCk5R9osujX1tbUoWD7ZefU81F7eY7ywDd0zdWtPFV/dZWyz48=
+	t=1718941831; cv=none; b=VGi3KjMaXQ2suDkwXwoMQly4K/KWA1PFmVDsPAiVN1lqsk+Jw7NAwaV6WY2dSkZ1O2gnGvPOtZhb0dD9eKWMUQAE4IRnPwFOdOICm7CKpBgD82fW304GBh80uR9aswA2GD7p7dmD79CcbtljuwzAEZwJl9mvD7+ngtZl1D8HwKs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718938831; c=relaxed/simple;
-	bh=urnadOlq2HbBOm64Z47sJOntg7zDAlckWeOYOt17MEE=;
+	s=arc-20240116; t=1718941831; c=relaxed/simple;
+	bh=Kj43b90q4hs4uUk/svMfiuEafvubhYopRgGw9yCLfmg=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=UwCQW7U+Rngs/vpK8j2ElJBuOys5JzAHKZij0oZh+TaDzPgm308rfy2cbxRs7zQe6mdGJMmUgVnHtOjOWM7/sAqLl/jd0xa+1WJWJWO9/bcTkoGab4cVhdK3RTB9D5CpeyLotI4kOcUWYR+PjzMP5Hme5ic+3HW8V9PlKGehc48=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mGsfS0wp; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=ZKDDByTAwld4g0/PFM1CjZozFMS1D3RQWlgq3WTINcKD3UMur2gsBf9dw38s+NHjm0yVAkincQx7kFJy8EglJAWylS1bABKTgAU3GytCuBHibyKeXXdNJBAUaEVZIqcM2B6TB7igV7klOHRrVQvpGsFedsvnl5KsmiRmirKayo4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Us43F5UP; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mGsfS0wp"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 33946C4AF08;
-	Fri, 21 Jun 2024 03:00:31 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Us43F5UP"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id C69FCC4AF07;
+	Fri, 21 Jun 2024 03:50:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1718938831;
-	bh=urnadOlq2HbBOm64Z47sJOntg7zDAlckWeOYOt17MEE=;
+	s=k20201202; t=1718941830;
+	bh=Kj43b90q4hs4uUk/svMfiuEafvubhYopRgGw9yCLfmg=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=mGsfS0wpYnwFLzDnmH7GMtETYizAlc5H+dmENKu5Y71Oq2ZUJOyH3aWDgbng/LCkf
-	 kGG3c3YdHiziC4mS+dg0cjemxemIlC7a9etGXJRLOxuRAmY7/4yBncMMxYd4WfA8wC
-	 qgkyaOwjwYmlVlNULHO2/1TUTDdteOi0Y2KZIVizl4MtKrc5/jcbga9bAeHTn1G469
-	 ikx7XxfKnxz0knpNhSyFmkp4Tl9wdpvFjXI3cqepx50fDd23a7Qp8GWHQt1jvDeuxI
-	 jxYuUoB0mXzvmBN/kS4YuMYI+TszhG+LXCsELYkWVYQDut+W5tI32089FdzNUqewb7
-	 VlDrDelN5zrFw==
+	b=Us43F5UPlsMQQrw2QntXmHyxpxqV1Bw6Hf4xfJ80uEt57aMEGQyvMNQkYe6h2n6dl
+	 jbTJezE0R6ab5Bj2iiN9zPsXI5q1VU0xH3k9mpcB+8sSS6IzvKykMBINPzquqQgkR9
+	 0N7iEwosBzS/zdGqAi/1qhaCqaxVm+0Zt1gHEm0Kg/EDQihonkbshNdzIMeK9ZyHRX
+	 7tl7m6UMQkBhxeCnJuXitUQKTJSFNHa97ol1FrDtBHOYqn+K+8hBdiufM7s1xPACkM
+	 NMhGKaoeh9W7Wx2rjzYBTQ/fLCZpn6YCmcZJ0CMbfGqoXOdZCUFTDboPgKDDH4bMMS
+	 a7OE2Mz7/tnfw==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 1709DCF3B9B;
-	Fri, 21 Jun 2024 03:00:31 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id A8943CF3B9A;
+	Fri, 21 Jun 2024 03:50:30 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -37,43 +37,50 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next V2 0/3] Fix compiler warnings,
- looking for suggestions
+Subject: Re: [PATCH bpf-next v6 0/6] use network helpers, part 7
 From: patchwork-bot+netdevbpf@kernel.org
 Message-Id: 
- <171893883109.18859.2036012380257120725.git-patchwork-notify@kernel.org>
-Date: Fri, 21 Jun 2024 03:00:31 +0000
-References: <20240615022641.210320-1-rafael@rcpassos.me>
-In-Reply-To: <20240615022641.210320-1-rafael@rcpassos.me>
-To: Rafael Passos <rafael@rcpassos.me>
-Cc: andrii@kernel.org, ast@kernel.org, bjorn@kernel.org, bp@alien8.de,
- daniel@iogearbox.net, davem@davemloft.net, dsahern@kernel.org,
- mingo@redhat.com, puranjay@kernel.org, tglx@linutronix.de, will@kernel.org,
- xi.wang@gmail.com, bpf@vger.kernel.org
+ <171894183068.10505.4717563449095144066.git-patchwork-notify@kernel.org>
+Date: Fri, 21 Jun 2024 03:50:30 +0000
+References: <cover.1718932493.git.tanggeliang@kylinos.cn>
+In-Reply-To: <cover.1718932493.git.tanggeliang@kylinos.cn>
+To: Geliang Tang <geliang@kernel.org>
+Cc: andrii@kernel.org, eddyz87@gmail.com, mykolal@fb.com, ast@kernel.org,
+ daniel@iogearbox.net, martin.lau@linux.dev, song@kernel.org,
+ yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
+ sdf@google.com, haoluo@google.com, jolsa@kernel.org, shuah@kernel.org,
+ tanggeliang@kylinos.cn, bpf@vger.kernel.org, linux-kselftest@vger.kernel.org
 
 Hello:
 
 This series was applied to bpf/bpf-next.git (master)
 by Alexei Starovoitov <ast@kernel.org>:
 
-On Fri, 14 Jun 2024 23:24:07 -0300 you wrote:
-> Hi,
-> This patchset has a few fixes to compiler warnings.
-> I am studying the BPF subsystem and wish to bring more tangible contributions.
-> I would appreciate receiving suggestions on things to investigate.
-> I also documented a bit in my blog. I could help with docs here, too.
-> https://rcpassos.me/post/linux-ebpf-understanding-kernel-level-mechanics
-> Thanks!
+On Fri, 21 Jun 2024 10:15:57 +0800 you wrote:
+> From: Geliang Tang <tanggeliang@kylinos.cn>
+> 
+> v6:
+>  - update ASSERT strings in patch 4 as Eduard suggested. (thanks)
+> 
+> v5:
+>  - update patch 1, add getsockopt(SO_PROTOCOL) in connect_to_fd() to
+> fix errors reported by CI.
 > 
 > [...]
 
 Here is the summary with links:
-  - [bpf-next,V2,1/3] bpf: remove unused parameter in bpf_jit_binary_pack_finalize
-    https://git.kernel.org/bpf/bpf-next/c/9919c5c98cb2
-  - [bpf-next,V2,2/3] bpf: remove unused parameter in __bpf_free_used_btfs
-    https://git.kernel.org/bpf/bpf-next/c/ab224b9ef7c4
-  - [bpf-next,V2,3/3] bpf: remove redeclaration of new_n in bpf_verifier_vlog
-    https://git.kernel.org/bpf/bpf-next/c/21ab4980e02d
+  - [bpf-next,v6,1/6] selftests/bpf: Drop type from network_helper_opts
+    https://git.kernel.org/bpf/bpf-next/c/34ad6ec97252
+  - [bpf-next,v6,2/6] selftests/bpf: Use connect_to_addr in connect_to_fd_opt
+    https://git.kernel.org/bpf/bpf-next/c/08a5206240d3
+  - [bpf-next,v6,3/6] selftests/bpf: Add client_socket helper
+    https://git.kernel.org/bpf/bpf-next/c/bbca57aa378b
+  - [bpf-next,v6,4/6] selftests/bpf: Drop noconnect from network_helper_opts
+    https://git.kernel.org/bpf/bpf-next/c/7f0d5140a6d6
+  - [bpf-next,v6,5/6] selftests/bpf: Use start_server_str in mptcp
+    https://git.kernel.org/bpf/bpf-next/c/fb69f71cf585
+  - [bpf-next,v6,6/6] selftests/bpf: Use start_server_str in test_tcp_check_syncookie_user
+    https://git.kernel.org/bpf/bpf-next/c/8cab7cdcf5ae
 
 You are awesome, thank you!
 -- 
