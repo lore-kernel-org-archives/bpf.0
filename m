@@ -1,176 +1,199 @@
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62048DDC4;
-	Fri, 21 Jun 2024 16:41:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B41E11662F6
+	for <bpf@vger.kernel.org>; Fri, 21 Jun 2024 16:53:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718988077; cv=none; b=f8M06po/3jcXqEGF8Uf5/I0+X02kkEeQre/R6C0YDeMz7UY4Qhx8rdocVU8C8rcp2K/QRVqVfF/s5/iKbltMQiB1VvcKDipwvNTjWOgXTN1qBIFC63826kG7g6goGivAJ7wmtp+WAwziUsCcYl+onwRlqVI4s91tqPaQmOl8hnY=
+	t=1718988836; cv=none; b=FYTiMOdatIAiZIRuzvO1lma8+MYJMndBzvv4Z6tln0JzmUKTk0ETxJnXcw336j4oSMbyOqTYfVmZeBKzb12SR7r0cPyn97W7g4wkKyBqN14OkLTlrnSHeEr3+wgB+VIZu/yZmsWWVhOmzU5Q9jvpbVPhA2Je8lvK4LPUa55t0nU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718988077; c=relaxed/simple;
-	bh=dsLA+22hlSSSclpZJIYfkt/ZlA9OEu3KOf2Bn4Fy+mw=;
-	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
-	 In-Reply-To:Content-Type; b=L1gi+49GyNpm6jaWcUwHCk/qohfz2+BkM4FndAy/ypM1Cx18yC0Ok8DcWnT2Nrgua6NZpjhTWJZnCBpZI1BFamMYsy4jGxzFQaX0aKjhnEhpPP+nc/LI7XRxwpqyyJDKrYdJFML4tHSbuq0iPgM17A2fIyHoLPUJcvxHRr/VJCw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=mhEetVxa; arc=none smtp.client-ip=213.133.104.62
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
+	s=arc-20240116; t=1718988836; c=relaxed/simple;
+	bh=ZlSwBMzBHxWlNWqUuyqs5XqfDTQcYh+6+TrNc2i2/yQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=hXt8s2fC7QSc88sY0fXtsOz3PWRHCmuZjDsHNNUE1tvOZSrowHbJvkl08EqwX1KpTfsNfCzzoKFfBid9RDi/7K4kLbgD2omS8WBbhJ5aTkUo/gWYBAz3l0nHaiRDcbrB2Np/7+STNwhHZZusgw+dxbAPIJGUxEVXEXzXaWLK3sc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ccTmi/2A; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="mhEetVxa"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=uijA8ksPgqyAyxVPrUhFm0QPuUIWPbwNGoZFxbgPkjw=; b=mhEetVxacMaUcljAE3ykcp1rvh
-	4tXMzlw29HctKLakedvYF1RsbTzLRx55ws25VWchklMEEJcHcKmvcZTDNkzMfCXQh9o54QjjWG2Lv
-	WDohCEy61S4DGQpwwK9rIrrgwRZh5LS6hqDRrOAOjOYlq5RRlS24d8ncUj03RvXVPm+Qru7cDG2qu
-	hD76ppVokws1PGIBYmyXor/NEBzxgmu47yeUkSmU1/Mu9fg+DkoXudvZyvi4H4piEVBraFzg5+80F
-	ho9/j/BJegCkgAa9t2+Xfp5/8FuaBHlyBAeN0h9rcvxYs2k+8BwZLIi/HWn2HN3pwBtyikYba1rGw
-	FfPgmWEw==;
-Received: from sslproxy04.your-server.de ([78.46.152.42])
-	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1sKgum-000PQq-2e; Fri, 21 Jun 2024 18:15:04 +0200
-Received: from [178.197.248.18] (helo=linux.home)
-	by sslproxy04.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1sKguk-000FWe-17;
-	Fri, 21 Jun 2024 18:15:02 +0200
-Subject: Re: [RFC net-next 1/9] skb: introduce gro_disabled bit
-To: Yan Zhai <yan@cloudflare.com>
-Cc: Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
- netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Alexei Starovoitov <ast@kernel.org>,
- Jesper Dangaard Brouer <hawk@kernel.org>,
- John Fastabend <john.fastabend@gmail.com>,
- Willem de Bruijn <willemb@google.com>, Simon Horman <horms@kernel.org>,
- Florian Westphal <fw@strlen.de>, Mina Almasry <almasrymina@google.com>,
- Abhishek Chauhan <quic_abchauha@quicinc.com>,
- David Howells <dhowells@redhat.com>,
- Alexander Lobakin <aleksander.lobakin@intel.com>,
- David Ahern <dsahern@kernel.org>, Richard Gobert <richardbgobert@gmail.com>,
- Antoine Tenart <atenart@kernel.org>, Felix Fietkau <nbd@nbd.name>,
- Soheil Hassas Yeganeh <soheil@google.com>,
- Pavel Begunkov <asml.silence@gmail.com>,
- Lorenzo Bianconi <lorenzo@kernel.org>,
- =?UTF-8?Q?Thomas_Wei=c3=9fschuh?= <linux@weissschuh.net>,
- linux-kernel@vger.kernel.org, bpf@vger.kernel.org
-References: <cover.1718919473.git.yan@cloudflare.com>
- <b8c183a24285c2ab30c51622f4f9eff8f7a4752f.1718919473.git.yan@cloudflare.com>
- <66756ed3f2192_2e64f929491@willemb.c.googlers.com.notmuch>
- <44ac34f6-c78e-16dd-14da-15d729fecb5b@iogearbox.net>
- <CAO3-PbrhnvmdYmQubNsTX3gX917o=Q+MBWTBkxUd=YWt4dNGuA@mail.gmail.com>
-From: Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <e6553be1-4eaa-e90a-17f8-dece2bb95e7b@iogearbox.net>
-Date: Fri, 21 Jun 2024 18:15:01 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ccTmi/2A"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1718988833;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=98J4OC312FGkaowbYujp5y890n377gkjQxs8ni0Mxpk=;
+	b=ccTmi/2APyUWenhNxIimy+dhTCcliajowVVrs9jadzMwpVrgUCIfW6rkW92uh6mMBNQpv8
+	eO1wPSifzzYppcBc9yxVVR4y/fCJzJgLPpIG045LGqkbOQgEVyDO4fDaHiSSQ/4rIrAaQj
+	kaY4nUzIc/nEDRlEVybkcqJ03BJHCtY=
+Received: from mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-411-iW8OVxfZPCiS8LTj9Vh5vQ-1; Fri,
+ 21 Jun 2024 12:53:49 -0400
+X-MC-Unique: iW8OVxfZPCiS8LTj9Vh5vQ-1
+Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id AA93D1955DC9;
+	Fri, 21 Jun 2024 16:53:44 +0000 (UTC)
+Received: from lorien.usersys.redhat.com (unknown [10.22.9.79])
+	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 1F4C23000218;
+	Fri, 21 Jun 2024 16:53:30 +0000 (UTC)
+Date: Fri, 21 Jun 2024 12:53:27 -0400
+From: Phil Auld <pauld@redhat.com>
+To: Tejun Heo <tj@kernel.org>
+Cc: torvalds@linux-foundation.org, mingo@redhat.com, peterz@infradead.org,
+	juri.lelli@redhat.com, vincent.guittot@linaro.org,
+	dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+	mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
+	ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+	martin.lau@kernel.org, joshdon@google.com, brho@google.com,
+	pjt@google.com, derkling@google.com, haoluo@google.com,
+	dvernet@meta.com, dschatzberg@meta.com, dskarlat@cs.cmu.edu,
+	riel@surriel.com, changwoo@igalia.com, himadrics@inria.fr,
+	memxor@gmail.com, andrea.righi@canonical.com,
+	joel@joelfernandes.org, linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org, kernel-team@meta.com
+Subject: Re: [PATCH 04/30] sched: Add sched_class->switching_to() and expose
+ check_class_changing/changed()
+Message-ID: <20240621165327.GA51310@lorien.usersys.redhat.com>
+References: <20240618212056.2833381-1-tj@kernel.org>
+ <20240618212056.2833381-5-tj@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <CAO3-PbrhnvmdYmQubNsTX3gX917o=Q+MBWTBkxUd=YWt4dNGuA@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.10/27313/Fri Jun 21 10:28:08 2024)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240618212056.2833381-5-tj@kernel.org>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
 
-On 6/21/24 6:00 PM, Yan Zhai wrote:
-> On Fri, Jun 21, 2024 at 8:13 AM Daniel Borkmann <daniel@iogearbox.net> wrote:
->> On 6/21/24 2:15 PM, Willem de Bruijn wrote:
->>> Yan Zhai wrote:
->>>> Software GRO is currently controlled by a single switch, i.e.
->>>>
->>>>     ethtool -K dev gro on|off
->>>>
->>>> However, this is not always desired. When GRO is enabled, even if the
->>>> kernel cannot GRO certain traffic, it has to run through the GRO receive
->>>> handlers with no benefit.
->>>>
->>>> There are also scenarios that turning off GRO is a requirement. For
->>>> example, our production environment has a scenario that a TC egress hook
->>>> may add multiple encapsulation headers to forwarded skbs for load
->>>> balancing and isolation purpose. The encapsulation is implemented via
->>>> BPF. But the problem arises then: there is no way to properly offload a
->>>> double-encapsulated packet, since skb only has network_header and
->>>> inner_network_header to track one layer of encapsulation, but not two.
->>>> On the other hand, not all the traffic through this device needs double
->>>> encapsulation. But we have to turn off GRO completely for any ingress
->>>> device as a result.
->>>>
->>>> Introduce a bit on skb so that GRO engine can be notified to skip GRO on
->>>> this skb, rather than having to be 0-or-1 for all traffic.
->>>>
->>>> Signed-off-by: Yan Zhai <yan@cloudflare.com>
->>>> ---
->>>>    include/linux/netdevice.h |  9 +++++++--
->>>>    include/linux/skbuff.h    | 10 ++++++++++
->>>>    net/Kconfig               | 10 ++++++++++
->>>>    net/core/gro.c            |  2 +-
->>>>    net/core/gro_cells.c      |  2 +-
->>>>    net/core/skbuff.c         |  4 ++++
->>>>    6 files changed, 33 insertions(+), 4 deletions(-)
->>>>
->>>> diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
->>>> index c83b390191d4..2ca0870b1221 100644
->>>> --- a/include/linux/netdevice.h
->>>> +++ b/include/linux/netdevice.h
->>>> @@ -2415,11 +2415,16 @@ struct net_device {
->>>>       ((dev)->devlink_port = (port));                         \
->>>>    })
->>>>
->>>> -static inline bool netif_elide_gro(const struct net_device *dev)
->>>> +static inline bool netif_elide_gro(const struct sk_buff *skb)
->>>>    {
->>>> -    if (!(dev->features & NETIF_F_GRO) || dev->xdp_prog)
->>>> +    if (!(skb->dev->features & NETIF_F_GRO) || skb->dev->xdp_prog)
->>>>               return true;
->>>> +
->>>> +#ifdef CONFIG_SKB_GRO_CONTROL
->>>> +    return skb->gro_disabled;
->>>> +#else
->>>>       return false;
->>>> +#endif
->>>
->>> Yet more branches in the hot path.
->>>
->>> Compile time configurability does not help, as that will be
->>> enabled by distros.
->>>
->>> For a fairly niche use case. Where functionality of GRO already
->>> works. So just a performance for a very rare case at the cost of a
->>> regression in the common case. A small regression perhaps, but death
->>> by a thousand cuts.
->>
->> Mentioning it here b/c it perhaps fits in this context, longer time ago
->> there was the idea mentioned to have BPF operating as GRO engine which
->> might also help to reduce attack surface by only having to handle packets
->> of interest for the concrete production use case. Perhaps here meta data
->> buffer could be used to pass a notification from XDP to exit early w/o
->> aggregation.
+On Tue, Jun 18, 2024 at 11:17:19AM -1000 Tejun Heo wrote:
+> When a task switches to a new sched_class, the prev and new classes are
+> notified through ->switched_from() and ->switched_to(), respectively, after
+> the switching is done.
 > 
-> Metadata is in fact one of our interests as well. We discussed using
-> metadata instead of a skb bit to carry this information internally.
-> Since metadata is opaque atm so it seems the only option is to have a
-> GRO control hook before napi_gro_receive, and let BPF decide
-> netif_receive_skb or napi_gro_receive (echo what Paolo said). With BPF
-> it could indeed be more flexible, but the cons is that it could be
-> even more slower than taking a bit on skb. I am actually open to
-> either approach, as long as it gives us more control on when to enable
-> GRO :)
+> A new BPF extensible sched_class will have callbacks that allow the BPF
+> scheduler to keep track of relevant task states (like priority and cpumask).
+> Those callbacks aren't called while a task is on a different sched_class.
+> When a task comes back, we wanna tell the BPF progs the up-to-date state
 
-Oh wait, one thing that just came to mind.. have you tried u64 per-CPU
-counter map in XDP? For packets which should not be GRO-aggregated you
-add count++ into the meta data area, and this forces GRO to not aggregate
-since meta data that needs to be transported to tc BPF layer mismatches
-(and therefore the contract/intent is that tc BPF needs to see the different
-meta data passed to it).
+"wanna" ?   How about "want to"?
 
-Thanks,
-Daniel
+That makes me wanna stop reading right there... :)
+
+
+> before the task gets enqueued, so we need a hook which is called before the
+> switching is committed.
+> 
+> This patch adds ->switching_to() which is called during sched_class switch
+> through check_class_changing() before the task is restored. Also, this patch
+> exposes check_class_changing/changed() in kernel/sched/sched.h. They will be
+> used by the new BPF extensible sched_class to implement implicit sched_class
+> switching which is used e.g. when falling back to CFS when the BPF scheduler
+> fails or unloads.
+> 
+> This is a prep patch and doesn't cause any behavior changes. The new
+> operation and exposed functions aren't used yet.
+> 
+> v3: Refreshed on top of tip:sched/core.
+> 
+> v2: Improve patch description w/ details on planned use.
+> 
+> Signed-off-by: Tejun Heo <tj@kernel.org>
+> Reviewed-by: David Vernet <dvernet@meta.com>
+> Acked-by: Josh Don <joshdon@google.com>
+> Acked-by: Hao Luo <haoluo@google.com>
+> Acked-by: Barret Rhoden <brho@google.com>
+> ---
+>  kernel/sched/core.c     | 12 ++++++++++++
+>  kernel/sched/sched.h    |  3 +++
+>  kernel/sched/syscalls.c |  1 +
+>  3 files changed, 16 insertions(+)
+> 
+> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+> index 48f9d00d0666..b088fbeaf26d 100644
+> --- a/kernel/sched/core.c
+> +++ b/kernel/sched/core.c
+> @@ -2035,6 +2035,17 @@ inline int task_curr(const struct task_struct *p)
+>  	return cpu_curr(task_cpu(p)) == p;
+>  }
+>  
+> +/*
+> + * ->switching_to() is called with the pi_lock and rq_lock held and must not
+> + * mess with locking.
+> + */
+> +void check_class_changing(struct rq *rq, struct task_struct *p,
+> +			  const struct sched_class *prev_class)
+> +{
+> +	if (prev_class != p->sched_class && p->sched_class->switching_to)
+> +		p->sched_class->switching_to(rq, p);
+> +}
+
+Does this really need wrapper? The compiler may help but it doesn't seem to
+but you're doing a function call and passing in prev_class just to do a
+simple check.  I guess it's not really a fast path. Just seemed like overkill.
+
+I guess I did read past the commit message ...
+
+
+Cheers,
+Phil
+
+
+
+> +
+>  /*
+>   * switched_from, switched_to and prio_changed must _NOT_ drop rq->lock,
+>   * use the balance_callback list if you want balancing.
+> @@ -7021,6 +7032,7 @@ void rt_mutex_setprio(struct task_struct *p, struct task_struct *pi_task)
+>  	}
+>  
+>  	__setscheduler_prio(p, prio);
+> +	check_class_changing(rq, p, prev_class);
+>  
+>  	if (queued)
+>  		enqueue_task(rq, p, queue_flag);
+> diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
+> index a2399ccf259a..0ed4271cedf5 100644
+> --- a/kernel/sched/sched.h
+> +++ b/kernel/sched/sched.h
+> @@ -2322,6 +2322,7 @@ struct sched_class {
+>  	 * cannot assume the switched_from/switched_to pair is serialized by
+>  	 * rq->lock. They are however serialized by p->pi_lock.
+>  	 */
+> +	void (*switching_to) (struct rq *this_rq, struct task_struct *task);
+>  	void (*switched_from)(struct rq *this_rq, struct task_struct *task);
+>  	void (*switched_to)  (struct rq *this_rq, struct task_struct *task);
+>  	void (*reweight_task)(struct rq *this_rq, struct task_struct *task,
+> @@ -3608,6 +3609,8 @@ extern void set_load_weight(struct task_struct *p, bool update_load);
+>  extern void enqueue_task(struct rq *rq, struct task_struct *p, int flags);
+>  extern void dequeue_task(struct rq *rq, struct task_struct *p, int flags);
+>  
+> +extern void check_class_changing(struct rq *rq, struct task_struct *p,
+> +				 const struct sched_class *prev_class);
+>  extern void check_class_changed(struct rq *rq, struct task_struct *p,
+>  				const struct sched_class *prev_class,
+>  				int oldprio);
+> diff --git a/kernel/sched/syscalls.c b/kernel/sched/syscalls.c
+> index ae1b42775ef9..cf189bc3dd18 100644
+> --- a/kernel/sched/syscalls.c
+> +++ b/kernel/sched/syscalls.c
+> @@ -797,6 +797,7 @@ int __sched_setscheduler(struct task_struct *p,
+>  		__setscheduler_prio(p, newprio);
+>  	}
+>  	__setscheduler_uclamp(p, attr);
+> +	check_class_changing(rq, p, prev_class);
+>  
+>  	if (queued) {
+>  		/*
+> -- 
+> 2.45.2
+> 
+> 
+
+-- 
+
