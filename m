@@ -1,204 +1,179 @@
-Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAD85208AF
-	for <bpf@vger.kernel.org>; Fri, 21 Jun 2024 16:12:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0C5410A39;
+	Fri, 21 Jun 2024 16:26:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718986377; cv=none; b=m6d1mQ1BHpxk4SCwM4h6DssyyNW3fw74+LNfth/y5RsNYPuyMMVu/pHi7qI3qapHDDcLBUHP1lnP8/A5uL6wtEknlStbX9vJI2ldYijTWq3i5ohQsOUFklVzPBKT/hYa2aG+ifywoqDRXDco8JrBKRxtqSmJ94cD0K/9fOymoio=
+	t=1718987175; cv=none; b=TlWBFeEbw/Lyj1Rd7n9GniNrefJ9OQdYxS1/CoCj0eVMCcX22u3WWi+s5qTYcSzbl28tJnFEQof0GEmq0Z/5pQtpR3G3itStU7RhK9y52DlW8HGSp0S+G253hY0erjuAkWRmWAvufy7y0++SbMHu69ZfA1v8WpiC8BbmWP5t/TY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718986377; c=relaxed/simple;
-	bh=jWlOoYuVaoLS+56u4GNV8VdQktFIi2pVchKpOlGoiw0=;
+	s=arc-20240116; t=1718987175; c=relaxed/simple;
+	bh=syaw2j1CKNhKileFRhZaU0gaJjIh+YpnaVjx+YB5jbA=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=oDUna0FX8SoqZKRPOgNkt8gwJTj5B6UhSV6SoSRQHN6ybba4h2ZKfkf5UWejKVCxlQcFC+mnIsEN3Y5VHEqG2tcLDEkpf9jsYGasxGW9uFmtIEHkDrc3SosRSHarR02fK8MlUWp/F9tUp4oBUFq14UdOSrdQmdhhN9ULXOeGBzA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=WNz3epab; arc=none smtp.client-ip=209.85.208.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
+	 To:Cc:Content-Type; b=JIRWPwqAfi6HQMumrgbeciWomlY3V8l+7gDOV2/56lm36B2XZFwe/efsdRiTb472cZxfd1eGJw9jqtclKgX0DlPOnaH+LRkGJxzLIoRQx0+sxVWufhDAqRa2fAiIneM8jZG/1HMrv6RkSLYVVR/cgfK0DLtmEtRrMjQ7aFeqqbo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Aid5b4T7; arc=none smtp.client-ip=209.85.128.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="WNz3epab"
-Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-57d07f07a27so2457810a12.3
-        for <bpf@vger.kernel.org>; Fri, 21 Jun 2024 09:12:55 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Aid5b4T7"
+Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-42189d3c7efso24593105e9.2;
+        Fri, 21 Jun 2024 09:26:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google09082023; t=1718986374; x=1719591174; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1718987172; x=1719591972; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=y0zYMWy18YNNETi7e8eQDmKjdjVWK9tOu69sXy0qbaU=;
-        b=WNz3epabe8jtWysPqdeHzNbiO785PVmdJbPIJR9cY+lIKloSzUnXzGfO8F9Tcuio3j
-         x5XZ3Ms3qGMWbDZz9Bag2bV0Xlr5puMzdXxob8/o7dsFWfQ50BrG3wZ9rhcvGrcU8LnN
-         uyIjJuV2l6fC1mLSNAfi4a4SXwBbiXZWw4gZE11vzzyBaKqUZ9ySxDl4toaLMlg6kydk
-         wlWpmfjVWD08Q5IIIXNa8nkRaQdBTj2z/F9+69zI8ieWW7cd+XJhtHzhUPg4HEmSKMN+
-         deK0JNe7tHJ/9/1D89C6OlKywmx5dxhqr/8y67kn0WAhmcbW2LT6GT5P2Y/bzq2u9GxX
-         B5Wg==
+        bh=2G5sctyY5+akJotF0NYZBVeqJ4gLFW6IE6iMuGoc2hc=;
+        b=Aid5b4T7HqsUpD2CeIijka/5BYSfZX2u67OiQNvQEMNtbd3mUYD+8ti1CwIMJONcnY
+         kby1LW1FC2CG1t9dsLKOgNjCDbGS344LPkYTwHQSBgr9BjMLx84I4G3dxOfJVP1P/1aF
+         Iyh0/C4VzxTLyRgC3k5GHbNphkCAiGrh1J4TKQSGJWbYDNt9KuinjiVWiDD42srsdwvp
+         qSyBrPpkQP3JxMoJ8KkPA3pCULL8lHXERqAB2UlXBlo+eL0C0VJj3sM0HxptRnnMLpa5
+         Am+4r6hWt1ZOx2yX2KVxktSdu4YVcwqKAFkfsMoArHdRzH/E8zbKt4TcQ5+GP8xTzrJ0
+         IwSw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718986374; x=1719591174;
+        d=1e100.net; s=20230601; t=1718987172; x=1719591972;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=y0zYMWy18YNNETi7e8eQDmKjdjVWK9tOu69sXy0qbaU=;
-        b=ClKD9YVovLHJl0FA3sujSVVvZcwJ5f9z1K/BmkrHgNhQ1k/44jXOjLijdpKImY0c80
-         QDNxWwIQvq+IMYeUBlhRvYmR3H8WvJTWv5dMsNIOYQf/4fPQDhWR5rWRcQv9By3NA4+4
-         B94Ptjbv2D+M8aRwiVNcA3HVDBKf54yS5EzlwbHDmdh5DPc4qgKEmtX/slbKuc07VpJ9
-         kfazU3XJO4QoEES8NYlHzYmKnTcO2/Y44ENmpFwHdmwlNuYTXM2nrj5M6VbpEPYgmu1R
-         006XoYd9FdSW6zNhqTEDu9cYL7H5o2n5AfYoLUUHf47aoj/fgPT3nF8fTAbytmbU8Q9j
-         mjtQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVBRby3/ycudkHBn2Nw9i7aOTeSOjot7JzYXIGkVigkG40xxeH4G84u6qbE+MhKvpnejdPIEfaFq3WKU+gFgybDY/BI
-X-Gm-Message-State: AOJu0YzaBYFg3kUqKRIZ62L7DOLUmfOWwsOEqyXxUNy4c8aMBIVGRlQ1
-	4gSXwmGPXVOAm04GZO6GaKEz3lTjObu7kTktuXOEVOCDns9IOb9RtKnxxuia7FgoyzxHY1T6ErS
-	bNF78aixEDCvonqaoiea8c0C4IboaHufsIM8drQ==
-X-Google-Smtp-Source: AGHT+IF7ObXHDh6mLXvGuKl49qYAnntiqa3n0WDZ6sIU1vmldDPL6jOhnwAlmJHdvCTF05jpm/342x1EYcFV1AmFL8w=
-X-Received: by 2002:a50:d74a:0:b0:57d:669:cafb with SMTP id
- 4fb4d7f45d1cf-57d07ebf2abmr5129115a12.40.1718986373992; Fri, 21 Jun 2024
- 09:12:53 -0700 (PDT)
+        bh=2G5sctyY5+akJotF0NYZBVeqJ4gLFW6IE6iMuGoc2hc=;
+        b=sX4PTazIsenMU6EtxHDYvpP8qEtn+JhnPP7NKXk5Zq3fiOE+JEqabVvVsjeERmLYew
+         twiqpVI5G6qtLJyhA45oF8EFomevQ92LqxuOyc1y7UhoDS6AchgBQzaD00iUr9+kM2hc
+         zCbq/ZjGXRBgsj5c5Or54gE/TdbujMDinQl6hqau/v4WrJbo59hu+MQoz7r8WmXHcIIK
+         aQNcL5JTldUX7xPivhwrpFNPis0ZH34uGYJuz6VWVqGFcD7aGuxKVso2pO6KO1ZRz1T8
+         41cwyB9hri7EzGzzG7BYaZGq8dFvS3aPuw04vCYYnLri+X+NB4nW+f/zn2jDzypLdC/b
+         lrbQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVomdJeHiYxc9eDA+NiLSOP3uIFuMTvj7uALfkYWYHqXi6R61CCwaKLhPcy7Hmk//fOHlbWy+eoI0F5qux9buWopOO+oH9iS0NWYfT60W6bxOtfCR9BGATglA1gnTPfUAw1cDAIO+yIm8GkJBEpsDn4s9On/cpyBV7vrsrBilYrWI+UjJOJhA1LiWNWFYzBaRCJqs/t/LG4q7kYc1C1PVWUglfj78wMxldx64fepnmqkMx6z/qwJJGGDLY=
+X-Gm-Message-State: AOJu0Yz/2Tmu4PXP2rmdEKkd4ZX+fA8KUvrykZvw2vhQaseKUsjxv62q
+	mem9RbbprAiso/vH1xsISFq+ktm0Te5Wxz1howDd6Ct0mJt51E1tfieHHx6Hx4ZsCSh1PZqBp1s
+	2p3SGlRq2MhLTNrPjCyH0zo35rbc=
+X-Google-Smtp-Source: AGHT+IFSihQV0lS2A8sdrIWW8qjAtXJa85Cfo+eO9dbfvheawX77yi34eO4/SQ3D/TDwMdwQ6G6tYXsv4r3cj5RyB98=
+X-Received: by 2002:a05:600c:181c:b0:422:1a82:3ed2 with SMTP id
+ 5b1f17b1804b1-424752969b0mr86309965e9.27.1718987172113; Fri, 21 Jun 2024
+ 09:26:12 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1718919473.git.yan@cloudflare.com> <39f5cbdfaa67e3319bce64ee8e4e5585b9e0c11e.1718919473.git.yan@cloudflare.com>
- <7ce408ff-77e1-4d7b-8b4a-5ce5e16397dc@intel.com>
-In-Reply-To: <7ce408ff-77e1-4d7b-8b4a-5ce5e16397dc@intel.com>
-From: Yan Zhai <yan@cloudflare.com>
-Date: Fri, 21 Jun 2024 11:12:42 -0500
-Message-ID: <CAO3-PbqxuvZwz0edh-OYiGv57LbKJtUh64QCvDoz9c8XqkeHdw@mail.gmail.com>
-Subject: Re: [RFC net-next 2/9] xdp: add XDP_FLAGS_GRO_DISABLED flag
-To: Alexander Lobakin <aleksander.lobakin@intel.com>
-Cc: netdev@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, "David S. Miller" <davem@davemloft.net>, 
-	Jakub Kicinski <kuba@kernel.org>, Jesper Dangaard Brouer <hawk@kernel.org>, 
-	John Fastabend <john.fastabend@gmail.com>, Eric Dumazet <edumazet@google.com>, 
-	Paolo Abeni <pabeni@redhat.com>, bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20240621-hid_hw_req_bpf-v1-0-d7ab8b885a0b@kernel.org>
+ <20240621-hid_hw_req_bpf-v1-6-d7ab8b885a0b@kernel.org> <CAADnVQ+us6cQepSGWbOB4K1bb_0Wh43Cpo4zXJxB2d+SVpYinQ@mail.gmail.com>
+ <dcbgoe7gija3fn5zsooulnq3jey4twwqvsxjv4yjijacnrlt2h@q6obu65ifctt>
+In-Reply-To: <dcbgoe7gija3fn5zsooulnq3jey4twwqvsxjv4yjijacnrlt2h@q6obu65ifctt>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Fri, 21 Jun 2024 09:26:00 -0700
+Message-ID: <CAADnVQKE6RyGUhQbTiOfa15=D9B_vtAg=VMDv8cfYrUKOv5UFQ@mail.gmail.com>
+Subject: Re: [PATCH HID 06/12] HID: bpf: add HID-BPF hooks for hid_hw_output_report
+To: Benjamin Tissoires <bentiss@kernel.org>
+Cc: Jiri Kosina <jikos@kernel.org>, Alexei Starovoitov <ast@kernel.org>, Shuah Khan <shuah@kernel.org>, 
+	Jonathan Corbet <corbet@lwn.net>, "open list:HID CORE LAYER" <linux-input@vger.kernel.org>, 
+	LKML <linux-kernel@vger.kernel.org>, bpf <bpf@vger.kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, 
+	"open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Jun 21, 2024 at 4:17=E2=80=AFAM Alexander Lobakin
-<aleksander.lobakin@intel.com> wrote:
+On Fri, Jun 21, 2024 at 9:08=E2=80=AFAM Benjamin Tissoires <bentiss@kernel.=
+org> wrote:
 >
-> From: Yan Zhai <yan@cloudflare.com>
-> Date: Thu, 20 Jun 2024 15:19:13 -0700
->
-> > Allow XDP program to set XDP_FLAGS_GRO_DISABLED flag in xdp_buff and
-> > xdp_frame, and disable GRO when building an sk_buff if this flag is set=
-.
+> On Jun 21 2024, Alexei Starovoitov wrote:
+> > On Fri, Jun 21, 2024 at 1:56=E2=80=AFAM Benjamin Tissoires <bentiss@ker=
+nel.org> wrote:
+> > >
+> > > Same story than hid_hw_raw_requests:
+> > >
+> > > This allows to intercept and prevent or change the behavior of
+> > > hid_hw_output_report() from a bpf program.
+> > >
+> > > The intent is to solve a couple of use case:
+> > >   - firewalling a HID device: a firewall can monitor who opens the hi=
+draw
+> > >     nodes and then prevent or allow access to write operations on tha=
+t
+> > >     hidraw node.
+> > >   - change the behavior of a device and emulate a new HID feature req=
+uest
+> > >
+> > > The hook is allowed to be run as sleepable so it can itself call
+> > > hid_hw_output_report(), which allows to "convert" one feature request=
+ into
+> > > another or even call the feature request on a different HID device on=
+ the
+> > > same physical device.
+> > >
+> > > Signed-off-by: Benjamin Tissoires <bentiss@kernel.org>
+> > >
+> > > ---
+> > >
+> > > Here checkpatch complains about:
+> > > WARNING: use of RCU tasks trace is incorrect outside BPF or core RCU =
+code
+> > >
+> > > However, we are jumping in BPF code, so I think this is correct, but =
+I'd
+> > > like to have the opinion on the BPF folks.
+> > > ---
+> > >  drivers/hid/bpf/hid_bpf_dispatch.c   | 37 ++++++++++++++++++++++++++=
+++++++----
+> > >  drivers/hid/bpf/hid_bpf_struct_ops.c |  1 +
+> > >  drivers/hid/hid-core.c               | 10 ++++++++--
+> > >  drivers/hid/hidraw.c                 |  2 +-
+> > >  include/linux/hid.h                  |  3 ++-
+> > >  include/linux/hid_bpf.h              | 24 ++++++++++++++++++++++-
+> > >  6 files changed, 68 insertions(+), 9 deletions(-)
+> > >
+> > > diff --git a/drivers/hid/bpf/hid_bpf_dispatch.c b/drivers/hid/bpf/hid=
+_bpf_dispatch.c
+> > > index 8d6e08b7c42f..2a29a0625a3b 100644
+> > > --- a/drivers/hid/bpf/hid_bpf_dispatch.c
+> > > +++ b/drivers/hid/bpf/hid_bpf_dispatch.c
+> > > @@ -111,6 +111,38 @@ int dispatch_hid_bpf_raw_requests(struct hid_dev=
+ice *hdev,
+> > >  }
+> > >  EXPORT_SYMBOL_GPL(dispatch_hid_bpf_raw_requests);
+> > >
+> > > +int dispatch_hid_bpf_output_report(struct hid_device *hdev,
+> > > +                                  __u8 *buf, u32 size, __u64 source,
+> > > +                                  bool from_bpf)
+> > > +{
+> > > +       struct hid_bpf_ctx_kern ctx_kern =3D {
+> > > +               .ctx =3D {
+> > > +                       .hid =3D hdev,
+> > > +                       .allocated_size =3D size,
+> > > +                       .size =3D size,
+> > > +               },
+> > > +               .data =3D buf,
+> > > +               .from_bpf =3D from_bpf,
+> > > +       };
+> > > +       struct hid_bpf_ops *e;
+> > > +       int ret;
+> > > +
+> > > +       rcu_read_lock_trace();
+> > > +       list_for_each_entry_rcu(e, &hdev->bpf.prog_list, list) {
+> > > +               if (e->hid_hw_output_report) {
+> > > +                       ret =3D e->hid_hw_output_report(&ctx_kern.ctx=
+, source);
+> > > +                       if (ret)
+> > > +                               goto out;
+> > > +               }
+> > > +       }
+> > > +       ret =3D 0;
+> > > +
+> > > +out:
+> > > +       rcu_read_unlock_trace();
 > >
-> > Signed-off-by: Yan Zhai <yan@cloudflare.com>
-> > ---
-> >  include/net/xdp.h | 38 +++++++++++++++++++++++++++++++++++++-
-> >  1 file changed, 37 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/include/net/xdp.h b/include/net/xdp.h
-> > index e6770dd40c91..cc3bce8817b0 100644
-> > --- a/include/net/xdp.h
-> > +++ b/include/net/xdp.h
-> > @@ -75,6 +75,7 @@ enum xdp_buff_flags {
-> >       XDP_FLAGS_FRAGS_PF_MEMALLOC     =3D BIT(1), /* xdp paged memory i=
-s under
-> >                                                  * pressure
-> >                                                  */
-> > +     XDP_FLAGS_GRO_DISABLED          =3D BIT(2), /* GRO disabled */
+> > same question.
 >
-> There should be tabs, not spaces.
+> re What is this for?:
 >
-> >  };
-> >
-> >  struct xdp_buff {
-> > @@ -113,12 +114,35 @@ static __always_inline void xdp_buff_set_frag_pfm=
-emalloc(struct xdp_buff *xdp)
-> >       xdp->flags |=3D XDP_FLAGS_FRAGS_PF_MEMALLOC;
-> >  }
-> >
-> > +static __always_inline void xdp_buff_disable_gro(struct xdp_buff *xdp)
-> > +{
-> > +     xdp->flags |=3D XDP_FLAGS_GRO_DISABLED;
-> > +}
-> > +
-> > +static __always_inline bool xdp_buff_gro_disabled(struct xdp_buff *xdp=
-)
-> > +{
-> > +     return !!(xdp->flags & XDP_FLAGS_GRO_DISABLED);
-> > +}
-> > +
-> > +static __always_inline void
-> > +xdp_buff_fixup_skb_offloading(struct xdp_buff *xdp, struct sk_buff *sk=
-b)
-> > +{
-> > +     if (xdp_buff_gro_disabled(xdp))
-> > +             skb_disable_gro(skb);
-> > +}
->
-> I don't think this should be named "fixup". "propagate", "update",
-> "promote", ...?
->
-> Maybe `if` is not needed here?
->
->         skb->gro_disabled =3D xdp_buff_gro_disabled(xdp)
->
-> ?
->
-I called it fixup mainly considering current skb fields could be set
-incorrectly (or maybe not?) For example when XDP load balances
-traffic, it could encap and send from server A to server B, but that
-means HW on B may have no good way to calculate the actual flow
-hash/csum. The original values could be read from A and sent within
-the encapsulation header, so that B can use this value to "fixup" the
-things.
+> e->hid_hw_output_report might sleep, so using a plain rcu_read_lock()
+> introduces warnings.
 
-But tbh, I am never good at naming, it's too hard for a non-native
-speaker sometimes... So I am very open on what to use if majority of
-the participants like it :D
+Ok, but just replacing rcu_read_lock() with rcu_read_lock_trace()
+doesn't fix it.
+rcu and rcu_tasks_trace are different.
+If you're using call_rcu to wait for GP to free an element in that
+list the thing will go wrong.
 
-The if is still needed since I added a control config to wrap that bit.
-
-best
-Yan
-
-> > +
-> > +static __always_inline void
-> > +xdp_init_buff_minimal(struct xdp_buff *xdp)
-> > +{
-> > +     xdp->flags =3D 0;
-> > +}
->
-> "xdp_buff_clear_flags"?
->
-> > +
-> >  static __always_inline void
-> >  xdp_init_buff(struct xdp_buff *xdp, u32 frame_sz, struct xdp_rxq_info =
-*rxq)
-> >  {
-> >       xdp->frame_sz =3D frame_sz;
-> >       xdp->rxq =3D rxq;
-> > -     xdp->flags =3D 0;
-> > +     xdp_init_buff_minimal(xdp);
-> >  }
-> >
-> >  static __always_inline void
-> > @@ -187,6 +211,18 @@ static __always_inline bool xdp_frame_is_frag_pfme=
-malloc(struct xdp_frame *frame
-> >       return !!(frame->flags & XDP_FLAGS_FRAGS_PF_MEMALLOC);
-> >  }
-> >
-> > +static __always_inline bool xdp_frame_gro_disabled(struct xdp_frame *f=
-rame)
-> > +{
-> > +     return !!(frame->flags & XDP_FLAGS_GRO_DISABLED);
-> > +}
-> > +
-> > +static __always_inline void
-> > +xdp_frame_fixup_skb_offloading(struct xdp_frame *frame, struct sk_buff=
- *skb)
-> > +{
-> > +     if (xdp_frame_gro_disabled(frame))
-> > +             skb_disable_gro(skb);
-> > +}
->
-> (same)
->
-> > +
-> >  #define XDP_BULK_QUEUE_SIZE  16
-> >  struct xdp_frame_bulk {
-> >       int count;
->
-> Thanks,
-> Olek
+If you really need rcu life times here use srcu. It's a much better fit.
+There will be srcu_read_lock() here, paired with call_srcu().
