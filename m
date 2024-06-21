@@ -1,263 +1,220 @@
-Received: from mail-qk1-f181.google.com (mail-qk1-f181.google.com [209.85.222.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C31E40861;
-	Fri, 21 Jun 2024 12:15:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AB57152166
+	for <bpf@vger.kernel.org>; Fri, 21 Jun 2024 12:26:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718972121; cv=none; b=QFPYIKmXsaCJZ0mpYpvnGbg/vbF0KmyH8WOLV4G61by709GhpN/tpP+mSoU/hcZE72eS1BZVyPpAlSO1glBQVU50hzcV75s2aW313OJQTNGWlqzQ7liG/PWkbmi1tZO3Y4xKf9CrPpKOUBDxQ2e9OzcAvdMgS1Do6RoaGyis9Qw=
+	t=1718972789; cv=none; b=Clcqi/Q9fiHzrVkSlQAT+6uJjg7E41dNVxiMZrwmper/8/7hIfQsO7uY/rx+/Ao0XLycW/L2b0Tj177CNCqtnU8UFzaAC/KGCWBA1wBYyVfYTnl2EMG/7j4k2MJQLAQXwe8eoOqpr1VXL0bu8ri7VwJ95aUlkKHozYVlD4BWaMg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718972121; c=relaxed/simple;
-	bh=cIPNiu/gEF0HK1CBHnIMlx3R04l5LgkBN4c4sNzkFzg=;
-	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 Mime-Version:Content-Type; b=fIcmx+V1Cbz4JR1Yz0nq4aVXndubT+J7CDOn0foO8E8y2tqyXsX86Pn9qtYGjBt1x/Hq87rLfTx41rR/HWnavFuQBxupOy197txC2gc0lsPiDo3yjfDHcWap4dHJKKYpOrTT9EoQ/S0r39m01Lw5jPicS5gqEx+EpjyoLMaJCCA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VjrRL1lw; arc=none smtp.client-ip=209.85.222.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1718972789; c=relaxed/simple;
+	bh=AkNt1pWCk/A9KaLQLLAqgVU7///UavYq/l28BJAcjQA=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=ufsJGwEcZOhXIk/1lM+V17dyuP3xKKQCpc5LEh7zur7qvi0aQ8SSZ6Q2n4Vq4YXsIovJwhXyPHfddj2PSxymcY+7GUpWr9MgwGtE0h6bCCghbp8tH0QcbPObuNq0yeSTi///EK7FLkQQDbLh7/HZXCyYolgLwUKNaJIld5XvlKs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=gse3jQEp; arc=none smtp.client-ip=213.133.104.62
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VjrRL1lw"
-Received: by mail-qk1-f181.google.com with SMTP id af79cd13be357-7954dcf3158so112011185a.3;
-        Fri, 21 Jun 2024 05:15:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1718972119; x=1719576919; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2E6XacsjAwWDKM7tAVWRLWVOqk2WqIKzpAc0VY30v6o=;
-        b=VjrRL1lw6kiGem2y5tzeeX7QuFqaLlZ6Kkdp7njOQK/OS77W/Z+Nx2tc1jouC1U/RU
-         5X4fiGPvq9m/WDEdbLpE3RJfqOqt7g6TpMJAyICU0VMuOM5I+qzGKQTi73upqr5KjV9O
-         j9Lu2XOx2ebjXcGbfgUA+005yomw07+sjUsHF7mF6f3pt399fWVUG40qf/KgvfXXLhcg
-         NMgm3lg/a23UPilmIFSiTSvEvl/Yvr1WtYvv9FdmQSDf7OmZehQog6kcqKN1Lj0pJdeb
-         cKFCydGbUtNwV3EG10PalwCP0AGICfykHsY8a9VQJJ449LuIVmE3cj8492QqyUvJ74Aq
-         HQcw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718972119; x=1719576919;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=2E6XacsjAwWDKM7tAVWRLWVOqk2WqIKzpAc0VY30v6o=;
-        b=aPA05k1u8iSNNzMmYRINMhsRLGk2hp1pila1VItPahzF5YKZGDXJYCHfqsY1C1x9Oz
-         081b7+/Pf94TDhgNDt3czjRUyCGfYRquU0RGaZECQCy1Cl6PquonnfmKKXVECHxo+pYB
-         Cf79ojQv5pq4OZbZhntn8SZfsxqGratxF8xruhHT25geXVOjLh6+6CZFBma0irX24Pjh
-         6GBeIh0YDPEv9+uLjUdvsFgBmozTisyFpRHiHapGyNcEu21wu5KnRHo8fRrGRNj5bz9f
-         SSAhDCVMHdyo3vJ2uSVtdO1H76bN/k0/pQ5ZmuCnzb42yk+wAOInLoutU1tmxDujXqPw
-         AcIg==
-X-Forwarded-Encrypted: i=1; AJvYcCXjprUtXeWAvFJaLki47x6MeMFGrgFTP7ZEeBtEfnl32rNzgJoy12apKS5A33sF8JTjbSihtd/Eggz5Mg8iGYECHepTUvvhcZ/B4m8GzOJgfDXOjt2rMRPH9YeUUy0p93SVg24ypCeYPfFHQWMcX90bJCviqhjd01/p
-X-Gm-Message-State: AOJu0YwsLmZpxKFCOF+xSyyeeIEEdZ3esdUJYvC2g4QaTIWgoKYNccHl
-	ERmWc8EnAk7e2Aii8RsDGI4Tq5CANXDU8BwBIt5V0yySK+qwdYMo
-X-Google-Smtp-Source: AGHT+IEn9FUQygN9w/1i0M1N6zLdsUlHCdn8LnwTaa/JuDCqlYaQXN/DUjsKv+XrwynmaavdzDNtwA==
-X-Received: by 2002:a05:620a:2606:b0:795:5896:f842 with SMTP id af79cd13be357-79bb3ee6e0fmr719006285a.76.1718972118698;
-        Fri, 21 Jun 2024 05:15:18 -0700 (PDT)
-Received: from localhost (56.148.86.34.bc.googleusercontent.com. [34.86.148.56])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-79bce930b8dsm80912885a.102.2024.06.21.05.15.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Jun 2024 05:15:16 -0700 (PDT)
-Date: Fri, 21 Jun 2024 08:15:15 -0400
-From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-To: Yan Zhai <yan@cloudflare.com>, 
- netdev@vger.kernel.org
-Cc: "David S. Miller" <davem@davemloft.net>, 
- Eric Dumazet <edumazet@google.com>, 
- Jakub Kicinski <kuba@kernel.org>, 
- Paolo Abeni <pabeni@redhat.com>, 
- Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, 
- Jesper Dangaard Brouer <hawk@kernel.org>, 
- John Fastabend <john.fastabend@gmail.com>, 
- Willem de Bruijn <willemb@google.com>, 
- Simon Horman <horms@kernel.org>, 
- Florian Westphal <fw@strlen.de>, 
- Mina Almasry <almasrymina@google.com>, 
- Abhishek Chauhan <quic_abchauha@quicinc.com>, 
- David Howells <dhowells@redhat.com>, 
- Alexander Lobakin <aleksander.lobakin@intel.com>, 
- David Ahern <dsahern@kernel.org>, 
- Richard Gobert <richardbgobert@gmail.com>, 
- Antoine Tenart <atenart@kernel.org>, 
- Yan Zhai <yan@cloudflare.com>, 
- Felix Fietkau <nbd@nbd.name>, 
- Soheil Hassas Yeganeh <soheil@google.com>, 
- Pavel Begunkov <asml.silence@gmail.com>, 
- Lorenzo Bianconi <lorenzo@kernel.org>, 
- =?UTF-8?B?VGhvbWFzIFdlacOfc2NodWg=?= <linux@weissschuh.net>, 
- netdev@vger.kernel.org, 
- linux-kernel@vger.kernel.org, 
- bpf@vger.kernel.org
-Message-ID: <66756ed3f2192_2e64f929491@willemb.c.googlers.com.notmuch>
-In-Reply-To: <b8c183a24285c2ab30c51622f4f9eff8f7a4752f.1718919473.git.yan@cloudflare.com>
-References: <cover.1718919473.git.yan@cloudflare.com>
- <b8c183a24285c2ab30c51622f4f9eff8f7a4752f.1718919473.git.yan@cloudflare.com>
-Subject: Re: [RFC net-next 1/9] skb: introduce gro_disabled bit
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="gse3jQEp"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:MIME-Version:
+	References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
+	Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=MogDk9UEa/FL4UBSrS0FFC9seISLfvKSO3MLp4XGzik=; b=gse3jQEp/LfcfF4udYoJFQH/Kt
+	KWcamwpjcWR+0yqYj67jd7FXeIJg78FzOKAeoIj3fYII8oQ+U6XDcQRKpWFGpNIOlBjlhVjDDaSxW
+	cxu3CtIa2e+l1xLUaMfNdETck0M4S7pntknqFJdxOEGVcA9KSMAPOsC6g15cpIlAf6srM/uTiMfxd
+	0ZSAm+pBo2Kd8E7KfjsdXDkjlboaH3d8H2L3DCMvlEuMzeN7xSRkvGyxlNCpMsEsy2nRmouD+zxz9
+	TAKMeVM0SO8fLRNH++XPI6l7s4dPRWeyu1iQQf/nCch4cxTASnUyOMZ+/q4HjXq5AuBXfodonOEfi
+	5Tp7q/LA==;
+Received: from 18.248.197.178.dynamic.cust.swisscom.net ([178.197.248.18] helo=localhost)
+	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1sKdLO-0001nh-Nn; Fri, 21 Jun 2024 14:26:18 +0200
+From: Daniel Borkmann <daniel@iogearbox.net>
+To: ast@kernel.org
+Cc: bpf@vger.kernel.org,
+	Daniel Borkmann <daniel@iogearbox.net>
+Subject: [PATCH bpf v2 2/2] selftests/bpf: Add more ring buffer test coverage
+Date: Fri, 21 Jun 2024 14:26:10 +0200
+Message-Id: <20240621122610.15083-2-daniel@iogearbox.net>
+X-Mailer: git-send-email 2.21.0
+In-Reply-To: <20240621122610.15083-1-daniel@iogearbox.net>
+References: <20240621122610.15083-1-daniel@iogearbox.net>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.103.10/27313/Fri Jun 21 10:28:08 2024)
 
-Yan Zhai wrote:
-> Software GRO is currently controlled by a single switch, i.e.
-> 
->   ethtool -K dev gro on|off
-> 
-> However, this is not always desired. When GRO is enabled, even if the
-> kernel cannot GRO certain traffic, it has to run through the GRO receive
-> handlers with no benefit.
-> 
-> There are also scenarios that turning off GRO is a requirement. For
-> example, our production environment has a scenario that a TC egress hook
-> may add multiple encapsulation headers to forwarded skbs for load
-> balancing and isolation purpose. The encapsulation is implemented via
-> BPF. But the problem arises then: there is no way to properly offload a
-> double-encapsulated packet, since skb only has network_header and
-> inner_network_header to track one layer of encapsulation, but not two.
-> On the other hand, not all the traffic through this device needs double
-> encapsulation. But we have to turn off GRO completely for any ingress
-> device as a result.
-> 
-> Introduce a bit on skb so that GRO engine can be notified to skip GRO on
-> this skb, rather than having to be 0-or-1 for all traffic.
-> 
-> Signed-off-by: Yan Zhai <yan@cloudflare.com>
-> ---
->  include/linux/netdevice.h |  9 +++++++--
->  include/linux/skbuff.h    | 10 ++++++++++
->  net/Kconfig               | 10 ++++++++++
->  net/core/gro.c            |  2 +-
->  net/core/gro_cells.c      |  2 +-
->  net/core/skbuff.c         |  4 ++++
->  6 files changed, 33 insertions(+), 4 deletions(-)
-> 
-> diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
-> index c83b390191d4..2ca0870b1221 100644
-> --- a/include/linux/netdevice.h
-> +++ b/include/linux/netdevice.h
-> @@ -2415,11 +2415,16 @@ struct net_device {
->  	((dev)->devlink_port = (port));				\
->  })
->  
-> -static inline bool netif_elide_gro(const struct net_device *dev)
-> +static inline bool netif_elide_gro(const struct sk_buff *skb)
->  {
-> -	if (!(dev->features & NETIF_F_GRO) || dev->xdp_prog)
-> +	if (!(skb->dev->features & NETIF_F_GRO) || skb->dev->xdp_prog)
->  		return true;
-> +
-> +#ifdef CONFIG_SKB_GRO_CONTROL
-> +	return skb->gro_disabled;
-> +#else
->  	return false;
-> +#endif
+Add test coverage for reservations beyond the ring buffer size in order
+to validate that bpf_ringbuf_reserve() rejects the request with NULL, all
+other ring buffer tests keep passing as well:
 
-Yet more branches in the hot path.
+  # ./vmtest.sh -- ./test_progs -t ringbuf
+  [...]
+  ./test_progs -t ringbuf
+  [    1.165434] bpf_testmod: loading out-of-tree module taints kernel.
+  [    1.165825] bpf_testmod: module verification failed: signature and/or required key missing - tainting kernel
+  [    1.284001] tsc: Refined TSC clocksource calibration: 3407.982 MHz
+  [    1.286871] clocksource: tsc: mask: 0xffffffffffffffff max_cycles: 0x311fc34e357, max_idle_ns: 440795379773 ns
+  [    1.289555] clocksource: Switched to clocksource tsc
+  #274/1   ringbuf/ringbuf:OK
+  #274/2   ringbuf/ringbuf_n:OK
+  #274/3   ringbuf/ringbuf_map_key:OK
+  #274/4   ringbuf/ringbuf_write:OK
+  #274     ringbuf:OK
+  #275     ringbuf_multi:OK
+  [...]
 
-Compile time configurability does not help, as that will be
-enabled by distros.
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+---
+ v1 -> v2:
+   - Remove old-style CHECK asserts
 
-For a fairly niche use case. Where functionality of GRO already
-works. So just a performance for a very rare case at the cost of a
-regression in the common case. A small regression perhaps, but death
-by a thousand cuts.
+ tools/testing/selftests/bpf/Makefile          |  2 +-
+ .../selftests/bpf/prog_tests/ringbuf.c        | 45 +++++++++++++++++++
+ .../selftests/bpf/progs/test_ringbuf_write.c  | 42 +++++++++++++++++
+ 3 files changed, 88 insertions(+), 1 deletion(-)
+ create mode 100644 tools/testing/selftests/bpf/progs/test_ringbuf_write.c
 
->  }
->  
->  #define	NETDEV_ALIGN		32
-> diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
-> index f4cda3fbdb75..48b10ece95b5 100644
-> --- a/include/linux/skbuff.h
-> +++ b/include/linux/skbuff.h
-> @@ -1008,6 +1008,9 @@ struct sk_buff {
->  #if IS_ENABLED(CONFIG_IP_SCTP)
->  	__u8			csum_not_inet:1;
->  #endif
-> +#ifdef CONFIG_SKB_GRO_CONTROL
-> +	__u8			gro_disabled:1;
-> +#endif
->  
->  #if defined(CONFIG_NET_SCHED) || defined(CONFIG_NET_XGRESS)
->  	__u16			tc_index;	/* traffic control index */
-> @@ -1215,6 +1218,13 @@ static inline bool skb_wifi_acked_valid(const struct sk_buff *skb)
->  #endif
->  }
->  
-> +static inline void skb_disable_gro(struct sk_buff *skb)
-> +{
-> +#ifdef CONFIG_SKB_GRO_CONTROL
-> +	skb->gro_disabled = 1;
-> +#endif
-> +}
-> +
->  /**
->   * skb_unref - decrement the skb's reference count
->   * @skb: buffer
-> diff --git a/net/Kconfig b/net/Kconfig
-> index 9fe65fa26e48..47d1ee92df15 100644
-> --- a/net/Kconfig
-> +++ b/net/Kconfig
-> @@ -289,6 +289,16 @@ config MAX_SKB_FRAGS
->  	  and in drivers using build_skb().
->  	  If unsure, say 17.
->  
-> +config SKB_GRO_CONTROL
-> +	bool "allow disable GRO on per-packet basis"
-> +	default y
-> +	help
-> +	  By default GRO can only be enabled or disabled per network device.
-> +	  This can be cumbersome for certain scenarios.
-> +	  Toggling this option will allow disabling GRO for selected packets,
-> +	  e.g. by XDP programs, so that it is more flexibile.
-> +	  Extra overhead should be minimal.
-> +
->  config RPS
->  	bool "Receive packet steering"
->  	depends on SMP && SYSFS
-> diff --git a/net/core/gro.c b/net/core/gro.c
-> index b3b43de1a650..46232a0d1983 100644
-> --- a/net/core/gro.c
-> +++ b/net/core/gro.c
-> @@ -476,7 +476,7 @@ static enum gro_result dev_gro_receive(struct napi_struct *napi, struct sk_buff
->  	enum gro_result ret;
->  	int same_flow;
->  
-> -	if (netif_elide_gro(skb->dev))
-> +	if (netif_elide_gro(skb))
->  		goto normal;
->  
->  	gro_list_prepare(&gro_list->list, skb);
-> diff --git a/net/core/gro_cells.c b/net/core/gro_cells.c
-> index ff8e5b64bf6b..1bf15783300f 100644
-> --- a/net/core/gro_cells.c
-> +++ b/net/core/gro_cells.c
-> @@ -20,7 +20,7 @@ int gro_cells_receive(struct gro_cells *gcells, struct sk_buff *skb)
->  	if (unlikely(!(dev->flags & IFF_UP)))
->  		goto drop;
->  
-> -	if (!gcells->cells || skb_cloned(skb) || netif_elide_gro(dev)) {
-> +	if (!gcells->cells || skb_cloned(skb) || netif_elide_gro(skb)) {
->  		res = netif_rx(skb);
->  		goto unlock;
->  	}
-> diff --git a/net/core/skbuff.c b/net/core/skbuff.c
-> index 2315c088e91d..82bd297921c1 100644
-> --- a/net/core/skbuff.c
-> +++ b/net/core/skbuff.c
-> @@ -6030,6 +6030,10 @@ void skb_scrub_packet(struct sk_buff *skb, bool xnet)
->  	ipvs_reset(skb);
->  	skb->mark = 0;
->  	skb_clear_tstamp(skb);
-> +#ifdef CONFIG_SKB_GRO_CONTROL
-> +	/* hand back GRO control to next netns */
-> +	skb->gro_disabled = 0;
-> +#endif
->  }
->  EXPORT_SYMBOL_GPL(skb_scrub_packet);
->  
-> -- 
-> 2.30.2
-> 
-> 
-
+diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+index 96c0af323341..037d2e0502ef 100644
+--- a/tools/testing/selftests/bpf/Makefile
++++ b/tools/testing/selftests/bpf/Makefile
+@@ -457,7 +457,7 @@ LINKED_SKELS := test_static_linked.skel.h linked_funcs.skel.h		\
+ LSKELS := fentry_test.c fexit_test.c fexit_sleep.c atomics.c 		\
+ 	trace_printk.c trace_vprintk.c map_ptr_kern.c 			\
+ 	core_kern.c core_kern_overflow.c test_ringbuf.c			\
+-	test_ringbuf_n.c test_ringbuf_map_key.c
++	test_ringbuf_n.c test_ringbuf_map_key.c test_ringbuf_write.c
+ 
+ # Generate both light skeleton and libbpf skeleton for these
+ LSKELS_EXTRA := test_ksyms_module.c test_ksyms_weak.c kfunc_call_test.c \
+diff --git a/tools/testing/selftests/bpf/prog_tests/ringbuf.c b/tools/testing/selftests/bpf/prog_tests/ringbuf.c
+index 4c6f42dae409..09cce4367ce4 100644
+--- a/tools/testing/selftests/bpf/prog_tests/ringbuf.c
++++ b/tools/testing/selftests/bpf/prog_tests/ringbuf.c
+@@ -12,9 +12,11 @@
+ #include <sys/sysinfo.h>
+ #include <linux/perf_event.h>
+ #include <linux/ring_buffer.h>
++
+ #include "test_ringbuf.lskel.h"
+ #include "test_ringbuf_n.lskel.h"
+ #include "test_ringbuf_map_key.lskel.h"
++#include "test_ringbuf_write.lskel.h"
+ 
+ #define EDONE 7777
+ 
+@@ -84,6 +86,47 @@ static void *poll_thread(void *input)
+ 	return (void *)(long)ring_buffer__poll(ringbuf, timeout);
+ }
+ 
++static void ringbuf_write_subtest(void)
++{
++	struct test_ringbuf_write_lskel *skel;
++	int page_size = getpagesize();
++	size_t *mmap_ptr;
++	int err, rb_fd;
++
++	skel = test_ringbuf_write_lskel__open();
++	if (!ASSERT_OK_PTR(skel, "skel_load"))
++		return;
++
++	skel->maps.ringbuf.max_entries = 0x4000;
++
++	err = test_ringbuf_write_lskel__load(skel);
++	if (!ASSERT_OK(err, "ringbuf_write"))
++		goto cleanup;
++
++	rb_fd = skel->maps.ringbuf.map_fd;
++
++	mmap_ptr = mmap(NULL, page_size, PROT_READ | PROT_WRITE, MAP_SHARED, rb_fd, 0);
++	ASSERT_OK_PTR(mmap_ptr, "rw_cons_pos");
++	*mmap_ptr = 0x3000;
++
++	skel->bss->pid = getpid();
++
++	ringbuf = ring_buffer__new(rb_fd, process_sample, NULL, NULL);
++	if (!ASSERT_OK_PTR(ringbuf, "ringbuf_create"))
++		goto cleanup;
++
++	err = test_ringbuf_write_lskel__attach(skel);
++	if (!ASSERT_OK(err, "ringbuf_write"))
++		goto cleanup;
++
++	trigger_samples();
++	ASSERT_GE(skel->bss->discarded, 1, "discarded");
++	ASSERT_EQ(skel->bss->passed, 0, "passed");
++cleanup:
++	ring_buffer__free(ringbuf);
++	test_ringbuf_write_lskel__destroy(skel);
++}
++
+ static void ringbuf_subtest(void)
+ {
+ 	const size_t rec_sz = BPF_RINGBUF_HDR_SZ + sizeof(struct sample);
+@@ -451,4 +494,6 @@ void test_ringbuf(void)
+ 		ringbuf_n_subtest();
+ 	if (test__start_subtest("ringbuf_map_key"))
+ 		ringbuf_map_key_subtest();
++	if (test__start_subtest("ringbuf_write"))
++		ringbuf_write_subtest();
+ }
+diff --git a/tools/testing/selftests/bpf/progs/test_ringbuf_write.c b/tools/testing/selftests/bpf/progs/test_ringbuf_write.c
+new file mode 100644
+index 000000000000..c6c67238a7c8
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/test_ringbuf_write.c
+@@ -0,0 +1,42 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#include <linux/bpf.h>
++#include <bpf/bpf_helpers.h>
++#include "bpf_misc.h"
++
++char _license[] SEC("license") = "GPL";
++
++struct {
++	__uint(type, BPF_MAP_TYPE_RINGBUF);
++} ringbuf SEC(".maps");
++
++long discarded, passed;
++int pid;
++
++SEC("fentry/" SYS_PREFIX "sys_getpgid")
++int test_ringbuf_write(void *ctx)
++{
++	int *foo, cur_pid = bpf_get_current_pid_tgid() >> 32;
++	void *sample1, *sample2;
++
++	if (cur_pid != pid)
++		return 0;
++
++	sample1 = bpf_ringbuf_reserve(&ringbuf, 0x3000, 0);
++	if (!sample1)
++		return 0;
++	/* first one can pass */
++	sample2 = bpf_ringbuf_reserve(&ringbuf, 0x3000, 0);
++	if (!sample2) {
++		bpf_ringbuf_discard(sample1, 0);
++		__sync_fetch_and_add(&discarded, 1);
++		return 0;
++	}
++	/* second one must not */
++	__sync_fetch_and_add(&passed, 1);
++	foo = sample2 + 4084;
++	*foo = 256;
++	bpf_ringbuf_discard(sample1, 0);
++	bpf_ringbuf_discard(sample2, 0);
++	return 0;
++}
+-- 
+2.43.0
 
