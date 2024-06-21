@@ -1,199 +1,142 @@
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AB09152161
-	for <bpf@vger.kernel.org>; Fri, 21 Jun 2024 12:26:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59DE1155310
+	for <bpf@vger.kernel.org>; Fri, 21 Jun 2024 12:35:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718972789; cv=none; b=X0eYrceyB/9QgPZlON/Uru8NG7Pph91Yd4IS7MPbTiZPoKLIH9/W1SojOEcuC0waei1UBxnDPkz69PfMoMxhRvxvYf4HNshQ/sYfTzBhjzCAt9kR4PtvJpWum+tesfit6h5/Uwfv1wKMOVvcNvqpqPHlIaLCmG/W7S5hx6lcOo4=
+	t=1718973322; cv=none; b=j+684dl80FWo2JxpQBYV7KFivjQtZyGCs+Q0SXOduvSQoKeHHxkwPAciMSMBZ4ljGnJWIDCF4QvngEnuimM2NYsolV+WwUuaQL/XAePq5De/DY+53FF4sqtHVAznSzamlL1jJY5n6r7KrUnsKYL7rGiCpIPjUS3xM7vvsWX4sqs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718972789; c=relaxed/simple;
-	bh=NbIY79fOS0V0qD+tp87WsVRBr9peyg8yqANF4enkn6Y=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=W/JQbCkQAzV4arLXqPeRCuT8OD5tlfQbb9OKrBYLjGkhdOXJZZoEAP4UjksOgGWq4r75SA8nGbFvf58r8MKB0CC2oD4QLc2ecH7J4+18uzQbBsUOBn0sSwgMKQeQtPHif18iifBAigRu7F+nfLUrhquXpuc03swFvI3Bcp29c/c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=RQsU8mjl; arc=none smtp.client-ip=213.133.104.62
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
+	s=arc-20240116; t=1718973322; c=relaxed/simple;
+	bh=F1ll4sOIvCBXD+ONg7YMytT6dGxSUcFFkrx7rbA2UqE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ce1BJ675X1ShxPA4izuz5OOq/hNdFd0bCqtenUS5T1R7o98x4+YjP3kRfa2b0kLyx8MNv9PTrdA9crED9UMr4iM6EPsIogwI0AEbznPXqM+QovzahZ0mcNV82AKS6vFaLeEk7qL1Cz0aIbcdL+Kzf1fzV/xzWNLvDw6/18TAzMs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=U+JrUESr; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="RQsU8mjl"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:MIME-Version:
-	Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:In-Reply-To:References;
-	bh=8fxV3n42om9XbYIukRrWbliOg7Ni/Z1uVCYVzjTzi6o=; b=RQsU8mjl6o+vDwb7AjNM6klpbW
-	UsnzWsPeA4jb3xvtH7kz/VWG9AQmbxUiU9aUHZ7M3qKxLEL126hXM6MB68CpjPtufDjL6svRzZDYx
-	ZioWjXgv0DQ/H9VQDzHVp/ep2tVLlXA8330BfAiXyDg88ezXj3F1eLxKR9MYT1eK7d8pKasFJvFRJ
-	uZ152B86HvcPNzVuS13K20ezaJ+6EKd9JaGycgHvBrmBzWFz3+nuTKITZZWJK6nmOtiAFoU5rH/oL
-	dmwthDRht3cw2qWlgsxfGO6EuFcAfXRd6UrBFlrGId2Gq26G4ut0a8zVPxQykKl545u6JoK6f6vKk
-	puOk7dOg==;
-Received: from 18.248.197.178.dynamic.cust.swisscom.net ([178.197.248.18] helo=localhost)
-	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1sKdLO-0001nW-8R; Fri, 21 Jun 2024 14:26:18 +0200
-From: Daniel Borkmann <daniel@iogearbox.net>
-To: ast@kernel.org
-Cc: bpf@vger.kernel.org,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Bing-Jhong Billy Jheng <billy@starlabs.sg>,
-	Muhammad Ramdhan <ramdhan@starlabs.sg>,
-	Andrii Nakryiko <andrii@kernel.org>
-Subject: [PATCH bpf v2 1/2] bpf: Fix overrunning reservations in ringbuf
-Date: Fri, 21 Jun 2024 14:26:09 +0200
-Message-Id: <20240621122610.15083-1-daniel@iogearbox.net>
-X-Mailer: git-send-email 2.21.0
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="U+JrUESr"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1718973320;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=DUOo6pncrLLfVNELGwFTwFChqLBk3YLyQi1FlWq0WU8=;
+	b=U+JrUESrXLqc49siFWWjpvYqxBHHnR08oBTZu6mIT6L8gKugK9SLNVzvdEm1QJEAlTTsfP
+	C1YhIFa4SnY/l6bN328YXkfurdMggOWnkHSyyelcH7JP5Uu9khiwFc4jRjzSTHfbNAgRfo
+	8hYvrjNEXzR8yfHDG/yRl4oYhiGD9Zk=
+Received: from mail-yw1-f199.google.com (mail-yw1-f199.google.com
+ [209.85.128.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-569-PMAq3DAzOnqwaIrZoLy7Ww-1; Fri, 21 Jun 2024 08:35:18 -0400
+X-MC-Unique: PMAq3DAzOnqwaIrZoLy7Ww-1
+Received: by mail-yw1-f199.google.com with SMTP id 00721157ae682-632e098ab42so36801867b3.3
+        for <bpf@vger.kernel.org>; Fri, 21 Jun 2024 05:35:18 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1718973318; x=1719578118;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=DUOo6pncrLLfVNELGwFTwFChqLBk3YLyQi1FlWq0WU8=;
+        b=jcbY3x3tgdWE885pSnEY4ibCC1II9pZyNxl5TEijPbPu7lutzbRoyKXNNUedxU3MhB
+         weC7LUVzAhvgMUo2vyFiFNpQikIEQCOfi5QuXuaAjp1rtb3YtKn2JwPFRZYvL/CvqYNc
+         zNc2rrdL9trx45Fr630M7CXB26cNbCMpsKncihxCvRcU+8Ts5MAq5BhVKjeb3yxJdPQA
+         RgDjsyldjFqLff7VemQc9T9LcGF1nj2D3h8aOY4G9/zQ7vtJXEsP4NLHF8uSQhKYNv/O
+         6iEoT5r+fFmFzUIwNUORENBeed9OTQr31FoohAkTQV1Phd7uAF28hpzPAl1iN1aKyqPX
+         iVZQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWWBUSRcpcfFqTYk+93NfbW75BV3izZuNzA2zfTqB/82j7fB2c9V635LvEZ8rPHwi4fLHoprPJL6EobNZGOOKyE7ybf
+X-Gm-Message-State: AOJu0YxXp/opZJOcFXtxBPyk6nE6zqKN+JcoyUtzvf5RJGzk3S2GYtMH
+	GHGIeDLk4cS3DpDXiOw69rCnLD8nNGju6XYoaw1E44dGj73UxbxVL8Z5uD+BL7cEqLmng2w+QkJ
+	jN4aSG4Ys5HjskJZ7GGBYDt07KDIMQ3Iar8tFulp6zYprKqHhlXCEcggIz/yAK/1A/H0z1hUF5v
+	JmVws2yCGr93rO/rRje1JSSuXI
+X-Received: by 2002:a81:7282:0:b0:615:8c1:d7ec with SMTP id 00721157ae682-63a8f5243f4mr82320797b3.33.1718973318122;
+        Fri, 21 Jun 2024 05:35:18 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IGg4AV3dsomq7cAZlPOVhXZ/8jwkZGHBKMxRoERWq1isJ0a7oog8UYUJOo3PkY6knHJsv8OaMe5ENGVL/P/agU=
+X-Received: by 2002:a81:7282:0:b0:615:8c1:d7ec with SMTP id
+ 00721157ae682-63a8f5243f4mr82320627b3.33.1718973317776; Fri, 21 Jun 2024
+ 05:35:17 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.10/27313/Fri Jun 21 10:28:08 2024)
+References: <CAMENy5pb8ea+piKLg5q5yRTMZacQqYWAoVLE1FE9WhQPq92E0g@mail.gmail.com>
+ <5b64c89f-4127-4e8f-b795-3cec8e7350b4@kernel.org> <87wmmkn3mq.fsf@toke.dk> <ff571dcf-0375-6684-b188-5c1278cd50ce@iogearbox.net>
+In-Reply-To: <ff571dcf-0375-6684-b188-5c1278cd50ce@iogearbox.net>
+From: Samuel Dobron <sdobron@redhat.com>
+Date: Fri, 21 Jun 2024 14:35:06 +0200
+Message-ID: <CA+h3auMq5vnoyRLvJainG-AFA6f=ivRmu6RjKU4cBv_go975tw@mail.gmail.com>
+Subject: Re: XDP Performance Regression in recent kernel versions
+To: Daniel Borkmann <daniel@iogearbox.net>, hawk@kernel.org
+Cc: =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>, 
+	Sebastiano Miano <mianosebastiano@gmail.com>, bpf@vger.kernel.org, netdev@vger.kernel.org, 
+	saeedm@nvidia.com, tariqt@nvidia.com, edumazet@google.com, kuba@kernel.org, 
+	pabeni@redhat.com
+Content-Type: text/plain; charset="UTF-8"
 
-The BPF ring buffer internally is implemented as a power-of-2 sized circular
-buffer, with two logical and ever-increasing counters: consumer_pos is the
-consumer counter to show which logical position the consumer consumed the
-data, and producer_pos which is the producer counter denoting the amount of
-data reserved by all producers.
+Hey all,
 
-Each time a record is reserved, the producer that "owns" the record will
-successfully advance producer counter. In user space each time a record is
-read, the consumer of the data advanced the consumer counter once it finished
-processing. Both counters are stored in separate pages so that from user
-space, the producer counter is read-only and the consumer counter is read-write.
+Yeah, we do tests for ELN kernels [1] on a regular basis. Since
+~January of this year.
 
-One aspect that simplifies and thus speeds up the implementation of both
-producers and consumers is how the data area is mapped twice contiguously
-back-to-back in the virtual memory, allowing to not take any special measures
-for samples that have to wrap around at the end of the circular buffer data
-area, because the next page after the last data page would be first data page
-again, and thus the sample will still appear completely contiguous in virtual
-memory.
+As already mentioned, mlx5 is the only driver affected by this regression.
+Unfortunately, I think Jesper is actually hitting 2 regressions we noticed,
+the one already mentioned by Toke, another one [0] has been reported
+in early February.
+Btw. issue mentioned by Toke has been moved to Jira, see [5].
 
-Each record has a struct bpf_ringbuf_hdr { u32 len; u32 pg_off; } header for
-book-keeping the length and offset, and is inaccessible to the BPF program.
-Helpers like bpf_ringbuf_reserve() return `(void *)hdr + BPF_RINGBUF_HDR_SZ`
-for the BPF program to use. Bing-Jhong and Muhammad reported that it is however
-possible to make a second allocated memory chunk overlapping with the first
-chunk and as a result, the BPF program is now able to edit first chunk's
-header.
+Not sure all of you are able to see the content of [0], Jira says it's
+RH-confidental.
+So, I am not sure how much I can share without being fired :D. Anyway,
+affected kernels have been released a while ago, so anyone can find it
+on its own.
+Basically, we detected 5% regression on XDP_DROP+mlx5 (currently, we
+don't have data for any other XDP mode) in kernel-5.14 compared to
+previous builds.
 
-For example, consider the creation of a BPF_MAP_TYPE_RINGBUF map with size
-of 0x4000. Next, the consumer_pos is modified to 0x3000 /before/ a call to
-bpf_ringbuf_reserve() is made. This will allocate a chunk A, which is in
-[0x0,0x3008], and the BPF program is able to edit [0x8,0x3008]. Now, lets
-allocate a chunk B with size 0x3000. This will succeed because consumer_pos
-was edited ahead of time to pass the `new_prod_pos - cons_pos > rb->mask`
-check. Chunk B will be in range [0x3008,0x6010], and the BPF program is able
-to edit [0x3010,0x6010]. Due to the ring buffer memory layout mentioned
-earlier, the ranges [0x0,0x4000] and [0x4000,0x8000] point to the same data
-pages. This means that chunk B at [0x4000,0x4008] is chunk A's header.
-bpf_ringbuf_submit() / bpf_ringbuf_discard() use the header's pg_off to then
-locate the bpf_ringbuf itself via bpf_ringbuf_restore_from_rec(). Once chunk
-B modified chunk A's header, then bpf_ringbuf_commit() refers to the wrong
-page and could cause a crash.
+From tests history, I can see (most likely) the same improvement
+on 6.10rc2 (from 15Mpps to 17-18Mpps), so I'd say 20% drop has been
+(partially) fixed?
 
-Fix it by calculating the oldest pending_pos and check whether the range
-from the oldest outstanding record to the newest would span beyond the ring
-buffer size. If that is the case, then reject the request. We've tested with
-the ring buffer benchmark in BPF selftests (./benchs/run_bench_ringbufs.sh)
-before/after the fix and while it seems a bit slower on some benchmarks, it
-is still not significantly enough to matter.
+For earlier 6.10. kernels we don't have data due to [3] (there is regression on
+XDP_DROP as well, but I believe it's turbo-boost issue, as I mentioned
+in issue).
+So if you want to run tests on 6.10. please see [3].
 
-Fixes: 457f44363a88 ("bpf: Implement BPF ring buffer and verifier support for it")
-Reported-by: Bing-Jhong Billy Jheng <billy@starlabs.sg>
-Reported-by: Muhammad Ramdhan <ramdhan@starlabs.sg>
-Co-developed-by: Bing-Jhong Billy Jheng <billy@starlabs.sg>
-Signed-off-by: Bing-Jhong Billy Jheng <billy@starlabs.sg>
-Co-developed-by: Andrii Nakryiko <andrii@kernel.org>
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
----
- v1 -> v2:
-   - Move pending_pos to the same cacheline as producer_pos
-   - Force compiler to read hdr->len only once
+Summary XDP_DROP+mlx5@25G:
+kernel       pps
+<5.14        20.5M        baseline
+>=5.14      19M           [0]
+<6.4          19-20M      baseline for ELN kernels
+>=6.4        15M           [4 and 5] (mentioned by Toke)
+>=6.10      ???            [3]
+>=6.10rc2 17M-18M
 
- kernel/bpf/ringbuf.c | 32 ++++++++++++++++++++++++++------
- 1 file changed, 26 insertions(+), 6 deletions(-)
 
-diff --git a/kernel/bpf/ringbuf.c b/kernel/bpf/ringbuf.c
-index 0ee653a936ea..87466de8316a 100644
---- a/kernel/bpf/ringbuf.c
-+++ b/kernel/bpf/ringbuf.c
-@@ -51,7 +51,8 @@ struct bpf_ringbuf {
- 	 * This prevents a user-space application from modifying the
- 	 * position and ruining in-kernel tracking. The permissions of the
- 	 * pages depend on who is producing samples: user-space or the
--	 * kernel.
-+	 * kernel. Note that the pending counter is placed in the same
-+	 * page as the producer, so that it shares the same cacheline.
- 	 *
- 	 * Kernel-producer
- 	 * ---------------
-@@ -70,6 +71,7 @@ struct bpf_ringbuf {
- 	 */
- 	unsigned long consumer_pos __aligned(PAGE_SIZE);
- 	unsigned long producer_pos __aligned(PAGE_SIZE);
-+	unsigned long pending_pos;
- 	char data[] __aligned(PAGE_SIZE);
- };
- 
-@@ -179,6 +181,7 @@ static struct bpf_ringbuf *bpf_ringbuf_alloc(size_t data_sz, int numa_node)
- 	rb->mask = data_sz - 1;
- 	rb->consumer_pos = 0;
- 	rb->producer_pos = 0;
-+	rb->pending_pos = 0;
- 
- 	return rb;
- }
-@@ -404,9 +407,10 @@ bpf_ringbuf_restore_from_rec(struct bpf_ringbuf_hdr *hdr)
- 
- static void *__bpf_ringbuf_reserve(struct bpf_ringbuf *rb, u64 size)
- {
--	unsigned long cons_pos, prod_pos, new_prod_pos, flags;
--	u32 len, pg_off;
-+	unsigned long cons_pos, prod_pos, new_prod_pos, pend_pos, flags;
- 	struct bpf_ringbuf_hdr *hdr;
-+	u64 tmp_size, hdr_len;
-+	u32 len, pg_off;
- 
- 	if (unlikely(size > RINGBUF_MAX_RECORD_SZ))
- 		return NULL;
-@@ -424,13 +428,29 @@ static void *__bpf_ringbuf_reserve(struct bpf_ringbuf *rb, u64 size)
- 		spin_lock_irqsave(&rb->spinlock, flags);
- 	}
- 
-+	pend_pos = rb->pending_pos;
- 	prod_pos = rb->producer_pos;
- 	new_prod_pos = prod_pos + len;
- 
--	/* check for out of ringbuf space by ensuring producer position
--	 * doesn't advance more than (ringbuf_size - 1) ahead
-+	while (pend_pos < prod_pos) {
-+		hdr = (void *)rb->data + (pend_pos & rb->mask);
-+		hdr_len = READ_ONCE(hdr->len);
-+		if (hdr_len & BPF_RINGBUF_BUSY_BIT)
-+			break;
-+		tmp_size = hdr_len & ~BPF_RINGBUF_DISCARD_BIT;
-+		tmp_size = round_up(tmp_size + BPF_RINGBUF_HDR_SZ, 8);
-+		pend_pos += tmp_size;
-+	}
-+	rb->pending_pos = pend_pos;
-+
-+	/* check for out of ringbuf space:
-+	 * - by ensuring producer position doesn't advance more than
-+	 *   (ringbuf_size - 1) ahead
-+	 * - by ensuring oldest not yet committed record until newest
-+	 *   record does not span more than (ringbuf_size - 1)
- 	 */
--	if (new_prod_pos - cons_pos > rb->mask) {
-+	if ((new_prod_pos - cons_pos > rb->mask) ||
-+	    (new_prod_pos - pend_pos > rb->mask)) {
- 		spin_unlock_irqrestore(&rb->spinlock, flags);
- 		return NULL;
- 	}
--- 
-2.43.0
+> It looks like this is known since March, was this ever reported to Nvidia back
+> then? :/
+
+Not sure if that's a question for me, I was told, filling an issue in
+Bugzilla/Jira is where
+our competences end. Who is supposed to report it to them?
+
+> Given XDP is in the critical path for many in production, we should think about
+> regular performance reporting for the different vendors for each released kernel,
+> similar to here [0].
+
+I think this might be the part of upstream kernel testing with LNST?
+Maybe Jesper
+knows more about that? Until then, I think, I can let you know about
+new regressions we catch.
+
+Thanks,
+Sam.
+
+[0] https://issues.redhat.com/browse/RHEL-24054
+[1] https://koji.fedoraproject.org/koji/search?terms=kernel-%5Cd.*eln*&type=build&match=regexp
+[2] https://koji.fedoraproject.org/koji/buildinfo?buildID=2469107
+[3] https://bugzilla.redhat.com/show_bug.cgi?id=2282969
+[4] https://bugzilla.redhat.com/show_bug.cgi?id=2270408
+[5] https://issues.redhat.com/browse/RHEL-24054
 
