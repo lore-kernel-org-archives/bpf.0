@@ -1,175 +1,199 @@
-Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85FA6C148
-	for <bpf@vger.kernel.org>; Fri, 21 Jun 2024 14:30:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D8D0374FF
+	for <bpf@vger.kernel.org>; Fri, 21 Jun 2024 14:40:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718980204; cv=none; b=jrlZ1hJsE27xvZOH/FtOIBfA7lz5jRkxOWk1nZzq9tA7fsCucdhR2PvK2URYWXHtQDo8cPc9Yx+fgp9L7UApCP/GnWvHM0e1bMyVkwZSczOAksr7TMq/XAeZZ5Q+LYtWEOGBUl58SHR+SheNyaJKCgphgCswUUcXoUccZ4dRHoI=
+	t=1718980807; cv=none; b=ONMJ1bkTt8Lp5b6rRsjekglI4mLOdFfSHDGh16sZleeRj0xt+cLFOHfLLZ9f4uz3HTpSFmrA12pCvBvFk6EaHAHUJCUvPBd1hG8NkNh80bMxQWJj5eCuoRaj7QSk0AiyLhAiIjQMMCyiwG116ntkUY0ES9u4SvppZlM0v7meKGs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718980204; c=relaxed/simple;
-	bh=74XNNsrGcyt42W0i4MGFAN1ASfBc1WU+Wx8RPbhBId0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=RPKHIQpdEE25sKEi9huJ4D/SFAGllBpJdcOXRYJENgfmKNwsrnA798WwHUyXh+eQwRBtgM3srvTIBWOLr6u8edrx8KcVJ57pzQtWPxOvBgjpshAUd+OUcehAqZJyrbEjN4ggpWkfc2y4jLAaNC9fXg8PrptzPq/GhER2jk2hrGs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=G2riJ6mm; arc=none smtp.client-ip=209.85.208.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
+	s=arc-20240116; t=1718980807; c=relaxed/simple;
+	bh=NbIY79fOS0V0qD+tp87WsVRBr9peyg8yqANF4enkn6Y=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=pzgMuZypQByU5FHQP2ySN/0aLu8xXp0tk9kSxsGh+cNrvxbCmD+YZxtomYfJnABaphQvGX7jp7iaUtiWPbIGXE0NctRdT3InCvcY3Wkp4LzChVuZYSNCTeQpuQtUi2FBSYE8+dWHVhQbGObmyBMpJz6ojQINPCVaa646HUhYJQM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=GGEN+wYG; arc=none smtp.client-ip=213.133.104.62
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="G2riJ6mm"
-Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-57cc1c00b97so2005658a12.0
-        for <bpf@vger.kernel.org>; Fri, 21 Jun 2024 07:30:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google09082023; t=1718980201; x=1719585001; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Ne9VJpx8ATDhafgirOBTQVVX5apXj+MyTTRFOBCHPQI=;
-        b=G2riJ6mm83GI9hpvQ1ed6E3z1bAbY4V7dQde1ZnuiOP8gVTFLnV4hUSbkOCeKUGGzw
-         nKXNQDpabIsBHnUU9w8HTmxwh4ZBI5uNl7kPoptYXgm6Qb2d+/0Z3zTecIO9PGezlyvP
-         bNsMjYi58JVupyl/5NvNzfNcldHBLGGegAAXeaLWBvuSwLK8+VKzaMm6Y5bTFHGWTA6+
-         MpELz/t/tRJrah/6KM95zNpK9xeQtZ9m7dhrktL1nxIs68eZc2MuRwdfgzQoUq9JnqCq
-         oip+9sYRa252b5j2WlrC/LqVi+CcXh6V3iBLoiJXGzScQh6Pachbjv6Bq/go4O344F4Q
-         jCMg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1718980201; x=1719585001;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Ne9VJpx8ATDhafgirOBTQVVX5apXj+MyTTRFOBCHPQI=;
-        b=p/r4eq77NF0p0xETujBy4WgzcIkkBhqGpn8ihr+5VmAwDOmeRkTj7emF6l3kaTAtsg
-         QemRSgmB4J/OiIdkYf9t/D+SBoCTCZC9r6xWKQBIjPWE+6L+4PfNM2FN/T8celh/2hjO
-         Ok0AgSSgztGZRWnosYh/ASMnj+JrvnGDtkFHyqOA4T3JZIbR+AIa6QdxJyq2PkeI7KS4
-         pdZVS+eDFBt6TV2yH+rIlwf2FvMotP3bdKp+hWEJgczYlkrt206RHILObI9JwEbMjl8Z
-         OlU80iSWDxFZEsOoTYGgAR7GTCUZO2LZaW1D3o8Ci2mzpF0yZAUzTpuMp3J8pY2tvjCb
-         VDkQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVUBk4RhbbiyxIrNueTLbqvSktNs7/UyKfW8WGW1WvkfYdfL31UvLF64K747OizuSbnch0h8ba/MtybNfy3i1fw+UCL
-X-Gm-Message-State: AOJu0YxWnUboWOOCFmSPL3lCv7ySpceNYSVBoRTcJS2uB1DecF9CCe7f
-	2Jj2Vs41uOlMe5/+L+EGWnRohTC8XVtBFQ5SB+zZeuZ7HtB7cjOqilaz36U529HKtQv/xprSSMz
-	m1IfqXbTy9s/agdqg8SG+VWNjbQkqH9IQs4mFxw==
-X-Google-Smtp-Source: AGHT+IHSOppKzSm+kjtySl83Xy2s0lY1tdgWQ/xnbihr5ZcC5awX/1jregyRR8ecqABG8aV7I3my61NvkLz1w0cvTgQ=
-X-Received: by 2002:a50:d699:0:b0:579:ca97:da1b with SMTP id
- 4fb4d7f45d1cf-57d07e0d427mr5079082a12.6.1718980200824; Fri, 21 Jun 2024
- 07:30:00 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="GGEN+wYG"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:MIME-Version:
+	Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:In-Reply-To:References;
+	bh=8fxV3n42om9XbYIukRrWbliOg7Ni/Z1uVCYVzjTzi6o=; b=GGEN+wYGmsHIxBqUU5xDzOI3wV
+	H1NN27LeUc57BzMhH6w08SpVpZoNHEM1FQjyF87CWERn+90sOEtYgKcoYzTOPuDozJCcZb8Yet+rj
+	GFwSdcN0Xnqfu7UJfTWaEvvfJB/fP3NYZxRSSF8AMsz4w3Gcu/FYL5hhj6itgt/GvwQnBSUJAO15n
+	0Bo18OjgzDSYFn+0D+zS7mH5j1gvRu7Kn+xII8frVpsdoce+LAkAnvDbE0vXxW90g0Cvju/FkOKWX
+	0ggxcyBG2oCdeXwl1w3SErI88CNj744ji6fsG1VPhEY/5EjW8mJP/otWFrFoio1fONN9obO4khgOc
+	xiO3jhWA==;
+Received: from 18.248.197.178.dynamic.cust.swisscom.net ([178.197.248.18] helo=localhost)
+	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1sKewH-000CiQ-UZ; Fri, 21 Jun 2024 16:08:30 +0200
+From: Daniel Borkmann <daniel@iogearbox.net>
+To: ast@kernel.org
+Cc: bpf@vger.kernel.org,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Bing-Jhong Billy Jheng <billy@starlabs.sg>,
+	Muhammad Ramdhan <ramdhan@starlabs.sg>,
+	Andrii Nakryiko <andrii@kernel.org>
+Subject: [PATCH bpf v3 1/2] bpf: Fix overrunning reservations in ringbuf
+Date: Fri, 21 Jun 2024 16:08:27 +0200
+Message-Id: <20240621140828.18238-1-daniel@iogearbox.net>
+X-Mailer: git-send-email 2.21.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1718919473.git.yan@cloudflare.com> <b8c183a24285c2ab30c51622f4f9eff8f7a4752f.1718919473.git.yan@cloudflare.com>
- <a1c983cdb95bdd44385dae29ca7451da16a70c98.camel@redhat.com>
-In-Reply-To: <a1c983cdb95bdd44385dae29ca7451da16a70c98.camel@redhat.com>
-From: Yan Zhai <yan@cloudflare.com>
-Date: Fri, 21 Jun 2024 09:29:49 -0500
-Message-ID: <CAO3-Pboc_r-owOxkZcD9Tyo4MD0ey9bBJj827R+o_NnMMkF2Ow@mail.gmail.com>
-Subject: Re: [RFC net-next 1/9] skb: introduce gro_disabled bit
-To: Paolo Abeni <pabeni@redhat.com>
-Cc: netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Jesper Dangaard Brouer <hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>, 
-	Willem de Bruijn <willemb@google.com>, Simon Horman <horms@kernel.org>, Florian Westphal <fw@strlen.de>, 
-	Mina Almasry <almasrymina@google.com>, Abhishek Chauhan <quic_abchauha@quicinc.com>, 
-	David Howells <dhowells@redhat.com>, Alexander Lobakin <aleksander.lobakin@intel.com>, 
-	David Ahern <dsahern@kernel.org>, Richard Gobert <richardbgobert@gmail.com>, 
-	Antoine Tenart <atenart@kernel.org>, Felix Fietkau <nbd@nbd.name>, 
-	Soheil Hassas Yeganeh <soheil@google.com>, Pavel Begunkov <asml.silence@gmail.com>, 
-	Lorenzo Bianconi <lorenzo@kernel.org>, =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>, 
-	linux-kernel@vger.kernel.org, bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.103.10/27313/Fri Jun 21 10:28:08 2024)
 
-On Fri, Jun 21, 2024 at 4:49=E2=80=AFAM Paolo Abeni <pabeni@redhat.com> wro=
-te:
->
-> On Thu, 2024-06-20 at 15:19 -0700, Yan Zhai wrote:
-> > Software GRO is currently controlled by a single switch, i.e.
-> >
-> >   ethtool -K dev gro on|off
-> >
-> > However, this is not always desired. When GRO is enabled, even if the
-> > kernel cannot GRO certain traffic, it has to run through the GRO receiv=
-e
-> > handlers with no benefit.
-> >
-> > There are also scenarios that turning off GRO is a requirement. For
-> > example, our production environment has a scenario that a TC egress hoo=
-k
-> > may add multiple encapsulation headers to forwarded skbs for load
-> > balancing and isolation purpose. The encapsulation is implemented via
-> > BPF. But the problem arises then: there is no way to properly offload a
-> > double-encapsulated packet, since skb only has network_header and
-> > inner_network_header to track one layer of encapsulation, but not two.
-> > On the other hand, not all the traffic through this device needs double
-> > encapsulation. But we have to turn off GRO completely for any ingress
-> > device as a result.
-> >
-> > Introduce a bit on skb so that GRO engine can be notified to skip GRO o=
-n
-> > this skb, rather than having to be 0-or-1 for all traffic.
-> >
-> > Signed-off-by: Yan Zhai <yan@cloudflare.com>
-> > ---
-> >  include/linux/netdevice.h |  9 +++++++--
-> >  include/linux/skbuff.h    | 10 ++++++++++
-> >  net/Kconfig               | 10 ++++++++++
-> >  net/core/gro.c            |  2 +-
-> >  net/core/gro_cells.c      |  2 +-
-> >  net/core/skbuff.c         |  4 ++++
-> >  6 files changed, 33 insertions(+), 4 deletions(-)
-> >
-> > diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
-> > index c83b390191d4..2ca0870b1221 100644
-> > --- a/include/linux/netdevice.h
-> > +++ b/include/linux/netdevice.h
-> > @@ -2415,11 +2415,16 @@ struct net_device {
-> >       ((dev)->devlink_port =3D (port));                         \
-> >  })
-> >
-> > -static inline bool netif_elide_gro(const struct net_device *dev)
-> > +static inline bool netif_elide_gro(const struct sk_buff *skb)
-> >  {
-> > -     if (!(dev->features & NETIF_F_GRO) || dev->xdp_prog)
-> > +     if (!(skb->dev->features & NETIF_F_GRO) || skb->dev->xdp_prog)
-> >               return true;
-> > +
-> > +#ifdef CONFIG_SKB_GRO_CONTROL
-> > +     return skb->gro_disabled;
-> > +#else
-> >       return false;
-> > +#endif
->
-> This will generate OoO if the gro_disabled is flipped in the middle of
-> a stream.
->
-> Assuming the above is fine for your use case (I think it's _not_ in
-> general), you could get the same result without an additional costly
-> bit in sk_buff.
+The BPF ring buffer internally is implemented as a power-of-2 sized circular
+buffer, with two logical and ever-increasing counters: consumer_pos is the
+consumer counter to show which logical position the consumer consumed the
+data, and producer_pos which is the producer counter denoting the amount of
+data reserved by all producers.
 
-Calling it per-packet control seems inaccurate here, the motivation is
-to give users the ability to control per-flow behaviors. OoO is indeed
-a consequence if users don't do it correctly.
+Each time a record is reserved, the producer that "owns" the record will
+successfully advance producer counter. In user space each time a record is
+read, the consumer of the data advanced the consumer counter once it finished
+processing. Both counters are stored in separate pages so that from user
+space, the producer counter is read-only and the consumer counter is read-write.
 
->
-> Let xdp_frame_fixup_skb_offloading() return a bool - e.g. 'true' when
-> gro should be avoided - and let the NIC driver call netif_receive_skb()
-> instead of the gro rx hook for such packet.
->
-For rx on a single device, directly calling netif_receive_skb is
-reasonable. For tunnel receivers it is kinda inconsistent IMHO. For
-example, we terminate GRE tunnels in a netns, and it is necessary to
-disable GRO on both the entering veth device and also the GRE tunnel
-to shutdown GRO. That's why I'd hope to use a bit of skb, to be
-consistent within the same netns. Let me add a bit more context to
-clarify why we think this is necessary in another thread.
+One aspect that simplifies and thus speeds up the implementation of both
+producers and consumers is how the data area is mapped twice contiguously
+back-to-back in the virtual memory, allowing to not take any special measures
+for samples that have to wrap around at the end of the circular buffer data
+area, because the next page after the last data page would be first data page
+again, and thus the sample will still appear completely contiguous in virtual
+memory.
 
-best,
-Yan
+Each record has a struct bpf_ringbuf_hdr { u32 len; u32 pg_off; } header for
+book-keeping the length and offset, and is inaccessible to the BPF program.
+Helpers like bpf_ringbuf_reserve() return `(void *)hdr + BPF_RINGBUF_HDR_SZ`
+for the BPF program to use. Bing-Jhong and Muhammad reported that it is however
+possible to make a second allocated memory chunk overlapping with the first
+chunk and as a result, the BPF program is now able to edit first chunk's
+header.
 
-> All in all the approach implemented in this series does not look worthy
-> to me.
->
-> Thanks,
->
-> Paolo
->
+For example, consider the creation of a BPF_MAP_TYPE_RINGBUF map with size
+of 0x4000. Next, the consumer_pos is modified to 0x3000 /before/ a call to
+bpf_ringbuf_reserve() is made. This will allocate a chunk A, which is in
+[0x0,0x3008], and the BPF program is able to edit [0x8,0x3008]. Now, lets
+allocate a chunk B with size 0x3000. This will succeed because consumer_pos
+was edited ahead of time to pass the `new_prod_pos - cons_pos > rb->mask`
+check. Chunk B will be in range [0x3008,0x6010], and the BPF program is able
+to edit [0x3010,0x6010]. Due to the ring buffer memory layout mentioned
+earlier, the ranges [0x0,0x4000] and [0x4000,0x8000] point to the same data
+pages. This means that chunk B at [0x4000,0x4008] is chunk A's header.
+bpf_ringbuf_submit() / bpf_ringbuf_discard() use the header's pg_off to then
+locate the bpf_ringbuf itself via bpf_ringbuf_restore_from_rec(). Once chunk
+B modified chunk A's header, then bpf_ringbuf_commit() refers to the wrong
+page and could cause a crash.
+
+Fix it by calculating the oldest pending_pos and check whether the range
+from the oldest outstanding record to the newest would span beyond the ring
+buffer size. If that is the case, then reject the request. We've tested with
+the ring buffer benchmark in BPF selftests (./benchs/run_bench_ringbufs.sh)
+before/after the fix and while it seems a bit slower on some benchmarks, it
+is still not significantly enough to matter.
+
+Fixes: 457f44363a88 ("bpf: Implement BPF ring buffer and verifier support for it")
+Reported-by: Bing-Jhong Billy Jheng <billy@starlabs.sg>
+Reported-by: Muhammad Ramdhan <ramdhan@starlabs.sg>
+Co-developed-by: Bing-Jhong Billy Jheng <billy@starlabs.sg>
+Signed-off-by: Bing-Jhong Billy Jheng <billy@starlabs.sg>
+Co-developed-by: Andrii Nakryiko <andrii@kernel.org>
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+---
+ v1 -> v2:
+   - Move pending_pos to the same cacheline as producer_pos
+   - Force compiler to read hdr->len only once
+
+ kernel/bpf/ringbuf.c | 32 ++++++++++++++++++++++++++------
+ 1 file changed, 26 insertions(+), 6 deletions(-)
+
+diff --git a/kernel/bpf/ringbuf.c b/kernel/bpf/ringbuf.c
+index 0ee653a936ea..87466de8316a 100644
+--- a/kernel/bpf/ringbuf.c
++++ b/kernel/bpf/ringbuf.c
+@@ -51,7 +51,8 @@ struct bpf_ringbuf {
+ 	 * This prevents a user-space application from modifying the
+ 	 * position and ruining in-kernel tracking. The permissions of the
+ 	 * pages depend on who is producing samples: user-space or the
+-	 * kernel.
++	 * kernel. Note that the pending counter is placed in the same
++	 * page as the producer, so that it shares the same cacheline.
+ 	 *
+ 	 * Kernel-producer
+ 	 * ---------------
+@@ -70,6 +71,7 @@ struct bpf_ringbuf {
+ 	 */
+ 	unsigned long consumer_pos __aligned(PAGE_SIZE);
+ 	unsigned long producer_pos __aligned(PAGE_SIZE);
++	unsigned long pending_pos;
+ 	char data[] __aligned(PAGE_SIZE);
+ };
+ 
+@@ -179,6 +181,7 @@ static struct bpf_ringbuf *bpf_ringbuf_alloc(size_t data_sz, int numa_node)
+ 	rb->mask = data_sz - 1;
+ 	rb->consumer_pos = 0;
+ 	rb->producer_pos = 0;
++	rb->pending_pos = 0;
+ 
+ 	return rb;
+ }
+@@ -404,9 +407,10 @@ bpf_ringbuf_restore_from_rec(struct bpf_ringbuf_hdr *hdr)
+ 
+ static void *__bpf_ringbuf_reserve(struct bpf_ringbuf *rb, u64 size)
+ {
+-	unsigned long cons_pos, prod_pos, new_prod_pos, flags;
+-	u32 len, pg_off;
++	unsigned long cons_pos, prod_pos, new_prod_pos, pend_pos, flags;
+ 	struct bpf_ringbuf_hdr *hdr;
++	u64 tmp_size, hdr_len;
++	u32 len, pg_off;
+ 
+ 	if (unlikely(size > RINGBUF_MAX_RECORD_SZ))
+ 		return NULL;
+@@ -424,13 +428,29 @@ static void *__bpf_ringbuf_reserve(struct bpf_ringbuf *rb, u64 size)
+ 		spin_lock_irqsave(&rb->spinlock, flags);
+ 	}
+ 
++	pend_pos = rb->pending_pos;
+ 	prod_pos = rb->producer_pos;
+ 	new_prod_pos = prod_pos + len;
+ 
+-	/* check for out of ringbuf space by ensuring producer position
+-	 * doesn't advance more than (ringbuf_size - 1) ahead
++	while (pend_pos < prod_pos) {
++		hdr = (void *)rb->data + (pend_pos & rb->mask);
++		hdr_len = READ_ONCE(hdr->len);
++		if (hdr_len & BPF_RINGBUF_BUSY_BIT)
++			break;
++		tmp_size = hdr_len & ~BPF_RINGBUF_DISCARD_BIT;
++		tmp_size = round_up(tmp_size + BPF_RINGBUF_HDR_SZ, 8);
++		pend_pos += tmp_size;
++	}
++	rb->pending_pos = pend_pos;
++
++	/* check for out of ringbuf space:
++	 * - by ensuring producer position doesn't advance more than
++	 *   (ringbuf_size - 1) ahead
++	 * - by ensuring oldest not yet committed record until newest
++	 *   record does not span more than (ringbuf_size - 1)
+ 	 */
+-	if (new_prod_pos - cons_pos > rb->mask) {
++	if ((new_prod_pos - cons_pos > rb->mask) ||
++	    (new_prod_pos - pend_pos > rb->mask)) {
+ 		spin_unlock_irqrestore(&rb->spinlock, flags);
+ 		return NULL;
+ 	}
+-- 
+2.43.0
+
