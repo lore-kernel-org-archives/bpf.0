@@ -1,134 +1,262 @@
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
+Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A5E71EB25
-	for <bpf@vger.kernel.org>; Sun, 23 Jun 2024 14:36:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED4C620E6
+	for <bpf@vger.kernel.org>; Sun, 23 Jun 2024 15:04:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719153365; cv=none; b=pK7i/myIRL7GsL0pItcOygaFmygTQIPHayzNGLiyhrz3ztqMwzl74emmqO6P13l6oEBnrAPFestK0USgviZ7nS40W42J6QEA/28Zho8xcmEuWtndeaFLWMzoQKQqCy6QGZY7IexA8FYxEex0AeAQMIaO9/wEyQ2km9TEU8NT1r8=
+	t=1719155098; cv=none; b=fDu1H7QwcUqUMjzmXhoGv90p0EGVWwpi8FirU+El/+cKM5GPkIkN2HM5EA1VGbKLHMfn259Q9950lYxZ7Sqxqh6ztnk39ILtUZjsnN0H6nZIDiCs6sckU/yHgUJoSb9LHda0zUQ6rxwXiGrEaJJKaHdbRSV+4WuKdfW71lbMTtE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719153365; c=relaxed/simple;
-	bh=//VNWIbwQKq7O7Loy6tiF/8/9AACAhtg4/mzZMVFTeQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=cO63zrpLNcbZjWfDRXqCOSNSW5/azycvtLuy80+919jucrjdm9oF3mn9XzkuUBor4CplNJZ1lE73nDeTE0Ho57J0LdqD5zVovFtzLpE2mGMp8pj8zblcIaMd7kq5HolomX2czrpx8kb6SSTe5TNpqrQVFE/Z+hW+6V74yfRwA/o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ANnkqqKB; arc=none smtp.client-ip=209.85.128.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1719155098; c=relaxed/simple;
+	bh=KN86M5KGTNnNYujLykS3fF6q7CsijoIo16X2NbF6rR0=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=BQ60mBEvZisFLsfFxlAGUIssIEjPMphoW2KH4YQa3aIsjKxo9DyCumcJ/b9Kaoeo05gfUL1b+0Oe1ZJxw8MjOW9CC8zRhZip6GXzMXu5U4FavYEY8tEwjM34fGk1axxCLJtOloFlcn3CIMjLJpx2jF4OBw4h/vCgr6GbJj15cyw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=googlemail.com; spf=pass smtp.mailfrom=googlemail.com; dkim=pass (2048-bit key) header.d=googlemail.com header.i=@googlemail.com header.b=kq0De3wp; arc=none smtp.client-ip=209.85.210.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=googlemail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=googlemail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ANnkqqKB"
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-4217c7eb6b4so29906465e9.2
-        for <bpf@vger.kernel.org>; Sun, 23 Jun 2024 07:36:03 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=googlemail.com header.i=@googlemail.com header.b="kq0De3wp"
+Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-7066c9741fbso931732b3a.2
+        for <bpf@vger.kernel.org>; Sun, 23 Jun 2024 08:04:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1719153362; x=1719758162; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=kIJqTaogFrJafdOWDDUeQAFvjHB+YfO9F41uxi9LsJo=;
-        b=ANnkqqKBz/dk4oyuNR58PihTErGRBPw5Q7WUsEWYktegGXOgOhaVoLoX/Of+Lkt7Sf
-         efSlIDLanmxXHb1m1T8qChXUvw3IU6BT52RtoDq3h5/7zDQ2JVK9MbYkmvtOefDS6UVB
-         OMWQkFNML3qmKT6UfUbIqkS7k07tKgV7zB96S43+Fkq4Htdb5GGHD/arFZX1YedLvpNh
-         AkItzZeWhsWcVJZXlOc7Xb35TTJrRZ2upg/gm8ZJ9cx4Ii7Pyw8LCSrbytEi3PlxDXQZ
-         eEkVAs5hsfa5vFtk2SWOYpstAxShg50QxqkckYqFPFHsciyq0tPN/Q2GHpMt7aJd4R2K
-         fUCQ==
+        d=googlemail.com; s=20230601; t=1719155096; x=1719759896; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=m25unrwg1PT9NQnxWCnDwQB5AZXe0LWwBxxc9EgNd5M=;
+        b=kq0De3wp1kUC2QrxAZupZqup1bni28tQUbqQLhtasUKU+QFLUvYvZCo22kODjWQbAK
+         pwVofH06W12G7Xfdkr+wtn+2cW+dTxVkInVEspPi6R5A2t3aSHMwDBQky6zFzbPEKTJZ
+         LgGs45bZUk0s2rXzNcDmqkxUh8IJ1ggXyPh+sRe/9F3c2kRqYFxbKJONY1v25q6+XomD
+         kkGebftHcFAnyb04ctmktVhrsY6+1Y0YC0rNYEF4x3R7srqfxsLWVRXOliTLOVzQxiNt
+         /yiRmb2973zP7QcrNGuz8GWEpxbuRVmTUX8MtZys9Prgdxdwz5avDG0L1M0mKbqWAhUd
+         QY7Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719153362; x=1719758162;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=kIJqTaogFrJafdOWDDUeQAFvjHB+YfO9F41uxi9LsJo=;
-        b=t5TgNTNPKzVwAlBVfNR2SoUnxIE78UN71ChgphjkT5+uL36htMqZDfSokP+4Q7ej2P
-         6hz7BGm9uHbFs6vOA5gabnEqyk3OyIPi/80ZyIaXr8bV2QyZDbhpmlXVseQQ33Fqisif
-         yGFC0Zb0u+PgK5MbJcl4z6dSlKabNnxKEzgogq2UiF5RD1+wPRTwDIC0PMDv1kw3OhpY
-         plLwlweu8Y2C4Gx06UL3yL07nwkMUV10U1BcJ6hn4KO86C51PweRG97IsNnG4s6jON/V
-         ccNXiHVAQbi7NZPBXvHRcGJGslpELsiPjYm/Sz9sakPfmj7ZziC7netCYqJNMTIgSfxL
-         nkAw==
-X-Forwarded-Encrypted: i=1; AJvYcCWVEH9e50sq3ilRPM1pOr4BPUuOoGVSL3XLFDEmtM2s1c1NnfY2v1PeSep6Zdj76MvVCeC2F0xkm2hjd9CfceKNPXeJ
-X-Gm-Message-State: AOJu0Yx6uGjtdAymdBx5ThXQyNt0jO7rqy2HO/MyhlNidsACuCHvGQ0Q
-	6/HfN96vCIdR08QcD8YkUI1gzAtG9mq9xQ0AiwFWPxdmtxp0n4qXzYDktpBaKo2D948DXfCH1YM
-	Kls/g0Ctc+HV3iRg7/iMEulTnPH0=
-X-Google-Smtp-Source: AGHT+IFTNouMTp6/5EGIs3Y/1WD1pP2SSZxso6yerhG3vRi0JqRIXxCfgDooFo9pBFm//l65fnlTN+pAgDZUWwIyGDg=
-X-Received: by 2002:adf:eec9:0:b0:362:c971:d97c with SMTP id
- ffacd0b85a97d-366e962cb55mr1225052f8f.63.1719153361647; Sun, 23 Jun 2024
- 07:36:01 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1719155096; x=1719759896;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=m25unrwg1PT9NQnxWCnDwQB5AZXe0LWwBxxc9EgNd5M=;
+        b=o1AK22q7oM0bKxqn+1z1bREn/8bVFJo/JATKLUhp73IALwAr2+HcZGgjxjrNp3IRuI
+         KvAXj/FEVs7nOeZGxS9O52LYo3uh3v+19xB9jAk55gBbVKcc7M0X9d1oOU7p0tEHOkZO
+         1kFkzU3P02x5zxkJcAghddxvt5eoUiKZmoh97CwPMtbSPMgtdjGjbEW3rBaOghpqFP16
+         wx1AbRwgHyDl8+/PXY0PNvvEgaFntc2c7+YQ0xiOxehMYQC4d1elSMc5G4nFC1MlSwhY
+         W7c8xCYrGYYShXoxgQr80w/sMIy0hN/bHEatiDf/H/Xt0mudUed5z+XnUP1SmRwqrN7i
+         yjRQ==
+X-Gm-Message-State: AOJu0YyBw63CyX2C/2hTzOEOcYUWEdux57TQuuFWVSVCjrtnX5siqDMK
+	UIoomlggEnI5HugzQvftcFYn67YD+AYzph0nZkuY6lB6gdEjUmZgSCh9bTqv
+X-Google-Smtp-Source: AGHT+IGZ2u+dzz5DeD1aYzlJumLG9lmlPnUKug6YfGmCZCgaz+L56b8gr1nDDwdRpSgaTGN3DzpgeA==
+X-Received: by 2002:a05:6a20:7b06:b0:1b6:ed32:4622 with SMTP id adf61e73a8af0-1bcf7e2ad78mr2603992637.2.1719155095730;
+        Sun, 23 Jun 2024 08:04:55 -0700 (PDT)
+Received: from ubuntu2310.. (64-119-15-123.fiber.ric.network. [64.119.15.123])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-706512e000asm4727241b3a.179.2024.06.23.08.04.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 23 Jun 2024 08:04:55 -0700 (PDT)
+From: Dave Thaler <dthaler1968@googlemail.com>
+X-Google-Original-From: Dave Thaler <dthaler1968@gmail.com>
+To: bpf@vger.kernel.org
+Cc: bpf@ietf.org,
+	Dave Thaler <dthaler1968@gmail.com>,
+	Dave Thaler <dthaler1968@googlemail.com>
+Subject: [PATCH bpf-next v2] bpf, docs: Address comments from IETF Area Directors
+Date: Sun, 23 Jun 2024 08:04:53 -0700
+Message-Id: <20240623150453.10613-1-dthaler1968@gmail.com>
+X-Mailer: git-send-email 2.40.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240623135224.27981-1-alan.maguire@oracle.com>
-In-Reply-To: <20240623135224.27981-1-alan.maguire@oracle.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Sun, 23 Jun 2024 07:35:50 -0700
-Message-ID: <CAADnVQJ_s3FyRo3J3cNTETd3ZSFsFdTvxWy+HnRDzT9LuKrSSA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] bpf: fix build when CONFIG_DEBUG_INFO_BTF[_MODULES]
- is undefined
-To: Alan Maguire <alan.maguire@oracle.com>
-Cc: Andrii Nakryiko <andrii@kernel.org>, Eddy Z <eddyz87@gmail.com>, 
-	Alexei Starovoitov <ast@kernel.org>, Arnaldo Carvalho de Melo <acme@redhat.com>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Jiri Olsa <jolsa@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
-	"Luis R. Rodriguez" <mcgrof@kernel.org>, Masahiro Yamada <masahiroy@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Mykola Lysenko <mykolal@fb.com>, Kui-Feng Lee <thinker.li@gmail.com>, 
-	Benjamin Tissoires <bentiss@kernel.org>, Geliang Tang <tanggeliang@kylinos.cn>, bpf <bpf@vger.kernel.org>, 
-	kernel test robot <lkp@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Sun, Jun 23, 2024 at 6:52=E2=80=AFAM Alan Maguire <alan.maguire@oracle.c=
-om> wrote:
->
-> Kernel test robot reports that kernel build fails with
-> resilient split BTF changes.
->
-> Examining the associated config and code we see that
-> btf_relocate_id() is defined under CONFIG_DEBUG_INFO_BTF_MODULES.
-> Moving it outside the #ifdef solves the issue.
->
-> Reported-by: kernel test robot <lkp@intel.com>
-> Closes: https://lore.kernel.org/oe-kbuild-all/202406221742.d2srFLVI-lkp@i=
-ntel.com/
-> Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
-> ---
->  kernel/bpf/btf.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-> index 8e12cb80ba73..4ff11779699e 100644
-> --- a/kernel/bpf/btf.c
-> +++ b/kernel/bpf/btf.c
-> @@ -6185,8 +6185,6 @@ struct btf *btf_parse_vmlinux(void)
->         return btf;
->  }
->
-> -#ifdef CONFIG_DEBUG_INFO_BTF_MODULES
-> -
->  /* If .BTF_ids section was created with distilled base BTF, both base an=
-d
->   * split BTF ids will need to be mapped to actual base/split ids for
->   * BTF now that it has been relocated.
-> @@ -6198,6 +6196,8 @@ static __u32 btf_relocate_id(const struct btf *btf,=
- __u32 id)
->         return btf->base_id_map[id];
->  }
->
-> +#ifdef CONFIG_DEBUG_INFO_BTF_MODULES
-> +
+This patch does the following to address IETF feedback:
 
-It doesn't fix it all. The 32 build is still failing:
+* Remove mention of "program type" and reference future
+  docs (and mention platform-specific docs exist) for
+  helper functions and BTF. Addresses Roman Danyliw's
+  comments based on GENART review from Ines Robles [0].
 
-../kernel/bpf/btf.c: In function =E2=80=98btf_populate_kfunc_set=E2=80=99:
--../kernel/bpf/btf.c:8251:36: error: implicit declaration of function
-=E2=80=98btf_relocate_id=E2=80=99; did you mean =E2=80=98btf_relocate=E2=80=
-=99?
-[-Wimplicit-function-declaration]
-- 8251 |                 set->pairs[i].id =3D btf_relocate_id(btf,
-set->pairs[i].id);
--      |                                    ^~~~~~~~~~~~~~~
--      |                                    btf_relocate
+* Add reference for endianness as requested by John
+  Scudder [1].
+
+* Added bit numbers to top of 32-bit wide format diagrams
+  as requested by Paul Wouters [2].
+
+* Added more text about why BPF doesn't stand for anything, based
+  on text from ebpf.io [3], as requested by Eric Vyncke and
+  Gunter Van de Velde [4].
+
+* Replaced "htobe16" (and similar) and the direction-specific
+  description with just "be16" (and similar) and a direction-agnostic
+  description, to match the direction-agnostic description in
+  the Byteswap Instructions section. Based on feedback from Eric
+  Vyncke [5].
+
+[0] https://mailarchive.ietf.org/arch/msg/bpf/DvDgDWOiwk05OyNlWlAmELZFPlM/
+
+[1] https://mailarchive.ietf.org/arch/msg/bpf/eKNXpU4jCLjsbZDSw8LjI29M3tM/
+
+[2] https://mailarchive.ietf.org/arch/msg/bpf/hGk8HkYxeZTpdu9qW_MvbGKj7WU/
+
+[3] https://ebpf.io/what-is-ebpf/#what-do-ebpf-and-bpf-stand-for
+
+[4] https://mailarchive.ietf.org/arch/msg/bpf/i93lzdN3ewnzzS_JMbinCIYxAIU/
+
+[5] https://mailarchive.ietf.org/arch/msg/bpf/KBWXbMeDcSrq4vsKR_KkBbV6hI4/
+
+---
+
+1->2: Addressed nits from David Vernet
+
+Signed-off-by: Dave Thaler <dthaler1968@googlemail.com>
+---
+ .../bpf/standardization/instruction-set.rst   | 80 +++++++++++--------
+ 1 file changed, 45 insertions(+), 35 deletions(-)
+
+diff --git a/Documentation/bpf/standardization/instruction-set.rst b/Documentation/bpf/standardization/instruction-set.rst
+index 398f27bab..7e636299a 100644
+--- a/Documentation/bpf/standardization/instruction-set.rst
++++ b/Documentation/bpf/standardization/instruction-set.rst
+@@ -5,12 +5,19 @@
+ BPF Instruction Set Architecture (ISA)
+ ======================================
+ 
+-eBPF (which is no longer an acronym for anything), also commonly
++eBPF, also commonly
+ referred to as BPF, is a technology with origins in the Linux kernel
+ that can run untrusted programs in a privileged context such as an
+ operating system kernel. This document specifies the BPF instruction
+ set architecture (ISA).
+ 
++As a historical note, BPF originally stood for Berkeley Packet Filter,
++but now that it can do so much more than packet filtering, the acronym
++no longer makes sense. BPF is now considered a standalone term that
++does not stand for anything.  The original BPF is sometimes referred to
++as cBPF (classic BPF) to distinguish it from the now widely deployed
++eBPF (extended BPF).
++
+ Documentation conventions
+ =========================
+ 
+@@ -18,7 +25,7 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+ "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and
+ "OPTIONAL" in this document are to be interpreted as described in
+ BCP 14 `<https://www.rfc-editor.org/info/rfc2119>`_
+-`RFC8174 <https://www.rfc-editor.org/info/rfc8174>`_
++`<https://www.rfc-editor.org/info/rfc8174>`_
+ when, and only when, they appear in all capitals, as shown here.
+ 
+ For brevity and consistency, this document refers to families
+@@ -59,24 +66,18 @@ numbers.
+ 
+ Functions
+ ---------
+-* htobe16: Takes an unsigned 16-bit number in host-endian format and
+-  returns the equivalent number as an unsigned 16-bit number in big-endian
+-  format.
+-* htobe32: Takes an unsigned 32-bit number in host-endian format and
+-  returns the equivalent number as an unsigned 32-bit number in big-endian
+-  format.
+-* htobe64: Takes an unsigned 64-bit number in host-endian format and
+-  returns the equivalent number as an unsigned 64-bit number in big-endian
+-  format.
+-* htole16: Takes an unsigned 16-bit number in host-endian format and
+-  returns the equivalent number as an unsigned 16-bit number in little-endian
+-  format.
+-* htole32: Takes an unsigned 32-bit number in host-endian format and
+-  returns the equivalent number as an unsigned 32-bit number in little-endian
+-  format.
+-* htole64: Takes an unsigned 64-bit number in host-endian format and
+-  returns the equivalent number as an unsigned 64-bit number in little-endian
+-  format.
++
++The following byteswap functions are direction-agnostic.  That is,
++the same function is used for conversion in either direction discussed
++below.
++
++* be16: Takes an unsigned 16-bit number and converts it between
++  host byte order and big-endian
++  (`IEN137 <https://www.rfc-editor.org/ien/ien137.txt>`_) byte order.
++* be32: Takes an unsigned 32-bit number and converts it between
++  host byte order and big-endian byte order.
++* be64: Takes an unsigned 64-bit number and converts it between
++  host byte order and big-endian byte order.
+ * bswap16: Takes an unsigned 16-bit number in either big- or little-endian
+   format and returns the equivalent number with the same bit width but
+   opposite endianness.
+@@ -86,7 +87,12 @@ Functions
+ * bswap64: Takes an unsigned 64-bit number in either big- or little-endian
+   format and returns the equivalent number with the same bit width but
+   opposite endianness.
 -
++* le16: Takes an unsigned 16-bit number and converts it between
++  host byte order and little-endian byte order.
++* le32: Takes an unsigned 32-bit number and converts it between
++  host byte order and little-endian byte order.
++* le64: Takes an unsigned 64-bit number and converts it between
++  host byte order and little-endian byte order.
+ 
+ Definitions
+ -----------
+@@ -441,8 +447,8 @@ and MUST be set to 0.
+   =====  ========  =====  =================================================
+   class  source    value  description
+   =====  ========  =====  =================================================
+-  ALU    TO_LE     0      convert between host byte order and little endian
+-  ALU    TO_BE     1      convert between host byte order and big endian
++  ALU    LE        0      convert between host byte order and little endian
++  ALU    BE        1      convert between host byte order and big endian
+   ALU64  Reserved  0      do byte swap unconditionally
+   =====  ========  =====  =================================================
+ 
+@@ -453,19 +459,19 @@ conformance group.
+ 
+ Examples:
+ 
+-``{END, TO_LE, ALU}`` with 'imm' = 16/32/64 means::
++``{END, LE, ALU}`` with 'imm' = 16/32/64 means::
+ 
+-  dst = htole16(dst)
+-  dst = htole32(dst)
+-  dst = htole64(dst)
++  dst = le16(dst)
++  dst = le32(dst)
++  dst = le64(dst)
+ 
+-``{END, TO_BE, ALU}`` with 'imm' = 16/32/64 means::
++``{END, BE, ALU}`` with 'imm' = 16/32/64 means::
+ 
+-  dst = htobe16(dst)
+-  dst = htobe32(dst)
+-  dst = htobe64(dst)
++  dst = be16(dst)
++  dst = be32(dst)
++  dst = be64(dst)
+ 
+-``{END, TO_LE, ALU64}`` with 'imm' = 16/32/64 means::
++``{END, TO, ALU64}`` with 'imm' = 16/32/64 means::
+ 
+   dst = bswap16(dst)
+   dst = bswap32(dst)
+@@ -545,13 +551,17 @@ Helper functions are a concept whereby BPF programs can call into a
+ set of function calls exposed by the underlying platform.
+ 
+ Historically, each helper function was identified by a static ID
+-encoded in the 'imm' field.  The available helper functions may differ
+-for each program type, but static IDs are unique across all program types.
++encoded in the 'imm' field.  Further documentation of helper functions
++is outside the scope of this document and standardization is left for
++future work, but use is widely deployed and more information can be
++found in platform-specific documentation (e.g., Linux kernel documentation).
+ 
+ Platforms that support the BPF Type Format (BTF) support identifying
+ a helper function by a BTF ID encoded in the 'imm' field, where the BTF ID
+ identifies the helper name and type.  Further documentation of BTF
+-is outside the scope of this document and is left for future work.
++is outside the scope of this document and standardization is left for
++future work, but use is widely deployed and more information can be
++found in platform-specific documentation (e.g., Linux kernel documentation).
+ 
+ Program-local functions
+ ~~~~~~~~~~~~~~~~~~~~~~~
+-- 
+2.40.1
 
-See build_32, build_clang, build_allmod failures in CI:
-https://patchwork.kernel.org/project/netdevbpf/patch/20240623135224.27981-1=
--alan.maguire@oracle.com/
