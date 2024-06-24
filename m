@@ -1,65 +1,82 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FF0E13DBB1;
-	Mon, 24 Jun 2024 13:28:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA56C13DBB1;
+	Mon, 24 Jun 2024 13:28:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719235708; cv=none; b=Fi+Q+cCzoReAEeaUO7ATvEv0ye+soTlbE3NMLbm/0PO9b/JUH2rkC/oiqO/Ifr/E7Ohl0EZooxyA+fzYIkIl/F8dND/+EQNWkY15fe8ok/3Ox0AUu/xursvHEetOgB4dt8YmN8k7NDufXhaTpw1gu40M24xRYxfyS7x3NtMOOBM=
+	t=1719235714; cv=none; b=SWewAe9wq9OPaIradj9n2X4KBQwFnZk/Knw/IjmmeZdAcujjZIdUSsvdsVYAV9Y25fEFhsHDabgts8Frj/3X53Ti+XssU0LmRTnhSfGEHRfnB9xd9sop36CeJb37Y2GKDQbLr9bOqO1IjBRtdI5GGScDdjW7BUqyMeX1M/OFc3w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719235708; c=relaxed/simple;
-	bh=7tbsczf0PnCDywXyYKxY9m9ikEjYKv17QDMOEKE013s=;
+	s=arc-20240116; t=1719235714; c=relaxed/simple;
+	bh=Knw25hLKGn36AJuU2/rDQCCe9C1d6rjfmd8w0Kwrf9M=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=FUGwGvrlHuEVHHjFkQjaUR/M5Vv/oUSsYoULm/YLF46JtYPMxqEssSQWW7qJzez7CVZEdPLQACtr8HcwhQvDLkTK13gcchKi3YZ1vVEQaEAb4p51UAYnfT1bM1qasWncgaswWfqO0JPOex2XAcM5YM3bowNlMdw9y1v+cT/oRqs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ALYDvSoD; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=Ij8DXfiKXToFuDTVY01tS2zaDXOgFK/145lGw/7AK1/YTvys5gv0yLNOrAjkhpr2ddB9DLUUWe/TI54fe4hJz+OSo7d9R3ntMbHkOrzAGfMsW4XO4QTsxNsemsLzL2VFSyZnR+DhZs7o/gxS4HD/gJkVySpIiYUFGm5T5mxa3qI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZBqvaOJa; arc=none smtp.client-ip=209.85.167.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ALYDvSoD"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65197C2BBFC;
-	Mon, 24 Jun 2024 13:28:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1719235708;
-	bh=7tbsczf0PnCDywXyYKxY9m9ikEjYKv17QDMOEKE013s=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=ALYDvSoDguX6hkvidoP/m8vFAK/hTQU0da2pxIYiQ0rW+zGM3SP1mAaP7/pD67twv
-	 TbqeYIDXzMTivwN1CeOYklU98jEWYG39vJbKgoJRm0X2kWdvDVC8rRerIfaEG6vZve
-	 7WM8lGoMtqzWsygD+/jTtHkG2ty0EQrJi8jhiOIWUH+oTcj7jguxrfsRY1eOtE5qO2
-	 bHeKj1HP2yMRNp+EA2S7SSuNjffiuQv+TK56WT+Tg0stfDZSlbYZBKpmusv/sQLmfV
-	 iF9mGb8IcKlhFP7NpOtKeTSLysVVggeZJFy1BfSATP7AYpBJjgqiL9K47JWLcI7lQ+
-	 wxz1SqMJ2KvWg==
-From: Geliang Tang <geliang@kernel.org>
-To: John Fastabend <john.fastabend@gmail.com>,
-	Jakub Sitnicki <jakub@cloudflare.com>,
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZBqvaOJa"
+Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-52ce6a9fd5cso873385e87.3;
+        Mon, 24 Jun 2024 06:28:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1719235711; x=1719840511; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=weoB2927OHeQLkItSsl1+92aESa5A0VbbSHXdYNaCxU=;
+        b=ZBqvaOJaLpBvLvoDx4+DB36f8kUyelHn7dA4o5VH2fu5akGL1L2M/v7Re1FvqGErkF
+         mL1F5jvl4QWMYgYQZr3xx0ZRORv058uKBOq6DLNq72BmAEgtnLh3mam/TQH4MYdrn+X3
+         nulmPUr2Q5XfiZxrdEZf0ECMlwE3xQXJ0gHo7SChh+oc+TPkMBrZaqdMrVabH05uaE5B
+         Nh0lcQ6pveVRIbGhyWMvnpQH6mpvqSUapGMgx+t4AHgwJFq/wlDj2WpJBhnyM/iqlWXp
+         hR8Fd9WdK6ubpox/SmGHNNOsyTvxLLPFJxz3RaMsZKQqGjeC2DwiX9AG9VeGsRYer1tc
+         JMCQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1719235711; x=1719840511;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=weoB2927OHeQLkItSsl1+92aESa5A0VbbSHXdYNaCxU=;
+        b=fyvs2AGvpIUvOqgmcHFIFZhnu7kIV8W8EmYEZH/eCyDk25EKSqBq91i5L19Tq/bbPj
+         zWss7SJLYKo7PvUhOM0Cgtj2jtwFrJ4wBdIPXof94xmMGKPkRjR9aqV9ZuOCDghoIvmt
+         Hze1vnJlf84I53RfTDp9QlKhnVxeY8FXGvscPpxzuHfyZm0dxXAVtc+IGKpcK+b8v7OG
+         R5ZXB9jLvB9pi5YMZAcEh4rBcnkbLx6POZSaVdhkT9IQNkyCVyAFiGkD68oYF5t6mk+z
+         jd67Pi0xg4bbQav2mEvecgx5A831sZRK+/2ZG/d2+Ckx5juVdgzbOyX0KoQOClEDdRUs
+         OZqQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUt8CSfWT4qrkq+0q/n3qmvCqQnGgicP+g4OCNefaeSFP3D/8xqjy1FPUhwKUWdiPIBuiIsrdO7FAmFxx9hIwSrHbWW/XMy86jKPNXsByQvewpenDSVsNr0d4hir4JG5syLkVvZCbUZHWtFYYAwhfljYH3OTXZX7+Pg
+X-Gm-Message-State: AOJu0Yz1/FD+xM4RPyEWifSDkAfday+9RUKDTLkuGQGIPank5SvnS0Ov
+	K4EyCiijSgJsKG2PnuRMGAfVZbimGVWf911QrvHFkMx0nMldC20E
+X-Google-Smtp-Source: AGHT+IFq8C6kBEtbmGEGitX4D9FUoJzf8LPqBHNhfBy21YGAueF442o3wAvxepev68ZGGljisU8J+g==
+X-Received: by 2002:a05:6512:ba1:b0:52c:dd38:f3a3 with SMTP id 2adb3069b0e04-52ce185cf4amr3356821e87.46.1719235710522;
+        Mon, 24 Jun 2024 06:28:30 -0700 (PDT)
+Received: from localhost ([213.79.110.82])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-52cd6454a96sm968129e87.303.2024.06.24.06.28.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Jun 2024 06:28:30 -0700 (PDT)
+From: Serge Semin <fancer.lancer@gmail.com>
+To: Russell King <linux@armlinux.org.uk>,
+	Andrew Halaney <ahalaney@redhat.com>,
+	Alexandre Torgue <alexandre.torgue@foss.st.com>,
+	Jose Abreu <joabreu@synopsys.com>,
 	"David S. Miller" <davem@davemloft.net>,
 	Eric Dumazet <edumazet@google.com>,
 	Jakub Kicinski <kuba@kernel.org>,
 	Paolo Abeni <pabeni@redhat.com>,
-	David Ahern <dsahern@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Mykola Lysenko <mykolal@fb.com>,
-	Alexei Starovoitov <ast@kernel.org>,
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
 	Daniel Borkmann <daniel@iogearbox.net>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@google.com>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Mykyta Yatsenko <yatsenko@meta.com>,
-	Miao Xu <miaxu@meta.com>,
-	Yuran Pereira <yuran.pereira@hotmail.com>
-Cc: Geliang Tang <tanggeliang@kylinos.cn>,
-	netdev@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-stm32@st-md-mailman.stormreply.com,
 	bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH net 3/3] selftests/bpf: Null checks for link in bpf_tcp_ca
-Date: Mon, 24 Jun 2024 21:27:57 +0800
-Message-ID: <0f91336b3f464b63ef2f223bba7759adc81affdb.1719234744.git.tanggeliang@kylinos.cn>
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH RFC net-next v2 09/17] net: stmmac: Introduce mac_device_info::priv pointer
+Date: Mon, 24 Jun 2024 16:26:26 +0300
+Message-ID: <20240624132802.14238-1-fancer.lancer@gmail.com>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <cover.1719234744.git.tanggeliang@kylinos.cn>
-References: <cover.1719234744.git.tanggeliang@kylinos.cn>
+In-Reply-To: <Zlmzu7/ANyZxOOQL@shell.armlinux.org.uk>
+References: <Zlmzu7/ANyZxOOQL@shell.armlinux.org.uk>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -68,103 +85,53 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Geliang Tang <tanggeliang@kylinos.cn>
+There is going to be introduced an PCS-specific CSR space pointer defined
+in the stmmac_priv structure nearby the mmcaddr, estaddr and ptpaddr
+fields. In order to have that pointer accessible from the PCS-specific
+callback, let's introduce pointer to stmmac_priv defined in the
+mac_device_info structure.
 
-Run BPF selftests bpf_tcp_ca on loongarch:
+Signed-off-by: Serge Semin <fancer.lancer@gmail.com>
 
-# ./test_progs -t bpf_tcp_ca
-
-A "Segmentation fault" error occurs:
-
-'''
- test_dctcp:PASS:bpf_dctcp__open_and_load 0 nsec
- test_dctcp:FAIL:bpf_map__attach_struct_ops unexpected error: -524
- #29/1    bpf_tcp_ca/dctcp:FAIL
- test_cubic:PASS:bpf_cubic__open_and_load 0 nsec
- test_cubic:FAIL:bpf_map__attach_struct_ops unexpected error: -524
- #29/2    bpf_tcp_ca/cubic:FAIL
- test_dctcp_fallback:PASS:dctcp_skel 0 nsec
- test_dctcp_fallback:PASS:bpf_dctcp__load 0 nsec
- test_dctcp_fallback:FAIL:dctcp link unexpected error: -524
- #29/4    bpf_tcp_ca/dctcp_fallback:FAIL
- test_write_sk_pacing:PASS:open_and_load 0 nsec
- test_write_sk_pacing:FAIL:attach_struct_ops unexpected error: -524
- #29/6    bpf_tcp_ca/write_sk_pacing:FAIL
- test_update_ca:PASS:open 0 nsec
- test_update_ca:FAIL:attach_struct_ops unexpected error: -524
- settcpca:FAIL:setsockopt unexpected setsockopt: actual -1 == expected -1
- (network_helpers.c:99: errno: No such file or directory) Failed to call post_socket_cb
- start_test:FAIL:start_server_str unexpected start_server_str: actual -1 == expected -1
- test_update_ca:FAIL:ca1_ca1_cnt unexpected ca1_ca1_cnt: actual 0 <= expected 0
- #29/9    bpf_tcp_ca/update_ca:FAIL
- #29      bpf_tcp_ca:FAIL
- Caught signal #11!
- Stack trace:
- ./test_progs(crash_handler+0x28)[0x5555567ed91c]
- linux-vdso.so.1(__vdso_rt_sigreturn+0x0)[0x7ffffee408b0]
- ./test_progs(bpf_link__update_map+0x80)[0x555556824a78]
- ./test_progs(+0x94d68)[0x5555564c4d68]
- ./test_progs(test_bpf_tcp_ca+0xe8)[0x5555564c6a88]
- ./test_progs(+0x3bde54)[0x5555567ede54]
- ./test_progs(main+0x61c)[0x5555567efd54]
- /usr/lib64/libc.so.6(+0x22208)[0x7ffff2aaa208]
- /usr/lib64/libc.so.6(__libc_start_main+0xac)[0x7ffff2aaa30c]
- ./test_progs(_start+0x48)[0x55555646bca8]
- Segmentation fault
-'''
-
-This is because "link" is NULL in that case. This patch adds null
-checks for link in bpf_tcp_ca to fix this error.
-
-Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
 ---
- tools/testing/selftests/bpf/prog_tests/bpf_tcp_ca.c | 12 ++++++++----
- 1 file changed, 8 insertions(+), 4 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_tcp_ca.c b/tools/testing/selftests/bpf/prog_tests/bpf_tcp_ca.c
-index bceff5900016..8c0306f344e9 100644
---- a/tools/testing/selftests/bpf/prog_tests/bpf_tcp_ca.c
-+++ b/tools/testing/selftests/bpf/prog_tests/bpf_tcp_ca.c
-@@ -411,7 +411,8 @@ static void test_update_ca(void)
- 		return;
+Note the better approach would be to convert the mac_device_info instance
+to being embedded into the stmmac_priv structure. It would have solved
+many driver problems like non-unified HW abstraction interface, duplicated
+fields (ioaddr and pcsr, etc) or too many non-runtime parameters passed to
+the callbacks, etc. But the change also would have been much-much more
+invasive than this one is. If despite of that you find the mac_device_info
+embedding into stmmac_priv more appropriate (as I do), then I'll provide
+the respective patch in place of this one.
+---
+ drivers/net/ethernet/stmicro/stmmac/common.h | 1 +
+ drivers/net/ethernet/stmicro/stmmac/hwif.c   | 1 +
+ 2 files changed, 2 insertions(+)
+
+diff --git a/drivers/net/ethernet/stmicro/stmmac/common.h b/drivers/net/ethernet/stmicro/stmmac/common.h
+index a66b836996d6..f7661268518f 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/common.h
++++ b/drivers/net/ethernet/stmicro/stmmac/common.h
+@@ -580,6 +580,7 @@ struct mii_regs {
+ };
  
- 	link = bpf_map__attach_struct_ops(skel->maps.ca_update_1);
--	ASSERT_OK_PTR(link, "attach_struct_ops");
-+	if (!ASSERT_OK_PTR(link, "attach_struct_ops"))
-+		return;
+ struct mac_device_info {
++	struct stmmac_priv *priv;
+ 	const struct stmmac_ops *mac;
+ 	const struct stmmac_desc_ops *desc;
+ 	const struct stmmac_dma_ops *dma;
+diff --git a/drivers/net/ethernet/stmicro/stmmac/hwif.c b/drivers/net/ethernet/stmicro/stmmac/hwif.c
+index 29367105df54..84fd57b76fad 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/hwif.c
++++ b/drivers/net/ethernet/stmicro/stmmac/hwif.c
+@@ -351,6 +351,7 @@ int stmmac_hwif_init(struct stmmac_priv *priv)
+ 		mac->tc = mac->tc ? : entry->tc;
+ 		mac->mmc = mac->mmc ? : entry->mmc;
+ 		mac->est = mac->est ? : entry->est;
++		mac->priv = priv;
  
- 	do_test(&opts);
- 	saved_ca1_cnt = skel->bss->ca1_cnt;
-@@ -447,7 +448,8 @@ static void test_update_wrong(void)
- 		return;
- 
- 	link = bpf_map__attach_struct_ops(skel->maps.ca_update_1);
--	ASSERT_OK_PTR(link, "attach_struct_ops");
-+	if (!ASSERT_OK_PTR(link, "attach_struct_ops"))
-+		return;
- 
- 	do_test(&opts);
- 	saved_ca1_cnt = skel->bss->ca1_cnt;
-@@ -484,7 +486,8 @@ static void test_mixed_links(void)
- 	ASSERT_OK_PTR(link_nl, "attach_struct_ops_nl");
- 
- 	link = bpf_map__attach_struct_ops(skel->maps.ca_update_1);
--	ASSERT_OK_PTR(link, "attach_struct_ops");
-+	if (!ASSERT_OK_PTR(link, "attach_struct_ops"))
-+		return;
- 
- 	do_test(&opts);
- 	ASSERT_GT(skel->bss->ca1_cnt, 0, "ca1_ca1_cnt");
-@@ -536,7 +539,8 @@ static void test_link_replace(void)
- 	bpf_link__destroy(link);
- 
- 	link = bpf_map__attach_struct_ops(skel->maps.ca_update_2);
--	ASSERT_OK_PTR(link, "attach_struct_ops_2nd");
-+	if (!ASSERT_OK_PTR(link, "attach_struct_ops_2nd"))
-+		return;
- 
- 	/* BPF_F_REPLACE with a wrong old map Fd. It should fail!
- 	 *
+ 		priv->hw = mac;
+ 		priv->ptpaddr = priv->ioaddr + entry->regs.ptp_off;
 -- 
 2.43.0
 
