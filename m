@@ -1,114 +1,184 @@
-Received: from mail-lj1-f177.google.com (mail-lj1-f177.google.com [209.85.208.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2164313E3ED;
-	Mon, 24 Jun 2024 13:28:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D038BFC08;
+	Mon, 24 Jun 2024 13:30:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719235732; cv=none; b=fKOXdjMr8qfLgNObhLgN5ZqhFAlDCiB2q7dZuV1U46F82Qh/29nDoOvaxAJ7blFGXR1Db6xGpgO+cLyEjRYJ8+E7RnkjV1FTI9Ucq/I96xXFYaHkUElA/xEQmqFzRiDsttnZoxN9krtoQC/eeKa0IjdTFDm80Bvm2HbUTbeEzWE=
+	t=1719235818; cv=none; b=hTzx75bGAnoOYLRNSdhnWTnr16Nq0ChbaPnVh59LRiS9aFXNPPaFb5//yBuQur8ge4WImJgRCkQuQ9vHhhu21lyQlnG6/fSdGZvT9dDQ47vPUdCG1+Ci4uo4CFA4mpSQtTqrdzZSZH2iHuRY09rHa0T5pAFHDl/pCa/n1MR902k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719235732; c=relaxed/simple;
-	bh=cDqcb6SJV4vRBb4QkNmQT3Wl/AbFEpR2X5N+u6WtmW4=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=oomZk6CRsk8ytWhalvCbqvQ0tKx2qDH51svMaTIduVNACagcZP0osPVzF8ugp7ml4D4DzlcJ1JF8G/PTYzgdWzALhsYOFehDWW3THayKAZ1lxPK/Zjh75HXkWEkpDQZjnNqnAyiVHrnRYYLauPnHln9+klMmQVdMIrzmS4hVkuE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZMlwThy/; arc=none smtp.client-ip=209.85.208.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1719235818; c=relaxed/simple;
+	bh=HccfLGLs+2vAsVTdnhMXqed4ZyzI1sE4rwYvGiswFz0=;
+	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=G9FJX2ZePEjSzHbI6/rPoAhGFITSCIoBjA2qFTyhxhOV2FHJgmjASkkzkSUhd0b9WTa1zOIj+WLzMA93/w6TdNRyC3O/6SsW43usneXapTMekSYwMbb5ACrns6evbtj4T7VVu+qCz7a3sGR29rUDAnQiAmXPAGMRjedHmLmXryI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=Fl17fSLT; arc=none smtp.client-ip=213.133.104.62
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZMlwThy/"
-Received: by mail-lj1-f177.google.com with SMTP id 38308e7fff4ca-2ec6635aa43so4209021fa.1;
-        Mon, 24 Jun 2024 06:28:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1719235729; x=1719840529; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=WtEe7sDqfN9JW3LcLHq6hNyDw8ZBCvPF/f0tUgUw0Ek=;
-        b=ZMlwThy/3xzxtPwT3+luMCEFBU8NHV4ABEkK6TrI+XMuIjE0ITbgF8tppy75mwmS64
-         LmBcZuGQ6NBi7SYO5Jqm88u/55nvxpsiCVcw8IHYbBnJQ1EOyMmI/Vdcd0GAJoBlna96
-         rUbA3aglp4yEvhviO6Hy9nAo21pel+JTZIGUEm5Vb/9/MzvMCVU0u8YUtcXfaa8Idc0V
-         qCcNEZTJESr1ZemwILHDkRTAh7Y532LYGxKnfOqxwM+QcauvYRnXEXdAfEl4hMky85ES
-         IPrqVwBqeSi8DyVf6vPXg84IoiNL5eBmCibYG0uFr9LzX1nUjfxbEhz2UFoZd2meWH/E
-         5w2A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719235729; x=1719840529;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=WtEe7sDqfN9JW3LcLHq6hNyDw8ZBCvPF/f0tUgUw0Ek=;
-        b=fi8u9dR5qtzgPKO080S2J3CVBkOHsqFteIzW0tGrWEUPPVMmBVd0rk2q40buCQVAa6
-         QHf632rNkmlI7QBp7U9M/x4RnJsKVKTJfOgs3vDZ5atkTdVMZsC5+TGwAIYb5HkOj13o
-         c334GeOEVkDggeJsiui857TjjK7mkahtzL5VR9Ge+UN3HG/diV8gldrVCbeVI0aQ4wZr
-         EVOAuEwiDn4DbwN9Y6P5vuBlgJBxRcbeCuTgU7Kj+ejtwVH0zG3AYUfcFayRFeUyAYo/
-         sPEth9usubTcMZ7L2C1VZ97ha4gt0V1glwqsBlOUvs7mIFr72fnLJaNuLXejw5MuVM6S
-         NBPg==
-X-Forwarded-Encrypted: i=1; AJvYcCVZWzYmDIrQJJaOE6hNaLIT0678H0vm6QZkUOqEOme/8fdr+wz0h6CE961S9x87lHw6fMH0RQGGUTA1B+dMCU4V1rN3onas7gMjaEZihpi8jRpTbJLL4QCXtx/z88qObmR5JUWMsyVJnntnfdUQa3zcyL/3JMawWYY7
-X-Gm-Message-State: AOJu0YxOtaoTJ9a/QRNuvLJOMdD4ou2PNbbQUHYCfkW8qI0wXFzSy1Gm
-	0CP4Uo+mAMLmAGuAclQZsVqgH5t4L6ncfPX/WnvGWCMmeM0iNq9w
-X-Google-Smtp-Source: AGHT+IFPP14441T+3czwKEItmbrOsbND2YdLL8uZN7bzYoWhRPQpBDSL2HCd8X2teLzstMx3I7E0FQ==
-X-Received: by 2002:a05:651c:1988:b0:2ec:637a:c212 with SMTP id 38308e7fff4ca-2ec637ac2b5mr15471271fa.39.1719235729169;
-        Mon, 24 Jun 2024 06:28:49 -0700 (PDT)
-Received: from localhost ([213.79.110.82])
-        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-2ec4d602519sm9997201fa.6.2024.06.24.06.28.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Jun 2024 06:28:48 -0700 (PDT)
-From: Serge Semin <fancer.lancer@gmail.com>
-To: Russell King <linux@armlinux.org.uk>,
-	Andrew Halaney <ahalaney@redhat.com>,
-	Alexandre Torgue <alexandre.torgue@foss.st.com>,
-	Jose Abreu <joabreu@synopsys.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-stm32@st-md-mailman.stormreply.com,
-	bpf@vger.kernel.org,
-	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH RFC net-next v2 17/17] net: stmmac: pcs: Drop the _SHIFT macros
-Date: Mon, 24 Jun 2024 16:26:34 +0300
-Message-ID: <20240624132802.14238-9-fancer.lancer@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <Zlmzu7/ANyZxOOQL@shell.armlinux.org.uk>
-References: <Zlmzu7/ANyZxOOQL@shell.armlinux.org.uk>
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="Fl17fSLT"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=ZMMmxbunf9noBGfoICHMb7iWweKWqqDXgeAEpAAQEoc=; b=Fl17fSLTHbjN96GEtB+/joCKBa
+	tDhZfM6AAJlbovMNDQhaBLH5QKmja+3kOINAmRUWn2ShLXtptr7gJhY0ogLKLrZN8Dx38iOsupt7H
+	ew3tgsvhmDUbXbJqqek4kENIlHLLiaDvhw5XSYdwX6qpNfZpf/yP5JgkFEjTT4Ehv81lKJKtbLUL6
+	01bMLZrteKKfqTmzSiBcZE/ZS82rKH+yn0uDV0JAeYgerqAoLfmMzjrti7ZfBFSNym2/sQTarrQBU
+	P3tz/Bb2zVTlCA7+1RyVMo7sf91ef0aaoF+DdEF72+6kMXJUCuuWuxs09q72ME6BnnPIstSAe1i1b
+	Cb7OEh2g==;
+Received: from sslproxy02.your-server.de ([78.47.166.47])
+	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1sLjlt-000Nfq-3P; Mon, 24 Jun 2024 15:30:13 +0200
+Received: from [178.197.249.38] (helo=linux.home)
+	by sslproxy02.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1sLjlt-0000YL-0v;
+	Mon, 24 Jun 2024 15:30:12 +0200
+Subject: Re: [RFC net-next 1/9] skb: introduce gro_disabled bit
+To: Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+ Yan Zhai <yan@cloudflare.com>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+ bpf@vger.kernel.org, kernel-team <kernel-team@cloudflare.com>
+References: <cover.1718919473.git.yan@cloudflare.com>
+ <b8c183a24285c2ab30c51622f4f9eff8f7a4752f.1718919473.git.yan@cloudflare.com>
+ <66756ed3f2192_2e64f929491@willemb.c.googlers.com.notmuch>
+ <44ac34f6-c78e-16dd-14da-15d729fecb5b@iogearbox.net>
+ <CAO3-PbrhnvmdYmQubNsTX3gX917o=Q+MBWTBkxUd=YWt4dNGuA@mail.gmail.com>
+ <e6553be1-4eaa-e90a-17f8-dece2bb95e7b@iogearbox.net>
+ <CAO3-PboYruuLrF7D_rMiuG-AnWdR4BhsgP+MhVmOm-f3MzJFyQ@mail.gmail.com>
+ <6677db8b2ef78_33522729492@willemb.c.googlers.com.notmuch>
+From: Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <caecbff8-ffc4-976b-4516-dba41848ef30@iogearbox.net>
+Date: Mon, 24 Jun 2024 15:30:12 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+In-Reply-To: <6677db8b2ef78_33522729492@willemb.c.googlers.com.notmuch>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.103.10/27316/Mon Jun 24 10:26:29 2024)
 
-The PCS_ANE_PSE_SHIFT and PCS_ANE_RFE_SHIFT are unused anyway. Moreover
-PCS_ANE_PSE and PCS_ANE_RFE are the respective field masks. So the
-FIELD_GET()/FIELD_SET() macro-functions can be used to get/set the fields
-content. Drop the _SHIFT macros for good then.
+On 6/23/24 10:23 AM, Willem de Bruijn wrote:
+> Yan Zhai wrote:
+>> On Fri, Jun 21, 2024 at 11:41 AM Daniel Borkmann <daniel@iogearbox.net> wrote:
+>>> On 6/21/24 6:00 PM, Yan Zhai wrote:
+>>>> On Fri, Jun 21, 2024 at 8:13 AM Daniel Borkmann <daniel@iogearbox.net> wrote:
+>>>>> On 6/21/24 2:15 PM, Willem de Bruijn wrote:
+>>>>>> Yan Zhai wrote:
+>>>>>>> Software GRO is currently controlled by a single switch, i.e.
+>>>>>>>
+>>>>>>>      ethtool -K dev gro on|off
+>>>>>>>
+>>>>>>> However, this is not always desired. When GRO is enabled, even if the
+>>>>>>> kernel cannot GRO certain traffic, it has to run through the GRO receive
+>>>>>>> handlers with no benefit.
+>>>>>>>
+>>>>>>> There are also scenarios that turning off GRO is a requirement. For
+>>>>>>> example, our production environment has a scenario that a TC egress hook
+>>>>>>> may add multiple encapsulation headers to forwarded skbs for load
+>>>>>>> balancing and isolation purpose. The encapsulation is implemented via
+>>>>>>> BPF. But the problem arises then: there is no way to properly offload a
+>>>>>>> double-encapsulated packet, since skb only has network_header and
+>>>>>>> inner_network_header to track one layer of encapsulation, but not two.
+>>>>>>> On the other hand, not all the traffic through this device needs double
+>>>>>>> encapsulation. But we have to turn off GRO completely for any ingress
+>>>>>>> device as a result.
+>>>>>>>
+>>>>>>> Introduce a bit on skb so that GRO engine can be notified to skip GRO on
+>>>>>>> this skb, rather than having to be 0-or-1 for all traffic.
+>>>>>>>
+>>>>>>> Signed-off-by: Yan Zhai <yan@cloudflare.com>
+>>>>>>> ---
+>>>>>>>     include/linux/netdevice.h |  9 +++++++--
+>>>>>>>     include/linux/skbuff.h    | 10 ++++++++++
+>>>>>>>     net/Kconfig               | 10 ++++++++++
+>>>>>>>     net/core/gro.c            |  2 +-
+>>>>>>>     net/core/gro_cells.c      |  2 +-
+>>>>>>>     net/core/skbuff.c         |  4 ++++
+>>>>>>>     6 files changed, 33 insertions(+), 4 deletions(-)
+>>>>>>>
+>>>>>>> diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
+>>>>>>> index c83b390191d4..2ca0870b1221 100644
+>>>>>>> --- a/include/linux/netdevice.h
+>>>>>>> +++ b/include/linux/netdevice.h
+>>>>>>> @@ -2415,11 +2415,16 @@ struct net_device {
+>>>>>>>        ((dev)->devlink_port = (port));                         \
+>>>>>>>     })
+>>>>>>>
+>>>>>>> -static inline bool netif_elide_gro(const struct net_device *dev)
+>>>>>>> +static inline bool netif_elide_gro(const struct sk_buff *skb)
+>>>>>>>     {
+>>>>>>> -    if (!(dev->features & NETIF_F_GRO) || dev->xdp_prog)
+>>>>>>> +    if (!(skb->dev->features & NETIF_F_GRO) || skb->dev->xdp_prog)
+>>>>>>>                return true;
+>>>>>>> +
+>>>>>>> +#ifdef CONFIG_SKB_GRO_CONTROL
+>>>>>>> +    return skb->gro_disabled;
+>>>>>>> +#else
+>>>>>>>        return false;
+>>>>>>> +#endif
+>>>>>>
+>>>>>> Yet more branches in the hot path.
+>>>>>>
+>>>>>> Compile time configurability does not help, as that will be
+>>>>>> enabled by distros.
+>>>>>>
+>>>>>> For a fairly niche use case. Where functionality of GRO already
+>>>>>> works. So just a performance for a very rare case at the cost of a
+>>>>>> regression in the common case. A small regression perhaps, but death
+>>>>>> by a thousand cuts.
+>>>>>
+>>>>> Mentioning it here b/c it perhaps fits in this context, longer time ago
+>>>>> there was the idea mentioned to have BPF operating as GRO engine which
+>>>>> might also help to reduce attack surface by only having to handle packets
+>>>>> of interest for the concrete production use case. Perhaps here meta data
+>>>>> buffer could be used to pass a notification from XDP to exit early w/o
+>>>>> aggregation.
+>>>>
+>>>> Metadata is in fact one of our interests as well. We discussed using
+>>>> metadata instead of a skb bit to carry this information internally.
+>>>> Since metadata is opaque atm so it seems the only option is to have a
+>>>> GRO control hook before napi_gro_receive, and let BPF decide
+>>>> netif_receive_skb or napi_gro_receive (echo what Paolo said). With BPF
+>>>> it could indeed be more flexible, but the cons is that it could be
+>>>> even more slower than taking a bit on skb. I am actually open to
+>>>> either approach, as long as it gives us more control on when to enable
+>>>> GRO :)
+>>>
+>>> Oh wait, one thing that just came to mind.. have you tried u64 per-CPU
+>>> counter map in XDP? For packets which should not be GRO-aggregated you
+>>> add count++ into the meta data area, and this forces GRO to not aggregate
+>>> since meta data that needs to be transported to tc BPF layer mismatches
+>>> (and therefore the contract/intent is that tc BPF needs to see the different
+>>> meta data passed to it).
+>>
+>> We did this before accidentally (we put a timestamp for debugging
+>> purposes in metadata) and this actually caused about 20% of OoO for
+>> TCP in production: all PSH packets are reordered. GRO does not fire
+>> the packet to the upper layer when a diff in metadata is found for a
+>> non-PSH packet, instead it is queued as a “new flow” on the GRO list
+>> and waits for flushing. When a PSH packet arrives, its semantic is to
+>> flush this packet immediately and thus precedes earlier packets of the
+>> same flow.
+> 
+> Is that a bug in XDP metadata handling for GRO?
+> 
+> Mismatching metadata should not be taken as separate flows, but as a
+> flush condition.
 
-Signed-off-by: Serge Semin <fancer.lancer@gmail.com>
----
- drivers/net/ethernet/stmicro/stmmac/stmmac_pcs.h | 2 --
- 1 file changed, 2 deletions(-)
+Definitely a bug as it should flush. If noone is faster I can add it to my
+backlog todo to fix it, but might probably take a week before I get to it.
 
-diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_pcs.h b/drivers/net/ethernet/stmicro/stmmac/stmmac_pcs.h
-index a17e5b37c411..0f15c9898788 100644
---- a/drivers/net/ethernet/stmicro/stmmac/stmmac_pcs.h
-+++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_pcs.h
-@@ -43,9 +43,7 @@
- #define PCS_ANE_FD		BIT(5)		/* AN Full-duplex flag */
- #define PCS_ANE_HD		BIT(6)		/* AN Half-duplex flag */
- #define PCS_ANE_PSE		GENMASK(8, 7)	/* AN Pause Encoding */
--#define PCS_ANE_PSE_SHIFT	7
- #define PCS_ANE_RFE		GENMASK(13, 12)	/* AN Remote Fault Encoding */
--#define PCS_ANE_RFE_SHIFT	12
- #define PCS_ANE_ACK		BIT(14)		/* AN Base-page acknowledge */
- 
- /* SGMII/RGMII/SMII link status register */
--- 
-2.43.0
-
+Thanks,
+Daniel
