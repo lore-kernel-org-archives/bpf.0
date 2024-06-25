@@ -1,141 +1,161 @@
-Received: from mail-oo1-f43.google.com (mail-oo1-f43.google.com [209.85.161.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B76E822313
-	for <bpf@vger.kernel.org>; Tue, 25 Jun 2024 08:25:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E02A31474A0;
+	Tue, 25 Jun 2024 08:25:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719303907; cv=none; b=GR3Rl4J+9vXQJN9TWLt1pgKxzu7y0XsHFaSvmTH0dLfLaroqSJJf2inCz3oa3xlos5ZC0vHr8kqBZfPysCEef5PvSa1vx9Fq8/k4W2KaE0aJYdP/6rlhHu0LQvEYzddLR0PbKvhQXgi9bRgMY92sHIv3RtuMhEaLP1IGh4eA+Nw=
+	t=1719303911; cv=none; b=lfn5toCX72oa0r+p4VxfUQrWYrS91qeRAYUi2cZYGORRdDZnG1vQ9Q7tBt9VVIyQ7qv0uQ6gbkxIcSmh79noBQWxBcM8pZh2qLe4+4L2Yz5Yio9MEl79CGEUXNC0k+Go5z2bYG8feX6duy96ajJ7iyEhqfxUGacOWvNM6VHk/04=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719303907; c=relaxed/simple;
-	bh=x9Xq4nJRhjjFa5IMN1qjncFsaG0ztpmFcergDKd1o2U=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=RuE11oc432lW2v4ZsWhp0ZaRsCCxwfxhiVRWzFU47OYb6b/OcjTEeVtgZSUJbJUl6E5fRVGLnbcDngoy0LFpKlhvKy+QrTRzWS3avbSToArfQo+H3bWcCSp4kPFbQSj/ueZfBrPukxR6tUUAUGfK1NP2iOQ8SW5QqO+fOQIc2rs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ELUQAKrG; arc=none smtp.client-ip=209.85.161.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1719303911; c=relaxed/simple;
+	bh=GV6RzNRiu+NFo0nRbcqXXn65F5CbOzF0HE2HroGeUgE=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=f6IAmCD0aw9ZbJ6ImTiImegRxfGgXLMkJscvmSDJPrsOuX4RfOE1O5Jbsdj/knFQOFldognp7HSAacyKT9X+9uCag150ZwRkVyayMB9ZfKqdqZl9WqBxlNBmQv+UmW58kWi9CVudSP+bj4GwqEPnRZk9QmgwCI3piuS7KslCsOY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HAwZY4P5; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ELUQAKrG"
-Received: by mail-oo1-f43.google.com with SMTP id 006d021491bc7-5c200bee86aso821064eaf.1
-        for <bpf@vger.kernel.org>; Tue, 25 Jun 2024 01:25:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1719303905; x=1719908705; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ic0gR8lv1bzgi74/8//kPAW6gA0eMoG+p7FcgAs/fPw=;
-        b=ELUQAKrGvvymybJCHTk09auXxYFdtQqTOkGUyqmM+Z56gexYd4QA2mrV+HkGH+n62r
-         I2Phf9wz48kIFvI4Qxy4+eNFTdbrzAhk880AdxIY6Iulu/mLGLcoJgCHDmE7fw5gzgR8
-         SbVcwn1cUdD7uTiBllAjKYRXdALSzkJ+qbBG16I/Zsq1M4XU8nAAI6ZBhHF5UxG/LI1V
-         V9NHErECEL9HH89DrYij826SBaWF8OFPousQglFFPBXys1adjp2jOYWcm06W2RhK1iku
-         uTjNqg3T9bokQsUV3iNoEOeKdYA0bbN+2GI0wB2ShnuwWXLuGK2CyeOgvrwiZ9s/aqlA
-         zqdA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719303905; x=1719908705;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ic0gR8lv1bzgi74/8//kPAW6gA0eMoG+p7FcgAs/fPw=;
-        b=G+39d3DWbOkCrAsRUrb7xEEjHNW82sFsGUWv960yGPcy2B11c92NW+pAhSPY83jE0N
-         i0cAuk4mqEZ/R7xMLOy76kVA1+3iHCqybhX6zeO96PzpGBh00aYtkoZdK7sn5n0K0z2G
-         nXat/h+x2g4ydxSfNAkAxolAmrIOLVfQNS5CM6EkApVi/dEapftDCtF9x+50JZYsq7Bj
-         DU7np1LgiHnEOYMAw08uQe66QIe6iixSipFjDLlofFdQoOoFn3bsnOSGSlXDbIo1x8Rj
-         hrAtWMSb7XQLL1VmAIsRnp9qNNJGtx85bjZPEpYxlCvgwiR+ch8OOHN7Mym7vXOuKBIy
-         bPnw==
-X-Forwarded-Encrypted: i=1; AJvYcCV2jlKqY2UEonMyN/AxOZHKqgwVTeR5vb6QtTHH7oUGmZKtCPoWqOz2/6o5n059kglxAvmWTXTBzjCtcOlfVK9xMeOm
-X-Gm-Message-State: AOJu0YwVwNOnvXeRWLE5sCGJ6+6dMMRBlXWpUqBbH84MbaB8PoJAn/5e
-	JLasyexUUgOya4W9OaSyl65BJGK6gB6mA24WhCJ2Dp/XcwioPGgq
-X-Google-Smtp-Source: AGHT+IHHtCpPitKeFignih/Zbj7MxleXlHtKMu6APKY8FCO4SUGxC+GN7Lm7vSGr6hOFkVSmcD67Fw==
-X-Received: by 2002:a05:6358:7e88:b0:1a4:617d:6fea with SMTP id e5c5f4694b2df-1a4617d7377mr119874755d.6.1719303904573;
-        Tue, 25 Jun 2024 01:25:04 -0700 (PDT)
-Received: from [10.22.68.7] ([122.11.166.8])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-716bb041180sm6664845a12.80.2024.06.25.01.25.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 25 Jun 2024 01:25:03 -0700 (PDT)
-Message-ID: <ac402815-923c-49ec-b027-4f99b55c895e@gmail.com>
-Date: Tue, 25 Jun 2024 16:25:00 +0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HAwZY4P5"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1580C32789;
+	Tue, 25 Jun 2024 08:25:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1719303909;
+	bh=GV6RzNRiu+NFo0nRbcqXXn65F5CbOzF0HE2HroGeUgE=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=HAwZY4P5qnXs2cHBEiga+yj3iGNMFi82pL8hcLO4Z/X9mfIlAfJP3ikVng5IqjOw/
+	 Q5CiSd7an7Rj/WKCXer4As5VbEOF9/02bh/dnme43GzluUPsjN3pyXQGpkQaFsDHLR
+	 fHD1dfLFhbF8QnjXwZHCTl3qDES+49dgr646WyzBhMtDpfl6HkviUoA4ctf76nS5w8
+	 dx8WXRWWbU2djtRuKkCjwVxUPhvX/tyzKuX2nj0yqXsqzR1iRNzmEN2myZXBBGYrhC
+	 tgAmSZHcTIDtWrjzNc7vie/YN2bHF1UCMv7ScDhQvGXsdSST6KqDkWFxv3ZZfoTnsJ
+	 7OPqDpfkWvtcw==
+From: Geliang Tang <geliang@kernel.org>
+To: John Fastabend <john.fastabend@gmail.com>,
+	Jakub Sitnicki <jakub@cloudflare.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	David Ahern <dsahern@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Mykola Lysenko <mykolal@fb.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@google.com>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Mykyta Yatsenko <yatsenko@meta.com>,
+	Miao Xu <miaxu@meta.com>,
+	Yuran Pereira <yuran.pereira@hotmail.com>,
+	Huacai Chen <chenhuacai@kernel.org>,
+	Tiezhu Yang <yangtiezhu@loongson.cn>
+Cc: Geliang Tang <tanggeliang@kylinos.cn>,
+	netdev@vger.kernel.org,
+	bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH bpf-next v2 1/4] skmsg: null check for sg_page in sk_msg_recvmsg
+Date: Tue, 25 Jun 2024 16:24:36 +0800
+Message-ID: <072709ce77b04dc77523d4e8763c1fb47bf0913d.1719302367.git.tanggeliang@kylinos.cn>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <cover.1719302367.git.tanggeliang@kylinos.cn>
+References: <cover.1719302367.git.tanggeliang@kylinos.cn>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [linux-next:master] [bpf, x64] f663a03c8e:
- test-bpf.Tail_call_count_preserved_across_function_calls.fail
-To: kernel test robot <oliver.sang@intel.com>
-Cc: oe-lkp@lists.linux.dev, lkp@intel.com,
- Linux Memory Management List <linux-mm@kvack.org>,
- Alexei Starovoitov <ast@kernel.org>, bpf@vger.kernel.org
-References: <202406251415.c51865bc-oliver.sang@intel.com>
-Content-Language: en-US
-From: Leon Hwang <hffilwlqm@gmail.com>
-In-Reply-To: <202406251415.c51865bc-oliver.sang@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
+From: Geliang Tang <tanggeliang@kylinos.cn>
 
+Run the following BPF selftests on Loongarch:
 
-On 25/6/24 14:55, kernel test robot wrote:
-> 
-> 
-> Hello,
-> 
-> kernel test robot noticed "test-bpf.Tail_call_count_preserved_across_function_calls.fail" on:
-> 
-> commit: f663a03c8e35c5156bad073a4a8f5e673d656e3f ("bpf, x64: Remove tail call detection")
-> https://git.kernel.org/cgit/linux/kernel/git/next/linux-next.git master
-> 
-> [test failed on linux-next/master 62c97045b8f720c2eac807a5f38e26c9ed512371]
-> 
-> in testcase: test-bpf
-> version: 
-> with following parameters:
-> 
-> 	test: non-jit
-> 
-> 
-> 
-> compiler: gcc-13
-> test machine: 36 threads 1 sockets Intel(R) Core(TM) i9-10980XE CPU @ 3.00GHz (Cascade Lake) with 32G memory
-> 
-> (please refer to attached dmesg/kmsg for entire log/backtrace)
-> 
-> 
-> 
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <oliver.sang@intel.com>
-> | Closes: https://lore.kernel.org/oe-lkp/202406251415.c51865bc-oliver.sang@intel.com
-> 
-> 
-> 
-> [   43.913560] test_bpf: #0 Tail call leaf jited:1 5 PASS
-> [   43.913572] test_bpf: #1 Tail call 2 jited:1 ret -1 != 3 FAIL
-> [   43.914138] test_bpf: #2 Tail call 3 jited:1 ret -1 != 6 FAIL
-> [   43.914756] test_bpf: #3 Tail call 4 jited:1 ret -1 != 10 FAIL
-> [   43.915374] test_bpf: #4 Tail call load/store leaf jited:1 5 PASS
-> [   43.915993] test_bpf: #5 Tail call load/store jited:1 ret -1 != 0 FAIL
-> [   43.916636] test_bpf: #6 Tail call error path, max count reached jited:1 ret 1000 != 34000 FAIL
-> [   43.917319] test_bpf: #7 Tail call count preserved across function calls jited:1 ret 1000 != 34000 FAIL
-> [   43.918799] test_bpf: #8 Tail call error path, NULL target jited:1 5 PASS
-> [   43.919720] test_bpf: #9 Tail call error path, index out of range jited:1 5 PASS
-> [   43.920474] test_bpf: test_tail_calls: Summary: 4 PASSED, 6 FAILED, [10/10 JIT'ed]
-> 
+./test_progs -t sockmap_basic
 
-Hi,
+A Kernel panic occurs:
 
-May I request the source code of these test cases?
-I do not find them in lkp-tests.
+'''
+ Oops[#1]:
+ CPU: 22 PID: 2824 Comm: test_progs Tainted: G           OE      6.10.0-rc2+ #18
+ Hardware name: LOONGSON Dabieshan/Loongson-TC542F0, BIOS Loongson-UDK2018-V4.0.11
+ pc 9000000004162774 ra 90000000048bf6c0 tp 90001000aa16c000 sp 90001000aa16fb90
+ a0 0000000000000000 a1 0000000000000000 a2 0000000000000000 a3 90001000aa16fd70
+ a4 0000000000000800 a5 0000000000000000 a6 000055557b63aae8 a7 00000000000000cf
+ t0 0000000000000000 t1 0000000000004000 t2 0000000000000048 t3 0000000000000000
+ t4 0000000000000001 t5 0000000000000002 t6 0000000000000001 t7 0000000000000002
+ t8 0000000000000018 u0 9000000004856150 s9 0000000000000000 s0 0000000000000000
+ s1 0000000000000000 s2 90001000aa16fd70 s3 0000000000000000 s4 0000000000000000
+ s5 0000000000004000 s6 900010009284dc00 s7 0000000000000001 s8 900010009284dc00
+    ra: 90000000048bf6c0 sk_msg_recvmsg+0x120/0x560
+   ERA: 9000000004162774 copy_page_to_iter+0x74/0x1c0
+  CRMD: 000000b0 (PLV0 -IE -DA +PG DACF=CC DACM=CC -WE)
+  PRMD: 0000000c (PPLV0 +PIE +PWE)
+  EUEN: 00000007 (+FPE +SXE +ASXE -BTE)
+  ECFG: 00071c1d (LIE=0,2-4,10-12 VS=7)
+ ESTAT: 00010000 [PIL] (IS= ECode=1 EsubCode=0)
+  BADV: 0000000000000040
+  PRID: 0014c011 (Loongson-64bit, Loongson-3C5000)
+ Modules linked in: bpf_testmod(OE) xt_CHECKSUM xt_MASQUERADE xt_conntrack
+ Process test_progs (pid: 2824, threadinfo=0000000000863a31, task=000000001cba0874)
+ Stack : 0000000000000001 fffffffffffffffc 0000000000000000 0000000000000000
+         0000000000000018 0000000000000000 0000000000000000 90000000048bf6c0
+         90000000052cd638 90001000aa16fd70 900010008bf51580 900010009284f000
+         90000000049f2b90 900010009284f188 900010009284f178 90001000861d4780
+         9000100084dccd00 0000000000000800 0000000000000007 fffffffffffffff2
+         000000000453e92f 90000000049aae34 90001000aa16fd60 900010009284f000
+         0000000000000000 0000000000000000 900010008bf51580 90000000049f2b90
+         0000000000000001 0000000000000000 9000100084dc3a10 900010009284f1ac
+         90001000aa16fd40 0000555559953278 0000000000000001 0000000000000000
+         90001000aa16fdc8 9000000005a5a000 90001000861d4780 0000000000000800
+         ...
+ Call Trace:
+ [<9000000004162774>] copy_page_to_iter+0x74/0x1c0
+ [<90000000048bf6c0>] sk_msg_recvmsg+0x120/0x560
+ [<90000000049f2b90>] tcp_bpf_recvmsg_parser+0x170/0x4e0
+ [<90000000049aae34>] inet_recvmsg+0x54/0x100
+ [<900000000481ad5c>] sock_recvmsg+0x7c/0xe0
+ [<900000000481e1a8>] __sys_recvfrom+0x108/0x1c0
+ [<900000000481e27c>] sys_recvfrom+0x1c/0x40
+ [<9000000004c076ec>] do_syscall+0x8c/0xc0
+ [<9000000003731da4>] handle_syscall+0xc4/0x160
 
-Thanks,
-Leon
+ Code: 0010b09b  440125a0  0011df8d <28c10364> 0012b70c  00133305  0013b1ac  0010dc84  00151585
 
-> 
-> 
-> The kernel config and materials to reproduce are available at:
-> https://download.01.org/0day-ci/archive/20240625/202406251415.c51865bc-oliver.sang@intel.com
-> 
-> 
-> 
+ ---[ end trace 0000000000000000 ]---
+ Kernel panic - not syncing: Fatal exception
+ Kernel relocated by 0x3510000
+  .text @ 0x9000000003710000
+  .data @ 0x9000000004d70000
+  .bss  @ 0x9000000006469400
+ ---[ end Kernel panic - not syncing: Fatal exception ]---
+'''
+
+This is because "sg_page(sge)" is NULL in that case. This patch adds null
+check for it in sk_msg_recvmsg() to fix this error.
+
+Fixes: 604326b41a6f ("bpf, sockmap: convert to generic sk_msg interface")
+Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
+---
+ net/core/skmsg.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/net/core/skmsg.c b/net/core/skmsg.c
+index fd20aae30be2..bafcc1e2eadf 100644
+--- a/net/core/skmsg.c
++++ b/net/core/skmsg.c
+@@ -432,6 +432,8 @@ int sk_msg_recvmsg(struct sock *sk, struct sk_psock *psock, struct msghdr *msg,
+ 			sge = sk_msg_elem(msg_rx, i);
+ 			copy = sge->length;
+ 			page = sg_page(sge);
++			if (!page)
++				goto out;
+ 			if (copied + copy > len)
+ 				copy = len - copied;
+ 			copy = copy_page_to_iter(page, sge->offset, copy, iter);
+-- 
+2.43.0
+
