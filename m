@@ -1,34 +1,34 @@
 Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEC6C190465;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54D0714EC59;
 	Wed, 26 Jun 2024 18:59:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=167.114.26.122
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719428362; cv=none; b=gM3ntcezZfqv0K/ZQurz2LeZ99k9LQLeK5Pr4V5rakgHMesR/YDlUg5WU1eBwVkOSO83QDMidrNOWCdYrJvPaIPl0dD5FBSymidJhx23i+tzAf6MHO3qstQO9rX5hBFRdJHsNWKJsUEDDUUgLYOM0sJr5xjo8jdRaE0D/l9eO/8=
+	t=1719428363; cv=none; b=d2qcZKEVvF9M00NKL6MsI4zEXXAf7LspjgRXvU6L9oVdIZr5R1Cook+GCJGyNewTSZXolj3pusFgoaDMexdld7uHggv4mnKFhw60iKXAyXSy3lCYVfrwbIKsSyPz+oILkMyRLKemfI0yoljyh7mI0KuzNzJgH7lKqSgw2xvaEcs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719428362; c=relaxed/simple;
-	bh=dqQyq+JWny1Zk9kPrnxbdc4Bt8ivWO1bh2Qq0DoNRlQ=;
+	s=arc-20240116; t=1719428363; c=relaxed/simple;
+	bh=gjc048RnAItR651zyPAIKpF5uOoLVdvActZXFVDndY0=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=rNiYviDPF2Ase8iT+yB7WLvnF2PSmmOnVGivFySbxC36Kao+qL5KMT5LeYufxy+OavhGJAilm2eT9gQTu5x2wBcV/Uv2/VcvcWYFLpxE0B6hrYthCF3u6EnTl67RCq7EdagO0Zo+6nSEgPbVa2KABIkJ67coLGbFoz+Op4+d0nQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com; spf=pass smtp.mailfrom=efficios.com; dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b=WDfpKnAU; arc=none smtp.client-ip=167.114.26.122
+	 MIME-Version; b=cu5Z0lU/EWku+9UyMVPov8m8h2Vpuv8wvIpVQIy2lUmo1IFVixITKy0mUSO4oktVXIp+2mxrldwuVyXg+M35vx+9xqwLM+Yfreub5j5zRBinGZV/34S8KGpO3lrUAFNV7WLCegUJb6OkSmpI7vUd2CkIHP+rrBssCmYUZnCAQGU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com; spf=pass smtp.mailfrom=efficios.com; dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b=IVpwk2qs; arc=none smtp.client-ip=167.114.26.122
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=efficios.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b="WDfpKnAU"
+	dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b="IVpwk2qs"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
-	s=smtpout1; t=1719428354;
-	bh=dqQyq+JWny1Zk9kPrnxbdc4Bt8ivWO1bh2Qq0DoNRlQ=;
+	s=smtpout1; t=1719428353;
+	bh=gjc048RnAItR651zyPAIKpF5uOoLVdvActZXFVDndY0=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=WDfpKnAU9v8OwZZJ3bWq2cs5pSWzGiEYlwQ/0fuDC0EP2WMihq8dZA/IL2llbeWbw
-	 s0xPIfSPXd6oXnroddl+C5DZaLwA82weDhpsdyN4AYki56gz0kIMeZFjr3TICxTLH/
-	 ugVUgQiVbu/qlt50dphZmbwrPhUxcj/JjDd/FDm31oyShjVeOYUfntkmUdVEySpQqM
-	 kq7hPkeqVRbepH5ZOoZncZZPcg37dNFSAawcsdVNwOz7qpc86AzEpLq82+Sd14AZDe
-	 kpdM0ze6Kkfp9j+Go/Q/nx76zVhwKQHk83wDmaSDt5KqolEx2aqNqi9Vvf95ckpBUH
-	 KF2e9pBnO42rA==
+	b=IVpwk2qstEbmGTpAX4dsPOYiMy5QxBk6RF2KXZYLSQEcfbToItWhZk05F9/Abalza
+	 8JJbyi0L4H9uk7Q5HHGPrAb7kUToSXbaduFyfrhhF5sJ0yYVUOGU+2yn9Qmfqf/Vb+
+	 H69OfB+PVC10+vd9vlVzYMSA3pzQFXx58WJxZlRefnyGrCmhx+CGRWNdEJccgoXD9g
+	 yGx/nYhmeaf8Oe+OT0HoOTtnfuHAxYA1LdTVpVHFnz3o37cjvB3stl5ZIP4kvR7n+Q
+	 5Co1k/h2Ddr7z4EiesPly/W4DlMjfOv82Npl0FnDKXGk5DrpSX3+9/nvj76UUacn1/
+	 LMR8nGUvKetCw==
 Received: from thinkos.internal.efficios.com (192-222-143-198.qc.cable.ebox.net [192.222.143.198])
-	by smtpout.efficios.com (Postfix) with ESMTPSA id 4W8WFt0KtSz17Zf;
-	Wed, 26 Jun 2024 14:59:14 -0400 (EDT)
+	by smtpout.efficios.com (Postfix) with ESMTPSA id 4W8WFs1RNyz17tZ;
+	Wed, 26 Jun 2024 14:59:13 -0400 (EDT)
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 To: Steven Rostedt <rostedt@goodmis.org>,
 	Masami Hiramatsu <mhiramat@kernel.org>
@@ -46,10 +46,10 @@ Cc: linux-kernel@vger.kernel.org,
 	Namhyung Kim <namhyung@kernel.org>,
 	bpf@vger.kernel.org,
 	Joel Fernandes <joel@joelfernandes.org>,
-	Michael Jeanson <mjeanson@efficios.com>
-Subject: [PATCH v5 4/8] tracing: Introduce faultable tracepoints
-Date: Wed, 26 Jun 2024 14:59:37 -0400
-Message-Id: <20240626185941.68420-5-mathieu.desnoyers@efficios.com>
+	Ingo Molnar <mingo@kernel.org>
+Subject: [PATCH v5 2/8] cleanup.h guard: Rename DEFINE_ prefix to DECLARE_
+Date: Wed, 26 Jun 2024 14:59:35 -0400
+Message-Id: <20240626185941.68420-3-mathieu.desnoyers@efficios.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20240626185941.68420-1-mathieu.desnoyers@efficios.com>
 References: <20240626185941.68420-1-mathieu.desnoyers@efficios.com>
@@ -61,572 +61,880 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-When invoked from system call enter/exit instrumentation, accessing
-user-space data is a common use-case for tracers. However, tracepoints
-currently disable preemption around iteration on the registered
-tracepoint probes and invocation of the probe callbacks, which prevents
-tracers from handling page faults.
+The convention used in other kernel headers (e.g. wait.h, percpu-defs.h)
+is to use "DECLARE_" prefix for macros emitting externs, static inlines
+and type definitions.
 
-Extend the tracepoint and trace event APIs to allow defining a faultable
-tracepoint which invokes its callback with preemption enabled.
+The "DEFINE_" prefix is used for variable definitions.
 
-Also extend the tracepoint API to allow tracers to request specific
-probes to be connected to those faultable tracepoints. When the
-TRACEPOINT_MAY_FAULT flag is provided on registration, the probe
-callback will be called with preemption enabled, and is allowed to take
-page faults. Faultable probes can only be registered on faultable
-tracepoints and non-faultable probes on non-faultable tracepoints.
+In preparation to introduce a "DEFINE_INACTIVE_GUARD()" to actually
+define a guard variable, rename all the guard "DEFINE_" prefix to
+"DECLARE_".
 
-The tasks trace rcu mechanism is used to synchronize read-side
-marshalling of the registered probes with respect to faultable probes
-unregistration and teardown.
-
-Link: https://lore.kernel.org/lkml/20231002202531.3160-1-mathieu.desnoyers@efficios.com/
-Co-developed-by: Michael Jeanson <mjeanson@efficios.com>
 Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Signed-off-by: Michael Jeanson <mjeanson@efficios.com>
-Cc: Steven Rostedt <rostedt@goodmis.org>
-Cc: Masami Hiramatsu <mhiramat@kernel.org>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Alexei Starovoitov <ast@kernel.org>
-Cc: Yonghong Song <yhs@fb.com>
-Cc: Paul E. McKenney <paulmck@kernel.org>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc: Mark Rutland <mark.rutland@arm.com>
-Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
-Cc: Jiri Olsa <jolsa@redhat.com>
-Cc: Namhyung Kim <namhyung@kernel.org>
-Cc: bpf@vger.kernel.org
-Cc: Joel Fernandes <joel@joelfernandes.org>
+Cc: Peter Zijlstra (Intel) <peterz@infradead.org>
+Cc: Ingo Molnar <mingo@kernel.org>
 ---
-Changes since v1:
-- Cleanup __DO_TRACE() implementation.
-- Rename "sleepable tracepoints" to "faultable tracepoints", MAYSLEEP to
-  MAYFAULT, and use might_fault() rather than might_sleep(), to properly
-  convey that the tracepoints are meant to be able to take a page fault,
-  which requires to be able to sleep *and* to hold the mmap_sem.
-Changes since v2:
-- Rename MAYFAULT to MAY_FAULT.
-- Rebased on 6.5.5.
-- Introduce MAY_EXIST tracepoint flag.
-Changes since v3:
-- Rebased on 6.6.2.
-Changes since v4:
-- Rebased on 6.9.6.
-- Simplify flag check in tracepoint_probe_register_prio_flags().
-- Update MAY_EXIST flag description.
----
- include/linux/tracepoint-defs.h | 14 ++++++
- include/linux/tracepoint.h      | 88 +++++++++++++++++++++++----------
- include/trace/define_trace.h    |  7 +++
- include/trace/trace_events.h    |  6 +++
- init/Kconfig                    |  1 +
- kernel/trace/bpf_trace.c        |  5 +-
- kernel/trace/trace_fprobe.c     |  5 +-
- kernel/tracepoint.c             | 65 ++++++++++++++----------
- 8 files changed, 136 insertions(+), 55 deletions(-)
+ drivers/cxl/core/cdat.c                     |  2 +-
+ drivers/cxl/cxl.h                           |  2 +-
+ drivers/gpio/gpiolib.h                      |  2 +-
+ drivers/platform/x86/intel/pmc/core_ssram.c |  2 +-
+ fs/fuse/virtio_fs.c                         |  2 +-
+ fs/pstore/inode.c                           |  4 +-
+ include/linux/bitmap.h                      |  2 +-
+ include/linux/cleanup.h                     | 56 ++++++++++-----------
+ include/linux/cpu.h                         |  2 +-
+ include/linux/cpumask.h                     |  2 +-
+ include/linux/device.h                      |  6 +--
+ include/linux/file.h                        |  4 +-
+ include/linux/firmware.h                    |  2 +-
+ include/linux/gpio/driver.h                 |  4 +-
+ include/linux/iio/iio.h                     |  4 +-
+ include/linux/irqflags.h                    |  4 +-
+ include/linux/mutex.h                       |  6 +--
+ include/linux/of.h                          |  2 +-
+ include/linux/pci.h                         |  4 +-
+ include/linux/percpu.h                      |  2 +-
+ include/linux/preempt.h                     |  6 +--
+ include/linux/rcupdate.h                    |  2 +-
+ include/linux/rwsem.h                       | 10 ++--
+ include/linux/sched/task.h                  |  4 +-
+ include/linux/slab.h                        |  4 +-
+ include/linux/spinlock.h                    | 38 +++++++-------
+ include/linux/srcu.h                        |  2 +-
+ include/sound/pcm.h                         |  6 +--
+ kernel/sched/core.c                         |  4 +-
+ kernel/sched/sched.h                        | 16 +++---
+ lib/locking-selftest.c                      | 12 ++---
+ sound/core/control_led.c                    |  2 +-
+ 32 files changed, 110 insertions(+), 110 deletions(-)
 
-diff --git a/include/linux/tracepoint-defs.h b/include/linux/tracepoint-defs.h
-index 4dc4955f0fbf..94e39c86b49f 100644
---- a/include/linux/tracepoint-defs.h
-+++ b/include/linux/tracepoint-defs.h
-@@ -29,6 +29,19 @@ struct tracepoint_func {
- 	int prio;
- };
- 
-+/**
-+ * enum tracepoint_flags - Tracepoint flags
-+ * @TRACEPOINT_MAY_EXIST: On registration, don't warn if the tracepoint is
-+ *                        already registered.
-+ * @TRACEPOINT_MAY_FAULT: The tracepoint probe callback will be called with
-+ *                        preemption enabled, and is allowed to take page
-+ *                        faults.
-+ */
-+enum tracepoint_flags {
-+	TRACEPOINT_MAY_EXIST = (1 << 0),
-+	TRACEPOINT_MAY_FAULT = (1 << 1),
-+};
-+
- struct tracepoint {
- 	const char *name;		/* Tracepoint name */
- 	struct static_key key;
-@@ -39,6 +52,7 @@ struct tracepoint {
- 	int (*regfunc)(void);
- 	void (*unregfunc)(void);
- 	struct tracepoint_func __rcu *funcs;
-+	unsigned int flags;
- };
- 
- #ifdef CONFIG_HAVE_ARCH_PREL32_RELOCATIONS
-diff --git a/include/linux/tracepoint.h b/include/linux/tracepoint.h
-index 689b6d71590e..eaf8c00b30a3 100644
---- a/include/linux/tracepoint.h
-+++ b/include/linux/tracepoint.h
-@@ -18,6 +18,7 @@
- #include <linux/types.h>
- #include <linux/cpumask.h>
- #include <linux/rcupdate.h>
-+#include <linux/rcupdate_trace.h>
- #include <linux/tracepoint-defs.h>
- #include <linux/static_call.h>
- 
-@@ -41,17 +42,10 @@ extern int
- tracepoint_probe_register_prio(struct tracepoint *tp, void *probe, void *data,
- 			       int prio);
- extern int
--tracepoint_probe_register_prio_may_exist(struct tracepoint *tp, void *probe, void *data,
--					 int prio);
-+tracepoint_probe_register_prio_flags(struct tracepoint *tp, void *probe, void *data,
-+			       int prio, unsigned int flags);
- extern int
- tracepoint_probe_unregister(struct tracepoint *tp, void *probe, void *data);
--static inline int
--tracepoint_probe_register_may_exist(struct tracepoint *tp, void *probe,
--				    void *data)
--{
--	return tracepoint_probe_register_prio_may_exist(tp, probe, data,
--							TRACEPOINT_DEFAULT_PRIO);
--}
- extern void
- for_each_kernel_tracepoint(void (*fct)(struct tracepoint *tp, void *priv),
- 		void *priv);
-@@ -90,6 +84,7 @@ int unregister_tracepoint_module_notifier(struct notifier_block *nb)
- #ifdef CONFIG_TRACEPOINTS
- static inline void tracepoint_synchronize_unregister(void)
- {
-+	synchronize_rcu_tasks_trace();
- 	synchronize_srcu(&tracepoint_srcu);
- 	synchronize_rcu();
- }
-@@ -192,9 +187,10 @@ static inline struct tracepoint *tracepoint_ptr_deref(tracepoint_ptr_t *p)
-  * it_func[0] is never NULL because there is at least one element in the array
-  * when the array itself is non NULL.
-  */
--#define __DO_TRACE(name, args, cond, rcuidle)				\
-+#define __DO_TRACE(name, args, cond, rcuidle, tp_flags)			\
- 	do {								\
- 		int __maybe_unused __idx = 0;				\
-+		bool mayfault = (tp_flags) & TRACEPOINT_MAY_FAULT;	\
- 									\
- 		if (!(cond))						\
- 			return;						\
-@@ -203,8 +199,12 @@ static inline struct tracepoint *tracepoint_ptr_deref(tracepoint_ptr_t *p)
- 			      "Bad RCU usage for tracepoint"))		\
- 			return;						\
- 									\
--		/* keep srcu and sched-rcu usage consistent */		\
--		preempt_disable_notrace();				\
-+		if (mayfault) {						\
-+			rcu_read_lock_trace();				\
-+		} else {						\
-+			/* keep srcu and sched-rcu usage consistent */	\
-+			preempt_disable_notrace();			\
-+		}							\
- 									\
- 		/*							\
- 		 * For rcuidle callers, use srcu since sched-rcu	\
-@@ -222,20 +222,23 @@ static inline struct tracepoint *tracepoint_ptr_deref(tracepoint_ptr_t *p)
- 			srcu_read_unlock_notrace(&tracepoint_srcu, __idx);\
- 		}							\
- 									\
--		preempt_enable_notrace();				\
-+		if (mayfault)						\
-+			rcu_read_unlock_trace();			\
-+		else							\
-+			preempt_enable_notrace();			\
- 	} while (0)
- 
- #ifndef MODULE
--#define __DECLARE_TRACE_RCU(name, proto, args, cond)			\
-+#define __DECLARE_TRACE_RCU(name, proto, args, cond, tp_flags)		\
- 	static inline void trace_##name##_rcuidle(proto)		\
- 	{								\
- 		if (static_key_false(&__tracepoint_##name.key))		\
- 			__DO_TRACE(name,				\
- 				TP_ARGS(args),				\
--				TP_CONDITION(cond), 1);			\
-+				TP_CONDITION(cond), 1, tp_flags);	\
+diff --git a/drivers/cxl/core/cdat.c b/drivers/cxl/core/cdat.c
+index bb83867d9fec..689143566642 100644
+--- a/drivers/cxl/core/cdat.c
++++ b/drivers/cxl/core/cdat.c
+@@ -385,7 +385,7 @@ static void discard_dsmas(struct xarray *xa)
  	}
- #else
--#define __DECLARE_TRACE_RCU(name, proto, args, cond)
-+#define __DECLARE_TRACE_RCU(name, proto, args, cond, tp_flags)
- #endif
+ 	xa_destroy(xa);
+ }
+-DEFINE_FREE(dsmas, struct xarray *, if (_T) discard_dsmas(_T))
++DECLARE_FREE(dsmas, struct xarray *, if (_T) discard_dsmas(_T))
+ 
+ void cxl_endpoint_parse_cdat(struct cxl_port *port)
+ {
+diff --git a/drivers/cxl/cxl.h b/drivers/cxl/cxl.h
+index 036d17db68e0..89cadb029d31 100644
+--- a/drivers/cxl/cxl.h
++++ b/drivers/cxl/cxl.h
+@@ -737,7 +737,7 @@ struct cxl_root *devm_cxl_add_root(struct device *host,
+ 				   const struct cxl_root_ops *ops);
+ struct cxl_root *find_cxl_root(struct cxl_port *port);
+ void put_cxl_root(struct cxl_root *cxl_root);
+-DEFINE_FREE(put_cxl_root, struct cxl_root *, if (_T) put_cxl_root(_T))
++DECLARE_FREE(put_cxl_root, struct cxl_root *, if (_T) put_cxl_root(_T))
+ 
+ int devm_cxl_enumerate_ports(struct cxl_memdev *cxlmd);
+ void cxl_bus_rescan(void);
+diff --git a/drivers/gpio/gpiolib.h b/drivers/gpio/gpiolib.h
+index 8e0e211ebf08..17507a64c284 100644
+--- a/drivers/gpio/gpiolib.h
++++ b/drivers/gpio/gpiolib.h
+@@ -199,7 +199,7 @@ struct gpio_chip_guard {
+ 	int idx;
+ };
+ 
+-DEFINE_CLASS(gpio_chip_guard,
++DECLARE_CLASS(gpio_chip_guard,
+ 	     struct gpio_chip_guard,
+ 	     srcu_read_unlock(&_T.gdev->srcu, _T.idx),
+ 	     ({
+diff --git a/drivers/platform/x86/intel/pmc/core_ssram.c b/drivers/platform/x86/intel/pmc/core_ssram.c
+index 1bde86c54eb9..115f16448406 100644
+--- a/drivers/platform/x86/intel/pmc/core_ssram.c
++++ b/drivers/platform/x86/intel/pmc/core_ssram.c
+@@ -29,7 +29,7 @@
+ #define LPM_REG_COUNT		28
+ #define LPM_MODE_OFFSET		1
+ 
+-DEFINE_FREE(pmc_core_iounmap, void __iomem *, iounmap(_T));
++DECLARE_FREE(pmc_core_iounmap, void __iomem *, iounmap(_T));
+ 
+ static u32 pmc_core_find_guid(struct pmc_info *list, const struct pmc_reg_map *map)
+ {
+diff --git a/fs/fuse/virtio_fs.c b/fs/fuse/virtio_fs.c
+index bb3e941b9503..d062bafb294a 100644
+--- a/fs/fuse/virtio_fs.c
++++ b/fs/fuse/virtio_fs.c
+@@ -852,7 +852,7 @@ static void virtio_fs_cleanup_dax(void *data)
+ 	put_dax(dax_dev);
+ }
+ 
+-DEFINE_FREE(cleanup_dax, struct dax_dev *, if (!IS_ERR_OR_NULL(_T)) virtio_fs_cleanup_dax(_T))
++DECLARE_FREE(cleanup_dax, struct dax_dev *, if (!IS_ERR_OR_NULL(_T)) virtio_fs_cleanup_dax(_T))
+ 
+ static int virtio_fs_setup_dax(struct virtio_device *vdev, struct virtio_fs *fs)
+ {
+diff --git a/fs/pstore/inode.c b/fs/pstore/inode.c
+index 56815799ce79..f34da47d26d4 100644
+--- a/fs/pstore/inode.c
++++ b/fs/pstore/inode.c
+@@ -35,7 +35,7 @@ static LIST_HEAD(records_list);
+ static DEFINE_MUTEX(pstore_sb_lock);
+ static struct super_block *pstore_sb;
+ 
+-DEFINE_FREE(pstore_iput, struct inode *, if (_T) iput(_T))
++DECLARE_FREE(pstore_iput, struct inode *, if (_T) iput(_T))
+ 
+ struct pstore_private {
+ 	struct list_head list;
+@@ -63,7 +63,7 @@ static void free_pstore_private(struct pstore_private *private)
+ 	}
+ 	kfree(private);
+ }
+-DEFINE_FREE(pstore_private, struct pstore_private *, free_pstore_private(_T));
++DECLARE_FREE(pstore_private, struct pstore_private *, free_pstore_private(_T));
+ 
+ static void *pstore_ftrace_seq_start(struct seq_file *s, loff_t *pos)
+ {
+diff --git a/include/linux/bitmap.h b/include/linux/bitmap.h
+index aa4096126553..22f0893bb8c6 100644
+--- a/include/linux/bitmap.h
++++ b/include/linux/bitmap.h
+@@ -131,7 +131,7 @@ unsigned long *bitmap_alloc_node(unsigned int nbits, gfp_t flags, int node);
+ unsigned long *bitmap_zalloc_node(unsigned int nbits, gfp_t flags, int node);
+ void bitmap_free(const unsigned long *bitmap);
+ 
+-DEFINE_FREE(bitmap, unsigned long *, if (_T) bitmap_free(_T))
++DECLARE_FREE(bitmap, unsigned long *, if (_T) bitmap_free(_T))
+ 
+ /* Managed variants of the above. */
+ unsigned long *devm_bitmap_alloc(struct device *dev,
+diff --git a/include/linux/cleanup.h b/include/linux/cleanup.h
+index 4cf8ad5d27a3..04f03ad5f25d 100644
+--- a/include/linux/cleanup.h
++++ b/include/linux/cleanup.h
+@@ -5,8 +5,8 @@
+ #include <linux/compiler.h>
  
  /*
-@@ -249,7 +252,7 @@ static inline struct tracepoint *tracepoint_ptr_deref(tracepoint_ptr_t *p)
-  * site if it is not watching, as it will need to be active when the
-  * tracepoint is enabled.
+- * DEFINE_FREE(name, type, free):
+- *	simple helper macro that defines the required wrapper for a __free()
++ * DECLARE_FREE(name, type, free):
++ *	simple helper macro that declares the required wrapper for a __free()
+  *	based cleanup function. @free is an expression using '_T' to access the
+  *	variable. @free should typically include a NULL test before calling a
+  *	function, see the example below.
+@@ -26,7 +26,7 @@
+  *
+  * Ex.
+  *
+- * DEFINE_FREE(kfree, void *, if (_T) kfree(_T))
++ * DECLARE_FREE(kfree, void *, if (_T) kfree(_T))
+  *
+  * void *alloc_obj(...)
+  * {
+@@ -40,7 +40,7 @@
+  *	return_ptr(p);
+  * }
+  *
+- * NOTE: the DEFINE_FREE()'s @free expression includes a NULL test even though
++ * NOTE: the DECLARE_FREE()'s @free expression includes a NULL test even though
+  * kfree() is fine to be called with a NULL value. This is on purpose. This way
+  * the compiler sees the end of our alloc_obj() function as:
+  *
+@@ -58,7 +58,7 @@
+  * Without the NULL test it turns into a mess and the compiler can't help us.
   */
--#define __DECLARE_TRACE(name, proto, args, cond, data_proto)		\
-+#define __DECLARE_TRACE(name, proto, args, cond, data_proto, tp_flags)	\
- 	extern int __traceiter_##name(data_proto);			\
- 	DECLARE_STATIC_CALL(tp_func_##name, __traceiter_##name);	\
- 	extern struct tracepoint __tracepoint_##name;			\
-@@ -258,14 +261,16 @@ static inline struct tracepoint *tracepoint_ptr_deref(tracepoint_ptr_t *p)
- 		if (static_key_false(&__tracepoint_##name.key))		\
- 			__DO_TRACE(name,				\
- 				TP_ARGS(args),				\
--				TP_CONDITION(cond), 0);			\
-+				TP_CONDITION(cond), 0, tp_flags);	\
- 		if (IS_ENABLED(CONFIG_LOCKDEP) && (cond)) {		\
- 			WARN_ONCE(!rcu_is_watching(),			\
- 				  "RCU not watching for tracepoint");	\
- 		}							\
-+		if ((tp_flags) & TRACEPOINT_MAY_FAULT)			\
-+			might_fault();					\
- 	}								\
- 	__DECLARE_TRACE_RCU(name, PARAMS(proto), PARAMS(args),		\
--			    PARAMS(cond))				\
-+			    PARAMS(cond), tp_flags)			\
- 	static inline int						\
- 	register_trace_##name(void (*probe)(data_proto), void *data)	\
- 	{								\
-@@ -280,6 +285,13 @@ static inline struct tracepoint *tracepoint_ptr_deref(tracepoint_ptr_t *p)
- 					      (void *)probe, data, prio); \
- 	}								\
- 	static inline int						\
-+	register_trace_prio_flags_##name(void (*probe)(data_proto), void *data, \
-+				   int prio, unsigned int flags)	\
-+	{								\
-+		return tracepoint_probe_register_prio_flags(&__tracepoint_##name, \
-+					      (void *)probe, data, prio, flags); \
-+	}								\
-+	static inline int						\
- 	unregister_trace_##name(void (*probe)(data_proto), void *data)	\
- 	{								\
- 		return tracepoint_probe_unregister(&__tracepoint_##name,\
-@@ -300,7 +312,7 @@ static inline struct tracepoint *tracepoint_ptr_deref(tracepoint_ptr_t *p)
-  * structures, so we create an array of pointers that will be used for iteration
-  * on the tracepoints.
+ 
+-#define DEFINE_FREE(_name, _type, _free) \
++#define DECLARE_FREE(_name, _type, _free) \
+ 	static inline void __free_##_name(void *p) { _type _T = *(_type *)p; _free; }
+ 
+ #define __free(_name)	__cleanup(__free_##_name)
+@@ -79,8 +79,8 @@ const volatile void * __must_check_fn(const volatile void *val)
+ 
+ 
+ /*
+- * DEFINE_CLASS(name, type, exit, init, init_args...):
+- *	helper to define the destructor and constructor for a type.
++ * DECLARE_CLASS(name, type, exit, init, init_args...):
++ *	helper to declare the destructor and constructor for a type.
+  *	@exit is an expression using '_T' -- similar to FREE above.
+  *	@init is an expression in @init_args resulting in @type
+  *
+@@ -92,7 +92,7 @@ const volatile void * __must_check_fn(const volatile void *val)
+  *
+  * Ex.
+  *
+- * DEFINE_CLASS(fdget, struct fd, fdput(_T), fdget(fd), int fd)
++ * DECLARE_CLASS(fdget, struct fd, fdput(_T), fdget(fd), int fd)
+  *
+  *	CLASS(fdget, f)(fd);
+  *	if (!f.file)
+@@ -101,7 +101,7 @@ const volatile void * __must_check_fn(const volatile void *val)
+  *	// use 'f' without concern
   */
--#define DEFINE_TRACE_FN(_name, _reg, _unreg, proto, args)		\
-+#define DEFINE_TRACE_FN_FLAGS(_name, _reg, _unreg, proto, args, tp_flags) \
- 	static const char __tpstrtab_##_name[]				\
- 	__section("__tracepoints_strings") = #_name;			\
- 	extern struct static_call_key STATIC_CALL_KEY(tp_func_##_name);	\
-@@ -316,7 +328,9 @@ static inline struct tracepoint *tracepoint_ptr_deref(tracepoint_ptr_t *p)
- 		.probestub = &__probestub_##_name,			\
- 		.regfunc = _reg,					\
- 		.unregfunc = _unreg,					\
--		.funcs = NULL };					\
-+		.funcs = NULL,						\
-+		.flags = (tp_flags),					\
-+	};								\
- 	__TRACEPOINT_ENTRY(_name);					\
- 	int __traceiter_##_name(void *__data, proto)			\
- 	{								\
-@@ -339,8 +353,11 @@ static inline struct tracepoint *tracepoint_ptr_deref(tracepoint_ptr_t *p)
- 	}								\
- 	DEFINE_STATIC_CALL(tp_func_##_name, __traceiter_##_name);
  
-+#define DEFINE_TRACE_FN(_name, _reg, _unreg, proto, args)		\
-+	DEFINE_TRACE_FN_FLAGS(_name, _reg, _unreg, PARAMS(proto), PARAMS(args), 0)
-+
- #define DEFINE_TRACE(name, proto, args)		\
--	DEFINE_TRACE_FN(name, NULL, NULL, PARAMS(proto), PARAMS(args));
-+	DEFINE_TRACE_FN(name, NULL, NULL, PARAMS(proto), PARAMS(args))
- 
- #define EXPORT_TRACEPOINT_SYMBOL_GPL(name)				\
- 	EXPORT_SYMBOL_GPL(__tracepoint_##name);				\
-@@ -353,7 +370,7 @@ static inline struct tracepoint *tracepoint_ptr_deref(tracepoint_ptr_t *p)
+-#define DEFINE_CLASS(_name, _type, _exit, _init, _init_args...)		\
++#define DECLARE_CLASS(_name, _type, _exit, _init, _init_args...)		\
+ typedef _type class_##_name##_t;					\
+ static inline void class_##_name##_destructor(_type *p)			\
+ { _type _T = *p; _exit; }						\
+@@ -121,11 +121,11 @@ static inline class_##_name##_t class_##_name##ext##_constructor(_init_args) \
  
  
- #else /* !TRACEPOINTS_ENABLED */
--#define __DECLARE_TRACE(name, proto, args, cond, data_proto)		\
-+#define __DECLARE_TRACE(name, proto, args, cond, data_proto, tp_flags)	\
- 	static inline void trace_##name(proto)				\
- 	{ }								\
- 	static inline void trace_##name##_rcuidle(proto)		\
-@@ -365,6 +382,18 @@ static inline struct tracepoint *tracepoint_ptr_deref(tracepoint_ptr_t *p)
- 		return -ENOSYS;						\
- 	}								\
- 	static inline int						\
-+	register_trace_prio_##name(void (*probe)(data_proto),		\
-+			      void *data, int prio)			\
-+	{								\
-+		return -ENOSYS;						\
-+	}								\
-+	static inline int						\
-+	register_trace_prio_flags_##name(void (*probe)(data_proto),	\
-+			      void *data, int prio, unsigned int flags)	\
-+	{								\
-+		return -ENOSYS;						\
-+	}								\
-+	static inline int						\
- 	unregister_trace_##name(void (*probe)(data_proto),		\
- 				void *data)				\
- 	{								\
-@@ -379,6 +408,7 @@ static inline struct tracepoint *tracepoint_ptr_deref(tracepoint_ptr_t *p)
- 		return false;						\
- 	}
+ /*
+- * DEFINE_GUARD(name, type, lock, unlock):
+- *	trivial wrapper around DEFINE_CLASS() above specifically
++ * DECLARE_GUARD(name, type, lock, unlock):
++ *	trivial wrapper around DECLARE_CLASS() above specifically
+  *	for locks.
+  *
+- * DEFINE_GUARD_COND(name, ext, condlock)
++ * DECLARE_GUARD_COND(name, ext, condlock)
+  *	wrapper around EXTEND_CLASS above to add conditional lock
+  *	variants to a base class, eg. mutex_trylock() or
+  *	mutex_lock_interruptible().
+@@ -148,12 +148,12 @@ static inline class_##_name##_t class_##_name##ext##_constructor(_init_args) \
+  *
+  */
  
-+#define DEFINE_TRACE_FN_FLAGS(name, reg, unreg, proto, args, tp_flags)
- #define DEFINE_TRACE_FN(name, reg, unreg, proto, args)
- #define DEFINE_TRACE(name, proto, args)
- #define EXPORT_TRACEPOINT_SYMBOL_GPL(name)
-@@ -433,12 +463,17 @@ static inline struct tracepoint *tracepoint_ptr_deref(tracepoint_ptr_t *p)
- #define DECLARE_TRACE(name, proto, args)				\
- 	__DECLARE_TRACE(name, PARAMS(proto), PARAMS(args),		\
- 			cpu_online(raw_smp_processor_id()),		\
--			PARAMS(void *__data, proto))
-+			PARAMS(void *__data, proto), 0)
-+
-+#define DECLARE_TRACE_MAY_FAULT(name, proto, args)			\
-+	__DECLARE_TRACE(name, PARAMS(proto), PARAMS(args),		\
-+			cpu_online(raw_smp_processor_id()),		\
-+			PARAMS(void *__data, proto), TRACEPOINT_MAY_FAULT)
+-#define DEFINE_GUARD(_name, _type, _lock, _unlock) \
+-	DEFINE_CLASS(_name, _type, if (_T) { _unlock; }, ({ _lock; _T; }), _type _T); \
++#define DECLARE_GUARD(_name, _type, _lock, _unlock) \
++	DECLARE_CLASS(_name, _type, if (_T) { _unlock; }, ({ _lock; _T; }), _type _T); \
+ 	static inline void * class_##_name##_lock_ptr(class_##_name##_t *_T) \
+ 	{ return *_T; }
  
- #define DECLARE_TRACE_CONDITION(name, proto, args, cond)		\
- 	__DECLARE_TRACE(name, PARAMS(proto), PARAMS(args),		\
- 			cpu_online(raw_smp_processor_id()) && (PARAMS(cond)), \
--			PARAMS(void *__data, proto))
-+			PARAMS(void *__data, proto), 0)
+-#define DEFINE_GUARD_COND(_name, _ext, _condlock) \
++#define DECLARE_GUARD_COND(_name, _ext, _condlock) \
+ 	EXTEND_CLASS(_name, _ext, \
+ 		     ({ void *_t = _T; if (_T && !(_condlock)) _t = NULL; _t; }), \
+ 		     class_##_name##_t _T) \
+@@ -180,9 +180,9 @@ static inline class_##_name##_t class_##_name##ext##_constructor(_init_args) \
+  * locks that don't have a native type (eg. RCU, preempt) or those that need a
+  * 'fat' pointer (eg. spin_lock_irqsave).
+  *
+- * DEFINE_LOCK_GUARD_0(name, lock, unlock, ...)
+- * DEFINE_LOCK_GUARD_1(name, type, lock, unlock, ...)
+- * DEFINE_LOCK_GUARD_1_COND(name, ext, condlock)
++ * DECLARE_LOCK_GUARD_0(name, lock, unlock, ...)
++ * DECLARE_LOCK_GUARD_1(name, type, lock, unlock, ...)
++ * DECLARE_LOCK_GUARD_1_COND(name, ext, condlock)
+  *
+  * will result in the following type:
+  *
+@@ -195,7 +195,7 @@ static inline class_##_name##_t class_##_name##ext##_constructor(_init_args) \
+  * be a pointer to the above struct.
+  */
  
- #define TRACE_EVENT_FLAGS(event, flag)
- 
-@@ -569,6 +604,9 @@ static inline struct tracepoint *tracepoint_ptr_deref(tracepoint_ptr_t *p)
- #define TRACE_EVENT_FN(name, proto, args, struct,		\
- 		assign, print, reg, unreg)			\
- 	DECLARE_TRACE(name, PARAMS(proto), PARAMS(args))
-+#define TRACE_EVENT_FN_MAY_FAULT(name, proto, args, struct,	\
-+		assign, print, reg, unreg)			\
-+	DECLARE_TRACE_MAY_FAULT(name, PARAMS(proto), PARAMS(args))
- #define TRACE_EVENT_FN_COND(name, proto, args, cond, struct,		\
- 		assign, print, reg, unreg)			\
- 	DECLARE_TRACE_CONDITION(name, PARAMS(proto),	\
-diff --git a/include/trace/define_trace.h b/include/trace/define_trace.h
-index 00723935dcc7..1b8ca143724a 100644
---- a/include/trace/define_trace.h
-+++ b/include/trace/define_trace.h
-@@ -41,6 +41,12 @@
- 		assign, print, reg, unreg)			\
- 	DEFINE_TRACE_FN(name, reg, unreg, PARAMS(proto), PARAMS(args))
- 
-+#undef TRACE_EVENT_FN_MAY_FAULT
-+#define TRACE_EVENT_FN_MAY_FAULT(name, proto, args, tstruct,	\
-+		assign, print, reg, unreg)			\
-+	DEFINE_TRACE_FN_FLAGS(name, reg, unreg, PARAMS(proto),	\
-+			      PARAMS(args), TRACEPOINT_MAY_FAULT)
-+
- #undef TRACE_EVENT_FN_COND
- #define TRACE_EVENT_FN_COND(name, proto, args, cond, tstruct,		\
- 		assign, print, reg, unreg)			\
-@@ -106,6 +112,7 @@
- 
- #undef TRACE_EVENT
- #undef TRACE_EVENT_FN
-+#undef TRACE_EVENT_FN_MAY_FAULT
- #undef TRACE_EVENT_FN_COND
- #undef TRACE_EVENT_CONDITION
- #undef TRACE_EVENT_NOP
-diff --git a/include/trace/trace_events.h b/include/trace/trace_events.h
-index c2f9cabf154d..df590eea8ae4 100644
---- a/include/trace/trace_events.h
-+++ b/include/trace/trace_events.h
-@@ -77,6 +77,12 @@
- 	TRACE_EVENT(name, PARAMS(proto), PARAMS(args),			\
- 		PARAMS(tstruct), PARAMS(assign), PARAMS(print))		\
- 
-+#undef TRACE_EVENT_FN_MAY_FAULT
-+#define TRACE_EVENT_FN_MAY_FAULT(name, proto, args, tstruct,		\
-+		assign, print, reg, unreg)				\
-+	TRACE_EVENT(name, PARAMS(proto), PARAMS(args),			\
-+		PARAMS(tstruct), PARAMS(assign), PARAMS(print))		\
-+
- #undef TRACE_EVENT_FN_COND
- #define TRACE_EVENT_FN_COND(name, proto, args, cond, tstruct,	\
- 		assign, print, reg, unreg)				\
-diff --git a/init/Kconfig b/init/Kconfig
-index 459f44ef7cc9..3d726f2edfe1 100644
---- a/init/Kconfig
-+++ b/init/Kconfig
-@@ -1933,6 +1933,7 @@ config BINDGEN_VERSION_TEXT
- #
- config TRACEPOINTS
- 	bool
-+	select TASKS_TRACE_RCU
- 
- source "kernel/Kconfig.kexec"
- 
-diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-index 5d8f918c9825..192de33d961f 100644
---- a/kernel/trace/bpf_trace.c
-+++ b/kernel/trace/bpf_trace.c
-@@ -2443,8 +2443,9 @@ static int __bpf_probe_register(struct bpf_raw_event_map *btp, struct bpf_prog *
- 	if (prog->aux->max_tp_access > btp->writable_size)
- 		return -EINVAL;
- 
--	return tracepoint_probe_register_may_exist(tp, (void *)btp->bpf_func,
--						   prog);
-+	return tracepoint_probe_register_prio_flags(tp, (void *)btp->bpf_func,
-+						    prog, TRACEPOINT_DEFAULT_PRIO,
-+						    TRACEPOINT_MAY_EXIST);
+-#define __DEFINE_UNLOCK_GUARD(_name, _type, _unlock, ...)		\
++#define __DECLARE_UNLOCK_GUARD(_name, _type, _unlock, ...)		\
+ typedef struct {							\
+ 	_type *lock;							\
+ 	__VA_ARGS__;							\
+@@ -212,7 +212,7 @@ static inline void *class_##_name##_lock_ptr(class_##_name##_t *_T)	\
  }
  
- int bpf_probe_register(struct bpf_raw_event_map *btp, struct bpf_prog *prog)
-diff --git a/kernel/trace/trace_fprobe.c b/kernel/trace/trace_fprobe.c
-index 4f4280815522..06d2ebbd381d 100644
---- a/kernel/trace/trace_fprobe.c
-+++ b/kernel/trace/trace_fprobe.c
-@@ -705,8 +705,9 @@ static int __register_trace_fprobe(struct trace_fprobe *tf)
- 		 * At first, put __probestub_##TP function on the tracepoint
- 		 * and put a fprobe on the stub function.
- 		 */
--		ret = tracepoint_probe_register_prio_may_exist(tpoint,
--					tpoint->probestub, NULL, 0);
-+		ret = tracepoint_probe_register_prio_flags(tpoint,
-+					tpoint->probestub, NULL, 0,
-+					TRACEPOINT_MAY_EXIST);
- 		if (ret < 0)
- 			return ret;
- 		return register_fprobe_ips(&tf->fp, &ip, 1);
-diff --git a/kernel/tracepoint.c b/kernel/tracepoint.c
-index 8d1507dd0724..cc5e71383c4d 100644
---- a/kernel/tracepoint.c
-+++ b/kernel/tracepoint.c
-@@ -111,11 +111,16 @@ static inline void *allocate_probes(int count)
- 	return p == NULL ? NULL : p->probes;
+ 
+-#define __DEFINE_LOCK_GUARD_1(_name, _type, _lock)			\
++#define __DECLARE_LOCK_GUARD_1(_name, _type, _lock)			\
+ static inline class_##_name##_t class_##_name##_constructor(_type *l)	\
+ {									\
+ 	class_##_name##_t _t = { .lock = l }, *_T = &_t;		\
+@@ -220,7 +220,7 @@ static inline class_##_name##_t class_##_name##_constructor(_type *l)	\
+ 	return _t;							\
  }
  
--static void srcu_free_old_probes(struct rcu_head *head)
-+static void rcu_tasks_trace_free_old_probes(struct rcu_head *head)
+-#define __DEFINE_LOCK_GUARD_0(_name, _lock)				\
++#define __DECLARE_LOCK_GUARD_0(_name, _lock)				\
+ static inline class_##_name##_t class_##_name##_constructor(void)	\
+ {									\
+ 	class_##_name##_t _t = { .lock = (void*)1 },			\
+@@ -229,15 +229,15 @@ static inline class_##_name##_t class_##_name##_constructor(void)	\
+ 	return _t;							\
+ }
+ 
+-#define DEFINE_LOCK_GUARD_1(_name, _type, _lock, _unlock, ...)		\
+-__DEFINE_UNLOCK_GUARD(_name, _type, _unlock, __VA_ARGS__)		\
+-__DEFINE_LOCK_GUARD_1(_name, _type, _lock)
++#define DECLARE_LOCK_GUARD_1(_name, _type, _lock, _unlock, ...)		\
++__DECLARE_UNLOCK_GUARD(_name, _type, _unlock, __VA_ARGS__)		\
++__DECLARE_LOCK_GUARD_1(_name, _type, _lock)
+ 
+-#define DEFINE_LOCK_GUARD_0(_name, _lock, _unlock, ...)			\
+-__DEFINE_UNLOCK_GUARD(_name, void, _unlock, __VA_ARGS__)		\
+-__DEFINE_LOCK_GUARD_0(_name, _lock)
++#define DECLARE_LOCK_GUARD_0(_name, _lock, _unlock, ...)			\
++__DECLARE_UNLOCK_GUARD(_name, void, _unlock, __VA_ARGS__)		\
++__DECLARE_LOCK_GUARD_0(_name, _lock)
+ 
+-#define DEFINE_LOCK_GUARD_1_COND(_name, _ext, _condlock)		\
++#define DECLARE_LOCK_GUARD_1_COND(_name, _ext, _condlock)		\
+ 	EXTEND_CLASS(_name, _ext,					\
+ 		     ({ class_##_name##_t _t = { .lock = l }, *_T = &_t;\
+ 		        if (_T->lock && !(_condlock)) _T->lock = NULL;	\
+diff --git a/include/linux/cpu.h b/include/linux/cpu.h
+index 861c3bfc5f17..17bfa30b06de 100644
+--- a/include/linux/cpu.h
++++ b/include/linux/cpu.h
+@@ -162,7 +162,7 @@ static inline int remove_cpu(unsigned int cpu) { return -EPERM; }
+ static inline void smp_shutdown_nonboot_cpus(unsigned int primary_cpu) { }
+ #endif	/* !CONFIG_HOTPLUG_CPU */
+ 
+-DEFINE_LOCK_GUARD_0(cpus_read_lock, cpus_read_lock(), cpus_read_unlock())
++DECLARE_LOCK_GUARD_0(cpus_read_lock, cpus_read_lock(), cpus_read_unlock())
+ 
+ #ifdef CONFIG_PM_SLEEP_SMP
+ extern int freeze_secondary_cpus(int primary);
+diff --git a/include/linux/cpumask.h b/include/linux/cpumask.h
+index 1c29947db848..45486817a570 100644
+--- a/include/linux/cpumask.h
++++ b/include/linux/cpumask.h
+@@ -991,7 +991,7 @@ static inline bool cpumask_available(cpumask_var_t mask)
+ }
+ #endif /* CONFIG_CPUMASK_OFFSTACK */
+ 
+-DEFINE_FREE(free_cpumask_var, struct cpumask *, if (_T) free_cpumask_var(_T));
++DECLARE_FREE(free_cpumask_var, struct cpumask *, if (_T) free_cpumask_var(_T));
+ 
+ /* It's common to want to use cpu_all_mask in struct member initializers,
+  * so it has to refer to an address rather than a pointer. */
+diff --git a/include/linux/device.h b/include/linux/device.h
+index b9f5464f44ed..a9ffe3b07e32 100644
+--- a/include/linux/device.h
++++ b/include/linux/device.h
+@@ -1005,7 +1005,7 @@ static inline void device_unlock(struct device *dev)
+ 	mutex_unlock(&dev->mutex);
+ }
+ 
+-DEFINE_GUARD(device, struct device *, device_lock(_T), device_unlock(_T))
++DECLARE_GUARD(device, struct device *, device_lock(_T), device_unlock(_T))
+ 
+ static inline void device_lock_assert(struct device *dev)
  {
- 	kfree(container_of(head, struct tp_probes, rcu));
+@@ -1055,7 +1055,7 @@ void device_initialize(struct device *dev);
+ int __must_check device_add(struct device *dev);
+ void device_del(struct device *dev);
+ 
+-DEFINE_FREE(device_del, struct device *, if (_T) device_del(_T))
++DECLARE_FREE(device_del, struct device *, if (_T) device_del(_T))
+ 
+ int device_for_each_child(struct device *dev, void *data,
+ 			  int (*fn)(struct device *dev, void *data));
+@@ -1224,7 +1224,7 @@ extern int (*platform_notify_remove)(struct device *dev);
+ struct device *get_device(struct device *dev);
+ void put_device(struct device *dev);
+ 
+-DEFINE_FREE(put_device, struct device *, if (_T) put_device(_T))
++DECLARE_FREE(put_device, struct device *, if (_T) put_device(_T))
+ 
+ bool kill_device(struct device *dev);
+ 
+diff --git a/include/linux/file.h b/include/linux/file.h
+index 169692cb1906..65de75d62175 100644
+--- a/include/linux/file.h
++++ b/include/linux/file.h
+@@ -83,7 +83,7 @@ static inline void fdput_pos(struct fd f)
+ 	fdput(f);
  }
  
-+static void srcu_free_old_probes(struct rcu_head *head)
-+{
-+	call_rcu_tasks_trace(head, rcu_tasks_trace_free_old_probes);
-+}
-+
- static void rcu_free_old_probes(struct rcu_head *head)
+-DEFINE_CLASS(fd, struct fd, fdput(_T), fdget(fd), int fd)
++DECLARE_CLASS(fd, struct fd, fdput(_T), fdget(fd), int fd)
+ 
+ extern int f_dupfd(unsigned int from, struct file *file, unsigned flags);
+ extern int replace_fd(unsigned fd, struct file *file, unsigned flags);
+@@ -93,7 +93,7 @@ extern int __get_unused_fd_flags(unsigned flags, unsigned long nofile);
+ extern int get_unused_fd_flags(unsigned flags);
+ extern void put_unused_fd(unsigned int fd);
+ 
+-DEFINE_CLASS(get_unused_fd, int, if (_T >= 0) put_unused_fd(_T),
++DECLARE_CLASS(get_unused_fd, int, if (_T >= 0) put_unused_fd(_T),
+ 	     get_unused_fd_flags(flags), unsigned flags)
+ 
+ extern void fd_install(unsigned int fd, struct file *file);
+diff --git a/include/linux/firmware.h b/include/linux/firmware.h
+index f026f8926d79..f845b8703d86 100644
+--- a/include/linux/firmware.h
++++ b/include/linux/firmware.h
+@@ -199,6 +199,6 @@ static inline void firmware_upload_unregister(struct fw_upload *fw_upload)
+ 
+ int firmware_request_cache(struct device *device, const char *name);
+ 
+-DEFINE_FREE(firmware, struct firmware *, release_firmware(_T))
++DECLARE_FREE(firmware, struct firmware *, release_firmware(_T))
+ 
+ #endif
+diff --git a/include/linux/gpio/driver.h b/include/linux/gpio/driver.h
+index f8617eaf08ba..088a4d91b136 100644
+--- a/include/linux/gpio/driver.h
++++ b/include/linux/gpio/driver.h
+@@ -541,7 +541,7 @@ struct _gpiochip_for_each_data {
+ 	unsigned int *i;
+ };
+ 
+-DEFINE_CLASS(_gpiochip_for_each_data,
++DECLARE_CLASS(_gpiochip_for_each_data,
+ 	     struct _gpiochip_for_each_data,
+ 	     if (*_T.label) kfree(*_T.label),
+ 	     ({
+@@ -650,7 +650,7 @@ struct gpio_device *gpio_device_find(const void *data,
+ struct gpio_device *gpio_device_get(struct gpio_device *gdev);
+ void gpio_device_put(struct gpio_device *gdev);
+ 
+-DEFINE_FREE(gpio_device_put, struct gpio_device *,
++DECLARE_FREE(gpio_device_put, struct gpio_device *,
+ 	    if (!IS_ERR_OR_NULL(_T)) gpio_device_put(_T))
+ 
+ struct device *gpio_device_to_device(struct gpio_device *gdev);
+diff --git a/include/linux/iio/iio.h b/include/linux/iio/iio.h
+index e370a7bb3300..b56bacdce411 100644
+--- a/include/linux/iio/iio.h
++++ b/include/linux/iio/iio.h
+@@ -644,10 +644,10 @@ void iio_device_release_direct_mode(struct iio_dev *indio_dev);
+  * This autocleanup logic is normally used via
+  * iio_device_claim_direct_scoped().
+  */
+-DEFINE_GUARD(iio_claim_direct, struct iio_dev *, iio_device_claim_direct_mode(_T),
++DECLARE_GUARD(iio_claim_direct, struct iio_dev *, iio_device_claim_direct_mode(_T),
+ 	     iio_device_release_direct_mode(_T))
+ 
+-DEFINE_GUARD_COND(iio_claim_direct, _try, ({
++DECLARE_GUARD_COND(iio_claim_direct, _try, ({
+ 			struct iio_dev *dev;
+ 			int d = iio_device_claim_direct_mode(_T);
+ 
+diff --git a/include/linux/irqflags.h b/include/linux/irqflags.h
+index 3f003d5fde53..b4966d64b788 100644
+--- a/include/linux/irqflags.h
++++ b/include/linux/irqflags.h
+@@ -256,8 +256,8 @@ extern void warn_bogus_irq_restore(void);
+ 
+ #define irqs_disabled_flags(flags) raw_irqs_disabled_flags(flags)
+ 
+-DEFINE_LOCK_GUARD_0(irq, local_irq_disable(), local_irq_enable())
+-DEFINE_LOCK_GUARD_0(irqsave,
++DECLARE_LOCK_GUARD_0(irq, local_irq_disable(), local_irq_enable())
++DECLARE_LOCK_GUARD_0(irqsave,
+ 		    local_irq_save(_T->flags),
+ 		    local_irq_restore(_T->flags),
+ 		    unsigned long flags)
+diff --git a/include/linux/mutex.h b/include/linux/mutex.h
+index 67edc4ca2bee..c424fa471b69 100644
+--- a/include/linux/mutex.h
++++ b/include/linux/mutex.h
+@@ -166,8 +166,8 @@ extern void mutex_unlock(struct mutex *lock);
+ 
+ extern int atomic_dec_and_mutex_lock(atomic_t *cnt, struct mutex *lock);
+ 
+-DEFINE_GUARD(mutex, struct mutex *, mutex_lock(_T), mutex_unlock(_T))
+-DEFINE_GUARD_COND(mutex, _try, mutex_trylock(_T))
+-DEFINE_GUARD_COND(mutex, _intr, mutex_lock_interruptible(_T) == 0)
++DECLARE_GUARD(mutex, struct mutex *, mutex_lock(_T), mutex_unlock(_T))
++DECLARE_GUARD_COND(mutex, _try, mutex_trylock(_T))
++DECLARE_GUARD_COND(mutex, _intr, mutex_lock_interruptible(_T) == 0)
+ 
+ #endif /* __LINUX_MUTEX_H */
+diff --git a/include/linux/of.h b/include/linux/of.h
+index a0bedd038a05..6cb0a522542b 100644
+--- a/include/linux/of.h
++++ b/include/linux/of.h
+@@ -135,7 +135,7 @@ static inline struct device_node *of_node_get(struct device_node *node)
+ }
+ static inline void of_node_put(struct device_node *node) { }
+ #endif /* !CONFIG_OF_DYNAMIC */
+-DEFINE_FREE(device_node, struct device_node *, if (_T) of_node_put(_T))
++DECLARE_FREE(device_node, struct device_node *, if (_T) of_node_put(_T))
+ 
+ /* Pointer for first entry in chain of all nodes. */
+ extern struct device_node *of_root;
+diff --git a/include/linux/pci.h b/include/linux/pci.h
+index 16493426a04f..b19c7f044a1f 100644
+--- a/include/linux/pci.h
++++ b/include/linux/pci.h
+@@ -1171,7 +1171,7 @@ int pci_get_interrupt_pin(struct pci_dev *dev, struct pci_dev **bridge);
+ u8 pci_common_swizzle(struct pci_dev *dev, u8 *pinp);
+ struct pci_dev *pci_dev_get(struct pci_dev *dev);
+ void pci_dev_put(struct pci_dev *dev);
+-DEFINE_FREE(pci_dev_put, struct pci_dev *, if (_T) pci_dev_put(_T))
++DECLARE_FREE(pci_dev_put, struct pci_dev *, if (_T) pci_dev_put(_T))
+ void pci_remove_bus(struct pci_bus *b);
+ void pci_stop_and_remove_bus_device(struct pci_dev *dev);
+ void pci_stop_and_remove_bus_device_locked(struct pci_dev *dev);
+@@ -1882,7 +1882,7 @@ void pci_cfg_access_unlock(struct pci_dev *dev);
+ void pci_dev_lock(struct pci_dev *dev);
+ int pci_dev_trylock(struct pci_dev *dev);
+ void pci_dev_unlock(struct pci_dev *dev);
+-DEFINE_GUARD(pci_dev, struct pci_dev *, pci_dev_lock(_T), pci_dev_unlock(_T))
++DECLARE_GUARD(pci_dev, struct pci_dev *, pci_dev_lock(_T), pci_dev_unlock(_T))
+ 
+ /*
+  * PCI domain support.  Sometimes called PCI segment (eg by ACPI),
+diff --git a/include/linux/percpu.h b/include/linux/percpu.h
+index 8c677f185901..5bc5a0a6816c 100644
+--- a/include/linux/percpu.h
++++ b/include/linux/percpu.h
+@@ -134,7 +134,7 @@ extern void __percpu *__alloc_percpu(size_t size, size_t align) __alloc_size(1);
+ extern void free_percpu(void __percpu *__pdata);
+ extern size_t pcpu_alloc_size(void __percpu *__pdata);
+ 
+-DEFINE_FREE(free_percpu, void __percpu *, free_percpu(_T))
++DECLARE_FREE(free_percpu, void __percpu *, free_percpu(_T))
+ 
+ extern phys_addr_t per_cpu_ptr_to_phys(void *addr);
+ 
+diff --git a/include/linux/preempt.h b/include/linux/preempt.h
+index 7233e9cf1bab..d07631a09467 100644
+--- a/include/linux/preempt.h
++++ b/include/linux/preempt.h
+@@ -477,8 +477,8 @@ static __always_inline void preempt_enable_nested(void)
+ 		preempt_enable();
+ }
+ 
+-DEFINE_LOCK_GUARD_0(preempt, preempt_disable(), preempt_enable())
+-DEFINE_LOCK_GUARD_0(preempt_notrace, preempt_disable_notrace(), preempt_enable_notrace())
+-DEFINE_LOCK_GUARD_0(migrate, migrate_disable(), migrate_enable())
++DECLARE_LOCK_GUARD_0(preempt, preempt_disable(), preempt_enable())
++DECLARE_LOCK_GUARD_0(preempt_notrace, preempt_disable_notrace(), preempt_enable_notrace())
++DECLARE_LOCK_GUARD_0(migrate, migrate_disable(), migrate_enable())
+ 
+ #endif /* __LINUX_PREEMPT_H */
+diff --git a/include/linux/rcupdate.h b/include/linux/rcupdate.h
+index 17d7ed5f3ae6..91fe15bf5513 100644
+--- a/include/linux/rcupdate.h
++++ b/include/linux/rcupdate.h
+@@ -1090,6 +1090,6 @@ rcu_head_after_call_rcu(struct rcu_head *rhp, rcu_callback_t f)
+ extern int rcu_expedited;
+ extern int rcu_normal;
+ 
+-DEFINE_LOCK_GUARD_0(rcu, rcu_read_lock(), rcu_read_unlock())
++DECLARE_LOCK_GUARD_0(rcu, rcu_read_lock(), rcu_read_unlock())
+ 
+ #endif /* __LINUX_RCUPDATE_H */
+diff --git a/include/linux/rwsem.h b/include/linux/rwsem.h
+index c8b543d428b0..1eab827372ee 100644
+--- a/include/linux/rwsem.h
++++ b/include/linux/rwsem.h
+@@ -238,12 +238,12 @@ extern void up_read(struct rw_semaphore *sem);
+  */
+ extern void up_write(struct rw_semaphore *sem);
+ 
+-DEFINE_GUARD(rwsem_read, struct rw_semaphore *, down_read(_T), up_read(_T))
+-DEFINE_GUARD_COND(rwsem_read, _try, down_read_trylock(_T))
+-DEFINE_GUARD_COND(rwsem_read, _intr, down_read_interruptible(_T) == 0)
++DECLARE_GUARD(rwsem_read, struct rw_semaphore *, down_read(_T), up_read(_T))
++DECLARE_GUARD_COND(rwsem_read, _try, down_read_trylock(_T))
++DECLARE_GUARD_COND(rwsem_read, _intr, down_read_interruptible(_T) == 0)
+ 
+-DEFINE_GUARD(rwsem_write, struct rw_semaphore *, down_write(_T), up_write(_T))
+-DEFINE_GUARD_COND(rwsem_write, _try, down_write_trylock(_T))
++DECLARE_GUARD(rwsem_write, struct rw_semaphore *, down_write(_T), up_write(_T))
++DECLARE_GUARD_COND(rwsem_write, _try, down_write_trylock(_T))
+ 
+ /*
+  * downgrade write lock to read lock
+diff --git a/include/linux/sched/task.h b/include/linux/sched/task.h
+index d362aacf9f89..ece0cc084a6a 100644
+--- a/include/linux/sched/task.h
++++ b/include/linux/sched/task.h
+@@ -163,7 +163,7 @@ static inline void put_task_struct(struct task_struct *t)
+ 	call_rcu(&t->rcu, __put_task_struct_rcu_cb);
+ }
+ 
+-DEFINE_FREE(put_task, struct task_struct *, if (_T) put_task_struct(_T))
++DECLARE_FREE(put_task, struct task_struct *, if (_T) put_task_struct(_T))
+ 
+ static inline void put_task_struct_many(struct task_struct *t, int nr)
  {
- 	call_srcu(&tracepoint_srcu, head, srcu_free_old_probes);
-@@ -136,7 +141,7 @@ static __init int release_early_probes(void)
- 	return 0;
+@@ -228,6 +228,6 @@ static inline void task_unlock(struct task_struct *p)
+ 	spin_unlock(&p->alloc_lock);
  }
  
--/* SRCU is initialized at core_initcall */
-+/* SRCU and Tasks Trace RCU are initialized at core_initcall */
- postcore_initcall(release_early_probes);
+-DEFINE_GUARD(task_lock, struct task_struct *, task_lock(_T), task_unlock(_T))
++DECLARE_GUARD(task_lock, struct task_struct *, task_lock(_T), task_unlock(_T))
  
- static inline void release_probes(struct tracepoint_func *old)
-@@ -146,8 +151,9 @@ static inline void release_probes(struct tracepoint_func *old)
- 			struct tp_probes, probes[0]);
+ #endif /* _LINUX_SCHED_TASK_H */
+diff --git a/include/linux/slab.h b/include/linux/slab.h
+index 739b21262507..a242897880ae 100644
+--- a/include/linux/slab.h
++++ b/include/linux/slab.h
+@@ -266,7 +266,7 @@ void kfree(const void *objp);
+ void kfree_sensitive(const void *objp);
+ size_t __ksize(const void *objp);
  
- 		/*
--		 * We can't free probes if SRCU is not initialized yet.
--		 * Postpone the freeing till after SRCU is initialized.
-+		 * We can't free probes if SRCU and Tasks Trace RCU are not
-+		 * initialized yet. Postpone the freeing till after both are
-+		 * initialized.
- 		 */
- 		if (unlikely(!ok_to_free_tracepoints)) {
- 			tp_probes->rcu.next = early_probes;
-@@ -156,10 +162,9 @@ static inline void release_probes(struct tracepoint_func *old)
- 		}
- 
- 		/*
--		 * Tracepoint probes are protected by both sched RCU and SRCU,
--		 * by calling the SRCU callback in the sched RCU callback we
--		 * cover both cases. So let us chain the SRCU and sched RCU
--		 * callbacks to wait for both grace periods.
-+		 * Tracepoint probes are protected by sched RCU, SRCU and
-+		 * Tasks Trace RCU by chaining the callbacks we cover all three
-+		 * cases and wait for all three grace periods.
- 		 */
- 		call_rcu(&tp_probes->rcu, rcu_free_old_probes);
- 	}
-@@ -460,30 +465,45 @@ static int tracepoint_remove_func(struct tracepoint *tp,
- }
+-DEFINE_FREE(kfree, void *, if (!IS_ERR_OR_NULL(_T)) kfree(_T))
++DECLARE_FREE(kfree, void *, if (!IS_ERR_OR_NULL(_T)) kfree(_T))
  
  /**
-- * tracepoint_probe_register_prio_may_exist -  Connect a probe to a tracepoint with priority
-+ * tracepoint_probe_register_prio_flags -  Connect a probe to a tracepoint with priority and flags
-  * @tp: tracepoint
-  * @probe: probe handler
-  * @data: tracepoint data
-  * @prio: priority of this function over other registered functions
-+ * @flags: tracepoint flags argument (enum tracepoint_flags bits)
-  *
-- * Same as tracepoint_probe_register_prio() except that it will not warn
-- * if the tracepoint is already registered.
-+ * Returns 0 if ok, error value on error.
-+ * Note: if @tp is within a module, the caller is responsible for
-+ * unregistering the probe before the module is gone. This can be
-+ * performed either with a tracepoint module going notifier, or from
-+ * within module exit functions.
-  */
--int tracepoint_probe_register_prio_may_exist(struct tracepoint *tp, void *probe,
--					     void *data, int prio)
-+int tracepoint_probe_register_prio_flags(struct tracepoint *tp, void *probe,
-+				   void *data, int prio, unsigned int flags)
- {
- 	struct tracepoint_func tp_func;
- 	int ret;
+  * ksize - Report actual allocation size of associated object
+@@ -792,7 +792,7 @@ static inline __alloc_size(1, 2) void *kvcalloc(size_t n, size_t size, gfp_t fla
+ extern void *kvrealloc(const void *p, size_t oldsize, size_t newsize, gfp_t flags)
+ 		      __realloc_size(3);
+ extern void kvfree(const void *addr);
+-DEFINE_FREE(kvfree, void *, if (!IS_ERR_OR_NULL(_T)) kvfree(_T))
++DECLARE_FREE(kvfree, void *, if (!IS_ERR_OR_NULL(_T)) kvfree(_T))
  
-+	/*
-+	 * For a probe to be registered to a tracepoint they must share the
-+	 * same MAY_FAULT flag value.
-+	 */
-+	if ((tp->flags & TRACEPOINT_MAY_FAULT) != (flags & TRACEPOINT_MAY_FAULT))
-+		return -EINVAL;
-+
- 	mutex_lock(&tracepoints_mutex);
- 	tp_func.func = probe;
- 	tp_func.data = data;
- 	tp_func.prio = prio;
--	ret = tracepoint_add_func(tp, &tp_func, prio, false);
-+	/*
-+	 * When the MAY_EXIST flag is set, don't warn if the tracepoint is
-+	 * already registered.
-+	 */
-+	ret = tracepoint_add_func(tp, &tp_func, prio, flags & TRACEPOINT_MAY_EXIST);
- 	mutex_unlock(&tracepoints_mutex);
- 	return ret;
+ extern void kvfree_sensitive(const void *addr, size_t len);
+ 
+diff --git a/include/linux/spinlock.h b/include/linux/spinlock.h
+index 3fcd20de6ca8..2ef955703e76 100644
+--- a/include/linux/spinlock.h
++++ b/include/linux/spinlock.h
+@@ -534,73 +534,73 @@ int __alloc_bucket_spinlocks(spinlock_t **locks, unsigned int *lock_mask,
+ 
+ void free_bucket_spinlocks(spinlock_t *locks);
+ 
+-DEFINE_LOCK_GUARD_1(raw_spinlock, raw_spinlock_t,
++DECLARE_LOCK_GUARD_1(raw_spinlock, raw_spinlock_t,
+ 		    raw_spin_lock(_T->lock),
+ 		    raw_spin_unlock(_T->lock))
+ 
+-DEFINE_LOCK_GUARD_1_COND(raw_spinlock, _try, raw_spin_trylock(_T->lock))
++DECLARE_LOCK_GUARD_1_COND(raw_spinlock, _try, raw_spin_trylock(_T->lock))
+ 
+-DEFINE_LOCK_GUARD_1(raw_spinlock_nested, raw_spinlock_t,
++DECLARE_LOCK_GUARD_1(raw_spinlock_nested, raw_spinlock_t,
+ 		    raw_spin_lock_nested(_T->lock, SINGLE_DEPTH_NESTING),
+ 		    raw_spin_unlock(_T->lock))
+ 
+-DEFINE_LOCK_GUARD_1(raw_spinlock_irq, raw_spinlock_t,
++DECLARE_LOCK_GUARD_1(raw_spinlock_irq, raw_spinlock_t,
+ 		    raw_spin_lock_irq(_T->lock),
+ 		    raw_spin_unlock_irq(_T->lock))
+ 
+-DEFINE_LOCK_GUARD_1_COND(raw_spinlock_irq, _try, raw_spin_trylock_irq(_T->lock))
++DECLARE_LOCK_GUARD_1_COND(raw_spinlock_irq, _try, raw_spin_trylock_irq(_T->lock))
+ 
+-DEFINE_LOCK_GUARD_1(raw_spinlock_irqsave, raw_spinlock_t,
++DECLARE_LOCK_GUARD_1(raw_spinlock_irqsave, raw_spinlock_t,
+ 		    raw_spin_lock_irqsave(_T->lock, _T->flags),
+ 		    raw_spin_unlock_irqrestore(_T->lock, _T->flags),
+ 		    unsigned long flags)
+ 
+-DEFINE_LOCK_GUARD_1_COND(raw_spinlock_irqsave, _try,
++DECLARE_LOCK_GUARD_1_COND(raw_spinlock_irqsave, _try,
+ 			 raw_spin_trylock_irqsave(_T->lock, _T->flags))
+ 
+-DEFINE_LOCK_GUARD_1(spinlock, spinlock_t,
++DECLARE_LOCK_GUARD_1(spinlock, spinlock_t,
+ 		    spin_lock(_T->lock),
+ 		    spin_unlock(_T->lock))
+ 
+-DEFINE_LOCK_GUARD_1_COND(spinlock, _try, spin_trylock(_T->lock))
++DECLARE_LOCK_GUARD_1_COND(spinlock, _try, spin_trylock(_T->lock))
+ 
+-DEFINE_LOCK_GUARD_1(spinlock_irq, spinlock_t,
++DECLARE_LOCK_GUARD_1(spinlock_irq, spinlock_t,
+ 		    spin_lock_irq(_T->lock),
+ 		    spin_unlock_irq(_T->lock))
+ 
+-DEFINE_LOCK_GUARD_1_COND(spinlock_irq, _try,
++DECLARE_LOCK_GUARD_1_COND(spinlock_irq, _try,
+ 			 spin_trylock_irq(_T->lock))
+ 
+-DEFINE_LOCK_GUARD_1(spinlock_irqsave, spinlock_t,
++DECLARE_LOCK_GUARD_1(spinlock_irqsave, spinlock_t,
+ 		    spin_lock_irqsave(_T->lock, _T->flags),
+ 		    spin_unlock_irqrestore(_T->lock, _T->flags),
+ 		    unsigned long flags)
+ 
+-DEFINE_LOCK_GUARD_1_COND(spinlock_irqsave, _try,
++DECLARE_LOCK_GUARD_1_COND(spinlock_irqsave, _try,
+ 			 spin_trylock_irqsave(_T->lock, _T->flags))
+ 
+-DEFINE_LOCK_GUARD_1(read_lock, rwlock_t,
++DECLARE_LOCK_GUARD_1(read_lock, rwlock_t,
+ 		    read_lock(_T->lock),
+ 		    read_unlock(_T->lock))
+ 
+-DEFINE_LOCK_GUARD_1(read_lock_irq, rwlock_t,
++DECLARE_LOCK_GUARD_1(read_lock_irq, rwlock_t,
+ 		    read_lock_irq(_T->lock),
+ 		    read_unlock_irq(_T->lock))
+ 
+-DEFINE_LOCK_GUARD_1(read_lock_irqsave, rwlock_t,
++DECLARE_LOCK_GUARD_1(read_lock_irqsave, rwlock_t,
+ 		    read_lock_irqsave(_T->lock, _T->flags),
+ 		    read_unlock_irqrestore(_T->lock, _T->flags),
+ 		    unsigned long flags)
+ 
+-DEFINE_LOCK_GUARD_1(write_lock, rwlock_t,
++DECLARE_LOCK_GUARD_1(write_lock, rwlock_t,
+ 		    write_lock(_T->lock),
+ 		    write_unlock(_T->lock))
+ 
+-DEFINE_LOCK_GUARD_1(write_lock_irq, rwlock_t,
++DECLARE_LOCK_GUARD_1(write_lock_irq, rwlock_t,
+ 		    write_lock_irq(_T->lock),
+ 		    write_unlock_irq(_T->lock))
+ 
+-DEFINE_LOCK_GUARD_1(write_lock_irqsave, rwlock_t,
++DECLARE_LOCK_GUARD_1(write_lock_irqsave, rwlock_t,
+ 		    write_lock_irqsave(_T->lock, _T->flags),
+ 		    write_unlock_irqrestore(_T->lock, _T->flags),
+ 		    unsigned long flags)
+diff --git a/include/linux/srcu.h b/include/linux/srcu.h
+index 236610e4a8fa..1d424223a990 100644
+--- a/include/linux/srcu.h
++++ b/include/linux/srcu.h
+@@ -343,7 +343,7 @@ static inline void smp_mb__after_srcu_read_unlock(void)
+ 	/* __srcu_read_unlock has smp_mb() internally so nothing to do here. */
  }
--EXPORT_SYMBOL_GPL(tracepoint_probe_register_prio_may_exist);
-+EXPORT_SYMBOL_GPL(tracepoint_probe_register_prio_flags);
  
- /**
-  * tracepoint_probe_register_prio -  Connect a probe to a tracepoint with priority
-@@ -501,16 +521,7 @@ EXPORT_SYMBOL_GPL(tracepoint_probe_register_prio_may_exist);
- int tracepoint_probe_register_prio(struct tracepoint *tp, void *probe,
- 				   void *data, int prio)
- {
--	struct tracepoint_func tp_func;
--	int ret;
--
--	mutex_lock(&tracepoints_mutex);
--	tp_func.func = probe;
--	tp_func.data = data;
--	tp_func.prio = prio;
--	ret = tracepoint_add_func(tp, &tp_func, prio, true);
--	mutex_unlock(&tracepoints_mutex);
--	return ret;
-+	return tracepoint_probe_register_prio_flags(tp, probe, data, prio, 0);
+-DEFINE_LOCK_GUARD_1(srcu, struct srcu_struct,
++DECLARE_LOCK_GUARD_1(srcu, struct srcu_struct,
+ 		    _T->idx = srcu_read_lock(_T->lock),
+ 		    srcu_read_unlock(_T->lock, _T->idx),
+ 		    int idx)
+diff --git a/include/sound/pcm.h b/include/sound/pcm.h
+index 210096f124ee..6d4137d85362 100644
+--- a/include/sound/pcm.h
++++ b/include/sound/pcm.h
+@@ -660,13 +660,13 @@ void snd_pcm_stream_unlock_irqrestore(struct snd_pcm_substream *substream,
+ 	} while (0)
+ 
+ /* definitions for guard(); use like guard(pcm_stream_lock) */
+-DEFINE_LOCK_GUARD_1(pcm_stream_lock, struct snd_pcm_substream,
++DECLARE_LOCK_GUARD_1(pcm_stream_lock, struct snd_pcm_substream,
+ 		    snd_pcm_stream_lock(_T->lock),
+ 		    snd_pcm_stream_unlock(_T->lock))
+-DEFINE_LOCK_GUARD_1(pcm_stream_lock_irq, struct snd_pcm_substream,
++DECLARE_LOCK_GUARD_1(pcm_stream_lock_irq, struct snd_pcm_substream,
+ 		    snd_pcm_stream_lock_irq(_T->lock),
+ 		    snd_pcm_stream_unlock_irq(_T->lock))
+-DEFINE_LOCK_GUARD_1(pcm_stream_lock_irqsave, struct snd_pcm_substream,
++DECLARE_LOCK_GUARD_1(pcm_stream_lock_irqsave, struct snd_pcm_substream,
+ 		    snd_pcm_stream_lock_irqsave(_T->lock, _T->flags),
+ 		    snd_pcm_stream_unlock_irqrestore(_T->lock, _T->flags),
+ 		    unsigned long flags)
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index d211d40a2edc..471768047db7 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -6439,7 +6439,7 @@ static void queue_core_balance(struct rq *rq)
+ 	queue_balance_callback(rq, &per_cpu(core_balance_head, rq->cpu), sched_core_balance);
  }
- EXPORT_SYMBOL_GPL(tracepoint_probe_register_prio);
  
-@@ -520,6 +531,8 @@ EXPORT_SYMBOL_GPL(tracepoint_probe_register_prio);
-  * @probe: probe handler
-  * @data: tracepoint data
-  *
-+ * Non-faultable probes can only be registered on non-faultable tracepoints.
-+ *
-  * Returns 0 if ok, error value on error.
-  * Note: if @tp is within a module, the caller is responsible for
-  * unregistering the probe before the module is gone. This can be
-@@ -528,7 +541,7 @@ EXPORT_SYMBOL_GPL(tracepoint_probe_register_prio);
-  */
- int tracepoint_probe_register(struct tracepoint *tp, void *probe, void *data)
- {
--	return tracepoint_probe_register_prio(tp, probe, data, TRACEPOINT_DEFAULT_PRIO);
-+	return tracepoint_probe_register_prio_flags(tp, probe, data, TRACEPOINT_DEFAULT_PRIO, 0);
+-DEFINE_LOCK_GUARD_1(core_lock, int,
++DECLARE_LOCK_GUARD_1(core_lock, int,
+ 		    sched_core_lock(*_T->lock, &_T->flags),
+ 		    sched_core_unlock(*_T->lock, &_T->flags),
+ 		    unsigned long flags)
+@@ -7591,7 +7591,7 @@ static struct task_struct *find_get_task(pid_t pid)
+ 	return p;
  }
- EXPORT_SYMBOL_GPL(tracepoint_probe_register);
  
+-DEFINE_CLASS(find_get_task, struct task_struct *, if (_T) put_task_struct(_T),
++DECLARE_CLASS(find_get_task, struct task_struct *, if (_T) put_task_struct(_T),
+ 	     find_get_task(pid), pid_t pid)
+ 
+ /*
+diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
+index ae50f212775e..6c1ccf49c914 100644
+--- a/kernel/sched/sched.h
++++ b/kernel/sched/sched.h
+@@ -1673,7 +1673,7 @@ task_rq_unlock(struct rq *rq, struct task_struct *p, struct rq_flags *rf)
+ 	raw_spin_unlock_irqrestore(&p->pi_lock, rf->flags);
+ }
+ 
+-DEFINE_LOCK_GUARD_1(task_rq_lock, struct task_struct,
++DECLARE_LOCK_GUARD_1(task_rq_lock, struct task_struct,
+ 		    _T->rq = task_rq_lock(_T->lock, &_T->rf),
+ 		    task_rq_unlock(_T->rq, _T->lock, &_T->rf),
+ 		    struct rq *rq; struct rq_flags rf)
+@@ -1726,17 +1726,17 @@ rq_unlock(struct rq *rq, struct rq_flags *rf)
+ 	raw_spin_rq_unlock(rq);
+ }
+ 
+-DEFINE_LOCK_GUARD_1(rq_lock, struct rq,
++DECLARE_LOCK_GUARD_1(rq_lock, struct rq,
+ 		    rq_lock(_T->lock, &_T->rf),
+ 		    rq_unlock(_T->lock, &_T->rf),
+ 		    struct rq_flags rf)
+ 
+-DEFINE_LOCK_GUARD_1(rq_lock_irq, struct rq,
++DECLARE_LOCK_GUARD_1(rq_lock_irq, struct rq,
+ 		    rq_lock_irq(_T->lock, &_T->rf),
+ 		    rq_unlock_irq(_T->lock, &_T->rf),
+ 		    struct rq_flags rf)
+ 
+-DEFINE_LOCK_GUARD_1(rq_lock_irqsave, struct rq,
++DECLARE_LOCK_GUARD_1(rq_lock_irqsave, struct rq,
+ 		    rq_lock_irqsave(_T->lock, &_T->rf),
+ 		    rq_unlock_irqrestore(_T->lock, &_T->rf),
+ 		    struct rq_flags rf)
+@@ -2661,8 +2661,8 @@ static inline void double_rq_clock_clear_update(struct rq *rq1, struct rq *rq2)
+ static inline void double_rq_clock_clear_update(struct rq *rq1, struct rq *rq2) {}
+ #endif
+ 
+-#define DEFINE_LOCK_GUARD_2(name, type, _lock, _unlock, ...)		\
+-__DEFINE_UNLOCK_GUARD(name, type, _unlock, type *lock2; __VA_ARGS__) \
++#define DECLARE_LOCK_GUARD_2(name, type, _lock, _unlock, ...)		\
++__DECLARE_UNLOCK_GUARD(name, type, _unlock, type *lock2; __VA_ARGS__) \
+ static inline class_##name##_t class_##name##_constructor(type *lock, type *lock2) \
+ { class_##name##_t _t = { .lock = lock, .lock2 = lock2 }, *_T = &_t;	\
+   _lock; return _t; }
+@@ -2802,7 +2802,7 @@ static inline void double_raw_unlock(raw_spinlock_t *l1, raw_spinlock_t *l2)
+ 	raw_spin_unlock(l2);
+ }
+ 
+-DEFINE_LOCK_GUARD_2(double_raw_spinlock, raw_spinlock_t,
++DECLARE_LOCK_GUARD_2(double_raw_spinlock, raw_spinlock_t,
+ 		    double_raw_lock(_T->lock, _T->lock2),
+ 		    double_raw_unlock(_T->lock, _T->lock2))
+ 
+@@ -2863,7 +2863,7 @@ static inline void double_rq_unlock(struct rq *rq1, struct rq *rq2)
+ 
+ #endif
+ 
+-DEFINE_LOCK_GUARD_2(double_rq_lock, struct rq,
++DECLARE_LOCK_GUARD_2(double_rq_lock, struct rq,
+ 		    double_rq_lock(_T->lock, _T->lock2),
+ 		    double_rq_unlock(_T->lock, _T->lock2))
+ 
+diff --git a/lib/locking-selftest.c b/lib/locking-selftest.c
+index 6f6a5fc85b42..7e72d973d419 100644
+--- a/lib/locking-selftest.c
++++ b/lib/locking-selftest.c
+@@ -2507,19 +2507,19 @@ static void fs_reclaim_tests(void)
+ }
+ 
+ /* Defines guard classes to create contexts */
+-DEFINE_LOCK_GUARD_0(HARDIRQ, HARDIRQ_ENTER(), HARDIRQ_EXIT())
+-DEFINE_LOCK_GUARD_0(NOTTHREADED_HARDIRQ,
++DECLARE_LOCK_GUARD_0(HARDIRQ, HARDIRQ_ENTER(), HARDIRQ_EXIT())
++DECLARE_LOCK_GUARD_0(NOTTHREADED_HARDIRQ,
+ 	do {
+ 		local_irq_disable();
+ 		__irq_enter();
+ 		WARN_ON(!in_irq());
+ 	} while(0), HARDIRQ_EXIT())
+-DEFINE_LOCK_GUARD_0(SOFTIRQ, SOFTIRQ_ENTER(), SOFTIRQ_EXIT())
++DECLARE_LOCK_GUARD_0(SOFTIRQ, SOFTIRQ_ENTER(), SOFTIRQ_EXIT())
+ 
+ /* Define RCU guards, should go away when RCU has its own guard definitions */
+-DEFINE_LOCK_GUARD_0(RCU, rcu_read_lock(), rcu_read_unlock())
+-DEFINE_LOCK_GUARD_0(RCU_BH, rcu_read_lock_bh(), rcu_read_unlock_bh())
+-DEFINE_LOCK_GUARD_0(RCU_SCHED, rcu_read_lock_sched(), rcu_read_unlock_sched())
++DECLARE_LOCK_GUARD_0(RCU, rcu_read_lock(), rcu_read_unlock())
++DECLARE_LOCK_GUARD_0(RCU_BH, rcu_read_lock_bh(), rcu_read_unlock_bh())
++DECLARE_LOCK_GUARD_0(RCU_SCHED, rcu_read_lock_sched(), rcu_read_unlock_sched())
+ 
+ 
+ #define GENERATE_2_CONTEXT_TESTCASE(outer, outer_lock, inner, inner_lock)	\
+diff --git a/sound/core/control_led.c b/sound/core/control_led.c
+index 3d37e9fa7b9c..c1b32255b87d 100644
+--- a/sound/core/control_led.c
++++ b/sound/core/control_led.c
+@@ -236,7 +236,7 @@ static void snd_ctl_led_notify(struct snd_card *card, unsigned int mask,
+ 	}
+ }
+ 
+-DEFINE_FREE(snd_card_unref, struct snd_card *, if (_T) snd_card_unref(_T))
++DECLARE_FREE(snd_card_unref, struct snd_card *, if (_T) snd_card_unref(_T))
+ 
+ static int snd_ctl_led_set_id(int card_number, struct snd_ctl_elem_id *id,
+ 			      unsigned int group, bool set)
 -- 
 2.39.2
 
