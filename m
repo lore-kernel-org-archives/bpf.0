@@ -1,33 +1,34 @@
 Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54D5919005C;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AECC0190491;
 	Wed, 26 Jun 2024 18:59:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=167.114.26.122
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719428362; cv=none; b=sjhVEFoS7RKC8KUACLuY9SXWNlB2M116oioKksmmT7zLUoFJDF+1rDB2zS6JkP/wXu1wUo4CPL/iUNRSKcNL27WUgBCt0I3x8zzD8Zu/JOZVEtaOqofKP6sWVKZjTIzEa/S+S3gAnwFhFvwZPnUu5CmnNBpXQs6Pnaj9gDXq3dM=
+	t=1719428362; cv=none; b=B7O8q3pETERnSC9UkkCsxfnyA9xZFAHAcVy/0y2PDoypsOUiDQM1FlJoKOTGwy0eF3QeAP+te+6fYc8IdP2BoyCN837p0iK8ee7Pp1gXeIZHCqFzf++nh7BRygVgwF+wujePCkxO3EZqAGqWNS/thXHtRuU4OsTa6D3+TdHnZhY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1719428362; c=relaxed/simple;
-	bh=5+b8aWZO+wYMW95/3/7a4Rw1GpZfUelw6aGT8D3zXCs=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=f96Osd1ZwdC03Z+3dm9dBecFP9xTSiWxtkRKD/084aZAoE+pRGcAzAVWGKLEpPsnIXrZw6xjZMRopsONKd+hHv8XuSooW01vsyOctM9ZloIcgfR+AbW05Nhiv7Nva3AqvI75fbXiuvxFHt0nHgwrmpydhgKw9pRdVtIIDmt9JE0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com; spf=pass smtp.mailfrom=efficios.com; dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b=gE2LaqHc; arc=none smtp.client-ip=167.114.26.122
+	bh=Tjzvmf5EBWU/mIHNxl5zJ84d7NNq4nJZW+2g+oj8Cjs=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=n5OlWYMHKOv9FRbwnSMzkipEbonvI8zWN30m7WuyADo5UUk7myK8ocHGkpBFhJuysvlNwbz0SFUH2I4VDVzNroOKcxiQvpmRmP1T0HKwIqj+eYdJTyT5Uqrw398UPoUiKmIDv7CbHO1rWd84uKHrjVrkCC4teYkviRQQ5gCec+k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com; spf=pass smtp.mailfrom=efficios.com; dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b=ehnbNBmG; arc=none smtp.client-ip=167.114.26.122
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=efficios.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b="gE2LaqHc"
+	dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b="ehnbNBmG"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
-	s=smtpout1; t=1719428352;
-	bh=5+b8aWZO+wYMW95/3/7a4Rw1GpZfUelw6aGT8D3zXCs=;
-	h=From:To:Cc:Subject:Date:From;
-	b=gE2LaqHc44okkoRzav42NIKNH8gouinZkpgrxFXcwd6GCZyWkqbeY6P4awe7mKLwt
-	 RM1pje9SpQxgX5iRF7z323qJC0BnM+27kmniPbG4hGET8uzD/umVZ+IzlGMSUw/qZ6
-	 DZZ+WmJW/4iQTcAJYPtTBVCitivRexXY6yTIClflPNoIW8UxWGIXh1U9lJv4WZ8R3X
-	 Bbtk4zKPyrfJjWFpWYB/Jebc/tfbS4vtv0wlOVBGIOPNCfQTPwW0WoNL4j86AUG4Ml
-	 JSrPk+DBaRHEoJOiEHq4rI9K6IH0lKVO1Gk9nloDf9uL6yZqehXpD4sdcLD/BGHj8S
-	 kbApItQ/3JRag==
+	s=smtpout1; t=1719428353;
+	bh=Tjzvmf5EBWU/mIHNxl5zJ84d7NNq4nJZW+2g+oj8Cjs=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=ehnbNBmGy94iL3Mj2oboy0yV/cErK1xTRrGWHFImaoSJXGKZtjklFRb+24gLfkXAt
+	 SgR61xDS0JSXYBQa1N6zDf17xYqVHhsycybzOpnqgp153jCiTZ725iRUfFMtla1as8
+	 FqVJkCAWGAh7I5kfWbfDG+1gmPq4SMDjQkjTcPLxLvUmTEvdP0V6eqlbzvX0xbhA1o
+	 cnwB4eO30ws4+pGZiAmfqmaDgtAc0gtz4Xj0cr7TJgr/gLZVUMkgrLlvhbfPAVpiTB
+	 fBPmrBEuhNcJiFawQWuzHxPhW0kxX5p53/uPpi8HFqCOp0a1StSyl2QiFq1ejXzNYo
+	 J5YsXHfCIDndw==
 Received: from thinkos.internal.efficios.com (192-222-143-198.qc.cable.ebox.net [192.222.143.198])
-	by smtpout.efficios.com (Postfix) with ESMTPSA id 4W8WFr3SkPz17fj;
-	Wed, 26 Jun 2024 14:59:12 -0400 (EDT)
+	by smtpout.efficios.com (Postfix) with ESMTPSA id 4W8WFs4NXrz17r1;
+	Wed, 26 Jun 2024 14:59:13 -0400 (EDT)
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 To: Steven Rostedt <rostedt@goodmis.org>,
 	Masami Hiramatsu <mhiramat@kernel.org>
@@ -44,11 +45,18 @@ Cc: linux-kernel@vger.kernel.org,
 	Jiri Olsa <jolsa@redhat.com>,
 	Namhyung Kim <namhyung@kernel.org>,
 	bpf@vger.kernel.org,
-	Joel Fernandes <joel@joelfernandes.org>
-Subject: [PATCH v5 0/8] Faultable Tracepoints
-Date: Wed, 26 Jun 2024 14:59:33 -0400
-Message-Id: <20240626185941.68420-1-mathieu.desnoyers@efficios.com>
+	Joel Fernandes <joel@joelfernandes.org>,
+	Ingo Molnar <mingo@kernel.org>,
+	Linus Torvalds <torvalds@linux-foundation.org>,
+	Kees Cook <keescook@chromium.org>,
+	Greg KH <gregkh@linuxfoundation.org>,
+	Sean Christopherson <seanjc@google.com>
+Subject: [PATCH v5 3/8] cleanup.h: Introduce DEFINE_INACTIVE_GUARD and activate_guard
+Date: Wed, 26 Jun 2024 14:59:36 -0400
+Message-Id: <20240626185941.68420-4-mathieu.desnoyers@efficios.com>
 X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20240626185941.68420-1-mathieu.desnoyers@efficios.com>
+References: <20240626185941.68420-1-mathieu.desnoyers@efficios.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -57,114 +65,87 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Wire up the system call tracepoints with Tasks Trace RCU to allow
-the ftrace, perf, and eBPF tracers to handle page faults.
+In scenarios where the scope of the guard differs from the scope of its
+activation, introduce DEFINE_INACTIVE_GUARD() and activate_guard().
 
-This series does the initial wire-up allowing tracers to handle page
-faults, but leaves out the actual handling of said page faults as future
-work.
+Here is an example use for a conditionally activated guard variable:
 
-I have tested this against a feature branch of lttng-modules which
-implements handling of page faults for the filename argument of the
-openat(2) system call.
+void func(bool a)
+{
+	DEFINE_INACTIVE_GUARD(preempt_notrace, myguard);
 
-This v5 addresses comments from the previous round of review [1].
+	[...]
+	if (a) {
+		might_sleep();
+		activate_guard(preempt_notrace, myguard)();
+	}
+	[ protected code ]
+}
 
-Steven Rostedt suggested separating tracepoints into two separate
-sections. It is unclear how that approach would prove to be an
-improvement over the currently proposed approach, so those changes were
-not incorporated. See [2] for my detailed reply.
+Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: Peter Zijlstra (Intel) <peterz@infradead.org>
+Cc: Ingo Molnar <mingo@kernel.org>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Kees Cook <keescook@chromium.org>
+Cc: Greg KH <gregkh@linuxfoundation.org>
+Cc: Sean Christopherson <seanjc@google.com>
+---
+ include/linux/cleanup.h | 23 ++++++++++++++++++++++-
+ 1 file changed, 22 insertions(+), 1 deletion(-)
 
-In the previous round, Peter Zijlstra suggested use of SRCU rather than
-Tasks Trace RCU. See my reply about the distinction between SRCU and
-Tasks Trace RCU [3] and this explanation from Paul E. McKenney about the
-purpose of Tasks Trace RCU [4].
-
-The macros DEFINE_INACTIVE_GUARD and activate_guard are added to
-cleanup.h for use in the __DO_TRACE() macro. Those appear to be more
-flexible than the guard_if() proposed by Peter Zijlstra in the previous
-round of review [5].
-
-This series is based on kernel v6.9.6.
-
-Thanks,
-
-Mathieu
-
-Link: https://lore.kernel.org/lkml/20231120205418.334172-1-mathieu.desnoyers@efficios.com/ # [1]
-Link: https://lore.kernel.org/lkml/e4e9a2bc-1776-4b51-aba4-a147795a5de1@efficios.com/ # [2]
-Link: https://lore.kernel.org/lkml/a0ac5f77-411e-4562-9863-81196238f3f5@efficios.com/ # [3]
-Link: https://lore.kernel.org/lkml/ba543d44-9302-4115-ac4f-d4e9f8d98a90@paulmck-laptop/ # [4]
-Link: https://lore.kernel.org/lkml/20231120221524.GD8262@noisy.programming.kicks-ass.net/ # [5]
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Alexei Starovoitov <ast@kernel.org>
-Cc: Yonghong Song <yhs@fb.com>
-Cc: Paul E. McKenney <paulmck@kernel.org>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc: Mark Rutland <mark.rutland@arm.com>
-Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
-Cc: Jiri Olsa <jolsa@redhat.com>
-Cc: Namhyung Kim <namhyung@kernel.org>
-Cc: bpf@vger.kernel.org
-Cc: Joel Fernandes <joel@joelfernandes.org>
-
-Mathieu Desnoyers (8):
-  cleanup.h: Header include guard should match header name
-  cleanup.h guard: Rename DEFINE_ prefix to DECLARE_
-  cleanup.h: Introduce DEFINE_INACTIVE_GUARD and activate_guard
-  tracing: Introduce faultable tracepoints
-  tracing/ftrace: Add support for faultable tracepoints
-  tracing/bpf-trace: Add support for faultable tracepoints
-  tracing/perf: Add support for faultable tracepoints
-  tracing: Convert sys_enter/exit to faultable tracepoints
-
- drivers/cxl/core/cdat.c                     |  2 +-
- drivers/cxl/cxl.h                           |  2 +-
- drivers/gpio/gpiolib.h                      |  2 +-
- drivers/platform/x86/intel/pmc/core_ssram.c |  2 +-
- fs/fuse/virtio_fs.c                         |  2 +-
- fs/pstore/inode.c                           |  4 +-
- include/linux/bitmap.h                      |  2 +-
- include/linux/cleanup.h                     | 85 ++++++++++++--------
- include/linux/cpu.h                         |  2 +-
- include/linux/cpumask.h                     |  2 +-
- include/linux/device.h                      |  6 +-
- include/linux/file.h                        |  4 +-
- include/linux/firmware.h                    |  2 +-
- include/linux/gpio/driver.h                 |  4 +-
- include/linux/iio/iio.h                     |  4 +-
- include/linux/irqflags.h                    |  4 +-
- include/linux/mutex.h                       |  6 +-
- include/linux/of.h                          |  2 +-
- include/linux/pci.h                         |  4 +-
- include/linux/percpu.h                      |  2 +-
- include/linux/preempt.h                     |  6 +-
- include/linux/rcupdate.h                    |  2 +-
- include/linux/rwsem.h                       | 10 +--
- include/linux/sched/task.h                  |  4 +-
- include/linux/slab.h                        |  4 +-
- include/linux/spinlock.h                    | 38 ++++-----
- include/linux/srcu.h                        |  2 +-
- include/linux/tracepoint-defs.h             | 14 ++++
- include/linux/tracepoint.h                  | 88 +++++++++++++++------
- include/sound/pcm.h                         |  6 +-
- include/trace/bpf_probe.h                   | 20 ++++-
- include/trace/define_trace.h                |  7 ++
- include/trace/events/syscalls.h             |  4 +-
- include/trace/perf.h                        | 22 +++++-
- include/trace/trace_events.h                | 68 +++++++++++++++-
- init/Kconfig                                |  1 +
- kernel/sched/core.c                         |  4 +-
- kernel/sched/sched.h                        | 16 ++--
- kernel/trace/bpf_trace.c                    | 11 ++-
- kernel/trace/trace_events.c                 | 28 +++++--
- kernel/trace/trace_fprobe.c                 |  5 +-
- kernel/trace/trace_syscalls.c               | 52 ++++++++++--
- kernel/tracepoint.c                         | 65 +++++++++------
- lib/locking-selftest.c                      | 12 +--
- sound/core/control_led.c                    |  2 +-
- 45 files changed, 441 insertions(+), 193 deletions(-)
-
+diff --git a/include/linux/cleanup.h b/include/linux/cleanup.h
+index 04f03ad5f25d..d6a3d8099d77 100644
+--- a/include/linux/cleanup.h
++++ b/include/linux/cleanup.h
+@@ -146,12 +146,20 @@ static inline class_##_name##_t class_##_name##ext##_constructor(_init_args) \
+  *      similar to scoped_guard(), except it does fail when the lock
+  *      acquire fails.
+  *
++ * DEFINE_INACTIVE_GUARD(name, var):
++ *      define an inactive guard variable in a given scope, initialized to NULL.
++ *
++ * activate_guard(name, var)(args...):
++ *      activate a guard variable with its constructor, if it is not already
++ *      activated.
+  */
+ 
+ #define DECLARE_GUARD(_name, _type, _lock, _unlock) \
+ 	DECLARE_CLASS(_name, _type, if (_T) { _unlock; }, ({ _lock; _T; }), _type _T); \
+ 	static inline void * class_##_name##_lock_ptr(class_##_name##_t *_T) \
+-	{ return *_T; }
++	{ return *_T; } \
++	static inline class_##_name##_t class_##_name##_null(void) \
++	{ return NULL; }
+ 
+ #define DECLARE_GUARD_COND(_name, _ext, _condlock) \
+ 	EXTEND_CLASS(_name, _ext, \
+@@ -175,6 +183,14 @@ static inline class_##_name##_t class_##_name##ext##_constructor(_init_args) \
+ 		if (!__guard_ptr(_name)(&scope)) _fail; \
+ 		else
+ 
++#define DEFINE_INACTIVE_GUARD(_name, _var) \
++	class_##_name##_t _var __cleanup(class_##_name##_destructor) = \
++		class_##_name##_null()
++
++#define activate_guard(_name, _var) \
++	if (!class_##_name##_lock_ptr(&(_var))) \
++		_var = class_##_name##_constructor
++
+ /*
+  * Additional helper macros for generating lock guards with types, either for
+  * locks that don't have a native type (eg. RCU, preempt) or those that need a
+@@ -209,6 +225,11 @@ static inline void class_##_name##_destructor(class_##_name##_t *_T)	\
+ static inline void *class_##_name##_lock_ptr(class_##_name##_t *_T)	\
+ {									\
+ 	return _T->lock;						\
++}									\
++static inline class_##_name##_t class_##_name##_null(void)		\
++{									\
++	class_##_name##_t _t = { .lock = NULL };			\
++	return _t;							\
+ }
+ 
+ 
 -- 
 2.39.2
+
