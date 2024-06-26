@@ -1,188 +1,189 @@
-Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23EEF18A930;
-	Wed, 26 Jun 2024 13:47:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2746E18C35C;
+	Wed, 26 Jun 2024 13:47:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719409631; cv=none; b=Nskh2wVHuRaa1O99Cj8Bm2HLncELHf9gg0S5cO2MFcWf+DJ5QWmj/ztOFLWN1l4l8ciQuY7JXlYUnYmvGsl9VASxHIctID9OA+uMiG7uHw6UjU2l3IUGF2WJ8DgYPPmgYVbEt7mGVws101olWQ31yrKIwXWeBs9anrWNFpZ5xZQ=
+	t=1719409633; cv=none; b=KytstjYPYD95HHvt+rxL7nS+qvLGcXQO5BrpNMpIHSfFh3PX3yFjpZnoBGDZGUly635oRWlM9NJdV2tpK04mMJ3P7VKFyorxdWX/m23dE6lnSFKYVZ0ELWC5rQLMsIUjOEQ1gINeun8jwUQn6r7081i/MduJAbnODKTitPz+PQA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719409631; c=relaxed/simple;
-	bh=rSsKiSc4dFI2tkoNlNTsDyIXyV57SbU85aojGhTzijM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=IS4L1n5z0jO+9GfrS7x+Wa7lw9lsHTpb7S7XR6iot1aDA3Q/HIzX6bPm7ic4H1lEeodrZx5zyLFW1dNryAiVtf55rvRX5jPFj7iSinw5tyogS/a9X9ONHknpaPUWhGO0UTfRYhifi03+RetQSmuhRGjU94nZlVpb/H9+yiDS4CE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MOY4waer; arc=none smtp.client-ip=209.85.218.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1719409633; c=relaxed/simple;
+	bh=8DVfI5Mgh3sBj3CpzjHKwk7ojiMdJpUgU0LXrBaKg2c=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=URdVfHAo3IPgOENqsE5SynGoHdFD0MuKtl8/hr3nUFhG7g75lQnkSNUs3zYwYnfivLIye66fJDD5t9/DvPlcSZndwca3LwppeEdjfw+IAvc9yJAWtLGynXZ6Osbu7ojSy7zeXxC8VSsbgu/1LPagesYlfWLd9oqtt6US3JksFoc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AnLkus0S; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MOY4waer"
-Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-a6fdd947967so486955566b.2;
-        Wed, 26 Jun 2024 06:47:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1719409628; x=1720014428; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=RFl4a85rkCgH8ys4lWAdMJzDTuxnq6IRXeCuLnaU+Ko=;
-        b=MOY4waermEgQGuDE/Z8Y91XE2m4Ji5CPK4kC3p6Mnk2ayoMVI/SG65zt2wESlXtPfK
-         4KJ4dT4BFUpOpaqoqBlWyqtgZYxrT3/8odwLGRYevviDiMv3u7BAjD7RUzEyHt9YuKK5
-         PyXWs1hBKTH9vAuyEruOFF3/bHxu4fYyxjQDfEfEbzdkQ1G1fYGeJy8RNL/IUF816Hlz
-         8DMRrZjLvgY8p/ZJnJ4NUBnKKINfgZR8Qli/2ZiwTeDwklD+CYaVSCNTrIH/Mr/WvXQT
-         tZTWS4RHhJLwZZeQ+AJs86bufZTrzfKtVErT6dvxHXJQuZs4VFxORPXmfXFmDK01rV/i
-         kc/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719409628; x=1720014428;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=RFl4a85rkCgH8ys4lWAdMJzDTuxnq6IRXeCuLnaU+Ko=;
-        b=Jnt35k//YwAVGuzHfZh8oJyhuoIesVL/tvbkqP0HEX8lnlYYeSrhRkx8Uz47TFmy3n
-         kCT2mmAk4/sMf1DMa4O0lGbfA5wwhDqD0FSCglggbXAzCO/UDnPedWOvbZbwqM9rlzPJ
-         EfqLAFhs3FbD6bisISS2jTTIhysCDFhbNfrzoRpxygkCR3Hkf9pk/kVmDJlPXjttsPCF
-         i0SQiGcf/K449qks1Sv77AJGFXWueLdGytrZ2igq43eECxIdhgw0XnBXOX2yUAglLdst
-         w5sme/tI2ApZ+uPfUfQoA7CirHzA7Xhh98WOwH1alnItst7faEuWNPTcgRtVFJKLS7Y6
-         aaFg==
-X-Forwarded-Encrypted: i=1; AJvYcCVoYWzSe3SpUqdUjR/pFPb+AQ8AeNv6+vEvMb/FqwD1Jj/8rWL2+IT4AJtujG9kDovVVffMBBtAWAWjdodOZON+2mpYJo4c29u3bAG3cRyAzBtEtQt3KFN8KHk5I20ToPonF0rVhgBRe6YEhUnFfy2/nY8fUZooUev6k9iSU2y/8BMAKNNFWs245rr/OZlHApRW3vR2BDOI4CgWpWCAcVX2RCN6StbQPQiVQNx0upsDi6wXGX1JFHRRe/rAjEihGgNy7pJRWrtxIPs9FTb25FK90L8e+kYWWDzptlkH6AE3o+U1SPJzGLYfFB4QFHQNG5DA0OYjE/Yk1t3OLy5peSrFpj3DZN/YUVKM7ne8IrVCKunUcT8Fv2sewFa5Nl0f/pH5RrwFLCw5cLR5rD9iAdkkckIboLLpMrTNgT4eC1KmyG+g4wjBPGXju9FeykxzWr/gHQ3pi3eeJdldectuPPLgZFNve5eWRnnYzvUUmT73ZT9koxqV0yjXMkxAx6fpF+DgPiZuVQ==
-X-Gm-Message-State: AOJu0YxHsN5weWDKj5nJu5tI3DNP8gz9E11kO3w4rW4xJSJWUBRqFnQM
-	7RKQEuGE3D6RX391dTfXUL4lQ/V4+llJST0mSkd2z4Fl9tEMsB6m
-X-Google-Smtp-Source: AGHT+IGD5mGfND6mvQHeN5VakSdcpLJO5iAUu9YTrHEpvfoG3vNqvyJwqGy3yIJ4e8gaM2b8isOyjg==
-X-Received: by 2002:a17:907:c01a:b0:a72:8c5e:f3d with SMTP id a640c23a62f3a-a728c5e112amr201037566b.49.1719409628168;
-        Wed, 26 Jun 2024 06:47:08 -0700 (PDT)
-Received: from [192.168.42.3] ([163.114.131.193])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a7244cbce5bsm425759166b.79.2024.06.26.06.47.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 26 Jun 2024 06:47:07 -0700 (PDT)
-Message-ID: <09bdd7e5-75ca-42d5-8e59-a8ec05da89c7@gmail.com>
-Date: Wed, 26 Jun 2024 14:47:13 +0100
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AnLkus0S"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D388DC32782;
+	Wed, 26 Jun 2024 13:47:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1719409632;
+	bh=8DVfI5Mgh3sBj3CpzjHKwk7ojiMdJpUgU0LXrBaKg2c=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
+	b=AnLkus0ScJlNtHUTw9KITY2V/hjtnycgXxOlFC6L5c1V24zrpjWKsjW8TkYOaVf3v
+	 9CItVAIaGnzFxkKbnhCVlRZ4/CwyQlgqkAw8SQv5sO3n46QT5juEiOCD8lgLZgFitt
+	 tiewbBnUoZqfVRSobPMgMIiGe40JN9fqfOHztEpTIa6cgNo+fl68HT9W/Ucdl9ykBw
+	 Mmjr2nxEXyYoRfH6pcaazP/ZcoBbK7ey7QVtmZzHfV52BISMc8DeTNRIdf8Eo0Xnm+
+	 a7DXzkiDeOrKeetS+wTOSxFZRqNti19Ibj3OJl2v2sO15iYRtsQtwZVnJgu+bKJuRb
+	 qmprk5Se1UmAw==
+From: Benjamin Tissoires <bentiss@kernel.org>
+Date: Wed, 26 Jun 2024 15:46:33 +0200
+Subject: [PATCH HID v2 12/13] selftests/hid: add another test for injecting
+ an event from an event hook
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v13 11/13] net: add SO_DEVMEM_DONTNEED setsockopt
- to release RX frags
-To: Mina Almasry <almasrymina@google.com>, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
- linux-parisc@vger.kernel.org, sparclinux@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
- bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org
-Cc: "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Donald Hunter <donald.hunter@gmail.com>,
- Jonathan Corbet <corbet@lwn.net>,
- Richard Henderson <richard.henderson@linaro.org>,
- Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner
- <mattst88@gmail.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
- "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
- Helge Deller <deller@gmx.de>, Andreas Larsson <andreas@gaisler.com>,
- Jesper Dangaard Brouer <hawk@kernel.org>,
- Ilias Apalodimas <ilias.apalodimas@linaro.org>,
- Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
- <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
- <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Steffen Klassert
- <steffen.klassert@secunet.com>, Herbert Xu <herbert@gondor.apana.org.au>,
- David Ahern <dsahern@kernel.org>,
- Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
- Shuah Khan <shuah@kernel.org>, Sumit Semwal <sumit.semwal@linaro.org>,
- =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
- Bagas Sanjaya <bagasdotme@gmail.com>, Christoph Hellwig <hch@infradead.org>,
- Nikolay Aleksandrov <razor@blackwall.org>, David Wei <dw@davidwei.uk>,
- Jason Gunthorpe <jgg@ziepe.ca>, Yunsheng Lin <linyunsheng@huawei.com>,
- Shailend Chand <shailend@google.com>,
- Harshitha Ramamurthy <hramamurthy@google.com>,
- Shakeel Butt <shakeel.butt@linux.dev>, Jeroen de Borst
- <jeroendb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>,
- Willem de Bruijn <willemb@google.com>, Kaiyuan Zhang <kaiyuanz@google.com>
-References: <20240625024721.2140656-1-almasrymina@google.com>
- <20240625024721.2140656-12-almasrymina@google.com>
-Content-Language: en-US
-From: Pavel Begunkov <asml.silence@gmail.com>
-In-Reply-To: <20240625024721.2140656-12-almasrymina@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+Message-Id: <20240626-hid_hw_req_bpf-v2-12-cfd60fb6c79f@kernel.org>
+References: <20240626-hid_hw_req_bpf-v2-0-cfd60fb6c79f@kernel.org>
+In-Reply-To: <20240626-hid_hw_req_bpf-v2-0-cfd60fb6c79f@kernel.org>
+To: Jiri Kosina <jikos@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+ Shuah Khan <shuah@kernel.org>, Jonathan Corbet <corbet@lwn.net>
+Cc: linux-input@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ linux-doc@vger.kernel.org, Benjamin Tissoires <bentiss@kernel.org>
+X-Mailer: b4 0.13.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1719409602; l=4137;
+ i=bentiss@kernel.org; s=20230215; h=from:subject:message-id;
+ bh=8DVfI5Mgh3sBj3CpzjHKwk7ojiMdJpUgU0LXrBaKg2c=;
+ b=DvtSTPl9Sbeel8MPOCTiv0xr/zIBIx8/BnIBFF/7gK7Yik5kufwDTjLOlFE4C8CavsG79lPZW
+ dAQDSh/zHOnAqyrKfAvW448xXEFrBMKWxNpmKPQHR6ixZeHhFdbGTj6
+X-Developer-Key: i=bentiss@kernel.org; a=ed25519;
+ pk=7D1DyAVh6ajCkuUTudt/chMuXWIJHlv2qCsRkIizvFw=
 
-On 6/25/24 03:47, Mina Almasry wrote:
-> Add an interface for the user to notify the kernel that it is done
-> reading the devmem dmabuf frags returned as cmsg. The kernel will
-> drop the reference on the frags to make them available for reuse.
+Similar to test_multiply_events_wq: we receive one event and inject a
+new one. But given that this time we are already in the event hook, we
+can use hid_bpf_try_input_report() directly as this function will not
+sleep.
 
-The sock_devmem_dontneed loop is a bit crude, but that can
-be handled by follow up patches.
+Note that the injected event gets processed before the original one this
+way.
 
-Reviewed-by: Pavel Begunkov <asml.silence@gmail.com>
+Signed-off-by: Benjamin Tissoires <bentiss@kernel.org>
 
-> diff --git a/net/core/sock.c b/net/core/sock.c
-> index 9abc4fe259535..040c66ac26244 100644
-> --- a/net/core/sock.c
-> +++ b/net/core/sock.c
-...
->   
-> +#ifdef CONFIG_PAGE_POOL
-> +static noinline_for_stack int
-> +sock_devmem_dontneed(struct sock *sk, sockptr_t optval, unsigned int optlen)
-> +{
-> +	unsigned int num_tokens, i, j, k, netmem_num = 0;
-> +	struct dmabuf_token *tokens;
-> +	netmem_ref netmems[16];
-> +	int ret = 0;
-> +
-> +	if (sk->sk_type != SOCK_STREAM || sk->sk_protocol != IPPROTO_TCP)
-> +		return -EBADF;
-> +
-> +	if (optlen % sizeof(struct dmabuf_token) ||
-> +	    optlen > sizeof(*tokens) * 128)
-> +		return -EINVAL;
-> +
-> +	tokens = kvmalloc_array(128, sizeof(*tokens), GFP_KERNEL);
-> +	if (!tokens)
-> +		return -ENOMEM;
-> +
-> +	num_tokens = optlen / sizeof(struct dmabuf_token);
-> +	if (copy_from_sockptr(tokens, optval, optlen)) {
-> +		kvfree(tokens);
-> +		return -EFAULT;
-> +	}
-> +
-> +	xa_lock_bh(&sk->sk_user_frags);
-> +	for (i = 0; i < num_tokens; i++) {
-> +		for (j = 0; j < tokens[i].token_count; j++) {
-> +			netmem_ref netmem = (__force netmem_ref)__xa_erase(
-> +				&sk->sk_user_frags, tokens[i].token_start + j);
-> +
-> +			if (netmem &&
-> +			    !WARN_ON_ONCE(!netmem_is_net_iov(netmem))) {
-> +				netmems[netmem_num++] = netmem;
-> +				if (netmem_num == ARRAY_SIZE(netmems)) {
-> +					xa_unlock_bh(&sk->sk_user_frags);
-> +					for (k = 0; k < netmem_num; k++)
-> +						WARN_ON_ONCE(!napi_pp_put_page(netmems[k]));
-> +					netmem_num = 0;
-> +					xa_lock_bh(&sk->sk_user_frags);
-> +				}
-> +				ret++;
-> +			}
-> +		}
-> +	}
-> +
-> +	xa_unlock_bh(&sk->sk_user_frags);
-> +	for (k = 0; k < netmem_num; k++)
-> +		WARN_ON_ONCE(!napi_pp_put_page(netmems[k]));
-> +
-> +	kvfree(tokens);
-> +	return ret;
-> +}
-> +#endif
+---
+
+no changes in v2
+---
+ tools/testing/selftests/hid/hid_bpf.c              | 36 ++++++++++++++++++++
+ tools/testing/selftests/hid/progs/hid.c            | 39 ++++++++++++++++++++++
+ .../testing/selftests/hid/progs/hid_bpf_helpers.h  |  4 +++
+ 3 files changed, 79 insertions(+)
+
+diff --git a/tools/testing/selftests/hid/hid_bpf.c b/tools/testing/selftests/hid/hid_bpf.c
+index 31637b3b8db5..36bbad8e0f9f 100644
+--- a/tools/testing/selftests/hid/hid_bpf.c
++++ b/tools/testing/selftests/hid/hid_bpf.c
+@@ -1168,6 +1168,42 @@ TEST_F(hid_bpf, test_multiply_events_wq)
+ 	ASSERT_EQ(buf[1], 3);
+ }
+ 
++/*
++ * Attach hid_multiply_event to the given uhid device,
++ * retrieve and open the matching hidraw node,
++ * inject one event in the uhid device,
++ * check that the program sees it and can add extra data
++ */
++TEST_F(hid_bpf, test_multiply_events)
++{
++	const struct test_program progs[] = {
++		{ .name = "hid_test_multiply_events" },
++	};
++	__u8 buf[10] = {0};
++	int err;
++
++	LOAD_PROGRAMS(progs);
++
++	/* inject one event */
++	buf[0] = 1;
++	buf[1] = 42;
++	uhid_send_event(_metadata, self->uhid_fd, buf, 6);
++
++	/* read the data from hidraw */
++	memset(buf, 0, sizeof(buf));
++	err = read(self->hidraw_fd, buf, sizeof(buf));
++	ASSERT_EQ(err, 9) TH_LOG("read_hidraw");
++	ASSERT_EQ(buf[0], 2);
++	ASSERT_EQ(buf[1], 47);
++
++	/* read the data from hidraw */
++	memset(buf, 0, sizeof(buf));
++	err = read(self->hidraw_fd, buf, sizeof(buf));
++	ASSERT_EQ(err, 9) TH_LOG("read_hidraw");
++	ASSERT_EQ(buf[0], 2);
++	ASSERT_EQ(buf[1], 52);
++}
++
+ /*
+  * Attach hid_insert{0,1,2} to the given uhid device,
+  * retrieve and open the matching hidraw node,
+diff --git a/tools/testing/selftests/hid/progs/hid.c b/tools/testing/selftests/hid/progs/hid.c
+index f539a7a223cf..46feeb91d1d5 100644
+--- a/tools/testing/selftests/hid/progs/hid.c
++++ b/tools/testing/selftests/hid/progs/hid.c
+@@ -522,3 +522,42 @@ SEC(".struct_ops.link")
+ struct hid_bpf_ops test_multiply_events_wq = {
+ 	.hid_device_event = (void *)hid_test_multiply_events_wq,
+ };
++
++SEC("?struct_ops/hid_device_event")
++int BPF_PROG(hid_test_multiply_events, struct hid_bpf_ctx *hid_ctx, enum hid_report_type type)
++{
++	__u8 *data = hid_bpf_get_data(hid_ctx, 0 /* offset */, 9 /* size */);
++	__u8 buf[9];
++	int ret;
++
++	if (!data)
++		return 0; /* EPERM check */
++
++	if (data[0] != 1)
++		return 0;
++
++	/*
++	 * we have to use an intermediate buffer as hid_bpf_input_report
++	 * will memset data to \0
++	 */
++	__builtin_memcpy(buf, data, sizeof(buf));
++
++	buf[0] = 2;
++	buf[1] += 5;
++	ret = hid_bpf_try_input_report(hid_ctx, HID_INPUT_REPORT, buf, sizeof(buf));
++	if (ret < 0)
++		return ret;
++
++	/*
++	 * In real world we should reset the original buffer as data might be garbage now,
++	 * but it actually now has the content of 'buf'
++	 */
++	data[1] += 5;
++
++	return 9;
++}
++
++SEC(".struct_ops.link")
++struct hid_bpf_ops test_multiply_events = {
++	.hid_device_event = (void *)hid_test_multiply_events,
++};
+diff --git a/tools/testing/selftests/hid/progs/hid_bpf_helpers.h b/tools/testing/selftests/hid/progs/hid_bpf_helpers.h
+index 8014383846d2..c72e44321764 100644
+--- a/tools/testing/selftests/hid/progs/hid_bpf_helpers.h
++++ b/tools/testing/selftests/hid/progs/hid_bpf_helpers.h
+@@ -89,6 +89,10 @@ extern int hid_bpf_input_report(struct hid_bpf_ctx *ctx,
+ 				enum hid_report_type type,
+ 				__u8 *data,
+ 				size_t buf__sz) __ksym;
++extern int hid_bpf_try_input_report(struct hid_bpf_ctx *ctx,
++				    enum hid_report_type type,
++				    __u8 *data,
++				    size_t buf__sz) __ksym;
+ 
+ /* bpf_wq implementation */
+ extern int bpf_wq_init(struct bpf_wq *wq, void *p__map, unsigned int flags) __weak __ksym;
 
 -- 
-Pavel Begunkov
+2.44.0
+
