@@ -1,178 +1,204 @@
-Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAA4A191481;
-	Wed, 26 Jun 2024 18:59:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=167.114.26.122
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EEB08F47
+	for <bpf@vger.kernel.org>; Wed, 26 Jun 2024 20:18:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719428364; cv=none; b=EnBoXc5RmmBDo4YipMITDQHDHTS9d0nJUlbRj5IxZgmjH4LJdRXrACcvJzZTs/5NykcoGrq7O7Rgc9ZuW3GVl22qaIJxqsYkmbZ6Wxj+xyplSGvFoBYG1prGzrmwDhhpEcchfHXdIMHeuAjBWqDSE2kHv0BwdZFsMY0BWElKjmc=
+	t=1719433119; cv=none; b=t1XjmeNFh4n5GxkHLSMAj2BeuFuCETvHXjOXAVjBVVUkwnQUKmqQYwopiMXGNQRxKedx5efntacQmnvNe8XKrOLFTLZsDLQ3XJ+CtciXzGRweqexzw0NDaDb0hS8yFXW3GDVx7xAE8YbhQPIY1Lk1s2ucBqgxoM1Xu6N5bbdD0k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719428364; c=relaxed/simple;
-	bh=Ii+cxjz0MLUIaEg5tcYbEKz1AeI5UWrbwUMe27azAqI=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=i9X3VMJeDop13QvmjuO78Pq4l7bvHUe+2YQ+P+t7hvB4hd193o0ynXbBhBucjghyz+wbAET3Dt7F4vEc0oDsA9+LgcZvRuKAxQ2i/S5dIHgwam9nfQ0bWuyGZt+Zim6+y7K5mgphDXCVD7g+nGPyO/uL0caCwzflYIcOIMvrFM4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com; spf=pass smtp.mailfrom=efficios.com; dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b=wA0zd7b1; arc=none smtp.client-ip=167.114.26.122
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=efficios.com
+	s=arc-20240116; t=1719433119; c=relaxed/simple;
+	bh=6jv3aEP+pFdv8kOhpdn3PxPW2pOn7rB70BqlBqElIcE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=s2MvdagQCmnLiYwiXo1qP5HfqrIQf1XVq69jyiqqvgYs1QzvDWz9hgYJXHlolk4yZNt+iOHcF2JAwpPgh5kASkTd8+aCqN1GPIDdaoRDP9AB4v+bqDFoAHQzRuR7oTVOa/ZVYvySUIwiCpWCzMj3Nt+Q+BIGhm9pwYWGuaurBIc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jMlAHiwN; arc=none smtp.client-ip=209.85.221.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b="wA0zd7b1"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
-	s=smtpout1; t=1719428355;
-	bh=Ii+cxjz0MLUIaEg5tcYbEKz1AeI5UWrbwUMe27azAqI=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=wA0zd7b1/dZnXXwMP1KlkiWG3Ud7Q3K2yNDDBYqn5VFlS8Q1bdBL+RAoe4H2s8S0g
-	 mkj8MLq129ZbrM2BwaY6MSfTayemr7Gx+/i0MhwCPkaBI0i9cqHOrw/thvMTv7poD5
-	 ipzTogztWbtzUy3WidWH0HcfVyVY5Qfn5j8fgf4q6bdZ5sHw/g05e3OyLZ307OBAym
-	 niyn0neFJjVsPLgD06s+rWHnDtniND2KpKoZ0JFiiMX7g9x7EPBLGnehozbeCYeTGE
-	 ls8aodr2C7d79iwZ6078WzQoWgdMYRJRo1KXcp5UUTV28LeyF1BM1iBbr2ljf5TviX
-	 EQDRPPdQPh4yg==
-Received: from thinkos.internal.efficios.com (192-222-143-198.qc.cable.ebox.net [192.222.143.198])
-	by smtpout.efficios.com (Postfix) with ESMTPSA id 4W8WFt5zV5z17d1;
-	Wed, 26 Jun 2024 14:59:14 -0400 (EDT)
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-To: Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>
-Cc: linux-kernel@vger.kernel.org,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Yonghong Song <yhs@fb.com>,
-	"Paul E . McKenney" <paulmck@kernel.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Jiri Olsa <jolsa@redhat.com>,
-	Namhyung Kim <namhyung@kernel.org>,
-	bpf@vger.kernel.org,
-	Joel Fernandes <joel@joelfernandes.org>,
-	Michael Jeanson <mjeanson@efficios.com>
-Subject: [PATCH v5 6/8] tracing/bpf-trace: Add support for faultable tracepoints
-Date: Wed, 26 Jun 2024 14:59:39 -0400
-Message-Id: <20240626185941.68420-7-mathieu.desnoyers@efficios.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20240626185941.68420-1-mathieu.desnoyers@efficios.com>
-References: <20240626185941.68420-1-mathieu.desnoyers@efficios.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jMlAHiwN"
+Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-354b722fe81so4728154f8f.3
+        for <bpf@vger.kernel.org>; Wed, 26 Jun 2024 13:18:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1719433116; x=1720037916; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=PAEXjYZo3lQPILlHC/GV+hgZUNlRCbCxV9EK5vWYjJU=;
+        b=jMlAHiwNOh4W4qRneqbs/DYZSRcY2UVty68IfcR3prTk93pmdNY993HroqUB8oGcVh
+         uZAyigsbaGDsx8Bn+4ogvwdTnqoES49XlgIHS+HtUUdF/RDAD9fqA+C6EJfNL26t00lC
+         Hg3aIx1RDIOhFq+iaZA5kSy2JLucMbQgLyQS1CtsP9gd5/xclK5lrkPY1YIp7irTeTPK
+         QZZpBfhoT0JkFZCdHfKi3Y/BUfAhcHE65ErJIm4dpA+BtaLmbWck4FYlMhmEX9UvAtTC
+         n9jNyVV3jKx7hu9d0HgNKD9Kh+MGC63ra6/hXhTNmFq+/Vk7Xr6LEVUxRItukAx+0APB
+         IM8g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1719433116; x=1720037916;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=PAEXjYZo3lQPILlHC/GV+hgZUNlRCbCxV9EK5vWYjJU=;
+        b=c4kHvodmJZvvk5n06cQ3Q2kesdNRLkdNdU06aowOUJIUbRIulFYNJlNwTWbZbA/CNV
+         4r9HM8Hw/XvnU7Uwqxun4Ozklg7kjmkZrpcyCR/M857PSUZBEKjtC9M1qY5yxNovVwkb
+         i9G3RPUBqc+ePFVlTVfYpUr+61QUQ46UDrFM+bB0eppdkkdsg3bOsHqeN10FWSG1YID2
+         cdwmjTS2mt6LZjPwMetUaE8YWe1HWmCMVFr+Fnb/UCOORExJa2Ieg8suXxfDj7el44i4
+         jR++EcfNW52ERd3GEcGUtYZv8mlxSoks3biffok7z/teVqZvvyPYsJkapclzMRKop3Al
+         OhaQ==
+X-Gm-Message-State: AOJu0YzvLKiRyUC6uqepFt4xoFGy67PjoEDGSCXAAxqNZlAe2OOZGY1l
+	iw+l8Xphock95WbUCud5QzKlqKGc8imjk0++lyfmlN/z91DNSXVpZ3ls39zSYMynB7h9ARx2B+d
+	TtXTj2qFXsNqYsdv+f+Z/Z2sjpDo=
+X-Google-Smtp-Source: AGHT+IFxi6FL7ogCOlgz2xHpiGzd7g08U0egWS56iMS5+gIdwDynkQCu1VGD7FYIy8h+84Z6iQ6VMyBvZVQNazXX5+s=
+X-Received: by 2002:adf:f547:0:b0:362:4ce:2171 with SMTP id
+ ffacd0b85a97d-366e4f00ba5mr9394022f8f.52.1719433116200; Wed, 26 Jun 2024
+ 13:18:36 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20240625062857.92760-1-mattbobrowski@google.com>
+In-Reply-To: <20240625062857.92760-1-mattbobrowski@google.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Wed, 26 Jun 2024 13:18:25 -0700
+Message-ID: <CAADnVQKYXo9NpGEsfvgSeW_bXi-8BDHAYT0QkPv0gwh9g0CccQ@mail.gmail.com>
+Subject: Re: [PATCH v2 bpf 1/2] bpf: add missing check_func_arg_reg_off() to
+ prevent out-of-bounds memory accesses
+To: Matt Bobrowski <mattbobrowski@google.com>
+Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Eddy Z <eddyz87@gmail.com>, KP Singh <kpsingh@kernel.org>, 
+	Stanislav Fomichev <sdf@fomichev.me>, Jiri Olsa <jolsa@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-In preparation for converting system call enter/exit instrumentation
-into faultable tracepoints, make sure that bpf can handle registering to
-such tracepoints by explicitly disabling preemption within the bpf
-tracepoint probes to respect the current expectations within bpf tracing
-code.
+On Mon, Jun 24, 2024 at 11:29=E2=80=AFPM Matt Bobrowski
+<mattbobrowski@google.com> wrote:
+>
+> Currently, it's possible to pass in a modified CONST_PTR_TO_DYNPTR to
+> a global function as an argument. The adverse effects of this is that
+> BPF helpers can continue to make use of this modified
+> CONST_PTR_TO_DYNPTR from within the context of the global function,
+> which can unintentionally result in out-of-bounds memory accesses and
+> therefore compromise overall system stability i.e.
+>
+> [  244.157771] BUG: KASAN: slab-out-of-bounds in bpf_dynptr_data+0x137/0x=
+140
+> [  244.161345] Read of size 8 at addr ffff88810914be68 by task test_progs=
+/302
+> [  244.167151] CPU: 0 PID: 302 Comm: test_progs Tainted: G O E 6.10.0-rc3=
+-00131-g66b586715063 #533
+> [  244.174318] Call Trace:
+> [  244.175787]  <TASK>
+> [  244.177356]  dump_stack_lvl+0x66/0xa0
+> [  244.179531]  print_report+0xce/0x670
+> [  244.182314]  ? __virt_addr_valid+0x200/0x3e0
+> [  244.184908]  kasan_report+0xd7/0x110
+> [  244.187408]  ? bpf_dynptr_data+0x137/0x140
+> [  244.189714]  ? bpf_dynptr_data+0x137/0x140
+> [  244.192020]  bpf_dynptr_data+0x137/0x140
+> [  244.194264]  bpf_prog_b02a02fdd2bdc5fa_global_call_bpf_dynptr_data+0x2=
+2/0x26
+> [  244.198044]  bpf_prog_b0fe7b9d7dc3abde_callback_adjust_bpf_dynptr_reg_=
+off+0x1f/0x23
+> [  244.202136]  bpf_user_ringbuf_drain+0x2c7/0x570
+> [  244.204744]  ? 0xffffffffc0009e58
+> [  244.206593]  ? __pfx_bpf_user_ringbuf_drain+0x10/0x10
+> [  244.209795]  bpf_prog_33ab33f6a804ba2d_user_ringbuf_callback_const_ptr=
+_to_dynptr_reg_off+0x47/0x4b
+> [  244.215922]  bpf_trampoline_6442502480+0x43/0xe3
+> [  244.218691]  __x64_sys_prlimit64+0x9/0xf0
+> [  244.220912]  do_syscall_64+0xc1/0x1d0
+> [  244.223043]  entry_SYSCALL_64_after_hwframe+0x77/0x7f
+> [  244.226458] RIP: 0033:0x7ffa3eb8f059
+> [  244.228582] Code: 08 89 e8 5b 5d c3 66 2e 0f 1f 84 00 00 00 00 00 90 4=
+8 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <=
+48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d 8f 1d 0d 00 f7 d8 64 89 01 48
+> [  244.241307] RSP: 002b:00007ffa3e9c6eb8 EFLAGS: 00000206 ORIG_RAX: 0000=
+00000000012e
+> [  244.246474] RAX: ffffffffffffffda RBX: 00007ffa3e9c7cdc RCX: 00007ffa3=
+eb8f059
+> [  244.250478] RDX: 00007ffa3eb162b4 RSI: 0000000000000000 RDI: 00007ffa3=
+e9c7fb0
+> [  244.255396] RBP: 00007ffa3e9c6ed0 R08: 00007ffa3e9c76c0 R09: 000000000=
+0000000
+> [  244.260195] R10: 0000000000000000 R11: 0000000000000206 R12: fffffffff=
+fffff80
+> [  244.264201] R13: 000000000000001c R14: 00007ffc5d6b4260 R15: 00007ffa3=
+e1c7000
+> [  244.268303]  </TASK>
+>
+> Add a check_func_arg_reg_off() to the path in which the BPF verifier
+> verifies the arguments of global function arguments, specifically
+> those which take an argument of type ARG_PTR_TO_DYNPTR |
+> MEM_RDONLY. Also, process_dynptr_func() doesn't appear to perform any
+> explicit and strict type matching on the supplied register type, so
+> let's also enforce that a register either type PTR_TO_STACK or
+> CONST_PTR_TO_DYNPTR is by the caller.
 
-This change does not yet allow bpf to take page faults per se within its
-probe, but allows its existing probes to connect to faultable
-tracepoints.
+The fix makes sense, but I applied it to bpf-next tree.
+Since kfunc_dynptr_nullable_test3 had to be adjusted there.
 
-Link: https://lore.kernel.org/lkml/20231002202531.3160-1-mathieu.desnoyers@efficios.com/
-Co-developed-by: Michael Jeanson <mjeanson@efficios.com>
-Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Signed-off-by: Michael Jeanson <mjeanson@efficios.com>
-Cc: Steven Rostedt <rostedt@goodmis.org>
-Cc: Masami Hiramatsu <mhiramat@kernel.org>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Alexei Starovoitov <ast@kernel.org>
-Cc: Yonghong Song <yhs@fb.com>
-Cc: Paul E. McKenney <paulmck@kernel.org>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc: Mark Rutland <mark.rutland@arm.com>
-Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
-Cc: Jiri Olsa <jolsa@redhat.com>
-Cc: Namhyung Kim <namhyung@kernel.org>
-Cc: bpf@vger.kernel.org
-Cc: Joel Fernandes <joel@joelfernandes.org>
----
-Changes since v4:
-- Use DEFINE_INACTIVE_GUARD.
-- Add brackets to multiline 'if' statements.
----
- include/trace/bpf_probe.h | 20 ++++++++++++++++----
- kernel/trace/bpf_trace.c  | 12 +++++++++---
- 2 files changed, 25 insertions(+), 7 deletions(-)
+> Reported-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+> Acked-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+> Acked-by: Eduard Zingerman <eddyz87@gmail.com>
+> Signed-off-by: Matt Bobrowski <mattbobrowski@google.com>
+> ---
+>  kernel/bpf/verifier.c | 19 ++++++++++++-------
+>  1 file changed, 12 insertions(+), 7 deletions(-)
+>
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 214a9fa8c6fb..fe12463511f6 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -7715,6 +7715,13 @@ static int process_dynptr_func(struct bpf_verifier=
+_env *env, int regno, int insn
+>         struct bpf_reg_state *regs =3D cur_regs(env), *reg =3D &regs[regn=
+o];
+>         int err;
+>
+> +       if (reg->type !=3D PTR_TO_STACK && reg->type !=3D CONST_PTR_TO_DY=
+NPTR) {
+> +               verbose(env,
+> +                       "arg#%d expected pointer to stack or const struct=
+ bpf_dynptr\n",
+> +                       regno);
+> +               return -EINVAL;
+> +       }
+> +
+>         /* MEM_UNINIT and MEM_RDONLY are exclusive, when applied to an
+>          * ARG_PTR_TO_DYNPTR (or ARG_PTR_TO_DYNPTR | DYNPTR_TYPE_*):
+>          */
+> @@ -9464,6 +9471,10 @@ static int btf_check_func_arg_match(struct bpf_ver=
+ifier_env *env, int subprog,
+>                                 return -EINVAL;
+>                         }
+>                 } else if (arg->arg_type =3D=3D (ARG_PTR_TO_DYNPTR | MEM_=
+RDONLY)) {
+> +                       ret =3D check_func_arg_reg_off(env, reg, regno, A=
+RG_PTR_TO_DYNPTR);
+> +                       if (ret)
+> +                               return ret;
+> +
+>                         ret =3D process_dynptr_func(env, regno, -1, arg->=
+arg_type, 0);
+>                         if (ret)
+>                                 return ret;
+> @@ -11954,14 +11965,8 @@ static int check_kfunc_args(struct bpf_verifier_=
+env *env, struct bpf_kfunc_call_
+>                         break;
+>                 case KF_ARG_PTR_TO_DYNPTR:
+>                 {
+> -                       enum bpf_arg_type dynptr_arg_type =3D ARG_PTR_TO_=
+DYNPTR;
+>                         int clone_ref_obj_id =3D 0;
+> -
+> -                       if (reg->type !=3D PTR_TO_STACK &&
+> -                           reg->type !=3D CONST_PTR_TO_DYNPTR) {
+> -                               verbose(env, "arg#%d expected pointer to =
+stack or dynptr_ptr\n", i);
+> -                               return -EINVAL;
+> -                       }
+> +                       enum bpf_arg_type dynptr_arg_type =3D ARG_PTR_TO_=
+DYNPTR;
 
-diff --git a/include/trace/bpf_probe.h b/include/trace/bpf_probe.h
-index e609cd7da47e..96c1269dd88c 100644
---- a/include/trace/bpf_probe.h
-+++ b/include/trace/bpf_probe.h
-@@ -42,17 +42,29 @@
- /* tracepoints with more than 12 arguments will hit build error */
- #define CAST_TO_U64(...) CONCATENATE(__CAST, COUNT_ARGS(__VA_ARGS__))(__VA_ARGS__)
- 
--#define __BPF_DECLARE_TRACE(call, proto, args)				\
-+#define __BPF_DECLARE_TRACE(call, proto, args, tp_flags)		\
- static notrace void							\
- __bpf_trace_##call(void *__data, proto)					\
- {									\
- 	struct bpf_prog *prog = __data;					\
-+									\
-+	DEFINE_INACTIVE_GUARD(preempt_notrace, bpf_trace_guard);	\
-+									\
-+	if ((tp_flags) & TRACEPOINT_MAY_FAULT) {			\
-+		might_fault();						\
-+		activate_guard(preempt_notrace, bpf_trace_guard)();	\
-+	}								\
-+									\
- 	CONCATENATE(bpf_trace_run, COUNT_ARGS(args))(prog, CAST_TO_U64(args));	\
- }
- 
- #undef DECLARE_EVENT_CLASS
- #define DECLARE_EVENT_CLASS(call, proto, args, tstruct, assign, print)	\
--	__BPF_DECLARE_TRACE(call, PARAMS(proto), PARAMS(args))
-+	__BPF_DECLARE_TRACE(call, PARAMS(proto), PARAMS(args), 0)
-+
-+#undef DECLARE_EVENT_CLASS_MAY_FAULT
-+#define DECLARE_EVENT_CLASS_MAY_FAULT(call, proto, args, tstruct, assign, print) \
-+	__BPF_DECLARE_TRACE(call, PARAMS(proto), PARAMS(args), TRACEPOINT_MAY_FAULT)
- 
- /*
-  * This part is compiled out, it is only here as a build time check
-@@ -106,13 +118,13 @@ static inline void bpf_test_buffer_##call(void)				\
- 
- #undef DECLARE_TRACE
- #define DECLARE_TRACE(call, proto, args)				\
--	__BPF_DECLARE_TRACE(call, PARAMS(proto), PARAMS(args))		\
-+	__BPF_DECLARE_TRACE(call, PARAMS(proto), PARAMS(args), 0)	\
- 	__DEFINE_EVENT(call, call, PARAMS(proto), PARAMS(args), 0)
- 
- #undef DECLARE_TRACE_WRITABLE
- #define DECLARE_TRACE_WRITABLE(call, proto, args, size) \
- 	__CHECK_WRITABLE_BUF_SIZE(call, PARAMS(proto), PARAMS(args), size) \
--	__BPF_DECLARE_TRACE(call, PARAMS(proto), PARAMS(args)) \
-+	__BPF_DECLARE_TRACE(call, PARAMS(proto), PARAMS(args), 0) \
- 	__DEFINE_EVENT(call, call, PARAMS(proto), PARAMS(args), size)
- 
- #include TRACE_INCLUDE(TRACE_INCLUDE_FILE)
-diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-index 192de33d961f..873b0e885677 100644
---- a/kernel/trace/bpf_trace.c
-+++ b/kernel/trace/bpf_trace.c
-@@ -2443,9 +2443,15 @@ static int __bpf_probe_register(struct bpf_raw_event_map *btp, struct bpf_prog *
- 	if (prog->aux->max_tp_access > btp->writable_size)
- 		return -EINVAL;
- 
--	return tracepoint_probe_register_prio_flags(tp, (void *)btp->bpf_func,
--						    prog, TRACEPOINT_DEFAULT_PRIO,
--						    TRACEPOINT_MAY_EXIST);
-+	if (tp->flags & TRACEPOINT_MAY_FAULT) {
-+		return tracepoint_probe_register_prio_flags(tp, (void *)btp->bpf_func,
-+							    prog, TRACEPOINT_DEFAULT_PRIO,
-+							    TRACEPOINT_MAY_EXIST | TRACEPOINT_MAY_FAULT);
-+	} else {
-+		return tracepoint_probe_register_prio_flags(tp, (void *)btp->bpf_func,
-+							    prog, TRACEPOINT_DEFAULT_PRIO,
-+							    TRACEPOINT_MAY_EXIST);
-+	}
- }
- 
- int bpf_probe_register(struct bpf_raw_event_map *btp, struct bpf_prog *prog)
--- 
-2.39.2
-
+also fixed that to keep the original order and
+reduce diff noise.
