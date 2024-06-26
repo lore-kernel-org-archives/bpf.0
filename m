@@ -1,263 +1,188 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8A6618A935;
-	Wed, 26 Jun 2024 13:47:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23EEF18A930;
+	Wed, 26 Jun 2024 13:47:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719409631; cv=none; b=F7y19zPwQd+4kt9Q3kRBYiiMj0reaOmyESzp9i6VSAP3GcguHBfb1MfwlqgsTuOPlL9lVbAcejzDij/BBvR6pSrBVDl/nN75OzDG7YJx4bG40fj/etmsX6+Al89W9mtHUZ4Up9t/MomqWgxIVrCKvYzH6ceovTeQ+0ed2u5b4fw=
+	t=1719409631; cv=none; b=Nskh2wVHuRaa1O99Cj8Bm2HLncELHf9gg0S5cO2MFcWf+DJ5QWmj/ztOFLWN1l4l8ciQuY7JXlYUnYmvGsl9VASxHIctID9OA+uMiG7uHw6UjU2l3IUGF2WJ8DgYPPmgYVbEt7mGVws101olWQ31yrKIwXWeBs9anrWNFpZ5xZQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1719409631; c=relaxed/simple;
-	bh=hyfLdKibLMSyU1dBbJDQVjZCoODwC6YGKovbqR6PglA=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=CMs0Fb97/Nf6yDLX7m3DV4ilu5OK/nSechOFS0o7ZoukJR90qmCnhyKjotoNn4EC/wN1pTUyS8MtsyCxShTn4sCarbzXUnzOzN7qyKg8rlgN2R9xCZpbTTfBXOdSJrroorTRL+vehR3EmQAaWIih8z9o+fkeknGs1wF5VSyYlrE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CFY3prtF; arc=none smtp.client-ip=10.30.226.201
+	bh=rSsKiSc4dFI2tkoNlNTsDyIXyV57SbU85aojGhTzijM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=IS4L1n5z0jO+9GfrS7x+Wa7lw9lsHTpb7S7XR6iot1aDA3Q/HIzX6bPm7ic4H1lEeodrZx5zyLFW1dNryAiVtf55rvRX5jPFj7iSinw5tyogS/a9X9ONHknpaPUWhGO0UTfRYhifi03+RetQSmuhRGjU94nZlVpb/H9+yiDS4CE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MOY4waer; arc=none smtp.client-ip=209.85.218.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CFY3prtF"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 843D4C32789;
-	Wed, 26 Jun 2024 13:47:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1719409630;
-	bh=hyfLdKibLMSyU1dBbJDQVjZCoODwC6YGKovbqR6PglA=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=CFY3prtF1kVwvW5ygB4BQ9HytpUPjuxL/LiM8IB8TgfO304gbZ7TUEmV5ZO6xr1CE
-	 T/hY98O6Shqs0U5vMc81mb/hiK9ELoimFj6lOkgemudbc3geWBa3Q9179htJBFncdy
-	 mLP7hZx6ESALLadgm0tngm12LFRdkX3EWlt61ayBbXs1goNnirizia7/NAewjy+tQ6
-	 a38vlI218Sc8+UVBBL1v5NCB7+YXojCS4rTaoj40E7Me9UQJDndGXcEjTfl8uPKMWi
-	 z5bHhXzmk3IgukM+YRuADAod2/g70OAFGRsbf+8uap6wSQhCc8HUrdvCmVzVD+R3nE
-	 13Vu+wtOzcEFw==
-From: Benjamin Tissoires <bentiss@kernel.org>
-Date: Wed, 26 Jun 2024 15:46:32 +0200
-Subject: [PATCH HID v2 11/13] HID: bpf: allow hid_device_event hooks to
- inject input reports on self
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MOY4waer"
+Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-a6fdd947967so486955566b.2;
+        Wed, 26 Jun 2024 06:47:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1719409628; x=1720014428; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=RFl4a85rkCgH8ys4lWAdMJzDTuxnq6IRXeCuLnaU+Ko=;
+        b=MOY4waermEgQGuDE/Z8Y91XE2m4Ji5CPK4kC3p6Mnk2ayoMVI/SG65zt2wESlXtPfK
+         4KJ4dT4BFUpOpaqoqBlWyqtgZYxrT3/8odwLGRYevviDiMv3u7BAjD7RUzEyHt9YuKK5
+         PyXWs1hBKTH9vAuyEruOFF3/bHxu4fYyxjQDfEfEbzdkQ1G1fYGeJy8RNL/IUF816Hlz
+         8DMRrZjLvgY8p/ZJnJ4NUBnKKINfgZR8Qli/2ZiwTeDwklD+CYaVSCNTrIH/Mr/WvXQT
+         tZTWS4RHhJLwZZeQ+AJs86bufZTrzfKtVErT6dvxHXJQuZs4VFxORPXmfXFmDK01rV/i
+         kc/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1719409628; x=1720014428;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=RFl4a85rkCgH8ys4lWAdMJzDTuxnq6IRXeCuLnaU+Ko=;
+        b=Jnt35k//YwAVGuzHfZh8oJyhuoIesVL/tvbkqP0HEX8lnlYYeSrhRkx8Uz47TFmy3n
+         kCT2mmAk4/sMf1DMa4O0lGbfA5wwhDqD0FSCglggbXAzCO/UDnPedWOvbZbwqM9rlzPJ
+         EfqLAFhs3FbD6bisISS2jTTIhysCDFhbNfrzoRpxygkCR3Hkf9pk/kVmDJlPXjttsPCF
+         i0SQiGcf/K449qks1Sv77AJGFXWueLdGytrZ2igq43eECxIdhgw0XnBXOX2yUAglLdst
+         w5sme/tI2ApZ+uPfUfQoA7CirHzA7Xhh98WOwH1alnItst7faEuWNPTcgRtVFJKLS7Y6
+         aaFg==
+X-Forwarded-Encrypted: i=1; AJvYcCVoYWzSe3SpUqdUjR/pFPb+AQ8AeNv6+vEvMb/FqwD1Jj/8rWL2+IT4AJtujG9kDovVVffMBBtAWAWjdodOZON+2mpYJo4c29u3bAG3cRyAzBtEtQt3KFN8KHk5I20ToPonF0rVhgBRe6YEhUnFfy2/nY8fUZooUev6k9iSU2y/8BMAKNNFWs245rr/OZlHApRW3vR2BDOI4CgWpWCAcVX2RCN6StbQPQiVQNx0upsDi6wXGX1JFHRRe/rAjEihGgNy7pJRWrtxIPs9FTb25FK90L8e+kYWWDzptlkH6AE3o+U1SPJzGLYfFB4QFHQNG5DA0OYjE/Yk1t3OLy5peSrFpj3DZN/YUVKM7ne8IrVCKunUcT8Fv2sewFa5Nl0f/pH5RrwFLCw5cLR5rD9iAdkkckIboLLpMrTNgT4eC1KmyG+g4wjBPGXju9FeykxzWr/gHQ3pi3eeJdldectuPPLgZFNve5eWRnnYzvUUmT73ZT9koxqV0yjXMkxAx6fpF+DgPiZuVQ==
+X-Gm-Message-State: AOJu0YxHsN5weWDKj5nJu5tI3DNP8gz9E11kO3w4rW4xJSJWUBRqFnQM
+	7RKQEuGE3D6RX391dTfXUL4lQ/V4+llJST0mSkd2z4Fl9tEMsB6m
+X-Google-Smtp-Source: AGHT+IGD5mGfND6mvQHeN5VakSdcpLJO5iAUu9YTrHEpvfoG3vNqvyJwqGy3yIJ4e8gaM2b8isOyjg==
+X-Received: by 2002:a17:907:c01a:b0:a72:8c5e:f3d with SMTP id a640c23a62f3a-a728c5e112amr201037566b.49.1719409628168;
+        Wed, 26 Jun 2024 06:47:08 -0700 (PDT)
+Received: from [192.168.42.3] ([163.114.131.193])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a7244cbce5bsm425759166b.79.2024.06.26.06.47.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 26 Jun 2024 06:47:07 -0700 (PDT)
+Message-ID: <09bdd7e5-75ca-42d5-8e59-a8ec05da89c7@gmail.com>
+Date: Wed, 26 Jun 2024 14:47:13 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v13 11/13] net: add SO_DEVMEM_DONTNEED setsockopt
+ to release RX frags
+To: Mina Almasry <almasrymina@google.com>, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
+ linux-parisc@vger.kernel.org, sparclinux@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+ bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org
+Cc: "David S. Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>, Donald Hunter <donald.hunter@gmail.com>,
+ Jonathan Corbet <corbet@lwn.net>,
+ Richard Henderson <richard.henderson@linaro.org>,
+ Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner
+ <mattst88@gmail.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+ "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+ Helge Deller <deller@gmx.de>, Andreas Larsson <andreas@gaisler.com>,
+ Jesper Dangaard Brouer <hawk@kernel.org>,
+ Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+ Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
+ <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Arnd Bergmann <arnd@arndb.de>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
+ <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Steffen Klassert
+ <steffen.klassert@secunet.com>, Herbert Xu <herbert@gondor.apana.org.au>,
+ David Ahern <dsahern@kernel.org>,
+ Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+ Shuah Khan <shuah@kernel.org>, Sumit Semwal <sumit.semwal@linaro.org>,
+ =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+ Bagas Sanjaya <bagasdotme@gmail.com>, Christoph Hellwig <hch@infradead.org>,
+ Nikolay Aleksandrov <razor@blackwall.org>, David Wei <dw@davidwei.uk>,
+ Jason Gunthorpe <jgg@ziepe.ca>, Yunsheng Lin <linyunsheng@huawei.com>,
+ Shailend Chand <shailend@google.com>,
+ Harshitha Ramamurthy <hramamurthy@google.com>,
+ Shakeel Butt <shakeel.butt@linux.dev>, Jeroen de Borst
+ <jeroendb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>,
+ Willem de Bruijn <willemb@google.com>, Kaiyuan Zhang <kaiyuanz@google.com>
+References: <20240625024721.2140656-1-almasrymina@google.com>
+ <20240625024721.2140656-12-almasrymina@google.com>
+Content-Language: en-US
+From: Pavel Begunkov <asml.silence@gmail.com>
+In-Reply-To: <20240625024721.2140656-12-almasrymina@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240626-hid_hw_req_bpf-v2-11-cfd60fb6c79f@kernel.org>
-References: <20240626-hid_hw_req_bpf-v2-0-cfd60fb6c79f@kernel.org>
-In-Reply-To: <20240626-hid_hw_req_bpf-v2-0-cfd60fb6c79f@kernel.org>
-To: Jiri Kosina <jikos@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
- Shuah Khan <shuah@kernel.org>, Jonathan Corbet <corbet@lwn.net>
-Cc: linux-input@vger.kernel.org, linux-kernel@vger.kernel.org, 
- bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- linux-doc@vger.kernel.org, Benjamin Tissoires <bentiss@kernel.org>
-X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1719409602; l=8364;
- i=bentiss@kernel.org; s=20230215; h=from:subject:message-id;
- bh=hyfLdKibLMSyU1dBbJDQVjZCoODwC6YGKovbqR6PglA=;
- b=4nq40RQYWfU9QD8TJ/y5+gtnU30IuWvlup3ZU+fqs3pHkQD0yjaQBe6mHc1TQweBUZPfwOjjU
- 6RJVgfE4QU9DCvA+d6TBzA3wMKo85x9h6KoqUyDrktfDDNW58Ck/rat
-X-Developer-Key: i=bentiss@kernel.org; a=ed25519;
- pk=7D1DyAVh6ajCkuUTudt/chMuXWIJHlv2qCsRkIizvFw=
 
-This is the same logic than hid_hw_raw_request or hid_hw_output_report:
-we can allow hid_bpf_try_input_report to be called from a hook on
-hid_input_report if we ensure that the call can not be made twice in a
-row.
+On 6/25/24 03:47, Mina Almasry wrote:
+> Add an interface for the user to notify the kernel that it is done
+> reading the devmem dmabuf frags returned as cmsg. The kernel will
+> drop the reference on the frags to make them available for reuse.
 
-There is one extra subtlety in which there is a lock in hid_input_report.
-But given that we can detect if we are already in the hook, we can notify
-hid_input_report to not take the lock. This is done by checking if
-ctx_kern data is valid or null, and if it is equal to the dedicated
-incoming data buffer.
+The sock_devmem_dontneed loop is a bit crude, but that can
+be handled by follow up patches.
 
-In order to have more control on whether the lock needs to be taken or not
-we introduce a new kfunc for it: hid_bpf_try_input_report()
+Reviewed-by: Pavel Begunkov <asml.silence@gmail.com>
 
-Signed-off-by: Benjamin Tissoires <bentiss@kernel.org>
-
----
-
-no changes in v2
----
- Documentation/hid/hid-bpf.rst      |  2 +-
- drivers/hid/bpf/hid_bpf_dispatch.c | 56 ++++++++++++++++++++++++++++++++------
- drivers/hid/hid-core.c             |  5 ++--
- include/linux/hid_bpf.h            |  6 ++--
- 4 files changed, 55 insertions(+), 14 deletions(-)
-
-diff --git a/Documentation/hid/hid-bpf.rst b/Documentation/hid/hid-bpf.rst
-index 8ae8f49801cb..5939eeafb361 100644
---- a/Documentation/hid/hid-bpf.rst
-+++ b/Documentation/hid/hid-bpf.rst
-@@ -202,7 +202,7 @@ Available API that can be used in syscall HID-BPF programs or in sleepable HID-B
- -------------------------------------------------------------------------------------------------------
- 
- .. kernel-doc:: drivers/hid/bpf/hid_bpf_dispatch.c
--   :identifiers: hid_bpf_hw_request hid_bpf_hw_output_report hid_bpf_input_report hid_bpf_allocate_context hid_bpf_release_context
-+   :identifiers: hid_bpf_hw_request hid_bpf_hw_output_report hid_bpf_input_report hid_bpf_try_input_report hid_bpf_allocate_context hid_bpf_release_context
- 
- General overview of a HID-BPF program
- =====================================
-diff --git a/drivers/hid/bpf/hid_bpf_dispatch.c b/drivers/hid/bpf/hid_bpf_dispatch.c
-index 1fb321545db0..60d12fcd28bd 100644
---- a/drivers/hid/bpf/hid_bpf_dispatch.c
-+++ b/drivers/hid/bpf/hid_bpf_dispatch.c
-@@ -24,7 +24,7 @@ EXPORT_SYMBOL(hid_ops);
- 
- u8 *
- dispatch_hid_bpf_device_event(struct hid_device *hdev, enum hid_report_type type, u8 *data,
--			      u32 *size, int interrupt, u64 source)
-+			      u32 *size, int interrupt, u64 source, bool from_bpf)
- {
- 	struct hid_bpf_ctx_kern ctx_kern = {
- 		.ctx = {
-@@ -33,6 +33,7 @@ dispatch_hid_bpf_device_event(struct hid_device *hdev, enum hid_report_type type
- 			.size = *size,
- 		},
- 		.data = hdev->bpf.device_data,
-+		.from_bpf = from_bpf,
- 	};
- 	struct hid_bpf_ops *e;
- 	int ret;
-@@ -486,6 +487,50 @@ hid_bpf_hw_output_report(struct hid_bpf_ctx *ctx, __u8 *buf, size_t buf__sz)
- 	return ret;
- }
- 
-+static int
-+__hid_bpf_input_report(struct hid_bpf_ctx *ctx, enum hid_report_type type, u8 *buf,
-+		       size_t size, bool lock_already_taken)
-+{
-+	struct hid_bpf_ctx_kern *ctx_kern;
-+	int ret;
-+
-+	ctx_kern = container_of(ctx, struct hid_bpf_ctx_kern, ctx);
-+	if (ctx_kern->from_bpf)
-+		return -EDEADLOCK;
-+
-+	/* check arguments */
-+	ret = __hid_bpf_hw_check_params(ctx, buf, &size, type);
-+	if (ret)
-+		return ret;
-+
-+	return hid_ops->hid_input_report(ctx->hid, type, buf, size, 0, (__u64)ctx, true,
-+					 lock_already_taken);
-+}
-+
-+/**
-+ * hid_bpf_try_input_report - Inject a HID report in the kernel from a HID device
-+ *
-+ * @ctx: the HID-BPF context previously allocated in hid_bpf_allocate_context()
-+ * @type: the type of the report (%HID_INPUT_REPORT, %HID_FEATURE_REPORT, %HID_OUTPUT_REPORT)
-+ * @buf: a %PTR_TO_MEM buffer
-+ * @buf__sz: the size of the data to transfer
-+ *
-+ * Returns %0 on success, a negative error code otherwise. This function will immediately
-+ * fail if the device is not available, thus can be safely used in IRQ context.
-+ */
-+__bpf_kfunc int
-+hid_bpf_try_input_report(struct hid_bpf_ctx *ctx, enum hid_report_type type, u8 *buf,
-+			 const size_t buf__sz)
-+{
-+	struct hid_bpf_ctx_kern *ctx_kern;
-+	bool from_hid_event_hook;
-+
-+	ctx_kern = container_of(ctx, struct hid_bpf_ctx_kern, ctx);
-+	from_hid_event_hook = ctx_kern->data && ctx_kern->data == ctx->hid->bpf.device_data;
-+
-+	return __hid_bpf_input_report(ctx, type, buf, buf__sz, from_hid_event_hook);
-+}
-+
- /**
-  * hid_bpf_input_report - Inject a HID report in the kernel from a HID device
-  *
-@@ -502,7 +547,6 @@ __bpf_kfunc int
- hid_bpf_input_report(struct hid_bpf_ctx *ctx, enum hid_report_type type, u8 *buf,
- 		     const size_t buf__sz)
- {
--	size_t size = buf__sz;
- 	int ret;
- 
- 	ret = down_interruptible(&ctx->hid->driver_input_lock);
-@@ -510,12 +554,7 @@ hid_bpf_input_report(struct hid_bpf_ctx *ctx, enum hid_report_type type, u8 *buf
- 		return ret;
- 
- 	/* check arguments */
--	ret = __hid_bpf_hw_check_params(ctx, buf, &size, type);
--	if (ret)
--		return ret;
--
--	ret = hid_ops->hid_input_report(ctx->hid, type, buf, size, 0, (__u64)ctx,
--					true /* lock_already_taken */);
-+	ret = __hid_bpf_input_report(ctx, type, buf, buf__sz, true /* lock_already_taken */);
- 
- 	up(&ctx->hid->driver_input_lock);
- 
-@@ -534,6 +573,7 @@ BTF_ID_FLAGS(func, hid_bpf_release_context, KF_RELEASE | KF_SLEEPABLE)
- BTF_ID_FLAGS(func, hid_bpf_hw_request, KF_SLEEPABLE)
- BTF_ID_FLAGS(func, hid_bpf_hw_output_report, KF_SLEEPABLE)
- BTF_ID_FLAGS(func, hid_bpf_input_report, KF_SLEEPABLE)
-+BTF_ID_FLAGS(func, hid_bpf_try_input_report)
- BTF_KFUNCS_END(hid_bpf_kfunc_ids)
- 
- static const struct btf_kfunc_id_set hid_bpf_kfunc_set = {
-diff --git a/drivers/hid/hid-core.c b/drivers/hid/hid-core.c
-index e9b5f44683fd..52a75afe3e7d 100644
---- a/drivers/hid/hid-core.c
-+++ b/drivers/hid/hid-core.c
-@@ -2027,7 +2027,7 @@ EXPORT_SYMBOL_GPL(hid_report_raw_event);
- 
- 
- static int __hid_input_report(struct hid_device *hid, enum hid_report_type type,
--			      u8 *data, u32 size, int interrupt, u64 source,
-+			      u8 *data, u32 size, int interrupt, u64 source, bool from_bpf,
- 			      bool lock_already_taken)
- {
- 	struct hid_report_enum *report_enum;
-@@ -2053,7 +2053,7 @@ static int __hid_input_report(struct hid_device *hid, enum hid_report_type type,
- 	report_enum = hid->report_enum + type;
- 	hdrv = hid->driver;
- 
--	data = dispatch_hid_bpf_device_event(hid, type, data, &size, interrupt, source);
-+	data = dispatch_hid_bpf_device_event(hid, type, data, &size, interrupt, source, from_bpf);
- 	if (IS_ERR(data)) {
- 		ret = PTR_ERR(data);
- 		goto unlock;
-@@ -2105,6 +2105,7 @@ int hid_input_report(struct hid_device *hid, enum hid_report_type type, u8 *data
- 		     int interrupt)
- {
- 	return __hid_input_report(hid, type, data, size, interrupt, 0,
-+				  false, /* from_bpf */
- 				  false /* lock_already_taken */);
- }
- EXPORT_SYMBOL_GPL(hid_input_report);
-diff --git a/include/linux/hid_bpf.h b/include/linux/hid_bpf.h
-index 7f04353d09e9..93546ee7677a 100644
---- a/include/linux/hid_bpf.h
-+++ b/include/linux/hid_bpf.h
-@@ -72,7 +72,7 @@ struct hid_ops {
- 	int (*hid_hw_output_report)(struct hid_device *hdev, __u8 *buf, size_t len,
- 				    __u64 source, bool from_bpf);
- 	int (*hid_input_report)(struct hid_device *hid, enum hid_report_type type,
--				u8 *data, u32 size, int interrupt, u64 source,
-+				u8 *data, u32 size, int interrupt, u64 source, bool from_bpf,
- 				bool lock_already_taken);
- 	struct module *owner;
- 	const struct bus_type *bus_type;
-@@ -195,7 +195,7 @@ struct hid_bpf {
- 
- #ifdef CONFIG_HID_BPF
- u8 *dispatch_hid_bpf_device_event(struct hid_device *hid, enum hid_report_type type, u8 *data,
--				  u32 *size, int interrupt, u64 source);
-+				  u32 *size, int interrupt, u64 source, bool from_bpf);
- int dispatch_hid_bpf_raw_requests(struct hid_device *hdev,
- 				  unsigned char reportnum, __u8 *buf,
- 				  u32 size, enum hid_report_type rtype,
-@@ -211,7 +211,7 @@ u8 *call_hid_bpf_rdesc_fixup(struct hid_device *hdev, u8 *rdesc, unsigned int *s
- #else /* CONFIG_HID_BPF */
- static inline u8 *dispatch_hid_bpf_device_event(struct hid_device *hid, enum hid_report_type type,
- 						u8 *data, u32 *size, int interrupt,
--						u64 source) { return data; }
-+						u64 source, bool from_bpf) { return data; }
- static inline int dispatch_hid_bpf_raw_requests(struct hid_device *hdev,
- 						unsigned char reportnum, u8 *buf,
- 						u32 size, enum hid_report_type rtype,
+> diff --git a/net/core/sock.c b/net/core/sock.c
+> index 9abc4fe259535..040c66ac26244 100644
+> --- a/net/core/sock.c
+> +++ b/net/core/sock.c
+...
+>   
+> +#ifdef CONFIG_PAGE_POOL
+> +static noinline_for_stack int
+> +sock_devmem_dontneed(struct sock *sk, sockptr_t optval, unsigned int optlen)
+> +{
+> +	unsigned int num_tokens, i, j, k, netmem_num = 0;
+> +	struct dmabuf_token *tokens;
+> +	netmem_ref netmems[16];
+> +	int ret = 0;
+> +
+> +	if (sk->sk_type != SOCK_STREAM || sk->sk_protocol != IPPROTO_TCP)
+> +		return -EBADF;
+> +
+> +	if (optlen % sizeof(struct dmabuf_token) ||
+> +	    optlen > sizeof(*tokens) * 128)
+> +		return -EINVAL;
+> +
+> +	tokens = kvmalloc_array(128, sizeof(*tokens), GFP_KERNEL);
+> +	if (!tokens)
+> +		return -ENOMEM;
+> +
+> +	num_tokens = optlen / sizeof(struct dmabuf_token);
+> +	if (copy_from_sockptr(tokens, optval, optlen)) {
+> +		kvfree(tokens);
+> +		return -EFAULT;
+> +	}
+> +
+> +	xa_lock_bh(&sk->sk_user_frags);
+> +	for (i = 0; i < num_tokens; i++) {
+> +		for (j = 0; j < tokens[i].token_count; j++) {
+> +			netmem_ref netmem = (__force netmem_ref)__xa_erase(
+> +				&sk->sk_user_frags, tokens[i].token_start + j);
+> +
+> +			if (netmem &&
+> +			    !WARN_ON_ONCE(!netmem_is_net_iov(netmem))) {
+> +				netmems[netmem_num++] = netmem;
+> +				if (netmem_num == ARRAY_SIZE(netmems)) {
+> +					xa_unlock_bh(&sk->sk_user_frags);
+> +					for (k = 0; k < netmem_num; k++)
+> +						WARN_ON_ONCE(!napi_pp_put_page(netmems[k]));
+> +					netmem_num = 0;
+> +					xa_lock_bh(&sk->sk_user_frags);
+> +				}
+> +				ret++;
+> +			}
+> +		}
+> +	}
+> +
+> +	xa_unlock_bh(&sk->sk_user_frags);
+> +	for (k = 0; k < netmem_num; k++)
+> +		WARN_ON_ONCE(!napi_pp_put_page(netmems[k]));
+> +
+> +	kvfree(tokens);
+> +	return ret;
+> +}
+> +#endif
 
 -- 
-2.44.0
-
+Pavel Begunkov
