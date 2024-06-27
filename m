@@ -1,34 +1,34 @@
 Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BA1F198A2C;
-	Thu, 27 Jun 2024 15:23:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77E0B1991BF;
+	Thu, 27 Jun 2024 15:23:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=167.114.26.122
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719501794; cv=none; b=iLk8GFs2Aaf4GBK1cEX39ETH5GpNK1FOolU2EiFhlitLRk4zrbiY9x0gEkw3JoLMRnoY82gA8gKCQEMVarGYkuobI6e+PEMRTCKLuAA8L6A8aESwLEHL3wBV8ohvDSqv8etvhufIg7U5+NVVKp/tK2g7JtUbp/dPfARL9U72nEE=
+	t=1719501795; cv=none; b=p7ulKJGYZ6X7WXiiz2+10BrUfLvVIMVGgU14lFzqM8amo9jxlRnkSkYryGKRAxRPoZM3iwHjJY9wWAXrjX6UUO+bCACOb9fTh6NZaF3ofvb+u74tJuw7ZgDHPyIUEWXyKwivbeCoKB2hE0xohgPq/kwlvKtqqNMR4trIVaWeLHI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719501794; c=relaxed/simple;
-	bh=5KxhwtYs0VwKO6/mQqYE9U67KELGGajoSLZw7rpHpkU=;
+	s=arc-20240116; t=1719501795; c=relaxed/simple;
+	bh=PLilsDQe1SB8Sc5yvuTGO9LSAXut9VnHgr6OZBAMHIQ=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=Bki0ciYr4lzDZK9sz9TCYefkfokfOVMw9mCytRsm4k8IO7muUu4qp1XDoTQTBt0BK5GO9VpteU4uMEUce4f/Xtk376JnvX+TdCt/GwExmmh3j/X0OdGfPI3FoBqfcrQjOcBlW0laVzgcLDu6lVJ5doupyR9D52i4WytoKJc1gN4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com; spf=pass smtp.mailfrom=efficios.com; dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b=weTEf1Uj; arc=none smtp.client-ip=167.114.26.122
+	 MIME-Version; b=mCJy0W+82IgW8s9e2t4ruvMquy5xFunWDydQWbg1bfqQyh9TvrHBD5z/nrTI1p4h3lKFyrtQXtp/SVqfZGzZwJadppcN7YqHr6uY6nJLTRqrgawK5toNCjoQES9EFa5bW9u1YUgF4FkZqWSa/KBlOESQz7V3ah2H96F2+lpafzU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com; spf=pass smtp.mailfrom=efficios.com; dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b=kQZZotTt; arc=none smtp.client-ip=167.114.26.122
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=efficios.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b="weTEf1Uj"
+	dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b="kQZZotTt"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
-	s=smtpout1; t=1719501790;
-	bh=5KxhwtYs0VwKO6/mQqYE9U67KELGGajoSLZw7rpHpkU=;
+	s=smtpout1; t=1719501791;
+	bh=PLilsDQe1SB8Sc5yvuTGO9LSAXut9VnHgr6OZBAMHIQ=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=weTEf1UjoMOqQsQP2F8YarQbk6gCl+qO2zvWREhaSx0v1DRodyyr4VDGVAzwxhWJs
-	 bvqxhPwnU9jV+nOWChY4xFYAffbe9+/MuFzZ0AxmC5qdwDDkXdlovifyPNgWmr1j2G
-	 MR6hO67Fl65rt0qppDAn8QLz2GdrdJuRleSQHTkDgIhB+it3g2hT+2/6sPoTYZalov
-	 N7ESVVMaWkQJ0rjxWhgcoCWe/1DD2eu5NqktreZ7Zf7SaMeTrB6PuyBe1+QLTSAcHA
-	 fNWZfU1qfPDx9aoY/3zR7i4C8rPmcYzzWifPoFJObu2i9QIZhcJ5NtnRcWghhGhfKo
-	 /z/45X5jPDuyA==
+	b=kQZZotTt80CS23lVbz/NKG52CokcfXwTj2G36q6EMRK6UBSmCQgotDi85CSPFrUNK
+	 uHt+nJMW+fsmLhK4cSiOFLfrKSFVShWZD/o0IvWB23kgkhg55J7wFM/STm8hLNG8vH
+	 ZlLq/mdaxuGhe0de28Qauc0WF80T2G6zZHVmNt4lT3iun5C9JxCRM1sx5scF92j+0H
+	 dfIr//Sfn8GB4KFQVAKoy4Q1FzHSildV+MoA+/Yn00fGp59bglijBGdCxS1wvIi3DW
+	 Q7hTaT9OSDKoDKzpFf+/+QRMavG/IurJbESaEuqUzpCDqZGCvWgq7WvEWSStqc4AFj
+	 mdxoN/Svv2ZeA==
 Received: from thinkos.internal.efficios.com (192-222-143-198.qc.cable.ebox.net [192.222.143.198])
-	by smtpout.efficios.com (Postfix) with ESMTPSA id 4W92Q564YZz17gG;
-	Thu, 27 Jun 2024 11:23:09 -0400 (EDT)
+	by smtpout.efficios.com (Postfix) with ESMTPSA id 4W92Q66Ddcz17gH;
+	Thu, 27 Jun 2024 11:23:10 -0400 (EDT)
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 To: Steven Rostedt <rostedt@goodmis.org>,
 	Masami Hiramatsu <mhiramat@kernel.org>
@@ -48,9 +48,9 @@ Cc: linux-trace-kernel@vger.kernel.org,
 	bpf@vger.kernel.org,
 	Joel Fernandes <joel@joelfernandes.org>,
 	Michael Jeanson <mjeanson@efficios.com>
-Subject: [PATCH v5 5/8] tracing/ftrace: Add support for faultable tracepoints
-Date: Thu, 27 Jun 2024 11:23:37 -0400
-Message-Id: <20240627152340.82413-6-mathieu.desnoyers@efficios.com>
+Subject: [PATCH v5 7/8] tracing/perf: Add support for faultable tracepoints
+Date: Thu, 27 Jun 2024 11:23:39 -0400
+Message-Id: <20240627152340.82413-8-mathieu.desnoyers@efficios.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20240627152340.82413-1-mathieu.desnoyers@efficios.com>
 References: <20240627152340.82413-1-mathieu.desnoyers@efficios.com>
@@ -63,19 +63,19 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
 In preparation for converting system call enter/exit instrumentation
-into faultable tracepoints, make sure that ftrace can handle registering
-to such tracepoints by explicitly disabling preemption within the ftrace
-tracepoint probes to respect the current expectations within ftrace ring
+into faultable tracepoints, make sure that perf can handle registering
+to such tracepoints by explicitly disabling preemption within the perf
+tracepoint probes to respect the current expectations within perf ring
 buffer code.
 
-This change does not yet allow ftrace to take page faults per se within
+This change does not yet allow perf to take page faults per se within
 its probe, but allows its existing probes to connect to faultable
 tracepoints.
 
 Link: https://lore.kernel.org/lkml/20231002202531.3160-1-mathieu.desnoyers@efficios.com/
 Co-developed-by: Michael Jeanson <mjeanson@efficios.com>
-Signed-off-by: Michael Jeanson <mjeanson@efficios.com>
 Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Signed-off-by: Michael Jeanson <mjeanson@efficios.com>
 Cc: Steven Rostedt <rostedt@goodmis.org>
 Cc: Masami Hiramatsu <mhiramat@kernel.org>
 Cc: Peter Zijlstra <peterz@infradead.org>
@@ -93,116 +93,28 @@ Cc: Joel Fernandes <joel@joelfernandes.org>
 ---
 Changes since v4:
 - Use DEFINE_INACTIVE_GUARD.
-- Add brackets to multiline 'if' statements.
 ---
- include/trace/trace_events.h | 64 ++++++++++++++++++++++++++++++++++--
- kernel/trace/trace_events.c  | 28 ++++++++++++----
- 2 files changed, 83 insertions(+), 9 deletions(-)
+ include/trace/perf.h | 22 ++++++++++++++++++++--
+ 1 file changed, 20 insertions(+), 2 deletions(-)
 
-diff --git a/include/trace/trace_events.h b/include/trace/trace_events.h
-index df590eea8ae4..c887f7b6fbe9 100644
---- a/include/trace/trace_events.h
-+++ b/include/trace/trace_events.h
-@@ -45,6 +45,16 @@
- 			     PARAMS(print));		       \
- 	DEFINE_EVENT(name, name, PARAMS(proto), PARAMS(args));
- 
-+#undef TRACE_EVENT_MAY_FAULT
-+#define TRACE_EVENT_MAY_FAULT(name, proto, args, tstruct, assign, print) \
-+	DECLARE_EVENT_CLASS_MAY_FAULT(name,		       \
-+			     PARAMS(proto),		       \
-+			     PARAMS(args),		       \
-+			     PARAMS(tstruct),		       \
-+			     PARAMS(assign),		       \
-+			     PARAMS(print));		       \
-+	DEFINE_EVENT(name, name, PARAMS(proto), PARAMS(args));
-+
- #include "stages/stage1_struct_define.h"
- 
- #undef DECLARE_EVENT_CLASS
-@@ -57,6 +67,11 @@
- 									\
- 	static struct trace_event_class event_class_##name;
- 
-+#undef DECLARE_EVENT_CLASS_MAY_FAULT
-+#define DECLARE_EVENT_CLASS_MAY_FAULT(name, proto, args, tstruct, assign, print) \
-+	DECLARE_EVENT_CLASS(name, PARAMS(proto), PARAMS(args),		\
-+			    PARAMS(tstruct), PARAMS(assign), PARAMS(print))
-+
- #undef DEFINE_EVENT
- #define DEFINE_EVENT(template, name, proto, args)	\
- 	static struct trace_event_call	__used		\
-@@ -80,7 +95,7 @@
- #undef TRACE_EVENT_FN_MAY_FAULT
- #define TRACE_EVENT_FN_MAY_FAULT(name, proto, args, tstruct,		\
- 		assign, print, reg, unreg)				\
--	TRACE_EVENT(name, PARAMS(proto), PARAMS(args),			\
-+	TRACE_EVENT_MAY_FAULT(name, PARAMS(proto), PARAMS(args),	\
- 		PARAMS(tstruct), PARAMS(assign), PARAMS(print))		\
- 
- #undef TRACE_EVENT_FN_COND
-@@ -123,6 +138,11 @@
- 		tstruct;						\
- 	};
- 
-+#undef DECLARE_EVENT_CLASS_MAY_FAULT
-+#define DECLARE_EVENT_CLASS_MAY_FAULT(call, proto, args, tstruct, assign, print) \
-+	DECLARE_EVENT_CLASS(call, PARAMS(proto), PARAMS(args),		\
-+			    PARAMS(tstruct), PARAMS(assign), PARAMS(print))
-+
- #undef DEFINE_EVENT
- #define DEFINE_EVENT(template, name, proto, args)
- 
-@@ -214,6 +234,11 @@ static struct trace_event_functions trace_event_type_funcs_##call = {	\
- 	.trace			= trace_raw_output_##call,		\
- };
- 
-+#undef DECLARE_EVENT_CLASS_MAY_FAULT
-+#define DECLARE_EVENT_CLASS_MAY_FAULT(call, proto, args, tstruct, assign, print) \
-+	DECLARE_EVENT_CLASS(call, PARAMS(proto), PARAMS(args),		\
-+			    PARAMS(tstruct), PARAMS(assign), PARAMS(print))
-+
- #undef DEFINE_EVENT_PRINT
- #define DEFINE_EVENT_PRINT(template, call, proto, args, print)		\
- static notrace enum print_line_t					\
-@@ -250,6 +275,11 @@ static struct trace_event_fields trace_event_fields_##call[] = {	\
- 	tstruct								\
- 	{} };
- 
-+#undef DECLARE_EVENT_CLASS_MAY_FAULT
-+#define DECLARE_EVENT_CLASS_MAY_FAULT(call, proto, args, tstruct, assign, print) \
-+	DECLARE_EVENT_CLASS(call, PARAMS(proto), PARAMS(args),		\
-+			    PARAMS(tstruct), PARAMS(assign), PARAMS(print))
-+
- #undef DEFINE_EVENT_PRINT
- #define DEFINE_EVENT_PRINT(template, name, proto, args, print)
- 
-@@ -271,6 +301,11 @@ static inline notrace int trace_event_get_offsets_##call(		\
- 	return __data_size;						\
- }
- 
-+#undef DECLARE_EVENT_CLASS_MAY_FAULT
-+#define DECLARE_EVENT_CLASS_MAY_FAULT(call, proto, args, tstruct, assign, print) \
-+	DECLARE_EVENT_CLASS(call, PARAMS(proto), PARAMS(args),		\
-+			    PARAMS(tstruct), PARAMS(assign), PARAMS(print))
-+
- #include TRACE_INCLUDE(TRACE_INCLUDE_FILE)
- 
- /*
-@@ -380,8 +415,8 @@ static inline notrace int trace_event_get_offsets_##call(		\
- 
- #include "stages/stage6_event_callback.h"
+diff --git a/include/trace/perf.h b/include/trace/perf.h
+index 2c11181c82e0..161e1655b953 100644
+--- a/include/trace/perf.h
++++ b/include/trace/perf.h
+@@ -12,8 +12,8 @@
+ #undef __perf_task
+ #define __perf_task(t)	(__task = (t))
  
 -#undef DECLARE_EVENT_CLASS
 -#define DECLARE_EVENT_CLASS(call, proto, args, tstruct, assign, print)	\
 +#undef _DECLARE_EVENT_CLASS
 +#define _DECLARE_EVENT_CLASS(call, proto, args, tstruct, assign, print, tp_flags) \
- 									\
  static notrace void							\
- trace_event_raw_event_##call(void *__data, proto)			\
-@@ -392,6 +427,13 @@ trace_event_raw_event_##call(void *__data, proto)			\
- 	struct trace_event_raw_##call *entry;				\
+ perf_trace_##call(void *__data, proto)					\
+ {									\
+@@ -28,6 +28,13 @@ perf_trace_##call(void *__data, proto)					\
  	int __data_size;						\
+ 	int rctx;							\
  									\
 +	DEFINE_INACTIVE_GUARD(preempt_notrace, trace_event_guard);	\
 +									\
@@ -211,85 +123,27 @@ index df590eea8ae4..c887f7b6fbe9 100644
 +		activate_guard(preempt_notrace, trace_event_guard)();	\
 +	}								\
 +									\
- 	if (trace_trigger_soft_disabled(trace_file))			\
- 		return;							\
+ 	__data_size = trace_event_get_offsets_##call(&__data_offsets, args); \
  									\
-@@ -409,6 +451,17 @@ trace_event_raw_event_##call(void *__data, proto)			\
- 									\
- 	trace_event_buffer_commit(&fbuffer);				\
+ 	head = this_cpu_ptr(event_call->perf_events);			\
+@@ -55,6 +62,17 @@ perf_trace_##call(void *__data, proto)					\
+ 				  head, __task);			\
  }
-+
+ 
 +#undef DECLARE_EVENT_CLASS
 +#define DECLARE_EVENT_CLASS(call, proto, args, tstruct, assign, print)	\
 +	_DECLARE_EVENT_CLASS(call, PARAMS(proto), PARAMS(args),		\
-+			    PARAMS(tstruct), PARAMS(assign), PARAMS(print), 0)
++			     PARAMS(tstruct), PARAMS(assign), PARAMS(print), 0)
 +
 +#undef DECLARE_EVENT_CLASS_MAY_FAULT
 +#define DECLARE_EVENT_CLASS_MAY_FAULT(call, proto, args, tstruct, assign, print) \
 +	_DECLARE_EVENT_CLASS(call, PARAMS(proto), PARAMS(args),		\
-+			    PARAMS(tstruct), PARAMS(assign), PARAMS(print), TRACEPOINT_MAY_FAULT)
++			     PARAMS(tstruct), PARAMS(assign), PARAMS(print), \
++			     TRACEPOINT_MAY_FAULT)
 +
  /*
-  * The ftrace_test_probe is compiled out, it is only here as a build time check
-  * to make sure that if the tracepoint handling changes, the ftrace probe will
-@@ -440,6 +493,11 @@ static struct trace_event_class __used __refdata event_class_##call = { \
- 	_TRACE_PERF_INIT(call)						\
- };
- 
-+#undef DECLARE_EVENT_CLASS_MAY_FAULT
-+#define DECLARE_EVENT_CLASS_MAY_FAULT(call, proto, args, tstruct, assign, print) \
-+	DECLARE_EVENT_CLASS(call, PARAMS(proto), PARAMS(args),		\
-+			    PARAMS(tstruct), PARAMS(assign), PARAMS(print))
-+
- #undef DEFINE_EVENT
- #define DEFINE_EVENT(template, call, proto, args)			\
- 									\
-diff --git a/kernel/trace/trace_events.c b/kernel/trace/trace_events.c
-index 6ef29eba90ce..7a0a9197a01b 100644
---- a/kernel/trace/trace_events.c
-+++ b/kernel/trace/trace_events.c
-@@ -532,9 +532,17 @@ int trace_event_reg(struct trace_event_call *call,
- 	WARN_ON(!(call->flags & TRACE_EVENT_FL_TRACEPOINT));
- 	switch (type) {
- 	case TRACE_REG_REGISTER:
--		return tracepoint_probe_register(call->tp,
--						 call->class->probe,
--						 file);
-+		if (call->tp->flags & TRACEPOINT_MAY_FAULT) {
-+			return tracepoint_probe_register_prio_flags(call->tp,
-+								    call->class->probe,
-+								    file,
-+								    TRACEPOINT_DEFAULT_PRIO,
-+								    TRACEPOINT_MAY_FAULT);
-+		} else {
-+			return tracepoint_probe_register(call->tp,
-+							 call->class->probe,
-+							 file);
-+		}
- 	case TRACE_REG_UNREGISTER:
- 		tracepoint_probe_unregister(call->tp,
- 					    call->class->probe,
-@@ -543,9 +551,17 @@ int trace_event_reg(struct trace_event_call *call,
- 
- #ifdef CONFIG_PERF_EVENTS
- 	case TRACE_REG_PERF_REGISTER:
--		return tracepoint_probe_register(call->tp,
--						 call->class->perf_probe,
--						 call);
-+		if (call->tp->flags & TRACEPOINT_MAY_FAULT) {
-+			return tracepoint_probe_register_prio_flags(call->tp,
-+								    call->class->perf_probe,
-+								    call,
-+								    TRACEPOINT_DEFAULT_PRIO,
-+								    TRACEPOINT_MAY_FAULT);
-+		} else {
-+			return tracepoint_probe_register(call->tp,
-+							 call->class->perf_probe,
-+							 call);
-+		}
- 	case TRACE_REG_PERF_UNREGISTER:
- 		tracepoint_probe_unregister(call->tp,
- 					    call->class->perf_probe,
+  * This part is compiled out, it is only here as a build time check
+  * to make sure that if the tracepoint handling changes, the
 -- 
 2.39.2
 
