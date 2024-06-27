@@ -1,107 +1,154 @@
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16313E56A;
-	Thu, 27 Jun 2024 16:47:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A32EA1990C4;
+	Thu, 27 Jun 2024 16:51:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719506844; cv=none; b=m+SfVK5eUfGcX+nYGQzDr0Bwvyiqy5ZBYKJ4+cit6WigH+oncdZhDIFpCEjrYLsupujATXgBRs72HZ/L0D6RqC/NAvX+GkyXPfx87kGl4wIeDyH+8CzOsmfr8FHUtAHDr8Zb0NQJ6LoHSWzGS+uGlVedoBXyYa66hdbSdbm3nFM=
+	t=1719507110; cv=none; b=URmj0U1szRbZD/hLzDlT+fDxWmEcD5U50mgsrDAGD4QPnNwMOC81lidbyl8y+3Na0Z+uYD97zgG9is6YbhI28uAlnG5o2GlhRoGsUlvCuywsg9M0jc0gUbcgY00mNiXfrbyAXUYHYHhIk0Jo1osDhBtxuhMwJt9MwtFUyFHVoj4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719506844; c=relaxed/simple;
-	bh=Dq9zyZxB5Tjhs4VAjVCQb+aaRWymV9vkVxFm8OEoxTg=;
+	s=arc-20240116; t=1719507110; c=relaxed/simple;
+	bh=qIvu4g/bIBmBH2H9f4HwrUaLQ5grYwZpG98mYQbbVE0=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Cn24t+4piguXK0GUDQSjPGw0khflXbNHgsRgndUt9EACGbTdF8l1ZPqJS4xCoUCnJnsBG/Oo7rIa6YSAhomrUn6kMTW6LYqYzH5t3rRTGtyXIADApp8oGqAqqtv8/eMIucj7roAwmeGb87a2ddu7d1hDU5XWUpsU03niZY6wxek=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QEYADTZq; arc=none smtp.client-ip=209.85.214.171
+	 To:Cc:Content-Type; b=QLrptxn2I5RXlBmnlfk1uqqBN1Ruz/t9sW+rzK5NPjTBO+V8yiMjYhxHYxi4daJhJ9zJdl8g+OT7Xya8hL0U4DfA186xIrDmei+7rtvgeg2zG4L5r4kdI7rqvRS9dnrkT/MZMO1wAPZ+y3hzwmZmP+zYTkNAQTBgqcKNaJ6P4ZA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DldEElm4; arc=none smtp.client-ip=209.85.215.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QEYADTZq"
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-1f9cd92b146so62608545ad.3;
-        Thu, 27 Jun 2024 09:47:22 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DldEElm4"
+Received: by mail-pg1-f180.google.com with SMTP id 41be03b00d2f7-70b2421471aso5840529a12.0;
+        Thu, 27 Jun 2024 09:51:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1719506842; x=1720111642; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1719507108; x=1720111908; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Dx/8vkmfwSR7BxnO3245yFMjBsK0SXa9E9u3paaEo2s=;
-        b=QEYADTZqDSTKkRt00kIxAmKXhizrc+S+Dur0kmebole3jKqM42ESde05eMXNOTW3U6
-         ele9IJy5pD1OZe+9LR2r3kVE1+vabEYqS5kDy4bqUKRdnzClGy4u1XJBP+nc8I33OXbu
-         40BHYnTWTqogAMKo2KHDeWQRuIT3M3JiIkfRpZjQeo7wUcL6TqzsIId58LzSlf/UBDXG
-         cM4cez8F/mtjyN5zR7PfQaj7p/vtLpAC/NiIfo789YVfUPJxOoEV+JRpui2tigSNtOgS
-         lN6LhWzB0i8AvRI8mO0Y5SadWqR7HH+J6pcN8Toa06JcFUDA7+XV0ds9el3tuPchtumE
-         Nxrw==
+        bh=1XSXQVstAeex/QLAPNBTMhwk+wqQDJE0LuUAT237zRI=;
+        b=DldEElm4XDMXVQrwrMD6DjndIeVmra915tuWv6nFgQGtUqEUJbP9pvRpq2qYm66YiH
+         kTo+ns7znlr9S3uMeAdJfrZngkanwUEN+aozmfgdQh2S+5vELa1SitQ1ef4JlnP4qNfz
+         FBAvdhXzs3WByb7E2bS8gd1LT48zAFgUk04FkN3p+qrFi7jsurjRKgq5NeMG0RxLt592
+         oRZip697cIbLG0H5OrLgVAtLUcWyRaHiV9vR8Ch5URFnba02KP49GgTkvlwVDtXItQsS
+         ecwRJcFblNHwvRzM8mYTt6RsLcoxCezBYnbaG8bTrcNNYhR5ADakODY4GzMKpno0wh8Y
+         4yPQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719506842; x=1720111642;
+        d=1e100.net; s=20230601; t=1719507108; x=1720111908;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Dx/8vkmfwSR7BxnO3245yFMjBsK0SXa9E9u3paaEo2s=;
-        b=DQUL93Th9IhBhQ2DRLWsTayWWTsVKoGRFMVKFFWBCmUwk3nvkgkQVVXp+J1H1Xft+E
-         qhklNTmw/2t84cz8TToMv5qR+xRxqvpmTJ/mE2f/69SLOlnL+8OX2ADsAkjInSu0QC+f
-         h/XjctOMO10fZyey87Ieu1icvmyR68PN71YPZMqpiZ+uBI56nPKfmrZsZ8IjkWJvT2xY
-         ZnsQA0FBW+UcQcJ7JVvvXtWgObbOydmvhFQvzWyidqdK58boD+FxSlZl3U+LEUSttsDJ
-         tmNchJZRdzp3aRnGzIt46H5Goe7B0+Y6pMWs/HXQ9HfrS81RVWxFHTl1CWansmwPFypU
-         T9hA==
-X-Forwarded-Encrypted: i=1; AJvYcCWv1/p4q8k6xxJ7XzA0GRNCGGNmarlxZNxd7GHk8dLJzkvDdDZ5R/9Fk1a560k0Jk7J5ipqRm8K+SBEeDG4i1Ld7IT0Jy4Ie8wBWX5IyDy5HGNRE2vkVpUthFOoGP4WNf76oP968fti
-X-Gm-Message-State: AOJu0YxhyO4s7RzxB5c4RzXjln1Gx6N6UnRLvkiSQdNk9za9VLtC/9nQ
-	Ne4g0vU9v68MLL4vpsRMJKF6lHxcti6dh+2x3g3UlPf7bN88V4coKMpd7VrPqEHJQu6+44dum/q
-	xYnbxjs3InwgYYie/c2Vvwl7N5Kc=
-X-Google-Smtp-Source: AGHT+IHfHM9fZyd8Od0hiWuP+2c+ckNOVnoLawFsBRjZSSP2fA1KScCAJ/JsiNGHenpd/hkXBgoRgUS+blThWyoDONI=
-X-Received: by 2002:a17:90a:1f44:b0:2c4:ab0b:9d9e with SMTP id
- 98e67ed59e1d1-2c8581cd072mr13022241a91.15.1719506842289; Thu, 27 Jun 2024
- 09:47:22 -0700 (PDT)
+        bh=1XSXQVstAeex/QLAPNBTMhwk+wqQDJE0LuUAT237zRI=;
+        b=a3itqysm13pDVdfXUxzoU/ylqwjonLAXkMmwd6B2x9fgstBMACX5VWnbK7EfpPBZNa
+         rx9GY0gMv8ntPxbIresmwlWrgkIR66dub8D+cqegkTKEE7Fk6ZP0/fsPOg7iowI4Zj5I
+         PpiMVkeL0y3UqdFp0qAFc3s3NpOlBERDbzXZUIxRWDqtGbKW6jgdiGWMlBarl+1Pav9o
+         boAhkSoXrsowrOWqdtt9InV6Lr9jYXLB7l8bO8CXRBqR7CP4nr9uO1M2i2NGQczguIdp
+         aTBDCI8UtJhZV4jn+/UUNFeKDHAaKauvPnjHiB628RRB/Ma26pD/Kx3+fSt8jeRzYZw3
+         dugQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUFfocTSCEp8sM+bESEN4XJdo+TTJWMWzYG9GLlgBSjbNy4pPGjDp537cVugYSprZwPJYcVAosuJuWMRvWw1A1uNF0LP/t3FvoMcdqCFQxE6G+au6RFv2UWnB4TtlzL9jYhb31sqiTOTpUu7op1WNVoblQkSkkNPeQ13WrYwK6OgxcwJepP
+X-Gm-Message-State: AOJu0Yx5bj4jYc58/T7gc5E8QWJAxfIPKYHPOx0n8eRhm1R8RyibsfEt
+	x9qv3xFjei9FbPnVtlIztwaaythCbWCTnHqAtb4siH5u5xMqY/qyF8KNTnKdwenXID0ykDv2HYu
+	YmseP18OiLaPNNBM6HXIQDTp7E20=
+X-Google-Smtp-Source: AGHT+IGXhQGVZd2LJiMpsrXL71XDxbNoacHQmSsuRaKegbY7AIu6gYcF5MN/YCRWVrZjSANHroTFUHFWhELa89DiLk4=
+X-Received: by 2002:a05:6a20:8c24:b0:1bd:2acd:d175 with SMTP id
+ adf61e73a8af0-1bd2acdd201mr5372076637.32.1719507107687; Thu, 27 Jun 2024
+ 09:51:47 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240625002144.3485799-1-andrii@kernel.org> <20240625002144.3485799-7-andrii@kernel.org>
- <20240627220449.0d2a12e24731e4764540f8aa@kernel.org>
-In-Reply-To: <20240627220449.0d2a12e24731e4764540f8aa@kernel.org>
+References: <20240618194306.1577022-1-jolsa@kernel.org> <20240627160255.GA25374@redhat.com>
+In-Reply-To: <20240627160255.GA25374@redhat.com>
 From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Thu, 27 Jun 2024 09:47:10 -0700
-Message-ID: <CAEf4BzbLNHYsUfPi3+M_WUVSaZ9Ey-r3BxqV0Zz6pPqpMCjqpg@mail.gmail.com>
-Subject: Re: [PATCH 06/12] uprobes: add batch uprobe register/unregister APIs
-To: Masami Hiramatsu <mhiramat@kernel.org>
-Cc: Andrii Nakryiko <andrii@kernel.org>, linux-trace-kernel@vger.kernel.org, 
-	rostedt@goodmis.org, oleg@redhat.com, peterz@infradead.org, mingo@redhat.com, 
-	bpf@vger.kernel.org, jolsa@kernel.org, paulmck@kernel.org, clm@meta.com
+Date: Thu, 27 Jun 2024 09:51:35 -0700
+Message-ID: <CAEf4BzZVmKjfQD1zKMDOD-Zc4pVp+EGgb8h2veg=bXe1Pjn_Uw@mail.gmail.com>
+Subject: Re: [PATCH] LoongArch: uprobes: make UPROBE_SWBP_INSN/UPROBE_XOLBP_INSN
+ constant
+To: Oleg Nesterov <oleg@redhat.com>
+Cc: Tiezhu Yang <yangtiezhu@loongson.cn>, Jiri Olsa <jolsa@kernel.org>, 
+	Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>, 
+	Andrii Nakryiko <andrii@kernel.org>, Nathan Chancellor <nathan@kernel.org>, linux-kernel@vger.kernel.org, 
+	linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org, 
+	Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>, loongarch@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Jun 27, 2024 at 6:04=E2=80=AFAM Masami Hiramatsu <mhiramat@kernel.o=
-rg> wrote:
+On Thu, Jun 27, 2024 at 9:04=E2=80=AFAM Oleg Nesterov <oleg@redhat.com> wro=
+te:
 >
-> On Mon, 24 Jun 2024 17:21:38 -0700
-> Andrii Nakryiko <andrii@kernel.org> wrote:
+> LoongArch defines UPROBE_SWBP_INSN as a function call and this breaks
+> arch_uprobe_trampoline() which uses it to initialize a static variable.
 >
-> > -static int __uprobe_register(struct inode *inode, loff_t offset,
-> > -                          loff_t ref_ctr_offset, struct uprobe_consume=
-r *uc)
-> > +int uprobe_register_batch(struct inode *inode, int cnt,
-> > +                       uprobe_consumer_fn get_uprobe_consumer, void *c=
-tx)
+> Fixes: ff474a78cef5 ("uprobe: Add uretprobe syscall to speed up return pr=
+obe")
+> Reported-by: Nathan Chancellor <nathan@kernel.org>
+> Closes: https://lore.kernel.org/all/20240614174822.GA1185149@thelio-3990X=
+/
+> Suggested-by: Andrii Nakryiko <andrii@kernel.org>
+> Signed-off-by: Oleg Nesterov <oleg@redhat.com>
+> ---
+>  arch/loongarch/include/asm/uprobes.h | 6 ++++--
+>  arch/loongarch/kernel/uprobes.c      | 8 ++++++++
+>  2 files changed, 12 insertions(+), 2 deletions(-)
 >
-> Is this interface just for avoiding memory allocation? Can't we just
-> allocate a temporary array of *uprobe_consumer instead?
 
-Yes, exactly, to avoid the need for allocating another array that
-would just contain pointers to uprobe_consumer. Consumers would never
-just have an array of `struct uprobe_consumer *`, because
-uprobe_consumer struct is embedded in some other struct, so the array
-interface isn't the most convenient.
+LGTM.
 
-If you feel strongly, I can do an array, but this necessitates
-allocating an extra array *and keeping it* for the entire duration of
-BPF multi-uprobe link (attachment) existence, so it feels like a
-waste. This is because we don't want to do anything that can fail in
-the detachment logic (so no temporary array allocation there).
+Acked-by: Andrii Nakryiko <andrii@kernel.org>
 
-Anyways, let me know how you feel about keeping this callback.
 
+> diff --git a/arch/loongarch/include/asm/uprobes.h b/arch/loongarch/includ=
+e/asm/uprobes.h
+> index c8f59983f702..18221eb9a8b0 100644
+> --- a/arch/loongarch/include/asm/uprobes.h
+> +++ b/arch/loongarch/include/asm/uprobes.h
+> @@ -6,13 +6,15 @@
 >
-> Thank you,
+>  typedef u32 uprobe_opcode_t;
 >
+> +#define __emit_break(imm)      (uprobe_opcode_t)((imm) | (break_op << 15=
+))
+> +
+>  #define MAX_UINSN_BYTES                8
+>  #define UPROBE_XOL_SLOT_BYTES  MAX_UINSN_BYTES
+>
+> -#define UPROBE_SWBP_INSN       larch_insn_gen_break(BRK_UPROBE_BP)
+> +#define UPROBE_SWBP_INSN       __emit_break(BRK_UPROBE_BP)
+>  #define UPROBE_SWBP_INSN_SIZE  LOONGARCH_INSN_SIZE
+>
+> -#define UPROBE_XOLBP_INSN      larch_insn_gen_break(BRK_UPROBE_XOLBP)
+> +#define UPROBE_XOLBP_INSN      __emit_break(BRK_UPROBE_XOLBP)
+>
+
+this looks correct (but based on pure code inspection)
+
+>  struct arch_uprobe {
+>         unsigned long   resume_era;
+> diff --git a/arch/loongarch/kernel/uprobes.c b/arch/loongarch/kernel/upro=
+bes.c
+> index 87abc7137b73..90462d94c28f 100644
+> --- a/arch/loongarch/kernel/uprobes.c
+> +++ b/arch/loongarch/kernel/uprobes.c
+> @@ -7,6 +7,14 @@
+>
+>  #define UPROBE_TRAP_NR UINT_MAX
+>
+> +static __init int check_emit_break(void)
+> +{
+> +       BUG_ON(UPROBE_SWBP_INSN  !=3D larch_insn_gen_break(BRK_UPROBE_BP)=
+);
+> +       BUG_ON(UPROBE_XOLBP_INSN !=3D larch_insn_gen_break(BRK_UPROBE_XOL=
+BP));
+> +       return 0;
+> +}
+> +arch_initcall(check_emit_break);
+> +
+
+I wouldn't even bother with this, but whatever.
+
+>  int arch_uprobe_analyze_insn(struct arch_uprobe *auprobe,
+>                              struct mm_struct *mm, unsigned long addr)
+>  {
 > --
-> Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> 2.25.1.362.g51ebf55
+>
+>
