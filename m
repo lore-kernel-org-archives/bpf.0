@@ -1,57 +1,56 @@
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24B7313AA4C
-	for <bpf@vger.kernel.org>; Thu, 27 Jun 2024 09:09:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFE6E137757
+	for <bpf@vger.kernel.org>; Thu, 27 Jun 2024 09:10:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719479371; cv=none; b=Thlf9ahgDGaXvOLp4C8YL6QrZCh/nvi8Y6Mg14IJhBK5039+Qbnw7Ny2Csjd2x+hXSQP1kwG2SgHHSFjiwo6SZOS12O34MtZmqscW+zswk2Jp0Hs6D/sxo0lsBkkDaz14stOnDVJoJIM99BzkDlfuMz+yqNfmplKlWqbmhOy7wA=
+	t=1719479404; cv=none; b=rEvS7vkWWFiqSSNZjfXPXu74ni08EEeZthedz/X8B3nKcagZZpGHcrAGA9//d6e5pIMEj92K7P9r4xOLrY5kRen+pPD+/+beFY8MU2JLKTmQB1CIOuYB3sY/SBEsBW33miY2xNcLZ7ZBgNGe+Dvjgl+0kPRvacCD9aDdWJh2wlw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719479371; c=relaxed/simple;
-	bh=QHzT5BWkXXxyEISDPlHFqxf+bFfTZdX0GiZjPvMfexQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=SLkKaWOM2aLH92IxBvib/G23cp1RZMDFD0nZkfwoNLNxrJ5dRGZush+Nc+KZ8N8kPxwDWsd/PB1zdLq0C9Lfi8Ng1FqHDqs7gwb+d8PgLLvJvNpYQe6UW3czX37ByROfspTSRenXjUxwCV/9W2ig3ezN4TnNcMCKMMKH+C6LJn8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=CFkkdNH4; arc=none smtp.client-ip=148.163.156.1
+	s=arc-20240116; t=1719479404; c=relaxed/simple;
+	bh=BKZBBqFysG+LIB9ZgMfMuJW4xSZtHessNP3KzI58zNY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=gN6v4eBcErV5mMXHe3cWbuXkZVemVhnKfFt3tHY61tM2LvtDEJQIVhK8PJJtllR9si4EfizgvElbsvGAUhhqPemJDws6fITuxec/WyUldns3bHY9Uc7VbXftib/tJPzCLuJtW2P1iR/gW27ucRQkqbQwmNnfii/1WZNmgLR/93I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=p3LjyQoX; arc=none smtp.client-ip=148.163.158.5
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="CFkkdNH4"
-Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 45R8San5021970;
-	Thu, 27 Jun 2024 09:09:14 GMT
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="p3LjyQoX"
+Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 45R8Sb4S006646;
+	Thu, 27 Jun 2024 09:09:50 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from
-	:to:cc:subject:date:message-id:in-reply-to:references
-	:mime-version:content-transfer-encoding; s=pp1; bh=oBCW7ApJhpCFX
-	4EyNprymqi7a4pIqPmVdokLSSJpoi8=; b=CFkkdNH4YygpHIjrNVFtGI4wjxgLw
-	ZhKjPwJiVEBVdtEDZqTWwlaFxPpm5XMBZ7Y581Lhd3Jc7BcTCEMTHBRqW/z8GqZq
-	SRJWGIZABzhUd11KoTC91fHfY/MNqE2AUjQUsvXyKiVhw55rcV0qtY4jog8KyWUk
-	KXVP3AG5mJbxv6TS4p7+IWt2KmdvqIXXxUTcvyb7ezTVZZRVxFd9HLg3CXnu5iRj
-	0WzZC7hTBtsIE41Fxx12s90fslzZVegGcMPaT1uXQSzPRRV0iH/nr0zApxClwnRl
-	eiOfI0Pp8KD+6P0Myh+irJBceXbMPIpObvAbqgi9fneiag9WBw5Hzuj0A==
-Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4014ks835x-1
+	:to:cc:subject:date:message-id:mime-version
+	:content-transfer-encoding; s=pp1; bh=c/u3Rn8vfc1Lh4MRA6OM/YxpLY
+	jfUeqd7VeA+YFwi30=; b=p3LjyQoXpT8YPAStK4UXPGg/N4886OdF8+l0MgMH6d
+	wqJNELQUA4bl8WKpU0vupR56siHxkEQCtOR8JnHVGVPEsWSpXpxqHmqklxJFAAYB
+	kJy1op6ZkdyehiGNoI0d+jaXjWKVjF4FI5BRyW04xRzZzqF+kxI6Jhu6ZbwcU8hv
+	8I6Gkv3sMZTeOiOIcajB5AFKjAiu01rtAcZYY5pduKloTizYAEVSKaqqCqYb6QbA
+	R27heV28SSbzZmVF7Co3zvFiztWgVnpkXjG/EG8tt/UpjvQytEeDxxK/iANK0QN1
+	bE9TtjZnhOYU9OA9R5PRawFMrW7IL3UxtnQZ+Ok90pdQ==
+Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4014kmg3en-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 27 Jun 2024 09:09:13 +0000 (GMT)
-Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma12.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 45R7FIFU018103;
-	Thu, 27 Jun 2024 09:09:12 GMT
-Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
-	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 3yx8xuj5bm-1
+	Thu, 27 Jun 2024 09:09:50 +0000 (GMT)
+Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma13.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 45R8oeLA019800;
+	Thu, 27 Jun 2024 09:09:49 GMT
+Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
+	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 3yxb5msn3k-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 27 Jun 2024 09:09:12 +0000
-Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
-	by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 45R997Hd46399812
+	Thu, 27 Jun 2024 09:09:49 +0000
+Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
+	by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 45R99iP435127628
 	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 27 Jun 2024 09:09:09 GMT
-Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 4464D2005A;
-	Thu, 27 Jun 2024 09:09:07 +0000 (GMT)
-Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id B58CD2004D;
-	Thu, 27 Jun 2024 09:09:06 +0000 (GMT)
+	Thu, 27 Jun 2024 09:09:46 GMT
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 6BD182005A;
+	Thu, 27 Jun 2024 09:09:44 +0000 (GMT)
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id DBC5220040;
+	Thu, 27 Jun 2024 09:09:43 +0000 (GMT)
 Received: from heavy.ibm.com (unknown [9.171.16.175])
-	by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Thu, 27 Jun 2024 09:09:06 +0000 (GMT)
+	by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Thu, 27 Jun 2024 09:09:43 +0000 (GMT)
 From: Ilya Leoshkevich <iii@linux.ibm.com>
 To: Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
@@ -60,12 +59,10 @@ Cc: bpf@vger.kernel.org, Heiko Carstens <hca@linux.ibm.com>,
         Vasily Gorbik <gor@linux.ibm.com>,
         Alexander Gordeev <agordeev@linux.ibm.com>,
         Ilya Leoshkevich <iii@linux.ibm.com>
-Subject: [PATCH bpf-next 06/10] s390/bpf: Support address space cast instruction
-Date: Thu, 27 Jun 2024 11:07:09 +0200
-Message-ID: <20240627090900.20017-7-iii@linux.ibm.com>
+Subject: [PATCH bpf-next] libbpf: Make btf_name_info.needs_size unsigned
+Date: Thu, 27 Jun 2024 11:09:32 +0200
+Message-ID: <20240627090942.20127-1-iii@linux.ibm.com>
 X-Mailer: git-send-email 2.45.2
-In-Reply-To: <20240627090900.20017-1-iii@linux.ibm.com>
-References: <20240627090900.20017-1-iii@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -74,75 +71,44 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: HIcfC_jkcOb_SwwnRs-JJdyml9fk0BgG
-X-Proofpoint-ORIG-GUID: HIcfC_jkcOb_SwwnRs-JJdyml9fk0BgG
+X-Proofpoint-ORIG-GUID: tD-KjJTeKMrsCQpWHPmsPApsBZYyFhlk
+X-Proofpoint-GUID: tD-KjJTeKMrsCQpWHPmsPApsBZYyFhlk
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
  definitions=2024-06-27_05,2024-06-25_01,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 spamscore=0
- suspectscore=0 phishscore=0 priorityscore=1501 mlxlogscore=999
- clxscore=1015 malwarescore=0 lowpriorityscore=0 bulkscore=0 adultscore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 spamscore=0
+ priorityscore=1501 phishscore=0 lowpriorityscore=0 adultscore=0
+ impostorscore=0 suspectscore=0 malwarescore=0 mlxlogscore=865 mlxscore=0
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.19.0-2406140001 definitions=main-2406270067
 
-The new address cast instruction translates arena offsets to userspace
-addresses. NULL pointers must not be translated.
+Clang build of libbpf fails with:
 
-The common code sets up the mappings in such a way that it's enough to
-replace the higher 32 bits to achieve the desired result. s390x has
-just an instruction for this: INSERT IMMEDIATE.
+tools/lib/bpf/btf_relocate.c:206:23: error: implicit truncation from 'int' to a one-bit wide bit-field changes value from 1 to -1 [-Werror,-Wsingle-bit-bitfield-constant-conversion]
+  206 |                 info[id].needs_size = true;
+      |                                     ^ ~~~~
 
-Implement the sequence using 3 instruction: LOAD AND TEST, BRANCH
-RELATIVE ON CONDITION and INSERT IMMEDIATE.
+Resolve the issue by making needs_size unsigned.
 
+Fixes: 19e00c897d50 ("libbpf: Split BTF relocation")
 Signed-off-by: Ilya Leoshkevich <iii@linux.ibm.com>
 ---
- arch/s390/net/bpf_jit_comp.c | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
+ tools/lib/bpf/btf_relocate.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/s390/net/bpf_jit_comp.c b/arch/s390/net/bpf_jit_comp.c
-index 4b62b5162dfb..39c1d9aa7f1e 100644
---- a/arch/s390/net/bpf_jit_comp.c
-+++ b/arch/s390/net/bpf_jit_comp.c
-@@ -54,6 +54,7 @@ struct bpf_jit {
- 	int prologue_plt_ret;	/* Return address for prologue hotpatch PLT */
- 	int prologue_plt;	/* Start of prologue hotpatch PLT */
- 	int kern_arena;		/* Pool offset of kernel arena address */
-+	u64 user_arena;		/* User arena address */
+diff --git a/tools/lib/bpf/btf_relocate.c b/tools/lib/bpf/btf_relocate.c
+index 2281dbbafa11..d2551d7f33c8 100644
+--- a/tools/lib/bpf/btf_relocate.c
++++ b/tools/lib/bpf/btf_relocate.c
+@@ -58,7 +58,7 @@ struct btf_relocate {
+ struct btf_name_info {
+ 	const char *name;
+ 	/* set when search requires a size match */
+-	int needs_size:1,
++	unsigned needs_size:1,
+ 	    size:31;
+ 	__u32 id;
  };
- 
- #define SEEN_MEM	BIT(0)		/* use mem[] for temporary storage */
-@@ -863,6 +864,22 @@ static noinline int bpf_jit_insn(struct bpf_jit *jit, struct bpf_prog *fp,
- 		}
- 		break;
- 	case BPF_ALU64 | BPF_MOV | BPF_X:
-+		if (insn_is_cast_user(insn)) {
-+			int patch_brc;
-+
-+			/* ltgr %dst,%src */
-+			EMIT4(0xb9020000, dst_reg, src_reg);
-+			/* brc 8,0f */
-+			patch_brc = jit->prg;
-+			EMIT4_PCREL_RIC(0xa7040000, 8, 0);
-+			/* iihf %dst,user_arena>>32 */
-+			EMIT6_IMM(0xc0080000, dst_reg, jit->user_arena >> 32);
-+			/* 0: */
-+			if (jit->prg_buf)
-+				*(u16 *)(jit->prg_buf + patch_brc + 2) =
-+					(jit->prg - patch_brc) >> 1;
-+			break;
-+		}
- 		switch (insn->off) {
- 		case 0: /* DST = SRC */
- 			/* lgr %dst,%src */
-@@ -2076,6 +2093,7 @@ static int bpf_jit_prog(struct bpf_jit *jit, struct bpf_prog *fp,
- 	kern_arena = bpf_arena_get_kern_vm_start(fp->aux->arena);
- 	if (kern_arena)
- 		jit->kern_arena = _EMIT_CONST_U64(kern_arena);
-+	jit->user_arena = bpf_arena_get_user_vm_start(fp->aux->arena);
- 
- 	bpf_jit_prologue(jit, fp, stack_depth);
- 	if (bpf_set_addr(jit, 0) < 0)
 -- 
 2.45.2
 
