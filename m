@@ -1,34 +1,34 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E385384DE9;
-	Mon,  1 Jul 2024 15:10:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 287362576F;
+	Mon,  1 Jul 2024 15:20:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719846629; cv=none; b=o+El8hNUQE1kCrrs/iZIF7q4WPMsfeAVEcuRf3nSPtiIVyht7M/NIQeqiFQyupzPe7evgK9Ek1zkscdKYY5IZsXWktjrINxJSvHkQBQdgsPcB2ajOKhTTVx0Sc9kxoyFmoiRM2sdxcvws+Dk1A5zjd3pOCx9HZ2wcJ/mO5mDeQU=
+	t=1719847232; cv=none; b=CBjPpIFVMk9pD9d/D3A8N6LVxOLGdgACDVPZ2pT1ntplCrRLhYHxhoXK8qMPksUOFAmgYRxafjK+tMC7o3wRVrY+oyfW8rV8Z04OEMhlgMvMHc/6H5cLp3t40X8c1wbuMJUivru/PEa9uKd8Whis2mGJhelnEy6R56B3ExqMK/4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719846629; c=relaxed/simple;
-	bh=MMhmd+2OqCPynT3QO2s+IyuhlXayN0mUXmdQP4pBhXc=;
+	s=arc-20240116; t=1719847232; c=relaxed/simple;
+	bh=wxYu3zIRsXfA4tN7GBGojXy29esfx9y9v7Vqne4vjRI=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=jB02WDMI1qGOgzO+aneD8610dbW4BhuWk7w39vzerBlWYQzrgyOSzleJbLErB0ByNCgtYUF05f65bIiOPAOrGXm3/dgX7i6UZ6OqYAz2w5ry6kw81QTKg/nCFM5KUUj9xrZUGjNnWUJqM0sJ86PObN102yEKSlWEJFcxJ5ZSrg4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lV9r7hAJ; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=DXLqnRNkvgWZxyp17gu4aBr1OD8HOGCjrDNVJhc+QFSpNARL0mc6KkE4I4DANVE6E7qbhTv+N5RZTHRWwv9OZlpgCV2wi6UT/dynNxMUIazhRL+u7bwMQ69nZKNvaQSVo1KnR5GjtLHyjzAt7Zr8Zoh6oh0xAOf5fiXgx7hen9c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=S7Hbbd1v; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lV9r7hAJ"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 919A0C4AF12;
-	Mon,  1 Jul 2024 15:10:28 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="S7Hbbd1v"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 918D4C2BD10;
+	Mon,  1 Jul 2024 15:20:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1719846628;
-	bh=MMhmd+2OqCPynT3QO2s+IyuhlXayN0mUXmdQP4pBhXc=;
+	s=k20201202; t=1719847230;
+	bh=wxYu3zIRsXfA4tN7GBGojXy29esfx9y9v7Vqne4vjRI=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=lV9r7hAJjQEcxvhXproilhEBUcPjUx6bscl+ZuG+DZjXKTsnVdGye8PpjE0zlE2Do
-	 sf+WDe1YmIijeVQe3eQQJW6AuHquUHvr+p8C7WLyGggZ2UbSARQWYORUTkTJfT/Z6R
-	 zM7N850/CWtDFl6UWRF10IjXrLa0ryyowk5hRDeFuN1pEqPRobXiQDMt71k2B2TdeS
-	 EnFbPIRoWKBF2aA9Jl5ft+JRNA0T7qyTMDNmVv0N01epugVUh/aZzYGGowZSrjjE1t
-	 cSVX/PN6nqoD1A1f/7PITzqWdS+ra4st5VC4r3WXbDan51F5rTW4+LamsL1BriIdnD
-	 bM5C4wcSCa5+A==
+	b=S7Hbbd1vhwHZKa9YqOoZSUlJFWJpgZPDu1al4RUr/qVgCCC05hGixcBxq1qU+Xvr3
+	 f0FNf1IXL8LLVTNy9HOky1GbeQ99L0NzD6ZtVO+vPyvk/+n4lmNhBhgkM6Ed2xn+Y9
+	 QzpgIgDVGClgh5LEHyHA6fvw0fNZQsGfW8heJ2uwD0v7zBdfIh7dPB3Tj2CBf91Bkj
+	 xgtKYtD7paXl7kh+QqkTLiR5hF/eRDqXsc6jtPZwvRrFuZ0OSc89/P2jcC1z3vHXSl
+	 VhRIFsT3UGHDNnns5g7Xj8fSuYzS8KrG9l+qGAxBW3CPlzAfmlyc73fGTA2ErTjzLj
+	 Q6spRSFMLybjg==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 7D276C43468;
-	Mon,  1 Jul 2024 15:10:28 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 7E2E6C43468;
+	Mon,  1 Jul 2024 15:20:30 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -37,48 +37,48 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v6 bpf-next 0/3] netfilter: Add the capability to offload
- flowtable in XDP layer
+Subject: Re: [PATCH RESEND bpf-next v2 0/3] Use bpf_prog_pack for RV64 bpf
+ trampoline
 From: patchwork-bot+netdevbpf@kernel.org
 Message-Id: 
- <171984662850.25774.11398044687534883438.git-patchwork-notify@kernel.org>
-Date: Mon, 01 Jul 2024 15:10:28 +0000
-References: <cover.1719698275.git.lorenzo@kernel.org>
-In-Reply-To: <cover.1719698275.git.lorenzo@kernel.org>
-To: Lorenzo Bianconi <lorenzo@kernel.org>
-Cc: bpf@vger.kernel.org, pablo@netfilter.org, kadlec@netfilter.org,
- davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
- netfilter-devel@vger.kernel.org, netdev@vger.kernel.org, ast@kernel.org,
+ <171984723051.1282.8352301752535739343.git-patchwork-notify@kernel.org>
+Date: Mon, 01 Jul 2024 15:20:30 +0000
+References: <20240622030437.3973492-1-pulehui@huaweicloud.com>
+In-Reply-To: <20240622030437.3973492-1-pulehui@huaweicloud.com>
+To: Pu Lehui <pulehui@huaweicloud.com>
+Cc: bpf@vger.kernel.org, linux-riscv@lists.infradead.org,
+ netdev@vger.kernel.org, bjorn@kernel.org, ast@kernel.org,
  daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev,
- eddyz87@gmail.com, lorenzo.bianconi@redhat.com, toke@redhat.com,
- fw@strlen.de, hawk@kernel.org, horms@kernel.org, donhunte@redhat.com,
- memxor@gmail.com
+ eddyz87@gmail.com, song@kernel.org, yhs@fb.com, john.fastabend@gmail.com,
+ kpsingh@kernel.org, sdf@google.com, haoluo@google.com, jolsa@kernel.org,
+ puranjay@kernel.org, palmer@dabbelt.com, pulehui@huawei.com
 
 Hello:
 
 This series was applied to bpf/bpf-next.git (master)
 by Daniel Borkmann <daniel@iogearbox.net>:
 
-On Sun, 30 Jun 2024 00:26:47 +0200 you wrote:
-> Introduce bpf_xdp_flow_lookup kfunc in order to perform the lookup of
-> a given flowtable entry based on the fib tuple of incoming traffic.
-> bpf_xdp_flow_lookup can be used as building block to offload in XDP
-> the sw flowtable processing when the hw support is not available.
-> 
-> This series has been tested running the xdp_flowtable_offload eBPF program
-> on an ixgbe 10Gbps NIC (eno2) in order to XDP_REDIRECT the TCP traffic to
-> a veth pair (veth0-veth1) based on the content of the nf_flowtable as soon
-> as the TCP connection is in the established state:
+On Sat, 22 Jun 2024 03:04:34 +0000 you wrote:
+> We used bpf_prog_pack to aggregate bpf programs into huge page to
+> relieve the iTLB pressure on the system. We can apply it to bpf
+> trampoline, as Song had been implemented it in core and x86 [0]. This
+> patch is going to use bpf_prog_pack to RV64 bpf trampoline. Since Song
+> and Puranjay have done a lot of work for bpf_prog_pack on RV64,
+> implementing this function will be easy. But one thing to mention is
+> that emit_call in RV64 will generate the maximum number of instructions
+> during dry run, but during real patching it may be optimized to 1
+> instruction due to distance. This is no problem as it does not overflow
+> the allocated RO image.
 > 
 > [...]
 
 Here is the summary with links:
-  - [v6,bpf-next,1/3] netfilter: nf_tables: add flowtable map for xdp offload
-    https://git.kernel.org/bpf/bpf-next/c/89cc8f1c5f22
-  - [v6,bpf-next,2/3] netfilter: add bpf_xdp_flow_lookup kfunc
-    https://git.kernel.org/bpf/bpf-next/c/391bb6594fd3
-  - [v6,bpf-next,3/3] selftests/bpf: Add selftest for bpf_xdp_flow_lookup kfunc
-    https://git.kernel.org/bpf/bpf-next/c/c77e572d3a8c
+  - [RESEND,bpf-next,v2,1/3] bpf: Use precise image size for struct_ops trampoline
+    https://git.kernel.org/bpf/bpf-next/c/d1a426171d76
+  - [RESEND,bpf-next,v2,2/3] riscv, bpf: Fix out-of-bounds issue when preparing trampoline image
+    https://git.kernel.org/bpf/bpf-next/c/9f1e16fb1fc9
+  - [RESEND,bpf-next,v2,3/3] riscv, bpf: Use bpf_prog_pack for RV64 bpf trampoline
+    https://git.kernel.org/bpf/bpf-next/c/2382a405c581
 
 You are awesome, thank you!
 -- 
