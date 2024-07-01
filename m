@@ -1,57 +1,57 @@
 Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0B5A171652
-	for <bpf@vger.kernel.org>; Mon,  1 Jul 2024 23:43:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01D85172BAB
+	for <bpf@vger.kernel.org>; Mon,  1 Jul 2024 23:43:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719877412; cv=none; b=Gg7qUm3i0xGhD/gzs40sKST17zGfxIHSaoly4vgepruZnPyp1rZnO6Z0r4swpqIz6+ni8loJxnt/5Yicm0AqWxcn9UeagZ5fg0ATMxevkHBD5gJul+7dx9eFISp/5vlrRTqAAFfocVarqsRxxti6xhuruz3AXjtrfDIeBp+oKM8=
+	t=1719877413; cv=none; b=UE4hTmEnj6c5E1rWXRTv22PR9QF7HGmuxnaOCknBeW2YV7KMIZ18dm4f1cTd4Rvx+CHfzQpFTAqZG9E94SYQj/OBhMB/ZFU5IACR6XDIXjD/uis5QfqhqE6B4OZvDGKcIUfJejXsvVLpw5rUTphHntsBDUr7kVTVTptH6xuLJms=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719877412; c=relaxed/simple;
-	bh=QHzT5BWkXXxyEISDPlHFqxf+bFfTZdX0GiZjPvMfexQ=;
+	s=arc-20240116; t=1719877413; c=relaxed/simple;
+	bh=OXH/4zT+LIxU89nhQfA6cdIHpGuxysLNE4wjmlUJVVY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=MaLiPhcdZd54q6NrMTFwftkh3r5symSJKPFt+C/EpPbAfSpMB6+Z5hrQKy0YAG6X3pITxkQxp5c2B1EAyEUlko5A36YyHimy8G4OyFrwVTjRCJjVUzrRdysEy43e/6MWj+hdY2+XqhVsT3DChHBOUPNHd3qMPoK1Kzy/iA7dpBk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=N/Gcz2vt; arc=none smtp.client-ip=148.163.158.5
+	 MIME-Version; b=orBCxn9eIOkh+mChPLmuk+/WukYR06SvuqvkTtvfZnPSZaMA66582rd/UHlYU1UgXpq9ADKZ1Mjw9SOkL70tDoqP8ip0VbCYW041YC1Hl6GqFMFoqV2E1RIkAsBFRf7tcJ6cmVY+tSmw5otzWGksAe2lD/vvFN7B7TxfSKIDwuY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=PldZ5wJr; arc=none smtp.client-ip=148.163.158.5
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="N/Gcz2vt"
-Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 461N0GS9025314;
-	Mon, 1 Jul 2024 23:43:17 GMT
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="PldZ5wJr"
+Received: from pps.filterd (m0353722.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 461NUf2N009594;
+	Mon, 1 Jul 2024 23:43:19 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from
 	:to:cc:subject:date:message-id:in-reply-to:references
-	:mime-version:content-transfer-encoding; s=pp1; bh=oBCW7ApJhpCFX
-	4EyNprymqi7a4pIqPmVdokLSSJpoi8=; b=N/Gcz2vt5LCk1PkoGM17U5K2EHNLn
-	RDPQJZe6Xwq0/MZfleR4gksgPRtJ5nxNPBdRQo24nCU2QMdAbzACP2Z/OW2z7T6E
-	oFiqzehD55/RknZdf82wTeyTzTubVMsYfr1kkSnFCNEX452+1dNnabOCq4tRM55K
-	QhzM9YvZg0hvrGrSdYQYyE/QI+X2jErp2hZQw2BSLdivZySmwqFAZ3YORNju7FXj
-	i3GMULsW2n50htw71gUjNeuPIwQqMlHSDVdu/NWcTdHbXOVMGlq6EHqocW1uSJ3B
-	DyROtZdVYkTJG09LxfSciLsL7WzWSHlOOm7AAFv/p90LHaA/HQHRtb4yA==
-Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4045qf02hb-1
+	:mime-version:content-transfer-encoding; s=pp1; bh=NiikpQ8rU7LPY
+	HFcJaEFvAGriKGJRfBX0N+D93H/VBU=; b=PldZ5wJrTpQ1Yqe8bpIaot6tc6fe3
+	I6Yg1FbXEJZiUfSw0RtMlCKi2JBTBkPxCYb0qDokCNyBP1RZ2LkJyUel2DDsz/ak
+	OLSb/jKOYlbRIXhPZW7okqTvVH+zrMptgChsNHQalGg6L7UyL93xdd2AZj+tYP3N
+	mWmlsW452dKm1tbq+JGtkDncuFjpHk3xycnxkpzyGY24/oGgBZyMAcMHgUErKcPn
+	WIrCO5dwv2TBnhtBO9ZIexi9iXjGitShyte5QyV+XrQvFenRPA/lM6EoluIzv+fd
+	4QrNAnfHRDJs53/JwEeIA1c8HkIQlcxwgtR/OQn4PF6UnvgNQUnnnSh/Q==
+Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 40465hg0np-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 01 Jul 2024 23:43:17 +0000 (GMT)
-Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma11.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 461KVLL2024095;
-	Mon, 1 Jul 2024 23:43:16 GMT
-Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
-	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 402ya39f9c-1
+	Mon, 01 Jul 2024 23:43:18 +0000 (GMT)
+Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma12.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 461LLbh9005985;
+	Mon, 1 Jul 2024 23:43:18 GMT
+Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
+	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 402vku24ev-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 01 Jul 2024 23:43:16 +0000
+	Mon, 01 Jul 2024 23:43:18 +0000
 Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
-	by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 461NhB7s37945602
+	by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 461NhCY646727582
 	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 1 Jul 2024 23:43:13 GMT
+	Mon, 1 Jul 2024 23:43:15 GMT
 Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 3AB6220040;
-	Mon,  1 Jul 2024 23:43:11 +0000 (GMT)
+	by IMSVA (Postfix) with ESMTP id D931F2004B;
+	Mon,  1 Jul 2024 23:43:12 +0000 (GMT)
 Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id C19892004E;
-	Mon,  1 Jul 2024 23:43:10 +0000 (GMT)
+	by IMSVA (Postfix) with ESMTP id 6AF1D20043;
+	Mon,  1 Jul 2024 23:43:12 +0000 (GMT)
 Received: from heavy.ibm.com (unknown [9.171.65.243])
 	by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Mon,  1 Jul 2024 23:43:10 +0000 (GMT)
+	Mon,  1 Jul 2024 23:43:12 +0000 (GMT)
 From: Ilya Leoshkevich <iii@linux.ibm.com>
 To: Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
@@ -60,9 +60,9 @@ Cc: bpf@vger.kernel.org, Heiko Carstens <hca@linux.ibm.com>,
         Vasily Gorbik <gor@linux.ibm.com>,
         Alexander Gordeev <agordeev@linux.ibm.com>,
         Ilya Leoshkevich <iii@linux.ibm.com>
-Subject: [PATCH bpf-next v3 07/12] s390/bpf: Support address space cast instruction
-Date: Tue,  2 Jul 2024 01:40:25 +0200
-Message-ID: <20240701234304.14336-8-iii@linux.ibm.com>
+Subject: [PATCH bpf-next v3 10/12] selftests/bpf: Introduce __arena_global
+Date: Tue,  2 Jul 2024 01:40:28 +0200
+Message-ID: <20240701234304.14336-11-iii@linux.ibm.com>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <20240701234304.14336-1-iii@linux.ibm.com>
 References: <20240701234304.14336-1-iii@linux.ibm.com>
@@ -74,75 +74,165 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: YIaMG4eyGgLOJOZd8nvoeWFuAH3mi43g
-X-Proofpoint-ORIG-GUID: YIaMG4eyGgLOJOZd8nvoeWFuAH3mi43g
+X-Proofpoint-ORIG-GUID: 62ebFTczhijfkxAyj34iWyOAv_ElimBw
+X-Proofpoint-GUID: 62ebFTczhijfkxAyj34iWyOAv_ElimBw
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
  definitions=2024-07-01_21,2024-07-01_01,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- mlxlogscore=999 phishscore=0 suspectscore=0 adultscore=0 impostorscore=0
- malwarescore=0 priorityscore=1501 clxscore=1015 mlxscore=0 bulkscore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2406140001 definitions=main-2407010174
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999
+ suspectscore=0 lowpriorityscore=0 adultscore=0 impostorscore=0
+ malwarescore=0 clxscore=1015 bulkscore=0 spamscore=0 phishscore=0
+ mlxscore=0 priorityscore=1501 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.19.0-2406140001 definitions=main-2407010174
 
-The new address cast instruction translates arena offsets to userspace
-addresses. NULL pointers must not be translated.
-
-The common code sets up the mappings in such a way that it's enough to
-replace the higher 32 bits to achieve the desired result. s390x has
-just an instruction for this: INSERT IMMEDIATE.
-
-Implement the sequence using 3 instruction: LOAD AND TEST, BRANCH
-RELATIVE ON CONDITION and INSERT IMMEDIATE.
+While clang uses __attribute__((address_space(1))) both for defining
+arena pointers and arena globals, GCC requires different syntax for
+both. While __arena covers the first use case, introduce __arena_global
+to cover the second one.
 
 Signed-off-by: Ilya Leoshkevich <iii@linux.ibm.com>
 ---
- arch/s390/net/bpf_jit_comp.c | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
+ .../testing/selftests/bpf/bpf_arena_common.h  |  2 +
+ .../selftests/bpf/progs/arena_atomics.c       | 67 +++++++++----------
+ 2 files changed, 32 insertions(+), 37 deletions(-)
 
-diff --git a/arch/s390/net/bpf_jit_comp.c b/arch/s390/net/bpf_jit_comp.c
-index 4b62b5162dfb..39c1d9aa7f1e 100644
---- a/arch/s390/net/bpf_jit_comp.c
-+++ b/arch/s390/net/bpf_jit_comp.c
-@@ -54,6 +54,7 @@ struct bpf_jit {
- 	int prologue_plt_ret;	/* Return address for prologue hotpatch PLT */
- 	int prologue_plt;	/* Start of prologue hotpatch PLT */
- 	int kern_arena;		/* Pool offset of kernel arena address */
-+	u64 user_arena;		/* User arena address */
- };
+diff --git a/tools/testing/selftests/bpf/bpf_arena_common.h b/tools/testing/selftests/bpf/bpf_arena_common.h
+index 567491f3e1b5..68a51dcc0669 100644
+--- a/tools/testing/selftests/bpf/bpf_arena_common.h
++++ b/tools/testing/selftests/bpf/bpf_arena_common.h
+@@ -34,10 +34,12 @@
  
- #define SEEN_MEM	BIT(0)		/* use mem[] for temporary storage */
-@@ -863,6 +864,22 @@ static noinline int bpf_jit_insn(struct bpf_jit *jit, struct bpf_prog *fp,
- 		}
- 		break;
- 	case BPF_ALU64 | BPF_MOV | BPF_X:
-+		if (insn_is_cast_user(insn)) {
-+			int patch_brc;
-+
-+			/* ltgr %dst,%src */
-+			EMIT4(0xb9020000, dst_reg, src_reg);
-+			/* brc 8,0f */
-+			patch_brc = jit->prg;
-+			EMIT4_PCREL_RIC(0xa7040000, 8, 0);
-+			/* iihf %dst,user_arena>>32 */
-+			EMIT6_IMM(0xc0080000, dst_reg, jit->user_arena >> 32);
-+			/* 0: */
-+			if (jit->prg_buf)
-+				*(u16 *)(jit->prg_buf + patch_brc + 2) =
-+					(jit->prg - patch_brc) >> 1;
-+			break;
-+		}
- 		switch (insn->off) {
- 		case 0: /* DST = SRC */
- 			/* lgr %dst,%src */
-@@ -2076,6 +2093,7 @@ static int bpf_jit_prog(struct bpf_jit *jit, struct bpf_prog *fp,
- 	kern_arena = bpf_arena_get_kern_vm_start(fp->aux->arena);
- 	if (kern_arena)
- 		jit->kern_arena = _EMIT_CONST_U64(kern_arena);
-+	jit->user_arena = bpf_arena_get_user_vm_start(fp->aux->arena);
+ #if defined(__BPF_FEATURE_ADDR_SPACE_CAST) && !defined(BPF_ARENA_FORCE_ASM)
+ #define __arena __attribute__((address_space(1)))
++#define __arena_global __attribute__((address_space(1)))
+ #define cast_kern(ptr) /* nop for bpf prog. emitted by LLVM */
+ #define cast_user(ptr) /* nop for bpf prog. emitted by LLVM */
+ #else
+ #define __arena
++#define __arena_global SEC(".addr_space.1")
+ #define cast_kern(ptr) bpf_addr_space_cast(ptr, 0, 1)
+ #define cast_user(ptr) bpf_addr_space_cast(ptr, 1, 0)
+ #endif
+diff --git a/tools/testing/selftests/bpf/progs/arena_atomics.c b/tools/testing/selftests/bpf/progs/arena_atomics.c
+index 55f10563208d..77a4dfa9cdf9 100644
+--- a/tools/testing/selftests/bpf/progs/arena_atomics.c
++++ b/tools/testing/selftests/bpf/progs/arena_atomics.c
+@@ -25,20 +25,13 @@ bool skip_tests = true;
  
- 	bpf_jit_prologue(jit, fp, stack_depth);
- 	if (bpf_set_addr(jit, 0) < 0)
+ __u32 pid = 0;
+ 
+-#undef __arena
+-#if defined(__BPF_FEATURE_ADDR_SPACE_CAST)
+-#define __arena __attribute__((address_space(1)))
+-#else
+-#define __arena SEC(".addr_space.1")
+-#endif
+-
+-__u64 __arena add64_value = 1;
+-__u64 __arena add64_result = 0;
+-__u32 __arena add32_value = 1;
+-__u32 __arena add32_result = 0;
+-__u64 __arena add_stack_value_copy = 0;
+-__u64 __arena add_stack_result = 0;
+-__u64 __arena add_noreturn_value = 1;
++__u64 __arena_global add64_value = 1;
++__u64 __arena_global add64_result = 0;
++__u32 __arena_global add32_value = 1;
++__u32 __arena_global add32_result = 0;
++__u64 __arena_global add_stack_value_copy = 0;
++__u64 __arena_global add_stack_result = 0;
++__u64 __arena_global add_noreturn_value = 1;
+ 
+ SEC("raw_tp/sys_enter")
+ int add(const void *ctx)
+@@ -58,13 +51,13 @@ int add(const void *ctx)
+ 	return 0;
+ }
+ 
+-__s64 __arena sub64_value = 1;
+-__s64 __arena sub64_result = 0;
+-__s32 __arena sub32_value = 1;
+-__s32 __arena sub32_result = 0;
+-__s64 __arena sub_stack_value_copy = 0;
+-__s64 __arena sub_stack_result = 0;
+-__s64 __arena sub_noreturn_value = 1;
++__s64 __arena_global sub64_value = 1;
++__s64 __arena_global sub64_result = 0;
++__s32 __arena_global sub32_value = 1;
++__s32 __arena_global sub32_result = 0;
++__s64 __arena_global sub_stack_value_copy = 0;
++__s64 __arena_global sub_stack_result = 0;
++__s64 __arena_global sub_noreturn_value = 1;
+ 
+ SEC("raw_tp/sys_enter")
+ int sub(const void *ctx)
+@@ -84,8 +77,8 @@ int sub(const void *ctx)
+ 	return 0;
+ }
+ 
+-__u64 __arena and64_value = (0x110ull << 32);
+-__u32 __arena and32_value = 0x110;
++__u64 __arena_global and64_value = (0x110ull << 32);
++__u32 __arena_global and32_value = 0x110;
+ 
+ SEC("raw_tp/sys_enter")
+ int and(const void *ctx)
+@@ -101,8 +94,8 @@ int and(const void *ctx)
+ 	return 0;
+ }
+ 
+-__u32 __arena or32_value = 0x110;
+-__u64 __arena or64_value = (0x110ull << 32);
++__u32 __arena_global or32_value = 0x110;
++__u64 __arena_global or64_value = (0x110ull << 32);
+ 
+ SEC("raw_tp/sys_enter")
+ int or(const void *ctx)
+@@ -117,8 +110,8 @@ int or(const void *ctx)
+ 	return 0;
+ }
+ 
+-__u64 __arena xor64_value = (0x110ull << 32);
+-__u32 __arena xor32_value = 0x110;
++__u64 __arena_global xor64_value = (0x110ull << 32);
++__u32 __arena_global xor32_value = 0x110;
+ 
+ SEC("raw_tp/sys_enter")
+ int xor(const void *ctx)
+@@ -133,12 +126,12 @@ int xor(const void *ctx)
+ 	return 0;
+ }
+ 
+-__u32 __arena cmpxchg32_value = 1;
+-__u32 __arena cmpxchg32_result_fail = 0;
+-__u32 __arena cmpxchg32_result_succeed = 0;
+-__u64 __arena cmpxchg64_value = 1;
+-__u64 __arena cmpxchg64_result_fail = 0;
+-__u64 __arena cmpxchg64_result_succeed = 0;
++__u32 __arena_global cmpxchg32_value = 1;
++__u32 __arena_global cmpxchg32_result_fail = 0;
++__u32 __arena_global cmpxchg32_result_succeed = 0;
++__u64 __arena_global cmpxchg64_value = 1;
++__u64 __arena_global cmpxchg64_result_fail = 0;
++__u64 __arena_global cmpxchg64_result_succeed = 0;
+ 
+ SEC("raw_tp/sys_enter")
+ int cmpxchg(const void *ctx)
+@@ -156,10 +149,10 @@ int cmpxchg(const void *ctx)
+ 	return 0;
+ }
+ 
+-__u64 __arena xchg64_value = 1;
+-__u64 __arena xchg64_result = 0;
+-__u32 __arena xchg32_value = 1;
+-__u32 __arena xchg32_result = 0;
++__u64 __arena_global xchg64_value = 1;
++__u64 __arena_global xchg64_result = 0;
++__u32 __arena_global xchg32_value = 1;
++__u32 __arena_global xchg32_result = 0;
+ 
+ SEC("raw_tp/sys_enter")
+ int xchg(const void *ctx)
 -- 
 2.45.2
 
