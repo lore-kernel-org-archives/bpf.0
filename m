@@ -1,129 +1,126 @@
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com [209.85.128.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C189B85626;
-	Mon,  1 Jul 2024 23:21:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 890F5171652
+	for <bpf@vger.kernel.org>; Mon,  1 Jul 2024 23:41:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719876114; cv=none; b=UYHKjNP8XEzYfneRrCSLPGuu3Q4raxunCWStEWPEDZjTyYzQJ1va+GvaW/5cZQITsdXG09drbt0fY0807NicPn/kQq5MZgzbL9MToqfoJEEFH1Y0wtm15p2L2vrL5wuS35HXUMlcQLC2/QZoxCtdIsGwrGv4IGHq++HpfXsfaSs=
+	t=1719877272; cv=none; b=VoMR8A8X/hhu2T5ajlEKJ0yOh948fiW+Rsh8MLrwkkCWuasZkW+batSrWUOihuhFh2q09/g5+VP0NJrrGplO2Kbv0Q2Z0821ayrJMAP/pg98O7WUN/nkzjwOTzh0Yk2hgAxPF6wnFFH5y6zKmpsTerrd7S8BlVzUfqELuBb4AJc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719876114; c=relaxed/simple;
-	bh=l161noe5d4m1fHPVwe7LFmqgbONJXsfZmxoUYVpLqK0=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=g8lIN9LMxa1mpZWuYY2uF9qREA8ePYa8CpMTUzBUP9r0H+2QVJ5JllWzNJmzlb+2ZZ3nJiXosXPX9whCSTGVQGYTnASEzWj+ThzeUl/Dpu6uzKuqiLE3OsHCPhZO9QtQFGfheihGpKrPI/vHRIsTY8lu8AkgSoraxMMuYIre/0c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Gsnw295q; arc=none smtp.client-ip=209.85.128.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1719877272; c=relaxed/simple;
+	bh=CgoTJpfM3Eaqb9b9tstTTdsvLHWdvVZJPceoVZ/lIxw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=QaIi8guKHIEHouWinBRB1zXxck8f1yusDXyUHa8PZCYDQSvox6pLmbmmEGJmG/8MNNuvm0cjciy4Deva5zNyU2LQVLgH3SWDcjLoyRDiBe64veLPt3qjZNDEaFo8rpuRVtpeaius7EhcEowmNsoVYM2t6fprViq4vLUBfq/exAw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=giqerGV4; arc=none smtp.client-ip=209.85.128.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Gsnw295q"
-Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-425624255f3so21349135e9.0;
-        Mon, 01 Jul 2024 16:21:52 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="giqerGV4"
+Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-64ad8d7b804so28752717b3.0
+        for <bpf@vger.kernel.org>; Mon, 01 Jul 2024 16:41:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1719876111; x=1720480911; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:date:from:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=J4N/GP5VmiaJVWsKvPXL+RPq8dWI4QSa+5yYoGERr4Q=;
-        b=Gsnw295q5scrrXu0TFKtbQ8hgCP9IIrPCLoXk2kwuqWJkOjM0Y1+X2RAeHTQqjjTn4
-         hU2vMWsMiVZNpUP3YUlj6RfeMQL8imzWVRRsF878Bh8l2pKoD6DeOa6Ce4tjDROD+/rW
-         ARd3E4FWPpDo6/PRDdaCPghj6yCa85j7EDqKcvHHxAT5csYUQarhz/eDrj+S86CJn2TB
-         EOFV0DYu1sut5KXx4ndJkv/nZYfCtu2EnwT9JTjQfpoDWeEyWYqaJM/wkj0BAahPbaUC
-         G+rOiO9gP2hJAmovPeT3R6hp3qmLSJtxfqPIz+yS22hCJ3wkvPeRo6s9KeB8HFEm8sSE
-         PRZQ==
+        d=paul-moore.com; s=google; t=1719877269; x=1720482069; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Ql1LylJQbz5AqF02VyghAmPHhBmm+I/CxB5gAOiOtG0=;
+        b=giqerGV4DRRuwFPvN6Xrg9BgUdFji2MMj5Dij9liQWHDD+UdN7NnE7+ZR3jOf+7iCr
+         gfZLcQktp+Oj2ikTU6ahGw3g2BNjlt3anXc20tn2oC39tNn1TymcXZOUW4cb6HyOp+oo
+         XaT4yOn35rOvJwm4PgVWQVX/3Dty9N/F2XDpX/WFSxhxPy915splFSHsv/pjNf8RgGeO
+         aczV0HE4Ky/cnz8lbyOkkizwsym1Hd/GiUzKhyipkiYyAUQy22Y4xKoSZYmCRDSYcnY/
+         cDH2dYgPZfqtFUwcTZWIlP8G+4qr+/F3cugHhx35a4zCFLd5XngisbDEN6+ooNx3rMRi
+         YaKg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719876111; x=1720480911;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:date:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=J4N/GP5VmiaJVWsKvPXL+RPq8dWI4QSa+5yYoGERr4Q=;
-        b=Gh9c42HWu/uQlThMRtZy7ZU5pFFHs+yIaFkqDzJzle13jKKGGi0cWDAJdNxnhRfvDW
-         HDQi0QxBfo9OU19gvNAJbJ74uDwka8S7lBs60/AvRDNEnMMqiVMH3OkNrLPCuGYPHgk5
-         Jpiy5NKxxZW8r024ut4VdyXnV/Ft38WKJ/PqP5CMGU31F4p49voQ+x2Y4sfesAgzQLIf
-         AViwBNko3HrI9FO9h4qFOnmUIFTvs4u0VeobUF9YqlhhUeRMV6o+lxzX6rNlgyCGUmuL
-         egIovBLjMhsdjIQ3PMrKKONvfGZV55eVyDlYm1mKr6EHOsIo5/zCGRA/UqJsxsDZHDWs
-         3fQw==
-X-Forwarded-Encrypted: i=1; AJvYcCUP797ABUoF4axI4J12rVqIcKztOa757Yz9uti9g8+GgxuKsXLNYKPoPoplWaAOGCr+kZDIOzQcVzEncV226tYOmkqx
-X-Gm-Message-State: AOJu0YyspSmAmDx1hEQo/yM0KQu6VpbWp7RAJsE3gYBnyxjntoN+e4yJ
-	LFUs7NXonzwwfeECWsqNpev+orAXwj4TEUS/jTSef0ojB9KvKOwp
-X-Google-Smtp-Source: AGHT+IFiJrVlOS6nSZr2vq22HUDj+b44fPA0H26+dRRG9DhHLPNlLhirN66WtpD66w7oFRyz+tXl3Q==
-X-Received: by 2002:a05:600c:1d20:b0:424:a823:51d8 with SMTP id 5b1f17b1804b1-4256d4fb273mr88007515e9.11.1719876111076;
-        Mon, 01 Jul 2024 16:21:51 -0700 (PDT)
-Received: from krava ([176.105.156.1])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3675a0cd707sm11374193f8f.1.2024.07.01.16.21.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 Jul 2024 16:21:50 -0700 (PDT)
-From: Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Tue, 2 Jul 2024 01:21:45 +0200
-To: Christian Kujau <lists@nerdbynature.de>,
-	Daniel Borkmann <daniel@iogearbox.net>
-Cc: linux-kernel@vger.kernel.org, Martin KaFai Lau <martin.lau@linux.dev>,
-	bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
-	Hao Luo <haoluo@google.com>, regressions@lists.linux.dev,
-	patchwork-bot+netdevbpf@kernel.org, peter.ujfalusi@intel.com
-Subject: Re: [regression] =?utf-8?Q?bpf=5Flocal=5Fs?=
- =?utf-8?B?dG9yYWdlLmM6Nzg1OjYwOiBlcnJvcjog4oCYa3ZtYWxsb2NfYXJyYXlfbm9k?=
- =?utf-8?B?ZV9ub3Byb2bigJkgc2l6ZXMgc3BlY2lmaWVkIHdpdGgg4oCYc2l6ZW9m4oCZ?=
-Message-ID: <ZoM6CUhbWuAFuHjP@krava>
-References: <d0dd2457-ab58-1b08-caa4-93eaa2de221e@nerdbynature.de>
+        d=1e100.net; s=20230601; t=1719877269; x=1720482069;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Ql1LylJQbz5AqF02VyghAmPHhBmm+I/CxB5gAOiOtG0=;
+        b=LP1YbYg1GoHZ2ClzcBaxksZ2L5M9Sgri/0DU9F/k0mc3zVNqId1tcIkaQLtIHdlgiG
+         gtzLSZ0PFixJkS2u9JHF9sEAq1RJ8lyrimyzUchYuRwgh174BQuM0CdpRejYJ87mDvN2
+         Jg4x1FDxTCPXK2ULbLFIDoOLUQEvH+nTvjCXXs40fYG2fLP1G1kZTpFLjRDgp7nDNjvl
+         z4O/NqPzWSujI+bTwW0RRfVoG7JcX16llMSd7dj/NOFiDd5j3ibZxe8cJ8jQfPo5Nfje
+         JFGs0gzg2tFszIue4g1jH6S0sgyHyN6UvIb/QxKNu927a5srVT+Zqy0tHAh0n+5Jowjz
+         iaRA==
+X-Forwarded-Encrypted: i=1; AJvYcCVbJ8PgmdqL+UXG/2J676Ieb4l6gRI8no7Wk+lyBfM1J+EavXU9jLz47uEQEla3cfq+v1puLIxN7+50GXpsGJBPN6wu
+X-Gm-Message-State: AOJu0YxVLDIv1xR9gUhgI8d6yJBwYb2wWvlf/52GaDRUvOzOeW7b8Wyd
+	8GtKiYRSTYw8oelqHU4uK02CJia6tS/jmzSgoMwt5yJKOTSzziO9+d0N+WYdt4WL4mKVFT1LEQa
+	jlyHQaXb/61/ppbCpkJ7MLJlhcpYKv484+g1J
+X-Google-Smtp-Source: AGHT+IHtDYzMOZDam+ECIMAw43vgsX26d3AvzRHQKMU8Wr/2vGxwFWto9PP9Wduno94h2/m8Ochn48+TWWWjPOg+GJ4=
+X-Received: by 2002:a81:83d0:0:b0:64b:1eb2:3dd4 with SMTP id
+ 00721157ae682-64c6cabc43fmr49699387b3.8.1719877269534; Mon, 01 Jul 2024
+ 16:41:09 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <d0dd2457-ab58-1b08-caa4-93eaa2de221e@nerdbynature.de>
+References: <20240516003524.143243-6-kpsingh@kernel.org> <03c6f35485d622d8121fa0d7a7e3d0b2@paul-moore.com>
+ <CACYkzJ6hBdk0MEW+4-U3zprEY4a_JcOLYj0wFEz1KW2gBDDE_Q@mail.gmail.com>
+In-Reply-To: <CACYkzJ6hBdk0MEW+4-U3zprEY4a_JcOLYj0wFEz1KW2gBDDE_Q@mail.gmail.com>
+From: Paul Moore <paul@paul-moore.com>
+Date: Mon, 1 Jul 2024 19:40:58 -0400
+Message-ID: <CAHC9VhS_5d-CsTVTQCSZ3W151hGhNC+AZf=jRqfheKtZ+J4xOg@mail.gmail.com>
+Subject: Re: [PATCH v12 5/5] bpf: Only enable BPF LSM hooks when an LSM
+ program is attached
+To: KP Singh <kpsingh@kernel.org>
+Cc: linux-security-module@vger.kernel.org, bpf@vger.kernel.org, ast@kernel.org, 
+	casey@schaufler-ca.com, andrii@kernel.org, keescook@chromium.org, 
+	daniel@iogearbox.net, renauld@google.com, revest@chromium.org, 
+	song@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Jul 01, 2024 at 10:56:22PM +0200, Christian Kujau wrote:
-> This has been brought up before along with a patch[0] but has not been 
-> pushed to mainline:
-> 
->  $ make allnoconfig
->  $ enable CONFIG_WERROR and CONFIG_BPF
->  $ make
->  [...]
->  kernel/bpf/bpf_local_storage.c: In function ‘bpf_local_storage_map_alloc’:
->  kernel/bpf/bpf_local_storage.c:785:60: error: ‘kvmalloc_array_node_noprof’ sizes specified with ‘sizeof’ in the earlier 
->    argument and not in the later argument [-Werror=calloc-transposed-args]
->      785 |         smap->buckets = bpf_map_kvcalloc(&smap->map, sizeof(*smap->buckets),
->          |                                                            ^
-> 
-> I always compile kernels with CONFIG_WERROR=y and I'm surprised that this 
-> has not been caught by any build bots yet (or I did not see those 
-> reports), the help text even says "If in doubt, say Y", so I'm very 
-> puzzled why almost nobody else would be affected by this. The compilation 
-> error happens on a Fedora 40 laptop, with gcc 14.1.1 20240620 (Red Hat 
-> 14.1.1-6) installed.
-> 
-> The fix posted in [0] does fix the compilation errors, but maybe never 
-> made it to the correct trees to be included upstream? We are already in 
-> -rc6 and I fear that the next release will be shipped with that problem.
-> 
-> Thanks,
-> Christian.
-> 
-> [0] https://lore.kernel.org/bpf/363ad8d1-a2d2-4fca-b66a-3d838eb5def9@intel.com/T/
+On Sat, Jun 29, 2024 at 4:13=E2=80=AFAM KP Singh <kpsingh@kernel.org> wrote=
+:
+> On Tue, Jun 11, 2024 at 6:35=E2=80=AFAM Paul Moore <paul@paul-moore.com> =
+wrote:
+> > On May 15, 2024 KP Singh <kpsingh@kernel.org> wrote:
+> > >
+>
+> [...]
+>
+> > > +/**
+> > > + * security_toggle_hook - Toggle the state of the LSM hook.
+> > > + * @hook_addr: The address of the hook to be toggled.
+> > > + * @state: Whether to enable for disable the hook.
+> > > + *
+> > > + * Returns 0 on success, -EINVAL if the address is not found.
+> > > + */
+> > > +int security_toggle_hook(void *hook_addr, bool state)
+> > > +{
+> > > +     struct lsm_static_call *scalls =3D ((void *)&static_calls_table=
+);
+> >
+> > GCC (v14.1.1 if that matters) is complaining about casting randomized
+> > structs.  Looking quickly at the two structs, lsm_static_call and
+> > lsm_static_calls_table, I suspect the cast is harmless even if the
+> > randstruct case, but I would like to see some sort of fix for this so
+> > I don't get spammed by GCC every time I do a build.  On the other hand,
+> > if this cast really is a problem in the randstruct case we obviously
+> > need to fix that.
+> >
+>
+> The cast is not a problem with rand struct, we are iterating through a
+> 2 dimensional array and it does not matter in which order we iterate
+> the first dimension.
 
-hum.. it's in bpf-next and linux-next tree [1], but not sure it's
-on the way for next release.. Daniel?
+That was my suspicion when I looked at it quickly after the gcc
+complained, but if nothing else the compiler splat needed to be
+resolved.  Based on your comment it looks like you've fixed that in
+v13, that's good.  Please make sure to test with both gcc and clang in
+the future.
 
-jirka
+In an effort to avoid the "merge this now!" shouts and any other
+attempted maintainer manipulations using Linus' email as
+justification, I want to make it clear that the earliest the v13 would
+possibly be merged is after the upcoming merge window.  See the
+"Kernel Source Branches and Development Process" in the LSM guidance
+document below:
 
+https://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/lsm.git/tree/README=
+.md
 
-[1] 6f130e4d4a5f bpf: Fix order of args in call to bpf_map_kvcalloc
-
-
-> -- 
-> BOFH excuse #424:
-> 
-> operation failed because: there is no message for this error (#1014)
-
-
+--=20
+paul-moore.com
