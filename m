@@ -1,57 +1,57 @@
 Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3EA7173355
-	for <bpf@vger.kernel.org>; Mon,  1 Jul 2024 23:43:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F2AD173323
+	for <bpf@vger.kernel.org>; Mon,  1 Jul 2024 23:43:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719877417; cv=none; b=No/3xC1s8x+N3yZhfO0K6XuDamNQbE0R+8y2n08hhGeBlSGTL9oOzqeEpdfgCso5gsBzVnJcfq3cq3gFw3cDuSAYzk41harVeOC28s637V3DHrl2kwsQygHq2bjX6R36ewHzRISOIM46l/0m5/v09l/puytMwBD+adsm3kIjaD4=
+	t=1719877417; cv=none; b=CSDRwDUkHMhMOBz1Ej/BlxB1fHG5mdy833cFlOv9SW6v2/41dNh8G4Now5eqb7eCetpUZfuE99yITuRzyZTsQcJAOn+h+5Fd7ZhGoA+tW2JQoFId8DX+1U7VJQk4oqEzUnLuYp5kQ57fUuBsQrbiZzJCbFiIfdzDQtRlgxx1ilo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1719877417; c=relaxed/simple;
-	bh=Hc+rYwYqeRm5bcCCJCprRvdz23umNzVidylKqGV4lXk=;
+	bh=CMDoq7koA9F5m4zBtxZnvx6BijJnJYY2D1BNNSwvY/k=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=LuCBI/STPpR5qQgE0RH6z4AC0y8dmBR526uWnmzv0F5jcei0AL2Zp0kn3NiBU9Ec7S9E1HwcnVpt3zSaTAXSYCuE/jT6HMmH3OiNC9n+zFZa5Vb1oiP86rE0FEGJim2Wg6ndtrNDbKFORVjtC9Uf9SIuvERyfrpGMf6TdGECw10=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=DMMi54t5; arc=none smtp.client-ip=148.163.156.1
+	 MIME-Version; b=l8TCMwUI37mf82Uv6xTL1sSdKe2nY3CMf5msBKUfIHkTo/0hD1stDBfDT2B7OFytZVgQGGOghOGrAViFpzOD+0PY81N2OKlQ44O4wT9l5YoPhftsNoKqtm7nH806JW98/rmMJRaLMT28xP4JfY43p059+Sv/teIi+BQ2/5mipdw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=Wyyodpl3; arc=none smtp.client-ip=148.163.156.1
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="DMMi54t5"
-Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 461NU2al017837;
-	Mon, 1 Jul 2024 23:43:18 GMT
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="Wyyodpl3"
+Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 461NSHEu014796;
+	Mon, 1 Jul 2024 23:43:17 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from
 	:to:cc:subject:date:message-id:in-reply-to:references
-	:mime-version:content-transfer-encoding; s=pp1; bh=D22J5DIiU/1Ow
-	EsZW6ru2C1R9q/QG+4nTQU9H/YxeSo=; b=DMMi54t54I5Be+gJSs4onzt1vygb+
-	NXdYRIoO8KG4qmaurgaeCb7bqVG1r+frfBl3bm+6gFT+9Ahh533vZTvVtkQNBUvE
-	9kFOc6IU6/w17qzAry/IZ8w7OeDpXepy9gl41St/+QCMuZMUKKrTIo9usyVXEWqz
-	uOym5lk3cSfcm0lzKHAub/WSaTs30QP+iSAeibw/oUK8m7zKpMu/syYWn1nBAfiw
-	g8k4e8JHTtZm2eQi7iNoyByYTyHrmDkkNCxiRED9LJeb8KekMKJB4x3PjcxXI4uL
-	SZKkeSq7R5ZmJzZmBEG3NuIPAXDojWt5QOyezCUJn0uYr5MI6OhJEboHg==
-Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 40465g00t7-1
+	:mime-version:content-transfer-encoding; s=pp1; bh=HyLG7cKBYvUHQ
+	YdtIvtPnTMQHq80LRV6ShZUkjpj0z8=; b=Wyyodpl3e4jmya6XxpllE2RYe/WnX
+	LDP5/Skiehxwqt0F/LEdorOqcLCZbPahDGncC9ftFYC5tEDikeIhdD6fcYVNHh3e
+	4MOMHBrNKjT5cAZWaSO6YRASjjQk61XAFS+HQ9CA1rhhvTrUf2XvGJ48GYCncGax
+	mvjyEFM+MeDdhZ7TvezX9eagQH3zPCcEaqsXkL3XN3yT8KH9GfUCqZNa+7wTgz7e
+	9GEz4Cx198dKW/cK7OLS0TGdr3Oqk1YFMfMVAXpa1FzyB3zJrnB/buZTQZJ7koiq
+	EUz8FPT/D1wz1TYAMGn4YbM0ae687c5nGGRo781o6KShmEuxKlUPPW+pA==
+Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 40465g80sa-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 01 Jul 2024 23:43:18 +0000 (GMT)
-Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma12.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 461Lb4Wg005942;
-	Mon, 1 Jul 2024 23:43:17 GMT
-Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
-	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 402vku24et-1
+	Mon, 01 Jul 2024 23:43:17 +0000 (GMT)
+Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma21.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 461MTFsf026417;
+	Mon, 1 Jul 2024 23:43:16 GMT
+Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
+	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 402wkpsun1-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 01 Jul 2024 23:43:17 +0000
+	Mon, 01 Jul 2024 23:43:15 +0000
 Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
-	by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 461NhBvR43712922
+	by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 461NhAUG49611260
 	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 1 Jul 2024 23:43:13 GMT
+	Mon, 1 Jul 2024 23:43:12 GMT
 Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id C79A92004F;
-	Mon,  1 Jul 2024 23:43:11 +0000 (GMT)
+	by IMSVA (Postfix) with ESMTP id 2837D20043;
+	Mon,  1 Jul 2024 23:43:10 +0000 (GMT)
 Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 508FB2004E;
-	Mon,  1 Jul 2024 23:43:11 +0000 (GMT)
+	by IMSVA (Postfix) with ESMTP id ADDF120040;
+	Mon,  1 Jul 2024 23:43:09 +0000 (GMT)
 Received: from heavy.ibm.com (unknown [9.171.65.243])
 	by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Mon,  1 Jul 2024 23:43:11 +0000 (GMT)
+	Mon,  1 Jul 2024 23:43:09 +0000 (GMT)
 From: Ilya Leoshkevich <iii@linux.ibm.com>
 To: Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
@@ -60,9 +60,9 @@ Cc: bpf@vger.kernel.org, Heiko Carstens <hca@linux.ibm.com>,
         Vasily Gorbik <gor@linux.ibm.com>,
         Alexander Gordeev <agordeev@linux.ibm.com>,
         Ilya Leoshkevich <iii@linux.ibm.com>
-Subject: [PATCH bpf-next v3 08/12] s390/bpf: Enable arena
-Date: Tue,  2 Jul 2024 01:40:26 +0200
-Message-ID: <20240701234304.14336-9-iii@linux.ibm.com>
+Subject: [PATCH bpf-next v3 05/12] s390/bpf: Land on the next JITed instruction after exception
+Date: Tue,  2 Jul 2024 01:40:23 +0200
+Message-ID: <20240701234304.14336-6-iii@linux.ibm.com>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <20240701234304.14336-1-iii@linux.ibm.com>
 References: <20240701234304.14336-1-iii@linux.ibm.com>
@@ -74,38 +74,48 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: Yx1shvyIw3BXA36m8FSAR82R0Bb4sb-s
-X-Proofpoint-ORIG-GUID: Yx1shvyIw3BXA36m8FSAR82R0Bb4sb-s
+X-Proofpoint-GUID: mO85lQEYQ1UzlvGksWKaf2NIJ9lwko-F
+X-Proofpoint-ORIG-GUID: mO85lQEYQ1UzlvGksWKaf2NIJ9lwko-F
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
  definitions=2024-07-01_21,2024-07-01_01,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
- mlxlogscore=875 malwarescore=0 impostorscore=0 priorityscore=1501
- spamscore=0 bulkscore=0 adultscore=0 clxscore=1015 mlxscore=0 phishscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 phishscore=0
+ mlxlogscore=879 suspectscore=0 priorityscore=1501 adultscore=0
+ lowpriorityscore=0 spamscore=0 impostorscore=0 bulkscore=0 malwarescore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.19.0-2406140001 definitions=main-2407010174
 
-Now that BPF_PROBE_MEM32 and address space cast instructions are
-implemented, tell the verifier that the JIT supports arena.
+Currently we land on the nop, which is unnecessary: we can just as well
+begin executing the next instruction. Furthermore, the upcoming arena
+support for the loop-based BPF_XCHG implementation will require landing
+on an instruction that comes after the loop.
+
+So land on the next JITed instruction, which covers both cases.
 
 Signed-off-by: Ilya Leoshkevich <iii@linux.ibm.com>
 ---
- arch/s390/net/bpf_jit_comp.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ arch/s390/net/bpf_jit_comp.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
 diff --git a/arch/s390/net/bpf_jit_comp.c b/arch/s390/net/bpf_jit_comp.c
-index 39c1d9aa7f1e..1dd359c25ada 100644
+index 582fa3830772..ecd53f8f0602 100644
 --- a/arch/s390/net/bpf_jit_comp.c
 +++ b/arch/s390/net/bpf_jit_comp.c
-@@ -2820,3 +2820,8 @@ bool bpf_jit_supports_subprog_tailcalls(void)
- {
- 	return true;
- }
-+
-+bool bpf_jit_supports_arena(void)
-+{
-+	return true;
-+}
+@@ -747,10 +747,11 @@ static int bpf_jit_probe_post(struct bpf_jit *jit, struct bpf_prog *fp,
+ 			return -1;
+ 		ex->insn = delta;
+ 		/*
+-		 * Always land on the nop. Note that extable infrastructure
+-		 * ignores fixup field, it is handled by ex_handler_bpf().
++		 * Land on the current instruction. Note that the extable
++		 * infrastructure ignores the fixup field; it is handled by
++		 * ex_handler_bpf().
+ 		 */
+-		delta = jit->prg_buf + probe->nop_prg - (u8 *)&ex->fixup;
++		delta = jit->prg_buf + jit->prg - (u8 *)&ex->fixup;
+ 		if (WARN_ON_ONCE(delta < INT_MIN || delta > INT_MAX))
+ 			/* JIT bug - landing pad and extable must be close. */
+ 			return -1;
 -- 
 2.45.2
 
