@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 287362576F;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2878216C850;
 	Mon,  1 Jul 2024 15:20:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719847232; cv=none; b=CBjPpIFVMk9pD9d/D3A8N6LVxOLGdgACDVPZ2pT1ntplCrRLhYHxhoXK8qMPksUOFAmgYRxafjK+tMC7o3wRVrY+oyfW8rV8Z04OEMhlgMvMHc/6H5cLp3t40X8c1wbuMJUivru/PEa9uKd8Whis2mGJhelnEy6R56B3ExqMK/4=
+	t=1719847232; cv=none; b=JLH5Ai6vyFEm1DGl5Bv/MzypzS8ccxfiikk/n2oqEgUxECAmpDMlo7gKopXD60Z7ZWCRRqDRsWsxLwIdjX/mF12PhNOJMGRM7WjiNIer0XEFwCk789CUN2UJpF/fIIqNnNtol6VsHK7BlCbI95FWo2/Gdl+N1P1R66xiJk/cois=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1719847232; c=relaxed/simple;
-	bh=wxYu3zIRsXfA4tN7GBGojXy29esfx9y9v7Vqne4vjRI=;
+	bh=eBZTgio92XvIiaJrlosp4SpcyfO8TN1ko1sMkGrctV4=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=DXLqnRNkvgWZxyp17gu4aBr1OD8HOGCjrDNVJhc+QFSpNARL0mc6KkE4I4DANVE6E7qbhTv+N5RZTHRWwv9OZlpgCV2wi6UT/dynNxMUIazhRL+u7bwMQ69nZKNvaQSVo1KnR5GjtLHyjzAt7Zr8Zoh6oh0xAOf5fiXgx7hen9c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=S7Hbbd1v; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=j7LcAsEemA07Ai3AvgAoxM5mT344ktOwCp4REA6mepEvqiwdiVSltmY03mthnBDFXl8wUvKmw82DCRHUUzk5iAReQsEXvPrvX+osg5AitucPXpdp0PLL7VxCqXZjD7x8X7CyCq6sKDySeimy0LQmgmRwnHiBnuZVkgC0c35iJh4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CbMte/2K; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="S7Hbbd1v"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 918D4C2BD10;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CbMte/2K"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id A06F3C32786;
 	Mon,  1 Jul 2024 15:20:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1719847230;
-	bh=wxYu3zIRsXfA4tN7GBGojXy29esfx9y9v7Vqne4vjRI=;
+	bh=eBZTgio92XvIiaJrlosp4SpcyfO8TN1ko1sMkGrctV4=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=S7Hbbd1vhwHZKa9YqOoZSUlJFWJpgZPDu1al4RUr/qVgCCC05hGixcBxq1qU+Xvr3
-	 f0FNf1IXL8LLVTNy9HOky1GbeQ99L0NzD6ZtVO+vPyvk/+n4lmNhBhgkM6Ed2xn+Y9
-	 QzpgIgDVGClgh5LEHyHA6fvw0fNZQsGfW8heJ2uwD0v7zBdfIh7dPB3Tj2CBf91Bkj
-	 xgtKYtD7paXl7kh+QqkTLiR5hF/eRDqXsc6jtPZwvRrFuZ0OSc89/P2jcC1z3vHXSl
-	 VhRIFsT3UGHDNnns5g7Xj8fSuYzS8KrG9l+qGAxBW3CPlzAfmlyc73fGTA2ErTjzLj
-	 Q6spRSFMLybjg==
+	b=CbMte/2KIZuE6OBCyEbal2xPSDK7ZLPu2X03gX2Qwa/kah5z9T/mAuadTwndtPc2R
+	 UUIfLvbjAU/dqS/hBqTRUlvc6Peu12xqAjjZMT0UH+m2mdZDnrIqHcL8coY/bPE29J
+	 kKb74rvUih0HbE/LRcHsnRuF3xrJEVbwYfA6z55pXh7OhYbzZ4S4TSdE9w6jWvmDPq
+	 xQuh9YTVqrv6swJtQNCUphYBCQj4yoLCf3z/IEOS72V5KpLmt8yeLRgsxi4YQgoAvG
+	 z0IlwcfvXLdrVjE6mEU1/dkIPrxIB9DFpwwRFFvD1cBTBIshrsG/b+dqXBSu8v4BPB
+	 lH1kFt2nGvmeA==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 7E2E6C43468;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 88680C4333A;
 	Mon,  1 Jul 2024 15:20:30 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
@@ -37,48 +37,37 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH RESEND bpf-next v2 0/3] Use bpf_prog_pack for RV64 bpf
- trampoline
+Subject: Re: [PATCH] selftests/bpf:Delete extra blank Lines
 From: patchwork-bot+netdevbpf@kernel.org
 Message-Id: 
- <171984723051.1282.8352301752535739343.git-patchwork-notify@kernel.org>
+ <171984723055.1282.11176590552984938670.git-patchwork-notify@kernel.org>
 Date: Mon, 01 Jul 2024 15:20:30 +0000
-References: <20240622030437.3973492-1-pulehui@huaweicloud.com>
-In-Reply-To: <20240622030437.3973492-1-pulehui@huaweicloud.com>
-To: Pu Lehui <pulehui@huaweicloud.com>
-Cc: bpf@vger.kernel.org, linux-riscv@lists.infradead.org,
- netdev@vger.kernel.org, bjorn@kernel.org, ast@kernel.org,
- daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev,
- eddyz87@gmail.com, song@kernel.org, yhs@fb.com, john.fastabend@gmail.com,
- kpsingh@kernel.org, sdf@google.com, haoluo@google.com, jolsa@kernel.org,
- puranjay@kernel.org, palmer@dabbelt.com, pulehui@huawei.com
+References: <20240627031905.7133-1-zhujun2@cmss.chinamobile.com>
+In-Reply-To: <20240627031905.7133-1-zhujun2@cmss.chinamobile.com>
+To: Zhu Jun <zhujun2@cmss.chinamobile.com>
+Cc: shuah@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+ martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
+ yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
+ sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org, ast@kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ bpf@vger.kernel.org
 
 Hello:
 
-This series was applied to bpf/bpf-next.git (master)
+This patch was applied to bpf/bpf-next.git (master)
 by Daniel Borkmann <daniel@iogearbox.net>:
 
-On Sat, 22 Jun 2024 03:04:34 +0000 you wrote:
-> We used bpf_prog_pack to aggregate bpf programs into huge page to
-> relieve the iTLB pressure on the system. We can apply it to bpf
-> trampoline, as Song had been implemented it in core and x86 [0]. This
-> patch is going to use bpf_prog_pack to RV64 bpf trampoline. Since Song
-> and Puranjay have done a lot of work for bpf_prog_pack on RV64,
-> implementing this function will be easy. But one thing to mention is
-> that emit_call in RV64 will generate the maximum number of instructions
-> during dry run, but during real patching it may be optimized to 1
-> instruction due to distance. This is no problem as it does not overflow
-> the allocated RO image.
+On Wed, 26 Jun 2024 20:19:05 -0700 you wrote:
+> Delete extra blank lines inside of test_selftest()
 > 
-> [...]
+> Signed-off-by: Zhu Jun <zhujun2@cmss.chinamobile.com>
+> ---
+>  tools/testing/selftests/bpf/test_sockmap.c | 1 -
+>  1 file changed, 1 deletion(-)
 
 Here is the summary with links:
-  - [RESEND,bpf-next,v2,1/3] bpf: Use precise image size for struct_ops trampoline
-    https://git.kernel.org/bpf/bpf-next/c/d1a426171d76
-  - [RESEND,bpf-next,v2,2/3] riscv, bpf: Fix out-of-bounds issue when preparing trampoline image
-    https://git.kernel.org/bpf/bpf-next/c/9f1e16fb1fc9
-  - [RESEND,bpf-next,v2,3/3] riscv, bpf: Use bpf_prog_pack for RV64 bpf trampoline
-    https://git.kernel.org/bpf/bpf-next/c/2382a405c581
+  - selftests/bpf:Delete extra blank Lines
+    https://git.kernel.org/bpf/bpf-next/c/03922e97bc30
 
 You are awesome, thank you!
 -- 
