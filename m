@@ -1,126 +1,189 @@
-Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com [209.85.128.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 890F5171652
-	for <bpf@vger.kernel.org>; Mon,  1 Jul 2024 23:41:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B15712F29
+	for <bpf@vger.kernel.org>; Mon,  1 Jul 2024 23:43:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719877272; cv=none; b=VoMR8A8X/hhu2T5ajlEKJ0yOh948fiW+Rsh8MLrwkkCWuasZkW+batSrWUOihuhFh2q09/g5+VP0NJrrGplO2Kbv0Q2Z0821ayrJMAP/pg98O7WUN/nkzjwOTzh0Yk2hgAxPF6wnFFH5y6zKmpsTerrd7S8BlVzUfqELuBb4AJc=
+	t=1719877411; cv=none; b=JsoP+5r/LEY0Fs7RmmzGdcfrdynKxjHkF39NJYJA/Hl/J5lSF/aow8UCQyPoauTy3CKEymoMPhNxD5FoK2B/ZTvwE4dyybwJ01CKpf1mqkIjyWKQtDPNGs4dGN03MkWvKZBZjhcye+K372FuWZD+/R6dXNdipo9Hndxji/JlL0c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719877272; c=relaxed/simple;
-	bh=CgoTJpfM3Eaqb9b9tstTTdsvLHWdvVZJPceoVZ/lIxw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=QaIi8guKHIEHouWinBRB1zXxck8f1yusDXyUHa8PZCYDQSvox6pLmbmmEGJmG/8MNNuvm0cjciy4Deva5zNyU2LQVLgH3SWDcjLoyRDiBe64veLPt3qjZNDEaFo8rpuRVtpeaius7EhcEowmNsoVYM2t6fprViq4vLUBfq/exAw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=giqerGV4; arc=none smtp.client-ip=209.85.128.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+	s=arc-20240116; t=1719877411; c=relaxed/simple;
+	bh=Ffnk2hnEq3iyMJwjgWXOy12DcTrsJB0dQof8gtQ7y/A=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=dV5gYVELmNLzlLMUj0z0Bp81Q4A1gGNOoKDe+yD+Pc4GyblKW0CjA41trTNjdZS9lyxWb1ZmhJtXN4EqjflotS/4F8+jD6vWCB/f+EW6bvD5Js3c5iYa48p8ko+Y+sEnVQlqQhoaVoEpnYQIYYjhC89NBdDfwjrJPMQVuD/QkGM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=CBY+4Dcy; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="giqerGV4"
-Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-64ad8d7b804so28752717b3.0
-        for <bpf@vger.kernel.org>; Mon, 01 Jul 2024 16:41:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1719877269; x=1720482069; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Ql1LylJQbz5AqF02VyghAmPHhBmm+I/CxB5gAOiOtG0=;
-        b=giqerGV4DRRuwFPvN6Xrg9BgUdFji2MMj5Dij9liQWHDD+UdN7NnE7+ZR3jOf+7iCr
-         gfZLcQktp+Oj2ikTU6ahGw3g2BNjlt3anXc20tn2oC39tNn1TymcXZOUW4cb6HyOp+oo
-         XaT4yOn35rOvJwm4PgVWQVX/3Dty9N/F2XDpX/WFSxhxPy915splFSHsv/pjNf8RgGeO
-         aczV0HE4Ky/cnz8lbyOkkizwsym1Hd/GiUzKhyipkiYyAUQy22Y4xKoSZYmCRDSYcnY/
-         cDH2dYgPZfqtFUwcTZWIlP8G+4qr+/F3cugHhx35a4zCFLd5XngisbDEN6+ooNx3rMRi
-         YaKg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719877269; x=1720482069;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Ql1LylJQbz5AqF02VyghAmPHhBmm+I/CxB5gAOiOtG0=;
-        b=LP1YbYg1GoHZ2ClzcBaxksZ2L5M9Sgri/0DU9F/k0mc3zVNqId1tcIkaQLtIHdlgiG
-         gtzLSZ0PFixJkS2u9JHF9sEAq1RJ8lyrimyzUchYuRwgh174BQuM0CdpRejYJ87mDvN2
-         Jg4x1FDxTCPXK2ULbLFIDoOLUQEvH+nTvjCXXs40fYG2fLP1G1kZTpFLjRDgp7nDNjvl
-         z4O/NqPzWSujI+bTwW0RRfVoG7JcX16llMSd7dj/NOFiDd5j3ibZxe8cJ8jQfPo5Nfje
-         JFGs0gzg2tFszIue4g1jH6S0sgyHyN6UvIb/QxKNu927a5srVT+Zqy0tHAh0n+5Jowjz
-         iaRA==
-X-Forwarded-Encrypted: i=1; AJvYcCVbJ8PgmdqL+UXG/2J676Ieb4l6gRI8no7Wk+lyBfM1J+EavXU9jLz47uEQEla3cfq+v1puLIxN7+50GXpsGJBPN6wu
-X-Gm-Message-State: AOJu0YxVLDIv1xR9gUhgI8d6yJBwYb2wWvlf/52GaDRUvOzOeW7b8Wyd
-	8GtKiYRSTYw8oelqHU4uK02CJia6tS/jmzSgoMwt5yJKOTSzziO9+d0N+WYdt4WL4mKVFT1LEQa
-	jlyHQaXb/61/ppbCpkJ7MLJlhcpYKv484+g1J
-X-Google-Smtp-Source: AGHT+IHtDYzMOZDam+ECIMAw43vgsX26d3AvzRHQKMU8Wr/2vGxwFWto9PP9Wduno94h2/m8Ochn48+TWWWjPOg+GJ4=
-X-Received: by 2002:a81:83d0:0:b0:64b:1eb2:3dd4 with SMTP id
- 00721157ae682-64c6cabc43fmr49699387b3.8.1719877269534; Mon, 01 Jul 2024
- 16:41:09 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="CBY+4Dcy"
+Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 461MuoUV013429;
+	Mon, 1 Jul 2024 23:43:15 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from
+	:to:cc:subject:date:message-id:in-reply-to:references
+	:mime-version:content-transfer-encoding; s=pp1; bh=OZJgdvap6RejD
+	C2FzpnNBkCKdzEUVS7hHzbtvz+kL/E=; b=CBY+4Dcyo/+0gOBy4cxfQ0l54+qBm
+	j+WojI8O5OQCb8D/qe/BRLGAOUEr/ofu9X+5IRFZ+sFe1Po1Wb/wYZe5sKzsXxCI
+	l5Uh8R6EC4r17Lt3sfFX5W7mjaqpDrQ2gRiKDjb50+f9FUmeqk3VwC+lVUuJ8DYc
+	6eXH2KE07DRa1lXlV5DY8OG0n5mQP8jTX7ABI++w1TRRWayNjOrwvw6dOSVvXLEo
+	kXSsBs3kjM/ZtWfM1F4vPQnbD/ZACsyL569kdEjQtvGK9xMwwpiXwwaAAmTBL28V
+	e8bqhJ3dEv77aUVj0MdrV8IoSAbSC/r3FL9jPd1X6ggzNywBAeAwAc32w==
+Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 40459dr3fc-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 01 Jul 2024 23:43:15 +0000 (GMT)
+Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma22.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 461M4uQv009154;
+	Mon, 1 Jul 2024 23:43:14 GMT
+Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
+	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 402w00j19y-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 01 Jul 2024 23:43:14 +0000
+Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
+	by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 461Nh91319857704
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 1 Jul 2024 23:43:11 GMT
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 142CA2004F;
+	Mon,  1 Jul 2024 23:43:09 +0000 (GMT)
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 9916420040;
+	Mon,  1 Jul 2024 23:43:08 +0000 (GMT)
+Received: from heavy.ibm.com (unknown [9.171.65.243])
+	by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Mon,  1 Jul 2024 23:43:08 +0000 (GMT)
+From: Ilya Leoshkevich <iii@linux.ibm.com>
+To: Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>
+Cc: bpf@vger.kernel.org, Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Ilya Leoshkevich <iii@linux.ibm.com>
+Subject: [PATCH bpf-next v3 03/12] s390/bpf: Get rid of get_probe_mem_regno()
+Date: Tue,  2 Jul 2024 01:40:21 +0200
+Message-ID: <20240701234304.14336-4-iii@linux.ibm.com>
+X-Mailer: git-send-email 2.45.2
+In-Reply-To: <20240701234304.14336-1-iii@linux.ibm.com>
+References: <20240701234304.14336-1-iii@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240516003524.143243-6-kpsingh@kernel.org> <03c6f35485d622d8121fa0d7a7e3d0b2@paul-moore.com>
- <CACYkzJ6hBdk0MEW+4-U3zprEY4a_JcOLYj0wFEz1KW2gBDDE_Q@mail.gmail.com>
-In-Reply-To: <CACYkzJ6hBdk0MEW+4-U3zprEY4a_JcOLYj0wFEz1KW2gBDDE_Q@mail.gmail.com>
-From: Paul Moore <paul@paul-moore.com>
-Date: Mon, 1 Jul 2024 19:40:58 -0400
-Message-ID: <CAHC9VhS_5d-CsTVTQCSZ3W151hGhNC+AZf=jRqfheKtZ+J4xOg@mail.gmail.com>
-Subject: Re: [PATCH v12 5/5] bpf: Only enable BPF LSM hooks when an LSM
- program is attached
-To: KP Singh <kpsingh@kernel.org>
-Cc: linux-security-module@vger.kernel.org, bpf@vger.kernel.org, ast@kernel.org, 
-	casey@schaufler-ca.com, andrii@kernel.org, keescook@chromium.org, 
-	daniel@iogearbox.net, renauld@google.com, revest@chromium.org, 
-	song@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: WsyQvIbQsg0k_a6DNloe1qtiDNEQEy_z
+X-Proofpoint-GUID: WsyQvIbQsg0k_a6DNloe1qtiDNEQEy_z
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-07-01_21,2024-07-01_01,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 mlxscore=0
+ mlxlogscore=999 lowpriorityscore=0 clxscore=1015 impostorscore=0
+ suspectscore=0 bulkscore=0 priorityscore=1501 adultscore=0 malwarescore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2406140001 definitions=main-2407010170
 
-On Sat, Jun 29, 2024 at 4:13=E2=80=AFAM KP Singh <kpsingh@kernel.org> wrote=
-:
-> On Tue, Jun 11, 2024 at 6:35=E2=80=AFAM Paul Moore <paul@paul-moore.com> =
-wrote:
-> > On May 15, 2024 KP Singh <kpsingh@kernel.org> wrote:
-> > >
->
-> [...]
->
-> > > +/**
-> > > + * security_toggle_hook - Toggle the state of the LSM hook.
-> > > + * @hook_addr: The address of the hook to be toggled.
-> > > + * @state: Whether to enable for disable the hook.
-> > > + *
-> > > + * Returns 0 on success, -EINVAL if the address is not found.
-> > > + */
-> > > +int security_toggle_hook(void *hook_addr, bool state)
-> > > +{
-> > > +     struct lsm_static_call *scalls =3D ((void *)&static_calls_table=
-);
-> >
-> > GCC (v14.1.1 if that matters) is complaining about casting randomized
-> > structs.  Looking quickly at the two structs, lsm_static_call and
-> > lsm_static_calls_table, I suspect the cast is harmless even if the
-> > randstruct case, but I would like to see some sort of fix for this so
-> > I don't get spammed by GCC every time I do a build.  On the other hand,
-> > if this cast really is a problem in the randstruct case we obviously
-> > need to fix that.
-> >
->
-> The cast is not a problem with rand struct, we are iterating through a
-> 2 dimensional array and it does not matter in which order we iterate
-> the first dimension.
+Commit 7fc8c362e782 ("s390/bpf: encode register within extable entry")
+introduced explicit passing of the number of the register to be cleared
+to ex_handler_bpf(), which replaced deducing it from the respective
+native load instruction using get_probe_mem_regno().
 
-That was my suspicion when I looked at it quickly after the gcc
-complained, but if nothing else the compiler splat needed to be
-resolved.  Based on your comment it looks like you've fixed that in
-v13, that's good.  Please make sure to test with both gcc and clang in
-the future.
+Replace the second and last usage in the same manner, and remove this
+function.
 
-In an effort to avoid the "merge this now!" shouts and any other
-attempted maintainer manipulations using Linus' email as
-justification, I want to make it clear that the earliest the v13 would
-possibly be merged is after the upcoming merge window.  See the
-"Kernel Source Branches and Development Process" in the LSM guidance
-document below:
+Signed-off-by: Ilya Leoshkevich <iii@linux.ibm.com>
+---
+ arch/s390/net/bpf_jit_comp.c | 33 +++++++--------------------------
+ 1 file changed, 7 insertions(+), 26 deletions(-)
 
-https://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/lsm.git/tree/README=
-.md
+diff --git a/arch/s390/net/bpf_jit_comp.c b/arch/s390/net/bpf_jit_comp.c
+index 260e7009784b..d9d79aa2be1b 100644
+--- a/arch/s390/net/bpf_jit_comp.c
++++ b/arch/s390/net/bpf_jit_comp.c
+@@ -667,25 +667,6 @@ static void bpf_jit_epilogue(struct bpf_jit *jit, u32 stack_depth)
+ 	jit->prg += sizeof(struct bpf_plt);
+ }
+ 
+-static int get_probe_mem_regno(const u8 *insn)
+-{
+-	/*
+-	 * insn must point to llgc, llgh, llgf, lg, lgb, lgh or lgf, which have
+-	 * destination register at the same position.
+-	 */
+-	if (insn[0] != 0xe3) /* common prefix */
+-		return -1;
+-	if (insn[5] != 0x90 && /* llgc */
+-	    insn[5] != 0x91 && /* llgh */
+-	    insn[5] != 0x16 && /* llgf */
+-	    insn[5] != 0x04 && /* lg */
+-	    insn[5] != 0x77 && /* lgb */
+-	    insn[5] != 0x15 && /* lgh */
+-	    insn[5] != 0x14) /* lgf */
+-		return -1;
+-	return insn[1] >> 4;
+-}
+-
+ bool ex_handler_bpf(const struct exception_table_entry *x, struct pt_regs *regs)
+ {
+ 	regs->psw.addr = extable_fixup(x);
+@@ -699,12 +680,14 @@ bool ex_handler_bpf(const struct exception_table_entry *x, struct pt_regs *regs)
+ struct bpf_jit_probe {
+ 	int prg;	/* JITed instruction offset */
+ 	int nop_prg;	/* JITed nop offset */
++	int reg;	/* Register to clear on exception */
+ };
+ 
+ static void bpf_jit_probe_init(struct bpf_jit_probe *probe)
+ {
+ 	probe->prg = -1;
+ 	probe->nop_prg = -1;
++	probe->reg = -1;
+ }
+ 
+ /*
+@@ -725,7 +708,7 @@ static int bpf_jit_probe_mem(struct bpf_jit *jit, struct bpf_prog *fp,
+ 			     struct bpf_jit_probe *probe)
+ {
+ 	struct exception_table_entry *ex;
+-	int i, prg, reg;
++	int i, prg;
+ 	s64 delta;
+ 	u8 *insn;
+ 
+@@ -734,10 +717,6 @@ static int bpf_jit_probe_mem(struct bpf_jit *jit, struct bpf_prog *fp,
+ 		/* Do nothing during early JIT passes. */
+ 		return 0;
+ 	insn = jit->prg_buf + probe->prg;
+-	reg = get_probe_mem_regno(insn);
+-	if (WARN_ON_ONCE(reg < 0))
+-		/* JIT bug - unexpected probe instruction. */
+-		return -1;
+ 	if (WARN_ON_ONCE(probe->prg + insn_length(*insn) != probe->nop_prg))
+ 		/* JIT bug - gap between probe and nop instructions. */
+ 		return -1;
+@@ -763,7 +742,7 @@ static int bpf_jit_probe_mem(struct bpf_jit *jit, struct bpf_prog *fp,
+ 			return -1;
+ 		ex->fixup = delta;
+ 		ex->type = EX_TYPE_BPF;
+-		ex->data = reg;
++		ex->data = probe->reg;
+ 		jit->excnt++;
+ 	}
+ 	return 0;
+@@ -821,8 +800,10 @@ static noinline int bpf_jit_insn(struct bpf_jit *jit, struct bpf_prog *fp,
+ 	bpf_jit_probe_init(&probe);
+ 	if (BPF_CLASS(insn->code) == BPF_LDX &&
+ 	    (BPF_MODE(insn->code) == BPF_PROBE_MEM ||
+-	     BPF_MODE(insn->code) == BPF_PROBE_MEMSX))
++	     BPF_MODE(insn->code) == BPF_PROBE_MEMSX)) {
+ 		probe.prg = jit->prg;
++		probe.reg = reg2hex[dst_reg];
++	}
+ 
+ 	switch (insn->code) {
+ 	/*
+-- 
+2.45.2
 
---=20
-paul-moore.com
