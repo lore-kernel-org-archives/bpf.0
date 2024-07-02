@@ -1,331 +1,237 @@
-Received: from mail-oi1-f178.google.com (mail-oi1-f178.google.com [209.85.167.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C2452F43;
-	Tue,  2 Jul 2024 01:35:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C30FD2F43;
+	Tue,  2 Jul 2024 01:35:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719884111; cv=none; b=VAp7zLJivUf3np5hL0BCmofHUsUTGXEScHMl4+aBAZEp9qH1/zwWg6wqVhHDPm8ZllE7Ptnpmhj50VZx8bf8mx0Q3ipoRg/D0+4K2ItNG4oFNm5c9TdvPFRRmJPDesy0B3MAYBLAaH4Y3VKzmdo3DUxluUSaEeZ+2TEmG06BfZI=
+	t=1719884153; cv=none; b=oKQbWgzMnFMmZqceyMMNePDpGqX3SJHI1z4Fswan9+OARwJD9MiioVid1jX63I3LxI/P0nyrHFtZSRywr3IUQtEu6NFammTr6CzjqLJ4KODM4mELlujxYqp9tn+ia68cJRHB7VGWAaQffX+u1OIG6bY2esR8ASQztrdwzLkkErk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719884111; c=relaxed/simple;
-	bh=PIzYFOK0PDzkUyIeOB5c2a9FdJS+U+iXhHuKC468duk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=h/rO8dVZo/Ou+PuNYxR02sVZ+qbBhZN+OVEBbvhxIMv0SdGBc/Xpn4PwgR4gcfuDKJeDHC17Tgx6zkH4Q+FShVKK/RzAIUOvMfcBSXYHfMVRKJ4LkeqM2J/ytkvgekLqwPA46TlYpVe4o9MPTZo8KPCdln9M2ucWlrvZfr+O71Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZuLXdtJQ; arc=none smtp.client-ip=209.85.167.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZuLXdtJQ"
-Received: by mail-oi1-f178.google.com with SMTP id 5614622812f47-3d55f198f1eso1812100b6e.0;
-        Mon, 01 Jul 2024 18:35:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1719884108; x=1720488908; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=sBXXf8pITsw6l4LfxVnWjvzW94GQwfP4c3NRXFnNIJE=;
-        b=ZuLXdtJQJh6kKTY0qUMFa8ubwDW1h3o3cz+Lj7946m3SLAGIck+9F45k0Bo9tjkAYA
-         vylNt4OWmidCov7qCTMjUlzVyxpQ3LHWfuru5d4wYDjh+cJAyZNv3uWKielco9+FxQGN
-         CcEMXAP2UsKeoM9j6Bd3YlObO/ekQdwKI6MWM+Nqi+nwRC3RB+qzmyoCpwiDxI1tR5mc
-         5CrHypbJAkePwd9b4L1fOOpHUuhOrGbtLKPblLzqC68WZw8lHc28TEQa6u2VNBsNrHb/
-         fX8W9FYAvFkPXZ5g66uHKr9idnMI3ECJUYW55iIydc63t0uKFrIOukpNjaURzNnKZ+WW
-         MRwA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1719884108; x=1720488908;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=sBXXf8pITsw6l4LfxVnWjvzW94GQwfP4c3NRXFnNIJE=;
-        b=fFP4YOk64EseBxPKO0Sf4SAhMNI07zxmcGY8PDfPFovzAt6bvBVkMSLekox1efmUqI
-         AU3mwCIfTulD69b9bU71AaqvqV4yn+r9fCYCLpn7WOj5JujcThrgYNzBXu+95Taz8TOo
-         cBCMO9JRu/yywz/9MBD5XZc3jy6DmgIFFOpZD0b7lVsV8fry/qhpLVqJpfdHNED8Wfrr
-         UXf0xf3cNx3H1/h9iWcJW+6XIgepcF79ujNS90FrM6+xSLdcTS95NOUYzBST3A/Eu/n5
-         w7xGR2GWd0pKXk4SxuSx1LmPJ9JOG/ffU7GqRFgpzjz32uxqONYQ4hKIb3oJLQA70Py+
-         WRTA==
-X-Forwarded-Encrypted: i=1; AJvYcCVOiQbQpOG3BNOHx+TF6JZOk3h1IZOQylIlIS3iv6Fb3MbqGiGT/AhiIFHEPL86DEkTmuBYNBvZRRTQVRLjEjfGddKwZ3ICDRpKkXLMIZJritAjW3ouYamowrkkgCK+ExdfYSPijkXz
-X-Gm-Message-State: AOJu0YypYl/o86FobutGVrhBcEItWgzh7W1I68+XObae941z2OgB7UyG
-	eLgKgt+GLvexiH6fRIHlIRuQkK9j7SN0VR600oNYf4lMHNcYLN7OfmGSddkA4kGVhCSedSMcQ+t
-	XAzPTgIZ9Q9XdmXBIHt0+dYOqEyg=
-X-Google-Smtp-Source: AGHT+IGkmEJ8753bYaETSqXEP7YS13zqav+d3S14tfqjdJeANw9bthaekf1H1Nt7Tv3PRqTjnZl3ZMMWgZ8Cbul+KWQ=
-X-Received: by 2002:a05:6808:1416:b0:3d5:6344:fd9f with SMTP id
- 5614622812f47-3d6b37b3ac8mr9816968b6e.31.1719884107383; Mon, 01 Jul 2024
- 18:35:07 -0700 (PDT)
+	s=arc-20240116; t=1719884153; c=relaxed/simple;
+	bh=0YIb1crBhvzWhdl6nL2HInePKan9fvjO81UhTtfWzzg=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=PyI03U1kgeC20y9I/nIgI3BcxoPqGbOc7vfReDwrdJmP7TIaMT5Xzl+lP0kolC/n2MkUN4rBrKt6AkwJafPQFswkTkjLPMXj3lsYb4GvF+tK931YEzgPugFVJVjz4To+5oIGNnFmMjkqS0i8TeFai0yfNrXlahKaJYHkgyrgnPw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.235])
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4WClq06sbXz4f3jYl;
+	Tue,  2 Jul 2024 09:35:40 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.112])
+	by mail.maildlp.com (Postfix) with ESMTP id 442B71A0568;
+	Tue,  2 Jul 2024 09:35:48 +0800 (CST)
+Received: from ultra.huawei.com (unknown [10.90.53.71])
+	by APP1 (Coremail) with SMTP id cCh0CgCXwX1vWYNm+0GRAw--.62272S5;
+	Tue, 02 Jul 2024 09:35:48 +0800 (CST)
+From: Pu Lehui <pulehui@huaweicloud.com>
+To: bpf@vger.kernel.org,
+	linux-riscv@lists.infradead.org,
+	netdev@vger.kernel.org
+Cc: =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@google.com>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Puranjay Mohan <puranjay@kernel.org>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Pu Lehui <pulehui@huawei.com>
+Subject: [PATCH bpf-next v5 3/3] selftests/bpf: Add testcase where 7th argment is struct
+Date: Tue,  2 Jul 2024 01:37:30 +0000
+Message-Id: <20240702013730.1082285-4-pulehui@huaweicloud.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20240702013730.1082285-1-pulehui@huaweicloud.com>
+References: <20240702013730.1082285-1-pulehui@huaweicloud.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240625002144.3485799-1-andrii@kernel.org> <20240625002144.3485799-7-andrii@kernel.org>
- <20240627220449.0d2a12e24731e4764540f8aa@kernel.org> <CAEf4BzbLNHYsUfPi3+M_WUVSaZ9Ey-r3BxqV0Zz6pPqpMCjqpg@mail.gmail.com>
- <20240628152846.ddf192c426fc6ce155044da0@kernel.org> <CAEf4Bzbr-yFv6wPJ8P=GBth7jLLj58Y7D5NwcDbX4V8nAs1QmA@mail.gmail.com>
- <20240630083010.99ff77488ec62b38bcfeaa29@kernel.org> <CAEf4BzZh4ShURvqk-QxC5h1NpN0tjWMr1db+__gsCmr-suUNOQ@mail.gmail.com>
- <CAEf4BzbRQjK7nnR2nnw_hgYztPPxaSC6_qFTrdADy3yCki_wEA@mail.gmail.com> <20240702100151.509a9e45c04a9cfed0653e6f@kernel.org>
-In-Reply-To: <20240702100151.509a9e45c04a9cfed0653e6f@kernel.org>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Mon, 1 Jul 2024 18:34:55 -0700
-Message-ID: <CAEf4BzYShpT2fZKv3yZYxZA0Ha9JQXC3YQyJsjGB+T-yLOKs+Q@mail.gmail.com>
-Subject: Re: [PATCH 06/12] uprobes: add batch uprobe register/unregister APIs
-To: Masami Hiramatsu <mhiramat@kernel.org>
-Cc: Andrii Nakryiko <andrii@kernel.org>, linux-trace-kernel@vger.kernel.org, 
-	rostedt@goodmis.org, oleg@redhat.com, peterz@infradead.org, mingo@redhat.com, 
-	bpf@vger.kernel.org, jolsa@kernel.org, paulmck@kernel.org, clm@meta.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:cCh0CgCXwX1vWYNm+0GRAw--.62272S5
+X-Coremail-Antispam: 1UD129KBjvJXoW3GrWxCryxGr1DCFW5Aw4xWFg_yoWxWFykpa
+	s7Xw1UtFWrJF47WryxGa1UZr4S9393Xr1UJFW7G3s0vry8t3s7JF1xKF4jyFn5G398uwnx
+	AayqkFZ8Ca1xJaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUBYb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUWw
+	A2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
+	w2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
+	W8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v2
+	6rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMc
+	Ij6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_
+	Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij64
+	vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8G
+	jcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE2I
+	x0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26F4j6r4UJwCI42IY6xAI
+	w20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x
+	0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU1c4S7UUUUU==
+X-CM-SenderInfo: psxovxtxl6x35dzhxuhorxvhhfrp/
 
-On Mon, Jul 1, 2024 at 6:01=E2=80=AFPM Masami Hiramatsu <mhiramat@kernel.or=
-g> wrote:
->
-> On Mon, 1 Jul 2024 15:15:56 -0700
-> Andrii Nakryiko <andrii.nakryiko@gmail.com> wrote:
->
-> > On Mon, Jul 1, 2024 at 10:55=E2=80=AFAM Andrii Nakryiko
-> > <andrii.nakryiko@gmail.com> wrote:
-> > >
-> > > On Sat, Jun 29, 2024 at 4:30=E2=80=AFPM Masami Hiramatsu <mhiramat@ke=
-rnel.org> wrote:
-> > > >
-> > > > On Fri, 28 Jun 2024 09:34:26 -0700
-> > > > Andrii Nakryiko <andrii.nakryiko@gmail.com> wrote:
-> > > >
-> > > > > On Thu, Jun 27, 2024 at 11:28=E2=80=AFPM Masami Hiramatsu <mhiram=
-at@kernel.org> wrote:
-> > > > > >
-> > > > > > On Thu, 27 Jun 2024 09:47:10 -0700
-> > > > > > Andrii Nakryiko <andrii.nakryiko@gmail.com> wrote:
-> > > > > >
-> > > > > > > On Thu, Jun 27, 2024 at 6:04=E2=80=AFAM Masami Hiramatsu <mhi=
-ramat@kernel.org> wrote:
-> > > > > > > >
-> > > > > > > > On Mon, 24 Jun 2024 17:21:38 -0700
-> > > > > > > > Andrii Nakryiko <andrii@kernel.org> wrote:
-> > > > > > > >
-> > > > > > > > > -static int __uprobe_register(struct inode *inode, loff_t=
- offset,
-> > > > > > > > > -                          loff_t ref_ctr_offset, struct =
-uprobe_consumer *uc)
-> > > > > > > > > +int uprobe_register_batch(struct inode *inode, int cnt,
-> > > > > > > > > +                       uprobe_consumer_fn get_uprobe_con=
-sumer, void *ctx)
-> > > > > > > >
-> > > > > > > > Is this interface just for avoiding memory allocation? Can'=
-t we just
-> > > > > > > > allocate a temporary array of *uprobe_consumer instead?
-> > > > > > >
-> > > > > > > Yes, exactly, to avoid the need for allocating another array =
-that
-> > > > > > > would just contain pointers to uprobe_consumer. Consumers wou=
-ld never
-> > > > > > > just have an array of `struct uprobe_consumer *`, because
-> > > > > > > uprobe_consumer struct is embedded in some other struct, so t=
-he array
-> > > > > > > interface isn't the most convenient.
-> > > > > >
-> > > > > > OK, I understand it.
-> > > > > >
-> > > > > > >
-> > > > > > > If you feel strongly, I can do an array, but this necessitate=
-s
-> > > > > > > allocating an extra array *and keeping it* for the entire dur=
-ation of
-> > > > > > > BPF multi-uprobe link (attachment) existence, so it feels lik=
-e a
-> > > > > > > waste. This is because we don't want to do anything that can =
-fail in
-> > > > > > > the detachment logic (so no temporary array allocation there)=
-.
-> > > > > >
-> > > > > > No need to change it, that sounds reasonable.
-> > > > > >
-> > > > >
-> > > > > Great, thanks.
-> > > > >
-> > > > > > >
-> > > > > > > Anyways, let me know how you feel about keeping this callback=
-.
-> > > > > >
-> > > > > > IMHO, maybe the interface function is better to change to
-> > > > > > `uprobe_consumer *next_uprobe_consumer(void **data)`. If caller
-> > > > > > side uses a linked list of structure, index access will need to
-> > > > > > follow the list every time.
-> > > > >
-> > > > > This would be problematic. Note how we call get_uprobe_consumer(i=
-,
-> > > > > ctx) with i going from 0 to N in multiple independent loops. So i=
-f we
-> > > > > are only allowed to ask for the next consumer, then
-> > > > > uprobe_register_batch and uprobe_unregister_batch would need to b=
-uild
-> > > > > its own internal index and remember ith instance. Which again mea=
-ns
-> > > > > more allocations and possibly failing uprobe_unregister_batch(), =
-which
-> > > > > isn't great.
-> > > >
-> > > > No, I think we can use a cursor variable as;
-> > > >
-> > > > int uprobe_register_batch(struct inode *inode,
-> > > >                  uprobe_consumer_fn get_uprobe_consumer, void *ctx)
-> > > > {
-> > > >         void *cur =3D ctx;
-> > > >
-> > > >         while ((uc =3D get_uprobe_consumer(&cur)) !=3D NULL) {
-> > > >                 ...
-> > > >         }
-> > > >
-> > > >         cur =3D ctx;
-> > > >         while ((uc =3D get_uprobe_consumer(&cur)) !=3D NULL) {
-> > > >                 ...
-> > > >         }
-> > > > }
-> > > >
-> > > > This can also remove the cnt.
-> > >
-> > > Ok, if you prefer this I'll switch. It's a bit more cumbersome to use
-> > > for callers, but we have one right now, and might have another one, s=
-o
-> > > not a big deal.
-> > >
-> >
-> > Actually, now that I started implementing this, I really-really don't
-> > like it. In the example above you assume by storing and reusing
-> > original ctx value you will reset iteration to the very beginning.
-> > This is not how it works in practice though. Ctx is most probably a
-> > pointer to some struct somewhere with iteration state (e.g., array of
-> > all uprobes + current index), and so get_uprobe_consumer() doesn't
-> > update `void *ctx` itself, it updates the state of that struct.
->
-> Yeah, that should be noted so that if the get_uprobe_consumer() is
-> called with original `ctx` value, it should return the same.
-> Ah, and I found we need to pass both ctx and pos...
->
->        while ((uc =3D get_uprobe_consumer(&cur, ctx)) !=3D NULL) {
->                  ...
->          }
->
-> Usually it is enough to pass the cursor as similar to the other
-> for_each_* macros. For example, struct foo has .list and .uc, then
->
-> struct uprobe_consumer *get_uprobe_consumer_foo(void **pos, void *head)
-> {
->         struct foo *foo =3D *pos;
->
->         if (!foo)
->                 return NULL;
->
->         *pos =3D list_next_entry(foo, list);
->         if (list_is_head(pos, (head)))
->                 *pos =3D NULL;
->
->         return foo->uc;
-> }
->
-> This works something like this.
->
-> #define for_each_uprobe_consumer_from_foo(uc, pos, head) \
->         list_for_each_entry(pos, head, list) \
->                 if (uc =3D uprobe_consumer_from_foo(pos))
->
-> or, for array of *uprobe_consumer (array must be end with NULL),
->
-> struct uprobe_consumer *get_uprobe_consumer_array(void **pos, void *head =
-__unused)
-> {
->         struct uprobe_consumer **uc =3D *pos;
->
->         if (!*uc)
->                 return NULL;
->
->         *pos =3D uc + 1;
->
->         return *uc;
-> }
->
-> But this may not be able to support array of uprobe_consumer. Hmm.
->
->
-> > And so there is no easy and clean way to reset this iterator without
-> > adding another callback or something. At which point it becomes quite
-> > cumbersome and convoluted.
->
-> If you consider that is problematic, I think we can prepare more
-> iterator like object;
->
-> struct uprobe_consumer_iter_ops {
->         struct uprobe_consumer *(*start)(struct uprobe_consumer_iter_ops =
-*);
->         struct uprobe_consumer *(*next)(struct uprobe_consumer_iter_ops *=
-);
->         void *ctx; // or, just embed the data in this structure.
-> };
->
+From: Pu Lehui <pulehui@huawei.com>
 
-Yeah, I was thinking about something like this for adding a proper
-iterator-based interface.
+Add testcase where 7th argument is struct for architectures with 8
+argument registers, and increase the complexity of the struct.
 
->
-> > How about this? I'll keep the existing get_uprobe_consumer(idx, ctx)
-> > contract, which works for the only user right now, BPF multi-uprobes.
-> > When it's time to add another consumer that works with a linked list,
-> > we can add another more complicated contract that would do
-> > iterator-style callbacks. This would be used by linked list users, and
-> > we can transparently implement existing uprobe_register_batch()
-> > contract on top of if by implementing a trivial iterator wrapper on
-> > top of get_uprobe_consumer(idx, ctx) approach.
->
-> Agreed, anyway as far as it uses an array of uprobe_consumer, it works.
-> When we need to register list of the structure, we may be possible to
-> allocate an array or introduce new function.
->
+Signed-off-by: Pu Lehui <pulehui@huawei.com>
+Acked-by: Björn Töpel <bjorn@kernel.org>
+Reviewed-by: Björn Töpel <bjorn@rivosinc.com>
+---
+ tools/testing/selftests/bpf/DENYLIST.aarch64  |  1 +
+ .../selftests/bpf/bpf_testmod/bpf_testmod.c   | 19 ++++++++++
+ .../selftests/bpf/prog_tests/tracing_struct.c | 14 ++++++++
+ .../bpf/progs/tracing_struct_many_args.c      | 35 +++++++++++++++++++
+ 4 files changed, 69 insertions(+)
 
-Cool, glad we agree. What you propose above with start + next + ctx
-seems like a way forward if we need this.
+diff --git a/tools/testing/selftests/bpf/DENYLIST.aarch64 b/tools/testing/selftests/bpf/DENYLIST.aarch64
+index 0445ac38bc07..3c7c3e79aa93 100644
+--- a/tools/testing/selftests/bpf/DENYLIST.aarch64
++++ b/tools/testing/selftests/bpf/DENYLIST.aarch64
+@@ -6,6 +6,7 @@ kprobe_multi_test                                # needs CONFIG_FPROBE
+ module_attach                                    # prog 'kprobe_multi': failed to auto-attach: -95
+ fentry_test/fentry_many_args                     # fentry_many_args:FAIL:fentry_many_args_attach unexpected error: -524
+ fexit_test/fexit_many_args                       # fexit_many_args:FAIL:fexit_many_args_attach unexpected error: -524
++tracing_struct/struct_many_args                  # struct_many_args:FAIL:tracing_struct_many_args__attach unexpected error: -524
+ fill_link_info/kprobe_multi_link_info            # bpf_program__attach_kprobe_multi_opts unexpected error: -95
+ fill_link_info/kretprobe_multi_link_info         # bpf_program__attach_kprobe_multi_opts unexpected error: -95
+ fill_link_info/kprobe_multi_invalid_ubuff        # bpf_program__attach_kprobe_multi_opts unexpected error: -95
+diff --git a/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c b/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
+index d8bd01d8560b..f8962a1dd397 100644
+--- a/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
++++ b/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
+@@ -53,6 +53,13 @@ struct bpf_testmod_struct_arg_4 {
+ 	int b;
+ };
+ 
++struct bpf_testmod_struct_arg_5 {
++	char a;
++	short b;
++	int c;
++	long d;
++};
++
+ __bpf_hook_start();
+ 
+ noinline int
+@@ -110,6 +117,15 @@ bpf_testmod_test_struct_arg_8(u64 a, void *b, short c, int d, void *e,
+ 	return bpf_testmod_test_struct_arg_result;
+ }
+ 
++noinline int
++bpf_testmod_test_struct_arg_9(u64 a, void *b, short c, int d, void *e, char f,
++			      short g, struct bpf_testmod_struct_arg_5 h, long i)
++{
++	bpf_testmod_test_struct_arg_result = a + (long)b + c + d + (long)e +
++		f + g + h.a + h.b + h.c + h.d + i;
++	return bpf_testmod_test_struct_arg_result;
++}
++
+ noinline int
+ bpf_testmod_test_arg_ptr_to_struct(struct bpf_testmod_struct_arg_1 *a) {
+ 	bpf_testmod_test_struct_arg_result = a->a;
+@@ -305,6 +321,7 @@ bpf_testmod_test_read(struct file *file, struct kobject *kobj,
+ 	struct bpf_testmod_struct_arg_2 struct_arg2 = {2, 3};
+ 	struct bpf_testmod_struct_arg_3 *struct_arg3;
+ 	struct bpf_testmod_struct_arg_4 struct_arg4 = {21, 22};
++	struct bpf_testmod_struct_arg_5 struct_arg5 = {23, 24, 25, 26};
+ 	int i = 1;
+ 
+ 	while (bpf_testmod_return_ptr(i))
+@@ -319,6 +336,8 @@ bpf_testmod_test_read(struct file *file, struct kobject *kobj,
+ 					    (void *)20, struct_arg4);
+ 	(void)bpf_testmod_test_struct_arg_8(16, (void *)17, 18, 19,
+ 					    (void *)20, struct_arg4, 23);
++	(void)bpf_testmod_test_struct_arg_9(16, (void *)17, 18, 19, (void *)20,
++					    21, 22, struct_arg5, 27);
+ 
+ 	(void)bpf_testmod_test_arg_ptr_to_struct(&struct_arg1_2);
+ 
+diff --git a/tools/testing/selftests/bpf/prog_tests/tracing_struct.c b/tools/testing/selftests/bpf/prog_tests/tracing_struct.c
+index 2820fd912f2f..1e7ac6fc34bf 100644
+--- a/tools/testing/selftests/bpf/prog_tests/tracing_struct.c
++++ b/tools/testing/selftests/bpf/prog_tests/tracing_struct.c
+@@ -95,6 +95,20 @@ static void test_struct_many_args(void)
+ 	ASSERT_EQ(skel->bss->t8_g, 23, "t8:g");
+ 	ASSERT_EQ(skel->bss->t8_ret, 156, "t8 ret");
+ 
++	ASSERT_EQ(skel->bss->t9_a, 16, "t9:a");
++	ASSERT_EQ(skel->bss->t9_b, 17, "t9:b");
++	ASSERT_EQ(skel->bss->t9_c, 18, "t9:c");
++	ASSERT_EQ(skel->bss->t9_d, 19, "t9:d");
++	ASSERT_EQ(skel->bss->t9_e, 20, "t9:e");
++	ASSERT_EQ(skel->bss->t9_f, 21, "t9:f");
++	ASSERT_EQ(skel->bss->t9_g, 22, "t9:f");
++	ASSERT_EQ(skel->bss->t9_h_a, 23, "t9:h.a");
++	ASSERT_EQ(skel->bss->t9_h_b, 24, "t9:h.b");
++	ASSERT_EQ(skel->bss->t9_h_c, 25, "t9:h.c");
++	ASSERT_EQ(skel->bss->t9_h_d, 26, "t9:h.d");
++	ASSERT_EQ(skel->bss->t9_i, 27, "t9:i");
++	ASSERT_EQ(skel->bss->t9_ret, 258, "t9 ret");
++
+ 	tracing_struct_many_args__detach(skel);
+ destroy_skel:
+ 	tracing_struct_many_args__destroy(skel);
+diff --git a/tools/testing/selftests/bpf/progs/tracing_struct_many_args.c b/tools/testing/selftests/bpf/progs/tracing_struct_many_args.c
+index 3de4bb918178..4742012ace06 100644
+--- a/tools/testing/selftests/bpf/progs/tracing_struct_many_args.c
++++ b/tools/testing/selftests/bpf/progs/tracing_struct_many_args.c
+@@ -8,8 +8,16 @@ struct bpf_testmod_struct_arg_4 {
+ 	int b;
+ };
+ 
++struct bpf_testmod_struct_arg_5 {
++	char a;
++	short b;
++	int c;
++	long d;
++};
++
+ long t7_a, t7_b, t7_c, t7_d, t7_e, t7_f_a, t7_f_b, t7_ret;
+ long t8_a, t8_b, t8_c, t8_d, t8_e, t8_f_a, t8_f_b, t8_g, t8_ret;
++long t9_a, t9_b, t9_c, t9_d, t9_e, t9_f, t9_g, t9_h_a, t9_h_b, t9_h_c, t9_h_d, t9_i, t9_ret;
+ 
+ SEC("fentry/bpf_testmod_test_struct_arg_7")
+ int BPF_PROG2(test_struct_many_args_1, __u64, a, void *, b, short, c, int, d,
+@@ -57,4 +65,31 @@ int BPF_PROG2(test_struct_many_args_4, __u64, a, void *, b, short, c, int, d,
+ 	return 0;
+ }
+ 
++SEC("fentry/bpf_testmod_test_struct_arg_9")
++int BPF_PROG2(test_struct_many_args_5, __u64, a, void *, b, short, c, int, d, void *, e,
++	      char, f, short, g, struct bpf_testmod_struct_arg_5, h, long, i)
++{
++	t9_a = a;
++	t9_b = (long)b;
++	t9_c = c;
++	t9_d = d;
++	t9_e = (long)e;
++	t9_f = f;
++	t9_g = g;
++	t9_h_a = h.a;
++	t9_h_b = h.b;
++	t9_h_c = h.c;
++	t9_h_d = h.d;
++	t9_i = i;
++	return 0;
++}
++
++SEC("fexit/bpf_testmod_test_struct_arg_9")
++int BPF_PROG2(test_struct_many_args_6, __u64, a, void *, b, short, c, int, d, void *, e,
++	      char, f, short, g, struct bpf_testmod_struct_arg_5, h, long, i, int, ret)
++{
++	t9_ret = ret;
++	return 0;
++}
++
+ char _license[] SEC("license") = "GPL";
+-- 
+2.34.1
 
-BTW, is this (batched register/unregister APIs) something you'd like
-to use from the tracefs-based (or whatever it's called, I mean non-BPF
-ones) uprobes as well? Or there is just no way to even specify a batch
-of uprobes? Just curious if you had any plans for this.
-
-> Thank you!
->
-> >
-> > Let's not add unnecessary complications right now given we have a
-> > clear path forward to add it later, if necessary, without breaking
-> > anything. I'll send v2 without changes to get_uprobe_consumer() for
-> > now, hopefully my above plan makes sense to you. Thanks!
-> >
-> > > >
-> > > > Thank you,
-> > > >
-> > > > >
-> > > > > For now this API works well, I propose to keep it as is. For link=
-ed
-> > > > > list case consumers would need to allocate one extra array or pay=
- the
-> > > > > price of O(N) search (which might be ok, depending on how many up=
-robes
-> > > > > are being attached). But we don't have such consumers right now,
-> > > > > thankfully.
-> > > > >
-> > > > > >
-> > > > > > Thank you,
-> > > > > >
-> > > > > >
-> > > > > > >
-> > > > > > > >
-> > > > > > > > Thank you,
-> > > > > > > >
-> > > > > > > > --
-> > > > > > > > Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> > > > > >
-> > > > > >
-> > > > > > --
-> > > > > > Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> > > >
-> > > >
-> > > > --
-> > > > Masami Hiramatsu (Google) <mhiramat@kernel.org>
->
->
-> --
-> Masami Hiramatsu (Google) <mhiramat@kernel.org>
