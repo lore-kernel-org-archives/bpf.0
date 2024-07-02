@@ -1,259 +1,114 @@
-Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 155EEB64A;
-	Tue,  2 Jul 2024 01:35:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF9358BFA;
+	Tue,  2 Jul 2024 06:18:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719884160; cv=none; b=hE1WzEBr9QCNSSo+rUsEdku/Cv+uApr+HuIa4ZFCAhRIXiXMBfAzoYMKu0guYRDnJqeMiXwSzxynTIINaiikUY1uMIAQRqlUxPR84zlocDdjQgCWIvkCvaFUM5jNeopA8XtWh2GTtcWFJJtPjXD+1m+QlP/sEHrgdNB1bqTnRmM=
+	t=1719901139; cv=none; b=VioukIEZWVM4hYg0lGAq6quv8Xtydx0EThOMESyOEWY1lZF0xQUE0pAYnozTXNS20TADD03MpsUETYXdN4D0tS1cdM6vQ3hHqsg6K0xoNfJxFp+WFgZ9bcm5adjt/la80PwdgtZi0tjl7bKXawQyPs0BvrPLV6U5L2u0RL9ekbY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719884160; c=relaxed/simple;
-	bh=3VDAuiZBH+gLjN3NTcg0rMEOelsUtjIHrtwcAvN4804=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=LC98EjtxpKBUVIQWQKVdsqWyLpNQxmTNhrqzs27Ui2z39FCcrvgU0PBCQWGN0KpvyZwj0irW3/vaglONxmNaHFAKe0py3jzT/f00thAGqdRwqhMsYeCB4Kdow19Z84BYV9F7WU17Mg1lzMfLHBJ4r996rix+BG30drZpT7DlWyo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.93.142])
-	by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4WClpw6JGrz4f3jdq;
-	Tue,  2 Jul 2024 09:35:36 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.112])
-	by mail.maildlp.com (Postfix) with ESMTP id 0A8511A0185;
-	Tue,  2 Jul 2024 09:35:48 +0800 (CST)
-Received: from ultra.huawei.com (unknown [10.90.53.71])
-	by APP1 (Coremail) with SMTP id cCh0CgCXwX1vWYNm+0GRAw--.62272S3;
-	Tue, 02 Jul 2024 09:35:47 +0800 (CST)
-From: Pu Lehui <pulehui@huaweicloud.com>
-To: bpf@vger.kernel.org,
-	linux-riscv@lists.infradead.org,
-	netdev@vger.kernel.org
-Cc: =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@google.com>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Puranjay Mohan <puranjay@kernel.org>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Pu Lehui <pulehui@huawei.com>
-Subject: [PATCH bpf-next v5 1/3] riscv, bpf: Add 12-argument support for RV64 bpf trampoline
-Date: Tue,  2 Jul 2024 01:37:28 +0000
-Message-Id: <20240702013730.1082285-2-pulehui@huaweicloud.com>
+	s=arc-20240116; t=1719901139; c=relaxed/simple;
+	bh=z2qRpavm2IBeL3dqoSrTiUiRP+4wh58flkN+8pF6XVE=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Fvzr0b45xo4tBST4w5AM7iHNgCsLXlYa129/cU2q/3j3SLwwr5BHMUyjlKN7GYimVP6sUPtpjrYpR40aMixjgz1RpJYqQ4ZcSlxqBX0zGZIbMLrZ3DtOubgma3/prmIuM2vLfXih2a7dZpKvOxPTRiTYMfHe6waRSScQcRjb39g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kHAgzBVC; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kHAgzBVC"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1719901138; x=1751437138;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=z2qRpavm2IBeL3dqoSrTiUiRP+4wh58flkN+8pF6XVE=;
+  b=kHAgzBVC3RvozzmcSNEdmAmHOSzjquarfsKT9MsxRJEJx+9Ye+x3/3yI
+   G3rsmafW1bR7tt9DKNrv5q6AMioaH4G0RhMx1lCOdJihmGJnfRA6W+udS
+   nIwk2q1jhtg8Um4R5UGH5P99q37n/YgRUJaPdd6bYLRRBfyV0lKURXzNj
+   hJVkxhkdV73serLpj0UBXrXdpA8P+TsxyoY+XlbagoV0Hx8gIXLwmSTvN
+   tw68TfNcnLVEBs3ReJ8hhF0PeIIEU4z/bAy5RRYBJTWZR49kY3O36QAOj
+   XKLSVaXHi/kFYmq+SfV2Kro25LSUzViQOgy7fCnkPYmDzEUrCwwmpn0mC
+   w==;
+X-CSE-ConnectionGUID: ir4i/JxhTYyKXvIYqZ4DFA==
+X-CSE-MsgGUID: 49TzcwbpSaSIegNPpRT3Og==
+X-IronPort-AV: E=McAfee;i="6700,10204,11120"; a="20866593"
+X-IronPort-AV: E=Sophos;i="6.09,178,1716274800"; 
+   d="scan'208";a="20866593"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jul 2024 23:18:57 -0700
+X-CSE-ConnectionGUID: 8HtkeyqWSqikvwKjkj1khg==
+X-CSE-MsgGUID: lchK49MbRE657UgWb5m37w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.09,178,1716274800"; 
+   d="scan'208";a="45919938"
+Received: from intel.iind.intel.com (HELO brc5..) ([10.190.162.156])
+  by orviesa009-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jul 2024 23:18:54 -0700
+From: Tushar Vyavahare <tushar.vyavahare@intel.com>
+To: bpf@vger.kernel.org
+Cc: netdev@vger.kernel.org,
+	bjorn@kernel.org,
+	magnus.karlsson@intel.com,
+	maciej.fijalkowski@intel.com,
+	jonathan.lemon@gmail.com,
+	davem@davemloft.net,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	tirthendu.sarkar@intel.com,
+	tushar.vyavahare@intel.com
+Subject: [PATCH bpf-next v3 0/2] selftests/xsk: Enhance traffic validation and batch size support
+Date: Tue,  2 Jul 2024 05:59:14 +0000
+Message-Id: <20240702055916.48071-1-tushar.vyavahare@intel.com>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240702013730.1082285-1-pulehui@huaweicloud.com>
-References: <20240702013730.1082285-1-pulehui@huaweicloud.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:cCh0CgCXwX1vWYNm+0GRAw--.62272S3
-X-Coremail-Antispam: 1UD129KBjvJXoW3Ar15Jw13Kr13Ww4xtF4UXFb_yoWxXF4fp3
-	WDKwsxAF9YqF47Gayvga1UXF13Aan0v34akFW7Gas3uayYqr98GayFkF4jyry5Gr1rAw1f
-	AFs0vr95K3W7ArDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUB0b4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUGw
-	A2048vs2IY020Ec7CjxVAFwI0_Gr0_Xr1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
-	w2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
-	W8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v2
-	6rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMc
-	Ij6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_
-	Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij64
-	vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8G
-	jcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE2I
-	x0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK
-	8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I
-	0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxU2mL9UUUUU
-X-CM-SenderInfo: psxovxtxl6x35dzhxuhorxvhhfrp/
 
-From: Pu Lehui <pulehui@huawei.com>
+This patch series introduces enhancements to xsk selftests, focusing on
+dynamic batch size configurations and robust traffic validation.
 
-This patch adds 12 function arguments support for riscv64 bpf
-trampoline. The current bpf trampoline supports <= sizeof(u64) bytes
-scalar arguments [0] and <= 16 bytes struct arguments [1]. Therefore, we
-focus on the situation where scalars are at most XLEN bits and
-aggregates whose total size does not exceed 2×XLEN bits in the riscv
-calling convention [2].
+v1->v2:
+- Correctly bind UMEM queue sizes to TX and RX queues for standard
+  operational alignment.
+- Set cfg.rx_size directly from umem->fill_size when umem->fill_size is
+  true, ensuring alignment with test specifications.
 
-Link: https://elixir.bootlin.com/linux/v6.8/source/kernel/bpf/btf.c#L6184 [0]
-Link: https://elixir.bootlin.com/linux/v6.8/source/kernel/bpf/btf.c#L6769 [1]
-Link: https://github.com/riscv-non-isa/riscv-elf-psabi-doc/releases/download/draft-20230929-e5c800e661a53efe3c2678d71a306323b60eb13b/riscv-abi.pdf [2]
-Signed-off-by: Pu Lehui <pulehui@huawei.com>
-Acked-by: Björn Töpel <bjorn@kernel.org>
-Reviewed-by: Björn Töpel <bjorn@rivosinc.com>
----
- arch/riscv/net/bpf_jit_comp64.c | 66 +++++++++++++++++++++++----------
- 1 file changed, 47 insertions(+), 19 deletions(-)
+v2->v3:
+- Update commit messages and cover letter for clarity and precision in
+  documentation.
 
-diff --git a/arch/riscv/net/bpf_jit_comp64.c b/arch/riscv/net/bpf_jit_comp64.c
-index 351e1484205e..685c7389ae7e 100644
---- a/arch/riscv/net/bpf_jit_comp64.c
-+++ b/arch/riscv/net/bpf_jit_comp64.c
-@@ -15,6 +15,7 @@
- #include <asm/percpu.h>
- #include "bpf_jit.h"
- 
-+#define RV_MAX_REG_ARGS 8
- #define RV_FENTRY_NINSNS 2
- /* imm that allows emit_imm to emit max count insns */
- #define RV_MAX_COUNT_IMM 0x7FFF7FF7FF7FF7FF
-@@ -692,26 +693,45 @@ int bpf_arch_text_poke(void *ip, enum bpf_text_poke_type poke_type,
- 	return ret;
- }
- 
--static void store_args(int nregs, int args_off, struct rv_jit_context *ctx)
-+static void store_args(int nr_arg_slots, int args_off, struct rv_jit_context *ctx)
- {
- 	int i;
- 
--	for (i = 0; i < nregs; i++) {
--		emit_sd(RV_REG_FP, -args_off, RV_REG_A0 + i, ctx);
-+	for (i = 0; i < nr_arg_slots; i++) {
-+		if (i < RV_MAX_REG_ARGS) {
-+			emit_sd(RV_REG_FP, -args_off, RV_REG_A0 + i, ctx);
-+		} else {
-+			/* skip slots for T0 and FP of traced function */
-+			emit_ld(RV_REG_T1, 16 + (i - RV_MAX_REG_ARGS) * 8, RV_REG_FP, ctx);
-+			emit_sd(RV_REG_FP, -args_off, RV_REG_T1, ctx);
-+		}
- 		args_off -= 8;
- 	}
- }
- 
--static void restore_args(int nregs, int args_off, struct rv_jit_context *ctx)
-+static void restore_args(int nr_reg_args, int args_off, struct rv_jit_context *ctx)
- {
- 	int i;
- 
--	for (i = 0; i < nregs; i++) {
-+	for (i = 0; i < nr_reg_args; i++) {
- 		emit_ld(RV_REG_A0 + i, -args_off, RV_REG_FP, ctx);
- 		args_off -= 8;
- 	}
- }
- 
-+static void restore_stack_args(int nr_stack_args, int args_off, int stk_arg_off,
-+			       struct rv_jit_context *ctx)
-+{
-+	int i;
-+
-+	for (i = 0; i < nr_stack_args; i++) {
-+		emit_ld(RV_REG_T1, -(args_off - RV_MAX_REG_ARGS * 8), RV_REG_FP, ctx);
-+		emit_sd(RV_REG_FP, -stk_arg_off, RV_REG_T1, ctx);
-+		args_off -= 8;
-+		stk_arg_off -= 8;
-+	}
-+}
-+
- static int invoke_bpf_prog(struct bpf_tramp_link *l, int args_off, int retval_off,
- 			   int run_ctx_off, bool save_ret, struct rv_jit_context *ctx)
- {
-@@ -784,8 +804,8 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tramp_image *im,
- {
- 	int i, ret, offset;
- 	int *branches_off = NULL;
--	int stack_size = 0, nregs = m->nr_args;
--	int retval_off, args_off, nregs_off, ip_off, run_ctx_off, sreg_off;
-+	int stack_size = 0, nr_arg_slots = 0;
-+	int retval_off, args_off, nregs_off, ip_off, run_ctx_off, sreg_off, stk_arg_off;
- 	struct bpf_tramp_links *fentry = &tlinks[BPF_TRAMP_FENTRY];
- 	struct bpf_tramp_links *fexit = &tlinks[BPF_TRAMP_FEXIT];
- 	struct bpf_tramp_links *fmod_ret = &tlinks[BPF_TRAMP_MODIFY_RETURN];
-@@ -831,20 +851,21 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tramp_image *im,
- 	 * FP - sreg_off    [ callee saved reg	]
- 	 *
- 	 *		    [ pads              ] pads for 16 bytes alignment
-+	 *
-+	 *		    [ stack_argN        ]
-+	 *		    [ ...               ]
-+	 * FP - stk_arg_off [ stack_arg1        ] BPF_TRAMP_F_CALL_ORIG
- 	 */
- 
- 	if (flags & (BPF_TRAMP_F_ORIG_STACK | BPF_TRAMP_F_SHARE_IPMODIFY))
- 		return -ENOTSUPP;
- 
--	/* extra regiters for struct arguments */
--	for (i = 0; i < m->nr_args; i++)
--		if (m->arg_flags[i] & BTF_FMODEL_STRUCT_ARG)
--			nregs += round_up(m->arg_size[i], 8) / 8 - 1;
--
--	/* 8 arguments passed by registers */
--	if (nregs > 8)
-+	if (m->nr_args > MAX_BPF_FUNC_ARGS)
- 		return -ENOTSUPP;
- 
-+	for (i = 0; i < m->nr_args; i++)
-+		nr_arg_slots += round_up(m->arg_size[i], 8) / 8;
-+
- 	/* room of trampoline frame to store return address and frame pointer */
- 	stack_size += 16;
- 
-@@ -854,7 +875,7 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tramp_image *im,
- 		retval_off = stack_size;
- 	}
- 
--	stack_size += nregs * 8;
-+	stack_size += nr_arg_slots * 8;
- 	args_off = stack_size;
- 
- 	stack_size += 8;
-@@ -871,8 +892,14 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tramp_image *im,
- 	stack_size += 8;
- 	sreg_off = stack_size;
- 
-+	if (nr_arg_slots - RV_MAX_REG_ARGS > 0)
-+		stack_size += (nr_arg_slots - RV_MAX_REG_ARGS) * 8;
-+
- 	stack_size = round_up(stack_size, STACK_ALIGN);
- 
-+	/* room for args on stack must be at the top of stack */
-+	stk_arg_off = stack_size;
-+
- 	if (!is_struct_ops) {
- 		/* For the trampoline called from function entry,
- 		 * the frame of traced function and the frame of
-@@ -908,10 +935,10 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tramp_image *im,
- 		emit_sd(RV_REG_FP, -ip_off, RV_REG_T1, ctx);
- 	}
- 
--	emit_li(RV_REG_T1, nregs, ctx);
-+	emit_li(RV_REG_T1, nr_arg_slots, ctx);
- 	emit_sd(RV_REG_FP, -nregs_off, RV_REG_T1, ctx);
- 
--	store_args(nregs, args_off, ctx);
-+	store_args(nr_arg_slots, args_off, ctx);
- 
- 	/* skip to actual body of traced function */
- 	if (flags & BPF_TRAMP_F_SKIP_FRAME)
-@@ -951,7 +978,8 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tramp_image *im,
- 	}
- 
- 	if (flags & BPF_TRAMP_F_CALL_ORIG) {
--		restore_args(nregs, args_off, ctx);
-+		restore_args(min_t(int, nr_arg_slots, RV_MAX_REG_ARGS), args_off, ctx);
-+		restore_stack_args(nr_arg_slots - RV_MAX_REG_ARGS, args_off, stk_arg_off, ctx);
- 		ret = emit_call((const u64)orig_call, true, ctx);
- 		if (ret)
- 			goto out;
-@@ -986,7 +1014,7 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tramp_image *im,
- 	}
- 
- 	if (flags & BPF_TRAMP_F_RESTORE_REGS)
--		restore_args(nregs, args_off, ctx);
-+		restore_args(min_t(int, nr_arg_slots, RV_MAX_REG_ARGS), args_off, ctx);
- 
- 	if (save_ret) {
- 		emit_ld(RV_REG_A0, -retval_off, RV_REG_FP, ctx);
+Patch series summary:
+
+Patch 1/2: Robust traffic validation post-ring size adjustment
+
+- Fixed the flow in HW_SW_MIN_RING_SIZE and HW_SW_MAX_RING_SIZE test cases
+  to validate Tx/Rx traffic by checking the return value of
+  set_ring_size(), preventing premature test termination.
+
+Patch 2/2: Dynamic batch size configuration
+
+- Overcomes the 2K batch size limit by introducing dynamic adjustments for
+  fill_size and comp_size.
+- Update HW_SW_MAX_RING_SIZE test case that evaluates the maximum ring
+  sizes for AF_XDP, ensuring its reliability under maximum ring utilization.
+
+Ensure the xsk selftests patches improve overall reliability and
+efficiency, allowing the system to handle larger batch sizes and
+effectively validate traffic after configuration changes.
+
+Tushar Vyavahare (2):
+  selftests/xsk: Ensure traffic validation proceeds after ring size
+    adjustment in xskxceiver
+  selftests/xsk: Enhance batch size support with dynamic configurations
+
+ tools/testing/selftests/bpf/xskxceiver.c | 40 +++++++++++++++++-------
+ tools/testing/selftests/bpf/xskxceiver.h |  2 ++
+ 2 files changed, 31 insertions(+), 11 deletions(-)
+
 -- 
 2.34.1
 
