@@ -1,189 +1,217 @@
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D3D14C6C
-	for <bpf@vger.kernel.org>; Wed,  3 Jul 2024 00:51:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DA5865C;
+	Wed,  3 Jul 2024 01:03:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719967878; cv=none; b=O/v3uhkKCl5vwbH2Jl96JsY52q9p2QRO5syDyurqVcGCvGVqemJPdlJ/VZWEhw7lZX7kUdrgIT4aCSQyHKJ3ROGNscVYBUPu0m2cIUhmJIbaVp05q4g1OZsLxlIPMDYcmX5DEwsDlnrkQor4ppLCjrxXLPnuBQzgEFhfxk2bDws=
+	t=1719968591; cv=none; b=eq3R4LFtDkqGJ7JSHwC6uyZ+c1pZsy1fBGWZxOFqi2099utnejUdK/I1rXui8NT7d1bMhfdabf+8aIr7nwx1TTHbMyvm0UZ8sNKwGtLi4GxONBTeNRR4HtvdNpBxB/ADBPOKfbt+ecQfCdnATR5bpmd5Or1SIPnjIXZ92/I0fW8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719967878; c=relaxed/simple;
-	bh=drLtYWWsR9+CgoH0FAUkN8Fng5o52oeg6jsB2v4QOgQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=POSDHlkQNzLXyPqWeMe9LIaOwfn7wkr4oMsq1wZBYnyRgS8rjm5iIqpOqI4BGmnN/urEspMlGtSKw78VgZmp4Qk+IsoliqgmBfZRkiRfZHQKqYYCQevIRKH5NWvLZC0E3ko4UALz85cxY/Awp5/WjIdj+DgaKNarDnqdrZsuVDU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=Q0uPMMT/; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	s=arc-20240116; t=1719968591; c=relaxed/simple;
+	bh=4wo2lD1y6lyr3yKDc0DhpPbhMH4zSy9uV7XKRPXC/Aw=;
+	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
+	 Mime-Version:Content-Type; b=YNQfIN8ZdxqkJGUMjXCJa4+UzL6lo7rgRCmg07R+e4052QWQsIH5VRqU9M/oFx/NL+E00gKkBCKwlrd1JNYIuH4tGaFzjlcHWZWqREage+yEW91ACbynuEaiy5S6ac1mC5Jqce3Kr1dkO2zstdft4AXyEQdxdrymG0xgeL0Hkdw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HsbvG4iA; arc=none smtp.client-ip=209.85.210.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="Q0uPMMT/"
-Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4630gJuu010399;
-	Wed, 3 Jul 2024 00:50:57 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from
-	:to:cc:subject:date:message-id:in-reply-to:references
-	:mime-version:content-transfer-encoding; s=pp1; bh=qQ9vX5gheADfP
-	l6ikPet2MUwJ+FzesxchU/XU9pkzPY=; b=Q0uPMMT/KdTj6n8FVqpEX+59z4EiD
-	X2apCSFvpBcNOwlpGqY8qldC/tsAOyRUkQGO5WP2Ehyz7TdeaDWMBIFrPlKTiKH7
-	KDjC5EOk1KKA+d7AbYDMvIwhCogp6K4UBsiFmPUl1IO7Sm4NEn5mCdP6ST1Q6SAw
-	1xmi6SCEvNiklenl0lxpNvaV8Jj3SjkhABEtMeeOrElv/Z8qhCZaQODgr2B4mG5j
-	cL09ZghebqnnEu+EY6K7s9U/i4iuL2MQpXTQFxCf9sMd98mwgtII1yMsA6Vt34pV
-	E4zjIcHT6MJnd1C0OOhAkRkMB7SBCpO0fxzI/R+bxrkx4+hwHDQuCGYtQ==
-Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 404v4tg1gv-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 03 Jul 2024 00:50:56 +0000 (GMT)
-Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma12.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 462Nqikp005930;
-	Wed, 3 Jul 2024 00:50:55 GMT
-Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
-	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 402vku83ns-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 03 Jul 2024 00:50:55 +0000
-Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
-	by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 4630ooCq31916610
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 3 Jul 2024 00:50:52 GMT
-Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 29EC420063;
-	Wed,  3 Jul 2024 00:50:50 +0000 (GMT)
-Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id A7B4220040;
-	Wed,  3 Jul 2024 00:50:49 +0000 (GMT)
-Received: from heavy.ibm.com (unknown [9.171.78.146])
-	by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Wed,  3 Jul 2024 00:50:49 +0000 (GMT)
-From: Ilya Leoshkevich <iii@linux.ibm.com>
-To: Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>
-Cc: bpf@vger.kernel.org, Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Ilya Leoshkevich <iii@linux.ibm.com>
-Subject: [PATCH bpf-next 2/3] s390/bpf: Implement exceptions
-Date: Wed,  3 Jul 2024 02:48:48 +0200
-Message-ID: <20240703005047.40915-3-iii@linux.ibm.com>
-X-Mailer: git-send-email 2.45.2
-In-Reply-To: <20240703005047.40915-1-iii@linux.ibm.com>
-References: <20240703005047.40915-1-iii@linux.ibm.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HsbvG4iA"
+Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-7066a3229f4so3200887b3a.2;
+        Tue, 02 Jul 2024 18:03:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1719968589; x=1720573389; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=H6n8lv4fymMg3QNDwFo2o+d5Auk2Egz8lr4w2J+CDP8=;
+        b=HsbvG4iA+sc/3spAzDTAz83BGrcUOxlWGei0LaGt7I7YCWmTSmn2IurvMlRxOs8ODx
+         C4zaevsCGTcZzHl7uiSW2w+edRmKlenIocN1NCrRIctTvnTHJ7HmKC27OpZyRyNVkPHN
+         OI2LU4xQ4K7sqRc1phD60T7InLAz4kDoonclXbyCufYOZ/rq4kgvy52BuUsZw35Q6bXt
+         owphacrwjic0iPUaZ5CFSktYbC5ZokIMXC7a8l8Q19Dr3L8daLFpABdOlmjVPrsDZawl
+         V2M4ZeTGwbdkZ1LbYHgGMQowA0TDL1B/HK5aOTflKRBwwrvGv5c5wxtfZRCKIwbKzhEK
+         IacA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1719968589; x=1720573389;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=H6n8lv4fymMg3QNDwFo2o+d5Auk2Egz8lr4w2J+CDP8=;
+        b=iWMBke5c9EVEsQVv+AO2RZQfPNfAgM2OIvXxqPsASiInoLTIAIgauYL7TxumYax28P
+         jNaVM+YHojfQYOrWMU9epwh/kB7xdPP+hJwGWCnysuJxFRmop/bc1Frn6CqVMviCUh8d
+         Xhfj+ggWiHFp1jViE7gVl8fgRhi3kvikJ5oAR8ld4KOzKTAb/995ymx+SfSuylIsAuae
+         0hxuWzCfpCabT1gAnJfARi7NtgLvCMgtM03uPJCV7ZprU77RD/t0j+YTId2JCAE7k8v1
+         srukSs4h4HbSRUoep7TAaFIeGvkjkgQgOMO1vloxar8jC2UGVMrAxePAEqxFXfK+5aBw
+         iqLA==
+X-Forwarded-Encrypted: i=1; AJvYcCU9TUVXqp39hijx9f+z1IuhghdRfCgNaO55I6/s3B2RYphvAD8ctzzUWeI7TBM01W40IuP6v/5pbOHXN5eku6EO30GzFMcU//qjOMzag3klVHGhf1LnnGK8B9vtKFb8eJA6aVe/CDZmTv4UBzPx4zDBL19AaGzgY5FNPc3M
+X-Gm-Message-State: AOJu0YzWixSVZefNyS9jwF2qqUlW6uVmsToQGDUVGWVS2oJ/OukslosF
+	e4Sn75FsYjdoOmGeCgUjYLBgnhO7WzspAzyPgt+2tRmtq2wwXOLE
+X-Google-Smtp-Source: AGHT+IE6J2a7lgggM31jC/Jp/P8ov/n84ZefQHuucZrHhVRX7SLL79nZoA4PvethuTvgQ12krsUyUw==
+X-Received: by 2002:a05:6a00:3c8d:b0:706:67c9:16d0 with SMTP id d2e1a72fcca58-70aaaee4715mr10390881b3a.26.1719968588301;
+        Tue, 02 Jul 2024 18:03:08 -0700 (PDT)
+Received: from localhost ([98.97.33.150])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7080246e1d9sm9198259b3a.71.2024.07.02.18.03.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 02 Jul 2024 18:03:07 -0700 (PDT)
+Date: Tue, 02 Jul 2024 18:03:06 -0700
+From: John Fastabend <john.fastabend@gmail.com>
+To: Geliang Tang <geliang@kernel.org>, 
+ John Fastabend <john.fastabend@gmail.com>, 
+ Jakub Sitnicki <jakub@cloudflare.com>, 
+ "David S. Miller" <davem@davemloft.net>, 
+ Eric Dumazet <edumazet@google.com>, 
+ Jakub Kicinski <kuba@kernel.org>, 
+ Paolo Abeni <pabeni@redhat.com>, 
+ Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>
+Cc: Geliang Tang <tanggeliang@kylinos.cn>, 
+ David Ahern <dsahern@kernel.org>, 
+ Eduard Zingerman <eddyz87@gmail.com>, 
+ Mykola Lysenko <mykolal@fb.com>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, 
+ Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, 
+ KP Singh <kpsingh@kernel.org>, 
+ Stanislav Fomichev <sdf@google.com>, 
+ Hao Luo <haoluo@google.com>, 
+ Jiri Olsa <jolsa@kernel.org>, 
+ Shuah Khan <shuah@kernel.org>, 
+ Mykyta Yatsenko <yatsenko@meta.com>, 
+ Miao Xu <miaxu@meta.com>, 
+ Yuran Pereira <yuran.pereira@hotmail.com>, 
+ Huacai Chen <chenhuacai@kernel.org>, 
+ Tiezhu Yang <yangtiezhu@loongson.cn>, 
+ netdev@vger.kernel.org, 
+ bpf@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org
+Message-ID: <6684a34ac2143_403d2087e@john.notmuch>
+In-Reply-To: <5b6a55017ab616131f7de1268b60cb34e99941a1.1719553101.git.tanggeliang@kylinos.cn>
+References: <cover.1719553101.git.tanggeliang@kylinos.cn>
+ <5b6a55017ab616131f7de1268b60cb34e99941a1.1719553101.git.tanggeliang@kylinos.cn>
+Subject: RE: [PATCH net v3 1/2] skmsg: prevent empty ingress skb from
+ enqueuing
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: G7qTHgv3PChykClf-uQZ1tkQ4kbGk3b8
-X-Proofpoint-ORIG-GUID: G7qTHgv3PChykClf-uQZ1tkQ4kbGk3b8
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-07-02_17,2024-07-02_02,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- impostorscore=0 mlxscore=0 spamscore=0 adultscore=0 malwarescore=0
- clxscore=1015 suspectscore=0 bulkscore=0 lowpriorityscore=0 phishscore=0
- mlxlogscore=925 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2406140001 definitions=main-2407030001
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: 7bit
 
-Implement the following three pieces required from the JIT:
+Geliang Tang wrote:
+> From: Geliang Tang <tanggeliang@kylinos.cn>
+> 
+> Run this BPF selftests (./test_progs -t sockmap_basic) on a Loongarch
+> platform, a Kernel panic occurs:
+> 
+> '''
+> Oops[#1]:
+> CPU: 22 PID: 2824 Comm: test_progs Tainted: G           OE  6.10.0-rc2+ #18
+> Hardware name: LOONGSON Dabieshan/Loongson-TC542F0, BIOS Loongson-UDK2018
+>    ... ...
+>    ra: 90000000048bf6c0 sk_msg_recvmsg+0x120/0x560
+>   ERA: 9000000004162774 copy_page_to_iter+0x74/0x1c0
+>  CRMD: 000000b0 (PLV0 -IE -DA +PG DACF=CC DACM=CC -WE)
+>  PRMD: 0000000c (PPLV0 +PIE +PWE)
+>  EUEN: 00000007 (+FPE +SXE +ASXE -BTE)
+>  ECFG: 00071c1d (LIE=0,2-4,10-12 VS=7)
+> ESTAT: 00010000 [PIL] (IS= ECode=1 EsubCode=0)
+>  BADV: 0000000000000040
+>  PRID: 0014c011 (Loongson-64bit, Loongson-3C5000)
+> Modules linked in: bpf_testmod(OE) xt_CHECKSUM xt_MASQUERADE xt_conntrack
+> Process test_progs (pid: 2824, threadinfo=0000000000863a31, task=...)
+> Stack : ...
+>         ...
+> Call Trace:
+> [<9000000004162774>] copy_page_to_iter+0x74/0x1c0
+> [<90000000048bf6c0>] sk_msg_recvmsg+0x120/0x560
+> [<90000000049f2b90>] tcp_bpf_recvmsg_parser+0x170/0x4e0
+> [<90000000049aae34>] inet_recvmsg+0x54/0x100
+> [<900000000481ad5c>] sock_recvmsg+0x7c/0xe0
+> [<900000000481e1a8>] __sys_recvfrom+0x108/0x1c0
+> [<900000000481e27c>] sys_recvfrom+0x1c/0x40
+> [<9000000004c076ec>] do_syscall+0x8c/0xc0
+> [<9000000003731da4>] handle_syscall+0xc4/0x160
+> 
+> Code: ...
+> 
+> ---[ end trace 0000000000000000 ]---
+> Kernel panic - not syncing: Fatal exception
+> Kernel relocated by 0x3510000
+>  .text @ 0x9000000003710000
+>  .data @ 0x9000000004d70000
+>  .bss  @ 0x9000000006469400
+> ---[ end Kernel panic - not syncing: Fatal exception ]---
+> '''
+> 
+> This crash happens every time when running sockmap_skb_verdict_shutdown
+> subtest in sockmap_basic.
+> 
+> This crash is because a NULL pointer is passed to page_address() in
+> sk_msg_recvmsg(). Due to the difference in architecture, page_address(0)
+> will not trigger a panic on the X86 platform but will panic on the
+> Loogarch platform. So this bug was hidden on the x86 platform, but now
+> it is exposed on the Loogarch platform.
+> 
+> The root cause is an empty skb (skb->len == 0) is put on the queue.
+> 
+> In this case, in sk_psock_skb_ingress_enqueue(), num_sge is zero, and no
+> page is put to this sge (see sg_set_page in sg_set_page), but this empty
+> sge is queued into ingress_msg list.
+> 
+> And in sk_msg_recvmsg(), this empty sge is used, and a NULL page is
+> got by sg_page(sge). Pass this NULL-page to copy_page_to_iter(), it
+> passed to kmap_local_page() and page_address(), then kernel panics.
+> 
+> To solve this, we should prevent empty skb from putting on the queue. So
+> in sk_psock_verdict_recv(), if the skb->len is zero, drop this skb.
+> 
+> Fixes: ef5659280eb1 ("bpf, sockmap: Allow skipping sk_skb parser program")
+> Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
+> ---
+>  net/core/skmsg.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/net/core/skmsg.c b/net/core/skmsg.c
+> index fd20aae30be2..44952cdd1425 100644
+> --- a/net/core/skmsg.c
+> +++ b/net/core/skmsg.c
+> @@ -1184,7 +1184,7 @@ static int sk_psock_verdict_recv(struct sock *sk, struct sk_buff *skb)
+>  
+>  	rcu_read_lock();
+>  	psock = sk_psock(sk);
+> -	if (unlikely(!psock)) {
+> +	if (unlikely(!psock || !len)) {
+>  		len = 0;
+>  		tcp_eat_skb(sk, skb);
+>  		sock_drop(sk, skb);
 
-- A "top-level" BPF prog (exception_boundary) must save all
-  non-volatile registers, and not only the ones that it clobbers.
-- A "handler" BPF prog (exception_cb) must switch stack to that of
-  exception_boundary, and restore the registers that exception_boundary
-  saved.
-- arch_bpf_stack_walk() must unwind the stack and provide the results
-  in a way that satisfies both bpf_throw() and exception_cb.
+The skb->len == 0 here is the FIN pkt right? We are using the EFAULT return
+triggered by copy_page_to_iter to check for is_fin in tcp_bpf.c.
 
-Signed-off-by: Ilya Leoshkevich <iii@linux.ibm.com>
----
- arch/s390/net/bpf_jit_comp.c | 55 ++++++++++++++++++++++++++++++++++--
- 1 file changed, 53 insertions(+), 2 deletions(-)
+The concern I have here is if we don't have the skb fin pkt on the recv
+queue we might go into wait_data and block instead of return to user when
+rcvmsg() is called from user. I wonder if we can write a test for this if
+we don't already have one we probably should create one.
 
-diff --git a/arch/s390/net/bpf_jit_comp.c b/arch/s390/net/bpf_jit_comp.c
-index 945f2ee6511b..9d440a0b729e 100644
---- a/arch/s390/net/bpf_jit_comp.c
-+++ b/arch/s390/net/bpf_jit_comp.c
-@@ -31,6 +31,7 @@
- #include <asm/nospec-branch.h>
- #include <asm/set_memory.h>
- #include <asm/text-patching.h>
-+#include <asm/unwind.h>
- #include "bpf_jit.h"
- 
- struct bpf_jit {
-@@ -62,6 +63,8 @@ struct bpf_jit {
- #define SEEN_FUNC	BIT(2)		/* calls C functions */
- #define SEEN_STACK	(SEEN_FUNC | SEEN_MEM)
- 
-+#define NVREGS		0xffc0		/* %r6-%r15 */
-+
- /*
-  * s390 registers
-  */
-@@ -572,8 +575,21 @@ static void bpf_jit_prologue(struct bpf_jit *jit, struct bpf_prog *fp,
- 	}
- 	/* Tail calls have to skip above initialization */
- 	jit->tail_call_start = jit->prg;
--	/* Save registers */
--	save_restore_regs(jit, REGS_SAVE, stack_depth, 0);
-+	if (fp->aux->exception_cb) {
-+		/*
-+		 * Switch stack, the new address is in the 2nd parameter.
-+		 *
-+		 * Arrange the restoration of %r6-%r15 in the epilogue.
-+		 * Do not restore them now, the prog does not need them.
-+		 */
-+		/* lgr %r15,%r3 */
-+		EMIT4(0xb9040000, REG_15, REG_3);
-+		jit->seen_regs |= NVREGS;
-+	} else {
-+		/* Save registers */
-+		save_restore_regs(jit, REGS_SAVE, stack_depth,
-+				  fp->aux->exception_boundary ? NVREGS : 0);
-+	}
- 	/* Setup literal pool */
- 	if (is_first_pass(jit) || (jit->seen & SEEN_LITERAL)) {
- 		if (!is_first_pass(jit) &&
-@@ -2909,3 +2925,38 @@ bool bpf_jit_supports_insn(struct bpf_insn *insn, bool in_arena)
- 	 */
- 	return true;
- }
-+
-+bool bpf_jit_supports_exceptions(void)
-+{
-+	/*
-+	 * Exceptions require unwinding support, which is always available,
-+	 * because the kernel is always built with backchain.
-+	 */
-+	return true;
-+}
-+
-+void arch_bpf_stack_walk(bool (*consume_fn)(void *, u64, u64, u64),
-+			 void *cookie)
-+{
-+	unsigned long addr, prev_addr = 0;
-+	struct unwind_state state;
-+
-+	unwind_for_each_frame(&state, NULL, NULL, 0) {
-+		addr = unwind_get_return_address(&state);
-+		if (!addr)
-+			break;
-+		/*
-+		 * addr is a return address and state.sp is the value of %r15
-+		 * at this address. exception_cb needs %r15 at entry to the
-+		 * function containing addr, so take the next state.sp.
-+		 *
-+		 * There is no bp, and the exception_cb prog does not need one
-+		 * to perform a quasi-longjmp. The common code requires a
-+		 * non-zero bp, so pass sp there as well.
-+		 */
-+		if (prev_addr && !consume_fn(cookie, prev_addr, state.sp,
-+					     state.sp))
-+			break;
-+		prev_addr = addr;
-+	}
-+}
--- 
-2.45.2
+Maybe a better fix assuming my assumption about fin being skb->len=0 is
+correct?
 
+diff --git a/net/core/skmsg.c b/net/core/skmsg.c
+index fd20aae30be2..bbf40b999713 100644
+--- a/net/core/skmsg.c
++++ b/net/core/skmsg.c
+@@ -434,7 +434,8 @@ int sk_msg_recvmsg(struct sock *sk, struct sk_psock *psock, struct msghdr *msg,
+                        page = sg_page(sge);
+                        if (copied + copy > len)
+                                copy = len - copied;
+-                       copy = copy_page_to_iter(page, sge->offset, copy, iter);
++                       if (copy)
++                               copy = copy_page_to_iter(page, sge->offset, copy, iter);
+                        if (!copy) {
+                                copied = copied ? copied : -EFAULT;
+                                goto out;
+
+Thanks,
+John
