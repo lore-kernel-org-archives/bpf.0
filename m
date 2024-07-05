@@ -1,30 +1,30 @@
-Received: from out30-99.freemail.mail.aliyun.com (out30-99.freemail.mail.aliyun.com [115.124.30.99])
+Received: from out30-98.freemail.mail.aliyun.com (out30-98.freemail.mail.aliyun.com [115.124.30.98])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40C47143866;
-	Fri,  5 Jul 2024 07:37:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.99
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3441813BAFA;
+	Fri,  5 Jul 2024 07:37:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.98
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720165064; cv=none; b=R3vDp82ZUCDo6erPIdUOwn03q/tkq7ZiZG4JFgFJIjl3q3iH2R0khGh+xH0slYm8cauq4370VLSzPrR0aVgjfI2yBpisaEa1ox12HhpDkckRVE2NJi/h+R4Rl/A3MmDWss8x+v6cX1FT8Gl6i/imv78fi276pH6m7UGI1GurJCE=
+	t=1720165065; cv=none; b=IFU+rzoRAk9b2tJ83nD6pbgLFsiOlJNq90E4HVH8cDZXuBJHr7d1TXVcsbwXRQrmET/xO0d8rmxdFVBUyDNAaIhnXBhdJEnysYthV5w2tPGwaQEN9ym1iXvpqzxAUb4pByE+FXwdqDRXsEYt1F8BB9Tk1FDEu6ZjJvyW6JzJQwQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720165064; c=relaxed/simple;
-	bh=N3BuQzEZ3xADxJCxh31dFbFp4xi723iW5Mhupk7GrXk=;
+	s=arc-20240116; t=1720165065; c=relaxed/simple;
+	bh=Q8quGDSZzYUbIq22I2pv0We8cWtmL2jLiqoJdbdM8As=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=JyfdDTxzjVzs1m2G7QoDHQUdkSejhErPUpiGebSbDX0fl0ThJpv5ure/Zx4mDJiHru2dT9qR5sILATXuUymd9xcpl+QLfrhNfLHPL6T1gl5IIb2h48oqjA/lN+yjOUBTHYikAAw1lch2aydSXGVC7rYpQoB8oQ4Mrwha4m7JLI8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=eEdYoh/I; arc=none smtp.client-ip=115.124.30.99
+	 MIME-Version; b=nC1sd82O/6Q16rIGOIWGHkxLQrgirXq0+hATumxD7mLyqcgZEkM0w3b4tapXB6BomVo7kjnZ48LsTJniOSvOzPbSKYgdiSYCbFxAIW1PpxSKfxS3p3msbZa21GVgLyrpBxRx4svBm8G3wtKerq3Q/ivVHTNSpHEmGw4R5nwkMms=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=CQDiQQzy; arc=none smtp.client-ip=115.124.30.98
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="eEdYoh/I"
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="CQDiQQzy"
 DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
 	d=linux.alibaba.com; s=default;
-	t=1720165059; h=From:To:Subject:Date:Message-Id:MIME-Version;
-	bh=ixQcmDs1008Adtr8nnLB1TsPVvNLEyo3g5zAUujjY4M=;
-	b=eEdYoh/IiGcSuBw2mmpZn45sHSYiaQGXDDzx1Gd8cvCi+Dya1NGq53Wdn6fRDcv/LhexKdgCWhtJSgkF/5AygixDXh4YV/6mmb3pP19LFIkxsh24AjaXJFQOx+kseHJ6rnqxuSjtZDrkAGhG2XyJ7HRV3vFgmETa0zHnzu9OOoc=
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R131e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033037067111;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=15;SR=0;TI=SMTPD_---0W9uE.dr_1720165057;
-Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0W9uE.dr_1720165057)
+	t=1720165060; h=From:To:Subject:Date:Message-Id:MIME-Version;
+	bh=zNeiDwdkqzBfnWgHli0nRbhmznR8NhiOcj4IWvM1Tec=;
+	b=CQDiQQzyd4s1s7AnFuK3aV6IrKSQLaxQEZ67wgQUx7HUqecFjemBTyz05t1NO3/Dxef8BfsJC8/NNdAS+VRhc5YLwk1G3HJQl9exSfUFQRkgRkpazSq1mqAXWzOu8y1bTGUZUYBzgYA71hCHfaRo59XWCvofaNfVKled0h0OaYg=
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R201e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033045046011;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=15;SR=0;TI=SMTPD_---0W9u53pV_1720165059;
+Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0W9u53pV_1720165059)
           by smtp.aliyun-inc.com;
-          Fri, 05 Jul 2024 15:37:38 +0800
+          Fri, 05 Jul 2024 15:37:40 +0800
 From: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
 To: netdev@vger.kernel.org
 Cc: "Michael S. Tsirkin" <mst@redhat.com>,
@@ -41,9 +41,9 @@ Cc: "Michael S. Tsirkin" <mst@redhat.com>,
 	John Fastabend <john.fastabend@gmail.com>,
 	virtualization@lists.linux.dev,
 	bpf@vger.kernel.org
-Subject: [PATCH net-next v7 03/10] virtio_net: separate virtnet_tx_resize()
-Date: Fri,  5 Jul 2024 15:37:27 +0800
-Message-Id: <20240705073734.93905-4-xuanzhuo@linux.alibaba.com>
+Subject: [PATCH net-next v7 05/10] virtio_net: separate receive_mergeable
+Date: Fri,  5 Jul 2024 15:37:29 +0800
+Message-Id: <20240705073734.93905-6-xuanzhuo@linux.alibaba.com>
 X-Mailer: git-send-email 2.32.0.3.g01195cf9f
 In-Reply-To: <20240705073734.93905-1-xuanzhuo@linux.alibaba.com>
 References: <20240705073734.93905-1-xuanzhuo@linux.alibaba.com>
@@ -56,83 +56,118 @@ MIME-Version: 1.0
 X-Git-Hash: bfc652b69f2c
 Content-Transfer-Encoding: 8bit
 
-This patch separates two sub-functions from virtnet_tx_resize():
-
-* virtnet_tx_pause
-* virtnet_tx_resume
-
-Then the subsequent virtnet_tx_reset() can share these two functions.
+This commit separates the function receive_mergeable(),
+put the logic of appending frag to the skb as an independent function.
+The subsequent commit will reuse it.
 
 Signed-off-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
 Acked-by: Jason Wang <jasowang@redhat.com>
 ---
- drivers/net/virtio_net.c | 35 +++++++++++++++++++++++++++++------
- 1 file changed, 29 insertions(+), 6 deletions(-)
+ drivers/net/virtio_net.c | 77 ++++++++++++++++++++++++----------------
+ 1 file changed, 47 insertions(+), 30 deletions(-)
 
 diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
-index df5b23374c53..7d762614113b 100644
+index abfc84af90ce..3c828cdd438b 100644
 --- a/drivers/net/virtio_net.c
 +++ b/drivers/net/virtio_net.c
-@@ -2703,12 +2703,11 @@ static int virtnet_rx_resize(struct virtnet_info *vi,
- 	return err;
+@@ -1821,6 +1821,49 @@ static struct sk_buff *receive_mergeable_xdp(struct net_device *dev,
+ 	return NULL;
  }
  
--static int virtnet_tx_resize(struct virtnet_info *vi,
--			     struct send_queue *sq, u32 ring_num)
-+static void virtnet_tx_pause(struct virtnet_info *vi, struct send_queue *sq)
- {
- 	bool running = netif_running(vi->dev);
- 	struct netdev_queue *txq;
--	int err, qindex;
-+	int qindex;
- 
- 	qindex = sq - vi->sq;
- 
-@@ -2729,10 +2728,17 @@ static int virtnet_tx_resize(struct virtnet_info *vi,
- 	netif_stop_subqueue(vi->dev, qindex);
- 
- 	__netif_tx_unlock_bh(txq);
-+}
- 
--	err = virtqueue_resize(sq->vq, ring_num, virtnet_sq_free_unused_buf);
--	if (err)
--		netdev_err(vi->dev, "resize tx fail: tx queue index: %d err: %d\n", qindex, err);
-+static void virtnet_tx_resume(struct virtnet_info *vi, struct send_queue *sq)
++static struct sk_buff *virtnet_skb_append_frag(struct sk_buff *head_skb,
++					       struct sk_buff *curr_skb,
++					       struct page *page, void *buf,
++					       int len, int truesize)
 +{
-+	bool running = netif_running(vi->dev);
-+	struct netdev_queue *txq;
-+	int qindex;
++	int num_skb_frags;
++	int offset;
 +
-+	qindex = sq - vi->sq;
++	num_skb_frags = skb_shinfo(curr_skb)->nr_frags;
++	if (unlikely(num_skb_frags == MAX_SKB_FRAGS)) {
++		struct sk_buff *nskb = alloc_skb(0, GFP_ATOMIC);
 +
-+	txq = netdev_get_tx_queue(vi->dev, qindex);
- 
- 	__netif_tx_lock_bh(txq);
- 	sq->reset = false;
-@@ -2741,6 +2747,23 @@ static int virtnet_tx_resize(struct virtnet_info *vi,
- 
- 	if (running)
- 		virtnet_napi_tx_enable(vi, sq->vq, &sq->napi);
++		if (unlikely(!nskb))
++			return NULL;
++
++		if (curr_skb == head_skb)
++			skb_shinfo(curr_skb)->frag_list = nskb;
++		else
++			curr_skb->next = nskb;
++		curr_skb = nskb;
++		head_skb->truesize += nskb->truesize;
++		num_skb_frags = 0;
++	}
++
++	if (curr_skb != head_skb) {
++		head_skb->data_len += len;
++		head_skb->len += len;
++		head_skb->truesize += truesize;
++	}
++
++	offset = buf - page_address(page);
++	if (skb_can_coalesce(curr_skb, num_skb_frags, page, offset)) {
++		put_page(page);
++		skb_coalesce_rx_frag(curr_skb, num_skb_frags - 1,
++				     len, truesize);
++	} else {
++		skb_add_rx_frag(curr_skb, num_skb_frags, page,
++				offset, len, truesize);
++	}
++
++	return curr_skb;
 +}
 +
-+static int virtnet_tx_resize(struct virtnet_info *vi, struct send_queue *sq,
-+			     u32 ring_num)
-+{
-+	int qindex, err;
-+
-+	qindex = sq - vi->sq;
-+
-+	virtnet_tx_pause(vi, sq);
-+
-+	err = virtqueue_resize(sq->vq, ring_num, virtnet_sq_free_unused_buf);
-+	if (err)
-+		netdev_err(vi->dev, "resize tx fail: tx queue index: %d err: %d\n", qindex, err);
-+
-+	virtnet_tx_resume(vi, sq);
-+
- 	return err;
- }
+ static struct sk_buff *receive_mergeable(struct net_device *dev,
+ 					 struct virtnet_info *vi,
+ 					 struct receive_queue *rq,
+@@ -1870,8 +1913,6 @@ static struct sk_buff *receive_mergeable(struct net_device *dev,
+ 	if (unlikely(!curr_skb))
+ 		goto err_skb;
+ 	while (--num_buf) {
+-		int num_skb_frags;
+-
+ 		buf = virtnet_rq_get_buf(rq, &len, &ctx);
+ 		if (unlikely(!buf)) {
+ 			pr_debug("%s: rx error: %d buffers out of %d missing\n",
+@@ -1896,34 +1937,10 @@ static struct sk_buff *receive_mergeable(struct net_device *dev,
+ 			goto err_skb;
+ 		}
  
+-		num_skb_frags = skb_shinfo(curr_skb)->nr_frags;
+-		if (unlikely(num_skb_frags == MAX_SKB_FRAGS)) {
+-			struct sk_buff *nskb = alloc_skb(0, GFP_ATOMIC);
+-
+-			if (unlikely(!nskb))
+-				goto err_skb;
+-			if (curr_skb == head_skb)
+-				skb_shinfo(curr_skb)->frag_list = nskb;
+-			else
+-				curr_skb->next = nskb;
+-			curr_skb = nskb;
+-			head_skb->truesize += nskb->truesize;
+-			num_skb_frags = 0;
+-		}
+-		if (curr_skb != head_skb) {
+-			head_skb->data_len += len;
+-			head_skb->len += len;
+-			head_skb->truesize += truesize;
+-		}
+-		offset = buf - page_address(page);
+-		if (skb_can_coalesce(curr_skb, num_skb_frags, page, offset)) {
+-			put_page(page);
+-			skb_coalesce_rx_frag(curr_skb, num_skb_frags - 1,
+-					     len, truesize);
+-		} else {
+-			skb_add_rx_frag(curr_skb, num_skb_frags, page,
+-					offset, len, truesize);
+-		}
++		curr_skb  = virtnet_skb_append_frag(head_skb, curr_skb, page,
++						    buf, len, truesize);
++		if (!curr_skb)
++			goto err_skb;
+ 	}
+ 
+ 	ewma_pkt_len_add(&rq->mrg_avg_pkt_len, head_skb->len);
 -- 
 2.32.0.3.g01195cf9f
 
