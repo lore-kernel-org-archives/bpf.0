@@ -1,42 +1,40 @@
-Received: from mailtransmit04.runbox.com (mailtransmit04.runbox.com [185.226.149.37])
+Received: from mailtransmit05.runbox.com (mailtransmit05.runbox.com [185.226.149.38])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6ED512E55;
-	Sun,  7 Jul 2024 22:29:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.37
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E130C79D2
+	for <bpf@vger.kernel.org>; Sun,  7 Jul 2024 22:46:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.38
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720391384; cv=none; b=KdSSd4j5ii0iYdXaWg8OnM8q3tbCud7BL13av2F5wQDF+YCFsLY6OLwouduKmdPfaxXkc+LrHZj5cACcKi5A/UaUVsqKdb3sYa5WtaM/mIcc7iwYmdVhUKjAGxnuaOTFyhF+0U8e7UzF26jqp831omInfBPL8qYavM4ke3sK1Lg=
+	t=1720392377; cv=none; b=dwst3iIa8kpZhX/Ggy+kDoMFPeksmJeZSOOwXXxA0l3D2z5mI79E537yZBKPADbitxFEOPOxIRKq5NonZSCXqyRDqYwnOxLxOw6l9J/GiyWwaWwSI70oQFyikJX9fnf4ZccRtWJHtd2+pagHusg/79TuRfYk5WPsrt9Oate/cQQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720391384; c=relaxed/simple;
-	bh=dGUOgYZXO+dYc4Hd2aEZo7E1ZNs9m6oaDpq8IcnWEaA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=mQfE8lW4Md0Gl8y7GzPPIV8x1ocXP2gFiEAdSWKl6Tt5cnNfz8BuhLn7dG+2HGm4lgBoAm/QvmTC8NT/KIodOFyXQGzlT8JwckyvmDHjVOhf0NqdGPLGnzmPGLqKVHa9qlNcyhEWxF1LCRtUXHlGAI4P3aMLyZvH550HtQE8aJ4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co; spf=pass smtp.mailfrom=rbox.co; dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b=XTquWd9Z; arc=none smtp.client-ip=185.226.149.37
+	s=arc-20240116; t=1720392377; c=relaxed/simple;
+	bh=5WXa7TXUt0pTujieU/s8THkO0eiSAbtWwQVfoul+XZU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=IyfRR5YR+Vazn2MpIstFvCeg+/cH/n7dE1yEmkCe1LSQiQTAY9dysVrR9fG6j58JkhCjt2kuL3NmToRgc1Gd7Pk/qNfJKWzWIPFQlCyrBeCSsmo7RvhTz3Wi0JYopPrRgrcOTA2TDvYtmuZuEtvvvS8JtNdghikuU7/eecrP2Rk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co; spf=pass smtp.mailfrom=rbox.co; dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b=xgaWsu1Y; arc=none smtp.client-ip=185.226.149.38
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rbox.co
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b="XTquWd9Z"
+	dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b="xgaWsu1Y"
 Received: from mailtransmit02.runbox ([10.9.9.162] helo=aibo.runbox.com)
-	by mailtransmit04.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+	by mailtransmit05.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
 	(Exim 4.93)
 	(envelope-from <mhal@rbox.co>)
-	id 1sQaO1-00H8ig-A7; Mon, 08 Jul 2024 00:29:37 +0200
+	id 1sQaNs-00Ept5-70; Mon, 08 Jul 2024 00:29:28 +0200
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=rbox.co;
-	s=selector2; h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:
-	Message-ID:Date:Subject:Cc:To:From;
-	bh=E4IXG40cCmALJCoKYDNrqUR7yMYyRtdiJB1SHvERVGo=; b=XTquWd9ZHlzloP5OkvTkhb8+wW
-	vZWtMfohM6X3ipEbgHClu2WnkZSCePVhNAzhrSNcretd5LmqokfAaCH+SHIK+b0ujFtCvBqmtpim+
-	FiZ1pThKNYdKf3LKtbvQv8Jd60KjZBu41py1TbXCktR6Aksw+hvbb9dK5C7IUXpVerSvLhg5avfSP
-	FuSctR0ZsvwOt+da6QwaIn/Wb3h1/Z7tnxll+MhmMz2jzD4ocEXp05RNMQX/ogRUwb6/ZXKft4laa
-	8Aq5t7jlqcXw8K0AXlWjBqrcx5mQI0aHOGm7Dm+wwSGmcAsnQ/CWBJBxDXLY/P7uneJ/MjEQ1lcb9
-	7osUCOjg==;
+	s=selector2; h=Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject
+	:Cc:To:From; bh=3uQCmZos7NiStkurhNQ3kVX1Rs80FogJIMD1ibPixD8=; b=xgaWsu1YWjlA9
+	9hsWZaQs8T6gVoZd8fXWyK/mhJU4SBEdV+7kbrBWRvsThK/Y6Z2eR2I7Y43WYH7Vd7v2o2/yC0lH8
+	UFx/NeeH8XPcKfdocqiIOp/ShBx/YRjVPlJH50Ob7JbztNC9WFp7Y0AMQ+e2cExXfLKWEIK7KEXTw
+	ECUSnlJafkwIRjVds1eo3wrsGFmaqjLdGdsN2R68lVWAFgnsa0A5Dik0yPRpgyggvUO3mFZ7V+l3C
+	zbsFNwumc1//IisU9+94ZUjD02lV4OSOl73VTQaKSmWJ1MIOqY3n5wpBqicw20dvYhKp5oK3TRX84
+	Yw2S8mH8QkeGGGZ+cYoKA==;
 Received: from [10.9.9.74] (helo=submission03.runbox)
 	by mailtransmit02.runbox with esmtp (Exim 4.86_2)
 	(envelope-from <mhal@rbox.co>)
-	id 1sQaNw-00060Z-0K; Mon, 08 Jul 2024 00:29:32 +0200
+	id 1sQaNr-0005zf-5J; Mon, 08 Jul 2024 00:29:27 +0200
 Received: by submission03.runbox with esmtpsa  [Authenticated ID (604044)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
 	(Exim 4.93)
-	id 1sQaNb-009IHx-F4; Mon, 08 Jul 2024 00:29:11 +0200
+	id 1sQaNZ-009IHx-Mb; Mon, 08 Jul 2024 00:29:09 +0200
 From: Michal Luczaj <mhal@rbox.co>
 To: netdev@vger.kernel.org
 Cc: bpf@vger.kernel.org,
@@ -50,12 +48,10 @@ Cc: bpf@vger.kernel.org,
 	Rao.Shoaib@oracle.com,
 	cong.wang@bytedance.com,
 	Michal Luczaj <mhal@rbox.co>
-Subject: [PATCH bpf v3 3/4] selftest/bpf: Parametrize AF_UNIX redir functions to accept send() flags
-Date: Sun,  7 Jul 2024 23:28:24 +0200
-Message-ID: <20240707222842.4119416-4-mhal@rbox.co>
+Subject: [PATCH bpf v3 0/4] af_unix: MSG_OOB handling fix & selftest
+Date: Sun,  7 Jul 2024 23:28:21 +0200
+Message-ID: <20240707222842.4119416-1-mhal@rbox.co>
 X-Mailer: git-send-email 2.45.2
-In-Reply-To: <20240707222842.4119416-1-mhal@rbox.co>
-References: <20240707222842.4119416-1-mhal@rbox.co>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -64,102 +60,29 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Extend pairs_redir_to_connected() and unix_inet_redir_to_connected() with a
-send_flags parameter. Replace write() with send() allowing packets to be
-sent as MSG_OOB.
+PATCH 1/4 tells BPF redirect how to deal with AF_UNIX's MSG_OOB
+(silent drop). The rest is selftest-related.
 
-Signed-off-by: Michal Luczaj <mhal@rbox.co>
----
- .../selftests/bpf/prog_tests/sockmap_listen.c | 40 +++++++++++++------
- 1 file changed, 27 insertions(+), 13 deletions(-)
+v3:
+  - Add selftest
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c b/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c
-index c075d376fcab..59e16f8f2090 100644
---- a/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c
-+++ b/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c
-@@ -1374,9 +1374,10 @@ static void test_redir(struct test_sockmap_listen *skel, struct bpf_map *map,
- 	}
- }
- 
--static void pairs_redir_to_connected(int cli0, int peer0, int cli1, int peer1,
--				     int sock_mapfd, int nop_mapfd,
--				     int verd_mapfd, enum redir_mode mode)
-+static void __pairs_redir_to_connected(int cli0, int peer0, int cli1, int peer1,
-+				       int sock_mapfd, int nop_mapfd,
-+				       int verd_mapfd, enum redir_mode mode,
-+				       int send_flags)
- {
- 	const char *log_prefix = redir_mode_str(mode);
- 	unsigned int pass;
-@@ -1396,11 +1397,9 @@ static void pairs_redir_to_connected(int cli0, int peer0, int cli1, int peer1,
- 			return;
- 	}
- 
--	n = write(cli1, "a", 1);
--	if (n < 0)
--		FAIL_ERRNO("%s: write", log_prefix);
-+	n = xsend(cli1, "a", 1, send_flags);
- 	if (n == 0)
--		FAIL("%s: incomplete write", log_prefix);
-+		FAIL("%s: incomplete send", log_prefix);
- 	if (n < 1)
- 		return;
- 
-@@ -1418,6 +1417,14 @@ static void pairs_redir_to_connected(int cli0, int peer0, int cli1, int peer1,
- 		FAIL("%s: incomplete recv", log_prefix);
- }
- 
-+static void pairs_redir_to_connected(int cli0, int peer0, int cli1, int peer1,
-+				     int sock_mapfd, int nop_mapfd,
-+				     int verd_mapfd, enum redir_mode mode)
-+{
-+	__pairs_redir_to_connected(cli0, peer0, cli1, peer1, sock_mapfd,
-+				   nop_mapfd, verd_mapfd, mode, 0);
-+}
-+
- static void unix_redir_to_connected(int sotype, int sock_mapfd,
- 			       int verd_mapfd, enum redir_mode mode)
- {
-@@ -1815,10 +1822,9 @@ static void inet_unix_skb_redir_to_connected(struct test_sockmap_listen *skel,
- 	xbpf_prog_detach2(verdict, sock_map, BPF_SK_SKB_VERDICT);
- }
- 
--static void unix_inet_redir_to_connected(int family, int type,
--					int sock_mapfd, int nop_mapfd,
--					int verd_mapfd,
--					enum redir_mode mode)
-+static void __unix_inet_redir_to_connected(int family, int type, int sock_mapfd,
-+					   int nop_mapfd, int verd_mapfd,
-+					   enum redir_mode mode, int send_flags)
- {
- 	int c0, c1, p0, p1;
- 	int sfd[2];
-@@ -1832,8 +1838,8 @@ static void unix_inet_redir_to_connected(int family, int type,
- 		goto close_cli0;
- 	c1 = sfd[0], p1 = sfd[1];
- 
--	pairs_redir_to_connected(c0, p0, c1, p1,
--				 sock_mapfd, nop_mapfd, verd_mapfd, mode);
-+	__pairs_redir_to_connected(c0, p0, c1, p1, sock_mapfd, nop_mapfd,
-+				   verd_mapfd, mode, send_flags);
- 
- 	xclose(c1);
- 	xclose(p1);
-@@ -1842,6 +1848,14 @@ static void unix_inet_redir_to_connected(int family, int type,
- 	xclose(p0);
- }
- 
-+static void unix_inet_redir_to_connected(int family, int type, int sock_mapfd,
-+					 int nop_mapfd, int verd_mapfd,
-+					 enum redir_mode mode)
-+{
-+	__unix_inet_redir_to_connected(family, type, sock_mapfd, nop_mapfd,
-+				       verd_mapfd, mode, 0);
-+}
-+
- static void unix_inet_skb_redir_to_connected(struct test_sockmap_listen *skel,
- 					    struct bpf_map *inner_map, int family)
- {
+v2: https://lore.kernel.org/netdev/20240622223324.3337956-1-mhal@rbox.co/
+  - Reduce time under mutex, restructure (Kuniyuki)
+  - Handle unix_release_sock() race
+
+v1: https://lore.kernel.org/netdev/20240620203009.2610301-1-mhal@rbox.co/
+
+Michal Luczaj (4):
+  af_unix: Disable MSG_OOB handling for sockets in sockmap/sockhash
+  selftest/bpf: Support SOCK_STREAM in unix_inet_redir_to_connected()
+  selftest/bpf: Parametrize AF_UNIX redir functions to accept send()
+    flags
+  selftest/bpf: Test sockmap redirect for AF_UNIX MSG_OOB
+
+ net/unix/af_unix.c                            | 41 +++++++++++-
+ net/unix/unix_bpf.c                           |  3 +
+ .../selftests/bpf/prog_tests/sockmap_listen.c | 65 ++++++++++++++-----
+ 3 files changed, 92 insertions(+), 17 deletions(-)
+
 -- 
 2.45.2
-
