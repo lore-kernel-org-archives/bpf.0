@@ -1,136 +1,128 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out30-113.freemail.mail.aliyun.com (out30-113.freemail.mail.aliyun.com [115.124.30.113])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AA7936134
-	for <bpf@vger.kernel.org>; Mon,  8 Jul 2024 10:04:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 889F07A715;
+	Mon,  8 Jul 2024 11:25:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.113
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720433091; cv=none; b=E7U4WzbGeMTHfSaRciBumMUHYbVOUpTR/+D+bc+zrqzvpM5bOQbWsMb035+7xG6W+XXQf+M7ol+fYtB3QRKVEQNKho0ICagaKgwKIZxx2+VAYy0KzWDAOHYnbq8UXAHIOnIdtf3datbKDeE7D7pQtrsbCFKj3/Ttd2uXk25iyzY=
+	t=1720437946; cv=none; b=T3j3X35JBSSUC54RePBdSm7Y+NkK0FG/uka6Dd0lvESyiaQQD/CZe+aU3NYsf/FbZVvf/sks43+n7WvjkPzUKRJbBSGJ5CHGf5k6TtayNcs703PbfY85Rm0bjGSQm2UAKtKzrwmPZa3nc38xOBS9ZdgAjLvQiOClUoI9o3OpNqQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720433091; c=relaxed/simple;
-	bh=USy5tAusbYhsNK4T3DhzfrXWJZNN3yFfYPLsqMtD+AY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=LfY0dHZicT71dLE0WINi26m0asNg5oWnZSi3Cpglsdd1R630+IyI2tOIjcBI4le3UAewJWtrR0HTdxmwS9BE+4wAzQuvEzY+gwvTY01mA9zlofLKvmpdeZ3XPAqKD0z/XqXJOsOPwinoXypw9qso9dPWfL4vO0K7L/5SPA1w+x0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HjMQoKB/; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1720437946; c=relaxed/simple;
+	bh=S6oVuJH4Ey1aGRyuX5UtuKn3x/lfZdCtlD0vCpj5PUg=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=e45M6lSaM3uqtxRyxxPuRIlw7rxY9fve5ixJy26se+fc8KEZDh4ceaO+Jjd4kfHhwvfkgxYqot1TaeaG5CjGsb2V7yu7FOtCMqRhL8dg5inRDSCQTcAd2WL8JMrQJ0OffOKr4D8O6atg+ZR03GLNQJXzKQ1r8RSx/FAsRxjIz1c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=D4/3CuE8; arc=none smtp.client-ip=115.124.30.113
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HjMQoKB/"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A72E5C4AF10
-	for <bpf@vger.kernel.org>; Mon,  8 Jul 2024 10:04:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1720433090;
-	bh=USy5tAusbYhsNK4T3DhzfrXWJZNN3yFfYPLsqMtD+AY=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=HjMQoKB/Tz2oaWPvKxRodrl1bgihRp5pQHQoz3ddUDeg968b/8wOlJmO+Ir2YLfRz
-	 1/AXGdUzDNwK2J5d6Zq+LDqz4IiWJhJfBbk8LhJUlRcVlPat/qiajn59/yrTWvbVYk
-	 O828Kp1hh0AKM4Za9t9E3otA9iKjMMPbOwu2ai1LHIG53DnJqPdnuor5HxfInaJKsb
-	 oUDac6oYF4CwZqYITibpyHC3+vamLNehSWrQPT6zhqePwcM2QhPJIVOd4LCnEdaFLW
-	 yTTZdM+pxpG5upHtOWJheV+b9p7hdYLpDqwkn8/q0L//HG+tkRX991Zkw33uz7XfqC
-	 J72cL00m56gcQ==
-Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-58b447c511eso4637403a12.2
-        for <bpf@vger.kernel.org>; Mon, 08 Jul 2024 03:04:50 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCU6O7lzt2D21ogw3fRu8AK7iRiRaArhJYbLff+ldjJfqoyOGZ9z11ZJ16Uhagumq8ULOODOVDV5YS1FvUuYpvHResDT
-X-Gm-Message-State: AOJu0YzlodFcUNcG/9g+VSZbNmPlGZBREWbhnlOo+LQfDpVYFE5lhldl
-	cCWghFecv3289viSeQpooAX/2D6XC9ka0M3Iak6DfcGhV+4UOnhDq5i8O5f78ElAbpmPiznr0LF
-	pu0u8gyYYrMndnnphiy5QgoQjZ8cgYyaOKFj8
-X-Google-Smtp-Source: AGHT+IHYhZUMGl3xoMe6nGJCiUDuux4b5qNKC9p3FSNKDNSbMdP8pPQTIUoPx5b2kRBVKsNnXotkfx2Vvb3CGONNVLc=
-X-Received: by 2002:a05:6402:40cc:b0:57a:27c8:3269 with SMTP id
- 4fb4d7f45d1cf-58e5a7f0899mr9931152a12.4.1720433089092; Mon, 08 Jul 2024
- 03:04:49 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="D4/3CuE8"
+DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux.alibaba.com; s=default;
+	t=1720437941; h=From:To:Subject:Date:Message-Id:MIME-Version;
+	bh=atkXl8sdxE5F980RyAJSy3BaZJBzT1htGKQ6PgTVJ0c=;
+	b=D4/3CuE8lc2d6Nd1kl9yvrkMIBh2VfpSo8ATOP0lP5C0F8DbQhaiWwvzJjY/sJfoLfh63Y3zlstAege0O9vgEC3oxuTgdEzl2uH26DUA1MY6BcP0G/CS2XkSSZFYvQvl71CJZok8OAwbK3ANfeOCS5xuWRxyrEbIrB5AxvVMCmY=
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R171e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033037067112;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=15;SR=0;TI=SMTPD_---0WA4mZe5_1720437940;
+Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0WA4mZe5_1720437940)
+          by smtp.aliyun-inc.com;
+          Mon, 08 Jul 2024 19:25:40 +0800
+From: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+To: netdev@vger.kernel.org
+Cc: "Michael S. Tsirkin" <mst@redhat.com>,
+	Jason Wang <jasowang@redhat.com>,
+	Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+	=?UTF-8?q?Eugenio=20P=C3=A9rez?= <eperezma@redhat.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	virtualization@lists.linux.dev,
+	bpf@vger.kernel.org
+Subject: [PATCH net-next v8 02/10] virtio_net: separate virtnet_rx_resize()
+Date: Mon,  8 Jul 2024 19:25:29 +0800
+Message-Id: <20240708112537.96291-3-xuanzhuo@linux.alibaba.com>
+X-Mailer: git-send-email 2.32.0.3.g01195cf9f
+In-Reply-To: <20240708112537.96291-1-xuanzhuo@linux.alibaba.com>
+References: <20240708112537.96291-1-xuanzhuo@linux.alibaba.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240629084331.3807368-4-kpsingh@kernel.org> <ce279e1f9a4e4226e7a87a7e2440fbe4@paul-moore.com>
- <CACYkzJ60tmZEe3=T-yU3dF2x757_BYUxb_MQRm6tTp8Nj2A9KA@mail.gmail.com>
- <CAHC9VhQ4qH-rtTpvCTpO5aNbFV4epJr5Xaj=TJ86_Y_Z3v-uyw@mail.gmail.com>
- <CACYkzJ4kwrsDwD2k5ywn78j7CcvufgJJuZQ4Wpz8upL9pAsuZw@mail.gmail.com>
- <CAHC9VhRoMpmHEVi5K+BmKLLEkcAd6Qvf+CdSdBdLOx4LUSsgKQ@mail.gmail.com>
- <CACYkzJ6mWFRsdtRXSnaEZbnYR9w85MfmMJ3i76WEz+af=_QnLg@mail.gmail.com>
- <CAHC9VhRA0hX-Nx20CK+yV276d7nooMmR+Q5OBNOy5fces4q9Bw@mail.gmail.com>
- <CACYkzJ6jADoGNuPP3-1wkk-kV7NOQh+eFkU5KEDEZgq9qNNEfg@mail.gmail.com> <CAHC9VhQQkWxMT3KguOOK7W8cbY-cdeYTJSuh=tSDV4jsqp6s6g@mail.gmail.com>
-In-Reply-To: <CAHC9VhQQkWxMT3KguOOK7W8cbY-cdeYTJSuh=tSDV4jsqp6s6g@mail.gmail.com>
-From: KP Singh <kpsingh@kernel.org>
-Date: Mon, 8 Jul 2024 12:04:36 +0200
-X-Gmail-Original-Message-ID: <CACYkzJ5gAnbXX_aWy6952s2O5L2p3Mw14OUfo9Z-Od6_Dp2HLQ@mail.gmail.com>
-Message-ID: <CACYkzJ5gAnbXX_aWy6952s2O5L2p3Mw14OUfo9Z-Od6_Dp2HLQ@mail.gmail.com>
-Subject: Re: [PATCH v13 3/5] security: Replace indirect LSM hook calls with
- static calls
-To: Paul Moore <paul@paul-moore.com>
-Cc: linux-security-module@vger.kernel.org, bpf@vger.kernel.org, ast@kernel.org, 
-	casey@schaufler-ca.com, andrii@kernel.org, keescook@chromium.org, 
-	daniel@iogearbox.net, renauld@google.com, revest@chromium.org, 
-	song@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-Git-Hash: 74fbc055cff2
+Content-Transfer-Encoding: 8bit
 
-On Sat, Jul 6, 2024 at 6:40=E2=80=AFAM Paul Moore <paul@paul-moore.com> wro=
-te:
->
-> On Fri, Jul 5, 2024 at 3:34=E2=80=AFPM KP Singh <kpsingh@kernel.org> wrot=
-e:
-> > On Fri, Jul 5, 2024 at 8:07=E2=80=AFPM Paul Moore <paul@paul-moore.com>=
- wrote:
-> > > On Wed, Jul 3, 2024 at 7:08=E2=80=AFPM KP Singh <kpsingh@kernel.org> =
-wrote:
+This patch separates two sub-functions from virtnet_rx_resize():
 
-[...]
+* virtnet_rx_pause
+* virtnet_rx_resume
 
-> >
-> > Paul, I am talking about eliminating a class of bugs, but you don't
-> > seem to get the point and you are fixated on the very instance of this
-> > bug class.
->
-> I do understand that you are trying to eliminate a class of bugs, the
-> point I'm trying to make is that I believe we have addressed that
-> already with the patches I've previously cited.
+Then the subsequent reset rx for xsk can share these two functions.
 
-The class I am referring to is useless hooks returning a default value
-and imposing a denial / enforcement when they are not supposed to. If
-you think this class of issues is not relevant to the overall LSM,
-sure. I would still like BPF LSM to not add default callbacks as I
-have always maintained since day 1:
+Signed-off-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+Acked-by: Jason Wang <jasowang@redhat.com>
+---
+ drivers/net/virtio_net.c | 29 +++++++++++++++++++++--------
+ 1 file changed, 21 insertions(+), 8 deletions(-)
 
-https://lwn.net/ml/linux-kernel/20200224171305.GA21886@chromium.org/
+diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
+index d99898e44456..df5b23374c53 100644
+--- a/drivers/net/virtio_net.c
++++ b/drivers/net/virtio_net.c
+@@ -2665,28 +2665,41 @@ static netdev_tx_t start_xmit(struct sk_buff *skb, struct net_device *dev)
+ 	return NETDEV_TX_OK;
+ }
+ 
+-static int virtnet_rx_resize(struct virtnet_info *vi,
+-			     struct receive_queue *rq, u32 ring_num)
++static void virtnet_rx_pause(struct virtnet_info *vi, struct receive_queue *rq)
+ {
+ 	bool running = netif_running(vi->dev);
+-	int err, qindex;
+-
+-	qindex = rq - vi->rq;
+ 
+ 	if (running) {
+ 		napi_disable(&rq->napi);
+ 		virtnet_cancel_dim(vi, &rq->dim);
+ 	}
++}
+ 
+-	err = virtqueue_resize(rq->vq, ring_num, virtnet_rq_unmap_free_buf);
+-	if (err)
+-		netdev_err(vi->dev, "resize rx fail: rx queue index: %d err: %d\n", qindex, err);
++static void virtnet_rx_resume(struct virtnet_info *vi, struct receive_queue *rq)
++{
++	bool running = netif_running(vi->dev);
+ 
+ 	if (!try_fill_recv(vi, rq, GFP_KERNEL))
+ 		schedule_delayed_work(&vi->refill, 0);
+ 
+ 	if (running)
+ 		virtnet_napi_enable(rq->vq, &rq->napi);
++}
++
++static int virtnet_rx_resize(struct virtnet_info *vi,
++			     struct receive_queue *rq, u32 ring_num)
++{
++	int err, qindex;
++
++	qindex = rq - vi->rq;
++
++	virtnet_rx_pause(vi, rq);
++
++	err = virtqueue_resize(rq->vq, ring_num, virtnet_rq_unmap_free_buf);
++	if (err)
++		netdev_err(vi->dev, "resize rx fail: rx queue index: %d err: %d\n", qindex, err);
++
++	virtnet_rx_resume(vi, rq);
+ 	return err;
+ }
+ 
+-- 
+2.32.0.3.g01195cf9f
 
-BPF LSM does not want to provide a default decision until a BPF LSM
-policy program is loaded,
-
->
-> > > > 2. Performance, no extra function call.
-> > >
-> > > Convince me the bug still exists first and then we can discuss the
-> > > merits of whatever solutions are proposed.
-> >
-> > This is independent of the bug!
->
-> Correctness first, maintainability second, performance third.  That's
-> my current priority and I feel the maintainability hit doesn't justify
-> the performance win at this point in time.  Besides, we're already
-> expecting a big performance boost simply by moving to static_calls.
->
-> > As I said, If you don't want to modify the core LSM layer, it's okay,
-> > I still want to go with changes local to the BPF LSM, If you really
-> > don't agree with the changes local to the BPF LSM, we can have it go
-> > via the BPF tree and seek Linus' help to resolve the conflict.
->
-> As the BPF maintainer you are always free to do whatever you like
-> within the scope of the LSM you maintain so long as it does not touch
-> or otherwise impact any of the other LSMs or the LSM framework.  If
-> you do affect the other LSMs, or the LSM framework, you need to get an
-> ACK from the associated maintainer.  That's pretty much how Linux
-> kernel development works.
-
-Okay, then let's not make an LSM API, I will handle it within the BPF LSM.
-
-The patch I proposed should not affect any other LSMs and is self
-contained within BPF LSM:
-
-https://lore.kernel.org/bpf/CACYkzJ6jADoGNuPP3-1wkk-kV7NOQh+eFkU5KEDEZgq9qN=
-NEfg@mail.gmail.com/
-
-
->
-> --
-> paul-moore.com
