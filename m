@@ -1,145 +1,185 @@
-Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com [209.85.128.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C935824A1
-	for <bpf@vger.kernel.org>; Mon,  8 Jul 2024 12:52:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0768CB665;
+	Mon,  8 Jul 2024 13:31:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720443137; cv=none; b=K+vh1LjNFur3DuXeumTy0RCnyNdggIBvVXidTsiIEe5i6WNH3QddJLcxR+5JuURKzV/El0JFD5LXLA//rtEb9NqC4fe4YfSb41bzbqe0kWdEtT7TkB0ENKrQhBUN97aTUpv8fx8nJuY9GjWKhdh3ECeYrCe0y31XtLYY8IsK6HM=
+	t=1720445521; cv=none; b=Zu0xNR+JTdUI46heLyNvua/ggK3SzKD+YwZyYHqQEUpi8TcoaqOZjQZ9InICiP4ivkx5q3GL3jkQo0PC1CAyDttrRvSQ9nNot6SK8DyM8bSGVSMiXtOt5qm+kWHnI97C1LxGhscguf8/GBQLckX80P9t/rErJMxaD3zHtQd6dNE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720443137; c=relaxed/simple;
-	bh=GKaxPMeQCGwz0xGt/xe9JtjyKYlBVSwbj5uPlZY2E+4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ppXQJJyksEhajNb8vJRFnFte81VYPAzgj1xjxPeIJ0nmF3Fe+bJwEka/NFNVNvcQkmadisIzfaH1Of8q7cSDAaPD0KTCUHboQf3hPCKqcOgb+EXL7Uz2IgbjxnDKkc1xkbudqCI2kupIClh7yTWHbGwv1XjeyEVZV66J4ORyvyM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=cngZK1Xm; arc=none smtp.client-ip=209.85.128.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+	s=arc-20240116; t=1720445521; c=relaxed/simple;
+	bh=572glhSyk6BTuRM6yrwPG//XI+zDRm0J8fE6WzuPNg4=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=NYv3936tJ6iII9OtjNLMHLqq56DqEKO9TdmJnC3YICkwty0Qb+j+QcdkKMI4y8FtlkhOgRni++uB3/RGmwCVhzdBDCziXr4zavsIvWBhWt7WlGVTA58Mll3e18sSrMdgcQlMiVo3JU5snKi+Ml+S6nDLg5YBBcSnzjq2ntZWvSM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=goeAqUHd; arc=none smtp.client-ip=213.133.104.62
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="cngZK1Xm"
-Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-64d408a5d01so35332317b3.1
-        for <bpf@vger.kernel.org>; Mon, 08 Jul 2024 05:52:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1720443135; x=1721047935; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tWQFkOE0z0Ym6Txw+ydgQQZdK+TeJwfjOMSz/3B528I=;
-        b=cngZK1XmagyQSQcXPsE+zOY7o9ipn8xqhyih/A+56BXmdM72slgqGoXc7kuWosiS9V
-         gx1QWLaXc8KnjPtBvOOKVXu4FY6ZO6nuGwvI/0rAt6Sj6d6TQpynTC1uH1Wb3G1po/Pb
-         kW26pum9b5dodtbo63ELzAkQ78ih+WslGMAyTizJFN9vKG4LCyYm0lsaMMs5Os6owNUv
-         YoCUCl0txqXsP1GD7IRY2fFK5IfJ6lOYVhD04l1Ood2x1CoLqOai3+HguSvpt7FLiKdc
-         c0mXT3XjqQrzLGlkcNPN9tWQ+0YUzdqsrpPP3Yp866B3cw2OFllT0SPs8rwkS9sPLZe5
-         aK9Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720443135; x=1721047935;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=tWQFkOE0z0Ym6Txw+ydgQQZdK+TeJwfjOMSz/3B528I=;
-        b=gc/GqAx8QioraIG2DKjZ++bWV9jaZmb3FRvSP+BLhW9GWxyhzRyt/ladi198Qbc6ui
-         p3Rf11qz2OSD9EMoI0IWjKVrkrI09vkSZ2oTjoiMUlmHhDsQ+JmkRiLGGc/pGuiasphj
-         YVIcFaDts+WkVNNzS60RHBRARCQ3kbd45NI1O9Vu9L2SdAt11jUd9f+SS/WiLKX83mf1
-         DoeP/D52qR0pphiBLmIck4DE0guAHFaJfFrzu75/HqL/5ikjsTA5+L1YSV/M/hWXy6Gy
-         Udi7LqZ8eD32qu2rSQmcUUYuCUaoSRAh70hXn5LTtfTUCEqxEzIEVvzssKwEqFjo8Dcn
-         4xfw==
-X-Forwarded-Encrypted: i=1; AJvYcCVP/iSdHNUPPbfGPQgTrlvgCm/HwSy6/60mS5GPzqCPXn4sPimUw4IE3OxfGudVJSbf39bZomWV/MnOqkAe1jBcrWdM
-X-Gm-Message-State: AOJu0YzlEKPMqSxI15u5MFM8IFNkBYndQIFtvjsJ4KKFtGENiBgYhuz+
-	Kev9bxTRFGbLaGdGug9YUgvIZNK8enK8FKnHKXP0igKCB0wG1vYbWLGhsCj8f1RuzeyD0W4uuUZ
-	OTDej4b4+5U5n2SRBUfuPDXzC/gPSnPCuIrZN
-X-Google-Smtp-Source: AGHT+IG8zzbRg4bwkTys4DhYJPBGGaNK8oeWdV1kR+CQ9qZu8soabHqXFh7VGeTZX0rBfmAwmZ4oYhgYUUAPDTy/hQA=
-X-Received: by 2002:a05:690c:a9e:b0:651:79ee:d14b with SMTP id
- 00721157ae682-652d62e4aafmr145100107b3.29.1720443134920; Mon, 08 Jul 2024
- 05:52:14 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="goeAqUHd"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:MIME-Version:
+	References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
+	Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=62h8teGbKuadC6YE88nVJpQLYgQY0jX/eeYoOy9WQJQ=; b=goeAqUHdyfF2/N6Uld0yNjs8gV
+	Dw9X3rWBAM/RPG4uV5Q0rYJGKju+up8toGYBLLDciSixglh441paE4v/kGS6ZfOE0eWd/mwZvyjnH
+	dbUzZdIrjIwTa2xngTL/Wsr1GYc0ikbWUK7QBwmIIQJBd+DlS91VHxuR3yt5PnpKTCS/aokT6ZU/M
+	NNadVMdGL+0wiuTw4zwPbaK4PfpszEBirIDKjIaw1anLpCi6gJk9He6f59+8AUyCJgZEJ7XBAGdl7
+	sF6pX96J3LDQ+HkGqUtT3AYuHSIHIFYp+UkmQTLJZP0YlOuxJbtYPLYMP+i/6YzoMmOhT5KRlehc8
+	X7ox2Vvw==;
+Received: from 35.248.197.178.dynamic.cust.swisscom.net ([178.197.248.35] helo=localhost)
+	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1sQoT9-000NDd-37; Mon, 08 Jul 2024 15:31:51 +0200
+From: Daniel Borkmann <daniel@iogearbox.net>
+To: martin.lau@kernel.org
+Cc: bpf@vger.kernel.org,
+	netdev@vger.kernel.org,
+	Daniel Borkmann <daniel@iogearbox.net>
+Subject: [PATCH bpf 2/2] selftests/bpf: Extend tcx tests to cover late tcx_entry release
+Date: Mon,  8 Jul 2024 15:31:30 +0200
+Message-Id: <20240708133130.11609-2-daniel@iogearbox.net>
+X-Mailer: git-send-email 2.21.0
+In-Reply-To: <20240708133130.11609-1-daniel@iogearbox.net>
+References: <20240708133130.11609-1-daniel@iogearbox.net>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240629084331.3807368-4-kpsingh@kernel.org> <ce279e1f9a4e4226e7a87a7e2440fbe4@paul-moore.com>
- <CACYkzJ60tmZEe3=T-yU3dF2x757_BYUxb_MQRm6tTp8Nj2A9KA@mail.gmail.com>
- <CAHC9VhQ4qH-rtTpvCTpO5aNbFV4epJr5Xaj=TJ86_Y_Z3v-uyw@mail.gmail.com>
- <CACYkzJ4kwrsDwD2k5ywn78j7CcvufgJJuZQ4Wpz8upL9pAsuZw@mail.gmail.com>
- <CAHC9VhRoMpmHEVi5K+BmKLLEkcAd6Qvf+CdSdBdLOx4LUSsgKQ@mail.gmail.com>
- <CACYkzJ6mWFRsdtRXSnaEZbnYR9w85MfmMJ3i76WEz+af=_QnLg@mail.gmail.com>
- <CAHC9VhRA0hX-Nx20CK+yV276d7nooMmR+Q5OBNOy5fces4q9Bw@mail.gmail.com>
- <CACYkzJ6jADoGNuPP3-1wkk-kV7NOQh+eFkU5KEDEZgq9qNNEfg@mail.gmail.com>
- <CAHC9VhQQkWxMT3KguOOK7W8cbY-cdeYTJSuh=tSDV4jsqp6s6g@mail.gmail.com> <CACYkzJ5gAnbXX_aWy6952s2O5L2p3Mw14OUfo9Z-Od6_Dp2HLQ@mail.gmail.com>
-In-Reply-To: <CACYkzJ5gAnbXX_aWy6952s2O5L2p3Mw14OUfo9Z-Od6_Dp2HLQ@mail.gmail.com>
-From: Paul Moore <paul@paul-moore.com>
-Date: Mon, 8 Jul 2024 08:52:03 -0400
-Message-ID: <CAHC9VhQ+KkqTZdvo0cT6-F1fJaG3QgBEnMQqHkiN-GToH37BuA@mail.gmail.com>
-Subject: Re: [PATCH v13 3/5] security: Replace indirect LSM hook calls with
- static calls
-To: KP Singh <kpsingh@kernel.org>
-Cc: linux-security-module@vger.kernel.org, bpf@vger.kernel.org, ast@kernel.org, 
-	casey@schaufler-ca.com, andrii@kernel.org, keescook@chromium.org, 
-	daniel@iogearbox.net, renauld@google.com, revest@chromium.org, 
-	song@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.103.10/27330/Mon Jul  8 10:36:43 2024)
 
-On Mon, Jul 8, 2024 at 6:04=E2=80=AFAM KP Singh <kpsingh@kernel.org> wrote:
-> On Sat, Jul 6, 2024 at 6:40=E2=80=AFAM Paul Moore <paul@paul-moore.com> w=
-rote:
-> > On Fri, Jul 5, 2024 at 3:34=E2=80=AFPM KP Singh <kpsingh@kernel.org> wr=
-ote:
-> > > On Fri, Jul 5, 2024 at 8:07=E2=80=AFPM Paul Moore <paul@paul-moore.co=
-m> wrote:
-> > > > On Wed, Jul 3, 2024 at 7:08=E2=80=AFPM KP Singh <kpsingh@kernel.org=
-> wrote:
->
-> [...]
->
-> > >
-> > > Paul, I am talking about eliminating a class of bugs, but you don't
-> > > seem to get the point and you are fixated on the very instance of thi=
-s
-> > > bug class.
-> >
-> > I do understand that you are trying to eliminate a class of bugs, the
-> > point I'm trying to make is that I believe we have addressed that
-> > already with the patches I've previously cited.
->
-> The class I am referring to is useless hooks returning a default value
-> and imposing a denial / enforcement when they are not supposed to.
+Add a test case which replaces an active ingress qdisc while keeping the
+miniq in-tact during the transition period to the new clsact qdisc.
 
-If a LSM hook's default value were to result in an undesirable
-behavior within the kernel that would be an issue regardless of what
-LSMs were involved and we would either need to modify the hook and/or
-the default value.  I am not convinced that we can adequately solve
-this entire class of problems simply by allowing one LSM, or even
-arbitrary combinations of LSMs, to disable or otherwise disconnect
-themselves from the framework.
+  # ./vmtest.sh -- ./test_progs -t tc_link
+  [...]
+  ./test_progs -t tc_link
+  [    3.412871] bpf_testmod: loading out-of-tree module taints kernel.
+  [    3.413343] bpf_testmod: module verification failed: signature and/or required key missing - tainting kernel
+  #332     tc_links_after:OK
+  #333     tc_links_append:OK
+  #334     tc_links_basic:OK
+  #335     tc_links_before:OK
+  #336     tc_links_chain_classic:OK
+  #337     tc_links_chain_mixed:OK
+  #338     tc_links_dev_chain0:OK
+  #339     tc_links_dev_cleanup:OK
+  #340     tc_links_dev_mixed:OK
+  #341     tc_links_ingress:OK
+  #342     tc_links_invalid:OK
+  #343     tc_links_prepend:OK
+  #344     tc_links_replace:OK
+  #345     tc_links_revision:OK
+  Summary: 14/0 PASSED, 0 SKIPPED, 0 FAILED
 
-> > As the BPF maintainer you are always free to do whatever you like
-> > within the scope of the LSM you maintain so long as it does not touch
-> > or otherwise impact any of the other LSMs or the LSM framework.  If
-> > you do affect the other LSMs, or the LSM framework, you need to get an
-> > ACK from the associated maintainer.  That's pretty much how Linux
-> > kernel development works.
->
-> Okay, then let's not make an LSM API, I will handle it within the BPF LSM=
-.
->
-> The patch I proposed should not affect any other LSMs and is self
-> contained within BPF LSM:
->
-> https://lore.kernel.org/bpf/CACYkzJ6jADoGNuPP3-1wkk-kV7NOQh+eFkU5KEDEZgq9=
-qNNEfg@mail.gmail.com/
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Cc: Martin KaFai Lau <martin.lau@kernel.org>
+---
+ tools/testing/selftests/bpf/config            |  3 +
+ .../selftests/bpf/prog_tests/tc_links.c       | 61 +++++++++++++++++++
+ 2 files changed, 64 insertions(+)
 
-The code changes may be self-contained within the BPF LSM, but it does
-appear that the bpf_lsm_toggle_hook() function directly manipulates
-the LSM framework hook state which is not something we want to allow -
-none of the individual LSMs should be directly manipulating the LSM
-hook state/configuration.  Although perhaps I'm missing or not
-factoring in some context around the patch linked above and that isn't
-the case?
+diff --git a/tools/testing/selftests/bpf/config b/tools/testing/selftests/bpf/config
+index c0ef168eb637..c95f6f1ab74a 100644
+--- a/tools/testing/selftests/bpf/config
++++ b/tools/testing/selftests/bpf/config
+@@ -61,9 +61,12 @@ CONFIG_MPLS=y
+ CONFIG_MPLS_IPTUNNEL=y
+ CONFIG_MPLS_ROUTING=y
+ CONFIG_MPTCP=y
++CONFIG_NET_ACT_SKBMOD=y
++CONFIG_NET_CLS=y
+ CONFIG_NET_CLS_ACT=y
+ CONFIG_NET_CLS_BPF=y
+ CONFIG_NET_CLS_FLOWER=y
++CONFIG_NET_CLS_MATCHALL=y
+ CONFIG_NET_FOU=y
+ CONFIG_NET_FOU_IP_TUNNELS=y
+ CONFIG_NET_IPGRE=y
+diff --git a/tools/testing/selftests/bpf/prog_tests/tc_links.c b/tools/testing/selftests/bpf/prog_tests/tc_links.c
+index bc9841144685..1af9ec1149aa 100644
+--- a/tools/testing/selftests/bpf/prog_tests/tc_links.c
++++ b/tools/testing/selftests/bpf/prog_tests/tc_links.c
+@@ -9,6 +9,8 @@
+ #define ping_cmd "ping -q -c1 -w1 127.0.0.1 > /dev/null"
+ 
+ #include "test_tc_link.skel.h"
++
++#include "netlink_helpers.h"
+ #include "tc_helpers.h"
+ 
+ void serial_test_tc_links_basic(void)
+@@ -1787,6 +1789,65 @@ void serial_test_tc_links_ingress(void)
+ 	test_tc_links_ingress(BPF_TCX_INGRESS, false, false);
+ }
+ 
++struct qdisc_req {
++	struct nlmsghdr  n;
++	struct tcmsg     t;
++	char             buf[1024];
++};
++
++static int qdisc_replace(int ifindex, const char *kind, bool block)
++{
++	struct rtnl_handle rth = { .fd = -1 };
++	struct qdisc_req req;
++	int err;
++
++	err = rtnl_open(&rth, 0);
++	if (!ASSERT_OK(err, "open_rtnetlink"))
++		return err;
++
++	memset(&req, 0, sizeof(req));
++	req.n.nlmsg_len = NLMSG_LENGTH(sizeof(struct tcmsg));
++	req.n.nlmsg_flags = NLM_F_CREATE | NLM_F_REPLACE | NLM_F_REQUEST;
++	req.n.nlmsg_type = RTM_NEWQDISC;
++	req.t.tcm_family = AF_UNSPEC;
++	req.t.tcm_ifindex = ifindex;
++	req.t.tcm_parent = 0xfffffff1;
++
++	addattr_l(&req.n, sizeof(req), TCA_KIND, kind, strlen(kind) + 1);
++	if (block)
++		addattr32(&req.n, sizeof(req), TCA_INGRESS_BLOCK, 1);
++
++	err = rtnl_talk(&rth, &req.n, NULL);
++	ASSERT_OK(err, "talk_rtnetlink");
++	rtnl_close(&rth);
++	return err;
++}
++
++void serial_test_tc_links_dev_chain0(void)
++{
++	int err, ifindex;
++
++	ASSERT_OK(system("ip link add dev foo type veth peer name bar"), "add veth");
++	ifindex = if_nametoindex("foo");
++	ASSERT_NEQ(ifindex, 0, "non_zero_ifindex");
++	err = qdisc_replace(ifindex, "ingress", true);
++	if (!ASSERT_OK(err, "attaching ingress"))
++		goto cleanup;
++	ASSERT_OK(system("tc filter add block 1 matchall action skbmod swap mac"), "add block");
++	err = qdisc_replace(ifindex, "clsact", false);
++	if (!ASSERT_OK(err, "attaching clsact"))
++		goto cleanup;
++	/* Heuristic: kern_sync_rcu() alone does not work; a wait-time of ~5s
++	 * triggered the issue without the fix reliably 100% of the time.
++	 */
++	sleep(5);
++	ASSERT_OK(system("tc filter add dev foo ingress matchall action skbmod swap mac"), "add filter");
++cleanup:
++	ASSERT_OK(system("ip link del dev foo"), "del veth");
++	ASSERT_EQ(if_nametoindex("foo"), 0, "foo removed");
++	ASSERT_EQ(if_nametoindex("bar"), 0, "bar removed");
++}
++
+ static void test_tc_links_dev_mixed(int target)
+ {
+ 	LIBBPF_OPTS(bpf_tc_opts, tc_opts, .handle = 1, .priority = 1);
+-- 
+2.43.0
 
-While I had issues with Kees' comments, at a high level his suggestion
-of dropping the last patch and moving forward is something you should
-consider as I don't see this a good path forward with all of the
-approaches that have been discussed thus far.
-
---=20
-paul-moore.com
