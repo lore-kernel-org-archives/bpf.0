@@ -1,29 +1,30 @@
-Received: from out30-119.freemail.mail.aliyun.com (out30-119.freemail.mail.aliyun.com [115.124.30.119])
+Received: from out30-111.freemail.mail.aliyun.com (out30-111.freemail.mail.aliyun.com [115.124.30.111])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D392C7E103;
-	Mon,  8 Jul 2024 11:25:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.119
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B755E7E782;
+	Mon,  8 Jul 2024 11:25:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.111
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720437949; cv=none; b=JQYzNQOrjg/pfj5LGdCq++5DBS4c3MdMEc6LNcJ+DV85wlRfe3HHzhjU0RQ5d6iH+K8g6wR/YxZjdcymhrhD3DybtcSG2nKylu94U36rRhh55pj/67qd8KKUscbvUmfUzKS/fuvrWoab/xrNRWXLQzgTm8uxY59BInlWHj4mJEI=
+	t=1720437950; cv=none; b=Q2RsyQTmoNkomwht1bAZanvYyOSAkD7pZRtR8YDZHjYOldD6Rfyu3IYlf6pDgTrWioj9HL0kuPGUVbMm9Nonm8lfckZ1g+41JYduzyidEIxxH1VntjnxMwx+wqGXcT8NeQ31ikv/WyXABILgvGhzufmXq3c+iCVIJNZxN9qXekU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720437949; c=relaxed/simple;
-	bh=jAeCdnQZODykeWWnC1inHxoKt7YbwmGF84FTe1a71Fg=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=NSVYphHeHfj5/S+D5mblM38GiUt94GFtEP+i4zToUvQ4wOr09Vwa+I8pUN6WeqG6WjZssZaLOG1dwFzyDvq9Xz0jI1xrmjoz8+CR/tOUS9pZd9uQ7GZT0dcwdWvNG+aldUJkAZ2bpEK8NV8BJvfvyDjHDwF+ohqQnNKswxRXvDk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=t8vmdIRm; arc=none smtp.client-ip=115.124.30.119
+	s=arc-20240116; t=1720437950; c=relaxed/simple;
+	bh=Wrjs558K6NB9vwm79NuDkoW8fckP1JrN9gVKbqnTIro=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=pa4drj8Mf9dnKj816wXpiL+U763vtGPet1mD4VB+UJyAiQGH6QiDtpyMexqy/2jPdFzVjCGaQn2lgQLv7LqpSUeqCyQB8IcYQuBfzZiJdpYA3ypqOC1YryZs06AvBor99TBZ6Nw1NGvBn4Pzzn7QH4M+6QpfIv1ZqTi8Y2zg2Vk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=Glh+3Mfd; arc=none smtp.client-ip=115.124.30.111
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="t8vmdIRm"
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="Glh+3Mfd"
 DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
 	d=linux.alibaba.com; s=default;
-	t=1720437939; h=From:To:Subject:Date:Message-Id:MIME-Version;
-	bh=VbdS6zELmWbuEAa6vOpUDpsiNWhHK7bVVek4TZEw204=;
-	b=t8vmdIRmulMpmmNEADMLFuwo1AdIAcFuh2gGXN8BuNLY0dcG+Y8MGpYcLpa2o2mqfGUGlYyfC0QUz7eEI7ial3SMYm6G53V7ewMSxNJ3qCDlxVTKRQAjfsaVBeiBEhNJxPXeOrrpg2IBV8WNP7B8d1+QQN5wLF0udXzHx/AnM2Q=
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R101e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033037067112;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=15;SR=0;TI=SMTPD_---0WA5oE5X_1720437937;
-Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0WA5oE5X_1720437937)
+	t=1720437945; h=From:To:Subject:Date:Message-Id:MIME-Version;
+	bh=zyEYZ3DF226csR2wWuS2AwWAEamnKLbGB0JFS8/+T3Q=;
+	b=Glh+3Mfden+2QK8iEzg6R3i14pWat9TnyM7MLdxQnBlWot4vksDuM5j9xETTdEQGd+3xKgMHACYKNyhWDKJHXZ6bJw3zp2kylEgUq8bvVqAecqmlTHfba1QxJ1njWghTdYpWD+8GEUzCwN19orql6YnDmhHWvtUl6iUzzn+4a0A=
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R191e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033037067109;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=15;SR=0;TI=SMTPD_---0WA4mZf9_1720437944;
+Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0WA4mZf9_1720437944)
           by smtp.aliyun-inc.com;
-          Mon, 08 Jul 2024 19:25:38 +0800
+          Mon, 08 Jul 2024 19:25:44 +0800
 From: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
 To: netdev@vger.kernel.org
 Cc: "Michael S. Tsirkin" <mst@redhat.com>,
@@ -40,10 +41,12 @@ Cc: "Michael S. Tsirkin" <mst@redhat.com>,
 	John Fastabend <john.fastabend@gmail.com>,
 	virtualization@lists.linux.dev,
 	bpf@vger.kernel.org
-Subject: [PATCH net-next v8 00/10] virtio-net: support AF_XDP zero copy
-Date: Mon,  8 Jul 2024 19:25:27 +0800
-Message-Id: <20240708112537.96291-1-xuanzhuo@linux.alibaba.com>
+Subject: [PATCH net-next v8 06/10] virtio_net: xsk: bind/unbind xsk for rx
+Date: Mon,  8 Jul 2024 19:25:33 +0800
+Message-Id: <20240708112537.96291-7-xuanzhuo@linux.alibaba.com>
 X-Mailer: git-send-email 2.32.0.3.g01195cf9f
+In-Reply-To: <20240708112537.96291-1-xuanzhuo@linux.alibaba.com>
+References: <20240708112537.96291-1-xuanzhuo@linux.alibaba.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -53,141 +56,180 @@ MIME-Version: 1.0
 X-Git-Hash: 74fbc055cff2
 Content-Transfer-Encoding: 8bit
 
-v8:
-    1. virtnet_add_recvbuf_xsk() always return err, when encounters error
+This patch implement the logic of bind/unbind xsk pool to rq.
 
-v7:
-    1. some small fixes
+Signed-off-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+Acked-by: Jason Wang <jasowang@redhat.com>
+---
+ drivers/net/virtio_net.c | 134 +++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 134 insertions(+)
 
-v6:
-    1. start from supporting the rx zerocopy
-
-v5:
-    1. fix the comments of last version
-        http://lore.kernel.org/all/20240611114147.31320-1-xuanzhuo@linux.alibaba.com
-v4:
-    1. remove the commits that introduce the independent directory
-    2. remove the supporting for the rx merge mode (for limit 15
-       commits of net-next). Let's start with the small mode.
-    3. merge some commits and remove some not important commits
-
-## AF_XDP
-
-XDP socket(AF_XDP) is an excellent bypass kernel network framework. The zero
-copy feature of xsk (XDP socket) needs to be supported by the driver. The
-performance of zero copy is very good. mlx5 and intel ixgbe already support
-this feature, This patch set allows virtio-net to support xsk's zerocopy xmit
-feature.
-
-At present, we have completed some preparation:
-
-1. vq-reset (virtio spec and kernel code)
-2. virtio-core premapped dma
-3. virtio-net xdp refactor
-
-So it is time for Virtio-Net to complete the support for the XDP Socket
-Zerocopy.
-
-Virtio-net can not increase the queue num at will, so xsk shares the queue with
-kernel.
-
-On the other hand, Virtio-Net does not support generate interrupt from driver
-manually, so when we wakeup tx xmit, we used some tips. If the CPU run by TX
-NAPI last time is other CPUs, use IPI to wake up NAPI on the remote CPU. If it
-is also the local CPU, then we wake up napi directly.
-
-This patch set includes some refactor to the virtio-net to let that to support
-AF_XDP.
-
-## Run & Test
-
-Because there are too many commits, the work of virtio net supporting af-xdp is
-split to rx part and tx part. This patch set is for rx part.
-
-So the flag NETDEV_XDP_ACT_XSK_ZEROCOPY is not added, if someone want to test
-for af-xdp rx, the flag needs to be adding locally.
-
-## performance
-
-ENV: Qemu with vhost-user(polling mode).
-Host CPU: Intel(R) Xeon(R) Platinum 8163 CPU @ 2.50GHz
-
-### virtio PMD in guest with testpmd
-
-testpmd> show port stats all
-
- ######################## NIC statistics for port 0 ########################
- RX-packets: 19531092064 RX-missed: 0     RX-bytes: 1093741155584
- RX-errors: 0
- RX-nombuf: 0
- TX-packets: 5959955552 TX-errors: 0     TX-bytes: 371030645664
-
-
- Throughput (since last show)
- Rx-pps:   8861574     Rx-bps:  3969985208
- Tx-pps:   8861493     Tx-bps:  3969962736
- ############################################################################
-
-### AF_XDP PMD in guest with testpmd
-
-testpmd> show port stats all
-
-  ######################## NIC statistics for port 0  ########################
-  RX-packets: 68152727   RX-missed: 0          RX-bytes:  3816552712
-  RX-errors: 0
-  RX-nombuf:  0
-  TX-packets: 68114967   TX-errors: 33216      TX-bytes:  3814438152
-
-  Throughput (since last show)
-  Rx-pps:      6333196          Rx-bps:   2837272088
-  Tx-pps:      6333227          Tx-bps:   2837285936
-  ############################################################################
-
-But AF_XDP consumes more CPU for tx and rx napi(100% and 86%).
-
-Please review.
-
-Thanks.
-
-v3
-    1. virtio introduces helpers for virtio-net sq using premapped dma
-    2. xsk has more complete support for merge mode
-    3. fix some problems
-
-v2
-    1. wakeup uses the way of GVE. No send ipi to wakeup napi on remote cpu.
-    2. remove rcu. Because we synchronize all operat, so the rcu is not needed.
-    3. split the commit "move to virtio_net.h" in last patch set. Just move the
-       struct/api to header when we use them.
-    4. add comments for some code
-
-v1:
-    1. remove two virtio commits. Push this patchset to net-next
-    2. squash "virtio_net: virtnet_poll_tx support rescheduled" to xsk: support tx
-    3. fix some warnings
-
-
-
-
-
-
-
-
-Xuan Zhuo (10):
-  virtio_net: replace VIRTIO_XDP_HEADROOM by XDP_PACKET_HEADROOM
-  virtio_net: separate virtnet_rx_resize()
-  virtio_net: separate virtnet_tx_resize()
-  virtio_net: separate receive_buf
-  virtio_net: separate receive_mergeable
-  virtio_net: xsk: bind/unbind xsk for rx
-  virtio_net: xsk: support wakeup
-  virtio_net: xsk: rx: support fill with xsk buffer
-  virtio_net: xsk: rx: support recv small mode
-  virtio_net: xsk: rx: support recv merge mode
-
- drivers/net/virtio_net.c | 770 ++++++++++++++++++++++++++++++++++-----
- 1 file changed, 676 insertions(+), 94 deletions(-)
-
---
+diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
+index 3c828cdd438b..c4f5ebd10092 100644
+--- a/drivers/net/virtio_net.c
++++ b/drivers/net/virtio_net.c
+@@ -25,6 +25,7 @@
+ #include <net/net_failover.h>
+ #include <net/netdev_rx_queue.h>
+ #include <net/netdev_queues.h>
++#include <net/xdp_sock_drv.h>
+ 
+ static int napi_weight = NAPI_POLL_WEIGHT;
+ module_param(napi_weight, int, 0444);
+@@ -348,6 +349,11 @@ struct receive_queue {
+ 
+ 	/* Record the last dma info to free after new pages is allocated. */
+ 	struct virtnet_rq_dma *last_dma;
++
++	struct xsk_buff_pool *xsk_pool;
++
++	/* xdp rxq used by xsk */
++	struct xdp_rxq_info xsk_rxq_info;
+ };
+ 
+ /* This structure can contain rss message with maximum settings for indirection table and keysize
+@@ -5026,6 +5032,132 @@ static int virtnet_restore_guest_offloads(struct virtnet_info *vi)
+ 	return virtnet_set_guest_offloads(vi, offloads);
+ }
+ 
++static int virtnet_rq_bind_xsk_pool(struct virtnet_info *vi, struct receive_queue *rq,
++				    struct xsk_buff_pool *pool)
++{
++	int err, qindex;
++
++	qindex = rq - vi->rq;
++
++	if (pool) {
++		err = xdp_rxq_info_reg(&rq->xsk_rxq_info, vi->dev, qindex, rq->napi.napi_id);
++		if (err < 0)
++			return err;
++
++		err = xdp_rxq_info_reg_mem_model(&rq->xsk_rxq_info,
++						 MEM_TYPE_XSK_BUFF_POOL, NULL);
++		if (err < 0)
++			goto unreg;
++
++		xsk_pool_set_rxq_info(pool, &rq->xsk_rxq_info);
++	}
++
++	virtnet_rx_pause(vi, rq);
++
++	err = virtqueue_reset(rq->vq, virtnet_rq_unmap_free_buf);
++	if (err) {
++		netdev_err(vi->dev, "reset rx fail: rx queue index: %d err: %d\n", qindex, err);
++
++		pool = NULL;
++	}
++
++	rq->xsk_pool = pool;
++
++	virtnet_rx_resume(vi, rq);
++
++	if (pool)
++		return 0;
++
++unreg:
++	xdp_rxq_info_unreg(&rq->xsk_rxq_info);
++	return err;
++}
++
++static int virtnet_xsk_pool_enable(struct net_device *dev,
++				   struct xsk_buff_pool *pool,
++				   u16 qid)
++{
++	struct virtnet_info *vi = netdev_priv(dev);
++	struct receive_queue *rq;
++	struct device *dma_dev;
++	struct send_queue *sq;
++	int err;
++
++	if (vi->hdr_len > xsk_pool_get_headroom(pool))
++		return -EINVAL;
++
++	/* In big_packets mode, xdp cannot work, so there is no need to
++	 * initialize xsk of rq.
++	 */
++	if (vi->big_packets && !vi->mergeable_rx_bufs)
++		return -ENOENT;
++
++	if (qid >= vi->curr_queue_pairs)
++		return -EINVAL;
++
++	sq = &vi->sq[qid];
++	rq = &vi->rq[qid];
++
++	/* xsk assumes that tx and rx must have the same dma device. The af-xdp
++	 * may use one buffer to receive from the rx and reuse this buffer to
++	 * send by the tx. So the dma dev of sq and rq must be the same one.
++	 *
++	 * But vq->dma_dev allows every vq has the respective dma dev. So I
++	 * check the dma dev of vq and sq is the same dev.
++	 */
++	if (virtqueue_dma_dev(rq->vq) != virtqueue_dma_dev(sq->vq))
++		return -EINVAL;
++
++	dma_dev = virtqueue_dma_dev(rq->vq);
++	if (!dma_dev)
++		return -EINVAL;
++
++	err = xsk_pool_dma_map(pool, dma_dev, 0);
++	if (err)
++		goto err_xsk_map;
++
++	err = virtnet_rq_bind_xsk_pool(vi, rq, pool);
++	if (err)
++		goto err_rq;
++
++	return 0;
++
++err_rq:
++	xsk_pool_dma_unmap(pool, 0);
++err_xsk_map:
++	return err;
++}
++
++static int virtnet_xsk_pool_disable(struct net_device *dev, u16 qid)
++{
++	struct virtnet_info *vi = netdev_priv(dev);
++	struct xsk_buff_pool *pool;
++	struct receive_queue *rq;
++	int err;
++
++	if (qid >= vi->curr_queue_pairs)
++		return -EINVAL;
++
++	rq = &vi->rq[qid];
++
++	pool = rq->xsk_pool;
++
++	err = virtnet_rq_bind_xsk_pool(vi, rq, NULL);
++
++	xsk_pool_dma_unmap(pool, 0);
++
++	return err;
++}
++
++static int virtnet_xsk_pool_setup(struct net_device *dev, struct netdev_bpf *xdp)
++{
++	if (xdp->xsk.pool)
++		return virtnet_xsk_pool_enable(dev, xdp->xsk.pool,
++					       xdp->xsk.queue_id);
++	else
++		return virtnet_xsk_pool_disable(dev, xdp->xsk.queue_id);
++}
++
+ static int virtnet_xdp_set(struct net_device *dev, struct bpf_prog *prog,
+ 			   struct netlink_ext_ack *extack)
+ {
+@@ -5151,6 +5283,8 @@ static int virtnet_xdp(struct net_device *dev, struct netdev_bpf *xdp)
+ 	switch (xdp->command) {
+ 	case XDP_SETUP_PROG:
+ 		return virtnet_xdp_set(dev, xdp->prog, xdp->extack);
++	case XDP_SETUP_XSK_POOL:
++		return virtnet_xsk_pool_setup(dev, xdp);
+ 	default:
+ 		return -EINVAL;
+ 	}
+-- 
 2.32.0.3.g01195cf9f
 
