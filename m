@@ -1,59 +1,35 @@
-Received: from smtp-fw-80008.amazon.com (smtp-fw-80008.amazon.com [99.78.197.219])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C751B1CD3D;
-	Mon,  8 Jul 2024 19:38:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=99.78.197.219
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79D8214B95B;
+	Mon,  8 Jul 2024 19:42:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720467523; cv=none; b=GOQflek/Oxp70B0goOtkYV5q9FhsnXXz8Pwf5xNZH0o/c+3In9lww83IoO+cG6B0l2aNaOlNIlOBt1PVaBXtgNLtZ9acyV8Tj8JutOEIKtwqvxauQUl/oYLr456OsVcF9cX3nIAa2V1ROslUplUklHjDT20QyCrz7k23f5HBnf4=
+	t=1720467746; cv=none; b=rUMIRL1RG+AO3QBja9c0PY2Xv4KU3Zz97/j9M2leKWIjpMnp0xm4Jac5TYz07kKTMjwQO8Ro04koeMFOXIKBLCLmihXfEAA4uLzkabSIQx97/wXXuGC5iETuQZg6UKD7V08ravMc7wtqiPYQr9HUsAeAxbc5MEyO1yfDi3bvXiE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720467523; c=relaxed/simple;
-	bh=RTJ+hggeJZB8ODwiAXzM2+2WiLfIshV4OLijwhI7wM8=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=IeEIxogayZViPp+euwJfLmFX61llM4J3FsYhBUyo5pOy/VPXD4tGRqIVgGQTzcyl0U7VNP/Sl9Mb/mcFHAAMJzpyFFkrZZCtlYfaKvKsUnBGlUdJmZgXmMui0plOGpAoQJ2ELASmdzBRDmtQW21Qpp7Vf+JFGJyiL4MFRFU1EEU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.co.jp; dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b=mcmCwwN+; arc=none smtp.client-ip=99.78.197.219
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.co.jp
+	s=arc-20240116; t=1720467746; c=relaxed/simple;
+	bh=UYEkDikTrK4yUGHNdvG5X7alA+OBfYc03Q1rcRBDxok=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=RHpep7a6+IX/HndLt5DCuu87HXA4WeFQrEvtF+YzeGjs2dN90gTtI2xQtVAOpYivr4N0wdkS9NGXSN58LluEOFd/xFrUl70ekGgLpJC6OvP+wP5IJjeTGZi/IAItMqgWqwKVbotTyDBK5fc4kVg8fNL9adov2/4dIGCGH/+N1rg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bMTv13EM; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b="mcmCwwN+"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1720467521; x=1752003521;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=OSsIpF/a28bJRFswEdHaZgwaYC+QevUN84+rJOAer9I=;
-  b=mcmCwwN+gDlnYZv5VMUbNWkKEvda6rwds/PJoNMkoKq71T7Pd2w7CiDm
-   xuBm07p6qTp0Uq+M+SirC1fArWkbwH3rP3SbWWYZYxI5MbXMCZBIBgvDZ
-   u8Q7xTDpi+Zizbks9sMyo1WGiNj13ydaVtBSR/rJQYdROWkVs6h+5nTMk
-   k=;
-X-IronPort-AV: E=Sophos;i="6.09,192,1716249600"; 
-   d="scan'208";a="103513989"
-Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO smtpout.prod.us-west-2.prod.farcaster.email.amazon.dev) ([10.25.36.214])
-  by smtp-border-fw-80008.pdx80.corp.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jul 2024 19:38:39 +0000
-Received: from EX19MTAUWC001.ant.amazon.com [10.0.38.20:29918]
- by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.8.210:2525] with esmtp (Farcaster)
- id 737ceb2e-cda8-4d19-bad3-72b8653ce7bc; Mon, 8 Jul 2024 19:38:38 +0000 (UTC)
-X-Farcaster-Flow-ID: 737ceb2e-cda8-4d19-bad3-72b8653ce7bc
-Received: from EX19D004ANA001.ant.amazon.com (10.37.240.138) by
- EX19MTAUWC001.ant.amazon.com (10.250.64.174) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1258.34;
- Mon, 8 Jul 2024 19:38:33 +0000
-Received: from 88665a182662.ant.amazon.com (10.106.100.51) by
- EX19D004ANA001.ant.amazon.com (10.37.240.138) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1258.34;
- Mon, 8 Jul 2024 19:38:30 +0000
-From: Kuniyuki Iwashima <kuniyu@amazon.com>
-To: <mhal@rbox.co>
-CC: <Rao.Shoaib@oracle.com>, <bpf@vger.kernel.org>, <cong.wang@bytedance.com>,
-	<davem@davemloft.net>, <edumazet@google.com>, <jakub@cloudflare.com>,
-	<john.fastabend@gmail.com>, <kuba@kernel.org>, <kuniyu@amazon.com>,
-	<netdev@vger.kernel.org>, <pabeni@redhat.com>
-Subject: Re: [PATCH bpf v3 1/4] af_unix: Disable MSG_OOB handling for sockets in sockmap/sockhash
-Date: Mon, 8 Jul 2024 12:38:20 -0700
-Message-ID: <20240708193820.3392-1-kuniyu@amazon.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20240707222842.4119416-2-mhal@rbox.co>
-References: <20240707222842.4119416-2-mhal@rbox.co>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bMTv13EM"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id E7924C3277B;
+	Mon,  8 Jul 2024 19:42:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1720467746;
+	bh=UYEkDikTrK4yUGHNdvG5X7alA+OBfYc03Q1rcRBDxok=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=bMTv13EMbkIVJRwr7CSLXUVzWa2fnxM1psAVIok12DIc+BoO+bqy5qhjS52mkK3TV
+	 wr0gDxVdbpcZmiYpWGPSys0n0bQZtOhPdLBf50hfjWMGufeMzfFrCZ9RAO3KlpDHw1
+	 NLyIdD2EmH6N2g6kgHL805hRjJO0+/CX64rKO2ELYRqtUJmOKIei/bdWiu6py5QNr/
+	 760c/u28g+h59M49Z5bNa+5IeRWZyDGZ5lHrqluZYPtZu5ETI9NzJXETTI6Slh57Iq
+	 6MOBwY2spaUDI6eCYLKTXmuNVb6lVV6LkE9H8Q7Zv668Fth7yEqBNKQWxytQ+fJuKN
+	 art3T7LQEkXfA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D2038DF3713;
+	Mon,  8 Jul 2024 19:42:25 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -61,105 +37,46 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: EX19D042UWB004.ant.amazon.com (10.13.139.150) To
- EX19D004ANA001.ant.amazon.com (10.37.240.138)
+Subject: Re: [PATCH bpf-next v2 0/2] Small API fix for bpf_wq
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <172046774585.17805.5648980759770927798.git-patchwork-notify@kernel.org>
+Date: Mon, 08 Jul 2024 19:42:25 +0000
+References: <20240708-fix-wq-v2-0-667e5c9fbd99@kernel.org>
+In-Reply-To: <20240708-fix-wq-v2-0-667e5c9fbd99@kernel.org>
+To: Benjamin Tissoires <bentiss@kernel.org>
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+ martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
+ yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
+ sdf@google.com, haoluo@google.com, jolsa@kernel.org, mykolal@fb.com,
+ shuah@kernel.org, bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
 
-From: Michal Luczaj <mhal@rbox.co>
-Date: Sun,  7 Jul 2024 23:28:22 +0200
-> AF_UNIX socket tracks the most recent OOB packet (in its receive queue)
-> with an `oob_skb` pointer. BPF redirecting does not account for that: when
-> an OOB packet is moved between sockets, `oob_skb` is left outdated. This
-> results in a single skb that may be accessed from two different sockets.
+Hello:
+
+This series was applied to bpf/bpf-next.git (master)
+by Alexei Starovoitov <ast@kernel.org>:
+
+On Mon, 08 Jul 2024 11:52:56 +0200 you wrote:
+> I realized this while having a map containing both a struct bpf_timer and
+> a struct bpf_wq: the third argument provided to the bpf_wq callback is
+> not the struct bpf_wq pointer itself, but the pointer to the value in
+> the map.
 > 
-> Take the easy way out: silently drop MSG_OOB data targeting any socket that
-> is in a sockmap or a sockhash. Note that such silent drop is akin to the
-> fate of redirected skb's scm_fp_list (SCM_RIGHTS, SCM_CREDENTIALS).
+> Which means that the users need to double cast the provided "value" as
+> this is not a struct bpf_wq *.
 > 
-> For symmetry, forbid MSG_OOB in unix_bpf_recvmsg().
-> 
-> Suggested-by: Kuniyuki Iwashima <kuniyu@amazon.com>
-> Fixes: 314001f0bf92 ("af_unix: Add OOB support")
-> Signed-off-by: Michal Luczaj <mhal@rbox.co>
+> [...]
 
-Reviewed-by: Kuniyuki Iwashima <kuniyu@amazon.com>
+Here is the summary with links:
+  - [bpf-next,v2,1/2] bpf: helpers: fix bpf_wq_set_callback_impl signature
+    https://git.kernel.org/bpf/bpf-next/c/f56f4d541eab
+  - [bpf-next,v2,2/2] selftests/bpf: amend for wrong bpf_wq_set_callback_impl signature
+    https://git.kernel.org/bpf/bpf-next/c/16e86f2e8199
 
-Thanks!
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
-> ---
->  net/unix/af_unix.c  | 41 ++++++++++++++++++++++++++++++++++++++++-
->  net/unix/unix_bpf.c |  3 +++
->  2 files changed, 43 insertions(+), 1 deletion(-)
-> 
-> diff --git a/net/unix/af_unix.c b/net/unix/af_unix.c
-> index 142f56770b77..11cb5badafb6 100644
-> --- a/net/unix/af_unix.c
-> +++ b/net/unix/af_unix.c
-> @@ -2667,10 +2667,49 @@ static struct sk_buff *manage_oob(struct sk_buff *skb, struct sock *sk,
->  
->  static int unix_stream_read_skb(struct sock *sk, skb_read_actor_t recv_actor)
->  {
-> +	struct unix_sock *u = unix_sk(sk);
-> +	struct sk_buff *skb;
-> +	int err;
-> +
->  	if (unlikely(READ_ONCE(sk->sk_state) != TCP_ESTABLISHED))
->  		return -ENOTCONN;
->  
-> -	return unix_read_skb(sk, recv_actor);
-> +	mutex_lock(&u->iolock);
-> +	skb = skb_recv_datagram(sk, MSG_DONTWAIT, &err);
-> +	mutex_unlock(&u->iolock);
-> +	if (!skb)
-> +		return err;
-> +
-> +#if IS_ENABLED(CONFIG_AF_UNIX_OOB)
-> +	if (unlikely(skb == READ_ONCE(u->oob_skb))) {
-> +		bool drop = false;
-> +
-> +		unix_state_lock(sk);
-> +
-> +		if (sock_flag(sk, SOCK_DEAD)) {
-> +			unix_state_unlock(sk);
-> +			kfree_skb(skb);
-> +			return -ECONNRESET;
-> +		}
-> +
-> +		spin_lock(&sk->sk_receive_queue.lock);
-> +		if (likely(skb == u->oob_skb)) {
-> +			WRITE_ONCE(u->oob_skb, NULL);
-> +			drop = true;
-> +		}
-> +		spin_unlock(&sk->sk_receive_queue.lock);
-> +
-> +		unix_state_unlock(sk);
-> +
-> +		if (drop) {
-> +			WARN_ON_ONCE(skb_unref(skb));
-> +			kfree_skb(skb);
-> +			return -EAGAIN;
-> +		}
-> +	}
-> +#endif
-> +
-> +	return recv_actor(sk, skb);
->  }
->  
->  static int unix_stream_read_generic(struct unix_stream_read_state *state,
-> diff --git a/net/unix/unix_bpf.c b/net/unix/unix_bpf.c
-> index bd84785bf8d6..bca2d86ba97d 100644
-> --- a/net/unix/unix_bpf.c
-> +++ b/net/unix/unix_bpf.c
-> @@ -54,6 +54,9 @@ static int unix_bpf_recvmsg(struct sock *sk, struct msghdr *msg,
->  	struct sk_psock *psock;
->  	int copied;
->  
-> +	if (flags & MSG_OOB)
-> +		return -EOPNOTSUPP;
-> +
->  	if (!len)
->  		return 0;
->  
-> -- 
-> 2.45.2
