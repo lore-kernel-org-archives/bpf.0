@@ -1,48 +1,48 @@
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4A4715217B;
-	Mon,  8 Jul 2024 22:14:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39CC115252D;
+	Mon,  8 Jul 2024 22:14:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720476874; cv=none; b=cn+ssG7UWG/e+QDPrZj4n+Oh2vMrE/RJVokGU8xmIkxfTOxCGfY2KBrbnNfl/4VQAYOR+KALBjLCfU4LzXv7imCImL7Z4vDjFa5fBifD7Yid5TamoHFq0v7fGTe1EXI9/G/kOB614vfYJwc1iQxvEazgO2zvQ0kQDR2fQK6O5mo=
+	t=1720476875; cv=none; b=cUxPfi5mRSD9xJo0f//cxI0Av9Oc+g5M79B9o2lElg3Uksces6lMRaI2S1PgWAhMoWlbrHuAxneYn6cJw8BObf124zcRU0xp401pAOv6WKZ1qHo0JBD03QfkleoNkbOtpmZ0Bkr0P9KGLBgn1KJIz10bbw6YFeaxwEGkpJ0PfQM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720476874; c=relaxed/simple;
-	bh=hud+m7wkiU9U1pJykwTiEEjYC4SiQr4wLDJjtQChzf4=;
+	s=arc-20240116; t=1720476875; c=relaxed/simple;
+	bh=xE86BGRtQWWMnOyK+r1yEqFx04WZKR0PhfuQ7KGuVVg=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=TkwLdKSbH/DvhUOLRZbABI01wYt4Ljz/kOHXpAAr/e5a8cgPH7HKNaZJdKiYzoffLgnMGdkuDEoD9WDlnvBMml66poQoPWrSReAf7Y2GIIHyuNzdOhInbptLPlvsQVsxVLalJSjiv7qDhF1yr3NwQsukqz8d/0u06HHQe6oyH6s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Vidxexyn; arc=none smtp.client-ip=192.198.163.18
+	 MIME-Version; b=XalS5UC78+GUVwbVbBTPwNGbLpg4XG4X+6BJLPdzvHHGqGeAkV2EzlyvzyE+fE9cgs4zLgd77zhbDEr7qt8Rcnt0LvOR6IYwcVckH7VYfwcLjxq9T/8O8Up/CAO7QOmCkEk7bvR4N6MJvkvHnntI27ywtNkvpAow9zCxFy5IDnA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PPC/4Fgn; arc=none smtp.client-ip=192.198.163.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Vidxexyn"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PPC/4Fgn"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1720476873; x=1752012873;
+  t=1720476874; x=1752012874;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=hud+m7wkiU9U1pJykwTiEEjYC4SiQr4wLDJjtQChzf4=;
-  b=VidxexynH75LqNiDyZqVZraF90ZcYYUed1u9Cgjex+g0XtkRnEnD77lH
-   GSKzedvx2LRbKuucTcu/k0+OMlcx5RazHjJ3PMXbpzrCTKtd/ySThVdIl
-   TBMj07p7T1DbHRmkjdc1l5i1XDGia0wJ5CaN9g5bbKA1VwswFouMEaIqx
-   A1W9cepoSOwUlACWdviZPlB5TnDWHkyHUqh6bKl8c+/uTy9/wxXqh/rxp
-   OmC0EQdhmum/ZGctM/hWhEklnKoEnkC2WE0ZtAaROVIGHLkoAisuZYePr
-   hfnjXBV/xvsLhoHZYFNvxpMVRqIQN5RQHRZX49ijDGbZ5hVqND2RXzzn/
+  bh=xE86BGRtQWWMnOyK+r1yEqFx04WZKR0PhfuQ7KGuVVg=;
+  b=PPC/4FgnpZbsrox2mt1wVPgaIO7lCeKRVXgYlNGgXRbeoBJtuydEGuSn
+   rOsFxvvjBaejF6gpnzOhpSAXtQuztpOVnzJeF/4WX92RI+gpioUpvWnIU
+   Pc94hY2HPSx8df75+n7DJYsb+IKqD/c/aOkeU0A6pCBm0P359WZVSgMaE
+   /cb0MLT9R/vcxMng1fu9KB2BTzw60eIiH+SjcnrKTc+o2+bncXAcphmUN
+   d5O7WUG9dlOezIaP5pcBuGcYWYwtkMPOKZygCLY26AZEYbxMhXt2Ot9cS
+   6SCel3VGxHW/28yDZTD9jV1CmLtwRjmkHX0j+mOpppZbDNgQvM/4E3Eox
    Q==;
-X-CSE-ConnectionGUID: Gto48dIdS9+e3XDASKkvpg==
-X-CSE-MsgGUID: XrO3IWwURKWFiI49v79SlA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11127"; a="17340122"
+X-CSE-ConnectionGUID: d9AJYyDtRvmEw0/uumjIjA==
+X-CSE-MsgGUID: sTwKS7WjT52HKrx0gxpNKQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11127"; a="17340147"
 X-IronPort-AV: E=Sophos;i="6.09,193,1716274800"; 
-   d="scan'208";a="17340122"
+   d="scan'208";a="17340147"
 Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jul 2024 15:14:30 -0700
-X-CSE-ConnectionGUID: hK3XQebPTZSLRMEjQ2kzzA==
-X-CSE-MsgGUID: 7+nvtzHfTpiMrYRIiAnBaQ==
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jul 2024 15:14:31 -0700
+X-CSE-ConnectionGUID: KgussPKpS0yFJ3BDPlY58A==
+X-CSE-MsgGUID: kByg+hGfTPCG6xT/1Kn0Zg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.09,193,1716274800"; 
-   d="scan'208";a="52237721"
+   d="scan'208";a="52237732"
 Received: from anguy11-upstream.jf.intel.com ([10.166.9.133])
-  by fmviesa004.fm.intel.com with ESMTP; 08 Jul 2024 15:14:30 -0700
+  by fmviesa004.fm.intel.com with ESMTP; 08 Jul 2024 15:14:31 -0700
 From: Tony Nguyen <anthony.l.nguyen@intel.com>
 To: davem@davemloft.net,
 	kuba@kernel.org,
@@ -60,9 +60,9 @@ Cc: Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
 	bpf@vger.kernel.org,
 	Shannon Nelson <shannon.nelson@amd.com>,
 	Chandan Kumar Rout <chandanx.rout@intel.com>
-Subject: [PATCH net 4/8] ice: modify error handling when setting XSK pool in ndo_bpf
-Date: Mon,  8 Jul 2024 15:14:10 -0700
-Message-ID: <20240708221416.625850-5-anthony.l.nguyen@intel.com>
+Subject: [PATCH net 7/8] ice: add missing WRITE_ONCE when clearing ice_rx_ring::xdp_prog
+Date: Mon,  8 Jul 2024 15:14:13 -0700
+Message-ID: <20240708221416.625850-8-anthony.l.nguyen@intel.com>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20240708221416.625850-1-anthony.l.nguyen@intel.com>
 References: <20240708221416.625850-1-anthony.l.nguyen@intel.com>
@@ -76,112 +76,31 @@ Content-Transfer-Encoding: 8bit
 
 From: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
 
-Don't bail out right when spotting an error within ice_qp_{dis,ena}()
-but rather track error and go through whole flow of disabling and
-enabling queue pair.
+It is read by data path and modified from process context on remote cpu
+so it is needed to use WRITE_ONCE to clear the pointer.
 
-Fixes: 2d4238f55697 ("ice: Add support for AF_XDP")
+Fixes: efc2214b6047 ("ice: Add support for XDP")
 Reviewed-by: Shannon Nelson <shannon.nelson@amd.com>
 Tested-by: Chandan Kumar Rout <chandanx.rout@intel.com> (A Contingent Worker at Intel)
 Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
 Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
 ---
- drivers/net/ethernet/intel/ice/ice_xsk.c | 30 +++++++++++++-----------
- 1 file changed, 16 insertions(+), 14 deletions(-)
+ drivers/net/ethernet/intel/ice/ice_txrx.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/ethernet/intel/ice/ice_xsk.c b/drivers/net/ethernet/intel/ice/ice_xsk.c
-index ba50af9a5929..902096b000f5 100644
---- a/drivers/net/ethernet/intel/ice/ice_xsk.c
-+++ b/drivers/net/ethernet/intel/ice/ice_xsk.c
-@@ -162,6 +162,7 @@ static int ice_qp_dis(struct ice_vsi *vsi, u16 q_idx)
- 	struct ice_tx_ring *tx_ring;
- 	struct ice_rx_ring *rx_ring;
- 	int timeout = 50;
-+	int fail = 0;
- 	int err;
- 
- 	if (q_idx >= vsi->num_rxq || q_idx >= vsi->num_txq)
-@@ -186,8 +187,8 @@ static int ice_qp_dis(struct ice_vsi *vsi, u16 q_idx)
- 
- 	ice_fill_txq_meta(vsi, tx_ring, &txq_meta);
- 	err = ice_vsi_stop_tx_ring(vsi, ICE_NO_RESET, 0, tx_ring, &txq_meta);
--	if (err)
--		return err;
-+	if (!fail)
-+		fail = err;
- 	if (ice_is_xdp_ena_vsi(vsi)) {
- 		struct ice_tx_ring *xdp_ring = vsi->xdp_rings[q_idx];
- 
-@@ -195,15 +196,15 @@ static int ice_qp_dis(struct ice_vsi *vsi, u16 q_idx)
- 		ice_fill_txq_meta(vsi, xdp_ring, &txq_meta);
- 		err = ice_vsi_stop_tx_ring(vsi, ICE_NO_RESET, 0, xdp_ring,
- 					   &txq_meta);
--		if (err)
--			return err;
-+		if (!fail)
-+			fail = err;
- 	}
- 
- 	ice_vsi_ctrl_one_rx_ring(vsi, false, q_idx, false);
- 	ice_qp_clean_rings(vsi, q_idx);
- 	ice_qp_reset_stats(vsi, q_idx);
- 
--	return 0;
-+	return fail;
- }
- 
- /**
-@@ -216,32 +217,33 @@ static int ice_qp_dis(struct ice_vsi *vsi, u16 q_idx)
- static int ice_qp_ena(struct ice_vsi *vsi, u16 q_idx)
- {
- 	struct ice_q_vector *q_vector;
-+	int fail = 0;
- 	int err;
- 
- 	err = ice_vsi_cfg_single_txq(vsi, vsi->tx_rings, q_idx);
--	if (err)
--		return err;
-+	if (!fail)
-+		fail = err;
- 
- 	if (ice_is_xdp_ena_vsi(vsi)) {
- 		struct ice_tx_ring *xdp_ring = vsi->xdp_rings[q_idx];
- 
- 		err = ice_vsi_cfg_single_txq(vsi, vsi->xdp_rings, q_idx);
--		if (err)
--			return err;
-+		if (!fail)
-+			fail = err;
- 		ice_set_ring_xdp(xdp_ring);
- 		ice_tx_xsk_pool(vsi, q_idx);
- 	}
- 
- 	err = ice_vsi_cfg_single_rxq(vsi, q_idx);
--	if (err)
--		return err;
-+	if (!fail)
-+		fail = err;
- 
- 	q_vector = vsi->rx_rings[q_idx]->q_vector;
- 	ice_qvec_cfg_msix(vsi, q_vector);
- 
- 	err = ice_vsi_ctrl_one_rx_ring(vsi, true, q_idx, true);
--	if (err)
--		return err;
-+	if (!fail)
-+		fail = err;
- 
- 	ice_qvec_toggle_napi(vsi, q_vector, true);
- 	ice_qvec_ena_irq(vsi, q_vector);
-@@ -249,7 +251,7 @@ static int ice_qp_ena(struct ice_vsi *vsi, u16 q_idx)
- 	netif_tx_start_queue(netdev_get_tx_queue(vsi->netdev, q_idx));
- 	clear_bit(ICE_CFG_BUSY, vsi->state);
- 
--	return 0;
-+	return fail;
- }
- 
- /**
+diff --git a/drivers/net/ethernet/intel/ice/ice_txrx.c b/drivers/net/ethernet/intel/ice/ice_txrx.c
+index f4b2b1bca234..4c115531beba 100644
+--- a/drivers/net/ethernet/intel/ice/ice_txrx.c
++++ b/drivers/net/ethernet/intel/ice/ice_txrx.c
+@@ -456,7 +456,7 @@ void ice_free_rx_ring(struct ice_rx_ring *rx_ring)
+ 	if (rx_ring->vsi->type == ICE_VSI_PF)
+ 		if (xdp_rxq_info_is_reg(&rx_ring->xdp_rxq))
+ 			xdp_rxq_info_unreg(&rx_ring->xdp_rxq);
+-	rx_ring->xdp_prog = NULL;
++	WRITE_ONCE(rx_ring->xdp_prog, NULL);
+ 	if (rx_ring->xsk_pool) {
+ 		kfree(rx_ring->xdp_buf);
+ 		rx_ring->xdp_buf = NULL;
 -- 
 2.41.0
 
