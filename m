@@ -1,30 +1,30 @@
-Received: from out30-110.freemail.mail.aliyun.com (out30-110.freemail.mail.aliyun.com [115.124.30.110])
+Received: from out30-100.freemail.mail.aliyun.com (out30-100.freemail.mail.aliyun.com [115.124.30.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A597380BF7;
-	Mon,  8 Jul 2024 11:25:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.110
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 166117E0EA;
+	Mon,  8 Jul 2024 11:25:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.100
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720437953; cv=none; b=FHJDtVcaS/zV6IqdqzaoTlXthtSGv05xtVcqSkYMAGhMAWYV8PWkovIhtcYF2SBk0ocY+W5neAUAlZFhOiyAbz5f/sydnuSNBZQnCaJFD2U5SWU0RWl1WXNtSF5OtVuuSZ0N8ayxh7GuNOZjAWHpHawW1/WPMqy4xHFEx91q4rQ=
+	t=1720437957; cv=none; b=sUDd8vPUgceF8oo/S6+AuT3iCN3s5ekjzVJr8Jxu3E2Ac8pCzWXkjaHK/OGNqw3hoT6Ggi4YWd2/SQ2v/0j0IZjlw4um0m1lYTHZTJ/Jv8K7NMH52PlpDZAkPCo+hHpapZ0BEnMO/aoiL3wXuk6SJs7NrImJqqafqgm4ouZOB+8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720437953; c=relaxed/simple;
-	bh=Q8quGDSZzYUbIq22I2pv0We8cWtmL2jLiqoJdbdM8As=;
+	s=arc-20240116; t=1720437957; c=relaxed/simple;
+	bh=rGJc5hEPMzfyjL/iFsdlvssJlEZJwSgpRlS/qvXgYF4=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=oObRZHPtPNb9U8n6vR+vgJtAd9o9FVspNCP9Nxr7VQJDL30BnQ3lCBe6RPDIutImmD46pq5zNeiZNP+cZTuItgr0Jn6LiU1l3jTaeIbNLBHol7CCWaWDMLzcAYH9pm7NNtZv7+iUbO6JdQi+W2g6vLr3D7HWPuiN8faVNVzC6rg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=ZBVT5Jq7; arc=none smtp.client-ip=115.124.30.110
+	 MIME-Version; b=ABWOB+swi17HSj3yGptpUxMdP/ytFq1GEcBKxiI2ecKGzJgxwjsT+oM1J970ZR1zNcxECKlsbMnrZHALQvsm+4ckhjV2XfmaUiNvTsA8Uv8X742IV1TEPdrRE30hlLdevcnQ5lrwoQZgwyGL53+NJdimDKBKpYXqfwViTDtLcac=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=sNC2I1zx; arc=none smtp.client-ip=115.124.30.100
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="ZBVT5Jq7"
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="sNC2I1zx"
 DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
 	d=linux.alibaba.com; s=default;
-	t=1720437944; h=From:To:Subject:Date:Message-Id:MIME-Version;
-	bh=zNeiDwdkqzBfnWgHli0nRbhmznR8NhiOcj4IWvM1Tec=;
-	b=ZBVT5Jq7Ncmpm8E0n97JiCRX7J3xudZhhlLkanmohT0pWpdjJRdAOcmlZyQ91b9CMUxadHiFLoLXnXSGwb2xMqCWeqNuab5QrsoHfScJ4KVs0WurUbGR+orKCU0WepOMPDL7Ds7EfCeHVC9DoCFgeh3XS1k+5kV1kQ/QH6Z+4ew=
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R111e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033037067110;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=15;SR=0;TI=SMTPD_---0WA59bz2_1720437943;
-Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0WA59bz2_1720437943)
+	t=1720437947; h=From:To:Subject:Date:Message-Id:MIME-Version;
+	bh=MCa21Uiv2zEGi7Rr1bqY3eqwGd+Po10RpvvMm6XC6b8=;
+	b=sNC2I1zxZbUTz6oxYtdoHjnDo6UjtWgyML1r/wj3YNcmT7jTumhfiBILir6VcZVvlxjgOL/lfkbEjIfRY+dvcgvEU4AqWPjSFJT2Tgqp6axM8v3grXMvZDI/CviGJzG0eWixLxOpkz0x50M2MGzalxI7mmvg5a8LUkYCXkj7pE8=
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R341e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033032014031;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=15;SR=0;TI=SMTPD_---0WA4mZfP_1720437945;
+Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0WA4mZfP_1720437945)
           by smtp.aliyun-inc.com;
-          Mon, 08 Jul 2024 19:25:43 +0800
+          Mon, 08 Jul 2024 19:25:45 +0800
 From: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
 To: netdev@vger.kernel.org
 Cc: "Michael S. Tsirkin" <mst@redhat.com>,
@@ -41,9 +41,9 @@ Cc: "Michael S. Tsirkin" <mst@redhat.com>,
 	John Fastabend <john.fastabend@gmail.com>,
 	virtualization@lists.linux.dev,
 	bpf@vger.kernel.org
-Subject: [PATCH net-next v8 05/10] virtio_net: separate receive_mergeable
-Date: Mon,  8 Jul 2024 19:25:32 +0800
-Message-Id: <20240708112537.96291-6-xuanzhuo@linux.alibaba.com>
+Subject: [PATCH net-next v8 07/10] virtio_net: xsk: support wakeup
+Date: Mon,  8 Jul 2024 19:25:34 +0800
+Message-Id: <20240708112537.96291-8-xuanzhuo@linux.alibaba.com>
 X-Mailer: git-send-email 2.32.0.3.g01195cf9f
 In-Reply-To: <20240708112537.96291-1-xuanzhuo@linux.alibaba.com>
 References: <20240708112537.96291-1-xuanzhuo@linux.alibaba.com>
@@ -56,118 +56,60 @@ MIME-Version: 1.0
 X-Git-Hash: 74fbc055cff2
 Content-Transfer-Encoding: 8bit
 
-This commit separates the function receive_mergeable(),
-put the logic of appending frag to the skb as an independent function.
-The subsequent commit will reuse it.
+xsk wakeup is used to trigger the logic for xsk xmit by xsk framework or
+user.
+
+Virtio-net does not support to actively generate an interruption, so it
+tries to trigger tx NAPI on the local cpu.
 
 Signed-off-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
 Acked-by: Jason Wang <jasowang@redhat.com>
 ---
- drivers/net/virtio_net.c | 77 ++++++++++++++++++++++++----------------
- 1 file changed, 47 insertions(+), 30 deletions(-)
+ drivers/net/virtio_net.c | 24 ++++++++++++++++++++++++
+ 1 file changed, 24 insertions(+)
 
 diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
-index abfc84af90ce..3c828cdd438b 100644
+index c4f5ebd10092..665b4925e545 100644
 --- a/drivers/net/virtio_net.c
 +++ b/drivers/net/virtio_net.c
-@@ -1821,6 +1821,49 @@ static struct sk_buff *receive_mergeable_xdp(struct net_device *dev,
- 	return NULL;
+@@ -1054,6 +1054,29 @@ static void check_sq_full_and_disable(struct virtnet_info *vi,
+ 	}
  }
  
-+static struct sk_buff *virtnet_skb_append_frag(struct sk_buff *head_skb,
-+					       struct sk_buff *curr_skb,
-+					       struct page *page, void *buf,
-+					       int len, int truesize)
++static int virtnet_xsk_wakeup(struct net_device *dev, u32 qid, u32 flag)
 +{
-+	int num_skb_frags;
-+	int offset;
++	struct virtnet_info *vi = netdev_priv(dev);
++	struct send_queue *sq;
 +
-+	num_skb_frags = skb_shinfo(curr_skb)->nr_frags;
-+	if (unlikely(num_skb_frags == MAX_SKB_FRAGS)) {
-+		struct sk_buff *nskb = alloc_skb(0, GFP_ATOMIC);
++	if (!netif_running(dev))
++		return -ENETDOWN;
 +
-+		if (unlikely(!nskb))
-+			return NULL;
++	if (qid >= vi->curr_queue_pairs)
++		return -EINVAL;
 +
-+		if (curr_skb == head_skb)
-+			skb_shinfo(curr_skb)->frag_list = nskb;
-+		else
-+			curr_skb->next = nskb;
-+		curr_skb = nskb;
-+		head_skb->truesize += nskb->truesize;
-+		num_skb_frags = 0;
-+	}
++	sq = &vi->sq[qid];
 +
-+	if (curr_skb != head_skb) {
-+		head_skb->data_len += len;
-+		head_skb->len += len;
-+		head_skb->truesize += truesize;
-+	}
++	if (napi_if_scheduled_mark_missed(&sq->napi))
++		return 0;
 +
-+	offset = buf - page_address(page);
-+	if (skb_can_coalesce(curr_skb, num_skb_frags, page, offset)) {
-+		put_page(page);
-+		skb_coalesce_rx_frag(curr_skb, num_skb_frags - 1,
-+				     len, truesize);
-+	} else {
-+		skb_add_rx_frag(curr_skb, num_skb_frags, page,
-+				offset, len, truesize);
-+	}
++	local_bh_disable();
++	virtqueue_napi_schedule(&sq->napi, sq->vq);
++	local_bh_enable();
 +
-+	return curr_skb;
++	return 0;
 +}
 +
- static struct sk_buff *receive_mergeable(struct net_device *dev,
- 					 struct virtnet_info *vi,
- 					 struct receive_queue *rq,
-@@ -1870,8 +1913,6 @@ static struct sk_buff *receive_mergeable(struct net_device *dev,
- 	if (unlikely(!curr_skb))
- 		goto err_skb;
- 	while (--num_buf) {
--		int num_skb_frags;
--
- 		buf = virtnet_rq_get_buf(rq, &len, &ctx);
- 		if (unlikely(!buf)) {
- 			pr_debug("%s: rx error: %d buffers out of %d missing\n",
-@@ -1896,34 +1937,10 @@ static struct sk_buff *receive_mergeable(struct net_device *dev,
- 			goto err_skb;
- 		}
- 
--		num_skb_frags = skb_shinfo(curr_skb)->nr_frags;
--		if (unlikely(num_skb_frags == MAX_SKB_FRAGS)) {
--			struct sk_buff *nskb = alloc_skb(0, GFP_ATOMIC);
--
--			if (unlikely(!nskb))
--				goto err_skb;
--			if (curr_skb == head_skb)
--				skb_shinfo(curr_skb)->frag_list = nskb;
--			else
--				curr_skb->next = nskb;
--			curr_skb = nskb;
--			head_skb->truesize += nskb->truesize;
--			num_skb_frags = 0;
--		}
--		if (curr_skb != head_skb) {
--			head_skb->data_len += len;
--			head_skb->len += len;
--			head_skb->truesize += truesize;
--		}
--		offset = buf - page_address(page);
--		if (skb_can_coalesce(curr_skb, num_skb_frags, page, offset)) {
--			put_page(page);
--			skb_coalesce_rx_frag(curr_skb, num_skb_frags - 1,
--					     len, truesize);
--		} else {
--			skb_add_rx_frag(curr_skb, num_skb_frags, page,
--					offset, len, truesize);
--		}
-+		curr_skb  = virtnet_skb_append_frag(head_skb, curr_skb, page,
-+						    buf, len, truesize);
-+		if (!curr_skb)
-+			goto err_skb;
- 	}
- 
- 	ewma_pkt_len_add(&rq->mrg_avg_pkt_len, head_skb->len);
+ static int __virtnet_xdp_xmit_one(struct virtnet_info *vi,
+ 				   struct send_queue *sq,
+ 				   struct xdp_frame *xdpf)
+@@ -5399,6 +5422,7 @@ static const struct net_device_ops virtnet_netdev = {
+ 	.ndo_vlan_rx_kill_vid = virtnet_vlan_rx_kill_vid,
+ 	.ndo_bpf		= virtnet_xdp,
+ 	.ndo_xdp_xmit		= virtnet_xdp_xmit,
++	.ndo_xsk_wakeup         = virtnet_xsk_wakeup,
+ 	.ndo_features_check	= passthru_features_check,
+ 	.ndo_get_phys_port_name	= virtnet_get_phys_port_name,
+ 	.ndo_set_features	= virtnet_set_features,
 -- 
 2.32.0.3.g01195cf9f
 
