@@ -1,57 +1,56 @@
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E22DE14F9D2;
-	Mon,  8 Jul 2024 22:14:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E261D14F9F0;
+	Mon,  8 Jul 2024 22:14:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720476871; cv=none; b=WPJ1Hb6OoaqvnXzExUSi92K+WYKd8M9B94EEQVbty0fXQawTqw2LZWoYGBJdOs4fyLWnjsUni3oIWC359zfAac05O/L6zq7XcSB3COljug/wipCPEu7ZFsf3vrl+yfjjuxnSwclr4IXskFtFzciktlP1XoMTemzVQ4r1KNH1cak=
+	t=1720476872; cv=none; b=lNzuhmdIc9gR85uEUG6Sd9/UlR8HkV4Hv5EM1Uf2/tLdZpiuj2lHKitZ7/pBelonMMVgVN9zcyV7ZCM5a3IC0aOKGnNlspm9hbkRbDNcPXLAkY3XN0fabPHQWBKHi5wI0ixTnIwhVh2hakfhOAy6g9XuZpImautFXIxzJGWuZ2Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720476871; c=relaxed/simple;
-	bh=ONFpqfeAXH8s7eiHCY3CcbttD65Jhbns9lZ0f/3QRho=;
+	s=arc-20240116; t=1720476872; c=relaxed/simple;
+	bh=Bwr0PTdDGmTP6VB8HL7RHouUSm+zvmEbjPJ9gHz3nX4=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=O1nIDcE+ZWl06ksBrAKBRTUZMS4gWPNClfA7A8y/JEuTvSRwRPHjHtVGKBfOMRIlbgf8U9UJyWQRwJlNlb8wZ4X4HQmPnf5Bc505740uaExO2hunTnpfOiKO+L6oLGKnchV1wJcOMAwnBdgEWKaWhd6UOY81y0x9+MrsQ7VUuOA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GWEmkc96; arc=none smtp.client-ip=192.198.163.18
+	 MIME-Version; b=t3IUpu60sJIjdHSfwyyNKe22+tesvLQgLdhT9TRLqL3ntjkNmrf4QPYrroXrcTngynLYlaHM/Nn6nkwA3fWB7bLD9nrtNhCCRReR7o0N++uetfh8aqL48oykzpXfoGlKvxI3xPM5V2EFglUndcJ4fiS8KGOHYD4+KQXt5nQ5kuk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=O2v9XHOk; arc=none smtp.client-ip=192.198.163.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GWEmkc96"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="O2v9XHOk"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1720476870; x=1752012870;
+  t=1720476871; x=1752012871;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=ONFpqfeAXH8s7eiHCY3CcbttD65Jhbns9lZ0f/3QRho=;
-  b=GWEmkc96pLRQ7AZq3+TNNZnhF5uyaXfBwchQ+eWOc5eVRopRPwRLzG6S
-   smbiIETcIH2ErR1cex77WOqLjtlSQbj5wr+FZVv3nBwbht+CZCWlPA2PQ
-   iaQxEXKJzO7FpkbXprl37/v9yVpHxKBsq2NyjR4tJCayd/5PNnpyTiuma
-   jhDoHtsC7JqwTrmYUZBXTHZ1yQaG+F4Qulqja3dL3Z3y3TVc/5NHILyRI
-   PYiS+lHkqDV0uieJ8kdY7kajBWhYTI7cMJAcl5VIB4f0PRZb1RswoVTQe
-   4TN0sNro5bqkjb3ixs4cADPCTjCRzCCx0JNd6J3NJbkAtXIrNuR93hZt/
-   g==;
-X-CSE-ConnectionGUID: 53ZSDerCTASMGR5OUtMkdg==
-X-CSE-MsgGUID: Dz+cjDs6SwuE8eOwA3514w==
-X-IronPort-AV: E=McAfee;i="6700,10204,11127"; a="17340098"
+  bh=Bwr0PTdDGmTP6VB8HL7RHouUSm+zvmEbjPJ9gHz3nX4=;
+  b=O2v9XHOkkB8nlkzj7uCsrTWiPCafG0W6HfD2/9cPzw3OD3m6VJpPYZrF
+   dDPmyZibIb0RZy7d/mA2y7BhQQOe3sIQMzNic/1BeSyD2m8TxhKIH1jzy
+   /aJQDrbBnZm3InVZIN7eJuD83BLj5vuUbLQ0jso0YmLyK+eiZDAmaJPoh
+   ZRXlmWT+ZvqqQda4PXxhoHVMqQLrNm49fb+7jSiUWDKO72iSoC7DgbMZE
+   oCsVjIuolPrWIUSMdGfVB2fmw/vAIqns1djXcfBi8qEtNxOfrqrlCED90
+   rr9gYX7/5cZ61SiRE4OwWdBv0jeeuYGB+Zkno7k0x6TlkI2W2OmEuoBKt
+   A==;
+X-CSE-ConnectionGUID: 5yOY7k9AT+mlzeDEr1g80w==
+X-CSE-MsgGUID: rr/lYlnOTtq4eakN5Y7gtQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11127"; a="17340114"
 X-IronPort-AV: E=Sophos;i="6.09,193,1716274800"; 
-   d="scan'208";a="17340098"
+   d="scan'208";a="17340114"
 Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jul 2024 15:14:28 -0700
-X-CSE-ConnectionGUID: a6MLhka3SOeB5jNDKqNdvA==
-X-CSE-MsgGUID: 7hg2m7wvQ0KCxhYr55R0XA==
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jul 2024 15:14:30 -0700
+X-CSE-ConnectionGUID: vQEGHPv7T4SJN8R0E4kPIw==
+X-CSE-MsgGUID: dQndFPkmRgmM7cJ1Cw37cw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.09,193,1716274800"; 
-   d="scan'208";a="52237708"
+   d="scan'208";a="52237717"
 Received: from anguy11-upstream.jf.intel.com ([10.166.9.133])
-  by fmviesa004.fm.intel.com with ESMTP; 08 Jul 2024 15:14:28 -0700
+  by fmviesa004.fm.intel.com with ESMTP; 08 Jul 2024 15:14:29 -0700
 From: Tony Nguyen <anthony.l.nguyen@intel.com>
 To: davem@davemloft.net,
 	kuba@kernel.org,
 	pabeni@redhat.com,
 	edumazet@google.com,
 	netdev@vger.kernel.org
-Cc: Michal Kubiak <michal.kubiak@intel.com>,
+Cc: Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
 	anthony.l.nguyen@intel.com,
-	maciej.fijalkowski@intel.com,
 	magnus.karlsson@intel.com,
 	aleksander.lobakin@intel.com,
 	ast@kernel.org,
@@ -61,9 +60,9 @@ Cc: Michal Kubiak <michal.kubiak@intel.com>,
 	bpf@vger.kernel.org,
 	Shannon Nelson <shannon.nelson@amd.com>,
 	Chandan Kumar Rout <chandanx.rout@intel.com>
-Subject: [PATCH net 1/8] ice: respect netif readiness in AF_XDP ZC related ndo's
-Date: Mon,  8 Jul 2024 15:14:07 -0700
-Message-ID: <20240708221416.625850-2-anthony.l.nguyen@intel.com>
+Subject: [PATCH net 3/8] ice: replace synchronize_rcu with synchronize_net
+Date: Mon,  8 Jul 2024 15:14:09 -0700
+Message-ID: <20240708221416.625850-4-anthony.l.nguyen@intel.com>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20240708221416.625850-1-anthony.l.nguyen@intel.com>
 References: <20240708221416.625850-1-anthony.l.nguyen@intel.com>
@@ -75,62 +74,55 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Michal Kubiak <michal.kubiak@intel.com>
+From: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
 
-Address a scenario in which XSK ZC Tx produces descriptors to XDP Tx
-ring when link is either not yet fully initialized or process of
-stopping the netdev has already started. To avoid this, add checks
-against carrier readiness in ice_xsk_wakeup() and in ice_xmit_zc().
-One could argue that bailing out early in ice_xsk_wakeup() would be
-sufficient but given the fact that we produce Tx descriptors on behalf
-of NAPI that is triggered for Rx traffic, the latter is also needed.
+Given that ice_qp_dis() is called under rtnl_lock, synchronize_net() can
+be called instead of synchronize_rcu() so that XDP rings can finish its
+job in a faster way. Also let us do this as earlier in XSK queue disable
+flow.
 
-Bringing link up is an asynchronous event executed within
-ice_service_task so even though interface has been brought up there is
-still a time frame where link is not yet ok.
+Additionally, turn off regular Tx queue before disabling irqs and NAPI.
 
-Without this patch, when AF_XDP ZC Tx is used simultaneously with stack
-Tx, Tx timeouts occur after going through link flap (admin brings
-interface down then up again). HW seem to be unable to transmit
-descriptor to the wire after HW tail register bump which in turn causes
-bit __QUEUE_STATE_STACK_XOFF to be set forever as
-netdev_tx_completed_queue() sees no cleaned bytes on the input.
-
-Fixes: 126cdfe1007a ("ice: xsk: Improve AF_XDP ZC Tx and use batching API")
 Fixes: 2d4238f55697 ("ice: Add support for AF_XDP")
 Reviewed-by: Shannon Nelson <shannon.nelson@amd.com>
 Tested-by: Chandan Kumar Rout <chandanx.rout@intel.com> (A Contingent Worker at Intel)
-Signed-off-by: Michal Kubiak <michal.kubiak@intel.com>
 Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
 Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
 ---
- drivers/net/ethernet/intel/ice/ice_xsk.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ drivers/net/ethernet/intel/ice/ice_xsk.c | 9 ++++-----
+ 1 file changed, 4 insertions(+), 5 deletions(-)
 
 diff --git a/drivers/net/ethernet/intel/ice/ice_xsk.c b/drivers/net/ethernet/intel/ice/ice_xsk.c
-index a65955eb23c0..72738b8b8a68 100644
+index 3104a5657b83..ba50af9a5929 100644
 --- a/drivers/net/ethernet/intel/ice/ice_xsk.c
 +++ b/drivers/net/ethernet/intel/ice/ice_xsk.c
-@@ -1048,6 +1048,10 @@ bool ice_xmit_zc(struct ice_tx_ring *xdp_ring)
+@@ -52,10 +52,8 @@ static void ice_qp_reset_stats(struct ice_vsi *vsi, u16 q_idx)
+ static void ice_qp_clean_rings(struct ice_vsi *vsi, u16 q_idx)
+ {
+ 	ice_clean_tx_ring(vsi->tx_rings[q_idx]);
+-	if (ice_is_xdp_ena_vsi(vsi)) {
+-		synchronize_rcu();
++	if (ice_is_xdp_ena_vsi(vsi))
+ 		ice_clean_tx_ring(vsi->xdp_rings[q_idx]);
+-	}
+ 	ice_clean_rx_ring(vsi->rx_rings[q_idx]);
+ }
  
- 	ice_clean_xdp_irq_zc(xdp_ring);
+@@ -180,11 +178,12 @@ static int ice_qp_dis(struct ice_vsi *vsi, u16 q_idx)
+ 		usleep_range(1000, 2000);
+ 	}
  
-+	if (!netif_carrier_ok(xdp_ring->vsi->netdev) ||
-+	    !netif_running(xdp_ring->vsi->netdev))
-+		return true;
++	synchronize_net();
++	netif_tx_stop_queue(netdev_get_tx_queue(vsi->netdev, q_idx));
 +
- 	budget = ICE_DESC_UNUSED(xdp_ring);
- 	budget = min_t(u16, budget, ICE_RING_QUARTER(xdp_ring));
+ 	ice_qvec_dis_irq(vsi, rx_ring, q_vector);
+ 	ice_qvec_toggle_napi(vsi, q_vector, false);
  
-@@ -1091,7 +1095,7 @@ ice_xsk_wakeup(struct net_device *netdev, u32 queue_id,
- 	struct ice_vsi *vsi = np->vsi;
- 	struct ice_tx_ring *ring;
- 
--	if (test_bit(ICE_VSI_DOWN, vsi->state))
-+	if (test_bit(ICE_VSI_DOWN, vsi->state) || !netif_carrier_ok(netdev))
- 		return -ENETDOWN;
- 
- 	if (!ice_is_xdp_ena_vsi(vsi))
+-	netif_tx_stop_queue(netdev_get_tx_queue(vsi->netdev, q_idx));
+-
+ 	ice_fill_txq_meta(vsi, tx_ring, &txq_meta);
+ 	err = ice_vsi_stop_tx_ring(vsi, ICE_NO_RESET, 0, tx_ring, &txq_meta);
+ 	if (err)
 -- 
 2.41.0
 
