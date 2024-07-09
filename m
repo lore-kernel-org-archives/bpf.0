@@ -1,112 +1,228 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECF4C154458;
-	Tue,  9 Jul 2024 09:34:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96FAD13C687;
+	Tue,  9 Jul 2024 09:39:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720517682; cv=none; b=XXdo9nSbEQrT0X9OhxE2COhlJtkjuGoG7a2Ce1lGlgAYOoY38BIMKoOgNXcuKHnH+AnPWpwxY7mKwNy3dd3I6Z+C/k/tcAa5TjyA7h44LTXQ3DUdPACpd6KzAzpbMGtm8673YAM/IIiX1THpgd7A1IFnLp9sHaHt0aNk62sFUUI=
+	t=1720517998; cv=none; b=T/wttiRPwAEtjYoMUCUknUEpnATYiMyhRXHjnVA3SKXaFyN1zGKuJUcf94eqooDuoMIXk8A+ByyblB/NnoAHizz/MqzdLQoPJduAI7ZktB36ABK2fLjXvO9KTNsJ4rYrIy00MteHMbFdkvC35xsxWfLsVqSIG6TsIUv3IWZ4K7I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720517682; c=relaxed/simple;
-	bh=P0Tg5HgvkrsbncakOIEEZ4alS4fkZKeRhddMQDXL43c=;
-	h=Date:From:Subject:To:Cc:References:In-Reply-To:MIME-Version:
-	 Message-Id:Content-Type; b=u9wt6MXsEgGkpJzuvTMj7Az+hJUfOObspEMLgCSRM2wzLyU0XuxFob6M+etI7KjcnD06innm3VhcjAn3UekIeeuWOqbZmRl5yjY26/udYEhR/iqeY7jrYun30fZTKZWtZPqk66XSNCoJXePSNwW0OFyW7Ha2N+P+NCzxJMohFNg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=he1zNqLl; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1720517998; c=relaxed/simple;
+	bh=YLLKXO9LQyBdruxsLrFG2iexGd+6cQarJN2FYHNbX38=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=MXoHrfhRdf1RRmaNFgrH+vd13uxYrPZ+mjZ/PYX8+ghTUtO7L90URrBEvVlEXdzGy3VAxdHFgm27aBxyCpRW9141fZILeS2raySdkj+9Xvof4P0Qe1VtQfv/CumNNsFxVj6TPLILzmMnBny9odSa/6z2/huE5l6xSegY5znhJGw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=A0xAch9H; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="he1zNqLl"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F481C3277B;
-	Tue,  9 Jul 2024 09:34:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1720517681;
-	bh=P0Tg5HgvkrsbncakOIEEZ4alS4fkZKeRhddMQDXL43c=;
-	h=Date:From:Subject:To:Cc:References:In-Reply-To:From;
-	b=he1zNqLljVoU8atGAg/yb/t+komzyYSyUY+npj0LJK4bw+LtwG11R0MmXeAwmqJVN
-	 Gq2dFw2iLKQw4byk3Jns1oIitgwh5VE3CeSemr9ul5IDq1N/fs8QPsVGGzHAXiL+gE
-	 3UZnQ54m426HhEP1xEhMFfkflU9qC3krY+KILGS0EzD5qvw5SHqPlXOIOr8/jV1Gru
-	 jYvW8eSkQPg/CJxlcbfxZBdTxpt89kvJ78Eed5vR6EsWNw7cxMdLNCnX4W53UCak3D
-	 rCRrUuoCATcNZqAmlzOexTCha0d8M49L3Rot3QU4UoktF/cV4sVw3liGPk+RE6qkGp
-	 QDJDM1x9covzQ==
-Date: Tue, 09 Jul 2024 15:02:13 +0530
-From: Naveen N Rao <naveen@kernel.org>
-Subject: Re: WARNING&Oops in v6.6.37 on ppc64lea - Trying to vfree() bad
- address (00000000453be747)
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, matoro
-	<matoro_mailinglist_kernel@matoro.tk>
-Cc: bpf@vger.kernel.org, Hari Bathini <hbathini@linux.ibm.com>, linuxppc-dev
-	<linuxppc-dev@lists.ozlabs.org>, ltp@lists.linux.it, stable@vger.kernel.org,
-	Vitaly Chikunov <vt@altlinux.org>
-References: <20240705203413.wbv2nw3747vjeibk@altlinux.org>
-	<cf736c5e37489e7dc7ffd67b9de2ab47@matoro.tk>
-	<2024070904-cod-bobcat-a0d0@gregkh>
-In-Reply-To: <2024070904-cod-bobcat-a0d0@gregkh>
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="A0xAch9H"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F152AC3277B;
+	Tue,  9 Jul 2024 09:39:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1720517998;
+	bh=YLLKXO9LQyBdruxsLrFG2iexGd+6cQarJN2FYHNbX38=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=A0xAch9HsB+cVsJef7JG/fDYr42ZEaIKrFRNruViCD5ylCrIiteelaBz2b8FedJ8p
+	 NipKOtQN5ToBUmNA6d4AsMNKBDv6T8ZDJGIx2sKFmG2iihW9J6R2wC2cVhXT7+JMPV
+	 2J4gVGdws9ioh2PbFbGo4yczJ+mRLATvUN1CTBKU=
+Date: Tue, 9 Jul 2024 11:39:54 +0200
+From: Greg KH <gregkh@linuxfoundation.org>
+To: LEROY Christophe <christophe.leroy2@cs-soprasteria.com>
+Cc: WangYuli <wangyuli@uniontech.com>,
+	"stable@vger.kernel.org" <stable@vger.kernel.org>,
+	"sashal@kernel.org" <sashal@kernel.org>,
+	"ast@kernel.org" <ast@kernel.org>,
+	"keescook@chromium.org" <keescook@chromium.org>,
+	"linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>,
+	"catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+	"song@kernel.org" <song@kernel.org>,
+	"puranjay12@gmail.com" <puranjay12@gmail.com>,
+	"daniel@iogearbox.net" <daniel@iogearbox.net>,
+	"andrii@kernel.org" <andrii@kernel.org>,
+	"martin.lau@linux.dev" <martin.lau@linux.dev>,
+	"yonghong.song@linux.dev" <yonghong.song@linux.dev>,
+	"john.fastabend@gmail.com" <john.fastabend@gmail.com>,
+	"kpsingh@kernel.org" <kpsingh@kernel.org>,
+	"sdf@google.com" <sdf@google.com>,
+	"haoluo@google.com" <haoluo@google.com>,
+	"jolsa@kernel.org" <jolsa@kernel.org>,
+	"illusionist.neo@gmail.com" <illusionist.neo@gmail.com>,
+	"linux@armlinux.org.uk" <linux@armlinux.org.uk>,
+	"bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"chenhuacai@kernel.org" <chenhuacai@kernel.org>,
+	"kernel@xen0n.name" <kernel@xen0n.name>,
+	"loongarch@lists.linux.dev" <loongarch@lists.linux.dev>,
+	"johan.almbladh@anyfinetworks.com" <johan.almbladh@anyfinetworks.com>,
+	"paulburton@kernel.org" <paulburton@kernel.org>,
+	"tsbogend@alpha.franken.de" <tsbogend@alpha.franken.de>,
+	"linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+	"deller@gmx.de" <deller@gmx.de>,
+	"linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
+	"iii@linux.ibm.com" <iii@linux.ibm.com>,
+	"hca@linux.ibm.com" <hca@linux.ibm.com>,
+	"gor@linux.ibm.com" <gor@linux.ibm.com>,
+	"agordeev@linux.ibm.com" <agordeev@linux.ibm.com>,
+	"borntraeger@linux.ibm.com" <borntraeger@linux.ibm.com>,
+	"svens@linux.ibm.com" <svens@linux.ibm.com>,
+	"linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
+	"davem@davemloft.net" <davem@davemloft.net>,
+	"sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
+	"kuba@kernel.org" <kuba@kernel.org>,
+	"hawk@kernel.org" <hawk@kernel.org>,
+	"netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+	"dsahern@kernel.org" <dsahern@kernel.org>,
+	"tglx@linutronix.de" <tglx@linutronix.de>,
+	"mingo@redhat.com" <mingo@redhat.com>,
+	"bp@alien8.de" <bp@alien8.de>,
+	"dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+	"x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
+	"guanwentao@uniontech.com" <guanwentao@uniontech.com>,
+	"baimingcong@uniontech.com" <baimingcong@uniontech.com>
+Subject: Re: [PATCH] Revert "bpf: Take return from set_memory_rox() into
+ account with bpf_jit_binary_lock_ro()" for linux-6.6.37
+Message-ID: <2024070953-sepia-protozoan-86a0@gregkh>
+References: <5A29E00D83AB84E3+20240706031101.637601-1-wangyuli@uniontech.com>
+ <2024070631-unrivaled-fever-8548@gregkh>
+ <B7E3B29557B78CB1+afadbaa6-987e-4db4-96b5-4e4d5465c37b@uniontech.com>
+ <2024070815-udder-charging-7f75@gregkh>
+ <a1dac525-4e6d-4d28-87ee-63723abbafad@cs-soprasteria.com>
+ <2024070908-glade-granny-1137@gregkh>
+ <4d07cfa3-031c-45f4-aec1-9f0a54dd22b2@cs-soprasteria.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: astroid/0.16.0 (https://github.com/astroidmail/astroid)
-Message-Id: <1720516964.n61e0dnv80.naveen@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <4d07cfa3-031c-45f4-aec1-9f0a54dd22b2@cs-soprasteria.com>
 
-Greg Kroah-Hartman wrote:
-> On Mon, Jul 08, 2024 at 11:16:48PM -0400, matoro wrote:
->> On 2024-07-05 16:34, Vitaly Chikunov wrote:
->> > Hi,
->> >=20
->> > There is new WARNING and Oops on ppc64le in v6.6.37 when running LTP t=
-ests:
->> > bpf_prog01, bpf_prog02, bpf_prog04, bpf_prog05, prctl04. Logs excerpt
->> > below. I
->> > see there is 1 commit in v6.6.36..v6.6.37 with call to
->> > bpf_jit_binary_pack_finalize, backported from 5 patch mainline patchse=
-t:
->> >=20
->> >   f99feda5684a powerpc/bpf: use bpf_jit_binary_pack_[alloc|finalize|fr=
-ee]
->> >=20
+On Tue, Jul 09, 2024 at 09:24:54AM +0000, LEROY Christophe wrote:
+> 
+> 
+> Le 09/07/2024 à 11:15, Greg KH a écrit :
+> > On Mon, Jul 08, 2024 at 03:12:55PM +0000, LEROY Christophe wrote:
+> >>
+> >>
+> >> Le 08/07/2024 à 14:36, Greg KH a écrit :
+> >>> On Sun, Jul 07, 2024 at 03:34:15PM +0800, WangYuli wrote:
+> >>>>
+> >>>> On 2024/7/6 17:30, Greg KH wrote:
+> >>>>> This makes it sound like you are reverting this because of a build
+> >>>>> error, which is not the case here, right?  Isn't this because of the
+> >>>>> powerpc issue reported here:
+> >>>>>      https://lore.kernel.org/r/20240705203413.wbv2nw3747vjeibk@altlinux.org
+> >>>>> ?
+> >>>>
+> >>>> No, it only occurs on ARM64 architecture. The reason is that before being
+> >>>> modified, the function
+> >>>>
+> >>>> bpf_jit_binary_lock_ro() in arch/arm64/net/bpf_jit_comp.c +1651
+> >>>>
+> >>>> was introduced with __must_check, which is defined as
+> >>>> __attribute__((__warn_unused_result__)).
+> >>>>
+> >>>>
+> >>>> However, at this point, calling bpf_jit_binary_lock_ro(header)
+> >>>> coincidentally results in an unused-result
+> >>>>
+> >>>> warning.
+> >>>
+> >>> Ok, thanks, but why is no one else seeing this in their testing?
+> >>
+> >> Probably the configs used by robots do not activate BPF JIT ?
+> >>
+> >>>
+> >>>>> If not, why not just backport the single missing arm64 commit,
+> >>>>
+> >>>> Upstream commit 1dad391daef1 ("bpf, arm64: use bpf_prog_pack for memory
+> >>>> management") is part of
+> >>>>
+> >>>> a larger change that involves multiple commits. It's not an isolated commit.
+> >>>>
+> >>>>
+> >>>> We could certainly backport all of them to solve this problem, buthas it's not
+> >>>> the simplest solution.
+> >>>
+> >>> reverting the change feels wrong in that you will still have the bug
+> >>> present that it was trying to solve, right?  If so, can you then provide
+> >>> a working version?
+> >>
+> >> Indeed, by reverting the change you "punish" all architectures because
+> >> arm64 hasn't properly been backported, is it fair ?
+> >>
+> >> In fact, when I implemented commit e60adf513275 ("bpf: Take return from
+> >> set_memory_rox() into account with bpf_jit_binary_lock_ro()"), we had
+> >> the following users for function bpf_jit_binary_lock_ro() :
+> >>
+> >> $ git grep bpf_jit_binary_lock_ro e60adf513275~
+> >> e60adf513275~:arch/arm/net/bpf_jit_32.c:
+> >> bpf_jit_binary_lock_ro(header);
+> >> e60adf513275~:arch/loongarch/net/bpf_jit.c:
+> >> bpf_jit_binary_lock_ro(header);
+> >> e60adf513275~:arch/mips/net/bpf_jit_comp.c:
+> >> bpf_jit_binary_lock_ro(header);
+> >> e60adf513275~:arch/parisc/net/bpf_jit_core.c:
+> >> bpf_jit_binary_lock_ro(jit_data->header);
+> >> e60adf513275~:arch/s390/net/bpf_jit_comp.c:
+> >> bpf_jit_binary_lock_ro(header);
+> >> e60adf513275~:arch/sparc/net/bpf_jit_comp_64.c:
+> >> bpf_jit_binary_lock_ro(header);
+> >> e60adf513275~:arch/x86/net/bpf_jit_comp32.c:
+> >> bpf_jit_binary_lock_ro(header);
+> >> e60adf513275~:include/linux/filter.h:static inline void
+> >> bpf_jit_binary_lock_ro(struct bpf_binary_header *hdr)
+> >>
+> >> But when commit 08f6c05feb1d ("bpf: Take return from set_memory_rox()
+> >> into account with bpf_jit_binary_lock_ro()") was applied, we had one
+> >> more user which is arm64:
+> >>
+> >> $ git grep bpf_jit_binary_lock_ro 08f6c05feb1d~
+> >> 08f6c05feb1d~:arch/arm/net/bpf_jit_32.c:
+> >> bpf_jit_binary_lock_ro(header);
+> >> 08f6c05feb1d~:arch/arm64/net/bpf_jit_comp.c:
+> >> bpf_jit_binary_lock_ro(header);
+> >> 08f6c05feb1d~:arch/loongarch/net/bpf_jit.c:
+> >> bpf_jit_binary_lock_ro(header);
+> >> 08f6c05feb1d~:arch/mips/net/bpf_jit_comp.c:
+> >> bpf_jit_binary_lock_ro(header);
+> >> 08f6c05feb1d~:arch/parisc/net/bpf_jit_core.c:
+> >> bpf_jit_binary_lock_ro(jit_data->header);
+> >> 08f6c05feb1d~:arch/s390/net/bpf_jit_comp.c:
+> >> bpf_jit_binary_lock_ro(header);
+> >> 08f6c05feb1d~:arch/sparc/net/bpf_jit_comp_64.c:
+> >> bpf_jit_binary_lock_ro(header);
+> >> 08f6c05feb1d~:arch/x86/net/bpf_jit_comp32.c:
+> >> bpf_jit_binary_lock_ro(header);
+> >> 08f6c05feb1d~:include/linux/filter.h:static inline void
+> >> bpf_jit_binary_lock_ro(struct bpf_binary_header *hdr)
+> >>
+> >> Therefore, commit 08f6c05feb1d should have included a backport for arm64.
+> >>
+> >> So yes, I agree with Greg, the correct fix should be to backport to
+> >> ARM64 the changes done on other architectures in order to properly
+> >> handle return of set_memory_rox() in bpf_jit_binary_lock_ro().
+> >
+> > Ok, but it looks like due to this series, the powerpc tree is crashing
+> > at the first bpf load, so something went wrong.  Let me go revert these
+> > 4 patches for now, and then I will be glad to queue them up if you can
+> > provide a working series for all arches.
+> >
+> 
+> Fair enough, indeed I think for powerpc it probably also relies on more
+> changes, so both ARM and POWERPC need a carefull backport.
+> 
+> I can look at it, but can you tell why it was decided to apply that
+> commit on stable at the first place ? Is there a particular need ?
 
-<snip>
+Based on the changelog text itself, it fixes an issue and was flagged as
+something to be backported.
 
->> >=20
->> > And so on. Temporary build/test log is at
->> > https://git.altlinux.org/tasks/352218/build/100/ppc64le/log
->> >=20
->> > Other stable/longterm branches or other architectures does not exhibit=
- this.
->> >=20
->> > Thanks,
->>=20
->> Hi all - this just took down a production server for me, on POWER9 bare
->> metal.  Not running tests, just booting normally, before services even c=
-ame
->> up.  Had to perform manual restoration, reverting to 6.6.36 worked.  Als=
-o
->> running 64k kernel, unsure if it's better on 4k kernel.
->>=20
->> In case it's helpful, here's the log from my boot:
->> https://dpaste.org/Gyxxg/raw
->=20
-> Ok, this isn't good, something went wrong with my backports here.  Let
-> me go revert them all and push out a new 6.6.y release right away.
+If this isn't needed in 6.6.y, then no worries at all, we can just drop
+them and be happy :)
 
-I think the problem is that the series adding support for bpf prog_pack=20
-was partially backported. In particular, the below patches are missing=20
-from stable v6.6:
-465cabc97b42 powerpc/code-patching: introduce patch_instructions()
-033ffaf0af1f powerpc/bpf: implement bpf_arch_text_invalidate for bpf_prog_p=
-ack
-6efc1675acb8 powerpc/bpf: implement bpf_arch_text_copy
+thanks,
 
-It should be sufficient to revert commit f99feda5684a (powerpc/bpf: use=20
-bpf_jit_binary_pack_[alloc|finalize|free]) to allow the above to apply=20
-cleanly, followed by cherry picking commit 90d862f370b6 (powerpc/bpf:=20
-use bpf_jit_binary_pack_[alloc|finalize|free]) from upstream.
-
-Alternately, commit f99feda5684a (powerpc/bpf: use=20
-bpf_jit_binary_pack_[alloc|finalize|free]) can be reverted.
-
-
-- Naveen
-
+greg k-h
