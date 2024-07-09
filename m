@@ -1,68 +1,44 @@
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09D76180056
-	for <bpf@vger.kernel.org>; Tue,  9 Jul 2024 20:42:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B3CE187861
+	for <bpf@vger.kernel.org>; Tue,  9 Jul 2024 20:42:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720557771; cv=none; b=fls6QAyPBI85b05wiyJ147Jk2bMSkRzLZ200gjmyVWiX2gCDbKj0pjDvQziA+3r4S6zYI6RQ1vDnNF2PlYl7JATLpXlVAFGfCFr3j1YNnov2ZFiYVZ30f5DmTgu/N9zNqT/3lcjptXalq6WAm8nrgBanplmn8LQiHYLpBS6ZRd0=
+	t=1720557772; cv=none; b=WQoLWQCSMcL6AWdQgp476evUyI1bSg/6/sW1svd0WCBlKO4PkBifw8uFkutrZWkU2/gB1gwYr7eqXMo9x9IAQePkAJvwoU+ks4icJ2pgcm0iuppDZ20h/F4Rokj7vQWlxfYVsQdWIkd8Ha2LDb8uDso3NrR4ZDe8Dnh/WOGLJYE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720557771; c=relaxed/simple;
-	bh=NzFd7/N3dtVr8i5r6QNxUqTOXBxNxROsAYCor52Ghrc=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=D46I68Xu87hRa2OVpkihWlcv7dYVLev6a9iho6+WCcjFtznuQzT+T9G1UmHnxOSuFRPMxJkHkoGtfDDH5yR1d4EdP4NmFJgaq7Gx+MGa77tNV7KsRG880xdsZ2VYIEwxosEYk2DA9UXDcnfvS2FnV0puju+6IbQR9NJK32jbDes=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=dkcW2G9R; arc=none smtp.client-ip=209.85.214.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+	s=arc-20240116; t=1720557772; c=relaxed/simple;
+	bh=vYyrBpzkRZI9HAtJcRaJBlpeRkvBiECfUfa7DYrUBvE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=MMPTy8XOOrqrDZ8R+vPDPBitfkOC/VR6zY2mFi11jLDoGh3f7+W22E6KX8XGib8+xRbz4Tu6OdAp5rOlTtnZfVF73Sw5GvFddC8F3Fn4sntGurT9xToI4G/etjCX7XlJV406cnzPIIw6z7VxyTZI6ghAc1edBb1cVoi6yG3n268=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=p0h7Wr0Z; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="dkcW2G9R"
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-1fb05b0be01so33328705ad.2
-        for <bpf@vger.kernel.org>; Tue, 09 Jul 2024 13:42:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1720557769; x=1721162569; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=IClM+nkNh3bQyMb1SpTr5S0Y3fVSw1KJe9ktaS1rz2Q=;
-        b=dkcW2G9R0uxdWnZnyrbMHLHkBAvfmy84GKC/vFqTxwRk84nyU4wLYWSN9xviZNRPtg
-         c1ZMHoJKUhKHGX8H89JHUZDBE0nWgdBz1Aj2sCQP5zGL6OGYILE2vcCxCmQtm/gx5e0u
-         8dmGTeMVvqqvMpYM0l4Dt1UKimh4jhCtBz/4E=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720557769; x=1721162569;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=IClM+nkNh3bQyMb1SpTr5S0Y3fVSw1KJe9ktaS1rz2Q=;
-        b=RBSMLjEi3/Fx2RUaKCHg5W5dPo2HRMj+G6D5t6ipPgYUg4Xmp4kjXur38eE4oVS5YF
-         4+CQJ/Sy0N+iVPjl65QOfDWqO4HA5nWSsqsWdxro4+j0DTisO9DyOK8FWTS1V84MHDaB
-         u0/knlNGeHxiv54G7Gm4YWdJhXq6GSXVgzhE1JYsoAko+2f3mCL+ukN+MOlRY4hpPpmQ
-         P2TsiwO0Yjf0zZz0gwGvqVC/Z4QDHmS4riKyry2DqRaGIU9bdeQKCURorzzdDyLcIYdS
-         FGq+H9UOO/Ccq88uax7EiULJJnmWDFX3FTqNSydb/2m9XMe5FV4FWqx78Z20UbGRvGPh
-         UUHg==
-X-Forwarded-Encrypted: i=1; AJvYcCW0pHR5p2b4H8Hp3TvyXm3VN5RobXM6AQeX1MJQX9LRWjPOxzlUFI0lPvINX3MgG0fZXG/KsE3Onv9FWW8I/KJOpgwK
-X-Gm-Message-State: AOJu0YwRznkyCA2H6i/o+3VcIpXpYuLmNnuL5YgNFU7N+CAwLlbph5ec
-	ndS2q1rrubPg/+oxaBh8pu56qcUxIbC18xys+uRlPds61BfPXIU4l1FU3UZh8Q==
-X-Google-Smtp-Source: AGHT+IGoLgQUOgFZQ37HZfVJhxLYUs8U/Kuzkwqzf3f2LTNflHkGkZ0CMMSP3/cENo3kBdzUxltHGA==
-X-Received: by 2002:a17:902:d50c:b0:1fb:5f82:6a5d with SMTP id d9443c01a7336-1fbb6d44060mr37343645ad.21.1720557769407;
-        Tue, 09 Jul 2024 13:42:49 -0700 (PDT)
-Received: from localhost ([2620:15c:9d:2:4d59:98c6:8095:9b12])
-        by smtp.gmail.com with UTF8SMTPSA id d9443c01a7336-1fbb6ab6d80sm20322515ad.170.2024.07.09.13.42.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 09 Jul 2024 13:42:49 -0700 (PDT)
-From: Brian Norris <briannorris@chromium.org>
-To: Arnaldo Carvalho de Melo <acme@redhat.com>,
-	Namhyung Kim <namhyung@kernel.org>,
-	Ian Rogers <irogers@google.com>,
-	Thomas Richter <tmricht@linux.ibm.com>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>
-Cc: linux-kbuild@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Brian Norris <briannorris@chromium.org>
-Subject: [PATCH v3 0/3] tools build: Incorrect fixdep dependencies
-Date: Tue,  9 Jul 2024 13:41:50 -0700
-Message-ID: <20240709204203.1481851-1-briannorris@chromium.org>
-X-Mailer: git-send-email 2.45.2.803.g4e1b14247a-goog
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="p0h7Wr0Z"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0E01C4AF15;
+	Tue,  9 Jul 2024 20:42:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1720557772;
+	bh=vYyrBpzkRZI9HAtJcRaJBlpeRkvBiECfUfa7DYrUBvE=;
+	h=From:To:Cc:Subject:Date:From;
+	b=p0h7Wr0ZspcYf7uyOIqvWIx3+Z1uuIfeRmYyd4jPvOt2Jk7QYKj72j8umuWslLRwm
+	 LKFdVBuTHewNZqNuArgMKU8QqsQOgGC+193UifjFOryAyaNx9GFlxla2eAbViqow7P
+	 0MhELdODtpQ+LUXrK7uGmvYI3RdivC1M8f9RDuE0Fw8KwGCQezjg26JyD5CCWI8kEF
+	 q7KLgcNWiOb2nA16TO722SSp7C3NHWML9QzfrQTOqj8NVpyIOVRKvx0bRB9OwlEqvg
+	 0rsRhBKNIpZ18bXcQddXBG1PIOBuT8jQihh/9qfQd79ApwH2somxykNyjqy64/woIf
+	 svZdV2M0NEP1g==
+From: Andrii Nakryiko <andrii@kernel.org>
+To: bpf@vger.kernel.org
+Cc: linux-mm@kvack.org,
+	akpm@linux-foundation.org,
+	adobriyan@gmail.com,
+	shakeel.butt@linux.dev,
+	hannes@cmpxchg.org,
+	ak@linux.intel.com,
+	osandov@osandov.com,
+	Andrii Nakryiko <andrii@kernel.org>
+Subject: [PATCH bpf-next 00/10] Harden and extend ELF build ID parsing logic
+Date: Tue,  9 Jul 2024 13:42:35 -0700
+Message-ID: <20240709204245.3847811-1-andrii@kernel.org>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -71,63 +47,64 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Hi all,
+The goal of this patch set is to extend existing ELF build ID parsing logic,
+currently mostly used by BPF subsystem, with support for working in sleepable
+mode in which memory faults are allowed and can be relied upon to fetch
+relevant parts of ELF file to find and fetch .note.gnu.build-id information.
 
-The following series consists of a few bugfixes on the topic of "misuse
-of fixdep in the tools/ build tree." There is no listed maintainer for
-tools/build, but there are for tools/bpf and tools/objtool, which are
-the main pieces that affect most users, because they're built as part of
-the main kernel build. I've addressed this series to a selection of
-those maintainers, and those that have previously applied build changes
-in tools/. I hope one of you can apply this series, pending favorable
-review. Or feel free to point me to a different set of maintainers.
+This is useful and important for BPF subsystem itself, but also for
+PROCMAP_QUERY ioctl(), built atop of /proc/<pid>/maps functionality (see [0]),
+which makes use of the same build_id_parse() functionality. PROCMAP_QUERY is
+always called from sleepable user process context, so it doesn't have to
+suffer from current restrictions of build_id_parse() which are due to the NMI
+context assumption.
 
-This patch series came out of poking around some build errors seen by me
-and my coworkers, and I found that there were rather similar reports a
-while back here:
+Along the way, we harden the logic to avoid TOCTOU problems. We also lift
+existing limitations of only working as long as ELF program headers and build
+ID note section is contained strictly within the very first page of ELF file.
 
-    Subject: possible dependency error?
-    https://lore.kernel.org/all/ZGVi9HbI43R5trN8@bhelgaas/
+We achieve all of the above without duplication of logic between sleepable and
+non-sleepable modes through freader abstraction that manages underlying page
+cache page (on demand) and giving a simple to use direct memory access
+interface. With that, single page restrictions and adding sleepable mode
+support is rather straightforward.
 
-I reported some findings to that thread; see also subsequent discussion:
+We also extend existing set of BPF selftests with a few tests targeting build
+ID logic across sleepable and non-sleepabe contexts (we utilize sleepable and
+non-sleepable uprobes for that).
 
-    https://lore.kernel.org/all/Zk-C5Eg84yt6_nml@google.com/
+   [0] https://lore.kernel.org/linux-mm/20240627170900.1672542-4-andrii@kernel.org/
 
-One element of that discussion: these problems are already solved
-consistently in Kbuild. tools/build purposely borrows some from Kbuild,
-but also purposely does not actually use Kbuild. While it'd make my life
-easier if tools/ would just adopt Kbuild (at least for the tools which
-are built during kernel builds), I've chosen a path that I hope will
-yield less resistance -- simply hacking up the existing tools/ build
-without major changes to its design.
+Andrii Nakryiko (10):
+  lib/buildid: add single page-based file reader abstraction
+  lib/buildid: take into account e_phoff when fetching program headers
+  lib/buildid: remove single-page limit for PHDR search
+  lib/buildid: rename build_id_parse() into build_id_parse_nofault()
+  lib/buildid: implement sleepable build_id_parse() API
+  lib/buildid: don't limit .note.gnu.build-id to the first page in ELF
+  lib/buildid: harden build ID parsing logic some more
+  bpf: decouple stack_map_get_build_id_offset() from
+    perf_callchain_entry
+  bpf: wire up sleepable bpf_get_stack() and bpf_get_task_stack()
+    helpers
+  selftests/bpf: add build ID tests
 
-NB: I've also CC'd Kbuild folks, since Masahiro has already been so
-helpful here, but note that this is not really a "kbuild" patch series.
-
-Regards,
-Brian
-
-Changes in v3:
- - Drop unnecessary tools/build/Build
-
-Changes in v2:
- - also fix libbpf shared library rules
- - ensure OUTPUT is always set, and always an absolute path
- - add backup $(Q) definition in tools/build/Makefile.include
-
-Brian Norris (3):
-  tools build: Correct libsubcmd fixdep dependencies
-  tools build: Avoid circular .fixdep-in.o.cmd issues
-  tools build: Correct bpf fixdep dependencies
-
- tools/build/Build            |  3 ---
- tools/build/Makefile         | 11 ++---------
- tools/build/Makefile.include | 12 +++++++++++-
- tools/lib/bpf/Makefile       | 14 ++++++++++++--
- tools/lib/subcmd/Makefile    |  2 +-
- 5 files changed, 26 insertions(+), 16 deletions(-)
- delete mode 100644 tools/build/Build
+ include/linux/bpf.h                           |   2 +
+ include/linux/buildid.h                       |   4 +-
+ kernel/bpf/stackmap.c                         | 131 +++++--
+ kernel/events/core.c                          |   2 +-
+ kernel/trace/bpf_trace.c                      |   5 +-
+ lib/buildid.c                                 | 370 +++++++++++++-----
+ tools/testing/selftests/bpf/Makefile          |   5 +-
+ .../selftests/bpf/prog_tests/build_id.c       | 118 ++++++
+ .../selftests/bpf/progs/test_build_id.c       |  31 ++
+ tools/testing/selftests/bpf/uprobe_multi.c    |  34 ++
+ tools/testing/selftests/bpf/uprobe_multi.ld   |  11 +
+ 11 files changed, 584 insertions(+), 129 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/build_id.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_build_id.c
+ create mode 100644 tools/testing/selftests/bpf/uprobe_multi.ld
 
 -- 
-2.45.2.803.g4e1b14247a-goog
+2.43.0
 
