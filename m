@@ -1,104 +1,105 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCA4C1534FC;
-	Tue,  9 Jul 2024 09:40:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from cmccmta1.chinamobile.com (cmccmta8.chinamobile.com [111.22.67.151])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2CFA61553AB;
+	Tue,  9 Jul 2024 09:41:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=111.22.67.151
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720518023; cv=none; b=s408RfnbvkDjtaPYdZsjtfl3kWl3NnXAd2Quj6G29Z2dS5/T/u4pL/i0hyWeA0bLOYxIV1LjP1wwpa9Aok9K9x4wIKKDKviwi+0vFJKo4XjdBvyGynlR1QVsVery94ESI50NSy10vh0sadUtCYeIS3aDVHqGkKTHR0Ow/PIdnM4=
+	t=1720518128; cv=none; b=WrmDhmh3VOYnFhzdjEwWb3TApZwevY5L4eE6Q0BcPdIuW7wkKPG8dorRPv4J3ZWYvilz/FEtySPMVK1BMFW1UP5o5omjGQtlgFPBLEOFXc70yvBSKTKWaHhT9yRrhL7QGDoG6jKl81yQjMe84ZTwnfAorRwLcR8NH1D30nVZ8n0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720518023; c=relaxed/simple;
-	bh=zDQMeE37biW7ERmyjD/Ec9NvHO+hvzgb1NmDdJv4Pic=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BK7aPo34sUaawKy8rmLOB6NogTFxNySSCt84YF58xG7bY5Q0F/lVD8NZqKp2hklXEXgr9bv5e4ttAp+NIHjdKB/beNXm51zrlIJSwYsC7uhOSKa6ukkfr00mX2tfSwChoHOCM0riNRYhVWb6b+ocrdijeJWMwzXjqy+m/tKLTpc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=B7Jhoz0b; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="B7Jhoz0b"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3933C32786;
-	Tue,  9 Jul 2024 09:40:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1720518022;
-	bh=zDQMeE37biW7ERmyjD/Ec9NvHO+hvzgb1NmDdJv4Pic=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=B7Jhoz0bHAUt5hHwJtGldKeFjGjaOfySM/ZjXWWGO1FoZ0/IbAlAxbAptHEMDoBqM
-	 7DNHn//Nl7rJjGue9y/sRNTFc8f+jXuOjuCNBz5KewiY0JO0GTyCgjiNsk3OAb3Z0f
-	 tXGu1Bfjy3rKly/jK5SbR7Q1/g8ea9Vi/6dh1ffU=
-Date: Tue, 9 Jul 2024 11:40:19 +0200
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Naveen N Rao <naveen@kernel.org>
-Cc: matoro <matoro_mailinglist_kernel@matoro.tk>, bpf@vger.kernel.org,
-	Hari Bathini <hbathini@linux.ibm.com>,
-	linuxppc-dev <linuxppc-dev@lists.ozlabs.org>, ltp@lists.linux.it,
-	stable@vger.kernel.org, Vitaly Chikunov <vt@altlinux.org>
-Subject: Re: WARNING&Oops in v6.6.37 on ppc64lea - Trying to vfree() bad
- address (00000000453be747)
-Message-ID: <2024070958-plant-prozac-6a33@gregkh>
-References: <20240705203413.wbv2nw3747vjeibk@altlinux.org>
- <cf736c5e37489e7dc7ffd67b9de2ab47@matoro.tk>
- <2024070904-cod-bobcat-a0d0@gregkh>
- <1720516964.n61e0dnv80.naveen@kernel.org>
+	s=arc-20240116; t=1720518128; c=relaxed/simple;
+	bh=bJpV92jD3cHVno9zaJ1U4+EJAewTdl9SOzWYprQ1xos=;
+	h=From:To:Subject:Date:Message-Id; b=LlPY8r77yxo3Ch3zg7L1dUP+KkJsPMvLEezcIhzB2BA+Y00MEXfbwd8EKyNI38Pq8Bwm0QHnIHSRWQnUVSv9y4/xcEeilxsyY6Q0RPtLIv/RUVt924VjDHlJAPhxCzAO9QkVTfeoXMvMIvgjmMsqm4wbVLpPLHnJBPMwG4iHEpE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cmss.chinamobile.com; spf=pass smtp.mailfrom=cmss.chinamobile.com; arc=none smtp.client-ip=111.22.67.151
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cmss.chinamobile.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cmss.chinamobile.com
+X-RM-TagInfo: emlType=0                                       
+X-RM-SPAM-FLAG:00000000
+Received:from spf.mail.chinamobile.com (unknown[10.188.0.87])
+	by rmmx-syy-dmz-app02-12002 (RichMail) with SMTP id 2ee2668d0522f64-58f67;
+	Tue, 09 Jul 2024 17:38:45 +0800 (CST)
+X-RM-TRANSID:2ee2668d0522f64-58f67
+X-RM-TagInfo: emlType=0                                       
+X-RM-SPAM-FLAG:00000000
+Received:from ubuntu.localdomain (unknown[10.54.5.255])
+	by rmsmtp-syy-appsvr06-12006 (RichMail) with SMTP id 2ee6668d0523288-b3700;
+	Tue, 09 Jul 2024 17:38:45 +0800 (CST)
+X-RM-TRANSID:2ee6668d0523288-b3700
+From: Zhu Jun <zhujun2@cmss.chinamobile.com>
+To: andrii@kernel.org,
+	eddyz87@gmail.com,
+	mykolal@fb.com,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	martin.lau@linux.dev,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	john.fastabend@gmail.com,
+	kpsingh@kernel.org,
+	sdf@fomichev.me,
+	haoluo@google.com,
+	jolsa@kernel.org,
+	shuah@kernel.org,
+	bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.or,
+	zhujun2@cmss.chinamobile.com
+Subject: [PATCH] selftests/bpf:fix a resource leak
+Date: Tue,  9 Jul 2024 02:38:42 -0700
+Message-Id: <20240709093842.3407-1-zhujun2@cmss.chinamobile.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1720516964.n61e0dnv80.naveen@kernel.org>
 
-On Tue, Jul 09, 2024 at 03:02:13PM +0530, Naveen N Rao wrote:
-> Greg Kroah-Hartman wrote:
-> > On Mon, Jul 08, 2024 at 11:16:48PM -0400, matoro wrote:
-> > > On 2024-07-05 16:34, Vitaly Chikunov wrote:
-> > > > Hi,
-> > > > > There is new WARNING and Oops on ppc64le in v6.6.37 when running
-> > > LTP tests:
-> > > > bpf_prog01, bpf_prog02, bpf_prog04, bpf_prog05, prctl04. Logs excerpt
-> > > > below. I
-> > > > see there is 1 commit in v6.6.36..v6.6.37 with call to
-> > > > bpf_jit_binary_pack_finalize, backported from 5 patch mainline patchset:
-> > > > >   f99feda5684a powerpc/bpf: use
-> > > bpf_jit_binary_pack_[alloc|finalize|free]
-> > > >
-> 
-> <snip>
-> 
-> > > > > And so on. Temporary build/test log is at
-> > > > https://git.altlinux.org/tasks/352218/build/100/ppc64le/log
-> > > > > Other stable/longterm branches or other architectures does not
-> > > exhibit this.
-> > > > > Thanks,
-> > > 
-> > > Hi all - this just took down a production server for me, on POWER9 bare
-> > > metal.  Not running tests, just booting normally, before services even came
-> > > up.  Had to perform manual restoration, reverting to 6.6.36 worked.  Also
-> > > running 64k kernel, unsure if it's better on 4k kernel.
-> > > 
-> > > In case it's helpful, here's the log from my boot:
-> > > https://dpaste.org/Gyxxg/raw
-> > 
-> > Ok, this isn't good, something went wrong with my backports here.  Let
-> > me go revert them all and push out a new 6.6.y release right away.
-> 
-> I think the problem is that the series adding support for bpf prog_pack was
-> partially backported. In particular, the below patches are missing from
-> stable v6.6:
-> 465cabc97b42 powerpc/code-patching: introduce patch_instructions()
-> 033ffaf0af1f powerpc/bpf: implement bpf_arch_text_invalidate for bpf_prog_pack
-> 6efc1675acb8 powerpc/bpf: implement bpf_arch_text_copy
-> 
-> It should be sufficient to revert commit f99feda5684a (powerpc/bpf: use
-> bpf_jit_binary_pack_[alloc|finalize|free]) to allow the above to apply
-> cleanly, followed by cherry picking commit 90d862f370b6 (powerpc/bpf: use
-> bpf_jit_binary_pack_[alloc|finalize|free]) from upstream.
-> 
-> Alternately, commit f99feda5684a (powerpc/bpf: use
-> bpf_jit_binary_pack_[alloc|finalize|free]) can be reverted.
+The requested resources should be closed before return
+in main(), otherwise resource leak will occur
 
-I'm dropping them all now, if you want to submit a working series for
-this, I'll be glad to queue them all up.
+Signed-off-by: Zhu Jun <zhujun2@cmss.chinamobile.com>
+---
+v1 -> v2: check for cg_fd >= 0 and have just one out label
 
-thanks,
+ tools/testing/selftests/bpf/test_sockmap.c | 11 +++++++----
+ 1 file changed, 7 insertions(+), 4 deletions(-)
 
-greg k-h
+diff --git a/tools/testing/selftests/bpf/test_sockmap.c b/tools/testing/selftests/bpf/test_sockmap.c
+index a34e95040994..285a9a714666 100644
+--- a/tools/testing/selftests/bpf/test_sockmap.c
++++ b/tools/testing/selftests/bpf/test_sockmap.c
+@@ -2075,8 +2075,10 @@ int main(int argc, char **argv)
+ 
+ 	if (!cg_fd) {
+ 		cg_fd = cgroup_setup_and_join(CG_PATH);
+-		if (cg_fd < 0)
+-			return cg_fd;
++		if (cg_fd < 0) {
++			err = cg_fd;
++			goto out;
++		}
+ 		cg_created = 1;
+ 	}
+ 
+@@ -2092,7 +2094,7 @@ int main(int argc, char **argv)
+ 	if (err) {
+ 		fprintf(stderr, "populate program: (%s) %s\n",
+ 			bpf_file, strerror(errno));
+-		return 1;
++		goto out;
+ 	}
+ 	running = 1;
+ 
+@@ -2109,7 +2111,8 @@ int main(int argc, char **argv)
+ 		free(options.whitelist);
+ 	if (options.blacklist)
+ 		free(options.blacklist);
+-	close(cg_fd);
++	if (cg_fd >= 0)
++		close(cg_fd);
+ 	if (cg_created)
+ 		cleanup_cgroup_environment();
+ 	return err;
+-- 
+2.17.1
+
+
+
