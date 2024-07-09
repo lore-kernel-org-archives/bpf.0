@@ -1,105 +1,94 @@
-Received: from cmccmta1.chinamobile.com (cmccmta8.chinamobile.com [111.22.67.151])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2CFA61553AB;
-	Tue,  9 Jul 2024 09:41:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=111.22.67.151
+Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2F1C1552FC
+	for <bpf@vger.kernel.org>; Tue,  9 Jul 2024 09:48:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720518128; cv=none; b=WrmDhmh3VOYnFhzdjEwWb3TApZwevY5L4eE6Q0BcPdIuW7wkKPG8dorRPv4J3ZWYvilz/FEtySPMVK1BMFW1UP5o5omjGQtlgFPBLEOFXc70yvBSKTKWaHhT9yRrhL7QGDoG6jKl81yQjMe84ZTwnfAorRwLcR8NH1D30nVZ8n0=
+	t=1720518493; cv=none; b=RJAulbWoNEOdgGaIzMdEYdCTsr0Q7FdWJwP9MCKWoI32mIevykW7VNOYp1SKMZIsN+xqDLQUrjDx2K6ycnO27SVjQe+tSFpe7ALDyCWF3BZgU5EV5XLRSt8JNAWxgcZ8vt2xJedF1yF/mYYgy3TTooSnV2xMsnJeU16iOmB2fXU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720518128; c=relaxed/simple;
-	bh=bJpV92jD3cHVno9zaJ1U4+EJAewTdl9SOzWYprQ1xos=;
-	h=From:To:Subject:Date:Message-Id; b=LlPY8r77yxo3Ch3zg7L1dUP+KkJsPMvLEezcIhzB2BA+Y00MEXfbwd8EKyNI38Pq8Bwm0QHnIHSRWQnUVSv9y4/xcEeilxsyY6Q0RPtLIv/RUVt924VjDHlJAPhxCzAO9QkVTfeoXMvMIvgjmMsqm4wbVLpPLHnJBPMwG4iHEpE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cmss.chinamobile.com; spf=pass smtp.mailfrom=cmss.chinamobile.com; arc=none smtp.client-ip=111.22.67.151
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cmss.chinamobile.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cmss.chinamobile.com
-X-RM-TagInfo: emlType=0                                       
-X-RM-SPAM-FLAG:00000000
-Received:from spf.mail.chinamobile.com (unknown[10.188.0.87])
-	by rmmx-syy-dmz-app02-12002 (RichMail) with SMTP id 2ee2668d0522f64-58f67;
-	Tue, 09 Jul 2024 17:38:45 +0800 (CST)
-X-RM-TRANSID:2ee2668d0522f64-58f67
-X-RM-TagInfo: emlType=0                                       
-X-RM-SPAM-FLAG:00000000
-Received:from ubuntu.localdomain (unknown[10.54.5.255])
-	by rmsmtp-syy-appsvr06-12006 (RichMail) with SMTP id 2ee6668d0523288-b3700;
-	Tue, 09 Jul 2024 17:38:45 +0800 (CST)
-X-RM-TRANSID:2ee6668d0523288-b3700
-From: Zhu Jun <zhujun2@cmss.chinamobile.com>
-To: andrii@kernel.org,
-	eddyz87@gmail.com,
-	mykolal@fb.com,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	martin.lau@linux.dev,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	john.fastabend@gmail.com,
-	kpsingh@kernel.org,
-	sdf@fomichev.me,
-	haoluo@google.com,
-	jolsa@kernel.org,
-	shuah@kernel.org,
-	bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.or,
-	zhujun2@cmss.chinamobile.com
-Subject: [PATCH] selftests/bpf:fix a resource leak
-Date: Tue,  9 Jul 2024 02:38:42 -0700
-Message-Id: <20240709093842.3407-1-zhujun2@cmss.chinamobile.com>
-X-Mailer: git-send-email 2.17.1
+	s=arc-20240116; t=1720518493; c=relaxed/simple;
+	bh=AWTB0NTTqgILlhQ6Z7xHF3dR8DuumJxzh5Lw6GO6YSs=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=hyZQyqoi4TdEZjz1z7td1NupXNcApDnS0HxDf5qbUP5y/J3iUdwf4Ej8WKvDb8+E/xAj4/XayRUOqb33aYMQi8Dv2SQ6bd9S+OBx8brvWTU97Oz5hDZddOrbvqA+mwnAHNHxmSAPliVOAo5spoV+11UzYAD49JFThqnz/0BKmuY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=bugpNe+M; arc=none smtp.client-ip=209.85.218.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="bugpNe+M"
+Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-a77ec5d3b0dso286120866b.0
+        for <bpf@vger.kernel.org>; Tue, 09 Jul 2024 02:48:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google09082023; t=1720518489; x=1721123289; darn=vger.kernel.org;
+        h=mime-version:message-id:date:user-agent:references:in-reply-to
+         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=AWTB0NTTqgILlhQ6Z7xHF3dR8DuumJxzh5Lw6GO6YSs=;
+        b=bugpNe+MmG7kZbNAyxO5UEFxvVRJAzMFrIAFpsauxU4z+PKAoKkILHVDdHfcbtpJHr
+         +aHZKwZleyNwJh1tVsS6NygJ+zZw8Lki+cs66A5IzAnwCWK13e/OWL73JqETCtW/h0Iv
+         wPZqu5xwVXLvz3ZVDxNTtyrftpokS0Ut71xph3wfGa/rvXD3anx5/sX/wRkT72htGpDf
+         MsWuP0OJGUpHFKia30QERD+9FGfMb6v9ufpNHW1V7HVxMpJ3QpThC0LndAFEuIsNThHd
+         UK28qmCsj2VgAHhadptI6KQlxTSFa5IsQuwixArURv3gDjrkJg/zZXki2HCZN3riT6iW
+         2h9A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1720518489; x=1721123289;
+        h=mime-version:message-id:date:user-agent:references:in-reply-to
+         :subject:cc:to:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=AWTB0NTTqgILlhQ6Z7xHF3dR8DuumJxzh5Lw6GO6YSs=;
+        b=b6J9oimcPCiiyrXR45IevlDNi/qHmuWabWlP5lhdQosAmAO5X17ZRRVxZwBwp3/cu4
+         ZzSPES3X5fcdzkg+1Dk4m5rgU/kfuYcog/7OEBYa5CNc6nEj65L8Hie4v9ENgJ2hJtux
+         GvQUNXAqx+tLRx6UFpvxBllS6diE5poEyOAtaCvauG4ihvR7TMa/XW0zjCFSN0QOTb97
+         bNXvsXyJ9ddLb20tJnGcQqo7gO7zljYRBiPDH2pjV1nvpBqObsq4IYoDzrk/vprVJGj2
+         Kri8ff3kfIhT3iOoeQYEYOYHV5vQYpBBCaI8zEFrbuJ82p2BJ8Xv3Tqdr5oXUlgEGCoo
+         6BiQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWyDROWUzm1/aViZDOQg/0qhnv50Sw1GZJkf6gH4FMEZPdaQP8PZujn6JYqxa1DlMALO4rcO9IMBpUXqhssPhY1IkgW
+X-Gm-Message-State: AOJu0Yw14dPlm+Bd2aEB6ujhCspNFKij0l3ihAk86VeryXS+C49HyQWI
+	3Yi52OMA+jh5ACjnV5dMssagSKFNxLnG1WdfTP/tL7f5urKSpd7INXuUT3BMNfU=
+X-Google-Smtp-Source: AGHT+IEJ+FytStfsmRY6vrNbbjD+0EypVJPktrXamer74I0z4NRBlrliFzWC55kPLPAmr4G2ukk7Yg==
+X-Received: by 2002:a17:906:4ed6:b0:a77:c199:9cfc with SMTP id a640c23a62f3a-a780b8856e6mr105170366b.57.1720518489244;
+        Tue, 09 Jul 2024 02:48:09 -0700 (PDT)
+Received: from cloudflare.com ([2a09:bac5:5063:2387::38a:45])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a780a7ff379sm63180066b.114.2024.07.09.02.48.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 09 Jul 2024 02:48:08 -0700 (PDT)
+From: Jakub Sitnicki <jakub@cloudflare.com>
+To: Michal Luczaj <mhal@rbox.co>
+Cc: netdev@vger.kernel.org,  bpf@vger.kernel.org,  davem@davemloft.net,
+  edumazet@google.com,  kuba@kernel.org,  pabeni@redhat.com,
+  john.fastabend@gmail.com,  kuniyu@amazon.com,  Rao.Shoaib@oracle.com,
+  cong.wang@bytedance.com
+Subject: Re: [PATCH bpf v3 1/4] af_unix: Disable MSG_OOB handling for
+ sockets in sockmap/sockhash
+In-Reply-To: <20240707222842.4119416-2-mhal@rbox.co> (Michal Luczaj's message
+	of "Sun, 7 Jul 2024 23:28:22 +0200")
+References: <20240707222842.4119416-1-mhal@rbox.co>
+	<20240707222842.4119416-2-mhal@rbox.co>
+User-Agent: mu4e 1.12.4; emacs 29.1
+Date: Tue, 09 Jul 2024 11:48:07 +0200
+Message-ID: <874j8yoq08.fsf@cloudflare.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain
 
-The requested resources should be closed before return
-in main(), otherwise resource leak will occur
+On Sun, Jul 07, 2024 at 11:28 PM +02, Michal Luczaj wrote:
+> AF_UNIX socket tracks the most recent OOB packet (in its receive queue)
+> with an `oob_skb` pointer. BPF redirecting does not account for that: when
+> an OOB packet is moved between sockets, `oob_skb` is left outdated. This
+> results in a single skb that may be accessed from two different sockets.
+>
+> Take the easy way out: silently drop MSG_OOB data targeting any socket that
+> is in a sockmap or a sockhash. Note that such silent drop is akin to the
+> fate of redirected skb's scm_fp_list (SCM_RIGHTS, SCM_CREDENTIALS).
+>
+> For symmetry, forbid MSG_OOB in unix_bpf_recvmsg().
+>
+> Suggested-by: Kuniyuki Iwashima <kuniyu@amazon.com>
+> Fixes: 314001f0bf92 ("af_unix: Add OOB support")
+> Signed-off-by: Michal Luczaj <mhal@rbox.co>
+> ---
 
-Signed-off-by: Zhu Jun <zhujun2@cmss.chinamobile.com>
----
-v1 -> v2: check for cg_fd >= 0 and have just one out label
-
- tools/testing/selftests/bpf/test_sockmap.c | 11 +++++++----
- 1 file changed, 7 insertions(+), 4 deletions(-)
-
-diff --git a/tools/testing/selftests/bpf/test_sockmap.c b/tools/testing/selftests/bpf/test_sockmap.c
-index a34e95040994..285a9a714666 100644
---- a/tools/testing/selftests/bpf/test_sockmap.c
-+++ b/tools/testing/selftests/bpf/test_sockmap.c
-@@ -2075,8 +2075,10 @@ int main(int argc, char **argv)
- 
- 	if (!cg_fd) {
- 		cg_fd = cgroup_setup_and_join(CG_PATH);
--		if (cg_fd < 0)
--			return cg_fd;
-+		if (cg_fd < 0) {
-+			err = cg_fd;
-+			goto out;
-+		}
- 		cg_created = 1;
- 	}
- 
-@@ -2092,7 +2094,7 @@ int main(int argc, char **argv)
- 	if (err) {
- 		fprintf(stderr, "populate program: (%s) %s\n",
- 			bpf_file, strerror(errno));
--		return 1;
-+		goto out;
- 	}
- 	running = 1;
- 
-@@ -2109,7 +2111,8 @@ int main(int argc, char **argv)
- 		free(options.whitelist);
- 	if (options.blacklist)
- 		free(options.blacklist);
--	close(cg_fd);
-+	if (cg_fd >= 0)
-+		close(cg_fd);
- 	if (cg_created)
- 		cleanup_cgroup_environment();
- 	return err;
--- 
-2.17.1
-
-
-
+Reviewed-by: Jakub Sitnicki <jakub@cloudflare.com>
