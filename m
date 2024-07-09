@@ -1,410 +1,204 @@
-Received: from szxga05-in.huawei.com (szxga05-in.huawei.com [45.249.212.191])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DA3D39856;
-	Tue,  9 Jul 2024 01:00:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.191
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E9231FA1;
+	Tue,  9 Jul 2024 01:24:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720486819; cv=none; b=VgOYvXv0nbAspZXakaPCVwCpHjlumruJpXkZKMpMX87GjPvFuhG0+hQBeVqqXa5R6nCxQsugf4yOIC/0+GGts8ecfcP5XKd93uUr/cWQdId2dK/R518z8trEdtE1/Vkfv+y0TsjCcGOHaCiafV9RiK07hSy78Hc0WoMI4R2x4Qc=
+	t=1720488253; cv=none; b=jMm+alZiy2GiMWbXtEkeknlwWNZO0mQUpxNncqxTwf5tfx7BYqkiWydnuEFRtBP6uUulTk1Rf+sqDFlRdcMnFeXOQrcCla9A4mLfgntMvzXK9Cp1dpiULHFkW7eGeCNJ4jWcxPn0zBYMHRIjkK2YxhSTvyeEY1vO2PJem6+vo+0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720486819; c=relaxed/simple;
-	bh=xLqdOSI1eEn13oz6ComTmDYh9EQN8Mh9yt72JKOjUs8=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ErzsRSeDMwk2/N67v0LfFb4d5lkqT+7GI7PvvKjBx1RAqGLCz+K2V62jdgmvXqEFG9mXUvcyiZ21o1X0J+qcvrZ3eC7n3UcOUe3xLxVNwWuO0XfjVtEj6WWfjE9OUmJZ1UIYy1K8hYqL/WynFQYB6UeUAzeOqdTq8uKlsjpi8/U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.191
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.88.163])
-	by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4WJ2dz1gqSz1HF7Y;
-	Tue,  9 Jul 2024 08:57:43 +0800 (CST)
-Received: from kwepemd200013.china.huawei.com (unknown [7.221.188.133])
-	by mail.maildlp.com (Postfix) with ESMTPS id 71A72180028;
-	Tue,  9 Jul 2024 09:00:07 +0800 (CST)
-Received: from huawei.com (10.67.174.28) by kwepemd200013.china.huawei.com
- (7.221.188.133) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1258.34; Tue, 9 Jul
- 2024 09:00:06 +0800
-From: Liao Chang <liaochang1@huawei.com>
-To: <peterz@infradead.org>, <mingo@redhat.com>, <acme@kernel.org>,
-	<namhyung@kernel.org>, <mark.rutland@arm.com>,
-	<alexander.shishkin@linux.intel.com>, <jolsa@kernel.org>,
-	<irogers@google.com>, <adrian.hunter@intel.com>, <kan.liang@linux.intel.com>,
-	<ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
-	<martin.lau@linux.dev>, <eddyz87@gmail.com>, <song@kernel.org>,
-	<yonghong.song@linux.dev>, <john.fastabend@gmail.com>, <kpsingh@kernel.org>,
-	<sdf@fomichev.me>, <haoluo@google.com>, <mykolal@fb.com>, <shuah@kernel.org>,
-	<liaochang1@huawei.com>
-CC: <linux-kernel@vger.kernel.org>, <linux-perf-users@vger.kernel.org>,
-	<bpf@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
-Subject: [PATCH 1/2] uprobes: Optimize the return_instance related routines
-Date: Tue, 9 Jul 2024 00:51:41 +0000
-Message-ID: <20240709005142.4044530-2-liaochang1@huawei.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240709005142.4044530-1-liaochang1@huawei.com>
-References: <20240709005142.4044530-1-liaochang1@huawei.com>
+	s=arc-20240116; t=1720488253; c=relaxed/simple;
+	bh=lEtixa07+RUJAtKBJsg+gVwNeRwl/kAxLHxDaZOtyBc=;
+	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
+	 Mime-Version:Content-Type; b=GT02zNLhLL4LyT1D/j0cAXqsZrZ7afNODIlBuzqTXLeuGQ/e4F01B2VInvd8b6LW33a/wDzTaRLhk82ybfYQTBiH6Gw9PwsAyhnX3pOOAaSsE1FyOZRNgMbKkBuNTe7syUkcUEYqAi9+QGieF+HTcBpcXBvCfIuKRdqtre5kQ2g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kW0u2twX; arc=none smtp.client-ip=209.85.214.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kW0u2twX"
+Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-1fb3e9e32ffso18655905ad.0;
+        Mon, 08 Jul 2024 18:24:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1720488250; x=1721093050; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=j32VYAlsuK3/jNbvHCaSgNRDqiz9cqS48fKSFKyyisg=;
+        b=kW0u2twX+VFqsTFO15BewePKAqaLuWCifmH8wS6Wy/cdkidOocsgFZTo1NhDZS5sbX
+         +oXsP3dIVHXHMuGKJGQ2agj3cuL+ULBSWx1JnvykihLei/pY4MVbPYWwR87wgzoAC/VE
+         EJNqR8nLZqSXSeAKhtSvuvL7iG/DXFVNrf1ez6EBVEtbB2r3KIwmpl9V2shuI30HZOmm
+         GucHQxLmvqN4NnEZyUCFLyRVzM2naFaiI7rqEhfXAF433FXXCgbH3fFYf03H/yb3PlcU
+         ECQ5ue2AGcSlGep1sR4Xl2coKbXzMygqXEMIjaf1KXqdUwuFymHWFgwfE7cvEJ+IS+5u
+         HUDg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1720488250; x=1721093050;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=j32VYAlsuK3/jNbvHCaSgNRDqiz9cqS48fKSFKyyisg=;
+        b=Y/ePHyrMtN591MEapUfjDK6/ETFUcqymRBA7Xrwuwbwo4OYpocRSILdb+PhNV2of7P
+         XM85+a3PYZI6TJWBz/C3OL/KS4x00iCIxtYYXHJ/SnHunMvSeBhUueBHzD5CGDu3Boa1
+         tkmQSGF9ZndLwGlyEJL0GYJq9ada0kPp76KtBzxiq1hKgdG4GBVOglgjboLEmPapGsWM
+         8evKcp/ZQe13yCiWFFE5Jy9JwRHZGVPOzkxwHibw9E6OdwTY9apknL392uTB/OGxvj5M
+         rR3+Ya2JwdKhORk80LK82QUz8PIQuTNpN2sy4A6OH7K2O2Scg/pTM+Y7ZvB3UP/3dooX
+         QLAA==
+X-Forwarded-Encrypted: i=1; AJvYcCVEqyYE5fqbSvyhy261tLkU/sctONqYGys3ObRxI3X3Q3Oa6SwlXowO8KljL8IcaPDt8ggJ8ku6GRLMY0FeuqWfN6LY4UQEEQfGtzIqLkhenanZjguD88Sro9p8
+X-Gm-Message-State: AOJu0Yyn+RL8ubd5mEKsR61zBclfOUOvfVJhR7orEz4QcfU4bFod/3oW
+	yVWRco00IdsD/mlM+XefkYcS1ose62dvwYi01r9te1841S2LnNXZRCcoMQ==
+X-Google-Smtp-Source: AGHT+IGd9SsKvaiwytVNuNwMiS1lxE3xnM6kDjIqPA7QoodzrYTEMUqV6/sjV5+BiL4ED9bplPS4nQ==
+X-Received: by 2002:a17:903:11d1:b0:1fa:2760:c3f3 with SMTP id d9443c01a7336-1fbb6d252a9mr9620375ad.13.1720488250411;
+        Mon, 08 Jul 2024 18:24:10 -0700 (PDT)
+Received: from localhost ([98.97.32.172])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1fbb6a28f8esm4814595ad.64.2024.07.08.18.24.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 08 Jul 2024 18:24:08 -0700 (PDT)
+Date: Mon, 08 Jul 2024 18:24:02 -0700
+From: John Fastabend <john.fastabend@gmail.com>
+To: Kuniyuki Iwashima <kuniyu@amazon.com>, 
+ mhal@rbox.co
+Cc: Rao.Shoaib@oracle.com, 
+ bpf@vger.kernel.org, 
+ cong.wang@bytedance.com, 
+ davem@davemloft.net, 
+ edumazet@google.com, 
+ jakub@cloudflare.com, 
+ john.fastabend@gmail.com, 
+ kuba@kernel.org, 
+ kuniyu@amazon.com, 
+ netdev@vger.kernel.org, 
+ pabeni@redhat.com
+Message-ID: <668c9132195f6_d7720840@john.notmuch>
+In-Reply-To: <20240708193820.3392-1-kuniyu@amazon.com>
+References: <20240707222842.4119416-2-mhal@rbox.co>
+ <20240708193820.3392-1-kuniyu@amazon.com>
+Subject: Re: [PATCH bpf v3 1/4] af_unix: Disable MSG_OOB handling for sockets
+ in sockmap/sockhash
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- kwepemd200013.china.huawei.com (7.221.188.133)
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: 7bit
 
-Reduce the runtime overhead for struct return_instance data managed by
-uretprobe. This patch replaces the dynamic allocation with statically
-allocated array, leverage two facts that are limited nesting depth of
-uretprobe (max 64) and the function call style of return_instance usage
-(create at entry, free at exit).
+Kuniyuki Iwashima wrote:
+> From: Michal Luczaj <mhal@rbox.co>
+> Date: Sun,  7 Jul 2024 23:28:22 +0200
+> > AF_UNIX socket tracks the most recent OOB packet (in its receive queue)
+> > with an `oob_skb` pointer. BPF redirecting does not account for that: when
+> > an OOB packet is moved between sockets, `oob_skb` is left outdated. This
+> > results in a single skb that may be accessed from two different sockets.
+> > 
+> > Take the easy way out: silently drop MSG_OOB data targeting any socket that
+> > is in a sockmap or a sockhash. Note that such silent drop is akin to the
+> > fate of redirected skb's scm_fp_list (SCM_RIGHTS, SCM_CREDENTIALS).
+> > 
+> > For symmetry, forbid MSG_OOB in unix_bpf_recvmsg().
+> > 
+> > Suggested-by: Kuniyuki Iwashima <kuniyu@amazon.com>
+> > Fixes: 314001f0bf92 ("af_unix: Add OOB support")
+> > Signed-off-by: Michal Luczaj <mhal@rbox.co>
+> 
 
-This patch has been tested on Kunpeng916 (Hi1616), 4 NUMA nodes, 64
-cores @ 2.4GHz. Redis benchmarks show a throughput gain by 2% for Redis
-GET and SET commands:
+Why does af_unix put the oob data on the sk_receive_queue()? Wouldn't it
+be enough to just have the ousk->oob_skb hold the reference to the skb?
 
-------------------------------------------------------------------
-Test case       | No uretprobes | uretprobes     | uretprobes
-                |               | (current)      | (optimized)
-==================================================================
-Redis SET (RPS) | 47025         | 40619 (-13.6%) | 41529 (-11.6%)
-------------------------------------------------------------------
-Redis GET (RPS) | 46715         | 41426 (-11.3%) | 42306 (-9.4%)
-------------------------------------------------------------------
+I think for TCP/UDP at least I'll want to handle MSG_OOB data correctly.
+For redirect its probably fine to just drop or skip it, but when we are
+just reading recv msgs and parsing/observing it would be nice to not change
+how the application works. In practice I don't recall anyone reporting
+issues on TCP side though from incorrectly handling URG data.
 
-Signed-off-by: Liao Chang <liaochang1@huawei.com>
----
- include/linux/uprobes.h |  10 ++-
- kernel/events/uprobes.c | 162 ++++++++++++++++++++++++----------------
- 2 files changed, 105 insertions(+), 67 deletions(-)
+From TCP side I believe we can fix the OOB case by checking the oob queue
+before doing the recvmsg handling. If the urg data wasn't on the general
+sk_receive_queue we could do similar here for af_unix? My argument for
+URG not working for redirect would be to let userspace handle it if they
+cared.
 
-diff --git a/include/linux/uprobes.h b/include/linux/uprobes.h
-index f46e0ca0169c..ec50ff010b1d 100644
---- a/include/linux/uprobes.h
-+++ b/include/linux/uprobes.h
-@@ -55,6 +55,12 @@ enum uprobe_task_state {
- 	UTASK_SSTEP_TRAPPED,
- };
- 
-+struct return_frame {
-+	/* the frames of return instances */
-+	struct return_instance	*return_instance;
-+	struct return_instance	*vaddr;
-+};
-+
- /*
-  * uprobe_task: Metadata of a task while it singlesteps.
-  */
-@@ -76,7 +82,7 @@ struct uprobe_task {
- 	struct uprobe			*active_uprobe;
- 	unsigned long			xol_vaddr;
- 
--	struct return_instance		*return_instances;
-+	struct return_frame		frame;
- 	unsigned int			depth;
- };
- 
-@@ -86,8 +92,6 @@ struct return_instance {
- 	unsigned long		stack;		/* stack pointer */
- 	unsigned long		orig_ret_vaddr; /* original return address */
- 	bool			chained;	/* true, if instance is nested */
--
--	struct return_instance	*next;		/* keep as stack */
- };
- 
- enum rp_check {
-diff --git a/kernel/events/uprobes.c b/kernel/events/uprobes.c
-index 2c83ba776fc7..81c56fd2811c 100644
---- a/kernel/events/uprobes.c
-+++ b/kernel/events/uprobes.c
-@@ -1697,12 +1697,89 @@ unsigned long uprobe_get_trap_addr(struct pt_regs *regs)
- 	return instruction_pointer(regs);
- }
- 
--static struct return_instance *free_ret_instance(struct return_instance *ri)
-+static inline
-+struct return_instance *next_ret_instance(struct return_frame *frame,
-+					  struct return_instance *ri)
-+{
-+	return ri == frame->vaddr ? NULL : ri - 1;
-+}
-+
-+static inline
-+struct return_instance *curr_ret_instance(struct uprobe_task *task)
-+{
-+	return task->frame.return_instance;
-+}
-+
-+static struct return_instance *find_next_ret_chain(struct uprobe_task *utask,
-+						   struct return_instance *ri)
-+{
-+	bool chained;
-+
-+	do {
-+		chained = ri->chained;
-+		ri = next_ret_instance(&utask->frame, ri);
-+	} while (chained);
-+
-+	return ri;
-+}
-+
-+static inline
-+struct return_instance *free_ret_instance(struct uprobe_task *utask,
-+					  struct return_instance *ri)
- {
--	struct return_instance *next = ri->next;
- 	put_uprobe(ri->uprobe);
--	kfree(ri);
--	return next;
-+	return next_ret_instance(&utask->frame, ri);
-+}
-+
-+static void free_return_instances(struct uprobe_task *task)
-+{
-+	struct return_frame *frame = &task->frame;
-+	struct return_instance *ri = frame->return_instance;
-+
-+	while (ri) {
-+		put_uprobe(ri->uprobe);
-+		ri = next_ret_instance(frame, ri);
-+	}
-+
-+	kfree(frame->vaddr);
-+}
-+
-+static void cleanup_return_instances(struct uprobe_task *utask, bool chained,
-+				     struct pt_regs *regs)
-+{
-+	struct return_frame *frame = &utask->frame;
-+	struct return_instance *ri = frame->return_instance;
-+	enum rp_check ctx = chained ? RP_CHECK_CHAIN_CALL : RP_CHECK_CALL;
-+
-+	while (ri && !arch_uretprobe_is_alive(ri, ctx, regs)) {
-+		ri = next_ret_instance(frame, ri);
-+		utask->depth--;
-+	}
-+	frame->return_instance = ri;
-+}
-+
-+static struct return_instance *alloc_return_instance(struct uprobe_task *task)
-+{
-+	struct return_frame *frame = &task->frame;
-+
-+	if (!frame->vaddr) {
-+		frame->vaddr = kcalloc(MAX_URETPROBE_DEPTH,
-+				sizeof(struct return_instance), GFP_KERNEL);
-+		if (!frame->vaddr)
-+			return NULL;
-+	}
-+
-+	if (!frame->return_instance) {
-+		frame->return_instance = frame->vaddr;
-+		return frame->return_instance;
-+	}
-+
-+	return ++frame->return_instance;
-+}
-+
-+static inline bool return_frame_empty(struct uprobe_task *task)
-+{
-+	return !task->frame.return_instance;
- }
- 
- /*
-@@ -1712,7 +1789,6 @@ static struct return_instance *free_ret_instance(struct return_instance *ri)
- void uprobe_free_utask(struct task_struct *t)
- {
- 	struct uprobe_task *utask = t->utask;
--	struct return_instance *ri;
- 
- 	if (!utask)
- 		return;
-@@ -1720,10 +1796,7 @@ void uprobe_free_utask(struct task_struct *t)
- 	if (utask->active_uprobe)
- 		put_uprobe(utask->active_uprobe);
- 
--	ri = utask->return_instances;
--	while (ri)
--		ri = free_ret_instance(ri);
--
-+	free_return_instances(utask);
- 	xol_free_insn_slot(t);
- 	kfree(utask);
- 	t->utask = NULL;
-@@ -1747,26 +1820,20 @@ static struct uprobe_task *get_utask(void)
- static int dup_utask(struct task_struct *t, struct uprobe_task *o_utask)
- {
- 	struct uprobe_task *n_utask;
--	struct return_instance **p, *o, *n;
-+	struct return_instance *o, *n;
- 
- 	n_utask = kzalloc(sizeof(struct uprobe_task), GFP_KERNEL);
- 	if (!n_utask)
- 		return -ENOMEM;
- 	t->utask = n_utask;
- 
--	p = &n_utask->return_instances;
--	for (o = o_utask->return_instances; o; o = o->next) {
--		n = kmalloc(sizeof(struct return_instance), GFP_KERNEL);
--		if (!n)
--			return -ENOMEM;
--
-+	o = curr_ret_instance(o_utask);
-+	while (o) {
-+		n = alloc_return_instance(n_utask);
-+		n_utask->depth++;
- 		*n = *o;
- 		get_uprobe(n->uprobe);
--		n->next = NULL;
--
--		*p = n;
--		p = &n->next;
--		n_utask->depth++;
-+		o = next_ret_instance(&o_utask->frame, o);
- 	}
- 
- 	return 0;
-@@ -1799,7 +1866,7 @@ void uprobe_copy_process(struct task_struct *t, unsigned long flags)
- 
- 	t->utask = NULL;
- 
--	if (!utask || !utask->return_instances)
-+	if (!utask || return_frame_empty(utask))
- 		return;
- 
- 	if (mm == t->mm && !(flags & CLONE_VFORK))
-@@ -1840,19 +1907,6 @@ static unsigned long get_trampoline_vaddr(void)
- 	return trampoline_vaddr;
- }
- 
--static void cleanup_return_instances(struct uprobe_task *utask, bool chained,
--					struct pt_regs *regs)
--{
--	struct return_instance *ri = utask->return_instances;
--	enum rp_check ctx = chained ? RP_CHECK_CHAIN_CALL : RP_CHECK_CALL;
--
--	while (ri && !arch_uretprobe_is_alive(ri, ctx, regs)) {
--		ri = free_ret_instance(ri);
--		utask->depth--;
--	}
--	utask->return_instances = ri;
--}
--
- static void prepare_uretprobe(struct uprobe *uprobe, struct pt_regs *regs)
- {
- 	struct return_instance *ri;
-@@ -1874,10 +1928,6 @@ static void prepare_uretprobe(struct uprobe *uprobe, struct pt_regs *regs)
- 		return;
- 	}
- 
--	ri = kmalloc(sizeof(struct return_instance), GFP_KERNEL);
--	if (!ri)
--		return;
--
- 	trampoline_vaddr = get_trampoline_vaddr();
- 	orig_ret_vaddr = arch_uretprobe_hijack_return_addr(trampoline_vaddr, regs);
- 	if (orig_ret_vaddr == -1)
-@@ -1893,7 +1943,7 @@ static void prepare_uretprobe(struct uprobe *uprobe, struct pt_regs *regs)
- 	 * instances. This also makes breakpoint unwrapping easier.
- 	 */
- 	if (chained) {
--		if (!utask->return_instances) {
-+		if (return_frame_empty(utask)) {
- 			/*
- 			 * This situation is not possible. Likely we have an
- 			 * attack from user-space.
-@@ -1901,22 +1951,19 @@ static void prepare_uretprobe(struct uprobe *uprobe, struct pt_regs *regs)
- 			uprobe_warn(current, "handle tail call");
- 			goto fail;
- 		}
--		orig_ret_vaddr = utask->return_instances->orig_ret_vaddr;
-+		orig_ret_vaddr = curr_ret_instance(utask)->orig_ret_vaddr;
- 	}
- 
-+	ri = alloc_return_instance(utask);
- 	ri->uprobe = get_uprobe(uprobe);
- 	ri->func = instruction_pointer(regs);
- 	ri->stack = user_stack_pointer(regs);
- 	ri->orig_ret_vaddr = orig_ret_vaddr;
- 	ri->chained = chained;
--
- 	utask->depth++;
--	ri->next = utask->return_instances;
--	utask->return_instances = ri;
- 
--	return;
-  fail:
--	kfree(ri);
-+	return;
- }
- 
- /* Prepare to single-step probed instruction out of line. */
-@@ -2111,18 +2158,6 @@ handle_uretprobe_chain(struct return_instance *ri, struct pt_regs *regs)
- 	up_read(&uprobe->register_rwsem);
- }
- 
--static struct return_instance *find_next_ret_chain(struct return_instance *ri)
--{
--	bool chained;
--
--	do {
--		chained = ri->chained;
--		ri = ri->next;	/* can't be NULL if chained */
--	} while (chained);
--
--	return ri;
--}
--
- static void handle_trampoline(struct pt_regs *regs)
- {
- 	struct uprobe_task *utask;
-@@ -2133,7 +2168,7 @@ static void handle_trampoline(struct pt_regs *regs)
- 	if (!utask)
- 		goto sigill;
- 
--	ri = utask->return_instances;
-+	ri = curr_ret_instance(utask);
- 	if (!ri)
- 		goto sigill;
- 
-@@ -2144,25 +2179,24 @@ static void handle_trampoline(struct pt_regs *regs)
- 		 * or NULL; the latter case means that nobody but ri->func
- 		 * could hit this trampoline on return. TODO: sigaltstack().
- 		 */
--		next = find_next_ret_chain(ri);
-+		next = find_next_ret_chain(utask, ri);
- 		valid = !next || arch_uretprobe_is_alive(next, RP_CHECK_RET, regs);
- 
- 		instruction_pointer_set(regs, ri->orig_ret_vaddr);
- 		do {
- 			if (valid)
- 				handle_uretprobe_chain(ri, regs);
--			ri = free_ret_instance(ri);
-+			ri = free_ret_instance(utask, ri);
- 			utask->depth--;
- 		} while (ri != next);
- 	} while (!valid);
- 
--	utask->return_instances = ri;
-+	utask->frame.return_instance = ri;
- 	return;
- 
-  sigill:
- 	uprobe_warn(current, "handle uretprobe, sending SIGILL.");
- 	force_sig(SIGILL);
--
- }
- 
- bool __weak arch_uprobe_ignore(struct arch_uprobe *aup, struct pt_regs *regs)
-@@ -2315,7 +2349,7 @@ int uprobe_pre_sstep_notifier(struct pt_regs *regs)
- 		return 0;
- 
- 	if (!test_bit(MMF_HAS_UPROBES, &current->mm->flags) &&
--	    (!current->utask || !current->utask->return_instances))
-+	    (!current->utask || return_frame_empty(current->utask)))
- 		return 0;
- 
- 	set_thread_flag(TIF_UPROBE);
--- 
-2.34.1
+Thanks.
+
+> Reviewed-by: Kuniyuki Iwashima <kuniyu@amazon.com>
+> 
+> Thanks!
+> 
+> 
+> > ---
+> >  net/unix/af_unix.c  | 41 ++++++++++++++++++++++++++++++++++++++++-
+> >  net/unix/unix_bpf.c |  3 +++
+> >  2 files changed, 43 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/net/unix/af_unix.c b/net/unix/af_unix.c
+> > index 142f56770b77..11cb5badafb6 100644
+> > --- a/net/unix/af_unix.c
+> > +++ b/net/unix/af_unix.c
+> > @@ -2667,10 +2667,49 @@ static struct sk_buff *manage_oob(struct sk_buff *skb, struct sock *sk,
+> >  
+> >  static int unix_stream_read_skb(struct sock *sk, skb_read_actor_t recv_actor)
+> >  {
+> > +	struct unix_sock *u = unix_sk(sk);
+> > +	struct sk_buff *skb;
+> > +	int err;
+> > +
+> >  	if (unlikely(READ_ONCE(sk->sk_state) != TCP_ESTABLISHED))
+> >  		return -ENOTCONN;
+> >  
+> > -	return unix_read_skb(sk, recv_actor);
+> > +	mutex_lock(&u->iolock);
+> > +	skb = skb_recv_datagram(sk, MSG_DONTWAIT, &err);
+> > +	mutex_unlock(&u->iolock);
+> > +	if (!skb)
+> > +		return err;
+> > +
+> > +#if IS_ENABLED(CONFIG_AF_UNIX_OOB)
+> > +	if (unlikely(skb == READ_ONCE(u->oob_skb))) {
+> > +		bool drop = false;
+> > +
+> > +		unix_state_lock(sk);
+> > +
+> > +		if (sock_flag(sk, SOCK_DEAD)) {
+> > +			unix_state_unlock(sk);
+> > +			kfree_skb(skb);
+> > +			return -ECONNRESET;
+> > +		}
+> > +
+> > +		spin_lock(&sk->sk_receive_queue.lock);
+> > +		if (likely(skb == u->oob_skb)) {
+> > +			WRITE_ONCE(u->oob_skb, NULL);
+> > +			drop = true;
+> > +		}
+> > +		spin_unlock(&sk->sk_receive_queue.lock);
+> > +
+> > +		unix_state_unlock(sk);
+> > +
+> > +		if (drop) {
+> > +			WARN_ON_ONCE(skb_unref(skb));
+> > +			kfree_skb(skb);
+> > +			return -EAGAIN;
+> > +		}
+> > +	}
+> > +#endif
+> > +
+> > +	return recv_actor(sk, skb);
+> >  }
+> >  
+> >  static int unix_stream_read_generic(struct unix_stream_read_state *state,
+> > diff --git a/net/unix/unix_bpf.c b/net/unix/unix_bpf.c
+> > index bd84785bf8d6..bca2d86ba97d 100644
+> > --- a/net/unix/unix_bpf.c
+> > +++ b/net/unix/unix_bpf.c
+> > @@ -54,6 +54,9 @@ static int unix_bpf_recvmsg(struct sock *sk, struct msghdr *msg,
+> >  	struct sk_psock *psock;
+> >  	int copied;
+> >  
+> > +	if (flags & MSG_OOB)
+> > +		return -EOPNOTSUPP;
+> > +
+> >  	if (!len)
+> >  		return 0;
+> >  
+> > -- 
+> > 2.45.2
+
 
