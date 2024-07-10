@@ -1,135 +1,257 @@
-Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
+Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DCFF194C9A;
-	Wed, 10 Jul 2024 18:40:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E7DE195803
+	for <bpf@vger.kernel.org>; Wed, 10 Jul 2024 18:41:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720636833; cv=none; b=G/25RxL1G+XD8/FO6ri+BXExOKyueae3Yq+CiwKuepsquF26bz5Eajnn74fm6ZBa8XxveC/pzUdh5Bi7RdnQGaqBWuvnzsB2e9Ku+vzx1yn0HqYznaZEumW/hbHCoEifuXyZBNAZd0NAkXu7CAIispjrgNV3aoLUWq8Rza5j+yo=
+	t=1720636862; cv=none; b=sRYPKrsUHAcs+5Uk2ZGobeNuAjD9Jojfmqzrb5rTcZR2pKEEUBahRtIx6Z+IllScCTLeiioZ1nCNtgVhiYEWzo+60CS8G2GBjQhno+C8rH82NsKw1xT9eBFwCxF8SkAi55mqVFMY7v20+L/w70I4mVzkg+yrXbP+sSDtYnxM6SM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720636833; c=relaxed/simple;
-	bh=mOG1/dy9foWXLBEbNdNTS2vxukoMRdb2jrb0IqcqAdM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=eZB8hHlja7I6phyehCRU4niQ9zG+TqLIgQjX0B21bZr14du4BJY5nK84Hj/b7UmH3Em/9jnEQwU9GzYmiVvvN221tCk0+jjboVNWIMZ4Cpnlw/xYwJD/TlmL9+22IiMeVEkwMXp38UFqWjw8f2VVMGgZyJWvVNgnuCnP6fC8cRc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=D4o42eGK; arc=none smtp.client-ip=209.85.210.178
+	s=arc-20240116; t=1720636862; c=relaxed/simple;
+	bh=wLqPYzW2pBBV+oKcBJ+oU+XebIJJYxesDOoqfOP4Fm8=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=HeOMVvhO4kZa+KPyqWZMwjio28oeJXc7jJO0fAxjhp2IVLKlTjDBjs1Ljqctk0Dq/W3MdBRDuYYai2HkQboxasEtwzMdI72wVjlHShlojtBtHvhnBALnlRLC3IechqSrFObi972zm6YYg/ECt0AMd1E/yXkSdpiYG5zi04WT4YA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YrCgIUNG; arc=none smtp.client-ip=209.85.210.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="D4o42eGK"
-Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-70b05260c39so111835b3a.0;
-        Wed, 10 Jul 2024 11:40:31 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YrCgIUNG"
+Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-70af81e8439so129038b3a.0
+        for <bpf@vger.kernel.org>; Wed, 10 Jul 2024 11:41:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1720636830; x=1721241630; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=DH2iXf/QMBEgCOBgDj4vj0d1Ba4Ks2ZfB6GNwCH8rhU=;
-        b=D4o42eGKZv6V1qEe/PdcQsGA2E/ROijA9fBj+6lXnrOqBOE3i200zVWtGlY7UZ1XW5
-         tDjJmcK2E4D4crpUurbeDM/1jS0xnrtFNnywpsC7rBFc4Iho17Yg1Rkwyyfoeq87NgNK
-         woRw0r2HlpPofd6qhzC7lWBat4iwqvVqiv9e3QMooO4Iy6FI1ZV26RTWrUx2KZDjbbPT
-         VwBe093DbEEBsvUpQs4An00/6ehM1SZV50OaehX6p2tC9socu3ii2IWoUjTuGih5igK+
-         QPvWrEM7NcdfZdqUV88o8p+FqnYie0ZWFJ90kA4g5ZZLcrbnTXcqCTjgz/6suyf6zHiY
-         f9fg==
+        d=gmail.com; s=20230601; t=1720636860; x=1721241660; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=ANczVI3KSYUFvPh1e7RqT/SMcnsl4xdigmhSPJ5myzY=;
+        b=YrCgIUNGWJ+P/UdyLpkLs6vV4syFuQC1OYstHLSrKFxXsq3GHA1w3qs1VFToFsNDnY
+         SbIz4ZmXwZGcbZZ3k5ikfV0Ri4PZKqGTYltXlhCP6Zc2BE0p5ASFXBxMncDLJ/cALW92
+         v1qon1ZQS0LqTYwvuSt0lzuq/wopKQvhbmKB6Q0RBCubfv+Szlea5ckL+99H3XxjDW1P
+         SezTDgjDmaurpR2kSODwSTonmrALqhHBGggJaTxAiFikMUVyDOEEyPiCBLjwCsrL77PE
+         WX/Y6xcfhm86OkDSbpJJvV2ISiHmhM+JAucEP4S9i0+oRlgE8t1bEiL3j0+DUPhu02Vb
+         AATA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720636830; x=1721241630;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=DH2iXf/QMBEgCOBgDj4vj0d1Ba4Ks2ZfB6GNwCH8rhU=;
-        b=fS+hUW0WhbrZoLDUu45xQC0f0j2E6x/lVBaXgKMoxVa+n1qM4J97cZ6D+B2e2f2ZL7
-         7ImQpbq01/jRotzNYx5M64OehLxTio88uMXpL8Gu+0JfXClOSxzYR/UUbiKTEwP8HeEb
-         YvBVj3YKc6VfNzr7o4l2CGEKVwezljUoob6gVvVwcQaszEcM6J73sfFCJi5itAqg9pRN
-         QoQysQ0BBCc+osSn8XmwTtchzwxsCqASYHxkD3StW65RTFta/oPTW4xEAqcgVC7iMpHW
-         yl3GIrzgShINna7EoehHUcmUABF/YwyjQJp15ZJVBGcm25Xsf1iG4mKLHzpzIldE0YVw
-         Y7Pg==
-X-Forwarded-Encrypted: i=1; AJvYcCXjOSN9qInP1QHeBbabsUJ2clJFQUy4adP6G962oUYYj4H1pzfgb39uiS2HXEbysl6zJNLyYRABR9WcKkT79WugAx2sc0O5JrqO+OufV6YlF+fwObk/qgoxf8YGIcZ3S6DP
-X-Gm-Message-State: AOJu0Yzwrb35W6nMknd9xxmIOcipdGKqwSfVjB0WYUZd9iwQ1lFKsjqD
-	yY71iNPpoksMw8QXIhUi/cNGPu2MZuMS0PZ8yfe9bnwdqwghJF+Q5WMM2edxQdDzkJnTtWod9aC
-	ZZzdopfanYjloG+XutMBZwO/pKi8=
-X-Google-Smtp-Source: AGHT+IHbcbETAey3NnuCmNe9kMNNq4TJGEo4sZLOKWaX4wJefc0OEeANmtUqvBXPG/ZjU+u19uigzELjdNSis4bytkA=
-X-Received: by 2002:a05:6a20:c22:b0:1be:c88f:c60d with SMTP id
- adf61e73a8af0-1c2984d82d1mr4743125637.56.1720636830506; Wed, 10 Jul 2024
- 11:40:30 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1720636860; x=1721241660;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ANczVI3KSYUFvPh1e7RqT/SMcnsl4xdigmhSPJ5myzY=;
+        b=RCZOc2avKlPZfFd+apDmwt4rRetxy/6eHTm+6ufbbXtlrg67A1neSxTHq+ojDGUn0z
+         24qlqKP8PARF/vi9xQ2F/K/Hspo3eTJwnbpPMaoeBDaH5oY18ptlYaV+S+6+lD/7XRZH
+         tnLyL9ACXnHY1euzJw184QuBRfdoBMx8WkbhCciOpu2ORgoY0enrFReL7yF7gVu97QRO
+         kHeVyENOtRlgTxvT7eqgsOq9+L0msHGhNWTQXyN81bWxiFQ39hZ2La0Uv/ZEjeuXS3QD
+         hSO6mjdwZd/qZ82u5GoCs9LbLUbscJIBDHa/8LZFft3O6r3E4iOZj20D9rCVIcfG67mw
+         uv0A==
+X-Gm-Message-State: AOJu0Yz9EA6n9tIPEbark4mhc6dBQJq8eKVjsYgIf7QIjZ7JdgliqGNw
+	FLZdYmtqttukYsaowcmyM9UHz74yvW2bwtasZMZr08MEJtnUeTF3
+X-Google-Smtp-Source: AGHT+IHnU7kwxhUzExd7GtsBZbDDmDrE3ZlvjtELbrgDkI7qCL8FFK4xeGh91DWzzDBJvXqD9gIfHw==
+X-Received: by 2002:a05:6a00:814:b0:70b:12:5241 with SMTP id d2e1a72fcca58-70b43544e6bmr7896967b3a.13.1720636859774;
+        Wed, 10 Jul 2024 11:40:59 -0700 (PDT)
+Received: from [192.168.0.31] ([38.34.87.7])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-70b438c2597sm4114473b3a.55.2024.07.10.11.40.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 10 Jul 2024 11:40:59 -0700 (PDT)
+Message-ID: <b21d3cc6f95dc4e1241c09a92a1ad45942ce53d0.camel@gmail.com>
+Subject: Re: [RFC bpf-next v2 2/9] bpf: no_caller_saved_registers attribute
+ for helper calls
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
+ daniel@iogearbox.net,  martin.lau@linux.dev, kernel-team@fb.com,
+ yonghong.song@linux.dev,  puranjay@kernel.org, jose.marchesi@oracle.com,
+ Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Wed, 10 Jul 2024 11:40:53 -0700
+In-Reply-To: <CAEf4BzZWMNWzk0V2HmG3MV693bNDoBo5ptFE6_fPsRXEH4E75A@mail.gmail.com>
+References: <20240704102402.1644916-1-eddyz87@gmail.com>
+	 <20240704102402.1644916-3-eddyz87@gmail.com>
+	 <CAEf4BzaC--u8egj_JXrR4VoedeFdX3W=sKZt1aO9+ed44tQxWw@mail.gmail.com>
+	 <7ec55e40e50fd432ba2c5d344c4927ed3a5ab953.camel@gmail.com>
+	 <CAEf4BzY00fv1+13rZHb+5YHdXcwPzYjNDnN3Rq0-o+cwSB=JFw@mail.gmail.com>
+	 <de4ed737e56fc6288031191509acc590446f4d24.camel@gmail.com>
+	 <CAEf4BzajkXm0_8H3bA4RaYLvK19sz5OeQL0HFWgRGgKKERbrkA@mail.gmail.com>
+	 <44bbdf47feb182fce4857e1b38fedb8fc95db3e7.camel@gmail.com>
+	 <CAEf4BzZWMNWzk0V2HmG3MV693bNDoBo5ptFE6_fPsRXEH4E75A@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4-0ubuntu2 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240708091241.544262971@infradead.org> <20240709075651.122204f1358f9f78d1e64b62@kernel.org>
- <CAEf4BzY6tXrDGkW6mkxCY551pZa1G+Sgxeuex==nvHUEp9ynpg@mail.gmail.com>
- <20240709090304.GG27299@noisy.programming.kicks-ass.net> <Zo0KX1P8L3Yt4Z8j@krava>
- <20240709101634.GJ27299@noisy.programming.kicks-ass.net> <20240710071046.e032ee74903065bddba9a814@kernel.org>
- <20240710101003.GV27299@noisy.programming.kicks-ass.net> <20240710235616.5a9142faf152572db62d185c@kernel.org>
-In-Reply-To: <20240710235616.5a9142faf152572db62d185c@kernel.org>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Wed, 10 Jul 2024 11:40:17 -0700
-Message-ID: <CAEf4BzZGHGxsqNWSBu3B79ZNEM6EruiqSD4vT-O=_RzsBeKP0w@mail.gmail.com>
-Subject: Re: [PATCH 00/10] perf/uprobe: Optimize uprobes
-To: Masami Hiramatsu <mhiramat@kernel.org>
-Cc: Peter Zijlstra <peterz@infradead.org>, Jiri Olsa <olsajiri@gmail.com>, mingo@kernel.org, 
-	andrii@kernel.org, linux-kernel@vger.kernel.org, rostedt@goodmis.org, 
-	oleg@redhat.com, clm@meta.com, paulmck@kernel.org, bpf <bpf@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jul 10, 2024 at 7:56=E2=80=AFAM Masami Hiramatsu <mhiramat@kernel.o=
-rg> wrote:
->
-> On Wed, 10 Jul 2024 12:10:03 +0200
-> Peter Zijlstra <peterz@infradead.org> wrote:
->
-> > On Wed, Jul 10, 2024 at 07:10:46AM +0900, Masami Hiramatsu wrote:
-> >
-> > > > FFS :-/ That touches all sorts and doesn't have any perf ack on. Ma=
-sami
-> > > > what gives?
-> > >
-> > > This is managing *probes and related dynamic trace-events. Those has =
-been
-> > > moved from tip. Could you also add linux-trace-kernel@vger ML to CC?
-> >
-> > ./scripts/get_maintainer.pl -f kernel/events/uprobes.c
-> >
-> > disagrees with that, also things like:
-> >
-> >   https://git.kernel.org/pub/scm/linux/kernel/git/trace/linux-trace.git=
-/commit/?h=3Dprobes/for-next&id=3D4a365eb8a6d9940e838739935f1ce21f1ec8e33f
-> >
-> > touch common perf stuff, and very much would require at least an ack
-> > from the perf folks.
->
-> Hmm, indeed. I'm OK to pass those patches (except for trace_uprobe things=
-)
-> to -tip if you can.
->
-> >
-> > Not cool.
->
+On Wed, 2024-07-10 at 10:50 -0700, Andrii Nakryiko wrote:
 
-You were aware of this patch and cc'ed personally (just like
-linux-perf-users@vger.kernel.org) on all revisions of it. I addressed
-your concerns in [0], you went silent after that and patches were
-sitting idle for more than a month.
+[...]
 
-But regardless, if you'd like me to do any adjustments, please let me know.
+> > > Ok, I see, this wasn't obvious that you want this behavior. I actuall=
+y
+> > > find it surprising (and so at least let's call this possibility out).
+> > >=20
+> > > But, tbh, I'd make this stricter. I'd dictate that within a subprogra=
+m
+> > > all no_csr patterns *should* end with the same stack offset and I
+> > > would check for that (so what I mentioned before that instead of min
+> > > or max we need assignment and check for equality if we already
+> > > assigned it once).
+> >=20
+> > This makes sense, but does not cover a theoretical corner case:
+> > - suppose there are two nocsr functions A and B on the kernel side,
+> >   but only was A marked as nocsr during program compilation;
+> > - the spill/fill "bracket" was generated for a call to function B by
+> >   the compiler (because this is just a valid codegen).
+>=20
+> In this case the call to A shouldn't be changing nocsr_offset at all,
+> though? You should find no spill/fill and thus even though A is
+> *allowed* to use no_csr, it doesn't, so it should have no effect on
+> nocsr offsets, no?
 
-  [0] https://lore.kernel.org/all/CAEf4Bzazi7YMz9n0V46BU7xthQjNdQL_zma5vzgC=
-m_7C-_CvmQ@mail.gmail.com/
+Consider the following code:
 
-> Yeah, the probe things are boundary.
-> BTW, IMHO, there could be dependency issues on *probes. Those are usually=
- used
-> by ftrace/perf/bpf, which are managed by different trees. This means a se=
-ries
-> can span multiple trees. Mutually reviewing is the solution?
->
+    *(u64 *)(r10 - 24) =3D r1;
+    call A                     // kernel and clang know that A is nocsr
+    r1 =3D *(u64 *)(r10 - 24);   // kernel assumes .nocsr_stack_offset -24
+    ...
+    *(u64 *)(r10 - 16) =3D r1;
+    call B                     // only kernel knows that B is nocsr
+    r1 =3D *(u64 *)(r10 - 16);   // with stricter logic this would disable
+                               // nocsr for the whole sub-probram
 
-I agree, there is no one best tree for stuff like this. So as long as
-relevant people and mailing lists are CC'ed we hopefully should be
-fine?
+> But your example actually made me think about another (not theoretical
+> at all) case. What if we have calls to A and B, the kernel is slightly
+> old and knows that B is nocsr, but A is not. But the BPF program was
+> compiled with the latest helper/kfunc definitions marking A as no_csr
+> eligible (as well as B). (btw, THAT'S THE WORD for allow_csr --
+> ELIGIBLE. csr_eligible FTW! but I digress...)
+>=20
+> With the case above we'll disable nocsr for both A and B, right? That
+> sucks, but not sure if we can do anything about that. (We can probably
+> assume no_csr pattern and thus allow spill/fill and not disable nocsr
+> in general, but not remove spill/fills... a bit more complication
+> upfront for longer term extensibility.. not sure, maybe performance
+> regression is a fine price, hmm)
+>=20
+> So I take it back about unmarking csr in the *entire BPF program*,
+> let's just limit it to the subprog scope. But I still think we should
+> do it eagerly, rather than double checking in do_misc_followups().
+> WDYT?
 
-> Thank you,
->
-> --
-> Masami Hiramatsu (Google) <mhiramat@kernel.org>
+With current algo this situation would disable nocsr indeed.
+The problem is that checks for spilled stack slots usage is too simplistic.
+However, it could be covered if the check is performed using e.g.
+process I described earlier:
+- for spill, remember the defining instruction in the stack slot structure;
+- for fill, "merge" the defining instruction index;
+- for other stack access mark defining instruction as escaping.
+
+> > So I wanted to keep the nocsr check a little bit more permissive.
+> >=20
+> > > Also, instead of doing that extra nocsr offset check in
+> > > do_misc_fixups(), why don't we just reset all no_csr patterns within =
+a
+> > > subprogram *if we find a single violation*. Compiler shouldn't ever
+> > > emit such code, right? So let's be strict and fallback to not
+> > > recognizing nocsr.
+> > >=20
+> > > And then we won't need that extra check in do_misc_fixups() because w=
+e
+> > > eagerly unset no_csr flag and will never hit that piece of logic in
+> > > patching.
+> >=20
+> > I can do that, but the detector pass would have to be two pass:
+> > - on the first pass, find the nocsr_stack_off, add candidate insn marks=
+;
+> > - on the second pass, remove marks from insns with wrong stack access o=
+ffset.
+>=20
+> It's not really a second pass, it's part of normal validation.
+> check_nocsr_stack_contract() will detect this and will do, yes, pass
+> over all instructions of a subprogram to unmark them.
+
+- on the first pass true .nocsr_stack_off is not yet known,
+  so .nocsr_pattern is set optimistically;
+- on the second pass .nocsr_stack_off is already known,
+  so .nocsr_pattern can be removed from spills/fills outside the range;
+- check_nocsr_stack_contract() does not need to scan full sub-program
+  on each violation, it can set a flag disabling nocsr in subprogram info.
+
+> > Otherwise I can't discern true patterns from false positives in
+> > situation described above.
+>=20
+> See above, I might be missing what your "theoretical" example changes.
+>=20
+> >=20
+> > > I'd go even further and say that on any nocsr invariant violation, we
+> > > just go and reset all nocsr pattern flags across entire BPF program
+> > > (all subprogs including). In check_nocsr_stack_contract() I mean. Jus=
+t
+> > > have a loop over all instructions and set that flag to false.
+> > >=20
+> > > Why not? What realistic application would need to violate nocsr in
+> > > some subprogs but not in others?
+> > >=20
+> > > KISS or it's too simplistic for some reason?
+> >=20
+> > I can invalidate nocsr per-program.
+> > If so, I would use an "allow_nocsr" flag in program aux to avoid
+> > additional passes over instructions.
+>=20
+> yep, see above (but let's keep it per-subprog for now)
+
+Ok
+
+> > > > > > bpf_patch_insn_data() assumes that one instruction has to be re=
+placed with many.
+> > > > > > Here I need to replace many instructions with a single instruct=
+ion.
+> > > > > > I'd prefer not to tweak bpf_patch_insn_data() for this patch-se=
+t.
+> > > > >=20
+> > > > > ah, bpf_patch_insn_data just does bpf_patch_insn_single, somehow =
+I
+> > > > > thought that it does range for range replacement of instructions.
+> > > > > Never mind then (it's a bit sad that we don't have a proper flexi=
+ble
+> > > > > and powerful patching primitive, though, but oh well).
+> > > >=20
+> > > > That is true.
+> > > > I'll think about it once other issues with this patch-set are resol=
+ved.
+> > >=20
+> > > yeah, it's completely unrelated, but having a bpf_patch_insns that
+> > > takes input instruction range to be replaced and replacing it with
+> > > another set of instructions would cover all existing use cases and
+> > > some more. We wouldn't need verifier_remove_insns(), because that's
+> > > just replacing existing instructions with empty new set of
+> > > instructions. We would now have "insert instructions" primitive if we
+> > > specify empty input range of instructions. If we add a flag whether t=
+o
+> > > adjust jump offsets and make it configurable, we'd need the thing tha=
+t
+> > > Alexei needed for may_goto without any extra hacks.
+> > >=20
+> > > Furthermore, I find it wrong and silly that we keep having manual
+> > > delta+insn adjustments in every single piece of patching logic. I
+> > > think this should be done by bpf_patch_insns(). We need to have a
+> > > small "insn_patcher" struct that we use during instruction patching,
+> > > and a small instruction iterator on top that would keep returning nex=
+t
+> > > instruction to process (and its index, probably). This will allow us
+> > > to optimize patching and instead of doing O(N) we can have something
+> > > faster and smarter (if we hide direct insn array accesses during
+> > > patching).
+> > >=20
+> > > But this is all a completely separate story from all of this.
+> >=20
+> > I actually suggested something along these lines very long time ago:
+> > https://lore.kernel.org/bpf/5c297e5009bcd4f0becf59ccd97cfd82bb3a49ec.ca=
+mel@gmail.com/
+>=20
+> We had a few discussions around patching improvements (you can see I
+> mentioned that in that thread as well). We all like to talk about
+> improving this, but not really doing anything about this. :) Tech debt
+> at its best.
+
+If you are not completely opposed to that idea I can follow-up with a
+complete version as an RFC.
