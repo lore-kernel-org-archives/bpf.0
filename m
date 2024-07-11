@@ -1,43 +1,44 @@
-Received: from AS8PR04CU009.outbound.protection.outlook.com (mail-westeuropeazolkn19011027.outbound.protection.outlook.com [52.103.33.27])
+Received: from DB3PR0202CU003.outbound.protection.outlook.com (mail-northeuropeazolkn19011021.outbound.protection.outlook.com [52.103.32.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCB2213C3D5;
-	Thu, 11 Jul 2024 11:16:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.103.33.27
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97DBA15B11D;
+	Thu, 11 Jul 2024 11:20:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.103.32.21
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720696611; cv=fail; b=mLWf/FxT72kzSJwJA9Pc0qxCp3Vvu3E7+8uyEtM9lqqCCJClBKLk0imoccgLcPqXVwhRXNVJPlbnw7aQ2ZG0XLde2F4bxbj9uNH/ySGCRuWKhDQIweCx7szZEjj7jThrbrlD4k08tczpZ9wgwLZVPmJorMS9d53v2oXv493NC90=
+	t=1720696827; cv=fail; b=ImYWM+I/nxa0kn79SA5OWZ/d+GWq6vcd2amHWsTf39pHZl6lYOFFXGT8aC9vgWVu4KgdmHp5zzjjVrGPZKxZPZy+WFgtaIkHdRsJRSM/qgCijExrZMD6DRbJwX++lY/cuHu4kVc73lRiu9RutqQh5zOJpENg/7LKuqirK+m0vI0=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720696611; c=relaxed/simple;
-	bh=ClTNvg00VeNr9yRQk+CTRCZpHfk1i90UAv3IwtuPRtc=;
-	h=From:To:Cc:Subject:Date:Message-ID:Content-Type:MIME-Version; b=WHHyr0vwE7gQP+dG+TCzoLFJ9IW5g+0KOamBpZC7GbU/kAevvcu5bfBCkXtEf5h2BEUUHQfHEzJBooTQ2bHd5YaOK+i0vSC5nHY6cpQpyzECLKFlr7I+PRMnl/A7WKIEyIqNHuno+HHNXQeuyi5WHeMX0EyHkldf4bPsch8TUhw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com; spf=pass smtp.mailfrom=outlook.com; dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b=erq8XoQV; arc=fail smtp.client-ip=52.103.33.27
+	s=arc-20240116; t=1720696827; c=relaxed/simple;
+	bh=SWCAw0vxxBbwypSNpxzrPoVaZe25u4XvQL4Z9MsWc4c=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=rY5HV8YxZ2l5KkxwqRpx3Tt8G47QjosG8m9b08kUsFKR1MZDHAQHdCyyTlt/6AdUqG3shYMaGnWHetfVUu8ipXr7xeeHF1BbG9ADiWxS5ZC2QLQ0rh6L4VycTRzApjcLZ0+XoSaeBlKGMqjqE/zrKIWeoUCEeWz0030CQRCV4N8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com; spf=pass smtp.mailfrom=outlook.com; dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b=W8A4zskK; arc=fail smtp.client-ip=52.103.32.21
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=outlook.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b="erq8XoQV"
+	dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b="W8A4zskK"
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=n1ONxBKEQGjkgCxXhydqFkf9ZQ7j+Vqx8hj0CIVOv1Q8vvV38eKr0VMmnzeBxUrc3d6Lh/E2Q0p8WyMOO3XS0xP3ilM6kSPh1OqBfxkrBFiDQmj1CzYpjMekPiqAX17joub2gD7wBjF7QKhicIibOc8do4/MTf15uwa8hNzQW/yvRBsX1IY/sJI6yvRMEmi6aVvMMmoubCvyMTz+dpxUAMAFf/uoBNSN1et66Eo5p/Qe/cB5yfHIZobkt5B51Ifg5+57LMOeZuXtTJ2Ym++aj6SBqVEhSzRrkuuYqIh2jp7am081jptd9zNZGmNQ/S99upeu+f55Dphov32UB0R+gQ==
+ b=ySLnQ6nfAwVd0Cv+/pRa6ukP8vwX7WyevSrR8W9nIzFFXV9dzG577fCnQZIezM1uDidjkh5MDqPyxSpDHkxpMI/sFB3qIO2xxwrxx2cuSy5z7nB+hjtwrEO1p09z+O3guBLUPtIzOM9WNiap+p6N2FHO4R1SirAyS/L7BeWrfRATkWV+nr6xrpKoMc3iLgHMEoekhX0qH48JLhaGls86y7s/K8E7e84j8ff0kPWl1Bn4NVzEeo+MV4ZmS6+SQWBeX+rWDtxTq4Slxp1NVUC7jGsf3WH8h/b1wXUR+o93FiQgDAtv4KftsorfKeXPmVk+XgdYeZYJRznP4ITrchdYww==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=b2EH9CHuF3D5LCBMpenWZrfw4GPBC8HQGLYnJYtKSvo=;
- b=VYeeX9fRKFhanO9VtiroGaBEIO4H6Rs/RO7aV1gTYNalvD2cc0GSDmyZQ7doMiGOxES8TIs8wVVPtIxxHQDJFyBSXhc20cLVuA4Vq8IYjR5PHqb7lDnIXYQZiyLm13/nTdOfiHib2BInvhfyxGChEH9ejAt6rjNBm6EO6B1DznjTUuz5WMEv+MOxGrih0ZqzrNKtD7Gh2Tam+bEpDffaiTAHnrZS30cxrk0mVLOLbBLrmGgL3Ek8Dd6BK4pB7OmVbh2VvegcN5VtWH5Btmq98Rp1F7oQzRtqeH1z+SHM0OMy5eqTa9fSYec8OHV1WepWcp+e5ioLgPqnO4wAguMZ7Q==
+ bh=hUTTySXX7ENbwFzAPBR/n6DwWWoqRqJO0M+cOB8m4iU=;
+ b=s2N0HZzHp9b3xCrqnjQQC1eqtdaho8nApZdrBMpv8fDRXwVnsdcBFoIQU6S3G8sFDGEX/2LLnjnhAfuCL5NhfZfIopIFwgtyCYMP/EGvBYkWRt3WvgGlW2zgNz216GDJxpV0SGCu0B+b7nmVo+JdFPdo6iVXp/YcULIebBwg0iIF2hIQs803n2uMNRXQUPUb8k4ccHZHncK3qNJ/UPGHaYaqErLOdRKl3BUiipWBS32JStochDpTzwi+lxfuo+BqE/udCKORFaVus3VCqCmTX4Pxcwp1HTOX1uPMvx+3aqplsWeIs20OHL+BxTdnwAUOULPebqabsQxrY0PkFI80/A==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
  dkim=none; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
  s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=b2EH9CHuF3D5LCBMpenWZrfw4GPBC8HQGLYnJYtKSvo=;
- b=erq8XoQVkf0P9Z115pqBT4ZblZxaz9u3vVbdnbbg9HuGAKTIeJjMbOyaSZsvi0uK3Skw7qF7mtWux6D6LNW3U+ISV1PkIjVC9K6/+MIGv67qzZPHz8ChyWtL0bZGNkVN3dM6LCGPVQFfqnAv5JmOYHX6SakUFmkUPAIsF+9ElReyqhQ9LgifxoICoJ6a+u6+uleQt0rklN7IDuJfa3w6D2nvU+8S9tBRAyZ0re6o0FqTGhGoKKvr97CH5lUnvMVo1/IG4p/L3GM0Kxr90eYcxI0BnHOlf/f+T06DRXID7+rp/2lg0Mnxeb3cqhs9tgwWZ0yIhoMdFSEYsvDZJViy+w==
+ bh=hUTTySXX7ENbwFzAPBR/n6DwWWoqRqJO0M+cOB8m4iU=;
+ b=W8A4zskKZeFmVrHoIlGPHY7dK4mb7XzUec0VEwlVk0pwt87/3c+tv1DZp7xfMuT3qScnTs0yKeRb3Dx5ci08F/0uShuiTwk8t91niOOSuKHB1EenIHQkIFL5I+KT6erQ8AV6WcjTVq69gHixAHldvqhgFxAvuXwx/gr/XFqCWQzG8SEHaFS/+1c/wirrKmv3CSUwETYHxM+bFea5RPJOQnh62RHkE+6fTCUFb3FuyigNeJ16eCCPoja0qwCRPKKjAGfeTsm8VvvV9KpBp5Y7Xa+Xfs0OyIeTvNHgkVkzaYfdcUJlJHxn5GdbvyeIcJyK4hTRceNSyQ9bHUKyKOhvGA==
 Received: from AM6PR03MB5848.eurprd03.prod.outlook.com (2603:10a6:20b:e4::10)
  by AM7PR03MB6628.eurprd03.prod.outlook.com (2603:10a6:20b:1bf::21) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7762.22; Thu, 11 Jul
- 2024 11:16:45 +0000
+ 2024 11:20:21 +0000
 Received: from AM6PR03MB5848.eurprd03.prod.outlook.com
  ([fe80::4b97:bbdb:e0ac:6f7]) by AM6PR03MB5848.eurprd03.prod.outlook.com
  ([fe80::4b97:bbdb:e0ac:6f7%6]) with mapi id 15.20.7762.020; Thu, 11 Jul 2024
- 11:16:45 +0000
+ 11:20:21 +0000
 From: Juntong Deng <juntong.deng@outlook.com>
 To: ast@kernel.org,
 	daniel@iogearbox.net,
@@ -56,19 +57,20 @@ To: ast@kernel.org,
 Cc: bpf@vger.kernel.org,
 	netdev@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [RFC PATCH bpf-next RESEND 00/16] bpf: Checkpoint/Restore In eBPF (CRIB)
-Date: Thu, 11 Jul 2024 12:10:17 +0100
+Subject: [RFC PATCH bpf-next RESEND 01/16] bpf: Introduce BPF_PROG_TYPE_CRIB
+Date: Thu, 11 Jul 2024 12:19:23 +0100
 Message-ID:
- <AM6PR03MB58488045E4D0FA6AEDC8BDE099A52@AM6PR03MB5848.eurprd03.prod.outlook.com>
+ <AM6PR03MB58480C75AA57F0B333063D2C99A52@AM6PR03MB5848.eurprd03.prod.outlook.com>
 X-Mailer: git-send-email 2.39.2
+In-Reply-To: <AM6PR03MB58488045E4D0FA6AEDC8BDE099A52@AM6PR03MB5848.eurprd03.prod.outlook.com>
+References: <AM6PR03MB58488045E4D0FA6AEDC8BDE099A52@AM6PR03MB5848.eurprd03.prod.outlook.com>
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-TMN: [c62PQRZPfm7qfy3LO15ldxmVBZ4xx+5Y]
-X-ClientProxiedBy: SI2PR01CA0045.apcprd01.prod.exchangelabs.com
- (2603:1096:4:193::19) To AM6PR03MB5848.eurprd03.prod.outlook.com
- (2603:10a6:20b:e4::10)
+X-TMN: [fDhjfl4XQ7kxjkOZWf/LUz85FXmek1tg]
+X-ClientProxiedBy: SI2P153CA0031.APCP153.PROD.OUTLOOK.COM (2603:1096:4:190::7)
+ To AM6PR03MB5848.eurprd03.prod.outlook.com (2603:10a6:20b:e4::10)
 X-Microsoft-Original-Message-ID:
- <20240711111017.10669-1-juntong.deng@outlook.com>
+ <20240711111938.11722-1-juntong.deng@outlook.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -78,40 +80,40 @@ MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: AM6PR03MB5848:EE_|AM7PR03MB6628:EE_
-X-MS-Office365-Filtering-Correlation-Id: 57abe7a8-e62b-4b5b-d8c0-08dca19af2af
+X-MS-Office365-Filtering-Correlation-Id: 89691632-7daa-4565-cf05-08dca19b739e
 X-Microsoft-Antispam:
-	BCL:0;ARA:14566002|461199028|8060799006|19110799003|4302099013|3412199025|440099028|56899033|1602099012;
+	BCL:0;ARA:14566002|461199028|8060799006|19110799003|3412199025|440099028;
 X-Microsoft-Antispam-Message-Info:
-	xM+ruN0nevC8Yq1qtwlXiWWrOlsrWiA0nDDyITNlN7k+0ExKR6G4M7y0ZoHo3Z1Fy1GLYV8RZhs6kQWqcHK/uW5YnuSWvC4VkXdwbRU/DIcCXIOTlLRc1EjbEGAx+sVu03KG1ru14m98B0LiOBJ4OBVE/auUQevq7tcHyoAwwSx5mUwOlHNghDLwAb3Gk2iwBdxnnXZSv+miD6F5ZP/KcMX+fxeTKWjWio7u6QBebOHYuCCNzmx/H+8uzFi7MmdyPIm3BdcJ8W3qpBlPHOdh4ZxOonOrO3yHLL8MQLcQRP9jNOETtQWoZJp6BD9BqLEuLw6CWdSGKAvU0AH9EMAa+fLCXDVxLri5NjSsgJ/WSonPNlMmrnZYgqRMo4U/EhFl/XBYW4TwJNtedv1AzDy9P4b7f9EGlRyhduyPsaSiMJcFOcATb68vBAdDhDUsFhhL2F00QEDx29iQQ3W9IN/Ondiuy6UxOGWC2RCk0h9L+TgCI3dsp1RgN5DDGbvus+3QULI9uCRF/1W/DBbRMlXPtNlL+AeNhiHaKN0c+bKE6OGjv4/w7yF6bdxM/im7GGQKxNJg4T1hAUGrVMelyKaYqw2zaVYKGR+cNVLMZpgk+fOIrR7X0YLc+7KoWA9pRyzcLHAKpCLnMgsRzJjFzoirEzY7kH5yI6PqfD+7MuoVh+b5vuGmyMnEKk9R7uPvwF3ggZf6a/peO5pfjq7m6EKwPIA5HUqLvuq3HtkwnD7r+rbf0jPHCeyzlds45uRf9uI9
+	LlG0ohRQj/HVX6bAYRB4Z6LK/58BQPAGn4U3cBOrFK9LAsG9XvOvPJiz8e0OyG4DftFijCvzq4wwIxyreG49vYw5V7aoAcxy0BqrZeaHu+ZG28VuwNoONTyff1dSGbwQjzitgMf7+744nDJBfkvFd7Eh1/iL5k4qRaIXmeJUgLi+/y9hACNSoWOrMC1QJY5vSF3rq9LihsHGGOVf1BFUffg2I7wDnAMzzMbqEfxaJ5IvFIYsTGLEQA38gjNFJROF9j1cFfGRAfLwOTySwJOiJH4e5wUasqpm/gabWks7bO/qkibBkBfzyVfV/jRQZFIFZv8hI+2VjM9eHBgXbFEEic7ZPwjNDsh/ARonBo/I/0L2/+jWnHA79kPABCYz0/DUQ2T/DZTpcU7uJGJUOlWb7LACLNF7rYq6L/4QNO465u8cAI5uJ26GUGx4XBUZ5jjc24rriLOB6cxlVXqaUohhZd9p9evT1tBRy7j1L3M4fbHqkp7O0y/Ml6CEbyHG9tDEST6ZwxF8N78zOPuH8MaY3ZDfNDo/BxlCOKiDqM9bUn7IRflN6JZ2k5s9eirpvFXak7NWRYCLeXHD6JHOdZk28AK5Sn7DLQ6B2xTW/PZw5sjCsO2JydtaLWHtrRc+qtZ/X3RkqrloG1ls88lKgPqCGQ==
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?XpTtxunQ3/07sI7FLfQTBrnVjBQkKejhXST8vKbRoXlJ5mFl5AHGFa6Khhln?=
- =?us-ascii?Q?jROY101RN92UWEKZktgO8InBicg+fF8nkr719/VgwcqmAN7AgzQSBYlHuWjK?=
- =?us-ascii?Q?fQQ1byagoqrqdwG4eESVr/5JQTHIHTMUBXO7U8dLd3of0WmfV5kaorCVosMf?=
- =?us-ascii?Q?6NSZh23Bic+Zm6RVAKKOQAJiyzttl+PBlnWJHxCNiRFBIuMoKPo1vXmwlWrQ?=
- =?us-ascii?Q?VVN6+IsCP/8zlV2kvUt9ZQQPqXoWT23SpQUR+VOUGQOqukScoJdgs4QPnQ6o?=
- =?us-ascii?Q?kJ50pHnayAaYb0Se2Vxyn1p9Z7UZvG/0vX+wGNhuxndiKw1ZlfAKPfeyl7f+?=
- =?us-ascii?Q?cnz1Ri2aoAY6p0lymK5vN1qxjlm7zPe7qmemZggYgCyDP6G0LXRyIXsL0u54?=
- =?us-ascii?Q?ha4LvOGraJBsaJ+K8irJqo0oY1q+AIc6yDXUKimy+INeofrbkshvEOYh70Ix?=
- =?us-ascii?Q?JodXAOwnZkwUIVmqcbxD22b+h8gIqGWgIk5oRwOBodDRUp+vLxGfUiYxxnZp?=
- =?us-ascii?Q?tZ1DAG4Pe7EJqlIr7hyGYu0kSLlBl54WYT6l867o2+I18CM9Qi2x+Im4WyT1?=
- =?us-ascii?Q?F3c4NvENMWAffWhyxW8gwrk7vhTB2s7n+IDlZZi19aXoXeP9KElkrbNzuXPC?=
- =?us-ascii?Q?HdU2PdunT+lCfuZwx5ukYIGwR3CeY4vaPh1GH1gjCivNj9fMODM1BLzWYd4V?=
- =?us-ascii?Q?Qeth3ZYiMA5ynIkfUwlYBGsmmsxL4a03gIa5NmvhLRwCRJ/oa7iiy1Jn0IpR?=
- =?us-ascii?Q?iJYW891OeY6x1KiP1hbOYVjLUIIBex6aa/k1NslXl90SB7Gk9vLv/80okVvN?=
- =?us-ascii?Q?w2ULFMgo3o/uojbGIIxUJpmJ/W8kupgxY2o6yX85qrcvskjL0O2/H17f6QlQ?=
- =?us-ascii?Q?kaUbZYrZ+MdJI1OZ54Fy5xniXFOos/Lgqr1donDLW2A7qkpLRAqUhoIxKm9Y?=
- =?us-ascii?Q?aK2/AV+3RFNfL2wK3eBEcO6zj8zPbfiZn7vlrJJzyHFsF3LBnLlGGfmfW9jM?=
- =?us-ascii?Q?cwicHBPAUwSl9tffXBm8XTcTV+sHHFLqIQWYtGq1wUF7UjyJai3/OuRguKOW?=
- =?us-ascii?Q?HWUzKK9lh8mYibKOhRkAyNkZncv60g1kJ/M1Vha1vCmlFPSlm64KGqXx/Oae?=
- =?us-ascii?Q?9Ix0w9j7m0Rx+p9zqrGaSq2pphSZim2RKp/dpcvHJWHXZ84PQ3wO+P6mqYoT?=
- =?us-ascii?Q?8NKrRtSbGnsUhop31pEe4596i1v2R5QSlY8xjvw2sUgPQLsyb9VMvfnMSN8?=
+	=?us-ascii?Q?79FEAK6SBwr0f10qaSgTwFqAbAq8r4EVIJyNqZRRhZmESq4wAFpIzOpUN8/O?=
+ =?us-ascii?Q?1rCpP/pw+w21j7yDw55klUaMZjVhFxRKhLdIWmpdnd49YFhYWlv5P4tyQk73?=
+ =?us-ascii?Q?hizIWrtC8hKD42srwK3MBrYsTj4Mx2SgaWKX2fgP8RhdP8pQA+b2WrYgPRTJ?=
+ =?us-ascii?Q?CcFRSiJf9tmDCMExLcNtGBEh6BoZXsTuRsSv7bothYga+ftfvQ47kWIRHKJH?=
+ =?us-ascii?Q?mbgYgfTtYE7XNhAxM6rutlSdSgdoTz2yskevoZtXaTqt7OFlTkNEuIGgP9/A?=
+ =?us-ascii?Q?oHXmB/4Z5XR6Q4x+UgBFAN5gRMTQ36gHiATIo2i1ps31UoQd6I5UYRSG+Vvu?=
+ =?us-ascii?Q?mfUxr7Qjej4bmZM3UNHSeFX79u5qBvP56jcgdIOcScKSromjRA4FKYmIyNtv?=
+ =?us-ascii?Q?iplXuLkXGzs9c7QTQd6giCaWj3szv5Nnts1zTWrKEHOEt1HIiMkLzkY9NTlV?=
+ =?us-ascii?Q?F0RmdYEL3xpWtjlJZF+YjBxiqz2kggNedZyTABqLDlwCiZgMN6c50nFUFanc?=
+ =?us-ascii?Q?5N0v7oF893ckztsT7dmT/q7rkLwcusKo5Grj1yxuOdMwvlys07k+gHLSj7Kj?=
+ =?us-ascii?Q?gCVcB6ihOrrEKY1JosZ44B2tBDnMo2A4WzYcs3fFHNqMT+ceWHI2zI03AOl5?=
+ =?us-ascii?Q?ZNONODdZUYZ1ZrF7B7WGbv3A02rNXlo7rb2rL01x2Ai/dQcmK3umEhL5rug1?=
+ =?us-ascii?Q?vs6emizhLhixM/C464F3dG9OJ1VHdDZljkGhbeseodocfPUleYht3NgJv0wV?=
+ =?us-ascii?Q?lSzxZuItjTRHFrNOE1t9rQRD+9bNwEgSThQvdGF7ksKKmPpyUW9XNsG26eG3?=
+ =?us-ascii?Q?cuBZFHCFlcGp8B4XYOA6hbxghKBmcXiIZQMdBou9fAd9REGty0Y18GyFodkx?=
+ =?us-ascii?Q?tcHJPJpU1HGT21dXZ6QYp3jjEZeN8EaDCGE5IN/a+0Bg0U5yA5TGqFjOU2as?=
+ =?us-ascii?Q?s9dL3+ItyiOWL9c39DzBWklAv5J4JB5WOEuYy1YyGtSB3lB2yeu1JmN7Hpks?=
+ =?us-ascii?Q?S3L9DkBd7Jh4FEbY36lmP337WsbIQCvrUPN2GBWIEpLnlm5LedWHR8HlObEc?=
+ =?us-ascii?Q?SnZ0W97m4Z0oLX5i8UjQazE6f6s1gf5+2bzrKieb1MMOQDs7O4r55zm6XGEP?=
+ =?us-ascii?Q?54NxpDfWLGqHDx7ah2fcLOfjxWju2Sce2jsy1crqYk0ewunNoy75HNTvDWrR?=
+ =?us-ascii?Q?bUmncJYyRX/tlg1IjilykolrhBlmu9t3GHJ+kl3Be8k7F1w551SPCSqtn5I?=
  =?us-ascii?Q?=3D?=
 X-OriginatorOrg: outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 57abe7a8-e62b-4b5b-d8c0-08dca19af2af
+X-MS-Exchange-CrossTenant-Network-Message-Id: 89691632-7daa-4565-cf05-08dca19b739e
 X-MS-Exchange-CrossTenant-AuthSource: AM6PR03MB5848.eurprd03.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Jul 2024 11:16:45.3452
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Jul 2024 11:20:21.7538
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
@@ -119,345 +121,391 @@ X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg:
 	00000000-0000-0000-0000-000000000000
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM7PR03MB6628
 
-Overview
---------
-
-This patch series adds a new bpf program type CRIB (Checkpoint/Restore
-In eBPF) for better checkpoint/restore of processes. CRIB provides a new
-way to dump/restore process information for better performance, more
-flexibility, more extensibility (easier support for dumping/restoring
-more information), and more elegant implementation.
-
-Motivation
-----------
-
-The original goal of the CRIU (Checkpoint/Restore In Userspace) project
-was to implement most of the checkpoint/restore functionality in
-userspace [0], avoiding placing most of the implementation in the kernel.
-The CRIU project achieves this goal and is currently widely used for
-live migration in the cloud and works well in most scenarios. However,
-the current technology that CRIU relies on is not optimal and has
-some problems.
-
-[0]: https://lwn.net/Articles/451916/
-
-1. CRIU relies heavily on procfs to get process information (checkpoint)
-
-Procfs is not really a good place to use for checkpointing processes
-(same for sysfs).
-
-- Lots of system calls, lots of context switches (each file needs to
-open, read, close)
-
-- Variety of formats (each file format is different and parsers need to
-be implemented for each format)
-
-- Fixed return information (if the information needed is not currently
-supported by procfs, even if it is just a struct member, the upstream
-kernel code still needs to be modified to add it)
-
-- Non-extensible formats (the format of some files in the procfs cannot
-be extended without breaking backward compatibility)
-
-- Lots of extra information, slow to read (not all information in some
-files is useful for checkpoint, and text parsing is inefficient)
-
-More detailed summary of why procfs is not suitable for checkpointing
-can be found in [1].
-
-[1]: https://criu.org/Task-diag
-
-Andrey has tried to replace insufficient procfs by using netlink 
-(task_diag) [2], but it was not accepted by upstream for reasons
-[3][4][5][6]:
-
-- netlink is unable to elegantly obtain the pidns and userns
-of processes
-
-- Since the namespace issue cannot be resolved elegantly,
-obtaining process information via netlink can lead to credential
-security issues.
-
-[2]: https://lwn.net/Articles/650243/
-[3]: https://lore.kernel.org/linux-kernel//CALCETrVg5AyeXW_AGguFoGCPK9_2zeobEgT9JJFsakH6PyQf_A@mail.gmail.com/
-[4]: https://lore.kernel.org/linux-kernel//CALCETrVSRkMSAVPz9JW4XCV7DmrgkyGK54HRUrue2R756f5C=Q@mail.gmail.com/
-[5]: https://lore.kernel.org/linux-kernel//CALCETrW4LU3M2OAWjnckFR-rqenBjV+ROBi8B3eOo=Y_mCWfGQ@mail.gmail.com/
-[6]: https://lore.kernel.org/linux-kernel//CALCETrUzOBybH0-rcgvzMNazjadZpuxkBZLkoUDY30X_-cqBzg@mail.gmail.com/
-
-2. Some process status information is difficult to dump/restore through
-normal interfaces
-
-One example is checkpoint/restore for TCP sockets, where we are unable
-to get the underlying protocol information for TCP sockets through
-procfs (or sysfs), or through the normal socket API. Here we need to
-add TCP repair mode [7][8], which works but is not an elegant approach. 
-
-In TCP repair mode, we need to change (hijack) the behaviour of the
-system calls, including recvmsg and sendmsg, used to dump/restore
-packets in the socket write/receive queue. In TCP repair mode,
-additional getsockopt/setsockopt optnames need to be introduced to
-dump/restore the underlying TCP socket information such as sequence
-number, send window, receive window, max window.
-
-[7]: https://lwn.net/Articles/495304/
-[8]: https://criu.org/TCP_connection
-
-The above approach to extending system calls may be feasible, but not
-good practice:
-
-- The structure of the data returned by each system call API is roughly
-fixed at the moment it is added. If we need to add new members, then we
-may need data structures V1 and V2. If we want to remove members we no
-longer need, it would be painful because we need to maintain backward
-compatibility. More often we need new extensions to system calls,
-such as the new getsockopt optnames.
-
-- We need case-by-case extensions to system calls. As more and more
-features are added to the kernel (e.g. io uring, bpf),
-checkpointing/restoring these features via the normal API will become
-more and more difficult (or even impossible). We have had to continue
-to add (extend) lots of single-purpose (perhaps only for
-checkpoint/restore) interfaces for various kernel features ,
-more xxx repair modes, ioctl commands, getxxxopt/setxxxopt optnames.
-Obviously, these interfaces are not elegant and may even be
-considered cumbersome.
-
-CRIB introduction
------------------
-
-CRIB is a new bpf program type that is not attached to any hooks
-(similar to BPF_PROG_TYPE_SYSCALL), runs through BPF_PROG_RUN, and is
-called by userspace programs as eBPF API for dumping/restoring
-process information.
-
-The entire CRIB consists of three parts, CRIB kfuncs, CRIB ebpf programs,
-and CRIB user space program.
-
-- CRIB kfuncs provides low-level APIs. Each kfuncs low-level API is only
-responsible for one small task, such as getting a specific file object
-based on the file descriptor of a process.
-
-- CRIB ebpf program provides high-level APIs. Each CRIB ebpf program
-obtains process information in the kernel by calling the CRIB kfuncs
-API and returns the data to the userspace program through ringbuf.
-Each CRIB ebpf API is responsible for some relatively complex tasks,
-such as getting all the socket information of a process.
-
-- The CRIB userspace program is responsible for loading the CRIB ebpf
-program and calling the CRIB ebpf API, deciding what needs to be dumped
-and what needs to be restored, and saving the dumped information so that
-it can be read during restoration.
-
-With the above CRIB design, the CRIB kfunc API in the kernel can be kept
-simple enough that it does not require much modification even in the
-future. Each kfuncs can be easily kept reliable without a lot of
-complicated code.
-
-Complex ebpf programs and userspace programs are maintained outside
-the kernel, and CRIB ebpf programs are maintained with
-CRIB userspace programs.
-
-My current positioning of CRIB is that CRIU as CRIB userspace program
-and CRIB ebpf program can be used as a new engine for CRIU, a new
-and better way to dump/restore processes which has higher performance
-and can dump/restore more information.
-
-Why CRIB is better?
--------------------
-
-1. More elegant way to get process information
-
-If xxx repair mode, ioctl, getxxxopt, setxxxopt are like using
-gastroscope, colonoscope, nasal endoscope, and we need to keep looking
-for (add) more "holes" in the kernel for physical examination
-(dump/restore information), then using CRIB is like putting an
-intelligent micro physical examination robot (ebpf) into the kernel
-and letting it work inside the kernel to collect all the information
-and return.
-
-We no longer need to open more inelegant "holes" in the kernel, and we
-no longer need to add more interfaces that are only used for
-checkpoint/restore.
-
-2. More flexible and extensible
-
-CRIB ebpf programs are maintained with CRIB userspace programs,
-which means that CRIB ebpf programs do not need to provide stable APIs,
-do not need stable structures, and can continue to change flexibly with
-the needs of CRIB userspace programs.
-
-Most of the information in kernel data structures can be obtained
-through BPF_CORE_READ, so there is no need to add trivial CRIB kfuncs,
-and the trivial code for obtaining the structure members can be kept
-outside the kernel in the CRIB ebpf program. This means that this part of
-the code can be added or removed flexibly.
-
-CRIB kfuncs focuses on implementing dump/restore that cannot be done by
-simple data structure operations.
-
-3. Higher performance
-
-- Since CRIB is very flexible (CRIB ebpf programs are changeable), we
-can dump/restore just enough information and no additional information
-is needed. 
-
-- CRIB ebpf programs can return binary data (not text) via ringbuf,
-which means no additional conversion or parsing is required.
-
-- With BPF ringbuf, we avoid lots of system calls, lots of context
-switches, and lots of memory copying (between kernel space and
-user space).
-
-4. Better support for namespaces and credentials
-
-Since CRIB ebpf programs can access the task_struct of a process,
-it is simple for CRIB ebpf programs to know the current namespace
-(e.g., pidns, userns) and credentials of a process, and there is no
-situation where CRIB cannot know that a process has dropped privileges.
-
-The problems in the netlink method mentioned earlier do not exist
-in CRIB.
-
-Proof of Concept
-----------------
-
-I have currently added three selftest programs to demonstrate the
-functionality of CRIB.
-
-- dump_task shows the performance comparison between CRIB and procfs.
-CRIB takes only 20-30% of the time of the procfs to obtain the same
-process information.
-
-- dump_all_socket shows that CRIB does not need to rely on procfs to
-get all the socket information of a process, and can get the
-underlying protocol information (e.g., sequence number, send window)
-of TCP sockets without using getsockopt.
-
-- restore_udp_socket shows that CRIB can dump/restore packets from
-the write queue and receive queue of UDP sockets without adding
-additional system call interfaces and without UDP repair mode.
-
-Shortcoming?
-------------
-
-Yes, obviously, loading the ebpf programs takes time.
-
-However, in most scenarios, CRIU runs as a service and is integrated
-into other software (via RPC or C API) such as OpenVZ , docker, k8s,
-rather than as a standalone tool.
-
-This means that in most scenarios CRIU will handle multiple
-checkpoints/restores, but in this case CRIB ebpf programs only need
-to be loaded once, and can be subsequently used like normal APIs.
-
-Overall, it is worth it.
-
-More?
------
-
-In restore_udp_socket I had to add a struct bpf_crib_skb_info for
-restoring packets, this is because there is currently no BPF_CORE_WRITE.
-
-I am not sure what the current attitude of the kernel community
-towards BPF_CORE_WRITE is, personally I think it is well worth adding,
-as we need a portable way to change the value in the kernel.
-
-This not only allows more complexity in the CRIB restoring part to
-be transferred from CRIB kfuncs to CRIB ebpf programs, but also allows
-ebpf to unlock more possible application scenarios. 
-
-At the end
-----------
-
-This patch series is not the final patch series, this is still a
-proof of concept, incomplete in functionality and probably buggy,
-but I think it is enough to show the power of CRIB, which is a
-meaningful innovation.
-
-(I know I did not pay attention to the coding style of the test cases
-in selftest, as these are only for proof of concept, not real testing)
-
-This is not only a new checkpoint/restore method, but also allows us
-to think about what more eBPF might be able to do, and what more we
-can unlock with eBPF.
-
-I would like to get some feedback, welcome to discuss!
-
-(This resend is used to fix mail thread that was messed up by outlook.)
+This patch adds a new BPF program type CRIB (Checkpoint/Restore In eBPF)
+for checkpointing/restoring processes through eBPF.
+
+CRIB BPF programs are not attached to any hooks, run through
+BPF_PROG_RUN, and are called by userspace programs as eBPF APIs
+for dumping/restoring process information.
+
+CRIB BPF programs dump/restore process information through CRIB
+kfunc APIs.
 
 Signed-off-by: Juntong Deng <juntong.deng@outlook.com>
-
-Juntong Deng (16):
-  bpf: Introduce BPF_PROG_TYPE_CRIB
-  bpf: Add KF_ITER_GETTER and KF_ITER_SETTER flags
-  bpf: Improve bpf kfuncs pointer arguments chain of trust
-  bpf: Add bpf_task_from_vpid() kfunc
-  bpf/crib: Add struct file related CRIB kfuncs
-  bpf/crib: Introduce task_file open-coded iterator kfuncs
-  bpf/crib: Add struct sock related CRIB kfuncs
-  bpf/crib: Add CRIB kfuncs for getting pointer to often-used
-    socket-related structures
-  bpf/crib: Add CRIB kfuncs for getting socket source/destination
-    addresses
-  bpf/crib: Add struct sk_buff related CRIB kfuncs
-  bpf/crib: Introduce skb open-coded iterator kfuncs
-  bpf/crib: Introduce skb_data open-coded iterator kfuncs
-  bpf/crib: Add CRIB kfuncs for restoring data in skb
-  selftests/crib: Add test for getting basic information of the process
-  selftests/crib: Add test for getting all socket information of the
-    process
-  selftests/crib: Add test for dumping/restoring UDP socket packets
-
- include/linux/bpf_crib.h                      |  62 +++
- include/linux/bpf_types.h                     |   4 +
- include/linux/btf.h                           |   5 +-
- include/uapi/linux/bpf.h                      |   1 +
- kernel/bpf/Kconfig                            |   2 +
- kernel/bpf/Makefile                           |   2 +
- kernel/bpf/btf.c                              |  34 +-
- kernel/bpf/crib/Kconfig                       |  14 +
- kernel/bpf/crib/Makefile                      |   3 +
- kernel/bpf/crib/bpf_checkpoint.c              | 360 ++++++++++++++++
- kernel/bpf/crib/bpf_crib.c                    | 397 ++++++++++++++++++
- kernel/bpf/crib/bpf_restore.c                 |  80 ++++
- kernel/bpf/helpers.c                          |  21 +
- kernel/bpf/syscall.c                          |   1 +
- kernel/bpf/verifier.c                         |  15 +-
- tools/include/uapi/linux/bpf.h                |   1 +
- tools/lib/bpf/libbpf.c                        |   2 +
- tools/lib/bpf/libbpf_probes.c                 |   1 +
- tools/testing/selftests/crib/.gitignore       |   1 +
- tools/testing/selftests/crib/Makefile         | 136 ++++++
- tools/testing/selftests/crib/config           |   7 +
- .../selftests/crib/test_dump_all_socket.bpf.c | 252 +++++++++++
- .../selftests/crib/test_dump_all_socket.c     | 375 +++++++++++++++++
- .../selftests/crib/test_dump_all_socket.h     |  69 +++
- .../selftests/crib/test_dump_task.bpf.c       | 125 ++++++
- tools/testing/selftests/crib/test_dump_task.c | 337 +++++++++++++++
- tools/testing/selftests/crib/test_dump_task.h |  90 ++++
- .../crib/test_restore_udp_socket.bpf.c        | 311 ++++++++++++++
- .../selftests/crib/test_restore_udp_socket.c  | 333 +++++++++++++++
- .../selftests/crib/test_restore_udp_socket.h  |  51 +++
- 30 files changed, 3080 insertions(+), 12 deletions(-)
+---
+ include/linux/bpf_crib.h         |  16 +++++
+ include/linux/bpf_types.h        |   4 ++
+ include/uapi/linux/bpf.h         |   1 +
+ kernel/bpf/Kconfig               |   2 +
+ kernel/bpf/Makefile              |   2 +
+ kernel/bpf/btf.c                 |   4 ++
+ kernel/bpf/crib/Kconfig          |  14 ++++
+ kernel/bpf/crib/Makefile         |   3 +
+ kernel/bpf/crib/bpf_checkpoint.c |  13 ++++
+ kernel/bpf/crib/bpf_crib.c       | 109 +++++++++++++++++++++++++++++++
+ kernel/bpf/crib/bpf_restore.c    |  13 ++++
+ kernel/bpf/helpers.c             |   1 +
+ kernel/bpf/syscall.c             |   1 +
+ tools/include/uapi/linux/bpf.h   |   1 +
+ tools/lib/bpf/libbpf.c           |   2 +
+ tools/lib/bpf/libbpf_probes.c    |   1 +
+ 16 files changed, 187 insertions(+)
  create mode 100644 include/linux/bpf_crib.h
  create mode 100644 kernel/bpf/crib/Kconfig
  create mode 100644 kernel/bpf/crib/Makefile
  create mode 100644 kernel/bpf/crib/bpf_checkpoint.c
  create mode 100644 kernel/bpf/crib/bpf_crib.c
  create mode 100644 kernel/bpf/crib/bpf_restore.c
- create mode 100644 tools/testing/selftests/crib/.gitignore
- create mode 100644 tools/testing/selftests/crib/Makefile
- create mode 100644 tools/testing/selftests/crib/config
- create mode 100644 tools/testing/selftests/crib/test_dump_all_socket.bpf.c
- create mode 100644 tools/testing/selftests/crib/test_dump_all_socket.c
- create mode 100644 tools/testing/selftests/crib/test_dump_all_socket.h
- create mode 100644 tools/testing/selftests/crib/test_dump_task.bpf.c
- create mode 100644 tools/testing/selftests/crib/test_dump_task.c
- create mode 100644 tools/testing/selftests/crib/test_dump_task.h
- create mode 100644 tools/testing/selftests/crib/test_restore_udp_socket.bpf.c
- create mode 100644 tools/testing/selftests/crib/test_restore_udp_socket.c
- create mode 100644 tools/testing/selftests/crib/test_restore_udp_socket.h
 
+diff --git a/include/linux/bpf_crib.h b/include/linux/bpf_crib.h
+new file mode 100644
+index 000000000000..f667b740fcc2
+--- /dev/null
++++ b/include/linux/bpf_crib.h
+@@ -0,0 +1,16 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Checkpoint/Restore In eBPF (CRIB)
++ *
++ * Author:
++ *	Juntong Deng <juntong.deng@outlook.com>
++ */
++#ifndef _BPF_CRIB_H
++#define _BPF_CRIB_H
++
++#include <linux/bpf.h>
++#include <linux/btf.h>
++#include <linux/btf_ids.h>
++#include <linux/filter.h>
++
++#endif /* _BPF_CRIB_H */
+diff --git a/include/linux/bpf_types.h b/include/linux/bpf_types.h
+index 9f2a6b83b49e..a6feddfd17e2 100644
+--- a/include/linux/bpf_types.h
++++ b/include/linux/bpf_types.h
+@@ -83,6 +83,10 @@ BPF_PROG_TYPE(BPF_PROG_TYPE_SYSCALL, bpf_syscall,
+ BPF_PROG_TYPE(BPF_PROG_TYPE_NETFILTER, netfilter,
+ 	      struct bpf_nf_ctx, struct bpf_nf_ctx)
+ #endif
++#ifdef CONFIG_BPF_CRIB
++BPF_PROG_TYPE(BPF_PROG_TYPE_CRIB, bpf_crib,
++	      void *, void *)
++#endif /* CONFIG_BPF_CRIB */
+ 
+ BPF_MAP_TYPE(BPF_MAP_TYPE_ARRAY, array_map_ops)
+ BPF_MAP_TYPE(BPF_MAP_TYPE_PERCPU_ARRAY, percpu_array_map_ops)
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index 35bcf52dbc65..cb67a9cad8c6 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -1055,6 +1055,7 @@ enum bpf_prog_type {
+ 	BPF_PROG_TYPE_SK_LOOKUP,
+ 	BPF_PROG_TYPE_SYSCALL, /* a program that can execute syscalls */
+ 	BPF_PROG_TYPE_NETFILTER,
++	BPF_PROG_TYPE_CRIB,
+ 	__MAX_BPF_PROG_TYPE
+ };
+ 
+diff --git a/kernel/bpf/Kconfig b/kernel/bpf/Kconfig
+index 17067dcb4386..a129677a03e3 100644
+--- a/kernel/bpf/Kconfig
++++ b/kernel/bpf/Kconfig
+@@ -101,4 +101,6 @@ config BPF_LSM
+ 
+ 	  If you are unsure how to answer this question, answer N.
+ 
++source "kernel/bpf/crib/Kconfig"
++
+ endmenu # "BPF subsystem"
+diff --git a/kernel/bpf/Makefile b/kernel/bpf/Makefile
+index 0291eef9ce92..8c350d159d3c 100644
+--- a/kernel/bpf/Makefile
++++ b/kernel/bpf/Makefile
+@@ -58,3 +58,5 @@ vpath %.c $(srctree)/kernel/bpf:$(srctree)/tools/lib/bpf
+ 
+ $(obj)/%.o: %.c FORCE
+ 	$(call if_changed_rule,cc_o_c)
++
++obj-$(CONFIG_BPF_CRIB) += crib/
+diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+index 4ff11779699e..306349ee3d6a 100644
+--- a/kernel/bpf/btf.c
++++ b/kernel/bpf/btf.c
+@@ -219,6 +219,7 @@ enum btf_kfunc_hook {
+ 	BTF_KFUNC_HOOK_LWT,
+ 	BTF_KFUNC_HOOK_NETFILTER,
+ 	BTF_KFUNC_HOOK_KPROBE,
++	BTF_KFUNC_HOOK_CRIB,
+ 	BTF_KFUNC_HOOK_MAX,
+ };
+ 
+@@ -6037,6 +6038,7 @@ static int btf_validate_prog_ctx_type(struct bpf_verifier_log *log, const struct
+ 	case BPF_PROG_TYPE_TRACEPOINT:
+ 	case BPF_PROG_TYPE_SYSCALL:
+ 	case BPF_PROG_TYPE_EXT:
++	case BPF_PROG_TYPE_CRIB:
+ 		return 0; /* anything goes */
+ 	default:
+ 		break;
+@@ -8326,6 +8328,8 @@ static int bpf_prog_type_to_kfunc_hook(enum bpf_prog_type prog_type)
+ 		return BTF_KFUNC_HOOK_NETFILTER;
+ 	case BPF_PROG_TYPE_KPROBE:
+ 		return BTF_KFUNC_HOOK_KPROBE;
++	case BPF_PROG_TYPE_CRIB:
++		return BTF_KFUNC_HOOK_CRIB;
+ 	default:
+ 		return BTF_KFUNC_HOOK_MAX;
+ 	}
+diff --git a/kernel/bpf/crib/Kconfig b/kernel/bpf/crib/Kconfig
+new file mode 100644
+index 000000000000..346304f65db6
+--- /dev/null
++++ b/kernel/bpf/crib/Kconfig
+@@ -0,0 +1,14 @@
++# SPDX-License-Identifier: GPL-2.0-only
++
++config BPF_CRIB
++	bool "Checkpoint/Restore In eBPF (CRIB)"
++	depends on BPF_SYSCALL
++	depends on BPF_JIT
++	depends on DEBUG_INFO_BTF
++	help
++	  Enable CRIB (Checkpoint/Restore In eBPF), which allows
++	  checkpointing/restoring of processes through BPF programs.
++
++	  Compared to procfs and system call interfaces, CRIB achieves
++	  higher performance and supports dumping/restoring more
++	  comprehensive process status information.
+diff --git a/kernel/bpf/crib/Makefile b/kernel/bpf/crib/Makefile
+new file mode 100644
+index 000000000000..abd43c76140b
+--- /dev/null
++++ b/kernel/bpf/crib/Makefile
+@@ -0,0 +1,3 @@
++# SPDX-License-Identifier: GPL-2.0
++
++obj-$(CONFIG_BPF_CRIB) += bpf_crib.o bpf_checkpoint.o bpf_restore.o
+diff --git a/kernel/bpf/crib/bpf_checkpoint.c b/kernel/bpf/crib/bpf_checkpoint.c
+new file mode 100644
+index 000000000000..efaca6bcdfe4
+--- /dev/null
++++ b/kernel/bpf/crib/bpf_checkpoint.c
+@@ -0,0 +1,13 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Checkpoint/Restore In eBPF (CRIB): Checkpoint
++ *
++ * Author:
++ *	Juntong Deng <juntong.deng@outlook.com>
++ */
++
++#include <linux/bpf_crib.h>
++
++__bpf_kfunc_start_defs();
++
++__bpf_kfunc_end_defs();
+diff --git a/kernel/bpf/crib/bpf_crib.c b/kernel/bpf/crib/bpf_crib.c
+new file mode 100644
+index 000000000000..9ef2d61955bf
+--- /dev/null
++++ b/kernel/bpf/crib/bpf_crib.c
+@@ -0,0 +1,109 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Checkpoint/Restore In eBPF (CRIB): Common
++ *
++ * Author:
++ *	Juntong Deng <juntong.deng@outlook.com>
++ */
++
++#include <linux/bpf_crib.h>
++#include <linux/init.h>
++
++__bpf_kfunc_start_defs();
++
++__bpf_kfunc_end_defs();
++
++BTF_KFUNCS_START(bpf_crib_kfuncs)
++
++BTF_KFUNCS_END(bpf_crib_kfuncs)
++
++static int bpf_prog_run_crib(struct bpf_prog *prog,
++			      const union bpf_attr *kattr,
++			      union bpf_attr __user *uattr)
++{
++	void __user *ctx_in = u64_to_user_ptr(kattr->test.ctx_in);
++	__u32 ctx_size_in = kattr->test.ctx_size_in;
++	void *ctx = NULL;
++	u32 retval;
++	int err = 0;
++
++	/* doesn't support data_in/out, ctx_out, duration, or repeat or flags */
++	if (kattr->test.data_in || kattr->test.data_out ||
++	    kattr->test.ctx_out || kattr->test.duration ||
++	    kattr->test.repeat || kattr->test.flags ||
++	    kattr->test.batch_size)
++		return -EINVAL;
++
++	if (ctx_size_in < prog->aux->max_ctx_offset ||
++	    ctx_size_in > U16_MAX)
++		return -EINVAL;
++
++	if (ctx_size_in) {
++		ctx = memdup_user(ctx_in, ctx_size_in);
++		if (IS_ERR(ctx))
++			return PTR_ERR(ctx);
++	}
++
++	rcu_read_lock_trace();
++	retval = bpf_prog_run_pin_on_cpu(prog, ctx);
++	rcu_read_unlock_trace();
++
++	if (copy_to_user(&uattr->test.retval, &retval, sizeof(u32))) {
++		err = -EFAULT;
++		goto out;
++	}
++out:
++	if (ctx_size_in)
++		kfree(ctx);
++
++	return err;
++}
++
++static const struct bpf_func_proto *
++bpf_crib_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
++{
++	switch (func_id) {
++	default:
++		return bpf_base_func_proto(func_id, prog);
++	}
++}
++
++static bool bpf_crib_is_valid_access(int off, int size,
++					 enum bpf_access_type type,
++					 const struct bpf_prog *prog,
++					 struct bpf_insn_access_aux *info)
++{
++	/*
++	 * Changing the context is not allowed, and all dumped data
++	 * is returned to userspace via ringbuf.
++	 */
++	if (type != BPF_READ)
++		return false;
++	if (off < 0 || off >= U16_MAX)
++		return false;
++	if (off % size != 0)
++		return false;
++
++	return true;
++}
++
++const struct bpf_prog_ops bpf_crib_prog_ops = {
++	.test_run = bpf_prog_run_crib,
++};
++
++const struct bpf_verifier_ops bpf_crib_verifier_ops = {
++	.get_func_proto		= bpf_crib_func_proto,
++	.is_valid_access	= bpf_crib_is_valid_access,
++};
++
++static const struct btf_kfunc_id_set bpf_crib_kfunc_set = {
++	.owner = THIS_MODULE,
++	.set   = &bpf_crib_kfuncs,
++};
++
++static int __init bpf_crib_init(void)
++{
++	return register_btf_kfunc_id_set(BPF_PROG_TYPE_CRIB, &bpf_crib_kfunc_set);
++}
++
++late_initcall(bpf_crib_init);
+diff --git a/kernel/bpf/crib/bpf_restore.c b/kernel/bpf/crib/bpf_restore.c
+new file mode 100644
+index 000000000000..6bbb4b01e34b
+--- /dev/null
++++ b/kernel/bpf/crib/bpf_restore.c
+@@ -0,0 +1,13 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Checkpoint/Restore In eBPF (CRIB): Restore
++ *
++ * Author:
++ *	Juntong Deng <juntong.deng@outlook.com>
++ */
++
++#include <linux/bpf_crib.h>
++
++__bpf_kfunc_start_defs();
++
++__bpf_kfunc_end_defs();
+diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+index 5241ba671c5a..bcd3ce9da00c 100644
+--- a/kernel/bpf/helpers.c
++++ b/kernel/bpf/helpers.c
+@@ -2986,6 +2986,7 @@ static int __init kfunc_init(void)
+ 	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_XDP, &generic_kfunc_set);
+ 	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_STRUCT_OPS, &generic_kfunc_set);
+ 	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_SYSCALL, &generic_kfunc_set);
++	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_CRIB, &generic_kfunc_set);
+ 	ret = ret ?: register_btf_id_dtor_kfuncs(generic_dtors,
+ 						  ARRAY_SIZE(generic_dtors),
+ 						  THIS_MODULE);
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index 0719192a3482..faf99e53d706 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -2633,6 +2633,7 @@ bpf_prog_load_check_attach(enum bpf_prog_type prog_type,
+ 		return -EINVAL;
+ 	case BPF_PROG_TYPE_SYSCALL:
+ 	case BPF_PROG_TYPE_EXT:
++	case BPF_PROG_TYPE_CRIB:
+ 		if (expected_attach_type)
+ 			return -EINVAL;
+ 		fallthrough;
+diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
+index 35bcf52dbc65..cb67a9cad8c6 100644
+--- a/tools/include/uapi/linux/bpf.h
++++ b/tools/include/uapi/linux/bpf.h
+@@ -1055,6 +1055,7 @@ enum bpf_prog_type {
+ 	BPF_PROG_TYPE_SK_LOOKUP,
+ 	BPF_PROG_TYPE_SYSCALL, /* a program that can execute syscalls */
+ 	BPF_PROG_TYPE_NETFILTER,
++	BPF_PROG_TYPE_CRIB,
+ 	__MAX_BPF_PROG_TYPE
+ };
+ 
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index 30f121754d83..4e1451901b7d 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -224,6 +224,7 @@ static const char * const prog_type_name[] = {
+ 	[BPF_PROG_TYPE_SK_LOOKUP]		= "sk_lookup",
+ 	[BPF_PROG_TYPE_SYSCALL]			= "syscall",
+ 	[BPF_PROG_TYPE_NETFILTER]		= "netfilter",
++	[BPF_PROG_TYPE_CRIB]			= "crib",
+ };
+ 
+ static int __base_pr(enum libbpf_print_level level, const char *format,
+@@ -9449,6 +9450,7 @@ static const struct bpf_sec_def section_defs[] = {
+ 	SEC_DEF("struct_ops.s+",	STRUCT_OPS, 0, SEC_SLEEPABLE),
+ 	SEC_DEF("sk_lookup",		SK_LOOKUP, BPF_SK_LOOKUP, SEC_ATTACHABLE),
+ 	SEC_DEF("netfilter",		NETFILTER, BPF_NETFILTER, SEC_NONE),
++	SEC_DEF("crib",			CRIB, 0, SEC_NONE),
+ };
+ 
+ int libbpf_register_prog_handler(const char *sec,
+diff --git a/tools/lib/bpf/libbpf_probes.c b/tools/lib/bpf/libbpf_probes.c
+index 9dfbe7750f56..2e087280c5f0 100644
+--- a/tools/lib/bpf/libbpf_probes.c
++++ b/tools/lib/bpf/libbpf_probes.c
+@@ -180,6 +180,7 @@ static int probe_prog_load(enum bpf_prog_type prog_type,
+ 	case BPF_PROG_TYPE_SK_REUSEPORT:
+ 	case BPF_PROG_TYPE_FLOW_DISSECTOR:
+ 	case BPF_PROG_TYPE_CGROUP_SYSCTL:
++	case BPF_PROG_TYPE_CRIB:
+ 		break;
+ 	case BPF_PROG_TYPE_NETFILTER:
+ 		opts.expected_attach_type = BPF_NETFILTER;
 -- 
 2.39.2
 
