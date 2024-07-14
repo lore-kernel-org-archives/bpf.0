@@ -1,56 +1,45 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B01B2282FD;
-	Sun, 14 Jul 2024 08:30:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 458561C2BE;
+	Sun, 14 Jul 2024 08:38:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720945807; cv=none; b=mgElkWqMAazC/aJzECL/CMHk18mcM3IRYUfEP+rvdJtoNNJDMM/QiLKoaVZq6kZ8SX++L5qyfelP4Nl17/lqp1BNH0aKVaR3n7QXmWgwcdUlCJZMo/3ERr9Oi3h4K+xfT53PwqYigWTbULv9htP3r4bg0iJJRPWj5g3gwuES7W8=
+	t=1720946292; cv=none; b=PGwk8ncl4fbyCFX7nL5KM5abc34rJG846VhuNXIAIRycZWos3ePbhKvm51qvL3Vq0jH0BODllc4v3L3XYWUNTQyRePUgLQTxhoxmHFo7+iRVHrAAt13JKYbNjZP4afkwGCwzudWGcaN+BIof3WkXr+D/06Y1UyQJYQJNe9yqmN4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720945807; c=relaxed/simple;
-	bh=LpYS83WLCwfoYEIrkASmAZU4pJqGiVpUR3z2uaU37Ro=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=TMEnKFvP4v8gkWN70nhAw9H2/pzec/E4dsFcUs/InyBM6jhtapMyv6Bb519Dsm5pgRD0X+OQJ+HoYoED+VBpT7DHTAV6lwvQhWrEiYdnLsPZHEifjww7Dcesdq4mPUbIXXBBXrz6mPsedlqK2IxfeFf7GJ2PUyEN16tV4F1qPUw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XJqJsGGi; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1720946292; c=relaxed/simple;
+	bh=LjwBIK+b2D+BSfM5bKhp6MDPM+Wpr0//MiA+sJQ0Hkk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=pW6YWxBonxigY+/l1bkiLAemu3k7nOXrefg4sBhuq1tRzZhUtBl8vtMQcaMJoH2dipuBcAh6dqlMK+CE+IO8GPSCaQB/4a5ENLqr7r3rG/T58skyLJzHXNFdSgRy1bcxoNrBNMgmmioBd1Y3KL5+eO3rDJs/uhZMPoVECQ0x4dk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=B7V9IigM; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XJqJsGGi"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7DA1EC116B1;
-	Sun, 14 Jul 2024 08:30:06 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="B7V9IigM"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20085C116B1;
+	Sun, 14 Jul 2024 08:38:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1720945807;
-	bh=LpYS83WLCwfoYEIrkASmAZU4pJqGiVpUR3z2uaU37Ro=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=XJqJsGGit09XBqOHB5LEw6ZRLHjyamWhzZwHwa7PgA8oYEFGYK2DUyoetxnyZpgOr
-	 EvFtbYl/fTNqBnpu7kb3xvD2KQ7l41z97Wkixno4IFocFyufkxyulnYEBjTWLyQ8Lu
-	 2iFj4qhy7hsFZtZYg4Mt0TI5eNwPG8NfEdxz4LMoUup9f9QiJHaGIdQSvZKKordgI6
-	 rgJ1fjgHkaz0brF9NSj8Z8el0w1iU+gvPDiaTgjUcxzjfPE+r6xscrBjER1EegqwMo
-	 OPTzQ+qXjavbeVMYXZvMl8xBUqNgRCl9YmXRIFXfqbCaS+gMRAaL0472Q6SC4jWAEa
-	 rU1TmANJEvDZA==
+	s=k20201202; t=1720946291;
+	bh=LjwBIK+b2D+BSfM5bKhp6MDPM+Wpr0//MiA+sJQ0Hkk=;
+	h=From:To:Cc:Subject:Date:From;
+	b=B7V9IigMd1vltmXQQzdLePysQGC25irDQsTeBZhiuyTK6DiKPbjso+5cKcYut2oAI
+	 jcBAl7QQYDurz2fXbYh2sIUTXqcCVYK9hpOO/sxzpE/nX56RTYXcgg1sJ4qxUypVZm
+	 KxP3OlU3CxWx/O8dbdjmx/k/+Q4Yj3JHyyN1rzVV77LDQ0cnX6sh/eOir7VkSc/IPn
+	 KTlMqM4Lq0JkVyKlw65LSbFChJUFP1e9tKIObLfqN3J49D3t41ippEfv1L3LWvF3tz
+	 RR5avVH+fgk6VOlNbcJ3sXmS0iHO46T/cJXAJsc3SJ+C3eeuqptkGdJmMnEe5fIxxo
+	 +zUsYmQHmycgg==
 From: Naveen N Rao <naveen@kernel.org>
-To: <linuxppc-dev@lists.ozlabs.org>,
-	<linux-trace-kernel@vger.kernel.org>,
-	<bpf@vger.kernel.org>,
-	linux-kbuild@vger.kernel.org,
-	<linux-kernel@vger.kernel.org>
+To: <linux-kernel@vger.kernel.org>,
+	<linuxppc-dev@lists.ozlabs.org>,
+	<bpf@vger.kernel.org>
 Cc: Michael Ellerman <mpe@ellerman.id.au>,
 	Nicholas Piggin <npiggin@gmail.com>,
 	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
+	Hari Bathini <hbathini@linux.ibm.com>,
 	Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Hari Bathini <hbathini@linux.ibm.com>,
-	Mahesh Salgaonkar <mahesh@linux.ibm.com>,
-	Vishal Chourasia <vishalc@linux.ibm.com>
-Subject: [RFC PATCH v4 01/17] powerpc/trace: Account for -fpatchable-function-entry support by toolchain
-Date: Sun, 14 Jul 2024 13:57:37 +0530
-Message-ID: <12d7c105aea999faa4bcdac8587b3a2899da3461.1720942106.git.naveen@kernel.org>
+	Masami Hiramatsu <mhiramat@kernel.org>
+Subject: [PATCH 1/2] MAINTAINERS: Update email address of Naveen
+Date: Sun, 14 Jul 2024 14:04:23 +0530
+Message-ID: <fb6ef126771c70538067709af69d960da3560ce7.1720944897.git.naveen@kernel.org>
 X-Mailer: git-send-email 2.45.2
-In-Reply-To: <cover.1720942106.git.naveen@kernel.org>
-References: <cover.1720942106.git.naveen@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -59,47 +48,62 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-So far, we have relied on the fact that gcc supports both
--mprofile-kernel, as well as -fpatchable-function-entry, and clang
-supports neither. Our Makefile only checks for CONFIG_MPROFILE_KERNEL to
-decide which files to build. Clang has a feature request out [*] to
-implement -fpatchable-function-entry, and is unlikely to support
--mprofile-kernel.
+I have switched to using my @kernel.org id for my contributions. Update
+MAINTAINERS and mailmap to reflect the same.
 
-Update our Makefile checks so that we pick up the correct files to build
-once clang picks up support for -fpatchable-function-entry.
-
-[*] https://github.com/llvm/llvm-project/issues/57031
-
+Cc: Naveen N. Rao <naveen.n.rao@linux.ibm.com>
 Signed-off-by: Naveen N Rao <naveen@kernel.org>
 ---
- arch/powerpc/kernel/trace/Makefile | 11 +++++++----
- 1 file changed, 7 insertions(+), 4 deletions(-)
+ .mailmap    | 2 ++
+ MAINTAINERS | 6 +++---
+ 2 files changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/arch/powerpc/kernel/trace/Makefile b/arch/powerpc/kernel/trace/Makefile
-index 125f4ca588b9..d6c3885453bd 100644
---- a/arch/powerpc/kernel/trace/Makefile
-+++ b/arch/powerpc/kernel/trace/Makefile
-@@ -9,12 +9,15 @@ CFLAGS_REMOVE_ftrace.o = $(CC_FLAGS_FTRACE)
- CFLAGS_REMOVE_ftrace_64_pg.o = $(CC_FLAGS_FTRACE)
- endif
+diff --git a/.mailmap b/.mailmap
+index 81ac1e17ac3c..289011ebca00 100644
+--- a/.mailmap
++++ b/.mailmap
+@@ -473,6 +473,8 @@ Nadia Yvette Chambers <nyc@holomorphy.com> William Lee Irwin III <wli@holomorphy
+ Naoya Horiguchi <nao.horiguchi@gmail.com> <n-horiguchi@ah.jp.nec.com>
+ Naoya Horiguchi <nao.horiguchi@gmail.com> <naoya.horiguchi@nec.com>
+ Nathan Chancellor <nathan@kernel.org> <natechancellor@gmail.com>
++Naveen N Rao <naveen@kernel.org> <naveen.n.rao@linux.ibm.com>
++Naveen N Rao <naveen@kernel.org> <naveen.n.rao@linux.vnet.ibm.com>
+ Neeraj Upadhyay <neeraj.upadhyay@kernel.org> <quic_neeraju@quicinc.com>
+ Neeraj Upadhyay <neeraj.upadhyay@kernel.org> <neeraju@codeaurora.org>
+ Neil Armstrong <neil.armstrong@linaro.org> <narmstrong@baylibre.com>
+diff --git a/MAINTAINERS b/MAINTAINERS
+index fa32e3c035c2..05f14b67cd74 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -3878,7 +3878,7 @@ S:	Odd Fixes
+ F:	drivers/net/ethernet/netronome/nfp/bpf/
  
--obj32-$(CONFIG_FUNCTION_TRACER)		+= ftrace.o ftrace_entry.o
--ifdef CONFIG_MPROFILE_KERNEL
--obj64-$(CONFIG_FUNCTION_TRACER)		+= ftrace.o ftrace_entry.o
-+ifdef CONFIG_FUNCTION_TRACER
-+obj32-y					+= ftrace.o ftrace_entry.o
-+ifeq ($(CONFIG_MPROFILE_KERNEL)$(CONFIG_ARCH_USING_PATCHABLE_FUNCTION_ENTRY),)
-+obj64-y					+= ftrace_64_pg.o ftrace_64_pg_entry.o
- else
--obj64-$(CONFIG_FUNCTION_TRACER)		+= ftrace_64_pg.o ftrace_64_pg_entry.o
-+obj64-y					+= ftrace.o ftrace_entry.o
- endif
-+endif
-+
- obj-$(CONFIG_TRACING)			+= trace_clock.o
+ BPF JIT for POWERPC (32-BIT AND 64-BIT)
+-M:	Naveen N. Rao <naveen.n.rao@linux.ibm.com>
++M:	Naveen N Rao <naveen@kernel.org>
+ M:	Michael Ellerman <mpe@ellerman.id.au>
+ L:	bpf@vger.kernel.org
+ S:	Supported
+@@ -12332,7 +12332,7 @@ F:	mm/kmsan/
+ F:	scripts/Makefile.kmsan
  
- obj-$(CONFIG_PPC64)			+= $(obj64-y)
+ KPROBES
+-M:	Naveen N. Rao <naveen.n.rao@linux.ibm.com>
++M:	Naveen N Rao <naveen@kernel.org>
+ M:	Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>
+ M:	"David S. Miller" <davem@davemloft.net>
+ M:	Masami Hiramatsu <mhiramat@kernel.org>
+@@ -12708,7 +12708,7 @@ LINUX FOR POWERPC (32-BIT AND 64-BIT)
+ M:	Michael Ellerman <mpe@ellerman.id.au>
+ R:	Nicholas Piggin <npiggin@gmail.com>
+ R:	Christophe Leroy <christophe.leroy@csgroup.eu>
+-R:	Naveen N. Rao <naveen.n.rao@linux.ibm.com>
++R:	Naveen N Rao <naveen@kernel.org>
+ L:	linuxppc-dev@lists.ozlabs.org
+ S:	Supported
+ W:	https://github.com/linuxppc/wiki/wiki
+
+base-commit: 582b0e554593e530b1386eacafee6c412c5673cc
 -- 
 2.45.2
 
