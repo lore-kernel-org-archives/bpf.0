@@ -1,126 +1,98 @@
-Received: from mx0.woks-audio.com (mx0.woks-audio.com [88.99.2.238])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78338171BB;
-	Mon, 15 Jul 2024 11:43:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=88.99.2.238
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24FD518A958
+	for <bpf@vger.kernel.org>; Mon, 15 Jul 2024 11:52:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.72
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721043788; cv=none; b=gLMGUIEUVOBNxZXSps8bmK02mN4qSOzm4/E8K9IofRgd9j8XFR/t7EBftXLohWucfW6KlOdGuWgL4d9OHimQ7hqNH1MmNpoSIMdu/ndBoPmxea36Q7UOlPBFCdJcA4ARoPsR3mlyH/lVWXPk0jMcVSl2cpFOVqYJDVtJuooih7M=
+	t=1721044347; cv=none; b=YkFoAO9RTDhLHSN/lIPJskWmdF+mO4uH6F2wTskpArsBjclLXWUNbRoSRoqz19Zz5XrjbaWypAXEGHTPmT61EhTYSu14zkbdpX3VyeiErn0vWjwwxgBGY1NfuItnUd9WArGmZhXgWtUtadvagQWlzFfH0WgAG1CCm3eR4YkcMKw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721043788; c=relaxed/simple;
-	bh=T9mhDH0c1ZG2sIUI32/qS5pA87j3GgJBY4C7u3AmmXE=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=bZk/X5VKyfxlL0fSOSYXYF4rMzoPU94FM8ml+g5bzpITHMjFhWcdU1tobMZ/OgOLCkYmVLRgv5jQDQl0whYXgu8YWlTczKVl4Qy9xMeKZcCPjmmz6KGTdA7u3kjLSrTIYALSZQZxtiunhbHUuya9U4ETYDCBSNL8p9UGbC0brOg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=woks-audio.com; spf=pass smtp.mailfrom=woks-audio.com; dkim=pass (2048-bit key) header.d=woks-audio.com header.i=@woks-audio.com header.b=EtvVcCtS; arc=none smtp.client-ip=88.99.2.238
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=woks-audio.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=woks-audio.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=woks-audio.com header.i=@woks-audio.com header.b="EtvVcCtS"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=woks-audio.com;
-	 h=cc:cc:content-transfer-encoding:content-type:content-type
-	:date:from:from:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=woks; bh=J7xpTlNWKSsTCrvwopXn
-	KlFCYuKohhqt/axMz6/Ds/c=; b=EtvVcCtScC2cpKeH7QyV6FoIFUg3GX2dRPZa
-	eXmmiMT8yv0wZlRwurE7l3EqHqb6HkAaWMnHOIeS/a+lltfrjV1zOS7EroMsH3ak
-	PftJYjRQeVpnySaY1hICRDRLySA5XV5VEyb50xscve8tPCbPXMpjL9MnKy9LDZhE
-	6ilA96Ag+d6BZbiYbjV3fma1Fxs/1WkhpG7bxaW9gFZzf5KTcJzclrs2x1ZdpkXg
-	qdyOVBVjl6rbibY4DrKLERSuYC/OKoI/WG93OmBB6DUbClBB9JVJWUsqBwYA8Fs3
-	/+/IwbYCkUH7sLyr6bRgdHx4FQCjqMLW3rD97NmpA3ySDEJsaQ==
-From: Benjamin Steinke <benjamin.steinke@woks-audio.com>
-To: <intel-wired-lan@osuosl.org>, Kurt Kanzenbach <kurt@linutronix.de>
-CC: Sriram Yagnaraman <sriram.yagnaraman@est.tech>, Maciej Fijalkowski
-	<maciej.fijalkowski@intel.com>, Jesper Dangaard Brouer <hawk@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>, <netdev@vger.kernel.org>, Jonathan
- Lemon <jonathan.lemon@gmail.com>, John Fastabend <john.fastabend@gmail.com>,
-	Alexei Starovoitov <ast@kernel.org>, =?ISO-8859-1?Q?Bj=F6rn_T=F6pel?=
-	<bjorn@kernel.org>, Eric Dumazet <edumazet@google.com>, Sriram Yagnaraman
-	<sriram.yagnaraman@est.tech>, Tony Nguyen <anthony.l.nguyen@intel.com>, Jakub
- Kicinski <kuba@kernel.org>, <bpf@vger.kernel.org>, Paolo Abeni
-	<pabeni@redhat.com>, "David S . Miller" <davem@davemloft.net>, Magnus
- Karlsson <magnus.karlsson@intel.com>
-Subject: Re: [Intel-wired-lan] [PATCH iwl-next v4 0/4] igb: Add support for AF_XDP zero-copy
-Date: Mon, 15 Jul 2024 13:34:11 +0200
-Message-ID: <16778076.kXn58iQkRG@desktop>
-In-Reply-To: <87cyo2fgnm.fsf@kurt.kurt.home>
-References: <20230804084051.14194-1-sriram.yagnaraman@est.tech> <3253130.2gtjKKCVsX@desktop> <87cyo2fgnm.fsf@kurt.kurt.home>
+	s=arc-20240116; t=1721044347; c=relaxed/simple;
+	bh=diIkvLPLDk621MQUgXDoYLDnPu5UDhuEInfuGBiLta0=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=iai3Gzu5HFQWu43aMgq681xDZfKXlEtUiBARmbguIfOOGHxl6BmtAnv6Jg5YEAG1k2n180nYH4A9ooyvlJ+xYo+6ueYP+oAuGlVcqFCTaBPScQO848KXzkB5GDf18jprZ0IdwDgmFOYlycp2SMcRohRKQwyxpMv0srKjzk9E98w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.72
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-io1-f72.google.com with SMTP id ca18e2360f4ac-81257dec573so133993839f.0
+        for <bpf@vger.kernel.org>; Mon, 15 Jul 2024 04:52:25 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1721044344; x=1721649144;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=akbEEO5eDMgzVWGCcvmROY2hRDgzwS14XNZ5oBf1+cg=;
+        b=GQdfvCYgdpvPEwj2CMDDlxmzl10p4/zGv9FfNyzLZ7lP2W/jxxn/7olSKAOkiFo2Cg
+         QmFY4QXJwbbQ8Ie5GY7kvVWhoGDd7qRdM+oaWvzmlS8j5LDF4bbIlt7w2Zhv6BL40TBZ
+         RCaI1AAp67YTYYRmlgCxTV2YQaEnYkzj5J8m39GbbzBL5kNh48VSJqcCEcKuRhxyA4vG
+         hv4pV9p2kBE/4Sqs9W8OqALzVdHVJSMf1z5D6LP8FZKQUXYm6IV5hTwzyPK3vpx1CNC0
+         sZXIPbKWi5/RPK63cEp0NQysHdJPcVDPfKz89txY/bGCqlTBFR6E6VntjkTKgBG99RiL
+         IdEQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWrYx85HYnGSzUw47ilAv6yBTaXzACXDbcvtysKwP0c64qiBgAP9z+Bi02HWaKVqPBrOGq5iSGKDy4J7X+ioETn+Ta2
+X-Gm-Message-State: AOJu0Ywxc8LqcWSw/DyeI+ZlQujwTcgT9ocStd6trE1k3r8KmVjl+M8r
+	BWFvn8qOf52MCoiArMtQTypNYsx8WIiz2jgVrG3OiBS6Jn12Gsu5j3Rr6QrFchaByAhwKeGdpsR
+	2QWqehhc74w74dnuJKLiLQgYk417Zjl/zi7O4p/n3uImWqEW0mlfnato=
+X-Google-Smtp-Source: AGHT+IGbO8E7xzqfGGCF4bOhniymNQ6wQMjLxQgwbzBzed/SnyWB802ButKIujMhzYIKYVew/98ZKs8CLCbAdG91B/tufBuj89U3
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-ClientProxiedBy: EX1.jas.loc (10.100.2.20) To EX1.jas.loc (10.100.2.20)
+X-Received: by 2002:a05:6638:2486:b0:4be:d44b:de24 with SMTP id
+ 8926c6da1cb9f-4c0b2999752mr1398314173.2.1721044344440; Mon, 15 Jul 2024
+ 04:52:24 -0700 (PDT)
+Date: Mon, 15 Jul 2024 04:52:24 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000cb15b9061d47dc76@google.com>
+Subject: [syzbot] Monthly bpf report (Jul 2024)
+From: syzbot <syzbot+list0338b242d2eaf79f8dd5@syzkaller.appspotmail.com>
+To: andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org, 
+	daniel@iogearbox.net, linux-kernel@vger.kernel.org, 
+	syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 
-On Thursday, 27 June 2024, 19:18:37 CEST, Kurt Kanzenbach wrote:
-> Hi Benjamin,
-> 
-> On Thu Jun 27 2024, Benjamin Steinke wrote:
-> > On Thursday, 27 June 2024, 09:07:55 CEST, Kurt Kanzenbach wrote:
-> >> Hi Sriram,
-> >> 
-> >> On Fri Aug 04 2023, Sriram Yagnaraman wrote:
-> >> > The first couple of patches adds helper funcctions to prepare for
-> >> > AF_XDP
-> >> > zero-copy support which comes in the last couple of patches, one each
-> >> > for Rx and TX paths.
-> >> > 
-> >> > As mentioned in v1 patchset [0], I don't have access to an actual IGB
-> >> > device to provide correct performance numbers. I have used Intel
-> >> > 82576EB
-> >> > emulator in QEMU [1] to test the changes to IGB driver.
-> >> 
-> >> I gave this patch series a try on a recent kernel and silicon
-> >> (i210). There was one issue in igb_xmit_zc(). But other than that it
-> >> worked very nicely.
-> > 
-> > Hi Kurt and Sriram,
-> > 
-> > I recently tried the patches on a 6.1 kernel. On two different devices
-> > i210 & i211 I couldn't see any packets being transmitted on the wire.
-> > Perhaps caused by the issue in igb_xmit_zc() you mentioned, Kurt? Can you
-> > share your findings, please?
-> 
-> Yeah, that's exactly the issue.
-> 
-> Following igb_xmit_xdp_ring() I've added PAYLEN to the Tx descriptor
-> instead of setting it to zero:
-> 
-> igb_xmit_zc()
-> {
->         [...]
-> 
-> 	/* put descriptor type bits */
-> 	cmd_type = E1000_ADVTXD_DTYP_DATA | E1000_ADVTXD_DCMD_DEXT |
-> 		   E1000_ADVTXD_DCMD_IFCS;
-> 	olinfo_status = descs[i].len << E1000_ADVTXD_PAYLEN_SHIFT;
-> 
-> 	cmd_type |= descs[i].len | IGB_TXD_DCMD;
-> 	tx_desc->read.cmd_type_len = cpu_to_le32(cmd_type);
-> 	tx_desc->read.olinfo_status = cpu_to_le32(olinfo_status);
-> 
-> 	[...]
-> }
-> 
-> Afterwards packets are transmitted on the wire.
+Hello bpf maintainers/developers,
 
-Hi Kurt,
+This is a 31-day syzbot report for the bpf subsystem.
+All related reports/information can be found at:
+https://syzkaller.appspot.com/upstream/s/bpf
 
-I can confirm this makes the transmitter work.
-Thank you for taking over this patch series and continue to bring this 
-upstream. I will continue testing on this.
- 
-> > RX seemed to work on first sight.
-> 
-> Yes, Rx works even with PTP enabled.
+During the period, 5 new issues were detected and 2 were fixed.
+In total, 52 issues are still open and 256 have been fixed so far.
 
-I can confirm this as well. 
+Some of the still happening issues:
 
-Best regards,
-Benjamin
+Ref  Crashes Repro Title
+<1>  18263   Yes   possible deadlock in trie_delete_elem
+                   https://syzkaller.appspot.com/bug?extid=9d95beb2a3c260622518
+<2>  10705   Yes   KASAN: slab-out-of-bounds Read in btf_datasec_check_meta
+                   https://syzkaller.appspot.com/bug?extid=cc32304f6487ebff9b70
+<3>  8741    Yes   possible deadlock in task_fork_fair
+                   https://syzkaller.appspot.com/bug?extid=1a93ee5d329e97cfbaff
+<4>  1396    Yes   WARNING in bpf_map_lookup_percpu_elem
+                   https://syzkaller.appspot.com/bug?extid=dce5aae19ae4d6399986
+<5>  966     Yes   WARNING in format_decode (3)
+                   https://syzkaller.appspot.com/bug?extid=e2c932aec5c8a6e1d31c
+<6>  803     Yes   possible deadlock in __bpf_ringbuf_reserve
+                   https://syzkaller.appspot.com/bug?extid=850aaf14624dc0c6d366
+<7>  144     Yes   possible deadlock in __queue_map_get
+                   https://syzkaller.appspot.com/bug?extid=8bdfc2c53fb2b63e1871
+<8>  110     Yes   WARNING in __xdp_reg_mem_model
+                   https://syzkaller.appspot.com/bug?extid=f534bd500d914e34b59e
+<9>  108     Yes   BUG: unable to handle kernel NULL pointer dereference in sk_msg_recvmsg
+                   https://syzkaller.appspot.com/bug?extid=84f695756ed0c4bb3aba
+<10> 84      No    possible deadlock in trie_update_elem
+                   https://syzkaller.appspot.com/bug?extid=ea624e536fee669a05cf
 
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
+To disable reminders for individual bugs, reply with the following command:
+#syz set <Ref> no-reminders
 
+To change bug's subsystems, reply with:
+#syz set <Ref> subsystems: new-subsystem
 
-
+You may send multiple commands in a single email message.
