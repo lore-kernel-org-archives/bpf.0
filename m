@@ -1,56 +1,56 @@
-Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
+Received: from mail-oa1-f46.google.com (mail-oa1-f46.google.com [209.85.160.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8818C13FD66
-	for <bpf@vger.kernel.org>; Mon, 15 Jul 2024 23:02:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0F3E1448C7
+	for <bpf@vger.kernel.org>; Mon, 15 Jul 2024 23:02:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721084557; cv=none; b=Hbjg7dEWtsckIGIXtZzzP5C8xeWjoM2jxGiN6B29VRq5OscDWKTFPus94U22DOVuLsTxRgUVnY6gV0sqlSIGv7WpGTGTuwBGENqv1Q1XLxooHP1zQ7/QxP+Ry4GVnTSqpe2UzstY2JDRZ9JzvFaWgqXbuAm1UV2wsKwCrQhQejU=
+	t=1721084559; cv=none; b=IdqkIg7G+DbVvkISQdlRiOvHV9Uyex37Rhd5w0HcTHm7eAv8cpRc7mIyQUVp8JV0yfBuruqGJeBDxjXewYflgXhSjicgSqjCixUnZE4gyrFqJ0KbknJT6EyP1y0c8QiDnz/PJyKABWr76qwhfzOiVpigcUtkhmT2p+ft1BHGZ04=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721084557; c=relaxed/simple;
-	bh=zHssEFSew6/7/I5d3v96ywaAl8Z3NeUArp5+VNQy/C0=;
+	s=arc-20240116; t=1721084559; c=relaxed/simple;
+	bh=nSRQgVwzqE9EibMQ+6b2kM1It2Gm6S06QoRB9b5WnkU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=lOHrsT6B91v2xyjOG/beqcvvEYvaFC7pctgSxrVK9KzyzT0YMl7u7hH18mB9ebggjB8M1cXYTtWVzJNXTZ4VyS/dgg4OFVFNeRbWLBNKKBIdxAxyW1rvCFvy/LjnSB6ltZWPgeT3vXxXqFHvflRKoNjAMZ/1eGNdw7qKemClakA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QYTjmnJ0; arc=none smtp.client-ip=209.85.210.180
+	 MIME-Version; b=Bme/A28dnRZIISHG0ChbxGQR/p9ozft70lEiI404k+2m67700SaSMDAtJ62NoAl7zY6lWPVggXDZkTOqMPVsQRWO5qJKmh/0x8wR6Ja3azU0I6a9u3ZUtJWl9MyMb1bN5cSsmlbOUokoT7YmSLq2/C1NfPfPWaMVi+XcPnjRZMA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ECm6nONU; arc=none smtp.client-ip=209.85.160.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QYTjmnJ0"
-Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-70afe18837cso3020979b3a.3
-        for <bpf@vger.kernel.org>; Mon, 15 Jul 2024 16:02:35 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ECm6nONU"
+Received: by mail-oa1-f46.google.com with SMTP id 586e51a60fabf-250ca14422aso2725303fac.0
+        for <bpf@vger.kernel.org>; Mon, 15 Jul 2024 16:02:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1721084554; x=1721689354; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1721084556; x=1721689356; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Skpti20qxoE6XuXbBaxdLW/TvxJxIRzVhmXOURRx+sc=;
-        b=QYTjmnJ0NoH4F0Xzs2rlKEeTkH28uKXQO3jLQi8pECQ4zotwPE57mdEhEu99PltH34
-         s0LHteGtf3Q6G9J6SyuYnpBCsnCzhzNzb6wO7yhytV3XUMK/k62AketqNNaD9OekAs7K
-         S2Nj3E8PCSKHQAAJfEF4lxOli5ii+KIuTJsmIf7raecWrXZxUlcQZ5Lr33N9qSOcGMae
-         gQ3SM2Wj8B1Z5+2r+F2BESbf/vTZ9OngdHPBDDhMZoHIW9ANtymeCHhzy+EA+3FQg4vz
-         Nb7e1pZsDRYbWGv7H18YSLpPA0n0jY4QGNv4d4ZCUdgdchAMWS2+Tc9IsZuMqczm8sHe
-         NNmw==
+        bh=zEEKOl8JhrhEjS/sgijGjfbzU9z19n/Dr0hU6V4VsDA=;
+        b=ECm6nONUg60EuQ3cvTYqcMH/I1sl7Zr0ck+592X9KFxjbspzsvex0e+9o/QHBTfkFh
+         vFitO42NukhrmXoRJpVUoJo8gUZCz4Cxms2h4wRjnMC3krTjcuwNJ/xvynhbDXEEfqHX
+         pcm/H1XXkcNpwUN2SEtFuz95JJ6Lw7Y1mlKpThW/FzF0trG5lR2GXoCjIpUD+4gc5JTU
+         KUofy34s5ZPLhE0DZEUUD+/maFFm4ykc7Fznzt//mga9FIZACfIYMC7E9MIdODolEK+M
+         2JUmObltHpXfuSL5x8DzxEbsM+7W4lWeSBdj9o94UaxhnKYJL9e59JAVBIerpDtZvLvN
+         zzWQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1721084554; x=1721689354;
+        d=1e100.net; s=20230601; t=1721084556; x=1721689356;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Skpti20qxoE6XuXbBaxdLW/TvxJxIRzVhmXOURRx+sc=;
-        b=tgaNJHyQe94Sk7SD44zmF5lNx2PNzHVvl4DPhnOKlWKUUqWFe3WlyJCV2sHmrjQ57W
-         gpwNesn+oJDf/5S/ZQY2dKorvrng4OxAGouly7F4DNQVtbdGxRjVsm7HpBiZUVmoVpoL
-         weBTACN5d4Srm6wvSfz3vzYR/7M6GQjJDllmO0AXvVVkBj9Yp6RLdX2VHgV2FbJtuSI+
-         uZ+ZNmehPMfJQRnHubnlnWIQVYFAEh7Rj9/RL21pEItPL+EDCxAHV2lV/GcVoTfdjC8g
-         xRyJD2ysYwVUliSpmrSkaG5ffgTnSaBVn/rdue/uZdhRfrVoJzce7Gx6jDWaOyAb7oLc
-         fM4g==
-X-Gm-Message-State: AOJu0YxdHOnW+isnrMMX1ZIiOTPIF908q8bhEoVCIylVKq1ZW1u6uJrY
-	RuYkw6uAo9Jg9hn1RJiWKS3Gr5eW9Bi04UzuheGDvelD98GuaH+wANItgw==
-X-Google-Smtp-Source: AGHT+IGDJly7JQmW4Sume9xsYbBZyPdgaRNEsb2bNnzYj/cwNFv78GL6tiOs70TN31XMIWz8NGGDvQ==
-X-Received: by 2002:a05:6a21:e8a:b0:1c0:f648:8574 with SMTP id adf61e73a8af0-1c3f123d9e7mr428547637.29.1721084554363;
-        Mon, 15 Jul 2024 16:02:34 -0700 (PDT)
+        bh=zEEKOl8JhrhEjS/sgijGjfbzU9z19n/Dr0hU6V4VsDA=;
+        b=AKieLSyu3ApdZeAf2eWigR2kNSai3A4ia+9BcIgfSFE328A4KvjmAOsqzM4lhOTJ+N
+         pSKROjd4PWAfpj5Ha0OJ/d/U2kn+KWpcEtt+qLBPNWFuTT21QnW3eQg3EBnXuU5t6RMj
+         rhoM3X5X19p/LLjmZnOTNkKpbpIZOmjNFf6v0qxj/w1bb+zQLqbQ53VU6Q7GQeR+EGu2
+         Ma7tZwREgHLxHhSiPguN4EH03wQ9pCpPOJxjh6qqklDxkZaAJLt0n6q4B1+JVr8k3aZs
+         bbFRGhGwTzWalBsdgs5xseHMMW5JFx7rbvdwBlVsaBvlVmCKSERtPkwd+fRo/S7OkVCt
+         wuFQ==
+X-Gm-Message-State: AOJu0Yz6zBFPfEUTAkLrbrrg3+6QVEQkCs7n2QxZhMMqZE2zT+Ifn2jF
+	7eLtTgfUDx5d2WcolTXQhhstzuexLvdueD6pDqogCQ2zJqrLEZbq5xsZrA==
+X-Google-Smtp-Source: AGHT+IF0BpfRmdLoZlEPYSc6mDHHRhL7/Ozz0nAINmHk88sv++YJRe0uyXwFXi+/2VnQ8qJwK7n1xQ==
+X-Received: by 2002:a05:6870:d614:b0:254:963e:cc3f with SMTP id 586e51a60fabf-260bd51fd74mr262006fac.1.1721084556366;
+        Mon, 15 Jul 2024 16:02:36 -0700 (PDT)
 Received: from badger.. ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-70b7ecc9d36sm4915344b3a.205.2024.07.15.16.02.33
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-70b7ecc9d36sm4915344b3a.205.2024.07.15.16.02.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Jul 2024 16:02:33 -0700 (PDT)
+        Mon, 15 Jul 2024 16:02:35 -0700 (PDT)
 From: Eduard Zingerman <eddyz87@gmail.com>
 To: bpf@vger.kernel.org,
 	ast@kernel.org
@@ -61,9 +61,9 @@ Cc: andrii@kernel.org,
 	yonghong.song@linux.dev,
 	jose.marchesi@oracle.com,
 	Eduard Zingerman <eddyz87@gmail.com>
-Subject: [bpf-next v3 07/12] selftests/bpf: extract test_loader->expect_msgs as a data structure
-Date: Mon, 15 Jul 2024 16:01:56 -0700
-Message-ID: <20240715230201.3901423-8-eddyz87@gmail.com>
+Subject: [bpf-next v3 09/12] selftests/bpf: __arch_* macro to limit test cases to specific archs
+Date: Mon, 15 Jul 2024 16:01:58 -0700
+Message-ID: <20240715230201.3901423-10-eddyz87@gmail.com>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <20240715230201.3901423-1-eddyz87@gmail.com>
 References: <20240715230201.3901423-1-eddyz87@gmail.com>
@@ -75,204 +75,171 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Non-functional change: use a separate data structure to represented
-expected messages in test_loader.
-This would allow to use the same functionality for expected set of
-disassembled instructions in the follow-up commit.
+Add annotations __arch_x86_64, __arch_arm64, __arch_riscv64
+to specify on which architecture the test case should be tested.
+Several __arch_* annotations could be specified at once.
+When test case is not run on current arch it is marked as skipped.
+
+For example, the following would be tested only on arm64 and riscv64:
+
+  SEC("raw_tp")
+  __arch_arm64
+  __arch_riscv64
+  __xlated("1: *(u64 *)(r10 - 16) = r1")
+  __xlated("2: call")
+  __xlated("3: r1 = *(u64 *)(r10 - 16);")
+  __success
+  __naked void canary_arm64_riscv64(void)
+  {
+  	asm volatile (
+  	"r1 = 1;"
+  	"*(u64 *)(r10 - 16) = r1;"
+  	"call %[bpf_get_smp_processor_id];"
+  	"r1 = *(u64 *)(r10 - 16);"
+  	"exit;"
+  	:
+  	: __imm(bpf_get_smp_processor_id)
+  	: __clobber_all);
+  }
+
+On x86 it would be skipped:
+
+  #467/2   verifier_nocsr/canary_arm64_riscv64:SKIP
 
 Acked-by: Andrii Nakryiko <andrii@kernel.org>
 Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
 ---
- tools/testing/selftests/bpf/test_loader.c | 81 ++++++++++++-----------
- 1 file changed, 41 insertions(+), 40 deletions(-)
+ tools/testing/selftests/bpf/progs/bpf_misc.h |  8 ++++
+ tools/testing/selftests/bpf/test_loader.c    | 43 ++++++++++++++++++++
+ 2 files changed, 51 insertions(+)
 
+diff --git a/tools/testing/selftests/bpf/progs/bpf_misc.h b/tools/testing/selftests/bpf/progs/bpf_misc.h
+index a70939c7bc26..a225cd87897c 100644
+--- a/tools/testing/selftests/bpf/progs/bpf_misc.h
++++ b/tools/testing/selftests/bpf/progs/bpf_misc.h
+@@ -63,6 +63,10 @@
+  * __auxiliary         Annotated program is not a separate test, but used as auxiliary
+  *                     for some other test cases and should always be loaded.
+  * __auxiliary_unpriv  Same, but load program in unprivileged mode.
++ *
++ * __arch_*          Specify on which architecture the test case should be tested.
++ *                   Several __arch_* annotations could be specified at once.
++ *                   When test case is not run on current arch it is marked as skipped.
+  */
+ #define __msg(msg)		__attribute__((btf_decl_tag("comment:test_expect_msg=" msg)))
+ #define __regex(regex)		__attribute__((btf_decl_tag("comment:test_expect_regex=" regex)))
+@@ -82,6 +86,10 @@
+ #define __auxiliary		__attribute__((btf_decl_tag("comment:test_auxiliary")))
+ #define __auxiliary_unpriv	__attribute__((btf_decl_tag("comment:test_auxiliary_unpriv")))
+ #define __btf_path(path)	__attribute__((btf_decl_tag("comment:test_btf_path=" path)))
++#define __arch(arch)		__attribute__((btf_decl_tag("comment:test_arch=" arch)))
++#define __arch_x86_64		__arch("X86_64")
++#define __arch_arm64		__arch("ARM64")
++#define __arch_riscv64		__arch("RISCV64")
+ 
+ /* Convenience macro for use with 'asm volatile' blocks */
+ #define __naked __attribute__((naked))
 diff --git a/tools/testing/selftests/bpf/test_loader.c b/tools/testing/selftests/bpf/test_loader.c
-index 47508cf66e89..3f84903558dd 100644
+index b44b6a2fc82c..12b0c41e8d64 100644
 --- a/tools/testing/selftests/bpf/test_loader.c
 +++ b/tools/testing/selftests/bpf/test_loader.c
-@@ -55,11 +55,15 @@ struct expect_msg {
- 	regex_t regex;
- };
+@@ -34,6 +34,7 @@
+ #define TEST_TAG_AUXILIARY "comment:test_auxiliary"
+ #define TEST_TAG_AUXILIARY_UNPRIV "comment:test_auxiliary_unpriv"
+ #define TEST_BTF_PATH "comment:test_btf_path="
++#define TEST_TAG_ARCH "comment:test_arch="
  
-+struct expected_msgs {
-+	struct expect_msg *patterns;
-+	size_t cnt;
+ /* Warning: duplicated in bpf_misc.h */
+ #define POINTER_VALUE	0xcafe4all
+@@ -80,6 +81,7 @@ struct test_spec {
+ 	int log_level;
+ 	int prog_flags;
+ 	int mode_mask;
++	int arch_mask;
+ 	bool auxiliary;
+ 	bool valid;
+ };
+@@ -213,6 +215,12 @@ static void update_flags(int *flags, int flag, bool clear)
+ 		*flags |= flag;
+ }
+ 
++enum arch {
++	ARCH_X86_64	= 0x1,
++	ARCH_ARM64	= 0x2,
++	ARCH_RISCV64	= 0x4,
 +};
 +
- struct test_subspec {
- 	char *name;
- 	bool expect_failure;
--	struct expect_msg *expect_msgs;
--	size_t expect_msg_cnt;
-+	struct expected_msgs expect_msgs;
- 	int retval;
- 	bool execute;
- };
-@@ -96,44 +100,45 @@ void test_loader_fini(struct test_loader *tester)
- 	free(tester->log_buf);
+ /* Uses btf_decl_tag attributes to describe the expected test
+  * behavior, see bpf_misc.h for detailed description of each attribute
+  * and attribute combinations.
+@@ -226,6 +234,7 @@ static int parse_test_spec(struct test_loader *tester,
+ 	bool has_unpriv_result = false;
+ 	bool has_unpriv_retval = false;
+ 	int func_id, i, err = 0;
++	u32 arch_mask = 0;
+ 	struct btf *btf;
+ 
+ 	memset(spec, 0, sizeof(*spec));
+@@ -364,11 +373,26 @@ static int parse_test_spec(struct test_loader *tester,
+ 					goto cleanup;
+ 				update_flags(&spec->prog_flags, flags, clear);
+ 			}
++		} else if (str_has_pfx(s, TEST_TAG_ARCH)) {
++			val = s + sizeof(TEST_TAG_ARCH) - 1;
++			if (strcmp(val, "X86_64") == 0) {
++				arch_mask |= ARCH_X86_64;
++			} else if (strcmp(val, "ARM64") == 0) {
++				arch_mask |= ARCH_ARM64;
++			} else if (strcmp(val, "RISCV64") == 0) {
++				arch_mask |= ARCH_RISCV64;
++			} else {
++				PRINT_FAIL("bad arch spec: '%s'", val);
++				err = -EINVAL;
++				goto cleanup;
++			}
+ 		} else if (str_has_pfx(s, TEST_BTF_PATH)) {
+ 			spec->btf_custom_path = s + sizeof(TEST_BTF_PATH) - 1;
+ 		}
+ 	}
+ 
++	spec->arch_mask = arch_mask;
++
+ 	if (spec->mode_mask == 0)
+ 		spec->mode_mask = PRIV;
+ 
+@@ -677,6 +701,20 @@ static int get_xlated_program_text(int prog_fd, char *text, size_t text_sz)
+ 	return err;
  }
  
--static void free_test_spec(struct test_spec *spec)
-+static void free_msgs(struct expected_msgs *msgs)
- {
- 	int i;
- 
-+	for (i = 0; i < msgs->cnt; i++)
-+		if (msgs->patterns[i].regex_str)
-+			regfree(&msgs->patterns[i].regex);
-+	free(msgs->patterns);
-+	msgs->patterns = NULL;
-+	msgs->cnt = 0;
++static bool run_on_current_arch(int arch_mask)
++{
++	if (arch_mask == 0)
++		return true;
++#if defined(__x86_64__)
++	return arch_mask & ARCH_X86_64;
++#elif defined(__aarch64__)
++	return arch_mask & ARCH_ARM64;
++#elif defined(__riscv) && __riscv_xlen == 64
++	return arch_mask & ARCH_RISCV64;
++#endif
++	return false;
 +}
 +
-+static void free_test_spec(struct test_spec *spec)
-+{
- 	/* Deallocate expect_msgs arrays. */
--	for (i = 0; i < spec->priv.expect_msg_cnt; i++)
--		if (spec->priv.expect_msgs[i].regex_str)
--			regfree(&spec->priv.expect_msgs[i].regex);
--	for (i = 0; i < spec->unpriv.expect_msg_cnt; i++)
--		if (spec->unpriv.expect_msgs[i].regex_str)
--			regfree(&spec->unpriv.expect_msgs[i].regex);
-+	free_msgs(&spec->priv.expect_msgs);
-+	free_msgs(&spec->unpriv.expect_msgs);
+ /* this function is forced noinline and has short generic name to look better
+  * in test_progs output (in case of a failure)
+  */
+@@ -701,6 +739,11 @@ void run_subtest(struct test_loader *tester,
+ 	if (!test__start_subtest(subspec->name))
+ 		return;
  
- 	free(spec->priv.name);
- 	free(spec->unpriv.name);
--	free(spec->priv.expect_msgs);
--	free(spec->unpriv.expect_msgs);
--
- 	spec->priv.name = NULL;
- 	spec->unpriv.name = NULL;
--	spec->priv.expect_msgs = NULL;
--	spec->unpriv.expect_msgs = NULL;
- }
- 
--static int push_msg(const char *substr, const char *regex_str, struct test_subspec *subspec)
-+static int push_msg(const char *substr, const char *regex_str, struct expected_msgs *msgs)
- {
- 	void *tmp;
- 	int regcomp_res;
- 	char error_msg[100];
- 	struct expect_msg *msg;
- 
--	tmp = realloc(subspec->expect_msgs,
--		      (1 + subspec->expect_msg_cnt) * sizeof(struct expect_msg));
-+	tmp = realloc(msgs->patterns,
-+		      (1 + msgs->cnt) * sizeof(struct expect_msg));
- 	if (!tmp) {
- 		ASSERT_FAIL("failed to realloc memory for messages\n");
- 		return -ENOMEM;
- 	}
--	subspec->expect_msgs = tmp;
--	msg = &subspec->expect_msgs[subspec->expect_msg_cnt];
-+	msgs->patterns = tmp;
-+	msg = &msgs->patterns[msgs->cnt];
- 
- 	if (substr) {
- 		msg->substr = substr;
-@@ -150,7 +155,7 @@ static int push_msg(const char *substr, const char *regex_str, struct test_subsp
- 		}
- 	}
- 
--	subspec->expect_msg_cnt += 1;
-+	msgs->cnt += 1;
- 	return 0;
- }
- 
-@@ -272,25 +277,25 @@ static int parse_test_spec(struct test_loader *tester,
- 			spec->mode_mask |= UNPRIV;
- 		} else if (str_has_pfx(s, TEST_TAG_EXPECT_MSG_PFX)) {
- 			msg = s + sizeof(TEST_TAG_EXPECT_MSG_PFX) - 1;
--			err = push_msg(msg, NULL, &spec->priv);
-+			err = push_msg(msg, NULL, &spec->priv.expect_msgs);
- 			if (err)
- 				goto cleanup;
- 			spec->mode_mask |= PRIV;
- 		} else if (str_has_pfx(s, TEST_TAG_EXPECT_MSG_PFX_UNPRIV)) {
- 			msg = s + sizeof(TEST_TAG_EXPECT_MSG_PFX_UNPRIV) - 1;
--			err = push_msg(msg, NULL, &spec->unpriv);
-+			err = push_msg(msg, NULL, &spec->unpriv.expect_msgs);
- 			if (err)
- 				goto cleanup;
- 			spec->mode_mask |= UNPRIV;
- 		} else if (str_has_pfx(s, TEST_TAG_EXPECT_REGEX_PFX)) {
- 			msg = s + sizeof(TEST_TAG_EXPECT_REGEX_PFX) - 1;
--			err = push_msg(NULL, msg, &spec->priv);
-+			err = push_msg(NULL, msg, &spec->priv.expect_msgs);
- 			if (err)
- 				goto cleanup;
- 			spec->mode_mask |= PRIV;
- 		} else if (str_has_pfx(s, TEST_TAG_EXPECT_REGEX_PFX_UNPRIV)) {
- 			msg = s + sizeof(TEST_TAG_EXPECT_REGEX_PFX_UNPRIV) - 1;
--			err = push_msg(NULL, msg, &spec->unpriv);
-+			err = push_msg(NULL, msg, &spec->unpriv.expect_msgs);
- 			if (err)
- 				goto cleanup;
- 			spec->mode_mask |= UNPRIV;
-@@ -387,11 +392,12 @@ static int parse_test_spec(struct test_loader *tester,
- 			spec->unpriv.execute = spec->priv.execute;
- 		}
- 
--		if (!spec->unpriv.expect_msgs) {
--			for (i = 0; i < spec->priv.expect_msg_cnt; i++) {
--				struct expect_msg *msg = &spec->priv.expect_msgs[i];
-+		if (spec->unpriv.expect_msgs.cnt == 0) {
-+			for (i = 0; i < spec->priv.expect_msgs.cnt; i++) {
-+				struct expect_msg *msg = &spec->priv.expect_msgs.patterns[i];
- 
--				err = push_msg(msg->substr, msg->regex_str, &spec->unpriv);
-+				err = push_msg(msg->substr, msg->regex_str,
-+					       &spec->unpriv.expect_msgs);
- 				if (err)
- 					goto cleanup;
- 			}
-@@ -443,18 +449,14 @@ static void emit_verifier_log(const char *log_buf, bool force)
- 	fprintf(stdout, "VERIFIER LOG:\n=============\n%s=============\n", log_buf);
- }
- 
--static void validate_case(struct test_loader *tester,
--			  struct test_subspec *subspec,
--			  struct bpf_object *obj,
--			  struct bpf_program *prog,
--			  int load_err)
-+static void validate_msgs(char *log_buf, struct expected_msgs *msgs)
- {
- 	regmatch_t reg_match[1];
--	const char *log = tester->log_buf;
-+	const char *log = log_buf;
- 	int i, j, err;
- 
--	for (i = 0; i < subspec->expect_msg_cnt; i++) {
--		struct expect_msg *msg = &subspec->expect_msgs[i];
-+	for (i = 0; i < msgs->cnt; i++) {
-+		struct expect_msg *msg = &msgs->patterns[i];
- 		const char *match = NULL;
- 
- 		if (msg->substr) {
-@@ -471,9 +473,9 @@ static void validate_case(struct test_loader *tester,
- 
- 		if (!ASSERT_OK_PTR(match, "expect_msg")) {
- 			if (env.verbosity == VERBOSE_NONE)
--				emit_verifier_log(tester->log_buf, true /*force*/);
-+				emit_verifier_log(log_buf, true /*force*/);
- 			for (j = 0; j <= i; j++) {
--				msg = &subspec->expect_msgs[j];
-+				msg = &msgs->patterns[j];
- 				fprintf(stderr, "%s %s: '%s'\n",
- 					j < i ? "MATCHED " : "EXPECTED",
- 					msg->substr ? "SUBSTR" : " REGEX",
-@@ -692,9 +694,8 @@ void run_subtest(struct test_loader *tester,
- 			goto tobj_cleanup;
- 		}
- 	}
--
- 	emit_verifier_log(tester->log_buf, false /*force*/);
--	validate_case(tester, subspec, tobj, tprog, err);
-+	validate_msgs(tester->log_buf, &subspec->expect_msgs);
- 
- 	if (should_do_test_run(spec, subspec)) {
- 		/* For some reason test_verifier executes programs
++	if (!run_on_current_arch(spec->arch_mask)) {
++		test__skip();
++		return;
++	}
++
+ 	if (unpriv) {
+ 		if (!can_execute_unpriv(tester, spec)) {
+ 			test__skip();
 -- 
 2.45.2
 
