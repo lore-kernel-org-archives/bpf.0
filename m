@@ -1,108 +1,132 @@
-Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com [209.85.128.181])
+Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com [209.85.128.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14FC014265
-	for <bpf@vger.kernel.org>; Tue, 16 Jul 2024 05:34:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECAFAE556
+	for <bpf@vger.kernel.org>; Tue, 16 Jul 2024 06:46:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721108058; cv=none; b=AFsDpIfSVD6AGI7AylCDA7Au8IHwGDe/b6rRIRi8zCCYdAt74hFxbEP43D9wjfMOcXQJFU+jWz/y5qfZvf5Zz9eP5Oj0kqTBlBFeOlc8huwDI398bCkfLfVTulpluwrllX7ROHYQr18XzdWUm8Z+7FeDFIQBuOq9LWT2gn2cB3s=
+	t=1721112381; cv=none; b=qbYX5YC85Ihse42uApSbCjrTCfvJYBgwuS9HFTzs2rKLIobaKGAYZ39v04MEYs0D7sQXLtwCKSBW7KG5nO35FeHkPWBtTOQTdGgu9Rv2Q3IRVCANjkJrCxU13eH/sXFBRPORgT25FuZXzZ4GIMGpgvlic97C0RirIFYDfXghrRc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721108058; c=relaxed/simple;
-	bh=BWYDGGDkJ1T8JdNjH54qMSgyKH4bhwtTpS2p71/pwJA=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=i9RvIzH0WJETwRw1qnAa5ZWRh1YTMcbbmGohxDvZSk0OJ90YFduJWwXE4ldlUKHpgRkh3OdhBCJWvNZCMDBUp3UvJoIBr/O9KDzxxAjz3097O0BqGDQvuksAIkWqFqQxZeLImF4mT31ArQhcLVPr5CYbKxibM4dzXSar3P3/A68=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Tt7Yev0X; arc=none smtp.client-ip=209.85.128.181
+	s=arc-20240116; t=1721112381; c=relaxed/simple;
+	bh=6tDGVjIzmtBzHyugGLmnm4BHc/foSaOVq0EoQcYrGYg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=b6HnKBJZQtgic+ZObECiNqO6m2pqN7J7JCBJwHF3i3B5s5TNAXK7byYPctlTgDaUa+3N9bGOf7lOz091qsfExLYqYVhvCMDjL0Tq6+MZMP2gsERHsDDV/JjGe3W5m+sb6OhSWOyYrEBZlGx+aA0Mdy1+4doFocFO6xLcmFODhKI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ndHF7piJ; arc=none smtp.client-ip=209.85.128.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Tt7Yev0X"
-Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-65fe1239f12so18801147b3.0
-        for <bpf@vger.kernel.org>; Mon, 15 Jul 2024 22:34:16 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ndHF7piJ"
+Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-65fa21206b5so23605637b3.3
+        for <bpf@vger.kernel.org>; Mon, 15 Jul 2024 23:46:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1721108056; x=1721712856; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=EkAPNc7UxXzOyccSnCjSf9aden+0hCCcYkV+GkIs5x0=;
-        b=Tt7Yev0XY2U+ZdkAyESA1Mwp2jD7e/d+HX5NJ/41vBFlC6Ljdf16jpCKSnqiYUMEcv
-         tDReEc3sStN4SaLp5nfO0cIhNPsKB3tYnY3D/k/UN10a/kDSVFdzgt7kJRmhFeAZvRPe
-         zyAPH42ntQf4Xpu85x7O4PR+3lQn46xLswjYusJEGV5mpdafnpJrcusIVyy44FvHQMFL
-         wfjYZs1oFjNR4Yoihh8PrJrIYVxL5v6STffuDdE5pTwVzxU8mEjcho02XNyfrHGrjPQd
-         XZalWRJbQ/2XF/ZEjsXiaYwZfJNGrbrctW1I3PeKlZVh0+2ZpWR7OWiU/odcvu1NaG5L
-         oxzQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1721108056; x=1721712856;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+        d=gmail.com; s=20230601; t=1721112379; x=1721717179; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=EkAPNc7UxXzOyccSnCjSf9aden+0hCCcYkV+GkIs5x0=;
-        b=f3R/Mf1YX2z0wr5WSirg6oh8u2llVY7a3ZYRzuknbb6XBG9CRhC0CorEMC/GLUqVGj
-         l5s8GfxtV/Yr1h012YnBhVaBTtt/SzorJWwJZ9LAqkOrjVFA9HOTS6WaGJ2HLHvK4OED
-         iQNtPAR2Z+owH03o01rjzLLyVN4/0talK2mW/uui5A0eMEKuncdjwER0xD66YBwmKGDT
-         IW+3jL2o1Y+COYLiqAYW20/A0Uj1vZiM4u7w0xce13vwZ1S0U02kODizH4QK0ut4ZrWB
-         0FQHhFaI1bQncwOIz8cZ7TLWGKT9e9MviVukW4K76+rqnzDgX3+wb7z460/mJ2ewTYAZ
-         fUVQ==
-X-Gm-Message-State: AOJu0Yy7+WKh0pM7yDG2dqcu3aIskHzVvHL47yMwfuZcqfSCR0kyaRkd
-	IiPGLmcYal3AxsNDpYewVKzxQ8oeQqfkVdKNs0OVTN6PdNIRu8SJ
-X-Google-Smtp-Source: AGHT+IEAaeb2JwPvZHXbsi667o7Evcgsz+EdtXXlx4T8gcnMD78IwEtFv560ttQMBqfW5ZExP0diAw==
-X-Received: by 2002:a05:6902:230e:b0:dfe:fac8:b890 with SMTP id 3f1490d57ef6-e05d5dff8a2mr1523652276.28.1721108056007;
-        Mon, 15 Jul 2024 22:34:16 -0700 (PDT)
-Received: from [192.168.0.31] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-7910f291ee4sm2954748a12.86.2024.07.15.22.34.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Jul 2024 22:34:15 -0700 (PDT)
-Message-ID: <b660e0becf9b629a4d236ec5c03b8cc0dcdc2502.camel@gmail.com>
-Subject: Re: [bpf-next v3 02/12] bpf: no_caller_saved_registers attribute
- for helper calls
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>, Andrii
- Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Martin KaFai Lau <martin.lau@linux.dev>, Kernel Team <kernel-team@fb.com>,
- Yonghong Song <yonghong.song@linux.dev>, "Jose E. Marchesi"
- <jose.marchesi@oracle.com>
-Date: Mon, 15 Jul 2024 22:34:10 -0700
-In-Reply-To: <CAADnVQJ7MAtt-EZLorjuyhoOFijyff7tNDy4-up0L6pjnrZHvg@mail.gmail.com>
-References: <20240715230201.3901423-1-eddyz87@gmail.com>
-	 <20240715230201.3901423-3-eddyz87@gmail.com>
-	 <CAADnVQJ7MAtt-EZLorjuyhoOFijyff7tNDy4-up0L6pjnrZHvg@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4-0ubuntu2 
+        bh=ENHQbO7KQAdaGaUXwYWNrzJUlsoljyfuz78VE6h8mTc=;
+        b=ndHF7piJpl0vwsJ9biz7u5i0qt6U48clCnXguRCo5LjK0jbOEfiIbfdlp/9Kfkj57W
+         QCij12DIxpidWQQL//BxreeIwzkZPohx2SCAmzOBcWE41sVLo3dGqQ2pGslrJDpn2Xc2
+         j4OY6JyTMqTV4S1CDwsS+d9xnoYo5D/1pQRJWfs/W6X/z3E5caRG8V1eeDNaZC1yFoxw
+         rZMAfK1Aj5cKIk0Kh1N88v76LzhKUC9mz6lIWl1KzB6Iun4gOzfkDfk7ZbfD4/wbcCXI
+         upBSAe2W8wZtCrwKpCiFrU+MsOWc3LfZuCysiF0xQS9UkeP61kwR+yC8E4sxy92H23Cz
+         GV4g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1721112379; x=1721717179;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ENHQbO7KQAdaGaUXwYWNrzJUlsoljyfuz78VE6h8mTc=;
+        b=vFcBvpq9UkapO931nCSCtwzx5mJgCo1FoGH6/cAsaE+KUU2cZoxMzPzr3v5hSElWhZ
+         IXXVv0sSuwi4uVRxqVPTR7ShdQBRavb97wfDwZ09fi0FoZVdM9hI1Wih508oivaGuThV
+         WHgaVSF1qhxit4nwir+im6ue/FiOmSu9r14lpkeLsL97ffElrHioGHPPNnNlrujCfsFu
+         Z11icVq3vFEE1IHdS4ucg/US4WICew3s2ktpuJnr0sMWIX+sqJ4hebLHthCqzqrh0C3q
+         pMOgUsY3qijxYDxrHAUKoSU3v8gJV+qgGfDgLX1EEisCoVvi0TQeCpem24cTfVEnuL09
+         sUyQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUc0xWpic5J3qPs60v3E/nglJ1IgRO0p7nfVl3W4ixfViOZZ9/lvi5JWZGiiOBjeOkpdA5TgJgnapF/JIbH68LBxmKs
+X-Gm-Message-State: AOJu0YzqGkN+chiOoBUqW4iR+SZy371nw/WVKccFyy/ORkh+fnLQeAnY
+	TWFj5l3VIb3gjlKRFTanNU3StKrK4AGt8xV18Pm1QsWgrlsdYSTr
+X-Google-Smtp-Source: AGHT+IGm8wJSmBg70zi60viyN/9EGKaXKlcDkMxYmqTGeS8pGaOPF/htTNSHzrX/3MAO6Dptqhxzww==
+X-Received: by 2002:a05:690c:d8b:b0:65c:b1ef:2a14 with SMTP id 00721157ae682-663818cf422mr15440357b3.47.1721112378902;
+        Mon, 15 Jul 2024 23:46:18 -0700 (PDT)
+Received: from ?IPV6:2600:1700:6cf8:1240:9e31:e627:eb50:ccf1? ([2600:1700:6cf8:1240:9e31:e627:eb50:ccf1])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-65fc2af4232sm10559437b3.70.2024.07.15.23.46.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 15 Jul 2024 23:46:18 -0700 (PDT)
+Message-ID: <ce96aa60-bb14-498f-b996-ab906a3b9f0d@gmail.com>
+Date: Mon, 15 Jul 2024 23:46:17 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next 0/4] monitor network traffic for flaky test cases
+To: Stanislav Fomichev <sdf@fomichev.me>
+Cc: Martin KaFai Lau <martin.lau@linux.dev>,
+ Kui-Feng Lee <thinker.li@gmail.com>, bpf@vger.kernel.org, ast@kernel.org,
+ song@kernel.org, kernel-team@meta.com, andrii@kernel.org, kuifeng@meta.com
+References: <20240713055552.2482367-1-thinker.li@gmail.com>
+ <ZpWVvo5ypevlt9AB@mini-arch> <4c658385-dc3c-46ff-a868-0159edf84dc1@gmail.com>
+ <940fff33-ed2b-41e0-bac6-d388deda9446@linux.dev>
+ <528a8c8c-159c-4fb2-9c4c-c9c9b2e585df@gmail.com> <ZpXoODGNDyhnyeO8@mini-arch>
+Content-Language: en-US
+From: Kui-Feng Lee <sinquersw@gmail.com>
+In-Reply-To: <ZpXoODGNDyhnyeO8@mini-arch>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Mon, 2024-07-15 at 18:51 -0700, Alexei Starovoitov wrote:
-> On Mon, Jul 15, 2024 at 4:02=E2=80=AFPM Eduard Zingerman <eddyz87@gmail.c=
-om> wrote:
-> >=20
-> > @@ -21771,6 +22058,12 @@ int bpf_check(struct bpf_prog **prog, union bp=
-f_attr *attr, bpfptr_t uattr, __u3
-> >         if (ret =3D=3D 0)
-> >                 ret =3D check_max_stack_depth(env);
-> >=20
-> > +       /* might decrease stack depth, keep it before passes that
-> > +        * allocate additional slots.
-> > +        */
-> > +       if (ret =3D=3D 0)
-> > +               ret =3D remove_nocsr_spills_fills(env);
->=20
-> Probably should be before check_max_stack_depth() above :)
 
-I thought about it, unfortunately, that would be a half-measure.
-There are two places where verifier reports stack depth errors:
-- check_stack_access_within_bounds() checks for access outside
-  [-MAX_BPF_STACK..0) region within one subprogram;
-- check_max_stack_depth() checks accumulated stack depth across
-  subprogram calls.
 
-It is possible to move remove_nocsr_spills_fills() before
-check_max_stack_depth(), but check_stack_access_within_bounds() would
-still report errors for nocsr stack slots, because
-check_nocsr_stack_contract() and check_stack_access_within_bounds()
-are both invoked during main verification pass and contract validation
-is not yet finished.
+On 7/15/24 20:25, Stanislav Fomichev wrote:
+> On 07/15, Kui-Feng Lee wrote:
+>>
+>>
+>> On 7/15/24 16:56, Martin KaFai Lau wrote:
+>>> On 7/15/24 3:07 PM, Kui-Feng Lee wrote:
+>>>>
+>>>>
+>>>> On 7/15/24 14:33, Stanislav Fomichev wrote:
+>>>>> On 07/12, Kui-Feng Lee wrote:
+>>>>>> Run tcpdump in the background for flaky test cases related to network
+>>>>>> features.
+>>>>>
+>>>>> Have you considered linking against libpcap instead of shelling out
+>>>>> to tcpdump? As long as we have this lib installed on the runners
+>>>>> (likely?) that should be a bit cleaner than doing tcpdump.. WDYT?
+>>>>
+>>>> I just checked the script building the root image for vmtest. [1]
+>>>> It doesn't install libpcap.
+>>>>
+>>>> If our approach is to capture the packets in a file, and let developers
+>>>> download the file, it would be a simple and straight forward solution.
+>>>> If we want a log in text, it would be more complicated to parse
+>>>> packets.
+>>>>
+>>>> Martin & Stanislay,
+>>>>
+>>>> WDYT about capture packets in a file and using libpcap directly?
+>>>> Developers can download the file and parse it with tcpdump locally.
+>>>
+>>> thinking out loud...
+>>>
+>>> Re: libpcap (instead of tcpdump) part. I am not very experienced in
+>>> libpcap. I don't have a strong preference. I do hope patch 1 could be
+>>> more straight forward that no need to use loops and artificial udp
+>>> packets to ensure the tcpdump is fully ready to capture. I assume using
+>>> libpcap can make this sync part easier/cleaner (pthread_cond?) and not
+>>> too much code is needed to use libpcap?
+>>
+>> Yes, it would be easier and cleaner if we don't parse the payload
+>> of packets.
+> 
+> Yeah, same, no strong preference; was just wondering whether you've
+> made a conscious choice of not using it because it definitely makes things
+> a bit easier wrt to the part where you try to sync with tcpdump..
+> 
+> Also +1 on saving the raw file (via libpcap or tcpdump -w).
+
+I agree to do it with libpcap. And, will print a number to stdout/stderr
+as an index to the packets in the raw file. However, I need to figure
+out how to make the raw file available to developers at first.
+
