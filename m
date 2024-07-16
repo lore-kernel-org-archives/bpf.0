@@ -1,30 +1,30 @@
-Received: from out30-124.freemail.mail.aliyun.com (out30-124.freemail.mail.aliyun.com [115.124.30.124])
+Received: from out30-132.freemail.mail.aliyun.com (out30-132.freemail.mail.aliyun.com [115.124.30.132])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F9A022638;
-	Tue, 16 Jul 2024 06:46:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58FCB219EA;
+	Tue, 16 Jul 2024 06:46:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.132
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721112401; cv=none; b=cYJb67gEwRQjXTB0ADlwK/8M3NuGuK3nOGqiMbvWs1OHva9HJhzwrXa3Ptc85FVrIILZu9dtcvSVvYgOuFmvo8H1Laessc/h4MDaRDulD7tTeUIzVSmb/LZ4zJX+BfFPoZRcsxt6syEZj4aN+tErmTvY2LD4WnoVZo/4Bd0asD8=
+	t=1721112402; cv=none; b=bNFRaDIJ1SZ6P3Zgjx9Pa9eR1YnSGSsSClMFrX3dUDyWMFRZdK8qhvi8ltDkDzIjvOUE7/uncksD3un6NKX/F1Vo4Wq0DZDo5VrYY1sTEoEEX623ZDMCpdtGM3pj8sRxQPOpH14LexDeQvT+HCKf2VIFVtzwWQ9YCZ6M4yB/gC4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721112401; c=relaxed/simple;
-	bh=pTQAbPs2Y8vILkiKqSBINZPTFPiJOn07NUz7MZ3ogks=;
+	s=arc-20240116; t=1721112402; c=relaxed/simple;
+	bh=XaJ+GyJuXnOuEfLtRWJG61X6LD/245VFFuMjFSc1MLs=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=WBfy8z1Srz9nzAtNZFhb6m+Z6xPg3UpNOT4JbRgNUynLKZyIVxZ6cY8rK7+/k+XpXR74E+BiFSGP5jOtpSSdIRF75YIU7RUEmdpqtZVSkMEAInIcLFXU65iM0yb51px7fvrnLPzB8bSqJljwqF6BOX5hlP1FZ/FIURT9dbKTWE0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=CLwFiOx5; arc=none smtp.client-ip=115.124.30.124
+	 MIME-Version; b=S2+LA3QDtSlUVaRXJwsT4CxurVgtUlz04MHv0pUwmDKqagV8n1IKi647ueucGCkS4mPu3395pzUHCc7LnIS6Xrh9mhAuvt0J6feTeO88epjbXGTdFklDUhwatmAfYsw14R8DySWwfRKltToBaUpWbHcrgyHplWdTR3KJ6p5mP80=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=hHmFk/je; arc=none smtp.client-ip=115.124.30.132
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="CLwFiOx5"
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="hHmFk/je"
 DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
 	d=linux.alibaba.com; s=default;
-	t=1721112390; h=From:To:Subject:Date:Message-Id:MIME-Version;
-	bh=qgqdkRciuZJYQi1guTaiH4JgvQ7k9vOP3+uaxnvIAH4=;
-	b=CLwFiOx5dOsSxuuBMwfSn66l+6nwh3XbxO1ew9c2h2gGP0CL6sjz/Zxy7hS9O9xINHzQPcoR8COxytgc6EvyipsV6ktKUWe5FrcWIikW0TEohUfEPz67rgNjxTyW1j7wgTSBjjqw9yXJOcD78DDRLZ69tXZWJSRTf6dnxfLCwz0=
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R191e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033037067113;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=15;SR=0;TI=SMTPD_---0WAgTJeG_1721112389;
-Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0WAgTJeG_1721112389)
+	t=1721112398; h=From:To:Subject:Date:Message-Id:MIME-Version;
+	bh=HLzK+zdEoDR14AtqNW6FDV1ikkwm7FR0ZZ1YiptWjAA=;
+	b=hHmFk/je5CXn19rdcDW64VoVVls9qcYxP6ELt72vA6BlPKuL66TudQAvb6HBGls1yTpjX/NugiVAPqNWW0kuQHoN2x/s7EORmFfeKeQD7flH71l9Kzth8eXKKJY/QfkmxP1gON4awQQuRydQi3UCPrXkahtC6ArSgztP3HJwhh8=
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R921e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033032019045;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=15;SR=0;TI=SMTPD_---0WAgTJge_1721112395;
+Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0WAgTJge_1721112395)
           by smtp.aliyun-inc.com;
-          Tue, 16 Jul 2024 14:46:30 +0800
+          Tue, 16 Jul 2024 14:46:36 +0800
 From: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
 To: netdev@vger.kernel.org
 Cc: "Michael S. Tsirkin" <mst@redhat.com>,
@@ -41,9 +41,9 @@ Cc: "Michael S. Tsirkin" <mst@redhat.com>,
 	John Fastabend <john.fastabend@gmail.com>,
 	virtualization@lists.linux.dev,
 	bpf@vger.kernel.org
-Subject: [RFC net-next 01/13] virtio_ring: introduce vring_need_unmap_buffer
-Date: Tue, 16 Jul 2024 14:46:16 +0800
-Message-Id: <20240716064628.1950-2-xuanzhuo@linux.alibaba.com>
+Subject: [RFC net-next 08/13] virtio_net: xsk: bind/unbind xsk for tx
+Date: Tue, 16 Jul 2024 14:46:23 +0800
+Message-Id: <20240716064628.1950-9-xuanzhuo@linux.alibaba.com>
 X-Mailer: git-send-email 2.32.0.3.g01195cf9f
 In-Reply-To: <20240716064628.1950-1-xuanzhuo@linux.alibaba.com>
 References: <20240716064628.1950-1-xuanzhuo@linux.alibaba.com>
@@ -56,135 +56,138 @@ MIME-Version: 1.0
 X-Git-Hash: d3e48bf059c8
 Content-Transfer-Encoding: 8bit
 
-To make the code readable, introduce vring_need_unmap_buffer() to
-replace do_unmap.
-
-   use_dma_api premapped -> vring_need_unmap_buffer()
-1. false       false        false
-2. true        false        true
-3. true        true         false
+This patch implement the logic of bind/unbind xsk pool to sq and rq.
 
 Signed-off-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-Acked-by: Jason Wang <jasowang@redhat.com>
 ---
- drivers/virtio/virtio_ring.c | 27 ++++++++++++---------------
- 1 file changed, 12 insertions(+), 15 deletions(-)
+ drivers/net/virtio_net.c | 54 ++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 54 insertions(+)
 
-diff --git a/drivers/virtio/virtio_ring.c b/drivers/virtio/virtio_ring.c
-index 2a972752ff1b..df8eb0521aa0 100644
---- a/drivers/virtio/virtio_ring.c
-+++ b/drivers/virtio/virtio_ring.c
-@@ -175,11 +175,6 @@ struct vring_virtqueue {
- 	/* Do DMA mapping by driver */
- 	bool premapped;
+diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
+index f5edd8be4668..c0aba5d4aa48 100644
+--- a/drivers/net/virtio_net.c
++++ b/drivers/net/virtio_net.c
+@@ -54,6 +54,8 @@ DECLARE_EWMA(pkt_len, 0, 64)
  
--	/* Do unmap or not for desc. Just when premapped is False and
--	 * use_dma_api is true, this is true.
--	 */
--	bool do_unmap;
--
- 	/* Head of free buffer list. */
- 	unsigned int free_head;
- 	/* Number we've added since last sync. */
-@@ -297,6 +292,11 @@ static bool vring_use_dma_api(const struct virtio_device *vdev)
- 	return false;
+ #define VIRTNET_DRIVER_VERSION "1.0.0"
+ 
++static struct virtio_net_common_hdr xsk_hdr;
++
+ static const unsigned long guest_offloads[] = {
+ 	VIRTIO_NET_F_GUEST_TSO4,
+ 	VIRTIO_NET_F_GUEST_TSO6,
+@@ -295,6 +297,10 @@ struct send_queue {
+ 
+ 	/* Record whether sq is in reset state. */
+ 	bool reset;
++
++	struct xsk_buff_pool *xsk_pool;
++
++	dma_addr_t xsk_hdr_dma_addr;
+ };
+ 
+ /* Internal representation of a receive virtqueue */
+@@ -5447,6 +5453,29 @@ static int virtnet_rq_bind_xsk_pool(struct virtnet_info *vi, struct receive_queu
+ 	return err;
  }
  
-+static bool vring_need_unmap_buffer(const struct vring_virtqueue *vring)
++static int virtnet_sq_bind_xsk_pool(struct virtnet_info *vi,
++				    struct send_queue *sq,
++				    struct xsk_buff_pool *pool)
 +{
-+	return vring->use_dma_api && !vring->premapped;
++	int err, qindex;
++
++	qindex = sq - vi->sq;
++
++	virtnet_tx_pause(vi, sq);
++
++	err = virtqueue_reset(sq->vq, virtnet_sq_free_unused_buf);
++	if (err) {
++		netdev_err(vi->dev, "reset tx fail: tx queue index: %d err: %d\n", qindex, err);
++		pool = NULL;
++	}
++
++	sq->xsk_pool = pool;
++
++	virtnet_tx_resume(vi, sq);
++
++	return err;
 +}
 +
- size_t virtio_max_dma_size(const struct virtio_device *vdev)
- {
- 	size_t max_segment_size = SIZE_MAX;
-@@ -445,7 +445,7 @@ static void vring_unmap_one_split_indirect(const struct vring_virtqueue *vq,
- {
- 	u16 flags;
+ static int virtnet_xsk_pool_enable(struct net_device *dev,
+ 				   struct xsk_buff_pool *pool,
+ 				   u16 qid)
+@@ -5455,6 +5484,7 @@ static int virtnet_xsk_pool_enable(struct net_device *dev,
+ 	struct receive_queue *rq;
+ 	struct device *dma_dev;
+ 	struct send_queue *sq;
++	dma_addr_t hdr_dma;
+ 	int err, size;
  
--	if (!vq->do_unmap)
-+	if (!vring_need_unmap_buffer(vq))
- 		return;
+ 	if (vi->hdr_len > xsk_pool_get_headroom(pool))
+@@ -5492,6 +5522,10 @@ static int virtnet_xsk_pool_enable(struct net_device *dev,
+ 	if (!rq->xsk_buffs)
+ 		return -ENOMEM;
  
- 	flags = virtio16_to_cpu(vq->vq.vdev, desc->flags);
-@@ -475,7 +475,7 @@ static unsigned int vring_unmap_one_split(const struct vring_virtqueue *vq,
- 				 (flags & VRING_DESC_F_WRITE) ?
- 				 DMA_FROM_DEVICE : DMA_TO_DEVICE);
- 	} else {
--		if (!vq->do_unmap)
-+		if (!vring_need_unmap_buffer(vq))
- 			goto out;
++	hdr_dma = dma_map_single(dma_dev, &xsk_hdr, vi->hdr_len, DMA_TO_DEVICE);
++	if (dma_mapping_error(dma_dev, hdr_dma))
++		return -ENOMEM;
++
+ 	err = xsk_pool_dma_map(pool, dma_dev, 0);
+ 	if (err)
+ 		goto err_xsk_map;
+@@ -5500,11 +5534,23 @@ static int virtnet_xsk_pool_enable(struct net_device *dev,
+ 	if (err)
+ 		goto err_rq;
  
- 		dma_unmap_page(vring_dma_dev(vq),
-@@ -643,7 +643,7 @@ static inline int virtqueue_add_split(struct virtqueue *_vq,
- 	}
- 	/* Last one doesn't continue. */
- 	desc[prev].flags &= cpu_to_virtio16(_vq->vdev, ~VRING_DESC_F_NEXT);
--	if (!indirect && vq->do_unmap)
-+	if (!indirect && vring_need_unmap_buffer(vq))
- 		vq->split.desc_extra[prev & (vq->split.vring.num - 1)].flags &=
- 			~VRING_DESC_F_NEXT;
++	err = virtnet_sq_bind_xsk_pool(vi, sq, pool);
++	if (err)
++		goto err_sq;
++
++	/* Now, we do not support tx offset, so all the tx virtnet hdr is zero.
++	 * So all the tx packets can share a single hdr.
++	 */
++	sq->xsk_hdr_dma_addr = hdr_dma;
++
+ 	return 0;
  
-@@ -802,7 +802,7 @@ static void detach_buf_split(struct vring_virtqueue *vq, unsigned int head,
- 				VRING_DESC_F_INDIRECT));
- 		BUG_ON(len == 0 || len % sizeof(struct vring_desc));
++err_sq:
++	virtnet_rq_bind_xsk_pool(vi, rq, NULL);
+ err_rq:
+ 	xsk_pool_dma_unmap(pool, 0);
+ err_xsk_map:
++	dma_unmap_single(dma_dev, hdr_dma, vi->hdr_len, DMA_TO_DEVICE);
+ 	return err;
+ }
  
--		if (vq->do_unmap) {
-+		if (vring_need_unmap_buffer(vq)) {
- 			for (j = 0; j < len / sizeof(struct vring_desc); j++)
- 				vring_unmap_one_split_indirect(vq, &indir_desc[j]);
- 		}
-@@ -1236,7 +1236,7 @@ static void vring_unmap_extra_packed(const struct vring_virtqueue *vq,
- 				 (flags & VRING_DESC_F_WRITE) ?
- 				 DMA_FROM_DEVICE : DMA_TO_DEVICE);
- 	} else {
--		if (!vq->do_unmap)
-+		if (!vring_need_unmap_buffer(vq))
- 			return;
+@@ -5513,19 +5559,27 @@ static int virtnet_xsk_pool_disable(struct net_device *dev, u16 qid)
+ 	struct virtnet_info *vi = netdev_priv(dev);
+ 	struct xsk_buff_pool *pool;
+ 	struct receive_queue *rq;
++	struct device *dma_dev;
++	struct send_queue *sq;
+ 	int err;
  
- 		dma_unmap_page(vring_dma_dev(vq),
-@@ -1251,7 +1251,7 @@ static void vring_unmap_desc_packed(const struct vring_virtqueue *vq,
- {
- 	u16 flags;
+ 	if (qid >= vi->curr_queue_pairs)
+ 		return -EINVAL;
  
--	if (!vq->do_unmap)
-+	if (!vring_need_unmap_buffer(vq))
- 		return;
++	sq = &vi->sq[qid];
+ 	rq = &vi->rq[qid];
  
- 	flags = le16_to_cpu(desc->flags);
-@@ -1632,7 +1632,7 @@ static void detach_buf_packed(struct vring_virtqueue *vq,
- 		if (!desc)
- 			return;
+ 	pool = rq->xsk_pool;
  
--		if (vq->do_unmap) {
-+		if (vring_need_unmap_buffer(vq)) {
- 			len = vq->packed.desc_extra[id].len;
- 			for (i = 0; i < len / sizeof(struct vring_packed_desc);
- 					i++)
-@@ -2091,7 +2091,6 @@ static struct virtqueue *vring_create_virtqueue_packed(
- 	vq->dma_dev = dma_dev;
- 	vq->use_dma_api = vring_use_dma_api(vdev);
- 	vq->premapped = false;
--	vq->do_unmap = vq->use_dma_api;
+ 	err = virtnet_rq_bind_xsk_pool(vi, rq, NULL);
++	err |= virtnet_sq_bind_xsk_pool(vi, sq, NULL);
  
- 	vq->indirect = virtio_has_feature(vdev, VIRTIO_RING_F_INDIRECT_DESC) &&
- 		!context;
-@@ -2636,7 +2635,6 @@ static struct virtqueue *__vring_new_virtqueue(unsigned int index,
- 	vq->dma_dev = dma_dev;
- 	vq->use_dma_api = vring_use_dma_api(vdev);
- 	vq->premapped = false;
--	vq->do_unmap = vq->use_dma_api;
+ 	xsk_pool_dma_unmap(pool, 0);
  
- 	vq->indirect = virtio_has_feature(vdev, VIRTIO_RING_F_INDIRECT_DESC) &&
- 		!context;
-@@ -2799,7 +2797,6 @@ int virtqueue_set_dma_premapped(struct virtqueue *_vq)
- 	}
++	dma_dev = virtqueue_dma_dev(sq->vq);
++
++	dma_unmap_single(dma_dev, sq->xsk_hdr_dma_addr, vi->hdr_len, DMA_TO_DEVICE);
++
+ 	kvfree(rq->xsk_buffs);
  
- 	vq->premapped = true;
--	vq->do_unmap = false;
- 
- 	END_USE(vq);
- 
+ 	return err;
 -- 
 2.32.0.3.g01195cf9f
 
