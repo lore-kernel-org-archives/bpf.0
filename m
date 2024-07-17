@@ -1,34 +1,34 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B8571836D8
-	for <bpf@vger.kernel.org>; Wed, 17 Jul 2024 20:50:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0F0112E7F;
+	Wed, 17 Jul 2024 21:00:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721249434; cv=none; b=sI3+6Y+f3kId+MfFRdz2VU8i+ka4eXhDoVNwB+40GhORMRyfPGiaoXITnM6gHSECZNd90u6j7dsoYT4dPpLOCb0cG4tjToomKwAGQBCRiUc4gFyIDTwx51SaotIk3Zl9kcoSA+4eQ1XYYXufoRiEk22QwvHZNRDwxpgscc2ho+A=
+	t=1721250037; cv=none; b=PMLikBN+2ZOooMva1QEPr+qFR7yld0YciNHC75RY8Bi7iXEUgPHtw6P4ANLrsmPBlU3R7DOrBY3E/H0G//lFYApiFf3sXsH1i1TV3OgVQP5acJefhCwGqHXfepg2aZAHtOyts3xkn3HynbNk/L1Pwv0Rj78wsdUs74XBOzNduF8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721249434; c=relaxed/simple;
-	bh=nV7X2uiKXvD7eRUNCTjREp9SizA8ka5vqm1LSpkInUY=;
+	s=arc-20240116; t=1721250037; c=relaxed/simple;
+	bh=oVUiDNK6x2CJTRP8Yw9QN7dQwwZtrfApPWM9loebxKQ=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=rhVy+wc9EeimxK9Rom1QFI+I9U8glnQBD4pZ0uihKOHdjPHULA7BrcOwva522VGZCJSM5nT2NixnRTPcqOlRWArGYibXZD5FMbAgbyNzpT6PdNvnfAhEF8E35VLeQEjHH7rdl1yCz7/KErrP/I0sQCdOZhkODQgZ6N8bPWRtHEo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VFWfB+hY; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=tOaHkmYPTS7y0sZsLwFghX7O7Qgz7ShymDHVGNijxLfom5lPw4BODyXrguN8sgl+lBjFTLq/RPR0lcx+DsN7Zc7ZmlT6FekjLr/8w+8rxWEov/NzAe8gH8RTXlbhgWp4k/2UDdVdhCJd8h9Iw33yfsKedq78ot7g/uAcpzs2uwM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WFYlYEh0; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VFWfB+hY"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id D520FC4AF0C;
-	Wed, 17 Jul 2024 20:50:33 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WFYlYEh0"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 4BA91C4AF09;
+	Wed, 17 Jul 2024 21:00:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1721249433;
-	bh=nV7X2uiKXvD7eRUNCTjREp9SizA8ka5vqm1LSpkInUY=;
+	s=k20201202; t=1721250037;
+	bh=oVUiDNK6x2CJTRP8Yw9QN7dQwwZtrfApPWM9loebxKQ=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=VFWfB+hYpExI1AO010Y3gxgQmb1oMBYhkvL8uz67mKnWzFR7EfMWJeAH+cwJGKG7u
-	 JBMKeHOk+ZqJBvRg1y1+1LbNHxY0KCfLi8d2LroA4cshuLtlNUp1Ox4xivdBMmjPqS
-	 0qh7laxZUj9va20w0krqmDGTrYFUAh1kFQHzN0jqMirjtAAx0PjWupSAnE6Y3EypoG
-	 iwlyEiT65AxM0pguxggJNbc01bgSDX262Cka9QB9RMVcp9iUHJcV/dJsvw+JMGsG6F
-	 eKpl7woke839vQ25f1DKO6SCDX5/sjVNe3iRV4UvjO4Qa0guy57rVBqPRK+niB8shp
-	 wOkvWkFJrCUdg==
+	b=WFYlYEh0wjLXNZg5oo16uMswkwYNi9XJZYwipe4QUd5Gl6ssFL5Rm4OGolXqUTwmF
+	 rkrtDQM3wr4oLQc213MYmHhoBdmkyaEJPjzG2i9Q6C39O5RHpc7msLczQMTdtCg0mu
+	 GY8FQUdEL4qdo3l0emIACUZV9A10M6k4yOvfiG5aKpQDfW0X1/D/G9y28x3rmnxOu4
+	 ggG2FhQwV82WUVrOZIQGGExI+tebjxtEFTW2Ie0mS9TWRleIXi7Ra4KbL1t8glHkae
+	 BqlOYCQC+gju7sN7tzA7qqmCQg32pjzHlE4SV34bW/mQS/5QUL54N0eKJs8XHWec2u
+	 Y5XVrAjYwSUnA==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B9CD4C43601;
-	Wed, 17 Jul 2024 20:50:33 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 3A40FC4333D;
+	Wed, 17 Jul 2024 21:00:37 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -37,35 +37,46 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next] bpftool: Fix typo in usage help
+Subject: Re: [PATCH bpf v4 0/4] af_unix: MSG_OOB handling fix & selftest
 From: patchwork-bot+netdevbpf@kernel.org
 Message-Id: 
- <172124943375.32411.7854367381247333565.git-patchwork-notify@kernel.org>
-Date: Wed, 17 Jul 2024 20:50:33 +0000
-References: <20240717134508.77488-1-donald.hunter@gmail.com>
-In-Reply-To: <20240717134508.77488-1-donald.hunter@gmail.com>
-To: Donald Hunter <donald.hunter@gmail.com>
-Cc: bpf@vger.kernel.org, qmo@kernel.org, daan.j.demeyer@gmail.com,
- donald.hunter@redhat.com
+ <172125003723.5337.495884946556946756.git-patchwork-notify@kernel.org>
+Date: Wed, 17 Jul 2024 21:00:37 +0000
+References: <20240713200218.2140950-1-mhal@rbox.co>
+In-Reply-To: <20240713200218.2140950-1-mhal@rbox.co>
+To: Michal Luczaj <mhal@rbox.co>
+Cc: netdev@vger.kernel.org, bpf@vger.kernel.org, davem@davemloft.net,
+ edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+ john.fastabend@gmail.com, jakub@cloudflare.com, kuniyu@amazon.com,
+ Rao.Shoaib@oracle.com, cong.wang@bytedance.com
 
 Hello:
 
-This patch was applied to bpf/bpf.git (master)
+This series was applied to bpf/bpf.git (master)
 by Daniel Borkmann <daniel@iogearbox.net>:
 
-On Wed, 17 Jul 2024 14:45:08 +0100 you wrote:
-> The usage help for "bpftool prog help" contains a ° instead of the _
-> symbol for cgroup/sendmsg_unix. Fix the typo.
+On Sat, 13 Jul 2024 21:41:37 +0200 you wrote:
+> PATCH 1/4 tells BPF redirect to silently drop AF_UNIX's MSG_OOB. The rest
+> is selftest-related.
 > 
-> Fixes: 8b3cba987e6d ("bpftool: Add support for cgroup unix socket address hooks")
-> Signed-off-by: Donald Hunter <donald.hunter@gmail.com>
-> ---
->  tools/bpf/bpftool/prog.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> Michal Luczaj (4):
+>   af_unix: Disable MSG_OOB handling for sockets in sockmap/sockhash
+>   selftest/bpf: Support SOCK_STREAM in unix_inet_redir_to_connected()
+>   selftest/bpf: Parametrize AF_UNIX redir functions to accept send()
+>     flags
+>   selftest/bpf: Test sockmap redirect for AF_UNIX MSG_OOB
+> 
+> [...]
 
 Here is the summary with links:
-  - [bpf-next] bpftool: Fix typo in usage help
-    https://git.kernel.org/bpf/bpf/c/3c870059e9f8
+  - [bpf,v4,1/4] af_unix: Disable MSG_OOB handling for sockets in sockmap/sockhash
+    https://git.kernel.org/bpf/bpf/c/638f32604385
+  - [bpf,v4,2/4] selftest/bpf: Support SOCK_STREAM in unix_inet_redir_to_connected()
+    https://git.kernel.org/bpf/bpf/c/1b0ad43177c0
+  - [bpf,v4,3/4] selftest/bpf: Parametrize AF_UNIX redir functions to accept send() flags
+    https://git.kernel.org/bpf/bpf/c/0befb349c4cd
+  - [bpf,v4,4/4] selftest/bpf: Test sockmap redirect for AF_UNIX MSG_OOB
+    https://git.kernel.org/bpf/bpf/c/6caf9efaa169
 
 You are awesome, thank you!
 -- 
