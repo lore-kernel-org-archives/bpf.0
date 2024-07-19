@@ -1,57 +1,57 @@
 Received: from mail-qk1-f169.google.com (mail-qk1-f169.google.com [209.85.222.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38FFE13D61D;
-	Fri, 19 Jul 2024 17:21:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFD82146A85;
+	Fri, 19 Jul 2024 17:21:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721409683; cv=none; b=XaWZdWY6VKgJXdBLwNHQ0wssWOnC/ZyHzNlVuAg1caLsG85GwXz4VJUJaZ5Yvh/nH1JcmxuiaDFnE8ewy+0l7eUne/FUXXRruVuNWQ0KZkOXjgehTj1A5tkizmtgOrTntb+QKwMY22TEOgKYqskLWA8XxY65tJgrNOwKcarnI+g=
+	t=1721409685; cv=none; b=pkaUKro7LZmDN+rysuGbZ4Dy3yQ225oqTvROxbmCiL9/MtBscw03mbOZPs0cg/vb5Z4+A/1/4Qktl3onCbxQT36Wp9tmQ/g2cEC9XtsKaDeXsJN/3FeQRnGv5AymZn0eiYzkyFRxgoiSWDLG7HuvzsJAYVr/Pst1pbWBggtq1gg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721409683; c=relaxed/simple;
-	bh=N7XN9zYJyoXoo4WBRpHa3c/xnLvk5O5Eq2nJF1C9R6Y=;
+	s=arc-20240116; t=1721409685; c=relaxed/simple;
+	bh=GcPbDg8dGPpvW3qKI6MgYWhbdTG4qTHFxQ7VdGvdbZ0=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=ZOqLsSlU/U0Ye3CVqdc1KXtyH/7NS5I+NYiwnCKbBRXA/vr2JS6+BMRA1p8y3fnmgSfp2QC19IHiM3EmKaU1Du6QQCkrEHovnaHoNYKo0FH4QpIX82aaCJpEDbjJow2vNW6UheR4vBEK/idY+MtxEcIIGyL3dDQhyMqeLC9DZAY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=S+k1q+Vy; arc=none smtp.client-ip=209.85.222.169
+	 MIME-Version; b=hUzplkVst0pOsxyGacADg8W6DOFSF9OMcD7H/Si6y++BBxu0Ztk0DGDa90QBw45CNNRk9mHlAJz5c5OLDkA+HAXtOc03vCAiOyy2fj/mSXiv6PDZE4bvZ6logLvx/QLVlg5njTIhBg8BAH3qlYXTARdBG65cu2PP6sqge3WWylg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JvbhNCQD; arc=none smtp.client-ip=209.85.222.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="S+k1q+Vy"
-Received: by mail-qk1-f169.google.com with SMTP id af79cd13be357-79f08b01ba6so143258485a.0;
-        Fri, 19 Jul 2024 10:21:21 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JvbhNCQD"
+Received: by mail-qk1-f169.google.com with SMTP id af79cd13be357-79ef93865afso106959485a.1;
+        Fri, 19 Jul 2024 10:21:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1721409681; x=1722014481; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1721409683; x=1722014483; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=jHkR3HeaTgi9Sf/bo6ZYoa8FS/YOxvNEWT4vNOjsanI=;
-        b=S+k1q+Vy0We+3KOVL6AlIVVLCdbXQ1AAHlMlwOhwJzM/97OJW/GdtkfhKep1BoG/yi
-         Fu8stwgNneZJEKKuV4RuHObzvMdtsZaH0iVu9VMC42JE73vU2fb3w+4B3HeUaAghFtZ+
-         MXLN+6x8IohrIz2bgPwOhLpNqqU2K7OEwujJx2GKndfgNjp3fLhwOAhMiZeRHf1+6s+x
-         7jYGDHF7SV8Sw05VuwMErhiN/aWzxvFpJ47BJ5J9lWqZG6oUYxzf7i/F9BEeqZP2ytua
-         bnKHPxikGuvqU/24WdMju1gZrLA6U15sko/zLKvTVL9XoGItPMrR+T96hwgqsGOB8/Q2
-         E0gg==
+        bh=/3/xMbadZR6ipB99nJ7HjWra8CWfz07I6ua6elRBn7o=;
+        b=JvbhNCQD6jfV/tO1WwWsGNyrHoP/N55Bix5WdXwrBGuwMY44Oi0oflbuYH0eihqiO+
+         mSu0AhdR6bmPYXurC4Hd8p0KyGrcOV2Ycj/34xn91TR5Vxq930VVpPd+V/Say74PChzk
+         zqhj7YMFakRr7XkuCdDeb+ATm0FoTcwB0ZrI/uvHddK+fFKLmVA7VH8lcuuXWTJlqkwx
+         PeQt1vMOL2jx9TURtBpIqoHzp3iSlyAyYYAG52k+Nas+MqbdooVBvA/+xw2sV4XiGiE+
+         BUs9LWb242QzBjgYxXqeo9afGzD0CMHGCWR5uNP3kW+IEH6t6y0s1Meu4b4+9vFXobgF
+         NsaA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1721409681; x=1722014481;
+        d=1e100.net; s=20230601; t=1721409683; x=1722014483;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=jHkR3HeaTgi9Sf/bo6ZYoa8FS/YOxvNEWT4vNOjsanI=;
-        b=w7RgIWW0LUbSO1ERRNMROsgElWlnkrtKpx7KsX7Lp+3Aem/x+lEtU5asHHFTPdX6Tn
-         19AP5/10WkTWVP9XhIp3r2oEuBbHlath9caTBINcNUmNS1HTVAa01PLKlKyk6I+9Vi77
-         8iczvPVGeBduKMfrod72TQB9PCrfaHZq49Ym9NEw/GWE6TFskmyYbFLw6B+maoXerZ6/
-         XLMoYVe4mUQeHue8hBIi674uzq3RL2n23UydZU4yYk93seDKZkMSi+al1qPRvniM/ups
-         rvSbiO1AsottLYIAL+Eru1/TK9NHAUhM2w2ZvmT3NGf9xn5R8tp+nG40I/FhFsgaIUq/
-         yIAQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVMo5KdxcbqrKFXuOCckxmwSlXAktHakBA3KOLreggmcQlz05ye6410kxxFjbhYEEI5BEP972LAePW7vj02xD1aQ95tebeB87gaoFf/wIDIVPkhb2PwQlzjAv/g
-X-Gm-Message-State: AOJu0YyBlTpAMitO79pZsNXGmizRj3KT3WHevnteFWxSCM36ezoOVjOE
-	FDnt5g1QsAMOJsPZHJp9nfJXIdWwUC42qbORUnw133E2y2qunokH
-X-Google-Smtp-Source: AGHT+IFcJWc4DhxYXowk7bcxAPqGv/DdpDPFiY2uxMgEAlptAMLX/qoN2RtmyPMXSgSJsN1EQuH3SA==
-X-Received: by 2002:a05:620a:4549:b0:79f:18f1:b6e6 with SMTP id af79cd13be357-7a1a18e9aabmr60574685a.10.1721409681157;
-        Fri, 19 Jul 2024 10:21:21 -0700 (PDT)
+        bh=/3/xMbadZR6ipB99nJ7HjWra8CWfz07I6ua6elRBn7o=;
+        b=WbfL4tt02rxKL2ftIwRjUKrtc6FFhspQul9lWhm1R3NDUpy2CtTUFxAGcBIsoZ8BZi
+         FSq1XXz5UyP/l/UryADWOAGhpSqHnAvPk1OYFFt3qPjKzEuo/Cf/dzfsX3oY1wT5sZ+v
+         F/KRc1mlvrVt+73yyS/O58sEmrVpmfzudzW/FK3465G1G/OPWhmgJ9vUFk3UASkNVo6B
+         bg0mK/H+5O6U7/ynglQOraOx8DaBZ3kAlwSXJJPt+MJ78zr45GCSMk0zjaQm5EHn86KS
+         UVjujTs2vQ5KyH/BFbIf8/mJdhHmU07lx9mmZJye0h+mKDUjSgSAT8Lmy0V8wvoHOzfJ
+         MBoA==
+X-Forwarded-Encrypted: i=1; AJvYcCXoojE5rCkQtx0niU9cEh9uzKYAgMzrAfb6lqWa7J5b827bJELYTZ1jBggAUqioHKdSl2xM25o3Hi4hCWn8E1BN/VEylKBy6E2cx9sLZ58VaNwf+grnLoiEAGhs
+X-Gm-Message-State: AOJu0YzQAfcE2cTshCKNyr4kDX+zbseJsB9FFYWFLXl3xPf1DlpewVKZ
+	ONOn6gqsjbsagocAetchsuZtPcalboVCOFgZDI6MfADF32gAzVg5
+X-Google-Smtp-Source: AGHT+IFeYODdlJTJQuieFvm41hhcW7y+RmebwKsxXtILe9qa55t1jiNZPIbRJRpCS2XEZxiFmrs69w==
+X-Received: by 2002:a05:620a:4108:b0:79c:103b:af44 with SMTP id af79cd13be357-7a187501438mr1068244185a.65.1721409682694;
+        Fri, 19 Jul 2024 10:21:22 -0700 (PDT)
 Received: from n36-183-057.byted.org ([130.44.212.91])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-7a19905eb1dsm109706485a.89.2024.07.19.10.21.20
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-7a19905eb1dsm109706485a.89.2024.07.19.10.21.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 Jul 2024 10:21:20 -0700 (PDT)
+        Fri, 19 Jul 2024 10:21:22 -0700 (PDT)
 From: Amery Hung <ameryhung@gmail.com>
 X-Google-Original-From: Amery Hung <amery.hung@bytedance.com>
 To: ameryhung@gmail.com
@@ -70,9 +70,9 @@ Cc: alexei.starovoitov@gmail.com,
 	yangpeihao@sjtu.edu.cn,
 	yepeilin.cs@gmail.com,
 	donald.hunter@gmail.com
-Subject: [OFFLIST RFC 2/4] bpf: Rename ARG_PTR_TO_KPTR -> ARG_KPTR_XCHG_DEST
-Date: Fri, 19 Jul 2024 17:21:17 +0000
-Message-Id: <20240719172119.3199738-2-amery.hung@bytedance.com>
+Subject: [OFFLIST RFC 4/4] selftests/bpf: Test bpf_kptr_xchg stashing into local kptr
+Date: Fri, 19 Jul 2024 17:21:19 +0000
+Message-Id: <20240719172119.3199738-4-amery.hung@bytedance.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20240719172119.3199738-1-amery.hung@bytedance.com>
 References: <20240714175130.4051012-1-amery.hung@bytedance.com>
@@ -87,82 +87,59 @@ Content-Transfer-Encoding: 8bit
 
 From: Dave Marchevsky <davemarchevsky@fb.com>
 
-ARG_PTR_TO_KPTR is currently only used by the bpf_kptr_xchg helper.
-Although it limits reg types for that helper's first arg to
-PTR_TO_MAP_VALUE, any arbitrary mapval won't do: further custom
-verification logic ensures that the mapval reg being xchgd-into is
-pointing to a kptr field. If this is not the case, it's not safe to xchg
-into that reg's pointee.
-
-Let's rename the bpf_arg_type to more accurately describe the fairly
-specific expectations that this arg type encodes.
-
-This is a nonfunctional change.
-
 Signed-off-by: Dave Marchevsky <davemarchevsky@fb.com>
 ---
- include/linux/bpf.h   | 2 +-
- kernel/bpf/helpers.c  | 2 +-
- kernel/bpf/verifier.c | 6 +++---
- 3 files changed, 5 insertions(+), 5 deletions(-)
+ .../selftests/bpf/progs/local_kptr_stash.c    | 21 +++++++++++++++++--
+ 1 file changed, 19 insertions(+), 2 deletions(-)
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 4f1d4a97b9d1..cc460786da9b 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -743,7 +743,7 @@ enum bpf_arg_type {
- 	ARG_PTR_TO_STACK,	/* pointer to stack */
- 	ARG_PTR_TO_CONST_STR,	/* pointer to a null terminated read-only string */
- 	ARG_PTR_TO_TIMER,	/* pointer to bpf_timer */
--	ARG_PTR_TO_KPTR,	/* pointer to referenced kptr */
-+	ARG_KPTR_XCHG_DEST,	/* pointer to destination that kptrs are bpf_kptr_xchg'd into */
- 	ARG_PTR_TO_DYNPTR,      /* pointer to bpf_dynptr. See bpf_type_flag for dynptr type */
- 	__BPF_ARG_TYPE_MAX,
- 
-diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-index b5f0adae8293..c038c3e03019 100644
---- a/kernel/bpf/helpers.c
-+++ b/kernel/bpf/helpers.c
-@@ -1635,7 +1635,7 @@ static const struct bpf_func_proto bpf_kptr_xchg_proto = {
- 	.gpl_only     = false,
- 	.ret_type     = RET_PTR_TO_BTF_ID_OR_NULL,
- 	.ret_btf_id   = BPF_PTR_POISON,
--	.arg1_type    = ARG_PTR_TO_KPTR,
-+	.arg1_type    = ARG_KPTR_XCHG_DEST,
- 	.arg2_type    = ARG_PTR_TO_BTF_ID_OR_NULL | OBJ_RELEASE,
- 	.arg2_btf_id  = BPF_PTR_POISON,
- };
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 8da132a1ef28..06ec18ee973c 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -8260,7 +8260,7 @@ static const struct bpf_reg_types func_ptr_types = { .types = { PTR_TO_FUNC } };
- static const struct bpf_reg_types stack_ptr_types = { .types = { PTR_TO_STACK } };
- static const struct bpf_reg_types const_str_ptr_types = { .types = { PTR_TO_MAP_VALUE } };
- static const struct bpf_reg_types timer_types = { .types = { PTR_TO_MAP_VALUE } };
--static const struct bpf_reg_types kptr_types = { .types = { PTR_TO_MAP_VALUE } };
-+static const struct bpf_reg_types kptr_xchg_dest_types = { .types = { PTR_TO_MAP_VALUE } };
- static const struct bpf_reg_types dynptr_types = {
- 	.types = {
- 		PTR_TO_STACK,
-@@ -8292,7 +8292,7 @@ static const struct bpf_reg_types *compatible_reg_types[__BPF_ARG_TYPE_MAX] = {
- 	[ARG_PTR_TO_STACK]		= &stack_ptr_types,
- 	[ARG_PTR_TO_CONST_STR]		= &const_str_ptr_types,
- 	[ARG_PTR_TO_TIMER]		= &timer_types,
--	[ARG_PTR_TO_KPTR]		= &kptr_types,
-+	[ARG_KPTR_XCHG_DEST]		= &kptr_xchg_dest_types,
- 	[ARG_PTR_TO_DYNPTR]		= &dynptr_types,
+diff --git a/tools/testing/selftests/bpf/progs/local_kptr_stash.c b/tools/testing/selftests/bpf/progs/local_kptr_stash.c
+index 75043ffc5dad..8532abcae5c0 100644
+--- a/tools/testing/selftests/bpf/progs/local_kptr_stash.c
++++ b/tools/testing/selftests/bpf/progs/local_kptr_stash.c
+@@ -11,6 +11,7 @@
+ struct node_data {
+ 	long key;
+ 	long data;
++	struct prog_test_ref_kfunc __kptr *stashed_in_node;
+ 	struct bpf_rb_node node;
  };
  
-@@ -8892,7 +8892,7 @@ static int check_func_arg(struct bpf_verifier_env *env, u32 arg,
- 			return err;
- 		break;
- 	}
--	case ARG_PTR_TO_KPTR:
-+	case ARG_KPTR_XCHG_DEST:
- 		err = process_kptr_func(env, regno, meta);
- 		if (err)
- 			return err;
+@@ -85,17 +86,33 @@ static bool less(struct bpf_rb_node *a, const struct bpf_rb_node *b)
+ 
+ static int create_and_stash(int idx, int val)
+ {
++	struct prog_test_ref_kfunc *inner;
+ 	struct map_value *mapval;
+ 	struct node_data *res;
++	unsigned long dummy;
+ 
+ 	mapval = bpf_map_lookup_elem(&some_nodes, &idx);
+ 	if (!mapval)
+ 		return 1;
+ 
++	dummy = 0;
++	inner = bpf_kfunc_call_test_acquire(&dummy);
++	if (!inner)
++		return 2;
++
+ 	res = bpf_obj_new(typeof(*res));
+-	if (!res)
+-		return 1;
++	if (!res) {
++		bpf_kfunc_call_test_release(inner);
++		return 3;
++	}
+ 	res->key = val;
++	inner = bpf_kptr_xchg(&res->stashed_in_node, inner);
++	if (inner) {
++		/* Should never happen, we just obj_new'd res */
++		bpf_kfunc_call_test_release(inner);
++		bpf_obj_drop(res);
++		return 4;
++	}
+ 
+ 	res = bpf_kptr_xchg(&mapval->node, res);
+ 	if (res)
 -- 
 2.20.1
 
