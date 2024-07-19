@@ -1,59 +1,59 @@
-Received: from mail-qv1-f48.google.com (mail-qv1-f48.google.com [209.85.219.48])
+Received: from mail-qk1-f177.google.com (mail-qk1-f177.google.com [209.85.222.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A64CB22331
-	for <bpf@vger.kernel.org>; Fri, 19 Jul 2024 02:08:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2D2E376E7
+	for <bpf@vger.kernel.org>; Fri, 19 Jul 2024 02:08:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721354889; cv=none; b=Mf3Dqlwb+T0LI8fhucZk5XkHtd1L1es63zrCnqqUgcfR1Av6d3KB1/b2c6gcRTF9FeMFaVDanRb1M9OlrBbestlV5zTP0lYMzz8OGBYs8rA99pPKK0v1FAeYqdLsekJnlO0f7K/2St1653hvC6fjnMi9jCtVingUkNX1Jc48XgY=
+	t=1721354890; cv=none; b=uooMw0n790s/y8Ob6PpHMZ3UvGF2SgNAEbucvYp9njmL02eK/WABfMC8Q8OAG0viWimZN4HembvQE4recZ3G+gBZCUMNN0Zj3xVlBwCHjVixS0omXI6WoeCH9t1G3IwIDtf4/MDC7zdjGxia2T2s7NzoVZ1Sz42LaIJQBm5C6KQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721354889; c=relaxed/simple;
-	bh=3kQS2cZBJ39f+nV1qKNmNoKNDB7FDTY1mI5qcsc0L6E=;
+	s=arc-20240116; t=1721354890; c=relaxed/simple;
+	bh=K3kRa8M3XjJ6TYCBzNSI7QLaEzBmwYjbaWzmaybCoBA=;
 	h=Date:Message-ID:MIME-Version:Content-Type:Content-Disposition:
-	 From:To:Cc:Subject:References:In-Reply-To; b=KN/giISuiqqNRYx+rRm6jYKhjCgll4OYReuFKeT0cwSpYwNTN3wx0o+vGOQ4V3A/mE2tsVPr1elw2wf6vMc/taDtYTvF/hHRtNYAvGn3m+p9PgJ0ucaRJ/d/vdd4ZajhLjNqDcbVAB9xdiZ1M7ypwybuWAoSt0QpKZ5ZgFj40/Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=HpMOg9hP; arc=none smtp.client-ip=209.85.219.48
+	 From:To:Cc:Subject:References:In-Reply-To; b=NmLbRAwUvdp7kRSIATRfd5f0Ioa6lgC6q98OZiim8JmuSmCRvvx+SMvqurQNH3cxMHTcQX9BQK7i9fQnT4wV0rSgjprI/FFtiBkmR61RalxSRWQjr9J02dJe/+S3Cu/cFRMVgX+ZQgZttM//0mOYBKnfH2xToh1FMLvHnvlEqjg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=T/WZXoB/; arc=none smtp.client-ip=209.85.222.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="HpMOg9hP"
-Received: by mail-qv1-f48.google.com with SMTP id 6a1803df08f44-6b5f46191b5so7977896d6.3
-        for <bpf@vger.kernel.org>; Thu, 18 Jul 2024 19:08:06 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="T/WZXoB/"
+Received: by mail-qk1-f177.google.com with SMTP id af79cd13be357-79ef7ecc7d4so54991385a.0
+        for <bpf@vger.kernel.org>; Thu, 18 Jul 2024 19:08:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1721354886; x=1721959686; darn=vger.kernel.org;
+        d=paul-moore.com; s=google; t=1721354887; x=1721959687; darn=vger.kernel.org;
         h=in-reply-to:references:subject:cc:to:from:content-transfer-encoding
          :content-disposition:mime-version:message-id:date:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=RdOweloEpaz6RcCvISa0YGQIo20b47lcaEayePDedxM=;
-        b=HpMOg9hP2D2CTIPEDAoJCR0GMOLmSCcqBQi5wznRJIrnLgRAQtG1TjSvV7e9U6dDbq
-         DgOXGYY81ajdwliU84ZqZynv8JissDXi9EGoLvHwR5IfaPpmuxm5FkUrAYes8b+4gAZi
-         6EmN8C5F1Q51+9W6JN2IlDACNzY4elkY7tv7mQmcDT5oNGrX/1CISKwP2uM9Hiy+vsC+
-         ESvRK8rQjUl3QQZmlCE5KiSkc0BjFp/l9FIUTmgbaQ95Jj8LXz3lkI/fvNJCz6KwGytb
-         6YmgUyci89NY1g0YBukW/VwWwsoqPYZfvji94ceyMbBydexVHF/8klkLWDM4jzklkH3S
-         N3rw==
+        bh=YDBm3QRwilAu+OHaz6Ln5e9Jy4Z5QvQg9nfn3ZsegWg=;
+        b=T/WZXoB/Uk5dXKxdM91e+evI9UA50w4YJkvGfiR+KicDHnrBLsl7spyVjtojoh9j9e
+         iCHR6bD5sAJXIlFsHuWrttE4dC2MAqvT4yuDWQZPVv7gEZ/5uQZ3WDmZk4H48ucmH/t4
+         QwJoSBjQSGvWGH4pP8QEdzEuAKxqiFhgPcNj9zgMfo6F8VfgYoykQIn6mp7KxBuI3AOc
+         2eGFnFm63Pt7h3rk2pAvapCKTcjJtW5agpD0ZP9S2YrFdYKurghIoqCZEPU1+k33JGSy
+         Lsi5Ag1JE2Zy1HnnsldPiHemkZ7W8W/zj+lwSZdOcqks7yVpZ5TlFdzmaXebJ0zB/30y
+         LYcA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1721354886; x=1721959686;
+        d=1e100.net; s=20230601; t=1721354887; x=1721959687;
         h=in-reply-to:references:subject:cc:to:from:content-transfer-encoding
          :content-disposition:mime-version:message-id:date:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=RdOweloEpaz6RcCvISa0YGQIo20b47lcaEayePDedxM=;
-        b=eFG0jmXdOt2BoTY2F3gW/WQD7g4i06u/D+JwCG48AdOGf7j08b2guZ3T8scbX844ry
-         V8DtEdcIEtgTPq7ydzoZm2Fl8gzMOnyaQtejDGwMOGQA00ruWmxMXWKGvo7wbEEaZONd
-         lqra4na/grWmJVW3+v53s2vgsZmfOLi+zXAqGhv9l5N179TEyt9h9mywxgKpLVsg/oKj
-         0UDuojIlDvgQNZ9n/LqNXId4Uga4t9F6jjIWOUsZ6Q6yemt5mgJkTfQiQlbqiWK78CiW
-         jIIKkq9nPV6mZh9jUA7HH4Ex0jOpyIj3K7TP7zya85TngUZO6kMJzVSxzNd1JF27TevH
-         8S+g==
-X-Forwarded-Encrypted: i=1; AJvYcCUyThZGu+Cfm6CrtFwyh3n30iepXICOVPn59HAwHDATq69VT7Rbm9zvVB2OdhBLq7lTIduuVKl4WhyaneGB4VZyfl4A
-X-Gm-Message-State: AOJu0Ywkr25E4TnVungFznxtL4pUp8HuULVQmWnwI5JTrCIO8lZUom7S
-	LgT5i6qcUAQW0ctnu0KmCuP3T/I3fdPBJi/FSCuDNsH+OD3HiDKjRYEEU2mPQQ==
-X-Google-Smtp-Source: AGHT+IF74+EqudtKUL7i1ZCCvXjz+qd3zopM19m0jWGVbddz7RHlAWv2UgDf87dhf8FKY+88djubgQ==
-X-Received: by 2002:a05:6214:2301:b0:6b5:3c06:a58b with SMTP id 6a1803df08f44-6b78e364c4fmr77396666d6.59.1721354885611;
-        Thu, 18 Jul 2024 19:08:05 -0700 (PDT)
+        bh=YDBm3QRwilAu+OHaz6Ln5e9Jy4Z5QvQg9nfn3ZsegWg=;
+        b=BmmMd33TO+IWk1bw0QnyDabUmZ4c39zfbdJcIE/pA7f22gJXugrVBqJvuWCDBOOczg
+         yaj1+NrDlA8uaxTx1JGpaR081DdksQAaRwTlvsdv9nH1glD9aK2EVcVgm1QD2MNigujs
+         /coT1Cl4hjkeMJBB4pMVvPubMf5wlAp3x833I2DnKL0eBi+cfv5qy+vWgIo4MtZkG6l+
+         O9jk/wqQ+M5pH3OMciQJQw4+nyfbV193tQra9lS3clS7T59KAPcyCYh1Nw976xNCseLk
+         5OY+vQX/kUJwWKLy1XmtdfHFibM2mdDLSLKBRiljFBj7Htxsxm8WZUloFlMtDFYHCWhu
+         HLuQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXAVScCaBfLurKEkBYdO1ZM0M3/CUwGfQmg62efywE4VxzOdCpI6iXu3+gN7BHDiQR7eBe0rQPi+u5Az3BMHKOtFfHz
+X-Gm-Message-State: AOJu0YxabEty4o2WFLiQ57iu7kIcVfMEdh7BWwKZtSLhDlTiJqB2CpM7
+	2D1/5cedqLbX+EdcUSZUV65/KW1kCaR/JKCWZotRD3L2Tt/X2o3hx7yP7GYmnA==
+X-Google-Smtp-Source: AGHT+IHJXqsEfMvaJ3I4voV7h0JmzEBLz/Y77YU9PWIwttNlLAz95UGh+qmMP8iEzkPgMVaZTYkx+Q==
+X-Received: by 2002:a05:620a:4014:b0:79e:ff47:3307 with SMTP id af79cd13be357-7a1938c1fb6mr351466485a.8.1721354887484;
+        Thu, 18 Jul 2024 19:08:07 -0700 (PDT)
 Received: from localhost ([70.22.175.108])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6b7ac7dfc97sm1785356d6.46.2024.07.18.19.08.04
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-7a198e9f7ccsm22476985a.0.2024.07.18.19.08.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 Jul 2024 19:08:04 -0700 (PDT)
-Date: Thu, 18 Jul 2024 22:08:04 -0400
-Message-ID: <6e79c031aa6c223df552726ac6537d44@paul-moore.com>
+        Thu, 18 Jul 2024 19:08:07 -0700 (PDT)
+Date: Thu, 18 Jul 2024 22:08:06 -0400
+Message-ID: <35bc63dac544edc75c25b8dc6c8c99d0@paul-moore.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -81,39 +81,36 @@ Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
 	Trond Myklebust <trond.myklebust@hammerspace.com>, Anna Schumaker <anna@kernel.org>, 
 	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
 	Stephen Smalley <stephen.smalley.work@gmail.com>
-Subject: Re: [PATCH v4 6/20] lsm: Refactor return value of LSM hook getselfattr
-References: <20240711111908.3817636-7-xukuohai@huaweicloud.com>
-In-Reply-To: <20240711111908.3817636-7-xukuohai@huaweicloud.com>
+Subject: Re: [PATCH v4 8/20] lsm: Refactor return value of LSM hook getprocattr
+References: <20240711111908.3817636-9-xukuohai@huaweicloud.com>
+In-Reply-To: <20240711111908.3817636-9-xukuohai@huaweicloud.com>
 
 On Jul 11, 2024 Xu Kuohai <xukuohai@huaweicloud.com> wrote:
 > 
 > To be consistent with most LSM hooks, convert the return value of
-> hook getselfattr to 0 or a negative error code.
+> hook getprocattr to 0 or a negative error code.
 > 
 > Before:
-> - Hook getselfattr returns number of attributes found on success
->   or a negative error code on failure.
+> - Hook getprocattr returns length of value on success or a negative
+>   error code on failure.
 > 
 > After:
-> - Hook getselfattr returns 0 on success or a negative error code
->   on failure. An output parameter @nattr is introduced to hold
->   the number of attributes found on success.
+> - Hook getprocattr returns 0 on success or a negative error code on
+>   failure. An output parameter @len is introduced to hold the
+>   length of value on success.
 > 
 > Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
 > ---
+>  fs/proc/base.c                |  5 ++++-
 >  include/linux/lsm_hook_defs.h |  2 +-
 >  include/linux/security.h      |  5 +++--
->  security/apparmor/lsm.c       |  5 +++--
->  security/lsm_syscalls.c       |  6 +++++-
->  security/security.c           | 18 +++++++++++-------
->  security/selinux/hooks.c      | 13 +++++++++----
->  security/smack/smack_lsm.c    | 13 +++++++++----
->  7 files changed, 41 insertions(+), 21 deletions(-)
+>  security/apparmor/lsm.c       |  7 +++++--
+>  security/security.c           |  8 +++++---
+>  security/selinux/hooks.c      | 16 +++++++++-------
+>  security/smack/smack_lsm.c    | 11 ++++++-----
+>  7 files changed, 33 insertions(+), 21 deletions(-)
 
-The getselfattr hook is different from the majority of the other LSM
-hooks as getselfattr is used as part of lsm_get_self_attr(2) syscall and
-not by other subsystems within the kernel.  Let's leave it as-is for now
-as it is sufficiently special case that a deviation is okay.
+The patch 07/20 comments also apply here.
 
 --
 paul-moore.com
