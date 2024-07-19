@@ -1,59 +1,59 @@
-Received: from mail-qk1-f174.google.com (mail-qk1-f174.google.com [209.85.222.174])
+Received: from mail-vs1-f45.google.com (mail-vs1-f45.google.com [209.85.217.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B457B2A1CF
-	for <bpf@vger.kernel.org>; Fri, 19 Jul 2024 02:08:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFDB9AD5B
+	for <bpf@vger.kernel.org>; Fri, 19 Jul 2024 02:08:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721354890; cv=none; b=ax20bxp+NPEpMfy5VsONj7J58DlwVDFAND8RA3obQFULJ81o7hHYfXMuzXBBeOxL+wul4Ompsk5lsw07+wDpH6Hr4AiHw6xAyzLXsc/Qa1HKxJH7o/NBwmi+BNIqHVhFr7o1+Hk8N0QDH+hqB98L/DhwVoXGpMf0gs3YSQgWELw=
+	t=1721354891; cv=none; b=WAqDfj7ZR0JTtkL5IDjhEBjRduuogx8VEa7s9iPFDREhfpUV5hwvMukAnsAeK0O6JvTReLp0oRaSLydk9NKQGIybAjRsqbHo55i/GisL5Y4fYw5xayZP0dH7AeEtyjfL95B5iOhxdpdhPbSxraJVfklc7TWisiEHiL6IDq78nFU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721354890; c=relaxed/simple;
-	bh=5ZcGXS//apEgtQX2XqPaW8VBEtbAmzIFR4sLfvFevMA=;
+	s=arc-20240116; t=1721354891; c=relaxed/simple;
+	bh=VmKDvFgpz/E83Ibzf8dU/pBFko/O1qd4sreAXbduhsc=;
 	h=Date:Message-ID:MIME-Version:Content-Type:Content-Disposition:
-	 From:To:Cc:Subject:References:In-Reply-To; b=bKDN6ptJkY1vMKECcMtFt4sPQuWfvOH0oAR+AJoBCWh/8xzTgAgG2grYM5asvJ2fAc8WVSH/+h9NpcQB+BdX1lIOz3uY12cl98QChfne5e7GQAGpwD0YW7lMrjRZNkj779gJwotP2WnG8lEsISlYuepeGKGh6RfCZ0kcKyiitLQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=cGFiBNMV; arc=none smtp.client-ip=209.85.222.174
+	 From:To:Cc:Subject:References:In-Reply-To; b=YPenTeYOnwBcNUtEBgl/71fWFIjpnmfV4ckzQVIURve3lUh5vaVJS8MUdj95ygqWBVJKttpFxrvzkB85r/JxHOw/vXveycGGndLHBxkJwxP67fsJwsvaG3/qrc6jl2Jfl8eoC5BSWhXHyVC1B5zeq7eUVksxJQPtd4AsGi7PnE8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=TOdu95Uj; arc=none smtp.client-ip=209.85.217.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="cGFiBNMV"
-Received: by mail-qk1-f174.google.com with SMTP id af79cd13be357-79ef8e0c294so70380585a.1
-        for <bpf@vger.kernel.org>; Thu, 18 Jul 2024 19:08:07 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="TOdu95Uj"
+Received: by mail-vs1-f45.google.com with SMTP id ada2fe7eead31-48ff8aa6081so471833137.1
+        for <bpf@vger.kernel.org>; Thu, 18 Jul 2024 19:08:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1721354886; x=1721959686; darn=vger.kernel.org;
+        d=paul-moore.com; s=google; t=1721354888; x=1721959688; darn=vger.kernel.org;
         h=in-reply-to:references:subject:cc:to:from:content-transfer-encoding
          :content-disposition:mime-version:message-id:date:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=7T3A18YPB97LPR6SF4j8Sn/pZVY1F/IR3nCX5MC7xN8=;
-        b=cGFiBNMVGdfoN3CVulGGwryC7UCj1rOezo2xkveWzz8TFlvjE6qTiX1YNEDkUzIDc8
-         6K+xQrjT/buvYHEAMAh87CeTjvckkNcGCE9KxyGQQqTKf1xryPbZuFUq7fF0l4AoOnKx
-         Sc1GD1I0GB+ulUrjptd7hfU50pxDSVgya98fLSrtvr0KOWHieZKpJGDzgYftaqXvNNwc
-         mDjl4O+g4giYPbg4bnQejowcIfre5bPu0KPnOjVj13JdDb/CXPinA3z3Q+mtwu0fYoFa
-         9PRhzTbfE5s7MOFjTUMSh3Qsf7dg8/Wi07LUvZ9QQF/bSgP18Gbg/rCHUQB7DP9m7/4+
-         E3LQ==
+        bh=7WJIAU9I1siplxW26ihrUPrlbSZPb9UDEgIONz1gVMM=;
+        b=TOdu95UjVwn4OZ5EVBmq3u8ej6E779CltdzldQHRbLERFOmqzi/yFkJySUkDo8Q02S
+         MmucwBK1/1SuoKkSRBdsKjSIMKhWdeSiaycI+cPxmECXQfvR2aKbY5BqsDOmsa9reAiT
+         yZ7bvOVdN44uSSjzR3r+AK3FuhKiXFlE7LBF+eoO2hM8dKX3JPrYRO1Tt76HeIppxIJO
+         YL9vaEz9ychYf25oJ7bS2x1fcHAkxjGl+OFJpJnLe10FyE3LnpoKpRsAb+U0+VJFPg7E
+         YO22VimpGBJG0zZfGZkh7vMaKtbE/8Y1Bo6vXm1EeU0MNoLkSYueNMQn4LdZP9hfWwq8
+         qoBw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1721354886; x=1721959686;
+        d=1e100.net; s=20230601; t=1721354888; x=1721959688;
         h=in-reply-to:references:subject:cc:to:from:content-transfer-encoding
          :content-disposition:mime-version:message-id:date:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=7T3A18YPB97LPR6SF4j8Sn/pZVY1F/IR3nCX5MC7xN8=;
-        b=w/ZA8XX/hZZXs50FLRJ5ptugAWHTPQSG2y43diBHP4K9NPTaXlynBwhpot38lcnmPk
-         CeKqIfMTGReDsBxn9rpnv44R2ADLgWxBmV8GuTOBJSx7XQXTCUA+EuaEGIJ6PccEXJV3
-         Fdj2ToN3q7kRAPkhU0fSa0HTXGfi6Bgz+7adWBEqnK0o+mx0uwLWGoLCR09UD0QaTKxh
-         K29rIwPxoObkmhy/gTfVD4ECZgIc2ZCg3ZydmmoeCUM5QbMNebq8lAmlCIVCQaFrmnUj
-         EOT7T8w/d9EQfMu+Gsqw+dzKA2OgbK5bGru6tCzWb7j9XGe6Rj2MAUMlBvxj69fUVF20
-         K0oQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWn7+mStBe30y94lGJQOtUCD6looVCmfQgRNWVhyrCn69nmG05Cw4G7JF80JufT6NlIfPCo5vFvjzCQ4kwFz78XnxSv
-X-Gm-Message-State: AOJu0YxXqZ2dvhTEldjpaxtkCyEUPxY6ttzwiLgMwtxNAuuQFLkgp1WZ
-	w3vz6hz1MJTWqh8I3rTtYzYTnQQwFIq6e0P2tlBchPpSQeszvzfMmDG0o14foQ==
-X-Google-Smtp-Source: AGHT+IHgEdIdqfk63w+VB4pfUkz4rCmNInwk3vmByH2HiGhUy6RD2ny0XAt6GVYxWU0i2NMuExmVBA==
-X-Received: by 2002:a05:620a:2591:b0:79e:fd1e:6fc4 with SMTP id af79cd13be357-7a193b54b5amr412753385a.34.1721354886527;
-        Thu, 18 Jul 2024 19:08:06 -0700 (PDT)
+        bh=7WJIAU9I1siplxW26ihrUPrlbSZPb9UDEgIONz1gVMM=;
+        b=ElbcfPq1cvNRjZuHP7bP61cnZ8WJ0CU5Di2q0sHOVS06AqvgB3l/FhO1SURoDL9BF/
+         G47skz4zjfKBAihRkqJq5Yp13U77g9xEwb/FDjJATbUR9JcF2HOPxNCgHcpBTjOBFlAf
+         LNWXyy9aNs1f/mNZNeBuwwM//g8onEOkmnKlndFob4Mi9MIJ1U/EUaDqjVKHCqaAvrHS
+         k6l3eI3oFO4u5GVQTNBhBQWyK6jihzyxhtP7ErT5SlWjouALMerL917NEZsNDll4ED14
+         RVo4/Dma2XEyQ6G/OPnGIEoOV6qlSOPJcqrmL6NQdEXwydfLgkeuBo28xxpuMBujBWcy
+         t/hg==
+X-Forwarded-Encrypted: i=1; AJvYcCVVUGDEErw4nchv/jkvZJ4VJshIvgqdrf51ItmaN0h15fjNySh2NRYSrCwUPHa/exmHD6sIEKKWWRYHGqjCm69bEGt1
+X-Gm-Message-State: AOJu0YzcLEJ8lI3iJ+QU507MW/qUF1sbDR24THWifrdmtsa9TRoPUd5s
+	XrA5Qwr9Dz1zRXWN2eGXfeBEiMh6nMLFP5ztHFf5jicrveRn3itEkcbHNiNSxg==
+X-Google-Smtp-Source: AGHT+IEfFmWT5d1hhUBnOOZYB8cD3VARfyIizd2JvZZpXpXUEgCBoIWvB9rnP0zsX/VlF1HVVridVA==
+X-Received: by 2002:a05:6102:5687:b0:48f:c031:3fa9 with SMTP id ada2fe7eead31-4915987763amr8039245137.12.1721354888569;
+        Thu, 18 Jul 2024 19:08:08 -0700 (PDT)
 Received: from localhost ([70.22.175.108])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-7a19909434bsm20720885a.126.2024.07.18.19.08.06
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6b7acb0a15bsm1723896d6.138.2024.07.18.19.08.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 Jul 2024 19:08:06 -0700 (PDT)
-Date: Thu, 18 Jul 2024 22:08:05 -0400
-Message-ID: <9f26368cc7aeccba460c9bce0a13f301@paul-moore.com>
+        Thu, 18 Jul 2024 19:08:08 -0700 (PDT)
+Date: Thu, 18 Jul 2024 22:08:07 -0400
+Message-ID: <94a3b82a1e3e1fec77d676fa382105d4@paul-moore.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -81,229 +81,171 @@ Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
 	Trond Myklebust <trond.myklebust@hammerspace.com>, Anna Schumaker <anna@kernel.org>, 
 	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
 	Stephen Smalley <stephen.smalley.work@gmail.com>
-Subject: Re: [PATCH v4 7/20] lsm: Refactor return value of LSM hook setprocattr
-References: <20240711111908.3817636-8-xukuohai@huaweicloud.com>
-In-Reply-To: <20240711111908.3817636-8-xukuohai@huaweicloud.com>
+Subject: Re: [PATCH v4 9/20] lsm: Refactor return value of LSM hook  key_getsecurity
+References: <20240711111908.3817636-10-xukuohai@huaweicloud.com>
+In-Reply-To: <20240711111908.3817636-10-xukuohai@huaweicloud.com>
 
 On Jul 11, 2024 Xu Kuohai <xukuohai@huaweicloud.com> wrote:
 > 
 > To be consistent with most LSM hooks, convert the return value of
-> hook setprocattr to 0 or a negative error code.
+> hook key_getsecurity to 0 or a negative error code.
 > 
 > Before:
-> - Hook setprocattr returns the number of bytes written on success
->   or a negative error code on failure.
+> - Hook key_getsecurity returns length of value on success or a
+>   negative error code on failure.
 > 
 > After:
-> - Hook setprocattr returns 0 on success or a negative error code
->   on failure. An output parameter @wbytes is introduced to hold
->   the number of bytes written on success.
+> - Hook key_getsecurity returns 0 on success or a negative error
+>   code on failure. An output parameter @len is introduced to hold
+>   the length of value on success.
 > 
 > Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
 > ---
->  fs/proc/base.c                |  5 +++--
 >  include/linux/lsm_hook_defs.h |  3 ++-
->  include/linux/security.h      |  5 +++--
->  security/apparmor/lsm.c       | 10 +++++++---
->  security/security.c           |  8 +++++---
->  security/selinux/hooks.c      | 11 ++++++++---
->  security/smack/smack_lsm.c    | 14 ++++++++++----
->  7 files changed, 38 insertions(+), 18 deletions(-)
+>  include/linux/security.h      |  6 ++++--
+>  security/keys/keyctl.c        | 11 ++++++++---
+>  security/security.c           | 26 +++++++++++++++++++++-----
+>  security/selinux/hooks.c      | 11 +++++------
+>  security/smack/smack_lsm.c    | 21 +++++++++++----------
+>  6 files changed, 51 insertions(+), 27 deletions(-)
 
-The security_setprocattr() hook is another odd case that we probably
-just want to leave alone for two reasons:
+...
 
-1. With the move to LSM syscalls for getting/setting a task's LSM
-attributes we are "freezing" the procfs API and not adding any new
-entries to it.
+> diff --git a/security/keys/keyctl.c b/security/keys/keyctl.c
+> index 4bc3e9398ee3..e9f857620f28 100644
+> --- a/security/keys/keyctl.c
+> +++ b/security/keys/keyctl.c
+> @@ -1565,6 +1565,7 @@ long keyctl_get_security(key_serial_t keyid,
+>  	struct key *key, *instkey;
+>  	key_ref_t key_ref;
+>  	char *context;
+> +	size_t len;
+>  	long ret;
+>  
+>  	key_ref = lookup_user_key(keyid, KEY_LOOKUP_PARTIAL, KEY_NEED_VIEW);
+> @@ -1586,15 +1587,18 @@ long keyctl_get_security(key_serial_t keyid,
+>  	}
+>  
+>  	key = key_ref_to_ptr(key_ref);
+> -	ret = security_key_getsecurity(key, &context);
+> -	if (ret == 0) {
+> +	ret = security_key_getsecurity(key, &context, &len);
+> +	if (ret < 0)
+> +		goto error;
 
-2. The BPF LSM doesn't currently register any procfs entries.
+Since there is already an if-else pattern here you might as well stick
+with that, for example:
 
-I'd suggest leaving security_setprocattr() as-is and blocking it in
-the BPF verifier, I can't see any reason why a BPF LSM would need
-this hook.
+  if (ret == 0) {
+    ...
+  } else if (ret > 0) {
+    ...
+  }
 
-> diff --git a/fs/proc/base.c b/fs/proc/base.c
-> index 72a1acd03675..9e1cf6cc674d 100644
-> --- a/fs/proc/base.c
-> +++ b/fs/proc/base.c
-> @@ -2740,6 +2740,7 @@ static ssize_t proc_pid_attr_write(struct file * file, const char __user * buf,
->  {
->  	struct inode * inode = file_inode(file);
->  	struct task_struct *task;
-> +	size_t wbytes;
->  	void *page;
->  	int rv;
+... you should probably add a comment that @ret is -ERRNO on failure,
+but it doesn't look like you need an explicit test here since the error
+case will normally fall through to the 'error' label (which you shouldn't
+need anymore either).
+
+> +	if (len == 0) {
+>  		/* if no information was returned, give userspace an empty
+>  		 * string */
+>  		ret = 1;
+>  		if (buffer && buflen > 0 &&
+>  		    copy_to_user(buffer, "", 1) != 0)
+>  			ret = -EFAULT;
+> -	} else if (ret > 0) {
+> +	} else {
+> +		ret = len;
+>  		/* return as much data as there's room for */
+>  		if (buffer && buflen > 0) {
+>  			if (buflen > ret)
+> @@ -1607,6 +1611,7 @@ long keyctl_get_security(key_serial_t keyid,
+>  		kfree(context);
+>  	}
 >  
-> @@ -2785,12 +2786,12 @@ static ssize_t proc_pid_attr_write(struct file * file, const char __user * buf,
->  
->  	rv = security_setprocattr(PROC_I(inode)->op.lsmid,
->  				  file->f_path.dentry->d_name.name, page,
-> -				  count);
-> +				  count, &wbytes);
->  	mutex_unlock(&current->signal->cred_guard_mutex);
->  out_free:
->  	kfree(page);
->  out:
-> -	return rv;
-> +	return rv < 0 ? rv : wbytes;
+> +error:
+>  	key_ref_put(key_ref);
+>  	return ret;
 >  }
->  
->  static const struct file_operations proc_pid_attr_operations = {
-> diff --git a/include/linux/lsm_hook_defs.h b/include/linux/lsm_hook_defs.h
-> index dbc16f14f42f..2628514bb19c 100644
-> --- a/include/linux/lsm_hook_defs.h
-> +++ b/include/linux/lsm_hook_defs.h
-> @@ -287,7 +287,8 @@ LSM_HOOK(int, -EOPNOTSUPP, setselfattr, unsigned int attr,
->  	 struct lsm_ctx *ctx, u32 size, u32 flags)
->  LSM_HOOK(int, -EINVAL, getprocattr, struct task_struct *p, const char *name,
->  	 char **value)
-> -LSM_HOOK(int, -EINVAL, setprocattr, const char *name, void *value, size_t size)
-> +LSM_HOOK(int, -EINVAL, setprocattr, const char *name, void *value, size_t size,
-> +	 size_t *wbytes)
->  LSM_HOOK(int, 0, ismaclabel, const char *name)
->  LSM_HOOK(int, -EOPNOTSUPP, secid_to_secctx, u32 secid, char **secdata,
->  	 u32 *seclen)
-> diff --git a/include/linux/security.h b/include/linux/security.h
-> index 96a63e132abf..1f1a9696e65d 100644
-> --- a/include/linux/security.h
-> +++ b/include/linux/security.h
-> @@ -496,7 +496,8 @@ int security_setselfattr(unsigned int attr, struct lsm_ctx __user *ctx,
->  			 u32 size, u32 flags);
->  int security_getprocattr(struct task_struct *p, int lsmid, const char *name,
->  			 char **value);
-> -int security_setprocattr(int lsmid, const char *name, void *value, size_t size);
-> +int security_setprocattr(int lsmid, const char *name, void *value, size_t size,
-> +			 size_t *wbytes);
->  int security_netlink_send(struct sock *sk, struct sk_buff *skb);
->  int security_ismaclabel(const char *name);
->  int security_secid_to_secctx(u32 secid, char **secdata, u32 *seclen);
-> @@ -1440,7 +1441,7 @@ static inline int security_getprocattr(struct task_struct *p, int lsmid,
->  }
->  
->  static inline int security_setprocattr(int lsmid, char *name, void *value,
-> -				       size_t size)
-> +				       size_t size, size_t *wbytes)
->  {
->  	return -EINVAL;
->  }
-> diff --git a/security/apparmor/lsm.c b/security/apparmor/lsm.c
-> index 72dd09993f28..6c8b1f8c5781 100644
-> --- a/security/apparmor/lsm.c
-> +++ b/security/apparmor/lsm.c
-> @@ -939,13 +939,17 @@ static int apparmor_setselfattr(unsigned int attr, struct lsm_ctx *ctx,
->  }
->  
->  static int apparmor_setprocattr(const char *name, void *value,
-> -				size_t size)
-> +				size_t size, size_t *wbytes)
->  {
-> +	int rc = -EINVAL;
->  	int attr = lsm_name_to_attr(name);
->  
->  	if (attr)
-> -		return do_setattr(attr, value, size);
-> -	return -EINVAL;
-> +		rc = do_setattr(attr, value, size);
-> +	if (rc < 0)
-> +		return rc;
-> +	*wbytes = rc;
-> +	return 0;
->  }
->  
->  /**
 > diff --git a/security/security.c b/security/security.c
-> index 095e78efcb32..9685096dbf16 100644
+> index 9dd2ae6cf763..2c161101074d 100644
 > --- a/security/security.c
 > +++ b/security/security.c
-> @@ -4141,20 +4141,22 @@ int security_getprocattr(struct task_struct *p, int lsmid, const char *name,
->   * @name: attribute name
->   * @value: attribute value
->   * @size: attribute value size
-> + * @wbytes: bytes written on success
+> @@ -5338,19 +5338,35 @@ int security_key_permission(key_ref_t key_ref, const struct cred *cred,
+>   * security_key_getsecurity() - Get the key's security label
+>   * @key: key
+>   * @buffer: security label buffer
+> + * @len: the length of @buffer (including terminating NULL) on success
 >   *
->   * Write (set) the current task's attribute @name to @value, size @size if
->   * allowed.
+>   * Get a textual representation of the security context attached to a key for
+>   * the purposes of honouring KEYCTL_GETSECURITY.  This function allocates the
+>   * storage for the NUL-terminated string and the caller should free it.
 >   *
-> - * Return: Returns bytes written on success, a negative value otherwise.
-> + * Return: Returns 0 on success, a negative error code otherwise.
+> - * Return: Returns the length of @buffer (including terminating NUL) or -ve if
+> - *         an error occurs.  May also return 0 (and a NULL buffer pointer) if
+> - *         there is no security label assigned to the key.
+> + * Return: Returns 0 on success or -ve if an error occurs. May also return 0
+> + *         (and a NULL buffer pointer) if there is no security label assigned
+> + *         to the key.
 >   */
-> -int security_setprocattr(int lsmid, const char *name, void *value, size_t size)
-> +int security_setprocattr(int lsmid, const char *name, void *value, size_t size,
-> +			 size_t *wbytes)
+> -int security_key_getsecurity(struct key *key, char **buffer)
+> +int security_key_getsecurity(struct key *key, char **buffer, size_t *len)
 >  {
->  	struct security_hook_list *hp;
->  
->  	hlist_for_each_entry(hp, &security_hook_heads.setprocattr, list) {
->  		if (lsmid != 0 && lsmid != hp->lsmid->id)
->  			continue;
-> -		return hp->hook.setprocattr(name, value, size);
-> +		return hp->hook.setprocattr(name, value, size, wbytes);
->  	}
->  	return LSM_RET_DEFAULT(setprocattr);
+> +	int rc;
+> +	size_t n = 0;
+> +	struct security_hook_list *hp;
+> +
+>  	*buffer = NULL;
+> -	return call_int_hook(key_getsecurity, key, buffer);
+> +
+> +	hlist_for_each_entry(hp, &security_hook_heads.key_getsecurity, list) {
+> +		rc = hp->hook.key_getsecurity(key, buffer, &n);
+> +		if (rc < 0)
+> +			return rc;
+> +		if (n)
+> +			break;
+> +	}
+> +
+> +	*len = n;
+> +
+> +	return 0;
 >  }
+
+Help me understand why we can't continue to use the call_int_hook()
+macro here?
+
 > diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
-> index 0d35bb93baca..7a73f3710025 100644
+> index 16cd336aab3d..747ec602dec0 100644
 > --- a/security/selinux/hooks.c
 > +++ b/security/selinux/hooks.c
-> @@ -6589,13 +6589,18 @@ static int selinux_getprocattr(struct task_struct *p,
->  	return -EINVAL;
+> @@ -6737,18 +6737,17 @@ static int selinux_key_permission(key_ref_t key_ref,
+>  	return avc_has_perm(sid, ksec->sid, SECCLASS_KEY, perm, NULL);
 >  }
 >  
-> -static int selinux_setprocattr(const char *name, void *value, size_t size)
-> +static int selinux_setprocattr(const char *name, void *value, size_t size,
-> +			       size_t *wbytes)
+> -static int selinux_key_getsecurity(struct key *key, char **_buffer)
+> +static int selinux_key_getsecurity(struct key *key, char **_buffer,
+> +				   size_t *_len)
 >  {
-> +	int rc = -EINVAL;
->  	int attr = lsm_name_to_attr(name);
+>  	struct key_security_struct *ksec = key->security;
+>  	char *context = NULL;
+> -	unsigned len;
+> +	u32 context_len;
+
+Since @len doesn't collide with the parameter, you might as well just
+stick with @len as the local variable name.
+
+>  	int rc;
 >  
->  	if (attr)
-> -		return selinux_lsm_setattr(attr, value, size);
-> -	return -EINVAL;
-> +		rc = selinux_lsm_setattr(attr, value, size);
-> +	if (rc < 0)
-> +		return rc;
-> +	*wbytes = rc;
-> +	return 0;
+> -	rc = security_sid_to_context(ksec->sid,
+> -				     &context, &len);
+> -	if (!rc)
+> -		rc = len;
+> +	rc = security_sid_to_context(ksec->sid, &context, &context_len);
+>  	*_buffer = context;
+> +	*_len = context_len;
+>  	return rc;
 >  }
->  
->  static int selinux_ismaclabel(const char *name)
-> diff --git a/security/smack/smack_lsm.c b/security/smack/smack_lsm.c
-> index 63d9c5f456c1..4265f2639106 100644
-> --- a/security/smack/smack_lsm.c
-> +++ b/security/smack/smack_lsm.c
-> @@ -3797,19 +3797,25 @@ static int smack_setselfattr(unsigned int attr, struct lsm_ctx *ctx,
->   * @name: the name of the attribute in /proc/.../attr
->   * @value: the value to set
->   * @size: the size of the value
-> + * @wbytes: the length of the smack label written
->   *
->   * Sets the Smack value of the task. Only setting self
->   * is permitted and only with privilege
->   *
-> - * Returns the length of the smack label or an error code
-> + * Returns 0 on success or a negative error code
->   */
-> -static int smack_setprocattr(const char *name, void *value, size_t size)
-> +static int smack_setprocattr(const char *name, void *value, size_t size,
-> +			     size_t *wbytes)
->  {
-> +	int rc = -EINVAL;
->  	int attr = lsm_name_to_attr(name);
->  
->  	if (attr != LSM_ATTR_UNDEF)
-> -		return do_setattr(attr, value, size);
-> -	return -EINVAL;
-> +		rc = do_setattr(attr, value, size);
-> +	if (rc < 0)
-> +		return rc;
-> +	*wbytes = rc;
-> +	return 0;
->  }
->  
->  /**
-> -- 
-> 2.30.2
 
 --
 paul-moore.com
