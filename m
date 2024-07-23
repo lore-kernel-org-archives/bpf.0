@@ -1,97 +1,80 @@
-Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86B8113C9CB;
-	Tue, 23 Jul 2024 20:28:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 245B913D898
+	for <bpf@vger.kernel.org>; Tue, 23 Jul 2024 20:30:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721766519; cv=none; b=hRwXiT4Kf9Ru2WHipS3hTemIpH97LExN2z937//X6AYQTApk+dLinC/4i0NrYPwznVrypYRzBKnoiz29Zex4Lw8mNF4OiqCFA7AkxJADWzSzIBzgScYzuGKDxFNmfLMSbEoRb9UsI3c2po1r3jh+8Kq/NvAbRN5aV+saS4DfzU8=
+	t=1721766636; cv=none; b=Czs+cwUJSIeAOd5QaKn7ps8cS4/nH8dbsWX7KRAKZnyExqsMjXktGYWBSWB0Hr8oeGebsyBROyaNm+semjcP2jSgzGJFuZLDEn+NZ+M74+uRpv4ne4qQkTmo28bT4jMfA6LorHBaG83XMJ5fgfp5EAhHQabvGBl7j8WKVE6l+JU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721766519; c=relaxed/simple;
-	bh=o3WEIpUZ2Ir6/UxTB4aSIomYxmK5gpHnooT4W3F63P4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=N6xSEQqKcD31/eiz3S0W8VennV4PKWU4ZjsNnWIYsyRAa7X9DVLUQX15V4yxZRScuKIrBcCIfaax9SQkmqIW7vIFHvMYA6BkYLOGkyreImYKwuuzehvP7pPOG/RIKxX1PArSFq+zDLDANWm7XCjoT3McNcMXaHo93P3PavyxkPQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=A0WKdgPH; arc=none smtp.client-ip=209.85.210.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1721766636; c=relaxed/simple;
+	bh=3LcB8bPR4r9jCMhinz6NWRl87VzJeh/dKx46sHjXUnQ=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=sxTQpp6vsCgSdzNhGgi32/8ZfFbXjKKJtHv7sNOO4mXMzq5sm1cmzmi5sUKEtjXiC/BpvK85QJSOSeaeNf7Uj+WnKKRNyXjzu86vFkB8Jh1nDxyun2anQBsph6P7YVJFFMZUvlzF8XQfKW/7IZNU3uvCmJRBWssV2rDxAJl+lt0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kwqxndtU; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="A0WKdgPH"
-Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-70d1cbbeeaeso1697360b3a.0;
-        Tue, 23 Jul 2024 13:28:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1721766518; x=1722371318; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=o3WEIpUZ2Ir6/UxTB4aSIomYxmK5gpHnooT4W3F63P4=;
-        b=A0WKdgPH20RByqbw6bWiO6/6kIhIQVYTG70bgIKCuDn6zpvqhjwZJU84oiOfQsLY/+
-         ca500hFnmHkmKS+kR3fnTF0Q0Q3iDVjfSoqpYF5c3hgvCy1nyDkxV3Not2ZGQ5LzOWnr
-         8tbUrTzEyY3/B32/oLeYsplDxIosgHvDocZGYP0zgECt8/grjdu3nSwrcpXiIn8DHMP9
-         85ozFaFJ/GeTCmM+Z6no+3BSCcRjnBQ27w3xG6RK5T6AJJhm85hVILRgKJWiiuJaj2y1
-         nkPfikNHzSOJA8ebgmLAema1YZdZUfLNlnftCVVwGLyzB76tQJL2kZm1tJLf0/xJd9dC
-         //Hw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1721766518; x=1722371318;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=o3WEIpUZ2Ir6/UxTB4aSIomYxmK5gpHnooT4W3F63P4=;
-        b=CbOCVTo3tcKdtDttaS55nYsGy4im97C6KknLTz4lpOUIkl3EEVcqZ7m1Ht/+QZ0KDW
-         eoFdPZNeAtOLdtbPB0OaJrnqvO3G1hMzdGmvjLeu/g7f1XBoCasTm7BtFtauqKwdd6vt
-         jI8nKuGEAEUaxr16H3ZgSfO11vx+ygZVOd+//hltnalQYX2eQRn2d3ZHRMJLxnNyJ545
-         yz12yF1MHzFL/pUx8QevsBEDzMr0ITuKeygv9aSU1TwNNsIqaNl0lGh95Zh8kmgrrYLS
-         P4Eb0ZivFWsxYHXsLlWrqZOf1RyeCK4pflC73e5pYCetcIeO4z3Rhvjd3a0+65YJ24WM
-         /Axg==
-X-Forwarded-Encrypted: i=1; AJvYcCU4Hzn8Cybw94D1QVIEk/no/PgfZ4pEtK5ClSZE65BmSX9C6MP6jQ5r2dr49pICB1pCGvuxWSUOI3kyU4ylgp6b2ryf2rAWEFONLK3PcFAdvQbN3+c3bSrSVO9GP6otWajdZl3i
-X-Gm-Message-State: AOJu0YzUN4q0QAVkkoqmCoWLQMOUqOT1T+zBz61JYDZDSunpHIN3KIqa
-	k27X1+oHXey4R6dNzD0S9QFMRLyJi8bhgijoiwrhS8Zre3vUo7TWIJm7Cr9/O9R8ezzruAk1XGp
-	e0/KQFdFRQt1tw+XpgojCPsCBAw5AtQ==
-X-Google-Smtp-Source: AGHT+IHo4CP6gnK5Jmdf1ya66+0HaFOLgkaaXdIFIcFPe6AOIp/m28IxYjDmUzplJhxdNCWpeFGIaiGCfdNt1XQ8P3M=
-X-Received: by 2002:a05:6a20:a128:b0:1c0:e925:f3ea with SMTP id
- adf61e73a8af0-1c45e5d4b0cmr1136696637.16.1721766517763; Tue, 23 Jul 2024
- 13:28:37 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kwqxndtU"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id ADF31C4AF0A;
+	Tue, 23 Jul 2024 20:30:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1721766635;
+	bh=3LcB8bPR4r9jCMhinz6NWRl87VzJeh/dKx46sHjXUnQ=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=kwqxndtUuEOodxYeQReNP8jNlwS6OgaKrHfmJEnR9Xk1O2Y7M58Yhdu3PQs69/lnt
+	 BRStp7xBz3uI8jbZM6F5X6yBt1Q+ZC4RcKaJWHlJpKetXyEqY/GrSsDzI1D3UIJwcR
+	 Al5DDCGZeFHqT9wU7iUXLvtg8cIEEu5KXGwdrVBx/Bo2rb4T1hnUNcJByKaJ+Nv46G
+	 8JxjKeQRvMogVUliRCs2yHEIQ3a9SZEKOFgUbpyvlyBdbdbOzRPE7M3eMw5Yo4tBfM
+	 2zlWNpSwdfRVbfNoIpvIMXb8UU3HSTkoBnayDg45SPLrL9ZR/pkmw5MtP/GThhyTxm
+	 ZiV0AnF1y+GzA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 8F6DDC4332C;
+	Tue, 23 Jul 2024 20:30:35 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CAEf4BzarKiUZqNcq1E+6SaeG8oP5+SfSLLoTNKF3_+7MS6CtyQ@mail.gmail.com>
- <20240719232159.2147210-1-tony.ambardar@gmail.com> <CAEf4BzZ-caZKO_kEqhh930_x3UGVXQ3NJJaG5BZq9NJhaP2xng@mail.gmail.com>
- <ZptJ1dsnKbjTZ6iH@kodidev-ubuntu> <Zp8I3aN/bZnka4I+@kodidev-ubuntu> <00c938b06c8b3df26a10f93b4bdb113048525c9b.camel@gmail.com>
-In-Reply-To: <00c938b06c8b3df26a10f93b4bdb113048525c9b.camel@gmail.com>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Tue, 23 Jul 2024 13:28:25 -0700
-Message-ID: <CAEf4BzYSfY57+DnUdWzqGeMG5iEVg9eWnta=kunQ6MkgFxfM6g@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v1] selftests/bpf: Fix wrong binary in Makefile
- log output
-To: Eduard Zingerman <eddyz87@gmail.com>
-Cc: Tony Ambardar <tony.ambardar@gmail.com>, bpf@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCHv3 bpf-next 0/2] selftests/bpf: Add more uprobe multi tests
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <172176663558.27466.9674850229320310129.git-patchwork-notify@kernel.org>
+Date: Tue, 23 Jul 2024 20:30:35 +0000
+References: <20240722202758.3889061-1-jolsa@kernel.org>
+In-Reply-To: <20240722202758.3889061-1-jolsa@kernel.org>
+To: Jiri Olsa <jolsa@kernel.org>
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+ bpf@vger.kernel.org, kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+ john.fastabend@gmail.com, kpsingh@chromium.org, sdf@google.com,
+ haoluo@google.com, oleg@redhat.com, peterz@infradead.org, mhiramat@kernel.org
 
-On Mon, Jul 22, 2024 at 6:37=E2=80=AFPM Eduard Zingerman <eddyz87@gmail.com=
-> wrote:
->
-> On Mon, 2024-07-22 at 18:35 -0700, Tony Ambardar wrote:
+Hello:
+
+This series was applied to bpf/bpf-next.git (master)
+by Andrii Nakryiko <andrii@kernel.org>:
+
+On Mon, 22 Jul 2024 22:27:56 +0200 you wrote:
+> hi,
+> adding more uprobe multi tests for failed attachments
+> inside the uprobe register code.
+> 
+> v3 changes:
+>   - renamed several variables/functions, null check [Andrii]
+>   - fixed CI issue
+> 
 > [...]
->
-> > Hi Andrii,
-> >
-> > I sent out a v2 based on your suggestions but omitted Eduard's Acked-by=
-:
-> > by mistake. Should I resubmit or is that something you can update?
->
-> That's fine, don't bother.
->
 
-Added it while applying.
+Here is the summary with links:
+  - [PATCHv3,bpf-next,1/2] selftests/bpf: Add uprobe fail tests for uprobe multi
+    https://git.kernel.org/bpf/bpf-next/c/f5ee7d559a7c
+  - [PATCHv3,bpf-next,2/2] selftests/bpf: Add uprobe multi consumers test
+    https://git.kernel.org/bpf/bpf-next/c/c5ec71c325e7
 
-> [...]
->
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
