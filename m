@@ -1,97 +1,94 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from 69-171-232-181.mail-mxout.facebook.com (69-171-232-181.mail-mxout.facebook.com [69.171.232.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A658E158A1F;
-	Tue, 23 Jul 2024 16:22:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C96F414D2B8
+	for <bpf@vger.kernel.org>; Tue, 23 Jul 2024 16:29:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=69.171.232.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721751737; cv=none; b=gkEBpjPAncb06vZ34hYuoEYuVglczlelHVy1zZ4YNGg2TEI/aoZ5+yoKkKTr4Ur1T/QpmohmMuGi7EstAO+uSLBJnSP0jkC5oPM4iG3mxQkEQRMves2L04jXw+mjD4FVURwwEiL9MyW82jC9AvkpqdorUa2gy7ftOa0VxcWtt1E=
+	t=1721752191; cv=none; b=qIvuPmXegkhchJSTICuQjlQm/+lOwZO2SGMNRK4uk1ea4h02tY6uM2/dmOTFAtPnXW98gUnbSIhlizfjs2eZlTlzuhZnVJLXZLeeIv0ZSeFalNp2GEBUNAAx4+w4Olb2y7tAQqXCmTewc1yD5ZrvZNIl/5171aNcI3UuLXl0GiE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721751737; c=relaxed/simple;
-	bh=rbkwpDTz7JUQx62sDw+oVHWEAHwrQR6OSjMfDq8ibHU=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=qdVYIdQDO1mUzH7Yze7uwz9R/TauPU5j1ZC7lqhWD97HZhuVZOQ/ZpBW0tNt8TWXH+4Dt6IboiWOcfFubBLKMyZ8vOMj9HBZ4O6fqhjRsj8aGHY7OMK0q4pDZh6Eor9PVGaloGjlcYk1Zz3d3gASghjFgtuT4oaWft2niqVSNkQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Xcnn9IhT; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Xcnn9IhT"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1147C4AF09;
-	Tue, 23 Jul 2024 16:22:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1721751737;
-	bh=rbkwpDTz7JUQx62sDw+oVHWEAHwrQR6OSjMfDq8ibHU=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=Xcnn9IhTdV53G/ModhKEbQDSMUV3IFkwy/yGYYDE9kTYWzH+NKESUgfHTeSBaF2PA
-	 INgnXoXgFauT0VhOjjf44CPcadvYnf/Lf1N/sggNx3nhdTu9MRmi6cjJZHskhVy4y1
-	 MOw36NYA+6zAf7m/YezM6LtoFWkyGvVXVXYpfjC4xWHD5vRpvmfZ75P2fcuAcdVrEg
-	 t+J5YvFydLedgEm0E4h51YYtH4Vtg06ESLH2fLsJ3yskl/T0oPutJNWWjg1VNMAm9d
-	 tqxONYyWG76pPvQjjcP9eTFpmNvTWuvWaDo0mdbn7CD7ToIrBi+NiSri89kiOeoMdo
-	 yR4b1cvsCRB8A==
-From: Benjamin Tissoires <bentiss@kernel.org>
-Date: Tue, 23 Jul 2024 18:21:54 +0200
-Subject: [PATCH HID 4/4] selftests/hid: add test for attaching multiple
- time the same struct_ops
+	s=arc-20240116; t=1721752191; c=relaxed/simple;
+	bh=wPy96mAFzSyXWbxGd5HyrYc+tAhLNE8c6yGsjtLJlws=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=kjyOE1hD3HsjirHpjhF3498AeIYLABPtwdu0yJ9J/v5vILCpkPXavaWl3TR2msfcnPYqojKT6DfhVfO3zE0zQyBiHuXpmUi1owFEArXz1pWWkXCd7l0jL15izPPZ43DqRMhtfVR9xDmwtOA3yfBhoTVFRy4XzNkoR9vbSWuurXI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=69.171.232.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
+Received: by devbig309.ftw3.facebook.com (Postfix, from userid 128203)
+	id 12A946E9B471; Tue, 23 Jul 2024 09:29:40 -0700 (PDT)
+From: Yonghong Song <yonghong.song@linux.dev>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	kernel-team@fb.com,
+	Martin KaFai Lau <martin.lau@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>
+Subject: [PATCH bpf-next v5 2/2] selftests/bpf: Add reg_bounds tests for ldsx and subreg compare
+Date: Tue, 23 Jul 2024 09:29:40 -0700
+Message-ID: <20240723162940.2732171-1-yonghong.song@linux.dev>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20240723162933.2731620-1-yonghong.song@linux.dev>
+References: <20240723162933.2731620-1-yonghong.song@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240723-fix-6-11-bpf-v1-4-b9d770346784@kernel.org>
-References: <20240723-fix-6-11-bpf-v1-0-b9d770346784@kernel.org>
-In-Reply-To: <20240723-fix-6-11-bpf-v1-0-b9d770346784@kernel.org>
-To: Jiri Kosina <jikos@kernel.org>, Shuah Khan <shuah@kernel.org>
-Cc: linux-input@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
- Benjamin Tissoires <bentiss@kernel.org>
-X-Mailer: b4 0.14.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1721751728; l=1182;
- i=bentiss@kernel.org; s=20230215; h=from:subject:message-id;
- bh=rbkwpDTz7JUQx62sDw+oVHWEAHwrQR6OSjMfDq8ibHU=;
- b=o462OkArDDHfVpI/bdKYU9U7nW92WlKzPZgakCpKBG595M3fkFpL0MBDj7Q3DYupX34eM8L0o
- PnACh9AIlBWA6Af5Rpki97NcuxJx12ghILHimKeeiXmKcCLHndejuh4
-X-Developer-Key: i=bentiss@kernel.org; a=ed25519;
- pk=7D1DyAVh6ajCkuUTudt/chMuXWIJHlv2qCsRkIizvFw=
+Content-Transfer-Encoding: quoted-printable
 
-Turns out that we would en up in a bad state if we attempt to attach
-twice the same HID-BPF struct_ops, so have a test for it.
+Add a few reg_bounds selftests to test 32/16/8-bit ldsx and subreg compar=
+ison.
+Without the previous patch, all added tests will fail.
 
-Signed-off-by: Benjamin Tissoires <bentiss@kernel.org>
+Acked-by: Eduard Zingerman <eddyz87@gmail.com>
+Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
 ---
- tools/testing/selftests/hid/hid_bpf.c | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
+ .../selftests/bpf/prog_tests/reg_bounds.c        | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
 
-diff --git a/tools/testing/selftests/hid/hid_bpf.c b/tools/testing/selftests/hid/hid_bpf.c
-index 9c935fd0dffc..75b7b4ef6cfa 100644
---- a/tools/testing/selftests/hid/hid_bpf.c
-+++ b/tools/testing/selftests/hid/hid_bpf.c
-@@ -694,6 +694,24 @@ TEST_F(hid_bpf, subprog_raw_event)
- 	ASSERT_EQ(buf[2], 52);
- }
- 
-+/*
-+ * Attach hid_first_event to the given uhid device,
-+ * attempt at re-attaching it, we should not lock and
-+ * return an invalid struct bpf_link
-+ */
-+TEST_F(hid_bpf, multiple_attach)
-+{
-+	const struct test_program progs[] = {
-+		{ .name = "hid_first_event" },
-+	};
-+	struct bpf_link *link;
+diff --git a/tools/testing/selftests/bpf/prog_tests/reg_bounds.c b/tools/=
+testing/selftests/bpf/prog_tests/reg_bounds.c
+index eb74363f9f70..0da4225749bd 100644
+--- a/tools/testing/selftests/bpf/prog_tests/reg_bounds.c
++++ b/tools/testing/selftests/bpf/prog_tests/reg_bounds.c
+@@ -433,6 +433,19 @@ static struct range range_refine(enum num_t x_t, str=
+uct range x, enum num_t y_t,
+=20
+ 	y_cast =3D range_cast(y_t, x_t, y);
+=20
++	/* If we know that
++	 *   - *x* is in the range of signed 32bit value, and
++	 *   - *y_cast* range is 32-bit signed non-negative
++	 * then *x* range can be improved with *y_cast* such that *x* range
++	 * is 32-bit signed non-negative. Otherwise, if the new range for *x*
++	 * allows upper 32-bit * 0xffffffff then the eventual new range for
++	 * *x* will be out of signed 32-bit range which violates the origin
++	 * *x* range.
++	 */
++	if (x_t =3D=3D S64 && y_t =3D=3D S32 && y_cast.a <=3D S32_MAX  && y_cas=
+t.b <=3D S32_MAX &&
++	    (s64)x.a >=3D S32_MIN && (s64)x.b <=3D S32_MAX)
++		return range_improve(x_t, x, y_cast);
 +
-+	LOAD_PROGRAMS(progs);
-+
-+	link = bpf_map__attach_struct_ops(self->skel->maps.first_event);
-+	ASSERT_NULL(link) TH_LOG("unexpected return value when re-attaching the struct_ops");
-+}
-+
- /*
-  * Ensures that we can attach/detach programs
-  */
-
--- 
-2.44.0
+ 	/* the case when new range knowledge, *y*, is a 32-bit subregister
+ 	 * range, while previous range knowledge, *x*, is a full register
+ 	 * 64-bit range, needs special treatment to take into account upper 32
+@@ -2108,6 +2121,9 @@ static struct subtest_case crafted_cases[] =3D {
+ 	{S32, U32, {(u32)S32_MIN, 0}, {0, 0}},
+ 	{S32, U32, {(u32)S32_MIN, 0}, {(u32)S32_MIN, (u32)S32_MIN}},
+ 	{S32, U32, {(u32)S32_MIN, S32_MAX}, {S32_MAX, S32_MAX}},
++	{S64, U32, {0x0, 0x1f}, {0xffffffff80000000ULL, 0x000000007fffffffULL}}=
+,
++	{S64, U32, {0x0, 0x1f}, {0xffffffffffff8000ULL, 0x0000000000007fffULL}}=
+,
++	{S64, U32, {0x0, 0x1f}, {0xffffffffffffff80ULL, 0x000000000000007fULL}}=
+,
+ };
+=20
+ /* Go over crafted hard-coded cases. This is fast, so we do it as part o=
+f
+--=20
+2.43.0
 
