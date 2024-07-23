@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2453113B5B4
-	for <bpf@vger.kernel.org>; Tue, 23 Jul 2024 20:30:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2457B13C823;
+	Tue, 23 Jul 2024 20:30:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721766636; cv=none; b=RaQK8fL2L0ErYUZdyhQvzNLtDgS32yyF8T+0ryjbOMx9RRtQlr3plvsnwHea+qcRnVOqHz0/gz+ih1hsOkpo30gfLK3lBUf49n8uflnqJs90cw35uRtYALaFRRqOAOLIatTz3Gs6p/mkNUqK3/qiIn/7Aaa7tlfrNciCjUjr4/c=
+	t=1721766636; cv=none; b=QXnjbZ2ANe8ounoprhdIP0eH+TjH6WMgn7jWWdAo2epvQsP/Xtfn1oH27S7CmG0u2nNkT744mPETQ+VsxITo+4TIuQKEEhTg4YFu4OyKQyD/Zfc69aEhccuevoI/D/oGPYxAJXYyHZrtOgIH4KxCdxDUPVSyXolLRI7h8oCjqLE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1721766636; c=relaxed/simple;
-	bh=HkevzESJQD1XUBMNGXSehE/5dj9N0ilw+ybjtmwJffE=;
+	bh=l8Nlo0+S0lvry3MI5IHMaoyWT4SOOKiV/71Ugpz0nXY=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=JzV/XTd3QBQxOjxVBY4h4h7kW+SJkKlL9UQjzFVzT+QP9th8K5tMSqt/8LEEKWO7i4Z+qFssLy361etrxLdfkhZaAoUj1gUekWhTbeEwF+e2sw3ajuuqoQPFLEjDVoHZjuFnrBWfZTD8ZCrwL/Y/ZP0WfsFR/XhvUMT+Xcb4t+8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=g1nPacow; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=T7pVcZVPaBSQga9FlYrmXWJ6PhEXr4jcNTPD3KWBBzVjDgztxB8IiZR5EdCZZNPIceyx9jrP5Y8lscaP6oA471VmkKG1IuC8QqM/ReFKvmIHTVeaZS+jbzAWNsvmjvLjgwoyBK+zFc3oZlxfwLhw2W05hmnNnefsnp8M3/HWAmU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lYbbJSAp; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="g1nPacow"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 99FC6C4AF0B;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lYbbJSAp"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id B5104C4AF0E;
 	Tue, 23 Jul 2024 20:30:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1721766635;
-	bh=HkevzESJQD1XUBMNGXSehE/5dj9N0ilw+ybjtmwJffE=;
+	bh=l8Nlo0+S0lvry3MI5IHMaoyWT4SOOKiV/71Ugpz0nXY=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=g1nPacowu2y/5NMvvGK49V7leqw509smlR8hVWOeWygEcgfTUWnPRaVKrYf4b2MfV
-	 nGcfEXNzkM4IBirkwvskLiE1PeNmVt6OUo1MVKJhmB+cZnuxnKNv3WEEbImgaaLeI1
-	 yl8oAcJiBYMHXPUvqtPJNBWJxiVU8ADDQrWX39Ta2cKVhsiE+qmrt+fSzflhyjDV4S
-	 HM3ozzl7myqKOTsqxEbmkKPuQYkiy8bl45PlXjys5SZswDvBV7k77o1gEZ/E3A6oQi
-	 8xMIiB/ibz8av79F0o90nLzeHsMhFKj+MhV4V7XZ2sOSnl51McqY/6KlH6jhZP4hrB
-	 LPuGvdvEXVH/A==
+	b=lYbbJSApwul5V5kh8UkmFOUjvQLVNnord/3nHffW839bjSZWYOnBNQeC8fEBObRhb
+	 fDrW0skgmUjImX5+FPwAdtaNN7sR6sd+SiamDNmOhaz6UnVTB+K6as1kPuANHlGZqC
+	 b1Cy8WSQWHGq5nADLeJofozNNPS/vZ28vJcLLqlEzUBv3UI0iYfging5yvLXp92QxO
+	 bAzi3Dvlh1AoyArJMyvPFhQmYUbJWWJ7i9EqS4sc/BQzmyn7rDggsnZVqcHDwh4Jfs
+	 /lovifW2/scRc/sd2/vL1OV+uBjokSFzTaPzwIm7WLx9oYPM48zM+QwM7RtTrePjqN
+	 xcd+1wpr/DNAw==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 85B2BC4333D;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 9C5C2C43140;
 	Tue, 23 Jul 2024 20:30:35 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
@@ -37,38 +37,36 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v2] tools/runqslower: Fix LDFLAGS and add LDLIBS
- support
+Subject: Re: [PATCH bpf-next v3] selftests/bpf: fix compilation failure when
+ CONFIG_NET_FOU!=y
 From: patchwork-bot+netdevbpf@kernel.org
 Message-Id: 
- <172176663554.27466.6314434452346672344.git-patchwork-notify@kernel.org>
+ <172176663563.27466.768477846355169392.git-patchwork-notify@kernel.org>
 Date: Tue, 23 Jul 2024 20:30:35 +0000
-References: <20240723003045.2273499-1-tony.ambardar@gmail.com>
-In-Reply-To: <20240723003045.2273499-1-tony.ambardar@gmail.com>
-To: Tony Ambardar <tony.ambardar@gmail.com>
-Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
- andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
- yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
- sdf@google.com, haoluo@google.com, jolsa@kernel.org, iii@linux.ibm.com
+References: <20240723071031.3389423-1-asavkov@redhat.com>
+In-Reply-To: <20240723071031.3389423-1-asavkov@redhat.com>
+To: Artem Savkov <asavkov@redhat.com>
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+ bpf@vger.kernel.org, netdev@vger.kernel.org, linux-kernel@vger.kernel.org
 
 Hello:
 
 This patch was applied to bpf/bpf-next.git (master)
 by Andrii Nakryiko <andrii@kernel.org>:
 
-On Mon, 22 Jul 2024 17:30:45 -0700 you wrote:
-> Actually use previously defined LDFLAGS during build and add support for
-> LDLIBS to link extra standalone libraries e.g. 'argp' which is not provided
-> by musl libc.
+On Tue, 23 Jul 2024 09:10:31 +0200 you wrote:
+> Without CONFIG_NET_FOU bpf selftests are unable to build because of
+> missing definitions. Add ___local versions of struct bpf_fou_encap and
+> enum bpf_fou_encap_type to fix the issue.
 > 
-> Fixes: 585bf4640ebe ("tools: runqslower: Add EXTRA_CFLAGS and EXTRA_LDFLAGS support")
-> Signed-off-by: Tony Ambardar <tony.ambardar@gmail.com>
+> Signed-off-by: Artem Savkov <asavkov@redhat.com>
+> 
 > 
 > [...]
 
 Here is the summary with links:
-  - [bpf-next,v2] tools/runqslower: Fix LDFLAGS and add LDLIBS support
-    https://git.kernel.org/bpf/bpf-next/c/3929c8dca3b1
+  - [bpf-next,v3] selftests/bpf: fix compilation failure when CONFIG_NET_FOU!=y
+    https://git.kernel.org/bpf/bpf-next/c/c67b2a6f3b84
 
 You are awesome, thank you!
 -- 
