@@ -1,27 +1,28 @@
 Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F11C514A0A0;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F114913CF85;
 	Tue, 23 Jul 2024 06:32:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721716329; cv=none; b=Dcm1vPt1N1BxSm98vFcMN3wBvFCUdOjOG7D5CYAbk2qyumsscQpJrypfcFYWTF9OqM9MdV1aZ1soqDxsKZyqHLCq2FrkunQ+HyorMlXtLTHscLTL5R6D6mFZhG7i/hNWaz48+GBu9QPq5wXzO8kKgcY1R0xqKWsRy6vxkKFXHyw=
+	t=1721716329; cv=none; b=h6ZykdvqCMvEcC+dukyeRpFBql0IdFzCsD7mfrJGIbI4x9V5i42cdUh992LKjRTDNJJdbbBRfyoTMtBfRqF7pk4KQG5KNnu43i2RZxRCljHeRo8V+v+d1eTUWSCBKFFD6t0GZkN9cnpfRW203QDb38/VrS2FX/Bt8ettg4nDSMQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1721716329; c=relaxed/simple;
-	bh=zn8p2mp8QXQP5W9qSz5N2++LCfixPhpzw/topBgjCvw=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=clqIY786lS5BmpimiLJVLm5A4iz8CQZkHFs/W9IJUkPG6HC20oA2JvkptjpJ60gNrB2pntcVRLQrp8csNJPx+1B07eG8KZMP+Oi+usLnEJQxpHg2bjVYACKbSbVlbIOKzU5LJU2YxOsazSZ3PvO6uJ7OAbtvtwjE7BSKpWvVWig=
+	bh=LLO1F1XA2C13CWuFfwDqmzGNIc8dg7seX4y/8W9IzB8=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=BQI5WAfMwBY0xuxF4gUij2lI/67+FR33skMT05wIAPWt6F65iJeRDzp7M7sNafOGd+KXFbJdtyLN6A3tIP1fZyoAQo/ZhWktfcmzH481c3I1YffFNHb9keK5ZiWF01U50KhqUWKqanJqRLlc8O4NsP2R0AIswQFiuTDb2x6AxjM=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.216])
-	by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4WSnNz5nhQz4f3lCp;
-	Tue, 23 Jul 2024 14:31:47 +0800 (CST)
+Received: from mail.maildlp.com (unknown [172.19.163.235])
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4WSnP00S3Xz4f3lVL;
+	Tue, 23 Jul 2024 14:31:48 +0800 (CST)
 Received: from mail02.huawei.com (unknown [10.116.40.75])
-	by mail.maildlp.com (Postfix) with ESMTP id 50B5E1A140D;
+	by mail.maildlp.com (Postfix) with ESMTP id 8D8FB1A0572;
 	Tue, 23 Jul 2024 14:32:01 +0800 (CST)
 Received: from localhost.localdomain (unknown [10.67.175.61])
-	by APP2 (Coremail) with SMTP id Syh0CgA34wpOTp9mjImuAw--.48686S2;
-	Tue, 23 Jul 2024 14:31:59 +0800 (CST)
+	by APP2 (Coremail) with SMTP id Syh0CgA34wpOTp9mjImuAw--.48686S4;
+	Tue, 23 Jul 2024 14:32:01 +0800 (CST)
 From: Zheng Yejian <zhengyejian@huaweicloud.com>
 To: masahiroy@kernel.org,
 	peterz@infradead.org,
@@ -56,10 +57,12 @@ Cc: x86@kernel.org,
 	linux-kbuild@vger.kernel.org,
 	bpf@vger.kernel.org,
 	zhengyejian@huaweicloud.com
-Subject: [PATCH v2 0/5] kallsyms: Emit symbol for holes in text and fix weak function issue
-Date: Tue, 23 Jul 2024 14:32:53 +0800
-Message-Id: <20240723063258.2240610-1-zhengyejian@huaweicloud.com>
+Subject: [PATCH v2 2/5] module: kallsyms: Determine exact function size
+Date: Tue, 23 Jul 2024 14:32:55 +0800
+Message-Id: <20240723063258.2240610-3-zhengyejian@huaweicloud.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20240723063258.2240610-1-zhengyejian@huaweicloud.com>
+References: <20240723063258.2240610-1-zhengyejian@huaweicloud.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -67,118 +70,111 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:Syh0CgA34wpOTp9mjImuAw--.48686S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxWrW7ur4kXFWktryDur45KFg_yoWrZF1fpa
-	y3Xrs8Kr4DAa1qgFW2kr4Fyr1Yq3ykG3srKas5K3yfZr1q9r1UXws2yw1DZayDXrW5Cay3
-	trn7ZF4xKF1kA3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUU9F14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-	1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-	JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-	CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-	2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-	W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2
-	Y2ka0xkIwI1lc7CjxVAaw2AFwI0_Wrv_ZF1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x
-	0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2
-	zVAF1VAY17CE14v26rWY6r4UJwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r
-	1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_
-	JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcS
-	sGvfC2KfnxnUUI43ZEXa7sREfHUDUUUUU==
+X-CM-TRANSID:Syh0CgA34wpOTp9mjImuAw--.48686S4
+X-Coremail-Antispam: 1UD129KBjvJXoWxZr47Wry3tF4UAr4xKw47twb_yoW5Ary5pF
+	45Ar4rGF48Xr47uFWxAay09ry5Gr1kur4UKasxK34fZFnIqFy093Z7t3y5C3s8Zr48GF18
+	JrnagFWakF4UArJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUmY14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_Jryl82xGYIkIc2
+	x26xkF7I0E14v26ryj6s0DM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0
+	Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr1j6rxdM2
+	8EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2AI
+	xVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20x
+	vE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xv
+	r2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E8cxan2IY04
+	v7MxkF7I0En4kS14v26rWY6Fy7MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j
+	6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7
+	AF67AKxVWrXVW8Jr1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY
+	6xIIjxv20xvEc7CjxVAFwI0_Cr0_Gr1UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42
+	IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIev
+	Ja73UjIFyTuYvjTRC2NtUUUUU
 X-CM-SenderInfo: x2kh0w51hmxt3q6k3tpzhluzxrxghudrp/
 
-Background of this patch set can be found in v1:
-https://lore.kernel.org/all/20240613133711.2867745-1-zhengyejian1@huawei.com/
+When a weak type function is overridden, its symbol will be removed
+from the symbol table, but its code will not been removed. It will
+cause find_kallsyms_symbol() to compute a larger function size than
+it actually is, just because symbol of its following weak function is
+removed.
 
-Here add a reproduction to show the impact to livepatch:
-1. Add following hack to make livepatch-sample.ko do patch on do_one_initcall()
-   which has an overriden weak function behind in vmlinux, then print the
-   actually used __fentry__ location:
+To fix this issue, check that given address is within the size of
+the function found.
 
-  diff --git a/kernel/livepatch/patch.c b/kernel/livepatch/patch.c
-  index 90408500e5a3..20b75e7b1771 100644
-  --- a/kernel/livepatch/patch.c
-  +++ b/kernel/livepatch/patch.c
-  @@ -173,6 +173,8 @@ static int klp_patch_func(struct klp_func *func)
-                  unsigned long ftrace_loc;
+Signed-off-by: Zheng Yejian <zhengyejian@huaweicloud.com>
+---
+ include/linux/module.h   |  7 +++++++
+ kernel/module/kallsyms.c | 19 +++++++++++++++++--
+ 2 files changed, 24 insertions(+), 2 deletions(-)
 
-                  ftrace_loc = ftrace_location((unsigned long)func->old_func);
-  +               pr_info("%s: old_func=%pS ftrace_loc=%pS (%lx)\n", __func__,
-  +                       func->old_func, (void *)ftrace_loc, ftrace_loc);
-                  if (!ftrace_loc) {
-                          pr_err("failed to find location for function '%s'\n",
-                                  func->old_name);
-  diff --git a/samples/livepatch/livepatch-sample.c b/samples/livepatch/livepatch-sample.c
-  index cd76d7ebe598..c6e8e78e23b8 100644
-  --- a/samples/livepatch/livepatch-sample.c
-  +++ b/samples/livepatch/livepatch-sample.c
-  @@ -38,7 +38,7 @@ static int livepatch_cmdline_proc_show(struct seq_file *m, void *v)
-
-   static struct klp_func funcs[] = {
-          {
-  -               .old_name = "cmdline_proc_show",
-  +               .old_name = "do_one_initcall",
-                  .new_func = livepatch_cmdline_proc_show,
-          }, { }
-   };
-
-2. We can see the size of do_one_initcall() is 0x27e:
-  $ nm -nS vmlinux | grep do_one_initcall
-  ffffffff810021e0 000000000000027e T do_one_initcall
-
-3. Insert the livepatch ko, the expected ftrace_loc is do_one_initcall+0x4/0x27e but
-   actually do_one_initcall+0x294/0x2c0 which is invalid, also its size is inaccurate.
-   Then this livepatch can not properly work!!!
-
-  # insmod livepatch-sample.ko
-  [   17.942451] livepatch: klp_patch_func: old_func=do_one_initcall+0x0/0x2c0 ftrace_loc=do_one_initcall+0x294/0x2c0 (ffffffff81002474)
-  #
-  # cat /sys/kernel/tracing/available_filter_functions_addrs | grep ffffffff81002474
-  ffffffff81002474 __ftrace_invalid_address___660
-
-After this patch, this issue is gone:
-
-  # insmod livepatch-sample.ko
-  [   42.408632] livepatch: klp_patch_func: old_func=do_one_initcall+0x0/0x27e ftrace_loc=do_one_initcall+0x4/0x27e (ffffffff810021e4)
-  # cat /sys/kernel/tracing/available_filter_functions_addrs | grep ffffffff810021e4
-  ffffffff810021e4 do_one_initcall
-  # cat /sys/kernel/tracing/enabled_functions
-  do_one_initcall (1)   I     M   tramp: 0xffffffffa0020000 (klp_ftrace_handler+0x0/0x258)->klp_ftrace_handler+0x0/0x258
-
-Changes:
-
-v1->v2:
-  - Drop patch which titled "kallsyms: Optimize multiple times of realloc() to one time of malloc()"
-    as suggested by Masahiro;
-    Link: https://lore.kernel.org/all/CAK7LNAQkSnZ1nVXiZH9kg52H-A_=urcsv-W7wGXvunMGhGX8Vw@mail.gmail.com/
-  - Changes in PATCH 1/5:
-    - Change may_exist_hole_after_symbol() to has_hole() and return bool type;
-    - User realloc instead of malloc another table in emit_hole_symbols();
-      Link: https://lore.kernel.org/all/CAK7LNAQaLc6aDK85qQtPHoCkQSGyL-TxXjpgJTfehe2Q1=jMSA@mail.gmail.com/
-    - Use empty symbol type/name as a special case to represent the hole instead of
-      using symbol "t__hole_symbol_XXXXX";
-      Link: https://lore.kernel.org/all/CAK7LNARiR5z9hPRG932T7YjRWqkX_qZ7WKmbxx7iTo2w5YJojQ@mail.gmail.com/
-  - Changes in PATCH 3/5:
-    - Now name of hole symbol is NULL, so if __fentry__ is located in a hole,
-      kallsyms_lookup() find an NULL name then will return 0, so drop the
-      needless kallsyms_is_hole_symbol().
-
-Zheng Yejian (5):
-  kallsyms: Emit symbol at the holes in the text
-  module: kallsyms: Determine exact function size
-  ftrace: Skip invalid __fentry__ in ftrace_process_locs()
-  ftrace: Fix possible out-of-bound issue in ftrace_process_locs()
-  ftrace: Revert the FTRACE_MCOUNT_MAX_OFFSET workaround
-
- arch/powerpc/include/asm/ftrace.h |   7 --
- arch/x86/include/asm/ftrace.h     |   7 --
- include/linux/module.h            |  14 +++
- kernel/module/kallsyms.c          |  42 ++++++--
- kernel/trace/ftrace.c             | 171 ++++++------------------------
- scripts/kallsyms.c                |  95 ++++++++++++++++-
- scripts/link-vmlinux.sh           |   4 +-
- scripts/mksysmap                  |   2 +-
- 8 files changed, 173 insertions(+), 169 deletions(-)
-
+diff --git a/include/linux/module.h b/include/linux/module.h
+index 4213d8993cd8..0299d79433ae 100644
+--- a/include/linux/module.h
++++ b/include/linux/module.h
+@@ -599,6 +599,13 @@ static inline unsigned long kallsyms_symbol_value(const Elf_Sym *sym)
+ }
+ #endif
+ 
++#ifndef HAVE_ARCH_KALLSYMS_SYMBOL_TYPE
++static inline unsigned int kallsyms_symbol_type(const Elf_Sym *sym)
++{
++	return ELF_ST_TYPE(sym->st_info);
++}
++#endif
++
+ /* FIXME: It'd be nice to isolate modules during init, too, so they
+    aren't used before they (may) fail.  But presently too much code
+    (IDE & SCSI) require entry into the module during init.*/
+diff --git a/kernel/module/kallsyms.c b/kernel/module/kallsyms.c
+index bf65e0c3c86f..cce4f81b9933 100644
+--- a/kernel/module/kallsyms.c
++++ b/kernel/module/kallsyms.c
+@@ -262,6 +262,7 @@ static const char *find_kallsyms_symbol(struct module *mod,
+ 	unsigned long nextval, bestval;
+ 	struct mod_kallsyms *kallsyms = rcu_dereference_sched(mod->kallsyms);
+ 	struct module_memory *mod_mem;
++	const Elf_Sym *sym;
+ 
+ 	/* At worse, next value is at end of module */
+ 	if (within_module_init(addr, mod))
+@@ -278,9 +279,10 @@ static const char *find_kallsyms_symbol(struct module *mod,
+ 	 * starts real symbols at 1).
+ 	 */
+ 	for (i = 1; i < kallsyms->num_symtab; i++) {
+-		const Elf_Sym *sym = &kallsyms->symtab[i];
+-		unsigned long thisval = kallsyms_symbol_value(sym);
++		unsigned long thisval;
+ 
++		sym = &kallsyms->symtab[i];
++		thisval = kallsyms_symbol_value(sym);
+ 		if (sym->st_shndx == SHN_UNDEF)
+ 			continue;
+ 
+@@ -292,6 +294,13 @@ static const char *find_kallsyms_symbol(struct module *mod,
+ 		    is_mapping_symbol(kallsyms_symbol_name(kallsyms, i)))
+ 			continue;
+ 
++		if (kallsyms_symbol_type(sym) == STT_FUNC &&
++		    addr >= thisval && addr < thisval + sym->st_size) {
++			best = i;
++			bestval = thisval;
++			nextval = thisval + sym->st_size;
++			goto found;
++		}
+ 		if (thisval <= addr && thisval > bestval) {
+ 			best = i;
+ 			bestval = thisval;
+@@ -303,6 +312,12 @@ static const char *find_kallsyms_symbol(struct module *mod,
+ 	if (!best)
+ 		return NULL;
+ 
++	sym = &kallsyms->symtab[best];
++	if (kallsyms_symbol_type(sym) == STT_FUNC && sym->st_size &&
++	    addr >= kallsyms_symbol_value(sym) + sym->st_size)
++		return NULL;
++
++found:
+ 	if (size)
+ 		*size = nextval - bestval;
+ 	if (offset)
 -- 
 2.25.1
 
