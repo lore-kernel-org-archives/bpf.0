@@ -1,57 +1,57 @@
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
+Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9350C18D;
-	Tue, 23 Jul 2024 00:14:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76F6D367;
+	Tue, 23 Jul 2024 00:14:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721693651; cv=none; b=O9LAlp4yFWdCn42fQ40vU0uywYroz48hIANECabymDf00ChL4JER46GGNkC3+Tlw1j4XMOj1qhAvONs9yKlrqbWD7sqcOLyQzySiJ0ZxYl1xe4dmNR0W35kNFBJWlZvj66vhwfhUQLZodPXxmvAJr0aj9LBmClCiH3udSEqATHs=
+	t=1721693652; cv=none; b=TzB8BCTo2Av1vioGu8lyhZAFj+vGmvQHL8/ZHPZIATCuX89sblvNKzL76F30TBL0avz6mxcU7Hegkj/whWWZwDVnCVnWVvImWOcc28QAYv5f0r57sA6uuOFzKRVqtr4NAbIA9Qlcv4cr0bQg8jJkvoa7r3mNNfgmuS1Wb5YtYCo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721693651; c=relaxed/simple;
-	bh=7pqJ3J20waZnXX8P018M/Gzx0aSlsmuQoWJWr6wcj4w=;
+	s=arc-20240116; t=1721693652; c=relaxed/simple;
+	bh=yNqvLkLdmItRNrlqWRMJ9OQAo/hWme8VonLmIuj9wck=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=TPJSE06ZLcx19wAe9i9hCg5fjtI6vHJ0QggV6tr3/+GKm0jpFZlwzCwU9YiTLBSw0WIXx3VKMyIMhjmH3wBTbSIw9Ge131TwKS+B2XosuhBoQ7hleElTPfv4F6o/560d6CQ5UYWsNR3vPscIEcXDIDlZgMQURL12pnj1iPyYpeo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lLRm3oz+; arc=none smtp.client-ip=209.85.214.172
+	 MIME-Version; b=mSKCCff/Y6+utmIAw5SFvD/i5nmM04n2aQsIwc+FVr7+Tz9+3hKwXB8+7w/e+zm5pyGZ6Ye9f+V3Qo84wqpbo44cM3EPorPlJV70TTXv3n20ThACyc8AC+GTzSBa/cr+RZC2Tx2cb+k4ff5vzYC0gSpg3+e58IuxoeEB6UZUpiU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OaJQswgR; arc=none smtp.client-ip=209.85.214.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lLRm3oz+"
-Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-1fc566ac769so1383505ad.1;
-        Mon, 22 Jul 2024 17:14:10 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OaJQswgR"
+Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-1fc5239faebso802675ad.1;
+        Mon, 22 Jul 2024 17:14:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1721693649; x=1722298449; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1721693651; x=1722298451; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=kbxVyQbDQlMb/OjU+04+gpn/ZuusWjk+eEOd0jqrQbo=;
-        b=lLRm3oz+UamlVEnPAuAljCTAAMFgqZtvWgfTpTnP2flB6PVYOnDzDy89IWow7NQlS0
-         QkgM2RKDe1nFFk9eDibFAqZEDNSwxuZ8v7OZVa7nUxJLsMEn85RTLZuDpe8TOzQyxIhM
-         4UwpbnVsNYygPCHuQCdbsHcfvRVsMW0utRCV8k73B8JRe7ub6lN+hFGdmWzKehOE5jP9
-         mz2AqEykWItQoVivsU6dRoBNoEqkJJ2uKeeiiekkHA+Vw50EHW3+zMlP394JIogywexW
-         hx+X0+zcNikXkZq7R5GK9dBObhdvxt+wucKyA6BWDkgSW8v/Uxb6mqNDrN+3SIP55fR8
-         cuRQ==
+        bh=uZ5wt8LPl1ED8SmV39RI+AxdKFeRoDjRtT2DxDCCHdI=;
+        b=OaJQswgRuQCgPFdBnaNSYwjzasuFbHw1K2iyUoCzAlkUcaiZ4geinVpSrsva3bckSh
+         7kmK8CwPOcK0Osli6RXhWeaQqpw53cGhmA4NDFxARlMB5dmCDF7GO/NKW5gmCe7sIudA
+         pOE79xUj58FegJIU6OsNDH95GAMF6+xlh0TyhcO9QEljEJySrHQmR9kbK1Zi8L+yg0b/
+         85npTIFApiFBSJsnR57ghAAEHZ7+md3wm2KEfAFv8t64c5d9mP7VLb29vSjDZG+VWXUd
+         wQOW6h4z2xnwIl/XWp9lrsWow8rwqnlushmQ9FhmO9ggRwlQLl3nYbvocsy9N9emUALu
+         4eQw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1721693649; x=1722298449;
+        d=1e100.net; s=20230601; t=1721693651; x=1722298451;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=kbxVyQbDQlMb/OjU+04+gpn/ZuusWjk+eEOd0jqrQbo=;
-        b=kZHkofXOIYB2La+55rr2P+u69ElA/0JXz/gv6S6qaLbk9lchzuc5fsJ7D3x/E1Vx14
-         LA9VX0VNTr8zYpZcSwbakF7OmiKQszBV0gn1yYGX2ZWK1APg7hSpDaDQzWS2Fxuu4hQA
-         IuvIVJG28yB96FbCxfYHgxy8hs1xrRG+5ARMnFz71YX0MRXw3cvVpq9nI/xQMzTN7Xs9
-         Hfpl52X7tyVO1urb4ep0AVaXapdEitOZcZ4lNIYKNfWvELkhdSg/uZpZZnDqC//6w84Q
-         fnmAzSLn/Pwr13rMPRwzuTtQzcPgZ8LJvupgdkBwDKy62JPJf+kCpCL1c+ak83x3TvTO
-         OeNg==
-X-Forwarded-Encrypted: i=1; AJvYcCU/v4w0a6TRtdwS7KEpTSjONQwMo3zVPDrjF0FhU0Q4gFhxAuvyYOpJidaB5WEu/TrCuPSGLCoVcy0/KRrfQrphIthYrHNloEz4AvVCjTvd
-X-Gm-Message-State: AOJu0YzRMmbiJaqFeYU4tcTtYstYQaueMxQY+ZKZnM2z5M7O0cnRYMGB
-	Gvy/rOWeOBp/AfGZR2cZKotzCwDczb0jDaKUJAWaX/8G/4JwJ1IMqoghcX6H
-X-Google-Smtp-Source: AGHT+IE4m2Or6gT784/wBXHvxM+Q0dqpDY4maWyYTuYDa463SAie3HdkblQkQ92KTnXgAJEToxGMlA==
-X-Received: by 2002:a17:903:22cb:b0:1fb:9627:b353 with SMTP id d9443c01a7336-1fd7451fce1mr70806745ad.12.1721693648065;
-        Mon, 22 Jul 2024 17:14:08 -0700 (PDT)
+        bh=uZ5wt8LPl1ED8SmV39RI+AxdKFeRoDjRtT2DxDCCHdI=;
+        b=Fo5PhoVAw0gl/22la9ZX9Mp8aL2bAONspQIaQV3vjTo8r+c06Ba36LU0fBV7/LYdHe
+         WobZScLdXF2WvexkMFVGrBVXc9W5mId43lMewwAgeFQwWzsDYKayqZv0Te081473Xx0S
+         3Oo6tchnYvt3Yprwv7+HtQmHOOO61LTixbIkd3zTBr8zCsXtM8upH/X0x6eNn4noAEQT
+         7U5Ztv9R+8Kq2H7NsZ7uRx50+XfleZZg74XYuQe0zgKQKgfQmSvq42/163ON2BG9+9F3
+         QRHrAZtvdXMesZV2cVPuPnMt3UUBc3DQAopFDZANRsYLdtBPvCtRRCRNoL1yZdUizSa+
+         LISw==
+X-Forwarded-Encrypted: i=1; AJvYcCW0jtnXfpf5tTNdyw50zi1AyYJMhP9Vpv2Uwov37MKfk8NjuROZ74+0XpZKT/HPX3YeoSfRPkIgiV4ENJZB/EkzTv5/dHKDcn7ahSp1NvN1
+X-Gm-Message-State: AOJu0YzPUaNscIMM6OrKltm3DZgu+t22B78FgUaGWOHhCjLzradzrdO4
+	4CATDvpUYSZPJIy/XXck2oLXqbXM1iFHmpwn2OUL+0VlxEK6IsNzYudEZ/G2
+X-Google-Smtp-Source: AGHT+IHrOJFzXzmwYP6gm0u+D7NVm/ke4XvWTtjIvETGp7oJlN/edpQaCQuA5A1x/OKNnrnGGjzq7g==
+X-Received: by 2002:a17:902:ea0b:b0:1fb:82f5:6641 with SMTP id d9443c01a7336-1fd7455cae3mr75992595ad.23.1721693650636;
+        Mon, 22 Jul 2024 17:14:10 -0700 (PDT)
 Received: from localhost.localdomain (69-172-146-21.cable.teksavvy.com. [69.172.146.21])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1fd6f48e7c4sm61395485ad.307.2024.07.22.17.14.07
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1fd6f48e7c4sm61395485ad.307.2024.07.22.17.14.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 Jul 2024 17:14:07 -0700 (PDT)
+        Mon, 22 Jul 2024 17:14:10 -0700 (PDT)
 From: Tony Ambardar <tony.ambardar@gmail.com>
 X-Google-Original-From: Tony Ambardar <itugrok@yahoo.com>
 To: bpf@vger.kernel.org
@@ -71,12 +71,12 @@ Cc: Tony Ambardar <tony.ambardar@gmail.com>,
 	Jiri Olsa <jolsa@kernel.org>,
 	Mykola Lysenko <mykolal@fb.com>,
 	Shuah Khan <shuah@kernel.org>
-Subject: [PATCH bpf-next v2 0/2] selftests/bpf: Add support for MIPS systems
-Date: Mon, 22 Jul 2024 17:13:27 -0700
-Message-Id: <cover.1721692479.git.tony.ambardar@gmail.com>
+Subject: [PATCH bpf-next v2 2/2] selftests/bpf: Fix error linking uprobe_multi on mips
+Date: Mon, 22 Jul 2024 17:13:29 -0700
+Message-Id: <14eb7b70f8ccef9834874d75eb373cb9292129da.1721692479.git.tony.ambardar@gmail.com>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <cover.1721541467.git.tony.ambardar@gmail.com>
-References: <cover.1721541467.git.tony.ambardar@gmail.com>
+In-Reply-To: <cover.1721692479.git.tony.ambardar@gmail.com>
+References: <cover.1721541467.git.tony.ambardar@gmail.com> <cover.1721692479.git.tony.ambardar@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -87,30 +87,36 @@ Content-Transfer-Encoding: 8bit
 
 From: Tony Ambardar <tony.ambardar@gmail.com>
 
-Hello,
+Linking uprobe_multi.c on mips64el fails due to relocation overflows, when
+the GOT entries required exceeds the default maximum. Add a specific CFLAGS
+(-mxgot) for uprobe_multi.c on MIPS that allows using a larger GOT and
+avoids errors such as:
 
-This series includes two fixes to support builds targeting MIPS systems.
-The patches have been tested both with the kernel-patches/bpf CI and
-locally using mips64el-gcc/musl-libc and QEMU with an OpenWrt rootfs.
+  /tmp/ccBTNQzv.o: in function `bench':
+  uprobe_multi.c:49:(.text+0x1d7720): relocation truncated to fit: R_MIPS_GOT_DISP against `uprobe_multi_func_08188'
+  uprobe_multi.c:49:(.text+0x1d7730): relocation truncated to fit: R_MIPS_GOT_DISP against `uprobe_multi_func_08189'
+  ...
+  collect2: error: ld returned 1 exit status
 
-Patch 1 adds support for MIPS system includes when compiling BPF.
-Patch 2 fixes a MIPS GOT issue when linking uprobe_multi.
+Fixes: 519dfeaf5119 ("selftests/bpf: Add uprobe_multi test program")
+Signed-off-by: Tony Ambardar <tony.ambardar@gmail.com>
+---
+ tools/testing/selftests/bpf/Makefile | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Feedback and suggestions for improvement are welcome!
-
-Thanks,
-Tony
-
-v1->v2:
- - improve CFLAGS handling per Andrii's suggestion
-
-Tony Ambardar (2):
-  selftests/bpf: Add missing system defines for mips
-  selftests/bpf: Fix error linking uprobe_multi on mips
-
- tools/testing/selftests/bpf/Makefile | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
-
+diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+index 11fdf126cb7c..60a07605a162 100644
+--- a/tools/testing/selftests/bpf/Makefile
++++ b/tools/testing/selftests/bpf/Makefile
+@@ -785,6 +785,8 @@ $(OUTPUT)/veristat: $(OUTPUT)/veristat.o
+ 	$(call msg,BINARY,,$@)
+ 	$(Q)$(CC) $(CFLAGS) $(LDFLAGS) $(filter %.a %.o,$^) $(LDLIBS) -o $@
+ 
++# Linking uprobe_multi can fail due to relocation overflows on mips.
++$(OUTPUT)/uprobe_multi: CFLAGS += $(if $(filter mips, $(ARCH)),-mxgot)
+ $(OUTPUT)/uprobe_multi: uprobe_multi.c
+ 	$(call msg,BINARY,,$@)
+ 	$(Q)$(CC) $(CFLAGS) -O0 $(LDFLAGS) $^ $(LDLIBS) -o $@
 -- 
 2.34.1
 
