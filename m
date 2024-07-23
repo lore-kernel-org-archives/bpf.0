@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2457B13C823;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37A9113F01A;
 	Tue, 23 Jul 2024 20:30:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721766636; cv=none; b=QXnjbZ2ANe8ounoprhdIP0eH+TjH6WMgn7jWWdAo2epvQsP/Xtfn1oH27S7CmG0u2nNkT744mPETQ+VsxITo+4TIuQKEEhTg4YFu4OyKQyD/Zfc69aEhccuevoI/D/oGPYxAJXYyHZrtOgIH4KxCdxDUPVSyXolLRI7h8oCjqLE=
+	t=1721766636; cv=none; b=ouVuvu8jPJ0pEC/kHVETzwi+iH3VVGTccYktGQMm7VB7mHzuEcIjV6hiz6kXhNHATMZNWnAlxT/+0NH3YZONYnWluxpMiHb2y39Irvn3pvvkQ83j/vm3BrlVzI6iFQjcnzyeyLWBLa65tkK01N1A8IxbbRxP0fkpp2DNVauVWz8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1721766636; c=relaxed/simple;
-	bh=l8Nlo0+S0lvry3MI5IHMaoyWT4SOOKiV/71Ugpz0nXY=;
+	bh=ZGGHTSnF06IJ//J8AC6dFzbaUgf+xGPQrDv1rpW8QyE=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=T7pVcZVPaBSQga9FlYrmXWJ6PhEXr4jcNTPD3KWBBzVjDgztxB8IiZR5EdCZZNPIceyx9jrP5Y8lscaP6oA471VmkKG1IuC8QqM/ReFKvmIHTVeaZS+jbzAWNsvmjvLjgwoyBK+zFc3oZlxfwLhw2W05hmnNnefsnp8M3/HWAmU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lYbbJSAp; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=B3xJScy4MQScts9890gf0HeMKI3lFOBRj2oGbfCiiCYNU2E7TUjFK332MBRRAUhKmiV77eHQAyBYXwDZBKVqyE6g8Bydw7JKMkZHbIoGmWwvEeIw8rViTtFHjD+ojjcrjKlPzz6NlusqOLFhtRSHuhgLcEMfjMn+RsY7c4puDTE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pyK2bd1D; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lYbbJSAp"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id B5104C4AF0E;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pyK2bd1D"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id BF696C4AF13;
 	Tue, 23 Jul 2024 20:30:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1721766635;
-	bh=l8Nlo0+S0lvry3MI5IHMaoyWT4SOOKiV/71Ugpz0nXY=;
+	bh=ZGGHTSnF06IJ//J8AC6dFzbaUgf+xGPQrDv1rpW8QyE=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=lYbbJSApwul5V5kh8UkmFOUjvQLVNnord/3nHffW839bjSZWYOnBNQeC8fEBObRhb
-	 fDrW0skgmUjImX5+FPwAdtaNN7sR6sd+SiamDNmOhaz6UnVTB+K6as1kPuANHlGZqC
-	 b1Cy8WSQWHGq5nADLeJofozNNPS/vZ28vJcLLqlEzUBv3UI0iYfging5yvLXp92QxO
-	 bAzi3Dvlh1AoyArJMyvPFhQmYUbJWWJ7i9EqS4sc/BQzmyn7rDggsnZVqcHDwh4Jfs
-	 /lovifW2/scRc/sd2/vL1OV+uBjokSFzTaPzwIm7WLx9oYPM48zM+QwM7RtTrePjqN
-	 xcd+1wpr/DNAw==
+	b=pyK2bd1D6B1zu1oMf1TrsuFKIGgtSo9CzqCkr4oXMKexiIEDHUK0BMh7tbJHawftg
+	 6Y9p/vJQZtCBRa71b+9c9Hl074lMILOrg6CdQ4cnXGO2yvYuGLyH/8dIemSKVWHJXb
+	 5D3bD/yOF0f/SOG2qNYpZRtPA72f2SqTk5B/ol94RbT6zuhhY8RyyYnbJ+4eSW5AJm
+	 tvisI2xUG0bkSYfHfTgyEAUGu2F+fessApoyrdJTQ0rqTnRWI3u2/2jXXW3FWVpM5h
+	 vKxKbw+XVN7BibaGVBkaBIO7zD8bmRYhxfwFv9j1kiPF9DQMWoj6RHrxNbDuMtQOcO
+	 R2gVM4rEvqc9w==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 9C5C2C43140;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id ADA86C43638;
 	Tue, 23 Jul 2024 20:30:35 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
@@ -37,36 +37,47 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v3] selftests/bpf: fix compilation failure when
- CONFIG_NET_FOU!=y
+Subject: Re: [PATCH bpf-next v2] selftests/bpf: Fix wrong binary in Makefile log
+ output
 From: patchwork-bot+netdevbpf@kernel.org
 Message-Id: 
- <172176663563.27466.768477846355169392.git-patchwork-notify@kernel.org>
+ <172176663569.27466.11065049509700723720.git-patchwork-notify@kernel.org>
 Date: Tue, 23 Jul 2024 20:30:35 +0000
-References: <20240723071031.3389423-1-asavkov@redhat.com>
-In-Reply-To: <20240723071031.3389423-1-asavkov@redhat.com>
-To: Artem Savkov <asavkov@redhat.com>
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
- bpf@vger.kernel.org, netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20240720052535.2185967-1-tony.ambardar@gmail.com>
+In-Reply-To: <20240720052535.2185967-1-tony.ambardar@gmail.com>
+To: Tony Ambardar <tony.ambardar@gmail.com>
+Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, ast@kernel.org,
+ daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev,
+ eddyz87@gmail.com, song@kernel.org, yonghong.song@linux.dev,
+ john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+ haoluo@google.com, jolsa@kernel.org, mykolal@fb.com, shuah@kernel.org
 
 Hello:
 
 This patch was applied to bpf/bpf-next.git (master)
 by Andrii Nakryiko <andrii@kernel.org>:
 
-On Tue, 23 Jul 2024 09:10:31 +0200 you wrote:
-> Without CONFIG_NET_FOU bpf selftests are unable to build because of
-> missing definitions. Add ___local versions of struct bpf_fou_encap and
-> enum bpf_fou_encap_type to fix the issue.
+On Fri, 19 Jul 2024 22:25:35 -0700 you wrote:
+> Make log output incorrectly shows 'test_maps' as the binary name for every
+> 'CLNG-BPF' build step, apparently picking up the last value defined for the
+> $(TRUNNER_BINARY) variable. Update the 'CLANG_BPF_BUILD_RULE' variants to
+> fix this confusing output.
 > 
-> Signed-off-by: Artem Savkov <asavkov@redhat.com>
-> 
+> Current output:
+>   CLNG-BPF [test_maps] access_map_in_map.bpf.o
+>   GEN-SKEL [test_progs] access_map_in_map.skel.h
+>   ...
+>   CLNG-BPF [test_maps] access_map_in_map.bpf.o
+>   GEN-SKEL [test_progs-no_alu32] access_map_in_map.skel.h
+>   ...
+>   CLNG-BPF [test_maps] access_map_in_map.bpf.o
+>   GEN-SKEL [test_progs-cpuv4] access_map_in_map.skel.h
 > 
 > [...]
 
 Here is the summary with links:
-  - [bpf-next,v3] selftests/bpf: fix compilation failure when CONFIG_NET_FOU!=y
-    https://git.kernel.org/bpf/bpf-next/c/c67b2a6f3b84
+  - [bpf-next,v2] selftests/bpf: Fix wrong binary in Makefile log output
+    https://git.kernel.org/bpf/bpf-next/c/efb1d64030ef
 
 You are awesome, thank you!
 -- 
