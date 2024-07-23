@@ -1,100 +1,126 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8AAB4273DC
-	for <bpf@vger.kernel.org>; Tue, 23 Jul 2024 01:18:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E86126AE6;
+	Tue, 23 Jul 2024 01:21:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721697529; cv=none; b=pfqhwdZlyCtLs27R2Sl0ivnULbUuuYYUCVZjMuapCfTMiU+xR24Q/rdJMSlMXhpFP/c1y3qdi29o+ZsmpWHedzgTFEXyzApFgrHzZuhTmL41NHYtWbRByEZaGBgrNgiC8evgC1GhUnxlFdIzSWiSDTRBKcmAtbbuy8B6HhYf3r4=
+	t=1721697709; cv=none; b=oNbmFSShfNUVOfWsns9jkfWsoIxBgxoskoKL1YPCWk3yFZz132zo57ujF5nGc4BXoHa/Yuuc2K06uxZFMb8qgxuWnSB5P1hx2S7YabeK/vhVHNY9WnDFgh0yN0dkMcnBu+SZGllEEx6QDErhgGnBaQf+4S2upEu287FKAbdjCJY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721697529; c=relaxed/simple;
-	bh=2sWq4pgnBVmlBN4UQt+qMOnCNcZh86KMyHVOXJ9VNxQ=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=auGoedF/yoZEQVW2b/LpxEOMiOqlj60jWRl6ZD1PeDslHccAV254cGQdwTwnqQ0VEmihPproz6O4oxcOxAv2W3OW4vUxPMnqKTFbilXB5/54MkRnFQVeLUsZA7lPuP4F1tw/+XS9s2njz6LpY+oPYzCpior1C60ChZ/MSvFFYd0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=e8D5NP9C; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="e8D5NP9C"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D627C116B1;
-	Tue, 23 Jul 2024 01:18:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1721697529;
-	bh=2sWq4pgnBVmlBN4UQt+qMOnCNcZh86KMyHVOXJ9VNxQ=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=e8D5NP9CXFOQv+Yt5gYQJAnTRUSF4v7C7I5b7hf/Hj5T8ZvuYnliAt03Ml/7pc9a+
-	 EdefFWssx7uiS+9tnyfdlu2FXrbDn1SsfIjFSyZyF+RiDnUSBAn6am49CZZN/1l9C6
-	 J9Ak4ammoTgefUFsWSEzHK/TrJteN6LP0btvZx9Hwb0b7mm3ikgjayo1DFqBrBLVUn
-	 y223xBQ5uDD+pNWhrPG+oPsR5s5rzaUwEmROqIYLuBW2FelEY27GJ2grYQsLKkF6gL
-	 pUonXjZouIt0VeQYaWLu+FPz0JjnmLxpd/aW2K3V8wx9BkZlTJC/MFV2GXCEt8wXrY
-	 +pgMzgDBBc8OQ==
-Content-Type: multipart/mixed; boundary="===============0632086043324520423=="
+	s=arc-20240116; t=1721697709; c=relaxed/simple;
+	bh=tltkUCqeUYOfAfQoR4j7NiTDBSjIyeD2zBpbDmMXRAk=;
+	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=o54WG91zfXJDRbH2X3Y/3o0ITdYq5NI+yYRokXdnm1pXgycMl5FqAw2Qzi0DM/l2XnGFcZea3ev0QkD943FOs9Ff21OrwFWbtWo6PKJ2aJ7OUineg12gTx70gVJ7uOr4kbxWvElWHty0Kp/OE3DdUQI1I3i7dyoxfg+va5YuZoM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.235])
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4WSfVq2Tphz4f3kw1;
+	Tue, 23 Jul 2024 09:21:23 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.112])
+	by mail.maildlp.com (Postfix) with ESMTP id D349B1A0572;
+	Tue, 23 Jul 2024 09:21:36 +0800 (CST)
+Received: from [10.174.176.117] (unknown [10.174.176.117])
+	by APP1 (Coremail) with SMTP id cCh0CgCnRniJBZ9m3+p8Aw--.16725S2;
+	Tue, 23 Jul 2024 09:21:36 +0800 (CST)
+Subject: Re: [PATCH] bpf: fix excessively checking for elem_flags in batch
+ update mode
+To: Lin Feng <linf@wangsu.com>
+Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+ yonghong.song@linux.dev, Brian Vazquez <brianvv@google.com>,
+ Daniel Borkmann <daniel@iogearbox.net>, ast@kernel.org
+References: <cde62a6c-384a-5bdd-fe64-3f3d999c3825@wangsu.com>
+ <7d351341-fefe-a40f-f62a-d9505432d056@iogearbox.net>
+From: Hou Tao <houtao@huaweicloud.com>
+Message-ID: <c26a1373-c206-51b3-406a-83f3adddbdd5@huaweicloud.com>
+Date: Tue, 23 Jul 2024 09:21:13 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <8077ce3048a284b96e74ac93965219fdac73fada00a37b9a8cff00d193cb9acd@mail.kernel.org>
-In-Reply-To: <20240722233844.1406874-1-eddyz87@gmail.com>
-References: <20240722233844.1406874-1-eddyz87@gmail.com>
-Subject: Re: [PATCH bpf-next v4 00/10] no_caller_saved_registers attribute for helper calls
-From: bot+bpf-ci@kernel.org
-To: eddyz87@gmail.com
-Cc: bpf@vger.kernel.org,kernel-ci@meta.com
-Date: Tue, 23 Jul 2024 01:18:48 +0000 (UTC)
+In-Reply-To: <7d351341-fefe-a40f-f62a-d9505432d056@iogearbox.net>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-CM-TRANSID:cCh0CgCnRniJBZ9m3+p8Aw--.16725S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7CrWfZrW5Cr4kCF1DurWUtwb_yoW8tF45pF
+	Z5Jay7G3yqgw18Zw42q347GFW0yr45tw15JFn5tFy5Xry7GryFgF10qF4a9F1agF4fJrWj
+	vay2vFySvw1xZaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUkKb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I
+	0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+	x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+	0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0VAS07AlzVAYIcxG8wCY1x0262kKe7AK
+	xVWUAVWUtwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F4
+	0E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1l
+	IxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxV
+	AFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j
+	6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU1veHD
+	UUUUU==
+X-CM-SenderInfo: xkrx3t3r6k3tpzhluzxrxghudrp/
 
---===============0632086043324520423==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Hi,
 
-Dear patch submitter,
+On 7/20/2024 12:22 AM, Daniel Borkmann wrote:
+> On 7/17/24 1:15 PM, Lin Feng wrote:
+>> Currently generic_map_update_batch will reject all valid command
+>> flags for
+>> BPF_MAP_UPDATE_ELEM other than BPF_F_LOCK, which is overkill, map
+>> updating
+>> semantic does allow specify BPF_NOEXIST or BPF_EXIST even for batching
+>> update.
+>>
+>> Signed-off-by: Lin Feng <linf@wangsu.com>
+>
+> [ +Hou/Brian ]
+>
+> Please also add a BPF selftest along with this extension which
+> exercises the
+> batch update and validates the behavior for the various flags which
+> are now enabled.
 
-CI has tested the following submission:
-Status:     FAILURE
-Name:       [bpf-next,v4,00/10] no_caller_saved_registers attribute for helper calls
-Patchwork:  https://patchwork.kernel.org/project/netdevbpf/list/?series=873083&state=*
-Matrix:     https://github.com/kernel-patches/bpf/actions/runs/10050709206
+Agreed. There are already some batched map operation tests in
+tools/testing/selftests/bpf/map_tests/htab_map_batch_ops.c, I think
+extending the test cases in the file will be fine.
+> Also, please discuss the semantics in the commit msg.. errors due to
+> BPF_EXIST and
+> BPF_NOEXIST will cause bpf_map_update_value() to fail and then break
+> the loop. It's
+> probably fine given batch.count (cp) will be propagated back to user
+> space to tell
+> how many elements could actually get updated.
 
-Failed jobs:
-test_progs_no_alu32-aarch64-gcc: https://github.com/kernel-patches/bpf/actions/runs/10050709206/job/27779271465
-test_progs_no_alu32-s390x-gcc: https://github.com/kernel-patches/bpf/actions/runs/10050709206/job/27779454667
-test_progs_no_alu32-x86_64-gcc: https://github.com/kernel-patches/bpf/actions/runs/10050709206/job/27779437404
-test_progs_no_alu32-x86_64-llvm-17: https://github.com/kernel-patches/bpf/actions/runs/10050709206/job/27779452223
-test_progs_no_alu32-x86_64-llvm-18: https://github.com/kernel-patches/bpf/actions/runs/10050709206/job/27779453627
+It seems that the initial commit aa2e93b8e58e ("bpf: Add generic support
+for update and delete batch ops") only enabled BPF_F_LOCK for
+BPF_MAP_UPDATE_BATCH, but the document commit 0cb804547927 ("bpf:
+Document BPF_MAP_*_BATCH syscall commands for BPF_MAP_UPDATE_BATCH
+considered both BPF_NOEXIST and BPF_EXIST are valid. The
+bpf_map_update_batch() API in libbpf also considered both BPF_NOEXIST
+and BPF_EXIST are valid, but we just never test it before.
+>
+>> ---
+>>   kernel/bpf/syscall.c | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+>> index 869265852d51..d85361f9a9b8 100644
+>> --- a/kernel/bpf/syscall.c
+>> +++ b/kernel/bpf/syscall.c
+>> @@ -1852,7 +1852,7 @@ int generic_map_update_batch(struct bpf_map
+>> *map, struct file *map_file,
+>>       void *key, *value;
+>>       int err = 0;
+>>   -    if (attr->batch.elem_flags & ~BPF_F_LOCK)
+>> +    if ((attr->batch.elem_flags & ~BPF_F_LOCK) > BPF_EXIST)
+>>           return -EINVAL;
+>>         if ((attr->batch.elem_flags & BPF_F_LOCK) &&
+>>
+>
+> .
 
-First test_progs failure (test_progs_no_alu32-aarch64-gcc):
-#134 libbpf_get_fd_by_id_opts
-libbpf: prog 'check_access': BPF program load failed: Invalid argument
-libbpf: prog 'check_access': -- BEGIN PROG LOAD LOG --
-0: R1=ctx() R10=fp0
-; int BPF_PROG(check_access, struct bpf_map *map, fmode_t fmode) @ test_libbpf_get_fd_by_id_opts.c:27
-0: (b7) r0 = 0                        ; R0_w=0
-1: (79) r2 = *(u64 *)(r1 +0)
-func 'bpf_lsm_bpf_map' arg0 has btf_id 2072 type STRUCT 'bpf_map'
-2: R1=ctx() R2_w=trusted_ptr_bpf_map()
-; if (map != (struct bpf_map *)&data_input) @ test_libbpf_get_fd_by_id_opts.c:29
-2: (18) r3 = 0xffff0000c0273a00       ; R3_w=map_ptr(map=data_input,ks=4,vs=4)
-4: (5d) if r2 != r3 goto pc+4         ; R2_w=trusted_ptr_bpf_map() R3_w=map_ptr(map=data_input,ks=4,vs=4)
-; int BPF_PROG(check_access, struct bpf_map *map, fmode_t fmode) @ test_libbpf_get_fd_by_id_opts.c:27
-5: (79) r0 = *(u64 *)(r1 +8)          ; R0_w=scalar() R1=ctx()
-; if (fmode & FMODE_WRITE) @ test_libbpf_get_fd_by_id_opts.c:32
-6: (67) r0 <<= 62                     ; R0_w=scalar(smax=0x4000000000000000,umax=0xc000000000000000,smin32=0,smax32=umax32=0,var_off=(0x0; 0xc000000000000000))
-7: (c7) r0 s>>= 63                    ; R0_w=scalar(smin=smin32=-1,smax=smax32=0)
-;  @ test_libbpf_get_fd_by_id_opts.c:0
-8: (57) r0 &= -13                     ; R0_w=scalar(smax=0x7ffffffffffffff3,umax=0xfffffffffffffff3,smax32=0x7ffffff3,umax32=0xfffffff3,var_off=(0x0; 0xfffffffffffffff3))
-; int BPF_PROG(check_access, struct bpf_map *map, fmode_t fmode) @ test_libbpf_get_fd_by_id_opts.c:27
-9: (95) exit
-At program exit the register R0 has smax=9223372036854775795 should have been in [-4095, 0]
-processed 9 insns (limit 1000000) max_states_per_insn 0 total_states 0 peak_states 0 mark_read 0
--- END PROG LOAD LOG --
-libbpf: prog 'check_access': failed to load: -22
-libbpf: failed to load object 'test_libbpf_get_fd_by_id_opts'
-libbpf: failed to load BPF skeleton 'test_libbpf_get_fd_by_id_opts': -22
-test_libbpf_get_fd_by_id_opts:FAIL:test_libbpf_get_fd_by_id_opts__open_and_load unexpected error: -22
-
-
-Please note: this email is coming from an unmonitored mailbox. If you have
-questions or feedback, please reach out to the Meta Kernel CI team at
-kernel-ci@meta.com.
-
---===============0632086043324520423==--
