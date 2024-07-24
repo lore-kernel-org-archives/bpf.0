@@ -1,97 +1,199 @@
-Received: from cmccmta2.chinamobile.com (cmccmta8.chinamobile.com [111.22.67.151])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED0CD6BFD2;
-	Wed, 24 Jul 2024 11:11:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=111.22.67.151
+Received: from mailtransmit05.runbox.com (mailtransmit05.runbox.com [185.226.149.38])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE6EF74424;
+	Wed, 24 Jul 2024 11:33:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.38
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721819490; cv=none; b=mABiNMk3jbjsPvcWBCC3X4uuUtcuJRc/sQkIAyghTvv/cQjosj44OOfEs5TryCo1BHm8KASsil40a1OUDCivtPpp8THFNY28PWkvlkJ6FnEZwqADQ301kfrU5eiCCufxLUJ/KXwMZq4H7hN0a0OE3x4KwWDCOqNLPb2u8LmJzW4=
+	t=1721820832; cv=none; b=RdDCdCgRXLpoDlCxS8AffeQfH8L1cviCeAABHpMdRhVqDtdUVgp+0UfwaoqdQJ3WTPytmGulZLeVllHphSEDt9kYrnZcHYtKbEXRv/KpCnFx/CG4A5JpCFzwk8qmuDGUClkGERF171R7TMadVmOzMLtSLMV4U0YoTZ0lJDfAooE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721819490; c=relaxed/simple;
-	bh=Pfuo2baySnR6689GK89/olXtrcD1jmb/qCSjgqJukuo=;
-	h=From:To:Cc:Subject:Date:Message-Id; b=fdHqBlmLLACom7rlXTFT4R0h+Z6mne/OucBpZNjpE3S10u2PjceCebl36xlqcWwhbgLSn+duPh+x4Ceo5lSmfdzcK/OlHYIUtnHraueCeT0wdE5srn2G613Dje3v4kV3bL1pC1C+FeeoCIaeRqjKckXv/UpNg1R8uR8VH/r/PYg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cmss.chinamobile.com; spf=pass smtp.mailfrom=cmss.chinamobile.com; arc=none smtp.client-ip=111.22.67.151
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cmss.chinamobile.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cmss.chinamobile.com
-X-RM-TagInfo: emlType=0                                       
-X-RM-SPAM-FLAG:00000000
-Received:from spf.mail.chinamobile.com (unknown[10.188.0.87])
-	by rmmx-syy-dmz-app06-12006 (RichMail) with SMTP id 2ee666a0e154849-69103;
-	Wed, 24 Jul 2024 19:11:20 +0800 (CST)
-X-RM-TRANSID:2ee666a0e154849-69103
-X-RM-TagInfo: emlType=0                                       
-X-RM-SPAM-FLAG:00000000
-Received:from ubuntu.localdomain (unknown[223.108.79.96])
-	by rmsmtp-syy-appsvr01-12001 (RichMail) with SMTP id 2ee166a0e156885-a332b;
-	Wed, 24 Jul 2024 19:11:20 +0800 (CST)
-X-RM-TRANSID:2ee166a0e156885-a332b
-From: Zhu Jun <zhujun2@cmss.chinamobile.com>
-To: qmo@kernel.org
-Cc: ast@kernel.org,
-	daniel@iogearbox.net,
-	martin.lau@linux.dev,
-	eddyz87@gmail.com,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	john.fastabend@gmail.com,
-	kpsingh@kernel.org,
-	sdf@fomichev.me,
-	haoluo@google.com,
-	bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	zhujun2@cmss.chinamobile.com
-Subject: [PATCH v4] tools/bpf:Fix the wrong format specifier
-Date: Wed, 24 Jul 2024 04:11:20 -0700
-Message-Id: <20240724111120.11625-1-zhujun2@cmss.chinamobile.com>
-X-Mailer: git-send-email 2.17.1
+	s=arc-20240116; t=1721820832; c=relaxed/simple;
+	bh=G9RNrBANBO5DT6liRRNsVU1O+MHguLsID6qwDutDtcY=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=qxhxMOHwp/osgfo8MJMn9XZzn5hAu7tGNU9BVM3ZcNtMvJNzZQOynuSrYNB1s9zetlE+rhQ67Z5S12JylgzPylkxsa85PquXToqr8YAe5WEPDvgEXiXxgO3S2GDC5QXpgBKUWmTDFL5ObIzFd7/+v5xP7s4dhj2NK9SRpnv66aA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co; spf=pass smtp.mailfrom=rbox.co; dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b=wyAP3TP5; arc=none smtp.client-ip=185.226.149.38
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rbox.co
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b="wyAP3TP5"
+Received: from mailtransmit02.runbox ([10.9.9.162] helo=aibo.runbox.com)
+	by mailtransmit05.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+	(Exim 4.93)
+	(envelope-from <mhal@rbox.co>)
+	id 1sWaFV-006K18-Cd; Wed, 24 Jul 2024 13:33:37 +0200
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=rbox.co;
+	s=selector1; h=Cc:To:In-Reply-To:References:Message-Id:
+	Content-Transfer-Encoding:Content-Type:MIME-Version:Subject:Date:From;
+	bh=ra+gEbfL/+9Bc67fOIAgA1NInXmFgBolUaIk7jzGadA=; b=wyAP3TP5oxtYJqydCwKzXBoAo2
+	1aALolzZZgqhqQIP3DOxjwKYlbbSLZHFVldcL6woJNGq5dF3KAxZxKUbFksv6Hub6w6AJ+LsBxeqt
+	J4af86LSXL8A9y6OeAhQFqNU6cGD8AWDxy0N81ycTS5iVKi7EC9U9ZOhr0luWQP/9xPnDv69ms+YV
+	h4fjtQw22NDzI5j8X2//K7KRJil7ufBBFrBYLfvNrhRS2XquYA0K0LIMjrh10oJHKqr+rncNoTkCq
+	RNUfdo/MNw/UnQQOgW5fyFwz0xIGkr59oiklDSi5Ed/3RzeEQAre1Rai6LWI+V57aZ+WkF7/cjkmi
+	/O5b87Dg==;
+Received: from [10.9.9.74] (helo=submission03.runbox)
+	by mailtransmit02.runbox with esmtp (Exim 4.86_2)
+	(envelope-from <mhal@rbox.co>)
+	id 1sWaFU-0003xl-Ix; Wed, 24 Jul 2024 13:33:36 +0200
+Received: by submission03.runbox with esmtpsa  [Authenticated ID (604044)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.93)
+	id 1sWaFM-00EK6H-5u; Wed, 24 Jul 2024 13:33:28 +0200
+From: Michal Luczaj <mhal@rbox.co>
+Date: Wed, 24 Jul 2024 13:32:38 +0200
+Subject: [PATCH bpf 2/6] selftest/bpf: Socket pair creation, cleanups
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20240724-sockmap-selftest-fixes-v1-2-46165d224712@rbox.co>
+References: <20240724-sockmap-selftest-fixes-v1-0-46165d224712@rbox.co>
+In-Reply-To: <20240724-sockmap-selftest-fixes-v1-0-46165d224712@rbox.co>
+To: Andrii Nakryiko <andrii@kernel.org>, 
+ Eduard Zingerman <eddyz87@gmail.com>, Mykola Lysenko <mykolal@fb.com>, 
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, 
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+ Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>, 
+ Jakub Sitnicki <jakub@cloudflare.com>
+Cc: bpf@vger.kernel.org, netdev@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, Michal Luczaj <mhal@rbox.co>
+X-Mailer: b4 0.14.0
 
-The format specifier of "unsigned int" in printf() should be "%u", not
-"%d".
+Following create_pair() changes, remove unused function argument in
+create_socket_pairs() and adapt its callers, i.e. drop the open-coded
+loopback socket creation.
 
-Signed-off-by: Zhu Jun <zhujun2@cmss.chinamobile.com>
+Suggested-by: Jakub Sitnicki <jakub@cloudflare.com>
+Signed-off-by: Michal Luczaj <mhal@rbox.co>
 ---
-Changes:
-v2:
-modify commit info
-v3:
-fix compile warning
-v4:
-Thanks! But unsigned seems relevant here, and it doesn't make much sense
-to change the type of the int just because we don't have the right
-specifier in the printf(), does it? Sorry, I should have been more
-explicit: the warning on v1 and v2 can be addressed by simply removing
-the "space flag" from the format string, in other words:
+ .../selftests/bpf/prog_tests/sockmap_basic.c       |  9 +++-----
+ .../selftests/bpf/prog_tests/sockmap_helpers.h     |  4 ++--
+ .../selftests/bpf/prog_tests/sockmap_listen.c      | 26 +++++++---------------
+ 3 files changed, 13 insertions(+), 26 deletions(-)
 
- tools/bpf/bpftool/xlated_dumper.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
+index 5b17d69c9ee6..82bfb266741c 100644
+--- a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
++++ b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
+@@ -503,8 +503,8 @@ static void test_sockmap_skb_verdict_shutdown(void)
+ 
+ static void test_sockmap_skb_verdict_fionread(bool pass_prog)
+ {
++	int err, map, verdict, c0 = -1, c1 = -1, p0 = -1, p1 = -1;
+ 	int expected, zero = 0, sent, recvd, avail;
+-	int err, map, verdict, s, c0 = -1, c1 = -1, p0 = -1, p1 = -1;
+ 	struct test_sockmap_pass_prog *pass = NULL;
+ 	struct test_sockmap_drop_prog *drop = NULL;
+ 	char buf[256] = "0123456789";
+@@ -531,11 +531,8 @@ static void test_sockmap_skb_verdict_fionread(bool pass_prog)
+ 	if (!ASSERT_OK(err, "bpf_prog_attach"))
+ 		goto out;
+ 
+-	s = socket_loopback(AF_INET, SOCK_STREAM);
+-	if (!ASSERT_GT(s, -1, "socket_loopback(s)"))
+-		goto out;
+-	err = create_socket_pairs(s, AF_INET, SOCK_STREAM, &c0, &c1, &p0, &p1);
+-	if (!ASSERT_OK(err, "create_socket_pairs(s)"))
++	err = create_socket_pairs(AF_INET, SOCK_STREAM, &c0, &c1, &p0, &p1);
++	if (!ASSERT_OK(err, "create_socket_pairs()"))
+ 		goto out;
+ 
+ 	err = bpf_map_update_elem(map, &zero, &c1, BPF_NOEXIST);
+diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_helpers.h b/tools/testing/selftests/bpf/prog_tests/sockmap_helpers.h
+index 77b73333f091..ead8ea4fd0da 100644
+--- a/tools/testing/selftests/bpf/prog_tests/sockmap_helpers.h
++++ b/tools/testing/selftests/bpf/prog_tests/sockmap_helpers.h
+@@ -437,8 +437,8 @@ static inline int create_pair(int family, int sotype, int *p0, int *p1)
+ 	return err;
+ }
+ 
+-static inline int create_socket_pairs(int s, int family, int sotype,
+-				      int *c0, int *c1, int *p0, int *p1)
++static inline int create_socket_pairs(int family, int sotype, int *c0, int *c1,
++				      int *p0, int *p1)
+ {
+ 	int err;
+ 
+diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c b/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c
+index 9ce0e0e0b7da..bfbc217637d1 100644
+--- a/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c
++++ b/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c
+@@ -677,7 +677,7 @@ static void redir_to_connected(int family, int sotype, int sock_mapfd,
+ 			       int verd_mapfd, enum redir_mode mode)
+ {
+ 	const char *log_prefix = redir_mode_str(mode);
+-	int s, c0, c1, p0, p1;
++	int c0, c1, p0, p1;
+ 	unsigned int pass;
+ 	int err, n;
+ 	u32 key;
+@@ -685,13 +685,10 @@ static void redir_to_connected(int family, int sotype, int sock_mapfd,
+ 
+ 	zero_verdict_count(verd_mapfd);
+ 
+-	s = socket_loopback(family, sotype | SOCK_NONBLOCK);
+-	if (s < 0)
+-		return;
+-
+-	err = create_socket_pairs(s, family, sotype, &c0, &c1, &p0, &p1);
++	err = create_socket_pairs(family, sotype | SOCK_NONBLOCK, &c0, &c1,
++				  &p0, &p1);
+ 	if (err)
+-		goto close_srv;
++		return;
+ 
+ 	err = add_to_sockmap(sock_mapfd, p0, p1);
+ 	if (err)
+@@ -722,8 +719,6 @@ static void redir_to_connected(int family, int sotype, int sock_mapfd,
+ 	xclose(c1);
+ 	xclose(p0);
+ 	xclose(c0);
+-close_srv:
+-	xclose(s);
+ }
+ 
+ static void test_skb_redir_to_connected(struct test_sockmap_listen *skel,
+@@ -909,7 +904,7 @@ static void test_msg_redir_to_listening_with_link(struct test_sockmap_listen *sk
+ 
+ static void redir_partial(int family, int sotype, int sock_map, int parser_map)
+ {
+-	int s, c0 = -1, c1 = -1, p0 = -1, p1 = -1;
++	int c0 = -1, c1 = -1, p0 = -1, p1 = -1;
+ 	int err, n, key, value;
+ 	char buf[] = "abc";
+ 
+@@ -919,13 +914,10 @@ static void redir_partial(int family, int sotype, int sock_map, int parser_map)
+ 	if (err)
+ 		return;
+ 
+-	s = socket_loopback(family, sotype | SOCK_NONBLOCK);
+-	if (s < 0)
+-		goto clean_parser_map;
+-
+-	err = create_socket_pairs(s, family, sotype, &c0, &c1, &p0, &p1);
++	err = create_socket_pairs(family, sotype | SOCK_NONBLOCK, &c0, &c1,
++				  &p0, &p1);
+ 	if (err)
+-		goto close_srv;
++		goto clean_parser_map;
+ 
+ 	err = add_to_sockmap(sock_map, p0, p1);
+ 	if (err)
+@@ -944,8 +936,6 @@ static void redir_partial(int family, int sotype, int sock_map, int parser_map)
+ 	xclose(p0);
+ 	xclose(c1);
+ 	xclose(p1);
+-close_srv:
+-	xclose(s);
+ 
+ clean_parser_map:
+ 	key = 0;
 
-diff --git a/tools/bpf/bpftool/xlated_dumper.c b/tools/bpf/bpftool/xlated_dumper.c
-index 567f56dfd9f1..d0094345fb2b 100644
---- a/tools/bpf/bpftool/xlated_dumper.c
-+++ b/tools/bpf/bpftool/xlated_dumper.c
-@@ -349,7 +349,7 @@ void dump_xlated_plain(struct dump_data *dd, void *buf, unsigned int len,
- 
- 		double_insn = insn[i].code == (BPF_LD | BPF_IMM | BPF_DW);
- 
--		printf("% 4d: ", i);
-+		printf("%4u: ", i);
- 		print_bpf_insn(&cbs, insn + i, true);
- 
- 		if (opcodes) {
-@@ -415,7 +415,7 @@ void dump_xlated_for_graph(struct dump_data *dd, void *buf_start, void *buf_end,
- 			}
- 		}
- 
--		printf("%d: ", insn_off);
-+		printf("%u: ", insn_off);
- 		print_bpf_insn(&cbs, cur, true);
- 
- 		if (opcodes) {
 -- 
-2.17.1
-
-
+2.45.2
 
