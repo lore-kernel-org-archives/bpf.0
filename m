@@ -1,97 +1,132 @@
 Received: from mailtransmit04.runbox.com (mailtransmit04.runbox.com [185.226.149.37])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6598158A3F;
-	Wed, 24 Jul 2024 11:33:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3712E22EF2
+	for <bpf@vger.kernel.org>; Wed, 24 Jul 2024 11:36:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.37
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721820835; cv=none; b=Ruxo/pHeNhkxXg5iwcIL7nlmX6Ixb7D9STCqUkAnsvrQAq8MN5NvdpG29mNPD952qLEi3sQT2uYRDa3glUUzYRz37h9nBKGgOClKGbBhF3QpdKWVO+DMGhRTEWrfLCOG2LXWI2+gCl/tCLXue23oMMNUCcUq/l4IKDVlKuWd1nk=
+	t=1721821020; cv=none; b=kft3gt39KqvPAhWxTR3QBYNLSfcR8kQRWdO5j94xyzseif1C/1Aic4wlzx2HvRIwxx2RGGPS2HZm6YVZSgc+2CWJn9KA2GmBMMIahcsUAKk+U4mqfinp3eeeKyWkZEGDmCUHALBAD7f9k2j1jKbusKA0lwGDeK7i2OGqhR1nq5w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721820835; c=relaxed/simple;
-	bh=uOz91Gn2STW9xzMEaWpAYLySta2fPZaLuXdfVEnOago=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=idtw9TS0JdVNX+OEfPVmTJCy9aYoEFCX77LSk26IqpvEcK7zK3EDu57ALApRtocbRUMiGotGHuv9i7ZTRx97QhWPSvtXreBEGjl++i7OUgjDh4CTQxquUZdf7cRMOsPjn2nqduvVqfpMjNlGANa9zKqTddZbzF1GvZhYvo1JDbY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co; spf=pass smtp.mailfrom=rbox.co; dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b=SC/A4ocF; arc=none smtp.client-ip=185.226.149.37
+	s=arc-20240116; t=1721821020; c=relaxed/simple;
+	bh=SXk3WsBNjDynq25pQIZDkUSYM0QZ+9ZSPnd9uSTDHmA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=DVz3U1ei+yux6KWmqSLHm9xtPy0c7El0dFfvbjEyrOsCuk5lyIwmxxmt1ZrmiDEOHCYyXfm9gfTesiMBG1pr4cgPxar2iOIpH4HqW64duaiJRfCstgUkpn79vO0W0ZQo9VA2Eg4MQz5/ZHe3W4lpt38G8RrmsNVYemMYr+IOJgE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co; spf=pass smtp.mailfrom=rbox.co; dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b=X4NhvTVA; arc=none smtp.client-ip=185.226.149.37
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rbox.co
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b="SC/A4ocF"
+	dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b="X4NhvTVA"
 Received: from mailtransmit02.runbox ([10.9.9.162] helo=aibo.runbox.com)
 	by mailtransmit04.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
 	(Exim 4.93)
 	(envelope-from <mhal@rbox.co>)
-	id 1sWaFc-008NvU-H0; Wed, 24 Jul 2024 13:33:44 +0200
+	id 1sWaIh-008OJE-4A; Wed, 24 Jul 2024 13:36:55 +0200
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=rbox.co;
-	s=selector1; h=Cc:To:Content-Transfer-Encoding:Content-Type:MIME-Version:
-	Message-Id:Date:Subject:From; bh=RG8Mn5O4ciGwSlNQl0ohY2SpG2tlGFwuC693yChqDCs=
-	; b=SC/A4ocFdyBLisjIQyiTK2P/YHhqxIwLVnUNKk2Ivi93DG8SyYAt59Va5qVCQbUP07nMQaNYd
-	6z/FmMQ0baEmRE3gV6XrWEwJQ/sh5DgTAi/qUX9nX2NrVx69g2PAFQZa5PU8Ny2lNRKY809NPCL4O
-	SME+XlSGJPnxW6b1pn12fvCRWz4VzMw4tJgRkFv9OWhAUceiA/e6qsdmGTr5npR9wBmt04zB0Lsrs
-	PSOowmAI7GfdXi0G0AugydAVpj0GnxJMPX8Z8xc811ja6islOnnt+IdfYASrnuOJ7f2aKr3tiwsr5
-	WIFl101f9WX6szdmbpqdBRjvKm6hC+Tozfkw3A==;
-Received: from [10.9.9.74] (helo=submission03.runbox)
+	s=selector1; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+	References:Cc:To:Subject:MIME-Version:Date:Message-ID;
+	bh=nzhloxqdtHODiwkBOZMF69gQ3m2/iOf10YyFwS7HwfY=; b=X4NhvTVACjVdZVtl2XLVA+Oqaq
+	h9EehNzvXSsP1E0Y9a6pDVy7LLjlqRYDBGjWv0+Ox+dsi8AMYhC/9m5h/P6yT1HNllERX57TOhved
+	PIWEThDhGTVa8sky19dKNDwl3j8i3KUIa3mvULi5XOEvZrw//myCuPKbUGEDmXaaSs5XnFki3PoeP
+	bKYNDeE/I5pn0jGWmnoxxqnjsHBdfBbZ9K/5aNhTJImTEi8i45I4l4qrn9rcBNyS8aSZqM3fKYO5h
+	RgMZJRGQcqMRwr9lTakKEYbmBo/4UuAhs9PIBFP5hbvlUsr2uHsVdDyMpwU01cuZaUZU0Cpwv4eRl
+	XZaMgrlA==;
+Received: from [10.9.9.72] (helo=submission01.runbox)
 	by mailtransmit02.runbox with esmtp (Exim 4.86_2)
 	(envelope-from <mhal@rbox.co>)
-	id 1sWaFc-0003y2-5D; Wed, 24 Jul 2024 13:33:44 +0200
-Received: by submission03.runbox with esmtpsa  [Authenticated ID (604044)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	id 1sWaIa-0004L0-V4; Wed, 24 Jul 2024 13:36:49 +0200
+Received: by submission01.runbox with esmtpsa  [Authenticated ID (604044)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
 	(Exim 4.93)
-	id 1sWaFK-00EK6H-Fs; Wed, 24 Jul 2024 13:33:26 +0200
-From: Michal Luczaj <mhal@rbox.co>
-Subject: [PATCH bpf 0/6] selftest/bpf: Various sockmap-related fixes
-Date: Wed, 24 Jul 2024 13:32:36 +0200
-Message-Id: <20240724-sockmap-selftest-fixes-v1-0-46165d224712@rbox.co>
+	id 1sWaIQ-00GwhV-Eg; Wed, 24 Jul 2024 13:36:38 +0200
+Message-ID: <1612714f-a362-4f42-a05b-53f57b90d6f2@rbox.co>
+Date: Wed, 24 Jul 2024 13:36:36 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf v3 2/4] selftest/bpf: Support SOCK_STREAM in
+ unix_inet_redir_to_connected()
+To: Jakub Sitnicki <jakub@cloudflare.com>
+Cc: netdev@vger.kernel.org, bpf@vger.kernel.org, davem@davemloft.net,
+ edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+ john.fastabend@gmail.com, kuniyu@amazon.com, Rao.Shoaib@oracle.com,
+ cong.wang@bytedance.com, Andrii Nakryiko <andrii@kernel.org>,
+ Eduard Zingerman <eddyz87@gmail.com>, Mykola Lysenko <mykolal@fb.com>
+References: <20240707222842.4119416-1-mhal@rbox.co>
+ <20240707222842.4119416-3-mhal@rbox.co> <87zfqqnbex.fsf@cloudflare.com>
+ <fb95824c-6068-47f2-b9eb-894ea9182ede@rbox.co>
+ <87ikx962wm.fsf@cloudflare.com>
+ <2eae7943-38d7-4839-ae72-97f9a3123c8a@rbox.co>
+ <87sew57i4v.fsf@cloudflare.com>
+ <027fdb41-ee11-4be0-a493-22f28a1abd7c@rbox.co>
+ <87ed7lcjnw.fsf@cloudflare.com>
+Content-Language: pl-PL, en-GB
+From: Michal Luczaj <mhal@rbox.co>
+In-Reply-To: <87ed7lcjnw.fsf@cloudflare.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAFTmoGYC/x3L3QpAQBBA4VfRXJtisRuvIheLWSZ/246k5N1tL
- r9O5wGhwCTQJA8Eulj42CPyNIFhtvtEyGM0qEyVmVEFyjEsm/UotLqT5ETHNwlqrY2uTVXlhYE
- 4+0B/iG8LvXfQve8HyEAMl20AAAA=
-To: Andrii Nakryiko <andrii@kernel.org>, 
- Eduard Zingerman <eddyz87@gmail.com>, Mykola Lysenko <mykolal@fb.com>, 
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, 
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
- Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>, 
- Jakub Sitnicki <jakub@cloudflare.com>
-Cc: bpf@vger.kernel.org, netdev@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, Michal Luczaj <mhal@rbox.co>
-X-Mailer: b4 0.14.0
 
-Series takes care of few bugs and missing features with the aim to improve
-the test coverage of sockmap/sockhash.
+On 7/22/24 21:26, Jakub Sitnicki wrote:
+> On Mon, Jul 22, 2024 at 03:07 PM +02, Michal Luczaj wrote:
+>>> Classic cleanup with goto to close sockets is all right, but if you're
+>>> feeling brave and aim for something less branchy, I've noticed we have
+>>> finally started using __attribute__((cleanup)):
+>>>
+>>> https://elixir.bootlin.com/linux/v6.10/source/tools/testing/selftests/bpf/progs/iters.c#L115
+>>
+>> I've tried. Is such "ownership passing" (to inhibit the cleanup) via
+>> construct like take_fd()[1] welcomed?
+> 
+> I'm fine with having such a helper to complement the cleanup attribute.
+> Alternatively, we can always open code it like it used to be in systemd
+> at first [1], if other reviewers don't warm up to it :-)
+> 
+> [1] https://github.com/systemd/systemd/blob/main/coccinelle/take-fd.cocci
 
-Last patch is a create_pair() rewrite making use of
-__attribute__((cleanup)) to handle socket fd lifetime.
+OK, so I've kept create_pair()'s __cleanupfication as the last part of the
+series:
+https://lore.kernel.org/netdev/20240724-sockmap-selftest-fixes-v1-0-46165d224712@rbox.co
 
-v0: https://lore.kernel.org/netdev/027fdb41-ee11-4be0-a493-22f28a1abd7c@rbox.co/
-  - No declarations in function body (Jakub)
-  - Don't touch output arguments until function succeeds (Jakub)
+>> [1] https://lore.kernel.org/all/20240627-work-pidfs-v1-1-7e9ab6cc3bb1@kernel.org/
+>>
+>> static inline void close_fd(int *fd)
+>> {
+>> 	if (*fd >= 0)
+>> 		xclose(*fd);
+>> }
+>>
+>> #define __closefd __attribute__((cleanup(close_fd)))
+>>
+>> static inline int create_pair(int family, int sotype, int *c, int *p)
+>> {
+>> 	struct sockaddr_storage addr;
+>> 	socklen_t len = sizeof(addr);
+>> 	int err;
+>>
+>> 	int s __closefd = socket_loopback(family, sotype);
+>> 	if (s < 0)
+>> 		return s;
+>>
+>> 	err = xgetsockname(s, sockaddr(&addr), &len);
+>> 	if (err)
+>> 		return err;
+>>
+>> 	int s0 __closefd = xsocket(family, sotype, 0);
+> 
+> I'd stick to no declarations in the body. Init to -1 or -EBADF.
 
-Signed-off-by: Michal Luczaj <mhal@rbox.co>
----
-Michal Luczaj (6):
-      selftest/bpf: Support more socket types in create_pair()
-      selftest/bpf: Socket pair creation, cleanups
-      selftest/bpf: Simplify inet_socketpair() and vsock_unix_redir_connectible()
-      selftest/bpf: Respect the sotype of af_unix redir tests
-      selftest/bpf: Exercise SOCK_STREAM unix_inet_redir_to_connected()
-      selftest/bpf: Introduce __attribute__((cleanup)) in create_pair()
+All right, it just felt wrong to (demand to) initialize variables with some
+magic values. __attribute__((setup(set_negative))) would solve that :) I've
+toyed with `DEFINE_CLASS(fd, int, if (_T >= 0) xclose(_T), -EBADF, void)`
+but it felt wrong, too.
 
- .../selftests/bpf/prog_tests/sockmap_basic.c       |  28 ++--
- .../selftests/bpf/prog_tests/sockmap_helpers.h     | 145 ++++++++++++++-------
- .../selftests/bpf/prog_tests/sockmap_listen.c      | 117 ++---------------
- 3 files changed, 120 insertions(+), 170 deletions(-)
----
-base-commit: 13c9b702e6cb8e406d5fa6b2dca422fa42d2f13e
-change-id: 20240723-sockmap-selftest-fixes-666769755137
+>> 	case SOCK_STREAM:
+>> 	case SOCK_SEQPACKET:
+>> 		*p = xaccept_nonblock(s, NULL, NULL);
+> 
+> I wouldn't touch output arguments until we have succedeed.  Another
+> local var will be handy.
 
-Best regards,
--- 
-Michal Luczaj <mhal@rbox.co>
-
+OK, sure. Thanks.
