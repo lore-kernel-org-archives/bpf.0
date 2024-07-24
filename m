@@ -1,45 +1,46 @@
 Received: from mailtransmit05.runbox.com (mailtransmit05.runbox.com [185.226.149.38])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE6EF74424;
-	Wed, 24 Jul 2024 11:33:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 519F615687C;
+	Wed, 24 Jul 2024 11:33:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.38
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721820832; cv=none; b=RdDCdCgRXLpoDlCxS8AffeQfH8L1cviCeAABHpMdRhVqDtdUVgp+0UfwaoqdQJ3WTPytmGulZLeVllHphSEDt9kYrnZcHYtKbEXRv/KpCnFx/CG4A5JpCFzwk8qmuDGUClkGERF171R7TMadVmOzMLtSLMV4U0YoTZ0lJDfAooE=
+	t=1721820832; cv=none; b=ZWci4KDlsNpfxZwoDD1aSN+f8z/Y6zFkY1Sn1fgLajr5j2ZItslXKS6a/GZM2uWz+bjX2vrYBsxJ5tE2W/wdDmSf8NScPo1pSuM5+qHpYsP7pCu3AcsDQqI0+A1+d539wKvjQ496jho0V2DzNmqRAdZ3Lx/Fjk+DSBdYAf4e1k0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1721820832; c=relaxed/simple;
-	bh=G9RNrBANBO5DT6liRRNsVU1O+MHguLsID6qwDutDtcY=;
+	bh=YtKGjVmznTaP+uG+xNnwv2w/Omxd9HhwCtFydYbreGI=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=qxhxMOHwp/osgfo8MJMn9XZzn5hAu7tGNU9BVM3ZcNtMvJNzZQOynuSrYNB1s9zetlE+rhQ67Z5S12JylgzPylkxsa85PquXToqr8YAe5WEPDvgEXiXxgO3S2GDC5QXpgBKUWmTDFL5ObIzFd7/+v5xP7s4dhj2NK9SRpnv66aA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co; spf=pass smtp.mailfrom=rbox.co; dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b=wyAP3TP5; arc=none smtp.client-ip=185.226.149.38
+	 In-Reply-To:To:Cc; b=WomBn+z2f8VIGZiJE6lBq4DuK8PamcJbua0uYKgJpVS4hAPRhNNL8igod6AZ5Ngqm+qHKy2P+tF+80XtmknpCLeiwGF6c8HT0hvokUnuXUPchLJmOjmKVmmTzWiLsTauhsd+I9rQ6s9pNGeO3Wj8bFNmSPZYCnrIEK4HpSAQNjo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co; spf=pass smtp.mailfrom=rbox.co; dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b=A2VLeIan; arc=none smtp.client-ip=185.226.149.38
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rbox.co
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b="wyAP3TP5"
-Received: from mailtransmit02.runbox ([10.9.9.162] helo=aibo.runbox.com)
+	dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b="A2VLeIan"
+Received: from mailtransmit03.runbox ([10.9.9.163] helo=aibo.runbox.com)
 	by mailtransmit05.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
 	(Exim 4.93)
 	(envelope-from <mhal@rbox.co>)
-	id 1sWaFV-006K18-Cd; Wed, 24 Jul 2024 13:33:37 +0200
+	id 1sWaFW-006K1D-SR; Wed, 24 Jul 2024 13:33:38 +0200
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=rbox.co;
 	s=selector1; h=Cc:To:In-Reply-To:References:Message-Id:
 	Content-Transfer-Encoding:Content-Type:MIME-Version:Subject:Date:From;
-	bh=ra+gEbfL/+9Bc67fOIAgA1NInXmFgBolUaIk7jzGadA=; b=wyAP3TP5oxtYJqydCwKzXBoAo2
-	1aALolzZZgqhqQIP3DOxjwKYlbbSLZHFVldcL6woJNGq5dF3KAxZxKUbFksv6Hub6w6AJ+LsBxeqt
-	J4af86LSXL8A9y6OeAhQFqNU6cGD8AWDxy0N81ycTS5iVKi7EC9U9ZOhr0luWQP/9xPnDv69ms+YV
-	h4fjtQw22NDzI5j8X2//K7KRJil7ufBBFrBYLfvNrhRS2XquYA0K0LIMjrh10oJHKqr+rncNoTkCq
-	RNUfdo/MNw/UnQQOgW5fyFwz0xIGkr59oiklDSi5Ed/3RzeEQAre1Rai6LWI+V57aZ+WkF7/cjkmi
-	/O5b87Dg==;
+	bh=li0JujrPpPpO/xAc8QiZ65BoP8NJpRd+3obwcRQIRXc=; b=A2VLeIannLvlKeIbbeUZXHmKXF
+	cPa+vI+HbrikfEDlQs48lfVnyOXcXuUu5Bt5+bqo0wvBrNpM5lQi19kV44A9kAvNAffysCgIWPK6Y
+	s41+PH181jf/MT27I0nxWG3pEY9YcAAnkwmtw0RA6DQv1aqcfDKh9HRkr3867hLXy1BTD3MAbEhZI
+	ETbUnc1gqnSgScsSrSb/p5ItxCc3O9dUd+JFUvkBX2ozpKDfGTJ+LorK6I8y7zuPON5/ctFxmwtwk
+	6uMdYf8ULTOpIn9KfJMSGS1swDS1h6ryeRDHgERypLJ+NMEf+Vmuiv3uYZUYJgk7njh4wMT7R4/1Y
+	+DqZAdEQ==;
 Received: from [10.9.9.74] (helo=submission03.runbox)
-	by mailtransmit02.runbox with esmtp (Exim 4.86_2)
+	by mailtransmit03.runbox with esmtp (Exim 4.86_2)
 	(envelope-from <mhal@rbox.co>)
-	id 1sWaFU-0003xl-Ix; Wed, 24 Jul 2024 13:33:36 +0200
+	id 1sWaFW-0004y5-GE; Wed, 24 Jul 2024 13:33:38 +0200
 Received: by submission03.runbox with esmtpsa  [Authenticated ID (604044)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
 	(Exim 4.93)
-	id 1sWaFM-00EK6H-5u; Wed, 24 Jul 2024 13:33:28 +0200
+	id 1sWaFN-00EK6H-TH; Wed, 24 Jul 2024 13:33:29 +0200
 From: Michal Luczaj <mhal@rbox.co>
-Date: Wed, 24 Jul 2024 13:32:38 +0200
-Subject: [PATCH bpf 2/6] selftest/bpf: Socket pair creation, cleanups
+Date: Wed, 24 Jul 2024 13:32:40 +0200
+Subject: [PATCH bpf 4/6] selftest/bpf: Respect the sotype of af_unix redir
+ tests
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -48,7 +49,7 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240724-sockmap-selftest-fixes-v1-2-46165d224712@rbox.co>
+Message-Id: <20240724-sockmap-selftest-fixes-v1-4-46165d224712@rbox.co>
 References: <20240724-sockmap-selftest-fixes-v1-0-46165d224712@rbox.co>
 In-Reply-To: <20240724-sockmap-selftest-fixes-v1-0-46165d224712@rbox.co>
 To: Andrii Nakryiko <andrii@kernel.org>, 
@@ -64,135 +65,44 @@ Cc: bpf@vger.kernel.org, netdev@vger.kernel.org,
  linux-kselftest@vger.kernel.org, Michal Luczaj <mhal@rbox.co>
 X-Mailer: b4 0.14.0
 
-Following create_pair() changes, remove unused function argument in
-create_socket_pairs() and adapt its callers, i.e. drop the open-coded
-loopback socket creation.
+Do actually test the sotype as specified by the caller.
+
+This picks up after commit 75e0e27db6cf ("selftest/bpf: Change udp to inet
+in some function names").
 
 Suggested-by: Jakub Sitnicki <jakub@cloudflare.com>
 Signed-off-by: Michal Luczaj <mhal@rbox.co>
 ---
- .../selftests/bpf/prog_tests/sockmap_basic.c       |  9 +++-----
- .../selftests/bpf/prog_tests/sockmap_helpers.h     |  4 ++--
- .../selftests/bpf/prog_tests/sockmap_listen.c      | 26 +++++++---------------
- 3 files changed, 13 insertions(+), 26 deletions(-)
+ tools/testing/selftests/bpf/prog_tests/sockmap_listen.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
-index 5b17d69c9ee6..82bfb266741c 100644
---- a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
-+++ b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
-@@ -503,8 +503,8 @@ static void test_sockmap_skb_verdict_shutdown(void)
- 
- static void test_sockmap_skb_verdict_fionread(bool pass_prog)
- {
-+	int err, map, verdict, c0 = -1, c1 = -1, p0 = -1, p1 = -1;
- 	int expected, zero = 0, sent, recvd, avail;
--	int err, map, verdict, s, c0 = -1, c1 = -1, p0 = -1, p1 = -1;
- 	struct test_sockmap_pass_prog *pass = NULL;
- 	struct test_sockmap_drop_prog *drop = NULL;
- 	char buf[256] = "0123456789";
-@@ -531,11 +531,8 @@ static void test_sockmap_skb_verdict_fionread(bool pass_prog)
- 	if (!ASSERT_OK(err, "bpf_prog_attach"))
- 		goto out;
- 
--	s = socket_loopback(AF_INET, SOCK_STREAM);
--	if (!ASSERT_GT(s, -1, "socket_loopback(s)"))
--		goto out;
--	err = create_socket_pairs(s, AF_INET, SOCK_STREAM, &c0, &c1, &p0, &p1);
--	if (!ASSERT_OK(err, "create_socket_pairs(s)"))
-+	err = create_socket_pairs(AF_INET, SOCK_STREAM, &c0, &c1, &p0, &p1);
-+	if (!ASSERT_OK(err, "create_socket_pairs()"))
- 		goto out;
- 
- 	err = bpf_map_update_elem(map, &zero, &c1, BPF_NOEXIST);
-diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_helpers.h b/tools/testing/selftests/bpf/prog_tests/sockmap_helpers.h
-index 77b73333f091..ead8ea4fd0da 100644
---- a/tools/testing/selftests/bpf/prog_tests/sockmap_helpers.h
-+++ b/tools/testing/selftests/bpf/prog_tests/sockmap_helpers.h
-@@ -437,8 +437,8 @@ static inline int create_pair(int family, int sotype, int *p0, int *p1)
- 	return err;
- }
- 
--static inline int create_socket_pairs(int s, int family, int sotype,
--				      int *c0, int *c1, int *p0, int *p1)
-+static inline int create_socket_pairs(int family, int sotype, int *c0, int *c1,
-+				      int *p0, int *p1)
- {
- 	int err;
- 
 diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c b/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c
-index 9ce0e0e0b7da..bfbc217637d1 100644
+index ea2faacd146d..7ed223df5f12 100644
 --- a/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c
 +++ b/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c
-@@ -677,7 +677,7 @@ static void redir_to_connected(int family, int sotype, int sock_mapfd,
- 			       int verd_mapfd, enum redir_mode mode)
- {
- 	const char *log_prefix = redir_mode_str(mode);
--	int s, c0, c1, p0, p1;
-+	int c0, c1, p0, p1;
- 	unsigned int pass;
- 	int err, n;
- 	u32 key;
-@@ -685,13 +685,10 @@ static void redir_to_connected(int family, int sotype, int sock_mapfd,
+@@ -1706,11 +1706,11 @@ static void inet_unix_redir_to_connected(int family, int type, int sock_mapfd,
+ 	int sfd[2];
+ 	int err;
  
- 	zero_verdict_count(verd_mapfd);
+-	if (socketpair(AF_UNIX, SOCK_DGRAM | SOCK_NONBLOCK, 0, sfd))
++	if (socketpair(AF_UNIX, type | SOCK_NONBLOCK, 0, sfd))
+ 		return;
+ 	c0 = sfd[0], p0 = sfd[1];
  
--	s = socket_loopback(family, sotype | SOCK_NONBLOCK);
--	if (s < 0)
--		return;
--
--	err = create_socket_pairs(s, family, sotype, &c0, &c1, &p0, &p1);
-+	err = create_socket_pairs(family, sotype | SOCK_NONBLOCK, &c0, &c1,
-+				  &p0, &p1);
+-	err = inet_socketpair(family, SOCK_DGRAM, &p1, &c1);
++	err = inet_socketpair(family, type, &p1, &c1);
  	if (err)
--		goto close_srv;
-+		return;
+ 		goto close;
  
- 	err = add_to_sockmap(sock_mapfd, p0, p1);
- 	if (err)
-@@ -722,8 +719,6 @@ static void redir_to_connected(int family, int sotype, int sock_mapfd,
- 	xclose(c1);
- 	xclose(p0);
- 	xclose(c0);
--close_srv:
--	xclose(s);
- }
+@@ -1758,7 +1758,7 @@ static void unix_inet_redir_to_connected(int family, int type, int sock_mapfd,
+ 	int sfd[2];
+ 	int err;
  
- static void test_skb_redir_to_connected(struct test_sockmap_listen *skel,
-@@ -909,7 +904,7 @@ static void test_msg_redir_to_listening_with_link(struct test_sockmap_listen *sk
- 
- static void redir_partial(int family, int sotype, int sock_map, int parser_map)
- {
--	int s, c0 = -1, c1 = -1, p0 = -1, p1 = -1;
-+	int c0 = -1, c1 = -1, p0 = -1, p1 = -1;
- 	int err, n, key, value;
- 	char buf[] = "abc";
- 
-@@ -919,13 +914,10 @@ static void redir_partial(int family, int sotype, int sock_map, int parser_map)
+-	err = inet_socketpair(family, SOCK_DGRAM, &p0, &c0);
++	err = inet_socketpair(family, type, &p0, &c0);
  	if (err)
  		return;
  
--	s = socket_loopback(family, sotype | SOCK_NONBLOCK);
--	if (s < 0)
--		goto clean_parser_map;
--
--	err = create_socket_pairs(s, family, sotype, &c0, &c1, &p0, &p1);
-+	err = create_socket_pairs(family, sotype | SOCK_NONBLOCK, &c0, &c1,
-+				  &p0, &p1);
- 	if (err)
--		goto close_srv;
-+		goto clean_parser_map;
- 
- 	err = add_to_sockmap(sock_map, p0, p1);
- 	if (err)
-@@ -944,8 +936,6 @@ static void redir_partial(int family, int sotype, int sock_map, int parser_map)
- 	xclose(p0);
- 	xclose(c1);
- 	xclose(p1);
--close_srv:
--	xclose(s);
- 
- clean_parser_map:
- 	key = 0;
 
 -- 
 2.45.2
