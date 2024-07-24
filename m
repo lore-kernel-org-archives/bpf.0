@@ -1,144 +1,117 @@
-Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3E8B29CA
-	for <bpf@vger.kernel.org>; Wed, 24 Jul 2024 16:54:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8187B15EFA0;
+	Wed, 24 Jul 2024 16:58:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721840067; cv=none; b=QZH+slktd6RTpzbRwl6tBm8CEOePUZ1G4W17u9+F8+gPowf3FjbWPUZBMD9u48vMQEM+Ic9X230Ukx3zaxvF8zq3sokGzLnh4Si0c6gVxixZOWXYgGvBUfEW1dIzWeGuLFbhyp0cic1XUn3hSMu4Oywjry6iaSAgtreZb2ggl9M=
+	t=1721840311; cv=none; b=Ss7Wjfg3fSzGPbtuIoc8gJUh2yNhWJoxrUJOak0+F8Pb+y5a/rQLpZGo8d1DOsWitm2eAO8C4mNFAVhyiZQ/Dmx1EM+KQZ1CmM4DX9DcYxEVp1tUEK2kaBb9xlNA3q89C/k2T9/zkRy+PjKUB0bGchOi5IhFj/IfQzbgNAs1KSg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721840067; c=relaxed/simple;
-	bh=wPrf3bpOYdyNSOf32i04pqx43rHY3yUf6g3HnlLLY3c=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=MNNYKJB3lcPds6afkkwIYYgHnLTTKJ5b+EePf2HqoUrzodV6hKVQDb6motPG3+bgLZLyf5ScT0zFldJor3JzqEvprSgN+2OUBg7FtOEBDXnzdABVr7CzHMJ8aJCl0giEu3Q2hT68IImT6SXFYq527xYsa1fmUGVhKhcXAsAq+Qk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Yx3+9w/M; arc=none smtp.client-ip=209.85.221.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1721840311; c=relaxed/simple;
+	bh=rsVz+LhgSFt8cu91zlcAvS+TOmocgJJ/c2yTNsJ47XE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Bkl0uxS+BnYBdYgoX6mHzRMaLz3jF0nmid+sgL50+TJadS7j6FHgwU/8H5OtD2C9grqLezXnq5E9iSXjq9qcoiN9K3MicQ/Vpgg0VDV/QafSvcNYl7reGXklm19Sbpxua7nBZJazSkNLWBjRCgBCgkEnn+tJvQzheTJhrL2uViI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=b1ZREMuV; arc=none smtp.client-ip=198.175.65.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Yx3+9w/M"
-Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-3683329f787so3891271f8f.1
-        for <bpf@vger.kernel.org>; Wed, 24 Jul 2024 09:54:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1721840064; x=1722444864; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=WCObS5s6JwzipkWLPwVrfAC28ySk0WgvHQRELOVz6NU=;
-        b=Yx3+9w/M+mTm1qstKMLgEgPcQCvM2cEnZtomV8zRig7lW7IrEhDR0qzHogQuOdelBB
-         NwsdhvuaApDvE2IBHD5WNRNejcYWiuCxONOTreBNt4jb76nXCfcrtIutcu5Y1T+0n62V
-         RfElH72sZUSzUSNLjnxasBUZ+HKTm0npVhaYLWAXkwS3cZ8V9hoZLai60PAQnl/57l2I
-         k21DvHLZ2LW31BlCmAprYvydnq8tA9o5mhBArBQpnvjAxniXdBK5j7qY7h181xXuwnc7
-         4wz69o2TrytWxrcOYY7H36FuMY2Ydgp/HboS9/a/MB51Ci9wLqBszn23fkt64dYMVvpQ
-         jXfQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1721840064; x=1722444864;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=WCObS5s6JwzipkWLPwVrfAC28ySk0WgvHQRELOVz6NU=;
-        b=wDov58Z6W+xuRPEMGwcUwzpLU/MH1I9v8XoBAv2s+VL6BJDUrfZSKcGDyqLKrWqm2e
-         CFzrXGn6MMKKVSmHBLvZB3s7/K1N7FnWM58b0s980R0ckWWXzID+3uTbFVAfO9Ksic2U
-         oQz0eVOjy3MayveHoP5xHRjxlLOPBYHlyUoHhvq1o2Xw+VroDXMgtNw1/87SIh3cBl/a
-         Wkih1fBApuvK/v7JzokO5gAQ0wYDvY73958u7p6qDPdZxKXEvrw8Qq261njm/Nf0R0+P
-         vhU7f69t8dh9jum1jtPY4rExUI312vhzpuet+KZkXECZh2h0RgAUpuPCjipAT553tciC
-         5BMw==
-X-Forwarded-Encrypted: i=1; AJvYcCWgQDdfwUKn0QMl2ZdLRbLYtAR02PtZ4WauYqaTXrgYx0zKuVwARYt0bUBq6pwqC2YPIIroE3FGZyViDgGMZ9iUQrdU
-X-Gm-Message-State: AOJu0Yyp/IlBvLMinTAnf87zoqUgBdwSNwHsvOeZad8aNTfwjXr21LYh
-	as5u00cRey0jOxf6j5werPIQp95/1HgCaGCCeSwdIh0bwHuA0e2tkI3sjDca8YOuOU8/XTqW/pV
-	q0tt5dIehFdr7FacEVOAgVIxBXAA=
-X-Google-Smtp-Source: AGHT+IFkAD+IgLi7lK/SQjYbBsLxuqJXMwcPbHTS4ES+vGyNMjkgwa/40+jufyKlURRBJwiUwXZYwWtwqZcmLXbD97g=
-X-Received: by 2002:adf:f489:0:b0:367:96a1:3c91 with SMTP id
- ffacd0b85a97d-36b31a459femr193588f8f.62.1721840063878; Wed, 24 Jul 2024
- 09:54:23 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="b1ZREMuV"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1721840310; x=1753376310;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=rsVz+LhgSFt8cu91zlcAvS+TOmocgJJ/c2yTNsJ47XE=;
+  b=b1ZREMuVzXu3NQ5GHmdwNF5LKx53BgShYqr98b1BgPiL5FhETDXuNSy8
+   yYF47CYcuojtuUIpQbSeF5DHfJFghls4QPaM8deHyXllPGWnapAcBRvqO
+   Rqin2sbEJJLrCzHW8IVRnUC7K43EyxPfq/cQPN+9B1484PEDj2hznd0fZ
+   jnQl7Svgoi0DUf5XrfwMRiu4D3p+MaoSsJ0p+bAjLdZt692py8byoSkU9
+   J88WOEU8FNcfdjT16rNhGyhXqifNxKMLcuxth+vuR+VatO/NecG7Q4Wi1
+   uVSnCritloFPxt0Y+qkwvPg3B5emsGnWbRrXiQRkKeZHCHrD4ht5gV/Sh
+   Q==;
+X-CSE-ConnectionGUID: kI26JWEoQyeI0AdTEolrvg==
+X-CSE-MsgGUID: 91CU5LCoRs6fmaEwnDNkYg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11143"; a="30679727"
+X-IronPort-AV: E=Sophos;i="6.09,233,1716274800"; 
+   d="scan'208";a="30679727"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jul 2024 09:58:29 -0700
+X-CSE-ConnectionGUID: JaAMf6SKT36fJrtSfnXnFQ==
+X-CSE-MsgGUID: M9OmluhuRcSSUQtvTT9B2g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.09,233,1716274800"; 
+   d="scan'208";a="56960617"
+Received: from irvmail002.ir.intel.com ([10.43.11.120])
+  by fmviesa005.fm.intel.com with ESMTP; 24 Jul 2024 09:58:25 -0700
+Received: from lincoln.igk.intel.com (lincoln.igk.intel.com [10.102.21.235])
+	by irvmail002.ir.intel.com (Postfix) with ESMTP id 3B34B28785;
+	Wed, 24 Jul 2024 17:58:23 +0100 (IST)
+From: Larysa Zaremba <larysa.zaremba@intel.com>
+To: intel-wired-lan@lists.osuosl.org
+Cc: Larysa Zaremba <larysa.zaremba@intel.com>,
+	Tony Nguyen <anthony.l.nguyen@intel.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Jacob Keller <jacob.e.keller@intel.com>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org,
+	magnus.karlsson@intel.com,
+	Michal Kubiak <michal.kubiak@intel.com>,
+	Wojciech Drewek <wojciech.drewek@intel.com>,
+	Amritha Nambiar <amritha.nambiar@intel.com>
+Subject: [PATCH iwl-net v2 0/6] ice: fix synchronization between .ndo_bpf() and reset
+Date: Wed, 24 Jul 2024 18:48:31 +0200
+Message-ID: <20240724164840.2536605-1-larysa.zaremba@intel.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240718205158.3651529-1-yonghong.song@linux.dev>
- <CAEf4BzZUT9fWZrcXN-HVM=ce6thNBCL2RrZ3sTsdMkTzmk=gwQ@mail.gmail.com>
- <036e4320-1e22-4066-bfa5-42b1fa290a39@linux.dev> <f12db0b4-bcd4-4fb3-a0cf-35c96c2b549c@linux.dev>
-In-Reply-To: <f12db0b4-bcd4-4fb3-a0cf-35c96c2b549c@linux.dev>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Wed, 24 Jul 2024 09:54:12 -0700
-Message-ID: <CAADnVQLCk9Rccp3UPVzn3qrEzx1kPxqYv4QVWUpw1pSE1PHuZQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 1/2] bpf: Support private stack for bpf progs
-To: Yonghong Song <yonghong.song@linux.dev>
-Cc: Andrii Nakryiko <andrii.nakryiko@gmail.com>, bpf <bpf@vger.kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Kernel Team <kernel-team@fb.com>, 
-	Martin KaFai Lau <martin.lau@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Tue, Jul 23, 2024 at 10:09=E2=80=AFPM Yonghong Song <yonghong.song@linux=
-.dev> wrote:
->
->
-> Discussed with Andrii. I think the following approach should work.
-> For each non-static prog, the private stack is allocated including
-> that non-static prog and the called static progs. For example,
->      main_prog
->         static_prog_1
->           static_prog_11
->           global_prog
->              static_prog_12
->         static_prog_2
->
-> So in verifier we calculate stack size for
->      main_prog
->         static_prog_1
->            static_prog_11
->         static_prog_2
->   and
->      global_prog
->        static_prog_12
->
-> Let us say the stack size for main_prog like below for each (sub)prog
->      main_prog // stack size 100
->         static_prog_1 // stack size 100
->           static_prog_11 // stack size 100
->         static_prog_2 // static size 100
-> so total static size is 300 so the private stack size will be 300.
-> So R9 is calculated like below
->      main_prog
->        R9 =3D ... // for tailcall reachable, R9 may be original R9 + offs=
-et
->                 // for non-tailcall reachable, R9 equals the original R9 =
-(based on jit-time allocation).
->        ...  R9 ...
->        R9 +=3D 100
->        static_prog_1
->           ... R9 ...
->           R9 +=3D 100
->           static_prog_11
->             ... R9 ...
->           R9 -=3D 100
->        R9 -=3D 100
->        ... R9 ...
->        R9 +=3D 100
->        static_prog_2
->           ... R9 ...
->        R9 -=3D 100
->
-> Similary, we can calculate R9 offset for
->      global_prog
->        static_prog_12
-> as well.
+PF reset can be triggered asynchronously, by tx_timeout or by a user. With some
+unfortunate timings both ice_vsi_rebuild() and .ndo_bpf will try to access and
+modify XDP rings at the same time, causing system crash.
 
-I don't understand why differentiate static and global surprogs.
+The first patch factors out rtnl-locked code from VSI rebuild code to avoid
+deadlock. The following changes lock rebuild and .ndo_bpf() critical sections
+with an internal mutex as well and provide complementary fixes.
 
-But, mainly, +=3D and -=3D around the call is suboptimal.
-Can we do it as a normal stack does ?
-Each prog knows how much stack it needs,
-so it can do:
-r9 +=3D stack_depth in the prologue
-and all accesses are done as r9 - off.
-Then to do a call nothing extra is needed.
-The callee will do r9 +=3D its own stack depth.
-Whether private stack growth up or down is tbd.
+v1: https://lore.kernel.org/netdev/20240610153716.31493-1-larysa.zaremba@intel.com/
+v1->v2:
+* use mutex for locking
+* redefine critical sections
+* account for short time between rebuild and VSI being open
+* add netif_queue_set_napi() patch, so ICE_RTNL_WAITS_FOR_RESET strategy can be
+  dropped, no more rtnl-locked code in ice_vsi_rebuild()
+* change the test case from waiting for tx_timeout to happen to actively firing
+  resets through sysfs, this adds more minor fixes on top
 
-The challenge is how to supply proper r9 on entry
-into the main prog. Potentially a task for bpf trampoline,
-and kprobe/tp/etc will need special hack in bpf_dispatcher_nop_func.
+Larysa Zaremba (6):
+  ice: move netif_queue_set_napi to rtnl-protected sections
+  ice: protect XDP configuration with a mutex
+  ice: check for XDP rings instead of bpf program when unconfiguring
+  ice: check ICE_VSI_DOWN under rtnl_lock when preparing for reset
+  ice: remove ICE_CFG_BUSY locking from AF_XDP code
+  ice: do not bring the VSI up, if it was down before the XDP setup
+
+ drivers/net/ethernet/intel/ice/ice.h      |   2 +
+ drivers/net/ethernet/intel/ice/ice_base.c |  11 +-
+ drivers/net/ethernet/intel/ice/ice_lib.c  | 171 +++++++---------------
+ drivers/net/ethernet/intel/ice/ice_lib.h  |  10 +-
+ drivers/net/ethernet/intel/ice/ice_main.c |  47 ++++--
+ drivers/net/ethernet/intel/ice/ice_xsk.c  |  18 +--
+ 6 files changed, 102 insertions(+), 157 deletions(-)
+
+-- 
+2.43.0
+
