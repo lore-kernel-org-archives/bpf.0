@@ -1,134 +1,128 @@
-Received: from mail.ietf.org (mail.ietf.org [50.223.129.194])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E10475684
-	for <bpf@vger.kernel.org>; Fri, 26 Jul 2024 17:08:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=50.223.129.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D9D217C7B9;
+	Fri, 26 Jul 2024 17:15:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722013739; cv=none; b=f8TXQx8+FJsOt2JeINVaE4xrMVSJWudLsVEzWe8HaOEW55FTbuRv83VaG0wQfDlASvLjlOzoFOhieQozpKg1uHaK2bbfnQvKY3pW+EZ94tKK7FLp5sQ7rU7RznlmpGJQPCbU1jPCD2hnKL5q9ytiZvL1K5eJczbp1zqH3te/+Qk=
+	t=1722014151; cv=none; b=TEKBRaaXJc9dqC60tK67NeRJazz/eUD8VPxaZ4tVwI+o6BVhvU6P04RFbyi7/6UhWHt3QCOZ8I33qnmjIqBezZdhTSEcflcQ4p1FPmDWwnkQwXxwV+eASRgZD+Q8KxIDK0zCFKm2ykmRuioLvUEWxaY/bldoEvrRC7u8/rXsSRE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722013739; c=relaxed/simple;
-	bh=JbNHstT+c9PvRl1pzP8pisYqqfdk4lO4wWGLheXvy8Y=;
-	h=Message-ID:Date:MIME-Version:To:References:From:In-Reply-To:
-	 Subject:Content-Type; b=Od6ZJA4Sz4vlJgMvaKyI3scnKEmXU/Rof3SIgtWsUHN7dy9NRCxI4/03Sx58WUXJrBjF4ehRH/hom311UyQt7UY4QPggUbwuYloASCG94Hlkm8tYijiM+BW4KlQXkZjK3eypCYDv2ejFboocOumgD9OvUzyRQd9QrmlDB3RI6nU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=ietf.org; dkim=pass (1024-bit key) header.d=ietf.org header.i=@ietf.org header.b=utHN6kLJ; dkim=pass (1024-bit key) header.d=ietf.org header.i=@ietf.org header.b=utHN6kLJ; dkim=fail (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=V5i8zv2C reason="signature verification failed"; arc=none smtp.client-ip=50.223.129.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ietf.org
+	s=arc-20240116; t=1722014151; c=relaxed/simple;
+	bh=61gnd0sx9HxAqNF212thtWj6xm0VgTZonk2jnGbSF0Q=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=eyPm8XynQoWp3I9mmechYMhP5peg9TK6UWVLQAPpjVoUk6Qs9wvbksrk4301267lBQ5gHvL4AREzY6kDT2cFw+ftIpcBEsmRPYnHgZUwkXTWgmouk8cL+MMmGbjscUQYncCqI/Z9hjvNPnQQGXKFO7cgQKYl64SKLpEjwtqSL14=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iUzf3/k+; arc=none smtp.client-ip=209.85.208.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ietf.org header.i=@ietf.org header.b="utHN6kLJ";
-	dkim=pass (1024-bit key) header.d=ietf.org header.i=@ietf.org header.b="utHN6kLJ";
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="V5i8zv2C"
-Received: from ietfa.amsl.com (localhost [IPv6:::1])
-	by ietfa.amsl.com (Postfix) with ESMTP id 3EFC6C14F749
-	for <bpf@vger.kernel.org>; Fri, 26 Jul 2024 09:59:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ietf.org; s=ietf1;
-	t=1722013148; bh=JbNHstT+c9PvRl1pzP8pisYqqfdk4lO4wWGLheXvy8Y=;
-	h=Date:To:References:From:In-Reply-To:Subject:List-Id:List-Archive:
-	 List-Help:List-Owner:List-Post:List-Subscribe:List-Unsubscribe;
-	b=utHN6kLJyCofcRAeZLJ4Pnd80yYh5jLsIETV/5/diTepULyjni+0JIhHFJV/X1n4h
-	 3NR6oBcXxtq1lI72Cgyrxat87rkfB4Ub5cSi4h4kCix5eyJiCRtPLIxCJS1unNEP8J
-	 C9Cp/utURAG0/a44sErCsSTQjDnE3lERl4KeQ/T0=
-X-Mailbox-Line: From bpf-bounces+bpf=vger.kernel.org@ietf.org  Fri Jul 26 09:59:08 2024
-Received: from ietfa.amsl.com (localhost [IPv6:::1])
-	by ietfa.amsl.com (Postfix) with ESMTP id 13C57C14F699
-	for <bpf@vger.kernel.org>; Fri, 26 Jul 2024 09:59:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ietf.org; s=ietf1;
-	t=1722013148; bh=JbNHstT+c9PvRl1pzP8pisYqqfdk4lO4wWGLheXvy8Y=;
-	h=Date:To:References:From:In-Reply-To:Subject:List-Id:List-Archive:
-	 List-Help:List-Owner:List-Post:List-Subscribe:List-Unsubscribe;
-	b=utHN6kLJyCofcRAeZLJ4Pnd80yYh5jLsIETV/5/diTepULyjni+0JIhHFJV/X1n4h
-	 3NR6oBcXxtq1lI72Cgyrxat87rkfB4Ub5cSi4h4kCix5eyJiCRtPLIxCJS1unNEP8J
-	 C9Cp/utURAG0/a44sErCsSTQjDnE3lERl4KeQ/T0=
-Received: from localhost (localhost [127.0.0.1])
-	by ietfa.amsl.com (Postfix) with ESMTP id 4A7E4C14F6BC
-	for <bpf@ietfa.amsl.com>; Fri, 26 Jul 2024 09:59:06 -0700 (PDT)
-X-Virus-Scanned: amavisd-new at amsl.com
-X-Spam-Flag: NO
-X-Spam-Score: -2.808
-X-Spam-Level: 
-Authentication-Results: ietfa.amsl.com (amavisd-new); dkim=pass (1024-bit key)
-	header.d=linux.dev
-Received: from mail.ietf.org ([50.223.129.194])
-	by localhost (ietfa.amsl.com [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id NIAzy4fRk_h6 for <bpf@ietfa.amsl.com>;
-	Fri, 26 Jul 2024 09:59:01 -0700 (PDT)
-Received: from out-176.mta1.migadu.com (out-176.mta1.migadu.com
- [95.215.58.176])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest
- SHA256)
-	(No client certificate requested)
-	by ietfa.amsl.com (Postfix) with ESMTPS id 4FC76C14F699
-	for <bpf@ietf.org>; Fri, 26 Jul 2024 09:59:00 -0700 (PDT)
-Message-ID: <7ab6fbc6-2f05-4bb1-9596-855f276ab997@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1722013138;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ckFjhxBtKaQbq8JRIVByyXVebct9aJJ1dpU0RfTlqWU=;
-	b=V5i8zv2CmuZ0/rB9t2ZcP4FQ9J50yEUpNzXIcgWO7yUBqyk3+AnWvIIQW8yZJlLctzN7s4
-	Ku3Y5WepsoSoyfKNkvpwXl84AmhyPFWcdQt0dgPK3n1lXVdE8wDUoxI9Hwn+nrVbk/+FER
-	5KzXg79KMbWDD0KvMV2A3yvi2xbZTbs=
-Date: Fri, 26 Jul 2024 09:58:52 -0700
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iUzf3/k+"
+Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-5a167b9df7eso3189443a12.3;
+        Fri, 26 Jul 2024 10:15:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1722014148; x=1722618948; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=8vpGciT+EfMu9i44/49LpouWCuEX00g0iPIyybvjqvo=;
+        b=iUzf3/k+9kw3e75iUmTQhLIOhQGpGkIhW6BegQLIamTJ4a/3qeMLIKcWE3QWBAWqKz
+         dinPj1BK6SX8o+cl5a5LbSWfdWRJ48ToA56bOqxnpZSITum3/bY4B0cYey/RWDhrQi5l
+         K3OW0LBE/k8qUXatBPZsN+8PRgM5rPbZLu88Lcih+oY4LQUcu3DJzk5oWE0QPadcZAm9
+         GbUp87/PMg9zDTgE6WAqfgaEcWE9L03O75VmR5uWI7fo4+OgUYtud2mBqdHxKpv+WArm
+         TSDCTPrP6lQ50pKlxIDOY/o5qHUOZX0jQkeYNUTDBBMSNuY1ssFDgKHWj1EKeHA2oEur
+         uwcA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1722014148; x=1722618948;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8vpGciT+EfMu9i44/49LpouWCuEX00g0iPIyybvjqvo=;
+        b=OB7W7Gmi9FJPHd0MbRQXvUAHJKxXHuXEHs6NDEG/DqKFUEDJSqcKCguD7bxgDuv/GW
+         WZw5rmoZIkJkBwWtE7LxVWg2Ed8pWjpVz0lrbaoifvVlbVJenMAv0ZZeT8Wh4feMXgf/
+         jgWNuAm12XLheVeFa5Pbune8gBcD6WHDkds/9CAj4A7O4YlStSne3DQyE2vK9rqZ/zyX
+         mM7sSx4vbe2xw9pIXYKdP9MnQtnLdnZXO2Y3xEVdMedugjrCUcOx4deLWm2WhkqR0A0d
+         +5Ikp812Tye11YJMNfFIpfnTQJKu3MzMEgsZa461Y5D2eFmBxQeMzpEQARbNL04ZqMPa
+         ZVtQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVPDeHxpWm4/5upqBmC3r7pqLuPAP5bW57GvKIeGyg760S4ffCT2CpkHsS5Exd+z+sh2DhqELWPd/OA5lBh4nRiGADZ885M
+X-Gm-Message-State: AOJu0Yx1h1l9VxyJvVsK6t4Dk8HCDxmVigGqtnHt2lU0SDesb+HSm+MS
+	rWkDenNDjpdIxEfEVtLxBFNs3Sah4UZloC2E47BvqotoI4JLtf/2
+X-Google-Smtp-Source: AGHT+IE9zZdyNmfpiM4FUHqpKi+wmDWmqEBrIS/7oODMnsyvZKwDKVtAKOaJq8aa+lnscoRdtsEW0w==
+X-Received: by 2002:a50:f686:0:b0:5a2:eeeb:9470 with SMTP id 4fb4d7f45d1cf-5b020bbde61mr62591a12.18.1722014147419;
+        Fri, 26 Jul 2024 10:15:47 -0700 (PDT)
+Received: from krava (2001-1ae9-1c2-4c00-726e-c10f-8833-ff22.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:726e:c10f:8833:ff22])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5ac64eb3aacsm2151534a12.64.2024.07.26.10.15.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 26 Jul 2024 10:15:47 -0700 (PDT)
+From: Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date: Fri, 26 Jul 2024 19:15:44 +0200
+To: Stanislav Fomichev <sdf@fomichev.me>
+Cc: bpf@vger.kernel.org, netdev@vger.kernel.org, ast@kernel.org,
+	daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev,
+	song@kernel.org, yhs@fb.com, john.fastabend@gmail.com,
+	kpsingh@kernel.org, haoluo@google.com,
+	Jakub Kicinski <kuba@kernel.org>
+Subject: Re: [PATCH bpf] selftests/bpf: Filter out _GNU_SOURCE when compiling
+ test_cpp
+Message-ID: <ZqPZwByJM3TU5Oqt@krava>
+References: <20240725214029.1760809-1-sdf@fomichev.me>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Language: en-GB
-To: Michael Agun <danielagun@microsoft.com>,
- "bpf@vger.kernel.org" <bpf@vger.kernel.org>, "bpf@ietf.org" <bpf@ietf.org>
-References: 
- <CY5PR21MB349314B6ECC4284EA3712FCDD7B42@CY5PR21MB3493.namprd21.prod.outlook.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and
- include these headers.
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: 
- <CY5PR21MB349314B6ECC4284EA3712FCDD7B42@CY5PR21MB3493.namprd21.prod.outlook.com>
-X-Migadu-Flow: FLOW_OUT
-Message-ID-Hash: TPCM4XDZZ6GGOVP3Z5E27L6B2B34CN6A
-X-Message-ID-Hash: TPCM4XDZZ6GGOVP3Z5E27L6B2B34CN6A
-X-MailFrom: yonghong.song@linux.dev
-X-Mailman-Rule-Misses: dmarc-mitigation; no-senders; approved; emergency;
- loop; banned-address; member-moderation; nonmember-moderation; administrivia;
- implicit-dest; max-recipients; max-size; news-moderation; no-subject;
- digests; suspicious-header
-X-Mailman-Version: 3.3.9rc4
-Precedence: list
-Subject: =?utf-8?q?=5BBpf=5D_Re=3A_perf=5Fevent=5Foutput_payload_capture_flags=3F?=
-Archived-At: 
- <https://mailarchive.ietf.org/arch/msg/bpf/DZ2dC0iR_ZsabG31v1SnBE_sJuk>
-List-Archive: <https://mailarchive.ietf.org/arch/browse/bpf>
-List-Help: <mailto:bpf-request@ietf.org?subject=help>
-List-Owner: <mailto:bpf-owner@ietf.org>
-List-Post: <mailto:bpf@ietf.org>
-X-Mailman-Copy: yes
-Content-Type: text/plain; charset="utf-8"; format="flowed"
-Content-Transfer-Encoding: base64
-Message-ID: <20240726165852.q9K44WUm5ZiqgCSJL-WJayOumV0goKTkWpBGGWJ4DPM@z>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240725214029.1760809-1-sdf@fomichev.me>
 
-DQpPbiA3LzI1LzI0IDY6NDIgUE0sIE1pY2hhZWwgQWd1biB3cm90ZToNCj4gQXJlIHRoZSBwZXJm
-X2V2ZW50X291dHB1dCBmbGFncyAoYW5kIHdoYXQgdGhlIGV2ZW50IGJsb2IgbG9va3MgbGlrZSkg
-ZG9jdW1lbnRlZD8gRXNwZWNpYWxseSBmb3IgdGhlIHByb2dyYW0gdHlwZSBzcGVjaWZpYyBwZXJm
-X2V2ZW50X291dHB1dCBmdW5jdGlvbnMuDQoNClRoZSBkb2N1bWVudGF0aW9uIGlzIGluIHVhcGkv
-bGludXgvYnBmLmggaGVhZGVyLg0KDQpodHRwczovL2dpdGh1Yi5jb20vdG9ydmFsZHMvbGludXgv
-YmxvYi9tYXN0ZXIvaW5jbHVkZS91YXBpL2xpbnV4L2JwZi5oI0wyMzUzLUwyMzk3DQoNCiDCoCog
-wqDCoMKgIMKgwqDCoCBUaGUgKmZsYWdzKiBhcmUgdXNlZCB0byBpbmRpY2F0ZSB0aGUgaW5kZXgg
-aW4gKm1hcCogZm9yIHdoaWNoDQogwqAqIMKgwqDCoCDCoMKgwqAgdGhlIHZhbHVlIG11c3QgYmUg
-cHV0LCBtYXNrZWQgd2l0aCAqKkJQRl9GX0lOREVYX01BU0sqKi4NCiDCoCogwqDCoMKgIMKgwqDC
-oCBBbHRlcm5hdGl2ZWx5LCAqZmxhZ3MqIGNhbiBiZSBzZXQgdG8gKipCUEZfRl9DVVJSRU5UX0NQ
-VSoqDQogwqAqIMKgwqDCoCDCoMKgwqAgdG8gaW5kaWNhdGUgdGhhdCB0aGUgaW5kZXggb2YgdGhl
-IGN1cnJlbnQgQ1BVIGNvcmUgc2hvdWxkIGJlDQogwqAqIMKgwqDCoCDCoMKgwqAgdXNlZC4NCg0K
-Pg0KPiBJJ3ZlIHNlZW4gbm90ZXMgaW4gKGNpbGl1bSkgY29kZSBwYXNzaW5nIHBheWxvYWQgbGVu
-Z3RocyBpbiB0aGUgZmxhZ3MsIGFuZCBhbSBzcGVjaWZpY2FsbHkgaW50ZXJlc3RlZCBpbiBob3cg
-dGhlIGV2ZW50IGJsb2IgaXMgY29uc3RydWN0ZWQgZm9yIHBlcmYgZXZlbnRzIHdpdGggcGF5bG9h
-ZCBjYXB0dXJlLg0KDQpDb3VsZCB5b3Ugc2hhcmUgbW9yZSBkZXRhaWxzIGFib3V0ICdwYXNzaW5n
-IHBheWxvYWQgbGVuZ3RocyBpbiB0aGUgZmxhZ3MnPw0KQUZBSUssIG5ldHdvcmtpbmcgYnBmX3Bl
-cmZfZXZlbnRfb3V0cHV0KCkgYWN0dWFsbHkgdXRpbGl6ZXMgYnBmX2V2ZW50X291dHB1dF9kYXRh
-KCksDQppbiB3aGljaCAnZmxhZ3MnIHNlbWFudGljcyBoYXMgdGhlIHNhbWUgbWVhbmluZyBhcyB0
-aGUgYWJvdmUuDQoNCj4NCj4NCj4gVGhhbmtzLA0KPiBNaWNoYWVsDQoNCi0tIApCcGYgbWFpbGlu
-ZyBsaXN0IC0tIGJwZkBpZXRmLm9yZwpUbyB1bnN1YnNjcmliZSBzZW5kIGFuIGVtYWlsIHRvIGJw
-Zi1sZWF2ZUBpZXRmLm9yZwo=
+On Thu, Jul 25, 2024 at 02:40:29PM -0700, Stanislav Fomichev wrote:
+> Jakub reports build failures when merging linux/master with net tree:
+> 
+> CXX      test_cpp
+> In file included from <built-in>:454:
+> <command line>:2:9: error: '_GNU_SOURCE' macro redefined [-Werror,-Wmacro-redefined]
+>     2 | #define _GNU_SOURCE
+>       |         ^
+> <built-in>:445:9: note: previous definition is here
+>   445 | #define _GNU_SOURCE 1
+> 
+> The culprit is commit cc937dad85ae ("selftests: centralize -D_GNU_SOURCE= to
+> CFLAGS in lib.mk") which unconditionally added -D_GNU_SOUCE to CLFAGS.
+> Apparently clang++ also unconditionally adds it for the C++ targets [0]
+> which causes a conflict. Add small change in the selftests makefile
+> to filter it out for test_cpp.
+> 
+> Not sure which tree it should go via, targeting bpf for now, but net
+> might be better?
+> 
+> 0: https://stackoverflow.com/questions/11670581/why-is-gnu-source-defined-by-default-and-how-to-turn-it-off
+> 
+> Cc: Jakub Kicinski <kuba@kernel.org>
+> Signed-off-by: Stanislav Fomichev <sdf@fomichev.me>
+> ---
+>  tools/testing/selftests/bpf/Makefile | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+> index dd49c1d23a60..81d4757ecd4c 100644
+> --- a/tools/testing/selftests/bpf/Makefile
+> +++ b/tools/testing/selftests/bpf/Makefile
+> @@ -713,7 +713,7 @@ $(OUTPUT)/xdp_features: xdp_features.c $(OUTPUT)/network_helpers.o $(OUTPUT)/xdp
+>  # Make sure we are able to include and link libbpf against c++.
+>  $(OUTPUT)/test_cpp: test_cpp.cpp $(OUTPUT)/test_core_extern.skel.h $(BPFOBJ)
+>  	$(call msg,CXX,,$@)
+> -	$(Q)$(CXX) $(CFLAGS) $(filter %.a %.o %.cpp,$^) $(LDLIBS) -o $@
+> +	$(Q)$(CXX) $(subst -D_GNU_SOURCE=,,$(CFLAGS)) $(filter %.a %.o %.cpp,$^) $(LDLIBS) -o $@
+
+nit, seems like we use filter-out for cases like that (but just one instance of -static option)
+anyway the fix works for me
+
+Acked-by: Jiri Olsa <jolsa@kernel.org>
+
+jirka
+
+>  
+>  # Benchmark runner
+>  $(OUTPUT)/bench_%.o: benchs/bench_%.c bench.h $(BPFOBJ)
+> -- 
+> 2.45.2
+> 
