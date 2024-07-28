@@ -1,118 +1,119 @@
-Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx1.sberdevices.ru (mx1.sberdevices.ru [37.18.73.165])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC9726F2EB
-	for <bpf@vger.kernel.org>; Sun, 28 Jul 2024 20:35:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60E8054BD4;
+	Sun, 28 Jul 2024 20:40:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=37.18.73.165
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722198925; cv=none; b=m0qpnSK/2bTEVQyte54xeQ77STJPL3+12jbUqzOX+i1ORKuBDgrO+mZIBFJzp160IVNomKy5e3rJXBqFqQj4+OQ8mSJSQopHKtn6s1+yvWtvHBiZzSRtXUhPSbcMthN47WEontMGOwI6Q+/NCfWCjlFFBzx4sxZtkpIsOx2kKOw=
+	t=1722199248; cv=none; b=sqwkjO5/SE3wBzzlp6vgBj0z/FcWu6rsvJB3SwbvJbeKeI9WrMKuEMGs4sV/hsA23/8gAnyOqFvWDLwWnUDWpDS7/3F5xtEJNEprhA3UupMTGH6UJe+Kmy0BxfEw5PbavQB6TyBM7cM8WN/Yk01tUufJH7G4eF4UGN2QWKJA3g4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722198925; c=relaxed/simple;
-	bh=mgu+Yj+jxGXZRLUlwBp5yMyvSwB9uW7xJptSeY98TYg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nj4CLsMyTfHKStxno3EEaPhdRpRow+Cr9p8FXY66YX07oOHkkPw+3QZABh6TW95uO8yzxFRxqhhyumo6UCMlrLAPdR9eT2DnFavpFW3KaY2EE/xWHaQ6tptIz72ADrVwJS1l9DnwA9m/kSPtiqCxePpgtATOphdq/a8ypByqHTI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=1CQekjNt; arc=none smtp.client-ip=209.85.218.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1722199248; c=relaxed/simple;
+	bh=fo9SxnRqHmWkZ+4Xi5y0iHSeCC+yY2XTdoLtLszvGhg=;
+	h=Message-ID:Date:MIME-Version:In-Reply-To:To:CC:From:Subject:
+	 Content-Type; b=rbgD9r/0+XjSzc1CZi5Bkseq8J17DZwqf6J/B9OqMdvj9Umum9LvcBIsmEQyR/DHMbpF7Kxpd52bd+YzdBcHmAzEpbceJKsQOHCZJ0SQogCjVjCv4nT5SX4DKTOmEMY0nKgAMiOwKym6XKGmxTspwmqrvS6nF+O74LL0wO4TeoI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=salutedevices.com; spf=pass smtp.mailfrom=salutedevices.com; dkim=pass (2048-bit key) header.d=salutedevices.com header.i=@salutedevices.com header.b=JrgBbp/J; arc=none smtp.client-ip=37.18.73.165
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=salutedevices.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=salutedevices.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="1CQekjNt"
-Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-a7a8caef11fso326680566b.0
-        for <bpf@vger.kernel.org>; Sun, 28 Jul 2024 13:35:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1722198922; x=1722803722; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=nontbgcjIDqftJuySTTJnYyofNA22ioowgX6CXcR/jY=;
-        b=1CQekjNtlMrhc1MzTLrrTrtie8iiIq6r9HG3w8OBpLErgkfG/hc4m3zSGvBRdO4u33
-         y+jGatuCF+YxfMNdWwplzoLhnPfWsXpnaAAixS8bK/R0FP1mfKWZkx3ZTMVLGNYM4y5w
-         E8ZaervwdJ5yfqcmqR0i3IQMZHVmLh+l2QzxgJnzUkDgLqPgtKZh5H3PMYCTPLVtgxz3
-         AOcygCDmGLIasE6Zymc5FeKeddjxIAnhnrJaPAMXDg0qrT9nmslbDSGBepu+CKdgeFzh
-         lbTubLqifTnFDn8Bdj8C7vOiIrWjAbTxY+SSzBYX0D1w0X6xi4gGe1Uog98QCmUpdLN5
-         +DkQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722198922; x=1722803722;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=nontbgcjIDqftJuySTTJnYyofNA22ioowgX6CXcR/jY=;
-        b=jPgdYW62AtznHtW/NF8cmnxPlhKFmc3IuUerPMbovN98KBGGmK9YwVd1hTjZtID7eE
-         5Q8KkqPnw9B3voq11OcL1suF6u55GFqJbLxewPQmxjOC+vlXem+Wy85Z8XjT9HTa9fV0
-         hwZ37YO+N1XvAqzfWO2xqZgVBo7f/O5+EZlLzWuwvhRXJJbQMVwkfuGBnrmxlaEtEWu8
-         1QmRBpSAPCaEeE49LWXcr1zKzt2Py3C+dT3PBHt7tbj8ZrEIfVqr4tivAv0H1m4PMWah
-         SY2fNearcwrt+p4BGy2OsLoIV/M6o1MLWC+IAS+6LEopznBqgpMDw5mLqAfNnfsTJ+yE
-         Er4A==
-X-Gm-Message-State: AOJu0Yyzwt1/VyemzF/TIQ5887WLvwISm4DDIpSzuuSVUW+w+2acPP/r
-	vqEi/aEPr3B70BeJfGIVRpX1IsIJGcY+9soaV1HvwW96b1MrWLvepbgeo3kOwQ==
-X-Google-Smtp-Source: AGHT+IFOTQVaWR8X2b+Rf7JTM/y+VMpyyyTx6OFW82HRoMMJWD2DlJzr2AhKJfNrkWWaBypjQqOegA==
-X-Received: by 2002:a17:907:9802:b0:a77:c364:c4f2 with SMTP id a640c23a62f3a-a7d40150ac5mr408195466b.52.1722198921083;
-        Sun, 28 Jul 2024 13:35:21 -0700 (PDT)
-Received: from google.com (64.227.90.34.bc.googleusercontent.com. [34.90.227.64])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a7acab23828sm430409966b.19.2024.07.28.13.35.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 28 Jul 2024 13:35:20 -0700 (PDT)
-Date: Sun, 28 Jul 2024 20:35:17 +0000
-From: Matt Bobrowski <mattbobrowski@google.com>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-	KP Singh <kpsingh@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
-	Jann Horn <jannh@google.com>,
-	Christian Brauner <brauner@kernel.org>,
-	Linux-Fsdevel <linux-fsdevel@vger.kernel.org>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Subject: Re: [PATCH v3 bpf-next 1/3] bpf: introduce new VFS based BPF kfuncs
-Message-ID: <ZqarhaE7JgkkxASP@google.com>
-References: <20240726085604.2369469-1-mattbobrowski@google.com>
- <20240726085604.2369469-2-mattbobrowski@google.com>
- <CAADnVQJdv9rjCHMzmE+W4AO3GgKjNjS_c06kC0iXe+itDstGZQ@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=salutedevices.com header.i=@salutedevices.com header.b="JrgBbp/J"
+Received: from p-infra-ksmg-sc-msk01.sberdevices.ru (localhost [127.0.0.1])
+	by mx1.sberdevices.ru (Postfix) with ESMTP id D762D100004;
+	Sun, 28 Jul 2024 23:40:34 +0300 (MSK)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mx1.sberdevices.ru D762D100004
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=salutedevices.com;
+	s=mail; t=1722199234;
+	bh=qiJcQnSK+EjYjj6+LyL+4e28HtKf7NXcELPMPziM0TI=;
+	h=Message-ID:Date:MIME-Version:To:From:Subject:Content-Type:From;
+	b=JrgBbp/J/gqP72xMqAgVWV2MYxHIBAZmJkmkosZdbhugqZPs5tP8Raer96lUThaGq
+	 BqVO7+48ve2oLt7uBklm1v4avi5H4YYSxgCRIGpjOclSgJS/PZxyhSM97wtCnprmb8
+	 Wfd7YjJxwPQ8V5eWAsAoJhtHjQnTXk3s0X/O/lxE+uyKXxRhMKkjiFkup/uytwiPh2
+	 RBHajb/uecZokN4tPxgSZHEwGSPDZsYspxJ1HGYnyp/tgUpkmZVwedtayeiggsCRjY
+	 B8pS18DFS6Q8q4nDt9vmZTkcWPAIAiKzrBU2IEdG8Qe2VaMmmBlX/OVVlDLIHTdBaW
+	 xtlQd8LnNUHCg==
+Received: from smtp.sberdevices.ru (p-i-exch-sc-m02.sberdevices.ru [172.16.192.103])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mx1.sberdevices.ru (Postfix) with ESMTPS;
+	Sun, 28 Jul 2024 23:40:34 +0300 (MSK)
+Received: from [192.168.1.103] (100.64.160.123) by
+ p-i-exch-sc-m02.sberdevices.ru (172.16.192.103) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.40; Sun, 28 Jul 2024 23:40:33 +0300
+Message-ID: <ce580c81-36a1-8b3b-b73f-1d88c5ec72b6@salutedevices.com>
+Date: Sun, 28 Jul 2024 23:28:12 +0300
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAADnVQJdv9rjCHMzmE+W4AO3GgKjNjS_c06kC0iXe+itDstGZQ@mail.gmail.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Content-Language: en-US
+In-Reply-To: <20240710212555.1617795-4-amery.hung@bytedance.com>
+To: <stefanha@redhat.com>, <sgarzare@redhat.com>, <mst@redhat.com>,
+	<jasowang@redhat.com>, <xuanzhuo@linux.alibaba.com>, <davem@davemloft.net>,
+	<edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
+	<kys@microsoft.com>, <haiyangz@microsoft.com>, <wei.liu@kernel.org>,
+	<decui@microsoft.com>, <bryantan@vmware.com>, <vdasa@vmware.com>,
+	<pv-drivers@vmware.com>
+CC: <dan.carpenter@linaro.org>, <simon.horman@corigine.com>,
+	<oxffffaa@gmail.com>, <kvm@vger.kernel.org>,
+	<virtualization@lists.linux-foundation.org>, <netdev@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <linux-hyperv@vger.kernel.org>,
+	<bpf@vger.kernel.org>, <bobby.eshleman@bytedance.com>,
+	<jiang.wang@bytedance.com>, <amery.hung@bytedance.com>,
+	<ameryhung@gmail.com>, <xiyou.wangcong@gmail.com>, <kernel@sberdevices.ru>
+From: Arseniy Krasnov <avkrasnov@salutedevices.com>
+Subject: Re: [RFC PATCH net-next v6 03/14] af_vsock: support multi-transport
+ datagrams
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: p-i-exch-sc-m02.sberdevices.ru (172.16.192.103) To
+ p-i-exch-sc-m02.sberdevices.ru (172.16.192.103)
+X-KSMG-Rule-ID: 10
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Lua-Profiles: 186756 [Jul 28 2024]
+X-KSMG-AntiSpam-Version: 6.1.0.4
+X-KSMG-AntiSpam-Envelope-From: avkrasnov@salutedevices.com
+X-KSMG-AntiSpam-Rate: 0
+X-KSMG-AntiSpam-Status: not_detected
+X-KSMG-AntiSpam-Method: none
+X-KSMG-AntiSpam-Auth: dkim=none
+X-KSMG-AntiSpam-Info: LuaCore: 24 0.3.24 186c4d603b899ccfd4883d230c53f273b80e467f, {Tracking_from_domain_doesnt_match_to}, smtp.sberdevices.ru:7.1.1,5.0.1;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;127.0.0.199:7.1.2;salutedevices.com:7.1.1;100.64.160.123:7.1.2, FromAlignment: s, ApMailHostAddress: 100.64.160.123
+X-MS-Exchange-Organization-SCL: -1
+X-KSMG-AntiSpam-Interceptor-Info: scan successful
+X-KSMG-AntiPhishing: Clean
+X-KSMG-LinksScanning: Clean
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 2.0.1.6960, bases: 2024/07/28 19:39:00 #26171428
+X-KSMG-AntiVirus-Status: Clean, skipped
 
-On Fri, Jul 26, 2024 at 01:43:45PM -0700, Alexei Starovoitov wrote:
-> On Fri, Jul 26, 2024 at 1:56 AM Matt Bobrowski <mattbobrowski@google.com> wrote:
-> > +
-> > +static int bpf_fs_kfuncs_filter(const struct bpf_prog *prog, u32 kfunc_id)
-> > +{
-> > +       if (!btf_id_set8_contains(&bpf_fs_kfunc_set_ids, kfunc_id) ||
-> > +           prog->type == BPF_PROG_TYPE_LSM)
-> > +               return 0;
-> > +       return -EACCES;
-> > +}
-> > +
-> > +static const struct btf_kfunc_id_set bpf_fs_kfunc_set = {
-> > +       .owner = THIS_MODULE,
-> > +       .set = &bpf_fs_kfunc_set_ids,
-> > +       .filter = bpf_fs_kfuncs_filter,
-> > +};
-> > +
-> > +static int __init bpf_fs_kfuncs_init(void)
-> > +{
-> > +       return register_btf_kfunc_id_set(BPF_PROG_TYPE_LSM, &bpf_fs_kfunc_set);
-> > +}
-> 
-> Aside from buf__sz <= 0 that Christian spotted
+Hi Amery
 
-I'm going to fix this up in v2 of this patch, so don't worry about it.
+>  /* Transport features flags */
+>  /* Transport provides host->guest communication */
+> -#define VSOCK_TRANSPORT_F_H2G		0x00000001
+> +#define VSOCK_TRANSPORT_F_H2G			0x00000001
+>  /* Transport provides guest->host communication */
+> -#define VSOCK_TRANSPORT_F_G2H		0x00000002
+> -/* Transport provides DGRAM communication */
+> -#define VSOCK_TRANSPORT_F_DGRAM		0x00000004
+> +#define VSOCK_TRANSPORT_F_G2H			0x00000002
+> +/* Transport provides fallback for DGRAM communication */
+> +#define VSOCK_TRANSPORT_F_DGRAM_FALLBACK	0x00000004
+>  /* Transport provides local (loopback) communication */
+> -#define VSOCK_TRANSPORT_F_LOCAL		0x00000008
+> +#define VSOCK_TRANSPORT_F_LOCAL			0x00000008
 
-> the bpf_fs_kfuncs_filter() is a watery water.
-> It's doing a redundant check that is already covered by
-> 
-> register_btf_kfunc_id_set(BPF_PROG_TYPE_LSM,...
-> 
-> I'll remove it while applying.
+^^^ This is refactoring ?
 
-As discussed, this filter is currently required as without it we
-inadvertently allow tracing BPF programs to also use these BPF
-kfuncs.
 
-/M
+> +		/* During vsock_create(), the transport cannot be decided yet if
+> +		 * using virtio. While for VMCI, it is transport_dgram_fallback.
+
+
+I'm not English speaker, but 'decided' -> 'detected'/'resolved' ?
+
+
+
+Thanks, Arseniy
