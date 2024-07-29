@@ -1,140 +1,88 @@
-Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
+Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0852580027
-	for <bpf@vger.kernel.org>; Mon, 29 Jul 2024 15:48:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AEBF8172D
+	for <bpf@vger.kernel.org>; Mon, 29 Jul 2024 16:16:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722268112; cv=none; b=mM4KgYLAfjhgi9CUN6m+sMU6As7OJHRSCl1qZtQ6gGGHC86kRzi8ZHVRKc98X+xJeoF4IeWnerlzoUdVnPAvs2YoROFhIlvDLMYBc8h3Vq1kXZOQHvPgLItBYlm5EJHn8z08oL4gO0ai+i1VNNwqaK4dq2qAkou550g/ISp/00w=
+	t=1722269767; cv=none; b=A7IflPTEVYFRqMyRCWNuJL4AH9Xr/iSOTS8HuFayyxZRgyQctetExiXS0HhnpQANxbmI4Y6Ms26O3nj3Yu4TXQajeVMj2gI5KSdrbIdMKs9y+505EtQbICJ6uEEW9qNcqq/p0lPL3b/atwlm+8DGrrz/K/YE9bVt/gBgfoR7Gek=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722268112; c=relaxed/simple;
-	bh=3M44BJ/6llBRI3BY+/27BawTsfMJUQaBcNY4z9SHW/4=;
+	s=arc-20240116; t=1722269767; c=relaxed/simple;
+	bh=d18Gy67ikbYuUZdaoOJUpFbMEluKyBKjTm4b3S21oFY=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=XM1LsI3xxftqXayBLgPQWaIhlPJD+cHbdncs1fql5q1ChzTQIax7oeBQm+pnS0kXb5IaEw7GjVEU+eK94lbmkmRlxVP8WR5hp1uAuxZq9VGRBlLezX26GWtB4ZwfP8Pt0XdESoSC/y1VCQ6eV982+K7O8b0YdbYqox/gjECVyjs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=z6ukkpiZ; arc=none smtp.client-ip=209.85.208.43
+	 To:Cc:Content-Type; b=su1LccEGINQAp2v1mai0pF74W6Z37UylKmqtbG7tjOn8n38TwNLUA5SmS0V13MC4fg4spcuC5/5M3rc8H5Ojz4P6K5QyrX3WZq4x8yFS6CRTZQDDnyt0FViptMMSpvSMalipLgU29V2lNCWxQu9vmixPvQcwPL5jzMPkyZ+JIkg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=BX0EjTz5; arc=none smtp.client-ip=209.85.208.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="z6ukkpiZ"
-Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-5a869e3e9dfso15321a12.0
-        for <bpf@vger.kernel.org>; Mon, 29 Jul 2024 08:48:30 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="BX0EjTz5"
+Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-5a869e3e9dfso15641a12.0
+        for <bpf@vger.kernel.org>; Mon, 29 Jul 2024 09:16:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1722268109; x=1722872909; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1722269765; x=1722874565; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=JXhuRVtdMgKztBG06DUybwA27IR+VJWVhO/lY2CgOJc=;
-        b=z6ukkpiZFX3hyMBqjeoOg2GZleki2WIOgK2D4XYceEAUEzXHCQ5vljBHfNxtkJTEh2
-         tGrO18uJk5CjMMp0Nbh9R+J62o/j/p1/0hkNmnY6GIAl3lxEgdIrHaDxSE9ziaCr5wnQ
-         CVTkIQx9zH0fM05603Rgy636VPNxRzIJkhqK/8Sq9OD7rE7HfWVEeULaEQ/ysSltUzV0
-         RbAsijnm6SHje4ZfQvctdSOiXVfXNB/2GSMao0Y0cakr9gX+aUFc/frNOU3lPmWSvX4c
-         fw6rR35qVEByhux1MYM/FHcgWqZBmIaYNfeKQncpfya2j/nE0TPMzGYMILseakonoWnv
-         ESNQ==
+        bh=d18Gy67ikbYuUZdaoOJUpFbMEluKyBKjTm4b3S21oFY=;
+        b=BX0EjTz5MD7VJvtNy8/k5fEGvmMpyxlWjadlcZGc6tM/O2he5YIzr1k92f2bCLng8z
+         Gp1ZGQAfgDkCxZnFDa0WdxMHgdYwkucPaIuobVmL0aeiGL9w8TwXPLkICb6NQqBwZj+o
+         /BeP8ntTDvyRSebtuc5qxezBgQgzhELUqVGOb41ZZHgpijXNuhbnmfbsgKMIjvS8Ij6B
+         OvFjgm8gn9ejXVHYvzlVkgvLYOp4TOy5AA5R06XAQ2TKwD1waZPz/jG6vqF+choC6XeO
+         HbDIl65xLhecyTwPO37LBPAlOykuiuRu5Vmi6um4e4+M1RUPeaBGpoUmrqlKf0R+S+IN
+         9ZEg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722268109; x=1722872909;
+        d=1e100.net; s=20230601; t=1722269765; x=1722874565;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=JXhuRVtdMgKztBG06DUybwA27IR+VJWVhO/lY2CgOJc=;
-        b=uIgFI988Ih6ii3OS5N0snZNfZ+SizzvLbdGj5iwxsiF54EOYtKYPDX4J8Ocdswizcs
-         IGNv9WX4JjRBRcAgBsv3FnaIoP0NfKI1zts7AuoidlpeZlNfl5m+9wJQ0ZDAc6LfGSTa
-         kwOlt3pNqF4+qGmJQeCuCg5fq3eS5I7zmtZ+hCN+dBZTcjSScPqf5dxLlCdPJ7+OFFvD
-         oD/CNyWY9qwAq1ix/jFLNWIe3q8dkq7usncshgs0e2sSfncbPhClXJkRrgpA2gAPyTjg
-         bX3tbhth7Bgo043KSjsBVmWD2IisrSOYYpBh7Dy7M688ARQr46hfYsymLNktpjLNjsiw
-         xUZQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVPS8nm4Y1YLLV4toM2KOkbPFiYQwmTmrwdqW98Ls6L1YfKOr0yqOcPyj7yA8jinHdJpeVaD9OQ4NSV4SqUCh3d1oc/
-X-Gm-Message-State: AOJu0Yx/kE06iL6JVfhYjXhxgi9MBDXmNxLIZEbszk/cbXq+xRBXgga1
-	rZYn9ft46kwplQ5bs2ksYENRbKYbJ/c0QaHaCLnnZJ0soAheGldlKYFHBFqleGc5at/qxx+Y6mH
-	bjlxUe4iWG+rW+o/qda9flmMLdf599Ez/RoHq
-X-Google-Smtp-Source: AGHT+IH7QFyGS9sG4LuxOfocsqAqv82bMTA+QSn7azu9nOm+cFz5UNLcj0gpvytnicRkd122MuYcGBq2TC00htBHepI=
-X-Received: by 2002:a05:6402:350c:b0:5ac:4ce3:8f6a with SMTP id
- 4fb4d7f45d1cf-5b40d4a1985mr8515a12.6.1722268108796; Mon, 29 Jul 2024 08:48:28
- -0700 (PDT)
+        bh=d18Gy67ikbYuUZdaoOJUpFbMEluKyBKjTm4b3S21oFY=;
+        b=kHn5qURBAGYxFutFVpJgejM5RHA4et2K5JIzasRC1Xcu1Bmt2CQorS5wILsKoe+TUP
+         KWF9A1Y9cbw+z7lJvdE3/VzHAc+g9Bue4BSMF+x152fT/dGZ7YDQDU3j7qrDSCJYpFJv
+         hoEGjMJzjDJM9hCNGSPizbv2yokEicByTj3CxtxTfu6UiCa49gTAxcmebZrh88Lp9ZbY
+         dDk3JCw+vr81zLpOt6M3zpTJSt8s7RBj5n53bKvFX/BR9bNt/vs9GAVVNquN/ZFAeIe7
+         tzqwWzZaRGhWzt9R9p1mKmffZJsyocKoKZWSOsq4Ro0bjYkky1ECLG7bVlSSjAiVnIUj
+         AeoA==
+X-Gm-Message-State: AOJu0YyaPl8DONBDMJ15oePWvt63hUI8w3omPISSE6AgGCfKOcD8BFGe
+	SzwadhYJ/vTNOt32UUd7ZBb0z3VaA4EZwSGtAz5SsNYPW6AIxndm6Cd6BkrZvUyLw0DeM/xrPCQ
+	oXpURRG6hDe6JWIeqzUZhyA3Jm4MTYPGmWzAEYDKM5poH7kmWOTzSPO+Pcg==
+X-Google-Smtp-Source: AGHT+IFq7wwFm0yDbIXrhXFmEY2q6vGwMcUWFfTzQ0yzkf4W85Zpi28KqinyomoROUU4QxcEIMksYCFXQcQW1eegr9A=
+X-Received: by 2002:a05:6402:430c:b0:57c:b712:47b5 with SMTP id
+ 4fb4d7f45d1cf-5b40cede5c1mr22853a12.4.1722269764183; Mon, 29 Jul 2024
+ 09:16:04 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240627170900.1672542-1-andrii@kernel.org> <20240627170900.1672542-4-andrii@kernel.org>
-In-Reply-To: <20240627170900.1672542-4-andrii@kernel.org>
+References: <20240724225210.545423-1-andrii@kernel.org> <20240724225210.545423-8-andrii@kernel.org>
+In-Reply-To: <20240724225210.545423-8-andrii@kernel.org>
 From: Jann Horn <jannh@google.com>
-Date: Mon, 29 Jul 2024 17:47:51 +0200
-Message-ID: <CAG48ez3VuVQbbCCPRudOGq8jTVkhH17qe6vv7opuCghHAAd3Zw@mail.gmail.com>
-Subject: Re: [PATCH v6 3/6] fs/procfs: add build ID fetching to PROCMAP_QUERY API
+Date: Mon, 29 Jul 2024 18:15:28 +0200
+Message-ID: <CAG48ez0p-oH6VCv38NYyBq1g4URu6Tntj0B7Moz6Cmpr=vy5PQ@mail.gmail.com>
+Subject: Re: [PATCH v2 bpf-next 07/10] lib/buildid: harden build ID parsing
+ logic some more
 To: Andrii Nakryiko <andrii@kernel.org>
-Cc: linux-fsdevel@vger.kernel.org, brauner@kernel.org, viro@zeniv.linux.org.uk, 
-	akpm@linux-foundation.org, linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
-	gregkh@linuxfoundation.org, linux-mm@kvack.org, liam.howlett@oracle.com, 
-	surenb@google.com, rppt@kernel.org, adobriyan@gmail.com
+Cc: bpf@vger.kernel.org, linux-mm@kvack.org, akpm@linux-foundation.org, 
+	adobriyan@gmail.com, shakeel.butt@linux.dev, hannes@cmpxchg.org, 
+	ak@linux.intel.com, osandov@osandov.com, song@kernel.org, 
+	Jiri Olsa <jolsa@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Jun 27, 2024 at 7:08=E2=80=AFPM Andrii Nakryiko <andrii@kernel.org>=
- wrote:
-> The need to get ELF build ID reliably is an important aspect when
-> dealing with profiling and stack trace symbolization, and
-> /proc/<pid>/maps textual representation doesn't help with this.
-[...]
-> @@ -539,6 +543,21 @@ static int do_procmap_query(struct proc_maps_private=
- *priv, void __user *uarg)
->                 }
->         }
+On Thu, Jul 25, 2024 at 12:52=E2=80=AFAM Andrii Nakryiko <andrii@kernel.org=
+> wrote:
+> Harden build ID parsing logic some more, adding explicit READ_ONCE()
+> when fetching values that we then use to check correctness and various
+> note iteration invariants.
 >
-> +       if (karg.build_id_size) {
-> +               __u32 build_id_sz;
-> +
-> +               err =3D build_id_parse(vma, build_id_buf, &build_id_sz);
-> +               if (err) {
-> +                       karg.build_id_size =3D 0;
-> +               } else {
-> +                       if (karg.build_id_size < build_id_sz) {
-> +                               err =3D -ENAMETOOLONG;
-> +                               goto out;
-> +                       }
-> +                       karg.build_id_size =3D build_id_sz;
-> +               }
-> +       }
+> Suggested-by: Andi Kleen <ak@linux.intel.com>
+> Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 
-The diff doesn't have enough context lines to see it here, but the two
-closing curly braces above are another copy of exactly the same code
-block from the preceding patch. The current state in mainline looks
-like this, with two repetitions of exactly the same block:
-
-[...]
-                karg.dev_minor =3D 0;
-                karg.inode =3D 0;
-        }
-
-        if (karg.build_id_size) {
-                __u32 build_id_sz;
-
-                err =3D build_id_parse(vma, build_id_buf, &build_id_sz);
-                if (err) {
-                        karg.build_id_size =3D 0;
-                } else {
-                        if (karg.build_id_size < build_id_sz) {
-                                err =3D -ENAMETOOLONG;
-                                goto out;
-                        }
-                        karg.build_id_size =3D build_id_sz;
-                }
-        }
-
-        if (karg.build_id_size) {
-                __u32 build_id_sz;
-
-                err =3D build_id_parse(vma, build_id_buf, &build_id_sz);
-                if (err) {
-                        karg.build_id_size =3D 0;
-                } else {
-                        if (karg.build_id_size < build_id_sz) {
-                                err =3D -ENAMETOOLONG;
-                                goto out;
-                        }
-                        karg.build_id_size =3D build_id_sz;
-                }
-        }
-
-        if (karg.vma_name_size) {
-[...]
+If I understand correctly, build ID parsing is already exposed to
+untrusted code since commit 88a16a130933 ("perf: Add build id data in
+mmap2 event"), which first landed in v5.12, right? Can you put fixes
+for parsing build IDs from untrusted memory at the start of your
+series with stable backport markers, so that we can fix this on
+existing systems? Or should this be fixed on existing stable trees
+with a separate stable-only fix?
