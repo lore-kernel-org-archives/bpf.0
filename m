@@ -1,147 +1,215 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+Received: from mx1.sberdevices.ru (mx2.sberdevices.ru [45.89.224.132])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBCB018C325;
-	Mon, 29 Jul 2024 20:07:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E8AC188CB3;
+	Mon, 29 Jul 2024 20:12:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.89.224.132
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722283650; cv=none; b=lvZOXuvudubaMSz4sCkDYzOx7eT7pxAwz37ShcK/nPUyKTiRixv99WM5QshqhGLDhTZ5J5y02e+KBm6mn7jXtM1rCl66H1bS3UrQ7L1dqt8r13l//StCsPu3jFyMJxfSolwRO8R4hkUAMH4dO2/nRYZE2L02K66awz4IGgxMkCc=
+	t=1722283983; cv=none; b=hxdvfq2DwU92VldLit3I3Kz0NSpnRodxcV8l8Kw+88jW/NX8Sc1zkpkfKeEIzoVZ7qEGY+SRjxuXerU6LcXI5cMFLAZerfDNSl6LANtaqdFq08AZbxzyuchqdRfgYzZxy340CE3uRo4WOyhn8cMpEZkJHZ0TY81TQbmGVjzx6/E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722283650; c=relaxed/simple;
-	bh=3LAjuSxLYaetIQgXY8nT5M5q9x91e4EkU5j0UGqqOZg=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=qvzmAN2yVOPSu/iiv1BqIleRcMK+NjtXKsJss0Gk/IQpXfhMyu6/vzWzoIOgPn2/qUkEzQke1UaQTi67CsuthzpYPNrTfiqxldwYt4gnWT6ZajAhGh2FOMAtFVmB9DLeMskRpCkpYt9uqrIcmEQJX3Ew2lK6JjIhVSE/iARF+2o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QLaINT9a; arc=none smtp.client-ip=198.175.65.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1722283983; c=relaxed/simple;
+	bh=crICF1i5RQKEnw5gmthwsCxsW7dV+fc7ifqG4NAJLHE=;
+	h=Message-ID:Date:MIME-Version:In-Reply-To:To:CC:From:Subject:
+	 Content-Type; b=jQ0epu8aBDU2Umyz53hq9AFaLVq8U6YhNPidTLxgx58L1yOh65fKowCwaxyrIpbUWM+sdJguC/Cu9IG2LwSplVoZbvBLkcKB5vSAf1NoZIJaIoLvWChAFFUKDeFC+earSKX04VQuV2ksjqM0u38xDIxejug4Rztb7Zzq/QWDdU8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=salutedevices.com; spf=pass smtp.mailfrom=salutedevices.com; dkim=pass (2048-bit key) header.d=salutedevices.com header.i=@salutedevices.com header.b=X1ABmKZ4; arc=none smtp.client-ip=45.89.224.132
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=salutedevices.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=salutedevices.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QLaINT9a"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1722283649; x=1753819649;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=3LAjuSxLYaetIQgXY8nT5M5q9x91e4EkU5j0UGqqOZg=;
-  b=QLaINT9aWSqr+jNBiPxNQgu0//N0FZJZdJe4bZ/UkHz0NGcKhzlHjsPq
-   q40uL6NxPrCGWF11QG4itM4uxUEUbCyWPV2Qwa1QnB/L4xzFkOuEaM+tL
-   Owv3Z/w53bDvCiyTdnXYRNcsYSVnuIs9NgsYUQDGZ+a/tEJ3ye+T88g3L
-   E3igyV6M39j5kvva9oXlrd54F0Yp9ADN6Nq7bCi8ifsrT7cNjR9fqqg+Q
-   APa3RVgJYwAcE6cUvKL3voPBHxI41QYF+WPk2ppthNU/0okTXKW1zm+99
-   haz4npNhtjGBIlc7MQoxQtKWUJSnWXm1dCgpd+Dm7kWeOeMBy8eqfHOi6
-   g==;
-X-CSE-ConnectionGUID: T4uZA5yzQEGqh1nJQ0D4TA==
-X-CSE-MsgGUID: W89HRBBYQ7uosOeQ6zqGrA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11148"; a="23818559"
-X-IronPort-AV: E=Sophos;i="6.09,246,1716274800"; 
-   d="scan'208";a="23818559"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jul 2024 13:07:23 -0700
-X-CSE-ConnectionGUID: BZgJhSC2Rvik0XOdbffbLg==
-X-CSE-MsgGUID: OtZhgceITyemfhSVFShb3Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.09,246,1716274800"; 
-   d="scan'208";a="54681300"
-Received: from anguy11-upstream.jf.intel.com ([10.166.9.133])
-  by orviesa007.jf.intel.com with ESMTP; 29 Jul 2024 13:07:24 -0700
-From: Tony Nguyen <anthony.l.nguyen@intel.com>
-To: davem@davemloft.net,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	edumazet@google.com,
-	netdev@vger.kernel.org
-Cc: Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-	anthony.l.nguyen@intel.com,
-	magnus.karlsson@intel.com,
-	aleksander.lobakin@intel.com,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	hawk@kernel.org,
-	john.fastabend@gmail.com,
-	bpf@vger.kernel.org,
-	Shannon Nelson <shannon.nelson@amd.com>,
-	Chandan Kumar Rout <chandanx.rout@intel.com>
-Subject: [PATCH net v2 8/8] ice: xsk: fix txq interrupt mapping
-Date: Mon, 29 Jul 2024 13:07:14 -0700
-Message-ID: <20240729200716.681496-9-anthony.l.nguyen@intel.com>
-X-Mailer: git-send-email 2.42.0
-In-Reply-To: <20240729200716.681496-1-anthony.l.nguyen@intel.com>
-References: <20240729200716.681496-1-anthony.l.nguyen@intel.com>
+	dkim=pass (2048-bit key) header.d=salutedevices.com header.i=@salutedevices.com header.b="X1ABmKZ4"
+Received: from p-infra-ksmg-sc-msk02.sberdevices.ru (localhost [127.0.0.1])
+	by mx1.sberdevices.ru (Postfix) with ESMTP id E8F50120003;
+	Mon, 29 Jul 2024 23:12:56 +0300 (MSK)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mx1.sberdevices.ru E8F50120003
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=salutedevices.com;
+	s=mail; t=1722283976;
+	bh=wqCOH0OMZnBR80J18ev/8FeOuZRcI6ZPg6yEni5bP5E=;
+	h=Message-ID:Date:MIME-Version:To:From:Subject:Content-Type:From;
+	b=X1ABmKZ44Jlf8L31CHuQAeIk4ZIqA6FntZHkexU9nNc/jFP1zP/GqdXt8tmR7aRMK
+	 hEXlF60medUb1VpmwEdY2Y78WUdmT8XBBB5wJSljFT6TrIDVQZWlSFJxxKpxTzxL67
+	 TIpv7Dctt1Rxat40rZVpl75dUMp+7ohkUBxK5f2qxfZbad28FuC5mqduVUtMX29L2B
+	 uKqrvUuC76txADmCn6hykswCviJN2lJe2SS/Yw0nyaOwe2P/Fp8a/Ub9npGnph8hhp
+	 tpMLqcRmiINh5AiqbgvlWCWZECR6KtPcgC5d2cEBoEohi196cjA4z5FnM+CJuNRAQM
+	 L/wZAreMfwHOw==
+Received: from smtp.sberdevices.ru (p-i-exch-sc-m02.sberdevices.ru [172.16.192.103])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mx1.sberdevices.ru (Postfix) with ESMTPS;
+	Mon, 29 Jul 2024 23:12:56 +0300 (MSK)
+Received: from [172.28.128.200] (100.64.160.123) by
+ p-i-exch-sc-m02.sberdevices.ru (172.16.192.103) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.40; Mon, 29 Jul 2024 23:12:55 +0300
+Message-ID: <e1647f5f-5056-5cf0-e81c-5ef71fd6efd0@salutedevices.com>
+Date: Mon, 29 Jul 2024 23:00:36 +0300
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Content-Language: en-US
+In-Reply-To: <20240710212555.1617795-8-amery.hung@bytedance.com>
+To: <stefanha@redhat.com>, <sgarzare@redhat.com>, <mst@redhat.com>,
+	<jasowang@redhat.com>, <xuanzhuo@linux.alibaba.com>, <davem@davemloft.net>,
+	<edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
+	<kys@microsoft.com>, <haiyangz@microsoft.com>, <wei.liu@kernel.org>,
+	<decui@microsoft.com>, <bryantan@vmware.com>, <vdasa@vmware.com>,
+	<pv-drivers@vmware.com>
+CC: <dan.carpenter@linaro.org>, <simon.horman@corigine.com>,
+	<oxffffaa@gmail.com>, <kvm@vger.kernel.org>,
+	<virtualization@lists.linux-foundation.org>, <netdev@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <linux-hyperv@vger.kernel.org>,
+	<bpf@vger.kernel.org>, <bobby.eshleman@bytedance.com>,
+	<jiang.wang@bytedance.com>, <amery.hung@bytedance.com>,
+	<ameryhung@gmail.com>, <xiyou.wangcong@gmail.com>, <kernel@sberdevices.ru>
+From: Arseniy Krasnov <avkrasnov@salutedevices.com>
+Subject: [RFC PATCH net-next v6 07/14] virtio/vsock: add common datagram send
+ path
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: p-i-exch-sc-m01.sberdevices.ru (172.16.192.107) To
+ p-i-exch-sc-m02.sberdevices.ru (172.16.192.103)
+X-KSMG-Rule-ID: 10
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Lua-Profiles: 186779 [Jul 29 2024]
+X-KSMG-AntiSpam-Version: 6.1.0.4
+X-KSMG-AntiSpam-Envelope-From: avkrasnov@salutedevices.com
+X-KSMG-AntiSpam-Rate: 0
+X-KSMG-AntiSpam-Status: not_detected
+X-KSMG-AntiSpam-Method: none
+X-KSMG-AntiSpam-Auth: dkim=none
+X-KSMG-AntiSpam-Info: LuaCore: 24 0.3.24 186c4d603b899ccfd4883d230c53f273b80e467f, {Tracking_from_domain_doesnt_match_to}, smtp.sberdevices.ru:5.0.1,7.1.1;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;salutedevices.com:7.1.1;100.64.160.123:7.1.2;127.0.0.199:7.1.2, FromAlignment: s, ApMailHostAddress: 100.64.160.123
+X-MS-Exchange-Organization-SCL: -1
+X-KSMG-AntiSpam-Interceptor-Info: scan successful
+X-KSMG-AntiPhishing: Clean
+X-KSMG-LinksScanning: Clean
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 2.0.1.6960, bases: 2024/07/29 16:49:00 #26175127
+X-KSMG-AntiVirus-Status: Clean, skipped
 
-From: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Hi,
 
-ice_cfg_txq_interrupt() internally handles XDP Tx ring. Do not use
-ice_for_each_tx_ring() in ice_qvec_cfg_msix() as this causing us to
-treat XDP ring that belongs to queue vector as Tx ring and therefore
-misconfiguring the interrupts.
+> diff --git a/net/vmw_vsock/virtio_transport_common.c b/net/vmw_vsock/virtio_transport_common.c
+> index a1c76836d798..46cd1807f8e3 100644
+> --- a/net/vmw_vsock/virtio_transport_common.c
+> +++ b/net/vmw_vsock/virtio_transport_common.c
+> @@ -1040,13 +1040,98 @@ int virtio_transport_shutdown(struct vsock_sock *vsk, int mode)
+>  }
+>  EXPORT_SYMBOL_GPL(virtio_transport_shutdown);
+>  
+> +static int virtio_transport_dgram_send_pkt_info(struct vsock_sock *vsk,
+> +						struct virtio_vsock_pkt_info *info)
+> +{
+> +	u32 src_cid, src_port, dst_cid, dst_port;
+> +	const struct vsock_transport *transport;
+> +	const struct virtio_transport *t_ops;
+> +	struct sock *sk = sk_vsock(vsk);
+> +	struct virtio_vsock_hdr *hdr;
+> +	struct sk_buff *skb;
+> +	void *payload;
+> +	int noblock = 0;
+> +	int err;
+> +
+> +	info->type = virtio_transport_get_type(sk_vsock(vsk));
+> +
+> +	if (info->pkt_len > VIRTIO_VSOCK_MAX_PKT_BUF_SIZE)
+> +		return -EMSGSIZE;
 
-Fixes: 2d4238f55697 ("ice: Add support for AF_XDP")
-Reviewed-by: Shannon Nelson <shannon.nelson@amd.com>
-Tested-by: Chandan Kumar Rout <chandanx.rout@intel.com> (A Contingent Worker at Intel)
-Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
----
- drivers/net/ethernet/intel/ice/ice_xsk.c | 24 ++++++++++++++----------
- 1 file changed, 14 insertions(+), 10 deletions(-)
+Small suggestion, i think we can check for packet length earlier ? Before
+info->type = ...
 
-diff --git a/drivers/net/ethernet/intel/ice/ice_xsk.c b/drivers/net/ethernet/intel/ice/ice_xsk.c
-index ee084ad80a61..240a7bec242b 100644
---- a/drivers/net/ethernet/intel/ice/ice_xsk.c
-+++ b/drivers/net/ethernet/intel/ice/ice_xsk.c
-@@ -110,25 +110,29 @@ ice_qvec_dis_irq(struct ice_vsi *vsi, struct ice_rx_ring *rx_ring,
-  * ice_qvec_cfg_msix - Enable IRQ for given queue vector
-  * @vsi: the VSI that contains queue vector
-  * @q_vector: queue vector
-+ * @qid: queue index
-  */
- static void
--ice_qvec_cfg_msix(struct ice_vsi *vsi, struct ice_q_vector *q_vector)
-+ice_qvec_cfg_msix(struct ice_vsi *vsi, struct ice_q_vector *q_vector, u16 qid)
- {
- 	u16 reg_idx = q_vector->reg_idx;
- 	struct ice_pf *pf = vsi->back;
- 	struct ice_hw *hw = &pf->hw;
--	struct ice_tx_ring *tx_ring;
--	struct ice_rx_ring *rx_ring;
-+	int q, _qid = qid;
- 
- 	ice_cfg_itr(hw, q_vector);
- 
--	ice_for_each_tx_ring(tx_ring, q_vector->tx)
--		ice_cfg_txq_interrupt(vsi, tx_ring->reg_idx, reg_idx,
--				      q_vector->tx.itr_idx);
-+	for (q = 0; q < q_vector->num_ring_tx; q++) {
-+		ice_cfg_txq_interrupt(vsi, _qid, reg_idx, q_vector->tx.itr_idx);
-+		_qid++;
-+	}
- 
--	ice_for_each_rx_ring(rx_ring, q_vector->rx)
--		ice_cfg_rxq_interrupt(vsi, rx_ring->reg_idx, reg_idx,
--				      q_vector->rx.itr_idx);
-+	_qid = qid;
-+
-+	for (q = 0; q < q_vector->num_ring_rx; q++) {
-+		ice_cfg_rxq_interrupt(vsi, _qid, reg_idx, q_vector->rx.itr_idx);
-+		_qid++;
-+	}
- 
- 	ice_flush(hw);
- }
-@@ -241,7 +245,7 @@ static int ice_qp_ena(struct ice_vsi *vsi, u16 q_idx)
- 		fail = err;
- 
- 	q_vector = vsi->rx_rings[q_idx]->q_vector;
--	ice_qvec_cfg_msix(vsi, q_vector);
-+	ice_qvec_cfg_msix(vsi, q_vector, q_idx);
- 
- 	err = ice_vsi_ctrl_one_rx_ring(vsi, true, q_idx, true);
- 	if (!fail)
--- 
-2.42.0
+> +
+> +	transport = vsock_dgram_lookup_transport(info->remote_cid, info->remote_flags);
+> +	t_ops = container_of(transport, struct virtio_transport, transport);
+> +	if (unlikely(!t_ops))
+> +		return -EFAULT;
+> +
+> +	if (info->msg)
+> +		noblock = info->msg->msg_flags & MSG_DONTWAIT;
+> +
+> +	/* Use sock_alloc_send_skb to throttle by sk_sndbuf. This helps avoid
+> +	 * triggering the OOM.
+> +	 */
+> +	skb = sock_alloc_send_skb(sk, info->pkt_len + VIRTIO_VSOCK_SKB_HEADROOM,
+> +				  noblock, &err);
+> +	if (!skb)
+> +		return err;
+> +
+> +	skb_reserve(skb, VIRTIO_VSOCK_SKB_HEADROOM);
+> +
+> +	src_cid = t_ops->transport.get_local_cid();
+> +	src_port = vsk->local_addr.svm_port;
+> +	dst_cid = info->remote_cid;
+> +	dst_port = info->remote_port;
+> +
+> +	hdr = virtio_vsock_hdr(skb);
+> +	hdr->type	= cpu_to_le16(info->type);
+> +	hdr->op		= cpu_to_le16(info->op);
+> +	hdr->src_cid	= cpu_to_le64(src_cid);
+> +	hdr->dst_cid	= cpu_to_le64(dst_cid);
+> +	hdr->src_port	= cpu_to_le32(src_port);
+> +	hdr->dst_port	= cpu_to_le32(dst_port);
+> +	hdr->flags	= cpu_to_le32(info->flags);
+> +	hdr->len	= cpu_to_le32(info->pkt_len);
 
+There is function 'virtio_transport_init_hdr()' in this file, may be reuse it ?
+
+> +
+> +	if (info->msg && info->pkt_len > 0) {
+
+If pkt_len is 0, do we really need to send such packets ? Because for connectible
+sockets, we ignore empty OP_RW packets.
+
+> +		payload = skb_put(skb, info->pkt_len);
+> +		err = memcpy_from_msg(payload, info->msg, info->pkt_len);
+> +		if (err)
+> +			goto out;
+> +	}
+> +
+> +	trace_virtio_transport_alloc_pkt(src_cid, src_port,
+> +					 dst_cid, dst_port,
+> +					 info->pkt_len,
+> +					 info->type,
+> +					 info->op,
+> +					 info->flags,
+> +					 false);
+
+^^^ For SOCK_DGRAM, include/trace/events/vsock_virtio_transport_common.h also should
+be updated?
+
+> +
+> +	return t_ops->send_pkt(skb);
+> +out:
+> +	kfree_skb(skb);
+> +	return err;
+> +}
+> +
+>  int
+>  virtio_transport_dgram_enqueue(struct vsock_sock *vsk,
+>  			       struct sockaddr_vm *remote_addr,
+>  			       struct msghdr *msg,
+>  			       size_t dgram_len)
+>  {
+> -	return -EOPNOTSUPP;
+> +	/* Here we are only using the info struct to retain style uniformity
+> +	 * and to ease future refactoring and merging.
+> +	 */
+> +	struct virtio_vsock_pkt_info info = {
+> +		.op = VIRTIO_VSOCK_OP_RW,
+> +		.remote_cid = remote_addr->svm_cid,
+> +		.remote_port = remote_addr->svm_port,
+> +		.remote_flags = remote_addr->svm_flags,
+> +		.msg = msg,
+> +		.vsk = vsk,
+> +		.pkt_len = dgram_len,
+> +	};
+> +
+> +	return virtio_transport_dgram_send_pkt_info(vsk, &info);
+>  }
+>  EXPORT_SYMBOL_GPL(virtio_transport_dgram_enqueue);
+>  
+> -- 
+> 2.20.1
+
+Thanks, Arseniy
