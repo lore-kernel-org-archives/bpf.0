@@ -1,102 +1,173 @@
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D41B18E762;
-	Mon, 29 Jul 2024 20:43:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D5A77F484
+	for <bpf@vger.kernel.org>; Mon, 29 Jul 2024 20:58:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722285834; cv=none; b=fZ1dNDq8VOkuUfTzp4WRisQVV5r648VFegh8A2NgRGoSOIIQd12q3Zs7m8xeQBDap4FWHHfBWThSsdv2Uew/hqnmo6OnzsyJYNWnAWuyUCXguW2PLXUEWOJgt6SK+Fokik9aWXoT0QoEhaAl7jf4jN5fBhV12NDbEkftQcEyawg=
+	t=1722286703; cv=none; b=rgH6iEp5bzWCXjVuuicAs0ItLUf9OTI8TCUDQOLKT635fDPy2qrxEAI5wDqBY2LEizi8iqP5htEwMHx7HcQwKOc/7QXpbRO+orNst7I9/KikiYuYeZIDrDpzGG33pNp+U51DA01/HHohI9v8jlC2ndcQBDKB8wzqcGaRePBEfk0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722285834; c=relaxed/simple;
-	bh=BKEQT8+KYO2Lx+4PYMNXeCjW8FDuqJOIi+Cq4x3uRkQ=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=qvNN0KDyDDCCktdrL5GMCnLRy7w+c9ysT2AgxEuQDW+pKk4LvAZ/1zkPkpcItJmpXmSFqyNEZwokuVo6wZnZhAx9n52xhKn1S5N903ie2BXDbvdp2eJj6q2vIyQwZCijwkm59o52zrrs4Tqfq45XoibEH4gRO6aJ30po1fd9S9I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=J3oxi84t; arc=none smtp.client-ip=159.69.126.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
+	s=arc-20240116; t=1722286703; c=relaxed/simple;
+	bh=OPbPlXUZi8nGaG/J9ZqstdoAg1WNwfJMj+P9D3pHtEo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=DDO26rRXpTz61KY4r0UCXe3KpV9T3DrbFI6oiJE8gwGKDD/yqTwsctXZx41V/rICRChfzaRX/scA+0D7TKTWAQFw3KGIIPHzYjxGCBo4b+1cpmAkV8Zc9VqpdxeWLPz/skZYXR6q9qpuSXjwkc5ZI+8jVmihO/Ku3SacDRJrcYY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Zs97CoVA; arc=none smtp.client-ip=209.85.216.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="J3oxi84t"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-	s=mail; t=1722285818;
-	bh=BKEQT8+KYO2Lx+4PYMNXeCjW8FDuqJOIi+Cq4x3uRkQ=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=J3oxi84tTAvzqz4jmYEfFLCbaxJaRJSr6/V/xRBnLQFh4ZgSRJKXK+oTkGTn5+FaJ
-	 oYkQUPdyB5rnwPOcahsiSoxIRX8C8I3LdDo83wRTzVMWnPtY8f86QrKptpyUb2D3q7
-	 84I4Fp8F+ymJiXdVanMZ6iT5HcDcvQuF1zVQF5pw=
-From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Date: Mon, 29 Jul 2024 22:43:30 +0200
-Subject: [PATCH 1/5] bpf: Constify ctl_table argument of filter function
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Zs97CoVA"
+Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-2cb7cd6f5f2so2883068a91.2
+        for <bpf@vger.kernel.org>; Mon, 29 Jul 2024 13:58:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1722286701; x=1722891501; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=N9uSNgkqboHdYWPSPQXHmNVFn+KcANAci377u7Br/xE=;
+        b=Zs97CoVAbS75fbK4qITcPLb+CjeHdDsyFN9KJeIFeZ4HvNPCAKY1tUweI8F23UHMb9
+         RuIiwerrFExlnhMa09aXviWBUC0Cwps4hRQ2Bsa732zz1Z78jFOIE7j3d8VFO+dexGqk
+         I24M5W/HXjlCL3gQ4o4G0xeqEcJDNuTn2vbi9MHAbUCxSd7KCp/UdxthbX+J6PJpN0++
+         cQI0VWLp6fVRJy8Fgn9ACpIq87UHt5RqujXLNEX56nn863v5w5veQvkiAgBaWyqUz66s
+         epROYJc/TOR0usVhd3rGq3Mk2xbMlmHAkAU4kOzRFaZu+s2KfxTzR1h6oBYFMI3KbHwP
+         rezg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1722286701; x=1722891501;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=N9uSNgkqboHdYWPSPQXHmNVFn+KcANAci377u7Br/xE=;
+        b=SMZZJFz60AsE8KlthfCbJf9ucOuf8P3bnjiRNJ7olBz6Rr0jjBUq37ezCmNQdCv2r7
+         02FaVZ2Otmvf7Us/ESdhLwTI2bIxd7gH3m8Ci0d9WXKLQD8LtQ1kViMigX/5Qupk1Q/9
+         bMmrk6N2kmdO4pTVh7QMrYrDLlu2UWo6d+bosgi7dfOG0VMJudzIfOvpPjKjjFR0x3ul
+         57ApGPs4Xv/weDQN839A0Jk/oUOX+GjMoysrgNSJS9MjVCw0bOirFV3Nv1JT/dyIP45V
+         orx0kowZ1CegRwfGaCIgYjWJzpGxcaTC5GayMtV/LcBcsu91Akxryk9bMrxto/nrfhjk
+         WZ0Q==
+X-Forwarded-Encrypted: i=1; AJvYcCVgWff8momVzsNMLRjWBf1/1P5U7Y6/eitnuWT0pcUq6nBi/cyTXvT2QyXA/QsXaYBrXegcC995ejal6y4EU4hGYs8d
+X-Gm-Message-State: AOJu0Yxooeb1lyhnbLh5dxPuPywkpcEmBhrRRkbfXsay43Fcs5JOWjWW
+	Oi5PEj5Ow5OvmZ4PXAv+NCx7k9y+xBiKuLF70vEyqnKdd35YF8unndB5pdpAuiDv8ZQYd1LsEjD
+	MZnfmRsuQ6AuEWSzNyY5lgB1pzpw=
+X-Google-Smtp-Source: AGHT+IFNgxcYfmNm4/LshVlUWJcyZwD9RZ9iE+dRYmU4ESuvVF8+ld0CvY2shdTLiT1EGC9FVhAVzp/VN/pd7m1tnWQ=
+X-Received: by 2002:a17:90b:fd0:b0:2cc:ff56:5be3 with SMTP id
+ 98e67ed59e1d1-2cf7e21687amr10067135a91.19.1722286700909; Mon, 29 Jul 2024
+ 13:58:20 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20240729-sysctl-const-api-v1-1-ca628c7a942c@weissschuh.net>
-References: <20240729-sysctl-const-api-v1-0-ca628c7a942c@weissschuh.net>
-In-Reply-To: <20240729-sysctl-const-api-v1-0-ca628c7a942c@weissschuh.net>
-To: Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
- Martin KaFai Lau <martin.lau@linux.dev>, 
- Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, 
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
- Jiri Olsa <jolsa@kernel.org>, Luis Chamberlain <mcgrof@kernel.org>, 
- Kees Cook <kees@kernel.org>, Joel Granados <j.granados@samsung.com>
-Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-fsdevel@vger.kernel.org, 
- =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-X-Mailer: b4 0.14.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1722285818; l=1677;
- i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=BKEQT8+KYO2Lx+4PYMNXeCjW8FDuqJOIi+Cq4x3uRkQ=;
- b=V0Qa4gSui+7cgZ5N4mQ0QnvGulTtQsNALhcaFCC5bM57lCvZZFFvU2qkRds6yqjax9Apm9nqT
- 9dZvvmZ7vO/A0NE1xZy8d96zTMTvfuDlDYQMsaK8wNk+USsANsZc6uc
-X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
- pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
+References: <CY5PR21MB349314B6ECC4284EA3712FCDD7B42@CY5PR21MB3493.namprd21.prod.outlook.com>
+ <7ab6fbc6-2f05-4bb1-9596-855f276ab997@linux.dev> <CY5PR21MB3493D67300A4005628E8CB8DD7B42@CY5PR21MB3493.namprd21.prod.outlook.com>
+In-Reply-To: <CY5PR21MB3493D67300A4005628E8CB8DD7B42@CY5PR21MB3493.namprd21.prod.outlook.com>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Mon, 29 Jul 2024 13:58:09 -0700
+Message-ID: <CAEf4BzZvMOdL+mL9NxxesyXO-xRCwkJYqQ+GXQVBssF3_jid=w@mail.gmail.com>
+Subject: Re: [EXTERNAL] Re: perf_event_output payload capture flags?
+To: Michael Agun <danielagun@microsoft.com>
+Cc: Yonghong Song <yonghong.song@linux.dev>, "bpf@vger.kernel.org" <bpf@vger.kernel.org>, 
+	"bpf@ietf.org" <bpf@ietf.org>, "dthaler1968@googlemail.com" <dthaler1968@googlemail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-The sysctl core is moving to allow "struct ctl_table" in read-only memory.
-As a preparation for that all functions handling "struct ctl_table" need
-to be able to work with "const struct ctl_table".
-As __cgroup_bpf_run_filter_sysctl() does not modify its table, it can be
-adapted trivially.
+On Fri, Jul 26, 2024 at 4:45=E2=80=AFPM Michael Agun <danielagun@microsoft.=
+com> wrote:
+>
+> CC Dave
+>
+> Thank you.
+>
+> Due to Microsoft policies we avoid reading code with strong licensing (li=
+ke GPL 2.0).
 
-Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
----
- include/linux/bpf-cgroup.h | 2 +-
- kernel/bpf/cgroup.c        | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Linux UAPI headers are licensed as `GPL-2.0 WITH Linux-syscall-note`,
+and see [0]. Will cite it in full below. Doesn't this mean that it's
+fine to read UAPI definitions?
 
-diff --git a/include/linux/bpf-cgroup.h b/include/linux/bpf-cgroup.h
-index fb3c3e7181e6..814a9d1c4a84 100644
---- a/include/linux/bpf-cgroup.h
-+++ b/include/linux/bpf-cgroup.h
-@@ -138,7 +138,7 @@ int __cgroup_bpf_check_dev_permission(short dev_type, u32 major, u32 minor,
- 				      short access, enum cgroup_bpf_attach_type atype);
- 
- int __cgroup_bpf_run_filter_sysctl(struct ctl_table_header *head,
--				   struct ctl_table *table, int write,
-+				   const struct ctl_table *table, int write,
- 				   char **buf, size_t *pcount, loff_t *ppos,
- 				   enum cgroup_bpf_attach_type atype);
- 
-diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
-index 8ba73042a239..429a43746886 100644
---- a/kernel/bpf/cgroup.c
-+++ b/kernel/bpf/cgroup.c
-@@ -1691,7 +1691,7 @@ const struct bpf_verifier_ops cg_dev_verifier_ops = {
-  * returned value != 1 during execution. In all other cases 0 is returned.
-  */
- int __cgroup_bpf_run_filter_sysctl(struct ctl_table_header *head,
--				   struct ctl_table *table, int write,
-+				   const struct ctl_table *table, int write,
- 				   char **buf, size_t *pcount, loff_t *ppos,
- 				   enum cgroup_bpf_attach_type atype)
- {
+SPDX-Exception-Identifier: Linux-syscall-note
+SPDX-URL: https://spdx.org/licenses/Linux-syscall-note.html
+SPDX-Licenses: GPL-2.0, GPL-2.0+, GPL-1.0+, LGPL-2.0, LGPL-2.0+,
+LGPL-2.1, LGPL-2.1+, GPL-2.0-only, GPL-2.0-or-later
+Usage-Guide:
+  This exception is used together with one of the above SPDX-Licenses
+  to mark user space API (uapi) header files so they can be included
+  into non GPL compliant user space application code.
+  To use this exception add it with the keyword WITH to one of the
+  identifiers in the SPDX-Licenses tag:
+    SPDX-License-Identifier: <SPDX-License> WITH Linux-syscall-note
+License-Text:
 
--- 
-2.45.2
+   NOTE! This copyright does *not* cover user programs that use kernel
+ services by normal system calls - this is merely considered normal use
+ of the kernel, and does *not* fall under the heading of "derived work".
+ Also note that the GPL below is copyrighted by the Free Software
+ Foundation, but the instance of code that it refers to (the Linux
+ kernel) is copyrighted by me and others who actually wrote it.
 
+ Also note that the only valid version of the GPL as far as the kernel
+ is concerned is _this_ particular version of the license (ie v2, not
+ v2.2 or v3.x or whatever), unless explicitly otherwise stated.
+
+            Linus Torvalds
+
+
+  [0] https://github.com/torvalds/linux/blob/master/LICENSES/exceptions/Lin=
+ux-syscall-note
+
+>
+> Is there some other documentation of the flags, or could you explain them=
+ in words?
+> Or is that the complete flags description (which is in other documentatio=
+n) and I am misunderstanding the code below?
+>
+> https://github.com/cilium/cilium/blob/3fa44b59eef792e28f70b1fd23e3e17e426=
+909f5/bpf/lib/dbg.h#L229
+>
+> It looks to me here like the capture length is being OR'd into the flags.
+>
+> Any insights would be appreciated.
+>
+> Thanks,
+> Michael
+>
+> ________________________________________
+> From: Yonghong Song <yonghong.song@linux.dev>
+> Sent: Friday, July 26, 2024 9:58 AM
+> To: Michael Agun <danielagun@microsoft.com>; bpf@vger.kernel.org <bpf@vge=
+r.kernel.org>; bpf@ietf.org <bpf@ietf.org>
+> Subject: [EXTERNAL] Re: perf_event_output payload capture flags?
+>
+> [You don't often get email from yonghong.song@linux.dev. Learn why this i=
+s important at https://aka.ms/LearnAboutSenderIdentification ]
+>
+> On 7/25/24 6:42 PM, Michael Agun wrote:
+> > Are the perf_event_output flags (and what the event blob looks like) do=
+cumented? Especially for the program type specific perf_event_output functi=
+ons.
+>
+> The documentation is in uapi/linux/bpf.h header.
+>
+> https://github.com/torvalds/linux/blob/master/include/uapi/linux/bpf.h#L2=
+353-L2397
+>
+>   *         The *flags* are used to indicate the index in *map* for which
+>   *         the value must be put, masked with **BPF_F_INDEX_MASK**.
+>   *         Alternatively, *flags* can be set to **BPF_F_CURRENT_CPU**
+>   *         to indicate that the index of the current CPU core should be
+>   *         used.
+>
+> >
+> > I've seen notes in (cilium) code passing payload lengths in the flags, =
+and am specifically interested in how the event blob is constructed for per=
+f events with payload capture.
+>
+> Could you share more details about 'passing payload lengths in the flags'=
+?
+> AFAIK, networking bpf_perf_event_output() actually utilizes bpf_event_out=
+put_data(),
+> in which 'flags' semantics has the same meaning as the above.
+>
+> >
+> >
+> > Thanks,
+> > Michael
+>
