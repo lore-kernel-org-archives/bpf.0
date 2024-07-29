@@ -1,343 +1,152 @@
-Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
+Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A011F18A930
-	for <bpf@vger.kernel.org>; Mon, 29 Jul 2024 16:46:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A2E978B50;
+	Mon, 29 Jul 2024 16:52:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722271582; cv=none; b=epuZSV2Upg3rBsdMOS6Ad6469NflnhTN5gG+8SWHRcn2F4sGmpe1kQ8+NolJFAtx/w98RhfrDTNzH3iNX/ZXILCR07MuWwSAekBPFADkR6GOX3nQh0EpaupuhgJNRBfIE12xniwkjep1L/LbNBUjfJAkgEJcyZoe8Vi/GsSLk+M=
+	t=1722271953; cv=none; b=S2DqAngKmZj7OG927lpvDYdhuoi98mzTdpAOsbBtHUvus+Z6sCFrqjQbzyxNRhJ1et+E2jhm4zSGjHfpRye0Eu9jP6YqgX8wlk6lYYh0olPZPRIslIO4zDPTAmswzg0L4VyYWu9maUwv9BQPZZO8pcfGj9gkSYCspMtOIDraBns=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722271582; c=relaxed/simple;
-	bh=vcEzXouSW5qhs+WKWJ6j7BThr5Umszy0VJSt4R3KWXE=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=d8CgqCxq9B05FsjLtYhrF+UlROltMTiaSL3wn7BxxQqufcIT2chlT1BwOpgujOzfpftKkcfMlMprE4MZzJszZv+URatu3yP39Vf5aIkizoFhXz3wfsRrcxeOEBhf5UDJVhD+83QGCBM5hMKDLEGuJDNZlYCUJc1HmfeHJ14QHas=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=P6zz1nS1; arc=none smtp.client-ip=209.85.214.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
+	s=arc-20240116; t=1722271953; c=relaxed/simple;
+	bh=RQT5WWRujTcAqltR+0zVcm58GG+9YxEIRL8PNIgQUSs=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=iJaOzyOxdY+uFi42mwsQslwiCzW55Z89oD4tRrAJ50NCKOz7o1OBu2lQHY2KmN3bUzsJnj0rnRf1myl4k83vwc97Eb2ZPiZzN48aXKZXgkmtTArYyUfxdLIr9Q60nxRg7BXHvB++kAVGcFz9TYLBVAvLxrhCN52bJEDWNUNck/E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Yk7y/4lI; arc=none smtp.client-ip=209.85.216.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="P6zz1nS1"
-Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-1fc4fccdd78so20572735ad.2
-        for <bpf@vger.kernel.org>; Mon, 29 Jul 2024 09:46:20 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Yk7y/4lI"
+Received: by mail-pj1-f47.google.com with SMTP id 98e67ed59e1d1-2cd5e3c27c5so2160766a91.3;
+        Mon, 29 Jul 2024 09:52:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1722271580; x=1722876380; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=BW7CGRA85beDZYynJOG3K+o2YMpxrF+HMxsvS/Z8BLI=;
-        b=P6zz1nS1Qk6Oh+bA2gtESUKV0MFqo0sGW6ESrThezO3r8j2MjGd+lofOCCGbUF/dwa
-         ETo0w5q6T8iRFn1kZjwph9A9dd4ODJ377xXiXrNxF6j5A1Y0xhUMbmtk+SQpHIqRxy/0
-         CUQPgYPdFIV4biOdmMyPOHS9GkVyWCH6C7nF52tuLAr/PmD05i8MCg1HBxXb0+67xmBL
-         HcGtAMzRYcDVmPkJ76hwO+EEWH4vSJrr1fcvQOZ6PXkzBu0v10ZEtNikGmpks0h9b49H
-         HfQjfDzuBOZlXUaPkR716dz/Y/KrQeVj0M+052DE/a3E9YWmxoaSpGBUbSghCmnYXVsY
-         U9cg==
+        d=gmail.com; s=20230601; t=1722271951; x=1722876751; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=F1ho5QoGVALlGvO1PPceVK1Uz2j6z5FfEI7hQnwqjGw=;
+        b=Yk7y/4lIQb129jBbiRi89A2K1OUUPd10w3Gm8IJ6dT+p89zMxbHq4e24XXunAQy99i
+         bFPVu8KVNpL214+0VKMGw1PtCNzsJxnV25FLZs6O7klimZcJVCwcofyBUapcK0sNYAWi
+         nSlE9Du9ejhW7XghxBgSsgxRtYaQukPMWsGzIslkFCp0z5O+Ls6+/HCh+/uITs3RMy1S
+         Kv9ypddp4/fEQBw9bhpUi7g1M/tH/kzEwU8giEfQ3lk5V6aNYrfMSP/wx/1E+NQpXVAC
+         rnabWkKfQJF0NtM82R3vpPltZ0e+DpJNmVEnhc6kurJZO31id+Kc/C4zQ99lgL6O9Y5r
+         60ug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722271580; x=1722876380;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1722271951; x=1722876751;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=BW7CGRA85beDZYynJOG3K+o2YMpxrF+HMxsvS/Z8BLI=;
-        b=PU3se96+xdbpxMkLW08i28gtyYI6RI6QPTjyUgE8/DBpGMIXbhDDeLqWlvKPfbt0ZV
-         hoENzYzMUxEduNajqPKu0LBgIuJ+GxN8kzv+2jZeKLEYNAzJO90sKfkTZaV9dCfnYqYs
-         lK78OWKbUjhO355cH0JwZIACRnCENOF3mfpvDvXGS+Pmd0ZpC8PQsvZ9aEwMohuBwPqF
-         ++o5vvq1cPSaXOM0q2zMzYtgMVLQEkZeq70QCp7nj2bnIo5K3DbkHCbVGqFFG7xhLY/J
-         wdFrcU7twJzsXAi6vPos84tgX0r+sgm8KS0/wIu9Z7PRIpByNU7lHoGe2nlkJ0rD53wl
-         ejdw==
-X-Forwarded-Encrypted: i=1; AJvYcCX0f72ssDG35X8FShoM/Wp9tFuIa4PxqkkVmOFKa5dLLuiFxR9RhRg7mfw7Cn8ZHZ+uqO2La0XwiXEQ4WEnq8nVcvZE
-X-Gm-Message-State: AOJu0YyYXKKu5vKls1U9vPi14ch2BiZBhfvE/dU5GvPJO7Xi+7FJhesr
-	LGMAuMWtpnA/6Y9bhgxgWR6gM4Eo3rGj+gS5N3zPaNQvf4t/p8/H6+Fuz4d0/Bo=
-X-Google-Smtp-Source: AGHT+IGT68p/2k5fQAsQJYVblnXyBTkymlHklXNAKKlhKSCjLI+wrBNoURLMQpu2s75WaRqmrTJs/A==
-X-Received: by 2002:a17:903:4298:b0:1fd:3cf9:c7d1 with SMTP id d9443c01a7336-1ff0482be69mr57426615ad.19.1722271579966;
-        Mon, 29 Jul 2024 09:46:19 -0700 (PDT)
-Received: from charlie.ba.rivosinc.com ([64.71.180.162])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1fed7d401c6sm85480545ad.117.2024.07.29.09.46.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Jul 2024 09:46:19 -0700 (PDT)
-From: Charlie Jenkins <charlie@rivosinc.com>
-Date: Fri, 26 Jul 2024 22:29:38 -0700
-Subject: [PATCH v2 8/8] libperf test: Add test_stat_overflow_event()
+        bh=F1ho5QoGVALlGvO1PPceVK1Uz2j6z5FfEI7hQnwqjGw=;
+        b=Ai4gMIflVGDrm4SPlwl1tZO7oesCSKleBa87T+DaCTj+IP/z3v2Hj1uJs59d78MBQZ
+         iZdyyBVw9KKp2yUByUGayG2w9thYdM2t4MgO5NOFFNbo7MKfyHqD5vxQLws5PwWcu1ci
+         X5hUlZZEyTylD3lGK/ibJbYTv/+75nIezdeSPaOGtIaSEBIfq2lSg9eSh3+rXMFdgskk
+         dGfsWmjdfBiBSEHSnsizK5GSzJIzSnIDXWWaMARpE8+fcoTI3iwwjd6gDPYGn28Yl4Yu
+         s1jVeWDcXm6F01hhmlktXF9WFydK55Y9SsWdCZN8hYcXz75gJUYdSQgw9Q5GkutGzXcR
+         K11g==
+X-Forwarded-Encrypted: i=1; AJvYcCUZvfB2NByVTA/KW/7CJldB7W0yE95JJn2IgLOkbdi6V8qHtfUl00ROe3vSc4nQIHvvVYl1S3zsrofo1ea4OP3oK4KAZLzCAV1iToI2Qf3aUhyWytemY1DzK7rcjgseONi7nydeEr8pKsmKReP/oGjdWa97hqZOsNca0KtnForirg==
+X-Gm-Message-State: AOJu0Yzt5YvGrhSA90dpoZr71GPePqQr36P9UbM0rpXN9mYXJamHUw9o
+	UgX3pnmyYzoGjYIvIidBh7QBOXvSgOkYg5iz2BGIl/zJcJVvW8CXtbc/FHY6aHWJ3mSvoEWXGsj
+	kIDOrRJAm2tNo8lL+xRf+2+Kzsi8=
+X-Google-Smtp-Source: AGHT+IFOQKm1kOOY1enndLUmrwVyPkPWD9zlOkNYF4MshasZERBRGWashb+a1LdHxEgXCuM3q9OHW2D9HSs6IbtHY2s=
+X-Received: by 2002:a17:90a:a018:b0:2c9:359c:b0c with SMTP id
+ 98e67ed59e1d1-2cf7e82fdf9mr5911155a91.28.1722271951367; Mon, 29 Jul 2024
+ 09:52:31 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240726-overflow_check_libperf-v2-8-7d154dcf6bea@rivosinc.com>
-References: <20240726-overflow_check_libperf-v2-0-7d154dcf6bea@rivosinc.com>
-In-Reply-To: <20240726-overflow_check_libperf-v2-0-7d154dcf6bea@rivosinc.com>
-To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
- Arnaldo Carvalho de Melo <acme@kernel.org>, 
- Namhyung Kim <namhyung@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
- Alexander Shishkin <alexander.shishkin@linux.intel.com>, 
- Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>, 
- Adrian Hunter <adrian.hunter@intel.com>, 
- Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, 
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>
-Cc: linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org, 
- bpf@vger.kernel.org, Charlie Jenkins <charlie@rivosinc.com>, 
- Shunsuke Nakamura <nakamura.shun@fujitsu.com>
-X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1722271564; l=7556;
- i=charlie@rivosinc.com; s=20231120; h=from:subject:message-id;
- bh=NX8BD2CX09iOEogiAZJc+2h9Y+GaCDx2QBL9DE7jL6c=;
- b=vj4XrZPx2rKNLrg7qQ9zQkLdR+6nTeAcc3FVWqgcDvl00wCiU8f0eW84vn9pbovF0dF0LBn7o
- BXCM/LpaJu1DMdDywG4WOfEvQVKgPjHU1FyIEX12mh4eKyAnU8EZExi
-X-Developer-Key: i=charlie@rivosinc.com; a=ed25519;
- pk=t4RSWpMV1q5lf/NWIeR9z58bcje60/dbtxxmoSfBEcs=
+References: <20240627170900.1672542-1-andrii@kernel.org> <20240627170900.1672542-4-andrii@kernel.org>
+ <CAG48ez3VuVQbbCCPRudOGq8jTVkhH17qe6vv7opuCghHAAd3Zw@mail.gmail.com>
+In-Reply-To: <CAG48ez3VuVQbbCCPRudOGq8jTVkhH17qe6vv7opuCghHAAd3Zw@mail.gmail.com>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Mon, 29 Jul 2024 09:52:19 -0700
+Message-ID: <CAEf4Bza761YA=io2p_E8qSxuOxkkKFF7=RXnK2vDUE4eUdUmBw@mail.gmail.com>
+Subject: Re: [PATCH v6 3/6] fs/procfs: add build ID fetching to PROCMAP_QUERY API
+To: Jann Horn <jannh@google.com>
+Cc: Andrii Nakryiko <andrii@kernel.org>, linux-fsdevel@vger.kernel.org, brauner@kernel.org, 
+	viro@zeniv.linux.org.uk, akpm@linux-foundation.org, 
+	linux-kernel@vger.kernel.org, bpf@vger.kernel.org, gregkh@linuxfoundation.org, 
+	linux-mm@kvack.org, liam.howlett@oracle.com, surenb@google.com, 
+	rppt@kernel.org, adobriyan@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: Shunsuke Nakamura <nakamura.shun@fujitsu.com>
+On Mon, Jul 29, 2024 at 8:48=E2=80=AFAM Jann Horn <jannh@google.com> wrote:
+>
+> On Thu, Jun 27, 2024 at 7:08=E2=80=AFPM Andrii Nakryiko <andrii@kernel.or=
+g> wrote:
+> > The need to get ELF build ID reliably is an important aspect when
+> > dealing with profiling and stack trace symbolization, and
+> > /proc/<pid>/maps textual representation doesn't help with this.
+> [...]
+> > @@ -539,6 +543,21 @@ static int do_procmap_query(struct proc_maps_priva=
+te *priv, void __user *uarg)
+> >                 }
+> >         }
+> >
+> > +       if (karg.build_id_size) {
+> > +               __u32 build_id_sz;
+> > +
+> > +               err =3D build_id_parse(vma, build_id_buf, &build_id_sz)=
+;
+> > +               if (err) {
+> > +                       karg.build_id_size =3D 0;
+> > +               } else {
+> > +                       if (karg.build_id_size < build_id_sz) {
+> > +                               err =3D -ENAMETOOLONG;
+> > +                               goto out;
+> > +                       }
+> > +                       karg.build_id_size =3D build_id_sz;
+> > +               }
+> > +       }
+>
+> The diff doesn't have enough context lines to see it here, but the two
+> closing curly braces above are another copy of exactly the same code
+> block from the preceding patch. The current state in mainline looks
+> like this, with two repetitions of exactly the same block:
 
-Add a test to check overflowed events.
+Yeah, you are right, thanks for the heads up! Seems like a rebase
+screw up which duplicated build_id logic. It doesn't have any negative
+effects besides doing the same work twice (if build ID parsing is
+requested), but I'll definitely will send a fix to drop the
+duplication.
 
-Committer testing:
-
-  $ sudo make tests -C ./tools/lib/perf V=1
-  make: Entering directory '/home/nakamura/build_work/build_kernel/linux-kernel/linux/tools/lib/perf'
-  make -f /home/nakamura/build_work/build_kernel/linux-kernel/linux/tools/build/Makefile.build dir=. obj=libperf
-  make -C /home/nakamura/build_work/build_kernel/linux-kernel/linux/tools/lib/api/ O= libapi.a
-  make -f /home/nakamura/build_work/build_kernel/linux-kernel/linux/tools/build/Makefile.build dir=./fd obj=libapi
-  make -f /home/nakamura/build_work/build_kernel/linux-kernel/linux/tools/build/Makefile.build dir=./fs obj=libapi
-  make -f /home/nakamura/build_work/build_kernel/linux-kernel/linux/tools/build/Makefile.build dir=. obj=tests
-  make -f /home/nakamura/build_work/build_kernel/linux-kernel/linux/tools/build/Makefile.build dir=./tests obj=tests
-  running static:
-  - running tests/test-cpumap.c...OK
-  - running tests/test-threadmap.c...OK
-  - running tests/test-evlist.c...
-
-  <SNIP>
-
-  Event  0 -- overflow flag = 0x1, POLL_HUP = 1, other signal event = 0
-  Event  1 -- overflow flag = 0x2, POLL_HUP = 1, other signal event = 0
-  Event  2 -- overflow flag = 0x4, POLL_HUP = 1, other signal event = 0
-  Event  3 -- overflow flag = 0x8, POLL_HUP = 1, other signal event = 0
-  OK
-  - running tests/test-evsel.c...
-
-  <SNIP>
-
-  OK
-  running dynamic:
-  - running tests/test-cpumap.c...OK
-  - running tests/test-threadmap.c...OK
-  - running tests/test-evlist.c...
-
-  <SNIP>
-
-  Event  0 -- overflow flag = 0x1, POLL_HUP = 1, other signal event = 0
-  Event  1 -- overflow flag = 0x2, POLL_HUP = 1, other signal event = 0
-  Event  2 -- overflow flag = 0x4, POLL_HUP = 1, other signal event = 0
-  Event  3 -- overflow flag = 0x8, POLL_HUP = 1, other signal event = 0
-  OK
-  - running tests/test-evsel.c...
-
-  <SNIP>
-
-  OK
-  make: Leaving directory '/home/nakamura/build_work/build_kernel/linux-kernel/linux/tools/lib/perf'
-
-Signed-off-by: Shunsuke Nakamura <nakamura.shun@fujitsu.com>
-Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
----
- tools/lib/perf/tests/test-evlist.c | 111 +++++++++++++++++++++++++++++++++++++
- tools/lib/perf/tests/test-evsel.c  |  20 +++----
- 2 files changed, 121 insertions(+), 10 deletions(-)
-
-diff --git a/tools/lib/perf/tests/test-evlist.c b/tools/lib/perf/tests/test-evlist.c
-index 3a833f0349d3..7bfceb8e0c66 100644
---- a/tools/lib/perf/tests/test-evlist.c
-+++ b/tools/lib/perf/tests/test-evlist.c
-@@ -5,6 +5,8 @@
- #include <stdarg.h>
- #include <unistd.h>
- #include <stdlib.h>
-+#include <string.h>
-+#include <fcntl.h>
- #include <linux/perf_event.h>
- #include <linux/limits.h>
- #include <sys/types.h>
-@@ -24,6 +26,13 @@
- #define EVENT_NUM 15
- #define WAIT_COUNT 100000000UL
- 
-+static unsigned int overflow_flag;
-+static struct signal_counts {
-+	int hup;
-+	int others;
-+} sig_count;
-+static struct perf_evlist *s_evlist;
-+
- static int libperf_print(enum libperf_print_level level,
- 			 const char *fmt, va_list ap)
- {
-@@ -570,6 +579,107 @@ static int test_stat_multiplexing(void)
- 	return 0;
- }
- 
-+static void sig_handler(int signo, siginfo_t *info, void *uc)
-+{
-+	struct perf_evsel *evsel;
-+	int i = 0;
-+
-+	perf_evlist__for_each_evsel(s_evlist, evsel) {
-+		if (perf_evsel__has_fd(evsel, info->si_fd)) {
-+			if (info->si_code == POLL_HUP)
-+				sig_count.hup++;
-+			else
-+				sig_count.others++;
-+
-+			overflow_flag = (1U << i);
-+			return;
-+		}
-+		i++;
-+	}
-+
-+	__T_VERBOSE("Failed to get fd of overflowed event");
-+}
-+
-+static int test_stat_overflow_event(void)
-+{
-+	static struct sigaction sigact;
-+
-+	struct perf_thread_map *threads;
-+	struct perf_evsel *evsel;
-+	struct perf_event_attr attr = {
-+		.type		= PERF_TYPE_SOFTWARE,
-+		.config		= PERF_COUNT_SW_CPU_CLOCK,
-+		.sample_type	= PERF_SAMPLE_PERIOD,
-+		.sample_period	= 100000,
-+		.disabled	= 1,
-+	};
-+	int err, i, event_num = 4;
-+
-+	LIBPERF_OPTS(perf_evsel_open_opts, opts,
-+		     .open_flags	= PERF_FLAG_FD_CLOEXEC,
-+		     .fcntl_flags	= (O_RDWR | O_NONBLOCK | O_ASYNC),
-+		     .signal		= SIGRTMIN + 1,
-+		     .owner_type	= F_OWNER_PID,
-+		     .sigact		= &sigact);
-+
-+	/* setup signal handler */
-+	memset(&sigact, 0, sizeof(struct sigaction));
-+	sigact.sa_sigaction = (void *)sig_handler;
-+	sigact.sa_flags = SA_SIGINFO;
-+
-+	threads = perf_thread_map__new_dummy();
-+	__T("failed to create threads", threads);
-+
-+	perf_thread_map__set_pid(threads, 0, 0);
-+
-+	s_evlist = perf_evlist__new();
-+	__T("failed to create evlist", s_evlist);
-+
-+	for (i = 0; i < event_num; i++) {
-+		evsel = perf_evsel__new(&attr);
-+		__T("failed to create evsel", evsel);
-+
-+		perf_evlist__add(s_evlist, evsel);
-+	}
-+
-+	perf_evlist__set_maps(s_evlist, NULL, threads);
-+
-+	err = perf_evlist__open_opts(s_evlist, &opts);
-+	__T("failed to open evlist", err == 0);
-+
-+	i = 0;
-+	perf_evlist__for_each_evsel(s_evlist, evsel) {
-+		volatile unsigned int wait_count = WAIT_COUNT;
-+
-+		overflow_flag = 0;
-+		sig_count.hup = 0;
-+		sig_count.others = 0;
-+
-+		err = perf_evsel__refresh(evsel, 1);
-+		__T("failed to refresh evsel", err == 0);
-+
-+		while (wait_count--)
-+			;
-+
-+		__T_VERBOSE("Event %2d -- overflow flag = %#x, ",
-+			    i, overflow_flag);
-+		__T_VERBOSE("POLL_HUP = %d, other signal event = %d\n",
-+			    sig_count.hup, sig_count.others);
-+
-+		__T("unexpected event overflow detected", overflow_flag && (1U << i));
-+		__T("unexpected signal event detected",
-+		    sig_count.hup == 1 && sig_count.others == 0);
-+
-+		i++;
-+	}
-+
-+	perf_evlist__close(s_evlist);
-+	perf_evlist__delete(s_evlist);
-+	perf_thread_map__put(threads);
-+
-+	return 0;
-+}
-+
- int test_evlist(int argc, char **argv)
- {
- 	__T_START;
-@@ -582,6 +692,7 @@ int test_evlist(int argc, char **argv)
- 	test_mmap_thread();
- 	test_mmap_cpus();
- 	test_stat_multiplexing();
-+	test_stat_overflow_event();
- 
- 	__T_END;
- 	return tests_failed == 0 ? 0 : -1;
-diff --git a/tools/lib/perf/tests/test-evsel.c b/tools/lib/perf/tests/test-evsel.c
-index b27dd65f2ec9..56f4ae20e922 100644
---- a/tools/lib/perf/tests/test-evsel.c
-+++ b/tools/lib/perf/tests/test-evsel.c
-@@ -15,7 +15,7 @@
- #include <internal/tests.h>
- #include "tests.h"
- 
--#define WAIT_COUNT 10000000UL
-+#define WAIT_COUNT 100000000UL
- static struct signal_counts {
- 	int in;
- 	int hup;
-@@ -380,7 +380,7 @@ static void sig_handler(int signo, siginfo_t *info, void *uc)
- 
- static int test_stat_overflow(int owner)
- {
--	static struct sigaction sig;
-+	static struct sigaction sigact;
- 	u64 period = 1000000;
- 	int overflow_limit = 3;
- 
-@@ -396,16 +396,16 @@ static int test_stat_overflow(int owner)
- 	int err = 0, i;
- 
- 	LIBPERF_OPTS(perf_evsel_open_opts, opts,
--		     .open_flags = PERF_FLAG_FD_CLOEXEC,
--		     .flags	 = (O_RDWR | O_NONBLOCK | O_ASYNC),
--		     .signal	 = SIGRTMIN + 1,
--		     .owner_type = owner,
--		     .sig	 = &sig);
-+		     .open_flags	= PERF_FLAG_FD_CLOEXEC,
-+		     .fcntl_flags	= (O_RDWR | O_NONBLOCK | O_ASYNC),
-+		     .signal		= SIGRTMIN + 1,
-+		     .owner_type	= owner,
-+		     .sigact		= &sigact);
- 
- 	/* setup signal handler */
--	memset(&sig, 0, sizeof(struct sigaction));
--	sig.sa_sigaction = (void *)sig_handler;
--	sig.sa_flags = SA_SIGINFO;
-+	memset(&sigact, 0, sizeof(struct sigaction));
-+	sigact.sa_sigaction = (void *)sig_handler;
-+	sigact.sa_flags = SA_SIGINFO;
- 
- 	threads = perf_thread_map__new_dummy();
- 	__T("failed to create threads", threads);
-
--- 
-2.44.0
-
+>
+> [...]
+>                 karg.dev_minor =3D 0;
+>                 karg.inode =3D 0;
+>         }
+>
+>         if (karg.build_id_size) {
+>                 __u32 build_id_sz;
+>
+>                 err =3D build_id_parse(vma, build_id_buf, &build_id_sz);
+>                 if (err) {
+>                         karg.build_id_size =3D 0;
+>                 } else {
+>                         if (karg.build_id_size < build_id_sz) {
+>                                 err =3D -ENAMETOOLONG;
+>                                 goto out;
+>                         }
+>                         karg.build_id_size =3D build_id_sz;
+>                 }
+>         }
+>
+>         if (karg.build_id_size) {
+>                 __u32 build_id_sz;
+>
+>                 err =3D build_id_parse(vma, build_id_buf, &build_id_sz);
+>                 if (err) {
+>                         karg.build_id_size =3D 0;
+>                 } else {
+>                         if (karg.build_id_size < build_id_sz) {
+>                                 err =3D -ENAMETOOLONG;
+>                                 goto out;
+>                         }
+>                         karg.build_id_size =3D build_id_sz;
+>                 }
+>         }
+>
+>         if (karg.vma_name_size) {
+> [...]
