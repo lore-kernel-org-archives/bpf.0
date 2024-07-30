@@ -1,173 +1,143 @@
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [217.70.183.195])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F5C5166316
-	for <bpf@vger.kernel.org>; Tue, 30 Jul 2024 11:50:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 655ED195F22;
+	Tue, 30 Jul 2024 11:59:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722340254; cv=none; b=pWw5LnErc8Z88rpAL5Bz9f2OxMfFDxqZ7Ex0t63ZA4GxWW1oReEsXAw9cuBq6mDuDLQkqR/F0Iw+VypsCemu71GBjXeNKR73NX13Gzk6G32h2ONBIz6ImGZNdW7kMK8yuIXEFO3ITJ8qtW6bHUiaLg05E6+u3G29VtWR9OiUWkA=
+	t=1722340775; cv=none; b=LYlzeiwWu3S5QKZwyYpqAy2mP6Y81+OgGwwep5+ize5aUnFczrETCPZznCJgNRLLIpiUqjsnM6UmFOKXRbqpBs2pCUk524+LVeXFElKxkYKcWhkSOuqKzEnYLeBStDvZ66zL3XaqM2eJcL9TTsYYUU0j2ITSfgVpwRWnbqyvGMk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722340254; c=relaxed/simple;
-	bh=/Gur3ofaBDV/CQBYfPljGCUWCgNZq+TErEX6GZE/i04=;
-	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
-	 In-Reply-To:Content-Type; b=Xih+jO/2gXMXKpxLYUbDd1mxzcnEWeNUyxDJWR4nNiXrD/QQ266GTSAyaN3aUP4MIr5pGyYR8SwYZDY16GzwOZSJv9k/wIH1TLSCwdKFXJE2vtjgSVmr6qQTfZ2mvIw0kG5Cv66U0f9a5wDB+c7qaj3mPznU/F/JsqDImjMGguQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZDXlJQbZ; arc=none smtp.client-ip=209.85.128.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1722340775; c=relaxed/simple;
+	bh=bFng46TywWA1qcwiXCQr+6wwB4FqtiDuuvEwXl3opRU=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=MWIzDHexVkclW0m5x6J//ac0FazPEOahYZjibU0F3NtBnlRi7W2DTKlPrd4T49or2CytxSYmab94y0MieG34TtVMzpbnahlkHC66xWyHN9pN1edAft1deA5c2f0op/OQ+3Ugp4vJfq6IcjWjnXRAWVgt87vG+XRGD+GFZUvT91M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=P80rYNQw; arc=none smtp.client-ip=217.70.183.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZDXlJQbZ"
-Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-427b1d4da32so16233525e9.0
-        for <bpf@vger.kernel.org>; Tue, 30 Jul 2024 04:50:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1722340250; x=1722945050; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-language:in-reply-to:mime-version
-         :user-agent:date:message-id:from:references:cc:to:subject:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/T48/fichyDTbOCumPADzryXKhO1LLQwnEtgQ2EPaaA=;
-        b=ZDXlJQbZjilahi5xGK7eKhH/0fXCfWwUTDpWiSZZiTQQU8c5BbPLGGfXv51uiUftqt
-         unMz+lVP5inWavNDyQO0g40Kn+RHeE4Wk6ZEbJf18eHDTq0FeyY6NcAFSMixJl1a/FX/
-         M78tmhrxT0D283rFv2ddaET/Lo1d0CkBOvldkxFv7ZL7T0jSF0wQYltSGXte2B+fnxSf
-         iuIS2AfoWu53fNV1o3gwGTyMGvFfDAT5/lldlV+KSHnHxbm6Ddhz9Oy8NXaqoH2AH6Dz
-         gtgSOIdb8cHBbz3ANns+o2pXnyVbFqQ2wKokjrdF1kGtlfwJ/ZFi+Cd/naC21f+0Amqo
-         q5wg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722340250; x=1722945050;
-        h=content-transfer-encoding:content-language:in-reply-to:mime-version
-         :user-agent:date:message-id:from:references:cc:to:subject
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/T48/fichyDTbOCumPADzryXKhO1LLQwnEtgQ2EPaaA=;
-        b=Rf9mrPNQbLD/Ugt5uqKUq6DnRZ/oFQ+nu9p6QytAjFYuaVXYit+DUMdkpfAe9zgWvC
-         8Ia2GeUEzSNjFDE32C5qRe7clvDDFxwjG1obdp8RZxHXCZLzb1x8jfVnCPgIUMR4Rdcb
-         lLmAnuJ+Fl7zM8QozV2ptz1RCme0yXzT3bAhkmXBP7cHVnD4XgkNYJKravx4DHDQ808q
-         EPpFcb1FnhBesgSYw6Gj+syKsWffDcsxl/Gj21+R0X+GLjiv5DNP/q2gKf9CYd4SqCtu
-         Hr+yp/t8Y9zkTgzvMQrxEri7mVqtXuMHK18F0eiuDFR8xHa40jytZMJAPkYtq8t0D8pi
-         cjLA==
-X-Forwarded-Encrypted: i=1; AJvYcCUkmHnIYy6QvYKj6sW/9+Y0A/r3noDQ3yhgeBbhCqO3dQsoIxd/KDCxJHzvUTgeZQKzaAGVHacJfHzIQZz2s7lI0n/j
-X-Gm-Message-State: AOJu0Ywo4xqvktPVg05Qa3K4tHCzCvF5wZaWAynyq3EabpAxaZHbJJLi
-	4gEQINOIiuWP08f/HDILGqpIyvjneZM7rGQ6JiFZd3QCBasnq0mL
-X-Google-Smtp-Source: AGHT+IFUraZa+rGLwO1dY8KOrau+eiIRKtZ+2dXCo4DRo62WivkFpMIMzxZG/7u+CYTa58OQ3bjGaA==
-X-Received: by 2002:a5d:4e87:0:b0:368:3b89:df1d with SMTP id ffacd0b85a97d-36b8c8fdbe7mr1309933f8f.22.1722340250190;
-        Tue, 30 Jul 2024 04:50:50 -0700 (PDT)
-Received: from [192.168.1.122] (cpc159313-cmbg20-2-0-cust161.5-4.cable.virginm.net. [82.0.78.162])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-36b367c0344sm14635731f8f.2.2024.07.30.04.50.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 Jul 2024 04:50:49 -0700 (PDT)
-Subject: Re: [RFC bpf-next v1] bpf, verifier: improve signed ranges inference
- for BPF_AND
-To: Shung-Hsi Yu <shung-hsi.yu@suse.com>, Xu Kuohai
- <xukuohai@huaweicloud.com>, bpf@vger.kernel.org
-Cc: Eduard Zingerman <eddyz87@gmail.com>, Alexei Starovoitov
- <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- John Fastabend <john.fastabend@gmail.com>,
- Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
- <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>,
- Harishankar Vishwanathan <harishankar.vishwanathan@gmail.com>,
- Santosh Nagarakatte <santosh.nagarakatte@rutgers.edu>,
- Srinivas Narayana <srinivas.narayana@rutgers.edu>,
- Matan Shachnai <m.shachnai@rutgers.edu>
-References: <20240719081702.137173-1-shung-hsi.yu@suse.com>
-From: Edward Cree <ecree.xilinx@gmail.com>
-Message-ID: <9505522b-de45-cf52-162b-76a3a52a6efe@gmail.com>
-Date: Tue, 30 Jul 2024 12:50:48 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="P80rYNQw"
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 3588E60009;
+	Tue, 30 Jul 2024 11:59:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1722340766;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=hnKLsdQUhtO0HXqkcJaopxOibAnUmKmSBAHLuOVe3/0=;
+	b=P80rYNQw9XW0VIIJ+VZjytrSHFU7k1MaZP6iVQf5HZNJIMyVjaP1qTReR3Z5UvunSnaWRY
+	8yUA5DPzzFnCL67bQ9QWw/gx58mNk18kyzfp2tAXjvPCRb+cDLSFHP8K4YRDSVpplDZBXi
+	dDIdrXUC0qNpGjdQXWW53853YaH6Xp4qp8HADSJN6VYEKgUGWkEoDzw0VsgJXyPf1FEGJy
+	FWsXYkHMY5pjCoq6BP1V0lHqwT9VZfrhl4TG8YvxKBtSef4iZ4RmV9MZX3oMOUVBa6aNay
+	zotpigNKg5kz4PLU4/RbTJNX77NEra70HpSosyuu/BF7VdOUFoWanWHoSklzhQ==
+From: =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
+Date: Tue, 30 Jul 2024 13:59:11 +0200
+Subject: [PATCH bpf-next v3 1/3] selftests/bpf: do not disable /dev/null
+ device access in cgroup dev test
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20240719081702.137173-1-shung-hsi.yu@suse.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-GB
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
+Message-Id: <20240730-convert_dev_cgroup-v3-1-93e573b74357@bootlin.com>
+References: <20240730-convert_dev_cgroup-v3-0-93e573b74357@bootlin.com>
+In-Reply-To: <20240730-convert_dev_cgroup-v3-0-93e573b74357@bootlin.com>
+To: Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, 
+ Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, 
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+ Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>, 
+ Shuah Khan <shuah@kernel.org>
+Cc: ebpf@linuxfoundation.org, 
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
+ Alan Maguire <alan.maguire@oracle.com>, bpf@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
+X-Mailer: b4 0.14.1
+X-GND-Sasl: alexis.lothore@bootlin.com
 
-On 19/07/2024 09:17, Shung-Hsi Yu wrote:
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 8da132a1ef28..f6827f9e2076 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -13466,6 +13466,40 @@ static void scalar_min_max_mul(struct bpf_reg_state *dst_reg,
->  	}
->  }
->  
-> +/* Clears all trailing bits after the most significant unset bit.
-> + *
-> + * Used for estimating the minimum possible value after BPF_AND. This
-> + * effectively rounds a negative value down to a negative power-of-2 value
-> + * (except for -1, which just return -1) and returning 0 for non-negative
-> + * values. E.g. negative32_bit_floor(0xff0ff0ff) == 0xff000000.
-> + */
-> +static inline s32 negative32_bit_floor(s32 v)
-> +{
-> +	u8 bits = fls(~v); /* find most-significant unset bit */
-> +	u32 delta;
-> +
-> +	/* special case, needed because 1UL << 32 is undefined */
-> +	if (bits > 31)
-> +		return 0;
+test_dev_cgroup currently loads a small bpf program allowing any access on
+urandom and zero devices, disabling access to any other device. It makes
+migrating this test to test_progs impossible, since this one manipulates
+extensively /dev/null.
 
-If I'm understanding correctly: this case happens when the input
- is nonnegative: v >= 0 means ~v's msb is set, so fls(~v) = 32.
-Might be worth calling that out in the comment.
+Allow /dev/null manipulation in dev_cgroup program to make its usage in
+test_progs framework possible. Update test_dev_cgroup.c as well to match
+this change while it has not been removed.
 
-> +
-> +	delta = (1UL << bits) - 1;
-> +	return ~delta;
-> +}
-> +
-> +/* Same as negative32_bit_floor() above, but for 64-bit signed value */
-> +static inline s64 negative_bit_floor(s64 v)
-> +{
-> +	u8 bits = fls64(~v); /* find most-significant unset bit */
-> +	u64 delta;
-> +
-> +	/* special case, needed because 1ULL << 64 is undefined */
-> +	if (bits > 63)
-> +		return 0;
-> +
-> +	delta = (1ULL << bits) - 1;
-> +	return ~delta;
-> +}
-> +
->  static void scalar32_min_max_and(struct bpf_reg_state *dst_reg,
->  				 struct bpf_reg_state *src_reg)
->  {
-> @@ -13485,16 +13519,10 @@ static void scalar32_min_max_and(struct bpf_reg_state *dst_reg,
->  	dst_reg->u32_min_value = var32_off.value;
->  	dst_reg->u32_max_value = min(dst_reg->u32_max_value, umax_val);
->  
-> -	/* Safe to set s32 bounds by casting u32 result into s32 when u32
-> -	 * doesn't cross sign boundary. Otherwise set s32 bounds to unbounded.
-> -	 */
-> -	if ((s32)dst_reg->u32_min_value <= (s32)dst_reg->u32_max_value) {
-> -		dst_reg->s32_min_value = dst_reg->u32_min_value;
-> -		dst_reg->s32_max_value = dst_reg->u32_max_value;
-> -	} else {
-> -		dst_reg->s32_min_value = S32_MIN;
-> -		dst_reg->s32_max_value = S32_MAX;
-> -	}
-> +	/* Handle the [-1, 0] & -CONSTANT case that's difficult for tnum */
-> +	dst_reg->s32_min_value = negative32_bit_floor(min(dst_reg->s32_min_value,
-> +							  src_reg->s32_min_value));
-> +	dst_reg->s32_max_value = max(dst_reg->s32_max_value, src_reg->s32_max_value);
+Signed-off-by: Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
+---
+ tools/testing/selftests/bpf/progs/dev_cgroup.c |  4 ++--
+ tools/testing/selftests/bpf/test_dev_cgroup.c  | 18 +++++++++---------
+ 2 files changed, 11 insertions(+), 11 deletions(-)
 
-Either comment or commit message could maybe point out that the
- work the deleted code was doing (propagating u32 bounds into
- s32) is done by the caller later via __reg_deduce_bounds().
+diff --git a/tools/testing/selftests/bpf/progs/dev_cgroup.c b/tools/testing/selftests/bpf/progs/dev_cgroup.c
+index 79b54a4fa244..c1dfbd2b56fc 100644
+--- a/tools/testing/selftests/bpf/progs/dev_cgroup.c
++++ b/tools/testing/selftests/bpf/progs/dev_cgroup.c
+@@ -41,14 +41,14 @@ int bpf_prog1(struct bpf_cgroup_dev_ctx *ctx)
+ 	bpf_trace_printk(fmt, sizeof(fmt), ctx->major, ctx->minor);
+ #endif
+ 
+-	/* Allow access to /dev/zero and /dev/random.
++	/* Allow access to /dev/null and /dev/urandom.
+ 	 * Forbid everything else.
+ 	 */
+ 	if (ctx->major != 1 || type != BPF_DEVCG_DEV_CHAR)
+ 		return 0;
+ 
+ 	switch (ctx->minor) {
+-	case 5: /* 1:5 /dev/zero */
++	case 3: /* 1:3 /dev/null */
+ 	case 9: /* 1:9 /dev/urandom */
+ 		return 1;
+ 	}
+diff --git a/tools/testing/selftests/bpf/test_dev_cgroup.c b/tools/testing/selftests/bpf/test_dev_cgroup.c
+index adeaf63cb6fa..33f544f0005a 100644
+--- a/tools/testing/selftests/bpf/test_dev_cgroup.c
++++ b/tools/testing/selftests/bpf/test_dev_cgroup.c
+@@ -54,25 +54,25 @@ int main(int argc, char **argv)
+ 		goto err;
+ 	}
+ 
+-	/* All operations with /dev/zero and and /dev/urandom are allowed,
++	/* All operations with /dev/null and /dev/urandom are allowed,
+ 	 * everything else is forbidden.
+ 	 */
+-	assert(system("rm -f /tmp/test_dev_cgroup_null") == 0);
+-	assert(system("mknod /tmp/test_dev_cgroup_null c 1 3"));
+-	assert(system("rm -f /tmp/test_dev_cgroup_null") == 0);
+-
+-	/* /dev/zero is whitelisted */
+ 	assert(system("rm -f /tmp/test_dev_cgroup_zero") == 0);
+-	assert(system("mknod /tmp/test_dev_cgroup_zero c 1 5") == 0);
++	assert(system("mknod /tmp/test_dev_cgroup_zero c 1 5"));
+ 	assert(system("rm -f /tmp/test_dev_cgroup_zero") == 0);
+ 
+-	assert(system("dd if=/dev/urandom of=/dev/zero count=64") == 0);
++	/* /dev/null is whitelisted */
++	assert(system("rm -f /tmp/test_dev_cgroup_null") == 0);
++	assert(system("mknod /tmp/test_dev_cgroup_null c 1 3") == 0);
++	assert(system("rm -f /tmp/test_dev_cgroup_null") == 0);
++
++	assert(system("dd if=/dev/urandom of=/dev/null count=64") == 0);
+ 
+ 	/* src is allowed, target is forbidden */
+ 	assert(system("dd if=/dev/urandom of=/dev/full count=64"));
+ 
+ 	/* src is forbidden, target is allowed */
+-	assert(system("dd if=/dev/random of=/dev/zero count=64"));
++	assert(system("dd if=/dev/random of=/dev/null count=64"));
+ 
+ 	error = 0;
+ 	printf("test_dev_cgroup:PASS\n");
 
-It's a bit of a shame that we can't get the sharp bound
- [-13, 0] in your example, for which we technically have the
- information we need — src_reg being constant means its tnum
- carries information that negative_bit_floor(smin_value) is
- throwing away — but I don't see an efficient way to handle
- the case (it happens basically because only one operand
- crosses the sign boundary, so the other operand's tnum is
- informative) without going down the range-splitting road you
- (I think rightly) discarded as unnecessarily complex.
+-- 
+2.45.2
 
-Apart from that this all LGTM, so:
-Reviewed-by: Edward Cree <ecree.xilinx@gmail.com>
