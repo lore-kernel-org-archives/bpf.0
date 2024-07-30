@@ -1,249 +1,221 @@
-Received: from out30-110.freemail.mail.aliyun.com (out30-110.freemail.mail.aliyun.com [115.124.30.110])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D868D18FDC0;
-	Tue, 30 Jul 2024 08:17:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.110
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2FE1188CBD
+	for <bpf@vger.kernel.org>; Tue, 30 Jul 2024 08:22:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722327468; cv=none; b=hOg1EnHun6w2sxRk/sNH5oKq+3V8bWRg+3hbY3ve4Io0pAAIWMY0KhG+gMl22lNb9a+akU34KXUXi3lfZfG02akaWrJ3CaX8BenoJr8ICN6WDUUARZcoxKsUTRDva0C6i9zWdRHJz9K6co1VNn77HXRajstnSnFUQsiL1uvX+0k=
+	t=1722327730; cv=none; b=qMjtMXOj4S7tnJU251tnUu3pfvq9FV2bb4ITK12Tga3Ejk0Y8ef+mn1YPWVUIJTVxV662JWgzgJKI4v6RvgQNwnYfA+WBi+TSS0UiMh+rymlRBYiZZkhtD7JD/uqFswhfnywLmZ4JxqbnHJk0xeJDIzshWRF01ovGVwykLobrGc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722327468; c=relaxed/simple;
-	bh=SoTuAhXH8DAcGS2Zg9eo9Y+q6LWEAmfzEF5TC+h8Cco=;
-	h=Message-ID:Subject:Date:From:To:Cc:References:In-Reply-To; b=KrgrT3Qo+/mHbCDS077VXDGPGIE/LZkJC5b9b4hZfNWWI7J6ZhGwBn6NwFd9kihaSydUWRA1Uu5ZeTTUPu7XwotuNo6xcTcmwDURYQI2y4w7HZ54tliBtgVszYrJv66Rglbu3iPoC3TMopfw8ZSDBSIwJfbEKZRI1PfJDR21G+U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=K0SNL6uI; arc=none smtp.client-ip=115.124.30.110
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
+	s=arc-20240116; t=1722327730; c=relaxed/simple;
+	bh=zlLvkfB6nHfIqOkTOl9zHCG1pW4blpqkJHvz6DHFM6k=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=GEC4FMm2CDiZW6IC2ttLW/R+5FpeSjza8SFhY5L0zQ5td/7zZW4GZUIqCuQO84wYL1VR/LP6ki7Z7S1A/8jZm3mGq9hu75A5XHc85tsY2+R4xb0fwsFVdJxHd2F0jxEPMRBeryF+zKxWUl/1RT3NsBL4xjKlq7fSw/4waG69RhI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=CGkpZbVp; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="K0SNL6uI"
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux.alibaba.com; s=default;
-	t=1722327455; h=Message-ID:Subject:Date:From:To;
-	bh=BL5MMNWBxRZiD5bwdc51aQGuezbk7sZ94pe6i1nz4Vo=;
-	b=K0SNL6uIC0eITT6Ch2r7BogGPhKmMDjZy9Nxz+6Qhajjb1Vgq/5wlNA9xcpE72fmkEEE7MYawZrvsms1DS5GczCXuJHg1wM70Cz7KiIdGiCXxcAwrzA7UdmVW+UJmSxEwAkF5AoIWCTtZnkCxdajJydcKxgpmyWuYlcQLFHpbj4=
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R101e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033037067113;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=53;SR=0;TI=SMTPD_---0WBexhuz_1722327451;
-Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0WBexhuz_1722327451)
-          by smtp.aliyun-inc.com;
-          Tue, 30 Jul 2024 16:17:32 +0800
-Message-ID: <1722327259.5659568-1-xuanzhuo@linux.alibaba.com>
-Subject: Re: [PATCH net-next v17 01/14] netdev: add netdev_rx_queue_restart()
-Date: Tue, 30 Jul 2024 16:14:19 +0800
-From: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-To: Mina Almasry <almasrymina@google.com>
-Cc: Mina Almasry <almasrymina@google.com>,
- "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>,
- Donald Hunter <donald.hunter@gmail.com>,
- Jonathan Corbet <corbet@lwn.net>,
- Richard Henderson <richard.henderson@linaro.org>,
- Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
- Matt Turner <mattst88@gmail.com>,
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
- "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
- Helge Deller <deller@gmx.de>,
- Andreas Larsson <andreas@gaisler.com>,
- Jesper Dangaard Brouer <hawk@kernel.org>,
- Ilias Apalodimas <ilias.apalodimas@linaro.org>,
- Steven Rostedt <rostedt@goodmis.org>,
- Masami Hiramatsu <mhiramat@kernel.org>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Arnd Bergmann <arnd@arndb.de>,
- Steffen Klassert <steffen.klassert@secunet.com>,
- Herbert Xu <herbert@gondor.apana.org.au>,
- David Ahern <dsahern@kernel.org>,
- Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
- Shuah Khan <shuah@kernel.org>,
- Sumit Semwal <sumit.semwal@linaro.org>,
- =?utf-8?q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
- Bagas Sanjaya <bagasdotme@gmail.com>,
- Christoph Hellwig <hch@infradead.org>,
- Nikolay Aleksandrov <razor@blackwall.org>,
- Taehee Yoo <ap420073@gmail.com>,
- Pavel Begunkov <asml.silence@gmail.com>,
- David Wei <dw@davidwei.uk>,
- Jason Gunthorpe <jgg@ziepe.ca>,
- Yunsheng Lin <linyunsheng@huawei.com>,
- Shailend Chand <shailend@google.com>,
- Harshitha Ramamurthy <hramamurthy@google.com>,
- Shakeel Butt <shakeel.butt@linux.dev>,
- Jeroen de Borst <jeroendb@google.com>,
- Praveen Kaligineedi <pkaligineedi@google.com>,
- netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org,
- linux-doc@vger.kernel.org,
- linux-alpha@vger.kernel.org,
- linux-mips@vger.kernel.org,
- linux-parisc@vger.kernel.org,
- sparclinux@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org,
- linux-arch@vger.kernel.org,
- linux-kselftest@vger.kernel.org,
- bpf@vger.kernel.org,
- linux-media@vger.kernel.org,
- dri-devel@lists.freedesktop.org
-References: <20240730022623.98909-1-almasrymina@google.com>
- <20240730022623.98909-2-almasrymina@google.com>
-In-Reply-To: <20240730022623.98909-2-almasrymina@google.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="CGkpZbVp"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1722327727;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=b/IhPTVrwNuelKzGXqZiTkO3FsriRH/0wyKH+Wqzb38=;
+	b=CGkpZbVppZh28Oi50sCbV9J2NgNluHoTxTJHIgisVuEU1r+h15NkDzujUWvgHyNExhrgzx
+	hI5xN4AzPEQayp/VcTPYrKA9MGp/XzaM/7jqFoSyQmQGetLQ7CbK96TPEUOyczXhCEb0ZM
+	uepk1zAS6Ub+iLTrU19qT1AYwb6ehJY=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-103-BYY6EAnlObWYpwSPNfl5tA-1; Tue, 30 Jul 2024 04:22:06 -0400
+X-MC-Unique: BYY6EAnlObWYpwSPNfl5tA-1
+Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-4280ec5200cso23598055e9.0
+        for <bpf@vger.kernel.org>; Tue, 30 Jul 2024 01:22:05 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1722327725; x=1722932525;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=b/IhPTVrwNuelKzGXqZiTkO3FsriRH/0wyKH+Wqzb38=;
+        b=ixSa/E7vU+SfHPQUfxmpgIBZcZvbEL2obbdfV+qKf2lvwVXslXrlFmbMcE5zCSVePo
+         qM+jPYKsf8OjsmkgNk1YwC/X3HSYvKVvCT1ahS/8EbpvioxcO8fdzh9ne2+D48+67pyp
+         78fNC5of2zG6ICBo46D6Y7qRUV5+he3VQTbufXW+OCZhLwm8w2FrsB804mRGDtXX62D7
+         wzW1VTa3RJ9/kkHlP01y1t5f4WYXbjLbZcSa4feGdNSlHQtw+AOFCf/AryBQYMIkRUgZ
+         uNHksme8bZewP9/guhgR8pG1nDkEdxwOROEbkmg1G0tdBMRo1vyKa4x087ceNebTYdMf
+         8Vmw==
+X-Forwarded-Encrypted: i=1; AJvYcCU/CSi71x23aacAlpE5BLXtY9uXZVv3WIocpk5edOCoi2A9mAj0Yg9o6VKRZ5QKRfpNybD2whlJsy3FEIUv35T3fnCv
+X-Gm-Message-State: AOJu0YxAXfBD4TZL61cux0mcaP4tnhT0v9X9Xyqocn7sedPmDfg2esnC
+	WtKFvwpwNPTmIlV2hoZTZuX7sPNEoUOFRR43iTsW++ohr3maHNCYAPMbr9x9NslmJ55Oeuu6Ex4
+	f+H2NwfHdQHGyEB/L03pefEMJ+NnijtG2OSVkqjj03WchfOvCfw==
+X-Received: by 2002:a05:600c:1551:b0:426:59fe:ac2d with SMTP id 5b1f17b1804b1-42811df6feemr91230875e9.32.1722327724768;
+        Tue, 30 Jul 2024 01:22:04 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IEG73W9sSA9j5TadFSq8iKvQdv6b7fO7acNXZOSHElpNXTnzHiZQyX55WqKLZtnIzVAJf9toA==
+X-Received: by 2002:a05:600c:1551:b0:426:59fe:ac2d with SMTP id 5b1f17b1804b1-42811df6feemr91230145e9.32.1722327723937;
+        Tue, 30 Jul 2024 01:22:03 -0700 (PDT)
+Received: from sgarzare-redhat ([62.205.9.89])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-42824afbe9dsm6396745e9.1.2024.07.30.01.22.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 Jul 2024 01:22:03 -0700 (PDT)
+Date: Tue, 30 Jul 2024 10:22:00 +0200
+From: Stefano Garzarella <sgarzare@redhat.com>
+To: Amery Hung <ameryhung@gmail.com>
+Cc: stefanha@redhat.com, mst@redhat.com, jasowang@redhat.com, 
+	xuanzhuo@linux.alibaba.com, davem@davemloft.net, edumazet@google.com, kuba@kernel.org, 
+	pabeni@redhat.com, kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org, 
+	decui@microsoft.com, bryantan@vmware.com, vdasa@vmware.com, pv-drivers@vmware.com, 
+	dan.carpenter@linaro.org, simon.horman@corigine.com, oxffffaa@gmail.com, 
+	kvm@vger.kernel.org, virtualization@lists.linux-foundation.org, 
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org, linux-hyperv@vger.kernel.org, 
+	bpf@vger.kernel.org, bobby.eshleman@bytedance.com, jiang.wang@bytedance.com, 
+	amery.hung@bytedance.com, xiyou.wangcong@gmail.com
+Subject: Re: [RFC PATCH net-next v6 07/14] virtio/vsock: add common datagram
+ send path
+Message-ID: <obbppqyhstsuh3p3p4v6ipu7gl4z2ufeubvpv3dftyxubdvs5n@f7ugbp62xos7>
+References: <20240710212555.1617795-1-amery.hung@bytedance.com>
+ <20240710212555.1617795-8-amery.hung@bytedance.com>
+ <bpb36dtlbs6osr5cudvwrbagt7bls3cllg35lsusrly5pxwe7o@kjphrbuc64ix>
+ <CAMB2axPwUV9EusNPaemLVx5NN2_1wkq0ney4NazAj7P+WRo=NQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAMB2axPwUV9EusNPaemLVx5NN2_1wkq0ney4NazAj7P+WRo=NQ@mail.gmail.com>
 
-On Tue, 30 Jul 2024 02:26:05 +0000, Mina Almasry <almasrymina@google.com> wrote:
-> Add netdev_rx_queue_restart() function to netdev_rx_queue.h
+On Fri, Jul 26, 2024 at 04:22:16PM GMT, Amery Hung wrote:
+>On Tue, Jul 23, 2024 at 7:42 AM Stefano Garzarella <sgarzare@redhat.com> wrote:
+>>
+>> On Wed, Jul 10, 2024 at 09:25:48PM GMT, Amery Hung wrote:
+>> >From: Bobby Eshleman <bobby.eshleman@bytedance.com>
+>> >
+>> >This commit implements the common function
+>> >virtio_transport_dgram_enqueue for enqueueing datagrams. It does not add
+>> >usage in either vhost or virtio yet.
+>> >
+>> >Signed-off-by: Bobby Eshleman <bobby.eshleman@bytedance.com>
+>> >Signed-off-by: Amery Hung <amery.hung@bytedance.com>
+>> >---
+>> > include/linux/virtio_vsock.h            |  1 +
+>> > include/net/af_vsock.h                  |  2 +
+>> > net/vmw_vsock/af_vsock.c                |  2 +-
+>> > net/vmw_vsock/virtio_transport_common.c | 87 ++++++++++++++++++++++++-
+>> > 4 files changed, 90 insertions(+), 2 deletions(-)
+>> >
+>> >diff --git a/include/linux/virtio_vsock.h b/include/linux/virtio_vsock.h
+>> >index f749a066af46..4408749febd2 100644
+>> >--- a/include/linux/virtio_vsock.h
+>> >+++ b/include/linux/virtio_vsock.h
+>> >@@ -152,6 +152,7 @@ struct virtio_vsock_pkt_info {
+>> >       u16 op;
+>> >       u32 flags;
+>> >       bool reply;
+>> >+      u8 remote_flags;
+>> > };
+>> >
+>> > struct virtio_transport {
+>> >diff --git a/include/net/af_vsock.h b/include/net/af_vsock.h
+>> >index 44db8f2c507d..6e97d344ac75 100644
+>> >--- a/include/net/af_vsock.h
+>> >+++ b/include/net/af_vsock.h
+>> >@@ -216,6 +216,8 @@ void vsock_for_each_connected_socket(struct vsock_transport *transport,
+>> >                                    void (*fn)(struct sock *sk));
+>> > int vsock_assign_transport(struct vsock_sock *vsk, struct vsock_sock *psk);
+>> > bool vsock_find_cid(unsigned int cid);
+>> >+const struct vsock_transport *vsock_dgram_lookup_transport(unsigned int cid,
+>> >+                                                         __u8 flags);
+>>
+>> Why __u8 and not just u8?
+>>
+>
+>Will change to u8.
+>
+>>
+>> >
+>> > struct vsock_skb_cb {
+>> >       unsigned int src_cid;
+>> >diff --git a/net/vmw_vsock/af_vsock.c b/net/vmw_vsock/af_vsock.c
+>> >index ab08cd81720e..f83b655fdbe9 100644
+>> >--- a/net/vmw_vsock/af_vsock.c
+>> >+++ b/net/vmw_vsock/af_vsock.c
+>> >@@ -487,7 +487,7 @@ vsock_connectible_lookup_transport(unsigned int cid, __u8 flags)
+>> >       return transport;
+>> > }
+>> >
+>> >-static const struct vsock_transport *
+>> >+const struct vsock_transport *
+>> > vsock_dgram_lookup_transport(unsigned int cid, __u8 flags)
+>> > {
+>> >       const struct vsock_transport *transport;
+>> >diff --git a/net/vmw_vsock/virtio_transport_common.c b/net/vmw_vsock/virtio_transport_common.c
+>> >index a1c76836d798..46cd1807f8e3 100644
+>> >--- a/net/vmw_vsock/virtio_transport_common.c
+>> >+++ b/net/vmw_vsock/virtio_transport_common.c
+>> >@@ -1040,13 +1040,98 @@ int virtio_transport_shutdown(struct vsock_sock *vsk, int mode)
+>> > }
+>> > EXPORT_SYMBOL_GPL(virtio_transport_shutdown);
+>> >
+>> >+static int virtio_transport_dgram_send_pkt_info(struct vsock_sock *vsk,
+>> >+                                              struct virtio_vsock_pkt_info *info)
+>> >+{
+>> >+      u32 src_cid, src_port, dst_cid, dst_port;
+>> >+      const struct vsock_transport *transport;
+>> >+      const struct virtio_transport *t_ops;
+>> >+      struct sock *sk = sk_vsock(vsk);
+>> >+      struct virtio_vsock_hdr *hdr;
+>> >+      struct sk_buff *skb;
+>> >+      void *payload;
+>> >+      int noblock = 0;
+>> >+      int err;
+>> >+
+>> >+      info->type = virtio_transport_get_type(sk_vsock(vsk));
+>> >+
+>> >+      if (info->pkt_len > VIRTIO_VSOCK_MAX_PKT_BUF_SIZE)
+>> >+              return -EMSGSIZE;
+>> >+
+>> >+      transport = vsock_dgram_lookup_transport(info->remote_cid, info->remote_flags);
+>>
+>> Can `transport` be null?
+>>
+>> I don't understand why we are calling vsock_dgram_lookup_transport()
+>> again. Didn't we already do that in vsock_dgram_sendmsg()?
+>>
+>
+>transport should be valid here sin)e we null-checked it in
+>vsock_dgram_sendmsg(). The reason vsock_dgram_lookup_transport() is
+>called again here is we don't have the transport when we called into
+>transport->dgram_enqueue(). I can also instead add transport to the
+>argument of dgram_enqueue() to eliminate this redundant lookup.
 
+Yes, I would absolutely eliminate this double lookup.
 
-Can you say more? As far as I understand, we just release the buffer
-submitted to the rx ring and get a new page pool.
+You can add either a parameter, or define the callback in each transport 
+and internally use the statically allocated transport in each.
 
-But I personally feel that the interface here is a bit too complicated. In
-particular, we also need to copy the rx struct memory, which means it is a
-dangerous operation for many pointers.
+For example for vhost/vsock.c:
 
-Thanks.
+static int vhost_transport_dgram_enqueue(....) {
+     return virtio_transport_dgram_enqueue(&vhost_transport.transport,
+                                           ...)
+}
 
+In virtio_transport_recv_pkt() we already do something similar.
 
 >
-> Signed-off-by: David Wei <dw@davidwei.uk>
-> Signed-off-by: Mina Almasry <almasrymina@google.com>
-> Reviewed-by: Pavel Begunkov <asml.silence@gmail.com>
-> Reviewed-by: Jakub Kicinski <kuba@kernel.org>
+>> Also should we add a comment mentioning that we can't use
+>> virtio_transport_get_ops()? IIUC becuase the vsk can be not assigned
+>> to a specific transport, right?
+>>
 >
-> ---
->
-> v17:
-> - Use ASSERT_RTNL() (Jakub).
->
-> v13:
-> - Add reviewed-by from Pavel (thanks!)
-> - Fixed comment (Pavel)
->
-> v11:
-> - Fix not checking dev->queue_mgmt_ops (Pavel).
-> - Fix ndo_queue_mem_free call that passed the wrong pointer (David).
->
-> v9: https://lore.kernel.org/all/20240502045410.3524155-4-dw@davidwei.uk/
-> (submitted by David).
-> - fixed SPDX license identifier (Simon).
-> - Rebased on top of merged queue API definition, and changed
->   implementation to match that.
-> - Replace rtnl_lock() with rtnl_is_locked() to make it useable from my
->   netlink code where rtnl is already locked.
->
-> ---
->  include/net/netdev_rx_queue.h |  3 ++
->  net/core/Makefile             |  1 +
->  net/core/netdev_rx_queue.c    | 74 +++++++++++++++++++++++++++++++++++
->  3 files changed, 78 insertions(+)
->  create mode 100644 net/core/netdev_rx_queue.c
->
-> diff --git a/include/net/netdev_rx_queue.h b/include/net/netdev_rx_queue.h
-> index aa1716fb0e53c..e78ca52d67fbf 100644
-> --- a/include/net/netdev_rx_queue.h
-> +++ b/include/net/netdev_rx_queue.h
-> @@ -54,4 +54,7 @@ get_netdev_rx_queue_index(struct netdev_rx_queue *queue)
->  	return index;
->  }
->  #endif
-> +
-> +int netdev_rx_queue_restart(struct net_device *dev, unsigned int rxq);
-> +
->  #endif
-> diff --git a/net/core/Makefile b/net/core/Makefile
-> index 62be9aef25285..f82232b358a2c 100644
-> --- a/net/core/Makefile
-> +++ b/net/core/Makefile
-> @@ -19,6 +19,7 @@ obj-$(CONFIG_NETDEV_ADDR_LIST_TEST) += dev_addr_lists_test.o
->
->  obj-y += net-sysfs.o
->  obj-y += hotdata.o
-> +obj-y += netdev_rx_queue.o
->  obj-$(CONFIG_PAGE_POOL) += page_pool.o page_pool_user.o
->  obj-$(CONFIG_PROC_FS) += net-procfs.o
->  obj-$(CONFIG_NET_PKTGEN) += pktgen.o
-> diff --git a/net/core/netdev_rx_queue.c b/net/core/netdev_rx_queue.c
-> new file mode 100644
-> index 0000000000000..da11720a59830
-> --- /dev/null
-> +++ b/net/core/netdev_rx_queue.c
-> @@ -0,0 +1,74 @@
-> +// SPDX-License-Identifier: GPL-2.0-or-later
-> +
-> +#include <linux/netdevice.h>
-> +#include <net/netdev_queues.h>
-> +#include <net/netdev_rx_queue.h>
-> +
-> +int netdev_rx_queue_restart(struct net_device *dev, unsigned int rxq_idx)
-> +{
-> +	void *new_mem, *old_mem;
-> +	int err;
-> +
-> +	if (!dev->queue_mgmt_ops || !dev->queue_mgmt_ops->ndo_queue_stop ||
-> +	    !dev->queue_mgmt_ops->ndo_queue_mem_free ||
-> +	    !dev->queue_mgmt_ops->ndo_queue_mem_alloc ||
-> +	    !dev->queue_mgmt_ops->ndo_queue_start)
-> +		return -EOPNOTSUPP;
-> +
-> +	ASSERT_RTNL();
-> +
-> +	new_mem = kvzalloc(dev->queue_mgmt_ops->ndo_queue_mem_size, GFP_KERNEL);
-> +	if (!new_mem)
-> +		return -ENOMEM;
-> +
-> +	old_mem = kvzalloc(dev->queue_mgmt_ops->ndo_queue_mem_size, GFP_KERNEL);
-> +	if (!old_mem) {
-> +		err = -ENOMEM;
-> +		goto err_free_new_mem;
-> +	}
-> +
-> +	err = dev->queue_mgmt_ops->ndo_queue_mem_alloc(dev, new_mem, rxq_idx);
-> +	if (err)
-> +		goto err_free_old_mem;
-> +
-> +	err = dev->queue_mgmt_ops->ndo_queue_stop(dev, old_mem, rxq_idx);
-> +	if (err)
-> +		goto err_free_new_queue_mem;
-> +
-> +	err = dev->queue_mgmt_ops->ndo_queue_start(dev, new_mem, rxq_idx);
-> +	if (err)
-> +		goto err_start_queue;
-> +
-> +	dev->queue_mgmt_ops->ndo_queue_mem_free(dev, old_mem);
-> +
-> +	kvfree(old_mem);
-> +	kvfree(new_mem);
-> +
-> +	return 0;
-> +
-> +err_start_queue:
-> +	/* Restarting the queue with old_mem should be successful as we haven't
-> +	 * changed any of the queue configuration, and there is not much we can
-> +	 * do to recover from a failure here.
-> +	 *
-> +	 * WARN if we fail to recover the old rx queue, and at least free
-> +	 * old_mem so we don't also leak that.
-> +	 */
-> +	if (dev->queue_mgmt_ops->ndo_queue_start(dev, old_mem, rxq_idx)) {
-> +		WARN(1,
-> +		     "Failed to restart old queue in error path. RX queue %d may be unhealthy.",
-> +		     rxq_idx);
-> +		dev->queue_mgmt_ops->ndo_queue_mem_free(dev, old_mem);
-> +	}
-> +
-> +err_free_new_queue_mem:
-> +	dev->queue_mgmt_ops->ndo_queue_mem_free(dev, new_mem);
-> +
-> +err_free_old_mem:
-> +	kvfree(old_mem);
-> +
-> +err_free_new_mem:
-> +	kvfree(new_mem);
-> +
-> +	return err;
-> +}
-> --
-> 2.46.0.rc1.232.g9752f9e123-goog
->
->
+>Correct. For virtio dgram socket, transport is not assigned unless
+>vsock_dgram_connect() is called. I will add a comment here explaining
+>this.
+
+Thanks,
+Stefano
+
