@@ -1,233 +1,249 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B20DC18EFE0
-	for <bpf@vger.kernel.org>; Tue, 30 Jul 2024 09:43:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AC9E195FE5;
+	Tue, 30 Jul 2024 09:58:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722332630; cv=none; b=cCiB0e8D9HwMeHS1SJO4P3Zw7wKxry2TfMIuYuuZGQTU1oOc0MjHeapTQoMupqZG/tSJBKtGa5bXeeWEtRC6IKFUTC4c66wx4kjjy7XNHP0PUXYrZ1rt+sug9h/SYunTRaeu6cmvBJbuFFXy89VUsMYfMcfeagXB8nzB+8QAnG4=
+	t=1722333521; cv=none; b=iFWG4p8s+Oqug/dF6gBww+xJsoB34wOjCEKNbv/Znqr069SH/gpb/2oz23wpjDe0W44HYThC2YUrtQYhthMekRzdEkOtsEWcaqp4Y7rx+bLoecJeNiqIvEIXMneFsNDFxcYOxaxkt640+Z6ojqMJvUUd30AUO0Pzq3Qz86I/Fv8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722332630; c=relaxed/simple;
-	bh=XW4J0yIG/OJmrTqLg7iEIXYWx3lzZUd/3l9VGEkH5mg=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=FXPVaqnfc0HZDNcIeoGUBccIAx3wdhBclG76FnCs2ZQ8QZE1g9j/VZIGKhuAgtutO62ybdzEtOJXqID8+tE5VQtL2Lj7qMuZQn1E9N5CUrqJVjCBTyS9PRk8chCEf3lw4QAaqEKwFSTq8kioEDS3oZS0B/Vbp0IkIRR3Opi6mKo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=h/V3REum; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1722333521; c=relaxed/simple;
+	bh=pBW1iXUgUWPqF8BiZCdFB4ILrvn3db6+hfo+Ctdyk48=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=q5Nd90TKyL4H2AHmvzD7CCga67+0tTzlmxXXCl9lLgTSap8D7+p4XDz6zLN3M7shEqgrSarU15EywuMVfbZyHwuDKG21byfPB6aCpk6ahWmUGsuE0y+G8Qnp6sIbMtiSf+MJEEz/wxdczR4OMf0bofi+DMfNSMsb7G9bPcedYyU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=uR0sgPqO; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=k4Js5UuQ; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="h/V3REum"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6668CC32782;
-	Tue, 30 Jul 2024 09:43:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722332630;
-	bh=XW4J0yIG/OJmrTqLg7iEIXYWx3lzZUd/3l9VGEkH5mg=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-	b=h/V3REum6nmJLCD+nxWIQqnw2etOaoP/cZxpt42qqnccTb8s2F7vIIyVlPle2SMQ6
-	 7puB6kTmYUWF0gfLAMc+vA3SyQjMGZ4po05ulQhRzIFV8p8U3patQI1ZaKaUhOqnKf
-	 BAgckWxqfSyh+7mZmdMq7DrScsJhVDyeNnXDeBN69qYb+yBRdFuM2/doujDWHZZZmE
-	 I7qDqUZ6g6WonZTZpCh9Ykd8JOXO7Vdzh8WOmBAvHBBTuZ5b7XNOsGCGUMYgEc3X6V
-	 +MaCRHf1uSbY0WBPZdTToVtFaD/+F3VOlo4CnPgURMsfngDc7FeufD+DKNTiFOSwHT
-	 FeM4AIh0tEHUg==
-Message-ID: <7da1f071b59bebf6583844b79c72271cf4ab958d.camel@kernel.org>
-Subject: Re: [PATCH bpf-next v3 4/6] selftests/bpf: Monitor traffic for
- tc_redirect.
-From: Geliang Tang <geliang@kernel.org>
-To: Kui-Feng Lee <thinker.li@gmail.com>, bpf@vger.kernel.org,
- ast@kernel.org,  martin.lau@linux.dev, song@kernel.org,
- kernel-team@meta.com, andrii@kernel.org,  sdf@fomichev.me
-Cc: sinquersw@gmail.com, kuifeng@meta.com
-Date: Tue, 30 Jul 2024 17:43:39 +0800
-In-Reply-To: <20240730002745.1484204-5-thinker.li@gmail.com>
-References: <20240730002745.1484204-1-thinker.li@gmail.com>
-	 <20240730002745.1484204-5-thinker.li@gmail.com>
-Autocrypt: addr=geliang@kernel.org; prefer-encrypt=mutual;
- keydata=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
- TO0tfEdfAX7IENcV87h2yAFBZkaA==
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.52.0-1build2 
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="uR0sgPqO";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="k4Js5UuQ"
+From: Kurt Kanzenbach <kurt@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1722333516;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=RGoEM2sBI9H+4jdzkqFA7zQ20wEq+y0hpMq3862q89o=;
+	b=uR0sgPqO4CkZIXC3qLkB1+lOBK+9HOm16MLEx8B+FIaE4W5QuWyc44hBBJ++xHLjrdjDTm
+	R5IuH5iW7j70XU2Q3HgFoNYtJ8nskjskL5fdMD3sGiZijIYqoZ8pS6o9b6XHYx+N/nKbRE
+	V+Y6HThiQMlnVbmJzm65d0qxzVOQosw5QZ/I1q3eUXDCth2hW8r460bc1bfbNVcnOPGd/A
+	iskkM3RRSKYFcGbZAjlqmg7oOCWVEad/ILxPfDdcVTBvNXbavf2Y1sMKcHo26hV8a+huNq
+	9fMzm2JZAKYTsS3crhhOi1N5FBINQBSJGdPM0n/PzyEpyZ4cG9oEiEe3+hVKyQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1722333516;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=RGoEM2sBI9H+4jdzkqFA7zQ20wEq+y0hpMq3862q89o=;
+	b=k4Js5UuQd4uIH5icrNshrFG5sJwDCLMzqjPnnBx9lE40D/UgblZ5kjap+oBRnQj9eCYa2i
+	KXp+/I9hlX78TwBg==
+To: Song Yoong Siang <yoong.siang.song@intel.com>, Tony Nguyen
+ <anthony.l.nguyen@intel.com>, "David S . Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>, Richard Cochran
+ <richardcochran@gmail.com>, Alexei Starovoitov <ast@kernel.org>, Daniel
+ Borkmann <daniel@iogearbox.net>, Jesper Dangaard Brouer <hawk@kernel.org>,
+ John Fastabend <john.fastabend@gmail.com>, Vinicius Costa Gomes
+ <vinicius.gomes@intel.com>, Jonathan Corbet <corbet@lwn.net>, Przemek
+ Kitszel <przemyslaw.kitszel@intel.com>, Shinas Rasheed
+ <srasheed@marvell.com>, Kevin Tian <kevin.tian@intel.com>, Brett Creeley
+ <brett.creeley@amd.com>, Blanco Alcaine Hector
+ <hector.blanco.alcaine@intel.com>, Joshua Hay <joshua.a.hay@intel.com>,
+ Sasha Neftin <sasha.neftin@intel.com>
+Cc: intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+ linux-doc@vger.kernel.org
+Subject: Re: [PATCH iwl-next,v1 2/3] igc: Add default Rx queue configuration
+ via sysfs
+In-Reply-To: <20240730012312.775893-1-yoong.siang.song@intel.com>
+References: <20240730012312.775893-1-yoong.siang.song@intel.com>
+Date: Tue, 30 Jul 2024 11:58:34 +0200
+Message-ID: <87plqvjj5h.fsf@kurt.kurt.home>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; boundary="=-=-=";
+	micalg=pgp-sha512; protocol="application/pgp-signature"
 
-On Mon, 2024-07-29 at 17:27 -0700, Kui-Feng Lee wrote:
-> Enable traffic monitoring for the test case tc_redirect.
-> 
-> Signed-off-by: Kui-Feng Lee <thinker.li@gmail.com>
-> ---
->  .../selftests/bpf/prog_tests/tc_redirect.c    | 48 ++++++++++++++---
-> --
->  1 file changed, 36 insertions(+), 12 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/tc_redirect.c
-> b/tools/testing/selftests/bpf/prog_tests/tc_redirect.c
-> index 327d51f59142..46d397c5c79a 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/tc_redirect.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/tc_redirect.c
-> @@ -68,6 +68,7 @@
->  		__FILE__, __LINE__, strerror(errno), ##__VA_ARGS__)
->  
->  static const char * const namespaces[] = {NS_SRC, NS_FWD, NS_DST,
-> NULL};
-> +static struct netns_obj *netns_objs[3];
->  
->  static int write_file(const char *path, const char *newval)
->  {
-> @@ -85,29 +86,52 @@ static int write_file(const char *path, const
-> char *newval)
->  	return 0;
->  }
->  
-> -static int netns_setup_namespaces(const char *verb)
-> +enum NETNS_VERB {
-> +	NETNS_ADD,
-> +	NETNS_DEL,
-> +};
+--=-=-=
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
+
+On Tue Jul 30 2024, Song Yoong Siang wrote:
+> From: Blanco Alcaine Hector <hector.blanco.alcaine@intel.com>
+>
+> This commit introduces the support to configure default Rx queue during
+> runtime. A new sysfs attribute "default_rx_queue" has been added, allowing
+> users to check and modify the default Rx queue.
+>
+> 1. Command to check the currently configured default Rx queue:
+>    cat /sys/devices/pci0000:00/.../default_rx_queue
+>
+> 2. Command to set the default Rx queue to a desired value, for example 3:
+>    echo 3 > /sys/devices/pci0000:00/.../default_rx_queue
+>
+> Signed-off-by: Blanco Alcaine Hector <hector.blanco.alcaine@intel.com>
+> Signed-off-by: Song Yoong Siang <yoong.siang.song@intel.com>
+
+[...]
+
+> index e5b893fc5b66..df96800f6e3b 100644
+> --- a/drivers/net/ethernet/intel/igc/igc_regs.h
+> +++ b/drivers/net/ethernet/intel/igc/igc_regs.h
+> @@ -63,6 +63,12 @@
+>  /* RSS registers */
+>  #define IGC_MRQC		0x05818 /* Multiple Receive Control - RW */
+>=20=20
+> +/* MRQC register bit definitions */
+
+Nit: Now, the MRQC register definitions are scattered over two files:
+igc_regs.h and igc.h. igc.h has
+
+#define IGC_MRQC_ENABLE_RSS_MQ		0x00000002
+#define IGC_MRQC_RSS_FIELD_IPV4_UDP	0x00400000
+#define IGC_MRQC_RSS_FIELD_IPV6_UDP	0x00800000
+
+Maybe combine them into a single location?
+
+> +#define IGC_MRQC_ENABLE_MQ		0x00000000
+> +#define IGC_MRQC_ENABLE_MASK		GENMASK(2, 0)
+> +#define IGC_MRQC_DEFAULT_QUEUE_MASK	GENMASK(5, 3)
+> +#define IGC_MRQC_DEFAULT_QUEUE_SHIFT	3
+
+Nit: FIELD_GET() and FIELD_PREP() can help to get rid of the manual
+shifting. See below.=20
+
 > +
-> +static int netns_setup_namespaces(enum NETNS_VERB verb)
->  {
->  	const char * const *ns = namespaces;
-> -	char cmd[128];
-> +	struct netns_obj **ns_obj = netns_objs;
->  
->  	while (*ns) {
-> -		snprintf(cmd, sizeof(cmd), "ip netns %s %s", verb,
-> *ns);
-> -		if (!ASSERT_OK(system(cmd), cmd))
-> -			return -1;
-> +		if (verb == NETNS_ADD) {
+>  /* Filtering Registers */
+>  #define IGC_ETQF(_n)		(0x05CB0 + (4 * (_n))) /* EType Queue Fltr */
+>  #define IGC_FHFT(_n)		(0x09000 + (256 * (_n))) /* Flexible Host Filter */
+> diff --git a/drivers/net/ethernet/intel/igc/igc_sysfs.c b/drivers/net/eth=
+ernet/intel/igc/igc_sysfs.c
+> new file mode 100644
+> index 000000000000..34d838e6a019
+> --- /dev/null
+> +++ b/drivers/net/ethernet/intel/igc/igc_sysfs.c
+> @@ -0,0 +1,156 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/* Copyright (c) 2024 Intel Corporation */
+> +
+> +#include <linux/device.h>
+> +#include <linux/kobject.h>
+> +#include <linux/module.h>
+> +#include <linux/netdevice.h>
+> +#include <linux/sysfs.h>
+> +#include <linux/types.h>
+> +
+> +#include "igc.h"
+> +#include "igc_regs.h"
+> +#include "igc_sysfs.h"
+> +
+> +/**
+> + * igc_is_default_queue_supported - Checks if default Rx queue can be co=
+nfigured
+> + * @mrqc: MRQC register content
+> + *
+> + * Checks if the current configuration of the device supports changing t=
+he
+> + * default Rx queue configuration.
+> + *
+> + * Return: true if the default Rx queue can be configured, false otherwi=
+se.
+> + */
+> +static bool igc_is_default_queue_supported(u32 mrqc)
+> +{
+> +	u32 mrqe =3D mrqc & IGC_MRQC_ENABLE_MASK;
+> +
+> +	/* The default Rx queue setting is applied only if Multiple Receive
+> +	 * Queues (MRQ) as defined by filters (2-tuple filters, L2 Ether-type
+> +	 * filters, SYN filter and flex filters) is enabled.
+> +	 */
+> +	if (mrqe !=3D IGC_MRQC_ENABLE_MQ && mrqe !=3D IGC_MRQC_ENABLE_RSS_MQ)
+> +		return false;
+> +
+> +	return true;
+> +}
+> +
+> +/**
+> + * igc_get_default_rx_queue - Returns the index of default Rx queue
+> + * @adapter: address of board private structure
+> + *
+> + * Return: index of the default Rx queue.
+> + */
+> +static u32 igc_get_default_rx_queue(struct igc_adapter *adapter)
+> +{
+> +	struct igc_hw *hw =3D &adapter->hw;
+> +	u32 mrqc =3D rd32(IGC_MRQC);
+> +
+> +	if (!igc_is_default_queue_supported(mrqc)) {
+> +		netdev_warn(adapter->netdev,
+> +			    "MRQ disabled: default RxQ is ignored.\n");
+> +	}
+> +
+> +	return (mrqc & IGC_MRQC_DEFAULT_QUEUE_MASK) >>
+> +		IGC_MRQC_DEFAULT_QUEUE_SHIFT;
 
-Maybe better to keep "verb" parameter as "char *", and use
+Nit: return FIELD_GET(IGC_MRQC_DEFAULT_QUEUE_MASK, mrqc);
 
-		if (!strcmp(verb, "add"))
+> +}
+> +
+> +/**
+> + * igc_set_default_rx_queue - Sets the default Rx queue
+> + * @adapter: address of board private structure
+> + * @queue: index of the queue to be set as default Rx queue
+> + *
+> + * Return: 0 on success, negative error code on failure.
+> + */
+> +static int igc_set_default_rx_queue(struct igc_adapter *adapter, u32 que=
+ue)
+> +{
+> +	struct igc_hw *hw =3D &adapter->hw;
+> +	u32 mrqc =3D rd32(IGC_MRQC);
+> +
+> +	if (!igc_is_default_queue_supported(mrqc)) {
+> +		netdev_err(adapter->netdev,
+> +			   "Default RxQ not supported. Please enable MRQ.\n");
+> +		return -EOPNOTSUPP;
+> +	}
+> +
+> +	if (queue > adapter->rss_queues - 1) {
+> +		netdev_err(adapter->netdev,
+> +			   "Invalid default RxQ index %d. Valid range: 0-%u.\n",
+> +			   queue, adapter->rss_queues - 1);
+> +		return -EINVAL;
+> +	}
+> +
+> +	/* Set the default Rx queue */
+> +	mrqc =3D rd32(IGC_MRQC);
+> +	mrqc &=3D ~IGC_MRQC_DEFAULT_QUEUE_MASK;
+> +	mrqc |=3D queue << IGC_MRQC_DEFAULT_QUEUE_SHIFT;
 
-here instead?
+Nit: mrqc |=3D FIELD_PREP(IGC_MRQC_DEFAULT_QUEUE_MASK, queue);
 
-> +			*ns_obj = netns_new(*ns, false);
-> +			if (!*ns_obj) {
-> +				log_err("netns_new failed");
-> +				return -1;
-> +			}
-> +		} else {
-> +			if (!*ns_obj) {
-> +				log_err("netns_obj is NULL");
-> +				return -1;
-> +			}
-> +			netns_free(*ns_obj);
-> +			*ns_obj = NULL;
-> +		}
->  		ns++;
-> +		ns_obj++;
->  	}
->  	return 0;
->  }
->  
-> -static void netns_setup_namespaces_nofail(const char *verb)
-> +static void netns_setup_namespaces_nofail(enum NETNS_VERB verb)
->  {
->  	const char * const *ns = namespaces;
-> -	char cmd[128];
-> +	struct netns_obj **ns_obj = netns_objs;
->  
->  	while (*ns) {
-> -		snprintf(cmd, sizeof(cmd), "ip netns %s %s >
-> /dev/null 2>&1", verb, *ns);
-> -		system(cmd);
-> +		if (verb == NETNS_ADD) {
-> +			*ns_obj = netns_new(*ns, false);
-> +		} else {
-> +			if (*ns_obj)
-> +				netns_free(*ns_obj);
-> +			*ns_obj = NULL;
-> +		}
->  		ns++;
-> +		ns_obj++;
->  	}
->  }
->  
-> @@ -1250,17 +1274,17 @@ static void test_tc_redirect_peer_l3(struct
-> netns_setup_result *setup_result)
->  	({                                                          
->                         \
->  		struct netns_setup_result setup_result = { .dev_mode
-> = mode, };             \
->  		if
-> (test__start_subtest(#name))                                         
->     \
-> -			if (ASSERT_OK(netns_setup_namespaces("add"),
-> "setup namespaces")) { \
-> +			if
-> (ASSERT_OK(netns_setup_namespaces(NETNS_ADD), "setup namespaces")) {
-> \
->  				if
-> (ASSERT_OK(netns_setup_links_and_routes(&setup_result),  \
->  					      "setup links and
-> routes"))                    \
->  					test_ ##
-> name(&setup_result);                       \
-> -
-> 				netns_setup_namespaces("delete");                           \
-> +				netns_setup_namespaces(NETNS_DEL);  
->                         \
->  			}                                           
->                         \
->  	})
->  
->  static void *test_tc_redirect_run_tests(void *arg)
->  {
-> -	netns_setup_namespaces_nofail("delete");
-> +	netns_setup_namespaces_nofail(NETNS_DEL);
->  
->  	RUN_TEST(tc_redirect_peer, MODE_VETH);
->  	RUN_TEST(tc_redirect_peer, MODE_NETKIT);
+Thanks,
+Kurt
 
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQJHBAEBCgAxFiEEvLm/ssjDfdPf21mSwZPR8qpGc4IFAmaouUoTHGt1cnRAbGlu
+dXRyb25peC5kZQAKCRDBk9HyqkZzgtBQEACSIf0aYuaOphs8JPYmE2MJMfO+x270
+iNE9MGJpBgiso4SlT3dNT05mFcKNDVQW/azmtJDRlgMSf3xBlbdexN2Gag/PK4Ah
+lJATYGUABykY3ThNAAhMUV4YbzcAa0r0C34oorr3s+mIGh4k0xeRbAaAF12tTezN
+asnXQ5tFLlCMfi3uKK7y+YW4SENhnDMbw4QEPzN8xqoU1gfVSVSZHdlE2E7aGx2r
+GTIdo3gNiYwplUZo4zPQfC9v02XGzM73bYNs7mNBlktnxn9Tn5GH+TmNxFbDgroI
+kQaw2ytg9X+b+9TSGkCCvCzFv2fH4DmRPMshOetPnrHhKm9VYTkGhbvdr4k9jZUi
+EG72L1w+8YBy8UG+bo63bjhFRnIP+7N7YVYVZBrUBmBFtdHyWIE8vG2IppUWUw+r
+8UChtvhhmRjmyTTbKE4YvdFOu2u4EF9a3ex0s/4sMN86pjegqZFm8qBlWbjIh+B1
+O6iyzKkWHBtrUJZYHto8xM+1nwkz1+Ny5muGhqZh6AHKZItDsrbwwWJYeLd/ovmX
+oiGRoQ5XSDBlZaV9PE6LmZnfE616UgbSuLfIfF4yQxrbCa4BGe9SaawBX4aiB/kG
+qL+xJUKR98cjwmCKSYQvGOHyAno4HWv3tgCP8oz0LZyUs6/hxs461S/biL87c58R
+yCkNyHwZ0+2zWg==
+=vGQh
+-----END PGP SIGNATURE-----
+--=-=-=--
