@@ -1,77 +1,106 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7775018562A;
-	Tue, 30 Jul 2024 20:50:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC33138B;
+	Tue, 30 Jul 2024 21:12:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722372633; cv=none; b=Bes5B4zGO6xUHFq/K8+0wHuHSVow4N0FyVbtXoMu1UoRxHmeX8Kt7Boo7E4kqqrgCoP/XZFsuOQv4JAwuRLKy7qtBcZDroUysajXcGp7ZdHzZ7oYVltYdxHv5TrtcWIX8hHkweJPi0mV2DbVUpw0Y0jZKrAnr0xUNfKmHA0Uqb8=
+	t=1722373949; cv=none; b=uShFL92EgWbcegcriStpk1ONhaJglcqXLT67JBjnIGdAvexbThlbyTnOJGlO5Ms8JbLRhVNHqVshlgh9x441xGHOuq6njhUGpGGKB6x9vy8ZFgYHeVUiRhzrv+rZS4H9tJYpQ8bSx0MCGDPz8sf8NA7fZcBlpWpwL/Bigr2KESM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722372633; c=relaxed/simple;
-	bh=b2IxN54gwI0ZZihIlpMveC0fYHrEctJnVgLs2cEaq2U=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=OtLDK6HoIaly3qT4Hcc6bUZZCQVpoNPmlV0E/FZbmNAfH8GijRtq6eg9JFCnfLjXlSURM1KrjRepZT+KP5/uTzLlHXw6K2/KkDWwNHJ2P0lGdkNRt7Hm6CYvi5g9vlUt4qjIYarL66KvAydtt3tA8UiLhLSmJVLSUfv+Hi2ykJM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MX4//iqT; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1722373949; c=relaxed/simple;
+	bh=cEk83l4mWONqpD4v1BQ3vkO7xHMQ560brpMG+0bHCOE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=uPFVsu2wVAQVkfdZJ2uI1amAOeN8dnQuwDZPBfEEU5YJ44kOPJkGnYWvmPgoPWT/W9R8dDOC0AJoiC3oev+RiFg4zfmLnJgME54uv2ab7hSfXzsCJnHshSMBu2wwkTR5oN+daM5c4rJ7+IC8f2BDRQq1akVIuTBn+M/dVBLTKPM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=AfLb+6tR; arc=none smtp.client-ip=62.89.141.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MX4//iqT"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id EB2E1C4AF0E;
-	Tue, 30 Jul 2024 20:50:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722372633;
-	bh=b2IxN54gwI0ZZihIlpMveC0fYHrEctJnVgLs2cEaq2U=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=MX4//iqTNi+XloB0AZR/v1GPsYMDLyK2BD4RHGTwD3TCKqyTePIwnnvre9aTnKO/R
-	 FiyiR5xUxrs5sd/I+WwEKeZoykVpsRqmsX58HFOKejcjK8zg7F0n81eWAwUkEm3P5N
-	 V4UcAnvK1prjW5FD9ZidvXVYNwYK+oGmPD3t3dImh8vbTSmIqa0dPXtllKupazJKU3
-	 9nRv/4bSU5TTfSjILJycfqIewRC4D3gYy59SiZ/j15eiO+DQEYgDqm3daBT/Vq3f1S
-	 lp2dpjHDtzD7vybr+pEC5XayCmqqavvMf9bzQGk/+zFy3HA7FP6tGzcoTVTjsGinB0
-	 BDgNHNyLdN2ig==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D762DC6E398;
-	Tue, 30 Jul 2024 20:50:32 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="AfLb+6tR"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
+	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=juLNTGfDHj50atuMhk7dbWzwjGHWgRDm70U6RaLXPeI=; b=AfLb+6tRV/VaQlwK13wMXFAbnO
+	vU63GJMLfBvuV5wJiW28+O+73IOccKalEjRgaSVawG/Z1x5KYwtMw9cis8PulfGTR5zJTk4+dwweP
+	82HSUu5kEr3nipS5EwFKI3MjT7E6np3n0g4MXRjQw4iD6Z2XXPXtJLKcae/NR9QXRN+kc4sWcQWA0
+	MIowMYuz1WqKP3J640l9+NLShXeP2fNoioj6rs1pow6c8sd7BR+oBCQaQmeYwIbcl8CWDeykeSC0h
+	wtO4zqR7tY46hCgdf2bom5NnVZAPfBcjnuOUgCLe4m4lx4cN3eNRirNgjYbX+wU9ydJEGss3NETCV
+	cbcOMWMw==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.98 #2 (Red Hat Linux))
+	id 1sYu8v-00000000KBN-2OVT;
+	Tue, 30 Jul 2024 21:12:25 +0000
+Date: Tue, 30 Jul 2024 22:12:25 +0100
+From: Al Viro <viro@zeniv.linux.org.uk>
+To: Josef Bacik <josef@toxicpanda.com>
+Cc: viro@kernel.org, linux-fsdevel@vger.kernel.org, amir73il@gmail.com,
+	bpf@vger.kernel.org, brauner@kernel.org, cgroups@vger.kernel.org,
+	kvm@vger.kernel.org, netdev@vger.kernel.org,
+	torvalds@linux-foundation.org
+Subject: Re: [PATCH 08/39] experimental: convert fs/overlayfs/file.c to
+ CLASS(...)
+Message-ID: <20240730211225.GH5334@ZenIV>
+References: <20240730050927.GC5334@ZenIV>
+ <20240730051625.14349-1-viro@kernel.org>
+ <20240730051625.14349-8-viro@kernel.org>
+ <20240730191025.GB3830393@perftesting>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v2] bpf: kprobe: remove unused declaring of
- bpf_kprobe_override
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <172237263287.10299.9053781144488747339.git-patchwork-notify@kernel.org>
-Date: Tue, 30 Jul 2024 20:50:32 +0000
-References: <20240730053733.885785-1-dongml2@chinatelecom.cn>
-In-Reply-To: <20240730053733.885785-1-dongml2@chinatelecom.cn>
-To: Menglong Dong <menglong8.dong@gmail.com>
-Cc: mhiramat@kernel.org, rostedt@goodmis.org, mathieu.desnoyers@efficios.com,
- linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- bpf@vger.kernel.org, dongml2@chinatelecom.cn
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240730191025.GB3830393@perftesting>
+Sender: Al Viro <viro@ftp.linux.org.uk>
 
-Hello:
+On Tue, Jul 30, 2024 at 03:10:25PM -0400, Josef Bacik wrote:
+> On Tue, Jul 30, 2024 at 01:15:54AM -0400, viro@kernel.org wrote:
+> > From: Al Viro <viro@zeniv.linux.org.uk>
+> > 
+> > There are four places where we end up adding an extra scope
+> > covering just the range from constructor to destructor;
+> > not sure if that's the best way to handle that.
+> > 
+> > The functions in question are ovl_write_iter(), ovl_splice_write(),
+> > ovl_fadvise() and ovl_copyfile().
+> > 
+> > This is very likely *NOT* the final form of that thing - it
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> > needs to be discussed.
 
-This patch was applied to bpf/bpf-next.git (master)
-by Andrii Nakryiko <andrii@kernel.org>:
-
-On Tue, 30 Jul 2024 13:37:33 +0800 you wrote:
-> After the commit 66665ad2f102 ("tracing/kprobe: bpf: Compare instruction
-> pointer with original one"), "bpf_kprobe_override" is not used anywhere
-> anymore, and we can remove it now.
+> Is this what we want to do from a code cleanliness standpoint?  This feels
+> pretty ugly to me, I feal like it would be better to have something like
 > 
-> Fixes: 66665ad2f102 ("tracing/kprobe: bpf: Compare instruction pointer with original one")
-> Signed-off-by: Menglong Dong <dongml2@chinatelecom.cn>
+> scoped_class(fd_real, real) {
+> 	// code
+> }
 > 
-> [...]
+> rather than the {} at the same indent level as the underlying block.
+> 
+> I don't feel super strongly about this, but I do feel like we need to either
+> explicitly say "this is the way/an acceptable way to do this" from a code
+> formatting standpoint, or we need to come up with a cleaner way of representing
+> the scoped area.
 
-Here is the summary with links:
-  - [bpf-next,v2] bpf: kprobe: remove unused declaring of bpf_kprobe_override
-    https://git.kernel.org/bpf/bpf-next/c/1cbe8143fd2f
+That's a bit painful in these cases - sure, we can do something like
+	scoped_class(fd_real, real)(file) {
+		if (fd_empty(fd_real)) {
+			ret = fd_error(real);
+			break;
+		}
+		old_cred = ovl_override_creds(file_inode(file)->i_sb);
+		ret = vfs_fallocate(fd_file(real), mode, offset, len);
+		revert_creds(old_cred);
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+		/* Update size */
+		ovl_file_modified(file);  
+	}
+but that use of break would need to be documented.  And IMO anything like
+        scoped_cond_guard (mutex_intr, return -ERESTARTNOINTR,
+			   &task->signal->cred_guard_mutex) {
+is just distasteful ;-/  Control flow should _not_ be hidden that way;
+it's hard on casual reader.
 
-
+The variant I'd put in there is obviously not suitable for merge - we need
+something else, the question is what that something should be...
