@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C0AE1AA3C3;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7779E187861;
 	Tue, 30 Jul 2024 20:50:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722372633; cv=none; b=N0HUf9A+dYx+C1b9AX9Vnyl8+r/sgWB20+cxWBpJxDwibOM1wpwPbkNhidozBfzIZ75XUg8P8uuNZ0qHGvvgkJj4+jcGJUm756q8B0LZDyApRNRGaOrvZt73PlAAeuyH4T22sWKc/66pHHKrH7yw7tV8XZXUQvJno8hP77AL34E=
+	t=1722372633; cv=none; b=itRTAxnQcYyKaRjzlTB5WAmLCDztOfnwHTlvXJWlt/LqkijyYhZiaEvOL1yvlFQa2wfBB49XXvcpw6vJZGe5s5kjy/XRddHhrhD/tf+EWVmQ2jjaOUlRmH1Pmy86RPhOYL6QqEi4beGiDR4IKVgReJq1FPfxI0kKAP4nwwswzKE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1722372633; c=relaxed/simple;
-	bh=mgbDbs3m2vKrcowpVkRdf2QvyifjX7DGu7yPNSLLAVM=;
+	bh=MgCVRhA1euoE+9YhaIxZKyIRf/DwiRAkhRG0WzHNhEg=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=lAEYnnUF9gHZe/KEkwmwC3h+wfomiEXlsHwjnqdKWyTW/UJ1rPCH2Fhoa/Ogg00v6nYHsom+GTN8Hk3EyzdKBfY6kr/sNW+0WdHSC6g9rizeJ1Q8Mk0iC81g4cOF1l859VMdC8HDDDPLt4bbY1K4xQUTjbtySYb1CIcBMlNfcss=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FmGT+v0F; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=Y0BGsOYdc51FGZxDlTrtbuWg2AkL21ORJBpSSS9gjXm7iAGi4gdwynus2D18HlhLm9W1S1VShCE9Kr9waJY1L5KsGP0uO9WwHTl24oh6DU/llo0iVCCBk5EjpMh0F9UbDk7ArZUUiEc48z58B+OgKlLDCcDiW+yavqZbifcApmo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ESIC2VSg; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FmGT+v0F"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id DD7CAC4AF0B;
-	Tue, 30 Jul 2024 20:50:32 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ESIC2VSg"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 0B88AC4AF11;
+	Tue, 30 Jul 2024 20:50:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722372632;
-	bh=mgbDbs3m2vKrcowpVkRdf2QvyifjX7DGu7yPNSLLAVM=;
+	s=k20201202; t=1722372633;
+	bh=MgCVRhA1euoE+9YhaIxZKyIRf/DwiRAkhRG0WzHNhEg=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=FmGT+v0FnlO9H2NNnWNgxAHW0irv5gSsOUCQ/XrtWHwdOQ+wvlE+5zzQnb/Zm9dg3
-	 wlwaPkG6oHh3a0nvm3DkzvMUvDFdtcX9rRIA5j9isIzDxSPtIFTnU637Gk44iOhgxf
-	 hguPAruwKwyAPczAxrINK6ScULc7QStK2JwFXUoAi+Ss5f5s+dmgTLXzJNeXxJNsqQ
-	 8N74GcxLILRkVbvDZXAd0XPT53rnCfA5m8/nP5Kw0NkHSX33g0PGIbMnaPSAt1RH34
-	 sQFl5ZrZbaao/EMJ5zHzIcABmZQJfFCdi942+Ceq9VlB+2uJYQYK3Wjg5HoxFjjLk/
-	 uCBo9tf25eQgw==
+	b=ESIC2VSg6TVKifsfwvGrLTAsJVYhNgh2de8nxhFueEktUtfCcMvQF1mIgigL7ZJyl
+	 tKI3nf27XW0mogHxEULS+aSdCzzeRyxFU2SHdnVl76IPZJgbjPkC1cZU/6gq43sPba
+	 9BEgkMzgN83XJ+pvWucCqbCDmuO5j3Vd+oQ498lb21iNUgnHK8oltmHNIaO2P/CF2L
+	 yARaCnq1fG768CavgLQGLX4R1p2IsUoU9ENqU1nc6wojBGDko+Ktkw+k1xHChk/dbb
+	 Xo7egu6vnxsywT7CTyRpdVYNvnBpQKTlzBod/UBM/dcTE6apvD04d9S4yIxqO0Bz/7
+	 1WJsQ/GyrzSiQ==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id C9509C43140;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E9297C43619;
 	Tue, 30 Jul 2024 20:50:32 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
@@ -37,56 +37,48 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v2 1/8] selftests/bpf: Use portable POSIX basename()
+Subject: Re: [PATCH v4] tools/bpf:Fix the wrong format specifier
 From: patchwork-bot+netdevbpf@kernel.org
 Message-Id: 
- <172237263281.10299.11042421152153113745.git-patchwork-notify@kernel.org>
+ <172237263295.10299.13717406365394258197.git-patchwork-notify@kernel.org>
 Date: Tue, 30 Jul 2024 20:50:32 +0000
-References: <0fd3c9f3c605e6cba33504213c9df287817ade04.1722244708.git.tony.ambardar@gmail.com>
-In-Reply-To: <0fd3c9f3c605e6cba33504213c9df287817ade04.1722244708.git.tony.ambardar@gmail.com>
-To: Tony Ambardar <tony.ambardar@gmail.com>
-Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
- netdev@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
- andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
+References: <20240724111120.11625-1-zhujun2@cmss.chinamobile.com>
+In-Reply-To: <20240724111120.11625-1-zhujun2@cmss.chinamobile.com>
+To: Zhu Jun <zhujun2@cmss.chinamobile.com>
+Cc: qmo@kernel.org, ast@kernel.org, daniel@iogearbox.net,
+ martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
  yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
- sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org, mykolal@fb.com,
- shuah@kernel.org, bjorn@kernel.org, magnus.karlsson@intel.com,
- maciej.fijalkowski@intel.com, jonathan.lemon@gmail.com, davem@davemloft.net,
- yan@cloudflare.com
+ sdf@fomichev.me, haoluo@google.com, bpf@vger.kernel.org,
+ linux-kernel@vger.kernel.org
 
 Hello:
 
-This series was applied to bpf/bpf-next.git (master)
+This patch was applied to bpf/bpf-next.git (master)
 by Andrii Nakryiko <andrii@kernel.org>:
 
-On Mon, 29 Jul 2024 02:24:17 -0700 you wrote:
-> Use the POSIX version of basename() to allow compilation against non-gnu
-> libc (e.g. musl). Include <libgen.h> ahead of <string.h> to enable using
-> functions from the latter while preferring POSIX over GNU basename().
+On Wed, 24 Jul 2024 04:11:20 -0700 you wrote:
+> The format specifier of "unsigned int" in printf() should be "%u", not
+> "%d".
 > 
-> In veristat.c, rely on strdupa() to avoid basename() altering the passed
-> "const char" argument. This is not needed in xskxceiver.c since the arg
-> is mutable and the program exits immediately after usage.
+> Signed-off-by: Zhu Jun <zhujun2@cmss.chinamobile.com>
+> ---
+> Changes:
+> v2:
+> modify commit info
+> v3:
+> fix compile warning
+> v4:
+> Thanks! But unsigned seems relevant here, and it doesn't make much sense
+> to change the type of the int just because we don't have the right
+> specifier in the printf(), does it? Sorry, I should have been more
+> explicit: the warning on v1 and v2 can be addressed by simply removing
+> the "space flag" from the format string, in other words:
 > 
 > [...]
 
 Here is the summary with links:
-  - [bpf-next,v2,1/8] selftests/bpf: Use portable POSIX basename()
-    https://git.kernel.org/bpf/bpf-next/c/c0247800ee7d
-  - [bpf-next,v2,2/8] selftests/bpf: Fix arg parsing in veristat, test_progs
-    https://git.kernel.org/bpf/bpf-next/c/03bfcda1fbc3
-  - [bpf-next,v2,3/8] selftests/bpf: Fix error compiling test_lru_map.c
-    https://git.kernel.org/bpf/bpf-next/c/cacf2a5a78cd
-  - [bpf-next,v2,4/8] selftests/bpf: Fix C++ compile error from missing _Bool type
-    https://git.kernel.org/bpf/bpf-next/c/aa95073fd290
-  - [bpf-next,v2,5/8] selftests/bpf: Fix redefinition errors compiling lwt_reroute.c
-    https://git.kernel.org/bpf/bpf-next/c/16b795cc5952
-  - [bpf-next,v2,6/8] selftests/bpf: Fix compile if backtrace support missing in libc
-    https://git.kernel.org/bpf/bpf-next/c/c9a83e76b5a9
-  - [bpf-next,v2,7/8] selftests/bpf: Fix using stdout, stderr as struct field names
-    https://git.kernel.org/bpf/bpf-next/c/06eeca1217a8
-  - [bpf-next,v2,8/8] selftests/bpf: Fix error compiling tc_redirect.c with musl libc
-    https://git.kernel.org/bpf/bpf-next/c/21c5f4f55da7
+  - [v4] tools/bpf:Fix the wrong format specifier
+    https://git.kernel.org/bpf/bpf-next/c/781f0bbbdade
 
 You are awesome, thank you!
 -- 
