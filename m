@@ -1,355 +1,256 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBA02188CBD
-	for <bpf@vger.kernel.org>; Tue, 30 Jul 2024 08:06:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722326762; cv=none; b=FdMRov84Z+WjzIXZaarsC265zCfBw3I1JM47h0IsMGeRnBJsFrT14kOoiK7A8KHV0NkVFZHZ//MPcFLNI5hTw/gYdo60l196PQEQgU362fKnNaltB5w7G+ZuhetbW7B94S1UlbBH3rtc0iEmtj7DlqE3TtNeByC2wK9aYg9oRJg=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722326762; c=relaxed/simple;
-	bh=pimUNZNB2gtc5f7DgOK9I9O4tl9OPttYxcjsdaqFCOw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rF6/ogT4EYP09oG4VLwc9C2nVpzVGCpZwueJnz2sO/TttbQq87b/aMrky31cgMNefgUfA65jmntjvfVZWofdA8uNUju0lS43PkHk4oDdeT1HE95frTKBd90AxVXVq94cV7SBXjFkMUVedlSoXIp9kGuCBt07tukDyFtBJbYoi1w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Jy5eDPnh; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4639F1922DF;
+	Tue, 30 Jul 2024 08:16:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.177.32
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1722327407; cv=fail; b=n+VDS9tvy2GTpfY8O0cmr6LeDGrez1MVvJh1b9RiNBazhzIIZsP5Le+1rYiZL5N+qnyNkkY74897l/tPmrFez5c/CK0Epm+w2O6pOpU4PBkKnW4tXTWLzdlWq7OVfPQEdG3hnjY2gjdYd53FtOg+5Oma3A49KKkoPWBVK7TclUg=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1722327407; c=relaxed/simple;
+	bh=a2aH9prO1mcdyRxnwNFMw/DhFX4QscrZxdrJ0E5KNs8=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=VQ1DghjHNZEe+G0DhgwIsJykpJgRBlj/G7K7x+lLRbnelOSyCHsj12oR8qb1Aldv75JjHPiFm5qVPF+FyaMKR8WfrYNrqFFfvrxM/colezxn+ZyyBJRwsX45d7LS21T8zqlbAydnCae1XiBIpcqRH3jsKK6KWbIR/W6zWVDlVnY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=cgHFJa+I; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=OeTj9+gi; arc=fail smtp.client-ip=205.220.177.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Jy5eDPnh"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1722326759;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=9eh8EZF73LnG+wG1L4uQeusfNtosd8JnNoUVpYATm/E=;
-	b=Jy5eDPnhWYWnRFSZ3fS9iPk89A7oKTdhvKiH8EOtf9Z7G/q9QTwMgliQWCqwYvXyCyh8FK
-	GWaF6C0/jclJDKnmsYSHmvAOtZMnvHMnCOcpEUnOE05JnNOdQsBDTFXO8IR79/zjlX/ORm
-	RsxHUnSWBeo84oebskRtHkeT631GbrA=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-323-MtVBwhVXN16TpvgKiIBTwg-1; Tue, 30 Jul 2024 04:05:58 -0400
-X-MC-Unique: MtVBwhVXN16TpvgKiIBTwg-1
-Received: by mail-wr1-f70.google.com with SMTP id ffacd0b85a97d-36875698d0dso2012308f8f.3
-        for <bpf@vger.kernel.org>; Tue, 30 Jul 2024 01:05:57 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722326757; x=1722931557;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9eh8EZF73LnG+wG1L4uQeusfNtosd8JnNoUVpYATm/E=;
-        b=QbI14O7tf+3n7JUSYiQw9ZU3E2cH9NDs9Ydcymf2Yma0EK+6EmV/rnNK0yfHT5520r
-         rOT/s4slZRALVwICtGYMHzEUm8s6G92p7G26Pnf6NhlGAIsxpCubB7IPpkZLsugqTNIY
-         ZsJTT4OHAuwgzTQimgRhLj6zswoBfkigaWnXBexOB6zu3BJuvjbJiNkZq8ACIk2n+8DJ
-         SJD4h2tw/+iQZAvJiIDmmXkyNJ3Hvo8YC4w77/E6ozruPBI723W73MAhIJsq27APpKw9
-         NPYTmzrtx/IPcPl7uGSQ513If62HHATep6Mz+0w/NqMC5rLQJnNo+X2bJwdS7hrj8SLF
-         qKZA==
-X-Forwarded-Encrypted: i=1; AJvYcCXuy9uyBNhEaw63AehJc2R5GRHOx1h1yUGrGG2DAY7kzdkN1G8adliIxt7NX4+uAKY0Jlwpi1ghtmNbUlH8e2C2tfwJ
-X-Gm-Message-State: AOJu0YwfjjeMb/QT4oKnxulHsdWGcEiEYwpRVLmSLf/A9n2t/DA0uP92
-	RStqripOj7csTSPot8ZiVi4/gmXnUITTkXJPIq/xmCZOERTr6tSTifQFhWn0pNZPeR/s+t5GVvp
-	FRjGUM3vPQ+4WtgjwFKqRC5gpDNP3ibIAZZ60HuvOD1qERHL4NQ==
-X-Received: by 2002:adf:e743:0:b0:368:71fa:7532 with SMTP id ffacd0b85a97d-36b5d03d47emr5868790f8f.31.1722326756680;
-        Tue, 30 Jul 2024 01:05:56 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IFVMcf3I278ckQcEneUi+srZQULTonJGRRhlMeHi0/D0JUXQfm+ZqCL8Q22Lapx7Ip82TdYYQ==
-X-Received: by 2002:adf:e743:0:b0:368:71fa:7532 with SMTP id ffacd0b85a97d-36b5d03d47emr5868755f8f.31.1722326755759;
-        Tue, 30 Jul 2024 01:05:55 -0700 (PDT)
-Received: from sgarzare-redhat ([62.205.9.89])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-36b367c0320sm14032984f8f.19.2024.07.30.01.05.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Jul 2024 01:05:54 -0700 (PDT)
-Date: Tue, 30 Jul 2024 10:05:47 +0200
-From: Stefano Garzarella <sgarzare@redhat.com>
-To: Amery Hung <ameryhung@gmail.com>
-Cc: stefanha@redhat.com, mst@redhat.com, jasowang@redhat.com, 
-	xuanzhuo@linux.alibaba.com, davem@davemloft.net, edumazet@google.com, kuba@kernel.org, 
-	pabeni@redhat.com, kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org, 
-	decui@microsoft.com, bryantan@vmware.com, vdasa@vmware.com, pv-drivers@vmware.com, 
-	dan.carpenter@linaro.org, simon.horman@corigine.com, oxffffaa@gmail.com, 
-	kvm@vger.kernel.org, virtualization@lists.linux-foundation.org, 
-	netdev@vger.kernel.org, linux-kernel@vger.kernel.org, linux-hyperv@vger.kernel.org, 
-	bpf@vger.kernel.org, bobby.eshleman@bytedance.com, jiang.wang@bytedance.com, 
-	amery.hung@bytedance.com, xiyou.wangcong@gmail.com
-Subject: Re: [RFC PATCH net-next v6 05/14] af_vsock: use a separate dgram
- bind table
-Message-ID: <luie6pznvmhige4qti64ka6dgvekzpmrmmnk3naocfwj6sqvu4@wwspdc4tqced>
-References: <20240710212555.1617795-1-amery.hung@bytedance.com>
- <20240710212555.1617795-6-amery.hung@bytedance.com>
- <pghfa4vh7vb7sggelop5asuyj6bqtq4rbgm2q3bdslcoeicihj@6arcanemghjo>
- <CAMB2axNL_O3Twksi+ROUz0B298A-xQ_EYsgYzc2jLRbpikrdJQ@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="cgHFJa+I";
+	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="OeTj9+gi"
+Received: from pps.filterd (m0333520.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 46TKtVGW024171;
+	Tue, 30 Jul 2024 08:16:13 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=
+	message-id:date:subject:to:cc:references:from:in-reply-to
+	:content-type:content-transfer-encoding:mime-version; s=
+	corp-2023-11-20; bh=qglqRWJN6jQlZeF7but04/F+U6qkfOru65KZEHAwmQs=; b=
+	cgHFJa+ILlQpVmQBedDwFt+MV18GD/qOsFyq/F7s84cbqAKSW/oIBl6oFaT8K8iC
+	sAZjfCsk2wX3Ny33cr5w2bckh7KU+1RC7b9gOdzAJzTiD8hTY+WZZPTfC74qZU81
+	3xQA8c5sOl2368mf9fDxKJm10GSrRnXpDpT3pz8Z8RWjtcHICGgx+DnglIN8Zjgf
+	tOSMbIDk0zvpqf6nPQMtxcuSNGREtRarbjLJqyRuKzrSkd8XTP+AeQLsHTXowjFo
+	54NxCrxI63h1YJie+wZfiULy3CclVAwhIDq3XJpo6VP/w/cfJWsGf4Eq/0hmhueJ
+	B1Gml3+IZgFEbITOT5syJw==
+Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 40mrxbvgap-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 30 Jul 2024 08:16:13 +0000 (GMT)
+Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 46U7UHK5037991;
+	Tue, 30 Jul 2024 08:16:12 GMT
+Received: from nam12-dm6-obe.outbound.protection.outlook.com (mail-dm6nam12lp2169.outbound.protection.outlook.com [104.47.59.169])
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 40pm82wyht-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 30 Jul 2024 08:16:12 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=nT4q8y35/Br/BRmapB38Kt/b0bXN2wKd8SWT5K6e+OVUROw/wb52O2GA3demK9/Hx7yZBSo6WDXfWwe2scK6eepd+uG/K6Had5w9SWeSQrksXOiqad7g406BYHHzPOYreHHXaoevxt9qgBVffLLRee7x9zUgRQP9LudeUssdT+MDbVGoupz3KoblrUxFvIG8j7akKusvyBmGrw1SDFizrMG/yXqDB8Tk5mDTw0J/Xfaq5YKo4D583gbPwGy0Q0/+UfEerg9sf6vTIJcP2ROFKIfWXUFdtV3/lvEllL9P7lzBBRl5ILwdIJWEUbxpdj6GQWSwHOLntXBp0/h2Jun6vw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=qglqRWJN6jQlZeF7but04/F+U6qkfOru65KZEHAwmQs=;
+ b=AThCvKpEKflM65e8fX+w1EIdldUx5gZc8Ba9mh2suX+vU8Vk83Ldc05xurvlXOwGPsbvByx5/WQfCPpNDK4G0awczHRSomfUIj5XiaIOMYTLEKqV8lbNcvOOc+fcq75r9q9Xpid3AOHuAei31wmTWt11XZWi6KRdfBJIW7diIG2BouNaGqZZ9b1bhIEtv43ERa26G+C8lTnUwrpHFeehPcTDcn0OT9rItKGrQw5mCOtyPU8nZLKinq04uikhWZuL325jmJlyesGm5dsSloIzYANllVYF1V5P67JcwjtPLrsJPRcPSc7ArG650nMl5pAL1hSwGyiAzkm74J4oaW6VnQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=qglqRWJN6jQlZeF7but04/F+U6qkfOru65KZEHAwmQs=;
+ b=OeTj9+giw+jTzqvHkbAXpZvRPnC8o+w/znfGPLAz35Vm3albAyB6RGOGj4Xfj0zR2koe6uHG8nnL6UTE7k5RtmAdFwq/LoHvIiSv8ZAG50HWCIk81vNY266YFtAdOKeh2NxdBRfRQh33Efaxow/aVDovghjKExXdL+mDLcBXXlo=
+Received: from BLAPR10MB5267.namprd10.prod.outlook.com (2603:10b6:208:30e::22)
+ by IA0PR10MB6772.namprd10.prod.outlook.com (2603:10b6:208:43b::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7807.27; Tue, 30 Jul
+ 2024 08:16:10 +0000
+Received: from BLAPR10MB5267.namprd10.prod.outlook.com
+ ([fe80::682b:c879:9f97:a34f]) by BLAPR10MB5267.namprd10.prod.outlook.com
+ ([fe80::682b:c879:9f97:a34f%7]) with mapi id 15.20.7807.026; Tue, 30 Jul 2024
+ 08:16:09 +0000
+Message-ID: <012176d7-646b-49fe-b139-c8072340ecdb@oracle.com>
+Date: Tue, 30 Jul 2024 09:16:00 +0100
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v2 1/3] selftests/bpf: do not disable /dev/null
+ device access in cgroup dev test
+To: =?UTF-8?Q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau
+ <martin.lau@linux.dev>,
+        Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+        Yonghong Song <yonghong.song@linux.dev>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>
+Cc: ebpf@linuxfoundation.org, Thomas Petazzoni
+ <thomas.petazzoni@bootlin.com>,
+        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20240729-convert_dev_cgroup-v2-0-4c1fc0520545@bootlin.com>
+ <20240729-convert_dev_cgroup-v2-1-4c1fc0520545@bootlin.com>
+ <39781c99-95db-4c48-b363-a482a426e3b0@oracle.com>
+ <3d809ae0-d228-4ba0-baa4-c1b299024c55@bootlin.com>
+Content-Language: en-GB
+From: Alan Maguire <alan.maguire@oracle.com>
+In-Reply-To: <3d809ae0-d228-4ba0-baa4-c1b299024c55@bootlin.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: LO4P123CA0244.GBRP123.PROD.OUTLOOK.COM
+ (2603:10a6:600:1a7::15) To BLAPR10MB5267.namprd10.prod.outlook.com
+ (2603:10b6:208:30e::22)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAMB2axNL_O3Twksi+ROUz0B298A-xQ_EYsgYzc2jLRbpikrdJQ@mail.gmail.com>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BLAPR10MB5267:EE_|IA0PR10MB6772:EE_
+X-MS-Office365-Filtering-Correlation-Id: fc9316f0-bee4-4f57-8e94-08dcb06fde3e
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|7416014|376014|1800799024|366016|921020;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?QjZnaERmWlovcEFDRUx5RGpybUg4YUlSL3haWGJaZ1c4ZXlTZS95dW1VV0FG?=
+ =?utf-8?B?V0w5clBLS0xjSkNSTGpIcXBKQ0xxekM2cWpqQk92ekJvNjhlZWlRWXhQTHpM?=
+ =?utf-8?B?MXVxNmZDM3dWVTZoVGFiWjVidXRLWEk2QU54Q0RrbGx5WWVQT3ZLM0ZncENI?=
+ =?utf-8?B?ZjZTa2U3ell3blR3L0RoY09DWEovcy9NQ2kwbWZTUGhsOGhISUZxMlNjL0JD?=
+ =?utf-8?B?dUxMcStMQmRNTU5wemxRTy81QUdsbVpJS0EzczVubWtUV21kR1JuU1JkTTFG?=
+ =?utf-8?B?TFJudmhxSkVwcjZBc3hvVmwxMEJYeE4rTXRxSmEyQ21qTkFYdkhPS3RFT09u?=
+ =?utf-8?B?dHBzbTl3cHdLd0VEekM2ZDFEeitKUDRhbDBCaG9veUJEdzNJMDZka1k2amlI?=
+ =?utf-8?B?OGM1ZDFQTXdpbklPT2QvWkpPOVJLOVFzV2VLcTZvNncvRGV4TFh0UVcrRXQx?=
+ =?utf-8?B?QVpvK1dPR2FDb0hNaFZwaFRDdnU4VkRxZUlFejU4cTJDWXJza1R3Ync1WjZT?=
+ =?utf-8?B?Vi9mZnE2TG8vTmwzQjNSaTMyMDk3NWx3TUNtNlU3YmtrZ1lEWlVPQklvZUdw?=
+ =?utf-8?B?WXpUUzVrZWk4K0dxTEZEMUs3VThFNitpYUpBcDgzR0dySHJ6KzhRYzUxL1pX?=
+ =?utf-8?B?eUV2ZlVGNGJRdTZBbURrUVk5T2tyajEwR3pPcEdsN09lZklCcjBXZjB2ZVQ0?=
+ =?utf-8?B?dy9XdlRnM2JOcWw3UlpONTFUK1FjQWxDNmhzZG9yWVZTZTlUa0RHSEFNeTJm?=
+ =?utf-8?B?S0Q1VDZFRGhIbTFjVEMvdTJYWGFlSXd1amxoVU1nN0JRMG5xelhjUzUweTNz?=
+ =?utf-8?B?cDF4WDFESlRMOU5oYW9ZY0FNcHlCcktieE05eE9HOHUyYTFUMmRnZEttSXBi?=
+ =?utf-8?B?TXJwYkdtQVBWR2VXeDZQOFJidmxVaDFDR0lmNmlYL1VXWnZxZnFIREVNclRp?=
+ =?utf-8?B?am9wQ0tDSlFuMk1aQTVxZUpZbE5jaUFIdzdMcDdwVkYvSGtiblVSWFltVTJt?=
+ =?utf-8?B?OUtpeG5xYkFrNjk3N3R3b1ZmeGNQZFlpQ1l0OTZ6WlZ5dEpkQm5Cc3k4RWJE?=
+ =?utf-8?B?ZThiODZPQXJ3dmJxT1JXOWxJNllUcGdCL3NXWE9GalArNVMyT2hpcGliY2lw?=
+ =?utf-8?B?ekI2SzVSdURKcDZjbVR2ZTBjazRiZ1JlOWxTNmtiZzFCN1VGcExlWVdQMS8y?=
+ =?utf-8?B?S3hsVVpUSEdVVXcyNUN5ckMwcmx4UUpwandLbGdWSHdWcndPY1pRQjBpL1pJ?=
+ =?utf-8?B?a2R0S1pJbHJMYXB2NGtGcnluUDUxdW5BQzBCT3VIWlpPcDdDZm92aVR1NEJl?=
+ =?utf-8?B?UlAzNXdaNHY2cmZ6RzlvYXBmK3BiMDFvQ0ZhOTVpS2w1OWIwamQxZjAwN0tE?=
+ =?utf-8?B?THlLWG1NMHpITGNDOTVzeThDZFMvNDh2VjgwVXdGMnlqUFk1QndWR2Y5dndx?=
+ =?utf-8?B?dnJUbzBxYnB0ZE1IbWM4eWtzemQzMGJRcEN4MXRIeFIrSTJjbGFmRm4rSWdF?=
+ =?utf-8?B?aTBBQTVWeTQ4anpwaXliS1h4WFZRT0sxTThPUWliaG1RTzBDNzg2VkJNWWp1?=
+ =?utf-8?B?ZmxYQnlCbVdvN3RuN2JPeFFRc2NSd1gxV1QxZ21EYVdVY3VOSkwyejdaQitt?=
+ =?utf-8?B?MWp6RGNLMUxyb0ZCS1BGT1JpK2poY3VDTlhPUWtHLzBWU3ZqaEhQVm14OUIw?=
+ =?utf-8?B?WDA1REtuMGN5bUdKTTZuUDBZOUpnbHRlR245cVVRS0V5eW52MFJEUmFjNHhv?=
+ =?utf-8?B?bnlYNG1xcmc1ZnBzWlNOR0c4Y1ZiNlE1UDlRNThlcmZDcFZyd1NXeUlEanhZ?=
+ =?utf-8?B?MUwvR3dMcWdUUWR2VGc5anJyMlJ0OUdMU3lPUEJlNnl1TTYzQWFqTURuOU1G?=
+ =?utf-8?Q?SEyRRAhsBzN8o?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BLAPR10MB5267.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(1800799024)(366016)(921020);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?Q2RtWTNFR1FRNVVuczBQUVI5bjY4NnVqcnJRVnBBYmt1elhsSkJlWDVaaEk1?=
+ =?utf-8?B?K1BSamVNQlZUdDNhNXBDQzVCaUxWRURzaGE3YWl6Q085NHdkRHJXdXpUVWZI?=
+ =?utf-8?B?TEE2Z09wZGhVd3dkVkFWcWdVUGljeDhFNWEwY2FBUnV4aTAreGdvcHliMFll?=
+ =?utf-8?B?dmVyRENxTzR0bTRvcXllWVd3Yk9ZTmVJejVpNEw4UU9SQy82OHBkSzhmMGRo?=
+ =?utf-8?B?c2gxOGhaLzRwNUNIbStVNTdVUHJyKzBjbnBBY1Fza25uZjZ3MVk1VEQ0SUxm?=
+ =?utf-8?B?ODd4Tm5yZG42UWpoZWZwRHY5dko0R3E4b3pqMUczWXN0djNqNWhzWlp6SlMx?=
+ =?utf-8?B?ZEdUaTBrZW10OXdBcEF4ZXNacEc2a2JWN2IrM2Q3WEVRcjgwRE1pamNyL3J3?=
+ =?utf-8?B?UC84Y2FaREhjZnBPV1NUK09OOXJCN3l2WDBQWWVkaGFxb1ZZd29OcVh3SHpC?=
+ =?utf-8?B?cFJlN1RhZDRsalNGQ0ZwcFdRUU44N01YalVybW1keXUvaG8vTFNvTFNkb3JZ?=
+ =?utf-8?B?bDhIcVpCVW1ORjQ4d2s0RFJ5bkJnZExObW5lRGt3N2pYbHRqVm9PU2k5NjN6?=
+ =?utf-8?B?c0xRQTJyOHhEQUF2cDZERnFScEhOb0FYTEQxUllNdHlBVnBuRWM2VlBJSXVR?=
+ =?utf-8?B?ZWpURmVxdk1SYXh2akJteGhEZFhPYzIzUCtXQ05ibUF6eGdNWHhHNzlpbTFn?=
+ =?utf-8?B?U2lrclFKRVZ2MDNNc0JTTWp5ODdpVGFueEZOZ1U3MmVVeWIvUVR4SFJlTU9P?=
+ =?utf-8?B?NnJxa016NS85VkovV2FLNFNzTWVqY0lxbDlNbnhMdms2aEVmczhoWGpTN3cy?=
+ =?utf-8?B?MHpNNlE3K2F0UzhuaVJHekNuNE14QWpCcXFQcjRoOUZlNnFTd09MQW5vMmQ1?=
+ =?utf-8?B?aTdVM2VtZk1QTjRSWjdWYnVzM3Q4VTViS3lFbkhvM2RGUis0bmR6eFYxM3BC?=
+ =?utf-8?B?YjJpc1Y4ejZxYmpSM3dpYkNvak9LYldkQ1RGR2RNNjFUT2xqLzdpTG9BNjBu?=
+ =?utf-8?B?NFM0WENsOFdHQndsZXpndENKaElNekowV0JNWGxBVHJKVFN2VlNUcC9GUEdt?=
+ =?utf-8?B?K1JJY0M1dGhhOGJtc0Q5L3NqU1E0TmhXNFB2bm5FbnMrekFaY0hIYmJjQ3BI?=
+ =?utf-8?B?OFdKUW1XZm50T0Z4Rm1CTWxPYitSL2ZDY3RnZW13bGhKVjVrVzZ0eGZkaGxO?=
+ =?utf-8?B?VXRqYXpCU09wRFYzTVZ3VXRScGU4WmMweFEwem1UQkxtUlBpR3RycVRxMUUr?=
+ =?utf-8?B?SzRhaXE1dFhoUmtqT25qalkzWjk5NU11MmcvN3ZZV0NNek42NDVSb3VCaXdi?=
+ =?utf-8?B?dENsUXloYk43S0ZudnhBa0UxSGNSbWNJY09EaDkyb1ZjRUdhYSthT25kQ0lC?=
+ =?utf-8?B?WVhPZUtHVjFNdFVNdVlZV0NjSkFXNGhxRlY1QWl5a1RmWksxcFJQdmNmL3BX?=
+ =?utf-8?B?MDF2ZXNyZnYxRmZTYjZTVVVxdHlLbnBuRzlVMDU0RCtOVHNZc1JmUnFxTVpk?=
+ =?utf-8?B?SGxpYmVqMG1oZWdyUGFYb2VaQlRmOHlOYndXUHV2SFF6MG5DS3ppVjYzaUFJ?=
+ =?utf-8?B?a1cvZElxM2xNSGRnMDlvcGhzSGtGN20wM1BBd2xKWE83eDFPb1dxWlZhRGQ2?=
+ =?utf-8?B?aEtZdDB4Y2VQL3NFeTNUMTVpMVZianRRNkhuMFNZNzdlN1owQVVpdXB5eGlF?=
+ =?utf-8?B?NUUzRkR3azJ5Nzd5cWtraFEyYm10andvQk5iMFdqMUpUZXlpVjl6WitKSnJq?=
+ =?utf-8?B?S2Flc3orZXk2c0ZaMDZiS2ZZQU45QUF2cWpyeldmM3NJOGJJWmhpTmNzclRH?=
+ =?utf-8?B?WXl0MEZtTVRZbE8zcnFoMDNtREFCS0YyN21SME9SZERxbThrMnJpUW9adHRC?=
+ =?utf-8?B?YlZWOVgvM21yM0ZlU3lwVHQzVU01QmI0TEZNd3hFZ1B2eUJIbVJZYm9uQmVZ?=
+ =?utf-8?B?NlU4Y3VOK0liZkQ1VzJHNWYxWnhTMUhtK3E2c2ZGV1cwV1pQQXZZYXF0T3JR?=
+ =?utf-8?B?WW9ESmppVnNtdnJPaTA2bnB1S1Vxd2Q4UTd6cWhGcEppTDl1WVpndGsxY1Rp?=
+ =?utf-8?B?U0VERFc5SXFZZFkzS1JSL1VsMUIzcERWck1jZ1J6YjhnbVBMWWUxVjc0UW5G?=
+ =?utf-8?B?L3VhNnVCSFBjb29WTlp1T3gydzNtZDc1ZS9zM3htL3QrTmpEeTlaKzRRYnV3?=
+ =?utf-8?Q?rsf8pUTxoXrlQJEeoI9YaZk=3D?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
+	Tj6DH8ihEVy+XGrJUt89Slvr0gmgjgdV1vTMU2tkDSFkW6bd/fsNujSJHrP2wRJ/GdpSWoD8wuntWG87ihxdg7FKEFOxLk9l6vk5aUijTRU0CJExHi6NU2+ECu6E4hLRKUv9Lns6JRET/m3+2jTr5XC5MVogmSJGB0wXlA8PlQygWB8va8uHxnnj5lpKPYCcCDamVt/Gx/Y8e3Dgzy3t1nNRp68UitiPC7/x7FwpDUZ+6bUN/xkqPdlUEF4duquhXG9t+zxH8SpibKTPqVw+HX7iNklSZ5kyHWbKoqdBJvznOnMyH5xHfI8HCN1CsFmmnmiarlSJPl0UmG2FpgiZLVS7xFie5seWSLyIGkQXGQiEIKHlZFJ/Z/3hJAg3UA9gbGlO7Ct89nU8Tdm9zc8t/AozDGkQInCVovrANqmIGg5gIeb80LnmmRPAwDVrqNJ3ZxvsLY7cnUzO0Z1I7aS0J+E1p2xUEqhqSfL0ZVts0jdw/wnNqvHsX+k/MY7BKJFEK1BDJbiEQNEgP6eV+THRrIjgDpnFg+WmgN+SAVCL67O4/h/GLPHZZnZtCChND/Rz9PR9kbllSyR4nd/35dctmT0PjOMKczRhNFbXYN7mnXI=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: fc9316f0-bee4-4f57-8e94-08dcb06fde3e
+X-MS-Exchange-CrossTenant-AuthSource: BLAPR10MB5267.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Jul 2024 08:16:09.8601
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: qBN76FG9F7DmRBUV16w+h5n8JPVWTdvQeLD8yUrVBBJx+C3IPoeB7J2nUQqbwMGI57h3kUfTk2zgH26H14RVYA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PR10MB6772
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-07-30_08,2024-07-26_01,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 spamscore=0 mlxscore=0
+ suspectscore=0 phishscore=0 bulkscore=0 malwarescore=0 mlxlogscore=999
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2407110000
+ definitions=main-2407300060
+X-Proofpoint-GUID: LeTybu9m9a-SjDetYgr8kCchiExoqco5
+X-Proofpoint-ORIG-GUID: LeTybu9m9a-SjDetYgr8kCchiExoqco5
 
-On Sun, Jul 28, 2024 at 02:37:24PM GMT, Amery Hung wrote:
->On Tue, Jul 23, 2024 at 7:41 AM Stefano Garzarella <sgarzare@redhat.com> wrote:
+On 29/07/2024 18:30, Alexis Lothoré wrote:
+> Hello Alan,
+> 
+> On 7/29/24 18:59, Alan Maguire wrote:
+>> On 29/07/2024 09:20, Alexis Lothoré (eBPF Foundation) wrote:
+>>> test_dev_cgroup currently loads a small bpf program allowing any access on
+>>> urandom and zero devices, disabling access to any other device. It makes
+>>> migrating this test to test_progs impossible, since this one manipulates
+>>> extensively /dev/null.
+>>>
+>>> Allow /dev/null manipulation in dev_cgroup program to make its usage in
+>>> test_progs framework possible. Update test_dev_cgroup.c as well to match
+>>> this change while it has not been removed.
+>>>
+>>> Signed-off-by: Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
+>>> ---
+>>>  tools/testing/selftests/bpf/progs/dev_cgroup.c |  4 ++--
+>>>  tools/testing/selftests/bpf/test_dev_cgroup.c  | 18 +++++++++---------
 >>
->> On Wed, Jul 10, 2024 at 09:25:46PM GMT, Amery Hung wrote:
->> >From: Bobby Eshleman <bobby.eshleman@bytedance.com>
->> >
->> >This commit adds support for bound dgram sockets to be tracked in a
->> >separate bind table from connectible sockets in order to avoid address
->> >collisions. With this commit, users can simultaneously bind a dgram
->> >socket and connectible socket to the same CID and port.
->> >
->> >Signed-off-by: Bobby Eshleman <bobby.eshleman@bytedance.com>
->> >---
->> > net/vmw_vsock/af_vsock.c | 103 +++++++++++++++++++++++++++++----------
->> > 1 file changed, 76 insertions(+), 27 deletions(-)
->> >
->> >diff --git a/net/vmw_vsock/af_vsock.c b/net/vmw_vsock/af_vsock.c
->> >index d571be9cdbf0..ab08cd81720e 100644
->> >--- a/net/vmw_vsock/af_vsock.c
->> >+++ b/net/vmw_vsock/af_vsock.c
->> >@@ -10,18 +10,23 @@
->> >  * - There are two kinds of sockets: those created by user action (such as
->> >  * calling socket(2)) and those created by incoming connection request packets.
->> >  *
->> >- * - There are two "global" tables, one for bound sockets (sockets that have
->> >- * specified an address that they are responsible for) and one for connected
->> >- * sockets (sockets that have established a connection with another socket).
->> >- * These tables are "global" in that all sockets on the system are placed
->> >- * within them. - Note, though, that the bound table contains an extra entry
->> >- * for a list of unbound sockets and SOCK_DGRAM sockets will always remain in
->> >- * that list. The bound table is used solely for lookup of sockets when packets
->> >- * are received and that's not necessary for SOCK_DGRAM sockets since we create
->> >- * a datagram handle for each and need not perform a lookup.  Keeping SOCK_DGRAM
->> >- * sockets out of the bound hash buckets will reduce the chance of collisions
->> >- * when looking for SOCK_STREAM sockets and prevents us from having to check the
->> >- * socket type in the hash table lookups.
->> >+ * - There are three "global" tables, one for bound connectible (stream /
->> >+ * seqpacket) sockets, one for bound datagram sockets, and one for connected
->> >+ * sockets. Bound sockets are sockets that have specified an address that
->> >+ * they are responsible for. Connected sockets are sockets that have
->> >+ * established a connection with another socket. These tables are "global" in
->> >+ * that all sockets on the system are placed within them. - Note, though,
->> >+ * that the bound tables contain an extra entry for a list of unbound
->> >+ * sockets. The bound tables are used solely for lookup of sockets when packets
->> >+ * are received.
->> >+ *
->> >+ * - There are separate bind tables for connectible and datagram sockets to avoid
->> >+ * address collisions between stream/seqpacket sockets and datagram sockets.
->> >+ *
->> >+ * - Transports may elect to NOT use the global datagram bind table by
->> >+ * implementing the ->dgram_bind() callback. If that callback is implemented,
->> >+ * the global bind table is not used and the responsibility of bound datagram
->> >+ * socket tracking is deferred to the transport.
->> >  *
->> >  * - Sockets created by user action will either be "client" sockets that
->> >  * initiate a connection or "server" sockets that listen for connections; we do
->> >@@ -116,6 +121,7 @@
->> > static int __vsock_bind(struct sock *sk, struct sockaddr_vm *addr);
->> > static void vsock_sk_destruct(struct sock *sk);
->> > static int vsock_queue_rcv_skb(struct sock *sk, struct sk_buff *skb);
->> >+static bool sock_type_connectible(u16 type);
->> >
->> > /* Protocol family. */
->> > struct proto vsock_proto = {
->> >@@ -152,21 +158,25 @@ static DEFINE_MUTEX(vsock_register_mutex);
->> >  * VSocket is stored in the connected hash table.
->> >  *
->> >  * Unbound sockets are all put on the same list attached to the end of the hash
->> >- * table (vsock_unbound_sockets).  Bound sockets are added to the hash table in
->> >- * the bucket that their local address hashes to (vsock_bound_sockets(addr)
->> >- * represents the list that addr hashes to).
->> >+ * tables (vsock_unbound_sockets/vsock_unbound_dgram_sockets).  Bound sockets
->> >+ * are added to the hash table in the bucket that their local address hashes to
->> >+ * (vsock_bound_sockets(addr) and vsock_bound_dgram_sockets(addr) represents
->> >+ * the list that addr hashes to).
->> >  *
->> >- * Specifically, we initialize the vsock_bind_table array to a size of
->> >- * VSOCK_HASH_SIZE + 1 so that vsock_bind_table[0] through
->> >- * vsock_bind_table[VSOCK_HASH_SIZE - 1] are for bound sockets and
->> >- * vsock_bind_table[VSOCK_HASH_SIZE] is for unbound sockets.  The hash function
->> >- * mods with VSOCK_HASH_SIZE to ensure this.
->> >+ * Specifically, taking connectible sockets as an example we initialize the
->> >+ * vsock_bind_table array to a size of VSOCK_HASH_SIZE + 1 so that
->> >+ * vsock_bind_table[0] through vsock_bind_table[VSOCK_HASH_SIZE - 1] are for
->> >+ * bound sockets and vsock_bind_table[VSOCK_HASH_SIZE] is for unbound sockets.
->> >+ * The hash function mods with VSOCK_HASH_SIZE to ensure this.
->> >+ * Datagrams and vsock_dgram_bind_table operate in the same way.
->> >  */
->> > #define MAX_PORT_RETRIES        24
->> >
->> > #define VSOCK_HASH(addr)        ((addr)->svm_port % VSOCK_HASH_SIZE)
->> > #define vsock_bound_sockets(addr) (&vsock_bind_table[VSOCK_HASH(addr)])
->> >+#define vsock_bound_dgram_sockets(addr) (&vsock_dgram_bind_table[VSOCK_HASH(addr)])
->> > #define vsock_unbound_sockets     (&vsock_bind_table[VSOCK_HASH_SIZE])
->> >+#define vsock_unbound_dgram_sockets     (&vsock_dgram_bind_table[VSOCK_HASH_SIZE])
->> >
->> > /* XXX This can probably be implemented in a better way. */
->> > #define VSOCK_CONN_HASH(src, dst)                             \
->> >@@ -182,6 +192,8 @@ struct list_head vsock_connected_table[VSOCK_HASH_SIZE];
->> > EXPORT_SYMBOL_GPL(vsock_connected_table);
->> > DEFINE_SPINLOCK(vsock_table_lock);
->> > EXPORT_SYMBOL_GPL(vsock_table_lock);
->> >+static struct list_head vsock_dgram_bind_table[VSOCK_HASH_SIZE + 1];
->> >+static DEFINE_SPINLOCK(vsock_dgram_table_lock);
->> >
->> > /* Autobind this socket to the local address if necessary. */
->> > static int vsock_auto_bind(struct vsock_sock *vsk)
->> >@@ -204,6 +216,9 @@ static void vsock_init_tables(void)
->> >
->> >       for (i = 0; i < ARRAY_SIZE(vsock_connected_table); i++)
->> >               INIT_LIST_HEAD(&vsock_connected_table[i]);
->> >+
->> >+      for (i = 0; i < ARRAY_SIZE(vsock_dgram_bind_table); i++)
->> >+              INIT_LIST_HEAD(&vsock_dgram_bind_table[i]);
->> > }
->> >
->> > static void __vsock_insert_bound(struct list_head *list,
->> >@@ -271,13 +286,28 @@ static struct sock *__vsock_find_connected_socket(struct sockaddr_vm *src,
->> >       return NULL;
->> > }
->> >
->> >-static void vsock_insert_unbound(struct vsock_sock *vsk)
->> >+static void __vsock_insert_dgram_unbound(struct vsock_sock *vsk)
->> >+{
->> >+      spin_lock_bh(&vsock_dgram_table_lock);
->> >+      __vsock_insert_bound(vsock_unbound_dgram_sockets, vsk);
->> >+      spin_unlock_bh(&vsock_dgram_table_lock);
->> >+}
->> >+
->> >+static void __vsock_insert_connectible_unbound(struct vsock_sock *vsk)
->> > {
->> >       spin_lock_bh(&vsock_table_lock);
->> >       __vsock_insert_bound(vsock_unbound_sockets, vsk);
->> >       spin_unlock_bh(&vsock_table_lock);
->> > }
->> >
->> >+static void vsock_insert_unbound(struct vsock_sock *vsk)
->> >+{
->> >+      if (sock_type_connectible(sk_vsock(vsk)->sk_type))
->> >+              __vsock_insert_connectible_unbound(vsk);
->> >+      else
->> >+              __vsock_insert_dgram_unbound(vsk);
->> >+}
->> >+
->> > void vsock_insert_connected(struct vsock_sock *vsk)
->> > {
->> >       struct list_head *list = vsock_connected_sockets(
->> >@@ -289,6 +319,14 @@ void vsock_insert_connected(struct vsock_sock *vsk)
->> > }
->> > EXPORT_SYMBOL_GPL(vsock_insert_connected);
->> >
->> >+static void vsock_remove_dgram_bound(struct vsock_sock *vsk)
->> >+{
->> >+      spin_lock_bh(&vsock_dgram_table_lock);
->> >+      if (__vsock_in_bound_table(vsk))
->> >+              __vsock_remove_bound(vsk);
->> >+      spin_unlock_bh(&vsock_dgram_table_lock);
->> >+}
->> >+
->> > void vsock_remove_bound(struct vsock_sock *vsk)
->> > {
->> >       spin_lock_bh(&vsock_table_lock);
->> >@@ -340,7 +378,10 @@ EXPORT_SYMBOL_GPL(vsock_find_connected_socket);
->> >
->> > void vsock_remove_sock(struct vsock_sock *vsk)
->> > {
->> >-      vsock_remove_bound(vsk);
->> >+      if (sock_type_connectible(sk_vsock(vsk)->sk_type))
->> >+              vsock_remove_bound(vsk);
->> >+      else
->> >+              vsock_remove_dgram_bound(vsk);
->>
->> Can we try to be consistent, for example we have vsock_insert_unbound()
->> which calls internally sock_type_connectible(), while
->> vsock_remove_bound() is just for connectible sockets. It's a bit
->> confusing.
->
->I agree with you. I will make the style more consistent by keeping
->vsock_insert_unbound() only work on connectible sockets.
-
-Maybe I would have done the opposite, making vsock_remove_bound() usable 
-on all sockets. But I haven't really looked at whether that's feasible 
-or not.
-
->
->>
->> >       vsock_remove_connected(vsk);
->> > }
->> > EXPORT_SYMBOL_GPL(vsock_remove_sock);
->> >@@ -746,11 +787,19 @@ static int __vsock_bind_connectible(struct vsock_sock *vsk,
->> >       return vsock_bind_common(vsk, addr, vsock_bind_table, VSOCK_HASH_SIZE + 1);
->> > }
->> >
->> >-static int __vsock_bind_dgram(struct vsock_sock *vsk,
->> >-                            struct sockaddr_vm *addr)
->> >+static int vsock_bind_dgram(struct vsock_sock *vsk,
->> >+                          struct sockaddr_vm *addr)
->>
->> Why we are renaming this?
->
->I will keep the original __vsock_bind_dgram() for consistency.
->
->>
->> > {
->> >-      if (!vsk->transport || !vsk->transport->dgram_bind)
->> >-              return -EINVAL;
->> >+      if (!vsk->transport || !vsk->transport->dgram_bind) {
->>
->> Why this condition?
->>
->> Maybe a comment here is needed because I'm lost...
->
->We currently use !vsk->transport->dgram_bind to determine if this is
->VMCI dgram transport. Will add a comment explaining this.
-
-Thanks, what's not clear to me is why before this series we returned an 
-error, whereas now we call vsock_bind_common().
-
-Thanks,
-Stefano
-
->
->>
->> >+              int retval;
->> >+
->> >+              spin_lock_bh(&vsock_dgram_table_lock);
->> >+              retval = vsock_bind_common(vsk, addr, vsock_dgram_bind_table,
->> >+                                         VSOCK_HASH_SIZE);
->>
->> Should we use VSOCK_HASH_SIZE + 1 here?
->>
->> Using ARRAY_SIZE(x) should avoid this problem.
->
->Yes. The size here is wrong. I will remove the size check (the
->discussion is in patch 4).
->
->Thanks,
->Amery
->
->
->
->>
->>
->> >+              spin_unlock_bh(&vsock_dgram_table_lock);
->> >+
->> >+              return retval;
->> >+      }
->> >
->> >       return vsk->transport->dgram_bind(vsk, addr);
->> > }
->> >@@ -781,7 +830,7 @@ static int __vsock_bind(struct sock *sk, struct sockaddr_vm *addr)
->> >               break;
->> >
->> >       case SOCK_DGRAM:
->> >-              retval = __vsock_bind_dgram(vsk, addr);
->> >+              retval = vsock_bind_dgram(vsk, addr);
->> >               break;
->> >
->> >       default:
->> >--
->> >2.20.1
->> >
->>
+>> Not a big deal, but I found it a bit confusing that this file was
+>> modified then deleted in patch 2. Would it work having patch 1 stop
+>> building the standalone test/remove it and .gitignore entry, patch 2
+>> updating progs/dev_cgroup.c to allow /dev/zero, /dev/urandom access,
+>> patch 3 add cgroup_dev.c test support, and patch 4 add the device type
+>> subtest? Or are there issues with doing things that way? Thanks!
+> 
+> I've done this to make sure that at any point in the git history, there is one
+> working test for the targeted feature, either the old or the new one. I've done
+> it this way because the old test also helped me validate the new one while
+> developing it, but also because if at some point there is a (major) issue with
+> the new test, reverting only the relevant commit brings back the old test while
+> disabling the new one.
+> 
+> But maybe this concern is not worth the trouble (especially since the old tests
+> are not run automatically) ? If that's indeed the case, I can do it the way you
+> are suggesting :)
 >
 
+If no-one complains, it seems fine to me to stick with the way you've
+constructed the series the next respin. Thanks!
+
+> Thanks,
+> 
+> Alexis
+> 
