@@ -1,87 +1,179 @@
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+Received: from mailtransmit05.runbox.com (mailtransmit05.runbox.com [185.226.149.38])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DE0643ACB;
-	Wed, 31 Jul 2024 09:28:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.188
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4656C1AB50F
+	for <bpf@vger.kernel.org>; Wed, 31 Jul 2024 10:01:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.38
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722418102; cv=none; b=i72DAuvg7b1uprDeOwC8Py8ztdDeNfnlMTzLCa46js7FtCBSx7l9SHemdgEjjut1hShpXRfSAyiHVlv9RYlj1tbX8Nd/2qx335UqpvIAXyXweWviqepdDtGfjbyKXXk4+krtcUImpuFwRuy/IVtCrfUiIvsZoV61XU2h/tHyqfw=
+	t=1722420117; cv=none; b=qDR2fTePiRLrYQvaq22Y7GZmV3PUnQQlRBNOdnsyu6Ag+zIO12BllkJDii8zdyDjQmCYT/Jw0hM+Vunb8uu7ylGggFHIrRm5ye9sanvw6olaFVxCG1DKRQHLW7GiKigFZX8xOXSoWyB1B4hi3o6X7LylXsxt2TRgCTc01FztVVk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722418102; c=relaxed/simple;
-	bh=m9ybYCieBZjq7BVBviWIevcefmS2bXQGAuzliTHlPE0=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=XinSt3qUW3M+yp06Volx0+/bDRgvp7H8KJPYUIyEpm9CKGXROQtR9kwyjPMnjtM0ZBvhCPIW2jDeM4qq+ku0QS2Yd3tDFmOYL/GYJh90zxFIuWahWrcB76O3EIt1GIwsne7u2FMFK4DG/dSpHHt4NJChtzNZV054t1cNEWUGhxM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.188
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.163.48])
-	by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4WYmtq1cvxzgYn3;
-	Wed, 31 Jul 2024 17:26:27 +0800 (CST)
-Received: from kwepemd100013.china.huawei.com (unknown [7.221.188.163])
-	by mail.maildlp.com (Postfix) with ESMTPS id ABEB818005F;
-	Wed, 31 Jul 2024 17:28:17 +0800 (CST)
-Received: from huawei.com (10.67.174.121) by kwepemd100013.china.huawei.com
- (7.221.188.163) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1258.34; Wed, 31 Jul
- 2024 17:28:17 +0800
-From: Chen Ridong <chenridong@huawei.com>
-To: <tj@kernel.org>, <lizefan.x@bytedance.com>, <hannes@cmpxchg.org>,
-	<longman@redhat.com>, <adityakali@google.com>, <sergeh@kernel.org>
-CC: <bpf@vger.kernel.org>, <cgroups@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>
-Subject: [PATCH -next] cgroup/cpuset: Do not clear xcpus when clearing cpus
-Date: Wed, 31 Jul 2024 09:21:02 +0000
-Message-ID: <20240731092102.2369580-1-chenridong@huawei.com>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1722420117; c=relaxed/simple;
+	bh=mAWtuOtGuJESjzvI0NFmi3RwM42Z3P+0llBnuHalf3c=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=L+hJohxbSh4keXBtvpQktj1biNeT3g4F+3W7cOc8MN8WUQJMA3iaZbZCJRyGQPcGcmWwy43eIrmzkvifNDJ+QHFjWEnhrPZFXvwj+5DmLCIM1kpwRDX/D32fveyMaVtLPz3A+I+mjl19G/Yi9eyDs0fZrWYzv4SSULl6t+sis0E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co; spf=pass smtp.mailfrom=rbox.co; dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b=0/D5h1JS; arc=none smtp.client-ip=185.226.149.38
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rbox.co
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b="0/D5h1JS"
+Received: from mailtransmit02.runbox ([10.9.9.162] helo=aibo.runbox.com)
+	by mailtransmit05.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+	(Exim 4.93)
+	(envelope-from <mhal@rbox.co>)
+	id 1sZ69T-007DCs-KS; Wed, 31 Jul 2024 12:01:47 +0200
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=rbox.co;
+	s=selector1; h=Cc:To:In-Reply-To:References:Message-Id:
+	Content-Transfer-Encoding:Content-Type:MIME-Version:Subject:Date:From;
+	bh=dUGV8QTuF9AS0RTuH4OvphKPP6WrA30a06ChdR64otk=; b=0/D5h1JSEg5eRuOWaToCRu+5dD
+	6oZbf1wp2s3gWT5ySDpKgMJaGoTcecLFLC4FN1eI3Hsyym6v+1FAyd/GzMotHVBRhH2Er0J/Ui9dv
+	22eouyRuh1DKNM190AS2wCsXEK0IwEqCXx1cz2JsbdCKs6hXDE6m23jp4OgvLzrAryyPjxtnJmB+T
+	A5+Bc2hO4Fq7Jnff4qeGmilOZzvKAY7Y0QeYYB4LX3Wnu/iQ4XtgSMRfumJOhLwGuktdEhHifzo11
+	Usz68JPIbJ6IYHshvnFGhrFe53g2tQb2VBopBuT+4htTUcn6tv3UFiTRdamjVarFW+1u/HyKX658z
+	gkhFrSvw==;
+Received: from [10.9.9.73] (helo=submission02.runbox)
+	by mailtransmit02.runbox with esmtp (Exim 4.86_2)
+	(envelope-from <mhal@rbox.co>)
+	id 1sZ69S-000213-WD; Wed, 31 Jul 2024 12:01:47 +0200
+Received: by submission02.runbox with esmtpsa  [Authenticated ID (604044)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.93)
+	id 1sZ69H-006dO6-5w; Wed, 31 Jul 2024 12:01:35 +0200
+From: Michal Luczaj <mhal@rbox.co>
+Date: Wed, 31 Jul 2024 12:01:28 +0200
+Subject: [PATCH bpf-next v2 3/6] selftests/bpf: Simplify inet_socketpair()
+ and vsock_socketpair_connectible()
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- kwepemd100013.china.huawei.com (7.221.188.163)
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20240731-selftest-sockmap-fixes-v2-3-08a0c73abed2@rbox.co>
+References: <20240731-selftest-sockmap-fixes-v2-0-08a0c73abed2@rbox.co>
+In-Reply-To: <20240731-selftest-sockmap-fixes-v2-0-08a0c73abed2@rbox.co>
+To: Andrii Nakryiko <andrii@kernel.org>, 
+ Eduard Zingerman <eddyz87@gmail.com>, Mykola Lysenko <mykolal@fb.com>, 
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, 
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+ Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>, 
+ Jakub Sitnicki <jakub@cloudflare.com>
+Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, Michal Luczaj <mhal@rbox.co>
+X-Mailer: b4 0.14.1
 
-After commit 737bb142a00d ("cgroup/cpuset: Make cpuset.cpus.exclusive
-independent of cpuset.cpus"), cpuset.cpus.exclusive and cpuset.cpus
-became independent. However we found that cpuset.cpus.exclusive.effective
-is cleared when cpuset.cpus is clear. To fix this issue, just remove xcpus
-clearing when cpuset.cpus is being cleared.
+Replace implementation with a call to a generic function.
 
-It can be reproduced as below:
-cd /sys/fs/cgroup/
-mkdir test
-echo +cpuset > cgroup.subtree_control
-cd test
-echo 3 > cpuset.cpus.exclusive
-cat cpuset.cpus.exclusive.effective
-3
-echo > cpuset.cpus
-cat cpuset.cpus.exclusive.effective // was cleared
-
-Signed-off-by: Chen Ridong <chenridong@huawei.com>
+Signed-off-by: Michal Luczaj <mhal@rbox.co>
 ---
- kernel/cgroup/cpuset.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ .../selftests/bpf/prog_tests/sockmap_listen.c      | 83 +---------------------
+ 1 file changed, 2 insertions(+), 81 deletions(-)
 
-diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
-index a9b6d56eeffa..248c39bebbe9 100644
---- a/kernel/cgroup/cpuset.c
-+++ b/kernel/cgroup/cpuset.c
-@@ -2523,10 +2523,9 @@ static int update_cpumask(struct cpuset *cs, struct cpuset *trialcs,
- 	 * that parsing.  The validate_change() call ensures that cpusets
- 	 * with tasks have cpus.
- 	 */
--	if (!*buf) {
-+	if (!*buf)
- 		cpumask_clear(trialcs->cpus_allowed);
--		cpumask_clear(trialcs->effective_xcpus);
--	} else {
-+	else {
- 		retval = cpulist_parse(buf, trialcs->cpus_allowed);
- 		if (retval < 0)
- 			return retval;
+diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c b/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c
+index bfbc217637d1..ea2faacd146d 100644
+--- a/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c
++++ b/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c
+@@ -1490,49 +1490,7 @@ static void test_unix_redir(struct test_sockmap_listen *skel, struct bpf_map *ma
+ /* Returns two connected loopback vsock sockets */
+ static int vsock_socketpair_connectible(int sotype, int *v0, int *v1)
+ {
+-	struct sockaddr_storage addr;
+-	socklen_t len = sizeof(addr);
+-	int s, p, c;
+-
+-	s = socket_loopback(AF_VSOCK, sotype);
+-	if (s < 0)
+-		return -1;
+-
+-	c = xsocket(AF_VSOCK, sotype | SOCK_NONBLOCK, 0);
+-	if (c == -1)
+-		goto close_srv;
+-
+-	if (getsockname(s, sockaddr(&addr), &len) < 0)
+-		goto close_cli;
+-
+-	if (connect(c, sockaddr(&addr), len) < 0 && errno != EINPROGRESS) {
+-		FAIL_ERRNO("connect");
+-		goto close_cli;
+-	}
+-
+-	len = sizeof(addr);
+-	p = accept_timeout(s, sockaddr(&addr), &len, IO_TIMEOUT_SEC);
+-	if (p < 0)
+-		goto close_cli;
+-
+-	if (poll_connect(c, IO_TIMEOUT_SEC) < 0) {
+-		FAIL_ERRNO("poll_connect");
+-		goto close_acc;
+-	}
+-
+-	*v0 = p;
+-	*v1 = c;
+-
+-	return 0;
+-
+-close_acc:
+-	close(p);
+-close_cli:
+-	close(c);
+-close_srv:
+-	close(s);
+-
+-	return -1;
++	return create_pair(AF_VSOCK, sotype | SOCK_NONBLOCK, v0, v1);
+ }
+ 
+ static void vsock_unix_redir_connectible(int sock_mapfd, int verd_mapfd,
+@@ -1681,44 +1639,7 @@ static void test_reuseport(struct test_sockmap_listen *skel,
+ 
+ static int inet_socketpair(int family, int type, int *s, int *c)
+ {
+-	struct sockaddr_storage addr;
+-	socklen_t len;
+-	int p0, c0;
+-	int err;
+-
+-	p0 = socket_loopback(family, type | SOCK_NONBLOCK);
+-	if (p0 < 0)
+-		return p0;
+-
+-	len = sizeof(addr);
+-	err = xgetsockname(p0, sockaddr(&addr), &len);
+-	if (err)
+-		goto close_peer0;
+-
+-	c0 = xsocket(family, type | SOCK_NONBLOCK, 0);
+-	if (c0 < 0) {
+-		err = c0;
+-		goto close_peer0;
+-	}
+-	err = xconnect(c0, sockaddr(&addr), len);
+-	if (err)
+-		goto close_cli0;
+-	err = xgetsockname(c0, sockaddr(&addr), &len);
+-	if (err)
+-		goto close_cli0;
+-	err = xconnect(p0, sockaddr(&addr), len);
+-	if (err)
+-		goto close_cli0;
+-
+-	*s = p0;
+-	*c = c0;
+-	return 0;
+-
+-close_cli0:
+-	xclose(c0);
+-close_peer0:
+-	xclose(p0);
+-	return err;
++	return create_pair(family, type | SOCK_NONBLOCK, s, c);
+ }
+ 
+ static void udp_redir_to_connected(int family, int sock_mapfd, int verd_mapfd,
+
 -- 
-2.34.1
+2.45.2
 
