@@ -1,56 +1,56 @@
-Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com [209.85.128.174])
+Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com [209.85.128.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38D5C38DD2
-	for <bpf@vger.kernel.org>; Wed, 31 Jul 2024 19:31:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65CA917BCE
+	for <bpf@vger.kernel.org>; Wed, 31 Jul 2024 19:31:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722454309; cv=none; b=M0vdtmkAYQ5QXPUJCYjGjGy7qqGtfZly+d71mn+GAsMWcrt/AVXQhUKHNkwNK/99LRO+MDj3zQxUDqSJhWvZYvAUG35v6EW/tqwjvgbKQKj2EvsMy35hVljrmr4NRQryFx1XhMLNhvtZbMezvb7TvvGxXeOax7YEBwxnGRyOz/g=
+	t=1722454310; cv=none; b=aE9kkdI3Etzbbpd+bO+0GxotHKg9PRu9DjjG4PTu3KvOQ7+dfdqlTPg2x2RjOJUjL/sW1ncyjHZhCtx0TUv8e6oJqV7uZfcNuCaPozfGZIYRw6MPZzlMkIqZ85zwImvmPTC4Nq7cix3gpm8r0r+RGQrx7RIuiwAzHoKVHQbyeK0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722454309; c=relaxed/simple;
-	bh=KrPP9nFWyrD/AIn5EC+RRWDUAalIUuL1g2x/VkU7Jss=;
+	s=arc-20240116; t=1722454310; c=relaxed/simple;
+	bh=6KP6XsUv2MGZxxCLPVaPwIrIr/pUiW9quThq/ark6wY=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=o5soH8BuULyXHHjY3DMuilW/GSblZBzdt03UkIccvQeW77VN18dfdwT6w+GjreY6DMj8JkgNYjBzFZT+Zenu+Q8cS2etCtjwUtlWGMQaZ819i4zS0j4GKVSTdu+36YeFUYnRIEpvKAL+vGj5ojQN6pwy0lXobEUxvcbo3KOHgkk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Y9lTQw2u; arc=none smtp.client-ip=209.85.128.174
+	 MIME-Version; b=dQL72S88m1SHfbNXy1p7O+JI5YBD7e0NpZBLW7dsw3B4nXv95Opdu9qjkN676N2otaE6DERZc2hRDx074/w7BAsU/GDjfxGybpXXSLUmTPFaRGa7Ui3KILY4zaiYYfpUBZFcIlkM/EuckaEl1lsj5jXrPPTFPch1FanK8IILUas=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cu5YQNai; arc=none smtp.client-ip=209.85.128.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Y9lTQw2u"
-Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-65f7bd30546so11340117b3.1
-        for <bpf@vger.kernel.org>; Wed, 31 Jul 2024 12:31:46 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cu5YQNai"
+Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-664ccd158b0so47599917b3.1
+        for <bpf@vger.kernel.org>; Wed, 31 Jul 2024 12:31:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1722454305; x=1723059105; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1722454307; x=1723059107; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=gETAlhCEIpmBXK5PoPlhkIAdH76l3nS959YTg/VZ7fY=;
-        b=Y9lTQw2uLK0vPqArQHvMFFKNmkH58i37qnCBCnLZX2SADJfuiLwjGyD4Yyh85t8sdU
-         Nby6mwlkM6LV5jvvyPgJ7xcw3zt9xuWo6f8szO0OqnfEc7qE4gLc+ArTspj46O+ZZtCU
-         kWly6kGCpO19U5KHFnejml6Tx6kO6t34tUuSW1a1W5hKq//gmGMuo9lJ0lnJl3E3ieJv
-         qNXkUVg8e+A0eX9tlFUwNvri8P7UkF//0vxKBHHWnbxV4cZhTaXuUzEjGCXnVYqrbXK5
-         NtmhFHEMlzS3lmgJ2JuSMfPbITRblIqPVPXE4j7wsUU65uImWXNP0loWxeFxkFQf2EhL
-         16Bg==
+        bh=Pqyn20/ZGp0eJf+fwSbjl5bPgfZOLDFMntDAjkIVgDU=;
+        b=cu5YQNaihGjWJCFd/JeWlgcJAGzYPG9g0HYkfZYod0lbBWzDKrIAEVXf9ectmdkdIc
+         4Ong2kHgkg4nOK9X2QO7z/fEdsjO7Oz+s696vy4zHOJjvH0ZV8qr+UidPb3Sm7GUX/jH
+         EcyzTIGJLesnJ9JLn8RO1S1jOkdmXNlXXViLXmGCrI7RuTQ6J8urlk3CR5PJ92rND06n
+         W6FGDjLV1cAVn4rLygRhLPOzLSi4YaJpaMssn6/T/Z/bzqKwZMgGf0nRC8ss1zlqDDrc
+         ZkGWIh2btCztC/xWfd21GSXm7jVuX8G7MKUuxdUnJVeKqk1HD0ygNayTFYFXdUmNFqLT
+         /itw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722454305; x=1723059105;
+        d=1e100.net; s=20230601; t=1722454307; x=1723059107;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=gETAlhCEIpmBXK5PoPlhkIAdH76l3nS959YTg/VZ7fY=;
-        b=KdRCuu/KALQ1lD4bHFCDyVRePj7DAe6sardAikzWLBbA1nWOS0SIuIAzr1yPml6Z2a
-         HDsnYo4uLxdOpLeAYVYWVacJcP7mLjXkVIZpj2FfBEwv2nv0wpb4JmrB68diMjyMwH03
-         r/5J9LRW7T/dKHufDj3S96MvtNGtLoK7WCD5B/NGrNw/B85AscSihktvjKPDKJSj2H1w
-         GqvgrqqJm3Pmi+SitAXf2iOZP8BNa1jrBOA9hZ/oWt5IWWlqQ1d7591Y3Qht1wuKtVis
-         pDMa/HstlUMiBiZFAc1LgZHYkv1bIJrrkYjAV2G9lgVw4L1aNSoJKCC6HH5GIWOSt2F2
-         favg==
-X-Gm-Message-State: AOJu0YzCpy/VnVRpbAIA18Q6ssnPwgXsczIVSKLIlwagQualBtffLnUF
-	28mSR8/GDO0E9S9fQL2w5ZGn7pnKziMW39gdCtfIDvzHTs9tYmUk1dt4z2fT
-X-Google-Smtp-Source: AGHT+IGEKN4VDbPVbhS/zAEoQgdhqHgWkLmmPsSGdpzxggyG//behEIDx2ajz8vEm8l5Pjzzy/CS4w==
-X-Received: by 2002:a81:a787:0:b0:65f:d6fe:5de4 with SMTP id 00721157ae682-6826f9fb99cmr60245777b3.21.1722454304901;
-        Wed, 31 Jul 2024 12:31:44 -0700 (PDT)
+        bh=Pqyn20/ZGp0eJf+fwSbjl5bPgfZOLDFMntDAjkIVgDU=;
+        b=jSbFnxPQaK9pLmLQN8KBmrdAHC/ZmrJhd/4BwGxm+k64iBzpRIjjp13LgipGXUBI+N
+         URshG9QSJ1SXU/uO9hLW2Fe3m4+9QJdFX+K5GLjbFXICHRI3lA+vxs/FxGFIR0g9ihYu
+         R29h1V2pGSQsg6/raalk4Sf1TQgUntkFR/UHVopPNC/kk4GQtWyYBM+959mut0iIqS4+
+         1zW/QP3+eZl1bufPct5VS5A/dHT4ZfUkHbrZ+3Qb4WMOIgTpK5Tc14l8eB2uqPsGCbIa
+         Rb0hI/bTcZRJo+9btUXYDNC/a8rgHx9bV9ftNN8eQ5bJzB/hFEybZeXM0LWN+HyTNVcy
+         TI1w==
+X-Gm-Message-State: AOJu0Yzn3+J4LMzk5W55LL3euBKV/K0EKpZOJCGmHWzTp1TxcpgW0UIy
+	/4pfeX6AgX8xQfOeVfwNYYpv8s5IFCbxYA/W6EW8xWfMWANjIB/qKUrXhKWY
+X-Google-Smtp-Source: AGHT+IETXJNqQl5qB/oph2YCkC7jbvBOHW8Z2lMm8A9Po7+b1mAseiT+inQZRy8I2RAKfCYT6Qo22A==
+X-Received: by 2002:a0d:f207:0:b0:669:b45d:2098 with SMTP id 00721157ae682-6874b291af6mr2031847b3.5.1722454307311;
+        Wed, 31 Jul 2024 12:31:47 -0700 (PDT)
 Received: from kickker.attlocal.net ([2600:1700:6cf8:1240:c6db:9dfe:1d13:3b2e])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-6756b024ab1sm30891597b3.91.2024.07.31.12.31.43
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-6756b024ab1sm30891597b3.91.2024.07.31.12.31.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 31 Jul 2024 12:31:44 -0700 (PDT)
+        Wed, 31 Jul 2024 12:31:47 -0700 (PDT)
 From: Kui-Feng Lee <thinker.li@gmail.com>
 To: bpf@vger.kernel.org,
 	ast@kernel.org,
@@ -63,9 +63,9 @@ To: bpf@vger.kernel.org,
 Cc: sinquersw@gmail.com,
 	kuifeng@meta.com,
 	Kui-Feng Lee <thinker.li@gmail.com>
-Subject: [PATCH bpf-next v4 1/6] selftests/bpf: Add traffic monitor functions.
-Date: Wed, 31 Jul 2024 12:31:35 -0700
-Message-Id: <20240731193140.758210-2-thinker.li@gmail.com>
+Subject: [PATCH bpf-next v4 3/6] selftests/bpf: netns_new() and netns_free() helpers.
+Date: Wed, 31 Jul 2024 12:31:37 -0700
+Message-Id: <20240731193140.758210-4-thinker.li@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20240731193140.758210-1-thinker.li@gmail.com>
 References: <20240731193140.758210-1-thinker.li@gmail.com>
@@ -77,535 +77,174 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add functions that capture packets and print log in the background. They
-are supposed to be used for debugging flaky network test cases. A monitored
-test case should call traffic_monitor_start() to start a thread to capture
-packets in the background for a given namespace and call
-traffic_monitor_stop() to stop capturing. (Or, option '-m' implemented by
-the later patches.)
-
-    IPv4 TCP packet: 127.0.0.1:48165 -> 127.0.0.1:36707, len 68, ifindex 1, SYN
-    IPv4 TCP packet: 127.0.0.1:36707 -> 127.0.0.1:48165, len 60, ifindex 1, SYN, ACK
-    IPv4 TCP packet: 127.0.0.1:48165 -> 127.0.0.1:36707, len 60, ifindex 1, ACK
-    IPv4 TCP packet: 127.0.0.1:36707 -> 127.0.0.1:48165, len 52, ifindex 1, ACK
-    IPv4 TCP packet: 127.0.0.1:48165 -> 127.0.0.1:36707, len 52, ifindex 1, FIN, ACK
-    IPv4 TCP packet: 127.0.0.1:36707 -> 127.0.0.1:48165, len 52, ifindex 1, RST, ACK
-    Packet file: packets-2172-86-select_reuseport:sockhash-test.log
-    #280/87 select_reuseport/sockhash IPv4/TCP LOOPBACK test_detach_bpf:OK
-
-The above is the output of an example. It shows the packets of a connection
-and the name of the file that contains captured packets in the directory
-/tmp/tmon_pcap. The file can be loaded by tcpdump or wireshark.
-
-This feature only works if TRAFFIC_MONITOR variable has been passed to
-build BPF selftests. For example,
-
-  make TRAFFIC_MONITOR=1 -C tools/testing/selftests/bpf
-
-This command will build BPF selftests with this feature enabled.
+netns_new()/netns_free() create/delete network namespaces. They support the
+option '-m' of test_progs to start/stop traffic monitor for the network
+namespace being created for matched tests.
 
 Signed-off-by: Kui-Feng Lee <thinker.li@gmail.com>
 ---
- tools/testing/selftests/bpf/Makefile     |   5 +
- tools/testing/selftests/bpf/test_progs.c | 432 +++++++++++++++++++++++
- tools/testing/selftests/bpf/test_progs.h |  16 +
- 3 files changed, 453 insertions(+)
+ tools/testing/selftests/bpf/network_helpers.c | 26 ++++++
+ tools/testing/selftests/bpf/network_helpers.h |  2 +
+ tools/testing/selftests/bpf/test_progs.c      | 80 +++++++++++++++++++
+ tools/testing/selftests/bpf/test_progs.h      |  4 +
+ 4 files changed, 112 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index 774c6270e377..0a3108311be7 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -41,6 +41,11 @@ CFLAGS += -g $(OPT_FLAGS) -rdynamic					\
- LDFLAGS += $(SAN_LDFLAGS)
- LDLIBS += $(LIBELF_LIBS) -lz -lrt -lpthread
- 
-+ifneq ($(TRAFFIC_MONITOR),)
-+LDLIBS += -lpcap
-+CFLAGS += -DTRAFFIC_MONITOR=1
-+endif
-+
- # The following tests perform type punning and they may break strict
- # aliasing rules, which are exploited by both GCC and clang by default
- # while optimizing.  This can lead to broken programs.
-diff --git a/tools/testing/selftests/bpf/test_progs.c b/tools/testing/selftests/bpf/test_progs.c
-index 60fafa2f1ed7..ab54d8420603 100644
---- a/tools/testing/selftests/bpf/test_progs.c
-+++ b/tools/testing/selftests/bpf/test_progs.c
-@@ -14,10 +14,25 @@
- #include <netinet/in.h>
- #include <sys/select.h>
- #include <sys/socket.h>
-+#include <sys/stat.h>
-+#include <sys/types.h>
- #include <sys/un.h>
- #include <bpf/btf.h>
- #include "json_writer.h"
- 
-+#include <linux/ip.h>
-+#include <linux/udp.h>
-+#include <netinet/tcp.h>
-+#include <net/if.h>
-+#include "network_helpers.h"
-+
-+#ifdef TRAFFIC_MONITOR
-+/* Prevent pcap.h from including pcap/bpf.h and causing conflicts */
-+#define PCAP_DONT_INCLUDE_PCAP_BPF_H 1
-+#include <pcap/pcap.h>
-+#include <pcap/dlt.h>
-+#endif
-+
- #ifdef __GLIBC__
- #include <execinfo.h> /* backtrace */
- #endif
-@@ -416,6 +431,423 @@ static void restore_netns(void)
- 	}
+diff --git a/tools/testing/selftests/bpf/network_helpers.c b/tools/testing/selftests/bpf/network_helpers.c
+index a3f0a49fb26f..f2cf43382a8e 100644
+--- a/tools/testing/selftests/bpf/network_helpers.c
++++ b/tools/testing/selftests/bpf/network_helpers.c
+@@ -432,6 +432,32 @@ char *ping_command(int family)
+ 	return "ping";
  }
  
-+#ifdef TRAFFIC_MONITOR
-+struct tmonitor_ctx {
-+	pcap_t *pcap;
-+	pcap_dumper_t *dumper;
-+	pthread_t thread;
-+	int wake_fd_r;
-+	int wake_fd_w;
++int make_netns(const char *name)
++{
++	char cmd[128];
++	int r;
 +
-+	bool done;
-+	char pkt_fname[PATH_MAX];
-+	int pcap_fd;
++	snprintf(cmd, sizeof(cmd), "ip netns add %s", name);
++	r = system(cmd);
++	if (r > 0)
++		/* exit code */
++		return -r;
++	return r;
++}
++
++int remove_netns(const char *name)
++{
++	char cmd[128];
++	int r;
++
++	snprintf(cmd, sizeof(cmd), "ip netns del %s >/dev/null 2>&1", name);
++	r = system(cmd);
++	if (r > 0)
++		/* exit code */
++		return -r;
++	return r;
++}
++
+ struct nstoken {
+ 	int orig_netns_fd;
+ };
+diff --git a/tools/testing/selftests/bpf/network_helpers.h b/tools/testing/selftests/bpf/network_helpers.h
+index cce56955371f..f8aa8680a640 100644
+--- a/tools/testing/selftests/bpf/network_helpers.h
++++ b/tools/testing/selftests/bpf/network_helpers.h
+@@ -93,6 +93,8 @@ struct nstoken;
+ struct nstoken *open_netns(const char *name);
+ void close_netns(struct nstoken *token);
+ int send_recv_data(int lfd, int fd, uint32_t total_bytes);
++int make_netns(const char *name);
++int remove_netns(const char *name);
+ 
+ static __u16 csum_fold(__u32 csum)
+ {
+diff --git a/tools/testing/selftests/bpf/test_progs.c b/tools/testing/selftests/bpf/test_progs.c
+index 95643cd3119a..f86d47efe06e 100644
+--- a/tools/testing/selftests/bpf/test_progs.c
++++ b/tools/testing/selftests/bpf/test_progs.c
+@@ -1074,6 +1074,86 @@ int compare_stack_ips(int smap_fd, int amap_fd, int stack_trace_len)
+ 	return err;
+ }
+ 
++struct netns_obj {
++	char nsname[128];
++	struct tmonitor_ctx *tmon;
++	struct nstoken *nstoken;
 +};
 +
-+/* Is this packet captured with a Ethernet protocol type? */
-+static bool is_ethernet(const u_char *packet)
-+{
-+	u16 arphdr_type;
-+
-+	memcpy(&arphdr_type, packet + 8, 2);
-+	arphdr_type = ntohs(arphdr_type);
-+
-+	/* Except the following cases, the protocol type contains the
-+	 * Ethernet protocol type for the packet.
-+	 *
-+	 * https://www.tcpdump.org/linktypes/LINKTYPE_LINUX_SLL2.html
-+	 */
-+	switch (arphdr_type) {
-+	case 770: /* ARPHRD_FRAD */
-+	case 778: /* ARPHDR_IPGRE */
-+	case 803: /* ARPHRD_IEEE80211_RADIOTAP */
-+		return false;
-+	}
-+	return true;
-+}
-+
-+/* Show the information of the transport layer in the packet */
-+static void show_transport(const u_char *packet, u16 len, u32 ifindex,
-+			   const char *src_addr, const char *dst_addr,
-+			   u16 proto, bool ipv6)
-+{
-+	struct udphdr *udp;
-+	struct tcphdr *tcp;
-+	u16 src_port, dst_port;
-+	const char *transport_str;
-+	char *ifname, _ifname[IF_NAMESIZE];
-+
-+	ifname = if_indextoname(ifindex, _ifname);
-+	if (!ifname) {
-+		snprintf(_ifname, sizeof(_ifname), "unknown(%d)", ifindex);
-+		ifname = _ifname;
-+	}
-+
-+	if (proto == IPPROTO_UDP) {
-+		udp = (struct udphdr *)packet;
-+		src_port = ntohs(udp->source);
-+		dst_port = ntohs(udp->dest);
-+		transport_str = "UDP";
-+	} else if (proto == IPPROTO_TCP) {
-+		tcp = (struct tcphdr *)packet;
-+		src_port = ntohs(tcp->source);
-+		dst_port = ntohs(tcp->dest);
-+		transport_str = "TCP"
-+;
-+	} else if (proto == IPPROTO_ICMP) {
-+		printf("IPv4 ICMP packet: %s -> %s, len %d, type %d, code %d, ifname %s\n",
-+		       src_addr, dst_addr, len, packet[0], packet[1], ifname);
-+		return;
-+	} else if (proto == IPPROTO_ICMPV6) {
-+		printf("IPv6 ICMPv6 packet: %s -> %s, len %d, type %d, code %d, ifname %s\n",
-+		       src_addr, dst_addr, len, packet[0], packet[1], ifname);
-+		return;
-+	} else {
-+		printf("%s (proto %d): %s -> %s, ifname %s\n",
-+		       ipv6 ? "IPv6" : "IPv4", proto, src_addr, dst_addr, ifname);
-+		return;
-+	}
-+
-+	/* TCP */
-+
-+	if (ipv6)
-+		printf("IPv6 %s packet: [%s]:%d -> [%s]:%d, len %d, ifname %s",
-+		       transport_str, src_addr, src_port,
-+		       dst_addr, dst_port, len, ifname);
-+	else
-+		printf("IPv4 %s packet: %s:%d -> %s:%d, len %d, ifname %s",
-+		       transport_str, src_addr, src_port,
-+		       dst_addr, dst_port, len, ifname);
-+
-+	if (proto == IPPROTO_TCP) {
-+		if (tcp->fin)
-+			printf(", FIN");
-+		if (tcp->syn)
-+			printf(", SYN");
-+		if (tcp->rst)
-+			printf(", RST");
-+		if (tcp->ack)
-+			printf(", ACK");
-+	}
-+
-+	printf("\n");
-+}
-+
-+static void show_ipv6_packet(const u_char *packet, u32 ifindex)
-+{
-+	struct ipv6hdr *pkt = (struct ipv6hdr *)packet;
-+	struct in6_addr src;
-+	struct in6_addr dst;
-+	char src_str[INET6_ADDRSTRLEN], dst_str[INET6_ADDRSTRLEN];
-+	u_char proto;
-+
-+	memcpy(&src, &pkt->saddr, sizeof(src));
-+	memcpy(&dst, &pkt->daddr, sizeof(dst));
-+	inet_ntop(AF_INET6, &src, src_str, sizeof(src_str));
-+	inet_ntop(AF_INET6, &dst, dst_str, sizeof(dst_str));
-+	proto = pkt->nexthdr;
-+	show_transport(packet + sizeof(struct ipv6hdr),
-+		       ntohs(pkt->payload_len),
-+		       ifindex, src_str, dst_str, proto, true);
-+}
-+
-+static void show_ipv4_packet(const u_char *packet, u32 ifindex)
-+{
-+	struct iphdr *pkt = (struct iphdr *)packet;
-+	struct in_addr src;
-+	struct in_addr dst;
-+	u_char proto;
-+	char src_str[INET_ADDRSTRLEN], dst_str[INET_ADDRSTRLEN];
-+
-+	memcpy(&src, &pkt->saddr, sizeof(src));
-+	memcpy(&dst, &pkt->daddr, sizeof(dst));
-+	inet_ntop(AF_INET, &src, src_str, sizeof(src_str));
-+	inet_ntop(AF_INET, &dst, dst_str, sizeof(dst_str));
-+	proto = pkt->protocol;
-+	show_transport(packet + sizeof(struct iphdr),
-+		       ntohs(pkt->tot_len),
-+		       ifindex, src_str, dst_str, proto, false);
-+}
-+
-+static void *traffic_monitor_thread(void *arg)
-+{
-+	char *ifname, _ifname[IF_NAMESIZE];
-+	const u_char *packet, *payload;
-+	struct tmonitor_ctx *ctx = arg;
-+	struct pcap_pkthdr header;
-+	pcap_t *pcap = ctx->pcap;
-+	pcap_dumper_t *dumper = ctx->dumper;
-+	int fd = ctx->pcap_fd;
-+	int wake_fd = ctx->wake_fd_r;
-+	u16 proto;
-+	u32 ifindex;
-+	fd_set fds;
-+	int nfds, r;
-+
-+	nfds = (fd > wake_fd ? fd : wake_fd) + 1;
-+	FD_ZERO(&fds);
-+
-+	while (!ctx->done) {
-+		FD_SET(fd, &fds);
-+		FD_SET(wake_fd, &fds);
-+		r = select(nfds, &fds, NULL, NULL, NULL);
-+		if (!r)
-+			continue;
-+		if (r < 0) {
-+			if (errno == EINTR)
-+				continue;
-+			log_err("Fail to select on pcap fd and wake fd: %s", strerror(errno));
-+			break;
-+		}
-+
-+		packet = pcap_next(pcap, &header);
-+		if (!packet)
-+			continue;
-+
-+		/* According to the man page of pcap_dump(), first argument
-+		 * is the pcap_dumper_t pointer even it's argument type is
-+		 * u_char *.
-+		 */
-+		pcap_dump((u_char *)dumper, &header, packet);
-+
-+		/* Not sure what other types of packets look like. Here, we
-+		 * parse only Ethernet and compatible packets.
-+		 */
-+		if (!is_ethernet(packet)) {
-+			printf("Packet captured\n");
-+			continue;
-+		}
-+
-+		/* Skip SLL2 header
-+		 * https://www.tcpdump.org/linktypes/LINKTYPE_LINUX_SLL2.html
-+		 *
-+		 * Although the document doesn't mention that, the payload
-+		 * doesn't include the Ethernet header. The payload starts
-+		 * from the first byte of the network layer header.
-+		 */
-+		payload = packet + 20;
-+
-+		memcpy(&proto, packet, 2);
-+		proto = ntohs(proto);
-+		memcpy(&ifindex, packet + 4, 4);
-+		ifindex = ntohl(ifindex);
-+
-+		if (proto == ETH_P_IPV6) {
-+			show_ipv6_packet(payload, ifindex);
-+		} else if (proto == ETH_P_IP) {
-+			show_ipv4_packet(payload, ifindex);
-+		} else {
-+			ifname = if_indextoname(ifindex, _ifname);
-+			if (!ifname) {
-+				snprintf(_ifname, sizeof(_ifname), "unknown(%d)", ifindex);
-+				ifname = _ifname;
-+			}
-+
-+			printf("Unknown network protocol type %x, ifname %s\n", proto, ifname);
-+		}
-+	}
-+
-+	return NULL;
-+}
-+
-+/* Prepare the pcap handle to capture packets.
++/* Create a new network namespace with the given name.
 + *
-+ * This pcap is non-blocking and immediate mode is enabled to receive
-+ * captured packets as soon as possible.  The snaplen is set to 1024 bytes
-+ * to limit the size of captured content. The format of the link-layer
-+ * header is set to DLT_LINUX_SLL2 to enable handling various link-layer
-+ * technologies.
++ * Create a new network namespace and set the network namespace of the
++ * current process to the new network namespace if the argument "open" is
++ * true. This function should be paired with netns_free() to release the
++ * resource and delete the network namespace.
++ *
++ * It also implements the functionality of the option "-m" by starting
++ * traffic monitor on the background to capture the packets in this network
++ * namespace if the current test or subtest matching the pattern.
++ *
++ * name: the name of the network namespace to create.
++ * open: open the network namespace if true.
++ *
++ * Return: the network namespace object on success, NULL on failure.
 + */
-+static pcap_t *traffic_monitor_prepare_pcap(void)
++struct netns_obj *netns_new(const char *name, bool open)
 +{
-+	char errbuf[PCAP_ERRBUF_SIZE];
-+	pcap_t *pcap;
++	struct netns_obj *netns_obj = malloc(sizeof(*netns_obj));
 +	int r;
 +
-+	/* Listen on all NICs in the namespace */
-+	pcap = pcap_create("any", errbuf);
-+	if (!pcap) {
-+		log_err("Failed to open pcap: %s", errbuf);
++	if (!netns_obj)
 +		return NULL;
-+	}
-+	/* Limit the size of the packet (first N bytes) */
-+	r = pcap_set_snaplen(pcap, 1024);
-+	if (r) {
-+		log_err("Failed to set snaplen: %s", pcap_geterr(pcap));
-+		goto error;
-+	}
-+	/* To receive packets as fast as possible */
-+	r = pcap_set_immediate_mode(pcap, 1);
-+	if (r) {
-+		log_err("Failed to set immediate mode: %s", pcap_geterr(pcap));
-+		goto error;
-+	}
-+	r = pcap_setnonblock(pcap, 1, errbuf);
-+	if (r) {
-+		log_err("Failed to set nonblock: %s", errbuf);
-+		goto error;
-+	}
-+	r = pcap_activate(pcap);
-+	if (r) {
-+		log_err("Failed to activate pcap: %s", pcap_geterr(pcap));
-+		goto error;
-+	}
-+	/* Determine the format of the link-layer header */
-+	r = pcap_set_datalink(pcap, DLT_LINUX_SLL2);
-+	if (r) {
-+		log_err("Failed to set datalink: %s", pcap_geterr(pcap));
-+		goto error;
-+	}
++	memset(netns_obj, 0, sizeof(*netns_obj));
 +
-+	return pcap;
-+error:
-+	pcap_close(pcap);
-+	return NULL;
-+}
++	strncpy(netns_obj->nsname, name, sizeof(netns_obj->nsname));
++	netns_obj->nsname[sizeof(netns_obj->nsname) - 1] = '\0';
 +
-+static void encode_test_name(char *buf, size_t len)
-+{
-+	struct prog_test_def *test = env.test;
-+	struct subtest_state *subtest_state = env.subtest_state;
-+	char *p;
-+
-+	if (subtest_state)
-+		snprintf(buf, len, "%s:%s", test->test_name, subtest_state->name);
-+	else
-+		snprintf(buf, len, "%s", test->test_name);
-+	while ((p = strchr(buf, '/')))
-+		*p = '_';
-+	while ((p = strchr(buf, ' ')))
-+		*p = '_';
-+}
-+
-+#define PCAP_DIR "/tmp/tmon_pcap"
-+
-+/* Start to monitor the network traffic in the given network namespace.
-+ *
-+ * netns: the name of the network namespace to monitor. If NULL, the
-+ * current network namespace is monitored.
-+ *
-+ * This function will start a thread to capture packets going through NICs
-+ * in the give network namespace.
-+ */
-+struct tmonitor_ctx *traffic_monitor_start(const char *netns)
-+{
-+	struct tmonitor_ctx *ctx = NULL;
-+	struct nstoken *nstoken = NULL;
-+	int pipefd[2] = {-1, -1};
-+	static int tmon_seq;
-+	char test_name[64];
-+	int r;
-+
-+	if (netns) {
-+		nstoken = open_netns(netns);
-+		if (!nstoken)
-+			return NULL;
-+	}
-+	ctx = malloc(sizeof(*ctx));
-+	if (!ctx) {
-+		log_err("Failed to malloc ctx");
-+		goto fail_ctx;
-+	}
-+	memset(ctx, 0, sizeof(*ctx));
-+
-+	encode_test_name(test_name, sizeof(test_name));
-+	snprintf(ctx->pkt_fname, sizeof(ctx->pkt_fname),
-+		 PCAP_DIR "/packets-%d-%d-%s-%s.log", getpid(), tmon_seq++,
-+		 test_name, netns ? netns : "unknown");
-+
-+	r = mkdir(PCAP_DIR, 0755);
-+	if (r && errno != EEXIST) {
-+		log_err("Failed to create " PCAP_DIR);
-+		goto fail_pcap;
-+	}
-+
-+	ctx->pcap = traffic_monitor_prepare_pcap();
-+	if (!ctx->pcap)
-+		goto fail_pcap;
-+	ctx->pcap_fd = pcap_get_selectable_fd(ctx->pcap);
-+	if (ctx->pcap_fd < 0) {
-+		log_err("Failed to get pcap fd");
-+		goto fail_dumper;
-+	}
-+
-+	/* Create a packet file */
-+	ctx->dumper = pcap_dump_open(ctx->pcap, ctx->pkt_fname);
-+	if (!ctx->dumper) {
-+		log_err("Failed to open pcap dump: %s", ctx->pkt_fname);
-+		goto fail_dumper;
-+	}
-+
-+	/* Create a pipe to wake up the monitor thread */
-+	r = pipe(pipefd);
-+	if (r) {
-+		log_err("Failed to create pipe: %s", strerror(errno));
++	/* Create the network namespace */
++	r = make_netns(name);
++	if (r)
 +		goto fail;
-+	}
-+	ctx->wake_fd_r = pipefd[0];
-+	ctx->wake_fd_w = pipefd[1];
 +
-+	r = pthread_create(&ctx->thread, NULL, traffic_monitor_thread, ctx);
-+	if (r) {
-+		log_err("Failed to create thread: %s", strerror(r));
-+		goto fail;
++	/* Set the network namespace of the current process */
++	if (open) {
++		netns_obj->nstoken = open_netns(name);
++		if (!netns_obj->nstoken)
++			goto fail;
 +	}
 +
-+	close_netns(nstoken);
++	/* Start traffic monitor */
++	if (env.test->should_tmon ||
++	    (env.subtest_state && env.subtest_state->should_tmon)) {
++		netns_obj->tmon = traffic_monitor_start(name);
++		if (!netns_obj->tmon)
++			goto fail;
++	} else {
++		netns_obj->tmon = NULL;
++	}
 +
-+	return ctx;
-+
++	return netns_obj;
 +fail:
-+	close(pipefd[0]);
-+	close(pipefd[1]);
-+
-+	pcap_dump_close(ctx->dumper);
-+	unlink(ctx->pkt_fname);
-+
-+fail_dumper:
-+	pcap_close(ctx->pcap);
-+
-+fail_pcap:
-+	free(ctx);
-+
-+fail_ctx:
-+	close_netns(nstoken);
-+
++	close_netns(netns_obj->nstoken);
++	remove_netns(name);
++	free(netns_obj);
 +	return NULL;
 +}
 +
-+static void traffic_monitor_release(struct tmonitor_ctx *ctx)
-+{
-+	pcap_close(ctx->pcap);
-+	pcap_dump_close(ctx->dumper);
-+
-+	close(ctx->wake_fd_r);
-+	close(ctx->wake_fd_w);
-+
-+	free(ctx);
-+}
-+
-+/* Stop the network traffic monitor.
++/* Delete the network namespace.
 + *
-+ * ctx: the context returned by traffic_monitor_start()
++ * This function should be paired with netns_new() to delete the namespace
++ * created by netns_new().
 + */
-+void traffic_monitor_stop(struct tmonitor_ctx *ctx)
++void netns_free(struct netns_obj *netns_obj)
 +{
-+	if (!ctx)
++	if (!netns_obj)
 +		return;
-+
-+	/* Stop the monitor thread */
-+	ctx->done = true;
-+	write(ctx->wake_fd_w, "x", 1);
-+	pthread_join(ctx->thread, NULL);
-+
-+	printf("Packet file: %s\n", strrchr(ctx->pkt_fname, '/') + 1);
-+
-+	traffic_monitor_release(ctx);
++	if (netns_obj->tmon)
++		traffic_monitor_stop(netns_obj->tmon);
++	close_netns(netns_obj->nstoken);
++	remove_netns(netns_obj->nsname);
++	free(netns_obj);
 +}
-+#endif /* TRAFFIC_MONITOR */
 +
- void test__end_subtest(void)
- {
- 	struct prog_test_def *test = env.test;
+ /* extern declarations for test funcs */
+ #define DEFINE_TEST(name)				\
+ 	extern void test_##name(void) __weak;		\
 diff --git a/tools/testing/selftests/bpf/test_progs.h b/tools/testing/selftests/bpf/test_progs.h
-index cb9d6d46826b..5d4e61fa26a1 100644
+index ceda86a5a524..e025ac6f5a8d 100644
 --- a/tools/testing/selftests/bpf/test_progs.h
 +++ b/tools/testing/selftests/bpf/test_progs.h
-@@ -473,4 +473,20 @@ extern void test_loader_fini(struct test_loader *tester);
- 	test_loader_fini(&tester);					       \
- })
+@@ -430,6 +430,10 @@ int write_sysctl(const char *sysctl, const char *value);
+ int get_bpf_max_tramp_links_from(struct btf *btf);
+ int get_bpf_max_tramp_links(void);
  
-+struct tmonitor_ctx;
++struct netns_obj;
++struct netns_obj *netns_new(const char *name, bool open);
++void netns_free(struct netns_obj *netns);
 +
-+#ifdef TRAFFIC_MONITOR
-+struct tmonitor_ctx *traffic_monitor_start(const char *netns);
-+void traffic_monitor_stop(struct tmonitor_ctx *ctx);
-+#else
-+static inline struct tmonitor_ctx *traffic_monitor_start(const char *netns)
-+{
-+	return (struct tmonitor_ctx *)-1;
-+}
-+
-+static inline void traffic_monitor_stop(struct tmonitor_ctx *ctx)
-+{
-+}
-+#endif
-+
- #endif /* __TEST_PROGS_H */
+ #ifdef __x86_64__
+ #define SYS_NANOSLEEP_KPROBE_NAME "__x64_sys_nanosleep"
+ #elif defined(__s390x__)
 -- 
 2.34.1
 
