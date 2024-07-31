@@ -1,109 +1,92 @@
 Received: from mailtransmit04.runbox.com (mailtransmit04.runbox.com [185.226.149.37])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A3381AE841;
-	Wed, 31 Jul 2024 10:02:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C6D43CF73;
+	Wed, 31 Jul 2024 10:05:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.37
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722420124; cv=none; b=BHJ0hZd0VJ6SaN2Q77AkAA2WoukyNBPdC/MQojZq6qz7rJJx0xS6dVjbnZ++1uq7lGJKcRJsRPQMylWrHie5y1G3JLixHdJN1ndWPeX1BeHHWuq1JvjGWYXcgfZK6WHU54OVcN4tnL6uyt1F3qaLe63giQ0BXLv+RTrnzTMUWDg=
+	t=1722420361; cv=none; b=a/Xt31l460jEiW8VfiCpPVvNTVimJTDc6BdglcE4lSElitkMrNeX6JKUeo7l7tOcKsqHu7W370jY84rCDPk6vUMZP8fINGiA59Nazd6KRNvyDcpCgqnWZIZIzW7lwp3Bn1ENenaur4a6+8X+nq4SPZjaScwQ1MWbHzV28n7TefM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722420124; c=relaxed/simple;
-	bh=YtKGjVmznTaP+uG+xNnwv2w/Omxd9HhwCtFydYbreGI=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=mSpbZoxxb8HjiaJSSAZlZQYLP4865fduNm4/99DlWFi2/24mVDF5eMkV42k53UEctz+1irhkdYnvjdyHDNzYvLSdKwaYlONs5s3HDFc7hVljDPMNNgyGqSQDHQLsCg0bGn/CLbvPJh4m5OTsrihKQyDi4p6H1+T60SkecOmg+30=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co; spf=pass smtp.mailfrom=rbox.co; dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b=hq4ReaKp; arc=none smtp.client-ip=185.226.149.37
+	s=arc-20240116; t=1722420361; c=relaxed/simple;
+	bh=srmQMSPvjmzX6YVnb4EoadT8BWjHWmgLWmalAmQCuf8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=YI7S9jxfy6YmIbWCaCkFKOgMRNSiWrXB76+zyeUNxK2J3zs/+eth0ltN082G20/ybvj89DKWGQOCC7Vk2Ekxux5CU+0hBUyzgeW9yR3IfMj1Nc/8tmgOwlPTQ6x8Cyj7uucHRoRrGEOZ2R4qnYQ8ZAHNY6lk8Mms2hawJJg5tmg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co; spf=pass smtp.mailfrom=rbox.co; dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b=KXib8HK7; arc=none smtp.client-ip=185.226.149.37
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rbox.co
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b="hq4ReaKp"
-Received: from mailtransmit02.runbox ([10.9.9.162] helo=aibo.runbox.com)
+	dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b="KXib8HK7"
+Received: from mailtransmit03.runbox ([10.9.9.163] helo=aibo.runbox.com)
 	by mailtransmit04.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
 	(Exim 4.93)
 	(envelope-from <mhal@rbox.co>)
-	id 1sZ69S-009FBm-Is; Wed, 31 Jul 2024 12:01:46 +0200
+	id 1sZ6DS-009FnH-49; Wed, 31 Jul 2024 12:05:54 +0200
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=rbox.co;
-	s=selector1; h=Cc:To:In-Reply-To:References:Message-Id:
-	Content-Transfer-Encoding:Content-Type:MIME-Version:Subject:Date:From;
-	bh=li0JujrPpPpO/xAc8QiZ65BoP8NJpRd+3obwcRQIRXc=; b=hq4ReaKpol8TfZMlYO2sx0as2T
-	4/HM+rolpTYA0hM5S+Omf8YK59fi5SKD4Au51wAVINCKsUNeBDZe9IDC/H2cTgxJQYx8wXBT/ndnR
-	1kkqe94684FVC62clYfi58QhlnxT3HYbUyNDKYR5ufktz0pETW9xxHhYa/rCUyVQNgPH2+u36R0Up
-	VPLalKu48r5UtHWk1QmxNWjNa5Y+dT8b4QWITHAHv8hNWEPexraY4Gwdu0dr3xW9H3vL6hzR957ER
-	JVMaw4oAJWtyzmg05KQR5b2Egy3dF/qz/vBnlMLwOHAPZdQQUzV9LIywwuvVBd8RWuVLYv8w4evRB
-	BnEDcL7Q==;
-Received: from [10.9.9.73] (helo=submission02.runbox)
-	by mailtransmit02.runbox with esmtp (Exim 4.86_2)
+	s=selector1; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+	References:Cc:To:Subject:MIME-Version:Date:Message-ID;
+	bh=7WS5w3a6OnGgEbNmijkTxVC2Csv3HLG/InjtySuGe5k=; b=KXib8HK7QGxqR3+4N85jlCWmeH
+	ryBS3iHyrX2boZvL3pHMvmSC605z13qL/Cg9dDJ36VB2vZYlUpfiYcu/+pAeoFVDJtPQsNDsSs4Rw
+	LXih0vizz96kIAzoMWCvu7Sb7S1wezRhlC96wZorPCFO9TUIBKe3uGhCg0ACGzV6SfWaCUyAcx5Iq
+	/iGtIDUaVCy6mc4uiEqSGhwLB/wrUaogdwOL6N+hll263e6P1w+6DEehZThTQ7/w5hX6XxQTNWWTf
+	ggJgmfEQIOpoO3H8ymIGAV6fqkQ7YPefVhRYQ2ONkMPk2U69MsLMi6MELAMTLCnx6gkYQq39sUdl+
+	lqS656jg==;
+Received: from [10.9.9.74] (helo=submission03.runbox)
+	by mailtransmit03.runbox with esmtp (Exim 4.86_2)
 	(envelope-from <mhal@rbox.co>)
-	id 1sZ69R-00020n-OL; Wed, 31 Jul 2024 12:01:46 +0200
-Received: by submission02.runbox with esmtpsa  [Authenticated ID (604044)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	id 1sZ6DR-0005LZ-H5; Wed, 31 Jul 2024 12:05:53 +0200
+Received: by submission03.runbox with esmtpsa  [Authenticated ID (604044)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
 	(Exim 4.93)
-	id 1sZ69H-006dO6-W6; Wed, 31 Jul 2024 12:01:36 +0200
-From: Michal Luczaj <mhal@rbox.co>
-Date: Wed, 31 Jul 2024 12:01:29 +0200
-Subject: [PATCH bpf-next v2 4/6] selftests/bpf: Honour the sotype of
- af_unix redir tests
+	id 1sZ6DB-003PbE-PN; Wed, 31 Jul 2024 12:05:37 +0200
+Message-ID: <04c91b4c-8863-4306-81a2-4cf917e9de23@rbox.co>
+Date: Wed, 31 Jul 2024 12:05:36 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf 1/6] selftest/bpf: Support more socket types in
+ create_pair()
+To: Jakub Sitnicki <jakub@cloudflare.com>
+Cc: Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman
+ <eddyz87@gmail.com>, Mykola Lysenko <mykolal@fb.com>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
+ bpf@vger.kernel.org, netdev@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20240724-sockmap-selftest-fixes-v1-0-46165d224712@rbox.co>
+ <20240724-sockmap-selftest-fixes-v1-1-46165d224712@rbox.co>
+ <87cyn0kqxu.fsf@cloudflare.com>
+ <7ae7a77c-c5ce-4a09-8a6c-b3cd014220f3@rbox.co>
+ <87mslyztu9.fsf@cloudflare.com>
+Content-Language: pl-PL, en-GB
+From: Michal Luczaj <mhal@rbox.co>
+In-Reply-To: <87mslyztu9.fsf@cloudflare.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240731-selftest-sockmap-fixes-v2-4-08a0c73abed2@rbox.co>
-References: <20240731-selftest-sockmap-fixes-v2-0-08a0c73abed2@rbox.co>
-In-Reply-To: <20240731-selftest-sockmap-fixes-v2-0-08a0c73abed2@rbox.co>
-To: Andrii Nakryiko <andrii@kernel.org>, 
- Eduard Zingerman <eddyz87@gmail.com>, Mykola Lysenko <mykolal@fb.com>, 
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, 
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
- Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>, 
- Jakub Sitnicki <jakub@cloudflare.com>
-Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- linux-kernel@vger.kernel.org, Michal Luczaj <mhal@rbox.co>
-X-Mailer: b4 0.14.1
 
-Do actually test the sotype as specified by the caller.
+On 7/30/24 19:13, Jakub Sitnicki wrote:
+> On Fri, Jul 26, 2024 at 10:29 PM +02, Michal Luczaj wrote:
+>> On 7/26/24 19:23, Jakub Sitnicki wrote:
+>>> I was going to suggest that a single return path for success is better
+>>> than two (diff below), but I see that this is what you ended up with
+>>> after patch 6.
+>>>
+>>> So I think we can leave it as is.
+>>> [...]
+>>
+>> And speaking of which, would you rather have patch 1 and 6 squashed?
+> 
+> Don't have a straight answer, sorry . Would have to see if the diff is
+> clear enough after squashing it. Use your best judgement.
+> 
+> It's certainly fine with me to review the steps that were taken to
+> massage the code.
 
-This picks up after commit 75e0e27db6cf ("selftest/bpf: Change udp to inet
-in some function names").
-
-Suggested-by: Jakub Sitnicki <jakub@cloudflare.com>
-Signed-off-by: Michal Luczaj <mhal@rbox.co>
----
- tools/testing/selftests/bpf/prog_tests/sockmap_listen.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c b/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c
-index ea2faacd146d..7ed223df5f12 100644
---- a/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c
-+++ b/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c
-@@ -1706,11 +1706,11 @@ static void inet_unix_redir_to_connected(int family, int type, int sock_mapfd,
- 	int sfd[2];
- 	int err;
- 
--	if (socketpair(AF_UNIX, SOCK_DGRAM | SOCK_NONBLOCK, 0, sfd))
-+	if (socketpair(AF_UNIX, type | SOCK_NONBLOCK, 0, sfd))
- 		return;
- 	c0 = sfd[0], p0 = sfd[1];
- 
--	err = inet_socketpair(family, SOCK_DGRAM, &p1, &c1);
-+	err = inet_socketpair(family, type, &p1, &c1);
- 	if (err)
- 		goto close;
- 
-@@ -1758,7 +1758,7 @@ static void unix_inet_redir_to_connected(int family, int type, int sock_mapfd,
- 	int sfd[2];
- 	int err;
- 
--	err = inet_socketpair(family, SOCK_DGRAM, &p0, &c0);
-+	err = inet_socketpair(family, type, &p0, &c0);
- 	if (err)
- 		return;
- 
-
--- 
-2.45.2
+That's what I've assumed, thanks. So here's the bpf-next based respin:
+https://lore.kernel.org/bpf/20240731-selftest-sockmap-fixes-v2-0-08a0c73abed2@rbox.co
 
