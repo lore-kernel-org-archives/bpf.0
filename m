@@ -1,215 +1,173 @@
-Received: from szxga05-in.huawei.com (szxga05-in.huawei.com [45.249.212.191])
+Received: from relay.smtp-ext.broadcom.com (relay.smtp-ext.broadcom.com [192.19.144.209])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53BBD613D;
-	Fri,  2 Aug 2024 02:41:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.191
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3F9E632;
+	Fri,  2 Aug 2024 03:18:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.19.144.209
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722566484; cv=none; b=rITRYRY+y5aXIXYMnVDq5VTHbniXKmYt4g8Ik34sEMXzH1s/TEM33B1FQbLVOEL4SsQwNY4NOUBiumrE6he2i0PkloJHsaM4o+j58nf0F09UUwCejd2YJVyUIv6lFOiLNnvIylqzADHObeb50x0Gp97nhPPKSnSmKM9bErX0cJA=
+	t=1722568715; cv=none; b=XeNdpwM3KFNwG9PpB1uqhVnqB2RgNDLSJsPiyRK4/7ScjlkKC5XXkhXWfATe6mKwnR/XHMg+PIDYf1VZuNwPTweDYa2cMHaQV2tYyHArhKNIGnJvd2AwVXiCH0HeI0eBOoPoT1XqzK5VINXiguobKkqW+DdOmeO2bAJDpvhTt7k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722566484; c=relaxed/simple;
-	bh=nPIBnnil8Qfd/KlJNy2Gg11pc9TGxiWflNn2Xckegl4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=DahENxTPKgVVlDul6YfRibSXdakgDUBNhLNxNZvsMzMqSnEMo1bl8Q/9Eipfb7irXxxZbxiTRpjuZGLwlPXN9eJl1zUttH+tXk3tB0jdEWHAlMU5JILQyWHTNd0UrOdCinHM1DCmRop1xmKLrD49xihqG1zHDpNvJOihunln2aU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.191
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.163.17])
-	by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4WZql75NlMz1HFn8;
-	Fri,  2 Aug 2024 10:38:27 +0800 (CST)
-Received: from kwepemd200013.china.huawei.com (unknown [7.221.188.133])
-	by mail.maildlp.com (Postfix) with ESMTPS id 83F291A0188;
-	Fri,  2 Aug 2024 10:41:18 +0800 (CST)
-Received: from [10.67.110.108] (10.67.110.108) by
- kwepemd200013.china.huawei.com (7.221.188.133) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1258.34; Fri, 2 Aug 2024 10:41:17 +0800
-Message-ID: <eb6d1474-a292-af20-b8b1-1c2de61405f4@huawei.com>
-Date: Fri, 2 Aug 2024 10:41:17 +0800
+	s=arc-20240116; t=1722568715; c=relaxed/simple;
+	bh=krI7U8sRBmiw28CnfnkGSQgKpZPhoxDuv6WMnKEa0LE=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=HPyjGvggmWtGebKK5PmLR1Fydfa4jad9OPT4XdmwJJC0WQK9+n7vdjyco2K0Q3RFomxIqz4xfE28onE6eJ7Xut1nurNBGuWXvu/wrqMyqNidTvtM+SGn84BQHhw1uE4MLD7c3qKRkLwD37F2fQgRFJzqm7jr/lztZP67uNRkkMU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=FCC1inpq; arc=none smtp.client-ip=192.19.144.209
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=broadcom.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="FCC1inpq"
+Received: from mail-lvn-it-01.lvn.broadcom.net (mail-lvn-it-01.lvn.broadcom.net [10.36.132.253])
+	by relay.smtp-ext.broadcom.com (Postfix) with ESMTP id 50B9FC0000FB;
+	Thu,  1 Aug 2024 20:18:27 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 relay.smtp-ext.broadcom.com 50B9FC0000FB
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=broadcom.com;
+	s=dkimrelay; t=1722568707;
+	bh=krI7U8sRBmiw28CnfnkGSQgKpZPhoxDuv6WMnKEa0LE=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=FCC1inpqffmiJmEp+NcaB3ipvjKhCVumgwgPJvq/vrZtn81BYmSsmNdVL7E7sFesA
+	 /p6knY5qmUKRJx+mtz36ElVDV7YGRYS4N57Eg38Fa2TeyRt9idXAvjifCX23o8DGuk
+	 d4sKRRcISZU89ZJOQTxGXrgHx+wFJ/M/4Mdd2riI=
+Received: from pcie-dev03.dhcp.broadcom.net (pcie-dev03.dhcp.broadcom.net [10.59.171.67])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by mail-lvn-it-01.lvn.broadcom.net (Postfix) with ESMTPSA id 7733318041CAC7;
+	Thu,  1 Aug 2024 20:18:24 -0700 (PDT)
+From: jitendra.vegiraju@broadcom.com
+To: netdev@vger.kernel.org
+Cc: alexandre.torgue@foss.st.com,
+	joabreu@synopsys.com,
+	davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	mcoquelin.stm32@gmail.com,
+	jitendra.vegiraju@broadcom.com,
+	bcm-kernel-feedback-list@broadcom.com,
+	richardcochran@gmail.com,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	hawk@kernel.org,
+	john.fastabend@gmail.com,
+	linux-kernel@vger.kernel.org,
+	linux-stm32@st-md-mailman.stormreply.com,
+	linux-arm-kernel@lists.infradead.org,
+	bpf@vger.kernel.org,
+	andrew@lunn.ch,
+	linux@armlinux.org.uk,
+	horms@kernel.org,
+	florian.fainelli@broadcom.com
+Subject: [PATCH net-next v3 2/3] net: stmmac: Integrate dwxgmac4 into stmmac hwif handling
+Date: Thu,  1 Aug 2024 20:18:21 -0700
+Message-Id: <20240802031822.1862030-3-jitendra.vegiraju@broadcom.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20240802031822.1862030-1-jitendra.vegiraju@broadcom.com>
+References: <20240802031822.1862030-1-jitendra.vegiraju@broadcom.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH 6/8] perf/uprobe: split uprobe_unregister()
-To: Andrii Nakryiko <andrii@kernel.org>, <linux-trace-kernel@vger.kernel.org>,
-	<peterz@infradead.org>, <oleg@redhat.com>, <rostedt@goodmis.org>,
-	<mhiramat@kernel.org>
-CC: <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>, <jolsa@kernel.org>,
-	<paulmck@kernel.org>
-References: <20240731214256.3588718-1-andrii@kernel.org>
- <20240731214256.3588718-7-andrii@kernel.org>
-From: "Liao, Chang" <liaochang1@huawei.com>
-In-Reply-To: <20240731214256.3588718-7-andrii@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- kwepemd200013.china.huawei.com (7.221.188.133)
 
+From: Jitendra Vegiraju <jitendra.vegiraju@broadcom.com>
 
+Integrate dwxgmac4 support into stmmac hardware interface handling.
+A dwxgmac4 is an xgmac device and hence it inherits properties from
+existing stmmac_hw table entry.
+The quirks handling facility is used to update dma_ops field to
+point to dwxgmac400_dma_ops when the user version field matches.
 
-在 2024/8/1 5:42, Andrii Nakryiko 写道:
-> From: Peter Zijlstra <peterz@infradead.org>
-> 
-> With uprobe_unregister() having grown a synchronize_srcu(), it becomes
-> fairly slow to call. Esp. since both users of this API call it in a
-> loop.
-> 
-> Peel off the sync_srcu() and do it once, after the loop.
-> 
-> With recent uprobe_register()'s error handling reusing full
-> uprobe_unregister() call, we need to be careful about returning to the
-> caller before we have a guarantee that partially attached consumer won't
-> be called anymore. So add uprobe_unregister_sync() in the error handling
-> path. This is an unlikely slow path and this should be totally fine to
-> be slow in the case of an failed attach.
-> 
-> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> Co-developed-by: Andrii Nakryiko <andrii@kernel.org>
-> Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
-> ---
->  include/linux/uprobes.h                        |  8 ++++++--
->  kernel/events/uprobes.c                        | 18 ++++++++++++++----
->  kernel/trace/bpf_trace.c                       |  5 ++++-
->  kernel/trace/trace_uprobe.c                    |  6 +++++-
->  .../selftests/bpf/bpf_testmod/bpf_testmod.c    |  3 ++-
->  5 files changed, 31 insertions(+), 9 deletions(-)
-> 
-> diff --git a/include/linux/uprobes.h b/include/linux/uprobes.h
-> index a1686c1ebcb6..8f1999eb9d9f 100644
-> --- a/include/linux/uprobes.h
-> +++ b/include/linux/uprobes.h
-> @@ -105,7 +105,8 @@ extern unsigned long uprobe_get_trap_addr(struct pt_regs *regs);
->  extern int uprobe_write_opcode(struct arch_uprobe *auprobe, struct mm_struct *mm, unsigned long vaddr, uprobe_opcode_t);
->  extern struct uprobe *uprobe_register(struct inode *inode, loff_t offset, loff_t ref_ctr_offset, struct uprobe_consumer *uc);
->  extern int uprobe_apply(struct uprobe *uprobe, struct uprobe_consumer *uc, bool);
-> -extern void uprobe_unregister(struct uprobe *uprobe, struct uprobe_consumer *uc);
-> +extern void uprobe_unregister_nosync(struct uprobe *uprobe, struct uprobe_consumer *uc);
-> +extern void uprobe_unregister_sync(void);
+Signed-off-by: Jitendra Vegiraju <jitendra.vegiraju@broadcom.com>
+---
+ drivers/net/ethernet/stmicro/stmmac/common.h |  4 +++
+ drivers/net/ethernet/stmicro/stmmac/hwif.c   | 26 +++++++++++++++++++-
+ drivers/net/ethernet/stmicro/stmmac/hwif.h   |  1 +
+ 3 files changed, 30 insertions(+), 1 deletion(-)
 
-[...]
-
->  static inline void
-> -uprobe_unregister(struct uprobe *uprobe, struct uprobe_consumer *uc)
-> +uprobe_unregister_nosync(struct uprobe *uprobe, struct uprobe_consumer *uc)
-> +{
-> +}
-> +static inline void uprobes_unregister_sync(void)
-
-*uprobes*_unregister_sync, is it a typo?
-
->  {
->  }
->  static inline int uprobe_mmap(struct vm_area_struct *vma)
-> diff --git a/kernel/events/uprobes.c b/kernel/events/uprobes.c
-> index 3b42fd355256..b0488d356399 100644
-> --- a/kernel/events/uprobes.c
-> +++ b/kernel/events/uprobes.c
-> @@ -1089,11 +1089,11 @@ register_for_each_vma(struct uprobe *uprobe, struct uprobe_consumer *new)
->  }
->  
->  /**
-> - * uprobe_unregister - unregister an already registered probe.
-> + * uprobe_unregister_nosync - unregister an already registered probe.
->   * @uprobe: uprobe to remove
->   * @uc: identify which probe if multiple probes are colocated.
->   */
-> -void uprobe_unregister(struct uprobe *uprobe, struct uprobe_consumer *uc)
-> +void uprobe_unregister_nosync(struct uprobe *uprobe, struct uprobe_consumer *uc)
->  {
->  	int err;
->  
-> @@ -1109,10 +1109,14 @@ void uprobe_unregister(struct uprobe *uprobe, struct uprobe_consumer *uc)
->  		return;
->  
->  	put_uprobe(uprobe);
-> +}
-> +EXPORT_SYMBOL_GPL(uprobe_unregister_nosync);
->  
-> +void uprobe_unregister_sync(void)
-> +{
->  	synchronize_srcu(&uprobes_srcu);
->  }
-> -EXPORT_SYMBOL_GPL(uprobe_unregister);
-> +EXPORT_SYMBOL_GPL(uprobe_unregister_sync);
->  
->  /**
->   * uprobe_register - register a probe
-> @@ -1170,7 +1174,13 @@ struct uprobe *uprobe_register(struct inode *inode,
->  	up_write(&uprobe->register_rwsem);
->  
->  	if (ret) {
-> -		uprobe_unregister(uprobe, uc);
-> +		uprobe_unregister_nosync(uprobe, uc);
-> +		/*
-> +		 * Registration might have partially succeeded, so we can have
-> +		 * this consumer being called right at this time. We need to
-> +		 * sync here. It's ok, it's unlikely slow path.
-> +		 */
-> +		uprobe_unregister_sync();
->  		return ERR_PTR(ret);
->  	}
->  
-> diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-> index 73c570b5988b..6b632710c98e 100644
-> --- a/kernel/trace/bpf_trace.c
-> +++ b/kernel/trace/bpf_trace.c
-> @@ -3184,7 +3184,10 @@ static void bpf_uprobe_unregister(struct bpf_uprobe *uprobes, u32 cnt)
->  	u32 i;
->  
->  	for (i = 0; i < cnt; i++)
-> -		uprobe_unregister(uprobes[i].uprobe, &uprobes[i].consumer);
-> +		uprobe_unregister_nosync(uprobes[i].uprobe, &uprobes[i].consumer);
-> +
-> +	if (cnt)
-> +		uprobe_unregister_sync();
->  }
->  
->  static void bpf_uprobe_multi_link_release(struct bpf_link *link)
-> diff --git a/kernel/trace/trace_uprobe.c b/kernel/trace/trace_uprobe.c
-> index 7eb79e0a5352..f7443e996b1b 100644
-> --- a/kernel/trace/trace_uprobe.c
-> +++ b/kernel/trace/trace_uprobe.c
-> @@ -1097,6 +1097,7 @@ static int trace_uprobe_enable(struct trace_uprobe *tu, filter_func_t filter)
->  static void __probe_event_disable(struct trace_probe *tp)
->  {
->  	struct trace_uprobe *tu;
-> +	bool sync = false;
->  
->  	tu = container_of(tp, struct trace_uprobe, tp);
->  	WARN_ON(!uprobe_filter_is_empty(tu->tp.event->filter));
-> @@ -1105,9 +1106,12 @@ static void __probe_event_disable(struct trace_probe *tp)
->  		if (!tu->uprobe)
->  			continue;
->  
-> -		uprobe_unregister(tu->uprobe, &tu->consumer);
-> +		uprobe_unregister_nosync(tu->uprobe, &tu->consumer);
-> +		sync = true;
->  		tu->uprobe = NULL;
->  	}
-> +	if (sync)
-> +		uprobe_unregister_sync();
->  }
->  
->  static int probe_event_enable(struct trace_event_call *call,
-> diff --git a/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c b/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
-> index 73a6b041bcce..928c73cde32e 100644
-> --- a/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
-> +++ b/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
-> @@ -478,7 +478,8 @@ static void testmod_unregister_uprobe(void)
->  	mutex_lock(&testmod_uprobe_mutex);
->  
->  	if (uprobe.uprobe) {
-> -		uprobe_unregister(uprobe.uprobe, &uprobe.consumer);
-> +		uprobe_unregister_nosync(uprobe.uprobe, &uprobe.consumer);
-> +		uprobe_unregister_sync();
->  		uprobe.offset = 0;
->  		uprobe.uprobe = NULL;
->  	}
-
+diff --git a/drivers/net/ethernet/stmicro/stmmac/common.h b/drivers/net/ethernet/stmicro/stmmac/common.h
+index cd36ff4da68c..9bf278e11704 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/common.h
++++ b/drivers/net/ethernet/stmicro/stmmac/common.h
+@@ -37,11 +37,15 @@
+ #define DWXGMAC_CORE_2_10	0x21
+ #define DWXGMAC_CORE_2_20	0x22
+ #define DWXLGMAC_CORE_2_00	0x20
++#define DWXGMAC_CORE_4_00	0x40
+ 
+ /* Device ID */
+ #define DWXGMAC_ID		0x76
+ #define DWXLGMAC_ID		0x27
+ 
++/* User Version */
++#define DWXGMAC_USER_VER_X22	0x22
++
+ #define STMMAC_CHAN0	0	/* Always supported and default for all chips */
+ 
+ /* TX and RX Descriptor Length, these need to be power of two.
+diff --git a/drivers/net/ethernet/stmicro/stmmac/hwif.c b/drivers/net/ethernet/stmicro/stmmac/hwif.c
+index 29367105df54..713cb5aa2c3e 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/hwif.c
++++ b/drivers/net/ethernet/stmicro/stmmac/hwif.c
+@@ -36,6 +36,18 @@ static u32 stmmac_get_dev_id(struct stmmac_priv *priv, u32 id_reg)
+ 	return (reg & GENMASK(15, 8)) >> 8;
+ }
+ 
++static u32 stmmac_get_user_version(struct stmmac_priv *priv, u32 id_reg)
++{
++	u32 reg = readl(priv->ioaddr + id_reg);
++
++	if (!reg) {
++		dev_info(priv->device, "User Version not available\n");
++		return 0x0;
++	}
++
++	return (reg & GENMASK(23, 16)) >> 16;
++}
++
+ static void stmmac_dwmac_mode_quirk(struct stmmac_priv *priv)
+ {
+ 	struct mac_device_info *mac = priv->hw;
+@@ -82,6 +94,18 @@ static int stmmac_dwmac4_quirks(struct stmmac_priv *priv)
+ 	return 0;
+ }
+ 
++static int stmmac_dwxgmac_quirks(struct stmmac_priv *priv)
++{
++	struct mac_device_info *mac = priv->hw;
++	u32 user_ver;
++
++	user_ver = stmmac_get_user_version(priv, GMAC4_VERSION);
++	if (priv->synopsys_id == DWXGMAC_CORE_4_00 &&
++	    user_ver == DWXGMAC_USER_VER_X22)
++		mac->dma = &dwxgmac400_dma_ops;
++	return 0;
++}
++
+ static int stmmac_dwxlgmac_quirks(struct stmmac_priv *priv)
+ {
+ 	priv->hw->xlgmac = true;
+@@ -256,7 +280,7 @@ static const struct stmmac_hwif_entry {
+ 		.mmc = &dwxgmac_mmc_ops,
+ 		.est = &dwmac510_est_ops,
+ 		.setup = dwxgmac2_setup,
+-		.quirks = NULL,
++		.quirks = stmmac_dwxgmac_quirks,
+ 	}, {
+ 		.gmac = false,
+ 		.gmac4 = false,
+diff --git a/drivers/net/ethernet/stmicro/stmmac/hwif.h b/drivers/net/ethernet/stmicro/stmmac/hwif.h
+index e53c32362774..6213c496385c 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/hwif.h
++++ b/drivers/net/ethernet/stmicro/stmmac/hwif.h
+@@ -683,6 +683,7 @@ extern const struct stmmac_desc_ops dwxgmac210_desc_ops;
+ extern const struct stmmac_mmc_ops dwmac_mmc_ops;
+ extern const struct stmmac_mmc_ops dwxgmac_mmc_ops;
+ extern const struct stmmac_est_ops dwmac510_est_ops;
++extern const struct stmmac_dma_ops dwxgmac400_dma_ops;
+ 
+ #define GMAC_VERSION		0x00000020	/* GMAC CORE Version */
+ #define GMAC4_VERSION		0x00000110	/* GMAC4+ CORE Version */
 -- 
-BR
-Liao, Chang
+2.34.1
+
