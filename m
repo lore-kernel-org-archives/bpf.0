@@ -1,42 +1,42 @@
 Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [78.32.30.218])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBAC31D1F4B;
-	Fri,  2 Aug 2024 10:47:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1E921DC461;
+	Fri,  2 Aug 2024 10:47:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.32.30.218
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722595663; cv=none; b=ah0ucnX6qigSHaFObu5NEIOrOu2ODwD9a+ASWh2ImqCcEs0gGqbsEtiwsXZDGN+xS8e+REjwNmk+pupNiDKzMf9Kg0hptaKxBXrOljequcCJwBo7K9zYLeDVP+Uc1SX6qByDylh634KQzf2njTrwx/dMuzhurmoi4dhDg0bhtYw=
+	t=1722595664; cv=none; b=JHdX4ZSoPc2sek7LRMymxG3uaRjMlgSLfWdkD8QI4gbQhxesua2BYQmE0yocKMNEDgQ+fwfrFAB0MlO0Yto4DuF/Ub8gmxxNAbwaBAgLTR/gQl8F2O12mPUMfL/iD38vhRSgyzEvgFnjmpXJOMyo8NPdAZdrF2J2YJd9eYPL+M0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722595663; c=relaxed/simple;
-	bh=p1mKDn2jk7rxfYSG81m6boKJ9PG9+PAuUcxhATBuP5A=;
+	s=arc-20240116; t=1722595664; c=relaxed/simple;
+	bh=nG/Bu0qNgThvf6E59RPlDUKB47Hmbg5UAaNMgW7a1zc=;
 	h=In-Reply-To:References:From:To:Cc:Subject:MIME-Version:
-	 Content-Disposition:Content-Type:Message-Id:Date; b=jLiz2eUoIqV+Bp1OcQ1Fv/aHpQNIEoOFbPtyuUJzchTtLVJHVqECrtIlwtjNdPxX3mrqXlcZIQ6DZZg4Cw/XmskjKPXHOfebuLlxNdB7rWHKjww3P4PUl7zx7c8CyYH4iFhLgS2lah0hktDkYqGa8Ew/HYIEb4JX+6M163WPKoQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk; spf=none smtp.mailfrom=armlinux.org.uk; dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b=DcJMFv5D; arc=none smtp.client-ip=78.32.30.218
+	 Content-Disposition:Content-Type:Message-Id:Date; b=jmfY2f00D2NyiqZXv3y2qESJZxxd+uvzZ95b2+qTuPC5DkZDJHVMUASyOJZTr9Q6z2SZFhHbSCQEQBhSJrpqjbA/awKzyxQeFnlfO8SixA0TpA2OPyYW53Kdqci3pRUpEjE/SbdFYZIT5sF4vEbzeWZHswSt+UuYN1KdFz1f6PQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk; spf=none smtp.mailfrom=armlinux.org.uk; dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b=17mmKeB+; arc=none smtp.client-ip=78.32.30.218
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=armlinux.org.uk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b="DcJMFv5D"
+	dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b="17mmKeB+"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=armlinux.org.uk; s=pandora-2019; h=Date:Sender:Message-Id:Content-Type:
 	Content-Transfer-Encoding:MIME-Version:Subject:Cc:To:From:References:
 	In-Reply-To:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
 	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=4++u+M2gUsWJ0uVVvTAggA9qzMZa6bmuLtZOnE5wpxw=; b=DcJMFv5DuAQmmU/DBxlbCFzpyN
-	LzF/ThYcFNtdSVoSbs51EBxlBt3SUPSYarYUmuXoRCz8jz3wzN1l0GyF+qC7Zdtx0XbdbR/pDj7Zm
-	vNUWaDuw+tdqFsk2wH2pah2CU33nE/XcR0OPpd/S/AtCNIueOjtvXUrzYIXJhaCzFbN5G/PStMHFw
-	TM49wXLBD2JlpOkGgZS00tgcGkYeo+L/6H8JsyFXr5/7EedHJ/FI0mz0N3jsitkMf6czIuQ0eKPtl
-	X3DsU9bsRvaB6cbaPn29jzxUvC2EVA3dfG0AGnJSHEQ28qrHFseg4BiOvbzJLE+mnHerJg0P/+Tij
-	Y4TFJmGg==;
-Received: from e0022681537dd.dyn.armlinux.org.uk ([fd8f:7570:feb6:1:222:68ff:fe15:37dd]:36368 helo=rmk-PC.armlinux.org.uk)
+	bh=AasczkNb11bsNmuV1kDQTIcXsK7ueDkdZx5V2wjlYDk=; b=17mmKeB+++QONTfu6Hlc3z2HQs
+	NlWxzFj/pGibOwtctx8XPHlACMQXLSbFHlSofk9Lk1CaIRdAVMc4UUkdjjz7nrUtpubtbgeCeBWFU
+	9fJYEDSUn2y+MR1Pg5+hLf23wGbngcJ6RpKjOgT3dN5YenmyVeRQnW4h94dXMpYsjhlh2ecYqhtUn
+	ZeDHtFv3oPB5YKTb0Q9Lwik3fHuELh5Im7sVPB1VWFt454v/vsttrzVDwdyZjlgrfWprlSEIaU/ry
+	Zfch0X19gmZIoJLXUXJALj2yJR0tWzezd0urJuqfJs6m67fH23jgW8OMWKHXM+PVTiMJbXmUVhfOb
+	R1hUXTcw==;
+Received: from e0022681537dd.dyn.armlinux.org.uk ([fd8f:7570:feb6:1:222:68ff:fe15:37dd]:36344 helo=rmk-PC.armlinux.org.uk)
 	by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.96)
 	(envelope-from <rmk@armlinux.org.uk>)
-	id 1sZpoP-0006El-0l;
+	id 1sZpoO-0006Eb-1V;
 	Fri, 02 Aug 2024 11:47:05 +0100
 Received: from rmk by rmk-PC.armlinux.org.uk with local (Exim 4.94.2)
 	(envelope-from <rmk@rmk-PC.armlinux.org.uk>)
-	id 1sZpoQ-000eHS-TH; Fri, 02 Aug 2024 11:47:06 +0100
+	id 1sZpoB-000eHD-Ek; Fri, 02 Aug 2024 11:46:51 +0100
 In-Reply-To: <Zqy4wY0Of8noDqxt@shell.armlinux.org.uk>
 References: <Zqy4wY0Of8noDqxt@shell.armlinux.org.uk>
 From: "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
@@ -59,8 +59,8 @@ Cc: Alexandre Torgue <alexandre.torgue@foss.st.com>,
 	netdev@vger.kernel.org,
 	Paolo Abeni <pabeni@redhat.com>,
 	Vinod Koul <vkoul@kernel.org>
-Subject: [PATCH net-next 08/14] net: stmmac: dwmac4: convert sgmii/rgmii "pcs"
- to phylink
+Subject: [PATCH net-next 05/14] net: stmmac: provide core phylink PCS
+ infrastructure
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -70,166 +70,157 @@ MIME-Version: 1.0
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain; charset="utf-8"
-Message-Id: <E1sZpoQ-000eHS-TH@rmk-PC.armlinux.org.uk>
+Message-Id: <E1sZpoB-000eHD-Ek@rmk-PC.armlinux.org.uk>
 Sender: Russell King <rmk@armlinux.org.uk>
-Date: Fri, 02 Aug 2024 11:47:06 +0100
+Date: Fri, 02 Aug 2024 11:46:51 +0100
 
-Convert dwmac4 sgmii/rgmii "pcs" implementation to use a phylink_pcs
-so we can eventually get rid of the exceptional paths that conflict
-with phylink.
-
-We do not provide a validate method to enforce auto-negotiation,
-because the ethtool autonegotiation is a property of the media facing
-link, not of the internal network device links.
+There are some common operations shared between the dwmac hwifs, the
+only difference is where they are located within the device. These
+are already present in the form of dwmac_rane() and dwmac_ctrl_ane().
+Rather than use these (which don't quite fit with phylink PCS, provide
+phylink PCS specific versions. Also provide an implementation to parse
+the RSGMII status register.
 
 Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
 ---
- drivers/net/ethernet/stmicro/stmmac/dwmac4.h  | 13 +----
- .../net/ethernet/stmicro/stmmac/dwmac4_core.c | 58 +++++++++++--------
- 2 files changed, 34 insertions(+), 37 deletions(-)
+ drivers/net/ethernet/stmicro/stmmac/Makefile  |  2 +-
+ .../net/ethernet/stmicro/stmmac/stmmac_pcs.c  | 47 +++++++++++++++++
+ .../net/ethernet/stmicro/stmmac/stmmac_pcs.h  | 50 +++++++++++++++++++
+ 3 files changed, 98 insertions(+), 1 deletion(-)
+ create mode 100644 drivers/net/ethernet/stmicro/stmmac/stmmac_pcs.c
 
-diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac4.h b/drivers/net/ethernet/stmicro/stmmac/dwmac4.h
-index d3c5306f1c41..c6a254ecfbb8 100644
---- a/drivers/net/ethernet/stmicro/stmmac/dwmac4.h
-+++ b/drivers/net/ethernet/stmicro/stmmac/dwmac4.h
-@@ -567,18 +567,7 @@ static inline u32 mtl_low_credx_base_addr(const struct dwmac4_addrs *addrs,
- #define GMAC_PHYIF_CTRLSTATUS_TC		BIT(0)
- #define GMAC_PHYIF_CTRLSTATUS_LUD		BIT(1)
- #define GMAC_PHYIF_CTRLSTATUS_SMIDRXS		BIT(4)
--#define GMAC_PHYIF_CTRLSTATUS_LNKMOD		BIT(16)
--#define GMAC_PHYIF_CTRLSTATUS_SPEED		GENMASK(18, 17)
--#define GMAC_PHYIF_CTRLSTATUS_SPEED_SHIFT	17
--#define GMAC_PHYIF_CTRLSTATUS_LNKSTS		BIT(19)
--#define GMAC_PHYIF_CTRLSTATUS_JABTO		BIT(20)
--#define GMAC_PHYIF_CTRLSTATUS_FALSECARDET	BIT(21)
--/* LNKMOD */
--#define GMAC_PHYIF_CTRLSTATUS_LNKMOD_MASK	0x1
--/* LNKSPEED */
--#define GMAC_PHYIF_CTRLSTATUS_SPEED_125		0x2
--#define GMAC_PHYIF_CTRLSTATUS_SPEED_25		0x1
--#define GMAC_PHYIF_CTRLSTATUS_SPEED_2_5		0x0
-+#define GMAC_PHYIF_CTRLSTATUS_RS_STAT		GENMASK(31, 16)
+diff --git a/drivers/net/ethernet/stmicro/stmmac/Makefile b/drivers/net/ethernet/stmicro/stmmac/Makefile
+index c2f0e91f6bf8..9e15f7615ff4 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/Makefile
++++ b/drivers/net/ethernet/stmicro/stmmac/Makefile
+@@ -6,7 +6,7 @@ stmmac-objs:= stmmac_main.o stmmac_ethtool.o stmmac_mdio.o ring_mode.o	\
+ 	      mmc_core.o stmmac_hwtstamp.o stmmac_ptp.o dwmac4_descs.o	\
+ 	      dwmac4_dma.o dwmac4_lib.o dwmac4_core.o dwmac5.o hwif.o \
+ 	      stmmac_tc.o dwxgmac2_core.o dwxgmac2_dma.o dwxgmac2_descs.o \
+-	      stmmac_xdp.o stmmac_est.o \
++	      stmmac_xdp.o stmmac_est.o stmmac_pcs.o \
+ 	      $(stmmac-y)
  
- extern const struct stmmac_dma_ops dwmac4_dma_ops;
- extern const struct stmmac_dma_ops dwmac410_dma_ops;
-diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac4_core.c b/drivers/net/ethernet/stmicro/stmmac/dwmac4_core.c
-index d919fc07c8f1..ec8e94ddf948 100644
---- a/drivers/net/ethernet/stmicro/stmmac/dwmac4_core.c
-+++ b/drivers/net/ethernet/stmicro/stmmac/dwmac4_core.c
-@@ -14,6 +14,7 @@
- #include <linux/slab.h>
- #include <linux/ethtool.h>
- #include <linux/io.h>
-+#include <linux/phylink.h>
- #include "stmmac.h"
- #include "stmmac_pcs.h"
- #include "dwmac4.h"
-@@ -758,37 +759,32 @@ static void dwmac4_ctrl_ane(struct stmmac_priv *priv, bool ane, bool srgmi_ral,
- 	dwmac_ctrl_ane(priv->ioaddr, GMAC_PCS_BASE, ane, srgmi_ral, loopback);
- }
- 
--/* RGMII or SMII interface */
--static void dwmac4_phystatus(void __iomem *ioaddr, struct stmmac_extra_stats *x)
-+static void dwmac4_mii_pcs_get_state(struct phylink_pcs *pcs,
-+				     struct phylink_link_state *state)
- {
-+	struct stmmac_pcs *spcs = phylink_pcs_to_stmmac_pcs(pcs);
- 	u32 status;
- 
--	status = readl(ioaddr + GMAC_PHYIF_CONTROL_STATUS);
--	x->irq_rgmii_n++;
-+	status = readl(spcs->priv->ioaddr + GMAC_PHYIF_CONTROL_STATUS);
- 
--	/* Check the link status */
--	if (status & GMAC_PHYIF_CTRLSTATUS_LNKSTS) {
--		int speed_value;
-+	dwmac_rs_decode_stat(state, FIELD_GET(GMAC_PHYIF_CTRLSTATUS_RS_STAT,
-+					      status));
-+}
- 
--		x->pcs_link = 1;
-+static const struct phylink_pcs_ops dwmac4_mii_pcs_ops = {
-+	.pcs_config = dwmac_pcs_config,
-+	.pcs_get_state = dwmac4_mii_pcs_get_state,
-+};
- 
--		speed_value = ((status & GMAC_PHYIF_CTRLSTATUS_SPEED) >>
--			       GMAC_PHYIF_CTRLSTATUS_SPEED_SHIFT);
--		if (speed_value == GMAC_PHYIF_CTRLSTATUS_SPEED_125)
--			x->pcs_speed = SPEED_1000;
--		else if (speed_value == GMAC_PHYIF_CTRLSTATUS_SPEED_25)
--			x->pcs_speed = SPEED_100;
--		else
--			x->pcs_speed = SPEED_10;
- 
--		x->pcs_duplex = (status & GMAC_PHYIF_CTRLSTATUS_LNKMOD_MASK);
-+static struct phylink_pcs *
-+dwmac4_phylink_select_pcs(struct stmmac_priv *priv, phy_interface_t interface)
-+{
-+	if (priv->hw->pcs & STMMAC_PCS_RGMII ||
-+	    priv->hw->pcs & STMMAC_PCS_SGMII)
-+		return &priv->hw->mac_pcs.pcs;
- 
--		pr_info("Link is Up - %d/%s\n", (int)x->pcs_speed,
--			x->pcs_duplex ? "Full" : "Half");
--	} else {
--		x->pcs_link = 0;
--		pr_info("Link is Down\n");
--	}
-+	return NULL;
- }
- 
- static int dwmac4_irq_mtl_status(struct stmmac_priv *priv,
-@@ -862,8 +858,12 @@ static int dwmac4_irq_status(struct mac_device_info *hw,
- 	}
- 
- 	dwmac_pcs_isr(ioaddr, GMAC_PCS_BASE, intr_status, x);
--	if (intr_status & PCS_RGSMIIIS_IRQ)
--		dwmac4_phystatus(ioaddr, x);
-+	if (intr_status & PCS_RGSMIIIS_IRQ) {
-+		/* TODO Dummy-read to clear the IRQ status */
-+		readl(ioaddr + GMAC_PHYIF_CONTROL_STATUS);
-+		phylink_pcs_change(&hw->mac_pcs.pcs, false);
-+		x->irq_rgmii_n++;
-+	}
- 
- 	return ret;
- }
-@@ -1181,6 +1181,7 @@ static void dwmac4_set_hw_vlan_mode(struct mac_device_info *hw)
- const struct stmmac_ops dwmac4_ops = {
- 	.core_init = dwmac4_core_init,
- 	.update_caps = dwmac4_update_caps,
-+	.phylink_select_pcs = dwmac4_phylink_select_pcs,
- 	.set_mac = stmmac_set_mac,
- 	.rx_ipc = dwmac4_rx_ipc_enable,
- 	.rx_queue_enable = dwmac4_rx_queue_enable,
-@@ -1224,6 +1225,7 @@ const struct stmmac_ops dwmac4_ops = {
- const struct stmmac_ops dwmac410_ops = {
- 	.core_init = dwmac4_core_init,
- 	.update_caps = dwmac4_update_caps,
-+	.phylink_select_pcs = dwmac4_phylink_select_pcs,
- 	.set_mac = stmmac_dwmac4_set_mac,
- 	.rx_ipc = dwmac4_rx_ipc_enable,
- 	.rx_queue_enable = dwmac4_rx_queue_enable,
-@@ -1271,6 +1273,7 @@ const struct stmmac_ops dwmac410_ops = {
- const struct stmmac_ops dwmac510_ops = {
- 	.core_init = dwmac4_core_init,
- 	.update_caps = dwmac4_update_caps,
-+	.phylink_select_pcs = dwmac4_phylink_select_pcs,
- 	.set_mac = stmmac_dwmac4_set_mac,
- 	.rx_ipc = dwmac4_rx_ipc_enable,
- 	.rx_queue_enable = dwmac4_rx_queue_enable,
-@@ -1383,5 +1386,10 @@ int dwmac4_setup(struct stmmac_priv *priv)
- 	mac->mii.clk_csr_mask = GENMASK(11, 8);
- 	mac->num_vlan = dwmac4_get_num_vlan(priv->ioaddr);
- 
-+	mac->mac_pcs.priv = priv;
-+	mac->mac_pcs.pcs_base = priv->ioaddr + GMAC_PCS_BASE;
-+	mac->mac_pcs.pcs.ops = &dwmac4_mii_pcs_ops;
-+	mac->mac_pcs.pcs.neg_mode = true;
+ stmmac-$(CONFIG_STMMAC_SELFTESTS) += stmmac_selftests.o
+diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_pcs.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_pcs.c
+new file mode 100644
+index 000000000000..292c039c9778
+--- /dev/null
++++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_pcs.c
+@@ -0,0 +1,47 @@
++// SPDX-License-Identifier: GPL-2.0-only
++#include "stmmac.h"
++#include "stmmac_pcs.h"
 +
- 	return 0;
++static void __dwmac_ctrl_ane(struct stmmac_pcs *spcs, bool ane, bool srgmi_ral,
++			     bool loopback)
++
++{
++	u32 val;
++
++	val = readl(spcs->pcs_base + GMAC_AN_CTRL(0));
++
++	/* Enable and restart the Auto-Negotiation */
++	if (ane)
++		val |= GMAC_AN_CTRL_ANE | GMAC_AN_CTRL_RAN;
++	else
++		val &= ~GMAC_AN_CTRL_ANE;
++
++	/* In case of MAC-2-MAC connection, block is configured to operate
++	 * according to MAC conf register.
++	 */
++	if (srgmi_ral)
++		val |= GMAC_AN_CTRL_SGMRAL;
++
++	if (loopback)
++		val |= GMAC_AN_CTRL_ELE;
++	else
++		val &= ~GMAC_AN_CTRL_ELE;
++
++	writel(val, spcs->pcs_base + GMAC_AN_CTRL(0));
++}
++
++int dwmac_pcs_config(struct phylink_pcs *pcs, unsigned int neg_mode,
++		     phy_interface_t interface,
++		     const unsigned long *advertising,
++		     bool permit_pause_to_mac)
++{
++	struct stmmac_pcs *spcs = phylink_pcs_to_stmmac_pcs(pcs);
++
++	/* The RGMII interface does not have the GMAC_AN_CTRL register */
++	if (phy_interface_mode_is_rgmii(spcs->priv->plat->mac_interface))
++		return 0;
++
++	__dwmac_ctrl_ane(spcs, true, spcs->priv->hw->ps, false);
++
++	return 0;
++}
+diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_pcs.h b/drivers/net/ethernet/stmicro/stmmac/stmmac_pcs.h
+index 4a684c97dfae..f0d6442711ff 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/stmmac_pcs.h
++++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_pcs.h
+@@ -46,6 +46,19 @@
+ #define GMAC_ANE_RFE_SHIFT	12
+ #define GMAC_ANE_ACK		BIT(14)
+ 
++/* MAC specific status - for RGMII and SGMII. These appear as
++ * GMAC_RGSMIIIS[15:0] and GMAC_PHYIF_CONTROL_STATUS[31:16]
++ */
++#define GMAC_RS_STAT_LNKMOD		BIT(0)
++#define GMAC_RS_STAT_SPEED		GENMASK(2, 1)
++#define GMAC_RS_STAT_LNKSTS		BIT(3)
++#define GMAC_RS_STAT_JABTO		BIT(4)
++#define GMAC_RS_STAT_FALSECARDET	BIT(5)
++
++#define GMAC_RS_STAT_SPEED_125		2
++#define GMAC_RS_STAT_SPEED_25		1
++#define GMAC_RS_STAT_SPEED_2_5		0
++
+ /**
+  * dwmac_pcs_isr - TBI, RTBI, or SGMII PHY ISR
+  * @ioaddr: IO registers pointer
+@@ -109,4 +122,41 @@ static inline void dwmac_ctrl_ane(void __iomem *ioaddr, u32 reg, bool ane,
+ 
+ 	writel(value, ioaddr + GMAC_AN_CTRL(reg));
  }
++
++static inline bool dwmac_rs_decode_stat(struct phylink_link_state *state,
++					uint16_t rs_stat)
++{
++	unsigned int speed;
++
++	state->link = !!(rs_stat & GMAC_RS_STAT_LNKSTS);
++	if (!state->link)
++		return false;
++
++	speed = FIELD_GET(GMAC_RS_STAT_SPEED, rs_stat);
++	switch (speed) {
++	case GMAC_RS_STAT_SPEED_125:
++		state->speed = SPEED_1000;
++		break;
++	case GMAC_RS_STAT_SPEED_25:
++		state->speed = SPEED_100;
++		break;
++	case GMAC_RS_STAT_SPEED_2_5:
++		state->speed = SPEED_10;
++		break;
++	default:
++		state->link = false;
++		return false;
++	}
++
++	state->duplex = rs_stat & GMAC_RS_STAT_LNKMOD ?
++			DUPLEX_FULL : DUPLEX_HALF;
++
++	return true;
++}
++
++int dwmac_pcs_config(struct phylink_pcs *pcs, unsigned int neg_mode,
++		     phy_interface_t interface,
++		     const unsigned long *advertising,
++		     bool permit_pause_to_mac);
++
+ #endif /* __STMMAC_PCS_H__ */
 -- 
 2.30.2
 
