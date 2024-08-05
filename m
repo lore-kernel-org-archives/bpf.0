@@ -1,31 +1,31 @@
 Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B3D8152E12;
-	Mon,  5 Aug 2024 09:40:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F047214A609;
+	Mon,  5 Aug 2024 09:40:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722850831; cv=none; b=Iqb1aIuiKi5O59wptj9hiKmw/uKSodZmPL6jTKBA86QU4AJziVuSzL6Oh8YZSqGDvPMFs80abRr2ZvYAuTjU/LQu6/+xc97gLq863OJF7LC102ZWHjKwK8EmUL57OXorIBOnSj0pH09mCHVysXBd1Svl/Be1HbscXVcMiJZ/XjE=
+	t=1722850831; cv=none; b=UNHv3Bi1P5QkAcHXrn2CJg6OqAhRRfdrbG6K90H6aJw2PvAoaPbd4jhYiDX07wCOC1UoniX8qxDtvnw6rLvV3wc9lAjS+8kJefDOurhV8SmYsdO2rA+k5IyrccXsbEuOe6fKMad+q+Ptx3DUPjnlqlNgFKCY/uuK8NmaLdpy3f4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1722850831; c=relaxed/simple;
-	bh=Rw7lLyUzQtDQ37SOsZUqYsNsIk/yDuTOrlhTe9egzio=;
+	bh=WtcLac89cqaa8TlTPPbJpfye9uK9JkL4Eft9RJam5x8=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=mFb/2t/ZErkP7K0PG+xn+/3ZFq5M5ffiJsUkJhYvhWJyGfzuGraXq3lwdu8VYA4uPIfQxXyhofvnOZD5dTHA73HoOFgZ2t45H5lamS5Nd6xi7A/14Y3QQcMmmsUdgsGi3fZfBz1Qnhw37o0wlttoGq8G3q/fZTdgtffovw3fklE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=sEUkzoOq; arc=none smtp.client-ip=159.69.126.157
+	 In-Reply-To:To:Cc; b=g+g1tBt1Zit0Ci1el9WZasooCn3N5XQDAXw0byOl1kvK9SXz76aKXG5noiEFQdGr2KkDKm9/JVdMAPKaJt8gMb1d9AsOHop7bTGr+1UY3fj7p5md++YxzECSKxgPJ8f2zcNemqTmbX4tWGJcLe8DlDU1inMsj1EonoOlLTy72ss=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=Djcyn6q8; arc=none smtp.client-ip=159.69.126.157
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="sEUkzoOq"
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="Djcyn6q8"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
 	s=mail; t=1722850825;
-	bh=Rw7lLyUzQtDQ37SOsZUqYsNsIk/yDuTOrlhTe9egzio=;
+	bh=WtcLac89cqaa8TlTPPbJpfye9uK9JkL4Eft9RJam5x8=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=sEUkzoOqfbySqJcN5K1mMVKJYXpLYE1IRUTo7bQpUvKepp60pD9UVd4taHe9bzo8i
-	 tgccNMcis2n0B47aLtOw+gwiQhFv/C2pzsyrHftfzhvDIggsgHFrfXkpSTke+kDwO3
-	 7gYU/uhBzj0p+yNKEYJj23E6+9SvzKVMFtcrxEuk=
+	b=Djcyn6q8XdTIFGgERhT+8uTuVj/l+yw/59+KESKXb82ia2udUurLDLe58wOYJ815Z
+	 ZAe/abUzoPIDAy2qETDiwgFZxDPAWq7lF65dhgBtqI1wb6zAhFRZPUTZUwYs18R0hx
+	 4rHh4Pu3w3UAD+JOf9BpVmEUoG2OqwvUKa/QQafo=
 From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Date: Mon, 05 Aug 2024 11:39:36 +0200
-Subject: [PATCH v2 2/6] bpf: Constify ctl_table argument of filter function
+Date: Mon, 05 Aug 2024 11:39:35 +0200
+Subject: [PATCH v2 1/6] sysctl: avoid spurious permanent empty tables
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -34,7 +34,7 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20240805-sysctl-const-api-v2-2-52c85f02ee5e@weissschuh.net>
+Message-Id: <20240805-sysctl-const-api-v2-1-52c85f02ee5e@weissschuh.net>
 References: <20240805-sysctl-const-api-v2-0-52c85f02ee5e@weissschuh.net>
 In-Reply-To: <20240805-sysctl-const-api-v2-0-52c85f02ee5e@weissschuh.net>
 To: Alexei Starovoitov <ast@kernel.org>, 
@@ -48,54 +48,75 @@ To: Alexei Starovoitov <ast@kernel.org>,
  Kees Cook <kees@kernel.org>, Joel Granados <j.granados@samsung.com>
 Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
  linux-fsdevel@vger.kernel.org, 
- =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+ =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>, 
+ stable@vger.kernel.org
 X-Mailer: b4 0.14.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1722850824; l=1677;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1722850824; l=2410;
  i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=Rw7lLyUzQtDQ37SOsZUqYsNsIk/yDuTOrlhTe9egzio=;
- b=Tnz2oU9PfiIZf89t1KnPtyCZ6GqcNmO1kGYDzyhnx0275zoYBfu/nuqPrypoDK++1DEFMwx3x
- 751mlX196u8DVuPYVicR5AzL4h/HHq/d6kF2W8pj6o4m8RcO+73PFqG
+ bh=WtcLac89cqaa8TlTPPbJpfye9uK9JkL4Eft9RJam5x8=;
+ b=iFLyKCah+OT86AEz0GgKOzw6q1AHQmfYiAe3EpUPohFjZtfQRh9I94+yKIZy8ivyA9I/NdyIX
+ xe2KWiFhpqQAQ3rPyK9Xj+NxSWFbdjDt3cH5CTpNzGYH9yiMbXSXNmO
 X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
  pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 
-The sysctl core is moving to allow "struct ctl_table" in read-only memory.
-As a preparation for that all functions handling "struct ctl_table" need
-to be able to work with "const struct ctl_table".
-As __cgroup_bpf_run_filter_sysctl() does not modify its table, it can be
-adapted trivially.
+The test if a table is a permanently empty one, inspects the address of
+the registered ctl_table argument.
+However as sysctl_mount_point is an empty array and does not occupy and
+space it can end up sharing an address with another object in memory.
+If that other object itself is a "struct ctl_table" then registering
+that table will fail as it's incorrectly recognized as permanently empty.
 
+Avoid this issue by adding a dummy element to the array so that is not
+empty anymore.
+Explicitly register the table with zero elements as otherwise the dummy
+element would be recognized as a sentinel element which would lead to a
+runtime warning from the sysctl core.
+
+While the issue seems not being encountered at this time, this seems
+mostly to be due to luck.
+Also a future change, constifying sysctl_mount_point and root_table, can
+reliably trigger this issue on clang 18.
+
+Given that empty arrays are non-standard in the first place it seems
+prudent to avoid them if possible.
+
+Fixes: 4a7b29f65094 ("sysctl: move sysctl type to ctl_table_header")
+Fixes: a35dd3a786f5 ("sysctl: drop now unnecessary out-of-bounds check")
+Cc: stable@vger.kernel.org
 Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
 ---
- include/linux/bpf-cgroup.h | 2 +-
- kernel/bpf/cgroup.c        | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ fs/proc/proc_sysctl.c | 11 ++++++++---
+ 1 file changed, 8 insertions(+), 3 deletions(-)
 
-diff --git a/include/linux/bpf-cgroup.h b/include/linux/bpf-cgroup.h
-index fb3c3e7181e6..814a9d1c4a84 100644
---- a/include/linux/bpf-cgroup.h
-+++ b/include/linux/bpf-cgroup.h
-@@ -138,7 +138,7 @@ int __cgroup_bpf_check_dev_permission(short dev_type, u32 major, u32 minor,
- 				      short access, enum cgroup_bpf_attach_type atype);
+diff --git a/fs/proc/proc_sysctl.c b/fs/proc/proc_sysctl.c
+index 9553e77c9d31..d11ebc055ce0 100644
+--- a/fs/proc/proc_sysctl.c
++++ b/fs/proc/proc_sysctl.c
+@@ -29,8 +29,13 @@ static const struct inode_operations proc_sys_inode_operations;
+ static const struct file_operations proc_sys_dir_file_operations;
+ static const struct inode_operations proc_sys_dir_operations;
  
- int __cgroup_bpf_run_filter_sysctl(struct ctl_table_header *head,
--				   struct ctl_table *table, int write,
-+				   const struct ctl_table *table, int write,
- 				   char **buf, size_t *pcount, loff_t *ppos,
- 				   enum cgroup_bpf_attach_type atype);
+-/* Support for permanently empty directories */
+-static struct ctl_table sysctl_mount_point[] = { };
++/*
++ * Support for permanently empty directories.
++ * Must be non-empty to avoid sharing an address with other tables.
++ */
++static struct ctl_table sysctl_mount_point[] = {
++	{ }
++};
  
-diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
-index 8ba73042a239..429a43746886 100644
---- a/kernel/bpf/cgroup.c
-+++ b/kernel/bpf/cgroup.c
-@@ -1691,7 +1691,7 @@ const struct bpf_verifier_ops cg_dev_verifier_ops = {
-  * returned value != 1 during execution. In all other cases 0 is returned.
+ /**
+  * register_sysctl_mount_point() - registers a sysctl mount point
+@@ -42,7 +47,7 @@ static struct ctl_table sysctl_mount_point[] = { };
   */
- int __cgroup_bpf_run_filter_sysctl(struct ctl_table_header *head,
--				   struct ctl_table *table, int write,
-+				   const struct ctl_table *table, int write,
- 				   char **buf, size_t *pcount, loff_t *ppos,
- 				   enum cgroup_bpf_attach_type atype)
+ struct ctl_table_header *register_sysctl_mount_point(const char *path)
  {
+-	return register_sysctl(path, sysctl_mount_point);
++	return register_sysctl_sz(path, sysctl_mount_point, 0);
+ }
+ EXPORT_SYMBOL(register_sysctl_mount_point);
+ 
 
 -- 
 2.46.0
