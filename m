@@ -1,32 +1,32 @@
 Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D91E152E02;
-	Mon,  5 Aug 2024 09:40:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F04BC1514C8;
+	Mon,  5 Aug 2024 09:40:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722850831; cv=none; b=D+HCodnf0sNJBhehVM7da64Kfh/BvRiOWTqbD3G+Y8fahsgFDN38OJtkrHFTZqYoFY3bInDVHhda+DhvXl0cmPQzPeOgPmMhuUjM4llOLU4kIE12EBMJacyLNJ0PtDxptEJU3HnaI3G1GhWcHGywQU3yyIsoh5Ab+pXVoE5KkKU=
+	t=1722850831; cv=none; b=eWY3s6pmu8MTPTp3U7NAcNQn9AUU31YgororhmCNKMl/cw7CoGBShbFDLnK+qcn35BC1VtwRT5XLgFA7oPb83QwxYKa4XRHTcKf4yggv3ww4VnbfQLhkSser/Vgx7F5AYKTzSmprMP7RaYtEH8q/MuJRe2mIRPSkRllpJxN6alA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1722850831; c=relaxed/simple;
-	bh=coe0y78UwhKWJW7PsD0qo2yJRLRh9q2BOig3oj68HQo=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=nK4s9y5n72zcnRMEMv3QPN4EqQk39Lf1Z4TI0yLqI9PfErCALYoZd7QQDXFrr3wkKMSFAnCjvBGUIF7WGWoZWTZN8H542urzus8sKNu+qwP3tSDmFri9bXLZWWxjTsSz52M29jPLlUWHYB5GqgPD8hu9sUMra/1O6zN1pfbejkA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=hGl362aO; arc=none smtp.client-ip=159.69.126.157
+	bh=sYgXbuAakfwcEWfFa7hRpS+UDd+V5VwsrPZWs4c0MYg=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=hRR8Q22b49ciR5KkV4iwzxG4Se2DHpCXrBKe0yJkAui32+pjRS/URiEF9d/f8abQK1t9Y6YE4cYRRVXnS64/hkJ4LOfeMMYQWYit06DiLJH4yBVgK+UyQhUEcXcrUBEHQGIY5urVUXv/l6kOiccDeY1JQ+mqM6Whw0cU5Br0tUc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=EjghtQti; arc=none smtp.client-ip=159.69.126.157
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="hGl362aO"
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="EjghtQti"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
 	s=mail; t=1722850825;
-	bh=coe0y78UwhKWJW7PsD0qo2yJRLRh9q2BOig3oj68HQo=;
-	h=From:Subject:Date:To:Cc:From;
-	b=hGl362aOY8oo8UMA43uXHtXmYbv4HU8OmSbokDLS3HQ7llP6Yey7a7FwS0SSZy99L
-	 TnqoJzzmqUtp2IVCs02TSVpeRRgXVR07Es6lvfRDCRUmHsMbw15InnCR0Dpp83Klp8
-	 oIOg47K0ZPryu0/SmtoaGzyZiUU4KS9IWyLlAFhs=
+	bh=sYgXbuAakfwcEWfFa7hRpS+UDd+V5VwsrPZWs4c0MYg=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
+	b=EjghtQtiKtCR+Ucp1DSrqpKL+pmRD14NiMyVsnofneY2pOynzO20CiuMCCIMeGKG3
+	 bf3ZhbMEKkS8dOoBh3wkHfn4V+bLEeUBzMEOsYJNnop9Ox6xX0w19xKJ5gkB+udNOQ
+	 QZ2cn6UiqrdSpmf3WUwMY3IbI/R8mrYPDvof2RFI=
 From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Subject: [PATCH v2 0/6] sysctl: prepare sysctl core for const struct
+Date: Mon, 05 Aug 2024 11:39:38 +0200
+Subject: [PATCH v2 4/6] sysctl: allow registration of const struct
  ctl_table
-Date: Mon, 05 Aug 2024 11:39:34 +0200
-Message-Id: <20240805-sysctl-const-api-v2-0-52c85f02ee5e@weissschuh.net>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -35,10 +35,9 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-B4-Tracking: v=1; b=H4sIANadsGYC/32NQQ6CMBBFr0JmbQ0MCMLKexgWzTDYSUwhnYoSw
- t2tHMDle8l/fwPlIKzQZRsEXkRl8gnwlAE56x9sZEgMmGOVN9gaXZXi09DkNRo7i2nK9lKN5VA
- jFZBmc+BRPkfy3id2onEK6/GwFD/7J7YUJjdka7xSY9sK6fZmUVVyL3f2HKHf9/0LdLV+urUAA
- AA=
+Message-Id: <20240805-sysctl-const-api-v2-4-52c85f02ee5e@weissschuh.net>
+References: <20240805-sysctl-const-api-v2-0-52c85f02ee5e@weissschuh.net>
+In-Reply-To: <20240805-sysctl-const-api-v2-0-52c85f02ee5e@weissschuh.net>
 To: Alexei Starovoitov <ast@kernel.org>, 
  Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
  Martin KaFai Lau <martin.lau@linux.dev>, 
@@ -50,87 +49,98 @@ To: Alexei Starovoitov <ast@kernel.org>,
  Kees Cook <kees@kernel.org>, Joel Granados <j.granados@samsung.com>
 Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
  linux-fsdevel@vger.kernel.org, 
- =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>, 
- stable@vger.kernel.org
+ =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
 X-Mailer: b4 0.14.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1722850824; l=2956;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1722850824; l=3585;
  i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=coe0y78UwhKWJW7PsD0qo2yJRLRh9q2BOig3oj68HQo=;
- b=mcs2aApIig8exj75ncJO707C1zdo7AeYfoUdUpv7tiyQAW0CPOSCzcf1TZXAp+AdX9aQQa/Cj
- ODvKICIDz1OAPwVHuzRVIk68A9Q3RMBW0HIi+4aTCK4WTExdaEKuAr9
+ bh=sYgXbuAakfwcEWfFa7hRpS+UDd+V5VwsrPZWs4c0MYg=;
+ b=PqK4Z0y5K3CQwqPhV9j4PB7rRVoJqPyP+5N2OsiJ6tFFgbkinzKKN+AkEJgLrtm/cFk9Ap2Fw
+ ieLXYaf/qmBBJWcNqNwy5ED9wfF/Bt6ZDQQFR4k3BxNdzzmAMItiuGX
 X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
  pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 
-Adapt the internal and external APIs of the sysctl core to handle
-read-only instances of "struct ctl_table".
-
-Patch 1: Bugfix for the sysctl core, the bug can be reliably triggered
-         with the series applied
-Patch 2: Trivial preparation commit for the sysctl BPF hook
-Patch 3: Adapts the internal sysctl APIs
-Patch 4: Adapts the external sysctl APIs
-Patch 5: Constifies the sysctl internal tables as proof that it works
-Patch 6: Updates scripts/const_structs.checkpatch for "struct ctl_table"
-
-Motivation
-==========
-
-Moving structures containing function pointers into unmodifiable .rodata
-prevents attackers or bugs from corrupting and diverting those pointers.
-
-Also the "struct ctl_table" exposed by the sysctl core were never meant
-to be mutated by users.
-
-For this goal changes to both the sysctl core and "const" qualifiers for
-various sysctl APIs are necessary.
-
-Full Process
-============
-
-* Drop ctl_table modifications from the sysctl core ([0], in mainline)
-* Constify arguments to ctl_table_root::{set_ownership,permissions}
-  ([1], in mainline)
-* Migrate users of "ctl_table_header::ctl_table_arg" to "const".
-  (in mainline)
-* Afterwards convert "ctl_table_header::ctl_table_arg" itself to const.
-  (in mainline)
-* Prepare helpers used to implement proc_handlers throughout the tree to
-  use "const struct ctl_table *". ([2], in mainline)
-* Afterwards switch over all proc_handlers callbacks to use
-  "const struct ctl_table *" in one commit. (in mainline)
-* Switch over the internals of the sysctl core to "const struct ctl_table *" (this series)
-* Switch include/linux/sysctl.h to "const struct ctl_table *" (this series)
-* Transition instances of "struct ctl_table" through the tree to const (to be done)
-
-This series is meant to be applied through the sysctl tree.
+Putting structure, especially those containing function pointers,
+into read-only memory makes the safer and easier to reason about.
+Change the sysctl registration APIs to allow registration of
+"const struct ctl_table".
 
 Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
 ---
-Changes in v2:
-- Avoid spurious permanent empty tables (patch 1)
-- Link to v1: https://lore.kernel.org/r/20240729-sysctl-const-api-v1-0-ca628c7a942c@weissschuh.net
+ fs/proc/proc_sysctl.c  |  6 +++---
+ include/linux/sysctl.h | 10 +++++-----
+ 2 files changed, 8 insertions(+), 8 deletions(-)
 
----
-Thomas Weißschuh (6):
-      sysctl: avoid spurious permanent empty tables
-      bpf: Constify ctl_table argument of filter function
-      sysctl: move internal interfaces to const struct ctl_table
-      sysctl: allow registration of const struct ctl_table
-      sysctl: make internal ctl_tables const
-      const_structs.checkpatch: add ctl_table
+diff --git a/fs/proc/proc_sysctl.c b/fs/proc/proc_sysctl.c
+index 713abccbfcf9..968f8dcffd8f 100644
+--- a/fs/proc/proc_sysctl.c
++++ b/fs/proc/proc_sysctl.c
+@@ -1359,7 +1359,7 @@ static struct ctl_dir *sysctl_mkdir_p(struct ctl_dir *dir, const char *path)
+  */
+ struct ctl_table_header *__register_sysctl_table(
+ 	struct ctl_table_set *set,
+-	const char *path, struct ctl_table *table, size_t table_size)
++	const char *path, const struct ctl_table *table, size_t table_size)
+ {
+ 	struct ctl_table_root *root = set->dir.header.root;
+ 	struct ctl_table_header *header;
+@@ -1420,7 +1420,7 @@ struct ctl_table_header *__register_sysctl_table(
+  *
+  * See __register_sysctl_table for more details.
+  */
+-struct ctl_table_header *register_sysctl_sz(const char *path, struct ctl_table *table,
++struct ctl_table_header *register_sysctl_sz(const char *path, const struct ctl_table *table,
+ 					    size_t table_size)
+ {
+ 	return __register_sysctl_table(&sysctl_table_root.default_set,
+@@ -1449,7 +1449,7 @@ EXPORT_SYMBOL(register_sysctl_sz);
+  *
+  * Context: if your base directory does not exist it will be created for you.
+  */
+-void __init __register_sysctl_init(const char *path, struct ctl_table *table,
++void __init __register_sysctl_init(const char *path, const struct ctl_table *table,
+ 				 const char *table_name, size_t table_size)
+ {
+ 	struct ctl_table_header *hdr = register_sysctl_sz(path, table, table_size);
+diff --git a/include/linux/sysctl.h b/include/linux/sysctl.h
+index a473deaf5a91..202855befa8b 100644
+--- a/include/linux/sysctl.h
++++ b/include/linux/sysctl.h
+@@ -223,13 +223,13 @@ extern void retire_sysctl_set(struct ctl_table_set *set);
+ 
+ struct ctl_table_header *__register_sysctl_table(
+ 	struct ctl_table_set *set,
+-	const char *path, struct ctl_table *table, size_t table_size);
+-struct ctl_table_header *register_sysctl_sz(const char *path, struct ctl_table *table,
++	const char *path, const struct ctl_table *table, size_t table_size);
++struct ctl_table_header *register_sysctl_sz(const char *path, const struct ctl_table *table,
+ 					    size_t table_size);
+ void unregister_sysctl_table(struct ctl_table_header * table);
+ 
+ extern int sysctl_init_bases(void);
+-extern void __register_sysctl_init(const char *path, struct ctl_table *table,
++extern void __register_sysctl_init(const char *path, const struct ctl_table *table,
+ 				 const char *table_name, size_t table_size);
+ #define register_sysctl_init(path, table)	\
+ 	__register_sysctl_init(path, table, #table, ARRAY_SIZE(table))
+@@ -251,7 +251,7 @@ extern int no_unaligned_warning;
+ 
+ #else /* CONFIG_SYSCTL */
+ 
+-static inline void register_sysctl_init(const char *path, struct ctl_table *table)
++static inline void register_sysctl_init(const char *path, const struct ctl_table *table)
+ {
+ }
+ 
+@@ -261,7 +261,7 @@ static inline struct ctl_table_header *register_sysctl_mount_point(const char *p
+ }
+ 
+ static inline struct ctl_table_header *register_sysctl_sz(const char *path,
+-							  struct ctl_table *table,
++							  const struct ctl_table *table,
+ 							  size_t table_size)
+ {
+ 	return NULL;
 
- fs/proc/internal.h               |   2 +-
- fs/proc/proc_sysctl.c            | 100 +++++++++++++++++++++------------------
- include/linux/bpf-cgroup.h       |   2 +-
- include/linux/sysctl.h           |  12 ++---
- kernel/bpf/cgroup.c              |   2 +-
- scripts/const_structs.checkpatch |   1 +
- 6 files changed, 63 insertions(+), 56 deletions(-)
----
-base-commit: 8400291e289ee6b2bf9779ff1c83a291501f017b
-change-id: 20240729-sysctl-const-api-73954f3d62c1
-
-Best regards,
 -- 
-Thomas Weißschuh <linux@weissschuh.net>
+2.46.0
 
