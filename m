@@ -1,171 +1,119 @@
-Received: from mail-lj1-f171.google.com (mail-lj1-f171.google.com [209.85.208.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C35F165EF6
-	for <bpf@vger.kernel.org>; Tue,  6 Aug 2024 10:45:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3B411BD015
+	for <bpf@vger.kernel.org>; Tue,  6 Aug 2024 10:54:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722941143; cv=none; b=a6mWJW0PxBaJsJdE8fWl3ys9/Wm2yVoc7goTPVj2ehayVoQlOG2ejA7FbiS1yay9EkEOKmX9WkCGWI8wrVf2e6Zs1E/xKghnPGxNGIVsTCZlgKFjezIavyoi5wekm70QlP8Wn+s8/lCpEw3QeIeezoA06IX8uh2e5TTIrTks66E=
+	t=1722941667; cv=none; b=uyfZnqQi1gERPhndkX7UAD6dchyU3oKuH8P3RlYGrYcdBVn2R7KqrWUNOEDluIm+wmbAfTYXb4TbV0gs/utWplczq48+XcniKkt3NzXg4g2EOflvN7RRWoifbhrl8LIxzbnuZPE+f6bIQr5DAfN/ittwC1RQTLEDN6mV4DV7uEg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722941143; c=relaxed/simple;
-	bh=e7RNq/+/ONuQLzdHf67YRYwH5y/OsEm8waAbEmryC4c=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=bzsXnNla/xGrnItZY9I4fQD2bBhcHdNmLgYk8xpDZY2vxJnyq7bYiGADjGMVDb8apirG8t22q11wlxXFKfKr2WtsA9gY82064pfVQMA0Wur8SOBM5TU7dPuXF6eWuQzZXs7IYbn12qPlZ+fROn4szJ37GcVroMu+qcf/qVwdPmU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=blackwall.org; spf=none smtp.mailfrom=blackwall.org; dkim=pass (2048-bit key) header.d=blackwall-org.20230601.gappssmtp.com header.i=@blackwall-org.20230601.gappssmtp.com header.b=NeAyJu8r; arc=none smtp.client-ip=209.85.208.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=blackwall.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=blackwall.org
+	s=arc-20240116; t=1722941667; c=relaxed/simple;
+	bh=QI76W/6+qyfi/f/458udiZ+vMPBWVCY8s3vj6UfuSig=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=HDJuu0HT7ytIlNO8QrW/SthtW5nfkMEqwWat5CGLxgYZMWUzin4VOj76iZ4hshWnLMbJ9PFGOZtVavX6n5jbU5voWjdzgFCAM7AtSZF2l9rZdxkXqNy1DrJE/R5VaUAWfnBfetFxG1te0nNvk3AeYz1oSZz/oWGBh0bzKQ+P5lQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Tqb3MLfS; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=blackwall-org.20230601.gappssmtp.com header.i=@blackwall-org.20230601.gappssmtp.com header.b="NeAyJu8r"
-Received: by mail-lj1-f171.google.com with SMTP id 38308e7fff4ca-2ef2cce8be8so4562981fa.1
-        for <bpf@vger.kernel.org>; Tue, 06 Aug 2024 03:45:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=blackwall-org.20230601.gappssmtp.com; s=20230601; t=1722941139; x=1723545939; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=diUm02Ee/bKj6lfPY+QMxUw1pjVHjgO/jz/e+XCyrz0=;
-        b=NeAyJu8r+janoriOoyEPxO8sQITtqxUUUnwbtyZ3tnzJlAXySHET3c6eoRzbqEWTDV
-         oAY4knmkoCGEaHV8UKT2qfGyfoQkeHekAuTHQOXBn66WXHjn27lZ7aIpou0edT+MPc+1
-         7JW/3E8uEkdw0YxMtGT0440BAjIGPcOYXPN5M3uV4ppYo4IEFl1IRcHUnz2etuMz9scF
-         ujYr2lRrj/XPEB0m1RxY3Qdz4UbMvWmTFqZcoQKyhrH4+0C09HzczKv/hbf/0Vje9nvU
-         7KeZcpNf9zqq+yrSHHAdS99/g2gtpgBItexlVhOiPWK6IRDWXIoGFaDiK6WQz79nQ7Uj
-         /JJQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722941139; x=1723545939;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=diUm02Ee/bKj6lfPY+QMxUw1pjVHjgO/jz/e+XCyrz0=;
-        b=hR60Izo8Oo9nEEfd/YmrKxSyjkkwwp2WNv76nMsIvyxe3ZntBuQwnFmn8tTrKvlHri
-         AltFGlUu60n3bLqRG9tLpv/1Py8nWt7jttvi9k/BP22ohb3iYl9n/GfeRc9ZTSjsC89o
-         Nn83a6Qa2B66zh0TktzkQJvsBPh1V1MNvECb3N7AoAqoeQ8MBdbcGfUQIqcYzTZAHfma
-         91OamZP6UzygB9wY7TIca2xgv1sdU/Qp6gjHxQirJ9ecAGSRvJZNAta7Ghs+mGbT0mgO
-         CtRtoyfQvwTsUd/OsV+9eTfO3i4utTTp2LUHJOhHLnnejXWwVCN1vGO+jTK7h4ZR9CBq
-         Hfyg==
-X-Forwarded-Encrypted: i=1; AJvYcCWFAr7DQXf1wR+nmJGypvHh5fKZ3sYYk7zjm5BsA7mVOtqhlG2x93cUkpkPKK8ciXfKFOGr/gv8EQ/+bpAsqhvcHGbM
-X-Gm-Message-State: AOJu0YxNvWIcnlLtXJmMaBqx8o34MlgFHhNzbYffv5BDZBJ9DlhvhzV1
-	MrkD8X55pTD8bdUTr/LZNcV6KWOKILj2hzHKdGw3T+cty+6bARmW1O6jUjeDRKpFuUiRNlXfsMO
-	A
-X-Google-Smtp-Source: AGHT+IEhERpJK1fvMoFLeT7W6Cansg52ARlI0lRlGGYvspHR6XBIK2SLmal2H1DiRg+1FyhH0vMpfg==
-X-Received: by 2002:a2e:9c03:0:b0:2ef:5d1d:773f with SMTP id 38308e7fff4ca-2f15aac1180mr100558991fa.24.1722941139132;
-        Tue, 06 Aug 2024 03:45:39 -0700 (PDT)
-Received: from debil.. ([62.73.69.208])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4282b89aa93sm236249735e9.10.2024.08.06.03.45.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Aug 2024 03:45:38 -0700 (PDT)
-From: Nikolay Aleksandrov <razor@blackwall.org>
-To: netdev@vger.kernel.org
-Cc: davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	daniel@iogearbox.net,
-	bpf@vger.kernel.org,
-	Nikolay Aleksandrov <razor@blackwall.org>
-Subject: [PATCH net-next] doc/netlink/specs: add netkit support to rt_link.yaml
-Date: Tue,  6 Aug 2024 13:45:31 +0300
-Message-ID: <20240806104531.3296718-1-razor@blackwall.org>
-X-Mailer: git-send-email 2.44.0
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Tqb3MLfS"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1722941664;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=gegv+FUrL3Bk/gUnU9MjiVdI0lIqs6KIEoJQDH9Pkv4=;
+	b=Tqb3MLfSbWPqi+oSb5r4laqVgJUSs2etQvoob7ekuEDp+MR5+JYzZJM4UR9y5+c8Q0Lf4e
+	dUgIc2+lxbDH65UN6M5zkw+u6sQfLSexk7oeh4V5mgGP5Xy4fo3UZNpC5KItPX1nY/EGEx
+	kfwnDWI+pg3AjzhxlRXYjMRUo4g5QsA=
+Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-503-WwuZVDk4MyCT6EGtkw8uxA-1; Tue,
+ 06 Aug 2024 06:54:21 -0400
+X-MC-Unique: WwuZVDk4MyCT6EGtkw8uxA-1
+Received: from mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.40])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 3C1AE19560AA;
+	Tue,  6 Aug 2024 10:54:19 +0000 (UTC)
+Received: from dhcp-27-174.brq.redhat.com (unknown [10.45.225.155])
+	by mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with SMTP id EABC81955D44;
+	Tue,  6 Aug 2024 10:54:14 +0000 (UTC)
+Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
+	oleg@redhat.com; Tue,  6 Aug 2024 12:54:16 +0200 (CEST)
+Date: Tue, 6 Aug 2024 12:54:11 +0200
+From: Oleg Nesterov <oleg@redhat.com>
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: Andrii Nakryiko <andrii@kernel.org>, linux-trace-kernel@vger.kernel.org,
+	peterz@infradead.org, rostedt@goodmis.org, mhiramat@kernel.org,
+	bpf@vger.kernel.org, linux-kernel@vger.kernel.org, jolsa@kernel.org,
+	paulmck@kernel.org
+Subject: Re: [PATCH 5/8] uprobes: travers uprobe's consumer list locklessly
+ under SRCU protection
+Message-ID: <20240806105411.GB20881@redhat.com>
+References: <20240731214256.3588718-1-andrii@kernel.org>
+ <20240731214256.3588718-6-andrii@kernel.org>
+ <20240805155931.GC11049@redhat.com>
+ <CAEf4BzZ=W3JLfpYcxEevMGS4whXQ2-nn5ezA+p3zV_WhiGG4iQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAEf4BzZ=W3JLfpYcxEevMGS4whXQ2-nn5ezA+p3zV_WhiGG4iQ@mail.gmail.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.40
 
-Add netkit support to rt_link.yaml. Only forward(PASS) and
-blackhole(DROP) policies are allowed to be set by user-space so I've
-added only them to the yaml to avoid confusion.
+On 08/05, Andrii Nakryiko wrote:
+>
+> On Mon, Aug 5, 2024 at 8:59 AM Oleg Nesterov <oleg@redhat.com> wrote:
+> >
+> > >  int uprobe_apply(struct uprobe *uprobe, struct uprobe_consumer *uc, bool add)
+> > >  {
+> > >       struct uprobe_consumer *con;
+> > > -     int ret = -ENOENT;
+> > > +     int ret = -ENOENT, srcu_idx;
+> > >
+> > >       down_write(&uprobe->register_rwsem);
+> > > -     for (con = uprobe->consumers; con && con != uc ; con = con->next)
+> > > -             ;
+> > > -     if (con)
+> > > -             ret = register_for_each_vma(uprobe, add ? uc : NULL);
+> > > +
+> > > +     srcu_idx = srcu_read_lock(&uprobes_srcu);
+> > > +     list_for_each_entry_srcu(con, &uprobe->consumers, cons_node,
+> > > +                              srcu_read_lock_held(&uprobes_srcu)) {
+> > > +             if (con == uc) {
+> > > +                     ret = register_for_each_vma(uprobe, add ? uc : NULL);
+> > > +                     break;
+> > > +             }
+> > > +     }
+> >
+> > we can probably remove the similar check above?
+> >
+> > I mean, why do we need the list_for_each_entry_srcu() above? Is it possible
+> > that uprobe_apply(uprobe, uc) is called when "uc" is not on the ->consumers
+> > list?
+>
+> Tbh, I just don't completely understand how (and why) uprobe_apply()
+> is used from kernel/trace/trace_uprobe.c, so I wanted to preserve the
+> logic exactly. I still don't see when this consumer is added before
+> uprobe_apply()... Exposing uprobe_apply() seems like a huge API
+> violation to me and I'd rather get rid of its users. But one step at a
+> time.
 
-Example:
-  $ ./tools/net/ynl/cli.py \
-     --spec Documentation/netlink/specs/rt_link.yaml \
-     --do getlink --json '{"ifname": "netkit0"}' --output-json | jq
-  ...
-  "linkinfo": {
-    "kind": "netkit",
-    "data": {
-      "primary": 1,
-      "policy": "blackhole",
-      "mode": "l2",
-      "peer-policy": "forward"
-    }
-  },
-  ...
+Agreed. Unlike uprobe_unregister(), uprobe_apply() doesn't WARN() or
+even explains this check, lets preserve the current logic for now.
 
-Signed-off-by: Nikolay Aleksandrov <razor@blackwall.org>
----
-This has been rotting in my tree for quite some time, sending out
-for reviews. :)
+And just in case... I am not sure too that the con == NULL case is not
+possible with the current code. The recent discussions forced me to recall
+some bits in uprobe.c, but not in trace_uprobe.c ;)
 
- Documentation/netlink/specs/rt_link.yaml | 41 ++++++++++++++++++++++++
- 1 file changed, 41 insertions(+)
-
-diff --git a/Documentation/netlink/specs/rt_link.yaml b/Documentation/netlink/specs/rt_link.yaml
-index de08c12fd56f..0c4d5d40cae9 100644
---- a/Documentation/netlink/specs/rt_link.yaml
-+++ b/Documentation/netlink/specs/rt_link.yaml
-@@ -903,6 +903,22 @@ definitions:
-       - cfm-config
-       - cfm-status
-       - mst
-+  -
-+    name: netkit-policy
-+    type: enum
-+    entries:
-+      -
-+        name: forward
-+        value: 0
-+      -
-+        name: blackhole
-+        value: 2
-+  -
-+    name: netkit-mode
-+    type: enum
-+    entries:
-+      - name: l2
-+      - name: l3
- 
- attribute-sets:
-   -
-@@ -2109,6 +2125,28 @@ attribute-sets:
-       -
-         name: id
-         type: u32
-+  -
-+    name: linkinfo-netkit-attrs
-+    name-prefix: ifla-netkit-
-+    attributes:
-+      -
-+        name: peer-info
-+        type: binary
-+      -
-+        name: primary
-+        type: u8
-+      -
-+        name: policy
-+        type: u32
-+        enum: netkit-policy
-+      -
-+        name: peer-policy
-+        type: u32
-+        enum: netkit-policy
-+      -
-+        name: mode
-+        type: u32
-+        enum: netkit-mode
- 
- sub-messages:
-   -
-@@ -2147,6 +2185,9 @@ sub-messages:
-       -
-         value: vrf
-         attribute-set: linkinfo-vrf-attrs
-+      -
-+        value: netkit
-+        attribute-set: linkinfo-netkit-attrs
-   -
-     name: linkinfo-member-data-msg
-     formats:
--- 
-2.44.0
+Oleg.
 
