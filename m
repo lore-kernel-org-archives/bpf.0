@@ -1,364 +1,165 @@
-Received: from out-185.mta1.migadu.com (out-185.mta1.migadu.com [95.215.58.185])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63F741C32
-	for <bpf@vger.kernel.org>; Tue,  6 Aug 2024 05:26:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.185
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 912B7165F08
+	for <bpf@vger.kernel.org>; Tue,  6 Aug 2024 07:08:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722921978; cv=none; b=jzkPKnjBnyCyphU1GYQcEkrautFoeA7DXAJRU5MuX1nJBudAaKttvUrwQzJkGhvEL8PC2ZWIEs+vkbUUw5aT7RzkfSeXvz4p7OTC1RCGaD0Y7BvgJ22+eFsDY8wFIDW4J8oKN5s4QsMLYajEa0JZaCp4Rl0b5DHx98eBz4vClFU=
+	t=1722928103; cv=none; b=GFBZ3sTsm+HI8EKuqKJ0vkQp7JoC0V1gvm1JICSZzBwMbLk1TWHO/Wu8KfKNL34jmk2D4zHQ1E8JRXV+vCM25hKJ3KkZk71xByZNCoruC1Rn3hhP/jvv3m1yzSoRJ9m4vlXjjqzKzhiIhQJSIIWbBFpg+ZucsK2NsUDMNAqr5hk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722921978; c=relaxed/simple;
-	bh=rNz67VG7g+R1LYcI4DK4D0BtWQHA45A2FdOIsI6dn7o=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=IWS1X2WNETz4gMrDj6JZNgBAmU7EgVeDVuczjx6id3ti15LQgaBspzl4gnJI2ZknnPJB0gGQL3pAXd0SuSiqFjFxv9BsATb1Kg7fh7DrPlW7nHUJ/eBJewqTR8F3WwTb3jRRC8SIcOpikqcsZziMmLwsAY3YM6KqGb5JSQNe2ag=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=t6NWB09v; arc=none smtp.client-ip=95.215.58.185
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1722928103; c=relaxed/simple;
+	bh=ajLRYujjc9QWRsXrB8TNBvB8wHVcDxiY2/xpjxLe2K4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=IY76xXPwrna5SUF6CmS4ldv1Ocsl8a/WR5LhvM7IGynGg7MRyZKpOQAxByO3wtwTzyY4F1caZ3qD7nFt2mjVOGWWcee2BOlGC+24eVcy+SDuZ1rvbYa6jc3ol9eJqMrWk7AsODl/elQHd6lfAgwJT0rlA6BenfYA4CazpPreC8E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Y23GrRCM; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="t6NWB09v"
-Message-ID: <6f32c0a1-9de2-4145-92ea-be025362182f@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1722921973;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Y23GrRCM"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1722928100;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=b8VOEog8ofR2j3djAsd2uPmqxvBBEnxlmxY+EkPEEV8=;
-	b=t6NWB09vxwVIY/d0Qj0jMYbkIVin1meTK4GORxyiEfsSckrNAmFDGdKQqK8FrV4Xyixg1h
-	Ei8d0v1tM5A9IIVWDpvKeWotdb1Am9DOe7cBSl7GZspGmS3HPc7dqoVkrKP+QszNwVu34c
-	ALjpNiLBTk7d8qzfVBLWwF0v0hHOF2Q=
-Date: Mon, 5 Aug 2024 22:26:02 -0700
+	bh=E2EC28zQ430Ls/AziiSrlmM1nMGgrya6wtZKA2XHYg4=;
+	b=Y23GrRCMQQmmRLADnO2NUuSlstQc7xQ4jqJKX3Za9dRr+9LqYLc8E2LjGLOMr9X/9b/Eys
+	ToeD7Ld5X0+5FliXf9hXAWzGdd+HqiScic2NECFzZLtuiAhUPUKxFlonXPU9DjEVt3rAD+
+	21kwasXZsRvogKdVUyKvtfHjUUbDAwA=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-220-w-yL8gndOLi2irxhsD3gnA-1; Tue, 06 Aug 2024 03:08:19 -0400
+X-MC-Unique: w-yL8gndOLi2irxhsD3gnA-1
+Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-428076fef5dso2869785e9.2
+        for <bpf@vger.kernel.org>; Tue, 06 Aug 2024 00:08:18 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1722928097; x=1723532897;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=E2EC28zQ430Ls/AziiSrlmM1nMGgrya6wtZKA2XHYg4=;
+        b=DpZV+BCRp+zPd8cnBpk7Aw14T+H/56wibaLCbRGqMptsHpeG/zFrVw7Fwvjo4ZBvmk
+         ZmU1TuW4YwzgJzBxkgM3JT3u3NU043537fYTldVNioOLli680pqcMadCLKgs8hh2n/0y
+         aXn1T3Fs1hiigR5Qpv+RlD+tG4BQPyKybmhihhpenDVMYvkCgdoggChk9Rznzd3FqwtR
+         LlycY88MNgIN+RoQMLt+KcRjnn8tuBtj5Ht7e7nFnt+DrrCJRubbnOp09DsNjQGFinMg
+         vMDQqK0X9TNXVhVSVhO8tlV7teukn9Dv5XLZ2PtbGkoWmeCubhdGi1CnlBxz4HkBLDal
+         u5dw==
+X-Forwarded-Encrypted: i=1; AJvYcCU6Ul9DVdlnQPXF5ztxeEfI3qMcmBl1zWcfVvaad1wnKLRSFTbz0EwHWGnUHFK6dvcdBrzjRSf0dRvWLWPE4T8hegg+
+X-Gm-Message-State: AOJu0YwWcOO35VZghp0hUYr8/3phapdmojN3LT2gLykRzHqfGTccuX0u
+	DtjZY2sFBS+n+4quH2wD/0kkfBf6tbrWLnpFgOYeezlhXC1/YfTfkffRr/EwATwuYA2pTpEcGzW
+	rYM+7cRokLw7QdAv480ix+GtRjFT/5qlJLfWNgp9xbYzonUbq7jtdMci5pg==
+X-Received: by 2002:a5d:5e11:0:b0:36b:cc42:29f9 with SMTP id ffacd0b85a97d-36bcc422dbcmr6475755f8f.51.1722928097320;
+        Tue, 06 Aug 2024 00:08:17 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IFbIEjqYZG/JsSsab+D6UceVhz0kBuqHI0/D9xOElxV5tsgsex1ZdX75f/L8FRiaklhaRxbXA==
+X-Received: by 2002:a5d:5e11:0:b0:36b:cc42:29f9 with SMTP id ffacd0b85a97d-36bcc422dbcmr6475736f8f.51.1722928096819;
+        Tue, 06 Aug 2024 00:08:16 -0700 (PDT)
+Received: from jlelli-thinkpadt14gen4.remote.csb ([151.29.159.67])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-36bbd06df9esm11978662f8f.100.2024.08.06.00.08.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Aug 2024 00:08:16 -0700 (PDT)
+Date: Tue, 6 Aug 2024 09:08:13 +0200
+From: Juri Lelli <juri.lelli@redhat.com>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Jiri Olsa <olsajiri@gmail.com>, bpf <bpf@vger.kernel.org>,
+	LKML <linux-kernel@vger.kernel.org>,
+	Artem Savkov <asavkov@redhat.com>
+Subject: Re: NULL pointer deref when running BPF monitor program (6.11.0-rc1)
+Message-ID: <ZrHL3YU1kfth3enJ@jlelli-thinkpadt14gen4.remote.csb>
+References: <ZrCZS6nisraEqehw@jlelli-thinkpadt14gen4.remote.csb>
+ <ZrECsnSJWDS7jFUu@krava>
+ <CAADnVQLMPPavJQR6JFsi3dtaaLHB816JN4HCV_TFWohJ61D+wQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v2] selftests/bpf: Fix arena_atomics selftest
- failure due to llvm change
-Content-Language: en-GB
-To: "Jose E. Marchesi" <jose.marchesi@oracle.com>
-Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
- bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
- Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Kernel Team <kernel-team@fb.com>, Martin KaFai Lau <martin.lau@kernel.org>
-References: <20240803025928.4184433-1-yonghong.song@linux.dev>
- <CAADnVQKt8FQjuZKFTGbyf5uKGZ8gfjzSvC36CbZ7ENbkuCmopA@mail.gmail.com>
- <e42a26b6-1520-40b9-850a-28d660bd9149@linux.dev> <87cymmqmry.fsf@oracle.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <87cymmqmry.fsf@oracle.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+In-Reply-To: <CAADnVQLMPPavJQR6JFsi3dtaaLHB816JN4HCV_TFWohJ61D+wQ@mail.gmail.com>
 
+Hi Jiri and Alexei,
 
-On 8/5/24 9:48 PM, Jose E. Marchesi wrote:
->> On 8/5/24 10:53 AM, Alexei Starovoitov wrote:
->>> On Fri, Aug 2, 2024 at 7:59 PM Yonghong Song <yonghong.song@linux.dev> wrote:
->>>> Peilen Ye reported an issue ([1]) where for __sync_fetch_and_add(...) without
->>>> return value like
->>>>     __sync_fetch_and_add(&foo, 1);
->>>> llvm BPF backend generates locked insn e.g.
->>>>     lock *(u32 *)(r1 + 0) += r2
->>>>
->>>> If __sync_fetch_and_add(...) returns a value like
->>>>     res = __sync_fetch_and_add(&foo, 1);
->>>> llvm BPF backend generates like
->>>>     r2 = atomic_fetch_add((u32 *)(r1 + 0), r2)
->>>>
->>>> But 'lock *(u32 *)(r1 + 0) += r2' caused a problem in jit
->>>> since proper barrier is not inserted based on __sync_fetch_and_add() semantics.
->>>>
->>>> The above discrepancy is due to commit [2] where it tries to maintain backward
->>>> compatability since before commit [2], __sync_fetch_and_add(...) generates
->>>> lock insn in BPF backend.
->>>>
->>>> Based on discussion in [1], now it is time to fix the above discrepancy so we can
->>>> have proper barrier support in jit. llvm patch [3] made sure that __sync_fetch_and_add(...)
->>>> always generates atomic_fetch_add(...) insns. Now 'lock *(u32 *)(r1 + 0) += r2' can only
->>>> be generated by inline asm. The same for __sync_fetch_and_and(), __sync_fetch_and_or()
->>>> and __sync_fetch_and_xor().
->>>>
->>>> But the change in [3] caused arena_atomics selftest failure.
->>>>
->>>>     test_arena_atomics:PASS:arena atomics skeleton open 0 nsec
->>>>     libbpf: prog 'and': BPF program load failed: Permission denied
->>>>     libbpf: prog 'and': -- BEGIN PROG LOAD LOG --
->>>>     arg#0 reference type('UNKNOWN ') size cannot be determined: -22
->>>>     0: R1=ctx() R10=fp0
->>>>     ; if (pid != (bpf_get_current_pid_tgid() >> 32)) @ arena_atomics.c:87
->>>>     0: (18) r1 = 0xffffc90000064000       ; R1_w=map_value(map=arena_at.bss,ks=4,vs=4)
->>>>     2: (61) r6 = *(u32 *)(r1 +0)          ; R1_w=map_value(map=arena_at.bss,ks=4,vs=4) R6_w=scalar(smin=0,smax=umax=0xffffffff,var_off=(0x0; 0xffffffff))
->>>>     3: (85) call bpf_get_current_pid_tgid#14      ; R0_w=scalar()
->>>>     4: (77) r0 >>= 32                     ; R0_w=scalar(smin=0,smax=umax=0xffffffff,var_off=(0x0; 0xffffffff))
->>>>     5: (5d) if r0 != r6 goto pc+11        ; R0_w=scalar(smin=0,smax=umax=0xffffffff,var_off=(0x0; 0xffffffff)) R6_w=scalar(smin=0,smax=umax=0xffffffff,var_off=(0x0; 0x)
->>>>     ; __sync_fetch_and_and(&and64_value, 0x011ull << 32); @ arena_atomics.c:91
->>>>     6: (18) r1 = 0x100000000060           ; R1_w=scalar()
->>>>     8: (bf) r1 = addr_space_cast(r1, 0, 1)        ; R1_w=arena
->>>>     9: (18) r2 = 0x1100000000             ; R2_w=0x1100000000
->>>>     11: (db) r2 = atomic64_fetch_and((u64 *)(r1 +0), r2)
->>>>     BPF_ATOMIC stores into R1 arena is not allowed
->>>>     processed 9 insns (limit 1000000) max_states_per_insn 0 total_states 0 peak_states 0 mark_read 0
->>>>     -- END PROG LOAD LOG --
->>>>     libbpf: prog 'and': failed to load: -13
->>>>     libbpf: failed to load object 'arena_atomics'
->>>>     libbpf: failed to load BPF skeleton 'arena_atomics': -13
->>>>     test_arena_atomics:FAIL:arena atomics skeleton load unexpected error: -13 (errno 13)
->>>>     #3       arena_atomics:FAIL
->>>>
->>>> The reason of the failure is due to [4] where atomic{64,}_fetch_{and,or,xor}() are not
->>>> allowed by arena addresses. Without llvm patch [3], the compiler will generate 'lock ...'
->>>> insn and everything will work fine.
->>>>
->>>> This patch fixed the problem by using inline asms. Instead of __sync_fetch_and_{and,or,xor}() functions,
->>>> the inline asm with 'lock' insn is used and it will work with or without [3].
->>>> Note that three bpf programs ('and', 'or' and 'xor') are guarded with __BPF_FEATURE_ADDR_SPACE_CAST
->>>> as well to ensure compilation failure for llvm <= 18 version. Note that for llvm <= 18 where
->>>> addr_space_cast is not supported, all arena_atomics subtests are skipped with below message:
->>>>     test_arena_atomics:SKIP:no ENABLE_ATOMICS_TESTS or no addr_space_cast support in clang
->>>>     #3 arena_atomics:SKIP
->>>>
->>>>     [1] https://lore.kernel.org/bpf/ZqqiQQWRnz7H93Hc@google.com/T/#mb68d67bc8f39e35a0c3db52468b9de59b79f021f
->>>>     [2] https://github.com/llvm/llvm-project/commit/286daafd65129228e08a1d07aa4ca74488615744
->>>>     [3] https://github.com/llvm/llvm-project/pull/101428
->>>>     [4] d503a04f8bc0 ("bpf: Add support for certain atomics in bpf_arena to x86 JIT")
->>>>
->>>> Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
->>>> ---
->>>>    .../selftests/bpf/progs/arena_atomics.c       | 63 ++++++++++++++++---
->>>>    1 file changed, 54 insertions(+), 9 deletions(-)
->>>>
->>>> Changelog:
->>>>     v1 -> v2:
->>>>       - Add __BPF_FEATURE_ADDR_SPACE_CAST to guard newly added asm codes for llvm >= 19
->>>>
->>>> diff --git a/tools/testing/selftests/bpf/progs/arena_atomics.c b/tools/testing/selftests/bpf/progs/arena_atomics.c
->>>> index bb0acd79d28a..dea54557fc00 100644
->>>> --- a/tools/testing/selftests/bpf/progs/arena_atomics.c
->>>> +++ b/tools/testing/selftests/bpf/progs/arena_atomics.c
->>>> @@ -5,6 +5,7 @@
->>>>    #include <bpf/bpf_tracing.h>
->>>>    #include <stdbool.h>
->>>>    #include "bpf_arena_common.h"
->>>> +#include "bpf_misc.h"
->>>>
->>>>    struct {
->>>>           __uint(type, BPF_MAP_TYPE_ARENA);
->>>> @@ -85,10 +86,24 @@ int and(const void *ctx)
->>>>    {
->>>>           if (pid != (bpf_get_current_pid_tgid() >> 32))
->>>>                   return 0;
->>>> -#ifdef ENABLE_ATOMICS_TESTS
->>>> +#if defined(ENABLE_ATOMICS_TESTS) && defined(__BPF_FEATURE_ADDR_SPACE_CAST)
->>>>
->>>> -       __sync_fetch_and_and(&and64_value, 0x011ull << 32);
->>>> -       __sync_fetch_and_and(&and32_value, 0x011);
->>>> +       asm volatile(
->>>> +               "r1 = addr_space_cast(%[and64_value], 0, 1);"
->>>> +               "lock *(u64 *)(r1 + 0) &= %[val]"
->>>> +               :
->>>> +               : __imm_ptr(and64_value),
->>>> +                 [val]"r"(0x011ull << 32)
->>>> +               : "r1"
->>>> +       );
->>>> +       asm volatile(
->>>> +               "r1 = addr_space_cast(%[and32_value], 0, 1);"
->>>> +               "lock *(u32 *)(r1 + 0) &= %[val]"
->>>> +               :
->>>> +               : __imm_ptr(and32_value),
->>>> +                 [val]"w"(0x011)
->>>> +               : "r1"
->>>> +       );
->>> Instead of inline asm there is a better way to do the same in C.
->>> https://godbolt.org/z/71PYx1oqE
->>>
->>> void foo(int a, _Atomic int *b)
->>> {
->>>    *b += a;
->>> }
->>>
->>> generates:
->>> lock *(u32 *)(r2 + 0) += r1
->> If you use latest llvm-project with
->> https://github.com/llvm/llvm-project/pull/101428
->> included, the above code will generate like
->>
->> $ clang --target=bpf -O2 -c t.c && llvm-objdump -d t.o
->> t.o:    file format elf64-bpf
->> Disassembly of section .text:
->> 0000000000000000 <foo>:
->>         0:       c3 12 00 00 01 00 00 00 r1 = atomic_fetch_add((u32 *)(r2 + 0x0), r1)
->>         1:       95 00 00 00 00 00 00 00 exit
->>
->>
->> With -mcpu=v3 the same code can be generated.
-> Same for current GCC.
->
->>> but
->>> *b &= a;
->>>
->>> crashes llvm :( with
->>>
->>> <source>:3:5: error: unsupported atomic operation, please use 64 bit version
->>>       3 |  *b &= a;
->> It failed with the following llvm error message:
->> t.c:1:6: error: unsupported atomic operation, please use 64 bit version
->>      1 | void foo(int a, _Atomic int *b)
->>        |      ^
->> fatal error: error in backend: Cannot select: t8: i64,ch = AtomicLoadAnd<(load store seq_cst (s32) on %ir.b)> t0, t4, t2
->>    t4: i64,ch = CopyFromReg t0, Register:i64 %1
->>      t3: i64 = Register %1
->>    t2: i64,ch = CopyFromReg t0, Register:i64 %0
->>      t1: i64 = Register %0
->> In function: foo
->>
->>> but works with -mcpu=v3
->> Yes. it does work with -mcpu=v3:
-> In GCC if you specify -mcpu=v2 and use atomic built-ins you get
-> workaround code in the form of libcalls (like calls to
-> __atomic_fetch_and_4) which are of course of no use in BPF atm.
->> $ clang --target=bpf -O2 -mcpu=v3 -c t.c && llvm-objdump -d --mcpu=v3 t.o
->>
->> t.o:    file format elf64-bpf
->> Disassembly of section .text:
->> 0000000000000000 <foo>:
->>         0:       c3 12 00 00 51 00 00 00 w1 = atomic_fetch_and((u32 *)(r2 + 0x0), w1)
->>         1:       95 00 00 00 00 00 00 00 exit
->>
->> NOTE: I need -mcpu=v3 for llvm-objdump to print asm code 'atomic_fetch_and' properly.
->> Will double check this.
-> The GNU binutils objdump will try to recognize instructions in the
-> latest supported cpu version, unless an explicit option is passed to
-> specify a particular ISA version:
+On 05/08/24 10:00, Alexei Starovoitov wrote:
+> On Mon, Aug 5, 2024 at 9:50 AM Jiri Olsa <olsajiri@gmail.com> wrote:
+> >
+> > On Mon, Aug 05, 2024 at 11:20:11AM +0200, Juri Lelli wrote:
+> >
+> > SNIP
+> >
+> > > [  154.566882] BUG: kernel NULL pointer dereference, address: 000000000000040c
+> > > [  154.573844] #PF: supervisor read access in kernel mode
+> > > [  154.578982] #PF: error_code(0x0000) - not-present page
+> > > [  154.584122] PGD 146fff067 P4D 146fff067 PUD 10fc00067 PMD 0
+> > > [  154.589780] Oops: Oops: 0000 [#1] PREEMPT SMP NOPTI
+> > > [  154.594659] CPU: 28 UID: 0 PID: 2234 Comm: thread0-13 Kdump: loaded Not tainted 6.11.0-rc1 #8
+> > > [  154.603179] Hardware name: Dell Inc. PowerEdge R740/04FC42, BIOS 2.10.2 02/24/2021
+> > > [  154.610744] RIP: 0010:bpf_prog_ec8173ca2868eb50_handle__sched_pi_setprio+0x22/0xd7
+> > > [  154.618310] Code: cc cc cc cc cc cc cc cc 0f 1f 44 00 00 66 90 55 48 89 e5 48 81 ec 30 00 00 00 53 41 55 41 56 48 89 fb 4c 8b 6b 00 4c 8b 73 08 <41> 8b be 0c 04 00 00 48 83 ff 06 0f 85 9b 00 00 00 41 8b be c0 09
+> > > [  154.637052] RSP: 0018:ffffabac60aebbc0 EFLAGS: 00010086
+> > > [  154.642278] RAX: ffffffffc03fba5c RBX: ffffabac60aebc28 RCX: 000000000000001f
+> > > [  154.649411] RDX: ffff95a90b4e4180 RSI: ffffabac4e639048 RDI: ffffabac60aebc28
+> > > [  154.656544] RBP: ffffabac60aebc08 R08: 00000023fce7674a R09: ffff95a91d85af38
+> > > [  154.663674] R10: ffff95a91d85a0c0 R11: 000000003357e518 R12: 0000000000000000
+> > > [  154.670807] R13: ffff95a90b4e4180 R14: 0000000000000000 R15: 0000000000000001
+> > > [  154.677939] FS:  00007ffa6d600640(0000) GS:ffff95c01bf00000(0000) knlGS:0000000000000000
+> > > [  154.686026] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> > > [  154.691769] CR2: 000000000000040c CR3: 000000014b9f2005 CR4: 00000000007706f0
+> > > [  154.698903] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> > > [  154.706035] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> > > [  154.713168] PKRU: 55555554
+> > > [  154.715879] Call Trace:
+> > > [  154.718332]  <TASK>
+> > > [  154.720439]  ? __die+0x20/0x70
+> > > [  154.723498]  ? page_fault_oops+0x75/0x170
+> > > [  154.727508]  ? sysvec_irq_work+0xb/0x90
+> > > [  154.731348]  ? exc_page_fault+0x64/0x140
+> > > [  154.735275]  ? asm_exc_page_fault+0x22/0x30
+> > > [  154.739461]  ? 0xffffffffc03fba5c
+> > > [  154.742780]  ? bpf_prog_ec8173ca2868eb50_handle__sched_pi_setprio+0x22/0xd7
+> >
+> > hi,
+> > reproduced.. AFAICS looks like the bpf program somehow lost the booster != NULL
+> > check and just load the policy field without it and crash when booster is rubbish
+> >
+> > int handle__sched_pi_setprio(u64 * ctx):
+> > ; int handle__sched_pi_setprio(u64 *ctx)
+> >    0: (bf) r6 = r1
+> > ; struct task_struct *boosted = (void *) ctx[0];
+> >    1: (79) r7 = *(u64 *)(r6 +0)
+> > ; struct task_struct *booster = (void *) ctx[1];
+> >    2: (79) r8 = *(u64 *)(r6 +8)
+> > ; if (booster->policy != SCHED_DEADLINE)
+> >
+> > curious why the check disappeared, because object file has it, so I guess verifier
+> > took it out for some reason, will check
+> 
+> Juri,
+> 
+> Thanks for flagging!
 
-Agree. As I mentioned in the above, I will take a look at this soon.
+Thanks for the super quick reply from both of you!
 
->
-> $ bpf-unknown-none-objdump -M pseudoc -d foo.o
->
-> foo.o:     file format elf64-bpfle
->
->
-> Disassembly of section .text:
->
-> 0000000000000000 <foo>:
->     0:	bf 11 20 00 00 00 00 00 	r1 = (s32) r1
->     8:	c3 12 00 00 51 00 00 00 	w1=atomic_fetch_and((u32*)(r2+0),w1)
->    10:	95 00 00 00 00 00 00 00 	exit
->
-> $ bpf-unknown-none-objdump -M v2,pseudoc -d foo.o
->
-> foo.o:     file format elf64-bpfle
->
->
-> Disassembly of section .text:
->
-> 0000000000000000 <foo>:
->     0:	bf 11 20 00 00 00 00 00 	r1=r1
->     8:	c3 12 00 00 51 00 00 00 	<unknown>
->    10:	95 00 00 00 00 00 00 00 	exit
->
->> For code:
->> void foo(int a, _Atomic int *b)
->> {
->>   *b &= a;
->> }
->>
->> The initial IR generated by clang frontend is:
->>
->> define dso_local void @foo(i32 noundef %a, ptr noundef %b) #0 {
->> entry:
->>    %a.addr = alloca i32, align 4
->>    %b.addr = alloca ptr, align 8
->>    store i32 %a, ptr %a.addr, align 4, !tbaa !3
->>    store ptr %b, ptr %b.addr, align 8, !tbaa !7
->>    %0 = load i32, ptr %a.addr, align 4, !tbaa !3
->>    %1 = load ptr, ptr %b.addr, align 8, !tbaa !7
->>    %2 = atomicrmw and ptr %1, i32 %0 seq_cst, align 4
->>    %3 = and i32 %2, %0
->>    ret void
->> }
->>
->> Note that atomicrmw in the above. Eventually it optimized to
->>
->> define dso_local void @foo(i32 noundef %a, ptr noundef %b) #0 {
->> entry:
->>    %0 = atomicrmw and ptr %b, i32 %a seq_cst, align 4
->>    ret void
->> }
->>
->> The 'atomicrmw' is the same IR as generated by
->> __sync_fetch_and_*() and eventually will generate atomic_fetch_*() bpf
->> insn.
->> Discussed with Andrii, and
->> another option is to specify relaxed consistency, so llvm
->> internal could translate it into locked insn. For example,
->>
->> $ cat t1.c
->> #include <stdatomic.h>
->>
->> void f(_Atomic int *i) {
->>    __c11_atomic_fetch_and(i, 1, memory_order_relaxed);
->> }
-> I think this makes sense.  Currently we removed the GCC insns
-> atomic_{add,or,xor,and} all together so the compiler is forced to
-> implement them in terms of atomic_fetch_and_{add,or,xor,and} regardless
-> of the memory ordering policy specified to the __sync_fetch_and_OP.  So
-> even if you specify relaxed memory ordered, the resulting ordering is
-> whatever implied by the fetching operation.
+> Jiri,
+> 
+> the verifier removes the check because it assumes that pointers
+> passed by the kernel into tracepoint are valid and trusted.
+> In this case:
+>         trace_sched_pi_setprio(p, pi_task);
+> 
+> pi_task can be NULL.
+> 
+> We cannot make all tracepoint pointers to be PTR_TRUSTED | PTR_MAYBE_NULL
+> by default, since it will break a bunch of progs.
+> Instead we can annotate this tracepoint arg as __nullable and
+> teach the verifier to recognize such special arguments of tracepoints.
+> 
+> Let's think how to workaround such verifier eagerness to remove != null check.
 
-Encoding memory order constraints in BPF insn might be too complicated.
-I am not sure. But at least we could map different memory constraints
-into different insns so jit can add proper barrier for those insns.
+Of course more than willing to test anything out, but no rush.
 
->
->> # to have gnu/stubs-32.h in the current directory to make it compile
->> [yhs@devvm1513.prn0 ~/tmp6]$ ls gnu
->> stubs-32.h
->> [yhs@devvm1513.prn0 ~/tmp6]$ clang --target=bpf -O2 -I. -c -mcpu=v3 t1.c
->>
->> The initial IR:
->> define dso_local void @f(ptr noundef %i) #0 {
->> entry:
->>    %i.addr = alloca ptr, align 8
->>    %.atomictmp = alloca i32, align 4
->>    %atomic-temp = alloca i32, align 4
->>    store ptr %i, ptr %i.addr, align 8, !tbaa !3
->>    %0 = load ptr, ptr %i.addr, align 8, !tbaa !3
->>    store i32 1, ptr %.atomictmp, align 4, !tbaa !7
->>    %1 = load i32, ptr %.atomictmp, align 4
->>    %2 = atomicrmw and ptr %0, i32 %1 monotonic, align 4
->>    store i32 %2, ptr %atomic-temp, align 4
->>    %3 = load i32, ptr %atomic-temp, align 4, !tbaa !7
->>    ret void
->> }
->>
->> The IR right before machine code generation:
->>
->> define dso_local void @f(ptr nocapture noundef %i) local_unnamed_addr #0 {
->> entry:
->>    %0 = atomicrmw and ptr %i, i32 1 monotonic, align 4
->>    ret void
->> }
->>
->> Maybe we could special process the above to generate
->> a locked insn if
->>    - atomicrmw operator
->>    - monotonic (related) consistency
->>    - return value is not used
->>
->> So this will not violate original program semantics.
->> Does this sound a reasonable apporach?
-> Whether monotonic consistency is desired (ordered writes) can be
-> probably deduced from the memory_order_* flag of the built-ins, but I
-> don't know what atomiccrmw is...  what is it in non-llvm terms?
+Best,
+Juri
 
-The llvm language reference for atomicrmw:
-
-   https://llvm.org/docs/LangRef.html#atomicrmw-instruction
-
->
->>> So let's make this test mcpu=v3 only and use normal C ?
->>>
->>> pw-bot: cr
