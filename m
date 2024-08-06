@@ -1,201 +1,243 @@
-Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6228E16CD11;
-	Tue,  6 Aug 2024 22:43:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E67480043
+	for <bpf@vger.kernel.org>; Tue,  6 Aug 2024 23:03:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722984191; cv=none; b=SppKYvcMqZagmPOhsABQIQgscOymmUF4VbzFyek9AVtYvyObxWzTq8lsHJCiaCWOfgu0mUNXKVr1fD/fvYgSOv+8HGW2zSUOQMwcRVwsUzTZrA7XusrfH8LQ2ZQVMwgh7dfYz+9r+nCiCyU/rn8juZEY04rOdJEc37c7M/8fU3k=
+	t=1722985402; cv=none; b=hDWASywU1g4Rq2KlwVzeq3waRPEufbXPb/tHiOESl/S9VQNrc3OiCyfT5dm/sFrDYjVP37lMgp1GEv1F7ncloGX3IVIrzU6NBEmFQKnzepSmX6tvPs/40/htppQGKh8Lt+J+it4yq9vkovNTOetGyhTUb9UuZUH4nMSFCufo1vI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722984191; c=relaxed/simple;
-	bh=ADMvC4n0oh3wghfjc0I1QjBweofU8AI28CRx4X1nqCQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=mKB1Qzd3NrxA7yXmKTWagjjsz4iHz7c3MInOV7D4FpuleneE84Vm3f+Qw54SMoyydJ/bnp5nBgjV1n8+1OAPtuvPWlDphvBjm3qLqIvXiodiZ01AOkjQM9nBf68k/F/jSlipQdxI+fZh+oWOOOA3SrOrCgmIQszKyyT8GOkjWOo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hXHpbR52; arc=none smtp.client-ip=209.85.216.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1722985402; c=relaxed/simple;
+	bh=YP9NKszvfzFeylX/jQuIG434nytIgkIquDDDfhlNZ5I=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=bXhRqIVgdd4bjNd+gPdar+cHeqbFTz+rhycgxmaa7zkTX1FTE+7CDHqNbecqilqmIqjShN3u84Zz+N4vW4Dv9zH+KmsraZhLyRFj4NvNYdBO2PZtfpIFCoacVWALC5NpkqxXfR5zvd8tdCgSORhDmy+6u64yPolyqi5i0TagBTA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QZ/ExSdB; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hXHpbR52"
-Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-2cd5d6b2581so831739a91.2;
-        Tue, 06 Aug 2024 15:43:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1722984189; x=1723588989; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=cNt5M+Kul3w3E9npRSXsBL87xWj9mvSGMN2GbHRNel0=;
-        b=hXHpbR52lghJY2g5CGpns138AghAhvCP5ES438H48tYWZNE88oCwNfcYvXIy2wZeHg
-         EIO3EMNeMkGdEja2PN4C7GlUq74kk84OXcwCdCi9xXSdRq9IKknUu7GG5JyULBWaLAX5
-         jzrch2b8CE98RUSObOsMU8gdIupfD8Ota0W+7CnnuFsCzjq4aAmJWvtoebGBJq6uNEOw
-         SZUmNmKfTM0H9OkYp6pT52kTiIwJzZfeYMK/tqZvhRV2KoXrK/UABm9W2uGFRXZqPYmj
-         4pZ4SY0XtCi0A57SUI424J5w7Zn2EGR+dQQOL4NwaYKKDCEl+KOC7/b1mcgpBFgPsstH
-         clzA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722984189; x=1723588989;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=cNt5M+Kul3w3E9npRSXsBL87xWj9mvSGMN2GbHRNel0=;
-        b=aIXLL1+7u2TzAhbKW7LS/rUlemuBxisQNCn8ZD+Yh4kHUFuDiMqxFNlczqkjWBAnau
-         1rxMOVILNr9Ug8NWHMq/5BdYJkC4FVtXcG67fsTxozexczLeknpCiFsqcZVxdqKJTK0w
-         CkoZI+MNEF+XZKuQlLgl/1bgEaY0RfEIhsSO4hhlVvxyMr+wyw3qlHST+Q+RnscNB0NR
-         LRjYu5JqNLl6mc+zuH9K3qLki0+q+pUz8/f3iCN190kfSedyMywuR0YBjJBiQq5dqMv6
-         PhT7lq1xNQo4KnnCRkkwQNEQNdwHNWmRboIv2IgnzjjJglStRAnZslmmYOmq4YEKaM5F
-         bNYA==
-X-Forwarded-Encrypted: i=1; AJvYcCUk8HzIdmSlJzLWsouceZYlH0onCivrlSJ+3XJzSgrv8duyxu6JMSJlJoV7CbjEXOjSI8PN8+cZsu408DQ27L1d1Te+HGNvKop1RbpTuAIsJmJhOl0Yw/mNEt8mEDflCxCNZV/TNM19JPHA7A7m5VzquSouKs0BsjlZHSDdLuuVs6pJXOTb6etB2w==
-X-Gm-Message-State: AOJu0Yw/v5mEeZR11qF2OBJVPPg2jELWxqzuQQEMhIjsddEtWRvmb6MA
-	0Jv56CPtFt8LoVRLCYhM8qwlPAwMBcgRjKBQMTl7UsZMLoi9XXdiENAzq6J+a5yzW9WVE+0wkVx
-	fMpYJ40qbHS5civVy+FsSaJAGqtM=
-X-Google-Smtp-Source: AGHT+IEnfhAcfSgoCthpAMSGkKGWhEoY1iGwgvNJm7uNk8jQoZ81xw/lBpbAmrFYQBME1zpJW4lpxRhr78WreNlX4x4=
-X-Received: by 2002:a17:90a:a417:b0:2c9:6f8d:7270 with SMTP id
- 98e67ed59e1d1-2cff9544dc7mr14391710a91.42.1722984188556; Tue, 06 Aug 2024
- 15:43:08 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QZ/ExSdB"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9CD15C32786;
+	Tue,  6 Aug 2024 23:03:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1722985401;
+	bh=YP9NKszvfzFeylX/jQuIG434nytIgkIquDDDfhlNZ5I=;
+	h=From:To:Cc:Subject:Date:From;
+	b=QZ/ExSdB0DngKWHxPmWF9dxr+L1RqPk7EhzXduAJ4WLYh2jdOB0S54PAwJ8HWFJPj
+	 iVrOW5c3UkyxTFji7n8wNeyxrOAasaXnEspUz26DCfD9P2wX9Q3ZsfWBiyQCScPoKU
+	 mmd5SohsqQd7A7gx1AicbWMfmG3ONKHBN29pA30krILcW7TbdC2w/Oa3ec/o1sbGHd
+	 n8DBAQJx8SNIuZYlBvPPCXP2toVgJm91lQQ6X2KdtRCtSiwn6QwCDEyw+7T0juIduU
+	 nvBo9CJsAQWWKSzd9XmXx8lM4o6ing3fnJYsurSm0wFlKZ4/lAYG4ZI2caIBdtIkef
+	 G5TitAhHIKQ/A==
+From: Andrii Nakryiko <andrii@kernel.org>
+To: bpf@vger.kernel.org,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	martin.lau@kernel.org
+Cc: andrii@kernel.org,
+	kernel-team@meta.com
+Subject: [PATCH bpf-next] selftests/bpf: make use of PROCMAP_QUERY ioctl if available
+Date: Tue,  6 Aug 2024 16:03:19 -0700
+Message-ID: <20240806230319.869734-1-andrii@kernel.org>
+X-Mailer: git-send-email 2.43.5
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240730050927.GC5334@ZenIV> <20240730051625.14349-1-viro@kernel.org>
- <20240730051625.14349-35-viro@kernel.org>
-In-Reply-To: <20240730051625.14349-35-viro@kernel.org>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Tue, 6 Aug 2024 15:42:56 -0700
-Message-ID: <CAEf4BzasSXFx5edPknxVnmk+o6oAyOU0h_Tg_yHVaJcaJfpPOQ@mail.gmail.com>
-Subject: Re: [PATCH 35/39] convert bpf_token_create()
-To: viro@kernel.org
-Cc: linux-fsdevel@vger.kernel.org, amir73il@gmail.com, bpf@vger.kernel.org, 
-	brauner@kernel.org, cgroups@vger.kernel.org, kvm@vger.kernel.org, 
-	netdev@vger.kernel.org, torvalds@linux-foundation.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Mon, Jul 29, 2024 at 10:27=E2=80=AFPM <viro@kernel.org> wrote:
->
-> From: Al Viro <viro@zeniv.linux.org.uk>
->
-> keep file reference through the entire thing, don't bother with
-> grabbing struct path reference (except, for now, around the LSM
-> call and that only until it gets constified) and while we are
-> at it, don't confuse the hell out of readers by random mix of
-> path.dentry->d_sb and path.mnt->mnt_sb uses - these two are equal,
-> so just put one of those into a local variable and use that.
->
-> Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
-> ---
->  kernel/bpf/token.c | 69 +++++++++++++++++-----------------------------
->  1 file changed, 26 insertions(+), 43 deletions(-)
->
+Instead of parsing text-based /proc/<pid>/maps file, try to use
+PROCMAP_QUERY ioctl() to simplify and speed up data fetching.
+This logic is used to do uprobe file offset calculation, so any bugs in
+this logic would manifest as failing uprobe BPF selftests.
 
-LGTM overall (modulo // comments, but see below)
+This also serves as a simple demonstration of one of the intended uses.
 
-Acked-by: Andrii Nakryiko <andrii@kernel.org>
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+---
+ tools/testing/selftests/bpf/test_progs.c    |   3 +
+ tools/testing/selftests/bpf/test_progs.h    |   2 +
+ tools/testing/selftests/bpf/trace_helpers.c | 104 +++++++++++++++++---
+ 3 files changed, 94 insertions(+), 15 deletions(-)
 
-> diff --git a/kernel/bpf/token.c b/kernel/bpf/token.c
-> index 9b92cb886d49..15da405d8302 100644
-> --- a/kernel/bpf/token.c
-> +++ b/kernel/bpf/token.c
-> @@ -116,67 +116,52 @@ int bpf_token_create(union bpf_attr *attr)
-
-[...]
-
-> -       err =3D security_bpf_token_create(token, attr, &path);
-> +       path_get(&path);        // kill it
-> +       err =3D security_bpf_token_create(token, attr, &path); // constif=
-y
-> +       path_put(&path);        // kill it
->         if (err)
->                 goto out_token;
->
-
-By constify you mean something like below?
-
-commit 06a6442ca9cc441805881eea61fd57d7defadaca
-Author: Andrii Nakryiko <andrii@kernel.org>
-Date:   Tue Aug 6 15:38:12 2024 -0700
-
-    security: constify struct path in bpf_token_create() LSM hook
-
-    There is no reason why struct path pointer shouldn't be const-qualified
-    when being passed into bpf_token_create() LSM hook. Add that const.
-
-    Suggested-by: Al Viro <viro@zeniv.linux.org.uk>
-    Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
-
-diff --git a/include/linux/lsm_hook_defs.h b/include/linux/lsm_hook_defs.h
-index 855db460e08b..462b55378241 100644
---- a/include/linux/lsm_hook_defs.h
-+++ b/include/linux/lsm_hook_defs.h
-@@ -431,7 +431,7 @@ LSM_HOOK(int, 0, bpf_prog_load, struct bpf_prog
-*prog, union bpf_attr *attr,
-      struct bpf_token *token)
- LSM_HOOK(void, LSM_RET_VOID, bpf_prog_free, struct bpf_prog *prog)
- LSM_HOOK(int, 0, bpf_token_create, struct bpf_token *token, union
-bpf_attr *attr,
--     struct path *path)
-+     const struct path *path)
- LSM_HOOK(void, LSM_RET_VOID, bpf_token_free, struct bpf_token *token)
- LSM_HOOK(int, 0, bpf_token_cmd, const struct bpf_token *token, enum
-bpf_cmd cmd)
- LSM_HOOK(int, 0, bpf_token_capable, const struct bpf_token *token, int cap=
-)
-diff --git a/include/linux/security.h b/include/linux/security.h
-index 1390f1efb4f0..31523a2c71c4 100644
---- a/include/linux/security.h
-+++ b/include/linux/security.h
-@@ -2137,7 +2137,7 @@ extern int security_bpf_prog_load(struct
-bpf_prog *prog, union bpf_attr *attr,
-                   struct bpf_token *token);
- extern void security_bpf_prog_free(struct bpf_prog *prog);
- extern int security_bpf_token_create(struct bpf_token *token, union
-bpf_attr *attr,
--                     struct path *path);
-+                     const struct path *path);
- extern void security_bpf_token_free(struct bpf_token *token);
- extern int security_bpf_token_cmd(const struct bpf_token *token, enum
-bpf_cmd cmd);
- extern int security_bpf_token_capable(const struct bpf_token *token, int c=
-ap);
-@@ -2177,7 +2177,7 @@ static inline void security_bpf_prog_free(struct
-bpf_prog *prog)
- { }
-
- static inline int security_bpf_token_create(struct bpf_token *token,
-union bpf_attr *attr,
--                     struct path *path)
-+                        const struct path *path)
- {
-     return 0;
+diff --git a/tools/testing/selftests/bpf/test_progs.c b/tools/testing/selftests/bpf/test_progs.c
+index 60fafa2f1ed7..bf262b42a488 100644
+--- a/tools/testing/selftests/bpf/test_progs.c
++++ b/tools/testing/selftests/bpf/test_progs.c
+@@ -33,6 +33,8 @@ __weak void backtrace_symbols_fd(void *const *buffer, int size, int fd)
+ 	dprintf(fd, "<backtrace not supported>\n");
  }
-diff --git a/security/security.c b/security/security.c
-index 8cee5b6c6e6d..d8d0b67ced25 100644
---- a/security/security.c
-+++ b/security/security.c
-@@ -5510,7 +5510,7 @@ int security_bpf_prog_load(struct bpf_prog
-*prog, union bpf_attr *attr,
-  * Return: Returns 0 on success, error on failure.
-  */
- int security_bpf_token_create(struct bpf_token *token, union bpf_attr *att=
-r,
--                  struct path *path)
-+                  const struct path *path)
+ 
++int env_verbosity = 0;
++
+ static bool verbose(void)
  {
-     return call_int_hook(bpf_token_create, token, attr, path);
+ 	return env.verbosity > VERBOSE_NONE;
+@@ -862,6 +864,7 @@ static error_t parse_arg(int key, char *arg, struct argp_state *state)
+ 				return -EINVAL;
+ 			}
+ 		}
++		env_verbosity = env->verbosity;
+ 
+ 		if (verbose()) {
+ 			if (setenv("SELFTESTS_VERBOSE", "1", 1) == -1) {
+diff --git a/tools/testing/selftests/bpf/test_progs.h b/tools/testing/selftests/bpf/test_progs.h
+index cb9d6d46826b..43e3136166b3 100644
+--- a/tools/testing/selftests/bpf/test_progs.h
++++ b/tools/testing/selftests/bpf/test_progs.h
+@@ -95,6 +95,8 @@ struct test_state {
+ 	FILE *stdout_saved;
+ };
+ 
++extern int env_verbosity;
++
+ struct test_env {
+ 	struct test_selector test_selector;
+ 	struct test_selector subtest_selector;
+diff --git a/tools/testing/selftests/bpf/trace_helpers.c b/tools/testing/selftests/bpf/trace_helpers.c
+index 465d196c7165..1bfd881c0e07 100644
+--- a/tools/testing/selftests/bpf/trace_helpers.c
++++ b/tools/testing/selftests/bpf/trace_helpers.c
+@@ -10,6 +10,8 @@
+ #include <pthread.h>
+ #include <unistd.h>
+ #include <linux/perf_event.h>
++#include <linux/fs.h>
++#include <sys/ioctl.h>
+ #include <sys/mman.h>
+ #include "trace_helpers.h"
+ #include <linux/limits.h>
+@@ -244,29 +246,91 @@ int kallsyms_find(const char *sym, unsigned long long *addr)
+ 	return err;
  }
-diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
-index 55c78c318ccd..0eec141a8f37 100644
---- a/security/selinux/hooks.c
-+++ b/security/selinux/hooks.c
-@@ -6965,7 +6965,7 @@ static void selinux_bpf_prog_free(struct bpf_prog *pr=
-og)
- }
-
- static int selinux_bpf_token_create(struct bpf_token *token, union
-bpf_attr *attr,
--                    struct path *path)
-+                    const struct path *path)
+ 
++#ifdef PROCMAP_QUERY
++int env_verbosity __weak = 0;
++
++int procmap_query(int fd, const void *addr, __u32 query_flags, size_t *start, size_t *offset, int *flags)
++{
++	char path_buf[PATH_MAX], build_id_buf[20];
++	struct procmap_query q;
++	int err;
++
++	memset(&q, 0, sizeof(q));
++	q.size = sizeof(q);
++	q.query_flags = query_flags;
++	q.query_addr = (__u64)addr;
++	q.vma_name_addr = (__u64)path_buf;
++	q.vma_name_size = sizeof(path_buf);
++	q.build_id_addr = (__u64)build_id_buf;
++	q.build_id_size = sizeof(build_id_buf);
++
++	err = ioctl(fd, PROCMAP_QUERY, &q);
++	if (err < 0) {
++		err = -errno;
++		if (err == -ENOTTY)
++			return -EOPNOTSUPP; /* ioctl() not implemented yet */
++		if (err == -ENOENT)
++			return -ESRCH; /* vma not found */
++		return err;
++	}
++
++	if (env_verbosity >= 1) {
++		printf("VMA FOUND (addr %08lx): %08lx-%08lx %c%c%c%c %08lx %02x:%02x %ld %s (build ID: %s, %d bytes)\n",
++		       (long)addr, (long)q.vma_start, (long)q.vma_end,
++		       (q.vma_flags & PROCMAP_QUERY_VMA_READABLE) ? 'r' : '-',
++		       (q.vma_flags & PROCMAP_QUERY_VMA_WRITABLE) ? 'w' : '-',
++		       (q.vma_flags & PROCMAP_QUERY_VMA_EXECUTABLE) ? 'x' : '-',
++		       (q.vma_flags & PROCMAP_QUERY_VMA_SHARED) ? 's' : 'p',
++		       (long)q.vma_offset, q.dev_major, q.dev_minor, (long)q.inode,
++		       q.vma_name_size ? path_buf : "",
++		       q.build_id_size ? "YES" : "NO",
++		       q.build_id_size);
++	}
++
++	*start = q.vma_start;
++	*offset = q.vma_offset;
++	*flags = q.vma_flags;
++	return 0;
++}
++#else
++int procmap_query(int fd, const void *addr, size_t *start, size_t *offset, int *flags)
++{
++	return -EOPNOTSUPP;
++}
++#endif
++
+ ssize_t get_uprobe_offset(const void *addr)
  {
-     struct bpf_security_struct *bpfsec;
+-	size_t start, end, base;
+-	char buf[256];
+-	bool found = false;
++	size_t start, base, end;
+ 	FILE *f;
++	char buf[256];
++	int err, flags;
+ 
+ 	f = fopen("/proc/self/maps", "r");
+ 	if (!f)
+ 		return -errno;
+ 
+-	while (fscanf(f, "%zx-%zx %s %zx %*[^\n]\n", &start, &end, buf, &base) == 4) {
+-		if (buf[2] == 'x' && (uintptr_t)addr >= start && (uintptr_t)addr < end) {
+-			found = true;
+-			break;
++	/* requested executable VMA only */
++	err = procmap_query(fileno(f), addr, PROCMAP_QUERY_VMA_EXECUTABLE, &start, &base, &flags);
++	if (err == -EOPNOTSUPP) {
++		bool found = false;
++
++		while (fscanf(f, "%zx-%zx %s %zx %*[^\n]\n", &start, &end, buf, &base) == 4) {
++			if (buf[2] == 'x' && (uintptr_t)addr >= start && (uintptr_t)addr < end) {
++				found = true;
++				break;
++			}
++		}
++		if (!found) {
++			fclose(f);
++			return -ESRCH;
+ 		}
++	} else if (err) {
++		fclose(f);
++		return err;
+ 	}
+-
+ 	fclose(f);
+ 
+-	if (!found)
+-		return -ESRCH;
+-
+ #if defined(__powerpc64__) && defined(_CALL_ELF) && _CALL_ELF == 2
+ 
+ #define OP_RT_RA_MASK   0xffff0000UL
+@@ -307,15 +371,25 @@ ssize_t get_rel_offset(uintptr_t addr)
+ 	size_t start, end, offset;
+ 	char buf[256];
+ 	FILE *f;
++	int err, flags;
+ 
+ 	f = fopen("/proc/self/maps", "r");
+ 	if (!f)
+ 		return -errno;
+ 
+-	while (fscanf(f, "%zx-%zx %s %zx %*[^\n]\n", &start, &end, buf, &offset) == 4) {
+-		if (addr >= start && addr < end) {
+-			fclose(f);
+-			return (size_t)addr - start + offset;
++	err = procmap_query(fileno(f), (const void *)addr, 0, &start, &offset, &flags);
++	if (err == 0) {
++		fclose(f);
++		return (size_t)addr - start + offset;
++	} else if (err != -EOPNOTSUPP) {
++		fclose(f);
++		return err;
++	} else if (err) {
++		while (fscanf(f, "%zx-%zx %s %zx %*[^\n]\n", &start, &end, buf, &offset) == 4) {
++			if (addr >= start && addr < end) {
++				fclose(f);
++				return (size_t)addr - start + offset;
++			}
+ 		}
+ 	}
+ 
+-- 
+2.43.5
 
-
-[...]
