@@ -1,170 +1,94 @@
-Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com [209.85.128.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-187.mta0.migadu.com (out-187.mta0.migadu.com [91.218.175.187])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 834AC13E04B
-	for <bpf@vger.kernel.org>; Wed,  7 Aug 2024 17:51:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 300A12F3E
+	for <bpf@vger.kernel.org>; Wed,  7 Aug 2024 17:54:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.187
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723053065; cv=none; b=JLpF0UHOYlvnECah03WB26Uf1viq5ug2GndXspiNmu4238Wx/HdzNd/MuewkAa7NpZae7WShvs2LzTN9wXP7nClHaVCPHdE0L9Absh+Y+M44Fudfnlr4Rom14Q0iabsCTMZw/tNQ2mX7j7dFRz4IMZyp37nfIuZT15P8kEzVYt4=
+	t=1723053258; cv=none; b=H5Fr/JJzdos8iIeP6gkBptQhD/KpJHpqUyBmEHXELbTfx1kv48RkD249Pa2gWDdjhbIc4+RFUenuGiYbSemSEzj3jF0PJ+7v2rQ8JF+BCj6tik/n081wcXGYpQiJ/ftI6fnRs69qkuRCsYCYflS87p6jnaBzR1Sv3z4PSIJDLoE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723053065; c=relaxed/simple;
-	bh=UDOJiRTvMpuD7RD6NM/euJKuUKttLepxfa4C+u3utcs=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=iFNZgxtFr6WA2KYz3sZnwpy+v/Axfr+dere/eLMtqbLAPIsQs9nTC0W8VLZlDkfX8VCZbNkx+NdK+Pgt8SZqo/OkiMJIjLxpOrLkgiPeyIUF3lyAopTkB8YBdbkBJ6M7u27fZN9IF7r2tKzfN8d2HqMduZoJXDJFMSclezz/iQo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jDYRoxX+; arc=none smtp.client-ip=209.85.128.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1723053258; c=relaxed/simple;
+	bh=6seFhQ5B0derFqlcuc+efp2ZP4XCLtKs8bQhBAqO87Y=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ovXdThOez7QIOxtLG8pgKYLxf1Pwsxsz5Dl42DNqorJUrUuMUb710EHW+njy4w1u8qrP+4c1fU+HtBsyuhI8WarDkADL+B9aCmvQKKBddNOhcooKYcDfibc1hbAOGtp55IvyzkWAMMyHf3SbNp85t1YrufJnD4WMfwSe8rykrVI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=PEUyEeVs; arc=none smtp.client-ip=91.218.175.187
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jDYRoxX+"
-Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-651da7c1531so1142247b3.0
-        for <bpf@vger.kernel.org>; Wed, 07 Aug 2024 10:51:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1723053062; x=1723657862; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=uhVlXzW9eweS2OHYJCvRKUDeLzK39AGvAsyg3ZtVVXo=;
-        b=jDYRoxX+Uokb6aSAuszXrTRqnfvu8oPcCvYZ0TX5F7Ys/eZevISIHwJPUIHmiV4HaX
-         2AcwZDoMUX00uU0CJcBw5LrKpHB1u8UU2AwAmXjIKydUyqMpK/WGOU//UZeiVyhHJkEe
-         hZpOfEhWqJsmwmp9IV8XPdadOhnTfvKSqGZneIIf1a3LbXEVH1CKR2T2zBJdiJNTSDEW
-         ZKdsaIQGIgurhJSXYgSjGtbWLRjqNfyR/XtPOZIUEOAOjxjdfwvWtypxzIedKsbftWkC
-         5XslBN7/Ust1XvQnX4/5dYwdvTEqpMsKgjb8Iu352M86Hm4wHgeeZpiHBLmOC8n/N+np
-         rMzw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1723053062; x=1723657862;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=uhVlXzW9eweS2OHYJCvRKUDeLzK39AGvAsyg3ZtVVXo=;
-        b=HPpzG5S7KIz2fohT07SypgsBA06+DISPM7M6FI+trBq5hkwSXgD9dOqOq/UJHOFm5E
-         /4wfU9Fsnn2VJQLesAN2fkW5NVFB9hEXnzjqlLdo15aNHNwvtv2Hl3A7vyw5g/bE3Hqg
-         n31NZhvcq6npTMmpV4G80YAhuLofxpLPNeFprsvp7lBIJvE1C3R9seuvigkKbsmVFbiW
-         WPOs7B0yCOgGUIKTSl+U0yYJW9iuNXWu4xzpwqjiFta5Lg1RV3Bd0KR5B9kdpvXW4xs+
-         PnWz6PPfsOv5CC0KMRLsynrntgnSALc9OHO9gd3nkYZFexN53n5X3DSrRDufELCI0EaR
-         ZtLA==
-X-Gm-Message-State: AOJu0YxbNayNfVH+aaP2V1sCP3o3MkpB/uiVlytNHwPVG9E0J8Oebe3u
-	SdQZ6EoC/CSHZ+Y83JrmEcBLsZhKQn6ZeHsNOZt20RQ63vhjPJ1sNM8mVFgJ
-X-Google-Smtp-Source: AGHT+IHfArpLBbkH8jz4g42ZaMzoaS+e07/xA/41tVMEy48vFJFdrb0p6SgZb2uAEgGO2nHSUArvGQ==
-X-Received: by 2002:a0d:ff03:0:b0:654:c11:602f with SMTP id 00721157ae682-68964391576mr224478077b3.40.1723053062515;
-        Wed, 07 Aug 2024 10:51:02 -0700 (PDT)
-Received: from kickker.attlocal.net ([2600:1700:6cf8:1240:fb5f:452b:3dfd:192])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-68fcd1727f3sm14988727b3.90.2024.08.07.10.51.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Aug 2024 10:51:02 -0700 (PDT)
-From: Kui-Feng Lee <thinker.li@gmail.com>
-To: bpf@vger.kernel.org,
-	ast@kernel.org,
-	martin.lau@linux.dev,
-	song@kernel.org,
-	kernel-team@meta.com,
-	andrii@kernel.org,
-	sdf@fomichev.me,
-	geliang@kernel.org
-Cc: sinquersw@gmail.com,
-	kuifeng@meta.com,
-	Kui-Feng Lee <thinker.li@gmail.com>
-Subject: [RFC bpf-next v6 6/6] selftests/bpf: Monitor traffic for select_reuseport.
-Date: Wed,  7 Aug 2024 10:50:52 -0700
-Message-Id: <20240807175052.674250-7-thinker.li@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240807175052.674250-1-thinker.li@gmail.com>
-References: <20240807175052.674250-1-thinker.li@gmail.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="PEUyEeVs"
+Date: Wed, 7 Aug 2024 10:54:08 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1723053253;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=c/gRiZ4u85fdbUyPuHXMYBPAy734NZeZvYCyZw5ZMIw=;
+	b=PEUyEeVsssUP9Rnu+g+mH5LvNo+RYyWdYubmqmYCW4leg4nLp3Cfdmsw/zIH6TNfSxRaui
+	MV4y/OEvjzY8QFF3PyKvhqhVAy+ApBxD4ANDL5bRyH4rwQ1pSgCAd08aGnL2m8JwaikDnJ
+	cNpFASL1yTO4LwddyjmlvWgq+uOjdIo=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Shakeel Butt <shakeel.butt@linux.dev>
+To: Matthew Wilcox <willy@infradead.org>
+Cc: Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org, 
+	linux-mm@kvack.org, akpm@linux-foundation.org, adobriyan@gmail.com, 
+	hannes@cmpxchg.org, ak@linux.intel.com, osandov@osandov.com, song@kernel.org, 
+	jannh@google.com
+Subject: Re: [PATCH v3 bpf-next 02/10] lib/buildid: add single page-based
+ file reader abstraction
+Message-ID: <n2y5rk74ynongpvbpbsnjzghskmw337bexf2ftcf2fnrgk3knn@3u322cnvwpcm>
+References: <20240730203914.1182569-1-andrii@kernel.org>
+ <20240730203914.1182569-3-andrii@kernel.org>
+ <ZrOStYOrlFr21jRc@casper.infradead.org>
+ <whbw2skd4lrkgqi5e6q6ha54f5vurhw3yiggdndu2xhxlqegtt@fjskvq4hsgfj>
+ <ZrOy2GFv5KDmFlZt@casper.infradead.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZrOy2GFv5KDmFlZt@casper.infradead.org>
+X-Migadu-Flow: FLOW_OUT
 
-Enable traffic monitoring for the subtests of select_reuseport.
+On Wed, Aug 07, 2024 at 06:46:00PM GMT, Matthew Wilcox wrote:
+> On Wed, Aug 07, 2024 at 10:19:11AM -0700, Shakeel Butt wrote:
+> > On Wed, Aug 07, 2024 at 04:28:53PM GMT, Matthew Wilcox wrote:
+> > > On Tue, Jul 30, 2024 at 01:39:06PM -0700, Andrii Nakryiko wrote:
+> > > > +	union {
+> > > > +		struct {
+> > > > +			struct address_space *mapping;
+> > > > +			struct page *page;
+> > > 
+> > > NAK.  All the page-based interfaces are deprecated.  Only we can't mark
+> > > them as deprecated because our tooling is a pile of crap.
+> > > 
+> > > > +			void *page_addr;
+> > > > +			u64 file_off;
+> > > 
+> > > loff_t pos.
+> > > 
+> > > > +	r->page = find_get_page(r->mapping, pg_off);
+> > > 
+> > > r->folio = read_mapping_folio(r->mapping, r->pos / PAGE_SIZE, ...)
+> > > 
+> > > OK, for network filesystems, you're going to need to retain the struct
+> > > file that's used to access them.  So maybe this becomes
+> > > 	read_mapping_folio(r->file->f_mapping, r->pos, r->file)
+> > 
+> > This code path can be called from non-sleepable context. What would be
+> > the appropriate way to get the folio in that case?
+> 
+> There isn't.  If there's no folio, or the folio isn't uptodate, we need
+> to sleep to wait for I/O.  We can't busy-wait for I/O.
+> 
 
-Signed-off-by: Kui-Feng Lee <thinker.li@gmail.com>
----
- .../bpf/prog_tests/select_reuseport.c         | 37 +++++++------------
- 1 file changed, 13 insertions(+), 24 deletions(-)
+Failure is fine if there is no folio or the folio is not uptodate. I
+assume we can do:
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/select_reuseport.c b/tools/testing/selftests/bpf/prog_tests/select_reuseport.c
-index 64c5f5eb2994..5a8fa450eb9d 100644
---- a/tools/testing/selftests/bpf/prog_tests/select_reuseport.c
-+++ b/tools/testing/selftests/bpf/prog_tests/select_reuseport.c
-@@ -37,9 +37,7 @@ static int sk_fds[REUSEPORT_ARRAY_SIZE];
- static int reuseport_array = -1, outer_map = -1;
- static enum bpf_map_type inner_map_type;
- static int select_by_skb_data_prog;
--static int saved_tcp_syncookie = -1;
- static struct bpf_object *obj;
--static int saved_tcp_fo = -1;
- static __u32 index_zero;
- static int epfd;
- 
-@@ -193,14 +191,6 @@ static int write_int_sysctl(const char *sysctl, int v)
- 	return 0;
- }
- 
--static void restore_sysctls(void)
--{
--	if (saved_tcp_fo != -1)
--		write_int_sysctl(TCP_FO_SYSCTL, saved_tcp_fo);
--	if (saved_tcp_syncookie != -1)
--		write_int_sysctl(TCP_SYNCOOKIE_SYSCTL, saved_tcp_syncookie);
--}
--
- static int enable_fastopen(void)
- {
- 	int fo;
-@@ -793,6 +783,7 @@ static void test_config(int sotype, sa_family_t family, bool inany)
- 		TEST_INIT(test_pass_on_err),
- 		TEST_INIT(test_detach_bpf),
- 	};
-+	struct netns_obj *netns;
- 	char s[MAX_TEST_NAME];
- 	const struct test *t;
- 
-@@ -808,9 +799,21 @@ static void test_config(int sotype, sa_family_t family, bool inany)
- 		if (!test__start_subtest(s))
- 			continue;
- 
-+		netns = netns_new("test", true);
-+		if (!ASSERT_OK_PTR(netns, "netns_new"))
-+			continue;
-+
-+		if (CHECK_FAIL(enable_fastopen()))
-+			goto out;
-+		if (CHECK_FAIL(disable_syncookie()))
-+			goto out;
-+
- 		setup_per_test(sotype, family, inany, t->no_inner_map);
- 		t->fn(sotype, family);
- 		cleanup_per_test(t->no_inner_map);
-+
-+out:
-+		netns_free(netns);
- 	}
- }
- 
-@@ -850,21 +853,7 @@ void test_map_type(enum bpf_map_type mt)
- 
- void serial_test_select_reuseport(void)
- {
--	saved_tcp_fo = read_int_sysctl(TCP_FO_SYSCTL);
--	if (saved_tcp_fo < 0)
--		goto out;
--	saved_tcp_syncookie = read_int_sysctl(TCP_SYNCOOKIE_SYSCTL);
--	if (saved_tcp_syncookie < 0)
--		goto out;
--
--	if (enable_fastopen())
--		goto out;
--	if (disable_syncookie())
--		goto out;
--
- 	test_map_type(BPF_MAP_TYPE_REUSEPORT_SOCKARRAY);
- 	test_map_type(BPF_MAP_TYPE_SOCKMAP);
- 	test_map_type(BPF_MAP_TYPE_SOCKHASH);
--out:
--	restore_sysctls();
- }
--- 
-2.34.1
+	folio = __filemap_get_folio(r->mapping, pg_off, 0, 0);
+	if (!folio || !folio_test_uptodate(folio))
+		return -EFAULT;
 
+Is this appropriate here?
