@@ -1,190 +1,111 @@
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4580C15F40A;
-	Fri,  9 Aug 2024 18:53:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3CB213AA38
+	for <bpf@vger.kernel.org>; Fri,  9 Aug 2024 19:14:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723229620; cv=none; b=rIp49RfR23/EBTsQKlDA8MPpgps8A7o9pnVT4mHL1sUVsfhYnAsvRtENn8HGeYSaUwJQ+j98xJQ5mWlXqCGXVrj9oOHXUeSfQQ7j5NYNn6mqlQ3tAmPCrLhCL0rC2DoA1bAWiYnENP8Q513FlldqMX7lwuQt4ZRJVOoPzY77Shs=
+	t=1723230875; cv=none; b=DLYIwlSaAD9K6uTnGb7sWgHVpRSx6wLDNO+zgfS6QDLS21PnlOyLf+ekvgno6EyoXippRQLPfvWXTHiodAvwMgJjyKo6iTHZxR+mtcESx6jzI12dBVLG74MDENHHJlJPGlLhoeLHwAZ5sM4JzQi2BFjF1sfqrHK8auzZlA/YiwA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723229620; c=relaxed/simple;
-	bh=/dHohhjd6mqlamUXfVgbOAeseXKkRFzIWn0NkexjeWE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fJ1RNHvFTLqM1L8aP0q0MBmuXXNV0lKjyCuDBiKd4/sL6HfrC9rxiRssRHZlRo14xdIVCiRXYAkavxr/R/LiyOE0GQ32M8IjegS4gK15EyuWtgjRUEnvR1Xbpe9LhpuIKFkRZKs2zwp6F4UECd1wmAR7+ONhRZQjLASjWQpMkRo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=I2+FqQRz; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	s=arc-20240116; t=1723230875; c=relaxed/simple;
+	bh=QTwrGMH/ZK5+bUJ31t9nf7/A+rGh57Zgr65RU5vNMYI=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=gkxE23C6nv9eNQE7uyLLzJkq11/lCO4OEdiXsmkdOyrKMCD8YfCzOGFYQdrBG6yfUmn/ZDZxTJt1bvVSj+/H+pZ0GUyC/elpaHI8v3672pTkXP6GAWKS8q06XY8r8vvKpA1jJ4EUNBh/Mt1wToDmH0MFP3rLWiooWoBotJARr1Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gy4xOsOk; arc=none smtp.client-ip=209.85.214.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="I2+FqQRz"
-Received: from pps.filterd (m0353722.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 479IXdwH010358;
-	Fri, 9 Aug 2024 18:53:10 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date
-	:from:to:cc:subject:message-id:references:mime-version
-	:content-type:content-transfer-encoding:in-reply-to; s=pp1; bh=b
-	mEjRON3V05lDNcx6eATNnufsLS6Cq7LkG7wr3fR8CY=; b=I2+FqQRzNFievgARW
-	VpRgqdgGlgm8Pub96+nNNaw3tTkHv/XATg9A2wh6qCN4yHEEyWGa+JQvDl74FnT/
-	XX3yc0nfp9bSoSti26ZtL/NVB7aTEAs5WqwsFO4tLE3nf0YsYXKe0kksinbUF9Y/
-	u9+DIWNV6TpbKwETBT6RufKKm3V/xWeAmiWuCOWUlAny/x07AQn6eIq/HBGKvznb
-	+U4RfiGg536Fxk5o+0xGm4xC7or2zXuKJOqqrqfCerTi1FlCwvosz4vVT1lHvPaX
-	oWcnivpc35RQzMlynLEjvphuF9quEDW+Ip9ZEmoUKciAzYAs1P/G2Mnfv9Vv+eW5
-	ALhFA==
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 40wrgg81a3-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 09 Aug 2024 18:53:10 +0000 (GMT)
-Received: from m0353722.ppops.net (m0353722.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 479Ir9xV012702;
-	Fri, 9 Aug 2024 18:53:09 GMT
-Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 40wrgg81a2-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 09 Aug 2024 18:53:09 +0000 (GMT)
-Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma22.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 479IoHCi024361;
-	Fri, 9 Aug 2024 18:53:09 GMT
-Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
-	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 40sy91558d-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 09 Aug 2024 18:53:08 +0000
-Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
-	by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 479Ir4j745875536
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 9 Aug 2024 18:53:07 GMT
-Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id CBB3920043;
-	Fri,  9 Aug 2024 18:53:04 +0000 (GMT)
-Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 5DA7920040;
-	Fri,  9 Aug 2024 18:53:01 +0000 (GMT)
-Received: from linux.ibm.com (unknown [9.43.65.191])
-	by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-	Fri,  9 Aug 2024 18:53:00 +0000 (GMT)
-Date: Sat, 10 Aug 2024 00:21:43 +0530
-From: Saket Kumar Bhaskar <skb99@linux.ibm.com>
-To: Waiman Long <longman@redhat.com>
-Cc: Chen Ridong <chenridong@huawei.com>, tj@kernel.org,
-        lizefan.x@bytedance.com, hannes@cmpxchg.org, adityakali@google.com,
-        sergeh@kernel.org, bpf@vger.kernel.org, cgroups@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH -next] cgroup/cpuset: Do not clear xcpus when clearing
- cpus
-Message-ID: <ZrZlP//QMWFEV6gJ@linux.ibm.com>
-References: <20240731092102.2369580-1-chenridong@huawei.com>
- <6a79b50a-ad74-4b1b-a98c-7da8ef341b24@redhat.com>
- <a3cee760-398f-4661-b4b5-f2fcfd5de7b7@redhat.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gy4xOsOk"
+Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-1fc4fccdd78so20711055ad.2
+        for <bpf@vger.kernel.org>; Fri, 09 Aug 2024 12:14:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1723230873; x=1723835673; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=DiZ9pLIpWoEX7m20bsoFVi1emGaCnlVdjT8ezXO1tcg=;
+        b=gy4xOsOkob4vc8GeyQFIaGZUJAAB+2mlYl1kMEfSxFWA7fRQN6cx8rIaEbm9ZN8LuL
+         yjhUnkecsqiWS2uXwGWcSDCTAAcB+s6aWZw/519pcjQtFJVkt8wuFNMk/3Byb45GBv3K
+         ojhROlbECoIMqrXNyjjwTdk3Iec0OG9QSyBL5CqHDvkesOr1kOrOBG1ni0tUMc5ewO8v
+         z1jbnv8ioikr7Sc6VHSL7pOzK8nnqDQp6FK+VhwQ0ds354FImY0FNTFK+DskQ5EQd5Bd
+         tBwYv3zfn25n0PuLhzoNufFOS683K0TutcEH0EKx2jnvAGHcwslX2eM5nbaExNRlhmIS
+         tcOw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1723230873; x=1723835673;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=DiZ9pLIpWoEX7m20bsoFVi1emGaCnlVdjT8ezXO1tcg=;
+        b=eqvEJ7kYjmNEd1Go7OjoOOrvalHTe5HZe1zREwxQopJeSERJC3nerSlMjFJQrbgV/b
+         8LUlt5/iOmxGpzwsna7NjcANAYgzaTHM4hqOF7WmNxCxp6rE3+mX6sjbP2zU7zaMk7/s
+         aUPp1rpkIjosNLBRBLDiLMqV8hWBHOUdYMr8sy640xZemAs+TYfFb//5j87SosreBr8B
+         OTRnGhFEfYRI9CZ/0FR6/YIBIY3elCXVd2oET5XVI/0/JcHR3XKft9sJUQbO9nFUYym0
+         jNWluRLf6O669A/SR4/ni72ROBGS/86J4n2BmnGDQesNVX6RPKZa8RSmObIs9k6KHyEx
+         /o+w==
+X-Forwarded-Encrypted: i=1; AJvYcCXYD51X835N+4nzJgcEuqFMv8esa8KBPKl9pI2NGCXCb0KmHBTRRGstEsO9DbdVkRd6izmWpgwHS02GlKbK5YqBePsx
+X-Gm-Message-State: AOJu0YyWJ3f0Cq/Q5Y3mzigUTiZxc78njCI6ehSpYQrgdXfHXIaML+fq
+	r8lHN2QOJxcQh+XG6OGcx/foWf7yTHbOsmNFXyxVfU2f69E7NYOq
+X-Google-Smtp-Source: AGHT+IFKLxfu9Qe5mSUPhVcWaTAPLJt0jbDStkqh9UJiy5tVTsp4fFzr+T0K2ApWdJYJPyhiXX4YxA==
+X-Received: by 2002:a17:902:e742:b0:1fb:8e00:e5e8 with SMTP id d9443c01a7336-200ae4db9bemr30276355ad.10.1723230873009;
+        Fri, 09 Aug 2024 12:14:33 -0700 (PDT)
+Received: from [192.168.0.235] ([38.34.87.7])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-200bba3f475sm945255ad.258.2024.08.09.12.14.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 09 Aug 2024 12:14:32 -0700 (PDT)
+Message-ID: <2689ece2c10e234a2326ad4406439ad7c8d35a03.camel@gmail.com>
+Subject: Re: [PATCH bpf-next 2/3] bpf: allow passing struct bpf_iter_<type>
+ as kfunc arguments
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
+ ast@kernel.org,  daniel@iogearbox.net, martin.lau@kernel.org
+Cc: tj@kernel.org, void@manifault.com
+Date: Fri, 09 Aug 2024 12:14:27 -0700
+In-Reply-To: <20240808232230.2848712-3-andrii@kernel.org>
+References: <20240808232230.2848712-1-andrii@kernel.org>
+	 <20240808232230.2848712-3-andrii@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.52.3 (3.52.3-1.fc40) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <a3cee760-398f-4661-b4b5-f2fcfd5de7b7@redhat.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: uL465YgwusuPMStJhZi5zVRPI9YVTvU4
-X-Proofpoint-ORIG-GUID: S17c7uSdwnOz9iIQFyQjuFH7szQHnfkZ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-08-09_14,2024-08-07_01,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 impostorscore=0
- malwarescore=0 spamscore=0 clxscore=1011 priorityscore=1501
- mlxlogscore=983 adultscore=0 suspectscore=0 lowpriorityscore=0 bulkscore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2407110000 definitions=main-2408090134
 
-On Thu, Aug 01, 2024 at 12:31:44PM -0400, Waiman Long wrote:
-> 
-> On 7/31/24 23:22, Waiman Long wrote:
-> > On 7/31/24 05:21, Chen Ridong wrote:
-> > > After commit 737bb142a00d ("cgroup/cpuset: Make cpuset.cpus.exclusive
-> > > independent of cpuset.cpus"), cpuset.cpus.exclusive and cpuset.cpus
-> > > became independent. However we found that
-> > > cpuset.cpus.exclusive.effective
-> > > is cleared when cpuset.cpus is clear. To fix this issue, just remove
-> > > xcpus
-> > > clearing when cpuset.cpus is being cleared.
-> > > 
-> > > It can be reproduced as below:
-> > > cd /sys/fs/cgroup/
-> > > mkdir test
-> > > echo +cpuset > cgroup.subtree_control
-> > > cd test
-> > > echo 3 > cpuset.cpus.exclusive
-> > > cat cpuset.cpus.exclusive.effective
-> > > 3
-> > > echo > cpuset.cpus
-> > > cat cpuset.cpus.exclusive.effective // was cleared
-> > > 
-> > > Signed-off-by: Chen Ridong <chenridong@huawei.com>
-> > > ---
-> > >   kernel/cgroup/cpuset.c | 5 ++---
-> > >   1 file changed, 2 insertions(+), 3 deletions(-)
-> > > 
-> > > diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
-> > > index a9b6d56eeffa..248c39bebbe9 100644
-> > > --- a/kernel/cgroup/cpuset.c
-> > > +++ b/kernel/cgroup/cpuset.c
-> > > @@ -2523,10 +2523,9 @@ static int update_cpumask(struct cpuset *cs,
-> > > struct cpuset *trialcs,
-> > >        * that parsing.  The validate_change() call ensures that cpusets
-> > >        * with tasks have cpus.
-> > >        */
-> > > -    if (!*buf) {
-> > > +    if (!*buf)
-> > >           cpumask_clear(trialcs->cpus_allowed);
-> > > -        cpumask_clear(trialcs->effective_xcpus);
-> > > -    } else {
-> > > +    else {
-> > >           retval = cpulist_parse(buf, trialcs->cpus_allowed);
-> > >           if (retval < 0)
-> > >               return retval;
-> > 
-> > Yes, that is a corner case bug that has not been properly handled.
-> > 
-> > Reviewed-by: Waiman Long <longman@redhat.com>
-> > 
-> With a second thought, I think we should keep the clearing of
-> effective_xcpus if exclusive_cpus is empty. IOW
-> 
-> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
-> index 6ba8313f1fc3..2023cd68d9bc 100644
-> --- a/kernel/cgroup/cpuset.c
-> +++ b/kernel/cgroup/cpuset.c
-> @@ -2516,7 +2516,8 @@ static int update_cpumask(struct cpuset *cs, struct
-> cpuset *trialcs,
->          */
->         if (!*buf) {
->                 cpumask_clear(trialcs->cpus_allowed);
-> -               cpumask_clear(trialcs->effective_xcpus);
-> +               if (cpumask_empty(trialcs->exclusive_cpus))
-> + cpumask_clear(trialcs->effective_xcpus);
->         } else {
->                 retval = cpulist_parse(buf, trialcs->cpus_allowed);
->                 if (retval < 0)
-> 
-> Thanks,
-> Longman
-> 
-Hi Longman,
+On Thu, 2024-08-08 at 16:22 -0700, Andrii Nakryiko wrote:
+> There are potentially useful cases where a specific iterator type might
+> need to be passed into some kfunc. So, in addition to existing
+> bpf_iter_<type>_{new,next,destroy}() kfuncs, allow to pass iterator
+> pointer to any kfunc.
+>=20
+> We employ "__iter" naming suffix for arguments that are meant to accept
+> iterators. We also enforce that they accept PTR -> STRUCT btf_iter_<type>
+> type chain and point to a valid initialized on-the-stack iterator state.
+>=20
+> Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+> ---
 
-Is there any situation in which we could land here for or after clearing 
-exclusive_cpus. AFAIK only way we could landup after clearing exclusive_cpus 
-to update_exclusive_cpumask(), which anyway clears effective_xcpus. 
-In that case, clearing effective_xcpus would be redundant in update_cpumask().
+In current form this allows the following usage:
 
+    SEC("?socket")
+    __success
+    int testmod_seq_getter_good(const void *ctx)
+    {
+    	struct bpf_iter_testmod_seq it;
+    	s64 sum =3D 0;
+   =20
+    	bpf_iter_testmod_seq_new(&it, 100, 100);
+    	sum *=3D bpf_iter_testmod_seq_value(0, &it);
+    	bpf_iter_testmod_seq_destroy(&it);
+   =20
+    	return sum;
+    }
 
-Also, is there any situation in which we could end up clearing exclusive_cpus
-without clearing effective_xcpus as we have a piece of code:
+Do we want to ensure that iterator is not drained before the call to
+bpf_iter_testmod_seq_value()?
 
-	static inline struct cpumask *fetch_xcpus(struct cpuset *cs)
-	{
-		return !cpumask_empty(cs->exclusive_cpus) ? cs->exclusive_cpus :
-	       	cpumask_empty(cs->effective_xcpus) ? cs->cpus_allowed
-						  : cs->effective_xcpus;
-	}
+Otherwise this patch lgtm.
 
-Thanks,
-Saket
+[...]
+
