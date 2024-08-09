@@ -1,197 +1,158 @@
-Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BD7913C8F4;
-	Fri,  9 Aug 2024 18:43:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 510281474C3
+	for <bpf@vger.kernel.org>; Fri,  9 Aug 2024 18:53:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723229002; cv=none; b=iDyGQ71C4AO3e5yVzAjhk3bqywToyu0vDxCLZOKgMrjE4iNrbjf1YGgf9jN1yki/icpvixSMXCB2GDj0mSFf6SqtC97gORFr2Z1u3vyoe13h1FIqmSR2qzKnUyqa+CGI3c2lKVFidaUPbppJMx41QIwI7cQRtZFY1MlC6Oj9pmg=
+	t=1723229614; cv=none; b=GqCbJ+viYgR6N8d+h2Vwg8VHVIiCYYT+DU+hakleDj2Xql5otdQMQ5c6ERKNbdH+V38yr/GvwgDCmCLa6eRAm+g2CgpVgrbx8WsEabkhD7uHZmViVTMl0kkLACyd4aDmcrlk7/v56JaKvqjYmxPeTwmbMV0wia4sf1WzWR7iFWU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723229002; c=relaxed/simple;
-	bh=H9FXHLpYfMUXWbFJSEQFUoSRkz4T4dpFivSoqqloZSg=;
+	s=arc-20240116; t=1723229614; c=relaxed/simple;
+	bh=kQRoSA92hYDyVhwG0YjQLYfA8ChI4kIlBvhbXyQNZzc=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=oGoc7NgmGDsIzJ/zBelWiqNYvgtkqwLScZWbqwvMWKbSUIoQOSPuqxP0RtgXDxRKqNfKCVEYpun83WYzpUux1r64Pql+MB0Re9/Dz7D/2BaKIaRtl/9kLehmFFR+1LhpL6+1Ll991I/JASIrUmLmGDjgxGIuz2TuIyMqoBJaMpE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NqeHxe67; arc=none smtp.client-ip=209.85.216.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 To:Cc:Content-Type; b=bvcWNqAHbYD/X+CriXxk/sxxa+8+vQkXXC1M3wxNhO1eVsvlr/WcQ9KjlMbxG2TA7VfquPkDdcOjjVGQCHTGqKVN+8y1584BczC7k+KB/j161TWyAY76l9Ef4KO7Byi28J3cvollg2Iq7XKD7MRCDFbK0SmzshBd/O3QLf8pe4g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ExrzfYK9; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NqeHxe67"
-Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-2cf93dc11c6so1901390a91.1;
-        Fri, 09 Aug 2024 11:43:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1723229000; x=1723833800; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=q6v/APqpkjljeWsKuKvJifVCNrWaIH3KrJtyq7+urjQ=;
-        b=NqeHxe677jNI7V4opI6VRANVY6D0IvCahel1bjW6xBsXvYjgehxvI3iKJ8Z76fgHSG
-         TWMFpRBRON+Gpuhuula3YDVjSWeqK9I2LQzNTs7npmNtPAsuRxl1SQ+52SyCMX6LY+i0
-         /0NW4Avw48OBrseI6CMvsOAzNfx/BmUrUWUozB96gCC+/DfVy03qkGUeg72hfni2pxGY
-         f+4jT8PnMAFrYpEwNVbJZDV7OFLOpAsqCsBf4yMiSI6Kw6lvXZ1HN5qYxR32yLRiS7j3
-         YXMzMX6Ew/4LYOQ+oT55ymtgHw419Kkjzu2BPqGKoN73xHrHVNFAqb8AZe8FLjfE+JuX
-         5mbA==
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ExrzfYK9"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1723229612;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=9Q0TdrPMBWPxQ8cg3/oqyzMEtJu5iYD7aWaTXlS9y5o=;
+	b=ExrzfYK9P/U0ljGgHZfG1Z+9g9v9wNSN/I516ZXj5BvafMfq9tHVyvWeClr5oZbljlAZ1h
+	K6TNymsMqvyxe/YdCWNL4fep0ZDDGlihe798GR34XnKTNsqXveQWJEU+wQaHQLx1sLDPLV
+	gasjRY7M7LgqPOffULdt9O6Q3hoxerM=
+Received: from mail-vs1-f72.google.com (mail-vs1-f72.google.com
+ [209.85.217.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-286-WC78oSKaNXeka1pskqYWig-1; Fri, 09 Aug 2024 14:53:31 -0400
+X-MC-Unique: WC78oSKaNXeka1pskqYWig-1
+Received: by mail-vs1-f72.google.com with SMTP id ada2fe7eead31-49457fc2a1fso1163319137.2
+        for <bpf@vger.kernel.org>; Fri, 09 Aug 2024 11:53:31 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1723229000; x=1723833800;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=q6v/APqpkjljeWsKuKvJifVCNrWaIH3KrJtyq7+urjQ=;
-        b=JLxiKdTN4hrihWphyz0di8kN1OHjnV5nK4QChAp2n7goduN1B93w/8vIWdnt6hQJm3
-         Et7+nzgAynsVA5BupLW3zqDa0eQ+StiTRJBxl54Bt9IgGu0qkzK65vp037o7hbkTfv8m
-         x63Q4juXYCSRLajYbBoIPVoM6KdduO1J2MCavudKyqjC7bKz2dt8PxJmi6TSJ/I2F0KQ
-         P7L0Gxt2HgdV8rnVAquhQHohk8BaGKhElMN6yRbOfg1D2Wg3fiEx0LqsnoFotdFyc3zg
-         K2HWKvYEtmL8cBQDgs6ExADYydDyRtLYscR7rcVwpHZfJ7EdKnYgXMFeOxozHRHe7aKr
-         /1sg==
-X-Forwarded-Encrypted: i=1; AJvYcCW7uxkmJVbipgGoycWfeuEpadizNO+MnnmaQ8UqwTUffLs6Wmfi3Aeonwpek2Xt91xlFbRdCJkrH5O8HiXaV62Lq3G2+PAI0iNJhH2s+QpN9FED1Lbp9cpOKqIrcBc6X6x/XUWUpkF7hQSeBY+lxT0eMb7jnOs5YbdcV0fS6s4n43eM9rla
-X-Gm-Message-State: AOJu0Ywdjjl9Pd4fMMLl5q/k9OINMeTEprAOwft4VSUTeSkVNJNBeCq0
-	Y4DmTeKmRFTrXMFra3U+kOpiRZE+8YKEdhU1J/UUKbGSW5GmZs/hrTxUFGmQ7D1Kznobsfzz7gY
-	w54OgyQwVnu0nmj2gXqQ/4F6yC18=
-X-Google-Smtp-Source: AGHT+IFbHS8h9BI8SNX7Kxkg+6R8B5ycqFbc+TxbxK49+cr4DQJrVJ7Lw0LCL/3Dtjc2Pzhrf3fSwVd4DMJFNKiXBVA=
-X-Received: by 2002:a17:90a:4b87:b0:2c9:6d8:d823 with SMTP id
- 98e67ed59e1d1-2d1e7fa91b6mr2955323a91.1.1723229000137; Fri, 09 Aug 2024
- 11:43:20 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1723229610; x=1723834410;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=9Q0TdrPMBWPxQ8cg3/oqyzMEtJu5iYD7aWaTXlS9y5o=;
+        b=Y4tj6YK1ysVUPe2rWud/LowsxwY3SbYoC5ZRfeQptVdbyUn/9TJ7Bl5ZQ42s/t1OPo
+         QRTwOi0bffj1r10GG3JiNv7LIg3gcSbqvJlk2ngi0KMS4JBTORI/eh9LcwUqMG95XNDB
+         Y8vq/CV6zlB1q+qonLZy65OKbWw14ReswxEtOzi4UzIqd3l+gcjy70ivb+fAdp5VKo59
+         ZEymSckEiicSKdttON1XGmGd6pwkWLstFqrZjDKdt5pteglCUK94uwUiBSPwd+ft/pBM
+         yKO2j5rMYwC52uGIQqLXQW9/Lcoxa54+7y6+1Vb3qZGVeWdq6UuO9tzH0On4UaZQeTnq
+         7FCw==
+X-Forwarded-Encrypted: i=1; AJvYcCVi9227SAdk94jGkRKs+DFhmnBTFMj0bguup+IG7zdPrQIjgWhBOI/REY2swCijK/fBpewiiXPLEz1HvgQJHDl7BYLH
+X-Gm-Message-State: AOJu0YxVLepOniPaZmPhh4+fb0jikcSea3AjJvkS1zOZusWRO940pGXK
+	MKRphvwEGTc3XFDiJU+eP6lvvKWb4NVjAqlNBH8vtAvkPVL4EPJokByrIwcI+F28pGxtSN5SV1h
+	eDo5kBS+T3OXPoCau9wNNhpAI5Ex94v/q7K5SF6epE+RYIEZCF9YDtXxfc31TBbccS/IGxCe2af
+	nkQo/DBmrvhbp7w7o3pcuYRejz
+X-Received: by 2002:a05:6102:38c7:b0:493:effa:f13c with SMTP id ada2fe7eead31-495d85836d7mr3406269137.19.1723229610633;
+        Fri, 09 Aug 2024 11:53:30 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IFXMG38O6bXHYSFXkgdhixdY/LL01zjfldoTMjmv76wCz3f6Z9SfwN5XHBpdXER9i7WZ/NwgNIWKqdEzG7NnVE=
+X-Received: by 2002:a05:6102:38c7:b0:493:effa:f13c with SMTP id
+ ada2fe7eead31-495d85836d7mr3406261137.19.1723229610341; Fri, 09 Aug 2024
+ 11:53:30 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240805202803.1813090-1-andrii@kernel.org> <ZrHSts7eySxHs4wh@krava>
- <CAEf4Bzaq86fPVGWtXqvxLtbsk06coGBebnAO5YiuvuUF2v7++w@mail.gmail.com> <20240808064353.7470f6bfab89bd28dbcdebe0@kernel.org>
-In-Reply-To: <20240808064353.7470f6bfab89bd28dbcdebe0@kernel.org>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Fri, 9 Aug 2024 11:43:07 -0700
-Message-ID: <CAEf4BzYeVT_pSaZP6HNVtdH1EpntXLbXB=6TLymnsA9YOjsWhg@mail.gmail.com>
-Subject: Re: [PATCH] uprobes: get rid of bogus trace_uprobe hit counter
-To: Masami Hiramatsu <mhiramat@kernel.org>
-Cc: Jiri Olsa <olsajiri@gmail.com>, Andrii Nakryiko <andrii@kernel.org>, 
-	linux-trace-kernel@vger.kernel.org, rostedt@goodmis.org, peterz@infradead.org, 
-	oleg@redhat.com, bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20240808145639.GA20510@asgard.redhat.com> <83d4e1a3-73fc-4634-b133-82b9e883b98b@linuxfoundation.org>
+ <20240809010044.GA28665@asgard.redhat.com> <41cb60af-3175-42ab-896f-b890e51cde0d@linuxfoundation.org>
+In-Reply-To: <41cb60af-3175-42ab-896f-b890e51cde0d@linuxfoundation.org>
+From: Eugene Syromiatnikov <esyromia@redhat.com>
+Date: Fri, 9 Aug 2024 20:53:19 +0200
+Message-ID: <CAKiVLCJK+D7nwSm0rVfL5qh6751SdX-DNHw=rD8OKfcSF767cw@mail.gmail.com>
+Subject: Re: [PATCH] selftests/alsa/Makefile: fix relative rpath usage
+To: Shuah Khan <skhan@linuxfoundation.org>
+Cc: Eugene Syromiatnikov <esyr@redhat.com>, Artem Savkov <asavkov@redhat.com>, linux-sound@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	bpf@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Wed, Aug 7, 2024 at 2:44=E2=80=AFPM Masami Hiramatsu <mhiramat@kernel.or=
-g> wrote:
+On Fri, 9 Aug 2024 at 19:01, Shuah Khan <skhan@linuxfoundation.org> wrote:
 >
-> On Tue, 6 Aug 2024 10:26:25 -0700
-> Andrii Nakryiko <andrii.nakryiko@gmail.com> wrote:
+> On 8/8/24 19:00, Eugene Syromiatnikov wrote:
+> > On Thu, Aug 08, 2024 at 02:20:21PM -0600, Shuah Khan wrote:
+> >> Wouldn't make sense to fix fix this in selftests main Makefile
+> >> instead of changing the all the test makefiles
+> >
+> > As of now, the usage of rpath is localised, so it is relatively easy
+> > to evaluate the effect/prudence of such a change;  I am not so confident
+> > in imposing rpath on all of the selftests (and, if doing so, I would
+> > rather opt for runpath, to leave out an ability to override the search
+> > path via LD_LIBRARY_PATH, if such need arises);  in that case it is possibly
+> > also worth to add -L$(OUTPUT) to the CFLAGS as well, as the compile-time
+> > counterpart.  But, again, I was trying to avoid the task of evaluating
+> > the possible side effects of such a change, considering the variability
+> > in environments and setups selftests are run.
 >
-> > On Tue, Aug 6, 2024 at 12:37=E2=80=AFAM Jiri Olsa <olsajiri@gmail.com> =
-wrote:
-> > >
-> > > On Mon, Aug 05, 2024 at 01:28:03PM -0700, Andrii Nakryiko wrote:
-> > > > trace_uprobe->nhit counter is not incremented atomically, so its va=
-lue
-> > > > is bogus in practice. On the other hand, it's actually a pretty big
-> > > > uprobe scalability problem due to heavy cache line bouncing between=
- CPUs
-> > > > triggering the same uprobe.
-> > >
-> > > so you're seeing that in the benchmark, right? I'm curious how bad
-> > > the numbers are
-> > >
-> >
-> > Yes. So, once we get rid of all the uprobe/uretprobe/mm locks (ongoing
-> > work), this one was the last limiter to linear scalability.
-> >
-> > With this counter, I was topping out at about 12 mln/s uprobe
-> > triggering (I think it was 32 CPUs, but I don't remember exactly now).
-> > About 30% of CPU cycles were spent in this increment.
-> >
-> > But those 30% don't paint the full picture. Once the counter is
-> > removed, the same uprobe throughput jumps to 62 mln/s or so. So we
-> > definitely have to do something about it.
-> >
-> > > >
-> > > > Drop it and emit obviously unrealistic value in its stead in
-> > > > uporbe_profiler seq file.
-> > > >
-> > > > The alternative would be allocating per-CPU counter, but I'm not su=
-re
-> > > > it's justified.
-> > > >
-> > > > Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
-> > > > ---
-> > > >  kernel/trace/trace_uprobe.c | 4 +---
-> > > >  1 file changed, 1 insertion(+), 3 deletions(-)
-> > > >
-> > > > diff --git a/kernel/trace/trace_uprobe.c b/kernel/trace/trace_uprob=
-e.c
-> > > > index 52e76a73fa7c..5d38207db479 100644
-> > > > --- a/kernel/trace/trace_uprobe.c
-> > > > +++ b/kernel/trace/trace_uprobe.c
-> > > > @@ -62,7 +62,6 @@ struct trace_uprobe {
-> > > >       struct uprobe                   *uprobe;
-> > > >       unsigned long                   offset;
-> > > >       unsigned long                   ref_ctr_offset;
-> > > > -     unsigned long                   nhit;
-> > > >       struct trace_probe              tp;
-> > > >  };
-> > > >
-> > > > @@ -821,7 +820,7 @@ static int probes_profile_seq_show(struct seq_f=
-ile *m, void *v)
-> > > >
-> > > >       tu =3D to_trace_uprobe(ev);
-> > > >       seq_printf(m, "  %s %-44s %15lu\n", tu->filename,
-> > > > -                     trace_probe_name(&tu->tp), tu->nhit);
-> > > > +                trace_probe_name(&tu->tp), ULONG_MAX);
-> > >
-> > > seems harsh.. would it be that bad to create per cpu counter for that=
-?
-> >
-> > Well, consider this patch a conversation starter. There are two
-> > reasons why I'm removing the counter instead of doing per-CPU one:
-> >
-> >   - it's less work to send out a patch pointing out the problem (but
-> > the solution might change)
-> >   - this counter was never correct in the presence of multiple
-> > threads, so I'm not sure how useful it is.
-> >
-> > Yes, I think we can do per-CPU counters, but do we want to pay the
-> > memory price? That's what I want to get from Masami, Steven, or Peter
-> > (whoever cares enough).
+> Okay.
 >
-> I would like to make it per-cpu counter *and* make it kconfig optional.
-> Or just remove with the file (but it changes the user interface without
-> option).
+> >
+> >> Same comment on all other files.
+> >
+> >> It would be easier to send these as series
+> >
+> > I hesitated to do so due to the fact that different selftests are seemingly
+> > maintained by different people.
 >
-> For the kprobes, the profile file is useful because it shows "missed"
-> counter. This tells user whether your trace data drops some events or not=
-.
-> But if uprobes profile only shows the number of hit, we can use the
-> histogram trigger if needed.
+> You can cc everybody on the cover-letter explaining the change
+> and the individual patches can be sent selectively.
 >
+> This is a kind of change it would be good to go as a series so
+> it will be easier for reviewers.
 
-I really don't like extra Kconfig options for something like this. So
-I'll just go ahead and switch this to per-CPU counters
-unconditionally.
+I see, thank you for the explanation.
 
-For BPF, this is unnecessary memory overhead, but as we shift to
-multi-uprobe (which doesn't go through trace_uprobe logic), it
-probably isn't a big deal over the longer term.
+Right now I am working on the variant of the patch that consolidates
+the -L/-rpath flags in lib.mk, do you think it will be of use to have
+some opt-in/opt-out mechanism, or just impose them unconditionally,
+similarly to -D_GNU_SOURCE? So far I don't see any issues with either
+building or running the tests, but I can imagine it might be necessary
+to avoid such flags in some cases.
 
-> Thank you,
->
+> I had to comment on all 3 patches you sent - instead I could have
+> sent one reply to the cover letter. It makes it so much easier for
+> people to follow the discussion and add to it.
+
+My apologies.
+
+> >> please mentioned the tests run as well after this change.
 > >
-> > >
-> > > jirka
-> > >
-> > > >       return 0;
-> > > >  }
-> > > >
-> > > > @@ -1507,7 +1506,6 @@ static int uprobe_dispatcher(struct uprobe_co=
-nsumer *con, struct pt_regs *regs)
-> > > >       int ret =3D 0;
-> > > >
-> > > >       tu =3D container_of(con, struct trace_uprobe, consumer);
-> > > > -     tu->nhit++;
-> > > >
-> > > >       udd.tu =3D tu;
-> > > >       udd.bp_addr =3D instruction_pointer(regs);
-> > > > --
-> > > > 2.43.5
-> > > >
+> > I have checked the ldd output after the change remained the same (and that ldd
+> > is able to find the libraries used when run outside the directory the tests
+> > reside in) and did a cursory check of the results of the run of the affected
+> > tests
 >
+> Please mention that then in the change log.
 >
-> --
-> Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> I applied this patch and ran alsa test without any issues. You
+> could do the same with:
+>
+> make kselftest TARGETS=alsa
+
+Thanks, will do.
+
+> (but not so sure about the BPF selftests, as they don't compile as-is
+> > due to numerous "incompatible pointer types" warnings that are forced
+> > into errors by -Werror and the fact that it hanged the machine I tried
+> > to run them on).
+> >
+>
+> I see a bpf patch from you in the inbox - if you mention the issues bpf
+> people might be able to help you.
+
+Right, I am in the process of condensing my issues into patches or at
+least useful bug reports.
+
+> I am not replying to your other patches. Take these as comments on others
+> as well.
+>
+> thanks,
+> -- Shuah
+
