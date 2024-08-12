@@ -1,372 +1,148 @@
-Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com [209.85.215.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FC0D13A24D;
-	Mon, 12 Aug 2024 17:57:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3DE913A3F2;
+	Mon, 12 Aug 2024 17:57:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723485438; cv=none; b=DkimOSU7YZRm92nxzt10MICBT7/+qV0GWuRD3ON2PreLFlp40KMM/3npxrn46M816Of4tX9g+kOgyweGG/kl9qjx4Y1Xy3E+PvrLBAqANET7EL1JlxXmPYnPF39iKia8X9l/jjN2TDhSyH1A8NUssHIlUvVSaxtRSmWcDII7e4o=
+	t=1723485456; cv=none; b=LBhpTtMbWfM2vQeCTBAWP9/lwHB2GxkSFngMO70cJnRmmTabkwCR6B5jG/6dFSJ3nlZU5L8FnNuMBEU9cDYZBROWjxf9tIsc+QHmQ5+Ucwj9vaqKBevzTPyZ+3hjzLt079lfERf2fTJEkWkD8e9Q1YHd1ACXr5eYdnitT6HBKoI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723485438; c=relaxed/simple;
-	bh=BSSIelT9b3lNDXNhVTXlTATdVA/AKFX98mMP/WgRPCQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=EjLVnw/hSi/xnPtL5tCIXVF3xWqbYnPAMPNyFgPnHcrnYkqslNV4/1hXelGWWUSeoj75EW0cBXBvM4gvcjKTsF1zA9rrXsdjsfTog9NsUF4n0Hfpi7ygBSeoE1camacW5Vho+rvAcY5R1HOa0iGSCL27JZOJYHgSHjsPWf5iLdw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=d3CKDdq7; arc=none smtp.client-ip=209.85.215.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1723485456; c=relaxed/simple;
+	bh=PjEd0BdogsUTaZfCUMRZ31Ra4P2TNDube5tSGJ9f9sw=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=MloUkPoBGISIjK0uzF5sGypuqpOgnLmJKvGEYPxG7r3O+Yyzvt9nO3F3IfA1DmfB1LZnnfV2AkQ/cyT9F4blXzmQh8LplYDgUphOqchY4/684dZP101Eho8QCcO4oktwK4H5E7CZnzdJjPEiBLX/hS4TaJgsx1+Dmdwyb9BipeI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=G9pSXQbI; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="d3CKDdq7"
-Received: by mail-pg1-f182.google.com with SMTP id 41be03b00d2f7-7c3e1081804so980210a12.3;
-        Mon, 12 Aug 2024 10:57:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1723485436; x=1724090236; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=QzMBVT5Buj7QKeGM9sscOvVq0ggegn0Fv1hQ4+00Cfo=;
-        b=d3CKDdq73we+r8SMMFIK9q2UMkACoH3eOyiOTxPF67gAHAnqis1gNSBxNDfVN2zKPc
-         LYVwmB5kCNgLV3fitz2+liSaF2wDJaCyIC6mV3zqNENqPt9ggSU0/ZPP77zK5avQJy72
-         gs6/bFnaIwqLXonB5oSinRp19Hln9RXyQE7fb1HSJLGnu0xgv628KQL+giD/XyPqSiRL
-         ugccv83/ieKkryRuxhXbMllVcmNM7pnRHQ63O9kWLRgt7l28ov2yb8boI26BQfHsQre7
-         PUzNhB6R0mkqaiRDTQ83wK9YlNOhXOJwZ1HfsTyy2LHUjJ2IMHnWFNnlSB8zacbEu1lx
-         kQVQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1723485436; x=1724090236;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=QzMBVT5Buj7QKeGM9sscOvVq0ggegn0Fv1hQ4+00Cfo=;
-        b=DDS3HZLO38QQ7aMGiLR0wxnIy6K/vKExDW/HGSM32tcQlWOiGqJO/Lp5MnNA57fx3T
-         Af7Ra/zSykX+Oz10VdZa/iU7yrdSauZOlic3URdAbCW294L0A9B1cmcb2aBpN1ilUOgA
-         CfeecG8e/4rM9mrtKnMtyV2dp84h7f16IPu9icfBfL4qFVNI4ygrHiBR++lthcqrOaaK
-         tf11EUMBOR+F9WkYMfGv77DfyIGzFDwtVvIL+NRB2BZElJG6Dva2p7/yKeI97841MMKc
-         JFbA+XDlagxB2MH/88sXMt1vMuDzPaGwyi04Xwf4D7QJboAwJFub2RL8DML8jUhT/yhJ
-         I+Kg==
-X-Forwarded-Encrypted: i=1; AJvYcCXzKgeEk5hfcpD9AYqUbx4DVC+WpPm3a3KIyHOb394uM9z1h7fSNdIUHzkSRs5hhbwjzfG7twgNrots+g4AlkHLsP+g+9P0aLeEkULCNWC6v9sf6zC+AAgdu6Y1GJ74EnxuefPBa2+MtuzZ/1kOa1c4mjFwZ7zEHmDb4pSIN6cl40NlyT/ve+rWR5dcWJld5jsapzLuPXZPHMp3/dhjhK02n3f8VjxSFA==
-X-Gm-Message-State: AOJu0YwRkP4gHoPx5U3YPKV7GNfB77m/626Ts8MdBUMRJI6xHwlFVQXQ
-	h20Jr0BD9xwM2A3tqWAMqUXpRv8cJGjUcwHygJv6HxWPs+K0L9zcq5V36rUiBOKoXXypbThD0Cs
-	e7Wn0PJLePzt7HTfsuNQkPXZ+zICWaxJf
-X-Google-Smtp-Source: AGHT+IEWaYU5TsSpZLF5Bkdw/GK/BBXBLxCLFfdL4qcFIBnZ8hPnO9Rx+YBlm8RCzsDmaVwoTkdtAdtlP5m6paJiMC4=
-X-Received: by 2002:a17:90a:cce:b0:2d1:b36c:6bc1 with SMTP id
- 98e67ed59e1d1-2d3924cba8emr1091937a91.2.1723485436373; Mon, 12 Aug 2024
- 10:57:16 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="G9pSXQbI"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5E1DC32782;
+	Mon, 12 Aug 2024 17:57:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1723485455;
+	bh=PjEd0BdogsUTaZfCUMRZ31Ra4P2TNDube5tSGJ9f9sw=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=G9pSXQbIwNKKdmOVG04ccy/1dIHLraWQ0G+g5z/MctkmVUUUXo81tnVQfF1RR+c1J
+	 Cvxt8qGSPA8JqYgFK4Wsisbb0RFx5KEJ2r00aZDsq7jtURbAetSPgcZbzv7tLhq3In
+	 X8cW65UhPResK30p4YVjVef/gIBciCKXIICBbwOv+MOkXOxEPR0kGDviaLOmGrQHjv
+	 1kVsTsVsho3L4Id+uxmWhHD1b/Ou3noRjVmbmLBl93blSGZxY3SAluidKUwiBL8YOv
+	 TqI1IrR/S8Qznu2rcbJ2YiWkSSF8CbSPSyNf8gpJaBr19k4+X1N8VCNVUteNnwEgHU
+	 0shtOIic2eEhw==
+Date: Mon, 12 Aug 2024 10:57:32 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Pavel Begunkov <asml.silence@gmail.com>
+Cc: Mina Almasry <almasrymina@google.com>, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
+ linux-parisc@vger.kernel.org, sparclinux@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, bpf@vger.kernel.org,
+ linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org, Donald Hunter
+ <donald.hunter@gmail.com>, "David S. Miller" <davem@davemloft.net>, Eric
+ Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Jonathan
+ Corbet <corbet@lwn.net>, Richard Henderson <richard.henderson@linaro.org>,
+ Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner
+ <mattst88@gmail.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+ "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, Helge
+ Deller <deller@gmx.de>, Andreas Larsson <andreas@gaisler.com>, Jesper
+ Dangaard Brouer <hawk@kernel.org>, Ilias Apalodimas
+ <ilias.apalodimas@linaro.org>, Steven Rostedt <rostedt@goodmis.org>, Masami
+ Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers
+ <mathieu.desnoyers@efficios.com>, Arnd Bergmann <arnd@arndb.de>, Steffen
+ Klassert <steffen.klassert@secunet.com>, Herbert Xu
+ <herbert@gondor.apana.org.au>, David Ahern <dsahern@kernel.org>, Willem de
+ Bruijn <willemdebruijn.kernel@gmail.com>, Shuah Khan <shuah@kernel.org>,
+ Sumit Semwal <sumit.semwal@linaro.org>, Christian =?UTF-8?B?S8O2bmln?=
+ <christian.koenig@amd.com>, Bagas Sanjaya <bagasdotme@gmail.com>, Christoph
+ Hellwig <hch@infradead.org>, Nikolay Aleksandrov <razor@blackwall.org>,
+ Taehee Yoo <ap420073@gmail.com>, David Wei <dw@davidwei.uk>, Jason
+ Gunthorpe <jgg@ziepe.ca>, Yunsheng Lin <linyunsheng@huawei.com>, Shailend
+ Chand <shailend@google.com>, Harshitha Ramamurthy <hramamurthy@google.com>,
+ Shakeel Butt <shakeel.butt@linux.dev>, Jeroen de Borst
+ <jeroendb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>,
+ Willem de Bruijn <willemb@google.com>, Kaiyuan Zhang <kaiyuanz@google.com>
+Subject: Re: [PATCH net-next v18 07/14] memory-provider: dmabuf devmem
+ memory provider
+Message-ID: <20240812105732.5d2845e4@kernel.org>
+In-Reply-To: <48f3a61f-9e04-4755-b50c-8fae6e6112eb@gmail.com>
+References: <20240805212536.2172174-1-almasrymina@google.com>
+	<20240805212536.2172174-8-almasrymina@google.com>
+	<20240806135924.5bb65ec7@kernel.org>
+	<CAHS8izOA80dxpB9rzOwv7Oe_1w4A7vo5S3c3=uCES8TSnjyzpg@mail.gmail.com>
+	<20240808192410.37a49724@kernel.org>
+	<CAHS8izMH4UhD+UDYqMjt9d=gu-wpGPQBLyewzVrCWRyoVtQcgA@mail.gmail.com>
+	<fc6a8f0a-cdb4-4705-a08f-7033ef15213e@gmail.com>
+	<20240809205236.77c959b0@kernel.org>
+	<CAHS8izOXwZS-8sfvn3DuT1XWhjc--7-ZLjr8rMn1XHr5F+ckbA@mail.gmail.com>
+	<48f3a61f-9e04-4755-b50c-8fae6e6112eb@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240727094405.1362496-1-liaochang1@huawei.com>
- <7eefae59-8cd1-14a5-ef62-fc0e62b26831@huawei.com> <CAEf4BzaO4eG6hr2hzXYpn+7Uer4chS0R99zLn02ezZ5YruVuQw@mail.gmail.com>
- <a22d6d79-fa7e-62b2-0ac1-575068f176a5@huawei.com> <CAEf4BzbN-+p0cDnHQPDwhVaqs-r-_Ft-LdUwY2KHG1xfrmyjBQ@mail.gmail.com>
- <CAEf4BzZyCd7ECbWQyEpcB4va_U33v8BdfWVY4cMH4zN-Z1sESw@mail.gmail.com> <5a110f15-024f-d693-e04f-7892fc8d7757@huawei.com>
-In-Reply-To: <5a110f15-024f-d693-e04f-7892fc8d7757@huawei.com>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Mon, 12 Aug 2024 10:57:03 -0700
-Message-ID: <CAEf4BzaGPB+AybJNhzD+4rT6ioLuhjp4sW3uG0ST4sCtqSjx1A@mail.gmail.com>
-Subject: Re: [PATCH] uprobes: Optimize the allocation of insn_slot for performance
-To: "Liao, Chang" <liaochang1@huawei.com>
-Cc: peterz@infradead.org, mingo@redhat.com, acme@kernel.org, 
-	namhyung@kernel.org, mark.rutland@arm.com, alexander.shishkin@linux.intel.com, 
-	jolsa@kernel.org, irogers@google.com, adrian.hunter@intel.com, 
-	kan.liang@linux.intel.com, 
-	"oleg@redhat.com >> Oleg Nesterov" <oleg@redhat.com>, Andrii Nakryiko <andrii@kernel.org>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Steven Rostedt <rostedt@goodmis.org>, paulmck@kernel.org, 
-	linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org, 
-	bpf@vger.kernel.org, linux-trace-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Mon, Aug 12, 2024 at 5:05=E2=80=AFAM Liao, Chang <liaochang1@huawei.com>=
- wrote:
->
->
->
-> =E5=9C=A8 2024/8/10 2:40, Andrii Nakryiko =E5=86=99=E9=81=93:
-> > On Fri, Aug 9, 2024 at 11:34=E2=80=AFAM Andrii Nakryiko
-> > <andrii.nakryiko@gmail.com> wrote:
-> >>
-> >> On Fri, Aug 9, 2024 at 12:16=E2=80=AFAM Liao, Chang <liaochang1@huawei=
-.com> wrote:
-> >>>
-> >>>
-> >>>
-> >>> =E5=9C=A8 2024/8/9 2:26, Andrii Nakryiko =E5=86=99=E9=81=93:
-> >>>> On Thu, Aug 8, 2024 at 1:45=E2=80=AFAM Liao, Chang <liaochang1@huawe=
-i.com> wrote:
-> >>>>>
-> >>>>> Hi Andrii and Oleg.
-> >>>>>
-> >>>>> This patch sent by me two weeks ago also aim to optimize the perfor=
-mance of uprobe
-> >>>>> on arm64. I notice recent discussions on the performance and scalab=
-ility of uprobes
-> >>>>> within the mailing list. Considering this interest, I've added you =
-and other relevant
-> >>>>> maintainers to the CC list for broader visibility and potential col=
-laboration.
-> >>>>>
-> >>>>
-> >>>> Hi Liao,
-> >>>>
-> >>>> As you can see there is an active work to improve uprobes, that
-> >>>> changes lifetime management of uprobes, removes a bunch of locks tak=
-en
-> >>>> in the uprobe/uretprobe hot path, etc. It would be nice if you can
-> >>>> hold off a bit with your changes until all that lands. And then
-> >>>> re-benchmark, as costs might shift.
-> >>>
-> >>> Andrii, I'm trying to integrate your lockless changes into the upstre=
-am
-> >>> next-20240806 kernel tree. And I ran into some conflicts. please let =
-me
-> >>> know which kernel you're currently working on.
-> >>>
-> >>
-> >> My patches are  based on tip/perf/core. But I also just pushed all the
-> >> changes I have accumulated (including patches I haven't sent for
-> >> review just yet), plus your patches for sighand lock removed applied
-> >> on top into [0]. So you can take a look and use that as a base for
-> >> now. Keep in mind, a bunch of those patches might still change, but
-> >> this should give you the best currently achievable performance with
-> >> uprobes/uretprobes. E.g., I'm getting something like below on x86-64
-> >> (note somewhat linear scalability with number of CPU cores, with
-> >> per-CPU performance *slowly* declining):
-> >>
-> >> uprobe-nop            ( 1 cpus):    3.565 =C2=B1 0.004M/s  (  3.565M/s=
-/cpu)
-> >> uprobe-nop            ( 2 cpus):    6.742 =C2=B1 0.009M/s  (  3.371M/s=
-/cpu)
-> >> uprobe-nop            ( 3 cpus):   10.029 =C2=B1 0.056M/s  (  3.343M/s=
-/cpu)
-> >> uprobe-nop            ( 4 cpus):   13.118 =C2=B1 0.014M/s  (  3.279M/s=
-/cpu)
-> >> uprobe-nop            ( 5 cpus):   16.360 =C2=B1 0.011M/s  (  3.272M/s=
-/cpu)
-> >> uprobe-nop            ( 6 cpus):   19.650 =C2=B1 0.045M/s  (  3.275M/s=
-/cpu)
-> >> uprobe-nop            ( 7 cpus):   22.926 =C2=B1 0.010M/s  (  3.275M/s=
-/cpu)
-> >> uprobe-nop            ( 8 cpus):   24.707 =C2=B1 0.025M/s  (  3.088M/s=
-/cpu)
-> >> uprobe-nop            (10 cpus):   30.842 =C2=B1 0.018M/s  (  3.084M/s=
-/cpu)
-> >> uprobe-nop            (12 cpus):   33.623 =C2=B1 0.037M/s  (  2.802M/s=
-/cpu)
-> >> uprobe-nop            (14 cpus):   39.199 =C2=B1 0.009M/s  (  2.800M/s=
-/cpu)
-> >> uprobe-nop            (16 cpus):   41.698 =C2=B1 0.018M/s  (  2.606M/s=
-/cpu)
-> >> uprobe-nop            (24 cpus):   65.078 =C2=B1 0.018M/s  (  2.712M/s=
-/cpu)
-> >> uprobe-nop            (32 cpus):   84.580 =C2=B1 0.017M/s  (  2.643M/s=
-/cpu)
-> >> uprobe-nop            (40 cpus):  101.992 =C2=B1 0.268M/s  (  2.550M/s=
-/cpu)
-> >> uprobe-nop            (48 cpus):  101.032 =C2=B1 1.428M/s  (  2.105M/s=
-/cpu)
-> >> uprobe-nop            (56 cpus):  110.986 =C2=B1 0.736M/s  (  1.982M/s=
-/cpu)
-> >> uprobe-nop            (64 cpus):  124.145 =C2=B1 0.110M/s  (  1.940M/s=
-/cpu)
-> >> uprobe-nop            (72 cpus):  134.940 =C2=B1 0.200M/s  (  1.874M/s=
-/cpu)
-> >> uprobe-nop            (80 cpus):  143.918 =C2=B1 0.235M/s  (  1.799M/s=
-/cpu)
-> >>
-> >> uretprobe-nop         ( 1 cpus):    1.987 =C2=B1 0.001M/s  (  1.987M/s=
-/cpu)
-> >> uretprobe-nop         ( 2 cpus):    3.766 =C2=B1 0.003M/s  (  1.883M/s=
-/cpu)
-> >> uretprobe-nop         ( 3 cpus):    5.638 =C2=B1 0.002M/s  (  1.879M/s=
-/cpu)
-> >> uretprobe-nop         ( 4 cpus):    7.275 =C2=B1 0.003M/s  (  1.819M/s=
-/cpu)
-> >> uretprobe-nop         ( 5 cpus):    9.124 =C2=B1 0.004M/s  (  1.825M/s=
-/cpu)
-> >> uretprobe-nop         ( 6 cpus):   10.818 =C2=B1 0.007M/s  (  1.803M/s=
-/cpu)
-> >> uretprobe-nop         ( 7 cpus):   12.721 =C2=B1 0.014M/s  (  1.817M/s=
-/cpu)
-> >> uretprobe-nop         ( 8 cpus):   13.639 =C2=B1 0.007M/s  (  1.705M/s=
-/cpu)
-> >> uretprobe-nop         (10 cpus):   17.023 =C2=B1 0.009M/s  (  1.702M/s=
-/cpu)
-> >> uretprobe-nop         (12 cpus):   18.576 =C2=B1 0.014M/s  (  1.548M/s=
-/cpu)
-> >> uretprobe-nop         (14 cpus):   21.660 =C2=B1 0.004M/s  (  1.547M/s=
-/cpu)
-> >> uretprobe-nop         (16 cpus):   22.922 =C2=B1 0.013M/s  (  1.433M/s=
-/cpu)
-> >> uretprobe-nop         (24 cpus):   34.756 =C2=B1 0.069M/s  (  1.448M/s=
-/cpu)
-> >> uretprobe-nop         (32 cpus):   44.869 =C2=B1 0.153M/s  (  1.402M/s=
-/cpu)
-> >> uretprobe-nop         (40 cpus):   53.397 =C2=B1 0.220M/s  (  1.335M/s=
-/cpu)
-> >> uretprobe-nop         (48 cpus):   48.903 =C2=B1 2.277M/s  (  1.019M/s=
-/cpu)
-> >> uretprobe-nop         (56 cpus):   42.144 =C2=B1 1.206M/s  (  0.753M/s=
-/cpu)
-> >> uretprobe-nop         (64 cpus):   42.656 =C2=B1 1.104M/s  (  0.666M/s=
-/cpu)
-> >> uretprobe-nop         (72 cpus):   46.299 =C2=B1 1.443M/s  (  0.643M/s=
-/cpu)
-> >> uretprobe-nop         (80 cpus):   46.469 =C2=B1 0.808M/s  (  0.581M/s=
-/cpu)
-> >>
-> >> uprobe-ret            ( 1 cpus):    1.219 =C2=B1 0.008M/s  (  1.219M/s=
-/cpu)
-> >> uprobe-ret            ( 2 cpus):    1.862 =C2=B1 0.008M/s  (  0.931M/s=
-/cpu)
-> >> uprobe-ret            ( 3 cpus):    2.874 =C2=B1 0.005M/s  (  0.958M/s=
-/cpu)
-> >> uprobe-ret            ( 4 cpus):    3.512 =C2=B1 0.002M/s  (  0.878M/s=
-/cpu)
-> >> uprobe-ret            ( 5 cpus):    3.549 =C2=B1 0.001M/s  (  0.710M/s=
-/cpu)
-> >> uprobe-ret            ( 6 cpus):    3.425 =C2=B1 0.003M/s  (  0.571M/s=
-/cpu)
-> >> uprobe-ret            ( 7 cpus):    3.551 =C2=B1 0.009M/s  (  0.507M/s=
-/cpu)
-> >> uprobe-ret            ( 8 cpus):    3.050 =C2=B1 0.002M/s  (  0.381M/s=
-/cpu)
-> >> uprobe-ret            (10 cpus):    2.706 =C2=B1 0.002M/s  (  0.271M/s=
-/cpu)
-> >> uprobe-ret            (12 cpus):    2.588 =C2=B1 0.003M/s  (  0.216M/s=
-/cpu)
-> >> uprobe-ret            (14 cpus):    2.589 =C2=B1 0.003M/s  (  0.185M/s=
-/cpu)
-> >> uprobe-ret            (16 cpus):    2.575 =C2=B1 0.001M/s  (  0.161M/s=
-/cpu)
-> >> uprobe-ret            (24 cpus):    1.808 =C2=B1 0.011M/s  (  0.075M/s=
-/cpu)
-> >> uprobe-ret            (32 cpus):    1.853 =C2=B1 0.001M/s  (  0.058M/s=
-/cpu)
-> >> uprobe-ret            (40 cpus):    1.952 =C2=B1 0.002M/s  (  0.049M/s=
-/cpu)
-> >> uprobe-ret            (48 cpus):    2.075 =C2=B1 0.007M/s  (  0.043M/s=
-/cpu)
-> >> uprobe-ret            (56 cpus):    2.441 =C2=B1 0.004M/s  (  0.044M/s=
-/cpu)
-> >> uprobe-ret            (64 cpus):    1.880 =C2=B1 0.012M/s  (  0.029M/s=
-/cpu)
-> >> uprobe-ret            (72 cpus):    0.962 =C2=B1 0.002M/s  (  0.013M/s=
-/cpu)
-> >> uprobe-ret            (80 cpus):    1.040 =C2=B1 0.011M/s  (  0.013M/s=
-/cpu)
-> >>
-> >> uretprobe-ret         ( 1 cpus):    0.981 =C2=B1 0.000M/s  (  0.981M/s=
-/cpu)
-> >> uretprobe-ret         ( 2 cpus):    1.421 =C2=B1 0.001M/s  (  0.711M/s=
-/cpu)
-> >> uretprobe-ret         ( 3 cpus):    2.050 =C2=B1 0.003M/s  (  0.683M/s=
-/cpu)
-> >> uretprobe-ret         ( 4 cpus):    2.596 =C2=B1 0.002M/s  (  0.649M/s=
-/cpu)
-> >> uretprobe-ret         ( 5 cpus):    3.105 =C2=B1 0.003M/s  (  0.621M/s=
-/cpu)
-> >> uretprobe-ret         ( 6 cpus):    3.886 =C2=B1 0.002M/s  (  0.648M/s=
-/cpu)
-> >> uretprobe-ret         ( 7 cpus):    3.016 =C2=B1 0.001M/s  (  0.431M/s=
-/cpu)
-> >> uretprobe-ret         ( 8 cpus):    2.903 =C2=B1 0.000M/s  (  0.363M/s=
-/cpu)
-> >> uretprobe-ret         (10 cpus):    2.755 =C2=B1 0.001M/s  (  0.276M/s=
-/cpu)
-> >> uretprobe-ret         (12 cpus):    2.400 =C2=B1 0.001M/s  (  0.200M/s=
-/cpu)
-> >> uretprobe-ret         (14 cpus):    3.972 =C2=B1 0.001M/s  (  0.284M/s=
-/cpu)
-> >> uretprobe-ret         (16 cpus):    3.940 =C2=B1 0.003M/s  (  0.246M/s=
-/cpu)
-> >> uretprobe-ret         (24 cpus):    3.002 =C2=B1 0.003M/s  (  0.125M/s=
-/cpu)
-> >> uretprobe-ret         (32 cpus):    3.018 =C2=B1 0.003M/s  (  0.094M/s=
-/cpu)
-> >> uretprobe-ret         (40 cpus):    1.846 =C2=B1 0.000M/s  (  0.046M/s=
-/cpu)
-> >> uretprobe-ret         (48 cpus):    2.487 =C2=B1 0.004M/s  (  0.052M/s=
-/cpu)
-> >> uretprobe-ret         (56 cpus):    2.470 =C2=B1 0.006M/s  (  0.044M/s=
-/cpu)
-> >> uretprobe-ret         (64 cpus):    2.027 =C2=B1 0.014M/s  (  0.032M/s=
-/cpu)
-> >> uretprobe-ret         (72 cpus):    1.108 =C2=B1 0.011M/s  (  0.015M/s=
-/cpu)
-> >> uretprobe-ret         (80 cpus):    0.982 =C2=B1 0.005M/s  (  0.012M/s=
-/cpu)
-> >>
-> >>
-> >> -ret variants (single-stepping case for x86-64) still suck, but they
-> >> suck 2x less now with your patches :) Clearly more work ahead for
-> >> those, though.
-> >>
-> >
-> > Quick profiling shows that it's mostly xol_take_insn_slot() and
-> > xol_free_insn_slot(), now. So it seems like your planned work might
-> > help here.
->
-> Andrii, I'm glad we've reached a similar result, The profiling result on
-> my machine reveals that about 80% cycles spent on the atomic operations
-> on area->bitmap and area->slot_count. I guess the atomic access leads to
-> the intensive cacheline bouncing bewteen CPUs.
->
-> In the passed weekend, I have been working on another patch that optimize=
-s
-> the xol_take_insn_slot() and xol_free_inns_slot() for better scalability.
-> This involves delaying the freeing of xol insn slots to reduce the times
-> of atomic operations and cacheline bouncing. Additionally, per-task refco=
-unts
-> and an RCU-style management of linked-list of allocated insn slots. In sh=
-ort
-> summary, this patch try to replace coarse-grained atomic variables with
-> finer-grained ones, aiming to elimiate the expensive atomic instructions
-> in the hot path. If you or others have bandwidth and interest, I'd welcom=
-e
-> a brainstorming session on this topic.
+On Sun, 11 Aug 2024 22:51:13 +0100 Pavel Begunkov wrote:
+> > I think we're talking about 2 slightly different flags, AFAIU.>
+> > Pavel and I are suggesting the driver reports "I support memory
+> > providers" directly to core (via the queue-api or what not), and we
+> > check that flag directly in netdev_rx_queue_restart(), and fail
+> > immediately if the support is not there.  
+> 
+> I might've misread Jakub, but yes, I believe it's different. It'd
+> communicate about support for providers to upper layers, so we can
+> fail even before attempting to allocate a new queue and init a
+> page pool.
 
-I'm happy to help, but I still feel like it's best to concentrate on
-landing all the other pending things for uprobe, and then switch to
-optimizing the xol case.
+Got it. Since allocating memory happens before stopping traffic
+I think it's acceptable to stick to a single flag.
 
-We have:
-  - RCU protection and avoiding refcounting for uprobes (I'll be
-sending latest revision soon);
-  - SRCU+timeout for uretprobe and single-step (pending the above
-landing first);
-  - removing shared nhit counter increment in trace_uprobe (I've sent
-patches last week, see [0]);
-  - lockless VMA -> inode -> uprobe look up (also pending for #1 to
-land, and some more benchmarking for mm_lock_seq changes from Suren,
-see [1]);
-  - and, of course, your work to remove sighand lock.
+> > Jakub is suggesting a page_pool_params flag which lets the driver
+> > report "I support memory providers". If the driver doesn't support it
+> > but core is trying to configure that, then the page_pool_create will
+> > fail, which will cause the queue API operation
+> > (ndo_queue_alloc_mem_alloc) to fail, which causes
+> > netdev_rx_queue_restart() to fail.  
+> 
+> And I'm not against this way either if we explicitly get an error
+> back instead of trying to figure it out post-factum like by
+> checking the references and possibly reverting the allocation.
+> Maybe that's where I was confused, and that refcount thing was
+> suggested as a WARN_ONCE?
 
-So as you can see, there is plenty to discuss and land already, I just
-don't want to spread the efforts too thin. But if you can help improve
-the benchmark for ARM64, that would be a great parallel effort setting
-us up for further work nicely. Thanks!
+Yup, the refcount (now: check of the page pool list) was meant
+as a WARN_ONCE() to catch bad drivers.
 
-  [0] https://lore.kernel.org/bpf/20240809192357.4061484-1-andrii@kernel.or=
-g/
-  [1] https://lore.kernel.org/linux-mm/CAEf4BzaocU-CQsFZ=3Ds5gDM6XQ0Foss_Hr=
-oFsPUesBn=3DqgJCprg@mail.gmail.com/
+> FWIW, I think it warrants two flags. The first saying that the
+> driver supports providers at all:
+> 
+> page_pool_init() {
+> 	if (rxq->mp_params)
+> 		if (!(flags & PP_PROVIDERS_SUPPORTED))
+> 			goto fail;
+> }
+> 
+> And the second telling whether the driver wants to install
+> providers for this particular page pool, so if there is a
+> separate pool for headers we can set it with plain old kernel
+> pages.
 
->
-> Thanks.
->
-> >
-> >>
-> >>   [0] https://github.com/anakryiko/linux/commits/uprobes-lockless-cumu=
-lative/
-> >>
-> >>
-> >>> Thanks.
-> >>>
-> >>>>
-> >>>> But also see some remarks below.
-> >>>>
-> >>>>> Thanks.
-> >>>>>
+The implementation of the queue API should be resilient against
+failures in alloc, and not being MP capable is just a form of 
+alloc failure. I don't see the upside of double-flag. 
 
-[...]
+> payload_pool = page_pool_create(rqx, PP_PROVIDERS_SUPPORTED);
+> header_pool = page_pool_create(rqx, PP_PROVIDERS_SUPPORTED |
+>                                      PP_IGNORE_PROVIDERS);
+
+Also don't see the upside of the explicit "non-capable" flag,
+but I haven't thought of that. Is there any use?
+
+One important note. The flag should not be tied to memory providers
+but rather to netmem, IOW unreadable memory. MP is an internal detail,
+the important fact from the driver-facing API perspective is that the
+driver doesn't need struct pages.
+
+> (or invert the flag). That's assuming page_pool_params::queue is
+> a generic thing and we don't want to draw equivalence between
+> it and memory providers.
