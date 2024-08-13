@@ -1,123 +1,135 @@
-Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-184.mta1.migadu.com (out-184.mta1.migadu.com [95.215.58.184])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F03319EEB7
-	for <bpf@vger.kernel.org>; Tue, 13 Aug 2024 15:17:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 010C51A01AB
+	for <bpf@vger.kernel.org>; Tue, 13 Aug 2024 15:18:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.184
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723562270; cv=none; b=Wjp6GWGUCRkXVsiwfgMFi6dVB5ahOp+uPPDyAIWkdBTc9o5lEhau0P9qDZ+pYsZPvGn3JF31dP5pqp1q7mAMIkO9VxNJUQfhDWlzW9zecODm+0t6DJcSEEl+226oiT2y9PBx7fB2d5wabsVqLIxkt4T5I0CjneA9Ta/MurQM2fY=
+	t=1723562314; cv=none; b=oTqp4W9fgvnB2zK26mCC9Qy5yxb0eTEW/ktqsXDxUtOxo42Vx/bRZ8J+kfbIIqDoq4zjB8A24PEH0meE1I5GDydUV3eo5NZLqyW6MypDlc9uTfD/CIXhgU6U1kszH8qhQl8UVcX3lAb5VVUTP2HsqWjDsL39pPfagv9P8kOiFas=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723562270; c=relaxed/simple;
-	bh=9Chp8Kdbu6SYoSV/XqRtuBNB0Ulomj1BCqRJZlB19WI=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=raYeI4g0HbVWHGHVV5cGHV98ATZlXOgU0Qj5YK+KSt8ew7C/oKsiJsHljgW5O9mD6ylXgtqz41i2LWJkHJn+DritK4rUvoo3wKrjFMRErmFuc64nOwSxR501xWtFdV5EoatT/VW2HHVrV1ae/1kc5rC7tmyDHrpj4c4Fsls34To=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fastly.com; spf=pass smtp.mailfrom=fastly.com; dkim=pass (1024-bit key) header.d=fastly.com header.i=@fastly.com header.b=gGkepzjd; arc=none smtp.client-ip=209.85.216.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fastly.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fastly.com
+	s=arc-20240116; t=1723562314; c=relaxed/simple;
+	bh=q1JQ4/9baglWo0PLilyIXgbSLQbTWKxnlrlAtZa/dYs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=P/rI8nUVOkJ4N17FdLeljD1KGqZs2cbPxWTE2vOwl6nGxeD40FzfQi53jrmv0j7sErWW+qHbQdDLkkl97PaFEmCVftLSU8KLHZUIJRvrhDDbAmFMKN0z/yRxLcGr7In3b5/fPFwVjvRBlo1Laj0Ti8jJf85Q9uZTbObSrqW6djg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=DyZEsaJH; arc=none smtp.client-ip=95.215.58.184
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=fastly.com header.i=@fastly.com header.b="gGkepzjd"
-Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-2d396fde759so634630a91.3
-        for <bpf@vger.kernel.org>; Tue, 13 Aug 2024 08:17:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fastly.com; s=google; t=1723562268; x=1724167068; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=w4KRY8X4IunmA74dEqtckpgjQWJ1kH7nl8/HPopsHUI=;
-        b=gGkepzjdZ1ZhClkJZH45b5IBGm3WJbOVMk8F3+VHG3eNrsgYgQEK2LN8xqwVnk6Ppn
-         srCICIYNNeyjcpVT2gcXQOuJGY+NWQX1QMfgaee0Bzj/C2utB8OO3jc7ZAAUfelV09dT
-         xVTbFr7zQ8EMoG1BAWk1fRUitpewQXiKnM1Ns=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1723562268; x=1724167068;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=w4KRY8X4IunmA74dEqtckpgjQWJ1kH7nl8/HPopsHUI=;
-        b=vsCJV07BJUgY9co9Y20EYAF3hCVfcnxldYv1sInbNc7fC9rRYt028YOkLxBrrNc3Kp
-         2+p9qzPpfB7iCpTCNQ5oTSV0lmwNmtQAuiAMvNpBTVfRZRMPl2fKWrHSHIFt1LbEEfy+
-         xGj+nUlFfZGUnzZWspDq29bGoz73FsDP/mczdsDI79V7wPB4qF6awANo5DTNItypMYFL
-         U9P/DJEzhLTSzoWETIOTxDSm5AfqT8J2+qwUByY/S+Qsr/Ft6QYWz4tf3IYVBCz/XNwg
-         UuaszALF0vIFwjjOrcbeDrlSnkIv/+Y8NSBUzFuAoOWKxjedpzCjwGAh6v/L3Sewwwdw
-         EEFw==
-X-Forwarded-Encrypted: i=1; AJvYcCWHLpVf2dAkOb8xKDPLUM+xGBppF+1UFz1A0hooJ3CFu/paIAC+TsR6xvLVP+BkrEu2WVmQKOf7mKPf5aBK11fZYn05
-X-Gm-Message-State: AOJu0YzioKJajgyG61ItLa3Ur+W/NnYL47jUQATJv0vU2EKxcPxLDKVc
-	pb+8od8rvqaBc0+hdE8i98YFc0Pv+CQEPPTPJTvrcjqmyCti6zWt6WvG04V5xqY=
-X-Google-Smtp-Source: AGHT+IHXm0x6rVFLg4sEMfOVNl/u+rp1s8fKEkxeX/qIQGEqM6BLnURVvMM4eI5C7/juC0jCPJ61ww==
-X-Received: by 2002:a17:90a:cf08:b0:2c6:ee50:5af4 with SMTP id 98e67ed59e1d1-2d3924d8178mr4202148a91.6.1723562268440;
-        Tue, 13 Aug 2024 08:17:48 -0700 (PDT)
-Received: from localhost.localdomain ([2620:11a:c019:0:65e:3115:2f58:c5fd])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2d1fce6cfc1sm7409649a91.6.2024.08.13.08.17.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Aug 2024 08:17:48 -0700 (PDT)
-From: Joe Damato <jdamato@fastly.com>
-To: linux-perf-users@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org
-Cc: peterz@infradead.org,
-	andrii@kernel.org,
-	mhiramat@kernel.org,
-	olsajiri@gmail.com,
-	me@kylehuey.com,
-	Kyle Huey <khuey@kylehuey.com>,
-	Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-	Joe Damato <jdamato@fastly.com>,
-	stable@vger.kernel.org
-Subject: [PATCH v2] perf/bpf: Don't call bpf_overflow_handler() for tracing events
-Date: Tue, 13 Aug 2024 15:17:27 +0000
-Message-Id: <20240813151727.28797-1-jdamato@fastly.com>
-X-Mailer: git-send-email 2.25.1
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="DyZEsaJH"
+Message-ID: <2970dc12-3dab-446d-9d75-a33c2f6bc008@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1723562310;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=G1RMbpd9pIEmU6CPY4F0VMGYhCAG6OhUbN1ZD14N5yU=;
+	b=DyZEsaJHg01u7lcwe302GQEWZMIKxa2wYWlU08xkIkXNvyc/K406umJLNM1TtbcicQy9TP
+	tTskEjldeE4+RJUmRF6ZT9E7BMqFKKp7mNvUg48MEvQZ/ecd9r7RxOLY0eXHEKrl+pjjkD
+	QRF9eOhmeWhIg6EXc3TUNA3QSozklxk=
+Date: Tue, 13 Aug 2024 08:18:21 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next 1/3] bpf: support nocsr patterns for calls to
+ kfuncs
+Content-Language: en-GB
+To: Eduard Zingerman <eddyz87@gmail.com>, bpf@vger.kernel.org, ast@kernel.org
+Cc: andrii@kernel.org, daniel@iogearbox.net, martin.lau@linux.dev,
+ kernel-team@fb.com
+References: <20240812234356.2089263-1-eddyz87@gmail.com>
+ <20240812234356.2089263-2-eddyz87@gmail.com>
+ <2ca49adc-2c90-42ee-b1ff-bf339731ad5a@linux.dev>
+ <b7518fdfd0a01f1eef66556b62f5e72484501eae.camel@gmail.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <b7518fdfd0a01f1eef66556b62f5e72484501eae.camel@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-From: Kyle Huey <me@kylehuey.com>
 
-The regressing commit is new in 6.10. It assumed that anytime event->prog
-is set bpf_overflow_handler() should be invoked to execute the attached bpf
-program. This assumption is false for tracing events, and as a result the
-regressing commit broke bpftrace by invoking the bpf handler with garbage
-inputs on overflow.
+On 8/13/24 12:55 AM, Eduard Zingerman wrote:
+> On Mon, 2024-08-12 at 22:36 -0700, Yonghong Song wrote:
+>
+> [...]
+>
+>>> @@ -16140,6 +16140,28 @@ static bool verifier_inlines_helper_call(struct bpf_verifier_env *env, s32 imm)
+>>>    	}
+>>>    }
+>>>    
+>>> +/* Same as helper_nocsr_clobber_mask() but for kfuncs, see comment above */
+>>> +static u32 kfunc_nocsr_clobber_mask(struct bpf_kfunc_call_arg_meta *meta)
+>>> +{
+>>> +	const struct btf_param *params;
+>>> +	u32 vlen, i, mask;
+>> In helper_nocsr_clobber_mask, we have u8 mask. To be consistent, can we have 'u8 mask' here?
+>> Are you worried that the number of arguments could be more than 7? This seems not the case
+>> right now.
+> Before the nocsr part for helpers landed there was a change request to
+> make helper_nocsr_clobber_mask() return u32. I modified the function
+> but forgot to change the type for 'mask' local variable.
+>
+> The main point in using u32 is uniformity.
+> I can either change kfunc_nocsr_clobber_mask() to use u8 for mask,
+> or update helper_nocsr_clobber_mask() to use u32 for mask.
 
-Prior to the regression the overflow handlers formed a chain (of length 0,
-1, or 2) and perf_event_set_bpf_handler() (the !tracing case) added
-bpf_overflow_handler() to that chain, while perf_event_attach_bpf_prog()
-(the tracing case) did not. Both set event->prog. The chain of overflow
-handlers was replaced by a single overflow handler slot and a fixed call to
-bpf_overflow_handler() when appropriate. This modifies the condition there
-to check event->prog->type == BPF_PROG_TYPE_PERF_EVENT, restoring the
-previous behavior and fixing bpftrace.
+Changing to u32 in helper_nocsr_clobber_mask() is okay. I
+just want to have consistent type for 'mask' in both functions.
 
-Signed-off-by: Kyle Huey <khuey@kylehuey.com>
-Suggested-by: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Reported-by: Joe Damato <jdamato@fastly.com>
-Closes: https://lore.kernel.org/lkml/ZpFfocvyF3KHaSzF@LQ3V64L9R2/
-Fixes: f11f10bfa1ca ("perf/bpf: Call BPF handler directly, not through overflow machinery")
-Cc: stable@vger.kernel.org
-Tested-by: Joe Damato <jdamato@fastly.com> # bpftrace
----
-v2:
-  - Update patch based on Andrii's suggestion
-  - Update commit message
+>
+>>> +
+>>> +	params = btf_params(meta->func_proto);
+>>> +	vlen = btf_type_vlen(meta->func_proto);
+>>> +	mask = 0;
+>>> +	if (!btf_type_is_void(btf_type_by_id(meta->btf, meta->func_proto->type)))
+>>> +		mask |= BIT(BPF_REG_0);
+>>> +	for (i = 0; i < vlen; ++i)
+>>> +		mask |= BIT(BPF_REG_1 + i);
+>>> +	return mask;
+>>> +}
+>>> +
+>>> +/* Same as verifier_inlines_helper_call() but for kfuncs, see comment above */
+>>> +static bool verifier_inlines_kfunc_call(struct bpf_kfunc_call_arg_meta *meta)
+>>> +{
+>>> +	return false;
+>>> +}
+>>> +
+>>>    /* GCC and LLVM define a no_caller_saved_registers function attribute.
+>>>     * This attribute means that function scratches only some of
+>>>     * the caller saved registers defined by ABI.
+>>> @@ -16238,6 +16260,20 @@ static void mark_nocsr_pattern_for_call(struct bpf_verifier_env *env,
+>>>    				  bpf_jit_inlines_helper_call(call->imm));
+>>>    	}
+>>>    
+>>> +	if (bpf_pseudo_kfunc_call(call)) {
+>>> +		struct bpf_kfunc_call_arg_meta meta;
+>>> +		int err;
+>>> +
+>>> +		err = fetch_kfunc_meta(env, call, &meta, NULL);
+>>> +		if (err < 0)
+>>> +			/* error would be reported later */
+>>> +			return;
+>>> +
+>>> +		clobbered_regs_mask = kfunc_nocsr_clobber_mask(&meta);
+>>> +		can_be_inlined = (meta.kfunc_flags & KF_NOCSR) &&
+>>> +				 verifier_inlines_kfunc_call(&meta);
+>> I think we do not need both meta.kfunc_flags & KF_NOCSR and
+>> verifier_inlines_kfunc_call(&meta). Only one of them is enough
+>> since they test very similar thing. You do need to ensure
+>> kfuncs with KF_NOCSR in special_kfunc_list though.
+>> WDYT?
+> I can remove the flag in favour of verifier_inlines_kfunc_call().
 
- kernel/events/core.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Sounds good to me.
 
-diff --git a/kernel/events/core.c b/kernel/events/core.c
-index aa3450bdc227..c973e3c11e03 100644
---- a/kernel/events/core.c
-+++ b/kernel/events/core.c
-@@ -9706,7 +9706,8 @@ static int __perf_event_overflow(struct perf_event *event,
- 
- 	ret = __perf_event_account_interrupt(event, throttle);
- 
--	if (event->prog && !bpf_overflow_handler(event, data, regs))
-+	if (event->prog && event->prog->type == BPF_PROG_TYPE_PERF_EVENT &&
-+	    !bpf_overflow_handler(event, data, regs))
- 		return ret;
- 
- 	/*
--- 
-2.25.1
-
+>
+>>> +	}
+>>> +
+>>>    	if (clobbered_regs_mask == ALL_CALLER_SAVED_REGS)
+>>>    		return;
+>>>    
+>
