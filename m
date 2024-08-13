@@ -1,203 +1,166 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 431C719E837
-	for <bpf@vger.kernel.org>; Tue, 13 Aug 2024 14:54:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52AF919EEA4;
+	Tue, 13 Aug 2024 15:10:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723560868; cv=none; b=WfgvRE8iP+ft0L9f263Tpnph95eRDDFALa7U0Ge1Olt8+cVMZR0DqpKoGn6Tm/c1OnYBzAg8OUZ3h2H0EYXAsTy/DAJZzmhJaTC3XQjT3qQxgBFenRlfBm1vznaezaZuNzDniUBdd561gpvynjAJmsAlkEfdSMkEwoJeKuzDfCk=
+	t=1723561847; cv=none; b=NoKkcQUWD9ZplkoXfSil+RbXjR7CQLgWDlP23Uyjd9QbXeQBfJCs1Bxh2AZFWISBsTtZZfxLeW+3+lSDdyNzpQlMzeCxQw16NJvFfSReEfbwV216Bl9Rv581KNN5NHrzgfP1aAkn1ilgzHgT6VjnTCKwB8AZ+2a6WbICiAdDbZU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723560868; c=relaxed/simple;
-	bh=n6cl//mqacbow4XK6MKXBt50goulzRZkvMufWgu2XC8=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=BlRuYptLYe59pCn7QXv0YPGIIZQBPT5i3xRD7yeT40wqLFA0kkcHH2H7YkY/hnWGOwKWtHcKMSHgSAI0u3P3ONHzLgZt6EQmWMwlFWVg4cbAeYOltfgUj2hQNhwoEQZ4FqyNXeTvU4qmsEb6w9oNC2KcwrTawVjU4mM0mvOg5eg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=RpldYlGb; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1723561847; c=relaxed/simple;
+	bh=pI7NJo+riq8hIU+FO7xdB5P09ot+AEQTqkbS5XscNBA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=gRCynsBC0PWWu7wYMWOB7+uG1HHNXY5nrwiRfMIg2140cWK7m9pJ97L6G1m8Kf2bzvRIKyeRMwFcwznWygtVi+3SJ38dsmFMBPf0C5gpXWcyhRfZYUSDb0sJoT6829oQkDjpSoaYn+gPg/hBwrdrm3Df/CtwPVkSow318gv7Ddc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WkTipgfN; arc=none smtp.client-ip=209.85.218.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="RpldYlGb"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1723560866;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=E6wxMvH5Stej7Yv5ATmISJ/l6opYMRxwGMga9kMqk9k=;
-	b=RpldYlGbyjF7veiEvVhDDdCoAjMGDo4PUONiNJNVt3BOzM1OnqB95ii2nT+ZcBF1NX/438
-	LOtgWCqyEea+eFOprgzUSpFFzYyet3ReDEJlITIEZKGlTg/HepLIsL/LTfr7nwHJP2sgK3
-	yUyzQMnSy+uONpjaKT+ZqWUsHrgqE7w=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-203-5gAiFI1xMemBYY4jAigh7A-1; Tue, 13 Aug 2024 10:54:24 -0400
-X-MC-Unique: 5gAiFI1xMemBYY4jAigh7A-1
-Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-427b7a2052bso64098405e9.2
-        for <bpf@vger.kernel.org>; Tue, 13 Aug 2024 07:54:24 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WkTipgfN"
+Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-a83597ce5beso36948366b.1;
+        Tue, 13 Aug 2024 08:10:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1723561844; x=1724166644; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=1DL27af2hm+nu7cPx2f4++LeZQVixre2oogzMUuwPfE=;
+        b=WkTipgfN7tfNmCBVk8tyjNMGCE8t4WgwY3vP+Yeyt5r8qrsd5JBVoNxEpOClqvS0AQ
+         8jTfWZjbWItdTkZAApW4OJZmdb3oH3Wwxan/6Q50vjPUpBIh67mrkbZdtqNGK7J14oRA
+         8GMP3+Hh/9p7MVgc7dlaWCtixGvzlQacnZdifbsqsHNkvaZYMjsVcpGlPVHx8UCmfp8d
+         Ty9DUXELEJ7F4Zx9ICUq3vVe3kWgEfI5KKS+BBnL5AuUwYxioa3QnVRaMYBVp5hDqmlV
+         VtU0RKj6PN4mgRxDtsszlUgMlsPJH+HtTwfFN5uRb2UvvpJxWPQpQxId2IJnbFPNGpOS
+         JKZA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1723560864; x=1724165664;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=E6wxMvH5Stej7Yv5ATmISJ/l6opYMRxwGMga9kMqk9k=;
-        b=WLJxeG+m/Ntn7bX2M0IIHraOYHdr/k98Uy9z6hB1qVGyYg+/o9y3Cq0XFC8fvjNqsR
-         F/pOcDHG6oaNFR0yWQPfzyCydleThLTtvob4gtrRLcrZ+dqimJTxC0096C4nWrES/CG0
-         dKnjU7IHSbZM7baWhEKX9c8Ki9iIBl8GQbqHyfSgBENZKwVMHFi3kBU85Xzh9njlRYhx
-         ZA6xF65cySqADPF2OG3UdDyfnXQzALS1FiaDB8WR/dH4tev2zeSm519hko1ev7RS9CL1
-         qWDSLRfJjT+iZnaUsvmtPsQAho3dWAQDpCNIPwsLI5AhvKcELfQY6F5ccbicN4GLbN9V
-         TSCA==
-X-Forwarded-Encrypted: i=1; AJvYcCXBhZ5lcCbxrr9wUsXqH8nmnYRk1lA+Smv/78Uq+1JsAxSpEcJaBz3zbxVqRHmOYWAlLzymj3yYNLxJpk9MKrv2qrnM
-X-Gm-Message-State: AOJu0Yyt9qFTDD65dSImnF9tZIru51tJ6jHZ6XO/w6EkX8CiYSeqf0M7
-	HK6WHtLo9H/w4xh94Rxk34dkhKpti6HVoTPGEDr74uFZzFRwbnLvEHO3jXfw2IcK76Ous6nPoXt
-	PyN3G1J9iCqnsv6qsnWhlR41Z2uBvDuBpgPGELX/2GvmBwRd0yg==
-X-Received: by 2002:a5d:5284:0:b0:368:6606:bd01 with SMTP id ffacd0b85a97d-3716cd250c5mr2570180f8f.55.1723560863599;
-        Tue, 13 Aug 2024 07:54:23 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IHoo4XWM+a6cr4sdY3abB/BPFL+oExtFb9xuFkxORKiSBgHvfqk12YWOOxnIo0yrvk1Sh4ZIA==
-X-Received: by 2002:a5d:5284:0:b0:368:6606:bd01 with SMTP id ffacd0b85a97d-3716cd250c5mr2570152f8f.55.1723560862967;
-        Tue, 13 Aug 2024 07:54:22 -0700 (PDT)
-Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-36e4c938045sm10651120f8f.43.2024.08.13.07.54.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Aug 2024 07:54:22 -0700 (PDT)
-Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-	id 9123D14ADF45; Tue, 13 Aug 2024 16:54:21 +0200 (CEST)
-From: Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-To: Alexander Lobakin <aleksander.lobakin@intel.com>, Lorenzo Bianconi
- <lorenzo.bianconi@redhat.com>, Daniel Xu <dxu@dxuuu.xyz>
-Cc: Alexander Lobakin <alexandr.lobakin@intel.com>, Alexei Starovoitov
- <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko
- <andrii@kernel.org>, Larysa Zaremba <larysa.zaremba@intel.com>, Michal
- Swiatkowski <michal.swiatkowski@linux.intel.com>, Jesper Dangaard Brouer
- <hawk@kernel.org>, =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
- Magnus Karlsson
- <magnus.karlsson@intel.com>, Maciej Fijalkowski
- <maciej.fijalkowski@intel.com>, Jonathan Lemon <jonathan.lemon@gmail.com>,
- Lorenzo Bianconi <lorenzo@kernel.org>, David Miller <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Jesse Brandeburg
- <jesse.brandeburg@intel.com>, John Fastabend <john.fastabend@gmail.com>,
- Yajun Deng <yajun.deng@linux.dev>, Willem de Bruijn <willemb@google.com>,
- "bpf@vger.kernel.org" <bpf@vger.kernel.org>, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, xdp-hints@xdp-project.net
-Subject: Re: [xdp-hints] Re: [PATCH RFC bpf-next 32/52] bpf, cpumap: switch
- to GRO from netif_receive_skb_list()
-In-Reply-To: <e0616dcc-1007-4faf-8825-6bf536799cbf@intel.com>
-References: <20220628194812.1453059-1-alexandr.lobakin@intel.com>
- <20220628194812.1453059-33-alexandr.lobakin@intel.com>
- <cadda351-6e93-4568-ba26-21a760bf9a57@app.fastmail.com>
- <ZrRPbtKk7RMXHfhH@lore-rh-laptop>
- <54aab7ec-80e9-44fd-8249-fe0cabda0393@intel.com>
- <e0616dcc-1007-4faf-8825-6bf536799cbf@intel.com>
-X-Clacks-Overhead: GNU Terry Pratchett
-Date: Tue, 13 Aug 2024 16:54:21 +0200
-Message-ID: <874j7oean6.fsf@toke.dk>
+        d=1e100.net; s=20230601; t=1723561844; x=1724166644;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=1DL27af2hm+nu7cPx2f4++LeZQVixre2oogzMUuwPfE=;
+        b=Ab3KjIVvYo/s9M4VBVQWE+Z/4EDXQXmB80TtXlJAdnGHTfUAVxUEUdVCeeo67+hrIb
+         ofRfhYZ/ciaCVwBciPOQBRqICoie7D1fHPcGq2kRuR1PDKelcIPZygn2Q49KGku6AFw1
+         xQxuwbHSusJqGJaKiZ7Rzq3kZXQVIYvxMRQhNXugT6kAltoBP1/OIZh2gL9uvXOHeEcb
+         gkMIJfodMoS+PbVxua2uP9rYNNU17LVTfPEU2RAkbVfNewz/BVbf7FY4pU8ILp9D346C
+         UPl7AdvGI8dRkXmo4JLvqKVkfcisSTb4sWP7x4XEs5xmfExwvW0OQy7FHy6HhoO1HQSk
+         t/vA==
+X-Forwarded-Encrypted: i=1; AJvYcCUWclAuE22nJxRlMOVWqvkF7aAMPNgXxfbNC8pmSkjoZd86KQOE+D/29eZmxTzNFoWCVe20h2xmbqZIOAHkclc4KwevTMkYmf/15yTlh7dhx86MVJ6lS1DDusy/yfR9VBtk7Wz6MfSaRTBLRORw34Q1A8NdQji8dMxQzA3eGevwL0yFNoUqyOxvG9hjoG3pNeUOSHi2qNQOuVXqfN0v0BMuB5ublIk0EU3sOpk09KUM75W9YFSL8MJVfxVB89HDuIF26ltFPcZtegDMFqG63WiA3QuzaDBHO1qWHOSLxoqYlWwqd+DjS3/Bv3Yi9M3/zWZJpBOFuiX7KvO0vCK/LtcagFNWWdQaVHeExlg8Q7K9WOL3ySPMGMeaGDyU6U0A+HDeeeWjs9OoULPRb+brHU6m7clutlEphIB9fHYUQY5RRamhh6EzdLo4UCgZNNQHvCUynaNzMYrAUVeGINK4qi06p7fk7GQjT9Oy8//oPVWULlgVfF22w+q3N2l5S2ihPplTtynn5Q==
+X-Gm-Message-State: AOJu0YwxnD18hWqDzhOQKUUPKxQsa/uCpiZOfpOZ8sTbOFSzzCUMIOt3
+	9T81ZXxSVcIhYoLk6FN0LQXOhOxfvWV4lqqLw0qcnwdOUd3rpzo3
+X-Google-Smtp-Source: AGHT+IEgp9b07/X8lBe3DTl0aD8UgrdTViu9k66B0d84BfuLitHAtBI4O1Nbqhy82P2v7UD6nlULfg==
+X-Received: by 2002:a17:907:3e13:b0:a6e:f869:d718 with SMTP id a640c23a62f3a-a836278bc29mr290666b.21.1723561844057;
+        Tue, 13 Aug 2024 08:10:44 -0700 (PDT)
+Received: from [192.168.42.131] (82-132-214-244.dab.02.net. [82.132.214.244])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a80f414e18csm77141966b.177.2024.08.13.08.10.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 13 Aug 2024 08:10:43 -0700 (PDT)
+Message-ID: <6a779dbb-ad3a-47cf-bb8e-1a50732a9694@gmail.com>
+Date: Tue, 13 Aug 2024 16:11:15 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v18 07/14] memory-provider: dmabuf devmem memory
+ provider
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: Mina Almasry <almasrymina@google.com>, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
+ linux-parisc@vger.kernel.org, sparclinux@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, bpf@vger.kernel.org,
+ linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+ Donald Hunter <donald.hunter@gmail.com>,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Paolo Abeni <pabeni@redhat.com>, Jonathan Corbet <corbet@lwn.net>,
+ Richard Henderson <richard.henderson@linaro.org>,
+ Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner
+ <mattst88@gmail.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+ "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+ Helge Deller <deller@gmx.de>, Andreas Larsson <andreas@gaisler.com>,
+ Jesper Dangaard Brouer <hawk@kernel.org>,
+ Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+ Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
+ <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Arnd Bergmann <arnd@arndb.de>,
+ Steffen Klassert <steffen.klassert@secunet.com>,
+ Herbert Xu <herbert@gondor.apana.org.au>, David Ahern <dsahern@kernel.org>,
+ Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+ Shuah Khan <shuah@kernel.org>, Sumit Semwal <sumit.semwal@linaro.org>,
+ =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+ Bagas Sanjaya <bagasdotme@gmail.com>, Christoph Hellwig <hch@infradead.org>,
+ Nikolay Aleksandrov <razor@blackwall.org>, Taehee Yoo <ap420073@gmail.com>,
+ David Wei <dw@davidwei.uk>, Jason Gunthorpe <jgg@ziepe.ca>,
+ Yunsheng Lin <linyunsheng@huawei.com>, Shailend Chand <shailend@google.com>,
+ Harshitha Ramamurthy <hramamurthy@google.com>,
+ Shakeel Butt <shakeel.butt@linux.dev>, Jeroen de Borst
+ <jeroendb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>,
+ Willem de Bruijn <willemb@google.com>, Kaiyuan Zhang <kaiyuanz@google.com>
+References: <20240805212536.2172174-1-almasrymina@google.com>
+ <20240805212536.2172174-8-almasrymina@google.com>
+ <20240806135924.5bb65ec7@kernel.org>
+ <CAHS8izOA80dxpB9rzOwv7Oe_1w4A7vo5S3c3=uCES8TSnjyzpg@mail.gmail.com>
+ <20240808192410.37a49724@kernel.org>
+ <CAHS8izMH4UhD+UDYqMjt9d=gu-wpGPQBLyewzVrCWRyoVtQcgA@mail.gmail.com>
+ <fc6a8f0a-cdb4-4705-a08f-7033ef15213e@gmail.com>
+ <20240809205236.77c959b0@kernel.org>
+ <CAHS8izOXwZS-8sfvn3DuT1XWhjc--7-ZLjr8rMn1XHr5F+ckbA@mail.gmail.com>
+ <48f3a61f-9e04-4755-b50c-8fae6e6112eb@gmail.com>
+ <20240812105732.5d2845e4@kernel.org>
+ <CAHS8izPb51gvEHGHeQwWTs4YmimLLamau1c4j=Z4KGM8ZJrx5g@mail.gmail.com>
+ <a6747b29-ed79-49d4-9ffe-b62074db1e09@gmail.com>
+ <20240812165708.33234ed6@kernel.org>
+ <5a51b11d-9c35-42a5-879b-08dc7ca2ca18@gmail.com>
+ <20240813073917.690ac1cc@kernel.org>
+Content-Language: en-US
+From: Pavel Begunkov <asml.silence@gmail.com>
+In-Reply-To: <20240813073917.690ac1cc@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Alexander Lobakin <aleksander.lobakin@intel.com> writes:
+On 8/13/24 15:39, Jakub Kicinski wrote:
+> On Tue, 13 Aug 2024 03:31:13 +0100 Pavel Begunkov wrote:
+>> I'm getting lost, so repeating myself a bit. What I think
+>> would be a good approach is if we get an error back from
+>> the driver if it doesn't support netiov / providers.
+>>
+>> netdev_rx_queue_restart() {
+>> 	...
+>> 	err = dev->queue_mgmt_ops->ndo_queue_mem_alloc();
+>> 	if (err == -EOPNOTSUPP) // the driver doesn't support netiov
+>> 		return -EOPNOTSUPP;
+>> 	...
+>> }
+>>
+>> That can be done if drivers opt in to support providers,
+>> e.g. via a page pool flag.
+>>
+>> What I think wouldn't be a great option is getting back a
+>> "success" from the driver even though it ignored
+> 
+> page pool params are not the right place for a supported flag.
+> Sooner or later we'll want to expose this flag to user space.
 
-> From: Alexander Lobakin <aleksander.lobakin@intel.com>
-> Date: Thu, 8 Aug 2024 13:57:00 +0200
->
->> From: Lorenzo Bianconi <lorenzo.bianconi@redhat.com>
->> Date: Thu, 8 Aug 2024 06:54:06 +0200
->> 
->>>> Hi Alexander,
->>>>
->>>> On Tue, Jun 28, 2022, at 12:47 PM, Alexander Lobakin wrote:
->>>>> cpumap has its own BH context based on kthread. It has a sane batch
->>>>> size of 8 frames per one cycle.
->>>>> GRO can be used on its own, adjust cpumap calls to the
->>>>> upper stack to use GRO API instead of netif_receive_skb_list() which
->>>>> processes skbs by batches, but doesn't involve GRO layer at all.
->>>>> It is most beneficial when a NIC which frame come from is XDP
->>>>> generic metadata-enabled, but in plenty of tests GRO performs better
->>>>> than listed receiving even given that it has to calculate full frame
->>>>> checksums on CPU.
->>>>> As GRO passes the skbs to the upper stack in the batches of
->>>>> @gro_normal_batch, i.e. 8 by default, and @skb->dev point to the
->>>>> device where the frame comes from, it is enough to disable GRO
->>>>> netdev feature on it to completely restore the original behaviour:
->>>>> untouched frames will be being bulked and passed to the upper stack
->>>>> by 8, as it was with netif_receive_skb_list().
->>>>>
->>>>> Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
->>>>> ---
->>>>>  kernel/bpf/cpumap.c | 43 ++++++++++++++++++++++++++++++++++++++-----
->>>>>  1 file changed, 38 insertions(+), 5 deletions(-)
->>>>>
->>>>
->>>> AFAICT the cpumap + GRO is a good standalone improvement. I think
->>>> cpumap is still missing this.
->> 
->> The only concern for having GRO in cpumap without metadata from the NIC
->> descriptor was that when the checksum status is missing, GRO calculates
->> the checksum on CPU, which is not really fast.
->> But I remember sometimes GRO was faster despite that.
->> 
->>>>
->>>> I have a production use case for this now. We want to do some intelligent
->>>> RX steering and I think GRO would help over list-ified receive in some cases.
->>>> We would prefer steer in HW (and thus get existing GRO support) but not all
->>>> our NICs support it. So we need a software fallback.
->>>>
->>>> Are you still interested in merging the cpumap + GRO patches?
->> 
->> For sure I can revive this part. I was planning to get back to this
->> branch and pick patches which were not related to XDP hints and send
->> them separately.
->> 
->>>
->>> Hi Daniel and Alex,
->>>
->>> Recently I worked on a PoC to add GRO support to cpumap codebase:
->>> - https://github.com/LorenzoBianconi/bpf-next/commit/a4b8264d5000ecf016da5a2dd9ac302deaf38b3e
->>>   Here I added GRO support to cpumap through gro-cells.
->>> - https://github.com/LorenzoBianconi/bpf-next/commit/da6cb32a4674aa72401c7414c9a8a0775ef41a55
->>>   Here I added GRO support to cpumap trough napi-threaded APIs (with a some
->>>   changes to them).
->> 
->> Hmm, when I was testing it, adding a whole NAPI to cpumap was sorta
->> overkill, that's why I separated GRO structure from &napi_struct.
->> 
->> Let me maybe find some free time, I would then test all 3 solutions
->> (mine, gro_cells, threaded NAPI) and pick/send the best?
->> 
->>>
->>> Please note I have not run any performance tests so far, just verified it does
->>> not crash (I was planning to resume this work soon). Please let me know if it
->>> works for you.
->
-> I did tests on both threaded NAPI for cpumap and my old implementation
-> with a traffic generator and I have the following (in Kpps):
->
->             direct Rx    direct GRO    cpumap    cpumap GRO
-> baseline    2900         5800          2700      2700 (N/A)
-> threaded                               2300      4000
-> old GRO                                2300      4000
->
-> IOW,
->
-> 1. There are no differences in perf between Lorenzo's threaded NAPI
->    GRO implementation and my old implementation, but Lorenzo's is also
->    a very nice cleanup as it switches cpumap to threaded NAPI completely
->    and the final diffstat even removes more lines than adds, while mine
->    adds a bunch of lines and refactors a couple hundred, so I'd go with
->    his variant.
->
-> 2. After switching to NAPI, the performance without GRO decreases (2.3
->    Mpps vs 2.7 Mpps), but after enabling GRO the perf increases hugely
->    (4 Mpps vs 2.7 Mpps) even though the CPU needs to compute checksums
->    manually.
+Fair enough, it appeared to me that's what you was suggesting
 
-One question for this: IIUC, the benefit of GRO varies with the traffic
-mix, depending on how much the GRO logic can actually aggregate. So did
-you test the pathological case as well (spraying packets over so many
-flows that there is basically no aggregation taking place)? Just to make
-sure we don't accidentally screw up performance in that case while
-optimising for the aggregating case :)
+"What comes to mind is adding an "I can gobble up net_iovs from this
+pool" flag in page pool params (the struct that comes from the driver),
+and then on the installation path we can check ..."
 
--Toke
+We can also move it from pp flags to queue API callbacks, however if we
+want to expose it to the userspace, I'd imagine we need a queue flag set
+by the driver, which then can be queried by netlink or whichever
+interface is appropriate. And it can be used can be used to fail
+netdev_rx_queue_restart() for queues/drivers that don't support mp.
 
+netdev_rx_queue_restart() {
+	if (rxq->mp_params && !rxq->netiov_supported)
+		fail;
+}
+
+Perhaps, I don't understand what approach you contemplate, but
+maybe Mina has cracked it.
+
+-- 
+Pavel Begunkov
