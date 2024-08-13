@@ -1,121 +1,113 @@
-Received: from mail-lj1-f175.google.com (mail-lj1-f175.google.com [209.85.208.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 017BD1A0AE0
-	for <bpf@vger.kernel.org>; Tue, 13 Aug 2024 15:19:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E0DD1A071F
+	for <bpf@vger.kernel.org>; Tue, 13 Aug 2024 15:25:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723562368; cv=none; b=aZvxwZSZBGxSWDvVtzJJFAJ1BcAZ2pPl3dl1HU8+LxjD1vnSHzpLJqAW6FuWNxdddI/eTsPTmH2Tjd6TbL/t5Bndx2dpPQpU3GvL7lzSureyhaZRNhmoWM1gGsEFoIYBJqTuUn9DGq/MOpUFMs/8Qz1grXsQmZ7VvNwJ+vc0M8w=
+	t=1723562741; cv=none; b=fTN9JNWiUBDD6CVMg2L2U6/I1IwSzhHCLZGZimEK00uy0gsJVxEOVI12bdrbscaf53G4GNw2TeFe8FPgNwSGCoITjWkw15xFjwkMzJTjhpl6/9fxV56I6/TTtOH24QCc+NToqAElCOeEWlKMMpQK8cobPuIwxB7/lO/J6L+D1II=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723562368; c=relaxed/simple;
-	bh=WEGOV/eNmS0JwTGq95TbV76XsATL+GH7esD7KLSP5Ac=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=OxMk3XdRBPFVAAUs7iUoUcnRPmkRouqJgaoWr3CQfPnnHUSQ4bYR8rS9WK79XF44+tccXtuUtxW/pyZHqzhjjKhgXjFPnsbCAEoerjJdH+NZnyD+uDpSwxg6znUfIBkqAeWxrH8+9AQW43X68o0QkWayiiUakCEpHwMA0UUEw0k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=toblux.com; spf=none smtp.mailfrom=toblux.com; dkim=pass (2048-bit key) header.d=toblux-com.20230601.gappssmtp.com header.i=@toblux-com.20230601.gappssmtp.com header.b=LtBVlUoA; arc=none smtp.client-ip=209.85.208.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=toblux.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=toblux.com
+	s=arc-20240116; t=1723562741; c=relaxed/simple;
+	bh=mxHq/5EUcyhgedYifQgGr+iOrVpFzjFryPlXatYl4sg=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=kum3zKD6lIocdRt3EsAhYHvlwltbAZyd1A+G9GoBXhSSARvNORlFM2LCBpsAZht9kMDldAOKPvGPrEjevVVIlaJtDtpZj3u7kzJPi+Y9VcaV+FhZsZWPd8Lhuwe347hG4zLx0PigByuzKLfodePxmjgwzNh6nHo4l0972GQHu2U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Hd6j4/bm; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=toblux-com.20230601.gappssmtp.com header.i=@toblux-com.20230601.gappssmtp.com header.b="LtBVlUoA"
-Received: by mail-lj1-f175.google.com with SMTP id 38308e7fff4ca-2f1a7faa4d5so49312931fa.3
-        for <bpf@vger.kernel.org>; Tue, 13 Aug 2024 08:19:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=toblux-com.20230601.gappssmtp.com; s=20230601; t=1723562364; x=1724167164; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=nLy7GIRQMaObsC/QtzsBD1LKVmCMkjVFm0GOFd+PCLQ=;
-        b=LtBVlUoAR2tgEEzSize/rtLSaP7N+bx3ohzWCB2d0aj2ACq6InTygnmpcaaCSVmE4o
-         enA7J2+d/1kBNwrRXuDr9+4O4ZtGiWz6SpFtpMTCt8bIWL4hRhdWutyuLHC2LweeCIQm
-         XK21H0Hq9KhLqdCU3nuumQVXWUVIwkRPpeMaKYYJUlIHnGwozpiJT3oAaj19qOntN26e
-         I1LmGD4zGL60EpT3IWALewNz9922wEPZVZ7AEFT1JvGE1FFFR+bKW2hsID37YuxNYzMS
-         7dYkk/yERk3NvfwOUs7sGnmzs8vvmMcYv2eUQ9gMaRfwPIspGOWzQEsgvC07C6RARpm4
-         zUAQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1723562364; x=1724167164;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=nLy7GIRQMaObsC/QtzsBD1LKVmCMkjVFm0GOFd+PCLQ=;
-        b=LNBllG69IwKf8nxe9jOCdbP8ScOBycBaWm2HlmAGOD4ANfRxqZ5jKqrJT6OCCQuXqZ
-         bdNr0wymqCQaj5X8/05V9691kv3n+sbUGr7CpCIciqREMYVlu4dAIpoNW42Pm21TYGWN
-         MFxj0RtXawNRBFdEjzdSqiHhbCdpp+je/w8vBt11HaT/0Ok9myyphOqLV8xyS0uT2Zo+
-         gRmHvlgazAdQXDeSxYflixMKu3ghoJs+2MM1sZvwUYo7WnOzvGsohEXAzWF11S4KGy4b
-         Z9/W0FQWhv8sLu34JKLk9Dy2es14EMbfmEhAbMZSJ2SeB2QA9Fhi1SxlN8BZnccIDlrB
-         FoBA==
-X-Gm-Message-State: AOJu0Yy8lCqrOSXHMgNuABjMQ3DNa+EzZQKax7FxpHUXMe2v7O7U8i6q
-	c8GAOcZb0Pc7ZqeyZjtdHSANqMgvgXHyC9zHDezl/uGFo+bPLEupvt0laJ/NLq4=
-X-Google-Smtp-Source: AGHT+IEQB9NVlJBHy3poayI8faoI7ySKxRBVnFDVKOGewt3x4rzWQUAPonzs+++1KgfNdJo0I641nQ==
-X-Received: by 2002:a2e:611:0:b0:2ef:1b1f:4b4f with SMTP id 38308e7fff4ca-2f2b7178671mr24425421fa.34.1723562363831;
-        Tue, 13 Aug 2024 08:19:23 -0700 (PDT)
-Received: from fedora.fritz.box (aftr-62-216-208-163.dynamic.mnet-online.de. [62.216.208.163])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5bd196a756esm2977597a12.52.2024.08.13.08.19.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Aug 2024 08:19:23 -0700 (PDT)
-From: Thorsten Blum <thorsten.blum@toblux.com>
-To: martin.lau@linux.dev,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	john.fastabend@gmail.com,
-	kpsingh@kernel.org,
-	sdf@fomichev.me,
-	haoluo@google.com,
-	jolsa@kernel.org,
-	kees@kernel.org,
-	gustavoars@kernel.org
-Cc: bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-hardening@vger.kernel.org,
-	Thorsten Blum <thorsten.blum@toblux.com>
-Subject: [PATCH] bpf: Annotate struct bpf_cand_cache with __counted_by()
-Date: Tue, 13 Aug 2024 17:17:53 +0200
-Message-ID: <20240813151752.95161-2-thorsten.blum@toblux.com>
-X-Mailer: git-send-email 2.46.0
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Hd6j4/bm"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1723562738;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type;
+	bh=I0nMtqh5iidb3sneVEeyHU76edxYtexTc0QHqAomIJQ=;
+	b=Hd6j4/bmVdOeuosXUSc75O0sz0AhUfeS1ivKz96WTW7axMY/YkHuayNSFRaMfX/AW1hNqX
+	xAcLmbm4g9LmoUqvRcRgmwaYk0vAvLeD7It6z84EhL9/5YcCFXyjbrg0BPipX6kUu1RUgz
+	ARWWGalNFJS2WBdiTknX3awRhQkNXJE=
+Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-593-996ghpllPvagZ2IuCcEghQ-1; Tue,
+ 13 Aug 2024 11:25:33 -0400
+X-MC-Unique: 996ghpllPvagZ2IuCcEghQ-1
+Received: from mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.40])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 869D619541A8;
+	Tue, 13 Aug 2024 15:25:31 +0000 (UTC)
+Received: from dhcp-27-174.brq.redhat.com (unknown [10.45.225.159])
+	by mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with SMTP id 9E8B719560A3;
+	Tue, 13 Aug 2024 15:25:28 +0000 (UTC)
+Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
+	oleg@redhat.com; Tue, 13 Aug 2024 17:25:28 +0200 (CEST)
+Date: Tue, 13 Aug 2024 17:25:24 +0200
+From: Oleg Nesterov <oleg@redhat.com>
+To: Ingo Molnar <mingo@kernel.org>, Peter Zijlstra <peterz@infradead.org>
+Cc: Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+	Jiri Olsa <jolsa@kernel.org>, linux-kernel@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org
+Subject: [PATCH tip/perf/core] bpf: fix use-after-free in
+ bpf_uprobe_multi_link_attach()
+Message-ID: <20240813152524.GA7292@redhat.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.40
 
-Add the __counted_by compiler attribute to the flexible array member
-cands to improve access bounds-checking via CONFIG_UBSAN_BOUNDS and
-CONFIG_FORTIFY_SOURCE.
+If bpf_link_prime() fails, bpf_uprobe_multi_link_attach() goes to the
+error_free label and frees the array of bpf_uprobe's without calling
+bpf_uprobe_unregister().
 
-Increment cnt before adding a new struct to the cands array.
+This leaks bpf_uprobe->uprobe and worse, this frees bpf_uprobe->consumer
+without removing it from the uprobe->consumers list.
 
-Signed-off-by: Thorsten Blum <thorsten.blum@toblux.com>
+Cc: stable@vger.kernel.org
+Fixes: 89ae89f53d20 ("bpf: Add multi uprobe link")
+Reported-by: syzbot+f7a1c2c2711e4a780f19@syzkaller.appspotmail.com
+Closes: https://lore.kernel.org/all/000000000000382d39061f59f2dd@google.com/
+Tested-by: syzbot+f7a1c2c2711e4a780f19@syzkaller.appspotmail.com
+Acked-by: Andrii Nakryiko <andrii@kernel.org>
+Signed-off-by: Oleg Nesterov <oleg@redhat.com>
 ---
- kernel/bpf/btf.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ kernel/trace/bpf_trace.c | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
-diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index 520f49f422fe..42bc70a56fcd 100644
---- a/kernel/bpf/btf.c
-+++ b/kernel/bpf/btf.c
-@@ -7240,7 +7240,7 @@ struct bpf_cand_cache {
- 	struct {
- 		const struct btf *btf;
- 		u32 id;
--	} cands[];
-+	} cands[] __counted_by(cnt);
- };
- 
- static DEFINE_MUTEX(cand_cache_mutex);
-@@ -8784,9 +8784,9 @@ bpf_core_add_cands(struct bpf_cand_cache *cands, const struct btf *targ_btf,
- 		memcpy(new_cands, cands, sizeof_cands(cands->cnt));
- 		bpf_free_cands(cands);
- 		cands = new_cands;
--		cands->cands[cands->cnt].btf = targ_btf;
--		cands->cands[cands->cnt].id = i;
- 		cands->cnt++;
-+		cands->cands[cands->cnt - 1].btf = targ_btf;
-+		cands->cands[cands->cnt - 1].id = i;
+diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+index 4e391daafa64..90cd30e9723e 100644
+--- a/kernel/trace/bpf_trace.c
++++ b/kernel/trace/bpf_trace.c
+@@ -3484,17 +3484,20 @@ int bpf_uprobe_multi_link_attach(const union bpf_attr *attr, struct bpf_prog *pr
+ 						    &uprobes[i].consumer);
+ 		if (IS_ERR(uprobes[i].uprobe)) {
+ 			err = PTR_ERR(uprobes[i].uprobe);
+-			bpf_uprobe_unregister(uprobes, i);
+-			goto error_free;
++			link->cnt = i;
++			goto error_unregister;
+ 		}
  	}
- 	return cands;
- }
+ 
+ 	err = bpf_link_prime(&link->link, &link_primer);
+ 	if (err)
+-		goto error_free;
++		goto error_unregister;
+ 
+ 	return bpf_link_settle(&link_primer);
+ 
++error_unregister:
++	bpf_uprobe_unregister(uprobes, link->cnt);
++
+ error_free:
+ 	kvfree(uprobes);
+ 	kfree(link);
 -- 
-2.46.0
+2.25.1.362.g51ebf55
+
 
