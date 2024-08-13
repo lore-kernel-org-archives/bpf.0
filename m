@@ -1,115 +1,388 @@
-Received: from szxga04-in.huawei.com (szxga04-in.huawei.com [45.249.212.190])
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3408199397;
-	Tue, 13 Aug 2024 12:30:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.190
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9886E1993A7;
+	Tue, 13 Aug 2024 12:45:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.198
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723552240; cv=none; b=IYYEiqvBv5t9jV0AQYN0BdJ6Wfh9SHQGo1ua0616vnwm5mDjHukDoluA1DAr/UsvQMoNNda1shy0YS17EOR0NlNlXs9BnRQq6WLy7FcLKP3YvVdF/rUwV2X8e2TRZZ1/hUpajpLwnqYotxr+idyLK0PhOfe7yu9DuCqu9voNQ/4=
+	t=1723553122; cv=none; b=m9GJ/bM7JKMd/oPO4hkcbvZpoyusNto6NGs41bcwEsAJwis9IDluerjGPdzdkOr0qjH9Wo99oLFOV4R/OaKi3zOAAxQg0/5WWM8ICp975XgssuLEXd+UwvRBP/0o+9n2gNXcDK86PGcAuoR4T2tBK41Cq+QAeu/lTvaWGb9L0Bk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723552240; c=relaxed/simple;
-	bh=Ui7mxf+XESXbl2/Tywo0mYfgT4r8ajOKrUstfrEfPZA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=lQJsh/hklzH53Zwxv6H+8laWxVJfur4fQmj4IgWlTaqp1/4Wr1zxJxElF2bSmGsyw9r9R+Reh85AIQ4eIRzhOXdIqgeVxUjUdGq/6TLk+gt3eXp2bfUtDpLFE8bdFqvFTR/cWBno621kkFYFyb7KTeIrZ5EGiuSPBVVOayFygzc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.190
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.88.163])
-	by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4WjrFg6WPxz2CmQ7;
-	Tue, 13 Aug 2024 20:25:43 +0800 (CST)
-Received: from kwepemd200013.china.huawei.com (unknown [7.221.188.133])
-	by mail.maildlp.com (Postfix) with ESMTPS id AC948180018;
-	Tue, 13 Aug 2024 20:30:34 +0800 (CST)
-Received: from [10.67.110.108] (10.67.110.108) by
- kwepemd200013.china.huawei.com (7.221.188.133) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1258.34; Tue, 13 Aug 2024 20:30:33 +0800
-Message-ID: <2971107e-75e7-8438-c858-b95202d7b5ea@huawei.com>
-Date: Tue, 13 Aug 2024 20:30:32 +0800
+	s=arc-20240116; t=1723553122; c=relaxed/simple;
+	bh=MYYGYRKkXEdbsBw7LOyr3lZWyfCyuPGsB8+wqTE9em8=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=iCxQtYUpoV3Yb786S+wB7tNA7CbACxR4Gnf+jcH7kALF9yAMWCj7sFiC3zKnyUbXemo2kfAG2VJGJ/JxS+M4MQkwDxb2sBd7SHzUvPrmT/30QFHI3e6EF4PIzGHyKkBaML/G5XA2a2LqOHbzTs+6FY2SGnKKfClQMPlRWEITiP0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=Up5llrnF; arc=none smtp.client-ip=217.70.183.198
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="Up5llrnF"
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 02D98C0002;
+	Tue, 13 Aug 2024 12:45:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1723553111;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=9kGz1szDpBn/CZxvhoM0F24cwT9uH/dncdiyqqwOY0g=;
+	b=Up5llrnFFT5KOjBYUiiW1280re1UBSeZAWtQrvojBzSQFeyjv+dvRSW9SPBSoNux9s4I79
+	gRHEpnEpRg87AoWMT5qosN2uURJFkpRduXH1y0weFsNv+sizjBKoXt8/7SdPjsNHZVb2ZK
+	O9DaUo9k+QULLpkY1yQOCVvIPgad+gRQGzo1Ko+k510vhs3tvtsG6TAzHbm97S1raS0hpi
+	viN55dn9E9WhDZaCqFuzOWKZawJczbeoBVdAjCUWVLNsTV/H/hQjIdsSNTJrWS4ydNLIir
+	qPJZHcsa1m4ZOxn046kF/LEYBFjKFHuDTeAMaK9Bsu+QDhVvVTptb++nocnJwA==
+From: =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
+Date: Tue, 13 Aug 2024 14:45:05 +0200
+Subject: [PATCH bpf-next v4 1/4] selftests/bpf: convert
+ get_current_cgroup_id_user to test_progs
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH v2 1/2] uprobes: Remove redundant spinlock in
- uprobe_deny_signal()
-To: Oleg Nesterov <oleg@redhat.com>
-CC: <mhiramat@kernel.org>, <peterz@infradead.org>, <mingo@redhat.com>,
-	<acme@kernel.org>, <namhyung@kernel.org>, <mark.rutland@arm.com>,
-	<alexander.shishkin@linux.intel.com>, <jolsa@kernel.org>,
-	<irogers@google.com>, <adrian.hunter@intel.com>, <kan.liang@linux.intel.com>,
-	<andrii@kernel.org>, <rostedt@goodmis.org>, <linux-kernel@vger.kernel.org>,
-	<linux-trace-kernel@vger.kernel.org>, <linux-perf-users@vger.kernel.org>,
-	<bpf@vger.kernel.org>
-References: <20240809061004.2112369-1-liaochang1@huawei.com>
- <20240809061004.2112369-2-liaochang1@huawei.com>
- <20240812120738.GC11656@redhat.com>
-From: "Liao, Chang" <liaochang1@huawei.com>
-In-Reply-To: <20240812120738.GC11656@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- kwepemd200013.china.huawei.com (7.221.188.133)
+Message-Id: <20240813-convert_cgroup_tests-v4-1-a33c03458cf6@bootlin.com>
+References: <20240813-convert_cgroup_tests-v4-0-a33c03458cf6@bootlin.com>
+In-Reply-To: <20240813-convert_cgroup_tests-v4-0-a33c03458cf6@bootlin.com>
+To: Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, 
+ Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, 
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+ Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>, 
+ Shuah Khan <shuah@kernel.org>
+Cc: ebpf@linuxfoundation.org, 
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
+ linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, Alan Maguire <alan.maguire@oracle.com>, 
+ =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
+X-Mailer: b4 0.14.1
+X-GND-Sasl: alexis.lothore@bootlin.com
 
+get_current_cgroup_id_user allows testing for bpf_get_current_cgroup_id()
+bpf API but is not integrated into test_progs, and so is not tested
+automatically in CI.
 
+Convert it to the test_progs framework to allow running it automatically.
+The most notable differences with the old test are the following:
+- the new test relies on autoattach instead of manually hooking/enabling
+  the targeted tracepoint through perf_event, which reduces quite a lot the
+  test code size
+- it also accesses bpf prog data through global variables instead of maps
+- sleep duration passed to nanosleep syscall has been reduced to its
+  minimum to not impact overall CI duration (we only care about the syscall
+  being properly triggered, not about the passed duration)
 
-在 2024/8/12 20:07, Oleg Nesterov 写道:
-> On 08/09, Liao Chang wrote:
->>
->> Since clearing a bit in thread_info is an atomic operation, the spinlock
->> is redundant and can be removed, reducing lock contention is good for
->> performance.
-> 
-> My ack still stays, but let me add some notes...
-> 
-> sighand->siglock doesn't protect clear_bit() per se. It was used to not
-> break the "the state of TIF_SIGPENDING of every thread is stable with
-> sighand->siglock held" rule.
-> 
-> But we already have the lockless users of clear_thread_flag(TIF_SIGPENDING)
-> (some if not most of them look buggy), and afaics in this (very special)
-> case it should be fine.
+Signed-off-by: Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
+---
+Changes in v3:
+- close leaking cgroup file descriptor
 
-Oleg, your explaination is more accurate. So I will reword the commit log and
-quote some of your note like this:
+Changes in v2:
+- use global variables instead of maps
 
-  Since we already have the lockless user of clear_thread_flag(TIF_SIGPENDING).
-  And for uprobe singlestep case, it doesn't break the rule of "the state of
-  TIF_SIGPENDING of every thread is stable with sighand->siglock held". So
-  removing sighand->siglock to reduce contention for better performance.
+The new test_progs part has been tested in a local qemu environment:
 
-> 
-> Oleg.
-> 
->> Acked-by: Oleg Nesterov <oleg@redhat.com>
->> Signed-off-by: Liao Chang <liaochang1@huawei.com>
->> ---
->>  kernel/events/uprobes.c | 2 --
->>  1 file changed, 2 deletions(-)
->>
->> diff --git a/kernel/events/uprobes.c b/kernel/events/uprobes.c
->> index 73cc47708679..76a51a1f51e2 100644
->> --- a/kernel/events/uprobes.c
->> +++ b/kernel/events/uprobes.c
->> @@ -1979,9 +1979,7 @@ bool uprobe_deny_signal(void)
->>  	WARN_ON_ONCE(utask->state != UTASK_SSTEP);
->>  
->>  	if (task_sigpending(t)) {
->> -		spin_lock_irq(&t->sighand->siglock);
->>  		clear_tsk_thread_flag(t, TIF_SIGPENDING);
->> -		spin_unlock_irq(&t->sighand->siglock);
->>  
->>  		if (__fatal_signal_pending(t) || arch_uprobe_xol_was_trapped(t)) {
->>  			utask->state = UTASK_SSTEP_TRAPPED;
->> -- 
->> 2.34.1
->>
-> 
-> 
+  ./test_progs -a cgroup_get_current_cgroup_id
+  47      cgroup_get_current_cgroup_id:OK
+  Summary: 1/0 PASSED, 0 SKIPPED, 0 FAILED
+---
+ tools/testing/selftests/bpf/.gitignore             |   1 -
+ tools/testing/selftests/bpf/Makefile               |   3 +-
+ tools/testing/selftests/bpf/get_cgroup_id_user.c   | 151 ---------------------
+ .../bpf/prog_tests/cgroup_get_current_cgroup_id.c  |  46 +++++++
+ .../selftests/bpf/progs/get_cgroup_id_kern.c       |  26 +---
+ 5 files changed, 51 insertions(+), 176 deletions(-)
+
+diff --git a/tools/testing/selftests/bpf/.gitignore b/tools/testing/selftests/bpf/.gitignore
+index 8f14d8faeb0b..7d4d5d3e0210 100644
+--- a/tools/testing/selftests/bpf/.gitignore
++++ b/tools/testing/selftests/bpf/.gitignore
+@@ -19,7 +19,6 @@ test_sock
+ urandom_read
+ test_sockmap
+ test_lirc_mode2_user
+-get_cgroup_id_user
+ test_skb_cgroup_id_user
+ test_cgroup_storage
+ test_flow_dissector
+diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+index 7e4b107b37b4..7e8f6354c115 100644
+--- a/tools/testing/selftests/bpf/Makefile
++++ b/tools/testing/selftests/bpf/Makefile
+@@ -67,7 +67,7 @@ endif
+ 
+ # Order correspond to 'make run_tests' order
+ TEST_GEN_PROGS = test_verifier test_tag test_maps test_lru_map test_lpm_map test_progs \
+-	test_sock test_sockmap get_cgroup_id_user \
++	test_sock test_sockmap \
+ 	test_cgroup_storage \
+ 	test_tcpnotify_user test_sysctl \
+ 	test_progs-no_alu32
+@@ -295,7 +295,6 @@ $(OUTPUT)/test_skb_cgroup_id_user: $(CGROUP_HELPERS) $(TESTING_HELPERS)
+ $(OUTPUT)/test_sock: $(CGROUP_HELPERS) $(TESTING_HELPERS)
+ $(OUTPUT)/test_sockmap: $(CGROUP_HELPERS) $(TESTING_HELPERS)
+ $(OUTPUT)/test_tcpnotify_user: $(CGROUP_HELPERS) $(TESTING_HELPERS) $(TRACE_HELPERS)
+-$(OUTPUT)/get_cgroup_id_user: $(CGROUP_HELPERS) $(TESTING_HELPERS)
+ $(OUTPUT)/test_cgroup_storage: $(CGROUP_HELPERS) $(TESTING_HELPERS)
+ $(OUTPUT)/test_sock_fields: $(CGROUP_HELPERS) $(TESTING_HELPERS)
+ $(OUTPUT)/test_sysctl: $(CGROUP_HELPERS) $(TESTING_HELPERS)
+diff --git a/tools/testing/selftests/bpf/get_cgroup_id_user.c b/tools/testing/selftests/bpf/get_cgroup_id_user.c
+deleted file mode 100644
+index aefd83ebdcd7..000000000000
+--- a/tools/testing/selftests/bpf/get_cgroup_id_user.c
++++ /dev/null
+@@ -1,151 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0
+-// Copyright (c) 2018 Facebook
+-
+-#include <stdio.h>
+-#include <stdlib.h>
+-#include <string.h>
+-#include <errno.h>
+-#include <fcntl.h>
+-#include <syscall.h>
+-#include <unistd.h>
+-#include <linux/perf_event.h>
+-#include <sys/ioctl.h>
+-#include <sys/time.h>
+-#include <sys/types.h>
+-#include <sys/stat.h>
+-
+-#include <linux/bpf.h>
+-#include <bpf/bpf.h>
+-#include <bpf/libbpf.h>
+-
+-#include "cgroup_helpers.h"
+-#include "testing_helpers.h"
+-
+-#define CHECK(condition, tag, format...) ({		\
+-	int __ret = !!(condition);			\
+-	if (__ret) {					\
+-		printf("%s:FAIL:%s ", __func__, tag);	\
+-		printf(format);				\
+-	} else {					\
+-		printf("%s:PASS:%s\n", __func__, tag);	\
+-	}						\
+-	__ret;						\
+-})
+-
+-static int bpf_find_map(const char *test, struct bpf_object *obj,
+-			const char *name)
+-{
+-	struct bpf_map *map;
+-
+-	map = bpf_object__find_map_by_name(obj, name);
+-	if (!map)
+-		return -1;
+-	return bpf_map__fd(map);
+-}
+-
+-#define TEST_CGROUP "/test-bpf-get-cgroup-id/"
+-
+-int main(int argc, char **argv)
+-{
+-	const char *probe_name = "syscalls/sys_enter_nanosleep";
+-	const char *file = "get_cgroup_id_kern.bpf.o";
+-	int err, bytes, efd, prog_fd, pmu_fd;
+-	int cgroup_fd, cgidmap_fd, pidmap_fd;
+-	struct perf_event_attr attr = {};
+-	struct bpf_object *obj;
+-	__u64 kcgid = 0, ucgid;
+-	__u32 key = 0, pid;
+-	int exit_code = 1;
+-	char buf[256];
+-	const struct timespec req = {
+-		.tv_sec = 1,
+-		.tv_nsec = 0,
+-	};
+-
+-	cgroup_fd = cgroup_setup_and_join(TEST_CGROUP);
+-	if (CHECK(cgroup_fd < 0, "cgroup_setup_and_join", "err %d errno %d\n", cgroup_fd, errno))
+-		return 1;
+-
+-	/* Use libbpf 1.0 API mode */
+-	libbpf_set_strict_mode(LIBBPF_STRICT_ALL);
+-
+-	err = bpf_prog_test_load(file, BPF_PROG_TYPE_TRACEPOINT, &obj, &prog_fd);
+-	if (CHECK(err, "bpf_prog_test_load", "err %d errno %d\n", err, errno))
+-		goto cleanup_cgroup_env;
+-
+-	cgidmap_fd = bpf_find_map(__func__, obj, "cg_ids");
+-	if (CHECK(cgidmap_fd < 0, "bpf_find_map", "err %d errno %d\n",
+-		  cgidmap_fd, errno))
+-		goto close_prog;
+-
+-	pidmap_fd = bpf_find_map(__func__, obj, "pidmap");
+-	if (CHECK(pidmap_fd < 0, "bpf_find_map", "err %d errno %d\n",
+-		  pidmap_fd, errno))
+-		goto close_prog;
+-
+-	pid = getpid();
+-	bpf_map_update_elem(pidmap_fd, &key, &pid, 0);
+-
+-	if (access("/sys/kernel/tracing/trace", F_OK) == 0) {
+-		snprintf(buf, sizeof(buf),
+-			 "/sys/kernel/tracing/events/%s/id", probe_name);
+-	} else {
+-		snprintf(buf, sizeof(buf),
+-			 "/sys/kernel/debug/tracing/events/%s/id", probe_name);
+-	}
+-	efd = open(buf, O_RDONLY, 0);
+-	if (CHECK(efd < 0, "open", "err %d errno %d\n", efd, errno))
+-		goto close_prog;
+-	bytes = read(efd, buf, sizeof(buf));
+-	close(efd);
+-	if (CHECK(bytes <= 0 || bytes >= sizeof(buf), "read",
+-		  "bytes %d errno %d\n", bytes, errno))
+-		goto close_prog;
+-
+-	attr.config = strtol(buf, NULL, 0);
+-	attr.type = PERF_TYPE_TRACEPOINT;
+-	attr.sample_type = PERF_SAMPLE_RAW;
+-	attr.sample_period = 1;
+-	attr.wakeup_events = 1;
+-
+-	/* attach to this pid so the all bpf invocations will be in the
+-	 * cgroup associated with this pid.
+-	 */
+-	pmu_fd = syscall(__NR_perf_event_open, &attr, getpid(), -1, -1, 0);
+-	if (CHECK(pmu_fd < 0, "perf_event_open", "err %d errno %d\n", pmu_fd,
+-		  errno))
+-		goto close_prog;
+-
+-	err = ioctl(pmu_fd, PERF_EVENT_IOC_ENABLE, 0);
+-	if (CHECK(err, "perf_event_ioc_enable", "err %d errno %d\n", err,
+-		  errno))
+-		goto close_pmu;
+-
+-	err = ioctl(pmu_fd, PERF_EVENT_IOC_SET_BPF, prog_fd);
+-	if (CHECK(err, "perf_event_ioc_set_bpf", "err %d errno %d\n", err,
+-		  errno))
+-		goto close_pmu;
+-
+-	/* trigger some syscalls */
+-	syscall(__NR_nanosleep, &req, NULL);
+-
+-	err = bpf_map_lookup_elem(cgidmap_fd, &key, &kcgid);
+-	if (CHECK(err, "bpf_map_lookup_elem", "err %d errno %d\n", err, errno))
+-		goto close_pmu;
+-
+-	ucgid = get_cgroup_id(TEST_CGROUP);
+-	if (CHECK(kcgid != ucgid, "compare_cgroup_id",
+-		  "kern cgid %llx user cgid %llx", kcgid, ucgid))
+-		goto close_pmu;
+-
+-	exit_code = 0;
+-	printf("%s:PASS\n", argv[0]);
+-
+-close_pmu:
+-	close(pmu_fd);
+-close_prog:
+-	bpf_object__close(obj);
+-cleanup_cgroup_env:
+-	cleanup_cgroup_environment();
+-	return exit_code;
+-}
+diff --git a/tools/testing/selftests/bpf/prog_tests/cgroup_get_current_cgroup_id.c b/tools/testing/selftests/bpf/prog_tests/cgroup_get_current_cgroup_id.c
+new file mode 100644
+index 000000000000..7a1643b03bf3
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/cgroup_get_current_cgroup_id.c
+@@ -0,0 +1,46 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#include <sys/stat.h>
++#include <sys/sysmacros.h>
++#include "test_progs.h"
++#include "cgroup_helpers.h"
++#include "get_cgroup_id_kern.skel.h"
++
++#define TEST_CGROUP "/test-bpf-get-cgroup-id/"
++
++void test_cgroup_get_current_cgroup_id(void)
++{
++	struct get_cgroup_id_kern *skel;
++	const struct timespec req = {
++		.tv_sec = 0,
++		.tv_nsec = 1,
++	};
++	int cgroup_fd;
++	__u64 ucgid;
++
++	cgroup_fd = cgroup_setup_and_join(TEST_CGROUP);
++	if (!ASSERT_OK_FD(cgroup_fd, "cgroup switch"))
++		return;
++
++	skel = get_cgroup_id_kern__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "load program"))
++		goto cleanup_cgroup;
++
++	if (!ASSERT_OK(get_cgroup_id_kern__attach(skel), "attach bpf program"))
++		goto cleanup_progs;
++
++	skel->bss->expected_pid = getpid();
++	/* trigger the syscall on which is attached the tested prog */
++	if (!ASSERT_OK(syscall(__NR_nanosleep, &req, NULL), "nanosleep"))
++		goto cleanup_progs;
++
++	ucgid = get_cgroup_id(TEST_CGROUP);
++
++	ASSERT_EQ(skel->bss->cg_id, ucgid, "compare cgroup ids");
++
++cleanup_progs:
++	get_cgroup_id_kern__destroy(skel);
++cleanup_cgroup:
++	close(cgroup_fd);
++	cleanup_cgroup_environment();
++}
+diff --git a/tools/testing/selftests/bpf/progs/get_cgroup_id_kern.c b/tools/testing/selftests/bpf/progs/get_cgroup_id_kern.c
+index 68587b1de34e..30fd504856c7 100644
+--- a/tools/testing/selftests/bpf/progs/get_cgroup_id_kern.c
++++ b/tools/testing/selftests/bpf/progs/get_cgroup_id_kern.c
+@@ -4,34 +4,16 @@
+ #include <linux/bpf.h>
+ #include <bpf/bpf_helpers.h>
+ 
+-struct {
+-	__uint(type, BPF_MAP_TYPE_ARRAY);
+-	__uint(max_entries, 1);
+-	__type(key, __u32);
+-	__type(value, __u64);
+-} cg_ids SEC(".maps");
+-
+-struct {
+-	__uint(type, BPF_MAP_TYPE_ARRAY);
+-	__uint(max_entries, 1);
+-	__type(key, __u32);
+-	__type(value, __u32);
+-} pidmap SEC(".maps");
++__u64 cg_id;
++__u64 expected_pid;
+ 
+ SEC("tracepoint/syscalls/sys_enter_nanosleep")
+ int trace(void *ctx)
+ {
+ 	__u32 pid = bpf_get_current_pid_tgid();
+-	__u32 key = 0, *expected_pid;
+-	__u64 *val;
+-
+-	expected_pid = bpf_map_lookup_elem(&pidmap, &key);
+-	if (!expected_pid || *expected_pid != pid)
+-		return 0;
+ 
+-	val = bpf_map_lookup_elem(&cg_ids, &key);
+-	if (val)
+-		*val = bpf_get_current_cgroup_id();
++	if (expected_pid == pid)
++		cg_id = bpf_get_current_cgroup_id();
+ 
+ 	return 0;
+ }
 
 -- 
-BR
-Liao, Chang
+2.46.0
+
