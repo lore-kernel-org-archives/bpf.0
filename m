@@ -1,120 +1,245 @@
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCAF31A38D3
-	for <bpf@vger.kernel.org>; Tue, 13 Aug 2024 20:59:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60F651A76D7
+	for <bpf@vger.kernel.org>; Tue, 13 Aug 2024 21:13:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723582796; cv=none; b=So/9qD3kRpyPLrI+z7rp4TzcFpl4MDxbOqdMuxeHIqtUwCNy9edI7t/JqpjP7C7BEmwFD6F6CYzdrRPevv10M+zzZEnnmjJyexsv81cQwUTpLK95XTj+l6xKhJX3tCrTvsEmodlX17fk4YOamTNffoe8fVzhtwAkfzMGvxlYZyY=
+	t=1723583605; cv=none; b=AX3SVpgtnYbu5QuyLPsKkmz5mhnpm0dKpQdDmzkBOiDLMYrcoOoftLwWwMk0QXmqTNkuruKzfsIBBnGTJbFISAQbmV+DwVAZitbcp9vtdNKYEYq/YRLgYvrizpJTtu+3R5ebs6246Lxq/xl3s12nbmRHtEd7Prk9NbIqvVmwkTg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723582796; c=relaxed/simple;
-	bh=hlBe3bO5nqL/9JxUsPJ41ih8e91oO5SDAycqip8w3t0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=N/rjdKgPhq7V7wygLhcQZB7560PA6gZ6ySqBu5R+BPtbSTZiTRLW6nrAic0OEGTnXa5MZ8tZePE8YzFk0UP3YYdsRYZQrGQAjQcqJYgUthKivdnBBCZC8UMjpzujQ2Il13wgwnRmM6Owrq0QbXlNf64IDZzN++3uf0RGoYPpsu8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=vshsCTUu; arc=none smtp.client-ip=209.85.214.180
+	s=arc-20240116; t=1723583605; c=relaxed/simple;
+	bh=HdlSzizJdXOwRG2k/ymIT58Jke7w9+SEPmQ0Rs6ax48=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=uGGQtF0jsBCb5AF2AJbNbbV/vOEoQkqRWFr4PsSH6sN1Jcwj+lcp3A0w3LLo0nH6x8bA+219rv3HJDFELShE0IsO37s1PctU7aUC7cJDO8w9eN6i+0uKnixoLa4+dDInu95VEUCDfDkKIP+BiVv1MKy292OzPZKsPjMOI42MfVs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--almasrymina.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=oLJkD5lb; arc=none smtp.client-ip=209.85.128.201
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--almasrymina.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="vshsCTUu"
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-200aa53d6d2so27375ad.0
-        for <bpf@vger.kernel.org>; Tue, 13 Aug 2024 13:59:54 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="oLJkD5lb"
+Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-650ab31aabdso118814697b3.3
+        for <bpf@vger.kernel.org>; Tue, 13 Aug 2024 14:13:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1723582794; x=1724187594; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RhgGYVMx+jW9NS5avNe3UcbWXP3uzGmp3M9nSD5W+Bo=;
-        b=vshsCTUuNNTZL2oqksGKcyE19bjvuZRnBweL8t6iC2HOt88hS5++QZ3fxDxME+nF5d
-         xVWcAlSt+0dtb64fUT/EXa6kZkRy9STOC9ITpu+5f3iTYx1hSAfABAKfshQAn4+kj6j9
-         2umV+ES7ZYtp5AzSM8a1I3t/F/VFcDhOhC5hScwAn3N8WSgo5YRyG3FUGbH+OhidqvKg
-         AMoFTSus2uAivEhqEfsudgcytpJQKn4w/U3fk8jSxAU48eEzoSM38wjHzbI+LtlCjiBG
-         z0T+hUCuS2Wbf1bib/sYJv5OZ14Mod95q0EaXDZSoOWO17yc92Pay/hDs561h0q3Jowh
-         MeuA==
+        d=google.com; s=20230601; t=1723583601; x=1724188401; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=wJPAY1lFj5tJn3a3E+W8gFPxIVw0CcWf1YfnWNpzLOU=;
+        b=oLJkD5lbYKOcnPZrFDXvOk/dKFI4y44ZZrO1m0Dtg4QnweRsvsxRG1PBwqpaQsaJwQ
+         PjlIZaCvmfQio7BSRvstWrTMfW8yIrE4PLuaRR5mKGTb14LM22m9T668gVSYGj4WzdNp
+         eQXVw68N3Q7uERl2SFqcZ20et860lu/rbCRP5neXATxKUP3Pn/yNQw3FJzqucSnX1rir
+         R32DSaLMc28Ej6xUn+KNEa//p4YDnYfkgyGXSi5hBThJEUDRrUKObUNX67kq99dIXtwL
+         cWtxEcKsItPAwT85i1fOHzZDAbmp7uVuY/mnniehmeot2e60j12nOScw6XMWbq8RC5LP
+         J7YQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1723582794; x=1724187594;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=RhgGYVMx+jW9NS5avNe3UcbWXP3uzGmp3M9nSD5W+Bo=;
-        b=ds8jiMXoakQR9E7ROjkWlu+qhhVWZrx+iKS8LGGGjmCUPKleyGxLbcFN0y5qp2IP0f
-         Yb5gLhLD08i5J4EBVcrjaE3+Fzsecg4/stnzyzxjLtEqzgCWRsyYkFpdLWD8+GPO8o91
-         UaRVMUKDgdNGmKN1pEf/9MpE40b5cFPNeDzasHFOEpN4O90hKn9qkXoTKJAJOUoI7/Qj
-         Ad3PWEYY1JejWQSw6FFSkqlhzipT3EJHVbgFjwr2u3ANROGoLr0692JLGVG+UfGxSwCV
-         wZCDsMHCEoUkLIZhHBvLfowAlRFlgaISom0IkqR47EpQ2SKjLkGdMn3eBkX0tG8rk4ke
-         c83g==
-X-Gm-Message-State: AOJu0YzkmkIqaZ+gz3rhdo6IYbvSTfTGIzZZDIapZ8hgBjfrrlbAJKr+
-	WSLOg/Zma5UxqlVzRC4nTob32FOs67v4SLTxqtUfnA6MbyOryxt28dAytymjARLDwZV2C2ZTiJn
-	MyOsUtoFV4IrSQSN+ZpPig071zH0u11nflFro
-X-Google-Smtp-Source: AGHT+IE7evxZcY5Q1trGPNN8QB7kOuoEiJu2YVj+e1IaKF5gw6xisj04CQzafN0peuVm9S/Q8W+/NmStPFUsjWgQGzQ=
-X-Received: by 2002:a17:902:c949:b0:1fd:d0c0:1a69 with SMTP id
- d9443c01a7336-201d9261633mr66975ad.9.1723582793740; Tue, 13 Aug 2024 13:59:53
- -0700 (PDT)
+        d=1e100.net; s=20230601; t=1723583601; x=1724188401;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=wJPAY1lFj5tJn3a3E+W8gFPxIVw0CcWf1YfnWNpzLOU=;
+        b=cUnC9Ov3TTg50ciTVXvJuLLB9s86kAo41+fIRyIQRGNQbGt4r8z5LOhb+GRlNtzNze
+         Nx8U0ZYvgTWibktWn+ktY5crM1BlX5Djr9fa7z3GJDDZVxS9vhfOQXtIkpoVjAmPVm5Q
+         usGXQjkJR42ZH+9eAjlvITdADdbhQoQg4be0tghv/snjvvEonwHRDkOQLe8FQskknIfw
+         KGBZTJsXJFtM4C/xmwESfu1ppIwbPNLZjt23cLXyVfkJd9fuaVDtgBfh46Fh/0BOKfWl
+         Ew4eVRdPaqdwRkkDo5WSEPbsPzDgn+BYm6jPzfF/dLex+9TnwI8GUlAqzcwglPYfAqpp
+         xKeQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUf842c7fLZ0q5UDjdrl5kBD0J8T1u/xlJ8jFcVoCtHyzh6wPiOsNYOfff73SoxvulHdhoyF12yCoNOYYpjpl7Z59hS
+X-Gm-Message-State: AOJu0YxRml6bw+MahgnRDMU4wG7FfbTRuhtctvCq2oS2rWxnzn6UAewA
+	ZF6nHGF70wwOnIHXETchrGiVtGp4oZBPAN3oAEAiNYhOAeiR8CFLmizcb+yJNkSfDfV7MClQdOi
+	OejzT7jCj+zq5yT0l2cy0hA==
+X-Google-Smtp-Source: AGHT+IFOJ+AnarAEzZ9CsLYic4GPYJ+K8HEYiQ1+sMf0GrT+bonfuMFlpBsyqXRz30xl8bG0haEExxymtAcDupW/yA==
+X-Received: from almasrymina.c.googlers.com ([fda3:e722:ac3:cc00:20:ed76:c0a8:4bc5])
+ (user=almasrymina job=sendgmr) by 2002:a81:b507:0:b0:691:55ea:8572 with SMTP
+ id 00721157ae682-6ac9a75c2e4mr86917b3.8.1723583601292; Tue, 13 Aug 2024
+ 14:13:21 -0700 (PDT)
+Date: Tue, 13 Aug 2024 21:13:03 +0000
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20240813002932.3373935-1-andrii@kernel.org> <20240813002932.3373935-2-andrii@kernel.org>
-In-Reply-To: <20240813002932.3373935-2-andrii@kernel.org>
-From: Jann Horn <jannh@google.com>
-Date: Tue, 13 Aug 2024 22:59:14 +0200
-Message-ID: <CAG48ez1oUas3ZMsDdJSxbZoFK0xfsLFiEZjJmOryzkURPPBeBA@mail.gmail.com>
-Subject: Re: [PATCH v5 bpf-next 01/10] lib/buildid: harden build ID parsing logic
-To: Andrii Nakryiko <andrii@kernel.org>
-Cc: bpf@vger.kernel.org, linux-mm@kvack.org, akpm@linux-foundation.org, 
-	adobriyan@gmail.com, shakeel.butt@linux.dev, hannes@cmpxchg.org, 
-	ak@linux.intel.com, osandov@osandov.com, song@kernel.org, 
-	linux-fsdevel@vger.kernel.org, willy@infradead.org, stable@vger.kernel.org
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.46.0.76.ge559c4bf1a-goog
+Message-ID: <20240813211317.3381180-2-almasrymina@google.com>
+Subject: [PATCH net-next v19 01/13] netdev: add netdev_rx_queue_restart()
+From: Mina Almasry <almasrymina@google.com>
+To: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org, 
+	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org, 
+	sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
+	linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	bpf@vger.kernel.org, linux-media@vger.kernel.org, 
+	dri-devel@lists.freedesktop.org
+Cc: Mina Almasry <almasrymina@google.com>, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Donald Hunter <donald.hunter@gmail.com>, Jonathan Corbet <corbet@lwn.net>, 
+	Richard Henderson <richard.henderson@linaro.org>, Ivan Kokshaysky <ink@jurassic.park.msu.ru>, 
+	Matt Turner <mattst88@gmail.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>, Helge Deller <deller@gmx.de>, 
+	Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer <hawk@kernel.org>, 
+	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven Rostedt <rostedt@goodmis.org>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Arnd Bergmann <arnd@arndb.de>, Steffen Klassert <steffen.klassert@secunet.com>, 
+	Herbert Xu <herbert@gondor.apana.org.au>, David Ahern <dsahern@kernel.org>, 
+	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Shuah Khan <shuah@kernel.org>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	John Fastabend <john.fastabend@gmail.com>, Sumit Semwal <sumit.semwal@linaro.org>, 
+	"=?UTF-8?q?Christian=20K=C3=B6nig?=" <christian.koenig@amd.com>, Bagas Sanjaya <bagasdotme@gmail.com>, 
+	Christoph Hellwig <hch@infradead.org>, Nikolay Aleksandrov <razor@blackwall.org>, Taehee Yoo <ap420073@gmail.com>, 
+	Pavel Begunkov <asml.silence@gmail.com>, David Wei <dw@davidwei.uk>, Jason Gunthorpe <jgg@ziepe.ca>, 
+	Yunsheng Lin <linyunsheng@huawei.com>, Shailend Chand <shailend@google.com>, 
+	Harshitha Ramamurthy <hramamurthy@google.com>, Shakeel Butt <shakeel.butt@linux.dev>, 
+	Jeroen de Borst <jeroendb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Tue, Aug 13, 2024 at 2:29=E2=80=AFAM Andrii Nakryiko <andrii@kernel.org>=
- wrote:
-> Harden build ID parsing logic, adding explicit READ_ONCE() where it's
-> important to have a consistent value read and validated just once.
->
-> Also, as pointed out by Andi Kleen, we need to make sure that entire ELF
-> note is within a page bounds, so move the overflow check up and add an
-> extra note_size boundaries validation.
->
-> Fixes tag below points to the code that moved this code into
-> lib/buildid.c, and then subsequently was used in perf subsystem, making
-> this code exposed to perf_event_open() users in v5.12+.
+Add netdev_rx_queue_restart(), which resets an rx queue using the
+queue API recently merged[1].
 
-Sorry, I missed some things in previous review rounds:
+The queue API was merged to enable the core net stack to reset individual
+rx queues to actuate changes in the rx queue's configuration. In later
+patches in this series, we will use netdev_rx_queue_restart() to reset
+rx queues after binding or unbinding dmabuf configuration, which will
+cause reallocation of the page_pool to repopulate its memory using the
+new configuration.
 
-[...]
-> @@ -18,31 +18,37 @@ static int parse_build_id_buf(unsigned char *build_id=
-,
-[...]
->                 if (nhdr->n_type =3D=3D BUILD_ID &&
-> -                   nhdr->n_namesz =3D=3D sizeof("GNU") &&
-> -                   !strcmp((char *)(nhdr + 1), "GNU") &&
-> -                   nhdr->n_descsz > 0 &&
-> -                   nhdr->n_descsz <=3D BUILD_ID_SIZE_MAX) {
-> -                       memcpy(build_id,
-> -                              note_start + note_offs +
-> -                              ALIGN(sizeof("GNU"), 4) + sizeof(Elf32_Nhd=
-r),
-> -                              nhdr->n_descsz);
-> -                       memset(build_id + nhdr->n_descsz, 0,
-> -                              BUILD_ID_SIZE_MAX - nhdr->n_descsz);
-> +                   name_sz =3D=3D note_name_sz &&
-> +                   strcmp((char *)(nhdr + 1), note_name) =3D=3D 0 &&
+[1] https://lore.kernel.org/netdev/20240430231420.699177-1-shailend@google.com/T/
 
-Please change this to something like "memcmp((char *)(nhdr + 1),
-note_name, note_name_sz) =3D=3D 0" to ensure that we can't run off the end
-of the page if there are no null bytes in the rest of the page.
+Signed-off-by: David Wei <dw@davidwei.uk>
+Signed-off-by: Mina Almasry <almasrymina@google.com>
+Reviewed-by: Pavel Begunkov <asml.silence@gmail.com>
+Reviewed-by: Jakub Kicinski <kuba@kernel.org>
 
-[...]
-> @@ -90,8 +97,8 @@ static int get_build_id_32(const void *page_addr, unsig=
-ned char *build_id,
->         for (i =3D 0; i < ehdr->e_phnum; ++i) {
+---
 
-Please change this to "for (i =3D 0; i < phnum; ++i) {" like in the
-64-bit version.
+v18:
+- Add more color to commit message (Xuan Zhuo).
 
-With these two changes applied:
+v17:
+- Use ASSERT_RTNL() (Jakub).
 
-Reviewed-by: Jann Horn <jannh@google.com>
+v13:
+- Add reviewed-by from Pavel (thanks!)
+- Fixed comment (Pavel)
+
+v11:
+- Fix not checking dev->queue_mgmt_ops (Pavel).
+- Fix ndo_queue_mem_free call that passed the wrong pointer (David).
+
+v9: https://lore.kernel.org/all/20240502045410.3524155-4-dw@davidwei.uk/
+(submitted by David).
+- fixed SPDX license identifier (Simon).
+- Rebased on top of merged queue API definition, and changed
+  implementation to match that.
+- Replace rtnl_lock() with rtnl_is_locked() to make it useable from my
+  netlink code where rtnl is already locked.
+
+---
+ include/net/netdev_rx_queue.h |  3 ++
+ net/core/Makefile             |  1 +
+ net/core/netdev_rx_queue.c    | 74 +++++++++++++++++++++++++++++++++++
+ 3 files changed, 78 insertions(+)
+ create mode 100644 net/core/netdev_rx_queue.c
+
+diff --git a/include/net/netdev_rx_queue.h b/include/net/netdev_rx_queue.h
+index aa1716fb0e53..e78ca52d67fb 100644
+--- a/include/net/netdev_rx_queue.h
++++ b/include/net/netdev_rx_queue.h
+@@ -54,4 +54,7 @@ get_netdev_rx_queue_index(struct netdev_rx_queue *queue)
+ 	return index;
+ }
+ #endif
++
++int netdev_rx_queue_restart(struct net_device *dev, unsigned int rxq);
++
+ #endif
+diff --git a/net/core/Makefile b/net/core/Makefile
+index 62be9aef2528..f82232b358a2 100644
+--- a/net/core/Makefile
++++ b/net/core/Makefile
+@@ -19,6 +19,7 @@ obj-$(CONFIG_NETDEV_ADDR_LIST_TEST) += dev_addr_lists_test.o
+ 
+ obj-y += net-sysfs.o
+ obj-y += hotdata.o
++obj-y += netdev_rx_queue.o
+ obj-$(CONFIG_PAGE_POOL) += page_pool.o page_pool_user.o
+ obj-$(CONFIG_PROC_FS) += net-procfs.o
+ obj-$(CONFIG_NET_PKTGEN) += pktgen.o
+diff --git a/net/core/netdev_rx_queue.c b/net/core/netdev_rx_queue.c
+new file mode 100644
+index 000000000000..da11720a5983
+--- /dev/null
++++ b/net/core/netdev_rx_queue.c
+@@ -0,0 +1,74 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
++
++#include <linux/netdevice.h>
++#include <net/netdev_queues.h>
++#include <net/netdev_rx_queue.h>
++
++int netdev_rx_queue_restart(struct net_device *dev, unsigned int rxq_idx)
++{
++	void *new_mem, *old_mem;
++	int err;
++
++	if (!dev->queue_mgmt_ops || !dev->queue_mgmt_ops->ndo_queue_stop ||
++	    !dev->queue_mgmt_ops->ndo_queue_mem_free ||
++	    !dev->queue_mgmt_ops->ndo_queue_mem_alloc ||
++	    !dev->queue_mgmt_ops->ndo_queue_start)
++		return -EOPNOTSUPP;
++
++	ASSERT_RTNL();
++
++	new_mem = kvzalloc(dev->queue_mgmt_ops->ndo_queue_mem_size, GFP_KERNEL);
++	if (!new_mem)
++		return -ENOMEM;
++
++	old_mem = kvzalloc(dev->queue_mgmt_ops->ndo_queue_mem_size, GFP_KERNEL);
++	if (!old_mem) {
++		err = -ENOMEM;
++		goto err_free_new_mem;
++	}
++
++	err = dev->queue_mgmt_ops->ndo_queue_mem_alloc(dev, new_mem, rxq_idx);
++	if (err)
++		goto err_free_old_mem;
++
++	err = dev->queue_mgmt_ops->ndo_queue_stop(dev, old_mem, rxq_idx);
++	if (err)
++		goto err_free_new_queue_mem;
++
++	err = dev->queue_mgmt_ops->ndo_queue_start(dev, new_mem, rxq_idx);
++	if (err)
++		goto err_start_queue;
++
++	dev->queue_mgmt_ops->ndo_queue_mem_free(dev, old_mem);
++
++	kvfree(old_mem);
++	kvfree(new_mem);
++
++	return 0;
++
++err_start_queue:
++	/* Restarting the queue with old_mem should be successful as we haven't
++	 * changed any of the queue configuration, and there is not much we can
++	 * do to recover from a failure here.
++	 *
++	 * WARN if we fail to recover the old rx queue, and at least free
++	 * old_mem so we don't also leak that.
++	 */
++	if (dev->queue_mgmt_ops->ndo_queue_start(dev, old_mem, rxq_idx)) {
++		WARN(1,
++		     "Failed to restart old queue in error path. RX queue %d may be unhealthy.",
++		     rxq_idx);
++		dev->queue_mgmt_ops->ndo_queue_mem_free(dev, old_mem);
++	}
++
++err_free_new_queue_mem:
++	dev->queue_mgmt_ops->ndo_queue_mem_free(dev, new_mem);
++
++err_free_old_mem:
++	kvfree(old_mem);
++
++err_free_new_mem:
++	kvfree(new_mem);
++
++	return err;
++}
+-- 
+2.46.0.76.ge559c4bf1a-goog
+
