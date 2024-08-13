@@ -1,141 +1,123 @@
-Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
+Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72A541E4A4;
-	Tue, 13 Aug 2024 15:11:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F03319EEB7
+	for <bpf@vger.kernel.org>; Tue, 13 Aug 2024 15:17:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723561904; cv=none; b=bSs/BDLodsnmROARarXRl7b2WA5if3V82R6bqfkO4gAGCqI8efOCFn0lTOyBtgEe3lbOc5U2bn64/dgWpBlCBjfYqmwvUg5WSxJfAFQ7s3N1S/EC4VoDndcrg2kEJoOuMDC4D0IVjXaefF+tF3dxi4sEfaTXfxOou5HXpVwYMXI=
+	t=1723562270; cv=none; b=Wjp6GWGUCRkXVsiwfgMFi6dVB5ahOp+uPPDyAIWkdBTc9o5lEhau0P9qDZ+pYsZPvGn3JF31dP5pqp1q7mAMIkO9VxNJUQfhDWlzW9zecODm+0t6DJcSEEl+226oiT2y9PBx7fB2d5wabsVqLIxkt4T5I0CjneA9Ta/MurQM2fY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723561904; c=relaxed/simple;
-	bh=raOwBnqYH5LhsUp41vZu/c8ShXCLiujerZ2BM0PTRAM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=gyF/tUJlVellLUTuLKwuP4MnG5ro6DG0klr2PeDfL12cw2glg6kxsUrvysoOmlAsITq4FnHteRqj8Hh6mI03v5c1VNZun8RtqS59SNrwd+ZnalKx4meM8CRhVlpZkcWClRkmeIzT0W3Q5sNbkPhpAA7aIIot2YCSA8KVZO9H0F8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nNMBJq2H; arc=none smtp.client-ip=209.85.221.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1723562270; c=relaxed/simple;
+	bh=9Chp8Kdbu6SYoSV/XqRtuBNB0Ulomj1BCqRJZlB19WI=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=raYeI4g0HbVWHGHVV5cGHV98ATZlXOgU0Qj5YK+KSt8ew7C/oKsiJsHljgW5O9mD6ylXgtqz41i2LWJkHJn+DritK4rUvoo3wKrjFMRErmFuc64nOwSxR501xWtFdV5EoatT/VW2HHVrV1ae/1kc5rC7tmyDHrpj4c4Fsls34To=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fastly.com; spf=pass smtp.mailfrom=fastly.com; dkim=pass (1024-bit key) header.d=fastly.com header.i=@fastly.com header.b=gGkepzjd; arc=none smtp.client-ip=209.85.216.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fastly.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fastly.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nNMBJq2H"
-Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-3683f56b9bdso3739149f8f.1;
-        Tue, 13 Aug 2024 08:11:42 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=fastly.com header.i=@fastly.com header.b="gGkepzjd"
+Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-2d396fde759so634630a91.3
+        for <bpf@vger.kernel.org>; Tue, 13 Aug 2024 08:17:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1723561901; x=1724166701; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4nC9j0rwXAV42mfe1JGwEatxbihzY0JrdD7+bccVpsE=;
-        b=nNMBJq2HqcvSHxtrXDlLxKwbvoTgYvObAxOF3a+Y36vrSY+WKZ7SDxvIrvA05NeMM+
-         UiXPxRirj2u/K1XrPj3nAKM3k1ZFc3xj13WkQgoyjLJcc+qeylB80UBq5eN8CoA2/JH2
-         vqn4ln8JbJ5I/9y1744aJUfAYJudv7f/+47sjZnYF81e3dn73YmUJ6YkCPBYCzSu6ndM
-         iMTkoUEOr5w44folNbMCENz2Nal5NZzAU7IFxh1BkhvfUlDr2h/QgueObo8aqfqvhlYo
-         ayKfx0ILPfJFNNfBI/btMeNzwAy8NYDjScc2uG3KBuT3P5SGb2kluDzPFzNLv/fTVmMD
-         4lyQ==
+        d=fastly.com; s=google; t=1723562268; x=1724167068; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=w4KRY8X4IunmA74dEqtckpgjQWJ1kH7nl8/HPopsHUI=;
+        b=gGkepzjdZ1ZhClkJZH45b5IBGm3WJbOVMk8F3+VHG3eNrsgYgQEK2LN8xqwVnk6Ppn
+         srCICIYNNeyjcpVT2gcXQOuJGY+NWQX1QMfgaee0Bzj/C2utB8OO3jc7ZAAUfelV09dT
+         xVTbFr7zQ8EMoG1BAWk1fRUitpewQXiKnM1Ns=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1723561901; x=1724166701;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=4nC9j0rwXAV42mfe1JGwEatxbihzY0JrdD7+bccVpsE=;
-        b=drzPNEED6abwnvjvm3+GPcDdQkY6D/dglNXJ6+oPAXAwA+PcKj95TtOrPLInMEHLbY
-         d+2+1atHKAn/LZvwB881QoM5uMttZ8QHzDNRojFc3jarKJBRanX8UFsQuNKf0BUjFl9N
-         Iw1xeNbInkKI4P6HHbA252MetG1Hx1G0/xZsBNdsHLjpu5bdScqL9oo0FtNfTNL2wxtg
-         ktRJsYJblLm0TTVqtOk6t3YMGI64+MGXqdZ1uu5DbeG6DfEmILtvGbaz0E8ytMEgAw/4
-         ef8cR5puJlkza2LcOsGdrVy7O3LO5jDulNwabhppFR54dls53oDG62CZBjQXVJ8dZLX1
-         6Eaw==
-X-Forwarded-Encrypted: i=1; AJvYcCXK1n54joW/ZvATScEK3cKCrV5UJEj703V5qLU1czEg9ZL1131cXTEOfy5RHk0f8iuuu8J/Zw5fw3Z0JsPIIRrYB6BSj3gF5qSw7vu4h4YB8G+F2pVeodjrFKUi0nd0QrhiXpXgtdtVY2DNu11f/9yjtZglXMxzyYCM
-X-Gm-Message-State: AOJu0YwTRkQVjuAySABeUXul/w1+4rU9ePp83ie17OpRDGmbJ7eJfVlZ
-	CpsKPqOG4UDJ7JYWCWbkMznrnTqhIxku3+8NzKXb/V3jI8QBQvPTq4wfLzvQY0Qexyt/7XK3Qb/
-	wjosXJ6E34gba7HYM6R2ePf7ijD4=
-X-Google-Smtp-Source: AGHT+IEiRdefQPqd/dPcUdZDhMBU+XuPSqJx3UZGGW6A7Tj9UdJ3g2ZF6n39rYUPDVgFQ3fwnLBKaSyoF92wFN4g+fE=
-X-Received: by 2002:a5d:47c2:0:b0:368:303b:8fe7 with SMTP id
- ffacd0b85a97d-3716ccd8341mr2763330f8f.7.1723561900405; Tue, 13 Aug 2024
- 08:11:40 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1723562268; x=1724167068;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=w4KRY8X4IunmA74dEqtckpgjQWJ1kH7nl8/HPopsHUI=;
+        b=vsCJV07BJUgY9co9Y20EYAF3hCVfcnxldYv1sInbNc7fC9rRYt028YOkLxBrrNc3Kp
+         2+p9qzPpfB7iCpTCNQ5oTSV0lmwNmtQAuiAMvNpBTVfRZRMPl2fKWrHSHIFt1LbEEfy+
+         xGj+nUlFfZGUnzZWspDq29bGoz73FsDP/mczdsDI79V7wPB4qF6awANo5DTNItypMYFL
+         U9P/DJEzhLTSzoWETIOTxDSm5AfqT8J2+qwUByY/S+Qsr/Ft6QYWz4tf3IYVBCz/XNwg
+         UuaszALF0vIFwjjOrcbeDrlSnkIv/+Y8NSBUzFuAoOWKxjedpzCjwGAh6v/L3Sewwwdw
+         EEFw==
+X-Forwarded-Encrypted: i=1; AJvYcCWHLpVf2dAkOb8xKDPLUM+xGBppF+1UFz1A0hooJ3CFu/paIAC+TsR6xvLVP+BkrEu2WVmQKOf7mKPf5aBK11fZYn05
+X-Gm-Message-State: AOJu0YzioKJajgyG61ItLa3Ur+W/NnYL47jUQATJv0vU2EKxcPxLDKVc
+	pb+8od8rvqaBc0+hdE8i98YFc0Pv+CQEPPTPJTvrcjqmyCti6zWt6WvG04V5xqY=
+X-Google-Smtp-Source: AGHT+IHXm0x6rVFLg4sEMfOVNl/u+rp1s8fKEkxeX/qIQGEqM6BLnURVvMM4eI5C7/juC0jCPJ61ww==
+X-Received: by 2002:a17:90a:cf08:b0:2c6:ee50:5af4 with SMTP id 98e67ed59e1d1-2d3924d8178mr4202148a91.6.1723562268440;
+        Tue, 13 Aug 2024 08:17:48 -0700 (PDT)
+Received: from localhost.localdomain ([2620:11a:c019:0:65e:3115:2f58:c5fd])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2d1fce6cfc1sm7409649a91.6.2024.08.13.08.17.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 13 Aug 2024 08:17:48 -0700 (PDT)
+From: Joe Damato <jdamato@fastly.com>
+To: linux-perf-users@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org
+Cc: peterz@infradead.org,
+	andrii@kernel.org,
+	mhiramat@kernel.org,
+	olsajiri@gmail.com,
+	me@kylehuey.com,
+	Kyle Huey <khuey@kylehuey.com>,
+	Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+	Joe Damato <jdamato@fastly.com>,
+	stable@vger.kernel.org
+Subject: [PATCH v2] perf/bpf: Don't call bpf_overflow_handler() for tracing events
+Date: Tue, 13 Aug 2024 15:17:27 +0000
+Message-Id: <20240813151727.28797-1-jdamato@fastly.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240808123714.462740-1-linyunsheng@huawei.com> <4aba9fae-563d-4a4e-8336-44e24551d9f9@huawei.com>
-In-Reply-To: <4aba9fae-563d-4a4e-8336-44e24551d9f9@huawei.com>
-From: Alexander Duyck <alexander.duyck@gmail.com>
-Date: Tue, 13 Aug 2024 08:11:03 -0700
-Message-ID: <CAKgT0UezjgRX9QUWkee_p8KVQQa1va12k2CaGJeOYrr5LGg4YQ@mail.gmail.com>
-Subject: Re: [PATCH net-next v13 00/14] Replace page_frag with page_frag_cache
- for sk_page_frag()
-To: Yunsheng Lin <linyunsheng@huawei.com>
-Cc: davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com, 
-	netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Jesper Dangaard Brouer <hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>, 
-	Matthias Brugger <matthias.bgg@gmail.com>, 
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, bpf@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Tue, Aug 13, 2024 at 4:30=E2=80=AFAM Yunsheng Lin <linyunsheng@huawei.co=
-m> wrote:
->
-> On 2024/8/8 20:37, Yunsheng Lin wrote:
->
-> ...
->
-> >
-> > CC: Alexander Duyck <alexander.duyck@gmail.com>
-> >
-> > 1. https://lore.kernel.org/all/20240228093013.8263-1-linyunsheng@huawei=
-.com/
-> >
-> > Change log:
-> > V13:
-> >    1. Move page_frag_test from mm/ to tools/testing/selftest/mm
-> >    2. Use ptr_ring to replace ptr_pool for page_frag_test.c
-> >    3. Retest based on the new testing ko, which shows a big different
-> >       result than using ptr_pool.
->
-> Hi, Davem & Jakub & Paolo
->     It seems the state of this patchset is changed to 'Deferred' in the
-> patchwork, as the info regarding the state in 'Documentation/process/
-> maintainer-netdev.rst':
->
-> Deferred           patch needs to be reposted later, usually due to depen=
-dency
->                    or because it was posted for a closed tree
->
-> Obviously it was not the a closed tree reason here, I guess it was the de=
-pendency
-> reason casuing the 'Deferred' here? I am not sure if I understand what so=
-rt of
-> dependency this patchset is running into? It would be good to mention wha=
-t need
-> to be done avoid the kind of dependency too.
->
->
-> Hi, Alexander
->     The v13 mainly address your comments about the page_fage_test module.
-> It seems the your main comment about this patchset is about the new API
-> naming now, and it seems there was no feedback in previous version for
-> about a week:
->
-> https://lore.kernel.org/all/ca6be29e-ab53-4673-9624-90d41616a154@huawei.c=
-om/
->
-> If there is still disagreement about the new API naming or other things, =
-it
-> would be good to continue the discussion, so that we can have better
-> understanding of each other's main concern and better idea might come up =
-too,
-> like the discussion about new layout for 'struct page_frag_cache' and the
-> new refactoring in patch 8.
+From: Kyle Huey <me@kylehuey.com>
 
-Sorry for not getting to this sooner. I have been travelling for the
-last week and a half. I just got home on Sunday and I am suffering
-from a pretty bad bout of jet lag as I am overcoming a 12.5 hour time
-change. The earliest I can probably get to this for review would be
-tomorrow morning (8/14 in the AM PDT) as my calendar has me fully
-booked with meetings most of today.
+The regressing commit is new in 6.10. It assumed that anytime event->prog
+is set bpf_overflow_handler() should be invoked to execute the attached bpf
+program. This assumption is false for tracing events, and as a result the
+regressing commit broke bpftrace by invoking the bpf handler with garbage
+inputs on overflow.
 
-Thanks,
+Prior to the regression the overflow handlers formed a chain (of length 0,
+1, or 2) and perf_event_set_bpf_handler() (the !tracing case) added
+bpf_overflow_handler() to that chain, while perf_event_attach_bpf_prog()
+(the tracing case) did not. Both set event->prog. The chain of overflow
+handlers was replaced by a single overflow handler slot and a fixed call to
+bpf_overflow_handler() when appropriate. This modifies the condition there
+to check event->prog->type == BPF_PROG_TYPE_PERF_EVENT, restoring the
+previous behavior and fixing bpftrace.
 
-- Alex
+Signed-off-by: Kyle Huey <khuey@kylehuey.com>
+Suggested-by: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Reported-by: Joe Damato <jdamato@fastly.com>
+Closes: https://lore.kernel.org/lkml/ZpFfocvyF3KHaSzF@LQ3V64L9R2/
+Fixes: f11f10bfa1ca ("perf/bpf: Call BPF handler directly, not through overflow machinery")
+Cc: stable@vger.kernel.org
+Tested-by: Joe Damato <jdamato@fastly.com> # bpftrace
+---
+v2:
+  - Update patch based on Andrii's suggestion
+  - Update commit message
+
+ kernel/events/core.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/kernel/events/core.c b/kernel/events/core.c
+index aa3450bdc227..c973e3c11e03 100644
+--- a/kernel/events/core.c
++++ b/kernel/events/core.c
+@@ -9706,7 +9706,8 @@ static int __perf_event_overflow(struct perf_event *event,
+ 
+ 	ret = __perf_event_account_interrupt(event, throttle);
+ 
+-	if (event->prog && !bpf_overflow_handler(event, data, regs))
++	if (event->prog && event->prog->type == BPF_PROG_TYPE_PERF_EVENT &&
++	    !bpf_overflow_handler(event, data, regs))
+ 		return ret;
+ 
+ 	/*
+-- 
+2.25.1
+
