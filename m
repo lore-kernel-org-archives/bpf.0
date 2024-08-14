@@ -1,44 +1,44 @@
 Received: from mailtransmit04.runbox.com (mailtransmit04.runbox.com [185.226.149.37])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BCA71B8EB0;
-	Wed, 14 Aug 2024 16:18:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 392A41B32A2;
+	Wed, 14 Aug 2024 16:20:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.37
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723652337; cv=none; b=rklbzYUyYDhrXw+CbDg+ispt87+oQVRRUUKC+QzqhKr7JQ2ye6PoamzxMbGG886isRhYInkaDP7pVwbsl0MfvmEwvFAvynkOhqzyj13HAfU4haNBEGR1U+G1tE1eRzugkxH3Dx5Di7akvBe/bPXUVACPlZqo7pgUlrrPNcWYLps=
+	t=1723652456; cv=none; b=ZZ/oFFtOtNfKCv8q/hk4OYQMB4hdwB84krTbi5FTlrLwskark5TWQ5FLdTa/VWk/A5CZINAALU/uNXEE9dQtPChG+WzmJOW2j9AXOWKyi/eWbGhOGGUt1mnLGiUXagmVGFrIpefWqKOv3IGl2bmbtvBYgrHqPYjNWK5Qzl3ga/Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723652337; c=relaxed/simple;
-	bh=zNsgASF057wFi7VlnTNfAZFkCOhBpYb4cACDi4WyeMo=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=DvIerFkRP1OvJ4PTMFzVjRmQDfI1z61gXAOw95UEaVgCGLE00k15YRU1KPSJUsc1ITOw+CPG3LI6OPnk5TcXWTglza+P/ykMhLzoINxZi6d0hoXXMwqaYDUP4tn1X1WC2TXu1m+/nC4IvpyE0Zp6cBlxunYy7o6bDyTqHk8JiRA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co; spf=pass smtp.mailfrom=rbox.co; dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b=QteaoSks; arc=none smtp.client-ip=185.226.149.37
+	s=arc-20240116; t=1723652456; c=relaxed/simple;
+	bh=w6DukgVdh/SeaYiuJZwiSsb19olegSRrDqb9Lls4kO0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=AM6iB/QAt6fJJEAywv2lzfLB4F4cWFXCPN2IEaFjpfJld3oum15y1j4/bhPPTBLPWfLjpe0R/lh97jI+DrFf/F2ER2amIok4v6Ze/6F2rXf0MdaLKz8b1HE02RHJvI4zvN6x+7361DjTFXulc+2J3i1+7RaiwmOY2aQpJ6cnGHo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co; spf=pass smtp.mailfrom=rbox.co; dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b=sQ5edDfk; arc=none smtp.client-ip=185.226.149.37
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rbox.co
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b="QteaoSks"
-Received: from mailtransmit03.runbox ([10.9.9.163] helo=aibo.runbox.com)
+	dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b="sQ5edDfk"
+Received: from mailtransmit02.runbox ([10.9.9.162] helo=aibo.runbox.com)
 	by mailtransmit04.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
 	(Exim 4.93)
 	(envelope-from <mhal@rbox.co>)
-	id 1seGhz-00Gwg5-3y; Wed, 14 Aug 2024 18:18:47 +0200
+	id 1seGeX-00GwGz-Jl; Wed, 14 Aug 2024 18:15:13 +0200
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=rbox.co;
-	s=selector1; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:References:
-	Cc:To:From:Subject:MIME-Version:Date:Message-ID;
-	bh=c0KMUdttV/wxsl2RrtTC21pfQ1ygNN4cevwFVGM0qjg=; b=QteaoSksiufHwLg3pf+KM+JE5p
-	0ZDOrShK+UOBanQgzqj3ENoiu/fkXlTQ1kvgSvDjokwmM9GS4rQPkSoOrdItmqf3qLRnRsIekjA4M
-	NDAJDaiIBFe6G4DcQ2hGyUshmh1hcrNCVmNT5Kx6n5zBkDo271O2/Zd430XS+WlTWwYnssIRvejwF
-	a2qEmMZEgnBNnxajvjKVMbKRhhkaCXZfkF7aGL6pVddH+idU0T3++A+6IwQIgeeDITqlrmXtgyuOa
-	x4K9fv6d3HDTZ+XcKjfkiqdB/cYu97FKeWQ3lTXwSfmv0yhWVnNm1ZrdCL8fAA6KONuGgpCTuL4rJ
-	UPH94oCw==;
+	s=selector1; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+	References:Cc:To:Subject:MIME-Version:Date:Message-ID;
+	bh=8gEuZoqquS008o2flgsV7w+43AvF3jk+PJRlBs+g2p0=; b=sQ5edDfkRzc9YUM4Nk/REh0Inu
+	f9DlCRgI9C1WcPcuDVa3dOe+fflSCNMCq4Y7cBkeFwBKas6iQCWoBUKkHBV0twXBtYw1a8C3UHYUW
+	uSGqZt80FwF3nFxwMq0F9VaQ4qBJ+SxcTQ6ax1+FHFwp5eTi/rq/j23cx1CZG7z4rv3qFhrh0b5zT
+	S/2zMG6l5YIzOqUXJMlY9IbRiLYBHtCLFY5VMK3Sj9wwd3gPCbC8jtbl3LcpoeGRWlu0Nmxtuk00P
+	ogGYsU8isI2SSBEfsU5PHrczKZbt79pqBDPaF602HapFg9iHTeUTUWxZGq8xlXs6hNa5VzbkmFbRr
+	EmNnS9fA==;
 Received: from [10.9.9.74] (helo=submission03.runbox)
-	by mailtransmit03.runbox with esmtp (Exim 4.86_2)
+	by mailtransmit02.runbox with esmtp (Exim 4.86_2)
 	(envelope-from <mhal@rbox.co>)
-	id 1seGhy-0005dL-FF; Wed, 14 Aug 2024 18:18:46 +0200
+	id 1seGeR-0003LT-GH; Wed, 14 Aug 2024 18:15:07 +0200
 Received: by submission03.runbox with esmtpsa  [Authenticated ID (604044)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
 	(Exim 4.93)
-	id 1seGhg-00EP3T-2v; Wed, 14 Aug 2024 18:18:28 +0200
-Message-ID: <a2c8831b-68bf-4c6f-ad5e-3ac67de2d314@rbox.co>
-Date: Wed, 14 Aug 2024 18:18:26 +0200
+	id 1seGeH-00EOaa-Nw; Wed, 14 Aug 2024 18:14:57 +0200
+Message-ID: <42939687-20f9-4a45-b7c2-342a0e11a014@rbox.co>
+Date: Wed, 14 Aug 2024 18:14:56 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -46,9 +46,8 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: [PATCH 2/3] selftests/bpf: Allow setting BPF_F_INGRESS in
- prog_msg_verdict()
-From: Michal Luczaj <mhal@rbox.co>
+Subject: Re: [PATCH bpf-next v2 0/6] selftests/bpf: Various sockmap-related
+ fixes
 To: Jakub Sitnicki <jakub@cloudflare.com>
 Cc: Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman
  <eddyz87@gmail.com>, Mykola Lysenko <mykolal@fb.com>,
@@ -64,53 +63,34 @@ References: <20240731-selftest-sockmap-fixes-v2-0-08a0c73abed2@rbox.co>
  <87y159yi5m.fsf@cloudflare.com>
  <249a7dc3-34e2-4579-aae7-8b38b145e4bb@rbox.co>
  <87ttfxy28s.fsf@cloudflare.com>
- <42939687-20f9-4a45-b7c2-342a0e11a014@rbox.co>
 Content-Language: pl-PL, en-GB
-In-Reply-To: <42939687-20f9-4a45-b7c2-342a0e11a014@rbox.co>
+From: Michal Luczaj <mhal@rbox.co>
+In-Reply-To: <87ttfxy28s.fsf@cloudflare.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-Let a selftest set BPF_F_INGRESS for map/hash redirect.
+On 8/6/24 19:45, Jakub Sitnicki wrote:
+> On Tue, Aug 06, 2024 at 07:18 PM +02, Michal Luczaj wrote:
+>> Great, thanks for the review. With this completed, I guess we can unwind
+>> the (mail) stack to [1]. Is that ingress-to-local et al. something you
+>> wanted to take care of yourself or can I give it a try?
+>> [1] https://lore.kernel.org/netdev/87msmqn9ws.fsf@cloudflare.com/
+> 
+> I haven't stated any work on. You're welcome to tackle that.
+> 
+> All I have is a toy test that I've used to generate the redirect matrix.
+> Perhaps it can serve as inspiration:
+> 
+> https://github.com/jsitnicki/sockmap-redir-matrix
 
-In run_tests(), explicitly reset skel->bss->test_ingress to false. Earlier
-tests might have left it flipped.
+All right, please let me know if this is more or less what you meant and
+I'll post the whole series for a review (+patch to purge sockmap_listen of
+redir tests, fix misnomers). Mostly I've just copypasted your code
+(mangling it terribly along the way), so I feel silly claiming the
+authorship. Should I assign you as an author?
 
-Signed-off-by: Michal Luczaj <mhal@rbox.co>
----
- tools/testing/selftests/bpf/prog_tests/sockmap_listen.c | 2 ++
- tools/testing/selftests/bpf/progs/test_sockmap_listen.c | 6 ++++--
- 2 files changed, 6 insertions(+), 2 deletions(-)
+Note that the patches are based on [2], which has not reached bpf-next
+(patchwork says: "Needs ACK").
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c b/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c
-index da5a6fb03b69..a5e7d27760cf 100644
---- a/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c
-+++ b/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c
-@@ -1850,6 +1850,8 @@ static void test_udp_unix_redir(struct test_sockmap_listen *skel, struct bpf_map
- static void run_tests(struct test_sockmap_listen *skel, struct bpf_map *map,
- 		      int family)
- {
-+	skel->bss->test_ingress = false;
-+
- 	test_ops(skel, map, family, SOCK_STREAM);
- 	test_ops(skel, map, family, SOCK_DGRAM);
- 	test_redir(skel, map, family, SOCK_STREAM);
-diff --git a/tools/testing/selftests/bpf/progs/test_sockmap_listen.c b/tools/testing/selftests/bpf/progs/test_sockmap_listen.c
-index b7250eb9c30c..5a3504d5dfc3 100644
---- a/tools/testing/selftests/bpf/progs/test_sockmap_listen.c
-+++ b/tools/testing/selftests/bpf/progs/test_sockmap_listen.c
-@@ -106,9 +106,11 @@ int prog_msg_verdict(struct sk_msg_md *msg)
- 	int verdict;
- 
- 	if (test_sockmap)
--		verdict = bpf_msg_redirect_map(msg, &sock_map, zero, 0);
-+		verdict = bpf_msg_redirect_map(msg, &sock_map, zero,
-+					       test_ingress ? BPF_F_INGRESS : 0);
- 	else
--		verdict = bpf_msg_redirect_hash(msg, &sock_hash, &zero, 0);
-+		verdict = bpf_msg_redirect_hash(msg, &sock_hash, &zero,
-+						test_ingress ? BPF_F_INGRESS : 0);
- 
- 	count = bpf_map_lookup_elem(&verdict_map, &verdict);
- 	if (count)
--- 
-2.46.0
+[2] [PATCH bpf-next v2 0/6] selftests/bpf: Various sockmap-related fixes
+    https://lore.kernel.org/bpf/20240731-selftest-sockmap-fixes-v2-0-08a0c73abed2@rbox.co/
