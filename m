@@ -1,173 +1,154 @@
-Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailtransmit05.runbox.com (mailtransmit05.runbox.com [185.226.149.38])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC9481B86DA
-	for <bpf@vger.kernel.org>; Wed, 14 Aug 2024 16:14:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 896731B8EBC;
+	Wed, 14 Aug 2024 16:17:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.38
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723652082; cv=none; b=kIG+HnrXgMYcoc6CzL8EyAo52vK1/Xj215oBV7728dmONCfvTeHwB8T91buUH4u+7G+CiycBZ8zCWLhFfOpn722VxIa5As8gEVCF4VV/R2nKoDUBcFefKjxnUXe2xnlgyeqFCu6vpurpJ+9lDZSwEKU5BcFSXBc7vKszYt65cSw=
+	t=1723652282; cv=none; b=pB8kkW7beVK1+pw9NInHz8MY2EKJn84bkYQmxQ60FAx2QTIYrqfodZxH4/atBkbCfgl/xb1sdwpz8SIoxSo+zxhVD2o+mJtRbjskuuiZUwKj9hWqHx8xE0bHdkY6ILNI0cA/XljgZ1rx0o3EWBFbbWFBeFa6GGcBipCXFngAuT0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723652082; c=relaxed/simple;
-	bh=1gR7IPGJlvDuH9OGf4O4TKswFpP6LwMPMY2YDmqcZhU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=a0ksie5FKss9VbHoEa94hxKrZIGynrBE/6TBeK7aUfWTzIsEIVR6F3ppDlSFX38xbLpYkB0KVDleISTO+swa2Nv/hRjzklhwftjaJg7bb/GJykfO9emGim9aNOWUDM5k7mS8Wlk+1twyrwQHWFiIC1YzSK/uai0ZgHoQcDOJvCc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Y6bsfOlF; arc=none smtp.client-ip=209.85.208.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1723652282; c=relaxed/simple;
+	bh=NQTpemzt4Tj8++a5VIsyfyK7+ZLyBcJfu2xffJVhs0k=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=FitGZ79Mce+3lI2neqBvawvBfBkjvd2mtWxwDVpdd2ugdALtVcEke5fzaBEUoLjGl3A+HDcaMisS5xdXuxtiSpWyCYSY7xtEQiZGwozHXnP1r2KQLidVZtUhIlixDtZerFks6jyKAkuI144gt8y1HlOtN2+5SNicLoTsYKjq21A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co; spf=pass smtp.mailfrom=rbox.co; dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b=QQkhUmtw; arc=none smtp.client-ip=185.226.149.38
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rbox.co
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Y6bsfOlF"
-Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-5a28b61b880so7646a12.1
-        for <bpf@vger.kernel.org>; Wed, 14 Aug 2024 09:14:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1723652078; x=1724256878; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6bQ9j9ErtrrpZhSLzeUe548UlFsO7KLb0/TyLtNcWJw=;
-        b=Y6bsfOlFnrM681/3d/iqNng48eYUH2/3fxGvd1bip/5D70uhu/GyEUXi4dJ4BJTsV8
-         iDJxh8vz3zqBMkfPRYAXED+FfWtM3OXeI9iWoBcPddFwIdt9L/rFZc0vDXiKsTsQKgY+
-         s5A/F5wZNsgIDkiQT/kRNgJ2zCTbH8Ge/1TnRpTnZWc17goih2AlA0l5w4H3+jmmXh3f
-         Fg6FYIjoMqbd8r8Gos/GFq8p2ZXiY/faQfzKGimgEYREspLO8+KYMooQe0xZ1AOb0Jiy
-         cT+skCXnNy5eWhN3NP8pvDLOOpEhh9j4UsW78PENIUSD1Bs/S7uRjmgf3LpHV/Yo1+x4
-         Ls3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1723652078; x=1724256878;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=6bQ9j9ErtrrpZhSLzeUe548UlFsO7KLb0/TyLtNcWJw=;
-        b=vB66SDD7mKGLAgKD86jUsiMzTgoT/bV67zTbkxYgz/7u54N2qyXuvxTHX5xAz755Do
-         DmWfFLAz1bLGoCf9KG8aiIDY3QZ2MxEDBFvDBgnG5WiBpSyoISuaRXJRHUQ8r2wqdnmm
-         SxVX/gd3TwF80F8Anc7TVrhMAzhKzSyexpjIBHClxIBoeVY/a7JzD9CghpulefvIZz53
-         73SKzc7hNNp9skG1G9/YPTAT8yy+nNd3hz4US9AuqwlM3i22lFLxVEKggBkNZh/XsbME
-         UcMrCsg7jWQbcZjOOslVS6AculbKvFG1tzLkNP/rbG1jSmgY5mzUvCq+uGf2WAp3LI8E
-         V6QQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVRY1wa2DCMfIj7giV/dFIf8wWCAD/Kbuuf4e+npv55enAuYQNF4V5Wk1sAq0ii/dnOr9c=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxrBccsSjD1YHk4grMZ+9+9mA8CcViBBe5sxsed1/DLWPDi1bLR
-	bloRlFBUGw25GRrjOB6k+BZZrMGju/J12LbZI1KtecniWLCMw/MBG8v+QfXVrkz78CrJEuUhA7I
-	9hWukJ9k43Hu4KxYh0kITFo4kNi5cCoPcXXni
-X-Google-Smtp-Source: AGHT+IEDxZPD3vJxwWTsDeOPtGLySgwgkgr6dRkg5BY1PBUpXws7SIHVDHMiXTM6viwfIH4s0+WA4qXy/HT+Mlhdu7E=
-X-Received: by 2002:a05:6402:50cf:b0:58b:93:b623 with SMTP id
- 4fb4d7f45d1cf-5bea55635d8mr87569a12.5.1723652077454; Wed, 14 Aug 2024
- 09:14:37 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b="QQkhUmtw"
+Received: from mailtransmit03.runbox ([10.9.9.163] helo=aibo.runbox.com)
+	by mailtransmit05.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+	(Exim 4.93)
+	(envelope-from <mhal@rbox.co>)
+	id 1seGh1-00H1Fi-33; Wed, 14 Aug 2024 18:17:47 +0200
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=rbox.co;
+	s=selector1; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:References:
+	Cc:To:From:Subject:MIME-Version:Date:Message-ID;
+	bh=eO5sD2wD20qYLIyQAYTr+NiDMBMypw6HCWvaYXpaa6s=; b=QQkhUmtwnl8ckO8bW0pQNcbx2m
+	gyEKnUqLeYNWPm3KCygcbh+QFQGqL3H7Qkt8c3EDXk6xjjU1fHzKyBs6QltpBiu1n0adkfj5S2QKQ
+	ygHDNDPKGq1v+KVKZbK9XaWKjKThS/fUVmsyax5sKkXl9ZVhw1s+NgapuTE49iTX8LgVNbCNs0oF4
+	6W9mZxjSumKrdmPDh6TZdOYVI8RmPjT3kljfg2kTOV4fwM8UetI7Yo8E9/CLQE6OUK9muPDOw14fD
+	OLvaqseKMRpDgi6O71HoD1lhuxIOu4+tNoFm34s8f1JPOXioFsceOiPBi3b+NFLoASfjcmp0AWWwN
+	hzeDIF7Q==;
+Received: from [10.9.9.74] (helo=submission03.runbox)
+	by mailtransmit03.runbox with esmtp (Exim 4.86_2)
+	(envelope-from <mhal@rbox.co>)
+	id 1seGh0-0005Xd-9h; Wed, 14 Aug 2024 18:17:46 +0200
+Received: by submission03.runbox with esmtpsa  [Authenticated ID (604044)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.93)
+	id 1seGgw-00EOyD-7r; Wed, 14 Aug 2024 18:17:42 +0200
+Message-ID: <55559365-8dea-4458-a6f3-3b0cff9f051f@rbox.co>
+Date: Wed, 14 Aug 2024 18:17:40 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240813002932.3373935-1-andrii@kernel.org> <20240813002932.3373935-2-andrii@kernel.org>
- <CAG48ez1oUas3ZMsDdJSxbZoFK0xfsLFiEZjJmOryzkURPPBeBA@mail.gmail.com> <CAEf4BzZa9Rkm=MAOOF58K444NAfiRry2Y1DDgPYaB48x6yEdbw@mail.gmail.com>
-In-Reply-To: <CAEf4BzZa9Rkm=MAOOF58K444NAfiRry2Y1DDgPYaB48x6yEdbw@mail.gmail.com>
-From: Jann Horn <jannh@google.com>
-Date: Wed, 14 Aug 2024 18:13:59 +0200
-Message-ID: <CAG48ez0QdmjJua8V4RPhs2WmuGGhD++H-e2vacfP1=2jVgCy+w@mail.gmail.com>
-Subject: Re: [PATCH v5 bpf-next 01/10] lib/buildid: harden build ID parsing logic
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org, linux-mm@kvack.org, 
-	akpm@linux-foundation.org, adobriyan@gmail.com, shakeel.butt@linux.dev, 
-	hannes@cmpxchg.org, ak@linux.intel.com, osandov@osandov.com, song@kernel.org, 
-	linux-fsdevel@vger.kernel.org, willy@infradead.org, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: [PATCH 1/3] selftests/bpf: Support AF_UNIX SOCK_DGRAM socket pair
+ creation
+From: Michal Luczaj <mhal@rbox.co>
+To: Jakub Sitnicki <jakub@cloudflare.com>
+Cc: Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman
+ <eddyz87@gmail.com>, Mykola Lysenko <mykolal@fb.com>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
+ bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20240731-selftest-sockmap-fixes-v2-0-08a0c73abed2@rbox.co>
+ <87y159yi5m.fsf@cloudflare.com>
+ <249a7dc3-34e2-4579-aae7-8b38b145e4bb@rbox.co>
+ <87ttfxy28s.fsf@cloudflare.com>
+ <42939687-20f9-4a45-b7c2-342a0e11a014@rbox.co>
+Content-Language: pl-PL, en-GB
+In-Reply-To: <42939687-20f9-4a45-b7c2-342a0e11a014@rbox.co>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Wed, Aug 14, 2024 at 1:21=E2=80=AFAM Andrii Nakryiko
-<andrii.nakryiko@gmail.com> wrote:
-> On Tue, Aug 13, 2024 at 1:59=E2=80=AFPM Jann Horn <jannh@google.com> wrot=
-e:
-> >
-> > On Tue, Aug 13, 2024 at 2:29=E2=80=AFAM Andrii Nakryiko <andrii@kernel.=
-org> wrote:
-> > > Harden build ID parsing logic, adding explicit READ_ONCE() where it's
-> > > important to have a consistent value read and validated just once.
-> > >
-> > > Also, as pointed out by Andi Kleen, we need to make sure that entire =
-ELF
-> > > note is within a page bounds, so move the overflow check up and add a=
-n
-> > > extra note_size boundaries validation.
-> > >
-> > > Fixes tag below points to the code that moved this code into
-> > > lib/buildid.c, and then subsequently was used in perf subsystem, maki=
-ng
-> > > this code exposed to perf_event_open() users in v5.12+.
-> >
-> > Sorry, I missed some things in previous review rounds:
-> >
-> > [...]
-> > > @@ -18,31 +18,37 @@ static int parse_build_id_buf(unsigned char *buil=
-d_id,
-> > [...]
-> > >                 if (nhdr->n_type =3D=3D BUILD_ID &&
-> > > -                   nhdr->n_namesz =3D=3D sizeof("GNU") &&
-> > > -                   !strcmp((char *)(nhdr + 1), "GNU") &&
-> > > -                   nhdr->n_descsz > 0 &&
-> > > -                   nhdr->n_descsz <=3D BUILD_ID_SIZE_MAX) {
-> > > -                       memcpy(build_id,
-> > > -                              note_start + note_offs +
-> > > -                              ALIGN(sizeof("GNU"), 4) + sizeof(Elf32=
-_Nhdr),
-> > > -                              nhdr->n_descsz);
-> > > -                       memset(build_id + nhdr->n_descsz, 0,
-> > > -                              BUILD_ID_SIZE_MAX - nhdr->n_descsz);
-> > > +                   name_sz =3D=3D note_name_sz &&
-> > > +                   strcmp((char *)(nhdr + 1), note_name) =3D=3D 0 &&
-> >
-> > Please change this to something like "memcmp((char *)(nhdr + 1),
-> > note_name, note_name_sz) =3D=3D 0" to ensure that we can't run off the =
-end
-> > of the page if there are no null bytes in the rest of the page.
->
-> I did switch this to strncmp() at some earlier point, but then
-> realized that there is no point because note_name is controlled by us
-> and will ensure there is a zero at byte (note_name_sz - 1). So I don't
-> think memcmp() buys us anything.
+Handle AF_UNIX in init_addr_loopback(). For pair creation, bind() the peer
+socket to make SOCK_DGRAM connect() happy.
 
-There are two reasons why using strcmp() here makes me uneasy.
+Signed-off-by: Michal Luczaj <mhal@rbox.co>
+---
+ .../bpf/prog_tests/sockmap_helpers.h          | 29 +++++++++++++++----
+ 1 file changed, 24 insertions(+), 5 deletions(-)
 
+diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_helpers.h b/tools/testing/selftests/bpf/prog_tests/sockmap_helpers.h
+index 38e35c72bdaa..c50efa834a11 100644
+--- a/tools/testing/selftests/bpf/prog_tests/sockmap_helpers.h
++++ b/tools/testing/selftests/bpf/prog_tests/sockmap_helpers.h
+@@ -1,6 +1,7 @@
+ #ifndef __SOCKMAP_HELPERS__
+ #define __SOCKMAP_HELPERS__
+ 
++#include <sys/un.h>
+ #include <linux/vm_sockets.h>
+ 
+ /* include/linux/net.h */
+@@ -283,6 +284,15 @@ static inline void init_addr_loopback6(struct sockaddr_storage *ss,
+ 	*len = sizeof(*addr6);
+ }
+ 
++static inline void init_addr_loopback_unix(struct sockaddr_storage *ss,
++					   socklen_t *len)
++{
++	struct sockaddr_un *addr = memset(ss, 0, sizeof(*ss));
++
++	addr->sun_family = AF_UNIX;
++	*len = sizeof(sa_family_t);
++}
++
+ static inline void init_addr_loopback_vsock(struct sockaddr_storage *ss,
+ 					    socklen_t *len)
+ {
+@@ -304,6 +314,9 @@ static inline void init_addr_loopback(int family, struct sockaddr_storage *ss,
+ 	case AF_INET6:
+ 		init_addr_loopback6(ss, len);
+ 		return;
++	case AF_UNIX:
++		init_addr_loopback_unix(ss, len);
++		return;
+ 	case AF_VSOCK:
+ 		init_addr_loopback_vsock(ss, len);
+ 		return;
+@@ -390,21 +403,27 @@ static inline int create_pair(int family, int sotype, int *p0, int *p1)
+ {
+ 	__close_fd int s, c = -1, p = -1;
+ 	struct sockaddr_storage addr;
+-	socklen_t len = sizeof(addr);
++	socklen_t len;
+ 	int err;
+ 
+ 	s = socket_loopback(family, sotype);
+ 	if (s < 0)
+ 		return s;
+ 
+-	err = xgetsockname(s, sockaddr(&addr), &len);
+-	if (err)
+-		return err;
+-
+ 	c = xsocket(family, sotype, 0);
+ 	if (c < 0)
+ 		return c;
+ 
++	init_addr_loopback(family, &addr, &len);
++	err = xbind(c, sockaddr(&addr), len);
++	if (err)
++		return err;
++
++	len = sizeof(addr);
++	err = xgetsockname(s, sockaddr(&addr), &len);
++	if (err)
++		return err;
++
+ 	err = connect(c, sockaddr(&addr), len);
+ 	if (err) {
+ 		if (errno != EINPROGRESS) {
+-- 
+2.46.0
 
-First: We're still operating on shared memory that can concurrently change.
-
-Let's say strcmp is implemented like this, this is the generic C
-implementation in the kernel (which I think is the implementation
-that's used for x86-64):
-
-int strcmp(const char *cs, const char *ct)
-{
-        unsigned char c1, c2;
-
-        while (1) {
-                c1 =3D *cs++;
-                c2 =3D *ct++;
-                if (c1 !=3D c2)
-                        return c1 < c2 ? -1 : 1;
-                if (!c1)
-                        break;
-        }
-        return 0;
-}
-
-No READ_ONCE() or anything like that - it's not designed for being
-used on concurrently changing memory.
-
-And let's say you call it like strcmp(<shared memory>, "GNU"), and
-we're now in the fourth iteration. If the compiler decides to re-fetch
-the value of "c1" from memory for each of the two conditions, then it
-could be that the "if (c1 !=3D c2)" sees c1=3D'\0' and c2=3D'\0', so the
-condition evaluates as false; but then at the "if (!c1)", the value in
-memory changed, and we see c1=3D'A'. So now in the next round, we'll be
-accessing out-of-bounds memory behind the 4-byte string constant
-"GNU".
-
-So I don't think strcmp() on memory that can concurrently change is allowed=
-.
-
-(It actually seems like the generic memcmp() is also implemented
-without READ_ONCE(), maybe we should change that...)
-
-
-Second: You are assuming that if one side of the strcmp() is at most
-four bytes long (including null terminator), then strcmp() also won't
-access more than 4 bytes of the other string, even if that string does
-not have a null terminator at index 4. I don't think that's part of
-the normal strcmp() API contract.
