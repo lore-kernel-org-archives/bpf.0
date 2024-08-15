@@ -1,89 +1,78 @@
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from szxga05-in.huawei.com (szxga05-in.huawei.com [45.249.212.191])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED81317C9
-	for <bpf@vger.kernel.org>; Thu, 15 Aug 2024 01:21:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D584D10F1;
+	Thu, 15 Aug 2024 01:55:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.191
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723684877; cv=none; b=TtAQQb8LV4dKxTGx+IwnMLXNMmbNL6YDfqFJNb8Zydcme8tstcHd3MYmLn3vj1aO7uWSN0JcDFX0ryJf9siuB4ukxIlGa0LIpFUErChwvfWdLFsqQFNbHSpObl0EK4zgsMLx1WFuk42P20WGLIUJ6mLQI0LpmCxMJbq6VnJe0DA=
+	t=1723686953; cv=none; b=Fe0Fb9X0L/bgDwNI5pxjUnrm4KFZDC7hvf7MtJNgoBbQo2JBtwXVhr4DZbKvcVuO/tc7QZGafP8nDyW5b/JhHj8dSueMkusNlhp9NXi2KJ+4/UIKhvg65DE/nFGqE1iJsMcI0FGzLTHBk/NXLlaN8/SfR6FoeDHrqfJwd6gw+hA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723684877; c=relaxed/simple;
-	bh=Hb3X4riTxNkNCGjBLuPrCPRcXoa2jIrWSholPAoh3Io=;
-	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
-	 Content-Type; b=YtBd2BNGp9oLtih5X9d3sn4wRv8tPpzD0rrQ/cFcMS71zte0VjSK8wUoT/dYaKvmQrKmHq2+WW1B5QxG8OK2eLYVOeaUKY8k8F9hvq9MY3WnqJWvzclll2WW4VW83ASlCUP21NH5QUViH/imMPea3oukiW6/o2+V8YFo0GwRmCU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.200
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-il1-f200.google.com with SMTP id e9e14a558f8ab-39b15a6bb6dso4614765ab.0
-        for <bpf@vger.kernel.org>; Wed, 14 Aug 2024 18:21:14 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1723684874; x=1724289674;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Hb3X4riTxNkNCGjBLuPrCPRcXoa2jIrWSholPAoh3Io=;
-        b=vLqiUJFB+fpOR7LbX8GFG79ufExZ+1zuNFjLQ/VhzJdywCqNCvpdvQ8uMtmP8dVFgJ
-         1g8Gdn1cwVtEzlwSsK7AJfNb52Fu5FYva/MjiszxmiwVtt1j8K2FhgcOQcTWEXooUBb2
-         pNKck+r41+iepCxS6wZKnRaq2Ff0OBGEIlQEePmC9/lO9+feFmGh6fCp0Yrd72QM1Nzx
-         bjDP6a1KJ1RJxSeqBCFfzI3nS/q8qT4SEygsQhDhki7RP/MQiFe57tom+8R2WOGfn29P
-         RCSqZmX49t9jdnc4kKTI1j5ZtfixHWRSlPFjCUEiq04SaOsOzFn5fnRU4LTWL5/7dNbx
-         1OSQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVLN1FeZbR3ijzz9pIze0J0xDzVdkj3bl9yRj7OfbX3E6ywGi4gC/7QL4WDLw7OXB3QEUT72dR2XseSSc+9kDxE6fW/
-X-Gm-Message-State: AOJu0YzL+zTvdhNQFaGkhGC2QN/bxA+maJuq2CUNsAD6U77fRMrK2W4P
-	KgQ7/vyn1LsiV8+NCEGLByATEDlPz0L8eDXALkX0VlbyFZMV9dIGjjIdQHJ3cQtjwslmH/UwMHg
-	vy2h/AkTjABMnPCKC+O7BnoYinpoMZYmQpanMux2J2iRMCTmrDLaPBtU=
-X-Google-Smtp-Source: AGHT+IE1L+cIMMAFHcc0Wx8kcH60VX5XGrnjTgUDbjMF+9tGU9/HcW1WoLcbwHPNqV8SKgFyweHjql3dcF+ilk3XSi+FpZYWPhcz
+	s=arc-20240116; t=1723686953; c=relaxed/simple;
+	bh=nj2pyoZqJqmHJU2rzvoQJXs0NBPBSP422jfhghGWovU=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=oWJ95sPUTiwV0Mcx0G0TB3bo3CL5T3p9MdDp4Zo2hyAINmk6/cpy1dO2pz3dANRKC3j70IU+pK1YGntyI5MES/KOjJ0C9XmP/AwLFMishDDK3IC79VIV/sK0t5dS5eX3u3sBe4zlrg7gdgWVGYvDHoIEGskhNbSI8MpkTfjTnLI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.191
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.163.17])
+	by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4Wkp6M28RDz1HGJg;
+	Thu, 15 Aug 2024 09:52:43 +0800 (CST)
+Received: from kwepemd200013.china.huawei.com (unknown [7.221.188.133])
+	by mail.maildlp.com (Postfix) with ESMTPS id 5906E1A0190;
+	Thu, 15 Aug 2024 09:55:48 +0800 (CST)
+Received: from huawei.com (10.67.174.28) by kwepemd200013.china.huawei.com
+ (7.221.188.133) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1258.34; Thu, 15 Aug
+ 2024 09:55:47 +0800
+From: Liao Chang <liaochang1@huawei.com>
+To: <mhiramat@kernel.org>, <oleg@redhat.com>, <peterz@infradead.org>,
+	<mingo@redhat.com>, <acme@kernel.org>, <namhyung@kernel.org>,
+	<mark.rutland@arm.com>, <alexander.shishkin@linux.intel.com>,
+	<jolsa@kernel.org>, <irogers@google.com>, <adrian.hunter@intel.com>,
+	<kan.liang@linux.intel.com>
+CC: <linux-kernel@vger.kernel.org>, <linux-trace-kernel@vger.kernel.org>,
+	<linux-perf-users@vger.kernel.org>, <bpf@vger.kernel.org>
+Subject: [PATCH v3 1/2] uprobes: Remove redundant spinlock in uprobe_deny_signal()
+Date: Thu, 15 Aug 2024 01:46:28 +0000
+Message-ID: <20240815014629.2685155-2-liaochang1@huawei.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20240815014629.2685155-1-liaochang1@huawei.com>
+References: <20240815014629.2685155-1-liaochang1@huawei.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:2181:b0:39b:c00:85aa with SMTP id
- e9e14a558f8ab-39d1bd3bb90mr881145ab.0.1723684873954; Wed, 14 Aug 2024
- 18:21:13 -0700 (PDT)
-Date: Wed, 14 Aug 2024 18:21:13 -0700
-In-Reply-To: <000000000000ac237d06179e3237@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000009df8df061faea836@google.com>
-Subject: Re: [syzbot] KASAN: slab-use-after-free Read in htab_map_alloc (2)
-From: syzbot <syzbot+061f58eec3bde7ee8ffa@syzkaller.appspotmail.com>
-To: andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org, 
-	daniel@iogearbox.net, eddyz87@gmail.com, haoluo@google.com, 
-	houtao@huaweicloud.com, john.fastabend@gmail.com, jolsa@kernel.org, 
-	kpsingh@kernel.org, linux-kernel@vger.kernel.org, martin.lau@linux.dev, 
-	netdev@vger.kernel.org, sdf@google.com, song@kernel.org, 
-	syzkaller-bugs@googlegroups.com, yonghong.song@linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ kwepemd200013.china.huawei.com (7.221.188.133)
 
-This bug is marked as fixed by commit:
-net/sched: unregister lockdep keys in qdisc_create/qdisc_alloc
+Since clearing a bit in thread_info is an atomic operation, the spinlock
+is redundant and can be removed, reducing lock contention is good for
+performance.
 
-But I can't find it in the tested trees[1] for more than 90 days.
-Is it a correct commit? Please update it by replying:
-
-#syz fix: exact-commit-title
-
-Until then the bug is still considered open and new crashes with
-the same signature are ignored.
-
-Kernel: Linux
-Dashboard link: https://syzkaller.appspot.com/bug?extid=061f58eec3bde7ee8ffa
-
+Acked-by: Oleg Nesterov <oleg@redhat.com>
+Signed-off-by: Liao Chang <liaochang1@huawei.com>
 ---
-[1] I expect the commit to be present in:
+ kernel/events/uprobes.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-1. for-kernelci branch of
-git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git
+diff --git a/kernel/events/uprobes.c b/kernel/events/uprobes.c
+index 73cc47708679..76a51a1f51e2 100644
+--- a/kernel/events/uprobes.c
++++ b/kernel/events/uprobes.c
+@@ -1979,9 +1979,7 @@ bool uprobe_deny_signal(void)
+ 	WARN_ON_ONCE(utask->state != UTASK_SSTEP);
+ 
+ 	if (task_sigpending(t)) {
+-		spin_lock_irq(&t->sighand->siglock);
+ 		clear_tsk_thread_flag(t, TIF_SIGPENDING);
+-		spin_unlock_irq(&t->sighand->siglock);
+ 
+ 		if (__fatal_signal_pending(t) || arch_uprobe_xol_was_trapped(t)) {
+ 			utask->state = UTASK_SSTEP_TRAPPED;
+-- 
+2.34.1
 
-2. master branch of
-git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git
-
-3. master branch of
-git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git
-
-4. main branch of
-git://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git
-
-The full list of 10 trees can be found at
-https://syzkaller.appspot.com/upstream/repos
