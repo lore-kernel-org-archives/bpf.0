@@ -1,142 +1,103 @@
-Received: from out-177.mta1.migadu.com (out-177.mta1.migadu.com [95.215.58.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 584D8154456
-	for <bpf@vger.kernel.org>; Thu, 15 Aug 2024 22:14:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33A2F154456
+	for <bpf@vger.kernel.org>; Thu, 15 Aug 2024 22:14:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723760063; cv=none; b=Y+KNvQygUbY6phVe1cvcl+NnYeZAi7WbtZztMO05xehkbOrtuheh7EaN/wAyTPE8zKvxgeduAtP4nE/BUytGWFQA3VWSiq8ha6dx3Hekjj7sPZxpgJUlyh87byyB58fjrL6THcaMB2ZejdiwU7zN/LMoPVhHPfID8KO6t9SMiYo=
+	t=1723760074; cv=none; b=mzAMvDvn4ePk2ICAv7gUpk0MzYXsNjSsX6iEHIr6iBHYXR2KVJCdJYNChw4wZke0BWAFFqT1kGSo4Q7FJFimMxpkYdfXyvq38HKsZ5gIa2g8kd46P1ykydO6VS2olnd0u4BRsAB+/xevCDivL7YkRTGFj4vMvi0e/iRM+J0METw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723760063; c=relaxed/simple;
-	bh=62RcMdgSn3oo3tSBy6DL778qabCdkvItbw5J2IqLDV0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=qorPUFM3r9ZIdMUvk086K8PhfAcRDezuGL9OmHmlxu/cNqtt/r46+ygZFbVvmqIiy7vxBkJIQmvoy9BFonS7XRo+0uVUl6miGTvghJZnnKoZWIe5h0P35vvnoSs8b9vEkBfeuJfQXQ6Gv7ihC32VLK56QOub8qJ8yWx3epxCMHI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=A+jeAP0R; arc=none smtp.client-ip=95.215.58.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1723760074; c=relaxed/simple;
+	bh=2tARasGGxj1OD8wKavVyQ0eyz9W+KvLa7uHWaRyVI/o=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=jOLrif2S5HJpXF9CUAujKQBEtAhosvNk1Zs2Ge4kC6/vZGwo1Q8Mb/VOgr0TCfABHEnvxkhgTHlJB4g7wLdEnXGEa72oEpMPIq0x7jkHNM51en/ZgPPVtYyL2dH6FUJJbVraLCdNEuP6MT0tUR6lpBEb2mVpUiZC/6eKlKxjd+s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LVtOXX6V; arc=none smtp.client-ip=209.85.216.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="A+jeAP0R"
-Message-ID: <a912370d-0812-48ee-aaf5-8dbeddc8fefa@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1723760058;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=MEGo0P6wJ3ynBWQNFoBSMJkQbbLm9oZkOQkRexkLPGE=;
-	b=A+jeAP0R79ZtEAoMtchEr1pgPCAg5uyaURIJWXKTRzOezGs4y8zuWqzd6MVwLv9llwllU/
-	7ymj/c5bMJUaqNyEk9MyJrtgxq0XkIY9Mh+Nz1Lk1tg7QRolFW5GKL/pWtyndj3oKkTG3T
-	fst5eRyHnpzF4iqOGiwseVcbkb8O95k=
-Date: Thu, 15 Aug 2024 15:14:10 -0700
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LVtOXX6V"
+Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-2d3e46ba5bcso165509a91.0
+        for <bpf@vger.kernel.org>; Thu, 15 Aug 2024 15:14:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1723760072; x=1724364872; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=2tARasGGxj1OD8wKavVyQ0eyz9W+KvLa7uHWaRyVI/o=;
+        b=LVtOXX6VC9cBzv0Q8uYEKFOYdyvzpZlGsOxQ+OAap70nB+rulUas75OJw75IkkUFMA
+         LA6XtnBgCTLZdxhuVjiTTaue0mxiUNrz2UuMuHMYZ/tk+WuJxg4YbVbeZR5apwavy82i
+         y9xBRaJxAo5mewjH1EOmVeDL2llRp2ZWXMbmXDJPQAVnJwoDI3OSR4g+d5E8fbQX+eDd
+         mNfYpEpfzfjPpECLIWDv8029SH2Qkapz3Y8c8eLzYfYnt0GYWuweCvy8lSeq06cYT/X7
+         kj6r/oJyTaIDMH5GW9jM/AnTsbNegQld/cy29laHrjodqzxbvZrzRR/3Dkv7I4Y1W7CL
+         Jbiw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1723760072; x=1724364872;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=2tARasGGxj1OD8wKavVyQ0eyz9W+KvLa7uHWaRyVI/o=;
+        b=ScNAHJiYr+oXnHACcM/MLCY4ap2MFNZsEJihu5mu38B/aEMjg483TJzucDKvs6Rr1S
+         VZQhVwegrVFxF/Eh2yONLtwV04xoCX9JaC8SDgZB1eFNw3acKvPrNOnWCCBtIWlxQqTE
+         xdItKLJTOtVAuJGgFbJDmCGTixcniG+ALirZNfiRInZ3mGRahWnhGdF3feok5dTdKocD
+         O8fCLoxgEfUAyByDJwWMt1G1LyGz0t/UAz5P53AlZ/iq8v2MM4tnPdFWYVTTmyXHZVt+
+         oZ85FQ7EQEm43ziCdTny+OWcAuYKAZ0sgtFvFUWvVIH4RcTmI1zuOJzb/o9ClNY/mc33
+         c/8Q==
+X-Gm-Message-State: AOJu0YzwfhqtRStMpLNeSsQBVGN0eZcDwjCY6C2yS3jD5lwQLlWSr+Rn
+	oR0T/zHZFwnWJcPn/Tp+0ag3rDVisqD7/PYRd4o8na5sU5J1vDf1
+X-Google-Smtp-Source: AGHT+IFcGu8aE/dxZgv7uPnpDUh3TdWbybKAzC7VmCgec3NVpN4CjipjFwVL8YiQ/CG26lx/oNGIsw==
+X-Received: by 2002:a17:90b:814:b0:2c9:5c7c:815d with SMTP id 98e67ed59e1d1-2d3dfc8918dmr1232250a91.22.1723760072499;
+        Thu, 15 Aug 2024 15:14:32 -0700 (PDT)
+Received: from [192.168.0.235] ([38.34.87.7])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2d3e2b65a4asm332141a91.11.2024.08.15.15.14.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 15 Aug 2024 15:14:32 -0700 (PDT)
+Message-ID: <79cdae55d4bbe2c9543e9811997251d80e0d6ace.camel@gmail.com>
+Subject: Re: [PATCH bpf-next 2/3] bpf: mark bpf_cast_to_kern_ctx and
+ bpf_rdonly_cast as KF_NOCSR
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
+ daniel@iogearbox.net,  martin.lau@linux.dev, kernel-team@fb.com,
+ yonghong.song@linux.dev
+Date: Thu, 15 Aug 2024 15:14:27 -0700
+In-Reply-To: <CAEf4BzZp-sqfL-r1GfsODO_Hm7QEO+gu-dNMnFN+_+=66RZCeg@mail.gmail.com>
+References: <20240812234356.2089263-1-eddyz87@gmail.com>
+	 <20240812234356.2089263-3-eddyz87@gmail.com>
+	 <CAEf4BzZDvYEB-qF75vpMbbYLN9rFiTegBsxBXvMxq-UsbANRaQ@mail.gmail.com>
+	 <444747beeb37eed1b173bb2fcb9077eaf543e50f.camel@gmail.com>
+	 <CAEf4BzZp-sqfL-r1GfsODO_Hm7QEO+gu-dNMnFN+_+=66RZCeg@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.52.3 (3.52.3-1.fc40) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [RFC PATCH bpf-next 1/6] bpf: Add gen_epilogue to
- bpf_verifier_ops
-To: Eduard Zingerman <eddyz87@gmail.com>, bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>,
- Yonghong Song <yonghong.song@linux.dev>, Amery Hung <ameryhung@gmail.com>,
- kernel-team@meta.com
-References: <20240813184943.3759630-1-martin.lau@linux.dev>
- <20240813184943.3759630-2-martin.lau@linux.dev>
- <19903da56fbfb99e4ad6fdea646aaff885e9fd4d.camel@gmail.com>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Martin KaFai Lau <martin.lau@linux.dev>
-In-Reply-To: <19903da56fbfb99e4ad6fdea646aaff885e9fd4d.camel@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
 
-On 8/14/24 1:56 PM, Eduard Zingerman wrote:
-> On Tue, 2024-08-13 at 11:49 -0700, Martin KaFai Lau wrote:
->> From: Martin KaFai Lau <martin.lau@kernel.org>
->>
->> This patch adds a .gen_epilogue to the bpf_verifier_ops. It is similar
->> to the existing .gen_prologue. Instead of allowing a subsystem
->> to run code at the beginning of a bpf prog, it allows the subsystem
->> to run code just before the bpf prog exit.
->>
->> One of the use case is to allow the upcoming bpf qdisc to ensure that
->> the skb->dev is the same as the qdisc->dev_queue->dev. The bpf qdisc
->> struct_ops implementation could either fix it up or drop the skb.
->> Another use case could be in bpf_tcp_ca.c to enforce snd_cwnd
->> has sane value (e.g. non zero).
->>
->> The epilogue can do the useful thing (like checking skb->dev) if it
->> can access the bpf prog's ctx. Unlike prologue, r1 may not hold the
->> ctx pointer. This patch saves the r1 in the stack if the .gen_epilogue
->> has returned some instructions in the "epilogue_buf".
->>
->> The existing .gen_prologue is done in convert_ctx_accesses().
->> The new .gen_epilogue is done in the convert_ctx_accesses() also.
->> When it sees the (BPF_JMP | BPF_EXIT) instruction, it will be patched
->> with the earlier generated "epilogue_buf". The epilogue patching is
->> only done for the main prog.
->>
->> Signed-off-by: Martin KaFai Lau <martin.lau@kernel.org>
->> ---
-> 
-> Apart from the note below I don't see any obvious problems with this code.
-> 
-> Reviewed-by: Eduard Zingerman <eddyz87@gmail.com>
-> 
-> [...]
-> 
->> --- a/kernel/bpf/verifier.c
->> +++ b/kernel/bpf/verifier.c
->> @@ -19610,15 +19610,37 @@ static int opt_subreg_zext_lo32_rnd_hi32(struct bpf_verifier_env *env,
->>    */
->>   static int convert_ctx_accesses(struct bpf_verifier_env *env)
->>   {
->> +	struct bpf_subprog_info *subprogs = env->subprog_info;
->>   	const struct bpf_verifier_ops *ops = env->ops;
->> -	int i, cnt, size, ctx_field_size, delta = 0;
->> +	int i, cnt, size, ctx_field_size, delta = 0, epilogue_cnt = 0;
->>   	const int insn_cnt = env->prog->len;
->> -	struct bpf_insn insn_buf[16], *insn;
->> +	struct bpf_insn insn_buf[16], epilogue_buf[16], *insn;
->>   	u32 target_size, size_default, off;
->>   	struct bpf_prog *new_prog;
->>   	enum bpf_access_type type;
->>   	bool is_narrower_load;
->>   
->> +	if (ops->gen_epilogue) {
->> +		epilogue_cnt = ops->gen_epilogue(epilogue_buf, env->prog,
->> +						 -(subprogs[0].stack_depth + 8));
->> +		if (epilogue_cnt >= ARRAY_SIZE(epilogue_buf)) {
->> +			verbose(env, "bpf verifier is misconfigured\n");
->> +			return -EINVAL;
->> +		} else if (epilogue_cnt) {
->> +			/* Save the ARG_PTR_TO_CTX for the epilogue to use */
->> +			cnt = 0;
->> +			subprogs[0].stack_depth += 8;
-> 
-> Note: two other places that allocate additional stack
->        (optimize_bpf_loop(), do_misc_fixups())
->        also bump 'env->prog->aux->stack_depth'.
+On Thu, 2024-08-15 at 15:12 -0700, Andrii Nakryiko wrote:
 
-Thanks for pointing it out.
+[...]
 
-In this case, I will stay with calling .gen_epilogue in convert_ctx_accesses().
+> > Here is a pull request for LLVM that lands the feature under
+> > the new bpf_fastcall name: https://github.com/llvm/llvm-project/pull/10=
+1228
+> > I hope that it would be approved today or tomorrow (more like tomorrow)=
+.
+> >=20
+> > Kernel side uses NOCSR in all places.
+> > I can add a first patch to the series, renaming all NOCSR to bpf_fastca=
+ll,
+> > now that it looks like llvm upstream won't object the name.
+>=20
+> Yep, I'd do that. Let's keep terminology consistent throughout.
 
-> 
->> +			insn_buf[cnt++] = BPF_STX_MEM(BPF_DW, BPF_REG_FP, BPF_REG_1,
->> +						      -subprogs[0].stack_depth);
->> +			insn_buf[cnt++] = env->prog->insnsi[0];
->> +			new_prog = bpf_patch_insn_data(env, 0, insn_buf, cnt);
->> +			if (!new_prog)
->> +				return -ENOMEM;
->> +			env->prog = new_prog;
->> +			delta += cnt - 1;
->> +		}
->> +	}
->> +
-> 
-> [...]
-> 
+Ok, will do, thank you.
+
+> I assume you'll also eventually follow up with bpf_helpers_defs.h
+> (there is a script that generates it) change to add that bpf_fastcall
+> attribute for select helpers, right?
+
+Good point.
 
