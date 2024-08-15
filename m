@@ -1,142 +1,145 @@
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB90917C9;
-	Thu, 15 Aug 2024 01:55:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.255
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 234B010F1
+	for <bpf@vger.kernel.org>; Thu, 15 Aug 2024 02:02:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723686960; cv=none; b=rdpHKSP8HIqdRlH+AwqcPVu9ozXr4aIJX8D9JQ9NVfxQ4VT6JIRTwL8TKhITERAFYhCz6nKNvxhUzfc4DLEybtdQWUBiDde1ipYNJ2hZFDTqYK+N0tqiomh0ICJLSKpA2FwqsRTSGCs3SowmcuUVF+ieOl9Akv8q1BBUhNOYA64=
+	t=1723687376; cv=none; b=GUSSFCn2c6Lcbo79Edyef54P4xpZAqY0LlkN3vqOqZXFqsbUPMRF3WcsnZ77xa327NBNv1YnBJcb1IM/6/UtYdilKa0wT0iDfmPZOSd7z9jVIPtD9s63PiRyNOKkVVKfuSCFpzIMDL09EXZCvtpWnyX2fGbtsh7f0qV4ScUEFoo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723686960; c=relaxed/simple;
-	bh=jS9I6vz/mLqWFHm0al0X2/o7/JXJYiIVeFzeJPA0xrs=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=bMO3fDOW++PqAbmDo3hIWj9jbHthtsaNHZ1/PYz4sILxa8EkKAFHPnSbcNKIXy5KdMC/MHVlcELSNx4EHqM9KRFQVsFWggLuQYbGVFTdlwP97/7SUzs1UNfEG3P9CAKq0hTpwWErX7Dtw/R1SLI4kO2yxIfAVEVW0xkIdDfpnqw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.255
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.163.48])
-	by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4Wkp9K1NPHz1T77H;
-	Thu, 15 Aug 2024 09:55:17 +0800 (CST)
-Received: from kwepemd200013.china.huawei.com (unknown [7.221.188.133])
-	by mail.maildlp.com (Postfix) with ESMTPS id BA3DB18006C;
-	Thu, 15 Aug 2024 09:55:47 +0800 (CST)
-Received: from huawei.com (10.67.174.28) by kwepemd200013.china.huawei.com
- (7.221.188.133) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1258.34; Thu, 15 Aug
- 2024 09:55:46 +0800
-From: Liao Chang <liaochang1@huawei.com>
-To: <mhiramat@kernel.org>, <oleg@redhat.com>, <peterz@infradead.org>,
-	<mingo@redhat.com>, <acme@kernel.org>, <namhyung@kernel.org>,
-	<mark.rutland@arm.com>, <alexander.shishkin@linux.intel.com>,
-	<jolsa@kernel.org>, <irogers@google.com>, <adrian.hunter@intel.com>,
-	<kan.liang@linux.intel.com>
-CC: <linux-kernel@vger.kernel.org>, <linux-trace-kernel@vger.kernel.org>,
-	<linux-perf-users@vger.kernel.org>, <bpf@vger.kernel.org>
-Subject: [PATCH v3 0/2] uprobes: Improve scalability by reducing the contention on siglock
-Date: Thu, 15 Aug 2024 01:46:27 +0000
-Message-ID: <20240815014629.2685155-1-liaochang1@huawei.com>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1723687376; c=relaxed/simple;
+	bh=K/bGJmxpTIiuJmmI7TOBjEMsEU9kmHsp+pnWJh3kP9Y=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=UpmiHQt0yJh21DXsj/GvH4zGu/NobjLUd0cXyKrkKJArLCfQzKq7cnFZkgTjCmvGHRGHbcyTLYzajZIwOMX3SNEzEIldP+4MdVd9aD1f+BK4bjx7azxWQE1XKL6FlNMY+50leGF+npkFVEH9xKdTSFpMswj+tgnpZxPXdOxrgKQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mkHiE5H3; arc=none smtp.client-ip=192.198.163.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mkHiE5H3"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1723687375; x=1755223375;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=K/bGJmxpTIiuJmmI7TOBjEMsEU9kmHsp+pnWJh3kP9Y=;
+  b=mkHiE5H3rplywOtA+r+DYONzFySQ7XoJjz/x8nFhiMa4MwD/nX2EZoPn
+   DEBfto5hK4/W2e2uvqLn44OjeTpc+lDF8OD0Zkng/ybVMGHz26wziaYsZ
+   l9T6eKeJfUkuiZCtzzSyj+SCoXkUeMeDc4z5e8sZkD3X5S4tp4R+jycmC
+   LQd1k0d+vO0o2X+yR1rx1wMXDK4ln5vuE7m5UkkiP+LuzMH799WzaaVtt
+   nUSl0kr6DGP/1Md4gRhAq6lYSuhiMT6ZouDIzPOJ/Y7RQY1qN1PhZMUcg
+   oHgYc4pEdsFFDyB0seuEKRC6ohwzRPgA/XP1y9aVBf1Ki3IEKFntr2uZm
+   w==;
+X-CSE-ConnectionGUID: zkHOwJcrRHW8GIlp2sg5wQ==
+X-CSE-MsgGUID: XFPIGPY2SSKmiu+fQ1E/Hw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11164"; a="33347854"
+X-IronPort-AV: E=Sophos;i="6.10,147,1719903600"; 
+   d="scan'208";a="33347854"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Aug 2024 19:02:52 -0700
+X-CSE-ConnectionGUID: tYtrasGiTFK3oZTP9/VDwQ==
+X-CSE-MsgGUID: I9VXDLE5SDKcj/iCvwlTeA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,147,1719903600"; 
+   d="scan'208";a="59367639"
+Received: from lkp-server01.sh.intel.com (HELO 9a732dc145d3) ([10.239.97.150])
+  by fmviesa010.fm.intel.com with ESMTP; 14 Aug 2024 19:02:50 -0700
+Received: from kbuild by 9a732dc145d3 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sePp9-00034q-3A;
+	Thu, 15 Aug 2024 02:02:47 +0000
+Date: Thu, 15 Aug 2024 10:02:33 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jordan Rome <linux@jordanrome.com>, bpf@vger.kernel.org
+Cc: oe-kbuild-all@lists.linux.dev, Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@kernel.org>,
+	Kernel Team <kernel-team@fb.com>, sinquersw@gmail.com
+Subject: Re: [bpf-next v4 1/2] bpf: Add bpf_copy_from_user_str kfunc
+Message-ID: <202408150928.HuDSmPPF-lkp@intel.com>
+References: <20240814004531.352157-1-linux@jordanrome.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- kwepemd200013.china.huawei.com (7.221.188.133)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240814004531.352157-1-linux@jordanrome.com>
 
-The profiling result of BPF selftest on ARM64 platform reveals the
-significant contention on the current->sighand->siglock is the
-scalability bottleneck. The reason is also very straightforward that all
-producer threads of benchmark have to contend the spinlock mentioned to
-resume the TIF_SIGPENDING bit in thread_info that might be removed in
-uprobe_deny_signal().
+Hi Jordan,
 
-The contention on current->sighand->siglock is unnecessary, this series
-remove them thoroughly. I've use the script developed by Andrii in [1]
-to run benchmark. The CPU used was Kunpeng916 (Hi1616), 4 NUMA nodes,
-64 cores@2.4GHz running the kernel on next tree + the optimization in
-[2] for get_xol_insn_slot().
+kernel test robot noticed the following build warnings:
 
-before-opt
-----------
-uprobe-nop      ( 1 cpus):    0.907 ± 0.003M/s  (  0.907M/s/cpu)
-uprobe-nop      ( 2 cpus):    1.676 ± 0.008M/s  (  0.838M/s/cpu)
-uprobe-nop      ( 4 cpus):    3.210 ± 0.003M/s  (  0.802M/s/cpu)
-uprobe-nop      ( 8 cpus):    4.457 ± 0.003M/s  (  0.557M/s/cpu)
-uprobe-nop      (16 cpus):    3.724 ± 0.011M/s  (  0.233M/s/cpu)
-uprobe-nop      (32 cpus):    2.761 ± 0.003M/s  (  0.086M/s/cpu)
-uprobe-nop      (64 cpus):    1.293 ± 0.015M/s  (  0.020M/s/cpu)
+[auto build test WARNING on bpf-next/master]
 
-uprobe-push     ( 1 cpus):    0.883 ± 0.001M/s  (  0.883M/s/cpu)
-uprobe-push     ( 2 cpus):    1.642 ± 0.005M/s  (  0.821M/s/cpu)
-uprobe-push     ( 4 cpus):    3.086 ± 0.002M/s  (  0.771M/s/cpu)
-uprobe-push     ( 8 cpus):    3.390 ± 0.003M/s  (  0.424M/s/cpu)
-uprobe-push     (16 cpus):    2.652 ± 0.005M/s  (  0.166M/s/cpu)
-uprobe-push     (32 cpus):    2.713 ± 0.005M/s  (  0.085M/s/cpu)
-uprobe-push     (64 cpus):    1.313 ± 0.009M/s  (  0.021M/s/cpu)
+url:    https://github.com/intel-lab-lkp/linux/commits/Jordan-Rome/bpf-Add-tests-for-bpf_copy_from_user_str-kfunc/20240814-232043
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
+patch link:    https://lore.kernel.org/r/20240814004531.352157-1-linux%40jordanrome.com
+patch subject: [bpf-next v4 1/2] bpf: Add bpf_copy_from_user_str kfunc
+config: x86_64-buildonly-randconfig-002-20240815 (https://download.01.org/0day-ci/archive/20240815/202408150928.HuDSmPPF-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-12) 11.3.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240815/202408150928.HuDSmPPF-lkp@intel.com/reproduce)
 
-uprobe-ret      ( 1 cpus):    1.774 ± 0.000M/s  (  1.774M/s/cpu)
-uprobe-ret      ( 2 cpus):    3.350 ± 0.001M/s  (  1.675M/s/cpu)
-uprobe-ret      ( 4 cpus):    6.604 ± 0.000M/s  (  1.651M/s/cpu)
-uprobe-ret      ( 8 cpus):    6.706 ± 0.005M/s  (  0.838M/s/cpu)
-uprobe-ret      (16 cpus):    5.231 ± 0.001M/s  (  0.327M/s/cpu)
-uprobe-ret      (32 cpus):    5.743 ± 0.003M/s  (  0.179M/s/cpu)
-uprobe-ret      (64 cpus):    4.726 ± 0.016M/s  (  0.074M/s/cpu)
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202408150928.HuDSmPPF-lkp@intel.com/
 
-after-opt
----------
-uprobe-nop      ( 1 cpus):    0.985 ± 0.002M/s  (  0.985M/s/cpu)
-uprobe-nop      ( 2 cpus):    1.773 ± 0.005M/s  (  0.887M/s/cpu)
-uprobe-nop      ( 4 cpus):    3.304 ± 0.001M/s  (  0.826M/s/cpu)
-uprobe-nop      ( 8 cpus):    5.328 ± 0.002M/s  (  0.666M/s/cpu)
-uprobe-nop      (16 cpus):    6.475 ± 0.002M/s  (  0.405M/s/cpu)
-uprobe-nop      (32 cpus):    4.831 ± 0.082M/s  (  0.151M/s/cpu)
-uprobe-nop      (64 cpus):    2.564 ± 0.053M/s  (  0.040M/s/cpu)
+All warnings (new ones prefixed by >>):
 
-uprobe-push     ( 1 cpus):    0.964 ± 0.001M/s  (  0.964M/s/cpu)
-uprobe-push     ( 2 cpus):    1.766 ± 0.002M/s  (  0.883M/s/cpu)
-uprobe-push     ( 4 cpus):    3.290 ± 0.009M/s  (  0.823M/s/cpu)
-uprobe-push     ( 8 cpus):    4.670 ± 0.002M/s  (  0.584M/s/cpu)
-uprobe-push     (16 cpus):    5.197 ± 0.004M/s  (  0.325M/s/cpu)
-uprobe-push     (32 cpus):    5.068 ± 0.161M/s  (  0.158M/s/cpu)
-uprobe-push     (64 cpus):    2.605 ± 0.026M/s  (  0.041M/s/cpu)
+   kernel/bpf/helpers.c: In function 'bpf_copy_from_user_str':
+>> kernel/bpf/helpers.c:2972:20: warning: suggest explicit braces to avoid ambiguous 'else' [-Wdangling-else]
+    2972 |                 if (ret <= count)
+         |                    ^
 
-uprobe-ret      ( 1 cpus):    1.833 ± 0.001M/s  (  1.833M/s/cpu)
-uprobe-ret      ( 2 cpus):    3.384 ± 0.003M/s  (  1.692M/s/cpu)
-uprobe-ret      ( 4 cpus):    6.677 ± 0.004M/s  (  1.669M/s/cpu)
-uprobe-ret      ( 8 cpus):    6.854 ± 0.005M/s  (  0.857M/s/cpu)
-uprobe-ret      (16 cpus):    6.508 ± 0.006M/s  (  0.407M/s/cpu)
-uprobe-ret      (32 cpus):    5.793 ± 0.009M/s  (  0.181M/s/cpu)
-uprobe-ret      (64 cpus):    4.743 ± 0.016M/s  (  0.074M/s/cpu)
 
-Above benchmark results demonstrates a obivious improvement in the
-scalability of trig-uprobe-nop and trig-uprobe-push, the peak throughput
-of which are from 4.5M/s to 6.4M/s and 3.3M/s to 5.1M/s individually.
+vim +/else +2972 kernel/bpf/helpers.c
 
-v3->v2:
-Renaming the flag in [2/2], s/deny_signal/signal_denied/g.
-
-v2->v1:
-Oleg pointed out the _DENY_SIGNAL will be replaced by _ACK upon the
-completion of singlestep which leads to handle_singlestep() has no
-chance to restore the removed TIF_SIGPENDING [3] and some case in
-question. So this revision proposes to use a flag in uprobe_task to
-track the denied TIF_SIGPENDING instead of new UPROBE_SSTEP state.
-
-[1] https://lore.kernel.org/all/20240731214256.3588718-1-andrii@kernel.org
-[2] https://lore.kernel.org/all/20240727094405.1362496-1-liaochang1@huawei.com
-[3] https://lore.kernel.org/all/20240801082407.1618451-1-liaochang1@huawei.com
-
-Liao Chang (2):
-  uprobes: Remove redundant spinlock in uprobe_deny_signal()
-  uprobes: Remove the spinlock within handle_singlestep()
-
- include/linux/uprobes.h |  1 +
- kernel/events/uprobes.c | 10 +++++-----
- 2 files changed, 6 insertions(+), 5 deletions(-)
+  2941	
+  2942	/**
+  2943	 * bpf_copy_from_user_str() - Copy a string from an unsafe user address
+  2944	 * @dst:             Destination address, in kernel space.  This buffer must be at
+  2945	 *                   least @dst__szk bytes long.
+  2946	 * @dst__szk:        Maximum number of bytes to copy, including the trailing NUL.
+  2947	 * @unsafe_ptr__ign: Source address, in user space.
+  2948	 * @flags:           The only supported flag is BPF_ZERO_BUFFER
+  2949	 *
+  2950	 * Copies a NUL-terminated string from userspace to BPF space. If user string is
+  2951	 * too long this will still ensure zero termination in the dst buffer unless
+  2952	 * buffer size is 0.
+  2953	 *
+  2954	 * If BPF_ZERO_BUFFER flag is set, memset the tail of @dst to 0 on success.
+  2955	 */
+  2956	__bpf_kfunc int bpf_copy_from_user_str(void *dst, u32 dst__szk, const void __user *unsafe_ptr__ign, u64 flags)
+  2957	{
+  2958		int ret;
+  2959		int count;
+  2960	
+  2961		if (unlikely(!dst__szk))
+  2962			return 0;
+  2963	
+  2964		count = dst__szk - 1;
+  2965		if (unlikely(!count)) {
+  2966			((char *)dst)[0] = '\0';
+  2967			return 1;
+  2968		}
+  2969	
+  2970		ret = strncpy_from_user(dst, unsafe_ptr__ign, count);
+  2971		if (ret >= 0) {
+> 2972			if (ret <= count)
+  2973				if (flags & BPF_ZERO_BUFFER)
+  2974					memset((char *)dst + ret, 0, dst__szk - ret);
+  2975				else
+  2976					((char *)dst)[ret] = '\0';
+  2977			ret++;
+  2978		}
+  2979	
+  2980		return ret;
+  2981	}
+  2982	
 
 -- 
-2.34.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
