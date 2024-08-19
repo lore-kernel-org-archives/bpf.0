@@ -1,150 +1,93 @@
-Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2E3D1DC481
-	for <bpf@vger.kernel.org>; Mon, 19 Aug 2024 22:42:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1383C158DA9;
+	Mon, 19 Aug 2024 22:45:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724107325; cv=none; b=LKy5kc6DGMWyq7Gt7JEYR7xaL8xWJH79bvOp4coSS/V+H13ljiortf3PEwlYsjIOgY0iR8+dwQtMVzWXNfI9e+aX3M0OH5+BrDL64wd43yjWSQcgf5mWdh2uU5m+NQXCZ9fR7mgh7vne80q8sK1KPgY3w77Sp5cJ1FdczHvPAsA=
+	t=1724107552; cv=none; b=lyGdXIjrlOSK4XqAHpXuUDC1fSJmAjaohJxrKkZp8QAnN3wLK9xhl/fHjpyCuvkYgSBq0pWiS8G+A26iHOfGJvygaBh7OW16mwHaBpnpTQhkvb3yYxmVARQzdF2MCdJF0gSqMAouONNKxlGBFcLLEt04Hax4TvWaGt1wNbX0t7w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724107325; c=relaxed/simple;
-	bh=jw0v/UB0QV9yq8RLFz0CsyLK7aYBKZz/RGFqG5G2pxA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=YhIdFdJXZTsWziUnxunllNzqXpK89sENd9yMX1vZFQZAyM1hXhNq9epkfHELC+vnS5eJZHxu0Oj+aCLN6+p1EMJWE4i5MxH8ZLp8IY1xPjHBdZR3UPknuJcAMm6PUEEFQz8xGJNn5GVA5HSDqq8iOd2wo5f5mGGISeulHJosJmk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OWM2k9/L; arc=none smtp.client-ip=209.85.215.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1724107552; c=relaxed/simple;
+	bh=J5q5uBzN4noHKYqi53b0GrvoaGSBGa+HJHli2/GUX5Q=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=tyNzV+5yF2F9hRTm5bWRCreLgBl+/4RXSBNwK6RlBqZRtjkRliCi9a/UiJYDIXwNFSk0ee5v5EY2x+niahePhlPOgFW3oLO49C+YOpzjAI91xq7swM4aFJfKPUl1P2AFMys8nM0wFujT6et/1+OIonbqSsqPhBMFFaYyKQrgF48=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SROf+HJO; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OWM2k9/L"
-Received: by mail-pg1-f179.google.com with SMTP id 41be03b00d2f7-7a1c7857a49so2841241a12.1
-        for <bpf@vger.kernel.org>; Mon, 19 Aug 2024 15:42:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1724107323; x=1724712123; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PAVM9iqrWGjPqnfO8Ys7mOW1MlLbVISkYO7K/L6iqKk=;
-        b=OWM2k9/LuHeF1KMKiQvvUW7MI54cdAjmc/X412DqkMuhfjtsKSl8CAfQjMwQ+mKuxN
-         +8lxcXIH7qvHAYQ6t8beaSq/Geh2noxyzoIfBVTy8xwErVKAypbfTmufQMtAOXRuUXQ+
-         0+WrkbB3bI/clkMhSRUW/24kSc7xkVvh0nerSJ9A+TyqnfEZf+ptBZQVUt2HBACzzive
-         wux0RyhkeDDyFAUONB7bOztVY0C2TNM1hlxctoJQb2tHGAUi8U7Jaq/A68KxWUa8r/Qm
-         PWriKOSWBgix0jDPxE17n95wi1129UUp6S4tTQxovAX6okwmI/oXFe3VL3yq/PBd+LQ/
-         gViA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724107323; x=1724712123;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=PAVM9iqrWGjPqnfO8Ys7mOW1MlLbVISkYO7K/L6iqKk=;
-        b=cAtOaFg1mDqo3gw1EDTs3lrxrKHAGWBEMigEyvF/7wzkm0/BMQkGz6ij6piZ8AvB+e
-         OrFRuxiS9kJIazYHsDOqcAUpfZiSjgl3uP0JZCTGsX0m3g4y8Huj/3iJa4zy4ZwwLTC/
-         dm6GMJOxLzOnLf1SJpEP4j2PynVxsJkRUcIei5iTNj68Jto4NlugqzG/f5/pfTKoC9dO
-         jUN1OtebVHP9DUW4OaZnWl+/9vdtpoa16xIGCVYE8lJ+IrstpKD246YKnvSvPVKTX6Bs
-         2PS64KHvRFfC5ATOGd9S9ojYM6TY0RGj3Jv2iLw8x39qHO9HvXEsmCt95vA3kDTnOWKe
-         d6/Q==
-X-Gm-Message-State: AOJu0YyYU8rhfL6yPtBbn00yNXsqWd9Oj/ZtqPFnewcLT3loRgrdcEZ4
-	B7WyNEeMUoyIf5LFCPCiqzaj1Hr8NAc4x5vr+7pf28Ii21XyOHQqHOQXBV6/pQ+OudvEBsRR5D6
-	SAewjyruAA4Lk/tjkpbo0oVEcn58=
-X-Google-Smtp-Source: AGHT+IEgybSLbLmzhuRqii0QUflOUoAHV9reRlt/hlqWSt5/XIG1MhaenNhLfn7/Z0MqMmhLzjYcBqvmaqyLtWKEBn8=
-X-Received: by 2002:a17:90a:f001:b0:2d3:c87e:b888 with SMTP id
- 98e67ed59e1d1-2d3e00f10bamr11292057a91.27.1724107322931; Mon, 19 Aug 2024
- 15:42:02 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SROf+HJO"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2C33C32782;
+	Mon, 19 Aug 2024 22:45:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1724107551;
+	bh=J5q5uBzN4noHKYqi53b0GrvoaGSBGa+HJHli2/GUX5Q=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=SROf+HJOW26xj6Eb+qvALMO23ofHkbMQrVuGD3hxiBBOOf8QwTZfzJfrwfxf+r6E9
+	 wvoW3HyjL7Vl7oKFURngKHRPu97VZpVepVHUruLzXrsqmXaGWayRKkzHhVvMlP0HJz
+	 gByRQYGWCnTlYf1PNzBfYOzjxHh9SYtiVHR4/JD5r/zCfkpyPjN3YRM4W56FElDu7b
+	 1Q1t/oB2/EY13LwPzw2uQWwAQzaAymTW20GIvRjXkYHIGrCkPVEapoOmbk1OTEL8OA
+	 t22Zqjorjg2+Sy9rlyf8eXrW5NLJY6VtwY1WrPs0+cQYIwBjnQNSt2fHyeokmG7VIr
+	 7nav8hvllxaCA==
+Date: Mon, 19 Aug 2024 15:45:49 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Mina Almasry <almasrymina@google.com>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org,
+ linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+ sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+ linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ bpf@vger.kernel.org, linux-media@vger.kernel.org,
+ dri-devel@lists.freedesktop.org, "David S. Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Donald
+ Hunter <donald.hunter@gmail.com>, Jonathan Corbet <corbet@lwn.net>, Richard
+ Henderson <richard.henderson@linaro.org>, Ivan Kokshaysky
+ <ink@jurassic.park.msu.ru>, Matt Turner <mattst88@gmail.com>, Thomas
+ Bogendoerfer <tsbogend@alpha.franken.de>, "James E.J. Bottomley"
+ <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>,
+ Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer
+ <hawk@kernel.org>, Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven
+ Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Arnd Bergmann
+ <arnd@arndb.de>, Steffen Klassert <steffen.klassert@secunet.com>, Herbert
+ Xu <herbert@gondor.apana.org.au>, David Ahern <dsahern@kernel.org>, Willem
+ de Bruijn <willemdebruijn.kernel@gmail.com>, Shuah Khan <shuah@kernel.org>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
+ <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, Sumit
+ Semwal <sumit.semwal@linaro.org>, Christian =?UTF-8?B?S8O2bmln?=
+ <christian.koenig@amd.com>, Bagas Sanjaya <bagasdotme@gmail.com>, Christoph
+ Hellwig <hch@infradead.org>, Nikolay Aleksandrov <razor@blackwall.org>,
+ Taehee Yoo <ap420073@gmail.com>, Pavel Begunkov <asml.silence@gmail.com>,
+ David Wei <dw@davidwei.uk>, Jason Gunthorpe <jgg@ziepe.ca>, Yunsheng Lin
+ <linyunsheng@huawei.com>, Shailend Chand <shailend@google.com>, Harshitha
+ Ramamurthy <hramamurthy@google.com>, Shakeel Butt <shakeel.butt@linux.dev>,
+ Jeroen de Borst <jeroendb@google.com>, Praveen Kaligineedi
+ <pkaligineedi@google.com>
+Subject: Re: [PATCH net-next v20 00/13] Device Memory TCP
+Message-ID: <20240819154549.3df4589b@kernel.org>
+In-Reply-To: <CAHS8izMqcLnmo9792FPkkXPQSBWSjFGO+QHhkou=PaDHLwtsRw@mail.gmail.com>
+References: <20240819035448.2473195-1-almasrymina@google.com>
+	<CAHS8izMqcLnmo9792FPkkXPQSBWSjFGO+QHhkou=PaDHLwtsRw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240818002350.1401842-1-linux@jordanrome.com> <20240818002350.1401842-2-linux@jordanrome.com>
-In-Reply-To: <20240818002350.1401842-2-linux@jordanrome.com>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Mon, 19 Aug 2024 15:41:50 -0700
-Message-ID: <CAEf4BzZD0O835HqkJ7vbHHGtJdab3JpXRSsiPF1dA0q=A5tgpg@mail.gmail.com>
-Subject: Re: [bpf-next v6 2/2] bpf: Add tests for bpf_copy_from_user_str kfunc
-To: Jordan Rome <linux@jordanrome.com>
-Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@kernel.org>, Kernel Team <kernel-team@fb.com>, sinquersw@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Sat, Aug 17, 2024 at 5:24=E2=80=AFPM Jordan Rome <linux@jordanrome.com> =
-wrote:
->
-> This adds tests for both the happy path and
-> the error path.
->
-> Signed-off-by: Jordan Rome <linux@jordanrome.com>
-> ---
->  .../selftests/bpf/prog_tests/attach_probe.c   |  8 ++-
->  .../selftests/bpf/prog_tests/read_vsyscall.c  |  1 +
->  .../selftests/bpf/progs/read_vsyscall.c       |  9 ++-
->  .../selftests/bpf/progs/test_attach_probe.c   | 57 ++++++++++++++++++-
->  4 files changed, 68 insertions(+), 7 deletions(-)
->
+On Mon, 19 Aug 2024 16:38:32 -0400 Mina Almasry wrote:
+> Looks like in this iteration I resolved the previous test failure, but
+> introduced a build regression with certain configs:
+> 
+> ld: vmlinux.o: in function `netdev_rx_queue_restart':
+> (.text+0x6a4133): undefined reference to `page_pool_check_memory_provider'
+> make[3]: *** [../scripts/Makefile.vmlinux:34: vmlinux] Error 1
+> make[2]: *** [/home/kunit/testing/Makefile:1156: vmlinux] Error 2
+> make[1]: *** [/home/kunit/testing/Makefile:224: __sub-make] Error 2
+> make: *** [Makefile:224: __sub-make] Error 2
+> 
+> Looks like I'm not build testing with enough config variations (in
+> this case CONFIG_NET=y but CONFIG_PAGE_POOL=n). I've fixed the issue
+> locally and added a test to my presubmit checks with this config and a
+> couple of risky others. Sorry about that.
 
-Thanks for adding more test cases! See a small nit below, but otherwise LGT=
-M
-
-Acked-by: Andrii Nakryiko <andrii@kernel.org>
-
-[...]
-
->
-> +static __always_inline bool verify_sleepable_user_copy_str(void)
-> +{
-> +       int ret;
-> +       char data_long[20];
-> +       char data_long_pad[20];
-> +       char data_long_err[20];
-> +       char data_short[4];
-> +       char data_short_pad[4];
-> +
-> +       ret =3D bpf_copy_from_user_str(data_short, sizeof(data_short), us=
-er_ptr, 0);
-> +
-> +       if (bpf_strncmp(data_short, 4, "tes\0") !=3D 0 || ret !=3D 4)
-> +               return false;
-> +
-> +       ret =3D bpf_copy_from_user_str(data_short_pad, sizeof(data_short_=
-pad), user_ptr, BPF_F_PAD_ZEROS);
-> +
-> +       if (bpf_strncmp(data_short, 4, "tes\0") !=3D 0 || ret !=3D 4)
-> +               return false;
-> +
-> +       ret =3D bpf_copy_from_user_str(data_long, sizeof(data_long), user=
-_ptr, 0);
-> +
-> +       if (bpf_strncmp(data_long, 10, "test_data\0") !=3D 0 || ret !=3D =
-10)
-> +               return false;
-> +
-> +       ret =3D bpf_copy_from_user_str(data_long_pad, sizeof(data_long_pa=
-d), user_ptr, BPF_F_PAD_ZEROS);
-> +
-> +       if (bpf_strncmp(data_long_pad, 10, "test_data\0") !=3D 0 || ret !=
-=3D 10 || data_long_pad[19] !=3D '\0')
-> +               return false;
-> +
-> +       ret =3D bpf_copy_from_user_str(data_long_err, sizeof(data_long_er=
-r), (void *)data_long, BPF_F_PAD_ZEROS);
-> +
-> +       if (ret > 0 || data_long_err[9] !=3D '\0')
-
-shouldn't the condition be something along the data_long_err[0] !=3D
-'\0' || data_long_err[19] !=3D '\0' to check that the entire buffer is
-zeroed out?
-
-> +               return false;
-> +
-> +       ret =3D bpf_copy_from_user_str(data_long, sizeof(data_long), user=
-_ptr, 2);
-> +
-> +       if (ret !=3D -EINVAL)
-> +               return false;
-> +
-> +       return true;
-> +}
-> +
-
-[...]
+Happens! Please share v21 later today I'll skip reviewing this one.
