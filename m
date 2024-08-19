@@ -1,148 +1,99 @@
-Received: from mail-il1-f179.google.com (mail-il1-f179.google.com [209.85.166.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-172.mta1.migadu.com (out-172.mta1.migadu.com [95.215.58.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 204091DD3AE
-	for <bpf@vger.kernel.org>; Mon, 19 Aug 2024 22:30:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29538EEA5
+	for <bpf@vger.kernel.org>; Mon, 19 Aug 2024 22:30:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724106613; cv=none; b=GjhYNFkp7NNT0s0KytUp+I3Hi4BvAPCtS1VOe6W9TCVs4Xjv7hbg5ht5HJAB0iqJcpbE1teQy2ezYWtqCIKjkBNmdr32bRZ3tPa9isCTCMglFXheMmYcP+33pKRI1FVYoknUe/kPJaE4YVKaSash00LV7bEax4CX/zmPGUO3ilY=
+	t=1724106619; cv=none; b=KSSaBs8vesg1tgH+YAqOc/nhmcfQzvbKbLN3c/akHddlohNSdzhsLEQK0ChZM+l6rFGJr059vEbjqTN4Q/xY4bXWZXZnnXwXwwQJzrFZA+01Eb6MaAAxJSyH8gpVm0ueeaeprL+EmO1Xq8rnlGe6A3wJMRCnPvaHhVqszqnicSw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724106613; c=relaxed/simple;
-	bh=WxJvpJWmn+n55gzSFW7Z7omb+ZRGuqCH2HJpCqZQyD0=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=NDjtwKM+FWRZmXtvCQ7jPMAno98onG9aMDhKCLbhBWUC5k9PmnegCYDFHOM4jeHpSncTb8S06ViNgjtQN96D8YuEEVayrT8unAZmwbw8DHeDRAczGUz9EBqUa9izvQNqUmk2FhudDeXD31mLd/Bl1s/3aoqlr97IBG2MfjQqXc8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=obs.cr; spf=none smtp.mailfrom=obs.cr; dkim=pass (2048-bit key) header.d=obs-cr.20230601.gappssmtp.com header.i=@obs-cr.20230601.gappssmtp.com header.b=xgtwyG9s; arc=none smtp.client-ip=209.85.166.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=obs.cr
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=obs.cr
+	s=arc-20240116; t=1724106619; c=relaxed/simple;
+	bh=x2rPivRJRngqkhZMjXuu0Kp073R3j5Aj+Cof0OPOOO0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Nyn+YN6iCJVzmOt6m/BxlTTREoEq6vVOybbF3owdRot+UZ2BcVH2HC/yZeAl4KC36PKtsEq/RxyKhTDcl9tZ/JTK/xEHS91h+vGSh7LhMWvye9XXZAD8+AOEe3d+Ki/G+Sox/i0UZlP+hzdCTFhEOcYbcPki4gSfG52dOT5fQYw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=D3243Jpv; arc=none smtp.client-ip=95.215.58.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=obs-cr.20230601.gappssmtp.com header.i=@obs-cr.20230601.gappssmtp.com header.b="xgtwyG9s"
-Received: by mail-il1-f179.google.com with SMTP id e9e14a558f8ab-39d47a9ffb9so7948115ab.1
-        for <bpf@vger.kernel.org>; Mon, 19 Aug 2024 15:30:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=obs-cr.20230601.gappssmtp.com; s=20230601; t=1724106611; x=1724711411; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=zlBO7op9yV0iOsawm3E4xQTL5C6nZ1QNeejEc0p0YVM=;
-        b=xgtwyG9sgbBO1Z3L9ngSt0qIr14L3ImzupMMbWAgxvfkem5gK1SRsYFjHU7IDGkCmt
-         GmDX16anIBW8IUvAAgSbN2a3tOVOWPMhdimEO8zqbmIol+3PNIX5hzDUspcXXN/XPz5J
-         wui11xJx6a5xq1NtcbbiqCDMtOnHiofygLL/OehAo9gcBnS3y/NApoLOYG1mb8FcrrnA
-         KZ97RMCnyiwYgsYTsKzCZiszmJghkTtiL6k2LlVMsaiqZUusX4c9rzSOW23TAXIXs5ZJ
-         Y0mJnI1tksCOILKFG3GVI0vzSMr4Zh3uKnLeRbOVCOTy1TGm1Ny7NGJKvgJRauAeC/lX
-         4bcw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724106611; x=1724711411;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=zlBO7op9yV0iOsawm3E4xQTL5C6nZ1QNeejEc0p0YVM=;
-        b=ZYe4cEVBKgyO6BqcUKXENrrkDC0zr/FxrDllMCT0Xg/kOyXhL2romytGQkcECRxyom
-         us0PE2sFP4Drod8Ftmmhh4eW4yHjDxA72J/ManTRRc6W0HtPKCW0Mp3pwfWP4/ujISlq
-         yUEYdi3eE8r0KGVm8tzlHLYREcalsLO8Io/xsvZyiDzjfTdK0uoOeUiB8XisMvSHQ2No
-         5PwFOvw42mEE3NsDwCUCSLwfB2InR54BHw+jOb3hz3pDbGL3G4+Qs7uQcvlF1vdvJCBs
-         Fwsw9qw3P28qIPh0/Io3X/aeRxb5OjcrIed/uJOV8slkEDyH83mKYOWtbTgcphIhUt1X
-         xrRA==
-X-Gm-Message-State: AOJu0YwF9zC8HR/VhlrnOof5jzCA0aT+hvlz8xn6Ufelc9/pUhX0M0yg
-	8AgsbZJxf5SuSE1O6GE2oI3lypXtr/0ha2rLmn8INV0i1hEJmgPsUdsNCJ8qktVoTNOHwlYiAh6
-	q
-X-Google-Smtp-Source: AGHT+IHmnzdQB1KFZi18yDin1p4609NZfm5womPqkarl0qMMm62alm/L7gBbuedvrFFFA4ECQ5e2eg==
-X-Received: by 2002:a05:6e02:1d8e:b0:39d:189a:edf6 with SMTP id e9e14a558f8ab-39d26d64478mr107657435ab.22.1724106610652;
-        Mon, 19 Aug 2024 15:30:10 -0700 (PDT)
-Received: from ininer.rhod.uc.edu ([129.137.96.15])
-        by smtp.gmail.com with ESMTPSA id e9e14a558f8ab-39d1ec03069sm37092255ab.32.2024.08.19.15.30.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Aug 2024 15:30:10 -0700 (PDT)
-From: Will Hawkins <hawkinsw@obs.cr>
-To: bpf@vger.kernel.org,
-	bpf@ietf.org
-Cc: Will Hawkins <hawkinsw@obs.cr>
-Subject: [PATCH] docs/bpf: Add constant values for linkages
-Date: Mon, 19 Aug 2024 18:30:06 -0400
-Message-ID: <20240819223008.469271-1-hawkinsw@obs.cr>
-X-Mailer: git-send-email 2.45.2
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="D3243Jpv"
+Message-ID: <b3887fe5-6093-4829-ab4d-025dc05aff9d@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1724106615;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=/NodTxGDId7JU3DhkQ9iiKn6yZf8ysf/nnFFbJgI+Pk=;
+	b=D3243JpvvfbB89k6UEz6ePArZ/P1hW2bh2VCR+Z+LXYMIZj1ltU1kM97O59aL5bHLFg0Tr
+	F3do1oQ9HgRMm82f3Z6xAU0ofcElBS3pV0g/bIuEOS7LgXj6BMhN2svPiXcQjw1TBJf7v4
+	A4iej7k+JS/toSoYVXfoFHieLYyDIHI=
+Date: Mon, 19 Aug 2024 15:30:11 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Subject: Re: [RFC PATCH bpf-next 3/6] selftests/test: test gen_prologue and
+ gen_epilogue
+To: Eduard Zingerman <eddyz87@gmail.com>
+Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>,
+ Yonghong Song <yonghong.song@linux.dev>, Amery Hung <ameryhung@gmail.com>,
+ kernel-team@meta.com, bpf@vger.kernel.org
+References: <20240813184943.3759630-1-martin.lau@linux.dev>
+ <20240813184943.3759630-4-martin.lau@linux.dev>
+ <b9fc529dbe218419820f1055fed6567e2290201c.camel@gmail.com>
+ <0625a342-887c-4c27-a7a7-9f0eadc31b9d@linux.dev>
+ <92f724366153f2fbd7d9e92b6ba6f82408970dd7.camel@gmail.com>
+ <2e86ab640b6acbe8e21af826ccfeeac6c055bc69.camel@gmail.com>
+ <13f4dee5-845a-4eae-95e3-27c340261098@linux.dev>
+ <82a85e54945e6832f5eed24b59dd8950941345c5.camel@gmail.com>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Martin KaFai Lau <martin.lau@linux.dev>
+In-Reply-To: <82a85e54945e6832f5eed24b59dd8950941345c5.camel@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-Make the values of the symbolic constants that define the valid linkages
-for functions and variables explicit.
+On 8/16/24 1:27 PM, Eduard Zingerman wrote:
+> On Fri, 2024-08-16 at 10:27 -0700, Martin KaFai Lau wrote:
+> 
+> [...]
+> 
+>> Thanks for checking!
+>>
+>> I think the bpf_map__attach_struct_ops() is not done such that st_ops is NULL.
+>>
+>> It probably needs another tag in the SEC("syscall") program to tell which st_ops
+>> map should be attached first before executing the "syscall" program.
+>>
+>> I like the idea of using the __xlated macro to check the patched prologue, ctx
+>> pointer saving, and epilogue. I will add this test in the respin. I will keep
+>> the current way in this patch to exercise syscall and the ops/func in st_ops for
+>> now. We can iterate on it later and use it as an example on what supports are
+>> needed on the test_loader side for st_ops map testing. On the repetitive-enough
+>> to worth test_loader refactoring side, I suspect some of the existing st_ops
+>> load-success/load-failure tests may be worth to look at also. Thoughts?
+> 
+> You are correct, this happens because bpf_map__attach_struct_ops() is
+> not called. Fortunately, the change for test_loader.c is not very big.
+> Please check two patches in the attachment.
 
-Signed-off-by: Will Hawkins <hawkinsw@obs.cr>
----
- Documentation/bpf/btf.rst | 44 +++++++++++++++++++++++++++++++++++----
- 1 file changed, 40 insertions(+), 4 deletions(-)
+The patch looks good. I tried and it works. I will add it in the next respin.
+That will help to cover the __xlated check on the instructions generated by 
+gen_pro/epilogue and also check the syscall return value for the common case.
 
-diff --git a/Documentation/bpf/btf.rst b/Documentation/bpf/btf.rst
-index 257a7e1cdf5d..cce03f1e552a 100644
---- a/Documentation/bpf/btf.rst
-+++ b/Documentation/bpf/btf.rst
-@@ -368,7 +368,7 @@ No additional type data follow ``btf_type``.
-   * ``info.kind_flag``: 0
-   * ``info.kind``: BTF_KIND_FUNC
-   * ``info.vlen``: linkage information (BTF_FUNC_STATIC, BTF_FUNC_GLOBAL
--                   or BTF_FUNC_EXTERN)
-+                   or BTF_FUNC_EXTERN - see :ref:`BTF_Function_Linkage_Constants`)
-   * ``type``: a BTF_KIND_FUNC_PROTO type
- 
- No additional type data follow ``btf_type``.
-@@ -424,9 +424,9 @@ following data::
-         __u32   linkage;
-     };
- 
--``struct btf_var`` encoding:
--  * ``linkage``: currently only static variable 0, or globally allocated
--                 variable in ELF sections 1
-+``btf_var.linkage`` may take the values: BTF_VAR_STATIC (for a static variable),
-+or BTF_VAR_GLOBAL_ALLOCATED (for a globally allocated variable stored in ELF sections 1) -
-+see :ref:`BTF_Var_Linkage_Constants`.
- 
- Not all type of global variables are supported by LLVM at this point.
- The following is currently available:
-@@ -549,6 +549,42 @@ The ``btf_enum64`` encoding:
- If the original enum value is signed and the size is less than 8,
- that value will be sign extended into 8 bytes.
- 
-+2.3 Constant Values
-+-------------------
-+
-+.. _BTF_Function_Linkage_Constants:
-+
-+2.3.1 Function Linkage Constant Values
-+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-+.. list-table::
-+   :widths: 1 1
-+   :header-rows: 1
-+
-+   * - Name
-+     - Value
-+   * - ``BTF_FUNC_STATIC``
-+     - ``0``
-+   * - ``BTF_FUNC_GLOBAL``
-+     - ``1``
-+   * - ``BTF_FUNC_EXTERN``
-+     - ``2``
-+
-+.. _BTF_Var_Linkage_Constants:
-+
-+2.3.2 Variable Linkage Constant Values
-+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-+.. list-table::
-+   :widths: 1 1
-+   :header-rows: 1
-+
-+   * - Name
-+     - Value
-+   * - ``BTF_VAR_STATIC``
-+     - ``0``
-+   * - ``BTF_VAR_GLOBAL_ALLOCATED``
-+     - ``1``
-+
-+
- 3. BTF Kernel API
- =================
- 
--- 
-2.45.2
+Except the tail_call test which needs to load a struct_ops program that does 
+bpf_tail_call and another struct_ops program that was used in the prog_array. 
+These two struct_ops programs need to be used in two separate struct_ops maps to 
+be able to load. The way that test_loader attaching all maps in your patch will 
+fail because bpf_testmod does not support attaching more than one struct_ops map.
 
+I don't want to further polish on the tail_call testing side. I will stay with 
+the current way to do the tail_call test which also allows the more regular 
+trampoline "unsigned long long *ctx" for the main struct_ops prog and also 
+allows using ctx_in in the SEC("syscall") prog.
+
+Thanks.
