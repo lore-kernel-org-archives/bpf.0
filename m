@@ -1,179 +1,220 @@
-Received: from mail.ietf.org (mail.ietf.org [50.223.129.194])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86AD71DC46C
-	for <bpf@vger.kernel.org>; Mon, 19 Aug 2024 22:35:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=50.223.129.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAF491DC481
+	for <bpf@vger.kernel.org>; Mon, 19 Aug 2024 22:42:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724106946; cv=none; b=tSQ3KyCuOwBXa13hnr+Lv427W31QJ7JdyoacOnPIHpcy4NQOtovGCVXs22ZQW3qnBp8yGsgj34UCuFoY4xAr7iYirflSgLlj7pBTcAZ+fdDyZdgoL/xgFPoHeaMcNGVQ8BhUd+HF3xIsT8L8eTpopaA+Rcm+PmvCT6eKbnvptUk=
+	t=1724107322; cv=none; b=AQgB1+QGXBVoE+EI9FYfTHuXD5X5lA5wV0ptrMsZnTm3+Fv+Ee+/2GtyJpPCcwxtkVDKfyIkIO4WINKp3rH7etjczjBPLteIdxl3hsDTFiVl5CEF1IVo+AuobIijnRw9wfP+KGty/VEU9arQbLiAc6akx9TQAb5y9iEmVRQzf0c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724106946; c=relaxed/simple;
-	bh=KTj2x9vP72woXYiQ69HNoeC+ADn9T1Xw8b/3iEewehc=;
-	h=From:To:Date:Message-ID:MIME-Version:CC:Subject:Content-Type; b=IHqweOErJWjCVgbExHpithtg5Q+lMjeNK9HHhSQ27hDT5dcvcrv1eVmW7qJ8kMI4Xn45WrONgZ0Or8YXHcKYOKYz6G+3jw7rjPVyYURCMIWkkpeoBTrgm7+II2o38HYpeutlLQnPMSHAhjOpJPpKfVor7ZRVSw0a8YsDegp4k5M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=obs.cr; spf=pass smtp.mailfrom=ietf.org; dkim=pass (1024-bit key) header.d=ietf.org header.i=@ietf.org header.b=qhljrB5C; dkim=pass (1024-bit key) header.d=ietf.org header.i=@ietf.org header.b=qhljrB5C; dkim=fail (2048-bit key) header.d=obs-cr.20230601.gappssmtp.com header.i=@obs-cr.20230601.gappssmtp.com header.b=cYhWgYG6 reason="signature verification failed"; arc=none smtp.client-ip=50.223.129.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=obs.cr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ietf.org
+	s=arc-20240116; t=1724107322; c=relaxed/simple;
+	bh=GB2mSMF5JUl8l6KpX26zyfq+TAKh2H67rFXNbhb7mNQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=VUCis3QjTwlrztFMLf//WWD9HygAvQKIo4jn33Z6+n3KPtSmW3eKGyVvQV2ZQqrnu8PPlGEHEoIyzmlOF/Hxq/tkzbpc6skGOccja8mMXOHddWfZS0BjjPMFmsgNG6qUofFcsKrp66fkizp3Wjm3GeS2x/SPY8U4QfiWCghTVek=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Vh6p91+V; arc=none smtp.client-ip=209.85.216.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ietf.org header.i=@ietf.org header.b="qhljrB5C";
-	dkim=pass (1024-bit key) header.d=ietf.org header.i=@ietf.org header.b="qhljrB5C";
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=obs-cr.20230601.gappssmtp.com header.i=@obs-cr.20230601.gappssmtp.com header.b="cYhWgYG6"
-Received: from ietfa.amsl.com (localhost [IPv6:::1])
-	by ietfa.amsl.com (Postfix) with ESMTP id CA332C18DB91
-	for <bpf@vger.kernel.org>; Mon, 19 Aug 2024 15:30:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ietf.org; s=ietf1;
-	t=1724106619; bh=KTj2x9vP72woXYiQ69HNoeC+ADn9T1Xw8b/3iEewehc=;
-	h=From:To:Date:CC:Subject:List-Id:List-Archive:List-Help:List-Owner:
-	 List-Post:List-Subscribe:List-Unsubscribe;
-	b=qhljrB5Cqo7cgdygIPVgcvW6mku00X7N74LX+I3ccfnKTWBuKhFhEd4sK9Iffu3i5
-	 auQet/UQ2NuIjmfGfiS91FyvHlKw/lyaDcGgolnngJmW3+LKsFjc9iuRdEJCd+kql1
-	 kRopihcghatBPxj4GMVwkgs511ln2iPZh3mn13ZI=
-X-Mailbox-Line: From bpf-bounces+bpf=vger.kernel.org@ietf.org  Mon Aug 19 15:30:19 2024
-Received: from ietfa.amsl.com (localhost [IPv6:::1])
-	by ietfa.amsl.com (Postfix) with ESMTP id ABB57C180B4D
-	for <bpf@vger.kernel.org>; Mon, 19 Aug 2024 15:30:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ietf.org; s=ietf1;
-	t=1724106619; bh=KTj2x9vP72woXYiQ69HNoeC+ADn9T1Xw8b/3iEewehc=;
-	h=From:To:Date:CC:Subject:List-Id:List-Archive:List-Help:List-Owner:
-	 List-Post:List-Subscribe:List-Unsubscribe;
-	b=qhljrB5Cqo7cgdygIPVgcvW6mku00X7N74LX+I3ccfnKTWBuKhFhEd4sK9Iffu3i5
-	 auQet/UQ2NuIjmfGfiS91FyvHlKw/lyaDcGgolnngJmW3+LKsFjc9iuRdEJCd+kql1
-	 kRopihcghatBPxj4GMVwkgs511ln2iPZh3mn13ZI=
-Received: from localhost (localhost [127.0.0.1])
-	by ietfa.amsl.com (Postfix) with ESMTP id 6D054C1840E8
-	for <bpf@ietfa.amsl.com>; Mon, 19 Aug 2024 15:30:17 -0700 (PDT)
-X-Virus-Scanned: amavisd-new at amsl.com
-X-Spam-Flag: NO
-X-Spam-Score: -1.907
-X-Spam-Level: 
-Authentication-Results: ietfa.amsl.com (amavisd-new); dkim=pass (2048-bit key)
-	header.d=obs-cr.20230601.gappssmtp.com
-Received: from mail.ietf.org ([50.223.129.194])
-	by localhost (ietfa.amsl.com [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id KVb_H9Or8VHw for <bpf@ietfa.amsl.com>;
-	Mon, 19 Aug 2024 15:30:16 -0700 (PDT)
-Received: from mail-il1-x133.google.com (mail-il1-x133.google.com
- [IPv6:2607:f8b0:4864:20::133])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by ietfa.amsl.com (Postfix) with ESMTPS id EAD6AC180B4D
-	for <bpf@ietf.org>; Mon, 19 Aug 2024 15:30:11 -0700 (PDT)
-Received: by mail-il1-x133.google.com with SMTP id
- e9e14a558f8ab-39d37d9767dso9061935ab.3
-        for <bpf@ietf.org>; Mon, 19 Aug 2024 15:30:11 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Vh6p91+V"
+Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-2d3b36f5366so3342173a91.0
+        for <bpf@vger.kernel.org>; Mon, 19 Aug 2024 15:42:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=obs-cr.20230601.gappssmtp.com; s=20230601; t=1724106611;
- x=1724711411; darn=ietf.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=zlBO7op9yV0iOsawm3E4xQTL5C6nZ1QNeejEc0p0YVM=;
-        b=cYhWgYG6gC1aVLh8hDhwvIfDrf7KTyDFRjewjs7b4ek3XFLNpE/+QdNg8fAoXr0Jub
-         mpcYxaFWLZr07mq6De4ehXcfptAwRPJHEAoknqlW2/10yt1T+PUr6Unj+Nozh/t5YQY1
-         N94AGLascBkn/mo5ZMwq2CpnQ+itRJO2FL0oxpOzqJwbQ9l5UmaHj8z7MclaKyyZqyn0
-         gamqa5SUA2QgOa1pkFC488HTPY0qRsWzToqnw0AY8dzOKkmL1CTGruA0XbPzyE8YrZ8W
-         cQqoWgLvRKExzgYT/d5p3lcGE8uqrLwf3JMCguvheEEOm6iEgpou+xz/N7IZZtfLfnW3
-         +p6w==
+        d=gmail.com; s=20230601; t=1724107320; x=1724712120; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=hLYsuQhM6b2RU1ReV3vrE8zWiYPWTVhm7xqqXtBJRu8=;
+        b=Vh6p91+VSrZyeDcmmP1noSuWGVssS/fN7s0H3rQCPOdhRSzMpJIYhH60hcYPWyxn8Y
+         S4azudvgoP7qSFn9HuvMW87wYTBWn9dCwGucQa/MWslkdkFLCWvQbwCzGG1OlTOXHgDW
+         gFmzlVhBT/efpOhn4jJ3+1BJrebIywBfY/E+UpKWjZlTwawAmpmjhbqCyeC0BvlzaUCj
+         2M8JQ1zIQ6Yc1TzY4rdh6sGFuTz3tWN0cykVEpRUro+l5JbLZWccr3Xfa1YBKV9Wp1vG
+         HHTcX/emWqoHlI3iJsVk2hhPgdendhNQlhBnMQ0T6lm4+N6qAzClgsYsPPwgzdyM0Ijd
+         g+Nw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724106611; x=1724711411;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=zlBO7op9yV0iOsawm3E4xQTL5C6nZ1QNeejEc0p0YVM=;
-        b=JnW+m8KTO2C9/hLBezL6MJS7woCzT3dltuaCk1wrz791iOYhLNbEeGlC1z5tj+mO7C
-         WrNQ7vvGhDydOho5Du6g7knHeXOhULXPtTO/28rhzwVP94r2p5/vaOtXo8kx5pFxdZja
-         PivSyU7rds6jKySiUPyfq9cuOiRAKJAp6qrA1G7ikASKj745ChGKlejVjG1oB+Y4iouU
-         uHR/HsWB8BZO39/kF/V6ekivX9WRqx++zV+d80OQUYjqbqUM0IIcAOqXT9BEsW8ruc+x
-         KebPPR3FbgLGgnimWvW5AmmKWvz3J67oNJlh00oHPt5vwlV/MKA886wmc6Lu6KfhcWl6
-         wBJA==
-X-Forwarded-Encrypted: i=1;
- AJvYcCUExKoHrZzBDIfumbYk9S8mcnCVlcfR9Got7W29tbPZIaaGaXrcOToc+g5pLGEJAo+24ZM=@ietf.org
-X-Gm-Message-State: AOJu0YwMoTEjYPetg8vpRXo9uIuEU5mI132SeJ6ucHc4a4KU3PXqi2IZ
-	paKHbDoZz9Dp5S8ZB4bQoidelpd4A2aetUtr9kDQKvI5CM791K1ApjvlGIZqOmQ=
-X-Google-Smtp-Source: 
- AGHT+IHmnzdQB1KFZi18yDin1p4609NZfm5womPqkarl0qMMm62alm/L7gBbuedvrFFFA4ECQ5e2eg==
-X-Received: by 2002:a05:6e02:1d8e:b0:39d:189a:edf6 with SMTP id
- e9e14a558f8ab-39d26d64478mr107657435ab.22.1724106610652;
-        Mon, 19 Aug 2024 15:30:10 -0700 (PDT)
-Received: from ininer.rhod.uc.edu ([129.137.96.15])
-        by smtp.gmail.com with ESMTPSA id
- e9e14a558f8ab-39d1ec03069sm37092255ab.32.2024.08.19.15.30.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Aug 2024 15:30:10 -0700 (PDT)
-From: Will Hawkins <hawkinsw@obs.cr>
-To: bpf@vger.kernel.org,
-	bpf@ietf.org
-Date: Mon, 19 Aug 2024 18:30:06 -0400
-Message-ID: <20240819223008.469271-1-hawkinsw@obs.cr>
-X-Mailer: git-send-email 2.45.2
+        d=1e100.net; s=20230601; t=1724107320; x=1724712120;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=hLYsuQhM6b2RU1ReV3vrE8zWiYPWTVhm7xqqXtBJRu8=;
+        b=F0mwTgjspYIfL6asKPrRPjZ5kVKTAUnFLHVUEiRbU2yn5xDSU56O3JJV6V8oZOz3oX
+         3QFdsQPf4jIdRijX0u7Jtp3afy77vabn6JrpU70VUqj+GW5vJDGZWy2AcpY/LW8mfiCH
+         Q1wkDulQSPN9gLFmhi4+2Cwhp8hSWow0eGmki42WS/8BARNDHCnaoVOtFQN3DTf0xzOr
+         67Y4L01c5y3seDjNcf3gibkZ7CjpqbrW+aTmUllx0C6eFnr0c22nCgNFS5gbLhUJSJmW
+         pjbYZ+CEePG/4D+0QZVVYBPwT+vwPI90aKqUmXgB2uokBS3Q+Cw6fmWGpUYThw+PBqE7
+         hq8Q==
+X-Gm-Message-State: AOJu0YztQpiBc7BwTYXP9aXnzYO/b8iSpw7YYSNSm9JMHEnlT6GwwI56
+	yfkJ2Dx0F1pc+S2H/iiJLEbs/zvo+YXMxrcsj2NYvISsL6Egs7hKI+I6MTV++XTT4eFiaeMoyaj
+	wmDsiF0dml/e1qb/ThHilz0uNEbk=
+X-Google-Smtp-Source: AGHT+IF3ErPoQ9bh5eFN5MZQ/T9Ctcolq/pV+a7cb6ILkZmWFl7RMZusQiLAthAIVQ91G6WkkWfrGw7tEjyHjcKGE2Q=
+X-Received: by 2002:a17:90a:3986:b0:2d3:ba42:775c with SMTP id
+ 98e67ed59e1d1-2d3dfc368e8mr11806732a91.1.1724107319776; Mon, 19 Aug 2024
+ 15:41:59 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-ID-Hash: 57OBVOELUXOWY4MBA6M2LGUVGPXKPQAU
-X-Message-ID-Hash: 57OBVOELUXOWY4MBA6M2LGUVGPXKPQAU
-X-MailFrom: hawkinsw@obs.cr
-X-Mailman-Rule-Misses: dmarc-mitigation; no-senders; approved; emergency;
- loop; banned-address; member-moderation; nonmember-moderation; administrivia;
- implicit-dest; max-recipients; max-size; news-moderation; no-subject;
- digests; suspicious-header
-CC: Will Hawkins <hawkinsw@obs.cr>
-X-Mailman-Version: 3.3.9rc4
-Precedence: list
-Subject: =?utf-8?q?=5BBpf=5D_=5BPATCH=5D_docs/bpf=3A_Add_constant_values_for_linkages?=
-Archived-At: 
- <https://mailarchive.ietf.org/arch/msg/bpf/yKM03P1xhKU7FTNg30HSCp29kWU>
-List-Archive: <https://mailarchive.ietf.org/arch/browse/bpf>
-List-Help: <mailto:bpf-request@ietf.org?subject=help>
-List-Owner: <mailto:bpf-owner@ietf.org>
-List-Post: <mailto:bpf@ietf.org>
-X-Mailman-Copy: yes
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
-Message-ID: <20240819223006._YFDCnFItgonQ5BOj2xnDv0m_6vgBbG9qNOlZ-jGf1U@z>
+References: <20240818002350.1401842-1-linux@jordanrome.com>
+In-Reply-To: <20240818002350.1401842-1-linux@jordanrome.com>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Mon, 19 Aug 2024 15:41:47 -0700
+Message-ID: <CAEf4BzZK7+=FRFXzMMtL7-hz5YgKjbthUDae4Wh0OMTP2PqJxw@mail.gmail.com>
+Subject: Re: [bpf-next v6 1/2] bpf: Add bpf_copy_from_user_str kfunc
+To: Jordan Rome <linux@jordanrome.com>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Martin KaFai Lau <martin.lau@kernel.org>, Kernel Team <kernel-team@fb.com>, sinquersw@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-TWFrZSB0aGUgdmFsdWVzIG9mIHRoZSBzeW1ib2xpYyBjb25zdGFudHMgdGhhdCBkZWZpbmUgdGhl
-IHZhbGlkIGxpbmthZ2VzDQpmb3IgZnVuY3Rpb25zIGFuZCB2YXJpYWJsZXMgZXhwbGljaXQuDQoN
-ClNpZ25lZC1vZmYtYnk6IFdpbGwgSGF3a2lucyA8aGF3a2luc3dAb2JzLmNyPg0KLS0tDQogRG9j
-dW1lbnRhdGlvbi9icGYvYnRmLnJzdCB8IDQ0ICsrKysrKysrKysrKysrKysrKysrKysrKysrKysr
-KysrKysrLS0tLQ0KIDEgZmlsZSBjaGFuZ2VkLCA0MCBpbnNlcnRpb25zKCspLCA0IGRlbGV0aW9u
-cygtKQ0KDQpkaWZmIC0tZ2l0IGEvRG9jdW1lbnRhdGlvbi9icGYvYnRmLnJzdCBiL0RvY3VtZW50
-YXRpb24vYnBmL2J0Zi5yc3QNCmluZGV4IDI1N2E3ZTFjZGY1ZC4uY2NlMDNmMWU1NTJhIDEwMDY0
-NA0KLS0tIGEvRG9jdW1lbnRhdGlvbi9icGYvYnRmLnJzdA0KKysrIGIvRG9jdW1lbnRhdGlvbi9i
-cGYvYnRmLnJzdA0KQEAgLTM2OCw3ICszNjgsNyBAQCBObyBhZGRpdGlvbmFsIHR5cGUgZGF0YSBm
-b2xsb3cgYGBidGZfdHlwZWBgLg0KICAgKiBgYGluZm8ua2luZF9mbGFnYGA6IDANCiAgICogYGBp
-bmZvLmtpbmRgYDogQlRGX0tJTkRfRlVOQw0KICAgKiBgYGluZm8udmxlbmBgOiBsaW5rYWdlIGlu
-Zm9ybWF0aW9uIChCVEZfRlVOQ19TVEFUSUMsIEJURl9GVU5DX0dMT0JBTA0KLSAgICAgICAgICAg
-ICAgICAgICBvciBCVEZfRlVOQ19FWFRFUk4pDQorICAgICAgICAgICAgICAgICAgIG9yIEJURl9G
-VU5DX0VYVEVSTiAtIHNlZSA6cmVmOmBCVEZfRnVuY3Rpb25fTGlua2FnZV9Db25zdGFudHNgKQ0K
-ICAgKiBgYHR5cGVgYDogYSBCVEZfS0lORF9GVU5DX1BST1RPIHR5cGUNCiANCiBObyBhZGRpdGlv
-bmFsIHR5cGUgZGF0YSBmb2xsb3cgYGBidGZfdHlwZWBgLg0KQEAgLTQyNCw5ICs0MjQsOSBAQCBm
-b2xsb3dpbmcgZGF0YTo6DQogICAgICAgICBfX3UzMiAgIGxpbmthZ2U7DQogICAgIH07DQogDQot
-YGBzdHJ1Y3QgYnRmX3ZhcmBgIGVuY29kaW5nOg0KLSAgKiBgYGxpbmthZ2VgYDogY3VycmVudGx5
-IG9ubHkgc3RhdGljIHZhcmlhYmxlIDAsIG9yIGdsb2JhbGx5IGFsbG9jYXRlZA0KLSAgICAgICAg
-ICAgICAgICAgdmFyaWFibGUgaW4gRUxGIHNlY3Rpb25zIDENCitgYGJ0Zl92YXIubGlua2FnZWBg
-IG1heSB0YWtlIHRoZSB2YWx1ZXM6IEJURl9WQVJfU1RBVElDIChmb3IgYSBzdGF0aWMgdmFyaWFi
-bGUpLA0KK29yIEJURl9WQVJfR0xPQkFMX0FMTE9DQVRFRCAoZm9yIGEgZ2xvYmFsbHkgYWxsb2Nh
-dGVkIHZhcmlhYmxlIHN0b3JlZCBpbiBFTEYgc2VjdGlvbnMgMSkgLQ0KK3NlZSA6cmVmOmBCVEZf
-VmFyX0xpbmthZ2VfQ29uc3RhbnRzYC4NCiANCiBOb3QgYWxsIHR5cGUgb2YgZ2xvYmFsIHZhcmlh
-YmxlcyBhcmUgc3VwcG9ydGVkIGJ5IExMVk0gYXQgdGhpcyBwb2ludC4NCiBUaGUgZm9sbG93aW5n
-IGlzIGN1cnJlbnRseSBhdmFpbGFibGU6DQpAQCAtNTQ5LDYgKzU0OSw0MiBAQCBUaGUgYGBidGZf
-ZW51bTY0YGAgZW5jb2Rpbmc6DQogSWYgdGhlIG9yaWdpbmFsIGVudW0gdmFsdWUgaXMgc2lnbmVk
-IGFuZCB0aGUgc2l6ZSBpcyBsZXNzIHRoYW4gOCwNCiB0aGF0IHZhbHVlIHdpbGwgYmUgc2lnbiBl
-eHRlbmRlZCBpbnRvIDggYnl0ZXMuDQogDQorMi4zIENvbnN0YW50IFZhbHVlcw0KKy0tLS0tLS0t
-LS0tLS0tLS0tLS0NCisNCisuLiBfQlRGX0Z1bmN0aW9uX0xpbmthZ2VfQ29uc3RhbnRzOg0KKw0K
-KzIuMy4xIEZ1bmN0aW9uIExpbmthZ2UgQ29uc3RhbnQgVmFsdWVzDQorfn5+fn5+fn5+fn5+fn5+
-fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn4NCisuLiBsaXN0LXRhYmxlOjoNCisgICA6d2lkdGhzOiAx
-IDENCisgICA6aGVhZGVyLXJvd3M6IDENCisNCisgICAqIC0gTmFtZQ0KKyAgICAgLSBWYWx1ZQ0K
-KyAgICogLSBgYEJURl9GVU5DX1NUQVRJQ2BgDQorICAgICAtIGBgMGBgDQorICAgKiAtIGBgQlRG
-X0ZVTkNfR0xPQkFMYGANCisgICAgIC0gYGAxYGANCisgICAqIC0gYGBCVEZfRlVOQ19FWFRFUk5g
-YA0KKyAgICAgLSBgYDJgYA0KKw0KKy4uIF9CVEZfVmFyX0xpbmthZ2VfQ29uc3RhbnRzOg0KKw0K
-KzIuMy4yIFZhcmlhYmxlIExpbmthZ2UgQ29uc3RhbnQgVmFsdWVzDQorfn5+fn5+fn5+fn5+fn5+
-fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn4NCisuLiBsaXN0LXRhYmxlOjoNCisgICA6d2lkdGhzOiAx
-IDENCisgICA6aGVhZGVyLXJvd3M6IDENCisNCisgICAqIC0gTmFtZQ0KKyAgICAgLSBWYWx1ZQ0K
-KyAgICogLSBgYEJURl9WQVJfU1RBVElDYGANCisgICAgIC0gYGAwYGANCisgICAqIC0gYGBCVEZf
-VkFSX0dMT0JBTF9BTExPQ0FURURgYA0KKyAgICAgLSBgYDFgYA0KKw0KKw0KIDMuIEJURiBLZXJu
-ZWwgQVBJDQogPT09PT09PT09PT09PT09PT0NCiANCi0tIA0KMi40NS4yDQoNCi0tIApCcGYgbWFp
-bGluZyBsaXN0IC0tIGJwZkBpZXRmLm9yZwpUbyB1bnN1YnNjcmliZSBzZW5kIGFuIGVtYWlsIHRv
-IGJwZi1sZWF2ZUBpZXRmLm9yZwo=
+On Sat, Aug 17, 2024 at 5:24=E2=80=AFPM Jordan Rome <linux@jordanrome.com> =
+wrote:
+>
+> This adds a kfunc wrapper around strncpy_from_user,
+> which can be called from sleepable BPF programs.
+>
+> This matches the non-sleepable 'bpf_probe_read_user_str'
+> helper except it includes an additional 'flags'
+> param, which allows consumers to clear the entire
+> destination buffer on success.
+>
+> Signed-off-by: Jordan Rome <linux@jordanrome.com>
+> ---
+>  include/uapi/linux/bpf.h       |  8 +++++++
+>  kernel/bpf/helpers.c           | 44 ++++++++++++++++++++++++++++++++++
+>  tools/include/uapi/linux/bpf.h |  8 +++++++
+>  3 files changed, 60 insertions(+)
+>
+
+LGTM overall, with the issues pointed out below:
+
+Acked-by: Andrii Nakryiko <andrii@kernel.org>
+
+> diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+> index e05b39e39c3f..5e6be3489e43 100644
+> --- a/include/uapi/linux/bpf.h
+> +++ b/include/uapi/linux/bpf.h
+> @@ -7513,4 +7513,12 @@ struct bpf_iter_num {
+>         __u64 __opaque[1];
+>  } __attribute__((aligned(8)));
+>
+> +/*
+> + * Flags to control bpf_copy_from_user_str() behaviour.
+> + *     - BPF_F_PAD_ZEROS: Memset 0 the tail of the destination buffer on=
+ success
+
+I suspect we might want to reuse this flag for similar kfuncs/helpers
+in the future, so I'd generalize description a bit. How about
+something like:
+
+BPF_F_PAD_ZEROS: pad destination buffer with zeros. (See respective
+helpers documentation for exact details.)
+
+> + */
+> +enum {
+> +       BPF_F_PAD_ZEROS =3D (1ULL << 0)
+> +};
+> +
+>  #endif /* _UAPI__LINUX_BPF_H__ */
+> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+> index d02ae323996b..a0d2cc8f4f3f 100644
+> --- a/kernel/bpf/helpers.c
+> +++ b/kernel/bpf/helpers.c
+> @@ -2939,6 +2939,49 @@ __bpf_kfunc void bpf_iter_bits_destroy(struct bpf_=
+iter_bits *it)
+>         bpf_mem_free(&bpf_global_ma, kit->bits);
+>  }
+>
+> +/**
+> + * bpf_copy_from_user_str() - Copy a string from an unsafe user address
+> + * @dst:             Destination address, in kernel space.  This buffer =
+must be at
+> + *                   least @dst__szk bytes long.
+> + * @dst__szk:        Maximum number of bytes to copy, including the trai=
+ling NUL.
+> + * @unsafe_ptr__ign: Source address, in user space.
+> + * @flags:           The only supported flag is BPF_F_PAD_ZEROS
+> + *
+> + * Copies a NUL-terminated string from userspace to BPF space. If user s=
+tring is
+> + * too long this will still ensure zero termination in the dst buffer un=
+less
+> + * buffer size is 0.
+> + *
+> + * If BPF_F_PAD_ZEROS flag is set, memset the tail of @dst to 0 on succe=
+ss and
+> + * memset all of @dst on failure.
+> + */
+> +__bpf_kfunc int bpf_copy_from_user_str(void *dst, u32 dst__szk, const vo=
+id __user *unsafe_ptr__ign, u64 flags)
+> +{
+> +       int ret;
+> +
+> +       if (unlikely(!dst__szk))
+> +               return 0;
+> +
+> +       if (unlikely(flags & ~BPF_F_PAD_ZEROS))
+> +               return -EINVAL;
+> +
+
+let's move this up before dst__szk check, invalid flags should be
+rejected regardless of dst__szk
+
+pw-bot: cr
+
+> +       ret =3D strncpy_from_user(dst, unsafe_ptr__ign, dst__szk - 1);
+> +       if (ret < 0) {
+> +               if (flags & BPF_F_PAD_ZEROS)
+> +                       memset((char *)dst, 0, dst__szk);
+> +
+> +               return ret;
+> +       }
+> +
+> +       if (flags & BPF_F_PAD_ZEROS)
+> +               memset((char *)dst + ret, 0, dst__szk - ret);
+> +       else
+> +               ((char *)dst)[ret] =3D '\0';
+> +
+> +       ret++;
+> +
+> +       return ret;
+
+nit: return ret + 1;
+
+
+> +}
+> +
+>  __bpf_kfunc_end_defs();
+>
+>  BTF_KFUNCS_START(generic_btf_ids)
+> @@ -3024,6 +3067,7 @@ BTF_ID_FLAGS(func, bpf_preempt_enable)
+>  BTF_ID_FLAGS(func, bpf_iter_bits_new, KF_ITER_NEW)
+>  BTF_ID_FLAGS(func, bpf_iter_bits_next, KF_ITER_NEXT | KF_RET_NULL)
+>  BTF_ID_FLAGS(func, bpf_iter_bits_destroy, KF_ITER_DESTROY)
+> +BTF_ID_FLAGS(func, bpf_copy_from_user_str, KF_SLEEPABLE)
+>  BTF_KFUNCS_END(common_btf_ids)
+>
+>  static const struct btf_kfunc_id_set common_kfunc_set =3D {
+> diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bp=
+f.h
+> index e05b39e39c3f..a8dcb99ed904 100644
+> --- a/tools/include/uapi/linux/bpf.h
+> +++ b/tools/include/uapi/linux/bpf.h
+> @@ -7513,4 +7513,12 @@ struct bpf_iter_num {
+>         __u64 __opaque[1];
+>  } __attribute__((aligned(8)));
+>
+> +/*
+> + * Flags to control bpf_copy_from_user_str() behaviour.
+> + *     - BPF_F_PAD_ZEROS: Memset 0 the entire destination buffer on succ=
+ess
+> + */
+> +enum {
+> +       BPF_F_PAD_ZEROS =3D (1ULL << 0)
+> +};
+> +
+>  #endif /* _UAPI__LINUX_BPF_H__ */
+> --
+> 2.43.5
+>
