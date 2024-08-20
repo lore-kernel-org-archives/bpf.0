@@ -1,152 +1,195 @@
-Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mout.perfora.net (mout.perfora.net [74.208.4.197])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 952E715C12F;
-	Tue, 20 Aug 2024 10:17:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E32CF189B99
+	for <bpf@vger.kernel.org>; Tue, 20 Aug 2024 10:18:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.208.4.197
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724149057; cv=none; b=ZAGhJqDLahtpFzZ1K55VHGP02vdcFUq69ePerIdW4Y+Y1MxaALXfuclBemswq+G/cpK+3qy9oQpZN0ijpYWCFHUJwNtqP8zfX0r+YxXiuzywhlqHqrKTgFAnDNOfXA9dOqzEt2N+Loi5FGoQM2tj2wffyA8mIbR0RCJXmPSJZwY=
+	t=1724149091; cv=none; b=mLEdC8Uy++88CSnoVvZZoahiO1w7m8FxSwcGx+mc/Bm7WJXJ2DLQqHC/JvAWGt+79haQx+c46OzEkRb7wbPmu2EI2X62xfi6+SWcyGULj0ojXvD+oHpPoGJsZk7Iy7ZtOLlmcL41deLD47uOqfe7cVVLuoPlG78J5xSA3dzTQ9Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724149057; c=relaxed/simple;
-	bh=JCKBojmsz/I8qlIZvcARXRDjSJkR3uBjOL+6+Vl/lTs=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=a6pzat+knTykw9ntyxNbn2g4yuedO17IRdBUbiIJCHHrZEoypsoIuK0tkz/4VYmucpJDT3t2XBgtaxVltF3e5IcfXyB19rv4Ns3E46Uq/qLWiwe9IERQT0c8pwLMruawKQxP0hIvqs9hCRTZSBIosS724W4PuowDkMzCvh9kZvc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nKYqJLmk; arc=none smtp.client-ip=209.85.218.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1724149091; c=relaxed/simple;
+	bh=StpzmIy6MTbgeUPsovd3tBDsxc2RZ1DeyJXtAbv11Yc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=E/NoGJsLXu+/XwQPweV7z/oOEI5gVWe+22Z7wj3OKlAcpRJAw6KiD5gtiFNCfwfLDakwv2DLO9o6UPhoEuShCYngDBnkvbbmgJP+o3rvmv7XILLntGqIz6+lelt1WQkZhx69NpdGq+wXYelaNCJ1NVVQhR0VB84IzZe3H0OjOig=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=jordanrome.com; spf=pass smtp.mailfrom=jordanrome.com; dkim=pass (2048-bit key) header.d=jordanrome.com header.i=linux@jordanrome.com header.b=Ba/GczE0; arc=none smtp.client-ip=74.208.4.197
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=jordanrome.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=jordanrome.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nKYqJLmk"
-Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-a7a94478a4eso1094468066b.1;
-        Tue, 20 Aug 2024 03:17:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1724149054; x=1724753854; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=KDCCCZfEDklTEDmwUp0EEGgF+x5DgllGqM8ppmfdIMs=;
-        b=nKYqJLmkIft/NJ+jfwlhoQSk6nX73kakmmV0Q3Hmp6X+6aIUEW+3rSYDnUwgtQHpS4
-         nS0RtCrC+wKiwGkrUCyhFWO9hyeq5xNZG3lbz4ex/tsYQxAAfi5SpQpaHA8wvA9p0hJL
-         FpsjLiZEK/LUrgMkhnyWDsHc9XJeT7deP8li4xvtb8BAS9TTTFv/o5NspUyMg9RLfZYN
-         PDBb4bMc1Q02Nj8s/k+gZwPQKJ7gLrDc9KyUF0eyQ0jlGz2InSPyxtbRBwlSMIMa13ju
-         nPI2WJWrveLaOCri72P0p67CXAvounppoR6VZHxRIkqDYvwT8Qfccptxkkj6EjCGBtNg
-         hfpQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724149054; x=1724753854;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KDCCCZfEDklTEDmwUp0EEGgF+x5DgllGqM8ppmfdIMs=;
-        b=oibiyzQYem6oQYIo1hXipLX8flSz1YR/mh3o7wOAj3YnpraTez0FwrkHhGZHyXufE1
-         oxKeqmh7oFCaKeuDnlajiYvauGePNelVx/UJj2Ef40svUt+b7MICLV100CTCEkHZZWYG
-         OCiFV5QHPn2Li0qRxPJimTBsuj4z5rfXEM3gxXpdWteXF0iIuq/Ah6GkZYUzY2dqWqLg
-         MKNnVc2IptM8oghXQj/raem8gvP1Ira6OzwTQstCUapZgc0ivVEYSg19R6EpIOzJbG/0
-         97ZWr9lD+oOil4TGsuCnXiC+p1PckDQ/4SFQYxzUUc73KGuXEIZSRtegMzW8an9X7czg
-         isiw==
-X-Forwarded-Encrypted: i=1; AJvYcCXEdG5oNnpTZZbLE+1XUgWrEaohbZkLU9bqCCaSoD9UJ9sOvxzy6vOoZxCF0rbs6+eGVZCm0IiGf3ylPEiu3sV/Sj1V7LwS0YdVQRWJq3okfL119iQG1r3b3JvicMjnV6jI
-X-Gm-Message-State: AOJu0YyQKJIVDYefvCa6vLV7/S5G0V5WDTZNhjBdyDnqwGa+X7cZO9be
-	EbRCev9qfRlXHHXdykAApasIBGwTSMzCO3xrFpQNvvBptfUOjTMh7jjMbQ==
-X-Google-Smtp-Source: AGHT+IEGej1nTsHT7LkLDAhVUwrtGbfv7KKa4ADTQE0bCOZPBkQhk5r0OjOkQcdlaDDKuxGCTxRTtA==
-X-Received: by 2002:a17:907:9811:b0:a7a:a4cf:4f93 with SMTP id a640c23a62f3a-a8643fee514mr226176466b.32.1724149053358;
-        Tue, 20 Aug 2024 03:17:33 -0700 (PDT)
-Received: from krava (2001-1ae9-1c2-4c00-726e-c10f-8833-ff22.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:726e:c10f:8833:ff22])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a83838cfb3bsm738173166b.65.2024.08.20.03.17.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Aug 2024 03:17:32 -0700 (PDT)
-From: Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Tue, 20 Aug 2024 12:17:31 +0200
-To: Steven Rostedt <rostedt@goodmis.org>
-Cc: Jiri Olsa <olsajiri@gmail.com>,
-	Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-	Juri Lelli <juri.lelli@redhat.com>, bpf <bpf@vger.kernel.org>,
-	LKML <linux-kernel@vger.kernel.org>,
-	Artem Savkov <asavkov@redhat.com>,
-	"Jose E. Marchesi" <jose.marchesi@oracle.com>
-Subject: Re: NULL pointer deref when running BPF monitor program (6.11.0-rc1)
-Message-ID: <ZsRtOzhicxAhkmoN@krava>
-References: <CAADnVQ+NpPtFOrvD0o2F8npCpZwPrLf4dX8h8Rt96uwM+crQcQ@mail.gmail.com>
- <ZrSh8AuV21AKHfNg@krava>
- <CAADnVQLYxdKn-J2-2iXKKKTg=o6xkKWzV2WyYrnmQ-j62b9STA@mail.gmail.com>
- <Zr3q8ihbe8cUdpfp@krava>
- <CAADnVQL2ChR5hGAXoV11QdMjN2WwHTLizfiAjRQfz3ekoj2iqg@mail.gmail.com>
- <20240816101031.6dd1361b@rorschach.local.home>
- <Zr-ho0ncAk__sZiX@krava>
- <20240816153040.14d36c77@rorschach.local.home>
- <ZsMwyO1Tv6BsOyc-@krava>
- <20240819113747.31d1ae79@gandalf.local.home>
+	dkim=pass (2048-bit key) header.d=jordanrome.com header.i=linux@jordanrome.com header.b="Ba/GczE0"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=jordanrome.com;
+	s=s1-ionos; t=1724149062; x=1724753862; i=linux@jordanrome.com;
+	bh=AJMRgGeeMzRnSr8q7dbhe7hdqvLeBI9dUaUJORKMGRM=;
+	h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:
+	 MIME-Version:Content-Transfer-Encoding:cc:
+	 content-transfer-encoding:content-type:date:from:message-id:
+	 mime-version:reply-to:subject:to;
+	b=Ba/GczE0a31vg9J4LZE/GybUQJrfk0S46xVlNacirMxdM84Ef9YzrKS9YF3XVnqg
+	 0TwQ44xmjiicny5yHnSRjx8Mf2u/YRTGJrjfVBtxxjggVfSyDuggEk22JC784Rkag
+	 TWW/wGCAmgWfkiLUgcYXt1H8da/TRtWvtPNGuIH3JHdQLQ0y1pVUf28YcT+vfvGM0
+	 ZcQ1hCkmJAtLqS+fhqB9rRmVmVzqW6K+XyZhRmT21AJgrGbz73RWQ2m7PeUNVn7fx
+	 euXzMcRwShkhiOdnSe1IMaoplfEHkB+B5h5KrDWEnbWaFEPH1z5xdWtrr4NhBuPpN
+	 wIkvRJF683kuwCqJ1w==
+X-UI-Sender-Class: 55c96926-9e95-11ee-ae09-1f7a4046a0f6
+Received: from localhost ([173.252.127.112]) by mrelay.perfora.net (mreueus002
+ [74.208.5.2]) with ESMTPSA (Nemesis) id 0LxhU5-1s5pBm3wwV-0106F8; Tue, 20 Aug
+ 2024 12:17:42 +0200
+From: Jordan Rome <linux@jordanrome.com>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@kernel.org>,
+	Kernel Team <kernel-team@fb.com>,
+	sinquersw@gmail.com
+Subject: [bpf-next v7 1/2] bpf: Add bpf_copy_from_user_str kfunc
+Date: Tue, 20 Aug 2024 03:17:24 -0700
+Message-ID: <20240820101725.1629353-1-linux@jordanrome.com>
+X-Mailer: git-send-email 2.43.5
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240819113747.31d1ae79@gandalf.local.home>
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:eb2sZk3hGKhq3SoXHrMuLkbpsORyCWv873eyIfthe5iWHI2zMkR
+ cmkE6BGxrfn3zb52EJvSvIkhZ1sEoEyUA7vU3462Qsmr2JTHExiHe42FGoolAtyK/KjoELU
+ 4DBZViVrNyy/R4mHbu/fyHQnpeJiXYHQ05cGn5bS/OC9VaGAQEuSiva2z5YMbfwj36BFGpH
+ x4KFQSqKA9Dg/OIp+XbWQ==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:X6Kv4aGorUo=;fELzMtlFdPHnl8FtbR4E8cISqAv
+ 6iodcwkZjKZaE9EK9jcuMez24LNjiifKQDK5IZFc4mjsBq29MLR1AO4zohU+sIY2Of2kkR5nH
+ Lq76c53UrpUYCXNlZSY1NKMxEV3RLwhocv61BBAb8MXBFbdPUZ2TslpNN48DWeGvbhBBEXE99
+ dd8dn+7uEHX6qgHXubc93yKVfsG+3beNF2FW2ekMM25I5k3jS5Plj2trbJRmjdz5AdDLXQgpn
+ 2TDTS5LO5i9TPsSpf5+ObgtgF/I0WuqtAgDxt0ipMJ8TzO+gfydG0DBXOZJ6WP1vIduUrPK7o
+ NBRWwOXNohDX6iDI5fkP4rSfNp+j899rV+ZpChd3mmTkEWSb6vOFxYPD6ak0nO8amIG0pq2uG
+ GR9l7bwIjs9MDm7F0VvpmLFMG+kdlRDlzGL4HbOAnOsnR3Ikcpwgj7WjgOwIc5uFcdpKhcMTn
+ 0McfmGxgpUKGpGDBvFwCe00Sx0264vN/jlkkt1pReboG+1x52Humlybs8ccBIFJsVYXFmfeQj
+ 8Qa2h3+VxGc9+u4D417FaPAYdDr0XJfXW7ogDVSkbNxGc/yxp7UHecCYAgav3jfNJTOKFJxLr
+ /Bj3+3KKJ4ZgFOsqj+LMUrtdAPqoZToQu8pUwplvBmkDZYGikiHigTcphytFx1ZfIwf+gmCNp
+ 3g4deRFqWYiEQ9oY/8XbUeiePvKOUxiW9F2/8Lr9slTnoJh91yIXKxzgch93EE3RPUmY27VpN
+ fsj5RhGCFRZz2RkQIxzVHrT+ul164HKwQ==
 
-On Mon, Aug 19, 2024 at 11:37:47AM -0400, Steven Rostedt wrote:
-> On Mon, 19 Aug 2024 13:47:20 +0200
-> Jiri Olsa <olsajiri@gmail.com> wrote:
-> 
-> > verifier assumes that programs attached to the tracepoint can access
-> > pointer arguments without checking them for null and some of those
-> > programs most likely access such arguments directly
-> 
-> Hmm, so the verifier made a wrong assumption :-/  That's because that was
-> never a requirement for tracepoint arguments and several can easily be
-> NULL. That's why the macros have NULL checks for all arguments. For
-> example, see include/trace/stages/stage5_get_offsets.h:
-> 
->   static inline const char *__string_src(const char *str)
->   {
->        if (!str)
->                return EVENT_NULL_STR;
->        return str;
->   }
-> 
-> 
-> How does the verifier handle accessing function arguments? Because a
-> tracepoint call is no different.
+This adds a kfunc wrapper around strncpy_from_user,
+which can be called from sleepable BPF programs.
 
-verifier is checking program's access to function arguments which in
-case of tracepoint is access to context (btf_ctx_access function)
+This matches the non-sleepable 'bpf_probe_read_user_str'
+helper except it includes an additional 'flags'
+param, which allows consumers to clear the entire
+destination buffer on success or failure.
 
-> 
-> > 
-> > changing that globally and require bpf program to do null check for all
-> > pointer arguments will make verifier fail to load existing programs
-> > 
-> > > 
-> > > If you had a macro around the parameter:
-> > > 
-> > > 		TP_PROTO(struct task_struct *tsk, struct task_struct *__nullable(pi_task)),
-> > > 
-> > > Could having that go through another macro pass in trace_events.h work?
-> > > That is, could we associate the trace event with "nullable" parameters
-> > > that could be stored someplace else for you?  
-> > 
-> > IIUC you mean to store extra data for each tracepoint that would
-> > annotate the argument? as Alexei pointed out earlier it might be
-> > too much, because we'd be fine with just adding suffix to annotated
-> > arguments in __bpf_trace_##call:
-> > 
-> > 	__bpf_trace_##call(void *__data, proto)                                 \
-> > 	{                                                                       \
-> > 		CONCATENATE(bpf_trace_run, COUNT_ARGS(args))(__data, CAST_TO_U64(args));        \
-> > 	}
-> > 
-> > with that verifier could easily get suffix information from BTF and
-> > once gcc implements btf_type_tag we can easily switch to that
-> 
-> Could it be possible that the verifier could add to the exception table for
-> all accesses to tracepoint arguments? Then if there's a NULL pointer
-> dereference, the kernel will not crash but the exception can be sent to the
-> user space process instead? That is, it sends SIGSEV to the task accessing
-> NULL when it shouldn't.
+Signed-off-by: Jordan Rome <linux@jordanrome.com>
+=2D--
+ include/uapi/linux/bpf.h       |  9 ++++++++
+ kernel/bpf/helpers.c           | 42 ++++++++++++++++++++++++++++++++++
+ tools/include/uapi/linux/bpf.h |  9 ++++++++
+ 3 files changed, 60 insertions(+)
 
-hm, but that would mean random process that would happened to trigger
-the tracepoint would segfault, right? I don't think we can do that
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index e05b39e39c3f..d3b69cb055c0 100644
+=2D-- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -7513,4 +7513,13 @@ struct bpf_iter_num {
+ 	__u64 __opaque[1];
+ } __attribute__((aligned(8)));
 
-it seems better to teach verifier which tracepoint arguments can be NULL
-and deny load of the bpf program that would not check such argument properly
++/*
++ * Flags to control bpf_copy_from_user_str() behaviour.
++ *     - BPF_F_PAD_ZEROS: Pad destination buffer with zeros. (See the res=
+pective
++ *       helper documentation for details.)
++ */
++enum {
++	BPF_F_PAD_ZEROS =3D (1ULL << 0)
++};
++
+ #endif /* _UAPI__LINUX_BPF_H__ */
+diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+index d02ae323996b..e5614a980d59 100644
+=2D-- a/kernel/bpf/helpers.c
++++ b/kernel/bpf/helpers.c
+@@ -2939,6 +2939,47 @@ __bpf_kfunc void bpf_iter_bits_destroy(struct bpf_i=
+ter_bits *it)
+ 	bpf_mem_free(&bpf_global_ma, kit->bits);
+ }
 
-jirka
++/**
++ * bpf_copy_from_user_str() - Copy a string from an unsafe user address
++ * @dst:             Destination address, in kernel space.  This buffer m=
+ust be at
++ *                   least @dst__szk bytes long.
++ * @dst__szk:        Maximum number of bytes to copy, including the trail=
+ing NUL.
++ * @unsafe_ptr__ign: Source address, in user space.
++ * @flags:           The only supported flag is BPF_F_PAD_ZEROS
++ *
++ * Copies a NUL-terminated string from userspace to BPF space. If user st=
+ring is
++ * too long this will still ensure zero termination in the dst buffer unl=
+ess
++ * buffer size is 0.
++ *
++ * If BPF_F_PAD_ZEROS flag is set, memset the tail of @dst to 0 on succes=
+s and
++ * memset all of @dst on failure.
++ */
++__bpf_kfunc int bpf_copy_from_user_str(void *dst, u32 dst__szk, const voi=
+d __user *unsafe_ptr__ign, u64 flags)
++{
++	int ret;
++
++	if (unlikely(flags & ~BPF_F_PAD_ZEROS))
++		return -EINVAL;
++
++	if (unlikely(!dst__szk))
++		return 0;
++
++	ret =3D strncpy_from_user(dst, unsafe_ptr__ign, dst__szk - 1);
++	if (ret < 0) {
++		if (flags & BPF_F_PAD_ZEROS)
++			memset((char *)dst, 0, dst__szk);
++
++		return ret;
++	}
++
++	if (flags & BPF_F_PAD_ZEROS)
++		memset((char *)dst + ret, 0, dst__szk - ret);
++	else
++		((char *)dst)[ret] =3D '\0';
++
++	return ret + 1;
++}
++
+ __bpf_kfunc_end_defs();
+
+ BTF_KFUNCS_START(generic_btf_ids)
+@@ -3024,6 +3065,7 @@ BTF_ID_FLAGS(func, bpf_preempt_enable)
+ BTF_ID_FLAGS(func, bpf_iter_bits_new, KF_ITER_NEW)
+ BTF_ID_FLAGS(func, bpf_iter_bits_next, KF_ITER_NEXT | KF_RET_NULL)
+ BTF_ID_FLAGS(func, bpf_iter_bits_destroy, KF_ITER_DESTROY)
++BTF_ID_FLAGS(func, bpf_copy_from_user_str, KF_SLEEPABLE)
+ BTF_KFUNCS_END(common_btf_ids)
+
+ static const struct btf_kfunc_id_set common_kfunc_set =3D {
+diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf=
+.h
+index e05b39e39c3f..d3b69cb055c0 100644
+=2D-- a/tools/include/uapi/linux/bpf.h
++++ b/tools/include/uapi/linux/bpf.h
+@@ -7513,4 +7513,13 @@ struct bpf_iter_num {
+ 	__u64 __opaque[1];
+ } __attribute__((aligned(8)));
+
++/*
++ * Flags to control bpf_copy_from_user_str() behaviour.
++ *     - BPF_F_PAD_ZEROS: Pad destination buffer with zeros. (See the res=
+pective
++ *       helper documentation for details.)
++ */
++enum {
++	BPF_F_PAD_ZEROS =3D (1ULL << 0)
++};
++
+ #endif /* _UAPI__LINUX_BPF_H__ */
+=2D-
+2.43.5
+
