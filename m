@@ -1,200 +1,152 @@
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CE7018B496;
-	Tue, 20 Aug 2024 09:29:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.61.82.184
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 952E715C12F;
+	Tue, 20 Aug 2024 10:17:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724146196; cv=none; b=Prtmp+z2HcT7a7RIN2P64sZ8/3iTxA/+kO7m3FNnj+d0HQfBkDw+qqPyjOFm9hxr2KbTahBLQuyzxf2r0O2x1SeLLhlKbbeJWUAEAYQX4wWagYLWqddaKYmfujKaaeb9cjC4fGBUPq1VH6llPyzLWCQ/SBgHThJ0sW93uzdjOgs=
+	t=1724149057; cv=none; b=ZAGhJqDLahtpFzZ1K55VHGP02vdcFUq69ePerIdW4Y+Y1MxaALXfuclBemswq+G/cpK+3qy9oQpZN0ijpYWCFHUJwNtqP8zfX0r+YxXiuzywhlqHqrKTgFAnDNOfXA9dOqzEt2N+Loi5FGoQM2tj2wffyA8mIbR0RCJXmPSJZwY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724146196; c=relaxed/simple;
-	bh=FhUN9+AUBTdYnKXDrh+pGWH85hZAd0MaIfyiYj0ktM0=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=DWYxAsaPps6+FapVF9V7Q9yjOpbWJb4FaieLoizJIkdGMOgxpRvPXDKtFT/5AvfqFthY380H7FTJSWBEd+5T9Xxi4/vDKHZTVpiErCeqDWOi2I6TIIQgQH3J8QiiI9rbUnOnG2AD0iCtDxAWixGs1QRyK4u4Bozp5bnp8yia+PQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=ctfNXpTB; arc=none smtp.client-ip=210.61.82.184
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
+	s=arc-20240116; t=1724149057; c=relaxed/simple;
+	bh=JCKBojmsz/I8qlIZvcARXRDjSJkR3uBjOL+6+Vl/lTs=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=a6pzat+knTykw9ntyxNbn2g4yuedO17IRdBUbiIJCHHrZEoypsoIuK0tkz/4VYmucpJDT3t2XBgtaxVltF3e5IcfXyB19rv4Ns3E46Uq/qLWiwe9IERQT0c8pwLMruawKQxP0hIvqs9hCRTZSBIosS724W4PuowDkMzCvh9kZvc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nKYqJLmk; arc=none smtp.client-ip=209.85.218.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="ctfNXpTB"
-X-UUID: bdbd74085ed611ef8b96093e013ec31c-20240820
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-	h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=qcpbxZTpMQHjU70kP0bCyCvXXCDagI/iPE2XuZLBzN4=;
-	b=ctfNXpTBw9OzUN0384X6CE1puJzxQLCOzWNGv90u3uSmx2pVLW+ba2XTWUGKUP/kTHeh8PLLfKUYrFJENKOIcCCgoMZvptlSPWJ/yddud5KXqhYU/NmKWKJYyNSmVYdH9QjqnYxmtcj1GPXpK/72H73HVF5JPhIhPEGbegZqdTM=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.41,REQID:8387e6a4-b346-4155-946e-00b34210ba26,IP:0,U
-	RL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-	:release,TS:-5
-X-CID-META: VersionHash:6dc6a47,CLOUDID:1c62a4be-d7af-4351-93aa-42531abf0c7b,B
-	ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-	RL:11|1,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES
-	:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 0,NGT
-X-CID-BAS: 0,NGT,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_ULN
-X-UUID: bdbd74085ed611ef8b96093e013ec31c-20240820
-Received: from mtkmbs09n1.mediatek.inc [(172.21.101.35)] by mailgw02.mediatek.com
-	(envelope-from <tze-nan.wu@mediatek.com>)
-	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-	with ESMTP id 533411009; Tue, 20 Aug 2024 17:29:47 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- MTKMBS09N1.mediatek.inc (172.21.101.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Tue, 20 Aug 2024 17:29:47 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
- mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1118.26 via Frontend Transport; Tue, 20 Aug 2024 17:29:47 +0800
-From: Tze-nan Wu <Tze-nan.Wu@mediatek.com>
-To: <netdev@vger.kernel.org>, "David S. Miller" <davem@davemloft.net>, Eric
- Dumazet <edumazet@google.com>, Kuniyuki Iwashima <kuniyu@amazon.com>, Jakub
- Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Matthias Brugger
-	<matthias.bgg@gmail.com>, AngeloGioacchino Del Regno
-	<angelogioacchino.delregno@collabora.com>, Stanislav Fomichev
-	<sdf@fomichev.me>
-CC: <bobule.chang@mediatek.com>, <wsd_upstream@mediatek.com>,
-	<linux-kernel@vger.kernel.org>, <linux-mediatek@lists.infradead.org>, Tze-nan
- Wu <Tze-nan.Wu@mediatek.com>, Yanghui Li <yanghui.li@mediatek.com>, Cheng-Jui
- Wang <cheng-jui.wang@mediatek.com>, Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>, John Fastabend
-	<john.fastabend@gmail.com>, Andrii Nakryiko <andrii@kernel.org>, Martin KaFai
- Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu
-	<song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, KP Singh
-	<kpsingh@kernel.org>, Hao Luo <haoluo@google.com>, Jiri Olsa
-	<jolsa@kernel.org>, <bpf@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>
-Subject: [PATCH v3] net/socket: Check cgroup_bpf_enabled() only once in do_sock_getsockopt()
-Date: Tue, 20 Aug 2024 17:29:42 +0800
-Message-ID: <20240820092942.16654-1-Tze-nan.Wu@mediatek.com>
-X-Mailer: git-send-email 2.18.0
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nKYqJLmk"
+Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-a7a94478a4eso1094468066b.1;
+        Tue, 20 Aug 2024 03:17:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1724149054; x=1724753854; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=KDCCCZfEDklTEDmwUp0EEGgF+x5DgllGqM8ppmfdIMs=;
+        b=nKYqJLmkIft/NJ+jfwlhoQSk6nX73kakmmV0Q3Hmp6X+6aIUEW+3rSYDnUwgtQHpS4
+         nS0RtCrC+wKiwGkrUCyhFWO9hyeq5xNZG3lbz4ex/tsYQxAAfi5SpQpaHA8wvA9p0hJL
+         FpsjLiZEK/LUrgMkhnyWDsHc9XJeT7deP8li4xvtb8BAS9TTTFv/o5NspUyMg9RLfZYN
+         PDBb4bMc1Q02Nj8s/k+gZwPQKJ7gLrDc9KyUF0eyQ0jlGz2InSPyxtbRBwlSMIMa13ju
+         nPI2WJWrveLaOCri72P0p67CXAvounppoR6VZHxRIkqDYvwT8Qfccptxkkj6EjCGBtNg
+         hfpQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1724149054; x=1724753854;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=KDCCCZfEDklTEDmwUp0EEGgF+x5DgllGqM8ppmfdIMs=;
+        b=oibiyzQYem6oQYIo1hXipLX8flSz1YR/mh3o7wOAj3YnpraTez0FwrkHhGZHyXufE1
+         oxKeqmh7oFCaKeuDnlajiYvauGePNelVx/UJj2Ef40svUt+b7MICLV100CTCEkHZZWYG
+         OCiFV5QHPn2Li0qRxPJimTBsuj4z5rfXEM3gxXpdWteXF0iIuq/Ah6GkZYUzY2dqWqLg
+         MKNnVc2IptM8oghXQj/raem8gvP1Ira6OzwTQstCUapZgc0ivVEYSg19R6EpIOzJbG/0
+         97ZWr9lD+oOil4TGsuCnXiC+p1PckDQ/4SFQYxzUUc73KGuXEIZSRtegMzW8an9X7czg
+         isiw==
+X-Forwarded-Encrypted: i=1; AJvYcCXEdG5oNnpTZZbLE+1XUgWrEaohbZkLU9bqCCaSoD9UJ9sOvxzy6vOoZxCF0rbs6+eGVZCm0IiGf3ylPEiu3sV/Sj1V7LwS0YdVQRWJq3okfL119iQG1r3b3JvicMjnV6jI
+X-Gm-Message-State: AOJu0YyQKJIVDYefvCa6vLV7/S5G0V5WDTZNhjBdyDnqwGa+X7cZO9be
+	EbRCev9qfRlXHHXdykAApasIBGwTSMzCO3xrFpQNvvBptfUOjTMh7jjMbQ==
+X-Google-Smtp-Source: AGHT+IEGej1nTsHT7LkLDAhVUwrtGbfv7KKa4ADTQE0bCOZPBkQhk5r0OjOkQcdlaDDKuxGCTxRTtA==
+X-Received: by 2002:a17:907:9811:b0:a7a:a4cf:4f93 with SMTP id a640c23a62f3a-a8643fee514mr226176466b.32.1724149053358;
+        Tue, 20 Aug 2024 03:17:33 -0700 (PDT)
+Received: from krava (2001-1ae9-1c2-4c00-726e-c10f-8833-ff22.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:726e:c10f:8833:ff22])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a83838cfb3bsm738173166b.65.2024.08.20.03.17.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 Aug 2024 03:17:32 -0700 (PDT)
+From: Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date: Tue, 20 Aug 2024 12:17:31 +0200
+To: Steven Rostedt <rostedt@goodmis.org>
+Cc: Jiri Olsa <olsajiri@gmail.com>,
+	Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+	Juri Lelli <juri.lelli@redhat.com>, bpf <bpf@vger.kernel.org>,
+	LKML <linux-kernel@vger.kernel.org>,
+	Artem Savkov <asavkov@redhat.com>,
+	"Jose E. Marchesi" <jose.marchesi@oracle.com>
+Subject: Re: NULL pointer deref when running BPF monitor program (6.11.0-rc1)
+Message-ID: <ZsRtOzhicxAhkmoN@krava>
+References: <CAADnVQ+NpPtFOrvD0o2F8npCpZwPrLf4dX8h8Rt96uwM+crQcQ@mail.gmail.com>
+ <ZrSh8AuV21AKHfNg@krava>
+ <CAADnVQLYxdKn-J2-2iXKKKTg=o6xkKWzV2WyYrnmQ-j62b9STA@mail.gmail.com>
+ <Zr3q8ihbe8cUdpfp@krava>
+ <CAADnVQL2ChR5hGAXoV11QdMjN2WwHTLizfiAjRQfz3ekoj2iqg@mail.gmail.com>
+ <20240816101031.6dd1361b@rorschach.local.home>
+ <Zr-ho0ncAk__sZiX@krava>
+ <20240816153040.14d36c77@rorschach.local.home>
+ <ZsMwyO1Tv6BsOyc-@krava>
+ <20240819113747.31d1ae79@gandalf.local.home>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240819113747.31d1ae79@gandalf.local.home>
 
-The return value from `cgroup_bpf_enabled(CGROUP_GETSOCKOPT)` can change
-between the invocations of `BPF_CGROUP_GETSOCKOPT_MAX_OPTLEN` and
-`BPF_CGROUP_RUN_PROG_GETSOCKOPT`.
+On Mon, Aug 19, 2024 at 11:37:47AM -0400, Steven Rostedt wrote:
+> On Mon, 19 Aug 2024 13:47:20 +0200
+> Jiri Olsa <olsajiri@gmail.com> wrote:
+> 
+> > verifier assumes that programs attached to the tracepoint can access
+> > pointer arguments without checking them for null and some of those
+> > programs most likely access such arguments directly
+> 
+> Hmm, so the verifier made a wrong assumption :-/  That's because that was
+> never a requirement for tracepoint arguments and several can easily be
+> NULL. That's why the macros have NULL checks for all arguments. For
+> example, see include/trace/stages/stage5_get_offsets.h:
+> 
+>   static inline const char *__string_src(const char *str)
+>   {
+>        if (!str)
+>                return EVENT_NULL_STR;
+>        return str;
+>   }
+> 
+> 
+> How does the verifier handle accessing function arguments? Because a
+> tracepoint call is no different.
 
-If `cgroup_bpf_enabled(CGROUP_GETSOCKOPT)` changes from "false" to
-"true" between the invocations of `BPF_CGROUP_GETSOCKOPT_MAX_OPTLEN` and
-`BPF_CGROUP_RUN_PROG_GETSOCKOPT`, `BPF_CGROUP_RUN_PROG_GETSOCKOPT` will
-receive an -EFAULT from `__cgroup_bpf_run_filter_getsockopt(max_optlen=0)`
-due to `get_user()` was not reached in `BPF_CGROUP_GETSOCKOPT_MAX_OPTLEN`.
+verifier is checking program's access to function arguments which in
+case of tracepoint is access to context (btf_ctx_access function)
 
-Scenario shown as below:
+> 
+> > 
+> > changing that globally and require bpf program to do null check for all
+> > pointer arguments will make verifier fail to load existing programs
+> > 
+> > > 
+> > > If you had a macro around the parameter:
+> > > 
+> > > 		TP_PROTO(struct task_struct *tsk, struct task_struct *__nullable(pi_task)),
+> > > 
+> > > Could having that go through another macro pass in trace_events.h work?
+> > > That is, could we associate the trace event with "nullable" parameters
+> > > that could be stored someplace else for you?  
+> > 
+> > IIUC you mean to store extra data for each tracepoint that would
+> > annotate the argument? as Alexei pointed out earlier it might be
+> > too much, because we'd be fine with just adding suffix to annotated
+> > arguments in __bpf_trace_##call:
+> > 
+> > 	__bpf_trace_##call(void *__data, proto)                                 \
+> > 	{                                                                       \
+> > 		CONCATENATE(bpf_trace_run, COUNT_ARGS(args))(__data, CAST_TO_U64(args));        \
+> > 	}
+> > 
+> > with that verifier could easily get suffix information from BTF and
+> > once gcc implements btf_type_tag we can easily switch to that
+> 
+> Could it be possible that the verifier could add to the exception table for
+> all accesses to tracepoint arguments? Then if there's a NULL pointer
+> dereference, the kernel will not crash but the exception can be sent to the
+> user space process instead? That is, it sends SIGSEV to the task accessing
+> NULL when it shouldn't.
 
-           `process A`                      `process B`
-           -----------                      ------------
-  BPF_CGROUP_GETSOCKOPT_MAX_OPTLEN
-                                            enable CGROUP_GETSOCKOPT
-  BPF_CGROUP_RUN_PROG_GETSOCKOPT (-EFAULT)
+hm, but that would mean random process that would happened to trigger
+the tracepoint would segfault, right? I don't think we can do that
 
-To prevent this, invoke `cgroup_bpf_enabled()` only once and cache the
-result in a newly added local variable `enabled`.
-Both `BPF_CGROUP_*` macros in `do_sock_getsockopt` will then check their
-condition using the same `enabled` variable as the condition variable,
-instead of using the return values from `cgroup_bpf_enabled` called by
-themselves as the condition variable(which could yield different results).
-This ensures that either both `BPF_CGROUP_*` macros pass the condition
-or neither does.
+it seems better to teach verifier which tracepoint arguments can be NULL
+and deny load of the bpf program that would not check such argument properly
 
-Co-developed-by: Yanghui Li <yanghui.li@mediatek.com>
-Signed-off-by: Yanghui Li <yanghui.li@mediatek.com>
-Co-developed-by: Cheng-Jui Wang <cheng-jui.wang@mediatek.com>
-Signed-off-by: Cheng-Jui Wang <cheng-jui.wang@mediatek.com>
-Signed-off-by: Tze-nan Wu <Tze-nan.Wu@mediatek.com>
----
-
-Chagnes from v1 to v2: https://lore.kernel.org/all/20240819082513.27176-1-Tze-nan.Wu@mediatek.com/
-  Instead of using cgroup_lock in the fastpath, invoke cgroup_bpf_enabled
-  only once and cache the value in the newly added variable `enabled`.
-  `BPF_CGROUP_*` macros in do_sock_getsockopt can then both check their
-  condition with the new variable `enable`, ensuring that either they both
-  passing the condition or both do not.
-
-Chagnes from v2 to v3: https://lore.kernel.org/all/20240819155627.1367-1-Tze-nan.Wu@mediatek.com/
-  Hide cgroup_bpf_enabled in the macro, and some modifications to adapt
-  the coding style.
-
----
- include/linux/bpf-cgroup.h | 15 ++++++++-------
- net/socket.c               |  5 +++--
- 2 files changed, 11 insertions(+), 9 deletions(-)
-
-diff --git a/include/linux/bpf-cgroup.h b/include/linux/bpf-cgroup.h
-index fb3c3e7181e6..5afa2ac76aae 100644
---- a/include/linux/bpf-cgroup.h
-+++ b/include/linux/bpf-cgroup.h
-@@ -390,20 +390,20 @@ static inline bool cgroup_bpf_sock_enabled(struct sock *sk,
- 	__ret;								       \
- })
- 
--#define BPF_CGROUP_GETSOCKOPT_MAX_OPTLEN(optlen)			       \
-+#define BPF_CGROUP_GETSOCKOPT_MAX_OPTLEN(optlen, enabled)		       \
- ({									       \
- 	int __ret = 0;							       \
--	if (cgroup_bpf_enabled(CGROUP_GETSOCKOPT))			       \
-+	enabled = cgroup_bpf_enabled(CGROUP_GETSOCKOPT);		       \
-+	if (enabled)							       \
- 		copy_from_sockptr(&__ret, optlen, sizeof(int));		       \
- 	__ret;								       \
- })
- 
- #define BPF_CGROUP_RUN_PROG_GETSOCKOPT(sock, level, optname, optval, optlen,   \
--				       max_optlen, retval)		       \
-+				       max_optlen, retval, enabled)	       \
- ({									       \
- 	int __ret = retval;						       \
--	if (cgroup_bpf_enabled(CGROUP_GETSOCKOPT) &&			       \
--	    cgroup_bpf_sock_enabled(sock, CGROUP_GETSOCKOPT))		       \
-+	if (enabled && cgroup_bpf_sock_enabled(sock, CGROUP_GETSOCKOPT))       \
- 		if (!(sock)->sk_prot->bpf_bypass_getsockopt ||		       \
- 		    !INDIRECT_CALL_INET_1((sock)->sk_prot->bpf_bypass_getsockopt, \
- 					tcp_bpf_bypass_getsockopt,	       \
-@@ -518,9 +518,10 @@ static inline int bpf_percpu_cgroup_storage_update(struct bpf_map *map,
- #define BPF_CGROUP_RUN_PROG_SOCK_OPS(sock_ops) ({ 0; })
- #define BPF_CGROUP_RUN_PROG_DEVICE_CGROUP(atype, major, minor, access) ({ 0; })
- #define BPF_CGROUP_RUN_PROG_SYSCTL(head,table,write,buf,count,pos) ({ 0; })
--#define BPF_CGROUP_GETSOCKOPT_MAX_OPTLEN(optlen) ({ 0; })
-+#define BPF_CGROUP_GETSOCKOPT_MAX_OPTLEN(optlen, enabled) ({ 0; })
- #define BPF_CGROUP_RUN_PROG_GETSOCKOPT(sock, level, optname, optval, \
--				       optlen, max_optlen, retval) ({ retval; })
-+				       optlen, max_optlen, retval, \
-+				       enabled) ({ retval; })
- #define BPF_CGROUP_RUN_PROG_GETSOCKOPT_KERN(sock, level, optname, optval, \
- 					    optlen, retval) ({ retval; })
- #define BPF_CGROUP_RUN_PROG_SETSOCKOPT(sock, level, optname, optval, optlen, \
-diff --git a/net/socket.c b/net/socket.c
-index fcbdd5bc47ac..0b465dc8a789 100644
---- a/net/socket.c
-+++ b/net/socket.c
-@@ -2363,6 +2363,7 @@ int do_sock_getsockopt(struct socket *sock, bool compat, int level,
- 		       int optname, sockptr_t optval, sockptr_t optlen)
- {
- 	int max_optlen __maybe_unused;
-+	bool enabled __maybe_unused;
- 	const struct proto_ops *ops;
- 	int err;
- 
-@@ -2371,7 +2372,7 @@ int do_sock_getsockopt(struct socket *sock, bool compat, int level,
- 		return err;
- 
- 	if (!compat)
--		max_optlen = BPF_CGROUP_GETSOCKOPT_MAX_OPTLEN(optlen);
-+		max_optlen = BPF_CGROUP_GETSOCKOPT_MAX_OPTLEN(optlen, enabled);
- 
- 	ops = READ_ONCE(sock->ops);
- 	if (level == SOL_SOCKET) {
-@@ -2390,7 +2391,7 @@ int do_sock_getsockopt(struct socket *sock, bool compat, int level,
- 	if (!compat)
- 		err = BPF_CGROUP_RUN_PROG_GETSOCKOPT(sock->sk, level, optname,
- 						     optval, optlen, max_optlen,
--						     err);
-+						     err, enabled);
- 
- 	return err;
- }
--- 
-2.45.2
-
+jirka
