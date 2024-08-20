@@ -1,294 +1,155 @@
-Received: from mout.perfora.net (mout.perfora.net [74.208.4.197])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D88C718CC0D
-	for <bpf@vger.kernel.org>; Tue, 20 Aug 2024 10:18:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.208.4.197
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0FA418DF66
+	for <bpf@vger.kernel.org>; Tue, 20 Aug 2024 10:24:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724149097; cv=none; b=cAx+ebEVnd3EW/j1Ot0+DYDBRCW5krCCHobuGv/VM/cmfzoPovz2R4S6E0q92Sn9XmmbTi+h3l64M+ugLswM3oYDZVTK+YXjNQiSAsrGVkhZPdywu95WHIw4uq4SlVzzfxADihs9QAtmDx327cUPIAZdYA2ptv5CwfIFjcLWAiA=
+	t=1724149454; cv=none; b=TatHKJPC3VW2TPq6x4uEN3PFqGX5KZ0RDzhq5cwlzNXKIvG4yXZvVlPnC/a7/tSONABPv0Dmw+bONXzALO0UEX+1Y7Nbl+E67J3t59lbntaLozMZfSOqIcjYTtIFejZfrZ81oBSJArCRQh1Z3xJgZmphLikfNdwMhQEWH9j3dQI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724149097; c=relaxed/simple;
-	bh=ftiCdK+HuM1djLlIQJCHxpKalyNiSzoY+iDHVh2EdEo=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=p3GQL93AiNzt83SXYVvn9wTsDTS4cRqT4dhFfwcWzklSU6wsJ941Oc9PYLtspNMrqHfXB7NZ4DnDyEMzf/LTAcqGjwNdQfQLHLetATgGjMOmTpXpwO0eQspJuZDorbnpLJg9m/TTq30HdxwPv4WcqdWyrL9+b5f7zUVwgP+qG40=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=jordanrome.com; spf=pass smtp.mailfrom=jordanrome.com; dkim=pass (2048-bit key) header.d=jordanrome.com header.i=linux@jordanrome.com header.b=ratZBya6; arc=none smtp.client-ip=74.208.4.197
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=jordanrome.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=jordanrome.com
+	s=arc-20240116; t=1724149454; c=relaxed/simple;
+	bh=dobEUqp8lcfEJD4HRWlqBt+710CakNhR8cx97jpz6jM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=G3cZr3PR4s3P4lzUDgnVtClNn4fGobLmZ/i1spXv+7dHXGEZ2+uYl/T175DHZN7xgV8lKl440PK0RWN0WXvNLFE1XzTtfBjH6SCg+exeGfx0qoDS2hRgzgt+ya30+wTYezOoqKDQi2ndKwkOqAKRPCJ0GK/ZSFvXDLIuBsvh4wY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iLYu1mSl; arc=none smtp.client-ip=209.85.210.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=jordanrome.com header.i=linux@jordanrome.com header.b="ratZBya6"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=jordanrome.com;
-	s=s1-ionos; t=1724149067; x=1724753867; i=linux@jordanrome.com;
-	bh=JAtM5HzXKWoEKkKhlpQuXZ5CfmOI1squcd2mbmSOjBY=;
-	h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:In-Reply-To:
-	 References:MIME-Version:Content-Transfer-Encoding:cc:
-	 content-transfer-encoding:content-type:date:from:message-id:
-	 mime-version:reply-to:subject:to;
-	b=ratZBya6LCMs8Cc4A6s1YFkub0uwmL9qKPNy0thsXZyQJd8kyOm32nkiBfj5bmDM
-	 g2axpYtF38yPSfmPQXvJF/zc/7hHXmSH7wRlrnEZFXlx0KLoBcf+ro/xS3NcrN12z
-	 6+uKUdVKs8ifsgQzcAwZVHV7LBygRAtn91wFOYVcYg+K0ocOz5c765dhF2T3+a22G
-	 c1GaRZTSags2wCe933v+5ovViRlih639KWD/r2vi6Ws3Ot7sCzU+XDUUcX7TgvFty
-	 rgE2mTBIgSjA9Y64o+Sp01910cRM3tA9InnBIKNv7Aryh+N5SdqzX4uVeILv9YL6m
-	 fZ+VEbxSkTU8JmLSpg==
-X-UI-Sender-Class: 55c96926-9e95-11ee-ae09-1f7a4046a0f6
-Received: from localhost ([173.252.127.115]) by mrelay.perfora.net (mreueus004
- [74.208.5.2]) with ESMTPSA (Nemesis) id 1MrPuF-1sKCHE1uFz-00pDMI; Tue, 20 Aug
- 2024 12:17:47 +0200
-From: Jordan Rome <linux@jordanrome.com>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@kernel.org>,
-	Kernel Team <kernel-team@fb.com>,
-	sinquersw@gmail.com
-Subject: [bpf-next v7 2/2] bpf: Add tests for bpf_copy_from_user_str kfunc
-Date: Tue, 20 Aug 2024 03:17:25 -0700
-Message-ID: <20240820101725.1629353-2-linux@jordanrome.com>
-X-Mailer: git-send-email 2.43.5
-In-Reply-To: <20240820101725.1629353-1-linux@jordanrome.com>
-References: <20240820101725.1629353-1-linux@jordanrome.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iLYu1mSl"
+Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-70f5ef740b7so4766160b3a.2
+        for <bpf@vger.kernel.org>; Tue, 20 Aug 2024 03:24:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1724149452; x=1724754252; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=KRU3frt64gJjfxCgo+e+sUbnNe57UC7Fh/tz5nbK0wk=;
+        b=iLYu1mSlW5iCqV3q1VFAzw08x1M/1FPza87U7BWaVMGSLnmqUF4MMfuOHmAJZLNeEh
+         y83swnduf6JWb2UIan1ZOIhBv9Rk3/Um5Tjr6E+HybwEbdpzJKYUhYRkb3x19We7Ys+C
+         mnHtOb+CmtcDnRhF2mEop7/UPLi4vQnKgxb45TlVZ4Oqtv6Z4h3F6OZzyTq6UiiRFxUR
+         bF+r+2DSzPWWOLcabSjStPUsH8a2Rb2MPF3KzGpwouw/ePnjaiLs/mZVk9dqn4ukSJHh
+         th/R7w8tDBAlXSL2SzwbDKffnUk97GS/oM2U0Yfz6pSOgs1r4T7xw1JJcKMWp4FZYpkz
+         cV6Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1724149452; x=1724754252;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=KRU3frt64gJjfxCgo+e+sUbnNe57UC7Fh/tz5nbK0wk=;
+        b=C1mM5tn38RGvWHw5PkU4cLlsHsEKPdFhuz8oI4FQ4Edhd/hyuifXqqg7jATycLYp2v
+         21OjoWZiEyBoaFhMS70YKDatFNxCBuU0TRPsvqXZO+A4lxPKd/XVRpltHuHjM12ENIKO
+         spcBippIvMV8l9GodDutr71X5JiKxsqTPx0E+dnKTYeVCnpBTpnS8Z5ONvTMi5ITG7B/
+         NXwpo/i7WO8ndVpnSpy9Ao6wr00rKC8agafbwvEsBm4BgAt51WWyWs4Pje3wxPLSgtvy
+         vtBrzBYnuC8E5fnIr0hyY+2j55R9su8St0oGN199iMRHLgs6XQa57888UaJeCBjZur3j
+         IFkA==
+X-Gm-Message-State: AOJu0YxvFkXz9oBnlcOw8d4Wtf7vZEp4HxK1rvJ87LkWxJ22rax/Ng/w
+	ffhb4INF/X3bk8kLm2U5i9VKvXhdHla5qmRjhuhoILE31nzQfSPP9RL/cHsm
+X-Google-Smtp-Source: AGHT+IHyN2X57gOHvyeA5cYVk1ir5KjqAY80ST6FZIw0AHffzAnysaM9UBcEzHMgpvrDtENDJE8aLw==
+X-Received: by 2002:a05:6300:668b:b0:1c0:f1cb:c4b2 with SMTP id adf61e73a8af0-1c904f6d703mr16449681637.4.1724149451520;
+        Tue, 20 Aug 2024 03:24:11 -0700 (PDT)
+Received: from honey-badger.. ([38.34.87.7])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2d3e3174bfdsm8976166a91.27.2024.08.20.03.24.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 Aug 2024 03:24:11 -0700 (PDT)
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: bpf@vger.kernel.org,
+	ast@kernel.org
+Cc: andrii@kernel.org,
+	daniel@iogearbox.net,
+	martin.lau@linux.dev,
+	kernel-team@fb.com,
+	yonghong.song@linux.dev,
+	hffilwlqm@gmail.com,
+	Eduard Zingerman <eddyz87@gmail.com>
+Subject: [PATCH bpf-next v3 0/8] __jited test tag to check disassembly after jit
+Date: Tue, 20 Aug 2024 03:23:48 -0700
+Message-ID: <20240820102357.3372779-1-eddyz87@gmail.com>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:1deFl2NAkpzcmnCTZ5CI3nU0UYN425yjP0llTeSmHgxFFh1dYnq
- diVBjuvtbaM+IMPwaOGaSAx7Fwwx4ng1CMA+iB4N995hKqpOkyoiQLROEjCtal12Wm4dKAA
- FUy+whcDQ0H8HX2IEeL6WvdDoHFG/6FK/C6IqY8UJV26aZXmG+GEhotBwmrTH6tcpuyvm1O
- yfqhB0Tx7hQUEomgxvbIA==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:Ad1WTZ4IJo4=;71QpmsXeWb22dsrWd6iDJRf10PG
- kkvcFn/KGZwbAW9HSRs+kwSoTjFoCknO7l/jC3acEShHO7En/8vtGhNHdbB+Iw8SWnUebIFBf
- CHb5L71v601xQmaH46aWOfknYWF3H2FM6/noW/imNPEvO04z8Z0KhMgrc6iWiNPieBZxq9LbS
- sEzoF4jZoS9LtIr6ygI0TIAv4uJR6DOma2t6Ny618BnRnr4ITHxGgzGnr/r9iLuPkqfiph8hq
- d+b/zFBQVd9jc/bx8T3edXukNJsYYoGCEwCqj5e01ZlRe+bylH6x1CTs11bgnASHAYR8CAm4e
- LqXWlGGxamqxd/dbKR2Kswbh2kpbWU63hSXJORvKyzH3vTAOE4YkHfCSP6aQiqc08LwcaoMPP
- GoYMkymix3bF8mnwoYzgf5yVJzkhBxvFVsMG9Ex2DgzDF3PKVxrRJBfHr7XcJhMD1S1TPvdAz
- VLR/u5gDwMGhmq/3BvK1IjH0vDoow6gF77cg885UB/6UvLXXDpUfPg/ObK3Lv9ptxg5m2HMdh
- CmnUko5awfjkvVTzuiT3JY0ILg4l0LHf0abxNuk1s1G1+naB/ZowcfueMhAS0r1+KbjPRFCHY
- qN46rwJeqP8dDP48WwjwtmRgDLGAFj7K5bYXznc4GOh6tJ3H0+OLWSoyS7gOr48JfGCIk+Lzw
- 7r2RiF52oAbNz9PU+WdVkDaJplkysIpVUWyPKfV6r1G5Sgar4Op3ZdJTSo0M2NEkaDmhu1G/W
- gxxL7Jyi/im5tM6yNSQSlkDepYNWfZl3Q==
+Content-Transfer-Encoding: 8bit
 
-This adds tests for both the happy path and
-the error path.
+Some of the logic in the BPF jits might be non-trivial.
+It might be useful to allow testing this logic by comparing
+generated native code with expected code template.
+This patch set adds a macro __jited() that could be used for
+test_loader based tests in a following manner:
 
-Signed-off-by: Jordan Rome <linux@jordanrome.com>
-=2D--
- .../selftests/bpf/prog_tests/attach_probe.c   |  8 ++-
- .../selftests/bpf/prog_tests/read_vsyscall.c  |  1 +
- .../selftests/bpf/progs/read_vsyscall.c       |  9 ++-
- .../selftests/bpf/progs/test_attach_probe.c   | 57 ++++++++++++++++++-
- 4 files changed, 68 insertions(+), 7 deletions(-)
+    SEC("tp")
+    __arch_x86_64
+    __jited("   endbr64")
+    __jited("   nopl    (%rax,%rax)")
+    __jited("   xorq    %rax, %rax")
+    ...
+    __naked void some_test(void) { ... }
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/attach_probe.c b/tools=
-/testing/selftests/bpf/prog_tests/attach_probe.c
-index 7175af39134f..329c7862b52d 100644
-=2D-- a/tools/testing/selftests/bpf/prog_tests/attach_probe.c
-+++ b/tools/testing/selftests/bpf/prog_tests/attach_probe.c
-@@ -283,9 +283,11 @@ static void test_uprobe_sleepable(struct test_attach_=
-probe *skel)
- 	trigger_func3();
+Also add a test for jit code generated for tail calls handling to
+demonstrate the feature.
 
- 	ASSERT_EQ(skel->bss->uprobe_byname3_sleepable_res, 9, "check_uprobe_byna=
-me3_sleepable_res");
--	ASSERT_EQ(skel->bss->uprobe_byname3_res, 10, "check_uprobe_byname3_res")=
-;
--	ASSERT_EQ(skel->bss->uretprobe_byname3_sleepable_res, 11, "check_uretpro=
-be_byname3_sleepable_res");
--	ASSERT_EQ(skel->bss->uretprobe_byname3_res, 12, "check_uretprobe_byname3=
-_res");
-+	ASSERT_EQ(skel->bss->uprobe_byname3_str_sleepable_res, 10, "check_uprobe=
-_byname3_str_sleepable_res");
-+	ASSERT_EQ(skel->bss->uprobe_byname3_res, 11, "check_uprobe_byname3_res")=
-;
-+	ASSERT_EQ(skel->bss->uretprobe_byname3_sleepable_res, 12, "check_uretpro=
-be_byname3_sleepable_res");
-+	ASSERT_EQ(skel->bss->uretprobe_byname3_str_sleepable_res, 13, "check_ure=
-tprobe_byname3_str_sleepable_res");
-+	ASSERT_EQ(skel->bss->uretprobe_byname3_res, 14, "check_uretprobe_byname3=
-_res");
- }
+The feature uses LLVM libraries to do the disassembly.
+At selftests compilation time Makefile detects if these libraries are
+available. When libraries are not available tests using __jit_x86()
+are skipped. 
+Current CI environment does not include llvm development libraries,
+but changes to add these are trivial.
 
- void test_attach_probe(void)
-diff --git a/tools/testing/selftests/bpf/prog_tests/read_vsyscall.c b/tool=
-s/testing/selftests/bpf/prog_tests/read_vsyscall.c
-index 3405923fe4e6..c7b9ba8b1d06 100644
-=2D-- a/tools/testing/selftests/bpf/prog_tests/read_vsyscall.c
-+++ b/tools/testing/selftests/bpf/prog_tests/read_vsyscall.c
-@@ -23,6 +23,7 @@ struct read_ret_desc {
- 	{ .name =3D "probe_read_user_str", .ret =3D -EFAULT },
- 	{ .name =3D "copy_from_user", .ret =3D -EFAULT },
- 	{ .name =3D "copy_from_user_task", .ret =3D -EFAULT },
-+	{ .name =3D "copy_from_user_str", .ret =3D -EFAULT },
- };
+This was previously discussed here:
+https://lore.kernel.org/bpf/20240718205158.3651529-1-yonghong.song@linux.dev/
 
- void test_read_vsyscall(void)
-diff --git a/tools/testing/selftests/bpf/progs/read_vsyscall.c b/tools/tes=
-ting/selftests/bpf/progs/read_vsyscall.c
-index 986f96687ae1..39ebef430059 100644
-=2D-- a/tools/testing/selftests/bpf/progs/read_vsyscall.c
-+++ b/tools/testing/selftests/bpf/progs/read_vsyscall.c
-@@ -1,5 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0
- /* Copyright (C) 2024. Huawei Technologies Co., Ltd */
-+#include "vmlinux.h"
- #include <linux/types.h>
- #include <bpf/bpf_helpers.h>
+Patch-set includes a few auxiliary steps:
+- patches #2 and #3 fix a few bugs in test_loader behaviour;
+- patch #4 replaces __regex macro with ability to specify regular
+  expressions in __msg and __xlated using "{{" "}}" escapes;
+- patch #8 updates __xlated to match disassembly lines consequently,
+  same way as __jited does.
 
-@@ -7,10 +8,15 @@
+Changes v2->v3:
+- changed macro name from __jit_x86 to __jited with __arch_* to
+  specify disassembly arch (Yonghong);
+- __jited matches disassembly lines consequently with "..."
+  allowing to skip some number of lines (Andrii);
+- __xlated matches disassembly lines consequently, same as __jited;
+- "{{...}}" regex brackets instead of __regex macro;
+- bug fixes for old commits.
 
- int target_pid =3D 0;
- void *user_ptr =3D 0;
--int read_ret[8];
-+int read_ret[9];
+Changes v1->v2:
+- stylistic changes suggested by Yonghong;
+- fix for -Wformat-truncation related warning when compiled with
+  llvm15 (Yonghong).
 
- char _license[] SEC("license") =3D "GPL";
+v1: https://lore.kernel.org/bpf/20240809010518.1137758-1-eddyz87@gmail.com/
+v2: https://lore.kernel.org/bpf/20240815205449.242556-1-eddyz87@gmail.com/
 
-+/*
-+ * This is the only kfunc, the others are helpers
-+ */
-+int bpf_copy_from_user_str(void *dst, u32, const void *, u64) __weak __ks=
-ym;
-+
- SEC("fentry/" SYS_PREFIX "sys_nanosleep")
- int do_probe_read(void *ctx)
- {
-@@ -40,6 +46,7 @@ int do_copy_from_user(void *ctx)
- 	read_ret[6] =3D bpf_copy_from_user(buf, sizeof(buf), user_ptr);
- 	read_ret[7] =3D bpf_copy_from_user_task(buf, sizeof(buf), user_ptr,
- 					      bpf_get_current_task_btf(), 0);
-+	read_ret[8] =3D bpf_copy_from_user_str((char *)buf, sizeof(buf), user_pt=
-r, 0);
+Eduard Zingerman (8):
+  selftests/bpf: less spam in the log for message matching
+  selftests/bpf: correctly move 'log' upon successful match
+  selftests/bpf: fix to avoid __msg tag de-duplication by clang
+  selftests/bpf: replace __regex macro with "{{...}}" patterns
+  selftests/bpf: utility function to get program disassembly after jit
+  selftests/bpf: __jited test tag to check disassembly after jit
+  selftests/bpf: validate jit behaviour for tail calls
+  selftests/bpf: validate __xlated same way as __jited
 
- 	return 0;
- }
-diff --git a/tools/testing/selftests/bpf/progs/test_attach_probe.c b/tools=
-/testing/selftests/bpf/progs/test_attach_probe.c
-index 68466a6ad18c..4959eda92479 100644
-=2D-- a/tools/testing/selftests/bpf/progs/test_attach_probe.c
-+++ b/tools/testing/selftests/bpf/progs/test_attach_probe.c
-@@ -5,6 +5,7 @@
- #include <bpf/bpf_helpers.h>
- #include <bpf/bpf_tracing.h>
- #include <bpf/bpf_core_read.h>
-+#include <errno.h>
- #include "bpf_misc.h"
+ tools/testing/selftests/bpf/.gitignore        |   1 +
+ tools/testing/selftests/bpf/Makefile          |  48 ++-
+ .../selftests/bpf/jit_disasm_helpers.c        | 234 ++++++++++++
+ .../selftests/bpf/jit_disasm_helpers.h        |  10 +
+ .../selftests/bpf/prog_tests/verifier.c       |   2 +
+ tools/testing/selftests/bpf/progs/bpf_misc.h  |  55 ++-
+ .../testing/selftests/bpf/progs/dynptr_fail.c |   6 +-
+ .../testing/selftests/bpf/progs/rbtree_fail.c |   2 +-
+ .../bpf/progs/refcounted_kptr_fail.c          |   4 +-
+ .../selftests/bpf/progs/verifier_nocsr.c      |  53 ++-
+ .../selftests/bpf/progs/verifier_spill_fill.c |   8 +-
+ .../bpf/progs/verifier_tailcall_jit.c         | 105 ++++++
+ tools/testing/selftests/bpf/test_loader.c     | 357 +++++++++++++-----
+ 13 files changed, 772 insertions(+), 113 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/jit_disasm_helpers.c
+ create mode 100644 tools/testing/selftests/bpf/jit_disasm_helpers.h
+ create mode 100644 tools/testing/selftests/bpf/progs/verifier_tailcall_jit.c
 
- int kprobe2_res =3D 0;
-@@ -14,11 +15,15 @@ int uretprobe_byname_res =3D 0;
- int uprobe_byname2_res =3D 0;
- int uretprobe_byname2_res =3D 0;
- int uprobe_byname3_sleepable_res =3D 0;
-+int uprobe_byname3_str_sleepable_res =3D 0;
- int uprobe_byname3_res =3D 0;
- int uretprobe_byname3_sleepable_res =3D 0;
-+int uretprobe_byname3_str_sleepable_res =3D 0;
- int uretprobe_byname3_res =3D 0;
- void *user_ptr =3D 0;
-
-+int bpf_copy_from_user_str(void *dst, u32, const void *, u64) __weak __ks=
-ym;
-+
- SEC("ksyscall/nanosleep")
- int BPF_KSYSCALL(handle_kprobe_auto, struct __kernel_timespec *req, struc=
-t __kernel_timespec *rem)
- {
-@@ -87,11 +92,55 @@ static __always_inline bool verify_sleepable_user_copy=
-(void)
- 	return bpf_strncmp(data, sizeof(data), "test_data") =3D=3D 0;
- }
-
-+static __always_inline bool verify_sleepable_user_copy_str(void)
-+{
-+	int ret;
-+	char data_long[20];
-+	char data_long_pad[20];
-+	char data_long_err[20];
-+	char data_short[4];
-+	char data_short_pad[4];
-+
-+	ret =3D bpf_copy_from_user_str(data_short, sizeof(data_short), user_ptr,=
- 0);
-+
-+	if (bpf_strncmp(data_short, 4, "tes\0") !=3D 0 || ret !=3D 4)
-+		return false;
-+
-+	ret =3D bpf_copy_from_user_str(data_short_pad, sizeof(data_short_pad), u=
-ser_ptr, BPF_F_PAD_ZEROS);
-+
-+	if (bpf_strncmp(data_short, 4, "tes\0") !=3D 0 || ret !=3D 4)
-+		return false;
-+
-+	ret =3D bpf_copy_from_user_str(data_long, sizeof(data_long), user_ptr, 0=
-);
-+
-+	if (bpf_strncmp(data_long, 10, "test_data\0") !=3D 0 || ret !=3D 10)
-+		return false;
-+
-+	ret =3D bpf_copy_from_user_str(data_long_pad, sizeof(data_long_pad), use=
-r_ptr, BPF_F_PAD_ZEROS);
-+
-+	if (bpf_strncmp(data_long_pad, 10, "test_data\0") !=3D 0 || ret !=3D 10 =
-|| data_long_pad[19] !=3D '\0')
-+		return false;
-+
-+	ret =3D bpf_copy_from_user_str(data_long_err, sizeof(data_long_err), (vo=
-id *)data_long, BPF_F_PAD_ZEROS);
-+
-+	if (ret > 0 || data_long_err[19] !=3D '\0')
-+		return false;
-+
-+	ret =3D bpf_copy_from_user_str(data_long, sizeof(data_long), user_ptr, 2=
-);
-+
-+	if (ret !=3D -EINVAL)
-+		return false;
-+
-+	return true;
-+}
-+
- SEC("uprobe.s//proc/self/exe:trigger_func3")
- int handle_uprobe_byname3_sleepable(struct pt_regs *ctx)
- {
- 	if (verify_sleepable_user_copy())
- 		uprobe_byname3_sleepable_res =3D 9;
-+	if (verify_sleepable_user_copy_str())
-+		uprobe_byname3_str_sleepable_res =3D 10;
- 	return 0;
- }
-
-@@ -102,7 +151,7 @@ int handle_uprobe_byname3_sleepable(struct pt_regs *ct=
-x)
- SEC("uprobe//proc/self/exe:trigger_func3")
- int handle_uprobe_byname3(struct pt_regs *ctx)
- {
--	uprobe_byname3_res =3D 10;
-+	uprobe_byname3_res =3D 11;
- 	return 0;
- }
-
-@@ -110,14 +159,16 @@ SEC("uretprobe.s//proc/self/exe:trigger_func3")
- int handle_uretprobe_byname3_sleepable(struct pt_regs *ctx)
- {
- 	if (verify_sleepable_user_copy())
--		uretprobe_byname3_sleepable_res =3D 11;
-+		uretprobe_byname3_sleepable_res =3D 12;
-+	if (verify_sleepable_user_copy_str())
-+		uretprobe_byname3_str_sleepable_res =3D 13;
- 	return 0;
- }
-
- SEC("uretprobe//proc/self/exe:trigger_func3")
- int handle_uretprobe_byname3(struct pt_regs *ctx)
- {
--	uretprobe_byname3_res =3D 12;
-+	uretprobe_byname3_res =3D 14;
- 	return 0;
- }
-
-=2D-
-2.43.5
+-- 
+2.45.2
 
