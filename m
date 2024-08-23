@@ -1,175 +1,116 @@
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f171.google.com (mail-pg1-f171.google.com [209.85.215.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3FBC18661A
-	for <bpf@vger.kernel.org>; Fri, 23 Aug 2024 22:20:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3011139CFC;
+	Fri, 23 Aug 2024 22:22:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724451652; cv=none; b=kZ46k4O6wkJeslevD1+QUBR0oTtLjtWaWEVPip8JD30EdgWS8sV2UZpTLEQZDxQb8QXhfj6rchlGgTGRHznUSEMHdkyaPOS5blsNNEVGebGYyeKxyPviDwmLSzaCvGwMGkkWnWUeCiltPfrtkXpMFwUxxoumdn2gs2/m/kHK+yI=
+	t=1724451728; cv=none; b=kESFMM5qDMRfWpYbEQTMztxM4fLXBdV2yDwKoyWWaERxYuYw5cBNn+DVxcjKiFEvqWaTNuWkDuEDCq5vxB/HJNyaty5AlBkaTX9hQBqp6LMEF81iVPiJ/XO0DF1RBGF24cE/e8/iuYmhPBjOz7g2bpnLiijJBSJwp0ke7NzKRB0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724451652; c=relaxed/simple;
-	bh=I0AHQmtu1F98zoUHTpEp0EuFHgd26Lw+GozzVqCYMCM=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=lTN8I1Gfox20SixjHGCusb567j8L+E0agk+LidupY/am5FhUGY1RFD8g1SrxpzbguDy0PhpC209FaZIAetm4OlQEIm8KvBCq4+LSEY1Dsf/QZco990YdZEVgilGsU94cGJNTiu75HITIqBqbwlyden/SnFdvcaVYyFcDnxqQyig=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=gtC86pVn; arc=none smtp.client-ip=213.133.104.62
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
+	s=arc-20240116; t=1724451728; c=relaxed/simple;
+	bh=z42+Q8AZanZAyEhdmQQpfFOP7RxuncrUYLIRyjSCh9o=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=C38aPCPHea+nMGaWt+uYWIwqb7/Lu87jkUC7RWgOCC+1+4e9vkgtXjevIwT/bdpqqjMlGEsuvJS5Dyt+opx3e9muSjJDhao7aBq0muBMOaeniM0bhYMPtVwy43mS/wNpUlcmXaSfr9NEtW676Vxj6I+Nnr3S7KNyRqFPBlD8sCU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VVIUBaMa; arc=none smtp.client-ip=209.85.215.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="gtC86pVn"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:MIME-Version:
-	Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:In-Reply-To:References;
-	bh=+8yRMhoousb1OYEQ09N9+qsc3KTlRjIGMm/BHYoKyok=; b=gtC86pVn+//XH4+N3xqXp97X/P
-	mBnv9c/YwzoR4rM+0qjnWqocxEvZl2zxO97NOcNgXk+DLaUW/eIh75v3EteYzYgJPBQ8hlx+Y82Bz
-	26fAuvPO7WfUaRu/Cm5Kd8H/3K0EA65IKftiCDsaoEdycmXdLBgszR2Cwhn79OHtyqlqOg+DCy3nY
-	peVyqTWyWFvx0oXs73Vz8DoYPJR2QAnuDkCIXn37p3xe3T0eM0jNme9x37Ho3B+0uFEIoxk8guPFy
-	Jak0YWPdR6NuwQ4xh2VCH2et77PUIDdxeco57xYnhgnh4XK1V+5AO7/70evBb0KYpWCoEY3U9XLbK
-	CcipmK1w==;
-Received: from 23.248.197.178.dynamic.cust.swisscom.net ([178.197.248.23] helo=localhost)
-	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1shceE-000FqE-Hc; Sat, 24 Aug 2024 00:20:46 +0200
-From: Daniel Borkmann <daniel@iogearbox.net>
-To: bpf@vger.kernel.org
-Cc: kongln9170@gmail.com,
-	Daniel Borkmann <daniel@iogearbox.net>
-Subject: [PATCH bpf 1/4] bpf: Fix helper writes to read-only maps
-Date: Sat, 24 Aug 2024 00:20:30 +0200
-Message-Id: <20240823222033.31006-1-daniel@iogearbox.net>
-X-Mailer: git-send-email 2.21.0
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VVIUBaMa"
+Received: by mail-pg1-f171.google.com with SMTP id 41be03b00d2f7-7cd9e634ea9so1486912a12.0;
+        Fri, 23 Aug 2024 15:22:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1724451726; x=1725056526; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=z42+Q8AZanZAyEhdmQQpfFOP7RxuncrUYLIRyjSCh9o=;
+        b=VVIUBaMaktKP9nz8snJlPUlrdtL0V6tViSNgHLtce/i8hJCHnPiTkMt4jtBDF1Cbza
+         gIChOUxuGFWyMcU5ZHDIll9/Oj3DE2YTGqxkauoD7Ru8PG+Qgjx0sLtOlc26u0Ao4It8
+         QYO/Hims1YqkAvJPh5azVmFjQCVvtAQ1twOIi7za9dbK5e4OQj236JXOVOEVa4xC9U6n
+         NqeYnd4p66poBn7tGELW+uLxqjwcoj7k2eee5kGyTAcartNf1xXRBsfJhvxy94HvJCZ3
+         KkQ6sLDYpigdpFEZbAvm9340eRGPwWw6OBcNujfaxqavx4p5hyaCJlVd4ooIz5cn4ta9
+         bSDg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1724451726; x=1725056526;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=z42+Q8AZanZAyEhdmQQpfFOP7RxuncrUYLIRyjSCh9o=;
+        b=E680AjRAVjax+9sMNQs70o/T2qfnaHDyxq4Lpw5gJyEosq01zswm4viFz36GRMhxg5
+         nD+hGvjd2QAoNb4Buupu+cK7ia47jrCupvUJtTgTtss8qdLzENCcOh+CQzfeBx2Mmco8
+         LlgMsprGELCsqz0/FEPd0cdH1XCL3J4ZvoyH94wnqYG8qtOjouUoOBoNq+6oJ5B23NHO
+         e3khFDzU6BIisuGpMcPMY7jLmp4nQO368sY0gRJC88MbsgGmdKZeP22UFfpBwbnTKaS8
+         Io8Yit6NnF1AALc5IZzjhBsMX6idorBFsiqeMKRlUYxL6GmMqQR9mA1B6F1Wjm+5DBgB
+         tQjQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVTWu5y3n9Fr3oBi3bTdpXoChzYQC8I66m/3fimCxHvEh6q2zBxqQxbroiZ0qxfrIXl90A=@vger.kernel.org, AJvYcCVyij9FjGv4GwkxfEtGYJMO/9D/PVOALC1ivmzj1iU/bxvL7Bknr+TJC/hEwk91FLnRZo9UCEa9TMu4COjUSw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyAB2/dh3nrcr3oOSUz9ApdrRadF/STOyY5GeNRGgsdbgE/zEZs
+	P6ayMpLfVdjhYvgM2y+JAUinps+seC/XhXgup4BYfl57rMrjlc29
+X-Google-Smtp-Source: AGHT+IHe2MZNqfdwKxtjHPiq7/ZoqoBvwMUroZDtf9P1IkJ3Smw4qpWQdX0dyd5EQEp0cv9vlkwxkQ==
+X-Received: by 2002:a05:6a20:c793:b0:1c6:f213:83b with SMTP id adf61e73a8af0-1cc89ed955emr3749733637.37.1724451725696;
+        Fri, 23 Aug 2024 15:22:05 -0700 (PDT)
+Received: from [192.168.0.235] ([38.34.87.7])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2d613a420cdsm4691284a91.28.2024.08.23.15.22.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 23 Aug 2024 15:22:04 -0700 (PDT)
+Message-ID: <8fc31d49d4666599cc2ac6815ff3e0b09adc8a94.camel@gmail.com>
+Subject: Re: [PATCH v6 bpf-next 09/10] bpf: wire up sleepable
+ bpf_get_stack() and bpf_get_task_stack() helpers
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org
+Cc: linux-mm@kvack.org, akpm@linux-foundation.org, adobriyan@gmail.com, 
+	shakeel.butt@linux.dev, hannes@cmpxchg.org, ak@linux.intel.com, 
+	osandov@osandov.com, song@kernel.org, jannh@google.com, 
+	linux-fsdevel@vger.kernel.org, willy@infradead.org
+Date: Fri, 23 Aug 2024 15:22:00 -0700
+In-Reply-To: <20240814185417.1171430-10-andrii@kernel.org>
+References: <20240814185417.1171430-1-andrii@kernel.org>
+	 <20240814185417.1171430-10-andrii@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.52.4 (3.52.4-1.fc40) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.10/27376/Fri Aug 23 10:47:45 2024)
 
-Lonial found an issue that despite user- and BPF-side frozen BPF map
-(like in case of .rodata), it was still possible to write into it from
-a BPF program side through specific helpers having ARG_PTR_TO_{LONG,INT}
-as arguments.
+On Wed, 2024-08-14 at 11:54 -0700, Andrii Nakryiko wrote:
+> Add sleepable implementations of bpf_get_stack() and
+> bpf_get_task_stack() helpers and allow them to be used from sleepable
+> BPF program (e.g., sleepable uprobes).
+>=20
+> Note, the stack trace IPs capturing itself is not sleepable (that would
+> need to be a separate project), only build ID fetching is sleepable and
+> thus more reliable, as it will wait for data to be paged in, if
+> necessary. For that we make use of sleepable build_id_parse()
+> implementation.
+>=20
+> Now that build ID related internals in kernel/bpf/stackmap.c can be used
+> both in sleepable and non-sleepable contexts, we need to add additional
+> rcu_read_lock()/rcu_read_unlock() protection around fetching
+> perf_callchain_entry, but with the refactoring in previous commit it's
+> now pretty straightforward. We make sure to do rcu_read_unlock (in
+> sleepable mode only) right before stack_map_get_build_id_offset() call
+> which can sleep. By that time we don't have any more use of
+> perf_callchain_entry.
+>=20
+> Note, bpf_get_task_stack() will fail for user mode if task !=3D current.
+> And for kernel mode build ID are irrelevant. So in that sense adding
+> sleepable bpf_get_task_stack() implementation is a no-op. It feel right
+> to wire this up for symmetry and completeness, but I'm open to just
+> dropping it until we support `user && crosstask` condition.
+>=20
+> Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+> ---
 
-In check_func_arg() when the argument is as mentioned, the meta->raw_mode
-is never set. Later, check_helper_mem_access(), under the case of
-PTR_TO_MAP_VALUE as register base type, it assumes BPF_READ for the
-subsequent call to check_map_access_type() and given the BPF map is
-read-only it succeeds.
+All seems logical.
+You skip wiring up support for sleepable bpf_get_task_stack() in
+tp_prog_func_proto(), pe_prog_func_proto() and
+raw_tp_prog_func_proto(), this is because these are used for programs
+that are never run in sleepable context, right?
 
-The helpers really need to be annotated as ARG_PTR_TO_{LONG,INT} | MEM_UNINIT
-when results are written into them as opposed to read out of them. The
-latter indicates that it's okay to pass a pointer to uninitialized memory
-as the memory is written to anyway.
+Reviewed-by: Eduard Zingerman <eddyz87@gmail.com>
 
-Fixes: 57c3bb725a3d ("bpf: Introduce ARG_PTR_TO_{INT,LONG} arg types")
-Reported-by: Lonial Con <kongln9170@gmail.com>
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
----
- kernel/bpf/helpers.c     | 4 ++--
- kernel/bpf/syscall.c     | 2 +-
- kernel/bpf/verifier.c    | 3 ++-
- kernel/trace/bpf_trace.c | 4 ++--
- net/core/filter.c        | 4 ++--
- 5 files changed, 9 insertions(+), 8 deletions(-)
-
-diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-index b5f0adae8293..356a58aeb79b 100644
---- a/kernel/bpf/helpers.c
-+++ b/kernel/bpf/helpers.c
-@@ -538,7 +538,7 @@ const struct bpf_func_proto bpf_strtol_proto = {
- 	.arg1_type	= ARG_PTR_TO_MEM | MEM_RDONLY,
- 	.arg2_type	= ARG_CONST_SIZE,
- 	.arg3_type	= ARG_ANYTHING,
--	.arg4_type	= ARG_PTR_TO_LONG,
-+	.arg4_type	= ARG_PTR_TO_LONG | MEM_UNINIT,
- };
- 
- BPF_CALL_4(bpf_strtoul, const char *, buf, size_t, buf_len, u64, flags,
-@@ -566,7 +566,7 @@ const struct bpf_func_proto bpf_strtoul_proto = {
- 	.arg1_type	= ARG_PTR_TO_MEM | MEM_RDONLY,
- 	.arg2_type	= ARG_CONST_SIZE,
- 	.arg3_type	= ARG_ANYTHING,
--	.arg4_type	= ARG_PTR_TO_LONG,
-+	.arg4_type	= ARG_PTR_TO_LONG | MEM_UNINIT,
- };
- 
- BPF_CALL_3(bpf_strncmp, const char *, s1, u32, s1_sz, const char *, s2)
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index bf6c5f685ea2..6d5942a6f41f 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -5952,7 +5952,7 @@ static const struct bpf_func_proto bpf_kallsyms_lookup_name_proto = {
- 	.arg1_type	= ARG_PTR_TO_MEM,
- 	.arg2_type	= ARG_CONST_SIZE_OR_ZERO,
- 	.arg3_type	= ARG_ANYTHING,
--	.arg4_type	= ARG_PTR_TO_LONG,
-+	.arg4_type	= ARG_PTR_TO_LONG | MEM_UNINIT,
- };
- 
- static const struct bpf_func_proto *
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index d8520095ca03..70b0474e03a6 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -8877,8 +8877,9 @@ static int check_func_arg(struct bpf_verifier_env *env, u32 arg,
- 	case ARG_PTR_TO_INT:
- 	case ARG_PTR_TO_LONG:
- 	{
--		int size = int_ptr_type_to_size(arg_type);
-+		int size = int_ptr_type_to_size(base_type(arg_type));
- 
-+		meta->raw_mode = arg_type & MEM_UNINIT;
- 		err = check_helper_mem_access(env, regno, size, false, meta);
- 		if (err)
- 			return err;
-diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-index cd098846e251..95c3409ff374 100644
---- a/kernel/trace/bpf_trace.c
-+++ b/kernel/trace/bpf_trace.c
-@@ -1226,7 +1226,7 @@ static const struct bpf_func_proto bpf_get_func_arg_proto = {
- 	.ret_type	= RET_INTEGER,
- 	.arg1_type	= ARG_PTR_TO_CTX,
- 	.arg2_type	= ARG_ANYTHING,
--	.arg3_type	= ARG_PTR_TO_LONG,
-+	.arg3_type	= ARG_PTR_TO_LONG | MEM_UNINIT,
- };
- 
- BPF_CALL_2(get_func_ret, void *, ctx, u64 *, value)
-@@ -1242,7 +1242,7 @@ static const struct bpf_func_proto bpf_get_func_ret_proto = {
- 	.func		= get_func_ret,
- 	.ret_type	= RET_INTEGER,
- 	.arg1_type	= ARG_PTR_TO_CTX,
--	.arg2_type	= ARG_PTR_TO_LONG,
-+	.arg2_type	= ARG_PTR_TO_LONG | MEM_UNINIT,
- };
- 
- BPF_CALL_1(get_func_arg_cnt, void *, ctx)
-diff --git a/net/core/filter.c b/net/core/filter.c
-index f3c72cf86099..2ff210cb068c 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -6346,7 +6346,7 @@ static const struct bpf_func_proto bpf_skb_check_mtu_proto = {
- 	.ret_type	= RET_INTEGER,
- 	.arg1_type      = ARG_PTR_TO_CTX,
- 	.arg2_type      = ARG_ANYTHING,
--	.arg3_type      = ARG_PTR_TO_INT,
-+	.arg3_type      = ARG_PTR_TO_INT | MEM_UNINIT,
- 	.arg4_type      = ARG_ANYTHING,
- 	.arg5_type      = ARG_ANYTHING,
- };
-@@ -6357,7 +6357,7 @@ static const struct bpf_func_proto bpf_xdp_check_mtu_proto = {
- 	.ret_type	= RET_INTEGER,
- 	.arg1_type      = ARG_PTR_TO_CTX,
- 	.arg2_type      = ARG_ANYTHING,
--	.arg3_type      = ARG_PTR_TO_INT,
-+	.arg3_type      = ARG_PTR_TO_INT | MEM_UNINIT,
- 	.arg4_type      = ARG_ANYTHING,
- 	.arg5_type      = ARG_ANYTHING,
- };
--- 
-2.43.0
+[...]
 
