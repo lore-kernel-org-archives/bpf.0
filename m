@@ -1,188 +1,142 @@
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 868D3186601;
-	Fri, 23 Aug 2024 13:29:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91270186E3B
+	for <bpf@vger.kernel.org>; Fri, 23 Aug 2024 13:29:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724419751; cv=none; b=HBD6mrANQfIKPylJ7uJHy2FXTCM3KlR2g2M3SXdBQsgVWPgcy+iIiwJ06LL+CZpYrTBaQcKzPgXQrIAeIrP/2jjK1IdFvCbnb9HRfphTOa0UZkGFiyVVyaVl8WgIF89lBtcgFVDz7IhC2igwEguJzu8y60FzWoO2VzDCVtllM2c=
+	t=1724419789; cv=none; b=ZKO0STbqcVcmn+svPxCL8oIkkPkrpcXL75D2Ft1MPUImbKjbv8P5ZAdvkHdeOnBfSk3Tp/ds3sSTOxPJkYhdIqBu6WT8dxNfbY4Lur7kl4jEE5LtSPYwLBAfHepAkdpSLjb7HBU8yXHX2+Ja4+UrxlHZD1o8ZxlOWld7pbfbNPk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724419751; c=relaxed/simple;
-	bh=upfjRbQi5d/9KGxy7xIOWRr855B07eT2IifI7j40eNw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=sLTFIJoDpj9R7aN4ffLHlCSn+vOG3/E+TkThLYAEtKofvxWg4l5iYgJehlcJJMK9npmt7GieoTzlkFPL5BJ4SaKccsRjnXJT9A7y+vo5MAO4DWdjBZmzUz7tmgW/7cGzEyPqyOa2psWrKlywLzeurZQsV3ZyXXjcYkjUaiGdlY8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=h+q2XWOe; arc=none smtp.client-ip=209.85.214.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1724419789; c=relaxed/simple;
+	bh=X9LwjPzhN+uJQCh4XWk9pbDdfJ5T1eZa5ETA6hy46Nc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=GYTV4pBwIuU4Fzn3JnhHITs7gtCrgjeN77fGwM5mkoT1jyW2zCf++03teMRBFZJozGPyCh2B21TECtf3ghHmzZwy8kv+sFIPXCE4eJSrHHeZV5t5Hx7clah+xAYg6TOzxmogXTENKJgFxD9ro5lZwxifOFJd/cw/YWDdrIqrQrU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=resnulli.us; spf=none smtp.mailfrom=resnulli.us; dkim=pass (2048-bit key) header.d=resnulli-us.20230601.gappssmtp.com header.i=@resnulli-us.20230601.gappssmtp.com header.b=eOEteFvJ; arc=none smtp.client-ip=209.85.208.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=resnulli.us
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=resnulli.us
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="h+q2XWOe"
-Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-20223b5c1c0so18479355ad.2;
-        Fri, 23 Aug 2024 06:29:09 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=resnulli-us.20230601.gappssmtp.com header.i=@resnulli-us.20230601.gappssmtp.com header.b="eOEteFvJ"
+Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-5bed83488b6so2589261a12.2
+        for <bpf@vger.kernel.org>; Fri, 23 Aug 2024 06:29:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1724419749; x=1725024549; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ryf/2ckFdrYuXbTIE9dYAxnCDBL+jejuPnXrTzRMY+c=;
-        b=h+q2XWOegHhjzNYr4JRi0OFyThcMocaM5vLAYhPjBJ+pb2RpkjSf1gEfOxqgmGWbap
-         l7KC9IAIfhfwB7DNsIEbRQKENONyqfBegelNj4gMt921QEr4X3qxibfZfRZf/A3vv/IP
-         LHNNUU78+XAQsI7Po0kwaaIi2+k2nPk0CxKc2w/jEXbMidKrhT+lOXoGNAjTn1ew3jyB
-         NtMav2UP2kDwXWybZ5TeZwHrULekgcbocimu0Jl+VxWOBmZpREZWtTmP3ZRT8KWjQzO6
-         IiaxeuYLSzUAPyeQPuhvTgFKDrMU0YhlQjmoYcU0fo6dh8AmvjaxdnDfQJ0VfWCRrXpK
-         vLUw==
+        d=resnulli-us.20230601.gappssmtp.com; s=20230601; t=1724419785; x=1725024585; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=34ePrmT6ThCSMAVDOF/08UJdMTT0ZiO9ZyonmTHuBOo=;
+        b=eOEteFvJIXchlLLKTVCuVUD8iR+ApTn2Qkg7MOqd3UwTgFRQ0YMaV6yAql6HdCvn2m
+         +Gfeu2eYYOa5VxOuPCuv1Jp2v2j8bMq2QbHKIHR2X8Cufg/iDVsbaGaF7tl7Am2O/fOX
+         RviJ2kfq8dL75PWmpdXQTxl9u3XBWzrww1nNZj8+eDMVV/Bb8LZUDkWborE8xXwyINNA
+         FBlRoWri4HdpCsnRkWQx6sMlEF43xxGK23fZ8Cu3iOas6F+6SVvsPYe+T0yZ4Go8UqcI
+         FMAi0c8pjUTWeMHKtbYwqi3fjCVwx5fbG0vsdkQX/yXMhyaouBG2KHq7LvZFcKqxHTWv
+         Bqtg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724419749; x=1725024549;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20230601; t=1724419785; x=1725024585;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ryf/2ckFdrYuXbTIE9dYAxnCDBL+jejuPnXrTzRMY+c=;
-        b=Cq9vSjOGANadzSYStpQbi0vbTeSiyoXheMLQpEpjaEpObhQX6fVZHMH3vL+zWz8JuZ
-         k2CAa7GzJt+Getk3CCsYdZUp0tITq01zigYbTIAv9RlyyfHarMOvtOg/8krBv2bDWh+5
-         UwUTyllmIq/DmLooZO+HAH6GprJ3VhbokzY+WB3tpJmz5x8rvu2DpNk31wPooX/BrYq0
-         ejyHlTKSWNMLeUSwDWkMvr/AzV0LC7pAjI+uaaO6wxkqmjSgQyp0qil6MGOl9E76OESz
-         sQuhGELTxJ8XEDwl/pXbwrF4fbQb4VbDbOy82QjPowfjkqr/TIzmYWgfHVCY1puwnFa/
-         OUMA==
-X-Forwarded-Encrypted: i=1; AJvYcCUBy/howGaCLihMNmi30F2lP+CLArJqWlboNbmxMhVefbfZLWaXPSyLTLvsWXfaeFnbOWj1SOAch5ta@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzbi9SnudDybpWEE/Crg0puTXpa3N33N3XnySbQ/pFvEoGdTuYR
-	xfghGSioSWeWiHg+pIfq3IiiAKwCOd1E0AI4Ba7clna19pBtKdk03F3B4Q==
-X-Google-Smtp-Source: AGHT+IERjkHPQy4k2IRLHuU2KxaoQgej00BYeiiSX/I0LCFS7aCBGT0lVu54ZCPsUGyc5cgJ0UtpDA==
-X-Received: by 2002:a17:902:fa0f:b0:202:19a0:fcb6 with SMTP id d9443c01a7336-2039e6b455dmr20008115ad.60.1724419748641;
-        Fri, 23 Aug 2024 06:29:08 -0700 (PDT)
-Received: from [192.168.1.76] (bb219-74-23-111.singnet.com.sg. [219.74.23.111])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-203855809d4sm28356265ad.95.2024.08.23.06.29.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 23 Aug 2024 06:29:08 -0700 (PDT)
-Message-ID: <b010c646-007c-47e3-b547-414e66567ccf@gmail.com>
-Date: Fri, 23 Aug 2024 21:29:03 +0800
+        bh=34ePrmT6ThCSMAVDOF/08UJdMTT0ZiO9ZyonmTHuBOo=;
+        b=mT75ssp0QKJfo7kLl+A+aunxu60vnBZMi+9RXdGV6PYkyKa2Zz1Ix4oO9SJSyJ3IeU
+         yp1uRlmmi+Bh5lUt6jFsAXhpTdJyanfU9HnNv9NUlnfx6+bPbBQtidcqYdiIbVA3YY8d
+         nRDOw/laZO8sq5fxgiEys6sYAe2w1vtnEtGiN0NCc7Gu8Fl3R8OvzP5pCQ7IlxwQAJEG
+         /xOQ6aENy7bmJP9sWfuOXm2VZM74lEI6wB/P2Wv9Hsqsw+y0GTYFndgC/biLnqPX1ggF
+         vF4Oj5Zab0NMiMQk6gtPoQ5R+wOLbShwVgNHYoG9AnEc0kj9148TdbghiuYF7oktzlw4
+         5qqQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXAO5afq8vjammd0z+JEKO9tOXxM0Gt6VrefR8KXQEFvWIznEcc3dOrMmXzLDa7isuUhFA=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx9qGz/utbsdEX5TGfCdxMjCYP2ENCNhlP60297Vi1hHmiQNJgz
+	N8NsNeQXwStUjNFe/PIC6QA8nkz7I+JO4xz0WGyw7f2UxTZd2MR/ZWUQVQbrUwQ=
+X-Google-Smtp-Source: AGHT+IEYo5sFGQI+9l4/IiJwriviRXNovEkCQk0pf3xWtH80ArYe1Esf/M6ITiX8QAhka73M1v+RLg==
+X-Received: by 2002:a05:6402:3549:b0:5c0:8d62:bc9c with SMTP id 4fb4d7f45d1cf-5c08d62bea7mr1232778a12.6.1724419784285;
+        Fri, 23 Aug 2024 06:29:44 -0700 (PDT)
+Received: from localhost (37-48-50-18.nat.epc.tmcz.cz. [37.48.50.18])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5c0515a6342sm2110246a12.79.2024.08.23.06.29.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 23 Aug 2024 06:29:43 -0700 (PDT)
+Date: Fri, 23 Aug 2024 15:29:42 +0200
+From: Jiri Pirko <jiri@resnulli.us>
+To: Daniel Borkmann <daniel@iogearbox.net>
+Cc: Feng zhou <zhoufeng.zf@bytedance.com>, davem@davemloft.net,
+	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+	ast@kernel.org, hawk@kernel.org, john.fastabend@gmail.com,
+	bigeasy@linutronix.de, lorenzo@kernel.org, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+	yangzhenze@bytedance.com, wangdongdong.6@bytedance.com,
+	Toke =?iso-8859-1?Q?H=F8iland-J=F8rgensen?= <toke@redhat.com>
+Subject: Re: [PATCH bpf-next v2] net: Don't allow to attach xdp if bond slave
+ device's upper already has a program
+Message-ID: <ZsiOxkd5KbbIIB6k@nanopsycho.orion>
+References: <20240823084204.67812-1-zhoufeng.zf@bytedance.com>
+ <Zsh4vPAPBKdRUq8H@nanopsycho.orion>
+ <6d38eaf5-0a13-9f85-3a5d-0ca354bc45d5@iogearbox.net>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: Problem testing with S390x under QEMU on x86_64
-To: Ilya Leoshkevich <iii@linux.ibm.com>,
- Tony Ambardar <tony.ambardar@gmail.com>
-Cc: bpf@vger.kernel.org, linux-s390@vger.kernel.org,
- Alexei Starovoitov <ast@kernel.org>
-References: <ZsEcsaa3juxxQBUf@kodidev-ubuntu>
- <180f4c27ebfb954d6b0fd2303c9fb7d5f21dae04.camel@linux.ibm.com>
- <ZsU3GdK5t6KEOr0g@kodidev-ubuntu>
- <aa8fe2731224ffdb6d64a014e3e02740c50010cd.camel@linux.ibm.com>
-Content-Language: en-US
-From: Leon Hwang <hffilwlqm@gmail.com>
-In-Reply-To: <aa8fe2731224ffdb6d64a014e3e02740c50010cd.camel@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <6d38eaf5-0a13-9f85-3a5d-0ca354bc45d5@iogearbox.net>
+
+Fri, Aug 23, 2024 at 02:07:45PM CEST, daniel@iogearbox.net wrote:
+>On 8/23/24 1:55 PM, Jiri Pirko wrote:
+>> Fri, Aug 23, 2024 at 10:42:04AM CEST, zhoufeng.zf@bytedance.com wrote:
+>> > From: Feng Zhou <zhoufeng.zf@bytedance.com>
+>> > 
+>> > Cannot attach when an upper device already has a program, This
+>> > restriction is only for bond's slave devices or team port, and
+>> > should not be accidentally injured for devices like eth0 and vxlan0.
+>> 
+>> What if I attach xdp program to solo netdev and then I enslave it
+>> to bond/team netdev that already has xdp program attached?
+>> What prevents me from doing that?
+>
+>In that case the enslaving of the device to bond(/team) must fail as
+>otherwise the latter won't be able to propagate the XDP prog downwards.
+
+Yep, I don't see that in the code though.
 
 
-
-On 2024/8/22 01:28, Ilya Leoshkevich wrote:
-> On Tue, 2024-08-20 at 17:38 -0700, Tony Ambardar wrote:
-> 
-> 
-> [...]
-> 
->> I used the command line:
->>     ./test_progs -d
->> get_stack_raw_tp,stacktrace_build_id,verifier_iterating_callbacks,tai
->> lcalls
->>
->> which includes the current DENYLIST.s390x as well as 'tailcalls',
->> which
->> is also excluded by the kernel-patches/bpf s390x CI. I note the CI
->> excludes several more tests that seem to work. Any idea why that is?
->>
->> For reference, the issue with 'tailcalls/tailcall_hierarchy_count' is
->> an
->> RCU stall and kernel hang:
->>
->> root@(none):/usr/libexec/kselftests-bpf# ./test_progs -v --debug -n
->> 332/19
->> bpf_testmod.ko is already unloaded.
->> Loading bpf_testmod.ko...
->> Successfully loaded bpf_testmod.ko.
->> test_tailcall_hierarchy_count:PASS:load obj 0 nsec
->> test_tailcall_hierarchy_count:PASS:find entry prog 0 nsec
->> test_tailcall_hierarchy_count:PASS:prog_fd 0 nsec
->> test_tailcall_hierarchy_count:PASS:find jmp_table 0 nsec
->> test_tailcall_hierarchy_count:PASS:map_fd 0 nsec
->> test_tailcall_hierarchy_count:PASS:update jmp_table 0 nsec
->> test_tailcall_hierarchy_count:PASS:find data_map 0 nsec
->> test_tailcall_hierarchy_count:PASS:open fentry_obj file 0 nsec
->> test_tailcall_hierarchy_count:PASS:find fentry prog 0 nsec
->> test_tailcall_hierarchy_count:PASS:set_attach_target subprog_tail 0
->> nsec
->> test_tailcall_hierarchy_count:PASS:load fentry_obj 0 nsec
->> test_tailcall_hierarchy_count:PASS:attach_trace 0 nsec
->> rcu: INFO: rcu_sched self-detected stall on CPU
->> rcu:    0-....: (1 GPs behind) idle=4eb4/1/0x4000000000000000
->> softirq=527/528 fqs=1050
->> rcu:    (t=2100 jiffies g=-379 q=20 ncpus=2)
->> CPU: 0 UID: 0 PID: 84 Comm: test_progs Tainted: G           O      
->> 6.10.0-12706-g853081e84612-dirty #111
->> Tainted: [O]=OOT_MODULE
->> Hardware name: QEMU 8561 QEMU (KVM/Linux)
->> Krnl PSW : 0704f00180000000 000003ffe00f8fca
->> (lock_release+0xf2/0x190)
->>            R:0 T:1 IO:1 EX:1 Key:0 M:1 W:0 P:0 AS:3 CC:3 PM:0 RI:0
->> EA:3
->> Krnl GPRS: 00000000b298dd12 0000000000000000 000002f23fd767c8
->> 000003ffe1848800
->>            0000000000000001 0000037fe034edbc 0000037fe034fd74
->> 0000000000000001
->>            0700037fe034edc8 000003ffe0249e48 000003ffe1848800
->> 000003ffe19ba7c8
->>            000003ff9f7a7f90 0000037fe034ef00 000003ffe00f8f96
->> 0000037fe034ed78
->> Krnl Code: 000003ffe00f8fbe: a7820300           tmhh    %r8,768
->>            000003ffe00f8fc2: a7840004           brc    
->> 8,000003ffe00f8fca
->>           #000003ffe00f8fc6: ad03f0a0           stosm   160(%r15),3
->>           >000003ffe00f8fca: eb8ff0a80004       lmg    
->> %r8,%r15,168(%r15)
->>            000003ffe00f8fd0: 07fe               bcr     15,%r14
->>            000003ffe00f8fd2: c0e500011057       brasl  
->> %r14,000003ffe011b080
->>            000003ffe00f8fd8: ec26ffa6007e       cij    
->> %r2,0,6,000003ffe00f8f24
->>            000003ffe00f8fde: c01000b78b96       larl   
->> %r1,000003ffe17ea70a
->> Call Trace:
->>  [<000003ffe00f8fca>] lock_release+0xf2/0x190
->> ([<000003ffe00f8f96>] lock_release+0xbe/0x190)
->>  [<000003ffe0249ea4>] __bpf_prog_exit_recur+0x5c/0x68
->>  [<000003ff6001e0b0>] bpf_trampoline_73014444060+0xb0/0xd2
->>  [<000003ff60024d14>] bpf_prog_eb7edc599e93dcc8_entry+0x5c/0xc8
->>  [<000003ff60024d14>] bpf_prog_eb7edc599e93dcc8_entry+0x5c/0xc8
->>  [<000003ff60024d14>] bpf_prog_eb7edc599e93dcc8_entry+0x5c/0xc8
->>  [<000003ff60024d2a>] bpf_prog_eb7edc599e93dcc8_entry+0x72/0xc8
->>  [<000003ff60024d2a>] bpf_prog_eb7edc599e93dcc8_entry+0x72/0xc8
->>  [<000003ff60024d14>] bpf_prog_eb7edc599e93dcc8_entry+0x5c/0xc8
->>  [<000003ff60024d14>] bpf_prog_eb7edc599e93dcc8_entry+0x5c/0xc8
->>  [<000003ff60024d14>] bpf_prog_eb7edc599e93dcc8_entry+0x5c/0xc8
->>  [<000003ffe084ecee>] bpf_test_run+0x216/0x3a8
->>  [<000003ffe084f9cc>] bpf_prog_test_run_skb+0x21c/0x630
->>  [<000003ffe0202ad2>] __sys_bpf+0x7ea/0xbb0
->>  [<000003ffe0203114>] __s390x_sys_bpf+0x44/0
-> 
-> Thanks for the detailed analysis! I will need to port
-> 
-> commit 116e04ba1459fc08f80cf27b8c9f9f188be0fcb2
-> Author: Leon Hwang <hffilwlqm@gmail.com>
-> Date:   Sun Jul 14 20:39:00 2024 +0800
-> 
->     bpf, x64: Fix tailcall hierarchy
-> 
-> to s390x to fix this.
-> 
-
-Hi Ilya,
-
-I think you should wait for a while, as I'll fix another tailcall issue
-in near future. After fixing the issue, you can port them both in one shot.
-
-Thanks,
-Leon
-
+>
+>Feng, did you double check if we have net or BPF selftest coverage for
+>that? If not might be good to add.
+>
+>> > Reviewed-by: Toke H�iland-J�rgensen <toke@redhat.com>
+>> > Signed-off-by: Feng Zhou <zhoufeng.zf@bytedance.com>
+>> > ---
+>> > Changelog:
+>> > v1->v2: Addressed comments from Paolo Abeni, Jiri Pirko
+>> > - Use "netif_is_lag_port" relace of "netif_is_bond_slave"
+>> > Details in here:
+>> > https://lore.kernel.org/netdev/3bf84d23-a561-47ae-84a4-e99488fc762b@bytedance.com/T/
+>> > 
+>> > net/core/dev.c | 10 ++++++----
+>> > 1 file changed, 6 insertions(+), 4 deletions(-)
+>> > 
+>> > diff --git a/net/core/dev.c b/net/core/dev.c
+>> > index f66e61407883..49144e62172e 100644
+>> > --- a/net/core/dev.c
+>> > +++ b/net/core/dev.c
+>> > @@ -9502,10 +9502,12 @@ static int dev_xdp_attach(struct net_device *dev, struct netlink_ext_ack *extack
+>> > 	}
+>> > 
+>> > 	/* don't allow if an upper device already has a program */
+>> > -	netdev_for_each_upper_dev_rcu(dev, upper, iter) {
+>> > -		if (dev_xdp_prog_count(upper) > 0) {
+>> > -			NL_SET_ERR_MSG(extack, "Cannot attach when an upper device already has a program");
+>> > -			return -EEXIST;
+>> > +	if (netif_is_lag_port(dev)) {
+>> > +		netdev_for_each_upper_dev_rcu(dev, upper, iter) {
+>> > +			if (dev_xdp_prog_count(upper) > 0) {
+>> > +				NL_SET_ERR_MSG(extack, "Cannot attach when an upper device already has a program");
+>> > +				return -EEXIST;
+>> > +			}
+>> > 		}
+>> > 	}
+>> > 
+>> > -- 
+>> > 2.30.2
+>> > 
+>> 
+>
