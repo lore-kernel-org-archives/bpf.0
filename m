@@ -1,44 +1,44 @@
 Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A6071925AF
-	for <bpf@vger.kernel.org>; Fri, 23 Aug 2024 22:20:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08B2D193412
+	for <bpf@vger.kernel.org>; Fri, 23 Aug 2024 22:20:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724451651; cv=none; b=Tk69zd8PRgXYKt2Xz66QkME+C1PJrMTwjgM/691HbwkLF0j4nteNAPoYf5yrfQO0Na/8UAFP3JgBmPiCggPRtmjyGgJaO+EQLpq5q9rt3azj74P7MQYQ25CTfr3AkxlHw+w9c270WUHm2wMYIijjNPifSsbW98k5sBzLGE54jmY=
+	t=1724451652; cv=none; b=gf2QeSvdyXeTbjdOzUq9omGhifUAuffZC6jdl1TnxJenq7e7eguKBgjSGTZ0RAwCeHyrHN3IrB7Gz25RNZ5a7d6HDcMA99aCxkHuuYx7M6CMF2pmbp8FyQJhKal9ZP+PnH/HsH0mM+VtsnUqtutt39M4NN/XK82ONSTRD8UGvJ4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724451651; c=relaxed/simple;
-	bh=g8clmXtu1A+OjsGICv10Jfz40Y++IxPCMFlutFN4/pY=;
+	s=arc-20240116; t=1724451652; c=relaxed/simple;
+	bh=QK8MK39HiFkZC9IdDGeoH6mRwoWDNkw7grcxl9vDWYY=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=SAuLvQhhx9xVvtbB1K+JQ27QlKom4PqIkkcWvCdzX9acaHRUYT1TrgW2VlBDL/A0QPvLIPFiH7NH1wuuyu/h+XnUi4RP2wUUclX9pxuNM8cOJQcNO+FDvR7gFTVufFsM19WAk5Z3ean723dYDfTciMYpyGYNR6cEV+EIYKAhsyA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=Mw96kH/O; arc=none smtp.client-ip=213.133.104.62
+	 MIME-Version; b=XsYVTM7EwPYNwY2BwUyXYqlbsAUnzn+r/feepfPu1+3yRk54j5vlNFfXhyY7SkvQ/TdpQIf0tPjCpvYlsrBM9eD7gDEXEhH21VOqnnA4bSprGjX9dGvgkYnq1EF1U5wth0yaVb5aT+KLrSYyhhncRPuEjhhLx5xJ3e+cSy18Koo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=gooV7xME; arc=none smtp.client-ip=213.133.104.62
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="Mw96kH/O"
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="gooV7xME"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:MIME-Version:
 	References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
 	Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=QPqcBH63vTx5Qv60Uav2OublP18UzLcW5khhwtJMKiA=; b=Mw96kH/OwwnCIxmmhLG5HU0YRr
-	AHDVVPS6oOjeE5NkV476J7quRigL5FPsytmrE5A1nIb+KSScY31350dFCEHRkQHvJ/K+IiGHAQfyx
-	IlU1xoRDer0UZngb0hxdKg15bNYs6qT0mkj1DDje0HiWT6ASUjFDjXXtYSRAPGfBh8J1YTcH3kLgM
-	3iBLXQqhP7lFSjW0qVkHo5BIttVq+VctdHPH5g8azHUwzcSsFcp/5gP+FHskG3qsJn/SyFJ0f2n2V
-	Q6INwDiRRQRzzZCkgCACHn/n9uwyQdqMMBPZ2KpV+hxl4hVHIiSUu1Ll/TEdt5VNTgq3WwIi2COlE
-	pB8zb74A==;
+	bh=y0Oj4oQJjwroW1spdDm2zx9giylR4ILGPim9m4wm28g=; b=gooV7xMEj3m44BSokYiPjxaHrO
+	EqXqVNdXKrm5x+OqlrlrXWWEmxeJeP/5lgs5xsFu+br7YOxSQbLYf4FTMwpvIh5Z8UNPGUhQBAIgO
+	0CgjVwcXB/YMsQHfGv/mLtqYLTtwvp7KRhL+lNlP8Lk+nRSwxhyktmQC/awUMUpV5Fhy/HhsXAWSS
+	rqDqHAtqn3w91IMqNCbdZ1Ceijmuut1mQh2obUW55FXNYfoIfjkPqB8G+wlMj+LAPe6DvRy/rVK4d
+	l6oc+PfrEGR0org6sXRejcSY7hzfLCiEjGrNsBU1biZW2i2NRPOXw/fbQgeXVDTkoRMqu9mCsXtJm
+	8/hbj/ig==;
 Received: from 23.248.197.178.dynamic.cust.swisscom.net ([178.197.248.23] helo=localhost)
 	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.94.2)
 	(envelope-from <daniel@iogearbox.net>)
-	id 1shceF-000Fqk-19; Sat, 24 Aug 2024 00:20:46 +0200
+	id 1shceF-000FrE-RP; Sat, 24 Aug 2024 00:20:47 +0200
 From: Daniel Borkmann <daniel@iogearbox.net>
 To: bpf@vger.kernel.org
 Cc: kongln9170@gmail.com,
 	Daniel Borkmann <daniel@iogearbox.net>
-Subject: [PATCH bpf 2/4] bpf: Zero ARG_PTR_TO_{LONG,INT} | MEM_UNINIT args in case of error
-Date: Sat, 24 Aug 2024 00:20:31 +0200
-Message-Id: <20240823222033.31006-2-daniel@iogearbox.net>
+Subject: [PATCH bpf 4/4] selftests/bpf: Add a test case to write into .rodata
+Date: Sat, 24 Aug 2024 00:20:33 +0200
+Message-Id: <20240823222033.31006-4-daniel@iogearbox.net>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20240823222033.31006-1-daniel@iogearbox.net>
 References: <20240823222033.31006-1-daniel@iogearbox.net>
@@ -52,74 +52,125 @@ Content-Transfer-Encoding: 8bit
 X-Authenticated-Sender: daniel@iogearbox.net
 X-Virus-Scanned: Clear (ClamAV 0.103.10/27376/Fri Aug 23 10:47:45 2024)
 
-For all non-tracing helpers which have ARG_PTR_TO_{LONG,INT} | MEM_UNINIT
-input arguments, zero the value for the case of an error as otherwise it
-could leak memory. For tracing, it is not needed given CAP_PERFMON can
-already read all kernel memory anyway.
+Add a test case which attempts to write into .rodata section of the
+BPF program, and for comparison this adds test cases also for .bss
+and .data section.
 
-Fixes: 8a67f2de9b1d ("bpf: expose bpf_strtol and bpf_strtoul to all program types")
-Fixes: d7a4cb9b6705 ("bpf: Introduce bpf_strtol and bpf_strtoul helpers")
+Before fix:
+
+  # ./vmtest.sh -- ./test_progs -t verifier_const
+  [...]
+  ./test_progs -t verifier_const
+  tester_init:PASS:tester_log_buf 0 nsec
+  process_subtest:PASS:obj_open_mem 0 nsec
+  process_subtest:PASS:specs_alloc 0 nsec
+  run_subtest:PASS:obj_open_mem 0 nsec
+  run_subtest:FAIL:unexpected_load_success unexpected success: 0
+  #465/1   verifier_const/rodata: write rejected:FAIL
+  #465/2   verifier_const/bss: write accepted:OK
+  #465/3   verifier_const/data: write accepted:OK
+  #465     verifier_const:FAIL
+  [...]
+
+After fix:
+
+  # ./vmtest.sh -- ./test_progs -t verifier_const
+  [...]
+  ./test_progs -t verifier_const
+  #465/1   verifier_const/rodata: write rejected:OK
+  #465/2   verifier_const/bss: write accepted:OK
+  #465/3   verifier_const/data: write accepted:OK
+  #465     verifier_const:OK
+  [...]
+
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
 ---
- kernel/bpf/helpers.c | 2 ++
- kernel/bpf/syscall.c | 1 +
- net/core/filter.c    | 4 ++++
- 3 files changed, 7 insertions(+)
+ .../selftests/bpf/prog_tests/tc_links.c       |  1 +
+ .../selftests/bpf/prog_tests/verifier.c       |  2 +
+ .../selftests/bpf/progs/verifier_const.c      | 42 +++++++++++++++++++
+ 3 files changed, 45 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/progs/verifier_const.c
 
-diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-index 356a58aeb79b..20f6a2b7e708 100644
---- a/kernel/bpf/helpers.c
-+++ b/kernel/bpf/helpers.c
-@@ -522,6 +522,7 @@ BPF_CALL_4(bpf_strtol, const char *, buf, size_t, buf_len, u64, flags,
- 	long long _res;
- 	int err;
+diff --git a/tools/testing/selftests/bpf/prog_tests/tc_links.c b/tools/testing/selftests/bpf/prog_tests/tc_links.c
+index 1af9ec1149aa..92c647dfd6f1 100644
+--- a/tools/testing/selftests/bpf/prog_tests/tc_links.c
++++ b/tools/testing/selftests/bpf/prog_tests/tc_links.c
+@@ -9,6 +9,7 @@
+ #define ping_cmd "ping -q -c1 -w1 127.0.0.1 > /dev/null"
  
-+	*res = 0;
- 	err = __bpf_strtoll(buf, buf_len, flags, &_res);
- 	if (err < 0)
- 		return err;
-@@ -548,6 +549,7 @@ BPF_CALL_4(bpf_strtoul, const char *, buf, size_t, buf_len, u64, flags,
- 	bool is_negative;
- 	int err;
+ #include "test_tc_link.skel.h"
++#include "test_const.skel.h"
  
-+	*res = 0;
- 	err = __bpf_strtoull(buf, buf_len, flags, &_res, &is_negative);
- 	if (err < 0)
- 		return err;
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index 6d5942a6f41f..f799179fd6c7 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -5932,6 +5932,7 @@ static const struct bpf_func_proto bpf_sys_close_proto = {
- 
- BPF_CALL_4(bpf_kallsyms_lookup_name, const char *, name, int, name_sz, int, flags, u64 *, res)
- {
-+	*res = 0;
- 	if (flags)
- 		return -EINVAL;
- 
-diff --git a/net/core/filter.c b/net/core/filter.c
-index 2ff210cb068c..a25c32da3d6c 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -6264,6 +6264,8 @@ BPF_CALL_5(bpf_skb_check_mtu, struct sk_buff *, skb,
- 	int skb_len, dev_len;
- 	int mtu;
- 
-+	*mtu_len = 0;
+ #include "netlink_helpers.h"
+ #include "tc_helpers.h"
+diff --git a/tools/testing/selftests/bpf/prog_tests/verifier.c b/tools/testing/selftests/bpf/prog_tests/verifier.c
+index 9dc3687bc406..c0cb1a145274 100644
+--- a/tools/testing/selftests/bpf/prog_tests/verifier.c
++++ b/tools/testing/selftests/bpf/prog_tests/verifier.c
+@@ -21,6 +21,7 @@
+ #include "verifier_cgroup_inv_retcode.skel.h"
+ #include "verifier_cgroup_skb.skel.h"
+ #include "verifier_cgroup_storage.skel.h"
++#include "verifier_const.skel.h"
+ #include "verifier_const_or.skel.h"
+ #include "verifier_ctx.skel.h"
+ #include "verifier_ctx_sk_msg.skel.h"
+@@ -140,6 +141,7 @@ void test_verifier_cfg(void)                  { RUN(verifier_cfg); }
+ void test_verifier_cgroup_inv_retcode(void)   { RUN(verifier_cgroup_inv_retcode); }
+ void test_verifier_cgroup_skb(void)           { RUN(verifier_cgroup_skb); }
+ void test_verifier_cgroup_storage(void)       { RUN(verifier_cgroup_storage); }
++void test_verifier_const(void)                { RUN(verifier_const); }
+ void test_verifier_const_or(void)             { RUN(verifier_const_or); }
+ void test_verifier_ctx(void)                  { RUN(verifier_ctx); }
+ void test_verifier_ctx_sk_msg(void)           { RUN(verifier_ctx_sk_msg); }
+diff --git a/tools/testing/selftests/bpf/progs/verifier_const.c b/tools/testing/selftests/bpf/progs/verifier_const.c
+new file mode 100644
+index 000000000000..81302d9738fa
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/verifier_const.c
+@@ -0,0 +1,42 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2024 Isovalent */
 +
- 	if (unlikely(flags & ~(BPF_MTU_CHK_SEGS)))
- 		return -EINVAL;
- 
-@@ -6313,6 +6315,8 @@ BPF_CALL_5(bpf_xdp_check_mtu, struct xdp_buff *, xdp,
- 	int ret = BPF_MTU_CHK_RET_SUCCESS;
- 	int mtu, dev_len;
- 
-+	*mtu_len = 0;
++#include <linux/bpf.h>
++#include <bpf/bpf_helpers.h>
++#include "bpf_misc.h"
 +
- 	/* XDP variant doesn't support multi-buffer segment check (yet) */
- 	if (unlikely(flags))
- 		return -EINVAL;
++const long foo = 42;
++long bar;
++long bart = 96;
++
++SEC("tc/ingress")
++__description("rodata: write rejected")
++__failure __msg("write into map forbidden")
++int tcx1(struct __sk_buff *skb)
++{
++	char buff[] = { '8', '4', '\0' };
++	bpf_strtol(buff, sizeof(buff), 0, (long *)&foo);
++	return TCX_PASS;
++}
++
++SEC("tc/ingress")
++__description("bss: write accepted")
++__success
++int tcx2(struct __sk_buff *skb)
++{
++	char buff[] = { '8', '4', '\0' };
++	bpf_strtol(buff, sizeof(buff), 0, &bar);
++	return TCX_PASS;
++}
++
++SEC("tc/ingress")
++__description("data: write accepted")
++__success
++int tcx3(struct __sk_buff *skb)
++{
++	char buff[] = { '8', '4', '\0' };
++	bpf_strtol(buff, sizeof(buff), 0, &bart);
++	return TCX_PASS;
++}
++
++char LICENSE[] SEC("license") = "GPL";
 -- 
 2.43.0
 
