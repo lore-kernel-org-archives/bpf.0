@@ -1,93 +1,129 @@
-Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-175.mta1.migadu.com (out-175.mta1.migadu.com [95.215.58.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BCD18F6B;
-	Fri, 23 Aug 2024 18:48:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F295113634A
+	for <bpf@vger.kernel.org>; Fri, 23 Aug 2024 18:48:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724438888; cv=none; b=PumeXJISjSAtByOt1CpSQ3o5My/N7BqXn8HciZMSwrhzCM20ePF0K9s+ASLW2wDwkScww48+/wlPfX4XWGIQR6ZajHxyJE6ANW+e4BJ/G7eUDJDTV3cqzflhyK0BlQAtRy3TPvLkVKBs4x6Xe+5B/si7/FFFCe0SGlHpu6F4Rio=
+	t=1724438942; cv=none; b=oKb4kBTKC8cVNw1s+D74CI5u9DXwqbpSFsHlmq0AVbBpZu/A3ivXRmWJmJoUe+PGQJSnQ78VE2tlMph/TwSyEN8wOT7iw1RWG7Uv3ySO/qwUyVRaBKUE0HKqakKG6EoaqyD+2dCJGVTnU3hYq+7EFPLkYzve33sRgSaUjQHDdc8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724438888; c=relaxed/simple;
-	bh=POw5n4uPK+5Wgj6bZ8E7UNaTIEwC7nnmx+EmsVvH934=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Qj75PVCELCyH1/9f3JOqLIqIIH+cZF+uurkY+e96absUUNcCnckdFgM78Kz7u7Bi1SSoWFQVxkffuppUhv95VVUnoJ9sOiHUcWGw6FlkEOo1kd2sPfL0UM44jemdhI1jHjr7LA5tXz8qKY4tr8XeYGiLpRJL4HDVB9TiOZOXuZg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=clVQMXmV; arc=none smtp.client-ip=209.85.210.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1724438942; c=relaxed/simple;
+	bh=TWL2MIVefQ12GZaOVVcxANHWJfwsKZKQd+xYbDghpiY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=qtBgSOLxnhndHqbsNWUowWLE8wSvqZxVa4nyard63/7+6uNbms2EUUaJXqbAhgu6MUTmOvqxsWAppF7VMiUWFev5iYmYjZE1vpRedylHLsb5SojJmYdqv2AxBpddO9r4LPJ6XfEIr+BvrmQQFYq/uvRDVQvrX7qIlYKSo6u4byM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=F2yFm2Qv; arc=none smtp.client-ip=95.215.58.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="clVQMXmV"
-Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-7143c9e68a3so112039b3a.0;
-        Fri, 23 Aug 2024 11:48:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1724438885; x=1725043685; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=uk0/C1AkOx81lEeJcP/sdwvaYycc+SWwymWZxuohJG4=;
-        b=clVQMXmV5vVjU+NC2+gMp76TTA3xN3S2+dCJhnfgBJAqtjdreG0od8yayRxFNBXZfD
-         kvON9+HlfxUuaO34sYDEwlBBRZOofA01VKt9aHbywNGfUdeItjhUObzylYxOQeRIRecI
-         MjVsrHrVpTHsUO5f6wbTqS0JwdU8C3PPjIMHh4Ea+IMPqocFFWN9gVRcMhvLMF7a9Y0h
-         RcH++ovff7XWtxDHjiH6Y5QM58aKF51I8ex0Xi2pZo7MDFjfLQspFpwEtSt0wWGOalsC
-         crzd31/rtXjdIam8XoVOfsXzQx7nUeD2gEAapmSZ7AUEDUJDsAYAq+EymCPioq1F7N8A
-         LOHA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724438885; x=1725043685;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=uk0/C1AkOx81lEeJcP/sdwvaYycc+SWwymWZxuohJG4=;
-        b=EfVj6PA007KAB4u2hJudTYTjPCj/f6p61IEDmFtoNQ5Nfuvof5v46uFqJdjv2w64BX
-         i45agn3n4VJldXNykpUDUk/svUnqsapaflXytxsgqBGmN+bh3s8DlTs5ox0I6dcJoCoV
-         WJYgktch/XhlSbp7dRtYO1n8xnoHSRCiBTxYLXrug9XrKYOF54m4MiRTICfQJ53Bg5ym
-         U6nYblZr74nIkKCXGzPCB6vkRLeIO67a7LOJ/sy0FozXhlc75RoNAArSjfdhGg5uNeY2
-         kJvj65kLCFxbDn1L9iXU2eXtTP9Fo1Rs0Z3eSk8gCdNEuSQrdCoHoiKNCkCWEn/j1CRY
-         tkDw==
-X-Forwarded-Encrypted: i=1; AJvYcCVO1IF4MK0/7C2C7mcPzc2wmmQIgM2XraJRXpIXy8jos9cj5IPKnienBtlArvoQGo8Yzh1YImwMyOiuAgj3@vger.kernel.org, AJvYcCVPpsOsuhu2yevFIdKrhTc4H/QQdHG8p+4GZMqULw4vhG+zW2BW4Nqqm8LDtrKExXWaNl1JZGsu3uWFrlux@vger.kernel.org, AJvYcCVpiVvYZXmUpoDMpQCS9cl1p0ttOtVELKHYod+S5ilpbIwvxbbwp6R1lGcTbPRiAPFfrho=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwKRsblVJmbKbPq4dBFv9+PT9UDlVXLSZHBO+9Tp03J6iO9XQ0L
-	vL3Q1qZdbClSV2rll/4E1QriFmUhLVUf0PrtQb4z+Fyun8pvg88Ju/Q5d2E77CMPFg3XNZoL6qh
-	0TbMkcOvOx4V3MJnIYI2qzygmqVQ=
-X-Google-Smtp-Source: AGHT+IHU1bqef0K7taMb7NU7AZLtkpaTLnqF/hx5h78WBNReGSNhGIsYsg5UQYCcuDeEKg1DlAP70nhcV8uXO1TKuAc=
-X-Received: by 2002:a05:6a20:1589:b0:1c6:ecf5:4418 with SMTP id
- adf61e73a8af0-1cc8a01c07bmr2328000637.4.1724438885555; Fri, 23 Aug 2024
- 11:48:05 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="F2yFm2Qv"
+Message-ID: <173d3b06-57ed-4e2e-9034-91b99f41512b@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1724438937;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=kby6+9RbR1DnjNM7kKUPdGTyp1MYuWl6dZurQYumurk=;
+	b=F2yFm2QvU5rc+5438dpysGUn5wuWo5E6kpKequitYiGHDDAdJf6n3IMxeof1Xb7/zufXQ9
+	U4dvfko5NgzPYBaeVLGPJzjS0ZKaaEjOHRKWWyrHBGEKfxJujlUTxrbMy8JaFNzOAbLASG
+	WaxOrtb0paeYf6nHQR60qaGU/1B/wEc=
+Date: Fri, 23 Aug 2024 11:48:44 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240728125527.690726-1-ojeda@kernel.org> <CAK7LNARhR=GGZ2Vr-SSog1yjnjh6iT7cCEe4mpYg889GhJnO9g@mail.gmail.com>
- <ZsiV0V5-UYFGkxPE@bergen>
-In-Reply-To: <ZsiV0V5-UYFGkxPE@bergen>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Fri, 23 Aug 2024 20:47:53 +0200
-Message-ID: <CANiq72khCDjCVbU=t+vpR+EfJucNBpYhZkW2VVjnXbD9S77C0A@mail.gmail.com>
-Subject: Re: [PATCH] kbuild: pahole-version: avoid errors if executing fails
-To: Nicolas Schier <nicolas@fjasle.eu>
-Cc: Masahiro Yamada <masahiroy@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, bpf@vger.kernel.org, 
-	Nathan Chancellor <nathan@kernel.org>, linux-kbuild@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, patches@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH bpf-next v2] bpf: Fix bpf_get/setsockopt to tos not take
+ effect when TCP over IPv4 via INET6 API
+To: Eric Dumazet <edumazet@google.com>, Feng zhou <zhoufeng.zf@bytedance.com>
+Cc: davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com, ast@kernel.org,
+ daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com, song@kernel.org,
+ yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
+ sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org, dsahern@kernel.org,
+ netdev@vger.kernel.org, linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+ yangzhenze@bytedance.com, wangdongdong.6@bytedance.com
+References: <20240823085313.75419-1-zhoufeng.zf@bytedance.com>
+ <CANn89i+ZsktuirATK0nhUmJu+TiqB9Kbozh+HhmCiP3qdnW3Ew@mail.gmail.com>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Martin KaFai Lau <martin.lau@linux.dev>
+In-Reply-To: <CANn89i+ZsktuirATK0nhUmJu+TiqB9Kbozh+HhmCiP3qdnW3Ew@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On Fri, Aug 23, 2024 at 4:00=E2=80=AFPM Nicolas Schier <nicolas@fjasle.eu> =
-wrote:
->
-> Do we have to catch all possibilities?  Then, what about this:
+On 8/23/24 6:35 AM, Eric Dumazet wrote:
+> On Fri, Aug 23, 2024 at 10:53 AM Feng zhou <zhoufeng.zf@bytedance.com> wrote:
+>>
+>> From: Feng Zhou <zhoufeng.zf@bytedance.com>
+>>
+>> when TCP over IPv4 via INET6 API, bpf_get/setsockopt with ipv4 will
+>> fail, because sk->sk_family is AF_INET6. With ipv6 will success, not
+>> take effect, because inet_csk(sk)->icsk_af_ops is ipv6_mapped and
+>> use ip_queue_xmit, inet_sk(sk)->tos.
+>>
+>> So bpf_get/setsockopt needs add the judgment of this case. Just check
+>> "inet_csk(sk)->icsk_af_ops == &ipv6_mapped".
+>>
+>> | Reported-by: kernel test robot <lkp@intel.com>
+>> | Closes: https://lore.kernel.org/oe-kbuild-all/202408152034.lw9Ilsj6-lkp@intel.com/
+>> Signed-off-by: Feng Zhou <zhoufeng.zf@bytedance.com>
+>> ---
+>> Changelog:
+>> v1->v2: Addressed comments from kernel test robot
+>> - Fix compilation error
+>> Details in here:
+>> https://lore.kernel.org/bpf/202408152058.YXAnhLgZ-lkp@intel.com/T/
+>>
+>>   include/net/tcp.h   | 2 ++
+>>   net/core/filter.c   | 6 +++++-
+>>   net/ipv6/tcp_ipv6.c | 6 ++++++
+>>   3 files changed, 13 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/include/net/tcp.h b/include/net/tcp.h
+>> index 2aac11e7e1cc..ea673f88c900 100644
+>> --- a/include/net/tcp.h
+>> +++ b/include/net/tcp.h
+>> @@ -493,6 +493,8 @@ struct request_sock *cookie_tcp_reqsk_alloc(const struct request_sock_ops *ops,
+>>                                              struct tcp_options_received *tcp_opt,
+>>                                              int mss, u32 tsoff);
+>>
+>> +bool is_tcp_sock_ipv6_mapped(struct sock *sk);
+>> +
+>>   #if IS_ENABLED(CONFIG_BPF)
+>>   struct bpf_tcp_req_attrs {
+>>          u32 rcv_tsval;
+>> diff --git a/net/core/filter.c b/net/core/filter.c
+>> index ecf2ddf633bf..02a825e35c4d 100644
+>> --- a/net/core/filter.c
+>> +++ b/net/core/filter.c
+>> @@ -5399,7 +5399,11 @@ static int sol_ip_sockopt(struct sock *sk, int optname,
+>>                            char *optval, int *optlen,
+>>                            bool getopt)
+>>   {
+>> -       if (sk->sk_family != AF_INET)
+>> +       if (sk->sk_family != AF_INET
+>> +#if IS_BUILTIN(CONFIG_IPV6)
+>> +           && !is_tcp_sock_ipv6_mapped(sk)
+>> +#endif
+>> +           )
+>>                  return -EINVAL;
+> 
+> This does not look right to me.
+> 
+> I would remove the test completely.
+> 
+> SOL_IP socket options are available on AF_INET6 sockets just fine.
 
-Something like that sounds good to me too -- we do something similar
-in `rust_is_available.sh`. We also have a `1` in the beginning of
-(most of) the `sed` commands there to check only the first line.
+Good point on the SOL_IP options.
 
-I guess it depends on whether Masahiro thinks the extra
-checks/complexity is worth it. Here I was aiming to catch the case he
-reported, i.e. non-successful programs.
+The sk could be neither AF_INET nor AF_INET6. e.g. the bpf_get/setsockopt 
+calling from the bpf_lsm's socket_post_create). so the AF_INET test is still needed.
 
-Cheers,
-Miguel
+Adding "&& sk->sk_family != AF_INET6" should do. From ipv6_setsockopt, I think 
+it also needs to consider the "sk->sk_type != SOCK_RAW".
+
+Please add a test in the next re-spin.
+
+pw-bot: cr
