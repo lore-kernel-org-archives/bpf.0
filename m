@@ -1,47 +1,44 @@
 Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08B2D193412
-	for <bpf@vger.kernel.org>; Fri, 23 Aug 2024 22:20:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3FBC18661A
+	for <bpf@vger.kernel.org>; Fri, 23 Aug 2024 22:20:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724451652; cv=none; b=gf2QeSvdyXeTbjdOzUq9omGhifUAuffZC6jdl1TnxJenq7e7eguKBgjSGTZ0RAwCeHyrHN3IrB7Gz25RNZ5a7d6HDcMA99aCxkHuuYx7M6CMF2pmbp8FyQJhKal9ZP+PnH/HsH0mM+VtsnUqtutt39M4NN/XK82ONSTRD8UGvJ4=
+	t=1724451652; cv=none; b=kZ46k4O6wkJeslevD1+QUBR0oTtLjtWaWEVPip8JD30EdgWS8sV2UZpTLEQZDxQb8QXhfj6rchlGgTGRHznUSEMHdkyaPOS5blsNNEVGebGYyeKxyPviDwmLSzaCvGwMGkkWnWUeCiltPfrtkXpMFwUxxoumdn2gs2/m/kHK+yI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1724451652; c=relaxed/simple;
-	bh=QK8MK39HiFkZC9IdDGeoH6mRwoWDNkw7grcxl9vDWYY=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=XsYVTM7EwPYNwY2BwUyXYqlbsAUnzn+r/feepfPu1+3yRk54j5vlNFfXhyY7SkvQ/TdpQIf0tPjCpvYlsrBM9eD7gDEXEhH21VOqnnA4bSprGjX9dGvgkYnq1EF1U5wth0yaVb5aT+KLrSYyhhncRPuEjhhLx5xJ3e+cSy18Koo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=gooV7xME; arc=none smtp.client-ip=213.133.104.62
+	bh=I0AHQmtu1F98zoUHTpEp0EuFHgd26Lw+GozzVqCYMCM=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=lTN8I1Gfox20SixjHGCusb567j8L+E0agk+LidupY/am5FhUGY1RFD8g1SrxpzbguDy0PhpC209FaZIAetm4OlQEIm8KvBCq4+LSEY1Dsf/QZco990YdZEVgilGsU94cGJNTiu75HITIqBqbwlyden/SnFdvcaVYyFcDnxqQyig=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=gtC86pVn; arc=none smtp.client-ip=213.133.104.62
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="gooV7xME"
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="gtC86pVn"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:MIME-Version:
-	References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
-	Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=y0Oj4oQJjwroW1spdDm2zx9giylR4ILGPim9m4wm28g=; b=gooV7xMEj3m44BSokYiPjxaHrO
-	EqXqVNdXKrm5x+OqlrlrXWWEmxeJeP/5lgs5xsFu+br7YOxSQbLYf4FTMwpvIh5Z8UNPGUhQBAIgO
-	0CgjVwcXB/YMsQHfGv/mLtqYLTtwvp7KRhL+lNlP8Lk+nRSwxhyktmQC/awUMUpV5Fhy/HhsXAWSS
-	rqDqHAtqn3w91IMqNCbdZ1Ceijmuut1mQh2obUW55FXNYfoIfjkPqB8G+wlMj+LAPe6DvRy/rVK4d
-	l6oc+PfrEGR0org6sXRejcSY7hzfLCiEjGrNsBU1biZW2i2NRPOXw/fbQgeXVDTkoRMqu9mCsXtJm
-	8/hbj/ig==;
+	Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:In-Reply-To:References;
+	bh=+8yRMhoousb1OYEQ09N9+qsc3KTlRjIGMm/BHYoKyok=; b=gtC86pVn+//XH4+N3xqXp97X/P
+	mBnv9c/YwzoR4rM+0qjnWqocxEvZl2zxO97NOcNgXk+DLaUW/eIh75v3EteYzYgJPBQ8hlx+Y82Bz
+	26fAuvPO7WfUaRu/Cm5Kd8H/3K0EA65IKftiCDsaoEdycmXdLBgszR2Cwhn79OHtyqlqOg+DCy3nY
+	peVyqTWyWFvx0oXs73Vz8DoYPJR2QAnuDkCIXn37p3xe3T0eM0jNme9x37Ho3B+0uFEIoxk8guPFy
+	Jak0YWPdR6NuwQ4xh2VCH2et77PUIDdxeco57xYnhgnh4XK1V+5AO7/70evBb0KYpWCoEY3U9XLbK
+	CcipmK1w==;
 Received: from 23.248.197.178.dynamic.cust.swisscom.net ([178.197.248.23] helo=localhost)
 	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.94.2)
 	(envelope-from <daniel@iogearbox.net>)
-	id 1shceF-000FrE-RP; Sat, 24 Aug 2024 00:20:47 +0200
+	id 1shceE-000FqE-Hc; Sat, 24 Aug 2024 00:20:46 +0200
 From: Daniel Borkmann <daniel@iogearbox.net>
 To: bpf@vger.kernel.org
 Cc: kongln9170@gmail.com,
 	Daniel Borkmann <daniel@iogearbox.net>
-Subject: [PATCH bpf 4/4] selftests/bpf: Add a test case to write into .rodata
-Date: Sat, 24 Aug 2024 00:20:33 +0200
-Message-Id: <20240823222033.31006-4-daniel@iogearbox.net>
+Subject: [PATCH bpf 1/4] bpf: Fix helper writes to read-only maps
+Date: Sat, 24 Aug 2024 00:20:30 +0200
+Message-Id: <20240823222033.31006-1-daniel@iogearbox.net>
 X-Mailer: git-send-email 2.21.0
-In-Reply-To: <20240823222033.31006-1-daniel@iogearbox.net>
-References: <20240823222033.31006-1-daniel@iogearbox.net>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -52,125 +49,127 @@ Content-Transfer-Encoding: 8bit
 X-Authenticated-Sender: daniel@iogearbox.net
 X-Virus-Scanned: Clear (ClamAV 0.103.10/27376/Fri Aug 23 10:47:45 2024)
 
-Add a test case which attempts to write into .rodata section of the
-BPF program, and for comparison this adds test cases also for .bss
-and .data section.
+Lonial found an issue that despite user- and BPF-side frozen BPF map
+(like in case of .rodata), it was still possible to write into it from
+a BPF program side through specific helpers having ARG_PTR_TO_{LONG,INT}
+as arguments.
 
-Before fix:
+In check_func_arg() when the argument is as mentioned, the meta->raw_mode
+is never set. Later, check_helper_mem_access(), under the case of
+PTR_TO_MAP_VALUE as register base type, it assumes BPF_READ for the
+subsequent call to check_map_access_type() and given the BPF map is
+read-only it succeeds.
 
-  # ./vmtest.sh -- ./test_progs -t verifier_const
-  [...]
-  ./test_progs -t verifier_const
-  tester_init:PASS:tester_log_buf 0 nsec
-  process_subtest:PASS:obj_open_mem 0 nsec
-  process_subtest:PASS:specs_alloc 0 nsec
-  run_subtest:PASS:obj_open_mem 0 nsec
-  run_subtest:FAIL:unexpected_load_success unexpected success: 0
-  #465/1   verifier_const/rodata: write rejected:FAIL
-  #465/2   verifier_const/bss: write accepted:OK
-  #465/3   verifier_const/data: write accepted:OK
-  #465     verifier_const:FAIL
-  [...]
+The helpers really need to be annotated as ARG_PTR_TO_{LONG,INT} | MEM_UNINIT
+when results are written into them as opposed to read out of them. The
+latter indicates that it's okay to pass a pointer to uninitialized memory
+as the memory is written to anyway.
 
-After fix:
-
-  # ./vmtest.sh -- ./test_progs -t verifier_const
-  [...]
-  ./test_progs -t verifier_const
-  #465/1   verifier_const/rodata: write rejected:OK
-  #465/2   verifier_const/bss: write accepted:OK
-  #465/3   verifier_const/data: write accepted:OK
-  #465     verifier_const:OK
-  [...]
-
+Fixes: 57c3bb725a3d ("bpf: Introduce ARG_PTR_TO_{INT,LONG} arg types")
+Reported-by: Lonial Con <kongln9170@gmail.com>
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
 ---
- .../selftests/bpf/prog_tests/tc_links.c       |  1 +
- .../selftests/bpf/prog_tests/verifier.c       |  2 +
- .../selftests/bpf/progs/verifier_const.c      | 42 +++++++++++++++++++
- 3 files changed, 45 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/progs/verifier_const.c
+ kernel/bpf/helpers.c     | 4 ++--
+ kernel/bpf/syscall.c     | 2 +-
+ kernel/bpf/verifier.c    | 3 ++-
+ kernel/trace/bpf_trace.c | 4 ++--
+ net/core/filter.c        | 4 ++--
+ 5 files changed, 9 insertions(+), 8 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/tc_links.c b/tools/testing/selftests/bpf/prog_tests/tc_links.c
-index 1af9ec1149aa..92c647dfd6f1 100644
---- a/tools/testing/selftests/bpf/prog_tests/tc_links.c
-+++ b/tools/testing/selftests/bpf/prog_tests/tc_links.c
-@@ -9,6 +9,7 @@
- #define ping_cmd "ping -q -c1 -w1 127.0.0.1 > /dev/null"
+diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+index b5f0adae8293..356a58aeb79b 100644
+--- a/kernel/bpf/helpers.c
++++ b/kernel/bpf/helpers.c
+@@ -538,7 +538,7 @@ const struct bpf_func_proto bpf_strtol_proto = {
+ 	.arg1_type	= ARG_PTR_TO_MEM | MEM_RDONLY,
+ 	.arg2_type	= ARG_CONST_SIZE,
+ 	.arg3_type	= ARG_ANYTHING,
+-	.arg4_type	= ARG_PTR_TO_LONG,
++	.arg4_type	= ARG_PTR_TO_LONG | MEM_UNINIT,
+ };
  
- #include "test_tc_link.skel.h"
-+#include "test_const.skel.h"
+ BPF_CALL_4(bpf_strtoul, const char *, buf, size_t, buf_len, u64, flags,
+@@ -566,7 +566,7 @@ const struct bpf_func_proto bpf_strtoul_proto = {
+ 	.arg1_type	= ARG_PTR_TO_MEM | MEM_RDONLY,
+ 	.arg2_type	= ARG_CONST_SIZE,
+ 	.arg3_type	= ARG_ANYTHING,
+-	.arg4_type	= ARG_PTR_TO_LONG,
++	.arg4_type	= ARG_PTR_TO_LONG | MEM_UNINIT,
+ };
  
- #include "netlink_helpers.h"
- #include "tc_helpers.h"
-diff --git a/tools/testing/selftests/bpf/prog_tests/verifier.c b/tools/testing/selftests/bpf/prog_tests/verifier.c
-index 9dc3687bc406..c0cb1a145274 100644
---- a/tools/testing/selftests/bpf/prog_tests/verifier.c
-+++ b/tools/testing/selftests/bpf/prog_tests/verifier.c
-@@ -21,6 +21,7 @@
- #include "verifier_cgroup_inv_retcode.skel.h"
- #include "verifier_cgroup_skb.skel.h"
- #include "verifier_cgroup_storage.skel.h"
-+#include "verifier_const.skel.h"
- #include "verifier_const_or.skel.h"
- #include "verifier_ctx.skel.h"
- #include "verifier_ctx_sk_msg.skel.h"
-@@ -140,6 +141,7 @@ void test_verifier_cfg(void)                  { RUN(verifier_cfg); }
- void test_verifier_cgroup_inv_retcode(void)   { RUN(verifier_cgroup_inv_retcode); }
- void test_verifier_cgroup_skb(void)           { RUN(verifier_cgroup_skb); }
- void test_verifier_cgroup_storage(void)       { RUN(verifier_cgroup_storage); }
-+void test_verifier_const(void)                { RUN(verifier_const); }
- void test_verifier_const_or(void)             { RUN(verifier_const_or); }
- void test_verifier_ctx(void)                  { RUN(verifier_ctx); }
- void test_verifier_ctx_sk_msg(void)           { RUN(verifier_ctx_sk_msg); }
-diff --git a/tools/testing/selftests/bpf/progs/verifier_const.c b/tools/testing/selftests/bpf/progs/verifier_const.c
-new file mode 100644
-index 000000000000..81302d9738fa
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/verifier_const.c
-@@ -0,0 +1,42 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2024 Isovalent */
-+
-+#include <linux/bpf.h>
-+#include <bpf/bpf_helpers.h>
-+#include "bpf_misc.h"
-+
-+const long foo = 42;
-+long bar;
-+long bart = 96;
-+
-+SEC("tc/ingress")
-+__description("rodata: write rejected")
-+__failure __msg("write into map forbidden")
-+int tcx1(struct __sk_buff *skb)
-+{
-+	char buff[] = { '8', '4', '\0' };
-+	bpf_strtol(buff, sizeof(buff), 0, (long *)&foo);
-+	return TCX_PASS;
-+}
-+
-+SEC("tc/ingress")
-+__description("bss: write accepted")
-+__success
-+int tcx2(struct __sk_buff *skb)
-+{
-+	char buff[] = { '8', '4', '\0' };
-+	bpf_strtol(buff, sizeof(buff), 0, &bar);
-+	return TCX_PASS;
-+}
-+
-+SEC("tc/ingress")
-+__description("data: write accepted")
-+__success
-+int tcx3(struct __sk_buff *skb)
-+{
-+	char buff[] = { '8', '4', '\0' };
-+	bpf_strtol(buff, sizeof(buff), 0, &bart);
-+	return TCX_PASS;
-+}
-+
-+char LICENSE[] SEC("license") = "GPL";
+ BPF_CALL_3(bpf_strncmp, const char *, s1, u32, s1_sz, const char *, s2)
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index bf6c5f685ea2..6d5942a6f41f 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -5952,7 +5952,7 @@ static const struct bpf_func_proto bpf_kallsyms_lookup_name_proto = {
+ 	.arg1_type	= ARG_PTR_TO_MEM,
+ 	.arg2_type	= ARG_CONST_SIZE_OR_ZERO,
+ 	.arg3_type	= ARG_ANYTHING,
+-	.arg4_type	= ARG_PTR_TO_LONG,
++	.arg4_type	= ARG_PTR_TO_LONG | MEM_UNINIT,
+ };
+ 
+ static const struct bpf_func_proto *
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index d8520095ca03..70b0474e03a6 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -8877,8 +8877,9 @@ static int check_func_arg(struct bpf_verifier_env *env, u32 arg,
+ 	case ARG_PTR_TO_INT:
+ 	case ARG_PTR_TO_LONG:
+ 	{
+-		int size = int_ptr_type_to_size(arg_type);
++		int size = int_ptr_type_to_size(base_type(arg_type));
+ 
++		meta->raw_mode = arg_type & MEM_UNINIT;
+ 		err = check_helper_mem_access(env, regno, size, false, meta);
+ 		if (err)
+ 			return err;
+diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+index cd098846e251..95c3409ff374 100644
+--- a/kernel/trace/bpf_trace.c
++++ b/kernel/trace/bpf_trace.c
+@@ -1226,7 +1226,7 @@ static const struct bpf_func_proto bpf_get_func_arg_proto = {
+ 	.ret_type	= RET_INTEGER,
+ 	.arg1_type	= ARG_PTR_TO_CTX,
+ 	.arg2_type	= ARG_ANYTHING,
+-	.arg3_type	= ARG_PTR_TO_LONG,
++	.arg3_type	= ARG_PTR_TO_LONG | MEM_UNINIT,
+ };
+ 
+ BPF_CALL_2(get_func_ret, void *, ctx, u64 *, value)
+@@ -1242,7 +1242,7 @@ static const struct bpf_func_proto bpf_get_func_ret_proto = {
+ 	.func		= get_func_ret,
+ 	.ret_type	= RET_INTEGER,
+ 	.arg1_type	= ARG_PTR_TO_CTX,
+-	.arg2_type	= ARG_PTR_TO_LONG,
++	.arg2_type	= ARG_PTR_TO_LONG | MEM_UNINIT,
+ };
+ 
+ BPF_CALL_1(get_func_arg_cnt, void *, ctx)
+diff --git a/net/core/filter.c b/net/core/filter.c
+index f3c72cf86099..2ff210cb068c 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -6346,7 +6346,7 @@ static const struct bpf_func_proto bpf_skb_check_mtu_proto = {
+ 	.ret_type	= RET_INTEGER,
+ 	.arg1_type      = ARG_PTR_TO_CTX,
+ 	.arg2_type      = ARG_ANYTHING,
+-	.arg3_type      = ARG_PTR_TO_INT,
++	.arg3_type      = ARG_PTR_TO_INT | MEM_UNINIT,
+ 	.arg4_type      = ARG_ANYTHING,
+ 	.arg5_type      = ARG_ANYTHING,
+ };
+@@ -6357,7 +6357,7 @@ static const struct bpf_func_proto bpf_xdp_check_mtu_proto = {
+ 	.ret_type	= RET_INTEGER,
+ 	.arg1_type      = ARG_PTR_TO_CTX,
+ 	.arg2_type      = ARG_ANYTHING,
+-	.arg3_type      = ARG_PTR_TO_INT,
++	.arg3_type      = ARG_PTR_TO_INT | MEM_UNINIT,
+ 	.arg4_type      = ARG_ANYTHING,
+ 	.arg5_type      = ARG_ANYTHING,
+ };
 -- 
 2.43.0
 
