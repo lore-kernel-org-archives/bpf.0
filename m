@@ -1,55 +1,55 @@
-Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
+Received: from mail-pg1-f201.google.com (mail-pg1-f201.google.com [209.85.215.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B63A57CA7
-	for <bpf@vger.kernel.org>; Sun, 25 Aug 2024 04:15:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 125DF3EA9A
+	for <bpf@vger.kernel.org>; Sun, 25 Aug 2024 04:15:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724559340; cv=none; b=LIY7zQp4Ziht2fK6EUhafqMeMH+RnoBAby/IA13HK3x5OGupUrbRd7L89w0WCr8vqpqGSgO5N9J2mJhcL2XchqSwB5HPqUOjTlixONYj+4mRHibhoJK77QLxhKeOCSbAUNAIYSE8Q+ey+nGTXYVulStEx9sYZrAUxnsHWKkbx3k=
+	t=1724559343; cv=none; b=PTkiyo3w9vj8MqAuVfk6WJjPH2qDtsNy2ddOTrhbAH3coCOJ5EyBR8bv6MvkZeUbaae6HI+q+6RhyxhXuWY3J7LlbloGk1zv1iUvYCTRBTkNLjoUoBELx2I74X4hfiVT2ru+2W/ZA4FItUpkeWE59z6gsGV7XBDh5TTwoGptPNs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724559340; c=relaxed/simple;
-	bh=GtojtkeaEEA1r/chQ4MiOBeTJT4i2SS2I7B7VaPwXOM=;
+	s=arc-20240116; t=1724559343; c=relaxed/simple;
+	bh=UG4Odx7ZlnicK/H+zvvvn0IwK+xDR9UZKy6QGbiGbHc=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=Q7vaSRHU+tXrjUQWKIvHpnq1A9k3yepLPR5nb96ypOQP4M70fXK/2uDju0j409aU9BGbrvMmASgsw0Qcp4IUnKmQaTblcPSBHB/p0qmti7Z0EioClouYHrGN9L0uVGqzEK9lQuZhRyOWptJLrOZGNhf4RsCGAQhKG3w6Y/yY3io=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--almasrymina.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=QpD+tm4C; arc=none smtp.client-ip=209.85.128.202
+	 To:Cc:Content-Type; b=W6WuISzKfXSMZgvDSdMryl8Cilhzza4t/yBT+HEBKOaLQyf9MG36ELCDXf13p4IE/6s9oVnAmpIQbSd/AwqrbPRZbg7pPapDQJ6L4obndvAZmFHWo1s3rKST16l87TQEfI9rtMOEIbVho5F8Dtqicj+RTHLhn7KnVvBf6My9klw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--almasrymina.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=gI4xAKs2; arc=none smtp.client-ip=209.85.215.201
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--almasrymina.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="QpD+tm4C"
-Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-6b71aa9349dso61726737b3.1
-        for <bpf@vger.kernel.org>; Sat, 24 Aug 2024 21:15:29 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="gI4xAKs2"
+Received: by mail-pg1-f201.google.com with SMTP id 41be03b00d2f7-6507e2f0615so2723459a12.1
+        for <bpf@vger.kernel.org>; Sat, 24 Aug 2024 21:15:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1724559327; x=1725164127; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1724559331; x=1725164131; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=87KGItvVtQXs8/B+jKHIQL1MzKRWZGgjddsd4mi7vb0=;
-        b=QpD+tm4Cmw62hcXyTFCPSB/7qvCRZaMeT0cVUJmgnGBHXv7oC++kgGmVvU3v6kErbn
-         0e7dZ8f0Grw54Sj0+qw7ZkJEajc9f94JdZJi0RuicRcoHG5RDW8yQ4lvzlzudKvlz+c3
-         4cURo/PBtzI9IoYQjVmYUVdBULANxj9hp1e6G3Hgoc+KRQ1qlax5yp30T1/qA6QvDcKQ
-         b7X/BWbUDGKe/UbF2VUki+fBR3hWU2G2fFd80SWF9iUuU7+yGMdfE7JIOPHM8yd0Cc0O
-         CcnUpSfmfvC63PtxLmhofkjXgMp1VbHdWcDQSi1RN+5Lb6EGgqKmllBxGv2fGp6MtdEY
-         9rkQ==
+        bh=qBaBPkUGzp81y+Ko+TRyZGwAtxViy7iHwU3rKfDaFg4=;
+        b=gI4xAKs2OAujyP/oyo2kC5F+uTCu/igAGfibNoHDGlJUpw+eP5msKV13JljNn1gZNh
+         KsKfstR9/PdyaJBDbKhESZJeedhBMl/DcECYDi3ZiuBJ4IdMIZpp0WOjHu2hzI6GjyYj
+         MBpsZyu2kAeXRVO57XIJyKQjSOqp85JpzG5BbmTy7I2y18eKQr8DyPyQKJqhoPgTl3rl
+         OOPBue3iVvxx7dtWnzHUpIOCd9ladbLwjam7tPRYocW58rLz7YgrF2SdzUi3CeIJSjNd
+         agf56tMNfsPRv9oyCqRU5S71z4n+RXTHZrmp9U8IUADFvl5ICkngFRpmtZ+NO7FFEqsf
+         8a/w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724559327; x=1725164127;
+        d=1e100.net; s=20230601; t=1724559331; x=1725164131;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=87KGItvVtQXs8/B+jKHIQL1MzKRWZGgjddsd4mi7vb0=;
-        b=HF4tx314vY7dnFggWtErXQZOSpOJpxhOmkZZXZCAhw/cM1EI79QB6zx7xcuiF4YTKY
-         EUkXy1dAKrodA2MdCeZP2doRfv62t4dzvAKBSQdT4nN6lUP9wj2PaV0FAVnxO9TkHxAw
-         Aj8xiwXD05bn0a0XuNrgyvs86423/SPSriJJioWTxBqNxqlStSX1reMtOPpCHVSBNpAd
-         6jQBYR4SCZC7+FwHEPE5caYg6kCnaMqBbYcKRS6QRty2P4/giEK/LSwEgaZXIEF3ErAZ
-         8MQAsshM09SyJGcN0rQhXzyXNZ7Z7aKt0ML3vfkkr7uw8FZ/nF/U7LY1HcLt3bXef7ni
-         v/Pw==
-X-Forwarded-Encrypted: i=1; AJvYcCUOkiXzT/AeJnd4DXlN/R9EmCpoDTNGc9cJxPMeEsISu5tYXdZ+/ra3hUKpZUe8X3D33VE=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw9MvnMhz4O6I1tJh6QX/9zK37Yde+efqq2E+ML3+DvAMFtqyPR
-	5oyex8uoPbUSL2QBJIWuGcC8kGwy1YokXetrdMhu32EjdFMDI26QxslTV1dT7I1aHw2zA9pcNWq
-	2IecfDlZQvR01xFuBsTR3dw==
-X-Google-Smtp-Source: AGHT+IFySAo9TpYxgVDRcDSGK8qPnazxw/VuCjz9FLGBBbFGS4sF85A2ufOUBCDHpNbsFZiwteyWpu2QRoeq0GaxhA==
+        bh=qBaBPkUGzp81y+Ko+TRyZGwAtxViy7iHwU3rKfDaFg4=;
+        b=OtA6ZBgfwVCGfjlelRy8+7s+t7lupbJqg4SFMZFB3sI+X3Syeehj4vROCMzpEPtSuT
+         KhNYme6HDZI0Ki3KZtGc6TsIxqyq6fXEbAtDBV4spGFtFHvgeI4ibFn7yDtUtGFm3gOq
+         5O8XTp7XiUHSazlrg0NZzkTjJ3hbJoHmzVcFH+p0w9lOfmv8rNt6CJlTasdk2/qciOSA
+         TBHOWxnn2duZCH47IccRNbA9gsDrBeA1r8+XO5kOfJ+4keRqrSLlMXvscYAhUMChT6Tn
+         OlGfpvgwwcS/DWz9TDWGOWolxJY/Q6SOLpsSS5ncBVcBBHfnsiv9DZ++ZmOWplouXtXf
+         c6Jw==
+X-Forwarded-Encrypted: i=1; AJvYcCXobmVYW0KEoJqNUglu4f8yT5FYmUVxJK4CKoZuoakeg2PTnFYg+J7Ij6oi4UFx96OoorQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzHNzWQOA1zLv1y342QrFiwlSD9wYfuzkgVzciF3T+VuPvpkKid
+	iDaDaKvUHCeiCfpSo09QYXJsr41SzJbHc8D/BBlnYD8WBT1SlBUsOY7Y5lGF463yPG+A+dATik2
+	6DT93PUDHMcwz5rxsdQlbCQ==
+X-Google-Smtp-Source: AGHT+IFYddEuV+6QD0mIFU1bJlBuaZgRaIPbtrt42PbKm8wRXB/WccdhoJa9w5dg05KWL7sZC43e64uPo59mKi+SYA==
 X-Received: from almasrymina.c.googlers.com ([fda3:e722:ac3:cc00:20:ed76:c0a8:4bc5])
- (user=almasrymina job=sendgmr) by 2002:a25:abb0:0:b0:e16:6e0a:bb0b with SMTP
- id 3f1490d57ef6-e17a8000831mr13005276.0.1724559327282; Sat, 24 Aug 2024
- 21:15:27 -0700 (PDT)
-Date: Sun, 25 Aug 2024 04:15:03 +0000
+ (user=almasrymina job=sendgmr) by 2002:a65:6884:0:b0:7c2:1887:5f9f with SMTP
+ id 41be03b00d2f7-7cf54e4c5dfmr11034a12.3.1724559331211; Sat, 24 Aug 2024
+ 21:15:31 -0700 (PDT)
+Date: Sun, 25 Aug 2024 04:15:05 +0000
 In-Reply-To: <20240825041511.324452-1-almasrymina@google.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -59,8 +59,8 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20240825041511.324452-1-almasrymina@google.com>
 X-Mailer: git-send-email 2.46.0.295.g3b9ea8a38a-goog
-Message-ID: <20240825041511.324452-6-almasrymina@google.com>
-Subject: [PATCH net-next v22 05/13] page_pool: devmem support
+Message-ID: <20240825041511.324452-8-almasrymina@google.com>
+Subject: [PATCH net-next v22 07/13] net: support non paged skb frags
 From: Mina Almasry <almasrymina@google.com>
 To: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
 	linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org, 
@@ -92,680 +92,245 @@ Cc: Mina Almasry <almasrymina@google.com>, Donald Hunter <donald.hunter@gmail.co
 	Shailend Chand <shailend@google.com>, Harshitha Ramamurthy <hramamurthy@google.com>, 
 	Shakeel Butt <shakeel.butt@linux.dev>, Jeroen de Borst <jeroendb@google.com>, 
 	Praveen Kaligineedi <pkaligineedi@google.com>, Bagas Sanjaya <bagasdotme@gmail.com>, 
-	Christoph Hellwig <hch@infradead.org>, Nikolay Aleksandrov <razor@blackwall.org>, Taehee Yoo <ap420073@gmail.com>, 
-	linux-mm@kvack.org, Matthew Wilcox <willy@infradead.org>
+	Christoph Hellwig <hch@infradead.org>, Nikolay Aleksandrov <razor@blackwall.org>, Taehee Yoo <ap420073@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
 
-Convert netmem to be a union of struct page and struct netmem. Overload
-the LSB of struct netmem* to indicate that it's a net_iov, otherwise
-it's a page.
-
-Currently these entries in struct page are rented by the page_pool and
-used exclusively by the net stack:
-
-struct {
-	unsigned long pp_magic;
-	struct page_pool *pp;
-	unsigned long _pp_mapping_pad;
-	unsigned long dma_addr;
-	atomic_long_t pp_ref_count;
-};
-
-Mirror these (and only these) entries into struct net_iov and implement
-netmem helpers that can access these common fields regardless of
-whether the underlying type is page or net_iov.
-
-Implement checks for net_iov in netmem helpers which delegate to mm
-APIs, to ensure net_iov are never passed to the mm stack.
+Make skb_frag_page() fail in the case where the frag is not backed
+by a page, and fix its relevant callers to handle this case.
 
 Signed-off-by: Mina Almasry <almasrymina@google.com>
-Reviewed-by: Pavel Begunkov <asml.silence@gmail.com>
+Reviewed-by: Eric Dumazet <edumazet@google.com>
+
 
 ---
 
-v19:
-- Move page_pool_set_dma_addr(_netmem) to page_pool_priv.h
-- Don't reset niov dma_addr on allocation/free. Instead, it's set once
-  when the binding happens and it never changes (Jakub)
-
-v17:
-- Rename netmem_to_pfn to netmem_pfn_trace (Jakub)
-- Move some low level netmem helpers to netmem_priv.h (Jakub).
-
-v13:
-- Move NET_IOV dependent changes to this patch.
-- Fixed comment (Pavel)
-- Applied Reviewed-by from Pavel.
-
-v9: https://lore.kernel.org/netdev/20240403002053.2376017-8-almasrymina@google.com/
-- Remove CONFIG checks in netmem_is_net_iov() (Pavel/David/Jens)
-
-v7:
-- Remove static_branch_unlikely from netmem_to_net_iov(). We're getting
-  better results from the fast path in bench_page_pool_simple tests
-  without the static_branch_unlikely, and the addition of
-  static_branch_unlikely doesn't improve performance of devmem TCP.
-
-  Additionally only check netmem_to_net_iov() if
-  CONFIG_DMA_SHARED_BUFFER is enabled, otherwise dmabuf net_iovs cannot
-  exist anyway.
-
-  net-next base: 8 cycle fast path.
-  with static_branch_unlikely: 10 cycle fast path.
-  without static_branch_unlikely: 9 cycle fast path.
-  CONFIG_DMA_SHARED_BUFFER disabled: 8 cycle fast path as baseline.
-
-  Performance of devmem TCP is at 95% line rate is regardless of
-  static_branch_unlikely or not.
+v10:
+- Fixed newly generated kdoc warnings found by patchwork. While we're
+  at it, fix the Return section of the functions I touched.
 
 v6:
-- Rebased on top of the merged netmem_ref type.
-- Rebased on top of the merged skb_pp_frag_ref() changes.
+- Rebased on top of the merged netmem changes.
 
-v5:
-- Use netmem instead of page* with LSB set.
-- Use pp_ref_count for refcounting net_iov.
-- Removed many of the custom checks for netmem.
-
-v1:
-- Disable fragmentation support for iov properly.
-- fix napi_pp_put_page() path (Yunsheng).
-- Use pp_frag_count for devmem refcounting.
-
-Cc: linux-mm@kvack.org
-Cc: Matthew Wilcox <willy@infradead.org>
+Changes in v1:
+- Fix illegal_highdma() (Yunsheng).
+- Rework napi_pp_put_page() slightly to reduce code churn (Willem).
 
 ---
- include/net/netmem.h             | 129 +++++++++++++++++++++++++++++--
- include/net/page_pool/helpers.h  |  39 ++--------
- include/trace/events/page_pool.h |  12 +--
- net/core/devmem.c                |   8 ++
- net/core/netmem_priv.h           |  31 ++++++++
- net/core/page_pool.c             |  25 +++---
- net/core/page_pool_priv.h        |  26 +++++++
- net/core/skbuff.c                |  23 +++---
- 8 files changed, 224 insertions(+), 69 deletions(-)
- create mode 100644 net/core/netmem_priv.h
+ include/linux/skbuff.h     | 42 +++++++++++++++++++++++++++++++++++++-
+ include/linux/skbuff_ref.h |  9 ++++----
+ net/core/dev.c             |  3 ++-
+ net/core/gro.c             |  3 ++-
+ net/core/skbuff.c          | 11 ++++++++++
+ net/ipv4/esp4.c            |  3 ++-
+ net/ipv4/tcp.c             |  3 +++
+ net/ipv6/esp6.c            |  3 ++-
+ 8 files changed, 67 insertions(+), 10 deletions(-)
 
-diff --git a/include/net/netmem.h b/include/net/netmem.h
-index 0fbc0999091a..284f84a312c2 100644
---- a/include/net/netmem.h
-+++ b/include/net/netmem.h
-@@ -9,13 +9,51 @@
- #define _NET_NETMEM_H
+diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
+index cf8f6ce06742..dbadf2dd6b35 100644
+--- a/include/linux/skbuff.h
++++ b/include/linux/skbuff.h
+@@ -3523,21 +3523,58 @@ static inline void skb_frag_off_copy(skb_frag_t *fragto,
+ 	fragto->offset = fragfrom->offset;
+ }
  
- #include <net/devmem.h>
-+#include <net/net_debug.h>
- 
- /* net_iov */
- 
-+DECLARE_STATIC_KEY_FALSE(page_pool_mem_providers);
-+
-+/*  We overload the LSB of the struct page pointer to indicate whether it's
-+ *  a page or net_iov.
-+ */
-+#define NET_IOV 0x01UL
-+
- struct net_iov {
-+	unsigned long __unused_padding;
-+	unsigned long pp_magic;
-+	struct page_pool *pp;
- 	struct dmabuf_genpool_chunk_owner *owner;
-+	unsigned long dma_addr;
-+	atomic_long_t pp_ref_count;
- };
- 
-+/* These fields in struct page are used by the page_pool and net stack:
-+ *
-+ *	struct {
-+ *		unsigned long pp_magic;
-+ *		struct page_pool *pp;
-+ *		unsigned long _pp_mapping_pad;
-+ *		unsigned long dma_addr;
-+ *		atomic_long_t pp_ref_count;
-+ *	};
-+ *
-+ * We mirror the page_pool fields here so the page_pool can access these fields
-+ * without worrying whether the underlying fields belong to a page or net_iov.
-+ *
-+ * The non-net stack fields of struct page are private to the mm stack and must
-+ * never be mirrored to net_iov.
-+ */
-+#define NET_IOV_ASSERT_OFFSET(pg, iov)             \
-+	static_assert(offsetof(struct page, pg) == \
-+		      offsetof(struct net_iov, iov))
-+NET_IOV_ASSERT_OFFSET(pp_magic, pp_magic);
-+NET_IOV_ASSERT_OFFSET(pp, pp);
-+NET_IOV_ASSERT_OFFSET(dma_addr, dma_addr);
-+NET_IOV_ASSERT_OFFSET(pp_ref_count, pp_ref_count);
-+#undef NET_IOV_ASSERT_OFFSET
-+
- static inline struct dmabuf_genpool_chunk_owner *
- net_iov_owner(const struct net_iov *niov)
- {
-@@ -46,20 +84,37 @@ net_iov_binding(const struct net_iov *niov)
-  */
- typedef unsigned long __bitwise netmem_ref;
- 
-+static inline bool netmem_is_net_iov(const netmem_ref netmem)
++/* Return: true if the skb_frag contains a net_iov. */
++static inline bool skb_frag_is_net_iov(const skb_frag_t *frag)
 +{
-+	return (__force unsigned long)netmem & NET_IOV;
++	return netmem_is_net_iov(frag->netmem);
 +}
 +
- /* This conversion fails (returns NULL) if the netmem_ref is not struct page
-  * backed.
-- *
-- * Currently struct page is the only possible netmem, and this helper never
-- * fails.
-  */
- static inline struct page *netmem_to_page(netmem_ref netmem)
- {
-+	if (WARN_ON_ONCE(netmem_is_net_iov(netmem)))
++/**
++ * skb_frag_net_iov - retrieve the net_iov referred to by fragment
++ * @frag: the fragment
++ *
++ * Return: the &struct net_iov associated with @frag. Returns NULL if this
++ * frag has no associated net_iov.
++ */
++static inline struct net_iov *skb_frag_net_iov(const skb_frag_t *frag)
++{
++	if (!skb_frag_is_net_iov(frag))
 +		return NULL;
 +
- 	return (__force struct page *)netmem;
- }
- 
--/* Converting from page to netmem is always safe, because a page can always be
-- * a netmem.
-- */
-+static inline struct net_iov *netmem_to_net_iov(netmem_ref netmem)
-+{
-+	if (netmem_is_net_iov(netmem))
-+		return (struct net_iov *)((__force unsigned long)netmem &
-+					  ~NET_IOV);
-+
-+	DEBUG_NET_WARN_ON_ONCE(true);
-+	return NULL;
++	return netmem_to_net_iov(frag->netmem);
 +}
 +
-+static inline netmem_ref net_iov_to_netmem(struct net_iov *niov)
-+{
-+	return (__force netmem_ref)((unsigned long)niov | NET_IOV);
-+}
-+
- static inline netmem_ref page_to_netmem(struct page *page)
+ /**
+  * skb_frag_page - retrieve the page referred to by a paged fragment
+  * @frag: the paged fragment
+  *
+- * Returns the &struct page associated with @frag.
++ * Return: the &struct page associated with @frag. Returns NULL if this frag
++ * has no associated page.
+  */
+ static inline struct page *skb_frag_page(const skb_frag_t *frag)
  {
- 	return (__force netmem_ref)page;
-@@ -67,17 +122,77 @@ static inline netmem_ref page_to_netmem(struct page *page)
- 
- static inline int netmem_ref_count(netmem_ref netmem)
- {
-+	/* The non-pp refcount of net_iov is always 1. On net_iov, we only
-+	 * support pp refcounting which uses the pp_ref_count field.
-+	 */
-+	if (netmem_is_net_iov(netmem))
-+		return 1;
-+
- 	return page_ref_count(netmem_to_page(netmem));
- }
- 
--static inline unsigned long netmem_to_pfn(netmem_ref netmem)
-+static inline unsigned long netmem_pfn_trace(netmem_ref netmem)
- {
-+	if (netmem_is_net_iov(netmem))
-+		return 0;
-+
- 	return page_to_pfn(netmem_to_page(netmem));
- }
- 
-+static inline struct net_iov *__netmem_clear_lsb(netmem_ref netmem)
-+{
-+	return (struct net_iov *)((__force unsigned long)netmem & ~NET_IOV);
-+}
-+
-+static inline struct page_pool *netmem_get_pp(netmem_ref netmem)
-+{
-+	return __netmem_clear_lsb(netmem)->pp;
-+}
-+
-+static inline atomic_long_t *netmem_get_pp_ref_count_ref(netmem_ref netmem)
-+{
-+	return &__netmem_clear_lsb(netmem)->pp_ref_count;
-+}
-+
-+static inline bool netmem_is_pref_nid(netmem_ref netmem, int pref_nid)
-+{
-+	/* Assume net_iov are on the preferred node without actually
-+	 * checking...
-+	 *
-+	 * This check is only used to check for recycling memory in the page
-+	 * pool's fast paths. Currently the only implementation of net_iov
-+	 * is dmabuf device memory. It's a deliberate decision by the user to
-+	 * bind a certain dmabuf to a certain netdev, and the netdev rx queue
-+	 * would not be able to reallocate memory from another dmabuf that
-+	 * exists on the preferred node, so, this check doesn't make much sense
-+	 * in this case. Assume all net_iovs can be recycled for now.
-+	 */
-+	if (netmem_is_net_iov(netmem))
-+		return true;
-+
-+	return page_to_nid(netmem_to_page(netmem)) == pref_nid;
-+}
-+
- static inline netmem_ref netmem_compound_head(netmem_ref netmem)
- {
-+	/* niov are never compounded */
-+	if (netmem_is_net_iov(netmem))
-+		return netmem;
-+
- 	return page_to_netmem(compound_head(netmem_to_page(netmem)));
- }
- 
-+static inline void *netmem_address(netmem_ref netmem)
-+{
-+	if (netmem_is_net_iov(netmem))
++	if (skb_frag_is_net_iov(frag))
 +		return NULL;
 +
-+	return page_address(netmem_to_page(netmem));
-+}
-+
-+static inline unsigned long netmem_get_dma_addr(netmem_ref netmem)
-+{
-+	return __netmem_clear_lsb(netmem)->dma_addr;
-+}
-+
- #endif /* _NET_NETMEM_H */
-diff --git a/include/net/page_pool/helpers.h b/include/net/page_pool/helpers.h
-index 2b43a893c619..793e6fd78bc5 100644
---- a/include/net/page_pool/helpers.h
-+++ b/include/net/page_pool/helpers.h
-@@ -216,7 +216,7 @@ page_pool_get_dma_dir(const struct page_pool *pool)
- 
- static inline void page_pool_fragment_netmem(netmem_ref netmem, long nr)
- {
--	atomic_long_set(&netmem_to_page(netmem)->pp_ref_count, nr);
-+	atomic_long_set(netmem_get_pp_ref_count_ref(netmem), nr);
+ 	return netmem_to_page(frag->netmem);
  }
  
++/**
++ * skb_frag_netmem - retrieve the netmem referred to by a fragment
++ * @frag: the fragment
++ *
++ * Return: the &netmem_ref associated with @frag.
++ */
++static inline netmem_ref skb_frag_netmem(const skb_frag_t *frag)
++{
++	return frag->netmem;
++}
++
+ int skb_pp_cow_data(struct page_pool *pool, struct sk_buff **pskb,
+ 		    unsigned int headroom);
+ int skb_cow_data_for_xdp(struct page_pool *pool, struct sk_buff **pskb,
+ 			 struct bpf_prog *prog);
++
  /**
-@@ -244,7 +244,7 @@ static inline void page_pool_fragment_page(struct page *page, long nr)
- 
- static inline long page_pool_unref_netmem(netmem_ref netmem, long nr)
+  * skb_frag_address - gets the address of the data contained in a paged fragment
+  * @frag: the paged fragment buffer
+@@ -3547,6 +3584,9 @@ int skb_cow_data_for_xdp(struct page_pool *pool, struct sk_buff **pskb,
+  */
+ static inline void *skb_frag_address(const skb_frag_t *frag)
  {
--	struct page *page = netmem_to_page(netmem);
-+	atomic_long_t *pp_ref_count = netmem_get_pp_ref_count_ref(netmem);
- 	long ret;
- 
- 	/* If nr == pp_ref_count then we have cleared all remaining
-@@ -261,19 +261,19 @@ static inline long page_pool_unref_netmem(netmem_ref netmem, long nr)
- 	 * initially, and only overwrite it when the page is partitioned into
- 	 * more than one piece.
- 	 */
--	if (atomic_long_read(&page->pp_ref_count) == nr) {
-+	if (atomic_long_read(pp_ref_count) == nr) {
- 		/* As we have ensured nr is always one for constant case using
- 		 * the BUILD_BUG_ON(), only need to handle the non-constant case
- 		 * here for pp_ref_count draining, which is a rare case.
- 		 */
- 		BUILD_BUG_ON(__builtin_constant_p(nr) && nr != 1);
- 		if (!__builtin_constant_p(nr))
--			atomic_long_set(&page->pp_ref_count, 1);
-+			atomic_long_set(pp_ref_count, 1);
- 
- 		return 0;
- 	}
- 
--	ret = atomic_long_sub_return(nr, &page->pp_ref_count);
-+	ret = atomic_long_sub_return(nr, pp_ref_count);
- 	WARN_ON(ret < 0);
- 
- 	/* We are the last user here too, reset pp_ref_count back to 1 to
-@@ -282,7 +282,7 @@ static inline long page_pool_unref_netmem(netmem_ref netmem, long nr)
- 	 * page_pool_unref_page() currently.
- 	 */
- 	if (unlikely(!ret))
--		atomic_long_set(&page->pp_ref_count, 1);
-+		atomic_long_set(pp_ref_count, 1);
- 
- 	return ret;
- }
-@@ -401,9 +401,7 @@ static inline void page_pool_free_va(struct page_pool *pool, void *va,
- 
- static inline dma_addr_t page_pool_get_dma_addr_netmem(netmem_ref netmem)
- {
--	struct page *page = netmem_to_page(netmem);
--
--	dma_addr_t ret = page->dma_addr;
-+	dma_addr_t ret = netmem_get_dma_addr(netmem);
- 
- 	if (PAGE_POOL_32BIT_ARCH_WITH_64BIT_DMA)
- 		ret <<= PAGE_SHIFT;
-@@ -423,24 +421,6 @@ static inline dma_addr_t page_pool_get_dma_addr(const struct page *page)
- 	return page_pool_get_dma_addr_netmem(page_to_netmem((struct page *)page));
++	if (!skb_frag_page(frag))
++		return NULL;
++
+ 	return page_address(skb_frag_page(frag)) + skb_frag_off(frag);
  }
  
--static inline bool page_pool_set_dma_addr_netmem(netmem_ref netmem,
--						 dma_addr_t addr)
--{
--	struct page *page = netmem_to_page(netmem);
--
--	if (PAGE_POOL_32BIT_ARCH_WITH_64BIT_DMA) {
--		page->dma_addr = addr >> PAGE_SHIFT;
--
--		/* We assume page alignment to shave off bottom bits,
--		 * if this "compression" doesn't work we need to drop.
--		 */
--		return addr != (dma_addr_t)page->dma_addr << PAGE_SHIFT;
--	}
--
--	page->dma_addr = addr;
--	return false;
--}
--
- /**
-  * page_pool_dma_sync_for_cpu - sync Rx page for CPU after it's written by HW
-  * @pool: &page_pool the @page belongs to
-@@ -463,11 +443,6 @@ static inline void page_pool_dma_sync_for_cpu(const struct page_pool *pool,
- 				      page_pool_get_dma_dir(pool));
- }
+diff --git a/include/linux/skbuff_ref.h b/include/linux/skbuff_ref.h
+index 16c241a23472..0f3c58007488 100644
+--- a/include/linux/skbuff_ref.h
++++ b/include/linux/skbuff_ref.h
+@@ -34,14 +34,13 @@ static inline void skb_frag_ref(struct sk_buff *skb, int f)
  
--static inline bool page_pool_set_dma_addr(struct page *page, dma_addr_t addr)
--{
--	return page_pool_set_dma_addr_netmem(page_to_netmem(page), addr);
--}
--
- static inline bool page_pool_put(struct page_pool *pool)
+ bool napi_pp_put_page(netmem_ref netmem);
+ 
+-static inline void
+-skb_page_unref(struct page *page, bool recycle)
++static inline void skb_page_unref(netmem_ref netmem, bool recycle)
  {
- 	return refcount_dec_and_test(&pool->user_cnt);
-diff --git a/include/trace/events/page_pool.h b/include/trace/events/page_pool.h
-index 543e54e432a1..31825ed30032 100644
---- a/include/trace/events/page_pool.h
-+++ b/include/trace/events/page_pool.h
-@@ -57,12 +57,12 @@ TRACE_EVENT(page_pool_state_release,
- 		__entry->pool		= pool;
- 		__entry->netmem		= (__force unsigned long)netmem;
- 		__entry->release	= release;
--		__entry->pfn		= netmem_to_pfn(netmem);
-+		__entry->pfn		= netmem_pfn_trace(netmem);
- 	),
- 
--	TP_printk("page_pool=%p netmem=%p pfn=0x%lx release=%u",
-+	TP_printk("page_pool=%p netmem=%p is_net_iov=%lu pfn=0x%lx release=%u",
- 		  __entry->pool, (void *)__entry->netmem,
--		  __entry->pfn, __entry->release)
-+		  __entry->netmem & NET_IOV, __entry->pfn, __entry->release)
- );
- 
- TRACE_EVENT(page_pool_state_hold,
-@@ -83,12 +83,12 @@ TRACE_EVENT(page_pool_state_hold,
- 		__entry->pool	= pool;
- 		__entry->netmem	= (__force unsigned long)netmem;
- 		__entry->hold	= hold;
--		__entry->pfn	= netmem_to_pfn(netmem);
-+		__entry->pfn	= netmem_pfn_trace(netmem);
- 	),
- 
--	TP_printk("page_pool=%p netmem=%p pfn=0x%lx hold=%u",
-+	TP_printk("page_pool=%p netmem=%p is_net_iov=%lu, pfn=0x%lx hold=%u",
- 		  __entry->pool, (void *)__entry->netmem,
--		  __entry->pfn, __entry->hold)
-+		  __entry->netmem & NET_IOV, __entry->pfn, __entry->hold)
- );
- 
- TRACE_EVENT(page_pool_update_nid,
-diff --git a/net/core/devmem.c b/net/core/devmem.c
-index d636a8b34215..8cc727bbd137 100644
---- a/net/core/devmem.c
-+++ b/net/core/devmem.c
-@@ -19,6 +19,8 @@
- #include <net/devmem.h>
- #include <net/netdev_queues.h>
- 
-+#include "page_pool_priv.h"
-+
- /* Device memory support */
- 
- #if defined(CONFIG_DMA_SHARED_BUFFER) && defined(CONFIG_GENERIC_ALLOCATOR)
-@@ -83,6 +85,10 @@ net_devmem_alloc_dmabuf(struct net_devmem_dmabuf_binding *binding)
- 	index = offset / PAGE_SIZE;
- 	niov = &owner->niovs[index];
- 
-+	niov->pp_magic = 0;
-+	niov->pp = NULL;
-+	atomic_long_set(&niov->pp_ref_count, 0);
-+
- 	return niov;
- }
- 
-@@ -263,6 +269,8 @@ net_devmem_bind_dmabuf(struct net_device *dev, unsigned int dmabuf_fd,
- 		for (i = 0; i < owner->num_niovs; i++) {
- 			niov = &owner->niovs[i];
- 			niov->owner = owner;
-+			page_pool_set_dma_addr_netmem(net_iov_to_netmem(niov),
-+						      net_devmem_get_dma_addr(niov));
- 		}
- 
- 		virtual += len;
-diff --git a/net/core/netmem_priv.h b/net/core/netmem_priv.h
-new file mode 100644
-index 000000000000..7eadb8393e00
---- /dev/null
-+++ b/net/core/netmem_priv.h
-@@ -0,0 +1,31 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+
-+#ifndef __NETMEM_PRIV_H
-+#define __NETMEM_PRIV_H
-+
-+static inline unsigned long netmem_get_pp_magic(netmem_ref netmem)
-+{
-+	return __netmem_clear_lsb(netmem)->pp_magic;
-+}
-+
-+static inline void netmem_or_pp_magic(netmem_ref netmem, unsigned long pp_magic)
-+{
-+	__netmem_clear_lsb(netmem)->pp_magic |= pp_magic;
-+}
-+
-+static inline void netmem_clear_pp_magic(netmem_ref netmem)
-+{
-+	__netmem_clear_lsb(netmem)->pp_magic = 0;
-+}
-+
-+static inline void netmem_set_pp(netmem_ref netmem, struct page_pool *pool)
-+{
-+	__netmem_clear_lsb(netmem)->pp = pool;
-+}
-+
-+static inline void netmem_set_dma_addr(netmem_ref netmem,
-+				       unsigned long dma_addr)
-+{
-+	__netmem_clear_lsb(netmem)->dma_addr = dma_addr;
-+}
-+#endif
-diff --git a/net/core/page_pool.c b/net/core/page_pool.c
-index 2abe6e919224..13277f05aebd 100644
---- a/net/core/page_pool.c
-+++ b/net/core/page_pool.c
-@@ -25,6 +25,9 @@
- #include <trace/events/page_pool.h>
- 
- #include "page_pool_priv.h"
-+#include "netmem_priv.h"
-+
-+DEFINE_STATIC_KEY_FALSE(page_pool_mem_providers);
- 
- #define DEFER_TIME (msecs_to_jiffies(1000))
- #define DEFER_WARN_INTERVAL (60 * HZ)
-@@ -358,7 +361,7 @@ static noinline netmem_ref page_pool_refill_alloc_cache(struct page_pool *pool)
- 		if (unlikely(!netmem))
- 			break;
- 
--		if (likely(page_to_nid(netmem_to_page(netmem)) == pref_nid)) {
-+		if (likely(netmem_is_pref_nid(netmem, pref_nid))) {
- 			pool->alloc.cache[pool->alloc.count++] = netmem;
- 		} else {
- 			/* NUMA mismatch;
-@@ -454,10 +457,8 @@ static bool page_pool_dma_map(struct page_pool *pool, netmem_ref netmem)
- 
- static void page_pool_set_pp_info(struct page_pool *pool, netmem_ref netmem)
- {
--	struct page *page = netmem_to_page(netmem);
--
--	page->pp = pool;
--	page->pp_magic |= PP_SIGNATURE;
-+	netmem_set_pp(netmem, pool);
-+	netmem_or_pp_magic(netmem, PP_SIGNATURE);
- 
- 	/* Ensuring all pages have been split into one fragment initially:
- 	 * page_pool_set_pp_info() is only called once for every page when it
-@@ -472,10 +473,8 @@ static void page_pool_set_pp_info(struct page_pool *pool, netmem_ref netmem)
- 
- static void page_pool_clear_pp_info(netmem_ref netmem)
- {
--	struct page *page = netmem_to_page(netmem);
--
--	page->pp_magic = 0;
--	page->pp = NULL;
-+	netmem_clear_pp_magic(netmem);
-+	netmem_set_pp(netmem, NULL);
- }
- 
- static struct page *__page_pool_alloc_page_order(struct page_pool *pool,
-@@ -692,8 +691,9 @@ static bool page_pool_recycle_in_cache(netmem_ref netmem,
- 
- static bool __page_pool_page_can_be_recycled(netmem_ref netmem)
- {
--	return page_ref_count(netmem_to_page(netmem)) == 1 &&
--	       !page_is_pfmemalloc(netmem_to_page(netmem));
-+	return netmem_is_net_iov(netmem) ||
-+	       (page_ref_count(netmem_to_page(netmem)) == 1 &&
-+		!page_is_pfmemalloc(netmem_to_page(netmem)));
- }
- 
- /* If the page refcnt == 1, this will try to recycle the page.
-@@ -728,6 +728,7 @@ __page_pool_put_page(struct page_pool *pool, netmem_ref netmem,
- 		/* Page found as candidate for recycling */
- 		return netmem;
- 	}
-+
- 	/* Fallback/non-XDP mode: API user have elevated refcnt.
- 	 *
- 	 * Many drivers split up the page into fragments, and some
-@@ -949,7 +950,7 @@ static void page_pool_empty_ring(struct page_pool *pool)
- 	/* Empty recycle ring */
- 	while ((netmem = (__force netmem_ref)ptr_ring_consume_bh(&pool->ring))) {
- 		/* Verify the refcnt invariant of cached pages */
--		if (!(page_ref_count(netmem_to_page(netmem)) == 1))
-+		if (!(netmem_ref_count(netmem) == 1))
- 			pr_crit("%s() page_pool refcnt %d violation\n",
- 				__func__, netmem_ref_count(netmem));
- 
-diff --git a/net/core/page_pool_priv.h b/net/core/page_pool_priv.h
-index 90665d40f1eb..2142caeddb7c 100644
---- a/net/core/page_pool_priv.h
-+++ b/net/core/page_pool_priv.h
-@@ -3,10 +3,36 @@
- #ifndef __PAGE_POOL_PRIV_H
- #define __PAGE_POOL_PRIV_H
- 
-+#include <net/page_pool/helpers.h>
-+
-+#include "netmem_priv.h"
-+
- s32 page_pool_inflight(const struct page_pool *pool, bool strict);
- 
- int page_pool_list(struct page_pool *pool);
- void page_pool_detached(struct page_pool *pool);
- void page_pool_unlist(struct page_pool *pool);
- 
-+static inline bool page_pool_set_dma_addr_netmem(netmem_ref netmem,
-+						 dma_addr_t addr)
-+{
-+	if (PAGE_POOL_32BIT_ARCH_WITH_64BIT_DMA) {
-+		netmem_set_dma_addr(netmem, addr >> PAGE_SHIFT);
-+
-+		/* We assume page alignment to shave off bottom bits,
-+		 * if this "compression" doesn't work we need to drop.
-+		 */
-+		return addr != (dma_addr_t)netmem_get_dma_addr(netmem)
-+				       << PAGE_SHIFT;
-+	}
-+
-+	netmem_set_dma_addr(netmem, addr);
-+	return false;
-+}
-+
-+static inline bool page_pool_set_dma_addr(struct page *page, dma_addr_t addr)
-+{
-+	return page_pool_set_dma_addr_netmem(page_to_netmem(page), addr);
-+}
-+
+ #ifdef CONFIG_PAGE_POOL
+-	if (recycle && napi_pp_put_page(page_to_netmem(page)))
++	if (recycle && napi_pp_put_page(netmem))
+ 		return;
  #endif
+-	put_page(page);
++	put_page(netmem_to_page(netmem));
+ }
+ 
+ /**
+@@ -54,7 +53,7 @@ skb_page_unref(struct page *page, bool recycle)
+  */
+ static inline void __skb_frag_unref(skb_frag_t *frag, bool recycle)
+ {
+-	skb_page_unref(skb_frag_page(frag), recycle);
++	skb_page_unref(skb_frag_netmem(frag), recycle);
+ }
+ 
+ /**
+diff --git a/net/core/dev.c b/net/core/dev.c
+index 2cab5f969778..8be922165737 100644
+--- a/net/core/dev.c
++++ b/net/core/dev.c
+@@ -3432,8 +3432,9 @@ static int illegal_highdma(struct net_device *dev, struct sk_buff *skb)
+ 	if (!(dev->features & NETIF_F_HIGHDMA)) {
+ 		for (i = 0; i < skb_shinfo(skb)->nr_frags; i++) {
+ 			skb_frag_t *frag = &skb_shinfo(skb)->frags[i];
++			struct page *page = skb_frag_page(frag);
+ 
+-			if (PageHighMem(skb_frag_page(frag)))
++			if (page && PageHighMem(page))
+ 				return 1;
+ 		}
+ 	}
+diff --git a/net/core/gro.c b/net/core/gro.c
+index b3b43de1a650..26f09c3e830b 100644
+--- a/net/core/gro.c
++++ b/net/core/gro.c
+@@ -408,7 +408,8 @@ static inline void skb_gro_reset_offset(struct sk_buff *skb, u32 nhoff)
+ 	pinfo = skb_shinfo(skb);
+ 	frag0 = &pinfo->frags[0];
+ 
+-	if (pinfo->nr_frags && !PageHighMem(skb_frag_page(frag0)) &&
++	if (pinfo->nr_frags && skb_frag_page(frag0) &&
++	    !PageHighMem(skb_frag_page(frag0)) &&
+ 	    (!NET_IP_ALIGN || !((skb_frag_off(frag0) + nhoff) & 3))) {
+ 		NAPI_GRO_CB(skb)->frag0 = skb_frag_address(frag0);
+ 		NAPI_GRO_CB(skb)->frag0_len = min_t(unsigned int,
 diff --git a/net/core/skbuff.c b/net/core/skbuff.c
-index 1748673e1fe0..e418da9e2379 100644
+index e418da9e2379..d3bcb37c9e7a 100644
 --- a/net/core/skbuff.c
 +++ b/net/core/skbuff.c
-@@ -89,6 +89,7 @@
+@@ -1371,6 +1371,14 @@ void skb_dump(const char *level, const struct sk_buff *skb, bool full_pkt)
+ 		struct page *p;
+ 		u8 *vaddr;
  
- #include "dev.h"
- #include "sock_destructor.h"
-+#include "netmem_priv.h"
++		if (skb_frag_is_net_iov(frag)) {
++			printk("%sskb frag %d: not readable\n", level, i);
++			len -= skb_frag_size(frag);
++			if (!len)
++				break;
++			continue;
++		}
++
+ 		skb_frag_foreach_page(frag, skb_frag_off(frag),
+ 				      skb_frag_size(frag), p, p_off, p_len,
+ 				      copied) {
+@@ -3163,6 +3171,9 @@ static bool __skb_splice_bits(struct sk_buff *skb, struct pipe_inode_info *pipe,
+ 	for (seg = 0; seg < skb_shinfo(skb)->nr_frags; seg++) {
+ 		const skb_frag_t *f = &skb_shinfo(skb)->frags[seg];
  
- #ifdef CONFIG_SKB_EXTENSIONS
- static struct kmem_cache *skbuff_ext_cache __ro_after_init;
-@@ -920,9 +921,9 @@ static void skb_clone_fraglist(struct sk_buff *skb)
- 		skb_get(list);
- }
- 
--static bool is_pp_page(struct page *page)
-+static bool is_pp_netmem(netmem_ref netmem)
- {
--	return (page->pp_magic & ~0x3UL) == PP_SIGNATURE;
-+	return (netmem_get_pp_magic(netmem) & ~0x3UL) == PP_SIGNATURE;
- }
- 
- int skb_pp_cow_data(struct page_pool *pool, struct sk_buff **pskb,
-@@ -1020,9 +1021,7 @@ EXPORT_SYMBOL(skb_cow_data_for_xdp);
- #if IS_ENABLED(CONFIG_PAGE_POOL)
- bool napi_pp_put_page(netmem_ref netmem)
- {
--	struct page *page = netmem_to_page(netmem);
--
--	page = compound_head(page);
-+	netmem = netmem_compound_head(netmem);
- 
- 	/* page->pp_magic is OR'ed with PP_SIGNATURE after the allocation
- 	 * in order to preserve any existing bits, such as bit 0 for the
-@@ -1031,10 +1030,10 @@ bool napi_pp_put_page(netmem_ref netmem)
- 	 * and page_is_pfmemalloc() is checked in __page_pool_put_page()
- 	 * to avoid recycling the pfmemalloc page.
++		if (WARN_ON_ONCE(!skb_frag_page(f)))
++			return false;
++
+ 		if (__splice_segment(skb_frag_page(f),
+ 				     skb_frag_off(f), skb_frag_size(f),
+ 				     offset, len, spd, false, sk, pipe))
+diff --git a/net/ipv4/esp4.c b/net/ipv4/esp4.c
+index 47378ca41904..f3281312eb5e 100644
+--- a/net/ipv4/esp4.c
++++ b/net/ipv4/esp4.c
+@@ -115,7 +115,8 @@ static void esp_ssg_unref(struct xfrm_state *x, void *tmp, struct sk_buff *skb)
  	 */
--	if (unlikely(!is_pp_page(page)))
-+	if (unlikely(!is_pp_netmem(netmem)))
- 		return false;
- 
--	page_pool_put_full_netmem(page->pp, page_to_netmem(page), false);
-+	page_pool_put_full_netmem(netmem_get_pp(netmem), netmem, false);
- 
- 	return true;
+ 	if (req->src != req->dst)
+ 		for (sg = sg_next(req->src); sg; sg = sg_next(sg))
+-			skb_page_unref(sg_page(sg), skb->pp_recycle);
++			skb_page_unref(page_to_netmem(sg_page(sg)),
++				       skb->pp_recycle);
  }
-@@ -1061,7 +1060,7 @@ static bool skb_pp_recycle(struct sk_buff *skb, void *data)
- static int skb_pp_frag_ref(struct sk_buff *skb)
- {
- 	struct skb_shared_info *shinfo;
--	struct page *head_page;
-+	netmem_ref head_netmem;
- 	int i;
  
- 	if (!skb->pp_recycle)
-@@ -1070,11 +1069,11 @@ static int skb_pp_frag_ref(struct sk_buff *skb)
- 	shinfo = skb_shinfo(skb);
- 
- 	for (i = 0; i < shinfo->nr_frags; i++) {
--		head_page = compound_head(skb_frag_page(&shinfo->frags[i]));
--		if (likely(is_pp_page(head_page)))
--			page_pool_ref_page(head_page);
-+		head_netmem = netmem_compound_head(shinfo->frags[i].netmem);
-+		if (likely(is_pp_netmem(head_netmem)))
-+			page_pool_ref_netmem(head_netmem);
- 		else
--			page_ref_inc(head_page);
-+			page_ref_inc(netmem_to_page(head_netmem));
- 	}
- 	return 0;
+ #ifdef CONFIG_INET_ESPINTCP
+diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
+index 8514257f4ecd..20a1b0333017 100644
+--- a/net/ipv4/tcp.c
++++ b/net/ipv4/tcp.c
+@@ -2177,6 +2177,9 @@ static int tcp_zerocopy_receive(struct sock *sk,
+ 			break;
+ 		}
+ 		page = skb_frag_page(frags);
++		if (WARN_ON_ONCE(!page))
++			break;
++
+ 		prefetchw(page);
+ 		pages[pages_to_map++] = page;
+ 		length += PAGE_SIZE;
+diff --git a/net/ipv6/esp6.c b/net/ipv6/esp6.c
+index 3920e8aa1031..b2400c226a32 100644
+--- a/net/ipv6/esp6.c
++++ b/net/ipv6/esp6.c
+@@ -132,7 +132,8 @@ static void esp_ssg_unref(struct xfrm_state *x, void *tmp, struct sk_buff *skb)
+ 	 */
+ 	if (req->src != req->dst)
+ 		for (sg = sg_next(req->src); sg; sg = sg_next(sg))
+-			skb_page_unref(sg_page(sg), skb->pp_recycle);
++			skb_page_unref(page_to_netmem(sg_page(sg)),
++				       skb->pp_recycle);
  }
+ 
+ #ifdef CONFIG_INET6_ESPINTCP
 -- 
 2.46.0.295.g3b9ea8a38a-goog
 
