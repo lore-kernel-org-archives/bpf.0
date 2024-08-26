@@ -1,52 +1,52 @@
-Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
+Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEF067D417
-	for <bpf@vger.kernel.org>; Mon, 26 Aug 2024 17:31:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 440E6198830
+	for <bpf@vger.kernel.org>; Mon, 26 Aug 2024 17:41:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724693463; cv=none; b=jLrCRynDV9fJPMpCSqajxlJzpsd3JE8xfJC7HBbxTEHuVetGnEftObPmFKxCmdKpSzhr3I6H67y6nEF8+m3+lGpLFI7z/vRMm8f2g07czGEQ6wNTCoBzTyRTSNFsFxHZ4MDL9doQpaNLEZSRRez/lr3L6z0kdbSTlaXvR9j3otQ=
+	t=1724694093; cv=none; b=eONC09kRzx3oD3IsfPjXe/q6klSoceoOMo7xS8n0VjObdKjAE37WbxUA6eMf17P5ZH0gQ/X00sc9wJBRPB68x8pUtIoveTVqBM9QMu9QFyfhlwqSPAgKE7Dqi74KmHWbgyrLD/1ZNOPxzus9x6bZFVeIdnL7R52YXCg21itrJaM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724693463; c=relaxed/simple;
-	bh=ai93OtOQrbR4S3AT314DLeiH8KJPW3YI556gX8jIasE=;
+	s=arc-20240116; t=1724694093; c=relaxed/simple;
+	bh=8z0ijpKLCyL0/hK7XURRlPlM8gG/OVt4zB5FIjNk014=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Z6xhC8dRYnlv/TRGEA/cfeNsczo7f86bovYx4zVGGLw7+SlSoY3BXEoRFRzxq1NsvhytkHkZrOmJJ3iopr5ZiawljEYf5hhb/EpUiNxQjSJI9e4hqJawUBf9fhYbJGYHDUFHlKe6c15i4S6iD6/SZFqYCXLzBVhmZZU5mRmqnRs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=e+pjeuj4; arc=none smtp.client-ip=209.85.216.51
+	 To:Cc:Content-Type; b=jqEJvoeDObUkvqV9SSwvWRqzdyCpu7g730V5Y03yArTjvLDvtH/iwA4M8DfnNcXdQOS0WVRU/Fcs3qwrjoyv0QnmxFHH0Ore0fGKdFtQjgnz/FF8NuupZk7m6o/AFgK8tCegoFmiy1rjIX9z2bOZqJo3IFIvPBqz41WVtdRB27U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=RyY4xkTi; arc=none smtp.client-ip=209.85.210.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=broadcom.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="e+pjeuj4"
-Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-2d3b5f2f621so3258569a91.1
-        for <bpf@vger.kernel.org>; Mon, 26 Aug 2024 10:31:01 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="RyY4xkTi"
+Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-714302e7285so3860128b3a.2
+        for <bpf@vger.kernel.org>; Mon, 26 Aug 2024 10:41:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google; t=1724693461; x=1725298261; darn=vger.kernel.org;
+        d=broadcom.com; s=google; t=1724694090; x=1725298890; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=iClgDrknyT0dEay6TLsYqV+rELzO0m3jwG6/VjVsKOY=;
-        b=e+pjeuj4mPrtiacsgQal52McaGxDOWl6JKcDmgYDtfpRpu5x5rZ94dZ9bQmeQS6INY
-         md7PNXfBKZ55/+GpJo+gI0ARPrS134axbAVbJGBGTYZph5L9E14QYmD4/Ov/S+MjtVaw
-         Swy5SiFwqLgFpqTAwpaAEwue4ZdbRAg7kKbjo=
+        bh=gk6yec5dWuUP0cgrAQJG6vAUBJ9aHrLwI2uJ5n3Lhmk=;
+        b=RyY4xkTipN3cKTf0Z8//tSaD5kW+wficFpJYbltMkKVdaDyPF6/WxyXU/01wxPtPct
+         zwZNAtZ1jnBNuImupSypFXtpCJJxke4rRiZzjxP75DbC14u7ovmESAb4XOtMBAtWHgCb
+         yBTtrrZ37IaYo/1fXFlIQ+TBdCgdJlfZDVHnE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724693461; x=1725298261;
+        d=1e100.net; s=20230601; t=1724694090; x=1725298890;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=iClgDrknyT0dEay6TLsYqV+rELzO0m3jwG6/VjVsKOY=;
-        b=wSBDizToqX1dWX1IMHjYfaSkeuQJDtG8NYy8CFY29j4Yml2E4BDWR6w8aytAht1viJ
-         2bLczvudfGERTXMhaMAkOy4oVUdEa7jas1NTstRF3qM/dz5WDSXr79bOD2aVgUqKUxDu
-         am9OaCPymj4EnNzyTCCT4eFmMFrUqeK6IMkHwUapXf5aQLhmfbbZnqn6TA6ozbhq/wTZ
-         TC4jq2x8ZmbENljEcr/5t3+6buxTFmBoRkSUx51fuWIo8HJ95r/XI6WVsijzFsqAwfY3
-         7II4KRKJnsWL1LgIS4CP0vu+CM09sGG2+xK1Ty9UbYTWl7EpZHoAT6KIfGWpfJlcx3CH
-         mKpg==
-X-Forwarded-Encrypted: i=1; AJvYcCXcz9NUJiUGNsY7d3sg3uFfQHALr4xelt0MBUiyfbsrt9QMxC8pVVTC0PByFf6N+YurnDA=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzlvtiyi6B/gNqLGZLl/7ah6INcKynBWpcdvM55zUwmTticJFNM
-	4X8Umu//8fFcqb1YFiFE5JPoDQeV5iIaMO351GaIp1uDXCAML/8Je5Hmx8jyBm7W5Bl1LInma60
-	bg+pLb+4k+0Gb+V+XVbFbyIevvjw6crK4pAND
-X-Google-Smtp-Source: AGHT+IGOiC9l+tylzHyvTlxh5R323gDD1FRUx3Z+bfPXVWn9FyrfJSQssxkfETmOUkVELarY+SrTHbJFJ2oK/08oDGc=
-X-Received: by 2002:a17:90b:4a43:b0:2d4:924:8891 with SMTP id
- 98e67ed59e1d1-2d8259f79a4mr319895a91.38.1724693460840; Mon, 26 Aug 2024
- 10:31:00 -0700 (PDT)
+        bh=gk6yec5dWuUP0cgrAQJG6vAUBJ9aHrLwI2uJ5n3Lhmk=;
+        b=YWVpOPrBYDwV29KGxgPLKhal47FOlpkGHvBU0sGLtMZIIJNtBLY6Z0mqZB1pgyhTUz
+         DYzldAOKQoyC7x/QjavdL3LzjZ2MrZZhskbSAFE6dI99KyidR3Gerv288P46NM5Zpzc4
+         JTBl1C8TfidAajuKvuzXnl6lz7I/wKB/u8DEPnEncf4wIrDxx+SGm3Z3Hjd/Jn/H5SkP
+         L1ihoM7VqAkm1D+o6s146obHSVD7e3pzDzqQXWrBrjPKHkJ+wYpx7eJpAnjhLKzQ222T
+         B3/RpkcgR4krpaX9neObmL4Wxu4QM8huegguKeg0dxy+JMQt/wO0sZVWaG4S52VHT7Q7
+         gDdQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVch+lW9XBQnQ+rW4Pp8IqVyo/qnh2o7MzSwfnQtr48rL0Jpnp1F6p13/lmYuCP3p7Rwbk=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz/BhLhDaDVcjSJyGxKbsq0lieOJaFhKmFFqMn/a3K0llKDV6qV
+	Px+bcAUhIfvOcGgFIaW8OozY3lXzwlX3LSbWbJ0fcS8mfVga0h1vMVOLIId+8/b/x91C7HVAw0d
+	qifRSSTQPkecwI75LWm6HS9ewU0DqjWV2Bws2
+X-Google-Smtp-Source: AGHT+IGUoZte0p19xwWBeSiInV7PcfaUqsGgBPlQ2VYY7m0wFFR9zVxHRono64Qiy0v2wUCnm32xn+uUvVhnGv9x41o=
+X-Received: by 2002:a05:6a00:1a8e:b0:710:4d08:e094 with SMTP id
+ d2e1a72fcca58-7144573cd07mr11456889b3a.2.1724694090361; Mon, 26 Aug 2024
+ 10:41:30 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -54,12 +54,13 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 References: <20240814221818.2612484-1-jitendra.vegiraju@broadcom.com>
- <20240814221818.2612484-5-jitendra.vegiraju@broadcom.com> <5f7a617e-a8a2-40ca-a54a-19e58d69ab33@marvell.com>
-In-Reply-To: <5f7a617e-a8a2-40ca-a54a-19e58d69ab33@marvell.com>
+ <20240814221818.2612484-3-jitendra.vegiraju@broadcom.com> <0de48667-fe8e-4cd8-a84a-e3e5407c7263@marvell.com>
+In-Reply-To: <0de48667-fe8e-4cd8-a84a-e3e5407c7263@marvell.com>
 From: Jitendra Vegiraju <jitendra.vegiraju@broadcom.com>
-Date: Mon, 26 Aug 2024 10:30:49 -0700
-Message-ID: <CAMdnO-+ZKyoPY=ZDO8cir5T8hcF-nLRhkasfykF8EFbbedqXFg@mail.gmail.com>
-Subject: Re: [net-next v4 4/5] net: stmmac: Add PCI driver support for BCM8958x
+Date: Mon, 26 Aug 2024 10:41:18 -0700
+Message-ID: <CAMdnO-JSPEkJZLMPL8BLy1DKFUtU4aC_JpaXfs=g5YJFBu4_RQ@mail.gmail.com>
+Subject: Re: [net-next v4 2/5] net: stmmac: Add basic dw25gmac support to
+ stmmac core
 To: Amit Singh Tomar <amitsinght@marvell.com>
 Cc: netdev@vger.kernel.org, alexandre.torgue@foss.st.com, joabreu@synopsys.com, 
 	davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, 
@@ -75,30 +76,59 @@ Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
 Hi Amit,
-Thanks for the review comments.
 
-On Thu, Aug 22, 2024 at 9:35=E2=80=AFAM Amit Singh Tomar <amitsinght@marvel=
-l.com> wrote:
+On Thu, Aug 22, 2024 at 10:17=E2=80=AFAM Amit Singh Tomar
+<amitsinght@marvell.com> wrote:
 >
 > Hi,
 >
->
+> > The BCM8958x uses early adaptor version of DWC_xgmac version 4.00a for
+> > ethernet MAC. The DW25GMAC introduced in this version adds new DMA
+> > architecture called Hyper-DMA (HDMA) for virtualization scalability.
+> > This is realized by decoupling physical DMA channels(PDMA) from potenti=
+ally
+> > large number of virtual DMA channels (VDMA). The VDMAs are software
+> > abastractions that map to PDMAs for frame transmission and reception.
+> You should either run ./scripts/checkpatch.pl --strict --codespell
+> --patch or use :set spell in vi to check for spelling mistakes
+
+Thank you, I will do that next time.
+
+> > +static u32 decode_vdma_count(u32 regval)
 > > +{
-> > +     int ret;
-> > +     int i;
-> nit: This can be merged into single line.
+> > +     /* compressed encoding for vdma count
+> > +      * regval: VDMA count
+> > +      * 0-15  : 1 - 16
+> > +      * 16-19 : 20, 24, 28, 32
+> > +      * 20-23 : 40, 48, 56, 64
+> > +      * 24-27 : 80, 96, 112, 128
+> > +      */
+> > +     if (regval < 16)
+> > +             return regval + 1;
+> > +     return (4 << ((regval - 16) / 4)) * ((regval % 4) + 5);
+> Is there a potential for regval to be out of bounds (regval > 27)  that
+> needed to be handled properly?
 
-Thanks, I will fix it.
+The IP core documentation we have only defines support upto 128 VDMAs.
+The same formula should for higher values (bound by bitmask).
 
-> > +err_disable_msi:
-> > +     pci_free_irq_vectors(pdev);
-> > +err_disable_device:
-> > +     pci_disable_device(pdev);
-> Shouldn't pcim_iounmap_region be called here to unmap and release PCI BAR=
-s?
+> > diff --git a/drivers/net/ethernet/stmicro/stmmac/dw25gmac.h b/drivers/n=
+et/ethernet/stmicro/stmmac/dw25gmac.h
+> > new file mode 100644
+> > index 000000000000..c7fdf6624fea
+> > --- /dev/null
+> > +++ b/drivers/net/ethernet/stmicro/stmmac/dw25gmac.h
+> > @@ -0,0 +1,90 @@
+> > +/* SPDX-License-Identifier: GPL-2.0-only */
+> > +/* Copyright (c) 2024 Broadcom Corporation
+> > + * DW25GMAC definitions.
+> > + */
+> > +
+> > +#define XXVGMAC_ADDR_OFFSET          GENMASK(14, 8)
+> > +#define XXVGMAC_AUTO_INCR            GENMASK(5, 4)
+> > +#define XXVGMAC_CMD_TYPE                     BIT(1)
+> > +#define XXVGMAC_OB                   BIT(0)
+> > +#define XXVGMAC_DMA_CH_IND_DATA              0X00003084
+> nit: lower case please, 0x00003084.
 
-My understanding is that for managed API calls pcim_iomap_regions(),
-we don't need to do explicit clean up.
-Please let me know if that's not the case.
-Just realized that pci_disable_device() in cleanup is not required
-since the driver is using pcim_enable_device().
+Thanks, will fix it.
