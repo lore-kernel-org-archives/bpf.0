@@ -1,59 +1,29 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2BD164A;
-	Mon, 26 Aug 2024 17:28:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C87D10E9;
+	Mon, 26 Aug 2024 17:30:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724693317; cv=none; b=kW0KnR2yGbattM2zbt/D7lrKbmyHY8FKUvUxmEqicafr0YYvqDQCg9D414VzArW5UAoLgcB85yjsB2YIhMBQ9pj5kxMpYsPt5fEWuo2jLrW8xIt6EgAUCDbnx/nhLM6uMzclxBa08s1WtOo7xkusS2z0qgAtqBJpktgAoZiOaWQ=
+	t=1724693454; cv=none; b=TNqpukuZzbyPtg9+1BFhIr0SDtQIdrvET/CutLpxNIT8MnospdMvmk14gQcR7XAgceFoXQ3dt7GzDHNOOtEM0jQfz9PnNWKVsfthfq21VU8pA/AuLh/mLOL9rabXvi+0BetmG9L1SOzKI39gZ3QjOg6izPRindKuH4qRCxt7Gqw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724693317; c=relaxed/simple;
-	bh=Ah1MYcJfpVaPDZCj/MgYPfBVJo43ln+VDcKQfM/BWW0=;
+	s=arc-20240116; t=1724693454; c=relaxed/simple;
+	bh=hvjbSglVG52utS/TNtvwDZVFsSLINCOLzNEh+HdAtW8=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=F0vJuB4enMf3kzX5w92GGjgpsS14IY3U78m1dP1LqdjuRTbkrmE7/1p6+62IWa4VSSS9IXuOm/ij9PxvLfDGCDYIOreZRpO9VqbJ8l7adlo09mkcJdQ+bEByMEFVsKuXzHUdV5LrCmwNVmGObV8zg6akptUVLJ+lZkfWB04lDGk=
+	 MIME-Version:Content-Type; b=R2EhiC23zNoHzMMT3Q2jUShCSBIvpB4jlroJfl/UtqJ1KS9S7Xm+3alid/KHo2H5qsmWQVToPmw0WhkPj/N4zCT0KuZ8TTfysFCxNrn/syROjVdyZyNZqsHqDOTeo/zBNaZTHdF2YdMFwfVM727M50JAfh0pcZ9DHU9WfXIzX6s=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0E6AC8B7B5;
-	Mon, 26 Aug 2024 17:28:29 +0000 (UTC)
-Date: Mon, 26 Aug 2024 13:29:09 -0400
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8217DC8B7BF;
+	Mon, 26 Aug 2024 17:30:53 +0000 (UTC)
+Date: Mon, 26 Aug 2024 13:31:33 -0400
 From: Steven Rostedt <rostedt@goodmis.org>
-To: Mike Rapoport <rppt@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>, Andreas Larsson
- <andreas@gaisler.com>, Andy Lutomirski <luto@kernel.org>, Arnd Bergmann
- <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>, Brian Cain
- <bcain@quicinc.com>, Catalin Marinas <catalin.marinas@arm.com>, Christoph
- Hellwig <hch@infradead.org>, Christophe Leroy
- <christophe.leroy@csgroup.eu>, Dave Hansen <dave.hansen@linux.intel.com>,
- Dinh Nguyen <dinguyen@kernel.org>, Geert Uytterhoeven
- <geert@linux-m68k.org>, Guo Ren <guoren@kernel.org>, Helge Deller
- <deller@gmx.de>, Huacai Chen <chenhuacai@kernel.org>, Ingo Molnar
- <mingo@redhat.com>, Johannes Berg <johannes@sipsolutions.net>, John Paul
- Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, Kent Overstreet
- <kent.overstreet@linux.dev>, "Liam R. Howlett" <Liam.Howlett@oracle.com>,
- Luis Chamberlain <mcgrof@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
- Masami Hiramatsu <mhiramat@kernel.org>, Matt Turner <mattst88@gmail.com>,
- Max Filippov <jcmvbkbc@gmail.com>, Michael Ellerman <mpe@ellerman.id.au>,
- Michal Simek <monstr@monstr.eu>, Oleg Nesterov <oleg@redhat.com>, Palmer
- Dabbelt <palmer@dabbelt.com>, Peter Zijlstra <peterz@infradead.org>,
- Richard Weinberger <richard@nod.at>, Russell King <linux@armlinux.org.uk>,
- Song Liu <song@kernel.org>, Stafford Horne <shorne@gmail.com>, Thomas
- Bogendoerfer <tsbogend@alpha.franken.de>, Thomas Gleixner
- <tglx@linutronix.de>, Uladzislau Rezki <urezki@gmail.com>, Vineet Gupta
- <vgupta@kernel.org>, Will Deacon <will@kernel.org>, bpf@vger.kernel.org,
- linux-alpha@vger.kernel.org, linux-arch@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
- linux-hexagon@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
- linux-mm@kvack.org, linux-modules@vger.kernel.org,
- linux-openrisc@vger.kernel.org, linux-parisc@vger.kernel.org,
- linux-riscv@lists.infradead.org, linux-sh@vger.kernel.org,
- linux-snps-arc@lists.infradead.org, linux-trace-kernel@vger.kernel.org,
- linux-um@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
- loongarch@lists.linux.dev, sparclinux@vger.kernel.org, x86@kernel.org
-Subject: Re: [PATCH v2 5/8] ftrace: Add swap_func to ftrace_process_locs()
-Message-ID: <20240826132909.306b08fc@gandalf.local.home>
-In-Reply-To: <20240826065532.2618273-6-rppt@kernel.org>
-References: <20240826065532.2618273-1-rppt@kernel.org>
-	<20240826065532.2618273-6-rppt@kernel.org>
+To: Viktor Malik <vmalik@redhat.com>
+Cc: linux-trace-kernel@vger.kernel.org, Masami Hiramatsu
+ <mhiramat@kernel.org>, Matt Wu <wuqiang.matt@bytedance.com>,
+ bpf@vger.kernel.org, Andrii Nakryiko <andrii@kernel.org>
+Subject: Re: [PATCH v2] objpool: fix choosing allocation for percpu slots
+Message-ID: <20240826133133.5affc7e6@gandalf.local.home>
+In-Reply-To: <20240826060718.267261-1-vmalik@redhat.com>
+References: <20240826060718.267261-1-vmalik@redhat.com>
 X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -64,69 +34,58 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On Mon, 26 Aug 2024 09:55:29 +0300
-Mike Rapoport <rppt@kernel.org> wrote:
+On Mon, 26 Aug 2024 08:07:18 +0200
+Viktor Malik <vmalik@redhat.com> wrote:
 
-> From: Song Liu <song@kernel.org>
+> objpool intends to use vmalloc for default (non-atomic) allocations of
+> percpu slots and objects. However, the condition checking if GFP flags
+> are equal to GFP_ATOMIC is wrong b/c GFP_ATOMIC is a combination of bits
+> (__GFP_HIGH|__GFP_KSWAPD_RECLAIM) and so `pool->gfp & GFP_ATOMIC` will
+> be true if either bit is set. Since GFP_ATOMIC and GFP_KERNEL share the
+> ___GFP_KSWAPD_RECLAIM bit, kmalloc will be used in cases when GFP_KERNEL
+> is specified, i.e. in all current usages of objpool.
 > 
-> ftrace_process_locs sorts module mcount, which is inside RO memory. Add a
-> ftrace_swap_func so that archs can use RO-memory-poke function to do the
-> sorting.
+> This may lead to unexpected OOM errors since kmalloc cannot allocate
+> large amounts of memory.
+> 
+> For instance, objpool is used by fprobe rethook which in turn is used by
+> BPF kretprobe.multi and kprobe.session probe types. Trying to attach
+> these to all kernel functions with libbpf using
+> 
+>     SEC("kprobe.session/*")
+>     int kprobe(struct pt_regs *ctx)
+>     {
+>         [...]
+>     }
+> 
+> fails on objpool slot allocation with ENOMEM.
+> 
+> Fix the condition to truly use vmalloc by default.
+> 
+> Fixes: b4edb8d2d464 ("lib: objpool added: ring-array based lockless MPMC")
+> Signed-off-by: Viktor Malik <vmalik@redhat.com>
+> Acked-by: Andrii Nakryiko <andrii@kernel.org>
+> Reviewed-by: Matt Wu <wuqiang.matt@bytedance.com>
 
-Can you add the above as a comment above the ftrace_swap_func() function?
-
-Thanks,
+Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 
 -- Steve
 
-> 
-> Signed-off-by: Song Liu <song@kernel.org>
-> Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
 > ---
->  include/linux/ftrace.h |  2 ++
->  kernel/trace/ftrace.c  | 13 ++++++++++++-
->  2 files changed, 14 insertions(+), 1 deletion(-)
+>  lib/objpool.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/include/linux/ftrace.h b/include/linux/ftrace.h
-> index fd5e84d0ec47..b794dcb7cae8 100644
-> --- a/include/linux/ftrace.h
-> +++ b/include/linux/ftrace.h
-> @@ -1188,4 +1188,6 @@ unsigned long arch_syscall_addr(int nr);
->  
->  #endif /* CONFIG_FTRACE_SYSCALLS */
->  
-> +void ftrace_swap_func(void *a, void *b, int n);
-> +
->  #endif /* _LINUX_FTRACE_H */
-> diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
-> index 4c28dd177ca6..9829979f3a46 100644
-> --- a/kernel/trace/ftrace.c
-> +++ b/kernel/trace/ftrace.c
-> @@ -6989,6 +6989,17 @@ static void test_is_sorted(unsigned long *start,
-> unsigned long count) }
->  #endif
->  
-> +void __weak ftrace_swap_func(void *a, void *b, int n)
-> +{
-> +	unsigned long t;
-> +
-> +	WARN_ON_ONCE(n != sizeof(t));
-> +
-> +	t = *((unsigned long *)a);
-> +	*(unsigned long *)a = *(unsigned long *)b;
-> +	*(unsigned long *)b = t;
-> +}
-> +
->  static int ftrace_process_locs(struct module *mod,
->  			       unsigned long *start,
->  			       unsigned long *end)
-> @@ -7016,7 +7027,7 @@ static int ftrace_process_locs(struct module *mod,
->  	 */
->  	if (!IS_ENABLED(CONFIG_BUILDTIME_MCOUNT_SORT) || mod) {
->  		sort(start, count, sizeof(*start),
-> -		     ftrace_cmp_ips, NULL);
-> +		     ftrace_cmp_ips, ftrace_swap_func);
->  	} else {
->  		test_is_sorted(start, count);
->  	}
+> diff --git a/lib/objpool.c b/lib/objpool.c
+> index 234f9d0bd081..fd108fe0d095 100644
+> --- a/lib/objpool.c
+> +++ b/lib/objpool.c
+> @@ -76,7 +76,7 @@ objpool_init_percpu_slots(struct objpool_head *pool, int nr_objs,
+>  		 * mimimal size of vmalloc is one page since vmalloc would
+>  		 * always align the requested size to page size
+>  		 */
+> -		if (pool->gfp & GFP_ATOMIC)
+> +		if ((pool->gfp & GFP_ATOMIC) == GFP_ATOMIC)
+>  			slot = kmalloc_node(size, pool->gfp, cpu_to_node(i));
+>  		else
+>  			slot = __vmalloc_node(size, sizeof(void *), pool->gfp,
 
