@@ -1,112 +1,89 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f180.google.com (mail-lj1-f180.google.com [209.85.208.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BBC61B4C33;
-	Thu, 29 Aug 2024 15:50:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EDE61B3B23
+	for <bpf@vger.kernel.org>; Thu, 29 Aug 2024 15:56:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724946633; cv=none; b=D+vynjjiUvZANCfIq0Lc/CoJRBtl5TlUH6mD6tPJE3dsjGzDFxb8T9T+SGOPY3BlJkLsqyZxAhOD0zH7fWGdODBt9h6jt/kxrGPLEiKcL7rTywRINvN1PJi54JsUPI4+rPubnKO3l0T0B0LeCf1sv0T0RCxy+l78XFZjsJGhlT0=
+	t=1724946999; cv=none; b=A0w7kTf3I1GhLaRMam3LciBBhRnK6p+xKdfJDwF4V4eCHtJSmZ1Tt7kcPEbCXYHHGYyw5QaRbAUsyXJzHw7tdyH9L0pXkgtdRvLiIc3uBveu9gEfv+SgE8HCoBEBPCZRZUjBdz26BiqFHdOplXFeELgkf48nUJO/w9/tIP7y4wo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724946633; c=relaxed/simple;
-	bh=MXbs9o4JsCqnOHzV2NkYU9Q0uIU+cS5hql1pqmeZMs8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=SZOzaLKLXzJdTrzurCUFFzncqs95T2rlr+qNOsYKVyNw6RIvlrhVpol8Q+1r1TEO4ZT3OopcEadIi3VI888jsXWStsn1Jq6kp1IrSIQuKn9H9ZUGtHNMO2oRjmuWKwsFMZkFhmgj3qOpIExCHBLqkcoVU47cg56M0LTMPA96L5U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=brZmY7at; arc=none smtp.client-ip=198.175.65.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1724946999; c=relaxed/simple;
+	bh=BBqKX133p9uAfTL/pwOLNDA/VyV9Sy6IKhFXpLLIDyw=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=acGv9dKAL18RsnPiJcOd5O2jL+oZkUg37jFpJdXv+tQY8y8i3v9QKUdxNoZ33egUDtiILrdwErknVuMWpJ79DNNu1uIbExGFx4gMd4idduPlWMJ1vhYtVAfQjT1FcEOSGN3LVxSzhJeXQIQysV2/AXbBg5busZOsuaLRAbxkE3E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=UYGeYzLO; arc=none smtp.client-ip=209.85.208.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="brZmY7at"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1724946631; x=1756482631;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=MXbs9o4JsCqnOHzV2NkYU9Q0uIU+cS5hql1pqmeZMs8=;
-  b=brZmY7atZgVb8/qr2bhXSYU56jxl4n5zmEA8lVuq9JqMnoOeZ+fvo7t5
-   1cJV8YdvZEIMzkQfrvaJJIhUdp4kALNbxK0/lcoA/enxJu6EXPkOxALHG
-   vznckwlGgkNtwzE0QREN3tQTMxnU4E0a7lZC9xasYYuoqL/Kg6ZaWgChY
-   tkV1wMOkktK4iJIYgwLPZxIxCwXjTAP85FbaG8am7mZNtrEWTcrek21g/
-   QBfK1RqXPl6bTJiM+P7LWUqgLyXNaaPYoBi2a2Qb8H/GvNJI1UPXhwExw
-   IIkGVqcHIvlc1uBd/i2b9qBMwkwjGdSu99Bt6F+Oq44b/lwZOVZtMaknA
-   g==;
-X-CSE-ConnectionGUID: VBd90OYZSI6shcF5Z84plg==
-X-CSE-MsgGUID: uyTEHOaDQCKos63gTjz7RA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11179"; a="23505190"
-X-IronPort-AV: E=Sophos;i="6.10,186,1719903600"; 
-   d="scan'208";a="23505190"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Aug 2024 08:50:30 -0700
-X-CSE-ConnectionGUID: J83LXIxzSzmT98GJ4pj8/A==
-X-CSE-MsgGUID: Z+lyrEAUTdejag2LclzVgw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,186,1719903600"; 
-   d="scan'208";a="63943997"
-Received: from lkp-server01.sh.intel.com (HELO 9c6b1c7d3b50) ([10.239.97.150])
-  by orviesa006.jf.intel.com with ESMTP; 29 Aug 2024 08:50:27 -0700
-Received: from kbuild by 9c6b1c7d3b50 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sjhPl-0000Py-0J;
-	Thu, 29 Aug 2024 15:50:25 +0000
-Date: Thu, 29 Aug 2024 23:50:06 +0800
-From: kernel test robot <lkp@intel.com>
-To: Vegard Nossum <vegard.nossum@oracle.com>,
-	Masahiro Yamada <masahiroy@kernel.org>
-Cc: oe-kbuild-all@lists.linux.dev, linux-kbuild@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-omap@vger.kernel.org, kvmarm@lists.linux.dev,
-	kvm@vger.kernel.org, linux-um@lists.infradead.org,
-	bpf@vger.kernel.org, llvm@lists.linux.dev,
-	Vegard Nossum <vegard.nossum@oracle.com>
-Subject: Re: [PATCH] kbuild: use objcopy to generate asm-offsets
-Message-ID: <202408292301.KMuvybe3-lkp@intel.com>
-References: <20240828083605.3093701-1-vegard.nossum@oracle.com>
+	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="UYGeYzLO"
+Received: by mail-lj1-f180.google.com with SMTP id 38308e7fff4ca-2f50966c478so7824351fa.1
+        for <bpf@vger.kernel.org>; Thu, 29 Aug 2024 08:56:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google09082023; t=1724946995; x=1725551795; darn=vger.kernel.org;
+        h=mime-version:message-id:date:user-agent:references:in-reply-to
+         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=BBqKX133p9uAfTL/pwOLNDA/VyV9Sy6IKhFXpLLIDyw=;
+        b=UYGeYzLOkCB+JendhzPh6b4eT1tVBt4dsIm6tOpuLKU4a1ZCvIXcLe4mmLq9c3QkwJ
+         GRn2D/anmeBL3eeHEtCFSzi1Ns1pminDRyJiNjMrzqsR5qlHep351Hyr32QfIWauPHxy
+         edsZxSJd/pk7BKlaqblCAg19zrUh1/+vtKvrzlkGs2QFOd2qlFCkUsiGCNIFqIzfJv7J
+         CNpP74LkPJibVwm1qotWKuxqxbrFlfQwNFzYjljUmRo8ZqEgakEDUhVxzxu703IsvFaP
+         Z2BxDfPf3EtRt/6AhYzi1umGREYQYZ0AVJ/hQZQIXOv3E0bQQFvNA8qU0vxTGAq1Gb6G
+         vckQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1724946995; x=1725551795;
+        h=mime-version:message-id:date:user-agent:references:in-reply-to
+         :subject:cc:to:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=BBqKX133p9uAfTL/pwOLNDA/VyV9Sy6IKhFXpLLIDyw=;
+        b=OWCuD0Axspix7k4ycOJGH71LQ4OqCcGA50Pd8yXEqkf+6NP46OicaFUAYlQZhtYJew
+         fuQE2z7u5lS0Ml7T2cxvWGIb76nL1aYk9qqjOP9e/isaFZJW0HXwxE1kOvAsOr5rsL1I
+         3r5mPMIMf+YxhlDQE2upY6iXF86Ca4dDwuPuYj4ry1xww0zaJRXYudqijHROA9oswJlU
+         bdSw6KszFJAXssldF9f29WJJxB8ey5pu6Pcbfk9f2BfKcZ0IGnJSjyhuqLfp0zHi2cVe
+         4TYpgSXfPgfJe6j6OgzxGkeGmr9IqFxqpG0mB+uVx+66aFlz6ncn0nUKBCB9zF8aRhXA
+         Kmog==
+X-Forwarded-Encrypted: i=1; AJvYcCX+um5XKlDXQnkOgJIz8at2D+KGrFQW8Tmw97PyFZsv1PKwtNV5ImRjIsgGrKx0ib5plV0=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx4JR1fcP5CymNW/Ty2UUYZBZlhjkBNNyNDePhiNmSihUtuoUME
+	2I9TVOdV3AQTk24+AYeAfV8HteYqVfuuqHHKd6hJSgHhYuRMxci+sjFPPcnQSpI=
+X-Google-Smtp-Source: AGHT+IH/TF/DXk+LKRSXXVi35QIzFpLF5dSEeiLFij7z4Dzn16uZrsamMOWW4Y8gBHG3t15eAvBs8Q==
+X-Received: by 2002:a05:6512:4003:b0:530:aea3:4659 with SMTP id 2adb3069b0e04-5353e54736amr2047454e87.9.1724946995032;
+        Thu, 29 Aug 2024 08:56:35 -0700 (PDT)
+Received: from cloudflare.com ([2a09:bac5:5063:2387::38a:4e])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a898900f055sm94706966b.67.2024.08.29.08.56.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 29 Aug 2024 08:56:34 -0700 (PDT)
+From: Jakub Sitnicki <jakub@cloudflare.com>
+To: Yaxin Chen <yaxin.chen1@bytedance.com>
+Cc: netdev@vger.kernel.org,  bpf@vger.kernel.org,  Cong Wang
+ <cong.wang@bytedance.com>,  John Fastabend <john.fastabend@gmail.com>
+Subject: Re: [Patch net-next] tcp_bpf: remove an unused parameter for
+ bpf_tcp_ingress()
+In-Reply-To: <20240823224843.1985277-1-yaxin.chen1@bytedance.com> (Yaxin
+	Chen's message of "Fri, 23 Aug 2024 15:48:43 -0700")
+References: <20240823224843.1985277-1-yaxin.chen1@bytedance.com>
+User-Agent: mu4e 1.12.4; emacs 29.1
+Date: Thu, 29 Aug 2024 17:56:33 +0200
+Message-ID: <87r0a7uxu6.fsf@cloudflare.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240828083605.3093701-1-vegard.nossum@oracle.com>
+Content-Type: text/plain
 
-Hi Vegard,
+On Fri, Aug 23, 2024 at 03:48 PM -07, Yaxin Chen wrote:
+> Parameter flags is not used in bpf_tcp_ingress().
+>
+> Reviewed-by: Cong Wang <cong.wang@bytedance.com>
+> Cc: John Fastabend <john.fastabend@gmail.com>
+> Cc: Jakub Sitnicki <jakub@cloudflare.com>
+> Signed-off-by: Yaxin Chen <yaxin.chen1@bytedance.com>
+> ---
 
-kernel test robot noticed the following build errors:
+First introduced in commit 8934ce2fd081 ("bpf: sockmap redirect ingress
+support") [1]. Looks like it was never in use from the beginning.
 
-[auto build test ERROR on masahiroy-kbuild/for-next]
-[also build test ERROR on masahiroy-kbuild/fixes soc/for-next kvmarm/next kvm/queue uml/next krzk-mem-ctrl/for-next bpf-next/master bpf/master linus/master v6.11-rc5 next-20240829]
-[cannot apply to tmlind-omap/for-next kvm/linux-next uml/fixes]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=8934ce2fd08171e8605f7fada91ee7619fe17ab8
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Vegard-Nossum/kbuild-use-objcopy-to-generate-asm-offsets/20240828-163854
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git for-next
-patch link:    https://lore.kernel.org/r/20240828083605.3093701-1-vegard.nossum%40oracle.com
-patch subject: [PATCH] kbuild: use objcopy to generate asm-offsets
-config: arc-allnoconfig (https://download.01.org/0day-ci/archive/20240829/202408292301.KMuvybe3-lkp@intel.com/config)
-compiler: arc-elf-gcc (GCC) 13.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240829/202408292301.KMuvybe3-lkp@intel.com/reproduce)
+Acked-by: Jakub Sitnicki <jakub@cloudflare.com>
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202408292301.KMuvybe3-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   {standard input}: Assembler messages:
->> {standard input}: Error: .size expression for main does not evaluate to a constant
-   make[3]: *** [scripts/Makefile.build:244: scripts/mod/devicetable-offsets.o] Error 1
-   make[3]: Target 'scripts/mod/' not remade because of errors.
-   make[2]: *** [Makefile:1192: prepare0] Error 2
-   make[2]: Target 'prepare' not remade because of errors.
-   make[1]: *** [Makefile:224: __sub-make] Error 2
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:224: __sub-make] Error 2
-   make: Target 'prepare' not remade because of errors.
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
