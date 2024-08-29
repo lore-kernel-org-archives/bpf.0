@@ -1,186 +1,95 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 836E9189F5A;
-	Thu, 29 Aug 2024 20:38:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76415189F5F;
+	Thu, 29 Aug 2024 21:08:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724963898; cv=none; b=BjlzDdA/WKx+LXldThH8q4blG3tZX3TGZ5+V1DdIsFozNrKtcHev/PlEn09x+bWf9BPncjjA7XjhXJLmAn1PZKMiSMval2trr7FS6hURZxfNbtXyBYDSqWjUcG7abGzEDgWyYz3zSwFjazqHrfdSyGIdveFaqFqgYTyjV4waMq8=
+	t=1724965708; cv=none; b=mK8YyqU0teTxJW7qOv05BprOW5ankmDrECkAxUVI0ZKKbJbkhNABUDzmphu+9neoiiSIGJEAlIDG5gav+Cn3XgkCKCcPdQYARodENTqnixN0fihM7jlLqQXA1uhri51vPEljffwGmMsK1bLwSUXM85dV62aDo8q5DbgrxDM0l+E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724963898; c=relaxed/simple;
-	bh=tscwRgI2saPDR7x1unDsFBI0xOp0fMmY1QDhyt+9PHk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Ss3sJVP4SYqLwK/aO06zGgpYIXDBCRWJUcU3tts3v05dtuccu3W6lTIpsrch2enAl6mrU9UtMpENgGxBD6dV8OKwCI9J1K4Li6P1ejHAk6A2FqmyCrkjXlPJkRi8wCSod51A5CUO7i2d4ChCx7uet/5Cf+TAP4lvEAe7OJqstHA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=anW59re8; arc=none smtp.client-ip=192.198.163.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1724965708; c=relaxed/simple;
+	bh=NEubUSRUeBvvm22Q348Fp9RYCVjR27lHQZqlTUf2ioM=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=A6btoZvru3Ygv9BB7FiUQdZ83/d46y8CVYeAV3eHDeRWmmV6ZA0heVuif1HEKZ4itOjKdBPXnFRXzsA1JMkO4+xaE9qCigEJLJIm+fnwLKvDSz81AASMTadAec3l7PFiW56PCYpZC3lcFhz2JIK4vKoJuQRBRAJdvNQDQ/qnhy0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=p6UVAYJ6; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="anW59re8"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1724963897; x=1756499897;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=tscwRgI2saPDR7x1unDsFBI0xOp0fMmY1QDhyt+9PHk=;
-  b=anW59re8g7E9kAelpNk+BBP1JV1PEOrPDKd7lZU3vM+SOIaCuXobj0e7
-   uP8jDX1W910+zN1waibuYTbWL94NJXYfhUx2AC9ZLDFiUSrgdhMxcwleh
-   OUEOtML7MWvmxWzN/kTUyo65swMO2bpGzo61/drgiQ/kPWsVZjOSyz2jV
-   RIylGzGYX7dHLL5pkZqeCHM9cIzq4NMLT1Lq1EiwtFMExxfQwx/P2Bse4
-   i3a5xxZANsNKbKJtTLaOEFDOOKEf1GGNI6f/lyXCoFIQCUAf4iwRPCoW8
-   GfNpg9+UU3sctCg7zK6YcjZCv0EM+Dipba01RU1n3VXzfgtzA+iajeMPQ
-   w==;
-X-CSE-ConnectionGUID: uMfpJ0muT5O3mIJDIuxDYw==
-X-CSE-MsgGUID: lbXaaTgCQVukWM3SIXoUVQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11179"; a="34200571"
-X-IronPort-AV: E=Sophos;i="6.10,186,1719903600"; 
-   d="scan'208";a="34200571"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Aug 2024 13:37:41 -0700
-X-CSE-ConnectionGUID: +2I+PKpfTEWO7ZhOV/mdjw==
-X-CSE-MsgGUID: 9jFLsk+2R9icUo/uf7t0Ig==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,186,1719903600"; 
-   d="scan'208";a="63325399"
-Received: from lkp-server01.sh.intel.com (HELO 9c6b1c7d3b50) ([10.239.97.150])
-  by fmviesa006.fm.intel.com with ESMTP; 29 Aug 2024 13:37:38 -0700
-Received: from kbuild by 9c6b1c7d3b50 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1sjltg-0000iM-02;
-	Thu, 29 Aug 2024 20:37:36 +0000
-Date: Fri, 30 Aug 2024 04:37:35 +0800
-From: kernel test robot <lkp@intel.com>
-To: Vegard Nossum <vegard.nossum@oracle.com>,
-	Masahiro Yamada <masahiroy@kernel.org>
-Cc: oe-kbuild-all@lists.linux.dev, linux-kbuild@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-omap@vger.kernel.org, kvmarm@lists.linux.dev,
-	kvm@vger.kernel.org, linux-um@lists.infradead.org,
-	bpf@vger.kernel.org, llvm@lists.linux.dev,
-	Vegard Nossum <vegard.nossum@oracle.com>
-Subject: Re: [PATCH] kbuild: use objcopy to generate asm-offsets
-Message-ID: <202408300438.xObK98m5-lkp@intel.com>
-References: <20240828083605.3093701-1-vegard.nossum@oracle.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="p6UVAYJ6"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B8E2C4CEC2;
+	Thu, 29 Aug 2024 21:08:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1724965708;
+	bh=NEubUSRUeBvvm22Q348Fp9RYCVjR27lHQZqlTUf2ioM=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=p6UVAYJ6/p5bhrYPea9y9LVZ73ntO1QP/0zR+Q+1patwv+tVmGiYjdDlAD218lAA8
+	 wmRGDX7i+DfyMahGib9Mm8V4I9AQEoLn8b9mtc+xdG36nS0cbP0QL45E59ogicrDMH
+	 UMsuv+C0jmECY39fsLsHq8fo4kUC/uT4Z1zk3MIcsu1n23rlQDYMcUqNN6ZZxIgzKS
+	 o9KRpRUv0V5uSxIszbyhHC/WKLKdlgKWDVMjA6m+icA4tY75YYjIYNbbXAYQUyxbZn
+	 M/VljWIX+Kv0vyYr8HtbjQKj1fUsJoxFw6I3C6QjqGuRCR3iyJC/09ocJiJFlPa4pV
+	 vik20KHhv5pnw==
+Date: Thu, 29 Aug 2024 14:08:24 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Mina Almasry <almasrymina@google.com>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org,
+ linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+ sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+ linux-arch@vger.kernel.org, bpf@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org,
+ dri-devel@lists.freedesktop.org, "David S. Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Donald
+ Hunter <donald.hunter@gmail.com>, Jonathan Corbet <corbet@lwn.net>, Richard
+ Henderson <richard.henderson@linaro.org>, Ivan Kokshaysky
+ <ink@jurassic.park.msu.ru>, Matt Turner <mattst88@gmail.com>, Thomas
+ Bogendoerfer <tsbogend@alpha.franken.de>, "James E.J. Bottomley"
+ <James.Bottomley@HansenPartnership.com>, Helge Deller <deller@gmx.de>,
+ Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer
+ <hawk@kernel.org>, Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven
+ Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Arnd Bergmann
+ <arnd@arndb.de>, Steffen Klassert <steffen.klassert@secunet.com>, Herbert
+ Xu <herbert@gondor.apana.org.au>, David Ahern <dsahern@kernel.org>, Willem
+ de Bruijn <willemdebruijn.kernel@gmail.com>, "=?UTF-8?B?QmrDtnJuIFTDtnBl?=
+ =?UTF-8?B?bA==?=" <bjorn@kernel.org>, Magnus Karlsson
+ <magnus.karlsson@intel.com>, Maciej Fijalkowski
+ <maciej.fijalkowski@intel.com>, Jonathan Lemon <jonathan.lemon@gmail.com>,
+ Shuah Khan <shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>, Daniel
+ Borkmann <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>,
+ Sumit Semwal <sumit.semwal@linaro.org>, "Christian =?UTF-8?B?S8O2bmln?="
+ <christian.koenig@amd.com>, Pavel Begunkov <asml.silence@gmail.com>, David
+ Wei <dw@davidwei.uk>, Jason Gunthorpe <jgg@ziepe.ca>, Yunsheng Lin
+ <linyunsheng@huawei.com>, Shailend Chand <shailend@google.com>, Harshitha
+ Ramamurthy <hramamurthy@google.com>, Shakeel Butt <shakeel.butt@linux.dev>,
+ Jeroen de Borst <jeroendb@google.com>, Praveen Kaligineedi
+ <pkaligineedi@google.com>, Bagas Sanjaya <bagasdotme@gmail.com>, Christoph
+ Hellwig <hch@infradead.org>, Nikolay Aleksandrov <razor@blackwall.org>,
+ Taehee Yoo <ap420073@gmail.com>, Willem de Bruijn <willemb@google.com>,
+ Kaiyuan Zhang <kaiyuanz@google.com>, Daniel Vetter <daniel.vetter@ffwll.ch>
+Subject: Re: [PATCH net-next v23 03/13] netdev: support binding dma-buf to
+ netdevice
+Message-ID: <20240829140824.555d016c@kernel.org>
+In-Reply-To: <20240829060126.2792671-4-almasrymina@google.com>
+References: <20240829060126.2792671-1-almasrymina@google.com>
+	<20240829060126.2792671-4-almasrymina@google.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240828083605.3093701-1-vegard.nossum@oracle.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Hi Vegard,
+On Thu, 29 Aug 2024 06:01:16 +0000 Mina Almasry wrote:
+> +	err = genlmsg_reply(rsp, info);
+> +	if (err)
+> +		goto err_unbind;
+> +
+>  	return 0;
+> +
+> +err_unbind:
 
-kernel test robot noticed the following build warnings:
+rtnl_lock()
 
-[auto build test WARNING on masahiroy-kbuild/for-next]
-[also build test WARNING on masahiroy-kbuild/fixes soc/for-next kvmarm/next kvm/queue uml/next krzk-mem-ctrl/for-next bpf-next/master bpf/master linus/master v6.11-rc5 next-20240829]
-[cannot apply to tmlind-omap/for-next kvm/linux-next uml/fixes]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Vegard-Nossum/kbuild-use-objcopy-to-generate-asm-offsets/20240828-163854
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git for-next
-patch link:    https://lore.kernel.org/r/20240828083605.3093701-1-vegard.nossum%40oracle.com
-patch subject: [PATCH] kbuild: use objcopy to generate asm-offsets
-config: mips-loongson3_defconfig (https://download.01.org/0day-ci/archive/20240830/202408300438.xObK98m5-lkp@intel.com/config)
-compiler: mips64el-linux-gcc (GCC) 13.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240830/202408300438.xObK98m5-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202408300438.xObK98m5-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   mips64el-linux-objcopy: /dev/stdout[.data.kbuild]: Illegal seek
-   In file included from include/linux/mm_types.h:18,
-                    from include/linux/uio.h:10,
-                    from include/linux/socket.h:8,
-                    from include/linux/compat.h:15,
-                    from arch/mips/kernel/asm-offsets.c:12:
-   include/linux/page-flags-layout.h:15:5: warning: "MAX_NR_ZONES" is not defined, evaluates to 0 [-Wundef]
-      15 | #if MAX_NR_ZONES < 2
-         |     ^~~~~~~~~~~~
-   include/linux/page-flags-layout.h:58:19: warning: "LRU_GEN_WIDTH" is not defined, evaluates to 0 [-Wundef]
-      58 | #if ZONES_WIDTH + LRU_GEN_WIDTH + SECTIONS_WIDTH + NODES_SHIFT \
-         |                   ^~~~~~~~~~~~~
-   include/linux/page-flags-layout.h:59:28: warning: "NR_PAGEFLAGS" is not defined, evaluates to 0 [-Wundef]
-      59 |         <= BITS_PER_LONG - NR_PAGEFLAGS
-         |                            ^~~~~~~~~~~~
-   include/linux/page-flags-layout.h:93:19: warning: "LRU_GEN_WIDTH" is not defined, evaluates to 0 [-Wundef]
-      93 | #if ZONES_WIDTH + LRU_GEN_WIDTH + SECTIONS_WIDTH + NODES_WIDTH + \
-         |                   ^~~~~~~~~~~~~
-   include/linux/page-flags-layout.h:94:64: warning: "NR_PAGEFLAGS" is not defined, evaluates to 0 [-Wundef]
-      94 |         KASAN_TAG_WIDTH + LAST_CPUPID_SHIFT <= BITS_PER_LONG - NR_PAGEFLAGS
-         |                                                                ^~~~~~~~~~~~
-   include/linux/page-flags-layout.h:104:19: warning: "LRU_GEN_WIDTH" is not defined, evaluates to 0 [-Wundef]
-     104 | #if ZONES_WIDTH + LRU_GEN_WIDTH + SECTIONS_WIDTH + NODES_WIDTH + \
-         |                   ^~~~~~~~~~~~~
-   include/linux/page-flags-layout.h:105:63: warning: "NR_PAGEFLAGS" is not defined, evaluates to 0 [-Wundef]
-     105 |         KASAN_TAG_WIDTH + LAST_CPUPID_WIDTH > BITS_PER_LONG - NR_PAGEFLAGS
-         |                                                               ^~~~~~~~~~~~
-   In file included from include/linux/mm_types.h:5:
-   include/linux/mm_types_task.h:22:34: warning: "SPINLOCK_SIZE" is not defined, evaluates to 0 [-Wundef]
-      22 | #define ALLOC_SPLIT_PTLOCKS     (SPINLOCK_SIZE > BITS_PER_LONG/8)
-         |                                  ^~~~~~~~~~~~~
-   include/linux/mm_types.h:478:5: note: in expansion of macro 'ALLOC_SPLIT_PTLOCKS'
-     478 | #if ALLOC_SPLIT_PTLOCKS
-         |     ^~~~~~~~~~~~~~~~~~~
-   In file included from include/linux/dcache.h:14,
-                    from include/linux/fs.h:8,
-                    from include/linux/compat.h:17:
->> include/linux/lockref.h:23:36: warning: "SPINLOCK_SIZE" is not defined, evaluates to 0 [-Wundef]
-      23 |          IS_ENABLED(CONFIG_SMP) && SPINLOCK_SIZE <= 4)
-         |                                    ^~~~~~~~~~~~~
-   include/linux/lockref.h:27:5: note: in expansion of macro 'USE_CMPXCHG_LOCKREF'
-      27 | #if USE_CMPXCHG_LOCKREF
-         |     ^~~~~~~~~~~~~~~~~~~
-   In file included from include/linux/gfp.h:7,
-                    from include/linux/xarray.h:16,
-                    from include/linux/list_lru.h:14,
-                    from include/linux/fs.h:13:
-   include/linux/mmzone.h:842:29: error: 'MAX_NR_ZONES' undeclared here (not in a function); did you mean 'MAX_NR_GENS'?
-     842 |         long lowmem_reserve[MAX_NR_ZONES];
-         |                             ^~~~~~~~~~~~
-         |                             MAX_NR_GENS
-   include/linux/mm_types_task.h:22:34: warning: "SPINLOCK_SIZE" is not defined, evaluates to 0 [-Wundef]
-      22 | #define ALLOC_SPLIT_PTLOCKS     (SPINLOCK_SIZE > BITS_PER_LONG/8)
-         |                                  ^~~~~~~~~~~~~
-   include/linux/mm.h:2889:5: note: in expansion of macro 'ALLOC_SPLIT_PTLOCKS'
-    2889 | #if ALLOC_SPLIT_PTLOCKS
-         |     ^~~~~~~~~~~~~~~~~~~
-   In file included from include/linux/swap.h:9,
-                    from include/linux/suspend.h:5,
-                    from arch/mips/kernel/asm-offsets.c:17:
-   include/linux/memcontrol.h: In function 'mem_cgroup_get_zone_lru_size':
->> include/linux/memcontrol.h:914:31: warning: parameter 'lru' set but not used [-Wunused-but-set-parameter]
-     914 |                 enum lru_list lru, int zone_idx)
-         |                 ~~~~~~~~~~~~~~^~~
->> include/linux/memcontrol.h:914:40: warning: parameter 'zone_idx' set but not used [-Wunused-but-set-parameter]
-     914 |                 enum lru_list lru, int zone_idx)
-         |                                    ~~~~^~~~~~~~
-   make[3]: *** [scripts/Makefile.build:244: arch/mips/kernel/asm-offsets.o] Error 1
-   make[3]: Target 'missing-syscalls' not remade because of errors.
-   make[2]: *** [arch/mips/Makefile:432: archprepare] Error 2
-   make[2]: Target 'prepare' not remade because of errors.
-   make[1]: *** [Makefile:224: __sub-make] Error 2
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:224: __sub-make] Error 2
-   make: Target 'prepare' not remade because of errors.
-
-
-vim +/SPINLOCK_SIZE +23 include/linux/lockref.h
-
-57f4257eae33e0 Peter Zijlstra     2013-11-14  20  
-57f4257eae33e0 Peter Zijlstra     2013-11-14  21  #define USE_CMPXCHG_LOCKREF \
-57f4257eae33e0 Peter Zijlstra     2013-11-14  22  	(IS_ENABLED(CONFIG_ARCH_USE_CMPXCHG_LOCKREF) && \
-597d795a2a786d Kirill A. Shutemov 2013-12-20 @23  	 IS_ENABLED(CONFIG_SMP) && SPINLOCK_SIZE <= 4)
-0f8f2aaaab0b0f Waiman Long        2013-08-28  24  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> +	net_devmem_unbind_dmabuf(binding);
+> +err_unlock:
+> +	rtnl_unlock();
