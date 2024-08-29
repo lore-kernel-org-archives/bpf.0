@@ -1,95 +1,150 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-174.mta1.migadu.com (out-174.mta1.migadu.com [95.215.58.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76415189F5F;
-	Thu, 29 Aug 2024 21:08:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA1B718A955
+	for <bpf@vger.kernel.org>; Thu, 29 Aug 2024 21:08:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724965708; cv=none; b=mK8YyqU0teTxJW7qOv05BprOW5ankmDrECkAxUVI0ZKKbJbkhNABUDzmphu+9neoiiSIGJEAlIDG5gav+Cn3XgkCKCcPdQYARodENTqnixN0fihM7jlLqQXA1uhri51vPEljffwGmMsK1bLwSUXM85dV62aDo8q5DbgrxDM0l+E=
+	t=1724965731; cv=none; b=QusMOkeEqVK5Hb29jcBaPSSLfCaNj4lmA5L/xcEKKZXNgpLziRe2AWZETVcHWErwwUbJaoQrVA2CLV3Gm9vb8wdECxaB5wGqaO2UCDNIHNmvyoU1DC1DkRrLknNpcl7FWDQl3aNa99CwKdym8B+VD10FKVdEeDBjCVU6+FV9BOA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724965708; c=relaxed/simple;
-	bh=NEubUSRUeBvvm22Q348Fp9RYCVjR27lHQZqlTUf2ioM=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=A6btoZvru3Ygv9BB7FiUQdZ83/d46y8CVYeAV3eHDeRWmmV6ZA0heVuif1HEKZ4itOjKdBPXnFRXzsA1JMkO4+xaE9qCigEJLJIm+fnwLKvDSz81AASMTadAec3l7PFiW56PCYpZC3lcFhz2JIK4vKoJuQRBRAJdvNQDQ/qnhy0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=p6UVAYJ6; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1724965731; c=relaxed/simple;
+	bh=Yf4xgNeXTRlZl6ijLFbCk2inW7dgejK8negwkjd5KUw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=k+UbQTK6BggJqGKX0cPSmnhfsQaD1RWjut1Bb4Qn0ew6dg/bcye/Bj1fge6R/d3MPcmCCNyZYzO9aT+GbGWnRPBihWXQWAxrP0pg4o8ymFTkn597soHdLeeOl3l9Cjqg6EFL2PtBdy9Y8P75lNBz5O98KyEXqNAT8TSoXueToFw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=MBRpu8nz; arc=none smtp.client-ip=95.215.58.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="p6UVAYJ6"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B8E2C4CEC2;
-	Thu, 29 Aug 2024 21:08:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724965708;
-	bh=NEubUSRUeBvvm22Q348Fp9RYCVjR27lHQZqlTUf2ioM=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=p6UVAYJ6/p5bhrYPea9y9LVZ73ntO1QP/0zR+Q+1patwv+tVmGiYjdDlAD218lAA8
-	 wmRGDX7i+DfyMahGib9Mm8V4I9AQEoLn8b9mtc+xdG36nS0cbP0QL45E59ogicrDMH
-	 UMsuv+C0jmECY39fsLsHq8fo4kUC/uT4Z1zk3MIcsu1n23rlQDYMcUqNN6ZZxIgzKS
-	 o9KRpRUv0V5uSxIszbyhHC/WKLKdlgKWDVMjA6m+icA4tY75YYjIYNbbXAYQUyxbZn
-	 M/VljWIX+Kv0vyYr8HtbjQKj1fUsJoxFw6I3C6QjqGuRCR3iyJC/09ocJiJFlPa4pV
-	 vik20KHhv5pnw==
-Date: Thu, 29 Aug 2024 14:08:24 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Mina Almasry <almasrymina@google.com>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org,
- linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
- sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- linux-arch@vger.kernel.org, bpf@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org,
- dri-devel@lists.freedesktop.org, "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Donald
- Hunter <donald.hunter@gmail.com>, Jonathan Corbet <corbet@lwn.net>, Richard
- Henderson <richard.henderson@linaro.org>, Ivan Kokshaysky
- <ink@jurassic.park.msu.ru>, Matt Turner <mattst88@gmail.com>, Thomas
- Bogendoerfer <tsbogend@alpha.franken.de>, "James E.J. Bottomley"
- <James.Bottomley@HansenPartnership.com>, Helge Deller <deller@gmx.de>,
- Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer
- <hawk@kernel.org>, Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven
- Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Arnd Bergmann
- <arnd@arndb.de>, Steffen Klassert <steffen.klassert@secunet.com>, Herbert
- Xu <herbert@gondor.apana.org.au>, David Ahern <dsahern@kernel.org>, Willem
- de Bruijn <willemdebruijn.kernel@gmail.com>, "=?UTF-8?B?QmrDtnJuIFTDtnBl?=
- =?UTF-8?B?bA==?=" <bjorn@kernel.org>, Magnus Karlsson
- <magnus.karlsson@intel.com>, Maciej Fijalkowski
- <maciej.fijalkowski@intel.com>, Jonathan Lemon <jonathan.lemon@gmail.com>,
- Shuah Khan <shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>, Daniel
- Borkmann <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>,
- Sumit Semwal <sumit.semwal@linaro.org>, "Christian =?UTF-8?B?S8O2bmln?="
- <christian.koenig@amd.com>, Pavel Begunkov <asml.silence@gmail.com>, David
- Wei <dw@davidwei.uk>, Jason Gunthorpe <jgg@ziepe.ca>, Yunsheng Lin
- <linyunsheng@huawei.com>, Shailend Chand <shailend@google.com>, Harshitha
- Ramamurthy <hramamurthy@google.com>, Shakeel Butt <shakeel.butt@linux.dev>,
- Jeroen de Borst <jeroendb@google.com>, Praveen Kaligineedi
- <pkaligineedi@google.com>, Bagas Sanjaya <bagasdotme@gmail.com>, Christoph
- Hellwig <hch@infradead.org>, Nikolay Aleksandrov <razor@blackwall.org>,
- Taehee Yoo <ap420073@gmail.com>, Willem de Bruijn <willemb@google.com>,
- Kaiyuan Zhang <kaiyuanz@google.com>, Daniel Vetter <daniel.vetter@ffwll.ch>
-Subject: Re: [PATCH net-next v23 03/13] netdev: support binding dma-buf to
- netdevice
-Message-ID: <20240829140824.555d016c@kernel.org>
-In-Reply-To: <20240829060126.2792671-4-almasrymina@google.com>
-References: <20240829060126.2792671-1-almasrymina@google.com>
-	<20240829060126.2792671-4-almasrymina@google.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="MBRpu8nz"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1724965726;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=QNXyF6/gA4Fvy2NblU6r5QMdHrXo/5nysw2QTdYfVTI=;
+	b=MBRpu8nza0rTeE/puPv4z2DHsa48v+zeqASK4e7PUmxU8/Ze8IUIymV81Xc7DMd/3LMyIF
+	e1SmpWa7G9J/4IG3/IdN53mODdGhdQ5X3HgkXuSke69BB57WGIfn0WQGt/F6AdavIUkegj
+	+DnUH2u3H1cEYUqgBbSXR7qL8OEDZFE=
+From: Martin KaFai Lau <martin.lau@linux.dev>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Amery Hung <ameryhung@gmail.com>,
+	kernel-team@meta.com
+Subject: [PATCH v5 bpf-next 0/9] bpf: Add gen_epilogue to bpf_verifier_ops
+Date: Thu, 29 Aug 2024 14:08:22 -0700
+Message-ID: <20240829210833.388152-1-martin.lau@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On Thu, 29 Aug 2024 06:01:16 +0000 Mina Almasry wrote:
-> +	err = genlmsg_reply(rsp, info);
-> +	if (err)
-> +		goto err_unbind;
-> +
->  	return 0;
-> +
-> +err_unbind:
+From: Martin KaFai Lau <martin.lau@kernel.org>
 
-rtnl_lock()
+This set allows the subsystem to patch codes before BPF_EXIT.
+The verifier ops, .gen_epilogue, is added for this purpose.
+One of the use case will be in the bpf qdisc, the bpf qdisc
+subsystem can ensure the skb->dev is in the correct value.
+The bpf qdisc subsystem can either inline fixing it in the
+epilogue or call another kernel function to handle it (e.g. drop)
+in the epilogue. Another use case could be in bpf_tcp_ca.c to
+enforce snd_cwnd has valid value (e.g. positive value).
 
-> +	net_devmem_unbind_dmabuf(binding);
-> +err_unlock:
-> +	rtnl_unlock();
+v5:
+ * Removed the skip_cnt argument from adjust_jmp_off() in patch 2.
+   Instead, reuse the delta argument and skip
+   the [tgt_idx, tgt_idx + delta) instructions.
+ * Added a BPF_JMP32_A macro in patch 3.
+ * Removed pro_epilogue_subprog.c in patch 6.
+   The pro_epilogue_kfunc.c has covered the subprog case.
+   Renamed the file pro_epilogue_kfunc.c to pro_epilogue.c.
+   Some of the SEC names and function names are changed
+   accordingly (mainly shorten them by removing the _kfunc suffix).
+ * Added comments to explain the tail_call result in patch 7.
+ * Fixed the following bpf CI breakages. I ran it in CI
+   manually to confirm:
+   https://github.com/kernel-patches/bpf/actions/runs/10590714532
+ * s390 zext added "w3 = w3". Adjusted the test to
+   use all ALU64 and BPF_DW to avoid zext.
+   Also changed the "int a" in the "struct st_ops_args" to "u64 a".
+ * llvm17 does not take:
+       *(u64 *)(r1 +0) = 0;
+   so it is changed to:
+       r3 = 0;
+       *(u64 *)(r1 +0) = r3;
+
+v4:
+ * Fixed a bug in the memcpy in patch 3
+   The size in the memcpy should be
+   epilogue_cnt * sizeof(*epilogue_buf)
+
+v3:
+ * Moved epilogue_buf[16] to env.
+   Patch 1 is added to move the existing insn_buf[16] to env.
+ * Fixed a case that the bpf prog has a BPF_JMP that goes back
+   to the first instruction of the main prog.
+   The jump back to 1st insn case also applies to the prologue.
+   Patch 2 is added to handle it.
+ * If the bpf main prog has multiple BPF_EXIT, use a BPF_JA
+   to goto the earlier patched epilogue.
+   Note that there are (BPF_JMP32 | BPF_JA) vs (BPF_JMP | BPF_JA)
+   details in the patch 3 commit message.
+ * There are subtle changes in patch 3, so I reset the Reviewed-by.
+ * Added patch 8 and patch 9 to cover the changes in patch 2 and patch 3.
+ * Dropped the kfunc call from pro/epilogue and its selftests.
+
+v2:
+ * Remove the RFC tag. Keep the ordering at where .gen_epilogue is
+   called in the verifier relative to the check_max_stack_depth().
+   This will be consistent with the other extra stack_depth
+   usage like optimize_bpf_loop().
+ * Use __xlated check provided by the test_loader to
+   check the patched instructions after gen_pro/epilogue (Eduard).
+ * Added Patch 3 by Eduard (Thanks!).
+
+Eduard Zingerman (1):
+  selftests/bpf: attach struct_ops maps before test prog runs
+
+Martin KaFai Lau (8):
+  bpf: Move insn_buf[16] to bpf_verifier_env
+  bpf: Adjust BPF_JMP that jumps to the 1st insn of the prologue
+  bpf: Add gen_epilogue to bpf_verifier_ops
+  bpf: Export bpf_base_func_proto
+  selftests/bpf: Test gen_prologue and gen_epilogue
+  selftests/bpf: Add tailcall epilogue test
+  selftests/bpf: A pro/epilogue test when the main prog jumps back to
+    the 1st insn
+  selftests/bpf: Test epilogue patching when the main prog has multiple
+    BPF_EXIT
+
+ include/linux/bpf.h                           |   2 +
+ include/linux/bpf_verifier.h                  |   4 +
+ include/linux/filter.h                        |  10 +
+ kernel/bpf/helpers.c                          |   1 +
+ kernel/bpf/verifier.c                         |  67 +++++-
+ .../selftests/bpf/bpf_testmod/bpf_testmod.c   | 190 ++++++++++++++++++
+ .../selftests/bpf/bpf_testmod/bpf_testmod.h   |  11 +
+ .../bpf/bpf_testmod/bpf_testmod_kfunc.h       |   6 +
+ .../selftests/bpf/prog_tests/pro_epilogue.c   |  60 ++++++
+ .../selftests/bpf/progs/epilogue_exit.c       |  82 ++++++++
+ .../selftests/bpf/progs/epilogue_tailcall.c   |  58 ++++++
+ .../selftests/bpf/progs/pro_epilogue.c        | 154 ++++++++++++++
+ .../bpf/progs/pro_epilogue_goto_start.c       | 149 ++++++++++++++
+ tools/testing/selftests/bpf/test_loader.c     |  27 +++
+ 14 files changed, 813 insertions(+), 8 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/pro_epilogue.c
+ create mode 100644 tools/testing/selftests/bpf/progs/epilogue_exit.c
+ create mode 100644 tools/testing/selftests/bpf/progs/epilogue_tailcall.c
+ create mode 100644 tools/testing/selftests/bpf/progs/pro_epilogue.c
+ create mode 100644 tools/testing/selftests/bpf/progs/pro_epilogue_goto_start.c
+
+-- 
+2.43.5
+
