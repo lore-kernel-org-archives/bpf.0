@@ -1,138 +1,241 @@
-Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3167A27473;
-	Fri, 30 Aug 2024 02:04:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C50BB1D1300;
+	Fri, 30 Aug 2024 02:08:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724983449; cv=none; b=aKIbjvKEphXJIJqUKagDgoJq4DmavfW43GudlpewSYaFarUvVuDGpBnZldYIAz6+8SG4pPVQVnK7dIOnk8S5giXgKE0xk+CSTjC0FwCuQpON3cP4d10L8yavoE8eLV7GTT+j4mcPMismcTWchY7ztCOibCUZs08wQ5W1vTJLw+Q=
+	t=1724983708; cv=none; b=sdwLwT9YY4TCPgUIKC5nBWNvzLWKvz3tAxniX2DD+m8GNrpktx4WFu1++bvppWMhH1yo1mwkfSQM/fS8fQsvfR4eWqopKHanBxBpbJ2gWz7ahmB9IHfOrJzA5QfeuZ6wHQ2LWYHn3zfl29/jv7KG+8eCchLYQtUfRks4UDt298g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724983449; c=relaxed/simple;
-	bh=Y3hMusF4liDwrYLRnZukIfN3F7nT4dN+Q5Rop8q4Vlk=;
-	h=Content-Type:From:Mime-Version:Subject:Date:Message-Id:References:
-	 Cc:In-Reply-To:To; b=hvXUox+Rhu969SnMm0lZP2I1fdZ+h81bYDY9BkSbui58ksogJawfoP2voSHyr3D++BFP8x6pSCiESV2UO3gJDlVS2RLaaJLqnovnfBkve6n7GijJytxWiwlMD0DW1lWZyly65d9fzxgOgM3qE5nDR7Rw+dIlIgGGaXSwaMqd8mc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PmKHox9V; arc=none smtp.client-ip=209.85.210.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PmKHox9V"
-Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-716609a0e2bso291303b3a.0;
-        Thu, 29 Aug 2024 19:04:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1724983447; x=1725588247; darn=vger.kernel.org;
-        h=to:in-reply-to:cc:references:message-id:date:subject:mime-version
-         :from:content-transfer-encoding:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=3u7MEHbTS5aIEdhqu3cNoa9W9oSTziOnMc5kpFlW668=;
-        b=PmKHox9V3B/cIDbEvv9ZlXDdY56KyNFgwuMzECbRQNqGQ2sFJyQs3kpfi2+Gi+8WG4
-         Y36HOHWHkqEbUI3ArLWBn5FZQqopGAGejg220seKrrknG7pVjZ+Xm/wJxXQp6pP+joiV
-         YMcK/2kT9SYJqjsaYhR+PDkg0n28ugJAnizvLUR1StugmT7SVvtWD9RoRNrmUOVHO4ju
-         CE3dEqc4FvpYHMLVw/MlgQ8QXcxzoNBOmh3VVbqe+kqg90Ed/KmV4ZdhLEvOiXs/NFO7
-         yKleqotlkAWoLmCePzx8tvysfLUtKlJF3p4QzLEZBJXEUQhIHP99ETF5Xe3mdsQc+a5n
-         6ikw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724983447; x=1725588247;
-        h=to:in-reply-to:cc:references:message-id:date:subject:mime-version
-         :from:content-transfer-encoding:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=3u7MEHbTS5aIEdhqu3cNoa9W9oSTziOnMc5kpFlW668=;
-        b=O8Vk3n20nTH2S/Q6MY8LaVKW84t16Ya9zMIuKNANjaYQRIn51viInqfPwE9wHMIEmF
-         ak04kpkJRi61QBF7ieNNgB46S/b7HOpmmRkHCCnDdGlabmbx4xIVllNFxFIyCLkOHDLd
-         /h2b1X0Bq0ZHOVvMvV3m+iHXyWGSaLP1ZF+0ZAEeKaqKT4g9gXvO0HxCTrhvhMpOPANl
-         kiq67bAVQrN+OlxR7RlyaK8r0yLT7H0XgJoSTT5ow+FeKKlDgK6l9RLxTx8H+8tvjLRK
-         BFOBmey2LJsFCZnAfIeSSE9CG9yg8Osgz6h4FU9So6RgGYjUL8a/J0rNMhYx6SwlNMN7
-         Iv4A==
-X-Forwarded-Encrypted: i=1; AJvYcCUDKh93e9rE9KX3PeRkSELJjFXvFJwVdNkkPftObct26LQDr7iVlP7sGSg+bisxuqG+hWQ=@vger.kernel.org, AJvYcCVbb1f7jWZB6GEbXhl9OZaeFHJ3RjNp9txDIEJPTCVef8LJzxEB3vpW3nd4QSORRLTUGj43is1ej9hqlviD@vger.kernel.org
-X-Gm-Message-State: AOJu0YwHwCR7qxVwDn4xbXNUwuWqVyM7wxdCMJ9oyuFM8emNtXGp0X2R
-	7Q+MZt1elcFkR4wyjL8ietOer7/4jQY2v0pNwidOZX5g43PfTsuO
-X-Google-Smtp-Source: AGHT+IGHl7cemBtoX5qsT9N4v16xPV1yX2TOLZXitRI1QU88g9SCvxMpqVFWtfp3UkXmgk0SXrsj6Q==
-X-Received: by 2002:a05:6a20:2d24:b0:1c4:818c:2986 with SMTP id adf61e73a8af0-1cce100e21emr4887015637.13.1724983447328;
-        Thu, 29 Aug 2024 19:04:07 -0700 (PDT)
-Received: from smtpclient.apple ([2001:e60:a014:2acf:bd3a:95a:cb6b:9c04])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-20515550badsm17508025ad.241.2024.08.29.19.04.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 29 Aug 2024 19:04:06 -0700 (PDT)
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-From: Jeongjun Park <aha310510@gmail.com>
+	s=arc-20240116; t=1724983708; c=relaxed/simple;
+	bh=wOgvntKYQmYohnFZGu07J+B7vsxAmgNnANMJIoUIDlI=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=Im/h5uyfId1dSn4FLOluV+V56CU2+muc+48aaOIDwNSdVd2Sqm0NR+sAwHRMVLvAWyQNm7KgBKqTEHURlhf+nvo5xP9d/uSn4RRXR4TqGpZoy3PPTGxBHe+FJmoJoz5bPneH9eG/4T+RC3t07pkyJdJdGQDctOqYWBjBhUgqb7Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.235])
+	by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4Ww1lC71sWz4f3jJC;
+	Fri, 30 Aug 2024 10:08:07 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.252])
+	by mail.maildlp.com (Postfix) with ESMTP id A5A8E1A06D7;
+	Fri, 30 Aug 2024 10:08:22 +0800 (CST)
+Received: from [10.67.109.79] (unknown [10.67.109.79])
+	by APP3 (Coremail) with SMTP id _Ch0CgAHtrSTKdFmeZoADA--.9512S2;
+	Fri, 30 Aug 2024 10:08:20 +0800 (CST)
+Message-ID: <cd2bc5bf-ac78-4121-80eb-9b5c7fd4549c@huaweicloud.com>
+Date: Fri, 30 Aug 2024 10:08:19 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0 (1.0)
-Subject: Re: [PATCH bpf] bpf: add check for invalid name in btf_name_valid_section()
-Date: Fri, 30 Aug 2024 11:03:54 +0900
-Message-Id: <07EBE3E5-61A7-4F64-92BA-24A1DCA9583B@gmail.com>
-References: <3a48e38f29cc8c73e36a6d3339b9303571d522a8.camel@gmail.com>
-Cc: alexei.starovoitov@gmail.com, andrii@kernel.org, ast@kernel.org,
- bpf@vger.kernel.org, daniel@iogearbox.net, haoluo@google.com,
- john.fastabend@gmail.com, jolsa@kernel.org, kpsingh@kernel.org,
- linux-kernel@vger.kernel.org, martin.lau@linux.dev, sdf@fomichev.me,
- song@kernel.org, yonghong.song@linux.dev
-In-Reply-To: <3a48e38f29cc8c73e36a6d3339b9303571d522a8.camel@gmail.com>
-To: Eduard Zingerman <eddyz87@gmail.com>
-X-Mailer: iPhone Mail (21F90)
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 1/1] cgroup: fix deadlock caused by cgroup_mutex and
+ cpu_hotplug_lock
+From: Chen Ridong <chenridong@huaweicloud.com>
+To: martin.lau@linux.dev, ast@kernel.org, daniel@iogearbox.net,
+ andrii@kernel.org, eddyz87@gmail.com, song@kernel.org,
+ yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
+ sdf@google.com, haoluo@google.com, jolsa@kernel.org, tj@kernel.org,
+ lizefan.x@bytedance.com, hannes@cmpxchg.org, roman.gushchin@linux.dev,
+ =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>
+Cc: bpf@vger.kernel.org, cgroups@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20240817093334.6062-1-chenridong@huawei.com>
+ <20240817093334.6062-2-chenridong@huawei.com>
+ <8c1ccd1b-47cd-43b6-b961-2829a5a24513@huaweicloud.com>
+Content-Language: en-US
+In-Reply-To: <8c1ccd1b-47cd-43b6-b961-2829a5a24513@huaweicloud.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:_Ch0CgAHtrSTKdFmeZoADA--.9512S2
+X-Coremail-Antispam: 1UD129KBjvJXoW3Jw43CF4fWr43Zr1fZr4Utwb_yoW3ZFWrpr
+	n5JryUJ3yrCr1ktr4Utw1UXryrKr40q3WUJr18J3WUAr47Jr1jqr1UZr1jgFyUJFs7Cr1U
+	AF1Yvry2vr1jqw7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUv0b4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6r1S6rWUM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
+	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+	6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+	Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4kS
+	14v26r4a6rW5MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I
+	8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWr
+	XwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x
+	0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_
+	Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU0
+	s2-5UUUUU==
+X-CM-SenderInfo: hfkh02xlgr0w46kxt4xhlfz01xgou0bp/
 
 
 
-> Eduard Zingerman wrote:
->=20
-> =EF=BB=BFOn Wed, 2024-08-28 at 22:45 -0700, Eduard Zingerman wrote:
->=20
-> [...]
->=20
->> I will prepare a test case.
->> Probably tomorrow.
->=20
-> Please find test in the attachment. This test triggers KASAN error
-> report as in another attachment. (I enabled CONFIG_KASAN using
-> menuconfig on top of regular selftest config).
->=20
+On 2024/8/22 8:57, Chen Ridong wrote:
+> 
+> 
+> On 2024/8/17 17:33, Chen Ridong wrote:
+>> We found a hung_task problem as shown below:
+>>
+>> INFO: task kworker/0:0:8 blocked for more than 327 seconds.
+>> "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+>> task:kworker/0:0     state:D stack:13920 pid:8     ppid:2       
+>> flags:0x00004000
+>> Workqueue: events cgroup_bpf_release
+>> Call Trace:
+>>   <TASK>
+>>   __schedule+0x5a2/0x2050
+>>   ? find_held_lock+0x33/0x100
+>>   ? wq_worker_sleeping+0x9e/0xe0
+>>   schedule+0x9f/0x180
+>>   schedule_preempt_disabled+0x25/0x50
+>>   __mutex_lock+0x512/0x740
+>>   ? cgroup_bpf_release+0x1e/0x4d0
+>>   ? cgroup_bpf_release+0xcf/0x4d0
+>>   ? process_scheduled_works+0x161/0x8a0
+>>   ? cgroup_bpf_release+0x1e/0x4d0
+>>   ? mutex_lock_nested+0x2b/0x40
+>>   ? __pfx_delay_tsc+0x10/0x10
+>>   mutex_lock_nested+0x2b/0x40
+>>   cgroup_bpf_release+0xcf/0x4d0
+>>   ? process_scheduled_works+0x161/0x8a0
+>>   ? trace_event_raw_event_workqueue_execute_start+0x64/0xd0
+>>   ? process_scheduled_works+0x161/0x8a0
+>>   process_scheduled_works+0x23a/0x8a0
+>>   worker_thread+0x231/0x5b0
+>>   ? __pfx_worker_thread+0x10/0x10
+>>   kthread+0x14d/0x1c0
+>>   ? __pfx_kthread+0x10/0x10
+>>   ret_from_fork+0x59/0x70
+>>   ? __pfx_kthread+0x10/0x10
+>>   ret_from_fork_asm+0x1b/0x30
+>>   </TASK>
+>>
+>> This issue can be reproduced by the following pressuse test:
+>> 1. A large number of cpuset cgroups are deleted.
+>> 2. Set cpu on and off repeatly.
+>> 3. Set watchdog_thresh repeatly.
+>> The scripts can be obtained at LINK mentioned above the signature.
+>>
+>> The reason for this issue is cgroup_mutex and cpu_hotplug_lock are
+>> acquired in different tasks, which may lead to deadlock.
+>> It can lead to a deadlock through the following steps:
+>> 1. A large number of cpusets are deleted asynchronously, which puts a
+>>     large number of cgroup_bpf_release works into system_wq. The 
+>> max_active
+>>     of system_wq is WQ_DFL_ACTIVE(256). Consequently, all active works 
+>> are
+>>     cgroup_bpf_release works, and many cgroup_bpf_release works will 
+>> be put
+>>     into inactive queue. As illustrated in the diagram, there are 256 (in
+>>     the acvtive queue) + n (in the inactive queue) works.
+>> 2. Setting watchdog_thresh will hold cpu_hotplug_lock.read and put
+>>     smp_call_on_cpu work into system_wq. However step 1 has already 
+>> filled
+>>     system_wq, 'sscs.work' is put into inactive queue. 'sscs.work' has
+>>     to wait until the works that were put into the inacvtive queue 
+>> earlier
+>>     have executed (n cgroup_bpf_release), so it will be blocked for a 
+>> while.
+>> 3. Cpu offline requires cpu_hotplug_lock.write, which is blocked by 
+>> step 2.
+>> 4. Cpusets that were deleted at step 1 put cgroup_release works into
+>>     cgroup_destroy_wq. They are competing to get cgroup_mutex all the 
+>> time.
+>>     When cgroup_metux is acqured by work at css_killed_work_fn, it will
+>>     call cpuset_css_offline, which needs to acqure cpu_hotplug_lock.read.
+>>     However, cpuset_css_offline will be blocked for step 3.
+>> 5. At this moment, there are 256 works in active queue that are
+>>     cgroup_bpf_release, they are attempting to acquire cgroup_mutex, 
+>> and as
+>>     a result, all of them are blocked. Consequently, sscs.work can not be
+>>     executed. Ultimately, this situation leads to four processes being
+>>     blocked, forming a deadlock.
+>>
+>> system_wq(step1)        WatchDog(step2)            cpu 
+>> offline(step3)    cgroup_destroy_wq(step4)
+>> ...
+>> 2000+ cgroups deleted asyn
+>> 256 actives + n inactives
+>>                 __lockup_detector_reconfigure
+>>                 P(cpu_hotplug_lock.read)
+>>                 put sscs.work into system_wq
+>> 256 + n + 1(sscs.work)
+>> sscs.work wait to be executed
+>>                 warting sscs.work finish
+>>                                 percpu_down_write
+>>                                 P(cpu_hotplug_lock.write)
+>>                                 ...blocking...
+>>                                             css_killed_work_fn
+>>                                             P(cgroup_mutex)
+>>                                             cpuset_css_offline
+>>                                             P(cpu_hotplug_lock.read)
+>>                                             ...blocking...
+>> 256 cgroup_bpf_release
+>> mutex_lock(&cgroup_mutex);
+>> ..blocking...
+>>
+>> To fix the problem, place cgroup_bpf_release works on cgroup_destroy_wq,
+>> which can break the loop and solve the problem. System wqs are for misc
+>> things which shouldn't create a large number of concurrent work items.
+>> If something is going to generate >WQ_DFL_ACTIVE(256) concurrent work
+>> items, it should use its own dedicated workqueue.
+>>
+>> Fixes: 4bfc0bb2c60e ("bpf: decouple the lifetime of cgroup_bpf from 
+>> cgroup itself")
+>> Link: 
+>> https://lore.kernel.org/cgroups/e90c32d2-2a85-4f28-9154-09c7d320cb60@huawei.com/T/#t
+>> Signed-off-by: Chen Ridong <chenridong@huawei.com>
+>> ---
+>>   kernel/bpf/cgroup.c             | 2 +-
+>>   kernel/cgroup/cgroup-internal.h | 1 +
+>>   kernel/cgroup/cgroup.c          | 2 +-
+>>   3 files changed, 3 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
+>> index 8ba73042a239..a611a1274788 100644
+>> --- a/kernel/bpf/cgroup.c
+>> +++ b/kernel/bpf/cgroup.c
+>> @@ -334,7 +334,7 @@ static void cgroup_bpf_release_fn(struct 
+>> percpu_ref *ref)
+>>       struct cgroup *cgrp = container_of(ref, struct cgroup, bpf.refcnt);
+>>       INIT_WORK(&cgrp->bpf.release_work, cgroup_bpf_release);
+>> -    queue_work(system_wq, &cgrp->bpf.release_work);
+>> +    queue_work(cgroup_destroy_wq, &cgrp->bpf.release_work);
+>>   }
+>>   /* Get underlying bpf_prog of bpf_prog_list entry, regardless if 
+>> it's through
+>> diff --git a/kernel/cgroup/cgroup-internal.h 
+>> b/kernel/cgroup/cgroup-internal.h
+>> index c964dd7ff967..17ac19bc8106 100644
+>> --- a/kernel/cgroup/cgroup-internal.h
+>> +++ b/kernel/cgroup/cgroup-internal.h
+>> @@ -13,6 +13,7 @@
+>>   extern spinlock_t trace_cgroup_path_lock;
+>>   extern char trace_cgroup_path[TRACE_CGROUP_PATH_LEN];
+>>   extern void __init enable_debug_cgroup(void);
+>> +extern struct workqueue_struct *cgroup_destroy_wq;
+>>   /*
+>>    * cgroup_path() takes a spin lock. It is good practice not to take
+>> diff --git a/kernel/cgroup/cgroup.c b/kernel/cgroup/cgroup.c
+>> index 75058fbf4450..77fa9ed69c86 100644
+>> --- a/kernel/cgroup/cgroup.c
+>> +++ b/kernel/cgroup/cgroup.c
+>> @@ -124,7 +124,7 @@ DEFINE_PERCPU_RWSEM(cgroup_threadgroup_rwsem);
+>>    * destruction work items don't end up filling up max_active of 
+>> system_wq
+>>    * which may lead to deadlock.
+>>    */
+>> -static struct workqueue_struct *cgroup_destroy_wq;
+>> +struct workqueue_struct *cgroup_destroy_wq;
+>>   /* generate an array of cgroup subsystem pointers */
+>>   #define SUBSYS(_x) [_x ## _cgrp_id] = &_x ## _cgrp_subsys,
+> 
+> Ping.
+> Hi,TJ, Roman and Michal, I have updated commit message, I think it can 
+> be much clearer now, can you review it again?
+> 
+> Thanks,
+> Ridong
+> 
+Friendly ping.
 
-Thank you for writing the selftest for me.
-
-> On Fri, Aug 23, 2024 at 3:43=E2=80=AFAM Jeongjun Park <aha310510@gmail.com=
-> wrote:
->=20
-> [...]
->=20
->> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
->> index 520f49f422fe..5c24ea1a65a4 100644
->> --- a/kernel/bpf/btf.c
->> +++ b/kernel/bpf/btf.c
->> @@ -823,6 +823,9 @@ static bool btf_name_valid_section(const struct btf *=
-btf, u32 offset)
->>        const char *src =3D btf_str_by_offset(btf, offset);
->>        const char *src_limit;
->>=20
->> +       if (!*src)
->> +               return false;
->> +
->=20
-> I think that correct fix would be as follows:
->=20
-> ---
->=20
-> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-> index edad152cee8e..d583d76fcace 100644
-> --- a/kernel/bpf/btf.c
-> +++ b/kernel/bpf/btf.c
-> @@ -820,7 +820,6 @@ static bool btf_name_valid_section(const struct btf *b=
-tf, u32 offset)
->=20
->        /* set a limit on identifier length */
->        src_limit =3D src + KSYM_NAME_LEN;
-> -       src++;
->        while (*src && src < src_limit) {
->                if (!isprint(*src))
->                        return false;
-
-However, this patch is logically flawed.=20
-It will return true for invalid names with=20
-length 1 and src[0] being NULL. So I think=20
-it's better to stick with the original patch.
-
->=20
-> <bad-name-test.patch>
-> <bad-name-kasan-report.txt>
