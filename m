@@ -1,39 +1,35 @@
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81A0626ADD;
-	Fri, 30 Aug 2024 01:59:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.187
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED72D12B71;
+	Fri, 30 Aug 2024 02:00:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724983194; cv=none; b=rlNGolrajd7/d+B1I8i6XT9V0ezob5Pta/JqVWlKoVmyczhG+3w5FyzVIxh0hQzILSmjkDs5LnCMcvllWP4/8xU0dbBDuOXywqrOK1nQypg4N8RmfyLm91GFHzQg8VTIsIsl3LR5al4bXXpyPX/Evz4A0pXgSijONv2hxYlLngY=
+	t=1724983229; cv=none; b=OGYddlUWfz7BeE+GDI8vIFTLFyfxtVNJlgkErG81eddKkyDsUUGfgTtigyEl5DAfQ14KVTxUb54iFgasZ3FWaxfznGsXPF5zK/wyT85TJDAmAGW8MQNzijNvoMNdw4dyZOuVEbikGknPF3olcghl0obwMlMebZ33qSRula4AlbA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724983194; c=relaxed/simple;
-	bh=mqhQhlMokAAr/KDzdS77oJ4HTaGfsVxEAAaDO6YMwdg=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Fhaw/9Uu4RUj2ZFBtrOvgnUI3Tl0W+xEeCOznIGMmeUuEiG3/pVgJbHixriO3t1G1MArncg/3HKP+U7M2L2bbqY/EQY1oOJXvfV8dzfNvtkjSKFQY3FWC17aJ81QuV+hMFxd0pjlczBULPEbksLImoJGcAIGWwJ1EDl+1cyY41k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.187
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.163.174])
-	by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Ww1Xg2bydzyQj5;
-	Fri, 30 Aug 2024 09:58:59 +0800 (CST)
-Received: from kwepemh500013.china.huawei.com (unknown [7.202.181.146])
-	by mail.maildlp.com (Postfix) with ESMTPS id F0417140202;
-	Fri, 30 Aug 2024 09:59:49 +0800 (CST)
-Received: from huawei.com (10.90.53.73) by kwepemh500013.china.huawei.com
- (7.202.181.146) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Fri, 30 Aug
- 2024 09:59:49 +0800
-From: Jinjie Ruan <ruanjinjie@huawei.com>
-To: <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
-	<martin.lau@linux.dev>, <eddyz87@gmail.com>, <song@kernel.org>,
-	<yonghong.song@linux.dev>, <john.fastabend@gmail.com>, <kpsingh@kernel.org>,
-	<sdf@fomichev.me>, <haoluo@google.com>, <jolsa@kernel.org>,
-	<bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC: <ruanjinjie@huawei.com>
-Subject: [PATCH bpf-next RESEND] bpf: Use sockfd_put() helper
-Date: Fri, 30 Aug 2024 10:07:56 +0800
-Message-ID: <20240830020756.607877-1-ruanjinjie@huawei.com>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1724983229; c=relaxed/simple;
+	bh=B2HPHms1/46KYw9UCCyoWapPV2HKBQXDMWa9CS2eZzM=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=MuA3nAFigrFUscoEzXaJd3CyMO8Q1v87CWasWFJVEz4WIPLa4ssEnmQekHH2lqkuCpETbv71jd8TxvyC/TP8N2tUN7kMVyjuoYNVgjU+yfSEybKQQawMjrQt+0BrVk3ULiix+4KLeBp2bmkZW1rKb0KnqWDBrIcPTrLFm21CMqE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QJ+DJHK4; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QJ+DJHK4"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68640C4CEC5;
+	Fri, 30 Aug 2024 02:00:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1724983228;
+	bh=B2HPHms1/46KYw9UCCyoWapPV2HKBQXDMWa9CS2eZzM=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=QJ+DJHK43N4Zbe1npGyyHNv50QX9ybNfA7fJWq4RNSj0fNU0nf1Gh2S5xc2XXJb+t
+	 MQfE0q1HYAPIldCTdcCUGdCIt19NWmdaO/7g4b8B87uXCqdbW6+Y2tTiebsxVKFLX+
+	 VkNAy+OM0LYNFIO6kBUmBa+8HGnZOjXNFMAHP9kZS5K4GxLBjRhCAygDySMCA9/wyu
+	 hf9A1SqV3HQ2WwLiNTZswptAG+RG8GaDkk0ZDSbb3naNK/vshTl29mh+YQzgn9Pkx0
+	 JpIHj9TzeAINrF7LBo7oDCzXi0Uyej2DSqMah8imfe1Ls+jx8/rjgznGkul48vL1R+
+	 TGSGs5gvAlxsw==
+Received: from ip-10-30-226-235.us-west-2.compute.internal (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id D71043822D6A;
+	Fri, 30 Aug 2024 02:00:29 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -41,35 +37,47 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- kwepemh500013.china.huawei.com (7.202.181.146)
+Subject: Re: [PATCH bpf-next v4 1/2] bpf: Make the pointer returned by iter next
+ method valid
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <172498322987.2141782.12883744896077744332.git-patchwork-notify@kernel.org>
+Date: Fri, 30 Aug 2024 02:00:29 +0000
+References: <AM6PR03MB584869F8B448EA1C87B7CDA399962@AM6PR03MB5848.eurprd03.prod.outlook.com>
+In-Reply-To: <AM6PR03MB584869F8B448EA1C87B7CDA399962@AM6PR03MB5848.eurprd03.prod.outlook.com>
+To: Juntong Deng <juntong.deng@outlook.com>
+Cc: ast@kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com,
+ andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
+ yonghong.song@linux.dev, kpsingh@kernel.org, sdf@fomichev.me,
+ haoluo@google.com, jolsa@kernel.org, memxor@gmail.com, snorcht@gmail.com,
+ bpf@vger.kernel.org, linux-kernel@vger.kernel.org
 
-Replace fput() with sockfd_put() in bpf_fd_reuseport_array_update_elem().
+Hello:
 
-Signed-off-by: Jinjie Ruan <ruanjinjie@huawei.com>
-Acked-by: Stanislav Fomichev <sdf@fomichev.me>
----
-v1-> RESEND
-- Use bpf-next instead of -next for commit title prefix.
-- Add acked-by.
----
- kernel/bpf/reuseport_array.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+This series was applied to bpf/bpf-next.git (master)
+by Alexei Starovoitov <ast@kernel.org>:
 
-diff --git a/kernel/bpf/reuseport_array.c b/kernel/bpf/reuseport_array.c
-index 4b4f9670f1a9..49b8e5a0c6b4 100644
---- a/kernel/bpf/reuseport_array.c
-+++ b/kernel/bpf/reuseport_array.c
-@@ -308,7 +308,7 @@ int bpf_fd_reuseport_array_update_elem(struct bpf_map *map, void *key,
- 
- 	spin_unlock_bh(&reuseport_lock);
- put_file:
--	fput(socket->file);
-+	sockfd_put(socket);
- 	return err;
- }
- 
+On Thu, 29 Aug 2024 21:11:17 +0100 you wrote:
+> Currently we cannot pass the pointer returned by iter next method as
+> argument to KF_TRUSTED_ARGS or KF_RCU kfuncs, because the pointer
+> returned by iter next method is not "valid".
+> 
+> This patch sets the pointer returned by iter next method to be valid.
+> 
+> This is based on the fact that if the iterator is implemented correctly,
+> then the pointer returned from the iter next method should be valid.
+> 
+> [...]
+
+Here is the summary with links:
+  - [bpf-next,v4,1/2] bpf: Make the pointer returned by iter next method valid
+    https://git.kernel.org/bpf/bpf-next/c/4cc8c50c9abc
+  - [bpf-next,v4,2/2] selftests/bpf: Add tests for iter next method returning valid pointer
+    https://git.kernel.org/bpf/bpf-next/c/7c5f7b16fe1b
+
+You are awesome, thank you!
 -- 
-2.34.1
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
