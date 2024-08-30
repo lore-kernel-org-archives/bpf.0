@@ -1,126 +1,73 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FDC927473;
-	Fri, 30 Aug 2024 01:55:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A905A2C18C;
+	Fri, 30 Aug 2024 01:58:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.187
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724982934; cv=none; b=dVxQGvXJl5L8dFCgsSLwABAnD7gC9HtK/9pQhgUuiohvubUhy991b3Ph28cNMzqJqJYs/ABqw58LeXRZeYF7TilON0PsehLKCasl2fvThJQNY3ps81DkzY6hul3t2qyUqv9bAWhGhIS2jIYuhzdfX/rLyoipae3R9aH2fDLVIqE=
+	t=1724983087; cv=none; b=Sj0kjKZe0Ulw9ZD0dX0St0zC0oLzKyJwcT0IUvMDlq+KHKCQWtmjVXPT5mLqrKbaWwRrPE4T2/KnzS80VLRkXCf12WiOB+dRq2s7KILel9ObwdnaI4XZWBMM4l3HVOmlrYkr5TumYA4Hc6ywCEhrD1wASQAXdgsJJ6nmpxjYRuw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724982934; c=relaxed/simple;
-	bh=ixaudXjydPQWqGwW6i0tvFoJa2z+92+ZszjJYy4wsfA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=gVwXM47EtGQYd0pElrAw3uKSQKlqbOVoBmt76qGfgnkOMi54KCveTFmM8M0f3a75qa40vv2bVNqZV9fo2EY38sM0MEH9JyIIJksFTmAOxmbPwQMnasQw5x0eQ/WS0SdbBVIMAfcCVg5nIifLRfuHe6WkMu6NkkUM7lrLRbA5eUs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JPLqhMEG; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JPLqhMEG"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56B2CC4CEC1;
-	Fri, 30 Aug 2024 01:55:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724982933;
-	bh=ixaudXjydPQWqGwW6i0tvFoJa2z+92+ZszjJYy4wsfA=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=JPLqhMEGxt5wUdNsS6na9V0n93df0kngWwoyVclEoqbcDhaDhsMgZQlBioYY/XowC
-	 gc4Q0YVUfIUxSx9Smdg9sNfEZUT+hOR1hA8McYNaZidychT6aWCDJBI+3p+k+IQRGq
-	 3/LHP6NnevRKG+Ejoy6yp1rwZjyBWJTJacxV8ow/4ozbFHawrPaSf/sHT+AWM1P3S4
-	 sIvbJ+rDRKF4Bpw08pb3uo98xwPZtGdlSdQ7Z/dK1aSkWpEv8hgdYOfZUi4bhjYbGV
-	 2fNqCpmfaRZ2qiHPZf2qVQidg5iRCKZvDNuWsy4lqqd+s1j6Ci694dLu4kkZFefEBe
-	 AihapTtLj8nZg==
-Message-ID: <a9603de2-3ff3-40aa-9bb1-2a02c2ed3e5e@kernel.org>
-Date: Thu, 29 Aug 2024 18:55:23 -0700
+	s=arc-20240116; t=1724983087; c=relaxed/simple;
+	bh=uKSvwoZXpADirUHvE6G1Q1pSCnJitgmjTM+tkmTDg04=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=R9El9sHi4RIWL0GLTX2BV8g+w95gJ1a9MXi6Vkx2mGI73fEOCsZVQGU7YQjIra2nJM08VvKYEXEsKlJrYS2o0sNMCzACZ+Wl6R4xdzpIQH0z9OAQJ8nohZJ+EQH+pJkn3Py03k7xevGRtxpuKrfTiVpD02p0GFo3s5v49yO6A8M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.187
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.163.174])
+	by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Ww1Vy6MD0zyR8S;
+	Fri, 30 Aug 2024 09:57:30 +0800 (CST)
+Received: from kwepemh500013.china.huawei.com (unknown [7.202.181.146])
+	by mail.maildlp.com (Postfix) with ESMTPS id 08F13140202;
+	Fri, 30 Aug 2024 09:58:03 +0800 (CST)
+Received: from huawei.com (10.90.53.73) by kwepemh500013.china.huawei.com
+ (7.202.181.146) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Fri, 30 Aug
+ 2024 09:58:02 +0800
+From: Jinjie Ruan <ruanjinjie@huawei.com>
+To: <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
+	<martin.lau@linux.dev>, <eddyz87@gmail.com>, <song@kernel.org>,
+	<yonghong.song@linux.dev>, <john.fastabend@gmail.com>, <kpsingh@kernel.org>,
+	<sdf@fomichev.me>, <haoluo@google.com>, <jolsa@kernel.org>,
+	<bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC: <ruanjinjie@huawei.com>
+Subject: [PATCH bpf-next RESEND] bpf: Use sockfd_put() helper
+Date: Fri, 30 Aug 2024 10:06:07 +0800
+Message-ID: <20240830020607.607516-1-ruanjinjie@huawei.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v2 00/12] Unmask upper DSCP bits - part 2
-Content-Language: en-US
-To: Ido Schimmel <idosch@nvidia.com>, netdev@vger.kernel.org
-Cc: davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
- edumazet@google.com, gnault@redhat.com, ast@kernel.org,
- daniel@iogearbox.net, martin.lau@linux.dev, john.fastabend@gmail.com,
- steffen.klassert@secunet.com, herbert@gondor.apana.org.au,
- bpf@vger.kernel.org
-References: <20240829065459.2273106-1-idosch@nvidia.com>
-From: David Ahern <dsahern@kernel.org>
-In-Reply-To: <20240829065459.2273106-1-idosch@nvidia.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ kwepemh500013.china.huawei.com (7.202.181.146)
 
-On 8/28/24 12:54 AM, Ido Schimmel wrote:
-> tl;dr - This patchset continues to unmask the upper DSCP bits in the
-> IPv4 flow key in preparation for allowing IPv4 FIB rules to match on
-> DSCP. No functional changes are expected. Part 1 was merged in commit
-> ("Merge branch 'unmask-upper-dscp-bits-part-1'").
-> 
-> The TOS field in the IPv4 flow key ('flowi4_tos') is used during FIB
-> lookup to match against the TOS selector in FIB rules and routes.
-> 
-> It is currently impossible for user space to configure FIB rules that
-> match on the DSCP value as the upper DSCP bits are either masked in the
-> various call sites that initialize the IPv4 flow key or along the path
-> to the FIB core.
-> 
-> In preparation for adding a DSCP selector to IPv4 and IPv6 FIB rules, we
-> need to make sure the entire DSCP value is present in the IPv4 flow key.
-> This patchset continues to unmask the upper DSCP bits, but this time in
-> the output route path.
-> 
-> Patches #1-#3 unmask the upper DSCP bits in the various places that
-> invoke the core output route lookup functions directly.
-> 
-> Patches #4-#6 do the same in three helpers that are widely used in the
-> output path to initialize the TOS field in the IPv4 flow key.
-> 
-> The rest of the patches continue to unmask these bits in call sites that
-> invoke the following wrappers around the core lookup functions:
-> 
-> Patch #7 - __ip_route_output_key()
-> Patches #8-#12 - ip_route_output_flow()
-> 
-> The next patchset will handle the callers of ip_route_output_ports() and
-> ip_route_output_key().
-> 
-> No functional changes are expected as commit 1fa3314c14c6 ("ipv4:
-> Centralize TOS matching") moved the masking of the upper DSCP bits to
-> the core where 'flowi4_tos' is matched against the TOS selector.
-> 
-> Changes since v1 [1]:
-> 
-> * Remove IPTOS_RT_MASK in patch #7 instead of in patch #6
-> 
-> [1] https://lore.kernel.org/netdev/20240827111813.2115285-1-idosch@nvidia.com/
-> 
-> Ido Schimmel (12):
->   ipv4: Unmask upper DSCP bits in RTM_GETROUTE output route lookup
->   ipv4: Unmask upper DSCP bits in ip_route_output_key_hash()
->   ipv4: icmp: Unmask upper DSCP bits in icmp_route_lookup()
->   ipv4: Unmask upper DSCP bits in ip_sock_rt_tos()
->   ipv4: Unmask upper DSCP bits in get_rttos()
->   ipv4: Unmask upper DSCP bits when building flow key
->   xfrm: Unmask upper DSCP bits in xfrm_get_tos()
->   ipv4: Unmask upper DSCP bits in ip_send_unicast_reply()
->   ipv6: sit: Unmask upper DSCP bits in ipip6_tunnel_xmit()
->   ipvlan: Unmask upper DSCP bits in ipvlan_process_v4_outbound()
->   vrf: Unmask upper DSCP bits in vrf_process_v4_outbound()
->   bpf: Unmask upper DSCP bits in __bpf_redirect_neigh_v4()
-> 
->  drivers/net/ipvlan/ipvlan_core.c | 4 +++-
->  drivers/net/vrf.c                | 3 ++-
->  include/net/ip.h                 | 5 ++++-
->  include/net/route.h              | 5 ++---
->  net/core/filter.c                | 2 +-
->  net/ipv4/icmp.c                  | 3 ++-
->  net/ipv4/ip_output.c             | 3 ++-
->  net/ipv4/route.c                 | 8 ++++----
->  net/ipv6/sit.c                   | 5 +++--
->  net/xfrm/xfrm_policy.c           | 3 ++-
->  10 files changed, 25 insertions(+), 16 deletions(-)
-> 
+Replace fput() with sockfd_put() in bpf_fd_reuseport_array_update_elem().
 
-For the set:
+Signed-off-by: Jinjie Ruan <ruanjinjie@huawei.com>
+---
+v1-> RESEND
+- Use bpf-next instead of -next for commit title prefix.
+---
+ kernel/bpf/reuseport_array.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Reviewed-by: David Ahern <dsahern@kernel.org>
+diff --git a/kernel/bpf/reuseport_array.c b/kernel/bpf/reuseport_array.c
+index 4b4f9670f1a9..49b8e5a0c6b4 100644
+--- a/kernel/bpf/reuseport_array.c
++++ b/kernel/bpf/reuseport_array.c
+@@ -308,7 +308,7 @@ int bpf_fd_reuseport_array_update_elem(struct bpf_map *map, void *key,
+ 
+ 	spin_unlock_bh(&reuseport_lock);
+ put_file:
+-	fput(socket->file);
++	sockfd_put(socket);
+ 	return err;
+ }
+ 
+-- 
+2.34.1
 
