@@ -1,93 +1,128 @@
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EA221758F
-	for <bpf@vger.kernel.org>; Sat, 31 Aug 2024 02:14:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B3E22E405;
+	Sat, 31 Aug 2024 02:34:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725070462; cv=none; b=DaYrO+ZtZZWpNspCh2IjBlYk8VIeLk8bd+VhjoEPbED3nbV1U8wuaQPN3jP1UxRAlYoX/wWg/my0Bb1w7kmhcQKBEF56fCVt2xV3m0C70psd6XDw+q/euljUkiO32pDJxu4/wbbrLYliA4XDM7txbFc7BKuNkmnoX+swCi693fU=
+	t=1725071653; cv=none; b=uwLaZ42IBr1HkrxSTiOKl9h5wszFYAvIUPQX3jFsinxEhvuAetJWr6N3uTvEH6UXb26NbpKYhiVdUiit3ujJUCj1Hz15v83O4WwckYGQbFAW8goA3HL9ZUYEx0abYvJlCqWCZpaS5ws1iBMDyTvgu/MzSTUxEkeAq4dB+KG3Bak=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725070462; c=relaxed/simple;
-	bh=75HqIkJujdkOIL2qY9pXCBhgTD3eGe1aMaDcqP93LD4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=jNiK2NZzw3FTv3gE/T51BrkNe1CojCKEB6710tnfEEytZX4NltsYYumcWL6MtyuPYVM0D5JPN6QfT3ai4aICQOpeaAxB5pV3ChAm+E+kFESpbsaa7noIvD4PkZ9Zislr4Qx4QRYqTiFFZn1f6PgF/Y0X0j8Gyi3Sz1tTQ6bdvsc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Klu0caKW; arc=none smtp.client-ip=209.85.128.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Klu0caKW"
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-4280ca0791bso20787335e9.1
-        for <bpf@vger.kernel.org>; Fri, 30 Aug 2024 19:14:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1725070459; x=1725675259; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=75HqIkJujdkOIL2qY9pXCBhgTD3eGe1aMaDcqP93LD4=;
-        b=Klu0caKW3GknPhHnnSrRGbS+A6kYgsbU6RWiqRkiza0QHWXfu2Dhn4CuFYlo+MTvAo
-         6Q322nO+HpaEMwlnZPUZWD5A2PdrIyFhnUzaD0MBvn5Qu5H7HOwGblvSLcMp/YEaNPnN
-         g0gFNsEpThylX5sLztjr1DJvSGmky50lWluQh6TNGJwaVRd82CLm1LDy8ooiEmLcb6fc
-         6ERssx8ezEjQsFALQdg7HiDExbhHwHQJpg1UY/9QTu13nA/yYvewb2iwmuftATqqtsVP
-         zhhQWA64C611lA9DGqw/zMSg2HnADraQpLAOWxu+ItnIg4WX+jrEL6C2hVeLRHarq4Q/
-         aMXQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725070459; x=1725675259;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=75HqIkJujdkOIL2qY9pXCBhgTD3eGe1aMaDcqP93LD4=;
-        b=ZqfuX6n2ZcQ3b+ND08dfSYNZjLTpXlj5JN9UiidMm1B9MtcR5LaDG57nDysZShFQJi
-         pULGAdvXLSJoPWB2D26OhPwaKJ0QlEBPr04HYyzJAo2phILfivtnNh+qdysEyfqLAHmr
-         jUDnHDI9LsQwNtLFkoKjUBjxG26Iv+S8esOhjaTDHWTJ/Ye8VPMFeG4+J8nRhfGHMmka
-         Q1+OUx4yKv6CXUiVB/6lbmM2sEG4jGTlUXIbgvt9GtiHZqVrvgfKN24ENwnRYCcD6F+N
-         DJhVzXfGNI/oiVtw75g2aZiZnxCGzPCG8nyoCzB4Igz4Xpfcstgg43AYpq8h2bBIBxAZ
-         rB4A==
-X-Forwarded-Encrypted: i=1; AJvYcCVS20LdNvMgR/6BsT38uetXNjXhthV6eOSd0zBK2mbGSeecVh8aMI5/J1rjSog/5nC9CMI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzKYAbWxbvebAy3j/48RN1/o3QkL86H+twsTqBI1ZCiuHdPscV0
-	x1uwVDWmgTWzAlVyQ7Lpux7iPrwoM0tm8dkh+t8jrqGEKj0hZ88BKhUFMzotUkvHAWgFvIzhbc8
-	NB3RuFHmZwJ6QnP9w9NAjnqDLUhw=
-X-Google-Smtp-Source: AGHT+IHsvq8G/4YiFA9TTGteVs3goIpRpQt7SUVVDgD/g4iyJ0999x7AjfIr1QrxXPA5vK8Vqu7N6YiEBsUTyXSN4+s=
-X-Received: by 2002:a05:600c:4fd3:b0:428:1007:6068 with SMTP id
- 5b1f17b1804b1-42bb01fb0e4mr68390565e9.34.1725070459047; Fri, 30 Aug 2024
- 19:14:19 -0700 (PDT)
+	s=arc-20240116; t=1725071653; c=relaxed/simple;
+	bh=PuFi4hImjOt7YO2S/s8fVlaq2t/ZV0plyc2KcKzvmGw=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=YZ1AMkfBFEHBfb2+yQfxeyGWTVZPwsO9UWVFOst0dyLGEvQbOZAMnVXZp98PoRlEmSI81RoHhdiiiuaf5ej1VqkZXojztvTulfkNDNO33BtZG1BVX9TeKz+DR0sKg9nLVU0UOGjNvMCIgN/wkB6iDj7FPQ/TS/JvYz+0Bj4hovE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.93.142])
+	by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4WwfGT43nBz4f3kFQ;
+	Sat, 31 Aug 2024 10:33:53 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.128])
+	by mail.maildlp.com (Postfix) with ESMTP id 4FEAD1A0359;
+	Sat, 31 Aug 2024 10:34:08 +0800 (CST)
+Received: from ultra.huawei.com (unknown [10.90.53.71])
+	by APP4 (Coremail) with SMTP id gCh0CgDXSYAagdJmoPLJDA--.24950S6;
+	Sat, 31 Aug 2024 10:34:08 +0800 (CST)
+From: Pu Lehui <pulehui@huaweicloud.com>
+To: bpf@vger.kernel.org,
+	linux-riscv@lists.infradead.org,
+	netdev@vger.kernel.org,
+	Andrii Nakryiko <andrii@kernel.org>
+Cc: =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
+	Ilya Leoshkevich <iii@linux.ibm.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@google.com>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Puranjay Mohan <puranjay@kernel.org>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Pu Lehui <pulehui@huawei.com>
+Subject: [PATCH bpf-next v2 4/4] libbpf: Fix accessing first syscall argument on RV64
+Date: Sat, 31 Aug 2024 02:36:46 +0000
+Message-Id: <20240831023646.1558629-5-pulehui@huaweicloud.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20240831023646.1558629-1-pulehui@huaweicloud.com>
+References: <20240831023646.1558629-1-pulehui@huaweicloud.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240826224814.289034-1-inwardvessel@gmail.com>
- <20240826224814.289034-2-inwardvessel@gmail.com> <CAADnVQJp3Me_tXRs6Nupbi93bAj2D-sFuN-N7DMfKU=EtMu5ow@mail.gmail.com>
- <CAEf4BzaaZqiRGwK5=GHrd81HgtVbWfXOSWAeyorHgbCVjsv-jw@mail.gmail.com> <Zs91tK9dduFe1dIj@saturn>
-In-Reply-To: <Zs91tK9dduFe1dIj@saturn>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Fri, 30 Aug 2024 19:14:08 -0700
-Message-ID: <CAADnVQJduHZsK8dpRxzD6cXqfrdjkmOd5CQD3yPH8s8NDD6CmA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 1/3] bpf: new btf kfunc hooks for tracepoint
- and perf event
-To: JP Kobryn <inwardvessel@gmail.com>
-Cc: Andrii Nakryiko <andrii.nakryiko@gmail.com>, Andrii Nakryiko <andrii@kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Eddy Z <eddyz87@gmail.com>, bpf <bpf@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:gCh0CgDXSYAagdJmoPLJDA--.24950S6
+X-Coremail-Antispam: 1UD129KBjvJXoW7Kr43ArWfCw1Dur4fur1rZwb_yoW8ZFW8pF
+	WUCa47Kr18Wr4Ig3s7KF4aqa13Kr15JrsxJFZ7Ww4SyFWUt3saqa429390yrsxtrW8X3y5
+	ZrsFkw18WryUZrDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUPSb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAV
+	Cq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0
+	rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267
+	AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E
+	14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7
+	xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Y
+	z7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2
+	AFwI0_GFv_Wryl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAq
+	x4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6r
+	W5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF
+	7I0E14v26F4j6r4UJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI
+	0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7I
+	U0sqXPUUUUU==
+X-CM-SenderInfo: psxovxtxl6x35dzhxuhorxvhhfrp/
 
-On Wed, Aug 28, 2024 at 12:08=E2=80=AFPM JP Kobryn <inwardvessel@gmail.com>=
- wrote:
->
-> With this change, anywhere we do
-> register_btf_kfunc_id_set(BPF_PROG_TYPE_TRACING, &some_kfunc_set),
-> BTF_KFUNC_HOOK_TRACING becomes allowed. So even if we never register the
-> extra program types like PROG_TYPE_PERF_EVENT, we still allow them as a
-> side effect since at runtime the program type mapping returns HOOK_TRACIN=
-G.
-> Any program type associated with this hook will be allowed even though no=
-t
-> explicitly registered.
+From: Pu Lehui <pulehui@huawei.com>
 
-Correct. kfuncs differentiate by type of their arguments.
-prog_type -> helper was an old style when context was the only
-thing we had. So we had to differentiate by prog_type.
-kfuncs are currently register by prog_type too, but that will go away.
-We're planning to do large refactoring in that area to satisfy
-sched-ext requests. It's not the prog type that would allow or
-disallow certain kfuncs but rather hook point plus custom flags.
+On RV64, as Ilya mentioned before [0], the first syscall parameter should be
+accessed through orig_a0 (see arch/riscv64/include/asm/syscall.h),
+otherwise it will cause selftests like bpf_syscall_macro, vmlinux,
+test_lsm, etc. to fail on RV64. Let's fix it by using the struct pt_regs
+style CO-RE direct access.
+
+Link: https://lore.kernel.org/bpf/20220209021745.2215452-1-iii@linux.ibm.com [0]
+Signed-off-by: Pu Lehui <pulehui@huawei.com>
+---
+ tools/lib/bpf/bpf_tracing.h | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
+
+diff --git a/tools/lib/bpf/bpf_tracing.h b/tools/lib/bpf/bpf_tracing.h
+index 051c408e6aed..6a4c49d1ca72 100644
+--- a/tools/lib/bpf/bpf_tracing.h
++++ b/tools/lib/bpf/bpf_tracing.h
+@@ -351,6 +351,10 @@ struct pt_regs___arm64 {
+  * https://github.com/riscv-non-isa/riscv-elf-psabi-doc/blob/master/riscv-cc.adoc#risc-v-calling-conventions
+  */
+ 
++struct pt_regs___riscv {
++	unsigned long orig_a0;
++} __attribute__((preserve_access_index));
++
+ /* riscv provides struct user_regs_struct instead of struct pt_regs to userspace */
+ #define __PT_REGS_CAST(x) ((const struct user_regs_struct *)(x))
+ #define __PT_PARM1_REG a0
+@@ -362,12 +366,15 @@ struct pt_regs___arm64 {
+ #define __PT_PARM7_REG a6
+ #define __PT_PARM8_REG a7
+ 
+-#define __PT_PARM1_SYSCALL_REG __PT_PARM1_REG
++#define __PT_PARM1_SYSCALL_REG orig_a0
+ #define __PT_PARM2_SYSCALL_REG __PT_PARM2_REG
+ #define __PT_PARM3_SYSCALL_REG __PT_PARM3_REG
+ #define __PT_PARM4_SYSCALL_REG __PT_PARM4_REG
+ #define __PT_PARM5_SYSCALL_REG __PT_PARM5_REG
+ #define __PT_PARM6_SYSCALL_REG __PT_PARM6_REG
++#define PT_REGS_PARM1_SYSCALL(x) (((const struct pt_regs___riscv *)(x))->orig_a0)
++#define PT_REGS_PARM1_CORE_SYSCALL(x) \
++	BPF_CORE_READ((const struct pt_regs___riscv *)(x), __PT_PARM1_SYSCALL_REG)
+ 
+ #define __PT_RET_REG ra
+ #define __PT_FP_REG s0
+-- 
+2.34.1
+
