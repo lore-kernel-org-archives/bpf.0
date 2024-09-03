@@ -1,48 +1,48 @@
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41CF61917E9;
-	Tue,  3 Sep 2024 18:30:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81B971922CE;
+	Tue,  3 Sep 2024 18:30:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725388254; cv=none; b=lS4sY0Ap8lLVuYttyUyALVC+CdSVQPk+ITer/HcD/Rk95XYWlXRp7xXU4vme4fxNJdWPiO2elKUFc3kf6B01LcMiE6uzqWwQ1gx9BpYSNREyVeQQFxIlyZKHiLS9oErlXNiZ6GAXIAFrd5Lnw8EHBtSdngewPb5ISWBBWRFzwoQ=
+	t=1725388255; cv=none; b=Ly7fPxLHD/QA/KthGM+9a3+cyGLN9fkKujihN6SkpLZ0dniIwlNmunfk4FzrP2fVOGEZpAJPV9Yrb/zGnJMnsRAqyPkofbWrBd4+l7xGLc7ffWA+NOYhy7A/udhOt+J6Tx6N025rlVjIFK/0HS1yuRc+MeHHgUTh4e0NHWj0eeE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725388254; c=relaxed/simple;
-	bh=RMl/2tSkzEFMDLFYEEtH4j/TR5cHFrHAvTbNOtLO0vA=;
+	s=arc-20240116; t=1725388255; c=relaxed/simple;
+	bh=Fg2F6R3nFvdMHEpobW/4u4lur5BSuO0Kf0dhd4qTKUI=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=cWRBWu7/wwMMjfUeHRB/PvpLUGNbhL53HgA60XxZR9pu4vojRMAk6X9JrnKnqUPMiJ+mzHlcY4RkoJBsu9MHwkod6vhZ+viDRokGlYYhlZ0ZCMur6YeILcggFpDJHyZhLgKUqbA3SqQANKVgxU6HXGFDakUvVaJt+ZeFhCUJAVU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KOmWGhi0; arc=none smtp.client-ip=198.175.65.18
+	 MIME-Version; b=WPNkqv08yaD0YXA97nXGRY18X8Qg5nYVMAJBUr/L/KiINZi6auCUHZXLx7pmDa6+5mqngypN8tImLgV1GU0/OKs3pWREvD42zCly0jKMm+EnNpDfooe/2fZilvEiT0b14pRKW9STIOqLCVspt83VmG+wVxRZiijwEzvY7BSF8eI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=a6oBwy5u; arc=none smtp.client-ip=198.175.65.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KOmWGhi0"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="a6oBwy5u"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1725388252; x=1756924252;
+  t=1725388253; x=1756924253;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=RMl/2tSkzEFMDLFYEEtH4j/TR5cHFrHAvTbNOtLO0vA=;
-  b=KOmWGhi02BiIdJ++pmcxxvkh/l435eowTQEZYHie9i/RcRXWTURHBFO6
-   cf/zZVDJYlQE7mFxNTCoiFhzzACqu0S/ZNusTql5ue59qS0Ehrh2mZpNW
-   xCIp65kWPRxnjuwdmk0mLRMqxNU366EoVaXM6AqzuKiiXY4m7EOkfrJSP
-   siL3hlnlqWJlSLVsC8QS4fZha5duHq0yRwNKeRNZnrRRebIOI+sBANuRQ
-   7kqwvHM/p5WY+la5GKPl6iDLQ1kHmbwZjBHNdUO5D1s7gEfE41ZmW+/y9
-   uAb6GEifZdKgZHlIL6V9i/M5Yvzc3lAsX89NZEeBx1ro9VZK8+fKFAlK6
-   Q==;
-X-CSE-ConnectionGUID: FdR+3jQVRLeDmzAjRhUQ9A==
-X-CSE-MsgGUID: B0VOutaERUOOQPKHui93Cg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11184"; a="24147007"
+  bh=Fg2F6R3nFvdMHEpobW/4u4lur5BSuO0Kf0dhd4qTKUI=;
+  b=a6oBwy5uluSzkWEhTQKuAomgVP/YWCEtesA674C4VuMJeyy9e5xHqI/5
+   04FvzyrRXvNk5K08Wml6F0h+W5jE+p1zsIpHIHxgWgJjMSzwlaZ4JqHQ2
+   b/JiLXWZQVBHUzOPCj3f94LVgYDUqf8gyHTZktMipLWm/xfwB2jZWPvrJ
+   O70f5YXTFfrcvRbQ49eRRNXUWF4fRhtxxflbt68CybenJVr1rtT+LzaTz
+   cKftL+I0/Wl+57gUUpNHEzOxxagmNB87kzbX88+TxnxSdCcAHqZ3kAEtp
+   yVHIhAYQBRlugIAw9MjDwl6KFMkqCl+NkTJY+LVvmi0nPrLPkCVaaKBD5
+   A==;
+X-CSE-ConnectionGUID: sQN5f+hKQnWkFjCleiMglw==
+X-CSE-MsgGUID: owishKdvTGWHXbUQRO0ieA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11184"; a="24147022"
 X-IronPort-AV: E=Sophos;i="6.10,199,1719903600"; 
-   d="scan'208";a="24147007"
+   d="scan'208";a="24147022"
 Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Sep 2024 11:30:51 -0700
-X-CSE-ConnectionGUID: LKLSjR9IT7SPVzLVlP2rNw==
-X-CSE-MsgGUID: n14Cb9X+QT2bK819bliw6g==
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Sep 2024 11:30:52 -0700
+X-CSE-ConnectionGUID: Q7/catdbTxO2k4Mcg33LwA==
+X-CSE-MsgGUID: PaMTAdJpRsW1RE1U4eYlzQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.10,199,1719903600"; 
-   d="scan'208";a="88250232"
+   d="scan'208";a="88250246"
 Received: from anguy11-upstream.jf.intel.com ([10.166.9.133])
-  by fmviesa002.fm.intel.com with ESMTP; 03 Sep 2024 11:30:50 -0700
+  by fmviesa002.fm.intel.com with ESMTP; 03 Sep 2024 11:30:51 -0700
 From: Tony Nguyen <anthony.l.nguyen@intel.com>
 To: davem@davemloft.net,
 	kuba@kernel.org,
@@ -65,9 +65,9 @@ Cc: Larysa Zaremba <larysa.zaremba@intel.com>,
 	john.fastabend@gmail.com,
 	bpf@vger.kernel.org,
 	Chandan Kumar Rout <chandanx.rout@intel.com>
-Subject: [PATCH net 3/6] ice: check for XDP rings instead of bpf program when unconfiguring
-Date: Tue,  3 Sep 2024 11:30:29 -0700
-Message-ID: <20240903183034.3530411-4-anthony.l.nguyen@intel.com>
+Subject: [PATCH net 5/6] ice: remove ICE_CFG_BUSY locking from AF_XDP code
+Date: Tue,  3 Sep 2024 11:30:31 -0700
+Message-ID: <20240903183034.3530411-6-anthony.l.nguyen@intel.com>
 X-Mailer: git-send-email 2.42.0
 In-Reply-To: <20240903183034.3530411-1-anthony.l.nguyen@intel.com>
 References: <20240903183034.3530411-1-anthony.l.nguyen@intel.com>
@@ -81,103 +81,58 @@ Content-Transfer-Encoding: 8bit
 
 From: Larysa Zaremba <larysa.zaremba@intel.com>
 
-If VSI rebuild is pending, .ndo_bpf() can attach/detach the XDP program on
-VSI without applying new ring configuration. When unconfiguring the VSI, we
-can encounter the state in which there is an XDP program but no XDP rings
-to destroy or there will be XDP rings that need to be destroyed, but no XDP
-program to indicate their presence.
+Locking used in ice_qp_ena() and ice_qp_dis() does pretty much nothing,
+because ICE_CFG_BUSY is a state flag that is supposed to be set in a PF
+state, not VSI one. Therefore it does not protect the queue pair from
+e.g. reset.
 
-When unconfiguring, rely on the presence of XDP rings rather then XDP
-program, as they better represent the current state that has to be
-destroyed.
+Remove ICE_CFG_BUSY locking from ice_qp_dis() and ice_qp_ena().
 
+Fixes: 2d4238f55697 ("ice: Add support for AF_XDP")
 Reviewed-by: Wojciech Drewek <wojciech.drewek@intel.com>
 Reviewed-by: Jacob Keller <jacob.e.keller@intel.com>
 Tested-by: Chandan Kumar Rout <chandanx.rout@intel.com>
-Acked-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Reviewed-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
 Signed-off-by: Larysa Zaremba <larysa.zaremba@intel.com>
 Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
 ---
- drivers/net/ethernet/intel/ice/ice_lib.c  | 4 ++--
- drivers/net/ethernet/intel/ice/ice_main.c | 4 ++--
- drivers/net/ethernet/intel/ice/ice_xsk.c  | 6 +++---
- 3 files changed, 7 insertions(+), 7 deletions(-)
+ drivers/net/ethernet/intel/ice/ice_xsk.c | 9 ---------
+ 1 file changed, 9 deletions(-)
 
-diff --git a/drivers/net/ethernet/intel/ice/ice_lib.c b/drivers/net/ethernet/intel/ice/ice_lib.c
-index c1c1b63d9701..3dccfaba024c 100644
---- a/drivers/net/ethernet/intel/ice/ice_lib.c
-+++ b/drivers/net/ethernet/intel/ice/ice_lib.c
-@@ -2426,7 +2426,7 @@ void ice_vsi_decfg(struct ice_vsi *vsi)
- 		dev_err(ice_pf_to_dev(pf), "Failed to remove RDMA scheduler config for VSI %u, err %d\n",
- 			vsi->vsi_num, err);
- 
--	if (ice_is_xdp_ena_vsi(vsi))
-+	if (vsi->xdp_rings)
- 		/* return value check can be skipped here, it always returns
- 		 * 0 if reset is in progress
- 		 */
-@@ -2528,7 +2528,7 @@ static void ice_vsi_release_msix(struct ice_vsi *vsi)
- 		for (q = 0; q < q_vector->num_ring_tx; q++) {
- 			ice_write_itr(&q_vector->tx, 0);
- 			wr32(hw, QINT_TQCTL(vsi->txq_map[txq]), 0);
--			if (ice_is_xdp_ena_vsi(vsi)) {
-+			if (vsi->xdp_rings) {
- 				u32 xdp_txq = txq + vsi->num_xdp_txq;
- 
- 				wr32(hw, QINT_TQCTL(vsi->txq_map[xdp_txq]), 0);
-diff --git a/drivers/net/ethernet/intel/ice/ice_main.c b/drivers/net/ethernet/intel/ice/ice_main.c
-index 4edaddcba3b4..22b8ef5faf8d 100644
---- a/drivers/net/ethernet/intel/ice/ice_main.c
-+++ b/drivers/net/ethernet/intel/ice/ice_main.c
-@@ -7249,7 +7249,7 @@ int ice_down(struct ice_vsi *vsi)
- 	if (tx_err)
- 		netdev_err(vsi->netdev, "Failed stop Tx rings, VSI %d error %d\n",
- 			   vsi->vsi_num, tx_err);
--	if (!tx_err && ice_is_xdp_ena_vsi(vsi)) {
-+	if (!tx_err && vsi->xdp_rings) {
- 		tx_err = ice_vsi_stop_xdp_tx_rings(vsi);
- 		if (tx_err)
- 			netdev_err(vsi->netdev, "Failed stop XDP rings, VSI %d error %d\n",
-@@ -7266,7 +7266,7 @@ int ice_down(struct ice_vsi *vsi)
- 	ice_for_each_txq(vsi, i)
- 		ice_clean_tx_ring(vsi->tx_rings[i]);
- 
--	if (ice_is_xdp_ena_vsi(vsi))
-+	if (vsi->xdp_rings)
- 		ice_for_each_xdp_txq(vsi, i)
- 			ice_clean_tx_ring(vsi->xdp_rings[i]);
- 
 diff --git a/drivers/net/ethernet/intel/ice/ice_xsk.c b/drivers/net/ethernet/intel/ice/ice_xsk.c
-index a659951fa987..8693509efbe7 100644
+index 8693509efbe7..5dee829bfc47 100644
 --- a/drivers/net/ethernet/intel/ice/ice_xsk.c
 +++ b/drivers/net/ethernet/intel/ice/ice_xsk.c
-@@ -39,7 +39,7 @@ static void ice_qp_reset_stats(struct ice_vsi *vsi, u16 q_idx)
- 	       sizeof(vsi_stat->rx_ring_stats[q_idx]->rx_stats));
- 	memset(&vsi_stat->tx_ring_stats[q_idx]->stats, 0,
- 	       sizeof(vsi_stat->tx_ring_stats[q_idx]->stats));
--	if (ice_is_xdp_ena_vsi(vsi))
-+	if (vsi->xdp_rings)
- 		memset(&vsi->xdp_rings[q_idx]->ring_stats->stats, 0,
- 		       sizeof(vsi->xdp_rings[q_idx]->ring_stats->stats));
- }
-@@ -52,7 +52,7 @@ static void ice_qp_reset_stats(struct ice_vsi *vsi, u16 q_idx)
- static void ice_qp_clean_rings(struct ice_vsi *vsi, u16 q_idx)
- {
- 	ice_clean_tx_ring(vsi->tx_rings[q_idx]);
--	if (ice_is_xdp_ena_vsi(vsi))
-+	if (vsi->xdp_rings)
- 		ice_clean_tx_ring(vsi->xdp_rings[q_idx]);
- 	ice_clean_rx_ring(vsi->rx_rings[q_idx]);
- }
-@@ -194,7 +194,7 @@ static int ice_qp_dis(struct ice_vsi *vsi, u16 q_idx)
- 	err = ice_vsi_stop_tx_ring(vsi, ICE_NO_RESET, 0, tx_ring, &txq_meta);
- 	if (!fail)
- 		fail = err;
--	if (ice_is_xdp_ena_vsi(vsi)) {
-+	if (vsi->xdp_rings) {
- 		struct ice_tx_ring *xdp_ring = vsi->xdp_rings[q_idx];
+@@ -165,7 +165,6 @@ static int ice_qp_dis(struct ice_vsi *vsi, u16 q_idx)
+ 	struct ice_q_vector *q_vector;
+ 	struct ice_tx_ring *tx_ring;
+ 	struct ice_rx_ring *rx_ring;
+-	int timeout = 50;
+ 	int fail = 0;
+ 	int err;
  
- 		memset(&txq_meta, 0, sizeof(txq_meta));
+@@ -176,13 +175,6 @@ static int ice_qp_dis(struct ice_vsi *vsi, u16 q_idx)
+ 	rx_ring = vsi->rx_rings[q_idx];
+ 	q_vector = rx_ring->q_vector;
+ 
+-	while (test_and_set_bit(ICE_CFG_BUSY, vsi->state)) {
+-		timeout--;
+-		if (!timeout)
+-			return -EBUSY;
+-		usleep_range(1000, 2000);
+-	}
+-
+ 	synchronize_net();
+ 	netif_carrier_off(vsi->netdev);
+ 	netif_tx_stop_queue(netdev_get_tx_queue(vsi->netdev, q_idx));
+@@ -261,7 +253,6 @@ static int ice_qp_ena(struct ice_vsi *vsi, u16 q_idx)
+ 		netif_tx_start_queue(netdev_get_tx_queue(vsi->netdev, q_idx));
+ 		netif_carrier_on(vsi->netdev);
+ 	}
+-	clear_bit(ICE_CFG_BUSY, vsi->state);
+ 
+ 	return fail;
+ }
 -- 
 2.42.0
 
