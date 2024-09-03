@@ -1,169 +1,140 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5895818E03F;
-	Tue,  3 Sep 2024 16:33:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74C0C18B49A
+	for <bpf@vger.kernel.org>; Tue,  3 Sep 2024 16:51:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725381200; cv=none; b=JF+3OVTbeDyMrlZmuWoYtwhCsQB8f593xpnO/dqss7zZXE6Usr7RjquVXSYT7kq3QvA8rsoLwlABHXyJR4KAAMYBQFgj6fQxj5eUHu1LFaxwOu7GTHpQSFFpdKQLITo1PWuf2TKT8JMdCafzLElrrD11XDE3UGL0KbvrMqwR/cQ=
+	t=1725382295; cv=none; b=jYjIpAx6x4ZzKmHAlhLh9qeFABeQgdcAPWY4Bo1UYk+aaw+QV58L3ctZsquHNdn0gJseOyuIHai8V+GpX4KAPP+j9i5w4zs8wJHFQfv2wrXKk78DjY9IX9WAbrw9690T9KZjR2gnvSISSKJTmUhJD0ME/QNZK9+zbXKV/oErVfw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725381200; c=relaxed/simple;
-	bh=MhS/oq03SSj2QvqQptvoFaLxq+uZXfCftTTcDAD6ccg=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=EioiYwFh4I1Gu5DnDpH7mcFeuLlzNRdfIn8thFWSw45FCT3vGouBOkGBwKkAmSyUoiPQM0gL+WZbRPYh9UpjQPa27jug2nirAeg5mDopjvEH9x2ErmNSCGMxricwuDjHwWk07rq1NhN7gkzbzw3IiPZ5NgFEiaLl6RglQXBKSXI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Z1Vx1tiL; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1725382295; c=relaxed/simple;
+	bh=c73ayQr7Zfsad3Z61HVujyKJHjiyT95khZVu2WfxZqo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=A3DFDXAC8XwMtBtYlv7ToUz/unHbr+smlp+a4AJQLTGaRegQDU6AeHSYqOXrHlHCLGOoWkouVDyj9bCzabx5Z35IWKcuYvvCrs3G5zQ8N3p+M9+xvSkFAUeJkh04HR0aL8mjUY7UuXOPZE5EEPUsbinZ2RShD8FXN5pWOI0R6ZU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GO27XMGc; arc=none smtp.client-ip=209.85.216.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Z1Vx1tiL"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE847C4CEC9;
-	Tue,  3 Sep 2024 16:33:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725381200;
-	bh=MhS/oq03SSj2QvqQptvoFaLxq+uZXfCftTTcDAD6ccg=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Z1Vx1tiLbI0CrfAXXVK5SpvMHQcdHDZ3GoiBjMxB5WDjVzV/MOr8zjDgVvJ9C/IIJ
-	 eW0fYTV80rauFWOwgslRWUOohhntsX3SCJwVUwiYHCXMz3ryEyAHuh+1bBc2mK6OUO
-	 yglq7MaK7AzWRbRFwY4gJSYz1OTBvqMtJtxlhhDHTFWOCexDFJw/RSSQ8YnICWKVas
-	 trdhdOYhlEkVAwxtJKGvD2Xas/pwFrgJ2elsis+3upsbvCUcdJW2OxJ8mT2Xu3AGPr
-	 NNsWXfZ4vBRl93VTaf9OW+F0cV+MYVholBUGA03p3MbEvGrc87PAQnY9nwOF7AsPQu
-	 J2FtqbQoyhx5g==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-	id 4FFD0CE2610; Tue,  3 Sep 2024 09:33:19 -0700 (PDT)
-From: "Paul E. McKenney" <paulmck@kernel.org>
-To: rcu@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org,
-	kernel-team@meta.com,
-	rostedt@goodmis.org,
-	Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Kent Overstreet <kent.overstreet@linux.dev>,
-	bpf@vger.kernel.org,
-	"Paul E. McKenney" <paulmck@kernel.org>
-Subject: [PATCH rcu 08/11] rcutorture: Expand RCUTORTURE_RDR_MASK_[12] to eight bits
-Date: Tue,  3 Sep 2024 09:33:15 -0700
-Message-Id: <20240903163318.480678-8-paulmck@kernel.org>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <26cddadd-a79b-47b1-923e-9684cd8a7ef4@paulmck-laptop>
-References: <26cddadd-a79b-47b1-923e-9684cd8a7ef4@paulmck-laptop>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GO27XMGc"
+Received: by mail-pj1-f47.google.com with SMTP id 98e67ed59e1d1-2d88edf1340so2153351a91.1
+        for <bpf@vger.kernel.org>; Tue, 03 Sep 2024 09:51:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1725382293; x=1725987093; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=EnlSH43JVn1Es3oVmSZPXjJsvT6RRjh+9zUkVE/oA8Q=;
+        b=GO27XMGcwt5ndPOb2J4vZgp/ch5XKBhcQVYqr0s0rKwY18yiHzdg/tbsS+HqcjjbAO
+         pOCnVEHB9EaAwnXhrpa9bxBHWKJcVXxX8SUvj7pptO/2pSWmb5ytlH+Mqd5fdbuJ3h3b
+         n+TxKmQRBLWlcR8qOqwnvGwF3TqiNy0mDw2Emeq2vZnKYpKUKIm/UbPLfReCbOMXYO9G
+         WIgBCPdB+bplzx9mL8NZiY7RuQ5iDseWkUuqjF+JkTARZ1ax8qv1y7bb32JGw0/mbqw6
+         w434Ed2eJMmcoGGz0QGBekBdqzl9M6LLaTzmXIN+d1sNY2FF+rMQEvpcG1R4KkE95uFY
+         T1MQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1725382293; x=1725987093;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=EnlSH43JVn1Es3oVmSZPXjJsvT6RRjh+9zUkVE/oA8Q=;
+        b=sZZbCo3iUL+iiC6Txs+epYUyfe4fjynZL7czpoJhrcsaFPKAKo8GxkT/Yge/h7rTsy
+         BSvySbUda9Y9OJKngvTLtW6tqZLKlq0aRASJGJ+YT4Cox6CnWC1R2Owrh+2OWgOFub3u
+         9t9UzN/4420qK5MW+jdrCLorM3bk47IPXLEtVSoD9/HmFMjQnYO281NQaftu8F2+Le1d
+         bua+RIcsiFtHFtGIgk74e6M1Znn28JID/t/ooJ8HO/TtjGktt85TMzg2SEGE/gdb1+dN
+         u9L1HY6+Y+B9uVSwDvYLI3YmWMpgWcNg+xFI0jQEe07ylYXtyxJJz+Esyl6D+GWWP2Z2
+         HvFg==
+X-Gm-Message-State: AOJu0Yzm6sw0EGY+UBMQGfs1b/Oe0E1WYYYUyn0Utis+sIXwLphf03Gx
+	y9V2rani5fHZvaVH79RZtUEgiKGn+09ZDrK7oQsHn8WqaC5gJ1TDcb756WSO6SeMaZYGQ2PwgYx
+	ITYiAT7gpKYmyoLcFMW4C4A1sphA=
+X-Google-Smtp-Source: AGHT+IGA3kCrhL33aHVqhL8NJfdf9JMH8IA/SWFqzJ6DCrlbVH8i1XF01pTT9Ud1PzpH6kNiMf2CN1r5QW3cBuW6prc=
+X-Received: by 2002:a17:90b:350d:b0:2d3:c9bb:9cd7 with SMTP id
+ 98e67ed59e1d1-2da55a77e52mr3804504a91.36.1725382293509; Tue, 03 Sep 2024
+ 09:51:33 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20240901213040.766724-1-yatsenko@meta.com> <695c2a92-a79d-5f8d-e3a9-00cd11b5f961@iogearbox.net>
+In-Reply-To: <695c2a92-a79d-5f8d-e3a9-00cd11b5f961@iogearbox.net>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Tue, 3 Sep 2024 09:51:20 -0700
+Message-ID: <CAEf4BzZ-_3AyvZN_0tbqYswax4Xx3fPrv_renMuxY_QLcNhcuQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] bpftool: Fix handling enum64 in btf dump sorting
+To: Daniel Borkmann <daniel@iogearbox.net>
+Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org, kafai@meta.com, 
+	kernel-team@meta.com, Mykyta Yatsenko <yatsenko@meta.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-This commit prepares for testing of multiple SRCU reader flavors by
-expanding RCUTORTURE_RDR_MASK_1 and RCUTORTURE_RDR_MASK_2 from a single
-bit to eight bits, allowing them to accommodate the return values from
-multiple calls to srcu_read_lock*().  This will in turn permit better
-testing coverage for these SRCU reader flavors, including testing of
-the diagnostics for inproper use of mixed reader flavors.
+On Mon, Sep 2, 2024 at 9:22=E2=80=AFAM Daniel Borkmann <daniel@iogearbox.ne=
+t> wrote:
+>
+> On 9/1/24 11:30 PM, "Mykyta Yatsenko mykyta.yatsenko5"@gmail.com wrote:
+> > From: Mykyta Yatsenko <yatsenko@meta.com>
+> >
+> > Wrong function is used to access the first enum64 element.
+> > Substituting btf_enum(t) with btf_enum64(t) for BTF_KIND_ENUM64.
+> >
+> > Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
+> > ---
+> >   tools/bpf/bpftool/btf.c | 13 ++++++++++---
+> >   1 file changed, 10 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/tools/bpf/bpftool/btf.c b/tools/bpf/bpftool/btf.c
+> > index 6789c7a4d5ca..b0f12c511bb3 100644
+> > --- a/tools/bpf/bpftool/btf.c
+> > +++ b/tools/bpf/bpftool/btf.c
+> > @@ -557,16 +557,23 @@ static const char *btf_type_sort_name(const struc=
+t btf *btf, __u32 index, bool f
+> >       const struct btf_type *t =3D btf__type_by_id(btf, index);
+> >
+> >       switch (btf_kind(t)) {
+> > -     case BTF_KIND_ENUM:
+> > -     case BTF_KIND_ENUM64: {
+> > +     case BTF_KIND_ENUM: {
+> >               int name_off =3D t->name_off;
+> >
+> >               /* Use name of the first element for anonymous enums if a=
+llowed */
+> > -             if (!from_ref && !t->name_off && btf_vlen(t))
+> > +             if (!from_ref && !name_off && btf_vlen(t))
+> >                       name_off =3D btf_enum(t)->name_off;
+> >
+> >               return btf__name_by_offset(btf, name_off);
+> >       }
+>
+> Small nit, could we consolidate the logic into the below? Still somewhat =
+nicer
+> than duplicating all of the rest.
+>
+> diff --git a/tools/bpf/bpftool/btf.c b/tools/bpf/bpftool/btf.c
+> index 6789c7a4d5ca..aae6f5262c6a 100644
+> --- a/tools/bpf/bpftool/btf.c
+> +++ b/tools/bpf/bpftool/btf.c
+> @@ -562,8 +562,10 @@ static const char *btf_type_sort_name(const struct b=
+tf *btf, __u32 index, bool f
+>                  int name_off =3D t->name_off;
+>
+>                  /* Use name of the first element for anonymous enums if =
+allowed */
+> -               if (!from_ref && !t->name_off && btf_vlen(t))
+> -                       name_off =3D btf_enum(t)->name_off;
+> +               if (!from_ref && !name_off && btf_vlen(t))
+> +                       name_off =3D btf_kind(t) =3D=3D BTF_KIND_ENUM64 ?
 
-Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-Cc: Alexei Starovoitov <ast@kernel.org>
-Cc: Andrii Nakryiko <andrii@kernel.org>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Kent Overstreet <kent.overstreet@linux.dev>
-Cc: <bpf@vger.kernel.org>
----
- kernel/rcu/rcutorture.c | 28 ++++++++++++++--------------
- 1 file changed, 14 insertions(+), 14 deletions(-)
+Just fyi for the future (I don't think we need to fix this or anything
+like that), but using BTF_KIND_xxx constants in btf_kind(t)
+comparisons should be rare. Libbpf provides a full set of shorter
+btf_is_xxx(t) helpers for this. So this would be just
+`btf_is_enum64(t)`. What you did is not wrong, it's just more
+open-coded and verbose.
 
-diff --git a/kernel/rcu/rcutorture.c b/kernel/rcu/rcutorture.c
-index b4cb7623a8bfc..d883f01407178 100644
---- a/kernel/rcu/rcutorture.c
-+++ b/kernel/rcu/rcutorture.c
-@@ -57,9 +57,9 @@ MODULE_AUTHOR("Paul E. McKenney <paulmck@linux.ibm.com> and Josh Triplett <josh@
- 
- /* Bits for ->extendables field, extendables param, and related definitions. */
- #define RCUTORTURE_RDR_SHIFT_1	 8	/* Put SRCU index in upper bits. */
--#define RCUTORTURE_RDR_MASK_1	 (1 << RCUTORTURE_RDR_SHIFT_1)
--#define RCUTORTURE_RDR_SHIFT_2	 9	/* Put SRCU index in upper bits. */
--#define RCUTORTURE_RDR_MASK_2	 (1 << RCUTORTURE_RDR_SHIFT_2)
-+#define RCUTORTURE_RDR_MASK_1	 (0xff << RCUTORTURE_RDR_SHIFT_1)
-+#define RCUTORTURE_RDR_SHIFT_2	 16	/* Put SRCU index in upper bits. */
-+#define RCUTORTURE_RDR_MASK_2	 (0xff << RCUTORTURE_RDR_SHIFT_2)
- #define RCUTORTURE_RDR_BH	 0x01	/* Extend readers by disabling bh. */
- #define RCUTORTURE_RDR_IRQ	 0x02	/*  ... disabling interrupts. */
- #define RCUTORTURE_RDR_PREEMPT	 0x04	/*  ... disabling preemption. */
-@@ -71,6 +71,9 @@ MODULE_AUTHOR("Paul E. McKenney <paulmck@linux.ibm.com> and Josh Triplett <josh@
- #define RCUTORTURE_MAX_EXTEND	 \
- 	(RCUTORTURE_RDR_BH | RCUTORTURE_RDR_IRQ | RCUTORTURE_RDR_PREEMPT | \
- 	 RCUTORTURE_RDR_RBH | RCUTORTURE_RDR_SCHED)
-+#define RCUTORTURE_RDR_ALLBITS	\
-+	(RCUTORTURE_MAX_EXTEND | RCUTORTURE_RDR_RCU_1 | RCUTORTURE_RDR_RCU_2 | \
-+	 RCUTORTURE_RDR_MASK_1 | RCUTORTURE_RDR_MASK_2)
- #define RCUTORTURE_RDR_MAX_LOOPS 0x7	/* Maximum reader extensions. */
- 					/* Must be power of two minus one. */
- #define RCUTORTURE_RDR_MAX_SEGS (RCUTORTURE_RDR_MAX_LOOPS + 3)
-@@ -1830,7 +1833,7 @@ static void rcutorture_one_extend(int *readstate, int newstate,
- 	int statesold = *readstate & ~newstate;
- 
- 	WARN_ON_ONCE(idxold2 < 0);
--	WARN_ON_ONCE((idxold2 >> RCUTORTURE_RDR_SHIFT_2) > 1);
-+	WARN_ON_ONCE(idxold2 & ~RCUTORTURE_RDR_ALLBITS);
- 	rtrsp->rt_readstate = newstate;
- 
- 	/* First, put new protection in place to avoid critical-section gap. */
-@@ -1845,9 +1848,9 @@ static void rcutorture_one_extend(int *readstate, int newstate,
- 	if (statesnew & RCUTORTURE_RDR_SCHED)
- 		rcu_read_lock_sched();
- 	if (statesnew & RCUTORTURE_RDR_RCU_1)
--		idxnew1 = (cur_ops->readlock() & 0x1) << RCUTORTURE_RDR_SHIFT_1;
-+		idxnew1 = (cur_ops->readlock() << RCUTORTURE_RDR_SHIFT_1) & RCUTORTURE_RDR_MASK_1;
- 	if (statesnew & RCUTORTURE_RDR_RCU_2)
--		idxnew2 = (cur_ops->readlock() & 0x1) << RCUTORTURE_RDR_SHIFT_2;
-+		idxnew2 = (cur_ops->readlock() << RCUTORTURE_RDR_SHIFT_2) & RCUTORTURE_RDR_MASK_2;
- 
- 	/*
- 	 * Next, remove old protection, in decreasing order of strength
-@@ -1867,7 +1870,7 @@ static void rcutorture_one_extend(int *readstate, int newstate,
- 	if (statesold & RCUTORTURE_RDR_RBH)
- 		rcu_read_unlock_bh();
- 	if (statesold & RCUTORTURE_RDR_RCU_2) {
--		cur_ops->readunlock((idxold2 >> RCUTORTURE_RDR_SHIFT_2) & 0x1);
-+		cur_ops->readunlock((idxold2 & RCUTORTURE_RDR_MASK_2) >> RCUTORTURE_RDR_SHIFT_2);
- 		WARN_ON_ONCE(idxnew2 != -1);
- 		idxold2 = 0;
- 	}
-@@ -1877,7 +1880,7 @@ static void rcutorture_one_extend(int *readstate, int newstate,
- 		lockit = !cur_ops->no_pi_lock && !statesnew && !(torture_random(trsp) & 0xffff);
- 		if (lockit)
- 			raw_spin_lock_irqsave(&current->pi_lock, flags);
--		cur_ops->readunlock((idxold1 >> RCUTORTURE_RDR_SHIFT_1) & 0x1);
-+		cur_ops->readunlock((idxold1 & RCUTORTURE_RDR_MASK_1) >> RCUTORTURE_RDR_SHIFT_1);
- 		WARN_ON_ONCE(idxnew1 != -1);
- 		idxold1 = 0;
- 		if (lockit)
-@@ -1892,16 +1895,13 @@ static void rcutorture_one_extend(int *readstate, int newstate,
- 	if (idxnew1 == -1)
- 		idxnew1 = idxold1 & RCUTORTURE_RDR_MASK_1;
- 	WARN_ON_ONCE(idxnew1 < 0);
--	if (WARN_ON_ONCE((idxnew1 >> RCUTORTURE_RDR_SHIFT_1) > 1))
--		pr_info("Unexpected idxnew1 value of %#x\n", idxnew1);
- 	if (idxnew2 == -1)
- 		idxnew2 = idxold2 & RCUTORTURE_RDR_MASK_2;
- 	WARN_ON_ONCE(idxnew2 < 0);
--	WARN_ON_ONCE((idxnew2 >> RCUTORTURE_RDR_SHIFT_2) > 1);
- 	*readstate = idxnew1 | idxnew2 | newstate;
- 	WARN_ON_ONCE(*readstate < 0);
--	if (WARN_ON_ONCE((*readstate >> RCUTORTURE_RDR_SHIFT_2) > 1))
--		pr_info("Unexpected idxnew2 value of %#x\n", idxnew2);
-+	if (WARN_ON_ONCE(*readstate & ~RCUTORTURE_RDR_ALLBITS))
-+		pr_info("Unexpected readstate value of %#x\n", *readstate);
- }
- 
- /* Return the biggest extendables mask given current RCU and boot parameters. */
-@@ -1926,7 +1926,7 @@ rcutorture_extend_mask(int oldmask, struct torture_random_state *trsp)
- 	unsigned long preempts_irq = preempts | RCUTORTURE_RDR_IRQ;
- 	unsigned long bhs = RCUTORTURE_RDR_BH | RCUTORTURE_RDR_RBH;
- 
--	WARN_ON_ONCE(mask >> RCUTORTURE_RDR_SHIFT_1);
-+	WARN_ON_ONCE(mask >> RCUTORTURE_RDR_SHIFT_1);  // Can't have reader idx bits.
- 	/* Mostly only one bit (need preemption!), sometimes lots of bits. */
- 	if (!(randmask1 & 0x7))
- 		mask = mask & randmask2;
--- 
-2.40.1
-
+> +                                  btf_enum64(t)->name_off :
+> +                                  btf_enum(t)->name_off;
+>
+>                  return btf__name_by_offset(btf, name_off);
+>          }
+>
+> Thanks,
+> Daniel
