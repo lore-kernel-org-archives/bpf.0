@@ -1,47 +1,44 @@
-Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15D6D1D9354;
-	Wed,  4 Sep 2024 12:41:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1E121DC06C;
+	Wed,  4 Sep 2024 13:10:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725453681; cv=none; b=f/tRdWnxNTlEVNTEbyalMt4bCTpH7LCcqlDdP/vZXpT0lydnvmHq0PDTEIMgXa4oJas5sn3hdfj/FobvdxvPDP/3FELdmhozUcG2AZmG/mOH9Vht1NBWeDqgpkJNN0VpkaV01HfEelCfzd6ROcT+8RcCFcHBYpJO5VP5KrbVX5Q=
+	t=1725455407; cv=none; b=l0c1zqYvYuueYxrQ3QLfInKRhDWR1dEh78b/y+kkZ0uYmqnjRN7r4xXrUBawaDdbpqCgy4pLx+02xuYiqJpsiz5HTAJEjF27G8SMzqNDAui3Oqmt1RABtulqBjV7ysXv8PAZ99n8yA7mVbt7mxvZlvyaU+kfp4v2adMkZ3w4e/s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725453681; c=relaxed/simple;
-	bh=iq25zN/1fAllIBHLNn/L+clDUrU36h3yvFzfKev23wM=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=ZP/5mZBGYgCXQzeduWb5+CpJTJgWET2oue2WqDZRzbKTguk7KA27hv71CAb4iW8OxyokS0aM7RXdkBj9ckkWzmbGEcVCnCMPxVq9mKmIOYujJxwQDhF5f7AWcDmm3o4m/nsDogtcxDkpqzRmarxpYyuRsqsyqunpl6I4q9rppms=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.93.142])
-	by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4WzMY95tN9z4f3jHl;
-	Wed,  4 Sep 2024 20:41:01 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.75])
-	by mail.maildlp.com (Postfix) with ESMTP id CC62B1A0359;
-	Wed,  4 Sep 2024 20:41:16 +0800 (CST)
-Received: from huawei.com (unknown [10.67.174.45])
-	by APP2 (Coremail) with SMTP id Syh0CgCHvGFdVdhmhod9AQ--.48162S4;
-	Wed, 04 Sep 2024 20:41:16 +0800 (CST)
-From: Tengda Wu <wutengda@huaweicloud.com>
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: Ingo Molnar <mingo@redhat.com>,
-	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	s=arc-20240116; t=1725455407; c=relaxed/simple;
+	bh=y7saYhhmY4HIH/NGyMHPeLYHWBqEunS8IquI7fd6Rk8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=G4GbDo2k85tXooCzvxjcecWfij529z8jIrQUp1txtus+0oc3iHIX6pP+DYr4jMF8x24RUymJWHtloTwzKZpsdsxMebENuYsa9IaAv9rj+E2bYCGqSd8yOpcDGz3cnlwUQpV2R57cTwa+jmrQdW2CSCIGnx8ry0UQr3Qofg7XV1I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=j4sUI+ig; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="j4sUI+ig"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AEEF1C4CEC6;
+	Wed,  4 Sep 2024 13:10:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1725455407;
+	bh=y7saYhhmY4HIH/NGyMHPeLYHWBqEunS8IquI7fd6Rk8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=j4sUI+igb6bNlHUhmZUe1PoS8r3JD6x8Thr+invKaUAWEMl9sxSDlDpoZFSCxkt9A
+	 51XSZ76cZUhpFBA5MRk4LQcbREF1MrCyEgpN1fO8AvxjHSnnE48lJK11MrWrjjcrl2
+	 9sgUv/iw1MA0u4r/ekonE60H5PqmbaZY8NbNx3mU3DLxAOmx2KPVhLkI323Bmh9yum
+	 K6+WbdQ590B9T4EOtZlClV37loEt0W5Z3WCij1Btc4HZXBzi99gyouguODqp9nSxCi
+	 EqA3xfNQRkxRO/Xz7AbPp5RVXj+c4UiXgm5zipHdViZCga2Swb7b/rD5tg57HVMcBJ
+	 jGf3NultZ42tg==
+Date: Wed, 4 Sep 2024 10:09:58 -0300
+From: Arnaldo Carvalho de Melo <acme@kernel.org>
+To: Song Liu <song@kernel.org>, Tengda Wu <wutengda@huaweicloud.com>
+Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
 	Namhyung Kim <namhyung@kernel.org>,
 	Mark Rutland <mark.rutland@arm.com>,
 	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Ian Rogers <irogers@google.com>,
-	Adrian Hunter <adrian.hunter@intel.com>,
-	kan.liang@linux.intel.com,
-	linux-perf-users@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
+	Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
+	Adrian Hunter <adrian.hunter@intel.com>, kan.liang@linux.intel.com,
+	linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
 	bpf@vger.kernel.org
-Subject: [PATCH -next 2/2] perf test: Use sqrtloop workload to test bperf event
-Date: Wed,  4 Sep 2024 12:31:03 +0000
-Message-Id: <20240904123103.732507-3-wutengda@huaweicloud.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240904123103.732507-1-wutengda@huaweicloud.com>
+Subject: Re: [PATCH -next 0/2] perf stat: Support inherit events for bperf
+Message-ID: <ZthcJtXyWk7uJFZY@x1>
 References: <20240904123103.732507-1-wutengda@huaweicloud.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -49,49 +46,39 @@ List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:Syh0CgCHvGFdVdhmhod9AQ--.48162S4
-X-Coremail-Antispam: 1UD129KBjvdXoW7Jr47AFyktw13CrW8Zw18Xwb_yoW3AFg_GF
-	WxXrn7tw4fA3srtrn5Kan5Ar1xXrWfZFykGr1rWF13C390kFy5GFyDZr98A34rWws3t393
-	Wwn7tr1Sya17KjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-	9fnUUIcSsGvfJTRUUUbDkYFVCjjxCrM7AC8VAFwI0_Wr0E3s1l1xkIjI8I6I8E6xAIw20E
-	Y4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l82xGYIkIc2x26280x7IE14v26r15M2
-	8IrcIa0xkI8VCY1x0267AKxVW5JVCq3wA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK
-	021l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F
-	4j6r4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0
-	oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7V
-	C0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j
-	6r4UM4x0Y48IcxkI7VAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4kS14v26r
-	1q6r43MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAF
-	wI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc4
-	0Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AK
-	xVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr
-	1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU1VT5JUU
-	UUU==
-X-CM-SenderInfo: pzxwv0hjgdqx5xdzvxpfor3voofrz/
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240904123103.732507-1-wutengda@huaweicloud.com>
 
-Replace `brstack` workload with `sqrtloop` workload, because `sqrtloop`
-workload contains fork(), which is suitable for testing the bperf event
-inheritance feature.
+On Wed, Sep 04, 2024 at 12:31:01PM +0000, Tengda Wu wrote:
+> Hi,
+> 
+> bperf (perf-stat --bpf-counter) has not supported inherit events
+> during fork() since it was first introduced.
+> 
+> This patch series tries to add this support by:
+>  1) adding two new bpf programs to monitor task lifecycle;
+>  2) recording new tasks in the filter map dynamically;
+>  3) reusing `accum_key` of parent task for new tasks.
 
-Signed-off-by: Tengda Wu <wutengda@huaweicloud.com>
----
- tools/perf/tests/shell/stat_bpf_counters.sh | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Song, can you please take a look?
 
-diff --git a/tools/perf/tests/shell/stat_bpf_counters.sh b/tools/perf/tests/shell/stat_bpf_counters.sh
-index f250b7d6f773..831f02add75e 100755
---- a/tools/perf/tests/shell/stat_bpf_counters.sh
-+++ b/tools/perf/tests/shell/stat_bpf_counters.sh
-@@ -4,7 +4,7 @@
+Thanks in advance!
+
+- Arnaldo
  
- set -e
- 
--workload="perf test -w brstack"
-+workload="perf test -w sqrtloop"
- 
- # check whether $2 is within +/- 20% of $1
- compare_number()
--- 
-2.34.1
-
+> Thanks,
+> Tengda
+> 
+> Tengda Wu (2):
+>   perf stat: Support inherit events during fork() for bperf
+>   perf test: Use sqrtloop workload to test bperf event
+> 
+>  tools/perf/tests/shell/stat_bpf_counters.sh   |  2 +-
+>  tools/perf/util/bpf_counter.c                 |  9 +--
+>  tools/perf/util/bpf_skel/bperf_follower.bpf.c | 75 +++++++++++++++++--
+>  tools/perf/util/bpf_skel/bperf_u.h            |  5 ++
+>  4 files changed, 79 insertions(+), 12 deletions(-)
+> 
+> -- 
+> 2.34.1
