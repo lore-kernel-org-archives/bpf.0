@@ -1,29 +1,28 @@
-Received: from out30-97.freemail.mail.aliyun.com (out30-97.freemail.mail.aliyun.com [115.124.30.97])
+Received: from out30-130.freemail.mail.aliyun.com (out30-130.freemail.mail.aliyun.com [115.124.30.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EB58193422;
-	Thu,  5 Sep 2024 07:56:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.97
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60A73193432;
+	Thu,  5 Sep 2024 07:56:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725522994; cv=none; b=FyNzgx3fAx6Q7qYJFzHiyITT2Nwf60Rgm9fjrpPad9swV3pNJkYdd5p6raHaTfLzX+ZmmIS3TB+Pw6DJYky+fYc0cKQfztLjsGiUI1WMxA54nL+Utjm6BNYtB0IKsYVxcv4jQaCfNNqC8U0seS/5IGAOjvnu0xeYXa6vtzvTE9o=
+	t=1725522996; cv=none; b=DhFOcnKj8/cOjGJdk+OdWLqwCqIQZnLIhoM/hI8vs4XSnN3vk3Z5JhfHIpe5JbdFe7njU/ZHDLUdrSoU3uLEsamw4h96eay954bCgCHSxI3O17IHZAC2KRQ5SX0wFSbwXjuRdekaP5jFoBrl+aQ7ANAeT2n2vwAfMnmBw98EQy8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725522994; c=relaxed/simple;
-	bh=9nX5BEqo/bJuVUV4T906+zK42dyZFMxqoxbNcOlRtAU=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=drijcX7jjSCbfnr+4yDm4RQDvphP0AFhmBXfXSHmlzYWv9tFADbu0NxvxRb4d2ZWCU//hG1ZqPXQsGU908Bkx2lrCRGn0NKg9GK9FQ/CewGKyldMnASu2o7FSjBBpoMfSp/5Xbvl4isgjl3U9gCsnpoZM8KrELuhQC2LcRbvp9Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=SM4dkg2w; arc=none smtp.client-ip=115.124.30.97
+	s=arc-20240116; t=1725522996; c=relaxed/simple;
+	bh=HSbCsyWENOOlMPThk6GgcaOBaiG7kMtdEQK1puFpCCA=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=tzz2S7OhoQBKaZGh5qzbEIIzj7go4X0GaOKakgxLIEUdYjFulAvRbhCemo2eCuazxBCjKqFyrfWzalimIZmubVoo2R3pnU30luoMpfk/xwt60LggmmjRY5o1P+XInW2Zcr0AtbhNN2t7agi7M+YP1tmUCmqnDKRz6P2guPg+v44=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=L4bo04zg; arc=none smtp.client-ip=115.124.30.130
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="SM4dkg2w"
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="L4bo04zg"
 DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
 	d=linux.alibaba.com; s=default;
-	t=1725522990; h=From:To:Subject:Date:Message-Id:MIME-Version;
-	bh=heg5ujh9995FGb5Bxbbr9bVFNtt01S491isl+3eyVds=;
-	b=SM4dkg2wDBVCtiM81sxkeUyOD1h+8jkHwb4OF48R0mRF7dCAjNGwFKrmb3MczM2S3eSBy5aQfCrx0Mc7peP4M1XcKd/N4lTFYHs5ULndurGNcY0/SNfNLbALwaCXCKe9BioxGXZ7yxHNU5SNwpuS2vUVnFfrLpNAK+aQ/uncZ44=
-Received: from localhost(mailfrom:lulie@linux.alibaba.com fp:SMTPD_---0WEKuTDv_1725522987)
+	t=1725522985; h=From:To:Subject:Date:Message-Id:MIME-Version;
+	bh=sdh8MrBU0BE1JM2cVtdUOToCDqNaIfDOUqNsR5L7rn0=;
+	b=L4bo04zg6MRiFYvs9nQztuMphzhmcWtuap5Mx0/KIemsmFkgLaD6Uwyv/D0SZ5YmMceHboexUakg+2xtCymiI7fDnQektrSImUOgnn6djl7NkLihEeM+9mGEeTp/4vGEtU7z7BD5XReW6KovY5afMaBndjLd2frQmZO/pmHEldY=
+Received: from localhost(mailfrom:lulie@linux.alibaba.com fp:SMTPD_---0WEKuTB4_1725522982)
           by smtp.aliyun-inc.com;
-          Thu, 05 Sep 2024 15:56:28 +0800
+          Thu, 05 Sep 2024 15:56:23 +0800
 From: Philo Lu <lulie@linux.alibaba.com>
 To: bpf@vger.kernel.org
 Cc: edumazet@google.com,
@@ -61,12 +60,10 @@ Cc: edumazet@google.com,
 	xuanzhuo@linux.alibaba.com,
 	netdev@vger.kernel.org,
 	linux-trace-kernel@vger.kernel.org
-Subject: [PATCH bpf-next v2 4/5] bpf: Allow bpf_dynptr_from_skb() for tp_btf
-Date: Thu,  5 Sep 2024 15:56:21 +0800
-Message-Id: <20240905075622.66819-5-lulie@linux.alibaba.com>
+Subject: [PATCH bpf-next v2 0/5] bpf: Allow skb dynptr for tp_btf
+Date: Thu,  5 Sep 2024 15:56:17 +0800
+Message-Id: <20240905075622.66819-1-lulie@linux.alibaba.com>
 X-Mailer: git-send-email 2.32.0.3.g01195cf9f
-In-Reply-To: <20240905075622.66819-1-lulie@linux.alibaba.com>
-References: <20240905075622.66819-1-lulie@linux.alibaba.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -75,44 +72,54 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Making tp_btf able to use bpf_dynptr_from_skb(), which is useful for skb
-parsing, especially for non-linear paged skb data. This is achieved by
-adding KF_TRUSTED_ARGS flag to bpf_dynptr_from_skb and registering it
-for TRACING progs. With KF_TRUSTED_ARGS, args from fentry/fexit are
-excluded, so that unsafe progs like fexit/__kfree_skb are not allowed.
+This makes bpf_dynptr_from_skb usable for tp_btf, so that we can easily
+parse skb in tracepoints. This has been discussed in [0], and Martin
+suggested to use dynptr (instead of helpers like bpf_skb_load_bytes).
 
-We also need the skb dynptr to be read-only in tp_btf. Because
-may_access_direct_pkt_data() returns false by default when checking
-bpf_dynptr_from_skb, there is no need to add BPF_PROG_TYPE_TRACING to it
-explicitly.
+For safety, skb dynptr shouldn't be used in fentry/fexit. This is achieved
+by add KF_TRUSTED_ARGS flag in bpf_dynptr_from_skb defination, because
+pointers passed by tracepoint are trusted (PTR_TRUSTED) while those of
+fentry/fexit are not.
 
-Suggested-by: Martin KaFai Lau <martin.lau@linux.dev>
-Signed-off-by: Philo Lu <lulie@linux.alibaba.com>
----
- net/core/filter.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Another problem raises that NULL pointers could be passed to tracepoint,
+such as trace_tcp_send_reset, and we need to recognize them. This is done
+by add a "__nullable" suffix in the func_proto of the tracepoint,
+discussed in [1].
 
-diff --git a/net/core/filter.c b/net/core/filter.c
-index 6d4fa9198b652..4c01f4756ddb5 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -12074,7 +12074,7 @@ int bpf_dynptr_from_skb_rdonly(struct __sk_buff *skb, u64 flags,
- }
- 
- BTF_KFUNCS_START(bpf_kfunc_check_set_skb)
--BTF_ID_FLAGS(func, bpf_dynptr_from_skb)
-+BTF_ID_FLAGS(func, bpf_dynptr_from_skb, KF_TRUSTED_ARGS)
- BTF_KFUNCS_END(bpf_kfunc_check_set_skb)
- 
- BTF_KFUNCS_START(bpf_kfunc_check_set_xdp)
-@@ -12123,6 +12123,7 @@ static int __init bpf_kfunc_init(void)
- 	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_LWT_XMIT, &bpf_kfunc_set_skb);
- 	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_LWT_SEG6LOCAL, &bpf_kfunc_set_skb);
- 	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_NETFILTER, &bpf_kfunc_set_skb);
-+	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_TRACING, &bpf_kfunc_set_skb);
- 	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_XDP, &bpf_kfunc_set_xdp);
- 	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_CGROUP_SOCK_ADDR,
- 					       &bpf_kfunc_set_sock_addr);
--- 
+2 Test cases are added, one for "__nullable" suffix, and the other for
+using skb dynptr in tp_btf.
+
+changelog
+v1 -> v2:
+ - Add "__nullable" suffix support (Alexei Starovoitov)
+ - Replace "struct __sk_buff*" with "void*" in test (Martin KaFai Lau)
+
+[0]
+https://lore.kernel.org/all/20240205121038.41344-1-lulie@linux.alibaba.com/T/
+[1]
+https://lore.kernel.org/all/20240430121805.104618-1-lulie@linux.alibaba.com/T/
+
+Philo Lu (5):
+  bpf: Support __nullable argument suffix for tp_btf
+  selftests/bpf: Add test for __nullable suffix in tp_btf
+  tcp: Use skb__nullable in trace_tcp_send_reset
+  bpf: Allow bpf_dynptr_from_skb() for tp_btf
+  selftests/bpf: Expand skb dynptr selftests for tp_btf
+
+ include/trace/events/tcp.h                    | 12 +++----
+ kernel/bpf/btf.c                              | 13 +++++++
+ kernel/bpf/verifier.c                         | 36 +++++++++++++++++--
+ net/core/filter.c                             |  3 +-
+ .../bpf/bpf_testmod/bpf_testmod-events.h      |  6 ++++
+ .../selftests/bpf/bpf_testmod/bpf_testmod.c   |  2 ++
+ .../testing/selftests/bpf/prog_tests/dynptr.c | 36 +++++++++++++++++--
+ .../selftests/bpf/prog_tests/module_attach.c  | 14 +++++++-
+ .../testing/selftests/bpf/progs/dynptr_fail.c | 25 +++++++++++++
+ .../selftests/bpf/progs/dynptr_success.c      | 23 ++++++++++++
+ .../bpf/progs/test_module_attach_fail.c       | 16 +++++++++
+ 11 files changed, 173 insertions(+), 13 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/progs/test_module_attach_fail.c
+
+--
 2.32.0.3.g01195cf9f
 
