@@ -1,120 +1,108 @@
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03DFB17839C
-	for <bpf@vger.kernel.org>; Thu,  5 Sep 2024 20:46:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDFAA14F125;
+	Thu,  5 Sep 2024 20:54:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725569198; cv=none; b=SiJn8gPH1AmyrUPhy2YUOH9K/MPiUuNb/bHeg2iFBwZch1+MnDyV+qE/sdu06spOd6G9lGa+lPjedJFexP3deS7VQfgKgo5epu4bkdZLkXasixTSx+KCHNciSYmMBiwI2P39w/tmgNUDmsgsK7CkI8kjgIlMuK+VyqDYD90zkqI=
+	t=1725569651; cv=none; b=kLMnAPuxgcZ/RUPfLdTJfvyIyXOItQ8WbEqV8xrPUuuwePyB5Wu2BY1Q90U+wKRWQAdPDSAvWlXQ1hamMz92XM92d2mVO2/suQxGP5fi7vkBFVLg+UPbQ+MxksUBTyD1HJ1Z9543d0VblLbq7Kc1/SI9k9HyuXbmODi+HUnduOU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725569198; c=relaxed/simple;
-	bh=9UgOlqAJ1NVnr3CBtNrLJlsQo+rN7FH/1d8QKyds9ZI=;
-	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
-	 In-Reply-To:Content-Type; b=ClVz0rfbxPCHBgVGW02XYUE1NlTNpSh8h1Poj2YzQaMgU1u2PNeKpvlaFWI+HEBKV5h8rW6JMuDfUazrKa9n1Fh9Y+uZ+fdJ/YEvD3orNf4LbNlh+yrUpDYqf1JPo3VlsO9LNAhterQzbfxW+9h9Rxx2n8cBaLANVzTzDngmFmU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=OXn3KIOc; arc=none smtp.client-ip=213.133.104.62
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
+	s=arc-20240116; t=1725569651; c=relaxed/simple;
+	bh=VtVcaTA8kr3xNL3ypmIYlIJ3WomRggFUtrSaomEP5wM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=OdKRmpiMEWkcGQDDJI9RH22Cq7VmvLCi4SaZZlsR328nx5iiPYsLTtmy+NzlDEOgeobnIHh3K5ROnPtYtK+p4Xqy+Y3fanelByOFrY0HxpjJ4HBNCy7O1oklpwvnLJEBY+QUaEEhBx9PwpCUhUmNSit+fl7r0mT8iCZFtf+4Rns=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=F9c3j/qX; arc=none smtp.client-ip=209.85.216.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="OXn3KIOc"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=H2FJj/RsNFf+Ta8hb3UaIua2T2O8Z1PwDWGEbn1dlDs=; b=OXn3KIOcMBW9Miyk4LRfV5Mt06
-	QcFuaoD/pcgtJazlA4cuR+nYdXTRKc/fJGOI1RdC5zjDDVdODaDrLqWXRmY7skX+ACdUq2NDuNlJ6
-	NRUQnrNMSetJ7J3UqasApL6MF/XTnHhbKGfh6AECcN73rXDVZ7feZo1wfg3VPdk8Z+6fdUqphNWjh
-	jbbSo/JnNVUBzElPoSCL2llnvUEf7o8vJlx/o64p4o+AJedTcQagAFs/fd1zwvIMn5Qp86P7usaaL
-	huvzBIyRfpln4tsUJMMWMulL5v+KuEctsHeza0iVE6EaEWLDD9ILU3wHYmu+esfMFqYmvYVRckAJ2
-	mIpIiEKA==;
-Received: from sslproxy01.your-server.de ([78.46.139.224])
-	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1smJ4N-000A24-Ib; Thu, 05 Sep 2024 22:27:07 +0200
-Received: from [178.197.248.15] (helo=linux.home)
-	by sslproxy01.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1smJ4N-000Nhg-1w;
-	Thu, 05 Sep 2024 22:27:06 +0200
-Subject: Re: [PATCH bpf-next v3 1/6] bpf: Fix helper writes to read-only maps
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: bpf <bpf@vger.kernel.org>, Shung-Hsi Yu <shung-hsi.yu@suse.com>,
- Andrii Nakryiko <andrii@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
- kongln9170@gmail.com
-References: <20240905134813.874-1-daniel@iogearbox.net>
- <CAADnVQJbqoXHMsC3_67xWXpvX8CjzOoRTTA7h_kZgZNOqNVW5w@mail.gmail.com>
-From: Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <14aa3075-2580-ab0d-e90d-bc29d435acd4@iogearbox.net>
-Date: Thu, 5 Sep 2024 22:27:06 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="F9c3j/qX"
+Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-2d8a54f1250so924615a91.0;
+        Thu, 05 Sep 2024 13:54:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1725569649; x=1726174449; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=D/vVqpOqdrwI/OeALxCbnulyGAi+e45HkWSWpudnHpg=;
+        b=F9c3j/qXdvv0mT1jhhJ+4xNM5vSppNfos/sLXjKoxXox8ir5GAAE178CyzLiD4drCI
+         sy+PzqZrvtg+mlPkHfedW4w9EnuD7RYC8Y6WcOb+cnPmYGD5hHqOqwZ8XNDUu7miu+zZ
+         6BktRpp6SL40+xaguZoBSti8pdcWF5k4vFy4dW/g46tmU/jPYi8CtmRJYK/RFLpWTjNB
+         SRYH1IbR44+HqejU+qwM4OZKb935uAlPWpvLFx3/RcSriRLqfGxBRB87QZsOcG0EET9E
+         Coa9gtFguQ9cmpXe43HQ9QmH1i83EInqNo6SGXnr49c3Wz7C26Albs76dWpKChWRunuL
+         ff6w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1725569649; x=1726174449;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=D/vVqpOqdrwI/OeALxCbnulyGAi+e45HkWSWpudnHpg=;
+        b=i8sDACoNsbsahyzSXDJy6ii8pfNshHJFb6A5DjFVjjRrBZJe8zPiVQ2E7GVUXgPVGy
+         83l9bmVKOppePD81gS10NVlNd5pgKndEbBqOieYVbocFIU21RuoJ6oTZHrJ6MFhATJRS
+         4fBN+Ky2lWugnurSt9eRZ9wPQZDb4sd3ExJ1fgffSDqYsbtmfW4iWZhjLV6KrPIp0Rcz
+         vKH17ikc/v02azlAZ8IfDcYJmEL/l8JU8Qc9Q0TdzHPN6MQogfkNkDUfpzl4TUL3Zhzw
+         l9eENh/NIx0rs+kXVKTOT9QXr41ULEcrbhZTQa9B3q6uEGAshs5t0lD292sYXLxq9+Od
+         3YdA==
+X-Forwarded-Encrypted: i=1; AJvYcCVtmnAkwDATrRbeRFEXoXIIy88t+in8uk5w9Bn5dDse1Kg9ishybJC+noZEkJQ0ua7ZShdGMBC76JfUrhJlBsOAms46@vger.kernel.org, AJvYcCW+WKM1cfucTD6DfhPqKEuh5LKf8lYo2aDv6Gbqd8ZzO1i1yBDyau59wU3qm84CCVzpHS7OAzsAFMmkfKsf@vger.kernel.org, AJvYcCX1PXSRqyytKZSaj+QC5LLdIicT0LjQLkEtH7QLQs98tj8tuEctCAyhlYCjM6vDgpfvsT5KwM05GII5QHJaMIJ2Aw==@vger.kernel.org, AJvYcCXGINPb/dAeHuI4+0+eBcO/9ackQtX5WPsaCTbv0CTj5ifUByZrjJ9fnBV6+qhrr2cS9Rs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxkI1+xZh2flR9rz3f22iOkBUw0mSMrdOFmzFO5/280O1M97Gsm
+	c8FTMEpgbvRtUbGI0Dpl6KIXuqTiOPtaNoa+0Q9I5xyqnAcC0ylSeCjCrW18RChJ6XEbWoso0Mw
+	wD9EjyHEDdmFCuuqyG4lIDzHnam0=
+X-Google-Smtp-Source: AGHT+IHOuBGq+ApkrAU0UbGfZKbR2eyqTNiruaFgO7adc5dpEztHv7s7Y4n/YPRGObOuuW2gmX2Yz+GWvEg1scR93j0=
+X-Received: by 2002:a17:90b:4b06:b0:2c9:9658:d704 with SMTP id
+ 98e67ed59e1d1-2dad511280fmr554489a91.40.1725569649131; Thu, 05 Sep 2024
+ 13:54:09 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <CAADnVQJbqoXHMsC3_67xWXpvX8CjzOoRTTA7h_kZgZNOqNVW5w@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.10/27389/Thu Sep  5 10:33:25 2024)
+References: <20240809061004.2112369-1-liaochang1@huawei.com>
+ <20240809061004.2112369-2-liaochang1@huawei.com> <20240812120738.GC11656@redhat.com>
+ <2971107e-75e7-8438-c858-b95202d7b5ea@huawei.com> <20240813124737.GA31977@redhat.com>
+In-Reply-To: <20240813124737.GA31977@redhat.com>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Thu, 5 Sep 2024 13:53:56 -0700
+Message-ID: <CAEf4Bza9UYWv1uM38wBbvmGCEtcvOK3DeybQ9+QGwVf3QyTTyA@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] uprobes: Remove redundant spinlock in uprobe_deny_signal()
+To: Oleg Nesterov <oleg@redhat.com>
+Cc: "Liao, Chang" <liaochang1@huawei.com>, mhiramat@kernel.org, peterz@infradead.org, 
+	mingo@redhat.com, acme@kernel.org, namhyung@kernel.org, mark.rutland@arm.com, 
+	alexander.shishkin@linux.intel.com, jolsa@kernel.org, irogers@google.com, 
+	adrian.hunter@intel.com, kan.liang@linux.intel.com, andrii@kernel.org, 
+	rostedt@goodmis.org, linux-kernel@vger.kernel.org, 
+	linux-trace-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org, 
+	bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 9/5/24 9:39 PM, Alexei Starovoitov wrote:
-> On Thu, Sep 5, 2024 at 6:48 AM Daniel Borkmann <daniel@iogearbox.net> wrote:
->> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
->> index 3956be5d6440..d2c8945e8297 100644
->> --- a/kernel/bpf/helpers.c
->> +++ b/kernel/bpf/helpers.c
->> @@ -539,7 +539,9 @@ const struct bpf_func_proto bpf_strtol_proto = {
->>          .arg1_type      = ARG_PTR_TO_MEM | MEM_RDONLY,
->>          .arg2_type      = ARG_CONST_SIZE,
->>          .arg3_type      = ARG_ANYTHING,
->> -       .arg4_type      = ARG_PTR_TO_LONG,
->> +       .arg4_type      = ARG_PTR_TO_FIXED_SIZE_MEM |
->> +                         MEM_UNINIT | MEM_ALIGNED,
->> +       .arg4_size      = sizeof(long),
->>   };
->>
->>   BPF_CALL_4(bpf_strtoul, const char *, buf, size_t, buf_len, u64, flags,
->> @@ -567,7 +569,9 @@ const struct bpf_func_proto bpf_strtoul_proto = {
->>          .arg1_type      = ARG_PTR_TO_MEM | MEM_RDONLY,
->>          .arg2_type      = ARG_CONST_SIZE,
->>          .arg3_type      = ARG_ANYTHING,
->> -       .arg4_type      = ARG_PTR_TO_LONG,
->> +       .arg4_type      = ARG_PTR_TO_FIXED_SIZE_MEM |
->> +                         MEM_UNINIT | MEM_ALIGNED,
->> +       .arg4_size      = sizeof(unsigned long),
-> 
-> This is not correct.
-> ARG_PTR_TO_LONG is bpf-side "long", not kernel side "long".
-> 
->> -static int int_ptr_type_to_size(enum bpf_arg_type type)
->> -{
->> -       if (type == ARG_PTR_TO_INT)
->> -               return sizeof(u32);
->> -       else if (type == ARG_PTR_TO_LONG)
->> -               return sizeof(u64);
-> 
-> as seen here.
-> 
-> BPF_CALL_4(bpf_strto[u]l, ... long *, res)
-> are buggy.
+On Tue, Aug 13, 2024 at 5:47=E2=80=AFAM Oleg Nesterov <oleg@redhat.com> wro=
+te:
+>
+> On 08/13, Liao, Chang wrote:
+> >
+> >
+> > Oleg, your explaination is more accurate. So I will reword the commit l=
+og and
+> > quote some of your note like this:
+>
+> Oh, please don't. I just tried to explain the history of this spin_lock(s=
+iglock).
+>
+> >   Since we already have the lockless user of clear_thread_flag(TIF_SIGP=
+ENDING).
+> >   And for uprobe singlestep case, it doesn't break the rule of "the sta=
+te of
+> >   TIF_SIGPENDING of every thread is stable with sighand->siglock held".
+>
+> It obviously does break the rule above. Please keep your changelog as is.
+>
+> Oleg.
+>
 
-Right, the int_ptr_type_to_size() checks mem based on u64 vs writing
-long in the helper which mismatches on 32bit archs.
+Liao,
 
-> but they call __bpf_strtoll which takes 'long long' correctly.
-> 
-> The fix for BPF_CALL_4(bpf_strto[u]l and uapi/bpf.h is orthogonal,
-> but this patch shouldn't make the verifier see it as sizeof(long).
+Can you please rebase and resend your patches now that the first part
+of my uprobe patches landed in perf/core? Seems like there is some
+tiny merge conflict or something.
 
-Ok, so I'll fix the BPF_CALL signatures for the affected helpers as
-one more patch and also align arg*_size to {s,u}64 then so that there's
-no mismatch.
-
-Thanks,
-Daniel
+Thanks!
