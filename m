@@ -1,51 +1,52 @@
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FA2A194A42;
-	Thu,  5 Sep 2024 08:07:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.154.123
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35393198A01;
+	Thu,  5 Sep 2024 08:07:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.153.233
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725523656; cv=none; b=GUW4aicZJZ1l4HbtVVMMgI6+P2vl3+pVkbCD7mSxbr0foAiONd214slLvRVQi5eRtI7wCVTm7MFLN7s8xL/aj5sbETA2ZLt/O6sGIIapWvNwOM4FKFwPPKg6CKBvN6FHQltyEu3vytJ6tcaYsbCUB77ltGZadueXCSiM6PIO5lw=
+	t=1725523659; cv=none; b=aE7smvP4scMkC/OprWxtBm1PK/BdmUEXjOzdG2ydOodd7wLJDPXw1wxWuZJxT648JeKIqjS8gT7QvUJFva83Sk9qWauuPP+0HM1XJNqebUTy2dfCCzf/oNL8nTC+0y6Ohx3x7/G06qlOgoq/QJy8ulHTJCM7kETWnJL5Egx6gwg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725523656; c=relaxed/simple;
-	bh=xAVcagYKeai1L5aDpWrNMHA0kV8FWN6WneX4kRW678s=;
+	s=arc-20240116; t=1725523659; c=relaxed/simple;
+	bh=b62wxCPphkMNdqIp8IIYXA+kiVBzUNTWDMg2d+BTP+4=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:References:
-	 In-Reply-To:To:CC; b=UJiday2FpQYXHbnru19LuHfw1gvzcr1X2uDlbPN/lqYQQW5UF+y34htdg4eOUiiXevC36u8UselxArpA2DQkyhVy1B4RanVl7F+xPP+C2MTjUjMWqjfEDcziiZ+zxIzCGDBedjtnpMCGVImdG6bSO5mLRSzi+67g8q7QWQqnPU0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=T3RrpA8g; arc=none smtp.client-ip=68.232.154.123
+	 In-Reply-To:To:CC; b=rwNoxLakPHkxNRsG0LgQhr+rXxVi4IVZCUBzjZEFY2nonpywDNVMmLz1RO0TxNfu7Wd9QX6EwWsOoGOFA6i0hGlIFPMEU8dpf/fuL75UBhvWkflPGnB/KFCD168DkwOcMDY89hP07Oze6KF0DG7IptlAXccr1xwNJZrZscT7790=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=UPgth385; arc=none smtp.client-ip=68.232.153.233
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="T3RrpA8g"
+	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="UPgth385"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1725523655; x=1757059655;
+  t=1725523658; x=1757059658;
   h=from:date:subject:mime-version:content-transfer-encoding:
    message-id:references:in-reply-to:to:cc;
-  bh=xAVcagYKeai1L5aDpWrNMHA0kV8FWN6WneX4kRW678s=;
-  b=T3RrpA8gAJ+OCJmHHM3IkrvaaJi/R6a0JPOfqMDk7P+Kz4K5riUzosma
-   hT+1qA30iuGZZag8tt1/757gyr8tiXYarwmLo/akljfR13MEkzO/g2tpd
-   BbZfdohhZ+Ak1ngFalR0VHfOq38JtJjGQBHa8ZJPEorB+2lyfd8v6+2Xi
-   eq0fl1+PfRpwCxcXsfs0x3LxQ5GUlVvGHzQprJJKwsavRapcd2ML5denz
-   p+zbeXlExFDBjAvz2uxCV/si1h/MEAa5ltCbFW0tIer1ojqZcqAOuLPuB
-   h/3ef20HlxIsbSkGzwtRhtWlDBLdlTm03D0W3/ubcq4icetc5+jQ+kZXD
-   w==;
-X-CSE-ConnectionGUID: rESGLHboTQ606MdHMphuVg==
-X-CSE-MsgGUID: AJ5fZx6XSVaQmx4VSPL0qw==
+  bh=b62wxCPphkMNdqIp8IIYXA+kiVBzUNTWDMg2d+BTP+4=;
+  b=UPgth385ZtJZcc93KE7JsnVaQ0P8FYQxdhsCqBBD6JWjxUkYGicBBEW4
+   LS+ys/pg0e8xQTYxiWvAGV/4ngMgJOFW8No+UNaM0Nbz/4n8wxpG68RK7
+   VCOy7UxyBAiW1Nv4Ns2zteFMKdfDREqmUYr8qJU2+syiCu8yAARQC5WVT
+   /Gcx5WOIwPl2hme7Lzb76mFx3BdTKa6kcSXsGn1iDqfvLt7e305ujWlf4
+   fze14P+WkgqpB0/Nitnt5uy4szvnRlDsH3ykZP7hrWtgadV+gmUYszgdq
+   3D2ulD8ueYSdW8gdJvn9R2OolXhp/BXI5dTEuXUvi2PYnnJ/m57OANNU0
+   A==;
+X-CSE-ConnectionGUID: gT0AKMfBTO+XOzKg9t5R6Q==
+X-CSE-MsgGUID: gq38b+0mTuCmHABD4cTGww==
 X-IronPort-AV: E=Sophos;i="6.10,204,1719903600"; 
-   d="scan'208";a="198790964"
+   d="scan'208";a="262316465"
 X-Amp-Result: SKIPPED(no attachment in message)
 Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 05 Sep 2024 01:07:33 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
- chn-vm-ex02.mchp-main.com (10.10.87.72) with Microsoft SMTP Server
+  by esa5.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 05 Sep 2024 01:07:37 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35; Thu, 5 Sep 2024 01:06:54 -0700
+ 15.1.2507.35; Thu, 5 Sep 2024 01:07:14 -0700
 Received: from [10.205.21.108] (10.10.85.11) by chn-vm-ex02.mchp-main.com
  (10.10.85.144) with Microsoft SMTP Server id 15.1.2507.35 via Frontend
- Transport; Thu, 5 Sep 2024 01:06:52 -0700
+ Transport; Thu, 5 Sep 2024 01:07:12 -0700
 From: Daniel Machon <daniel.machon@microchip.com>
-Date: Thu, 5 Sep 2024 10:06:29 +0200
-Subject: [PATCH net-next 01/12] net: lan966x: select FDMA library
+Date: Thu, 5 Sep 2024 10:06:37 +0200
+Subject: [PATCH net-next 09/12] net: lan966x: use library helper for
+ freeing tx buffers
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -54,7 +55,7 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-ID: <20240905-fdma-lan966x-v1-1-e083f8620165@microchip.com>
+Message-ID: <20240905-fdma-lan966x-v1-9-e083f8620165@microchip.com>
 References: <20240905-fdma-lan966x-v1-0-e083f8620165@microchip.com>
 In-Reply-To: <20240905-fdma-lan966x-v1-0-e083f8620165@microchip.com>
 To: Horatiu Vultur <horatiu.vultur@microchip.com>,
@@ -67,26 +68,35 @@ CC: <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
 	<bpf@vger.kernel.org>
 X-Mailer: b4 0.14-dev
 
-Select the newly introduced FDMA library.
+The library has the helper fdma_free_phys() for freeing physical FDMA
+memory. Use it in the exit path.
 
 Signed-off-by: Daniel Machon <daniel.machon@microchip.com>
 Reviewed-by: Horatiu Vultur <horatiu.vultur@microchip.com>
 ---
- drivers/net/ethernet/microchip/lan966x/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c | 7 +------
+ 1 file changed, 1 insertion(+), 6 deletions(-)
 
-diff --git a/drivers/net/ethernet/microchip/lan966x/Kconfig b/drivers/net/ethernet/microchip/lan966x/Kconfig
-index f9ebffc04eb8..f663b6e12466 100644
---- a/drivers/net/ethernet/microchip/lan966x/Kconfig
-+++ b/drivers/net/ethernet/microchip/lan966x/Kconfig
-@@ -8,6 +8,7 @@ config LAN966X_SWITCH
- 	select PHYLINK
- 	select PAGE_POOL
- 	select VCAP
-+	select FDMA
- 	help
- 	  This driver supports the Lan966x network switch device.
+diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c b/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
+index 1beafadce87a..6f7e3c27c1a7 100644
+--- a/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
++++ b/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
+@@ -229,14 +229,9 @@ static int lan966x_fdma_tx_alloc(struct lan966x_tx *tx)
+ static void lan966x_fdma_tx_free(struct lan966x_tx *tx)
+ {
+ 	struct lan966x *lan966x = tx->lan966x;
+-	struct fdma *fdma = &tx->fdma;
+-	int size;
  
+ 	kfree(tx->dcbs_buf);
+-
+-	size = sizeof(struct fdma_dcb) * fdma->n_dcbs;
+-	size = ALIGN(size, PAGE_SIZE);
+-	dma_free_coherent(lan966x->dev, size, fdma->dcbs, fdma->dma);
++	fdma_free_coherent(lan966x->dev, &tx->fdma);
+ }
+ 
+ static void lan966x_fdma_tx_activate(struct lan966x_tx *tx)
 
 -- 
 2.34.1
