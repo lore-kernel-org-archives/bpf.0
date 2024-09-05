@@ -1,52 +1,52 @@
 Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 971AD194A48;
-	Thu,  5 Sep 2024 08:07:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53383194A73;
+	Thu,  5 Sep 2024 08:07:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.154.123
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725523638; cv=none; b=nztbZL2dzb9Hs+h97HyQ7uUlMGAZm9tudQz9faAlHRcdHOHJncyRwD4zzXj5qULuqrGdg0kzi+rmx1SikSpavDtxYZo9ncJDzIj2RTPWFx4NVHqtrenw0u+pAVEDwYYx58mpBnsB5JITH4mVxSbGOYteP/8Cs+77yzn/aP7E2bw=
+	t=1725523639; cv=none; b=I5VksXbgTPZ5rm49gBPwyNCEp6cBAWibM41kbc+gS6Qv6aZesXco8zgOL9aK13OnMG0zKum/0Tj5gMt4jeElZAa9b4/zNgiQGnCh3qWB/zn30aArvCHr+8KALuBgZe2VEp4REJdI9mD4bM0uBvfgM9jwzoP8vc8NEibU9BKPqXg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725523638; c=relaxed/simple;
-	bh=WdqZWltClNsHkHBP3ox2/SslUl+vy/i1I7VtXRdpTJI=;
+	s=arc-20240116; t=1725523639; c=relaxed/simple;
+	bh=v0UJx/Km6OEA1FP/PhI1HAV2q6XZjFftqU+W595/U7A=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:References:
-	 In-Reply-To:To:CC; b=CG8xa7QDsAJaezkBdjVRJppfF2O9s4mqYkjIztkZ6d3v1XbHAjed2nwDIJrNvZkWsNzwn9zJ4sDBxFN/stZXDq93i1srDyb9yle8BFGs6E4F/4ZkV3ubqg3RPy9C24px3b/SjmptGAnItI9k5kYKAQaqdcV75Hc7yXh9sUQZisc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=UxobY6O+; arc=none smtp.client-ip=68.232.154.123
+	 In-Reply-To:To:CC; b=q6PeJx2SJJeNo3ijJlYnZk4AWc6vh/+UpV5p5SoSShJ+BRWY93Oeh/drVR6P9qPeGBUZTmVkwGcKGRxkYvEfrLLNhKAF8mxl35GnjygZ6lUFuHGzWYUK2pSYUm5p0mwOt6r87heJDNWL4+dNJakMLXG41ded6kJbxWgfuW4SWHc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=DrnDreP9; arc=none smtp.client-ip=68.232.154.123
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="UxobY6O+"
+	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="DrnDreP9"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1725523636; x=1757059636;
+  t=1725523637; x=1757059637;
   h=from:date:subject:mime-version:content-transfer-encoding:
    message-id:references:in-reply-to:to:cc;
-  bh=WdqZWltClNsHkHBP3ox2/SslUl+vy/i1I7VtXRdpTJI=;
-  b=UxobY6O+SLWgXwZk83ZvP5+JDHFL++gAANEGvnAaSSMRjv8nY6M8VYIQ
-   0E3CeJyPBANVvyBrMZEkp1eInJIViqCx0nIKJyDJk5cJ++mH8NOtsETbu
-   24ZMv6lLS3WuDwv3ygstlex2qIh5rZKljDM/6xH+g8/0GP3FdaqusfExh
-   18K6a9FJg+aczI10DVSDEgOO0DlENhqE011DD4dgDAxHl5JXmvNTktEWa
-   T4082pt3WxAX2yFduRqNLZkD7h4ryAG2+JL9UUcwtydd85+m/Q3DfQ7Wy
-   Jzeya6+x2SLz0gHV+uHCsddKGmHXJIg4Jn6u/mlQ31QR7OFrrBV+RDynN
-   A==;
+  bh=v0UJx/Km6OEA1FP/PhI1HAV2q6XZjFftqU+W595/U7A=;
+  b=DrnDreP9dA4kfkco5N1lSDe1F+DVDuCVOD31B0Vo4tQqyl2xqJlbRvhJ
+   EuVkqVG1Rg14F3iyB9ZMLX9xcmuZSob44MM1HBlcoawENr2kaSzTUvbSZ
+   FCxX5DZRW222A+YPJMsaZFWWPYEzVRy0tRbqEENFDQ0Q/iKA2HLdjS1Mf
+   y2KV2Q9AGhwf0/wMnW+zO+1j2X7UhjIOeGLZtmoBqTZVqoIxGATBNx2r6
+   kHCtPYJ/H41RX6L0xfmq+rxWFcF0KqTnvqTeCT/jMYy7BfW4n0M/DwdSR
+   l+JVc4kChCr0vtmn3iiVue7HU1Yt/Q97cm9cEwesTKSOGIrBfHSONhJLb
+   g==;
 X-CSE-ConnectionGUID: un5sTwBcTQSB1/6lZ6FYYg==
-X-CSE-MsgGUID: kXFlxhY2TVybLHqxUJYj4w==
+X-CSE-MsgGUID: YcCkSixSQ+mSEcIaM7dQ5A==
 X-IronPort-AV: E=Sophos;i="6.10,204,1719903600"; 
-   d="scan'208";a="32000384"
+   d="scan'208";a="32000385"
 X-Amp-Result: SKIPPED(no attachment in message)
 Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
   by esa2.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 05 Sep 2024 01:07:13 -0700
 Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
  chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35; Thu, 5 Sep 2024 01:07:04 -0700
+ 15.1.2507.35; Thu, 5 Sep 2024 01:07:12 -0700
 Received: from [10.205.21.108] (10.10.85.11) by chn-vm-ex02.mchp-main.com
  (10.10.85.144) with Microsoft SMTP Server id 15.1.2507.35 via Frontend
- Transport; Thu, 5 Sep 2024 01:07:02 -0700
+ Transport; Thu, 5 Sep 2024 01:07:10 -0700
 From: Daniel Machon <daniel.machon@microchip.com>
-Date: Thu, 5 Sep 2024 10:06:33 +0200
-Subject: [PATCH net-next 05/12] net: lan966x: use FDMA library for adding
- DCB's in the rx path
+Date: Thu, 5 Sep 2024 10:06:36 +0200
+Subject: [PATCH net-next 08/12] net: lan966x: use FDMA library for adding
+ DCB's in the tx path
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -55,7 +55,7 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-ID: <20240905-fdma-lan966x-v1-5-e083f8620165@microchip.com>
+Message-ID: <20240905-fdma-lan966x-v1-8-e083f8620165@microchip.com>
 References: <20240905-fdma-lan966x-v1-0-e083f8620165@microchip.com>
 In-Reply-To: <20240905-fdma-lan966x-v1-0-e083f8620165@microchip.com>
 To: Horatiu Vultur <horatiu.vultur@microchip.com>,
@@ -68,109 +68,131 @@ CC: <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
 	<bpf@vger.kernel.org>
 X-Mailer: b4 0.14-dev
 
-Use the fdma_dcb_add() function to add DCB's in the rx path. This gets
-rid of the open-coding of nextptr and dataptr handling and the functions
-for adding DCB's.
+Use the fdma_dcb_add() function to add DCB's in the tx path. This gets
+rid of the open-coding of nextptr and dataptr handling and leaves it to
+the library.
 
 Signed-off-by: Daniel Machon <daniel.machon@microchip.com>
 Reviewed-by: Horatiu Vultur <horatiu.vultur@microchip.com>
 ---
- .../net/ethernet/microchip/lan966x/lan966x_fdma.c  | 54 ++--------------------
- 1 file changed, 5 insertions(+), 49 deletions(-)
+ .../net/ethernet/microchip/lan966x/lan966x_fdma.c  | 62 +++++++++++-----------
+ 1 file changed, 30 insertions(+), 32 deletions(-)
 
 diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c b/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
-index 99d09c97737e..b85b15ca2052 100644
+index 3afc6c4c68a4..1beafadce87a 100644
 --- a/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
 +++ b/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
-@@ -28,20 +28,6 @@ static int lan966x_fdma_channel_active(struct lan966x *lan966x)
- 	return lan_rd(lan966x, FDMA_CH_ACTIVE);
+@@ -33,6 +33,16 @@ static int lan966x_fdma_tx_dataptr_cb(struct fdma *fdma, int dcb, int db,
+ 	return 0;
  }
  
--static struct page *lan966x_fdma_rx_alloc_page(struct lan966x_rx *rx,
--					       struct fdma_db *db)
--{
--	struct page *page;
--
--	page = page_pool_dev_alloc_pages(rx->page_pool);
--	if (unlikely(!page))
--		return NULL;
--
--	db->dataptr = page_pool_get_dma_addr(page) + XDP_PACKET_HEADROOM;
--
--	return page;
--}
--
- static void lan966x_fdma_rx_free_pages(struct lan966x_rx *rx)
- {
- 	struct fdma *fdma = &rx->fdma;
-@@ -66,26 +52,6 @@ static void lan966x_fdma_rx_free_page(struct lan966x_rx *rx)
- 	page_pool_recycle_direct(rx->page_pool, page);
- }
- 
--static void lan966x_fdma_rx_add_dcb(struct lan966x_rx *rx,
--				    struct fdma_dcb *dcb,
--				    u64 nextptr)
--{
--	struct fdma *fdma = &rx->fdma;
--	struct fdma_db *db;
--	int i;
--
--	for (i = 0; i < fdma->n_dbs; ++i) {
--		db = &dcb->db[i];
--		db->status = FDMA_DCB_STATUS_INTR;
--	}
--
--	dcb->nextptr = FDMA_DCB_INVALID_DATA;
--	dcb->info = FDMA_DCB_INFO_DATAL(PAGE_SIZE << rx->page_order);
--
--	fdma->last_dcb->nextptr = nextptr;
--	fdma->last_dcb = dcb;
--}
--
- static int lan966x_fdma_rx_alloc_page_pool(struct lan966x_rx *rx)
- {
- 	struct lan966x *lan966x = rx->lan966x;
-@@ -551,15 +517,11 @@ static int lan966x_fdma_napi_poll(struct napi_struct *napi, int weight)
- {
- 	struct lan966x *lan966x = container_of(napi, struct lan966x, napi);
- 	struct lan966x_rx *rx = &lan966x->rx;
-+	int old_dcb, dcb_reload, counter = 0;
- 	struct fdma *fdma = &rx->fdma;
--	int dcb_reload, counter = 0;
--	struct fdma_dcb *old_dcb;
- 	bool redirect = false;
- 	struct sk_buff *skb;
--	struct fdma_db *db;
--	struct page *page;
- 	u64 src_port;
--	u64 nextptr;
- 
- 	dcb_reload = fdma->dcb_index;
- 
-@@ -602,19 +564,13 @@ static int lan966x_fdma_napi_poll(struct napi_struct *napi, int weight)
- allocate_new:
- 	/* Allocate new pages and map them */
- 	while (dcb_reload != fdma->dcb_index) {
--		db = &fdma->dcbs[dcb_reload].db[fdma->db_index];
--		page = lan966x_fdma_rx_alloc_page(rx, db);
--		if (unlikely(!page))
--			break;
--		rx->page[dcb_reload][fdma->db_index] = page;
--
--		old_dcb = &fdma->dcbs[dcb_reload];
-+		old_dcb = dcb_reload;
- 		dcb_reload++;
- 		dcb_reload &= fdma->n_dcbs - 1;
- 
--		nextptr = fdma->dma + ((unsigned long)old_dcb -
--				     (unsigned long)fdma->dcbs);
--		lan966x_fdma_rx_add_dcb(rx, old_dcb, nextptr);
-+		fdma_dcb_add(fdma, old_dcb, FDMA_DCB_INFO_DATAL(fdma->db_size),
-+			     FDMA_DCB_STATUS_INTR);
++static int lan966x_fdma_xdp_tx_dataptr_cb(struct fdma *fdma, int dcb, int db,
++					  u64 *dataptr)
++{
++	struct lan966x *lan966x = (struct lan966x *)fdma->priv;
 +
- 		lan966x_fdma_rx_reload(rx);
++	*dataptr = lan966x->tx.dcbs_buf[dcb].dma_addr + XDP_PACKET_HEADROOM;
++
++	return 0;
++}
++
+ static int lan966x_fdma_channel_active(struct lan966x *lan966x)
+ {
+ 	return lan_rd(lan966x, FDMA_CH_ACTIVE);
+@@ -600,25 +610,6 @@ static int lan966x_fdma_get_next_dcb(struct lan966x_tx *tx)
+ 	return -1;
+ }
+ 
+-static void lan966x_fdma_tx_setup_dcb(struct lan966x_tx *tx,
+-				      int next_to_use, int len,
+-				      dma_addr_t dma_addr)
+-{
+-	struct fdma_dcb *next_dcb;
+-	struct fdma_db *next_db;
+-
+-	next_dcb = &tx->fdma.dcbs[next_to_use];
+-	next_dcb->nextptr = FDMA_DCB_INVALID_DATA;
+-
+-	next_db = &next_dcb->db[0];
+-	next_db->dataptr = dma_addr;
+-	next_db->status = FDMA_DCB_STATUS_SOF |
+-			  FDMA_DCB_STATUS_EOF |
+-			  FDMA_DCB_STATUS_INTR |
+-			  FDMA_DCB_STATUS_BLOCKO(0) |
+-			  FDMA_DCB_STATUS_BLOCKL(len);
+-}
+-
+ static void lan966x_fdma_tx_start(struct lan966x_tx *tx, int next_to_use)
+ {
+ 	struct lan966x *lan966x = tx->lan966x;
+@@ -692,11 +683,6 @@ int lan966x_fdma_xmit_xdpf(struct lan966x_port *port, void *ptr, u32 len)
+ 
+ 		next_dcb_buf->data.xdpf = xdpf;
+ 		next_dcb_buf->len = xdpf->len + IFH_LEN_BYTES;
+-
+-		/* Setup next dcb */
+-		lan966x_fdma_tx_setup_dcb(tx, next_to_use,
+-					  xdpf->len + IFH_LEN_BYTES,
+-					  dma_addr);
+ 	} else {
+ 		page = ptr;
+ 
+@@ -713,11 +699,6 @@ int lan966x_fdma_xmit_xdpf(struct lan966x_port *port, void *ptr, u32 len)
+ 
+ 		next_dcb_buf->data.page = page;
+ 		next_dcb_buf->len = len + IFH_LEN_BYTES;
+-
+-		/* Setup next dcb */
+-		lan966x_fdma_tx_setup_dcb(tx, next_to_use,
+-					  len + IFH_LEN_BYTES,
+-					  dma_addr + XDP_PACKET_HEADROOM);
  	}
  
+ 	/* Fill up the buffer */
+@@ -728,6 +709,17 @@ int lan966x_fdma_xmit_xdpf(struct lan966x_port *port, void *ptr, u32 len)
+ 	next_dcb_buf->ptp = false;
+ 	next_dcb_buf->dev = port->dev;
+ 
++	__fdma_dcb_add(&tx->fdma,
++		       next_to_use,
++		       0,
++		       FDMA_DCB_STATUS_INTR |
++		       FDMA_DCB_STATUS_SOF |
++		       FDMA_DCB_STATUS_EOF |
++		       FDMA_DCB_STATUS_BLOCKO(0) |
++		       FDMA_DCB_STATUS_BLOCKL(next_dcb_buf->len),
++		       &fdma_nextptr_cb,
++		       &lan966x_fdma_xdp_tx_dataptr_cb);
++
+ 	/* Start the transmission */
+ 	lan966x_fdma_tx_start(tx, next_to_use);
+ 
+@@ -787,9 +779,6 @@ int lan966x_fdma_xmit(struct sk_buff *skb, __be32 *ifh, struct net_device *dev)
+ 		goto release;
+ 	}
+ 
+-	/* Setup next dcb */
+-	lan966x_fdma_tx_setup_dcb(tx, next_to_use, skb->len, dma_addr);
+-
+ 	/* Fill up the buffer */
+ 	next_dcb_buf = &tx->dcbs_buf[next_to_use];
+ 	next_dcb_buf->use_skb = true;
+@@ -801,6 +790,15 @@ int lan966x_fdma_xmit(struct sk_buff *skb, __be32 *ifh, struct net_device *dev)
+ 	next_dcb_buf->ptp = false;
+ 	next_dcb_buf->dev = dev;
+ 
++	fdma_dcb_add(&tx->fdma,
++		     next_to_use,
++		     0,
++		     FDMA_DCB_STATUS_INTR |
++		     FDMA_DCB_STATUS_SOF |
++		     FDMA_DCB_STATUS_EOF |
++		     FDMA_DCB_STATUS_BLOCKO(0) |
++		     FDMA_DCB_STATUS_BLOCKL(skb->len));
++
+ 	if (skb_shinfo(skb)->tx_flags & SKBTX_HW_TSTAMP &&
+ 	    LAN966X_SKB_CB(skb)->rew_op == IFH_REW_OP_TWO_STEP_PTP)
+ 		next_dcb_buf->ptp = true;
 
 -- 
 2.34.1
