@@ -1,29 +1,29 @@
 Received: from out30-132.freemail.mail.aliyun.com (out30-132.freemail.mail.aliyun.com [115.124.30.132])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CD1319340D;
-	Thu,  5 Sep 2024 07:56:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 006C219340D;
+	Thu,  5 Sep 2024 07:56:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.132
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725522997; cv=none; b=UnY+kKHIqDOcoJcD0ggeWGJozfzEgCxGl2CFz1BfsS/YBbyHCljmuxmXVdRLKFQWa74qyi8aTYUAuBP5+8K2DdH0/9XMPBIOMUAHP29C3kpOiC/WVbj6PrWrw0fLoVLbiRj/oiUKiRfvae1Jm8dA5N4B5lH3MHIZ2WbtvXa23Dw=
+	t=1725523001; cv=none; b=bLjtGaLqiTx0Es9menznPfVvT5Ux6Il/W80yH331szXH47lbxlfu/12whxuB3lKWKJUrm4j3NeP9Vcg/hiorAWZQ0icaZN5hqFuT8ZgNu/1+lJvEABkeDGh5mBhFhVrosTEjqkmnvD2Ug3OWsXHqdZyZSVonQqbbEtcyzZLu69k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725522997; c=relaxed/simple;
-	bh=67C+ySKUMFOl/Vw/EWHL5BU7fz6lIct5OzmIokYnQIQ=;
+	s=arc-20240116; t=1725523001; c=relaxed/simple;
+	bh=fQA4ZmvJjUsqFOFX7s+On/lT0lNIldNAFmE9GyYmXH4=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=Yk3T06kUhWX9e0aLjWc7YM0RZqkzu1ZLQA//De9Ba7IPXBCVFlEc57QLIN7YJuI/J6FuigDM1x7R1xpfZoNRepgIJcSPIEFWYiayV3VbDnCvbgbDQamnlerSMCuvKjbsU9HvJSVTeWT0TF4X7oCyfj66It6bPsuFbR9jAnfSyRA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=doEQQoTG; arc=none smtp.client-ip=115.124.30.132
+	 MIME-Version; b=PrHW+xpG5tq+WOh8ZD3G/r56TTum+cPOEvaPNUcs89klvX9+dm5thRu4uB4IPGGUabp7kfznbDzVI5lAijFSVUKPZNMGf4FXjs55kDq/n9ZGuPHWQ/owjXis7BR7YBnQ3KSZVo/8+BfoMsEC1ToHBu0oIO7PvHtCutY+p+paBxQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=fRtXpEmo; arc=none smtp.client-ip=115.124.30.132
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="doEQQoTG"
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="fRtXpEmo"
 DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
 	d=linux.alibaba.com; s=default;
-	t=1725522986; h=From:To:Subject:Date:Message-Id:MIME-Version;
-	bh=XIpXmKG/dvqtkO380OYf1vfqjzkl8IpnbYNB+J/73MQ=;
-	b=doEQQoTG/kdjL2Y7oLNSv/Y5ZA0ZtaZJs/d8Kl+YgCImoiCicQ+F1ePQi8tZ9J9Y4dSwb+EEY9iZtUu0rZymLtLvf/4pIsZHaGJTuh3vPHEFknPKVQlo4J2BdXQ2mHRBuF7gFsTJ+uC0KJmQhAwSkOzXUjizYAAQAYeeyTwYxss=
-Received: from localhost(mailfrom:lulie@linux.alibaba.com fp:SMTPD_---0WEKrrCP_1725522983)
+	t=1725522991; h=From:To:Subject:Date:Message-Id:MIME-Version;
+	bh=kt0hxrOo2gJqVz1HQLnyjblcCFmCzmyTJPG3om2eI2M=;
+	b=fRtXpEmoGjVhmbYQKmzy6Af/gJJrQzZbC87YVy4aZkhlcQQcm1oLEiK99B/K+Fp07jzLs0uG/ZIR1TgYOjL1MTyVK1aq/hMXHVrDOSWIUcaS1dQLPlf9vk5WpJ48XvmZhMhPteOW9PyF/0j5tfTGdjqHLQTHdCk3+OE80w2zxGo=
+Received: from localhost(mailfrom:lulie@linux.alibaba.com fp:SMTPD_---0WEKkPgj_1725522989)
           by smtp.aliyun-inc.com;
-          Thu, 05 Sep 2024 15:56:24 +0800
+          Thu, 05 Sep 2024 15:56:29 +0800
 From: Philo Lu <lulie@linux.alibaba.com>
 To: bpf@vger.kernel.org
 Cc: edumazet@google.com,
@@ -61,9 +61,9 @@ Cc: edumazet@google.com,
 	xuanzhuo@linux.alibaba.com,
 	netdev@vger.kernel.org,
 	linux-trace-kernel@vger.kernel.org
-Subject: [PATCH bpf-next v2 1/5] bpf: Support __nullable argument suffix for tp_btf
-Date: Thu,  5 Sep 2024 15:56:18 +0800
-Message-Id: <20240905075622.66819-2-lulie@linux.alibaba.com>
+Subject: [PATCH bpf-next v2 5/5] selftests/bpf: Expand skb dynptr selftests for tp_btf
+Date: Thu,  5 Sep 2024 15:56:22 +0800
+Message-Id: <20240905075622.66819-6-lulie@linux.alibaba.com>
 X-Mailer: git-send-email 2.32.0.3.g01195cf9f
 In-Reply-To: <20240905075622.66819-1-lulie@linux.alibaba.com>
 References: <20240905075622.66819-1-lulie@linux.alibaba.com>
@@ -75,134 +75,196 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Pointers passed to tp_btf were trusted to be valid, but some tracepoints
-do take NULL pointer as input, such as trace_tcp_send_reset(). Then the
-invalid memory access cannot be detected by verifier.
+Add 3 test cases for skb dynptr used in tp_btf:
+- test_dynptr_skb_tp_btf: use skb dynptr in tp_btf and make sure it is
+  read-only.
+- skb_invalid_ctx_fentry/skb_invalid_ctx_fexit: bpf_dynptr_from_skb
+  should fail in fentry/fexit.
 
-This patch fix it by add a suffix "__nullable" to the unreliable
-argument. The suffix is shown in btf, and PTR_MAYBE_NULL will be added
-to nullable arguments. Then users must check the pointer before use it.
+In test_dynptr_skb_tp_btf, to trigger the tracepoint in kfree_skb,
+test_pkt_access is used for its test_run, as in kfree_skb.c. Because the
+test process is different from others, a new setup type is defined,
+i.e., SETUP_SKB_PROG_TP.
 
-A problem here is that we use "btf_trace_##call" to search func_proto.
-As it is a typedef, argument names as well as the suffix are not
-recorded. To solve this, I use bpf_raw_event_map to find
-"__bpf_trace##template" from "btf_trace_##call", and then we can see the
-suffix.
+The result is like:
+$ ./test_progs -t 'dynptr/test_dynptr_skb_tp_btf'
+  #84/14   dynptr/test_dynptr_skb_tp_btf:OK
+  #84      dynptr:OK
+  #127     kfunc_dynptr_param:OK
+  Summary: 2/1 PASSED, 0 SKIPPED, 0 FAILED
 
-Suggested-by: Alexei Starovoitov <ast@kernel.org>
+$ ./test_progs -t 'dynptr/skb_invalid_ctx_f'
+  #84/85   dynptr/skb_invalid_ctx_fentry:OK
+  #84/86   dynptr/skb_invalid_ctx_fexit:OK
+  #84      dynptr:OK
+  #127     kfunc_dynptr_param:OK
+  Summary: 2/2 PASSED, 0 SKIPPED, 0 FAILED
+
+Also fix two coding style nits (change spaces to tabs).
+
 Signed-off-by: Philo Lu <lulie@linux.alibaba.com>
 ---
- kernel/bpf/btf.c      | 13 +++++++++++++
- kernel/bpf/verifier.c | 36 +++++++++++++++++++++++++++++++++---
- 2 files changed, 46 insertions(+), 3 deletions(-)
+ .../testing/selftests/bpf/prog_tests/dynptr.c | 36 +++++++++++++++++--
+ .../testing/selftests/bpf/progs/dynptr_fail.c | 25 +++++++++++++
+ .../selftests/bpf/progs/dynptr_success.c      | 23 ++++++++++++
+ 3 files changed, 82 insertions(+), 2 deletions(-)
 
-diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index 1e29281653c62..157f5e1247c81 100644
---- a/kernel/bpf/btf.c
-+++ b/kernel/bpf/btf.c
-@@ -6385,6 +6385,16 @@ static bool prog_args_trusted(const struct bpf_prog *prog)
+diff --git a/tools/testing/selftests/bpf/prog_tests/dynptr.c b/tools/testing/selftests/bpf/prog_tests/dynptr.c
+index 7cfac53c0d58d..ba40be8b1c4ef 100644
+--- a/tools/testing/selftests/bpf/prog_tests/dynptr.c
++++ b/tools/testing/selftests/bpf/prog_tests/dynptr.c
+@@ -9,6 +9,7 @@
+ enum test_setup_type {
+ 	SETUP_SYSCALL_SLEEP,
+ 	SETUP_SKB_PROG,
++	SETUP_SKB_PROG_TP,
+ };
+ 
+ static struct {
+@@ -28,6 +29,7 @@ static struct {
+ 	{"test_dynptr_clone", SETUP_SKB_PROG},
+ 	{"test_dynptr_skb_no_buff", SETUP_SKB_PROG},
+ 	{"test_dynptr_skb_strcmp", SETUP_SKB_PROG},
++	{"test_dynptr_skb_tp_btf", SETUP_SKB_PROG_TP},
+ };
+ 
+ static void verify_success(const char *prog_name, enum test_setup_type setup_type)
+@@ -35,7 +37,7 @@ static void verify_success(const char *prog_name, enum test_setup_type setup_typ
+ 	struct dynptr_success *skel;
+ 	struct bpf_program *prog;
+ 	struct bpf_link *link;
+-       int err;
++	int err;
+ 
+ 	skel = dynptr_success__open();
+ 	if (!ASSERT_OK_PTR(skel, "dynptr_success__open"))
+@@ -47,7 +49,7 @@ static void verify_success(const char *prog_name, enum test_setup_type setup_typ
+ 	if (!ASSERT_OK_PTR(prog, "bpf_object__find_program_by_name"))
+ 		goto cleanup;
+ 
+-       bpf_program__set_autoload(prog, true);
++	bpf_program__set_autoload(prog, true);
+ 
+ 	err = dynptr_success__load(skel);
+ 	if (!ASSERT_OK(err, "dynptr_success__load"))
+@@ -87,6 +89,36 @@ static void verify_success(const char *prog_name, enum test_setup_type setup_typ
+ 
+ 		break;
  	}
++	case SETUP_SKB_PROG_TP:
++	{
++		struct __sk_buff skb = {};
++		struct bpf_object *obj;
++		int aux_prog_fd;
++
++		/* Just use its test_run to trigger kfree_skb tracepoint */
++		err = bpf_prog_test_load("./test_pkt_access.bpf.o", BPF_PROG_TYPE_SCHED_CLS,
++					 &obj, &aux_prog_fd);
++		if (!ASSERT_OK(err, "prog_load sched cls"))
++			goto cleanup;
++
++		LIBBPF_OPTS(bpf_test_run_opts, topts,
++			    .data_in = &pkt_v4,
++			    .data_size_in = sizeof(pkt_v4),
++			    .ctx_in = &skb,
++			    .ctx_size_in = sizeof(skb),
++		);
++
++		link = bpf_program__attach(prog);
++		if (!ASSERT_OK_PTR(link, "bpf_program__attach"))
++			goto cleanup;
++
++		err = bpf_prog_test_run_opts(aux_prog_fd, &topts);
++
++		if (!ASSERT_OK(err, "test_run"))
++			goto cleanup;
++
++		break;
++	}
+ 	}
+ 
+ 	ASSERT_EQ(skel->bss->err, 0, "err");
+diff --git a/tools/testing/selftests/bpf/progs/dynptr_fail.c b/tools/testing/selftests/bpf/progs/dynptr_fail.c
+index 68b8c6eca5083..8f36c9de75915 100644
+--- a/tools/testing/selftests/bpf/progs/dynptr_fail.c
++++ b/tools/testing/selftests/bpf/progs/dynptr_fail.c
+@@ -6,6 +6,7 @@
+ #include <stdbool.h>
+ #include <linux/bpf.h>
+ #include <bpf/bpf_helpers.h>
++#include <bpf/bpf_tracing.h>
+ #include <linux/if_ether.h>
+ #include "bpf_misc.h"
+ #include "bpf_kfuncs.h"
+@@ -1254,6 +1255,30 @@ int skb_invalid_ctx(void *ctx)
+ 	return 0;
  }
  
-+static bool prog_arg_maybe_null(const struct bpf_prog *prog, const struct btf *btf,
-+				const struct btf_param *arg)
++SEC("fentry/skb_tx_error")
++__failure __msg("must be referenced or trusted")
++int BPF_PROG(skb_invalid_ctx_fentry, void *skb)
 +{
-+	if (prog->type != BPF_PROG_TYPE_TRACING ||
-+	    prog->expected_attach_type != BPF_TRACE_RAW_TP)
-+		return false;
++	struct bpf_dynptr ptr;
 +
-+	return btf_param_match_suffix(btf, arg, "__nullable");
++	/* this should fail */
++	bpf_dynptr_from_skb(skb, 0, &ptr);
++
++	return 0;
 +}
 +
- int btf_ctx_arg_offset(const struct btf *btf, const struct btf_type *func_proto,
- 		       u32 arg_no)
- {
-@@ -6554,6 +6564,9 @@ bool btf_ctx_access(int off, int size, enum bpf_access_type type,
- 	if (prog_args_trusted(prog))
- 		info->reg_type |= PTR_TRUSTED;
- 
-+	if (prog_arg_maybe_null(prog, btf, &args[arg]))
-+		info->reg_type |= PTR_MAYBE_NULL;
++SEC("fexit/skb_tx_error")
++__failure __msg("must be referenced or trusted")
++int BPF_PROG(skb_invalid_ctx_fexit, void *skb)
++{
++	struct bpf_dynptr ptr;
 +
- 	if (tgt_prog) {
- 		enum bpf_prog_type tgt_type;
++	/* this should fail */
++	bpf_dynptr_from_skb(skb, 0, &ptr);
++
++	return 0;
++}
++
+ /* Reject writes to dynptr slot for uninit arg */
+ SEC("?raw_tp")
+ __failure __msg("potential write to dynptr at off=-16")
+diff --git a/tools/testing/selftests/bpf/progs/dynptr_success.c b/tools/testing/selftests/bpf/progs/dynptr_success.c
+index 5985920d162e7..bfcc85686cf04 100644
+--- a/tools/testing/selftests/bpf/progs/dynptr_success.c
++++ b/tools/testing/selftests/bpf/progs/dynptr_success.c
+@@ -5,6 +5,7 @@
+ #include <stdbool.h>
+ #include <linux/bpf.h>
+ #include <bpf/bpf_helpers.h>
++#include <bpf/bpf_tracing.h>
+ #include "bpf_misc.h"
+ #include "bpf_kfuncs.h"
+ #include "errno.h"
+@@ -544,3 +545,25 @@ int test_dynptr_skb_strcmp(struct __sk_buff *skb)
  
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 217eb0eafa2a6..9ee68ed915dfe 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -28,6 +28,7 @@
- #include <linux/cpumask.h>
- #include <linux/bpf_mem_alloc.h>
- #include <net/xdp.h>
-+#include <linux/trace_events.h>
- 
- #include "disasm.h"
- 
-@@ -21780,6 +21781,8 @@ static int check_non_sleepable_error_inject(u32 btf_id)
- 	return btf_id_set_contains(&btf_non_sleepable_error_inject, btf_id);
+ 	return 1;
  }
- 
-+#define BTF_MAX_NAME_SIZE 128
 +
- int bpf_check_attach_target(struct bpf_verifier_log *log,
- 			    const struct bpf_prog *prog,
- 			    const struct bpf_prog *tgt_prog,
-@@ -21788,6 +21791,8 @@ int bpf_check_attach_target(struct bpf_verifier_log *log,
- {
- 	bool prog_extension = prog->type == BPF_PROG_TYPE_EXT;
- 	bool prog_tracing = prog->type == BPF_PROG_TYPE_TRACING;
-+	char trace_symbol[BTF_MAX_NAME_SIZE];
-+	const struct bpf_raw_event_map *btp;
- 	const char prefix[] = "btf_trace_";
- 	int ret = 0, subprog = -1, i;
- 	const struct btf_type *t;
-@@ -21795,6 +21800,7 @@ int bpf_check_attach_target(struct bpf_verifier_log *log,
- 	const char *tname;
- 	struct btf *btf;
- 	long addr = 0;
-+	char *fname;
- 	struct module *mod = NULL;
- 
- 	if (!btf_id) {
-@@ -21923,10 +21929,34 @@ int bpf_check_attach_target(struct bpf_verifier_log *log,
- 			return -EINVAL;
- 		}
- 		tname += sizeof(prefix) - 1;
--		t = btf_type_by_id(btf, t->type);
--		if (!btf_type_is_ptr(t))
--			/* should never happen in valid vmlinux build */
++SEC("tp_btf/kfree_skb")
++int BPF_PROG(test_dynptr_skb_tp_btf, void *skb, void *location)
++{
++	__u8 write_data[2] = {1, 2};
++	struct bpf_dynptr ptr;
++	int ret;
 +
-+		/* The func_proto of "btf_trace_##tname" is generated from typedef without argument
-+		 * names. Thus using bpf_raw_event_map to get argument names. For module, the module
-+		 * name is printed in "%ps" after the template function name, so use strsep to cut
-+		 * it off.
-+		 */
-+		btp = bpf_get_raw_tracepoint(tname);
-+		if (!btp)
- 			return -EINVAL;
-+		sprintf(trace_symbol, "%ps", btp->bpf_func);
-+		fname = trace_symbol;
-+		fname = strsep(&fname, " ");
++	if (bpf_dynptr_from_skb(skb, 0, &ptr)) {
++		err = 1;
++		return 1;
++	}
 +
-+		ret = btf_find_by_name_kind(btf, fname, BTF_KIND_FUNC);
-+		if (ret < 0) {
-+			bpf_log(log, "Cannot find btf of template %s, fall back to %s%s.\n",
-+				fname, prefix, tname);
-+			t = btf_type_by_id(btf, t->type);
-+			if (!btf_type_is_ptr(t))
-+				/* should never happen in valid vmlinux build */
-+				return -EINVAL;
-+		} else {
-+			t = btf_type_by_id(btf, ret);
-+			if (!btf_type_is_func(t))
-+				/* should never happen in valid vmlinux build */
-+				return -EINVAL;
-+		}
++	/* since tp_btf skbs are read only, writes should fail */
++	ret = bpf_dynptr_write(&ptr, 0, write_data, sizeof(write_data), 0);
++	if (ret != -EINVAL) {
++		err = 2;
++		return 1;
++	}
 +
- 		t = btf_type_by_id(btf, t->type);
- 		if (!btf_type_is_func_proto(t))
- 			/* should never happen in valid vmlinux build */
++	return 1;
++}
 -- 
 2.32.0.3.g01195cf9f
 
