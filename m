@@ -1,183 +1,115 @@
 Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B8C51993B2;
-	Thu,  5 Sep 2024 08:11:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1EC71898E4;
+	Thu,  5 Sep 2024 08:36:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725523886; cv=none; b=HZ5Znq7bybfGfigB1UeXFUYV7JPEiUj1WI1EWDr33zrAPHQmznH4cRq8i4h+HlR5bxsb+m+QXG9qTXspcoiBrvOoudlEc476JAd7gDnFq32iv09vorW7AXWgnb4yisORYCntVyyrwpYaQGXdzUdz0FCnWnpe+V7zkCF0eGGyusw=
+	t=1725525376; cv=none; b=rXurbxTrp95e6piuF6TUeMZPl0hcUqnk/XmrhSzSfHfMYae3+cpHAgcuLNVQNDdwOrRReOXtafnB1J8erCCpijglth2tBrEMym+F7oKWJGqCWyISwfVCpBTGXjLlG1g9zfiiUneMWKX4KSEmeE8ysRA8WSgnFiLaqBLlRQ0Zs/A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725523886; c=relaxed/simple;
-	bh=Ey9n/C7/W1KXb3C4O0ZWrItcZQcO1j37HEJdCKbuOi4=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=VU6qmcrZEj9oAUPbJhrdsi9RYJh0xTVTUeWHBxI5u28dDOi/nSyrH3QltIoLEpAArqgDsTBY/I6EoK4WGygePy+aZusC0gO92A0zzg2DGYehq9wuGS2sd8QkGe29NZ1XGXToO2xL05FFs2VqDiEkL1+uPX7qZOe/va8sQ6Eie5M=
+	s=arc-20240116; t=1725525376; c=relaxed/simple;
+	bh=oSfYpChyPUqxzwYIuKsV5+CLXkmDQfOhI4Op599R7Z4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=E0yPVgLEHsWU+E7fL+xlGjp71EW7NMhxSWqlDXnoacSBT933+GPbNQY+hFUaLcNsBacMiyAo8/zIhqyLbxx+i9z2dBQDbXuHjhEJo+kR8p0KMKz/DBreUhR8csDmiao/qio7nVnB2K82xm09Dav9v74ZpiFeNbmVs0+G2qS0ElY=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
 Received: from mail.maildlp.com (unknown [172.19.163.235])
-	by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4WzsWF4LKrz4f3jHc;
-	Thu,  5 Sep 2024 16:11:05 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.112])
-	by mail.maildlp.com (Postfix) with ESMTP id A6B041A06D7;
-	Thu,  5 Sep 2024 16:11:20 +0800 (CST)
-Received: from ultra.huawei.com (unknown [10.90.53.71])
-	by APP1 (Coremail) with SMTP id cCh0CgD3Ii+gZ9lmMQ7AAQ--.26932S9;
-	Thu, 05 Sep 2024 16:11:20 +0800 (CST)
-From: Pu Lehui <pulehui@huaweicloud.com>
-To: bpf@vger.kernel.org,
-	linux-riscv@lists.infradead.org,
-	netdev@vger.kernel.org
-Cc: Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Mykola Lysenko <mykolal@fb.com>,
-	=?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
-	Puranjay Mohan <puranjay@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Pu Lehui <pulehui@huawei.com>
-Subject: [PATCH bpf-next v3 07/10] selftests/bpf: Add config.riscv64
-Date: Thu,  5 Sep 2024 08:13:58 +0000
-Message-Id: <20240905081401.1894789-8-pulehui@huaweicloud.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240905081401.1894789-1-pulehui@huaweicloud.com>
-References: <20240905081401.1894789-1-pulehui@huaweicloud.com>
+	by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4Wzt3v3LQhz4f3jMP;
+	Thu,  5 Sep 2024 16:35:55 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.128])
+	by mail.maildlp.com (Postfix) with ESMTP id 81AAE1A0568;
+	Thu,  5 Sep 2024 16:36:10 +0800 (CST)
+Received: from [10.67.109.184] (unknown [10.67.109.184])
+	by APP4 (Coremail) with SMTP id gCh0CgDXDMl2bdlm2BnOAQ--.51109S2;
+	Thu, 05 Sep 2024 16:36:07 +0800 (CST)
+Message-ID: <cdd31b81-8171-4dd0-b336-5229559ba50f@huaweicloud.com>
+Date: Thu, 5 Sep 2024 16:36:06 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:cCh0CgD3Ii+gZ9lmMQ7AAQ--.26932S9
-X-Coremail-Antispam: 1UD129KBjvJXoWxGr43tF4fAw17uF1DZr1UWrg_yoW5WF4xpr
-	n7JrW8Jr18Jr17KrW7AryDGrZ8tr1DJFWUJr17Xr1UJw1ktw4fJr1Fyr4UGr1UXa18Xr4r
-	AF97GF13Zr1UJw7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUPvb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAV
-	Cq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0
-	rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267
-	AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E
-	14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7
-	xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Y
-	z7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2
-	AFwI0_GFv_Wryl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAq
-	x4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6r
-	W5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2IY6xkF
-	7I0E14v26r4UJVWxJr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14
-	v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuY
-	vjxUI-eODUUUU
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v2 03/10] selftests/bpf: Disable feature-llvm for
+ vmtest
+To: Eduard Zingerman <eddyz87@gmail.com>, bpf@vger.kernel.org,
+ linux-riscv@lists.infradead.org, netdev@vger.kernel.org
+Cc: Andrii Nakryiko <andrii@kernel.org>, Mykola Lysenko <mykolal@fb.com>,
+ =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
+ Puranjay Mohan <puranjay@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
+ Pu Lehui <pulehui@huawei.com>
+References: <20240904141951.1139090-1-pulehui@huaweicloud.com>
+ <20240904141951.1139090-4-pulehui@huaweicloud.com>
+ <fc9a03f1809cfdd80a9a8cb7b513e32302be5a43.camel@gmail.com>
+ <1bd4056c2b311aca03b7707b077f7555db4e55d6.camel@gmail.com>
+Content-Language: en-US
+From: Pu Lehui <pulehui@huaweicloud.com>
+In-Reply-To: <1bd4056c2b311aca03b7707b077f7555db4e55d6.camel@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID:gCh0CgDXDMl2bdlm2BnOAQ--.51109S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7uF4fCw1UGw4UKFW3Gr4xXrb_yoW8Ww48pa
+	yrJ3ZIkF48XFyktFsrKa48W3W5K395t3WUX34Uur1DZFn0kFnYgFZ3Kryj9a4kX39rWF43
+	Zw12gasrXr1UZ3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUv0b4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I
+	0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+	x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+	0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AF
+	wI0_GFv_Wryl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4
+	xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5
+	MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I
+	0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8
+	JVWxJwCI42IY6I8E87Iv6xkF7I0E14v26r4UJVWxJrUvcSsGvfC2KfnxnUUI43ZEXa7IU0
+	s2-5UUUUU==
 X-CM-SenderInfo: psxovxtxl6x35dzhxuhorxvhhfrp/
 
-From: Pu Lehui <pulehui@huawei.com>
 
-Add config.riscv64 for both BPF CI and local vmtest.
 
-Tested-by: Eduard Zingerman <eddyz87@gmail.com>
-Signed-off-by: Pu Lehui <pulehui@huawei.com>
----
- tools/testing/selftests/bpf/config.riscv64 | 84 ++++++++++++++++++++++
- 1 file changed, 84 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/config.riscv64
+On 2024/9/5 7:08, Eduard Zingerman wrote:
+> On Wed, 2024-09-04 at 12:37 -0700, Eduard Zingerman wrote:
+>> On Wed, 2024-09-04 at 14:19 +0000, Pu Lehui wrote:
+>>> From: Pu Lehui <pulehui@huawei.com>
+>>>
+>>> After commit b991fc520700 ("selftests/bpf: utility function to get
+>>> program disassembly after jit"), Makefile will link libLLVM* related
+>>> libraries to the user binary execution file when detecting that
+>>> feature-llvm is enabled, which will cause the local vmtest to appear as
+>>> follows mistake:
+>>>
+>>>    ./test_progs: error while loading shared libraries: libLLVM-17.so.1:
+>>>      cannot open shared object file: No such file or directory
+>>>
+>>> Considering that the get_jited_program_text() function is a useful tool
+>>> for user debugging and will not be relied upon by the entire bpf
+>>> selftests, let's turn it off in local vmtest.
+>>>
+>>> Signed-off-by: Pu Lehui <pulehui@huawei.com>
+>>> ---
+>>
+>> I actually don't agree.
+>> The __jited tag is supposed to be used by selftests
+>> (granted, used by a single selftest for now).
+>> Maybe add an option to forgo LLVM linkage when test_progs are compiled?
+>> Regarding base image lacking libLLVM -- I need to fix this.
+>>
+> 
+> Please consider using my commit [1] instead of this patch, it forces
+> static linking form LLVM libraries, thus avoiding issues with rootfs.
+> (This was suggested by Andrii off list).
+> 
+> [1] https://git.kernel.org/pub/scm/linux/kernel/git/ez/bpf-next.git/commit/?h=selftest-llvm-static-linking&id=263bacf2f20fbc17204fd912609e26bdf6ac5a13
 
-diff --git a/tools/testing/selftests/bpf/config.riscv64 b/tools/testing/selftests/bpf/config.riscv64
-new file mode 100644
-index 000000000000..bb7043a80e1a
---- /dev/null
-+++ b/tools/testing/selftests/bpf/config.riscv64
-@@ -0,0 +1,84 @@
-+CONFIG_AUDIT=y
-+CONFIG_BLK_CGROUP=y
-+CONFIG_BLK_DEV_INITRD=y
-+CONFIG_BLK_DEV_RAM=y
-+CONFIG_BONDING=y
-+CONFIG_BPF_JIT_ALWAYS_ON=y
-+CONFIG_BPF_PRELOAD=y
-+CONFIG_BPF_PRELOAD_UMD=y
-+CONFIG_CGROUPS=y
-+CONFIG_CGROUP_CPUACCT=y
-+CONFIG_CGROUP_DEVICE=y
-+CONFIG_CGROUP_FREEZER=y
-+CONFIG_CGROUP_HUGETLB=y
-+CONFIG_CGROUP_NET_CLASSID=y
-+CONFIG_CGROUP_PERF=y
-+CONFIG_CGROUP_PIDS=y
-+CONFIG_CGROUP_SCHED=y
-+CONFIG_CPUSETS=y
-+CONFIG_DEBUG_ATOMIC_SLEEP=y
-+CONFIG_DEBUG_FS=y
-+CONFIG_DETECT_HUNG_TASK=y
-+CONFIG_DEVTMPFS=y
-+CONFIG_DEVTMPFS_MOUNT=y
-+CONFIG_EXPERT=y
-+CONFIG_EXT4_FS=y
-+CONFIG_EXT4_FS_POSIX_ACL=y
-+CONFIG_EXT4_FS_SECURITY=y
-+CONFIG_FRAME_POINTER=y
-+CONFIG_HARDLOCKUP_DETECTOR=y
-+CONFIG_HIGH_RES_TIMERS=y
-+CONFIG_HUGETLBFS=y
-+CONFIG_INET=y
-+CONFIG_IPV6_SEG6_LWTUNNEL=y
-+CONFIG_IP_ADVANCED_ROUTER=y
-+CONFIG_IP_MULTICAST=y
-+CONFIG_IP_MULTIPLE_TABLES=y
-+CONFIG_JUMP_LABEL=y
-+CONFIG_KALLSYMS_ALL=y
-+CONFIG_KPROBES=y
-+CONFIG_MEMCG=y
-+CONFIG_NAMESPACES=y
-+CONFIG_NET=y
-+CONFIG_NETDEVICES=y
-+CONFIG_NETFILTER_XT_MATCH_BPF=y
-+CONFIG_NET_ACT_BPF=y
-+CONFIG_NET_L3_MASTER_DEV=y
-+CONFIG_NET_VRF=y
-+CONFIG_NONPORTABLE=y
-+CONFIG_NO_HZ_IDLE=y
-+CONFIG_NR_CPUS=256
-+CONFIG_PACKET=y
-+CONFIG_PANIC_ON_OOPS=y
-+CONFIG_PARTITION_ADVANCED=y
-+CONFIG_PCI=y
-+CONFIG_PCI_HOST_GENERIC=y
-+CONFIG_POSIX_MQUEUE=y
-+CONFIG_PRINTK_TIME=y
-+CONFIG_PROC_KCORE=y
-+CONFIG_PROFILING=y
-+CONFIG_RCU_CPU_STALL_TIMEOUT=60
-+CONFIG_RISCV_EFFICIENT_UNALIGNED_ACCESS=y
-+CONFIG_RISCV_ISA_C=y
-+CONFIG_RISCV_PMU=y
-+CONFIG_RISCV_PMU_SBI=y
-+CONFIG_RT_GROUP_SCHED=y
-+CONFIG_SECURITY_NETWORK=y
-+CONFIG_SERIAL_8250=y
-+CONFIG_SERIAL_8250_CONSOLE=y
-+CONFIG_SERIAL_OF_PLATFORM=y
-+CONFIG_SMP=y
-+CONFIG_SOC_VIRT=y
-+CONFIG_SYSVIPC=y
-+CONFIG_TCP_CONG_ADVANCED=y
-+CONFIG_TLS=y
-+CONFIG_TMPFS=y
-+CONFIG_TMPFS_POSIX_ACL=y
-+CONFIG_TUN=y
-+CONFIG_UNIX=y
-+CONFIG_UPROBES=y
-+CONFIG_USER_NS=y
-+CONFIG_VETH=y
-+CONFIG_VLAN_8021Q=y
-+CONFIG_VSOCKETS_LOOPBACK=y
-+CONFIG_XFRM_USER=y
--- 
-2.34.1
+Happy to see this modification only on llvm lib. I test it works good 
+and have picked this in next version. Thanks
 
