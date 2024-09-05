@@ -1,27 +1,27 @@
 Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D76EC199249;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0087F199251;
 	Thu,  5 Sep 2024 08:11:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725523884; cv=none; b=jRvPg1mP+7FyaBKaq6Y/KeyIlZV9RNSeb96DEOHdakkcNck0gu4zURhHgG4nKlwkhm8A1zvkfcbACCeJU3I0EaaMvivPS3HogkYTdyKrA6N3RUqELOgAX1lECQgxq1ZH6384QO7yoknkWgfiBmzfBIfyWFCtyb89VrehLuq0E9k=
+	t=1725523884; cv=none; b=fm0qvb00GJdmEPT5IysXF+Brq+ii3UG0rdQVs27/uZagvrMtf5vy6G4XferQNX1Qpir9ZVucbDo1K1vy96kBtGDjtwUdIzeKA8p7SoDsjlGVez3fSNXENVGugB1epbeiAc/YmaCzE2Fl7E03gzyYqG64E3QyoWQ0hKUd2CgbB2g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1725523884; c=relaxed/simple;
-	bh=clDdIUEKVeiyjVQeDc44MqSrn4f4vzBWF+gE624PUIE=;
+	bh=yvisZw7rSUnpiD/1gR2nXJ9X28Uo8dA8a+f9fuCjNIk=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=uxu1RgI+1l0PWe+87/MT57cU/PTX/SjKUdFYMbbTuQuzAYK0TsPKpmtE5CXZHGNpx8FJ/vq+YViMCogtNOWBmtHCClomR2jEhRBg4p8TkhP/0bN79Zlvzc3419VGtQk40TkMUQ9U1N+5Fg5KXWYRoLA+iVjbONsCnm8dGui1rQU=
+	 MIME-Version; b=dLL5UHzoaWbEFqa9qu25zGaTakk+TdeehEZ50rTWvgXKNHRz9c604y5scfUYcPESYAuLYVWtr1EAderHehvo5kaX+XnE8PhnPVRLBbSq+1EKciknEzDkuuoKk6qFmDqlFxd3SHmXc2tkaYAZp4pQQji0OwW5keLLbPnlRZKF5DA=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.216])
-	by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4WzsWJ1ctSz4f3jkP;
-	Thu,  5 Sep 2024 16:11:08 +0800 (CST)
+Received: from mail.maildlp.com (unknown [172.19.163.235])
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4WzsWB6bPBz4f3l24;
+	Thu,  5 Sep 2024 16:11:02 +0800 (CST)
 Received: from mail02.huawei.com (unknown [10.116.40.112])
-	by mail.maildlp.com (Postfix) with ESMTP id 8CAF41A15EB;
+	by mail.maildlp.com (Postfix) with ESMTP id CC8E51A058E;
 	Thu,  5 Sep 2024 16:11:18 +0800 (CST)
 Received: from ultra.huawei.com (unknown [10.90.53.71])
-	by APP1 (Coremail) with SMTP id cCh0CgD3Ii+gZ9lmMQ7AAQ--.26932S4;
+	by APP1 (Coremail) with SMTP id cCh0CgD3Ii+gZ9lmMQ7AAQ--.26932S7;
 	Thu, 05 Sep 2024 16:11:18 +0800 (CST)
 From: Pu Lehui <pulehui@huaweicloud.com>
 To: bpf@vger.kernel.org,
@@ -44,9 +44,9 @@ Cc: Andrii Nakryiko <andrii@kernel.org>,
 	Jiri Olsa <jolsa@kernel.org>,
 	Palmer Dabbelt <palmer@dabbelt.com>,
 	Pu Lehui <pulehui@huawei.com>
-Subject: [PATCH bpf-next v3 02/10] selftests/bpf: Rename fallback in bpf_dctcp to avoid naming conflict
-Date: Thu,  5 Sep 2024 08:13:53 +0000
-Message-Id: <20240905081401.1894789-3-pulehui@huaweicloud.com>
+Subject: [PATCH bpf-next v3 05/10] selftests/bpf: Support local rootfs image for vmtest
+Date: Thu,  5 Sep 2024 08:13:56 +0000
+Message-Id: <20240905081401.1894789-6-pulehui@huaweicloud.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20240905081401.1894789-1-pulehui@huaweicloud.com>
 References: <20240905081401.1894789-1-pulehui@huaweicloud.com>
@@ -57,96 +57,118 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:cCh0CgD3Ii+gZ9lmMQ7AAQ--.26932S4
-X-Coremail-Antispam: 1UD129KBjvJXoWxCFW8GF1fAF15Zr48ZrW5ZFb_yoW5CF4kpa
-	4kZ3yYyF1xJFW3Jw17GrWqgFWFkws5XrWYkan7Wr15Ar17XryxWrs7KF4Yga9xWrZ5uwnx
-	Aas2g3s3Ar1kZ37anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUPIb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUXw
-	A2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
-	w2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
-	W8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v2
-	6rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMc
-	Ij6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_
-	Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AFwI
-	0_GFv_Wryl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG
-	67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MI
-	IYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E
-	14v26F4j6r4UJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr
-	0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZFpf9x07jI
-	sjbUUUUU=
+X-CM-TRANSID:cCh0CgD3Ii+gZ9lmMQ7AAQ--.26932S7
+X-Coremail-Antispam: 1UD129KBjvJXoWxWw1xAF4DZr48Cr4rXw1UJrb_yoW5ZrWfpa
+	1kXw1Ykr9agF13XF1fJrW8WF4rGF1kWry7G34xXrWUuwn3tFykXr1SyFWjqFW3Wa4FqrZx
+	A34SvF98uw1UA3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUPvb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAV
+	Cq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0
+	rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267
+	AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E
+	14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7
+	xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Y
+	z7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2
+	AFwI0_GFv_Wryl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAq
+	x4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6r
+	W5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2IY6xkF
+	7I0E14v26r4UJVWxJr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14
+	v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuY
+	vjxUI-eODUUUU
 X-CM-SenderInfo: psxovxtxl6x35dzhxuhorxvhhfrp/
 
 From: Pu Lehui <pulehui@huawei.com>
 
-Recently, when compiling bpf selftests on RV64, the following
-compilation failure occurred:
+Support vmtest to use local rootfs image generated by [0] that is
+consistent with BPF CI. Now we can specify the local rootfs image
+through the `-l` parameter like as follows:
 
-progs/bpf_dctcp.c:29:21: error: redefinition of 'fallback' as different kind of symbol
-   29 | volatile const char fallback[TCP_CA_NAME_MAX];
-      |                     ^
-/workspace/tools/testing/selftests/bpf/tools/include/vmlinux.h:86812:15: note: previous definition is here
- 86812 | typedef u32 (*fallback)(u32, const unsigned char *, size_t);
+  vmtest.sh -l ./libbpf-vmtest-rootfs-2024.08.22-noble-amd64.tar.zst -- ./test_progs
 
-The reason is that the `fallback` symbol has been defined in
-arch/riscv/lib/crc32.c, which will cause symbol conflicts when vmlinux.h
-is included in bpf_dctcp. Let we rename `fallback` string to
-`fallback_cc` in bpf_dctcp to fix this compilation failure.
+Meanwhile, some descriptions have been flushed.
 
+Link: https://github.com/libbpf/ci/blob/main/rootfs/mkrootfs_debian.sh [0]
+Acked-by: Eduard Zingerman <eddyz87@gmail.com>
 Signed-off-by: Pu Lehui <pulehui@huawei.com>
 ---
- tools/testing/selftests/bpf/prog_tests/bpf_tcp_ca.c | 2 +-
- tools/testing/selftests/bpf/progs/bpf_dctcp.c       | 8 ++++----
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ tools/testing/selftests/bpf/README.rst |  2 --
+ tools/testing/selftests/bpf/vmtest.sh  | 21 ++++++++++++++++-----
+ 2 files changed, 16 insertions(+), 7 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_tcp_ca.c b/tools/testing/selftests/bpf/prog_tests/bpf_tcp_ca.c
-index 1d494b4453f4..409a06975823 100644
---- a/tools/testing/selftests/bpf/prog_tests/bpf_tcp_ca.c
-+++ b/tools/testing/selftests/bpf/prog_tests/bpf_tcp_ca.c
-@@ -285,7 +285,7 @@ static void test_dctcp_fallback(void)
- 	dctcp_skel = bpf_dctcp__open();
- 	if (!ASSERT_OK_PTR(dctcp_skel, "dctcp_skel"))
- 		return;
--	strcpy(dctcp_skel->rodata->fallback, "cubic");
-+	strcpy(dctcp_skel->rodata->fallback_cc, "cubic");
- 	if (!ASSERT_OK(bpf_dctcp__load(dctcp_skel), "bpf_dctcp__load"))
- 		goto done;
+diff --git a/tools/testing/selftests/bpf/README.rst b/tools/testing/selftests/bpf/README.rst
+index 9b974e425af3..4a1e74b17109 100644
+--- a/tools/testing/selftests/bpf/README.rst
++++ b/tools/testing/selftests/bpf/README.rst
+@@ -85,8 +85,6 @@ In case of linker errors when running selftests, try using static linking:
+           If you want to change pahole and llvm, you can change `PATH` environment
+           variable in the beginning of script.
  
-diff --git a/tools/testing/selftests/bpf/progs/bpf_dctcp.c b/tools/testing/selftests/bpf/progs/bpf_dctcp.c
-index 02f552e7fd4d..7cd73e75f52a 100644
---- a/tools/testing/selftests/bpf/progs/bpf_dctcp.c
-+++ b/tools/testing/selftests/bpf/progs/bpf_dctcp.c
-@@ -26,7 +26,7 @@ static bool before(__u32 seq1, __u32 seq2)
+-.. note:: The script currently only supports x86_64 and s390x architectures.
+-
+ Additional information about selftest failures are
+ documented here.
  
- char _license[] SEC("license") = "GPL";
+diff --git a/tools/testing/selftests/bpf/vmtest.sh b/tools/testing/selftests/bpf/vmtest.sh
+index 87d93f29c565..7bd2b44deb08 100755
+--- a/tools/testing/selftests/bpf/vmtest.sh
++++ b/tools/testing/selftests/bpf/vmtest.sh
+@@ -4,9 +4,11 @@
+ set -u
+ set -e
  
--volatile const char fallback[TCP_CA_NAME_MAX];
-+volatile const char fallback_cc[TCP_CA_NAME_MAX];
- const char bpf_dctcp[] = "bpf_dctcp";
- const char tcp_cdg[] = "cdg";
- char cc_res[TCP_CA_NAME_MAX];
-@@ -71,10 +71,10 @@ void BPF_PROG(bpf_dctcp_init, struct sock *sk)
- 	struct bpf_dctcp *ca = inet_csk_ca(sk);
- 	int *stg;
+-# This script currently only works for x86_64 and s390x, as
+-# it is based on the VM image used by the BPF CI, which is
+-# available only for these architectures.
++# This script currently only works for the following platforms,
++# as it is based on the VM image used by the BPF CI, which is
++# available only for these architectures. We can also specify
++# the local rootfs image generated by the following script:
++# https://github.com/libbpf/ci/blob/main/rootfs/mkrootfs_debian.sh
+ ARCH="$(uname -m)"
+ case "${ARCH}" in
+ s390x)
+@@ -34,6 +36,7 @@ aarch64)
+ esac
+ DEFAULT_COMMAND="./test_progs"
+ MOUNT_DIR="mnt"
++LOCAL_ROOTFS_IMAGE=""
+ ROOTFS_IMAGE="root.img"
+ OUTPUT_DIR="$HOME/.bpf_selftests"
+ KCONFIG_REL_PATHS=("tools/testing/selftests/bpf/config"
+@@ -69,6 +72,7 @@ or
  
--	if (!(tp->ecn_flags & TCP_ECN_OK) && fallback[0]) {
-+	if (!(tp->ecn_flags & TCP_ECN_OK) && fallback_cc[0]) {
- 		/* Switch to fallback */
- 		if (bpf_setsockopt(sk, SOL_TCP, TCP_CONGESTION,
--				   (void *)fallback, sizeof(fallback)) == -EBUSY)
-+				   (void *)fallback_cc, sizeof(fallback_cc)) == -EBUSY)
- 			ebusy_cnt++;
+ Options:
  
- 		/* Switch back to myself and the recurred bpf_dctcp_init()
-@@ -87,7 +87,7 @@ void BPF_PROG(bpf_dctcp_init, struct sock *sk)
++	-l)             Specify the path to the local rootfs image.
+ 	-i)		Update the rootfs image with a newer version.
+ 	-d)		Update the output directory (default: ${OUTPUT_DIR})
+ 	-j)		Number of jobs for compilation, similar to -j in make
+@@ -128,7 +132,11 @@ load_rootfs()
+ 		exit 1
+ 	fi
  
- 		/* Switch back to fallback */
- 		if (bpf_setsockopt(sk, SOL_TCP, TCP_CONGESTION,
--				   (void *)fallback, sizeof(fallback)) == -EBUSY)
-+				   (void *)fallback_cc, sizeof(fallback_cc)) == -EBUSY)
- 			ebusy_cnt++;
+-	download_rootfs | zstd -d | sudo tar -C "$dir" -x
++	if [[ -n "${LOCAL_ROOTFS_IMAGE}" ]]; then
++		cat "${LOCAL_ROOTFS_IMAGE}" | zstd -d | sudo tar -C "$dir" -x
++	else
++		download_rootfs | zstd -d | sudo tar -C "$dir" -x
++	fi
+ }
  
- 		/* Expecting -ENOTSUPP for tcp_cdg_res */
+ recompile_kernel()
+@@ -342,8 +350,11 @@ main()
+ 	local exit_command="poweroff -f"
+ 	local debug_shell="no"
+ 
+-	while getopts ':hskid:j:' opt; do
++	while getopts ':hskl:id:j:' opt; do
+ 		case ${opt} in
++		l)
++			LOCAL_ROOTFS_IMAGE="$OPTARG"
++			;;
+ 		i)
+ 			update_image="yes"
+ 			;;
 -- 
 2.34.1
 
