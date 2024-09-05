@@ -1,28 +1,28 @@
 Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0087F199251;
-	Thu,  5 Sep 2024 08:11:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95BBD1993B5;
+	Thu,  5 Sep 2024 08:11:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725523884; cv=none; b=fm0qvb00GJdmEPT5IysXF+Brq+ii3UG0rdQVs27/uZagvrMtf5vy6G4XferQNX1Qpir9ZVucbDo1K1vy96kBtGDjtwUdIzeKA8p7SoDsjlGVez3fSNXENVGugB1epbeiAc/YmaCzE2Fl7E03gzyYqG64E3QyoWQ0hKUd2CgbB2g=
+	t=1725523885; cv=none; b=kzNGsQrW5nIjKDE6YoP0+ERXK4iWUJ2qmjKhgCmV7x/D4qwmg122rO+owEp75VuY3KpmoUTpaalFWIEbpz7HfzrDh8+wCc4d//DkiveyHQf+nEPHWHiXflxBP36f+6gHp6twUEuwLL7eR/IYZm1kXolHj76p7ThOxoP5gv/6Rhg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725523884; c=relaxed/simple;
-	bh=yvisZw7rSUnpiD/1gR2nXJ9X28Uo8dA8a+f9fuCjNIk=;
+	s=arc-20240116; t=1725523885; c=relaxed/simple;
+	bh=yYg8NBrz53EN1KPGT9VVN7I22bOthIz8uc7UGBu3Aq0=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=dLL5UHzoaWbEFqa9qu25zGaTakk+TdeehEZ50rTWvgXKNHRz9c604y5scfUYcPESYAuLYVWtr1EAderHehvo5kaX+XnE8PhnPVRLBbSq+1EKciknEzDkuuoKk6qFmDqlFxd3SHmXc2tkaYAZp4pQQji0OwW5keLLbPnlRZKF5DA=
+	 MIME-Version; b=SVzomld4kKeA/MRnkK84+xlyMne7kfWuyGM6FDl0mAaWvFPuGA1xguZWJUVC8lt2aD0YF3QwFQ0l2aEoK+xwfxbc3RlPlk4NCZfhLThAVSJKyEa8zuPrPbKv4sT1vH1o7MS/g30ccePcGlBoI1UFT/MH+ZFAsrLpeaUhmi0Mfms=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.235])
-	by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4WzsWB6bPBz4f3l24;
-	Thu,  5 Sep 2024 16:11:02 +0800 (CST)
+Received: from mail.maildlp.com (unknown [172.19.163.216])
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4WzsWL2ZLhz4f3jkd;
+	Thu,  5 Sep 2024 16:11:10 +0800 (CST)
 Received: from mail02.huawei.com (unknown [10.116.40.112])
-	by mail.maildlp.com (Postfix) with ESMTP id CC8E51A058E;
-	Thu,  5 Sep 2024 16:11:18 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTP id B023A1A17E8;
+	Thu,  5 Sep 2024 16:11:20 +0800 (CST)
 Received: from ultra.huawei.com (unknown [10.90.53.71])
-	by APP1 (Coremail) with SMTP id cCh0CgD3Ii+gZ9lmMQ7AAQ--.26932S7;
-	Thu, 05 Sep 2024 16:11:18 +0800 (CST)
+	by APP1 (Coremail) with SMTP id cCh0CgD3Ii+gZ9lmMQ7AAQ--.26932S10;
+	Thu, 05 Sep 2024 16:11:20 +0800 (CST)
 From: Pu Lehui <pulehui@huaweicloud.com>
 To: bpf@vger.kernel.org,
 	linux-riscv@lists.infradead.org,
@@ -44,9 +44,9 @@ Cc: Andrii Nakryiko <andrii@kernel.org>,
 	Jiri Olsa <jolsa@kernel.org>,
 	Palmer Dabbelt <palmer@dabbelt.com>,
 	Pu Lehui <pulehui@huawei.com>
-Subject: [PATCH bpf-next v3 05/10] selftests/bpf: Support local rootfs image for vmtest
-Date: Thu,  5 Sep 2024 08:13:56 +0000
-Message-Id: <20240905081401.1894789-6-pulehui@huaweicloud.com>
+Subject: [PATCH bpf-next v3 08/10] selftests/bpf: Add DENYLIST.riscv64
+Date: Thu,  5 Sep 2024 08:13:59 +0000
+Message-Id: <20240905081401.1894789-9-pulehui@huaweicloud.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20240905081401.1894789-1-pulehui@huaweicloud.com>
 References: <20240905081401.1894789-1-pulehui@huaweicloud.com>
@@ -57,10 +57,10 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:cCh0CgD3Ii+gZ9lmMQ7AAQ--.26932S7
-X-Coremail-Antispam: 1UD129KBjvJXoWxWw1xAF4DZr48Cr4rXw1UJrb_yoW5ZrWfpa
-	1kXw1Ykr9agF13XF1fJrW8WF4rGF1kWry7G34xXrWUuwn3tFykXr1SyFWjqFW3Wa4FqrZx
-	A34SvF98uw1UA3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+X-CM-TRANSID:cCh0CgD3Ii+gZ9lmMQ7AAQ--.26932S10
+X-Coremail-Antispam: 1UD129KBjvJXoW7ur48Xry3Xw4rur15tF15twb_yoW8Jw1Dpw
+	4fWryjk34fXF13tF1xCrZ2gFWrZFWkZrW8Jw10qr9xZr92yFZ7GFn7ta4rt3sxWFWrt3ya
+	ya4akryrZw40qaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
 	9KBjDU0xBIdaVrnRJUUUPvb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
 	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAV
 	Cq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0
@@ -73,102 +73,44 @@ X-Coremail-Antispam: 1UD129KBjvJXoWxWw1xAF4DZr48Cr4rXw1UJrb_yoW5ZrWfpa
 	x4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6r
 	W5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2IY6xkF
 	7I0E14v26r4UJVWxJr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14
-	v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuY
+	v26r4j6F4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuY
 	vjxUI-eODUUUU
 X-CM-SenderInfo: psxovxtxl6x35dzhxuhorxvhhfrp/
 
 From: Pu Lehui <pulehui@huawei.com>
 
-Support vmtest to use local rootfs image generated by [0] that is
-consistent with BPF CI. Now we can specify the local rootfs image
-through the `-l` parameter like as follows:
+This patch adds DENYLIST.riscv64 file for riscv64. It will help BPF CI
+and local vmtest to mask failing and unsupported test cases.
 
-  vmtest.sh -l ./libbpf-vmtest-rootfs-2024.08.22-noble-amd64.tar.zst -- ./test_progs
+We can use the following command to use deny list in local vmtest as
+previously mentioned by Manu.
 
-Meanwhile, some descriptions have been flushed.
+PLATFORM=riscv64 CROSS_COMPILE=riscv64-linux-gnu- vmtest.sh \
+    -l ./libbpf-vmtest-rootfs-2024.08.30-noble-riscv64.tar.zst -- \
+    ./test_progs -d \
+        \"$(cat tools/testing/selftests/bpf/DENYLIST.riscv64 \
+            | cut -d'#' -f1 \
+            | sed -e 's/^[[:space:]]*//' \
+                  -e 's/[[:space:]]*$//' \
+            | tr -s '\n' ','\
+        )\"
 
-Link: https://github.com/libbpf/ci/blob/main/rootfs/mkrootfs_debian.sh [0]
-Acked-by: Eduard Zingerman <eddyz87@gmail.com>
+Tested-by: Eduard Zingerman <eddyz87@gmail.com>
 Signed-off-by: Pu Lehui <pulehui@huawei.com>
 ---
- tools/testing/selftests/bpf/README.rst |  2 --
- tools/testing/selftests/bpf/vmtest.sh  | 21 ++++++++++++++++-----
- 2 files changed, 16 insertions(+), 7 deletions(-)
+ tools/testing/selftests/bpf/DENYLIST.riscv64 | 3 +++
+ 1 file changed, 3 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/DENYLIST.riscv64
 
-diff --git a/tools/testing/selftests/bpf/README.rst b/tools/testing/selftests/bpf/README.rst
-index 9b974e425af3..4a1e74b17109 100644
---- a/tools/testing/selftests/bpf/README.rst
-+++ b/tools/testing/selftests/bpf/README.rst
-@@ -85,8 +85,6 @@ In case of linker errors when running selftests, try using static linking:
-           If you want to change pahole and llvm, you can change `PATH` environment
-           variable in the beginning of script.
- 
--.. note:: The script currently only supports x86_64 and s390x architectures.
--
- Additional information about selftest failures are
- documented here.
- 
-diff --git a/tools/testing/selftests/bpf/vmtest.sh b/tools/testing/selftests/bpf/vmtest.sh
-index 87d93f29c565..7bd2b44deb08 100755
---- a/tools/testing/selftests/bpf/vmtest.sh
-+++ b/tools/testing/selftests/bpf/vmtest.sh
-@@ -4,9 +4,11 @@
- set -u
- set -e
- 
--# This script currently only works for x86_64 and s390x, as
--# it is based on the VM image used by the BPF CI, which is
--# available only for these architectures.
-+# This script currently only works for the following platforms,
-+# as it is based on the VM image used by the BPF CI, which is
-+# available only for these architectures. We can also specify
-+# the local rootfs image generated by the following script:
-+# https://github.com/libbpf/ci/blob/main/rootfs/mkrootfs_debian.sh
- ARCH="$(uname -m)"
- case "${ARCH}" in
- s390x)
-@@ -34,6 +36,7 @@ aarch64)
- esac
- DEFAULT_COMMAND="./test_progs"
- MOUNT_DIR="mnt"
-+LOCAL_ROOTFS_IMAGE=""
- ROOTFS_IMAGE="root.img"
- OUTPUT_DIR="$HOME/.bpf_selftests"
- KCONFIG_REL_PATHS=("tools/testing/selftests/bpf/config"
-@@ -69,6 +72,7 @@ or
- 
- Options:
- 
-+	-l)             Specify the path to the local rootfs image.
- 	-i)		Update the rootfs image with a newer version.
- 	-d)		Update the output directory (default: ${OUTPUT_DIR})
- 	-j)		Number of jobs for compilation, similar to -j in make
-@@ -128,7 +132,11 @@ load_rootfs()
- 		exit 1
- 	fi
- 
--	download_rootfs | zstd -d | sudo tar -C "$dir" -x
-+	if [[ -n "${LOCAL_ROOTFS_IMAGE}" ]]; then
-+		cat "${LOCAL_ROOTFS_IMAGE}" | zstd -d | sudo tar -C "$dir" -x
-+	else
-+		download_rootfs | zstd -d | sudo tar -C "$dir" -x
-+	fi
- }
- 
- recompile_kernel()
-@@ -342,8 +350,11 @@ main()
- 	local exit_command="poweroff -f"
- 	local debug_shell="no"
- 
--	while getopts ':hskid:j:' opt; do
-+	while getopts ':hskl:id:j:' opt; do
- 		case ${opt} in
-+		l)
-+			LOCAL_ROOTFS_IMAGE="$OPTARG"
-+			;;
- 		i)
- 			update_image="yes"
- 			;;
+diff --git a/tools/testing/selftests/bpf/DENYLIST.riscv64 b/tools/testing/selftests/bpf/DENYLIST.riscv64
+new file mode 100644
+index 000000000000..4fc4dfdde293
+--- /dev/null
++++ b/tools/testing/selftests/bpf/DENYLIST.riscv64
+@@ -0,0 +1,3 @@
++# riscv64 deny list for BPF CI and local vmtest
++exceptions					# JIT does not support exceptions
++tailcalls/tailcall_bpf2bpf*			# JIT does not support mixing bpf2bpf and tailcalls
 -- 
 2.34.1
 
