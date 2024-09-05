@@ -1,37 +1,37 @@
 Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 251C51990CE
-	for <bpf@vger.kernel.org>; Thu,  5 Sep 2024 12:01:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE34D19149E
+	for <bpf@vger.kernel.org>; Thu,  5 Sep 2024 12:01:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725537706; cv=none; b=DZfreRzBppMQBOkcxuHLI7BuSv1HZzbarb1OFJSl/cuqp4KYJpTK23tq5kTptatA+7IxJqvAzZ7OBK7Vi94+czuBii3P/QlpBm1Ng33AaJ+Rzab282zqLmdCuELZmyJ1bDCTEHY8ol1tqY+NXDgvogar3789YqWneQ8cTPPnBsw=
+	t=1725537707; cv=none; b=B3JS8bCqyGOFqLMi0LRPwIzJCXOqrPikhkcDGEt37nuNUNN9CxjstoHzJe4I3wIkK3MbL5wjnY4jpVvrPwcUhpg7Af88Qj+yNj1v3bfk/qsshvHiV3VPwommOanQnuMucaEgM23XIV/S3BKTDztWrDnS4Cy0ndd5xRc9h4SqiX8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725537706; c=relaxed/simple;
-	bh=gHDYpKf0GiNS5GKjOccDz/Nnf9d5GCHwP4u3Dv6Lw2k=;
+	s=arc-20240116; t=1725537707; c=relaxed/simple;
+	bh=jtHROiy8ztZAO6s3m9hHUwUDBEjxrCHdHNJWqzybUuM=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=b+Qk3EY2LuGYsuJFfvMxPS+aPpXmhgPAOtm8bMKaMigmaxBx7eMObZVQjlbTDaNWKupXEusohb68eWnN9lpdlsdKNvq26VhcGZBMROtcHRVQpXqF7cWrHa7NuMklRbNRLiX4toGw3gfoTQ7PBXsV+c+y0deoi/4fhTkF5JjgW3A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=SEasP3Mh; arc=none smtp.client-ip=213.133.104.62
+	 MIME-Version; b=T+SO9vHCqoLTw0wYnX5qICSoZg4DDcqmJKMHxj7y3p7r/kaI64hc5XMHxxDRs/kb+cjiQQnbsBoT72nTBIDhy/faKVPyNqkyQCPdLazpuusF/fe+Pg3m5y4tVOZFqbvYrEB3U2DiGkT7Bx6sVwwGXNrpZ+FjEy8/lOdAGMR64h0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=QF+W8TbT; arc=none smtp.client-ip=213.133.104.62
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="SEasP3Mh"
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="QF+W8TbT"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:MIME-Version:
 	References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
 	Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=gdzZQIhkAwk01U2LyJBHTjx1Kd1R9masdnEbcR+x7G0=; b=SEasP3MhWUPCFezmAuDIqcHHjb
-	jC9nlW8s5bFboXoQClzUYmfTQl3ytqkoO3hQ0xMqgd6f60QLktYnkCeYqolwEyEBOlEoqOGGeYIc0
-	ok6WsyZl7k6Uav5ixSNfgkmeFRHQQUw8EdSzUR8ltR0zGpk/I4cGgO17hqCwlexeBu1veUEqTtgXv
-	yX4S3lkoPGUOWkPZEoIdzF7jfoofBAA9E+iGLaFyu88XFkEVPjq09f4pmUNdq5zbknwtnztiCa3ov
-	CTeBP2X9kTrCUUBmYcf/0a6Nasril4Bd3hiFPM630Y88xPnELMZpClJgMR/FE8R71gQBgCy1TG8iL
-	wI9rVZ5w==;
+	bh=UQb/Mq4JBwlTVzgEJDhEBykB0OnacQBYbFi0HQkTpG4=; b=QF+W8TbTqnm+Zi2yUnYtaVO4+T
+	qgSetYfNK0h0fj8pscKRoqK43pc93jV1WHBgL+ZOtAd69r07uymDkFtx9me9wQsTS9/BFCI943izi
+	bKrWasCSxWD8nuWwQNW0g/AXHhmg6dJT+R/85zlLlM23trm7pFqc75HKbPXxOrOA5QJqWxj+g0N6R
+	mLhqoK9lp/ttPImhnzOMAWaDjG8u2hNLkFRP5QtWA9eXUiKzAc+S5QRtzMkW5G8dmb/5Xa+F6ibpW
+	P3PobMPcC7K4kCQ8H8YyvbJg7pgpTqFQ1g/899UE2Fdll5bJmv2Ftusz+ogODHvFmWGLzwSMRRPeo
+	zzfmoCsA==;
 Received: from 23.248.197.178.dynamic.cust.swisscom.net ([178.197.248.23] helo=localhost)
 	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.94.2)
 	(envelope-from <daniel@iogearbox.net>)
-	id 1smBB9-0001h7-Ux; Thu, 05 Sep 2024 14:01:35 +0200
+	id 1smBB9-0001gv-D8; Thu, 05 Sep 2024 14:01:35 +0200
 From: Daniel Borkmann <daniel@iogearbox.net>
 To: bpf@vger.kernel.org
 Cc: shung-hsi.yu@suse.com,
@@ -39,9 +39,9 @@ Cc: shung-hsi.yu@suse.com,
 	ast@kernel.org,
 	kongln9170@gmail.com,
 	Daniel Borkmann <daniel@iogearbox.net>
-Subject: [PATCH bpf-next v2 6/6] selftests/bpf: Add a test case to write into .rodata
-Date: Thu,  5 Sep 2024 14:01:28 +0200
-Message-Id: <20240905120128.7322-6-daniel@iogearbox.net>
+Subject: [PATCH bpf-next v2 5/6] selftests/bpf: Rename ARG_PTR_TO_LONG test description
+Date: Thu,  5 Sep 2024 14:01:27 +0200
+Message-Id: <20240905120128.7322-5-daniel@iogearbox.net>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20240905120128.7322-1-daniel@iogearbox.net>
 References: <20240905120128.7322-1-daniel@iogearbox.net>
@@ -55,116 +55,79 @@ Content-Transfer-Encoding: 8bit
 X-Authenticated-Sender: daniel@iogearbox.net
 X-Virus-Scanned: Clear (ClamAV 0.103.10/27389/Thu Sep  5 10:33:25 2024)
 
-Add a test case which attempts to write into .rodata section of the
-BPF program, and for comparison this adds test cases also for .bss
-and .data section.
+Given we got rid of ARG_PTR_TO_LONG, change the test case description to
+avoid potential confusion:
 
-Before fix:
-
-  # ./vmtest.sh -- ./test_progs -t verifier_const
+  # ./vmtest.sh -- ./test_progs -t verifier_int_ptr
   [...]
-  ./test_progs -t verifier_const
-  tester_init:PASS:tester_log_buf 0 nsec
-  process_subtest:PASS:obj_open_mem 0 nsec
-  process_subtest:PASS:specs_alloc 0 nsec
-  run_subtest:PASS:obj_open_mem 0 nsec
-  run_subtest:FAIL:unexpected_load_success unexpected success: 0
-  #465/1   verifier_const/rodata: write rejected:FAIL
-  #465/2   verifier_const/bss: write accepted:OK
-  #465/3   verifier_const/data: write accepted:OK
-  #465     verifier_const:FAIL
-  [...]
-
-After fix:
-
-  # ./vmtest.sh -- ./test_progs -t verifier_const
-  [...]
-  ./test_progs -t verifier_const
-  #465/1   verifier_const/rodata: write rejected:OK
-  #465/2   verifier_const/bss: write accepted:OK
-  #465/3   verifier_const/data: write accepted:OK
-  #465     verifier_const:OK
-  [...]
+  ./test_progs -t verifier_int_ptr
+  [    1.610563] bpf_testmod: loading out-of-tree module taints kernel.
+  [    1.611049] bpf_testmod: module verification failed: signature and/or required key missing - tainting kernel
+  #489/1   verifier_int_ptr/arg pointer to long uninitialized:OK
+  #489/2   verifier_int_ptr/arg pointer to long half-uninitialized:OK
+  #489/3   verifier_int_ptr/arg pointer to long misaligned:OK
+  #489/4   verifier_int_ptr/arg pointer to long size < sizeof(long):OK
+  #489/5   verifier_int_ptr/arg pointer to long initialized:OK
+  #489     verifier_int_ptr:OK
+  Summary: 1/5 PASSED, 0 SKIPPED, 0 FAILED
 
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Acked-by: Shung-Hsi Yu <shung-hsi.yu@suse.com>
 ---
  v1 -> v2:
- - const volatile long (Andrii)
+ - new patch
 
- .../selftests/bpf/prog_tests/verifier.c       |  2 +
- .../selftests/bpf/progs/verifier_const.c      | 42 +++++++++++++++++++
- 2 files changed, 44 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/progs/verifier_const.c
+ tools/testing/selftests/bpf/progs/verifier_int_ptr.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/verifier.c b/tools/testing/selftests/bpf/prog_tests/verifier.c
-index 80a90c627182..98d195ff778d 100644
---- a/tools/testing/selftests/bpf/prog_tests/verifier.c
-+++ b/tools/testing/selftests/bpf/prog_tests/verifier.c
-@@ -21,6 +21,7 @@
- #include "verifier_cgroup_inv_retcode.skel.h"
- #include "verifier_cgroup_skb.skel.h"
- #include "verifier_cgroup_storage.skel.h"
-+#include "verifier_const.skel.h"
- #include "verifier_const_or.skel.h"
- #include "verifier_ctx.skel.h"
- #include "verifier_ctx_sk_msg.skel.h"
-@@ -145,6 +146,7 @@ void test_verifier_cfg(void)                  { RUN(verifier_cfg); }
- void test_verifier_cgroup_inv_retcode(void)   { RUN(verifier_cgroup_inv_retcode); }
- void test_verifier_cgroup_skb(void)           { RUN(verifier_cgroup_skb); }
- void test_verifier_cgroup_storage(void)       { RUN(verifier_cgroup_storage); }
-+void test_verifier_const(void)                { RUN(verifier_const); }
- void test_verifier_const_or(void)             { RUN(verifier_const_or); }
- void test_verifier_ctx(void)                  { RUN(verifier_ctx); }
- void test_verifier_ctx_sk_msg(void)           { RUN(verifier_ctx_sk_msg); }
-diff --git a/tools/testing/selftests/bpf/progs/verifier_const.c b/tools/testing/selftests/bpf/progs/verifier_const.c
-new file mode 100644
-index 000000000000..5158dbea8c43
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/verifier_const.c
-@@ -0,0 +1,42 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2024 Isovalent */
-+
-+#include <linux/bpf.h>
-+#include <bpf/bpf_helpers.h>
-+#include "bpf_misc.h"
-+
-+const volatile long foo = 42;
-+long bar;
-+long bart = 96;
-+
-+SEC("tc/ingress")
-+__description("rodata: write rejected")
-+__failure __msg("write into map forbidden")
-+int tcx1(struct __sk_buff *skb)
-+{
-+	char buff[] = { '8', '4', '\0' };
-+	bpf_strtol(buff, sizeof(buff), 0, (long *)&foo);
-+	return TCX_PASS;
-+}
-+
-+SEC("tc/ingress")
-+__description("bss: write accepted")
-+__success
-+int tcx2(struct __sk_buff *skb)
-+{
-+	char buff[] = { '8', '4', '\0' };
-+	bpf_strtol(buff, sizeof(buff), 0, &bar);
-+	return TCX_PASS;
-+}
-+
-+SEC("tc/ingress")
-+__description("data: write accepted")
-+__success
-+int tcx3(struct __sk_buff *skb)
-+{
-+	char buff[] = { '8', '4', '\0' };
-+	bpf_strtol(buff, sizeof(buff), 0, &bart);
-+	return TCX_PASS;
-+}
-+
-+char LICENSE[] SEC("license") = "GPL";
+diff --git a/tools/testing/selftests/bpf/progs/verifier_int_ptr.c b/tools/testing/selftests/bpf/progs/verifier_int_ptr.c
+index 87206803c025..5f2efb895edb 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_int_ptr.c
++++ b/tools/testing/selftests/bpf/progs/verifier_int_ptr.c
+@@ -6,7 +6,7 @@
+ #include "bpf_misc.h"
+ 
+ SEC("socket")
+-__description("ARG_PTR_TO_LONG uninitialized")
++__description("arg pointer to long uninitialized")
+ __success
+ __naked void arg_ptr_to_long_uninitialized(void)
+ {
+@@ -34,7 +34,7 @@ __naked void arg_ptr_to_long_uninitialized(void)
+ }
+ 
+ SEC("socket")
+-__description("ARG_PTR_TO_LONG half-uninitialized")
++__description("arg pointer to long half-uninitialized")
+ __success
+ __retval(0)
+ __naked void ptr_to_long_half_uninitialized(void)
+@@ -64,7 +64,7 @@ __naked void ptr_to_long_half_uninitialized(void)
+ }
+ 
+ SEC("cgroup/sysctl")
+-__description("ARG_PTR_TO_LONG misaligned")
++__description("arg pointer to long misaligned")
+ __failure __msg("misaligned stack access off 0+-20+0 size 8")
+ __naked void arg_ptr_to_long_misaligned(void)
+ {
+@@ -95,7 +95,7 @@ __naked void arg_ptr_to_long_misaligned(void)
+ }
+ 
+ SEC("cgroup/sysctl")
+-__description("ARG_PTR_TO_LONG size < sizeof(long)")
++__description("arg pointer to long size < sizeof(long)")
+ __failure __msg("invalid indirect access to stack R4 off=-4 size=8")
+ __naked void to_long_size_sizeof_long(void)
+ {
+@@ -124,7 +124,7 @@ __naked void to_long_size_sizeof_long(void)
+ }
+ 
+ SEC("cgroup/sysctl")
+-__description("ARG_PTR_TO_LONG initialized")
++__description("arg pointer to long initialized")
+ __success
+ __naked void arg_ptr_to_long_initialized(void)
+ {
 -- 
 2.43.0
 
