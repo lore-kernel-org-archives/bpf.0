@@ -1,101 +1,83 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A4FB1AC8B0;
-	Mon,  9 Sep 2024 06:49:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4F5D1AD9F1;
+	Mon,  9 Sep 2024 07:08:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725864597; cv=none; b=B1dnDYq/bCtw6hqM9WsEt9lCY0+ugmTFSHODPJbgny8WHCpS2+2M7pfbYI/dMprJZqCpiofiH/p44T4Nkz2FnbZIt5TcjGlQ5ROpEzUw+FgEPMROq2hbzAbFA1rc/gLNYVOgFXfMR/qXwHK4/c/g3204OndfJK796ZKdp2nqBPI=
+	t=1725865700; cv=none; b=HAXBYKOQ56G4AoU0UuG63ZvG1hO5nFQxtR0XI0cbqDlQEpkUgIi87sLDfxa/mzQQ7p6OqpSjge7xf/XEWP2qZmiTww+KnRmfgbe3AEukJnJpv00QkNXUcdiQkdMapKwg7hVN13FPBYL76hRoto3WBxVmxKgGaA3FVsI/ykVCHJs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725864597; c=relaxed/simple;
-	bh=l7egSUNcilONf7gTBq0Hjl37ut+S55vwboWjXSdFWe0=;
+	s=arc-20240116; t=1725865700; c=relaxed/simple;
+	bh=vg8RVh1QVSzklqVo21bOPOyAtUZ4RZO6cEL+S2fGkkU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=liw9dugMCqYMNm8zUZX6JVuQRsz3Qj3Q91EwEnMF6RG8zNO2pl9LYRUKGcmBSJw6PuShvAUPSrdhiA4JhEY7G4+nqyIIlo+AfhKqXhvf6hPEaxH/1QVbmV722cGFoJ9HzH4d4clM9VYrL6YfQwdaAmdbSwtoey/6x+31Vxxu+WA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BkZCp3fS; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=GHbLOOtJKYyaUnd16ZcJjrwPWgm1+YxMlVNq5Nzm9Vd0V59VY5P4OO5S5ZcXPNbx5UQEGZ9THjE5FPq2QLXElILX/81uqwO2wGl9b+jozglW/zd3uPeDMpnnLhxDuh76Nut+rzfrXO9vQlT5Vg9diZHCUQCR/MpUsrXjgsyyQvk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hOb2shye; arc=none smtp.client-ip=209.85.221.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BkZCp3fS"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62106C4CECB;
-	Mon,  9 Sep 2024 06:49:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725864597;
-	bh=l7egSUNcilONf7gTBq0Hjl37ut+S55vwboWjXSdFWe0=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=BkZCp3fShQXfTG1Nn+VMmuW0LYueTyrn7acbRvvboJKcY6YjPoDDx968iFpKR1CWC
-	 aF/p0o4PzZ/eloW/K8mvH2s9aJhYiRq+CLA/Z6C5cf0zaOL7QYXEhZf0/TByS50AhI
-	 bJWZ0vLimK/FFtaJwXD9Yjc4jTIfHrr3Tv5YRIoRd3fkkJvNyNI486dzezhXOWgnQJ
-	 HbPC0BW8QqdHVqqtZvDGdZd2DLKkW13q6h3MOVdLTl2ijRdrSJoovSlNGk+YE1vLSL
-	 MY6Kf9lXc+klIMZqkADFnytoN8MKNCrTtrBVamTW4DGupk55fMoWoan0CIHDPihKAp
-	 1QrOM6cpJNDWA==
-From: Mike Rapoport <rppt@kernel.org>
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: Andreas Larsson <andreas@gaisler.com>,
-	Andy Lutomirski <luto@kernel.org>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Borislav Petkov <bp@alien8.de>,
-	Brian Cain <bcain@quicinc.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Christoph Hellwig <hch@infradead.org>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Dinh Nguyen <dinguyen@kernel.org>,
-	Geert Uytterhoeven <geert@linux-m68k.org>,
-	Guo Ren <guoren@kernel.org>,
-	Helge Deller <deller@gmx.de>,
-	Huacai Chen <chenhuacai@kernel.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Johannes Berg <johannes@sipsolutions.net>,
-	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-	Kent Overstreet <kent.overstreet@linux.dev>,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Matt Turner <mattst88@gmail.com>,
-	Max Filippov <jcmvbkbc@gmail.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Michal Simek <monstr@monstr.eu>,
-	Mike Rapoport <rppt@kernel.org>,
-	Oleg Nesterov <oleg@redhat.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Richard Weinberger <richard@nod.at>,
-	Russell King <linux@armlinux.org.uk>,
-	Song Liu <song@kernel.org>,
-	Stafford Horne <shorne@gmail.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Uladzislau Rezki <urezki@gmail.com>,
-	Vineet Gupta <vgupta@kernel.org>,
-	Will Deacon <will@kernel.org>,
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hOb2shye"
+Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-374c1e5fe79so2573496f8f.1;
+        Mon, 09 Sep 2024 00:08:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1725865697; x=1726470497; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8B7BVoErPcOoKPxSdUBz41r3SRVlI1m5+I4zzu3vMfI=;
+        b=hOb2shyew6VcFuElGULlrfNIjky0KF0Pr8T+bMV1osEqJEDlb4yKdZjqIR5auEz/QI
+         Ao+qeWQhCNiM6qLB3/yvXiTiKTHgInbDjkJq2fcDoJCxGj4w4lMMDaCdjBM9xD78Tw1H
+         gyr7BmoR4Z7u6rttdffn/l+5T6OUwfuRb6GWiKCdBW+17g6mrDUdWEWjHWtgAuzcDgXP
+         8OxxvAP4w4+/+18QO6Ub1cckD/UfePT5ICMBDszAIhXtUJ1fTejrjKMY5K1nY2U3J3pH
+         QKJZPdn1NYi7PJaTKV7bnRCIwNxVNYFPrz7ikzMdUgXCycdgb0OHNeyxhcVzQRGSsl7H
+         xzPw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1725865697; x=1726470497;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=8B7BVoErPcOoKPxSdUBz41r3SRVlI1m5+I4zzu3vMfI=;
+        b=KuTVlD+OrDDyGjdlsz7wdLJJ7NE3bo5z701VI4bIxL9S+Gds7cjWfVeD5C+uSTqWdr
+         GQElE0Q3P6X3usMjHkksNRjZNpDceo9Gb3lzwEeOhfeWS+gIY1+AwuodB8g0s9v1qdyW
+         FAUFgbc6ap2IRfEit5KfvTU1cORFkPM+f0noqqyBGhYbMTYQsHZn4S7cMOmENyVhSwCI
+         FqFVzoNqAa9a5HBQrFOZ8cLMAXHtFcSghhKBDSstAEh06PN/3oyVE+9bjcL5LampSJnQ
+         +zRSuoXUZmKg3joyDpzHgLasv5+E2lWeB4RAGzPcdWprJR3dKOFbHV1aOJWpQ0N+RHYF
+         59tQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUQb25kQyBmaNG8nJUwedggVSTMhgOMmF4lOQeJagL9jJgn0TnVLSAxV9H735nsVp3B2PtEJmN2YG3kog==@vger.kernel.org, AJvYcCVOCYj5tV1FDDox2p1WXj9JkZS8yq1w3J4vhJe6q/JQDBnfSDUKi4QWI6N6vY9nSs7UT3E=@vger.kernel.org, AJvYcCVbNxPujFfFnPkeeea7zLgaA+3+5kP7IrbmRgMQqH0/qaZs85USjJS3cuAG8XZ0ECM2tMNfSqUkzoT+iAU=@vger.kernel.org, AJvYcCWmbfcje/Y9okhRxV7YH++yIFDmU3seqdu07VdhnwrJVZ8bTIqQwm4yHO8L7dFVpk7IjRx/i0tcCxc3+OnV@vger.kernel.org, AJvYcCXGfiSt1lDTVmlSjMH6he3HOJlBo9fw43YP/S2arzjHvoBh8rE4wFkDVZp6EqrRXTRTk7k2TB+8IBrq1N7LswsN@vger.kernel.org, AJvYcCXVDWg9NES1B9EcvtKqq4BCOq/PImnMpEKo6oN1J1C259+zHCFw/VAbkhdSI2EYgoD/Rfo72fxuU9WuKbp6/A==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy4C7kuOXhPPEWOtcnDSKVD90Zu291hOy3qxy8Sauq7BuY6CqQB
+	LciMcPXayyKQiLzZQxsJnGYpFr46FSjUQZg2rTXHSgJckJIFbemr
+X-Google-Smtp-Source: AGHT+IGYyMu3Vg6t0QKAaHpT+Zfos7iWqitbr5XWvfDWFMrJwqorNUfbV12tuLSocQgEo0BB8LI95Q==
+X-Received: by 2002:adf:fe84:0:b0:371:8e3c:59 with SMTP id ffacd0b85a97d-378895c2578mr7304772f8f.5.1725865697132;
+        Mon, 09 Sep 2024 00:08:17 -0700 (PDT)
+Received: from fedora.iskraemeco.si ([193.77.86.250])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-378956d375asm5178754f8f.66.2024.09.09.00.08.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 Sep 2024 00:08:16 -0700 (PDT)
+From: Uros Bizjak <ubizjak@gmail.com>
+To: x86@kernel.org,
+	linux-crypto@vger.kernel.org,
+	intel-gfx@lists.freedesktop.org,
+	dri-devel@lists.freedesktop.org,
+	linux-media@vger.kernel.org,
+	linux-mtd@lists.infradead.org,
+	linux-fscrypt@vger.kernel.org,
+	linux-scsi@vger.kernel.org,
 	bpf@vger.kernel.org,
-	linux-alpha@vger.kernel.org,
-	linux-arch@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-csky@vger.kernel.org,
-	linux-hexagon@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-m68k@lists.linux-m68k.org,
-	linux-mips@vger.kernel.org,
-	linux-mm@kvack.org,
-	linux-modules@vger.kernel.org,
-	linux-openrisc@vger.kernel.org,
-	linux-parisc@vger.kernel.org,
-	linux-riscv@lists.infradead.org,
-	linux-sh@vger.kernel.org,
-	linux-snps-arc@lists.infradead.org,
-	linux-trace-kernel@vger.kernel.org,
-	linux-um@lists.infradead.org,
-	linuxppc-dev@lists.ozlabs.org,
-	loongarch@lists.linux.dev,
-	sparclinux@vger.kernel.org,
-	x86@kernel.org
-Subject: [PATCH v3 8/8] x86/module: enable ROX caches for module text
-Date: Mon,  9 Sep 2024 09:47:30 +0300
-Message-ID: <20240909064730.3290724-9-rppt@kernel.org>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240909064730.3290724-1-rppt@kernel.org>
-References: <20240909064730.3290724-1-rppt@kernel.org>
+	linux-kselftest@vger.kernel.org,
+	kunit-dev@googlegroups.com
+Cc: Uros Bizjak <ubizjak@gmail.com>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Andy Lutomirski <luto@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@kernel.org>,
+	Borislav Petkov <bp@alien8.de>,
+	"H. Peter Anvin" <hpa@zytor.com>
+Subject: [PATCH v2 01/19] x86/kaslr: Include <linux/prandom.h> instead of <linux/random.h>
+Date: Mon,  9 Sep 2024 09:05:15 +0200
+Message-ID: <20240909070742.75425-2-ubizjak@gmail.com>
+X-Mailer: git-send-email 2.46.0
+In-Reply-To: <20240909070742.75425-1-ubizjak@gmail.com>
+References: <20240909070742.75425-1-ubizjak@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -104,61 +86,35 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
+Substitute the inclusion of <linux/random.h> header with
+<linux/prandom.h> to allow the removal of legacy inclusion
+of <linux/prandom.h> from <linux/random.h>.
 
-Enable execmem's cache of PMD_SIZE'ed pages mapped as ROX for module
-text allocations.
-
-Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
+Signed-off-by: Uros Bizjak <ubizjak@gmail.com>
+Cc: Dave Hansen <dave.hansen@linux.intel.com>
+Cc: Andy Lutomirski <luto@kernel.org>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Ingo Molnar <mingo@kernel.org>
+Cc: Borislav Petkov <bp@alien8.de>
+Cc: "H. Peter Anvin" <hpa@zytor.com>
 ---
- arch/x86/mm/init.c | 26 +++++++++++++++++++++++++-
- 1 file changed, 25 insertions(+), 1 deletion(-)
+ arch/x86/mm/kaslr.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/x86/mm/init.c b/arch/x86/mm/init.c
-index eb503f53c319..a0ec99fb9385 100644
---- a/arch/x86/mm/init.c
-+++ b/arch/x86/mm/init.c
-@@ -1053,6 +1053,15 @@ unsigned long arch_max_swapfile_size(void)
- #ifdef CONFIG_EXECMEM
- static struct execmem_info execmem_info __ro_after_init;
+diff --git a/arch/x86/mm/kaslr.c b/arch/x86/mm/kaslr.c
+index 230f1dee4f09..e17e6e27b7ec 100644
+--- a/arch/x86/mm/kaslr.c
++++ b/arch/x86/mm/kaslr.c
+@@ -22,7 +22,7 @@
  
-+static void execmem_fill_trapping_insns(void *ptr, size_t size, bool writeable)
-+{
-+	/* fill memory with INT3 instructions */
-+	if (writeable)
-+		memset(ptr, INT3_INSN_OPCODE, size);
-+	else
-+		text_poke_set(ptr, INT3_INSN_OPCODE, size);
-+}
-+
- struct execmem_info __init *execmem_arch_setup(void)
- {
- 	unsigned long start, offset = 0;
-@@ -1063,8 +1072,23 @@ struct execmem_info __init *execmem_arch_setup(void)
- 	start = MODULES_VADDR + offset;
+ #include <linux/kernel.h>
+ #include <linux/init.h>
+-#include <linux/random.h>
++#include <linux/prandom.h>
+ #include <linux/memblock.h>
+ #include <linux/pgtable.h>
  
- 	execmem_info = (struct execmem_info){
-+		.fill_trapping_insns = execmem_fill_trapping_insns,
- 		.ranges = {
--			[EXECMEM_DEFAULT] = {
-+			[EXECMEM_MODULE_TEXT] = {
-+				.flags	= EXECMEM_KASAN_SHADOW | EXECMEM_ROX_CACHE,
-+				.start	= start,
-+				.end	= MODULES_END,
-+				.pgprot	= PAGE_KERNEL_ROX,
-+				.alignment = MODULE_ALIGN,
-+			},
-+			[EXECMEM_KPROBES ... EXECMEM_BPF] = {
-+				.flags	= EXECMEM_KASAN_SHADOW,
-+				.start	= start,
-+				.end	= MODULES_END,
-+				.pgprot	= PAGE_KERNEL,
-+				.alignment = MODULE_ALIGN,
-+			},
-+			[EXECMEM_MODULE_DATA] = {
- 				.flags	= EXECMEM_KASAN_SHADOW,
- 				.start	= start,
- 				.end	= MODULES_END,
 -- 
-2.43.0
+2.46.0
 
