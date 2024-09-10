@@ -1,140 +1,126 @@
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E56C183CB0;
-	Tue, 10 Sep 2024 09:43:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.154.123
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 744CFEEC9;
+	Tue, 10 Sep 2024 09:49:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725961407; cv=none; b=WfGW1yN/CgekIHcHIyNLsW0B7g5FOyD3DAaeFV7vrfuOHwKM2UKczb6/8HyheFd1zptBkwe4Lr0uKTM9Q7JvBaN6PW3dIslQ/Gar1e+EGIfVXEm81SoKS2FDfp3eTYgz1+RJ9Zbd+NZm+3E9/FLghYvzTYw7oT35HqRjNQuK/6g=
+	t=1725961752; cv=none; b=p5QhvFYo14QoauMdAwrQsGERIjBYn8u2iKg0I3L6092pzoUwGg7plLtTZ0d+Pqb5Ftk0UQstALhg75F8pwEpvx/SX+bN5SCuey7IHGj5qPeKf/KVJcbp5uFk8MN/hyqhn/hF4b+Ot4/mkck0SjBruGXybTcbiSKe8GFi6/gazR0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725961407; c=relaxed/simple;
-	bh=/23hy7Mk04sacJQrQYloYrb0pp+6CKVixUjvk6VV7vM=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Fr1FObcvoNLkb58Su3+7ZVIjD3vVCgBwfvQfzUXxLxsFelSN9RbEKB5DHw2oMVTHUttZnJrlg2Sv0M+g75yy4DZLWnFo5iRHQS0SmXsPmXhdfWZTHeFJacXQgFz75jSNve1yr0scfb0amB89ozKi5QVizHybzUpD0Ef0mncdTCs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=ZCB+NE4p; arc=none smtp.client-ip=68.232.154.123
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
+	s=arc-20240116; t=1725961752; c=relaxed/simple;
+	bh=lupSH6x0eVPPc8WQr7Gn4FRJWeqYOhgQHJaEvPAegDA=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=RRxONc8ashmh3C+EAO0R5QyMohaZ+8l+NH4I5z7XN3QXq4Km9YSdNiuD1Bp/M/2Gfc6U1UsZ2H8/cnISpU0V9d2evgH64nb8ETlVKSA6fdNPmArRIhgBDm3BwbrhENMNNibCnwBETzkBdczFCHVT66GX/Cow4Dja7sv6q/Elyw4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=CR998XMH; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="ZCB+NE4p"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1725961405; x=1757497405;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=/23hy7Mk04sacJQrQYloYrb0pp+6CKVixUjvk6VV7vM=;
-  b=ZCB+NE4pPDCYxHN5VPccWeyfei2xGTzMHnAhaXvCV/wPhNhfQ8Sev0pT
-   ZqR5aCV+m46opZsZ3WDMczO5U/s8KFk6l9hc+Ze3jQjeWeL84wtXudT8A
-   hll47TS4AG3V/SvFLoKFQQusL2sLHyKSRU1C7uEpODQegGBA3brPFRRMQ
-   OlVQ3vIhJzbVHZ8XKdhT7/sYDomJef6C/cXr3XN7Y9cZlufeirt0FZTht
-   Az646NRDW4c6CEp6MpYmxBX20ET0PPFmhf26OPu7V7umdxe3+6LWjb1Dw
-   8biVCZbaxnhEaKfk/ZIUTAkIc9OInh01dZgnXWSd1dnf+bLVX/U+RMmQl
-   g==;
-X-CSE-ConnectionGUID: B+zr+AzST0asdRwPHFVR3w==
-X-CSE-MsgGUID: CKJnfMvNSFaHgD3TNp8zJw==
-X-IronPort-AV: E=Sophos;i="6.10,216,1719903600"; 
-   d="scan'208";a="198998003"
-X-Amp-Result: SKIPPED(no attachment in message)
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 10 Sep 2024 02:43:23 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35; Tue, 10 Sep 2024 02:42:43 -0700
-Received: from DEN-DL-M70577 (10.10.85.11) by chn-vm-ex03.mchp-main.com
- (10.10.85.151) with Microsoft SMTP Server id 15.1.2507.35 via Frontend
- Transport; Tue, 10 Sep 2024 02:42:41 -0700
-Date: Tue, 10 Sep 2024 09:42:40 +0000
-From: Daniel Machon <daniel.machon@microchip.com>
-To: Paolo Abeni <pabeni@redhat.com>
-CC: Horatiu Vultur <horatiu.vultur@microchip.com>,
-	<UNGLinuxDriver@microchip.com>, "David S. Miller" <davem@davemloft.net>,
-	"Eric Dumazet" <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
-	"Alexei Starovoitov" <ast@kernel.org>, Daniel Borkmann
-	<daniel@iogearbox.net>, "Jesper Dangaard Brouer" <hawk@kernel.org>, John
- Fastabend <john.fastabend@gmail.com>, <netdev@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>
-Subject: Re: [PATCH net-next 04/12] net: lan966x: use the FDMA library for
- allocation of rx buffers
-Message-ID: <20240910094240.ileosxxgujfolkza@DEN-DL-M70577>
-References: <20240905-fdma-lan966x-v1-0-e083f8620165@microchip.com>
- <20240905-fdma-lan966x-v1-4-e083f8620165@microchip.com>
- <f8b58d30-cd45-4cb6-b6ca-ac076f072688@redhat.com>
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="CR998XMH"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F069EC4CEC3;
+	Tue, 10 Sep 2024 09:49:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1725961752;
+	bh=lupSH6x0eVPPc8WQr7Gn4FRJWeqYOhgQHJaEvPAegDA=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=CR998XMH+6WfGtsfXtqm76USuVSnRoud04L9dOcP3ODRj7irp/R+oalI2m/VpUahv
+	 xK7E10+WFP3I1g2wqCkjhDxtS+bcGVx9C0At3BT4D+ZUnkqGpBZTXyGC4e0JhPxUcm
+	 ucNYys1KQ+bTyxXa9bIAuBLNmPTeDXWz7ecxMKWw=
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: stable@vger.kernel.org
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	patches@lists.linux.dev,
+	Xi Wang <xii@google.com>,
+	Song Liu <song@kernel.org>,
+	bpf@vger.kernel.org,
+	Namhyung Kim <namhyung@kernel.org>,
+	Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 6.10 177/375] perf lock contention: Fix spinlock and rwlock accounting
+Date: Tue, 10 Sep 2024 11:29:34 +0200
+Message-ID: <20240910092628.425618468@linuxfoundation.org>
+X-Mailer: git-send-email 2.46.0
+In-Reply-To: <20240910092622.245959861@linuxfoundation.org>
+References: <20240910092622.245959861@linuxfoundation.org>
+User-Agent: quilt/0.67
+X-stable: review
+X-Patchwork-Hint: ignore
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <f8b58d30-cd45-4cb6-b6ca-ac076f072688@redhat.com>
+Content-Transfer-Encoding: 8bit
 
-> Use the two functions: fdma_alloc_phys() and fdma_dcb_init() for rx
-> > buffer allocation and use the new buffers throughout.
-> > 
-> > In order to replace the old buffers with the new ones, we have to do the
-> > following refactoring:
-> > 
-> >      - use fdma_alloc_phys() and fdma_dcb_init()
-> > 
-> >      - replace the variables: rx->dma, rx->dcbs and rx->last_entry
-> >        with the equivalents from the FDMA struct.
-> > 
-> >      - make use of fdma->db_size for rx buffer size.
-> > 
-> >      - add lan966x_fdma_rx_dataptr_cb callback for obtaining the dataptr.
-> > 
-> >      - Initialize FDMA struct values.
-> > 
-> > Signed-off-by: Daniel Machon <daniel.machon@microchip.com>
-> > Reviewed-by: Horatiu Vultur <horatiu.vultur@microchip.com>
-> > ---
-> >   .../net/ethernet/microchip/lan966x/lan966x_fdma.c  | 116 ++++++++++-----------
-> >   .../net/ethernet/microchip/lan966x/lan966x_main.h  |  15 ---
-> >   2 files changed, 55 insertions(+), 76 deletions(-)
-> > 
-> > diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c b/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
-> > index b64f04ff99a8..99d09c97737e 100644
-> > --- a/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
-> > +++ b/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
-> > @@ -6,13 +6,30 @@
-> > 
-> >   #include "lan966x_main.h"
-> > 
-> > +static int lan966x_fdma_rx_dataptr_cb(struct fdma *fdma, int dcb, int db,
-> > +                                   u64 *dataptr)
-> > +{
-> > +     struct lan966x *lan966x = (struct lan966x *)fdma->priv;
-> > +     struct lan966x_rx *rx = &lan966x->rx;
-> > +     struct page *page;
-> > +
-> > +     page = page_pool_dev_alloc_pages(rx->page_pool);
-> > +     if (unlikely(!page))
-> > +             return -ENOMEM;
-> > +
-> > +     rx->page[dcb][db] = page;
-> > +     *dataptr = page_pool_get_dma_addr(page) + XDP_PACKET_HEADROOM;
-> > +
-> > +     return 0;
-> > +}
-> 
-> Very nice cleanup indeed!
-> 
-> Out of ENOMEM I can't recall if the following was already discussed, but
-> looking at this cb, I'm wondering if a possible follow-up could replace
-> the dataptr_cb() and nextptr_cb() with lib functions i.e. operating on
-> page pool or doing netdev allocations according to some fdma lib flags.
-> 
-> Cheers,
-> 
-> Paolo
->
+6.10-stable review patch.  If anyone has any objections, please let me know.
 
-Hi Paolo,
+------------------
 
-Something like this could definitely be added down the road. I initially
-left this out to reduce library complexity.
+From: Namhyung Kim <namhyung@kernel.org>
 
-Thanks for reviewing!
+[ Upstream commit 287bd5cf06e0f2c02293ce942777ad1f18059ed3 ]
 
-/Daniel
+The spinlock and rwlock use a single-element per-cpu array to track
+current locks due to performance reason.  But this means the key is
+always available and it cannot simply account lock stats in the array
+because some of them are invalid.
+
+In fact, the contention_end() program in the BPF invalidates the entry
+by setting the 'lock' value to 0 instead of deleting the entry for the
+hashmap.  So it should skip entries with the lock value of 0 in the
+account_end_timestamp().
+
+Otherwise, it'd have spurious high contention on an idle machine:
+
+  $ sudo perf lock con -ab -Y spinlock sleep 3
+   contended   total wait     max wait     avg wait         type   caller
+
+           8      4.72 s       1.84 s     590.46 ms     spinlock   rcu_core+0xc7
+           8      1.87 s       1.87 s     233.48 ms     spinlock   process_one_work+0x1b5
+           2      1.87 s       1.87 s     933.92 ms     spinlock   worker_thread+0x1a2
+           3      1.81 s       1.81 s     603.93 ms     spinlock   tmigr_update_events+0x13c
+           2      1.72 s       1.72 s     861.98 ms     spinlock   tick_do_update_jiffies64+0x25
+           6     42.48 us     13.02 us      7.08 us     spinlock   futex_q_lock+0x2a
+           1     13.03 us     13.03 us     13.03 us     spinlock   futex_wake+0xce
+           1     11.61 us     11.61 us     11.61 us     spinlock   rcu_core+0xc7
+
+I don't believe it has contention on a spinlock longer than 1 second.
+After this change, it only reports some small contentions.
+
+  $ sudo perf lock con -ab -Y spinlock sleep 3
+   contended   total wait     max wait     avg wait         type   caller
+
+           4    133.51 us     43.29 us     33.38 us     spinlock   tick_do_update_jiffies64+0x25
+           4     69.06 us     31.82 us     17.27 us     spinlock   process_one_work+0x1b5
+           2     50.66 us     25.77 us     25.33 us     spinlock   rcu_core+0xc7
+           1     28.45 us     28.45 us     28.45 us     spinlock   rcu_core+0xc7
+           1     24.77 us     24.77 us     24.77 us     spinlock   tmigr_update_events+0x13c
+           1     23.34 us     23.34 us     23.34 us     spinlock   raw_spin_rq_lock_nested+0x15
+
+Fixes: b5711042a1c8 ("perf lock contention: Use per-cpu array map for spinlocks")
+Reported-by: Xi Wang <xii@google.com>
+Cc: Song Liu <song@kernel.org>
+Cc: bpf@vger.kernel.org
+Link: https://lore.kernel.org/r/20240828052953.1445862-1-namhyung@kernel.org
+Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ tools/perf/util/bpf_lock_contention.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/tools/perf/util/bpf_lock_contention.c b/tools/perf/util/bpf_lock_contention.c
+index b4cb3fe5cc25..bc4e92c0c08b 100644
+--- a/tools/perf/util/bpf_lock_contention.c
++++ b/tools/perf/util/bpf_lock_contention.c
+@@ -286,6 +286,9 @@ static void account_end_timestamp(struct lock_contention *con)
+ 			goto next;
+ 
+ 		for (int i = 0; i < total_cpus; i++) {
++			if (cpu_data[i].lock == 0)
++				continue;
++
+ 			update_lock_stat(stat_fd, -1, end_ts, aggr_mode,
+ 					 &cpu_data[i]);
+ 		}
+-- 
+2.43.0
+
+
+
