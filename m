@@ -1,73 +1,116 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5F5214A088;
-	Tue, 10 Sep 2024 18:40:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 196FF1C69D
+	for <bpf@vger.kernel.org>; Tue, 10 Sep 2024 18:49:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725993616; cv=none; b=I0tZTPoRen4B6uFVkrP2BCbffOID/pumHw2eqKY0hb0ehZBhrTXvWZw7YK3F6qvcRzkz/Ed2vgMIM5hR0sY12MaGv/VZKfFOg0Q8ByJTkLE6AGizKvV8ggIIKkQBTzSglFK212Z6OE+ADSyOhzTs6LCKDIPHKu6gMAe0+ByxvtY=
+	t=1725994175; cv=none; b=fXsDi+9R2XL+rVn/6022huBB+Dxzmvz1Mjmr2Dfix+etBbBMLDO5tc4SMII8W7mC7+4+eSlYPft1UddmJBjKOGXRu8uKv65IUue/QCP7y0HsoYGDf5pDEGAqi/LT67gqr3N5P2AtQhm/BFZxPF2hFFqZ637/QM/TWal1FSZG6E8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725993616; c=relaxed/simple;
-	bh=fzhPJFooZn6ziiB8dUyp4xNuOymY0Ow5XTpP8LzxOr4=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=gvL3KE38lQ5vi7bQvOxM/OTKYeONk07yTKZermtzYqHo96uqeiT6+bbtKTKbHKQyZHOaYU7+HRbMj+hr3rhwYjIWnHjvkOrEWrOt1woMIkiBxuk8Q5Md18+N2LG38SlwadWLJkciy3h8ACOhJiNPN95WFaIl6K5B5mLa2S5A7Gs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EAD08C4CEC3;
-	Tue, 10 Sep 2024 18:40:13 +0000 (UTC)
-Date: Tue, 10 Sep 2024 14:40:15 -0400
-From: Steven Rostedt <rostedt@goodmis.org>
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: Masami Hiramatsu <mhiramat@kernel.org>, bpf <bpf@vger.kernel.org>, Linux
- trace kernel <linux-trace-kernel@vger.kernel.org>, adubey@linux.ibm.com,
- "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>, KP Singh
- <kpsingh@chromium.org>, linux-arm-kernel
- <linux-arm-kernel@lists.infradead.org>, Mark Rutland
- <mark.rutland@arm.com>, Will Deacon <will@kernel.org>, Alexei Starovoitov
- <ast@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>, Florent Revest
- <revest@chromium.org>, Puranjay Mohan <puranjay@kernel.org>
-Subject: Re: Unsupported CONFIG_FPROBE and CONFIG_RETHOOK on ARM64
-Message-ID: <20240910144015.643dc6da@gandalf.local.home>
-In-Reply-To: <CAEf4BzasRqeAY3ZpBDbjyWSKUriZgUf4U_YoQNSSutKhX5g2kw@mail.gmail.com>
-References: <CAEf4BzaYyEftmRmt6FswrTOsb9FuQMtzuDXD4OJMO7Ein2ZRGg@mail.gmail.com>
-	<CAEf4BzasRqeAY3ZpBDbjyWSKUriZgUf4U_YoQNSSutKhX5g2kw@mail.gmail.com>
-X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1725994175; c=relaxed/simple;
+	bh=GIM0SEBww3CHyb751X7zloUAQJ94ON5C6idhpZ1JNSg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=JagMgAok8+DpvbE0ZPcQwtprTE+cl9wvZsj1kPa24heJV3LA8sjKyi+melpfUuC2UAW+BDUrOELwTxXQE/E+BRP7YOG+KL229eTmaDen7GaoQk8PZO/Z1BLT4KBuv4dKy9+9fwimp55mcgyiDx23Nz7KjZaZ/7wBJO/oCRjeatI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HQmLiZPZ; arc=none smtp.client-ip=209.85.216.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HQmLiZPZ"
+Received: by mail-pj1-f52.google.com with SMTP id 98e67ed59e1d1-2da4ea59658so4309964a91.0
+        for <bpf@vger.kernel.org>; Tue, 10 Sep 2024 11:49:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1725994173; x=1726598973; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=OIDmwJFXxGvqwF8wdkVphg2xSm3JUjmpIKcDQMvnC2M=;
+        b=HQmLiZPZAtLB/mYjDAGQgqaWMxWd4WD6H9ZGMpeS5IfcqvwvxeRpGUsvuVUU3NdXJV
+         Z8kWyw2ozEd76L8rnTqf8pklZKgQDm8A7lWHM7GJp/2DneS2roDc/EQOJPWUfBWoaTXY
+         sPXjpN1UwBOos8e98kNAFmQZcS0NCq5Kgluhfguyfy6OUrpPe3BxuaQpp3oOZ7nf2+aP
+         5cqRlgUxcSwADpCUuKCMDPbyfJGjrIAo9m3fu+6K7kFYTlm2yqECWK21ST0w/zNrrEZA
+         J6It/eGBfZlqyvSbWi4XVnf9ERiHiFXr71yPEwEwU490rtUXiGz5E1TcAQ0YCfIQ5vkV
+         NtCQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1725994173; x=1726598973;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=OIDmwJFXxGvqwF8wdkVphg2xSm3JUjmpIKcDQMvnC2M=;
+        b=TmdYB5M+2ZAumw0d7NlWC1uAI/BtBVsI4tfVihqQfT31f0WqDwJ7iyjWIXxehwU/Xj
+         CzzcBgEOLzpj1CvRRX9bMY2H5b1I6ogMAmUVHm/m4f8vjPdKaNDE4I4dic6BgMQRakTq
+         AkimTAciL5KrCYzd0JHWn2zlByaCknnyMzySftaP4PrdIuJMp2pbPZprEXSuH7VWbh/6
+         093zmpqBJqWUoLvbv2HPjYXXtKt9FAn+samX1qB4f8WMqQEakODEvYn9jJy3Lbx5q2nQ
+         vA2kdleBcfkm6DXSix7Xejf40S7MkQTBpcG+icJYURae5+Nl/kfGA5yKa40irAjuVqcw
+         6FsA==
+X-Forwarded-Encrypted: i=1; AJvYcCVMu1OozeUoVaCnxpEzf3hN1BtW2xH+9nnso7OWwJ6PVqqN8yc7TbjMkGKS5ZkS2iLHNlQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy2bsh5aBWxay/Hm1zUrgP8hlqXixNgkp8uVG+XKCy9mIqOfYT5
+	BjWelmFGaUDKwW5CJlj+6KkyH1BYxt6gns6CIa74J+MfED7Oz8VRm+2cTd/R4NiB3Hj397H4/37
+	ZHjBLTWS+xb9tb4vm5M3wEWxOyYw=
+X-Google-Smtp-Source: AGHT+IFFZYlCZ/Hc825WfR0ZGi4AUbOm7mFgmgjO2neJYTY6fYqLGmqIa5CUEClnS5tmTBqGRkv47uF+XUKNv/mFsQQ=
+X-Received: by 2002:a17:90a:7087:b0:2cb:5aaf:c12e with SMTP id
+ 98e67ed59e1d1-2dad50f9fc1mr18247334a91.37.1725994173460; Tue, 10 Sep 2024
+ 11:49:33 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+References: <20240910125336.3056271-1-jolsa@kernel.org>
+In-Reply-To: <20240910125336.3056271-1-jolsa@kernel.org>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Tue, 10 Sep 2024 11:49:18 -0700
+Message-ID: <CAEf4BzbAOK0viUgYX-hqQXrzAbEpknDBJ1FXZdhCYSQncTC5dg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] libbpf: Fix uretprobe.multi.s programs auto attachment
+To: Jiri Olsa <jolsa@kernel.org>
+Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org, Martin KaFai Lau <kafai@fb.com>, 
+	Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>, 
+	John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@chromium.org>, 
+	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, 10 Sep 2024 11:23:29 -0700
-Andrii Nakryiko <andrii.nakryiko@gmail.com> wrote:
+On Tue, Sep 10, 2024 at 5:53=E2=80=AFAM Jiri Olsa <jolsa@kernel.org> wrote:
+>
+> As reported by Andrii we don't currently recognize uretprobe.multi.s
+> programs as return probes due to using (wrong) strcmp function.
+>
+> Using strncmp instead to match uretprobe.multi as prefix.
+>
+> Tests are passing, because the return program was executed
+> as entry program and all counts were incremented properly.
+>
+> Reported-by: Andrii Nakryiko <andrii@kernel.org>
+> Closes: https://lore.kernel.org/bpf/CAEf4BzYpH_2f0eHwQG205Q_4hewbtC9OrVSA=
+-_jn6ysz53QbBg@mail.gmail.com/
+> Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+> ---
+>  tools/lib/bpf/libbpf.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+> index 4f29e06c2641..08e110392516 100644
+> --- a/tools/lib/bpf/libbpf.c
+> +++ b/tools/lib/bpf/libbpf.c
+> @@ -11688,7 +11688,7 @@ static int attach_uprobe_multi(const struct bpf_p=
+rogram *prog, long cookie, stru
+>                 ret =3D 0;
+>                 break;
+>         case 3:
+> -               opts.retprobe =3D strcmp(probe_type, "uretprobe.multi") =
+=3D=3D 0;
+> +               opts.retprobe =3D strncmp(probe_type, "uretprobe.multi", =
+sizeof("uretprobe.multi") - 1) =3D=3D 0;
 
-> Masami, Steven,
-> 
-> Does Linus have to be in CC to get any reply here? Come on, it's been
-> almost a full week.
+I replaced this with `opts.retprobe =3D str_has_pfx(probe_type,
+"uretprobe.multi");`, less duplication
 
-And we are busy getting ready for Plumbers. Go ahead Cc Linus, I'm sure he
-doesn't care, and you will likely just annoy him unless this is a
-regression. 
 
-> 
-> Maybe ARM64 folks have some context?... And hopefully desire to see
-> this through so that ARM64 doesn't stick out as a lesser-supported
-> platform as far as tracing goes compared to loongarch, s390x, and
-> powerpc (which just landed rethook support, see [2]).
-> 
-> Note that there was already an implementation (see [1]), but for some
-> reason it never made it.
-> 
->   [1] https://lore.kernel.org/bpf/164338038439.2429999.17564843625400931820.stgit@devnote2/
->   [2] https://lore.kernel.org/bpf/172562357215.467568.2172858907419105155.b4-ty@ellerman.id.au/
-
-Masami's fprobe work is near the top of my priority list, but there's been
-bugs reported that always take precedence over features. There's been fires
-to put out that has caused this to be delayed.
-
-There! I replied.
-
--- Steve
+>                 *link =3D bpf_program__attach_uprobe_multi(prog, -1, bina=
+ry_path, func_name, &opts);
+>                 ret =3D libbpf_get_error(*link);
+>                 break;
+> --
+> 2.46.0
+>
