@@ -1,126 +1,110 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 744CFEEC9;
-	Tue, 10 Sep 2024 09:49:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D34D21917C2;
+	Tue, 10 Sep 2024 10:37:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725961752; cv=none; b=p5QhvFYo14QoauMdAwrQsGERIjBYn8u2iKg0I3L6092pzoUwGg7plLtTZ0d+Pqb5Ftk0UQstALhg75F8pwEpvx/SX+bN5SCuey7IHGj5qPeKf/KVJcbp5uFk8MN/hyqhn/hF4b+Ot4/mkck0SjBruGXybTcbiSKe8GFi6/gazR0=
+	t=1725964631; cv=none; b=An99Mun1pWu7Ue1Jsbcc/h27aQFSpl8cdO7DO1QVBAFVcYTQBKBprqO+uj7DdRDAzZ4UYpv6dNXh1YJOb+R4Wd0Fv7msQk5ORi70BqKT87CIH3j9r0AT4d8GohaptXjMuCD0m6Wmw22baoSDpxVNeHi2lMklgMAjAZZ62NjIrs4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725961752; c=relaxed/simple;
-	bh=lupSH6x0eVPPc8WQr7Gn4FRJWeqYOhgQHJaEvPAegDA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=RRxONc8ashmh3C+EAO0R5QyMohaZ+8l+NH4I5z7XN3QXq4Km9YSdNiuD1Bp/M/2Gfc6U1UsZ2H8/cnISpU0V9d2evgH64nb8ETlVKSA6fdNPmArRIhgBDm3BwbrhENMNNibCnwBETzkBdczFCHVT66GX/Cow4Dja7sv6q/Elyw4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=CR998XMH; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1725964631; c=relaxed/simple;
+	bh=/5y2J5n+r5mgeGrIde6ZYT6sCQYYNRnC8UhTFG6YJGg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Sp3MNCKKEsto+NFKxdSwv5QJLeFoztnU94dHJCys9oQ8SQRbnjJdnUlpskSLJLNY4psLhyfXHet3DBtGZ5FATVjMI4nJVgVqg/duroxqTFNvt8OW+g8SNPAwyq6Ma4K+0cId8gZcwwEbUO4Gi9wAK5+MZQm15Bldaq9EAA8W3HY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Lo6KqNoh; arc=none smtp.client-ip=209.85.128.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=kernel.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="CR998XMH"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F069EC4CEC3;
-	Tue, 10 Sep 2024 09:49:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1725961752;
-	bh=lupSH6x0eVPPc8WQr7Gn4FRJWeqYOhgQHJaEvPAegDA=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=CR998XMH+6WfGtsfXtqm76USuVSnRoud04L9dOcP3ODRj7irp/R+oalI2m/VpUahv
-	 xK7E10+WFP3I1g2wqCkjhDxtS+bcGVx9C0At3BT4D+ZUnkqGpBZTXyGC4e0JhPxUcm
-	 ucNYys1KQ+bTyxXa9bIAuBLNmPTeDXWz7ecxMKWw=
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: stable@vger.kernel.org
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	patches@lists.linux.dev,
-	Xi Wang <xii@google.com>,
-	Song Liu <song@kernel.org>,
-	bpf@vger.kernel.org,
-	Namhyung Kim <namhyung@kernel.org>,
-	Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 6.10 177/375] perf lock contention: Fix spinlock and rwlock accounting
-Date: Tue, 10 Sep 2024 11:29:34 +0200
-Message-ID: <20240910092628.425618468@linuxfoundation.org>
-X-Mailer: git-send-email 2.46.0
-In-Reply-To: <20240910092622.245959861@linuxfoundation.org>
-References: <20240910092622.245959861@linuxfoundation.org>
-User-Agent: quilt/0.67
-X-stable: review
-X-Patchwork-Hint: ignore
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Lo6KqNoh"
+Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-42cacabd2e0so5319685e9.3;
+        Tue, 10 Sep 2024 03:37:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1725964628; x=1726569428; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=xu1lNcJUo/xU0OnY1NyGxCMOv270XnBlVpGeaBK8klg=;
+        b=Lo6KqNoh4/u3Ox30oYYbiSHI0KBxaJfbadJpTexYbhuii/Y/QochdmkFQs1IAjky0i
+         QShDUSGxKKO78YBroFyBONU34YyNmHltExhMuO4TVF2T4tPSsDrrbI5FfgMqthVvcJZ/
+         UZ93850xms+qY9p1L2m9ARzvlZx7HMX7mvC/F79pg+1DJkxLLdVfqHcjEiFiY0Zs22Ew
+         VuGr5uDEcDOgAWhugUrRgLtaZLu1Ngh/JmghhLMyR2a8d7unSodSvtUWhOiMf7IpjmPQ
+         OWWTfJOBx4sQKEYL7xHuYvd/lEY+WsNLGjq0wHSP70Gm9Sz8wfZK9Vby6WbAcMorjK+i
+         77lg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1725964628; x=1726569428;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=xu1lNcJUo/xU0OnY1NyGxCMOv270XnBlVpGeaBK8klg=;
+        b=KgakJMSiagvs+i1w7GKL+q+ewXQM1n1JoZgfacgyoKlxHesscc4TWcX18cdaf+Qy8b
+         ht9WLGM1w/Ay6Imx/WAhVZJk67itw12Z4Yag8IpTb78URi3tbLnfWQLVu1kZwXW6XOHv
+         tngbwM7/G8x0q+wYWBU/3NcqQzQTmJ59pBl8YBB3JeFO/AG+jPUJCgx3Mqz7RZMAKCwC
+         j8HgfgTeuP4O1fSrsNZpjgQ//ba3xfCN/hrW4WxNNZP13Aockxzuni5rjL1gNaIvnwWS
+         yWyPMXBOuDds5fdp+a24QEWUuPUbGV4Z8sDkKmaoZkArFLawYCru/1AiOoKT/Cp2eQbL
+         b+vA==
+X-Forwarded-Encrypted: i=1; AJvYcCU/sABatN/5moUmdYTLmgbh02fAcxnnTc522O6tG+QDhUxe5tdhUFlTg4KXC9y1SHN/iXs=@vger.kernel.org, AJvYcCWpGtLwMgSeqyCC2R6kH1O9jq8Bz/qtbm0WHOBiyqOAYfABdZCvwmycIDJBig0jtD3fxJI3Lze4MTrjCHFxFOrfZ+s=@vger.kernel.org, AJvYcCXqtZSIyEiPHaxQ3VXwX8NgVx24mttpq5qxzixAcjlAFXYCogydLODhtT+XBmu8bycZQRzAaTJ506Os0vJo@vger.kernel.org
+X-Gm-Message-State: AOJu0YxOXLYZaLqhzKofBoN0zm8QeDvN6obOgad75fHu3wsXN80sxcNh
+	yOOx3wRWzllL8xTgomyDCnoCQ6JpDBbslgr7jq4eJrfpecDLxv/r
+X-Google-Smtp-Source: AGHT+IEnF6/WGdCMUXV4UAmj4y+0SdZAu0kY2k92ECXrXgN6LclTZ1rXp5B5G2q/7u7PSCRcIHAh4Q==
+X-Received: by 2002:a05:600c:3c88:b0:42b:a2fd:3e52 with SMTP id 5b1f17b1804b1-42c9f9d6e65mr105129875e9.22.1725964627370;
+        Tue, 10 Sep 2024 03:37:07 -0700 (PDT)
+Received: from gmail.com (1F2EF544.nat.pool.telekom.hu. [31.46.245.68])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-42cb3098dbdsm86638525e9.33.2024.09.10.03.37.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 Sep 2024 03:37:06 -0700 (PDT)
+Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
+Date: Tue, 10 Sep 2024 12:37:04 +0200
+From: Ingo Molnar <mingo@kernel.org>
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+	linux-tip-commits@vger.kernel.org,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Oleg Nesterov <oleg@redhat.com>, x86@kernel.org,
+	linux-kernel@vger.kernel.org,
+	"Paul E . McKenney" <paulmck@kernel.org>, bpf <bpf@vger.kernel.org>,
+	Jiri Olsa <jolsa@kernel.org>
+Subject: Re: [tip: perf/core] uprobes: switch to RCU Tasks Trace flavor for
+ better performance
+Message-ID: <ZuAhUHqAA-ejpN3X@gmail.com>
+References: <20240903174603.3554182-9-andrii@kernel.org>
+ <172554860322.2215.10385397228202759078.tip-bot2@tip-bot2>
+ <CAEf4BzbytuSpro9wT7cZY2Qf98zpDz+V0hTwwKP3ZDa866s1tA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-
-6.10-stable review patch.  If anyone has any objections, please let me know.
-
-------------------
-
-From: Namhyung Kim <namhyung@kernel.org>
-
-[ Upstream commit 287bd5cf06e0f2c02293ce942777ad1f18059ed3 ]
-
-The spinlock and rwlock use a single-element per-cpu array to track
-current locks due to performance reason.  But this means the key is
-always available and it cannot simply account lock stats in the array
-because some of them are invalid.
-
-In fact, the contention_end() program in the BPF invalidates the entry
-by setting the 'lock' value to 0 instead of deleting the entry for the
-hashmap.  So it should skip entries with the lock value of 0 in the
-account_end_timestamp().
-
-Otherwise, it'd have spurious high contention on an idle machine:
-
-  $ sudo perf lock con -ab -Y spinlock sleep 3
-   contended   total wait     max wait     avg wait         type   caller
-
-           8      4.72 s       1.84 s     590.46 ms     spinlock   rcu_core+0xc7
-           8      1.87 s       1.87 s     233.48 ms     spinlock   process_one_work+0x1b5
-           2      1.87 s       1.87 s     933.92 ms     spinlock   worker_thread+0x1a2
-           3      1.81 s       1.81 s     603.93 ms     spinlock   tmigr_update_events+0x13c
-           2      1.72 s       1.72 s     861.98 ms     spinlock   tick_do_update_jiffies64+0x25
-           6     42.48 us     13.02 us      7.08 us     spinlock   futex_q_lock+0x2a
-           1     13.03 us     13.03 us     13.03 us     spinlock   futex_wake+0xce
-           1     11.61 us     11.61 us     11.61 us     spinlock   rcu_core+0xc7
-
-I don't believe it has contention on a spinlock longer than 1 second.
-After this change, it only reports some small contentions.
-
-  $ sudo perf lock con -ab -Y spinlock sleep 3
-   contended   total wait     max wait     avg wait         type   caller
-
-           4    133.51 us     43.29 us     33.38 us     spinlock   tick_do_update_jiffies64+0x25
-           4     69.06 us     31.82 us     17.27 us     spinlock   process_one_work+0x1b5
-           2     50.66 us     25.77 us     25.33 us     spinlock   rcu_core+0xc7
-           1     28.45 us     28.45 us     28.45 us     spinlock   rcu_core+0xc7
-           1     24.77 us     24.77 us     24.77 us     spinlock   tmigr_update_events+0x13c
-           1     23.34 us     23.34 us     23.34 us     spinlock   raw_spin_rq_lock_nested+0x15
-
-Fixes: b5711042a1c8 ("perf lock contention: Use per-cpu array map for spinlocks")
-Reported-by: Xi Wang <xii@google.com>
-Cc: Song Liu <song@kernel.org>
-Cc: bpf@vger.kernel.org
-Link: https://lore.kernel.org/r/20240828052953.1445862-1-namhyung@kernel.org
-Signed-off-by: Namhyung Kim <namhyung@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- tools/perf/util/bpf_lock_contention.c | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/tools/perf/util/bpf_lock_contention.c b/tools/perf/util/bpf_lock_contention.c
-index b4cb3fe5cc25..bc4e92c0c08b 100644
---- a/tools/perf/util/bpf_lock_contention.c
-+++ b/tools/perf/util/bpf_lock_contention.c
-@@ -286,6 +286,9 @@ static void account_end_timestamp(struct lock_contention *con)
- 			goto next;
- 
- 		for (int i = 0; i < total_cpus; i++) {
-+			if (cpu_data[i].lock == 0)
-+				continue;
-+
- 			update_lock_stat(stat_fd, -1, end_ts, aggr_mode,
- 					 &cpu_data[i]);
- 		}
--- 
-2.43.0
+In-Reply-To: <CAEf4BzbytuSpro9wT7cZY2Qf98zpDz+V0hTwwKP3ZDa866s1tA@mail.gmail.com>
 
 
+* Andrii Nakryiko <andrii.nakryiko@gmail.com> wrote:
 
+> On Thu, Sep 5, 2024 at 8:03 AM tip-bot2 for Andrii Nakryiko
+> <tip-bot2@linutronix.de> wrote:
+> >
+> > The following commit has been merged into the perf/core branch of tip:
+> >
+> > Commit-ID:     c4d4569c41f9cda745cfd1d8089ea3d3526bafe5
+> > Gitweb:        https://git.kernel.org/tip/c4d4569c41f9cda745cfd1d8089ea3d3526bafe5
+> > Author:        Andrii Nakryiko <andrii@kernel.org>
+> > AuthorDate:    Tue, 03 Sep 2024 10:46:03 -07:00
+> > Committer:     Peter Zijlstra <peterz@infradead.org>
+> > CommitterDate: Thu, 05 Sep 2024 16:56:15 +02:00
+> >
+> 
+> Hm... This commit landed in perf/core, but is gone now (the rest of
+> patches is still there). Any idea what happened?
+
+Yeah, I'm getting this build failure:
+
+     kernel/events/uprobes.c:1158:9: error: implicit declaration of function ‘synchronize_rcu_tasks_trace’; did you mean ‘synchronize_rcu_tasks’? [-Werror=implicit-function-declaration]
+
+on x86-64 defconfig, when applied to today's perf/core.
+
+Thanks,
+
+	Ingo
