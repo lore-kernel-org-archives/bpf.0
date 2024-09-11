@@ -1,229 +1,147 @@
-Received: from flow4-smtp.messagingengine.com (flow4-smtp.messagingengine.com [103.168.172.139])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f180.google.com (mail-qk1-f180.google.com [209.85.222.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CBFB39AEB;
-	Wed, 11 Sep 2024 04:43:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.139
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECB172AE69
+	for <bpf@vger.kernel.org>; Wed, 11 Sep 2024 05:50:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726029822; cv=none; b=R6jy5M62GbZOXHuLgQnLxpI0drWy5EyVgoy97TdmotVkTw2XWJinjHNtqwVQ0lLtsaQ3dAUJ6mBiCdxxy52UuP8NqlCrpv6rXNwrft9zGDQdHCVC13B7SEjIxM978ibcInMTAxWiXXG41kNewvLwq86jUi7+GEeh+GiTmvQOVXo=
+	t=1726033838; cv=none; b=nwmOxYb5+nv2YSYfX1CS/tkBZVeCQWtKQil0Hi1iYPzV2X7ZZoimXrn6ikszBcLjO4rM47KK3F0bbIOg5as9qcKhmuk6DAOtfDhSEW3lUl+akZiza+UuswSJYNugdIf++LYpqOuzOpLo0bmPDhaKy2qZc9DRKsAbtbx9v2UROvI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726029822; c=relaxed/simple;
-	bh=5WJmlUpv4uarehRVhZPvsD4DxEp0exdQL0oR9rX1viQ=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=BSrlA3C0JUxUSYkcYy1Rt5TyqUBTqQchkps3RiL5R+t/7WuYFYLSrPDIKLIfTyHAPD2idICjV455kzB2N29EWiAkwZr148DNlatECOx762qpzY5jj4rmOEQdBul/ljFCtK+TjMQgSjMlbqep/zWRp7iytSlSxPqrXQ7nmWeEyMU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dxuuu.xyz; spf=pass smtp.mailfrom=dxuuu.xyz; dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b=DEH+eF2a; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=LX9q9qim; arc=none smtp.client-ip=103.168.172.139
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dxuuu.xyz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dxuuu.xyz
+	s=arc-20240116; t=1726033838; c=relaxed/simple;
+	bh=E6HcTi3QGCsCQ1lJap1BcOxIy+/sCKLlqk9XIhglA8k=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=BISj+eL+RxlubBmsk6X2ryAtfpE+aGZJZJsv1/sjDvJ6ZaVMPJdUiVQn4+IoZareSUCPvk8kbYaYNGgfxAnLyHQ02Y3bgqLTqWk6Z5YBFfFsnOZHuksJmKkJDJhaB20PykoJ9TWvPfZ1aXBGjrYPzcV/jbFyL3TkYqAQMsSama0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=obs.cr; spf=none smtp.mailfrom=obs.cr; dkim=pass (2048-bit key) header.d=obs-cr.20230601.gappssmtp.com header.i=@obs-cr.20230601.gappssmtp.com header.b=tMxauiXb; arc=none smtp.client-ip=209.85.222.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=obs.cr
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=obs.cr
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b="DEH+eF2a";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="LX9q9qim"
-Received: from phl-compute-03.internal (phl-compute-03.phl.internal [10.202.2.43])
-	by mailflow.phl.internal (Postfix) with ESMTP id 2F9A22002F0;
-	Wed, 11 Sep 2024 00:43:39 -0400 (EDT)
-Received: from phl-imap-08 ([10.202.2.84])
-  by phl-compute-03.internal (MEProxy); Wed, 11 Sep 2024 00:43:39 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm3; t=1726029819;
-	 x=1726037019; bh=U9YHIYH7MDBn8W8m5ipffYcdOZHKNXYCU4csAZFBp0E=; b=
-	DEH+eF2apJ98APgQPYNh6XK2m04O63eL+8sF5i84xFMQzIqX/d+dYYEOy+GbalG9
-	RBoxkO+Wb7x6qitIUKJfeuVi/h/wl5tkvofP7pli+zyRRDT9zlxRZ7yDEL799Tkq
-	sjNOJ9y+HDMgiijlJIfLpXFqsQtDVJZ0UTpvZ96ySqIwFcqYPyUKy+MqiuqqPeJf
-	sfgp5vjcA/1UPX74v7G5dTTJo/VxKdi6vo8H3NmYHS3R9aAXYT8aQKiKlxhxw8/a
-	CwnWM5ne6295Mo5HER9qsKzdEzbh4W/VE6DodyQA/352i6exJrDKIo/U0VXlBL8b
-	1jhe26IDKj7xjGuPndO0jw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1726029819; x=
-	1726037019; bh=U9YHIYH7MDBn8W8m5ipffYcdOZHKNXYCU4csAZFBp0E=; b=L
-	X9q9qimlwytCr3wy6RA8JWzTHF1PgCsvxU860sGMMA79qsULmzRRCwAFjkMCtXJB
-	+Xmr3JRi7DJEI9BAos8cPR3bXS90IgMJ4tAXw8LB0xLWFTSqOLwdcvYp2+TKSrPQ
-	4kfZm1speIONlYJjI7z0S0kgAk5NT1zayt5xe+gmn1t4Uex0fMCJZ40LOOHlxvw5
-	mDiWbZMW6AqNaXWftwSzHf8CnxF5IOyE3bquDZDGJSe8YGUSc078T08uRmKpVJ+M
-	TlY147lf0miNsRTSq9+BKpBlBizRDuTfsc8+ugJ2fSqkq8nINU3QusnKkFU1+bXQ
-	h0AMY7dG5p3bNeu3i+JBA==
-X-ME-Sender: <xms:-h_hZnVHLkV6mN97PjZRXqceB6Z5mDZ2YJSLeru-OZkHO0vbuMi5Kw>
-    <xme:-h_hZvmmuaYz2KzfoieYhR2XT1nUh2i9uiLgIJEH2U5iZQhBNs1qjtqTnQGdkyz2E
-    2oh9v2febItXn-UyA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrudejtddgkeeiucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
-    rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnh
-    htshculddquddttddmnegfrhhlucfvnfffucdlfeehmdenucfjughrpefoggffhffvvefk
-    jghfufgtgfesthhqredtredtjeenucfhrhhomhepfdffrghnihgvlhcuighufdcuoegugi
-    husegugihuuhhurdighiiiqeenucggtffrrghtthgvrhhnpefgleeitefgvefffedufefh
-    ffdtieetgeetgeegheeufeeufeekgfefueffvefhffenucevlhhushhtvghrufhiiigvpe
-    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegugihusegugihuuhhurdighiiipdhnsggp
-    rhgtphhtthhopedvuddpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepmhihkhholh
-    grlhesfhgsrdgtohhmpdhrtghpthhtohepshgufhesfhhomhhitghhvghvrdhmvgdprhgt
-    phhtthhopegrlhgvgigvihdrshhtrghrohhvohhithhovhesghhmrghilhdrtghomhdprh
-    gtphhtthhopegrnhgurhhiihdrnhgrkhhrhihikhhosehgmhgrihhlrdgtohhmpdhrtghp
-    thhtohepvgguugihiiekjeesghhmrghilhdrtghomhdprhgtphhtthhopehjohhhnhdrfh
-    grshhtrggsvghnugesghhmrghilhdrtghomhdprhgtphhtthhopehhrgholhhuohesghho
-    ohhglhgvrdgtohhmpdhrtghpthhtohepuggrnhhivghlsehiohhgvggrrhgsohigrdhnvg
-    htpdhrtghpthhtoheprghnughrihhisehkvghrnhgvlhdrohhrgh
-X-ME-Proxy: <xmx:-h_hZjYm_JsKU-SWJKhPpHRf7HWtCOSPBCgDn8nzsSGKcm_vp1fIFQ>
-    <xmx:-h_hZiU1XEdfk4qEEiTkQhBsliDp5bOXeBQ6jnFiE8rl1xpZj55SFQ>
-    <xmx:-h_hZhmjYYpmDMXp2qtu_tZQzOf6Tm1OUPntjnpJnzKBZ_fagGcxUQ>
-    <xmx:-h_hZveDDS4Ebten0B46D8YD2SXxZ72BGY9TvNJrMPJY1BrQkAddgQ>
-    <xmx:-x_hZspB9AnDHwaJNIMKwExFdXvRGlhbATh1-oGx7fGBCDDPhr5WxSF7>
-Feedback-ID: i6a694271:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id 732FC18A0065; Wed, 11 Sep 2024 00:43:38 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	dkim=pass (2048-bit key) header.d=obs-cr.20230601.gappssmtp.com header.i=@obs-cr.20230601.gappssmtp.com header.b="tMxauiXb"
+Received: by mail-qk1-f180.google.com with SMTP id af79cd13be357-7a9af813f6cso317253685a.3
+        for <bpf@vger.kernel.org>; Tue, 10 Sep 2024 22:50:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=obs-cr.20230601.gappssmtp.com; s=20230601; t=1726033835; x=1726638635; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=KKMHrpR5X9WXAcYhedLYlZ3oPCaG5UH+cdvsRKtIGFk=;
+        b=tMxauiXbuxjYHcpKCwflY6L1PhhX9KXoFdj33lnYBIPrZ5Y9+IK1rhK1nLBXaADSgx
+         Pw7onl2NgqiHPCgCvnFlp5u6KznI5YENuy32NBj0KCi4cbvSIOc/DyIZ0QsknlOvj2WX
+         cMNfKFhPbp06ZkAu4tiYnoNWevsqGgoa7bawhXv6/0bP2LhYPeOzBAaO9DaGoIh0l5hg
+         QJrIBu0J4jQUxKLZJdpgTJOWVrG9N1HyJapBWY6jEneDhw2htcbtYDHuAsbv4/YiB+oA
+         cXj3JRY/BIGxXX0iSG5JrOLMy7aWhYfD1a6NL9UK9gPr2m16aI9TeNXPshDRaLxL/JWo
+         Ik6w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1726033835; x=1726638635;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=KKMHrpR5X9WXAcYhedLYlZ3oPCaG5UH+cdvsRKtIGFk=;
+        b=sjXQXXX/FxoxgB3n6BLy32R+EVdDBObUjL0ANmUQdq8uf+xnpQhFlNTb+nzeUa1sQ2
+         qb6QpPKpzZgGyqzXahDWztHD/A204KvLtFssGcBZ5gPR5sXcq0O/NdZECZxs3H20MRsZ
+         lCcxRtXQ4tVPJxeclblDjRquGWKCAdtp1LmKbjrUcOFfDbhK2oEArK+sIu4q7Ce1apS0
+         HUF5APZDQk4Cf72wOusUx+lEufi8K6txDbuCpvHqiBvKq10PqAaFndz07D1J336cRTJH
+         5r2voeZHSMFyk61ux7zg5K0ulGDQ9n/L1cUifw3aU8xwFWHB5cYfHuRHgHObrLUrSD25
+         TGNA==
+X-Gm-Message-State: AOJu0YyfwyQKNt13FgxpN1qwYhw927pAAAVIRtvTZZE8lJ1owLQLtGXJ
+	hHrxxn5c1dS5TirO8pFjJ4PeBuCqD1tQM/CH86I2KIgR1PuGxnIgG3p2doBndHgI+j9ZBOxkeUz
+	8
+X-Google-Smtp-Source: AGHT+IH1+5WzwhvwUxARcN34XPKfWywXQLulDvz6VObaTDekveqtRbPPEVcL0Rs2wBbEp6fEEeMclA==
+X-Received: by 2002:a05:620a:1996:b0:7a9:a63a:9f5e with SMTP id af79cd13be357-7a9a63aadbdmr2658262485a.41.1726033835371;
+        Tue, 10 Sep 2024 22:50:35 -0700 (PDT)
+Received: from ininer.rhod.uc.edu ([129.137.96.15])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-7a9a7a040dbsm378999185a.86.2024.09.10.22.50.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 Sep 2024 22:50:35 -0700 (PDT)
+From: Will Hawkins <hawkinsw@obs.cr>
+To: bpf@vger.kernel.org,
+	bpf@ietf.org
+Cc: Will Hawkins <hawkinsw@obs.cr>
+Subject: [PATCH v2] docs/bpf: Add constant values for linkages
+Date: Wed, 11 Sep 2024 01:50:32 -0400
+Message-ID: <20240911055033.2084881-1-hawkinsw@obs.cr>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Tue, 10 Sep 2024 21:43:18 -0700
-From: "Daniel Xu" <dxu@dxuuu.xyz>
-To: "Andrii Nakryiko" <andrii.nakryiko@gmail.com>,
- "Jesper Dangaard Brouer" <hawk@kernel.org>
-Cc: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>,
- "Eduard Zingerman" <eddyz87@gmail.com>,
- "Andrii Nakryiko" <andrii@kernel.org>,
- "Daniel Borkmann" <daniel@iogearbox.net>,
- "Alexei Starovoitov" <ast@kernel.org>, "Shuah Khan" <shuah@kernel.org>,
- "John Fastabend" <john.fastabend@gmail.com>,
- "Martin KaFai Lau" <martin.lau@linux.dev>, "Song Liu" <song@kernel.org>,
- "Yonghong Song" <yonghong.song@linux.dev>, "KP Singh" <kpsingh@kernel.org>,
- "Stanislav Fomichev" <sdf@fomichev.me>, "Hao Luo" <haoluo@google.com>,
- "Jiri Olsa" <jolsa@kernel.org>, "Mykola Lysenko" <mykolal@fb.com>,
- LKML <linux-kernel@vger.kernel.org>,
- "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
- "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
- "Kernel Team" <kernel-team@meta.com>
-Message-Id: <8a088e49-2b40-4a04-ae16-57cdddde09bc@app.fastmail.com>
-In-Reply-To: 
- <cz7qwrujjiunv3yydkfamfm5mkis5xdy4vg4odwatchjoaoolk@zzithxrzdxkv>
-References: 
- <18a9ddacc99bb95e9802f8ad1e81214433df496c.1725929645.git.dxu@dxuuu.xyz>
- <CAADnVQKyfZ2-qCvmqG8z919ggdOszEjTs04H=cTGOZTi-zhx7Q@mail.gmail.com>
- <CAEf4Bza5Fiw2rZ5T7=zRwVk1Ct1Mgm7Gpa8w+NJVPZf8keY_9Q@mail.gmail.com>
- <vru2zgphyfywjcqikolwotsfun2bgtrnfmwvfls5ra4tznsydr@46w5rq7gqepz>
- <4ec8e15b-c44b-41d7-b337-32d17306d67b@app.fastmail.com>
- <CAEf4BzbHqKD87KTSmFUMokXEaAa70xNs96QqfWBHjFbuE5PL=w@mail.gmail.com>
- <rsdwvah5ov3itchsgkwgleihswoycoal5vjbeql2wbqoz5noiz@myk2atnnjaub>
- <CAEf4BzbKoyja2ErsusUcK8YaS1Rqm0VmBzwsNtQtM1-XHDhD7g@mail.gmail.com>
- <cz7qwrujjiunv3yydkfamfm5mkis5xdy4vg4odwatchjoaoolk@zzithxrzdxkv>
-Subject: Re: [PATCH bpf-next] bpf: ringbuf: Support consuming BPF_MAP_TYPE_RINGBUF from
- prog
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-[cc Jesper]
+Make the values of the symbolic constants that define the valid linkages
+for functions and variables explicit.
 
-On Tue, Sep 10, 2024, at 8:31 PM, Daniel Xu wrote:
-> On Tue, Sep 10, 2024 at 05:39:55PM GMT, Andrii Nakryiko wrote:
->> On Tue, Sep 10, 2024 at 4:44=E2=80=AFPM Daniel Xu <dxu@dxuuu.xyz> wro=
-te:
->> >
->> > On Tue, Sep 10, 2024 at 03:21:04PM GMT, Andrii Nakryiko wrote:
->> > > On Tue, Sep 10, 2024 at 3:16=E2=80=AFPM Daniel Xu <dxu@dxuuu.xyz>=
- wrote:
->> > > >
->> > > >
->> > > >
->> > > > On Tue, Sep 10, 2024, at 2:07 PM, Daniel Xu wrote:
->> > > > > On Tue, Sep 10, 2024 at 01:41:41PM GMT, Andrii Nakryiko wrote:
->> > > > >> On Tue, Sep 10, 2024 at 11:36=E2=80=AFAM Alexei Starovoitov
->> > > > [...]
->> > > > >
->> > > > >>
->> > > > >> Also, Daniel, can you please make sure that dynptr we return=
- for each
->> > > > >> sample is read-only? We shouldn't let consumer BPF program a=
-bility to
->> > > > >> corrupt ringbuf record headers (accidentally or otherwise).
->> > > > >
->> > > > > Sure.
->> > > >
->> > > > So the sample is not read-only. But I think prog is prevented f=
-rom messing
->> > > > with header regardless.
->> > > >
->> > > > __bpf_user_ringbuf_peek() returns sample past the header:
->> > > >
->> > > >         *sample =3D (void *)((uintptr_t)rb->data +
->> > > >                            (uintptr_t)((cons_pos + BPF_RINGBUF_=
-HDR_SZ) & rb->mask));
->> > > >
->> > > > dynptr is initialized with the above ptr:
->> > > >
->> > > >         bpf_dynptr_init(&dynptr, sample, BPF_DYNPTR_TYPE_LOCAL,=
- 0, size);
->> > > >
->> > > > So I don't think there's a way for the prog to access the heade=
-r thru the dynptr.
->> > > >
->> > >
->> > > By "header" I mean 8 bytes that precede each submitted ringbuf re=
-cord.
->> > > That header is part of ringbuf data area. Given user space can set
->> > > consumer_pos to arbitrary value, kernel can return arbitrary part=
- of
->> > > ringbuf data area, including that 8 byte header. If that data is
->> > > writable, it's easy to screw up that header and crash another BPF
->> > > program that reserves/submits a new record. User space can only r=
-ead
->> > > data area for BPF ringbuf, and so we rely heavily on a tight cont=
-rol
->> > > of who can write what into those 8 bytes.
->> >
->> > Ah, ok. I think I understand.
->> >
->> > Given this and your other comments about rb->busy, what about enfor=
-cing
->> > bpf_user_ringbuf_drain() NAND mmap? I think the use cases here are
->> > different enough where this makes sense.
->>=20
->> You mean disabling user-space mmap()? TBH, I'd like to understand the
->> use case first before we make such decisions. Maybe what you need is
->> not really a BPF ringbuf? Can you give us a bit more details on what
->> you are trying to achieve?
->
-> BPF cpumap, under the hood, has one MPSC ring buffer (ptr_ring) for ea=
-ch
-> entry in the cpumap. When a prog redirects to an entry in the cpumap,
-> the machinery queues up the xdp frame onto the destination CPU ptr_rin=
-g.
-> This can occur on any cpu, thus multi-producer. On processing side,
-> there is only the kthread created by the cpumap entry and bound to the
-> specific cpu that is consuming entries. So single consumer.
->
-> Goal is to track the latency overhead added from ptr_ring and the
-> kthread (versus softirq where is less overhead). Ideally we want p50,
-> p90, p95, p99 percentiles.
->
-> To do this, we need to track every single entry enqueue time as well as
-> dequeue time - events that occur in the tail are quite important.
->
-> Since ptr_ring is also a ring buffer, I thought it would be easy,
-> reliable, and fast to just create a "shadow" ring buffer. Every time
-> producer enqueues entries, I'd enqueue the same number of current
-> timestamp onto shadow RB. Same thing on consumer side, except dequeue
-> and calculate timestamp delta.
->
-> I was originally planning on writing my own lockless ring buffer in pu=
-re
-> BPF (b/c spinlocks cannot be used w/ tracepoints yet) but was hoping I
-> could avoid that with this patch.
+Signed-off-by: Will Hawkins <hawkinsw@obs.cr>
+---
+    v1 -> v2:
+      - Reformat to match style in BPF ISA document
+      - Add information about BTF_VAR_GLOBAL_EXTERN
 
-[...]
+ Documentation/bpf/btf.rst | 39 +++++++++++++++++++++++++++++++++++----
+ 1 file changed, 35 insertions(+), 4 deletions(-)
 
-Alternatively, could add a u64 timestamp to xdp_frame, which makes all
-this tracking inline (and thus more reliable). But I'm not sure how prec=
-ious
-the space in that struct is - I see some references online saying most d=
-rivers
-save 128B headroom. I also see:
+diff --git a/Documentation/bpf/btf.rst b/Documentation/bpf/btf.rst
+index 257a7e1cdf5d..93060283b6fd 100644
+--- a/Documentation/bpf/btf.rst
++++ b/Documentation/bpf/btf.rst
+@@ -368,7 +368,7 @@ No additional type data follow ``btf_type``.
+   * ``info.kind_flag``: 0
+   * ``info.kind``: BTF_KIND_FUNC
+   * ``info.vlen``: linkage information (BTF_FUNC_STATIC, BTF_FUNC_GLOBAL
+-                   or BTF_FUNC_EXTERN)
++                   or BTF_FUNC_EXTERN - see :ref:`BTF_Function_Linkage_Constants`)
+   * ``type``: a BTF_KIND_FUNC_PROTO type
+ 
+ No additional type data follow ``btf_type``.
+@@ -424,9 +424,8 @@ following data::
+         __u32   linkage;
+     };
+ 
+-``struct btf_var`` encoding:
+-  * ``linkage``: currently only static variable 0, or globally allocated
+-                 variable in ELF sections 1
++``btf_var.linkage`` may take the values: BTF_VAR_STATIC, BTF_VAR_GLOBAL_ALLOCATED or BTF_VAR_GLOBAL_EXTERN -
++see :ref:`BTF_Var_Linkage_Constants`.
+ 
+ Not all type of global variables are supported by LLVM at this point.
+ The following is currently available:
+@@ -549,6 +548,38 @@ The ``btf_enum64`` encoding:
+ If the original enum value is signed and the size is less than 8,
+ that value will be sign extended into 8 bytes.
+ 
++2.3 Constant Values
++-------------------
++
++.. _BTF_Function_Linkage_Constants:
++
++2.3.1 Function Linkage Constant Values
++~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++.. table:: Function Linkage Values and Meanings
++
++  ===================  =====  ===========
++  kind                 value  description
++  ===================  =====  ===========
++  ``BTF_FUNC_STATIC``  0x0    definition of subprogram not visible outside containing compilation unit
++  ``BTF_FUNC_GLOBAL``  0x1    definition of subprogram visible outside containing compilation unit
++  ``BTF_FUNC_EXTERN``  0x2    declaration of a subprogram whose definition is outside the containing compilation unit
++  ===================  =====  ===========
++
++
++.. _BTF_Var_Linkage_Constants:
++
++2.3.2 Variable Linkage Constant Values
++~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++.. table:: Variable Linkage Values and Meanings
++
++  ============================  =====  ===========
++  kind                          value  description
++  ============================  =====  ===========
++  ``BTF_VAR_STATIC``            0x0    definition of global variable not visible outside containing compilation unit
++  ``BTF_VAR_GLOBAL_ALLOCATED``  0x1    definition of global variable visible outside containing compilation unit
++  ``BTF_VAR_GLOBAL_EXTERN``     0x2    declaration of global variable whose definition is outside the containing compilation unit
++  ============================  =====  ===========
++
+ 3. BTF Kernel API
+ =================
+ 
+-- 
+2.45.2
 
-        #define XDP_PACKET_HEADROOM 256
-
-Could probably amortize the timestamp read by setting it in
-bq_flush_to_queue().
