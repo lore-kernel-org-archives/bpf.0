@@ -1,94 +1,103 @@
-Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E108E2A1CA
-	for <bpf@vger.kernel.org>; Thu, 12 Sep 2024 01:28:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 684115684;
+	Thu, 12 Sep 2024 01:33:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726104525; cv=none; b=JANpcjsQ08eIGhluMbLDnTNpIml6uVbgXtnyO5+sFAezVotV86t/4JV+3SMNaN/Tse/JKw/83IaQukec0VQgfEg31q9IsUWaoSn48okukrDJXeqZBcZ6DwAj7dd0yCCggEY4PqN26GzyHEcd/sFsV0J7re3tYmEj+X81DKmpos8=
+	t=1726104810; cv=none; b=cfq75SxBPEPCpJWLSqjq8Ar8UHLUbp3/PN4DdRGLpiYGBIGeiNWmIenfmwrMZA/yH2xWkBxNpgwgJVtTxqjHAQXNzjUWSxSzH3VSDhHzOR6h2c8QyJItEdnYSPDQimfSQYlX73KGDTiCH3tql4qR1+bn0IIvtHRH0TfuUN8l/9E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726104525; c=relaxed/simple;
-	bh=/CIXCttOtx+IrQ/W22CA6QW6Ybk/FYVAYiHjpqoQnzk=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=q2p9isf11LF17xTSV1Me+khqx3HJWoC9RDFAC3uSPiF3ITSrVB9DLuoIUM53g4IV3QNcKLrcAqr9+AqgB2WIG4CFHk+S88WXSdOh6qu0W3U14f5aoOhFtuCw8xatcQ1HU3VrIm1cd2EdcvDNl9VDkAqhpLVDutquYaY224Gdd7I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
+	s=arc-20240116; t=1726104810; c=relaxed/simple;
+	bh=jHmJWTrEqPsqScYuqYapWqJNq9LsR2bNW6C0fjjRqJc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=XZiFcrNAoJPSOVzs6Na6QIbvqenvelelvOaodDyC7BVFOp2wLZOB92etf0y2eZPdVCsOBUpe/Y8z4p/fC1KjgFIzMjCcQj7Z0wz7xsU0A6LqaIDe8W73DtBcuCR9JuxZwvE2nE5BGzTnewCnXoDSKR7ODO+jMXTHBcaEPP10Eu4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.235])
-	by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4X40FN0J3kz4f3jrs
-	for <bpf@vger.kernel.org>; Thu, 12 Sep 2024 09:28:24 +0800 (CST)
+Received: from mail.maildlp.com (unknown [172.19.163.216])
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4X40Ls0Tsyz4f3kvP;
+	Thu, 12 Sep 2024 09:33:09 +0800 (CST)
 Received: from mail02.huawei.com (unknown [10.116.40.128])
-	by mail.maildlp.com (Postfix) with ESMTP id 7CCB41A06D7
-	for <bpf@vger.kernel.org>; Thu, 12 Sep 2024 09:28:39 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.175.124.27])
-	by APP4 (Coremail) with SMTP id gCh0CgCXysbFQ+JmOHBLBA--.63562S4;
-	Thu, 12 Sep 2024 09:28:39 +0800 (CST)
-From: Hou Tao <houtao@huaweicloud.com>
-To: bpf@vger.kernel.org
-Cc: Martin KaFai Lau <martin.lau@linux.dev>,
-	Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Hao Luo <haoluo@google.com>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Amery Hung <amery.hung@bytedance.com>,
-	Dave Marchevsky <davemarchevsky@fb.com>,
-	houtao1@huawei.com,
-	xukuohai@huawei.com
-Subject: [PATCH bpf-next 0/2] Two tiny fixes for btf record
-Date: Thu, 12 Sep 2024 09:28:43 +0800
-Message-Id: <20240912012845.3458483-1-houtao@huaweicloud.com>
-X-Mailer: git-send-email 2.29.2
+	by mail.maildlp.com (Postfix) with ESMTP id 555221A172E;
+	Thu, 12 Sep 2024 09:33:25 +0800 (CST)
+Received: from [10.67.109.79] (unknown [10.67.109.79])
+	by APP4 (Coremail) with SMTP id gCh0CgDnHMnjROJmEMNLBA--.2713S2;
+	Thu, 12 Sep 2024 09:33:25 +0800 (CST)
+Message-ID: <83cea8c6-d2f8-42f2-990e-80412ebf296e@huaweicloud.com>
+Date: Thu, 12 Sep 2024 09:33:23 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:gCh0CgCXysbFQ+JmOHBLBA--.63562S4
-X-Coremail-Antispam: 1UD129KBjvdXoWrJw4fZr48XFWfWF4UCFy3Arb_yoWxGFb_Ca
-	9Yyry8Wa1DZF47Ga47AFZ3WryxKFWkJrn5JrWqgrZxXryrXan7GF1vv348urykua1qgFW5
-	CFs5Zryftr12qjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-	9fnUUIcSsGvfJTRUUUbxAYFVCjjxCrM7AC8VAFwI0_Xr0_Wr1l1xkIjI8I6I8E6xAIw20E
-	Y4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwV
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 1/1] cgroup: fix deadlock caused by cgroup_mutex and
+ cpu_hotplug_lock
+To: Tejun Heo <tj@kernel.org>, Roman Gushchin <roman.gushchin@linux.dev>
+Cc: =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
+ Chen Ridong <chenridong@huawei.com>, martin.lau@linux.dev, ast@kernel.org,
+ daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com, song@kernel.org,
+ yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
+ sdf@google.com, haoluo@google.com, jolsa@kernel.org,
+ lizefan.x@bytedance.com, hannes@cmpxchg.org, bpf@vger.kernel.org,
+ cgroups@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20240817093334.6062-1-chenridong@huawei.com>
+ <20240817093334.6062-2-chenridong@huawei.com>
+ <kz6e3oadkmrl7elk6z765t2hgbcqbd2fxvb2673vbjflbjxqck@suy4p2mm7dvw>
+ <07501c67-3b18-48e3-8929-e773d8d6920f@huaweicloud.com>
+ <ZuC0A98pxYc3TODM@google.com> <ZuC3femqBNufgX1D@slm.duckdns.org>
+Content-Language: en-US
+From: Chen Ridong <chenridong@huaweicloud.com>
+In-Reply-To: <ZuC3femqBNufgX1D@slm.duckdns.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID:gCh0CgDnHMnjROJmEMNLBA--.2713S2
+X-Coremail-Antispam: 1UD129KBjvdXoW7GFWDJry3tw4DGw4UXryUtrb_yoWDurb_W3
+	92vr1DC3yUGFW5uw1qkFZ3WFWxXrZY9r1DX34DJwnrWw1Yyr43CryDXFy3X3Z8WFWrJrnI
+	gF90q34qvasrZjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+	9fnUUIcSsGvfJTRUUUbx8YFVCjjxCrM7AC8VAFwI0_Xr0_Wr1l1xkIjI8I6I8E6xAIw20E
+	Y4v20xvaj40_JFC_Wr1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwV
 	A0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x02
 	67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxV
 	AFwI0_GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2
 	j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7x
-	kEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACI402YVCY1x02628vn2kIc2xKxwCY1x0262kK
-	e7AKxVW8ZVWrXwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c
-	02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_
-	WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7
-	CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v2
-	6r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07
-	jIksgUUUUU=
-X-CM-SenderInfo: xkrx3t3r6k3tpzhluzxrxghudrp/
+	kEbVWUJVW8JwACjcxG0xvEwIxGrwACI402YVCY1x02628vn2kIc2xKxwCY1x0262kKe7AK
+	xVW8ZVWrXwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F4
+	0E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_Wryl
+	IxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxV
+	AFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j
+	6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07jIks
+	gUUUUU=
+X-CM-SenderInfo: hfkh02xlgr0w46kxt4xhlfz01xgou0bp/
 
-From: Hou Tao <houtao1@huawei.com>
 
-Hi,
 
-The tiny patch set aims to fix two problems found during the development
-of supporting dynptr key in hash table. Patch #1 fixes the missed
-btf_record_free() when map creation fails and patch #2 fixes the missed
-kfree() when there is no special field in the passed btf.
+On 2024/9/11 5:17, Tejun Heo wrote:
+> On Tue, Sep 10, 2024 at 09:02:59PM +0000, Roman Gushchin wrote:
+> ...
+>>>> By that reasoning any holder of cgroup_mutex on system_wq makes system
+>>>> susceptible to a deadlock (in presence of cpu_hotplug_lock waiting
+>>>> writers + cpuset operations). And the two work items must meet in same
+>>>> worker's processing hence probability is low (zero?) with less than
+>>>> WQ_DFL_ACTIVE items.
+>>
+>> Right, I'm on the same page. Should we document then somewhere that
+>> the cgroup mutex can't be locked from a system wq context?
+>>
+>> I think thus will also make the Fixes tag more meaningful.
+> 
+> I think that's completely fine. What's not fine is saturating system_wq.
+> Anything which creates a large number of concurrent work items should be
+> using its own workqueue. If anything, workqueue needs to add a warning for
+> saturation conditions and who are the offenders.
+> 
+> Thanks.
+> 
 
-Comments are always welcome.
+I will add a patch do document that.
+Should we modify WQ_DFL_ACTIVE(256 now)? Maybe 1024 is acceptable?
 
-Hou Tao (2):
-  bpf: Call the missed btf_record_free() when map creation fails
-  bpf: Call the missed kfree() when there is no special field in btf
-
- kernel/bpf/btf.c     |  4 +++-
- kernel/bpf/syscall.c | 19 ++++++++++++-------
- 2 files changed, 15 insertions(+), 8 deletions(-)
-
--- 
-2.29.2
+Best regards,
+Ridong
 
