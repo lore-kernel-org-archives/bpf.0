@@ -1,102 +1,196 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 199591D9348
-	for <bpf@vger.kernel.org>; Fri, 13 Sep 2024 12:45:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AA891DA610;
+	Fri, 13 Sep 2024 13:25:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.189
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726231520; cv=none; b=asOgtmG1hlvdeM69yKD6/qqQht3wcOGRncwg9HFy4EpoqM84bUPT2EPKx3NGpXY2Dr1KAK2E4Wvvdz9ENX1W9pxCvnZaYol/RNaDBlJr5YtKYvbUdgdL8BAZDl6rqgC0ayG5kusb2KS2Nrt5Y189i3tcSqNKtX9JukajCwRVbms=
+	t=1726233938; cv=none; b=BMseHi2UxbmDava+4kZg6ifFU0ugL/kEVHXgN0+gJkNpI2MExxFDD8O8rcEGkUKmFAU1uAmzngiKk/YJ8Xe2NmxCd0LQ7c6pFxCMVcDDzbMy359Ert1vcFIHLIq4C4fWwvEll7SVmqsuWauLMbXFEGufQEqXopq9fwAPBBanB9w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726231520; c=relaxed/simple;
-	bh=cGyOYOSjyHdELfZ+B0zzPen0DIFwtI6GvpI4dgZ+Zq0=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=kAjcHFjAJPPZhRAG1MfSf5bP1R3AVeot4jdG9VEvvMXdgVFovNyO76ymcoNiTPwD1w4+z8foBwEBvyPqs1my8RYUphXOObAcdtedgfakrpnwecyD+DGqFa/s6G/EQZooPA7faUPWYkGw1ZyxtQBkOmGWMhL77J9u62pgURwkxwc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=A1fuVgCF; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="A1fuVgCF"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93F29C4CEC0;
-	Fri, 13 Sep 2024 12:45:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1726231519;
-	bh=cGyOYOSjyHdELfZ+B0zzPen0DIFwtI6GvpI4dgZ+Zq0=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=A1fuVgCFvuQvRpz7K74HMNLLM8rwL6M82/ALm5qTbnpe2kK8ApjZ5O35w3rGjShG4
-	 cOpHUutAUKbleDAzHoX5BZrrcXe8/ZSxrJ8V4J0mjCNWg+RYaWxCyHNmJ6QSm8XQNO
-	 uQL4YOJ9RQsWnVmdq4SP5cFGVTvPd/m3NdxFnwk2DED0NgtDTK/O9Bx1YYdNYzp7wV
-	 M/NkqhV8PkwkAyPQF6nASHpz4C/WSStThDTitk0dlaGfLVo5rrNt0x3LKHIuAn1Cn9
-	 srGNhoIRtquTVtQFq45edOYbsQLNgs4ZtDJjU6dIAmefiPfjrV/RLpasXEVJD/v1/Q
-	 IxowZKmc0M29A==
-Date: Fri, 13 Sep 2024 21:45:15 +0900
-From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-Cc: Andrii Nakryiko <andrii.nakryiko@gmail.com>, kernel-ci@meta.com,
- bot+bpf-ci@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
- martin.lau@linux.dev, bpf <bpf@vger.kernel.org>, Jiri Olsa
- <jolsa@kernel.org>
-Subject: Re: [PATCH v14 00/19] tracing: fprobe: function_graph:
- Multi-function graph and fprobe on fgraph
-Message-Id: <20240913214515.894c868a1ef4968550553b86@kernel.org>
-In-Reply-To: <20240913175935.bb0892ab1e6052efc12c6423@kernel.org>
-References: <172615368656.133222.2336770908714920670.stgit@devnote2>
-	<0170cd7d95df0583770c385c1e11bd27dfacf618b71b6e723f0952efc0ce9040@mail.kernel.org>
-	<CAEf4BzZgAkSkMd6Vk3m1D-0AVqXp06PaBPr+2L7Dd3WRgJ8JvA@mail.gmail.com>
-	<20240913085402.9e5b2c506a8973b099679d04@kernel.org>
-	<CAEf4BzZEoNHgcLDPTPQ=yyQTZtEZoVrGbBbeTf3vqe_wcpS6EA@mail.gmail.com>
-	<20240913175935.bb0892ab1e6052efc12c6423@kernel.org>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1726233938; c=relaxed/simple;
+	bh=yjDSVydC9XmqKwk9cyO6jma5IlqOR9x3ARLftXVwpqs=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=tbdzO0UppNRzTTdyLIE0STaSY5As1wwQcE5Gga8yfeM62WyC8BXPgQMH2PJzQwXi6vLEybhzlHxBIHS41JBsU3KshZOS33KWKP7aOvaM6Me+9cl/Fa73+DGl79o2cc8/lBAGEE+ZOU9KjA3aVeIqTXi3CLsxhVboOV40wpLB1YM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.189
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.163.48])
+	by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4X4w6D2qBMz69WF;
+	Fri, 13 Sep 2024 21:25:24 +0800 (CST)
+Received: from kwepemd100013.china.huawei.com (unknown [7.221.188.163])
+	by mail.maildlp.com (Postfix) with ESMTPS id D90A118009B;
+	Fri, 13 Sep 2024 21:25:32 +0800 (CST)
+Received: from huawei.com (10.67.174.121) by kwepemd100013.china.huawei.com
+ (7.221.188.163) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1258.34; Fri, 13 Sep
+ 2024 21:25:31 +0800
+From: Chen Ridong <chenridong@huawei.com>
+To: <martin.lau@linux.dev>, <ast@kernel.org>, <daniel@iogearbox.net>,
+	<andrii@kernel.org>, <eddyz87@gmail.com>, <song@kernel.org>,
+	<yonghong.song@linux.dev>, <john.fastabend@gmail.com>, <kpsingh@kernel.org>,
+	<sdf@google.com>, <haoluo@google.com>, <jolsa@kernel.org>, <tj@kernel.org>,
+	<lizefan.x@bytedance.com>, <hannes@cmpxchg.org>, <roman.gushchin@linux.dev>
+CC: <bpf@vger.kernel.org>, <cgroups@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>
+Subject: [PATCH v4 1/3] cgroup: fix deadlock caused by cgroup_mutex and cpu_hotplug_lock
+Date: Fri, 13 Sep 2024 13:17:18 +0000
+Message-ID: <20240913131720.1762188-2-chenridong@huawei.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20240913131720.1762188-1-chenridong@huawei.com>
+References: <20240913131720.1762188-1-chenridong@huawei.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ kwepemd100013.china.huawei.com (7.221.188.163)
 
-On Fri, 13 Sep 2024 17:59:35 +0900
-Masami Hiramatsu (Google) <mhiramat@kernel.org> wrote:
+We found a hung_task problem as shown below:
 
-> > 
-> > Taking failing output from the test:
-> > 
-> > > > > kprobe_multi_testmod_check:FAIL:kretprobe_test3_result unexpected kretprobe_test3_result: actual 0 != expected 1
-> > 
-> > kretprobe_test3_result is a sort of identifier for a test condition,
-> > you can find a corresponding line in user space .c file grepping for
-> > that:
-> > 
-> > ASSERT_EQ(skel->bss->kretprobe_testmod_test3_result, 1,
-> > "kretprobe_test3_result");
-> > 
-> > Most probably the problem is in:
-> > 
-> > __u64 addr = bpf_get_func_ip(ctx);
-> 
-> Yeah, and as I replyed to another thread, the problem is
-> that the ftrace entry_ip is not symbol ip.
-> 
-> We have ftrace_call_adjust() arch function for reverse
-> direction (symbol ip to ftrace entry ip) but what we need
-> here is the reverse translate function (ftrace entry to symbol)
-> 
-> The easiest way is to use kallsyms to find it, but this is
-> a bit costful (but it just increase bsearch in several levels).
-> Other possible options are
-> 
->  - Change bpf_kprobe_multi_addrs_cmp() to accept a range
->    of address. [sym_addr, sym_addr + offset) returns true,
->    bpf_kprobe_multi_cookie() can find the entry address.
->    The offset depends on arch, but 16 is enough.
+INFO: task kworker/0:0:8 blocked for more than 327 seconds.
+"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+Workqueue: events cgroup_bpf_release
+Call Trace:
+ <TASK>
+ __schedule+0x5a2/0x2050
+ ? find_held_lock+0x33/0x100
+ ? wq_worker_sleeping+0x9e/0xe0
+ schedule+0x9f/0x180
+ schedule_preempt_disabled+0x25/0x50
+ __mutex_lock+0x512/0x740
+ ? cgroup_bpf_release+0x1e/0x4d0
+ ? cgroup_bpf_release+0xcf/0x4d0
+ ? process_scheduled_works+0x161/0x8a0
+ ? cgroup_bpf_release+0x1e/0x4d0
+ ? mutex_lock_nested+0x2b/0x40
+ ? __pfx_delay_tsc+0x10/0x10
+ mutex_lock_nested+0x2b/0x40
+ cgroup_bpf_release+0xcf/0x4d0
+ ? process_scheduled_works+0x161/0x8a0
+ ? trace_event_raw_event_workqueue_execute_start+0x64/0xd0
+ ? process_scheduled_works+0x161/0x8a0
+ process_scheduled_works+0x23a/0x8a0
+ worker_thread+0x231/0x5b0
+ ? __pfx_worker_thread+0x10/0x10
+ kthread+0x14d/0x1c0
+ ? __pfx_kthread+0x10/0x10
+ ret_from_fork+0x59/0x70
+ ? __pfx_kthread+0x10/0x10
+ ret_from_fork_asm+0x1b/0x30
+ </TASK>
 
-Oops. no, this bpf_kprobe_multi_cookie() is used only for storing
-test data. Not a general problem solving. (I saw kprobe_multi_check())
+This issue can be reproduced by the following pressuse test:
+1. A large number of cpuset cgroups are deleted.
+2. Set cpu on and off repeatly.
+3. Set watchdog_thresh repeatly.
+The scripts can be obtained at LINK mentioned above the signature.
 
-So solving problem is much costly, we need to put more arch-
-dependent in bpf_trace, and make sure it does reverse translation
-of ftrace_call_adjust(). (this means if you expand arch support,
-you need to add such implementation)
+The reason for this issue is cgroup_mutex and cpu_hotplug_lock are
+acquired in different tasks, which may lead to deadlock.
+It can lead to a deadlock through the following steps:
+1. A large number of cpusets are deleted asynchronously, which puts a
+   large number of cgroup_bpf_release works into system_wq. The max_active
+   of system_wq is WQ_DFL_ACTIVE(256). Consequently, all active works are
+   cgroup_bpf_release works, and many cgroup_bpf_release works will be put
+   into inactive queue. As illustrated in the diagram, there are 256 (in
+   the acvtive queue) + n (in the inactive queue) works.
+2. Setting watchdog_thresh will hold cpu_hotplug_lock.read and put
+   smp_call_on_cpu work into system_wq. However step 1 has already filled
+   system_wq, 'sscs.work' is put into inactive queue. 'sscs.work' has
+   to wait until the works that were put into the inacvtive queue earlier
+   have executed (n cgroup_bpf_release), so it will be blocked for a while.
+3. Cpu offline requires cpu_hotplug_lock.write, which is blocked by step 2.
+4. Cpusets that were deleted at step 1 put cgroup_release works into
+   cgroup_destroy_wq. They are competing to get cgroup_mutex all the time.
+   When cgroup_metux is acqured by work at css_killed_work_fn, it will
+   call cpuset_css_offline, which needs to acqure cpu_hotplug_lock.read.
+   However, cpuset_css_offline will be blocked for step 3.
+5. At this moment, there are 256 works in active queue that are
+   cgroup_bpf_release, they are attempting to acquire cgroup_mutex, and as
+   a result, all of them are blocked. Consequently, sscs.work can not be
+   executed. Ultimately, this situation leads to four processes being
+   blocked, forming a deadlock.
 
-Thank you,
+system_wq(step1)		WatchDog(step2)			cpu offline(step3)	cgroup_destroy_wq(step4)
+...
+2000+ cgroups deleted asyn
+256 actives + n inactives
+				__lockup_detector_reconfigure
+				P(cpu_hotplug_lock.read)
+				put sscs.work into system_wq
+256 + n + 1(sscs.work)
+sscs.work wait to be executed
+				warting sscs.work finish
+								percpu_down_write
+								P(cpu_hotplug_lock.write)
+								...blocking...
+											css_killed_work_fn
+											P(cgroup_mutex)
+											cpuset_css_offline
+											P(cpu_hotplug_lock.read)
+											...blocking...
+256 cgroup_bpf_release
+mutex_lock(&cgroup_mutex);
+..blocking...
 
+To fix the problem, place cgroup_bpf_release works on cgroup_destroy_wq,
+which can break the loop and solve the problem. System wqs are for misc
+things which shouldn't create a large number of concurrent work items.
+If something is going to generate >WQ_DFL_ACTIVE(256) concurrent work
+items, it should use its own dedicated workqueue.
+
+Reviewed-by: Michal Koutný <mkoutny@suse.com>
+Fixes: 4bfc0bb2c60e ("bpf: decouple the lifetime of cgroup_bpf from cgroup itself")
+Link: https://lore.kernel.org/cgroups/e90c32d2-2a85-4f28-9154-09c7d320cb60@huawei.com/T/#t
+Signed-off-by: Chen Ridong <chenridong@huawei.com>
+---
+ kernel/bpf/cgroup.c             | 2 +-
+ kernel/cgroup/cgroup-internal.h | 1 +
+ kernel/cgroup/cgroup.c          | 2 +-
+ 3 files changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
+index e7113d700b87..a8804f62bc25 100644
+--- a/kernel/bpf/cgroup.c
++++ b/kernel/bpf/cgroup.c
+@@ -334,7 +334,7 @@ static void cgroup_bpf_release_fn(struct percpu_ref *ref)
+ 	struct cgroup *cgrp = container_of(ref, struct cgroup, bpf.refcnt);
+ 
+ 	INIT_WORK(&cgrp->bpf.release_work, cgroup_bpf_release);
+-	queue_work(system_wq, &cgrp->bpf.release_work);
++	queue_work(cgroup_destroy_wq, &cgrp->bpf.release_work);
+ }
+ 
+ /* Get underlying bpf_prog of bpf_prog_list entry, regardless if it's through
+diff --git a/kernel/cgroup/cgroup-internal.h b/kernel/cgroup/cgroup-internal.h
+index c964dd7ff967..17ac19bc8106 100644
+--- a/kernel/cgroup/cgroup-internal.h
++++ b/kernel/cgroup/cgroup-internal.h
+@@ -13,6 +13,7 @@
+ extern spinlock_t trace_cgroup_path_lock;
+ extern char trace_cgroup_path[TRACE_CGROUP_PATH_LEN];
+ extern void __init enable_debug_cgroup(void);
++extern struct workqueue_struct *cgroup_destroy_wq;
+ 
+ /*
+  * cgroup_path() takes a spin lock. It is good practice not to take
+diff --git a/kernel/cgroup/cgroup.c b/kernel/cgroup/cgroup.c
+index 2032dc501427..a94ea6b993be 100644
+--- a/kernel/cgroup/cgroup.c
++++ b/kernel/cgroup/cgroup.c
+@@ -124,7 +124,7 @@ DEFINE_PERCPU_RWSEM(cgroup_threadgroup_rwsem);
+  * destruction work items don't end up filling up max_active of system_wq
+  * which may lead to deadlock.
+  */
+-static struct workqueue_struct *cgroup_destroy_wq;
++struct workqueue_struct *cgroup_destroy_wq;
+ 
+ /* generate an array of cgroup subsystem pointers */
+ #define SUBSYS(_x) [_x ## _cgrp_id] = &_x ## _cgrp_subsys,
 -- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+2.34.1
+
