@@ -1,78 +1,87 @@
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9DA61DC04E;
-	Fri, 13 Sep 2024 13:25:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.255
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58C231D6C7A;
+	Fri, 13 Sep 2024 13:38:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726233942; cv=none; b=mJTk1Re3ywduo6Lj0H0rcKnSzIE9QgSNyZIW2xsT7YLg2HCJNEq5wLdsOaamQGYvlbu4kXC/vg4qD2TxSv6X1/hHASi5B7uPLeKj6Q1pkbhdBJEHD06tRVGsxHTa/CKO5GaCE/+PJFJGqmhigNiYy6l8SM3r8ivymGLC07ZbWP4=
+	t=1726234738; cv=none; b=MUZYsl3k4gBNfwOwaEKJ2TjoRyQSyAPaeby9/WPi9m5fqCvzBr0Ceiy+ZN1FsunKGslofnB/8BVaK9sVutMfZ2njcmEEaOnVZLN6r/jacwma8XhAkUzIkIw6RAVoUaTC1Ngp8tgFNpl1Nq5ouH/j+zrxQ3c/9W/NDuAdrdSD+e4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726233942; c=relaxed/simple;
-	bh=ZVgNSlAKMOZIzRkPlFjag8EcjBn5Y6/V4SSAK7AwDf4=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=t3MaO8jGotb8qA4jKX6dB1WtHhNDn1HMryqsao+xk5jP0Yy0uM2ZJ5HYaQUvmiWM0FSM7r5aTMRv4w3ITCvUun7thQNF7QF8WFP+ANcD5iIllvMVOdv3K7mBiwyvO1B0z3L7rPAFemAAsAJv57vp1hDzNujED/THbniUSc6G+zM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.255
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.163.252])
-	by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4X4w52593Nz13Kmt;
-	Fri, 13 Sep 2024 21:24:22 +0800 (CST)
-Received: from kwepemd100013.china.huawei.com (unknown [7.221.188.163])
-	by mail.maildlp.com (Postfix) with ESMTPS id 163711800A7;
-	Fri, 13 Sep 2024 21:25:32 +0800 (CST)
-Received: from huawei.com (10.67.174.121) by kwepemd100013.china.huawei.com
- (7.221.188.163) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1258.34; Fri, 13 Sep
- 2024 21:25:31 +0800
-From: Chen Ridong <chenridong@huawei.com>
-To: <martin.lau@linux.dev>, <ast@kernel.org>, <daniel@iogearbox.net>,
-	<andrii@kernel.org>, <eddyz87@gmail.com>, <song@kernel.org>,
-	<yonghong.song@linux.dev>, <john.fastabend@gmail.com>, <kpsingh@kernel.org>,
-	<sdf@google.com>, <haoluo@google.com>, <jolsa@kernel.org>, <tj@kernel.org>,
-	<lizefan.x@bytedance.com>, <hannes@cmpxchg.org>, <roman.gushchin@linux.dev>
-CC: <bpf@vger.kernel.org>, <cgroups@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>
-Subject: [PATCH v4 0/3]  Fix deadlock caused by cgroup_mutex and cpu_hotplug_lock
-Date: Fri, 13 Sep 2024 13:17:17 +0000
-Message-ID: <20240913131720.1762188-1-chenridong@huawei.com>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1726234738; c=relaxed/simple;
+	bh=/KYBSsDBCUsu+s6eKQzz/C+xxOtD1VUVkICShhczuto=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=PdhHl2bzhdJb5TXUPM/PmIqt76ySRJBp0k4DU0L89zGzqJf5b/QM8eN8od9d/NuQiU6nJC4dNwzgarXfzYzxT1NbIzZn+W5CEhXJ0Bq6rIms5Mg7T9Ys/qfMLj1aXKL8ZJA0zs6csFEDCKBWgfk40IGrs2yaV6BzaVXjunM4Ff8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Bs/fFwqb; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Bs/fFwqb"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34808C4CEC0;
+	Fri, 13 Sep 2024 13:38:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1726234738;
+	bh=/KYBSsDBCUsu+s6eKQzz/C+xxOtD1VUVkICShhczuto=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=Bs/fFwqbdW6dlxBnItsXK36LvRQXPXcToYHuJUWFx6tvZ+ExVwLy+TlJyf+jFxlf0
+	 68TsjIdQub/qzqSm6R/Ym1o0APmC8da4YOjZOgiFrHMPvaoAFDTNyXnf2dpdDFRnQJ
+	 md/lYpfK1c1N0fV3phv+O+kGwE02CYfXL2IBShc7hbPsmaA/TWfbExj5Ji4GOyxRGh
+	 LQLWGUfT/Xz/oZYLO81dyF2eBXZsz8gqdtK9usPTcPGRUDDQcpoAW0qEMUedfirquF
+	 7i83vW4pBF0H8OiPYo6E8W8fQfM7wKjMzuqLAU61rjuq2g+Tv2tkrQMWYBgAkeHijU
+	 +I64sUZR7hjsQ==
+From: Benjamin Tissoires <bentiss@kernel.org>
+To: Jiri Kosina <jikos@kernel.org>, 
+ Peter Hutterer <peter.hutterer@who-t.net>, Vicki Pfau <vi@endrift.com>, 
+ Shuah Khan <shuah@kernel.org>, Benjamin Tissoires <bentiss@kernel.org>
+Cc: linux-input@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, bpf@vger.kernel.org
+In-Reply-To: <20240910-hid-bpf-hid-generic-v2-0-083dfc189e97@kernel.org>
+References: <20240910-hid-bpf-hid-generic-v2-0-083dfc189e97@kernel.org>
+Subject: Re: (subset) [PATCH HID v2 00/11] HID: bpf: add a new hook to
+ control hid-generic
+Message-Id: <172623473588.1192461.11090201509053454593.b4-ty@kernel.org>
+Date: Fri, 13 Sep 2024 15:38:55 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- kwepemd100013.china.huawei.com (7.221.188.163)
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.14.1
 
-The patch 1 have been reviewed by Michal Koutný.
-Add two patches as follow.
+On Tue, 10 Sep 2024 23:43:36 +0900, Benjamin Tissoires wrote:
+> This is a slight change from the fundamentals of HID-BPF.
+> In theory, HID-BPF is abstract to the kernel itself, and makes
+> only changes at the HID level (through report descriptors or
+> events emitted to/from the device).
+> 
+> However, we have seen a few use cases where HID-BPF might interact with
+> the running kernel when the target device is already handled by a
+> specific device.
+> 
+> [...]
 
-v4:
-- add a patch to document that saturating the system_wq is not permitted.
-- add a patch to adjust WQ_MAX_ACTIVE from 512 to 2048.
+Applied to hid/hid.git (for-6.12/bpf), thanks!
 
-v3:
-- optimize commit msg.
+[01/11] HID: bpf: move HID-BPF report descriptor fixup earlier
+        https://git.kernel.org/hid/hid/c/f10a11b7b599
+[02/11] HID: core: save one kmemdup during .probe()
+        https://git.kernel.org/hid/hid/c/6941754dbbc7
+[03/11] HID: core: remove one more kmemdup on .probe()
+        https://git.kernel.org/hid/hid/c/4fe29f36d2a3
+[04/11] HID: bpf: allow write access to quirks field in struct hid_device
+        https://git.kernel.org/hid/hid/c/b722f588adc6
+[05/11] selftests/hid: add dependency on hid_common.h
+        https://git.kernel.org/hid/hid/c/3d816765e12e
+[06/11] selftests/hid: cleanup C tests by adding a common struct uhid_device
+        https://git.kernel.org/hid/hid/c/28023a0f99d1
+[07/11] selftests/hid: allow to parametrize bus/vid/pid/rdesc on the test device
+        https://git.kernel.org/hid/hid/c/10d3147f9bb1
+[08/11] HID: add per device quirk to force bind to hid-generic
+        https://git.kernel.org/hid/hid/c/d030f826ea47
+[09/11] selftests/hid: add test for assigning a given device to hid-generic
+        https://git.kernel.org/hid/hid/c/10929078201f
 
-Link v1: https://lore.kernel.org/cgroups/20240607110313.2230669-1-chenridong@huawei.com/
-Link v2: https://lore.kernel.org/cgroups/20240719025232.2143638-1-chenridong@huawei.com/
-Link v3: https://lore.kernel.org/cgroups/20240817093334.6062-1-chenridong@huawei.com/
-
-
-Chen Ridong (3):
-  cgroup: fix deadlock caused by cgroup_mutex and cpu_hotplug_lock
-  workqueue: doc: Add a note saturating the system_wq is not permitted
-  workqueue: Adjust WQ_MAX_ACTIVE from 512 to 2048
-
- Documentation/core-api/workqueue.rst | 8 ++++++--
- include/linux/workqueue.h            | 2 +-
- kernel/bpf/cgroup.c                  | 2 +-
- kernel/cgroup/cgroup-internal.h      | 1 +
- kernel/cgroup/cgroup.c               | 2 +-
- 5 files changed, 10 insertions(+), 5 deletions(-)
-
+Cheers,
 -- 
-2.34.1
+Benjamin Tissoires <bentiss@kernel.org>
 
