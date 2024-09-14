@@ -1,184 +1,202 @@
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B57D413B780
-	for <bpf@vger.kernel.org>; Sat, 14 Sep 2024 09:14:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A303A440C;
+	Sat, 14 Sep 2024 09:25:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726305283; cv=none; b=p1I+JH1xvuRAZ49Lh2OfZPnwML8uaXn2Rzgo/lHNgukhtDkKSuP00dJ7XZJHci4TQxirXfyzHMHauZP3qZE42DqQrDPhviRcYeBvaswSRmzs220FtZ5GXJjkT4W9ahujFciTEQPoCL07+J7BJsBR+orhRel0o4RQtihPzW9TTmA=
+	t=1726305951; cv=none; b=V1RgSiPaLGL3V/tfRSpNQGMm7FwzkgHHmxDtwynmNdrsNpQjuq2Uop4ZPMZJRIh7m6RCaGRuQfSRmgHjglj6O2lTV9OtP9X8SXR0CRM67lF/UGeQgt+zEUeS2/3xlb3RDsfeBmAa4iED5DF2Qd9FDD0AFlTXwFtKAdzy2NftH4M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726305283; c=relaxed/simple;
-	bh=x7i/eyEpfgZAniVXQAWvNQJad+gFTiFJ+QnXP+cf1g8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=kRzllrh7E0xkXaccmV7zRjIdUy675yhiCM5CYyNBprShl5jwFIuJw2S0UgY2op2EE9arT1I8oLMmZK6lyMYAHLxgX0GB6pIbdkLbBm+A5oZU6lVcaJTg2Z/F8fBTQ9MiBaWHk7jGPqHFyQrZfqZkrA36nuSrb0B2YadSzYO7AEE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.216])
-	by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4X5QV759jxz4f3jkX
-	for <bpf@vger.kernel.org>; Sat, 14 Sep 2024 17:14:23 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.128])
-	by mail.maildlp.com (Postfix) with ESMTP id 795AD1A08DC
-	for <bpf@vger.kernel.org>; Sat, 14 Sep 2024 17:14:34 +0800 (CST)
-Received: from [10.67.111.192] (unknown [10.67.111.192])
-	by APP4 (Coremail) with SMTP id gCh0CgCHu8f4U+VmRycnBQ--.2469S2;
-	Sat, 14 Sep 2024 17:14:34 +0800 (CST)
-Message-ID: <fd7192e0-bba3-49d5-aede-ce3d85e886c2@huaweicloud.com>
-Date: Sat, 14 Sep 2024 17:14:32 +0800
+	s=arc-20240116; t=1726305951; c=relaxed/simple;
+	bh=VfHrlgV7IZimZ56kwz6gkQcl8Qjv5fduKCR4vNPpZOk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=N76rYFhy1F/WxbNP3Gn9A81YST3+KlJ7CPa5JnDHqp5n0hXp1/uM7dCz+lhVIRc/RgJF4B4hs9RtXGKFdcOc/bXzPTQ+7sK0s5qUKyP+fcKDJ+eN0RphUENZml9DmLjOEPOiUHNB5gMdxtDbDYEOMLGvWdhboDk18MWnCmZ1pko=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZLBvuI6w; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZLBvuI6w"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D681C4CEC0;
+	Sat, 14 Sep 2024 09:25:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1726305950;
+	bh=VfHrlgV7IZimZ56kwz6gkQcl8Qjv5fduKCR4vNPpZOk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ZLBvuI6w/tDERjYsF4sIHkwDHLawEOLjnbDtD1YpxvDEcp6bo9UlGOYJ9XksvAISW
+	 CNC2Ez0pV97mPEDX2CgmhdEvI1BxcB4LXuiBBeCG66oUpX0OlZ1PSchh2He3EngnSy
+	 Jda10jjZQSOtz3/jFSOBytcfgok4ygBz9SK5ncAPlg0H2vf2rRVL1zbQQoEO8a1vSW
+	 WWoL3DhyfTQK9oTo8sQNWer+WAc2lvck+zgwkcYBjivlAXJHs2BzE0D/9ZT5YqBKhJ
+	 Md4XVARyWMd6K1t7hW+jwgShSS6cvkiYwVs8EDZ57Mz/7lIz5kEJ3KuULz/Iwg/K/p
+	 NIFNUtgcpsfyg==
+Date: Sat, 14 Sep 2024 11:25:47 +0200
+From: Lorenzo Bianconi <lorenzo@kernel.org>
+To: Martin KaFai Lau <martin.lau@linux.dev>
+Cc: Alexis =?iso-8859-1?Q?Lothor=E9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+	Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	Maxime Chevallier <maxime.chevallier@bootlin.com>,
+	ebpf@linuxfoundation.org,
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+	linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [PATCH bpf-next v2] selftests/bpf: convert test_xdp_features.sh
+ to test_progs
+Message-ID: <ZuVWmxoqXFI3qvVI@lore-desk>
+References: <20240910-convert_xdp_tests-v2-1-a46367c9d038@bootlin.com>
+ <64df8d41-6cfb-45a9-8337-5cc04daedb60@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v2 2/4] bpf, arm64: Fix tailcall infinite loop
- caused by freplace
-Content-Language: en-US
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
- Leon Hwang <leon.hwang@linux.dev>
-Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- =?UTF-8?Q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
- Martin KaFai Lau <martin.lau@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, Puranjay Mohan
- <puranjay@kernel.org>, Eddy Z <eddyz87@gmail.com>,
- Ilya Leoshkevich <iii@linux.ibm.com>, kernel-patches-bot@fb.com
-References: <20240901133856.64367-1-leon.hwang@linux.dev>
- <20240901133856.64367-3-leon.hwang@linux.dev>
- <fb6ed3e4-7ef2-4b7d-af7e-bf928d835fe9@linux.dev>
- <64c3f174-1dfb-409b-bc11-d7379c09e0ae@huaweicloud.com>
- <cac838d2-9590-4bef-bb58-b56f97881fde@linux.dev>
- <0fc08a50-8812-4932-bb85-9d81cedf142a@huaweicloud.com>
- <2e955de3-396a-4def-925c-0e8463f29b23@linux.dev>
- <CAADnVQJB+y0NFTk4zOp8vLtYPuSy+eOOy6qYridK6WWeFFPWxA@mail.gmail.com>
-From: Xu Kuohai <xukuohai@huaweicloud.com>
-In-Reply-To: <CAADnVQJB+y0NFTk4zOp8vLtYPuSy+eOOy6qYridK6WWeFFPWxA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:gCh0CgCHu8f4U+VmRycnBQ--.2469S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxXFy8GFW3KF4UGFy7XF1fJFb_yoW5KFWkpF
-	y8Ja9rtF4Dtr4qvF47tw1fuFyakw4DJr90qrn5X34rAr9IqrnakFW3Gry8CFy5Xr4UGw1j
-	qF1jqas7A3W8JwUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUv0b4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
-	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-	6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-	Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4kS
-	14v26r1q6r43MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I
-	8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8
-	ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x
-	0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_
-	Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU1
-	7KsUUUUUU==
-X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="lrjavHNZyEh5dE4v"
+Content-Disposition: inline
+In-Reply-To: <64df8d41-6cfb-45a9-8337-5cc04daedb60@linux.dev>
 
-On 9/14/2024 1:47 AM, Alexei Starovoitov wrote:
-> On Mon, Sep 9, 2024 at 7:42 AM Leon Hwang <leon.hwang@linux.dev> wrote:
->>
->>
->>
->> On 9/9/24 20:08, Xu Kuohai wrote:
->>> On 9/9/2024 6:38 PM, Leon Hwang wrote:
->>>>
->>>>
->>>> On 9/9/24 17:02, Xu Kuohai wrote:
->>>>> On 9/8/2024 9:01 PM, Leon Hwang wrote:
->>>>>>
->>>>>>
->>>>>> On 1/9/24 21:38, Leon Hwang wrote:
->>>>>>> Like "bpf, x64: Fix tailcall infinite loop caused by freplace", the
->>>>>>> same
->>>>>>> issue happens on arm64, too.
->>>>>>>
->>
->> [...]
->>
->>>>>>>
->>>>>> Hi Puranjay and Kuohai,
->>>>>>
->>>>>> As it's not recommended to introduce arch_bpf_run(), this is my
->>>>>> approach
->>>>>> to fix the niche case on arm64.
->>>>>>
->>>>>> Do you have any better idea to fix it?
->>>>>>
->>>>>
->>>>> IIUC, the recommended appraoch is to teach verifier to reject the
->>>>> freplace + tailcall combination. If this combiation is allowed, we
->>>>> will face more than just this issue. For example, what happens if
->>>>> a freplace prog is attached to tail callee? The freplace prog is not
->>>>> reachable through the tail call, right?
->>>>>
->>>>
->>>> It's to reject the freplace + tailcall combination partially, see "bpf,
->>>> x64: Fix tailcall infinite loop caused by freplace". (Oh, I should
->>>> separate the rejection to a standalone patch.)
->>>> It rejects the case that freplace prog has tailcall and its attach
->>>> target has no tailcall.
->>>>
->>>> As for your example, it depends on:
->>>>
->>>>                   freplace       target    reject?
->>>> Has tailcall?     YES            NO        YES
->>>> Has tailcall?     YES            YES       NO
->>>> Has tailcall?     NO             YES       NO
->>>> Has tailcall?     NO             YES       NO
->>>>
->>>> Then, freplace prog can be tail callee always. I haven't seen any bad
->>>> case when freplace prog is tail callee.
->>>>
->>>
->>> Here is a concrete case. prog1 tail calls prog2, and prog2_new is
->>> attached to prog2 via freplace.
->>>
->>> SEC("tc")
->>> int prog1(struct __sk_buff *skb)
->>> {
->>>          bpf_tail_call_static(skb, &progs, 0); // tail call prog2
->>>          return 0;
->>> }
->>>
->>> SEC("tc")
->>> int prog2(struct __sk_buff *skb)
->>> {
->>>          return 0;
->>> }
->>>
->>> SEC("freplace")
->>> int prog2_new(struct __sk_buff *skb) // target is prog2
->>> {
->>>          return 0;
->>> }
->>>
->>> In this case, prog2_new is not reachable, since the tail call
->>> target in prog2 is start address of prog2  + TAIL_CALL_OFFSET,
->>> which locates behind freplace/fentry callsite of prog2.
->>>
->>
->> This is an abnormal use case. We can do nothing with it, e.g. we're
->> unable to notify user that prog2_new is not reachable for this case.
-> 
-> Since it doesn't behave as the user would expect, I think, it's better
-> to disallow such combinations in the verifier.
-> Either freplace is trying to patch a prog that is already in prog_array
-> then the load of freplace prog can report a meaningful error into the
-> verifier log or
-> already freplaced prog is being added to prog array.
-> I think in this case main prog tail calling into this freplace prog
-> will actually succeed, but it's better to reject sys_bpf update
-> command in bpf_fd_array_map_update_elem(),
-> since being-freplaced prog is not in prog_array and won't be called,
-> but freplace prog in prog array can be called which is inconsistent.
-> freplace prog should act and be called just like target being-freplaced prog.
-> 
-> I don't think this will break any actual use cases where freplace and
-> tail call are used together.
 
-+1, we should not ignore it silently. If the freplace + tailcall
-combination can not be disallowed completely, we should disallow
-this case separately (or maybe we could find an acceptable way to
-make it work as expected?) . Let me give it a try.
+--lrjavHNZyEh5dE4v
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
+On Sep 13, Martin KaFai Lau wrote:
+> On 9/10/24 11:10 AM, Alexis Lothor=E9 (eBPF Foundation) wrote:
+> > test_xdp_features.sh is a shell script allowing to test that xdp featur=
+es
+> > advertised by an interface are indeed delivered. The test works by star=
+ting
+> > two instance of the same program, both attaching specific xdp programs =
+to
+> > each side of a veth link, and then make those programs manage packets a=
+nd
+> > collect stats to check whether tested XDP feature is indeed delivered or
+> > not. However this test is not integrated in test_progs framework and so=
+ can
+> > not run automatically in CI.
+> >=20
+> > Rewrite test_xdp_features to integrate it in test_progs so it can run
+> > automatically in CI. The main changes brought by the rewrite are the
+> > following:
+> > - instead of running to separated processes (each one managing either t=
+he
+> >    tester veth or the DUT vet), run a single process
+> > - slightly change testing direction (v0 is the tester in local namespac=
+e,
+> >    v1 is the Device Under Test in remote namespace)
+> > - group all tests previously managed by test_xdp_features as subtests (=
+one
+> >    per tested XDP feature). As a consequence, run only once some steps
+> >    instead of once per subtest (eg: starting/stopping the udp server). =
+On
+> >    the contrary, make sure that each subtest properly cleans up its sta=
+te
+> >    (ie detach xdp programs, reset test stats, etc)
+> > - since there is now a single process, get rid of the "control" tcp cha=
+nnel
+> >    used to configure DUT. Configuring the DUT now only consists in swit=
+ching
+> >    to DUT network namespace and run the relevant commands
+> > - since there is no more control channel, get rid of TLVs, keep only the
+> >    CMD_ECHO packet type, and set it as a magic
+> > - simplify network setup: use only ipv6 instead of both ipv4 and ipv6,
+> >    force static neighbours instead of waiting for autoconfiguration, do=
+ not
+> >    force gro (fetch xdp features only once xdp programs are loaded inst=
+ead)
+> >=20
+> > The existing XDP programs are reused, with some minor changes:
+> > - tester and dut stats maps are converted to global variables for easier
+> >    usage
+> > - programs do not use TLV struct anymore but the magic replacing the ec=
+ho
+> >    command
+> > - avoid to accidentally make tests pass: drop packets instead of forwar=
+ding
+> >    them to userspace when they do not match the expected payload
+> > - make sure to perform host <-> network endianness conversion on consta=
+nts
+> >    rather than packet parts
+> >=20
+> > Signed-off-by: Alexis Lothor=E9 (eBPF Foundation) <alexis.lothore@bootl=
+in.com>
+> > ---
+> > Changes in v2:
+> > - fix endianness management in userspace packet parsing (call htonl on
+> >    constant rather than packet part)
+> >=20
+> > The xdp_features rewrite has been tested in a x86_64 qemu environment o=
+n my
+> > machine and in CI. In my environment, the test takes a bit less than 2s=
+ to
+> > execute.
+> >=20
+> >    # ./test_progs -a xdp_features
+> >    #561/1   xdp_features/XDP_PASS:OK
+> >    #561/2   xdp_features/XDP_DROP:OK
+> >    #561/3   xdp_features/XDP_ABORTED:OK
+> >    #561/4   xdp_features/XDP_TX:OK
+> >    #561/5   xdp_features/XDP_REDIRECT:OK
+> >    #561/6   xdp_features/XDP_NDO_XMIT:OK
+> >    #561     xdp_features:OK
+> >    Summary: 1/6 PASSED, 0 SKIPPED, 0 FAILED
+> > ---
+> >   tools/testing/selftests/bpf/.gitignore             |   1 -
+> >   tools/testing/selftests/bpf/Makefile               |  10 +-
+> >   .../selftests/bpf/prog_tests/xdp_features.c        | 446 +++++++++++++
+> >   tools/testing/selftests/bpf/progs/xdp_features.c   |  49 +-
+> >   tools/testing/selftests/bpf/test_xdp_features.sh   | 107 ---
+> >   tools/testing/selftests/bpf/xdp_features.c         | 718 ------------=
+---------
+
+Hi Alexis.
+
+sorry for the late reply.
+
+>=20
+> From the initial commit message of xdp_features.c, its primary usage is to
+> test a physical network device that supports a certain XDP features.
+>=20
+> iiuc, test_xdp_features.sh only uses the veth and veth will also be the o=
+nly
+> device tested after moving to prog_tests/xdp_features.c? It is a reasonab=
+le
+> addition to test_progs for an end-to-end xdp test by using veth. However,
+> test_progs will not be able to test the physical network device.
+>=20
+> Lorenzo, is the xdp_features.c still used for device testing?
+>=20
+
+correct, xdp_features.c is intended to test the real xdp features supported=
+ by
+the NIC under test (DUT), not just the advertised ones (iirc that was a
+requisite to add xdp kernel feature support). For this reason we need two
+separated processes running on the tester device and on the DUT (they are
+usually two different devices). test_xdp_features.sh was just a simple test
+script used to develop xdp_features.c.
+What about extending xdp_features.c to integrate it in the CI?
+
+Regards,
+Lorenzo
+
+--lrjavHNZyEh5dE4v
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQTquNwa3Txd3rGGn7Y6cBh0uS2trAUCZuVWmwAKCRA6cBh0uS2t
+rBxhAQCLXMuPwqHagnF+4BNb6j5Gb3F5dygivRqlb51M0C2jUgEA2Nt5fMwbUPTb
+OjTyGMkGQQ1xM77odNea/pO+2yekgQQ=
+=Yjnh
+-----END PGP SIGNATURE-----
+
+--lrjavHNZyEh5dE4v--
