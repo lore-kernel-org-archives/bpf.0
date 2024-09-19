@@ -1,108 +1,143 @@
-Received: from mail-pf1-f195.google.com (mail-pf1-f195.google.com [209.85.210.195])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from forward204a.mail.yandex.net (forward204a.mail.yandex.net [178.154.239.89])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE81919DF4C;
-	Thu, 19 Sep 2024 09:43:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B071319F410;
+	Thu, 19 Sep 2024 09:46:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.154.239.89
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726739014; cv=none; b=V3pDta3vXl35ds6zBhKZS78jd60w6AbbjEYC0cfIxk8wbI5AFQVPLj+ui8reQgXF9+aNJmlm6HgfruGh6XoSmvvim5+3YozstTm7UYDad+XIs7Zxz9LR5Jd3WrpcIYLYRLnFMvQwI98Oc5pLjPTX9cHkRSOX4lUaAsnJFNYgz78=
+	t=1726739202; cv=none; b=k7wDsLb7ZtaIhutVudr3RDQAb5cj4ZOSDzb6G5K480rwptTASh4nymGSBtG141nsdMvf7sILDrQcCjWWSGT2ywi8GjVhfxfw4x/PuhVrl78ZLQ8grFPelKEnDayGbf/1YRIp6S3zrgcYQZJhVlJOni6cw7Sb9m7IlxAuHZjZujo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726739014; c=relaxed/simple;
-	bh=ieuL/O3/265wxoAQ9SYV+ZrakZmm8ntMC/lUQH0jiok=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=cKEACobH1/UN+n3A7VHuszoE2Z64RCbB2VNw874z8rNTkCLjsMjG1zvzdB6dTP2jg4G5yAB5wseD9PjGTt/eQd9mKKwKLJ6htFqA4hN8umiltBJQ3end5Px2BveoAyL6AIpx3gZrPCKSFk5M4I+1v7/ZD7q16LHP1X1pfIT39YQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=B0/2UBAw; arc=none smtp.client-ip=209.85.210.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="B0/2UBAw"
-Received: by mail-pf1-f195.google.com with SMTP id d2e1a72fcca58-71798a15ce5so1357626b3a.0;
-        Thu, 19 Sep 2024 02:43:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1726738993; x=1727343793; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Rfr8GHfpAnekQQsJ9DXbNrw9ejSWEOElOr5R5vluBYQ=;
-        b=B0/2UBAwma0VutdNcINHEGSOz7zx/GIYaWWqDwYJA/iu0aDIEJmvcqj1wHE/JHyjXb
-         JLpawxRcFngs7m6CXEdnxAUhwqhN11Bwza70UuFiInPyChXyBXDSvGyXKl1jZVnb4xUR
-         qckkYBy8TzwGVcajZRQLbnd6tv+mIZXyoBqkmtFvKX2qTY/3Ccii1vxBwkm5e4K42PlL
-         9Cgg4xvva9Fyl9MixcYHi34QPZ42fk+0MVQABvAQc8VU0XtySWMp5rViVR+ku9GxpAhJ
-         +bKUpB8O6vY1i4jT5Kp/Rxv/Tbs+dgSTl5fxCAlwHRlUfNzDsoXOm4Dn0xau098EqZz+
-         9RYg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726738993; x=1727343793;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Rfr8GHfpAnekQQsJ9DXbNrw9ejSWEOElOr5R5vluBYQ=;
-        b=TO/Pm7fxQvUAxN7vrcididwKo9qHEdSpJIW8eCX2qd9ExR2KrkveO1hY7/hp6PaIqG
-         wNjSGZ4NewfcylRoCqNBiFTey+jqSubbxm01dHerqltY57/+F53dllk5UI/yvvyvPQwR
-         l4g7Vnvgyd7RcuMW/tk7LQFV6ZYrDdw1BDZz+gUKIPvUiCuRA8Y+HMF7pBzIMG+pF79c
-         +NgpsjT+PeCqxcpFWk6r8Ciy65NP98i636+m4h/Riyu1bv5bZO59DOaoHkLsKGq1A8Hn
-         ig1Wu2qVQMwIe+HQT+mDTeHmq+rYHi74jwIvKGvABYVSfe9tZIo5FNogVm2EZod/uNxP
-         hOiw==
-X-Forwarded-Encrypted: i=1; AJvYcCW0IW4s1r3KDnokPEXiSOvxGhwn1WRsMLGJIKNcnSd10b8rCBk5mJ/yw81+5t1zPndzRoEp3mW6Pp137Rfi@vger.kernel.org, AJvYcCWfRaAYKmkMcv0ayAm15K9GyjhZFruwJmOtYStj620FxS04OewKd2kn6oLQP6rBoSbxmrVHSWNk@vger.kernel.org, AJvYcCXGA7MWWWtfSDFCLjaHMF7bm2LG9tLNE1iBbGGJkIdQJ24OHLVNEOpFTRebhvSvYbGKzhQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzuKV8ZB5nmkeIaM983T6H6BAvWXpazuSzs0sM/XbsM4GCzvQ93
-	Z6zVgxETDRDYh8rs3cjOpRuCM9t4AXTAS2vF7KczE/IBdYEO4356
-X-Google-Smtp-Source: AGHT+IFX1KD+RvJbrJVzp6geUXTu7trq7flY/gtaClnP3+TUmI1zNKnGzoDcQrqHbOfBTw4UhC+0rw==
-X-Received: by 2002:a05:6a21:168d:b0:1cf:6d67:fe55 with SMTP id adf61e73a8af0-1d2fca179c2mr3744940637.5.1726738992908;
-        Thu, 19 Sep 2024 02:43:12 -0700 (PDT)
-Received: from localhost.localdomain ([43.129.25.208])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-71944ab4b36sm7927086b3a.47.2024.09.19.02.43.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Sep 2024 02:43:12 -0700 (PDT)
-From: Menglong Dong <menglong8.dong@gmail.com>
-X-Google-Original-From: Menglong Dong <dongml2@chinatelecom.cn>
-To: edumazet@google.com
-Cc: davem@davemloft.net,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	dsahern@kernel.org,
-	steffen.klassert@secunet.com,
-	herbert@gondor.apana.org.au,
-	dongml2@chinatelecom.cn,
-	bigeasy@linutronix.de,
-	toke@redhat.com,
-	idosch@nvidia.com,
-	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org
-Subject: [RFC PATCH net-next 7/7] net: ip: fix typo in the doc of SKB_DROP_REASON_IP_INNOROUTES
-Date: Thu, 19 Sep 2024 17:41:47 +0800
-Message-Id: <20240919094147.328737-8-dongml2@chinatelecom.cn>
-X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20240919094147.328737-1-dongml2@chinatelecom.cn>
-References: <20240919094147.328737-1-dongml2@chinatelecom.cn>
+	s=arc-20240116; t=1726739202; c=relaxed/simple;
+	bh=tpQTyP4bsW+xYGpbc3ZzzLGWMe3rTKm8zVurmTlQnes=;
+	h=From:Content-Type:Mime-Version:Subject:Message-Id:Date:Cc:To; b=G0LINNNRm7X0STtAXyoMEx5Txdj9XUChVbMzCWvrRDY7rILnsTA31QDhKWnH6c2kE+hknYEJCx8tU2ZfstDfwCUycFNfQijnML2iZwa/af6Bvr4EfKl6gHMwcTb3u5pwYvR8uPeDAf1he48r88WFciloFyZjBp/ReTlmlDRQSbE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lobanov.in; spf=pass smtp.mailfrom=lobanov.in; arc=none smtp.client-ip=178.154.239.89
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lobanov.in
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lobanov.in
+Received: from forward100a.mail.yandex.net (forward100a.mail.yandex.net [IPv6:2a02:6b8:c0e:500:1:45:d181:d100])
+	by forward204a.mail.yandex.net (Yandex) with ESMTPS id DD85E66C4E;
+	Thu, 19 Sep 2024 12:41:01 +0300 (MSK)
+Received: from mail-nwsmtp-smtp-production-main-18.iva.yp-c.yandex.net (mail-nwsmtp-smtp-production-main-18.iva.yp-c.yandex.net [IPv6:2a02:6b8:c0c:ea3:0:640:29cf:0])
+	by forward100a.mail.yandex.net (Yandex) with ESMTPS id 540D546D43;
+	Thu, 19 Sep 2024 12:40:54 +0300 (MSK)
+Received: by mail-nwsmtp-smtp-production-main-18.iva.yp-c.yandex.net (smtp/Yandex) with ESMTPSA id peKTgRXOjSw0-XUFzZ0ey;
+	Thu, 19 Sep 2024 12:40:53 +0300
+X-Yandex-Fwd: 1
+Authentication-Results: mail-nwsmtp-smtp-production-main-18.iva.yp-c.yandex.net; dkim=pass
+From: "Sergey V. Lobanov" <sergey@lobanov.in>
+Content-Type: text/plain;
+	charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3774.200.91.1.1\))
+Subject: BUG: Kernel OOPS in __bpf_prog_offload_destroy (6.10, 6.11, bpf-next,
+ x86_64/aarch64)
+Message-Id: <2194F884-8028-4018-AA64-848405757119@lobanov.in>
+Date: Thu, 19 Sep 2024 11:40:41 +0200
+Cc: "Sergey V. Lobanov" <sergey@lobanov.in>,
+ netdev@vger.kernel.org
+To: bpf@vger.kernel.org
+X-Mailer: Apple Mail (2.3774.200.91.1.1)
 
-This is a copy error, and SKB_DROP_REASON_IP_INNOROUTES should correspond
-to IPSTATS_MIB_INADDRERRORS in the comment. Just fix it
+Hi,
 
-Signed-off-by: Menglong Dong <dongml2@chinatelecom.cn>
----
- include/net/dropreason-core.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+I've found kernel oops during device deletion (ip link del veth0) after =
+attaching and detaching device bounded XDP bpf program. When this oops =
+happens, host doesn=E2=80=99t function correctly (new processes can=E2=80=99=
+t start, can=E2=80=99t login via ssh and so on).
 
-diff --git a/include/net/dropreason-core.h b/include/net/dropreason-core.h
-index 3d1b09f70bbd..a68235240f6a 100644
---- a/include/net/dropreason-core.h
-+++ b/include/net/dropreason-core.h
-@@ -366,7 +366,7 @@ enum skb_drop_reason {
- 	SKB_DROP_REASON_IP_INADDRERRORS,
- 	/**
- 	 * @SKB_DROP_REASON_IP_INNOROUTES: network unreachable, corresponding to
--	 * IPSTATS_MIB_INADDRERRORS
-+	 * IPSTATS_MIB_INNOROUTES
- 	 */
- 	SKB_DROP_REASON_IP_INNOROUTES,
- 	/** @SKB_DROP_REASON_IP_LOCAL_SOURCE: the source ip is local */
--- 
-2.39.5
+BPF compiler is GCC 14.2.0. CXX is compiler (for loader) is GCC 14.2.0
 
+It happens in kernels: 6.10.9, 6.11.0, bpf-next master branch (commit =
+5277d130947ba8c0d54c16eed89eb97f0b6d2e5a) on x86_64 and aarch64 hosts.
+
+Call trace (kernel 6.11.0, aarch64):
+[  584.364169] Unable to handle kernel paging request at virtual address =
+ffff80008b565038
+[  584.364236] Mem abort info:
+[  584.364242]   ESR =3D 0x0000000096000007
+[  584.364248]   EC =3D 0x25: DABT (current EL), IL =3D 32 bits
+[  584.364256]   SET =3D 0, FnV =3D 0
+[  584.364270]   EA =3D 0, S1PTW =3D 0
+[  584.364276]   FSC =3D 0x07: level 3 translation fault
+[  584.364283] Data abort info:
+[  584.364289]   ISV =3D 0, ISS =3D 0x00000007, ISS2 =3D 0x00000000
+[  584.364297]   CM =3D 0, WnR =3D 0, TnD =3D 0, TagAccess =3D 0
+[  584.364305]   GCS =3D 0, Overlay =3D 0, DirtyBit =3D 0, Xs =3D 0
+[  584.364313] swapper pgtable: 4k pages, 48-bit VAs, =
+pgdp=3D000000015ab5d000
+[  584.364323] [ffff80008b565038] pgd=3D100000015bdf0003, =
+p4d=3D100000015bdf0003, pud=3D100000015bdf1003, pmd=3D10000000ab84a003, =
+pte=3D0000000000000000
+[  584.364360] Internal error: Oops: 0000000096000007 [#1] SMP
+[  584.364387] Modules linked in: veth xt_nat xt_tcpudp xt_conntrack =
+nft_chain_nat xt_MASQUERADE nf_nat nf_conntrack_netlink nf_conntrack =
+nf_defrag_ipv6 nf_defrag_ipv4 xfrm_user xfrm_algo xt_addrtype nft_compat =
+nf_tables br_netfilter bridge stp llc overlay qrtr cfg80211 binfmt_misc =
+virtio_snd snd_pcm snd_timer nls_iso8859_1 snd soundcore input_leds =
+joydev apple_mfi_fastcharge dm_multipath efi_pstore nfnetlink dmi_sysfs =
+virtiofs ip_tables x_tables autofs4 hid_generic usbhid hid btrfs =
+blake2b_generic raid10 raid456 async_raid6_recov async_memcpy async_pq =
+async_xor async_tx xor xor_neon raid6_pq libcrc32c raid1 raid0 =
+crct10dif_ce polyval_ce polyval_generic ghash_ce sm4 sha3_ce sha2_ce =
+sha256_arm64 sha1_ce virtio_rng virtio_gpu xhci_pci virtio_dma_buf =
+xhci_pci_renesas aes_neon_bs aes_neon_blk aes_ce_blk aes_ce_cipher
+[  584.364667] CPU: 1 UID: 0 PID: 6070 Comm: ip Not tainted =
+6.11.0-061100-generic #202409151536
+[  584.364678] Hardware name: Apple Inc. Apple Virtualization Generic =
+Platform, BIOS 2020.41.1.0.0 10/04/2023
+[  584.364691] pstate: 21400005 (nzCv daif +PAN -UAO -TCO +DIT -SSBS =
+BTYPE=3D--)
+[  584.364701] pc : __bpf_prog_offload_destroy+0x24/0xc8
+[  584.364745] lr : __bpf_offload_dev_netdev_unregister+0x318/0x438
+[  584.364754] sp : ffff80008b64b1b0
+[  584.364766] x29: ffff80008b64b1b0 x28: ffff0000c0355e00 x27: =
+0000000000000008
+[  584.364781] x26: ffff80008394bcf8 x25: 0000000000000008 x24: =
+ffff0000c6b71058
+[  584.364791] x23: ffff0000c6b71000 x22: ffff0000c0d95018 x21: =
+0000000000000000
+[  584.364802] x20: ffff80008b565000 x19: ffff0000c0d94ff8 x18: =
+ffff80008b61d0a0
+[  584.364813] x17: 0000000000000000 x16: 0000000000000000 x15: =
+0000000000000000
+[  584.364823] x14: 0000000000000000 x13: 0000000000000000 x12: =
+0000000000000000
+[  584.364834] x11: 0000000000000000 x10: 949c93cdb28287d2 x9 : =
+ffff8000803abc30
+[  584.364844] x8 : ffff000042c844a8 x7 : 0000000000000000 x6 : =
+0000000000000000
+[  584.364854] x5 : 0000000000000000 x4 : 0000000000000000 x3 : =
+0000000000000000
+[  584.364865] x2 : 0000000000000000 x1 : ffff0000c0270500 x0 : =
+ffff80008b565000
+[  584.364875] Call trace:
+[  584.364881]  __bpf_prog_offload_destroy+0x24/0xc8
+[  584.364889]  __bpf_offload_dev_netdev_unregister+0x318/0x438
+[  584.364898]  bpf_dev_bound_netdev_unregister+0x8c/0x138
+[  584.364906]  unregister_netdevice_many_notify+0x1f0/0x760
+[  584.364928]  rtnl_dellink+0x1b4/0x3e8
+[  584.364935]  rtnetlink_rcv_msg+0x140/0x420
+[  584.364944]  netlink_rcv_skb+0x6c/0x160
+[  584.364978]  rtnetlink_rcv+0x24/0x50
+[  584.364985]  netlink_unicast+0x340/0x3a0
+[  584.364993]  netlink_sendmsg+0x270/0x480
+[  584.365007]  __sock_sendmsg+0x80/0x108
+[  584.365018]  ____sys_sendmsg+0x294/0x360
+[  584.365025]  ___sys_sendmsg+0xbc/0x140
+[  584.365033]  __sys_sendmsg+0x94/0x120
+[  584.365041]  __arm64_sys_sendmsg+0x30/0x60
+[  584.365052]  invoke_syscall+0x70/0x120
+[  584.365071]  el0_svc_common.constprop.0+0x4c/0x140
+[  584.365079]  do_el0_svc+0x28/0x60
+[  584.365086]  el0_svc+0x44/0x1b0
+[  584.365097]  el0t_64_sync_handler+0x148/0x160
+[  584.365106]  el0t_64_sync+0x1b0/0x1b8
+[  584.365113] Code: 910003fd a90153f3 aa0003f4 f90013f5 (f9401c00)=20
+[  584.365123] ---[ end trace 0000000000000000 ]=E2=80=94
+
+--
+Sergey=
