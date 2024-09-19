@@ -1,98 +1,128 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f193.google.com (mail-pg1-f193.google.com [209.85.215.193])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C76019CC18;
-	Thu, 19 Sep 2024 09:42:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 665FE19D086;
+	Thu, 19 Sep 2024 09:42:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.193
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726738970; cv=none; b=hqfYgqMYD9ebtPO4yEurFsuNykFLFRz8qFqONYx5ULlNN1rqWrcugiV517Xp6CPN37KH7DOeVtxgJ57xnDkuXvRy4+v6uxRt5Crv7m7OpcCNSULjMnq/i5gtH/ODkwL8QHzN/6m7q6tU5PlO2Dm/8XdKVg/bHDFFzn6+/H1H1UI=
+	t=1726738981; cv=none; b=Ie4Zm8Hr3BkpBrPSJBq0dvYX60bz6RgxImBEPW07EieucSeIEDqpbEKiE/nnuy7Qn9rQxu90b4OoaSwwgp2E2Kihe5LdwzMfiTuU5Jj4oMp4TSoMbeogj4eguwiVY6B5FgN1lLEdXWZtm4cf3MBmg+RL7nO7WzMEmKGtGpXCUbI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726738970; c=relaxed/simple;
-	bh=4mBPJ1/8ZHYMdSjeFFRdSDpez+20eaW5Qpk0ZxpyplE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=kNuGi9S+av7C4E8wr7aXz7xR3RtpcW46GtTtpNlrEltq/Gut2mu/LJn7Z54KS+bkpJZ10m0KKYfeAGG0kdJlgjGjgG7Gs2E1g/0X0B3iOD1az2JV656+RPUg73A0jF+sw8t/zOjoxRw0QVAM6YRg/Ey4TE9TmFx99PAgnGfEDoA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WNvFUZlI; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1726738981; c=relaxed/simple;
+	bh=celzY8OV4GMmy/RwTNyebjUESHinD4fwKxA7pGOfvoU=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Qd6SgVy4gbTlOBhS5Q45LBlxeVJmm1UQzVEoGfC3uzlgsUK5AIVpoe5Dqst7U11KD4wYKPUvot9qtZ+nA6oVMc9FeZR4VmQO1A4amXa7dSQ8TyOEUX9F3cCCu7iu0a6Xsz55lWUKmtgiAqMcfQpzuKJ7qXqXkg4FNsRo/Q3lK58=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CcqknQbZ; arc=none smtp.client-ip=209.85.215.193
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WNvFUZlI"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DBC7FC4CEC4;
-	Thu, 19 Sep 2024 09:42:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1726738970;
-	bh=4mBPJ1/8ZHYMdSjeFFRdSDpez+20eaW5Qpk0ZxpyplE=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=WNvFUZlIeZCdtFKQ6JJfXg22qRTupBYLgnu8Znpgj7u9GzB9cb+oCuqkGaUUFXqZg
-	 u3FLl6T6Dc6z14wmNEhM9sxXlKK/hnTLT7l41VAHBzniRkxJuoPGhWwQEozIgpKcqn
-	 e0kS1YGW5Ob7pUpRgtI7MbGmwk2xVRYMaz+rj6ubfII71lcBL9BipnzLBPVQDxC0s+
-	 6tii01Hw8+gMcMOU9sr4JhVfid9pQ8djWVDTMMnYh2tWVR7phPjsbZwqdPYB+N9hdB
-	 cnocJ45KkOqJzUN/IKhO7vvYPYCr6HhVzm91jSPJ6/m++FZ0VQT1lV4F/UgLqGCLlU
-	 /zO3c8TS5wTbA==
-Message-ID: <894a3c2c-22f9-45b9-a82b-de7320066b42@kernel.org>
-Date: Thu, 19 Sep 2024 11:42:40 +0200
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CcqknQbZ"
+Received: by mail-pg1-f193.google.com with SMTP id 41be03b00d2f7-7d50e865b7aso499580a12.0;
+        Thu, 19 Sep 2024 02:42:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1726738963; x=1727343763; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=KYn484j8l4FCD86Dl+kKDGHdgRbar+9TjSd1oUL2FFI=;
+        b=CcqknQbZJzeGD0S2dDUJFD0044+Ut9MwErZ06m0awwAIDxY2xM+m9hg6q+Ig+r8oRq
+         2bxbBkFa95qriOlCR4xGNSM9D+CVBFwTI+4z8b1OQ4bWjQtX7JACquePrBb/DH4Rio/h
+         m/YGkv0L+ukgpSvjjGevCOYyVZWWjdwJD57MB54nh6O/dJqiog2PIVU1wnxwAeY2qVJ8
+         TdoRNJJPmmsC9vzvwgJICkoF0xLdrH6ZlBEO/PqMDACEaN5AWF0UDn+ob8atDhs3usFc
+         YxI3Nzx3LUnoanJgn1f7qRHU1WBpgJjb5v7q76M4R8bVPNJjGB8pDH3JjpxMi71kmtiv
+         U6HQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1726738963; x=1727343763;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=KYn484j8l4FCD86Dl+kKDGHdgRbar+9TjSd1oUL2FFI=;
+        b=C7M1p8p15fcox8urxPTl2/v6QaINqlYgtwDUjcs5IX9P2odZ08vHjFF6toK5qU6pdO
+         oFWGS76Z23hqURWOAh3CLszByXR9r1JSGE1/XVj/uvq93fuIp54/l3P1TRD6cxMQcnw1
+         IOTTJyakkBM8KW2Rk+Id1x6ACKPtnuP0DqkF1qco5NTB6qgyKBOEKtlUbhDOnyNJ3LUu
+         N22lg1to34ueO4OiXorDL5sUpAxHOFEWHuRzliBGYBMI6o0xHAIqwal+K4LDz+MZgv3a
+         joo2k6+ZkANR4sbNjmWSRkn2fBtQSQSo1ebC8Kc06QPIDcSuAMlCkdPw4I0/yFcTMF03
+         8Qtw==
+X-Forwarded-Encrypted: i=1; AJvYcCWKKe7cmywuhMYdYmxDLiUJ07zi0hxRrIYWhhvmg1UDtTWfZtIpms+uKqE6IV3VRbLh4us=@vger.kernel.org, AJvYcCWob41+jFDV9DUUqTpMAGiz1OgkR/bwmNrpgsx9XrtWfohxo3Sod/BysYZkpWM7/Ri3QZcWvwihkvVjVkkH@vger.kernel.org, AJvYcCWzdKv4F09P8hIzY8S68/FMtVotytIzGFpknZdSVFvzYzudVoZ81Dbcr5HCuIB+5DhtANpiEIDk@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx2n22WI8cL4YHcFnQ6tFqbtwvnDIomn40JdrOac8AgsAIKWVpb
+	B2zDJ3QG2xXIZuPKCDKUmAfGO8aU6MuBlcUA86vV5qbx8c1to9Cb
+X-Google-Smtp-Source: AGHT+IGb5ZU6hI8x7OU7TGOVzz/mHBUwDrNmLwrlL6zCEh9MoU1jeUCZWXuDESCdHl3IaNx99lX7vQ==
+X-Received: by 2002:a05:6a21:a24c:b0:1d2:eb9d:9973 with SMTP id adf61e73a8af0-1d2eb9d9d4dmr10157500637.39.1726738963469;
+        Thu, 19 Sep 2024 02:42:43 -0700 (PDT)
+Received: from localhost.localdomain ([43.129.25.208])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-71944ab4b36sm7927086b3a.47.2024.09.19.02.42.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 Sep 2024 02:42:43 -0700 (PDT)
+From: Menglong Dong <menglong8.dong@gmail.com>
+X-Google-Original-From: Menglong Dong <dongml2@chinatelecom.cn>
+To: edumazet@google.com
+Cc: davem@davemloft.net,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	dsahern@kernel.org,
+	steffen.klassert@secunet.com,
+	herbert@gondor.apana.org.au,
+	dongml2@chinatelecom.cn,
+	bigeasy@linutronix.de,
+	toke@redhat.com,
+	idosch@nvidia.com,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org
+Subject: [RFC PATCH net-next 0/7] net: ip: add drop reasons to input route
+Date: Thu, 19 Sep 2024 17:41:40 +0800
+Message-Id: <20240919094147.328737-1-dongml2@chinatelecom.cn>
+X-Mailer: git-send-email 2.39.5
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net 2/2] page_pool: fix IOMMU crash when driver has
- already unbound
-To: Ilias Apalodimas <ilias.apalodimas@linaro.org>,
- Yunsheng Lin <linyunsheng@huawei.com>
-Cc: davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
- liuyonglong@huawei.com, fanghaiqing@huawei.com, zhangkun09@huawei.com,
- Robin Murphy <robin.murphy@arm.com>,
- Alexander Duyck <alexander.duyck@gmail.com>, IOMMU <iommu@lists.linux.dev>,
- Wei Fang <wei.fang@nxp.com>, Shenwei Wang <shenwei.wang@nxp.com>,
- Clark Wang <xiaoning.wang@nxp.com>, Eric Dumazet <edumazet@google.com>,
- Tony Nguyen <anthony.l.nguyen@intel.com>,
- Przemek Kitszel <przemyslaw.kitszel@intel.com>,
- Alexander Lobakin <aleksander.lobakin@intel.com>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- John Fastabend <john.fastabend@gmail.com>, Saeed Mahameed
- <saeedm@nvidia.com>, Leon Romanovsky <leon@kernel.org>,
- Tariq Toukan <tariqt@nvidia.com>, Felix Fietkau <nbd@nbd.name>,
- Lorenzo Bianconi <lorenzo@kernel.org>, Ryder Lee <ryder.lee@mediatek.com>,
- Shayne Chen <shayne.chen@mediatek.com>, Sean Wang <sean.wang@mediatek.com>,
- Kalle Valo <kvalo@kernel.org>, Matthias Brugger <matthias.bgg@gmail.com>,
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
- Andrew Morton <akpm@linux-foundation.org>, imx@lists.linux.dev,
- netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- intel-wired-lan@lists.osuosl.org, bpf@vger.kernel.org,
- linux-rdma@vger.kernel.org, linux-wireless@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org,
- linux-mm@kvack.org
-References: <20240918111826.863596-1-linyunsheng@huawei.com>
- <20240918111826.863596-3-linyunsheng@huawei.com>
- <CAC_iWjK=G7Oo5=pN2QunhasgDC6NyC1L+96jigX7u9ad+PbYng@mail.gmail.com>
-Content-Language: en-US
-From: Jesper Dangaard Brouer <hawk@kernel.org>
-In-Reply-To: <CAC_iWjK=G7Oo5=pN2QunhasgDC6NyC1L+96jigX7u9ad+PbYng@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
+In this series, we mainly add some skb drop reasons to the input path of
+ip routing.
 
-On 18/09/2024 19.06, Ilias Apalodimas wrote:
->> In order not to do the dma unmmapping after driver has already
->> unbound and stall the unloading of the networking driver, add
->> the pool->items array to record all the pages including the ones
->> which are handed over to network stack, so the page_pool can
->> do the dma unmmapping for those pages when page_pool_destroy()
->> is called.
->
-> So, I was thinking of a very similar idea. But what do you mean by
-> "all"? The pages that are still in caches (slow or fast) of the pool
-> will be unmapped during page_pool_destroy().
+The function ip_route_input_noref() is used commonly, and its return value
+is used by the caller sometimes. So, it's not easy to make it return skb
+drop reasons. Instead, we add the pointer of the drop reason to the
+function arguments of it. And we do the same things to
+ip_route_input_rcu() and ip_route_input_slow().
 
-I really dislike this idea of having to keep track of all outstanding pages.
+The errno from fib_validate_source() is -EINVAL or -EXDEV, and -EXDEV is
+used in ip_rcv_finish_core() to increase the LINUX_MIB_IPRPFILTER. For
+this case, we can check it by
+"drop_reason == SKB_DROP_REASON_IP_RPFILTER" instead. Therefore, we can
+make fib_validate_source() return -reason. Meanwhile, we make
+ip_route_input_mc() and ip_mc_validate_source() return drop reason.
 
-I liked Jakub's idea of keeping the netdev around for longer.
+Following new skb drop reasons are added:
 
-This is all related to destroying the struct device that have points to
-the DMA engine, right?
+  SKB_DROP_REASON_IP_LOCAL_SOURCE
+  SKB_DROP_REASON_IP_INVALID_SOURCE
+  SKB_DROP_REASON_IP_INVALID_DEST
+  SKB_DROP_REASON_IP_LOCALNET
 
-Why don't we add an API that allow netdev to "give" struct device to
-page_pool.  And then the page_poll will take over when we can safely
-free the stuct device?
+Menglong Dong (7):
+  net: ip: add drop reason to ip_route_input_noref()
+  net: ip: add drop reason to ip_route_input_rcu()
+  net: ip: add drop reason to ip_route_input_slow()
+  net: ip: make fib_validate_source() return drop reason
+  net: ip: make ip_route_input_mc() return drop reason
+  net: ip: make ip_mc_validate_source() return drop reason
+  net: ip: fix typo in the doc of SKB_DROP_REASON_IP_INNOROUTES
 
---Jesper
+ drivers/net/ipvlan/ipvlan_l3s.c |   2 +-
+ include/net/dropreason-core.h   |  21 +++++-
+ include/net/route.h             |  12 ++--
+ net/core/lwt_bpf.c              |   2 +-
+ net/ipv4/arp.c                  |   2 +-
+ net/ipv4/fib_frontend.c         |  19 ++++--
+ net/ipv4/ip_fragment.c          |   2 +-
+ net/ipv4/ip_input.c             |  11 ++--
+ net/ipv4/route.c                | 111 +++++++++++++++++++++-----------
+ net/ipv4/xfrm4_input.c          |   2 +-
+ net/ipv4/xfrm4_protocol.c       |   2 +-
+ 11 files changed, 122 insertions(+), 64 deletions(-)
+
+-- 
+2.39.5
+
