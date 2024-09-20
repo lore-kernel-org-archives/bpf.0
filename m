@@ -1,31 +1,59 @@
-Received: from szxga04-in.huawei.com (szxga04-in.huawei.com [45.249.212.190])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com [209.85.167.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A8A91C683;
-	Fri, 20 Sep 2024 06:30:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.190
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E95DA38F9C
+	for <bpf@vger.kernel.org>; Fri, 20 Sep 2024 06:43:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726813854; cv=none; b=cnAZ3rRZtfA8jSChjAm2tAFDU2nhxeqN4oWGL2jYxElUJtsQsEotmZU5O50/g94iMA4TitPWL0IeaQEYFLYN7xIetbqTXLDDVC3Rj70S9x1eJGhd9h8AO03dJMgAgyyKxqQDBQ4dHeBsbbNRuczwgtDlHAAWEPzeSdsYO02cT9E=
+	t=1726814623; cv=none; b=TTQaF0CbIYgwKaJdx4Bqal4tPwRZ6tCtH2H/NdbVOKPsvJ3VOmRwySiynsAA47KJYjHek6XFh5qkYCQk7H9rCYy3G+0ifY0uJSGrzrcl63XOe40Qpq9NHA5ZTXrT1HElC4x4XzQ/urGLy1FiscmJ/Tb4cr7VueddinnlIqbuogI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726813854; c=relaxed/simple;
-	bh=pUsj6zi6XSx6GhIlGdt1Hl9sG+23RLjq3jnloPOfGSA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=rxDIsaTHi3kWq43/mRml/2YUdB9q/6XVJyZcbfYOnOEMi1uTbtpezOSHa3YNGc6CcCZyVewtNvSv5//QyWFnKLfJDN3h10xzcg5k4JcqMR5i+r+6fvsULmxIW4EO156J0uVbl2awpoEm+AurSY7y6NuNUYqBNzrEVDMBFLfNbtg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.190
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.162.112])
-	by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4X92BV2t0Fz2DcJj;
-	Fri, 20 Sep 2024 14:13:22 +0800 (CST)
-Received: from dggpemf200006.china.huawei.com (unknown [7.185.36.61])
-	by mail.maildlp.com (Postfix) with ESMTPS id 140801401DC;
-	Fri, 20 Sep 2024 14:14:03 +0800 (CST)
-Received: from [10.67.120.129] (10.67.120.129) by
- dggpemf200006.china.huawei.com (7.185.36.61) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Fri, 20 Sep 2024 14:14:02 +0800
-Message-ID: <2c5ccfff-6ab4-4aea-bff6-3679ff72cc9a@huawei.com>
-Date: Fri, 20 Sep 2024 14:14:02 +0800
+	s=arc-20240116; t=1726814623; c=relaxed/simple;
+	bh=sOxxjmVIf9DK1JAPwTVAbAeOHGayuH0y2cxXhJoEjJs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Cu37r9jKn0CwQs4RqIEdXYSasLIWkz6SPqrcGBjKaM+5CsEWbThlwCUMTpC4TCRlgwXQ6bp0quKCLnFYSieY/bk4+pINHZtp5aoad1HrY69x0Qg8xRoX06B/YmDMUoB/7RtOxYgPQz3qpjjozZdhkYzxbDrRsu8WiBA2p0cEPhI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=blackwall.org; spf=none smtp.mailfrom=blackwall.org; dkim=pass (2048-bit key) header.d=blackwall-org.20230601.gappssmtp.com header.i=@blackwall-org.20230601.gappssmtp.com header.b=QB/yFY1M; arc=none smtp.client-ip=209.85.167.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=blackwall.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=blackwall.org
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=blackwall-org.20230601.gappssmtp.com header.i=@blackwall-org.20230601.gappssmtp.com header.b="QB/yFY1M"
+Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-5365928acd0so1875690e87.2
+        for <bpf@vger.kernel.org>; Thu, 19 Sep 2024 23:43:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=blackwall-org.20230601.gappssmtp.com; s=20230601; t=1726814620; x=1727419420; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=LLaE4A8HWomqnZxKIsBh6iXXcm0J13/3tg8Vb7IGkgU=;
+        b=QB/yFY1M86Pyo+0JMY2IrcKxjNPPaV/JKUA4jYV5ZDhiKcc2IeNxoGiAfPqIuVWmju
+         zA3edRbxcLfJ3H3wtl28mU9XT8YvVsz9wD36eCwHqiujbDaKuIGzdGUlvGn9TRDu+1Eg
+         3SCr+3IO1nzr1er4GN3DOxQbApbRzVjyRYcXx3/Y/KBPZc/wgyv4979jgEM79oVehAUQ
+         e/UDKp4/L7B1hmywYE8V6Cu5dXwqNOwv0aSxZWYKThUy0Zc1+L8JS/prv8kAixQw7t1Q
+         Oyn1hoM5Ar5pc30bHM+zLzhLYBR2YAkTXMz4hzgU0mVoPxKSdeH5YAD6FkCJddhREEf4
+         6m5w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1726814620; x=1727419420;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=LLaE4A8HWomqnZxKIsBh6iXXcm0J13/3tg8Vb7IGkgU=;
+        b=EPsnq1pW0aIs0HiGJnMXxdHY3KqAYjrkCIXCnFOlJ86B15drtxEGGmR6AOwMhp19Gy
+         AHZbKUGW+6wzPHuUDY/LxYOI1nLZRfsu9uh3fr/lgpLBjNh0BqhUVw+q9oBTRZOIt16E
+         nOxXl5r0Wg3jP6cE1lbageDeAzgDBhkdWEbZetZCSzZoTOsYHfJ5CZCgMd5xdXE0Zpjg
+         4d7pTgR+EuGA6ALVas8HYIrztEGCVxBmqNKace2NBEc+HlD4OtZGkneQxC97QR4Vv4Jm
+         A0mBACjnGDBFA4Ml3mXYe+n6qHg9vLB6Yu1A3wYX+DzP2Rz5CfBtyARXoHIjTL9AR2UF
+         FDAQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUQ/muSPpHYzn5rjcoKqf3zgrRouGm3ftLSqKduyWpj0D2jyRFj78JBZbQ0MC5fUlH9mQI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxATFEkO6+Ynjq4jwgRHuDbtFb9nx0CiNJgRx4rfDLT+GU9MQdO
+	KKM6S22ycSN0i3n5xu0HASdh7QBHXNTKvtiLjXmQSx5pbWE5F4HwFxsipqd+zTM=
+X-Google-Smtp-Source: AGHT+IFYc/zDgQiOV93CNO/o/R1jy+aordDFcbQRV8R86JE7XcZO4DTMEjkiBq8Mwj3Lv/fNs3rUBg==
+X-Received: by 2002:a05:6512:39c4:b0:536:581c:9d9f with SMTP id 2adb3069b0e04-536ad16b327mr692425e87.24.1726814619733;
+        Thu, 19 Sep 2024 23:43:39 -0700 (PDT)
+Received: from [192.168.0.245] ([62.73.69.208])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a90613304dasm797860266b.197.2024.09.19.23.43.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 19 Sep 2024 23:43:39 -0700 (PDT)
+Message-ID: <8dfc3125-b4fd-4209-89c5-a5a85a1d65a6@blackwall.org>
+Date: Fri, 20 Sep 2024 09:43:37 +0300
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -33,130 +61,75 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net 2/2] page_pool: fix IOMMU crash when driver has
- already unbound
-To: Ilias Apalodimas <ilias.apalodimas@linaro.org>, Jesper Dangaard Brouer
-	<hawk@kernel.org>
-CC: <davem@davemloft.net>, <kuba@kernel.org>, <pabeni@redhat.com>,
-	<liuyonglong@huawei.com>, <fanghaiqing@huawei.com>, <zhangkun09@huawei.com>,
-	Robin Murphy <robin.murphy@arm.com>, Alexander Duyck
-	<alexander.duyck@gmail.com>, IOMMU <iommu@lists.linux.dev>, Wei Fang
-	<wei.fang@nxp.com>, Shenwei Wang <shenwei.wang@nxp.com>, Clark Wang
-	<xiaoning.wang@nxp.com>, Eric Dumazet <edumazet@google.com>, Tony Nguyen
-	<anthony.l.nguyen@intel.com>, Przemek Kitszel <przemyslaw.kitszel@intel.com>,
-	Alexander Lobakin <aleksander.lobakin@intel.com>, Alexei Starovoitov
-	<ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, John Fastabend
-	<john.fastabend@gmail.com>, Saeed Mahameed <saeedm@nvidia.com>, Leon
- Romanovsky <leon@kernel.org>, Tariq Toukan <tariqt@nvidia.com>, Felix Fietkau
-	<nbd@nbd.name>, Lorenzo Bianconi <lorenzo@kernel.org>, Ryder Lee
-	<ryder.lee@mediatek.com>, Shayne Chen <shayne.chen@mediatek.com>, Sean Wang
-	<sean.wang@mediatek.com>, Kalle Valo <kvalo@kernel.org>, Matthias Brugger
-	<matthias.bgg@gmail.com>, AngeloGioacchino Del Regno
-	<angelogioacchino.delregno@collabora.com>, Andrew Morton
-	<akpm@linux-foundation.org>, <imx@lists.linux.dev>, <netdev@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <intel-wired-lan@lists.osuosl.org>,
-	<bpf@vger.kernel.org>, <linux-rdma@vger.kernel.org>,
-	<linux-wireless@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-mediatek@lists.infradead.org>, <linux-mm@kvack.org>
-References: <20240918111826.863596-1-linyunsheng@huawei.com>
- <20240918111826.863596-3-linyunsheng@huawei.com>
- <CAC_iWjK=G7Oo5=pN2QunhasgDC6NyC1L+96jigX7u9ad+PbYng@mail.gmail.com>
- <894a3c2c-22f9-45b9-a82b-de7320066b42@kernel.org>
- <cdfecd37-31d7-42d2-a8d8-92008285b42e@huawei.com>
- <0e8c7a7a-0e2a-42ec-adbc-b29f6a514517@kernel.org>
- <CAC_iWj+3JvPY2oqVOdu0T1Wt6-ukoy=dLc72u1f55yY23uOTbA@mail.gmail.com>
+Subject: Re: [PATCH net v3] bonding: Fix unnecessary warnings and logs from
+ bond_xdp_get_xmit_slave()
+To: Jiwon Kim <jiwonaid0@gmail.com>, jv@jvosburgh.net, andy@greyhouse.net,
+ davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+ pabeni@redhat.com, ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org,
+ john.fastabend@gmail.com, joamaki@gmail.com
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+ bpf@vger.kernel.org, syzbot+c187823a52ed505b2257@syzkaller.appspotmail.com
+References: <20240918140602.18644-1-jiwonaid0@gmail.com>
 Content-Language: en-US
-From: Yunsheng Lin <linyunsheng@huawei.com>
-In-Reply-To: <CAC_iWj+3JvPY2oqVOdu0T1Wt6-ukoy=dLc72u1f55yY23uOTbA@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+From: Nikolay Aleksandrov <razor@blackwall.org>
+In-Reply-To: <20240918140602.18644-1-jiwonaid0@gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpemf200006.china.huawei.com (7.185.36.61)
 
-On 2024/9/20 13:29, Ilias Apalodimas wrote:
-> Hi Jesper,
+On 18/09/2024 17:06, Jiwon Kim wrote:
+> syzbot reported a WARNING in bond_xdp_get_xmit_slave. To reproduce
+> this[1], one bond device (bond1) has xdpdrv, which increases
+> bpf_master_redirect_enabled_key. Another bond device (bond0) which is
+> unsupported by XDP but its slave (veth3) has xdpgeneric that returns
+> XDP_TX. This triggers WARN_ON_ONCE() from the xdp_master_redirect().
+> To reduce unnecessary warnings and improve log management, we need to
+> delete the WARN_ON_ONCE() and add ratelimit to the netdev_err().
 > 
-> On Fri, 20 Sept 2024 at 00:04, Jesper Dangaard Brouer <hawk@kernel.org> wrote:
->>
->>
->>
->> On 19/09/2024 13.15, Yunsheng Lin wrote:
->>> On 2024/9/19 17:42, Jesper Dangaard Brouer wrote:
->>>>
->>>> On 18/09/2024 19.06, Ilias Apalodimas wrote:
->>>>>> In order not to do the dma unmmapping after driver has already
->>>>>> unbound and stall the unloading of the networking driver, add
->>>>>> the pool->items array to record all the pages including the ones
->>>>>> which are handed over to network stack, so the page_pool can
->>>>>> do the dma unmmapping for those pages when page_pool_destroy()
->>>>>> is called.
->>>>>
->>>>> So, I was thinking of a very similar idea. But what do you mean by
->>>>> "all"? The pages that are still in caches (slow or fast) of the pool
->>>>> will be unmapped during page_pool_destroy().
->>>>
->>>> I really dislike this idea of having to keep track of all outstanding pages.
->>>>
->>>> I liked Jakub's idea of keeping the netdev around for longer.
->>>>
->>>> This is all related to destroying the struct device that have points to
->>>> the DMA engine, right?
->>>
->>> Yes, the problem seems to be that when device_del() is called, there is
->>> no guarantee hw behind the 'struct device ' will be usable even if we
->>> call get_device() on it.
->>>
->>>>
->>>> Why don't we add an API that allow netdev to "give" struct device to
->>>> page_pool.  And then the page_poll will take over when we can safely
->>>> free the stuct device?
->>>
->>> By 'allow netdev to "give" struct device to page_pool', does it mean
->>> page_pool become the driver for the device?
->>> If yes, it seems that is similar to jakub's idea, as both seems to stall
->>> the calling of device_del() by not returning when the driver unloading.
->>
->> Yes, this is what I mean. (That is why I mentioned Jakub's idea).
-
-I am not sure what dose the API that allows netdev to "give" struct device
-to page_pool look like or how to implement the API yet, but the obvious way
-to stall the calling of device_del() is to wait for the inflight page to
-come back in page_pool_destroy(), which seems the same as the jakub's
-way from the viewpoint of user, and jakub's way seems more elegant than
-waiting in page_pool_destroy().
-
+> [1] Steps to reproduce:
+>     # Needs tx_xdp with return XDP_TX;
+>     ip l add veth0 type veth peer veth1
+>     ip l add veth3 type veth peer veth4
+>     ip l add bond0 type bond mode 6 # BOND_MODE_ALB, unsupported by XDP
+>     ip l add bond1 type bond # BOND_MODE_ROUNDROBIN by default
+>     ip l set veth0 master bond1
+>     ip l set bond1 up
+>     # Increases bpf_master_redirect_enabled_key
+>     ip l set dev bond1 xdpdrv object tx_xdp.o section xdp_tx
+>     ip l set veth3 master bond0
+>     ip l set bond0 up
+>     ip l set veth4 up
+>     # Triggers WARN_ON_ONCE() from the xdp_master_redirect()
+>     ip l set veth3 xdpgeneric object tx_xdp.o section xdp_tx
 > 
-> Keeping track of inflight packets that need to be unmapped is
-> certainly more complex. Delaying the netdevice destruction certainly
-> solves the problem but there's a huge cost IMHO. Those devices might
-> stay there forever and we have zero guarantees that the network stack
-> will eventually release (and unmap) those packets. What happens in
-> that case? The user basically has to reboot the entire machine, just
-> because he tries to bring an interface down and up again.
-
-Yes.
-The problem seems to be how long page_pool is allowed to stall the driver
-unloading? Does the driver unload stalling affect some feature like device
-hotplug?
-As the problem in [1], the stall might be forever due to caching in the
-network stack as discussed in [2], and there might be some other caching
-we don't know yet.
-
-The stalling log in [1] is caused by the caching in skb_attempt_defer_free(),
-we may argue that a timeout is needed for those kind of caching, but Eric
-seemed to think otherwise in commit log of [3]:
-"As Eric pointed out/predicted there's no guarantee that
-applications will read / close their sockets so a page pool page
-may be stuck in a socket (but not leaked) forever."
-
-1. https://lore.kernel.org/netdev/20240814075603.05f8b0f5@kernel.org/T/#me2f2c89fbeb7f92a27d54a85aab5527efedfe260
-2. https://lore.kernel.org/netdev/20240814075603.05f8b0f5@kernel.org/T/#m2687f25537395401cd6a810ac14e0e0d9addf97e
-3. https://lore.kernel.org/netdev/ZWfuyc13oEkp583C@makrotopia.org/T/
-
+> Reported-by: syzbot+c187823a52ed505b2257@syzkaller.appspotmail.com
+> Closes: https://syzkaller.appspot.com/bug?extid=c187823a52ed505b2257
+> Fixes: 9e2ee5c7e7c3 ("net, bonding: Add XDP support to the bonding driver")
+> Signed-off-by: Jiwon Kim <jiwonaid0@gmail.com>
+> ---
+> v3: Fix subject and description
+> v2: Change the patch to fix bond_xdp_get_xmit_slave
+> ---
+>  drivers/net/bonding/bond_main.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
 > 
-> Thanks
-> /Ilias
->>
->>
->>> If no, it seems that the problem is still existed when the driver for
->>> the device has unbound after device_del() is called.
+> diff --git a/drivers/net/bonding/bond_main.c b/drivers/net/bonding/bond_main.c
+> index b560644ee1b1..b1bffd8e9a95 100644
+> --- a/drivers/net/bonding/bond_main.c
+> +++ b/drivers/net/bonding/bond_main.c
+> @@ -5610,9 +5610,9 @@ bond_xdp_get_xmit_slave(struct net_device *bond_dev, struct xdp_buff *xdp)
+>  		break;
+>  
+>  	default:
+> -		/* Should never happen. Mode guarded by bond_xdp_check() */
+> -		netdev_err(bond_dev, "Unknown bonding mode %d for xdp xmit\n", BOND_MODE(bond));
+> -		WARN_ON_ONCE(1);
+> +		if (net_ratelimit())
+> +			netdev_err(bond_dev, "Unknown bonding mode %d for xdp xmit\n",
+> +				   BOND_MODE(bond));
+>  		return NULL;
+>  	}
+>  
+
+Looks good to me, but next time wait 1 day before reposting another version.
+Signed-off-by: Nikolay Aleksandrov <razor@blackwall.org>
+
