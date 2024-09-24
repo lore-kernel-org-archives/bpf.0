@@ -1,304 +1,199 @@
-Received: from fhigh-a8-smtp.messagingengine.com (fhigh-a8-smtp.messagingengine.com [103.168.172.159])
+Received: from mailtransmit05.runbox.com (mailtransmit05.runbox.com [185.226.149.38])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFC1419EEB7;
-	Tue, 24 Sep 2024 10:40:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.159
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2786E19F40C
+	for <bpf@vger.kernel.org>; Tue, 24 Sep 2024 10:45:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.38
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727174431; cv=none; b=cs5+c93A5LbbM3a8UWJLr0ZyuIRb8hdpevvhPh8tTSQVLc29RsY9OdKRrJPvfP/a1YqbhWD1Qk/7MFTNsdeG4kBBgp+sUjb4cS2M0xZvW5QJdZuJhIr1gmO+4Fr3gAnv8ozAdAwFgqKvbjILmqgS6mWJSNhYAFxYmogsCKcsqHs=
+	t=1727174710; cv=none; b=trXUi34/lDVPz5gE1jMkWnLe/legKuWS3AB+JCzrGakbti12KUL1kABBJBF7Nio3MpEs+Qd3+SpkvDqMluqXNVaZE6RlFPbtCIp/Fco2AbwlnWbAtO3nTxlUQ8reOOz0GGsOnU+LrusfjOCS6BjRroSlYfwgL41VCCV3pFbmkI8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727174431; c=relaxed/simple;
-	bh=ryGGQ01u25GfzFcnfpQ+eQMm7gzGWJ8S+REeHBF0Bok=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=LZbCRbk9P36+zpegVPlqwc6A6EEiGhd6CjYvWEi6ZT5lgtUfELXbS8vmHHgqXkBkn1j8wR10cjVIT/yGJ2RQSfA8+OxJTvfuc5Gix5FPzPKOjKIx66txNj4QNwaB2A3jEH9RtLNrHCM0NbZTqySaL3W8mmwNYljm6fMNl1lKLEA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dxuuu.xyz; spf=pass smtp.mailfrom=dxuuu.xyz; dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b=TqiF7xRb; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=Cyt2VHFS; arc=none smtp.client-ip=103.168.172.159
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dxuuu.xyz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dxuuu.xyz
+	s=arc-20240116; t=1727174710; c=relaxed/simple;
+	bh=xicL/frCZY1KbKzVSB1P6euV3wP208zF7BMKF9c/vVc=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
+	 In-Reply-To:Content-Type; b=TPsFbvbma5vhVQNauAuWTKj4THU2jNe3txaiGb7rzFtI68sGJWnn+0a9oIpztYLRl7jW6aQeIkAKweJ8fQobKV0l/oY2INP9QULy/uiSx2JOmcGwTNXZOF5/rDuVy2ureD4gBA/L+7HOnWUqMVsiu2MeeDnctrJsQ9Me5WTeRf0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co; spf=pass smtp.mailfrom=rbox.co; dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b=Awmrk2EQ; arc=none smtp.client-ip=185.226.149.38
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rbox.co
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b="TqiF7xRb";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="Cyt2VHFS"
-Received: from phl-compute-06.internal (phl-compute-06.phl.internal [10.202.2.46])
-	by mailfhigh.phl.internal (Postfix) with ESMTP id ADBEE114030F;
-	Tue, 24 Sep 2024 06:40:28 -0400 (EDT)
-Received: from phl-mailfrontend-02 ([10.202.2.163])
-  by phl-compute-06.internal (MEProxy); Tue, 24 Sep 2024 06:40:28 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
-	:cc:content-transfer-encoding:content-type:date:date:from:from
-	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=fm1; t=1727174428; x=
-	1727260828; bh=tm27dyNaV+N171Lor7VvQJK/9qI5IQauKtiSXWUnARg=; b=T
-	qiF7xRbnIC6UybUVNYP+K1WAvCVUNMbLJhC0hY68kBOreT1QtmUl9fFy9tjQLd5d
-	6qpKeogbumXnMLE2FXtCkufHVVFSze9x1kgJ/NJa2CksZGaWgUtllWfFUDCQmdJJ
-	7TdMSkTI9WCRrn7ijxfQxtkef2xNl8iARqPskbV6pMJdURhP97WA+5Y7fBu3/0g+
-	iGvr6zxTpHzDOjAwLotTJiwqvVHCEDRDo0Su617pp8MGdHi5NZU3C71yhckAoaw8
-	gZiujxvYbcFt3HQPaXdEYOuv+3O+zbM5EaqbVg3CpntJl0QYz7ZmV5s6sVnKjeMg
-	2BPDuc1W6FkFJi2ODc3GA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:date:date:feedback-id:feedback-id:from:from
-	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1727174428; x=
-	1727260828; bh=tm27dyNaV+N171Lor7VvQJK/9qI5IQauKtiSXWUnARg=; b=C
-	yt2VHFS6SyvggsSMaTSewvrmHr3n5YZBmfwZofn+EXykTrkG6iNPPCqrFFhhPUfz
-	lGn+KoUpQtVLCs3RtpcJhbBywKBNWAwIxFWy8Ia7QT6BZFkiKUMqPfSrZxtq2BvJ
-	/yVABdeI6xNLk2nKLG3oAMSKWs/D2iJw2fi3XSwBxb0Xs4kUHSWHjQhHfQsN3xWm
-	klYGRFxpgRIOc8K7u9k5iwNs+4ACtppCMKmWBaK/ijudgp5Ur7XM1BpW2zzy5nJg
-	5k02S188pK5gvTBjPMbLAKOYDiVIl2FyKeX3VMCw6sBEJMPxN5d5aPoShEbV6Hvf
-	ZYsGdVyB0lkqpSW/tjCbw==
-X-ME-Sender: <xms:HJfyZiWM1jsvHLgA9LK5gSw8fupCrTCNKi5x1u9A6sY6FGwM0ZMrGw>
-    <xme:HJfyZukFVczhiI8azp2Gt73cmQdrwcy7ASMatx1P3jhFP8kiS1-YpXtaQj5q57aSY
-    mSxPQStsrx0dhqNMw>
-X-ME-Received: <xmr:HJfyZmYyr9u0_Qn2NvGShvdDPtYZKwYGcu7pUS0MwSX14OoYYPKlEXoKVsW5p7u8-3R4ql7t4u9X32Jp0aZm7X7LgM9wphcean70aMT8-3NdJuti-Zen>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrvddtvddgfedtucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
-    rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucgfrhhlucfvnfffucdlje
-    dtmdenucfjughrpefhvfevufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpeff
-    rghnihgvlhcuighuuceougiguhesugiguhhuuhdrgiihiieqnecuggftrfgrthhtvghrnh
-    epgfefgfegjefhudeikedvueetffelieefuedvhfehjeeljeejkefgffeghfdttdetnecu
-    vehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepugiguhesug
-    iguhhuuhdrgiihiidpnhgspghrtghpthhtohepudekpdhmohguvgepshhmthhpohhuthdp
-    rhgtphhtthhopehshhhurghhsehkvghrnhgvlhdrohhrghdprhgtphhtthhopegurghnih
-    gvlhesihhoghgvrghrsghogidrnhgvthdprhgtphhtthhopegrshhtsehkvghrnhgvlhdr
-    ohhrghdprhgtphhtthhopegvugguhiiikeejsehgmhgrihhlrdgtohhmpdhrtghpthhtoh
-    eprghnughrihhisehkvghrnhgvlhdrohhrghdprhgtphhtthhopehmhihkohhlrghlsehf
-    sgdrtghomhdprhgtphhtthhopehmrghrthhinhdrlhgruheslhhinhhugidruggvvhdprh
-    gtphhtthhopehsohhngheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohephihonhhghhho
-    nhhgrdhsohhngheslhhinhhugidruggvvh
-X-ME-Proxy: <xmx:HJfyZpWFyx9r9iZOhPEyuORSdoR1m7v0XIwehuavly7dMSSYNxFDLw>
-    <xmx:HJfyZsmCS_vK8ychJmPq0LYgtBrsxyz5JHh8nRrxTf4KfP-Z3wvGcg>
-    <xmx:HJfyZufh2TZNq27tGnPdu6xNj-Ap7kDfiORaf5T7uV0xioqByN0cMQ>
-    <xmx:HJfyZuFKTCE7NcVMvJekMWPgwTg5YrSs1PYvLsOvnZFEpjPwTLTnEg>
-    <xmx:HJfyZrd-DA2RobS6_p72nyvCKPyCXXgQMq3wZB-wOWNyTMHRwnycWTAE>
-Feedback-ID: i6a694271:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 24 Sep 2024 06:40:26 -0400 (EDT)
-From: Daniel Xu <dxu@dxuuu.xyz>
-To: shuah@kernel.org,
-	daniel@iogearbox.net,
-	ast@kernel.org,
-	eddyz87@gmail.com,
-	andrii@kernel.org
-Cc: mykolal@fb.com,
-	martin.lau@linux.dev,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	john.fastabend@gmail.com,
-	kpsingh@kernel.org,
-	sdf@fomichev.me,
-	haoluo@google.com,
-	jolsa@kernel.org,
-	bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	kernel-team@meta.com
-Subject: [PATCH bpf-next v3 2/2] bpf: selftests: verifier: Add nullness elision tests
-Date: Tue, 24 Sep 2024 04:40:09 -0600
-Message-ID: <0fe2a76efed263378c9739795d88d77a5ee81ff5.1727174358.git.dxu@dxuuu.xyz>
-X-Mailer: git-send-email 2.46.0
-In-Reply-To: <cover.1727174358.git.dxu@dxuuu.xyz>
-References: <cover.1727174358.git.dxu@dxuuu.xyz>
+	dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b="Awmrk2EQ"
+Received: from mailtransmit03.runbox ([10.9.9.163] helo=aibo.runbox.com)
+	by mailtransmit05.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+	(Exim 4.93)
+	(envelope-from <mhal@rbox.co>)
+	id 1st2k0-001TUe-5f; Tue, 24 Sep 2024 12:25:56 +0200
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=rbox.co;
+	s=selector1; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:References:
+	Cc:To:Subject:From:MIME-Version:Date:Message-ID;
+	bh=o17RNvtJLEnk+WRoWMXcR0GFHekQdtyQbeL3ND3m24g=; b=Awmrk2EQxvwLvZG8l17tjV3qSP
+	cD8g1keRjpF3qsNeuw4Xfpx+Zrya9DZorn+cUkpvnplg85s6lFlAQo+u7Wl10sgKY+Xara7nUWph5
+	SEhXn/0dujJl+PXtV456W9ebI6x2XgUVscklxLFwEWSL4miOTAs+tOpyXf0HPxmBrhFw5h9e/nwRp
+	m6dRHhHIyo1KYdxnJKg2iG+DDatmFY3BWOVVWbBogYJHbDd4K7tilcCUtI6gmV+DuhCoMjG5CeTvP
+	4jkJAtFI+wNW9LTC0DZhWTw+WGgrHziTipBs0pqPoY6PcCpR9cyL49S6nKYAFEcl4/boYWOsv01lY
+	coohFDlQ==;
+Received: from [10.9.9.72] (helo=submission01.runbox)
+	by mailtransmit03.runbox with esmtp (Exim 4.86_2)
+	(envelope-from <mhal@rbox.co>)
+	id 1st2jz-00069y-FB; Tue, 24 Sep 2024 12:25:55 +0200
+Received: by submission01.runbox with esmtpsa  [Authenticated ID (604044)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.93)
+	id 1st2je-00H6oF-ST; Tue, 24 Sep 2024 12:25:34 +0200
+Message-ID: <e78254c5-8f2f-4dc5-bf81-401caefabdd1@rbox.co>
+Date: Tue, 24 Sep 2024 12:25:33 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+From: Michal Luczaj <mhal@rbox.co>
+Subject: Re: [PATCH bpf-next v2 0/6] selftests/bpf: Various sockmap-related
+ fixes
+To: Jakub Sitnicki <jakub@cloudflare.com>
+Cc: Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman
+ <eddyz87@gmail.com>, Mykola Lysenko <mykolal@fb.com>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
+ bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20240731-selftest-sockmap-fixes-v2-0-08a0c73abed2@rbox.co>
+ <87y159yi5m.fsf@cloudflare.com>
+ <249a7dc3-34e2-4579-aae7-8b38b145e4bb@rbox.co>
+ <87ttfxy28s.fsf@cloudflare.com>
+ <42939687-20f9-4a45-b7c2-342a0e11a014@rbox.co>
+ <877cccqnvj.fsf@cloudflare.com>
+Content-Language: pl-PL, en-GB
+In-Reply-To: <877cccqnvj.fsf@cloudflare.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Test that nullness elision works for common use cases. For example, we
-want to check that both full and subreg stack slots are recognized. As
-well as when there's both const and non-const values of R2 leading up to
-a lookup. And obviously some bound checks.
+On 8/19/24 22:05, Jakub Sitnicki wrote:
+> On Wed, Aug 14, 2024 at 06:14 PM +02, Michal Luczaj wrote:
+>> On 8/6/24 19:45, Jakub Sitnicki wrote:
+>>> On Tue, Aug 06, 2024 at 07:18 PM +02, Michal Luczaj wrote:
+>>>> Great, thanks for the review. With this completed, I guess we can unwind
+>>>> the (mail) stack to [1]. Is that ingress-to-local et al. something you
+>>>> wanted to take care of yourself or can I give it a try?
+>>>> [1] https://lore.kernel.org/netdev/87msmqn9ws.fsf@cloudflare.com/
+>>>
+>>> I haven't stated any work on. You're welcome to tackle that.
+>>>
+>>> All I have is a toy test that I've used to generate the redirect matrix.
+>>> Perhaps it can serve as inspiration:
+>>>
+>>> https://github.com/jsitnicki/sockmap-redir-matrix
+>>
+>> All right, please let me know if this is more or less what you meant and
+>> I'll post the whole series for a review (+patch to purge sockmap_listen of
+>> redir tests, fix misnomers). [...]
+> 
+> Gave it a look as promised. It makes sense to me as well to put these
+> tests in a new module. There will be some overlap with sockmap_listen,
+> which has diverged from its inital scope, but we can dedup that later.
+> 
+> One thought that I had is that it could make sense to test the not
+> supported redirect combos (and expect an error). Sometimes folks make
+> changes and enable some parts of the API by accient.
 
-Acked-by: Eduard Zingerman <eddyz87@gmail.com>
-Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
----
- .../bpf/progs/verifier_array_access.c         | 166 ++++++++++++++++++
- 1 file changed, 166 insertions(+)
+All right, so I did what sockmap_listen does: check
+test_sockmap_listen.c:verdict_map[SK_PASS] to see if the redirect took
+place for a given combo. And that works well... except for skb/msg to
+ingress af_vsock. Even though this is unsupported and no redirect
+actually happens, verdict appears to be SK_PASS. Is this correct?
 
-diff --git a/tools/testing/selftests/bpf/progs/verifier_array_access.c b/tools/testing/selftests/bpf/progs/verifier_array_access.c
-index 95d7ecc12963..2e74504ddbb5 100644
---- a/tools/testing/selftests/bpf/progs/verifier_array_access.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_array_access.c
-@@ -28,6 +28,20 @@ struct {
- 	__uint(map_flags, BPF_F_WRONLY_PROG);
- } map_array_wo SEC(".maps");
- 
-+struct {
-+	__uint(type, BPF_MAP_TYPE_PERCPU_ARRAY);
-+	__uint(max_entries, 2);
-+	__type(key, int);
-+	__type(value, struct test_val);
-+} map_array_pcpu SEC(".maps");
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__uint(max_entries, 2);
-+	__type(key, int);
-+	__type(value, struct test_val);
-+} map_array SEC(".maps");
-+
- struct {
- 	__uint(type, BPF_MAP_TYPE_HASH);
- 	__uint(max_entries, 1);
-@@ -526,4 +540,156 @@ l0_%=:	exit;						\
- 	: __clobber_all);
+Maybe I'm missing something, so below is a crude testcase I've cobbled
+together.
+
+And sorry for the delay, I was away from keyboard.
+Michal
+
+All error logs:
+./test_progs:unix_vsock_redir_fail:1600: want pass=0 / drop=1, have 1 / 0
+unix_vsock_redir_fail:FAIL:1600
+
+diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c b/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c
+index 4ee1148d22be..e59e1654f110 100644
+--- a/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c
++++ b/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c
+@@ -1561,6 +1561,45 @@ static void vsock_unix_redir_connectible(int sock_mapfd, int verd_mapfd,
+ 	close(u1);
  }
  
-+SEC("socket")
-+__description("valid map access into an array using constant without nullness")
-+__success __retval(4)
-+__naked void an_array_with_a_constant_no_nullness(void)
++static void unix_vsock_redir_fail(int sock_mapfd, int verd_mapfd)
 +{
-+	asm volatile ("					\
-+	r1 = 1;						\
-+	*(u64*)(r10 - 8) = r1;				\
-+	r2 = r10;					\
-+	r2 += -8;					\
-+	r1 = %[map_array] ll;				\
-+	call %[bpf_map_lookup_elem];			\
-+	r1 = %[test_val_foo];				\
-+	*(u64*)(r0 + 0) = r1;				\
-+	r0 = *(u64*)(r0 + 0);				\
-+	exit;						\
-+"	:
-+	: __imm(bpf_map_lookup_elem),
-+	  __imm_addr(map_array),
-+	  __imm_const(test_val_foo, offsetof(struct test_val, foo))
-+	: __clobber_all);
++	int v0, v1, u[2], pass, drop;
++	char a = 'a';
++
++	bpf_map_delete_elem(sock_mapfd, &(int){0});
++	bpf_map_delete_elem(sock_mapfd, &(int){1});
++	zero_verdict_count(verd_mapfd);
++
++	if (socketpair(AF_UNIX, SOCK_STREAM, 0, u)) {
++		FAIL_ERRNO("socketpair(af_unix)");
++		return;
++	}
++
++	if (create_pair(AF_VSOCK, SOCK_STREAM, &v0, &v1))
++		return;
++
++	if (add_to_sockmap(sock_mapfd, v0, u[0]))
++		return;
++
++	if (write(u[1], &a, sizeof(a)) != 1) {
++		FAIL_ERRNO("write()");
++		return;
++	}
++
++	errno = 0;
++	if (recv_timeout(v0, &a, sizeof(a), 0, 1) >= 0 ||
++	    recv_timeout(v1, &a, sizeof(a), 0, 1) >= 0 ||
++	    recv_timeout(u[0], &a, sizeof(a), 0, 1) >= 0 ||
++	    recv_timeout(u[1], &a, sizeof(a), 0, 1) >= 0)
++		FAIL("recv() returned >=0, errno=%d", errno);
++
++	if (xbpf_map_lookup_elem(verd_mapfd, &(int){SK_PASS}, &pass) ||
++	    xbpf_map_lookup_elem(verd_mapfd, &(int){SK_DROP}, &drop))
++		return;
++	if (pass != 0 || drop != 1)
++		FAIL("want pass=0 / drop=1, have %d / %d", pass, drop);
 +}
 +
-+SEC("socket")
-+__description("valid multiple map access into an array using constant without nullness")
-+__success __retval(8)
-+__naked void multiple_array_with_a_constant_no_nullness(void)
+ static void vsock_unix_skb_redir_connectible(struct test_sockmap_listen *skel,
+ 					     struct bpf_map *inner_map,
+ 					     int sotype)
+@@ -1582,6 +1621,23 @@ static void vsock_unix_skb_redir_connectible(struct test_sockmap_listen *skel,
+ 	xbpf_prog_detach2(verdict, sock_map, BPF_SK_SKB_VERDICT);
+ }
+ 
++static void unix_vsock_redir(struct test_sockmap_listen *skel, struct bpf_map *inner_map)
 +{
-+	asm volatile ("					\
-+	r1 = 1;						\
-+	*(u64*)(r10 - 8) = r1;				\
-+	r2 = r10;					\
-+	r2 += -8;					\
-+	r1 = %[map_array] ll;				\
-+	call %[bpf_map_lookup_elem];			\
-+	r6 = %[test_val_foo];				\
-+	*(u64*)(r0 + 0) = r6;				\
-+	r7 = *(u64*)(r0 + 0);				\
-+	r1 = 0;						\
-+	*(u64*)(r10 - 16) = r1;				\
-+	r2 = r10;					\
-+	r2 += -16;					\
-+	r1 = %[map_array] ll;				\
-+	call %[bpf_map_lookup_elem];			\
-+	*(u64*)(r0 + 0) = r6;				\
-+	r1 = *(u64*)(r0 + 0);				\
-+	r7 += r1;					\
-+	r0 = r7;					\
-+	exit;						\
-+"	:
-+	: __imm(bpf_map_lookup_elem),
-+	  __imm_addr(map_array),
-+	  __imm_const(test_val_foo, offsetof(struct test_val, foo))
-+	: __clobber_all);
++	int verdict = bpf_program__fd(skel->progs.prog_skb_verdict);
++	int verdict_map = bpf_map__fd(skel->maps.verdict_map);
++	int sock_map = bpf_map__fd(inner_map);
++	int err;
++
++	err = xbpf_prog_attach(verdict, sock_map, BPF_SK_SKB_VERDICT, 0);
++	if (err)
++		return;
++
++	skel->bss->test_ingress = true;
++	unix_vsock_redir_fail(sock_map, verdict_map);
++
++	xbpf_prog_detach2(verdict, sock_map, BPF_SK_SKB_VERDICT);
 +}
 +
-+SEC("socket")
-+__description("valid map access into an array using 32-bit constant without nullness")
-+__success __retval(4)
-+__naked void an_array_with_a_32bit_constant_no_nullness(void)
-+{
-+	asm volatile ("					\
-+	r1 = 1;						\
-+	*(u32*)(r10 - 4) = r1;				\
-+	r2 = r10;					\
-+	r2 += -4;					\
-+	r1 = %[map_array] ll;				\
-+	call %[bpf_map_lookup_elem];			\
-+	r1 = %[test_val_foo];				\
-+	*(u64*)(r0 + 0) = r1;				\
-+	r0 = *(u64*)(r0 + 0);				\
-+	exit;						\
-+"	:
-+	: __imm(bpf_map_lookup_elem),
-+	  __imm_addr(map_array),
-+	  __imm_const(test_val_foo, offsetof(struct test_val, foo))
-+	: __clobber_all);
-+}
-+
-+SEC("socket")
-+__description("valid map access into a pcpu array using constant without nullness")
-+__success __retval(4)
-+__naked void a_pcpu_array_with_a_constant_no_nullness(void)
-+{
-+	asm volatile ("					\
-+	r1 = 1;						\
-+	*(u64*)(r10 - 8) = r1;				\
-+	r2 = r10;					\
-+	r2 += -8;					\
-+	r1 = %[map_array_pcpu] ll;			\
-+	call %[bpf_map_lookup_elem];			\
-+	r1 = %[test_val_foo];				\
-+	*(u64*)(r0 + 0) = r1;				\
-+	r0 = *(u64*)(r0 + 0);				\
-+	exit;						\
-+"	:
-+	: __imm(bpf_map_lookup_elem),
-+	  __imm_addr(map_array_pcpu),
-+	  __imm_const(test_val_foo, offsetof(struct test_val, foo))
-+	: __clobber_all);
-+}
-+
-+SEC("socket")
-+__description("invalid map access into an array using constant without nullness")
-+__failure __msg("R0 invalid mem access 'map_value_or_null'")
-+__naked void an_array_with_a_constant_no_nullness_out_of_bounds(void)
-+{
-+	asm volatile ("					\
-+	r1 = 3;						\
-+	*(u64*)(r10 - 8) = r1;				\
-+	r2 = r10;					\
-+	r2 += -8;					\
-+	r1 = %[map_array] ll;				\
-+	call %[bpf_map_lookup_elem];			\
-+	r1 = %[test_val_foo];				\
-+	*(u64*)(r0 + 0) = r1;				\
-+	r0 = *(u64*)(r0 + 0);				\
-+	exit;						\
-+"	:
-+	: __imm(bpf_map_lookup_elem),
-+	  __imm_addr(map_array),
-+	  __imm_const(test_val_foo, offsetof(struct test_val, foo))
-+	: __clobber_all);
-+}
-+
-+SEC("socket")
-+__description("invalid elided lookup using const and non-const key")
-+__failure __msg("R0 invalid mem access 'map_value_or_null'")
-+__naked void mixed_const_and_non_const_key_lookup(void)
-+{
-+	asm volatile ("					\
-+	call %[bpf_get_prandom_u32];			\
-+	if r0 > 42 goto l1_%=;				\
-+	*(u64*)(r10 - 8) = r0;				\
-+	r2 = r10;					\
-+	r2 += -8;					\
-+	goto l0_%=;					\
-+l1_%=:	r1 = 1;						\
-+	*(u64*)(r10 - 8) = r1;				\
-+	r2 = r10;					\
-+	r2 += -8;					\
-+l0_%=:	r1 = %[map_array] ll;				\
-+	call %[bpf_map_lookup_elem];			\
-+	r0 = *(u64*)(r0 + 0);				\
-+	exit;						\
-+"	:
-+	: __imm(bpf_get_prandom_u32),
-+	  __imm(bpf_map_lookup_elem),
-+	  __imm_addr(map_array)
-+	: __clobber_all);
-+}
-+
- char _license[] SEC("license") = "GPL";
--- 
-2.46.0
-
+ static void test_vsock_redir(struct test_sockmap_listen *skel, struct bpf_map *map)
+ {
+ 	const char *family_name, *map_name;
+@@ -1883,6 +1939,7 @@ void serial_test_sockmap_listen(void)
+ 	test_unix_redir(skel, skel->maps.sock_map, SOCK_DGRAM);
+ 	test_unix_redir(skel, skel->maps.sock_map, SOCK_STREAM);
+ 	test_vsock_redir(skel, skel->maps.sock_map);
++	unix_vsock_redir(skel, skel->maps.sock_map);
+ 
+ 	skel->bss->test_sockmap = false;
+ 	run_tests(skel, skel->maps.sock_hash, AF_INET);
