@@ -1,110 +1,124 @@
-Received: from mail-lj1-f179.google.com (mail-lj1-f179.google.com [209.85.208.179])
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3683415921D;
-	Wed, 25 Sep 2024 08:18:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21624130499;
+	Wed, 25 Sep 2024 08:24:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727252314; cv=none; b=Du6Sr3CUqfiQ/HVVJstpZskomqB/ppkin0Wh6uYBdeBxqZcK1OcZSYq7KrVTppu+KjHk6ANMYZIf/IOu+A4WPS5wkQnjVbzyxPgBKASvNhQYE/FKLpXgEFDGG+EGh70Mji2WVniBlSanKjM4Oa2YKoRC2266MiZbyYrL1rsvKzI=
+	t=1727252656; cv=none; b=MjfdJU2M2ydEH4R+blTMdVve1j6TdNkCHzDIzfp87uiDtQFXxLp4uRy+0Ep1Xs2WWL7ueXlwwtR5cyCuiSVmlGciXkZpSbjPXfmB/Rua69g1vVfSw3HftFwQBxT1SPvixLmipVvEtgSXP7DYQYC9S2YGaCYQLv/wAeEFG1SKa1g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727252314; c=relaxed/simple;
-	bh=1Nk5zw78EsDZtTINVN7tnvRQ3dNjHON4s+1QiENmxCY=;
+	s=arc-20240116; t=1727252656; c=relaxed/simple;
+	bh=z0YhgJE8tGOsHV49d9k1PcL2yhU7lZxB7k3+WA5Bpo0=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=g292NMZfDJqB5B6qRgfzEkXfc4W6+5H5eqsuy3teRy6CMP42JBybvs7gnsuUcekMB6/PuVGijIjGUx/Nsyd9zUdSLMQamF6/zSDSMnHNbe/NyrsCG/1gK25oIRyWK6AiXgkX9WZDCvcCHam0Se7brmXhCAcEluzizqYKypBJQOE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZzH/hoWL; arc=none smtp.client-ip=209.85.208.179
+	 To:Cc:Content-Type; b=XCNEFEPtETaWcMDh1DQvjrT986zaejrensUrm+rQvE43FEEa3u4uYx+qNoHvLnVZe0ikBnq1COXFFnHUCAEggwjW/QIShcDRSqTjZxjAj1UaQL7btHwclxM0U+1yG+zywUB1QFfKyJmnZ7uk0DCabgs84HfKz2r2UpG70DSs/W8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QYb9KAz8; arc=none smtp.client-ip=209.85.221.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZzH/hoWL"
-Received: by mail-lj1-f179.google.com with SMTP id 38308e7fff4ca-2f75c0b78fbso65026661fa.1;
-        Wed, 25 Sep 2024 01:18:32 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QYb9KAz8"
+Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-374cacf18b1so3791278f8f.2;
+        Wed, 25 Sep 2024 01:24:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1727252311; x=1727857111; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1727252653; x=1727857453; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :reply-to:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=1Nk5zw78EsDZtTINVN7tnvRQ3dNjHON4s+1QiENmxCY=;
-        b=ZzH/hoWLKdAOfTG2BO0mbR8C9StQXevObg687JzwjMzcUfnsgYKm9V8ZnzJa1rJEe/
-         cA4hnY2wVGuI8b7zsbqR1uDbarMfObEszQ9d/Y3oSgReBkE0PBs8v9GyrUZLadcNLNDW
-         XC+pKQrKExWVdkR3hbXBlkUn2kGvna1yvzIkGnss3HAKa6OAbFOq4Tgrz0L8kVxcl5rU
-         BxsnQyTq9bDsla0tIhwowb3j+wbugIt3iJB5sDG+bxxK3Fnvu27kfVYcB/owfBVtRsWs
-         CSFsTUYoo+gj5ooNyqI+N/veh+8skD4DloUxVwszeZMnl+RqyeZ89l92ePw1Ze6XBzJq
-         P+8A==
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=r2edHstWlsclzGFyhsz5xiTaZ1ZX4wZXAdxPbt18MN0=;
+        b=QYb9KAz86aPOk0KFsYMPchvHwqVgVbHqR2blrPF0Po6bng82J7+Qw4KHXGjQLHI2qp
+         4S8pVPrjxeVhNEuAH4DcNJz0SSdL1qcO+BSUCAdZo5kxmzYti5iJqo42v4zotU+ySjTK
+         05CaJIOO+ISz5jjx7sFi7nZxtd0ZhuX/OpCKyBFvrhYBhbVgEqqJvu3uNQmQehH4xqTC
+         Olc9Cmv+Uad1K+ToYpjVPz2/sAwoAlBAv+hvBHu1qyKGuFC0xd9UgJq47zMMEF1DEmTP
+         fm0a4cHCAiGfPD6U/lxunfDr6ss4jo/UTNqvfqn0wt5TulaSDMlw9yBVVzVLkAv8HyZr
+         Gklw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727252311; x=1727857111;
+        d=1e100.net; s=20230601; t=1727252653; x=1727857453;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :reply-to:in-reply-to:references:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=1Nk5zw78EsDZtTINVN7tnvRQ3dNjHON4s+1QiENmxCY=;
-        b=ofq1r3KxKbtStjAJ4gq7N+1I8fRjes2XIFI+j8kSTbEyYxHzj1lT9oMow91sldAoAn
-         9eiFsYYtFaNqsx+Y6ho8ndv1COYcGsMWzKtuDNdF3SxUvJNu6dqsIQ88ESeIx1kniBCB
-         ejDudKobluqHUgpIShp+0nr2D3M9mOh1hsoEiV5qjWPds5hdWM4uI2Ej5J6EYaMVVlwm
-         vBuL0Uf1L9S1mqFVtNQqf7M3P+3ojIEr1PwojLX++0KFHwISnsQDCVNjT4Cl1tAk+JGJ
-         nPTcyCbeBQfD44YKurk5pbydj7FKxDOCQNNvqagOZJZb3UAYUgwgjn7mDAbkTjYvaIJ1
-         c1CQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU9AI3qRnI5qgWCN16YWw+fIyMlCsrW4+a3Bl4zohXE1V7NoUxp/eo3q/cEt6nsc2Tagl5ho+zHqg==@vger.kernel.org, AJvYcCVpjyIg3KG2c2qRWON8TT2dJQj/sxTtMxV9qmjr31aNsuaD1sPY52pf2OIA399lAtF9Z1o9Ox1Zk9WsiFUm@vger.kernel.org, AJvYcCWi6oORtXEYeapcUzhGaNae/3F/ps/CFPL8Es7MwUqn20IA21R7HnGSI09gq5JRawPLExk=@vger.kernel.org, AJvYcCXWBcNOSShwr941RlTTg0MVtpLhkfep/RSH1EYPYuq4ZGnKuJND6ZRXJdiwdK1PRZq2cSOFuxp+AtuIf/kh@vger.kernel.org
-X-Gm-Message-State: AOJu0YxYW/zGNLMUUjgRyPfOCzhXAkQ+mDXIKPKq8e2+QxjK3uvmrqOD
-	Z3J4Zfgu6GVidguCQ0YgGxkvu5B7TAbgnMsBQXPXM/gnCLJNkfowWh41nGZn/t+bXOx7EpfcLag
-	1VqHmRrkvIlnkvdlkZqcpdlZaUK0=
-X-Google-Smtp-Source: AGHT+IERKtPYc980lSJ1UEXpI+b66aNtrwATZPdGkwcCyH8NhpOU5uComuDPBZkuyJYi/sYF3vfJcZoUfsiZOy7Rjr8=
-X-Received: by 2002:a2e:a58c:0:b0:2f7:4ea7:300c with SMTP id
- 38308e7fff4ca-2f91600dae6mr11933971fa.27.1727252310822; Wed, 25 Sep 2024
- 01:18:30 -0700 (PDT)
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=r2edHstWlsclzGFyhsz5xiTaZ1ZX4wZXAdxPbt18MN0=;
+        b=AO29vmNL7A/rc5FFI/hIKbXE0fqklLQV4r58gVV4FFUSdffwC6fP12h8bdcGC27Ca8
+         EkejjXGbtXBtQM9xI/oEuX6Usa1YlcD+m8tiONE2BMByR8T1EQkRPgTcMzVM7/KWOC9y
+         otzZGZLJVhR9wtTQwIfJDSwXwus7b0KktY0JZCSoWleQVEdL1ZwhEvjHsE8YcmCHVZIm
+         DEuKYbig8bUkc+MQCBOsRV1WKIKn4/EV1R8+QOUCeN3DstNnUXCrNAuZ4WrFd/UZck+I
+         EJCjc9Sc1njgZ1Of4eaKytncAjYHnyRYAm19ipAErpC/UavN/yXwNiFMjLMKf8pOyPTo
+         DwWA==
+X-Forwarded-Encrypted: i=1; AJvYcCVKsbbV/Gxn+ECgIMisxQtDgjR25Q9/VUAbytGEy4y0H7zep94Il+5feG5gPXXiM43cm+IGLYLbwUvg+CTb@vger.kernel.org, AJvYcCW+tHvGhBQUTI1PslT5RgxhrMC6HLiwYlSWJAI87qnlxKW1ez/8vfI3ppc6noX+b3XVgkE=@vger.kernel.org, AJvYcCXDeecuXAgvN2oTXNyFca/lJYtx/10InTsHgvaz1bcI1uuwog2Q1/z/gvyBvwB2dXkR1qIljTKKqTj3XlGhNjyA@vger.kernel.org
+X-Gm-Message-State: AOJu0YyxP1P7GLZTywTkcmVGld5oh2o+kf9tpL3RqR3RTiBdYZSPm80P
+	jgUcUdwm7YhCL+cpQBswwIJ4NN2ZEBbfQ6+wMlWddNf1fRp4OqXW98bqG5MxlDsdIqyqnBkab4n
+	hc2Nn1dq8J5qduHQzFPlMN5zsj4E=
+X-Google-Smtp-Source: AGHT+IEDxTRbBnGIMHlwmtmEVOiP+3su787rzVqn6SiEoedksyYRYCb1L7LZhgoxFmj4CZxWus/vi/pOmX1wsDm8s+Y=
+X-Received: by 2002:adf:dd90:0:b0:374:b6b5:4688 with SMTP id
+ ffacd0b85a97d-37cc24c9e96mr1103156f8f.49.1727252653066; Wed, 25 Sep 2024
+ 01:24:13 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240820085950.200358-1-jirislaby@kernel.org> <ZsSpU5DqT3sRDzZy@krava>
- <523c1afa-ed9d-4c76-baea-1c43b1b0c682@kernel.org> <c2086083-4378-4503-b3e2-08fb14f8ff37@kernel.org>
- <7ebee21d-058f-4f83-8959-bd7aaa4e7719@kernel.org> <a45nq7wustxrztjxmkqzevv3mkki5oizfik7b24gqiyldhlkhv@4rpy4tzwi52l>
- <ZsdYGOS7Yg9pS2BJ@x1> <CA+icZUVL13oPX8KybWirie5zH77qWuzG9-9yTNM7O1CxwhOp1w@mail.gmail.com>
-In-Reply-To: <CA+icZUVL13oPX8KybWirie5zH77qWuzG9-9yTNM7O1CxwhOp1w@mail.gmail.com>
-Reply-To: sedat.dilek@gmail.com
-From: Sedat Dilek <sedat.dilek@gmail.com>
-Date: Wed, 25 Sep 2024 10:17:54 +0200
-Message-ID: <CA+icZUUgk3fsmmWTx2ix0HAV=Wagy5AT341SFs2idaCyS2uvtA@mail.gmail.com>
-Subject: Re: [RFC] kbuild: bpf: Do not run pahole with -j on 32bit userspace
-To: Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc: Shung-Hsi Yu <shung-hsi.yu@suse.com>, dwarves@vger.kernel.org, 
-	Jiri Slaby <jirislaby@kernel.org>, Jiri Olsa <olsajiri@gmail.com>, masahiroy@kernel.org, 
-	linux-kernel@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>, 
-	Nicolas Schier <nicolas@fjasle.eu>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
-	linux-kbuild@vger.kernel.org, bpf@vger.kernel.org, msuchanek@suse.com
+References: <cover.1727174358.git.dxu@dxuuu.xyz> <815cefa75561c30bec8ca62b9261d4706fa25bb6.1727174358.git.dxu@dxuuu.xyz>
+In-Reply-To: <815cefa75561c30bec8ca62b9261d4706fa25bb6.1727174358.git.dxu@dxuuu.xyz>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Wed, 25 Sep 2024 10:24:01 +0200
+Message-ID: <CAADnVQKZ1MkBttCKsOMh7nNXNP4OVxGdYLnJuXjNFLPUv3Bm6w@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v3 1/2] bpf: verifier: Support eliding map lookup nullness
+To: Daniel Xu <dxu@dxuuu.xyz>
+Cc: Shuah Khan <shuah@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Alexei Starovoitov <ast@kernel.org>, Eddy Z <eddyz87@gmail.com>, Andrii Nakryiko <andrii@kernel.org>, 
+	John Fastabend <john.fastabend@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
+	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Mykola Lysenko <mykolal@fb.com>, bpf <bpf@vger.kernel.org>, 
+	LKML <linux-kernel@vger.kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, Kernel Team <kernel-team@meta.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Aug 26, 2024 at 12:18=E2=80=AFPM Sedat Dilek <sedat.dilek@gmail.com=
-> wrote:
+On Tue, Sep 24, 2024 at 12:40=E2=80=AFPM Daniel Xu <dxu@dxuuu.xyz> wrote:
 >
-> On Thu, Aug 22, 2024 at 5:24=E2=80=AFPM Arnaldo Carvalho de Melo
-> <acme@kernel.org> wrote:
->
-> > Please let me know if what is in the 'next' branch of:
-> >
-> > https://git.kernel.org/pub/scm/devel/pahole/pahole.git
-> >
-> > Works for you, that will be extra motivation to move it to the master
-> > branch and cut 1.28.
->
-> For pahole version 1.28 - Please, Go Go Go.
->
-> -Sedat-
->
-> pahole 1.27 segfaults when generating BTF for modules built with LTO #203=
-2
-> https://github.com/ClangBuiltLinux/linux/issues/2032
+> +
+> +/* Returns constant key value if possible, else -1 */
+> +static long get_constant_map_key(struct bpf_verifier_env *env,
+> +                                struct bpf_reg_state *key)
+> +{
+> +       struct bpf_func_state *state =3D func(env, key);
+> +       struct bpf_reg_state *reg;
+> +       int stack_off;
+> +       int slot;
+> +       int spi;
+> +
+> +       if (key->type !=3D PTR_TO_STACK)
+> +               return -1;
+> +       if (!tnum_is_const(key->var_off))
+> +               return -1;
+> +
+> +       stack_off =3D key->off + key->var_off.value;
+> +       slot =3D -stack_off - 1;
+> +       if (slot < 0)
+> +               /* Stack grew upwards */
 
-Hi Arnaldo,
+The comment is misleading.
+The verifier is supposed to catch this.
+It's just this helper was called before the stack bounds
+were checked?
+Maybe the call can be done later?
 
-Any news for pahole version 1.28 release?
+> +               return -1;
+> +       else if (slot >=3D state->allocated_stack)
+> +               /* Stack uninitialized */
+> +               return -1;
+> +
+> +       spi =3D slot / BPF_REG_SIZE;
+> +       reg =3D &state->stack[spi].spilled_ptr;
+> +       if (!tnum_is_const(reg->var_off))
+> +               /* Stack value not statically known */
+> +               return -1;
+> +
+> +       return reg->var_off.value;
+> +}
 
-Thanks.
+Looks like the code is more subtle than it looks.
 
-Best regards,
--Sedat-
+I think it's better to guard it all with CAP_BPF.
+
+pw-bot: cr
