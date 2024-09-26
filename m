@@ -1,21 +1,21 @@
-Received: from 66-220-155-178.mail-mxout.facebook.com (66-220-155-178.mail-mxout.facebook.com [66.220.155.178])
+Received: from 69-171-232-181.mail-mxout.facebook.com (69-171-232-181.mail-mxout.facebook.com [69.171.232.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82B11188CB7
-	for <bpf@vger.kernel.org>; Thu, 26 Sep 2024 23:45:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.155.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F46D13C683
+	for <bpf@vger.kernel.org>; Thu, 26 Sep 2024 23:45:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=69.171.232.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727394330; cv=none; b=SBpr7GQO7IaTade/n7Ulx4zWzNk9eAT0DeKfT0r1/q1MxX8gjJn5ZbCn80B3GTzURMEKgRAehb6xC8pAvkyD+TzKoUFnx1MXZWpGvuoZKndfvWy7mlfqhwNK7DzFaweV3c/hlDtY96McXOWZUGMgdlLwH8qEBNimIyDTVa+o7ZY=
+	t=1727394340; cv=none; b=hF0NB5iRuv1iblxhG7/76uo4kyNxZOjcgvx+V7g3RS5FHY7tzcSkl9suLIlKlb2xryvXr8m5919OpUuIfZ205/KKlGkGmfQ6JMDyAcLYG3jFEHfNWHs2QSFpBwqaU2Huylsfq/jxvr0J3HDrr21K9Z+JDtUAYNFiaCmeeJZh9II=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727394330; c=relaxed/simple;
-	bh=+AgiCmwseQJNQiVXVJD/fpibq+iyNAvfGv9ebRpy/Fk=;
+	s=arc-20240116; t=1727394340; c=relaxed/simple;
+	bh=FEbdUWsTuM01VEzEcCRNhgjZWj8vPDLfbKej36mK/KU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Ik4le82lFhivBRyrNFmsdXAfI3wfJnnNkH1vavZ3x5GjEK222tRdFu2p6KGiQJFIVkyy1aaeQVR4KDIxIIKTWS5FxITEiLCIYj+8MJ2BATkV3Gi8+Nl5GB/keDUKh48x3aenHuaRTqoFDuhC7Wp9RT5AYzUok18pji8cPfN4l08=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.155.178
+	 MIME-Version; b=Df2Hwe65jaE87V7UoxDW9R4BL0nvfRq33AQrNlodZuGZ7vwDqWbmog9MuINtwuhEw6mrl2H3bhnzXmi3MeG1QktL8cV8MnqCj9qYRCtZgPHSpb5094ZnNsaZjBrvEW0Y1I9xwp0H8+c91WuAYJoTCsaGdAg0z2J5sIj8Ebz5bLo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=69.171.232.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
 Received: by devbig309.ftw3.facebook.com (Postfix, from userid 128203)
-	id 40BE1967C768; Thu, 26 Sep 2024 16:45:16 -0700 (PDT)
+	id 76C4A967C7A4; Thu, 26 Sep 2024 16:45:26 -0700 (PDT)
 From: Yonghong Song <yonghong.song@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -23,9 +23,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	kernel-team@fb.com,
 	Martin KaFai Lau <martin.lau@kernel.org>
-Subject: [PATCH bpf-next v3 2/5] bpf: Collect stack depth information
-Date: Thu, 26 Sep 2024 16:45:16 -0700
-Message-ID: <20240926234516.1770154-1-yonghong.song@linux.dev>
+Subject: [PATCH bpf-next v3 4/5] bpf, x86: Add jit support for private stack
+Date: Thu, 26 Sep 2024 16:45:26 -0700
+Message-ID: <20240926234526.1770736-1-yonghong.song@linux.dev>
 X-Mailer: git-send-email 2.43.5
 In-Reply-To: <20240926234506.1769256-1-yonghong.song@linux.dev>
 References: <20240926234506.1769256-1-yonghong.song@linux.dev>
@@ -37,203 +37,245 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 
-Private stack memory allocation is based on call subtrees. For example,
+Add jit support for private stack. For a particular subtree, e.g.,
+  subtree_root <=3D=3D stack depth 120
+   subprog1    <=3D=3D stack depth 80
+    subprog2   <=3D=3D stack depth 40
+   subprog3    <=3D=3D stack depth 160
 
-  main_prog     // stack size 50
-    subprog1    // stack size 50
-      subprog2  // stack size 50
-    subprog3    // stack size 50
+Let us say that private_stack_ptr is the memory address allocated for
+private stack. The frame pointer for each above is calculated like below:
+  subtree_root  <=3D=3D subtree_root_fp =3D private_stack_ptr + 120
+   subprog1     <=3D=3D subtree_subprog1_fp =3D subtree_root_fp + 80
+    subprog2    <=3D=3D subtree_subprog2_fp =3D subtree_subprog1_fp + 40
+   subprog3     <=3D=3D subtree_subprog1_fp =3D subtree_root_fp + 160
 
-Overall allocation size should be 150 bytes (stacks from main_prog,
-subprog1 and subprog2).
+For any function call to helper/kfunc, push/pop prog frame pointer
+is needed in order to preserve frame pointer value.
 
-To simplify jit, the root of subtrees is either the main prog
-or any callback func. For example,
+To deal with exception handling, push/pop frame pointer is also used
+surrounding call to subsequent subprog. For example,
+  subtree_root
+   subprog1
+     ...
+     insn: call bpf_throw
+     ...
 
-  main_prog
-    subprog1    // callback subprog10
-      ...
-        subprog10
-          subprog11
+After jit, we will have
+  subtree_root
+   insn: push r9
+   subprog1
+     ...
+     insn: push r9
+     insn: call bpf_throw
+     insn: pop r9
+     ...
+   insn: pop r9
 
-In this case, two subtrees exist. One root is main_prog and the other
-root is subprog10.
-
-The private stack is used only if
- - the subtree stack size is greater than 128 bytes and
-   smaller than or equal to U16_MAX, and
- - the prog type is kprobe, tracepoint, perf_event, raw_tracepoint
-   and tracing, and
- - jit supports private stack, and
- - no tail call in the main prog and all subprogs
-
-The restriction of no tail call is due to the following two reasons:
- - to avoid potential large memory consumption. Currently maximum tail
-   call count is MAX_TAIL_CALL_CNT=3D33. Considering private stack memory
-   allocation is per-cpu based. It will be a very large memory consumptio=
-n
-   to support current MAX_TAIL_CALL_CNT.
- - if the tailcall in the callback function, it is not easy to pass
-   the tail call cnt to the callback function and the tail call cnt
-   is needed to find proper offset for private stack.
-So to avoid complexity, private stack does not support tail call
-for now.
+  exception_handler
+     pop r9
+     ...
+where r9 represents the fp for each subprog.
 
 Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
 ---
- include/linux/bpf.h          |  3 +-
- include/linux/bpf_verifier.h |  3 ++
- kernel/bpf/verifier.c        | 81 ++++++++++++++++++++++++++++++++++++
- 3 files changed, 86 insertions(+), 1 deletion(-)
+ arch/x86/net/bpf_jit_comp.c | 87 ++++++++++++++++++++++++++++++++++---
+ 1 file changed, 81 insertions(+), 6 deletions(-)
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 62909fbe9e48..156b9516d9f6 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -1566,7 +1566,8 @@ struct bpf_prog {
- 				call_get_stack:1, /* Do we call bpf_get_stack() or bpf_get_stackid()=
- */
- 				call_get_func_ip:1, /* Do we call get_func_ip() */
- 				tstamp_type_access:1, /* Accessed __sk_buff->tstamp_type */
--				sleepable:1;	/* BPF program is sleepable */
-+				sleepable:1,	/* BPF program is sleepable */
-+				pstack_eligible:1; /* Candidate for private stacks */
- 	enum bpf_prog_type	type;		/* Type of BPF program */
- 	enum bpf_attach_type	expected_attach_type; /* For some prog types */
- 	u32			len;		/* Number of filter blocks */
-diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index 4513372c5bc8..63df10f4129e 100644
---- a/include/linux/bpf_verifier.h
-+++ b/include/linux/bpf_verifier.h
-@@ -659,6 +659,8 @@ struct bpf_subprog_info {
- 	 * are used for bpf_fastcall spills and fills.
- 	 */
- 	s16 fastcall_stack_off;
-+	u16 subtree_stack_depth;
-+	u16 subtree_top_idx;
- 	bool has_tail_call: 1;
- 	bool tail_call_reachable: 1;
- 	bool has_ld_abs: 1;
-@@ -668,6 +670,7 @@ struct bpf_subprog_info {
- 	bool args_cached: 1;
- 	/* true if bpf_fastcall stack region is used by functions that can't be=
- inlined */
- 	bool keep_fastcall_stack: 1;
-+	bool pstack_eligible:1;
+diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+index 06b080b61aa5..c264822c926b 100644
+--- a/arch/x86/net/bpf_jit_comp.c
++++ b/arch/x86/net/bpf_jit_comp.c
+@@ -325,6 +325,22 @@ struct jit_context {
+ /* Number of bytes that will be skipped on tailcall */
+ #define X86_TAIL_CALL_OFFSET	(12 + ENDBR_INSN_SIZE)
 =20
- 	u8 arg_cnt;
- 	struct bpf_subprog_arg_info args[MAX_BPF_FUNC_REG_ARGS];
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 97700e32e085..69e17cb22037 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -194,6 +194,8 @@ struct bpf_verifier_stack_elem {
-=20
- #define BPF_GLOBAL_PERCPU_MA_MAX_SIZE  512
-=20
-+#define BPF_PSTACK_MIN_SUBTREE_SIZE	128
++static void push_r9(u8 **pprog)
++{
++	u8 *prog =3D *pprog;
 +
- static int acquire_reference_state(struct bpf_verifier_env *env, int ins=
-n_idx);
- static int release_reference(struct bpf_verifier_env *env, int ref_obj_i=
-d);
- static void invalidate_non_owning_refs(struct bpf_verifier_env *env);
-@@ -6192,6 +6194,82 @@ static int check_max_stack_depth(struct bpf_verifi=
-er_env *env)
- 	return 0;
++	EMIT2(0x41, 0x51);   /* push r9 */
++	*pprog =3D prog;
++}
++
++static void pop_r9(u8 **pprog)
++{
++	u8 *prog =3D *pprog;
++
++	EMIT2(0x41, 0x59);   /* pop r9 */
++	*pprog =3D prog;
++}
++
+ static void push_r12(u8 **pprog)
+ {
+ 	u8 *prog =3D *pprog;
+@@ -491,7 +507,7 @@ static void emit_prologue_tail_call(u8 **pprog, bool =
+is_subprog)
+  */
+ static void emit_prologue(u8 **pprog, u32 stack_depth, bool ebpf_from_cb=
+pf,
+ 			  bool tail_call_reachable, bool is_subprog,
+-			  bool is_exception_cb)
++			  bool is_exception_cb, enum bpf_pstack_state  pstack)
+ {
+ 	u8 *prog =3D *pprog;
+=20
+@@ -518,6 +534,8 @@ static void emit_prologue(u8 **pprog, u32 stack_depth=
+, bool ebpf_from_cbpf,
+ 		 * first restore those callee-saved regs from stack, before
+ 		 * reusing the stack frame.
+ 		 */
++		if (pstack)
++			pop_r9(&prog);
+ 		pop_callee_regs(&prog, all_callee_regs_used);
+ 		pop_r12(&prog);
+ 		/* Reset the stack frame. */
+@@ -1404,6 +1422,22 @@ static void emit_shiftx(u8 **pprog, u32 dst_reg, u=
+8 src_reg, bool is64, u8 op)
+ 	*pprog =3D prog;
  }
 =20
-+static int calc_private_stack_alloc_subprog(struct bpf_verifier_env *env=
-, int idx)
++static void emit_private_frame_ptr(u8 **pprog, void *private_frame_ptr)
 +{
-+	struct bpf_subprog_info *subprog =3D env->subprog_info;
-+	struct bpf_insn *insn =3D env->prog->insnsi;
-+	int depth =3D 0, frame =3D 0, i, subprog_end;
-+	int ret_insn[MAX_CALL_FRAMES];
-+	int ret_prog[MAX_CALL_FRAMES];
-+	int ps_eligible =3D 0;
-+	int orig_idx =3D idx;
++	u8 *prog =3D *pprog;
 +
-+	subprog[idx].subtree_top_idx =3D idx;
-+	i =3D subprog[idx].start;
++	/* movabs r9, private_frame_ptr */
++	emit_mov_imm64(&prog, X86_REG_R9, (long) private_frame_ptr >> 32,
++		       (u32) (long) private_frame_ptr);
 +
-+process_func:
-+	depth +=3D round_up_stack_depth(env, subprog[idx].stack_depth);
-+	if (depth > U16_MAX)
-+		return -EACCES;
++	/* add <r9>, gs:[<off>] */
++	EMIT2(0x65, 0x4c);
++	EMIT3(0x03, 0x0c, 0x25);
++	EMIT((u32)(unsigned long)&this_cpu_off, 4);
 +
-+	if (!ps_eligible && depth >=3D BPF_PSTACK_MIN_SUBTREE_SIZE) {
-+		subprog[orig_idx].pstack_eligible =3D true;
-+		ps_eligible =3D true;
-+	}
-+	subprog[orig_idx].subtree_stack_depth =3D
-+		max_t(u16, subprog[orig_idx].subtree_stack_depth, depth);
-+
-+continue_func:
-+	subprog_end =3D subprog[idx + 1].start;
-+	for (; i < subprog_end; i++) {
-+		int next_insn, sidx;
-+
-+		if (!bpf_pseudo_call(insn + i) && !bpf_pseudo_func(insn + i))
-+			continue;
-+		/* remember insn and function to return to */
-+		ret_insn[frame] =3D i + 1;
-+		ret_prog[frame] =3D idx;
-+
-+		/* find the callee */
-+		next_insn =3D i + insn[i].imm + 1;
-+		sidx =3D find_subprog(env, next_insn);
-+		if (subprog[sidx].is_cb) {
-+			if (!bpf_pseudo_call(insn + i))
-+				continue;
-+		}
-+		i =3D next_insn;
-+		idx =3D sidx;
-+		subprog[idx].subtree_top_idx =3D orig_idx;
-+
-+		frame++;
-+		goto process_func;
-+	}
-+	if (frame =3D=3D 0)
-+		return ps_eligible;
-+	depth -=3D round_up_stack_depth(env, subprog[idx].stack_depth);
-+	frame--;
-+	i =3D ret_insn[frame];
-+	idx =3D ret_prog[frame];
-+	goto continue_func;
++	*pprog =3D prog;
 +}
 +
-+static int calc_private_stack_alloc_size(struct bpf_verifier_env *env)
-+{
-+	struct bpf_subprog_info *si =3D env->subprog_info;
-+	int ret;
-+
-+	for (int i =3D 0; i < env->subprog_cnt; i++) {
-+		if (!i || si[i].is_cb) {
-+			ret =3D calc_private_stack_alloc_subprog(env, i);
-+			if (ret < 0)
-+				return ret;
-+			if (ret)
-+				env->prog->pstack_eligible =3D true;
-+		}
+ #define INSN_SZ_DIFF (((addrs[i] - addrs[i - 1]) - (prog - temp)))
+=20
+ #define __LOAD_TCC_PTR(off)			\
+@@ -1421,20 +1455,31 @@ static int do_jit(struct bpf_prog *bpf_prog, int =
+*addrs, u8 *image, u8 *rw_image
+ 	int insn_cnt =3D bpf_prog->len;
+ 	bool seen_exit =3D false;
+ 	u8 temp[BPF_MAX_INSN_SIZE + BPF_INSN_SAFETY];
++	void __percpu *private_frame_ptr =3D NULL;
+ 	u64 arena_vm_start, user_vm_start;
++	u32 orig_stack_depth, stack_depth;
+ 	int i, excnt =3D 0;
+ 	int ilen, proglen =3D 0;
+ 	u8 *prog =3D temp;
+ 	int err;
+=20
++	stack_depth =3D bpf_prog->aux->stack_depth;
++	orig_stack_depth =3D round_up(stack_depth, 8);
++	if (bpf_prog->pstack) {
++		stack_depth =3D 0;
++		if (bpf_prog->pstack =3D=3D PSTACK_TREE_ROOT)
++			private_frame_ptr =3D bpf_prog->private_stack_ptr + orig_stack_depth;
 +	}
-+	return 0;
++
+ 	arena_vm_start =3D bpf_arena_get_kern_vm_start(bpf_prog->aux->arena);
+ 	user_vm_start =3D bpf_arena_get_user_vm_start(bpf_prog->aux->arena);
+=20
+ 	detect_reg_usage(insn, insn_cnt, callee_regs_used);
+=20
+-	emit_prologue(&prog, bpf_prog->aux->stack_depth,
++	emit_prologue(&prog, stack_depth,
+ 		      bpf_prog_was_classic(bpf_prog), tail_call_reachable,
+-		      bpf_is_subprog(bpf_prog), bpf_prog->aux->exception_cb);
++		      bpf_is_subprog(bpf_prog), bpf_prog->aux->exception_cb,
++		      bpf_prog->pstack);
+ 	/* Exception callback will clobber callee regs for its own use, and
+ 	 * restore the original callee regs from main prog's stack frame.
+ 	 */
+@@ -1454,6 +1499,17 @@ static int do_jit(struct bpf_prog *bpf_prog, int *=
+addrs, u8 *image, u8 *rw_image
+ 		emit_mov_imm64(&prog, X86_REG_R12,
+ 			       arena_vm_start >> 32, (u32) arena_vm_start);
+=20
++	if (bpf_prog->pstack =3D=3D PSTACK_TREE_ROOT) {
++		emit_private_frame_ptr(&prog, private_frame_ptr);
++	} else if (bpf_prog->pstack =3D=3D PSTACK_TREE_INTERNAL  && orig_stack_=
+depth) {
++		/* r9 +=3D orig_stack_depth */
++		maybe_emit_1mod(&prog, X86_REG_R9, true);
++		if (is_imm8(orig_stack_depth))
++			EMIT3(0x83, add_1reg(0xC0, X86_REG_R9), orig_stack_depth);
++		else
++			EMIT2_off32(0x81, add_1reg(0xC0, X86_REG_R9), orig_stack_depth);
++	}
++
+ 	ilen =3D prog - temp;
+ 	if (rw_image)
+ 		memcpy(rw_image + proglen, temp, ilen);
+@@ -1473,6 +1529,14 @@ static int do_jit(struct bpf_prog *bpf_prog, int *=
+addrs, u8 *image, u8 *rw_image
+ 		u8 *func;
+ 		int nops;
+=20
++		if (bpf_prog->pstack) {
++			if (src_reg =3D=3D BPF_REG_FP)
++				src_reg =3D X86_REG_R9;
++
++			if (dst_reg =3D=3D BPF_REG_FP)
++				dst_reg =3D X86_REG_R9;
++		}
++
+ 		switch (insn->code) {
+ 			/* ALU */
+ 		case BPF_ALU | BPF_ADD | BPF_X:
+@@ -2128,14 +2192,20 @@ st:			if (is_imm8(insn->off))
+=20
+ 			func =3D (u8 *) __bpf_call_base + imm32;
+ 			if (tail_call_reachable) {
+-				LOAD_TAIL_CALL_CNT_PTR(bpf_prog->aux->stack_depth);
++				LOAD_TAIL_CALL_CNT_PTR(stack_depth);
+ 				ip +=3D 7;
+ 			}
+ 			if (!imm32)
+ 				return -EINVAL;
++			if (bpf_prog->pstack) {
++				push_r9(&prog);
++				ip +=3D 2;
++			}
+ 			ip +=3D x86_call_depth_emit_accounting(&prog, func, ip);
+ 			if (emit_call(&prog, func, ip))
+ 				return -EINVAL;
++			if (bpf_prog->pstack)
++				pop_r9(&prog);
+ 			break;
+ 		}
+=20
+@@ -2145,13 +2215,13 @@ st:			if (is_imm8(insn->off))
+ 							  &bpf_prog->aux->poke_tab[imm32 - 1],
+ 							  &prog, image + addrs[i - 1],
+ 							  callee_regs_used,
+-							  bpf_prog->aux->stack_depth,
++							  stack_depth,
+ 							  ctx);
+ 			else
+ 				emit_bpf_tail_call_indirect(bpf_prog,
+ 							    &prog,
+ 							    callee_regs_used,
+-							    bpf_prog->aux->stack_depth,
++							    stack_depth,
+ 							    image + addrs[i - 1],
+ 							    ctx);
+ 			break;
+@@ -3559,6 +3629,11 @@ bool bpf_jit_supports_exceptions(void)
+ 	return IS_ENABLED(CONFIG_UNWINDER_ORC);
+ }
+=20
++bool bpf_jit_supports_private_stack(void)
++{
++	return true;
 +}
 +
- #ifndef CONFIG_BPF_JIT_ALWAYS_ON
- static int get_callee_stack_depth(struct bpf_verifier_env *env,
- 				  const struct bpf_insn *insn, int idx)
-@@ -22502,6 +22580,9 @@ int bpf_check(struct bpf_prog **prog, union bpf_a=
-ttr *attr, bpfptr_t uattr, __u3
- 								     : false;
- 	}
-=20
-+	if (ret =3D=3D 0 && env->prog->aux->pstack_enabled)
-+		ret =3D calc_private_stack_alloc_size(env);
-+
- 	if (ret =3D=3D 0)
- 		ret =3D fixup_call_args(env);
-=20
+ void arch_bpf_stack_walk(bool (*consume_fn)(void *cookie, u64 ip, u64 sp=
+, u64 bp), void *cookie)
+ {
+ #if defined(CONFIG_UNWINDER_ORC)
 --=20
 2.43.5
 
