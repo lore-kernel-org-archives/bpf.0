@@ -1,106 +1,119 @@
-Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6FBB19ADBF;
-	Fri, 27 Sep 2024 13:48:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28DCF191;
+	Fri, 27 Sep 2024 14:17:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727444900; cv=none; b=V9sy0WRECt4vb3ZcRbatcckF9kSR+XifmM1uUB50U6TcMn4lmweD5mWh1eCxcjFKNbb15EDF/gt81+dpz+M0zggs1XK7ehzXXg7kbhLo8oGxzY5OY7Vge/aY4y6Fq0Utg4NucwZRUmlBi1AqmeiHtmb+2axsJd4g8Zf8Hud/Qvo=
+	t=1727446670; cv=none; b=teANBmqAYXYoD/loesA8si7469Z8MHDH21qYHxCHOycsbxd0d1lQc58uKbHcYc3C+8AnJgxS/LivteK0RYaPojk2/PZPTIF5gmVtt0bFVWPJyLANAdBUwkqZSNv+k3vvr5yE2qPus3YpVB1hroULy3drYv2l0ZeK7ml6d9vMU7Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727444900; c=relaxed/simple;
-	bh=V9eTCYU4XX+e3IYCCY9FtInd9JmbB7Kd/prqSuG1z9U=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=uwaf29A0oSz/49Ct57FkkrHjlN1ZEyuE5FtCzEZscWO6KsqCzQrl9WGVgXtJNayHID549YLtq8HcAwlmYcxnIoK+5g2Go7Jy7Tp4n6cAvemLhrdDt9xrkkM0TqK+pf2JjtXsn8cDybxooIj4AkT/WfP9K/ZtyJczoiUbmtBlcSg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.216])
-	by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4XFWxj3CVxz4f3jXP;
-	Fri, 27 Sep 2024 21:47:53 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.128])
-	by mail.maildlp.com (Postfix) with ESMTP id C23D61A08FC;
-	Fri, 27 Sep 2024 21:48:09 +0800 (CST)
-Received: from ultra.huawei.com (unknown [10.90.53.71])
-	by APP4 (Coremail) with SMTP id gCh0CgCHvMiYt_Zm3kQCCg--.422S3;
-	Fri, 27 Sep 2024 21:48:09 +0800 (CST)
-From: Pu Lehui <pulehui@huaweicloud.com>
-To: stable@vger.kernel.org,
-	bpf@vger.kernel.org
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Sasha Levin <sashal@kernel.org>,
-	=?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
-	Pu Lehui <pulehui@huawei.com>
-Subject: [PATCH 5.10 v2 1/3] Revert "bpf: Fix DEVMAP_HASH overflow check on 32-bit arches"
-Date: Fri, 27 Sep 2024 13:51:16 +0000
-Message-Id: <20240927135118.1432057-2-pulehui@huaweicloud.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240927135118.1432057-1-pulehui@huaweicloud.com>
-References: <20240927135118.1432057-1-pulehui@huaweicloud.com>
+	s=arc-20240116; t=1727446670; c=relaxed/simple;
+	bh=1TuZ25MJ9whfide80+hSRQq95cprrnR1mCj7R+DiV5A=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=EsaC1+Qolaat/9WKeGO/XDNa6rWkZLmALCy5c2nAw1mRTd4RFtXB8un4+GuRSqOgRgDie0tpfCXGeAxKAIXVc7s5WkVHgS+PfDZ77au2sY2XnMiIFSqCR1o5ICcO94NslIyXbLtaYU8TQPuN027KTI7EytuOnhXPvClARbhloH8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PhdjbVpe; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PhdjbVpe"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62A6DC4CEC4;
+	Fri, 27 Sep 2024 14:17:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1727446669;
+	bh=1TuZ25MJ9whfide80+hSRQq95cprrnR1mCj7R+DiV5A=;
+	h=From:Date:Subject:To:Cc:From;
+	b=PhdjbVpeVFwFAoX4Bx6STsjMaOYkSeN2GC25bPK7AoYbuu8wzObifBRDKBOOtN4sZ
+	 PEbsk50p/pLH880ju37ulcEIUBSbkmcX/aji4tdrTOAZtNUHYGe5JwaY0HjcNRsgGr
+	 8yQenHlkv7DJSGSrkkhUs5OKIrXDDKjgNXZ7kmIno8N0tGtoF0Z7jqPk5rC1DwVyXS
+	 bfRp0FdyYgqW6yD94o+3QeB7F5fZL9+tG1nZkE1W/5HxgvonYI6Ek3X6l99mluGHQP
+	 7Kdfg6bgeiTNzF9Mkj6QIMI/WIU3bRxCj84mD0qRP9Iui2+2D+UWy/SmY4dhqd0CCM
+	 ZXQRam5hiLKhw==
+From: Benjamin Tissoires <bentiss@kernel.org>
+Date: Fri, 27 Sep 2024 16:17:41 +0200
+Subject: [PATCH HID] HID: bpf: fix cfi stubs for hid_bpf_ops
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:gCh0CgCHvMiYt_Zm3kQCCg--.422S3
-X-Coremail-Antispam: 1UD129KBjvJXoW7Kw17Wr1kXFWDZw17JFyftFb_yoW8XF1rpr
-	WrA3W5Ww48Jr9Fq39Yqa1vg3yjkw40gryavr9xA34Skr4Igrnaq34vy3WrWF9Ikry0kF1S
-	qrn0qay0v34UuFJanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUU9Kb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUGw
-	A2048vs2IY020Ec7CjxVAFwI0_JFI_Gr1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
-	w2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
-	W8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v2
-	6rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMc
-	Ij6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_
-	Jr0_Gr1lF7xvr2IYc2Ij64vIr41lc7CjxVAaw2AFwI0_JF0_Jw1l42xK82IYc2Ij64vIr4
-	1l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK
-	67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI
-	8IcVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAv
-	wI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14
-	v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUw0eHUUUUU
-X-CM-SenderInfo: psxovxtxl6x35dzhxuhorxvhhfrp/
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20240927-fix-hid-bpf-stubs-v1-1-5bbf125f247c@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAIS+9mYC/x2MOQqAMBAAvyJbuxDjbW2hbxALj41uoyGrIoh/N
+ 1gOzMwDQo5JoAoecHSx8L55iMIApnXYFkKePYNWOlGlztHwjSvPOFqDcpyjoClUWkZDlseTBt9
+ ZR176nx00bQ39+343fHP3aAAAAA==
+To: Jiri Kosina <jikos@kernel.org>
+Cc: linux-input@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ bpf@vger.kernel.org, stable@vger.kernel.org, 
+ Benjamin Tissoires <bentiss@kernel.org>
+X-Mailer: b4 0.14.1
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1727446666; l=2048;
+ i=bentiss@kernel.org; s=20230215; h=from:subject:message-id;
+ bh=1TuZ25MJ9whfide80+hSRQq95cprrnR1mCj7R+DiV5A=;
+ b=yCMgfsrFEDdJDNrozHUfZNJzFPJooHAd09U2ZfloFYeJJ7xf4kGO/EB7BfOjuFwBmM0wHq3nm
+ FfvbevSB0l/AFHYER4e4xj/crN/2v6+q5KEBliO8QtV/EmxVjZIWJrA
+X-Developer-Key: i=bentiss@kernel.org; a=ed25519;
+ pk=7D1DyAVh6ajCkuUTudt/chMuXWIJHlv2qCsRkIizvFw=
 
-From: Pu Lehui <pulehui@huawei.com>
+With the introduction of commit e42ac1418055 ("bpf: Check unsupported ops
+from the bpf_struct_ops's cfi_stubs"), a HID-BPF struct_ops containing
+a .hid_hw_request() or a .hid_hw_output_report() was failing to load
+as the cfi stubs were not defined.
 
-This reverts commit 225da02acdc97af01b6bc6ce1a3e5362bf01d3fb.
+Fix that by defining those simple static functions and restore HID-BPF
+functionality.
 
-Commit 225da02acdc9 ("bpf: fix DEVMAP_HASH overflow check on 32-bit
-architectures") relies on the v5.11+ base mechanism of memcg-based
-memory accounting[0], which is not yet supported on the 5.10 stable
-branch, so let's revert this commit in preparation for re-adapting it.
+This was detected with the HID selftests suddenly failing on Linus' tree.
 
-Link: https://lore.kernel.org/bpf/20201201215900.3569844-1-guro@fb.com [0]
-Signed-off-by: Pu Lehui <pulehui@huawei.com>
+Cc: stable@vger.kernel.org # v6.11+
+Fixes: 9286675a2aed ("HID: bpf: add HID-BPF hooks for hid_hw_output_report")
+Fixes: 8bd0488b5ea5 ("HID: bpf: add HID-BPF hooks for hid_hw_raw_requests")
+Signed-off-by: Benjamin Tissoires <bentiss@kernel.org>
 ---
- kernel/bpf/devmap.c | 11 +++++------
- 1 file changed, 5 insertions(+), 6 deletions(-)
+Hi,
 
-diff --git a/kernel/bpf/devmap.c b/kernel/bpf/devmap.c
-index 07b5edb2c70f..ca2cade2871b 100644
---- a/kernel/bpf/devmap.c
-+++ b/kernel/bpf/devmap.c
-@@ -129,14 +129,13 @@ static int dev_map_init_map(struct bpf_dtab *dtab, union bpf_attr *attr)
- 	bpf_map_init_from_attr(&dtab->map, attr);
+This commit should directly go in Linus tree before we start creating
+topic branches for 6.13 given that the CI is now failing on our HID
+master branch.
+
+Cheers,
+Benjamin
+---
+ drivers/hid/bpf/hid_bpf_struct_ops.c | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
+
+diff --git a/drivers/hid/bpf/hid_bpf_struct_ops.c b/drivers/hid/bpf/hid_bpf_struct_ops.c
+index cd696c59ba0f..702c22fae136 100644
+--- a/drivers/hid/bpf/hid_bpf_struct_ops.c
++++ b/drivers/hid/bpf/hid_bpf_struct_ops.c
+@@ -276,9 +276,23 @@ static int __hid_bpf_rdesc_fixup(struct hid_bpf_ctx *ctx)
+ 	return 0;
+ }
  
- 	if (attr->map_type == BPF_MAP_TYPE_DEVMAP_HASH) {
--		/* hash table size must be power of 2; roundup_pow_of_two() can
--		 * overflow into UB on 32-bit arches, so check that first
--		 */
--		if (dtab->map.max_entries > 1UL << 31)
--			return -EINVAL;
--
- 		dtab->n_buckets = roundup_pow_of_two(dtab->map.max_entries);
- 
-+		if (!dtab->n_buckets) /* Overflow check */
-+			return -EINVAL;
-+	}
++static int __hid_bpf_hw_request(struct hid_bpf_ctx *ctx, unsigned char reportnum,
++				enum hid_report_type rtype, enum hid_class_request reqtype,
++				u64 source)
++{
++	return 0;
++}
 +
-+	if (attr->map_type == BPF_MAP_TYPE_DEVMAP_HASH) {
- 		dtab->dev_index_head = dev_map_create_hash(dtab->n_buckets,
- 							   dtab->map.numa_node);
- 		if (!dtab->dev_index_head)
++static int __hid_bpf_hw_output_report(struct hid_bpf_ctx *ctx, u64 source)
++{
++	return 0;
++}
++
+ static struct hid_bpf_ops __bpf_hid_bpf_ops = {
+ 	.hid_device_event = __hid_bpf_device_event,
+ 	.hid_rdesc_fixup = __hid_bpf_rdesc_fixup,
++	.hid_hw_request = __hid_bpf_hw_request,
++	.hid_hw_output_report = __hid_bpf_hw_output_report,
+ };
+ 
+ static struct bpf_struct_ops bpf_hid_bpf_ops = {
+
+---
+base-commit: 13882369ceb9b0953f9f5ff8563bbccfd80d0ffd
+change-id: 20240927-fix-hid-bpf-stubs-f80591a673c2
+
+Best regards,
 -- 
-2.34.1
+Benjamin Tissoires <bentiss@kernel.org>
 
