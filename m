@@ -1,178 +1,188 @@
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE99F1D150D
-	for <bpf@vger.kernel.org>; Wed,  2 Oct 2024 17:01:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A690E1D0E19;
+	Wed,  2 Oct 2024 17:02:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727888499; cv=none; b=fhQLVMzp1uEI9c3QKmeiGR7iBOnrduhBuHs19ezwNLMWKmGqyL09F7zVz+cn+Q3Ec3se4/Vgkb0nuuqUVAfoKESkgYnwWDYE0g+Qtx8NzvalEjiK36177OGgNrgWoALv744Oxk2RuUrJQv6rUaxKuWe/WdF8hN0stZyhBXQfE/Y=
+	t=1727888555; cv=none; b=UWp0jKeoUkNb8kNVuBwex+E0UOJ4JpKSPJLexlTUcod1pitIb29A2oHSmNSbaKVzRyOrAZdL4Gdb6zaSY4vSYKKfraBaprIve8v8kNV1kcp4I5H5xPR/H367mJpJUtxsinFI1906hM9c1JOeAwIOUeCocR71dqd8rq6gI7DqvDA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727888499; c=relaxed/simple;
-	bh=577fAuiY7k/W2o9T9JdM0OPHd/iJA/K86pGSr+nSf4k=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=dwfWdklKJmWuvEEqqlhxPIaVmDH4U//dX52bY+w5rVoqt7+Dx9OayUk/VrPgfzWDxEImSer6gJMxlqeIMAG21gMw8G2/A+h2r/aAJI2Riqesbe5IOj7l0x9zVU0VQVL8FUGb8my9dldi3E2Ww6IX1bj4AuWXPRoIPT9CX4lVIPU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=nzGoO/pN; arc=none smtp.client-ip=213.133.104.62
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
+	s=arc-20240116; t=1727888555; c=relaxed/simple;
+	bh=2qnD3gcBe6sh/sUSe/VAfQiEfTQxar5VV5mjmhqjanY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=hBcw5Gm/ZAF542V7ox6ScSREt6kNxWSQVJnff+QRmTFor8/kjfT97lUIZF49AuUdVBb/oxVM1LkkvYFeIaoDjhKD5d6CII+twpBs3MWdwUfQ9QehmoBj60R4EiOhCJG8SQ2A9zI6j147BIhnOPc6oHhqciWsJOceI5iII+ZJcDA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=g71HNFdf; arc=none smtp.client-ip=209.85.210.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="nzGoO/pN"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=3zt1X3mjNNbRXgA9ovCNYcAwOmhj3f5kzmFTM14l448=; b=nzGoO/pNX99+s3tjWNFPPxgs6d
-	6YBtF/GyR5VXJNsSn4vny6/OZOwbDSCb4BsDRv5lz3DZcj1UjEEUxi+muZdNtcSmgomNV1pdxwzai
-	mJkIhhEWV1AOIYolypFZG7iTok/00LyfJ3GyJFqoACd6XGn8gNi66y71ru7CK4rJxR9tgpd2qSPDl
-	GYqFCiB4UlPPDwwdMbvQBWo7nkoOHAIYaRtAk9IExzku6h3Bc3JGOjxCtZ6AyV1BGgoHfFjzU/8yH
-	eAihTd6JPc7pUWgUcJDbVGWEjo6xs8i1g7KCWOUbNM7b1ICP4TmNQHF7Z1S3EkGj/IMK7x2XAXeC9
-	LCsu/eWA==;
-Received: from sslproxy06.your-server.de ([78.46.172.3])
-	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1sw2QM-000EhK-CH; Wed, 02 Oct 2024 18:42:02 +0200
-Received: from [178.197.249.44] (helo=[192.168.1.114])
-	by sslproxy06.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1sw2QL-000CdS-2Y;
-	Wed, 02 Oct 2024 18:42:01 +0200
-Message-ID: <f05e5f07-467d-441a-8113-0a7c4cb2c842@iogearbox.net>
-Date: Wed, 2 Oct 2024 18:42:01 +0200
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="g71HNFdf"
+Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-718816be6cbso69556b3a.1;
+        Wed, 02 Oct 2024 10:02:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1727888553; x=1728493353; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=j3CAetgPIchZCXGcR59D8f6NwNxq3FYMeL7IhO3SN+4=;
+        b=g71HNFdfuv+bBytHj6Kde7USbYcpyUFzoRpcdFQTvBHGWprcmU6aJXsqwDLymAZroT
+         U6rzrlMMc61iSjY/R4L2bI+mEs89eWrYIRW8tVVtvodi/PfkNOFsoDWsX0hq2pcBCeOq
+         XfxNJGpjuyy8i8oYwAlCUJjpdk5F6KQB+EflQnJB0BQUmWVVJTNnTTHlaQwwBxE1RX+R
+         tyJhTnTEfP4CQKPMTkmlNF4AfARZ0NXZzLYSgWwhhU+vS+JuG9RFfyDtKp/ssa2r//hn
+         ARwu4ZUaRrYJTk96A9oUVLdS625mWljYINsTXRD7lZ6XgHzbzUDluurcdwasTQOEz0tr
+         cQIg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1727888553; x=1728493353;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=j3CAetgPIchZCXGcR59D8f6NwNxq3FYMeL7IhO3SN+4=;
+        b=nZsmyhs+joZCoq5rCYz8ZwVUxIQnMezMagqV8PtxYcgVcQZAvDWjFdFgtm7DWfJJpI
+         THCdhupAebHjchKhfec/jNxHRbWlsm7NljMorwYIcB8RpBurgMreUwqT1w+tOKCVLV5J
+         Do1/fPyKN5dTNzhAppNF3Ptb2Gg+okBmzJnNG3XDwZg/HyNhG+5jrZemQQspzoQCgEm8
+         Jl+RzIFSD01l/XuQvADjX+oVDD/uCPSC5A8cD7ppf/foxNl2A3gd8lFgeMJg+JTPhKDl
+         z9h6Em8mx9lxcceb3zOgxi4gRL/S/dLNEb5bNHKfSkMZ1wLd5b7VWEXNxzNLpqanOYGk
+         kR2w==
+X-Forwarded-Encrypted: i=1; AJvYcCW5GOPa6bbWq2smbLignQj6WWPyfFmf0CR5ewEuGUv6fqZrYizc9uYqX+829BcY206NLLPl73YF@vger.kernel.org, AJvYcCXnvY/xCVLX8CVgIjWqAh+VumBU48yYzMimHTw7cbZ4XX38d7M+7OaqDmbMD5aOtY6ec1s=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw4qD8YTaDkmzmdFAU6XHlZ5LCxPsX8xFSD8gjHizrQWmFf/L7k
+	EJTaxbepbO5D1RSkJf3KwikdR+/z6/b1GsvfI2Up4MTvzUzB0JI=
+X-Google-Smtp-Source: AGHT+IGp5S9qADB+5Pu5rzmzU8tU0hkVADw7MBH03DAjOoup+W+fr8dADId0yHouk9LY1IerDa/fzA==
+X-Received: by 2002:a05:6a00:807:b0:705:a13b:e740 with SMTP id d2e1a72fcca58-71dc5d6a157mr5638461b3a.19.1727888552645;
+        Wed, 02 Oct 2024 10:02:32 -0700 (PDT)
+Received: from localhost ([2601:646:9e00:f56e:123b:cea3:439a:b3e3])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-71b26498b51sm10383673b3a.14.2024.10.02.10.02.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Oct 2024 10:02:32 -0700 (PDT)
+Date: Wed, 2 Oct 2024 10:02:31 -0700
+From: Stanislav Fomichev <stfomichev@gmail.com>
+To: Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+Cc: Lorenzo Bianconi <lorenzo@kernel.org>,
+	Arthur Fabre <afabre@cloudflare.com>,
+	Lorenzo Bianconi <lorenzo.bianconi@redhat.com>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	Jakub Sitnicki <jakub@cloudflare.com>,
+	Alexander Lobakin <aleksander.lobakin@intel.com>,
+	bpf@vger.kernel.org, netdev@vger.kernel.org, ast@kernel.org,
+	daniel@iogearbox.net, davem@davemloft.net, kuba@kernel.org,
+	john.fastabend@gmail.com, edumazet@google.com, pabeni@redhat.com,
+	sdf@fomichev.me, tariqt@nvidia.com, saeedm@nvidia.com,
+	anthony.l.nguyen@intel.com, przemyslaw.kitszel@intel.com,
+	intel-wired-lan@lists.osuosl.org, mst@redhat.com,
+	jasowang@redhat.com, mcoquelin.stm32@gmail.com,
+	alexandre.torgue@foss.st.com,
+	kernel-team <kernel-team@cloudflare.com>,
+	Yan Zhai <yan@cloudflare.com>
+Subject: Re: [RFC bpf-next 0/4] Add XDP rx hw hints support performing
+ XDP_REDIRECT
+Message-ID: <Zv18pxsiTGTZSTyO@mini-arch>
+References: <87wmiysi37.fsf@toke.dk>
+ <D4GBY7CHJNJ6.3O18I5W1FTPKR@bobby>
+ <87ldzds8bp.fsf@toke.dk>
+ <D4H5CAN4O95E.3KF8LAH75FYD4@bobby>
+ <ZvbKDT-2xqx2unrx@lore-rh-laptop>
+ <871q11s91e.fsf@toke.dk>
+ <ZvqQOpqnK9hBmXNn@lore-desk>
+ <D4KJ7DUXJQC5.2UFST9L3CUOH7@bobby>
+ <ZvwNQqN4gez1Ksfn@lore-desk>
+ <87zfnnq2hs.fsf@toke.dk>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next 2/2] selftests/bpf: add tcx netns cookie tests
-To: Mahe Tardy <mahe.tardy@gmail.com>, bpf@vger.kernel.org
-Cc: martin.lau@linux.dev, john.fastabend@gmail.com
-References: <20241002160122.148980-1-mahe.tardy@gmail.com>
- <20241002160122.148980-2-mahe.tardy@gmail.com>
-Content-Language: en-US
-From: Daniel Borkmann <daniel@iogearbox.net>
-Autocrypt: addr=daniel@iogearbox.net; keydata=
- xsFNBGNAkI0BEADiPFmKwpD3+vG5nsOznvJgrxUPJhFE46hARXWYbCxLxpbf2nehmtgnYpAN
- 2HY+OJmdspBntWzGX8lnXF6eFUYLOoQpugoJHbehn9c0Dcictj8tc28MGMzxh4aK02H99KA8
- VaRBIDhmR7NJxLWAg9PgneTFzl2lRnycv8vSzj35L+W6XT7wDKoV4KtMr3Szu3g68OBbp1TV
- HbJH8qe2rl2QKOkysTFRXgpu/haWGs1BPpzKH/ua59+lVQt3ZupePpmzBEkevJK3iwR95TYF
- 06Ltpw9ArW/g3KF0kFUQkGXYXe/icyzHrH1Yxqar/hsJhYImqoGRSKs1VLA5WkRI6KebfpJ+
- RK7Jxrt02AxZkivjAdIifFvarPPu0ydxxDAmgCq5mYJ5I/+BY0DdCAaZezKQvKw+RUEvXmbL
- 94IfAwTFA1RAAuZw3Rz5SNVz7p4FzD54G4pWr3mUv7l6dV7W5DnnuohG1x6qCp+/3O619R26
- 1a7Zh2HlrcNZfUmUUcpaRPP7sPkBBLhJfqjUzc2oHRNpK/1mQ/+mD9CjVFNz9OAGD0xFzNUo
- yOFu/N8EQfYD9lwntxM0dl+QPjYsH81H6zw6ofq+jVKcEMI/JAgFMU0EnxrtQKH7WXxhO4hx
- 3DFM7Ui90hbExlFrXELyl/ahlll8gfrXY2cevtQsoJDvQLbv7QARAQABzSZEYW5pZWwgQm9y
- a21hbm4gPGRhbmllbEBpb2dlYXJib3gubmV0PsLBkQQTAQoAOxYhBCrUdtCTcZyapV2h+93z
- cY/jfzlXBQJjQJCNAhsDBQkHhM4ACAsJCAcNDAsKBRUKCQgLAh4BAheAAAoJEN3zcY/jfzlX
- dkUQAIFayRgjML1jnwKs7kvfbRxf11VI57EAG8a0IvxDlNKDcz74mH66HMyhMhPqCPBqphB5
- ZUjN4N5I7iMYB/oWUeohbuudH4+v6ebzzmgx/EO+jWksP3gBPmBeeaPv7xOvN/pPDSe/0Ywp
- dHpl3Np2dS6uVOMnyIsvmUGyclqWpJgPoVaXrVGgyuer5RpE/a3HJWlCBvFUnk19pwDMMZ8t
- 0fk9O47HmGh9Ts3O8pGibfdREcPYeGGqRKRbaXvcRO1g5n5x8cmTm0sQYr2xhB01RJqWrgcj
- ve1TxcBG/eVMmBJefgCCkSs1suriihfjjLmJDCp9XI/FpXGiVoDS54TTQiKQinqtzP0jv+TH
- 1Ku+6x7EjLoLH24ISGyHRmtXJrR/1Ou22t0qhCbtcT1gKmDbTj5TcqbnNMGWhRRTxgOCYvG0
- 0P2U6+wNj3HFZ7DePRNQ08bM38t8MUpQw4Z2SkM+jdqrPC4f/5S8JzodCu4x80YHfcYSt+Jj
- ipu1Ve5/ftGlrSECvy80ZTKinwxj6lC3tei1bkI8RgWZClRnr06pirlvimJ4R0IghnvifGQb
- M1HwVbht8oyUEkOtUR0i0DMjk3M2NoZ0A3tTWAlAH8Y3y2H8yzRrKOsIuiyKye9pWZQbCDu4
- ZDKELR2+8LUh+ja1RVLMvtFxfh07w9Ha46LmRhpCzsFNBGNAkI0BEADJh65bNBGNPLM7cFVS
- nYG8tqT+hIxtR4Z8HQEGseAbqNDjCpKA8wsxQIp0dpaLyvrx4TAb/vWIlLCxNu8Wv4W1JOST
- wI+PIUCbO/UFxRy3hTNlb3zzmeKpd0detH49bP/Ag6F7iHTwQQRwEOECKKaOH52tiJeNvvyJ
- pPKSKRhmUuFKMhyRVK57ryUDgowlG/SPgxK9/Jto1SHS1VfQYKhzMn4pWFu0ILEQ5x8a0RoX
- k9p9XkwmXRYcENhC1P3nW4q1xHHlCkiqvrjmWSbSVFYRHHkbeUbh6GYuCuhqLe6SEJtqJW2l
- EVhf5AOp7eguba23h82M8PC4cYFl5moLAaNcPHsdBaQZznZ6NndTtmUENPiQc2EHjHrrZI5l
- kRx9hvDcV3Xnk7ie0eAZDmDEbMLvI13AvjqoabONZxra5YcPqxV2Biv0OYp+OiqavBwmk48Z
- P63kTxLddd7qSWbAArBoOd0wxZGZ6mV8Ci/ob8tV4rLSR/UOUi+9QnkxnJor14OfYkJKxot5
- hWdJ3MYXjmcHjImBWplOyRiB81JbVf567MQlanforHd1r0ITzMHYONmRghrQvzlaMQrs0V0H
- 5/sIufaiDh7rLeZSimeVyoFvwvQPx5sXhjViaHa+zHZExP9jhS/WWfFE881fNK9qqV8pi+li
- 2uov8g5yD6hh+EPH6wARAQABwsF8BBgBCgAmFiEEKtR20JNxnJqlXaH73fNxj+N/OVcFAmNA
- kI0CGwwFCQeEzgAACgkQ3fNxj+N/OVfFMhAA2zXBUzMLWgTm6iHKAPfz3xEmjtwCF2Qv/TT3
- KqNUfU3/0VN2HjMABNZR+q3apm+jq76y0iWroTun8Lxo7g89/VDPLSCT0Nb7+VSuVR/nXfk8
- R+OoXQgXFRimYMqtP+LmyYM5V0VsuSsJTSnLbJTyCJVu8lvk3T9B0BywVmSFddumv3/pLZGn
- 17EoKEWg4lraXjPXnV/zaaLdV5c3Olmnj8vh+14HnU5Cnw/dLS8/e8DHozkhcEftOf+puCIl
- Awo8txxtLq3H7KtA0c9kbSDpS+z/oT2S+WtRfucI+WN9XhvKmHkDV6+zNSH1FrZbP9FbLtoE
- T8qBdyk//d0GrGnOrPA3Yyka8epd/bXA0js9EuNknyNsHwaFrW4jpGAaIl62iYgb0jCtmoK/
- rCsv2dqS6Hi8w0s23IGjz51cdhdHzkFwuc8/WxI1ewacNNtfGnorXMh6N0g7E/r21pPeMDFs
- rUD9YI1Je/WifL/HbIubHCCdK8/N7rblgUrZJMG3W+7vAvZsOh/6VTZeP4wCe7Gs/cJhE2gI
- DmGcR+7rQvbFQC4zQxEjo8fNaTwjpzLM9NIp4vG9SDIqAm20MXzLBAeVkofixCsosUWUODxP
- owLbpg7pFRJGL9YyEHpS7MGPb3jSLzucMAFXgoI8rVqoq6si2sxr2l0VsNH5o3NgoAgJNIg=
-In-Reply-To: <20241002160122.148980-2-mahe.tardy@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.10/27415/Wed Oct  2 10:52:29 2024)
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <87zfnnq2hs.fsf@toke.dk>
 
-On 10/2/24 6:01 PM, Mahe Tardy wrote:
-> Add netns cookie test that verifies the helper is now supported and work
-> in the context of tc programs.
+On 10/01, Toke Høiland-Jørgensen wrote:
+> Lorenzo Bianconi <lorenzo@kernel.org> writes:
 > 
-> Signed-off-by: Mahe Tardy <mahe.tardy@gmail.com>
-> ---
->   tools/testing/selftests/bpf/prog_tests/netns_cookie.c | 7 +++++++
->   tools/testing/selftests/bpf/progs/netns_cookie_prog.c | 9 +++++++++
->   2 files changed, 16 insertions(+)
+> >> On Mon Sep 30, 2024 at 1:49 PM CEST, Lorenzo Bianconi wrote:
+> >> > > Lorenzo Bianconi <lorenzo@kernel.org> writes:
+> >> > > 
+> >> > > >> > We could combine such a registration API with your header format, so
+> >> > > >> > that the registration just becomes a way of allocating one of the keys
+> >> > > >> > from 0-63 (and the registry just becomes a global copy of the header).
+> >> > > >> > This would basically amount to moving the "service config file" into the
+> >> > > >> > kernel, since that seems to be the only common denominator we can rely
+> >> > > >> > on between BPF applications (as all attempts to write a common daemon
+> >> > > >> > for BPF management have shown).
+> >> > > >> 
+> >> > > >> That sounds reasonable. And I guess we'd have set() check the global
+> >> > > >> registry to enforce that the key has been registered beforehand?
+> >> > > >> 
+> >> > > >> >
+> >> > > >> > -Toke
+> >> > > >> 
+> >> > > >> Thanks for all the feedback!
+> >> > > >
+> >> > > > I like this 'fast' KV approach but I guess we should really evaluate its
+> >> > > > impact on performances (especially for xdp) since, based on the kfunc calls
+> >> > > > order in the ebpf program, we can have one or multiple memmove/memcpy for
+> >> > > > each packet, right?
+> >> > > 
+> >> > > Yes, with Arthur's scheme, performance will be ordering dependent. Using
+> >> > > a global registry for offsets would sidestep this, but have the
+> >> > > synchronisation issues we discussed up-thread. So on balance, I think
+> >> > > the memmove() suggestion will probably lead to the least pain.
+> >> > > 
+> >> > > For the HW metadata we could sidestep this by always having a fixed
+> >> > > struct for it (but using the same set/get() API with reserved keys). The
+> >> > > only drawback of doing that is that we statically reserve a bit of
+> >> > > space, but I'm not sure that is such a big issue in practice (at least
+> >> > > not until this becomes to popular that the space starts to be contended;
+> >> > > but surely 256 bytes ought to be enough for everybody, right? :)).
+> >> >
+> >> > I am fine with the proposed approach, but I think we need to verify what is the
+> >> > impact on performances (in the worst case??)
+> >> 
+> >> If drivers are responsible for populating the hardware metadata before
+> >> XDP, we could make sure drivers set the fields in order to avoid any
+> >> memove() (and maybe even provide a helper to ensure this?).
+> >
+> > nope, since the current APIs introduced by Stanislav are consuming NIC
+> > metadata in kfuncs (mainly for af_xdp) and, according to my understanding,
+> > we want to add a kfunc to store the info for each NIC metadata (e.g rx-hash,
+> > timestamping, ..) into the packet (this is what Toke is proposing, right?).
+> > In this case kfunc calling order makes a difference.
+> > We can think even to add single kfunc to store all the info for all the NIC
+> > metadata (maybe via a helping struct) but it seems not scalable to me and we
+> > are losing kfunc versatility.
 > 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/netns_cookie.c b/tools/testing/selftests/bpf/prog_tests/netns_cookie.c
-> index 71d8f3ba7d6b..233fd66f59ee 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/netns_cookie.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/netns_cookie.c
-> @@ -12,6 +12,7 @@ static int duration;
+> Yes, I agree we should have separate kfuncs for each metadata field.
+> Which means it makes a lot of sense to just use the same setter API that
+> we use for the user-registered metadata fields, but using reserved keys.
+> So something like:
 > 
->   void test_netns_cookie(void)
->   {
-> +	LIBBPF_OPTS(bpf_prog_attach_opts, opta);
->   	int server_fd = -1, client_fd = -1, cgroup_fd = -1;
->   	int err, val, ret, map, verdict;
->   	struct netns_cookie_prog *skel;
-> @@ -38,6 +39,11 @@ void test_netns_cookie(void)
->   	if (!ASSERT_OK(err, "prog_attach"))
->   		goto done;
+> #define BPF_METADATA_HW_HASH      BIT(60)
+> #define BPF_METADATA_HW_TIMESTAMP BIT(61)
+> #define BPF_METADATA_HW_VLAN      BIT(62)
+> #define BPF_METADATA_RESERVED (0xffff << 48)
 > 
-> +	verdict = bpf_program__fd(skel->progs.get_netns_cookie_tcx);
-> +	err = bpf_prog_attach_opts(verdict, 1, BPF_TCX_INGRESS, &opta);
-> +	if (!ASSERT_EQ(err, 0, "prog_attach"))
-> +		goto done;
-> +
->   	server_fd = start_server(AF_INET6, SOCK_STREAM, "::1", 0, 0);
->   	if (CHECK(server_fd < 0, "start_server", "errno %d\n", errno))
->   		goto done;
-> @@ -68,6 +74,7 @@ void test_netns_cookie(void)
->   		goto done;
+> bpf_packet_metadata_set(pkt, BPF_METADATA_HW_HASH, hash_value);
 > 
->   	ASSERT_EQ(val, cookie_expected_value, "cookie_value");
-> +	ASSERT_EQ(skel->bss->tcx_netns_cookie, cookie_expected_value, "cookie_value");
 > 
->   done:
->   	if (server_fd != -1)
-
-Looks like CI fails, as this is missing a bpf_prog_detach_opts().
-
-> diff --git a/tools/testing/selftests/bpf/progs/netns_cookie_prog.c b/tools/testing/selftests/bpf/progs/netns_cookie_prog.c
-> index aeff3a4f9287..207f0e6c20b7 100644
-> --- a/tools/testing/selftests/bpf/progs/netns_cookie_prog.c
-> +++ b/tools/testing/selftests/bpf/progs/netns_cookie_prog.c
-> @@ -27,6 +27,8 @@ struct {
->   	__type(value, __u64);
->   } sock_map SEC(".maps");
+> As for the internal representation, we can just have the kfunc do
+> something like:
 > 
-> +int tcx_netns_cookie;
-> +
->   SEC("sockops")
->   int get_netns_cookie_sockops(struct bpf_sock_ops *ctx)
->   {
-> @@ -81,4 +83,11 @@ int get_netns_cookie_sk_msg(struct sk_msg_md *msg)
->   	return 1;
+> int bpf_packet_metadata_set(field_id, value) {
+>   switch(field_id) {
+>     case BPF_METADATA_HW_HASH:
+>       pkt->xdp_hw_meta.hash = value;
+>       break;
+>     [...]
+>     default:
+>       /* do the key packing thing */
 >   }
+> }
 > 
-> +SEC("tcx/ingress")
-> +int get_netns_cookie_tcx(struct __sk_buff *skb)
-> +{
-> +	tcx_netns_cookie = bpf_get_netns_cookie(skb);
-> +	return TCX_PASS;
-> +}
-> +
->   char _license[] SEC("license") = "GPL";
-> --
-> 2.34.1
 > 
+> that way the order of setting the HW fields doesn't matter, only the
+> user-defined metadata.
+
+Can you expand on why we need the flexibility of picking the metadata fields
+here? Presumably we are talking about the use-cases where the XDP program
+is doing redirect/pass and it doesn't really know who's the final
+consumer is (might be another xdp program or might be the xdp->skb
+kernel case), so the only sensible option here seems to be store everything?
