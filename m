@@ -1,33 +1,33 @@
 Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4012319EECD;
-	Thu,  3 Oct 2024 15:18:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD5851A2C05;
+	Thu,  3 Oct 2024 15:18:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=167.114.26.122
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727968732; cv=none; b=VyMtj+qgXPtUCcCQfwfHF9fAP7ncGip7s35Y1NpRkymn4gvvp2zG2MPkKyk4ZD76Br+t6QmwQcDF1LJBLfryZBwMwoyHmjU1gikTsdRrZMB4d9D8/OyMhl3klSd0tcTzf8qlgdRcEprGiOiraupnchCzajptyY9DDP9QXTd9bI0=
+	t=1727968732; cv=none; b=G1l4nigL8+3mqg9chPYfmZV5TDxBKqyOqknvKbzkKasAxi15gcJPQzKQ1Q/nbj6q2yO1vRwUV6XAuAHLj2vYPS7/NOGj54inSox8HAkAj/SY7jzU3rLD9dd2cRF96x2NxwRSf3K5SEg1Q/5K9mL09iuQ8Ol75CF3F3Dc97CwrJY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1727968732; c=relaxed/simple;
-	bh=iV8BNOEUAlVnHaxKIKuldZvcuyZQrIw4r05iL6v8clg=;
+	bh=mtMV15nwSgC24wpcl6rcJCStzDUXS/XjqRPiMOjRqhA=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=pGixRWpNp9OvqC9TB0Dc4aoJ+z3n7iD+FTAXIIcYQdnU94iejxcL9yLWHRd0UAC6Z7iTmC+dWfUxiBd/3b+keVKmxXoNLXsmo9N7QVMFEsCk/IG8lf/76Q/p4KNj4LR109fzkiESgFCUsHLRXwjGAWu24hOBgSikxvADrhYr2jY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com; spf=pass smtp.mailfrom=efficios.com; dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b=p4BRDEib; arc=none smtp.client-ip=167.114.26.122
+	 MIME-Version; b=LiEFbYfCFTMASBgvwkwxbDs7f8YI2+QZutwZtP1tJdYeVipW3Wtw7yzH/7/BUCQ+D0qvLqeo/HPe9Lwek9f6GzW00MNA/pfZ3H59XpZzvmussc4hvYgwdI6A+hbhAYeTsHaEp3koKR75ziz8U6237ymwGrnXOQNa8f/Tn/l/64k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com; spf=pass smtp.mailfrom=efficios.com; dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b=hbV7WCRK; arc=none smtp.client-ip=167.114.26.122
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=efficios.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b="p4BRDEib"
+	dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b="hbV7WCRK"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
-	s=smtpout1; t=1727968726;
-	bh=iV8BNOEUAlVnHaxKIKuldZvcuyZQrIw4r05iL6v8clg=;
+	s=smtpout1; t=1727968725;
+	bh=mtMV15nwSgC24wpcl6rcJCStzDUXS/XjqRPiMOjRqhA=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=p4BRDEibEFUrShfp4oo5FOB2ZXFQ/6+zGl80lZBPupnfK9PBU6VtoFe0cOPyGtQ0x
-	 P/XF1NaRyDifYVq/vKFoePTlsCxt8nxL7J1Vt3Q+5I2KL/gMSOnA5521p6TS+X9KDO
-	 LDPGZxlm1reC4mguEwMaNhhuGWsZVFkLAXpAibjCzKkuiDSAfT12ROUwZbJBpA6+Yr
-	 RGS3g6MtJlQ6hvChtYmBJ+d/kQL7+GazLYyhP/flAE5Bnk5E0Zw1X+lJ+XF6HdtDjA
-	 DHmGRjdAsvrRUsNO8sJwx+fE/rGfBSdUHDDiuyLGSpIA4B7l8stXnKrWQ8ZLIfMxnk
-	 5YJbpwO3FUFew==
+	b=hbV7WCRKltuEdzVtpPFHreHAjf7XCF2DxigiVx4HVFO59+Xs8Po0FO+kKpPKC77PM
+	 CF8FV3qm6HiFOse7/ZJHzexYFCXYErjX/9MFVKwWFmCRMsRWrB0zjlcP7cmZycsz4z
+	 2uOOe/pe5nwPcuMtDVq3KyAW7VFuad4m/W89czZTYjIGPtJY30jBHrCIOxYrnM0D8K
+	 pu6mMNdjuVkFl07TU6LQW0HZiywg3G+yCbXHDNmIiQNaWII1QvHLSfNzpzg0SzdOFT
+	 0U43387P7QOocr3w586bS4vLBQbWgpJczOO8K5f5CJ+0p01dKDRxsbnOF33Ms87nfH
+	 VFVeKJN4TcsVA==
 Received: from thinkos.internal.efficios.com (96-127-217-162.qc.cable.ebox.net [96.127.217.162])
-	by smtpout.efficios.com (Postfix) with ESMTPSA id 4XKFgn6Jqyz6Dp;
+	by smtpout.efficios.com (Postfix) with ESMTPSA id 4XKFgn14Qkz640;
 	Thu,  3 Oct 2024 11:18:45 -0400 (EDT)
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 To: Steven Rostedt <rostedt@goodmis.org>,
@@ -47,11 +47,10 @@ Cc: linux-kernel@vger.kernel.org,
 	bpf@vger.kernel.org,
 	Joel Fernandes <joel@joelfernandes.org>,
 	linux-trace-kernel@vger.kernel.org,
-	Andrii Nakryiko <andrii@kernel.org>,
 	Michael Jeanson <mjeanson@efficios.com>
-Subject: [PATCH v1 8/8] tracing/bpf: Add might_fault check to syscall probes
-Date: Thu,  3 Oct 2024 11:16:38 -0400
-Message-Id: <20241003151638.1608537-9-mathieu.desnoyers@efficios.com>
+Subject: [PATCH v1 6/8] tracing/ftrace: Add might_fault check to syscall probes
+Date: Thu,  3 Oct 2024 11:16:36 -0400
+Message-Id: <20241003151638.1608537-7-mathieu.desnoyers@efficios.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20241003151638.1608537-1-mathieu.desnoyers@efficios.com>
 References: <20241003151638.1608537-1-mathieu.desnoyers@efficios.com>
@@ -63,13 +62,12 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add a might_fault() check to validate that the bpf sys_enter/sys_exit
+Add a might_fault() check to validate that the ftrace sys_enter/sys_exit
 probe callbacks are indeed called from a context where page faults can
 be handled.
 
 Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Acked-by: Andrii Nakryiko <andrii@kernel.org>
-Tested-by: Andrii Nakryiko <andrii@kernel.org> # BPF parts
+Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 Cc: Michael Jeanson <mjeanson@efficios.com>
 Cc: Steven Rostedt <rostedt@goodmis.org>
 Cc: Masami Hiramatsu <mhiramat@kernel.org>
@@ -86,21 +84,42 @@ Cc: Andrii Nakryiko <andrii.nakryiko@gmail.com>
 Cc: bpf@vger.kernel.org
 Cc: Joel Fernandes <joel@joelfernandes.org>
 ---
- include/trace/bpf_probe.h | 1 +
- 1 file changed, 1 insertion(+)
+ include/trace/trace_events.h  | 1 +
+ kernel/trace/trace_syscalls.c | 2 ++
+ 2 files changed, 3 insertions(+)
 
-diff --git a/include/trace/bpf_probe.h b/include/trace/bpf_probe.h
-index 211b98d45fc6..099df5c3e38a 100644
---- a/include/trace/bpf_probe.h
-+++ b/include/trace/bpf_probe.h
-@@ -57,6 +57,7 @@ __bpf_trace_##call(void *__data, proto)					\
+diff --git a/include/trace/trace_events.h b/include/trace/trace_events.h
+index 0228d9ed94a3..e0d4850b0d77 100644
+--- a/include/trace/trace_events.h
++++ b/include/trace/trace_events.h
+@@ -446,6 +446,7 @@ __DECLARE_EVENT_CLASS(call, PARAMS(proto), PARAMS(args), PARAMS(tstruct), \
  static notrace void							\
- __bpf_trace_##call(void *__data, proto)					\
+ trace_event_raw_event_##call(void *__data, proto)			\
  {									\
 +	might_fault();							\
  	guard(preempt_notrace)();					\
- 	CONCATENATE(bpf_trace_run, COUNT_ARGS(args))(__data, CAST_TO_U64(args));	\
+ 	do_trace_event_raw_event_##call(__data, args);			\
  }
+diff --git a/kernel/trace/trace_syscalls.c b/kernel/trace/trace_syscalls.c
+index edcfa47446c7..89d7e4c57b5b 100644
+--- a/kernel/trace/trace_syscalls.c
++++ b/kernel/trace/trace_syscalls.c
+@@ -303,6 +303,7 @@ static void ftrace_syscall_enter(void *data, struct pt_regs *regs, long id)
+ 	 * Syscall probe called with preemption enabled, but the ring
+ 	 * buffer and per-cpu data require preemption to be disabled.
+ 	 */
++	might_fault();
+ 	guard(preempt_notrace)();
+ 
+ 	syscall_nr = trace_get_syscall_nr(current, regs);
+@@ -348,6 +349,7 @@ static void ftrace_syscall_exit(void *data, struct pt_regs *regs, long ret)
+ 	 * Syscall probe called with preemption enabled, but the ring
+ 	 * buffer and per-cpu data require preemption to be disabled.
+ 	 */
++	might_fault();
+ 	guard(preempt_notrace)();
+ 
+ 	syscall_nr = trace_get_syscall_nr(current, regs);
 -- 
 2.39.2
 
