@@ -1,111 +1,82 @@
-Received: from mail-ot1-f43.google.com (mail-ot1-f43.google.com [209.85.210.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AB231339B1
-	for <bpf@vger.kernel.org>; Fri,  4 Oct 2024 20:52:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B5D215D1;
+	Fri,  4 Oct 2024 20:58:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728075131; cv=none; b=npUBtt46+W0h0Zw0IdYq07B9TgKwbaZYukztEhIXfmwQGXQUz+4OfNklz+Hb9PCjerHAWK+9VZQs7rbwv/K3dyIzPJczf737iJKcSNqNIwdL38SGDhe7xQSAzZetBw3ZkEbfpu/lPKpMZ6xJ0jn5YSQFetN6RJnmM1WCUtut6FE=
+	t=1728075514; cv=none; b=c8K8eXncRFy2mObhUJekA+p+NPCYNiT/T4BVgNoEA2NKEvfdNmct8zp8o9MmaRm7/QhDQYbEq9llO9ds22+isXI38O1mhscFQNj8flTC+9xTEtEVdPHRsgHSn4Sj8oACKXLyRXRdLHuAnbvmh7cimbTrP0D5ziU3gi+GmRrVnG0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728075131; c=relaxed/simple;
-	bh=2mwI+cpW++bi36DJhtyWYNUvMNIVaFPeLVbEFgI72t4=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=RuIi785iXwfKc3y6pQSS0doqiKFXT+HbGWMq3K5VLuyzyzpMcTL2sdUpaMdOlgUnF6Kz3uGCRzpoB3C2MsA6EC3oy6+gYlIJhh6hn7QS0E4td/rS3SmnhOKtxAWv7fH3ECQdShEnP+aUerd9iCG+mDVWDWKGCaaI6YPvXgbWb+U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UqZMa0fP; arc=none smtp.client-ip=209.85.210.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UqZMa0fP"
-Received: by mail-ot1-f43.google.com with SMTP id 46e09a7af769-710d5d9aac1so1242611a34.3
-        for <bpf@vger.kernel.org>; Fri, 04 Oct 2024 13:52:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1728075129; x=1728679929; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=2mwI+cpW++bi36DJhtyWYNUvMNIVaFPeLVbEFgI72t4=;
-        b=UqZMa0fPXSLZseJq0SpRKn+E6uHvuSnveJ9rJl961+i/nhnLJiNo4EcqgMqTp6Bj5j
-         965Zpt7NxygvDyhjCMNub0YM1KSuL4YeVyOrWG0Kc00ytrFS0+60E/iWzEjPiTgTHcbj
-         IYeT7f0fhmVLE2oETIw5SM64+VFPmF9EpRbGz59Lar1fPffBIrQeAKM+UT6ZipX5PH6H
-         h8ZmQNZXcMxKtrIqiy6nIA0fJsJlLTCBpoMTtizb0+Wk9ngTvJZRE/ep6Rg09cbqiidd
-         L++UCYG+rLrhBsWYBdN+4A4PEveGLLtM0UELuPMoUYvpUJeBjYJIu+RAOtiXBTVgsc39
-         hkmQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728075129; x=1728679929;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=2mwI+cpW++bi36DJhtyWYNUvMNIVaFPeLVbEFgI72t4=;
-        b=WdQ9tZfYA8mDr856hLpevl1HxxBZa+o+KLO+GSKAd8NAzSC8sTKgr+SG1UAkuo6e2A
-         MA1wPRG8NWq9jb9IR6NpBsb5CQz8koLxUf9ncNN7ZxZecrnueB6+ZsKcVUAqXZZq0hZz
-         EcfPy8rsmrnp9p2PR1mrm6dqPUi3+i0FyYs/3JhIIe1u+r8VD/jpdmK/4zAAL0vlySJc
-         hnGhtNUJpLLK4/N8Gss27BZ3LTpB1p6kddjK8EArbzjo+nWg8k0JTQ/Ox9yem3ht/tA+
-         7WcAbIS2deSGAkS61hdS7r095+J54Q7JUbL9iYkMYC25tQkrb14dZYJ8lFjQNrPdBbSR
-         sZvw==
-X-Forwarded-Encrypted: i=1; AJvYcCVk/XabxVIp6w68dKILDQLLVEi3thwEy170YCeO+AGg0NJnkUAvHjaFkNou5HQwEo3D1QU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxCfSalROjnVBLMBy0GAc+zvRVIWaKKX2+BWJGL+Ro4P3GQOW03
-	fzBUQu9N/dqdKGbaYgwSxV/dak3Yn3bHjEVMUYmkZDt28CWj9mzj
-X-Google-Smtp-Source: AGHT+IHbbuVII5ehSKJZ+Uli2xqv916bqSjEUfbIazEzM3mlmgytFpRfv9nyloXA7psjztNVLNlGmQ==
-X-Received: by 2002:a05:6830:6781:b0:713:cc30:87a0 with SMTP id 46e09a7af769-7154e83a6e9mr3921775a34.17.1728075129213;
-        Fri, 04 Oct 2024 13:52:09 -0700 (PDT)
-Received: from [192.168.0.235] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-7e9f682c801sm419029a12.39.2024.10.04.13.52.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Oct 2024 13:52:08 -0700 (PDT)
-Message-ID: <3d2ba1d054d73c53b205559ad5d89cef78d89303.camel@gmail.com>
-Subject: Re: [PATCH bpf-next v4 2/4] bpf: Prevent extending tail callee prog
- with freplace prog
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>, Leon Hwang
-	 <hffilwlqm@gmail.com>
-Cc: Leon Hwang <leon.hwang@linux.dev>, bpf <bpf@vger.kernel.org>, Alexei
- Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>,  Toke
- =?ISO-8859-1?Q?H=F8iland-J=F8rgensen?= <toke@redhat.com>, Martin KaFai Lau
- <martin.lau@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, Puranjay
- Mohan <puranjay@kernel.org>, Xu Kuohai <xukuohai@huaweicloud.com>, Ilya
- Leoshkevich <iii@linux.ibm.com>,  kernel-patches-bot@fb.com
-Date: Fri, 04 Oct 2024 13:52:04 -0700
-In-Reply-To: <CAADnVQL_VUJCFH6TuHMLesafY8iQ-4xBkiTdfEMqr02C_G6T=w@mail.gmail.com>
-References: <20240929132757.79826-1-leon.hwang@linux.dev>
-	 <20240929132757.79826-3-leon.hwang@linux.dev>
-	 <378aa2d5-6359-4e89-a228-7ea47ba563c3@gmail.com>
-	 <CAADnVQL_VUJCFH6TuHMLesafY8iQ-4xBkiTdfEMqr02C_G6T=w@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.52.4 (3.52.4-1.fc40) 
+	s=arc-20240116; t=1728075514; c=relaxed/simple;
+	bh=+Ef3UyjsUB+Ar1A7IpIt4SHw+OpwXL1vVhNlffc6fuk=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=DaGw2uKtzzg2o+oJkf350z9CsKm4YB9g8W6IyNx1oDzUAN76L/ltGWdV65WvKuQXycPaCloysAIP/FoT0npRfIL0tJMkOI0Rw5rM/fo9f1HXTsvuwqCB4T/CRIOTywiXZCI5YMLkqxsw/wlv08oLCb0yX+RIVT34yUxJwrCsxaE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6C84C4CEC6;
+	Fri,  4 Oct 2024 20:58:31 +0000 (UTC)
+Date: Fri, 4 Oct 2024 16:59:27 -0400
+From: Steven Rostedt <rostedt@goodmis.org>
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Masami Hiramatsu
+ <mhiramat@kernel.org>, linux-kernel@vger.kernel.org, Peter Zijlstra
+ <peterz@infradead.org>, Alexei Starovoitov <ast@kernel.org>, Yonghong Song
+ <yhs@fb.com>, "Paul E . McKenney" <paulmck@kernel.org>, Ingo Molnar
+ <mingo@redhat.com>, Arnaldo Carvalho de Melo <acme@kernel.org>, Mark
+ Rutland <mark.rutland@arm.com>, Alexander Shishkin
+ <alexander.shishkin@linux.intel.com>, Namhyung Kim <namhyung@kernel.org>,
+ bpf@vger.kernel.org, Joel Fernandes <joel@joelfernandes.org>,
+ linux-trace-kernel@vger.kernel.org, Michael Jeanson <mjeanson@efficios.com>
+Subject: Re: [PATCH v1 2/8] tracing/ftrace: guard syscall probe with
+ preempt_notrace
+Message-ID: <20241004165927.774e7d35@gandalf.local.home>
+In-Reply-To: <CAEf4BzYHXz0UFOOnkAeKDK-yt59cwz-66_4wL-bjmv3zxryftg@mail.gmail.com>
+References: <20241003151638.1608537-1-mathieu.desnoyers@efficios.com>
+	<20241003151638.1608537-3-mathieu.desnoyers@efficios.com>
+	<20241003182304.2b04b74a@gandalf.local.home>
+	<6dc21f67-52e1-4ed5-af7f-f047c3c22c11@efficios.com>
+	<20241003210403.71d4aa67@gandalf.local.home>
+	<90ca2fee-cdfb-4d48-ab9e-57d8d2b8b8d8@efficios.com>
+	<20241004092619.0be53f90@gandalf.local.home>
+	<e547819a-7993-4c80-b358-6719ca420cf8@efficios.com>
+	<20241004105211.13ea45da@gandalf.local.home>
+	<4f1046e7-7b62-4db3-93d4-815dc8c27185@efficios.com>
+	<CAEf4BzYHXz0UFOOnkAeKDK-yt59cwz-66_4wL-bjmv3zxryftg@mail.gmail.com>
+X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Fri, 2024-10-04 at 12:33 -0700, Alexei Starovoitov wrote:
+On Fri, 4 Oct 2024 13:04:21 -0700
+Andrii Nakryiko <andrii.nakryiko@gmail.com> wrote:
 
-[...]
+> > AFAIU eBPF folks are very eager to start making use of this, so we won't
+> > have to wait long.  
+> 
+> I already gave my ack on BPF parts of this patch set, but I'll
+> elaborate a bit more here for the record. There seems to be two things
+> that's been discussed.
+> 
+> First, preempt_disable() vs migrate_disable(). We only need the
+> latter, but the former just preserves current behavior and I think
+> it's fine, we can follow up with BPF-specific bits later to optimize
+> and clean this up further. No big deal.
+> 
+> Second, whether BPF can utilize sleepable (faultable) tracepoints
+> right now with these changes. No, we need a bit more work (again, in
+> BPF specific parts) to allow faultable tracepoint attachment for BPF
+> programs. But it's a bit nuanced piece of code to get everything
+> right, and it's best done by someone more familiar with BPF internals.
+> So I wouldn't expect Mathieu to do this either.
+> 
+> So, tl;dr, I think patches are fine as-is (from BPF perspective), and
+> we'd like to see them applied and get to bpf-next for further
+> development on top of that.
 
-> btw the whole thing can be done with a single atomic64_t:
-> - set it to 1 at the start then
->=20
-> - prog_fd_array_get_ptr() will do
-> atomic64_inc_not_zero
->=20
-> - prog_fd_array_put_ptr() will do
-> atomic64_add_unless(,-1, 1)
->=20
-> - freplace attach will do
-> cmpxchg(,1,0)
->=20
-> so 1 - initial state
-> 2,3,.. - prog in prog_array
-> 0 - prog was extended.
->=20
-> If =3D=3D 0 -> cannot add to prog_array
-> if > 1 -> cannot freplace.
+Thanks Andrii for elaborating.
 
-I think this should work, because we no longer need to jungle two values.
-I kinda like it.
-
-[...]
-
+-- Steve
