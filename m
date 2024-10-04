@@ -1,32 +1,33 @@
 Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59B4479E5;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFCA68C13;
 	Fri,  4 Oct 2024 01:14:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=167.114.26.122
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728004450; cv=none; b=ay9KQ9sqcpY1JluEitpEcf4AuLLkMJW1pPBTVvUnt6pdJT6G26BEZz74nFFeDdAQEWfwKByDJTm2CQFkITCXG1oNPyyTOYEjK5Bw5BdmuSyNsK8kJ2FEwfreCJQoQMYalGwU9QbHbh/KhtDD9C66lUKDDSXe2NgxHnaDnUJH4u0=
+	t=1728004450; cv=none; b=SS1H8vCvVUoGnJRTIKRKNDwArRE/Z9d0Q3AE27hMcRAUJCwHWaJG0DFxYdZB5I5HNsLS3FLbgVdMRkSCI5g+HMn2WNbZX67M7jEMq4bMKOG/3Ga2QcEd+X/4BEp9uHw4fYbnjBMfxI3adYkifr04RX6eQak2RD5W5ObuqFyD/AU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1728004450; c=relaxed/simple;
-	bh=k6kMgX0hVkDhByV+E0NWNaA9K9fsGsrPdkDSm9yWatg=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=OprPdcvc0X3uLcmqLRq81X9V7ZWu8Elh3AwwnW9R67rYZIdceOE2ND+aQw5c/11fWlxAVS1hRiJKkjrth2p7hF1HcSx+X8tvmOKob+UKh1LWKNP1mEPWEPaWKuIHtR1Jd2FS6ixnriYmfvmjt2sx42Ccb7rZS8WF+MUiPFoNPLk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com; spf=pass smtp.mailfrom=efficios.com; dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b=cra/Vffb; arc=none smtp.client-ip=167.114.26.122
+	bh=xLHuv9/61/GTu39f5ouDh6xzs97QFfjZjBVP9NGmNMs=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=BWQPqKQGRa0Vo/bLr9iC8sqGX3hYEiwU1r6Hob2PPbpYVhsakKcPZ9NZj4RosTSxPfO3GtzI0Gt/prmnSHlbLgOpKyC9GO0rZ/OFwDQaZdHJ/6GAvgw4T4Uo0LkkKm+tHNWKIkxL9CqWAQ3S/OGAWttuf9UWSnGX+KnxHMd9yHU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com; spf=pass smtp.mailfrom=efficios.com; dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b=WqRsS9GY; arc=none smtp.client-ip=167.114.26.122
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=efficios.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b="cra/Vffb"
+	dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b="WqRsS9GY"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
 	s=smtpout1; t=1728004447;
-	bh=k6kMgX0hVkDhByV+E0NWNaA9K9fsGsrPdkDSm9yWatg=;
-	h=From:To:Cc:Subject:Date:From;
-	b=cra/Vffb6DNGwISzrVq1nLkS77p21mVVG/YohglWvCk/zmmqNsiHlbiDybY7glKej
-	 mQcuyWM8Xeb6cQwDxiLrI2hV9Od+6jZYbkFhBlkhr2TyWYlwsdmXMk02ZgkoFj9wkx
-	 XE+vxf9OpEj8fRayUNj4MpEHFpPWl4GkNIxTNbG7/mvAQddoXhMmWlpHioERLwoP9n
-	 dfLXXLgk+dn0fGs/vJMg3nkJDZmSdlG/MiB1LB6mr2M8HIL0YV1aSpLKaFyCdN0jOJ
-	 O92e5/7sJzTlrWjqa6eo7p5Fi3vMbjMUptuFJDmNOMZy+eSrKy4A4OO3RcgDNER145
-	 v9jpc4+ypy+hg==
+	bh=xLHuv9/61/GTu39f5ouDh6xzs97QFfjZjBVP9NGmNMs=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=WqRsS9GYIjSsGCWNrFK9NlHRRGIJp1T86Jd/1wWKXyk2YOjj0tKhVS5Kg45x4jsOO
+	 p9XK4wnrlv4zRy9kT3B1jbdLAoSsfMzbeEGzqGtfFeL+nZ7YhNuXU3PhRklarntyZf
+	 H55CgF3KcwC6ZYTi8FribLHebg/PF8lJ1P/ZUDJPGn29xsALAYL9tD6tBswnjzgiBn
+	 2YK7uNrlwkf5i/nmrU906JZpb9Lw2NB3xnLKEXtQ0IMUlndJh7GyRHP3dbiQZEeFbX
+	 1DW8xmZL8OFkOBKP3M0kbaV3t719ESAlpSMZ/W0FuimWfVMTIzIS/CWrd7vrQTJx2r
+	 OhTr0+QuHmMLA==
 Received: from thinkos.internal.efficios.com (unknown [IPv6:2606:6d00:100:4000:cacb:9855:de1f:ded2])
-	by smtpout.efficios.com (Postfix) with ESMTPSA id 4XKVtl0nLrzC3r;
+	by smtpout.efficios.com (Postfix) with ESMTPSA id 4XKVtl3ySCzBYD;
 	Thu,  3 Oct 2024 21:14:07 -0400 (EDT)
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 To: Steven Rostedt <rostedt@goodmis.org>,
@@ -45,11 +46,14 @@ Cc: linux-kernel@vger.kernel.org,
 	Andrii Nakryiko <andrii.nakryiko@gmail.com>,
 	bpf@vger.kernel.org,
 	Joel Fernandes <joel@joelfernandes.org>,
-	linux-trace-kernel@vger.kernel.org
-Subject: [PATCH v2 0/7] tracing: Allow system call tracepoints to handle page faults
-Date: Thu,  3 Oct 2024 21:11:54 -0400
-Message-Id: <20241004011201.1681962-1-mathieu.desnoyers@efficios.com>
+	linux-trace-kernel@vger.kernel.org,
+	Michael Jeanson <mjeanson@efficios.com>
+Subject: [PATCH v2 2/7] tracing/perf: guard syscall probe with preempt_notrace
+Date: Thu,  3 Oct 2024 21:11:56 -0400
+Message-Id: <20241004011201.1681962-3-mathieu.desnoyers@efficios.com>
 X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20241004011201.1681962-1-mathieu.desnoyers@efficios.com>
+References: <20241004011201.1681962-1-mathieu.desnoyers@efficios.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -58,31 +62,19 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Wire up the system call tracepoints with Tasks Trace RCU to allow
-the ftrace, perf, and eBPF tracers to handle page faults.
+In preparation for allowing system call enter/exit instrumentation to
+handle page faults, make sure that perf can handle this change by
+explicitly disabling preemption within the perf system call tracepoint
+probes to respect the current expectations within perf ring buffer code.
 
-This series does the initial wire-up allowing tracers to handle page
-faults, but leaves out the actual handling of said page faults as future
-work.
+This change does not yet allow perf to take page faults per se within
+its probe, but allows its existing probes to adapt to the upcoming
+change.
 
-This series was compile and runtime tested with ftrace and perf syscall
-tracing and raw syscall tracing, adding a WARN_ON_ONCE() in the
-generated code to validate that the intended probes are used for raw
-syscall tracing. The might_fault() added within those probes validate
-that they are called from a context where handling a page fault is OK.
-
-This series replaces the "Faultable Tracepoints v6" series found at [1].
-
-This has been rebased on v6.12-rc1 on top of two patches from Steven:
-
-tracing: Remove definition of trace_*_rcuidle()
-tracepoint: Remove SRCU protection
-
-Thanks,
-
-Mathieu
-
-Link: https://lore.kernel.org/lkml/20240828144153.829582-1-mathieu.desnoyers@efficios.com/ # [1]
+Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: Michael Jeanson <mjeanson@efficios.com>
+Cc: Steven Rostedt <rostedt@goodmis.org>
+Cc: Masami Hiramatsu <mhiramat@kernel.org>
 Cc: Peter Zijlstra <peterz@infradead.org>
 Cc: Alexei Starovoitov <ast@kernel.org>
 Cc: Yonghong Song <yhs@fb.com>
@@ -95,24 +87,107 @@ Cc: Namhyung Kim <namhyung@kernel.org>
 Cc: Andrii Nakryiko <andrii.nakryiko@gmail.com>
 Cc: bpf@vger.kernel.org
 Cc: Joel Fernandes <joel@joelfernandes.org>
-Cc: linux-trace-kernel@vger.kernel.org
+---
+ include/trace/perf.h          | 41 +++++++++++++++++++++++++++++++----
+ kernel/trace/trace_syscalls.c | 12 ++++++++++
+ 2 files changed, 49 insertions(+), 4 deletions(-)
 
-Mathieu Desnoyers (7):
-  tracing/ftrace: guard syscall probe with preempt_notrace
-  tracing/perf: guard syscall probe with preempt_notrace
-  tracing/bpf: guard syscall probe with preempt_notrace
-  tracing: Allow system call tracepoints to handle page faults
-  tracing/ftrace: Add might_fault check to syscall probes
-  tracing/perf: Add might_fault check to syscall probes
-  tracing/bpf: Add might_fault check to syscall probes
-
- include/linux/tracepoint.h    | 18 ++++++++++-----
- include/trace/bpf_probe.h     | 12 +++++++++-
- include/trace/perf.h          | 42 +++++++++++++++++++++++++++++++----
- include/trace/trace_events.h  | 39 ++++++++++++++++++++++++++------
- init/Kconfig                  |  1 +
- kernel/trace/trace_syscalls.c | 28 +++++++++++++++++++++++
- 6 files changed, 123 insertions(+), 17 deletions(-)
-
+diff --git a/include/trace/perf.h b/include/trace/perf.h
+index ded997af481e..5650c1bad088 100644
+--- a/include/trace/perf.h
++++ b/include/trace/perf.h
+@@ -12,10 +12,10 @@
+ #undef __perf_task
+ #define __perf_task(t)	(__task = (t))
+ 
+-#undef DECLARE_EVENT_CLASS
+-#define DECLARE_EVENT_CLASS(call, proto, args, tstruct, assign, print)	\
++#undef __DECLARE_EVENT_CLASS
++#define __DECLARE_EVENT_CLASS(call, proto, args, tstruct, assign, print) \
+ static notrace void							\
+-perf_trace_##call(void *__data, proto)					\
++do_perf_trace_##call(void *__data, proto)				\
+ {									\
+ 	struct trace_event_call *event_call = __data;			\
+ 	struct trace_event_data_offsets_##call __maybe_unused __data_offsets;\
+@@ -55,8 +55,38 @@ perf_trace_##call(void *__data, proto)					\
+ 				  head, __task);			\
+ }
+ 
++/*
++ * Define unused __count and __task variables to use @args to pass
++ * arguments to do_perf_trace_##call. This is needed because the
++ * macros __perf_count and __perf_task introduce the side-effect to
++ * store copies into those local variables.
++ */
++#undef DECLARE_EVENT_CLASS
++#define DECLARE_EVENT_CLASS(call, proto, args, tstruct, assign, print)	\
++__DECLARE_EVENT_CLASS(call, PARAMS(proto), PARAMS(args), PARAMS(tstruct), \
++		      PARAMS(assign), PARAMS(print))			\
++static notrace void							\
++perf_trace_##call(void *__data, proto)					\
++{									\
++	u64 __count __attribute__((unused));				\
++	struct task_struct *__task __attribute__((unused));		\
++									\
++	do_perf_trace_##call(__data, args);				\
++}
++
+ #undef DECLARE_EVENT_SYSCALL_CLASS
+-#define DECLARE_EVENT_SYSCALL_CLASS DECLARE_EVENT_CLASS
++#define DECLARE_EVENT_SYSCALL_CLASS(call, proto, args, tstruct, assign, print) \
++__DECLARE_EVENT_CLASS(call, PARAMS(proto), PARAMS(args), PARAMS(tstruct), \
++		      PARAMS(assign), PARAMS(print))			\
++static notrace void							\
++perf_trace_##call(void *__data, proto)					\
++{									\
++	u64 __count __attribute__((unused));				\
++	struct task_struct *__task __attribute__((unused));		\
++									\
++	guard(preempt_notrace)();					\
++	do_perf_trace_##call(__data, args);				\
++}
+ 
+ /*
+  * This part is compiled out, it is only here as a build time check
+@@ -76,4 +106,7 @@ static inline void perf_test_probe_##call(void)				\
+ 	DEFINE_EVENT(template, name, PARAMS(proto), PARAMS(args))
+ 
+ #include TRACE_INCLUDE(TRACE_INCLUDE_FILE)
++
++#undef __DECLARE_EVENT_CLASS
++
+ #endif /* CONFIG_PERF_EVENTS */
+diff --git a/kernel/trace/trace_syscalls.c b/kernel/trace/trace_syscalls.c
+index ab4db8c23f36..edcfa47446c7 100644
+--- a/kernel/trace/trace_syscalls.c
++++ b/kernel/trace/trace_syscalls.c
+@@ -596,6 +596,12 @@ static void perf_syscall_enter(void *ignore, struct pt_regs *regs, long id)
+ 	int rctx;
+ 	int size;
+ 
++	/*
++	 * Syscall probe called with preemption enabled, but the ring
++	 * buffer and per-cpu data require preemption to be disabled.
++	 */
++	guard(preempt_notrace)();
++
+ 	syscall_nr = trace_get_syscall_nr(current, regs);
+ 	if (syscall_nr < 0 || syscall_nr >= NR_syscalls)
+ 		return;
+@@ -698,6 +704,12 @@ static void perf_syscall_exit(void *ignore, struct pt_regs *regs, long ret)
+ 	int rctx;
+ 	int size;
+ 
++	/*
++	 * Syscall probe called with preemption enabled, but the ring
++	 * buffer and per-cpu data require preemption to be disabled.
++	 */
++	guard(preempt_notrace)();
++
+ 	syscall_nr = trace_get_syscall_nr(current, regs);
+ 	if (syscall_nr < 0 || syscall_nr >= NR_syscalls)
+ 		return;
 -- 
 2.39.2
+
