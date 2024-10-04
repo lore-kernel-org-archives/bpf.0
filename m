@@ -1,193 +1,224 @@
-Received: from fout-a3-smtp.messagingengine.com (fout-a3-smtp.messagingengine.com [103.168.172.146])
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3AD01D9A6A
-	for <bpf@vger.kernel.org>; Fri,  4 Oct 2024 17:21:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.146
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728062509; cv=none; b=UVOIcnmLl84J9m/UNWRLsN1e2J9pXv7ERcvIWS2Nh52/49TOjUOUrO6CVoheK7hT92+nahrqGnTwKM7ZxeM6hawt1NUr0+xZp9EGUcFYmrlE6xunB/NX5PZPmeQnK+b2bdNP+j7VvT5NYbB2eRrOFP8BgAWDtDwg5ZZZ5s9hJ2s=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728062509; c=relaxed/simple;
-	bh=xk9mWsy/nPV09vPn+40g/xnwQMh535+BnYfH/J3Splo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TAWtAwVGWsVcYVabCdu1JnOs9bjV0WS4W0Liakys2O1WfbGQ3wW/luHxb+UOS7iRJt8tY2ivCaimEPdLYUAuf6PckyEwxx2B3PXUuHeDektkoRtFZ3DDi7ZYSz1e3IehfTTvnX7qvuzO66nPgWKya4gIqb6V0CZ5cnttio+2B8U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dxuuu.xyz; spf=pass smtp.mailfrom=dxuuu.xyz; dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b=imGIFoWZ; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=RTXGtJBp; arc=none smtp.client-ip=103.168.172.146
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dxuuu.xyz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dxuuu.xyz
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3AAFF1E378D;
+	Fri,  4 Oct 2024 17:26:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.165.32
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1728062802; cv=fail; b=eoVG8CEO065ovVtpY/dXS4c72Pw+MQFwHw/OfvoRFqJjXroVX+RRee6EnjMJIZYOet05bMDPbtQnyDWuo8hz/+vbWEyzz9Ivg0Gz5wIP99iop/0sPN3QfPARFhFOynVS9NSoI2YYQv+T5QgH3PEOkfXeGKLzX0cTVz5KxJ2d4t4=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1728062802; c=relaxed/simple;
+	bh=t4qmbLO0VYKpg3RusnN/yqt0ARosjrA/KZBiIv6Lb0A=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=B3SFU5kH4M7sBz5giNBnToXSgmvweQI86BvFt7mLlgeqYQ4PP4ME8tLjgUWV7IljUIQStaFJhzrzRIa7EXG4uC0RZyoHmYDvBe2/gchSjceGJNlg8YIJRPETG05UR9go+I4sJeu0fXVbvKUL+r+RqZqnX+IPhOMQMmiIz88vjD0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=SQ2Pb7ZF; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=I6enpX1C; arc=fail smtp.client-ip=205.220.165.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b="imGIFoWZ";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="RTXGtJBp"
-Received: from phl-compute-05.internal (phl-compute-05.phl.internal [10.202.2.45])
-	by mailfout.phl.internal (Postfix) with ESMTP id EFC011380217;
-	Fri,  4 Oct 2024 13:21:46 -0400 (EDT)
-Received: from phl-mailfrontend-01 ([10.202.2.162])
-  by phl-compute-05.internal (MEProxy); Fri, 04 Oct 2024 13:21:46 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:subject
-	:subject:to:to; s=fm1; t=1728062506; x=1728148906; bh=ApPvOqqdtz
-	vE/knOZ1yEFTnfGSZiHSKGXQcfWrNlIaA=; b=imGIFoWZQe7C/cjBW+Tb7/0EB3
-	11VHKrwyanDi8g6MKHExA0q+lHMDmWcp9N4dQSuwk/bmMkTSCTs1fpbJyCh7OzwW
-	tveFI96TEp4dldebGvJRW8F75jxImzRFMxQTFDk4eZymlkDvWOzGBORpSXTUnHFK
-	jhhOMe3pZfH8H0f5XpOlYk9MGQ5phkhBNdSuv0u/GtvfuWwnpgDO/k5yOxs56jHW
-	3h/koCoowZMq3bkuoWPjul5DXbtAE260Qt316+gaQMYtFcn5vDMhb92XPpSwQS6R
-	0Bg9hOgPRfB3YNc+GnMpGf4KT5BWrhu6vmvQXwufyFyk/KfBKOYP9LkSp1IQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm2; t=1728062506; x=1728148906; bh=ApPvOqqdtzvE/knOZ1yEFTnfGSZi
-	HSKGXQcfWrNlIaA=; b=RTXGtJBpXAG37xUjd525pLi6JJo+EX5QDFxptL8KKyq7
-	AavGKStWGP4Ot8gu055RYXMWH/fvXQxiMc+E1V+NZJWy+se8wVtYW1RLTac7ZtvC
-	mev+PwNt6nKmdBIphpwQZqFraFoeIxNcNla1wR8aeotkzu8G9Uaw8OGCUUu7pEUv
-	D3qmmkuKOpoMA4c6nTUrF7f9cbajVD0JqNeLCyXS278JPw7vLApEfJLdD3TrKvVG
-	1H+jllcjyjStrXtvvkrVpF1Xq95QP+cXXJdD0zMIA9fJWK4pPe+OC0g3rXEuzcbT
-	J93oMDyyGRiOeS662DMvwPYB2Xzx+c2HY1PYbt/xdw==
-X-ME-Sender: <xms:KiQAZ4Bod3yEYoxu7XZo3-7xoeUjoS54v44n7wvQaMoBcMJRv74a8Q>
-    <xme:KiQAZ6iasORw-icSYyg6nAk8RDfNYQPGW5PFSUwXvq9VlkweaqQjPjLyV31tVJSLC
-    9GYBrLx7hiXh1V9Og>
-X-ME-Received: <xmr:KiQAZ7khZUS548Lj9uFexkcAwbN3Vu2bEqtj11fhuOhO3jL15mNzsPu_qH2AOPcUxoToreBhnA0JtGIAZdHuPrnrYNbPyen9vSfmh9AG0dAIVA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrvddvfedguddutdcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdp
-    uffrtefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivg
-    hnthhsucdlqddutddtmdenfghrlhcuvffnffculdejtddmnecujfgurhepfffhvfevuffk
-    fhggtggujgesthdtsfdttddtvdenucfhrhhomhepffgrnhhivghlucgiuhcuoegugihuse
-    gugihuuhhurdighiiiqeenucggtffrrghtthgvrhhnpedvfeekteduudefieegtdehfeff
-    keeuudekheduffduffffgfegiedttefgvdfhvdenucevlhhushhtvghrufhiiigvpedtne
-    curfgrrhgrmhepmhgrihhlfhhrohhmpegugihusegugihuuhhurdighiiipdhnsggprhgt
-    phhtthhopeelpdhmohguvgepshhmthhpohhuthdprhgtphhtthhopegvugguhiiikeejse
-    hgmhgrihhlrdgtohhmpdhrtghpthhtohepsghpfhesvhhgvghrrdhkvghrnhgvlhdrohhr
-    ghdprhgtphhtthhopegrshhtsehkvghrnhgvlhdrohhrghdprhgtphhtthhopegrnhgurh
-    hiiheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepuggrnhhivghlsehiohhgvggrrhgs
-    ohigrdhnvghtpdhrtghpthhtohepmhgrrhhtihhnrdhlrghusehlihhnuhigrdguvghvpd
-    hrtghpthhtohepkhgvrhhnvghlqdhtvggrmhesfhgsrdgtohhmpdhrtghpthhtohephiho
-    nhhghhhonhhgrdhsohhngheslhhinhhugidruggvvhdprhgtphhtthhopehtohhnhidrrg
-    hmsggrrhgurghrsehgmhgrihhlrdgtohhm
-X-ME-Proxy: <xmx:KiQAZ-z9ysTAJKt1-2QjwimuIn4qIQscgnhWjAU7LATlDDoxU2I4PA>
-    <xmx:KiQAZ9TpYyR39pPeDcwH9mtcjWeM2KVTw1IEpPIyfnULgdeWDO0TxA>
-    <xmx:KiQAZ5aj9SqmvL-2i6waShT-8yJrBYOuZQ0YfvVHNrAuaN6vB0eEOA>
-    <xmx:KiQAZ2T8dFBsJ3bB7mQQxPOy49qWsF-Rv7skRkIQ-dJHvISbPsMrLA>
-    <xmx:KiQAZ69xizm4doMZcjo3okRGgehRiSXKVr8kHJOib789BkfXGGiJT5PY>
-Feedback-ID: i6a694271:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 4 Oct 2024 13:21:45 -0400 (EDT)
-Date: Fri, 4 Oct 2024 11:21:44 -0600
-From: Daniel Xu <dxu@dxuuu.xyz>
-To: Eduard Zingerman <eddyz87@gmail.com>
-Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org, 
-	daniel@iogearbox.net, martin.lau@linux.dev, kernel-team@fb.com, 
-	yonghong.song@linux.dev, Tony Ambardar <tony.ambardar@gmail.com>
-Subject: Re: [PATCH bpf] selftests/bpf: fix backtrace printing for selftests
- crashes
-Message-ID: <wt42qzhzt3xzoxj56h7g3qkqg7cgyouufkilztmfaqrrsocqjm@pbxsgl5uvp5b>
-References: <20241003210307.3847907-1-eddyz87@gmail.com>
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="SQ2Pb7ZF";
+	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="I6enpX1C"
+Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 494Gfu1M015209;
+	Fri, 4 Oct 2024 17:26:38 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=
+	from:to:cc:subject:date:message-id:in-reply-to:references
+	:content-transfer-encoding:content-type:mime-version; s=
+	corp-2023-11-20; bh=2BoYj8vJoCc5YOGcljrF0j59xv9vGYkaEkCcW4RMm0g=; b=
+	SQ2Pb7ZF5BzQT5aOyIhKHHTZIKWy3o0dSxQAmt45HhRCLiMhoHLNEzP3VJEs95g6
+	e/cjtzYl62g9aC0/npxuJjac9Y4TMfZRVVlSQ9ZOIna7oIkLfzQO7v5g/nR2W5RS
+	KXlqCRFHOk+YgiuOFDu9DrcuBVu6t4MSmz/FOCF+tDpzHspzEAJnHg5HxumdRDjh
+	24M8GyPBbdNqhEzbR2EIhvYl3zKaedHQbdO7mbgQyXYl4/rSI4MB3Qqbdk5jyfju
+	KvWfI1JXfIZg3MweRA43jUv3XvNSjEQKcomZ+5p9JfUms/eabZnfLFsRmfdugVbR
+	intGiRVIQg+MPxFEwlOSmg==
+Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 42204gt2qj-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 04 Oct 2024 17:26:38 +0000 (GMT)
+Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 494H4rGM005877;
+	Fri, 4 Oct 2024 17:26:37 GMT
+Received: from nam12-mw2-obe.outbound.protection.outlook.com (mail-mw2nam12lp2049.outbound.protection.outlook.com [104.47.66.49])
+	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 422056u661-3
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 04 Oct 2024 17:26:37 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=pDZlIN5COL/in4RSmUgTwP4iqnG6vLTvm5o9XAvD2JRJQ4ukpyZpOFG4cMqGPi/TGKV4hIVlzqMSXfcRbOAySd6T+14TkCj1nI1ikTYMRZrAaXz85ium/WhSwSX1VKYPSYDKDX0QVhH18m08x2+XZ7U4lRW3ypSdE6rZk0rg6holmGPMWmzohcbqelpdm6KWgV3e799GQbFpiV7Zsa0PDkqgcf5BQziqs6f7QcrAe2Ko/UvgiCBnfWwxajuVevUPEvYYf77ZaaYS+Rd6DHDsYth33rMB7JrRGwVs6ZtdRNspNuohSRIyqjsCd30/SP+K4FfvnBkXzNCbopG7w5E01Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=2BoYj8vJoCc5YOGcljrF0j59xv9vGYkaEkCcW4RMm0g=;
+ b=wYS30qKwEU+iJh4Q3vNr5LAZI157DSB8N3xWZode5JaJPmaZcBUN9hcuQmm9LElVrv6XD01N4cDLxMfX5StgxMEREIadtybjnejIdMOWsTrnQwSLsUPOISBdUKOJYVCXXwDp1K5oTZGw4YP5okAdSUn8lPnsTJtO3i5vHxr86bnnUDlFTqC40wxtYpQ3y9+sujfHIA0SilhQ353mJB5pYTq1knhmmMkx8xAAUzXe4mR4CY1p2tM1g+6+51R+C4ZGBUteQ3vgcL8Fk5QZWT582BrqFjqIYtE3fii3HPT4ZS5URnDGfJn3hPPi3GcFKa9+rxieEKwW/YHQvGs45N2Cnw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=2BoYj8vJoCc5YOGcljrF0j59xv9vGYkaEkCcW4RMm0g=;
+ b=I6enpX1C3Cj664izuhhEdedMJ5lJtdDf14TYOtetY0GT5MkjvdDvPPacFMO25KVZSPFji4QZeKACEhAlBbSdskVnJ4Bfg5nlHGwcOjmv+2Ucp47S3A3ZBKJYfE1VfzvMusxhlYoGEl9vddb7MOVOarR8ErdPA1a+1rytIpfyKf0=
+Received: from PH8PR10MB6597.namprd10.prod.outlook.com (2603:10b6:510:226::20)
+ by IA1PR10MB7485.namprd10.prod.outlook.com (2603:10b6:208:451::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8026.19; Fri, 4 Oct
+ 2024 17:26:35 +0000
+Received: from PH8PR10MB6597.namprd10.prod.outlook.com
+ ([fe80::6874:4af6:bf0a:6ca]) by PH8PR10MB6597.namprd10.prod.outlook.com
+ ([fe80::6874:4af6:bf0a:6ca%3]) with mapi id 15.20.8026.017; Fri, 4 Oct 2024
+ 17:26:35 +0000
+From: Stephen Brennan <stephen.s.brennan@oracle.com>
+To: Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc: bpf@vger.kernel.org, dwarves@vger.kernel.org,
+        linux-debuggers@vger.kernel.org,
+        Stephen Brennan <stephen.s.brennan@oracle.com>,
+        Alan Maguire <alan.maguire@oracle.com>
+Subject: [PATCH dwarves v4 2/4] btf_encoder: explicitly check addr/size for u32 overflow
+Date: Fri,  4 Oct 2024 10:26:26 -0700
+Message-ID: <20241004172631.629870-3-stephen.s.brennan@oracle.com>
+X-Mailer: git-send-email 2.43.5
+In-Reply-To: <20241004172631.629870-1-stephen.s.brennan@oracle.com>
+References: <20241004172631.629870-1-stephen.s.brennan@oracle.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SJ0PR03CA0390.namprd03.prod.outlook.com
+ (2603:10b6:a03:3a1::35) To PH8PR10MB6597.namprd10.prod.outlook.com
+ (2603:10b6:510:226::20)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241003210307.3847907-1-eddyz87@gmail.com>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH8PR10MB6597:EE_|IA1PR10MB7485:EE_
+X-MS-Office365-Filtering-Correlation-Id: 55d637c7-9c70-4d43-6f40-08dce499b24d
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|10070799003|366016|376014|1800799024;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?Lek5cEipHLFmu31z4y3VDNqOBo52MlqjVo1VAGYlSHmBWZ8Si1j3WN3sHjAI?=
+ =?us-ascii?Q?aatgR8V1ktbF7tfq27ec+nk2ZrCyy8k7Wwd4oqzhpyjPK+gfIfbLP9akQS8G?=
+ =?us-ascii?Q?IA7T2NDEix+vAfl+noBH9SfAtlgE5r9Hm12crNlGBK87VhQx86dpJZMzFpD2?=
+ =?us-ascii?Q?i/KvAAMklBZOHE2lnoYUmDENoXtL/aHG+y0OTlQJuZ/KpQxq0L/h9uGhcuRf?=
+ =?us-ascii?Q?6M5EF/aQb59QWwkgIB9JizIXXVd60sD0FuQMZc0ACV4O3soBu3ghLQSZvrfF?=
+ =?us-ascii?Q?W9t8IZBnLE0/htWimJ9Ok0aUJF5cFqUVGN480FaTzRbz9QO9hDrorj1Tl+hK?=
+ =?us-ascii?Q?A61VT4c58TZ7xNsbGlbgH2KbCOdgSCFKpnwU9IzQX/JQlzAH3f69okjHO1bO?=
+ =?us-ascii?Q?Iq9AzLTIf2npqOFkj5vs4m/9ZdoJYQmlzcisqNOiLk9zRLL5i25v/L+gEF7Z?=
+ =?us-ascii?Q?tuZyzB3sB0Dr0Y/VZfHRIDMif0VZRGgFkNS9YQFNBslmwaz+M5Cl+xY7rG8e?=
+ =?us-ascii?Q?9oROeIOGCSrJ6zdF+BByiDxdCWGv+Py0fKQ0E/9ijNlAWfVR6xueFDMdgDF/?=
+ =?us-ascii?Q?uYbEoqtvgCImxCcd5mVSoKvTklDa9hAIGwizcwcaLnEseaGIpKfcn8PTtHCq?=
+ =?us-ascii?Q?h//WUwW8esnAdjCS2umXYuCNdiaUMuKAyTzp5Oe5UXG2gA7+vKkH57O4mbCC?=
+ =?us-ascii?Q?XK96JqDRGURWvVTySqT2dDFUIPKo6SauQptNxqrZmeWJsiNkj0WnT7YKOljd?=
+ =?us-ascii?Q?qvfKIzLusfUlAS/+HqrXsXsIw67oIi7fkyqrVHad/GOkf2qvigfHwSVVbMMQ?=
+ =?us-ascii?Q?8D+AMWfJj3hUiihGwRi9l/h3hAwbLWmLLKJPOoD3JOlO6Fu08djQMgPG8vOl?=
+ =?us-ascii?Q?IfgONOYQJAjS+xxRe/5HNvv0R3Gw1kMtXH8SO3W0Hf0olXHNXokME8OxDd3B?=
+ =?us-ascii?Q?JFwdJpg9pvdqthJbkbMLioPDOum36VrikVUGwAgtGrKBA2OsSsc2lEifOLvm?=
+ =?us-ascii?Q?bOaR3nitfkZyLkiYjaZT5bDVjvFbRKFZO1+BQk4QcFLm3qM+Vbx0WQZDD6rM?=
+ =?us-ascii?Q?hQwByqrYVQpLCbiAHnBvg8CcfdifwmUKc2gl553JacH4x3YegJiP5kdHzXQF?=
+ =?us-ascii?Q?FKc4sehSEOJFNMxxid4UoSLwUTpvtQTnsC3TQc5rRqU00iPXnOw4A6etqwOx?=
+ =?us-ascii?Q?H1xD2WeIeM8IvBnOau/9ejcbQ9y8PigiX8bT2i6q9eUqxdATX/UmwBWt8sBV?=
+ =?us-ascii?Q?Ic0gN/4xDQ3edqrEwwccTcWsojDHVlF0IIKOQSlhVw=3D=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH8PR10MB6597.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(10070799003)(366016)(376014)(1800799024);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?nr+Mfv2vYFdK8ZeucmEQAlOcDpk7DLp3qlJzT99frPD552zGNtyT9bazsJAY?=
+ =?us-ascii?Q?J35lqL0WBvvaY61uznWqA372p1OwY+e7DAkjExXVdJl+gd7a/1RDcp597BtG?=
+ =?us-ascii?Q?XsP0kxZSx0OIizGgIQJqBhJbw09Fl0D57sQKYZ8DUrAEGu76VnuvAZlI25HO?=
+ =?us-ascii?Q?2r/82sD7aodv+Rb1j4I+wfN/BNLFtSLFtdIj4M93KPefSWNaieSn3koytVZq?=
+ =?us-ascii?Q?H/iLsvjRh0LSiU5c3L3SBxgN75HVhvwiSc7jcAfA429McOn0bXU4B2ETmU5+?=
+ =?us-ascii?Q?vLrTm/4LAcJbL1b9rspfKUlQxKF5MxrZCSTGamMtIq6laMmskAJ3jXhkx+1q?=
+ =?us-ascii?Q?3RjaWDga/acZkLd3nSpzHWol5FgJzQMgSmqim6W3D8vWdCFujReFxdjuoKyp?=
+ =?us-ascii?Q?KUH0CsT22TyJhSZpOtoSjbWWyYaqVaWDBmUBDUx+b+C7DN2PkWoT1mbdncUZ?=
+ =?us-ascii?Q?a8BP0xzHVt5oYmbKtTCJ9wtEzz0LIStoh4gU9ONe+1/bkk31PFHz4SP8RYT+?=
+ =?us-ascii?Q?N5n9ZhuTt2gB2IHu+fbsFhsoW2abQFLAV0p3GrYc+IOScbW9Vt0hKgN1NbsK?=
+ =?us-ascii?Q?4h5An72yt7IX0Tyc8mTssowcfEagD0Upvw3ye2jd6KEhC/FDSpmrfocfJtUm?=
+ =?us-ascii?Q?iAD252Y5GNWy0y4zekzBWbx+bwA0ZKAtBe7aiZFl4NolNaigESup51aMUqh/?=
+ =?us-ascii?Q?PVnWcNibanjuQk+3KsF1jJCc5lRack3XrWW9al1ySBjqEnHWbIN9VXeGK7OW?=
+ =?us-ascii?Q?D6/60bOh8kSbrFynU9ypYsC6RUytAidaC8X3ybWHpXVgMq5liEgNgNvJUFP0?=
+ =?us-ascii?Q?5kNgerp8lWUCZouquEU87Bl4eM+NmGqIhUH3RZAwbJykNc6XoweW86E+zRp8?=
+ =?us-ascii?Q?XGVCBu1yYHx5QVjztlwgWDELvcGsviTF0s1y7Z2oVClsHG2tv6N20Xh7VcA8?=
+ =?us-ascii?Q?jT0kSRW0n4Yzix+02L21lp5leeU+OnLtvR8dZor8K+MqgBm1pxYzGNLOr4JR?=
+ =?us-ascii?Q?JO8J0ZpVbvO2+/SFxfvBHko8Jh3WdmLt7MTB8GdW+xiz66aa31QKE9R1kXlA?=
+ =?us-ascii?Q?Q/HHpfexUO2st3R7W2m0THCCuETjbHfTpLqHElGqp6SMmdSAOFtg9nIlvPfG?=
+ =?us-ascii?Q?k+DE1uZ1NzKfb4LMkRjcz+1bY4aPweGoctYbVCIe0MhYFNT7OAbe9T6yHYbQ?=
+ =?us-ascii?Q?Bnu2pdQi92Wa9EwRA8RXwhKOotNhZmwgiT2gWtjwHJMahUpa5oB5KiF1FJoa?=
+ =?us-ascii?Q?OzagnCIc8J18IQJB7zAQVxlkkOxlzE8pzhZKsSLFqjqoDmpWx1jTXpmI4+Sr?=
+ =?us-ascii?Q?gCMZt9n4DKhqYHPPbyseSmSeGzy+vLPTYp86jKwh4mbCFLWicHw8x3a758c0?=
+ =?us-ascii?Q?/R9pH5E2+8Yt9y37NGgeTrvmFGCKmDxZj7/zYblHM26BmQubedJLeBBYb9iX?=
+ =?us-ascii?Q?n64YchgxBnGyMLYl2OvOt8eFJ2pWuVZFHpGDNbGvXWnhyTD6Tq4Qx2EIQlaf?=
+ =?us-ascii?Q?ghbA+BlhN/HgeWs2W7DTdGULLaX+QMtHEJrSrAxI2slQUzXRHHgIGBS3tXjC?=
+ =?us-ascii?Q?cRTEiqCYT3cD9xrk7ZaB7cqh6cbJAvFgO2Qn5GnoSGQnHi2ySsQg98RuGZmi?=
+ =?us-ascii?Q?tbFjRBsiuQWaOmyA320iP34=3D?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
+	R2X3xu1wymaRxQFlRCGS8Sp6fh+Te+BS/+/Xo8RY5AfRANrFQ1m7iSX79rKZriJ7Gj0tGO66NQByTSvlm08dH4jLMNuFmaCRncIeyMuMC+Ot+P7IoijAUj0WS6SY4LOwImzQioR8jc26wU+H4c8FU1UY/53c5Qo2o+WQ9el5QXs17oDw2Ytc+V5J9FZKFpUiA/pLrJV32YOWKKl6Awv+zV/VMzKBdOtAby9UMndkSjKuQQkCyMEip+hUKrwPVVuBiadcyL/D25nZ/BBbm6sWB4hv8ZxGMvxeAkKTyeJwHyrUGzs5uoJE/sL1CkfvSeU6Q2r6BCJFNay7mvq6yyUbVVuGe1Dqe8uZIpfgi78KEKqgZPVhpkRz1XwSVrwe8TsdUSmaJ4zKQgVT2/TqLVlRFbCRuzpFvLZayDA5HEaAhlCegWjK2yGskjFm4J8fIdy7vvAJeOQ3zawRaViM/oWBdG33ugGC++mDRWV3tNXqv6OTdAPtPoQPg03UQOZ6UMq/rjfTVGLabMOoIsQ4Alh9zjfmpATnOHlN9RI6i+xZGHSJtgXDlTwNC+YzXI2BU9TCWPl/EM1ylrDYjmTXM4YoSOUHhIvlsCfRI48RtjcgMkc=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 55d637c7-9c70-4d43-6f40-08dce499b24d
+X-MS-Exchange-CrossTenant-AuthSource: PH8PR10MB6597.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Oct 2024 17:26:35.4306
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: l3MPrDn+vCcQyIRsnKVZ4+K8hwj9LXchZl/KWXZQAhBroAbPTEmfhIDb1TDo1f85VVaqEU3PwgXODihOFpUy6oHuWTh9DOp2lccfcHcCWF4=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR10MB7485
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
+ definitions=2024-10-04_14,2024-10-04_01,2024-09-30_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 phishscore=0
+ suspectscore=0 adultscore=0 bulkscore=0 mlxscore=0 mlxlogscore=999
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2409260000 definitions=main-2410040119
+X-Proofpoint-GUID: XitPjNXmN4fx15f8_jezt1GHu7n5b7Ba
+X-Proofpoint-ORIG-GUID: XitPjNXmN4fx15f8_jezt1GHu7n5b7Ba
 
-On Thu, Oct 03, 2024 at 02:03:07PM GMT, Eduard Zingerman wrote:
-> test_progs uses glibc specific functions backtrace() and
-> backtrace_symbols_fd() to print backtrace in case of SIGSEGV.
-> 
-> Recent commit (see fixes) updated test_progs.c to define stub versions
-> of the same functions with attriubte "weak" in order to allow linking
-> test_progs against musl libc. Unfortunately this broke the backtrace
-> handling for glibc builds.
-> 
-> As it turns out, glibc defines backtrace() and backtrace_symbols_fd()
-> as weak:
-> 
->   $ llvm-readelf --symbols /lib64/libc.so.6 \
->      | grep -P '( backtrace_symbols_fd| backtrace)$'
->   4910: 0000000000126b40   161 FUNC    WEAK   DEFAULT    16 backtrace
->   6843: 0000000000126f90   852 FUNC    WEAK   DEFAULT    16 backtrace_symbols_fd
-> 
-> So does test_progs:
-> 
->  $ llvm-readelf --symbols test_progs \
->     | grep -P '( backtrace_symbols_fd| backtrace)$'
->   2891: 00000000006ad190    15 FUNC    WEAK   DEFAULT    13 backtrace
->  11215: 00000000006ad1a0    41 FUNC    WEAK   DEFAULT    13 backtrace_symbols_fd
-> 
-> In such situation dynamic linker is not obliged to favour glibc
-> implementation over the one defined in test_progs.
-> 
-> Compiling with the following simple modification to test_progs.c
-> demonstrates the issue:
-> 
->   $ git diff
->   ...
->   \--- a/tools/testing/selftests/bpf/test_progs.c
->   \+++ b/tools/testing/selftests/bpf/test_progs.c
->   \@@ -1817,6 +1817,7 @@ int main(int argc, char **argv)
->           if (err)
->                   return err;
-> 
->   +       *(int *)0xdeadbeef  = 42;
->           err = cd_flavor_subdir(argv[0]);
->           if (err)
->                   return err;
-> 
->   $ ./test_progs
->   [0]: Caught signal #11!
->   Stack trace:
->   <backtrace not supported>
->   Segmentation fault (core dumped)
-> 
-> Resolve this by hiding stub definitions behind __GLIBC__ macro check
-> instead of using "weak" attribute.
-> 
-> Fixes: c9a83e76b5a9 ("selftests/bpf: Fix compile if backtrace support missing in libc")
-> 
-> CC: Tony Ambardar <tony.ambardar@gmail.com>
-> Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
-> ---
->  tools/testing/selftests/bpf/test_progs.c | 13 ++++++++-----
->  1 file changed, 8 insertions(+), 5 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/bpf/test_progs.c b/tools/testing/selftests/bpf/test_progs.c
-> index 7846f7f98908..005ff506b527 100644
-> --- a/tools/testing/selftests/bpf/test_progs.c
-> +++ b/tools/testing/selftests/bpf/test_progs.c
-> @@ -20,20 +20,23 @@
->  
->  #include "network_helpers.h"
->  
-> +/* backtrace() and backtrace_symbols_fd() are glibc specific,
-> + * use header file when glibc is available and provide stub
-> + * implementations when another libc implementation is used.
-> + */
->  #ifdef __GLIBC__
->  #include <execinfo.h> /* backtrace */
-> -#endif
-> -
-> -/* Default backtrace funcs if missing at link */
-> -__weak int backtrace(void **buffer, int size)
-> +#else
-> +int backtrace(void **buffer, int size)
->  {
->  	return 0;
->  }
->  
-> -__weak void backtrace_symbols_fd(void *const *buffer, int size, int fd)
-> +void backtrace_symbols_fd(void *const *buffer, int size, int fd)
->  {
->  	dprintf(fd, "<backtrace not supported>\n");
->  }
-> +#endif /*__GLIBC__ */
->  
->  int env_verbosity = 0;
->  
-> -- 
-> 2.46.1
-> 
-> 
+The addr is a uint64_t, and depending on the size of a data section,
+there's no guarantee that it fits into a uint32_t, even after
+subtracting out the section start address. Similarly, the variable size
+is a size_t which could exceed a uint32_t. Check both for overflow, and
+if found, skip the variable with an error message. Use explicit casts
+when we cast to uint32_t so it's plain to see that this is happening.
 
-Acked-by: Daniel Xu <dxu@dxuuu.xyz>
+Signed-off-by: Stephen Brennan <stephen.s.brennan@oracle.com>
+Reviewed-by: Alan Maguire <alan.maguire@oracle.com>
+Acked-by: Jiri Olsa <jolsa@kernel.org>
+---
+ btf_encoder.c | 13 ++++++++++---
+ 1 file changed, 10 insertions(+), 3 deletions(-)
+
+diff --git a/btf_encoder.c b/btf_encoder.c
+index 61e9ece..5586cd8 100644
+--- a/btf_encoder.c
++++ b/btf_encoder.c
+@@ -2253,9 +2253,16 @@ static int btf_encoder__encode_cu_variables(struct btf_encoder *encoder)
+ 
+ 		tag = cu__type(cu, var->ip.tag.type);
+ 		size = tag__size(tag, cu);
+-		if (size == 0) {
++		if (size == 0 || size > UINT32_MAX) {
+ 			if (encoder->verbose)
+-				fprintf(stderr, "Ignoring zero-sized per-CPU variable '%s'...\n", name);
++				fprintf(stderr, "Ignoring %s-sized per-CPU variable '%s'...\n",
++					size == 0 ? "zero" : "over", name);
++			continue;
++		}
++		if (addr > UINT32_MAX) {
++			if (encoder->verbose)
++				fprintf(stderr, "Ignoring variable '%s' - its offset %zu doesn't fit in a u32\n",
++					name, addr);
+ 			continue;
+ 		}
+ 
+@@ -2288,7 +2295,7 @@ static int btf_encoder__encode_cu_variables(struct btf_encoder *encoder)
+ 		 * add a BTF_VAR_SECINFO in encoder->percpu_secinfo, which will be added into
+ 		 * encoder->types later when we add BTF_VAR_DATASEC.
+ 		 */
+-		id = btf_encoder__add_var_secinfo(encoder, id, addr, size);
++		id = btf_encoder__add_var_secinfo(encoder, id, (uint32_t)addr, (uint32_t)size);
+ 		if (id < 0) {
+ 			fprintf(stderr, "error: failed to encode section info for variable '%s' at addr 0x%" PRIx64 "\n",
+ 			        name, addr);
+-- 
+2.43.5
+
