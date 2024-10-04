@@ -1,80 +1,134 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86CE9219480;
-	Fri,  4 Oct 2024 14:51:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73FE32178EE;
+	Fri,  4 Oct 2024 14:51:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=167.114.26.122
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728053479; cv=none; b=nvO5zQooxBu/w1ORrxQKcZYSoK9aTxy271q6Y9j8mg5EKi4hK2Ge4iqrrHeTzdAVwmEf3QwcnVdF+AW5bJwKOI61u78LOoYIaElP6o1v257DmWKUtEAk8ZsBbNnDJQcI1B6fr8HeDjxyPvC7VNzQgC5u8FvSL9+jMacrRkuc5iQ=
+	t=1728053500; cv=none; b=WnhtqDtxIGYjS6enATDybywzKdkJsGJRua/z2ELImxg11qeTUGH8ivsRqx87YHq9L4YwS1xYV8Xg7P5WRmhk0bhbmlTEONntZ76mubl5MNR63ayeNtumRU9MPAYgla9QKlfSHmdstKjniNe3VF2fNYB/3voyp4oHAiE9T4l4zlg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728053479; c=relaxed/simple;
-	bh=r/co0L0B4wgl0JjCCmR6K1PuFgXUGYn8T4273gDb+pI=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=nyE/2zzeJd9boG2Z5thLa/Vpk0Y5MmJPgi/z/6x0WkrE40BHIVxyo+ymZkvWwfoMaBpeUr3bMQ6BLVWS1g77xMzkHJX3C6OJ5xw5lCJUDs4nKuSNfhd1LHA4gJGYNAT3qZWQJ+ZRADCvF1AO5vks3JXYlNEcYv84oN9GUjiojN0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31484C4CEC6;
-	Fri,  4 Oct 2024 14:51:16 +0000 (UTC)
-Date: Fri, 4 Oct 2024 10:52:11 -0400
-From: Steven Rostedt <rostedt@goodmis.org>
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: Masami Hiramatsu <mhiramat@kernel.org>, linux-kernel@vger.kernel.org,
- Peter Zijlstra <peterz@infradead.org>, Alexei Starovoitov <ast@kernel.org>,
- Yonghong Song <yhs@fb.com>, "Paul E . McKenney" <paulmck@kernel.org>, Ingo
- Molnar <mingo@redhat.com>, Arnaldo Carvalho de Melo <acme@kernel.org>, Mark
- Rutland <mark.rutland@arm.com>, Alexander Shishkin
- <alexander.shishkin@linux.intel.com>, Namhyung Kim <namhyung@kernel.org>,
- Andrii Nakryiko <andrii.nakryiko@gmail.com>, bpf@vger.kernel.org, Joel
- Fernandes <joel@joelfernandes.org>, linux-trace-kernel@vger.kernel.org,
- Michael Jeanson <mjeanson@efficios.com>
-Subject: Re: [PATCH v1 2/8] tracing/ftrace: guard syscall probe with
- preempt_notrace
-Message-ID: <20241004105211.13ea45da@gandalf.local.home>
-In-Reply-To: <e547819a-7993-4c80-b358-6719ca420cf8@efficios.com>
-References: <20241003151638.1608537-1-mathieu.desnoyers@efficios.com>
-	<20241003151638.1608537-3-mathieu.desnoyers@efficios.com>
-	<20241003182304.2b04b74a@gandalf.local.home>
-	<6dc21f67-52e1-4ed5-af7f-f047c3c22c11@efficios.com>
-	<20241003210403.71d4aa67@gandalf.local.home>
-	<90ca2fee-cdfb-4d48-ab9e-57d8d2b8b8d8@efficios.com>
-	<20241004092619.0be53f90@gandalf.local.home>
-	<e547819a-7993-4c80-b358-6719ca420cf8@efficios.com>
-X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1728053500; c=relaxed/simple;
+	bh=AR81zM7tcgdPrGoH+VnVwMEtO6dO/auPSDmcI/0T2as=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=D+gaD6TLsWwoHBaJmO5w9iSOmV3yx9pvlGDEVp8FGzkZAtLSF35c3LIN7E7HJde6ebjIK6Ww/+U1VWD+ljwEf7LeAegocFMnRO3l9gWxgUXL0IN3wuPcHR1R7zgOLGjOxBNM9pJ3XGBELOi0EDItUt9kl6v4klKil/Z3Bk1aBCY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com; spf=pass smtp.mailfrom=efficios.com; dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b=aqZJiDkc; arc=none smtp.client-ip=167.114.26.122
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=efficios.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b="aqZJiDkc"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
+	s=smtpout1; t=1728053497;
+	bh=AR81zM7tcgdPrGoH+VnVwMEtO6dO/auPSDmcI/0T2as=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=aqZJiDkcFNbybvOWnSH1YTzAZ3uM5/cerAacIkwqm7Lc3cPTmNVHb2YLKv/c5xS8T
+	 mf1JNd4Lb0yZQvRElFWOgE1sRkiHrTIEwXxpXFj/DgKcwGYaY59Qm0ZfTIBo6HMqrq
+	 SnqTnoHFHD7zxNEL31vKleGoeHsH4JU3kIbE8BN2q5/dLekoHC/Bw4Hh/pTOBiLAq3
+	 jTIvouslB+GU7+x+ruAd6KDu5e174r8AnvwmiSCrDRZlYnQofKF6bMfiqMYZwbBOB5
+	 2jP+8Rl5p/OA9LMVlV0mND/nS6t6oofgwuyWUaK+L7ECjLYobPdfO+7xKz43utBB3q
+	 dEYJeAKnimt6A==
+Received: from [172.16.0.134] (96-127-217-162.qc.cable.ebox.net [96.127.217.162])
+	by smtpout.efficios.com (Postfix) with ESMTPSA id 4XKs2119qszL30;
+	Fri,  4 Oct 2024 10:51:37 -0400 (EDT)
+Message-ID: <1aff8385-083e-4d8d-9c81-ce8d54b688ed@efficios.com>
+Date: Fri, 4 Oct 2024 10:49:36 -0400
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 0/7] tracing: Allow system call tracepoints to handle
+ page faults
+To: Steven Rostedt <rostedt@goodmis.org>,
+ Masami Hiramatsu <mhiramat@kernel.org>
+Cc: linux-kernel@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
+ Alexei Starovoitov <ast@kernel.org>, Yonghong Song <yhs@fb.com>,
+ "Paul E . McKenney" <paulmck@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+ Arnaldo Carvalho de Melo <acme@kernel.org>,
+ Mark Rutland <mark.rutland@arm.com>,
+ Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+ Namhyung Kim <namhyung@kernel.org>,
+ Andrii Nakryiko <andrii.nakryiko@gmail.com>, bpf@vger.kernel.org,
+ Joel Fernandes <joel@joelfernandes.org>, linux-trace-kernel@vger.kernel.org
+References: <20241004011201.1681962-1-mathieu.desnoyers@efficios.com>
+Content-Language: en-US
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+In-Reply-To: <20241004011201.1681962-1-mathieu.desnoyers@efficios.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On Fri, 4 Oct 2024 10:19:36 -0400
-Mathieu Desnoyers <mathieu.desnoyers@efficios.com> wrote:
-
-> The eBPF people want to leverage this. When I last discussed this with
-> eBPF maintainers, they were open to adapt eBPF after this infrastructure
-> series is merged. Based on this eBPF attempt from 2022:
+On 2024-10-04 03:11, Mathieu Desnoyers wrote:
+> Wire up the system call tracepoints with Tasks Trace RCU to allow
+> the ftrace, perf, and eBPF tracers to handle page faults.
 > 
-> https://lore.kernel.org/lkml/c323bce9-a04e-b1c3-580a-783fde259d60@fb.com/
+> This series does the initial wire-up allowing tracers to handle page
+> faults, but leaves out the actual handling of said page faults as future
+> work.
+> 
+> This series was compile and runtime tested with ftrace and perf syscall
+> tracing and raw syscall tracing, adding a WARN_ON_ONCE() in the
+> generated code to validate that the intended probes are used for raw
+> syscall tracing. The might_fault() added within those probes validate
+> that they are called from a context where handling a page fault is OK.
+> 
+> This series replaces the "Faultable Tracepoints v6" series found at [1].
+> 
+> This has been rebased on v6.12-rc1 on top of two patches from Steven:
+> 
+> tracing: Remove definition of trace_*_rcuidle()
+> tracepoint: Remove SRCU protection
 
-Sorry, I wasn't part of that discussion.
+I'll send an updated series which includes
+"tracing: Declare system call tracepoints with TRACE_EVENT_SYSCALL"
+(missing here), and which rework that patch to remove the mapping from
+trace_sys_enter/exit to trace_syscall_sys_enter/exit which requires
+modifying architecture code. A lot of churn for little value add.
+
+Thanks,
+
+Mathieu
 
 > 
-> The sframe code is just getting in shape (2024), but is far from being ready.
+> Thanks,
 > 
-> Everyone appears to be waiting for this infrastructure work to go in
-> before they can build on top. Once this infrastructure is available,
-> multiple groups can start working on introducing use of this into their
-> own code in parallel.
+> Mathieu
 > 
-> Four years into this effort, and this is the first time we're told we need
-> to adapt in-tree tracers to handle the page faults before this can go in.
+> Link: https://lore.kernel.org/lkml/20240828144153.829582-1-mathieu.desnoyers@efficios.com/ # [1]
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> Cc: Alexei Starovoitov <ast@kernel.org>
+> Cc: Yonghong Song <yhs@fb.com>
+> Cc: Paul E. McKenney <paulmck@kernel.org>
+> Cc: Ingo Molnar <mingo@redhat.com>
+> Cc: Arnaldo Carvalho de Melo <acme@kernel.org>
+> Cc: Mark Rutland <mark.rutland@arm.com>
+> Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
+> Cc: Namhyung Kim <namhyung@kernel.org>
+> Cc: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+> Cc: bpf@vger.kernel.org
+> Cc: Joel Fernandes <joel@joelfernandes.org>
+> Cc: linux-trace-kernel@vger.kernel.org
 > 
-> Could you please stop moving the goal posts ?
+> Mathieu Desnoyers (7):
+>    tracing/ftrace: guard syscall probe with preempt_notrace
+>    tracing/perf: guard syscall probe with preempt_notrace
+>    tracing/bpf: guard syscall probe with preempt_notrace
+>    tracing: Allow system call tracepoints to handle page faults
+>    tracing/ftrace: Add might_fault check to syscall probes
+>    tracing/perf: Add might_fault check to syscall probes
+>    tracing/bpf: Add might_fault check to syscall probes
+> 
+>   include/linux/tracepoint.h    | 18 ++++++++++-----
+>   include/trace/bpf_probe.h     | 12 +++++++++-
+>   include/trace/perf.h          | 42 +++++++++++++++++++++++++++++++----
+>   include/trace/trace_events.h  | 39 ++++++++++++++++++++++++++------
+>   init/Kconfig                  |  1 +
+>   kernel/trace/trace_syscalls.c | 28 +++++++++++++++++++++++
+>   6 files changed, 123 insertions(+), 17 deletions(-)
+> 
 
-I don't think I'm moving the goal posts. I was mentioning to show an
-in-tree user. If BPF wants this, I'm all for it. The only thing I saw was a
-generalization in the cover letter about perf, bpf and ftrace using
-faultible tracepoints. I just wanted to see a path for that happening.
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+https://www.efficios.com
 
--- Steve
