@@ -1,149 +1,223 @@
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
+Received: from mail-oi1-f179.google.com (mail-oi1-f179.google.com [209.85.167.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A2AC1D7E52
-	for <bpf@vger.kernel.org>; Mon,  7 Oct 2024 18:35:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91A09320F;
+	Mon,  7 Oct 2024 18:48:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728326136; cv=none; b=Xax3iLSQiohzen2xeBmQzPrt+lXSO1MXxqNk3Nnxy+3bT/pxpARbJx13WXJ7mgx17ner4zsPVfbnuLp5t7qQRxDdu0mwPK+Lu8eQoB+Fxf9VRsUeQ5813f55HSDVntGL/E4/fcxfEEu9Y1M6VDZ/G4OrMaQiFYtu2OZUXyxwHfE=
+	t=1728326916; cv=none; b=nA9+TuL/2g4C4N3axkzF9ceqRR0gEy6op4LkNWuabjFjSv5MgOpsZs/MK5HMgWUBdhh1u9X9RZoHBLZSAgLn8WjRYwaTulgGCHPnkVIB2sY8CCiVjZCORN8ufp+mRsgPIDTXsdTzbpcqevzg9lG0rtEeWVL/xdiRxpmqwZakHvU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728326136; c=relaxed/simple;
-	bh=ui84LHJ7V2MPndNlQZi16Q2g1mkF+wiIlqZkiMB0dq8=;
-	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=hnyA3HwofjI/pvTf5INU3As9S5WDVotiCojWO2tucwXN3/4LtplW0QR3BlqJs5jTYnnwTKSgtvPWv5OZ6bWMjY05oU2ZVPSYpFXpISUOjCTm5p5UTfbwvPdO6wM9XihfBODY/5c/kF7WpAv6R1qte5e3lun/jC8J8ITD3RDG6vY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-il1-f199.google.com with SMTP id e9e14a558f8ab-3a2762bfcbbso76542875ab.3
-        for <bpf@vger.kernel.org>; Mon, 07 Oct 2024 11:35:34 -0700 (PDT)
+	s=arc-20240116; t=1728326916; c=relaxed/simple;
+	bh=2JRdkrq7ibC3AxPdWBaT0qkhzD1BlGvDutrusNteXmw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=jQ3jaVjN2kFfhSb7ruOY2+fmQ0qMw2IXaYoaTwnv/VQRIX0NwoVMyP3Up5q/Lls+Up6WEMQ9ww/fJAPMAp/ZWKzdTM642sLFxbKwIIKkVhPdQoWiGe79XQLJExI4PcnBeagR8fLp/e8r4p+afbEedAGCzWFqWNG/3NOSsqsBZkc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Gau3tt7I; arc=none smtp.client-ip=209.85.167.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Gau3tt7I"
+Received: by mail-oi1-f179.google.com with SMTP id 5614622812f47-3e3b79b4858so2704413b6e.2;
+        Mon, 07 Oct 2024 11:48:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1728326913; x=1728931713; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=DxIo6SBDZQXc37oWyxERlpu6l1Wa+ULpd6grGxBigoc=;
+        b=Gau3tt7IM5pHUxf37EnGP/Tk8m67cPPopn4OWYga5z2EIgZAVYqgdff/klB0DyqLQ0
+         otmb9mXzPFITCoWBQT20vGz+ejzazYa51hvxyLmnaxoWBZ3flLYYPYoALaLqZRMb9YNo
+         i3basQYLw6wtsLswhd8t97QspPhDi4UP4+Dl2M9w4CCYkNMeoCEkI//im5Sog76Vqp+l
+         1Ymazo/sW5+HQuX1ubT79SAtIQG8sOUKFvsoOZbFqhtQBqMGQq+aJCux7tjErF+vvrC8
+         +tEAr7LFxA2bp6GZgwBWf86FKj/oY3xUxPc9be63OJV6RXAQfq0XDCAKhf9sVa5r8nKA
+         zkDQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728326134; x=1728930934;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=tSkxKQJV4Cou1kKVASSDVARvILCeYBsEr0cEZZIICr8=;
-        b=IcbG0VLXCRS2j+5NJV0m49mLWrPu19aDlvxg/KefmDlJgTXtG2oaQ3M1mkpaLpea0M
-         TQh/3myhcymWkZJsm7Nt/oYBQN7+pxaSL+pZrbeiDay9VNV458sxrveGDp3bWRM+Xmxm
-         OrzSHVuWrQFNQy+1GkYABBgIwvV1VHHBul9Hx4fa5RhRw4qjVUlOiQuZG46gvRGUp2qa
-         3nv7znRyl+sJLkWmjizCbSzZtGDp7B2PE4qNh2vOA5FpNm9SYwbZHXuHrTC09AavIpcs
-         s5hc/P2S6h12eccskHyK7YGzgftlQDdZHUKyqhcNJaLXd6JT4r2dSV2tks+J8+hsPTcd
-         x3sg==
-X-Forwarded-Encrypted: i=1; AJvYcCXbgQtN01Hg+XZMUbNJIPZhppUx5g/v5MskS4m1G7MknWgtL5oH7biTkfQ1i6v+XaMjb3c=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxxzYPqUUU/4HsEtNkFW9OMBDmrav3PtC0LZdUI7ymnFZrDxnb9
-	cnV+XpZemQq88FJjm6p+adwwxneZJFfyo2XhFMETV4bj7Q3xAVAt+opDfhFDD8LieotyYwfiav3
-	v8hG8hXMZM+ZjwcauUZiSO4D1zZbsXoD88/h0jx6rWo5wSYNmn1YVqP0=
-X-Google-Smtp-Source: AGHT+IGvrO4tEXhzvh+AgETbW2DNS1KBSMgWQ5+HzHJTzW+7zW0bIP+twvXYMs18lyVwkHfLlAFHk8NZ3ioglW1u9XMz4h7y6lXw
+        d=1e100.net; s=20230601; t=1728326913; x=1728931713;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=DxIo6SBDZQXc37oWyxERlpu6l1Wa+ULpd6grGxBigoc=;
+        b=qQiArVy7SFAPCYAqrixZTkscfwcoucdedSYZSIpb0BdLml8Fzf7EHGdCXZfd3zIiY/
+         5F3s8Ve/5GDGAFj4NAY8TxPH0ONs2U69VTazW9gzTxvmjan+hPDLbA/9ER6p5dBwv6dx
+         LeiRODbWocMAuO3uD5qQDABJn0HxyPVaPDqmzgVVGNb2rEx3YBI562gfNyjb+Wv9tjfj
+         XF3lyZ97IAeKM5otAGsv+MC3VFB6SIoRi1QAoIfaplXVKAJIV/+D0T0BdVhMAdo15pNI
+         zEsH3kVQQ0WvRK15cUhT4+Ov0vpEGovCc+RY+1xgwbftGFAQXdS3XeV1OZsvuIk77jgf
+         rXFw==
+X-Forwarded-Encrypted: i=1; AJvYcCUB2wl8I0Ox3LGEnGFTD5pORfsP5KrADlroeZH3ZC+EB1VbmpxgCosEZ0rJNt9qr8c1SJA=@vger.kernel.org, AJvYcCXIn44juVAkBqsaOZW4oy+rgKA6O9CY2EPXBb5Mq9ziw2VSc6iko9w8x+SDki7pOX1FmKXEsIVz@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx4nt/fI+QVSX2Q6rhjK5Mr8hzZS/LjVJL4jGILuA+A3kwxCB7k
+	rs+4Rbkz5bzXw4egtrJWfhXFX8oX/qACy+bFaQGRITr1KwBbEmc=
+X-Google-Smtp-Source: AGHT+IHidoJ5KUJ6/hc4eJOnHC4cWCklIOkHi42bJtWHz6oCLeuYegsjuUpsou49IAVpUwzcvXsFXg==
+X-Received: by 2002:a05:6808:2e86:b0:3e0:7005:3f86 with SMTP id 5614622812f47-3e3c15345a3mr10727871b6e.28.1728326913536;
+        Mon, 07 Oct 2024 11:48:33 -0700 (PDT)
+Received: from localhost ([2601:646:9e00:f56e:123b:cea3:439a:b3e3])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-7e9f6c4a65esm5253615a12.94.2024.10.07.11.48.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Oct 2024 11:48:33 -0700 (PDT)
+Date: Mon, 7 Oct 2024 11:48:32 -0700
+From: Stanislav Fomichev <stfomichev@gmail.com>
+To: Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+Cc: Jesper Dangaard Brouer <hawk@kernel.org>, Daniel Xu <dxu@dxuuu.xyz>,
+	Arthur Fabre <afabre@cloudflare.com>,
+	Lorenzo Bianconi <lorenzo@kernel.org>,
+	Lorenzo Bianconi <lorenzo.bianconi@redhat.com>,
+	Jakub Sitnicki <jakub@cloudflare.com>,
+	Alexander Lobakin <aleksander.lobakin@intel.com>,
+	bpf@vger.kernel.org, netdev@vger.kernel.org, ast@kernel.org,
+	daniel@iogearbox.net, davem@davemloft.net, kuba@kernel.org,
+	john.fastabend@gmail.com, edumazet@google.com, pabeni@redhat.com,
+	sdf@fomichev.me, tariqt@nvidia.com, saeedm@nvidia.com,
+	anthony.l.nguyen@intel.com, przemyslaw.kitszel@intel.com,
+	intel-wired-lan@lists.osuosl.org, mst@redhat.com,
+	jasowang@redhat.com, mcoquelin.stm32@gmail.com,
+	alexandre.torgue@foss.st.com,
+	kernel-team <kernel-team@cloudflare.com>,
+	Yan Zhai <yan@cloudflare.com>
+Subject: Re: [RFC bpf-next 0/4] Add XDP rx hw hints support performing
+ XDP_REDIRECT
+Message-ID: <ZwQtAHpg2LB-7en_@mini-arch>
+References: <87zfnnq2hs.fsf@toke.dk>
+ <Zv18pxsiTGTZSTyO@mini-arch>
+ <87ttdunydz.fsf@toke.dk>
+ <Zv3N5G8swr100EXm@mini-arch>
+ <D4LYNKGLE7G0.3JAN5MX1ATPTB@bobby>
+ <Zv794Ot-kOq1pguM@mini-arch>
+ <2fy5vuewgwkh3o3mx5v4bkrzu6josqylraa4ocgzqib6a7ozt4@hwsuhcibtcb6>
+ <038fffa3-1e29-4c6d-9e27-8181865dca46@kernel.org>
+ <ZwArrsqrYx7IM5tq@mini-arch>
+ <87ldz1edaz.fsf@toke.dk>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1846:b0:3a0:abec:da95 with SMTP id
- e9e14a558f8ab-3a375bd1f54mr111730985ab.22.1728326134302; Mon, 07 Oct 2024
- 11:35:34 -0700 (PDT)
-Date: Mon, 07 Oct 2024 11:35:34 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <670429f6.050a0220.49194.0517.GAE@google.com>
-Subject: [syzbot] [bpf?] WARNING in push_jmp_history
-From: syzbot <syzbot+7e46cdef14bf496a3ab4@syzkaller.appspotmail.com>
-To: andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org, 
-	daniel@iogearbox.net, eddyz87@gmail.com, haoluo@google.com, 
-	john.fastabend@gmail.com, jolsa@kernel.org, kpsingh@kernel.org, 
-	linux-kernel@vger.kernel.org, martin.lau@linux.dev, sdf@fomichev.me, 
-	song@kernel.org, syzkaller-bugs@googlegroups.com, yonghong.song@linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <87ldz1edaz.fsf@toke.dk>
 
-Hello,
+On 10/06, Toke Høiland-Jørgensen wrote:
+> Stanislav Fomichev <stfomichev@gmail.com> writes:
+> 
+> > On 10/04, Jesper Dangaard Brouer wrote:
+> >> 
+> >> 
+> >> On 04/10/2024 04.13, Daniel Xu wrote:
+> >> > On Thu, Oct 03, 2024 at 01:26:08PM GMT, Stanislav Fomichev wrote:
+> >> > > On 10/03, Arthur Fabre wrote:
+> >> > > > On Thu Oct 3, 2024 at 12:49 AM CEST, Stanislav Fomichev wrote:
+> >> > > > > On 10/02, Toke Høiland-Jørgensen wrote:
+> >> > > > > > Stanislav Fomichev <stfomichev@gmail.com> writes:
+> >> > > > > > 
+> >> > > > > > > On 10/01, Toke Høiland-Jørgensen wrote:
+> >> > > > > > > > Lorenzo Bianconi <lorenzo@kernel.org> writes:
+> >> > > > > > > > 
+> >> > > > > > > > > > On Mon Sep 30, 2024 at 1:49 PM CEST, Lorenzo Bianconi wrote:
+> >> > > > > > > > > > > > Lorenzo Bianconi <lorenzo@kernel.org> writes:
+> >> > > > > > > > > > > > 
+> >> [...]
+> >> > > > > > > > > > > > > 
+> >> > > > > > > > > > > > > I like this 'fast' KV approach but I guess we should really evaluate its
+> >> > > > > > > > > > > > > impact on performances (especially for xdp) since, based on the kfunc calls
+> >> > > > > > > > > > > > > order in the ebpf program, we can have one or multiple memmove/memcpy for
+> >> > > > > > > > > > > > > each packet, right?
+> >> > > > > > > > > > > > 
+> >> > > > > > > > > > > > Yes, with Arthur's scheme, performance will be ordering dependent. Using
+> >> 
+> >> I really like the *compact* Key-Value (KV) store idea from Arthur.
+> >>  - The question is it is fast enough?
+> >> 
+> >> I've promised Arthur to XDP micro-benchmark this, if he codes this up to
+> >> be usable in the XDP code path.  Listening to the LPC recording I heard
+> >> that Alexei also saw potential and other use-case for this kind of
+> >> fast-and-compact KV approach.
+> >> 
+> >> I have high hopes for the performance, as Arthur uses POPCNT instruction
+> >> which is *very* fast[1]. I checked[2] AMD Zen 3 and 4 have Ops/Latency=1
+> >> and Reciprocal throughput 0.25.
+> >> 
+> >>  [1] https://www.agner.org/optimize/blog/read.php?i=853#848
+> >>  [2] https://www.agner.org/optimize/instruction_tables.pdf
+> >> 
+> >> [...]
+> >> > > > There are two different use-cases for the metadata:
+> >> > > > 
+> >> > > > * "Hardware" metadata (like the hash, rx_timestamp...). There are only a
+> >> > > >    few well known fields, and only XDP can access them to set them as
+> >> > > >    metadata, so storing them in a struct somewhere could make sense.
+> >> > > > 
+> >> > > > * Arbitrary metadata used by services. Eg a TC filter could set a field
+> >> > > >    describing which service a packet is for, and that could be reused for
+> >> > > >    iptables, routing, socket dispatch...
+> >> > > >    Similarly we could set a "packet_id" field that uniquely identifies a
+> >> > > >    packet so we can trace it throughout the network stack (through
+> >> > > >    clones, encap, decap, userspace services...).
+> >> > > >    The skb->mark, but with more room, and better support for sharing it.
+> >> > > > 
+> >> > > > We can only know the layout ahead of time for the first one. And they're
+> >> > > > similar enough in their requirements (need to be stored somewhere in the
+> >> > > > SKB, have a way of retrieving each one individually, that it seems to
+> >> > > > make sense to use a common API).
+> >> > > 
+> >> > > Why not have the following layout then?
+> >> > > 
+> >> > > +---------------+-------------------+----------------------------------------+------+
+> >> > > | more headroom | user-defined meta | hw-meta (potentially fixed skb format) | data |
+> >> > > +---------------+-------------------+----------------------------------------+------+
+> >> > >                  ^                                                            ^
+> >> > >              data_meta                                                      data
+> >> > > 
+> >> > > You obviously still have a problem of communicating the layout if you
+> >> > > have some redirects in between, but you, in theory still have this
+> >> > > problem with user-defined metadata anyway (unless I'm missing
+> >> > > something).
+> >> > > 
+> >> 
+> >> Hmm, I think you are missing something... As far as I'm concerned we are
+> >> discussing placing the KV data after the xdp_frame, and not in the XDP
+> >> data_meta area (as your drawing suggests).  The xdp_frame is stored at
+> >> the very top of the headroom.  Lorenzo's patchset is extending struct
+> >> xdp_frame and now we are discussing to we can make a more flexible API
+> >> for extending this. I understand that Toke confirmed this here [3].  Let
+> >> me know if I missed something :-)
+> >> 
+> >>  [3] https://lore.kernel.org/all/874j62u1lb.fsf@toke.dk/
+> >>
+> >> As part of designing this flexible API, we/Toke are trying hard not to
+> >> tie this to a specific data area.  This is a good API design, keeping it
+> >> flexible enough that we can move things around should the need arise.
+> >> 
+> >> I don't think it is viable to store this KV data in XDP data_meta area,
+> >> because existing BPF-prog's already have direct memory (write) access
+> >> and can change size of area, which creates too much headache with
+> >> (existing) BPF-progs creating unintentional breakage for the KV store,
+> >> which would then need extensive checks to handle random corruptions
+> >> (slowing down KV-store code).
+> >
+> > Yes, I'm definitely missing the bigger picture. If we want to have a global
+> > metadata registry in the kernel, why can't it be built on top of the existing
+> > area?
+> 
+> Because we have no way of preventing existing XDP programs from
+> overwriting (corrupting) the area using the xdp_adjust_meta() API and
+> data_meta field.
 
-syzbot found the following issue on:
+True, but this can be solved with some new BPF_F_XDP_HAS_FRAGS-like
+flag (which can reject loading if there is some incompatibility)?
+Even in the new KV-metadata world, 2+ programs still need to be
+aware of the new method to work correctly. But I do see your point
+that it's better to not apply any metadata than apply something
+that's corrupt/overridden.
 
-HEAD commit:    c02d24a5af66 Add linux-next specific files for 20241003
-git tree:       linux-next
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=17382707980000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=94f9caf16c0af42d
-dashboard link: https://syzkaller.appspot.com/bug?extid=7e46cdef14bf496a3ab4
-compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=10b82707980000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16f4c327980000
+> But in a sense the *memory area* is shared between the two APIs, in the
+> sense that they both use the headroom before the packet data, just from
+> opposite ends. So if you store lots of data using the new KV API, that
+> space will no longer be available for xdp_adjust_{head,meta}. But the
+> kernel can enforce this so we don't get programs corrupting the KV
+> format.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/641e642c9432/disk-c02d24a5.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/98aaf20c29e0/vmlinux-c02d24a5.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/c23099f2d86b/bzImage-c02d24a5.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+7e46cdef14bf496a3ab4@syzkaller.appspotmail.com
-
-------------[ cut here ]------------
-virt_to_cache: Object is not a Slab page!
-WARNING: CPU: 0 PID: 5232 at mm/slub.c:4655 virt_to_cache mm/slub.c:4655 [inline]
-WARNING: CPU: 0 PID: 5232 at mm/slub.c:4655 __do_krealloc mm/slub.c:4753 [inline]
-WARNING: CPU: 0 PID: 5232 at mm/slub.c:4655 krealloc_noprof+0x1b3/0x2e0 mm/slub.c:4838
-Modules linked in:
-CPU: 0 UID: 0 PID: 5232 Comm: syz-executor250 Not tainted 6.12.0-rc1-next-20241003-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/13/2024
-RIP: 0010:virt_to_cache mm/slub.c:4655 [inline]
-RIP: 0010:__do_krealloc mm/slub.c:4753 [inline]
-RIP: 0010:krealloc_noprof+0x1b3/0x2e0 mm/slub.c:4838
-Code: 45 31 ff 45 31 f6 45 31 ed e9 21 ff ff ff c6 05 4e 2a 14 0e 01 90 48 c7 c7 24 f2 0b 8e 48 c7 c6 44 f2 0b 8e e8 3e 19 63 ff 90 <0f> 0b 90 90 e9 d9 fe ff ff f3 0f 1e fa 41 8b 45 08 f7 d0 a8 88 0f
-RSP: 0018:ffffc90003c36ba8 EFLAGS: 00010246
-RAX: 3f2bb101b90db800 RBX: 0000000000000000 RCX: ffff88802bb01e00
-RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000000
-RBP: ffff88807849c000 R08: ffffffff8155d412 R09: 1ffff110170c519a
-R10: dffffc0000000000 R11: ffffed10170c519b R12: 0000000000004000
-R13: 0000000000000201 R14: 0000000000100cc0 R15: dffffc0000000000
-FS:  0000555587952380(0000) GS:ffff8880b8600000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00005594dac5c5d8 CR3: 00000000786d6000 CR4: 00000000003526f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- push_jmp_history+0x13c/0x5c0 kernel/bpf/verifier.c:3497
- do_check+0x6716/0xfe40 kernel/bpf/verifier.c:18352
- do_check_common+0x14bd/0x1dd0 kernel/bpf/verifier.c:21618
- do_check_main kernel/bpf/verifier.c:21709 [inline]
- bpf_check+0x18a25/0x1e320 kernel/bpf/verifier.c:22421
- bpf_prog_load+0x1667/0x20f0 kernel/bpf/syscall.c:2846
- __sys_bpf+0x4ee/0x810 kernel/bpf/syscall.c:5634
- __do_sys_bpf kernel/bpf/syscall.c:5741 [inline]
- __se_sys_bpf kernel/bpf/syscall.c:5739 [inline]
- __x64_sys_bpf+0x7c/0x90 kernel/bpf/syscall.c:5739
- do_syscall_x64 arch/x86/entry/common.c:52 [inline]
- do_syscall_64+0xf3/0x230 arch/x86/entry/common.c:83
- entry_SYSCALL_64_after_hwframe+0x77/0x7f
-RIP: 0033:0x7fc05a9603e9
-Code: 48 83 c4 28 c3 e8 37 17 00 00 0f 1f 80 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffd106d44d8 EFLAGS: 00000246 ORIG_RAX: 0000000000000141
-RAX: ffffffffffffffda RBX: 00007ffd106d46b8 RCX: 00007fc05a9603e9
-RDX: 0000000000000048 RSI: 00000000200054c0 RDI: 0000000000000005
-RBP: 00007fc05a9d4610 R08: 0000000000000000 R09: 0000000000000000
-R10: 00000000ffffffff R11: 0000000000000246 R12: 0000000000000001
-R13: 00007ffd106d46a8 R14: 0000000000000001 R15: 0000000000000001
- </TASK>
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-
-If the report is already addressed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
-
-If you want to overwrite report's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the report is a duplicate of another one, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
+Ack, let's see how it shapes out. My main concern comes from the
+growing api surface where for af_xdp it's one mechanism, for xdp
+redirect it's another. And for Jakub's consumption from userspace
+it's gonna be another special case probably (to read it out from the
+headroom head)? Idk, maybe it's fine as long as each case is clearly
+documented.
