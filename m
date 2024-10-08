@@ -1,28 +1,28 @@
 Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2A321C1AAE
-	for <bpf@vger.kernel.org>; Tue,  8 Oct 2024 09:05:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05B281C2DC3
+	for <bpf@vger.kernel.org>; Tue,  8 Oct 2024 09:05:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728378314; cv=none; b=pmd6d42ypsUOfQUoNHsWLRaNPKDuuDO/4w6G0qc40bjC7K7q85Uy/j6LbLcTg6rcQMaf/55Wu1gVe6+Br7OemldN6MfusWEMrpS0zUlCwUZVf/3weQF1wujBskEm4BBA5LVvturoJp/kO0MomQkWggYPa5Gy8FEbkl8+M1vbwMo=
+	t=1728378315; cv=none; b=KPAdOnXmg3vfN/p+FGih+icuWd7v3Vm4g3iOFEzkP1OmaFPaHv3Upr7cpuVgrR8W89rGaVCXCdpLkAMwhpslk3qLflL9E2EHZTGprFkHevWJ80ZJ5318J/xcKmc5QP4XhVFmvtHUAYr8XEIH7745f2ShjF5cihqKKG1UT3c4zqI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728378314; c=relaxed/simple;
-	bh=LAk1jG1ITzlWp360oTvvxr1sRM7zvgsLy1iTym9pByE=;
+	s=arc-20240116; t=1728378315; c=relaxed/simple;
+	bh=YZClfy9Bri4+3Vtc6QLb3qS16lWXR2kMUnMh7HJ5ZKU=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=b6qLfSe6lS01iJsBwK833fOCNzQlue6n8Kcc2zLPu/d6zSfynSPHTIiAJV1role8zC+JGl8el5mghAoBA3vIzpQzy1Z1WJqkCI+30KmxmMHac+oBlRs2pn7Oig8ggw91CGSzAYPYM5eTEKln33yjxIQVYfnlg1NjF3VtaLMjtf0=
+	 MIME-Version; b=FZCOgY1xMkEkZJwRrFELqbBlPFqt3uCRGEy6rlJouKTuapMNy2mIOTvzRirjhrGJCn0ILb2D4I8yY2Wd1x0kfoc+AQ5ynGK2Xx1z2X6noUSv0Qqr4+nhvwp+YtG0r3g1ahb0V+tvYpMvnCwaIb1IsLsXdQr4LoI0sArIdLcQumY=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
 Received: from mail.maildlp.com (unknown [172.19.163.216])
-	by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4XN9841S5Tz4f3lfh
-	for <bpf@vger.kernel.org>; Tue,  8 Oct 2024 17:04:52 +0800 (CST)
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4XN9852vjSz4f3lfY
+	for <bpf@vger.kernel.org>; Tue,  8 Oct 2024 17:04:53 +0800 (CST)
 Received: from mail02.huawei.com (unknown [10.116.40.252])
-	by mail.maildlp.com (Postfix) with ESMTP id BA1671A08FC
-	for <bpf@vger.kernel.org>; Tue,  8 Oct 2024 17:05:09 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTP id EAFDB1A08FC
+	for <bpf@vger.kernel.org>; Tue,  8 Oct 2024 17:05:10 +0800 (CST)
 Received: from huaweicloud.com (unknown [10.175.124.27])
-	by APP3 (Coremail) with SMTP id _Ch0CgB3yobB9QRnm_6TDQ--.2069S8;
-	Tue, 08 Oct 2024 17:05:09 +0800 (CST)
+	by APP3 (Coremail) with SMTP id _Ch0CgB3yobB9QRnm_6TDQ--.2069S10;
+	Tue, 08 Oct 2024 17:05:10 +0800 (CST)
 From: Hou Tao <houtao@huaweicloud.com>
 To: bpf@vger.kernel.org
 Cc: Martin KaFai Lau <martin.lau@linux.dev>,
@@ -40,9 +40,9 @@ Cc: Martin KaFai Lau <martin.lau@linux.dev>,
 	Yafang Shao <laoar.shao@gmail.com>,
 	houtao1@huawei.com,
 	xukuohai@huawei.com
-Subject: [PATCH bpf 4/7] bpf: Check the validity of nr_words in bpf_iter_bits_new()
-Date: Tue,  8 Oct 2024 17:17:15 +0800
-Message-Id: <20241008091718.3797027-5-houtao@huaweicloud.com>
+Subject: [PATCH bpf 6/7] selftests/bpf: Test multiplication overflow of nr_bits in bits_iter
+Date: Tue,  8 Oct 2024 17:17:17 +0800
+Message-Id: <20241008091718.3797027-7-houtao@huaweicloud.com>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20241008091718.3797027-1-houtao@huaweicloud.com>
 References: <20241008091718.3797027-1-houtao@huaweicloud.com>
@@ -53,10 +53,10 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_Ch0CgB3yobB9QRnm_6TDQ--.2069S8
-X-Coremail-Antispam: 1UD129KBjvdXoW7JFWfZFykCrWrCr15WryxuFg_yoWkGrb_Gr
-	WjqFyDGr45Can3tw1qyrn2vryaqw1kKFWkuw43tr95C3Wru3Z5Jr1rtr98AayDWrnrCFsx
-	t393XrWqgr1avjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+X-CM-TRANSID:_Ch0CgB3yobB9QRnm_6TDQ--.2069S10
+X-Coremail-Antispam: 1UD129KBjvdXoWrKFW5Wr48Zr47KryUCF1xXwb_yoWDurXEyw
+	4Sva48Kr4UtF97tFykZrn3urW5Cws29rWxGF43trWfA3WUXw1rJF4ktr18Zry8WrW5t39x
+	Z3WqqF10gw43KjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
 	9fnUUIcSsGvfJTRUUUbg8YFVCjjxCrM7AC8VAFwI0_Wr0E3s1l1xkIjI8I6I8E6xAIw20E
 	Y4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l82xGYIkIc2x26280x7IE14v26r126s
 	0DM28IrcIa0xkI8VCY1x0267AKxVW5JVCq3wA2ocxC64kIII0Yj41l84x0c7CEw4AK67xG
@@ -75,39 +75,37 @@ X-CM-SenderInfo: xkrx3t3r6k3tpzhluzxrxghudrp/
 
 From: Hou Tao <houtao1@huawei.com>
 
-Check the validity of nr_words in bpf_iter_bits_new(). Otherwise, when
-there is multiplication overflow for nr_bits (e.g., nr_words = 67108865,
-nr_bits will be 64), there may be stack corruption due to
-bpf_probe_read_kernel_common().
+Add a test to verify the multiplication overflow of nr_bits in bits_iter.
+When nr_words is assigned as 67108865, nr_bits becomes 64, causing
+bpf_probe_read_kernel_common() to corrupt the stack.
 
 Signed-off-by: Hou Tao <houtao1@huawei.com>
 ---
- kernel/bpf/helpers.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ .../selftests/bpf/progs/verifier_bits_iter.c       | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
 
-diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-index 9484b5f7c4c0..6c0205d5018c 100644
---- a/kernel/bpf/helpers.c
-+++ b/kernel/bpf/helpers.c
-@@ -2851,6 +2851,9 @@ struct bpf_iter_bits {
- 	__u64 __opaque[2];
- } __aligned(8);
- 
-+/* nr_bits only has 31 bits */
-+#define BITS_ITER_NR_WORDS_MAX ((1U << 31) / BITS_PER_TYPE(u64))
+diff --git a/tools/testing/selftests/bpf/progs/verifier_bits_iter.c b/tools/testing/selftests/bpf/progs/verifier_bits_iter.c
+index f4da4d508ddb..344b7eac15c8 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_bits_iter.c
++++ b/tools/testing/selftests/bpf/progs/verifier_bits_iter.c
+@@ -151,3 +151,17 @@ int zero_words(void)
+ 		nr++;
+ 	return nr;
+ }
 +
- struct bpf_iter_bits_kern {
- 	union {
- 		unsigned long *bits;
-@@ -2894,6 +2897,8 @@ bpf_iter_bits_new(struct bpf_iter_bits *it, const u64 *unsafe_ptr__ign, u32 nr_w
- 
- 	if (!unsafe_ptr__ign || !nr_words)
- 		return -EINVAL;
-+	if (nr_words > BITS_ITER_NR_WORDS_MAX)
-+		return -E2BIG;
- 
- 	/* Optimization for u64 mask */
- 	if (nr_bits == 64) {
++SEC("syscall")
++__description("big words")
++__success __retval(0)
++int big_words(void)
++{
++	u64 data[8] = {0x1, 0x1, 0x1, 0x1, 0x1, 0x1, 0x1, 0x1};
++	int nr = 0;
++	int *bit;
++
++	bpf_for_each(bits, bit, &data[0], 67108865)
++		nr++;
++	return nr;
++}
 -- 
 2.29.2
 
