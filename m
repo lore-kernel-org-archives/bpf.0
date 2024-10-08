@@ -1,28 +1,28 @@
 Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E64913A878
-	for <bpf@vger.kernel.org>; Tue,  8 Oct 2024 09:02:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11FB816DEB4
+	for <bpf@vger.kernel.org>; Tue,  8 Oct 2024 09:02:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728378154; cv=none; b=n4ixbKJlNFX1vy5zjeRGIReh81sTyARXw8oxUFJwV7ws+vhFbx5JONV8JUYQQQt9FYZehAoLzSwHHfhvIgzWGBFFw1c/FnskJDHzJCdF1luCOJeG3XKkp/bTKNPIa4StrjIVEsLwCroniW7XHG/8AEITq2zBGB4faojBfmvl/NA=
+	t=1728378154; cv=none; b=DX5QqqjxtdIfd06yV2+/xejGs+If4E31bnZcPIjthtGRTEDwiFFjsBkxO1pZZjs9tx6qqBLEMo1grLDmxVGXm8TGO/6xdBvj2LHQSSdJCE/KgpM2QO3yHlq3yqunMg0IXXIu0l/eXih9LhjQPpPoDpFZWTCR08lwljtn+XbUJaU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1728378154; c=relaxed/simple;
-	bh=RvE+LTUJOvFTb5I4Ku5u7U5B5d+nmKjUsauimT3CG8U=;
+	bh=8lAeQSX2SWsoFS95RbSvF8IAzPpYQeVpyKHetiCvKXE=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=HX777IELracaRu50uvERJLLVXSSaX/jVnh9y5TLM+MnMKFhgNST6/bwO94ZBBkKo1cAMGRRhYzFcTHg4u6hkOMS9FjQu2qeAD8S9WO66L2LVNjWC/YaJ3omLlylAS+BcBqf6SPdrEOKEGCuO1+xQhtRhvpkAip8CqS5iYj7cVq8=
+	 MIME-Version; b=jBUr/Y9xB7M211CSu0+Gw6qhhGeVOnBe/10xKnkNN1JrEGPWuMzZj5G2Jhxu1HSK1VDLVX4sZDsqTGFeimjoJc9+r8BpHN0jcGkDEvS3THvGfPOexJEHkjzTWqXAeezgNdnWsOR7euZRaoDaVhT+8tR/nurGHsiOtChBWWYJRU8=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.216])
-	by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4XN9552QbVz4f3jqx
-	for <bpf@vger.kernel.org>; Tue,  8 Oct 2024 17:02:17 +0800 (CST)
+Received: from mail.maildlp.com (unknown [172.19.93.142])
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4XN94x5vHjz4f3lfT
+	for <bpf@vger.kernel.org>; Tue,  8 Oct 2024 17:02:09 +0800 (CST)
 Received: from mail02.huawei.com (unknown [10.116.40.128])
-	by mail.maildlp.com (Postfix) with ESMTP id 10FF81A08FC
-	for <bpf@vger.kernel.org>; Tue,  8 Oct 2024 17:02:29 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTP id 5CE111A018D
+	for <bpf@vger.kernel.org>; Tue,  8 Oct 2024 17:02:27 +0800 (CST)
 Received: from huaweicloud.com (unknown [10.175.112.60])
-	by APP4 (Coremail) with SMTP id gCh0CgDH+sYd9QRnbOEHDg--.25681S12;
-	Tue, 08 Oct 2024 17:02:28 +0800 (CST)
+	by APP4 (Coremail) with SMTP id gCh0CgDH+sYd9QRnbOEHDg--.25681S9;
+	Tue, 08 Oct 2024 17:02:27 +0800 (CST)
 From: Hou Tao <houtao@huaweicloud.com>
 To: bpf@vger.kernel.org
 Cc: Martin KaFai Lau <martin.lau@linux.dev>,
@@ -39,9 +39,9 @@ Cc: Martin KaFai Lau <martin.lau@linux.dev>,
 	John Fastabend <john.fastabend@gmail.com>,
 	houtao1@huawei.com,
 	xukuohai@huawei.com
-Subject: [PATCH bpf-next 08/16] bpf: Handle bpf_dynptr_user in bpf syscall when it is used as input
-Date: Tue,  8 Oct 2024 17:14:53 +0800
-Message-ID: <20241008091501.8302-9-houtao@huaweicloud.com>
+Subject: [PATCH bpf-next 05/16] bpf: Support map key with dynptr in verifier
+Date: Tue,  8 Oct 2024 17:14:50 +0800
+Message-ID: <20241008091501.8302-6-houtao@huaweicloud.com>
 X-Mailer: git-send-email 2.45.0
 In-Reply-To: <20241008091501.8302-1-houtao@huaweicloud.com>
 References: <20241008091501.8302-1-houtao@huaweicloud.com>
@@ -52,11 +52,11 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:gCh0CgDH+sYd9QRnbOEHDg--.25681S12
-X-Coremail-Antispam: 1UD129KBjvJXoWxCF45CFWUWr45Jr1DCw18Grg_yoWrtry3pF
-	W8WryfZrWFvr43Jr95J3WFva1rWrn2qw1UG3srJas5W3WDXrZ8Xr1xtFZYgryY9FykXrn8
-	Jr4Dta4rCry8ArJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUPvb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+X-CM-TRANSID:gCh0CgDH+sYd9QRnbOEHDg--.25681S9
+X-Coremail-Antispam: 1UD129KBjvJXoW3ArWxXw48Aw47ZrWkKw15Jwb_yoW3try5pF
+	4kGa4Sgr1kKr42vwsxtFsrAry5Kw4xZw47CrWFg340vFy8Jr909ry0qFy5ur15trWkA3y7
+	Aws0qFZ0v3WUJFDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUPqb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
 	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAV
 	Cq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0
 	rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x0267
@@ -67,179 +67,272 @@ X-Coremail-Antispam: 1UD129KBjvJXoWxCF45CFWUWr45Jr1DCw18Grg_yoWrtry3pF
 	AFwI0_Jw0_GFyl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAq
 	x4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r
 	43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2IY6xkF
-	7I0E14v26r4UJVWxJr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14
-	v26r4j6F4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuY
-	vjxUoo7KUUUUU
+	7I0E14v26F4j6r4UJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI
+	0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZFpf9x
+	07Udl1kUUUUU=
 X-CM-SenderInfo: xkrx3t3r6k3tpzhluzxrxghudrp/
 
 From: Hou Tao <houtao1@huawei.com>
 
-Introduce bpf_copy_from_dynptr_ukey() helper to handle map key with
-bpf_dynptr when the map key is used in map lookup, update, delete and
-get_next_key operations.
+The patch basically does the following three things to enable dynptr key
+for bpf map:
 
-The helper places all variable-length data of these bpf_dynptr_user
-objects at the end of the map key to simplify the allocate and the free
-of map key with dynptr.
+1) Only allow PTR_TO_STACK typed register for dynptr key
+The main reason is that bpf_dynptr can only be defined in the stack, so
+for dynptr key only PTR_TO_STACK typed register is allowed. bpf_dynptr
+could also be represented by CONST_PTR_TO_DYNPTR typed register (e.g.,
+in callback func or subprog), but it is not supported now.
+
+2) Only allow fixed-offset for PTR_TO_STACK register
+Variable-offset for PTR_TO_STACK typed register is disallowed, because
+it is impossible to check whether or not the stack access is aligned
+with BPF_REG_SIZE and is matched with the location of dynptr or
+non-dynptr part in the map key.
+
+3) Check the layout of the stack content is matched with the btf_record
+Firstly check the start offset of the stack access is aligned with
+BPF_REG_SIZE, then check the offset and the size of dynptr/non-dynptr
+parts in the stack content is consistent with the btf_record of the map
+key.
 
 Signed-off-by: Hou Tao <houtao1@huawei.com>
 ---
- kernel/bpf/syscall.c | 98 +++++++++++++++++++++++++++++++++++++++-----
- 1 file changed, 87 insertions(+), 11 deletions(-)
+ kernel/bpf/verifier.c | 143 +++++++++++++++++++++++++++++++++++++++---
+ 1 file changed, 134 insertions(+), 9 deletions(-)
 
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index aa0a500f8fad..5bd75db9b12f 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -1540,10 +1540,83 @@ int __weak bpf_stackmap_copy(struct bpf_map *map, void *key, void *value)
- 	return -ENOTSUPP;
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 2090d2472d7c..345b45edf2a7 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -5042,6 +5042,7 @@ enum bpf_access_src {
+ };
+ 
+ #define ACCESS_F_ZERO_SIZE_ALLOWED BIT(0)
++#define ACCESS_F_DYNPTR_READ_ALLOWED BIT(1)
+ 
+ static int check_stack_range_initialized(struct bpf_verifier_env *env,
+ 					 int regno, int off, int access_size,
+@@ -7267,6 +7268,86 @@ static int check_atomic(struct bpf_verifier_env *env, int insn_idx, struct bpf_i
+ 	return 0;
  }
  
--static void *__bpf_copy_key(void __user *ukey, u64 key_size)
-+static void *bpf_copy_from_dynptr_ukey(const struct bpf_map *map, bpfptr_t ukey)
++struct dynptr_key_state {
++	const struct btf_record *rec;
++	const struct btf_field *cur_dynptr;
++	bool valid_dynptr_id;
++	int cur_dynptr_id;
++};
++
++static int init_dynptr_key_state(struct bpf_verifier_env *env, const struct btf_record *rec,
++				 struct dynptr_key_state *state)
 +{
-+	const struct btf_record *record;
-+	const struct btf_field *field;
-+	struct bpf_dynptr_user *uptr;
-+	struct bpf_dynptr_kern *kptr;
-+	void *key, *new_key, *kdata;
-+	unsigned int key_size, size;
-+	bpfptr_t udata;
 +	unsigned int i;
-+	int err;
 +
-+	key_size = map->key_size;
-+	key = kvmemdup_bpfptr(ukey, key_size);
-+	if (!key)
-+		return ERR_PTR(-ENOMEM);
-+
-+	size = key_size;
-+	record = map->key_record;
-+	for (i = 0; i < record->cnt; i++) {
-+		field = &record->fields[i];
-+		if (field->type != BPF_DYNPTR)
-+			continue;
-+		uptr = key + field->offset;
-+		if (!uptr->size || uptr->size > map->map_extra || uptr->rsvd) {
-+			err = -EINVAL;
-+			goto free_key;
-+		}
-+
-+		size += uptr->size;
-+		/* Overflow ? */
-+		if (size < uptr->size) {
-+			err = -E2BIG;
-+			goto free_key;
-+		}
++	/* Find the first dynptr in the dynptr-key */
++	for (i = 0; i < rec->cnt; i++) {
++		if (rec->fields[i].type == BPF_DYNPTR)
++			break;
++	}
++	if (i >= rec->cnt) {
++		verbose(env, "verifier bug: dynptr not found\n");
++		return -EFAULT;
 +	}
 +
-+	/* Place all dynptrs' data in the end of the key */
-+	new_key = kvrealloc(key, size, GFP_USER | __GFP_NOWARN);
-+	if (!new_key) {
-+		err = -ENOMEM;
-+		goto free_key;
-+	}
++	state->rec = rec;
++	state->cur_dynptr = &rec->fields[i];
++	state->valid_dynptr_id = false;
 +
-+	key = new_key;
-+	kdata = key + key_size;
-+	for (i = 0; i < record->cnt; i++) {
-+		field = &record->fields[i];
-+		if (field->type != BPF_DYNPTR)
-+			continue;
-+
-+		uptr = key + field->offset;
-+		size = uptr->size;
-+		udata = make_bpfptr(uptr->data, bpfptr_is_kernel(ukey));
-+		if (copy_from_bpfptr(kdata, udata, size)) {
-+			err = -EFAULT;
-+			goto free_key;
-+		}
-+		kptr = (struct bpf_dynptr_kern *)uptr;
-+		bpf_dynptr_init(kptr, kdata, BPF_DYNPTR_TYPE_LOCAL, 0, size);
-+		kdata += size;
-+	}
-+
-+	return key;
-+
-+free_key:
-+	kvfree(key);
-+	return ERR_PTR(err);
++	return 0;
 +}
 +
-+static void *__bpf_copy_key(const struct bpf_map *map, void __user *ukey)
- {
--	if (key_size)
--		return vmemdup_user(ukey, key_size);
-+	if (bpf_map_has_dynptr_key(map))
-+		return bpf_copy_from_dynptr_ukey(map, USER_BPFPTR(ukey));
++static int check_dynptr_key_access(struct bpf_verifier_env *env, struct dynptr_key_state *state,
++				   struct bpf_reg_state *reg, u8 stype, int offset)
++{
++	const struct btf_field *dynptr = state->cur_dynptr;
 +
-+	if (map->key_size)
-+		return vmemdup_user(ukey, map->key_size);
++	/* Non-dynptr part before a dynptr or non-dynptr part after
++	 * the last dynptr.
++	 */
++	if (offset < dynptr->offset || offset >= dynptr->offset + dynptr->size) {
++		if (stype == STACK_DYNPTR) {
++			verbose(env,
++				"dynptr-key expects non-dynptr at offset %d cur_dynptr_offset %u\n",
++				offset, dynptr->offset);
++			return -EACCES;
++		}
++	} else {
++		if (stype != STACK_DYNPTR) {
++			verbose(env,
++				"dynptr-key expects dynptr at offset %d cur_dynptr_offset %u\n",
++				offset, dynptr->offset);
++			return -EACCES;
++		}
++
++		/* A dynptr is composed of parts from two dynptrs */
++		if (state->valid_dynptr_id && reg->id != state->cur_dynptr_id) {
++			verbose(env, "malformed dynptr-key at offset %d cur_dynptr_offset %u\n",
++				offset, dynptr->offset);
++			return -EACCES;
++		}
++		if (!state->valid_dynptr_id) {
++			state->valid_dynptr_id = true;
++			state->cur_dynptr_id = reg->id;
++		}
++
++		if (offset == dynptr->offset + dynptr->size - 1) {
++			const struct btf_record *rec = state->rec;
++			unsigned int i;
++
++			for (i = dynptr - rec->fields + 1; i < rec->cnt; i++) {
++				if (rec->fields[i].type == BPF_DYNPTR) {
++					state->cur_dynptr = &rec->fields[i];
++					state->valid_dynptr_id = false;
++					break;
++				}
++			}
++		}
++	}
++
++	return 0;
++}
++
+ /* When register 'regno' is used to read the stack (either directly or through
+  * a helper function) make sure that it's within stack boundary and, depending
+  * on the access type and privileges, that all elements of the stack are
+@@ -7287,6 +7368,8 @@ static int check_stack_range_initialized(
+ 	int err, min_off, max_off, i, j, slot, spi;
+ 	char *err_extra = type == ACCESS_HELPER ? " indirect" : "";
+ 	enum bpf_access_type bounds_check_type;
++	struct dynptr_key_state dynptr_key;
++	bool dynptr_read_allowed;
+ 	/* Some accesses can write anything into the stack, others are
+ 	 * read-only.
+ 	 */
+@@ -7312,9 +7395,14 @@ static int check_stack_range_initialized(
+ 	if (err)
+ 		return err;
  
- 	if (ukey)
- 		return ERR_PTR(-EINVAL);
-@@ -1551,10 +1624,13 @@ static void *__bpf_copy_key(void __user *ukey, u64 key_size)
- 	return NULL;
+-
++	dynptr_read_allowed = access_flags & ACCESS_F_DYNPTR_READ_ALLOWED;
+ 	if (tnum_is_const(reg->var_off)) {
+ 		min_off = max_off = reg->var_off.value + off;
++
++		if (dynptr_read_allowed && (min_off % BPF_REG_SIZE)) {
++			verbose(env, "R%d misaligned offset %d for dynptr-key\n", regno, min_off);
++			return -EACCES;
++		}
+ 	} else {
+ 		/* Variable offset is prohibited for unprivileged mode for
+ 		 * simplicity since it requires corresponding support in
+@@ -7329,6 +7417,12 @@ static int check_stack_range_initialized(
+ 				regno, err_extra, tn_buf);
+ 			return -EACCES;
+ 		}
++
++		if (dynptr_read_allowed) {
++			verbose(env, "R%d variable offset prohibited for dynptr-key\n", regno);
++			return -EACCES;
++		}
++
+ 		/* Only initialized buffer on stack is allowed to be accessed
+ 		 * with variable offset. With uninitialized buffer it's hard to
+ 		 * guarantee that whole memory is marked as initialized on
+@@ -7373,19 +7467,26 @@ static int check_stack_range_initialized(
+ 		return 0;
+ 	}
+ 
++	if (dynptr_read_allowed) {
++		err = init_dynptr_key_state(env, meta->map_ptr->key_record, &dynptr_key);
++		if (err)
++			return err;
++	}
+ 	for (i = min_off; i < max_off + access_size; i++) {
+ 		u8 *stype;
+ 
+ 		slot = -i - 1;
+ 		spi = slot / BPF_REG_SIZE;
+ 		if (state->allocated_stack <= slot) {
+-			verbose(env, "verifier bug: allocated_stack too small");
++			verbose(env, "verifier bug: allocated_stack too small\n");
+ 			return -EFAULT;
+ 		}
+ 
+ 		stype = &state->stack[spi].slot_type[slot % BPF_REG_SIZE];
+ 		if (*stype == STACK_MISC)
+ 			goto mark;
++		if (dynptr_read_allowed && *stype == STACK_DYNPTR)
++			goto mark;
+ 		if ((*stype == STACK_ZERO) ||
+ 		    (*stype == STACK_INVALID && env->allow_uninit_stack)) {
+ 			if (clobber) {
+@@ -7418,18 +7519,28 @@ static int check_stack_range_initialized(
+ 		}
+ 		return -EACCES;
+ mark:
++		if (dynptr_read_allowed) {
++			err = check_dynptr_key_access(env, &dynptr_key,
++						      &state->stack[spi].spilled_ptr, *stype,
++						      i - min_off);
++			if (err)
++				return err;
++		}
++
+ 		/* reading any byte out of 8-byte 'spill_slot' will cause
+ 		 * the whole slot to be marked as 'read'
+-		 */
+-		mark_reg_read(env, &state->stack[spi].spilled_ptr,
+-			      state->stack[spi].spilled_ptr.parent,
+-			      REG_LIVE_READ64);
+-		/* We do not set REG_LIVE_WRITTEN for stack slot, as we can not
++		 *
++		 * We do not set REG_LIVE_WRITTEN for stack slot, as we can not
+ 		 * be sure that whether stack slot is written to or not. Hence,
+ 		 * we must still conservatively propagate reads upwards even if
+ 		 * helper may write to the entire memory range.
+ 		 */
++		mark_reg_read(env, &state->stack[spi].spilled_ptr,
++			      state->stack[spi].spilled_ptr.parent,
++			      REG_LIVE_READ64);
++
+ 	}
++
+ 	return 0;
  }
  
--static void *___bpf_copy_key(bpfptr_t ukey, u64 key_size)
-+static void *___bpf_copy_key(const struct bpf_map *map, bpfptr_t ukey)
- {
--	if (key_size)
--		return kvmemdup_bpfptr(ukey, key_size);
-+	if (bpf_map_has_dynptr_key(map))
-+		return bpf_copy_from_dynptr_ukey(map, ukey);
+@@ -8933,6 +9044,9 @@ static int check_func_arg(struct bpf_verifier_env *env, u32 arg,
+ 		meta->map_uid = reg->map_uid;
+ 		break;
+ 	case ARG_PTR_TO_MAP_KEY:
++	{
++		u32 access_flags = 0;
 +
-+	if (map->key_size)
-+		return kvmemdup_bpfptr(ukey, map->key_size);
- 
- 	if (!bpfptr_is_null(ukey))
- 		return ERR_PTR(-EINVAL);
-@@ -1591,7 +1667,7 @@ static int map_lookup_elem(union bpf_attr *attr)
- 	    !btf_record_has_field(map->record, BPF_SPIN_LOCK))
- 		return -EINVAL;
- 
--	key = __bpf_copy_key(ukey, map->key_size);
-+	key = __bpf_copy_key(map, ukey);
- 	if (IS_ERR(key))
- 		return PTR_ERR(key);
- 
-@@ -1658,7 +1734,7 @@ static int map_update_elem(union bpf_attr *attr, bpfptr_t uattr)
- 		goto err_put;
- 	}
- 
--	key = ___bpf_copy_key(ukey, map->key_size);
-+	key = ___bpf_copy_key(map, ukey);
- 	if (IS_ERR(key)) {
- 		err = PTR_ERR(key);
- 		goto err_put;
-@@ -1705,7 +1781,7 @@ static int map_delete_elem(union bpf_attr *attr, bpfptr_t uattr)
- 		goto err_put;
- 	}
- 
--	key = ___bpf_copy_key(ukey, map->key_size);
-+	key = ___bpf_copy_key(map, ukey);
- 	if (IS_ERR(key)) {
- 		err = PTR_ERR(key);
- 		goto err_put;
-@@ -1757,7 +1833,7 @@ static int map_get_next_key(union bpf_attr *attr)
- 		return -EPERM;
- 
- 	if (ukey) {
--		key = __bpf_copy_key(ukey, map->key_size);
-+		key = __bpf_copy_key(map, ukey);
- 		if (IS_ERR(key))
- 			return PTR_ERR(key);
- 	} else {
-@@ -2054,7 +2130,7 @@ static int map_lookup_and_delete_elem(union bpf_attr *attr)
- 		goto err_put;
- 	}
- 
--	key = __bpf_copy_key(ukey, map->key_size);
-+	key = __bpf_copy_key(map, ukey);
- 	if (IS_ERR(key)) {
- 		err = PTR_ERR(key);
- 		goto err_put;
+ 		/* bpf_map_xxx(..., map_ptr, ..., key) call:
+ 		 * check that [key, key + map->key_size) are within
+ 		 * stack limits and initialized
+@@ -8946,10 +9060,21 @@ static int check_func_arg(struct bpf_verifier_env *env, u32 arg,
+ 			verbose(env, "invalid map_ptr to access map->key\n");
+ 			return -EACCES;
+ 		}
++		/* Only allow PTR_TO_STACK for dynptr-key */
++		if (bpf_map_has_dynptr_key(meta->map_ptr)) {
++			if (base_type(reg->type) != PTR_TO_STACK) {
++				verbose(env, "map dynptr-key requires stack ptr but got %s\n",
++					reg_type_str(env, reg->type));
++				return -EACCES;
++			}
++			access_flags |= ACCESS_F_DYNPTR_READ_ALLOWED;
++		}
++		meta->raw_mode = false;
+ 		err = check_helper_mem_access(env, regno,
+-					      meta->map_ptr->key_size, 0,
+-					      NULL);
++					      meta->map_ptr->key_size, access_flags,
++					      meta);
+ 		break;
++	}
+ 	case ARG_PTR_TO_MAP_VALUE:
+ 		if (type_may_be_null(arg_type) && register_is_null(reg))
+ 			return 0;
 -- 
 2.44.0
 
