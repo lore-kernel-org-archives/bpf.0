@@ -1,242 +1,153 @@
-Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63F4318C35D;
-	Tue,  8 Oct 2024 08:45:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C3DC7603F
+	for <bpf@vger.kernel.org>; Tue,  8 Oct 2024 09:02:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728377132; cv=none; b=lOB9cIwEIfhT4rth71UIBP7OJLH6DOXebzkdAnQN85McpD74eLo/VyWHIEhXQU0CsGtdHpBfd2tycmvS6zq0g6pQxS0DS5rq6XBDNqjfPwTu+CNpdHPN6r0xWQfiCWdV45dG/gND1IY14ErF/5Sguv7n8E2ig6EGDVXCi/WbFFk=
+	t=1728378150; cv=none; b=WREDWvdOLuGErpsGd7cIM/1iK55Jp2YZ987ERVLmWRfAAmZ8Egq8ciGs2TVVaY2AwpWmxq31cU+w4ooGfKOJBrp+yL8XxkaFXCKiNKymeieH4YheTDithhpuHcJmUo+EGos02tgiWAyjwy5TThcTRLnLrFalVEbIMaelBVmA9Wg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728377132; c=relaxed/simple;
-	bh=VIHLJ66eE/wavOygB1PuGao6FeCvbE2xkQRb2vPO9G4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=m7ot4RH3TO3s329m/U3U7RpXqfX1CogP1Mfe0bg8L2qz/OCNRVVqby2r5/xHTaReOR/3GUXV/MdTyEBdPYYU0nvUCodiSoxvxLdpdwZWYsz+MFBCCuqZGb7l80Ob8hRL5aQLgC5y4tOYwdvApGxXJ5y8ztBt5DMplWDCh1xvGV4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SHBIHnJ1; arc=none smtp.client-ip=209.85.208.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SHBIHnJ1"
-Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-5c8967dd2c7so6662957a12.1;
-        Tue, 08 Oct 2024 01:45:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1728377129; x=1728981929; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tjUdOJA4jWMVSrUGgvOSdZl3neMitSFURhlyYwW/SrM=;
-        b=SHBIHnJ16+Ya7nr2cce9T1QavDSakrBNsCdthQdESUiB2fkKYGJ3MuyxhNTl1cP7x4
-         dK5cGunRTQ0JrpiF0ZM+MnyJm/6FQIFwYFOGLxhitru2Puoq2NGegZrguJ/kLUWpWlut
-         jIUsRCozdcI1HMUSEsAJbyk31uCjDBTxY7g2/w+DYHlRiZMr34490FIjZSoXLZKhN8Qy
-         P1dDj3qe49Rftj4C37mXO4jLmt++uYuHl0nF8QW9muaiV/LnnwhQiFtqaX1EUn/FdYF0
-         IH1K78WZNXEQV1zwNoAUI1XCwYpELMxEN5D0n+LrKNYDYF9v50ZMfS/XNrgWvtrTodfO
-         9LlA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728377129; x=1728981929;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=tjUdOJA4jWMVSrUGgvOSdZl3neMitSFURhlyYwW/SrM=;
-        b=GdZ++GdrpKl8yZVSQatBsBIOJGG9gy7HZx6B62p4dwhTwxtvm5sFdc6XWMe3CiCB+4
-         JF+EIJon5RYBeSLbM5KBqdrXmChFNLOKXOL2h0BfBDnV9pgQnPKpptqJ0eX2+dxfvKfm
-         ldzZesnUho5ChFnI6bzGN9qws3V2joYgYUOP3gr7e0yjesIrZInBNYkc8WFBUG4L+1aP
-         pdyJL28law1MpNvm0S42uOFbU1Y1AnfHdNp+Q1HWn/hahvbiG+JmEQnXxm4DVpeJxVKL
-         xJMpCX4g0LtPL5smbKiQtBfQMwpELdd1766CMenKEvm4kl2cup1Pum3gdkhxxdtFuphT
-         dKjw==
-X-Forwarded-Encrypted: i=1; AJvYcCVAn02MAJJO11Oj4YItlBX+L1jsS5Q9ElJhhWbnSfi4l62oTyHt+7eXz5atbe7sIS0aT4I=@vger.kernel.org, AJvYcCWIvQ+TYHM0zide9+a7zxZSS1bUxPc0YNXu6WbxHsmYsopwQ2O1RwMjbvKqiiLSoduGKyq48bAAWXWw0ck9@vger.kernel.org
-X-Gm-Message-State: AOJu0YwTNmCZTaXNdccmbTOkh+l8unho7o6EAu3IpRDvUcy/cfUKUrkA
-	C2hL98fO7l0ombNjF3MqUCAPlyFQJ0YTwAPV0Ob0obxK6gHO+X3C/ffpjEzi9kAIXLYpy+ExSat
-	9IYKhelZRTZyzPfHQ5ueT4gxJpMQ=
-X-Google-Smtp-Source: AGHT+IEVzwOnSYQA1b2F4OqwlA/gmNlLWqBbX9kmps/lSsu6YEwLy8WGawj/FxMV3YlylFOIka6CG/gYsPqDXcjpFyg=
-X-Received: by 2002:a05:6402:5108:b0:5c7:1922:d770 with SMTP id
- 4fb4d7f45d1cf-5c8d2d015cfmr10905346a12.6.1728377128325; Tue, 08 Oct 2024
- 01:45:28 -0700 (PDT)
+	s=arc-20240116; t=1728378150; c=relaxed/simple;
+	bh=hMlQ465msOI+bKPFDzJcTc/5/xgEgFCXP/cnqYD8g2g=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=YhdbYCViZcXJsRRYOtQpm8HyB5uOxr/RwC+7ObIwmUJYtsJiI7zCSHdNj+qv0441YnIU9l61vaw5dYIm3WjjT4BEmxrEi+3E8vCrqi/L8ebow6mf8tXCyE8yWtUW0El+tVmDFbUHGVgtB+Ky6FXojT1qSv5NK3ViJa4XV8Cpnjc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.93.142])
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4XN94v3s5Kz4f3lfY
+	for <bpf@vger.kernel.org>; Tue,  8 Oct 2024 17:02:07 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.128])
+	by mail.maildlp.com (Postfix) with ESMTP id 178651A018D
+	for <bpf@vger.kernel.org>; Tue,  8 Oct 2024 17:02:25 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.175.112.60])
+	by APP4 (Coremail) with SMTP id gCh0CgDH+sYd9QRnbOEHDg--.25681S5;
+	Tue, 08 Oct 2024 17:02:24 +0800 (CST)
+From: Hou Tao <houtao@huaweicloud.com>
+To: bpf@vger.kernel.org
+Cc: Martin KaFai Lau <martin.lau@linux.dev>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Hao Luo <haoluo@google.com>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Jiri Olsa <jolsa@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	houtao1@huawei.com,
+	xukuohai@huawei.com
+Subject: [PATCH bpf-next 01/16] bpf: Introduce map flag BPF_F_DYNPTR_IN_KEY
+Date: Tue,  8 Oct 2024 17:14:46 +0800
+Message-ID: <20241008091501.8302-2-houtao@huaweicloud.com>
+X-Mailer: git-send-email 2.45.0
+In-Reply-To: <20241008091501.8302-1-houtao@huaweicloud.com>
+References: <20241008091501.8302-1-houtao@huaweicloud.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CANpmjNOZ4N5mhqWGvEU9zGBxj+jqhG3Q_eM1AbHp0cbSF=HqFw@mail.gmail.com>
- <20241005164813.2475778-1-snovitoll@gmail.com> <20241005164813.2475778-2-snovitoll@gmail.com>
- <ZwTt-Sq5bsovQI5X@elver.google.com>
-In-Reply-To: <ZwTt-Sq5bsovQI5X@elver.google.com>
-From: Sabyrzhan Tasbolatov <snovitoll@gmail.com>
-Date: Tue, 8 Oct 2024 13:46:17 +0500
-Message-ID: <CACzwLxh1yWXQZ4LAO3gFMjK8KPDFfNOR6wqWhtXyucJ0+YXurw@mail.gmail.com>
-Subject: Re: [PATCH v2 1/1] mm, kasan, kmsan: copy_from/to_kernel_nofault
-To: Marco Elver <elver@google.com>
-Cc: akpm@linux-foundation.org, andreyknvl@gmail.com, bpf@vger.kernel.org, 
-	dvyukov@google.com, glider@google.com, kasan-dev@googlegroups.com, 
-	linux-kernel@vger.kernel.org, linux-mm@kvack.org, ryabinin.a.a@gmail.com, 
-	syzbot+61123a5daeb9f7454599@syzkaller.appspotmail.com, 
-	vincenzo.frascino@arm.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:gCh0CgDH+sYd9QRnbOEHDg--.25681S5
+X-Coremail-Antispam: 1UD129KBjvJXoWxWw4fWr1kKr4Utr17Ar4DCFg_yoW5Gr4xpF
+	s5CrWxCr40qFW7CrWDGa18Zry5Zw43ur1ak3ya9ryrAF12vr9aqr18WF1YyF95tw4jyrWr
+	Xr4UKrWrGa4xZrJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUPFb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUGw
+	A2048vs2IY020Ec7CjxVAFwI0_Gr0_Xr1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
+	w2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
+	W8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v2
+	6rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMc
+	Ij6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_
+	Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AFwI
+	0_Jw0_GFyl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG
+	67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MI
+	IYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E
+	14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJV
+	W8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxU7S_M
+	UUUUU
+X-CM-SenderInfo: xkrx3t3r6k3tpzhluzxrxghudrp/
 
-On Tue, Oct 8, 2024 at 1:32=E2=80=AFPM Marco Elver <elver@google.com> wrote=
-:
->
-> On Sat, Oct 05, 2024 at 09:48PM +0500, Sabyrzhan Tasbolatov wrote:
-> > Instrument copy_from_kernel_nofault() with KMSAN for uninitialized kern=
-el
-> > memory check and copy_to_kernel_nofault() with KASAN, KCSAN to detect
-> > the memory corruption.
-> >
-> > syzbot reported that bpf_probe_read_kernel() kernel helper triggered
-> > KASAN report via kasan_check_range() which is not the expected behaviou=
-r
-> > as copy_from_kernel_nofault() is meant to be a non-faulting helper.
-> >
-> > Solution is, suggested by Marco Elver, to replace KASAN, KCSAN check in
-> > copy_from_kernel_nofault() with KMSAN detection of copying uninitilaize=
-d
-> > kernel memory. In copy_to_kernel_nofault() we can retain
-> > instrument_write() for the memory corruption instrumentation but before
-> > pagefault_disable().
->
-> I don't understand why it has to be before the whole copy i.e. before
-> pagefault_disable()?
->
+From: Hou Tao <houtao1@huawei.com>
 
-I was unsure about this decision as well - I should've waited for your resp=
-onse
-before sending the PATCH when I was asking for clarification. Sorry
-for the confusion,
-I thought that what you meant as the instrumentation was already done after
-pagefault_disable().
+Introduce map flag BPF_F_DYNPTR_IN_KEY to support dynptr in map key. Add
+the corresponding helper bpf_map_has_dynptr_key() to check whether or
+not the dynptr-key is supported.
 
-Let me send the v3 with your suggested diff, I will also ask Andrew to drop
-merged to -mm patch.
-https://lore.kernel.org/all/20241008020150.4795AC4CEC6@smtp.kernel.org/
+For map with dynptr key support, it needs to use map_extra to specify
+the maximum length of these dynptrs. The implementation of the map will
+check whether map_extra is smaller than the limitation imposed by memory
+allocation during map creation. It may also use map_extra to optimizate
+the memory allocation for dynptr.
 
-Thanks for the review.
+Signed-off-by: Hou Tao <houtao1@huawei.com>
+---
+ include/linux/bpf.h            | 5 +++++
+ include/uapi/linux/bpf.h       | 3 +++
+ kernel/bpf/syscall.c           | 1 +
+ tools/include/uapi/linux/bpf.h | 3 +++
+ 4 files changed, 12 insertions(+)
 
-> I think my suggestion was to only check the memory where no fault
-> occurred. See below.
->
-> > diff --git a/mm/maccess.c b/mm/maccess.c
-> > index 518a25667323..a91a39a56cfd 100644
-> > --- a/mm/maccess.c
-> > +++ b/mm/maccess.c
-> > @@ -15,7 +15,7 @@ bool __weak copy_from_kernel_nofault_allowed(const vo=
-id *unsafe_src,
-> >
-> >  #define copy_from_kernel_nofault_loop(dst, src, len, type, err_label) =
-       \
-> >       while (len >=3D sizeof(type)) {                                  =
- \
-> > -             __get_kernel_nofault(dst, src, type, err_label);         =
-       \
-> > +             __get_kernel_nofault(dst, src, type, err_label);        \
-> >               dst +=3D sizeof(type);                                   =
- \
-> >               src +=3D sizeof(type);                                   =
- \
-> >               len -=3D sizeof(type);                                   =
- \
-> > @@ -31,6 +31,8 @@ long copy_from_kernel_nofault(void *dst, const void *=
-src, size_t size)
-> >       if (!copy_from_kernel_nofault_allowed(src, size))
-> >               return -ERANGE;
-> >
-> > +     /* Make sure uninitialized kernel memory isn't copied. */
-> > +     kmsan_check_memory(src, size);
-> >       pagefault_disable();
-> >       if (!(align & 7))
-> >               copy_from_kernel_nofault_loop(dst, src, size, u64, Efault=
-);
-> > @@ -49,7 +51,7 @@ EXPORT_SYMBOL_GPL(copy_from_kernel_nofault);
-> >
-> >  #define copy_to_kernel_nofault_loop(dst, src, len, type, err_label)  \
-> >       while (len >=3D sizeof(type)) {                                  =
- \
-> > -             __put_kernel_nofault(dst, src, type, err_label);         =
-       \
-> > +             __put_kernel_nofault(dst, src, type, err_label);        \
-> >               dst +=3D sizeof(type);                                   =
- \
-> >               src +=3D sizeof(type);                                   =
- \
-> >               len -=3D sizeof(type);                                   =
- \
-> > @@ -62,6 +64,7 @@ long copy_to_kernel_nofault(void *dst, const void *sr=
-c, size_t size)
-> >       if (!IS_ENABLED(CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS))
-> >               align =3D (unsigned long)dst | (unsigned long)src;
-> >
-> > +     instrument_write(dst, size);
-> >       pagefault_disable();
->
-> So this will check the whole range before the access. But if the copy
-> aborts because of a fault, then we may still end up with false
-> positives.
->
-> Why not something like the below - normally we check the accesses
-> before, but these are debug kernels anyway, so I see no harm in making
-> an exception in this case and checking the memory if there was no fault
-> i.e. it didn't jump to err_label yet. It's also slower because of
-> repeated calls, but these helpers aren't frequently used.
->
-> The alternative is to do the sanitizer check after the entire copy if we
-> know there was no fault at all. But that may still hide real bugs if
-> e.g. it starts copying some partial memory and then accesses an
-> unfaulted page.
->
->
-> diff --git a/mm/maccess.c b/mm/maccess.c
-> index a91a39a56cfd..3ca55ec63a6a 100644
-> --- a/mm/maccess.c
-> +++ b/mm/maccess.c
-> @@ -13,9 +13,14 @@ bool __weak copy_from_kernel_nofault_allowed(const voi=
-d *unsafe_src,
->         return true;
->  }
->
-> +/*
-> + * The below only uses kmsan_check_memory() to ensure uninitialized kern=
-el
-> + * memory isn't leaked.
-> + */
->  #define copy_from_kernel_nofault_loop(dst, src, len, type, err_label)  \
->         while (len >=3D sizeof(type)) {                                  =
- \
->                 __get_kernel_nofault(dst, src, type, err_label);        \
-> +               kmsan_check_memory(src, sizeof(type));                  \
->                 dst +=3D sizeof(type);                                   =
- \
->                 src +=3D sizeof(type);                                   =
- \
->                 len -=3D sizeof(type);                                   =
- \
-> @@ -31,8 +36,6 @@ long copy_from_kernel_nofault(void *dst, const void *sr=
-c, size_t size)
->         if (!copy_from_kernel_nofault_allowed(src, size))
->                 return -ERANGE;
->
-> -       /* Make sure uninitialized kernel memory isn't copied. */
-> -       kmsan_check_memory(src, size);
->         pagefault_disable();
->         if (!(align & 7))
->                 copy_from_kernel_nofault_loop(dst, src, size, u64, Efault=
-);
-> @@ -52,6 +55,7 @@ EXPORT_SYMBOL_GPL(copy_from_kernel_nofault);
->  #define copy_to_kernel_nofault_loop(dst, src, len, type, err_label)    \
->         while (len >=3D sizeof(type)) {                                  =
- \
->                 __put_kernel_nofault(dst, src, type, err_label);        \
-> +               instrument_write(dst, sizeof(type));                    \
->                 dst +=3D sizeof(type);                                   =
- \
->                 src +=3D sizeof(type);                                   =
- \
->                 len -=3D sizeof(type);                                   =
- \
-> @@ -64,7 +68,6 @@ long copy_to_kernel_nofault(void *dst, const void *src,=
- size_t size)
->         if (!IS_ENABLED(CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS))
->                 align =3D (unsigned long)dst | (unsigned long)src;
->
-> -       instrument_write(dst, size);
->         pagefault_disable();
->         if (!(align & 7))
->                 copy_to_kernel_nofault_loop(dst, src, size, u64, Efault);
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 19d8ca8ac960..f61bf427e14e 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -308,6 +308,11 @@ struct bpf_map {
+ 	s64 __percpu *elem_count;
+ };
+ 
++static inline bool bpf_map_has_dynptr_key(const struct bpf_map *map)
++{
++	return map->map_flags & BPF_F_DYNPTR_IN_KEY;
++}
++
+ static inline const char *btf_field_type_name(enum btf_field_type type)
+ {
+ 	switch (type) {
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index c6cd7c7aeeee..07f7df308a01 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -1409,6 +1409,9 @@ enum {
+ 
+ /* Do not translate kernel bpf_arena pointers to user pointers */
+ 	BPF_F_NO_USER_CONV	= (1U << 18),
++
++/* Create a map with bpf_dynptr in key */
++	BPF_F_DYNPTR_IN_KEY     = (1U << 19),
+ };
+ 
+ /* Flags for BPF_PROG_QUERY. */
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index a8f1808a1ca5..bffd803c5977 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -1232,6 +1232,7 @@ static int map_create(union bpf_attr *attr)
+ 
+ 	if (attr->map_type != BPF_MAP_TYPE_BLOOM_FILTER &&
+ 	    attr->map_type != BPF_MAP_TYPE_ARENA &&
++	    !(attr->map_flags & BPF_F_DYNPTR_IN_KEY) &&
+ 	    attr->map_extra != 0)
+ 		return -EINVAL;
+ 
+diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
+index 1fb3cb2636e6..14f223282bfa 100644
+--- a/tools/include/uapi/linux/bpf.h
++++ b/tools/include/uapi/linux/bpf.h
+@@ -1409,6 +1409,9 @@ enum {
+ 
+ /* Do not translate kernel bpf_arena pointers to user pointers */
+ 	BPF_F_NO_USER_CONV	= (1U << 18),
++
++/* Create a map with bpf_dynptr in key */
++	BPF_F_DYNPTR_IN_KEY     = (1U << 19),
+ };
+ 
+ /* Flags for BPF_PROG_QUERY. */
+-- 
+2.44.0
+
