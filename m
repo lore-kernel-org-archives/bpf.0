@@ -1,46 +1,45 @@
-Received: from mailtransmit05.runbox.com (mailtransmit05.runbox.com [185.226.149.38])
+Received: from mailtransmit04.runbox.com (mailtransmit04.runbox.com [185.226.149.37])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E132710E4;
-	Wed,  9 Oct 2024 21:46:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.38
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A5821E132D
+	for <bpf@vger.kernel.org>; Wed,  9 Oct 2024 21:48:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.37
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728510410; cv=none; b=Io6k1mzD3MXZx3HQpu5V0Lg0NgB4Jjlm+LAJa0yQcE5MYJP16jcRDJGuBkVyFZJOLE5RlYLZn1vnVYH2rlXwh8wPwFDVvB+SAdVEHIQRs4oNE+uuGNQa2/Hils7CUKmUk/zTD0A+VmK1fjhHUlkaEwOzFuuHubdyd3lGyaVZwxg=
+	t=1728510536; cv=none; b=N1QiZomB+FLqLaWQk83QYXMIcOupTfdC1fGSsD27Ej40J7pArD/Y3x1zoyWqhuJBccH8pQLVDxVWJo/22wXQpQ0A27TKQhbKJO/bNiKKG6apV8faiXZ3wguV0jcXJtLfPq6QdaSnVFs2sHj3s18ISUeJPMZf3Jdn9rGkeGyf1zw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728510410; c=relaxed/simple;
-	bh=e3SrNTsK0dGD9xesl4OQqQipb7Tulhm6OyotiGyjymc=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=AD+Ye5FaKEQwsWNstJMxHFeA9yrRR+XyIjvOyXcm02CyayRnASj2lksCocLpNdPyg5WuCqmUushjbWuOR46KfaW3cNGlacJEckpfWPYFrCX7n7Ogb2iNzQFkeDojVd+o7dZeNVv8myq7yDrttWV924pxcReS2I67lM6t+4PP8L4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co; spf=pass smtp.mailfrom=rbox.co; dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b=lx3Sij3P; arc=none smtp.client-ip=185.226.149.38
+	s=arc-20240116; t=1728510536; c=relaxed/simple;
+	bh=y20pFWe5bz8pDWZrc5ifjlBq1aQea51l+Z0BBNA5bLs=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=AgUZ95EA3ph307JWDWkMJVgC3zYjOzp+9nwDgYNkIrKQYYSWr0zliVy7b+M8kP9Q9klqdd9biw0nDrr9+TQDrOjtuAdNIZQBCILX11JGiWDdAjzAwLT8uQlgPEf/N+P1KiqFsU1sYrxsjUX7jJdwNlLEGkJHHF93OcPwKEEeWXo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co; spf=pass smtp.mailfrom=rbox.co; dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b=C+pdU2PR; arc=none smtp.client-ip=185.226.149.37
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rbox.co
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b="lx3Sij3P"
+	dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b="C+pdU2PR"
 Received: from mailtransmit03.runbox ([10.9.9.163] helo=aibo.runbox.com)
-	by mailtransmit05.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+	by mailtransmit04.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
 	(Exim 4.93)
 	(envelope-from <mhal@rbox.co>)
-	id 1sye8e-001i73-AQ; Wed, 09 Oct 2024 23:22:32 +0200
+	id 1sye8c-001jIq-2W; Wed, 09 Oct 2024 23:22:30 +0200
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=rbox.co;
-	s=selector1; h=Cc:To:In-Reply-To:References:Message-Id:
-	Content-Transfer-Encoding:Content-Type:MIME-Version:Subject:Date:From;
-	bh=F+RJd+JIpP4NiuqPuwFGdxJw5I73YccdWoYTGb3P+Vo=; b=lx3Sij3PRHC9LVPPD2VBO1LF6W
-	YScFaPpOmYXnga6tKXoPUsc3aWpaaDeRYB2mMJgsEgXUL03orAgB5geetyqDbDQ2zc2EI+ePU5Rwd
-	sbJrBtP/QwxBp7lbLF/8bfwytr5T68ZiEluzLwdSmblSo9vqA7eazq+G+uORbIzvrU0x6zYxfN5g+
-	ZsPLMf2rgA8Yc/E+CnMiyle2e3EY/esZ+Ia7yl7lWpmNumaA2BponFJwYGY5RDBV/8TCYe32npQ+E
-	b5ri6i4Miu8EtmLqzHZYkU9tMtzZQYMLWXWcth/vcLlNqR4v78JDhG4zI54YKNRrkj4fxmUs/VVAW
-	M+ebBXhw==;
+	s=selector1; h=Cc:To:Content-Transfer-Encoding:Content-Type:MIME-Version:
+	Message-Id:Date:Subject:From; bh=KfztzwfvgFK4GfnvzmV2UW/nnlWg1C2EdGrUazrp7Ak=
+	; b=C+pdU2PR6ypCphnMxCFZLFUo4qj4BrqsU6J2zObjUfdPK5EaumioPjN9Hv2r4udilr0u3R08l
+	VRP24FeicYm8UKR/tKIxeGCW7Lg93EwKwlLY4F1oEJcH0dD+gliqWT9C1Q31oJ314ya4mjAy4NvlN
+	oV7GuWh0hymrwljauR1QaSC/nucutNlZfHXOQuhJLwtIFjB18fB0JIkSJlzzwTNU1me90E6qSBBbA
+	IYQXwR5I7rsJwnzzRaBPgaQzdvPFy2BXx09DVzgi2+OM8qqDnIw7iFvWETMpFxzx+gjJtWUwZhzK8
+	/72b6G9bgKjz5UT+/JDvBs7Od0S+/IQU3OETpg==;
 Received: from [10.9.9.74] (helo=submission03.runbox)
 	by mailtransmit03.runbox with esmtp (Exim 4.86_2)
 	(envelope-from <mhal@rbox.co>)
-	id 1sye8d-0004h3-PV; Wed, 09 Oct 2024 23:22:32 +0200
+	id 1sye8b-0004gs-Oc; Wed, 09 Oct 2024 23:22:29 +0200
 Received: by submission03.runbox with esmtpsa  [Authenticated ID (604044)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
 	(Exim 4.93)
-	id 1sye8S-00EL6w-Il; Wed, 09 Oct 2024 23:22:20 +0200
+	id 1sye8Q-00EL6w-4B; Wed, 09 Oct 2024 23:22:18 +0200
 From: Michal Luczaj <mhal@rbox.co>
-Date: Wed, 09 Oct 2024 23:20:53 +0200
-Subject: [PATCH bpf 4/4] bpf, vsock: Drop static vsock_bpf_prot
- initialization
+Subject: [PATCH bpf 0/4] bpf, vsock: Fixes related to sockmap/sockhash
+ redirection
+Date: Wed, 09 Oct 2024 23:20:49 +0200
+Message-Id: <20241009-vsock-fixes-for-redir-v1-0-e455416f6d78@rbox.co>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -49,9 +48,10 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20241009-vsock-fixes-for-redir-v1-4-e455416f6d78@rbox.co>
-References: <20241009-vsock-fixes-for-redir-v1-0-e455416f6d78@rbox.co>
-In-Reply-To: <20241009-vsock-fixes-for-redir-v1-0-e455416f6d78@rbox.co>
+X-B4-Tracking: v=1; b=H4sIALHzBmcC/x3LQQqDQAxG4atI1g1kRNT2KqULO/6joeBIAiIM3
+ r2Dyw/eK+QwhdOrKWQ41DVvFeHRUFynbQHrXE2ttF0QefLhOf446QnnlI0NsxqP/SADAsYoHdV
+ 3N9xJXd/03RN9rusPip0H4WwAAAA=
+X-Change-ID: 20241009-vsock-fixes-for-redir-86707e1e8c04
 To: "David S. Miller" <davem@davemloft.net>, 
  Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
  Paolo Abeni <pabeni@redhat.com>, John Fastabend <john.fastabend@gmail.com>, 
@@ -64,36 +64,31 @@ Cc: netdev@vger.kernel.org, bpf@vger.kernel.org,
  Michal Luczaj <mhal@rbox.co>
 X-Mailer: b4 0.14.2
 
-vsock_bpf_prot is set up at runtime. Remove the superfluous init.
+Series consists of few fixes for issues uncovered while working on a BPF
+sockmap/sockhash redirection selftest.
 
-No functional change intended.
+The last patch is more of a RFC clean up attempt. Patch claims that there's
+no functional change, but effectively it removes (never touched?) reference
+to sock_map_unhash().
 
-Fixes: 634f1a7110b4 ("vsock: support sockmap")
 Signed-off-by: Michal Luczaj <mhal@rbox.co>
 ---
- net/vmw_vsock/vsock_bpf.c | 8 --------
- 1 file changed, 8 deletions(-)
+Michal Luczaj (4):
+      bpf, sockmap: SK_DROP on attempted redirects of unsupported af_vsock
+      vsock: Update rx_bytes on read_skb()
+      vsock: Update msg_count on read_skb()
+      bpf, vsock: Drop static vsock_bpf_prot initialization
 
-diff --git a/net/vmw_vsock/vsock_bpf.c b/net/vmw_vsock/vsock_bpf.c
-index c42c5cc18f324108e044772e957c8d42c92ead8c..4aa6e74ec2957b28b9e9d8ce0b5f4d5c289a9276 100644
---- a/net/vmw_vsock/vsock_bpf.c
-+++ b/net/vmw_vsock/vsock_bpf.c
-@@ -114,14 +114,6 @@ static int vsock_bpf_recvmsg(struct sock *sk, struct msghdr *msg,
- 	return copied;
- }
- 
--/* Copy of original proto with updated sock_map methods */
--static struct proto vsock_bpf_prot = {
--	.close = sock_map_close,
--	.recvmsg = vsock_bpf_recvmsg,
--	.sock_is_readable = sk_msg_is_readable,
--	.unhash = sock_map_unhash,
--};
--
- static void vsock_bpf_rebuild_protos(struct proto *prot, const struct proto *base)
- {
- 	*prot        = *base;
+ include/net/sock.h                      |  5 +++++
+ net/core/sock_map.c                     |  8 ++++++++
+ net/vmw_vsock/virtio_transport_common.c | 14 +++++++++++---
+ net/vmw_vsock/vsock_bpf.c               |  8 --------
+ 4 files changed, 24 insertions(+), 11 deletions(-)
+---
+base-commit: 94e354adf6c210ce79827f5affb0cf69f380d181
+change-id: 20241009-vsock-fixes-for-redir-86707e1e8c04
 
+Best regards,
 -- 
-2.46.2
+Michal Luczaj <mhal@rbox.co>
 
