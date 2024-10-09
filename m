@@ -1,126 +1,137 @@
-Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com [209.85.128.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailtransmit05.runbox.com (mailtransmit05.runbox.com [185.226.149.38])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7ABA81E32C2;
-	Wed,  9 Oct 2024 22:07:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B10017BB0C;
+	Wed,  9 Oct 2024 22:08:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.38
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728511624; cv=none; b=Z7swuTHjq55r9KEXNFwT6+Zfd30X4I/1aFYAHQ9b7UFZZMBTpmfRb98ZRLPJ7Auaid+b6lzDnIOx2wgGSzJdy4TVL256D6y9yZOSbwrn0EN0wq3b2sEIUKnN0zcql73mi6ZnZBhgKskTh9HeE5vYFfzQUVUMdPu3Dm5LL3VOORQ=
+	t=1728511696; cv=none; b=VQ1UBH0ecUhrQPxgQgsxcYmpOPCwd4/etPjj2OPfNS+8wHUcMHqPl2lkE5LbYRcOLU4DTdQ+orRI3+wv0bVzt7yKFm1YZHpcjEsseBTGjM8sx70KSmOQBEv8ZkR/RZvTj++UF3ST74Y9/PFt8FsqqUKxWEfz9Ko/+ukjMiBl3as=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728511624; c=relaxed/simple;
-	bh=vamGcFrPRyfG19X12b4a/YEYp7dSMGPkZd9DEbWGDM4=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=dT4lIL93yA2zAVn7J/4NSOspyNFbP/C0WxMKy4YdFyVpPX1r+G2sr70ZIIob9yXeezas1zbF2KYdQqcZAxh/QbNjH2kQMXfqbkDsAecavQLgMCHVQ46enho42ieNLWt3PdqpX8tCbM3qA8FSemFHAW9Guzxnaf7KKlIK37drNxw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ajlEsEXv; arc=none smtp.client-ip=209.85.128.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1728511696; c=relaxed/simple;
+	bh=ATz0ke/Gyqfq12BWInrt1+S0gvlwRss8NN0cvFIE+XI=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=GrbMN+0d1zdviwzo4kI0rbhmXArKs8q6/rj+s/DTGXJt1OJL9wkVoXVG9d9Xv9/YXCsm+P4DbB24nVyFDxlqCxJczK0xz8aZHYe+NWA6rXQoNGGDWMG91SDmqZxG2OL4qL06Pmsr30CIl9ca6sBwRsGYmU2hxz5oJYyVhHfcc7g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co; spf=pass smtp.mailfrom=rbox.co; dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b=DeJCF/z3; arc=none smtp.client-ip=185.226.149.38
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rbox.co
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ajlEsEXv"
-Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-6e330a7b120so1330677b3.2;
-        Wed, 09 Oct 2024 15:07:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1728511622; x=1729116422; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wZGOsm3YR+E73cJ0SGQHJhXA862v5jLb24Y7Aj3c+FE=;
-        b=ajlEsEXv09GzmaWk7BNIG7MOsyUtIRZhxCmwbBmLHgxzH7gXRbMrPYD09E2cml2/2C
-         rppHWyTMrib4L5omndUWBS3ltg38VLVjVnH+3KTIJT9nbsKbv/spAEF5kOn0rNVBbVdg
-         6hru/P9KlKBp8T+DP7roHnxMWtOVWuMrP19siLbIKe55SdwFmagMt5qfIzIT5EyEBQoC
-         FzUCJU+OzpB2Z8/kckZ3FamC35mPUszZwwB4A+AOcLBHCQk5TPR7pYjdTrfAYvSIC99c
-         rSwcTqDSSDGMw3o2l6phqZj/0uaWZbBqm6OtI17z60iTgSZ21ezOWdHlxUdEWUN5PxK2
-         jEPA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728511622; x=1729116422;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=wZGOsm3YR+E73cJ0SGQHJhXA862v5jLb24Y7Aj3c+FE=;
-        b=M0+Jvd4CDBoDcyV+K4YmxWIVwRFhUO+aooaYg7r0NwsCpkf+9EKZeiRCvqyNm4qyVM
-         ub0GMvfNGDnGhC9646wtwAFpbZZEhXrgtJGcFRfaMx3upgzNn01kwwZmJTPxC7DhmOxW
-         Zr8M7n6Cnb52OdTzUCAfGqjgoQBOQE20SxG/OkzddtcohTF5EAa5CL4A+aw70yh3fvwr
-         FkZ5WpTLv/7mk+zWuKXyfpfqDZUPhzEO+LHYaq8143H93LSGtG0IG3x/14QlgFMpsiD1
-         OZx736HyOd9wjMBPZgcml81OAF8Aih9TGFFGKQAPNuHvkSONgoFOl8c0zDB63P8omDAQ
-         rfEQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVffa/kvHoihrrMi0R6PehurCp7U1nvz28OBeikQ/sWOgALUvTdlV97RCXntxJjy7uh4RUG2rZlJdJjaBRY02Lv@vger.kernel.org, AJvYcCWaSU2XtXLrKFpfEIItrLUFqfV+7VOo1L/EUjE81c55sYxcMUpv5SZwDm9abkDIPFa1YTM9Kuyw+hDYvO4=@vger.kernel.org, AJvYcCXSRIPxkHQt7BLPn2LP3UbiCqjmfrDHmfHhR+6r7Ym3vO6jdv4WAyZiRab4k+3KZm21PeoJFr8VEHoNvxzF1IgLXTIO@vger.kernel.org
-X-Gm-Message-State: AOJu0YxG/rYjuNqUc1/X7D4RT6sw1DYGFjr0WKrHR5XDjTU3Pz5rqC+j
-	OYKxGUUowJ96JtsF4uWI7a92mRsY0EXV7NtAJn4TUlNSL55xskZheU9t06FB
-X-Google-Smtp-Source: AGHT+IF1uyZrUK2/Sy4TPteRgeer5kAxQj+FQiPxRggZ89itv4Zhagt8kBp2ymbhkdbDtg6qJgOcpw==
-X-Received: by 2002:a05:690c:113:b0:6e3:ceb:ce2b with SMTP id 00721157ae682-6e32250ade9mr39798427b3.44.1728511622150;
-        Wed, 09 Oct 2024 15:07:02 -0700 (PDT)
-Received: from dev-ubuntu-0.. (104-15-236-76.lightspeed.rlghnc.sbcglobal.net. [104.15.236.76])
-        by smtp.googlemail.com with ESMTPSA id 00721157ae682-6e2d926b44esm20294217b3.16.2024.10.09.15.07.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Oct 2024 15:07:01 -0700 (PDT)
-From: Tyrone Wu <wudevelops@gmail.com>
-To: bpf@vger.kernel.org,
-	wudevelops@gmail.com
-Cc: kpsingh@kernel.org,
-	mattbobrowski@google.com,
-	song@kernel.org,
-	jolsa@kernel.org,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	martin.lau@linux.dev,
-	eddyz87@gmail.com,
-	yonghong.song@linux.dev,
-	john.fastabend@gmail.com,
-	sdf@fomichev.me,
-	haoluo@google.com,
-	rostedt@goodmis.org,
-	mhiramat@kernel.org,
-	mathieu.desnoyers@efficios.com,
-	mykolal@fb.com,
-	shuah@kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	kernel-patches-bot@fb.com
-Subject: [PATCH bpf v1 2/2] selftests/bpf: assert link info uprobe_multi count & path_size if unset
-Date: Wed,  9 Oct 2024 22:06:38 +0000
-Message-ID: <20241009220638.333429-2-wudevelops@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20241009220638.333429-1-wudevelops@gmail.com>
-References: <20241009220638.333429-1-wudevelops@gmail.com>
+	dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b="DeJCF/z3"
+Received: from mailtransmit02.runbox ([10.9.9.162] helo=aibo.runbox.com)
+	by mailtransmit05.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+	(Exim 4.93)
+	(envelope-from <mhal@rbox.co>)
+	id 1sye8a-001i4v-Ve; Wed, 09 Oct 2024 23:22:29 +0200
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=rbox.co;
+	s=selector1; h=Cc:To:In-Reply-To:References:Message-Id:
+	Content-Transfer-Encoding:Content-Type:MIME-Version:Subject:Date:From;
+	bh=L1Tce96RUTs2pMiFj61EXXUMJFuuEoy26u+9hdzmS0A=; b=DeJCF/z3xEPseATxpW3MpZ6w/+
+	B30z4dEt9p06OApaznhC+h4H1KDUbyYTCAimYW85u/bWbCV4bvTc1OBN2lOp0TbSy7B6RCfcbU0Ai
+	e2bltKkPDws295rjOzrpTSsJ0QvgY28PJ/V5M0ASs5x+TKw6M3lYfVXFjldhaZnszrHTPjogse0Cp
+	WNUcMOJk20LTuDI8ggmKpgnJgKDmrjV6OxxN4uiefOGgNpwKjSy3D4C8XqanaVb45CvZ2SXrpVPEp
+	92AqHn11r2WpU7KSY52dSrjG7q0DfGItgiOa4PdTETLCDzhBOhh4Z/PVI8tnCow6pzDgFPdpueu53
+	G4HcZweg==;
+Received: from [10.9.9.74] (helo=submission03.runbox)
+	by mailtransmit02.runbox with esmtp (Exim 4.86_2)
+	(envelope-from <mhal@rbox.co>)
+	id 1sye8a-0000IK-0r; Wed, 09 Oct 2024 23:22:28 +0200
+Received: by submission03.runbox with esmtpsa  [Authenticated ID (604044)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.93)
+	id 1sye8Q-00EL6w-OY; Wed, 09 Oct 2024 23:22:18 +0200
+From: Michal Luczaj <mhal@rbox.co>
+Date: Wed, 09 Oct 2024 23:20:50 +0200
+Subject: [PATCH bpf 1/4] bpf, sockmap: SK_DROP on attempted redirects of
+ unsupported af_vsock
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20241009-vsock-fixes-for-redir-v1-1-e455416f6d78@rbox.co>
+References: <20241009-vsock-fixes-for-redir-v1-0-e455416f6d78@rbox.co>
+In-Reply-To: <20241009-vsock-fixes-for-redir-v1-0-e455416f6d78@rbox.co>
+To: "David S. Miller" <davem@davemloft.net>, 
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
+ Paolo Abeni <pabeni@redhat.com>, John Fastabend <john.fastabend@gmail.com>, 
+ Jakub Sitnicki <jakub@cloudflare.com>, 
+ "Michael S. Tsirkin" <mst@redhat.com>, 
+ Stefano Garzarella <sgarzare@redhat.com>, 
+ Bobby Eshleman <bobby.eshleman@bytedance.com>, 
+ Stefan Hajnoczi <stefanha@redhat.com>
+Cc: netdev@vger.kernel.org, bpf@vger.kernel.org, 
+ Michal Luczaj <mhal@rbox.co>
+X-Mailer: b4 0.14.2
 
-Add assertions in `bpf_link_info.uprobe_multi` test to verify that
-`count` and `path_size` fields are correctly populated when the fields
-are unset.
+Don't mislead the callers of bpf_{sk,msg}_redirect_{map,hash}(): make sure
+to immediately and visibly fail the forwarding of unsupported af_vsock
+packets.
 
-This tests a previous bug where the `path_size` field was not populated
-when `path` and `path_size` were unset.
-
-Signed-off-by: Tyrone Wu <wudevelops@gmail.com>
+Fixes: 634f1a7110b4 ("vsock: support sockmap")
+Signed-off-by: Michal Luczaj <mhal@rbox.co>
 ---
- tools/testing/selftests/bpf/prog_tests/fill_link_info.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+ include/net/sock.h  | 5 +++++
+ net/core/sock_map.c | 8 ++++++++
+ 2 files changed, 13 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/fill_link_info.c b/tools/testing/selftests/bpf/prog_tests/fill_link_info.c
-index f3932941bbaa..a38cf2a999fe 100644
---- a/tools/testing/selftests/bpf/prog_tests/fill_link_info.c
-+++ b/tools/testing/selftests/bpf/prog_tests/fill_link_info.c
-@@ -417,6 +417,13 @@ verify_umulti_link_info(int fd, bool retprobe, __u64 *offsets,
- 	if (!ASSERT_NEQ(err, -1, "readlink"))
- 		return -1;
+diff --git a/include/net/sock.h b/include/net/sock.h
+index c58ca8dd561b7312ffc0836585c04d9fe917a124..c87295f3476db23934d4fcbeabc7851c61ad2bc4 100644
+--- a/include/net/sock.h
++++ b/include/net/sock.h
+@@ -2715,6 +2715,11 @@ static inline bool sk_is_stream_unix(const struct sock *sk)
+ 	return sk->sk_family == AF_UNIX && sk->sk_type == SOCK_STREAM;
+ }
  
-+	memset(&info, 0, sizeof(info));
-+	err = bpf_link_get_info_by_fd(fd, &info, &len);
++static inline bool sk_is_vsock(const struct sock *sk)
++{
++	return sk->sk_family == AF_VSOCK;
++}
 +
-+	ASSERT_EQ(info.uprobe_multi.count, 3, "info.uprobe_multi.count");
-+	ASSERT_EQ(info.uprobe_multi.path_size, strlen(path) + 1,
-+		  "info.uprobe_multi.path_size");
-+
- 	for (bit = 0; bit < 8; bit++) {
- 		memset(&info, 0, sizeof(info));
- 		info.uprobe_multi.path = ptr_to_u64(path_buf);
+ /**
+  * sk_eat_skb - Release a skb if it is no longer needed
+  * @sk: socket to eat this skb from
+diff --git a/net/core/sock_map.c b/net/core/sock_map.c
+index 242c91a6e3d3870ec6da6fa095d180a933d1d3d4..07d6aa4e39ef606aab33bd0d95711ecf156596b9 100644
+--- a/net/core/sock_map.c
++++ b/net/core/sock_map.c
+@@ -647,6 +647,8 @@ BPF_CALL_4(bpf_sk_redirect_map, struct sk_buff *, skb,
+ 	sk = __sock_map_lookup_elem(map, key);
+ 	if (unlikely(!sk || !sock_map_redirect_allowed(sk)))
+ 		return SK_DROP;
++	if ((flags & BPF_F_INGRESS) && sk_is_vsock(sk))
++		return SK_DROP;
+ 
+ 	skb_bpf_set_redir(skb, sk, flags & BPF_F_INGRESS);
+ 	return SK_PASS;
+@@ -675,6 +677,8 @@ BPF_CALL_4(bpf_msg_redirect_map, struct sk_msg *, msg,
+ 		return SK_DROP;
+ 	if (!(flags & BPF_F_INGRESS) && !sk_is_tcp(sk))
+ 		return SK_DROP;
++	if (sk_is_vsock(sk))
++		return SK_DROP;
+ 
+ 	msg->flags = flags;
+ 	msg->sk_redir = sk;
+@@ -1249,6 +1253,8 @@ BPF_CALL_4(bpf_sk_redirect_hash, struct sk_buff *, skb,
+ 	sk = __sock_hash_lookup_elem(map, key);
+ 	if (unlikely(!sk || !sock_map_redirect_allowed(sk)))
+ 		return SK_DROP;
++	if ((flags & BPF_F_INGRESS) && sk_is_vsock(sk))
++		return SK_DROP;
+ 
+ 	skb_bpf_set_redir(skb, sk, flags & BPF_F_INGRESS);
+ 	return SK_PASS;
+@@ -1277,6 +1283,8 @@ BPF_CALL_4(bpf_msg_redirect_hash, struct sk_msg *, msg,
+ 		return SK_DROP;
+ 	if (!(flags & BPF_F_INGRESS) && !sk_is_tcp(sk))
+ 		return SK_DROP;
++	if (sk_is_vsock(sk))
++		return SK_DROP;
+ 
+ 	msg->flags = flags;
+ 	msg->sk_redir = sk;
+
 -- 
-2.43.0
+2.46.2
 
