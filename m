@@ -1,137 +1,106 @@
-Received: from mailtransmit05.runbox.com (mailtransmit05.runbox.com [185.226.149.38])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B10017BB0C;
-	Wed,  9 Oct 2024 22:08:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.38
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7A7816BE3A;
+	Wed,  9 Oct 2024 22:23:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728511696; cv=none; b=VQ1UBH0ecUhrQPxgQgsxcYmpOPCwd4/etPjj2OPfNS+8wHUcMHqPl2lkE5LbYRcOLU4DTdQ+orRI3+wv0bVzt7yKFm1YZHpcjEsseBTGjM8sx70KSmOQBEv8ZkR/RZvTj++UF3ST74Y9/PFt8FsqqUKxWEfz9Ko/+ukjMiBl3as=
+	t=1728512633; cv=none; b=ZFo8BFFJTy6kc/8ZL25UxCnTBthkV7yoiGVu6a9s6EBCleeckbd4w9UGshJWOPY9C1oXc1rSEFNiclMpNrXhBbV2irQH+mYaiQIPvrOKDPQVuL0RNPMV1c7xe86nwfpPgXHDcu7/uliYIZKF3arUQln6RyucfWHpiMlghB+yP3w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728511696; c=relaxed/simple;
-	bh=ATz0ke/Gyqfq12BWInrt1+S0gvlwRss8NN0cvFIE+XI=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=GrbMN+0d1zdviwzo4kI0rbhmXArKs8q6/rj+s/DTGXJt1OJL9wkVoXVG9d9Xv9/YXCsm+P4DbB24nVyFDxlqCxJczK0xz8aZHYe+NWA6rXQoNGGDWMG91SDmqZxG2OL4qL06Pmsr30CIl9ca6sBwRsGYmU2hxz5oJYyVhHfcc7g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co; spf=pass smtp.mailfrom=rbox.co; dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b=DeJCF/z3; arc=none smtp.client-ip=185.226.149.38
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rbox.co
+	s=arc-20240116; t=1728512633; c=relaxed/simple;
+	bh=w4l9dzDzlilO4E+6HL//zAT4zhaj8ld4amfc5zECEfQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=BgZFNti6Cp5Zfvo74gnk4Y8sLJAE2yWeVysachcCehMVU98fZPCD6GG8MhgZ7YuMkXblZpnp/uSOOh6Fmb/P8mNrKQwAZMewbybzD/XACx8v86FzAZG7HvMag8xUwjXsZowwlyicC2jB2InIeWDF+mHEezf9NUBZfSYXQMXOLpQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Wiwa3rlr; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b="DeJCF/z3"
-Received: from mailtransmit02.runbox ([10.9.9.162] helo=aibo.runbox.com)
-	by mailtransmit05.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-	(Exim 4.93)
-	(envelope-from <mhal@rbox.co>)
-	id 1sye8a-001i4v-Ve; Wed, 09 Oct 2024 23:22:29 +0200
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=rbox.co;
-	s=selector1; h=Cc:To:In-Reply-To:References:Message-Id:
-	Content-Transfer-Encoding:Content-Type:MIME-Version:Subject:Date:From;
-	bh=L1Tce96RUTs2pMiFj61EXXUMJFuuEoy26u+9hdzmS0A=; b=DeJCF/z3xEPseATxpW3MpZ6w/+
-	B30z4dEt9p06OApaznhC+h4H1KDUbyYTCAimYW85u/bWbCV4bvTc1OBN2lOp0TbSy7B6RCfcbU0Ai
-	e2bltKkPDws295rjOzrpTSsJ0QvgY28PJ/V5M0ASs5x+TKw6M3lYfVXFjldhaZnszrHTPjogse0Cp
-	WNUcMOJk20LTuDI8ggmKpgnJgKDmrjV6OxxN4uiefOGgNpwKjSy3D4C8XqanaVb45CvZ2SXrpVPEp
-	92AqHn11r2WpU7KSY52dSrjG7q0DfGItgiOa4PdTETLCDzhBOhh4Z/PVI8tnCow6pzDgFPdpueu53
-	G4HcZweg==;
-Received: from [10.9.9.74] (helo=submission03.runbox)
-	by mailtransmit02.runbox with esmtp (Exim 4.86_2)
-	(envelope-from <mhal@rbox.co>)
-	id 1sye8a-0000IK-0r; Wed, 09 Oct 2024 23:22:28 +0200
-Received: by submission03.runbox with esmtpsa  [Authenticated ID (604044)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.93)
-	id 1sye8Q-00EL6w-OY; Wed, 09 Oct 2024 23:22:18 +0200
-From: Michal Luczaj <mhal@rbox.co>
-Date: Wed, 09 Oct 2024 23:20:50 +0200
-Subject: [PATCH bpf 1/4] bpf, sockmap: SK_DROP on attempted redirects of
- unsupported af_vsock
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Wiwa3rlr"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C8D7C4CECC;
+	Wed,  9 Oct 2024 22:23:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1728512632;
+	bh=w4l9dzDzlilO4E+6HL//zAT4zhaj8ld4amfc5zECEfQ=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=Wiwa3rlrYH9BC46EoCHkt+QLbJoTT1X2QA01HAqIYKjAte3oUq44GaeL+zZ4AkJ2c
+	 2fmhTarWCgJZzvugjgiXFaapdrUxRw+aMHjQkxk7R7tMQ4X8TAISQfJF8mwZjkVS1k
+	 P8ckfmO9JeSeyS8x4lu0kJaTjkOtHpLIIPYKJmo4HQ1/9VWZa6uO3ff20ntiwcvv+8
+	 WNsOi1fvz3WyQp8/mTsIKp1bTZX1Q46ddgghD/obeQF4nyOrExSGPC7njchLh/Wo1L
+	 w8uAfe7NKlqBlMlX1oAMsBsi5zUdQStu0GaxZpBZ0z6hB0R3qZA3l0SEImsa2B3CEC
+	 jNcMMmsZn1/Ag==
+Received: by mail-il1-f181.google.com with SMTP id e9e14a558f8ab-3a394418442so1476475ab.0;
+        Wed, 09 Oct 2024 15:23:52 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCU61D2CRcLaVMIBuI6bY2KR8gDO+54vJTIDrd9dXpGnlhfz9PSeIgFxDEo0aa683hEME9WacFNEcK75/Q==@vger.kernel.org, AJvYcCU6d3T+xfYZy2ZFXy9VmY0Bz4A9MHDIH3H1Dt3ynUChED1Q2uAlSOfIdOM6LQQ9gJ3QHvtJ58hVz3HIyt6ZAg==@vger.kernel.org, AJvYcCUAd9vKSVac0AFdqFCSYRMUhYB+UQLfnbKVNt9XTL7TY1kal0FuLABW1DsLU43cPhtJW/5DDpstPUugb0hi@vger.kernel.org, AJvYcCUYrvTnCSh4MK873qv36UUCOhdtHj19TbOGgvM8d0S8sWOsfqIyiJ6jPS0CEqCe9YN2eoeS1IyefRRd1mNpLA==@vger.kernel.org, AJvYcCVI5+g2UIN13rDvUyTWLgNl03epMtsNWRHbF8T6c3XzRTEe5Te85331sYOS5vLSJ23RA4w=@vger.kernel.org, AJvYcCW5r0tPZikGROllmLilDHOQcXRNzPcUchdGX0JolS0jcZy30DBVKz4HMtBSYTVRlFHWXAQCfX1lLLx0fw==@vger.kernel.org, AJvYcCWIF2EZtnabVrRizeMQ/Tep9LTVr87ZDxZx83HJvZQQQ86NsOwKQHEzOKDN0Xqawqdss2IsMK+oO/OFnG3apSU=@vger.kernel.org, AJvYcCWW7Pza1E4TOk00NSKM83YK/yh7inog4RCog7HafeZksnpyNXVeFZSoFS5NHHbNTJ47fNcRqy0QITM+Vw==@vger.kernel.org, AJvYcCXCTVRsAhw+rPuKzky04p2bXjw8VQZ82+vrCqfA4Yx0DnKKYncBjkvhgSv79h37ER6NxmrHjY27AuB+/w==@vger.kernel.org, AJvYcCXZRssXwAo/AoVv+xF31T8SbmiHry76PkvJONpDdg1KO/SSvumEAS5ouqmtI6xptdmebRNO62viHxFfT5k=@vger.kernel.org, AJvYcCXbg/L4OaMANur3cTXZeXkAmiqmyFSK97rxe7C5AHGfqMAi/4MIVi9X8X3oe03WPJ1PJjJxhdVnmVODVzTSzoA8gESi@vger.kernel.org, AJvYcCXpMyniBp7nUwtryj0Diu50gmpx6gzO6of+c7dZofHAtVJRf6vBep9vIVdkig4y3/RA7XDZODFZ33O86nEc@vger.kernel.org, AJvYcCXvXb0vrL9zsDB5gWaymu5B7GP/LIsC0kSisKZlo3yGno3edCKU/B6Jm+pbe0yvNRKmGUHLzNlxAFk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyXv35Vz6MPYXtnQB6bXHLaTDBgUIz1+Bcw9ur/SOVy01qpX3mK
+	8AU3HMd55oMTZ91TqFK75LVJk+fRg3aWoLiA1riG08HddGm4Y6BbnmK+3053It5O/qJYBG15IR0
+	V5jvbKTFl4U5B0UDDgnKBlf2+VeQ=
+X-Google-Smtp-Source: AGHT+IE+0c/kMVosLTSGHy+n6QvIYJcOAn6W5BXDQkMmjF/nhxZwOJHSZ6SOjh26Vu9mUcUiW0DFRwoy/+Y0vdg6KQk=
+X-Received: by 2002:a05:6e02:1fe6:b0:3a0:aac2:a0a4 with SMTP id
+ e9e14a558f8ab-3a397cffa21mr40549325ab.9.1728512631542; Wed, 09 Oct 2024
+ 15:23:51 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20241009-vsock-fixes-for-redir-v1-1-e455416f6d78@rbox.co>
-References: <20241009-vsock-fixes-for-redir-v1-0-e455416f6d78@rbox.co>
-In-Reply-To: <20241009-vsock-fixes-for-redir-v1-0-e455416f6d78@rbox.co>
-To: "David S. Miller" <davem@davemloft.net>, 
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
- Paolo Abeni <pabeni@redhat.com>, John Fastabend <john.fastabend@gmail.com>, 
- Jakub Sitnicki <jakub@cloudflare.com>, 
- "Michael S. Tsirkin" <mst@redhat.com>, 
- Stefano Garzarella <sgarzare@redhat.com>, 
- Bobby Eshleman <bobby.eshleman@bytedance.com>, 
- Stefan Hajnoczi <stefanha@redhat.com>
-Cc: netdev@vger.kernel.org, bpf@vger.kernel.org, 
- Michal Luczaj <mhal@rbox.co>
-X-Mailer: b4 0.14.2
+References: <20241009180816.83591-1-rppt@kernel.org> <20241009180816.83591-5-rppt@kernel.org>
+In-Reply-To: <20241009180816.83591-5-rppt@kernel.org>
+From: Song Liu <song@kernel.org>
+Date: Wed, 9 Oct 2024 15:23:40 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW66etfdU3Fvk0KsELXcgWD6_TkBFjJ-BTHQu5OejDsP2w@mail.gmail.com>
+Message-ID: <CAPhsuW66etfdU3Fvk0KsELXcgWD6_TkBFjJ-BTHQu5OejDsP2w@mail.gmail.com>
+Subject: Re: [PATCH v5 4/8] module: prepare to handle ROX allocations for text
+To: Mike Rapoport <rppt@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>, Andreas Larsson <andreas@gaisler.com>, 
+	Andy Lutomirski <luto@kernel.org>, Ard Biesheuvel <ardb@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Borislav Petkov <bp@alien8.de>, Brian Cain <bcain@quicinc.com>, 
+	Catalin Marinas <catalin.marinas@arm.com>, Christoph Hellwig <hch@infradead.org>, 
+	Christophe Leroy <christophe.leroy@csgroup.eu>, Dave Hansen <dave.hansen@linux.intel.com>, 
+	Dinh Nguyen <dinguyen@kernel.org>, Geert Uytterhoeven <geert@linux-m68k.org>, Guo Ren <guoren@kernel.org>, 
+	Helge Deller <deller@gmx.de>, Huacai Chen <chenhuacai@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
+	Johannes Berg <johannes@sipsolutions.net>, 
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, Kent Overstreet <kent.overstreet@linux.dev>, 
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>, Luis Chamberlain <mcgrof@kernel.org>, 
+	Mark Rutland <mark.rutland@arm.com>, Masami Hiramatsu <mhiramat@kernel.org>, 
+	Matt Turner <mattst88@gmail.com>, Max Filippov <jcmvbkbc@gmail.com>, 
+	Michael Ellerman <mpe@ellerman.id.au>, Michal Simek <monstr@monstr.eu>, Oleg Nesterov <oleg@redhat.com>, 
+	Palmer Dabbelt <palmer@dabbelt.com>, Peter Zijlstra <peterz@infradead.org>, 
+	Richard Weinberger <richard@nod.at>, Russell King <linux@armlinux.org.uk>, 
+	Stafford Horne <shorne@gmail.com>, Steven Rostedt <rostedt@goodmis.org>, 
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Thomas Gleixner <tglx@linutronix.de>, 
+	Uladzislau Rezki <urezki@gmail.com>, Vineet Gupta <vgupta@kernel.org>, Will Deacon <will@kernel.org>, 
+	bpf@vger.kernel.org, linux-alpha@vger.kernel.org, linux-arch@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org, 
+	linux-hexagon@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org, 
+	linux-mm@kvack.org, linux-modules@vger.kernel.org, 
+	linux-openrisc@vger.kernel.org, linux-parisc@vger.kernel.org, 
+	linux-riscv@lists.infradead.org, linux-sh@vger.kernel.org, 
+	linux-snps-arc@lists.infradead.org, linux-trace-kernel@vger.kernel.org, 
+	linux-um@lists.infradead.org, linuxppc-dev@lists.ozlabs.org, 
+	loongarch@lists.linux.dev, sparclinux@vger.kernel.org, x86@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Don't mislead the callers of bpf_{sk,msg}_redirect_{map,hash}(): make sure
-to immediately and visibly fail the forwarding of unsupported af_vsock
-packets.
+On Wed, Oct 9, 2024 at 11:10=E2=80=AFAM Mike Rapoport <rppt@kernel.org> wro=
+te:
+[...]
+> diff --git a/include/linux/module.h b/include/linux/module.h
+> index 88ecc5e9f523..7039f609c6ef 100644
+> --- a/include/linux/module.h
+> +++ b/include/linux/module.h
+> @@ -367,6 +367,8 @@ enum mod_mem_type {
+>
+>  struct module_memory {
+>         void *base;
+> +       void *rw_copy;
+> +       bool is_rox;
+>         unsigned int size;
 
-Fixes: 634f1a7110b4 ("vsock: support sockmap")
-Signed-off-by: Michal Luczaj <mhal@rbox.co>
----
- include/net/sock.h  | 5 +++++
- net/core/sock_map.c | 8 ++++++++
- 2 files changed, 13 insertions(+)
+Do we really need to hold the rw_copy all the time? I was
+thinking we only need a temporary buffer when we want to
+update anything. The buffer might be much smaller than "size".
 
-diff --git a/include/net/sock.h b/include/net/sock.h
-index c58ca8dd561b7312ffc0836585c04d9fe917a124..c87295f3476db23934d4fcbeabc7851c61ad2bc4 100644
---- a/include/net/sock.h
-+++ b/include/net/sock.h
-@@ -2715,6 +2715,11 @@ static inline bool sk_is_stream_unix(const struct sock *sk)
- 	return sk->sk_family == AF_UNIX && sk->sk_type == SOCK_STREAM;
- }
- 
-+static inline bool sk_is_vsock(const struct sock *sk)
-+{
-+	return sk->sk_family == AF_VSOCK;
-+}
-+
- /**
-  * sk_eat_skb - Release a skb if it is no longer needed
-  * @sk: socket to eat this skb from
-diff --git a/net/core/sock_map.c b/net/core/sock_map.c
-index 242c91a6e3d3870ec6da6fa095d180a933d1d3d4..07d6aa4e39ef606aab33bd0d95711ecf156596b9 100644
---- a/net/core/sock_map.c
-+++ b/net/core/sock_map.c
-@@ -647,6 +647,8 @@ BPF_CALL_4(bpf_sk_redirect_map, struct sk_buff *, skb,
- 	sk = __sock_map_lookup_elem(map, key);
- 	if (unlikely(!sk || !sock_map_redirect_allowed(sk)))
- 		return SK_DROP;
-+	if ((flags & BPF_F_INGRESS) && sk_is_vsock(sk))
-+		return SK_DROP;
- 
- 	skb_bpf_set_redir(skb, sk, flags & BPF_F_INGRESS);
- 	return SK_PASS;
-@@ -675,6 +677,8 @@ BPF_CALL_4(bpf_msg_redirect_map, struct sk_msg *, msg,
- 		return SK_DROP;
- 	if (!(flags & BPF_F_INGRESS) && !sk_is_tcp(sk))
- 		return SK_DROP;
-+	if (sk_is_vsock(sk))
-+		return SK_DROP;
- 
- 	msg->flags = flags;
- 	msg->sk_redir = sk;
-@@ -1249,6 +1253,8 @@ BPF_CALL_4(bpf_sk_redirect_hash, struct sk_buff *, skb,
- 	sk = __sock_hash_lookup_elem(map, key);
- 	if (unlikely(!sk || !sock_map_redirect_allowed(sk)))
- 		return SK_DROP;
-+	if ((flags & BPF_F_INGRESS) && sk_is_vsock(sk))
-+		return SK_DROP;
- 
- 	skb_bpf_set_redir(skb, sk, flags & BPF_F_INGRESS);
- 	return SK_PASS;
-@@ -1277,6 +1283,8 @@ BPF_CALL_4(bpf_msg_redirect_hash, struct sk_msg *, msg,
- 		return SK_DROP;
- 	if (!(flags & BPF_F_INGRESS) && !sk_is_tcp(sk))
- 		return SK_DROP;
-+	if (sk_is_vsock(sk))
-+		return SK_DROP;
- 
- 	msg->flags = flags;
- 	msg->sk_redir = sk;
+Thanks,
+Song
 
--- 
-2.46.2
-
+[...]
