@@ -1,156 +1,211 @@
-Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-00206402.pphosted.com (mx0a-00206402.pphosted.com [148.163.148.77])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BC8B1E1C01
-	for <bpf@vger.kernel.org>; Wed,  9 Oct 2024 19:41:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B80D1E133F
+	for <bpf@vger.kernel.org>; Wed,  9 Oct 2024 19:42:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.148.77
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728502897; cv=none; b=nBUFC+9Umu4kZ+nAhVhTQO9oJ0HwwpwnjVrXi2Zm68M+5RIX+MIsAxZxsIgIptl1vO9wx/2aMqT6t5CCnIOncGrmDLyQw1kNnkrqEjoou1gpuAySjYLfStd6ygIDpCveY86zCvE3713OKfs246OKMA15mgxox9PW566n4G57JI8=
+	t=1728502970; cv=none; b=sh1Oy2X5mOvmbCOoyn7BqsuVTMaN8q7l9GwlpLunPO2sWW40buqLBPpk9uqWp7QGievGzo0ORYofU8Fq8S272zlNZVwefgLfWbUsSNcDXBgckwIuV1qgwgRp6kHl/k24DRNr9dhZnpYUzA4B0DsMPoK/he39zlNSUdu3c+unqDY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728502897; c=relaxed/simple;
-	bh=z3ehgoZRYtG18GSLZpqYRgsxxrjpT2JqJ2f5zeWScTU=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=ENvPnzHHDO5HFwiNmgvaJ/fzIU0flCb2APCR6GGkNJBWzChsjk9RuTl1qQqzUSt6eQRZwdchEy9ioEkmIGnNmwnkoOXB3u1JAXVikOTr22r1ZAyoMiHISt/qYxvJev+ISEVBAqjY98SfTxhQZ56PYbnj2htbbtGOOVysBkfrxYQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ioIA+qOg; arc=none smtp.client-ip=209.85.210.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1728502970; c=relaxed/simple;
+	bh=FZek8dJVhpzFf5wemh6ZOH75nuUzLlGigqH38gYVr8o=;
+	h=From:To:CC:Subject:Date:Message-ID:Content-Type:MIME-Version; b=mavb/PzBshG6tbJbS8FfvGOVcszgqbXp6bI7VXrZw0dF+mujscpqwMo1smDzgi78YjPOE/M2CGksyNJqqyCaREpYwDuBxkuPEHtgyh1ggdn2WUtKX2+kyVtFlZM1R6SezpcYSe8hOPhVodrfcymOXeZFYyW9T3eanlT2POWEeKc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com; spf=pass smtp.mailfrom=crowdstrike.com; dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b=F7ffH9tU; arc=none smtp.client-ip=148.163.148.77
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=crowdstrike.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ioIA+qOg"
-Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-71e029efecdso154869b3a.3
-        for <bpf@vger.kernel.org>; Wed, 09 Oct 2024 12:41:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1728502895; x=1729107695; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=Ot4oj59HT5IsaV1GiBJ31f69dh7Ad1WlzFMf1xoXZxw=;
-        b=ioIA+qOgl/bUaOtMhtJlDrhy/NNt3J13li4bhxNii7URy3ByUdIvDJOsMAoTQGtp1f
-         UbqRORlYhEeYHv73XpuYgHOqkKBffeKptvt4v6igT2oDh425ZBpw34aoW42h7wOryAqN
-         Vy/oI/MCx9X/DhnmUzr7Y/z/YeRE6yC59YWFSKWU3y86py/qPj131wEVt4BxL8m00Jum
-         AHOMVriwNw/ApLqU2vWj1vu/cpQ+rRpakVwPY8R4bFaC6CynmsRGU/PXMpaoA2NQIgLn
-         wuIiyxqrQOz3FP2aELFgahaVPyRtrs2fCH7ohhy5giDif3KUyZ32N4aLo3gJmMhSJDD4
-         UNXw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728502895; x=1729107695;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Ot4oj59HT5IsaV1GiBJ31f69dh7Ad1WlzFMf1xoXZxw=;
-        b=JNn1bJQzm+jvh19VdfJjH0iZYKQ5HUg4g3PTq3VQ9c/g4pdEW5ftwKj1FppnynDGZq
-         hpfVIx71P0+OYu558hzWKnH9dBorj1g5D2SJ5hRqGRGoTvKJ3vgMiDZX/k7qnXRsd8pj
-         aPQ5xjm33+oyrLaWS4W28yos2iSzT3QLkEgZdKyYp0LR0hgq5sXWi7Ls/pwhPOYI73ga
-         0b+YfzTQaIFwpoBOmTABiqm3JrtTE9Swj1Y3l+TAmnsAiq3Hd3TLKUa+V8sEYVFI3zNh
-         FNXNMQ+lAJv+jUBH8siFwcBrE7ApKeMNn6oXDnUJBbJBjVjJNxkdZpnTBqBnd0PG6yxH
-         PxrA==
-X-Gm-Message-State: AOJu0YyIGCMQ1u15aFTNEKSEepO3+6KVOAYQoVOTc3tDKz/lCXF47r9I
-	rcbcTWGTZk2teemVsNLJJNyi7RIDBnI//jjQUo0Er40AEr8FnH1OEs7HlA==
-X-Google-Smtp-Source: AGHT+IHBPwTbirtbTCPEOrWhx604YeXxXXJ3nItDExIYhB2SuoUylE8lQvOIoZNLlOZzcaUHYpAaiQ==
-X-Received: by 2002:a05:6a21:6e4a:b0:1d6:de67:91ca with SMTP id adf61e73a8af0-1d8a3bc50e3mr5268419637.4.1728502895002;
-        Wed, 09 Oct 2024 12:41:35 -0700 (PDT)
-Received: from [192.168.0.235] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-71df0d7d4a0sm8114052b3a.212.2024.10.09.12.41.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Oct 2024 12:41:34 -0700 (PDT)
-Message-ID: <46ff5f908c2ba69ebfa2033456425632c5f74c6f.camel@gmail.com>
-Subject: Re: [PATCH bpf-next v1 1/2] bpf: force checkpoints at loop
- back-edges
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: bpf@vger.kernel.org, ast@kernel.org
-Cc: andrii@kernel.org, daniel@iogearbox.net, martin.lau@linux.dev, 
-	kernel-team@fb.com, yonghong.song@linux.dev
-Date: Wed, 09 Oct 2024 12:41:29 -0700
-In-Reply-To: <20241009021254.2805446-1-eddyz87@gmail.com>
-References: <20241009021254.2805446-1-eddyz87@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.52.4 (3.52.4-1.fc40) 
+	dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b="F7ffH9tU"
+Received: from pps.filterd (m0354651.ppops.net [127.0.0.1])
+	by mx0a-00206402.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 499IpDQh003464;
+	Wed, 9 Oct 2024 18:58:55 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crowdstrike.com;
+	 h=cc:content-type:date:from:message-id:mime-version:subject:to;
+	 s=default; bh=hwcT8Cxi8V+8G2FB0dKh35DdeBP/lp3/RrbTVIxFILQ=; b=F
+	7ffH9tUMmqOYb9aScnWXOY+pjIZTjXClIUksGwhBr1ktfXBJp6j99YKLxbTlD0+3
+	lGZ5sfwoDDDtZ9Dl+KMe4k7kME/PZHbxgWuDSg4cm1X7FkWrMUcSSqHDbZIE5rqh
+	5srXKV/BuvWucBFXtgMe/djk+yVTsvbOjUDrfJieuMfA96Wl76V93ip6ElK1cQAK
+	vhMSlX17LoZklHU16DHdTV2XvVY6ds5LgDAmTseXSpXGMqLp59fYp3fm3VbOucqp
+	5BO2nFJjzQ8ZOCoCvMEOjY4+XzEqvf1Bn1s/sxXgqI6HNnPTuAZK0f25BH/BXDf0
+	lBNvFcaGg+ljUW4Mzd9mw==
+Received: from 04wpexch05.crowdstrike.sys (dragosx.crowdstrike.com [208.42.231.60] (may be forged))
+	by mx0a-00206402.pphosted.com (PPS) with ESMTPS id 425vbh0pf4-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 09 Oct 2024 18:58:55 +0000 (GMT)
+Received: from 04wpexch06.crowdstrike.sys (10.100.11.99) by
+ 04wpexch05.crowdstrike.sys (10.100.11.98) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.9; Wed, 9 Oct 2024 18:58:53 +0000
+Received: from 04wpexch06.crowdstrike.sys ([fe80::d7a2:a8e9:1f62:58cc]) by
+ 04wpexch06.crowdstrike.sys ([fe80::d7a2:a8e9:1f62:58cc%9]) with mapi id
+ 15.02.1544.009; Wed, 9 Oct 2024 18:58:53 +0000
+From: Martin Kelly <martin.kelly@crowdstrike.com>
+To: "bpf@vger.kernel.org" <bpf@vger.kernel.org>
+CC: "daniel@iogearbox.net" <daniel@iogearbox.net>,
+        "ast@kernel.org"
+	<ast@kernel.org>,
+        "andrii@kernel.org" <andrii@kernel.org>,
+        "john.fastabend@gmail.com" <john.fastabend@gmail.com>
+Subject: CONFIG_X86_X32_ABI silently breaks some fentry hooks
+Thread-Topic: CONFIG_X86_X32_ABI silently breaks some fentry hooks
+Thread-Index: AQHbGn1IBv6Qgmi38kyuqgRRJU67tA==
+Date: Wed, 9 Oct 2024 18:58:53 +0000
+Message-ID: <7136605d24de9b1fc62d02a355ef11c950a94153.camel@crowdstrike.com>
+Accept-Language: en-US, en-GB
+Content-Language: en-US
+X-MS-Has-Attach: yes
+X-MS-TNEF-Correlator:
+x-disclaimer: USA
+Content-Type: multipart/signed; micalg=sha-256;
+	protocol="application/pkcs7-signature"; boundary="=-NOPPPrF4i02QoXkZ1sK4"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+X-Authority-Analysis: v=2.4 cv=C/a7yhP+ c=1 sm=1 tr=0 ts=6706d26f cx=c_pps a=1d8vc5iZWYKGYgMGCdbIRA==:117 a=1d8vc5iZWYKGYgMGCdbIRA==:17 a=xqWC_Br6kY4A:10 a=EjBHVkixTFsA:10 a=DAUX931o1VcA:10 a=KeyApPSgi2vUwj7OLr8A:9 a=QEXdDO2ut3YA:10
+ a=0W44CzhA7K9tyo-iDOoA:9 a=ZVk8-NSrHBgA:10 a=30ssDGKg3p0A:10
+X-Proofpoint-ORIG-GUID: pJIsLmkx-VaznUWQNnVJHzd0FNeaxPl-
+X-Proofpoint-GUID: pJIsLmkx-VaznUWQNnVJHzd0FNeaxPl-
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 mlxlogscore=999
+ impostorscore=0 spamscore=0 mlxscore=0 bulkscore=0 priorityscore=1501
+ adultscore=0 clxscore=1011 suspectscore=0 malwarescore=0
+ lowpriorityscore=0 classifier=spam authscore=0 adjust=0 reason=mlx
+ scancount=1 engine=8.19.0-2409260000 definitions=main-2410090119
 
-On Tue, 2024-10-08 at 19:12 -0700, Eduard Zingerman wrote:
-> In [1] syzbot reported an interesting BPF program.
-> Verification for this program takes a very long time.
->=20
-> [1] https://lore.kernel.org/bpf/670429f6.050a0220.49194.0517.GAE@google.c=
-om/
->=20
-> The program could be simplified to the following snippet:
->=20
->     /* Program type is kprobe */
->        r7 =3D *(u16 *)(r1 +0);
->     1: r7 +=3D 0x1ab064b9;
->        if r7 & 0x702000 goto 1b;
->        r7 &=3D 0x1ee60e;
->        r7 +=3D r1;
->        if r7 s> 0x37d2 goto +0;
->        r0 =3D 0;
->        exit;
+--=-NOPPPrF4i02QoXkZ1sK4
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Answering a few questions from off-list discussion with Alexei.
-The test is not specific for jset instruction, e.g. the following
-program exhibits similar behaviour:
+Hi all, I want to report a very strange issues I found. Specifically,
+on latest master, I found that setting CONFIG_X86_X32_ABI=3Dy causes some
+fentry BPF hooks to be silently ignored. Most hooks still work fine,
+but some do not, and the same function works fine as a kprobe. The
+issue appears to be 100% reproducible for a given function hook.
 
-SEC("kprobe")
-__failure __log_level(4)
-__msg("BPF program is too large.")
-__naked void short_loop1(void)
-{
-	asm volatile (
-	"   r7 =3D *(u16 *)(r1 +0);"
-	"   r8 =3D *(u64 *)(r1 +16);"
-	"1: r7 +=3D 0x1ab064b9;"
-	"if r7 < r8 goto 1b;"
-	"   r7 &=3D 0x1ee60e;"
-	"   r7 +=3D r1;"
-	"   if r7 s> 0x37d2 goto +0;"
-	"   r0 =3D 0;"
-	"   exit;"
-	::: __clobber_all);
-}
+I checked and verified that the hook is not hit according to the BPF
+stats (kernel.bpf_stats_enabled=3D1), and I also didn't see the program
+getting run when it should in gdb. As far as I can tell from gdb, the
+trampoline code is still getting patched in, but the BPF program is not
+later getting invoked.
 
-> The snippet exhibits the following behaviour depending on
-> BPF_COMPLEXITY_LIMIT_INSNS:
-> - at 1,000,000 verification does not finish in 15 minutes;
-> - at 100,000 verification finishes in 15 seconds;
-> - at 100 it is possible to get some verifier log.
+The steps I used to reproduce are as follows:
+- Checkout latest master. I tested with 75b607fab38d ("Merge tag
+'sched_ext-for-6.12-rc2-fixes'").
+- make localmodconfig or similar, enabling relevant BPF options for
+trampolines and BTF. I can send the full config I used if that's
+helpful, but I think most config options don't affect this.
+- Set CONFIG_X86_X32_ABI=3Dy
+- Compile and boot the kernel and run the following bpftrace command:
+  bpftrace -e 'kfunc:acct_process { printf("acct_process called\n"); }'
+- In another terminal, run some processes, which should normally cause
+some output from this command. You should get no output.
 
-Still investigating why running time change is non-linear.
+Note that a similar command (bpftrace -e 'kfunc:acct_collect {
+printf("acct_collect called\n"); }'), hooking a similar function called
+in the same code path, still produces output, as does a kprobe of
+acct_process (sudo bpftrace -e 'kprobe:acct_process {
+printf("acct_process called\n"); }'). Also, with CONFIG_X86_X32_ABI=3Dn,
+the acct_process hook works correctly.
 
-[...]
+--=-NOPPPrF4i02QoXkZ1sK4
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Transfer-Encoding: base64
 
-> This patch forcibly enables checkpoints for each loop back-edge.
-> This helps with the programs in question, as verification of both
-> syzbot program and reduced snippet finishes in ~2.5 sec.
+MIAGCSqGSIb3DQEHAqCAMIACAQExDzANBglghkgBZQMEAgEFADCABgkqhkiG9w0BBwEAAKCCD70w
+ggUVMIID/aADAgECAhEArxwEsqyM/5sAAAAAUc4Y4zANBgkqhkiG9w0BAQsFADCBtDEUMBIGA1UE
+ChMLRW50cnVzdC5uZXQxQDA+BgNVBAsUN3d3dy5lbnRydXN0Lm5ldC9DUFNfMjA0OCBpbmNvcnAu
+IGJ5IHJlZi4gKGxpbWl0cyBsaWFiLikxJTAjBgNVBAsTHChjKSAxOTk5IEVudHJ1c3QubmV0IExp
+bWl0ZWQxMzAxBgNVBAMTKkVudHJ1c3QubmV0IENlcnRpZmljYXRpb24gQXV0aG9yaXR5ICgyMDQ4
+KTAeFw0yMDA3MjkxNTQ4MzBaFw0yOTA2MjkxNjE4MzBaMIGlMQswCQYDVQQGEwJVUzEWMBQGA1UE
+ChMNRW50cnVzdCwgSW5jLjE5MDcGA1UECxMwd3d3LmVudHJ1c3QubmV0L0NQUyBpcyBpbmNvcnBv
+cmF0ZWQgYnkgcmVmZXJlbmNlMR8wHQYDVQQLExYoYykgMjAxMCBFbnRydXN0LCBJbmMuMSIwIAYD
+VQQDExlFbnRydXN0IENsYXNzIDIgQ2xpZW50IENBMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIB
+CgKCAQEAxDKNQtCeGZ1bkFoQTLUQACG5B0jerm6A1v8UUAboda9rRo7npU+tw4yw+nvgGZH98GOt
+cUnzqBwfqzQZIE5LVOkAk75wCDHeiVOsV7wk7yqPQtT36pUlXRR20s2nEvobsrRcYUC9X91Xm0RV
+2MWJGTxlPbno1KUtwizT6oMxogg8XlmuEi4qCoxe87MxrgqtfuywSQn8py4iHmhkNJ0W46Y9AzFA
+FveU9ksZNMmX5iKcSN5koIMLWAWYxCJGiQX9o772SUxhAxak+AqZHOLAxn5pAjJXkAOvAJShudzO
+r+/0fBjOMAvKh/jVXx9ZUdiLC7k4xljCU3zaJtTb8r2QzQIDAQABo4IBLTCCASkwDgYDVR0PAQH/
+BAQDAgGGMB0GA1UdJQQWMBQGCCsGAQUFBwMEBggrBgEFBQcDAjASBgNVHRMBAf8ECDAGAQH/AgEA
+MDMGCCsGAQUFBwEBBCcwJTAjBggrBgEFBQcwAYYXaHR0cDovL29jc3AuZW50cnVzdC5uZXQwMgYD
+VR0fBCswKTAnoCWgI4YhaHR0cDovL2NybC5lbnRydXN0Lm5ldC8yMDQ4Y2EuY3JsMDsGA1UdIAQ0
+MDIwMAYEVR0gADAoMCYGCCsGAQUFBwIBFhpodHRwOi8vd3d3LmVudHJ1c3QubmV0L3JwYTAdBgNV
+HQ4EFgQUCZGluunyLip1381+/nfK8t5rmyQwHwYDVR0jBBgwFoAUVeSB0RGAvtiJuQijMfmhJAkW
+uXAwDQYJKoZIhvcNAQELBQADggEBAD+96RB180Kn0WyBJqFGIFcSJBVasgwIf91HuT9Ck6QKr0wR
+7sxrMPS0LITeCheQ+Xg0rq4mRXYFNSSDwJNzmU+lcnFjtAmIEctsbu+UldVJN8+hAPANSxRRRvRo
+cbL+YKE3DyX87yBaM8aph8nqUvbXaUiWzlrPEJv2twHDOiGlyEPAhJ0D+MU0CIfLiwqDXKojK+n/
+uN6nSQ5tMhWBMMgn9MD+zxp1zIe7uhGhgmVQBZ/zRZKHoEW4Gedf+EYKW8zYXWsWkUwVlWrj5Pze
+BnT2bFTdxCXwaRbW6g4/Wb4BYvlgnx1AszH3EJwv+YpEZthgAk4xELH2l47+IIO9TUowggVOMIIE
+NqADAgECAhBsZB83KgwoWAAAAABMPc0/MA0GCSqGSIb3DQEBCwUAMIGlMQswCQYDVQQGEwJVUzEW
+MBQGA1UEChMNRW50cnVzdCwgSW5jLjE5MDcGA1UECxMwd3d3LmVudHJ1c3QubmV0L0NQUyBpcyBp
+bmNvcnBvcmF0ZWQgYnkgcmVmZXJlbmNlMR8wHQYDVQQLExYoYykgMjAxMCBFbnRydXN0LCBJbmMu
+MSIwIAYDVQQDExlFbnRydXN0IENsYXNzIDIgQ2xpZW50IENBMB4XDTI0MDYyNDE2MTE1NFoXDTI1
+MDYyNDE2NDE1M1owgbwxCzAJBgNVBAYTAlVTMRMwEQYDVQQIEwpDYWxpZm9ybmlhMQ8wDQYDVQQH
+EwZJcnZpbmUxGjAYBgNVBAoTEUNyb3dkU3RyaWtlLCBJbmMuMRkwFwYDVQRhExBOVFJVUytERS01
+MDMwNzM3MVAwIwYDVQQDDBxtYXJ0aW4ua2VsbHlAY3Jvd2RzdHJpa2UuY29tMCkGCSqGSIb3DQEJ
+ARYcbWFydGluLmtlbGx5QGNyb3dkc3RyaWtlLmNvbTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCC
+AQoCggEBAJHfGNsWnmZY9pkAGm3Kdy9c45xX7Yk5MonIqtOXAVXGjv0E9X0EwGCA/niGjWj+RL4E
+seGI6Jb7zawE2RmGkU2Mka+8j6H7NkG+hWoZ6asJKN8iBoMPSO4XADF5l7yaBSTWJJxAM645rU3R
+xNdKR3uLCUYJ4Ys5bgB/9Sz7o1FJKJwO8tbDUz/nVUB1X4F2eW8Az3fKcuvAdPN7gcXoQaLS4wwi
+QAAin03FaEzTsn9EaHi/FtwD0Ar0KIDllJCJPwNrDepQDgOVzh29cbqGFzcxPvk4hp486UEWXB0D
+MWuGiyOf6EIrGXKypYDxvGj4SwTpVilZdAwKWe+9BWQ+IHECAwEAAaOCAV8wggFbMA4GA1UdDwEB
+/wQEAwIFoDAdBgNVHSUEFjAUBggrBgEFBQcDBAYIKwYBBQUHAwIwFAYDVR0gBA0wCzAJBgdngQwB
+BQMBMGoGCCsGAQUFBwEBBF4wXDAjBggrBgEFBQcwAYYXaHR0cDovL29jc3AuZW50cnVzdC5uZXQw
+NQYIKwYBBQUHMAKGKWh0dHA6Ly9haWEuZW50cnVzdC5uZXQvMjA0OGNsYXNzMnNoYTIuY2VyMDQG
+A1UdHwQtMCswKaAnoCWGI2h0dHA6Ly9jcmwuZW50cnVzdC5uZXQvY2xhc3MyY2EuY3JsMCcGA1Ud
+EQQgMB6BHG1hcnRpbi5rZWxseUBjcm93ZHN0cmlrZS5jb20wHwYDVR0jBBgwFoAUCZGluunyLip1
+381+/nfK8t5rmyQwHQYDVR0OBBYEFHG793l6wNAsDzVvuD1VwtKRCrzIMAkGA1UdEwQCMAAwDQYJ
+KoZIhvcNAQELBQADggEBAJ0+w5yt3zNaWXXwdZREN0ciNNUVOXsHedAEafcYnN9QumSvoUmcLd8N
+sRmhv5BcXMqKBh3kIPZzn1+B0zdlvvnYFhD2fM6sC2XZukhZXy97w88EUrP3tOWT+lDmFs+7NRur
+/KPyH50Ih/+AFaPPfEMY30dZiWUoq0ChqT3p76Y5L1md6pTpn39nSTAFzKaSf3VxaQo4aY4jrCdL
+Xo32MVQGwKtbUT3F5tF/cULxGchkopfSceVFyRELFvCRJobaJlASG5fDhnTY56u2WQOLPspaPNUU
+gvxlnSdCMNsaR3BFW5cH/Tklw5CttHHvngNKbuxuFax2kSOQpb3r5OlIiQkwggVOMIIENqADAgEC
+AhBsZB83KgwoWAAAAABMPc0/MA0GCSqGSIb3DQEBCwUAMIGlMQswCQYDVQQGEwJVUzEWMBQGA1UE
+ChMNRW50cnVzdCwgSW5jLjE5MDcGA1UECxMwd3d3LmVudHJ1c3QubmV0L0NQUyBpcyBpbmNvcnBv
+cmF0ZWQgYnkgcmVmZXJlbmNlMR8wHQYDVQQLExYoYykgMjAxMCBFbnRydXN0LCBJbmMuMSIwIAYD
+VQQDExlFbnRydXN0IENsYXNzIDIgQ2xpZW50IENBMB4XDTI0MDYyNDE2MTE1NFoXDTI1MDYyNDE2
+NDE1M1owgbwxCzAJBgNVBAYTAlVTMRMwEQYDVQQIEwpDYWxpZm9ybmlhMQ8wDQYDVQQHEwZJcnZp
+bmUxGjAYBgNVBAoTEUNyb3dkU3RyaWtlLCBJbmMuMRkwFwYDVQRhExBOVFJVUytERS01MDMwNzM3
+MVAwIwYDVQQDDBxtYXJ0aW4ua2VsbHlAY3Jvd2RzdHJpa2UuY29tMCkGCSqGSIb3DQEJARYcbWFy
+dGluLmtlbGx5QGNyb3dkc3RyaWtlLmNvbTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEB
+AJHfGNsWnmZY9pkAGm3Kdy9c45xX7Yk5MonIqtOXAVXGjv0E9X0EwGCA/niGjWj+RL4EseGI6Jb7
+zawE2RmGkU2Mka+8j6H7NkG+hWoZ6asJKN8iBoMPSO4XADF5l7yaBSTWJJxAM645rU3RxNdKR3uL
+CUYJ4Ys5bgB/9Sz7o1FJKJwO8tbDUz/nVUB1X4F2eW8Az3fKcuvAdPN7gcXoQaLS4wwiQAAin03F
+aEzTsn9EaHi/FtwD0Ar0KIDllJCJPwNrDepQDgOVzh29cbqGFzcxPvk4hp486UEWXB0DMWuGiyOf
+6EIrGXKypYDxvGj4SwTpVilZdAwKWe+9BWQ+IHECAwEAAaOCAV8wggFbMA4GA1UdDwEB/wQEAwIF
+oDAdBgNVHSUEFjAUBggrBgEFBQcDBAYIKwYBBQUHAwIwFAYDVR0gBA0wCzAJBgdngQwBBQMBMGoG
+CCsGAQUFBwEBBF4wXDAjBggrBgEFBQcwAYYXaHR0cDovL29jc3AuZW50cnVzdC5uZXQwNQYIKwYB
+BQUHMAKGKWh0dHA6Ly9haWEuZW50cnVzdC5uZXQvMjA0OGNsYXNzMnNoYTIuY2VyMDQGA1UdHwQt
+MCswKaAnoCWGI2h0dHA6Ly9jcmwuZW50cnVzdC5uZXQvY2xhc3MyY2EuY3JsMCcGA1UdEQQgMB6B
+HG1hcnRpbi5rZWxseUBjcm93ZHN0cmlrZS5jb20wHwYDVR0jBBgwFoAUCZGluunyLip1381+/nfK
+8t5rmyQwHQYDVR0OBBYEFHG793l6wNAsDzVvuD1VwtKRCrzIMAkGA1UdEwQCMAAwDQYJKoZIhvcN
+AQELBQADggEBAJ0+w5yt3zNaWXXwdZREN0ciNNUVOXsHedAEafcYnN9QumSvoUmcLd8NsRmhv5Bc
+XMqKBh3kIPZzn1+B0zdlvvnYFhD2fM6sC2XZukhZXy97w88EUrP3tOWT+lDmFs+7NRur/KPyH50I
+h/+AFaPPfEMY30dZiWUoq0ChqT3p76Y5L1md6pTpn39nSTAFzKaSf3VxaQo4aY4jrCdLXo32MVQG
+wKtbUT3F5tF/cULxGchkopfSceVFyRELFvCRJobaJlASG5fDhnTY56u2WQOLPspaPNUUgvxlnSdC
+MNsaR3BFW5cH/Tklw5CttHHvngNKbuxuFax2kSOQpb3r5OlIiQkxggPxMIID7QIBATCBujCBpTEL
+MAkGA1UEBhMCVVMxFjAUBgNVBAoTDUVudHJ1c3QsIEluYy4xOTA3BgNVBAsTMHd3dy5lbnRydXN0
+Lm5ldC9DUFMgaXMgaW5jb3Jwb3JhdGVkIGJ5IHJlZmVyZW5jZTEfMB0GA1UECxMWKGMpIDIwMTAg
+RW50cnVzdCwgSW5jLjEiMCAGA1UEAxMZRW50cnVzdCBDbGFzcyAyIENsaWVudCBDQQIQbGQfNyoM
+KFgAAAAATD3NPzANBglghkgBZQMEAgEFAKCCAgcwGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAc
+BgkqhkiG9w0BCQUxDxcNMjQxMDA5MTg1ODUzWjAvBgkqhkiG9w0BCQQxIgQg4c2xEwbEGpb3/1Z9
+0Hveb3EZH6FF/qO0K0snVLrsMAQwgcsGCSsGAQQBgjcQBDGBvTCBujCBpTELMAkGA1UEBhMCVVMx
+FjAUBgNVBAoTDUVudHJ1c3QsIEluYy4xOTA3BgNVBAsTMHd3dy5lbnRydXN0Lm5ldC9DUFMgaXMg
+aW5jb3Jwb3JhdGVkIGJ5IHJlZmVyZW5jZTEfMB0GA1UECxMWKGMpIDIwMTAgRW50cnVzdCwgSW5j
+LjEiMCAGA1UEAxMZRW50cnVzdCBDbGFzcyAyIENsaWVudCBDQQIQbGQfNyoMKFgAAAAATD3NPzCB
+zQYLKoZIhvcNAQkQAgsxgb2ggbowgaUxCzAJBgNVBAYTAlVTMRYwFAYDVQQKEw1FbnRydXN0LCBJ
+bmMuMTkwNwYDVQQLEzB3d3cuZW50cnVzdC5uZXQvQ1BTIGlzIGluY29ycG9yYXRlZCBieSByZWZl
+cmVuY2UxHzAdBgNVBAsTFihjKSAyMDEwIEVudHJ1c3QsIEluYy4xIjAgBgNVBAMTGUVudHJ1c3Qg
+Q2xhc3MgMiBDbGllbnQgQ0ECEGxkHzcqDChYAAAAAEw9zT8wDQYJKoZIhvcNAQEBBQAEggEAclC+
+pMelb+1AaR1fI4ce+u3t9Eh9seDjX6m0P419yumxYsjZWrt9fbHTbSXrWZ+QgRsiHpdvFd83rMiU
+wRg6xvJuoCuHrwat9tREF5ISFNBhpPKBEtxJdLpn4xeYZMEekAC0NmDu+xAh+84gHhwKeZYszkUu
+WLqkVx7bU4WocGG0SQtx7eCsPl0NB31ZtneUq0PyGmNAZb0tifLYQQ8TIp13t4dKmyXJvTA4xsmP
+ANb3NKVn0qngHCkUcdGc74sTVJRVfdTdMhRepfpIbq0SqhBWYGGEV/0gMuuu/eFtgxOjl/9youGy
+ncQW3CSbHaEPyOrZjlm1oLSqb8hBhBaQYQAAAAAAAA==
 
-There is the following code in is_state_visited():
 
-			...
-			/* if the verifier is processing a loop, avoid adding new state
-			 * too often, since different loop iterations have distinct
-			 * states and may not help future pruning.
-			 * This threshold shouldn't be too low to make sure that
-			 * a loop with large bound will be rejected quickly.
-			 * The most abusive loop will be:
-			 * r1 +=3D 1
-			 * if r1 < 1000000 goto pc-2
-			 * 1M insn_procssed limit / 100 =3D=3D 10k peak states.
-			 * This threshold shouldn't be too high either, since states
-			 * at the end of the loop are likely to be useful in pruning.
-			 */
-skip_inf_loop_check:
-			if (!env->test_state_freq &&
-			    env->jmps_processed - env->prev_jmps_processed < 20 &&
-			    env->insn_processed - env->prev_insn_processed < 100)
-				add_new_state =3D false;
-			goto miss;
-			...
-
-Which runs into a direct contradiction with what I do in this patch,
-so either I need to change the patch or this fragment needs adjustment.
-
-[...]
-
+--=-NOPPPrF4i02QoXkZ1sK4--
