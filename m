@@ -1,59 +1,41 @@
-Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CF983B784;
-	Wed,  9 Oct 2024 01:09:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=167.114.26.122
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2156F18EB0
+	for <bpf@vger.kernel.org>; Wed,  9 Oct 2024 01:16:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728436171; cv=none; b=SmiBNfUg1CvfoppuR48Gtv9K1InUz/U0C9IrDyblvBBzWD0egkgCFBq+QzKpYWT4zSEFPikIYU1ZPYvogySGnWl1wnI/c+0MCG5ZM4R4uEpJaEhvNUFzbcKfa10cNQzHKTKtja+E/xDcU2sPz4uTzW2ZN1LG10awiiyJk1kDBFs=
+	t=1728436563; cv=none; b=QNF4/+BAYDMgWIMqlH/wWpr0ITXAmDQkiQL3PY4pXu5sx/NtT968+iciQWRq4x73Q9Ot3gaEIorR53wnl8pB57hSYeDDwKv4xe5qgtwbVRH7LbMLqBcrOc3vl6PhPrrc8pnseTwCwZJIuvdWVX30GQfOlBr9aCYvM5ik6nPaK/o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728436171; c=relaxed/simple;
-	bh=Nz6l5GPgkpr6Cfo7qykznkJo1tIGMBS6YBtk78ruMYM=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=R5o4xuO0nraA+53kumpGZIvcmK4tG87LzXOk3MAQbOI00Pxn0/LVHzutfDCF2bSKmtrLBhnClKuAgvNBM5R3TY3l6atRHrw5qdM93HHQhG0fvD17zFJ1TZ/8Lr4UXivc1pxdKe+gQ15Ts9ubJgEhYGR2+z7YwRn1mwoPZs6zNRc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com; spf=pass smtp.mailfrom=efficios.com; dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b=rs6T9K0l; arc=none smtp.client-ip=167.114.26.122
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=efficios.com
+	s=arc-20240116; t=1728436563; c=relaxed/simple;
+	bh=c7D1JS1eC4MKOPqrCsgj8Gigg1QGtCteJwLq5Mo6UMk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=faZHPa63ry120YcbDgnBRjWQqZKsrBeqiSbWzSPMKFwk1jxi9s3wCNI8P1K/sWDhVmq+jB4d0+lv9N8Glh2ZFljpr9CCfVTu/KhWoybFLWD8/kxrt5uWZe2Efx5gzzGcvFhJWUbaLmNZ3xWV5PBZj2JreIm53Kc3n2oZWt5LvH8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iDHem5H8; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b="rs6T9K0l"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
-	s=smtpout1; t=1728436168;
-	bh=Nz6l5GPgkpr6Cfo7qykznkJo1tIGMBS6YBtk78ruMYM=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=rs6T9K0lz/+X3Rfi74RpNqHZ9qwr/bjoaIALNIS/y8+zBGlEDPM+yIenRz9kjPp7n
-	 rWLL3L2RuHTmaWnEneUCDM0UHNawBRYQU5eosPsgrcKXFhEOexEgq7xoDpULuKOCyV
-	 xETUzreIUYhD0Am/4hrqfQ8VGu0XopXjmOrKavJkWhs9MMMVqxjfG1gwO4D+SMfUut
-	 gx3QN1VftQGG3nhxBnK1+jDsTdmSUBlqcZKG9jZDsS+lKzZCB1lV8R1AoE0wmWzb43
-	 CKR+1YaWnbyLW2aH1glTjodgumuexehjMMGc/xJ/7uo0Ud2RRYhlirotMowI9dGDPO
-	 /w7dV2piTXuow==
-Received: from thinkos.internal.efficios.com (unknown [IPv6:2606:6d00:100:4000:cacb:9855:de1f:ded2])
-	by smtpout.efficios.com (Postfix) with ESMTPSA id 4XNZY40N1KzSJd;
-	Tue,  8 Oct 2024 21:09:28 -0400 (EDT)
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-To: Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>
-Cc: linux-kernel@vger.kernel.org,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Yonghong Song <yhs@fb.com>,
-	"Paul E . McKenney" <paulmck@kernel.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Namhyung Kim <namhyung@kernel.org>,
-	Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-	bpf@vger.kernel.org,
-	Joel Fernandes <joel@joelfernandes.org>,
-	linux-trace-kernel@vger.kernel.org,
-	Michael Jeanson <mjeanson@efficios.com>
-Subject: [PATCH v4 7/8] tracing/perf: Add might_fault check to syscall probes
-Date: Tue,  8 Oct 2024 21:07:17 -0400
-Message-Id: <20241009010718.2050182-8-mathieu.desnoyers@efficios.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20241009010718.2050182-1-mathieu.desnoyers@efficios.com>
-References: <20241009010718.2050182-1-mathieu.desnoyers@efficios.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iDHem5H8"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99D66C4CEC7;
+	Wed,  9 Oct 2024 01:16:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1728436561;
+	bh=c7D1JS1eC4MKOPqrCsgj8Gigg1QGtCteJwLq5Mo6UMk=;
+	h=From:To:Cc:Subject:Date:From;
+	b=iDHem5H8E4WAN9Kgfh26n+w0qDZnEY0xoem1p5XPAFrm5O98huTzOp8AE8JIRJSyY
+	 Oc1NxK4xkEETWuF4nppOEyv6q2MF0Ar8wHMYKIqzQNz2VXnIEpWTXtuJk+jptTGTXA
+	 q858f5pH08lz9fs8eH3S1vDa2RH/nfz7wgULuE/nn9Wgvaw6XEifqs5pDXvxzDIs2q
+	 HrPlf6/fgXRHSCP0lc2ZoDpMIcT+0ZRxYRBvbj4ME5Dk5itffDcmPOKhYTP+2o8GId
+	 MayhV6OL920prfpzDmr/5zoc6IZnPiZan+86rh1oSeekSGBMXdxPQ9zw7iOwcErGj0
+	 QYxzj4F6SZaCQ==
+From: Andrii Nakryiko <andrii@kernel.org>
+To: bpf@vger.kernel.org,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	martin.lau@kernel.org
+Cc: andrii@kernel.org,
+	kernel-team@meta.com
+Subject: [PATCH bpf-next] libbpf: fix sym_is_subprog() logic for weak global subprogs
+Date: Tue,  8 Oct 2024 18:15:54 -0700
+Message-ID: <20241009011554.880168-1-andrii@kernel.org>
+X-Mailer: git-send-email 2.43.5
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -62,63 +44,40 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add a might_fault() check to validate that the perf sys_enter/sys_exit
-probe callbacks are indeed called from a context where page faults can
-be handled.
+sym_is_subprog() is incorrectly rejecting relocations against *weak*
+global subprogs. Fix that by realizing that STB_WEAK is also a global
+function.
 
-Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: Michael Jeanson <mjeanson@efficios.com>
-Cc: Steven Rostedt <rostedt@goodmis.org>
-Cc: Masami Hiramatsu <mhiramat@kernel.org>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Alexei Starovoitov <ast@kernel.org>
-Cc: Yonghong Song <yhs@fb.com>
-Cc: Paul E. McKenney <paulmck@kernel.org>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc: Mark Rutland <mark.rutland@arm.com>
-Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
-Cc: Namhyung Kim <namhyung@kernel.org>
-Cc: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: bpf@vger.kernel.org
-Cc: Joel Fernandes <joel@joelfernandes.org>
+While it seems like verifier doesn't support taking an address of
+non-static subprog right now, it's still best to fix support for it on
+libbpf side, otherwise users will get a very confusing error during BPF
+skeleton generation or static linking due to misinterpreted relocation:
+
+  libbpf: prog 'handle_tp': bad map relo against 'foo' in section '.text'
+  Error: failed to open BPF object file: Relocation failed
+
+It's clearly not a map relocation, but is treated and reported as such
+without this fix.
+
+Fixes: 53eddb5e04ac ("libbpf: Support subprog address relocation")
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- include/trace/perf.h          | 1 +
- kernel/trace/trace_syscalls.c | 2 ++
- 2 files changed, 3 insertions(+)
+ tools/lib/bpf/libbpf.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/include/trace/perf.h b/include/trace/perf.h
-index 15cde7eac8b4..a1754b73a8f5 100644
---- a/include/trace/perf.h
-+++ b/include/trace/perf.h
-@@ -84,6 +84,7 @@ perf_trace_##call(void *__data, proto)					\
- 	u64 __count __attribute__((unused));				\
- 	struct task_struct *__task __attribute__((unused));		\
- 									\
-+	might_fault();							\
- 	preempt_disable_notrace();					\
- 	do_perf_trace_##call(__data, args);				\
- 	preempt_enable_notrace();					\
-diff --git a/kernel/trace/trace_syscalls.c b/kernel/trace/trace_syscalls.c
-index 6d6bbd56ed92..46aab0ab9350 100644
---- a/kernel/trace/trace_syscalls.c
-+++ b/kernel/trace/trace_syscalls.c
-@@ -602,6 +602,7 @@ static void perf_syscall_enter(void *ignore, struct pt_regs *regs, long id)
- 	 * Syscall probe called with preemption enabled, but the ring
- 	 * buffer and per-cpu data require preemption to be disabled.
- 	 */
-+	might_fault();
- 	guard(preempt_notrace)();
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index 712b95e8891b..05ad264ff09b 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -4013,7 +4013,7 @@ static bool sym_is_subprog(const Elf64_Sym *sym, int text_shndx)
+ 		return true;
  
- 	syscall_nr = trace_get_syscall_nr(current, regs);
-@@ -710,6 +711,7 @@ static void perf_syscall_exit(void *ignore, struct pt_regs *regs, long ret)
- 	 * Syscall probe called with preemption enabled, but the ring
- 	 * buffer and per-cpu data require preemption to be disabled.
- 	 */
-+	might_fault();
- 	guard(preempt_notrace)();
+ 	/* global function */
+-	return bind == STB_GLOBAL && type == STT_FUNC;
++	return (bind == STB_GLOBAL || bind == STB_WEAK) && type == STT_FUNC;
+ }
  
- 	syscall_nr = trace_get_syscall_nr(current, regs);
+ static int find_extern_btf_id(const struct btf *btf, const char *ext_name)
 -- 
-2.39.2
+2.43.5
 
