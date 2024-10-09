@@ -1,152 +1,115 @@
-Received: from mail-il1-f170.google.com (mail-il1-f170.google.com [209.85.166.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 533931362;
-	Wed,  9 Oct 2024 01:06:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17B1479EA
+	for <bpf@vger.kernel.org>; Wed,  9 Oct 2024 01:09:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728435961; cv=none; b=P4jidluW0TJJaJiGI1Gk512umqhQsLLAYUnfDYs9MRdGlxI0NiWQZ6Yf0YZr0Yzv3EKVLWWMAHlZj83FEEhgPU7Rnone7Mgw/5TLNYr3ammIYHOiEIvq9qu1phzYFBaqJQY0bDyT3d+tsH6KybhWhgtEfG7NPRZ7HChfdmSNJY4=
+	t=1728436152; cv=none; b=MthZm5cV9h9LK50IapMR27xBcWqLlcRomdPyeylhfuqWO9YwF9Q+0HYJt6E+qEYeGbtyKLCHPRkeLZ75zf2amEj/C6Sclh5c7K/OJRnVHNUOsgEg86wGsOU9gzThSu0PwtPos43W0ky6qXNCh14Hj/KTocivII1XK3Fc9ZWm/E4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728435961; c=relaxed/simple;
-	bh=Cd1YEYsbMmI9vBiiCy/3x9OeMb85KmOiEz8S3LB946U=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ZClJ4qNNF4sCmqxlBR8DZvKgjD0grcbNDasjywfIhz7KN6epFcStYnkuG8GDKvHMVj/d1tWz5Xr6XK0J6s/UkVIwxU3I3k9Ur69jb1BFccgaHuiD6chFIl2i7gGZTySanqxSIbXM9NeV3boxTpn+LIP1zbR+AJDTSqA7IlVUo5U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fIOd5pSv; arc=none smtp.client-ip=209.85.166.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fIOd5pSv"
-Received: by mail-il1-f170.google.com with SMTP id e9e14a558f8ab-3a34460a45eso33155245ab.3;
-        Tue, 08 Oct 2024 18:06:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1728435959; x=1729040759; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1yYxwbyU4ogYZkSctyKQJtOUt8bZmYLETK2TUgeUSno=;
-        b=fIOd5pSvBvJ9pnNGcXTpI5vmbe8LppH+hQJrOPlLU/IW89Tuak6zV7gETdyJA8WEMZ
-         3sT0skua4WVOoHvJ8YmBvTinYNvXnNuXB7B3LCiUFDJ13sKnaR/QD5rKkULsrXmRL5Mi
-         bT1jCK2rQFWxvwxVGopz6HUF5uiPYbvQ2z8WdOZXziEGQoAGcByUkr/WcNTkU9RJCY2u
-         Bwry9j1Jri+wVU5woZOFe5y4TghooQveABnNnWXxiUbZsUNJKS0lR4oIti/wu4HR01zt
-         BAEp91JnNwTNUL1mGCnjGACXuPhjoJSyrS3zirApul5YqM+mDpd+2Rua8wOswHtgJyHe
-         XJFg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728435959; x=1729040759;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=1yYxwbyU4ogYZkSctyKQJtOUt8bZmYLETK2TUgeUSno=;
-        b=HT8Me+XLlnlfkAVGJNUHmyBVclwFbFHRQQzF6VDaIVHWSi1oGLERTa921R0kIq3uQm
-         gFb3CAkmfpZ0Wk3sozy1nztXww9UWd0Ee0hSXxW7KHdQ1+0rpFqzQ4gXK271gDDA1mgc
-         aIxZdR/QGOzaZaTfMcob2xNxAWrmsCRvIQqqkh1qfXmLSpQfDgJYuFuYjXHJvkF9Rdu9
-         Jv1maEd/bSCQDRBqPtfPdHKbsPautu7ibf+InpJU3WX6vAG5ZH3D6zR7Hl2doW1bb3K0
-         DXSVmvpn0zJS4XoCvl1qzCP31t9iLBEYgMb0k8ayBdk+LC713XWyFsDC1CcBKRACiHDd
-         nw3g==
-X-Forwarded-Encrypted: i=1; AJvYcCWJt3kDA9w9ldk1+ZXyucTV8WiCuGd3fFCRHxy5L/o6M82k+yRFn6XfVBSCCY1+U+y11DQ=@vger.kernel.org, AJvYcCWa9h/ZEv68cfxD8hK0dwLksp+h/o4zfoDir55/KqfasLI0gAWBQxBGbRnaZWqnNMGYWYK6phaC@vger.kernel.org
-X-Gm-Message-State: AOJu0YxvkXUt7kiKqgyk/pdCp1vG7HdUzwm0jww+sN0jTEXX3SZ/CC5v
-	m0N3OZb89jXA5IjwtU/bSh2mTwKDhE1GuoNAsxRX0NiE8qEwpLx263ONW7n2SEv8Nu/ufBuhLiJ
-	BzTK2K6gFALDKcqI3pZkYw8eehMQ=
-X-Google-Smtp-Source: AGHT+IFkJx88WwtV+AqoSeJJ+DDXRLvAEmfSFZdVvBrlBGNAIO2KONa60JLluP5aWummzABPkW1PI63r6ltyqci17fk=
-X-Received: by 2002:a05:6e02:1fca:b0:3a0:8d60:8ba4 with SMTP id
- e9e14a558f8ab-3a397d11004mr7208105ab.16.1728435959435; Tue, 08 Oct 2024
- 18:05:59 -0700 (PDT)
+	s=arc-20240116; t=1728436152; c=relaxed/simple;
+	bh=CamCzznlJjUueULHUq2HltfqYSM+SeuSGDctQvCyaHk=;
+	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=B0EodURsDo/bCIujyTMLVN7VNPWoyP4FK53rpev5aAeTEK98wHPon8HYohuFlpiHrOcKBKuEYZB3TqRzpXCVaohhXitoIEC31hzhiRvJaD/LoPZDiFttBeKmMcwwgsd50cBMeKLY/52A9wbvYteV45bT8hWBwZ7eeIyDX13oInE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.216])
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4XNZXJ5z4Mz4f3l22
+	for <bpf@vger.kernel.org>; Wed,  9 Oct 2024 09:08:48 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.112])
+	by mail.maildlp.com (Postfix) with ESMTP id 660EF1A0A22
+	for <bpf@vger.kernel.org>; Wed,  9 Oct 2024 09:09:06 +0800 (CST)
+Received: from [10.174.176.117] (unknown [10.174.176.117])
+	by APP1 (Coremail) with SMTP id cCh0CgD3Ii+u1wVn8XjfDQ--.2409S2;
+	Wed, 09 Oct 2024 09:09:06 +0800 (CST)
+Subject: Re: [PATCH bpf 3/7] bpf: Free dynamically allocated bits in
+ bpf_iter_bits_destroy()
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: bpf@vger.kernel.org, Martin KaFai Lau <martin.lau@linux.dev>,
+ Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+ Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
+ Song Liu <song@kernel.org>, Hao Luo <haoluo@google.com>,
+ Yonghong Song <yonghong.song@linux.dev>,
+ Daniel Borkmann <daniel@iogearbox.net>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@fomichev.me>, Jiri Olsa <jolsa@kernel.org>,
+ John Fastabend <john.fastabend@gmail.com>, Yafang Shao
+ <laoar.shao@gmail.com>, houtao1@huawei.com, xukuohai@huawei.com
+References: <20241008091718.3797027-1-houtao@huaweicloud.com>
+ <20241008091718.3797027-4-houtao@huaweicloud.com>
+ <CAEf4BzaxYNZ=xc15O7ai5Fqd8XOON5t-Z25mFGGaSu=63j1T1A@mail.gmail.com>
+From: Hou Tao <houtao@huaweicloud.com>
+Message-ID: <bbfc7c3f-b4ff-7aa7-d3f1-d3d472bd0d99@huaweicloud.com>
+Date: Wed, 9 Oct 2024 09:09:02 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241008095109.99918-1-kerneljasonxing@gmail.com>
- <67057d89796b_1a41992944c@willemb.c.googlers.com.notmuch> <CAL+tcoBGQZWZr3PU4Chn1YiN8XO_2UXGOh3yxbvymvojH3r13g@mail.gmail.com>
-In-Reply-To: <CAL+tcoBGQZWZr3PU4Chn1YiN8XO_2UXGOh3yxbvymvojH3r13g@mail.gmail.com>
-From: Jason Xing <kerneljasonxing@gmail.com>
-Date: Wed, 9 Oct 2024 09:05:23 +0800
-Message-ID: <CAL+tcoC48XCmc3G7Xpb_0=maD1Gi0OLkNbUp4ugwtj69ANPaAw@mail.gmail.com>
-Subject: Re: [PATCH net-next 0/9] net-timestamp: bpf extension to equip
- applications transparently
-To: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org, 
-	pabeni@redhat.com, dsahern@kernel.org, willemb@google.com, ast@kernel.org, 
-	daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev, 
-	eddyz87@gmail.com, song@kernel.org, yonghong.song@linux.dev, 
-	john.fastabend@gmail.com, kpsingh@kernel.org, sdf@fomichev.me, 
-	haoluo@google.com, jolsa@kernel.org, bpf@vger.kernel.org, 
-	netdev@vger.kernel.org, Jason Xing <kernelxing@tencent.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <CAEf4BzaxYNZ=xc15O7ai5Fqd8XOON5t-Z25mFGGaSu=63j1T1A@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-CM-TRANSID:cCh0CgD3Ii+u1wVn8XjfDQ--.2409S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7KF1xtr13CrWfuw1kWFyrXrb_yoW8AFWUp3
+	43W3Wjgrs5trZrAw1Utw15KFyDJr4jkay5XFs3tr13AFW8WFyDG3WUGFWfXay5Ar4ktFy7
+	Cw1kA34vyry5AaUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUU9Ib4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
+	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+	6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+	Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7Mxk0xIA0c2IE
+	e2xFo4CEbIxvr21lc7CjxVAaw2AFwI0_GFv_Wryl42xK82IYc2Ij64vIr41l4I8I3I0E4I
+	kC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWU
+	WwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr
+	0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWU
+	JVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJb
+	IYCTnIWIevJa73UjIFyTuYvjxUIa0PDUUUU
+X-CM-SenderInfo: xkrx3t3r6k3tpzhluzxrxghudrp/
 
-On Wed, Oct 9, 2024 at 7:22=E2=80=AFAM Jason Xing <kerneljasonxing@gmail.co=
-m> wrote:
+Hi,
+
+On 10/9/2024 2:26 AM, Andrii Nakryiko wrote:
+> On Tue, Oct 8, 2024 at 2:05 AM Hou Tao <houtao@huaweicloud.com> wrote:
+>> From: Hou Tao <houtao1@huawei.com>
+>>
+>> bpf_iter_bits_destroy() uses "kit->nr_bits <= 64" to check whether the
+>> bits are dynamically allocated. However, the check is incorrect and may
+>> cause a kmemleak as shown below:
+>>
+>> unreferenced object 0xffff88812628c8c0 (size 32):
+>>   comm "swapper/0", pid 1, jiffies 4294727320
+>>   hex dump (first 32 bytes):
+>>     b0 c1 55 f5 81 88 ff ff f0 f0 f0 f0 f0 f0 f0 f0  ..U.............
+>>     f0 f0 f0 f0 f0 f0 f0 f0 00 00 00 00 00 00 00 00  ................
+>>   backtrace (crc 781e32cc):
+>>     [<00000000c452b4ab>] kmemleak_alloc+0x4b/0x80
+>>     [<0000000004e09f80>] __kmalloc_node_noprof+0x480/0x5c0
+>>     [<00000000597124d6>] __alloc.isra.0+0x89/0xb0
+>>     [<000000004ebfffcd>] alloc_bulk+0x2af/0x720
+>>     [<00000000d9c10145>] prefill_mem_cache+0x7f/0xb0
+>>     [<00000000ff9738ff>] bpf_mem_alloc_init+0x3e2/0x610
+>>     [<000000008b616eac>] bpf_global_ma_init+0x19/0x30
+>>     [<00000000fc473efc>] do_one_initcall+0xd3/0x3c0
+>>     [<00000000ec81498c>] kernel_init_freeable+0x66a/0x940
+>>     [<00000000b119f72f>] kernel_init+0x20/0x160
+>>     [<00000000f11ac9a7>] ret_from_fork+0x3c/0x70
+>>     [<0000000004671da4>] ret_from_fork_asm+0x1a/0x30
+>>
+>> That is because nr_bits will be set as zero in bpf_iter_bits_next()
+>> after all bits have been iterated.
+>>
+> so maybe don't touch nr_bits and just use `kit->bit >= kit->nr_bits`
+> condition to know when iterator is done?
+
+Good idea. That would be simpler. Will do in v2.
 >
-> On Wed, Oct 9, 2024 at 2:44=E2=80=AFAM Willem de Bruijn
-> <willemdebruijn.kernel@gmail.com> wrote:
-> >
-> > Jason Xing wrote:
-> > > From: Jason Xing <kernelxing@tencent.com>
-> > >
-> > > A few weeks ago, I planned to extend SO_TIMESTMAMPING feature by usin=
-g
-> > > tracepoint to print information (say, tstamp) so that we can
-> > > transparently equip applications with this feature and require no
-> > > modification in user side.
-> > >
-> > > Later, we discussed at netconf and agreed that we can use bpf for bet=
-ter
-> > > extension, which is mainly suggested by John Fastabend and Willem de
-> > > Bruijn. Many thanks here! So I post this series to see if we have a
-> > > better solution to extend.
-> > >
-> > > This approach relies on existing SO_TIMESTAMPING feature, for tx path=
-,
-> > > users only needs to pass certain flags through bpf program to make su=
-re
-> > > the last skb from each sendmsg() has timestamp related controlled fla=
-g.
-> > > For rx path, we have to use bpf_setsockopt() to set the sk->sk_tsflag=
-s
-> > > and wait for the moment when recvmsg() is called.
-> >
-> > As you mention, overall I am very supportive of having a way to add
-> > timestamping by adminstrators, without having to rebuild applications.
-> > BPF hooks seem to be the right place for this.
-> >
-> > There is existing kprobe/kretprobe/kfunc support. Supporting
-> > SO_TIMESTAMPING directly may be useful due to its targeted feature
-> > set, and correlation between measurements for the same data in the
-> > stream.
-> >
-> > > After this series, we could step by step implement more advanced
-> > > functions/flags already in SO_TIMESTAMPING feature for bpf extension.
-> >
-> > My main implementation concern is where this API overlaps with the
-> > existing user API, and how they might conflict. A few questions in the
-> > patches.
->
-> Agreed. That's also what I'm concerned about. So I decided to ask for
-> related experts' help.
->
-> How to deal with it without interfering with the existing apps in the
-> right way is the key problem.
+>> Fix the problem by introducing an extra allocated status in
+>> bpf_iter_bits and using it to indicate whether the bits are
+>> dynamically allocated.
 
-What I try to implement is let the bpf program have the highest
-precedence. It's similar to RTO min, see the commit as an example:
-
-commit f086edef71be7174a16c1ed67ac65a085cda28b1
-Author: Kevin Yang <yyd@google.com>
-Date:   Mon Jun 3 21:30:54 2024 +0000
-
-    tcp: add sysctl_tcp_rto_min_us
-
-    Adding a sysctl knob to allow user to specify a default
-    rto_min at socket init time, other than using the hard
-    coded 200ms default rto_min.
-
-    Note that the rto_min route option has the highest precedence
-    for configuring this setting, followed by the TCP_BPF_RTO_MIN
-    socket option, followed by the tcp_rto_min_us sysctl.
-
-It includes three cases, 1) route option, 2) bpf option, 3) sysctl.
-The first priority can override others. It doesn't have a good
-chance/point to restore the icsk_rto_min field if users want to
-shutdown the bpf program because it is set in
-bpf_sol_tcp_setsockopt().
