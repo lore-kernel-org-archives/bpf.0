@@ -1,268 +1,82 @@
-Received: from 66-220-155-179.mail-mxout.facebook.com (66-220-155-179.mail-mxout.facebook.com [66.220.155.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D13319D078
-	for <bpf@vger.kernel.org>; Thu, 10 Oct 2024 17:59:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.155.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE2BC1CEEB9;
+	Thu, 10 Oct 2024 18:00:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728583153; cv=none; b=E369W7zUsgGyajtAlmwuyXUgl7EmD4qV37Unbt63/Q1VGCrH6rWP6MApTCSzhiCnLM0Jh/zbpZhxoykhKpDctNjCjbBHiOvTMOzKv0v6fU0tWREkd+yw0SJJn5cyMjZ7geFjNP6WsIPLTzPp6nKZ0LBDFA1hykL6zUQy7wqYgi0=
+	t=1728583225; cv=none; b=tcRB3TzkOvppJL7vyjoOrKIiE5dOylt/GCUEdFHvc1avx/rwwhxYyEONONUfyqW3W1Zod2wvIStGwvaI+RVLb1OHq2j2ovLLQaskyMhpLoXKlb+nNJoyJf1UYh+S9AQfataeMUucmxWDqvJMGBVSgBBcFezdxvpyPIX5UqAAtQg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728583153; c=relaxed/simple;
-	bh=JXHiWZQsFCNNhQXWmIKmRiUaix4QlY5rCF/57pGJMws=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=sXyShq5ACKXMUbHHDuqTZFCa8+LzD21aDcp17KeMUOW05Ax1pNGEwgBQNa8Hx+q5csIovUFOdYS9rctZzSN2/bSlefqkx/2zr9YVzjR3Qa3PHp+lGRq1uvCJK3mqVuKvX8rLia3zWshmdpVTivXIFzZsDzV6petU+9OEw9bgqeM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.155.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
-Received: by devbig309.ftw3.facebook.com (Postfix, from userid 128203)
-	id 4FD4B9F27C4C; Thu, 10 Oct 2024 10:56:38 -0700 (PDT)
-From: Yonghong Song <yonghong.song@linux.dev>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	kernel-team@fb.com,
-	Martin KaFai Lau <martin.lau@kernel.org>,
-	Tejun Heo <tj@kernel.org>
-Subject: [PATCH bpf-next v4 09/10] bpf, x86: Jit support for nested bpf_prog_call
-Date: Thu, 10 Oct 2024 10:56:38 -0700
-Message-ID: <20241010175638.1899406-1-yonghong.song@linux.dev>
-X-Mailer: git-send-email 2.43.5
-In-Reply-To: <20241010175552.1895980-1-yonghong.song@linux.dev>
-References: <20241010175552.1895980-1-yonghong.song@linux.dev>
+	s=arc-20240116; t=1728583225; c=relaxed/simple;
+	bh=OMrWVEwG56phLjB3lXvtiLtZ/60G1Bl4ql3231HDQLM=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=rdmMLgSWMTENdh9aN8USns9Jz0LzIXN1ytR7W6a2giAmicrdU1kyHrhmaoqba3jGSQXwOoxvDzk4aRc+lOoQp1naF6xDL7mVRYAHGWvu0OpdoclHxA6xsjKGshLwXB/nNA3dmiIGzeDMQKn4KGF7zPGNBCS3mpFLy4D0/pX3cV8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KVW3kRZe; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KVW3kRZe"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 512EDC4CEC6;
+	Thu, 10 Oct 2024 18:00:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1728583225;
+	bh=OMrWVEwG56phLjB3lXvtiLtZ/60G1Bl4ql3231HDQLM=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=KVW3kRZeD1kePYkc78Nr3zoWKzbCrhXldWdSEI7SLXeRNGy/mu1x2nLMG/NCa9mCE
+	 7bHMR6MGhR26JMCfuhgBd3r6xBrezlFZDrsC3JAwuDtttfh5jO32VuIjc4f9JxozwJ
+	 y6ryZSIvsxHTMO6VldIHpHgskMXqRGaARSL98vYPsJbTuDSI7x1gIgsJpZZ7d5z42Y
+	 iiMmwaw2ONq7YuEchFWmhoNyFNjmdHppl+th2zGO9qDz51H713QyhHuVy8qHD0Z9hi
+	 PHiPSuTslM8NZ0f2h8z1vpftpaodFYlHsSsIf2Jx3WNQNdNcBkDb0tR9U3NSL0Xiyd
+	 asYY+CVW7cGXg==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id EB2E03803263;
+	Thu, 10 Oct 2024 18:00:30 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf v2 0/3] Fix caching of BTF for kfuncs in the verifier
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <172858322977.2114175.5921702022516465256.git-patchwork-notify@kernel.org>
+Date: Thu, 10 Oct 2024 18:00:29 +0000
+References: <20241010-fix-kfunc-btf-caching-for-modules-v2-0-745af6c1af98@redhat.com>
+In-Reply-To: <20241010-fix-kfunc-btf-caching-for-modules-v2-0-745af6c1af98@redhat.com>
+To: =?utf-8?b?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2VuIDx0b2tlQHJlZGhhdC5jb20+?=@aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org
+Cc: ast@kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com,
+ andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
+ yonghong.song@linux.dev, kpsingh@kernel.org, sdf@fomichev.me,
+ haoluo@google.com, jolsa@kernel.org, memxor@gmail.com, simon.sundberg@kau.se,
+ bpf@vger.kernel.org, netdev@vger.kernel.org
 
-Two functions are added in the kernel
-  - int notrace __bpf_prog_enter_recur_limited(struct bpf_prog *prog)
-  - void notrace __bpf_prog_exit_recur_limited(struct bpf_prog *prog)
-and they are called in bpf progs through jit.
+Hello:
 
-Func __bpf_prog_enter_recur_limited() will return 0 if maximum recursion
-level has been reached in which case, bpf prog will return to the caller
-directly. Otherwise, it will return the current recursion level. The
-recursion level will be used by jit to calculated proper frame pointer
-for that recursion level.
+This series was applied to bpf/bpf.git (master)
+by Alexei Starovoitov <ast@kernel.org>:
 
-Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
----
- arch/x86/net/bpf_jit_comp.c | 94 +++++++++++++++++++++++++++++++++----
- include/linux/bpf.h         |  2 +
- kernel/bpf/trampoline.c     | 16 +++++++
- 3 files changed, 104 insertions(+), 8 deletions(-)
+On Thu, 10 Oct 2024 15:27:06 +0200 you wrote:
+> When playing around with defining kfuncs in some custom modules, we
+> noticed that if a BPF program calls two functions with the same
+> signature in two different modules, the function from the wrong module
+> may sometimes end up being called. Whether this happens depends on the
+> order of the calls in the BPF program, which turns out to be due to the
+> use of sort() inside __find_kfunc_desc_btf() in the verifier code.
+> 
+> [...]
 
-diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
-index 297dd64f4b6a..a763e018e87f 100644
---- a/arch/x86/net/bpf_jit_comp.c
-+++ b/arch/x86/net/bpf_jit_comp.c
-@@ -501,7 +501,8 @@ static void emit_prologue_tail_call(u8 **pprog, bool =
-is_subprog)
- }
-=20
- static void emit_priv_frame_ptr(u8 **pprog, struct bpf_prog *bpf_prog,
--				enum bpf_priv_stack_mode priv_stack_mode);
-+				enum bpf_priv_stack_mode priv_stack_mode,
-+				bool is_subprog, u8 *image, u8 *temp);
-=20
- /*
-  * Emit x86-64 prologue code for BPF program.
-@@ -510,7 +511,8 @@ static void emit_priv_frame_ptr(u8 **pprog, struct bp=
-f_prog *bpf_prog,
-  */
- static void emit_prologue(u8 **pprog, u32 stack_depth, struct bpf_prog *=
-bpf_prog,
- 			  bool tail_call_reachable,
--			  enum bpf_priv_stack_mode priv_stack_mode)
-+			  enum bpf_priv_stack_mode priv_stack_mode, u8 *image,
-+			  u8 *temp)
- {
- 	bool ebpf_from_cbpf =3D bpf_prog_was_classic(bpf_prog);
- 	bool is_exception_cb =3D bpf_prog->aux->exception_cb;
-@@ -554,7 +556,7 @@ static void emit_prologue(u8 **pprog, u32 stack_depth=
-, struct bpf_prog *bpf_prog
- 	/* X86_TAIL_CALL_OFFSET is here */
- 	EMIT_ENDBR();
-=20
--	emit_priv_frame_ptr(&prog, bpf_prog, priv_stack_mode);
-+	emit_priv_frame_ptr(&prog, bpf_prog, priv_stack_mode, is_subprog, image=
-, temp);
-=20
- 	/* sub rsp, rounded_stack_depth */
- 	if (stack_depth)
-@@ -696,6 +698,15 @@ static void emit_return(u8 **pprog, u8 *ip)
- 	*pprog =3D prog;
- }
-=20
-+static int num_bytes_of_emit_return(void)
-+{
-+	if (cpu_feature_enabled(X86_FEATURE_RETHUNK))
-+		return 5;
-+	if (IS_ENABLED(CONFIG_MITIGATION_SLS))
-+		return 2;
-+	return 1;
-+}
-+
- #define BPF_TAIL_CALL_CNT_PTR_STACK_OFF(stack)	(-16 - round_up(stack, 8)=
-)
-=20
- /*
-@@ -1527,17 +1538,67 @@ static void emit_root_priv_frame_ptr(u8 **pprog, =
-struct bpf_prog *bpf_prog,
- }
-=20
- static void emit_priv_frame_ptr(u8 **pprog, struct bpf_prog *bpf_prog,
--				enum bpf_priv_stack_mode priv_stack_mode)
-+				enum bpf_priv_stack_mode priv_stack_mode,
-+				bool is_subprog, u8 *image, u8 *temp)
- {
- 	u32 orig_stack_depth =3D round_up(bpf_prog->aux->stack_depth, 8);
- 	u8 *prog =3D *pprog;
-=20
--	if (priv_stack_mode =3D=3D PRIV_STACK_ROOT_PROG)
--		emit_root_priv_frame_ptr(&prog, bpf_prog, orig_stack_depth);
--	else if (priv_stack_mode =3D=3D PRIV_STACK_SUB_PROG && orig_stack_depth=
-)
-+	if (priv_stack_mode =3D=3D PRIV_STACK_ROOT_PROG) {
-+		int offs;
-+		u8 *func;
-+
-+		if (!bpf_prog->aux->has_prog_call) {
-+			emit_root_priv_frame_ptr(&prog, bpf_prog, orig_stack_depth);
-+		} else {
-+			EMIT1(0x57);		/* push rdi */
-+			if (is_subprog) {
-+				/* subprog may have up to 5 arguments */
-+				EMIT1(0x56);		/* push rsi */
-+				EMIT1(0x52);		/* push rdx */
-+				EMIT1(0x51);		/* push rcx */
-+				EMIT2(0x41, 0x50);	/* push r8 */
-+			}
-+			emit_mov_imm64(&prog, BPF_REG_1, (long) bpf_prog >> 32,
-+				       (u32) (long) bpf_prog);
-+			func =3D (u8 *)__bpf_prog_enter_recur_limited;
-+			offs =3D prog - temp;
-+			offs +=3D x86_call_depth_emit_accounting(&prog, func, image + offs);
-+			emit_call(&prog, func, image + offs);
-+			if (is_subprog) {
-+				EMIT2(0x41, 0x58);	/* pop r8 */
-+				EMIT1(0x59);		/* pop rcx */
-+				EMIT1(0x5a);		/* pop rdx */
-+				EMIT1(0x5e);		/* pop rsi */
-+			}
-+			EMIT1(0x5f);		/* pop rdi */
-+
-+			EMIT4(0x48, 0x83, 0xf8, 0x0);   /* cmp rax,0x0 */
-+			EMIT2(X86_JNE, num_bytes_of_emit_return() + 1);
-+
-+			/* return if stack recursion has been reached */
-+			EMIT1(0xC9);    /* leave */
-+			emit_return(&prog, image + (prog - temp));
-+
-+			/* cnt -=3D 1 */
-+			emit_alu_helper_1(&prog, BPF_ALU64 | BPF_SUB | BPF_K,
-+					  BPF_REG_0, 1);
-+
-+			/* accum_stack_depth =3D cnt * subtree_stack_depth */
-+			emit_alu_helper_3(&prog, BPF_ALU64 | BPF_MUL | BPF_K, BPF_REG_0,
-+					  bpf_prog->aux->subtree_stack_depth);
-+
-+			emit_root_priv_frame_ptr(&prog, bpf_prog, orig_stack_depth);
-+
-+			/* r9 +=3D accum_stack_depth */
-+			emit_alu_helper_2(&prog, BPF_ALU64 | BPF_ADD | BPF_X, X86_REG_R9,
-+					  BPF_REG_0);
-+		}
-+	} else if (priv_stack_mode =3D=3D PRIV_STACK_SUB_PROG && orig_stack_dep=
-th) {
- 		/* r9 +=3D orig_stack_depth */
- 		emit_alu_helper_1(&prog, BPF_ALU64 | BPF_ADD | BPF_K, X86_REG_R9,
- 				  orig_stack_depth);
-+	}
-=20
- 	*pprog =3D prog;
- }
-@@ -1578,7 +1639,7 @@ static int do_jit(struct bpf_prog *bpf_prog, int *a=
-ddrs, u8 *image, u8 *rw_image
- 	detect_reg_usage(insn, insn_cnt, callee_regs_used);
-=20
- 	emit_prologue(&prog, stack_depth, bpf_prog, tail_call_reachable,
--		      priv_stack_mode);
-+		      priv_stack_mode, image, temp);
- 	/* Exception callback will clobber callee regs for its own use, and
- 	 * restore the original callee regs from main prog's stack frame.
- 	 */
-@@ -2519,6 +2580,23 @@ st:			if (is_imm8(insn->off))
- 				if (arena_vm_start)
- 					pop_r12(&prog);
- 			}
-+
-+			if (bpf_prog->aux->has_prog_call) {
-+				u8 *func, *ip;
-+				int offs;
-+
-+				ip =3D image + addrs[i - 1];
-+				/* save and restore the return value */
-+				EMIT1(0x50);    /* push rax */
-+				emit_mov_imm64(&prog, BPF_REG_1, (long) bpf_prog >> 32,
-+					       (u32) (long) bpf_prog);
-+				func =3D (u8 *)__bpf_prog_exit_recur_limited;
-+				offs =3D prog - temp;
-+				offs +=3D x86_call_depth_emit_accounting(&prog, func, ip + offs);
-+				emit_call(&prog, func, ip + offs);
-+				EMIT1(0x58);    /* pop rax */
-+			}
-+
- 			EMIT1(0xC9);         /* leave */
- 			emit_return(&prog, image + addrs[i - 1] + (prog - temp));
- 			break;
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 952cb398eb30..605004cba9f7 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -1148,6 +1148,8 @@ u64 notrace __bpf_prog_enter_sleepable_recur(struct=
- bpf_prog *prog,
- 					     struct bpf_tramp_run_ctx *run_ctx);
- void notrace __bpf_prog_exit_sleepable_recur(struct bpf_prog *prog, u64 =
-start,
- 					     struct bpf_tramp_run_ctx *run_ctx);
-+int notrace __bpf_prog_enter_recur_limited(struct bpf_prog *prog);
-+void notrace __bpf_prog_exit_recur_limited(struct bpf_prog *prog);
- void notrace __bpf_tramp_enter(struct bpf_tramp_image *tr);
- void notrace __bpf_tramp_exit(struct bpf_tramp_image *tr);
- typedef u64 (*bpf_trampoline_enter_t)(struct bpf_prog *prog,
-diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
-index f8302a5ca400..d9e7260e4b39 100644
---- a/kernel/bpf/trampoline.c
-+++ b/kernel/bpf/trampoline.c
-@@ -960,6 +960,22 @@ void notrace __bpf_prog_exit_sleepable_recur(struct =
-bpf_prog *prog, u64 start,
- 	rcu_read_unlock_trace();
- }
-=20
-+int notrace __bpf_prog_enter_recur_limited(struct bpf_prog *prog)
-+{
-+	int cnt =3D this_cpu_inc_return(*(prog->active));
-+
-+	if (cnt > BPF_MAX_PRIV_STACK_NEST_LEVEL) {
-+		bpf_prog_inc_misses_counter(prog);
-+		return 0;
-+	}
-+	return cnt;
-+}
-+
-+void notrace __bpf_prog_exit_recur_limited(struct bpf_prog *prog)
-+{
-+	this_cpu_dec(*(prog->active));
-+}
-+
- static u64 notrace __bpf_prog_enter_sleepable(struct bpf_prog *prog,
- 					      struct bpf_tramp_run_ctx *run_ctx)
- {
---=20
-2.43.5
+Here is the summary with links:
+  - [bpf,v2,1/3] bpf: fix kfunc btf caching for modules
+    https://git.kernel.org/bpf/bpf/c/6cb86a0fdece
+  - [bpf,v2,2/3] selftests/bpf: Provide a generic [un]load_module helper
+    https://git.kernel.org/bpf/bpf/c/4192bb294f80
+  - [bpf,v2,3/3] selftests/bpf: Add test for kfunc module order
+    https://git.kernel.org/bpf/bpf/c/f91b256644ea
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
