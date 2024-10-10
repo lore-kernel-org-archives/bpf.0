@@ -1,51 +1,35 @@
-Received: from out-172.mta0.migadu.com (out-172.mta0.migadu.com [91.218.175.172])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B665B1CC140
-	for <bpf@vger.kernel.org>; Thu, 10 Oct 2024 15:39:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D36B13C682;
+	Thu, 10 Oct 2024 16:00:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728574752; cv=none; b=rTd8xjkuwgsIKocsoDswZ6BBnr2HKxWkTvkKI2wXGhHxCkhVUEiB/2nE5ZxYw3qQTY+67McZRfaIfegEIV8WTbgbjxnWMlwi3JyMf25VFNBhJbiyO/zB9P6kZ5PV0CrSSVuYcEw5z5PsTpW1LFag3NSjmvR8L0H30UXF+wxDSb4=
+	t=1728576029; cv=none; b=is0GBLZKsLYgWW+cUurZLox7u0s5ItFe7LIWtQjh5zECW1CXIOQ4MFep9ATi2u+d38xVniAS8hhzt3pXsIllAd413WJ8XyD+obq0z8ojAIlRsEjGfeJERuk52/HLapZZ/uHdbfBbQI+18fEJY98RY4reFEaXsyLD4qpqw1wRrWo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728574752; c=relaxed/simple;
-	bh=PN8olCMX8ZbCDs2iWOFeApWpYd2PDL1lFinsr5dfZgw=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=gBsNY2z/J6dW3M2dJZLoK9eLUZoGVTXUKvjg9jMe+C3EZVeDy6AroM9g6r0l0HOrpdrtciiWAZcPswI0BmWux38jrikA94S521B94Ku+9khbXhK3Moa+8JA2uHH7SvZnP8hVlHtrulBvDj95THHXeLjIJfqO2lDKAlzxPLiszEo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=WWw46Rh5; arc=none smtp.client-ip=91.218.175.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1728576029; c=relaxed/simple;
+	bh=bOXfCK9aa6Z+FHkqe8BT3+D5wySGG8XgdIRoiD27rJg=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=hjLZKXBTe//WyQ0+/pcC2q4g/gguS1khiWJ+kgFYPDk8YV1xr4Xt1XDN6dVt+ZNjQEUtfAakaqO/kzIdhwHQlq/WREMurpHTkEosT2tvycPMZKN1+clof+Ae69PyAbl2mgInhlkTbz7OQNvJHlens1h4budlcASQFmfPSxNgAkI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=I26nUxRX; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="WWw46Rh5"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1728574747;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=0NRl9gJj7LZCw6qkIuaf1RgQA1DeyCgutryfS6VsNDk=;
-	b=WWw46Rh5sVoKR+zEjJ9mu295LDRt1yPQBBGzR4zpx6IFXsffJFveqQRJqPonflaxo4eLjd
-	YXtnlyTG4YnqK9g+PDZ6E7acf35cv7cFjNb3w1zuWf5hmOg5g7Rboq97Z7ADIRF3oBQqjS
-	rd87Ly7KL/AGbq281Vnjfyr+vVjcCOs=
-From: Leon Hwang <leon.hwang@linux.dev>
-To: bpf@vger.kernel.org
-Cc: ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	toke@redhat.com,
-	martin.lau@kernel.org,
-	yonghong.song@linux.dev,
-	puranjay@kernel.org,
-	xukuohai@huaweicloud.com,
-	eddyz87@gmail.com,
-	iii@linux.ibm.com,
-	leon.hwang@linux.dev,
-	kernel-patches-bot@fb.com
-Subject: [PATCH bpf-next v7 2/2] selftests/bpf: Add test to verify tailcall and freplace restrictions
-Date: Thu, 10 Oct 2024 23:38:35 +0800
-Message-ID: <20241010153835.26984-3-leon.hwang@linux.dev>
-In-Reply-To: <20241010153835.26984-1-leon.hwang@linux.dev>
-References: <20241010153835.26984-1-leon.hwang@linux.dev>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="I26nUxRX"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91A12C4CEC5;
+	Thu, 10 Oct 2024 16:00:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1728576027;
+	bh=bOXfCK9aa6Z+FHkqe8BT3+D5wySGG8XgdIRoiD27rJg=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=I26nUxRX1Oc5WtUzgH72oKUI/ZZmIJFQr8dyEUDXjHSGWjmvabhmt8WnVSZaKZ9xQ
+	 67kSmvTRiSl+uzCesXEVBnHIsRwGJQhu20Zo1WAhosOLcE/JdpovprHeh2v+3Ab21j
+	 I07/bB/7U8UJeIFWT/jdj4389UixdfOdDGw6MmMsW3eQq/iab8FmQ3klKOAd29xIb7
+	 C+4thJKKDZpi4t6tU/mVRZZ6J5duEhE9zodA5Unfej9sWJkwS4ORHwxYS9u+hQ5F5r
+	 O5j93L3EOmcKtcV9Hd5rHBEblpl+QHEtBx636/0tBkCYexF5QHcwTC2Hyr6AJa1biy
+	 FsVSUCNDNDndg==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 348573803263;
+	Thu, 10 Oct 2024 16:00:33 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -53,182 +37,41 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Subject: Re: [PATCH bpf v2] bpf: fix argument type in bpf_loop documentation
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <172857603201.2077656.16946456539767560762.git-patchwork-notify@kernel.org>
+Date: Thu, 10 Oct 2024 16:00:32 +0000
+References: <20241010035652.17830-1-technoboy85@gmail.com>
+In-Reply-To: <20241010035652.17830-1-technoboy85@gmail.com>
+To: Matteo Croce <technoboy85@gmail.com>
+Cc: andrii@kernel.org, bpf@vger.kernel.org, ast@kernel.org,
+ daniel@iogearbox.net, linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+ teknoraver@meta.com
 
-Add a test case to ensure that attaching a tail callee program with an
-freplace program fails, and that updating an extended program to a
-prog_array map is also prohibited.
+Hello:
 
-This test is designed to prevent the potential infinite loop issue caused
-by the combination of tail calls and freplace, ensuring the correct
-behavior and stability of the system.
+This patch was applied to bpf/bpf-next.git (master)
+by Alexei Starovoitov <ast@kernel.org>:
 
-cd tools/testing/selftests/bpf; ./test_progs -t tailcalls
-335/26  tailcalls/tailcall_bpf2bpf_freplace:OK
-335     tailcalls:OK
-Summary: 1/26 PASSED, 0 SKIPPED, 0 FAILED
+On Thu, 10 Oct 2024 04:56:52 +0100 you wrote:
+> From: Matteo Croce <teknoraver@meta.com>
+> 
+> The `index` argument to bpf_loop() is threaded as an u64.
+> This lead in a subtle verifier denial where clang cloned the argument
+> in another register[1].
+> 
+> [1] https://github.com/systemd/systemd/pull/34650#issuecomment-2401092895
+> 
+> [...]
 
-Acked-by: Eduard Zingerman <eddyz87@gmail.com>
-Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
----
- .../selftests/bpf/prog_tests/tailcalls.c      | 98 ++++++++++++++++++-
- .../testing/selftests/bpf/progs/tc_bpf2bpf.c  |  5 +-
- 2 files changed, 99 insertions(+), 4 deletions(-)
+Here is the summary with links:
+  - [bpf,v2] bpf: fix argument type in bpf_loop documentation
+    https://git.kernel.org/bpf/bpf-next/c/5bd48a3a14df
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/tailcalls.c b/tools/testing/selftests/bpf/prog_tests/tailcalls.c
-index 21c5a37846ade..244d1959bbc7f 100644
---- a/tools/testing/selftests/bpf/prog_tests/tailcalls.c
-+++ b/tools/testing/selftests/bpf/prog_tests/tailcalls.c
-@@ -1525,7 +1525,7 @@ static void test_tailcall_freplace(void)
- 
- 	prog_fd = bpf_program__fd(tc_skel->progs.entry_tc);
- 	freplace_prog = freplace_skel->progs.entry_freplace;
--	err = bpf_program__set_attach_target(freplace_prog, prog_fd, "subprog");
-+	err = bpf_program__set_attach_target(freplace_prog, prog_fd, "subprog_tc");
- 	if (!ASSERT_OK(err, "set_attach_target"))
- 		goto out;
- 
-@@ -1534,7 +1534,7 @@ static void test_tailcall_freplace(void)
- 		goto out;
- 
- 	freplace_link = bpf_program__attach_freplace(freplace_prog, prog_fd,
--						     "subprog");
-+						     "subprog_tc");
- 	if (!ASSERT_OK_PTR(freplace_link, "attach_freplace"))
- 		goto out;
- 
-@@ -1556,6 +1556,98 @@ static void test_tailcall_freplace(void)
- 	tailcall_freplace__destroy(freplace_skel);
- }
- 
-+/* test_tailcall_bpf2bpf_freplace checks the failure that fails to attach a tail
-+ * callee prog with freplace prog or fails to update an extended prog to
-+ * prog_array map.
-+ */
-+static void test_tailcall_bpf2bpf_freplace(void)
-+{
-+	struct tailcall_freplace *freplace_skel = NULL;
-+	struct bpf_link *freplace_link = NULL;
-+	struct tc_bpf2bpf *tc_skel = NULL;
-+	char buff[128] = {};
-+	int prog_fd, map_fd;
-+	int err, key;
-+
-+	LIBBPF_OPTS(bpf_test_run_opts, topts,
-+		    .data_in = buff,
-+		    .data_size_in = sizeof(buff),
-+		    .repeat = 1,
-+	);
-+
-+	tc_skel = tc_bpf2bpf__open_and_load();
-+	if (!ASSERT_OK_PTR(tc_skel, "tc_bpf2bpf__open_and_load"))
-+		goto out;
-+
-+	prog_fd = bpf_program__fd(tc_skel->progs.entry_tc);
-+	freplace_skel = tailcall_freplace__open();
-+	if (!ASSERT_OK_PTR(freplace_skel, "tailcall_freplace__open"))
-+		goto out;
-+
-+	err = bpf_program__set_attach_target(freplace_skel->progs.entry_freplace,
-+					     prog_fd, "subprog_tc");
-+	if (!ASSERT_OK(err, "set_attach_target"))
-+		goto out;
-+
-+	err = tailcall_freplace__load(freplace_skel);
-+	if (!ASSERT_OK(err, "tailcall_freplace__load"))
-+		goto out;
-+
-+	/* OK to attach then detach freplace prog. */
-+
-+	freplace_link = bpf_program__attach_freplace(freplace_skel->progs.entry_freplace,
-+						     prog_fd, "subprog_tc");
-+	if (!ASSERT_OK_PTR(freplace_link, "attach_freplace"))
-+		goto out;
-+
-+	err = bpf_link__destroy(freplace_link);
-+	if (!ASSERT_OK(err, "destroy link"))
-+		goto out;
-+
-+	/* OK to update prog_array map then delete element from the map. */
-+
-+	key = 0;
-+	map_fd = bpf_map__fd(freplace_skel->maps.jmp_table);
-+	err = bpf_map_update_elem(map_fd, &key, &prog_fd, BPF_ANY);
-+	if (!ASSERT_OK(err, "update jmp_table"))
-+		goto out;
-+
-+	err = bpf_map_delete_elem(map_fd, &key);
-+	if (!ASSERT_OK(err, "delete_elem from jmp_table"))
-+		goto out;
-+
-+	/* Fail to attach a tail callee prog with freplace prog. */
-+
-+	err = bpf_map_update_elem(map_fd, &key, &prog_fd, BPF_ANY);
-+	if (!ASSERT_OK(err, "update jmp_table"))
-+		goto out;
-+
-+	freplace_link = bpf_program__attach_freplace(freplace_skel->progs.entry_freplace,
-+						     prog_fd, "subprog_tc");
-+	if (!ASSERT_ERR_PTR(freplace_link, "attach_freplace failure"))
-+		goto out;
-+
-+	err = bpf_map_delete_elem(map_fd, &key);
-+	if (!ASSERT_OK(err, "delete_elem from jmp_table"))
-+		goto out;
-+
-+	/* Fail to update an extended prog to prog_array map. */
-+
-+	freplace_link = bpf_program__attach_freplace(freplace_skel->progs.entry_freplace,
-+						     prog_fd, "subprog_tc");
-+	if (!ASSERT_OK_PTR(freplace_link, "attach_freplace"))
-+		goto out;
-+
-+	err = bpf_map_update_elem(map_fd, &key, &prog_fd, BPF_ANY);
-+	if (!ASSERT_ERR(err, "update jmp_table failure"))
-+		goto out;
-+
-+out:
-+	bpf_link__destroy(freplace_link);
-+	tailcall_freplace__destroy(freplace_skel);
-+	tc_bpf2bpf__destroy(tc_skel);
-+}
-+
- void test_tailcalls(void)
- {
- 	if (test__start_subtest("tailcall_1"))
-@@ -1606,4 +1698,6 @@ void test_tailcalls(void)
- 	test_tailcall_bpf2bpf_hierarchy_3();
- 	if (test__start_subtest("tailcall_freplace"))
- 		test_tailcall_freplace();
-+	if (test__start_subtest("tailcall_bpf2bpf_freplace"))
-+		test_tailcall_bpf2bpf_freplace();
- }
-diff --git a/tools/testing/selftests/bpf/progs/tc_bpf2bpf.c b/tools/testing/selftests/bpf/progs/tc_bpf2bpf.c
-index 8a0632c37839a..d1a57f7d09bd8 100644
---- a/tools/testing/selftests/bpf/progs/tc_bpf2bpf.c
-+++ b/tools/testing/selftests/bpf/progs/tc_bpf2bpf.c
-@@ -5,10 +5,11 @@
- #include "bpf_misc.h"
- 
- __noinline
--int subprog(struct __sk_buff *skb)
-+int subprog_tc(struct __sk_buff *skb)
- {
- 	int ret = 1;
- 
-+	__sink(skb);
- 	__sink(ret);
- 	return ret;
- }
-@@ -16,7 +17,7 @@ int subprog(struct __sk_buff *skb)
- SEC("tc")
- int entry_tc(struct __sk_buff *skb)
- {
--	return subprog(skb);
-+	return subprog_tc(skb);
- }
- 
- char __license[] SEC("license") = "GPL";
+You are awesome, thank you!
 -- 
-2.44.0
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
