@@ -1,155 +1,127 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-179.mta0.migadu.com (out-179.mta0.migadu.com [91.218.175.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A3BE192D8B;
-	Thu, 10 Oct 2024 15:38:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EC771C9ED3
+	for <bpf@vger.kernel.org>; Thu, 10 Oct 2024 15:38:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728574717; cv=none; b=ckmn1HSo1DLNwtdO8qJ2PRrLqZef+9yzo4D4zD1srcF4fuDuvEerdd6l5g7RfhAJG/b8yBKBVlMI1KdVIOkCZ9JR0Lqn+Dq7Vap7QOjIjaFrahFiJ6YiOXJ7lATp2QCyPyKY8vjj59KlH/IogiOiB2kXvpsic9gyc40178O6PUM=
+	t=1728574736; cv=none; b=iC4+C++dc340rXVnxkiKJG+qyrSrGqh9e/oI8u/F0SikqkLLmpr4CNfPsqMHAQpeLEeQPqYvwAS+q5+4OIyI4BVDIYIbNdKRYli1A7TCnMO8VQiFzFxj6uMBaVuNATApzhpTF8+kRUK1i0XDZM/qNF2KefUibb8hXpiA8uuxaiA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728574717; c=relaxed/simple;
-	bh=uit4Lub857XpP8bTZpmDL+e/ODYWWFL0tRZq2qQw2uw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HzlOukoZ3lHB+0hyhro4PrMBXQ8s5KF5ljP7WbphbB5x48jHze45qfZ604ADMqrm03uwIdEmuvbpMSEFg69i2t8Bjyancjx16DHHSOkGxbbgMtHLfw5ztMdluavoNvnXiRGaBW3o7fCpZKvnNUD+JYNPYJbBXHZ8wylhDUzKBcI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AD9lnCec; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1728574736; c=relaxed/simple;
+	bh=vDlAQv06+XbDjGLCxE5lzGXAeR29j40K3mZDoArBoVw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Mk9jJSkaFAAu/y2mR48JqB/+5zKtPr2rYRb2Mx7sEWkpR1zd//8huwWYMd7+y+nJ+aLTt9+wtQaN8IclzwzeObzn7B72Ek8H3hC/KO82Wvne2WNdOjf0B9ugu4YyMMASR861pF2Oq93aPJ0CCb6v88ZNB7tPfOmPPKh3BVRpxB8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=HYVC/S+d; arc=none smtp.client-ip=91.218.175.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AD9lnCec"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E071C4CEC5;
-	Thu, 10 Oct 2024 15:38:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1728574717;
-	bh=uit4Lub857XpP8bTZpmDL+e/ODYWWFL0tRZq2qQw2uw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=AD9lnCecP7G3SU98hjKeIg/DUoTrcAwC8Vd9ohjRrn9hwTUbNQ8IhJVBjKTeTqCC/
-	 6LdfgfWTyGgWn2MQb+vO4VdJ+6zUmk9GYW3EMB64DDlvSLS2e6cnLTsu6w8QERMopv
-	 wJG6wF7nOFYdbYdF3mU56JP5HPLIAAHIZ4KLNZa/UtrEq+GE41lcoY+RT16sJWR+qB
-	 56SXpuw05PWLSOOQtttGxTZji+RUvZtLb7W4xT7TvfApTbEmZJLsRXK+TIWjD+/Pzv
-	 fVVNDVEPU9P96+CotDDq6lbVs9uADhuTFLsG86YHLiNDSAfGAzQFkMNhppSl9Ys9R4
-	 8Up8y794nVP8w==
-Date: Thu, 10 Oct 2024 17:38:34 +0200
-From: Frederic Weisbecker <frederic@kernel.org>
-To: "Paul E. McKenney" <paulmck@kernel.org>
-Cc: rcu@vger.kernel.org, linux-kernel@vger.kernel.org, kernel-team@meta.com,
-	rostedt@goodmis.org, Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Kent Overstreet <kent.overstreet@linux.dev>, bpf@vger.kernel.org
-Subject: Re: [PATCH rcu 12/12] refscale: Add srcu_read_lock_lite() support
- using "srcu-lite"
-Message-ID: <Zwf0-jFnWmpPIVy_@localhost.localdomain>
-References: <ff986c31-9cd0-45e5-aa31-9aedf582325f@paulmck-laptop>
- <20241009180719.778285-12-paulmck@kernel.org>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="HYVC/S+d"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1728574732;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=n/cNE7saetwM3+fOOLuNQcdlw9PRulx3xvDxlmDbig4=;
+	b=HYVC/S+dkge+dyzFDnUZ1glP9zsTXITeqJoEMoZJcn7nrE1G4U1gDKxZ5DPfUz/OLiqtnG
+	2vZ9NsXU42pzueXm9diGYpxHe4i1N1pBnVRw8bITdXfA1LEv3esnYZTd1KQJg0TBkvdQqx
+	cwucoZsolnePFp5rkqipOFtNiQB2ILA=
+From: Leon Hwang <leon.hwang@linux.dev>
+To: bpf@vger.kernel.org
+Cc: ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	toke@redhat.com,
+	martin.lau@kernel.org,
+	yonghong.song@linux.dev,
+	puranjay@kernel.org,
+	xukuohai@huaweicloud.com,
+	eddyz87@gmail.com,
+	iii@linux.ibm.com,
+	leon.hwang@linux.dev,
+	kernel-patches-bot@fb.com
+Subject: [PATCH bpf-next v7 0/2] bpf: Fix tailcall infinite loop caused by freplace
+Date: Thu, 10 Oct 2024 23:38:33 +0800
+Message-ID: <20241010153835.26984-1-leon.hwang@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20241009180719.778285-12-paulmck@kernel.org>
+X-Migadu-Flow: FLOW_OUT
 
-Le Wed, Oct 09, 2024 at 11:07:19AM -0700, Paul E. McKenney a écrit :
-> This commit creates a new srcu-lite option for the refscale.scale_type
-> module parameter that selects srcu_read_lock_lite() and
-> srcu_read_unlock_lite().
-> 
-> Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-> Cc: Alexei Starovoitov <ast@kernel.org>
-> Cc: Andrii Nakryiko <andrii@kernel.org>
-> Cc: Peter Zijlstra <peterz@infradead.org>
-> Cc: Kent Overstreet <kent.overstreet@linux.dev>
-> Cc: <bpf@vger.kernel.org>
+Previously, I addressed a tailcall infinite loop issue related to
+trampolines[0].
 
-This one does not apply cleanly. I assume there is some dependency to another
-branch?
+In this patchset, I resolve a similar issue where a tailcall infinite loop
+can occur due to the combination of tailcalls and freplace programs. The
+fix prevents adding extended programs to the prog_array map and blocks the
+extension of a tail callee program with freplace.
 
-Thanks.
+Key changes:
 
-> ---
->  kernel/rcu/refscale.c | 51 +++++++++++++++++++++++++++++++++----------
->  1 file changed, 40 insertions(+), 11 deletions(-)
-> 
-> diff --git a/kernel/rcu/refscale.c b/kernel/rcu/refscale.c
-> index be66e5a67ee19..897d5b5494949 100644
-> --- a/kernel/rcu/refscale.c
-> +++ b/kernel/rcu/refscale.c
-> @@ -216,6 +216,36 @@ static const struct ref_scale_ops srcu_ops = {
->  	.name		= "srcu"
->  };
->  
-> +static void srcu_lite_ref_scale_read_section(const int nloops)
-> +{
-> +	int i;
-> +	int idx;
-> +
-> +	for (i = nloops; i >= 0; i--) {
-> +		idx = srcu_read_lock_lite(srcu_ctlp);
-> +		srcu_read_unlock_lite(srcu_ctlp, idx);
-> +	}
-> +}
-> +
-> +static void srcu_lite_ref_scale_delay_section(const int nloops, const int udl, const int ndl)
-> +{
-> +	int i;
-> +	int idx;
-> +
-> +	for (i = nloops; i >= 0; i--) {
-> +		idx = srcu_read_lock_lite(srcu_ctlp);
-> +		un_delay(udl, ndl);
-> +		srcu_read_unlock_lite(srcu_ctlp, idx);
-> +	}
-> +}
-> +
-> +static const struct ref_scale_ops srcu_lite_ops = {
-> +	.init		= rcu_sync_scale_init,
-> +	.readsection	= srcu_lite_ref_scale_read_section,
-> +	.delaysection	= srcu_lite_ref_scale_delay_section,
-> +	.name		= "srcu-lite"
-> +};
-> +
->  #ifdef CONFIG_TASKS_RCU
->  
->  // Definitions for RCU Tasks ref scale testing: Empty read markers.
-> @@ -1133,27 +1163,26 @@ ref_scale_init(void)
->  	long i;
->  	int firsterr = 0;
->  	static const struct ref_scale_ops *scale_ops[] = {
-> -		&rcu_ops, &srcu_ops, RCU_TRACE_OPS RCU_TASKS_OPS &refcnt_ops, &rwlock_ops,
-> -		&rwsem_ops, &lock_ops, &lock_irq_ops, &acqrel_ops, &sched_clock_ops, &clock_ops,
-> -		&jiffies_ops, &typesafe_ref_ops, &typesafe_lock_ops, &typesafe_seqlock_ops,
-> +		&rcu_ops, &srcu_ops, &srcu_lite_ops, RCU_TRACE_OPS RCU_TASKS_OPS
-> +		&refcnt_ops, &rwlock_ops, &rwsem_ops, &lock_ops, &lock_irq_ops, &acqrel_ops,
-> +		&sched_clock_ops, &clock_ops, &jiffies_ops, &typesafe_ref_ops, &typesafe_lock_ops,
-> +		&typesafe_seqlock_ops,
->  	};
->  
->  	if (!torture_init_begin(scale_type, verbose))
->  		return -EBUSY;
->  
->  	for (i = 0; i < ARRAY_SIZE(scale_ops); i++) {
-> -		cur_ops = scale_ops[i];
-> -		if (strcmp(scale_type, cur_ops->name) == 0)
-> +		cur_ops = scale_ops[i]; if (strcmp(scale_type,
-> +		cur_ops->name) == 0)
->  			break;
->  	}
->  	if (i == ARRAY_SIZE(scale_ops)) {
-> -		pr_alert("rcu-scale: invalid scale type: \"%s\"\n", scale_type);
-> -		pr_alert("rcu-scale types:");
-> -		for (i = 0; i < ARRAY_SIZE(scale_ops); i++)
-> +		pr_alert("rcu-scale: invalid scale type: \"%s\"\n",
-> +		scale_type); pr_alert("rcu-scale types:"); for (i = 0;
-> +		i < ARRAY_SIZE(scale_ops); i++)
->  			pr_cont(" %s", scale_ops[i]->name);
-> -		pr_cont("\n");
-> -		firsterr = -EINVAL;
-> -		cur_ops = NULL;
-> +		pr_cont("\n"); firsterr = -EINVAL; cur_ops = NULL;
->  		goto unwind;
->  	}
->  	if (cur_ops->init)
-> -- 
-> 2.40.1
-> 
+1. If a program or its subprogram has been extended by an freplace program,
+   it can no longer be updated to a prog_array map.
+2. If a program has been added to a prog_array map, neither it nor its
+   subprograms can be extended by an freplace program.
+
+Changes:
+v6 -> v7:
+  * Address comments from Alexei:
+    * Rewrite commit message more imperative and consice with AI.
+    * Extend bpf_trampoline_link_prog() and bpf_trampoline_unlink_prog()
+      to link and unlink target prog for freplace prog.
+    * Use guard(mutex)(&tgt_prog->aux->ext_mutex) instead of
+      mutex_lock()&mutex_unlock() pair.
+  * Address comment from Eduard:
+    * Remove misplaced "Reported-by" and "Closes" tags.
+
+v5 -> v6:
+  * Fix a build warning reported by kernel test robot.
+
+v4 -> v5:
+  * Move code of linking/unlinking target prog of freplace to trampoline.c.
+  * Address comments from Alexei:
+    * Change type of prog_array_member_cnt to u64.
+    * Combine two patches to one.
+
+v3 -> v4:
+  * Address comments from Eduard:
+    * Rename 'tail_callee_cnt' to 'prog_array_member_cnt'.
+    * Add comment to 'prog_array_member_cnt'.
+    * Use a mutex to protect 'is_extended' and 'prog_array_member_cnt'.
+
+v2 -> v3:
+  * Address comments from Alexei:
+    * Stop hacking JIT.
+    * Prevent the specific use case at attach/update time.
+
+v1 -> v2:
+  * Address comment from Eduard:
+    * Explain why nop5 and xor/nop3 are swapped at prologue.
+  * Address comment from Alexei:
+    * Disallow attaching tail_call_reachable freplace prog to
+      not-tail_call_reachable target in verifier.
+  * Update "bpf, arm64: Fix tailcall infinite loop caused by freplace" with
+    latest arm64 JIT code.
+
+Links:
+[0] https://lore.kernel.org/bpf/20230912150442.2009-1-hffilwlqm@gmail.com/
+
+Leon Hwang (2):
+  bpf: Prevent tailcall infinite loop caused by freplace
+  selftests/bpf: Add test to verify tailcall and freplace restrictions
+
+ include/linux/bpf.h                           | 17 +++-
+ kernel/bpf/arraymap.c                         | 23 ++++-
+ kernel/bpf/core.c                             |  1 +
+ kernel/bpf/syscall.c                          |  7 +-
+ kernel/bpf/trampoline.c                       | 37 +++++--
+ .../selftests/bpf/prog_tests/tailcalls.c      | 98 ++++++++++++++++++-
+ .../testing/selftests/bpf/progs/tc_bpf2bpf.c  |  5 +-
+ 7 files changed, 168 insertions(+), 20 deletions(-)
+
+-- 
+2.44.0
+
