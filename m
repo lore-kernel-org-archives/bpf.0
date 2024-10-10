@@ -1,146 +1,155 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BAC71CC146;
-	Thu, 10 Oct 2024 15:24:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A3BE192D8B;
+	Thu, 10 Oct 2024 15:38:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728573883; cv=none; b=eGuiKwfNt5EeK2L+p3GpJvpvhjOCDQd8f2FvlFZK+oNh6Yyln98htJS7xhllkqSK96MDO4RVrPLnCQ3OODE0JJVEzvBzmprYJu0twqWeUnMj8pCVx13Gvwzcwiq1XVzh8w8FnvRojIvtjGcgpXVyMlNOh65ay4RZEsRP0EJPI2I=
+	t=1728574717; cv=none; b=ckmn1HSo1DLNwtdO8qJ2PRrLqZef+9yzo4D4zD1srcF4fuDuvEerdd6l5g7RfhAJG/b8yBKBVlMI1KdVIOkCZ9JR0Lqn+Dq7Vap7QOjIjaFrahFiJ6YiOXJ7lATp2QCyPyKY8vjj59KlH/IogiOiB2kXvpsic9gyc40178O6PUM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728573883; c=relaxed/simple;
-	bh=gnTehr7qrLMKw/pUpKhTMaCY3tpDIt6F6aFobT96HoY=;
+	s=arc-20240116; t=1728574717; c=relaxed/simple;
+	bh=uit4Lub857XpP8bTZpmDL+e/ODYWWFL0tRZq2qQw2uw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jH4/QwYdMYSRHgNrkotABtQpbYoq36PP1zZrVAMHMH/BrigC0mQ3WPBRfCDGKC5uYCSHibLw6MWil3ENOwGHkkXp3Ab0iCgO/KFE4EQtoEUIjSS8aVxYFfcXRyklCG/w8YapZ65fM/iUqWy6hXh+0kxtuuILYCj6NtnWD0M86os=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ekagPdIZ; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=HzlOukoZ3lHB+0hyhro4PrMBXQ8s5KF5ljP7WbphbB5x48jHze45qfZ604ADMqrm03uwIdEmuvbpMSEFg69i2t8Bjyancjx16DHHSOkGxbbgMtHLfw5ztMdluavoNvnXiRGaBW3o7fCpZKvnNUD+JYNPYJbBXHZ8wylhDUzKBcI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AD9lnCec; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ekagPdIZ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94D86C4CEC5;
-	Thu, 10 Oct 2024 15:24:22 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AD9lnCec"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E071C4CEC5;
+	Thu, 10 Oct 2024 15:38:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1728573883;
-	bh=gnTehr7qrLMKw/pUpKhTMaCY3tpDIt6F6aFobT96HoY=;
+	s=k20201202; t=1728574717;
+	bh=uit4Lub857XpP8bTZpmDL+e/ODYWWFL0tRZq2qQw2uw=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ekagPdIZxqT4SWWRuS6VjAHAzc6oWKEW/4hsSTRm4pLygcR/K/5nYo1MRhIB1W8Bi
-	 WhUInbNKfRaSZHzNuMbNo/gh/Dm11IzVkhHlBcuZvhkOJMQBELbJP+QR/GYDeVHSby
-	 +1ODj4I12HqiH5y8g34fzvrSEzf2u/HDRwYAX/nNnTn9iTEhJxcxooLVqAwIKD6FZv
-	 b3fbK7YHQj8tX05PEVkLu2GJn3pxXz8GTYW1p2sF1xOis1mXNPjG1oTG9dYByuOZVe
-	 q0nYNSfpcIxt1MrmJaX80Vmf5bsmJaexf7/nT75nIm1VGT6H7a1RxSwQLd/ELhYVan
-	 63H6TXss7XvhQ==
-Date: Thu, 10 Oct 2024 18:20:53 +0300
-From: Mike Rapoport <rppt@kernel.org>
-To: Sergey Senozhatsky <senozhatsky@chromium.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-	Andreas Larsson <andreas@gaisler.com>,
-	Andy Lutomirski <luto@kernel.org>, Ard Biesheuvel <ardb@kernel.org>,
-	Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-	Brian Cain <bcain@quicinc.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Christoph Hellwig <hch@infradead.org>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Dinh Nguyen <dinguyen@kernel.org>,
-	Geert Uytterhoeven <geert@linux-m68k.org>,
-	Guo Ren <guoren@kernel.org>, Helge Deller <deller@gmx.de>,
-	Huacai Chen <chenhuacai@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-	Johannes Berg <johannes@sipsolutions.net>,
-	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-	Kent Overstreet <kent.overstreet@linux.dev>,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Matt Turner <mattst88@gmail.com>, Max Filippov <jcmvbkbc@gmail.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Michal Simek <monstr@monstr.eu>, Oleg Nesterov <oleg@redhat.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
+	b=AD9lnCecP7G3SU98hjKeIg/DUoTrcAwC8Vd9ohjRrn9hwTUbNQ8IhJVBjKTeTqCC/
+	 6LdfgfWTyGgWn2MQb+vO4VdJ+6zUmk9GYW3EMB64DDlvSLS2e6cnLTsu6w8QERMopv
+	 wJG6wF7nOFYdbYdF3mU56JP5HPLIAAHIZ4KLNZa/UtrEq+GE41lcoY+RT16sJWR+qB
+	 56SXpuw05PWLSOOQtttGxTZji+RUvZtLb7W4xT7TvfApTbEmZJLsRXK+TIWjD+/Pzv
+	 fVVNDVEPU9P96+CotDDq6lbVs9uADhuTFLsG86YHLiNDSAfGAzQFkMNhppSl9Ys9R4
+	 8Up8y794nVP8w==
+Date: Thu, 10 Oct 2024 17:38:34 +0200
+From: Frederic Weisbecker <frederic@kernel.org>
+To: "Paul E. McKenney" <paulmck@kernel.org>
+Cc: rcu@vger.kernel.org, linux-kernel@vger.kernel.org, kernel-team@meta.com,
+	rostedt@goodmis.org, Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
 	Peter Zijlstra <peterz@infradead.org>,
-	Richard Weinberger <richard@nod.at>,
-	Russell King <linux@armlinux.org.uk>, Song Liu <song@kernel.org>,
-	Stafford Horne <shorne@gmail.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Uladzislau Rezki <urezki@gmail.com>,
-	Vineet Gupta <vgupta@kernel.org>, Will Deacon <will@kernel.org>,
-	bpf@vger.kernel.org, linux-alpha@vger.kernel.org,
-	linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-	linux-mips@vger.kernel.org, linux-mm@kvack.org,
-	linux-modules@vger.kernel.org, linux-openrisc@vger.kernel.org,
-	linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
-	linux-sh@vger.kernel.org, linux-snps-arc@lists.infradead.org,
-	linux-trace-kernel@vger.kernel.org, linux-um@lists.infradead.org,
-	linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
-	sparclinux@vger.kernel.org, x86@kernel.org
-Subject: Re: Bisected: [PATCH v5 8/8] x86/module: enable ROX caches for
- module text
-Message-ID: <Zwfw1bC-muLe6I9-@kernel.org>
-References: <20241009180816.83591-1-rppt@kernel.org>
- <20241009180816.83591-9-rppt@kernel.org>
- <20241010083033.GA1279924@google.com>
+	Kent Overstreet <kent.overstreet@linux.dev>, bpf@vger.kernel.org
+Subject: Re: [PATCH rcu 12/12] refscale: Add srcu_read_lock_lite() support
+ using "srcu-lite"
+Message-ID: <Zwf0-jFnWmpPIVy_@localhost.localdomain>
+References: <ff986c31-9cd0-45e5-aa31-9aedf582325f@paulmck-laptop>
+ <20241009180719.778285-12-paulmck@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20241010083033.GA1279924@google.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20241009180719.778285-12-paulmck@kernel.org>
 
-On Thu, Oct 10, 2024 at 05:30:33PM +0900, Sergey Senozhatsky wrote:
-> On (24/10/09 21:08), Mike Rapoport wrote:
-> > From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
-> > 
-> > Enable execmem's cache of PMD_SIZE'ed pages mapped as ROX for module
-> > text allocations.
-> > 
+Le Wed, Oct 09, 2024 at 11:07:19AM -0700, Paul E. McKenney a écrit :
+> This commit creates a new srcu-lite option for the refscale.scale_type
+> module parameter that selects srcu_read_lock_lite() and
+> srcu_read_unlock_lite().
 > 
-> With this modprobe disappoints kmemleak
+> Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+> Cc: Alexei Starovoitov <ast@kernel.org>
+> Cc: Andrii Nakryiko <andrii@kernel.org>
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> Cc: Kent Overstreet <kent.overstreet@linux.dev>
+> Cc: <bpf@vger.kernel.org>
+
+This one does not apply cleanly. I assume there is some dependency to another
+branch?
+
+Thanks.
+
+> ---
+>  kernel/rcu/refscale.c | 51 +++++++++++++++++++++++++++++++++----------
+>  1 file changed, 40 insertions(+), 11 deletions(-)
 > 
-> [   12.700128] kmemleak: Found object by alias at 0xffffffffa000a000
-> [   12.702179] CPU: 5 UID: 0 PID: 410 Comm: modprobe Tainted: G                 N 6.12.0-rc2+ #760
-> [   12.704656] Tainted: [N]=TEST
-> [   12.705526] Call Trace:
-> [   12.706250]  <TASK>
-> [   12.706888]  dump_stack_lvl+0x3e/0xdb
-> [   12.707961]  __find_and_get_object+0x100/0x110
-> [   12.709256]  kmemleak_no_scan+0x2e/0xb0
-> [   12.710354]  kmemleak_load_module+0xad/0xe0
-> [   12.711557]  load_module+0x2391/0x45a0
-> [   12.712507]  __se_sys_finit_module+0x4e0/0x7a0
-> [   12.713599]  do_syscall_64+0x54/0xf0
-> [   12.714477]  ? irqentry_exit_to_user_mode+0x33/0x100
-> [   12.715696]  entry_SYSCALL_64_after_hwframe+0x4b/0x53
-> [   12.716931] RIP: 0033:0x7fc7af51f059
-> [   12.717816] Code: 08 89 e8 5b 5d c3 66 2e 0f 1f 84 00 00 00 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d 8f 1d 0d 00 f7 d8 64 89 01 48
-> [   12.722324] RSP: 002b:00007ffc1d0b0c18 EFLAGS: 00000246 ORIG_RAX: 0000000000000139
-> [   12.724173] RAX: ffffffffffffffda RBX: 00005618a9439b20 RCX: 00007fc7af51f059
-> [   12.725884] RDX: 0000000000000000 RSI: 000056187aea098b RDI: 0000000000000003
-> [   12.727617] RBP: 0000000000000000 R08: 0000000000000060 R09: 00005618a943af60
-> [   12.729361] R10: 0000000000000038 R11: 0000000000000246 R12: 000056187aea098b
-> [   12.731101] R13: 0000000000040000 R14: 00005618a9439ac0 R15: 0000000000000000
-> [   12.732814]  </TASK>
-
-Below is a quick fix, I'll revisit module - kmemleak interaction in v6
-
-
-diff --git a/kernel/module/debug_kmemleak.c b/kernel/module/debug_kmemleak.c
-index b4cc03842d70..df873dad049d 100644
---- a/kernel/module/debug_kmemleak.c
-+++ b/kernel/module/debug_kmemleak.c
-@@ -14,7 +14,8 @@ void kmemleak_load_module(const struct module *mod,
- {
- 	/* only scan writable, non-executable sections */
- 	for_each_mod_mem_type(type) {
--		if (type != MOD_DATA && type != MOD_INIT_DATA)
-+		if (type != MOD_DATA && type != MOD_INIT_DATA &&
-+		    !mod->mem[type].is_rox)
- 			kmemleak_no_scan(mod->mem[type].base);
- 	}
- }
-
--- 
-Sincerely yours,
-Mike.
+> diff --git a/kernel/rcu/refscale.c b/kernel/rcu/refscale.c
+> index be66e5a67ee19..897d5b5494949 100644
+> --- a/kernel/rcu/refscale.c
+> +++ b/kernel/rcu/refscale.c
+> @@ -216,6 +216,36 @@ static const struct ref_scale_ops srcu_ops = {
+>  	.name		= "srcu"
+>  };
+>  
+> +static void srcu_lite_ref_scale_read_section(const int nloops)
+> +{
+> +	int i;
+> +	int idx;
+> +
+> +	for (i = nloops; i >= 0; i--) {
+> +		idx = srcu_read_lock_lite(srcu_ctlp);
+> +		srcu_read_unlock_lite(srcu_ctlp, idx);
+> +	}
+> +}
+> +
+> +static void srcu_lite_ref_scale_delay_section(const int nloops, const int udl, const int ndl)
+> +{
+> +	int i;
+> +	int idx;
+> +
+> +	for (i = nloops; i >= 0; i--) {
+> +		idx = srcu_read_lock_lite(srcu_ctlp);
+> +		un_delay(udl, ndl);
+> +		srcu_read_unlock_lite(srcu_ctlp, idx);
+> +	}
+> +}
+> +
+> +static const struct ref_scale_ops srcu_lite_ops = {
+> +	.init		= rcu_sync_scale_init,
+> +	.readsection	= srcu_lite_ref_scale_read_section,
+> +	.delaysection	= srcu_lite_ref_scale_delay_section,
+> +	.name		= "srcu-lite"
+> +};
+> +
+>  #ifdef CONFIG_TASKS_RCU
+>  
+>  // Definitions for RCU Tasks ref scale testing: Empty read markers.
+> @@ -1133,27 +1163,26 @@ ref_scale_init(void)
+>  	long i;
+>  	int firsterr = 0;
+>  	static const struct ref_scale_ops *scale_ops[] = {
+> -		&rcu_ops, &srcu_ops, RCU_TRACE_OPS RCU_TASKS_OPS &refcnt_ops, &rwlock_ops,
+> -		&rwsem_ops, &lock_ops, &lock_irq_ops, &acqrel_ops, &sched_clock_ops, &clock_ops,
+> -		&jiffies_ops, &typesafe_ref_ops, &typesafe_lock_ops, &typesafe_seqlock_ops,
+> +		&rcu_ops, &srcu_ops, &srcu_lite_ops, RCU_TRACE_OPS RCU_TASKS_OPS
+> +		&refcnt_ops, &rwlock_ops, &rwsem_ops, &lock_ops, &lock_irq_ops, &acqrel_ops,
+> +		&sched_clock_ops, &clock_ops, &jiffies_ops, &typesafe_ref_ops, &typesafe_lock_ops,
+> +		&typesafe_seqlock_ops,
+>  	};
+>  
+>  	if (!torture_init_begin(scale_type, verbose))
+>  		return -EBUSY;
+>  
+>  	for (i = 0; i < ARRAY_SIZE(scale_ops); i++) {
+> -		cur_ops = scale_ops[i];
+> -		if (strcmp(scale_type, cur_ops->name) == 0)
+> +		cur_ops = scale_ops[i]; if (strcmp(scale_type,
+> +		cur_ops->name) == 0)
+>  			break;
+>  	}
+>  	if (i == ARRAY_SIZE(scale_ops)) {
+> -		pr_alert("rcu-scale: invalid scale type: \"%s\"\n", scale_type);
+> -		pr_alert("rcu-scale types:");
+> -		for (i = 0; i < ARRAY_SIZE(scale_ops); i++)
+> +		pr_alert("rcu-scale: invalid scale type: \"%s\"\n",
+> +		scale_type); pr_alert("rcu-scale types:"); for (i = 0;
+> +		i < ARRAY_SIZE(scale_ops); i++)
+>  			pr_cont(" %s", scale_ops[i]->name);
+> -		pr_cont("\n");
+> -		firsterr = -EINVAL;
+> -		cur_ops = NULL;
+> +		pr_cont("\n"); firsterr = -EINVAL; cur_ops = NULL;
+>  		goto unwind;
+>  	}
+>  	if (cur_ops->init)
+> -- 
+> 2.40.1
+> 
