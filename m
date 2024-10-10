@@ -1,131 +1,116 @@
-Received: from mail-yb1-f195.google.com (mail-yb1-f195.google.com [209.85.219.195])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68A641BF336;
-	Thu, 10 Oct 2024 09:18:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E16919F41D;
+	Thu, 10 Oct 2024 09:33:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728551887; cv=none; b=N0+O+TUf2/dm+iQkougjftdB7cSuOKDRXZbn8XceUjo97BAH/2Mek2ToyQw7zedwtubjBTAeFkMWxxF5HhlZ2EbzN7+MYzPkrWrbVNr9Kb9euEmL0qYaw5QPcdnHDO9RiRVi9DEyz7OXQnLyuLaGBOI2DD+6qSNLnP9eTFSrdeo=
+	t=1728552807; cv=none; b=qPbpPVDQ+a8w6ozik17wcF4sHnzlSlMtYbOOBirI1CMQ7+FaASMvxnkQT84rDIHBrntHdnO4iEosLxOUZQa8SmUQGYr9DaJv+xEzR3v4/zcN8qEY9NRQaAZsDCe73IqkOWfDbNaxYTazOrc7k0bSNL6zeym/myyb35m2V6Bfp5A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728551887; c=relaxed/simple;
-	bh=rUHHk8rgJHWQvI6g2briKgZOqZvbsnK5PdnEPkVLbfA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=mms4TWYDe6dZlGVV6NGpYXoekV9UYo4qNZQb143s+cHdQ+2+Fj5cTdmdi4Ew01FA8i8trVV4q7mpgAepYgCX2lPjSfU8GWwGy7zD6ud0HqffMSpL6YaRSduvnfiokCaZWmpdHSnzUozN3yYNzaxLY6CYswa2v8/wDVLJ1tjkR9U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EYPEB+n0; arc=none smtp.client-ip=209.85.219.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1728552807; c=relaxed/simple;
+	bh=IHjj8Pm1cvim8ImsaUaQl0ADY0QKS9kDKJZxcyI9510=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=P/kr7K7j/QChCjIu/QlHZg+ZRwrQVwQxKsyHLxgkTbFOEYPnBEgIqKDJxaMzUqyKWyjV/9jfdPxGIV2KeMOft14D/2mFu75sW25ifO3tF+kcunTi0J88LrnA4YI+JF9sL/alYVzkHMgepippNUT45QyNC9v5b6Aey+zKF7CbpTc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TOVNNKtr; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EYPEB+n0"
-Received: by mail-yb1-f195.google.com with SMTP id 3f1490d57ef6-e25cc9e94eeso565293276.3;
-        Thu, 10 Oct 2024 02:18:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1728551884; x=1729156684; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vgEoSDXOx4rxS6fo7C9XyhinmE5c4V0uc58RByhFdoc=;
-        b=EYPEB+n0+loOPbd0UwdgYJukPTa0LFbZLn6aVKTeleASBxwSkUdS9Pg7ngrk0v79hR
-         7dRkuMp1P6HezlcRXPYNB5p3SRzNepB6sbQB/syHuPxUGqyM+GnkBH2DwBShs5Y++gh/
-         vH4L8Ewf97SH1qzniu7xYc7Ue2JPIT5Wj0w3wj5dhd60Zqu41fgzYRYrtXknhvNwqLe7
-         K8Mrg/DU/mMIp2y0Ft/UF5H1O02Uspk7sA1stokp2DCK7DvSVbQDZDoADDTkCdRfsdxV
-         oT30khUH5dRNUDzfBNTcBB+xkB0WOAyaXc+w1nwc7zUfPu0B36ziZHDwDLPx10qrHyTl
-         Keuw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728551884; x=1729156684;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=vgEoSDXOx4rxS6fo7C9XyhinmE5c4V0uc58RByhFdoc=;
-        b=dswf4zLfgX1dXz3Bjzy7yEv5X6pn9v/BKLOQxzOIflYmKCHA2ogKZfKtioS7IyNrGt
-         3CX5Qz5G2lPTtnKuaqWtTzEvMkzGT+H+Aq7NH3sB2tx39ODbSgSv0XK/FMtKh4Eo26Rl
-         xHmqovdn0QmstOfiAMcyfETM/svolSFfaRk/8KwOaLNffFp7m+2DvovY2iTtfn8pJE2D
-         VeW8+sEuC2M2dux1tSrCkEgiaWfaImb/Kw4BuK7TkXM/ZYDj7jWq3VeGPFBYjof8OvLP
-         Hi6X7zgzHdA0SrvEWkXgiXd/3aYcUrun8Wvr0Ftgo+rzKmj9Oip0Vrq/0wDlkgDheo62
-         Cd0w==
-X-Forwarded-Encrypted: i=1; AJvYcCUAgyJBcJoE6HUenWfAT9tNKdCV8hM9hhzFkONSkjZMIEIEqmliOt6Gi8TgFSLQmfRpU94=@vger.kernel.org, AJvYcCVlvY7omyqTKgOXhg9vKFU5oZGSvkxNisBnLbmVbFEaF+tJTl9aQbZ91+NfLvVkHttnqnupI7j3@vger.kernel.org, AJvYcCWLKm94mfm4MMsU+GnRNzFEjvfwRfAOl/3Hjp/sGa0ghJ616yRCP+WQAbzRPqE8ildy7cqzMqgERZc1z273@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywm6+mAMpny1Upx8SKN9VW1eLtgIREmzQQgC1jroLFVSWDmC6AA
-	zkYj0fV5UjSvJW2Lq83H/CL3VARSDlpk9xZpsrFkdgBxcAUNPgNniFcMbtgUvn69nUyLGUPFgrD
-	19dvAoLZ6Q/vT8A9/CqisjBkOsWU=
-X-Google-Smtp-Source: AGHT+IEs7eWnfTZKB14a5GrK0aqxuXs9/I7G3sqBW7ksOuF23qKYuOoSI9ITP1aD/hko3sqoVtCcuoKDNhAAzj2w4IM=
-X-Received: by 2002:a05:6902:240d:b0:e28:f558:ae4c with SMTP id
- 3f1490d57ef6-e28fe32dddcmr4949218276.1.1728551884329; Thu, 10 Oct 2024
- 02:18:04 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TOVNNKtr"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18111C4CEC5;
+	Thu, 10 Oct 2024 09:33:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1728552807;
+	bh=IHjj8Pm1cvim8ImsaUaQl0ADY0QKS9kDKJZxcyI9510=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=TOVNNKtrf8daQuuMacjY7pAlRlt/k4vb7wjQCQYF0aVuw/4MxtY1IEDmecYy869WA
+	 eL70bjSLCWzeSg87onzBIfUU+BSv9+MhwYkC/eIJ924jg8Lyc5Ubk1r7GreDoZptDJ
+	 teVpdajxre4MsBPJA9mql4sRA7irY3J0uloNZaSVW+zDmxt4CzZVh6D1UOnW7YD45l
+	 /XMlYCHBMS9YgkvBhtdnENr2FDWIvohUoNzgrqIpRpXIOWraQQuc8IrP9OJlfmnsWJ
+	 /Y7TcehyVVbI3ky02lFC2Bu9TlmKaTridXnO8cdxvFKPK24cuDB2/RZZ9PsqYrxZV2
+	 Py4W9D9Jti/XA==
+Date: Thu, 10 Oct 2024 12:29:39 +0300
+From: Mike Rapoport <rppt@kernel.org>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: Andreas Larsson <andreas@gaisler.com>,
+	Andy Lutomirski <luto@kernel.org>, Ard Biesheuvel <ardb@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+	Brian Cain <bcain@quicinc.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Christoph Hellwig <hch@infradead.org>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Dinh Nguyen <dinguyen@kernel.org>,
+	Geert Uytterhoeven <geert@linux-m68k.org>,
+	Guo Ren <guoren@kernel.org>, Helge Deller <deller@gmx.de>,
+	Huacai Chen <chenhuacai@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+	Johannes Berg <johannes@sipsolutions.net>,
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+	Kent Overstreet <kent.overstreet@linux.dev>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Matt Turner <mattst88@gmail.com>, Max Filippov <jcmvbkbc@gmail.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Michal Simek <monstr@monstr.eu>, Oleg Nesterov <oleg@redhat.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Richard Weinberger <richard@nod.at>,
+	Russell King <linux@armlinux.org.uk>, Song Liu <song@kernel.org>,
+	Stafford Horne <shorne@gmail.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Uladzislau Rezki <urezki@gmail.com>,
+	Vineet Gupta <vgupta@kernel.org>, Will Deacon <will@kernel.org>,
+	bpf@vger.kernel.org, linux-alpha@vger.kernel.org,
+	linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+	linux-mips@vger.kernel.org, linux-mm@kvack.org,
+	linux-modules@vger.kernel.org, linux-openrisc@vger.kernel.org,
+	linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
+	linux-sh@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+	linux-trace-kernel@vger.kernel.org, linux-um@lists.infradead.org,
+	linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
+	sparclinux@vger.kernel.org, x86@kernel.org
+Subject: Re: [PATCH v5 7/8] execmem: add support for cache of large ROX pages
+Message-ID: <Zweeg3oc-zrrG_D9@kernel.org>
+References: <20241009180816.83591-1-rppt@kernel.org>
+ <20241009180816.83591-8-rppt@kernel.org>
+ <20241009132427.5c94fb5942bae3832446bca5@linux-foundation.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241007074702.249543-1-dongml2@chinatelecom.cn>
- <20241007074702.249543-2-dongml2@chinatelecom.cn> <7caf130c-56f0-4f78-a006-5323e237cef1@redhat.com>
-In-Reply-To: <7caf130c-56f0-4f78-a006-5323e237cef1@redhat.com>
-From: Menglong Dong <menglong8.dong@gmail.com>
-Date: Thu, 10 Oct 2024 17:18:45 +0800
-Message-ID: <CADxym3baw2nLvANd-D5D2kCNRRoDmdgexBeGmD-uCcYYqAf=EQ@mail.gmail.com>
-Subject: Re: [PATCH net-next v2 1/7] net: ip: make fib_validate_source()
- return drop reason
-To: Paolo Abeni <pabeni@redhat.com>
-Cc: edumazet@google.com, kuba@kernel.org, davem@davemloft.net, 
-	dsahern@kernel.org, steffen.klassert@secunet.com, herbert@gondor.apana.org.au, 
-	dongml2@chinatelecom.cn, bigeasy@linutronix.de, toke@redhat.com, 
-	idosch@nvidia.com, netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241009132427.5c94fb5942bae3832446bca5@linux-foundation.org>
 
-On Thu, Oct 10, 2024 at 4:25=E2=80=AFPM Paolo Abeni <pabeni@redhat.com> wro=
-te:
->
->
->
-> On 10/7/24 09:46, Menglong Dong wrote:
-> > In this commit, we make fib_validate_source/__fib_validate_source retur=
-n
-> > -reason instead of errno on error. As the return value of them can be
-> > -errno, 0, and 1, we can't make it return enum skb_drop_reason directly=
-.
-> >
-> > In the origin logic, if __fib_validate_source() return -EXDEV,
-> > LINUX_MIB_IPRPFILTER will be counted. And now, we need to adjust it by
-> > checking "reason =3D=3D SKB_DROP_REASON_IP_RPFILTER". However, this wil=
-l take
-> > effect only after the patch "net: ip: make ip_route_input_noref() retur=
-n
-> > drop reasons", as we can't pass the drop reasons from
-> > fib_validate_source() to ip_rcv_finish_core() in this patch.
-> >
-> > We set the errno to -EINVAL when fib_validate_source() is called and th=
-e
-> > validation fails, as the errno can be checked in the caller and now its
-> > value is -reason, which can lead misunderstand.
-> >
-> > Following new drop reasons are added in this patch:
-> >
-> >    SKB_DROP_REASON_IP_LOCAL_SOURCE
-> >    SKB_DROP_REASON_IP_INVALID_SOURCE
-> >
-> > Signed-off-by: Menglong Dong <dongml2@chinatelecom.cn>
->
-> Looking at the next patches, I'm under the impression that the overall
-> code will be simpler if you let __fib_validate_source() return directly
-> a drop reason, and fib_validate_source(), too. Hard to be sure without
-> actually do the attempt... did you try such patch by any chance?
->
+On Wed, Oct 09, 2024 at 01:24:27PM -0700, Andrew Morton wrote:
+> On Wed,  9 Oct 2024 21:08:15 +0300 Mike Rapoport <rppt@kernel.org> wrote:
+> 
+> > Using large pages to map text areas reduces iTLB pressure and improves
+> > performance.
+> 
+> Are there any measurable performance improvements?
 
-I analysed the usages of fib_validate_source() before. The
-return value of fib_validate_source() can be -errno, "0", and "1".
-And the value "1" can be used by the caller, such as
-__mkroute_input(). Making it return drop reasons can't cover this
-case.
+I don't have any numbers, I just followed the common sense of "less TLB
+entries is better" and relied on Thomas comments from previous discussions.
+ 
+> What are the effects of this series upon overall memory consumption?
+ 
+There will be some execmem cache fragmentation and an increase in memory
+consumption. It depends on the actual modules loaded and how large it the
+fragmentation.
 
-It seems that __mkroute_input() is the only case that uses the
-positive returning value of fib_validate_source(). Let me think
-about it more in this case.
+For a set of pretty randomly chosen modules where most come from
+net/netfilter I see an increase from 19M to 25M.
 
-Thanks!
-Menglong Dong
+> The lack of acks is a bit surprising for a v5 patch, but I'll add all
+> this to mm.git for some testing, thanks.
+> 
 
-> Thanks!
->
-> Paolo
->
+-- 
+Sincerely yours,
+Mike.
