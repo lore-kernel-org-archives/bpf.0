@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87C251C7B6F;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB8691C8FC1;
 	Fri, 11 Oct 2024 17:39:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728668373; cv=none; b=JxeKvSjalUCkUQRINOgRpjj2XIvD6+PvI9stlmLMfHNWzSKUwl3Zj9VL2p8gY36PNNmCMdI5JZi0npM5AgAlSUX8v2vesWedKOr7NY9cGdoRyyzATyvSYHONYHnD4vsQbwcZb7Afzh6rG0VLtlWVIUpdYRsJMmp0EBrnrm1X9wA=
+	t=1728668373; cv=none; b=QiIagrMLGsIOFdQFsez8A/7GSGXUfbFk0T7s/yC1gOQHnbwraOqLxPn60aGQAyaz+f5ZO4HYn7dWoYOPNF8PPgZbAQXtGjWr/Q48k02hAaIV3zRA9JCPaqxUG7QYfBLnNNaqQV1q3n1YW95Giy+oogntqLshX4FXkkpg+qv3N/k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1728668373; c=relaxed/simple;
-	bh=LFRisZMxRbIMr0KIalT12nZOMI5l1WeI4c/6S81vXZY=;
+	bh=USWy1f2+MRE4E6Ag+HiaCUvOKEVnE9SJTDypoSyYrTo=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=QRcz4Nm+h1S9e8M3cVGpUJoKawdHeYu8Q1BThi+MAUDr2ARETIw1P17x6fwVdJpw4YE9bH0KFmlhUCR4AMM2sWde+GWZzRsvFX3yVY+CSDjXQuIt29UCQsFxWMAxWH/lz4YbHp8rWDY8644BJofgfBt0kOYWKwYFcKNoSkT8wbA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Sm2Yv2Ih; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=N4qDN1q2r7u5I9FWNKgGVm0fPpGobyOAuX43/b3FTV2sv5GwBDc5Clfsh+Str8yF9EBr9+bXufxF88zYyVaFtVuZdGbZum4+Gx7NL3HeanryXZlUpseNfLVome6qzVEqMIhDrOgXHGut/I6QJSI4FmLdJeMNjA8kfvTC6K2DcQY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qWt70X3v; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Sm2Yv2Ih"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4DEF5C4CEDC;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qWt70X3v"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5471AC4CEE0;
 	Fri, 11 Oct 2024 17:39:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1728668373;
-	bh=LFRisZMxRbIMr0KIalT12nZOMI5l1WeI4c/6S81vXZY=;
+	bh=USWy1f2+MRE4E6Ag+HiaCUvOKEVnE9SJTDypoSyYrTo=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Sm2Yv2IhK9/MC9wYy2QAb6Q7iUpUqYCTlMv2o//0E8M7YnLcH3NXGHIyIDWqC8Qlb
-	 l8YJg7KAV/hH5WRaUbPaA3+ZZ1XDPTR17XtzvUDsRP60DKUbUeBZluQv0Dqg0pMCBH
-	 lX+JSs35wqPRGGhIBwubWS/YfF7HoMidcVIEGd+Q3tO2F9p7L2Ri/v0N5OvIF8IyGq
-	 6kXZC3Ry5/ZNHRHC1YfiszeLZmmSxz2bOtuAYZM1reqkuI6GHSLaciGNcuI7a4cASq
-	 0/6GD7kZ7Rol+QY/UuG7H2mS2NT+cLDWUCSqqtAne9YPxecIBjPhhfNTOsgx78I3DH
-	 ptT8HZb/rwZWQ==
+	b=qWt70X3vWL4k1++QjbqhK9UTXcYfoXrqaN3XJc2cMveljYcrGtmmVMtfq4zYc1jgp
+	 dAc7XV0/Vj1QouUrgvGS9ytfnOkFnaVAiWd7/QvSOHo/GbggKfkhSEMm/FmG2pD4CZ
+	 Te9OmCZCqufJ0miu62e84WhJClzHpmYoHJQ6dCxXQdWr8uADAYN73WLbkdcNTm6GuB
+	 N5aUJRSNfJvJ1WGY8ib8FHlpkXgpx89wJprESjVSy+Frj98gaWgXDRwyHM+RV46Lab
+	 ojj9QPzPhfRH8jKojCu37UiLAKCUZYFtDEeDiaVm/bGjy0LDrP82erJlflQhFoqigq
+	 dxXb65Zf5uFCw==
 Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-	id A76ECCE0F52; Fri, 11 Oct 2024 10:39:32 -0700 (PDT)
+	id B037ECE0F96; Fri, 11 Oct 2024 10:39:32 -0700 (PDT)
 From: "Paul E. McKenney" <paulmck@kernel.org>
 To: frederic@kernel.org,
 	rcu@vger.kernel.org
@@ -35,15 +35,14 @@ Cc: linux-kernel@vger.kernel.org,
 	kernel-team@meta.com,
 	rostedt@goodmis.org,
 	"Paul E. McKenney" <paulmck@kernel.org>,
-	kernel test robot <oliver.sang@intel.com>,
 	Alexei Starovoitov <ast@kernel.org>,
 	Andrii Nakryiko <andrii@kernel.org>,
 	Peter Zijlstra <peterz@infradead.org>,
 	Kent Overstreet <kent.overstreet@linux.dev>,
 	bpf@vger.kernel.org
-Subject: [PATCH v2 rcu 06/13] srcu: Add srcu_read_lock_lite() and srcu_read_unlock_lite()
-Date: Fri, 11 Oct 2024 10:39:24 -0700
-Message-Id: <20241011173931.2050422-6-paulmck@kernel.org>
+Subject: [PATCH v2 rcu 09/13] rcutorture: Add reader_flavor parameter for SRCU readers
+Date: Fri, 11 Oct 2024 10:39:27 -0700
+Message-Id: <20241011173931.2050422-9-paulmck@kernel.org>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <3b82ac1a-8786-4a27-8eff-ecc67b50dfb6@paulmck-laptop>
 References: <3b82ac1a-8786-4a27-8eff-ecc67b50dfb6@paulmck-laptop>
@@ -55,291 +54,109 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This patch adds srcu_read_lock_lite() and srcu_read_unlock_lite(), which
-dispense with the read-side smp_mb() but also are restricted to code
-regions that RCU is watching.  If a given srcu_struct structure uses
-srcu_read_lock_lite() and srcu_read_unlock_lite(), it is not permitted
-to use any other SRCU read-side marker, before, during, or after.
-
-Another price of light-weight readers is heavier weight grace periods.
-Such readers mean that SRCU grace periods on srcu_struct structures
-used by light-weight readers will incur at least two calls to
-synchronize_rcu().  In addition, normal SRCU grace periods for
-light-weight-reader srcu_struct structures never auto-expedite.
-Note that expedited SRCU grace periods for light-weight-reader
-srcu_struct structures still invoke synchronize_rcu(), not
-synchronize_srcu_expedited().  Something about wishing to keep
-the IPIs down to a dull roar.
-
-The srcu_read_lock_lite() and srcu_read_unlock_lite() functions may not
-(repeat, *not*) be used from NMI handlers, but if this is needed, an
-additional flavor of SRCU reader can be added by some future commit.
-
-[ paulmck: Apply Alexei Starovoitov expediting feedback. ]
-[ paulmck: Apply kernel test robot feedback. ]
+This commit adds an rcutorture.reader_flavor parameter whose bits
+correspond to reader flavors.  For example, SRCU's readers are 0x1 for
+normal and 0x2 for NMI-safe.
 
 Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-Tested-by: kernel test robot <oliver.sang@intel.com>
 Cc: Alexei Starovoitov <ast@kernel.org>
 Cc: Andrii Nakryiko <andrii@kernel.org>
 Cc: Peter Zijlstra <peterz@infradead.org>
 Cc: Kent Overstreet <kent.overstreet@linux.dev>
 Cc: <bpf@vger.kernel.org>
 ---
- include/linux/srcu.h     | 51 ++++++++++++++++++++++++-
- include/linux/srcutree.h |  1 +
- kernel/rcu/srcutree.c    | 82 ++++++++++++++++++++++++++++++++++------
- 3 files changed, 122 insertions(+), 12 deletions(-)
+ .../admin-guide/kernel-parameters.txt         |  8 +++++
+ kernel/rcu/rcutorture.c                       | 30 ++++++++++++++-----
+ 2 files changed, 30 insertions(+), 8 deletions(-)
 
-diff --git a/include/linux/srcu.h b/include/linux/srcu.h
-index 84daaa33ea0ab..4ba96e2cfa405 100644
---- a/include/linux/srcu.h
-+++ b/include/linux/srcu.h
-@@ -56,6 +56,13 @@ void call_srcu(struct srcu_struct *ssp, struct rcu_head *head,
- void cleanup_srcu_struct(struct srcu_struct *ssp);
- int __srcu_read_lock(struct srcu_struct *ssp) __acquires(ssp);
- void __srcu_read_unlock(struct srcu_struct *ssp, int idx) __releases(ssp);
-+#ifdef CONFIG_TINY_SRCU
-+#define __srcu_read_lock_lite __srcu_read_lock
-+#define __srcu_read_unlock_lite __srcu_read_unlock
-+#else // #ifdef CONFIG_TINY_SRCU
-+int __srcu_read_lock_lite(struct srcu_struct *ssp) __acquires(ssp);
-+void __srcu_read_unlock_lite(struct srcu_struct *ssp, int idx) __releases(ssp);
-+#endif // #else // #ifdef CONFIG_TINY_SRCU
- void synchronize_srcu(struct srcu_struct *ssp);
+diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+index 1518343bbe223..52922727006fc 100644
+--- a/Documentation/admin-guide/kernel-parameters.txt
++++ b/Documentation/admin-guide/kernel-parameters.txt
+@@ -5426,6 +5426,14 @@
+ 			The delay, in seconds, between successive
+ 			read-then-exit testing episodes.
  
- #define SRCU_GET_STATE_COMPLETED 0x1
-@@ -179,7 +186,7 @@ static inline int srcu_read_lock_held(const struct srcu_struct *ssp)
- #if defined(CONFIG_PROVE_RCU) && defined(CONFIG_TREE_SRCU)
- void srcu_check_read_flavor(struct srcu_struct *ssp, int read_flavor);
- #else
--static inline void srcu_check_read_flavor(struct srcu_struct *ssp, int read_flavor) { }
-+#define srcu_check_read_flavor(ssp, read_flavor) do { } while (0)
- #endif
- 
- 
-@@ -249,6 +256,32 @@ static inline int srcu_read_lock(struct srcu_struct *ssp) __acquires(ssp)
- 	return retval;
- }
- 
-+/**
-+ * srcu_read_lock_lite - register a new reader for an SRCU-protected structure.
-+ * @ssp: srcu_struct in which to register the new reader.
-+ *
-+ * Enter an SRCU read-side critical section, but for a light-weight
-+ * smp_mb()-free reader.  See srcu_read_lock() for more information.
-+ *
-+ * If srcu_read_lock_lite() is ever used on an srcu_struct structure,
-+ * then none of the other flavors may be used, whether before, during,
-+ * or after.  Note that grace-period auto-expediting is disabled for _lite
-+ * srcu_struct structures because auto-expedited grace periods invoke
-+ * synchronize_rcu_expedited(), IPIs and all.
-+ *
-+ * Note that srcu_read_lock_lite() can be invoked only from those contexts
-+ * where RCU is watching.  Otherwise, lockdep will complain.
-+ */
-+static inline int srcu_read_lock_lite(struct srcu_struct *ssp) __acquires(ssp)
-+{
-+	int retval;
++	rcutorture.reader_flavor= [KNL]
++			A bit mask indicating which readers to use.
++			If there is more than one bit set, the readers
++			are entered from low-order bit up, and are
++			exited in the opposite order.  For SRCU, the
++			0x1 bit is normal readers and the 0x2 bit is
++			for NMI-safe readers.
 +
-+	srcu_check_read_flavor(ssp, SRCU_READ_FLAVOR_LITE);
-+	retval = __srcu_read_lock_lite(ssp);
-+	rcu_try_lock_acquire(&ssp->dep_map);
-+	return retval;
-+}
-+
- /**
-  * srcu_read_lock_nmisafe - register a new reader for an SRCU-protected structure.
-  * @ssp: srcu_struct in which to register the new reader.
-@@ -325,6 +358,22 @@ static inline void srcu_read_unlock(struct srcu_struct *ssp, int idx)
- 	__srcu_read_unlock(ssp, idx);
- }
+ 	rcutorture.shuffle_interval= [KNL]
+ 			Set task-shuffle interval (s).  Shuffling tasks
+ 			allows some CPUs to go into dyntick-idle mode
+diff --git a/kernel/rcu/rcutorture.c b/kernel/rcu/rcutorture.c
+index f96ab98f8182f..405decec33677 100644
+--- a/kernel/rcu/rcutorture.c
++++ b/kernel/rcu/rcutorture.c
+@@ -111,6 +111,7 @@ torture_param(int, nocbs_nthreads, 0, "Number of NOCB toggle threads, 0 to disab
+ torture_param(int, nocbs_toggle, 1000, "Time between toggling nocb state (ms)");
+ torture_param(int, read_exit_delay, 13, "Delay between read-then-exit episodes (s)");
+ torture_param(int, read_exit_burst, 16, "# of read-then-exit bursts per episode, zero to disable");
++torture_param(int, reader_flavor, 0x1, "Reader flavors to use, one per bit.");
+ torture_param(int, shuffle_interval, 3, "Number of seconds between shuffles");
+ torture_param(int, shutdown_secs, 0, "Shutdown time (s), <= zero to disable.");
+ torture_param(int, stall_cpu, 0, "Stall duration (s), zero to disable.");
+@@ -644,10 +645,20 @@ static void srcu_get_gp_data(int *flags, unsigned long *gp_seq)
  
-+/**
-+ * srcu_read_unlock_lite - unregister a old reader from an SRCU-protected structure.
-+ * @ssp: srcu_struct in which to unregister the old reader.
-+ * @idx: return value from corresponding srcu_read_lock().
-+ *
-+ * Exit a light-weight SRCU read-side critical section.
-+ */
-+static inline void srcu_read_unlock_lite(struct srcu_struct *ssp, int idx)
-+	__releases(ssp)
-+{
-+	WARN_ON_ONCE(idx & ~0x1);
-+	srcu_check_read_flavor(ssp, SRCU_READ_FLAVOR_LITE);
-+	srcu_lock_release(&ssp->dep_map);
-+	__srcu_read_unlock(ssp, idx);
-+}
-+
- /**
-  * srcu_read_unlock_nmisafe - unregister a old reader from an SRCU-protected structure.
-  * @ssp: srcu_struct in which to unregister the old reader.
-diff --git a/include/linux/srcutree.h b/include/linux/srcutree.h
-index 79ad809c7f035..8074138cbd624 100644
---- a/include/linux/srcutree.h
-+++ b/include/linux/srcutree.h
-@@ -46,6 +46,7 @@ struct srcu_data {
- /* Values for ->srcu_reader_flavor. */
- #define SRCU_READ_FLAVOR_NORMAL	0x1		// srcu_read_lock().
- #define SRCU_READ_FLAVOR_NMI	0x2		// srcu_read_lock_nmisafe().
-+#define SRCU_READ_FLAVOR_LITE	0x4		// srcu_read_lock_lite().
- 
- /*
-  * Node in SRCU combining tree, similar in function to rcu_data.
-diff --git a/kernel/rcu/srcutree.c b/kernel/rcu/srcutree.c
-index 4c51be484b48a..bf51758cf4a64 100644
---- a/kernel/rcu/srcutree.c
-+++ b/kernel/rcu/srcutree.c
-@@ -429,20 +429,29 @@ static bool srcu_gp_is_expedited(struct srcu_struct *ssp)
- }
- 
- /*
-- * Returns approximate total of the readers' ->srcu_lock_count[] values
-- * for the rank of per-CPU counters specified by idx.
-+ * Computes approximate total of the readers' ->srcu_lock_count[] values
-+ * for the rank of per-CPU counters specified by idx, and returns true if
-+ * the caller did the proper barrier (gp), and if the count of the locks
-+ * matches that of the unlocks passed in.
-  */
--static unsigned long srcu_readers_lock_idx(struct srcu_struct *ssp, int idx)
-+static bool srcu_readers_lock_idx(struct srcu_struct *ssp, int idx, bool gp, unsigned long unlocks)
+ static int srcu_torture_read_lock(void)
  {
- 	int cpu;
-+	unsigned long mask = 0;
- 	unsigned long sum = 0;
- 
- 	for_each_possible_cpu(cpu) {
- 		struct srcu_data *sdp = per_cpu_ptr(ssp->sda, cpu);
- 
- 		sum += atomic_long_read(&sdp->srcu_lock_count[idx]);
-+		if (IS_ENABLED(CONFIG_PROVE_RCU))
-+			mask = mask | READ_ONCE(sdp->srcu_reader_flavor);
- 	}
--	return sum;
-+	WARN_ONCE(IS_ENABLED(CONFIG_PROVE_RCU) && (mask & (mask - 1)),
-+		  "Mixed reader flavors for srcu_struct at %ps.\n", ssp);
-+	if (mask & SRCU_READ_FLAVOR_LITE && !gp)
-+		return false;
-+	return sum == unlocks;
- }
- 
- /*
-@@ -473,6 +482,7 @@ static unsigned long srcu_readers_unlock_idx(struct srcu_struct *ssp, int idx)
-  */
- static bool srcu_readers_active_idx_check(struct srcu_struct *ssp, int idx)
- {
-+	bool did_gp = !!(raw_cpu_read(ssp->sda->srcu_reader_flavor) & SRCU_READ_FLAVOR_LITE);
- 	unsigned long unlocks;
- 
- 	unlocks = srcu_readers_unlock_idx(ssp, idx);
-@@ -482,13 +492,16 @@ static bool srcu_readers_active_idx_check(struct srcu_struct *ssp, int idx)
- 	 * unlock is counted. Needs to be a smp_mb() as the read side may
- 	 * contain a read from a variable that is written to before the
- 	 * synchronize_srcu() in the write side. In this case smp_mb()s
--	 * A and B act like the store buffering pattern.
-+	 * A and B (or X and Y) act like the store buffering pattern.
- 	 *
--	 * This smp_mb() also pairs with smp_mb() C to prevent accesses
--	 * after the synchronize_srcu() from being executed before the
--	 * grace period ends.
-+	 * This smp_mb() also pairs with smp_mb() C (or, in the case of X,
-+	 * Z) to prevent accesses after the synchronize_srcu() from being
-+	 * executed before the grace period ends.
- 	 */
--	smp_mb(); /* A */
-+	if (!did_gp)
-+		smp_mb(); /* A */
-+	else
-+		synchronize_rcu(); /* X */
- 
- 	/*
- 	 * If the locks are the same as the unlocks, then there must have
-@@ -546,7 +559,7 @@ static bool srcu_readers_active_idx_check(struct srcu_struct *ssp, int idx)
- 	 * which are unlikely to be configured with an address space fully
- 	 * populated with memory, at least not anytime soon.
- 	 */
--	return srcu_readers_lock_idx(ssp, idx) == unlocks;
-+	return srcu_readers_lock_idx(ssp, idx, did_gp, unlocks);
- }
- 
- /**
-@@ -750,6 +763,47 @@ void __srcu_read_unlock(struct srcu_struct *ssp, int idx)
- }
- EXPORT_SYMBOL_GPL(__srcu_read_unlock);
- 
-+/*
-+ * Counts the new reader in the appropriate per-CPU element of the
-+ * srcu_struct.  Returns an index that must be passed to the matching
-+ * srcu_read_unlock_lite().
-+ *
-+ * Note that this_cpu_inc() is an RCU read-side critical section either
-+ * because it disables interrupts, because it is a single instruction,
-+ * or because it is a read-modify-write atomic operation, depending on
-+ * the whims of the architecture.
-+ */
-+int __srcu_read_lock_lite(struct srcu_struct *ssp)
-+{
+-	if (cur_ops == &srcud_ops)
+-		return srcu_read_lock_nmisafe(srcu_ctlp);
+-	else
+-		return srcu_read_lock(srcu_ctlp);
 +	int idx;
++	int ret = 0;
 +
-+	RCU_LOCKDEP_WARN(!rcu_is_watching(), "RCU must be watching srcu_read_lock_lite().");
-+	idx = READ_ONCE(ssp->srcu_idx) & 0x1;
-+	this_cpu_inc(ssp->sda->srcu_lock_count[idx].counter); /* Y */
-+	barrier(); /* Avoid leaking the critical section. */
-+	return idx;
-+}
-+EXPORT_SYMBOL_GPL(__srcu_read_lock_lite);
-+
-+/*
-+ * Removes the count for the old reader from the appropriate
-+ * per-CPU element of the srcu_struct.  Note that this may well be a
-+ * different CPU than that which was incremented by the corresponding
-+ * srcu_read_lock_lite(), but it must be within the same task.
-+ *
-+ * Note that this_cpu_inc() is an RCU read-side critical section either
-+ * because it disables interrupts, because it is a single instruction,
-+ * or because it is a read-modify-write atomic operation, depending on
-+ * the whims of the architecture.
-+ */
-+void __srcu_read_unlock_lite(struct srcu_struct *ssp, int idx)
-+{
-+	barrier();  /* Avoid leaking the critical section. */
-+	this_cpu_inc(ssp->sda->srcu_unlock_count[idx].counter);  /* Z */
-+	RCU_LOCKDEP_WARN(!rcu_is_watching(), "RCU must be watching srcu_read_unlock_lite().");
-+}
-+EXPORT_SYMBOL_GPL(__srcu_read_unlock_lite);
-+
- #ifdef CONFIG_NEED_SRCU_NMI_SAFE
++	if ((reader_flavor & 0x1) || !(reader_flavor & 0x7)) {
++		idx = srcu_read_lock(srcu_ctlp);
++		WARN_ON_ONCE(idx & ~0x1);
++		ret += idx;
++	}
++	if (reader_flavor & 0x2) {
++		idx = srcu_read_lock_nmisafe(srcu_ctlp);
++		WARN_ON_ONCE(idx & ~0x1);
++		ret += idx << 1;
++	}
++	return ret;
+ }
  
- /*
-@@ -1134,6 +1188,8 @@ static void srcu_flip(struct srcu_struct *ssp)
- 	 * it stays until either (1) Compilers learn about this sort of
- 	 * control dependency or (2) Some production workload running on
- 	 * a production system is unduly delayed by this slowpath smp_mb().
-+	 * Except for _lite() readers, where it is inoperative, which
-+	 * means that it is a good thing that it is redundant.
- 	 */
- 	smp_mb(); /* E */  /* Pairs with B and C. */
+ static void
+@@ -671,10 +682,11 @@ srcu_read_delay(struct torture_random_state *rrsp, struct rt_read_seg *rtrsp)
  
-@@ -1152,7 +1208,8 @@ static void srcu_flip(struct srcu_struct *ssp)
+ static void srcu_torture_read_unlock(int idx)
+ {
+-	if (cur_ops == &srcud_ops)
+-		srcu_read_unlock_nmisafe(srcu_ctlp, idx);
+-	else
+-		srcu_read_unlock(srcu_ctlp, idx);
++	WARN_ON_ONCE((reader_flavor && (idx & ~reader_flavor)) || (!reader_flavor && (idx & ~0x1)));
++	if (reader_flavor & 0x2)
++		srcu_read_unlock_nmisafe(srcu_ctlp, (idx & 0x2) >> 1);
++	if ((reader_flavor & 0x1) || !(reader_flavor & 0x7))
++		srcu_read_unlock(srcu_ctlp, idx & 0x1);
+ }
  
- /*
-  * If SRCU is likely idle, in other words, the next SRCU grace period
-- * should be expedited, return true, otherwise return false.
-+ * should be expedited, return true, otherwise return false.  Except that
-+ * in the presence of _lite() readers, always return false.
-  *
-  * Note that it is OK for several current from-idle requests for a new
-  * grace period from idle to specify expediting because they will all end
-@@ -1181,6 +1238,9 @@ static bool srcu_should_expedite(struct srcu_struct *ssp)
- 	unsigned long tlast;
- 
- 	check_init_srcu_struct(ssp);
-+	/* If _lite() readers, don't do unsolicited expediting. */
-+	if (this_cpu_read(ssp->sda->srcu_reader_flavor) & SRCU_READ_FLAVOR_LITE)
-+		return false;
- 	/* If the local srcu_data structure has callbacks, not idle.  */
- 	sdp = raw_cpu_ptr(ssp->sda);
- 	spin_lock_irqsave_rcu_node(sdp, flags);
+ static int torture_srcu_read_lock_held(void)
+@@ -2389,6 +2401,7 @@ rcu_torture_print_module_parms(struct rcu_torture_ops *cur_ops, const char *tag)
+ 		 "n_barrier_cbs=%d "
+ 		 "onoff_interval=%d onoff_holdoff=%d "
+ 		 "read_exit_delay=%d read_exit_burst=%d "
++		 "reader_flavor=%x "
+ 		 "nocbs_nthreads=%d nocbs_toggle=%d "
+ 		 "test_nmis=%d\n",
+ 		 torture_type, tag, nrealreaders, nfakewriters,
+@@ -2401,6 +2414,7 @@ rcu_torture_print_module_parms(struct rcu_torture_ops *cur_ops, const char *tag)
+ 		 n_barrier_cbs,
+ 		 onoff_interval, onoff_holdoff,
+ 		 read_exit_delay, read_exit_burst,
++		 reader_flavor,
+ 		 nocbs_nthreads, nocbs_toggle,
+ 		 test_nmis);
+ }
 -- 
 2.40.1
 
