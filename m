@@ -1,68 +1,68 @@
-Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
+Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 796351E9099;
-	Fri, 11 Oct 2024 02:20:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A310E56C;
+	Fri, 11 Oct 2024 02:21:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728613239; cv=none; b=sEKxJO7B2Q0jHic5dBJYsEzfRiP0+viSfflmex73yRAwrrManF0OLphP7QVFqK7VpWUuLr1Cyw2z9rx1/6dl1QvM3haOff35x0e7MUZeC8dBUnHANBhWFrPQG1nPv/hKM3666z0chfAMhpApu7By+QDgY7drgdMDiShRcumuyi0=
+	t=1728613301; cv=none; b=Gq9F1ATz+YYMYJMiP+ziGgwbNK9Va8kckfnzQzlJNbkgVHyPB5V2TVmpgK9PYPzINwRmDv5Brsr7x/ViVT/FCwwqmbBLhi6YITiixlsSi10OjVgwdKwXg/H3GI8G9z3I19E7nbhPyPPHVSKr4JHpzvAFifh6WTAEa9Ay2Dk622Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728613239; c=relaxed/simple;
-	bh=1ijJnCob+9tIpvtdxnuDyjvCd6Z2v5UhMdnZVzsBX/E=;
+	s=arc-20240116; t=1728613301; c=relaxed/simple;
+	bh=tc/UdZUOvlViT4RgdCT4OHnTBUnWQKwapgH7wTDF1BU=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=XoAM9HPrEmR4Z2/m+wuFj6GF1bFOyPO9bKRJplhx1joUCnSBDeJyiH3QQIl1wBVVbNJrCCOaP/o43jM8GguqKSrKOpFU3g+DsvN8xq4HoUU8Bm+rt+yY0LCQzUtYd37ghuN7ZhoMYTH3qfPUZrvubrzDf5qlK8xlj3JAsGhfbGk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XNy342yN; arc=none smtp.client-ip=209.85.216.50
+	 To:Cc:Content-Type; b=KvWZCBasDMpSUvJ+6scaTHq1TU3RULvupE+l5OAENp2XcN0lAeNpZp5dUz0Y53yPKXFjNc2IkRgIHcgTd9DQBOUkNvZWDZe2Uhep65M378W2nZKspNsWP4NHk/JUy+l5XEQuijwjP5zqWgJXHw9rq71L+KVY17ZQ6xUGwyXfp/o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=M621k/VX; arc=none smtp.client-ip=209.85.216.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XNy342yN"
-Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-2e2e87153a3so572899a91.3;
-        Thu, 10 Oct 2024 19:20:38 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="M621k/VX"
+Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-2e2e8c8915eso613724a91.3;
+        Thu, 10 Oct 2024 19:21:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1728613238; x=1729218038; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1728613300; x=1729218100; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=mtnJ2Bznke0oQPsOijLPOi2tLuq8IIbaw3z7aQYC59s=;
-        b=XNy342yNiACuEfW4iNpMjIbODOn8C3tqrZxkhC9iZU8j9PZmmFHKNgMYNQOg+tbWT5
-         T+9WgAjbr4iSiQSvnY9hrRwhQ3IGhO3bqcZH7id2tx0u/Apox2H+IJvnmnKqzNj2WHye
-         rhhHpqGv9AuGels5/rDIDiBJmQyXfFME1B9fw6Nf8BqGiv2L5efVefA5KofY66ufant9
-         H+YYrCC5ZRI2h1Mighap4+8hKqdzsLCin0Egy4seuCCbEnqupX7My91ZeblW3UZ+plEI
-         cRvwmSwZ4TN/9IE6QJleGsU/HQ/oeSywdSmmUkls9+8QXnpQdGT2ujizEwDCoxjvePgK
-         dZMA==
+        bh=0EGrwQX2pUhBJDuailgKFnmfWQOEkNWh/VZvU8d800Q=;
+        b=M621k/VXqoN5D7IxSmG7fI7KI5R7U88RwrcmVAV01T/niiPSCSFAmL64jR6AA9ykgI
+         /X8NP99TAHUc+h3rxxOTzO15GvC5CJFZC5knuZ7IhI/agr9B9vc2hdjMqhJtprJ8p97t
+         U0pinxhS7GcRKSlMNIPzS3ojCBYQtV3SJV3mJlYZMg9ckCJMwMNRS3KPSijwE7UslZuf
+         QDAwRequUYf0n/eqAFy66oUZ8hR8iQBQgjX2DbJiUHSdSQEXtRUs3TiSOGGAtxyBnZ6b
+         FUR+RB3Nsd36TQJROoyMRFs1UVAVvYtN42Qgr/orExVxHFHQci0wbWu1IlbKjMSw3Cpt
+         07kQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728613238; x=1729218038;
+        d=1e100.net; s=20230601; t=1728613300; x=1729218100;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=mtnJ2Bznke0oQPsOijLPOi2tLuq8IIbaw3z7aQYC59s=;
-        b=F8h2bmXJu7Io3DR6kzYpUOUmYev+hVd6MMqgaZpwuuHCNl0vuxHUiCf+Nk7mmPEVw+
-         97W+4UqiiNpOAflL0ArHnqHswqrnc8PlbxOKwgU082ciVpONqpJNzBkMyxNkFX7gevbc
-         bwqifGTb4t/WpPwuLjczAP7CoRqjtS6gA1eye6xVT2/aOB6vFzu7+bh4oaPmUk8WonsP
-         qmUsI4rbuUPpMWjn49COoQzc+FGDaybrUmX4KAvd8oGf+psIc2+99JLWka6HIlHh7Pbf
-         MhbcZbsf6q5Vn66bvNaKJkMOScXewgE8GwIwB1dZLkXIl5IvMd6SOsD72aip84cPPil8
-         EUHg==
-X-Forwarded-Encrypted: i=1; AJvYcCUCkd/CsNaQmivIFyGnjS0jScH1SW3PQ57+GocaAguaDQSpWzfl6CnF2Uc/v4ON8R3YAkT+Zy85hR254iUhOXFYmjkh@vger.kernel.org, AJvYcCX2Y73DohRIQ0BufXCWPoh0shnREypm2D5PodSD2XrYroqjyQ2tMIvC/5D+o6UQhZiNwvuD/FeLrNfWTWNV@vger.kernel.org, AJvYcCXF83pMPAqMVUzSIAlcBGaJ7JRDllOtk/mOENpyTiGuFFOBfVMHnGaR6AHNmARxddiKwXw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxGNfuhOSbdJ1S3pYrxNvkN7XWzofz7zVefggXDzuqMQEPes3+e
-	vnFYCzacAakRZDtotAF38HVCchXNwxlMOgt9lRADQGgHkgLKRqiala7CRDoPPNYNumZP/TsiUVe
-	oQn9fKWhs7xVehgx6/v7iKPLl7Sg=
-X-Google-Smtp-Source: AGHT+IEnlThx2CJOLLxYpZlnUVHLuVs3tRAlsUc0Ft/w8gpEqNyhz8GZjttfQbPclEDf2mHXJpdp9IjzS0TyI02SU04=
-X-Received: by 2002:a17:90a:c388:b0:2e2:d3ab:2d77 with SMTP id
- 98e67ed59e1d1-2e2f0d8adbbmr1517415a91.39.1728613237729; Thu, 10 Oct 2024
- 19:20:37 -0700 (PDT)
+        bh=0EGrwQX2pUhBJDuailgKFnmfWQOEkNWh/VZvU8d800Q=;
+        b=AbXgg8HVOuQ1Zq+A12I4R97IocqZeML2rsqEMIRuJaI1qJ8jJm9cX9CLeCdRJl1wqN
+         w+tOfFXq0XeeZEy5LAQYvOuW9fYN5c38YsMP790zVbPR7vYALFeJN8wp/yrZ/dGFWK/L
+         TuOtTCkFpB66/GGausgQfAA+JHMtCADfkJjhpeKgqNqQ6J6JE/bz0oiLWO9ea5hRWLQK
+         z4Oqv4zhlxYhK4BLAZx2vSRfIcVEbHEUpz4UAGKJJtlzx6spkf4/CdvPgi9iq3ncNCc4
+         YSfDjyghIkWz8G3pJtvBddTBZX0HmY88btRB3X1mCHzejDA05Yd/ssR/E9srgIUMJSa8
+         Nl6Q==
+X-Forwarded-Encrypted: i=1; AJvYcCUKjwiXnKbbT2jWRgj+lkK/Zim2k5Xwb6K2q+WX5jqV6OtvYSAe6K3vx1frH62E39+6DRUwgLZGFdB0q0Tn@vger.kernel.org, AJvYcCUaZAbUeLk9YKCihsa5FL0/ed20bGWX8yFX6sn1xI5slPUszoh7zUtrAPVAd2Srp2U4zuxATEPpzDYiePViX4WR0cAw@vger.kernel.org, AJvYcCXabwF0GAtR9dqnO79uZwtLsPeMM/Mio/6yAcuBt6OfeUzTlf5sPoLp6psMomJlLktOTm8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxE4hx8IPYtEeptmDcaWlKWGEp/b0MFmEA7RkMZpkFa1aONLXLV
+	AYqTFe61xE7vQC8j6OW5MsmMXx5c42wVOttx2V+hZjQ1rA9VYw0kGD2HEFG7wtoKiblsiGoAvZk
+	7X9+kX7qNnpg/zi8XYHi3f/umr3Q=
+X-Google-Smtp-Source: AGHT+IH03cAV+DovPcVvb/EccNXJFTUB3iLVugPD6xNERlpYU/fH5Tg6carfeYvJAFfN5UzRgw+c+Qtp9ocWMuONdSw=
+X-Received: by 2002:a17:90a:bf02:b0:2e2:ebbb:760c with SMTP id
+ 98e67ed59e1d1-2e2f0b1398cmr1742827a91.11.1728613299778; Thu, 10 Oct 2024
+ 19:21:39 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241010200957.2750179-1-jolsa@kernel.org> <20241010200957.2750179-5-jolsa@kernel.org>
-In-Reply-To: <20241010200957.2750179-5-jolsa@kernel.org>
+References: <20241010200957.2750179-1-jolsa@kernel.org> <20241010200957.2750179-8-jolsa@kernel.org>
+In-Reply-To: <20241010200957.2750179-8-jolsa@kernel.org>
 From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Thu, 10 Oct 2024 19:20:25 -0700
-Message-ID: <CAEf4BzaWyreKRmLSL0Z+698dqE6Xj8rze3zP=Ygb7WuhJZ-ibg@mail.gmail.com>
-Subject: Re: [PATCHv6 bpf-next 04/16] bpf: Force uprobe bpf program to always
- return 0
+Date: Thu, 10 Oct 2024 19:21:27 -0700
+Message-ID: <CAEf4BzYrbcT=Zfrp93_fqkFCRXXGGaDP2SnhyJq08AO8Mt87UQ@mail.gmail.com>
+Subject: Re: [PATCHv6 bpf-next 07/16] libbpf: Add support for uprobe multi
+ session attach
 To: Jiri Olsa <jolsa@kernel.org>
 Cc: Oleg Nesterov <oleg@redhat.com>, Peter Zijlstra <peterz@infradead.org>, 
 	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
@@ -75,57 +75,30 @@ Cc: Oleg Nesterov <oleg@redhat.com>, Peter Zijlstra <peterz@infradead.org>,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Oct 10, 2024 at 1:10=E2=80=AFPM Jiri Olsa <jolsa@kernel.org> wrote:
+On Thu, Oct 10, 2024 at 1:11=E2=80=AFPM Jiri Olsa <jolsa@kernel.org> wrote:
 >
-> As suggested by Andrii make uprobe multi bpf programs to always return 0,
-> so they can't force uprobe removal.
+> Adding support to attach program in uprobe session mode
+> with bpf_program__attach_uprobe_multi function.
 >
-> Keeping the int return type for uprobe_prog_run, because it will be used
-> in following session changes.
+> Adding session bool to bpf_uprobe_multi_opts struct that allows
+> to load and attach the bpf program via uprobe session.
+> the attachment to create uprobe multi session.
 >
-> Fixes: 89ae89f53d20 ("bpf: Add multi uprobe link")
-> Suggested-by: Andrii Nakryiko <andrii@kernel.org>
+> Also adding new program loader section that allows:
+>   SEC("uprobe.session/bpf_fentry_test*")
+>
+> and loads/attaches uprobe program as uprobe session.
+>
+> Adding sleepable hook (uprobe.session.s) as well.
+>
 > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
 > ---
->  kernel/trace/bpf_trace.c | 5 ++---
->  1 file changed, 2 insertions(+), 3 deletions(-)
+>  tools/lib/bpf/bpf.c    |  1 +
+>  tools/lib/bpf/libbpf.c | 18 ++++++++++++++++--
+>  tools/lib/bpf/libbpf.h |  4 +++-
+>  3 files changed, 20 insertions(+), 3 deletions(-)
 >
 
 Acked-by: Andrii Nakryiko <andrii@kernel.org>
 
-> diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-> index fdab7ecd8dfa..3c1e5a561df4 100644
-> --- a/kernel/trace/bpf_trace.c
-> +++ b/kernel/trace/bpf_trace.c
-> @@ -3209,7 +3209,6 @@ static int uprobe_prog_run(struct bpf_uprobe *uprob=
-e,
->         struct bpf_prog *prog =3D link->link.prog;
->         bool sleepable =3D prog->sleepable;
->         struct bpf_run_ctx *old_run_ctx;
-> -       int err =3D 0;
->
->         if (link->task && !same_thread_group(current, link->task))
->                 return 0;
-> @@ -3222,7 +3221,7 @@ static int uprobe_prog_run(struct bpf_uprobe *uprob=
-e,
->         migrate_disable();
->
->         old_run_ctx =3D bpf_set_run_ctx(&run_ctx.run_ctx);
-> -       err =3D bpf_prog_run(link->link.prog, regs);
-> +       bpf_prog_run(link->link.prog, regs);
->         bpf_reset_run_ctx(old_run_ctx);
->
->         migrate_enable();
-> @@ -3231,7 +3230,7 @@ static int uprobe_prog_run(struct bpf_uprobe *uprob=
-e,
->                 rcu_read_unlock_trace();
->         else
->                 rcu_read_unlock();
-> -       return err;
-> +       return 0;
->  }
->
->  static bool
-> --
-> 2.46.2
->
+[...]
