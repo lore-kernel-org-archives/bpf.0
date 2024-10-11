@@ -1,115 +1,86 @@
-Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79260748F;
-	Fri, 11 Oct 2024 02:20:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23269748F;
+	Fri, 11 Oct 2024 02:20:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728613203; cv=none; b=KL5eSBzOhbvLC9jjJN+f+xUGE8FK1e97JkCzaxFxdor+vM2ca61uaBdsNTq4SPVC3O2eM7AEt431EfyDDFI9RHUG0TU1GT9wtaGX2QOJZjjiMnd42vBlrFc71KsqKU9t/5iKadg1+zk2fbBgxcy2eA6t3dfyxec5QeSRUbF1gqw=
+	t=1728613223; cv=none; b=tfl5PbPCMqFhtycEbknAUPkafgOMQGro2ATx14G91gaPsIKxQlOjEP2S3AhtFWcJUDFxJTiBm0kt7P/+rRG6nkKsSlMFndnbWo3S2EHAclxEH50uTcVF0HrDLPxUM4Y/hr+Q5lGea4hnjrH2QLLsW3ARbQVKg01DeaWeIuL51ZM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728613203; c=relaxed/simple;
-	bh=BuWWt9J3d5LmtGizNy0RWMaMy0OvpvtNZEvoJlggdsQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=X7xGSV4ChQ/eFDRjNXbbTdwC1C+1jcIpV3rWya3U5IVfaBAyruRuLoccFr1gChnBEP9ucg7Gl0hK1Y4V+q0Vy9trftpvvHBHXB63z3M0PqU6VUiv+2mc4tmaHI0XnxrsdNF08jZ7HcUgNYGo76V793SYUtuqkplYrS3EYKI8Yxg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=V3vjoR08; arc=none smtp.client-ip=209.85.216.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1728613223; c=relaxed/simple;
+	bh=XBlu0wpqeZhr7tUmHfD9rqUxoOTmXQlZX1cwZ8Je5Fg=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=pvJzoxmKkW0I4jsZCPE7EAu68pLu+HItglvmeE/zZZbq+FT5CvgcrqDjorpVeAAnV+xGr6f4wVlNHamjyLcuoxzH2beffuJ9EjYYPw5TbpZUrWnfyYWztS8FAD7SHlGHzCH4tdt35lonb/r1pziR6BDtBpDDncwmxriE4yitGtg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rCVkFoDd; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="V3vjoR08"
-Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-2e2e050b1c3so752824a91.0;
-        Thu, 10 Oct 2024 19:20:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1728613202; x=1729218002; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=LLhOIYaSD3mZ10qNGhaTSWJ8llOcmLQ9hp+Mf//qB4E=;
-        b=V3vjoR08E9TR5w5YQYHiMVziOIVdEVn0gcT8NdXVMMRI1NHTWCzWa6WotE3Lbh+ibk
-         JhwOyZLgREFtfn2dj7320wCWKdtsrMwE/I0/IJgSuFhw1K9fDNs3JeytoqNDdvqo6pIp
-         2M/IvgaUZp5oJYCfYuENG2Z4BPGsgxGpe10szNzkhKe4SjQMtkEYxtiLn6MnpvoyO7QN
-         OUMl9w7MQCZUaMvTYGiEkTXvKD9REe8/0/guaxoQ+fSdTtqcG8cnJMiUvdFDvh+mkWw3
-         K49PPcg1AxmxDaZXkaiTDsKX6PHKdDZnfshKnNj5MXffjW/P6mEe7TJ+bDqa7ScwbWqM
-         YA0A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728613202; x=1729218002;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=LLhOIYaSD3mZ10qNGhaTSWJ8llOcmLQ9hp+Mf//qB4E=;
-        b=ZDSkTpI2F/G+xcBcPxxx9sVTDeiNqzjohGfVRzSfTBp7D5aJsbtkL50CpNjzcAPB5e
-         FfsgKLoJtQaah7ZSfQY/XZIyMpCAGumIwQYQTxCRLEuqOPuT6khu7faHO3k7yY10eQvn
-         5OdibTfC0dxDMF2oy7U/v/jxwzMDjDOYDkd8lGRQvGnh14gsxz233saLoZZUcFZ3h+d+
-         8oZ6NLwowbk6WJbs7LuQyLCa5AXfsVt4JgRfshSyF7cW9/0eFs+TbFs2QH8x+3Uw/vm4
-         SHK3I2u15G0ZG9VPerRyefkDM9ePxBLGhx+wrVE86e4CONcEyE8XPi4qoGIu9MgxhFOl
-         qgqw==
-X-Forwarded-Encrypted: i=1; AJvYcCVQAFkA7ca0RnD/3pG13TMeru4Dmi6vx2AklvuSm94OCvQh6G9Gs9Rs0Faq1UjoEPD5tw5+a+QY5inpZ6WZ@vger.kernel.org, AJvYcCWP0dn4QW2H/uhPwN+uaW95tkgF+fDgP6y7Ho3mmedhP4hvH9esm0CEPhZe78hU8fCTSmI=@vger.kernel.org, AJvYcCX54V98Jjwf+4d6Gwh++aVPg0okAO+vnywQTp1RNxY6IjARgsD3M93VonG3xGhLyMMB+Y8LEOn8HUUEHz9wXM/mEv4j@vger.kernel.org
-X-Gm-Message-State: AOJu0YwYFRyWWSsijoXzymdy8ph4lzgT0Ki1BC2ugsNXTq6pQACQglFp
-	fi9o0KWyyc02gYOtlD1cz/thFgDnIyBO58jPS1d1/jnpbeZiI75Cr9ebdEMDg4Y9l17pqL8sLvg
-	CHy6czDThDv8bessWEXENYeAh/5M=
-X-Google-Smtp-Source: AGHT+IG1I4iFVqrY5V/vK7jeWCCxVnW1eUMByhbkTIBDME0FM3UNcH2kH7ZEZ8SIqjT5wvAWRPg9sAnwXXcaz7e478U=
-X-Received: by 2002:a17:90b:3844:b0:2da:88b3:cff8 with SMTP id
- 98e67ed59e1d1-2e2f0aa5610mr1953711a91.6.1728613201788; Thu, 10 Oct 2024
- 19:20:01 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rCVkFoDd"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8871BC4CEC5;
+	Fri, 11 Oct 2024 02:20:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1728613222;
+	bh=XBlu0wpqeZhr7tUmHfD9rqUxoOTmXQlZX1cwZ8Je5Fg=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=rCVkFoDd1IKGG0VzxSKWDlWcTKqcKZKVJECqTj7m1+4bn0DDs4pDiMttJbVBWl0kF
+	 u5o5BKdNb3sQPu3uxArE8+odldYolAIODehHBMAaXFrxf9eQx0mmWyLoi5Al9D36YJ
+	 dLe5QkMQa2wl0yFCYZ0lWIR5Q+3/RjBPhqroOHr3x/a3xmvHWHgaxlyvf6+zV6LThM
+	 7OAUlVggIbUx8FL+m/KONqPYyWWbGFwzuhfANU/dcpO9Pjyz7T4DzkfRpSqA8P+jNq
+	 nwejcgGg+0ZxlkTbaNpeYOvw+4nh6Nmqk9cb/FrTnhD9jJXYr3Bf3LAeXWDKDYpuBx
+	 ryhnFNyNj/fnw==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 34A963803263;
+	Fri, 11 Oct 2024 02:20:28 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241010200957.2750179-1-jolsa@kernel.org> <20241010200957.2750179-4-jolsa@kernel.org>
-In-Reply-To: <20241010200957.2750179-4-jolsa@kernel.org>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Thu, 10 Oct 2024 19:19:49 -0700
-Message-ID: <CAEf4BzZV4AS2w5iXhTh+hEA1W+6uxHv7sJ9hAUvpUiBFbuOC+Q@mail.gmail.com>
-Subject: Re: [PATCHv6 bpf-next 03/16] bpf: Allow return values 0 and 1 for
- kprobe session
-To: Jiri Olsa <jolsa@kernel.org>
-Cc: Oleg Nesterov <oleg@redhat.com>, Peter Zijlstra <peterz@infradead.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org, Martin KaFai Lau <kafai@fb.com>, 
-	Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>, 
-	John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@chromium.org>, 
-	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
-	Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>, linux-kernel@vger.kernel.org, 
-	linux-trace-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf v2 1/2] bpf: fix unpopulated path_size when uprobe_multi
+ fields unset
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <172861322701.2249999.15080735852713427254.git-patchwork-notify@kernel.org>
+Date: Fri, 11 Oct 2024 02:20:27 +0000
+References: <20241011000803.681190-1-wudevelops@gmail.com>
+In-Reply-To: <20241011000803.681190-1-wudevelops@gmail.com>
+To: Tyrone Wu <wudevelops@gmail.com>
+Cc: andrii.nakryiko@gmail.com, andrii@kernel.org, ast@kernel.org,
+ bpf@vger.kernel.org, daniel@iogearbox.net, eddyz87@gmail.com,
+ haoluo@google.com, john.fastabend@gmail.com, jolsa@kernel.org,
+ kernel-patches-bot@fb.com, kpsingh@kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+ martin.lau@linux.dev, mathieu.desnoyers@efficios.com,
+ mattbobrowski@google.com, mhiramat@kernel.org, mykolal@fb.com,
+ rostedt@goodmis.org, sdf@fomichev.me, shuah@kernel.org, song@kernel.org,
+ yonghong.song@linux.dev
 
-On Thu, Oct 10, 2024 at 1:10=E2=80=AFPM Jiri Olsa <jolsa@kernel.org> wrote:
->
-> The kprobe session program can return only 0 or 1,
-> instruct verifier to check for that.
->
-> Fixes: 535a3692ba72 ("bpf: Add support for kprobe session attach")
-> Signed-off-by: Jiri Olsa <jolsa@kernel.org>
-> ---
->  kernel/bpf/verifier.c | 9 +++++++++
->  1 file changed, 9 insertions(+)
->
+Hello:
 
-Acked-by: Andrii Nakryiko <andrii@kernel.org>
+This series was applied to bpf/bpf.git (master)
+by Andrii Nakryiko <andrii@kernel.org>:
 
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 7d9b38ffd220..787008872a14 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -15910,6 +15910,15 @@ static int check_return_code(struct bpf_verifier=
-_env *env, int regno, const char
->                         return -ENOTSUPP;
->                 }
->                 break;
-> +       case BPF_PROG_TYPE_KPROBE:
-> +               switch (env->prog->expected_attach_type) {
-> +               case BPF_TRACE_KPROBE_SESSION:
-> +                       range =3D retval_range(0, 1);
-> +                       break;
-> +               default:
-> +                       return 0;
-> +               }
-> +               break;
->         case BPF_PROG_TYPE_SK_LOOKUP:
->                 range =3D retval_range(SK_DROP, SK_PASS);
->                 break;
-> --
-> 2.46.2
->
+On Fri, 11 Oct 2024 00:08:02 +0000 you wrote:
+> Previously when retrieving `bpf_link_info.uprobe_multi` with `path` and
+> `path_size` fields unset, the `path_size` field is not populated
+> (remains 0). This behavior was inconsistent with how other input/output
+> string buffer fields work, as the field should be populated in cases
+> when:
+> - both buffer and length are set (currently works as expected)
+> - both buffer and length are unset (not working as expected)
+> 
+> [...]
+
+Here is the summary with links:
+  - [bpf,v2,1/2] bpf: fix unpopulated path_size when uprobe_multi fields unset
+    https://git.kernel.org/bpf/bpf/c/ad6b5b6ea9b7
+  - [bpf,v2,2/2] selftests/bpf: assert link info uprobe_multi count & path_size if unset
+    https://git.kernel.org/bpf/bpf/c/b836cbdf3b81
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
