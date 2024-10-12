@@ -1,49 +1,82 @@
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C59A71CFB6;
-	Sat, 12 Oct 2024 02:43:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DEA3A41;
+	Sat, 12 Oct 2024 04:07:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728701002; cv=none; b=ONqWwrEsFvQzA2yx4Ddr4vPVGcj5Zw7AQ+e/28X0QhVpk3FVUeffiKQRGkjrK7S3/sVX+HzTh8Ub8WsjZwoK6bD/7eFmK6Hs+DuRHqQzkUJu2C/5YSSGb34XehXFQY2wuC7d8iI2xwPCY6YPIxov5hvgMFM3ilGOqPxr+LDZAzE=
+	t=1728706022; cv=none; b=pZz0Y37yIXwq9vhoCZJ5tWgFqVg14xIyzE8ocLyITRN9kcpp9hCj7rW3XmPDV5pJbPtuViOIvjHXY1zjxz9xcQcp4jHbXbRKu5Mty2Cwyxrg9xGnCulWYVLF+FbuAhrz3qiTo24/8K3TpPZNL8KKJhNZOjF3WLu7578vJKwixw4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728701002; c=relaxed/simple;
-	bh=rd37tq0n5JFvZtNefCYsB4ujebuFK5dwtRoDsQ2DKdk=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=X7yfoCPXHVKSr9QSsrU6bklOSVH/ftEuamyzothKPBtvvBC75j5SiBFWWNQGO63726Qo1rQqZpQt4YrlaAR8jb/QK8+QBfmY8dkP9w0tXbQx7SP0hheVQLfWRub6cQenq6Ko2wZxuxcDMTLYrYZmBIS58+szeDkX2FJk85RYE8M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.235])
-	by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4XQSTg5dv5z4f3jkL;
-	Sat, 12 Oct 2024 10:43:03 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.75])
-	by mail.maildlp.com (Postfix) with ESMTP id A18C81A0568;
-	Sat, 12 Oct 2024 10:43:15 +0800 (CST)
-Received: from huawei.com (unknown [10.67.174.45])
-	by APP2 (Coremail) with SMTP id Syh0CgC3Nlw14glnqkFfDw--.43203S3;
-	Sat, 12 Oct 2024 10:43:15 +0800 (CST)
-From: Tengda Wu <wutengda@huaweicloud.com>
-To: Peter Zijlstra <peterz@infradead.org>,
+	s=arc-20240116; t=1728706022; c=relaxed/simple;
+	bh=XES2tQiEJVE0YGyL1eqHh2iIj7S30J0+qAZk12OnD7w=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=JOAQyrBMmzzLG16M4WP+ZPHkjMr8OhiFgKW+3/n6kKSDpBYfZSf0mvyp6Ql7GInsoIKkS9MRq25knXqemqSFme3nkZZTDYMQLOmzDsON6tTJ0OmonJGUaMCtrbh6IHfHk32EusSW/H0mHuCYPZEbkGo+/JRrwyXvVpWUEzujI3k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PUciom02; arc=none smtp.client-ip=209.85.214.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PUciom02"
+Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-20cb7139d9dso6496595ad.1;
+        Fri, 11 Oct 2024 21:07:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1728706020; x=1729310820; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=2D2DwO8yx75JDPfMkeKeAbJ6J97OrpGiGWU3haByJ5A=;
+        b=PUciom02zar54iGhjA4etCM725x9uv/hZC1AezCXitv7OwHy88KidlAmjcMDxoOKCQ
+         gn8yHkhkVZJsvi3hcx/awwV7OTYahO9En989LCq4dbeYwDCHUQPKWHVhxmMwvCdpr7oD
+         mWtY8TYlkHhOqLmn47wM7cbcJ3fxOxfcqINBtpHOeo2Ps2U8tG08Xir15OAP46wo13Bk
+         bT1T3pQsFmPcEFniyLLPRifXvv/Hn/CRVj5/WTU/hNzSW7N7srVTg9utlm+xSKyVXdIb
+         JW+lHvLZ10GPFk+z0Q7Mu+i9JsTyFkBXT7mEKvK6l/GSpMQl+novHbAi2Eb53sJczTLn
+         kjnw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1728706020; x=1729310820;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=2D2DwO8yx75JDPfMkeKeAbJ6J97OrpGiGWU3haByJ5A=;
+        b=H1l69AUH8SSEYW7r2lIrdCCdVLW9RHOQrY9Jr97UaMswLVPBlJDDPJIXF53UZk0OAd
+         ZppKxIJDLvxrxeKbB0LIUrQnsVIxhnH2Zh5I58P/+y4LH87ZAj7o8la+WA4IXCrLTODZ
+         DfC0UkSbfEMe4VJx2nHKm84g3vSHt5Xb2enDZ8Ex8olyN+tmQJULbWts92Ig4vokYTCF
+         0SRUbiXbiOkIu4lKdIzd6D9Cwt1nQLpBf9SBqdncT8kIMvzTbmyFAXL7kxjRZnTyHAZs
+         tLjp0c8wwt0/+o7JV2t+oF8fCgg/EWbujrH0EgaLBcmXdkuMoaREsbF21fWVI2lptGl/
+         0U3Q==
+X-Forwarded-Encrypted: i=1; AJvYcCXf++xEntu/DhsDXEQqT1cu0EvvslDrhSLUy0Ro6ViBRXrvuDDCt83rx6gv7Ur/4hxgWBVVltU=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz3FTAlinpwzsc6A8dkf4VaCVbAhPiMsQZcbemm/mfbteUGK9Zk
+	VSWB/g9oRGCCkTLV6BiPaNXBEbO5lgEuf+rOCdtFp/pXEolZRP01
+X-Google-Smtp-Source: AGHT+IFs3OuurBGk0RLgKWivdB3HrINh60GKl06DHROmgEo/Gs2cWgEma4gcgBgEtvqJNsaQTBDI5Q==
+X-Received: by 2002:a17:902:f681:b0:20c:8b88:8268 with SMTP id d9443c01a7336-20ca1425c22mr73116065ad.10.1728706019730;
+        Fri, 11 Oct 2024 21:06:59 -0700 (PDT)
+Received: from KERNELXING-MB0.tencent.com ([43.132.141.25])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-20c8c21301dsm30939685ad.199.2024.10.11.21.06.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Oct 2024 21:06:59 -0700 (PDT)
+From: Jason Xing <kerneljasonxing@gmail.com>
+To: davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	dsahern@kernel.org,
+	willemdebruijn.kernel@gmail.com,
+	willemb@google.com,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	martin.lau@linux.dev,
+	eddyz87@gmail.com,
 	song@kernel.org,
-	Namhyung Kim <namhyung@kernel.org>
-Cc: Ingo Molnar <mingo@redhat.com>,
-	Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Ian Rogers <irogers@google.com>,
-	Adrian Hunter <adrian.hunter@intel.com>,
-	kan.liang@linux.intel.com,
-	linux-perf-users@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org
-Subject: [PATCH -next v4 1/2] perf stat: Support inherit events during fork() for bperf
-Date: Sat, 12 Oct 2024 02:32:24 +0000
-Message-Id: <20241012023225.151084-2-wutengda@huaweicloud.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20241012023225.151084-1-wutengda@huaweicloud.com>
-References: <20241012023225.151084-1-wutengda@huaweicloud.com>
+	yonghong.song@linux.dev,
+	john.fastabend@gmail.com,
+	kpsingh@kernel.org,
+	sdf@fomichev.me,
+	haoluo@google.com,
+	jolsa@kernel.org
+Cc: bpf@vger.kernel.org,
+	netdev@vger.kernel.org,
+	Jason Xing <kernelxing@tencent.com>
+Subject: [PATCH net-next v2 00/12] net-timestamp: bpf extension to equip applications transparently
+Date: Sat, 12 Oct 2024 12:06:39 +0800
+Message-Id: <20241012040651.95616-1-kerneljasonxing@gmail.com>
+X-Mailer: git-send-email 2.33.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -51,461 +84,144 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:Syh0CgC3Nlw14glnqkFfDw--.43203S3
-X-Coremail-Antispam: 1UD129KBjvAXoWfGFyfuF47uF18Cr45ZrW7twb_yoW8GFy5to
-	WIyFs8tan5WryrArWDJrn7tFW5uas8WFWrXr4Uuws5W347Kr1YqrZxCw4fAw17ZrW7GF47
-	ua47JaykJFnYyryrn29KB7ZKAUJUUUU8529EdanIXcx71UUUUU7v73VFW2AGmfu7bjvjm3
-	AaLaJ3UjIYCTnIWjp_UUUOs7kC6x804xWl14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK
-	8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_Jr
-	4l82xGYIkIc2x26xkF7I0E14v26r4j6ryUM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-	0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AK
-	xVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ew
-	Av7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY
-	6r1j6r4UM4x0Y48IcxkI7VAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4kS14
-	v26r1q6r43MxkF7I0Ew4C26cxK6c8Ij28IcwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE
-	7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI
-	8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWU
-	CwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r
-	1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBI
-	daVFxhVjvjDU0xZFpf9x07jxsqXUUUUU=
-X-CM-SenderInfo: pzxwv0hjgdqx5xdzvxpfor3voofrz/
 
-bperf has a nice ability to share PMUs, but it still does not support
-inherit events during fork(), resulting in some deviations in its stat
-results compared with perf.
+From: Jason Xing <kernelxing@tencent.com>
 
-perf stat result:
-$ ./perf stat -e cycles,instructions -- ./perf test -w sqrtloop
+A few weeks ago, I planned to extend SO_TIMESTMAMPING feature by using
+tracepoint to print information (say, tstamp) so that we can
+transparently equip applications with this feature and require no
+modification in user side.
 
-   Performance counter stats for './perf test -w sqrtloop':
+Later, we discussed at netconf and agreed that we can use bpf for better
+extension, which is mainly suggested by John Fastabend and Willem de
+Bruijn. Many thanks here! So I post this series to see if we have a
+better solution to extend. My feeling is BPF is a good place to provide
+a way to add timestamping by administrators, without having to rebuild
+applications. 
 
-       2,316,038,116      cycles
-       2,859,350,725      instructions
+This approach mostly relies on existing SO_TIMESTAMPING feature, users
+only needs to pass certain flags through bpf_setsocktop() to a separate
+tsflags. For TX timestamps, they will be printed during generation
+phase. For RX timestamps, we will wait for the moment when recvmsg() is
+called.
 
-         1.009603637 seconds time elapsed
+After this series, we could step by step implement more advanced
+functions/flags already in SO_TIMESTAMPING feature for bpf extension.
 
-         1.004196000 seconds user
-         0.003950000 seconds sys
+In this series, I only support TCP protocol which is widely used in
+SO_TIMESTAMPING feature.
 
-bperf stat result:
-$ ./perf stat --bpf-counters -e cycles,instructions -- \
-      ./perf test -w sqrtloop
-
-   Performance counter stats for './perf test -w sqrtloop':
-
-          18,762,093      cycles
-          23,487,766      instructions
-
-         1.008913769 seconds time elapsed
-
-         1.003248000 seconds user
-         0.004069000 seconds sys
-
-In order to support event inheritance, two new bpf programs are added
-to monitor the fork and exit of tasks respectively. When a task is
-created, add it to the filter map to enable counting, and reuse the
-`accum_key` of its parent task to count together with the parent task.
-When a task exits, remove it from the filter map to disable counting.
-
-After support:
-$ ./perf stat --bpf-counters -e cycles,instructions -- \
-      ./perf test -w sqrtloop
-
- Performance counter stats for './perf test -w sqrtloop':
-
-     2,316,252,189      cycles
-     2,859,946,547      instructions
-
-       1.009422314 seconds time elapsed
-
-       1.003597000 seconds user
-       0.004270000 seconds sys
-
-Signed-off-by: Tengda Wu <wutengda@huaweicloud.com>
 ---
- tools/perf/builtin-stat.c                     |  4 +-
- tools/perf/util/bpf_counter.c                 | 57 +++++++++---
- tools/perf/util/bpf_counter.h                 | 13 ++-
- tools/perf/util/bpf_counter_cgroup.c          |  3 +-
- tools/perf/util/bpf_skel/bperf_follower.bpf.c | 87 +++++++++++++++++--
- tools/perf/util/bpf_skel/bperf_u.h            |  5 ++
- 6 files changed, 145 insertions(+), 24 deletions(-)
+V2
+Link: https://lore.kernel.org/all/20241008095109.99918-1-kerneljasonxing@gmail.com/
+1. Introduce tsflag requestors so that we are able to extend more in the
+future. Besides, it enables TX flags for bpf extension feature separately
+without breaking users. It is suggested by Vadim Fedorenko.
+2. introduce a static key to control the whole feature. (Willem)
+3. Open the gate of bpf_setsockopt for the SO_TIMESTAMPING feature in
+some TX/RX cases, not all the cases.
 
-diff --git a/tools/perf/builtin-stat.c b/tools/perf/builtin-stat.c
-index 3e6b9f216e80..c27b107c1985 100644
---- a/tools/perf/builtin-stat.c
-+++ b/tools/perf/builtin-stat.c
-@@ -698,6 +698,7 @@ static int __run_perf_stat(int argc, const char **argv, int run_idx)
- 	char msg[BUFSIZ];
- 	unsigned long long t0, t1;
- 	struct evsel *counter;
-+	struct bpf_stat_opts opts;
- 	size_t l;
- 	int status = 0;
- 	const bool forks = (argc > 0);
-@@ -725,7 +726,8 @@ static int __run_perf_stat(int argc, const char **argv, int run_idx)
- 
- 	evlist__for_each_entry(evsel_list, counter) {
- 		counter->reset_group = false;
--		if (bpf_counter__load(counter, &target)) {
-+		opts.inherit = !stat_config.no_inherit;
-+		if (bpf_counter__load(counter, &target, &opts)) {
- 			err = -1;
- 			goto err_out;
- 		}
-diff --git a/tools/perf/util/bpf_counter.c b/tools/perf/util/bpf_counter.c
-index 7a8af60e0f51..00afea6bde63 100644
---- a/tools/perf/util/bpf_counter.c
-+++ b/tools/perf/util/bpf_counter.c
-@@ -166,7 +166,9 @@ static int bpf_program_profiler_load_one(struct evsel *evsel, u32 prog_id)
- 	return -1;
- }
- 
--static int bpf_program_profiler__load(struct evsel *evsel, struct target *target)
-+static int bpf_program_profiler__load(struct evsel *evsel,
-+				      struct target *target,
-+				      struct bpf_stat_opts *opts __maybe_unused)
- {
- 	char *bpf_str, *bpf_str_, *tok, *saveptr = NULL, *p;
- 	u32 prog_id;
-@@ -364,6 +366,7 @@ static int bperf_lock_attr_map(struct target *target)
- 
- static int bperf_check_target(struct evsel *evsel,
- 			      struct target *target,
-+			      struct bpf_stat_opts *opts,
- 			      enum bperf_filter_type *filter_type,
- 			      __u32 *filter_entry_cnt)
- {
-@@ -383,7 +386,12 @@ static int bperf_check_target(struct evsel *evsel,
- 		*filter_type = BPERF_FILTER_PID;
- 		*filter_entry_cnt = perf_thread_map__nr(evsel->core.threads);
- 	} else if (target->pid || evsel->evlist->workload.pid != -1) {
--		*filter_type = BPERF_FILTER_TGID;
-+		/*
-+		 * unlike the PID type, the TGID type implicitly enables
-+		 * event inheritance within a single process.
-+		 */
-+		*filter_type = opts->inherit ?
-+				BPERF_FILTER_TGID : BPERF_FILTER_PID;
- 		*filter_entry_cnt = perf_thread_map__nr(evsel->core.threads);
- 	} else {
- 		pr_err("bpf managed perf events do not yet support these targets.\n");
-@@ -394,6 +402,7 @@ static int bperf_check_target(struct evsel *evsel,
- }
- 
- static	struct perf_cpu_map *all_cpu_map;
-+static __u32 filter_entry_cnt;
- 
- static int bperf_reload_leader_program(struct evsel *evsel, int attr_map_fd,
- 				       struct perf_event_attr_map_entry *entry)
-@@ -444,14 +453,36 @@ static int bperf_reload_leader_program(struct evsel *evsel, int attr_map_fd,
- 	return err;
- }
- 
--static int bperf__load(struct evsel *evsel, struct target *target)
-+static int bperf_attach_follower_program(struct bperf_follower_bpf *skel,
-+					 enum bperf_filter_type filter_type,
-+					 bool inherit)
-+{
-+	struct bpf_link *link;
-+	int err = 0;
-+
-+	if ((filter_type == BPERF_FILTER_PID ||
-+	    filter_type == BPERF_FILTER_TGID) && inherit)
-+		/* attach all follower bpf progs to enable event inheritance */
-+		err = bperf_follower_bpf__attach(skel);
-+	else {
-+		link = bpf_program__attach(skel->progs.fexit_XXX);
-+		if (IS_ERR(link))
-+			err = PTR_ERR(link);
-+	}
-+
-+	return err;
-+}
-+
-+static int bperf__load(struct evsel *evsel, struct target *target,
-+		       struct bpf_stat_opts *opts)
- {
- 	struct perf_event_attr_map_entry entry = {0xffffffff, 0xffffffff};
- 	int attr_map_fd, diff_map_fd = -1, err;
- 	enum bperf_filter_type filter_type;
--	__u32 filter_entry_cnt, i;
-+	__u32 i;
- 
--	if (bperf_check_target(evsel, target, &filter_type, &filter_entry_cnt))
-+	if (bperf_check_target(evsel, target, opts, &filter_type,
-+			       &filter_entry_cnt))
- 		return -1;
- 
- 	if (!all_cpu_map) {
-@@ -529,9 +560,6 @@ static int bperf__load(struct evsel *evsel, struct target *target)
- 	/* set up reading map */
- 	bpf_map__set_max_entries(evsel->follower_skel->maps.accum_readings,
- 				 filter_entry_cnt);
--	/* set up follower filter based on target */
--	bpf_map__set_max_entries(evsel->follower_skel->maps.filter,
--				 filter_entry_cnt);
- 	err = bperf_follower_bpf__load(evsel->follower_skel);
- 	if (err) {
- 		pr_err("Failed to load follower skeleton\n");
-@@ -543,6 +571,7 @@ static int bperf__load(struct evsel *evsel, struct target *target)
- 	for (i = 0; i < filter_entry_cnt; i++) {
- 		int filter_map_fd;
- 		__u32 key;
-+		struct bperf_filter_value fval = { i, 0 };
- 
- 		if (filter_type == BPERF_FILTER_PID ||
- 		    filter_type == BPERF_FILTER_TGID)
-@@ -553,12 +582,13 @@ static int bperf__load(struct evsel *evsel, struct target *target)
- 			break;
- 
- 		filter_map_fd = bpf_map__fd(evsel->follower_skel->maps.filter);
--		bpf_map_update_elem(filter_map_fd, &key, &i, BPF_ANY);
-+		bpf_map_update_elem(filter_map_fd, &key, &fval, BPF_ANY);
- 	}
- 
- 	evsel->follower_skel->bss->type = filter_type;
- 
--	err = bperf_follower_bpf__attach(evsel->follower_skel);
-+	err = bperf_attach_follower_program(evsel->follower_skel, filter_type,
-+					    opts->inherit);
- 
- out:
- 	if (err && evsel->bperf_leader_link_fd >= 0)
-@@ -623,7 +653,7 @@ static int bperf__read(struct evsel *evsel)
- 	bperf_sync_counters(evsel);
- 	reading_map_fd = bpf_map__fd(skel->maps.accum_readings);
- 
--	for (i = 0; i < bpf_map__max_entries(skel->maps.accum_readings); i++) {
-+	for (i = 0; i < filter_entry_cnt; i++) {
- 		struct perf_cpu entry;
- 		__u32 cpu;
- 
-@@ -776,7 +806,8 @@ int bpf_counter__install_pe(struct evsel *evsel, int cpu_map_idx, int fd)
- 	return evsel->bpf_counter_ops->install_pe(evsel, cpu_map_idx, fd);
- }
- 
--int bpf_counter__load(struct evsel *evsel, struct target *target)
-+int bpf_counter__load(struct evsel *evsel, struct target *target,
-+		      struct bpf_stat_opts *opts)
- {
- 	if (target->bpf_str)
- 		evsel->bpf_counter_ops = &bpf_program_profiler_ops;
-@@ -787,7 +818,7 @@ int bpf_counter__load(struct evsel *evsel, struct target *target)
- 		evsel->bpf_counter_ops = &bperf_ops;
- 
- 	if (evsel->bpf_counter_ops)
--		return evsel->bpf_counter_ops->load(evsel, target);
-+		return evsel->bpf_counter_ops->load(evsel, target, opts);
- 	return 0;
- }
- 
-diff --git a/tools/perf/util/bpf_counter.h b/tools/perf/util/bpf_counter.h
-index c6d21c07b14c..70d7869c0cd6 100644
---- a/tools/perf/util/bpf_counter.h
-+++ b/tools/perf/util/bpf_counter.h
-@@ -15,9 +15,14 @@ struct evsel;
- struct target;
- struct bpf_counter;
- 
-+struct bpf_stat_opts {
-+	bool inherit;
-+};
-+
- typedef int (*bpf_counter_evsel_op)(struct evsel *evsel);
- typedef int (*bpf_counter_evsel_target_op)(struct evsel *evsel,
--					   struct target *target);
-+					   struct target *target,
-+					   struct bpf_stat_opts *opts);
- typedef int (*bpf_counter_evsel_install_pe_op)(struct evsel *evsel,
- 					       int cpu_map_idx,
- 					       int fd);
-@@ -38,7 +43,8 @@ struct bpf_counter {
- 
- #ifdef HAVE_BPF_SKEL
- 
--int bpf_counter__load(struct evsel *evsel, struct target *target);
-+int bpf_counter__load(struct evsel *evsel, struct target *target,
-+		      struct bpf_stat_opts *opts);
- int bpf_counter__enable(struct evsel *evsel);
- int bpf_counter__disable(struct evsel *evsel);
- int bpf_counter__read(struct evsel *evsel);
-@@ -50,7 +56,8 @@ int bpf_counter__install_pe(struct evsel *evsel, int cpu_map_idx, int fd);
- #include <linux/err.h>
- 
- static inline int bpf_counter__load(struct evsel *evsel __maybe_unused,
--				    struct target *target __maybe_unused)
-+				    struct target *target __maybe_unused,
-+				    struct bpf_stat_opts *opts __maybe_unused)
- {
- 	return 0;
- }
-diff --git a/tools/perf/util/bpf_counter_cgroup.c b/tools/perf/util/bpf_counter_cgroup.c
-index 6ff42619de12..755f12a6703c 100644
---- a/tools/perf/util/bpf_counter_cgroup.c
-+++ b/tools/perf/util/bpf_counter_cgroup.c
-@@ -167,7 +167,8 @@ static int bperf_load_program(struct evlist *evlist)
- }
- 
- static int bperf_cgrp__load(struct evsel *evsel,
--			    struct target *target __maybe_unused)
-+			    struct target *target __maybe_unused,
-+			    struct bpf_stat_opts *opts __maybe_unused)
- {
- 	static bool bperf_loaded = false;
- 
-diff --git a/tools/perf/util/bpf_skel/bperf_follower.bpf.c b/tools/perf/util/bpf_skel/bperf_follower.bpf.c
-index f193998530d4..e804b2a9d0a6 100644
---- a/tools/perf/util/bpf_skel/bperf_follower.bpf.c
-+++ b/tools/perf/util/bpf_skel/bperf_follower.bpf.c
-@@ -5,6 +5,8 @@
- #include <bpf/bpf_tracing.h>
- #include "bperf_u.h"
- 
-+#define MAX_ENTRIES 102400
-+
- struct {
- 	__uint(type, BPF_MAP_TYPE_PERCPU_ARRAY);
- 	__uint(key_size, sizeof(__u32));
-@@ -22,7 +24,9 @@ struct {
- struct {
- 	__uint(type, BPF_MAP_TYPE_HASH);
- 	__uint(key_size, sizeof(__u32));
--	__uint(value_size, sizeof(__u32));
-+	__uint(value_size, sizeof(struct bperf_filter_value));
-+	__uint(max_entries, MAX_ENTRIES);
-+	__uint(map_flags, BPF_F_NO_PREALLOC);
- } filter SEC(".maps");
- 
- enum bperf_filter_type type = 0;
-@@ -33,14 +37,15 @@ int BPF_PROG(fexit_XXX)
- {
- 	struct bpf_perf_event_value *diff_val, *accum_val;
- 	__u32 filter_key, zero = 0;
--	__u32 *accum_key;
-+	__u32 accum_key;
-+	struct bperf_filter_value *fval;
- 
- 	if (!enabled)
- 		return 0;
- 
- 	switch (type) {
- 	case BPERF_FILTER_GLOBAL:
--		accum_key = &zero;
-+		accum_key = zero;
- 		goto do_add;
- 	case BPERF_FILTER_CPU:
- 		filter_key = bpf_get_smp_processor_id();
-@@ -55,16 +60,20 @@ int BPF_PROG(fexit_XXX)
- 		return 0;
- 	}
- 
--	accum_key = bpf_map_lookup_elem(&filter, &filter_key);
--	if (!accum_key)
-+	fval = bpf_map_lookup_elem(&filter, &filter_key);
-+	if (!fval)
- 		return 0;
- 
-+	accum_key = fval->accum_key;
-+	if (fval->exited)
-+		bpf_map_delete_elem(&filter, &filter_key);
-+
- do_add:
- 	diff_val = bpf_map_lookup_elem(&diff_readings, &zero);
- 	if (!diff_val)
- 		return 0;
- 
--	accum_val = bpf_map_lookup_elem(&accum_readings, accum_key);
-+	accum_val = bpf_map_lookup_elem(&accum_readings, &accum_key);
- 	if (!accum_val)
- 		return 0;
- 
-@@ -75,4 +84,70 @@ int BPF_PROG(fexit_XXX)
- 	return 0;
- }
- 
-+/* The program is only used for PID or TGID filter types. */
-+SEC("tp_btf/task_newtask")
-+int BPF_PROG(on_newtask, struct task_struct *task, __u64 clone_flags)
-+{
-+	__u32 parent_key, child_key;
-+	struct bperf_filter_value *parent_fval;
-+	struct bperf_filter_value child_fval = { 0 };
-+
-+	if (!enabled)
-+		return 0;
-+
-+	switch (type) {
-+	case BPERF_FILTER_PID:
-+		parent_key = bpf_get_current_pid_tgid() & 0xffffffff;
-+		child_key = task->pid;
-+		break;
-+	case BPERF_FILTER_TGID:
-+		parent_key = bpf_get_current_pid_tgid() >> 32;
-+		child_key = task->tgid;
-+		if (child_key == parent_key)
-+			return 0;
-+		break;
-+	default:
-+		return 0;
-+	}
-+
-+	/* Check if the current task is one of the target tasks to be counted */
-+	parent_fval = bpf_map_lookup_elem(&filter, &parent_key);
-+	if (!parent_fval)
-+		return 0;
-+
-+	/* Start counting for the new task by adding it into filter map,
-+	 * inherit the accum key of its parent task so that they can be
-+	 * counted together.
-+	 */
-+	child_fval.accum_key = parent_fval->accum_key;
-+	child_fval.exited = 0;
-+	bpf_map_update_elem(&filter, &child_key, &child_fval, BPF_NOEXIST);
-+
-+	return 0;
-+}
-+
-+/* The program is only used for PID or TGID filter types. */
-+SEC("tp_btf/sched_process_exit")
-+int BPF_PROG(on_exittask, struct task_struct *task)
-+{
-+	__u32 pid;
-+	struct bperf_filter_value *fval;
-+
-+	if (!enabled)
-+		return 0;
-+
-+	/* Stop counting for this task by removing it from filter map.
-+	 * For TGID type, if the pid can be found in the map, it means that
-+	 * this pid belongs to the leader task. After the task exits, the
-+	 * tgid of its child tasks (if any) will be 1, so the pid can be
-+	 * safely removed.
-+	 */
-+	pid = task->pid;
-+	fval = bpf_map_lookup_elem(&filter, &pid);
-+	if (fval)
-+		fval->exited = 1;
-+
-+	return 0;
-+}
-+
- char LICENSE[] SEC("license") = "Dual BSD/GPL";
-diff --git a/tools/perf/util/bpf_skel/bperf_u.h b/tools/perf/util/bpf_skel/bperf_u.h
-index 1ce0c2c905c1..4a4a753980be 100644
---- a/tools/perf/util/bpf_skel/bperf_u.h
-+++ b/tools/perf/util/bpf_skel/bperf_u.h
-@@ -11,4 +11,9 @@ enum bperf_filter_type {
- 	BPERF_FILTER_TGID,
- };
- 
-+struct bperf_filter_value {
-+	__u32 accum_key;
-+	__u8 exited;
-+};
-+
- #endif /* __BPERF_STAT_U_H */
+Note:
+The main concern we've discussion in V1 thread is how to deal with the
+applications using SO_TIMESTAMPING feature? In this series, I allow both
+cases to happen at the same time, which indicates that even one
+applications setting SO_TIMESTAMPING can still be traced through BPF
+program. Please see patch [04/12].
+
+
+Here is the test output:
+1) receive path
+iperf3-987305  [008] ...11 179955.200990: bpf_trace_printk: rx: port: 5201:55192, swtimestamp: 1728167973,670426346, hwtimestamp: 0,0
+2) xmit path
+iperf3-19765   [013] ...11  2021.329602: bpf_trace_printk: tx: port: 47528:5201, key: 1036, timestamp: 1728357067,436678584
+iperf3-19765   [013] b..11  2021.329611: bpf_trace_printk: tx: port: 47528:5201, key: 1036, timestamp: 1728357067,436689976
+iperf3-19765   [013] ...11  2021.329622: bpf_trace_printk: tx: port: 47528:5201, key: 1036, timestamp: 1728357067,436700739
+
+Here is the full bpf program:
+#include <linux/bpf.h>
+
+#include <bpf/bpf_helpers.h>
+#include <bpf/bpf_endian.h>
+#include <uapi/linux/net_tstamp.h>
+
+int _version SEC("version") = 1;
+char _license[] SEC("license") = "GPL";
+
+# define SO_TIMESTAMPING         37
+
+__section("sockops")
+int set_initial_rto(struct bpf_sock_ops *skops)
+{
+	int op = (int) skops->op;
+	u32 sport = 0, dport = 0;
+	int flags;
+
+	switch (op) {
+	//case BPF_SOCK_OPS_ACTIVE_ESTABLISHED_CB:
+	case BPF_SOCK_OPS_TCP_CONNECT_CB:
+	case BPF_SOCK_OPS_PASSIVE_ESTABLISHED_CB:
+		flags = SOF_TIMESTAMPING_RX_SOFTWARE |
+			SOF_TIMESTAMPING_TX_SCHED | SOF_TIMESTAMPING_TX_ACK | SOF_TIMESTAMPING_TX_SOFTWARE |
+			SOF_TIMESTAMPING_OPT_ID | SOF_TIMESTAMPING_OPT_ID_TCP;
+		bpf_setsockopt(skops, SOL_SOCKET, SO_TIMESTAMPING, &flags, sizeof(flags));
+		bpf_sock_ops_cb_flags_set(skops, BPF_SOCK_OPS_TX_TIMESTAMPING_OPT_CB_FLAG|BPF_SOCK_OPS_RX_TIMESTAMPING_OPT_CB_FLAG);
+		break;
+	case BPF_SOCK_OPS_TS_SCHED_OPT_CB:
+	case BPF_SOCK_OPS_TS_SW_OPT_CB:
+	case BPF_SOCK_OPS_TS_ACK_OPT_CB:
+		dport = bpf_ntohl(skops->remote_port);
+		sport = skops->local_port;
+		bpf_printk("tx: port: %u:%u, key: %u, timestamp: %u,%u\n",
+			    sport, dport, skops->args[0], skops->args[1], skops->args[2]);
+		break;
+	case BPF_SOCK_OPS_TS_RX_OPT_CB:
+		dport = bpf_ntohl(skops->remote_port);
+		sport = skops->local_port;
+		bpf_printk("rx: port: %u:%u, swtimestamp: %u,%u, hwtimestamp: %u,%u\n",
+			   sport, dport, skops->args[0], skops->args[1], skops->args[2], skops->args[3]);
+		break;
+	}
+	return 1;
+}
+
+
+Jason Xing (12):
+  net-timestamp: introduce socket tsflag requestors
+  net-timestamp: open gate for bpf_setsockopt
+  net-timestamp: reorganize in skb_tstamp_tx_output()
+  net-timestamp: add static key to control the whole bpf extension
+  net-timestamp: add bpf infrastructure to allow exposing timestamp
+    later
+  net-timestamp: introduce TS_SCHED_OPT_CB to generate dev xmit
+    timestamp
+  net-timestamp: introduce TS_SW_OPT_CB to generate driver timestamp
+  net-timestamp: introduce TS_ACK_OPT_CB to generate tcp acked timestamp
+  net-timestamp: add tx OPT_ID_TCP support for bpf case
+  net-timestamp: make bpf for tx timestamp work
+  net-timestamp: add bpf framework for rx timestamps
+  net-timestamp: add bpf support for rx software/hardware timestamp
+
+ include/linux/tcp.h            |   2 +-
+ include/net/ip.h               |   2 +-
+ include/net/sock.h             |  19 ++++--
+ include/net/tcp.h              |  16 +++++-
+ include/uapi/linux/bpf.h       |  28 ++++++++-
+ net/can/j1939/socket.c         |   2 +-
+ net/core/filter.c              |  39 +++++++++++++
+ net/core/skbuff.c              | 102 ++++++++++++++++++++++++++++++---
+ net/core/sock.c                |  68 +++++++++++++++-------
+ net/ipv4/ip_output.c           |   2 +-
+ net/ipv4/ip_sockglue.c         |   2 +-
+ net/ipv4/tcp.c                 |  60 ++++++++++++++++++-
+ net/ipv6/ip6_output.c          |   2 +-
+ net/ipv6/ping.c                |   2 +-
+ net/ipv6/raw.c                 |   2 +-
+ net/ipv6/udp.c                 |   2 +-
+ net/sctp/socket.c              |   2 +-
+ net/socket.c                   |   4 +-
+ tools/include/uapi/linux/bpf.h |  28 ++++++++-
+ 19 files changed, 333 insertions(+), 51 deletions(-)
+
 -- 
-2.34.1
+2.37.3
 
