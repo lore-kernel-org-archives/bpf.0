@@ -1,131 +1,137 @@
-Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailtransmit04.runbox.com (mailtransmit04.runbox.com [185.226.149.37])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB559137776
-	for <bpf@vger.kernel.org>; Sun, 13 Oct 2024 13:08:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A573D2F42;
+	Sun, 13 Oct 2024 16:27:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.37
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728824901; cv=none; b=EFCxnIRP8HtEgqccTkMGLpGzq1Jh5ipDgeQv1Z/RNgj0EIQn+znk0eTQekKNjVvrj0JE1hVhCDdaUfAvtU87TvrKS2YDBP31bp8nDCUIsgLba2upMEU+jJ81kEHLGs2LnMw4PG+Ue2kNq9x8wYpdlY1pFx5/z0FCdKNfZnhXrAU=
+	t=1728836843; cv=none; b=gNh22/1OeZzYfPK/9XQTkf4aKasWXvDExPLG7KhGn9PU7gUWRY15IntmxHa7Yo+GvDBriTu7PT48dm6hAjvh0DDosYd9O2bVymIHWLcR9pWgukp6q4xDvH1PG3SyMX3QKwoytHpwKv6YVco+wFYP4GEVuEwEC9+cdzOaMK9D70o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728824901; c=relaxed/simple;
-	bh=UzwP+v7wSYe0vRug8F7Q/yE+ZrNVEpXmHSGfLFKU8vM=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To; b=Ros5tJgqQoQ1x5zyICWNSEzx/Y3B39FDnvrOx9OLGA/WtkHFO2fRMjbMC3EtqIi3hQzKsp6r3vP+7JFRJ51GHLUukNMquWHT3uVFPTm7MzKVuttFolQO9FWYWIWN3mczETidg2xEAzvle5icVWr1WC+0mk4fQbN9HflE6WciQPs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=zarn0GNj; arc=none smtp.client-ip=209.85.218.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1728836843; c=relaxed/simple;
+	bh=ATz0ke/Gyqfq12BWInrt1+S0gvlwRss8NN0cvFIE+XI=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=Xw3xLb2+H18toFb57KTmmU3oG8DgeH3Xxeyp9g8ABdLimqgp0lWXou6b+9AW+LqYAq+mGy55+uJUzNKV4nULgB4Rrh2yZaJBn7UY9493lXHFQmVmzYBWGJ7EW390f4GXurPuHpqBXQgX7K0KtpwoX6RLUVMghE74tGyN2CCwhgs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co; spf=pass smtp.mailfrom=rbox.co; dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b=JTuiPL34; arc=none smtp.client-ip=185.226.149.37
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rbox.co
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="zarn0GNj"
-Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-a994cd82a3bso501946166b.2
-        for <bpf@vger.kernel.org>; Sun, 13 Oct 2024 06:08:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1728824898; x=1729429698; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
-         :to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=BgHxcpCnt1m28Spmy794S8e8vo0cvEqjskS68PjwE4k=;
-        b=zarn0GNjITo4sd9RanLVpdpPzEiyXO/lxsBWr3l89g7zI8rUvN04snT8nQOj16lpTM
-         teBlYsoa6gOI3TsA8ybVefPY2FylqeHSf1/SWc3pvKjymoqpTgxca+52L6pcKMwYkSV7
-         rAjU9shyR8wvlMWl5qXPv9GmcFhnX+7k9dfQStO3QsJeZtKCtRetMX1W2wl8wMqA9yPS
-         HaSTGuyoFbdaoCzk3BXpLg+O4xQuvF7vOev8B08oK0e7PvjeLVymuKKYpPkVnrVjSv4o
-         o0dJ7hDCVRbHmwJcM/5wMxwogVKOz2+BRVhFYrkHQ/Ma7s3LW+jEB38Uwf5Z54tbgLdL
-         j+Cw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728824898; x=1729429698;
-        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
-         :to:from:date:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=BgHxcpCnt1m28Spmy794S8e8vo0cvEqjskS68PjwE4k=;
-        b=ZiQnV0P60E9sgUqJ5LZL9KT4enXIpTdixPIxeAGOiaSpFNH6+36fBuhH0cbCbdFB44
-         riEZmFLC8dav0p9sNOX32gfBqTcmNRUCBHzczUgVq02P+CkNF0XSk3dYU1a87kTk6JLb
-         NfjRDbRG3tmvXAF1LGw35OwJKg7vZqj44ddQ3XN1Ms4Odurc8WXr1h44+/ICB/z6tOed
-         pcUi2ZqdAyR1xhGYg6MsB0XL2CPSEw9Uho+3EFMomIZ8TsLUHnqI0akdgW/YmPxChMda
-         zHya3ePQVtg25o6CAITyrGbj/S6dFohqJ1zz9c6eI+6IXFcJHoL8TLW9tdORJnF+JvR3
-         59wA==
-X-Forwarded-Encrypted: i=1; AJvYcCUxUt4MpnyLv8UH/BAGrSkXjzACh0zxFWrY4eyO2n1NbELLkJU/dnSZGwJW/sDZA1S1k5Q=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxjkumi+ipzdu7yoc27YZMHxmrUhBoXxQNMGNuK9b6erege0oom
-	VCJV3m/Gl16EmoE2pAUI9clsv6K8XqYpDtInJQ3C6HaJljKUNjKorpw+7v5t6YU=
-X-Google-Smtp-Source: AGHT+IGwEWE371TARzktggzetrHDP4kTrhJ9brqkPyC9v+9STeYVdsEo8EWbdpgQCfEd+yto1WG10A==
-X-Received: by 2002:a17:907:9489:b0:a99:e98f:e73d with SMTP id a640c23a62f3a-a99e9900010mr296287666b.37.1728824898043;
-        Sun, 13 Oct 2024 06:08:18 -0700 (PDT)
-Received: from localhost ([196.207.164.177])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5c937298cc5sm3745677a12.93.2024.10.13.06.08.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 13 Oct 2024 06:08:17 -0700 (PDT)
-Date: Sun, 13 Oct 2024 16:08:13 +0300
-From: Dan Carpenter <dan.carpenter@linaro.org>
-To: oe-kbuild@lists.linux.dev, Hou Tao <houtao@huaweicloud.com>,
-	bpf@vger.kernel.org
-Cc: lkp@intel.com, oe-kbuild-all@lists.linux.dev,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Hao Luo <haoluo@google.com>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
-	Jiri Olsa <jolsa@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>, houtao1@huawei.com,
-	xukuohai@huawei.com
-Subject: Re: [PATCH bpf-next 08/16] bpf: Handle bpf_dynptr_user in bpf
- syscall when it is used as input
-Message-ID: <47cda1ac-3d40-415a-a36c-833efbbfa19c@stanley.mountain>
+	dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b="JTuiPL34"
+Received: from mailtransmit02.runbox ([10.9.9.162] helo=aibo.runbox.com)
+	by mailtransmit04.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+	(Exim 4.93)
+	(envelope-from <mhal@rbox.co>)
+	id 1t01R0-00Cycu-CN; Sun, 13 Oct 2024 18:27:10 +0200
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=rbox.co;
+	s=selector1; h=Cc:To:In-Reply-To:References:Message-Id:
+	Content-Transfer-Encoding:Content-Type:MIME-Version:Subject:Date:From;
+	bh=L1Tce96RUTs2pMiFj61EXXUMJFuuEoy26u+9hdzmS0A=; b=JTuiPL34z2zWnLWD4vcIWJ9nlp
+	sz8V25aXSC1omfOy4Glv1XkSH+XXuNoZwav8Mfqd+6fkuZG6xilSOsUekQcEnMftoXPszNDGh3HgN
+	J5+nthL4MM7ZvN1S5HA4PMnBSf1x7jcXiHG9uz0fOST33dwaOlPDn+6G3Mb8SNry27aal+hVHjuxM
+	6wcKnHuU2BhxIb4KDr70wsXP0cJ9k6UNlRhMJwT6zo2UrjOu8HDGt2nEsO8wCl20FvONkyvLN6c3A
+	y7vm14K2h2cyzVoWMix99IgQUYYZpr47G6RClICiVoefNf/usZL8kFYlAMAbz4bJfYdwIlbzj/X3v
+	ccqJmR7Q==;
+Received: from [10.9.9.73] (helo=submission02.runbox)
+	by mailtransmit02.runbox with esmtp (Exim 4.86_2)
+	(envelope-from <mhal@rbox.co>)
+	id 1t01Qz-0007ii-PK; Sun, 13 Oct 2024 18:27:10 +0200
+Received: by submission02.runbox with esmtpsa  [Authenticated ID (604044)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.93)
+	id 1t01Qg-00GV5b-3f; Sun, 13 Oct 2024 18:26:50 +0200
+From: Michal Luczaj <mhal@rbox.co>
+Date: Sun, 13 Oct 2024 18:26:39 +0200
+Subject: [PATCH bpf v2 1/4] bpf, sockmap: SK_DROP on attempted redirects of
+ unsupported af_vsock
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241008091501.8302-9-houtao@huaweicloud.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20241013-vsock-fixes-for-redir-v2-1-d6577bbfe742@rbox.co>
+References: <20241013-vsock-fixes-for-redir-v2-0-d6577bbfe742@rbox.co>
+In-Reply-To: <20241013-vsock-fixes-for-redir-v2-0-d6577bbfe742@rbox.co>
+To: "David S. Miller" <davem@davemloft.net>, 
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
+ Paolo Abeni <pabeni@redhat.com>, John Fastabend <john.fastabend@gmail.com>, 
+ Jakub Sitnicki <jakub@cloudflare.com>, 
+ "Michael S. Tsirkin" <mst@redhat.com>, 
+ Stefano Garzarella <sgarzare@redhat.com>, 
+ Bobby Eshleman <bobby.eshleman@bytedance.com>, 
+ Stefan Hajnoczi <stefanha@redhat.com>
+Cc: netdev@vger.kernel.org, bpf@vger.kernel.org, 
+ Michal Luczaj <mhal@rbox.co>
+X-Mailer: b4 0.14.2
 
-Hi Hou,
+Don't mislead the callers of bpf_{sk,msg}_redirect_{map,hash}(): make sure
+to immediately and visibly fail the forwarding of unsupported af_vsock
+packets.
 
-kernel test robot noticed the following build warnings:
+Fixes: 634f1a7110b4 ("vsock: support sockmap")
+Signed-off-by: Michal Luczaj <mhal@rbox.co>
+---
+ include/net/sock.h  | 5 +++++
+ net/core/sock_map.c | 8 ++++++++
+ 2 files changed, 13 insertions(+)
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Hou-Tao/bpf-Introduce-map-flag-BPF_F_DYNPTR_IN_KEY/20241008-171136
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
-patch link:    https://lore.kernel.org/r/20241008091501.8302-9-houtao%40huaweicloud.com
-patch subject: [PATCH bpf-next 08/16] bpf: Handle bpf_dynptr_user in bpf syscall when it is used as input
-config: x86_64-randconfig-161-20241011 (https://download.01.org/0day-ci/archive/20241012/202410120530.zUoa1scp-lkp@intel.com/config)
-compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Reported-by: Dan Carpenter <dan.carpenter@linaro.org>
-| Closes: https://lore.kernel.org/r/202410120530.zUoa1scp-lkp@intel.com/
-
-smatch warnings:
-kernel/bpf/syscall.c:1557 bpf_copy_from_dynptr_ukey() warn: 'key' is an error pointer or valid
-
-vim +/key +1557 kernel/bpf/syscall.c
-
-e1883aa78ac1fe9 Hou Tao            2024-10-08  1543  static void *bpf_copy_from_dynptr_ukey(const struct bpf_map *map, bpfptr_t ukey)
-e1883aa78ac1fe9 Hou Tao            2024-10-08  1544  {
-e1883aa78ac1fe9 Hou Tao            2024-10-08  1545  	const struct btf_record *record;
-e1883aa78ac1fe9 Hou Tao            2024-10-08  1546  	const struct btf_field *field;
-e1883aa78ac1fe9 Hou Tao            2024-10-08  1547  	struct bpf_dynptr_user *uptr;
-e1883aa78ac1fe9 Hou Tao            2024-10-08  1548  	struct bpf_dynptr_kern *kptr;
-e1883aa78ac1fe9 Hou Tao            2024-10-08  1549  	void *key, *new_key, *kdata;
-e1883aa78ac1fe9 Hou Tao            2024-10-08  1550  	unsigned int key_size, size;
-e1883aa78ac1fe9 Hou Tao            2024-10-08  1551  	bpfptr_t udata;
-e1883aa78ac1fe9 Hou Tao            2024-10-08  1552  	unsigned int i;
-e1883aa78ac1fe9 Hou Tao            2024-10-08  1553  	int err;
-e1883aa78ac1fe9 Hou Tao            2024-10-08  1554  
-e1883aa78ac1fe9 Hou Tao            2024-10-08  1555  	key_size = map->key_size;
-e1883aa78ac1fe9 Hou Tao            2024-10-08  1556  	key = kvmemdup_bpfptr(ukey, key_size);
-e1883aa78ac1fe9 Hou Tao            2024-10-08 @1557  	if (!key)
-
-This should be if (IS_ERR(key))
-
-e1883aa78ac1fe9 Hou Tao            2024-10-08  1558  		return ERR_PTR(-ENOMEM);
-e1883aa78ac1fe9 Hou Tao            2024-10-08  1559  
-e1883aa78ac1fe9 Hou Tao            2024-10-08  1560  	size = key_size;
-e1883aa78ac1fe9 Hou Tao            2024-10-08  1561  	record = map->key_record;
+diff --git a/include/net/sock.h b/include/net/sock.h
+index c58ca8dd561b7312ffc0836585c04d9fe917a124..c87295f3476db23934d4fcbeabc7851c61ad2bc4 100644
+--- a/include/net/sock.h
++++ b/include/net/sock.h
+@@ -2715,6 +2715,11 @@ static inline bool sk_is_stream_unix(const struct sock *sk)
+ 	return sk->sk_family == AF_UNIX && sk->sk_type == SOCK_STREAM;
+ }
+ 
++static inline bool sk_is_vsock(const struct sock *sk)
++{
++	return sk->sk_family == AF_VSOCK;
++}
++
+ /**
+  * sk_eat_skb - Release a skb if it is no longer needed
+  * @sk: socket to eat this skb from
+diff --git a/net/core/sock_map.c b/net/core/sock_map.c
+index 242c91a6e3d3870ec6da6fa095d180a933d1d3d4..07d6aa4e39ef606aab33bd0d95711ecf156596b9 100644
+--- a/net/core/sock_map.c
++++ b/net/core/sock_map.c
+@@ -647,6 +647,8 @@ BPF_CALL_4(bpf_sk_redirect_map, struct sk_buff *, skb,
+ 	sk = __sock_map_lookup_elem(map, key);
+ 	if (unlikely(!sk || !sock_map_redirect_allowed(sk)))
+ 		return SK_DROP;
++	if ((flags & BPF_F_INGRESS) && sk_is_vsock(sk))
++		return SK_DROP;
+ 
+ 	skb_bpf_set_redir(skb, sk, flags & BPF_F_INGRESS);
+ 	return SK_PASS;
+@@ -675,6 +677,8 @@ BPF_CALL_4(bpf_msg_redirect_map, struct sk_msg *, msg,
+ 		return SK_DROP;
+ 	if (!(flags & BPF_F_INGRESS) && !sk_is_tcp(sk))
+ 		return SK_DROP;
++	if (sk_is_vsock(sk))
++		return SK_DROP;
+ 
+ 	msg->flags = flags;
+ 	msg->sk_redir = sk;
+@@ -1249,6 +1253,8 @@ BPF_CALL_4(bpf_sk_redirect_hash, struct sk_buff *, skb,
+ 	sk = __sock_hash_lookup_elem(map, key);
+ 	if (unlikely(!sk || !sock_map_redirect_allowed(sk)))
+ 		return SK_DROP;
++	if ((flags & BPF_F_INGRESS) && sk_is_vsock(sk))
++		return SK_DROP;
+ 
+ 	skb_bpf_set_redir(skb, sk, flags & BPF_F_INGRESS);
+ 	return SK_PASS;
+@@ -1277,6 +1283,8 @@ BPF_CALL_4(bpf_msg_redirect_hash, struct sk_msg *, msg,
+ 		return SK_DROP;
+ 	if (!(flags & BPF_F_INGRESS) && !sk_is_tcp(sk))
+ 		return SK_DROP;
++	if (sk_is_vsock(sk))
++		return SK_DROP;
+ 
+ 	msg->flags = flags;
+ 	msg->sk_redir = sk;
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.46.2
 
