@@ -1,70 +1,99 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0C291714BE;
-	Tue, 15 Oct 2024 15:51:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A0E11CB9E2;
+	Tue, 15 Oct 2024 16:11:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729007483; cv=none; b=pK5GqF4jjU/xKoQ5NRLB+e67TNe9pnG54ooPzgmUDjgnPNwEx0eUbBcb9DW90usqYIg3rLHwA9ywE2j7G4FmzS4o9oAeK4kk/KeqjxhjHy5oK8lWIjwTLQU76CHuPh2YOWpEikfyUVqGxGVeempPEfTTufDhGdOlUxjtKiC1h5E=
+	t=1729008674; cv=none; b=qrsIqPUqkBKajWnQ8dlZ24YsLbsg2clZwhfXayl4TWy+DlfomLM4DBOz3sGU8dZhvPZp79AhXb2QDK6t9uRFarWmceuYdUfaxPREzzbhNkQ6RctW5IJM7ocg9ecwyKPLHpnbf8RKwbOewjKilVY6bd7+OIE0hCRNj8a82D7rD38=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729007483; c=relaxed/simple;
-	bh=grArdQkCShh+C6dJgpxXV1EytHE5WpU0yGVIeKNoxNg=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=oJKREqFxUBM5gUFZVyYa9GtCUpzZyi5Wo7Eb7hh9AYdpg+wMPfeCyh65AhqpBd+DdY1PtGTh1TugoNXbkk5Ak0q8NTbd9oUSynKF7M844MrVe22BR0bADDgmPl0XmYix4NLYE7tKCnHWjy8jKurrf0mpVXbPN0OI3w0NPLSNtuM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=c+9nQ8G7; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1729008674; c=relaxed/simple;
+	bh=HtkA9wBw7Sojuw5HhHk7JjMMtDq6tne9Y9iMOe1hFF4=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=KOyEPZXWwx+6agripVQX0BeCUrfZMVbt1i4UNZ8XRyVjsrlkJfzAsKzD8Kgj1cC+ft9JWqn0g4ra9letBrxuheEq2EE5mYxEUiemS94r27+H/i0JzVYCbK1gk8fwZyuWvUfhbtUocFcKmcEge/M3HN+u2iHzjBryrs56OxMaDEU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BgLXKw6N; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="c+9nQ8G7"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56560C4CEC6;
-	Tue, 15 Oct 2024 15:51:22 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BgLXKw6N"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E766C4CED1;
+	Tue, 15 Oct 2024 16:11:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1729007483;
-	bh=grArdQkCShh+C6dJgpxXV1EytHE5WpU0yGVIeKNoxNg=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=c+9nQ8G7Y9i/LwN7VNpV0DrdRQZkNBQPlKR8dE3HSexY+pKDsTc/SCMK2hMsar88w
-	 syKDfIFrTL9X/Qg9yNQQ0AHFsO6hOj3SW0KGr9OCMmTBp8cWOiYxpJrdYVga0K1/SX
-	 96iKIpBlsOWG/PRp4+eurZrZDHsM8qFZREzbIa0UZq+TDhm0ooUsjIJYDJs0L3PNHs
-	 bMgCuSovbXQTndefYSXXcNaQhTsofxc93EYdkTt49wyOVokXLmXFogNrvy8GkDw5tY
-	 Y6q0VoLjkA0JkzvDGD/z3Ed4BaigFe8R6RJ2lUUBoFA+Lab2t4Gy1m3D2uPOmRAeE5
-	 cLFPyx5C3n3ig==
-Date: Tue, 15 Oct 2024 08:51:21 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Hangbin Liu <liuhangbin@gmail.com>
-Cc: netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>, Eric
- Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Alexei
- Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Jesper Dangaard Brouer <hawk@kernel.org>, John Fastabend
- <john.fastabend@gmail.com>, Jiri Pirko <jiri@resnulli.us>, Sebastian
- Andrzej Siewior <bigeasy@linutronix.de>, Lorenzo Bianconi
- <lorenzo@kernel.org>, Andrii Nakryiko <andriin@fb.com>, Jussi Maki
- <joamaki@gmail.com>, Jay Vosburgh <jv@jvosburgh.net>,
- linux-kernel@vger.kernel.org, bpf@vger.kernel.org, Liang Li
- <liali@redhat.com>
-Subject: Re: [PATCH net] bpf: xdp: fallback to SKB mode if DRV flag is
- absent.
-Message-ID: <20241015085121.5f22e96f@kernel.org>
-In-Reply-To: <20241015033632.12120-1-liuhangbin@gmail.com>
-References: <20241015033632.12120-1-liuhangbin@gmail.com>
+	s=k20201202; t=1729008674;
+	bh=HtkA9wBw7Sojuw5HhHk7JjMMtDq6tne9Y9iMOe1hFF4=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=BgLXKw6N3AW+UE0XMhLDqSIskVLB+HpYigMBdbsRUvuki4N7849L9Qsef8x0PCOuW
+	 sVKIg7vmnpeAmr4apZ0rwwbgih3UMRxEGxm32fXVw8nxp8dZKFLGANx//Y4SJRHBDE
+	 4oD7Q6CUrBGrbVavbSKqXTi1I6v0DXk/2RZmeBy/T9zLtg0SLGXPik28l9fEKAduBm
+	 SYdgy3BCwcbvD4pui/epYistnTi7xQxmUyRXFVMDnzF/lce7Wdu5mxL0gl0hXoiz0N
+	 33f0I0KfDui+jzdbhJXWmjHbP2rt7xVHU6lGOPpExt9h0DDU87ACcalCaaz7kTQhQ7
+	 fBlLYRICxSdBA==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+	id BC0B7CE0F9A; Tue, 15 Oct 2024 09:11:13 -0700 (PDT)
+From: "Paul E. McKenney" <paulmck@kernel.org>
+To: rcu@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org,
+	kernel-team@meta.com,
+	rostedt@goodmis.org,
+	"Paul E. McKenney" <paulmck@kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Kent Overstreet <kent.overstreet@linux.dev>,
+	bpf@vger.kernel.org
+Subject: [PATCH rcu 04/15] srcu: Bit manipulation changes for additional reader flavor
+Date: Tue, 15 Oct 2024 09:11:01 -0700
+Message-Id: <20241015161112.442758-4-paulmck@kernel.org>
+X-Mailer: git-send-email 2.40.1
+In-Reply-To: <ddf64299-de71-41a2-b575-56ec173faf75@paulmck-laptop>
+References: <ddf64299-de71-41a2-b575-56ec173faf75@paulmck-laptop>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On Tue, 15 Oct 2024 03:36:32 +0000 Hangbin Liu wrote:
-> After commit c8a36f1945b2 ("bpf: xdp: Fix XDP mode when no mode flags
-> specified"), the mode is automatically set to XDP_MODE_DRV if the driver
-> implements the .ndo_bpf function. However, for drivers like bonding, which
-> only support native XDP for specific modes, this may result in an
-> "unsupported" response.
-> 
-> In such cases, let's fall back to SKB mode if the user did not explicitly
-> request DRV mode.
+Currently, there are only two flavors of readers, normal and NMI-safe.
+Very straightforward state updates suffice to check for erroneous
+mixing of reader flavors on a given srcu_struct structure.  This commit
+upgrades the checking in preparation for the addition of light-weight
+(as in memory-barrier-free) readers.
 
-Looks like the issue is reported by QA rather than a real user.
-A weak -1 from me on building such unreliable heuristics into
-the kernel. As BPF CI's failure points out the ops can return
-EOPNOTSUPP for multiple reasons while dev_xdp_mode() only checks 
-if the driver *has* ndo_bpf, not if it fails.
+Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+Cc: Alexei Starovoitov <ast@kernel.org>
+Cc: Andrii Nakryiko <andrii@kernel.org>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Kent Overstreet <kent.overstreet@linux.dev>
+Cc: <bpf@vger.kernel.org>
+---
+ kernel/rcu/srcutree.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
+
+diff --git a/kernel/rcu/srcutree.c b/kernel/rcu/srcutree.c
+index 18f2eae5e14bd..abe55777c4335 100644
+--- a/kernel/rcu/srcutree.c
++++ b/kernel/rcu/srcutree.c
+@@ -462,7 +462,7 @@ static unsigned long srcu_readers_unlock_idx(struct srcu_struct *ssp, int idx)
+ 		if (IS_ENABLED(CONFIG_PROVE_RCU))
+ 			mask = mask | READ_ONCE(cpuc->srcu_reader_flavor);
+ 	}
+-	WARN_ONCE(IS_ENABLED(CONFIG_PROVE_RCU) && (mask & (mask >> 1)),
++	WARN_ONCE(IS_ENABLED(CONFIG_PROVE_RCU) && (mask & (mask - 1)),
+ 		  "Mixed NMI-safe readers for srcu_struct at %ps.\n", ssp);
+ 	return sum;
+ }
+@@ -712,8 +712,9 @@ void srcu_check_read_flavor(struct srcu_struct *ssp, int read_flavor)
+ 	sdp = raw_cpu_ptr(ssp->sda);
+ 	old_reader_flavor_mask = READ_ONCE(sdp->srcu_reader_flavor);
+ 	if (!old_reader_flavor_mask) {
+-		WRITE_ONCE(sdp->srcu_reader_flavor, reader_flavor_mask);
+-		return;
++		old_reader_flavor_mask = cmpxchg(&sdp->srcu_reader_flavor, 0, reader_flavor_mask);
++		if (!old_reader_flavor_mask)
++			return;
+ 	}
+ 	WARN_ONCE(old_reader_flavor_mask != reader_flavor_mask, "CPU %d old state %d new state %d\n", sdp->cpu, old_reader_flavor_mask, reader_flavor_mask);
+ }
+-- 
+2.40.1
+
