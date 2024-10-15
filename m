@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D089B1F76CB;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E94491F76D9;
 	Tue, 15 Oct 2024 16:11:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729008674; cv=none; b=XIV49JsGuDjGWPtVMFTma2ZB+yy5YKcqU89iE95xJbVyr1q+rrYOYNMf8QUwqEJ+nsvPsHN+znZO+OHY34GGekyM0Hwn0v6XRCcUe6v/X2qoDFgvB8whgwX3k7XsFhVE25HlYmHQy1YMSKBptFTjs+weaLy+ojWBrBZ7XA1T4Lk=
+	t=1729008675; cv=none; b=oWd1GegFrMEitlPMFmfNom/67P3sAiWAetkAQvAleXQNJbs62q9p8a7vZYeTuM9NwaKXIK6SmstkJureM+qQEoLe0StAb96zD/8JjCu+BlitDPxER70swJlL+PHwpjld0DIeWAtDKHovc06O0Z6AwthMBF1S+EyzeSoE4G71m7g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729008674; c=relaxed/simple;
-	bh=aRxkj03S73hF0jV8gryZajtKN0A7DA6aTKR8Jq/1sgk=;
+	s=arc-20240116; t=1729008675; c=relaxed/simple;
+	bh=USWy1f2+MRE4E6Ag+HiaCUvOKEVnE9SJTDypoSyYrTo=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=qlXi+Th+NM4k5p+lNJ/F5FbnL0NX5UpWawyc/OEZrwA50kJdJDwWnLFgZQChXdg6pHVSvErELAkGa2GjAfBzjrPZNjl2J79y6+fwPj4CmaLVxP5Ye5HNdtTaGAmIvjz2S86RUt6/qs95/TefNn6ry9XGnI6vB3ZQs+Bk2NucXx4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=A9aengoc; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=t8zmlbRPLWDW94Ci6OuDHBoiuFEjVeOJT1dso/IK5x1TkWYw8JxfCRkLrFUqK8UWJigpWy3LJAm1vgJyu7gCHcqMhgyiCXnQqOfUM27vTqOp9P0EJLqUK5Tb8IPdvPd8R4Bq8pFaG3hoYt9It39T2rQ+HCZdX83PligwSMgP1iw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VluLbv0D; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="A9aengoc"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8FEEBC4CEEA;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VluLbv0D"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85DAFC4CEE4;
 	Tue, 15 Oct 2024 16:11:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1729008674;
-	bh=aRxkj03S73hF0jV8gryZajtKN0A7DA6aTKR8Jq/1sgk=;
+	bh=USWy1f2+MRE4E6Ag+HiaCUvOKEVnE9SJTDypoSyYrTo=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=A9aengocjrOEp06JhtZ7EDKxhhEbbEJWPJt5kIWlCOu6SeFdTfUT68yFtT9Bm1WSm
-	 DWqw/2zF4G4HaT/JcV/VDfWWQIjRZINlsFlflqzlE4k3dNq9ELaF6bS5siJXKvXSXJ
-	 AxQ/jXkMamJAHktKdBcFFFEVoUYElKshmFe9OAPwdXQ78ypcMGB6y6mkxsdc9Utq3T
-	 swlx3XYeVEzwkxV6JdxTARGjDfTKJXlKzyk2xPSbeBbWnrW9KpFCfkK/PMd6iHIqDe
-	 5wsmH/pi28YEEK8WrCGrQgWdS4l3PhqPWrWa5gjiT+eByI7KanmBYrazv1QSmb8wT4
-	 6eQskVSS087Qg==
+	b=VluLbv0DeB/aePpRB2If4lR9PZW2xAiiLjEKlpvhbZYRhtKBvek4K8DIwRWS7DVKv
+	 wNQidWf2fSt5/42jtGoFKqZCWU6JHqAWBx6eB+jmwMLHIWjlD6K/zy0wonIGVBA3Rc
+	 SJVSamA/SawXue+wuT8PGVj5w1yyDZDiAUfKraWI9ElF4SDWQQXtRyH0ckXL+9B/Zl
+	 uzCKheq7oTkLWOiwo/PdDCvuNZhEpPCAIzpaXxi393dPJ7DxDgX3DI1LggSxyTbpHO
+	 m/B14GCYJwLH/3dh9/kfExnjwz/lQQ/AYq+TBS3v/aKzQmyO7263Cn1wwq++it6bQ1
+	 sNHIDtV1kX26A==
 Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-	id D4755CE1FD0; Tue, 15 Oct 2024 09:11:13 -0700 (PDT)
+	id CF578CE16F0; Tue, 15 Oct 2024 09:11:13 -0700 (PDT)
 From: "Paul E. McKenney" <paulmck@kernel.org>
 To: rcu@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org,
@@ -39,9 +39,9 @@ Cc: linux-kernel@vger.kernel.org,
 	Peter Zijlstra <peterz@infradead.org>,
 	Kent Overstreet <kent.overstreet@linux.dev>,
 	bpf@vger.kernel.org
-Subject: [PATCH rcu 13/15] rcutorture: Add light-weight SRCU scenario
-Date: Tue, 15 Oct 2024 09:11:10 -0700
-Message-Id: <20241015161112.442758-13-paulmck@kernel.org>
+Subject: [PATCH rcu 11/15] rcutorture: Add reader_flavor parameter for SRCU readers
+Date: Tue, 15 Oct 2024 09:11:08 -0700
+Message-Id: <20241015161112.442758-11-paulmck@kernel.org>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <ddf64299-de71-41a2-b575-56ec173faf75@paulmck-laptop>
 References: <ddf64299-de71-41a2-b575-56ec173faf75@paulmck-laptop>
@@ -53,8 +53,9 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This commit adds an rcutorture scenario that tests light-weight SRCU
-readers.  While in the area, it adjusts the size of the TREE10 scenario.
+This commit adds an rcutorture.reader_flavor parameter whose bits
+correspond to reader flavors.  For example, SRCU's readers are 0x1 for
+normal and 0x2 for NMI-safe.
 
 Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 Cc: Alexei Starovoitov <ast@kernel.org>
@@ -63,71 +64,98 @@ Cc: Peter Zijlstra <peterz@infradead.org>
 Cc: Kent Overstreet <kent.overstreet@linux.dev>
 Cc: <bpf@vger.kernel.org>
 ---
- tools/testing/selftests/rcutorture/configs/rcu/CFLIST  |  1 +
- tools/testing/selftests/rcutorture/configs/rcu/SRCU-L  | 10 ++++++++++
- .../selftests/rcutorture/configs/rcu/SRCU-L.boot       |  3 +++
- .../selftests/rcutorture/configs/rcu/SRCU-N.boot       |  1 +
- tools/testing/selftests/rcutorture/configs/rcu/TREE10  |  2 +-
- 5 files changed, 16 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/rcutorture/configs/rcu/SRCU-L
- create mode 100644 tools/testing/selftests/rcutorture/configs/rcu/SRCU-L.boot
+ .../admin-guide/kernel-parameters.txt         |  8 +++++
+ kernel/rcu/rcutorture.c                       | 30 ++++++++++++++-----
+ 2 files changed, 30 insertions(+), 8 deletions(-)
 
-diff --git a/tools/testing/selftests/rcutorture/configs/rcu/CFLIST b/tools/testing/selftests/rcutorture/configs/rcu/CFLIST
-index 98b6175e5aa09..45f572570a8c3 100644
---- a/tools/testing/selftests/rcutorture/configs/rcu/CFLIST
-+++ b/tools/testing/selftests/rcutorture/configs/rcu/CFLIST
-@@ -5,6 +5,7 @@ TREE04
- TREE05
- TREE07
- TREE09
-+SRCU-L
- SRCU-N
- SRCU-P
- SRCU-T
-diff --git a/tools/testing/selftests/rcutorture/configs/rcu/SRCU-L b/tools/testing/selftests/rcutorture/configs/rcu/SRCU-L
-new file mode 100644
-index 0000000000000..3b4fa8dbef8a9
---- /dev/null
-+++ b/tools/testing/selftests/rcutorture/configs/rcu/SRCU-L
-@@ -0,0 +1,10 @@
-+CONFIG_RCU_TRACE=n
-+CONFIG_SMP=y
-+CONFIG_NR_CPUS=6
-+CONFIG_HOTPLUG_CPU=y
-+CONFIG_PREEMPT_NONE=y
-+CONFIG_PREEMPT_VOLUNTARY=n
-+CONFIG_PREEMPT=n
-+#CHECK#CONFIG_RCU_EXPERT=n
-+CONFIG_KPROBES=n
-+CONFIG_FTRACE=n
-diff --git a/tools/testing/selftests/rcutorture/configs/rcu/SRCU-L.boot b/tools/testing/selftests/rcutorture/configs/rcu/SRCU-L.boot
-new file mode 100644
-index 0000000000000..0207b3138c5be
---- /dev/null
-+++ b/tools/testing/selftests/rcutorture/configs/rcu/SRCU-L.boot
-@@ -0,0 +1,3 @@
-+rcutorture.torture_type=srcu
-+rcutorture.reader_flavor=0x4
-+rcutorture.fwd_progress=3
-diff --git a/tools/testing/selftests/rcutorture/configs/rcu/SRCU-N.boot b/tools/testing/selftests/rcutorture/configs/rcu/SRCU-N.boot
-index ce0694fd9b929..b54cf87dc1103 100644
---- a/tools/testing/selftests/rcutorture/configs/rcu/SRCU-N.boot
-+++ b/tools/testing/selftests/rcutorture/configs/rcu/SRCU-N.boot
-@@ -1,2 +1,3 @@
- rcutorture.torture_type=srcu
-+rcutorture.reader_flavor=0x2
- rcutorture.fwd_progress=3
-diff --git a/tools/testing/selftests/rcutorture/configs/rcu/TREE10 b/tools/testing/selftests/rcutorture/configs/rcu/TREE10
-index a323d8948b7cf..759ee51d3ddc6 100644
---- a/tools/testing/selftests/rcutorture/configs/rcu/TREE10
-+++ b/tools/testing/selftests/rcutorture/configs/rcu/TREE10
-@@ -1,5 +1,5 @@
- CONFIG_SMP=y
--CONFIG_NR_CPUS=56
-+CONFIG_NR_CPUS=74
- CONFIG_PREEMPT_NONE=y
- CONFIG_PREEMPT_VOLUNTARY=n
- CONFIG_PREEMPT=n
+diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+index 1518343bbe223..52922727006fc 100644
+--- a/Documentation/admin-guide/kernel-parameters.txt
++++ b/Documentation/admin-guide/kernel-parameters.txt
+@@ -5426,6 +5426,14 @@
+ 			The delay, in seconds, between successive
+ 			read-then-exit testing episodes.
+ 
++	rcutorture.reader_flavor= [KNL]
++			A bit mask indicating which readers to use.
++			If there is more than one bit set, the readers
++			are entered from low-order bit up, and are
++			exited in the opposite order.  For SRCU, the
++			0x1 bit is normal readers and the 0x2 bit is
++			for NMI-safe readers.
++
+ 	rcutorture.shuffle_interval= [KNL]
+ 			Set task-shuffle interval (s).  Shuffling tasks
+ 			allows some CPUs to go into dyntick-idle mode
+diff --git a/kernel/rcu/rcutorture.c b/kernel/rcu/rcutorture.c
+index f96ab98f8182f..405decec33677 100644
+--- a/kernel/rcu/rcutorture.c
++++ b/kernel/rcu/rcutorture.c
+@@ -111,6 +111,7 @@ torture_param(int, nocbs_nthreads, 0, "Number of NOCB toggle threads, 0 to disab
+ torture_param(int, nocbs_toggle, 1000, "Time between toggling nocb state (ms)");
+ torture_param(int, read_exit_delay, 13, "Delay between read-then-exit episodes (s)");
+ torture_param(int, read_exit_burst, 16, "# of read-then-exit bursts per episode, zero to disable");
++torture_param(int, reader_flavor, 0x1, "Reader flavors to use, one per bit.");
+ torture_param(int, shuffle_interval, 3, "Number of seconds between shuffles");
+ torture_param(int, shutdown_secs, 0, "Shutdown time (s), <= zero to disable.");
+ torture_param(int, stall_cpu, 0, "Stall duration (s), zero to disable.");
+@@ -644,10 +645,20 @@ static void srcu_get_gp_data(int *flags, unsigned long *gp_seq)
+ 
+ static int srcu_torture_read_lock(void)
+ {
+-	if (cur_ops == &srcud_ops)
+-		return srcu_read_lock_nmisafe(srcu_ctlp);
+-	else
+-		return srcu_read_lock(srcu_ctlp);
++	int idx;
++	int ret = 0;
++
++	if ((reader_flavor & 0x1) || !(reader_flavor & 0x7)) {
++		idx = srcu_read_lock(srcu_ctlp);
++		WARN_ON_ONCE(idx & ~0x1);
++		ret += idx;
++	}
++	if (reader_flavor & 0x2) {
++		idx = srcu_read_lock_nmisafe(srcu_ctlp);
++		WARN_ON_ONCE(idx & ~0x1);
++		ret += idx << 1;
++	}
++	return ret;
+ }
+ 
+ static void
+@@ -671,10 +682,11 @@ srcu_read_delay(struct torture_random_state *rrsp, struct rt_read_seg *rtrsp)
+ 
+ static void srcu_torture_read_unlock(int idx)
+ {
+-	if (cur_ops == &srcud_ops)
+-		srcu_read_unlock_nmisafe(srcu_ctlp, idx);
+-	else
+-		srcu_read_unlock(srcu_ctlp, idx);
++	WARN_ON_ONCE((reader_flavor && (idx & ~reader_flavor)) || (!reader_flavor && (idx & ~0x1)));
++	if (reader_flavor & 0x2)
++		srcu_read_unlock_nmisafe(srcu_ctlp, (idx & 0x2) >> 1);
++	if ((reader_flavor & 0x1) || !(reader_flavor & 0x7))
++		srcu_read_unlock(srcu_ctlp, idx & 0x1);
+ }
+ 
+ static int torture_srcu_read_lock_held(void)
+@@ -2389,6 +2401,7 @@ rcu_torture_print_module_parms(struct rcu_torture_ops *cur_ops, const char *tag)
+ 		 "n_barrier_cbs=%d "
+ 		 "onoff_interval=%d onoff_holdoff=%d "
+ 		 "read_exit_delay=%d read_exit_burst=%d "
++		 "reader_flavor=%x "
+ 		 "nocbs_nthreads=%d nocbs_toggle=%d "
+ 		 "test_nmis=%d\n",
+ 		 torture_type, tag, nrealreaders, nfakewriters,
+@@ -2401,6 +2414,7 @@ rcu_torture_print_module_parms(struct rcu_torture_ops *cur_ops, const char *tag)
+ 		 n_barrier_cbs,
+ 		 onoff_interval, onoff_holdoff,
+ 		 read_exit_delay, read_exit_burst,
++		 reader_flavor,
+ 		 nocbs_nthreads, nocbs_toggle,
+ 		 test_nmis);
+ }
 -- 
 2.40.1
 
