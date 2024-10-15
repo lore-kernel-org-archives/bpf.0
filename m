@@ -1,122 +1,87 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 746D618B477
-	for <bpf@vger.kernel.org>; Tue, 15 Oct 2024 06:55:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6ADC2139578;
+	Tue, 15 Oct 2024 07:45:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728975317; cv=none; b=fraViFG342x0MQ0yOREn5EPVnbsVdVxd4EGSptHyySaxeE9j3IeBZZwbRmT2sMdGHkz7pjIYJ3gtHaGMUCaqeRLck0MG4kUc2ceuIdev5Ad7q1TbRqXJ/Oa63hFBSEC7NX5391d+x9sb8NaIFGpugynHp7G12XhX5p28/q5ms0E=
+	t=1728978340; cv=none; b=nUnlCeErUtIb88RcTb6PvUmyfWqepWZw8EazshD6yob5zjuzt/h63mLQ+/J0eOURvhHMK1xK3iBciICAIO/cNesrm+yigAJAdOXd7KyGijuAET4zUCfdT3fJcxmXGHRoLW92WmdaCR3+rHVfazsWpVLZ3VrAJQtUK4leSzEfyTk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728975317; c=relaxed/simple;
-	bh=iRNCHG+nM0zWHSBJmF/VRZb62djRDYbMMhyDjcYCDV0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=qilgZ1BV0eFI+St8LaFNRwDnp96rnkNo8gJhQqzi825ZBNrV708YuPz6pKKGDzbVHB5MKFhm5i0JxFOi8iC199pr64qP9cUTMKxT878ELdj3b2d222wnv7/45TjkorjG6iTWcjd+L2Ty/rxPnDYTQKjtnAPWORqrwBpl8HNkHbo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=T2McxCIK; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1728978340; c=relaxed/simple;
+	bh=qVcs0kJhhRW1riI5poKvzlKD/kZkjfCeZ2kffWNPmnE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=JSvRbbBf+1iifBriYXx2P3Uon9j33meOGCQM1oNnsuQ28VzO9Y/WnNkPwpO8ESQlnqvP+gj0KmfTKED9bwXFXs/h/WwSdPwplDOYCkL799pXCoYlVFMIvR4Q4NIImjFV5/QURwgf8D62czTaBVKPmJieabctC58mCJNTChguNjo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=Xi+tactP; arc=none smtp.client-ip=90.155.92.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="T2McxCIK"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1728975313;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=tiX5TxHge8wYnZ04p0ykii5Ay1RFTMDGgmp1ST+PfKs=;
-	b=T2McxCIKNXWs01SNpK0kiIOsnGwFmCtkaU8zGMPYNMwumeL6Aso8FqQ0b+QqBOcqtGxsR3
-	QbNrh6lS1Ad0jWWy/q9XETM9S3o4UCUiREPUaNe/eu+wD1jXLheNKygbdrdnEyy2qJuq3O
-	1IxS/pWsa+QhrkLVv/Ahhri/UXrKHOE=
-Received: from mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-251-Vpi0lhgAMVejkzDJ29VY5Q-1; Tue,
- 15 Oct 2024 02:55:04 -0400
-X-MC-Unique: Vpi0lhgAMVejkzDJ29VY5Q-1
-Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 309D719560A2;
-	Tue, 15 Oct 2024 06:55:02 +0000 (UTC)
-Received: from vmalik-fedora.brq.redhat.com (unknown [10.43.17.54])
-	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 4F8D71956056;
-	Tue, 15 Oct 2024 06:54:57 +0000 (UTC)
-From: Viktor Malik <vmalik@redhat.com>
-To: bpf@vger.kernel.org
-Cc: Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Mykola Lysenko <mykolal@fb.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Viktor Malik <vmalik@redhat.com>
-Subject: [PATCH bpf-next 2/3] bpftool: Prevent setting duplicate _GNU_SOURCE in Makefile
-Date: Tue, 15 Oct 2024 08:54:41 +0200
-Message-ID: <507d699068777b78a5720e617c99fb19a9bb8a89.1728975031.git.vmalik@redhat.com>
-In-Reply-To: <cover.1728975031.git.vmalik@redhat.com>
-References: <cover.1728975031.git.vmalik@redhat.com>
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="Xi+tactP"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=uDl9pkQsAejcP+DObQT+ZkdJLsTfQuExHlBqtK3i0Lw=; b=Xi+tactP679leZrVTEZf06myCZ
+	Lazhki/vt00kcz2xJkUPsnILgNthufn5TE4c1BNHBiWZtiRsWUaB887np1DomuQDONzr3+1BLJWWe
+	fSJexEH9js6viXzfRuASGR6PjFQtNDCQETReSJDYV7Ftz4jzdyybG88mH9YSYmH/2wG6h08Bm8HxV
+	6RdA9s7mfJT8RxNuFIxXNDcNbfd9HXZAQoTu0ViwE1Dszl3V4xJ98EEeyzyuM/psLiSJ58eW7Lr20
+	ANA47NJD5Sm6MoV48DkmO6Dt9SXHPRdJMgItmQNgg25E3MxzI+f1VtjxZJKWOwcBqVt8jtIzU4eFi
+	Ctygb/4A==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+	by desiato.infradead.org with esmtpsa (Exim 4.98 #2 (Red Hat Linux))
+	id 1t0cFD-00000006VAb-3tE0;
+	Tue, 15 Oct 2024 07:45:28 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 74835300777; Tue, 15 Oct 2024 09:45:26 +0200 (CEST)
+Date: Tue, 15 Oct 2024 09:45:26 +0200
+From: Peter Zijlstra <peterz@infradead.org>
+To: Andrea Righi <andrea.righi@linux.dev>
+Cc: Tejun Heo <tj@kernel.org>, David Vernet <void@manifault.com>,
+	Ingo Molnar <mingo@redhat.com>, Juri Lelli <juri.lelli@redhat.com>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Dietmar Eggemann <dietmar.eggemann@arm.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+	Valentin Schneider <vschneid@redhat.com>,
+	linux-kernel@vger.kernel.org, bpf@vger.kernel.org
+Subject: Re: [PATCH v2] sched_ext: Trigger ops.update_idle() from
+ pick_task_idle()
+Message-ID: <20241015074526.GO16066@noisy.programming.kicks-ass.net>
+References: <20241014220603.35280-1-andrea.righi@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241014220603.35280-1-andrea.righi@linux.dev>
 
-When building selftests with CFLAGS set via env variable, the value of
-CFLAGS is propagated into bpftool Makefile (called from selftests
-Makefile). This makes the compilation fail as _GNU_SOURCE is defined two
-times - once from selftests Makefile (by including lib.mk) and once from
-bpftool Makefile (by calling `llvm-config --cflags`):
+On Tue, Oct 15, 2024 at 12:06:03AM +0200, Andrea Righi wrote:
 
-    $ CFLAGS="" make -C tools/testing/selftests/bpf
-    [...]
-    CC      /bpf-next/tools/testing/selftests/bpf/tools/build/bpftool/btf.o
-    <command-line>: error: "_GNU_SOURCE" redefined [-Werror]
-    <command-line>: note: this is the location of the previous definition
-    cc1: all warnings being treated as errors
-    [...]
+> diff --git a/kernel/sched/idle.c b/kernel/sched/idle.c
+> index d2f096bb274c..5a10cbc7e9df 100644
+> --- a/kernel/sched/idle.c
+> +++ b/kernel/sched/idle.c
+> @@ -459,13 +459,13 @@ static void put_prev_task_idle(struct rq *rq, struct task_struct *prev, struct t
+>  static void set_next_task_idle(struct rq *rq, struct task_struct *next, bool first)
+>  {
+>  	update_idle_core(rq);
+> -	scx_update_idle(rq, true);
+>  	schedstat_inc(rq->sched_goidle);
+>  	next->se.exec_start = rq_clock_task(rq);
+>  }
+>  
+>  struct task_struct *pick_task_idle(struct rq *rq)
+>  {
+> +	scx_update_idle(rq, true);
+>  	return rq->idle;
+>  }
 
-Let bpftool Makefile check if _GNU_SOURCE is already defined and if so,
-do not let llvm-config add it again.
+Does this do the right thing in the case of core-scheduling doing
+pick_task() for force-idle on a remote cpu?
 
-Signed-off-by: Viktor Malik <vmalik@redhat.com>
----
- tools/bpf/bpftool/Makefile | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+The core-sched case is somewhat special in that the pick can be ignored
+-- in which case you're doing a spurious scx_update_idle() call.
 
-diff --git a/tools/bpf/bpftool/Makefile b/tools/bpf/bpftool/Makefile
-index ba927379eb20..2b5a713d71d8 100644
---- a/tools/bpf/bpftool/Makefile
-+++ b/tools/bpf/bpftool/Makefile
-@@ -147,7 +147,13 @@ ifeq ($(feature-llvm),1)
-   # If LLVM is available, use it for JIT disassembly
-   CFLAGS  += -DHAVE_LLVM_SUPPORT
-   LLVM_CONFIG_LIB_COMPONENTS := mcdisassembler all-targets
--  CFLAGS  += $(shell $(LLVM_CONFIG) --cflags)
-+  # When bpftool build is called from another Makefile which already sets
-+  # -D_GNU_SOURCE, do not let llvm-config add it again as it will cause conflict.
-+  ifneq ($(filter -D_GNU_SOURCE=,$(CFLAGS)),)
-+    CFLAGS += $(filter-out -D_GNU_SOURCE,$(shell $(LLVM_CONFIG) --cflags))
-+  else
-+    CFLAGS += $(shell $(LLVM_CONFIG) --cflags)
-+  endif
-   LIBS    += $(shell $(LLVM_CONFIG) --libs $(LLVM_CONFIG_LIB_COMPONENTS))
-   ifeq ($(shell $(LLVM_CONFIG) --shared-mode),static)
-     LIBS += $(shell $(LLVM_CONFIG) --system-libs $(LLVM_CONFIG_LIB_COMPONENTS))
--- 
-2.47.0
 
