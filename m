@@ -1,46 +1,46 @@
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3319172BCE
-	for <bpf@vger.kernel.org>; Tue, 15 Oct 2024 06:55:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4A364D8DA
+	for <bpf@vger.kernel.org>; Tue, 15 Oct 2024 06:55:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728975306; cv=none; b=Am4KZx0GsvG043/4UzJMGvgmlkQt4E6EfsQDdy5JFHJSdgPvDTSGIok8Idb5P/j43b4mMyQQLon1mP9oc0u52gK8TNXZ9WjJK8BQduDe+CgkbwZTKL2ZQ6m+7f3+2yidpuIySKUzBXCmhZi3wzCf8/8iqfBXoI/FdvEsF7kDedY=
+	t=1728975313; cv=none; b=TbhW3asen1eSOT48gk8FzCLFil0Qc6P2GPDJUcJjT+PQ3+iWIrkiiTuJpo/yQn+V0ET697MG16LFtaBh26amzX2BoN2xh4mSmwSR9QUGxEYjs/AmjnPmWOI8wn76VVxQBYxY4xTvJgUTaR7jDhfviuNf47bpUyBnEVJzo6ifeRE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728975306; c=relaxed/simple;
-	bh=Km9aqrQqQJ/+/aDyuL/4DB7OD2i/xHmwoNPxbu4Fgyg=;
+	s=arc-20240116; t=1728975313; c=relaxed/simple;
+	bh=7q7eNhYq0nSPIYCuo2p0TJmlz2iqDNoPpwPFsrblBzk=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=o8GWMWPBGDK3MZoTW7hwBueNG7dg/mOS+bqqEkoIRNPUgRZS8ot+Hdq/tWeQKtxFdyoB0i7Xisp5GJB1pBppoCKr+6xSAXnWYYklC5SNJ30IXGMaM5yap9ZcCbca8gpVTSjdR4DawNNYsybA96KMPRxfmX//zQ/BDlrg5OQuUlI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=YJsrL0bD; arc=none smtp.client-ip=170.10.129.124
+	 MIME-Version; b=ry+ZXvX5R/jO+szZobHYd/gWqYm3ApjZc4fSu066iVGb3zGLgWjV8LXhPTKnwQ8nnhYHvHl4dt93VRoGL1qWiM9OuO5HqB2M8HSyRmx5yRf+bFq47bD4TC+kM7Yf1JojG+/6ksXAL9b52WtUYEHWeLoSBJS0tof2hI2adr/Zbs8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=TULafigA; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="YJsrL0bD"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="TULafigA"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1728975303;
+	s=mimecast20190719; t=1728975311;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=1gbaiOfCQHy4arFlzHBPrU/Z/qOESEsv8dCcuJLij6U=;
-	b=YJsrL0bDNr6PH7N81kr5Re2fFejDd0peMueHLK3ok9OmTCzWw/I6IOpfiQ0i+h2cwucZav
-	wvImYWFsSa5ctdoeslJxvOw7uKtOsnfSOJp8Y9+wxbeyx13czcz7oD0iFmRvQljg4VsUnD
-	rvqRPAVpYfbQ+Ov0VjV+JiIFAp67PNE=
-Received: from mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com
+	bh=3yxq/V/sDAxI1qUwT5vlBZFr/9AEbrny+p5ruhBtCUQ=;
+	b=TULafigAf2hciVEOvm5sXuvFSHBnuC9gHLuqj7P27Ea1UwPXlG/Z+pSz8wf0YXK/4Uzibl
+	c4TtfyKDO3QaUr9W/n/aqZycRipgpSV9UBbA9VpVOn1arXnZnuR/m1Tb5GeJ5zdt3CqVEb
+	knV56FmAi9LqY9xW22//eg39iDZ3HF0=
+Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
  (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-245-dSBU8xqOPgKsjoLZWlIkIg-1; Tue,
- 15 Oct 2024 02:55:00 -0400
-X-MC-Unique: dSBU8xqOPgKsjoLZWlIkIg-1
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-159-IW9vLsdzNomqLZ-7bcCv4w-1; Tue,
+ 15 Oct 2024 02:55:09 -0400
+X-MC-Unique: IW9vLsdzNomqLZ-7bcCv4w-1
 Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id E779619560A7;
-	Tue, 15 Oct 2024 06:54:56 +0000 (UTC)
+	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id E7DB219560A1;
+	Tue, 15 Oct 2024 06:55:06 +0000 (UTC)
 Received: from vmalik-fedora.brq.redhat.com (unknown [10.43.17.54])
-	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 26B921955E8F;
-	Tue, 15 Oct 2024 06:54:51 +0000 (UTC)
+	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 94A761956056;
+	Tue, 15 Oct 2024 06:55:02 +0000 (UTC)
 From: Viktor Malik <vmalik@redhat.com>
 To: bpf@vger.kernel.org
 Cc: Andrii Nakryiko <andrii@kernel.org>,
@@ -62,9 +62,9 @@ Cc: Andrii Nakryiko <andrii@kernel.org>,
 	Bill Wendling <morbo@google.com>,
 	Justin Stitt <justinstitt@google.com>,
 	Viktor Malik <vmalik@redhat.com>
-Subject: [PATCH bpf-next 1/3] selftests/bpf: Allow building with extra flags
-Date: Tue, 15 Oct 2024 08:54:40 +0200
-Message-ID: <ea7b96907258a47e071028b8d9ca21eca7ab9050.1728975031.git.vmalik@redhat.com>
+Subject: [PATCH bpf-next 3/3] selftests/bpf: Allow ignoring some flags for Clang builds
+Date: Tue, 15 Oct 2024 08:54:42 +0200
+Message-ID: <08becac5b0b536d918adeb90efd63bdd7dcc856c.1728975031.git.vmalik@redhat.com>
 In-Reply-To: <cover.1728975031.git.vmalik@redhat.com>
 References: <cover.1728975031.git.vmalik@redhat.com>
 Precedence: bulk
@@ -76,98 +76,68 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
 
-In order to specify extra compilation or linking flags to BPF selftests,
-it is possible to set EXTRA_CFLAGS and EXTRA_LDFLAGS from the command
-line. The problem is that they are not propagated to sub-make calls
-(runqslower, bpftool, libbpf) and in the better case are not applied, in
-the worse case cause the entire build fail.
+There exist compiler flags supported by GCC but not supported by Clang
+(e.g. -specs=...). Currently, these cannot be passed to BPF selftests
+builds, even when building with GCC, as some binaries (urandom_read and
+liburandom_read.so) are always built with Clang and the unsupported
+flags make the compilation fail (as -Werror is turned on).
 
-Propagate EXTRA_CFLAGS and EXTRA_LDFLAGS to the sub-makes.
+Add new Makefile variable CLANG_FILTEROUT_FLAGS which can be used by
+users to specify which flags (from the user-provided CFLAGS or LDFLAGS)
+should be filtered out for Clang invocations.
 
-This, for instance, allows to build selftests as PIE with
+This allows to do things like:
 
-    $ make EXTRA_CFLAGS='-fPIE' EXTRA_LDFLAGS='-pie'
+    $ CFLAGS="-specs=/usr/lib/rpm/redhat/redhat-hardened-cc1" \
+      CLANG_FILTEROUT_FLAGS="-specs=%" \
+      make -C tools/testing/selftests/bpf
 
-Without this change, the command would fail because libbpf.a would not
-be built with -fPIE and other PIE binaries would not link against it.
+Without this patch, the compilation would fail with:
 
-The only problem is that we have to explicitly provide empty
-EXTRA_CFLAGS='' and EXTRA_LDFLAGS='' to the builds of kernel modules
-(bpf_testmod and bpf_test_no_cfi) as we don't want to build modules with
-flags used for userspace (the above example would fail as kernel doesn't
-support PIE).
+    [...]
+    clang: error: argument unused during compilation: '-specs=/usr/lib/rpm/redhat/redhat-hardened-cc1' [-Werror,-Wunused-command-line-argument]
+    make: *** [Makefile:273: /bpf-next/tools/testing/selftests/bpf/liburandom_read.so] Error 1
+    [...]
 
 Signed-off-by: Viktor Malik <vmalik@redhat.com>
 ---
- tools/testing/selftests/bpf/Makefile | 22 ++++++++++++++--------
- 1 file changed, 14 insertions(+), 8 deletions(-)
+ tools/testing/selftests/bpf/Makefile | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
 diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index 28a76baa854d..d81583b2aef9 100644
+index d81583b2aef9..89662fe0470a 100644
 --- a/tools/testing/selftests/bpf/Makefile
 +++ b/tools/testing/selftests/bpf/Makefile
-@@ -294,13 +294,17 @@ $(OUTPUT)/sign-file: ../../../../scripts/sign-file.c
- $(OUTPUT)/bpf_testmod.ko: $(VMLINUX_BTF) $(RESOLVE_BTFIDS) $(wildcard bpf_testmod/Makefile bpf_testmod/*.[ch])
- 	$(call msg,MOD,,$@)
- 	$(Q)$(RM) bpf_testmod/bpf_testmod.ko # force re-compilation
--	$(Q)$(MAKE) $(submake_extras) RESOLVE_BTFIDS=$(RESOLVE_BTFIDS) -C bpf_testmod
-+	$(Q)$(MAKE) $(submake_extras) -C bpf_testmod \
-+		RESOLVE_BTFIDS=$(RESOLVE_BTFIDS)     \
-+		EXTRA_CFLAGS='' EXTRA_LDFLAGS=''
- 	$(Q)cp bpf_testmod/bpf_testmod.ko $@
+@@ -31,6 +31,11 @@ SAN_LDFLAGS	?= $(SAN_CFLAGS)
+ RELEASE		?=
+ OPT_FLAGS	?= $(if $(RELEASE),-O2,-O0)
  
- $(OUTPUT)/bpf_test_no_cfi.ko: $(VMLINUX_BTF) $(RESOLVE_BTFIDS) $(wildcard bpf_test_no_cfi/Makefile bpf_test_no_cfi/*.[ch])
- 	$(call msg,MOD,,$@)
- 	$(Q)$(RM) bpf_test_no_cfi/bpf_test_no_cfi.ko # force re-compilation
--	$(Q)$(MAKE) $(submake_extras) RESOLVE_BTFIDS=$(RESOLVE_BTFIDS) -C bpf_test_no_cfi
-+	$(Q)$(MAKE) $(submake_extras) -C bpf_test_no_cfi \
-+		RESOLVE_BTFIDS=$(RESOLVE_BTFIDS)	 \
-+		EXTRA_CFLAGS='' EXTRA_LDFLAGS=''
- 	$(Q)cp bpf_test_no_cfi/bpf_test_no_cfi.ko $@
++# Some flags supported by GCC are not supported by Clang.
++# This variable allows users to specify such flags so that they can use custom
++# CFLAGS and binaries built with Clang do not fail to build.
++CLANG_FILTEROUT_FLAGS ?=
++
+ LIBELF_CFLAGS	:= $(shell $(PKG_CONFIG) libelf --cflags 2>/dev/null)
+ LIBELF_LIBS	:= $(shell $(PKG_CONFIG) libelf --libs 2>/dev/null || echo -lelf)
  
- DEFAULT_BPFTOOL := $(HOST_SCRATCH_DIR)/sbin/bpftool
-@@ -319,8 +323,8 @@ $(OUTPUT)/runqslower: $(BPFOBJ) | $(DEFAULT_BPFTOOL) $(RUNQSLOWER_OUTPUT)
- 		    BPFTOOL_OUTPUT=$(HOST_BUILD_DIR)/bpftool/		       \
- 		    BPFOBJ_OUTPUT=$(BUILD_DIR)/libbpf/			       \
- 		    BPFOBJ=$(BPFOBJ) BPF_INCLUDE=$(INCLUDE_DIR)		       \
--		    EXTRA_CFLAGS='-g $(OPT_FLAGS) $(SAN_CFLAGS)'	       \
--		    EXTRA_LDFLAGS='$(SAN_LDFLAGS)' &&			       \
-+		    EXTRA_CFLAGS='-g $(OPT_FLAGS) $(SAN_CFLAGS) $(EXTRA_CFLAGS)' \
-+		    EXTRA_LDFLAGS='$(SAN_LDFLAGS) $(EXTRA_LDFLAGS)' &&	       \
- 		    cp $(RUNQSLOWER_OUTPUT)runqslower $@
- 
- TEST_GEN_PROGS_EXTENDED += $(TRUNNER_BPFTOOL)
-@@ -354,7 +358,8 @@ $(DEFAULT_BPFTOOL): $(wildcard $(BPFTOOLDIR)/*.[ch] $(BPFTOOLDIR)/Makefile)    \
- 		    $(HOST_BPFOBJ) | $(HOST_BUILD_DIR)/bpftool
- 	$(Q)$(MAKE) $(submake_extras)  -C $(BPFTOOLDIR)			       \
- 		    ARCH= CROSS_COMPILE= CC="$(HOSTCC)" LD="$(HOSTLD)" 	       \
--		    EXTRA_CFLAGS='-g $(OPT_FLAGS)'			       \
-+		    EXTRA_CFLAGS='-g $(OPT_FLAGS) $(EXTRA_CFLAGS)'	       \
-+		    EXTRA_LDFLAGS='$(EXTRA_LDFLAGS)'			       \
- 		    OUTPUT=$(HOST_BUILD_DIR)/bpftool/			       \
- 		    LIBBPF_OUTPUT=$(HOST_BUILD_DIR)/libbpf/		       \
- 		    LIBBPF_DESTDIR=$(HOST_SCRATCH_DIR)/			       \
-@@ -365,7 +370,8 @@ $(CROSS_BPFTOOL): $(wildcard $(BPFTOOLDIR)/*.[ch] $(BPFTOOLDIR)/Makefile)	\
- 		    $(BPFOBJ) | $(BUILD_DIR)/bpftool
- 	$(Q)$(MAKE) $(submake_extras)  -C $(BPFTOOLDIR)				\
- 		    ARCH=$(ARCH) CROSS_COMPILE=$(CROSS_COMPILE)			\
--		    EXTRA_CFLAGS='-g $(OPT_FLAGS)'				\
-+		    EXTRA_CFLAGS='-g $(OPT_FLAGS) $(EXTRA_CFLAGS)'		\
-+		    EXTRA_LDFLAGS='$(EXTRA_LDFLAGS)'				\
- 		    OUTPUT=$(BUILD_DIR)/bpftool/				\
- 		    LIBBPF_OUTPUT=$(BUILD_DIR)/libbpf/				\
- 		    LIBBPF_DESTDIR=$(SCRATCH_DIR)/				\
-@@ -388,8 +394,8 @@ $(BPFOBJ): $(wildcard $(BPFDIR)/*.[ch] $(BPFDIR)/Makefile)		       \
- 	   $(APIDIR)/linux/bpf.h					       \
- 	   | $(BUILD_DIR)/libbpf
- 	$(Q)$(MAKE) $(submake_extras) -C $(BPFDIR) OUTPUT=$(BUILD_DIR)/libbpf/ \
--		    EXTRA_CFLAGS='-g $(OPT_FLAGS) $(SAN_CFLAGS)'	       \
--		    EXTRA_LDFLAGS='$(SAN_LDFLAGS)'			       \
-+		    EXTRA_CFLAGS='-g $(OPT_FLAGS) $(SAN_CFLAGS) $(EXTRA_CFLAGS)' \
-+		    EXTRA_LDFLAGS='$(SAN_LDFLAGS) $(EXTRA_LDFLAGS)'	       \
- 		    DESTDIR=$(SCRATCH_DIR) prefix= all install_headers
- 
- ifneq ($(BPFOBJ),$(HOST_BPFOBJ))
+@@ -271,7 +276,7 @@ endif
+ $(OUTPUT)/liburandom_read.so: urandom_read_lib1.c urandom_read_lib2.c liburandom_read.map
+ 	$(call msg,LIB,,$@)
+ 	$(Q)$(CLANG) $(CLANG_TARGET_ARCH) \
+-		     $(filter-out -static,$(CFLAGS) $(LDFLAGS)) \
++		     $(filter-out -static $(CLANG_FILTEROUT_FLAGS),$(CFLAGS) $(LDFLAGS)) \
+ 		     $(filter %.c,$^) $(filter-out -static,$(LDLIBS)) \
+ 		     -fuse-ld=$(LLD) -Wl,-znoseparate-code -Wl,--build-id=sha1 \
+ 		     -Wl,--version-script=liburandom_read.map \
+@@ -280,7 +285,7 @@ $(OUTPUT)/liburandom_read.so: urandom_read_lib1.c urandom_read_lib2.c liburandom
+ $(OUTPUT)/urandom_read: urandom_read.c urandom_read_aux.c $(OUTPUT)/liburandom_read.so
+ 	$(call msg,BINARY,,$@)
+ 	$(Q)$(CLANG) $(CLANG_TARGET_ARCH) \
+-		     $(filter-out -static,$(CFLAGS) $(LDFLAGS)) $(filter %.c,$^) \
++		     $(filter-out -static $(CLANG_FILTEROUT_FLAGS),$(CFLAGS) $(LDFLAGS)) $(filter %.c,$^) \
+ 		     -lurandom_read $(filter-out -static,$(LDLIBS)) -L$(OUTPUT) \
+ 		     -fuse-ld=$(LLD) -Wl,-znoseparate-code -Wl,--build-id=sha1 \
+ 		     -Wl,-rpath=. -o $@
 -- 
 2.47.0
 
