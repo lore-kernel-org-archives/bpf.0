@@ -1,168 +1,109 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f52.google.com (mail-qv1-f52.google.com [209.85.219.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19DB32B9CD;
-	Tue, 15 Oct 2024 01:30:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D448A15531B;
+	Tue, 15 Oct 2024 01:30:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728955844; cv=none; b=KN0/Dxtd2PgWlZle1GNnV9Sf8XrET8lXpK1PhE/MOUhHrJW+xlYxb2n2dLaYzfFOsz/Zn0MQvg65ivLOtO1/gQSug/mGb7GN2n2aRn+gKddXqZR2luOpkh8jd+yTckx26Coq0ShbU+S1p79ChnVZjcziXZz9Ri/5M5dax2//0Wo=
+	t=1728955854; cv=none; b=tSQT+SO8yTfVKngC6or5vPvKDZCJVM71C670yR4Mv9xmkBa7WHkwQ8RVRhlIdYOscAkgJ7QdCt+3EJB8R5mjNrdry1BZplVU20YLAeTUV/ALsBoIO7dPpqvrHWcta2RIuJ8O7UdKziB3bANJ7hfhjltNM+XTQNs4swBITqiOOs4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728955844; c=relaxed/simple;
-	bh=ENIUEW8rDQ6Bki4p8UTgvZofYWz4Vdl3op51apG49gY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=M6s1gNb05BiFXvLHUxeeubJC4zd/tRisw1VFYlNWxPj0isSyEciD19iOmka9li35jgiJm9isK/ecL2zgHX5oMRJkPbxVX+l3SK3+2GdJBworbGFd6DMQrrhfDgTxzJSspWuYGgtpBNVgzSD4LPQuOt8d3BY4t0RILyy5TnAz+dg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ou2dNTC+; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1728955854; c=relaxed/simple;
+	bh=ONwEt1qF2gnrKk8AYHsw2vANXqRWmSlSBZHZSf2w5NU=;
+	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
+	 Mime-Version:Content-Type; b=o3yUnONvOC3hm2XqxAGz/kfvycMc8KKjg6t96goSBjTIgQc64JKotbiAKc9leJGhQJJ4GRv8GYiudgo2inC/hPulho5ERohTxSq2pUYNyuxP+JJe1aDJRmmbtE564uNHFZbKzDuKwvnamG0S56IGALAPypLYHWoGYzMLdQHNZ+o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=D+J/hCpq; arc=none smtp.client-ip=209.85.219.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ou2dNTC+"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1930FC4CEC3;
-	Tue, 15 Oct 2024 01:30:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1728955843;
-	bh=ENIUEW8rDQ6Bki4p8UTgvZofYWz4Vdl3op51apG49gY=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Ou2dNTC+kkz0CDfRndjCCT4hMtcye0Rdt186oSWTDV8TIA0MF8PNeJoqvG37u+1uD
-	 QSwiuMW/hBjanKPp7Dd8VGlpiXOevV+RW2+8rV3cYcivXHE9gnTTq318lY8RjhEgPO
-	 ok28aZVz27zwPnvZcKlY0qSfOpX5OeJe5WZW2/OIVc3Vqo6copk4oJK+2effNBXMkE
-	 aNo6ezgDxAGfzAqhlFdQo+Yo/3nEtC0YDJrrrSSnOUOLo4otSnOPalx7bCGV9h6KYK
-	 PrBZgBpT1AK4XWCRYvBLgR+zeZ8KeSPXESkiQDwzGmEKj+/C6pxyaFjs3W8U2Dr0mu
-	 /Zg8h5k1UggoQ==
-From: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Florent Revest <revest@chromium.org>
-Cc: linux-trace-kernel@vger.kernel.org,
-	LKML <linux-kernel@vger.kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	bpf <bpf@vger.kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Alan Maguire <alan.maguire@oracle.com>,
-	Mark Rutland <mark.rutland@arm.com>,
-	linux-arch@vger.kernel.org
-Subject: [PATCH v16 11/18] bpf: Enable kprobe_multi feature if CONFIG_FPROBE is enabled
-Date: Tue, 15 Oct 2024 10:30:39 +0900
-Message-ID: <172895583919.107311.9623949640386017781.stgit@devnote2>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <172895571278.107311.14000164546881236558.stgit@devnote2>
-References: <172895571278.107311.14000164546881236558.stgit@devnote2>
-User-Agent: StGit/0.19
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="D+J/hCpq"
+Received: by mail-qv1-f52.google.com with SMTP id 6a1803df08f44-6cbe700dcc3so37899506d6.3;
+        Mon, 14 Oct 2024 18:30:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1728955852; x=1729560652; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=LMGHn90jdK1Apdx6ox+0iliPpJbyfHmeOMFwrILCXrk=;
+        b=D+J/hCpqBla4okiweOPXHqw2pZr4zJiqKyFLadML8NSmrBv+P7BjsvK2EW+JvDJzxh
+         PqDHjqf3KyUHhiPlnNppNV/qxDXzdlVBeO9dZWNceiXyke2OaRN9TC/BWM/uwjdLh/pF
+         8919+cP9/C3yQUa/dfWZa60Gqn403u/jfUaxXHeX+iBEgxJD6KMhibuIKx5yRrpBM8Fs
+         YHMLPR5wSPLAJCWkCxQmQEIJeHuKtyXwJe2kWqcGuQbwhYW6YPnJ3jH8XWb5RxYuWjiB
+         RigAns1sdslnbP3buWO5e4+MdEoPmJo9q1vkzdIAbxcfqeENCJ9G6B6hQByZ17A0CDRT
+         XtKQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1728955852; x=1729560652;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=LMGHn90jdK1Apdx6ox+0iliPpJbyfHmeOMFwrILCXrk=;
+        b=CsWhuQFofx0uu2PXxGwGV93FeYGzm474jurIWZkvzZZlN/N8aixU5qfH9pKBLnJYUK
+         5ghUywHpsgmn6X2KrThDpF6xsZkkWtDEZ6lapXhp0SnF6Wv8hVMMiW7+Lu6HZkciOv8v
+         9n6RySOI9k5mrxq6i3NbVCjDvPCSvPGuUxT02qyu48n0wMhigGSIxLWLSZyV+1NPG97C
+         ldNw8pr2IYWU3O+Pt89bW/UQ05wCze3XMkozSowO4qHSwXYfl4mVtppL2jAFjho3PkJd
+         LAF/2hoeOC0uNfD8Ycju8Eu63Nt3CYmPzkfs7TO5RwB497s35bvAF1WhHpu5I+YvXgaB
+         gnaw==
+X-Forwarded-Encrypted: i=1; AJvYcCXXhR8OYXnaBOapOoLXgXIMQx4whIC1n+OIJrAO6YjOEhKP4kUzLM8m1BHxbv//Z/CQtCdwB5M=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzFxmQoMl8N+vTHAXm7Slzu0WLuI9anutTy+nmEBg4b43cubIYV
+	Ilyx7HReRfyd/MOIKrM8guPxJIbATlvugoqFKgZDSo2eckZB4FfD
+X-Google-Smtp-Source: AGHT+IGWNmu38/JGic1tS6JUWwL04UT03YEF6hrgrIMa7SB5gYtRN5ap+Uf6ck786HKewFOn2jWHEw==
+X-Received: by 2002:a05:6214:43c1:b0:6cb:98d3:3e67 with SMTP id 6a1803df08f44-6cbf007c225mr212672146d6.53.1728955851681;
+        Mon, 14 Oct 2024 18:30:51 -0700 (PDT)
+Received: from localhost (86.235.150.34.bc.googleusercontent.com. [34.150.235.86])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6cc2292e964sm1403136d6.59.2024.10.14.18.30.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Oct 2024 18:30:51 -0700 (PDT)
+Date: Mon, 14 Oct 2024 21:30:50 -0400
+From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+To: Jason Xing <kerneljasonxing@gmail.com>, 
+ davem@davemloft.net, 
+ edumazet@google.com, 
+ kuba@kernel.org, 
+ pabeni@redhat.com, 
+ dsahern@kernel.org, 
+ willemdebruijn.kernel@gmail.com, 
+ willemb@google.com, 
+ ast@kernel.org, 
+ daniel@iogearbox.net, 
+ andrii@kernel.org, 
+ martin.lau@linux.dev, 
+ eddyz87@gmail.com, 
+ song@kernel.org, 
+ yonghong.song@linux.dev, 
+ john.fastabend@gmail.com, 
+ kpsingh@kernel.org, 
+ sdf@fomichev.me, 
+ haoluo@google.com, 
+ jolsa@kernel.org
+Cc: bpf@vger.kernel.org, 
+ netdev@vger.kernel.org, 
+ Jason Xing <kernelxing@tencent.com>
+Message-ID: <670dc5cab30f5_2e1742294bc@willemb.c.googlers.com.notmuch>
+In-Reply-To: <20241012040651.95616-2-kerneljasonxing@gmail.com>
+References: <20241012040651.95616-1-kerneljasonxing@gmail.com>
+ <20241012040651.95616-2-kerneljasonxing@gmail.com>
+Subject: Re: [PATCH net-next v2 01/12] net-timestamp: introduce socket tsflag
+ requestors
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: 7bit
 
-From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Jason Xing wrote:
+> From: Jason Xing <kernelxing@tencent.com>
+> 
+> We need a separate tsflag to control bpf extension feature so that
+> we will not affect the behaviors of existing applications.
+> 
+> The idea of introducing requestors for better extension (not only
+> serving bpf extension) comes from Vadim Fedorenko.
 
-Enable kprobe_multi feature if CONFIG_FPROBE is enabled. The pt_regs is
-converted from ftrace_regs by ftrace_partial_regs(), thus some registers
-may always returns 0. But it should be enough for function entry (access
-arguments) and exit (access return value).
+As also said in the cover letter: I prefer sk_tstflags_bpf.
 
-Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-Acked-by: Florent Revest <revest@chromium.org>
----
- Changes in v9:
-  - Avoid wasting memory for bpf_kprobe_multi_pt_regs when
-    CONFIG_HAVE_PT_REGS_TO_FTRACE_REGS_CAST=y
----
- kernel/trace/bpf_trace.c |   27 ++++++++++++++-------------
- 1 file changed, 14 insertions(+), 13 deletions(-)
-
-diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-index 4db2aff65151..edd577297dc2 100644
---- a/kernel/trace/bpf_trace.c
-+++ b/kernel/trace/bpf_trace.c
-@@ -2517,7 +2517,7 @@ struct bpf_session_run_ctx {
- 	void *data;
- };
- 
--#if defined(CONFIG_FPROBE) && defined(CONFIG_DYNAMIC_FTRACE_WITH_REGS)
-+#ifdef CONFIG_FPROBE
- struct bpf_kprobe_multi_link {
- 	struct bpf_link link;
- 	struct fprobe fp;
-@@ -2540,6 +2540,13 @@ struct user_syms {
- 	char *buf;
- };
- 
-+#ifndef CONFIG_HAVE_FTRACE_REGS_HAVING_PT_REGS
-+static DEFINE_PER_CPU(struct pt_regs, bpf_kprobe_multi_pt_regs);
-+#define bpf_kprobe_multi_pt_regs_ptr()	this_cpu_ptr(&bpf_kprobe_multi_pt_regs)
-+#else
-+#define bpf_kprobe_multi_pt_regs_ptr()	(NULL)
-+#endif
-+
- static int copy_user_syms(struct user_syms *us, unsigned long __user *usyms, u32 cnt)
- {
- 	unsigned long __user usymbol;
-@@ -2734,7 +2741,7 @@ static u64 bpf_kprobe_multi_entry_ip(struct bpf_run_ctx *ctx)
- 
- static int
- kprobe_multi_link_prog_run(struct bpf_kprobe_multi_link *link,
--			   unsigned long entry_ip, struct pt_regs *regs,
-+			   unsigned long entry_ip, struct ftrace_regs *fregs,
- 			   bool is_return, void *data)
- {
- 	struct bpf_kprobe_multi_run_ctx run_ctx = {
-@@ -2746,6 +2753,7 @@ kprobe_multi_link_prog_run(struct bpf_kprobe_multi_link *link,
- 		.entry_ip = entry_ip,
- 	};
- 	struct bpf_run_ctx *old_run_ctx;
-+	struct pt_regs *regs;
- 	int err;
- 
- 	if (unlikely(__this_cpu_inc_return(bpf_prog_active) != 1)) {
-@@ -2756,6 +2764,7 @@ kprobe_multi_link_prog_run(struct bpf_kprobe_multi_link *link,
- 
- 	migrate_disable();
- 	rcu_read_lock();
-+	regs = ftrace_partial_regs(fregs, bpf_kprobe_multi_pt_regs_ptr());
- 	old_run_ctx = bpf_set_run_ctx(&run_ctx.session_ctx.run_ctx);
- 	err = bpf_prog_run(link->link.prog, regs);
- 	bpf_reset_run_ctx(old_run_ctx);
-@@ -2772,15 +2781,11 @@ kprobe_multi_link_handler(struct fprobe *fp, unsigned long fentry_ip,
- 			  unsigned long ret_ip, struct ftrace_regs *fregs,
- 			  void *data)
- {
--	struct pt_regs *regs = ftrace_get_regs(fregs);
- 	struct bpf_kprobe_multi_link *link;
- 	int err;
- 
--	if (!regs)
--		return 0;
--
- 	link = container_of(fp, struct bpf_kprobe_multi_link, fp);
--	err = kprobe_multi_link_prog_run(link, get_entry_ip(fentry_ip), regs, false, data);
-+	err = kprobe_multi_link_prog_run(link, get_entry_ip(fentry_ip), fregs, false, data);
- 	return is_kprobe_session(link->link.prog) ? err : 0;
- }
- 
-@@ -2790,13 +2795,9 @@ kprobe_multi_link_exit_handler(struct fprobe *fp, unsigned long fentry_ip,
- 			       void *data)
- {
- 	struct bpf_kprobe_multi_link *link;
--	struct pt_regs *regs = ftrace_get_regs(fregs);
--
--	if (!regs)
--		return;
- 
- 	link = container_of(fp, struct bpf_kprobe_multi_link, fp);
--	kprobe_multi_link_prog_run(link, get_entry_ip(fentry_ip), regs, true, data);
-+	kprobe_multi_link_prog_run(link, get_entry_ip(fentry_ip), fregs, true, data);
- }
- 
- static int symbols_cmp_r(const void *a, const void *b, const void *priv)
-@@ -3057,7 +3058,7 @@ int bpf_kprobe_multi_link_attach(const union bpf_attr *attr, struct bpf_prog *pr
- 	kvfree(cookies);
- 	return err;
- }
--#else /* !CONFIG_FPROBE || !CONFIG_DYNAMIC_FTRACE_WITH_REGS */
-+#else /* !CONFIG_FPROBE */
- int bpf_kprobe_multi_link_attach(const union bpf_attr *attr, struct bpf_prog *prog)
- {
- 	return -EOPNOTSUPP;
-
+This array approach adds code churn, may have cacheline effects by
+moving other fields and anticipates I don't see a third requestor
+happening. And if it does, we'll deal with it then.
