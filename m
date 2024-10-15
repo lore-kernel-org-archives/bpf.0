@@ -1,357 +1,232 @@
-Received: from out-178.mta1.migadu.com (out-178.mta1.migadu.com [95.215.58.178])
+Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2C0A1CB9F5
-	for <bpf@vger.kernel.org>; Tue, 15 Oct 2024 15:02:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 656AA1CBA0C;
+	Tue, 15 Oct 2024 15:14:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=167.114.26.122
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729004551; cv=none; b=P7FFwd82mFqS6mUxDy9x/XVpkUlXz3U8JxfozmbsG20OrgfizvxEBrpacajgjRM+/aKGDMWvLNnHFL3cNwayG9A+FUK1jEEMyJ0oqlQyYmBtqft48y4Bs1CSpls/podvSmcT8QyKcZmeWHj6NPcoWitP9r8E/kBPrjnh8VyuzZU=
+	t=1729005293; cv=none; b=T6jqH9vQQzb7T2HNGwAmCJrSobuLao2bnLj6phh6sP+Xn51Z4wfyA10KopIICmhoOvBs8F7UwPf6ogXdMpm9Vgjgyr55+gU0jvTbOU1NoUyI7OG02tyb+lfoiJljAeq7MMI2lzHzUhHN3ix4OOVdlEkE6uaYG9SJQgXiNjvV7qE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729004551; c=relaxed/simple;
-	bh=AI5iDG8/oSZWTISouQVr5dOe2A6Ps5NKKxwuuG0ow5w=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=OBJ4I5NtcVXmxig2rvhs09gEUFEEII2iLkL47FmN3Ii99oSiGkJyXz3JH4l7YS0MVV5hPzlOmznS7kHHcOCzMd9fIm5pe2nqHHex/YHIDUcwXF7pXK9iiWClWZqBkfnN2l0bSaFPPJ4BdjTUnhqD+uSKawfE1jp8k9LUWjIn208=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=XvWfI/rX; arc=none smtp.client-ip=95.215.58.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1729005293; c=relaxed/simple;
+	bh=omRJqiYyMi/GIo5oFxWyw97b7zKSG5rF9cTg8vXNq38=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=iP7gTySs+9/ZrWRmSYT+yzbpBcfQX3Ao5uOULoHWdaMsCEjASkoZGqFBStA6/40FcHRZUpy/TlWhDlfJNKK+Tw9sHBbKGDy//+saUo/bhZyBn/e5AOAElr/e48fY2Vp4U1/nfis3lEfGT9AUv1DLPXp7PqMaCGWKeBdXI9Wl+8o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com; spf=pass smtp.mailfrom=efficios.com; dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b=PMi/9q23; arc=none smtp.client-ip=167.114.26.122
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=efficios.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="XvWfI/rX"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1729004542;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=k4XJypsELEuBreM3jENIs3zOOqJw0Xomzh5IamblAs8=;
-	b=XvWfI/rXpcH/aJk0Qr8nwbZeIdUk675ljGtURd6Dm+qXnR1EEZm6JnWG9jqY74tlvYjYhX
-	CwH9S4VcueVRhWc9ORncAcD1AstYWuW0CpohZoou8YFY+cTfWiOhB9gJjp4GnX2/7IoHK8
-	UBmbVEnFu1jaabNG53kdhhMjU9sZsnc=
-From: Leon Hwang <leon.hwang@linux.dev>
-To: bpf@vger.kernel.org
-Cc: ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	toke@redhat.com,
-	martin.lau@kernel.org,
-	yonghong.song@linux.dev,
-	puranjay@kernel.org,
-	xukuohai@huaweicloud.com,
-	eddyz87@gmail.com,
-	iii@linux.ibm.com,
-	leon.hwang@linux.dev,
-	kernel-patches-bot@fb.com
-Subject: [PATCH bpf-next v8 1/2] bpf: Prevent tailcall infinite loop caused by freplace
-Date: Tue, 15 Oct 2024 23:02:06 +0800
-Message-ID: <20241015150207.70264-2-leon.hwang@linux.dev>
-In-Reply-To: <20241015150207.70264-1-leon.hwang@linux.dev>
-References: <20241015150207.70264-1-leon.hwang@linux.dev>
+	dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b="PMi/9q23"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
+	s=smtpout1; t=1729005289;
+	bh=omRJqiYyMi/GIo5oFxWyw97b7zKSG5rF9cTg8vXNq38=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=PMi/9q23tf3rgAefKVzlOH89s5sUpe4w3ayxQkqYRy6H8D0tPZCPQxwKmqLe2qqH1
+	 i/hQ6bLEiZpUJfUtytvDpOlLiDcezrn6/y7To8MUAblrGQl2AcOY1ngqdduVnNKfdS
+	 Y4F2KWQREd8jKZEIDyZpBeW2mx31wNjoxlcczep1FuCEuZixSUZ8wP3pCn+o5L3u/w
+	 yWxK2StcwnH0sLKRtrD9Cx3nHDtZF0nD2HwMZP31UzHWrlvM0E2l6CZ7W0ohb9PVjO
+	 tiDzvQIO2oK14onP0h0DxfnPrctkpIfvrHK/MzU41KIp6Y7sz4PNuhBsP1/ryRsAJc
+	 2JQ/IvUEVezow==
+Received: from [172.16.0.134] (96-127-217-162.qc.cable.ebox.net [96.127.217.162])
+	by smtpout.efficios.com (Postfix) with ESMTPSA id 4XSd1h71Lfz10rl;
+	Tue, 15 Oct 2024 11:14:48 -0400 (EDT)
+Message-ID: <03c26ddd-fa06-47b6-876f-b563e5aa6cbf@efficios.com>
+Date: Tue, 15 Oct 2024 11:12:58 -0400
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+User-Agent: Mozilla Thunderbird
+Subject: Re: [syzbot] [fs?] [mm?] stack segment fault in folio_wait_writeback
+To: Dmitry Vyukov <dvyukov@google.com>,
+ syzbot <syzbot+8cb2efaaad483f65f56c@syzkaller.appspotmail.com>,
+ Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
+ <mhiramat@kernel.org>, linux-trace-kernel@vger.kernel.org,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>
+Cc: akpm@linux-foundation.org, linux-fsdevel@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+ syzkaller-bugs@googlegroups.com, willy@infradead.org
+References: <670ba885.050a0220.4cbc0.002e.GAE@google.com>
+ <CACT4Y+bbG_pthEYyG5mCYZVdA1Rzch2rZ5Yoit6gPaKjssPAJg@mail.gmail.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Content-Language: en-US
+In-Reply-To: <CACT4Y+bbG_pthEYyG5mCYZVdA1Rzch2rZ5Yoit6gPaKjssPAJg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-There is a potential infinite loop issue that can occur when using a
-combination of tail calls and freplace.
+On 2024-10-14 04:41, Dmitry Vyukov wrote:
+> On Sun, 13 Oct 2024 at 13:01, syzbot
+> <syzbot+8cb2efaaad483f65f56c@syzkaller.appspotmail.com> wrote:
+>>
+>> Hello,
+>>
+>> syzbot found the following issue on:
+>>
+>> HEAD commit:    7234e2ea0edd Merge tag 'scsi-fixes' of git://git.kernel.or..
+>> git tree:       upstream
+>> console output: https://syzkaller.appspot.com/x/log.txt?x=157a085f980000
+>> kernel config:  https://syzkaller.appspot.com/x/.config?x=7cd9e7e4a8a0a15b
+>> dashboard link: https://syzkaller.appspot.com/bug?extid=8cb2efaaad483f65f56c
+>> compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
+>> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=146c7fd0580000
+>>
+>> Downloadable assets:
+>> disk image (non-bootable): https://storage.googleapis.com/syzbot-assets/7feb34a89c2a/non_bootable_disk-7234e2ea.raw.xz
+>> vmlinux: https://storage.googleapis.com/syzbot-assets/aa111520a0b7/vmlinux-7234e2ea.xz
+>> kernel image: https://storage.googleapis.com/syzbot-assets/07889fadba3b/bzImage-7234e2ea.xz
+>> mounted in repro #1: https://storage.googleapis.com/syzbot-assets/178fe4a5f5e7/mount_1.gz
+>> mounted in repro #2: https://storage.googleapis.com/syzbot-assets/7847e1862894/mount_2.gz
+>>
+>> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+>> Reported-by: syzbot+8cb2efaaad483f65f56c@syzkaller.appspotmail.com
+>>
+>> loop0: detected capacity change from 0 to 256
+>> exFAT-fs (loop0): failed to load upcase table (idx : 0x00010000, chksum : 0xcc9b7de9, utbl_chksum : 0xe619d30d)
+>> Oops: stack segment: 0000 [#1] PREEMPT SMP KASAN NOPTI
+>> CPU: 0 UID: 0 PID: 5340 Comm: syz.0.50 Not tainted 6.12.0-rc2-syzkaller-00305-g7234e2ea0edd #0
+>> Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.3-debian-1.16.3-2~bpo12+1 04/01/2014
+>> RIP: 0010:PageTail include/linux/page-flags.h:281 [inline]
+>> RIP: 0010:const_folio_flags include/linux/page-flags.h:309 [inline]
+>> RIP: 0010:folio_test_writeback include/linux/page-flags.h:555 [inline]
+>> RIP: 0010:folio_wait_writeback+0x2f/0x1e0 mm/page-writeback.c:3187
+>> Code: 41 57 41 56 41 55 41 54 53 48 83 ec 18 48 89 fb 49 bd 00 00 00 00 00 fc ff df e8 ac 7e c4 ff 4c 8d 73 08 4c 89 f5 48 c1 ed 03 <42> 80 7c 2d 00 00 74 08 4c 89 f7 e8 11 2f 2e 00 4d 8b 3e 4c 89 fe
+>> RSP: 0018:ffffc900025a7190 EFLAGS: 00010202
+>> RAX: ffffffff81d068a4 RBX: 0000000000000000 RCX: ffff888000c3c880
+>> RDX: 0000000000000000 RSI: 0000000000000001 RDI: 0000000000000000
+>> RBP: 0000000000000001 R08: ffffffff81cc460e R09: 1ffffd4000003328
+>> R10: dffffc0000000000 R11: fffff94000003329 R12: dffffc0000000000
+>> R13: dffffc0000000000 R14: 0000000000000008 R15: 0000000000000001
+>> FS:  00007f7a897816c0(0000) GS:ffff88801fc00000(0000) knlGS:0000000000000000
+>> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+>> CR2: 00007f7a88a75c60 CR3: 000000003f406000 CR4: 0000000000352ef0
+>> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+>> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+>> Call Trace:
+>>   <TASK>
+>>   __filemap_fdatawait_range+0x17c/0x2b0 mm/filemap.c:533
+>>   file_write_and_wait_range+0x1e3/0x280 mm/filemap.c:792
+>>   __generic_file_fsync+0x6f/0x1a0 fs/libfs.c:1528
+>>   exfat_file_fsync+0xf9/0x1d0 fs/exfat/file.c:524
+>>   exfat_file_write_iter+0x312/0x3f0 fs/exfat/file.c:608
+>>   iter_file_splice_write+0xbfa/0x1510 fs/splice.c:743
+>>   do_splice_from fs/splice.c:941 [inline]
+>>   direct_splice_actor+0x11b/0x220 fs/splice.c:1164
+>>   splice_direct_to_actor+0x586/0xc80 fs/splice.c:1108
+>>   do_splice_direct_actor fs/splice.c:1207 [inline]
+>>   do_splice_direct+0x289/0x3e0 fs/splice.c:1233
+>>   do_sendfile+0x561/0xe10 fs/read_write.c:1388
+>>   __do_sys_sendfile64 fs/read_write.c:1455 [inline]
+>>   __se_sys_sendfile64+0x17c/0x1e0 fs/read_write.c:1441
+>>   do_syscall_x64 arch/x86/entry/common.c:52 [inline]
+>>   do_syscall_64+0xf3/0x230 arch/x86/entry/common.c:83
+>>   entry_SYSCALL_64_after_hwframe+0x77/0x7f
+>> RIP: 0033:0x7f7a8897dff9
+>> Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 a8 ff ff ff f7 d8 64 89 01 48
+>> RSP: 002b:00007f7a89781038 EFLAGS: 00000246 ORIG_RAX: 0000000000000028
+>> RAX: ffffffffffffffda RBX: 00007f7a88b35f80 RCX: 00007f7a8897dff9
+>> RDX: 0000000000000000 RSI: 0000000000000005 RDI: 0000000000000004
+>> RBP: 00007f7a889f0296 R08: 0000000000000000 R09: 0000000000000000
+>> R10: 0000000000100001 R11: 0000000000000246 R12: 0000000000000000
+>> R13: 0000000000000000 R14: 00007f7a88b35f80 R15: 00007fffbdf78608
+>>   </TASK>
+>> Modules linked in:
+>> ---[ end trace 0000000000000000 ]---
+>> RIP: 0010:PageTail include/linux/page-flags.h:281 [inline]
+>> RIP: 0010:const_folio_flags include/linux/page-flags.h:309 [inline]
+>> RIP: 0010:folio_test_writeback include/linux/page-flags.h:555 [inline]
+>> RIP: 0010:folio_wait_writeback+0x2f/0x1e0 mm/page-writeback.c:3187
+>> Code: 41 57 41 56 41 55 41 54 53 48 83 ec 18 48 89 fb 49 bd 00 00 00 00 00 fc ff df e8 ac 7e c4 ff 4c 8d 73 08 4c 89 f5 48 c1 ed 03 <42> 80 7c 2d 00 00 74 08 4c 89 f7 e8 11 2f 2e 00 4d 8b 3e 4c 89 fe
+>> RSP: 0018:ffffc900025a7190 EFLAGS: 00010202
+>> RAX: ffffffff81d068a4 RBX: 0000000000000000 RCX: ffff888000c3c880
+>> RDX: 0000000000000000 RSI: 0000000000000001 RDI: 0000000000000000
+>> RBP: 0000000000000001 R08: ffffffff81cc460e R09: 1ffffd4000003328
+>> R10: dffffc0000000000 R11: fffff94000003329 R12: dffffc0000000000
+>> R13: dffffc0000000000 R14: 0000000000000008 R15: 0000000000000001
+>> FS:  00007f7a897816c0(0000) GS:ffff88801fc00000(0000) knlGS:0000000000000000
+>> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+>> CR2: 00007f7a8975ff98 CR3: 000000003f406000 CR4: 0000000000352ef0
+>> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+>> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+>> ----------------
+>> Code disassembly (best guess):
+>>     0:   41 57                   push   %r15
+>>     2:   41 56                   push   %r14
+>>     4:   41 55                   push   %r13
+>>     6:   41 54                   push   %r12
+>>     8:   53                      push   %rbx
+>>     9:   48 83 ec 18             sub    $0x18,%rsp
+>>     d:   48 89 fb                mov    %rdi,%rbx
+>>    10:   49 bd 00 00 00 00 00    movabs $0xdffffc0000000000,%r13
+>>    17:   fc ff df
+>>    1a:   e8 ac 7e c4 ff          call   0xffc47ecb
+>>    1f:   4c 8d 73 08             lea    0x8(%rbx),%r14
+>>    23:   4c 89 f5                mov    %r14,%rbp
+>>    26:   48 c1 ed 03             shr    $0x3,%rbp
+>> * 2a:   42 80 7c 2d 00 00       cmpb   $0x0,0x0(%rbp,%r13,1) <-- trapping instruction
+> 
+> +tracing maintainers
+> 
+> Not sure how this instruction can cause stack segment violation.
+> The reproducer does something with raw tracepoints:
+> https://syzkaller.appspot.com/text?tag=ReproSyz&x=146c7fd0580000
 
-In an upcoming selftest, the attach target for entry_freplace of
-tailcall_freplace.c is subprog_tc of tc_bpf2bpf.c, while the tail call in
-entry_freplace leads to entry_tc. This results in an infinite loop:
+The program attached to the raw tracepoint here is a bpf program. The
+bpf verifier should ensure that the raw tracepoint inputs (e.g.
+memory targeted by pointers) don't get corrupted by the bpf program.
 
-entry_tc -> subprog_tc -> entry_freplace --tailcall-> entry_tc.
+> 
+> Can raw tracepoints legally arbitrary corrupt kernel state?
+> If yes, is there some safe subset at least?
 
-The problem arises because the tail_call_cnt in entry_freplace resets to
-zero each time entry_freplace is executed, causing the tail call mechanism
-to never terminate, eventually leading to a kernel panic.
+ From a tracepoint perspective, that's really up to the implementer of
+the probe to make sure they don't corrupt the memory received as input
+from pointer arguments. AFAIU, in this case this validation should be
+done by the bpf verifier.
 
-To fix this issue, the solution is twofold:
+CCing BPF maintainers.
 
-1. Prevent updating a program extended by an freplace program to a
-   prog_array map.
-2. Prevent extending a program that is already part of a prog_array map
-   with an freplace program.
+Thanks,
 
-This ensures that:
+Mathieu
 
-* If a program or its subprogram has been extended by an freplace program,
-  it can no longer be updated to a prog_array map.
-* If a program has been added to a prog_array map, neither it nor its
-  subprograms can be extended by an freplace program.
+> 
+> 
+>>    30:   74 08                   je     0x3a
+>>    32:   4c 89 f7                mov    %r14,%rdi
+>>    35:   e8 11 2f 2e 00          call   0x2e2f4b
+>>    3a:   4d 8b 3e                mov    (%r14),%r15
+>>    3d:   4c 89 fe                mov    %r15,%rsi
+>>
+>>
+>> ---
+>> This report is generated by a bot. It may contain errors.
+>> See https://goo.gl/tpsmEJ for more information about syzbot.
+>> syzbot engineers can be reached at syzkaller@googlegroups.com.
+>>
+>> syzbot will keep track of this issue. See:
+>> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+>>
+>> If the report is already addressed, let syzbot know by replying with:
+>> #syz fix: exact-commit-title
+>>
+>> If you want syzbot to run the reproducer, reply with:
+>> #syz test: git://repo/address.git branch-or-commit-hash
+>> If you attach or paste a git patch, syzbot will apply it before testing.
+>>
+>> If you want to overwrite report's subsystems, reply with:
+>> #syz set subsystems: new-subsystem
+>> (See the list of subsystem names on the web dashboard)
+>>
+>> If the report is a duplicate of another one, reply with:
+>> #syz dup: exact-subject-of-another-report
+>>
+>> If you want to undo deduplication, reply with:
+>> #syz undup
 
-Moreover, an extension program should not be tailcalled. As such, return
--EINVAL if the program has a type of BPF_PROG_TYPE_EXT when adding it to a
-prog_array map.
-
-Additionally, fix a minor code style issue by replacing eight spaces with a
-tab for proper formatting.
-
-Reviewed-by: Eduard Zingerman <eddyz87@gmail.com>
-Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
----
- include/linux/bpf.h     | 17 +++++++++++----
- kernel/bpf/arraymap.c   | 26 +++++++++++++++++++++--
- kernel/bpf/core.c       |  1 +
- kernel/bpf/syscall.c    |  7 +++---
- kernel/bpf/trampoline.c | 47 ++++++++++++++++++++++++++++++++++-------
- 5 files changed, 81 insertions(+), 17 deletions(-)
-
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 19d8ca8ac960f..0c216e71cec76 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -1292,8 +1292,12 @@ void *__bpf_dynptr_data_rw(const struct bpf_dynptr_kern *ptr, u32 len);
- bool __bpf_dynptr_is_rdonly(const struct bpf_dynptr_kern *ptr);
- 
- #ifdef CONFIG_BPF_JIT
--int bpf_trampoline_link_prog(struct bpf_tramp_link *link, struct bpf_trampoline *tr);
--int bpf_trampoline_unlink_prog(struct bpf_tramp_link *link, struct bpf_trampoline *tr);
-+int bpf_trampoline_link_prog(struct bpf_tramp_link *link,
-+			     struct bpf_trampoline *tr,
-+			     struct bpf_prog *tgt_prog);
-+int bpf_trampoline_unlink_prog(struct bpf_tramp_link *link,
-+			       struct bpf_trampoline *tr,
-+			       struct bpf_prog *tgt_prog);
- struct bpf_trampoline *bpf_trampoline_get(u64 key,
- 					  struct bpf_attach_target_info *tgt_info);
- void bpf_trampoline_put(struct bpf_trampoline *tr);
-@@ -1374,12 +1378,14 @@ void bpf_jit_uncharge_modmem(u32 size);
- bool bpf_prog_has_trampoline(const struct bpf_prog *prog);
- #else
- static inline int bpf_trampoline_link_prog(struct bpf_tramp_link *link,
--					   struct bpf_trampoline *tr)
-+					   struct bpf_trampoline *tr,
-+					   struct bpf_prog *tgt_prog)
- {
- 	return -ENOTSUPP;
- }
- static inline int bpf_trampoline_unlink_prog(struct bpf_tramp_link *link,
--					     struct bpf_trampoline *tr)
-+					     struct bpf_trampoline *tr,
-+					     struct bpf_prog *tgt_prog)
- {
- 	return -ENOTSUPP;
- }
-@@ -1483,6 +1489,9 @@ struct bpf_prog_aux {
- 	bool xdp_has_frags;
- 	bool exception_cb;
- 	bool exception_boundary;
-+	bool is_extended; /* true if extended by freplace program */
-+	u64 prog_array_member_cnt; /* counts how many times as member of prog_array */
-+	struct mutex ext_mutex; /* mutex for is_extended and prog_array_member_cnt */
- 	struct bpf_arena *arena;
- 	/* BTF_KIND_FUNC_PROTO for valid attach_btf_id */
- 	const struct btf_type *attach_func_proto;
-diff --git a/kernel/bpf/arraymap.c b/kernel/bpf/arraymap.c
-index 79660e3fca4c1..6cdbb4c33d31d 100644
---- a/kernel/bpf/arraymap.c
-+++ b/kernel/bpf/arraymap.c
-@@ -947,22 +947,44 @@ static void *prog_fd_array_get_ptr(struct bpf_map *map,
- 				   struct file *map_file, int fd)
- {
- 	struct bpf_prog *prog = bpf_prog_get(fd);
-+	bool is_extended;
- 
- 	if (IS_ERR(prog))
- 		return prog;
- 
--	if (!bpf_prog_map_compatible(map, prog)) {
-+	if (prog->type == BPF_PROG_TYPE_EXT ||
-+	    !bpf_prog_map_compatible(map, prog)) {
- 		bpf_prog_put(prog);
- 		return ERR_PTR(-EINVAL);
- 	}
- 
-+	mutex_lock(&prog->aux->ext_mutex);
-+	is_extended = prog->aux->is_extended;
-+	if (!is_extended)
-+		prog->aux->prog_array_member_cnt++;
-+	mutex_unlock(&prog->aux->ext_mutex);
-+	if (is_extended) {
-+		/* Extended prog can not be tail callee. It's to prevent a
-+		 * potential infinite loop like:
-+		 * tail callee prog entry -> tail callee prog subprog ->
-+		 * freplace prog entry --tailcall-> tail callee prog entry.
-+		 */
-+		bpf_prog_put(prog);
-+		return ERR_PTR(-EBUSY);
-+	}
-+
- 	return prog;
- }
- 
- static void prog_fd_array_put_ptr(struct bpf_map *map, void *ptr, bool need_defer)
- {
-+	struct bpf_prog *prog = ptr;
-+
-+	mutex_lock(&prog->aux->ext_mutex);
-+	prog->aux->prog_array_member_cnt--;
-+	mutex_unlock(&prog->aux->ext_mutex);
- 	/* bpf_prog is freed after one RCU or tasks trace grace period */
--	bpf_prog_put(ptr);
-+	bpf_prog_put(prog);
- }
- 
- static u32 prog_fd_array_sys_lookup_elem(void *ptr)
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index 5e77c58e06010..233ea78f8f1bd 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -131,6 +131,7 @@ struct bpf_prog *bpf_prog_alloc_no_stats(unsigned int size, gfp_t gfp_extra_flag
- 	INIT_LIST_HEAD_RCU(&fp->aux->ksym_prefix.lnode);
- #endif
- 	mutex_init(&fp->aux->used_maps_mutex);
-+	mutex_init(&fp->aux->ext_mutex);
- 	mutex_init(&fp->aux->dst_mutex);
- 
- 	return fp;
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index a8f1808a1ca54..4d04d4d9c1f30 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -3214,7 +3214,8 @@ static void bpf_tracing_link_release(struct bpf_link *link)
- 		container_of(link, struct bpf_tracing_link, link.link);
- 
- 	WARN_ON_ONCE(bpf_trampoline_unlink_prog(&tr_link->link,
--						tr_link->trampoline));
-+						tr_link->trampoline,
-+						tr_link->tgt_prog));
- 
- 	bpf_trampoline_put(tr_link->trampoline);
- 
-@@ -3354,7 +3355,7 @@ static int bpf_tracing_prog_attach(struct bpf_prog *prog,
- 	 *   in prog->aux
- 	 *
- 	 * - if prog->aux->dst_trampoline is NULL, the program has already been
--         *   attached to a target and its initial target was cleared (below)
-+	 *   attached to a target and its initial target was cleared (below)
- 	 *
- 	 * - if tgt_prog != NULL, the caller specified tgt_prog_fd +
- 	 *   target_btf_id using the link_create API.
-@@ -3429,7 +3430,7 @@ static int bpf_tracing_prog_attach(struct bpf_prog *prog,
- 	if (err)
- 		goto out_unlock;
- 
--	err = bpf_trampoline_link_prog(&link->link, tr);
-+	err = bpf_trampoline_link_prog(&link->link, tr, tgt_prog);
- 	if (err) {
- 		bpf_link_cleanup(&link_primer);
- 		link = NULL;
-diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
-index f8302a5ca400d..9f36c049f4c28 100644
---- a/kernel/bpf/trampoline.c
-+++ b/kernel/bpf/trampoline.c
-@@ -523,7 +523,27 @@ static enum bpf_tramp_prog_type bpf_attach_type_to_tramp(struct bpf_prog *prog)
- 	}
- }
- 
--static int __bpf_trampoline_link_prog(struct bpf_tramp_link *link, struct bpf_trampoline *tr)
-+static int bpf_freplace_check_tgt_prog(struct bpf_prog *tgt_prog)
-+{
-+	struct bpf_prog_aux *aux = tgt_prog->aux;
-+
-+	guard(mutex)(&aux->ext_mutex);
-+	if (aux->prog_array_member_cnt)
-+		/* Program extensions can not extend target prog when the target
-+		 * prog has been updated to any prog_array map as tail callee.
-+		 * It's to prevent a potential infinite loop like:
-+		 * tgt prog entry -> tgt prog subprog -> freplace prog entry
-+		 * --tailcall-> tgt prog entry.
-+		 */
-+		return -EBUSY;
-+
-+	aux->is_extended = true;
-+	return 0;
-+}
-+
-+static int __bpf_trampoline_link_prog(struct bpf_tramp_link *link,
-+				      struct bpf_trampoline *tr,
-+				      struct bpf_prog *tgt_prog)
- {
- 	enum bpf_tramp_prog_type kind;
- 	struct bpf_tramp_link *link_exiting;
-@@ -544,6 +564,9 @@ static int __bpf_trampoline_link_prog(struct bpf_tramp_link *link, struct bpf_tr
- 		/* Cannot attach extension if fentry/fexit are in use. */
- 		if (cnt)
- 			return -EBUSY;
-+		err = bpf_freplace_check_tgt_prog(tgt_prog);
-+		if (err)
-+			return err;
- 		tr->extension_prog = link->link.prog;
- 		return bpf_arch_text_poke(tr->func.addr, BPF_MOD_JUMP, NULL,
- 					  link->link.prog->bpf_func);
-@@ -570,17 +593,21 @@ static int __bpf_trampoline_link_prog(struct bpf_tramp_link *link, struct bpf_tr
- 	return err;
- }
- 
--int bpf_trampoline_link_prog(struct bpf_tramp_link *link, struct bpf_trampoline *tr)
-+int bpf_trampoline_link_prog(struct bpf_tramp_link *link,
-+			     struct bpf_trampoline *tr,
-+			     struct bpf_prog *tgt_prog)
- {
- 	int err;
- 
- 	mutex_lock(&tr->mutex);
--	err = __bpf_trampoline_link_prog(link, tr);
-+	err = __bpf_trampoline_link_prog(link, tr, tgt_prog);
- 	mutex_unlock(&tr->mutex);
- 	return err;
- }
- 
--static int __bpf_trampoline_unlink_prog(struct bpf_tramp_link *link, struct bpf_trampoline *tr)
-+static int __bpf_trampoline_unlink_prog(struct bpf_tramp_link *link,
-+					struct bpf_trampoline *tr,
-+					struct bpf_prog *tgt_prog)
- {
- 	enum bpf_tramp_prog_type kind;
- 	int err;
-@@ -591,6 +618,8 @@ static int __bpf_trampoline_unlink_prog(struct bpf_tramp_link *link, struct bpf_
- 		err = bpf_arch_text_poke(tr->func.addr, BPF_MOD_JUMP,
- 					 tr->extension_prog->bpf_func, NULL);
- 		tr->extension_prog = NULL;
-+		guard(mutex)(&tgt_prog->aux->ext_mutex);
-+		tgt_prog->aux->is_extended = false;
- 		return err;
- 	}
- 	hlist_del_init(&link->tramp_hlist);
-@@ -599,12 +628,14 @@ static int __bpf_trampoline_unlink_prog(struct bpf_tramp_link *link, struct bpf_
- }
- 
- /* bpf_trampoline_unlink_prog() should never fail. */
--int bpf_trampoline_unlink_prog(struct bpf_tramp_link *link, struct bpf_trampoline *tr)
-+int bpf_trampoline_unlink_prog(struct bpf_tramp_link *link,
-+			       struct bpf_trampoline *tr,
-+			       struct bpf_prog *tgt_prog)
- {
- 	int err;
- 
- 	mutex_lock(&tr->mutex);
--	err = __bpf_trampoline_unlink_prog(link, tr);
-+	err = __bpf_trampoline_unlink_prog(link, tr, tgt_prog);
- 	mutex_unlock(&tr->mutex);
- 	return err;
- }
-@@ -619,7 +650,7 @@ static void bpf_shim_tramp_link_release(struct bpf_link *link)
- 	if (!shim_link->trampoline)
- 		return;
- 
--	WARN_ON_ONCE(bpf_trampoline_unlink_prog(&shim_link->link, shim_link->trampoline));
-+	WARN_ON_ONCE(bpf_trampoline_unlink_prog(&shim_link->link, shim_link->trampoline, NULL));
- 	bpf_trampoline_put(shim_link->trampoline);
- }
- 
-@@ -733,7 +764,7 @@ int bpf_trampoline_link_cgroup_shim(struct bpf_prog *prog,
- 		goto err;
- 	}
- 
--	err = __bpf_trampoline_link_prog(&shim_link->link, tr);
-+	err = __bpf_trampoline_link_prog(&shim_link->link, tr, NULL);
- 	if (err)
- 		goto err;
- 
 -- 
-2.44.0
+Mathieu Desnoyers
+EfficiOS Inc.
+https://www.efficios.com
 
