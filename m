@@ -1,184 +1,99 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mout.perfora.net (mout.perfora.net [74.208.4.196])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 969A94409;
-	Wed, 16 Oct 2024 21:01:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB30318F2F9
+	for <bpf@vger.kernel.org>; Wed, 16 Oct 2024 21:01:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.208.4.196
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729112474; cv=none; b=J8Rg8wu5SSEo+fuMdV1I1MgSncStWregB9qzlUe3OH6+C2m93jwILQ7f53AvsSfUFIHYeOXpDRvnJ6PoluGEioahxcj0HBqmEq7fMbXgfb3SH/sscaoLwY9DqNGG07E8TAB8cQapBs+BbAK+sjZ2YLMeZ8VQBzv3brncZ1MPbxs=
+	t=1729112491; cv=none; b=ZKPlbG6RdJf4aDiFDeznNiWrtt/jCKlSgRf2WUaptQ+ca1ap5CrwLuzb35m1ZZD6rrZXTdEkUuNFTs0Gfmo10to9I9/QefsnRqAIKQik2+8Y+UtnlA0GDk+ar6/5OirYHqVx0RshaW6p1MJMp8yyImc812kmezHinZA941xpiDw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729112474; c=relaxed/simple;
-	bh=k1HVXdWEl9r8b7TWbb3PEMrECBBSUgCGgBCTB9XVEhk=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=PDvAwy44qOXyIlxo2VEJZMmt/uf1OoV/oqh3lVQECuGpwf1OjZUj1xX+5Q0WJNY9tCSMFRbUbonmF5e+BWDwEfjb8wXCj14LaTMHKDYiKIzGtAVXMoR4qesJzACFJt/8TkhX5H7K4a54o5D5v+G3vReN5nQsXJHdrmmFdxB8Lwo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 368BFC4CEC5;
-	Wed, 16 Oct 2024 21:01:07 +0000 (UTC)
-Date: Wed, 16 Oct 2024 17:01:28 -0400
-From: Steven Rostedt <rostedt@goodmis.org>
-To: Mike Rapoport <rppt@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>, Luis Chamberlain
- <mcgrof@kernel.org>, Andreas Larsson <andreas@gaisler.com>, Andy Lutomirski
- <luto@kernel.org>, Ard Biesheuvel <ardb@kernel.org>, Arnd Bergmann
- <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>, Brian Cain
- <bcain@quicinc.com>, Catalin Marinas <catalin.marinas@arm.com>, Christoph
- Hellwig <hch@infradead.org>, Christophe Leroy
- <christophe.leroy@csgroup.eu>, Dave Hansen <dave.hansen@linux.intel.com>,
- Dinh Nguyen <dinguyen@kernel.org>, Geert Uytterhoeven
- <geert@linux-m68k.org>, Guo Ren <guoren@kernel.org>, Helge Deller
- <deller@gmx.de>, Huacai Chen <chenhuacai@kernel.org>, Ingo Molnar
- <mingo@redhat.com>, Johannes Berg <johannes@sipsolutions.net>, John Paul
- Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, Kent Overstreet
- <kent.overstreet@linux.dev>, "Liam R. Howlett" <Liam.Howlett@oracle.com>,
- Mark Rutland <mark.rutland@arm.com>, Masami Hiramatsu
- <mhiramat@kernel.org>, Matt Turner <mattst88@gmail.com>, Max Filippov
- <jcmvbkbc@gmail.com>, Michael Ellerman <mpe@ellerman.id.au>, Michal Simek
- <monstr@monstr.eu>, Oleg Nesterov <oleg@redhat.com>, Palmer Dabbelt
- <palmer@dabbelt.com>, Peter Zijlstra <peterz@infradead.org>, Richard
- Weinberger <richard@nod.at>, Russell King <linux@armlinux.org.uk>, Song Liu
- <song@kernel.org>, Stafford Horne <shorne@gmail.com>, Suren Baghdasaryan
- <surenb@google.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
- Thomas Gleixner <tglx@linutronix.de>, Uladzislau Rezki <urezki@gmail.com>,
- Vineet Gupta <vgupta@kernel.org>, Will Deacon <will@kernel.org>,
- bpf@vger.kernel.org, linux-alpha@vger.kernel.org,
- linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
- linux-mips@vger.kernel.org, linux-mm@kvack.org,
- linux-modules@vger.kernel.org, linux-openrisc@vger.kernel.org,
- linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
- linux-sh@vger.kernel.org, linux-snps-arc@lists.infradead.org,
- linux-trace-kernel@vger.kernel.org, linux-um@lists.infradead.org,
- linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
- sparclinux@vger.kernel.org, x86@kernel.org
-Subject: Re: [PATCH v6 6/8] x86/module: prepare module loading for ROX
- allocations of text
-Message-ID: <20241016170128.7afeb8b0@gandalf.local.home>
-In-Reply-To: <20241016122424.1655560-7-rppt@kernel.org>
-References: <20241016122424.1655560-1-rppt@kernel.org>
-	<20241016122424.1655560-7-rppt@kernel.org>
-X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1729112491; c=relaxed/simple;
+	bh=J7VJOvb3+gWByufi8DxEEV+PP5uGJmU9rw04YU01O0E=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=QS7eiTz/TsVOFKk2KMKqIYW7hWcgP8ViwRSkHmuAHQQEc4KSHht50CHhci1Lgv6NhYqK+vj2F0igoi5KCnOblVoRpuyrWgKFLqLnPdn/PR55LfdkXXnUR7iyJiDGCkA/1R54NuxY+bQ1KQxjS8P+1yAblAGQi+DoIG/WC8naYwo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=jordanrome.com; spf=pass smtp.mailfrom=jordanrome.com; dkim=pass (2048-bit key) header.d=jordanrome.com header.i=linux@jordanrome.com header.b=2qIJKGXz; arc=none smtp.client-ip=74.208.4.196
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=jordanrome.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=jordanrome.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=jordanrome.com header.i=linux@jordanrome.com header.b="2qIJKGXz"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=jordanrome.com;
+	s=s1-ionos; t=1729112461; x=1729717261; i=linux@jordanrome.com;
+	bh=nPyyMqaCnki3SYCO0WYRERMoEpoqneiuZUKl3/N/e88=;
+	h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:
+	 MIME-Version:Content-Transfer-Encoding:cc:
+	 content-transfer-encoding:content-type:date:from:message-id:
+	 mime-version:reply-to:subject:to;
+	b=2qIJKGXz6927Vkd3gsJxTWiYScZS4Lcj9z/Jd1D8SF/q/dtpVJppmKBK8eeldf76
+	 FZf+3IxtkPPx2AWbGBL0+4RVZg4WaXPsJayA+3w3JseiKb2b1AQgHQQwshgOs9xKC
+	 f8+Btl+HRaeMycdhf8t7uLaBfP6QzWpFjqf1ggb+5lfI7oipRvtt/g+iEgjpOxCtx
+	 uMe5fdWUcNPhxqMhJ0MFHHBi32gqAr8Ngb4p4YLawWRHmuEsq+Puw+Khg1ObZSXtY
+	 d0fN9SK8xvVcuBGqxaGjJ6BvetLWVpHnO9k5dLiJsn0g/X4sYFJGg085zCwAFiKwh
+	 tP6iBYKnwhq7HabKcQ==
+X-UI-Sender-Class: 55c96926-9e95-11ee-ae09-1f7a4046a0f6
+Received: from localhost ([69.171.251.113]) by mrelay.perfora.net (mreueus003
+ [74.208.5.2]) with ESMTPSA (Nemesis) id 0Md2qC-1tJOmN1j6Y-00XBek; Wed, 16 Oct
+ 2024 23:01:01 +0200
+From: Jordan Rome <linux@jordanrome.com>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@kernel.org>,
+	Kernel Team <kernel-team@fb.com>
+Subject: [PATCH bpf v2 1/2] bpf: Fix iter/task tid filtering
+Date: Wed, 16 Oct 2024 14:00:47 -0700
+Message-ID: <20241016210048.1213935-1-linux@jordanrome.com>
+X-Mailer: git-send-email 2.43.5
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:7ydAY+kefB0T78wt6G9KaGayILWBCjAICKnImjAEgIOJz+OFaxW
+ rIqZSc/zDr6LeJAzyQ2xtH/yak9Af0vQIRUa2DfA/D+uOMHqDqJoIxJGGY3izK2+HezKNgH
+ OuF7IKylIfd2ZPxB7tqMMp2lYix+jQkGM7wCkAK6rOiyAICDJExuAKVQtSLllbAnB7kGwrZ
+ 1KAQPquVHh1gEtlX44P6Q==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:y9Kwv+fVS+I=;LH1PW+uDlFBk2qzQpcjYLRZK/Gv
+ Z2qdhzLxi7nqnOb6uDwWMFYFNJuCoyaCc6Msy9O5AbZuxo6poa9dVsiY/ojUa6/Ib4E2xE39c
+ yBxpz5dMhJanwxDnsCxW1cc9r2b6WVFte2DNWElRm/DqDeWWkHqQUy2012MiHfYoL1aDKjBBe
+ KS1mPYLIGEZYKgaOdDi7YRAFh8qH3X11nvr6sz3Y8yiY1UEVGe/CtJrHZ6rYgJWVeiA0vg5kt
+ 5jHRZzyXs2rqruQaENoRZ70Fq7xxZrrC4ql7ovZsS2M7mKWTOTGQqWSTf/g6rlYAMVFDSPukK
+ 6ntPDYqQ166UPW2qDZsPaV3glJUU63SMiTPzoO9Tx8ECBgzzWQdF1YTL60D0Yoahxl6eT+oYN
+ WkSMSs/85eWy/vcEp4UZIt4SOBPN8W4BDuRU0cAxbZi0pWKyPnurVvuySB7NIJIspAt4VI5xS
+ Hek5t9XIrI7czZaqGpBhobP0AMHi857nKuPT+NlTEPekEMLlyieo9Py7+sLaeSOFEPPCu0oPw
+ hRysRJc7JiDcsUr/hL8TZ2skkHqRKyWHJjoXFdhxRWRiGXFn/l48EYDh9VEiSSLNcAxOx7j5N
+ HI8VTITrRvrMhbKuR4WrZLa1WIi53xPeQoEUL8877TEjxsp5kmN3Vl8ei1jKgq0CAZHziMiMq
+ OffnTdcDy14kvhslGCchLyRK8gPHVy0lfCGBk2lJqdc5qEbxHpnp0aArKcb9jvSEfJZtrw4eJ
+ E8tqF8hQXWb3LMiJnUySW5UQf8xeHQpnw==
 
-On Wed, 16 Oct 2024 15:24:22 +0300
-Mike Rapoport <rppt@kernel.org> wrote:
+In userspace, you can add a tid filter by setting
+the "task.tid" field for "bpf_iter_link_info".
+However, `get_pid_task` when called for the
+`BPF_TASK_ITER_TID` type should have been using
+`PIDTYPE_PID` (tid) instead of `PIDTYPE_TGID` (pid).
 
-> diff --git a/arch/x86/kernel/ftrace.c b/arch/x86/kernel/ftrace.c
-> index 8da0e66ca22d..b498897b213c 100644
-> --- a/arch/x86/kernel/ftrace.c
-> +++ b/arch/x86/kernel/ftrace.c
-> @@ -118,10 +118,13 @@ ftrace_modify_code_direct(unsigned long ip, const char *old_code,
->  		return ret;
->  
->  	/* replace the text with the new text */
-> -	if (ftrace_poke_late)
-> +	if (ftrace_poke_late) {
->  		text_poke_queue((void *)ip, new_code, MCOUNT_INSN_SIZE, NULL);
-> -	else
-> -		text_poke_early((void *)ip, new_code, MCOUNT_INSN_SIZE);
-> +	} else {
-> +		mutex_lock(&text_mutex);
-> +		text_poke((void *)ip, new_code, MCOUNT_INSN_SIZE);
-> +		mutex_unlock(&text_mutex);
-> +	}
->  	return 0;
->  }
+Fixes: f0d74c4da1f0 ("bpf: Parameterize task iterators.")
+Signed-off-by: Jordan Rome <linux@jordanrome.com>
+=2D--
+ kernel/bpf/task_iter.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-So this slows down the boot by over 30ms. That may not sound like much, but
-we care very much about boot times. This code is serialized with boot and
-runs whenever ftrace is configured in the kernel. The way I measured this,
-was that I added:
+diff --git a/kernel/bpf/task_iter.c b/kernel/bpf/task_iter.c
+index 02aa9db8d796..5af9e130e500 100644
+=2D-- a/kernel/bpf/task_iter.c
++++ b/kernel/bpf/task_iter.c
+@@ -99,7 +99,7 @@ static struct task_struct *task_seq_get_next(struct bpf_=
+iter_seq_task_common *co
+ 		rcu_read_lock();
+ 		pid =3D find_pid_ns(common->pid, common->ns);
+ 		if (pid) {
+-			task =3D get_pid_task(pid, PIDTYPE_TGID);
++			task =3D get_pid_task(pid, PIDTYPE_PID);
+ 			*tid =3D common->pid;
+ 		}
+ 		rcu_read_unlock();
+=2D-
+2.43.5
 
-diff --git a/arch/x86/kernel/ftrace.c b/arch/x86/kernel/ftrace.c
-index 4dd0ad6c94d6..b72bb9943140 100644
---- a/arch/x86/kernel/ftrace.c
-+++ b/arch/x86/kernel/ftrace.c
-@@ -104,6 +104,8 @@ static int ftrace_verify_code(unsigned long ip, const char *old_code)
- 	return 0;
- }
- 
-+u64 sdr_total;
-+
- /*
-  * Marked __ref because it calls text_poke_early() which is .init.text. That is
-  * ok because that call will happen early, during boot, when .init sections are
-@@ -114,6 +116,8 @@ ftrace_modify_code_direct(unsigned long ip, const char *old_code,
- 			  const char *new_code)
- {
- 	int ret = ftrace_verify_code(ip, old_code);
-+	u64 start, stop;
-+
- 	if (ret)
- 		return ret;
- 
-@@ -121,9 +125,12 @@ ftrace_modify_code_direct(unsigned long ip, const char *old_code,
- 	if (ftrace_poke_late) {
- 		text_poke_queue((void *)ip, new_code, MCOUNT_INSN_SIZE, NULL);
- 	} else {
-+		start = trace_clock_local();
- 		mutex_lock(&text_mutex);
- 		text_poke((void *)ip, new_code, MCOUNT_INSN_SIZE);
- 		mutex_unlock(&text_mutex);
-+		stop = trace_clock_local();
-+		sdr_total += stop - start;
- 	}
- 	return 0;
- }
-diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
-index c01375adc471..93284557144d 100644
---- a/kernel/trace/trace.c
-+++ b/kernel/trace/trace.c
-@@ -10738,6 +10738,11 @@ __init static int tracer_alloc_buffers(void)
- 
- 	register_snapshot_cmd();
- 
-+	{
-+		extern u64 sdr_total;
-+		printk("SDR TOTAL: %lld\n", sdr_total);
-+	}
-+
- 	test_can_verify();
- 
- 	return 0;
-
-
-And did the same before this patch. I ran it three times and have the
-following numbers (all in nanoseconds):
-
-before: 11356637	11863526	11507750
- after: 43978750	41293162	42741067
-
-Before this patch, the total updates took 11ms. After the patch it takes
-around 42ms. This is because we are patching 59 thousand sites with this.
-
-# dmesg |grep ftrace
-[    1.620569] ftrace: allocating 59475 entries in 233 pages
-[    1.667178] ftrace: allocated 233 pages with 5 groups
-
-
-If this is only needed for module load, can we at least still use the
-text_poke_early() at boot up?
-
- 	if (ftrace_poke_late) {
- 		text_poke_queue((void *)ip, new_code, MCOUNT_INSN_SIZE, NULL);
-	} else if (system_state == SYSTEM_BOOTING) {
-		text_poke_early((void *)ip, new_code, MCOUNT_INSN_SIZE);
- 	} else {
- 		mutex_lock(&text_mutex);
- 		text_poke((void *)ip, new_code, MCOUNT_INSN_SIZE);
- 		mutex_unlock(&text_mutex);
- 	}
-
-?
-
-The above if statement looks to slow things down just slightly, but only by
-2ms, which is more reasonable.
-
--- Steve
