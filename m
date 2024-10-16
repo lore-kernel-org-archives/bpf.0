@@ -1,36 +1,37 @@
 Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21715209F25
-	for <bpf@vger.kernel.org>; Wed, 16 Oct 2024 13:49:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AD14209F29
+	for <bpf@vger.kernel.org>; Wed, 16 Oct 2024 13:49:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729086560; cv=none; b=oGJNIChtkKoqcyXycBx5PtJi1FLG/LE8cScE1EQYMk516Yp722KwUG3aAJ8b8omU5yWzymjv0ykVeUYjk/ixzPZns9LhbcSKP3jwQpnxh0aCKE8N+kTVtRF48ZtqOjr2YLwzWWmWgv8FdnbzItsJX2uwvOCo1gqDZvsxGOwNbGQ=
+	t=1729086560; cv=none; b=ujE0urdYSYfeg2y7dCKT/knkAcAD1iIk1Uj9Xfvhqad/40xsIG0dQHQCAP2unfIhhKApbMcXI1NmLx4JM1omVPr1epmbTyIdLdE5TZtRcR8zUllizepi2plFCtaxFH9wYfUP/xerPqHgpXzKWzos/U1m0L/V0Ulgcfttgbzv0E4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1729086560; c=relaxed/simple;
-	bh=BkumHPdp3xpkvtFTHp4VE7s72zNQZuyK+PYf3+Lj6bk=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=u0HKps5mXodQFhCP7MldWUl0YMt+S+CFtaKM+D9ZEKuJmAucE+/f/DWOT7VNQeO8nUGvgB1cfXKPRQMT93UjbzrzwvK5UEovUARsFqG+0ws43jpJO+WDr1vT+H5iOIki2u0erejfxN+QqWSQAKgJwI63XYZ5dID2VPjBxNykl5g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=MwvxH7cc; arc=none smtp.client-ip=213.133.104.62
+	bh=4mcRfEKKjvKVrdMJBI3OfUzuQSGMcXsxDWfGYMSFCuA=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=R8b2JIxTvWWhP+50zXnVeP3UQ2aIpNUC4rlD3sF92fqhm+TSleHbNbjPozaYLvTZajDdy7D0BOTNWYCiaR6kaGeOzVsmelRJM+sers15gEtjo/H9vFJ492tIBGFODzTBuNiPt2GFzcqTCjK0173P5aeTqAz/D24lrH+jL1tRHR8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=HihfryH6; arc=none smtp.client-ip=213.133.104.62
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="MwvxH7cc"
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="HihfryH6"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:MIME-Version:
-	Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:In-Reply-To:References;
-	bh=uCHOh/Z0G3t+pSGtFSIJ4dFiSuqSvVnpqGofYrFhSWw=; b=MwvxH7ccPpBcxenWpLO1PlAiF6
-	FKSAkvTpCXNWWjoMLBY9V/3B66IONZ2lWinds3kkREDEmUt7t4Be4vk90W6H79t03eIMOwFIomoS8
-	NBVEwIiqwD7no0ES+lybj8rfGrfwoo3K41gn4aGsFseZemBkHC3ViJmxrgkh3NZvaNodkICmZPeez
-	7BTEhgIkCsj5gxDuYwDuys/0dnGHiGwBU1R1nUIraiWKkhhWT9FQa/Yi3Zro6sVVhI1gFyrTyC03i
-	kh0i5PXW8TVfh+0MIo3ZaGX5cdriK0XFzsEV0fZo0BiziaB6ALZyowZkyr4RpAlc513h72PIwUYbv
-	rSFNfEVA==;
+	References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
+	Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=UNgkOOrzAVujuxVwkOKKekCbLp6Z7Q9WsIeGa3Wo6nI=; b=HihfryH6SzDO06+s4dKb7rpUoX
+	2MKbcuPgkABo+Gx6rGeoAqkU2Vbkux4T4JUcom83xV+M+XBUo+vkqBu8vop5pmAQMgnIVV4l/p3nd
+	o27qnB9Js5DAsbANhZbZVV+//zru3FipT4Le1+AK1A6/jOjpi/wFG1hYGecTE9370E3zfAdtlcua2
+	l5GNQFlAAmVDkLc9+9xJNcPBZec7A3jkIc54dWB04gsNVHFTz+pMkz8GFmUy2VyxfFTVFQ+Y1qbGI
+	akiJYSlaL/6+xuDf0LsQPC3W//QJ1fmlyLTGANDjz7pj5mxGtvx/vz4s8DkSfYgsIwYm7JAE7r/zb
+	2q3q7f+Q==;
 Received: from 44.248.197.178.dynamic.cust.swisscom.net ([178.197.248.44] helo=localhost)
 	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.94.2)
 	(envelope-from <daniel@iogearbox.net>)
-	id 1t14Oo-000Nf5-3U; Wed, 16 Oct 2024 15:49:14 +0200
+	id 1t14Op-000NfR-B6; Wed, 16 Oct 2024 15:49:15 +0200
 From: Daniel Borkmann <daniel@iogearbox.net>
 To: bpf@vger.kernel.org
 Cc: nathaniel.theis@nccgroup.com,
@@ -38,10 +39,12 @@ Cc: nathaniel.theis@nccgroup.com,
 	eddyz87@gmail.com,
 	andrii@kernel.org,
 	john.fastabend@gmail.com
-Subject: [PATCH bpf 1/3] bpf: Fix incorrect delta propagation between linked registers
-Date: Wed, 16 Oct 2024 15:49:11 +0200
-Message-Id: <20241016134913.32249-1-daniel@iogearbox.net>
+Subject: [PATCH bpf 3/3] selftests/bpf: Add test case for delta propagation
+Date: Wed, 16 Oct 2024 15:49:13 +0200
+Message-Id: <20241016134913.32249-3-daniel@iogearbox.net>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20241016134913.32249-1-daniel@iogearbox.net>
+References: <20241016134913.32249-1-daniel@iogearbox.net>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -52,104 +55,91 @@ Content-Transfer-Encoding: 8bit
 X-Authenticated-Sender: daniel@iogearbox.net
 X-Virus-Scanned: Clear (ClamAV 0.103.10/27429/Wed Oct 16 10:34:11 2024)
 
-Nathaniel reported a bug in the linked scalar delta tracking, which can lead
-to accepting a program with OOB access. The specific code is related to the
-sync_linked_regs() function and the BPF_ADD_CONST flag, which signifies a
-constant offset between two scalar registers tracked by the same register id.
+Add a small BPF verifier test case to ensure that alu32 additions to
+registers are not subject to linked scalar delta tracking.
 
-The verifier attempts to track "similar" scalars in order to propagate bounds
-information learned about one scalar to others. For instance, if r1 and r2
-are known to contain the same value, then upon encountering 'if (r1 != 0x1234)
-goto xyz', not only does it know that r1 is equal to 0x1234 on the path where
-that conditional jump is not taken, it also knows that r2 is.
+  # ./vmtest.sh -- ./test_progs -t verifier_linked_scalars
+  [...]
+  ./test_progs -t verifier_linked_scalars
+  [    1.413138] tsc: Refined TSC clocksource calibration: 3407.993 MHz
+  [    1.413524] clocksource: tsc: mask: 0xffffffffffffffff max_cycles: 0x311fcd52370, max_idle_ns: 440795242006 ns
+  [    1.414223] clocksource: Switched to clocksource tsc
+  [    1.419640] bpf_testmod: loading out-of-tree module taints kernel.
+  [    1.420025] bpf_testmod: module verification failed: signature and/or required key missing - tainting kernel
+  #500/1   verifier_linked_scalars/scalars: find linked scalars:OK
+  #500     verifier_linked_scalars:OK
+  Summary: 1/1 PASSED, 0 SKIPPED, 0 FAILED
+  [    1.590858] ACPI: PM: Preparing to enter system sleep state S5
+  [    1.591402] reboot: Power down
+  [...]
 
-Additionally, with env->bpf_capable set, the verifier will track scalars
-which should be a constant delta apart (if r1 is known to be one greater than
-r2, then if r1 is known to be equal to 0x1234, r2 must be equal to 0x1233.)
-The code path for the latter in adjust_reg_min_max_vals() is reached when
-processing both 32 and 64-bit addition operations. While adjust_reg_min_max_vals()
-knows whether dst_reg was produced by a 32 or a 64-bit addition (based on the
-alu32 bool), the only information saved in dst_reg is the id of the source
-register (reg->id, or'ed by BPF_ADD_CONST) and the value of the constant
-offset (reg->off).
-
-Later, the function sync_linked_regs() will attempt to use this information
-to propagate bounds information from one register (known_reg) to others,
-meaning, for all R in linked_regs, it copies known_reg range (and possibly
-adjusting delta) into R for the case of R->id == known_reg->id.
-
-For the delta adjustment, meaning, matching reg->id with BPF_ADD_CONST, the
-verifier adjusts the register as reg = known_reg; reg += delta where delta
-is computed as (s32)reg->off - (s32)known_reg->off and placed as a scalar
-into a fake_reg to then simulate the addition of reg += fake_reg. This is
-only correct, however, if the value in reg was created by a 64-bit addition.
-When reg contains the result of a 32-bit addition operation, its upper 32
-bits will always be zero. sync_linked_regs() on the other hand, may cause
-the verifier to believe that the addition between fake_reg and reg overflows
-into those upper bits. For example, if reg was generated by adding the
-constant 1 to known_reg using a 32-bit alu operation, then reg->off is 1
-and known_reg->off is 0. If known_reg is known to be the constant 0xFFFFFFFF,
-sync_linked_regs() will tell the verifier that reg is equal to the constant
-0x100000000. This is incorrect as the actual value of reg will be 0, as the
-32-bit addition will wrap around.
-
-Example:
-
-  0: (b7) r0 = 0;             R0_w=0
-  1: (18) r1 = 0x80000001;    R1_w=0x80000001
-  3: (37) r1 /= 1;            R1_w=scalar()
-  4: (bf) r2 = r1;            R1_w=scalar(id=1) R2_w=scalar(id=1)
-  5: (bf) r4 = r1;            R1_w=scalar(id=1) R4_w=scalar(id=1)
-  6: (04) w2 += 2147483647;   R2_w=scalar(id=1+2147483647,smin=0,smax=umax=0xffffffff,var_off=(0x0; 0xffffffff))
-  7: (04) w4 += 0 ;           R4_w=scalar(id=1+0,smin=0,smax=umax=0xffffffff,var_off=(0x0; 0xffffffff))
-  8: (15) if r2 == 0x0 goto pc+1
- 10: R0=0 R1=0xffffffff80000001 R2=0x7fffffff R4=0xffffffff80000001 R10=fp0
-
-What can be seen here is that r1 is copied to r2 and r4, such that {r1,r2,r4}.id
-are all the same which later lets sync_linked_regs() to be invoked. Then, in
-a next step constants are added with alu32 to r2 and r4, setting their ->off,
-as well as id |= BPF_ADD_CONST. Next, the conditional will bind r2 and
-propagate ranges to its linked registers. The verifier now believes the upper
-32 bits of r4 are r4=0xffffffff80000001, while actually r4=r1=0x80000001.
-
-One approach for a simple fix suitable also for stable is to limit the constant
-delta tracking to only 64-bit alu addition. If necessary at some later point,
-BPF_ADD_CONST could be split into BPF_ADD_CONST64 and BPF_ADD_CONST32 to avoid
-mixing the two under the tradeoff to further complicate sync_linked_regs().
-However, none of the added tests from dedf56d775c0 ("selftests/bpf: Add tests
-for add_const") make this necessary at this point, meaning, BPF CI also passes
-with just limiting tracking to 64-bit alu addition.
-
-Fixes: 98d7ca374ba4 ("bpf: Track delta between "linked" registers.")
-Reported-by: Nathaniel Theis <nathaniel.theis@nccgroup.com>
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
 ---
- kernel/bpf/verifier.c | 11 ++++++-----
- 1 file changed, 6 insertions(+), 5 deletions(-)
+ .../selftests/bpf/prog_tests/verifier.c       |  2 ++
+ .../bpf/progs/verifier_linked_scalars.c       | 34 +++++++++++++++++++
+ 2 files changed, 36 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/progs/verifier_linked_scalars.c
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index a8a0b6e4110e..411ab1b57af4 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -14270,12 +14270,13 @@ static int adjust_reg_min_max_vals(struct bpf_verifier_env *env,
- 	 * r1 += 0x1
- 	 * if r2 < 1000 goto ...
- 	 * use r1 in memory access
--	 * So remember constant delta between r2 and r1 and update r1 after
--	 * 'if' condition.
-+	 * So for 64-bit alu remember constant delta between r2 and r1 and
-+	 * update r1 after 'if' condition.
- 	 */
--	if (env->bpf_capable && BPF_OP(insn->code) == BPF_ADD &&
--	    dst_reg->id && is_reg_const(src_reg, alu32)) {
--		u64 val = reg_const_value(src_reg, alu32);
-+	if (env->bpf_capable &&
-+	    BPF_OP(insn->code) == BPF_ADD && !alu32 &&
-+	    dst_reg->id && is_reg_const(src_reg, false)) {
-+		u64 val = reg_const_value(src_reg, false);
- 
- 		if ((dst_reg->id & BPF_ADD_CONST) ||
- 		    /* prevent overflow in sync_linked_regs() later */
+diff --git a/tools/testing/selftests/bpf/prog_tests/verifier.c b/tools/testing/selftests/bpf/prog_tests/verifier.c
+index e26b5150fc43..5356f26bbb3f 100644
+--- a/tools/testing/selftests/bpf/prog_tests/verifier.c
++++ b/tools/testing/selftests/bpf/prog_tests/verifier.c
+@@ -44,6 +44,7 @@
+ #include "verifier_ld_ind.skel.h"
+ #include "verifier_ldsx.skel.h"
+ #include "verifier_leak_ptr.skel.h"
++#include "verifier_linked_scalars.skel.h"
+ #include "verifier_loops1.skel.h"
+ #include "verifier_lwt.skel.h"
+ #include "verifier_map_in_map.skel.h"
+@@ -170,6 +171,7 @@ void test_verifier_jit_convergence(void)      { RUN(verifier_jit_convergence); }
+ void test_verifier_ld_ind(void)               { RUN(verifier_ld_ind); }
+ void test_verifier_ldsx(void)                  { RUN(verifier_ldsx); }
+ void test_verifier_leak_ptr(void)             { RUN(verifier_leak_ptr); }
++void test_verifier_linked_scalars(void)       { RUN(verifier_linked_scalars); }
+ void test_verifier_loops1(void)               { RUN(verifier_loops1); }
+ void test_verifier_lwt(void)                  { RUN(verifier_lwt); }
+ void test_verifier_map_in_map(void)           { RUN(verifier_map_in_map); }
+diff --git a/tools/testing/selftests/bpf/progs/verifier_linked_scalars.c b/tools/testing/selftests/bpf/progs/verifier_linked_scalars.c
+new file mode 100644
+index 000000000000..8f755d2464cf
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/verifier_linked_scalars.c
+@@ -0,0 +1,34 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#include <linux/bpf.h>
++#include <bpf/bpf_helpers.h>
++#include "bpf_misc.h"
++
++SEC("socket")
++__description("scalars: find linked scalars")
++__failure
++__msg("math between fp pointer and 2147483647 is not allowed")
++__naked void scalars(void)
++{
++	asm volatile ("				\
++	r0 = 0;					\
++	r1 = 0x80000001 ll;			\
++	r1 /= 1;				\
++	r2 = r1;				\
++	r4 = r1;				\
++	w2 += 0x7FFFFFFF;			\
++	w4 += 0;				\
++	if r2 == 0 goto l1;			\
++	exit;					\
++l1:						\
++	r4 >>= 63;				\
++	r3 = 1;					\
++	r3 -= r4;				\
++	r3 *= 0x7FFFFFFF;			\
++	r3 += r10;				\
++	*(u8*)(r3 - 1) = r0;			\
++	exit;					\
++"	::: __clobber_all);
++}
++
++char _license[] SEC("license") = "GPL";
 -- 
 2.43.0
 
