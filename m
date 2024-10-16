@@ -1,150 +1,509 @@
-Received: from mout.perfora.net (mout.perfora.net [74.208.4.197])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B18A1D175F
-	for <bpf@vger.kernel.org>; Wed, 16 Oct 2024 21:01:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.208.4.197
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8499313B298;
+	Wed, 16 Oct 2024 21:16:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729112494; cv=none; b=MLEVS7N0OXIDxGPXF3rIfaGJlaSTGc8B98bJSNUzMi4Q14F86niTIBsWI0ESow9WOh53XxwOR42fgLPERXHJe9vbT+ZnLdOWhJpwPRxYC+tugo0rv97JrwXWWCqZCwFcZWrGTwAemDlhscG6XU/S2WuBpdBEsYRnOC93FOTf45o=
+	t=1729113392; cv=none; b=BhmIZTv/cwNc+gwsPo4vF3sBlXOZiszgA7n4IACh9n1z5sHt67cWpb+bXjwPbJoRhdC1SCcNN/dawba7yfgKrOjUdE+WES8ILgq8gIkL0eLBQjRt/gKEBSo63zIeI9s4qFWN7S/yS8FG8jRYFDe0PRC1ouwf7KIfkPp+tcShjwQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729112494; c=relaxed/simple;
-	bh=egoEILchqN2+nW14V8v2e8QWemsaQvSxH+eKjOfE3B0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=CzQuB3289TPcHUAhfSWKtyfhohLqYhPgczz2h7vwEUFqm8toQBtKwj/z/h5cRL4lMwPP2pZY8OU8+ncv6VOU+b3j8M9szedPjq5WFU1LTqdjtqgvOtb+svBjFr05VQ2D28CNmrNFYPGajWWNs4FvYbJup0p6J0urfr8UVebibLk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=jordanrome.com; spf=pass smtp.mailfrom=jordanrome.com; dkim=pass (2048-bit key) header.d=jordanrome.com header.i=linux@jordanrome.com header.b=j9V4jSIQ; arc=none smtp.client-ip=74.208.4.197
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=jordanrome.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=jordanrome.com
+	s=arc-20240116; t=1729113392; c=relaxed/simple;
+	bh=o5cqmyrKpL5t6ZkOnGwlG7q0ciAQv941z5k5kWswV3A=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=M7FE1sA0mgt6YeEWqB4Xeqp8fOwAH8IQqG5iMTTrCUzxwpwcj7jUistO1lcAQyGWNn+jQpA66eyqMk0mFE1RQwnSWLE5cAFIR0kNQyKoAgMr4Qm9F1fx9eNhOHSKU7ELjUcbcVrEIa6tm5H1WSdgfBVDNf0wqdpIstJmZv2tcrE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dZVh3WIz; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=jordanrome.com header.i=linux@jordanrome.com header.b="j9V4jSIQ"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=jordanrome.com;
-	s=s1-ionos; t=1729112466; x=1729717266; i=linux@jordanrome.com;
-	bh=L0jvzN5FIznqHtYde8BnFrwdWYUFqZZtLXEJXLSXtCU=;
-	h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:In-Reply-To:
-	 References:MIME-Version:Content-Transfer-Encoding:cc:
-	 content-transfer-encoding:content-type:date:from:message-id:
-	 mime-version:reply-to:subject:to;
-	b=j9V4jSIQdjLyFkLN5yUkCEt6HKAKZUVfuTwffPK1c1xMNSSkoJKkRkl9Dj9m3GlC
-	 0nh/rKBhtw/ZI/Dl6cW2tXHrVAhjftkCW2Lze+7WmyM5AmbV9USxuhs1NwseMVUTy
-	 kVeRKJWzbyEyd6WAyfkuB35hUOfqKhzgmIucG9TrgFv++meTeWK1SJSd+W3QcBnEV
-	 bhg8GvmGlaZhL2cG218+J2HZJMJZDR6B48L1PrTIvVQv6uxFrVmc7H6hF3pM8qlME
-	 4alKRkAf5l6By1OuVVHW8vM0fXhDRZ/QeLwP93EA1W8orMG1ySKidIWIpULcAes+n
-	 GtT36cIq6iR4Zrdctw==
-X-UI-Sender-Class: 55c96926-9e95-11ee-ae09-1f7a4046a0f6
-Received: from localhost ([69.171.251.113]) by mrelay.perfora.net (mreueus003
- [74.208.5.2]) with ESMTPSA (Nemesis) id 0LufPq-1u0wk53lwm-00xxze; Wed, 16 Oct
- 2024 23:01:06 +0200
-From: Jordan Rome <linux@jordanrome.com>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@kernel.org>,
-	Kernel Team <kernel-team@fb.com>
-Subject: [PATCH bpf v2 2/2] bpf: properly test iter/task tid filtering
-Date: Wed, 16 Oct 2024 14:00:48 -0700
-Message-ID: <20241016210048.1213935-2-linux@jordanrome.com>
-X-Mailer: git-send-email 2.43.5
-In-Reply-To: <20241016210048.1213935-1-linux@jordanrome.com>
-References: <20241016210048.1213935-1-linux@jordanrome.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dZVh3WIz"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99F1AC4CEC5;
+	Wed, 16 Oct 2024 21:16:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1729113392;
+	bh=o5cqmyrKpL5t6ZkOnGwlG7q0ciAQv941z5k5kWswV3A=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=dZVh3WIzw/Sj7Quir9mrXQ92957yKsFMW9xqeJBxzKhzG2XE8U86B9Obb3+jXNfQA
+	 XhwGB+/LhfDS0nmmQ11pgRPW9w7VTknEo5ECDuKeqSI+vBgU61PF565H6HJ6CrUwyu
+	 UghL4PWTrSYHNq2qNgFeAM2NPnaqQt7lAxg84YFAPbdnWS+BClxLKqOgqxioIms7FS
+	 Griz1xigTVutmWODDwXRHB6DOGe3A2hy/Nre3O/r0VjFWCe5lCR+8kYU6ZmSe/esKT
+	 r+mxImSnmi/AiwzWjkwez11Q9Z9ZhDudJLeFi+jQb08pPi8xYCO18KC/QM4fNbPSCZ
+	 Qdxs0in9OtHAw==
+Date: Wed, 16 Oct 2024 14:16:30 -0700
+From: Namhyung Kim <namhyung@kernel.org>
+To: Tengda Wu <wutengda@huaweicloud.com>
+Cc: Peter Zijlstra <peterz@infradead.org>, song@kernel.org,
+	Ingo Molnar <mingo@redhat.com>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
+	Adrian Hunter <adrian.hunter@intel.com>, kan.liang@linux.intel.com,
+	linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org
+Subject: Re: [PATCH -next v4 1/2] perf stat: Support inherit events during
+ fork() for bperf
+Message-ID: <ZxAtLsClDW8x0H_a@google.com>
+References: <20241012023225.151084-1-wutengda@huaweicloud.com>
+ <20241012023225.151084-2-wutengda@huaweicloud.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:oKqS+1ZFkNNoHdnGlUo2rmSsPrM2zb0Kpmr5+l8wwpcM/JIiz7e
- iGk+LpIWChDtdrK0K1HXmRBGwk9SUGSoXXi+hiv4HY3yjmWxLfk79dMOKqjQS6hZRtRbvWs
- rPHmAhNTDQmYfc3xREI2Q4I8ZK4eS8uAVThlgVDCtlhmR4SLcliUpzYDMoBUYUu0/TrBuad
- RV8vsrrJhyqffOIf35D+g==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:F9J7QFOxcew=;R4qY2IPVyX4MLSZytMyOugZU/Rw
- 3ehcmzT11ma4swSO5LO+RzeD0EV9NaCiQqKYbknkRSBQuTcXu2mrFPMW3ynsYLe8OhxJJSm+U
- 2dhkb69xg22nKsbXHtFalXLjMsf9fbg2XiAs8xa7dIgiZSlHAbPcFncmyr1pdB5yZJGp/qfDW
- XNcUlR7nrxaKSBaVY74JqlSZG2oqtgx5XUSzYoobH5x02+y96yZUhYm8CldAx3m1EJ34ye/Wd
- SISeZWLAZjFpsVLlLSGrZUBlzeJqu0hdDnKDE730dPbWuJKoo7wU6pPLQxNPQi+0AWXEQs3ZE
- FlZLIaDZZ0QjnKpbzzx++IXWgl14Fk0jrv409tLzLiRSGnBsE8+I+b9B7FYSeuqIAhdBtHPb0
- O26c0aIums0T/tcVyYrvbvCUBuvoJclcnzLYN90J6HS/KNt3Hou4Lc/C4kng3HlNRpcKcKKvM
- WQgeRqit11Ofooc9KWppSGj7HzHLYgO/RP1II9giQE/vg4p1hAtFSARMXDTyeGKqEYLchlt0N
- UT2JjITcTiN2B5jEde5AIH3LNGtu1EI9j7Zg0oszoz6g9ZrqhthJjJxLfxI3picRBWiRpGRan
- uTcnY5osVdqtkAuDDsCKkjg4//8z9pT6iump8aReXOk5LS8cAUzsjzt6Dq3c6z3hAhJtwjz0L
- 4G+XT6RkYlsYOLwsdizwF2IQJnMkykSNHfqPkESQZj/N/Nhycx/w7LDY6ebXNJTcMRFTZJ/fv
- 6dHgD+F5N70ph+qblZw55feYtOr1CpOnQ==
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20241012023225.151084-2-wutengda@huaweicloud.com>
 
-Previously test_task_tid was setting `linfo.task.tid`
-to `getpid()` which is the same as `gettid()` for the
-parent process. Instead create a new child thread
-and set `linfo.task.tid` to `gettid()` to make sure
-the tid filtering logic is working as expected.
+Hello,
 
-Signed-off-by: Jordan Rome <linux@jordanrome.com>
-=2D--
- .../selftests/bpf/prog_tests/bpf_iter.c       | 27 +++++++++++++++----
- 1 file changed, 22 insertions(+), 5 deletions(-)
+On Sat, Oct 12, 2024 at 02:32:24AM +0000, Tengda Wu wrote:
+> bperf has a nice ability to share PMUs, but it still does not support
+> inherit events during fork(), resulting in some deviations in its stat
+> results compared with perf.
+> 
+> perf stat result:
+> $ ./perf stat -e cycles,instructions -- ./perf test -w sqrtloop
+> 
+>    Performance counter stats for './perf test -w sqrtloop':
+> 
+>        2,316,038,116      cycles
+>        2,859,350,725      instructions
+> 
+>          1.009603637 seconds time elapsed
+> 
+>          1.004196000 seconds user
+>          0.003950000 seconds sys
+> 
+> bperf stat result:
+> $ ./perf stat --bpf-counters -e cycles,instructions -- \
+>       ./perf test -w sqrtloop
+> 
+>    Performance counter stats for './perf test -w sqrtloop':
+> 
+>           18,762,093      cycles
+>           23,487,766      instructions
+> 
+>          1.008913769 seconds time elapsed
+> 
+>          1.003248000 seconds user
+>          0.004069000 seconds sys
+> 
+> In order to support event inheritance, two new bpf programs are added
+> to monitor the fork and exit of tasks respectively. When a task is
+> created, add it to the filter map to enable counting, and reuse the
+> `accum_key` of its parent task to count together with the parent task.
+> When a task exits, remove it from the filter map to disable counting.
+> 
+> After support:
+> $ ./perf stat --bpf-counters -e cycles,instructions -- \
+>       ./perf test -w sqrtloop
+> 
+>  Performance counter stats for './perf test -w sqrtloop':
+> 
+>      2,316,252,189      cycles
+>      2,859,946,547      instructions
+> 
+>        1.009422314 seconds time elapsed
+> 
+>        1.003597000 seconds user
+>        0.004270000 seconds sys
+> 
+> Signed-off-by: Tengda Wu <wutengda@huaweicloud.com>
+> ---
+>  tools/perf/builtin-stat.c                     |  4 +-
+>  tools/perf/util/bpf_counter.c                 | 57 +++++++++---
+>  tools/perf/util/bpf_counter.h                 | 13 ++-
+>  tools/perf/util/bpf_counter_cgroup.c          |  3 +-
+>  tools/perf/util/bpf_skel/bperf_follower.bpf.c | 87 +++++++++++++++++--
+>  tools/perf/util/bpf_skel/bperf_u.h            |  5 ++
+>  6 files changed, 145 insertions(+), 24 deletions(-)
+> 
+> diff --git a/tools/perf/builtin-stat.c b/tools/perf/builtin-stat.c
+> index 3e6b9f216e80..c27b107c1985 100644
+> --- a/tools/perf/builtin-stat.c
+> +++ b/tools/perf/builtin-stat.c
+> @@ -698,6 +698,7 @@ static int __run_perf_stat(int argc, const char **argv, int run_idx)
+>  	char msg[BUFSIZ];
+>  	unsigned long long t0, t1;
+>  	struct evsel *counter;
+> +	struct bpf_stat_opts opts;
+>  	size_t l;
+>  	int status = 0;
+>  	const bool forks = (argc > 0);
+> @@ -725,7 +726,8 @@ static int __run_perf_stat(int argc, const char **argv, int run_idx)
+>  
+>  	evlist__for_each_entry(evsel_list, counter) {
+>  		counter->reset_group = false;
+> -		if (bpf_counter__load(counter, &target)) {
+> +		opts.inherit = !stat_config.no_inherit;
+> +		if (bpf_counter__load(counter, &target, &opts)) {
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_iter.c b/tools/tes=
-ting/selftests/bpf/prog_tests/bpf_iter.c
-index 52e6f7570475..f0a3a9c18e9e 100644
-=2D-- a/tools/testing/selftests/bpf/prog_tests/bpf_iter.c
-+++ b/tools/testing/selftests/bpf/prog_tests/bpf_iter.c
-@@ -226,7 +226,7 @@ static void test_task_common_nocheck(struct bpf_iter_a=
-ttach_opts *opts,
- 	ASSERT_OK(pthread_create(&thread_id, NULL, &do_nothing_wait, NULL),
- 		  "pthread_create");
+Maybe you can just add a boolean member in the struct target.
 
--	skel->bss->tid =3D getpid();
-+	skel->bss->tid =3D gettid();
 
- 	do_dummy_read_opts(skel->progs.dump_task, opts);
+>  			err = -1;
+>  			goto err_out;
+>  		}
+> diff --git a/tools/perf/util/bpf_counter.c b/tools/perf/util/bpf_counter.c
+> index 7a8af60e0f51..00afea6bde63 100644
+> --- a/tools/perf/util/bpf_counter.c
+> +++ b/tools/perf/util/bpf_counter.c
+> @@ -166,7 +166,9 @@ static int bpf_program_profiler_load_one(struct evsel *evsel, u32 prog_id)
+>  	return -1;
+>  }
+>  
+> -static int bpf_program_profiler__load(struct evsel *evsel, struct target *target)
+> +static int bpf_program_profiler__load(struct evsel *evsel,
+> +				      struct target *target,
+> +				      struct bpf_stat_opts *opts __maybe_unused)
+>  {
+>  	char *bpf_str, *bpf_str_, *tok, *saveptr = NULL, *p;
+>  	u32 prog_id;
+> @@ -364,6 +366,7 @@ static int bperf_lock_attr_map(struct target *target)
+>  
+>  static int bperf_check_target(struct evsel *evsel,
+>  			      struct target *target,
+> +			      struct bpf_stat_opts *opts,
+>  			      enum bperf_filter_type *filter_type,
+>  			      __u32 *filter_entry_cnt)
+>  {
+> @@ -383,7 +386,12 @@ static int bperf_check_target(struct evsel *evsel,
+>  		*filter_type = BPERF_FILTER_PID;
+>  		*filter_entry_cnt = perf_thread_map__nr(evsel->core.threads);
+>  	} else if (target->pid || evsel->evlist->workload.pid != -1) {
+> -		*filter_type = BPERF_FILTER_TGID;
+> +		/*
+> +		 * unlike the PID type, the TGID type implicitly enables
+> +		 * event inheritance within a single process.
+> +		 */
+> +		*filter_type = opts->inherit ?
+> +				BPERF_FILTER_TGID : BPERF_FILTER_PID;
 
-@@ -249,25 +249,42 @@ static void test_task_common(struct bpf_iter_attach_=
-opts *opts, int num_unknown,
- 	ASSERT_EQ(num_known_tid, num_known, "check_num_known_tid");
- }
+I'm not sure if it's right.  You should be able to use PID type with
+inheritance.  In this case child processes or threads from the selected
+thread would be counted only.
 
--static void test_task_tid(void)
-+static void *run_test_task_tid(void *arg)
- {
- 	LIBBPF_OPTS(bpf_iter_attach_opts, opts);
- 	union bpf_iter_link_info linfo;
- 	int num_unknown_tid, num_known_tid;
+Thanks,
+Namhyung
 
-+	ASSERT_NEQ(getpid(), gettid(), "check_new_thread_id");
-+
- 	memset(&linfo, 0, sizeof(linfo));
--	linfo.task.tid =3D getpid();
-+	linfo.task.tid =3D gettid();
- 	opts.link_info =3D &linfo;
- 	opts.link_info_len =3D sizeof(linfo);
- 	test_task_common(&opts, 0, 1);
 
- 	linfo.task.tid =3D 0;
- 	linfo.task.pid =3D getpid();
--	test_task_common(&opts, 1, 1);
-+	/* This includes the parent thread, this thread,
-+	 * and the do_nothing_wait thread
-+	 */
-+	test_task_common(&opts, 2, 1);
-
- 	test_task_common_nocheck(NULL, &num_unknown_tid, &num_known_tid);
--	ASSERT_GT(num_unknown_tid, 1, "check_num_unknown_tid");
-+	ASSERT_GT(num_unknown_tid, 2, "check_num_unknown_tid");
- 	ASSERT_EQ(num_known_tid, 1, "check_num_known_tid");
-+
-+	return NULL;
-+}
-+
-+static void test_task_tid(void)
-+{
-+	pthread_t thread_id;
-+
-+	/* Create a new thread so pid and tid aren't the same */
-+	ASSERT_OK(pthread_create(&thread_id, NULL, &run_test_task_tid, NULL),
-+		  "pthread_create");
-+	ASSERT_FALSE(pthread_join(thread_id, NULL), "pthread_join");
- }
-
- static void test_task_pid(void)
-=2D-
-2.43.5
-
+>  		*filter_entry_cnt = perf_thread_map__nr(evsel->core.threads);
+>  	} else {
+>  		pr_err("bpf managed perf events do not yet support these targets.\n");
+> @@ -394,6 +402,7 @@ static int bperf_check_target(struct evsel *evsel,
+>  }
+>  
+>  static	struct perf_cpu_map *all_cpu_map;
+> +static __u32 filter_entry_cnt;
+>  
+>  static int bperf_reload_leader_program(struct evsel *evsel, int attr_map_fd,
+>  				       struct perf_event_attr_map_entry *entry)
+> @@ -444,14 +453,36 @@ static int bperf_reload_leader_program(struct evsel *evsel, int attr_map_fd,
+>  	return err;
+>  }
+>  
+> -static int bperf__load(struct evsel *evsel, struct target *target)
+> +static int bperf_attach_follower_program(struct bperf_follower_bpf *skel,
+> +					 enum bperf_filter_type filter_type,
+> +					 bool inherit)
+> +{
+> +	struct bpf_link *link;
+> +	int err = 0;
+> +
+> +	if ((filter_type == BPERF_FILTER_PID ||
+> +	    filter_type == BPERF_FILTER_TGID) && inherit)
+> +		/* attach all follower bpf progs to enable event inheritance */
+> +		err = bperf_follower_bpf__attach(skel);
+> +	else {
+> +		link = bpf_program__attach(skel->progs.fexit_XXX);
+> +		if (IS_ERR(link))
+> +			err = PTR_ERR(link);
+> +	}
+> +
+> +	return err;
+> +}
+> +
+> +static int bperf__load(struct evsel *evsel, struct target *target,
+> +		       struct bpf_stat_opts *opts)
+>  {
+>  	struct perf_event_attr_map_entry entry = {0xffffffff, 0xffffffff};
+>  	int attr_map_fd, diff_map_fd = -1, err;
+>  	enum bperf_filter_type filter_type;
+> -	__u32 filter_entry_cnt, i;
+> +	__u32 i;
+>  
+> -	if (bperf_check_target(evsel, target, &filter_type, &filter_entry_cnt))
+> +	if (bperf_check_target(evsel, target, opts, &filter_type,
+> +			       &filter_entry_cnt))
+>  		return -1;
+>  
+>  	if (!all_cpu_map) {
+> @@ -529,9 +560,6 @@ static int bperf__load(struct evsel *evsel, struct target *target)
+>  	/* set up reading map */
+>  	bpf_map__set_max_entries(evsel->follower_skel->maps.accum_readings,
+>  				 filter_entry_cnt);
+> -	/* set up follower filter based on target */
+> -	bpf_map__set_max_entries(evsel->follower_skel->maps.filter,
+> -				 filter_entry_cnt);
+>  	err = bperf_follower_bpf__load(evsel->follower_skel);
+>  	if (err) {
+>  		pr_err("Failed to load follower skeleton\n");
+> @@ -543,6 +571,7 @@ static int bperf__load(struct evsel *evsel, struct target *target)
+>  	for (i = 0; i < filter_entry_cnt; i++) {
+>  		int filter_map_fd;
+>  		__u32 key;
+> +		struct bperf_filter_value fval = { i, 0 };
+>  
+>  		if (filter_type == BPERF_FILTER_PID ||
+>  		    filter_type == BPERF_FILTER_TGID)
+> @@ -553,12 +582,13 @@ static int bperf__load(struct evsel *evsel, struct target *target)
+>  			break;
+>  
+>  		filter_map_fd = bpf_map__fd(evsel->follower_skel->maps.filter);
+> -		bpf_map_update_elem(filter_map_fd, &key, &i, BPF_ANY);
+> +		bpf_map_update_elem(filter_map_fd, &key, &fval, BPF_ANY);
+>  	}
+>  
+>  	evsel->follower_skel->bss->type = filter_type;
+>  
+> -	err = bperf_follower_bpf__attach(evsel->follower_skel);
+> +	err = bperf_attach_follower_program(evsel->follower_skel, filter_type,
+> +					    opts->inherit);
+>  
+>  out:
+>  	if (err && evsel->bperf_leader_link_fd >= 0)
+> @@ -623,7 +653,7 @@ static int bperf__read(struct evsel *evsel)
+>  	bperf_sync_counters(evsel);
+>  	reading_map_fd = bpf_map__fd(skel->maps.accum_readings);
+>  
+> -	for (i = 0; i < bpf_map__max_entries(skel->maps.accum_readings); i++) {
+> +	for (i = 0; i < filter_entry_cnt; i++) {
+>  		struct perf_cpu entry;
+>  		__u32 cpu;
+>  
+> @@ -776,7 +806,8 @@ int bpf_counter__install_pe(struct evsel *evsel, int cpu_map_idx, int fd)
+>  	return evsel->bpf_counter_ops->install_pe(evsel, cpu_map_idx, fd);
+>  }
+>  
+> -int bpf_counter__load(struct evsel *evsel, struct target *target)
+> +int bpf_counter__load(struct evsel *evsel, struct target *target,
+> +		      struct bpf_stat_opts *opts)
+>  {
+>  	if (target->bpf_str)
+>  		evsel->bpf_counter_ops = &bpf_program_profiler_ops;
+> @@ -787,7 +818,7 @@ int bpf_counter__load(struct evsel *evsel, struct target *target)
+>  		evsel->bpf_counter_ops = &bperf_ops;
+>  
+>  	if (evsel->bpf_counter_ops)
+> -		return evsel->bpf_counter_ops->load(evsel, target);
+> +		return evsel->bpf_counter_ops->load(evsel, target, opts);
+>  	return 0;
+>  }
+>  
+> diff --git a/tools/perf/util/bpf_counter.h b/tools/perf/util/bpf_counter.h
+> index c6d21c07b14c..70d7869c0cd6 100644
+> --- a/tools/perf/util/bpf_counter.h
+> +++ b/tools/perf/util/bpf_counter.h
+> @@ -15,9 +15,14 @@ struct evsel;
+>  struct target;
+>  struct bpf_counter;
+>  
+> +struct bpf_stat_opts {
+> +	bool inherit;
+> +};
+> +
+>  typedef int (*bpf_counter_evsel_op)(struct evsel *evsel);
+>  typedef int (*bpf_counter_evsel_target_op)(struct evsel *evsel,
+> -					   struct target *target);
+> +					   struct target *target,
+> +					   struct bpf_stat_opts *opts);
+>  typedef int (*bpf_counter_evsel_install_pe_op)(struct evsel *evsel,
+>  					       int cpu_map_idx,
+>  					       int fd);
+> @@ -38,7 +43,8 @@ struct bpf_counter {
+>  
+>  #ifdef HAVE_BPF_SKEL
+>  
+> -int bpf_counter__load(struct evsel *evsel, struct target *target);
+> +int bpf_counter__load(struct evsel *evsel, struct target *target,
+> +		      struct bpf_stat_opts *opts);
+>  int bpf_counter__enable(struct evsel *evsel);
+>  int bpf_counter__disable(struct evsel *evsel);
+>  int bpf_counter__read(struct evsel *evsel);
+> @@ -50,7 +56,8 @@ int bpf_counter__install_pe(struct evsel *evsel, int cpu_map_idx, int fd);
+>  #include <linux/err.h>
+>  
+>  static inline int bpf_counter__load(struct evsel *evsel __maybe_unused,
+> -				    struct target *target __maybe_unused)
+> +				    struct target *target __maybe_unused,
+> +				    struct bpf_stat_opts *opts __maybe_unused)
+>  {
+>  	return 0;
+>  }
+> diff --git a/tools/perf/util/bpf_counter_cgroup.c b/tools/perf/util/bpf_counter_cgroup.c
+> index 6ff42619de12..755f12a6703c 100644
+> --- a/tools/perf/util/bpf_counter_cgroup.c
+> +++ b/tools/perf/util/bpf_counter_cgroup.c
+> @@ -167,7 +167,8 @@ static int bperf_load_program(struct evlist *evlist)
+>  }
+>  
+>  static int bperf_cgrp__load(struct evsel *evsel,
+> -			    struct target *target __maybe_unused)
+> +			    struct target *target __maybe_unused,
+> +			    struct bpf_stat_opts *opts __maybe_unused)
+>  {
+>  	static bool bperf_loaded = false;
+>  
+> diff --git a/tools/perf/util/bpf_skel/bperf_follower.bpf.c b/tools/perf/util/bpf_skel/bperf_follower.bpf.c
+> index f193998530d4..e804b2a9d0a6 100644
+> --- a/tools/perf/util/bpf_skel/bperf_follower.bpf.c
+> +++ b/tools/perf/util/bpf_skel/bperf_follower.bpf.c
+> @@ -5,6 +5,8 @@
+>  #include <bpf/bpf_tracing.h>
+>  #include "bperf_u.h"
+>  
+> +#define MAX_ENTRIES 102400
+> +
+>  struct {
+>  	__uint(type, BPF_MAP_TYPE_PERCPU_ARRAY);
+>  	__uint(key_size, sizeof(__u32));
+> @@ -22,7 +24,9 @@ struct {
+>  struct {
+>  	__uint(type, BPF_MAP_TYPE_HASH);
+>  	__uint(key_size, sizeof(__u32));
+> -	__uint(value_size, sizeof(__u32));
+> +	__uint(value_size, sizeof(struct bperf_filter_value));
+> +	__uint(max_entries, MAX_ENTRIES);
+> +	__uint(map_flags, BPF_F_NO_PREALLOC);
+>  } filter SEC(".maps");
+>  
+>  enum bperf_filter_type type = 0;
+> @@ -33,14 +37,15 @@ int BPF_PROG(fexit_XXX)
+>  {
+>  	struct bpf_perf_event_value *diff_val, *accum_val;
+>  	__u32 filter_key, zero = 0;
+> -	__u32 *accum_key;
+> +	__u32 accum_key;
+> +	struct bperf_filter_value *fval;
+>  
+>  	if (!enabled)
+>  		return 0;
+>  
+>  	switch (type) {
+>  	case BPERF_FILTER_GLOBAL:
+> -		accum_key = &zero;
+> +		accum_key = zero;
+>  		goto do_add;
+>  	case BPERF_FILTER_CPU:
+>  		filter_key = bpf_get_smp_processor_id();
+> @@ -55,16 +60,20 @@ int BPF_PROG(fexit_XXX)
+>  		return 0;
+>  	}
+>  
+> -	accum_key = bpf_map_lookup_elem(&filter, &filter_key);
+> -	if (!accum_key)
+> +	fval = bpf_map_lookup_elem(&filter, &filter_key);
+> +	if (!fval)
+>  		return 0;
+>  
+> +	accum_key = fval->accum_key;
+> +	if (fval->exited)
+> +		bpf_map_delete_elem(&filter, &filter_key);
+> +
+>  do_add:
+>  	diff_val = bpf_map_lookup_elem(&diff_readings, &zero);
+>  	if (!diff_val)
+>  		return 0;
+>  
+> -	accum_val = bpf_map_lookup_elem(&accum_readings, accum_key);
+> +	accum_val = bpf_map_lookup_elem(&accum_readings, &accum_key);
+>  	if (!accum_val)
+>  		return 0;
+>  
+> @@ -75,4 +84,70 @@ int BPF_PROG(fexit_XXX)
+>  	return 0;
+>  }
+>  
+> +/* The program is only used for PID or TGID filter types. */
+> +SEC("tp_btf/task_newtask")
+> +int BPF_PROG(on_newtask, struct task_struct *task, __u64 clone_flags)
+> +{
+> +	__u32 parent_key, child_key;
+> +	struct bperf_filter_value *parent_fval;
+> +	struct bperf_filter_value child_fval = { 0 };
+> +
+> +	if (!enabled)
+> +		return 0;
+> +
+> +	switch (type) {
+> +	case BPERF_FILTER_PID:
+> +		parent_key = bpf_get_current_pid_tgid() & 0xffffffff;
+> +		child_key = task->pid;
+> +		break;
+> +	case BPERF_FILTER_TGID:
+> +		parent_key = bpf_get_current_pid_tgid() >> 32;
+> +		child_key = task->tgid;
+> +		if (child_key == parent_key)
+> +			return 0;
+> +		break;
+> +	default:
+> +		return 0;
+> +	}
+> +
+> +	/* Check if the current task is one of the target tasks to be counted */
+> +	parent_fval = bpf_map_lookup_elem(&filter, &parent_key);
+> +	if (!parent_fval)
+> +		return 0;
+> +
+> +	/* Start counting for the new task by adding it into filter map,
+> +	 * inherit the accum key of its parent task so that they can be
+> +	 * counted together.
+> +	 */
+> +	child_fval.accum_key = parent_fval->accum_key;
+> +	child_fval.exited = 0;
+> +	bpf_map_update_elem(&filter, &child_key, &child_fval, BPF_NOEXIST);
+> +
+> +	return 0;
+> +}
+> +
+> +/* The program is only used for PID or TGID filter types. */
+> +SEC("tp_btf/sched_process_exit")
+> +int BPF_PROG(on_exittask, struct task_struct *task)
+> +{
+> +	__u32 pid;
+> +	struct bperf_filter_value *fval;
+> +
+> +	if (!enabled)
+> +		return 0;
+> +
+> +	/* Stop counting for this task by removing it from filter map.
+> +	 * For TGID type, if the pid can be found in the map, it means that
+> +	 * this pid belongs to the leader task. After the task exits, the
+> +	 * tgid of its child tasks (if any) will be 1, so the pid can be
+> +	 * safely removed.
+> +	 */
+> +	pid = task->pid;
+> +	fval = bpf_map_lookup_elem(&filter, &pid);
+> +	if (fval)
+> +		fval->exited = 1;
+> +
+> +	return 0;
+> +}
+> +
+>  char LICENSE[] SEC("license") = "Dual BSD/GPL";
+> diff --git a/tools/perf/util/bpf_skel/bperf_u.h b/tools/perf/util/bpf_skel/bperf_u.h
+> index 1ce0c2c905c1..4a4a753980be 100644
+> --- a/tools/perf/util/bpf_skel/bperf_u.h
+> +++ b/tools/perf/util/bpf_skel/bperf_u.h
+> @@ -11,4 +11,9 @@ enum bperf_filter_type {
+>  	BPERF_FILTER_TGID,
+>  };
+>  
+> +struct bperf_filter_value {
+> +	__u32 accum_key;
+> +	__u8 exited;
+> +};
+> +
+>  #endif /* __BPERF_STAT_U_H */
+> -- 
+> 2.34.1
+> 
