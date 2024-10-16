@@ -1,193 +1,150 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C1FD20821C;
-	Wed, 16 Oct 2024 12:27:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7192E208D88;
+	Wed, 16 Oct 2024 13:08:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729081625; cv=none; b=s38+MPhnutUqUtm0FqgK7HuElUjrN3z/XJYpnGkenQMOPVAb+8cucCTVvG2oV34ixVp9h6FD1LdHM++3A7+PGdkwlnQjodM/5lOpcrrM4CI6tTnUVzqtsvdzpS9wNf0WYeM4DK8b7FJYVmwsLyjPAuskVBXjgULupFYEp+J04ME=
+	t=1729084125; cv=none; b=ARI3kgF1HEjryEw8Q7bqZjhC6h3gEnyBLt3DwE05ODcuVk4dEHfI1g/MNvs+xLJ36H4edEMFINgRsU9ua3yVDJhlJh8xxRhUiPmNYgKuSzQtOTsGKaBCx8MGohAYbMOZV7qFTSCJzyBynObE3hadW1s7c+P3wWo2odJltO+UDNo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729081625; c=relaxed/simple;
-	bh=eY6kLN8OlN+AhPSjfqE9l5XEI+8YBmb961qfGDylvwo=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=AsXymXiubOq2IXvnyu0Yr9ixv0wQBG5QA74AwF064eBSsVSagv3o/B/N/i8zUZN+ztAOY2SNdNuXtQO7boiCqt0izGETpatR+l3wTHFsr4fcJCOEWD2FG1khESIXBR34hzAbsR2cjO+P5BvGN3HrMhlayBnoNyIiE8OiIYp8CZw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ewgSS7JQ; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ewgSS7JQ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4677BC4CECF;
-	Wed, 16 Oct 2024 12:26:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1729081624;
-	bh=eY6kLN8OlN+AhPSjfqE9l5XEI+8YBmb961qfGDylvwo=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=ewgSS7JQnctq7Hgrv3uuVnVef5NJ6/W1nB36pkS9n4SMtyIyVrElKtKyFF1q0jkpP
-	 EsFcTPX0SKB8iugJZ8fG/3GbaKQ9JTTxiSf0x8Je0VGHSki/f8KCPFSVhlw3IAbCgq
-	 dHZxxLb3XDQt5YWY63oWKwfSJfIRrZ4ETnxR7W4suuZEwzrS9kg5Y5qEjXIsmjEAIc
-	 d+qNLfS/dkDTekE3774d/xn4huY0MjrfXRLRM5fT0pICnGA4BMmSBqBpOwDvhxDH7h
-	 lEAtUAvDJvuqN4dGETbbq15U4XHTm20JcFbizm6eRWYoC4wDxNk9mafVHZRkNrpKww
-	 GhffryNbJ3RBQ==
-From: Mike Rapoport <rppt@kernel.org>
-To: Andrew Morton <akpm@linux-foundation.org>,
-	Luis Chamberlain <mcgrof@kernel.org>
-Cc: Andreas Larsson <andreas@gaisler.com>,
-	Andy Lutomirski <luto@kernel.org>,
-	Ard Biesheuvel <ardb@kernel.org>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Borislav Petkov <bp@alien8.de>,
-	Brian Cain <bcain@quicinc.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Christoph Hellwig <hch@infradead.org>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Dinh Nguyen <dinguyen@kernel.org>,
-	Geert Uytterhoeven <geert@linux-m68k.org>,
-	Guo Ren <guoren@kernel.org>,
-	Helge Deller <deller@gmx.de>,
-	Huacai Chen <chenhuacai@kernel.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Johannes Berg <johannes@sipsolutions.net>,
-	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-	Kent Overstreet <kent.overstreet@linux.dev>,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Matt Turner <mattst88@gmail.com>,
-	Max Filippov <jcmvbkbc@gmail.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Michal Simek <monstr@monstr.eu>,
-	Mike Rapoport <rppt@kernel.org>,
-	Oleg Nesterov <oleg@redhat.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Richard Weinberger <richard@nod.at>,
-	Russell King <linux@armlinux.org.uk>,
-	Song Liu <song@kernel.org>,
-	Stafford Horne <shorne@gmail.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Uladzislau Rezki <urezki@gmail.com>,
-	Vineet Gupta <vgupta@kernel.org>,
-	Will Deacon <will@kernel.org>,
-	bpf@vger.kernel.org,
-	linux-alpha@vger.kernel.org,
-	linux-arch@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-csky@vger.kernel.org,
-	linux-hexagon@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-m68k@lists.linux-m68k.org,
-	linux-mips@vger.kernel.org,
-	linux-mm@kvack.org,
-	linux-modules@vger.kernel.org,
-	linux-openrisc@vger.kernel.org,
-	linux-parisc@vger.kernel.org,
-	linux-riscv@lists.infradead.org,
-	linux-sh@vger.kernel.org,
-	linux-snps-arc@lists.infradead.org,
-	linux-trace-kernel@vger.kernel.org,
-	linux-um@lists.infradead.org,
-	linuxppc-dev@lists.ozlabs.org,
-	loongarch@lists.linux.dev,
-	sparclinux@vger.kernel.org,
-	x86@kernel.org
-Subject: [PATCH v6 8/8] x86/module: enable ROX caches for module text on 64 bit
-Date: Wed, 16 Oct 2024 15:24:24 +0300
-Message-ID: <20241016122424.1655560-9-rppt@kernel.org>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20241016122424.1655560-1-rppt@kernel.org>
-References: <20241016122424.1655560-1-rppt@kernel.org>
+	s=arc-20240116; t=1729084125; c=relaxed/simple;
+	bh=p6qrzMsv92J2BKqZn/+oJpMYE2tiMW03Q9j+yCiO0f4=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=Uudo1FJj+8nnIAX83xXlROHxK1NmOxDcEcBqNbx18i/VA/CPqsDqyYcHz8saq6MMXyHTSKeSkKOYXuHAvrzM/tuMt/ukne15fQkicFv9Q2FVeMtGgbcQWp0Xm7q2lumT5hcysH9ww481bvFmMLq4Kqc+Nm6/eZOi/2u7B4BaaZk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.18.186.29])
+	by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4XT9kL507yz9v7NL;
+	Wed, 16 Oct 2024 20:48:26 +0800 (CST)
+Received: from mail02.huawei.com (unknown [7.182.16.27])
+	by mail.maildlp.com (Postfix) with ESMTP id 4A5EA14075E;
+	Wed, 16 Oct 2024 21:08:28 +0800 (CST)
+Received: from [127.0.0.1] (unknown [10.204.63.22])
+	by APP2 (Coremail) with SMTP id GxC2BwAniMjDug9nyd39Ag--.38782S2;
+	Wed, 16 Oct 2024 14:08:27 +0100 (CET)
+Message-ID: <33fefedfbdc44ea9c58a14030d58bff20b2c7d86.camel@huaweicloud.com>
+Subject: Re: [PATCH 2/3] ima: Ensure lock is held when setting iint pointer
+ in inode security blob
+From: Roberto Sassu <roberto.sassu@huaweicloud.com>
+To: Mimi Zohar <zohar@linux.ibm.com>, Paul Moore <paul@paul-moore.com>
+Cc: dmitry.kasatkin@gmail.com, eric.snowberg@oracle.com, jmorris@namei.org, 
+	serge@hallyn.com, linux-integrity@vger.kernel.org, 
+	linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	bpf@vger.kernel.org, ebpqwerty472123@gmail.com, Roberto Sassu
+	 <roberto.sassu@huawei.com>
+Date: Wed, 16 Oct 2024 15:08:16 +0200
+In-Reply-To: <3ab95195af7db9d2bd482f46a69305f2f386cc32.camel@huaweicloud.com>
+References: <20241008165732.2603647-1-roberto.sassu@huaweicloud.com>
+	 <20241008165732.2603647-2-roberto.sassu@huaweicloud.com>
+	 <CAHC9VhRkMwLqVFfWMvMOJ6x4UNUK=C_cMVW7Op9icz28MMDYdQ@mail.gmail.com>
+	 <69ed92fde951b20a9b976d48803fe9b5daaa9eea.camel@huaweicloud.com>
+	 <92c528d8848f78869888a746643e1cf2969df62a.camel@linux.ibm.com>
+	 <3ab95195af7db9d2bd482f46a69305f2f386cc32.camel@huaweicloud.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4-0ubuntu2 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:GxC2BwAniMjDug9nyd39Ag--.38782S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxGFW3Zr13Zr1fuw4UKF1ftFb_yoW5XF4fpF
+	Wvg3WUAayUXFW7urs0qasIvrWfK3yfGFWkWw15Jw1DZFyvvr1Yqr48Jr1Uury5Gr4xJw10
+	vr47Ka13uw1qyrJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUvjb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+	AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+	x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+	0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AF
+	wI0_Jw0_GFyl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4
+	xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43
+	MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I
+	0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWU
+	JVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUF1
+	v3UUUUU
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQASBGcPIPkKdAAAsY
 
-From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
+On Mon, 2024-10-14 at 13:45 +0200, Roberto Sassu wrote:
+> On Fri, 2024-10-11 at 15:30 -0400, Mimi Zohar wrote:
+> > On Wed, 2024-10-09 at 17:43 +0200, Roberto Sassu wrote:
+> > > On Wed, 2024-10-09 at 11:41 -0400, Paul Moore wrote:
+> > > > On Tue, Oct 8, 2024 at 12:57=E2=80=AFPM Roberto Sassu
+> > > > <roberto.sassu@huaweicloud.com> wrote:
+> > > > >=20
+> > > > > From: Roberto Sassu <roberto.sassu@huawei.com>
+> > > > >=20
+> > > > > IMA stores a pointer of the ima_iint_cache structure, containing =
+integrity
+> > > > > metadata, in the inode security blob. However, check and assignme=
+nt of this
+> > > > > pointer is not atomic, and it might happen that two tasks both se=
+e that the
+> > > > > iint pointer is NULL and try to set it, causing a memory leak.
+> > > > >=20
+> > > > > Ensure that the iint check and assignment is guarded, by adding a=
+ lockdep
+> > > > > assertion in ima_inode_get().
+> > > > >=20
+> > > > > Consequently, guard the remaining ima_inode_get() calls, in
+> > > > > ima_post_create_tmpfile() and ima_post_path_mknod(), to avoid the=
+ lockdep
+> > > > > warnings.
+> > > > >=20
+> > > > > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> > > > > ---
+> > > > >  security/integrity/ima/ima_iint.c |  5 +++++
+> > > > >  security/integrity/ima/ima_main.c | 14 ++++++++++++--
+> > > > >  2 files changed, 17 insertions(+), 2 deletions(-)
+> > > > >=20
+> > > > > diff --git a/security/integrity/ima/ima_iint.c b/security/integri=
+ty/ima/ima_iint.c
+> > > > > index c176fd0faae7..fe676ccec32f 100644
+> > > > > --- a/security/integrity/ima/ima_iint.c
+> > > > > +++ b/security/integrity/ima/ima_iint.c
+> > > > > @@ -87,8 +87,13 @@ static void ima_iint_free(struct ima_iint_cach=
+e *iint)
+> > > > >   */
+> > > > >  struct ima_iint_cache *ima_inode_get(struct inode *inode)
+> > > > >  {
+> > > > > +       struct ima_iint_cache_lock *iint_lock;
+> > > > >         struct ima_iint_cache *iint;
+> > > > >=20
+> > > > > +       iint_lock =3D ima_inode_security(inode->i_security);
+> > > > > +       if (iint_lock)
+> > > > > +               lockdep_assert_held(&iint_lock->mutex);
+> > > > > +
+> > > > >         iint =3D ima_iint_find(inode);
+> > > > >         if (iint)
+> > > > >                 return iint;
+> > > >=20
+> > > > Can you avoid the ima_iint_find() call here and just do the followi=
+ng?
+> > > >=20
+> > > >   /* not sure if you need to check !iint_lock or not? */
+> > > >   if (!iint_lock)
+> > > >     return NULL;
+> > > >   iint =3D iint_lock->iint;
+> > > >   if (!iint)
+> > > >     return NULL;
+> > >=20
+> > > Yes, I also like it much more.
+> >=20
+> > Yes, testing iint_lock and then iint_lock->iint should be fine, but the=
+ logic
+> > needs to be inverted.  ima_inode_get() should return the existing iint,=
+ if it
+> > exists, or allocate the memory.
+>=20
+> Right, I checked the patches I'm about to send, they do that.
 
-Enable execmem's cache of PMD_SIZE'ed pages mapped as ROX for module
-text allocations on 64 bit.
+I think Paul's point was that we should not create a iint anyway, if
+the inode does not have a security blob. That check I think it is fine
+to keep.
 
-Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
----
- arch/x86/Kconfig   |  1 +
- arch/x86/mm/init.c | 37 ++++++++++++++++++++++++++++++++++++-
- 2 files changed, 37 insertions(+), 1 deletion(-)
-
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index 2852fcd82cbd..ff71d18253ba 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -83,6 +83,7 @@ config X86
- 	select ARCH_HAS_DMA_OPS			if GART_IOMMU || XEN
- 	select ARCH_HAS_EARLY_DEBUG		if KGDB
- 	select ARCH_HAS_ELF_RANDOMIZE
-+	select ARCH_HAS_EXECMEM_ROX		if X86_64
- 	select ARCH_HAS_FAST_MULTIPLIER
- 	select ARCH_HAS_FORTIFY_SOURCE
- 	select ARCH_HAS_GCOV_PROFILE_ALL
-diff --git a/arch/x86/mm/init.c b/arch/x86/mm/init.c
-index eb503f53c319..c2e4f389f47f 100644
---- a/arch/x86/mm/init.c
-+++ b/arch/x86/mm/init.c
-@@ -1053,18 +1053,53 @@ unsigned long arch_max_swapfile_size(void)
- #ifdef CONFIG_EXECMEM
- static struct execmem_info execmem_info __ro_after_init;
- 
-+#ifdef CONFIG_ARCH_HAS_EXECMEM_ROX
-+void execmem_fill_trapping_insns(void *ptr, size_t size, bool writeable)
-+{
-+	/* fill memory with INT3 instructions */
-+	if (writeable)
-+		memset(ptr, INT3_INSN_OPCODE, size);
-+	else
-+		text_poke_set(ptr, INT3_INSN_OPCODE, size);
-+}
-+#endif
-+
- struct execmem_info __init *execmem_arch_setup(void)
- {
- 	unsigned long start, offset = 0;
-+	enum execmem_range_flags flags;
-+	pgprot_t pgprot;
- 
- 	if (kaslr_enabled())
- 		offset = get_random_u32_inclusive(1, 1024) * PAGE_SIZE;
- 
- 	start = MODULES_VADDR + offset;
- 
-+	if (IS_ENABLED(CONFIG_ARCH_HAS_EXECMEM_ROX)) {
-+		pgprot = PAGE_KERNEL_ROX;
-+		flags = EXECMEM_KASAN_SHADOW | EXECMEM_ROX_CACHE;
-+	} else {
-+		pgprot = PAGE_KERNEL;
-+		flags = EXECMEM_KASAN_SHADOW;
-+	}
-+
- 	execmem_info = (struct execmem_info){
- 		.ranges = {
--			[EXECMEM_DEFAULT] = {
-+			[EXECMEM_MODULE_TEXT] = {
-+				.flags	= flags,
-+				.start	= start,
-+				.end	= MODULES_END,
-+				.pgprot	= pgprot,
-+				.alignment = MODULE_ALIGN,
-+			},
-+			[EXECMEM_KPROBES ... EXECMEM_BPF] = {
-+				.flags	= EXECMEM_KASAN_SHADOW,
-+				.start	= start,
-+				.end	= MODULES_END,
-+				.pgprot	= PAGE_KERNEL,
-+				.alignment = MODULE_ALIGN,
-+			},
-+			[EXECMEM_MODULE_DATA] = {
- 				.flags	= EXECMEM_KASAN_SHADOW,
- 				.start	= start,
- 				.end	= MODULES_END,
--- 
-2.43.0
+Roberto
 
