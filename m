@@ -1,211 +1,121 @@
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E82A1DE8A1;
-	Thu, 17 Oct 2024 13:54:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.255
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 888781DDA24;
+	Thu, 17 Oct 2024 14:16:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729173256; cv=none; b=oUuDi+n1luSvke1Pj7XJmyFrCz16IVQF5SuTUeAN2hSERJQuLE9zI8gi73Y9Jl8D8A3rb3txePyOUuky8Qp+9V6IiVEwDEPLqoErM0nJQ1ER4ztqaAfZBQaVQZRjQx6++aRgNJLic2YXq2+WoyavJ9zykC5EZUXiGmdKQucbGWU=
+	t=1729174590; cv=none; b=i2MPPzyruRW5pDzrA8XlU0v5jp15UmIAwMB1RKDeCfjFQmyjG7+dmHXLDTLLtl09IwDbfXveYtDvh/uHWa3lF2PuZMguq7unr3sLf0UkB2ZunzRLmLd5LLSLVd9JXUwJKrIZmv2AS+q+RVgnEg/x5Mmei6tD/EWSx+smmLR9JD8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729173256; c=relaxed/simple;
-	bh=7bUe1e2eOAXKpLfEIAo5nEVTN3A38DDPwDMm4gQM/5o=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=tZzzhTBXEsF4JzREIG2cxlaDrD/JzuQCJ5nNGSrS858KV7wfk+/gFnxpHWN4x7LHHHyseLxcOnbusn0ur4KQ4p4UNTpzPXdv1LTd8Uh9rU2gBG6w5Effu/ixDmw3n9rio7j6Kb8mTCAsYkaAL1f+MNLUO5mj9IwJbm8+DmsMeDQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.255
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.163.48])
-	by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4XTq5M4HnWz1T8g6;
-	Thu, 17 Oct 2024 21:52:07 +0800 (CST)
-Received: from dggpemf500014.china.huawei.com (unknown [7.185.36.43])
-	by mail.maildlp.com (Postfix) with ESMTPS id 8FC8418009B;
-	Thu, 17 Oct 2024 21:54:01 +0800 (CST)
-Received: from huawei.com (10.175.101.6) by dggpemf500014.china.huawei.com
- (7.185.36.43) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Thu, 17 Oct
- 2024 21:54:00 +0800
-From: Muyang Tian <tianmuyang@huawei.com>
-To: <bpf@vger.kernel.org>
-CC: "David S . Miller" <davem@davemloft.net>, Eric Dumazet
-	<edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
-	<pabeni@redhat.com>, Donald Hunter <donald.hunter@gmail.com>,
-	=?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>, Magnus Karlsson
-	<magnus.karlsson@intel.com>, Maciej Fijalkowski
-	<maciej.fijalkowski@intel.com>, Jonathan Lemon <jonathan.lemon@gmail.com>,
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
-	Jesper Dangaard Brouer <hawk@kernel.org>, John Fastabend
-	<john.fastabend@gmail.com>, <netdev@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-	<yanan@huawei.com>, <xiesongyang@huawei.com>, <wuchangye@huawei.com>,
-	<liuxin350@huawei.com>, <zhangmingyi5@huawei.com>, <liwei883@huawei.com>,
-	<tianmuyang@huawei.com>
-Subject: [PATCH 2/3] xdp: Add Rx GSO hint
-Date: Thu, 17 Oct 2024 21:54:29 +0800
-Message-ID: <20241017135430.51655-3-tianmuyang@huawei.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20241017135430.51655-1-tianmuyang@huawei.com>
-References: <20241017135430.51655-1-tianmuyang@huawei.com>
+	s=arc-20240116; t=1729174590; c=relaxed/simple;
+	bh=Gjd358NdN1FC5NF7qKwHKj4oavoCBNSLL7Qo72hpwmg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=GCfuPosRpklPAqmnXPtvY49bzCcrIqcOMUVdKEVuMjZIgcJ7i7k2bWwh6k4IScTfRvG1ZOjgX95wV8fwuvaPE1d9H6+s6Iota2OmWNMCYux49achDELZ7idIRPo4eEVATrIaq7VpO2gCyxezbfE6p/8XL6w9txbzye3GsVgM+2A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iEFDhw4Q; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iEFDhw4Q"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B259DC4CEC3;
+	Thu, 17 Oct 2024 14:16:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1729174590;
+	bh=Gjd358NdN1FC5NF7qKwHKj4oavoCBNSLL7Qo72hpwmg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=iEFDhw4QSPb/UP/iSVNDln8sDERMgECcDFGfbozJO3x3fYWOcTwHktH1Uy3TSilNx
+	 Lfh8vIZGIdwI5sNQMzGUS2LBtAybjWYldLWUX+79J27rI+eg1aKNZVinfvTDVrBVTk
+	 /tdSYD2SpNSTPK32H6D8gLsU92p72IN3v/TZEXSClLKu1rGBaycEzBl1+6MsaZ2qTI
+	 Qaw7iE25YEG7seXmuo0c3PYZ7s5VjuLIAwzjai9VgZl+4R6DrwsNx8p2D6SfvIMJDI
+	 cND52m8HtNrqHT+h1CghLurFWm6PukkfadjY0rg4OwVDfVJid2tG10ClYkZcyDbcG/
+	 2qvzQoztLzu+Q==
+Date: Thu, 17 Oct 2024 15:16:24 +0100
+From: Simon Horman <horms@kernel.org>
+To: Jacob Keller <jacob.e.keller@intel.com>
+Cc: Yue Haibing <yuehaibing@huawei.com>, anthony.l.nguyen@intel.com,
+	przemyslaw.kitszel@intel.com, davem@davemloft.net,
+	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+	ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org,
+	john.fastabend@gmail.com, vedang.patel@intel.com,
+	andre.guedes@intel.com, maciej.fijalkowski@intel.com,
+	jithu.joseph@intel.com, intel-wired-lan@lists.osuosl.org,
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org
+Subject: Re: [Intel-wired-lan] [PATCH net] igc: Fix passing 0 to ERR_PTR in
+ igc_xdp_run_prog()
+Message-ID: <20241017141624.GO1697@kernel.org>
+References: <20241016105310.3500279-1-yuehaibing@huawei.com>
+ <20241016185333.GL2162@kernel.org>
+ <8e4ef7f6-1d7d-45dc-b26e-4d9bc37269de@intel.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpemf500014.china.huawei.com (7.185.36.43)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8e4ef7f6-1d7d-45dc-b26e-4d9bc37269de@intel.com>
 
-This is an implementation of functionality that allows drivers to
-expose GSO information to XDP.
-This information includes:
-  - GSO info, including GSO type and size in skb_shared_info
+On Wed, Oct 16, 2024 at 04:06:34PM -0700, Jacob Keller wrote:
+> 
+> 
+> On 10/16/2024 11:53 AM, Simon Horman wrote:
+> > On Wed, Oct 16, 2024 at 06:53:10PM +0800, Yue Haibing wrote:
+> >> Return NULL instead of passing to ERR_PTR while res is IGC_XDP_PASS,
+> >> which is zero, this fix smatch warnings:
+> >> drivers/net/ethernet/intel/igc/igc_main.c:2533
+> >>  igc_xdp_run_prog() warn: passing zero to 'ERR_PTR'
+> >>
+> >> Fixes: 26575105d6ed ("igc: Add initial XDP support")
+> >> Signed-off-by: Yue Haibing <yuehaibing@huawei.com>
+> >> ---
+> >>  drivers/net/ethernet/intel/igc/igc_main.c | 2 +-
+> >>  1 file changed, 1 insertion(+), 1 deletion(-)
+> >>
+> >> diff --git a/drivers/net/ethernet/intel/igc/igc_main.c b/drivers/net/ethernet/intel/igc/igc_main.c
+> >> index 6e70bca15db1..c3d6e20c0be0 100644
+> >> --- a/drivers/net/ethernet/intel/igc/igc_main.c
+> >> +++ b/drivers/net/ethernet/intel/igc/igc_main.c
+> >> @@ -2530,7 +2530,7 @@ static struct sk_buff *igc_xdp_run_prog(struct igc_adapter *adapter,
+> >>  	res = __igc_xdp_run_prog(adapter, prog, xdp);
+> >>  
+> >>  out:
+> >> -	return ERR_PTR(-res);
+> >> +	return res ? ERR_PTR(-res) : NULL;
+> > 
+> > I think this is what PTR_ERR_OR_ZERO() is for.
+> 
+> Not quite. PTR_ERR_OR_ZERO is intended for the case where you are
+> extracting an error from a pointer. This is converting an error into a
+> pointer.
 
-Signed-off-by: Muyang Tian <tianmuyang@huawei.com>
----
- Documentation/netlink/specs/netdev.yaml      |  4 ++++
- Documentation/networking/xdp-rx-metadata.rst |  3 +++
- include/net/xdp.h                            | 12 ++++++++++++
- include/uapi/linux/netdev.h                  |  3 +++
- net/core/xdp.c                               | 18 ++++++++++++++++++
- tools/include/uapi/linux/netdev.h            |  3 +++
- 6 files changed, 43 insertions(+)
+Yes, silly me.
 
-diff --git a/Documentation/netlink/specs/netdev.yaml b/Documentation/netlink/specs/netdev.yaml
-index e6045b447fc1..5beee7c8e7cf 100644
---- a/Documentation/netlink/specs/netdev.yaml
-+++ b/Documentation/netlink/specs/netdev.yaml
-@@ -62,6 +62,10 @@ definitions:
-         name: csum
-         doc:
-           Device is capable of exposing receive packet checksum via bpf_xdp_metadata_rx_csum().
-+      -
-+        name: gso
-+        doc:
-+          Device is capable of exposing receive packet GSO via bpf_xdp_metadata_rx_gso().
-   -
-     type: flags
-     name: xsk-flags
-diff --git a/Documentation/networking/xdp-rx-metadata.rst b/Documentation/networking/xdp-rx-metadata.rst
-index 6cf273b33ee6..618b9ba606e5 100644
---- a/Documentation/networking/xdp-rx-metadata.rst
-+++ b/Documentation/networking/xdp-rx-metadata.rst
-@@ -31,6 +31,9 @@ metadata is supported, this set will grow:
- .. kernel-doc:: net/core/xdp.c
-    :identifiers: bpf_xdp_metadata_rx_csum
- 
-+.. kernel-doc:: net/core/xdp.c
-+   :identifiers: bpf_xdp_metadata_rx_gso
-+
- An XDP program can use these kfuncs to read the metadata into stack
- variables for its own consumption. Or, to pass the metadata on to other
- consumers, an XDP program can store it into the metadata area carried
-diff --git a/include/net/xdp.h b/include/net/xdp.h
-index 7886658975c4..2e08f54106d3 100644
---- a/include/net/xdp.h
-+++ b/include/net/xdp.h
-@@ -412,6 +412,10 @@ void xdp_attachment_setup(struct xdp_attachment_info *info,
- 			   NETDEV_XDP_RX_METADATA_CSUM, \
- 			   bpf_xdp_metadata_rx_csum, \
- 			   xmo_rx_csum) \
-+	XDP_METADATA_KFUNC(XDP_METADATA_KFUNC_RX_GSO, \
-+			   NETDEV_XDP_RX_METADATA_GSO, \
-+			   bpf_xdp_metadata_rx_gso, \
-+			   xmo_rx_gso) \
- 
- enum xdp_rx_metadata {
- #define XDP_METADATA_KFUNC(name, _, __, ___) name,
-@@ -501,6 +505,13 @@ union xdp_csum_info {
- 	};
- };
- 
-+struct xdp_gso_info {
-+	/* GSO info in skb_shared_info */
-+
-+	unsigned int	gso_type;
-+	unsigned short	gso_size;
-+};
-+
- struct xdp_metadata_ops {
- 	int	(*xmo_rx_timestamp)(const struct xdp_md *ctx, u64 *timestamp);
- 	int	(*xmo_rx_hash)(const struct xdp_md *ctx, u32 *hash,
-@@ -509,6 +520,7 @@ struct xdp_metadata_ops {
- 				   u16 *vlan_tci);
- 	int (*xmo_rx_csum)(const struct xdp_md *ctx, enum xdp_csum_status *csum_status,
- 				   union xdp_csum_info *csum_info);
-+	int	(*xmo_rx_gso)(const struct xdp_md *ctx, struct xdp_gso_info *gso_info);
- };
- 
- #ifdef CONFIG_NET
-diff --git a/include/uapi/linux/netdev.h b/include/uapi/linux/netdev.h
-index a969b25529a3..1e711d6a4c6b 100644
---- a/include/uapi/linux/netdev.h
-+++ b/include/uapi/linux/netdev.h
-@@ -48,12 +48,15 @@ enum netdev_xdp_act {
-  *   packet VLAN tag via bpf_xdp_metadata_rx_vlan_tag().
-  * @NETDEV_XDP_RX_METADATA_CSUM: Device is capable of exposing receive packet
-  *   checksum via bpf_xdp_metadata_rx_csum().
-+ * @NETDEV_XDP_RX_METADATA_GSO: Device is capable of exposing receive packet
-+ *   GSO via bpf_xdp_metadata_rx_gso().
-  */
- enum netdev_xdp_rx_metadata {
- 	NETDEV_XDP_RX_METADATA_TIMESTAMP = 1,
- 	NETDEV_XDP_RX_METADATA_HASH = 2,
- 	NETDEV_XDP_RX_METADATA_VLAN_TAG = 4,
- 	NETDEV_XDP_RX_METADATA_CSUM = 8,
-+	NETDEV_XDP_RX_METADATA_GSO = 16,
- };
- 
- /**
-diff --git a/net/core/xdp.c b/net/core/xdp.c
-index 583e00d3580a..983440e2b3bf 100644
---- a/net/core/xdp.c
-+++ b/net/core/xdp.c
-@@ -789,6 +789,24 @@ __bpf_kfunc int bpf_xdp_metadata_rx_csum(const struct xdp_md *ctx,
- 	return -EOPNOTSUPP;
- }
- 
-+/**
-+ * bpf_xdp_metadata_rx_gso - Read XDP frame GSO info.
-+ * @ctx: XDP context pointer.
-+ * @gso_info: Destination pointer for GSO info.
-+ *
-+ * Info (@gso_info) includes GSO type and size from skb_shared_info.
-+ *
-+ * Return:
-+ * * Returns 0 on success or ``-errno`` on error.
-+ * * ``-EOPNOTSUPP`` : means device driver doesn't implement kfunc
-+ * * ``-ENODATA``    : means no GSO info available for this frame
-+ */
-+__bpf_kfunc int bpf_xdp_metadata_rx_gso(const struct xdp_md *ctx,
-+					 struct xdp_gso_info *gso_info)
-+{
-+	return -EOPNOTSUPP;
-+}
-+
- __bpf_kfunc_end_defs();
- 
- BTF_KFUNCS_START(xdp_metadata_kfunc_ids)
-diff --git a/tools/include/uapi/linux/netdev.h b/tools/include/uapi/linux/netdev.h
-index a969b25529a3..1e711d6a4c6b 100644
---- a/tools/include/uapi/linux/netdev.h
-+++ b/tools/include/uapi/linux/netdev.h
-@@ -48,12 +48,15 @@ enum netdev_xdp_act {
-  *   packet VLAN tag via bpf_xdp_metadata_rx_vlan_tag().
-  * @NETDEV_XDP_RX_METADATA_CSUM: Device is capable of exposing receive packet
-  *   checksum via bpf_xdp_metadata_rx_csum().
-+ * @NETDEV_XDP_RX_METADATA_GSO: Device is capable of exposing receive packet
-+ *   GSO via bpf_xdp_metadata_rx_gso().
-  */
- enum netdev_xdp_rx_metadata {
- 	NETDEV_XDP_RX_METADATA_TIMESTAMP = 1,
- 	NETDEV_XDP_RX_METADATA_HASH = 2,
- 	NETDEV_XDP_RX_METADATA_VLAN_TAG = 4,
- 	NETDEV_XDP_RX_METADATA_CSUM = 8,
-+	NETDEV_XDP_RX_METADATA_GSO = 16,
- };
- 
- /**
+> I am not sure what is really expected here. If res is zero, shouldn't we
+> be returning an skb pointer and not NULL?
+
+Right. I think the whole point of the cited warning is that it highlights
+code that is often buggy. I think I may have tried to address it in the
+past, but if so unsuccessfully. In any case, I do think it would be good to
+dig into this and either fix it properly (or understand why it is correct
+and note that somewhere.
+
+> 
+> Why does igc_xdp_run_prog even return a sk_buff pointer at all? It never
+> actually returns an skb...
+> 
+> This feels like the wrong fix entirely.
+> 
+> __igc_xdp_run_prog returns a custom value for the action, between
+> IGC_XDP_PASS, IGC_XDP_TX, IGC_XDP_REDIRECT, or IGC_XDP_CONSUMED.
+> 
+> This function is called by igc_xdp_run_prog which converts this to a
+> negative error code with the sk_buff pointer type.
+> 
+> All so that we can assign a value to the skb pointer in
+> ice_clean_rx_irq, and check it with IS_ERR
+> 
+> I don't like this fix, I think we could drop the igc_xdp_run_prog
+> wrapper, call __igc_xdp_run_prog directly and check its return value
+> instead of this method of using an error pointer.
+
 -- 
-2.41.0
-
+pw-bot: changes-requested
