@@ -1,107 +1,200 @@
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E7CA17BB3E;
-	Fri, 18 Oct 2024 08:23:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5377D15445B;
+	Fri, 18 Oct 2024 08:26:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729239841; cv=none; b=tSau0wSHsMB6WcXBlvhizXHjB4jgNKWinb5JbWzIS7OUTxE3sCE9BG2+QZx7ltu3jGWfIJuOV51b09TkU2fAWvVl/9YE6aBkqAcsZLGXwTsFDyw/JAG354/LIaPChpJFYlf2EUmcSG5Udngx501BtRepNFDSqsE5W916pQmFc80=
+	t=1729239972; cv=none; b=adlYNHv8js4EliAVqthS9HXIrYBRgp5yf8ItV83tarIz16fvK7o12FG85pDAQrZ6rqeZUKrKhLnAZZXtuFEFvQ7YXoGBKXILxy6HUZHJpe4eYSgwX0GqHRGESBG19HWxUfEY0YYgPuc65JmjbFS5VXomLZonnWc22Ig2hC6oTeA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729239841; c=relaxed/simple;
-	bh=wYkzs8KQZKg41qshv03hYNhGDsBtZdqi5H0RzuG4p10=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=PBJ1LBJkn/F9+JSaDt0f1rmVf2J1FRjidgs8XzX9MjqPnvZw3RSkHVre15AP8vYdOXinOpEgGJYtQuXeIq55Qbpod5/yM6qWAjRmkpsc5l52s1Yz5u3lTYqA1mSpQkXmJcpSl1hxlVgLSwN1c0yqujFAjzX0q4z2fVkmlWmtstA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.93.142])
-	by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4XVHly4NQYz4f3jkL;
-	Fri, 18 Oct 2024 16:23:42 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.128])
-	by mail.maildlp.com (Postfix) with ESMTP id B6C6A1A0359;
-	Fri, 18 Oct 2024 16:23:54 +0800 (CST)
-Received: from hulk-vt.huawei.com (unknown [10.67.174.121])
-	by APP4 (Coremail) with SMTP id gCh0CgBn58MLGxJnOtqxEQ--.35884S3;
-	Fri, 18 Oct 2024 16:23:51 +0800 (CST)
-From: Chen Ridong <chenridong@huaweicloud.com>
-To: tj@kernel.org,
-	lizefan.x@bytedance.com,
-	hannes@cmpxchg.org,
-	longman@redhat.com,
-	mkoutny@suse.com,
-	john.fastabend@gmail.com,
-	roman.gushchin@linux.dev,
-	quanyang.wang@windriver.com,
-	ast@kernel.org
-Cc: cgroups@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org,
-	chenridong@huawei.com,
-	wangweiyang2@huawei.com
-Subject: [PATCH v1 1/2] Revert "cgroup: Fix memory leak caused by missing cgroup_bpf_offline"
-Date: Fri, 18 Oct 2024 08:15:19 +0000
-Message-Id: <20241018081520.694139-2-chenridong@huaweicloud.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20241018081520.694139-1-chenridong@huaweicloud.com>
-References: <20241018081520.694139-1-chenridong@huaweicloud.com>
+	s=arc-20240116; t=1729239972; c=relaxed/simple;
+	bh=9r43XS4+hO3CCCvk2gQSw9q1OhEUnIT0UTONLiSknSA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ZzxIGqj4hngo3UxFyMT7qihs2mZDfdwwUl+mhPFYmzbL7NwHKRF3jAW3HzfYFf50aWErv5kwxzdPAWLhm7723lTqw7UsE4QJK/OsYWYBqAxuGFIUprQRdNeOj3rpBYRf9pDyLAXdsVDcJF2GZGzz7d2UyZHIy5ptVoZS34zqOYM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=Ote0cm8h; arc=none smtp.client-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="Ote0cm8h"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=gJboHb/BMbPaOUcsvW06gXD2GtuhaNwdjAM91CMzA8I=; b=Ote0cm8hlN5HfkRMzMjzlIp4r9
+	Gc9nZqHlik7uUgyLRW0BRJJW/eDOeYEbXgpr2jRwtpdaJ1lJmK8R/dhFAGkPUoqeSl8oCQPy9JczE
+	WUOl1SXPaMKC3ZNRLA+D0HJ4iMV/qPPItcBKarrRAXvaIIrDdKwC1M3VOhhE+rFPF4LcNMJpEduWn
+	43GY9EpcNvxhkcijhRjsGdMyicVLB8dmoJ5Om5p+UaOerCWFdH2A7nVLjKmXpOiCce4Qq8kN+cQdO
+	hjMXX7et8C+0oPj0nAeFExog5/AqmxKRDbgN/NZdwauacFjSG6VWWlLilw9ojFXieqEALZDnGIZJW
+	ZRdbdZ0g==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+	by casper.infradead.org with esmtpsa (Exim 4.98 #2 (Red Hat Linux))
+	id 1t1iJB-0000000Civ3-1t6G;
+	Fri, 18 Oct 2024 08:26:07 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 823773005AF; Fri, 18 Oct 2024 10:26:05 +0200 (CEST)
+Date: Fri, 18 Oct 2024 10:26:05 +0200
+From: Peter Zijlstra <peterz@infradead.org>
+To: Andrii Nakryiko <andrii@kernel.org>
+Cc: linux-trace-kernel@vger.kernel.org, oleg@redhat.com,
+	rostedt@goodmis.org, mhiramat@kernel.org, mingo@kernel.org,
+	bpf@vger.kernel.org, linux-kernel@vger.kernel.org, jolsa@kernel.org,
+	paulmck@kernel.org
+Subject: Re: [PATCH v2 tip/perf/core 1/2] uprobes: allow put_uprobe() from
+ non-sleepable softirq context
+Message-ID: <20241018082605.GD17263@noisy.programming.kicks-ass.net>
+References: <20241008002556.2332835-1-andrii@kernel.org>
+ <20241008002556.2332835-2-andrii@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:gCh0CgBn58MLGxJnOtqxEQ--.35884S3
-X-Coremail-Antispam: 1UD129KBjvJXoW7CryDXrW5Xr4fZF4rur48WFg_yoW8Jw45pF
-	s8u34Fvws5GF1Dta4qya4vgrWFkw4FqryDt3W2qryrAr17JFyjq34v9w1UZr1FyF12kw1r
-	trWYvr4xK34Iy3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUmlb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUGw
-	A2048vs2IY020Ec7CjxVAFwI0_Gr0_Xr1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
-	w2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
-	W8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v2
-	6rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMc
-	Ij6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_
-	Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AFwI
-	0_Jw0_GFyl42xK82IYc2Ij64vIr41l4c8EcI0Ec7CjxVAaw2AFwI0_Jw0_GFyl4I8I3I0E
-	4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGV
-	WUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_
-	Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rV
-	WUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4U
-	JbIYCTnIWIevJa73UjIFyTuYvjxU7S_MUUUUU
-X-CM-SenderInfo: hfkh02xlgr0w46kxt4xhlfz01xgou0bp/
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241008002556.2332835-2-andrii@kernel.org>
 
-From: Chen Ridong <chenridong@huawei.com>
+On Mon, Oct 07, 2024 at 05:25:55PM -0700, Andrii Nakryiko wrote:
+> Currently put_uprobe() might trigger mutex_lock()/mutex_unlock(), which
+> makes it unsuitable to be called from more restricted context like softirq.
 
-This reverts commit 04f8ef5643bcd8bcde25dfdebef998aea480b2ba.
+This is delayed_uprobe_lock, right?
 
-Only cgroup v2 can be attached by cgroup by BPF programs. Revert this
-commit and cgroup_bpf_inherit and cgroup_bpf_offline won't be called in
-cgroup v1. The memory leak issue will be fixed with next patch.
+So can't we do something like so instead? 
 
-Fixes: 04f8ef5643bc ("cgroup: Fix memory leak caused by missing cgroup_bpf_offline")
-Link: https://lore.kernel.org/cgroups/aka2hk5jsel5zomucpwlxsej6iwnfw4qu5jkrmjhyfhesjlfdw@46zxhg5bdnr7/
-Signed-off-by: Chen Ridong <chenridong@huawei.com>
 ---
- kernel/cgroup/cgroup.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ kernel/events/uprobes.c | 40 +++++++++++++++++++++++-----------------
+ 1 file changed, 23 insertions(+), 17 deletions(-)
 
-diff --git a/kernel/cgroup/cgroup.c b/kernel/cgroup/cgroup.c
-index 044c7ba1cc48..30444e096027 100644
---- a/kernel/cgroup/cgroup.c
-+++ b/kernel/cgroup/cgroup.c
-@@ -2314,10 +2314,8 @@ static void cgroup_kill_sb(struct super_block *sb)
- 	 * And don't kill the default root.
- 	 */
- 	if (list_empty(&root->cgrp.self.children) && root != &cgrp_dfl_root &&
--	    !percpu_ref_is_dying(&root->cgrp.self.refcnt)) {
--		cgroup_bpf_offline(&root->cgrp);
-+	    !percpu_ref_is_dying(&root->cgrp.self.refcnt))
- 		percpu_ref_kill(&root->cgrp.self.refcnt);
--	}
- 	cgroup_put(&root->cgrp);
- 	kernfs_kill_sb(sb);
+diff --git a/kernel/events/uprobes.c b/kernel/events/uprobes.c
+index 2a0059464383..d17a9046de35 100644
+--- a/kernel/events/uprobes.c
++++ b/kernel/events/uprobes.c
+@@ -83,9 +83,11 @@ struct delayed_uprobe {
+ 	struct list_head list;
+ 	struct uprobe *uprobe;
+ 	struct mm_struct *mm;
++	struct rcu_head rcu;
+ };
+ 
+-static DEFINE_MUTEX(delayed_uprobe_lock);
++/* XXX global state; use per mm list instead ? */
++static DEFINE_SPINLOCK(delayed_uprobe_lock);
+ static LIST_HEAD(delayed_uprobe_list);
+ 
+ /*
+@@ -289,9 +291,11 @@ delayed_uprobe_check(struct uprobe *uprobe, struct mm_struct *mm)
+ {
+ 	struct delayed_uprobe *du;
+ 
+-	list_for_each_entry(du, &delayed_uprobe_list, list)
++	guard(rcu)();
++	list_for_each_entry_rcu(du, &delayed_uprobe_list, list) {
+ 		if (du->uprobe == uprobe && du->mm == mm)
+ 			return du;
++	}
+ 	return NULL;
  }
--- 
-2.34.1
-
+ 
+@@ -308,7 +312,8 @@ static int delayed_uprobe_add(struct uprobe *uprobe, struct mm_struct *mm)
+ 
+ 	du->uprobe = uprobe;
+ 	du->mm = mm;
+-	list_add(&du->list, &delayed_uprobe_list);
++	scoped_guard(spinlock, &delayed_uprobe_lock)
++		list_add_rcu(&du->list, &delayed_uprobe_list);
+ 	return 0;
+ }
+ 
+@@ -316,19 +321,21 @@ static void delayed_uprobe_delete(struct delayed_uprobe *du)
+ {
+ 	if (WARN_ON(!du))
+ 		return;
+-	list_del(&du->list);
+-	kfree(du);
++	scoped_guard(spinlock, &delayed_uprobe_lock)
++		list_del(&du->list);
++	kfree_rcu(du, rcu);
+ }
+ 
+ static void delayed_uprobe_remove(struct uprobe *uprobe, struct mm_struct *mm)
+ {
+-	struct list_head *pos, *q;
+ 	struct delayed_uprobe *du;
++	struct list_head *pos;
+ 
+ 	if (!uprobe && !mm)
+ 		return;
+ 
+-	list_for_each_safe(pos, q, &delayed_uprobe_list) {
++	guard(rcu)();
++	list_for_each_rcu(pos, &delayed_uprobe_list) {
+ 		du = list_entry(pos, struct delayed_uprobe, list);
+ 
+ 		if (uprobe && du->uprobe != uprobe)
+@@ -434,12 +441,10 @@ static int update_ref_ctr(struct uprobe *uprobe, struct mm_struct *mm,
+ 			return ret;
+ 	}
+ 
+-	mutex_lock(&delayed_uprobe_lock);
+ 	if (d > 0)
+ 		ret = delayed_uprobe_add(uprobe, mm);
+ 	else
+ 		delayed_uprobe_remove(uprobe, mm);
+-	mutex_unlock(&delayed_uprobe_lock);
+ 
+ 	return ret;
+ }
+@@ -645,9 +650,7 @@ static void put_uprobe(struct uprobe *uprobe)
+ 	 * gets called, we don't get a chance to remove uprobe from
+ 	 * delayed_uprobe_list from remove_breakpoint(). Do it here.
+ 	 */
+-	mutex_lock(&delayed_uprobe_lock);
+ 	delayed_uprobe_remove(uprobe, NULL);
+-	mutex_unlock(&delayed_uprobe_lock);
+ 
+ 	call_rcu_tasks_trace(&uprobe->rcu, uprobe_free_rcu);
+ }
+@@ -1350,13 +1353,18 @@ static void build_probe_list(struct inode *inode,
+ /* @vma contains reference counter, not the probed instruction. */
+ static int delayed_ref_ctr_inc(struct vm_area_struct *vma)
+ {
+-	struct list_head *pos, *q;
+ 	struct delayed_uprobe *du;
++	struct list_head *pos;
+ 	unsigned long vaddr;
+ 	int ret = 0, err = 0;
+ 
+-	mutex_lock(&delayed_uprobe_lock);
+-	list_for_each_safe(pos, q, &delayed_uprobe_list) {
++	/*
++	 * delayed_uprobe_list is added to when the ref_ctr is not mapped
++	 * and is consulted (this function) when adding maps. And since
++	 * mmap_lock serializes these, it is not possible miss an entry.
++	 */
++	guard(rcu)();
++	list_for_each_rcu(pos, &delayed_uprobe_list) {
+ 		du = list_entry(pos, struct delayed_uprobe, list);
+ 
+ 		if (du->mm != vma->vm_mm ||
+@@ -1370,9 +1378,9 @@ static int delayed_ref_ctr_inc(struct vm_area_struct *vma)
+ 			if (!err)
+ 				err = ret;
+ 		}
++
+ 		delayed_uprobe_delete(du);
+ 	}
+-	mutex_unlock(&delayed_uprobe_lock);
+ 	return err;
+ }
+ 
+@@ -1596,9 +1604,7 @@ void uprobe_clear_state(struct mm_struct *mm)
+ {
+ 	struct xol_area *area = mm->uprobes_state.xol_area;
+ 
+-	mutex_lock(&delayed_uprobe_lock);
+ 	delayed_uprobe_remove(NULL, mm);
+-	mutex_unlock(&delayed_uprobe_lock);
+ 
+ 	if (!area)
+ 		return;
