@@ -1,64 +1,64 @@
 Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FE922040A3;
-	Fri, 18 Oct 2024 17:37:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A3A120403F;
+	Fri, 18 Oct 2024 17:37:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729273036; cv=none; b=Yv8sVLetnUvtmcXhQIdwT7GkGm3wWJ7L9BReh3Ha2208mYY3zLv/gbBKYI8upl/YaPldIZR8+eU+4lfNx2uxM2mC6ZHLFPYKZv7N08y4uT5O8ArzcFsUraoW/qBlpJCevm+HxE3nu32hhNduPypMelJD4SO3QG1BGVja4lQa+C8=
+	t=1729273045; cv=none; b=TEu3w3mDYtnhhISfvN1Y16DIQUVYZwmaHPNYKwovssAUZn15du+CQqVQyFpQIf1abuUMkyA8ylJ59V4TNVt7WnuhjBaYTHTZg9JOOaTUHqXQn3L5dvWciDhe/BsHADHLdGEoprsXzFXqnqr5DPne5h1wMowXn3dDGFqcl8MLWeI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729273036; c=relaxed/simple;
-	bh=pIR22lqg8pg9hsT1pgKfaYSCLQAG86rJjvc4Jfs7BCg=;
+	s=arc-20240116; t=1729273045; c=relaxed/simple;
+	bh=+W95hfalgBx+aCZjq4y20IiUOmE+GTOeYOkNUDcxi8Y=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=rca0hDvidCTHn+TfEBaE+t08wKhedAvXVeGO/4gto+bvR01cldXtGiavFczg6VoCsiCr3IsknW5Uh4dZ5DoCM5LkzR5rWDE5VXazvuvAYWrPMflKxtONr4u++EXYlEzECkAeTXyq358eHAjYB3Xvm7bEMiGAAR5N//aWeIEG+4Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=hvf60Hwx; arc=none smtp.client-ip=148.163.158.5
+	 MIME-Version; b=Gd8b3DrfLk3Tp5aSv/hSFZavbYVq6Y+9JnrFVg/lHRZ0zMt5G/SlU6x1SloeneJ/pbg88sFVlrH/g+7ZM1M5hAa1tN7WAWoaup8kxxBWvl5/6DAssgLlDhWntd1GnBoJpPo3hnqQlzlvFFBHuhH68ttNz+mTVxX1Tb0l9mwNpFs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=irDz35dm; arc=none smtp.client-ip=148.163.158.5
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="hvf60Hwx"
-Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49I7v3V3014400;
-	Fri, 18 Oct 2024 17:36:52 GMT
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="irDz35dm"
+Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49I9lo9m008102;
+	Fri, 18 Oct 2024 17:37:01 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
 	:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=pp1; bh=ke58AxBSPUQS3/T4M
-	vvz9VCq7Eju0gHJsQVTBJZ8QTc=; b=hvf60HwxO4ZkBuHa7No2V0A5VKl3d9hMn
-	g+JcwAeaLdlVBvapnELxxNbUPDn0WSrZe4PDyBBKT9NRBartgOflBVmGZhtW5c2I
-	dyzZRIQxI7o5FZ5wcV0zkFtdX/faAbpCIsZJPzm7cearT93KE0mccrYxHpkcKHP9
-	SVudi0Kz+9kJOQHB2Bvvp+USZ7C4lmgTualBUq5KDJh1J+oscs9Ay/tTP4T57Zna
-	u4yxEpiix3fwBC/a4+wyrjsu4SLiPNCWs4ztVVLjEdzIlsGMMjJWGlVU+u5LBlVi
-	DYBcF4QcTRl9TFgPBj+M3qG3PcFH6Pr+NW+oh5shKjkCDXVs2ryFA==
+	:mime-version:references:subject:to; s=pp1; bh=s0FRCiVrpvEhkqmos
+	saMa+/8pdEQ0r3/FwKVmEn10sc=; b=irDz35dmdMv18xTHQ6/b+OYhjOR/z2mJM
+	MJ7Ud2bO4ywVt4D/x94Lc1Qm6ScJh+eHcOIxu3YFSmCXHQweMaS4geYnNzBlHPMT
+	mumfaChrujD90Y30eFL1bxhquW8iE7FmJ7dw0YxZVS848nfGVyFsWs2fI70o90uX
+	qpIK+7lSahXtQhE3hBijqdi1SZp+61gPwG/SEPyPGOvx/dAfL+ckwGpDyEB2JpRc
+	kcHPzNs22iEDX+otDxecRMeqKYbeyeFoGbqly76a1ePMqjHVrNoBCastEvhhuhEP
+	6OxEmz+zH2ghVeFTDhZL6rCVm3OxCx3L/SeOKOIoT/m1uMtoH2qTA==
 Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 42aqgracfh-1
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 42as8aa274-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 18 Oct 2024 17:36:52 +0000 (GMT)
-Received: from m0356516.ppops.net (m0356516.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 49IHap9n009911;
-	Fri, 18 Oct 2024 17:36:51 GMT
+	Fri, 18 Oct 2024 17:37:00 +0000 (GMT)
+Received: from m0353725.ppops.net (m0353725.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 49IHb08u011544;
+	Fri, 18 Oct 2024 17:37:00 GMT
 Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 42aqgracfe-1
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 42as8aa26w-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 18 Oct 2024 17:36:51 +0000 (GMT)
+	Fri, 18 Oct 2024 17:37:00 +0000 (GMT)
 Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma23.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 49IEjA4a006761;
-	Fri, 18 Oct 2024 17:36:50 GMT
-Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
-	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4284xknurc-1
+	by ppma23.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 49IF0Shb006757;
+	Fri, 18 Oct 2024 17:36:59 GMT
+Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
+	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4284xknurs-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 18 Oct 2024 17:36:50 +0000
+	Fri, 18 Oct 2024 17:36:59 +0000
 Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
-	by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 49IHaktV56230306
+	by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 49IHatGQ39584066
 	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 18 Oct 2024 17:36:46 GMT
+	Fri, 18 Oct 2024 17:36:55 GMT
 Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 9EE772004B;
-	Fri, 18 Oct 2024 17:36:46 +0000 (GMT)
+	by IMSVA (Postfix) with ESMTP id B719020043;
+	Fri, 18 Oct 2024 17:36:55 +0000 (GMT)
 Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 93C2720040;
-	Fri, 18 Oct 2024 17:36:42 +0000 (GMT)
+	by IMSVA (Postfix) with ESMTP id 9EBFB20040;
+	Fri, 18 Oct 2024 17:36:51 +0000 (GMT)
 Received: from li-bd3f974c-2712-11b2-a85c-df1cec4d728e.ibm.com.com (unknown [9.43.99.188])
 	by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Fri, 18 Oct 2024 17:36:42 +0000 (GMT)
+	Fri, 18 Oct 2024 17:36:51 +0000 (GMT)
 From: Hari Bathini <hbathini@linux.ibm.com>
 To: linuxppc-dev <linuxppc-dev@lists.ozlabs.org>, bpf@vger.kernel.org,
         linux-trace-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
@@ -75,9 +75,9 @@ Cc: Michael Ellerman <mpe@ellerman.id.au>, "Naveen N. Rao" <naveen@kernel.org>,
         Christophe Leroy <christophe.leroy@csgroup.eu>,
         Vishal Chourasia <vishalc@linux.ibm.com>,
         Mahesh J Salgaonkar <mahesh@linux.ibm.com>
-Subject: [PATCH v6 02/17] powerpc/kprobes: Use ftrace to determine if a probe is at function entry
-Date: Fri, 18 Oct 2024 23:06:17 +0530
-Message-ID: <20241018173632.277333-3-hbathini@linux.ibm.com>
+Subject: [PATCH v6 04/17] powerpc32/ftrace: Unify 32-bit and 64-bit ftrace entry code
+Date: Fri, 18 Oct 2024 23:06:19 +0530
+Message-ID: <20241018173632.277333-5-hbathini@linux.ibm.com>
 X-Mailer: git-send-email 2.47.0
 In-Reply-To: <20241018173632.277333-1-hbathini@linux.ibm.com>
 References: <20241018173632.277333-1-hbathini@linux.ibm.com>
@@ -89,71 +89,79 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: q2keNPn7-Oh3zYQlEMQ1SBemYkmQqC5B
-X-Proofpoint-GUID: Tl-0OX7UmqfkzAmqZW8xwA4Md_8ZKBpy
+X-Proofpoint-GUID: 8TEt5P_BR_tEhgERfgAfUtj09TS_ZnVo
+X-Proofpoint-ORIG-GUID: sHcwMwaMmyu_9Y5NJ9s8Gr3A5XxspGpc
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
  definitions=2024-10-15_01,2024-10-11_01,2024-09-30_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- phishscore=0 mlxlogscore=999 malwarescore=0 clxscore=1015
- lowpriorityscore=0 adultscore=0 spamscore=0 mlxscore=0 suspectscore=0
- impostorscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.19.0-2409260000 definitions=main-2410180111
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 mlxscore=0
+ lowpriorityscore=0 suspectscore=0 mlxlogscore=999 phishscore=0
+ adultscore=0 impostorscore=0 priorityscore=1501 spamscore=0 malwarescore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2409260000 definitions=main-2410180111
 
 From: Naveen N Rao <naveen@kernel.org>
 
-Rather than hard-coding the offset into a function to be used to
-determine if a kprobe is at function entry, use ftrace_location() to
-determine the ftrace location within the function and categorize all
-instructions till that offset to be function entry.
+On 32-bit powerpc, gcc generates a three instruction sequence for
+function profiling:
+	mflr	r0
+	stw	r0, 4(r1)
+	bl	_mcount
 
-For functions that cannot be traced, we fall back to using a fixed
-offset of 8 (two instructions) to categorize a probe as being at
-function entry for 64-bit elfv2, unless we are using pcrel.
+On kernel boot, the call to _mcount() is nop-ed out, to be patched back
+in when ftrace is actually enabled. The 'stw' instruction therefore is
+not necessary unless ftrace is enabled. Nop it out during ftrace init.
 
-Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+When ftrace is enabled, we want the 'stw' so that stack unwinding works
+properly. Perform the same within the ftrace handler, similar to 64-bit
+powerpc.
+
+Reviewed-by: Nicholas Piggin <npiggin@gmail.com>
 Signed-off-by: Naveen N Rao <naveen@kernel.org>
 ---
- arch/powerpc/kernel/kprobes.c | 18 ++++++++----------
- 1 file changed, 8 insertions(+), 10 deletions(-)
+ arch/powerpc/kernel/trace/ftrace.c       | 6 ++++--
+ arch/powerpc/kernel/trace/ftrace_entry.S | 4 ++--
+ 2 files changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/arch/powerpc/kernel/kprobes.c b/arch/powerpc/kernel/kprobes.c
-index f8aa91bc3b17..bf382c459e1f 100644
---- a/arch/powerpc/kernel/kprobes.c
-+++ b/arch/powerpc/kernel/kprobes.c
-@@ -105,24 +105,22 @@ kprobe_opcode_t *kprobe_lookup_name(const char *name, unsigned int offset)
- 	return addr;
- }
+diff --git a/arch/powerpc/kernel/trace/ftrace.c b/arch/powerpc/kernel/trace/ftrace.c
+index 2ef504700e8d..8c3e523e4f96 100644
+--- a/arch/powerpc/kernel/trace/ftrace.c
++++ b/arch/powerpc/kernel/trace/ftrace.c
+@@ -240,8 +240,10 @@ int ftrace_init_nop(struct module *mod, struct dyn_ftrace *rec)
+ 	} else if (IS_ENABLED(CONFIG_PPC32)) {
+ 		/* Expected sequence: 'mflr r0', 'stw r0,4(r1)', 'bl _mcount' */
+ 		ret = ftrace_validate_inst(ip - 8, ppc_inst(PPC_RAW_MFLR(_R0)));
+-		if (!ret)
+-			ret = ftrace_validate_inst(ip - 4, ppc_inst(PPC_RAW_STW(_R0, _R1, 4)));
++		if (ret)
++			return ret;
++		ret = ftrace_modify_code(ip - 4, ppc_inst(PPC_RAW_STW(_R0, _R1, 4)),
++					 ppc_inst(PPC_RAW_NOP()));
+ 	} else if (IS_ENABLED(CONFIG_MPROFILE_KERNEL)) {
+ 		/* Expected sequence: 'mflr r0', ['std r0,16(r1)'], 'bl _mcount' */
+ 		ret = ftrace_read_inst(ip - 4, &old);
+diff --git a/arch/powerpc/kernel/trace/ftrace_entry.S b/arch/powerpc/kernel/trace/ftrace_entry.S
+index 76dbe9fd2c0f..244a1c7bb1e8 100644
+--- a/arch/powerpc/kernel/trace/ftrace_entry.S
++++ b/arch/powerpc/kernel/trace/ftrace_entry.S
+@@ -33,6 +33,8 @@
+  * and then arrange for the ftrace function to be called.
+  */
+ .macro	ftrace_regs_entry allregs
++	/* Save the original return address in A's stack frame */
++	PPC_STL		r0, LRSAVE(r1)
+ 	/* Create a minimal stack frame for representing B */
+ 	PPC_STLU	r1, -STACK_FRAME_MIN_SIZE(r1)
  
--static bool arch_kprobe_on_func_entry(unsigned long offset)
-+static bool arch_kprobe_on_func_entry(unsigned long addr, unsigned long offset)
- {
--#ifdef CONFIG_PPC64_ELF_ABI_V2
--#ifdef CONFIG_KPROBES_ON_FTRACE
--	return offset <= 16;
--#else
--	return offset <= 8;
--#endif
--#else
-+	unsigned long ip = ftrace_location(addr);
-+
-+	if (ip)
-+		return offset <= (ip - addr);
-+	if (IS_ENABLED(CONFIG_PPC64_ELF_ABI_V2) && !IS_ENABLED(CONFIG_PPC_KERNEL_PCREL))
-+		return offset <= 8;
- 	return !offset;
--#endif
- }
+@@ -44,8 +46,6 @@
+ 	SAVE_GPRS(3, 10, r1)
  
- /* XXX try and fold the magic of kprobe_lookup_name() in this */
- kprobe_opcode_t *arch_adjust_kprobe_addr(unsigned long addr, unsigned long offset,
- 					 bool *on_func_entry)
- {
--	*on_func_entry = arch_kprobe_on_func_entry(offset);
-+	*on_func_entry = arch_kprobe_on_func_entry(addr, offset);
- 	return (kprobe_opcode_t *)(addr + offset);
- }
- 
+ #ifdef CONFIG_PPC64
+-	/* Save the original return address in A's stack frame */
+-	std	r0, LRSAVE+SWITCH_FRAME_SIZE+STACK_FRAME_MIN_SIZE(r1)
+ 	/* Ok to continue? */
+ 	lbz	r3, PACA_FTRACE_ENABLED(r13)
+ 	cmpdi	r3, 0
 -- 
 2.47.0
 
