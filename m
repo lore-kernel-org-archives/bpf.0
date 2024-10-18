@@ -1,29 +1,29 @@
-Received: from szxga07-in.huawei.com (szxga07-in.huawei.com [45.249.212.35])
+Received: from szxga04-in.huawei.com (szxga04-in.huawei.com [45.249.212.190])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEC481E2303;
-	Fri, 18 Oct 2024 09:14:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.35
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 269BE1E32AC;
+	Fri, 18 Oct 2024 09:14:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.190
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729242865; cv=none; b=sLo2w8Bnyus+qpcMvBYPwn2/++x+ykSO77/L9/NIzu4vmqviZtqZF+vNslR1L8jePSOm9qiiST84CD6tVNOwnmGAintE8yeqZ5QPK5+gfBWNUMGf6cvraL3TJpTU3+qU2Re3hqMO+mZ68oQtB67Gu7cg4CejPkN1Xt+0x/TDZfA=
+	t=1729242868; cv=none; b=IR2CTcItuuW9vzJH4+sejNNeSW2unU0kcNxvF6L7VDlzNtKWn7iEuixbjJP0rOwg3pMpZOqP9yO8k3fSDfm25ArBolIlPRFOtldrq+T4QtVGHIIKlWhpwBHA056qKqiXj1ZTfxouKZmk+3y227550e5OfF+w9pLFv2UDu+YFQnY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729242865; c=relaxed/simple;
-	bh=ObmZm9SWgwAXOCoJix+m53ErQSZCmmvZ/mzHD2RA8gU=;
+	s=arc-20240116; t=1729242868; c=relaxed/simple;
+	bh=0pL/gayMZUTWrlQja+1vgkIZ0AHX46bA4d1cb9803Y0=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=CA3tgiq1vLGvO8UDpTNgByD8lXG9bcIoEYOdQpDqMhOyUtCXDwLXj9NuZuBa+lv5+uYfAT8gO5Cu8IeEuY/94kQKjqOvT32TrZlQx5m28i/oP2hUl2k2lzZNDFIb70Wx2zgqtMRTRSS71plgf2yRF+oUDpKxCHnk5w8B1kIw1OY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.35
+	 MIME-Version:Content-Type; b=msS0u9+mH/5wTP1qN5Ype/M828pyG22X+IuVHDD1hWWAt068vRRvQZh7hBmsuZ4XN5JPBYz4vPs/8rI/4b86yJpj6emyU/DP68ZsYdKUkkH0X5t3410b7fDPv1tnolfL1Zg0uh9ADVrX+lkCVJwKMtCYNoFeY6WSLcGVnpA8ICs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.190
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.88.214])
-	by szxga07-in.huawei.com (SkyGuard) with ESMTP id 4XVJrt42MKz1SC9k;
-	Fri, 18 Oct 2024 17:13:02 +0800 (CST)
+Received: from mail.maildlp.com (unknown [172.19.88.163])
+	by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4XVJrs0ygDz2Ddwr;
+	Fri, 18 Oct 2024 17:13:01 +0800 (CST)
 Received: from dggpemf500014.china.huawei.com (unknown [7.185.36.43])
-	by mail.maildlp.com (Postfix) with ESMTPS id D1D621A016C;
-	Fri, 18 Oct 2024 17:14:19 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTPS id CDBA6180041;
+	Fri, 18 Oct 2024 17:14:17 +0800 (CST)
 Received: from huawei.com (10.175.101.6) by dggpemf500014.china.huawei.com
  (7.185.36.43) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Fri, 18 Oct
- 2024 17:14:18 +0800
+ 2024 17:14:16 +0800
 From: Muyang Tian <tianmuyang@huawei.com>
 To: <bpf@vger.kernel.org>
 CC: "David S . Miller" <davem@davemloft.net>, Eric Dumazet
@@ -39,9 +39,9 @@ CC: "David S . Miller" <davem@davemloft.net>, Eric Dumazet
 	<yanan@huawei.com>, <xiesongyang@huawei.com>, <wuchangye@huawei.com>,
 	<liuxin350@huawei.com>, <zhangmingyi5@huawei.com>, <liwei883@huawei.com>,
 	<tianmuyang@huawei.com>
-Subject: [PATCH bpf-next v2 3/3] xsk: Add Tx GSO type and size offload support
-Date: Fri, 18 Oct 2024 17:15:02 +0800
-Message-ID: <20241018091502.411513-4-tianmuyang@huawei.com>
+Subject: [PATCH bpf-next v2 1/3] xdp: Add Rx checksum hint
+Date: Fri, 18 Oct 2024 17:15:00 +0800
+Message-ID: <20241018091502.411513-2-tianmuyang@huawei.com>
 X-Mailer: git-send-email 2.33.0
 In-Reply-To: <20241018091502.411513-1-tianmuyang@huawei.com>
 References: <20241018091502.411513-1-tianmuyang@huawei.com>
@@ -56,189 +56,192 @@ Content-Type: text/plain
 X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
  dggpemf500014.china.huawei.com (7.185.36.43)
 
-This change extends the xsk_tx_metadata struct with
-GSO type and size fields.
-A new offload XDP_TX_METADATA_GSO is defined, which
-offloads gso_type and gso_size in skb_shared_info to XDP.
+This is an implementation of functionality that allows drivers
+to expose checksum information to XDP, as generally based on 
+previous work[1], with xdp_csum_status modified.
+This information includes:
+- Checksum info, a union of
+  - complete checksum, if checksum is complete
+  - skb-style checksum start and offset, if checksum is partial
+- Checksum status, an enum which is the same as skb checksums in
+  skbuff.h, identical to sk_buff.ip_summed
+
+LINK:[1] https://lore.kernel.org/bpf/20230927075124.23941-13-larysa.zaremba@intel.com
 
 Signed-off-by: Muyang Tian <tianmuyang@huawei.com>
+Signed-off-by: Larysa Zaremba <larysa.zaremba@intel.com>
 ---
- Documentation/netlink/specs/netdev.yaml |  4 ++++
- include/net/xdp_sock.h                  |  8 ++++++++
- include/net/xdp_sock_drv.h              |  1 +
- include/uapi/linux/if_xdp.h             | 11 +++++++++++
- include/uapi/linux/netdev.h             |  2 ++
- net/xdp/xsk.c                           |  5 +++++
- tools/include/uapi/linux/if_xdp.h       | 11 +++++++++++
- tools/include/uapi/linux/netdev.h       |  2 ++
- 8 files changed, 44 insertions(+)
+ Documentation/netlink/specs/netdev.yaml      |  4 +++
+ Documentation/networking/xdp-rx-metadata.rst |  3 ++
+ include/net/xdp.h                            | 38 ++++++++++++++++++++
+ include/uapi/linux/netdev.h                  |  3 ++
+ net/core/xdp.c                               | 23 ++++++++++++
+ tools/include/uapi/linux/netdev.h            |  3 ++
+ 6 files changed, 74 insertions(+)
 
 diff --git a/Documentation/netlink/specs/netdev.yaml b/Documentation/netlink/specs/netdev.yaml
-index 5beee7c8e7cf..f4aa04eba54c 100644
+index 08412c279297..e6045b447fc1 100644
 --- a/Documentation/netlink/specs/netdev.yaml
 +++ b/Documentation/netlink/specs/netdev.yaml
-@@ -78,6 +78,10 @@ definitions:
-         name: tx-checksum
+@@ -58,6 +58,10 @@ definitions:
+         name: vlan-tag
          doc:
-           L3 checksum HW offload is supported by the driver.
+           Device is capable of exposing receive packet VLAN tag via bpf_xdp_metadata_rx_vlan_tag().
 +      -
-+        name: tx-gso
++        name: csum
 +        doc:
-+          GSO type and size is supported by the driver.
++          Device is capable of exposing receive packet checksum via bpf_xdp_metadata_rx_csum().
    -
-     name: queue-type
-     type: enum
-diff --git a/include/net/xdp_sock.h b/include/net/xdp_sock.h
-index bfe625b55d55..e5acb27c3e07 100644
---- a/include/net/xdp_sock.h
-+++ b/include/net/xdp_sock.h
-@@ -110,11 +110,14 @@ struct xdp_sock {
-  *     indicates position where checksumming should start.
-  *     csum_offset indicates position where checksum should be stored.
-  *
-+ * void (*tmo_request_gso)(u32 gso_type, u16 gso_size, void *priv)
-+ *     Called when AF_XDP frame requested GSO info.
-  */
- struct xsk_tx_metadata_ops {
- 	void	(*tmo_request_timestamp)(void *priv);
- 	u64	(*tmo_fill_timestamp)(void *priv);
- 	void	(*tmo_request_checksum)(u16 csum_start, u16 csum_offset, void *priv);
-+	void	(*tmo_request_gso)(u32 gso_type, u16 gso_size, void *priv);
+     type: flags
+     name: xsk-flags
+diff --git a/Documentation/networking/xdp-rx-metadata.rst b/Documentation/networking/xdp-rx-metadata.rst
+index a6e0ece18be5..6cf273b33ee6 100644
+--- a/Documentation/networking/xdp-rx-metadata.rst
++++ b/Documentation/networking/xdp-rx-metadata.rst
+@@ -28,6 +28,9 @@ metadata is supported, this set will grow:
+ .. kernel-doc:: net/core/xdp.c
+    :identifiers: bpf_xdp_metadata_rx_vlan_tag
+ 
++.. kernel-doc:: net/core/xdp.c
++   :identifiers: bpf_xdp_metadata_rx_csum
++
+ An XDP program can use these kfuncs to read the metadata into stack
+ variables for its own consumption. Or, to pass the metadata on to other
+ consumers, an XDP program can store it into the metadata area carried
+diff --git a/include/net/xdp.h b/include/net/xdp.h
+index e6770dd40c91..7886658975c4 100644
+--- a/include/net/xdp.h
++++ b/include/net/xdp.h
+@@ -408,6 +408,10 @@ void xdp_attachment_setup(struct xdp_attachment_info *info,
+ 			   NETDEV_XDP_RX_METADATA_VLAN_TAG, \
+ 			   bpf_xdp_metadata_rx_vlan_tag, \
+ 			   xmo_rx_vlan_tag) \
++	XDP_METADATA_KFUNC(XDP_METADATA_KFUNC_RX_CSUM, \
++			   NETDEV_XDP_RX_METADATA_CSUM, \
++			   bpf_xdp_metadata_rx_csum, \
++			   xmo_rx_csum) \
+ 
+ enum xdp_rx_metadata {
+ #define XDP_METADATA_KFUNC(name, _, __, ___) name,
+@@ -465,12 +469,46 @@ enum xdp_rss_hash_type {
+ 	XDP_RSS_TYPE_L4_IPV6_SCTP_EX = XDP_RSS_TYPE_L4_IPV6_SCTP | XDP_RSS_L3_DYNHDR,
  };
  
- #ifdef CONFIG_XDP_SOCKETS
-@@ -170,6 +173,11 @@ static inline void xsk_tx_metadata_request(const struct xsk_tx_metadata *meta,
- 		if (meta->flags & XDP_TXMD_FLAGS_CHECKSUM)
- 			ops->tmo_request_checksum(meta->request.csum_start,
- 						  meta->request.csum_offset, priv);
++enum xdp_csum_status {
++	/* The following enums are the same as skb checksums in skbuff.h, refer to
++	 * DOC: skb checksums for more details.
++	 */
 +
-+	if (ops->tmo_request_gso)
-+		if (meta->flags & XDP_TXMD_FLAGS_GSO)
-+			ops->tmo_request_gso(meta->request.gso_type,
-+						  meta->request.gso_size, priv);
- }
- 
- /**
-diff --git a/include/net/xdp_sock_drv.h b/include/net/xdp_sock_drv.h
-index 0a5dca2b2b3f..b192dab2b835 100644
---- a/include/net/xdp_sock_drv.h
-+++ b/include/net/xdp_sock_drv.h
-@@ -198,6 +198,7 @@ static inline void *xsk_buff_raw_get_data(struct xsk_buff_pool *pool, u64 addr)
- #define XDP_TXMD_FLAGS_VALID ( \
- 		XDP_TXMD_FLAGS_TIMESTAMP | \
- 		XDP_TXMD_FLAGS_CHECKSUM | \
-+		XDP_TXMD_FLAGS_GSO | \
- 	0)
- 
- static inline bool xsk_buff_valid_tx_metadata(struct xsk_tx_metadata *meta)
-diff --git a/include/uapi/linux/if_xdp.h b/include/uapi/linux/if_xdp.h
-index 42ec5ddaab8d..c3ea368bf613 100644
---- a/include/uapi/linux/if_xdp.h
-+++ b/include/uapi/linux/if_xdp.h
-@@ -127,6 +127,11 @@ struct xdp_options {
-  */
- #define XDP_TXMD_FLAGS_CHECKSUM			(1 << 1)
- 
-+/* Request transmit GSO info. GSO type and size are communicated via
-+ * csum_start and csum_offset fields of struct xsk_tx_metadata.
-+ */
-+#define XDP_TXMD_FLAGS_GSO				(1 << 2)
++	XDP_CHECKSUM_NONE = 0,
++	XDP_CHECKSUM_UNNECESSARY = 1,
++	/* Checksum, calculated over the entire packet is provided, as ``csum`` in
++	 * ``xdp_csum_info``.
++	 */
++	XDP_CHECKSUM_COMPLETE = 2,
++	/* Refer to ``csum_start`` and ``csum_offset`` in ``xdp_csum_info`` for more information. */
++	XDP_CHECKSUM_PARTIAL = 3,
++};
 +
- /* AF_XDP offloads request. 'request' union member is consumed by the driver
-  * when the packet is being transmitted. 'completion' union member is
-  * filled by the driver when the transmit completion arrives.
-@@ -142,6 +147,12 @@ struct xsk_tx_metadata {
- 			__u16 csum_start;
- 			/* Offset from csum_start where checksum should be stored. */
- 			__u16 csum_offset;
++union xdp_csum_info {
++	/* Checksum, calculated over the whole packet.
++	 * Available, if ``status & XDP_CHECKSUM_COMPLETE``.
++	 */
++	__wsum csum;
++	/* Checksum referred to by ``csum_start + csum_offset`` is considered
++	 * valid, but was never calculated, TX device has to do this,
++	 * starting from csum_start packet byte.
++	 * Any preceding checksums are also considered valid.
++	 * Available, if ``status == XDP_CHECKSUM_PARTIAL``.
++	 */
++	struct {
++		u16 csum_start;
++		u16 csum_offset;
++	};
++};
 +
-+			/* XDP_TXMD_FLAGS_GSO */
-+			/* Identical to skb_shared_info.gso_type*/
-+			__u32 gso_type;
-+			/* Identical to skb_shared_info.gso_size*/
-+			__u16 gso_size;
- 		} request;
+ struct xdp_metadata_ops {
+ 	int	(*xmo_rx_timestamp)(const struct xdp_md *ctx, u64 *timestamp);
+ 	int	(*xmo_rx_hash)(const struct xdp_md *ctx, u32 *hash,
+ 			       enum xdp_rss_hash_type *rss_type);
+ 	int	(*xmo_rx_vlan_tag)(const struct xdp_md *ctx, __be16 *vlan_proto,
+ 				   u16 *vlan_tci);
++	int (*xmo_rx_csum)(const struct xdp_md *ctx, enum xdp_csum_status *csum_status,
++				   union xdp_csum_info *csum_info);
+ };
  
- 		struct {
+ #ifdef CONFIG_NET
 diff --git a/include/uapi/linux/netdev.h b/include/uapi/linux/netdev.h
-index 1e711d6a4c6b..bd175afb3c6b 100644
+index 7c308f04e7a0..a969b25529a3 100644
 --- a/include/uapi/linux/netdev.h
 +++ b/include/uapi/linux/netdev.h
-@@ -65,10 +65,12 @@ enum netdev_xdp_rx_metadata {
-  *   by the driver.
-  * @NETDEV_XSK_FLAGS_TX_CHECKSUM: L3 checksum HW offload is supported by the
-  *   driver.
-+ * @NETDEV_XSK_FLAGS_TX_GSO: GSO type and size is supported by the driver.
+@@ -46,11 +46,14 @@ enum netdev_xdp_act {
+  *   hash via bpf_xdp_metadata_rx_hash().
+  * @NETDEV_XDP_RX_METADATA_VLAN_TAG: Device is capable of exposing receive
+  *   packet VLAN tag via bpf_xdp_metadata_rx_vlan_tag().
++ * @NETDEV_XDP_RX_METADATA_CSUM: Device is capable of exposing receive packet
++ *   checksum via bpf_xdp_metadata_rx_csum().
   */
- enum netdev_xsk_flags {
- 	NETDEV_XSK_FLAGS_TX_TIMESTAMP = 1,
- 	NETDEV_XSK_FLAGS_TX_CHECKSUM = 2,
-+	NETDEV_XSK_FLAGS_TX_GSO = 4,
+ enum netdev_xdp_rx_metadata {
+ 	NETDEV_XDP_RX_METADATA_TIMESTAMP = 1,
+ 	NETDEV_XDP_RX_METADATA_HASH = 2,
+ 	NETDEV_XDP_RX_METADATA_VLAN_TAG = 4,
++	NETDEV_XDP_RX_METADATA_CSUM = 8,
  };
  
- enum netdev_queue_type {
-diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
-index 1140b2a120ca..5a19edfce16c 100644
---- a/net/xdp/xsk.c
-+++ b/net/xdp/xsk.c
-@@ -745,6 +745,11 @@ static struct sk_buff *xsk_build_skb(struct xdp_sock *xs,
- 						goto free_err;
- 				}
- 			}
-+
-+			if (meta->flags & XDP_TXMD_FLAGS_GSO) {
-+				skb_shinfo(skb)->gso_type = meta->request.gso_type;
-+				skb_shinfo(skb)->gso_size = meta->request.gso_size;
-+			}
- 		}
- 	}
+ /**
+diff --git a/net/core/xdp.c b/net/core/xdp.c
+index bcc5551c6424..583e00d3580a 100644
+--- a/net/core/xdp.c
++++ b/net/core/xdp.c
+@@ -766,6 +766,29 @@ __bpf_kfunc int bpf_xdp_metadata_rx_vlan_tag(const struct xdp_md *ctx,
+ 	return -EOPNOTSUPP;
+ }
  
-diff --git a/tools/include/uapi/linux/if_xdp.h b/tools/include/uapi/linux/if_xdp.h
-index 2f082b01ff22..5714d0be8c53 100644
---- a/tools/include/uapi/linux/if_xdp.h
-+++ b/tools/include/uapi/linux/if_xdp.h
-@@ -127,6 +127,11 @@ struct xdp_options {
-  */
- #define XDP_TXMD_FLAGS_CHECKSUM			(1 << 1)
- 
-+/* Request transmit GSO info. GSO type and size are communicated via
-+ * csum_start and csum_offset fields of struct xsk_tx_metadata.
++/**
++ * bpf_xdp_metadata_rx_csum - Read XDP frame checksum status and info.
++ * @ctx: XDP context pointer.
++ * @csum_status: Destination pointer for checksum status.
++ * @csum_info: Destination pointer for complete checksum or partial checksum offset.
++ *
++ * Status (@csum_status) is an enum that informs what checksum processing was
++ * performed, same as sk_buff.ip_summed. Additional results of such processing,
++ * such as complete checksum or partial checksum offsets, are passed as
++ * info (@csum_info).
++ *
++ * Return:
++ * * Returns 0 on success or ``-errno`` on error.
++ * * ``-EOPNOTSUPP`` : means device driver doesn't implement kfunc
++ * * ``-ENODATA``    : means checksum status is unknown for this frame
 + */
-+#define XDP_TXMD_FLAGS_GSO				(1 << 2)
++__bpf_kfunc int bpf_xdp_metadata_rx_csum(const struct xdp_md *ctx,
++					 enum xdp_csum_status *csum_status,
++					 union xdp_csum_info *csum_info)
++{
++	return -EOPNOTSUPP;
++}
 +
- /* AF_XDP offloads request. 'request' union member is consumed by the driver
-  * when the packet is being transmitted. 'completion' union member is
-  * filled by the driver when the transmit completion arrives.
-@@ -142,6 +147,12 @@ struct xsk_tx_metadata {
- 			__u16 csum_start;
- 			/* Offset from csum_start where checksum should be stored. */
- 			__u16 csum_offset;
-+
-+			/* XDP_TXMD_FLAGS_GSO */
-+			/* Identical to skb_shared_info.gso_type*/
-+			__u32 gso_type;
-+			/* Identical to skb_shared_info.gso_size*/
-+			__u16 gso_size;
- 		} request;
+ __bpf_kfunc_end_defs();
  
- 		struct {
+ BTF_KFUNCS_START(xdp_metadata_kfunc_ids)
 diff --git a/tools/include/uapi/linux/netdev.h b/tools/include/uapi/linux/netdev.h
-index 1e711d6a4c6b..bd175afb3c6b 100644
+index 7c308f04e7a0..a969b25529a3 100644
 --- a/tools/include/uapi/linux/netdev.h
 +++ b/tools/include/uapi/linux/netdev.h
-@@ -65,10 +65,12 @@ enum netdev_xdp_rx_metadata {
-  *   by the driver.
-  * @NETDEV_XSK_FLAGS_TX_CHECKSUM: L3 checksum HW offload is supported by the
-  *   driver.
-+ * @NETDEV_XSK_FLAGS_TX_GSO: GSO type and size is supported by the driver.
+@@ -46,11 +46,14 @@ enum netdev_xdp_act {
+  *   hash via bpf_xdp_metadata_rx_hash().
+  * @NETDEV_XDP_RX_METADATA_VLAN_TAG: Device is capable of exposing receive
+  *   packet VLAN tag via bpf_xdp_metadata_rx_vlan_tag().
++ * @NETDEV_XDP_RX_METADATA_CSUM: Device is capable of exposing receive packet
++ *   checksum via bpf_xdp_metadata_rx_csum().
   */
- enum netdev_xsk_flags {
- 	NETDEV_XSK_FLAGS_TX_TIMESTAMP = 1,
- 	NETDEV_XSK_FLAGS_TX_CHECKSUM = 2,
-+	NETDEV_XSK_FLAGS_TX_GSO = 4,
+ enum netdev_xdp_rx_metadata {
+ 	NETDEV_XDP_RX_METADATA_TIMESTAMP = 1,
+ 	NETDEV_XDP_RX_METADATA_HASH = 2,
+ 	NETDEV_XDP_RX_METADATA_VLAN_TAG = 4,
++	NETDEV_XDP_RX_METADATA_CSUM = 8,
  };
  
- enum netdev_queue_type {
+ /**
 -- 
 2.41.0
 
