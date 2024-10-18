@@ -1,64 +1,64 @@
 Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAD012040A7;
-	Fri, 18 Oct 2024 17:37:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCBF5204F7C;
+	Fri, 18 Oct 2024 17:37:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729273051; cv=none; b=j8IMOj+H3dI7VWuuKOhrEAQfoGEWuEgNWR4UJoKU1TFwRdq/k9oADCrQfKBflPDAVRdMATXOzNymkWlJs6uN14xIhl2GeIyGpdmd8MQL2dR6pyN1yJD+oWoafRruujlbRBi5Hp5m5N3Iv01CHUSbZRnsoR0mrP0cCbiILMdV72I=
+	t=1729273053; cv=none; b=I9xqPmMhw3uBSJuOgPVQPPUYSPYB2/DhBD57zVEsM6MKIOdOQKjifhzy9l1soaE3QzwYjvCoxdk5eB8cDf/xnnV2Yml8l7wrXZKecmghckfIqfXiCbfUY9vGN+/Fjf1/p6jFQKVl30GIwcAlIeGasm+/VEA1JWn+KmDRsCZYkgs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729273051; c=relaxed/simple;
-	bh=PqKZkX5MfNlqlkxog8KNBTjCxPmS3rMjKgXtSBWMvGg=;
+	s=arc-20240116; t=1729273053; c=relaxed/simple;
+	bh=kmXND9GWUzfaSOnjTYcSawmSbJC47RzbZRXwhzS09gc=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ZsLUDenOECC1aCjTN+EBFM5DWbTlAlvwYwD1YkurCweVymf+45NqqBm0Fw+BJSLqt02bkhHr0dTnbQigbJkNlEZjIOu+Ny6fP5fRXcZj8rZUlhbvjgGKh3kxzIX5Su2Y6TMgyK7AWfHKHt/C8agOwc7XtmQpA5vOmiYdbv8NhJw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=AzC1imi0; arc=none smtp.client-ip=148.163.156.1
+	 MIME-Version; b=T5SVBORlYqfis3roIASUMKJiGa8UwvJ9yp9EW4HV5Hi1GEz5zwcPzpGzz0MSNiJwxVZ39D/TS8OFO3mm4Tgby5zAs0AwnHL1r9BFzt9IOdzjsKc5vKTcUq9ipi0iO42COktceQ8P9+MaDuiEtC9O0eTCGNUL4qOG5qFPvjrmbTU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=ebgEza5q; arc=none smtp.client-ip=148.163.156.1
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="AzC1imi0"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="ebgEza5q"
 Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49IAmf8V025092;
-	Fri, 18 Oct 2024 17:36:57 GMT
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49IA7pr1025135;
+	Fri, 18 Oct 2024 17:37:07 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
 	:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=pp1; bh=NBCz3KcpjPp2NZk6Q
-	kJH2AEFQre7Vj8TAQLOxgPmAFI=; b=AzC1imi0zH9dhQmR2r6U20e4bfn1yR8jB
-	PBqwJddRytLzCzv4YpOw1MNPIp5kuY47R4W+83bZ+3Ur7OcV2+iIM5x6taLUXHas
-	XGNJwPSuDAatyWbidJ6qfIYQUdrw++GOjWlnq/yVfe4mBRYjRgrHksteKlF3jtQ8
-	76worS8wporlbmj7G/oZ2SSi2XWGH/a032v03pXCVMNwIITYgKh7VkuUzScQ56OA
-	YadhU4wgj7L/Ebo0lr5XWhrOnxzRTDfAdxxOdSyHQXUMD+YZf2VvymDRpvqw3KUH
-	yE5447txo2ezPLiWF9jRTkbbYtJYsPLI9IUZP4pUXya8NdNgCHt4A==
+	:mime-version:references:subject:to; s=pp1; bh=SKma3CRH4og/h26/j
+	eEWVdCKsDhHjJllnomQxBVXmRU=; b=ebgEza5q90R0LvO6idenlAbmvCBfa1lA+
+	tLuB2rDFQ/MOiTftF/D97gw/mTLNzK6HT6E/IWCdTw1bpf8DMGsB/jwJ/OsHEBdb
+	759Y+wO4zxjKO58tH4grKBGJyke6l4WDtTPFK84xmBKW0jnBSl/ymnkgoJ0WJmZC
+	CMHNIKL0xhoz2cxIesDHrWn7W/RhUUGmkr8zODpWgZjjmv5r2h6wV/ql6XuiSaGA
+	EzKWsqBAt/l/Q3Gr5xTg48Vt71UhG3tohpy6olqhcZIpTgxZmArga/r8I/gJEVD1
+	Fs8lbdYwtHGIMMEFPRX0hQQim2ahzbXtDpXNfqMa7ffmwIudc4eUg==
 Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 42asbdar6u-1
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 42asbdar7t-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 18 Oct 2024 17:36:57 +0000 (GMT)
+	Fri, 18 Oct 2024 17:37:06 +0000 (GMT)
 Received: from m0360083.ppops.net (m0360083.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 49IHau2h014159;
-	Fri, 18 Oct 2024 17:36:56 GMT
-Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 42asbdar6n-1
+	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 49IHb533014588;
+	Fri, 18 Oct 2024 17:37:05 GMT
+Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 42asbdar7p-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 18 Oct 2024 17:36:56 +0000 (GMT)
-Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma22.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 49IEW6DJ027451;
-	Fri, 18 Oct 2024 17:36:55 GMT
-Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
-	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4283ty62j2-1
+	Fri, 18 Oct 2024 17:37:05 +0000 (GMT)
+Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma21.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 49IH95il001991;
+	Fri, 18 Oct 2024 17:37:04 GMT
+Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
+	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4284en5yxy-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 18 Oct 2024 17:36:54 +0000
+	Fri, 18 Oct 2024 17:37:03 +0000
 Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
-	by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 49IHapva30999204
+	by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 49IHb04w53477698
 	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 18 Oct 2024 17:36:51 GMT
+	Fri, 18 Oct 2024 17:37:00 GMT
 Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 3B9AC20043;
-	Fri, 18 Oct 2024 17:36:51 +0000 (GMT)
+	by IMSVA (Postfix) with ESMTP id 3E72620043;
+	Fri, 18 Oct 2024 17:37:00 +0000 (GMT)
 Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 0A16E20040;
-	Fri, 18 Oct 2024 17:36:47 +0000 (GMT)
+	by IMSVA (Postfix) with ESMTP id 25ED620040;
+	Fri, 18 Oct 2024 17:36:56 +0000 (GMT)
 Received: from li-bd3f974c-2712-11b2-a85c-df1cec4d728e.ibm.com.com (unknown [9.43.99.188])
 	by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Fri, 18 Oct 2024 17:36:46 +0000 (GMT)
+	Fri, 18 Oct 2024 17:36:55 +0000 (GMT)
 From: Hari Bathini <hbathini@linux.ibm.com>
 To: linuxppc-dev <linuxppc-dev@lists.ozlabs.org>, bpf@vger.kernel.org,
         linux-trace-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
@@ -75,9 +75,9 @@ Cc: Michael Ellerman <mpe@ellerman.id.au>, "Naveen N. Rao" <naveen@kernel.org>,
         Christophe Leroy <christophe.leroy@csgroup.eu>,
         Vishal Chourasia <vishalc@linux.ibm.com>,
         Mahesh J Salgaonkar <mahesh@linux.ibm.com>
-Subject: [PATCH v6 03/17] powerpc64/ftrace: Nop out additional 'std' instruction emitted by gcc v5.x
-Date: Fri, 18 Oct 2024 23:06:18 +0530
-Message-ID: <20241018173632.277333-4-hbathini@linux.ibm.com>
+Subject: [PATCH v6 05/17] powerpc/module_64: Convert #ifdef to IS_ENABLED()
+Date: Fri, 18 Oct 2024 23:06:20 +0530
+Message-ID: <20241018173632.277333-6-hbathini@linux.ibm.com>
 X-Mailer: git-send-email 2.47.0
 In-Reply-To: <20241018173632.277333-1-hbathini@linux.ibm.com>
 References: <20241018173632.277333-1-hbathini@linux.ibm.com>
@@ -89,59 +89,48 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: e7bCE0upbxhGk0cgK_MGkGYgF_o9tcOv
-X-Proofpoint-GUID: 7RoBXP6lDOZ4bNzIGITVI7Fm4dubzZnk
+X-Proofpoint-ORIG-GUID: keU9RRyVyeIXL02h-2Faem9ZHmyvIwh_
+X-Proofpoint-GUID: JviQE_gB3CP-YcSbg09S_45Rg4d7jwWf
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
  definitions=2024-10-15_01,2024-10-11_01,2024-09-30_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 suspectscore=0
  malwarescore=0 spamscore=0 lowpriorityscore=0 phishscore=0 mlxscore=0
- clxscore=1015 adultscore=0 priorityscore=1501 mlxlogscore=940
+ clxscore=1015 adultscore=0 priorityscore=1501 mlxlogscore=999
  impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.19.0-2409260000 definitions=main-2410180111
 
 From: Naveen N Rao <naveen@kernel.org>
 
-Gcc v5.x emits a 3-instruction sequence for -mprofile-kernel:
-	mflr	r0
-	std	r0, 16(r1)
-	bl	_mcount
+Minor refactor for converting #ifdef to IS_ENABLED().
 
-Gcc v6.x moved to a simpler 2-instruction sequence by removing the 'std'
-instruction. The store saved the return address in the LR save area in
-the caller stack frame for stack unwinding. However, with dynamic
-ftrace, we no longer have a call to _mcount on kernel boot when ftrace
-is not enabled. When ftrace is enabled, that store is performed within
-ftrace_caller(). As such, the additional 'std' instruction is redundant.
-Nop it out on kernel boot.
-
-With this change, we now use the same 2-instruction profiling sequence
-with both -mprofile-kernel, as well as -fpatchable-function-entry on
-64-bit powerpc.
-
+Reviewed-by: Nicholas Piggin <npiggin@gmail.com>
 Signed-off-by: Naveen N Rao <naveen@kernel.org>
 ---
- arch/powerpc/kernel/trace/ftrace.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ arch/powerpc/kernel/module_64.c | 10 ++--------
+ 1 file changed, 2 insertions(+), 8 deletions(-)
 
-diff --git a/arch/powerpc/kernel/trace/ftrace.c b/arch/powerpc/kernel/trace/ftrace.c
-index d8d6b4fd9a14..2ef504700e8d 100644
---- a/arch/powerpc/kernel/trace/ftrace.c
-+++ b/arch/powerpc/kernel/trace/ftrace.c
-@@ -246,8 +246,12 @@ int ftrace_init_nop(struct module *mod, struct dyn_ftrace *rec)
- 		/* Expected sequence: 'mflr r0', ['std r0,16(r1)'], 'bl _mcount' */
- 		ret = ftrace_read_inst(ip - 4, &old);
- 		if (!ret && !ppc_inst_equal(old, ppc_inst(PPC_RAW_MFLR(_R0)))) {
-+			/* Gcc v5.x emit the additional 'std' instruction, gcc v6.x don't */
- 			ret = ftrace_validate_inst(ip - 8, ppc_inst(PPC_RAW_MFLR(_R0)));
--			ret |= ftrace_validate_inst(ip - 4, ppc_inst(PPC_RAW_STD(_R0, _R1, 16)));
-+			if (ret)
-+				return ret;
-+			ret = ftrace_modify_code(ip - 4, ppc_inst(PPC_RAW_STD(_R0, _R1, 16)),
-+						 ppc_inst(PPC_RAW_NOP()));
+diff --git a/arch/powerpc/kernel/module_64.c b/arch/powerpc/kernel/module_64.c
+index e9bab599d0c2..1db88409bd95 100644
+--- a/arch/powerpc/kernel/module_64.c
++++ b/arch/powerpc/kernel/module_64.c
+@@ -241,14 +241,8 @@ static unsigned long get_stubs_size(const Elf64_Ehdr *hdr,
  		}
- 	} else {
- 		return -EINVAL;
+ 	}
+ 
+-#ifdef CONFIG_DYNAMIC_FTRACE
+-	/* make the trampoline to the ftrace_caller */
+-	relocs++;
+-#ifdef CONFIG_DYNAMIC_FTRACE_WITH_REGS
+-	/* an additional one for ftrace_regs_caller */
+-	relocs++;
+-#endif
+-#endif
++	/* stubs for ftrace_caller and ftrace_regs_caller */
++	relocs += IS_ENABLED(CONFIG_DYNAMIC_FTRACE) + IS_ENABLED(CONFIG_DYNAMIC_FTRACE_WITH_REGS);
+ 
+ 	pr_debug("Looks like a total of %lu stubs, max\n", relocs);
+ 	return relocs * sizeof(struct ppc64_stub_entry);
 -- 
 2.47.0
 
