@@ -1,37 +1,37 @@
-Received: from relay.smtp-ext.broadcom.com (relay.smtp-ext.broadcom.com [192.19.144.207])
+Received: from relay.smtp-ext.broadcom.com (relay.smtp-ext.broadcom.com [192.19.144.209])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 240A518D64F;
-	Fri, 18 Oct 2024 20:53:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.19.144.207
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABE5718D650;
+	Fri, 18 Oct 2024 20:53:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.19.144.209
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729284826; cv=none; b=hmXxrJmOhysWKUKretqv/AXzmViSSM1rMgNS2+7FlFLzejp13Zkx3EwYCe9ZzcpBmG8c6wWpUc7a9C281lvU4QkcNCQHKOT/kSJ6Q0UeVFD+Nkpwq+hb127loDhYovGCguCdQdzEdXs3yraIjnjmBXA+CB6o6dRAbwYPYHF8veg=
+	t=1729284827; cv=none; b=eGZRatEDcPusxrqIDBo0X3gaSNhTdGYMkQ87r1diV6/i6i3lKxjwCPyrQuvDaUisIvHIx7rt0WXPFUIjT+tgZsd5w6+7kfMCFcksf4rd0zfeMpD2VhP799PoITMCssIoksfrG2JQKjaJj1dN3zmfpyf+vqEqRJYyRsKolpKE6n4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729284826; c=relaxed/simple;
-	bh=0jiB1tRHc2IgEsT0lkF5yK8TzDqhVGpedseWUDNs8HI=;
+	s=arc-20240116; t=1729284827; c=relaxed/simple;
+	bh=B5pHMQe6V0dWAA56a9Ep6qiKIoCxDAhjKJta+dS+6/0=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=svwpTZpkXi1nWmVvuk38bz+8PjWYgPDW2mNkI75LDouTbj80w8GdpBqsy3J9PwqIoDcPewdXPbV/wOL+tmIgQBFcHE3iS9itHmehtmp1DjDDTFzd03ZqFsf3kB7qf5g3igH7c47iCvDjcO3xacAP0MPOt1o4T1SfWdZSDKLxiuY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=P9MktG33; arc=none smtp.client-ip=192.19.144.207
+	 MIME-Version; b=LOgFj9SQAXv/QqOddeyI0RMyQGr3pZkH9/3oZMqJrjTnVR9yA5Df5xZl3g/TB3r9fmMwMPEiwqkx4g4Eg1dFSpTXn/iQtTgnnSKwQ1K8l+5oEMk+zgGsW4k1Iz2X7DC1UK4NnGMlSo8udE05ePMT1Z95PmZzV6hsQo452s7Y3+c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=cCfO/fPY; arc=none smtp.client-ip=192.19.144.209
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=broadcom.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="P9MktG33"
+	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="cCfO/fPY"
 Received: from mail-lvn-it-01.lvn.broadcom.net (mail-lvn-it-01.lvn.broadcom.net [10.36.132.253])
-	by relay.smtp-ext.broadcom.com (Postfix) with ESMTP id 31F2DC003AD1;
-	Fri, 18 Oct 2024 13:53:38 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 relay.smtp-ext.broadcom.com 31F2DC003AD1
+	by relay.smtp-ext.broadcom.com (Postfix) with ESMTP id 3294FC003ABA;
+	Fri, 18 Oct 2024 13:53:39 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 relay.smtp-ext.broadcom.com 3294FC003ABA
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=broadcom.com;
-	s=dkimrelay; t=1729284818;
-	bh=0jiB1tRHc2IgEsT0lkF5yK8TzDqhVGpedseWUDNs8HI=;
+	s=dkimrelay; t=1729284819;
+	bh=B5pHMQe6V0dWAA56a9Ep6qiKIoCxDAhjKJta+dS+6/0=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=P9MktG33gf9fUSfp6ywesUxei0uEgvl277RPQ0zhTJjzpdekx9LoCPz7uJEvlNjgY
-	 IZ7Hg+YbHcmNORrysMhea+fsUk7lZztAT2fPmFXYqtq/sLgOndWepGGk/ci37sxeqY
-	 YSi8IVzynC2BIIpavKryYSNqdVIkT0KsdGZqMxJM=
+	b=cCfO/fPYCA+519rhhFetz0g8qOyEBrpselvj9Vya4G5HLdPoRUb6GNOiofUN8PBVq
+	 g2RIeSpWbGC++rs6YCe3bETjhxo3+vi0uvy/ie/jy6hHh0UIT/HknNEc100fKOq2Xm
+	 7Hptqwh1ZypKP97gKNhC0TSyp+qhVhrLTfbdMO8E=
 Received: from pcie-dev03.dhcp.broadcom.net (pcie-dev03.dhcp.broadcom.net [10.59.171.67])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail-lvn-it-01.lvn.broadcom.net (Postfix) with ESMTPSA id 8715018041CACA;
-	Fri, 18 Oct 2024 13:53:37 -0700 (PDT)
+	by mail-lvn-it-01.lvn.broadcom.net (Postfix) with ESMTPSA id 80F5818041CAC6;
+	Fri, 18 Oct 2024 13:53:38 -0700 (PDT)
 From: jitendra.vegiraju@broadcom.com
 To: netdev@vger.kernel.org
 Cc: alexandre.torgue@foss.st.com,
@@ -63,9 +63,9 @@ Cc: alexandre.torgue@foss.st.com,
 	horms@kernel.org,
 	florian.fainelli@broadcom.com,
 	quic_abchauha@quicinc.com
-Subject: [PATCH net-next v6 3/5] net: stmmac: Integrate dw25gmac into stmmac hwif handling
-Date: Fri, 18 Oct 2024 13:53:30 -0700
-Message-Id: <20241018205332.525595-4-jitendra.vegiraju@broadcom.com>
+Subject: [PATCH net-next v6 5/5] net: stmmac: Add BCM8958x driver to build system
+Date: Fri, 18 Oct 2024 13:53:32 -0700
+Message-Id: <20241018205332.525595-6-jitendra.vegiraju@broadcom.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20241018205332.525595-1-jitendra.vegiraju@broadcom.com>
 References: <20241018205332.525595-1-jitendra.vegiraju@broadcom.com>
@@ -79,62 +79,67 @@ Content-Transfer-Encoding: 8bit
 
 From: Jitendra Vegiraju <jitendra.vegiraju@broadcom.com>
 
-Integrate dw25gmac support into stmmac hardware interface handling.
-Added a new entry to the stmmac_hw table in hwif.c.
-Since BCM8958x is an early adopter device, the synopsis_id reported in HW
-is 0x32 and device_id is DWXGMAC_ID. Provide override support by giving
-preference to snps_id, dev_id values when initialized to non-zero
-values by glue driver.
+Add PCI driver for BCM8958x to the linux build system and
+update MAINTAINERS file.
 
 Signed-off-by: Jitendra Vegiraju <jitendra.vegiraju@broadcom.com>
 ---
- drivers/net/ethernet/stmicro/stmmac/hwif.c | 26 +++++++++++++++++++++-
- 1 file changed, 25 insertions(+), 1 deletion(-)
+ MAINTAINERS                                  |  8 ++++++++
+ drivers/net/ethernet/stmicro/stmmac/Kconfig  | 11 +++++++++++
+ drivers/net/ethernet/stmicro/stmmac/Makefile |  1 +
+ 3 files changed, 20 insertions(+)
 
-diff --git a/drivers/net/ethernet/stmicro/stmmac/hwif.c b/drivers/net/ethernet/stmicro/stmmac/hwif.c
-index 88cce28b2f98..b8ee7bf20037 100644
---- a/drivers/net/ethernet/stmicro/stmmac/hwif.c
-+++ b/drivers/net/ethernet/stmicro/stmmac/hwif.c
-@@ -257,6 +257,27 @@ static const struct stmmac_hwif_entry {
- 		.est = &dwmac510_est_ops,
- 		.setup = dwxgmac2_setup,
- 		.quirks = NULL,
-+	}, {
-+		.gmac = false,
-+		.gmac4 = false,
-+		.xgmac = true,
-+		.min_id = DW25GMAC_CORE_4_00,
-+		.dev_id = DW25GMAC_ID,
-+		.regs = {
-+			.ptp_off = PTP_XGMAC_OFFSET,
-+			.mmc_off = MMC_XGMAC_OFFSET,
-+			.est_off = EST_XGMAC_OFFSET,
-+		},
-+		.desc = &dwxgmac210_desc_ops,
-+		.dma = &dw25gmac400_dma_ops,
-+		.mac = &dwxgmac210_ops,
-+		.hwtimestamp = &stmmac_ptp,
-+		.mode = NULL,
-+		.tc = &dwmac510_tc_ops,
-+		.mmc = &dwxgmac_mmc_ops,
-+		.est = &dwmac510_est_ops,
-+		.setup = dw25gmac_setup,
-+		.quirks = NULL,
- 	}, {
- 		.gmac = false,
- 		.gmac4 = false,
-@@ -292,7 +313,10 @@ int stmmac_hwif_init(struct stmmac_priv *priv)
- 	u32 id, dev_id = 0;
- 	int i, ret;
+diff --git a/MAINTAINERS b/MAINTAINERS
+index d678a58c0205..f5ded80446d0 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -4464,6 +4464,14 @@ N:	brcmstb
+ N:	bcm7038
+ N:	bcm7120
  
--	if (needs_gmac) {
-+	if (priv->plat->snps_id && priv->plat->dev_id) {
-+		id = priv->plat->snps_id;
-+		dev_id = priv->plat->dev_id;
-+	} else if (needs_gmac) {
- 		id = stmmac_get_id(priv, GMAC_VERSION);
- 	} else if (needs_gmac4 || needs_xgmac) {
- 		id = stmmac_get_id(priv, GMAC4_VERSION);
++BROADCOM BCM8958X ETHERNET DRIVER
++M:	Jitendra Vegiraju <jitendra.vegiraju@broadcom.com>
++R:	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>
++L:	netdev@vger.kernel.org
++S:	Maintained
++F:	drivers/net/ethernet/stmicro/stmmac/dw25gmac.*
++F:	drivers/net/ethernet/stmicro/stmmac/dwmac-brcm.c
++
+ BROADCOM BCMBCA ARM ARCHITECTURE
+ M:	William Zhang <william.zhang@broadcom.com>
+ M:	Anand Gore <anand.gore@broadcom.com>
+diff --git a/drivers/net/ethernet/stmicro/stmmac/Kconfig b/drivers/net/ethernet/stmicro/stmmac/Kconfig
+index 05cc07b8f48c..47c9db123b03 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/Kconfig
++++ b/drivers/net/ethernet/stmicro/stmmac/Kconfig
+@@ -298,6 +298,17 @@ config DWMAC_LOONGSON
+ 	  This selects the LOONGSON PCI bus support for the stmmac driver,
+ 	  Support for ethernet controller on Loongson-2K1000 SoC and LS7A1000 bridge.
+ 
++config DWMAC_BRCM
++	tristate "Broadcom XGMAC support"
++	depends on STMMAC_ETH && PCI
++	depends on COMMON_CLK
++	help
++	  Support for ethernet controllers on Broadcom BCM8958x SoCs.
++
++	  This selects Broadcom XGMAC specific PCI bus support for the
++	  stmmac driver. This driver provides the glue layer on top of the
++	  stmmac driver required for the Broadcom BCM8958x SoC devices.
++
+ config STMMAC_PCI
+ 	tristate "STMMAC PCI bus support"
+ 	depends on STMMAC_ETH && PCI
+diff --git a/drivers/net/ethernet/stmicro/stmmac/Makefile b/drivers/net/ethernet/stmicro/stmmac/Makefile
+index 967e8a9aa432..517981b9e93a 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/Makefile
++++ b/drivers/net/ethernet/stmicro/stmmac/Makefile
+@@ -41,4 +41,5 @@ dwmac-altr-socfpga-objs := dwmac-socfpga.o
+ obj-$(CONFIG_STMMAC_PCI)	+= stmmac-pci.o
+ obj-$(CONFIG_DWMAC_INTEL)	+= dwmac-intel.o
+ obj-$(CONFIG_DWMAC_LOONGSON)	+= dwmac-loongson.o
++obj-$(CONFIG_DWMAC_BRCM)	+= dwmac-brcm.o
+ stmmac-pci-objs:= stmmac_pci.o
 -- 
 2.34.1
 
