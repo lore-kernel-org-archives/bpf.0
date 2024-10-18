@@ -1,290 +1,149 @@
-Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD7E7204030
-	for <bpf@vger.kernel.org>; Fri, 18 Oct 2024 17:14:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A1722022D6;
+	Fri, 18 Oct 2024 17:37:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729271651; cv=none; b=VG4uleb6NH/BV6nuXVI+uulQ2znN/nV+qBTTDPZbpZVNkBBBg52swyU7wcHdfcV4ZexW7IVd7U+wcpn/EroqrO1jJTJlWd9G2N/+aMclGV//HMovYGPtsEbIgjK5QUKgbe1Cr56RSaHQwJ+JWgx/jamyjU37EwTzF7/L0G471fE=
+	t=1729273034; cv=none; b=cCkll7YE8oMAb78tDVLxIbrxaQVXa0xfrbNFBqGROp8zUZawFKWWsKxNFNN9BOXYw7BqLYHMaqbOelPJP676Z/kOcnJvnaYiXUojCdhCHGSHwOVF0bEbTfHZomfUWUTLf+1y6o5M0VPzIk4rub1ZVqxbZRvr027xvjvxVQk9QR8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729271651; c=relaxed/simple;
-	bh=S1Gv+rk5OMZjIy8w9tc/hHLobo9asJPPPuXLuuF/Oek=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=fcEFCCBLwfNBgMc/xPWnMcpI7+jrJW2OTYVy8Cb4Pgk62dEe92FM1zWhS70JXxIA45tsnN78/9ys2VLcofX4CVD4gj8AoSZ4GlyeIpJ8UmBcMuqrKO3xrqkaa8ijXofrUR6MO42tonOpZ/QSAt7y+gcSu04CwgQN2DmMCj2LT4c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fastly.com; spf=pass smtp.mailfrom=fastly.com; dkim=pass (1024-bit key) header.d=fastly.com header.i=@fastly.com header.b=w8cy4SGv; arc=none smtp.client-ip=209.85.214.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fastly.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fastly.com
+	s=arc-20240116; t=1729273034; c=relaxed/simple;
+	bh=OHa/5zWi0vXq4rcvFOVZBvchbuev/e5QhlYi7bktsvw=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=doOHhNg73qd7qFPoYg4/fM2+XOarMA9sE763yU5F/eQfaDVflVZPthjQAEX67y8x63hbj333ExnKSXqVxbxLLzZvXpqDCC5hIYGtoC9d9S3vjksHW5xrMpGxChYnu9rKG1sXP341ltculagEYR3aN+9b/lNZaKh2I7gyh8wHMaE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=govUo/QW; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=fastly.com header.i=@fastly.com header.b="w8cy4SGv"
-Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-20c7ee8fe6bso22902975ad.2
-        for <bpf@vger.kernel.org>; Fri, 18 Oct 2024 10:14:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fastly.com; s=google; t=1729271649; x=1729876449; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=UoQ9bUJkSmK6/RGq4OX+PcLT68fp0+DWsECoKle6AwQ=;
-        b=w8cy4SGvoXKg/AzJylc2TLXtVflsxtiw+V6bkkRnk1GtNfjkxJwLlXUUQcpoTBa0/Z
-         jPoSGlqSltXzp8X9704qRiab9rn5TL1Vb3/UQ1kMoFNap1bG2dSVaIzaI657RSXJBi8B
-         XviBoOBx7aY5Bkr632qhwWQbDDWzeo4+ecUM4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729271649; x=1729876449;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=UoQ9bUJkSmK6/RGq4OX+PcLT68fp0+DWsECoKle6AwQ=;
-        b=JgyVJd3lJIU7cx14RauGmJMI7MNZT5/yrnrs4yswSUmSOP/BNKlkNUnYAn+OxqSBOU
-         Wk5jLOb256tdBFVDUVT/UPH8dMio7+DAlalE7P8XEDzM7YQpFlmaZ++StEo0Za76DRTR
-         0HJfDOciUjsc5uGQyp8/PzfSWvPI1SLcK19IcMV/XVLpVs+LdMW4AuMJ4eOqoB5HWIUN
-         RRpPTi8ShHiJCZw/4wkVCIHroqFamnT/FLZWkTnOIbM4BeRC+9PF7h7yNdIPyESmV2eL
-         lRy9Ff29S2Og6YrgL4hA5hIe6p6HNw4dFFD4iaXmIS/9OFN2C+fBI7AcsDxcgCjXsZr6
-         qFng==
-X-Forwarded-Encrypted: i=1; AJvYcCVLL52PoWlhCMcykl8eu24t5M4GH84fYPFyOSumP5jJ8OdSgunOvqwt8M9N8oIm9HUZ2z0=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyfrg04IYq8tgdGza/RRzrTcl4WS7fRddmS1H9BUik9YFlp9UEr
-	7U05VHWHJ/8DsiSSUqEgkOneLZ+HcjUjVscG0JFvVihRuVRJKPxE6k+DarFxQL8=
-X-Google-Smtp-Source: AGHT+IHEwb5+PY/1lW1EQSVV9TJ91giJ8W22+L0YQoZqb5lwDEqb12kb07vrXGOHn6hNiJ09tEZFcg==
-X-Received: by 2002:a17:902:da90:b0:20b:951f:6dff with SMTP id d9443c01a7336-20e59aa0261mr46928475ad.0.1729271649042;
-        Fri, 18 Oct 2024 10:14:09 -0700 (PDT)
-Received: from localhost.localdomain ([2620:11a:c019:0:65e:3115:2f58:c5fd])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-20e5a71ecd2sm15000255ad.29.2024.10.18.10.14.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Oct 2024 10:14:08 -0700 (PDT)
-From: Joe Damato <jdamato@fastly.com>
-To: netdev@vger.kernel.org
-Cc: kurt@linutronix.de,
-	vinicius.gomes@intel.com,
-	Joe Damato <jdamato@fastly.com>,
-	Tony Nguyen <anthony.l.nguyen@intel.com>,
-	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	intel-wired-lan@lists.osuosl.org (moderated list:INTEL ETHERNET DRIVERS),
-	linux-kernel@vger.kernel.org (open list),
-	bpf@vger.kernel.org (open list:XDP (eXpress Data Path))
-Subject: [net-next v3 2/2] igc: Link queues to NAPI instances
-Date: Fri, 18 Oct 2024 17:13:43 +0000
-Message-Id: <20241018171343.314835-3-jdamato@fastly.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20241018171343.314835-1-jdamato@fastly.com>
-References: <20241018171343.314835-1-jdamato@fastly.com>
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="govUo/QW"
+Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49I9m5SF015438;
+	Fri, 18 Oct 2024 17:36:47 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:date:from:in-reply-to:message-id
+	:mime-version:references:subject:to; s=pp1; bh=oL9IMEzVW/uiWNE33
+	1Qsj0y4/iuYLMGRaqR2BGXECGI=; b=govUo/QWtIxF90G2UJGKTLmlERhRafMVx
+	IfjDkyVwkCQ1smfyqpYHgah1XY0mAbzqeQodBGwMtMqZCRoaQh2tbsjzbStVt5Mr
+	lvdNicvd4QRrX7dbWf/nJVywpnhRpeqlUUCDF8VP9layYK3fgK6q4gxHGscMVC41
+	SS6fUx3kANk1SPuBFLoM5orI2QSIUXRRX9b4MvXnNtf/GwbHqAtBGLdaK5ZE6/d+
+	bJABKd3I7wLVjAPvpn2/S5go1kt+z7DlhUBtyvZeycpqxmM95s/eAicoONpcTC4H
+	yB0Mw0KrhO/qt3QgdBXfA6E0y1m4pZ0Bp/kN1xBgAlZsXIV2o6y5w==
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 42aqgracf6-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 18 Oct 2024 17:36:47 +0000 (GMT)
+Received: from m0356516.ppops.net (m0356516.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 49IHakP3009380;
+	Fri, 18 Oct 2024 17:36:46 GMT
+Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 42aqgracf0-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 18 Oct 2024 17:36:46 +0000 (GMT)
+Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma12.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 49IH7CmD006674;
+	Fri, 18 Oct 2024 17:36:45 GMT
+Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
+	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 4283ese5ru-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 18 Oct 2024 17:36:45 +0000
+Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
+	by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 49IHaguB32244354
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 18 Oct 2024 17:36:42 GMT
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 3881420043;
+	Fri, 18 Oct 2024 17:36:42 +0000 (GMT)
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 2198B20040;
+	Fri, 18 Oct 2024 17:36:38 +0000 (GMT)
+Received: from li-bd3f974c-2712-11b2-a85c-df1cec4d728e.ibm.com.com (unknown [9.43.99.188])
+	by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Fri, 18 Oct 2024 17:36:37 +0000 (GMT)
+From: Hari Bathini <hbathini@linux.ibm.com>
+To: linuxppc-dev <linuxppc-dev@lists.ozlabs.org>, bpf@vger.kernel.org,
+        linux-trace-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc: Michael Ellerman <mpe@ellerman.id.au>, "Naveen N. Rao" <naveen@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Vishal Chourasia <vishalc@linux.ibm.com>,
+        Mahesh J Salgaonkar <mahesh@linux.ibm.com>
+Subject: [PATCH v6 01/17] powerpc/trace: Account for -fpatchable-function-entry support by toolchain
+Date: Fri, 18 Oct 2024 23:06:16 +0530
+Message-ID: <20241018173632.277333-2-hbathini@linux.ibm.com>
+X-Mailer: git-send-email 2.47.0
+In-Reply-To: <20241018173632.277333-1-hbathini@linux.ibm.com>
+References: <20241018173632.277333-1-hbathini@linux.ibm.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: qreVLQ2fwO0r0YyIsFvzm78eaidVgshv
+X-Proofpoint-GUID: 3IpwSKqhGPkW8erZ7fEpG8dlsULJrk7V
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
+ definitions=2024-10-15_01,2024-10-11_01,2024-09-30_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ phishscore=0 mlxlogscore=999 malwarescore=0 clxscore=1015
+ lowpriorityscore=0 adultscore=0 spamscore=0 mlxscore=0 suspectscore=0
+ impostorscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.19.0-2409260000 definitions=main-2410180111
 
-Link queues to NAPI instances via netdev-genl API so that users can
-query this information with netlink. Handle a few cases in the driver:
-  1. Link/unlink the NAPIs when XDP is enabled/disabled
-  2. Handle IGC_FLAG_QUEUE_PAIRS enabled and disabled
+From: Naveen N Rao <naveen@kernel.org>
 
-Example output when IGC_FLAG_QUEUE_PAIRS is enabled:
+So far, we have relied on the fact that gcc supports both
+-mprofile-kernel, as well as -fpatchable-function-entry, and clang
+supports neither. Our Makefile only checks for CONFIG_MPROFILE_KERNEL to
+decide which files to build. Clang has a feature request out [*] to
+implement -fpatchable-function-entry, and is unlikely to support
+-mprofile-kernel.
 
-$ ./tools/net/ynl/cli.py --spec Documentation/netlink/specs/netdev.yaml \
-                         --dump queue-get --json='{"ifindex": 2}'
+Update our Makefile checks so that we pick up the correct files to build
+once clang picks up support for -fpatchable-function-entry.
 
-[{'id': 0, 'ifindex': 2, 'napi-id': 8193, 'type': 'rx'},
- {'id': 1, 'ifindex': 2, 'napi-id': 8194, 'type': 'rx'},
- {'id': 2, 'ifindex': 2, 'napi-id': 8195, 'type': 'rx'},
- {'id': 3, 'ifindex': 2, 'napi-id': 8196, 'type': 'rx'},
- {'id': 0, 'ifindex': 2, 'napi-id': 8193, 'type': 'tx'},
- {'id': 1, 'ifindex': 2, 'napi-id': 8194, 'type': 'tx'},
- {'id': 2, 'ifindex': 2, 'napi-id': 8195, 'type': 'tx'},
- {'id': 3, 'ifindex': 2, 'napi-id': 8196, 'type': 'tx'}]
+[*] https://github.com/llvm/llvm-project/issues/57031
 
-Since IGC_FLAG_QUEUE_PAIRS is enabled, you'll note that the same NAPI ID
-is present for both rx and tx queues at the same index, for example
-index 0:
-
-{'id': 0, 'ifindex': 2, 'napi-id': 8193, 'type': 'rx'},
-{'id': 0, 'ifindex': 2, 'napi-id': 8193, 'type': 'tx'},
-
-To test IGC_FLAG_QUEUE_PAIRS disabled, a test system was booted using
-the grub command line option "maxcpus=2" to force
-igc_set_interrupt_capability to disable IGC_FLAG_QUEUE_PAIRS.
-
-Example output when IGC_FLAG_QUEUE_PAIRS is disabled:
-
-$ lscpu | grep "On-line CPU"
-On-line CPU(s) list:      0,2
-
-$ ethtool -l enp86s0  | tail -5
-Current hardware settings:
-RX:		n/a
-TX:		n/a
-Other:		1
-Combined:	2
-
-$ cat /proc/interrupts  | grep enp
- 144: [...] enp86s0
- 145: [...] enp86s0-rx-0
- 146: [...] enp86s0-rx-1
- 147: [...] enp86s0-tx-0
- 148: [...] enp86s0-tx-1
-
-1 "other" IRQ, and 2 IRQs for each of RX and Tx, so we expect netlink to
-report 4 IRQs with unique NAPI IDs:
-
-$ ./tools/net/ynl/cli.py --spec Documentation/netlink/specs/netdev.yaml \
-                         --dump napi-get --json='{"ifindex": 2}'
-[{'id': 8196, 'ifindex': 2, 'irq': 148},
- {'id': 8195, 'ifindex': 2, 'irq': 147},
- {'id': 8194, 'ifindex': 2, 'irq': 146},
- {'id': 8193, 'ifindex': 2, 'irq': 145}]
-
-Now we examine which queues these NAPIs are associated with, expecting
-that since IGC_FLAG_QUEUE_PAIRS is disabled each RX and TX queue will
-have its own NAPI instance:
-
-$ ./tools/net/ynl/cli.py --spec Documentation/netlink/specs/netdev.yaml \
-                         --dump queue-get --json='{"ifindex": 2}'
-[{'id': 0, 'ifindex': 2, 'napi-id': 8193, 'type': 'rx'},
- {'id': 1, 'ifindex': 2, 'napi-id': 8194, 'type': 'rx'},
- {'id': 0, 'ifindex': 2, 'napi-id': 8195, 'type': 'tx'},
- {'id': 1, 'ifindex': 2, 'napi-id': 8196, 'type': 'tx'}]
-
-Signed-off-by: Joe Damato <jdamato@fastly.com>
+Signed-off-by: Naveen N Rao <naveen@kernel.org>
 ---
- v3:
-   - Replace igc_unset_queue_napi with igc_set_queue_napi(adapater, i,
-     NULL), as suggested by Vinicius Costa Gomes
-   - Simplify implemention of igc_set_queue_napi as suggested by Kurt
-     Kanzenbach, with a tweak to use ring->queue_index
+ arch/powerpc/kernel/trace/Makefile | 11 +++++++----
+ 1 file changed, 7 insertions(+), 4 deletions(-)
 
- v2:
-   - Update commit message to include tests for IGC_FLAG_QUEUE_PAIRS
-     disabled
-   - Refactored code to move napi queue mapping and unmapping to helper
-     functions igc_set_queue_napi and igc_unset_queue_napi
-   - Adjust the code to handle IGC_FLAG_QUEUE_PAIRS disabled
-   - Call helpers to map/unmap queues to NAPIs in igc_up, __igc_open,
-     igc_xdp_enable_pool, and igc_xdp_disable_pool
-
- drivers/net/ethernet/intel/igc/igc.h      |  2 ++
- drivers/net/ethernet/intel/igc/igc_main.c | 33 ++++++++++++++++++++---
- drivers/net/ethernet/intel/igc/igc_xdp.c  |  2 ++
- 3 files changed, 33 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/net/ethernet/intel/igc/igc.h b/drivers/net/ethernet/intel/igc/igc.h
-index eac0f966e0e4..b8111ad9a9a8 100644
---- a/drivers/net/ethernet/intel/igc/igc.h
-+++ b/drivers/net/ethernet/intel/igc/igc.h
-@@ -337,6 +337,8 @@ struct igc_adapter {
- 	struct igc_led_classdev *leds;
- };
+diff --git a/arch/powerpc/kernel/trace/Makefile b/arch/powerpc/kernel/trace/Makefile
+index 125f4ca588b9..d6c3885453bd 100644
+--- a/arch/powerpc/kernel/trace/Makefile
++++ b/arch/powerpc/kernel/trace/Makefile
+@@ -9,12 +9,15 @@ CFLAGS_REMOVE_ftrace.o = $(CC_FLAGS_FTRACE)
+ CFLAGS_REMOVE_ftrace_64_pg.o = $(CC_FLAGS_FTRACE)
+ endif
  
-+void igc_set_queue_napi(struct igc_adapter *adapter, int q_idx,
-+			struct napi_struct *napi);
- void igc_up(struct igc_adapter *adapter);
- void igc_down(struct igc_adapter *adapter);
- int igc_open(struct net_device *netdev);
-diff --git a/drivers/net/ethernet/intel/igc/igc_main.c b/drivers/net/ethernet/intel/igc/igc_main.c
-index 7964bbedb16c..783fc8e12ba1 100644
---- a/drivers/net/ethernet/intel/igc/igc_main.c
-+++ b/drivers/net/ethernet/intel/igc/igc_main.c
-@@ -4948,6 +4948,22 @@ static int igc_sw_init(struct igc_adapter *adapter)
- 	return 0;
- }
- 
-+void igc_set_queue_napi(struct igc_adapter *adapter, int vector,
-+			struct napi_struct *napi)
-+{
-+	struct igc_q_vector *q_vector = adapter->q_vector[vector];
+-obj32-$(CONFIG_FUNCTION_TRACER)		+= ftrace.o ftrace_entry.o
+-ifdef CONFIG_MPROFILE_KERNEL
+-obj64-$(CONFIG_FUNCTION_TRACER)		+= ftrace.o ftrace_entry.o
++ifdef CONFIG_FUNCTION_TRACER
++obj32-y					+= ftrace.o ftrace_entry.o
++ifeq ($(CONFIG_MPROFILE_KERNEL)$(CONFIG_ARCH_USING_PATCHABLE_FUNCTION_ENTRY),)
++obj64-y					+= ftrace_64_pg.o ftrace_64_pg_entry.o
+ else
+-obj64-$(CONFIG_FUNCTION_TRACER)		+= ftrace_64_pg.o ftrace_64_pg_entry.o
++obj64-y					+= ftrace.o ftrace_entry.o
++endif
+ endif
 +
-+	if (q_vector->rx.ring)
-+		netif_queue_set_napi(adapter->netdev,
-+				     q_vector->rx.ring->queue_index,
-+				     NETDEV_QUEUE_TYPE_RX, napi);
-+
-+	if (q_vector->tx.ring)
-+		netif_queue_set_napi(adapter->netdev,
-+				     q_vector->tx.ring->queue_index,
-+				     NETDEV_QUEUE_TYPE_TX, napi);
-+}
-+
- /**
-  * igc_up - Open the interface and prepare it to handle traffic
-  * @adapter: board private structure
-@@ -4955,6 +4971,7 @@ static int igc_sw_init(struct igc_adapter *adapter)
- void igc_up(struct igc_adapter *adapter)
- {
- 	struct igc_hw *hw = &adapter->hw;
-+	struct napi_struct *napi;
- 	int i = 0;
+ obj-$(CONFIG_TRACING)			+= trace_clock.o
  
- 	/* hardware has been reset, we need to reload some things */
-@@ -4962,8 +4979,11 @@ void igc_up(struct igc_adapter *adapter)
- 
- 	clear_bit(__IGC_DOWN, &adapter->state);
- 
--	for (i = 0; i < adapter->num_q_vectors; i++)
--		napi_enable(&adapter->q_vector[i]->napi);
-+	for (i = 0; i < adapter->num_q_vectors; i++) {
-+		napi = &adapter->q_vector[i]->napi;
-+		napi_enable(napi);
-+		igc_set_queue_napi(adapter, i, napi);
-+	}
- 
- 	if (adapter->msix_entries)
- 		igc_configure_msix(adapter);
-@@ -5192,6 +5212,7 @@ void igc_down(struct igc_adapter *adapter)
- 	for (i = 0; i < adapter->num_q_vectors; i++) {
- 		if (adapter->q_vector[i]) {
- 			napi_synchronize(&adapter->q_vector[i]->napi);
-+			igc_set_queue_napi(adapter, i, NULL);
- 			napi_disable(&adapter->q_vector[i]->napi);
- 		}
- 	}
-@@ -6021,6 +6042,7 @@ static int __igc_open(struct net_device *netdev, bool resuming)
- 	struct igc_adapter *adapter = netdev_priv(netdev);
- 	struct pci_dev *pdev = adapter->pdev;
- 	struct igc_hw *hw = &adapter->hw;
-+	struct napi_struct *napi;
- 	int err = 0;
- 	int i = 0;
- 
-@@ -6056,8 +6078,11 @@ static int __igc_open(struct net_device *netdev, bool resuming)
- 
- 	clear_bit(__IGC_DOWN, &adapter->state);
- 
--	for (i = 0; i < adapter->num_q_vectors; i++)
--		napi_enable(&adapter->q_vector[i]->napi);
-+	for (i = 0; i < adapter->num_q_vectors; i++) {
-+		napi = &adapter->q_vector[i]->napi;
-+		napi_enable(napi);
-+		igc_set_queue_napi(adapter, i, napi);
-+	}
- 
- 	/* Clear any pending interrupts. */
- 	rd32(IGC_ICR);
-diff --git a/drivers/net/ethernet/intel/igc/igc_xdp.c b/drivers/net/ethernet/intel/igc/igc_xdp.c
-index e27af72aada8..4da633430b80 100644
---- a/drivers/net/ethernet/intel/igc/igc_xdp.c
-+++ b/drivers/net/ethernet/intel/igc/igc_xdp.c
-@@ -84,6 +84,7 @@ static int igc_xdp_enable_pool(struct igc_adapter *adapter,
- 		napi_disable(napi);
- 	}
- 
-+	igc_set_queue_napi(adapter, queue_id, NULL);
- 	set_bit(IGC_RING_FLAG_AF_XDP_ZC, &rx_ring->flags);
- 	set_bit(IGC_RING_FLAG_AF_XDP_ZC, &tx_ring->flags);
- 
-@@ -133,6 +134,7 @@ static int igc_xdp_disable_pool(struct igc_adapter *adapter, u16 queue_id)
- 	xsk_pool_dma_unmap(pool, IGC_RX_DMA_ATTR);
- 	clear_bit(IGC_RING_FLAG_AF_XDP_ZC, &rx_ring->flags);
- 	clear_bit(IGC_RING_FLAG_AF_XDP_ZC, &tx_ring->flags);
-+	igc_set_queue_napi(adapter, queue_id, napi);
- 
- 	if (needs_reset) {
- 		napi_enable(napi);
+ obj-$(CONFIG_PPC64)			+= $(obj64-y)
 -- 
-2.25.1
+2.47.0
 
