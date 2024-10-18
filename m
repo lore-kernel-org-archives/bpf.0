@@ -1,111 +1,143 @@
-Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
+Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 857B62A1D1;
-	Fri, 18 Oct 2024 00:46:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9833020E326
+	for <bpf@vger.kernel.org>; Fri, 18 Oct 2024 02:03:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729212388; cv=none; b=uUNmRdeppmVorp0ZHwJskEutWqCyK+ts7WWSG2DyOSgXkhIshQNT8xDggsrzlRZ+tQ689Xm2CfaeWZrD6E/e0Q1XXURSHOQFkET39tC37l6J/2elLxLYpUSN+D22Z4PaERpKwfWVNsPwTffSDeJe6OgqkqrhDasY3KQSAfrMWPY=
+	t=1729217004; cv=none; b=GAnFKPgEkzBJiSwI6wr2ER6PJw9veeye1WNWZZPgzRQLtER8w3cHF0uDIumHSUBMzhGDMESH9B4OzGwfcFeRZVsYZrRBhkgSKAFlcJ1AF2c1kstkyWyShCpdxwkpgCxhrB37cDB4QK8BJXhNmg2s1PxjTm9jwQPhZLAZTAvqgC0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729212388; c=relaxed/simple;
-	bh=A9W5BXqJLzSc6wqaDftNTLmM/XjPL1T+K9gE4lzY9eg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=O8gtDiOliKKlFQXAg+lqVPz6xLDxev1IGy5lI6j6bUTKrzCZ2zV/4+cGChbiTS64NU6Rl99eE6mQdHk3ExBjftYdaSKWampbL/RQaxhU9adHLGxj8YTjW/UKzR5Jjauto8N1AgLH6U5HD8oTbdzmpqhgxFJgTott00kk0/NpGm4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Bn4GOA3b; arc=none smtp.client-ip=209.85.215.172
+	s=arc-20240116; t=1729217004; c=relaxed/simple;
+	bh=p6SSN4os+4yDpIS+8RGCRvE9ScZCpcjKRlkUFn+lSlM=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=ikhvqIijYTzyolwWhoyo3v6mi14HNE4N15EQDlJtIkC/rxcc/HOWZAXxr1L8xi95JvemZNJtqPBfYpjx3G+3PrPVd5/N9bNy2u8wUQ12AlrmMc16a2J00Gp2L5oNoOLqw9u3T8d6nLNOuTO+ltUCikElGR71sTG9q3w6FIXOkZk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ujr7TRQT; arc=none smtp.client-ip=209.85.214.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Bn4GOA3b"
-Received: by mail-pg1-f172.google.com with SMTP id 41be03b00d2f7-7ea784aea63so909546a12.3;
-        Thu, 17 Oct 2024 17:46:27 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ujr7TRQT"
+Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-20cdb889222so16911115ad.3
+        for <bpf@vger.kernel.org>; Thu, 17 Oct 2024 19:03:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1729212387; x=1729817187; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=RVunuq3gbvj+AkSw28J9IAD2E6K6krV4ZjRY2oiq+QY=;
-        b=Bn4GOA3bJHOvp7OuqZK5yyXMrwE37cypyWQ06BXwWvKRfSKaX6Xe8ag9CjjucE2Ylx
-         HLfQ297Wz/3BknAkP/T7dqM9qUVDafjvf/x/KvWUUWbm2QckRl/NZG0f2OYMMhlTjDWp
-         3qYy3lacBBarJmg295j/BwOVPi4ujOtnx6qPwR/tffSDJYYg+hhUzYlUwBqXNVJhlmsB
-         +ZNY8/884aM1Zi3YSEJ463Z9SBLGWYNwJfnXS0q5pO4wMH/bwGa0Br8mdmdx7hKLxJvC
-         Ri/5qJq5Vo1ZihR/AANC7vp/ABB72H2A22/GF9owJZF06q+u6lO4kEpYRQKuU7pTu6Hu
-         w+nA==
+        d=gmail.com; s=20230601; t=1729217003; x=1729821803; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=YaDNnr3hakhJqAiWa5aPSnbqXeJJN9gSynPqaIASC3g=;
+        b=Ujr7TRQTUuvdGCE1xJZwwE+3Kt+VkN8i1Psz1mMS1juiej1ytxyO3WpIOv0t3j69Xe
+         4z8qArEKDDsOrh2epOnTxD75tolmjAF84WgA0Z44J2Fxg7X1YYOqRqXo4xzY/wDm+AyD
+         kyP8Sj+RdVolqAmU7XgkG328QqlF5ofiMpYNow+8sEi4dFmsiF8ychpr+svnoMecc18U
+         nlzw8301eu5YIxqdp0hdY+jCamIiuf0dGw/7BoieltWoxuVtOjzO7VnxIqBwFhH3saoS
+         B/yMJU1FPKvpkYiOY3oI5Qvhe6dawVw15fF4M7nL9dIWA4FWsGWb/5+JNeJgjVRqG6qK
+         CXhw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729212387; x=1729817187;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=RVunuq3gbvj+AkSw28J9IAD2E6K6krV4ZjRY2oiq+QY=;
-        b=mk3voFCHNBqCD+aAHjzDWz/PmatIQhzvxSrIexw340aKB+yeF4e1740f7qsSR2WIoG
-         V+76wsgU/L0qI+Nq/WadnpCVe5p9OpKcKX2t8nH9zkD3ZHBpJ4hZNIPDwF8zZSX0R1+n
-         ke0pBOSFATE+hQaauU8uJvaOGN+ppxL+4kt2TaIFI1K1OVIFGio6KQ+1AjbGFhkPq9MG
-         DsC11UyjbxZK7atsHObWI9BnJTExJyVuYN9jaVHy8vunBoVvSynSyBL4JmsjaL4St04Y
-         Ugv59bUkz59QVpAkU39sFcjCFqy86uoHKLM8s3VttQedQ4pSCf3g0izY8OFuq7ySRocr
-         5VPw==
-X-Forwarded-Encrypted: i=1; AJvYcCUGrNUD7dYrsJ1ATSFlgvG549GSWMr0RLNYHUxSzl6iagvhUrt5RN5mJTyWp41e9FdzNjrOEJNBa+r0@vger.kernel.org, AJvYcCVSZFVc4N7kkWkyc+CHHU43yAV1quyfFIeOyou8o2cBJzWpWVYuWortRmpaXWB0VZMwt7zr5UQ/THAXMZ8/@vger.kernel.org, AJvYcCWdLBdoKQHPyE/Er52MyRYT2GrLlrjs7Ijbb5qdDu6FruhmNZ3B7arR9rJPw4FJp86tX14=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw1+7TkMMeHKPztVjA52i8gLxi8Nb4TQ4AJHDlwY4OZCgCB638x
-	lxS46uzz1uuROGWbp2XtD9QgVp4b97yzueoixDnS5pk57eIwaDJJLeF6zWWUCzo=
-X-Google-Smtp-Source: AGHT+IHPg8DRZc4blkJt6M4jB9p7QkQPgZeoQK6vx6eapZG8GWX01nJC76zgSI/PBpyyXXHR6o9AUA==
-X-Received: by 2002:a05:6a21:1693:b0:1cf:4ad8:83b9 with SMTP id adf61e73a8af0-1d92c5abf0dmr1004985637.43.1729212386730;
-        Thu, 17 Oct 2024 17:46:26 -0700 (PDT)
-Received: from fedora ([43.228.180.230])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-71ea3459abesm271817b3a.168.2024.10.17.17.46.20
+        d=1e100.net; s=20230601; t=1729217003; x=1729821803;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=YaDNnr3hakhJqAiWa5aPSnbqXeJJN9gSynPqaIASC3g=;
+        b=ef+zmWiqFxQZgDAR2EMG1hpwPVEGZkwl1Zhws++fthi0UvtcKddrJIVgzMqMu7OsAE
+         eZ4Lv9n5DPHeZZk4nej1fhRQtDiX11KL27JcTfs+ID6fqQJApcxYA0sr8Jqcl9TtMfkV
+         W1Elm4tHyc7NoIRQdDlAq0Gi/LXURA7r9rlN/5gvplWUsl/BiUOVgrzX466xh8OTm4yI
+         j/g1dCc/L+RTq9MrECynkrsXwYXV0/iPEJmq9Qef/YDtLuYDFcUATy+EFZEy7DeOpBCV
+         2sLhpww36+78wWA7WNS98WYc9mSUiLNljDfjqUD1dncAiAYmKXvJYvwsyamir58VoCup
+         HOsw==
+X-Gm-Message-State: AOJu0YyTf6MoDkhoTCR65MExJVd1fn8J/4HQkXnzIsxF+rMQgJ9vZ3kD
+	Bn12B0V9ZBMrBysKIOJoZ6T/hHogDoBk0Ya0530gIiKKJkozua2ZpYD4Dg==
+X-Google-Smtp-Source: AGHT+IEwQTzYPh+HLod60MUNrC18fqjJMwg4ng/2h8vB3Ul2pLPOoZx5zkfmdEgU58aTUV2SI4ICrA==
+X-Received: by 2002:a17:902:d4c9:b0:20b:7a46:1071 with SMTP id d9443c01a7336-20e5a70d006mr14334925ad.4.1729217002545;
+        Thu, 17 Oct 2024 19:03:22 -0700 (PDT)
+Received: from honey-badger.. ([38.34.87.7])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-20e5a915348sm2781285ad.283.2024.10.17.19.03.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Oct 2024 17:46:26 -0700 (PDT)
-Date: Fri, 18 Oct 2024 00:46:18 +0000
-From: Hangbin Liu <liuhangbin@gmail.com>
-To: Toke =?iso-8859-1?Q?H=F8iland-J=F8rgensen?= <toke@redhat.com>
-Cc: netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Jiri Pirko <jiri@resnulli.us>,
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-	Lorenzo Bianconi <lorenzo@kernel.org>,
-	Andrii Nakryiko <andriin@fb.com>, Jussi Maki <joamaki@gmail.com>,
-	Jay Vosburgh <jv@jvosburgh.net>,
-	Andy Gospodarek <andy@greyhouse.net>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Andrew Lunn <andrew+netdev@lunn.ch>, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-	Nikolay Aleksandrov <razor@blackwall.org>
-Subject: Re: [PATCHv2 net-next 2/3] bonding: use correct return value
-Message-ID: <ZxGv2s4bl5VQV4g-@fedora>
-References: <20241017020638.6905-1-liuhangbin@gmail.com>
- <20241017020638.6905-3-liuhangbin@gmail.com>
- <878qumzszs.fsf@toke.dk>
+        Thu, 17 Oct 2024 19:03:22 -0700 (PDT)
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: bpf@vger.kernel.org,
+	ast@kernel.org
+Cc: andrii@kernel.org,
+	daniel@iogearbox.net,
+	martin.lau@linux.dev,
+	kernel-team@fb.com,
+	yonghong.song@linux.dev,
+	Eduard Zingerman <eddyz87@gmail.com>
+Subject: [PATCH bpf-next v1 2/2] selftests/bpf: test with a very short loop
+Date: Thu, 17 Oct 2024 19:03:07 -0700
+Message-ID: <20241018020307.1766906-2-eddyz87@gmail.com>
+X-Mailer: git-send-email 2.46.2
+In-Reply-To: <20241018020307.1766906-1-eddyz87@gmail.com>
+References: <20241018020307.1766906-1-eddyz87@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <878qumzszs.fsf@toke.dk>
 
-On Thu, Oct 17, 2024 at 04:47:19PM +0200, Toke Høiland-Jørgensen wrote:
-> > diff --git a/drivers/net/bonding/bond_main.c b/drivers/net/bonding/bond_main.c
-> > index f0f76b6ac8be..6887a867fe8b 100644
-> > --- a/drivers/net/bonding/bond_main.c
-> > +++ b/drivers/net/bonding/bond_main.c
-> > @@ -5699,7 +5699,7 @@ static int bond_xdp_set(struct net_device *dev, struct bpf_prog *prog,
-> >  		if (dev_xdp_prog_count(slave_dev) > 0) {
-> >  			SLAVE_NL_ERR(dev, slave_dev, extack,
-> >  				     "Slave has XDP program loaded, please unload before enslaving");
-> > -			err = -EOPNOTSUPP;
-> > +			err = -EEXIST;
-> 
-> Hmm, this has been UAPI since kernel 5.15, so can we really change it
-> now? What's the purpose of changing it, anyway?
+The test added is a simplified reproducer from syzbot report [1].
+If verifier does not insert checkpoint somewhere inside the loop,
+verification of the program would take a very long time.
 
-I just think it should return EXIST when the error is "Slave has XDP program
-loaded". No special reason. If all others think we should not change it, I
-can drop this patch.
+This would happen because mark_chain_precision() for register r7 would
+constantly trace jump history of the loop back, processing many
+iterations for each mark_chain_precision() call.
 
-Thanks
-Hangbin
+[1] https://lore.kernel.org/bpf/670429f6.050a0220.49194.0517.GAE@google.com/
+
+Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
+---
+ .../bpf/progs/verifier_search_pruning.c       | 23 +++++++++++++++++++
+ tools/testing/selftests/bpf/veristat.cfg      |  1 +
+ 2 files changed, 24 insertions(+)
+
+diff --git a/tools/testing/selftests/bpf/progs/verifier_search_pruning.c b/tools/testing/selftests/bpf/progs/verifier_search_pruning.c
+index 5a14498d352f..f40e57251e94 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_search_pruning.c
++++ b/tools/testing/selftests/bpf/progs/verifier_search_pruning.c
+@@ -2,6 +2,7 @@
+ /* Converted from tools/testing/selftests/bpf/verifier/search_pruning.c */
+ 
+ #include <linux/bpf.h>
++#include <../../../include/linux/filter.h>
+ #include <bpf/bpf_helpers.h>
+ #include "bpf_misc.h"
+ 
+@@ -336,4 +337,26 @@ l0_%=:	r1 = 42;					\
+ 	: __clobber_all);
+ }
+ 
++/* Without checkpoint forcibly inserted at the back-edge a loop this
++ * test would take a very long time to verify.
++ */
++SEC("kprobe")
++__failure __log_level(4)
++__msg("BPF program is too large.")
++__naked void short_loop1(void)
++{
++	asm volatile (
++	"   r7 = *(u16 *)(r1 +0);"
++	"1: r7 += 0x1ab064b9;"
++	"   .8byte %[jset];" /* same as 'if r7 & 0x702000 goto 1b;' */
++	"   r7 &= 0x1ee60e;"
++	"   r7 += r1;"
++	"   if r7 s> 0x37d2 goto +0;"
++	"   r0 = 0;"
++	"   exit;"
++	:
++	: __imm_insn(jset, BPF_JMP_IMM(BPF_JSET, BPF_REG_7, 0x702000, -2))
++	: __clobber_all);
++}
++
+ char _license[] SEC("license") = "GPL";
+diff --git a/tools/testing/selftests/bpf/veristat.cfg b/tools/testing/selftests/bpf/veristat.cfg
+index 1a385061618d..e661ffdcaadf 100644
+--- a/tools/testing/selftests/bpf/veristat.cfg
++++ b/tools/testing/selftests/bpf/veristat.cfg
+@@ -15,3 +15,4 @@ test_usdt*
+ test_verif_scale*
+ test_xdp_noinline*
+ xdp_synproxy*
++verifier_search_pruning*
+-- 
+2.46.2
+
