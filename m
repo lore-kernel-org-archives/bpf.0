@@ -1,98 +1,91 @@
-Received: from outbound.soverin.net (outbound.soverin.net [185.233.34.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38E7615666D
-	for <bpf@vger.kernel.org>; Fri, 18 Oct 2024 09:26:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.233.34.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 806601FF7CC;
+	Fri, 18 Oct 2024 09:41:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729243585; cv=none; b=iZD/PceWWzVHowCVNEAiSJzalTQn5KceUvKmm1t0PpPeZdebJAl/nFNP2gfV7Z0IsvAdfN4AoIY75Td2m2zeyMcLygTfIPlG4NuftDT3fqBPfWxBKAmdr8x6+BwVN/GCarYCfrmuSBibr0wHO9EU0s7HQjQLOSyW7cFsafTfurw=
+	t=1729244506; cv=none; b=tuM556HL4yXJ/lwebRM3m6XUgKhYxF7DdP9YTGBdwOKxpXWs/OKzsWAgVIiSaS+ryUtiLdJIyTUfqcUNO5WmuVVMQXoF1VthQCh0GpI9tVcZoD1HGXqh+LwByGU8ycnLRsWQXnRMEqt3nvC6UVbPxsGlI07KsTpAbQ/McqHzq3c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729243585; c=relaxed/simple;
-	bh=2yX1lm0JYjYVXiUqlaYCdC0HijCE78w6eJElY9PLoro=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=M8eW4XSk5ACJZslbBkHt3KLx4eXOvieHk9fnAkQZI3SNl3as5sVjBY29gLDx/xIoZp3BAhBz7CZBoO4ghM8TqnmgpFPpRXp229iAXvNUc7sELe+x46YGc+Nm1YmkvRCA0hlqxYVNZv+HR2TY45OMSTnjKwR38BwyfgTtyKlurNQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=qmon.net; spf=pass smtp.mailfrom=qmon.net; dkim=pass (2048-bit key) header.d=qmon.net header.i=@qmon.net header.b=q8W7Yhkm; arc=none smtp.client-ip=185.233.34.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=qmon.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qmon.net
+	s=arc-20240116; t=1729244506; c=relaxed/simple;
+	bh=STA9085V5QDtl2xh/lrhmVnjJbInSu6992MFdMsW5V8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=c93bmo5InMnX7hQS+Rplt4Fy2vODn8CuHxYbaLjcOts01ovwSVG0aZI4/F1fpMTHij31EDlbUvt+adVdKQFFczvR9b5nBSZKOtCMoCN1mpdSR6xFoTxYiMVLFXNWd503W2DgyS89tNAl/GdiOmM6suOYIydXNhSzNkgYrld7O5M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RFNgq6pj; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qmon.net header.i=@qmon.net header.b="q8W7Yhkm"
-Received: from smtp.soverin.net (unknown [10.10.4.99])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
-	(No client certificate requested)
-	by outbound.soverin.net (Postfix) with ESMTPS id 4XVJy00GvGz4R;
-	Fri, 18 Oct 2024 09:17:28 +0000 (UTC)
-Received: from smtp.soverin.net (smtp.soverin.net [10.10.4.99]) by soverin.net (Postfix) with ESMTPSA id 4XVJxy6ww6z5r;
-	Fri, 18 Oct 2024 09:17:26 +0000 (UTC)
-Authentication-Results: smtp.soverin.net;
-	dkim=pass (2048-bit key; unprotected) header.d=qmon.net header.i=@qmon.net header.a=rsa-sha256 header.s=soverin1 header.b=q8W7Yhkm;
-	dkim-atps=neutral
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qmon.net; s=soverin1;
-	t=1729243047;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=0o1sDQ0CXar23qbhsbLkS5of90qvzdckiER1AtNWjAY=;
-	b=q8W7YhkmeREahtSSzugE7vJU4kFrZM85xXqg6fc26D8Huz92UOzjA+QrvL/EiajZyu3Lr5
-	3WSF4TaFoNlxtWwoustuj9YivSnVB2ZqjWXzPr67PTmKnWwW8Omjwj7arvFc++nH5L3joz
-	1Dj0Fb9Vj4YYyRWWAvUPcKbY/WAh/DihGxkFV2AI+nIfhrGr27RB0f03Zu1CaSQakUhEMF
-	WwMSCZhJhuUJjYQ+Ftsy29XnWeGOgdmQ7XBkGOMuXFqCBDaCPg3LyVjyZ65xS8fTloRuj0
-	6dz80s1OzeJX2yNuAZl3e2D9i8RePppIaEp+DooZbAzvWHEos6lJmiKck2H9Ig==
-Message-ID: <2bef35eb-a8a7-4569-a814-40ad60851d73@qmon.net>
-Date: Fri, 18 Oct 2024 10:17:25 +0100
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RFNgq6pj"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC53AC4CEC7;
+	Fri, 18 Oct 2024 09:41:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1729244506;
+	bh=STA9085V5QDtl2xh/lrhmVnjJbInSu6992MFdMsW5V8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=RFNgq6pjL40F9seIrECBJiCsY8530WZJuOmpGMM67dVyL2WH+b6Yc48cpUY8vGFy2
+	 GhQYOqcEtoH6+crkfQ6rdVtuQ4MZZ/QffMYsR/wKjXEULonaIZqgO2PRys07gIDZzj
+	 yZbabElq6NlIx/gNztOnoWjRcQ/nIyigiO4KxWtgjb1FgIXt45DyS/ukztpkr/Ad7u
+	 0guZS+f5qK6Dr2dJvZRJg8ERIKl6XtarAzuSYG78n98eXnsbVMrYDWhjBDwPIesrja
+	 DabfmUbhcau66NmIs/BA+xBUxEcqZbpufA//0Fn9865QxEiTxq1qfnSkG3CAcvpOUI
+	 JCBUIeBHHe+8A==
+Date: Fri, 18 Oct 2024 10:41:39 +0100
+From: Simon Horman <horms@kernel.org>
+To: Hangbin Liu <liuhangbin@gmail.com>
+Cc: Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
+	netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Jiri Pirko <jiri@resnulli.us>,
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+	Lorenzo Bianconi <lorenzo@kernel.org>,
+	Andrii Nakryiko <andriin@fb.com>, Jussi Maki <joamaki@gmail.com>,
+	Jay Vosburgh <jv@jvosburgh.net>,
+	Andy Gospodarek <andy@greyhouse.net>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Andrew Lunn <andrew+netdev@lunn.ch>, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+	Nikolay Aleksandrov <razor@blackwall.org>
+Subject: Re: [PATCHv2 net-next 2/3] bonding: use correct return value
+Message-ID: <20241018094139.GD1697@kernel.org>
+References: <20241017020638.6905-1-liuhangbin@gmail.com>
+ <20241017020638.6905-3-liuhangbin@gmail.com>
+ <878qumzszs.fsf@toke.dk>
+ <ZxGv2s4bl5VQV4g-@fedora>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v2 2/3] bpftool: Prevent setting duplicate
- _GNU_SOURCE in Makefile
-To: Viktor Malik <vmalik@redhat.com>, bpf@vger.kernel.org
-Cc: Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman
- <eddyz87@gmail.com>, Mykola Lysenko <mykolal@fb.com>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
- <morbo@google.com>, Justin Stitt <justinstitt@google.com>
-References: <cover.1729233447.git.vmalik@redhat.com>
- <820bd20ea460548828ae9a50f5bdbad0700591e5.1729233447.git.vmalik@redhat.com>
-From: Quentin Monnet <qmo@qmon.net>
-Content-Language: en-GB
-In-Reply-To: <820bd20ea460548828ae9a50f5bdbad0700591e5.1729233447.git.vmalik@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spampanel-Class: ham
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ZxGv2s4bl5VQV4g-@fedora>
 
-2024-10-18 08:49 UTC+0200 ~ Viktor Malik <vmalik@redhat.com>
-> When building selftests with CFLAGS set via env variable, the value of
-> CFLAGS is propagated into bpftool Makefile (called from selftests
-> Makefile). This makes the compilation fail as _GNU_SOURCE is defined two
-> times - once from selftests Makefile (by including lib.mk) and once from
-> bpftool Makefile (by calling `llvm-config --cflags`):
+On Fri, Oct 18, 2024 at 12:46:18AM +0000, Hangbin Liu wrote:
+> On Thu, Oct 17, 2024 at 04:47:19PM +0200, Toke Høiland-Jørgensen wrote:
+> > > diff --git a/drivers/net/bonding/bond_main.c b/drivers/net/bonding/bond_main.c
+> > > index f0f76b6ac8be..6887a867fe8b 100644
+> > > --- a/drivers/net/bonding/bond_main.c
+> > > +++ b/drivers/net/bonding/bond_main.c
+> > > @@ -5699,7 +5699,7 @@ static int bond_xdp_set(struct net_device *dev, struct bpf_prog *prog,
+> > >  		if (dev_xdp_prog_count(slave_dev) > 0) {
+> > >  			SLAVE_NL_ERR(dev, slave_dev, extack,
+> > >  				     "Slave has XDP program loaded, please unload before enslaving");
+> > > -			err = -EOPNOTSUPP;
+> > > +			err = -EEXIST;
+> > 
+> > Hmm, this has been UAPI since kernel 5.15, so can we really change it
+> > now? What's the purpose of changing it, anyway?
 > 
->     $ CFLAGS="" make -C tools/testing/selftests/bpf
->     [...]
->     CC      /bpf-next/tools/testing/selftests/bpf/tools/build/bpftool/btf.o
->     <command-line>: error: "_GNU_SOURCE" redefined [-Werror]
->     <command-line>: note: this is the location of the previous definition
->     cc1: all warnings being treated as errors
->     [...]
-> 
-> Filter out -D_GNU_SOURCE from the result of `llvm-config --cflags` in
-> bpftool Makefile to prevent this error.
-> 
-> Signed-off-by: Viktor Malik <vmalik@redhat.com>
+> I just think it should return EXIST when the error is "Slave has XDP program
+> loaded". No special reason. If all others think we should not change it, I
+> can drop this patch.
 
-I am not aware of any extension in use in bpftool that would require the
-use of -D_GNU_SOURCE, so I suppose it's fine to remove it
-unconditionally, even when it's not in CFLAGS before we append the flags
-from llvm-config. Thanks!
+Hi Toke,
 
-Acked-by: Quentin Monnet <qmo@kernel.org>
+Could you add some colour to what extent user's might rely on this error code?
+
+Basically I think that if they do then we shouldn't change this.
