@@ -1,175 +1,128 @@
-Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6FEA18D645
-	for <bpf@vger.kernel.org>; Sat, 19 Oct 2024 09:15:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4145A15D5D9;
+	Sat, 19 Oct 2024 09:19:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729329322; cv=none; b=Fjtb6M9Vugq1ZbSccWOBmYToBQRlqqarsMRZfzShfkWFWBzOF4Wx25JECNTW+wMgNGymhgX0LfG4CG5it6K5IxcfYeo47nlm7MFWpMnW+DYXcKnLDukUTvX7e7gXu8b0RMfiXgQEkGTfG7MUXTOYLCPZegvJhHU8oCqbJkQfhU8=
+	t=1729329577; cv=none; b=I8IgplRgB6wsrpYLhVzYfFdEB8dTEbhhAB70ltpTzvBiB9RCbezUKm4Nf+fEg3ChcmvnEJ0EtxRNLUhWvOoQWsc6PN9kUuyJ3JGerZL9CYXp8mJyObqtmv3PDRniAIeT8/rlUOB9SR+4N0566sxG5Jc0+lVAP3Pn2m7WpQ3sXzA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729329322; c=relaxed/simple;
-	bh=fw/sWlH+obU7YLvSndcbTehqytPOO/8XiKYUce3robo=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=uib9iokVNCS6R0SsIX8l7rIeVqCiCFZv+PVQIvkoQf2wb/gvAr/Xy1luFmYdqHd7IhgKNnN7uLc2EaiYN1wdMHCMMZ1MYA8V3gbu+xgRx34vXwUkC1V1uD4TOWEE38bMjc/PLMqtnK98l6WDP64qXZxqfkyEQ8gDL/q/X9KCrGA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.216])
-	by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4XVwrX2xNbz4f3jM1
-	for <bpf@vger.kernel.org>; Sat, 19 Oct 2024 17:14:52 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.112])
-	by mail.maildlp.com (Postfix) with ESMTP id A87251A092F
-	for <bpf@vger.kernel.org>; Sat, 19 Oct 2024 17:15:09 +0800 (CST)
-Received: from k01.huawei.com (unknown [10.67.174.197])
-	by APP1 (Coremail) with SMTP id cCh0CgAnniqceBNnwk6REQ--.26035S2;
-	Sat, 19 Oct 2024 17:15:09 +0800 (CST)
-From: Xu Kuohai <xukuohai@huaweicloud.com>
-To: bpf@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
+	s=arc-20240116; t=1729329577; c=relaxed/simple;
+	bh=ukAnmrzm5txy+zOC3tzTSzJ2SbJ7TgWf6o+/eiDiXUU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=U5vrFO76wx0VdyNJVRqKpUCbTbmONYp/8QamSlgihXyn/lktlK6r14OFRvtyYOo35hI6NzxvK4tIpvGPOLcUW3WQHhW/7cV9wYw8ahy1M9IgjSfk4W/LD3EByK4wQE+omjQCpeNpkxkDCxfpsj4KoTHQc97nkyaMGrugabNfoHQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gAMAzUxE; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gAMAzUxE"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD284C4CEC5;
+	Sat, 19 Oct 2024 09:19:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1729329577;
+	bh=ukAnmrzm5txy+zOC3tzTSzJ2SbJ7TgWf6o+/eiDiXUU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=gAMAzUxETaSXCQm3fSd84p2fqg1EqfjQ5ec0S7FngFMpyUNvhWf7nJMyVtJ2xRZPA
+	 RtBfXfO2U/uisgCIYeCWoJVCKDypfIRuIcVWcC+MN6TrhnTOq+LvvfPTsOFEylD+j6
+	 5Z+KoiKs23fZmA+Qpucu0S3pK4D6kH0eYWRGNwEVrW/TEi7+fU6U4Ikp7MguVImM/h
+	 Yez2X4+MnAzO3/QHexQGS6Di7jTO8Our/hr8/L14coKx9QC0XgtNulJwGudfX1WQaS
+	 lDJIPsVjnBLqlUfhkA5GrkvaGzrM+ZqQXfSDcT5WJrnegVI+GK9EuRbPaVSeLaQOO5
+	 feW2a+WdoC2rQ==
+Date: Sat, 19 Oct 2024 10:19:30 +0100
+From: Simon Horman <horms@kernel.org>
+To: Hangbin Liu <liuhangbin@gmail.com>
+Cc: Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
+	netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
-	Puranjay Mohan <puranjay@kernel.org>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>
-Subject: [PATCH bpf] bpf, arm64: Fix stack frame construction for struct_ops trampoline
-Date: Sat, 19 Oct 2024 17:27:09 +0800
-Message-Id: <20241019092709.128359-1-xukuohai@huaweicloud.com>
-X-Mailer: git-send-email 2.39.5
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Jiri Pirko <jiri@resnulli.us>,
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+	Lorenzo Bianconi <lorenzo@kernel.org>,
+	Andrii Nakryiko <andriin@fb.com>, Jussi Maki <joamaki@gmail.com>,
+	Jay Vosburgh <jv@jvosburgh.net>,
+	Andy Gospodarek <andy@greyhouse.net>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Andrew Lunn <andrew+netdev@lunn.ch>, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+	Nikolay Aleksandrov <razor@blackwall.org>
+Subject: Re: [PATCHv2 net-next 2/3] bonding: use correct return value
+Message-ID: <20241019091930.GS1697@kernel.org>
+References: <20241017020638.6905-1-liuhangbin@gmail.com>
+ <20241017020638.6905-3-liuhangbin@gmail.com>
+ <878qumzszs.fsf@toke.dk>
+ <ZxGv2s4bl5VQV4g-@fedora>
+ <20241018094139.GD1697@kernel.org>
+ <87o73hy7hh.fsf@toke.dk>
+ <20241018142104.GP1697@kernel.org>
+ <ZxMCdP1X-h9qyU0u@fedora>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:cCh0CgAnniqceBNnwk6REQ--.26035S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxAr17XF1fXrWfCryxtry8AFb_yoWrGw1rpr
-	1fCry5AF4xXr45XF9Ygr4xAF1Fyan7tw1UKFWUC3yrCa4FvrW3KF18trWjyrZ3XryfCw17
-	uFWjyrn7CryDZrJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUv0b4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
-	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-	6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-	Cjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxkF7I0En4kS14v26r126r1DMxkF7I0Ew4C2
-	6cxK6c8Ij28IcwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c
-	02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_
-	GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7
-	CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v2
-	6r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU8
-	mjg7UUUUU==
-X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
+In-Reply-To: <ZxMCdP1X-h9qyU0u@fedora>
 
-From: Xu Kuohai <xukuohai@huawei.com>
+On Sat, Oct 19, 2024 at 12:51:00AM +0000, Hangbin Liu wrote:
+> On Fri, Oct 18, 2024 at 03:21:04PM +0100, Simon Horman wrote:
+> > On Fri, Oct 18, 2024 at 01:29:30PM +0200, Toke Høiland-Jørgensen wrote:
+> > > Simon Horman <horms@kernel.org> writes:
+> > > 
+> > > > On Fri, Oct 18, 2024 at 12:46:18AM +0000, Hangbin Liu wrote:
+> > > >> On Thu, Oct 17, 2024 at 04:47:19PM +0200, Toke Høiland-Jørgensen wrote:
+> > > >> > > diff --git a/drivers/net/bonding/bond_main.c b/drivers/net/bonding/bond_main.c
+> > > >> > > index f0f76b6ac8be..6887a867fe8b 100644
+> > > >> > > --- a/drivers/net/bonding/bond_main.c
+> > > >> > > +++ b/drivers/net/bonding/bond_main.c
+> > > >> > > @@ -5699,7 +5699,7 @@ static int bond_xdp_set(struct net_device *dev, struct bpf_prog *prog,
+> > > >> > >  		if (dev_xdp_prog_count(slave_dev) > 0) {
+> > > >> > >  			SLAVE_NL_ERR(dev, slave_dev, extack,
+> > > >> > >  				     "Slave has XDP program loaded, please unload before enslaving");
+> > > >> > > -			err = -EOPNOTSUPP;
+> > > >> > > +			err = -EEXIST;
+> > > >> > 
+> > > >> > Hmm, this has been UAPI since kernel 5.15, so can we really change it
+> > > >> > now? What's the purpose of changing it, anyway?
+> > > >> 
+> > > >> I just think it should return EXIST when the error is "Slave has XDP program
+> > > >> loaded". No special reason. If all others think we should not change it, I
+> > > >> can drop this patch.
+> > > >
+> > > > Hi Toke,
+> > > >
+> > > > Could you add some colour to what extent user's might rely on this error code?
+> > > >
+> > > > Basically I think that if they do then we shouldn't change this.
+> > > 
+> > > Well, that's the trouble with UAPI, we don't really know. In libxdp and
+> > > xdp-tools we look at the return code to provide a nicer error message,
+> > > like:
+> > > 
+> > > https://github.com/xdp-project/xdp-tools/blob/master/lib/libxdp/libxdp.c#L615
+> > > 
+> > > and as a signal to fall back to loading the programme without a dispatcher:
+> > > 
+> > > https://github.com/xdp-project/xdp-tools/blob/master/lib/libxdp/libxdp.c#L1824
+> > > 
+> > > Both of these cases would be unaffected (or even improved) by this
+> > > patch, so in that sense I don't have a concrete objection, just a
+> > > general "userspace may react to this". In other words, my concern is
+> > > more of a general "we don't know, so this seems risky". If any of you
+> > > have more information about how bonding XDP is generally used, that may
+> > > help get a better idea of this?
+> > 
+> > Yes, that is the trouble with the UAPI. I was hoping you might be able to
+> > provide the clarity you ask for above. But alas, things are as clear as
+> > mud.
+> > 
+> > In lieu of more information I suggest caution and dropping this change for
+> > now.
+> 
+> OK, I will drop this one.
 
-The callsite layout for arm64 fentry is:
-
-mov x9, lr
-nop
-
-When a bpf prog is attached, the nop instruction is patched to a call
-to bpf trampoline:
-
-mov x9, lr
-bl <bpf trampoline>
-
-This passes two return addresses to bpf trampoline: the return address
-for the traced function/prog, stored in x9, and the return address for
-the bpf trampoline, stored in lr. To ensure stacktrace works properly,
-the bpf trampoline constructs two fake function stack frames using x9
-and lr.
-
-However, struct_ops progs are used as function callbacks and are invoked
-directly, without x9 being set as the fentry callsite does. Therefore,
-only one stack frame should be constructed using lr for struct_ops.
-
-Fixes: efc9909fdce0 ("bpf, arm64: Add bpf trampoline for arm64")
-Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
----
- arch/arm64/net/bpf_jit_comp.c | 47 +++++++++++++++++++++++------------
- 1 file changed, 31 insertions(+), 16 deletions(-)
-
-diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
-index 8bbd0b20136a..f8fec244c0c2 100644
---- a/arch/arm64/net/bpf_jit_comp.c
-+++ b/arch/arm64/net/bpf_jit_comp.c
-@@ -2094,6 +2094,12 @@ static void restore_args(struct jit_ctx *ctx, int args_off, int nregs)
- 	}
- }
- 
-+static bool is_struct_ops_tramp(const struct bpf_tramp_links *fentry_links)
-+{
-+	return fentry_links->nr_links == 1 &&
-+		fentry_links->links[0]->link.type == BPF_LINK_TYPE_STRUCT_OPS;
-+}
-+
- /* Based on the x86's implementation of arch_prepare_bpf_trampoline().
-  *
-  * bpf prog and function entry before bpf trampoline hooked:
-@@ -2123,6 +2129,7 @@ static int prepare_trampoline(struct jit_ctx *ctx, struct bpf_tramp_image *im,
- 	struct bpf_tramp_links *fmod_ret = &tlinks[BPF_TRAMP_MODIFY_RETURN];
- 	bool save_ret;
- 	__le32 **branches = NULL;
-+	bool is_struct_ops = is_struct_ops_tramp(fentry);
- 
- 	/* trampoline stack layout:
- 	 *                  [ parent ip         ]
-@@ -2191,11 +2198,14 @@ static int prepare_trampoline(struct jit_ctx *ctx, struct bpf_tramp_image *im,
- 	 */
- 	emit_bti(A64_BTI_JC, ctx);
- 
--	/* frame for parent function */
--	emit(A64_PUSH(A64_FP, A64_R(9), A64_SP), ctx);
--	emit(A64_MOV(1, A64_FP, A64_SP), ctx);
-+	/* x9 is not set for struct_ops */
-+	if (!is_struct_ops) {
-+		/* frame for parent function */
-+		emit(A64_PUSH(A64_FP, A64_R(9), A64_SP), ctx);
-+		emit(A64_MOV(1, A64_FP, A64_SP), ctx);
-+	}
- 
--	/* frame for patched function */
-+	/* frame for patched function for tracing, or caller for struct_ops */
- 	emit(A64_PUSH(A64_FP, A64_LR, A64_SP), ctx);
- 	emit(A64_MOV(1, A64_FP, A64_SP), ctx);
- 
-@@ -2281,19 +2291,24 @@ static int prepare_trampoline(struct jit_ctx *ctx, struct bpf_tramp_image *im,
- 	/* reset SP  */
- 	emit(A64_MOV(1, A64_SP, A64_FP), ctx);
- 
--	/* pop frames  */
--	emit(A64_POP(A64_FP, A64_LR, A64_SP), ctx);
--	emit(A64_POP(A64_FP, A64_R(9), A64_SP), ctx);
--
--	if (flags & BPF_TRAMP_F_SKIP_FRAME) {
--		/* skip patched function, return to parent */
--		emit(A64_MOV(1, A64_LR, A64_R(9)), ctx);
--		emit(A64_RET(A64_R(9)), ctx);
-+	if (is_struct_ops) {
-+		emit(A64_POP(A64_FP, A64_LR, A64_SP), ctx);
-+		emit(A64_RET(A64_LR), ctx);
- 	} else {
--		/* return to patched function */
--		emit(A64_MOV(1, A64_R(10), A64_LR), ctx);
--		emit(A64_MOV(1, A64_LR, A64_R(9)), ctx);
--		emit(A64_RET(A64_R(10)), ctx);
-+		/* pop frames */
-+		emit(A64_POP(A64_FP, A64_LR, A64_SP), ctx);
-+		emit(A64_POP(A64_FP, A64_R(9), A64_SP), ctx);
-+
-+		if (flags & BPF_TRAMP_F_SKIP_FRAME) {
-+			/* skip patched function, return to parent */
-+			emit(A64_MOV(1, A64_LR, A64_R(9)), ctx);
-+			emit(A64_RET(A64_R(9)), ctx);
-+		} else {
-+			/* return to patched function */
-+			emit(A64_MOV(1, A64_R(10), A64_LR), ctx);
-+			emit(A64_MOV(1, A64_LR, A64_R(9)), ctx);
-+			emit(A64_RET(A64_R(10)), ctx);
-+		}
- 	}
- 
- 	kfree(branches);
--- 
-2.43.0
-
+Thanks.
