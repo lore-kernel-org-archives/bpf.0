@@ -1,153 +1,163 @@
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from szxga05-in.huawei.com (szxga05-in.huawei.com [45.249.212.191])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7280820E31C;
-	Sat, 19 Oct 2024 00:51:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CACC519340C;
+	Sat, 19 Oct 2024 02:27:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.191
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729299072; cv=none; b=C0AwNNsEXR7oH85yZlLaKuY2r8nM6azOKoX/3NDDENx74uJ4Ce/9I4Z0lE8YfecULTRxVIwlGVVXJxm8hV6zuC4VrrjAIekDUPaBA4u5O4PRTGwimxguKA0ZcTtFPMKeuJAiVGjRGwJVa1mkrJ8V5qjNMCFFi0HoLlx/UcSvP+Y=
+	t=1729304829; cv=none; b=VLXzDWvK8qzD1+wfheaqC07YbIS+mVi6cuw5Zi9hgocpp4Q+Mywcfym+juQ5InFfdVX16UHYlcvu8MQXY5KVjehoW4uOi20jdCl+ZKIvru9d+FnlXVXafRvz8BCTL8DG59yXSftCSrOKO4g8b6oCVOsLiy7WyYcjDUM2YcBJm1A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729299072; c=relaxed/simple;
-	bh=MD5kkzyjVlGnny+gqQDDv1+RFxFDxvzSYdWohCFC5o4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HnwPpz23hgFWe7QZRy0Ab/NxN9azNsya7h3F4w2IpDulb7RIo8U9hpB7vW5HAUZn9JGt/tS3IR5W0E9LG1oQ4cddgN62h1abYsJqr2cvGGerrMORkdhy3pfazHpgQ3ICh+OeZsJdeci2bsBIVuJIWc+VJqmkCfke/dSG11uWn6w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mfUIGGy9; arc=none smtp.client-ip=209.85.214.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mfUIGGy9"
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-20c767a9c50so26156145ad.1;
-        Fri, 18 Oct 2024 17:51:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1729299069; x=1729903869; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=FL67X8g8ez0faSQl99ijSyvjCoKB8ojvzNqVtmVcfiE=;
-        b=mfUIGGy9bR9aKPRo55Evj5Y0+Syw/iJz2/yhdhO+b63hHvIHvYDxUA4Ui3G3+UmBHF
-         J1Iz8GUcEliAjAfmLwQqHL2mZKvgiWNxOcsfxrku6y4ZsOmRCTzsXz6nGHpxuZ1Vq1d6
-         XUyGqsxaFwmAjY017JagKBpd9uY7PRmIupDMo59mPAYkYPwIFcIGR5ERu6qb2ytDIkOn
-         Rvn6t8PFzt3PXkGZC405xgF0bzEfEyegSPqg+Zh3TrhApgKjaYqi1v4Rfd9KUMnVxAbh
-         l+PI2T9OQ2LH6XTlWvnIOXHa3/Blz+X/eH6rNMkoIt6k5ijcibNIUC8v8Uvks2N8/9Gn
-         Yh+A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729299069; x=1729903869;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=FL67X8g8ez0faSQl99ijSyvjCoKB8ojvzNqVtmVcfiE=;
-        b=FQOxsZXfjPWufy8q3dUAS65HKcItAmG2JFBh4cmyFXbFNZp5+lvVyIPwthbejeQFiw
-         cWFyktYcTc9+qT2DQlebuvo0xe/t3zG2HK+eYex6sH/3PfFargT6WCZnKCU3gKc8JWI/
-         AJDaq/PXNQfgHvGOcjfx9NTb1/eFBkrH4t3qIKwZPyINODVxBBc4tw4HsDot8lt3h5Pq
-         t82sBsLBeeyi6bofsVUM65cBxvBwzHI8agqeTVEGdqj9NmuiLxWL41gbHyGhdBfJskpF
-         ATQDx5tCSnlYLLcTQcWyYNR/xyeQOVNCcIW4+A0nGhUR2OJMO7rvzqL+IQ3SUQng/6Fs
-         TP5Q==
-X-Forwarded-Encrypted: i=1; AJvYcCV/LyoaH2bGNe0/sgXvMjjQUZXMFCVSpf5H1z2ffLdnBxrPtK6CuP/FgeC601IUWz6WnzsYzi89@vger.kernel.org, AJvYcCWQUCtrD+3m+iNCrq9EZKoG1qVniZX9lo2GwnAYHHLSqA+sNWKv0YC8Ziux0v6UHKh2pO8=@vger.kernel.org, AJvYcCWeyTMY2Y5TqnS3mTOXrQOFVZ9e/X1inVMrFjF5lHTK7pvmPjlJu+A89o4QO4ZNW+kDVR01MQowo4QV@vger.kernel.org, AJvYcCWmNlobGS9L1UAKuZWbmAEnYr9fVySSPLJJNXSE27qkT5VPQAngw/acEAS6EGcCx3WAjPBsI0xcFpYe9gCZ@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywt8ZRLsAmfKnPa+OB5/ptLDGVes3EN0HmxK16SVbZXOaV+SqU7
-	8nvJ8+uen9u9+Qy/EWIGTZKOI3hWO7vIi1nwpajtH5i4e+AAGiwy
-X-Google-Smtp-Source: AGHT+IEiV0cgKjHKe/2kpiCIm2aoibAX3dlE1cBZR9js0twjZlqgxio5Kuo8jbhyx35sK6LlhoZUUA==
-X-Received: by 2002:a17:903:192:b0:20b:9c8c:e9f3 with SMTP id d9443c01a7336-20e5a7663c2mr41358935ad.14.1729299069456;
-        Fri, 18 Oct 2024 17:51:09 -0700 (PDT)
-Received: from fedora ([43.228.180.230])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-7eacc28b869sm1967300a12.68.2024.10.18.17.51.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Oct 2024 17:51:09 -0700 (PDT)
-Date: Sat, 19 Oct 2024 00:51:00 +0000
-From: Hangbin Liu <liuhangbin@gmail.com>
-To: Simon Horman <horms@kernel.org>
-Cc: Toke =?iso-8859-1?Q?H=F8iland-J=F8rgensen?= <toke@redhat.com>,
-	netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Jiri Pirko <jiri@resnulli.us>,
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-	Lorenzo Bianconi <lorenzo@kernel.org>,
-	Andrii Nakryiko <andriin@fb.com>, Jussi Maki <joamaki@gmail.com>,
-	Jay Vosburgh <jv@jvosburgh.net>,
-	Andy Gospodarek <andy@greyhouse.net>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Andrew Lunn <andrew+netdev@lunn.ch>, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-	Nikolay Aleksandrov <razor@blackwall.org>
-Subject: Re: [PATCHv2 net-next 2/3] bonding: use correct return value
-Message-ID: <ZxMCdP1X-h9qyU0u@fedora>
-References: <20241017020638.6905-1-liuhangbin@gmail.com>
- <20241017020638.6905-3-liuhangbin@gmail.com>
- <878qumzszs.fsf@toke.dk>
- <ZxGv2s4bl5VQV4g-@fedora>
- <20241018094139.GD1697@kernel.org>
- <87o73hy7hh.fsf@toke.dk>
- <20241018142104.GP1697@kernel.org>
+	s=arc-20240116; t=1729304829; c=relaxed/simple;
+	bh=PuM8/dPucQeciYJoLXX4gm5o9AZ6J+GwyBcWEyxid9c=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=GdI4zg2KgSapqx+4bw6MKM89JNLSqMb96yKDgLWVRFnOPvIc4L8KAeXed++udGmoQBKm3Y+D/+sMnHVbNjR4jbyaUQXJ7CD3gdmRTjzDAk+H8+fiOYK1IBJyQ+S2mv7j105Sm4RvFWXZ1xBXT35NBmVN92UhHRqPUUecOXn2mqY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.191
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.163.44])
+	by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4XVlmV2sZ5z1j9q7;
+	Sat, 19 Oct 2024 10:25:46 +0800 (CST)
+Received: from dggpemf500002.china.huawei.com (unknown [7.185.36.57])
+	by mail.maildlp.com (Postfix) with ESMTPS id CF55C1401E9;
+	Sat, 19 Oct 2024 10:27:03 +0800 (CST)
+Received: from [10.174.179.113] (10.174.179.113) by
+ dggpemf500002.china.huawei.com (7.185.36.57) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.11; Sat, 19 Oct 2024 10:27:02 +0800
+Message-ID: <efb013ff-a9dd-07a7-e4e7-87aa19b559ac@huawei.com>
+Date: Sat, 19 Oct 2024 10:27:02 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20241018142104.GP1697@kernel.org>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.1
+Subject: Re: [PATCH v2 net 4/4] ixgbevf: Fix passing 0 to ERR_PTR in
+ ixgbevf_run_xdp()
+Content-Language: en-US
+To: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+CC: <anthony.l.nguyen@intel.com>, <przemyslaw.kitszel@intel.com>,
+	<davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+	<pabeni@redhat.com>, <ast@kernel.org>, <daniel@iogearbox.net>,
+	<hawk@kernel.org>, <john.fastabend@gmail.com>, <vedang.patel@intel.com>,
+	<jithu.joseph@intel.com>, <andre.guedes@intel.com>, <horms@kernel.org>,
+	<jacob.e.keller@intel.com>, <sven.auhagen@voleatech.de>,
+	<alexander.h.duyck@intel.com>, <intel-wired-lan@lists.osuosl.org>,
+	<netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<bpf@vger.kernel.org>
+References: <20241018023734.1912166-1-yuehaibing@huawei.com>
+ <20241018023734.1912166-5-yuehaibing@huawei.com> <ZxJTUKmZBAktfWik@boxer>
+From: Yue Haibing <yuehaibing@huawei.com>
+In-Reply-To: <ZxJTUKmZBAktfWik@boxer>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpemf500002.china.huawei.com (7.185.36.57)
 
-On Fri, Oct 18, 2024 at 03:21:04PM +0100, Simon Horman wrote:
-> On Fri, Oct 18, 2024 at 01:29:30PM +0200, Toke Høiland-Jørgensen wrote:
-> > Simon Horman <horms@kernel.org> writes:
-> > 
-> > > On Fri, Oct 18, 2024 at 12:46:18AM +0000, Hangbin Liu wrote:
-> > >> On Thu, Oct 17, 2024 at 04:47:19PM +0200, Toke Høiland-Jørgensen wrote:
-> > >> > > diff --git a/drivers/net/bonding/bond_main.c b/drivers/net/bonding/bond_main.c
-> > >> > > index f0f76b6ac8be..6887a867fe8b 100644
-> > >> > > --- a/drivers/net/bonding/bond_main.c
-> > >> > > +++ b/drivers/net/bonding/bond_main.c
-> > >> > > @@ -5699,7 +5699,7 @@ static int bond_xdp_set(struct net_device *dev, struct bpf_prog *prog,
-> > >> > >  		if (dev_xdp_prog_count(slave_dev) > 0) {
-> > >> > >  			SLAVE_NL_ERR(dev, slave_dev, extack,
-> > >> > >  				     "Slave has XDP program loaded, please unload before enslaving");
-> > >> > > -			err = -EOPNOTSUPP;
-> > >> > > +			err = -EEXIST;
-> > >> > 
-> > >> > Hmm, this has been UAPI since kernel 5.15, so can we really change it
-> > >> > now? What's the purpose of changing it, anyway?
-> > >> 
-> > >> I just think it should return EXIST when the error is "Slave has XDP program
-> > >> loaded". No special reason. If all others think we should not change it, I
-> > >> can drop this patch.
-> > >
-> > > Hi Toke,
-> > >
-> > > Could you add some colour to what extent user's might rely on this error code?
-> > >
-> > > Basically I think that if they do then we shouldn't change this.
-> > 
-> > Well, that's the trouble with UAPI, we don't really know. In libxdp and
-> > xdp-tools we look at the return code to provide a nicer error message,
-> > like:
-> > 
-> > https://github.com/xdp-project/xdp-tools/blob/master/lib/libxdp/libxdp.c#L615
-> > 
-> > and as a signal to fall back to loading the programme without a dispatcher:
-> > 
-> > https://github.com/xdp-project/xdp-tools/blob/master/lib/libxdp/libxdp.c#L1824
-> > 
-> > Both of these cases would be unaffected (or even improved) by this
-> > patch, so in that sense I don't have a concrete objection, just a
-> > general "userspace may react to this". In other words, my concern is
-> > more of a general "we don't know, so this seems risky". If any of you
-> > have more information about how bonding XDP is generally used, that may
-> > help get a better idea of this?
+On 2024/10/18 20:23, Maciej Fijalkowski wrote:
+> On Fri, Oct 18, 2024 at 10:37:34AM +0800, Yue Haibing wrote:
+>> ixgbevf_run_xdp() converts customed xdp action to a negative error code
+>> with the sk_buff pointer type which be checked with IS_ERR in
+>> ixgbevf_clean_rx_irq(). Remove this error pointer handing instead use
+>> plain int return value.
+>>
+>> Fixes: c7aec59657b6 ("ixgbevf: Add XDP support for pass and drop actions")
+>> Signed-off-by: Yue Haibing <yuehaibing@huawei.com>
+>> ---
+>>  .../net/ethernet/intel/ixgbevf/ixgbevf_main.c | 23 ++++++++-----------
+>>  1 file changed, 10 insertions(+), 13 deletions(-)
+>>
+>> diff --git a/drivers/net/ethernet/intel/ixgbevf/ixgbevf_main.c b/drivers/net/ethernet/intel/ixgbevf/ixgbevf_main.c
+>> index 149911e3002a..183d2305d058 100644
+>> --- a/drivers/net/ethernet/intel/ixgbevf/ixgbevf_main.c
+>> +++ b/drivers/net/ethernet/intel/ixgbevf/ixgbevf_main.c
+>> @@ -732,10 +732,6 @@ static bool ixgbevf_cleanup_headers(struct ixgbevf_ring *rx_ring,
+>>  				    union ixgbe_adv_rx_desc *rx_desc,
+>>  				    struct sk_buff *skb)
+>>  {
+>> -	/* XDP packets use error pointer so abort at this point */
+>> -	if (IS_ERR(skb))
+>> -		return true;
+>> -
+>>  	/* verify that the packet does not have any known errors */
+>>  	if (unlikely(ixgbevf_test_staterr(rx_desc,
+>>  					  IXGBE_RXDADV_ERR_FRAME_ERR_MASK))) {
+>> @@ -1044,9 +1040,9 @@ static int ixgbevf_xmit_xdp_ring(struct ixgbevf_ring *ring,
+>>  	return IXGBEVF_XDP_TX;
+>>  }
+>>  
+>> -static struct sk_buff *ixgbevf_run_xdp(struct ixgbevf_adapter *adapter,
+>> -				       struct ixgbevf_ring  *rx_ring,
+>> -				       struct xdp_buff *xdp)
+>> +static int ixgbevf_run_xdp(struct ixgbevf_adapter *adapter,
+>> +			   struct ixgbevf_ring *rx_ring,
+>> +			   struct xdp_buff *xdp)
 > 
-> Yes, that is the trouble with the UAPI. I was hoping you might be able to
-> provide the clarity you ask for above. But alas, things are as clear as
-> mud.
+> ditto
+
+yuehaibing@localhost:~/code/net$ ./scripts/checkpatch.pl 0004-ixgbevf-Fix-passing-0-to-ERR_PTR-in-ixgbevf_run_xdp.patch
+total: 0 errors, 0 warnings, 0 checks, 67 lines checked
+
+0004-ixgbevf-Fix-passing-0-to-ERR_PTR-in-ixgbevf_run_xdp.patch has no obvious style problems and is ready for submission.
+
 > 
-> In lieu of more information I suggest caution and dropping this change for
-> now.
-
-OK, I will drop this one.
-
-Thanks
-Hangbin
+>>  {
+>>  	int result = IXGBEVF_XDP_PASS;
+>>  	struct ixgbevf_ring *xdp_ring;
+>> @@ -1080,7 +1076,7 @@ static struct sk_buff *ixgbevf_run_xdp(struct ixgbevf_adapter *adapter,
+>>  		break;
+>>  	}
+>>  xdp_out:
+>> -	return ERR_PTR(-result);
+>> +	return result;
+>>  }
+>>  
+>>  static unsigned int ixgbevf_rx_frame_truesize(struct ixgbevf_ring *rx_ring,
+>> @@ -1122,6 +1118,7 @@ static int ixgbevf_clean_rx_irq(struct ixgbevf_q_vector *q_vector,
+>>  	struct sk_buff *skb = rx_ring->skb;
+>>  	bool xdp_xmit = false;
+>>  	struct xdp_buff xdp;
+>> +	int xdp_res;
+>>  
+>>  	/* Frame size depend on rx_ring setup when PAGE_SIZE=4K */
+>>  #if (PAGE_SIZE < 8192)
+>> @@ -1165,11 +1162,11 @@ static int ixgbevf_clean_rx_irq(struct ixgbevf_q_vector *q_vector,
+>>  			/* At larger PAGE_SIZE, frame_sz depend on len size */
+>>  			xdp.frame_sz = ixgbevf_rx_frame_truesize(rx_ring, size);
+>>  #endif
+>> -			skb = ixgbevf_run_xdp(adapter, rx_ring, &xdp);
+>> +			xdp_res = ixgbevf_run_xdp(adapter, rx_ring, &xdp);
+>>  		}
+>>  
+>> -		if (IS_ERR(skb)) {
+>> -			if (PTR_ERR(skb) == -IXGBEVF_XDP_TX) {
+>> +		if (xdp_res) {
+>> +			if (xdp_res == IXGBEVF_XDP_TX) {
+>>  				xdp_xmit = true;
+>>  				ixgbevf_rx_buffer_flip(rx_ring, rx_buffer,
+>>  						       size);
+>> @@ -1189,7 +1186,7 @@ static int ixgbevf_clean_rx_irq(struct ixgbevf_q_vector *q_vector,
+>>  		}
+>>  
+>>  		/* exit if we failed to retrieve a buffer */
+>> -		if (!skb) {
+>> +		if (!xdp_res && !skb) {
+>>  			rx_ring->rx_stats.alloc_rx_buff_failed++;
+>>  			rx_buffer->pagecnt_bias++;
+>>  			break;
+>> @@ -1203,7 +1200,7 @@ static int ixgbevf_clean_rx_irq(struct ixgbevf_q_vector *q_vector,
+>>  			continue;
+>>  
+>>  		/* verify the packet layout is correct */
+>> -		if (ixgbevf_cleanup_headers(rx_ring, rx_desc, skb)) {
+>> +		if (xdp_res || ixgbevf_cleanup_headers(rx_ring, rx_desc, skb)) {
+>>  			skb = NULL;
+>>  			continue;
+>>  		}
+>> -- 
+>> 2.34.1
+>>
+> 
+> .
