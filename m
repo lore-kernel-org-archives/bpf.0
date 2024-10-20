@@ -1,39 +1,39 @@
 Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E7DD194C67;
-	Sun, 20 Oct 2024 19:23:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E322B198838;
+	Sun, 20 Oct 2024 19:23:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.193
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729452198; cv=none; b=g7FwzXNRUBUHmT3ARZzR9HSMF3osadEvl5NNSguO1EeoFgVSGBGlZ1VEYR3ck8g4M327kGmU345n9GypvEdw3/pLqV5sE7kUy06hEWwpkmZRmJ3OwExPh8b0r7jOT+KOPLpHraEF0eWYJGLpgbundsloEoAlJvmutk0x98THMFU=
+	t=1729452200; cv=none; b=s3Y+0snF83P/JSXUwmXxZtH3GmtPPFd3Gn34nL9D4tI6XcGq5Y41hidgHTzMWcs/8biVrUcXGqYehlkPRjVggksvMeR1KOeBoiqow+RDIXyh1F1PFPKBtelNSebwc/pIRCofyS07LwRKtHneS/qnXNiSJPEv4Se76IyQNRoz3ZY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729452198; c=relaxed/simple;
-	bh=F6Roq7f9tTvCuSePQs3sDrJZuIt9ToqhCnAdISXkF1I=;
+	s=arc-20240116; t=1729452200; c=relaxed/simple;
+	bh=royLK8HneMJIN5mi9f3zh29HK6pvTNrY2UM+X45Tveo=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=L5mTcDIuA/dctBnoeyyJ8xXwol1vIlM6gR7KYJ+X+P3uNjwISackZtMER+G3NXZMT/RS8AUy9LsT99xJ7iq3lATlv3TYbQBlO5KrRnBb7chV84W+IJVNO5ooAdnt82/rQWwsygR3kwC7+6mes+asLPsIrYXZymQ1f7jTip27mhQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=Gab/gp3t; arc=none smtp.client-ip=217.70.183.193
+	 In-Reply-To:To:Cc; b=kwqeQ5u123btaLr1IX/dmVB62v1e8vNbN5OwgkQ+CPLUDAlA9UkxLpsn5guH0/yIh0uE3rJxGpGms8xGF1nyezI4tm2ISPBfiH4WOYgwNJf8/bdhhRVRTNZGs/sAuuN7AgKf6dNMLHTxxz15IFpSCufHVt8ZnEnj9sDuVJy8Mz8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=CZm3AO6s; arc=none smtp.client-ip=217.70.183.193
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="Gab/gp3t"
-Received: by mail.gandi.net (Postfix) with ESMTPSA id B18EB24000C;
-	Sun, 20 Oct 2024 19:23:12 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="CZm3AO6s"
+Received: by mail.gandi.net (Postfix) with ESMTPSA id A96A8240006;
+	Sun, 20 Oct 2024 19:23:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1729452193;
+	t=1729452189;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=Fx9i21pAqjrbU0cXkWsBZAKAK0ryJsZV4ejVPP7rKRU=;
-	b=Gab/gp3tAMN2Y6I2Ch1bPBnsdLVi/z7S/P5tRPbNUb4GmJ8sF1l+rIKFCwVt9y76vZhi3X
-	OW/tYTw+o+I6D7H+5LnpcoMbFfIVJR0fGIq/36lBXV0hgnZ6CTXlZAvw9Rkf8YEJq4qTgQ
-	wTsJTll3NLsmxZe9cG+N3PiD/Kt2rgD9xaTxaE9hgJ0Jm/6vT4T0fH6w1BmP5auQNbSifc
-	ZwXuPA+KXuyHjZ8N943OUIvhx284hqjuNEmvuZhZP9Gy5BtUG0HvRrfYjH91uzclyE3j59
-	rZYptGKs65E/1/TExJ0daraI9Ep9fYa9oQJhIYRyaYqhVFasmNXJKf9KsOYDug==
+	bh=VteMgUSqlqNb/CuHG/IuBbAFCgt0Pb5LrMMxVGZroTw=;
+	b=CZm3AO6ssh5vVpMZbj1vsRrJ77K1rHziW21UK5C7P0ZpAxuBoE588lmCv5/WBn/QkXedn1
+	ZP52VhC4sdJANDISQlEljwrNZbKQNN+3Iy3GgrZOZ4NAYMraJGNqHdXFJt+ssP9/o0e6ga
+	OhIg3KKHf3j7uWoXxjG4No2JrdiRtQqZzI8fFE8MSFzWX8K3XJj8PD2L7dAJVmW1Lsq2dG
+	6mmCjtzNxd3MBCbi8lG1FTN7beZm92T4vcETzjgm+LdVTO282PnzoJizwHBgnMTzw/NmUB
+	hAyRLzrkm4ZxKJJvDhyrAIZcNekCGJAz7vv61CqQwPOJKXKyeNAOknLMimmOxw==
 From: =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
-Date: Sun, 20 Oct 2024 21:22:58 +0200
-Subject: [PATCH bpf-next v2 6/6] selftests/bpf: remove
- test_tcp_check_syncookie
+Date: Sun, 20 Oct 2024 21:22:55 +0200
+Subject: [PATCH bpf-next v2 3/6] selftests/bpf: get rid of global vars in
+ btf_skc_cls_ingress
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -42,7 +42,7 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20241020-syncookie-v2-6-2db240225fed@bootlin.com>
+Message-Id: <20241020-syncookie-v2-3-2db240225fed@bootlin.com>
 References: <20241020-syncookie-v2-0-2db240225fed@bootlin.com>
 In-Reply-To: <20241020-syncookie-v2-0-2db240225fed@bootlin.com>
 To: Alexei Starovoitov <ast@kernel.org>, 
@@ -64,548 +64,206 @@ Cc: ebpf@linuxfoundation.org,
 X-Mailer: b4 0.14.2
 X-GND-Sasl: alexis.lothore@bootlin.com
 
-Now that btf_skc_cls_ingress has the same coverage as
-test_tcp_check_syncookie, remove the second one and keep the first one
-as it is integrated in test_progs
+There are a few global variables in btf_skc_cls_ingress.c, which are not
+really used by different tests. Get rid of those global variables, by
+performing the following updates:
+- make srv_sa6 local to the main runner function
+- make skel local to the main function, and propagate it through
+  function arguments
+- get rid of duration by replacing CHECK macros with the ASSERT_XXX
+  macros. While updating those assert macros:
+  - do not return early on asserts performing some actual tests, let the
+    other tests run as well (keep the early return for parts handling
+    test setup)
+  - instead of converting the CHECK on skel->bss->linum, just remove it,
+    since there is already a call to print_err_line after the test to
+    print the failing line in the bpf program
 
 Signed-off-by: Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
 ---
- tools/testing/selftests/bpf/.gitignore             |   1 -
- tools/testing/selftests/bpf/Makefile               |   9 +-
- .../bpf/progs/test_tcp_check_syncookie_kern.c      | 167 ----------------
- .../selftests/bpf/test_tcp_check_syncookie.sh      |  85 --------
- .../selftests/bpf/test_tcp_check_syncookie_user.c  | 213 ---------------------
- 5 files changed, 3 insertions(+), 472 deletions(-)
+ .../selftests/bpf/prog_tests/btf_skc_cls_ingress.c | 87 +++++++++-------------
+ 1 file changed, 34 insertions(+), 53 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/.gitignore b/tools/testing/selftests/bpf/.gitignore
-index e6533b3400de5ef9b0c0e02aa0e1afedcab9b349..7e88551f2d38bdfa87fd56ac83874c88c4335927 100644
---- a/tools/testing/selftests/bpf/.gitignore
-+++ b/tools/testing/selftests/bpf/.gitignore
-@@ -24,7 +24,6 @@ test_flow_dissector
- flow_dissector_load
- test_tcpnotify_user
- test_libbpf
--test_tcp_check_syncookie_user
- test_sysctl
- xdping
- test_cpp
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index 28a76baa854d3ef45bc6d511ad9188e737f0ebe8..7815b815fcef4a8e42f0211253c1e351a9af2abf 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -137,7 +137,6 @@ TEST_PROGS := test_kmod.sh \
- 	test_xdp_vlan_mode_generic.sh \
- 	test_xdp_vlan_mode_native.sh \
- 	test_lwt_ip_encap.sh \
--	test_tcp_check_syncookie.sh \
- 	test_tc_tunnel.sh \
- 	test_tc_edt.sh \
- 	test_xdping.sh \
-@@ -154,10 +153,9 @@ TEST_PROGS_EXTENDED := with_addr.sh \
+diff --git a/tools/testing/selftests/bpf/prog_tests/btf_skc_cls_ingress.c b/tools/testing/selftests/bpf/prog_tests/btf_skc_cls_ingress.c
+index c88fb0e3048c81a09cf4b0b9df434cf8d4c6ff33..426c9d5402fa8fd57f233feb1f43ffe66e386b7a 100644
+--- a/tools/testing/selftests/bpf/prog_tests/btf_skc_cls_ingress.c
++++ b/tools/testing/selftests/bpf/prog_tests/btf_skc_cls_ingress.c
+@@ -19,11 +19,7 @@
  
- # Compile but not part of 'make run_tests'
- TEST_GEN_PROGS_EXTENDED = \
--	flow_dissector_load test_flow_dissector test_tcp_check_syncookie_user \
--	test_lirc_mode2_user xdping test_cpp runqslower bench bpf_testmod.ko \
--	xskxceiver xdp_redirect_multi xdp_synproxy veristat xdp_hw_metadata \
--	xdp_features bpf_test_no_cfi.ko
-+	flow_dissector_load test_flow_dissector	test_lirc_mode2_user xdping \
-+	test_cpp runqslower bench bpf_testmod.ko xskxceiver xdp_redirect_multi \
-+	xdp_synproxy veristat xdp_hw_metadata xdp_features bpf_test_no_cfi.ko
+ #define TEST_NS "skc_cls_ingress"
  
- TEST_GEN_FILES += liburandom_read.so urandom_read sign-file uprobe_multi
+-static struct test_btf_skc_cls_ingress *skel;
+-static struct sockaddr_in6 srv_sa6;
+-static __u32 duration;
+-
+-static struct netns_obj *prepare_netns(void)
++static struct netns_obj *prepare_netns(struct test_btf_skc_cls_ingress *skel)
+ {
+ 	LIBBPF_OPTS(bpf_tc_hook, qdisc_lo, .attach_point = BPF_TC_INGRESS);
+ 	LIBBPF_OPTS(bpf_tc_opts, tc_attach,
+@@ -57,7 +53,7 @@ static struct netns_obj *prepare_netns(void)
+ 	return NULL;
+ }
  
-@@ -347,7 +345,6 @@ $(OUTPUT)/flow_dissector_load: $(TESTING_HELPERS)
- $(OUTPUT)/test_maps: $(TESTING_HELPERS)
- $(OUTPUT)/test_verifier: $(TESTING_HELPERS) $(CAP_HELPERS) $(UNPRIV_HELPERS)
- $(OUTPUT)/xsk.o: $(BPFOBJ)
--$(OUTPUT)/test_tcp_check_syncookie_user: $(NETWORK_HELPERS)
+-static void reset_test(void)
++static void reset_test(struct test_btf_skc_cls_ingress *skel)
+ {
+ 	memset(&skel->bss->srv_sa6, 0, sizeof(skel->bss->srv_sa6));
+ 	skel->bss->listen_tp_sport = 0;
+@@ -67,16 +63,17 @@ static void reset_test(void)
+ 	skel->bss->linum = 0;
+ }
  
- BPFTOOL ?= $(DEFAULT_BPFTOOL)
- $(DEFAULT_BPFTOOL): $(wildcard $(BPFTOOLDIR)/*.[ch] $(BPFTOOLDIR)/Makefile)    \
-diff --git a/tools/testing/selftests/bpf/progs/test_tcp_check_syncookie_kern.c b/tools/testing/selftests/bpf/progs/test_tcp_check_syncookie_kern.c
-deleted file mode 100644
-index 6edebce563b57e96b04a20b6d14dbcdca62152d5..0000000000000000000000000000000000000000
---- a/tools/testing/selftests/bpf/progs/test_tcp_check_syncookie_kern.c
-+++ /dev/null
-@@ -1,167 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0
--// Copyright (c) 2018 Facebook
--// Copyright (c) 2019 Cloudflare
--
--#include <string.h>
--
--#include <linux/bpf.h>
--#include <linux/pkt_cls.h>
--#include <linux/if_ether.h>
--#include <linux/in.h>
--#include <linux/ip.h>
--#include <linux/ipv6.h>
--#include <sys/socket.h>
--#include <linux/tcp.h>
--
--#include <bpf/bpf_helpers.h>
--#include <bpf/bpf_endian.h>
--
--struct {
--	__uint(type, BPF_MAP_TYPE_ARRAY);
--	__type(key, __u32);
--	__type(value, __u32);
--	__uint(max_entries, 3);
--} results SEC(".maps");
--
--static __always_inline __s64 gen_syncookie(void *data_end, struct bpf_sock *sk,
--					   void *iph, __u32 ip_size,
--					   struct tcphdr *tcph)
--{
--	__u32 thlen = tcph->doff * 4;
--
--	if (tcph->syn && !tcph->ack) {
--		// packet should only have an MSS option
--		if (thlen != 24)
--			return 0;
--
--		if ((void *)tcph + thlen > data_end)
--			return 0;
--
--		return bpf_tcp_gen_syncookie(sk, iph, ip_size, tcph, thlen);
--	}
--	return 0;
--}
--
--static __always_inline void check_syncookie(void *ctx, void *data,
--					    void *data_end)
--{
--	struct bpf_sock_tuple tup;
--	struct bpf_sock *sk;
--	struct ethhdr *ethh;
--	struct iphdr *ipv4h;
--	struct ipv6hdr *ipv6h;
--	struct tcphdr *tcph;
--	int ret;
--	__u32 key_mss = 2;
--	__u32 key_gen = 1;
--	__u32 key = 0;
--	__s64 seq_mss;
--
--	ethh = data;
--	if (ethh + 1 > data_end)
--		return;
--
--	switch (bpf_ntohs(ethh->h_proto)) {
--	case ETH_P_IP:
--		ipv4h = data + sizeof(struct ethhdr);
--		if (ipv4h + 1 > data_end)
--			return;
--
--		if (ipv4h->ihl != 5)
--			return;
--
--		tcph = data + sizeof(struct ethhdr) + sizeof(struct iphdr);
--		if (tcph + 1 > data_end)
--			return;
--
--		tup.ipv4.saddr = ipv4h->saddr;
--		tup.ipv4.daddr = ipv4h->daddr;
--		tup.ipv4.sport = tcph->source;
--		tup.ipv4.dport = tcph->dest;
--
--		sk = bpf_skc_lookup_tcp(ctx, &tup, sizeof(tup.ipv4),
--					BPF_F_CURRENT_NETNS, 0);
--		if (!sk)
--			return;
--
--		if (sk->state != BPF_TCP_LISTEN)
--			goto release;
--
--		seq_mss = gen_syncookie(data_end, sk, ipv4h, sizeof(*ipv4h),
--					tcph);
--
--		ret = bpf_tcp_check_syncookie(sk, ipv4h, sizeof(*ipv4h),
--					      tcph, sizeof(*tcph));
--		break;
--
--	case ETH_P_IPV6:
--		ipv6h = data + sizeof(struct ethhdr);
--		if (ipv6h + 1 > data_end)
--			return;
--
--		if (ipv6h->nexthdr != IPPROTO_TCP)
--			return;
--
--		tcph = data + sizeof(struct ethhdr) + sizeof(struct ipv6hdr);
--		if (tcph + 1 > data_end)
--			return;
--
--		memcpy(tup.ipv6.saddr, &ipv6h->saddr, sizeof(tup.ipv6.saddr));
--		memcpy(tup.ipv6.daddr, &ipv6h->daddr, sizeof(tup.ipv6.daddr));
--		tup.ipv6.sport = tcph->source;
--		tup.ipv6.dport = tcph->dest;
--
--		sk = bpf_skc_lookup_tcp(ctx, &tup, sizeof(tup.ipv6),
--					BPF_F_CURRENT_NETNS, 0);
--		if (!sk)
--			return;
--
--		if (sk->state != BPF_TCP_LISTEN)
--			goto release;
--
--		seq_mss = gen_syncookie(data_end, sk, ipv6h, sizeof(*ipv6h),
--					tcph);
--
--		ret = bpf_tcp_check_syncookie(sk, ipv6h, sizeof(*ipv6h),
--					      tcph, sizeof(*tcph));
--		break;
--
--	default:
--		return;
--	}
--
--	if (seq_mss > 0) {
--		__u32 cookie = (__u32)seq_mss;
--		__u32 mss = seq_mss >> 32;
--
--		bpf_map_update_elem(&results, &key_gen, &cookie, 0);
--		bpf_map_update_elem(&results, &key_mss, &mss, 0);
--	}
--
--	if (ret == 0) {
--		__u32 cookie = bpf_ntohl(tcph->ack_seq) - 1;
--
--		bpf_map_update_elem(&results, &key, &cookie, 0);
--	}
--
--release:
--	bpf_sk_release(sk);
--}
--
--SEC("tc")
--int check_syncookie_clsact(struct __sk_buff *skb)
--{
--	check_syncookie(skb, (void *)(long)skb->data,
--			(void *)(long)skb->data_end);
--	return TC_ACT_OK;
--}
--
--SEC("xdp")
--int check_syncookie_xdp(struct xdp_md *ctx)
--{
--	check_syncookie(ctx, (void *)(long)ctx->data,
--			(void *)(long)ctx->data_end);
--	return XDP_PASS;
--}
--
--char _license[] SEC("license") = "GPL";
-diff --git a/tools/testing/selftests/bpf/test_tcp_check_syncookie.sh b/tools/testing/selftests/bpf/test_tcp_check_syncookie.sh
-deleted file mode 100755
-index b42c24282c2543a61b559e70c4961011ddb8c463..0000000000000000000000000000000000000000
---- a/tools/testing/selftests/bpf/test_tcp_check_syncookie.sh
-+++ /dev/null
-@@ -1,85 +0,0 @@
--#!/bin/sh
--# SPDX-License-Identifier: GPL-2.0
--# Copyright (c) 2018 Facebook
--# Copyright (c) 2019 Cloudflare
--
--set -eu
--readonly NS1="ns1-$(mktemp -u XXXXXX)"
--
--wait_for_ip()
--{
--	local _i
--	printf "Wait for IP %s to become available " "$1"
--	for _i in $(seq ${MAX_PING_TRIES}); do
--		printf "."
--		if ns1_exec ping -c 1 -W 1 "$1" >/dev/null 2>&1; then
--			echo " OK"
--			return
--		fi
--		sleep 1
--	done
--	echo 1>&2 "ERROR: Timeout waiting for test IP to become available."
--	exit 1
--}
--
--get_prog_id()
--{
--	awk '/ id / {sub(/.* id /, "", $0); print($1)}'
--}
--
--ns1_exec()
--{
--	ip netns exec ${NS1} "$@"
--}
--
--setup()
--{
--	ip netns add ${NS1}
--	ns1_exec ip link set lo up
--
--	ns1_exec sysctl -w net.ipv4.tcp_syncookies=2
--	ns1_exec sysctl -w net.ipv4.tcp_window_scaling=0
--	ns1_exec sysctl -w net.ipv4.tcp_timestamps=0
--	ns1_exec sysctl -w net.ipv4.tcp_sack=0
--
--	wait_for_ip 127.0.0.1
--	wait_for_ip ::1
--}
--
--cleanup()
--{
--	ip netns del ns1 2>/dev/null || :
--}
--
--main()
--{
--	trap cleanup EXIT 2 3 6 15
--	setup
--
--	printf "Testing clsact..."
--	ns1_exec tc qdisc add dev "${TEST_IF}" clsact
--	ns1_exec tc filter add dev "${TEST_IF}" ingress \
--		bpf obj "${BPF_PROG_OBJ}" sec "${CLSACT_SECTION}" da
--
--	BPF_PROG_ID=$(ns1_exec tc filter show dev "${TEST_IF}" ingress | \
--		      get_prog_id)
--	ns1_exec "${PROG}" "${BPF_PROG_ID}"
--	ns1_exec tc qdisc del dev "${TEST_IF}" clsact
--
--	printf "Testing XDP..."
--	ns1_exec ip link set "${TEST_IF}" xdp \
--		object "${BPF_PROG_OBJ}" section "${XDP_SECTION}"
--	BPF_PROG_ID=$(ns1_exec ip link show "${TEST_IF}" | get_prog_id)
--	ns1_exec "${PROG}" "${BPF_PROG_ID}"
--}
--
--DIR=$(dirname $0)
--TEST_IF=lo
--MAX_PING_TRIES=5
--BPF_PROG_OBJ="${DIR}/test_tcp_check_syncookie_kern.bpf.o"
--CLSACT_SECTION="tc"
--XDP_SECTION="xdp"
--BPF_PROG_ID=0
--PROG="${DIR}/test_tcp_check_syncookie_user"
--
--main
-diff --git a/tools/testing/selftests/bpf/test_tcp_check_syncookie_user.c b/tools/testing/selftests/bpf/test_tcp_check_syncookie_user.c
-deleted file mode 100644
-index 3844f9b8232a25278e8190bc9b878ed73060fd4d..0000000000000000000000000000000000000000
---- a/tools/testing/selftests/bpf/test_tcp_check_syncookie_user.c
-+++ /dev/null
-@@ -1,213 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0
--// Copyright (c) 2018 Facebook
--// Copyright (c) 2019 Cloudflare
--
--#include <limits.h>
--#include <string.h>
--#include <stdlib.h>
--#include <unistd.h>
--
--#include <arpa/inet.h>
--#include <netinet/in.h>
--#include <sys/types.h>
--#include <sys/socket.h>
--
--#include <bpf/bpf.h>
--#include <bpf/libbpf.h>
--
--#include "cgroup_helpers.h"
--#include "network_helpers.h"
--
--static int get_map_fd_by_prog_id(int prog_id, bool *xdp)
--{
--	struct bpf_prog_info info = {};
--	__u32 info_len = sizeof(info);
--	__u32 map_ids[1];
--	int prog_fd = -1;
--	int map_fd = -1;
--
--	prog_fd = bpf_prog_get_fd_by_id(prog_id);
--	if (prog_fd < 0) {
--		log_err("Failed to get fd by prog id %d", prog_id);
--		goto err;
--	}
--
--	info.nr_map_ids = 1;
--	info.map_ids = (__u64)(unsigned long)map_ids;
--
--	if (bpf_prog_get_info_by_fd(prog_fd, &info, &info_len)) {
--		log_err("Failed to get info by prog fd %d", prog_fd);
--		goto err;
--	}
--
--	if (!info.nr_map_ids) {
--		log_err("No maps found for prog fd %d", prog_fd);
--		goto err;
--	}
--
--	*xdp = info.type == BPF_PROG_TYPE_XDP;
--
--	map_fd = bpf_map_get_fd_by_id(map_ids[0]);
--	if (map_fd < 0)
--		log_err("Failed to get fd by map id %d", map_ids[0]);
--err:
--	if (prog_fd >= 0)
--		close(prog_fd);
--	return map_fd;
--}
--
--static int run_test(int server_fd, int results_fd, bool xdp)
--{
--	int client = -1, srv_client = -1;
--	int ret = 0;
--	__u32 key = 0;
--	__u32 key_gen = 1;
--	__u32 key_mss = 2;
--	__u32 value = 0;
--	__u32 value_gen = 0;
--	__u32 value_mss = 0;
--
--	if (bpf_map_update_elem(results_fd, &key, &value, 0) < 0) {
--		log_err("Can't clear results");
--		goto err;
--	}
--
--	if (bpf_map_update_elem(results_fd, &key_gen, &value_gen, 0) < 0) {
--		log_err("Can't clear results");
--		goto err;
--	}
--
--	if (bpf_map_update_elem(results_fd, &key_mss, &value_mss, 0) < 0) {
--		log_err("Can't clear results");
--		goto err;
--	}
--
--	client = connect_to_fd(server_fd, 0);
--	if (client == -1)
--		goto err;
--
--	srv_client = accept(server_fd, NULL, 0);
--	if (srv_client == -1) {
--		log_err("Can't accept connection");
--		goto err;
--	}
--
--	if (bpf_map_lookup_elem(results_fd, &key, &value) < 0) {
--		log_err("Can't lookup result");
--		goto err;
--	}
--
--	if (value == 0) {
--		log_err("Didn't match syncookie: %u", value);
--		goto err;
--	}
--
--	if (bpf_map_lookup_elem(results_fd, &key_gen, &value_gen) < 0) {
--		log_err("Can't lookup result");
--		goto err;
--	}
--
--	if (xdp && value_gen == 0) {
--		// SYN packets do not get passed through generic XDP, skip the
--		// rest of the test.
--		printf("Skipping XDP cookie check\n");
--		goto out;
--	}
--
--	if (bpf_map_lookup_elem(results_fd, &key_mss, &value_mss) < 0) {
--		log_err("Can't lookup result");
--		goto err;
--	}
--
--	if (value != value_gen) {
--		log_err("BPF generated cookie does not match kernel one");
--		goto err;
--	}
--
--	if (value_mss < 536 || value_mss > USHRT_MAX) {
--		log_err("Unexpected MSS retrieved");
--		goto err;
--	}
--
--	goto out;
--
--err:
--	ret = 1;
--out:
--	close(client);
--	close(srv_client);
--	return ret;
--}
--
--static int v6only_true(int fd, void *opts)
--{
--	int mode = true;
--
--	return setsockopt(fd, IPPROTO_IPV6, IPV6_V6ONLY, &mode, sizeof(mode));
--}
--
--static int v6only_false(int fd, void *opts)
--{
--	int mode = false;
--
--	return setsockopt(fd, IPPROTO_IPV6, IPV6_V6ONLY, &mode, sizeof(mode));
--}
--
--int main(int argc, char **argv)
--{
--	struct network_helper_opts opts = { 0 };
--	int server = -1;
--	int server_v6 = -1;
--	int server_dual = -1;
--	int results = -1;
--	int err = 0;
--	bool xdp;
--
--	if (argc < 2) {
--		fprintf(stderr, "Usage: %s prog_id\n", argv[0]);
--		exit(1);
--	}
--
--	/* Use libbpf 1.0 API mode */
--	libbpf_set_strict_mode(LIBBPF_STRICT_ALL);
--
--	results = get_map_fd_by_prog_id(atoi(argv[1]), &xdp);
--	if (results < 0) {
--		log_err("Can't get map");
--		goto err;
--	}
--
--	server = start_server_str(AF_INET, SOCK_STREAM, "127.0.0.1", 0, NULL);
--	if (server == -1)
--		goto err;
--
--	opts.post_socket_cb = v6only_true;
--	server_v6 = start_server_str(AF_INET6, SOCK_STREAM, "::1", 0, &opts);
--	if (server_v6 == -1)
--		goto err;
--
--	opts.post_socket_cb = v6only_false;
--	server_dual = start_server_str(AF_INET6, SOCK_STREAM, "::0", 0, &opts);
--	if (server_dual == -1)
--		goto err;
--
--	if (run_test(server, results, xdp))
--		goto err;
--
--	if (run_test(server_v6, results, xdp))
--		goto err;
--
--	if (run_test(server_dual, results, xdp))
--		goto err;
--
--	printf("ok\n");
--	goto out;
--err:
--	err = 1;
--out:
--	close(server);
--	close(server_v6);
--	close(server_dual);
--	close(results);
--	return err;
--}
+-static void print_err_line(void)
++static void print_err_line(struct test_btf_skc_cls_ingress *skel)
+ {
+ 	if (skel->bss->linum)
+ 		printf("bpf prog error at line %u\n", skel->bss->linum);
+ }
+ 
+-static void run_test(bool gen_cookies)
++static void run_test(struct test_btf_skc_cls_ingress *skel, bool gen_cookies)
+ {
+ 	const char *tcp_syncookies = gen_cookies ? "2" : "1";
+ 	int listen_fd = -1, cli_fd = -1, srv_fd = -1, err;
++	struct sockaddr_in6 srv_sa6;
+ 	socklen_t addrlen = sizeof(srv_sa6);
+ 	int srv_port;
+ 
+@@ -84,58 +81,41 @@ static void run_test(bool gen_cookies)
+ 		return;
+ 
+ 	listen_fd = start_server(AF_INET6, SOCK_STREAM, "::1", 0, 0);
+-	if (CHECK_FAIL(listen_fd == -1))
++	if (!ASSERT_OK_FD(listen_fd, "start server"))
+ 		return;
+ 
+ 	err = getsockname(listen_fd, (struct sockaddr *)&srv_sa6, &addrlen);
+-	if (CHECK(err, "getsockname(listen_fd)", "err:%d errno:%d\n", err,
+-		  errno))
++	if (!ASSERT_OK(err, "getsockname(listen_fd)"))
+ 		goto done;
+ 	memcpy(&skel->bss->srv_sa6, &srv_sa6, sizeof(srv_sa6));
+ 	srv_port = ntohs(srv_sa6.sin6_port);
+ 
+ 	cli_fd = connect_to_fd(listen_fd, 0);
+-	if (CHECK_FAIL(cli_fd == -1))
++	if (!ASSERT_OK_FD(cli_fd, "connect client"))
+ 		goto done;
+ 
+ 	srv_fd = accept(listen_fd, NULL, NULL);
+-	if (CHECK_FAIL(srv_fd == -1))
++	if (!ASSERT_OK_FD(srv_fd, "accept connection"))
+ 		goto done;
+ 
+-	if (CHECK(skel->bss->listen_tp_sport != srv_port,
+-		  "Unexpected listen tp src port",
+-		  "listen_tp_sport:%u expected:%u\n",
+-		  skel->bss->listen_tp_sport, srv_port))
+-		goto done;
++	ASSERT_EQ(skel->bss->listen_tp_sport, srv_port, "listen tp src port");
+ 
+ 	if (!gen_cookies) {
+-		if (CHECK(skel->bss->req_sk_sport != srv_port,
+-			  "Unexpected req_sk src port",
+-			  "req_sk_sport:%u expected:%u\n",
+-			  skel->bss->req_sk_sport, srv_port))
+-			goto done;
+-		if (CHECK(skel->bss->gen_cookie || skel->bss->recv_cookie,
+-			  "Unexpected syncookie states",
+-			  "gen_cookie:%u recv_cookie:%u\n",
+-			  skel->bss->gen_cookie, skel->bss->recv_cookie))
+-			goto done;
++		ASSERT_EQ(skel->bss->req_sk_sport, srv_port,
++			  "request socket source port with syncookies disabled");
++		ASSERT_EQ(skel->bss->gen_cookie, 0,
++			  "generated syncookie with syncookies disabled");
++		ASSERT_EQ(skel->bss->recv_cookie, 0,
++			  "received syncookie with syncookies disabled");
+ 	} else {
+-		if (CHECK(skel->bss->req_sk_sport,
+-			  "Unexpected req_sk src port",
+-			  "req_sk_sport:%u expected:0\n",
+-			  skel->bss->req_sk_sport))
+-			goto done;
+-		if (CHECK(!skel->bss->gen_cookie ||
+-			  skel->bss->gen_cookie != skel->bss->recv_cookie,
+-			  "Unexpected syncookie states",
+-			  "gen_cookie:%u recv_cookie:%u\n",
+-			  skel->bss->gen_cookie, skel->bss->recv_cookie))
+-			goto done;
++		ASSERT_EQ(skel->bss->req_sk_sport, 0,
++			  "request socket source port with syncookies enabled");
++		ASSERT_NEQ(skel->bss->gen_cookie, 0,
++			   "syncookie properly generated");
++		ASSERT_EQ(skel->bss->gen_cookie, skel->bss->recv_cookie,
++			  "matching syncookies on client and server");
+ 	}
+ 
+-	CHECK(skel->bss->linum, "bpf prog detected error", "at line %u\n",
+-	      skel->bss->linum);
+-
+ done:
+ 	if (listen_fd != -1)
+ 		close(listen_fd);
+@@ -145,19 +125,19 @@ static void run_test(bool gen_cookies)
+ 		close(srv_fd);
+ }
+ 
+-static void test_conn(void)
++static void test_conn(struct test_btf_skc_cls_ingress *skel)
+ {
+-	run_test(false);
++	run_test(skel, false);
+ }
+ 
+-static void test_syncookie(void)
++static void test_syncookie(struct test_btf_skc_cls_ingress *skel)
+ {
+-	run_test(true);
++	run_test(skel, true);
+ }
+ 
+ struct test {
+ 	const char *desc;
+-	void (*run)(void);
++	void (*run)(struct test_btf_skc_cls_ingress *skel);
+ };
+ 
+ #define DEF_TEST(name) { #name, test_##name }
+@@ -168,25 +148,26 @@ static struct test tests[] = {
+ 
+ void test_btf_skc_cls_ingress(void)
+ {
++	struct test_btf_skc_cls_ingress *skel;
++	struct netns_obj *ns;
+ 	int i;
+ 
+ 	skel = test_btf_skc_cls_ingress__open_and_load();
+-	struct netns_obj *ns;
+-	if (CHECK(!skel, "test_btf_skc_cls_ingress__open_and_load", "failed\n"))
++	if (!ASSERT_OK_PTR(skel, "test_btf_skc_cls_ingress__open_and_load"))
+ 		return;
+ 
+ 	for (i = 0; i < ARRAY_SIZE(tests); i++) {
+ 		if (!test__start_subtest(tests[i].desc))
+ 			continue;
+ 
+-		ns = prepare_netns();
++		ns = prepare_netns(skel);
+ 		if (!ns)
+ 			break;
+ 
+-		tests[i].run();
++		tests[i].run(skel);
+ 
+-		print_err_line();
+-		reset_test();
++		print_err_line(skel);
++		reset_test(skel);
+ 		netns_free(ns);
+ 	}
+ 
 
 -- 
 2.47.0
