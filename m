@@ -1,38 +1,39 @@
 Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00790C2C6;
-	Sun, 20 Oct 2024 19:23:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87D87193425;
+	Sun, 20 Oct 2024 19:23:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.193
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729452197; cv=none; b=DbQyd+fwLkKzj+sTfp1wi1jLcGSmDIGoTwS3MdvIN8LBRMLtwm0y434wc8LCAcGO6hcMnSgN5VOhjo4ojzd8ZyE+HebWCvNsdw6HRruk1ceGobQ5Cmhy3mVQmeI3C9BNscva08eGR/1PJD+EsYAmVJB/FcmSpcalKuywIvVX4cY=
+	t=1729452197; cv=none; b=LJHiJyyNnonRMP14Ygrw7EAWnHPF+94ADJe36sfYmPhwQf8y2wLNPB1UFrMRaLYQ5Sxot94ou8y2ZTKhXMJkMsodC+UsxNNZaZjRsSYFf/vEwbgbA6F+Y1zoTyeyefYc0FIEIKUusHzjxXsdVI21Z5TCbljjG+k5iAhzSo0LzQk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1729452197; c=relaxed/simple;
-	bh=c2HWT4gCvfaBx0f4vU+MqomfioLzCAn/zhpHtgH8vfU=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=QxuVdBYOxKl0JMGPlLYv2X5o4bdLdmDuTZFX47VBRsxmiOIm6x1hAlwhAMVLTUekLAfTI6mYiP5lx7UWFERT2ZoJL1D/NWeJh3oej4rrDv/kWr9d+2VhsY3vdOX0rPR9Sq5U0qDcuErZiAyMGK9pLJb4ww4xCwVTLJ1RDzVJtHM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=n1n6IHGX; arc=none smtp.client-ip=217.70.183.193
+	bh=Cs1yhRGBKUQkFzsjOTlsbtgZyFNPf+Flz359arN5DLo=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=O1stbMTQ9kn1RKEeagJF7sXZlayl7MGRcEU3ISpxSfxwa13ULZF72NV9euaT4b1wJTzcpPiH4EPKIrwmnzHiBbJ1Q0m7nhUGefh440W49mfgjCFSa8SnPS2O+ilJxEe/aIDJEI+Dzpq4g+z+BgQs2Hrw4yn34FpGcUrIrrX3+FU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=X8/heZeJ; arc=none smtp.client-ip=217.70.183.193
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="n1n6IHGX"
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 26B52240005;
-	Sun, 20 Oct 2024 19:23:04 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="X8/heZeJ"
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 56AB4240009;
+	Sun, 20 Oct 2024 19:23:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1729452185;
+	t=1729452192;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=66oWL8FFyWQvIReQm+bsye/p0smamRZi1ITOxDVWHvw=;
-	b=n1n6IHGX0MZUv/0Thc8P85HlCTlIDg+8uQGITHIP9FXaGJdKBBQVGs+JLwwCkjh7BHrI9r
-	rc399i1CSq3ZZD8iqmhMYJiYMtnQc7+43yCBRaoFUg8KWJ0CVPkn/BcVPH2QmtX/xrtZHC
-	QQpdwao+UGMM64wg+0ooj1y+cz1Ylh9H1QvOASTiwCX1PbkBbGW4ZsOMWFPAKRCP3y3FZ4
-	IowuCXoPGRZbZn8ERDgx3NkgaBfQ/v4vNUyFT8a482cVft7bubN1qIIa7D12fyYOLzF65k
-	mVkco8vWhCRKHwlyFxki5bDRHU3U8fFzlEKhE5qNeQoYY3usNcUSKDd7uvpYGQ==
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Wq+8dgER22ihdwu+MBouUCZkQ4Npy6jQwIBTp1hzB+c=;
+	b=X8/heZeJ35yP8ABUVFuqaKr5Q+bKE7YcineHAWV2yMWWU+WELAEGCHZrZfo/HBCoOUNr9X
+	EbcTgbsgRbjKqd/FqRxjotv61b8XPBPgiHliImS4UHdgFAvXzj9856QgBJm32nunOs3XCw
+	a3THQyxRIMC+D+qww15ND3bzFqLFo2SZC/aDXhifYpUOZuf1mDBd71Rij9wYRQsev+ZpNK
+	OmxSPszujpko4GVjcCFgJ+MK29rLp1cnikXWZVGJb/BKCXv1f9HKqkmOCobNi3y3SXRR6t
+	RKccqG4dW3oaa6yxtzxrKJAFq3DHbK+HGrlcWzaPpralcKoTaZ1DUEUoAfq2fA==
 From: =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
-Subject: [PATCH bpf-next v2 0/6] selftests/bpf: integrate
- test_tcp_check_syncookie.sh into test_progs
-Date: Sun, 20 Oct 2024 21:22:52 +0200
-Message-Id: <20241020-syncookie-v2-0-2db240225fed@bootlin.com>
+Date: Sun, 20 Oct 2024 21:22:57 +0200
+Subject: [PATCH bpf-next v2 5/6] selftests/bpf: test MSS value returned
+ with bpf_tcp_gen_syncookie
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -41,11 +42,9 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-B4-Tracking: v=1; b=H4sIAIxYFWcC/02NywqDMBBFf0Vm3ZQkapSu+h/FhY+xDm0zkoSgS
- P69Qbro8nAu5x7g0RF6uBUHOIzkiW0GfSlgXHr7REFTZtBSV0qqWvjdjswvQoF9Y1qjTVW3BvJ
- +dTjTdrYeMKyzsLgF6LJZyAd2+3kS1el/PfPXi0pIUQ5NLydUWtXlfWAOb7LXkT/QpZS+QV3uS
- q4AAAA=
-X-Change-ID: 20241015-syncookie-ea7686264586
+Message-Id: <20241020-syncookie-v2-5-2db240225fed@bootlin.com>
+References: <20241020-syncookie-v2-0-2db240225fed@bootlin.com>
+In-Reply-To: <20241020-syncookie-v2-0-2db240225fed@bootlin.com>
 To: Alexei Starovoitov <ast@kernel.org>, 
  Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
  Martin KaFai Lau <martin.lau@linux.dev>, 
@@ -65,75 +64,71 @@ Cc: ebpf@linuxfoundation.org,
 X-Mailer: b4 0.14.2
 X-GND-Sasl: alexis.lothore@bootlin.com
 
-Hello,
-this series aims to bring test_tcp_check_syncookie.sh scope into
-test_progs to make sure that the corresponding tests are also run
-automatically in CI. This script tests for bpf_tcp_{gen,check}_syncookie
-and bpf_skc_lookup_tcp, in different contexts (ipv4, v6 or dual, and
-with tc and xdp programs).
-Some other tests like btf_skc_cls_ingress have some overlapping tests with
-test_tcp_check_syncookie.sh, so this series moves the missing bits from
-test_tcp_check_syncookie.sh into btf_skc_cls_ingress, which is already
-integrated into test_progs.
-- the first three commits bring some minor improvements to
-  btf_skc_cls_ingress without changing its testing scope
-- fourth and fifth commits bring test_tcp_check_syncookie.sh features
-  into btf_skc_cls_ingress
-- last commit removes test_tcp_check_syncookie.sh
+One remaining difference between test_tcp_check_syncookie.sh and
+btf_skc_cls_ingress is a small test on the mss value embedded in the
+cookie generated with the eBPF helper.
 
-The only topic for which I am not sure for this integration is the
-necessity or not to run the tests with different program types:
-test_tcp_check_syncookie.sh runs tests with both tc and xdp programs, but
-btf_skc_cls_ingress currently tests those helpers only with a tc
-program. Would it make sense to also make sure that btf_skc_cls_ingress
-is tested with all the programs types supported by those helpers ?
-
-The series has been tested both in CI and in a local x86_64 qemu
-environment:
-  # ./test_progs -a btf_skc_cls_ingress
-  #38/1    btf_skc_cls_ingress/conn_ipv4:OK
-  #38/2    btf_skc_cls_ingress/conn_ipv6:OK
-  #38/3    btf_skc_cls_ingress/conn_dual:OK
-  #38/4    btf_skc_cls_ingress/syncookie_ipv4:OK
-  #38/5    btf_skc_cls_ingress/syncookie_ipv6:OK
-  #38/6    btf_skc_cls_ingress/syncookie_dual:OK
-  #38      btf_skc_cls_ingress:OK
-  Summary: 1/6 PASSED, 0 SKIPPED, 0 FAILED
+Bring the corresponding test in btf_skc_cls_ingress.
 
 Signed-off-by: Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
 ---
-Changes in v2:
-- fix initial test author mail in Cc
-- Fix default cases in switches: indent, action
-- remove unneeded initializer
-- remove duplicate interface bring-up
-- remove unnecessary check and return in bpf program
-- Link to v1: https://lore.kernel.org/r/20241016-syncookie-v1-0-3b7a0de12153@bootlin.com
+ tools/testing/selftests/bpf/prog_tests/btf_skc_cls_ingress.c | 7 +++++++
+ tools/testing/selftests/bpf/progs/test_btf_skc_cls_ingress.c | 2 ++
+ 2 files changed, 9 insertions(+)
 
----
-Alexis Lothoré (eBPF Foundation) (6):
-      selftests/bpf: factorize conn and syncookies tests in a single runner
-      selftests/bpf: add missing ns cleanups in btf_skc_cls_ingress
-      selftests/bpf: get rid of global vars in btf_skc_cls_ingress
-      selftests/bpf: add ipv4 and dual ipv4/ipv6 support in btf_skc_cls_ingress
-      selftests/bpf: test MSS value returned with bpf_tcp_gen_syncookie
-      selftests/bpf: remove test_tcp_check_syncookie
+diff --git a/tools/testing/selftests/bpf/prog_tests/btf_skc_cls_ingress.c b/tools/testing/selftests/bpf/prog_tests/btf_skc_cls_ingress.c
+index 29b946d84816e41e87f11d2400f5c9a68f91a126..cf15cc3be49105db2a47d5c8686db7236ce9dd09 100644
+--- a/tools/testing/selftests/bpf/prog_tests/btf_skc_cls_ingress.c
++++ b/tools/testing/selftests/bpf/prog_tests/btf_skc_cls_ingress.c
+@@ -27,6 +27,8 @@
+ #define SERVER_ADDR_IPV4	"127.0.0.1"
+ #define SERVER_ADDR_IPV6	"::1"
+ #define SERVER_ADDR_DUAL	"::0"
++/* RFC791, 576 for minimal IPv4 datagram, minus 40 bytes of TCP header */
++#define MIN_IPV4_MSS		536
+ 
+ static struct netns_obj *prepare_netns(struct test_btf_skc_cls_ingress *skel)
+ {
+@@ -71,6 +73,7 @@ static void reset_test(struct test_btf_skc_cls_ingress *skel)
+ 	skel->bss->recv_cookie = 0;
+ 	skel->bss->gen_cookie = 0;
+ 	skel->bss->linum = 0;
++	skel->bss->mss = 0;
+ }
+ 
+ static void print_err_line(struct test_btf_skc_cls_ingress *skel)
+@@ -183,6 +186,10 @@ static void run_test(struct test_btf_skc_cls_ingress *skel, bool gen_cookies,
+ 			   "syncookie properly generated");
+ 		ASSERT_EQ(skel->bss->gen_cookie, skel->bss->recv_cookie,
+ 			  "matching syncookies on client and server");
++		ASSERT_GT(skel->bss->mss, MIN_IPV4_MSS,
++			  "MSS in cookie min value");
++		ASSERT_LT(skel->bss->mss, USHRT_MAX,
++			  "MSS in cookie max value");
+ 	}
+ 
+ done:
+diff --git a/tools/testing/selftests/bpf/progs/test_btf_skc_cls_ingress.c b/tools/testing/selftests/bpf/progs/test_btf_skc_cls_ingress.c
+index b38ca3c35994ba8e36d5108fa5f2f4053384368a..1cd1a1b72cb5e8f515302d452ca17727d8e2f58a 100644
+--- a/tools/testing/selftests/bpf/progs/test_btf_skc_cls_ingress.c
++++ b/tools/testing/selftests/bpf/progs/test_btf_skc_cls_ingress.c
+@@ -15,6 +15,7 @@ __u16 listen_tp_sport = 0;
+ __u16 req_sk_sport = 0;
+ __u32 recv_cookie = 0;
+ __u32 gen_cookie = 0;
++__u32 mss = 0;
+ __u32 linum = 0;
+ 
+ #define LOG() ({ if (!linum) linum = __LINE__; })
+@@ -46,6 +47,7 @@ static void test_syncookie_helper(void *iphdr, int iphdr_size,
+ 				LOG();
+ 		} else {
+ 			gen_cookie = (__u32)mss_cookie;
++			mss = mss_cookie >> 32;
+ 		}
+ 	} else if (gen_cookie) {
+ 		/* It was in cookie mode */
 
- tools/testing/selftests/bpf/.gitignore             |   1 -
- tools/testing/selftests/bpf/Makefile               |   9 +-
- .../selftests/bpf/prog_tests/btf_skc_cls_ingress.c | 264 +++++++++++++--------
- .../selftests/bpf/progs/test_btf_skc_cls_ingress.c |  82 ++++---
- .../bpf/progs/test_tcp_check_syncookie_kern.c      | 167 -------------
- .../selftests/bpf/test_tcp_check_syncookie.sh      |  85 -------
- .../selftests/bpf/test_tcp_check_syncookie_user.c  | 213 -----------------
- 7 files changed, 217 insertions(+), 604 deletions(-)
----
-base-commit: 030207b7fce8bad6827615cfc2c6592916e2c336
-change-id: 20241015-syncookie-ea7686264586
-
-Best regards,
 -- 
-Alexis Lothoré, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.47.0
 
