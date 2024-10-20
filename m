@@ -1,21 +1,21 @@
-Received: from 66-220-155-179.mail-mxout.facebook.com (66-220-155-179.mail-mxout.facebook.com [66.220.155.179])
+Received: from 66-220-155-178.mail-mxout.facebook.com (66-220-155-178.mail-mxout.facebook.com [66.220.155.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C992F15E97
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A31D8C2C6
 	for <bpf@vger.kernel.org>; Sun, 20 Oct 2024 19:16:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.155.179
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.155.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729451807; cv=none; b=ByHRWJxS12lRKC7aedLj6KxYjXnpDDP2V9gIu4z5mHcIXMp2FVAAQzFUyGAQqptgPpEjQpUAEBcIm1zAUiVVvG/qEdvWv87kOZUSxXZehqEYDqg+DS1xNTdPM/3g+nz32mdzsMh2r1TAvRo7kqut1c67tLNAEapdaSYBBo413Js=
+	t=1729451808; cv=none; b=frwha3fEY8+phCOEVZFNxj/fo5J6T3THt6ftj1hf9I6S4EfwdFBkKWK56jaeNX6puEm/CP18p1M9LH46jv5JVDz5pVlrBUkqpHw7ACu9AUqJmMWQy0+/y2QR50mAdf4OJIJmp3oCriqbd/dfGHW7buqBvhb5HoQe3/ATLc/VRec=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729451807; c=relaxed/simple;
-	bh=HEu40pK9baqV0hMINPUM/swvBuwblYI0LAmy4DQZPic=;
+	s=arc-20240116; t=1729451808; c=relaxed/simple;
+	bh=GpSmPbQXUavgPZYJFod3hh5zOpeJZo+P04PkrivsCME=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=OSrvDdjXa0NbfeLk3mEfOoKseFyj3/8uwBFhQbsAmGpBAt/EXNIxW+txNbrN35G9tUYj0kzkJiKyducv6euHQK82afVHlPGUtQlmxDrk6vKWkGImCgoegeSG/oO12OoR9noHozqRwx8UpFyloVSIKqRaY6sUtAXjPBqMqOpND5s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.155.179
+	 MIME-Version; b=g3Q21axUR/ly4pfSkQjPdCcwfIfmSgKp+yr89+OBzdwe6X726eCYBwe3SSLw253zE3U+6HAzeod1SvPNOtlyKVyEmAeoWTn/S77GgU29jasxbmlTfjzXHR6US4RG3f3xr+AgGFKEgs+aXDcRG2uGKgEkKv7+0XLuFCURF04/DK0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.155.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
 Received: by devbig309.ftw3.facebook.com (Postfix, from userid 128203)
-	id D4669A465E70; Sun, 20 Oct 2024 12:14:05 -0700 (PDT)
+	id 60787A465EB1; Sun, 20 Oct 2024 12:14:19 -0700 (PDT)
 From: Yonghong Song <yonghong.song@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -24,9 +24,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	kernel-team@fb.com,
 	Martin KaFai Lau <martin.lau@kernel.org>,
 	Tejun Heo <tj@kernel.org>
-Subject: [PATCH bpf-next v6 4/9] bpf: Mark each subprog with proper private stack modes
-Date: Sun, 20 Oct 2024 12:14:05 -0700
-Message-ID: <20241020191405.2106256-1-yonghong.song@linux.dev>
+Subject: [PATCH bpf-next v6 6/9] bpf, x86: Create a helper for certain "reg <op>= imm" operations
+Date: Sun, 20 Oct 2024 12:14:19 -0700
+Message-ID: <20241020191419.2107234-1-yonghong.song@linux.dev>
 X-Mailer: git-send-email 2.43.5
 In-Reply-To: <20241020191341.2104841-1-yonghong.song@linux.dev>
 References: <20241020191341.2104841-1-yonghong.song@linux.dev>
@@ -38,140 +38,118 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 
-Three private stack modes are used to direct jit action:
-  NO_PRIV_STACK:        do not use private stack
-  PRIV_STACK_SUB_PROG:  adjust frame pointer address (similar to normal s=
-tack)
-  PRIV_STACK_ROOT_PROG: set the frame pointer
-
-Note that for subtree root prog (main prog or callback fn), even if the
-bpf_prog stack size is 0, PRIV_STACK_ROOT_PROG mode is still used.
-This is for bpf exception handling. More details can be found in
-subsequent jit support and selftest patches.
+Create a helper to generate jited codes for certain "reg <op>=3D imm"
+operations where operations are for add/sub/and/or/xor. This helper
+will be used in the subsequent patch.
 
 Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
 ---
- include/linux/bpf.h   |  9 +++++++++
- kernel/bpf/core.c     | 19 +++++++++++++++++++
- kernel/bpf/verifier.c | 29 +++++++++++++++++++++++++++++
- 3 files changed, 57 insertions(+)
+ arch/x86/net/bpf_jit_comp.c | 82 +++++++++++++++++++++----------------
+ 1 file changed, 46 insertions(+), 36 deletions(-)
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 376e43fc72b9..27430e9dcfe3 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -1456,6 +1456,12 @@ struct btf_mod_pair {
+diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+index 6d24389e58a1..6be8c739c3c2 100644
+--- a/arch/x86/net/bpf_jit_comp.c
++++ b/arch/x86/net/bpf_jit_comp.c
+@@ -1406,6 +1406,51 @@ static void emit_shiftx(u8 **pprog, u32 dst_reg, u=
+8 src_reg, bool is64, u8 op)
+ 	*pprog =3D prog;
+ }
 =20
- struct bpf_kfunc_desc_tab;
++/* emit ADD/SUB/AND/OR/XOR 'reg <op>=3D imm' operations */
++static void emit_alu_imm(u8 **pprog, u8 insn_code, u32 dst_reg, s32 imm3=
+2)
++{
++	u8 b2 =3D 0, b3 =3D 0;
++	u8 *prog =3D *pprog;
++
++	maybe_emit_1mod(&prog, dst_reg, BPF_CLASS(insn_code) =3D=3D BPF_ALU64);
++
++	/*
++	 * b3 holds 'normal' opcode, b2 short form only valid
++	 * in case dst is eax/rax.
++	 */
++	switch (BPF_OP(insn_code)) {
++	case BPF_ADD:
++		b3 =3D 0xC0;
++		b2 =3D 0x05;
++		break;
++	case BPF_SUB:
++		b3 =3D 0xE8;
++		b2 =3D 0x2D;
++		break;
++	case BPF_AND:
++		b3 =3D 0xE0;
++		b2 =3D 0x25;
++		break;
++	case BPF_OR:
++		b3 =3D 0xC8;
++		b2 =3D 0x0D;
++		break;
++	case BPF_XOR:
++		b3 =3D 0xF0;
++		b2 =3D 0x35;
++		break;
++	}
++
++	if (is_imm8(imm32))
++		EMIT3(0x83, add_1reg(b3, dst_reg), imm32);
++	else if (is_axreg(dst_reg))
++		EMIT1_off32(b2, imm32);
++	else
++		EMIT2_off32(0x81, add_1reg(b3, dst_reg), imm32);
++
++	*pprog =3D prog;
++}
++
+ #define INSN_SZ_DIFF (((addrs[i] - addrs[i - 1]) - (prog - temp)))
 =20
-+enum bpf_priv_stack_mode {
-+	NO_PRIV_STACK,
-+	PRIV_STACK_SUB_PROG,
-+	PRIV_STACK_ROOT_PROG,
-+};
-+
- struct bpf_prog_aux {
- 	atomic64_t refcnt;
- 	u32 used_map_cnt;
-@@ -1472,6 +1478,9 @@ struct bpf_prog_aux {
- 	u32 ctx_arg_info_size;
- 	u32 max_rdonly_access;
- 	u32 max_rdwr_access;
-+	enum bpf_priv_stack_mode priv_stack_mode;
-+	u16 subtree_stack_depth; /* Subtree stack depth if PRIV_STACK_ROOT_PROG=
-, 0 otherwise */
-+	void __percpu *priv_stack_ptr;
- 	struct btf *attach_btf;
- 	const struct bpf_ctx_arg_aux *ctx_arg_info;
- 	struct mutex dst_mutex; /* protects dst_* pointers below, *after* prog =
-becomes visible */
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index 14d9288441f2..aee0055def4f 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -1240,6 +1240,7 @@ void __weak bpf_jit_free(struct bpf_prog *fp)
- 		struct bpf_binary_header *hdr =3D bpf_jit_binary_hdr(fp);
+ #define __LOAD_TCC_PTR(off)			\
+@@ -1567,42 +1612,7 @@ static int do_jit(struct bpf_prog *bpf_prog, int *=
+addrs, u8 *image, u8 *rw_image
+ 		case BPF_ALU64 | BPF_AND | BPF_K:
+ 		case BPF_ALU64 | BPF_OR | BPF_K:
+ 		case BPF_ALU64 | BPF_XOR | BPF_K:
+-			maybe_emit_1mod(&prog, dst_reg,
+-					BPF_CLASS(insn->code) =3D=3D BPF_ALU64);
+-
+-			/*
+-			 * b3 holds 'normal' opcode, b2 short form only valid
+-			 * in case dst is eax/rax.
+-			 */
+-			switch (BPF_OP(insn->code)) {
+-			case BPF_ADD:
+-				b3 =3D 0xC0;
+-				b2 =3D 0x05;
+-				break;
+-			case BPF_SUB:
+-				b3 =3D 0xE8;
+-				b2 =3D 0x2D;
+-				break;
+-			case BPF_AND:
+-				b3 =3D 0xE0;
+-				b2 =3D 0x25;
+-				break;
+-			case BPF_OR:
+-				b3 =3D 0xC8;
+-				b2 =3D 0x0D;
+-				break;
+-			case BPF_XOR:
+-				b3 =3D 0xF0;
+-				b2 =3D 0x35;
+-				break;
+-			}
+-
+-			if (is_imm8(imm32))
+-				EMIT3(0x83, add_1reg(b3, dst_reg), imm32);
+-			else if (is_axreg(dst_reg))
+-				EMIT1_off32(b2, imm32);
+-			else
+-				EMIT2_off32(0x81, add_1reg(b3, dst_reg), imm32);
++			emit_alu_imm(&prog, insn->code, dst_reg, imm32);
+ 			break;
 =20
- 		bpf_jit_binary_free(hdr);
-+		free_percpu(fp->aux->priv_stack_ptr);
- 		WARN_ON_ONCE(!bpf_prog_kallsyms_verify_off(fp));
- 	}
-=20
-@@ -2421,6 +2422,24 @@ struct bpf_prog *bpf_prog_select_runtime(struct bp=
-f_prog *fp, int *err)
- 		if (*err)
- 			return fp;
-=20
-+		if (fp->aux->priv_stack_eligible) {
-+			if (!fp->aux->stack_depth) {
-+				fp->aux->priv_stack_mode =3D NO_PRIV_STACK;
-+			} else {
-+				void __percpu *priv_stack_ptr;
-+
-+				fp->aux->priv_stack_mode =3D PRIV_STACK_ROOT_PROG;
-+				priv_stack_ptr =3D
-+					__alloc_percpu_gfp(fp->aux->stack_depth, 8, GFP_KERNEL);
-+				if (!priv_stack_ptr) {
-+					*err =3D -ENOMEM;
-+					return fp;
-+				}
-+				fp->aux->subtree_stack_depth =3D fp->aux->stack_depth;
-+				fp->aux->priv_stack_ptr =3D priv_stack_ptr;
-+			}
-+		}
-+
- 		fp =3D bpf_int_jit_compile(fp);
- 		bpf_prog_jit_attempt_done(fp);
- 		if (!fp->jited && jit_needed) {
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 25283ee6f86f..f770015d6ad1 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -20018,6 +20018,8 @@ static int jit_subprogs(struct bpf_verifier_env *=
-env)
- {
- 	struct bpf_prog *prog =3D env->prog, **func, *tmp;
- 	int i, j, subprog_start, subprog_end =3D 0, len, subprog;
-+	int subtree_top_idx, subtree_stack_depth;
-+	void __percpu *priv_stack_ptr;
- 	struct bpf_map *map_ptr;
- 	struct bpf_insn *insn;
- 	void *old_bpf_func;
-@@ -20096,6 +20098,33 @@ static int jit_subprogs(struct bpf_verifier_env =
-*env)
- 		func[i]->is_func =3D 1;
- 		func[i]->sleepable =3D prog->sleepable;
- 		func[i]->aux->func_idx =3D i;
-+
-+		subtree_top_idx =3D env->subprog_info[i].subtree_top_idx;
-+		if (env->subprog_info[subtree_top_idx].priv_stack_eligible) {
-+			if (subtree_top_idx =3D=3D i)
-+				func[i]->aux->subtree_stack_depth =3D
-+					env->subprog_info[i].subtree_stack_depth;
-+
-+			subtree_stack_depth =3D func[i]->aux->subtree_stack_depth;
-+			if (subtree_top_idx !=3D i) {
-+				if (env->subprog_info[subtree_top_idx].subtree_stack_depth)
-+					func[i]->aux->priv_stack_mode =3D PRIV_STACK_SUB_PROG;
-+				else
-+					func[i]->aux->priv_stack_mode =3D NO_PRIV_STACK;
-+			} else if (!subtree_stack_depth) {
-+				func[i]->aux->priv_stack_mode =3D PRIV_STACK_ROOT_PROG;
-+			} else {
-+				func[i]->aux->priv_stack_mode =3D PRIV_STACK_ROOT_PROG;
-+				priv_stack_ptr =3D
-+					__alloc_percpu_gfp(subtree_stack_depth, 8, GFP_KERNEL);
-+				if (!priv_stack_ptr) {
-+					err =3D -ENOMEM;
-+					goto out_free;
-+				}
-+				func[i]->aux->priv_stack_ptr =3D priv_stack_ptr;
-+			}
-+		}
-+
- 		/* Below members will be freed only at prog->aux */
- 		func[i]->aux->btf =3D prog->aux->btf;
- 		func[i]->aux->func_info =3D prog->aux->func_info;
+ 		case BPF_ALU64 | BPF_MOV | BPF_K:
 --=20
 2.43.5
 
