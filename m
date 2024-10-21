@@ -1,213 +1,114 @@
-Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 865312119
-	for <bpf@vger.kernel.org>; Sun, 20 Oct 2024 22:01:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 342C41BC3F
+	for <bpf@vger.kernel.org>; Mon, 21 Oct 2024 01:28:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729461671; cv=none; b=PTy49HAejrh9gxFtOeU7265R/pSeLgjuUzWRTXXXMPonqyXwjR3Qk2BD7bnykFMjQBHhyk5+2QuNx2Sueu/lBR8kOQIgOuiZUvvhIA1sSx2x70/J7NGY86XwKI4Y7z89Td5AQSdDtTS2yQ5nOWdNak0GkXB9sE+lnD1TvBo2f5E=
+	t=1729474086; cv=none; b=K19fHyN76z1EUKx9ho7AsbPvqTPDRAe04FKr5pZbzBb4GHH80xGgDqqfYUwkiKoJvovYWkMHFKrhNkBg2ccDPTGcdWGrTMZ3aRLIFAU6TXhd2V+hdBMUrbWbCwZsWjCMxoFR3Xkc+emhwJ2sBeO3VuYW0T+/aBYXj6Fai1IeAXQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729461671; c=relaxed/simple;
-	bh=+fF9p6Q0Ohvnux3/e/iucwZoGU+O+ba3uqVMytulSos=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Znuw4LwXEgrF34R3Pg391dCfhH+8M8aiqIrHdU+X8ZQRID7WbnuOpUiFFn8xz50v6c8kU6QRjZyiYjgjWZ3OyJGXiS7CTETSiLtuVgpd1IbCuKNrvhfR9sZyVQxogH3V4Lz2yxBeF5OmRdFYKuf/XqWTUcP8pmWJ9n1uEQqsI7c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HAfiL/B9; arc=none smtp.client-ip=209.85.218.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HAfiL/B9"
-Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-a99f3a5a44cso439020566b.3
-        for <bpf@vger.kernel.org>; Sun, 20 Oct 2024 15:01:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1729461668; x=1730066468; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=/0AQo2SoFHsh5+EMsA03NVPAfv4lSfV0EXdMhcaTrd8=;
-        b=HAfiL/B9qk4oqyTpJjn2LZpWT0nqGmgEv1uBCIS10k0vb2msi+NRNCk9ZikpIcfUd7
-         6wxXA1lx3pfUx9KvCrK2+M/WpJaH4auVo+qwTPrnreUmZxe+hl6NwF0QkFTWrG0k4vzA
-         RRv0Sv+AhmVh3cCxIK0SiwKasOB9yQ8rlL62/EueAbc+/GuzLgrKVrm6Le23ga+eNmYo
-         I6jSCXBi4YGi2DcqvoGy88zn43oWBwRArS7zz4xSYGfck7AVZwZbhFEHPwQ8/kZ5utmT
-         7aM0cZwbcZodGE4ngnCh4Xp8lB6hkh5UgE0oJiM5ncc3X75ysjefYcWK1RXWYQnLoy5r
-         pbaw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729461668; x=1730066468;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/0AQo2SoFHsh5+EMsA03NVPAfv4lSfV0EXdMhcaTrd8=;
-        b=v7oKYCGkrYj9C71BPrlHnm/MbCNvivNoHkBc87FTLFNqaergA4drNAqgDxLbxTveJR
-         RTAPqRism6Tew5OEtAOyjLPd55f1PlcvUjxMeut5sqzWSfy55siXnmLkmxZi4YkrXRp6
-         6hM/6eKDaJ2v5Dj8wY4moOhCXt4kBUkgfDut3+ClHUXIzwMTSj4hihJRqv70j08DUB93
-         Uupjwu2Z/FE4UF+NFx48ekBEQO6nsrS7UPrtu5ZwrH1NZEZXYZKWjl1QUnXpduO4Xf0T
-         cIOEOFW/oy56Tq72XBtL27lJRwl3QT7eq+Hg0/Rs3RmpXsA6G7evINnaKq8SilFyeK2C
-         BLOA==
-X-Gm-Message-State: AOJu0YwXnJhQ1QCkgerityKuCmPLwbXnbCi82hx2PgtGk7SuMvrfQu4Z
-	70jfnOrV8xjCraqjbvirj95ouRRq5RSA6aF2HhYouNvo3n9IEv1anthFAw==
-X-Google-Smtp-Source: AGHT+IG0zSUytKo5vXhS0WLaoQ0j6xXERcj+9oI0pBDTfxp61yYP+mvYR9o5X514PBj7J8Lyt6RX8Q==
-X-Received: by 2002:a17:907:7e92:b0:a9a:1094:55de with SMTP id a640c23a62f3a-a9a69969979mr927079666b.13.1729461667625;
-        Sun, 20 Oct 2024 15:01:07 -0700 (PDT)
-Received: from krava (85-193-35-5.rib.o2.cz. [85.193.35.5])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a9a912d6349sm130253966b.21.2024.10.20.15.01.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 20 Oct 2024 15:01:06 -0700 (PDT)
-From: Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Mon, 21 Oct 2024 00:01:04 +0200
-To: Yonghong Song <yonghong.song@linux.dev>
-Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+	s=arc-20240116; t=1729474086; c=relaxed/simple;
+	bh=FxE4hBRImd6TQgABYG1LUZ2TaE/ivkf7nN2thlViXIQ=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=XKEAfXljfkHcCf+aX2vC3BFW6bSEaYsHDjTjOtxCVIXvDixwHTOajfqwfWtj00ufASw1ExAlKwZt9e8nDhciBM0WR71rsfOxVklfqT2DLTAta4INDfX7juoMqXN+cZwf+PE+zidAlQVAa0FsclSNOKlb/j9A+oLZBlLnbBhVaeg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.216])
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4XWyNZ4lMPz4f3jjx
+	for <bpf@vger.kernel.org>; Mon, 21 Oct 2024 09:27:42 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.128])
+	by mail.maildlp.com (Postfix) with ESMTP id DACF51A092F
+	for <bpf@vger.kernel.org>; Mon, 21 Oct 2024 09:27:54 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.175.124.27])
+	by APP4 (Coremail) with SMTP id gCh0CgCXysYXrhVnot2wEg--.32425S4;
+	Mon, 21 Oct 2024 09:27:53 +0800 (CST)
+From: Hou Tao <houtao@huaweicloud.com>
+To: bpf@vger.kernel.org
+Cc: Martin KaFai Lau <martin.lau@linux.dev>,
+	Alexei Starovoitov <alexei.starovoitov@gmail.com>,
 	Andrii Nakryiko <andrii@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>, kernel-team@fb.com,
-	Martin KaFai Lau <martin.lau@kernel.org>, Tejun Heo <tj@kernel.org>
-Subject: Re: [PATCH bpf-next v6 4/9] bpf: Mark each subprog with proper
- private stack modes
-Message-ID: <ZxV9oMixusfz2YtC@krava>
-References: <20241020191341.2104841-1-yonghong.song@linux.dev>
- <20241020191405.2106256-1-yonghong.song@linux.dev>
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Hao Luo <haoluo@google.com>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Jiri Olsa <jolsa@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Yafang Shao <laoar.shao@gmail.com>,
+	houtao1@huawei.com,
+	xukuohai@huawei.com
+Subject: [PATCH bpf v2 0/7] Misc fixes for bpf
+Date: Mon, 21 Oct 2024 09:39:57 +0800
+Message-Id: <20241021014004.1647816-1-houtao@huaweicloud.com>
+X-Mailer: git-send-email 2.29.2
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241020191405.2106256-1-yonghong.song@linux.dev>
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:gCh0CgCXysYXrhVnot2wEg--.32425S4
+X-Coremail-Antispam: 1UD129KBjvJXoW7uFW8tw1DWF1UZrW7GFyxuFg_yoW8Ww4UpF
+	WFgw15Wr48JFW7Z393Kw1I9FyrGan2gFy8WFyagw1YyFy3ZF10gr18Kw4Y9F98JrWftF1S
+	qr18KF9Yga4UZaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUvFb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I
+	0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+	x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+	0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAa
+	w2AFwI0_Jw0_GFyl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxV
+	Aqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a
+	6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6x
+	kF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AK
+	xVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvj
+	xUFku4UUUUU
+X-CM-SenderInfo: xkrx3t3r6k3tpzhluzxrxghudrp/
 
-On Sun, Oct 20, 2024 at 12:14:05PM -0700, Yonghong Song wrote:
-> Three private stack modes are used to direct jit action:
->   NO_PRIV_STACK:        do not use private stack
->   PRIV_STACK_SUB_PROG:  adjust frame pointer address (similar to normal stack)
->   PRIV_STACK_ROOT_PROG: set the frame pointer
-> 
-> Note that for subtree root prog (main prog or callback fn), even if the
-> bpf_prog stack size is 0, PRIV_STACK_ROOT_PROG mode is still used.
-> This is for bpf exception handling. More details can be found in
-> subsequent jit support and selftest patches.
-> 
-> Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
-> ---
->  include/linux/bpf.h   |  9 +++++++++
->  kernel/bpf/core.c     | 19 +++++++++++++++++++
->  kernel/bpf/verifier.c | 29 +++++++++++++++++++++++++++++
->  3 files changed, 57 insertions(+)
-> 
-> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-> index 376e43fc72b9..27430e9dcfe3 100644
-> --- a/include/linux/bpf.h
-> +++ b/include/linux/bpf.h
-> @@ -1456,6 +1456,12 @@ struct btf_mod_pair {
->  
->  struct bpf_kfunc_desc_tab;
->  
-> +enum bpf_priv_stack_mode {
-> +	NO_PRIV_STACK,
-> +	PRIV_STACK_SUB_PROG,
-> +	PRIV_STACK_ROOT_PROG,
-> +};
-> +
->  struct bpf_prog_aux {
->  	atomic64_t refcnt;
->  	u32 used_map_cnt;
-> @@ -1472,6 +1478,9 @@ struct bpf_prog_aux {
->  	u32 ctx_arg_info_size;
->  	u32 max_rdonly_access;
->  	u32 max_rdwr_access;
-> +	enum bpf_priv_stack_mode priv_stack_mode;
-> +	u16 subtree_stack_depth; /* Subtree stack depth if PRIV_STACK_ROOT_PROG, 0 otherwise */
-> +	void __percpu *priv_stack_ptr;
->  	struct btf *attach_btf;
->  	const struct bpf_ctx_arg_aux *ctx_arg_info;
->  	struct mutex dst_mutex; /* protects dst_* pointers below, *after* prog becomes visible */
-> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-> index 14d9288441f2..aee0055def4f 100644
-> --- a/kernel/bpf/core.c
-> +++ b/kernel/bpf/core.c
-> @@ -1240,6 +1240,7 @@ void __weak bpf_jit_free(struct bpf_prog *fp)
->  		struct bpf_binary_header *hdr = bpf_jit_binary_hdr(fp);
->  
->  		bpf_jit_binary_free(hdr);
-> +		free_percpu(fp->aux->priv_stack_ptr);
+From: Hou Tao <houtao1@huawei.com>
 
-this should be also put to the x86 version of the bpf_jit_free ?
+Hi,
 
-jirka
+The patch set is just a bundle of fixes. Patch #1 fixes the out-of-bound
+for sockmap link fdinfo. Patch #2 adds a static assertion to guarantee
+such out-of-bound access will never happen again. Patch #3 fixes the
+kmemleak report when parsing the mount options for bpffs. Patch #4~#7
+fix issues related to bits iterator.
 
->  		WARN_ON_ONCE(!bpf_prog_kallsyms_verify_off(fp));
->  	}
->  
-> @@ -2421,6 +2422,24 @@ struct bpf_prog *bpf_prog_select_runtime(struct bpf_prog *fp, int *err)
->  		if (*err)
->  			return fp;
->  
-> +		if (fp->aux->priv_stack_eligible) {
-> +			if (!fp->aux->stack_depth) {
-> +				fp->aux->priv_stack_mode = NO_PRIV_STACK;
-> +			} else {
-> +				void __percpu *priv_stack_ptr;
-> +
-> +				fp->aux->priv_stack_mode = PRIV_STACK_ROOT_PROG;
-> +				priv_stack_ptr =
-> +					__alloc_percpu_gfp(fp->aux->stack_depth, 8, GFP_KERNEL);
-> +				if (!priv_stack_ptr) {
-> +					*err = -ENOMEM;
-> +					return fp;
-> +				}
-> +				fp->aux->subtree_stack_depth = fp->aux->stack_depth;
-> +				fp->aux->priv_stack_ptr = priv_stack_ptr;
-> +			}
-> +		}
-> +
->  		fp = bpf_int_jit_compile(fp);
->  		bpf_prog_jit_attempt_done(fp);
->  		if (!fp->jited && jit_needed) {
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 25283ee6f86f..f770015d6ad1 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -20018,6 +20018,8 @@ static int jit_subprogs(struct bpf_verifier_env *env)
->  {
->  	struct bpf_prog *prog = env->prog, **func, *tmp;
->  	int i, j, subprog_start, subprog_end = 0, len, subprog;
-> +	int subtree_top_idx, subtree_stack_depth;
-> +	void __percpu *priv_stack_ptr;
->  	struct bpf_map *map_ptr;
->  	struct bpf_insn *insn;
->  	void *old_bpf_func;
-> @@ -20096,6 +20098,33 @@ static int jit_subprogs(struct bpf_verifier_env *env)
->  		func[i]->is_func = 1;
->  		func[i]->sleepable = prog->sleepable;
->  		func[i]->aux->func_idx = i;
-> +
-> +		subtree_top_idx = env->subprog_info[i].subtree_top_idx;
-> +		if (env->subprog_info[subtree_top_idx].priv_stack_eligible) {
-> +			if (subtree_top_idx == i)
-> +				func[i]->aux->subtree_stack_depth =
-> +					env->subprog_info[i].subtree_stack_depth;
-> +
-> +			subtree_stack_depth = func[i]->aux->subtree_stack_depth;
-> +			if (subtree_top_idx != i) {
-> +				if (env->subprog_info[subtree_top_idx].subtree_stack_depth)
-> +					func[i]->aux->priv_stack_mode = PRIV_STACK_SUB_PROG;
-> +				else
-> +					func[i]->aux->priv_stack_mode = NO_PRIV_STACK;
-> +			} else if (!subtree_stack_depth) {
-> +				func[i]->aux->priv_stack_mode = PRIV_STACK_ROOT_PROG;
-> +			} else {
-> +				func[i]->aux->priv_stack_mode = PRIV_STACK_ROOT_PROG;
-> +				priv_stack_ptr =
-> +					__alloc_percpu_gfp(subtree_stack_depth, 8, GFP_KERNEL);
-> +				if (!priv_stack_ptr) {
-> +					err = -ENOMEM;
-> +					goto out_free;
-> +				}
-> +				func[i]->aux->priv_stack_ptr = priv_stack_ptr;
-> +			}
-> +		}
-> +
->  		/* Below members will be freed only at prog->aux */
->  		func[i]->aux->btf = prog->aux->btf;
->  		func[i]->aux->func_info = prog->aux->func_info;
-> -- 
-> 2.43.5
-> 
-> 
+Please check the individual patches for more details. And comments are
+always welcome.
+
+v2:
+ * patch #1: update tools/include/uapi/linux/bpf.h as well (Alexei)
+ * patch #2: new patch. Add a static assertion for bpf_link_type_strs[] (Andrii)
+ * patch #4: doesn't set nr_bits to zero in bpf_iter_bits_next (Andrii)
+ * patch #5: use 512 as the maximal value of nr_words
+ * patch #6: change the type of both bits and bits_copy to u64 (Andrii)
+
+v1: https://lore.kernel.org/bpf/20241008091718.3797027-1-houtao@huaweicloud.com/
+
+Hou Tao (7):
+  bpf: Add the missing BPF_LINK_TYPE invocation for sockmap
+  bpf: Add assertion for the size of bpf_link_type_strs[]
+  bpf: Preserve param->string when parsing mount options
+  bpf: Free dynamically allocated bits in bpf_iter_bits_destroy()
+  bpf: Check the validity of nr_words in bpf_iter_bits_new()
+  bpf: Use __u64 to save the bits in bits iterator
+  selftests/bpf: Test multiplication overflow of nr_bits in bits_iter
+
+ include/linux/bpf_types.h                     |  7 +--
+ include/uapi/linux/bpf.h                      |  3 ++
+ kernel/bpf/helpers.c                          | 45 +++++++++++++++----
+ kernel/bpf/inode.c                            |  5 ++-
+ kernel/bpf/syscall.c                          |  2 +
+ tools/include/uapi/linux/bpf.h                |  3 ++
+ .../selftests/bpf/progs/verifier_bits_iter.c  | 14 ++++++
+ 7 files changed, 63 insertions(+), 16 deletions(-)
+
+-- 
+2.29.2
+
