@@ -1,123 +1,103 @@
-Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A20931A302E;
-	Tue, 22 Oct 2024 15:27:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=167.114.26.122
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E4D5139CE2
+	for <bpf@vger.kernel.org>; Tue, 22 Oct 2024 15:29:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729610869; cv=none; b=MOIz5Xn/C+8v9SJHbeAMEpL5XRooosBH/FOFcuPrvf/zFLgVWXKeAGL7SvkXyJ4yWkB7k/wcwSqVqRSTJp3timr7NpS1SRylPQNvuNrO5mQMPI1nHw+0+qWDX/8LQZTXPrykAfspaPEqCmfE8Mr4xPEpggdmDFV2hccHtkrEbG8=
+	t=1729610959; cv=none; b=o+ZfpWlBLqW2TW7fuaG0FzYT+42S1TeEv1Ze5zMeWhZhCVXzFjoBsNSTtjv5s+ChMTLhaADM5jwkqfCldo517uE2xIQDOL0lUV8eQSyDS6D66xuA6ML6TrDQCXuONeQlKLd/lyqpBiWsxK0gaulRwl2Qncmj40WTZKCwzpFBhqs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729610869; c=relaxed/simple;
-	bh=2Mc2SXCOUMQ4Ki2MnPZxCewU6q9Ys7A8xNvKGEr0b3s=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=OZVM5GkZtJydfVEhRluB5x3rznH2dDNA9YZQKGsJMRh3Z81lTNr55x3jou0ZzTMVIBgfNwl+7BGPEQC1I+U5mGT8I1v/dD++BhrFBlzMtXVCUYyjHi1F3gbyfwQQmVdkSRsPDB/VwyPAgd3mam8LOf1s8tu5ILeYt91Pn4kGLsg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com; spf=pass smtp.mailfrom=efficios.com; dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b=sD4EGUzp; arc=none smtp.client-ip=167.114.26.122
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=efficios.com
+	s=arc-20240116; t=1729610959; c=relaxed/simple;
+	bh=AVHQdyjmODZpdCOtuBHcLgFbP4dCsqQ3defZwhN46S8=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=m4I052y14siXQXKbZj45s3yYzOPdkJ62yy2xcR0pGQNMviaoqYRjFFoFtCo7NXcgmbrINU3YuyiTIqF0e180EjDmdDDutbMZKrlVB3+44gLAe9tFWQITyOjQzdHnGurjUcEs2Z90YZlgRTtehm8VWcQRQ86qri00lFCLwqSVZIY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jrife.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=b4Tv1609; arc=none smtp.client-ip=209.85.216.73
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--jrife.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b="sD4EGUzp"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
-	s=smtpout1; t=1729610396;
-	bh=2Mc2SXCOUMQ4Ki2MnPZxCewU6q9Ys7A8xNvKGEr0b3s=;
-	h=From:To:Cc:Subject:Date:From;
-	b=sD4EGUzp9bdumubR71lH2R2EessL9X6lGsbBllRzjpunBtHbxzUaq4jnTawn1fe0i
-	 wgZL+94vLo6Wa5zJDvv2DIu5tQcb6e/JiY+VuWV7Y3PhMRffwhtjItmExexYODlU7V
-	 4JYpER08hp9WC6mRDfS8VRKVLEh3vDf+SADVkq620M+rJuYVHLWHdUWeIEjfNTqT0B
-	 HLrGE1WDf9WhXjpuTcWkx+wh+2F8KcOANk9TApq4zm4U7XLJkfpXFG0k8LANOaNIYd
-	 F7A9dUXMiCWdqluulGE4vSIpe4Si359oIXbuofGQnEO73bov5uhMsxwY/6ddSAXh05
-	 h33msiKCUsFHw==
-Received: from thinkos.internal.efficios.com (96-127-217-162.qc.cable.ebox.net [96.127.217.162])
-	by smtpout.efficios.com (Postfix) with ESMTPSA id 4XXwpM6vC9zQmW;
-	Tue, 22 Oct 2024 11:19:55 -0400 (EDT)
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-To: Steven Rostedt <rostedt@goodmis.org>
-Cc: linux-kernel@vger.kernel.org,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	syzbot+b390c8062d8387b6272a@syzkaller.appspotmail.com,
-	Michael Jeanson <mjeanson@efficios.com>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Yonghong Song <yhs@fb.com>,
-	"Paul E . McKenney" <paulmck@kernel.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Namhyung Kim <namhyung@kernel.org>,
-	Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-	bpf@vger.kernel.org,
-	Joel Fernandes <joel@joelfernandes.org>,
-	Jordan Rife <jrife@google.com>
-Subject: [RFC PATCH] tracing: Fix syscall tracepoint use-after-free
-Date: Tue, 22 Oct 2024 11:18:04 -0400
-Message-Id: <20241022151804.284424-1-mathieu.desnoyers@efficios.com>
-X-Mailer: git-send-email 2.39.5
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="b4Tv1609"
+Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-2e2c6a5fc86so5416407a91.2
+        for <bpf@vger.kernel.org>; Tue, 22 Oct 2024 08:29:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1729610957; x=1730215757; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=JzVIdkphVy6VCB+khzDa62+1PBT7rr/AZQaCe6/5n3s=;
+        b=b4Tv1609VoZZFWF/+MDnGRNI9bGuKO6zL9cdsTz5pAbk4O9Egdxa9rc9VNPcm6xkzk
+         ei8ibDafakyjQJjkVGtDIjlojQoNK+T4kolohR3SUFuoytfvFRQvZ8/oLA4P5UZnYuWd
+         ted1RS084uFy+2Tp5xBm/ikMSU60vmr7a271eyYtXJNlnerq+kdjBYp4WLrUGb4OAkB7
+         sFuQcGnsFYdkzlYxUKKPdI1yPESzdikd+QuumLBY6bc/wiBoJGdhynNcGrd4W37XaLZQ
+         xi4p4jjQIEeW8cDsgfwzu+sdow+4GR3yIFgN10DG+bG0/aObATwDNh745BFeDbb9x7SB
+         8K5w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1729610957; x=1730215757;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=JzVIdkphVy6VCB+khzDa62+1PBT7rr/AZQaCe6/5n3s=;
+        b=OHTPfwkA94Wy7t7/EWTGj5E47X2J0onGos6Mw2LylieWa7aFA5q/x/0oHfdzxLv61N
+         yNmlTSwXWXW+YE9YAH+QoEzLQjsBMwCrG0R2WR57UoRrEphG/BLtpM4vEYQq2SaBz+hR
+         FJ4UalGtyGdVaTqelcCSbd67utFI+Re9AIOwxTX7mO92PE1mlxjIslZv/5UIAKOnp/cC
+         fWRnzZqqOuYlFTPP7maQG1JFJbqvwjbz+kkS+NiRg1KuW0r7BSkMye7FnkgJZzgx8wm5
+         IWPpRy42Q8jZmTZqtcSm44/PHmjwbUKy8AIz3vKXFTB7RRF+a6V/cff7hg3R5nTgypd/
+         y24w==
+X-Gm-Message-State: AOJu0YzIpbaxMrmTEsH2hIPOHmkcETVkLG74UGFEvdWwE0+e7kaJJhcA
+	LW/nBqXeCTXaZFs3p2qQSr6VmFeDKplKt1zDdHt8R6Xgx8C8O/XlL0LFSr9OD4UKlEQukimI67r
+	6r0ibfSqu7VkC8f8s4YghRfs66mWhePLD/kJigAO1T0ReGCKc64UiDxbfgs+ii423qitFTaUNJf
+	gt3uu8xSaiG0hY6ONqZMphSZw=
+X-Google-Smtp-Source: AGHT+IGwcz/pUSBYuldFca3TxUcJHChZIavks6kQTWuGxmKjTJGzCxMUOarWkF1lSgYb4PLig7p/EQIuqg==
+X-Received: from jrife-kvm.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:63c1])
+ (user=jrife job=sendgmr) by 2002:a17:90a:fb46:b0:2e2:af52:a7b4 with SMTP id
+ 98e67ed59e1d1-2e561a55cf1mr28674a91.8.1729610955483; Tue, 22 Oct 2024
+ 08:29:15 -0700 (PDT)
+Date: Tue, 22 Oct 2024 15:29:00 +0000
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.47.0.105.g07ac214952-goog
+Message-ID: <20241022152913.574836-1-jrife@google.com>
+Subject: [PATCH bpf-next v2 0/4] Retire test_sock.c
+From: Jordan Rife <jrife@google.com>
+To: bpf@vger.kernel.org
+Cc: Jordan Rife <jrife@google.com>, Andrii Nakryiko <andrii@kernel.org>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Mykola Lysenko <mykolal@fb.com>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, "Daniel T. Lee" <danieltimlee@gmail.com>, 
+	John Fastabend <john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>, 
+	linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-The grace period used internally within tracepoint.c:release_probes()
-uses call_rcu() to batch waiting for quiescence of old probe arrays,
-rather than using the tracepoint_synchronize_unregister() which blocks
-while waiting for quiescence.
+This patch series migrates test cases out of test_sock.c to
+prog_tests-style tests. It moves all BPF_CGROUP_INET4_POST_BIND and
+BPF_CGROUP_INET6_POST_BIND test cases into a new prog_test,
+sock_post_bind.c, while reimplementing all LOAD_REJECT test cases as
+verifier tests in progs/verifier_sock.c. Finally, it moves remaining
+BPF_CGROUP_INET_SOCK_CREATE test coverage into prog_tests/sock_create.c
+before retiring test_sock.c completely.
 
-This causes use-after-free issues reproduced with syzkaller.
+Changes
+=======
+v1->v2:
+- Remove superfluous verbose bool from the top of sock_post_bind.c.
+- Use ASSERT_OK_FD instead of ASSERT_GE to test cgroup_fd validity.
+- Run sock_post_bind tests in their own namespace, "sock_post_bind".
 
-Fix this by introducing the following call_rcu chaining:
+Jordan Rife (4):
+  selftests/bpf: Migrate *_POST_BIND test cases to prog_tests
+  selftests/bpf: Migrate LOAD_REJECT test cases to prog_tests
+  selftests/bpf: Migrate BPF_CGROUP_INET_SOCK_CREATE test cases to
+    prog_tests
+  selftests/bpf: Retire test_sock.c
 
-   call_rcu() -> rcu_free_old_probes -> call_rcu_tasks_trace() -> rcu_tasks_trace_free_old_probes.
+ tools/testing/selftests/bpf/.gitignore        |   1 -
+ tools/testing/selftests/bpf/Makefile          |   3 +-
+ .../selftests/bpf/prog_tests/sock_create.c    |  35 ++-
+ .../sock_post_bind.c}                         | 256 +++++-------------
+ .../selftests/bpf/progs/verifier_sock.c       |  60 ++++
+ 5 files changed, 150 insertions(+), 205 deletions(-)
+ rename tools/testing/selftests/bpf/{test_sock.c => prog_tests/sock_post_bind.c} (64%)
 
-Just like it was done when SRCU was used.
-
-Reported-by: syzbot+b390c8062d8387b6272a@syzkaller.appspotmail.com
-Fixes: a363d27cdbc2 ("tracing: Allow system call tracepoints to handle page faults")
-Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: Michael Jeanson <mjeanson@efficios.com>
-Cc: Steven Rostedt <rostedt@goodmis.org>
-Cc: Masami Hiramatsu <mhiramat@kernel.org>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Alexei Starovoitov <ast@kernel.org>
-Cc: Yonghong Song <yhs@fb.com>
-Cc: Paul E. McKenney <paulmck@kernel.org>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc: Mark Rutland <mark.rutland@arm.com>
-Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
-Cc: Namhyung Kim <namhyung@kernel.org>
-Cc: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: bpf@vger.kernel.org
-Cc: Joel Fernandes <joel@joelfernandes.org>
-Cc: Jordan Rife <jrife@google.com>
----
- kernel/tracepoint.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
-
-diff --git a/kernel/tracepoint.c b/kernel/tracepoint.c
-index 6474e2cf22c9..33f6fa94d383 100644
---- a/kernel/tracepoint.c
-+++ b/kernel/tracepoint.c
-@@ -101,11 +101,16 @@ static inline void *allocate_probes(int count)
- 	return p == NULL ? NULL : p->probes;
- }
- 
--static void rcu_free_old_probes(struct rcu_head *head)
-+static void rcu_tasks_trace_free_old_probes(struct rcu_head *head)
- {
- 	kfree(container_of(head, struct tp_probes, rcu));
- }
- 
-+static void rcu_free_old_probes(struct rcu_head *head)
-+{
-+	call_rcu_tasks_trace(head, rcu_tasks_trace_free_old_probes);
-+}
-+
- static inline void release_probes(struct tracepoint_func *old)
- {
- 	if (old) {
 -- 
-2.39.5
+2.47.0.105.g07ac214952-goog
 
