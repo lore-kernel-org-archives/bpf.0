@@ -1,105 +1,180 @@
-Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72F9E1CEAC9
-	for <bpf@vger.kernel.org>; Tue, 22 Oct 2024 22:50:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8428518DF6B;
+	Tue, 22 Oct 2024 22:55:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729637430; cv=none; b=uveL07aeXGHP7J2BcrK9vyyXbuVlH07NYigV/z3NdeyokTkkx/pI2TemrIbUmaaC3DwJVHlKKiOmz9JAbrFygBUNIoT7XB2VZQTC30kETHJ23lK/ZMQTjrQ472tQB3gScfVKL4yKu2WWh1Aye5sAmha26Br7rtQaiwIuRHP9pN4=
+	t=1729637717; cv=none; b=lcVUASxtu7d6lMO2h2Zk2xG1qlCdk5QnLsCzbRBvsPn3jmX6f8iBvZX8UsL+t2DHnLToCtwLNVbFsCj7Nw+n2QHpN4NqLj69myTPmZt4CiiMWXHRVIwi5XYdabRyG34TYZ/Ok+sFdnhWUm131eTkMfLEnzz7ar6F9Wip3cjJKec=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729637430; c=relaxed/simple;
-	bh=cyatEPGCDJ31+cKRmXmFR2L696gELvtTkx1wdGSCYgI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=D/HTJLpkuaEVa1Wt3kaECDSnK4NKqPaiPUScpeI4C2OM9AxQy96v5Wvc9GeSNdSNa+FKr+w815zrmVVd8bSkEoxHqFkuYyAv5xTvXRY1ddZHlhlCR8GBL6fhFzEU2e6ItAmUZUJNxf7d7jkf38h+hYRgLJg7MEo6v+aptI7t+aU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bIa6lGNu; arc=none smtp.client-ip=209.85.221.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1729637717; c=relaxed/simple;
+	bh=mmB0h7GP5OEtq5xYgYIchtjpiU0bUWfBh3QydfmbdMc=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=hF9w3dMAPahlhNWbIOMYpRLVPifsbLSXMz2uHsi/Di204S8cSqEhruZeOO4Z74Qu20sF8yMBhZ2zguC09X8we4N51m3euF5HTsxiMPUXdX3dj4bnss3mkIpaTY3+wKPUWAOWSjorJO9lSCFGau8ZW81j64S1b9EjqqTKggcEeBk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ASu6p/OD; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bIa6lGNu"
-Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-37d3ecad390so183147f8f.1
-        for <bpf@vger.kernel.org>; Tue, 22 Oct 2024 15:50:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1729637426; x=1730242226; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=cyatEPGCDJ31+cKRmXmFR2L696gELvtTkx1wdGSCYgI=;
-        b=bIa6lGNuFVske+FofHsYIK3JTFPqVFbohRC466G8+pvrOMVhnGBA//+VHcYZXHNKNs
-         Oz+5p8KBJkRw2m0Zg03Vga4o/FyK0CX86n88w2qRsELuzlIusAn1vqjejk22ws5sD+ia
-         m8kGTMoZ76Zv1+b+Zx4BeZwb4v+Dg/uFKJtCAb83WOjktqsOvx16w3DQH9DRHbK7phEH
-         zJKPZIzvnEIgt6BmuMVzhxoi9ChcIXH6qlwxo7GAHHRYEsGmk4OxL2MOjF0KqmqhIDPc
-         OQwMkSgRifXK7Kka/5dkDrWAbvkId15WndXzlBM3DmpTCfAeIdlbMr/V+NHFuAQHW2S5
-         mbsA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729637426; x=1730242226;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=cyatEPGCDJ31+cKRmXmFR2L696gELvtTkx1wdGSCYgI=;
-        b=THG0SGQYuDtBOpe3QiOOqfNRha/5wBLnZS81lPmCxt3EuPckoCKMOBGGEYyFoyqqTZ
-         82mlcCxp8freJu7wKVS78CUI64uvN+w4o3BDPqkcZ0icrdlQCEGO/nBUEElwsheQruj+
-         wqtqiRcO5TL5Z4f8Ym+zsoR9Y1EDyaSjT4HIdsVeHLibuUCvbcMV3L61XYQz5woeGppF
-         9/0vvr1SzCcAAJKMelmDyOk2SW2vQkagH+XoY6M4bgEIWwd2ME5SbXAAm57w1+S8emwx
-         6+JL3h9OgWFG88FiBQpIF+HkqQUz8Iss3CL2Q0HL9Cd2v+TadgQ8K+8AHWEcuoZOkQv2
-         7/IQ==
-X-Gm-Message-State: AOJu0YzAGLRYK3Z3BxHdL4QeSb7G4h2y8nBKwXN6doepP7PAy63EDXAE
-	KAe+v9sD/LuYOC4T7kNfNn0dqU9Ahdqei5Tm7tYLWYUD9vtJQQS2ENrqNnvD80HIov0RZYnMr6m
-	o0P2stwbhjTorgym6jswgYNDZk3s=
-X-Google-Smtp-Source: AGHT+IFZrXb4OZ2jfTtDIyyoiwZyT//XdDozHA+u56Pz3+w+LFw2KU2+bZCUx0FI/iYkTmtGUHxGPuPbHVcT3P5PEFc=
-X-Received: by 2002:a5d:528e:0:b0:37e:d942:f4bf with SMTP id
- ffacd0b85a97d-37efc5de906mr347571f8f.12.1729637425660; Tue, 22 Oct 2024
- 15:50:25 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ASu6p/OD"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93C8CC4CEC3;
+	Tue, 22 Oct 2024 22:55:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1729637717;
+	bh=mmB0h7GP5OEtq5xYgYIchtjpiU0bUWfBh3QydfmbdMc=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=ASu6p/OD42ChIQmHFxFr9v3Uut7yuCh45MCO2hw++Lkjld6Jr/OQx9lqwZ+ZPNM10
+	 oJq97rdJrwZ9XNlxjth4RPMSbnbpXgWWvWIRseRkBJEbPGoiLwYx6xyx2JAiKXZgZl
+	 GH8dMoAlfClEytaexMXLu2QkP+8gHyHWzhuWLOxtOtxjlZjaX6WRvv4N2yfkwAM9Ja
+	 Wfs0rJif2mmYcrLm+a3pHWwupTHdyiqFHPC+TiqNsWeyVwTGYJcO+bOjEHBlgaEh7b
+	 CQSFWKNhj8tkhBXOE8CkoX+57ZsDAs699JxntIAfOvvpKcWSzFaXM+g7YvGyvyLPtd
+	 8F3OmoK82QV+A==
+Date: Wed, 23 Oct 2024 07:55:07 +0900
+From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To: Will Deacon <will@kernel.org>
+Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>, Steven Rostedt
+ <rostedt@goodmis.org>, Florent Revest <revest@chromium.org>,
+ linux-trace-kernel@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+ Martin KaFai Lau <martin.lau@linux.dev>, bpf <bpf@vger.kernel.org>, Alexei
+ Starovoitov <ast@kernel.org>, Jiri Olsa <jolsa@kernel.org>, Alan Maguire
+ <alan.maguire@oracle.com>, Mark Rutland <mark.rutland@arm.com>,
+ linux-arch@vger.kernel.org, Catalin Marinas <catalin.marinas@arm.com>,
+ Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>,
+ Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>,
+ Christophe Leroy <christophe.leroy@csgroup.eu>, Naveen N Rao
+ <naveen@kernel.org>, Madhavan Srinivasan <maddy@linux.ibm.com>, Paul
+ Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>,
+ Albert Ou <aou@eecs.berkeley.edu>, Thomas Gleixner <tglx@linutronix.de>,
+ Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, Dave Hansen
+ <dave.hansen@linux.intel.com>, x86@kernel.org, "H. Peter Anvin"
+ <hpa@zytor.com>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: [PATCH v17 01/16] function_graph: Pass ftrace_regs to entryfunc
+Message-Id: <20241023075507.ebeadc70579fc8a642213a55@kernel.org>
+In-Reply-To: <20241021170340.GB26122@willie-the-truck>
+References: <172904026427.36809.516716204730117800.stgit@devnote2>
+	<172904027515.36809.1961937054923520469.stgit@devnote2>
+	<20241021170340.GB26122@willie-the-truck>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20241019092709.128359-1-xukuohai@huaweicloud.com>
-In-Reply-To: <20241019092709.128359-1-xukuohai@huaweicloud.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Tue, 22 Oct 2024 15:50:14 -0700
-Message-ID: <CAADnVQLOY-eHby6CMNXr3FvwPm85W-tWDxiWnRaR_U_=71ADuA@mail.gmail.com>
-Subject: Re: [PATCH bpf] bpf, arm64: Fix stack frame construction for
- struct_ops trampoline
-To: Xu Kuohai <xukuohai@huaweicloud.com>
-Cc: bpf <bpf@vger.kernel.org>, 
-	linux-arm-kernel <linux-arm-kernel@lists.infradead.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Puranjay Mohan <puranjay@kernel.org>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Sat, Oct 19, 2024 at 2:15=E2=80=AFAM Xu Kuohai <xukuohai@huaweicloud.com=
-> wrote:
->
-> From: Xu Kuohai <xukuohai@huawei.com>
->
-> The callsite layout for arm64 fentry is:
->
-> mov x9, lr
-> nop
->
-> When a bpf prog is attached, the nop instruction is patched to a call
-> to bpf trampoline:
->
-> mov x9, lr
-> bl <bpf trampoline>
->
-> This passes two return addresses to bpf trampoline: the return address
-> for the traced function/prog, stored in x9, and the return address for
-> the bpf trampoline, stored in lr. To ensure stacktrace works properly,
-> the bpf trampoline constructs two fake function stack frames using x9
-> and lr.
->
-> However, struct_ops progs are used as function callbacks and are invoked
-> directly, without x9 being set as the fentry callsite does. Therefore,
-> only one stack frame should be constructed using lr for struct_ops.
+On Mon, 21 Oct 2024 18:03:40 +0100
+Will Deacon <will@kernel.org> wrote:
 
-Are you saying that currently stack unwinder on arm64 is
-completely broken for struct_ops progs ?
-or it shows an extra frame that doesn't have to be shown ?
+> On Wed, Oct 16, 2024 at 09:57:55AM +0900, Masami Hiramatsu (Google) wrote:
+> > From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> > 
+> > Pass ftrace_regs to the fgraph_ops::entryfunc(). If ftrace_regs is not
+> > available, it passes a NULL instead. User callback function can access
+> > some registers (including return address) via this ftrace_regs.
+> > 
+> > Note that the ftrace_regs can be NULL when the arch does NOT define:
+> > HAVE_DYNAMIC_FTRACE_WITH_ARGS or HAVE_DYNAMIC_FTRACE_WITH_REGS.
+> > More specifically, if HAVE_DYNAMIC_FTRACE_WITH_REGS is defined but
+> > not the HAVE_DYNAMIC_FTRACE_WITH_ARGS, and the ftrace ops used to
+> > register the function callback does not set FTRACE_OPS_FL_SAVE_REGS.
+> > In this case, ftrace_regs can be NULL in user callback.
+> > 
+> > Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> > Cc: Steven Rostedt <rostedt@goodmis.org>
+> > Cc: Mark Rutland <mark.rutland@arm.com>
+> > Cc: Catalin Marinas <catalin.marinas@arm.com>
+> > Cc: Will Deacon <will@kernel.org>
+> > Cc: Huacai Chen <chenhuacai@kernel.org>
+> > Cc: WANG Xuerui <kernel@xen0n.name>
+> > Cc: Michael Ellerman <mpe@ellerman.id.au>
+> > Cc: Nicholas Piggin <npiggin@gmail.com>
+> > Cc: Christophe Leroy <christophe.leroy@csgroup.eu>
+> > Cc: Naveen N Rao <naveen@kernel.org>
+> > Cc: Madhavan Srinivasan <maddy@linux.ibm.com>
+> > Cc: Paul Walmsley <paul.walmsley@sifive.com>
+> > Cc: Palmer Dabbelt <palmer@dabbelt.com>
+> > Cc: Albert Ou <aou@eecs.berkeley.edu>
+> > Cc: Thomas Gleixner <tglx@linutronix.de>
+> > Cc: Ingo Molnar <mingo@redhat.com>
+> > Cc: Borislav Petkov <bp@alien8.de>
+> > Cc: Dave Hansen <dave.hansen@linux.intel.com>
+> > Cc: x86@kernel.org
+> > Cc: "H. Peter Anvin" <hpa@zytor.com>
+> > Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+> > 
+> > ---
+> >  Changes in v16:
+> >   - Add a note when the ftrace_regs can be NULL.
+> >   - Update against for the latest kernel.
+> >  Changes in v11:
+> >   - Update for the latest for-next branch.
+> >  Changes in v8:
+> >   - Just pass ftrace_regs to the handler instead of adding a new
+> >     entryregfunc.
+> >   - Update riscv ftrace_graph_func().
+> >  Changes in v3:
+> >   - Update for new multiple fgraph.
+> > ---
+> >  arch/arm64/kernel/ftrace.c               |   20 +++++++++++-
+> >  arch/loongarch/kernel/ftrace_dyn.c       |   10 +++++-
+> >  arch/powerpc/kernel/trace/ftrace.c       |    2 +
+> >  arch/powerpc/kernel/trace/ftrace_64_pg.c |   10 ++++--
+> >  arch/riscv/kernel/ftrace.c               |   17 ++++++++++
+> >  arch/x86/kernel/ftrace.c                 |   50 +++++++++++++++++++++---------
+> >  include/linux/ftrace.h                   |   17 ++++++++--
+> >  kernel/trace/fgraph.c                    |   25 +++++++++------
+> >  kernel/trace/ftrace.c                    |    3 +-
+> >  kernel/trace/trace.h                     |    3 +-
+> >  kernel/trace/trace_functions_graph.c     |    3 +-
+> >  kernel/trace/trace_irqsoff.c             |    3 +-
+> >  kernel/trace/trace_sched_wakeup.c        |    3 +-
+> >  kernel/trace/trace_selftest.c            |    8 +++--
+> >  14 files changed, 129 insertions(+), 45 deletions(-)
+> > 
+> > diff --git a/arch/arm64/kernel/ftrace.c b/arch/arm64/kernel/ftrace.c
+> > index b2d947175cbe..a5a285f8a7ef 100644
+> > --- a/arch/arm64/kernel/ftrace.c
+> > +++ b/arch/arm64/kernel/ftrace.c
+> > @@ -481,7 +481,25 @@ void prepare_ftrace_return(unsigned long self_addr, unsigned long *parent,
+> >  void ftrace_graph_func(unsigned long ip, unsigned long parent_ip,
+> >  		       struct ftrace_ops *op, struct ftrace_regs *fregs)
+> >  {
+> > -	prepare_ftrace_return(ip, &arch_ftrace_regs(fregs)->lr, arch_ftrace_regs(fregs)->fp);
+> > +	unsigned long return_hooker = (unsigned long)&return_to_handler;
+> > +	unsigned long frame_pointer = arch_ftrace_regs(fregs)->fp;
+> > +	unsigned long *parent = &arch_ftrace_regs(fregs)->lr;
+> > +	unsigned long old;
+> > +
+> > +	if (unlikely(atomic_read(&current->tracing_graph_pause)))
+> > +		return;
+> > +
+> > +	/*
+> > +	 * Note:
+> > +	 * No protection against faulting at *parent, which may be seen
+> > +	 * on other archs. It's unlikely on AArch64.
+> > +	 */
+> > +	old = *parent;
+> 
+> Sorry to pick on this line again, but the comment is very non-committal]
+> and I think this is something on which we need to be definitive.
 
-If former then it's certainly a bpf tree material.
-If latter then bpf-next will do.
-Pls clarify.
+Agreed. I think this does not happen because it is a part of
+__arch_ftrace_regs, which is stored on kernel stack.
+
+I copied it from prepare_ftrace_return(), so that also need to be
+changed too.
+
+Let me remove this comment.
+
+Thank you,
+
+> 
+> Either the access can fault, and we should handle it, or it will never
+> fault and we don't need to handle it. Saying it's unlikely means we
+> need to handle it :)
+> 
+> Will
+> 
+
+
+-- 
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
