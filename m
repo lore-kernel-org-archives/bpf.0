@@ -1,65 +1,36 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67FB778C76
-	for <bpf@vger.kernel.org>; Tue, 22 Oct 2024 14:15:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9535F1A3BC8;
+	Tue, 22 Oct 2024 15:20:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=167.114.26.122
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729606509; cv=none; b=P3tPEj9oHeZd7hHPVdx95VrPh6rwC5yiLL/+IgJFrP9F9Rohs8HK9918JAmgETqjNImgcvKysWsOjuI/1ACGOyHlug41eQc0Ed4dZnYq8alOwNr+0wPl5UrPsStiQPqFpzUfVxQTQq9DNudiqqXawRnqGdI3kE7MQu+P9s5LTzg=
+	t=1729610449; cv=none; b=bCfj1IwgU1OthU0o8ZpjL5IndVnS+f5ZlvnJ5DjiUk8/9pvignboHVcCAKJesI/voZRZuZ3qeWZQqcZaCkl3YqSfopzLXfM/XiAnARc583z1dcLQymyakCsiXPdvDTtC/A2qUV+Bfy5/vAzDYfsUAzj5I2v7i+E+5IS4gkvZJUU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729606509; c=relaxed/simple;
-	bh=UvW/EIUqOGCNTRVCwMkVKOz5Lk7XXXMET8bipDLaGb8=;
+	s=arc-20240116; t=1729610449; c=relaxed/simple;
+	bh=CI8O5/CEGDNzrlkCIwc8zGa7x4u/7L0USxNN8JbWDqM=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=kEQJbdUpFrBDbdnENiAUWr+S+TavjwdBk06sZlqGiBYPd4OWEWf6FmSrn/UBao7cQMSsa3EVMFEXIhBAMtEeGLWC9IUt3FgMFZTxSif2im27yJbJrWX+KCqPJexfSAzG+Ae8zpnLnrv9glSZJsYEnKUUXZs90Ebjt3IoICC2a7c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=DW+eIAi0; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	 In-Reply-To:Content-Type; b=ZTv1HlkH0L/qZiK0Fov41EOrT6tjuUgyqnq7dIR9acIjMHS1xguHA4Jdr9+WYrq6RzyoEuj3D2+fzqiEMFnun1AXXVrsQ/fAwDAGjV44DcVSXL7ws231coCUgFmrO49pg2A8/4rfhJlLcfIokVVcslMV1OJ0Ll8nmP1hz4XHAU8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com; spf=pass smtp.mailfrom=efficios.com; dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b=H2AhGVLw; arc=none smtp.client-ip=167.114.26.122
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=efficios.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="DW+eIAi0"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1729606506;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=/rUUXr6la27UtVoKr8Jzs1BKo8PBqHiu5Iz8aLcJu/o=;
-	b=DW+eIAi0tmAyPPu3xKt7MxDSANVLNMU4CBYVH6fEKygEJjqHh91/NcxbiOXm6kECmZG59Z
-	dKYtz8cxhYS5QkrcdMU1Bp+npHRlrsQz1MbfYi1MYffDLVihVHprbf4LlHGDQjk1ZK5xV+
-	th2TA7Z5qwjEEfKl6JYGS5QYkZPz1BE=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-99-oMzFUuuKNcORXuLuvTikMw-1; Tue, 22 Oct 2024 10:15:05 -0400
-X-MC-Unique: oMzFUuuKNcORXuLuvTikMw-1
-Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-43157e3521dso41164155e9.1
-        for <bpf@vger.kernel.org>; Tue, 22 Oct 2024 07:15:04 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729606504; x=1730211304;
-        h=content-transfer-encoding:in-reply-to:content-language:from
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/rUUXr6la27UtVoKr8Jzs1BKo8PBqHiu5Iz8aLcJu/o=;
-        b=UzFNIqyrn89Ydb43JmA6wXKF5+SippNKPZl8xe4oJZldIcITrhjZmge88busDDMtKY
-         dOPYB03aM6pmj4hrLd2sMVw2sJGrGahTi3p9rRWeRpL/IOd2AvaVuM8XKFwm2Esv4U0j
-         JzUYbTvpK1INjgqOSDwujmig9LyZ31gLGObwGgbPxPpZ6SrOoMhV79mB59J6GxJtCEG4
-         SkKrqtHTR7XKFzaT3VoslWH7wBN/qEyI/8SV0WEZqGR86jXijqgOLpaMMq4rqGnZ0Dmd
-         thKu5j/tdKT7G+8kRovvj18No9IisFe7Wk66b2XdEbY/ogo0ndyMEsdp3T5cseIo5Ezq
-         VpDA==
-X-Forwarded-Encrypted: i=1; AJvYcCXTNxbsa1i7yqs/TpJ1fU+wGH7Kaq3+l2s91x5z9eG8WkwVxecCmxGa685vXMze2dGAS7s=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw3vXlJmWkeRx8N2mIltJH0OADTfCk4/3TWpM0TAbs1PP1ylRxi
-	2AVRfu+Ux+KMIhK1HggSMt98LoV19H3QNPUNc6GEGMPkynGGLloGSaMxIG8aQZ6ocqVSt1j7WX+
-	uv37GRAKsjjG5rn2JnN/dhpEEaYghPZUEkbQ9zVjYpIBWkhe5
-X-Received: by 2002:a05:600c:3592:b0:431:586e:7e7 with SMTP id 5b1f17b1804b1-43161634f28mr126111035e9.1.1729606503922;
-        Tue, 22 Oct 2024 07:15:03 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IHhExv0Aqskml1SfJxb1qUqYC5dGCntpwGGVJCs0D0hjswplvviaggVBRCP6Q+cv809Q/VhiA==
-X-Received: by 2002:a05:600c:3592:b0:431:586e:7e7 with SMTP id 5b1f17b1804b1-43161634f28mr126110785e9.1.1729606503576;
-        Tue, 22 Oct 2024 07:15:03 -0700 (PDT)
-Received: from [10.43.17.17] (nat-pool-brq-t.redhat.com. [213.175.37.10])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-37ee0a37d4esm6783856f8f.3.2024.10.22.07.15.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 22 Oct 2024 07:15:02 -0700 (PDT)
-Message-ID: <5f930d8b-42fa-4bde-813e-cf90d3b866be@redhat.com>
-Date: Tue, 22 Oct 2024 16:15:01 +0200
+	dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b="H2AhGVLw"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
+	s=smtpout1; t=1729610445;
+	bh=CI8O5/CEGDNzrlkCIwc8zGa7x4u/7L0USxNN8JbWDqM=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=H2AhGVLwtzfh0cKNLNJ0gUkFZN9B9hxEg7u7bQtCzMKat/KCY46BsZ+w9g8zibYt8
+	 CG88VT1nk7Z591jzXN7TrdEDXtVxDrDohGYseGSTbyxwbSsVDu20pyedpYO+paBpVs
+	 73t1Lj/t0GUM8p10K9nXPxD9EPZGHipdw7ucG1DEIbp6VCqrbEVhPvG0fKsQpjAE3G
+	 O4PCp7HwHOPSIJE4B+vyK8Jp7qjgokb0wU7C3I7K+KpfOV8SrozfNr96vOlbswkU6a
+	 r1VUtvvTJOs4SEa1H20m8BWXJSLaM6HBqFzB6id0tmhjgC+usQdV3F/6RWEJc1e4kW
+	 xGEqY6zZ4bvsw==
+Received: from [172.16.0.134] (96-127-217-162.qc.cable.ebox.net [96.127.217.162])
+	by smtpout.efficios.com (Postfix) with ESMTPSA id 4XXwqK1PGvzQmX;
+	Tue, 22 Oct 2024 11:20:45 -0400 (EDT)
+Message-ID: <29c58126-3146-4c61-8166-a894c0e84d08@efficios.com>
+Date: Tue, 22 Oct 2024 11:19:01 -0400
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -67,119 +38,125 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: linux-next: manual merge of the bpf-next tree with Linus' tree
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>,
- Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Daniel Borkmann <daniel@iogearbox.net>,
- Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
- bpf <bpf@vger.kernel.org>, Networking <netdev@vger.kernel.org>,
- =?UTF-8?Q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?=
- <alexis.lothore@bootlin.com>,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- Linux Next Mailing List <linux-next@vger.kernel.org>,
- Martin KaFai Lau <martin.lau@kernel.org>,
- Simon Sundberg <simon.sundberg@kau.se>,
- =?UTF-8?Q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-References: <20241022120211.2a5d41ed@canb.auug.org.au>
- <CAEf4BzamHrmdwRFKAr9MGSmaVtrJT3-ru=KPXEcO981XZsM+Ew@mail.gmail.com>
-From: Viktor Malik <vmalik@redhat.com>
+Subject: Re: [syzbot] [trace?] [bpf?] KASAN: slab-use-after-free Read in
+ bpf_trace_run2 (2)
+To: Steven Rostedt <rostedt@goodmis.org>, Jordan Rife <jrife@google.com>
+Cc: syzbot+b390c8062d8387b6272a@syzkaller.appspotmail.com, andrii@kernel.org,
+ ast@kernel.org, bpf@vger.kernel.org, daniel@iogearbox.net,
+ eddyz87@gmail.com, haoluo@google.com, john.fastabend@gmail.com,
+ jolsa@kernel.org, kpsingh@kernel.org, linux-kernel@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, martin.lau@linux.dev,
+ mattbobrowski@google.com, mhiramat@kernel.org, sdf@fomichev.me,
+ song@kernel.org, syzkaller-bugs@googlegroups.com, yonghong.song@linux.dev
+References: <67121037.050a0220.10f4f4.000f.GAE@google.com>
+ <20241021182347.77750-1-jrife@google.com>
+ <20241022042001.09055543@rorschach.local.home>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 Content-Language: en-US
-In-Reply-To: <CAEf4BzamHrmdwRFKAr9MGSmaVtrJT3-ru=KPXEcO981XZsM+Ew@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20241022042001.09055543@rorschach.local.home>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On 10/22/24 05:07, Andrii Nakryiko wrote:
-> On Mon, Oct 21, 2024 at 6:02 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->>
->> Hi all,
->>
->> Today's linux-next merge of the bpf-next tree got a conflict in:
->>
->>   tools/testing/selftests/bpf/Makefile
->>
->> between commit:
->>
->>   f91b256644ea ("selftests/bpf: Add test for kfunc module order")
->>
->> from Linus' tree and commit:
->>
->>   c3566ee6c66c ("selftests/bpf: remove test_tcp_check_syncookie")
->>
->> from the bpf-next tree.
->>
->> I fixed it up (see below) and can carry the fix as necessary. This
->> is now fixed as far as linux-next is concerned, but any non trivial
->> conflicts should be mentioned to your upstream maintainer when your tree
->> is submitted for merging.  You may also want to consider cooperating
->> with the maintainer of the conflicting tree to minimise any particularly
->> complex conflicts.
->>
->> --
->> Cheers,
->> Stephen Rothwell
->>
->> diff --cc tools/testing/selftests/bpf/Makefile
->> index 75016962f795,6d15355f1e62..000000000000
->> --- a/tools/testing/selftests/bpf/Makefile
->> +++ b/tools/testing/selftests/bpf/Makefile
->> @@@ -154,11 -153,9 +153,10 @@@ TEST_PROGS_EXTENDED := with_addr.sh
->>
->>   # Compile but not part of 'make run_tests'
->>   TEST_GEN_PROGS_EXTENDED = \
->> -       flow_dissector_load test_flow_dissector test_tcp_check_syncookie_user \
->> -       test_lirc_mode2_user xdping test_cpp runqslower bench bpf_testmod.ko \
->> -       xskxceiver xdp_redirect_multi xdp_synproxy veristat xdp_hw_metadata \
->> -       xdp_features bpf_test_no_cfi.ko bpf_test_modorder_x.ko \
->> -       bpf_test_modorder_y.ko
->> +       flow_dissector_load test_flow_dissector test_lirc_mode2_user xdping \
->> +       test_cpp runqslower bench bpf_testmod.ko xskxceiver xdp_redirect_multi \
->>  -      xdp_synproxy veristat xdp_hw_metadata xdp_features bpf_test_no_cfi.ko
->> ++      xdp_synproxy veristat xdp_hw_metadata xdp_features bpf_test_no_cfi.ko \
->> ++      bpf_test_modorder_x.ko bpf_test_modorder_y.ko
->>
->>   TEST_GEN_FILES += liburandom_read.so urandom_read sign-file uprobe_multi
->>
->> @@@ -301,22 -302,11 +303,24 @@@ $(OUTPUT)/bpf_testmod.ko: $(VMLINUX_BTF
->>   $(OUTPUT)/bpf_test_no_cfi.ko: $(VMLINUX_BTF) $(RESOLVE_BTFIDS) $(wildcard bpf_test_no_cfi/Makefile bpf_test_no_cfi/*.[ch])
->>         $(call msg,MOD,,$@)
->>         $(Q)$(RM) bpf_test_no_cfi/bpf_test_no_cfi.ko # force re-compilation
->> -       $(Q)$(MAKE) $(submake_extras) RESOLVE_BTFIDS=$(RESOLVE_BTFIDS) -C bpf_test_no_cfi
->> +       $(Q)$(MAKE) $(submake_extras) -C bpf_test_no_cfi \
->> +               RESOLVE_BTFIDS=$(RESOLVE_BTFIDS)         \
->> +               EXTRA_CFLAGS='' EXTRA_LDFLAGS=''
->>         $(Q)cp bpf_test_no_cfi/bpf_test_no_cfi.ko $@
->>
->>  +$(OUTPUT)/bpf_test_modorder_x.ko: $(VMLINUX_BTF) $(RESOLVE_BTFIDS) $(wildcard bpf_test_modorder_x/Makefile bpf_test_modorder_x/*.[ch])
->>  +      $(call msg,MOD,,$@)
->>  +      $(Q)$(RM) bpf_test_modorder_x/bpf_test_modorder_x.ko # force re-compilation
->>  +      $(Q)$(MAKE) $(submake_extras) RESOLVE_BTFIDS=$(RESOLVE_BTFIDS) -C bpf_test_modorder_x
->>  +      $(Q)cp bpf_test_modorder_x/bpf_test_modorder_x.ko $@
->>  +
->>  +$(OUTPUT)/bpf_test_modorder_y.ko: $(VMLINUX_BTF) $(RESOLVE_BTFIDS) $(wildcard bpf_test_modorder_y/Makefile bpf_test_modorder_y/*.[ch])
->>  +      $(call msg,MOD,,$@)
->>  +      $(Q)$(RM) bpf_test_modorder_y/bpf_test_modorder_y.ko # force re-compilation
->>  +      $(Q)$(MAKE) $(submake_extras) RESOLVE_BTFIDS=$(RESOLVE_BTFIDS) -C bpf_test_modorder_y
+On 2024-10-22 04:20, Steven Rostedt wrote:
 > 
-> This and above will need the EXTRA_CFLAGS and EXTRA_LDFLAGS additions
-> that we have for bpf_test_no_cfi.ko. For now, I'll unland the patch
-> set to avoid this conflict and breakage. We'll reapply once bpf is
-> merged into bpf-next. Viktor, please rebase to take into account these
-> new modorder.ko additions.
+> Mathieu, can you look at this?
 
-Thanks Andrii.
-
-I rebased my patches on top of the bpf tree, please let me know when I
-can resend them for bpf-next.
-
-Viktor
+Sure,
 
 > 
+> [ more below ]
 > 
->>  +      $(Q)cp bpf_test_modorder_y/bpf_test_modorder_y.ko $@
->>  +
->>  +
->>   DEFAULT_BPFTOOL := $(HOST_SCRATCH_DIR)/sbin/bpftool
->>   ifneq ($(CROSS_COMPILE),)
->>   CROSS_BPFTOOL := $(SCRATCH_DIR)/sbin/bpftool
+> On Mon, 21 Oct 2024 18:23:47 +0000
+> Jordan Rife <jrife@google.com> wrote:
 > 
+>> I performed a bisection and this issue starts with commit a363d27cdbc2
+>> ("tracing: Allow system call tracepoints to handle page faults") which
+>> introduces this change.
+>>
+>>> + *
+>>> + * With @syscall=0, the tracepoint callback array dereference is
+>>> + * protected by disabling preemption.
+>>> + * With @syscall=1, the tracepoint callback array dereference is
+>>> + * protected by Tasks Trace RCU, which allows probes to handle page
+>>> + * faults.
+>>>    */
+>>>   #define __DO_TRACE(name, args, cond, syscall)				\
+>>>   	do {								\
+>>> @@ -204,11 +212,17 @@ static inline struct tracepoint *tracepoint_ptr_deref(tracepoint_ptr_t *p)
+>>>   		if (!(cond))						\
+>>>   			return;						\
+>>>   									\
+>>> -		preempt_disable_notrace();				\
+>>> +		if (syscall)						\
+>>> +			rcu_read_lock_trace();				\
+>>> +		else							\
+>>> +			preempt_disable_notrace();			\
+>>>   									\
+>>>   		__DO_TRACE_CALL(name, TP_ARGS(args));			\
+>>>   									\
+>>> -		preempt_enable_notrace();				\
+>>> +		if (syscall)						\
+>>> +			rcu_read_unlock_trace();			\
+>>> +		else							\
+>>> +			preempt_enable_notrace();			\
+>>>   	} while (0)
+>>
+>> Link: https://lore.kernel.org/bpf/20241009010718.2050182-6-mathieu.desnoyers@efficios.com/
+>>
+>> I reproduced the bug locally by running syz-execprog inside a QEMU VM.
+>>
+>>> ./syz-execprog -repeat=0 -procs=5 ./repro.syz.txt
+>>
+>> I /think/ what is happening is that with this change preemption may now
+>> occur leading to a scenario where the RCU grace period is insufficient
+>> in a few places where call_rcu() is used. In other words, there are a
+>> few scenarios where call_rcu_tasks_trace() should be used instead to
+>> prevent a use-after-free bug when a preempted tracepoint call tries to
+>> access a program, link, etc. that was freed. It seems the syzkaller
+>> program induces page faults while attaching raw tracepoints to
+>> sys_enter making preemption more likely to occur.
+>>
+>> kernel/tracepoint.c
+>> ===================
+>>> ...
+>>> static inline void release_probes(struct tracepoint_func *old)
+>>> {
+>>> 	...
+>>> 	call_rcu(&tp_probes->rcu, rcu_free_old_probes); <-- Here
+> 
+> Have you tried just changing this one to call_rcu_tasks_trace()?
+
+Actually, I see two possible solutions there:
+
+1) If we want to keep unchanged register/unregister functions as a single
+    API for normal and syscall tracepoints, and we don't want to add additional
+    flags in the tracepoint struct, then we need to chain the call_rcu:
+
+    call_rcu() -> rcu_free_old_probes -> call_rcu_tasks_trace() -> rcu_tasks_trace_free_old_probes.
+
+    Just like we did when we used SRCU.
+
+    This is not perfect because we'd be adding extra delay for reclaim of
+    the old probes array for every tracepoint being updated, not just the
+    syscall tracepoints, but we probably don't care. This is a straightforward
+    initial solution.
+
+    We did something similar with SRCU before and it was OK.
+
+2) If we want something more elegant, we can add a flag to struct tracepoint
+    for syscall tracepoints, and use that flag to choose between call_rcu()
+    and call_rcu_tasks_trace(). But maybe this additional complexity is not
+    even useful.
+
+I'll prepare a patch implementing (1) and send it your way as RFC for further
+testing.
+
+Thanks,
+
+Mathieu
+
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+https://www.efficios.com
 
