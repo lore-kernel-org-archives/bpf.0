@@ -1,105 +1,105 @@
-Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com [209.85.128.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-181.mta1.migadu.com (out-181.mta1.migadu.com [95.215.58.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54EEB80025;
-	Tue, 22 Oct 2024 01:37:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7860317993
+	for <bpf@vger.kernel.org>; Tue, 22 Oct 2024 01:46:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729561076; cv=none; b=cvmUJzhhz25LWkA+c5Melp63YiNk56ZXbINEYRQXaOzl5F8IXIlrATsozabaWMK0koBDPQDUtemmbWf0atFfg65rysByURLdwjwyFWfdACO8JQf1ckcRF23f41I9SlYVc1YwEzlV89I/AiXPGQz/qgBRl+zhRGyF/6SyBCGRQ24=
+	t=1729561598; cv=none; b=NndPbmLeiI0/PpYwou5Q/9U2yySX5ir+ol6SWZ+n58OR4p9VpThnSMj0s+3xh4K4m9eKc2m7IxRz3+oYbyvS5woijFgg9kgQTrAjhaJUo8ZFyn4PCiSp7IaCJ8Shrl/dN2t/aeh9OpLoy2TEo8Pe+zEWgB5Kc01V6B7N7TaYHww=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729561076; c=relaxed/simple;
-	bh=NDJLk7xkPiU48e/PSsaR3uNMu9+RXCrTo/wdzd/6Vts=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=OsmANnnWvI9NZyt4PqZkfGlP04IY37WD7ak+F6MnTTB1wY5LPNTB4vn264mEca3OWC2s9zAEya9aahPDQEj/I3fpnIGGUx3rk3rs07YucyJcacdwMc30YlV0dM01ZWN+ZSKqwE73Aqme/LDeZZ0jYLu4xjwJ0KXg7j1hZ2BVTEk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CnEb5BFn; arc=none smtp.client-ip=209.85.128.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1729561598; c=relaxed/simple;
+	bh=AzE8fYotIum1oWdGLMn7crbHnaUEkMFZL232IOQeR7A=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=G/WJgj86TblbUY8Pf4M2gPTJQjylVVUOq/15/UYZq4LHmmnv/ScCQQs6y2dCx4U3nXPLLCgNoklK7r1CduK201BniqRNfO4HypavnbjA0ce+sXyV78OjYqvoaKiNPAZMP02L3bDhetvwum/GqNsIq3bm+OZSS10JeGyGgZYBtok=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=lgJOCrqb; arc=none smtp.client-ip=95.215.58.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CnEb5BFn"
-Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-6e2f4c1f79bso41758207b3.1;
-        Mon, 21 Oct 2024 18:37:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1729561074; x=1730165874; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=NDJLk7xkPiU48e/PSsaR3uNMu9+RXCrTo/wdzd/6Vts=;
-        b=CnEb5BFnjhBQbcZghV0O8QO/n7o4aJfb4ZTElX0odhBZQbZfh0i0m9L6bxxtDQLto9
-         nKpDYGTvijC7a1Z9eHOhbEftcSaEZ9CqM9tup9cShd7m/PdMB3izG0c4xLr0ItgkXMm3
-         ZizjhdgPwEySlNen9IPZ6ZbwLmbULNMYuK4dQs1i0KO4vGxyK6dXVyWxJ7ZPTefMLk8c
-         dqxF8AoJ9fntE0UEfjd9YPnoIhCdcpXStOOJtbqjSElqlVN5ZnD8BiQ0vJYWOKBLWhL6
-         p42lCwC8rcEiB7PiBU4bA0POVPc8IE1QKpg58+9Ym+qNf+AEikOMuuhHQdUPMSVHhXVQ
-         mGvQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729561074; x=1730165874;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=NDJLk7xkPiU48e/PSsaR3uNMu9+RXCrTo/wdzd/6Vts=;
-        b=VUib7ReMfLIJZFRA0IpJeFFmLSB9kwgLDkE0GNnaPIrfpYS9YfjUKM1YtYmFI44EOi
-         77FFRuXLp/TZ1HGUOFV5ikKwnuNLXfyfOX2cMawugsUmD9CjSg2hAg1q+R308ulv3CoS
-         5JXuwoRq3MJ39E7cLugCCyiIU3DAqOkeNJtSY6xrC3nhBHd64cIxB6kRcz2yC2AaJTLE
-         IOWy2dnqFenhqP2C2+YLJN5J5LshL+SK6uYGXLgO9rk1zEfQh+s+3AJjvgfDeCHKFwHu
-         Vdxe8wMocfJ75FfEdsUMvDRYppEgZzL6yYTyz1LASXviVccdvXCisy/44vMxLuzLR3yc
-         EJfw==
-X-Forwarded-Encrypted: i=1; AJvYcCV9qKlieFNoBAbqrS/f0LWjuJCRwr4fOZ74yeNkzfNF0jOSmwnMhk/4rQzOwPFPfQslhZuqr5Z7@vger.kernel.org, AJvYcCW4RJS86EzbI51r2DG1vPXC/75GYLMCPWZiTc2uRhRGLu7GJATpqBpZt1wrKfOvHuwUDqA=@vger.kernel.org, AJvYcCXWh8aio4rjTD2avFOkJUiJisEJFHyslwo7zZ/5f3bQsEmu74IdK87n/GZwJYP+5CyUsjAZ31fi1LtBSj0j@vger.kernel.org
-X-Gm-Message-State: AOJu0YxOLgSCYoE2+gUwIZ0p3nTfKmL6sJAsTDNAtqDJcUN5niCXXKXU
-	mlDv0lRAfeUs89COsAfqIxe9eh2h7nOJk4wXh+qfY9VPoej1Uk5WGVUoK7MsDbxH9Tfzbb2rxzi
-	MWmLX3VHCdUOWvMW4tOwjPT1oibk=
-X-Google-Smtp-Source: AGHT+IH/tKqA6Ex8XzzdbDrWfvqDknkowK08soSRE5a9PRlkAj9ON17Z/foKz0LOaGN255PnB9CXz+3HOizL5IJ0yLo=
-X-Received: by 2002:a05:690c:39b:b0:6d3:4c37:d652 with SMTP id
- 00721157ae682-6e7d8256f38mr10799427b3.24.1729561074147; Mon, 21 Oct 2024
- 18:37:54 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="lgJOCrqb"
+Message-ID: <0f61509c-3a00-422a-90f3-89bdfbd20037@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1729561592;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=0ry3br5BFbDWeH/Tp4jOgN3WpdVS73dULoPmS6fyRyg=;
+	b=lgJOCrqbe9MJC+9r+bxiOg8aVyT18h+AXOk6d2zNQ/PH/0vZKpvqaIy+VLM0nwQ6NsmkXe
+	6+zcglJtfm2zJKT5rTQy6On4AaEfFwq3xmu+aFXv+oj/ndeVXsXZR4PzAbHk3Rv9C2mmLl
+	dFhjhfAeRb3dsC3E7MYGrTjHCiYNI4o=
+Date: Tue, 22 Oct 2024 09:46:18 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241019071149.81696-1-danielyangkang@gmail.com> <c7d0503b-e20d-4a6d-aecf-2bd7e1c7a450@linux.dev>
-In-Reply-To: <c7d0503b-e20d-4a6d-aecf-2bd7e1c7a450@linux.dev>
-From: Daniel Yang <danielyangkang@gmail.com>
-Date: Mon, 21 Oct 2024 18:37:01 -0700
-Message-ID: <CAGiJo8R2PhpOitTjdqZ-jbng0Yg=Lxu6L+6FkYuUC1M_d10U2Q@mail.gmail.com>
-Subject: Re: [PATCH net] Drop packets with invalid headers to prevent KMSAN infoleak
-To: Martin KaFai Lau <martin.lau@linux.dev>
-Cc: Daniel Borkmann <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, 
-	Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
-	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	"open list:BPF [NETWORKING] (tcx & tc BPF, sock_addr)" <bpf@vger.kernel.org>, 
-	"open list:BPF [NETWORKING] (tcx & tc BPF, sock_addr)" <netdev@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>, 
-	syzbot+346474e3bf0b26bd3090@syzkaller.appspotmail.com
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [PATCH bpf-next 1/2] bpf, x64: Propagate tailcall info only for
+ tail_call_reachable subprogs
+Content-Language: en-US
+To: Yonghong Song <yonghong.song@linux.dev>, bpf@vger.kernel.org
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+ jolsa@kernel.org, eddyz87@gmail.com, kernel-patches-bot@fb.com
+References: <20241021133929.67782-1-leon.hwang@linux.dev>
+ <20241021133929.67782-2-leon.hwang@linux.dev>
+ <87faf17b-51aa-487f-8d49-bf297a64ffa6@linux.dev>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Leon Hwang <leon.hwang@linux.dev>
+In-Reply-To: <87faf17b-51aa-487f-8d49-bf297a64ffa6@linux.dev>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-> A test in selftests/bpf is needed to reproduce and better understand this.
-I don't know much about self tests but I've just been using the syzbot
-repro and #syz test at the link in the patch:
-https://syzkaller.appspot.com/bug?extid=346474e3bf0b26bd3090. Testing
-the patch showed that the uninitialized memory was not getting written
-to memory.
 
-> Only bpf_clone_redirect() is needed to reproduce or other bpf_skb_*() helpers calls
-> are needed to reproduce?
 
-From what I can see in the crash report here:
-https://syzkaller.appspot.com/text?tag=CrashReport&x=10ba3ca9980000,
-only bpf_clone_redirect() is needed to trigger this issue. The issue
-seems to be that bpf_try_make_head_writable clones the skb and creates
-uninitialized memory but __bpf_tx_skb() gets called and the ethernet
-header never got written, resulting in the skb having a data section
-without a proper mac header. Current check:
+On 22/10/24 01:49, Yonghong Song wrote:
+> 
+> On 10/21/24 6:39 AM, Leon Hwang wrote:
+>> In the x86_64 JIT, when calling a function, tailcall info is
+>> propagated if
+>> the program is tail_call_reachable, regardless of whether the function
+>> is a
+>> subprog, helper, or kfunc. However, this propagation is unnecessary for
+>> not-tail_call_reachable subprogs, helpers, or kfuncs.
+>>
+>> The verifier can determine if a subprog is tail_call_reachable.
+>> Therefore,
+>> it can be optimized to only propagate tailcall info when the callee is
+>> subprog and the subprog is actually tail_call_reachable.
+>>
+>> Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
+>> ---
+>>   arch/x86/net/bpf_jit_comp.c | 4 +++-
+>>   kernel/bpf/verifier.c       | 6 ++++++
+>>   2 files changed, 9 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+>> index 06b080b61aa57..6ad6886ecfc88 100644
+>> --- a/arch/x86/net/bpf_jit_comp.c
+>> +++ b/arch/x86/net/bpf_jit_comp.c
+>> @@ -2124,10 +2124,12 @@ st:            if (is_imm8(insn->off))
+>>                 /* call */
+>>           case BPF_JMP | BPF_CALL: {
+>> +            bool pseudo_call = src_reg == BPF_PSEUDO_CALL;
+>> +            bool subprog_tail_call_reachable = dst_reg;
+>>               u8 *ip = image + addrs[i - 1];
+>>                 func = (u8 *) __bpf_call_base + imm32;
+>> -            if (tail_call_reachable) {
+>> +            if (pseudo_call && subprog_tail_call_reachable) {
+> 
+> Why we need subprog_tail_call_reachable? Does
+>     tail_call_reachable && psueudo_call
+> work the same way?
+> 
 
-if (unlikely(skb->mac_header >= skb->network_header || skb->len == 0))
-{
-**drop packet**
-}
+'tail_call_reachable && pseudo_call' works too. However, it will
+propagate tailcall info to subprog even if the subprog is not
+tail_call_reachable.
 
-in __bpf_redirect_common() is insufficient since it only checks if the
-mac header is misordered or if the data length is 0. So, any packet
-with a malformed MAC header that is not 14 bytes but is not 0 doesn't
-get dropped. Adding bounds checks for mac header size should fix this.
-And from what I see in the syz test of this patch, it does.
+subprog_tail_call_reachable indicates the subprog requires tailcall info
+from its caller.
+So, 'pseudo_call && subprog_tail_call_reachable' is better.
 
-Are there any possible unexpected issues that can be caused by this?
+Thanks,
+Leon
+
