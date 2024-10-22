@@ -1,111 +1,87 @@
-Received: from out-175.mta1.migadu.com (out-175.mta1.migadu.com [95.215.58.175])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2717B1CCEFA
-	for <bpf@vger.kernel.org>; Tue, 22 Oct 2024 22:41:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F4BF1C8FCF
+	for <bpf@vger.kernel.org>; Tue, 22 Oct 2024 22:50:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729636911; cv=none; b=mEVgjhJXkfRUABOpZKl3IFnok7QrcnRbfeXlYUh2YnJHNZKaVEbtk+n7EU1q6ZiXPVyOXShvZ3N9VUlRP7BxXeyx61KW/dbhCy+fOfCqecQX/pixCBTUHdEXXQ9pl/GLi75NDdFO9C76g/LV8kf9XI+vwCLR7EkWOk8iIak/uDY=
+	t=1729637425; cv=none; b=M9U9y1+ucaQwO7Z3rwqgli/x0acMEGrTUouWux/YlqzfYB/m8A/sW14hSzQT/SluFkYEyTCKCubVMaFkdcJLLuPlfuFF6/O8SH+4rcO0OX66FgWDgS/q9wvNlCf+ofTNtdvzWVkuLgHG9H4n1FfxMOaM4DhudZlj1qHTEwSehnY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729636911; c=relaxed/simple;
-	bh=WgNSbo/AImVhxf5W0qyt3YtRMTqVYFAooszjmMx4Iss=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=oKqpKUF8wSks1ujKiijHeYApC+co6WZLEQUeZmkU3rFLXHsHPeojb4tpkpUsdLQF2IE1kn3/oF5nai607msuGWAejjAr7LjqvUNNKE6tCJPNUOGFfOjpTIiJALmTUebp3czrM7AVKQ7z9u0h8iikWJCdLm1TuhPU9H6bOdNw/jM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=VqcKm/th; arc=none smtp.client-ip=95.215.58.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1729637425; c=relaxed/simple;
+	bh=Ptf5eUVpCle4/T2Cp25AODQ7eKqyzJ9AXeWvuWWTsnA=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=N+qhGMOcdAYe1GS7QS+wPlpJ/Zj1vS0Eo7ifdPfZnjUj+xrZEGCa0CZvDD5Fm4gv8nvilJNz045z5JsF12wfbuyL0munGMhAfxX4CeU39SfZuRlm2psE/3nzpfGSPmwNV9tx1qoNZXsB6i1TSzecOULl8c+ZJn1zfnHrsRQvU2E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DNVL6MTr; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="VqcKm/th"
-Message-ID: <8f572c9d-00c2-48b7-b57f-bd6445c5d514@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1729636907;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Q9rEkTnLitVo+CR2r6cJsh/Zdkqkwgq+EGp91OH5fLI=;
-	b=VqcKm/th54uz0ugPPNjM10vmQvPQ3Zp8bVZSnjMKnXHY0gQKaODrvCgUm+JMPW/QoUEbBu
-	PsskcWFlONM8P9wHfSjzpebw6TXx/AXg6hRPkPBtGhoQ/Q6/7oFDTXX5dNHQLbkMEjZ7yb
-	eCmAYjOchRiQt0Ui41RqpimaK7ZNuWA=
-Date: Tue, 22 Oct 2024 15:41:38 -0700
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DNVL6MTr"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E7A9C4CEC3;
+	Tue, 22 Oct 2024 22:50:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1729637425;
+	bh=Ptf5eUVpCle4/T2Cp25AODQ7eKqyzJ9AXeWvuWWTsnA=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=DNVL6MTrgRWHodj5+/huezP3kWR9L9DXzs9YjnLZvgnY1OpsQxAQv1makJln4yxIm
+	 RmfhVNG9iPAnr1XY4hqonNXZbxQ0KtcX3HL7IY4g067vezkFCwrT+zXnVpwZe9o0G5
+	 6LApG7Ocz3HyCNFlBYSU708TSNIlNb2j9P+7CRDSdAEktYRtuALoR4+wX1YVPDVsAS
+	 xz6gOcE5Ft57D3huy+4vAdnqCNQPbtBzHlwk9C1MwHfMIWwCZJe4adhYZRnnLvCyfV
+	 3eLe/n05YOXC8UQrY3AVsZIGtIj3U0lNpmJpZb+ace1Wa87fsS0mf8Z/GQvU/55ezR
+	 EXqfppkOWsalg==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id EB3DC3822D22;
+	Tue, 22 Oct 2024 22:50:32 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v6 1/9] bpf: Allow each subprog having stack size
- of 512 bytes
-Content-Language: en-GB
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
- Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Kernel Team <kernel-team@fb.com>, Martin KaFai Lau <martin.lau@kernel.org>,
- Tejun Heo <tj@kernel.org>
-References: <20241020191341.2104841-1-yonghong.song@linux.dev>
- <20241020191347.2105090-1-yonghong.song@linux.dev>
- <CAADnVQ+ZXMh_QKy0nd-n7my1SETroockPjpVVJOAWsE3tB_5sg@mail.gmail.com>
- <c6e5040b-9558-481f-b1fc-f77dc9ce90c1@linux.dev>
- <CAADnVQJCfiNEgrvf6GuaUadz6rDSNU6QB3grpOfk2-jQP6is4Q@mail.gmail.com>
- <179d5f87-4c70-438b-9809-cc05dffc13de@linux.dev>
- <CAADnVQL3+o7xV2LQcO-AArBmSEV=CQ7TQsuzBfTUnc_g+MhoMw@mail.gmail.com>
- <489b0524-49bc-4df4-8744-1badd40824be@linux.dev>
- <CAADnVQJJxyoLvFY88OEGzy0MUnL5O8KCMdedDdAvqYcWDJsDXw@mail.gmail.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <CAADnVQJJxyoLvFY88OEGzy0MUnL5O8KCMdedDdAvqYcWDJsDXw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Subject: Re: [PATCH bpf 1/5] bpf: Add MEM_WRITE attribute
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <172963743177.1101685.1294930119594864937.git-patchwork-notify@kernel.org>
+Date: Tue, 22 Oct 2024 22:50:31 +0000
+References: <20241021152809.33343-1-daniel@iogearbox.net>
+In-Reply-To: <20241021152809.33343-1-daniel@iogearbox.net>
+To: Daniel Borkmann <daniel@iogearbox.net>
+Cc: ast@kernel.org, andrii@kernel.org, kongln9170@gmail.com, memxor@gmail.com,
+ bpf@vger.kernel.org
+
+Hello:
+
+This series was applied to bpf/bpf.git (master)
+by Alexei Starovoitov <ast@kernel.org>:
+
+On Mon, 21 Oct 2024 17:28:05 +0200 you wrote:
+> Add a MEM_WRITE attribute for BPF helper functions which can be used in
+> bpf_func_proto to annotate an argument type in order to let the verifier
+> know that the helper writes into the memory passed as an argument. In
+> the past MEM_UNINIT has been (ab)used for this function, but the latter
+> merely tells the verifier that the passed memory can be uninitialized.
+> 
+> There have been bugs with overloading the latter but aside from that
+> there are also cases where the passed memory is read + written which
+> currently cannot be expressed, see also 4b3786a6c539 ("bpf: Zero former
+> ARG_PTR_TO_{LONG,INT} args in case of error").
+> 
+> [...]
+
+Here is the summary with links:
+  - [bpf,1/5] bpf: Add MEM_WRITE attribute
+    https://git.kernel.org/bpf/bpf/c/6fad274f06f0
+  - [bpf,2/5] bpf: Fix overloading of MEM_UNINIT's meaning
+    https://git.kernel.org/bpf/bpf/c/8ea607330a39
+  - [bpf,3/5] bpf: Remove MEM_UNINIT from skb/xdp MTU helpers
+    https://git.kernel.org/bpf/bpf/c/14a3d3ef02ba
+  - [bpf,4/5] selftests/bpf: Add test for writes to .rodata
+    https://git.kernel.org/bpf/bpf/c/baa802d2aa5c
+  - [bpf,5/5] selftests/bpf: Add test for passing in uninit mtu_len
+    https://git.kernel.org/bpf/bpf/c/82bbe133312b
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
-On 10/22/24 2:57 PM, Alexei Starovoitov wrote:
-> On Tue, Oct 22, 2024 at 2:43 PM Yonghong Song <yonghong.song@linux.dev> wrote:
->> To handle a subprog may be used in more than one
->> subtree (subprog 0 tree or async tree), I need to
->> add a 'visited' field to bpf_subprog_info.
->> I think this should work.
-> This is getting quite complicated.
->
-> But looks like we have even bigger problem:
->
-> SEC("lsm/...")
-> int BPF_PROG(...)
-> {
->    volatile char buf[..];
->    buf[..] =
-> }
-
-If I understand correctly, lsm/... corresponds to BPF_PROG_TYPE_LSM prog type.
-The current implementation only supports the following plus struct_ops programs.
-
-+       switch (env->prog->type) {
-+       case BPF_PROG_TYPE_KPROBE:
-+       case BPF_PROG_TYPE_TRACEPOINT:
-+       case BPF_PROG_TYPE_PERF_EVENT:
-+       case BPF_PROG_TYPE_RAW_TRACEPOINT:
-+               return true;
-+       case BPF_PROG_TYPE_TRACING:
-+               if (env->prog->expected_attach_type != BPF_TRACE_ITER)
-+                       return true;
-+               fallthrough;
-+       default:
-+               return false;
-+       }
-
-I do agree that lsm programs will have issues if using private stack
-since preemptible is possible and we don't have recursion check for
-them (which is right in order to provide correct functionality).
-
->
-> The approach to have per-prog per-cpu priv stack
-> doesn't work for the above.
-> Sleepable and non-sleepable LSM progs are preemptible.
-> Multiple tasks can be running the same program on the same cpu
-> preempting each other.
-> The priv stack of this prog will be corrupted.
->
-> Maybe it won't be an issue for sched-ext prog
-> attached to a cgroup, but it feels fragile for bpf infra
-> to rely on implementation detail of another subsystem.
-> We probably need to go back to the drawing board.
