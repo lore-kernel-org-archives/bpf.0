@@ -1,154 +1,126 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCCDE13BAC3
-	for <bpf@vger.kernel.org>; Tue, 22 Oct 2024 11:45:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34DC212D1F1
+	for <bpf@vger.kernel.org>; Tue, 22 Oct 2024 12:49:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729597516; cv=none; b=ZrlJMpuBuhY8QBtLvDPbhCjGScngJuSWQXxyenVbTscR40iCZ/DVFbekZNFBN4aJFFEuNVAq643nmMMTZQ8LUAB7sCRPURYO57Zpt5+Y1JCHWODI8EOyuV2CStJTc9S0uDASSj8kCq33+J/eWw0ypHQd43hese3EuYm/qKP1apI=
+	t=1729601372; cv=none; b=gCjWoEdfJwK0rEl5JhVae3I5wVv7urh+e4McTDFEsIwz264Gz7mr0vZUYU1FxE5+g8Ay/sgh43O9mhQP5fYjUSS9SY5jOirf7F2WmlB9QMGc8/e/oiCShxJa337dOYCJLjJsC7PCMkGP5mCx2OLOVtyoFR2IuOxZY//zs6E8VeU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729597516; c=relaxed/simple;
-	bh=WZr6nhUUy78YTMOWnUJE5GttoIrEa/0NxsjsM9zKj14=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=U7M998wsthXgGL/KPbbfSozipLuEmUgbb1RugGWRB2cu6QotUHI0fDPL8zuJ1tqsHew7jzaF2W2ct4VH6uL07yIlPfL0V3hVjbmCb15bkdXjar/mZ6tQC3qE55PPOwGNnMloCazwG+ETUcvT9uabrXtdqz47KjwtwDSvDCnp3Vs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=C4gSUn4i; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="C4gSUn4i"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1729597513;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=7enNsG1bpUFHlhr1DT8YO4p834Hmfug+sy6xBqiLvdU=;
-	b=C4gSUn4iDoH/B3l8/WwKrLEDIUgg09X5wgee7AYchD9i8cjJcnAxf9I6hKiL71e+pALSEn
-	0oHx+tNyQlIvwVs/0JO6ZbmjVDqiB28jT1zNhxm1tBVHn7YsnsoQQC8dhVu9AxgLV+tBAo
-	eS80uxDBAdFZhqPxrsXojOq3NyKjSkI=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-556-W1LtwbXaNfWYWzOPwz6vfA-1; Tue, 22 Oct 2024 07:45:11 -0400
-X-MC-Unique: W1LtwbXaNfWYWzOPwz6vfA-1
-Received: by mail-wr1-f71.google.com with SMTP id ffacd0b85a97d-37d47fdbbd6so3235583f8f.3
-        for <bpf@vger.kernel.org>; Tue, 22 Oct 2024 04:45:11 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729597510; x=1730202310;
-        h=content-transfer-encoding:in-reply-to:content-language:from
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7enNsG1bpUFHlhr1DT8YO4p834Hmfug+sy6xBqiLvdU=;
-        b=FY+ArrqPoCbov/NDKJPbBa5o7R3JVtl6mnJgFBx9c582vJeVRNMJKRAeveO91/XIlx
-         qxOvk9h4GXtzk7suGMhHK0Tl4ppgLnmmghr03i4lK9dHnBf8FBrjjSDqBdnz2gs1Aaky
-         esnGAjV0wzaoSFaTNaOCLrcmeGaJvz5xaUbHa48dff2KjtLwbI8eb5hhtZw0eyTM6XeJ
-         utR0vCMSMXYrYR3vE+TGQv8OAyCJiPIRljceqQl7ah7toSewdh4gwShWp9K3zZJw8T1P
-         2WyYItulg1NvCxRK5shr/+K0SDZccHUwGuetAT0Q9BrcRjPPJ/qv181h0RSuwInSiVfl
-         0xHQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXeYTw9q2xBtXGhfVDNOZsUr+HF4x3pkhT9zOdnh7TAlwQw5uzfpcVmkRe/jz8fo/nAwWs=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw35Kpq4BVLPTnXV2CJDWFgl4RXKdu8PYL6G9xZ8ilQhaPrUc1V
-	/NJbzYbDiR3880I/NNnX7Rhy9BUlPcv5QCXKwKjKjXy/G1peSM+idMdAt72QtqLh6AjquO+C2sI
-	YQCK/LPgUHeRi58BZK3g5Jt2YRKZRZnyZJmJGOFOonIptTLAB
-X-Received: by 2002:a5d:4ac5:0:b0:37d:5035:451 with SMTP id ffacd0b85a97d-37ef2132fc5mr1627615f8f.10.1729597510367;
-        Tue, 22 Oct 2024 04:45:10 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IH9/lCtcCldWBfFoCPcs0bS+J8BhKQ+FTbLQ1w6APtRdz0iPaHCYLpmwsuxKuNHk9sPkkLKSg==
-X-Received: by 2002:a5d:4ac5:0:b0:37d:5035:451 with SMTP id ffacd0b85a97d-37ef2132fc5mr1627593f8f.10.1729597509995;
-        Tue, 22 Oct 2024 04:45:09 -0700 (PDT)
-Received: from [10.43.17.17] (nat-pool-brq-t.redhat.com. [213.175.37.10])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-37ee0a3650esm6504274f8f.4.2024.10.22.04.45.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 22 Oct 2024 04:45:09 -0700 (PDT)
-Message-ID: <3d1ad598-531a-4e31-a0cc-b8fe05d37f64@redhat.com>
-Date: Tue, 22 Oct 2024 13:45:08 +0200
+	s=arc-20240116; t=1729601372; c=relaxed/simple;
+	bh=qxW0SyRkmfxK6jsY/Agw+437swO/9hKsyHl4Gne155M=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=iYAcVF9eRkNBlKWw7ImCZqw3x5GEUSGJjboNF8Y1Yvv92fXX7XirtxZob5hJiBy3gvAqazONp3oit4uu4VXitsK20PBttFhivNAX4196kH9SB8qg7uWLwoLuu5eMWg2KKLGonSt3So77mJhqeAmE9So56sK4sSQd0cbGzgDCfBo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.93.142])
+	by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4XXsSM2xPNz4f3jXm
+	for <bpf@vger.kernel.org>; Tue, 22 Oct 2024 20:49:07 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.128])
+	by mail.maildlp.com (Postfix) with ESMTP id C74441A0359
+	for <bpf@vger.kernel.org>; Tue, 22 Oct 2024 20:49:24 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.175.124.27])
+	by APP4 (Coremail) with SMTP id gCh0CgCHusZQnxdnd_k7Ew--.1774S4;
+	Tue, 22 Oct 2024 20:49:22 +0800 (CST)
+From: Hou Tao <houtao@huaweicloud.com>
+To: bpf@vger.kernel.org
+Cc: Martin KaFai Lau <martin.lau@linux.dev>,
+	Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Hao Luo <haoluo@google.com>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Jiri Olsa <jolsa@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	houtao1@huawei.com,
+	xukuohai@huawei.com
+Subject: [PATCH bpf v3] bpf: Preserve param->string when parsing mount options
+Date: Tue, 22 Oct 2024 21:01:33 +0800
+Message-Id: <20241022130133.3798232-1-houtao@huaweicloud.com>
+X-Mailer: git-send-email 2.29.2
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] objpool: fix choosing allocation for percpu slots
-To: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-Cc: linux-trace-kernel@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>,
- Matt Wu <wuqiang.matt@bytedance.com>, bpf@vger.kernel.org,
- Andrii Nakryiko <andrii@kernel.org>
-References: <20240826060718.267261-1-vmalik@redhat.com>
- <20241022141748.521cb2d6a4a86428c9bfc99e@kernel.org>
-From: Viktor Malik <vmalik@redhat.com>
-Content-Language: en-US
-In-Reply-To: <20241022141748.521cb2d6a4a86428c9bfc99e@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:gCh0CgCHusZQnxdnd_k7Ew--.1774S4
+X-Coremail-Antispam: 1UD129KBjvJXoW7uw1kXrW5uF4xuF1UWr1Utrb_yoW8Zw4kpF
+	WrG34Uuw48XF4UAw4vqF4kWrWYv3W0kFW8Ka1kAr1Syr13tr92gF9Fkw4a9r1ft3yrCrWY
+	vr4Yy34I9w1UA3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUv2b4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
+	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+	6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+	Cjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0E
+	n4kS14v26r1q6r43MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I
+	0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWU
+	tVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcV
+	CY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAF
+	wI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa
+	7IU1aFAJUUUUU==
+X-CM-SenderInfo: xkrx3t3r6k3tpzhluzxrxghudrp/
 
-On 10/22/24 07:17, Masami Hiramatsu (Google) wrote:
-> On Mon, 26 Aug 2024 08:07:18 +0200
-> Viktor Malik <vmalik@redhat.com> wrote:
-> 
->> objpool intends to use vmalloc for default (non-atomic) allocations of
->> percpu slots and objects. However, the condition checking if GFP flags
->> are equal to GFP_ATOMIC is wrong b/c GFP_ATOMIC is a combination of bits
-> 
-> You meant "whether GFP flags sets any bit of GFP_ATOMIC is wrong"?
+From: Hou Tao <houtao1@huawei.com>
 
-Well, I meant that the condition is wrong w.r.t. what is supposedly its
-original purpose. But feel free to rephrase as you seem fit or I can
-send v3 if you prefer.
+In bpf_parse_param(), keep the value of param->string intact so it can
+be freed later. Otherwise, the kmalloc area pointed to by param->string
+will be leaked as shown below:
 
-Thanks.
-Viktor
+unreferenced object 0xffff888118c46d20 (size 8):
+  comm "new_name", pid 12109, jiffies 4295580214
+  hex dump (first 8 bytes):
+    61 6e 79 00 38 c9 5c 7e                          any.8.\~
+  backtrace (crc e1b7f876):
+    [<00000000c6848ac7>] kmemleak_alloc+0x4b/0x80
+    [<00000000de9f7d00>] __kmalloc_node_track_caller_noprof+0x36e/0x4a0
+    [<000000003e29b886>] memdup_user+0x32/0xa0
+    [<0000000007248326>] strndup_user+0x46/0x60
+    [<0000000035b3dd29>] __x64_sys_fsconfig+0x368/0x3d0
+    [<0000000018657927>] x64_sys_call+0xff/0x9f0
+    [<00000000c0cabc95>] do_syscall_64+0x3b/0xc0
+    [<000000002f331597>] entry_SYSCALL_64_after_hwframe+0x4b/0x53
 
-> 
->> (__GFP_HIGH|__GFP_KSWAPD_RECLAIM) and so `pool->gfp & GFP_ATOMIC` will
->> be true if either bit is set. Since GFP_ATOMIC and GFP_KERNEL share the
->> ___GFP_KSWAPD_RECLAIM bit, kmalloc will be used in cases when GFP_KERNEL
->> is specified, i.e. in all current usages of objpool.
->>
->> This may lead to unexpected OOM errors since kmalloc cannot allocate
->> large amounts of memory.
->>
->> For instance, objpool is used by fprobe rethook which in turn is used by
->> BPF kretprobe.multi and kprobe.session probe types. Trying to attach
->> these to all kernel functions with libbpf using
->>
->>     SEC("kprobe.session/*")
->>     int kprobe(struct pt_regs *ctx)
->>     {
->>         [...]
->>     }
->>
->> fails on objpool slot allocation with ENOMEM.
->>
->> Fix the condition to truly use vmalloc by default.
->>
-> 
-> Anyway, this looks good to me.
-> 
-> Thank you,
-> 
->> Fixes: b4edb8d2d464 ("lib: objpool added: ring-array based lockless MPMC")
->> Signed-off-by: Viktor Malik <vmalik@redhat.com>
->> Acked-by: Andrii Nakryiko <andrii@kernel.org>
->> Reviewed-by: Matt Wu <wuqiang.matt@bytedance.com>
->> ---
->>  lib/objpool.c | 2 +-
->>  1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/lib/objpool.c b/lib/objpool.c
->> index 234f9d0bd081..fd108fe0d095 100644
->> --- a/lib/objpool.c
->> +++ b/lib/objpool.c
->> @@ -76,7 +76,7 @@ objpool_init_percpu_slots(struct objpool_head *pool, int nr_objs,
->>  		 * mimimal size of vmalloc is one page since vmalloc would
->>  		 * always align the requested size to page size
->>  		 */
->> -		if (pool->gfp & GFP_ATOMIC)
->> +		if ((pool->gfp & GFP_ATOMIC) == GFP_ATOMIC)
->>  			slot = kmalloc_node(size, pool->gfp, cpu_to_node(i));
->>  		else
->>  			slot = __vmalloc_node(size, sizeof(void *), pool->gfp,
->> -- 
->> 2.46.0
->>
-> 
-> 
+Fixes: 6c1752e0b6ca ("bpf: Support symbolic BPF FS delegation mount options")
+Acked-by: Jiri Olsa <jolsa@kernel.org>
+Signed-off-by: Hou Tao <houtao1@huawei.com>
+---
+v3: split the patch from the "Misc fixes for bpf" patch set
+v2: https://lore.kernel.org/bpf/d49fa2f4-f743-c763-7579-c3cab4dd88cb@huaweicloud.com
+
+ kernel/bpf/inode.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/kernel/bpf/inode.c b/kernel/bpf/inode.c
+index d8fc5eba529d..9aaf5124648b 100644
+--- a/kernel/bpf/inode.c
++++ b/kernel/bpf/inode.c
+@@ -880,7 +880,7 @@ static int bpf_parse_param(struct fs_context *fc, struct fs_parameter *param)
+ 		const struct btf_type *enum_t;
+ 		const char *enum_pfx;
+ 		u64 *delegate_msk, msk = 0;
+-		char *p;
++		char *p, *str;
+ 		int val;
+ 
+ 		/* ignore errors, fallback to hex */
+@@ -911,7 +911,8 @@ static int bpf_parse_param(struct fs_context *fc, struct fs_parameter *param)
+ 			return -EINVAL;
+ 		}
+ 
+-		while ((p = strsep(&param->string, ":"))) {
++		str = param->string;
++		while ((p = strsep(&str, ":"))) {
+ 			if (strcmp(p, "any") == 0) {
+ 				msk |= ~0ULL;
+ 			} else if (find_btf_enum_const(info.btf, enum_t, enum_pfx, p, &val)) {
+-- 
+2.29.2
 
