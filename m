@@ -1,164 +1,96 @@
-Received: from out30-101.freemail.mail.aliyun.com (out30-101.freemail.mail.aliyun.com [115.124.30.101])
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 868311E51D;
-	Thu, 24 Oct 2024 02:48:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.101
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A46E0156997;
+	Thu, 24 Oct 2024 03:19:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729738112; cv=none; b=tCNqxjsY4cfcRM9sEEJ6W+EadvwSLhp5lFjeOTX9yfkVSMznzzLyiCH93q+zpJxgSXBX7zC0RF6kaPxCe+xcYuLcSWQI3vQQHYib62c9MDf6epk1yCefB9IL5R4nXFd5eEjE22TF3/Mavb5bJoHCsS/NTchAVbkmvitr34xTUCQ=
+	t=1729739972; cv=none; b=PtsJHPfDaJlUNde/h4068btzL7s5BiAVHAyInzpp//alm9J6ZCj1MrLMwbduxhMXndTQCTkdWf0J1huFu9irLQJDydti+5iD/nhTWQenfcvH5MSBMDisYBuXNt98s8Ew6kW4DFmeiWp6MEz3rluJO9uBykFt47TqbxAgYS2/QwU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729738112; c=relaxed/simple;
-	bh=pDBnVwV4TrSz9x6jHbsxWa5WmwTlfzb/lAVwo0dzrhc=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=DlAhQyBOSw0PuVxwCB4S6q7D6xDr/4Ba033lcMf5VsZ+SR5NXDHn93/4ASc2mryPwdct3zvkFqBJUmp9PYk0fb06Np8yhB93WDD5uO4EhJuejivC7/jrnRx1hRILoM/ul0QzXx0ShcCwYM5PLNhGTWU+AINw5VU4iEH3XhEXdbA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=wm7uSVrh; arc=none smtp.client-ip=115.124.30.101
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="wm7uSVrh"
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux.alibaba.com; s=default;
-	t=1729738100; h=From:To:Subject:Date:Message-Id;
-	bh=9jvqQZLq79EKmM2QtBsiWqAED1EfuumssWsjxKW9xfc=;
-	b=wm7uSVrhEyHL4EtJ5yrE0EfuyL++xuqviL4PenWQstX0vlOfzhCrQjQxCZLUk7ryPA2PcynL5khZckwkX6vOJSj8B8My/0QjdqWawAKNoa9PYH8dh0eyJ1AaW3Xhn4m3cxSclU0Q6xGX6kSaf8r6cVEmzvYltOyTs3j6gfbxTKI=
-Received: from j66a10360.sqa.eu95.tbsite.net(mailfrom:alibuda@linux.alibaba.com fp:SMTPD_---0WHnU0H6_1729737776 cluster:ay36)
-          by smtp.aliyun-inc.com;
-          Thu, 24 Oct 2024 10:42:57 +0800
-From: "D. Wythe" <alibuda@linux.alibaba.com>
-To: kgraul@linux.ibm.com,
-	wenjia@linux.ibm.com,
-	jaka@linux.ibm.com,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	martin.lau@linux.dev,
-	pabeni@redhat.com,
-	song@kernel.org,
-	sdf@google.com,
-	haoluo@google.com,
-	yhs@fb.com,
-	edumazet@google.com,
-	john.fastabend@gmail.com,
-	kpsingh@kernel.org,
-	jolsa@kernel.org,
-	guwen@linux.alibaba.com
-Cc: kuba@kernel.org,
-	davem@davemloft.net,
-	netdev@vger.kernel.org,
-	linux-s390@vger.kernel.org,
-	linux-rdma@vger.kernel.org,
-	bpf@vger.kernel.org,
-	dtcccc@linux.alibaba.com
-Subject: [PATCH bpf-next 4/4] bpf/selftests: add simple selftest for bpf_smc_ops
-Date: Thu, 24 Oct 2024 10:42:48 +0800
-Message-Id: <1729737768-124596-5-git-send-email-alibuda@linux.alibaba.com>
-X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <1729737768-124596-1-git-send-email-alibuda@linux.alibaba.com>
-References: <1729737768-124596-1-git-send-email-alibuda@linux.alibaba.com>
+	s=arc-20240116; t=1729739972; c=relaxed/simple;
+	bh=eiXoPBhcLW656chQS4im/MiDK2YJB69/S0pvCMxCqVk=;
+	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=Ow4Gh18VjTP5fMk6BLRChptdUXHktYRS7gxSm5DDzjuxZ/lt1b/mRk6t1zPiCH9EPHhu2iyRtpE6ka9cV3TLRaZoQhGbOkN5VP7wqydkl0HqSVsdfN+LRgM9uqUMyZW96yT5sNEqJpuLIgCwLVTB0f4Nym+JUn/n2Xy+qusu2lc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.93.142])
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4XYrjk4zgXz4f3jLm;
+	Thu, 24 Oct 2024 11:19:06 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.252])
+	by mail.maildlp.com (Postfix) with ESMTP id EE1321A018D;
+	Thu, 24 Oct 2024 11:19:24 +0800 (CST)
+Received: from [10.174.176.117] (unknown [10.174.176.117])
+	by APP3 (Coremail) with SMTP id _Ch0CgBX94O5vBlnW7YyEw--.40278S2;
+	Thu, 24 Oct 2024 11:19:24 +0800 (CST)
+Subject: Re: [PATCH] bpf: Fix out-of-bounds write in trie_get_next_key()
+To: Byeonguk Jeong <jungbu2855@gmail.com>
+Cc: Daniel Borkmann <daniel@iogearbox.net>,
+ Yonghong Song <yonghong.song@linux.dev>, bpf@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <ZxcDzT/iv/f0Gyz0@localhost.localdomain>
+ <26f04a6b-4248-6898-8612-793e02712017@huaweicloud.com>
+ <Zxil/uyqq5qDHuRX@localhost.localdomain>
+ <da89a4cb-1824-2228-31ef-ad33ad6099cd@huaweicloud.com>
+ <ZxmnZWjSRVHgtbGZ@localhost.localdomain>
+From: Hou Tao <houtao@huaweicloud.com>
+Message-ID: <a7cbcc55-0913-fdcb-3100-b9f71817bfaf@huaweicloud.com>
+Date: Thu, 24 Oct 2024 11:19:21 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+In-Reply-To: <ZxmnZWjSRVHgtbGZ@localhost.localdomain>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-CM-TRANSID:_Ch0CgBX94O5vBlnW7YyEw--.40278S2
+X-Coremail-Antispam: 1UD129KBjvdXoWrZF13Aw1fAw4xtFy7uw1rWFg_yoWkCwc_ur
+	s8ZF92kw47CFnIgFZayr45Jr9rGFy8tF9rurW8Wr17JryrJanIq3ZxGr9Yvay5Ga13Z343
+	tFn09rWrtw13ujkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+	9fnUUIcSsGvfJTRUUUb4AYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20E
+	Y4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwV
+	A0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x02
+	67AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxV
+	AFwI0_GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2
+	j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7x
+	kEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62AI1cAE67vIY487MxkF7I0En4kS14v2
+	6r126r1DMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrV
+	AFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCI
+	c40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267
+	AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_
+	Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU80fO7
+	UUUUU==
+X-CM-SenderInfo: xkrx3t3r6k3tpzhluzxrxghudrp/
 
-From: "D. Wythe" <alibuda@linux.alibaba.com>
 
-This PATCH adds a tiny selftest for bpf_smc_ops, to verify the ability
-to attach and write access.
 
-Follow the steps below to run this test.
+On 10/24/2024 9:48 AM, Byeonguk Jeong wrote:
+> Hi,
+>
+> On Wed, Oct 23, 2024 at 05:59:53PM +0800, Hou Tao wrote:
+>> Alexei suggested adding a bpf self-test for the patch.  I think you
+>> could reference the code in lpm_trie_map_batch_ops.c [1] or similar and
+>> add a new file that uses bpf_map_get_next_key to demonstrate the
+>> out-of-bound problem. The test can be run by ./test_maps. There is some
+>> document for the procedure in [2].
+>>
+>> [1]:  tools/testing/selftests/bpf/map_tests/lpm_trie_map_batch_ops.c
+>> [2]:
+>> https://github.com/torvalds/linux/blob/master/Documentation/bpf/bpf_devel_QA.rst
+> Okay, I will add a new test. Thanks for the detailed guideline.
+>
+>> Which procedure will return -ENOENT ? I think the element with
+>> prefixlen=0 could still be found through the key with prefixlen = 0.
+> I mean, BPF_MAP_GET_NEXT_KEY with .prefixlen = 0 would give us -ENOENT,
+> as it follows postorder. BPF_MAP_LOOKUP_ELEM still find the element
+> with prefixlen 0 through the key with prefixlen 0 as you said.
 
-make -C tools/testing/selftests/bpf
-cd tools/testing/selftests/bpf
-sudo ./test_progs -t smc
-
-Results shows:
-Summary: 1/1 PASSED, 0 SKIPPED, 0 FAILED
-
-Signed-off-by: D. Wythe <alibuda@linux.alibaba.com>
----
- .../selftests/bpf/prog_tests/test_bpf_smc.c        | 21 +++++++++++
- tools/testing/selftests/bpf/progs/bpf_smc.c        | 44 ++++++++++++++++++++++
- 2 files changed, 65 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/test_bpf_smc.c
- create mode 100644 tools/testing/selftests/bpf/progs/bpf_smc.c
-
-diff --git a/tools/testing/selftests/bpf/prog_tests/test_bpf_smc.c b/tools/testing/selftests/bpf/prog_tests/test_bpf_smc.c
-new file mode 100644
-index 00000000..2299853
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/test_bpf_smc.c
-@@ -0,0 +1,21 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <test_progs.h>
-+
-+#include "bpf_smc.skel.h"
-+
-+static void load(void)
-+{
-+	struct bpf_smc *skel;
-+
-+	skel = bpf_smc__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "bpf_smc__open_and_load"))
-+		return;
-+
-+	bpf_smc__destroy(skel);
-+}
-+
-+void test_bpf_smc(void)
-+{
-+	if (test__start_subtest("load"))
-+		load();
-+}
-diff --git a/tools/testing/selftests/bpf/progs/bpf_smc.c b/tools/testing/selftests/bpf/progs/bpf_smc.c
-new file mode 100644
-index 00000000..ebff477
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/bpf_smc.c
-@@ -0,0 +1,44 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include "vmlinux.h"
-+
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+
-+char _license[] SEC("license") = "GPL";
-+
-+struct smc_bpf_ops_ctx {
-+	struct {
-+		struct tcp_sock *tp;
-+	} set_option;
-+	struct {
-+		const struct tcp_sock *tp;
-+		struct inet_request_sock *ireq;
-+		int smc_ok;
-+	} set_option_cond;
-+};
-+
-+struct smc_bpf_ops {
-+	void (*set_option)(struct smc_bpf_ops_ctx *ctx);
-+	void (*set_option_cond)(struct smc_bpf_ops_ctx *ctx);
-+};
-+
-+SEC("struct_ops/bpf_smc_set_tcp_option_cond")
-+void BPF_PROG(bpf_smc_set_tcp_option_cond, struct smc_bpf_ops_ctx *arg)
-+{
-+	arg->set_option_cond.smc_ok = 1;
-+}
-+
-+SEC("struct_ops/bpf_smc_set_tcp_option")
-+void BPF_PROG(bpf_smc_set_tcp_option, struct smc_bpf_ops_ctx *arg)
-+{
-+	struct tcp_sock *tp = arg->set_option.tp;
-+
-+	tp->syn_smc = 1;
-+}
-+
-+SEC(".struct_ops.link")
-+struct smc_bpf_ops sample_smc_bpf_ops = {
-+	.set_option         = (void *) bpf_smc_set_tcp_option,
-+	.set_option_cond    = (void *) bpf_smc_set_tcp_option_cond,
-+};
--- 
-1.8.3.1
+I see. But considering the element with .prefixlen = 0 is the last one
+in the map, returning -ENOENT is expected.
+> .
 
