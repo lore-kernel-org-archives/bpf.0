@@ -1,130 +1,183 @@
-Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C12B021B860
-	for <bpf@vger.kernel.org>; Fri, 25 Oct 2024 15:01:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 002B015B992
+	for <bpf@vger.kernel.org>; Fri, 25 Oct 2024 15:39:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.177.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729868469; cv=none; b=ro7STBPbuWnNV6pePDqUlZpPittVd+QcMfiXHpNk+SCbZNFHQih6dN5c9WFv+iMWBt3FFjPz3l4LxE7X8I7OK3ZpY4NURoXptB1NnhPwYCPzEALyGCD6gnwKbB6zXBarqksbvdMKREhGyVapSDL6nKGao7vI6xHS51emKkB4Tf0=
+	t=1729870759; cv=none; b=Vi4Re/9JHwGoVXZoAyIRTmGwcrAmjxm2MIUGVZIzdjJElfrOOvXD3Bpbl80afLqLLpWRpBGLb4SWuKwNkK3eVlxL44gYp2T6v3Te+GET9Q42g+ihIZeLPophSRxzSOaz1uG2AoyKV3/eaQzqf6BAJv79Bbw3MzBsPuXtgq8WuMk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729868469; c=relaxed/simple;
-	bh=JnDq/cXDweLg3Xq/lPIrdn2Qyfxu5cN+MQ9TiJRj/sM=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=LoEG701zvtyuxYqyB1pzbN5DY1VepZjSsbuSyDSPvzRvJKfSY7c8h1hjPxHd0CiZoo8kLYbpfMyXdCci+EUMTtx0FLsoUvr7Izc222RJECMej19DYlSlsQ0GzCyVCyzvIoqjL4KK1zdWik+RX2qyu/fdIw+ZRbMRVOn5WCzSunA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jrife.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=PdCMcX7Y; arc=none smtp.client-ip=209.85.128.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--jrife.bounces.google.com
+	s=arc-20240116; t=1729870759; c=relaxed/simple;
+	bh=C4gV4q6piKd+jg3krYRRddL5ViN/tyh+9u6bqSltgjE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=aJChBCO+zrQIfSjSpuGWnGdexjg5WrsyfAnctohqaPtnt9IoATSeCY+bzbBnhZM94keLisYwsouGxpcSwz5Iwz3x8WltuRTYht+vkfegRQ74FQ6n81C63L6jwMmo+Fc9vWjhzlFLY/zUG4Lq2qngbHQMg47O9R2UlI7Zri1brJE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=ZINpzi9R; arc=none smtp.client-ip=205.220.177.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="PdCMcX7Y"
-Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-6e35bdb6a31so44718267b3.1
-        for <bpf@vger.kernel.org>; Fri, 25 Oct 2024 08:01:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1729868467; x=1730473267; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=WbcaaMQgVIC0j7P3IOBL2keqvrSuEW3gZvvAWAWwf8M=;
-        b=PdCMcX7YGwTreejC8wk3rQtEhl8OXQgnzmh6VSjy8Bv1UdGDnPGW3Uy6Ni9boKLI5A
-         y4LWjBmTgBUegTk1df5mnU/gGXaseN6rnMhfoChHrx0Z+gdXckpGXca7d0ebc8xOLCB+
-         7Op/g73JHbXx0EXXUmhIewg4q6wVbVpRid6Ga7+vmKHswiRzVmFNPspjE6lm0XSKA0VO
-         t5A/0JBbM3sa/t06bP06pk40Kydh01CoufiJkjz3yww6nA2pEmCLkqCi8PRSzwj7j/18
-         eJcmfpPiSz49lzBcT3itviIrYsIumfudtIYFntsN6N5LvUlsxt/PqZQbm6CONqM1wolP
-         VTVg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729868467; x=1730473267;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=WbcaaMQgVIC0j7P3IOBL2keqvrSuEW3gZvvAWAWwf8M=;
-        b=WrSd/3rdZnY2rjlQ/xbCXVNzZldlyq6kTDMqw/j2v2tHVfUon56JW22GmhhdUul7B/
-         zbJpatKWgITmG/fbJ9fYpuzFPeUueFThvb8UJwSPWjPNIlDac6EJyXyFbT06aoVzZrVP
-         /+iQbU45ptvh8MeYioJcdw8Fuj5xj6zyJY13cBStGCQvt/UeYABGUSvIosindR06miPp
-         jss4yVcgYzADe8K0rekGvrNtraaVGHL101ntONyG95Lgi1Bn0cQNWY5glBsUOQ3vRPnW
-         On5SoEUQ8KxSqh7AIlcxJOM54cm7QJmdh/EcZ1GNnwmM7zl1QhKSYzO2kbwAPxcLW87x
-         iNMA==
-X-Forwarded-Encrypted: i=1; AJvYcCWXpsl/D+FdpRCLYJlaNirUYZuCF47YSRLDJ/2aO53wRbr/HAOkA2O65tWiMpUtsVDCEEY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyRUszLwzStVE5FgyhBa3h6Ey5qVch+2+NLcFD/eP8XUOmEn9yw
-	ydyoJu2dMDA/C6oPQZa83WxYi0tOzAxbEbYlr1WcHJKQ8fBRzUNUnDzzcRy3UOkSYrlhSdH+nQ=
-	=
-X-Google-Smtp-Source: AGHT+IHTxnhOnZMjpPA9oXurqzuSlt3xx1/oPi27olT7Ce+WGo5Vk8FIGSdLkZzDlRRjWvtg3cTEW0MozQ==
-X-Received: from jrife-kvm.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:63c1])
- (user=jrife job=sendgmr) by 2002:a05:690c:6488:b0:6e3:da91:3e17 with SMTP id
- 00721157ae682-6e858149d43mr1789177b3.2.1729868466633; Fri, 25 Oct 2024
- 08:01:06 -0700 (PDT)
-Date: Fri, 25 Oct 2024 15:01:02 +0000
-In-Reply-To: <CAEf4Bzb4ywpMxchWcMfW9Lzh=re4x1zbMfz2aPRiUa29nUMB=g@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="ZINpzi9R"
+Received: from pps.filterd (m0333520.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49PEtZZC026139;
+	Fri, 25 Oct 2024 15:38:56 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
+	:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=corp-2023-11-20; bh=ujBtez9l8oSLCJJrzk4Pbf8SbjTmg
+	D6ph6gKOHUif3M=; b=ZINpzi9Rbp9WmW1de6C8fkreA69WxxL2120kg7AKoc02Z
+	0vtEhfb2ndBcb2mDNq6NuXzjeZKXSn1zviDoFx1w8XgvPc6OE1yiYmlXrmtjJr0c
+	slXEx1/qwZ34AUIuM1AxjERJdwV/hbdCh33Du07ak7UXJ7qyA00H00iMV+lAeD1l
+	WXEBgAfFQBx1+ohmd0M7mFTbLhVu6GqAFQKwl0iIeKefgzrwdL2ZEjEt1L1yz4XB
+	tIqN27bwiMqex2CQrpL3uNKQPfyaZZgzTXuHCL0p3ZHE1SyPfpmgTfzM21Vdp/sB
+	HP96HC7Foex6Hbj75WJrF5UmuaFAWxE0lM8K8XQDA==
+Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 42c545dc1n-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 25 Oct 2024 15:38:55 +0000 (GMT)
+Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 49PEFuJ3036739;
+	Fri, 25 Oct 2024 15:38:54 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 42emh5f9b0-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 25 Oct 2024 15:38:54 +0000
+Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 49PFcsTi005701;
+	Fri, 25 Oct 2024 15:38:54 GMT
+Received: from bpf.uk.oracle.com (dhcp-10-175-208-77.vpn.oracle.com [10.175.208.77])
+	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 42emh5f9a2-1;
+	Fri, 25 Oct 2024 15:38:54 +0000
+From: Alan Maguire <alan.maguire@oracle.com>
+To: andrii@kernel.org
+Cc: ast@kernel.org, daniel@iogearbox.net, martin.lau@linux.dev,
+        eddyz87@gmail.com, song@kernel.org, yonghong.song@linux.dev,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@fomichev.me,
+        haoluo@google.com, jolsa@kernel.org, corbet@lwn.net,
+        bpf@vger.kernel.org, Alan Maguire <alan.maguire@oracle.com>
+Subject: [PATCH bpf-next] docs/bpf: Add description of .BTF.base section
+Date: Fri, 25 Oct 2024 16:38:50 +0100
+Message-ID: <20241025153850.1791761-1-alan.maguire@oracle.com>
+X-Mailer: git-send-email 2.43.5
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <CAEf4Bzb4ywpMxchWcMfW9Lzh=re4x1zbMfz2aPRiUa29nUMB=g@mail.gmail.com>
-X-Mailer: git-send-email 2.47.0.163.g1226f6d8fa-goog
-Message-ID: <20241025150102.2930213-1-jrife@google.com>
-Subject: Re: [RFC PATCH] tracing: Fix syscall tracepoint use-after-free
-From: Jordan Rife <jrife@google.com>
-To: andrii.nakryiko@gmail.com
-Cc: acme@kernel.org, alexander.shishkin@linux.intel.com, 
-	alexei.starovoitov@gmail.com, ast@kernel.org, bpf@vger.kernel.org, 
-	joel@joelfernandes.org, jrife@google.com, linux-kernel@vger.kernel.org, 
-	mark.rutland@arm.com, mathieu.desnoyers@efficios.com, mhiramat@kernel.org, 
-	mingo@redhat.com, mjeanson@efficios.com, namhyung@kernel.org, 
-	paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org, 
-	syzbot+b390c8062d8387b6272a@syzkaller.appspotmail.com, yhs@fb.com
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
+ definitions=2024-10-25_14,2024-10-25_02,2024-09-30_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 adultscore=0
+ mlxlogscore=999 mlxscore=0 bulkscore=0 spamscore=0 phishscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2409260000 definitions=main-2410250122
+X-Proofpoint-ORIG-GUID: thFDa6Z8ngwTXr_wsoMYbc7yDQ921wwk
+X-Proofpoint-GUID: thFDa6Z8ngwTXr_wsoMYbc7yDQ921wwk
 
-> One solution might be to teach BPF raw tracepoint link to recognize
-> sleepable tracepoints, and then go through cal_rcu_task_trace ->
-> call_rcu chain instead of normal call_rcu. Similarly, for such cases
-> we'd need to do the same chain for underlying BPF program, even if BPF
-> program itself is not sleepable.
+Now that .BTF.base sections are generated for out-of-tree kernel
+modules (provided pahole supports the "distilled_base" BTF feature),
+document .BTF.base and its role in supporting resilient split BTF
+and BTF relocation.
 
-I don't suppose that tracepoints could themselves be marked as sleepable
-(e.g. a new 'sleepable' member of `struct tracepoint`), which could be
-checked when initializing or freeing the link? Something like this,
+Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
+---
+ Documentation/bpf/btf.rst | 78 ++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 77 insertions(+), 1 deletion(-)
 
-static void bpf_link_defer_bpf_prog_put(struct rcu_head *rcu)
-{
-	struct bpf_prog_aux *aux = container_of(rcu, struct bpf_prog_aux, rcu);
-	bpf_prog_put(aux->prog);
-}
-
- /* bpf_link_free is guaranteed to be called from process context */
- static void bpf_link_free(struct bpf_link *link)
- {
- 	const struct bpf_link_ops *ops = link->ops;
- 	bool sleepable = false;
+diff --git a/Documentation/bpf/btf.rst b/Documentation/bpf/btf.rst
+index 93060283b6fd..57992a9aa4f6 100644
+--- a/Documentation/bpf/btf.rst
++++ b/Documentation/bpf/btf.rst
+@@ -835,7 +835,7 @@ section named by ``btf_ext_info_sec->sec_name_off``.
+ See :ref:`Documentation/bpf/llvm_reloc.rst <btf-co-re-relocations>`
+ for more information on CO-RE relocations.
  
-+	if (ops->attachment_is_sleepable)
-+		sleepable = ops->attachment_is_sleepable(link);
+-4.2 .BTF_ids section
++4.3 .BTF_ids section
+ --------------------
+ 
+ The .BTF_ids section encodes BTF ID values that are used within the kernel.
+@@ -896,6 +896,82 @@ and is used as a filter when resolving the BTF ID value.
+ All the BTF ID lists and sets are compiled in the .BTF_ids section and
+ resolved during the linking phase of kernel build by ``resolve_btfids`` tool.
+ 
++4.4 .BTF.base section
++---------------------
++Split BTF - where the .BTF section only contains types not in the associated
++base .BTF section - is an extremely efficient way to encode type information
++for kernel modules, since they generally consist of a few module-specific
++types along with a large set of shared kernel types.  The former are encoded
++in split BTF, while the latter are encoded in base BTF, resulting in more
++compact representations.  A type in split BTF that referes to a type in
++base BTF refers to it using its base type id, and split BTF type ids start
++at last_base_type + 1.
 +
- 	bpf_link_free_id(link->id);
- 	if (link->prog) {
--		sleepable = link->prog->sleepable;
-+		sleepable = sleepable || link->prog->sleepable;
- 		/* detach BPF program, clean up used resources */
- 		ops->release(link);
--		bpf_prog_put(link->prog);
-+		if (sleepable)
-+			call_rcu_tasks_trace(&link->prog->aux->rcu,
-+ 					     bpf_link_defer_bpf_prog_put);
-+		else
-+			bpf_prog_put(link->prog);
- 	}
- 	if (ops->dealloc_deferred) {
- 		/* schedule BPF link deallocation; if underlying BPF program
-	...
- }
++The downside of this approach however is that this makes the split BTF
++somewhat brittle - when the base BTF changes, these base id references are
++no longer valid and the split BTF itself becomes useless.  The role of the
++.BTF.base section is to make split BTF more resilient for cases where
++the base BTF may change, as is the case for kernel modules not built every
++time the kernel is for example.  .BTF.base contains named base types; INTs,
++FLOATs, STRUCTs, UNIONs, ENUM[64]s and FWDs.  INTs and FLOATs are fully
++described in .BTF.base sections, while composite types like structs
++and unions are not fully defined - the .BTF.base type simply serves as
++a description of the type the split BTF referred to, so struct/unions
++has 0 members in the .BTF.base section.  ENUM[64]s are similarly recorded
++with 0 members.  Any other types are added to the split BTF.  This
++distillation process then leaves us with a .BTF.base section with
++such minimal descriptions of base types and .BTF split section which refers
++to those base types.  Later, we can relocate the split BTF using both the
++information stored in the .BTF.base section and the new BTF base; the type
++information in the .BTF.base section allows us to update the split BTF
++references to point at the corresponding new base BTF types.
++
++BTF relocation happens on kernel module load when a kernel module has a
++.BTF.base section, and libbpf also provides a btf__relocate() API to
++accomplish this.
++
++As an example consider the following base BTF:
++
++[1] INT 'int' size=4 bits_offset=0 nr_bits=32 encoding=SIGNED
++[2] STRUCT 'foo' size=8 vlen=2
++        'f1' type_id=1 bits_offset=0
++        'f2' type_id=2 bits_offset=32
++
++...and associated split BTF:
++
++[3] PTR '(anon)' type_id=2
++
++i.e. split BTF describes a pointer to struct foo { int f1; int f2 };
++
++.BTF.base will consist of
++
++[1] INT 'int' size=4 bits_offset=0 nr_bits=32 encoding=SIGNED
++[2] STRUCT 'foo' size=8 vlen=0
++
++..so if we relocate the split BTF later using the following new base
++BTF:
++
++[1] INT 'long unsigned int' size=8 bits_offset=0 nr_bits=64 encoding=(none)
++[2] INT 'int' size=4 bits_offset=0 nr_bits=32 encoding=SIGNED
++[3] STRUCT 'foo' size=8 vlen=2
++        'f1' type_id=2 bits_offset=0
++        'f2' type_id=2 bits_offset=32
++
++...we can use our .BTF.base description to know that the split BTF reference
++is to struct foo, and relocation results in:
++
++[4] PTR '(anon)' type_id=3
++
++Note that we had to update type id and start BTF id for the split BTF.
++
++So we see how .BTF.base plays the role of facilitating later relocation,
++leading to more resilient split BTF.
++
++.BTF.base sections will be generated automatically for out-of-tree kernel module
++builds - i.e. where KBUILD_EXTMOD is set (as it would be for "make M=path/2/mod"
++cases).  .BTF.base generation requires pahole support for the "distilled_base"
++BTF feature; this is available in pahole v1.28 and later.
++
+ 5. Using BTF
+ ============
  
-static bool bpf_raw_tp_link_attachment_is_sleepable(struct bpf_link *link)
-{
-	struct bpf_raw_tp_link *raw_tp =
-		container_of(link, struct bpf_raw_tp_link, link);
+-- 
+2.43.5
 
-	return raw_tp->btp->tp->sleepable;
-}
-
-where if the attachment point of the link is sleepable as with BPF raw
-syscall tracepoints then wait for the RCU tasks trace grace period
-to elapse before freeing up the program and link.
-
--Jordan
