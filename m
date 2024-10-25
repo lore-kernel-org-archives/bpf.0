@@ -1,157 +1,123 @@
-Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
+Received: from out-178.mta1.migadu.com (out-178.mta1.migadu.com [95.215.58.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0130C8DF
-	for <bpf@vger.kernel.org>; Fri, 25 Oct 2024 01:20:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50AAF225DA
+	for <bpf@vger.kernel.org>; Fri, 25 Oct 2024 02:37:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729819232; cv=none; b=PoZr256LGZUS/K3i+8jAFbWvhqelA2T/I7SOIwFnfY2sOzp4aeBSb6eRjdeo1HvhR6rttGQNMfd3mov/g8PCl4VjRPiFfBnnTnNoTRujP8Joryc1qlQz2TiOG3+bhWZUtPK9cbBmxdxO2oBGJzk4aMEPtOt+hKqqZ7v3fFMvJKE=
+	t=1729823868; cv=none; b=Gp0PbcMF3PCqLH9oSya2rf86SWDkD+flW8RDtn6gVoXN8/Pu9ArhfN76l96XHAAq5lCbxeepz9zsVCGyMlpieRT0ZaLC91SG6Q+Q6hL7zB3EZdVzNUZ3JiEgvO98mLdKeguG5nHlAAjY4ExE2WQq2CI6GkxkOb38hv5OB0ITl0M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729819232; c=relaxed/simple;
-	bh=LHCPDr51jp8tVzf7wGEQjFJio98kSF4ByHIAACfT4Ng=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=OUtB+zrQ9kiG92E5nvNsIbdOCtbyqxrVt3pRKDzboLm+8eO9vuSAhGMxlRr1KPYcgJVxkPkFGcyd+MG3SRF6j052KhMxVt/7bY7NM54/i29QBYbC4zOAcMGacfYXjaEHcWeJbs2qwjO2J9BFvJcOTy/1uhnrrLtxZhdw6ZoMuFU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.93.142])
-	by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4XZQ203T25z4f3jXl
-	for <bpf@vger.kernel.org>; Fri, 25 Oct 2024 09:20:08 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.128])
-	by mail.maildlp.com (Postfix) with ESMTP id F2FAB1A0359
-	for <bpf@vger.kernel.org>; Fri, 25 Oct 2024 09:20:25 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.175.124.27])
-	by APP4 (Coremail) with SMTP id gCh0CgCn28dU8hpnhzUqFA--.57458S7;
-	Fri, 25 Oct 2024 09:20:25 +0800 (CST)
-From: Hou Tao <houtao@huaweicloud.com>
-To: bpf@vger.kernel.org
-Cc: Martin KaFai Lau <martin.lau@linux.dev>,
-	Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Hao Luo <haoluo@google.com>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Jiri Olsa <jolsa@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Yafang Shao <laoar.shao@gmail.com>,
-	houtao1@huawei.com,
-	xukuohai@huawei.com
-Subject: [PATCH bpf v3 3/5] bpf: Check the validity of nr_words in bpf_iter_bits_new()
-Date: Fri, 25 Oct 2024 09:32:31 +0800
-Message-Id: <20241025013233.804027-4-houtao@huaweicloud.com>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20241025013233.804027-1-houtao@huaweicloud.com>
-References: <20241025013233.804027-1-houtao@huaweicloud.com>
+	s=arc-20240116; t=1729823868; c=relaxed/simple;
+	bh=oCDqtzzq1WmrAd2KbGKue4dOh+1UHWTya7l1bGo/pAk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=gl6n1dbVRdx9b/TIRL0W4kLo/VI0zCGiasT/q5j1Of+Rd7oz1wLs0GkekPrez6VxR5ThOMtiH9KQ23vvZtJRL9YxGwMQwbKVr97NzOUDzv38BLnwavHohNL+vOgKuSetefSYcVDeeOZ66FyMYzHenPmPjTWDo7yk9AG70Kh1RZw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=wPvXp6xq; arc=none smtp.client-ip=95.215.58.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="wPvXp6xq"
+Message-ID: <6f2c4bed-0b9c-48f7-886f-81e9df0155e7@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1729823862;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=6YMGzBRFNqMsV1ec7cLGd4b9mG3UgxSE/vhPIc7vqCU=;
+	b=wPvXp6xqcFCHWLK/3pZRHvT4yFi5jcHZYsY6Z6H8hj1LKp28A0GQGEiRz6rhB7pM0KpwB0
+	TUyceckG5rHFTVt92MknjFVA+Bjd551BOa0hqWTSmhu1P6RNIy3VJ7qgEAfYexIRMb479S
+	H0xYumNvzZcpiWzheZdaQO9RqU1sysM=
+Date: Fri, 25 Oct 2024 10:37:35 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Subject: Re: [PATCH bpf-next 1/2] bpf, x64: Propagate tailcall info only for
+ tail_call_reachable subprogs
+Content-Language: en-US
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Jiri Olsa <jolsa@kernel.org>, Eddy Z <eddyz87@gmail.com>,
+ kernel-patches-bot@fb.com
+References: <20241021133929.67782-1-leon.hwang@linux.dev>
+ <20241021133929.67782-2-leon.hwang@linux.dev>
+ <CAADnVQKO3rdaVrNOcLbm=kmue4orurcRTuskgrdze_=ExS2A7g@mail.gmail.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Leon Hwang <leon.hwang@linux.dev>
+In-Reply-To: <CAADnVQKO3rdaVrNOcLbm=kmue4orurcRTuskgrdze_=ExS2A7g@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:gCh0CgCn28dU8hpnhzUqFA--.57458S7
-X-Coremail-Antispam: 1UD129KBjvJXoWxWF17JF45ZFyxKFWxKw45Wrg_yoW5CF1rpF
-	4fJ3ZxAr48JF42gw1Dta1UCa4rX34vqay7GFWxJr1S9Fs5WrnF9r12gr1Yqas3CrWjyF12
-	vryv9ryfZayDAaUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUP2b4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUWw
-	A2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
-	w2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
-	W8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v2
-	6rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMc
-	Ij6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_
-	Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AFwI
-	0_Jw0_GFyl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG
-	67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MI
-	IYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E
-	14v26F4j6r4UJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr
-	0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU14x
-	RDUUUUU==
-X-CM-SenderInfo: xkrx3t3r6k3tpzhluzxrxghudrp/
+X-Migadu-Flow: FLOW_OUT
 
-From: Hou Tao <houtao1@huawei.com>
 
-Check the validity of nr_words in bpf_iter_bits_new(). Without this
-check, when multiplication overflow occurs for nr_bits (e.g., when
-nr_words = 0x0400-0001, nr_bits becomes 64), stack corruption may occur
-due to bpf_probe_read_kernel_common(..., nr_bytes = 0x2000-0008).
 
-Fix it by limiting the maximum value of nr_words to 511. The value is
-derived from the current implementation of BPF memory allocator. To
-ensure compatibility if the BPF memory allocator's size limitation
-changes in the future, use the helper bpf_mem_alloc_check_size() to
-check whether nr_bytes is too larger. And return -E2BIG instead of
--ENOMEM for oversized nr_bytes.
+On 25/10/24 06:09, Alexei Starovoitov wrote:
+> On Mon, Oct 21, 2024 at 6:39 AM Leon Hwang <leon.hwang@linux.dev> wrote:
+>>
+>> In the x86_64 JIT, when calling a function, tailcall info is propagated if
+>> the program is tail_call_reachable, regardless of whether the function is a
+>> subprog, helper, or kfunc. However, this propagation is unnecessary for
+>> not-tail_call_reachable subprogs, helpers, or kfuncs.
+>>
+>> The verifier can determine if a subprog is tail_call_reachable. Therefore,
+>> it can be optimized to only propagate tailcall info when the callee is
+>> subprog and the subprog is actually tail_call_reachable.
+>>
+>> Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
+>> ---
+>>  arch/x86/net/bpf_jit_comp.c | 4 +++-
+>>  kernel/bpf/verifier.c       | 6 ++++++
+>>  2 files changed, 9 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+>> index 06b080b61aa57..6ad6886ecfc88 100644
+>> --- a/arch/x86/net/bpf_jit_comp.c
+>> +++ b/arch/x86/net/bpf_jit_comp.c
+>> @@ -2124,10 +2124,12 @@ st:                     if (is_imm8(insn->off))
+>>
+>>                         /* call */
+>>                 case BPF_JMP | BPF_CALL: {
+>> +                       bool pseudo_call = src_reg == BPF_PSEUDO_CALL;
+>> +                       bool subprog_tail_call_reachable = dst_reg;
+>>                         u8 *ip = image + addrs[i - 1];
+>>
+>>                         func = (u8 *) __bpf_call_base + imm32;
+>> -                       if (tail_call_reachable) {
+>> +                       if (pseudo_call && subprog_tail_call_reachable) {
+>>                                 LOAD_TAIL_CALL_CNT_PTR(bpf_prog->aux->stack_depth);
+>>                                 ip += 7;
+>>                         }
+>> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+>> index f514247ba8ba8..6e7e42c7bc7b1 100644
+>> --- a/kernel/bpf/verifier.c
+>> +++ b/kernel/bpf/verifier.c
+>> @@ -19990,6 +19990,12 @@ static int jit_subprogs(struct bpf_verifier_env *env)
+>>                         insn[0].imm = (u32)addr;
+>>                         insn[1].imm = addr >> 32;
+>>                 }
+>> +
+>> +               if (bpf_pseudo_call(insn))
+>> +                       /* In the x86_64 JIT, tailcall information can only be
+>> +                        * propagated if the subprog is tail_call_reachable.
+>> +                        */
+>> +                       insn->dst_reg = env->subprog_info[subprog].tail_call_reachable;
+> 
+> I really don't like hacking flags into dst_reg.
+> We already abuse insn->off which is ugly too,
+> but at least we clean insns later after JIT.
+> 
+> I'd rather live with this tail call inefficiency than abuse insns
+> fields further.
+> 
 
-Fixes: 4665415975b0 ("bpf: Add bits iterator")
-Signed-off-by: Hou Tao <houtao1@huawei.com>
----
- kernel/bpf/helpers.c | 18 ++++++++++++++----
- 1 file changed, 14 insertions(+), 4 deletions(-)
+OK, let us use 'pseudo_call && tail_call_reachable' in x86 JIT to avoid
+touching 'insn->dst_reg'.
 
-diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-index 40ef6a56619f..daec74820dbe 100644
---- a/kernel/bpf/helpers.c
-+++ b/kernel/bpf/helpers.c
-@@ -2851,6 +2851,8 @@ struct bpf_iter_bits {
- 	__u64 __opaque[2];
- } __aligned(8);
- 
-+#define BITS_ITER_NR_WORDS_MAX 511
-+
- struct bpf_iter_bits_kern {
- 	union {
- 		unsigned long *bits;
-@@ -2865,7 +2867,8 @@ struct bpf_iter_bits_kern {
-  * @it: The new bpf_iter_bits to be created
-  * @unsafe_ptr__ign: A pointer pointing to a memory area to be iterated over
-  * @nr_words: The size of the specified memory area, measured in 8-byte units.
-- * Due to the limitation of memalloc, it can't be greater than 512.
-+ * The maximum value of @nr_words is @BITS_ITER_NR_WORDS_MAX. This limit may be
-+ * further reduced by the BPF memory allocator implementation.
-  *
-  * This function initializes a new bpf_iter_bits structure for iterating over
-  * a memory area which is specified by the @unsafe_ptr__ign and @nr_words. It
-@@ -2878,8 +2881,7 @@ __bpf_kfunc int
- bpf_iter_bits_new(struct bpf_iter_bits *it, const u64 *unsafe_ptr__ign, u32 nr_words)
- {
- 	struct bpf_iter_bits_kern *kit = (void *)it;
--	u32 nr_bytes = nr_words * sizeof(u64);
--	u32 nr_bits = BYTES_TO_BITS(nr_bytes);
-+	u32 nr_bytes, nr_bits;
- 	int err;
- 
- 	BUILD_BUG_ON(sizeof(struct bpf_iter_bits_kern) != sizeof(struct bpf_iter_bits));
-@@ -2892,9 +2894,14 @@ bpf_iter_bits_new(struct bpf_iter_bits *it, const u64 *unsafe_ptr__ign, u32 nr_w
- 
- 	if (!unsafe_ptr__ign || !nr_words)
- 		return -EINVAL;
-+	if (nr_words > BITS_ITER_NR_WORDS_MAX)
-+		return -E2BIG;
-+
-+	nr_bytes = nr_words * sizeof(u64);
-+	nr_bits = BYTES_TO_BITS(nr_bytes);
- 
- 	/* Optimization for u64 mask */
--	if (nr_bits == 64) {
-+	if (nr_words == 1) {
- 		err = bpf_probe_read_kernel_common(&kit->bits_copy, nr_bytes, unsafe_ptr__ign);
- 		if (err)
- 			return -EFAULT;
-@@ -2903,6 +2910,9 @@ bpf_iter_bits_new(struct bpf_iter_bits *it, const u64 *unsafe_ptr__ign, u32 nr_w
- 		return 0;
- 	}
- 
-+	if (bpf_mem_alloc_check_size(false, nr_bytes))
-+		return -E2BIG;
-+
- 	/* Fallback to memalloc */
- 	kit->bits = bpf_mem_alloc(&bpf_global_ma, nr_bytes);
- 	if (!kit->bits)
--- 
-2.29.2
+Thanks,
+Leon
+
+> pw-bot: cr
 
