@@ -1,69 +1,179 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3517B25776;
-	Sat, 26 Oct 2024 15:38:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECC8C7EEFD;
+	Sat, 26 Oct 2024 15:48:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=167.114.26.122
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729957096; cv=none; b=gDpcp7LjFh2b7AOjM6PfZQBWXF8AGMQB8fdupwelwTvNo5uokdYHtGEsSEq1ou9IPa5H9OILyQEX+hMDHAe3EZGsE/k4rRopI5geFl2RqjLQ83JzCNe0RCTnA9xiZ/cweNxNVm0rix6c9CufIexlZZfYISMTtj2gLmO3tPKoktM=
+	t=1729957697; cv=none; b=g50HEFcGb2/KKSrM5wp2otFkwEa/mpDwXY1lqO33l2kbRuzks8fOkPzRk5jfZ63F+BRi5Zoqoz+KA6+xkwns+GRGIL3ofNhJvhq0Egg8mC7K5GjBlJaqXGzZZ5Q3zG1+/GdkwoNi/4UjUZ7nPWm9HlDLtfc2+mIJ+D7cVi/KiXM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729957096; c=relaxed/simple;
-	bh=WoFOQrFDbt2BycOyxn0Rx5XH/N5keHBSRn4+P/slL3w=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MTxeIl797snPKNEkM0/vB7bEABzWOfinF0qcyx0uSjrozh5VkOe9gamMjtwGT/Fd4RLpIzBTmviEUMbGckqg7yX/R25FsZF6/XfxmtqDEjK1hpSN4StZGRMURZhRwd+tR8ny5EAFsBZREE0KIWLTSMmxnrLWp12slqSCiZE1Atc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kZialk5I; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1729957697; c=relaxed/simple;
+	bh=Yt3JqGyHnlN/PMXwaeZS2HWMIxiUalPTFf0y/3FdW84=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=ZNHut40AyaahukWP82601PrcFvE9r8R78Qult7IYB/hNfEwgFzlWmclYQY9MJzzCsmlmWl/wj2NPF869iFZmIpsmPhsDo785aiZRxfOFQH4FzEmhZDfcGJK6c7ezztTGNFKcZQINT5sWwUssrtTHZStER0tU5VzMRtrLZ7AhNIQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com; spf=pass smtp.mailfrom=efficios.com; dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b=FFZVl9wN; arc=none smtp.client-ip=167.114.26.122
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=efficios.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kZialk5I"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24343C4CEC6;
-	Sat, 26 Oct 2024 15:38:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1729957096;
-	bh=WoFOQrFDbt2BycOyxn0Rx5XH/N5keHBSRn4+P/slL3w=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=kZialk5IA7F8jwSiHW3amfsbfcZQEOLS3YLnu3MDowfEfxUfJYvx4ybNKAOJAgNkp
-	 StTtJ7ELKCJlvZxR+7fzw1/UMbAOEGoEtDPOtJbSnGfH+X7J3/tAFUkDp+XuMPgmIK
-	 Dw20FZCCTOG0b/yUqmA10j/RHIZr3qj5Ig529JpVChUtrhmVT4Q+Hs+/hxwGSX1nYc
-	 NrdAc6L1y6LI9nn/UFAQsfteG9zM+hZ854RQo/OiI65c1C5kd6JkN8I04gC9JItjJp
-	 ZRAI6DiKkQ3XffMQTakCBtsW8eyjwVSnXoODEVH8WQkb+0d9SsHCmFqcpOxSebqi0R
-	 FfaWzy5qtYUig==
-Date: Sat, 26 Oct 2024 16:38:10 +0100
-From: Simon Horman <horms@kernel.org>
-To: Yue Haibing <yuehaibing@huawei.com>
-Cc: anthony.l.nguyen@intel.com, przemyslaw.kitszel@intel.com,
-	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-	pabeni@redhat.com, ast@kernel.org, daniel@iogearbox.net,
-	hawk@kernel.org, john.fastabend@gmail.com,
-	maciej.fijalkowski@intel.com, vedang.patel@intel.com,
-	jithu.joseph@intel.com, andre.guedes@intel.com,
-	jacob.e.keller@intel.com, sven.auhagen@voleatech.de,
-	alexander.h.duyck@intel.com, intel-wired-lan@lists.osuosl.org,
-	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org
-Subject: Re: [PATCH v4 net-next 4/4] ixgbevf: Fix passing 0 to ERR_PTR in
- ixgbevf_run_xdp()
-Message-ID: <20241026153810.GN1507976@kernel.org>
-References: <20241026041249.1267664-1-yuehaibing@huawei.com>
- <20241026041249.1267664-5-yuehaibing@huawei.com>
+	dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b="FFZVl9wN"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
+	s=smtpout1; t=1729957694;
+	bh=Yt3JqGyHnlN/PMXwaeZS2HWMIxiUalPTFf0y/3FdW84=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=FFZVl9wN5VzrK90vBTebnKJw5b3b/ESDnfk20WGExNH2v41mnlXXXmLCnBZkG7cv9
+	 kmXuB4jQcni/zWcHiegRcLe/niCAds0jRt4xHDzEWl00IO4jVdj05YszBcBex/MIfe
+	 w95WP6J4S4YwU7HMl/Ke848MB+wm5OKApGxlGDq9kq3BRRkth8ceshQRGyGkFn69oG
+	 P23PrflB04Lv9SHP+Kjbx1n+v6pjAqeeEPy15ytfo4LKFcM6Tdg2oAaOdL/KTuT81R
+	 pmAXUsW1uIXzHIHY7x9Wl8td7vHuB3FxtwWVWqKvb5EMhXbxC7VsGTooMhpIdMq2Je
+	 4cnbZlrvhOyaQ==
+Received: from thinkos.internal.efficios.com (unknown [IPv6:2606:6d00:100:4000:cacb:9855:de1f:ded2])
+	by smtpout.efficios.com (Postfix) with ESMTPSA id 4XbPF96SvszNmN;
+	Sat, 26 Oct 2024 11:48:13 -0400 (EDT)
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To: Steven Rostedt <rostedt@goodmis.org>
+Cc: linux-kernel@vger.kernel.org,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Michael Jeanson <mjeanson@efficios.com>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Yonghong Song <yhs@fb.com>,
+	"Paul E . McKenney" <paulmck@kernel.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Namhyung Kim <namhyung@kernel.org>,
+	Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+	bpf@vger.kernel.org,
+	Joel Fernandes <joel@joelfernandes.org>,
+	Jordan Rife <jrife@google.com>
+Subject: [RFC PATCH v3 2/3] tracing: Introduce tracepoint_is_syscall()
+Date: Sat, 26 Oct 2024 11:46:28 -0400
+Message-Id: <20241026154629.593041-2-mathieu.desnoyers@efficios.com>
+X-Mailer: git-send-email 2.39.5
+In-Reply-To: <20241026154629.593041-1-mathieu.desnoyers@efficios.com>
+References: <20241026154629.593041-1-mathieu.desnoyers@efficios.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241026041249.1267664-5-yuehaibing@huawei.com>
+Content-Transfer-Encoding: 8bit
 
-On Sat, Oct 26, 2024 at 12:12:49PM +0800, Yue Haibing wrote:
-> ixgbevf_run_xdp() converts customed xdp action to a negative error code
-> with the sk_buff pointer type which be checked with IS_ERR in
-> ixgbevf_clean_rx_irq(). Remove this error pointer handing instead use
-> plain int return value.
-> 
-> Fixes: c7aec59657b6 ("ixgbevf: Add XDP support for pass and drop actions")
-> Reviewed-by: Jacob Keller <jacob.e.keller@intel.com>
-> Reviewed-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-> Signed-off-by: Yue Haibing <yuehaibing@huawei.com>
+Introduce a "syscall" flag within the extended structure to know whether
+a tracepoint needs rcu tasks trace grace period before reclaim.
+This can be queried using tracepoint_is_syscall().
 
-Reviewed-by: Simon Horman <horms@kernel.org>
+Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: Michael Jeanson <mjeanson@efficios.com>
+Cc: Steven Rostedt <rostedt@goodmis.org>
+Cc: Masami Hiramatsu <mhiramat@kernel.org>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Alexei Starovoitov <ast@kernel.org>
+Cc: Yonghong Song <yhs@fb.com>
+Cc: Paul E. McKenney <paulmck@kernel.org>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc: Mark Rutland <mark.rutland@arm.com>
+Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
+Cc: Namhyung Kim <namhyung@kernel.org>
+Cc: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: bpf@vger.kernel.org
+Cc: Joel Fernandes <joel@joelfernandes.org>
+Cc: Jordan Rife <jrife@google.com>
+---
+ include/linux/tracepoint-defs.h |  2 ++
+ include/linux/tracepoint.h      | 24 ++++++++++++++++++++++++
+ include/trace/define_trace.h    |  2 +-
+ 3 files changed, 27 insertions(+), 1 deletion(-)
+
+diff --git a/include/linux/tracepoint-defs.h b/include/linux/tracepoint-defs.h
+index 967c08d9da84..53119e074c87 100644
+--- a/include/linux/tracepoint-defs.h
++++ b/include/linux/tracepoint-defs.h
+@@ -32,6 +32,8 @@ struct tracepoint_func {
+ struct tracepoint_ext {
+ 	int (*regfunc)(void);
+ 	void (*unregfunc)(void);
++	/* Flags. */
++	unsigned int syscall:1;
+ };
+ 
+ struct tracepoint {
+diff --git a/include/linux/tracepoint.h b/include/linux/tracepoint.h
+index 83dc24ee8b13..93e70bc64533 100644
+--- a/include/linux/tracepoint.h
++++ b/include/linux/tracepoint.h
+@@ -104,6 +104,12 @@ void for_each_tracepoint_in_module(struct module *mod,
+  * tracepoint_synchronize_unregister must be called between the last tracepoint
+  * probe unregistration and the end of module exit to make sure there is no
+  * caller executing a probe when it is freed.
++ *
++ * An alternative is to use the following for batch reclaim associated
++ * with a given tracepoint:
++ *
++ * - tracepoint_is_syscall() == false: call_rcu()
++ * - tracepoint_is_syscall() == true:  call_rcu_tasks_trace()
+  */
+ #ifdef CONFIG_TRACEPOINTS
+ static inline void tracepoint_synchronize_unregister(void)
+@@ -111,9 +117,17 @@ static inline void tracepoint_synchronize_unregister(void)
+ 	synchronize_rcu_tasks_trace();
+ 	synchronize_rcu();
+ }
++static inline bool tracepoint_is_syscall(struct tracepoint *tp)
++{
++	return tp->ext && tp->ext->syscall;
++}
+ #else
+ static inline void tracepoint_synchronize_unregister(void)
+ { }
++static inline bool tracepoint_is_syscall(struct tracepoint *tp)
++{
++	return false;
++}
+ #endif
+ 
+ #ifdef CONFIG_HAVE_SYSCALL_TRACEPOINTS
+@@ -345,6 +359,15 @@ static inline struct tracepoint *tracepoint_ptr_deref(tracepoint_ptr_t *p)
+ 	struct tracepoint_ext __tracepoint_ext_##_name = {		\
+ 		.regfunc = _reg,					\
+ 		.unregfunc = _unreg,					\
++		.syscall = false,					\
++	};								\
++	__DEFINE_TRACE_EXT(_name, &__tracepoint_ext_##_name, PARAMS(_proto), PARAMS(_args));
++
++#define DEFINE_TRACE_SYSCALL(_name, _reg, _unreg, _proto, _args)	\
++	struct tracepoint_ext __tracepoint_ext_##_name = {		\
++		.regfunc = _reg,					\
++		.unregfunc = _unreg,					\
++		.syscall = true,					\
+ 	};								\
+ 	__DEFINE_TRACE_EXT(_name, &__tracepoint_ext_##_name, PARAMS(_proto), PARAMS(_args));
+ 
+@@ -389,6 +412,7 @@ static inline struct tracepoint *tracepoint_ptr_deref(tracepoint_ptr_t *p)
+ #define __DECLARE_TRACE_SYSCALL	__DECLARE_TRACE
+ 
+ #define DEFINE_TRACE_FN(name, reg, unreg, proto, args)
++#define DEFINE_TRACE_SYSCALL(name, reg, unreg, proto, args)
+ #define DEFINE_TRACE(name, proto, args)
+ #define EXPORT_TRACEPOINT_SYMBOL_GPL(name)
+ #define EXPORT_TRACEPOINT_SYMBOL(name)
+diff --git a/include/trace/define_trace.h b/include/trace/define_trace.h
+index ff5fa17a6259..63fea2218afa 100644
+--- a/include/trace/define_trace.h
++++ b/include/trace/define_trace.h
+@@ -48,7 +48,7 @@
+ 
+ #undef TRACE_EVENT_SYSCALL
+ #define TRACE_EVENT_SYSCALL(name, proto, args, struct, assign, print, reg, unreg) \
+-	DEFINE_TRACE_FN(name, reg, unreg, PARAMS(proto), PARAMS(args))
++	DEFINE_TRACE_SYSCALL(name, reg, unreg, PARAMS(proto), PARAMS(args))
+ 
+ #undef TRACE_EVENT_NOP
+ #define TRACE_EVENT_NOP(name, proto, args, struct, assign, print)
+-- 
+2.39.5
 
