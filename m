@@ -1,31 +1,32 @@
 Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.5])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A95B1142E86;
-	Mon, 28 Oct 2024 06:25:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A5D918DF7D;
+	Mon, 28 Oct 2024 06:53:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730096715; cv=none; b=vGo3cPzZMlQJy8nTthJfKmVdFvZan/lzLKMRAK+FmFYkxyurSBoLFLEKe50W8FPQpY63NN7Cq/SJNZH11pTOHdODcJpBMOMPf/IY79kmG7FbI5YOYtoKxJ8ExHHVbPkTRui5VIS5NobGRYf7tTfahpQWx1nhtLBp/4KdtppXHEM=
+	t=1730098399; cv=none; b=c4qfNBn5j51yoL+3EXdu9Efx3YfikviUeoTht9JpPuVP2EPZjhiQnfGwFJlwZuCpGwD5uQPUR8rJK8kVftuumO0ugZ/0owA67gJ1bRVTHigBw3TlVBk5mTIUngat7fw9gIbIK1Fy71XQxpXTjMr+u3vbCN0i62CJ3T5dbdXKZrs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730096715; c=relaxed/simple;
-	bh=V4+xfa194CBFp5q3Inlgr8aVzHzK5NZ5xiP0OuJVVKQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=tFcTPqlVjRvZitxhuMgDJe++SqedsRKVcBjoA7vOkHxx0Bxc5YQXxi7H341Dv0cOG2nWTUhxFq44hXqbjD3Kh0QL3OPZMs6pkSbSm6ONykfuS3AEWPzBCc8T2I8Mw7qAsv6WQqqJhhB6fAOPU1KSQPCLdVBD153gdWLcVMuWr0o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=M5UadF+U; arc=none smtp.client-ip=220.197.31.5
+	s=arc-20240116; t=1730098399; c=relaxed/simple;
+	bh=TogJYoeh0M9kdGAtiQR8MXVdXkWmgbpwWJ/bfasQLnM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=BBEGgACj+d+DaypwAaZbfslVwI0YGlynAMMmvgSIma8nS9Cp9EVlP3Kw8keRAtDg4xcbARKWoZZTY4UZEJOQ4zhsuCODSN30396UO6A3EW3VaJhzrmqZuPUakVPxQMW7ByyhaUh40ux9u87gbzEdvKpSQ1ggOu0vBgHeQ1obTYI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=K0RhwyT9; arc=none smtp.client-ip=220.197.31.5
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="M5UadF+U"
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="K0RhwyT9"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:Subject:Date:Message-ID:MIME-Version; bh=MnCJU
-	2J3pJ6fwUvA85VlD1sdw0N2m8tj2xG8I7tc5pg=; b=M5UadF+UJiIiYXpJuOvA8
-	xaDhrgCah03hkeerzByUdAGNoXhmsfL8ZZrSNMUl8QvFgc5j+TORgOK29Zv6zd7N
-	+BTr36Wb69mVOViai8nsvVF2zZCEVrMD6pLmaayOlAJmj8JqmnCHyvauyO5F70Hr
-	VStn42LJUl6OPJejqzegxI=
+	s=s110527; h=From:Subject:Date:Message-ID:MIME-Version; bh=gb2og
+	vjqOAk5QavOCwc2NuFRUeYMEbkQL5DGyoyp6jw=; b=K0RhwyT9lrnEBzG7oLml+
+	KHV8RdDgoO1TjUfU42azWbIZFsM1SSSTv0a1OF6BF+FKZszOxxt7Q624XnwVr7U6
+	L+Cbq9HXA1j1cUi8I2obcPI0zghGuzLNxbxo7nFeFLPrWGqTVmcmiVgmV/SvKe9C
+	Z2GR1sWy0TIGMQXECzDS1w=
 Received: from localhost.localdomain (unknown [47.252.33.72])
-	by gzga-smtp-mtada-g0-0 (Coremail) with SMTP id _____wDnDzAfLh9nUZxTBw--.19283S2;
-	Mon, 28 Oct 2024 14:24:36 +0800 (CST)
+	by gzga-smtp-mtada-g0-0 (Coremail) with SMTP id _____wDn70W0NB9nqv9XBw--.5137S2;
+	Mon, 28 Oct 2024 14:52:42 +0800 (CST)
 From: mrpre <mrpre@163.com>
 To: xiyou.wangcong@gmail.com
-Cc: edumazet@google.com,
+Cc: yonghong.song@linux.dev,
+	john.fastabend@gmail.com,
+	edumazet@google.com,
 	jakub@cloudflare.com,
 	davem@davemloft.net,
 	dsahern@kernel.org,
@@ -36,11 +37,9 @@ Cc: edumazet@google.com,
 	linux-kernel@vger.kernel.org,
 	mrpre <mrpre@163.com>
 Subject: [PATCH v2] bpf: fix filed access without lock
-Date: Mon, 28 Oct 2024 14:23:34 +0800
-Message-ID: <20241028062334.35488-1-mrpre@163.com>
+Date: Mon, 28 Oct 2024 14:52:26 +0800
+Message-ID: <20241028065226.35568-1-mrpre@163.com>
 X-Mailer: git-send-email 2.43.5
-In-Reply-To: <20241021013705.14105-1-mrpre@163.com>
-References: <20241021013705.14105-1-mrpre@163.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -48,12 +47,12 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wDnDzAfLh9nUZxTBw--.19283S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW7Kr1rCFy7WFWfXr43KFy5CFg_yoW8CFy3pF
-	ZrGw109a1DJFWDAr4vyFZ7JF13W3ySka4Uurn5uayfArsI9r1fKFWvkw4ayF1YgF4vvw1a
-	qrWjqr1q93WDA3JanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+X-CM-TRANSID:_____wDn70W0NB9nqv9XBw--.5137S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7Kr1rCFy7WFWfXr43KFy5CFg_yoW8ZrWxpF
+	ZrGw109a1DJFyDAr4vyFZ7JF13u3ySka4Uurn5WayfArsI9r1SgFWvkw4ayF1YgF4vv3Wa
+	qrWYqr1q93WDAwUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
 	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0piX_-PUUUUU=
-X-CM-SenderInfo: xpus2vi6rwjhhfrp/1tbiDxyGp2cfJbW6RwAAsn
+X-CM-SenderInfo: xpus2vi6rwjhhfrp/xtbBDx2Gp2cfJFjVrQACsN
 
 The tcp_bpf_recvmsg_parser() function, running in user context,
 retrieves seq_copied from tcp_sk without holding the socket lock, and
@@ -73,7 +72,8 @@ than 0), and all subsequent packets will be dropped.
 
 Signed-off-by: Jiayuan Chen <mrpre@163.com>
 ---
-V1 -> V2: add more commit message to describle the issue
+v1 -> v2: add more commit message to describle the issue
+          v1: https://lore.kernel.org/bpf/Zx1S9vf2i7O+BNE+@pop-os.localdomain/T/
 ---
  net/ipv4/tcp_bpf.c | 7 ++++---
  1 file changed, 4 insertions(+), 3 deletions(-)
