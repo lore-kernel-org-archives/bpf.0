@@ -1,240 +1,186 @@
-Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
+Received: from 66-220-155-179.mail-mxout.facebook.com (66-220-155-179.mail-mxout.facebook.com [66.220.155.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81B58206E61
-	for <bpf@vger.kernel.org>; Tue, 29 Oct 2024 22:17:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 557C4206E61
+	for <bpf@vger.kernel.org>; Tue, 29 Oct 2024 22:20:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.155.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730240273; cv=none; b=ahfIk7m2LjTM9QsNwyXnlD3B/tA9g+nKDpEhppDN+RE95H1wKvT+JRirhIHD3CCFMbHSgm7r0LQaskq/7triwXdrKH1+wEf06inSDtCOBvjy+xLmcWkIgfRYBLyC2MaRAgMq4mCtVCAgmaXAY8D+eLucPpWhhZXZraaLpVJPgd8=
+	t=1730240427; cv=none; b=dgvW3kt6sTpgj6maQx6OSUeUjiUTAEBgh5KJN+2PLXq2aA5McapH4l2WG41gZ0ZMGE/2h5pBG546YH3Kgq5cE3nPqzsZkaXo+CNLudf4d7jy6MzU+O9rcwam7Rr/ZGdUIRusbB+sLrAapfDpkbon+IlQbwbrPgRC2bm6hTqhVl4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730240273; c=relaxed/simple;
-	bh=0C5TalIrfBjgMojPb6Y3zU21zF8/Fakv/XG1ZlxG4yA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=g5p5jGHv61hJZrufCcfamRxeuCnmJmZiTJ2i5ee4v1BkfGEefobhilecpHVXKLsj3IROJvFRlU+yQWI1UiE0L6MjTIzRtkUqK2rJtMgYEw0p6GMUpo5F16N/N1wESDHEClAt5bQC6bThnP6H0wgCqOuAUG7uE0y2SlDnzQsDL5k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bMsVeM5Z; arc=none smtp.client-ip=209.85.210.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bMsVeM5Z"
-Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-720aa3dbda5so388370b3a.1
-        for <bpf@vger.kernel.org>; Tue, 29 Oct 2024 15:17:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1730240271; x=1730845071; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=SfXoY+PsOCrThveVcjwMP/5VExdUfxAxPNa/avTzze0=;
-        b=bMsVeM5ZXmiWkAq4XnaV4uONxtoItm4I9X+GQlMrfBp3Tq9zdHrKT8L/jZJtJpW1Fs
-         1HFuKrAXHpNY/fPqrjoFC9ro/nWmuVhq3vO29iRUthbL8ziWlbfHkZfB75qNnN+/QphO
-         iAUjZ0iX2R5UoFFKnUtsJttt2yxaKMmeb19Y7y3wuj9f6j7Gux4JnyiTtPYy1A1BdhM4
-         SrObguNgG+GEpusGTPeFdtFZKi1VExH8pwRCWumGgB/JxCBTA/GR1lxuCArSPinVYPRk
-         c7VAqn4BPy9fycffs1N27884UFFR7rr9CQauk6nngGoYaDUab9FqeBYcr/5sOPyhlwOv
-         Bofw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730240271; x=1730845071;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=SfXoY+PsOCrThveVcjwMP/5VExdUfxAxPNa/avTzze0=;
-        b=rQS24SaYsNmso7ljUhsUV9mh3iUBEOeQ7vx+1mZLKr8l0H5T0zhp4PPhcQCHuga9kq
-         2mWuC0JR2jHXF7KLk5kjqMklEgi2LMCxCRf7jltblelfu9vNV/svB5urAPirRGSoExB5
-         cLkykxRZtP/hcf5YJVGBZVMDREIkmyoAgHSYuMpTOyJHlYgUdlcJyTUor1dD/GrF4W5/
-         2Iv8i6VDiZATclmmyPOvq96Jd4FIW9zvEIRr54l2UqXDNwd4LTDR47BpbAkq5MJRvtEb
-         HhPCrurtG4tyE50MnOf+uh9REMDDBh9BsAphrASNAMbDJvxb4DgrRe2Qz3mVLhaiTvYx
-         Ipiw==
-X-Gm-Message-State: AOJu0Ywj0HC8dxrd7EUAPIvuYbwzp29TbY86OxpMhTCizpTyPuQa4p7f
-	x1BGWIOC/KZcpI1Rzyy9Ov84CZeQjyj63wFaR7qR0MAFqeiLaG72H01sHQHCkAWeAyUpvaktcbd
-	nJZDXoTdkad3SGIlzTTGhW1PGH4w=
-X-Google-Smtp-Source: AGHT+IEbioHmXOL6opwJR+oCiUXGhzZNvxKVOArBmqbbcX5/HfcNem8sncvJ7QjsQj0X6iHb5WvbAB+oFfLppx+lG+Q=
-X-Received: by 2002:a05:6a00:2191:b0:71e:44f6:6900 with SMTP id
- d2e1a72fcca58-720ab3f39d8mr1365606b3a.16.1730240270687; Tue, 29 Oct 2024
- 15:17:50 -0700 (PDT)
+	s=arc-20240116; t=1730240427; c=relaxed/simple;
+	bh=yGemHCqZpB+JfjrCz1yYHHmGhW+9Mr3xLUKBtAzyyR0=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=e7o1amcbmQ11WGk6HS9NoWC/lnwUCwnOs5qoTXKBpQ1hoEJ//AzDo66ZPsv+njmv0yRxDjrUtpx18k+59x0ryJ9Vpj+8zvUM08fSyR9LCDkEOO5K8yP4AifK/UD/hbBgQi8jVXCyt0Oyi1P6W6FFAl3S4rZ6NBgB3Fm8rr0j23Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.155.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
+Received: by devbig309.ftw3.facebook.com (Postfix, from userid 128203)
+	id 2D35DA91CFBF; Tue, 29 Oct 2024 15:17:07 -0700 (PDT)
+From: Yonghong Song <yonghong.song@linux.dev>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	kernel-team@fb.com,
+	Martin KaFai Lau <martin.lau@kernel.org>,
+	Tejun Heo <tj@kernel.org>
+Subject: [PATCH bpf-next v7 6/9] bpf, x86: Support private stack in jit
+Date: Tue, 29 Oct 2024 15:17:07 -0700
+Message-ID: <20241029221707.266393-1-yonghong.song@linux.dev>
+X-Mailer: git-send-email 2.43.5
+In-Reply-To: <20241029221637.264348-1-yonghong.song@linux.dev>
+References: <20241029221637.264348-1-yonghong.song@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241029193911.1575719-1-eddyz87@gmail.com>
-In-Reply-To: <20241029193911.1575719-1-eddyz87@gmail.com>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Tue, 29 Oct 2024 15:17:38 -0700
-Message-ID: <CAEf4Bzac+bFC77190DT38BTVnfC=oJP648KWW_+SmQWZEmfMmA@mail.gmail.com>
-Subject: Re: [PATCH bpf] bpf: disallow 40-bytes extra stack for bpf_fastcall patterns
-To: Eduard Zingerman <eddyz87@gmail.com>
-Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org, 
-	daniel@iogearbox.net, martin.lau@linux.dev, kernel-team@fb.com, 
-	yonghong.song@linux.dev, Hou Tao <houtao@huaweicloud.com>
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Oct 29, 2024 at 12:39=E2=80=AFPM Eduard Zingerman <eddyz87@gmail.co=
-m> wrote:
->
-> Hou Tao reported an issue with bpf_fastcall patterns allowing extra
-> stack space above MAX_BPF_STACK limit. This extra stack allowance is
-> not integrated properly with the following verifier parts:
-> - backtracking logic still assumes that stack can't exceed
->   MAX_BPF_STACK;
-> - bpf_verifier_env->scratched_stack_slots assumes only 64 slots are
->   available.
->
-> Here is an example of an issue with precision tracking
-> (note stack slot -8 tracked as precise instead of -520):
->
->     0: (b7) r1 =3D 42                       ; R1_w=3D42
->     1: (b7) r2 =3D 42                       ; R2_w=3D42
->     2: (7b) *(u64 *)(r10 -512) =3D r1       ; R1_w=3D42 R10=3Dfp0 fp-512_=
-w=3D42
->     3: (7b) *(u64 *)(r10 -520) =3D r2       ; R2_w=3D42 R10=3Dfp0 fp-520_=
-w=3D42
->     4: (85) call bpf_get_smp_processor_id#8       ; R0_w=3Dscalar(...)
->     5: (79) r2 =3D *(u64 *)(r10 -520)       ; R2_w=3D42 R10=3Dfp0 fp-520_=
-w=3D42
->     6: (79) r1 =3D *(u64 *)(r10 -512)       ; R1_w=3D42 R10=3Dfp0 fp-512_=
-w=3D42
->     7: (bf) r3 =3D r10                      ; R3_w=3Dfp0 R10=3Dfp0
->     8: (0f) r3 +=3D r2
->     mark_precise: frame0: last_idx 8 first_idx 0 subseq_idx -1
->     mark_precise: frame0: regs=3Dr2 stack=3D before 7: (bf) r3 =3D r10
->     mark_precise: frame0: regs=3Dr2 stack=3D before 6: (79) r1 =3D *(u64 =
-*)(r10 -512)
->     mark_precise: frame0: regs=3Dr2 stack=3D before 5: (79) r2 =3D *(u64 =
-*)(r10 -520)
->     mark_precise: frame0: regs=3D stack=3D-8 before 4: (85) call bpf_get_=
-smp_processor_id#8
->     mark_precise: frame0: regs=3D stack=3D-8 before 3: (7b) *(u64 *)(r10 =
--520) =3D r2
->     mark_precise: frame0: regs=3Dr2 stack=3D before 2: (7b) *(u64 *)(r10 =
--512) =3D r1
->     mark_precise: frame0: regs=3Dr2 stack=3D before 1: (b7) r2 =3D 42
->     9: R2_w=3D42 R3_w=3Dfp42
->     9: (95) exit
->
-> This patch disables the additional allowance for the moment.
-> Also, two test cases are removed:
-> - bpf_fastcall_max_stack_ok:
->   it fails w/o additional stack allowance;
-> - bpf_fastcall_max_stack_fail:
->   this test is no longer necessary, stack size follows
->   regular rules, pattern invalidation is checked by other
->   test cases.
->
-> Reported-by: Hou Tao <houtao@huaweicloud.com>
-> Closes: https://lore.kernel.org/bpf/20241023022752.172005-1-houtao@huawei=
-cloud.com/
-> Fixes: 5b5f51bff1b6 ("bpf: no_caller_saved_registers attribute for helper=
- calls")
-> Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
-> ---
->  kernel/bpf/verifier.c                         | 14 +----
->  .../bpf/progs/verifier_bpf_fastcall.c         | 55 -------------------
->  2 files changed, 2 insertions(+), 67 deletions(-)
->
+Support private stack in jit. The x86 register 9 (X86_REG_R9) is used to
+replace bpf frame register (BPF_REG_10). The private stack is used per
+subprog if it is enabled by verifier. The X86_REG_R9 is saved and
+restored around every func call (not including tailcall) to maintain
+correctness of X86_REG_R9.
 
-LGTM
+Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
+---
+ arch/x86/net/bpf_jit_comp.c | 61 +++++++++++++++++++++++++++++++++++++
+ 1 file changed, 61 insertions(+)
 
-Acked-by: Andrii Nakryiko <andrii@kernel.org>
+diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+index 181d9f04418f..4ee69071c26d 100644
+--- a/arch/x86/net/bpf_jit_comp.c
++++ b/arch/x86/net/bpf_jit_comp.c
+@@ -325,6 +325,22 @@ struct jit_context {
+ /* Number of bytes that will be skipped on tailcall */
+ #define X86_TAIL_CALL_OFFSET	(12 + ENDBR_INSN_SIZE)
+=20
++static void push_r9(u8 **pprog)
++{
++	u8 *prog =3D *pprog;
++
++	EMIT2(0x41, 0x51);   /* push r9 */
++	*pprog =3D prog;
++}
++
++static void pop_r9(u8 **pprog)
++{
++	u8 *prog =3D *pprog;
++
++	EMIT2(0x41, 0x59);   /* pop r9 */
++	*pprog =3D prog;
++}
++
+ static void push_r12(u8 **pprog)
+ {
+ 	u8 *prog =3D *pprog;
+@@ -1404,6 +1420,24 @@ static void emit_shiftx(u8 **pprog, u32 dst_reg, u=
+8 src_reg, bool is64, u8 op)
+ 	*pprog =3D prog;
+ }
+=20
++static void emit_priv_frame_ptr(u8 **pprog, void __percpu *priv_frame_pt=
+r)
++{
++	u8 *prog =3D *pprog;
++
++	/* movabs r9, priv_frame_ptr */
++	emit_mov_imm64(&prog, X86_REG_R9, (__force long) priv_frame_ptr >> 32,
++		       (u32) (__force long) priv_frame_ptr);
++
++#ifdef CONFIG_SMP
++	/* add <r9>, gs:[<off>] */
++	EMIT2(0x65, 0x4c);
++	EMIT3(0x03, 0x0c, 0x25);
++	EMIT((u32)(unsigned long)&this_cpu_off, 4);
++#endif
++
++	*pprog =3D prog;
++}
++
+ #define INSN_SZ_DIFF (((addrs[i] - addrs[i - 1]) - (prog - temp)))
+=20
+ #define __LOAD_TCC_PTR(off)			\
+@@ -1421,6 +1455,7 @@ static int do_jit(struct bpf_prog *bpf_prog, int *a=
+ddrs, u8 *image, u8 *rw_image
+ 	int insn_cnt =3D bpf_prog->len;
+ 	bool seen_exit =3D false;
+ 	u8 temp[BPF_MAX_INSN_SIZE + BPF_INSN_SAFETY];
++	void __percpu *priv_frame_ptr =3D NULL;
+ 	u64 arena_vm_start, user_vm_start;
+ 	int i, excnt =3D 0;
+ 	int ilen, proglen =3D 0;
+@@ -1429,6 +1464,10 @@ static int do_jit(struct bpf_prog *bpf_prog, int *=
+addrs, u8 *image, u8 *rw_image
+ 	int err;
+=20
+ 	stack_depth =3D bpf_prog->aux->stack_depth;
++	if (bpf_prog->aux->priv_stack_ptr) {
++		priv_frame_ptr =3D bpf_prog->aux->priv_stack_ptr + round_up(stack_dept=
+h, 8);
++		stack_depth =3D 0;
++	}
+=20
+ 	arena_vm_start =3D bpf_arena_get_kern_vm_start(bpf_prog->aux->arena);
+ 	user_vm_start =3D bpf_arena_get_user_vm_start(bpf_prog->aux->arena);
+@@ -1457,6 +1496,9 @@ static int do_jit(struct bpf_prog *bpf_prog, int *a=
+ddrs, u8 *image, u8 *rw_image
+ 		emit_mov_imm64(&prog, X86_REG_R12,
+ 			       arena_vm_start >> 32, (u32) arena_vm_start);
+=20
++	if (priv_frame_ptr)
++		emit_priv_frame_ptr(&prog, priv_frame_ptr);
++
+ 	ilen =3D prog - temp;
+ 	if (rw_image)
+ 		memcpy(rw_image + proglen, temp, ilen);
+@@ -1476,6 +1518,14 @@ static int do_jit(struct bpf_prog *bpf_prog, int *=
+addrs, u8 *image, u8 *rw_image
+ 		u8 *func;
+ 		int nops;
+=20
++		if (priv_frame_ptr) {
++			if (src_reg =3D=3D BPF_REG_FP)
++				src_reg =3D X86_REG_R9;
++
++			if (dst_reg =3D=3D BPF_REG_FP)
++				dst_reg =3D X86_REG_R9;
++		}
++
+ 		switch (insn->code) {
+ 			/* ALU */
+ 		case BPF_ALU | BPF_ADD | BPF_X:
+@@ -2136,9 +2186,15 @@ st:			if (is_imm8(insn->off))
+ 			}
+ 			if (!imm32)
+ 				return -EINVAL;
++			if (priv_frame_ptr) {
++				push_r9(&prog);
++				ip +=3D 2;
++			}
+ 			ip +=3D x86_call_depth_emit_accounting(&prog, func, ip);
+ 			if (emit_call(&prog, func, ip))
+ 				return -EINVAL;
++			if (priv_frame_ptr)
++				pop_r9(&prog);
+ 			break;
+ 		}
+=20
+@@ -3563,6 +3619,11 @@ bool bpf_jit_supports_exceptions(void)
+ 	return IS_ENABLED(CONFIG_UNWINDER_ORC);
+ }
+=20
++bool bpf_jit_supports_private_stack(void)
++{
++	return true;
++}
++
+ void arch_bpf_stack_walk(bool (*consume_fn)(void *cookie, u64 ip, u64 sp=
+, u64 bp), void *cookie)
+ {
+ #if defined(CONFIG_UNWINDER_ORC)
+--=20
+2.43.5
 
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 587a6c76e564..a494396bef2a 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -6804,20 +6804,10 @@ static int check_stack_slot_within_bounds(struct =
-bpf_verifier_env *env,
->                                            struct bpf_func_state *state,
->                                            enum bpf_access_type t)
->  {
-> -       struct bpf_insn_aux_data *aux =3D &env->insn_aux_data[env->insn_i=
-dx];
-> -       int min_valid_off, max_bpf_stack;
-> -
-> -       /* If accessing instruction is a spill/fill from bpf_fastcall pat=
-tern,
-> -        * add room for all caller saved registers below MAX_BPF_STACK.
-> -        * In case if bpf_fastcall rewrite won't happen maximal stack dep=
-th
-> -        * would be checked by check_max_stack_depth_subprog().
-> -        */
-> -       max_bpf_stack =3D MAX_BPF_STACK;
-> -       if (aux->fastcall_pattern)
-> -               max_bpf_stack +=3D CALLER_SAVED_REGS * BPF_REG_SIZE;
-> +       int min_valid_off;
->
->         if (t =3D=3D BPF_WRITE || env->allow_uninit_stack)
-> -               min_valid_off =3D -max_bpf_stack;
-> +               min_valid_off =3D -MAX_BPF_STACK;
->         else
->                 min_valid_off =3D -state->allocated_stack;
->
-> diff --git a/tools/testing/selftests/bpf/progs/verifier_bpf_fastcall.c b/=
-tools/testing/selftests/bpf/progs/verifier_bpf_fastcall.c
-> index 9da97d2efcd9..5094c288cfd7 100644
-> --- a/tools/testing/selftests/bpf/progs/verifier_bpf_fastcall.c
-> +++ b/tools/testing/selftests/bpf/progs/verifier_bpf_fastcall.c
-> @@ -790,61 +790,6 @@ __naked static void cumulative_stack_depth_subprog(v=
-oid)
->         :: __imm(bpf_get_smp_processor_id) : __clobber_all);
->  }
->
-> -SEC("raw_tp")
-> -__arch_x86_64
-> -__log_level(4)
-> -__msg("stack depth 512")
-> -__xlated("0: r1 =3D 42")
-> -__xlated("1: *(u64 *)(r10 -512) =3D r1")
-> -__xlated("2: w0 =3D ")
-> -__xlated("3: r0 =3D &(void __percpu *)(r0)")
-> -__xlated("4: r0 =3D *(u32 *)(r0 +0)")
-> -__xlated("5: exit")
-> -__success
-> -__naked int bpf_fastcall_max_stack_ok(void)
-> -{
-> -       asm volatile(
-> -       "r1 =3D 42;"
-> -       "*(u64 *)(r10 - %[max_bpf_stack]) =3D r1;"
-> -       "*(u64 *)(r10 - %[max_bpf_stack_8]) =3D r1;"
-> -       "call %[bpf_get_smp_processor_id];"
-> -       "r1 =3D *(u64 *)(r10 - %[max_bpf_stack_8]);"
-> -       "exit;"
-> -       :
-> -       : __imm_const(max_bpf_stack, MAX_BPF_STACK),
-> -         __imm_const(max_bpf_stack_8, MAX_BPF_STACK + 8),
-> -         __imm(bpf_get_smp_processor_id)
-> -       : __clobber_all
-> -       );
-> -}
-> -
-> -SEC("raw_tp")
-> -__arch_x86_64
-> -__log_level(4)
-> -__msg("stack depth 520")
-> -__failure
-> -__naked int bpf_fastcall_max_stack_fail(void)
-> -{
-> -       asm volatile(
-> -       "r1 =3D 42;"
-> -       "*(u64 *)(r10 - %[max_bpf_stack]) =3D r1;"
-> -       "*(u64 *)(r10 - %[max_bpf_stack_8]) =3D r1;"
-> -       "call %[bpf_get_smp_processor_id];"
-> -       "r1 =3D *(u64 *)(r10 - %[max_bpf_stack_8]);"
-> -       /* call to prandom blocks bpf_fastcall rewrite */
-> -       "*(u64 *)(r10 - %[max_bpf_stack_8]) =3D r1;"
-> -       "call %[bpf_get_prandom_u32];"
-> -       "r1 =3D *(u64 *)(r10 - %[max_bpf_stack_8]);"
-> -       "exit;"
-> -       :
-> -       : __imm_const(max_bpf_stack, MAX_BPF_STACK),
-> -         __imm_const(max_bpf_stack_8, MAX_BPF_STACK + 8),
-> -         __imm(bpf_get_smp_processor_id),
-> -         __imm(bpf_get_prandom_u32)
-> -       : __clobber_all
-> -       );
-> -}
-> -
->  SEC("cgroup/getsockname_unix")
->  __xlated("0: r2 =3D 1")
->  /* bpf_cast_to_kern_ctx is replaced by a single assignment */
-> --
-> 2.47.0
->
