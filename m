@@ -1,121 +1,118 @@
-Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
+Received: from 66-220-155-178.mail-mxout.facebook.com (66-220-155-178.mail-mxout.facebook.com [66.220.155.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E157A17B402;
-	Tue, 29 Oct 2024 22:15:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 503AE207A0B
+	for <bpf@vger.kernel.org>; Tue, 29 Oct 2024 22:16:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.155.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730240148; cv=none; b=g4ehovhZ+RWwdnnCTzBpG9+EhgAzhmK5+cCg1g2yrxvu4oGXmttM8x8huFBGOlMGKx750/x4J6Xfwh2JVJGFrF/z04BKOs1h1uKJqGUz74fcF7hi8c/47bzCTo6+gRbw/Px7ofsr9QLzkXSzPa2FM5atj5Yy518xArV5pcoKSlE=
+	t=1730240214; cv=none; b=Aj1jUK2aI9XSP79yPB2vFLXeglayESfMnWjj77CRtZKCjF/+waDNYp/48KJE4/lSd1kN5UgPyeDuTwfakbW1p5XXzQnTykbLK2YQ16hgeEKzl53JswBKjHfOWgVGtIjVFaKZw9xF4caKsay4hO3EF0+eY3nuaFsXhIgW1/OdkDk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730240148; c=relaxed/simple;
-	bh=Th+710hwtg36aggD8zdCEOkhdsQiBq5+/t8XJyHhUo0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=RcdTzClQLe2+PvkZuMm/NCXRwKw5OGNNdMCqzvw3YWy3pkZzldA5EeuXRJRYnlmqK/ecgE1gPWbcqA+p+DUjso7xQ6Gc/3dv331VjrZTWGcmjKtRmK/osF/3CSL/XRfc75RdkRW76YZEDyJyCM8JmjKdiRCqsPwr2qKoIOfkDuQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gG8ieoL4; arc=none smtp.client-ip=209.85.210.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gG8ieoL4"
-Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-71ec997ad06so4346414b3a.3;
-        Tue, 29 Oct 2024 15:15:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1730240146; x=1730844946; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=F9jFPar4//KYidNuqJMmCaLzKhmHHPRoEdXdNp1U9G0=;
-        b=gG8ieoL4VXlqlzUzp/n/wn69bzxyUeYrrjDRb7kyHPjEMcM2PY5b5Izc0uoj+1VvsD
-         k4kQkSkFOCXKrR65oMLvLTW9g2rxN0Wx5JV9wkwN+mCSgxzpXTrc1u3A+sDIYWXL60wt
-         a7+ULryC+vRXGlY7UgJ5AzgXRGWgrKeEXQ9mkNvLJ83mp+AhvYjjpD2osfyBO/dVeSGy
-         UySuu+YmcLyyBJrCYFqCAkFROFCd1A/rncNucd0vd9f70aKpRhYeDdPpED+yvhEAe3n2
-         MpPqC+WONU98eaaHpYWDCrVmq3nTt8Y+FSwoELyQTVgTqSBOSlVnr6dXB09UAxBm9i7c
-         zdhw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730240146; x=1730844946;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=F9jFPar4//KYidNuqJMmCaLzKhmHHPRoEdXdNp1U9G0=;
-        b=hldhc/bi8Jl/H7K82H46JaV0/OEQiia3UG9plC0g+vZIoQykSp1iS9r0rBpV6W/cTc
-         qpiScZP12OLmIbkNALs6yqcJVWDcqxmK0XrzXuiGEFpMokyqTJhy4ied/JKZv1kfid9x
-         wrFP0/0Crnf0A98ZIXqB/L+IOKpePahvkVa2LDfsHn5nnjCUdft5xlOeuNHjFCOCW+/n
-         GKiwfFU1boASXsSo1lOg++vUwuZdqQRqyPar133C6Vxj2CRSlkLGGj0V/vZhgIh0K8Ie
-         xTXgtxhxetUmrvUQFGQfOQ+kVfBxIl/bFJSi+gRU+ymA4OTi/RE5BR687o36Jmx4VGN/
-         VNaw==
-X-Forwarded-Encrypted: i=1; AJvYcCVUDeaJa2RQUfO9CeaNZ+z5FOwsae/jJnzgIP/SukZPwKwmxlDXa9d9ZqO883zld8BSgEs=@vger.kernel.org, AJvYcCVUxXH6Kdp7JU1a+aJmVFdvO7Wk1O4nX9QDEDzI/lE3KlbwNv+GVyTZ2sHA5f6y/KtyhrhndRhZBRaLx5dHeIHl@vger.kernel.org, AJvYcCWzCI4ylYIIthYgkecKtwZApKUOnS+IrzxBoARbSN0EAyR3LXEoWf4L8OqjwdzKZLrX+3OSHKDNuTHzZxv3@vger.kernel.org, AJvYcCXrGs4cZGG4VFqQ/vob4ojhf3Sig9/f7t904SQm+MJ1t40eOr8oN6X0ZjiwyK4Sq88j3BpmCYgQKk0ElT3Y74JsWfpt@vger.kernel.org
-X-Gm-Message-State: AOJu0YyxQJYgSSraJNILC4e1TsKkDz4csLiZWVJTElewvg1CG6ZvHhGu
-	AgJyqVVvbZlRfxfyrDmc34ceyC/boBzXaULTHZSGo5fpaTtIPNOgKkNHOtMoPc7/7ngteK/SnWY
-	1rvZq6EeJX2LLqzy0k9mX3UiS/Rz4zw==
-X-Google-Smtp-Source: AGHT+IHIcBdcUIT64eaEoLPTSkMsy/XL70V2JIoS9czd33AEXLuKHyp+llKf1eQ2Ir7iyZLAi3oYVTHpVffsUQscmgQ=
-X-Received: by 2002:a05:6a00:1809:b0:71e:6bf1:158f with SMTP id
- d2e1a72fcca58-720ab492bf1mr1533945b3a.21.1730240146088; Tue, 29 Oct 2024
- 15:15:46 -0700 (PDT)
+	s=arc-20240116; t=1730240214; c=relaxed/simple;
+	bh=Gw5e3HerW2V96yedmprrICn4PtHFGZKdTZhW89n3nm4=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=ZWwN1dzUcNq1znQ3Yg9iiL/bmwYX07X2ZbsS3GLqpkP0FDtoChRY/fYjhx6c7kCXCrcS697p4qlAD6IU0x794suCyiLdXhku9G7nOb8eUD78aRdbfDKQ6e3yhqZEVBKCHjEt8A16pLH6jSm4Sat9iBfiv/LVjNBeKwiZ/CigHew=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.155.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
+Received: by devbig309.ftw3.facebook.com (Postfix, from userid 128203)
+	id 5C426A91CF27; Tue, 29 Oct 2024 15:16:42 -0700 (PDT)
+From: Yonghong Song <yonghong.song@linux.dev>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	kernel-team@fb.com,
+	Martin KaFai Lau <martin.lau@kernel.org>,
+	Tejun Heo <tj@kernel.org>
+Subject: [PATCH bpf-next v7 1/9] bpf: Check stack depth limit after visiting all subprogs
+Date: Tue, 29 Oct 2024 15:16:42 -0700
+Message-ID: <20241029221642.264723-1-yonghong.song@linux.dev>
+X-Mailer: git-send-email 2.43.5
+In-Reply-To: <20241029221637.264348-1-yonghong.song@linux.dev>
+References: <20241029221637.264348-1-yonghong.song@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241029002208.1947947-1-dolinux.peng@gmail.com> <20241029002208.1947947-4-dolinux.peng@gmail.com>
-In-Reply-To: <20241029002208.1947947-4-dolinux.peng@gmail.com>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Tue, 29 Oct 2024 15:15:34 -0700
-Message-ID: <CAEf4BzYZgAPZSQTTk20s8vUwDMipe+0HRyKNnQchM+C10-1qOQ@mail.gmail.com>
-Subject: Re: [PATCH v4 3/3] libbpf: Using binary search to improve the
- performance of btf__find_by_name_kind
-To: Donglin Peng <dolinux.peng@gmail.com>
-Cc: andrii@kernel.org, eddyz87@gmail.com, ast@kernel.org, rostedt@goodmis.org, 
-	mhiramat@kernel.org, bpf@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Oct 28, 2024 at 5:22=E2=80=AFPM Donglin Peng <dolinux.peng@gmail.co=
-m> wrote:
->
-> Currently, we are only using the linear search method to find the type id
-> by the name, which has a time complexity of O(n). This change involves
-> sorting the names of btf types in ascending order and using binary search=
-,
-> which has a time complexity of O(log(n)).
->
-> Another change is the search direction, where we search the BTF first and
-> then its base.
->
-> Signed-off-by: Donglin Peng <dolinux.peng@gmail.com>
-> ---
->  tools/lib/bpf/btf.c | 159 ++++++++++++++++++++++++++++++++++++++------
->  1 file changed, 140 insertions(+), 19 deletions(-)
->
+Check stack depth limit after all subprogs are visited. Note that if
+private stack is enabled, the only stack size restriction is for a single
+subprog with size less than or equal to MAX_BPF_STACK.
 
-same complaints as with kernel-side implementation
+In subsequent patches, in function check_max_stack_depth(), there could
+be a flip from enabling private stack to disabling private stack due to
+potential nested bpf subprog run. Moving stack depth limit checking after
+visiting all subprogs ensures the checking not missed in such flipping
+cases.
 
-I'm not sure if this is the right approach, overall. I can see how
-pre-sorting might be useful if done by pahole. But then I'd say we
-should record some bit somewhere in btf_header claiming that this is
-sorted BTF, and then if that bit is set and we confirmed (on the
-kernel side) that sorting is indeed correct (and if not, reject, don't
-silently ignore), then we can use that sorting to our advantage.
+The useless 'continue' statement in the loop in func
+check_max_stack_depth() is also removed.
 
-I don't think libbpf should unconditionally sort or check sorting in
-the way that you implemented.
+Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
+---
+ kernel/bpf/verifier.c | 20 ++++++++++++--------
+ 1 file changed, 12 insertions(+), 8 deletions(-)
 
-> diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
-> index 5290e9d59997..cbf88a6b92e5 100644
-> --- a/tools/lib/bpf/btf.c
-> +++ b/tools/lib/bpf/btf.c
-> @@ -94,6 +94,10 @@ struct btf {
->          *   - for split BTF counts number of types added on top of base =
-BTF.
->          */
->         __u32 nr_types;
-> +       /* number of types in this BTF instance which are sorted by name:
-> +        *   - doesn't include special [0] void type;
-> +        */
-> +       __u32 nr_types_sorted;
->         /* if not NULL, points to the base BTF on top of which the curren=
-t
->          * split BTF is based
->          */
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 797cf3ed32e0..89b0a980d0f9 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -6032,7 +6032,8 @@ static int round_up_stack_depth(struct bpf_verifier=
+_env *env, int stack_depth)
+  * Since recursion is prevented by check_cfg() this algorithm
+  * only needs a local stack of MAX_CALL_FRAMES to remember callsites
+  */
+-static int check_max_stack_depth_subprog(struct bpf_verifier_env *env, i=
+nt idx)
++static int check_max_stack_depth_subprog(struct bpf_verifier_env *env, i=
+nt idx,
++					 int *subtree_depth, int *depth_frame)
+ {
+ 	struct bpf_subprog_info *subprog =3D env->subprog_info;
+ 	struct bpf_insn *insn =3D env->prog->insnsi;
+@@ -6070,10 +6071,9 @@ static int check_max_stack_depth_subprog(struct bp=
+f_verifier_env *env, int idx)
+ 		return -EACCES;
+ 	}
+ 	depth +=3D round_up_stack_depth(env, subprog[idx].stack_depth);
+-	if (depth > MAX_BPF_STACK) {
+-		verbose(env, "combined stack size of %d calls is %d. Too large\n",
+-			frame + 1, depth);
+-		return -EACCES;
++	if (depth > MAX_BPF_STACK && !*subtree_depth) {
++		*subtree_depth =3D depth;
++		*depth_frame =3D frame + 1;
+ 	}
+ continue_func:
+ 	subprog_end =3D subprog[idx + 1].start;
+@@ -6173,15 +6173,19 @@ static int check_max_stack_depth_subprog(struct b=
+pf_verifier_env *env, int idx)
+ static int check_max_stack_depth(struct bpf_verifier_env *env)
+ {
+ 	struct bpf_subprog_info *si =3D env->subprog_info;
+-	int ret;
++	int ret, subtree_depth =3D 0, depth_frame;
+=20
+ 	for (int i =3D 0; i < env->subprog_cnt; i++) {
+ 		if (!i || si[i].is_async_cb) {
+-			ret =3D check_max_stack_depth_subprog(env, i);
++			ret =3D check_max_stack_depth_subprog(env, i, &subtree_depth, &depth_=
+frame);
+ 			if (ret < 0)
+ 				return ret;
+ 		}
+-		continue;
++	}
++	if (subtree_depth > MAX_BPF_STACK) {
++		verbose(env, "combined stack size of %d calls is %d. Too large\n",
++			depth_frame, subtree_depth);
++		return -EACCES;
+ 	}
+ 	return 0;
+ }
+--=20
+2.43.5
 
-[...]
