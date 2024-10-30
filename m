@@ -1,105 +1,147 @@
-Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30FD41D515C;
-	Wed, 30 Oct 2024 06:54:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42B2F1E0DFE;
+	Wed, 30 Oct 2024 07:09:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730271300; cv=none; b=leM1W2io3dI0bI2thsqC4DtrTwZ+JyCYj9GRvw8evc7/DYc1cm9avT7c5OnADXRG+Mtjoo7bd0SA5v/Uk/W89MqwjPQ+y1J6giqc4CQB2JeEoovIr14sajWobbQWjnlLcZ/7o3FOfJS6ZdIij2MIYi3ypI8PTbFPyPUXQWOiP6s=
+	t=1730272185; cv=none; b=mf/ZAqAU4qJRWJOt5Xni4/5Jm5ep3mAUaBoscSq0ymYnHTbRp1Fi57deCJLgXHrblJ09Fd+kdTrdlW2WHgYZpz+sb+zXHkgTsa4WFByUMHeXGNH38yQXSaQyJHB6tnVqcPQTerYpvd4eSw7zonfoeF7W0IqgxTSppkI/LW0tV2Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730271300; c=relaxed/simple;
-	bh=BKKz/icmQ82AYruwgF3/yFljISwH2oNnOSVeJxPnyGM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ky/876D12M+XC4Kj+TyKfma1CGxtMnxkizxLLbXZjmxbMMAWNp2B8b/GCcFrE8iwOYa1VgCuPp5aM5IQwOcIP/jb4PZ25XAmt/CGjH0LlMDQGrXgfupxJrWxKqElyf5g2SP05VFefKZ+exNlScE45O8NLAt2d22IljBKIhyw990=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Udwh8VJB; arc=none smtp.client-ip=209.85.218.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1730272185; c=relaxed/simple;
+	bh=PqKZkX5MfNlqlkxog8KNBTjCxPmS3rMjKgXtSBWMvGg=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=LplDkhQgYMilxdAY17aMEFhUG771CsobTQzv8Im2CS0XIjIhRLC8GTAANrjeM9vEtoDXq/pm9ds4InzGcW1FaOy5AcHavOgnZwixnqlqODfA5510hnTu64IVcnFqk7VMuouwiU73ZchbwB6fg4A467TodeI5DRMAfEWkXRLeB5M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=DMe3xRrI; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Udwh8VJB"
-Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-a9a0c7abaa6so755556466b.2;
-        Tue, 29 Oct 2024 23:54:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1730271296; x=1730876096; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=BKKz/icmQ82AYruwgF3/yFljISwH2oNnOSVeJxPnyGM=;
-        b=Udwh8VJB2shLabI64WU6/Pmsa2ROqudHVuCFgVuZxXDWUfcB1nNaihwcn3tZmpp776
-         JyPEUHZBfiqhCwzXmoPJpp/hAmrCYZEILi6/cfIR4I4BnlbjklyYdf8qyjhCPI2hvp/3
-         ErIGgC79t4PL/4r25ZsfRKlup0CU2ON8CFQ+YqzbUy1TJjtmew4cdfBckAummuB7Jgnz
-         1PO4MkrHsm1654i89C9mFbW2VabwEm/xUjuY3mD85RUmZKOSMlKRgt4cc8dDC/WQJtin
-         v1Iv6SfP2yfKZCrfOzEel3gFfi52ppVC48CzJy6U2PN75HkZYBQFL2328c8gX3xPhW5g
-         4edA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730271296; x=1730876096;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=BKKz/icmQ82AYruwgF3/yFljISwH2oNnOSVeJxPnyGM=;
-        b=bxMI06B6WW8z43FMG3t6+qwU5bR+i0XMIfYjOI8oX+olrmCjkZGQN0ec0FdEKWZ7vy
-         M9yp83YdmzRXW0T914KEID3FfqeCKK5ZH62w7XcRuKinO7B4lyq/FKZ+OvSSulHIHq1U
-         fWj1MgOV7hzcx9asM4/UIb1jvBIJsXmrDf/hzIuRG+VfAAiVbcUiOMM9i2CZzRxQQabv
-         oA/Aa6UHpL8vlR3Ly9eXRRB1Vm6V1okeoWLO6Ru9XlC1JeGZ7766AFUF382EuqmR1FcH
-         bfguZyGG6Gf5G+QRdiJhqsE7pKqJnq64BFMM48fZpDjxYT5D+zP0p0O6FKPEGUc8myXq
-         4t/w==
-X-Forwarded-Encrypted: i=1; AJvYcCVuTkxr9enabwEiumaBvkkOOzG7quieiQ22cUw9EhoomTr5wtmOxEBU2KpWOXOlfbSpOIo=@vger.kernel.org, AJvYcCWoO9qtUzCAh7ixSmJ5HexskDZvFaiHZm++AtNbVGnlLmaT63M5Pt5DcS99E3tYQrxS94cmUouZ@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz3IYevM8bkrVcrycqME9vDdTl56ieKAwhdOngZfU2Atm29IvRV
-	byHoI0+pNmBUHzK6KsAjPLjIC8gbWlnBFJWAhO/azDiAUwSEADaSe9fVSTkH3203BGsGDWp964z
-	VsOoGL4iAAPRwzPu6QXzF+SlUgkE=
-X-Google-Smtp-Source: AGHT+IEctoS15MbRJ/OkILHRla6GJXmTmMo9ctvBZT15TX9hg7dEejt1STvhf5Gp//dWREX3fH94QrccwCZmz4xuCyc=
-X-Received: by 2002:a17:907:1c9d:b0:a9a:5b8d:68ad with SMTP id
- a640c23a62f3a-a9de615abc0mr1431826366b.48.1730271296157; Tue, 29 Oct 2024
- 23:54:56 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="DMe3xRrI"
+Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49U2d3BE024043;
+	Wed, 30 Oct 2024 07:09:13 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:date:from:in-reply-to:message-id
+	:mime-version:references:subject:to; s=pp1; bh=NBCz3KcpjPp2NZk6Q
+	kJH2AEFQre7Vj8TAQLOxgPmAFI=; b=DMe3xRrIog+pq4x9QG+06M2qVOt+FN+Ie
+	1zVd1VKqCKgPt0LHxueJ5aX7n8mgYvZheI2MZJA7Ky0pGLLHV0IqjP326/yXUzHc
+	+za+dD6CtcfXiyHgiOapI+UJl51EbyNs9V6+wP7TkJ7w1w49S1hsg7TdnPyMM8iJ
+	RRuBXpZ5ymX5JYq45Zy2xzY0lJWT0rwoNqpiDJzJFG6Z2u/7GY/q9+upx6iPaAkC
+	LemG6hWKwBLnLrhQIAtWldHxwLf2mDp4bGnx/SwPnAa8mDKpMtYWTr79nxpDBDd4
+	lzazZvf56+jF8Wjx0IEM7L+Jjo3AJxZS329uJdC7daRBU1JlkhXsQ==
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 42jyhbmb76-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 30 Oct 2024 07:09:12 +0000 (GMT)
+Received: from m0356516.ppops.net (m0356516.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 49U79CBV004738;
+	Wed, 30 Oct 2024 07:09:12 GMT
+Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 42jyhbmb73-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 30 Oct 2024 07:09:12 +0000 (GMT)
+Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma21.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 49U3A8oB013670;
+	Wed, 30 Oct 2024 07:09:11 GMT
+Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
+	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 42hbrmxw55-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 30 Oct 2024 07:09:11 +0000
+Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
+	by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 49U797PR28902076
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 30 Oct 2024 07:09:07 GMT
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 7A2F22004D;
+	Wed, 30 Oct 2024 07:09:07 +0000 (GMT)
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id C08F920043;
+	Wed, 30 Oct 2024 07:09:03 +0000 (GMT)
+Received: from li-bd3f974c-2712-11b2-a85c-df1cec4d728e.in.ibm.com (unknown [9.203.115.143])
+	by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Wed, 30 Oct 2024 07:09:03 +0000 (GMT)
+From: Hari Bathini <hbathini@linux.ibm.com>
+To: linuxppc-dev <linuxppc-dev@lists.ozlabs.org>, bpf@vger.kernel.org,
+        linux-trace-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc: Michael Ellerman <mpe@ellerman.id.au>, "Naveen N. Rao" <naveen@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Vishal Chourasia <vishalc@linux.ibm.com>,
+        Mahesh J Salgaonkar <mahesh@linux.ibm.com>
+Subject: [PATCH v7 03/17] powerpc64/ftrace: Nop out additional 'std' instruction emitted by gcc v5.x
+Date: Wed, 30 Oct 2024 12:38:36 +0530
+Message-ID: <20241030070850.1361304-4-hbathini@linux.ibm.com>
+X-Mailer: git-send-email 2.47.0
+In-Reply-To: <20241030070850.1361304-1-hbathini@linux.ibm.com>
+References: <20241030070850.1361304-1-hbathini@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241028110535.82999-1-kerneljasonxing@gmail.com>
- <20241028110535.82999-15-kerneljasonxing@gmail.com> <d443142f-c7a1-46f8-8c8f-ee0172e10bdf@linux.dev>
-In-Reply-To: <d443142f-c7a1-46f8-8c8f-ee0172e10bdf@linux.dev>
-From: Jason Xing <kerneljasonxing@gmail.com>
-Date: Wed, 30 Oct 2024 14:54:17 +0800
-Message-ID: <CAL+tcoBQ4MGKOhBh=Y1bAwvW02pLj63Dj2J4anGEW0H=W7if_g@mail.gmail.com>
-Subject: Re: [PATCH net-next v3 14/14] bpf: add simple bpf tests in the tx
- path for so_timstamping feature
-To: Martin KaFai Lau <martin.lau@linux.dev>
-Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org, 
-	pabeni@redhat.com, dsahern@kernel.org, willemdebruijn.kernel@gmail.com, 
-	willemb@google.com, ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, 
-	eddyz87@gmail.com, song@kernel.org, yonghong.song@linux.dev, 
-	john.fastabend@gmail.com, kpsingh@kernel.org, sdf@fomichev.me, 
-	haoluo@google.com, jolsa@kernel.org, shuah@kernel.org, ykolal@fb.com, 
-	bpf@vger.kernel.org, netdev@vger.kernel.org, 
-	Jason Xing <kernelxing@tencent.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: qgy0KvjTxbxMRpmk5MFbntDDAWjfDqT_
+X-Proofpoint-ORIG-GUID: 9AYLyruOn_3zT9wtyLDntWCorkdG9MXp
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
+ definitions=2024-10-15_01,2024-10-11_01,2024-09-30_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 mlxscore=0
+ malwarescore=0 bulkscore=0 priorityscore=1501 lowpriorityscore=0
+ suspectscore=0 phishscore=0 impostorscore=0 mlxlogscore=941 spamscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2409260000 definitions=main-2410300051
 
-On Wed, Oct 30, 2024 at 1:58=E2=80=AFPM Martin KaFai Lau <martin.lau@linux.=
-dev> wrote:
->
-> On 10/28/24 4:05 AM, Jason Xing wrote:
-> > From: Jason Xing <kernelxing@tencent.com>
-> >
-> > Only check if we pass those three key points after we enable the
-> > bpf extension for so_timestamping. During each point, we can choose
-> > whether to print the current timestamp.
->
-> The bpf prog usually does more than just print. The bpf prog aggregates d=
-ata
-> first before sending all raw data to the user space.
->
-> The selftests will be more useful for the reviewer and the future user if=
- it can
-> at least show how it can calculate the tx delay between [sendmsg, SCHED],
-> [SCHED, SND], [SND, ACK].
+From: Naveen N Rao <naveen@kernel.org>
 
-Got it, I will dig into how to implement it and then post a new
-version. Before this, I only used the bpf program to print timestamps
-to one file without using those advanced functions (like aggregating
-data) in bpf. Let me try :) If you know some good examples of this,
-please show me :) Thanks in advance.
+Gcc v5.x emits a 3-instruction sequence for -mprofile-kernel:
+	mflr	r0
+	std	r0, 16(r1)
+	bl	_mcount
 
-Thanks,
-Jason
+Gcc v6.x moved to a simpler 2-instruction sequence by removing the 'std'
+instruction. The store saved the return address in the LR save area in
+the caller stack frame for stack unwinding. However, with dynamic
+ftrace, we no longer have a call to _mcount on kernel boot when ftrace
+is not enabled. When ftrace is enabled, that store is performed within
+ftrace_caller(). As such, the additional 'std' instruction is redundant.
+Nop it out on kernel boot.
+
+With this change, we now use the same 2-instruction profiling sequence
+with both -mprofile-kernel, as well as -fpatchable-function-entry on
+64-bit powerpc.
+
+Signed-off-by: Naveen N Rao <naveen@kernel.org>
+---
+ arch/powerpc/kernel/trace/ftrace.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/arch/powerpc/kernel/trace/ftrace.c b/arch/powerpc/kernel/trace/ftrace.c
+index d8d6b4fd9a14..2ef504700e8d 100644
+--- a/arch/powerpc/kernel/trace/ftrace.c
++++ b/arch/powerpc/kernel/trace/ftrace.c
+@@ -246,8 +246,12 @@ int ftrace_init_nop(struct module *mod, struct dyn_ftrace *rec)
+ 		/* Expected sequence: 'mflr r0', ['std r0,16(r1)'], 'bl _mcount' */
+ 		ret = ftrace_read_inst(ip - 4, &old);
+ 		if (!ret && !ppc_inst_equal(old, ppc_inst(PPC_RAW_MFLR(_R0)))) {
++			/* Gcc v5.x emit the additional 'std' instruction, gcc v6.x don't */
+ 			ret = ftrace_validate_inst(ip - 8, ppc_inst(PPC_RAW_MFLR(_R0)));
+-			ret |= ftrace_validate_inst(ip - 4, ppc_inst(PPC_RAW_STD(_R0, _R1, 16)));
++			if (ret)
++				return ret;
++			ret = ftrace_modify_code(ip - 4, ppc_inst(PPC_RAW_STD(_R0, _R1, 16)),
++						 ppc_inst(PPC_RAW_NOP()));
+ 		}
+ 	} else {
+ 		return -EINVAL;
+-- 
+2.47.0
+
