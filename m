@@ -1,28 +1,27 @@
-Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F4D01E230F
-	for <bpf@vger.kernel.org>; Wed, 30 Oct 2024 09:53:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CFEB1E230C
+	for <bpf@vger.kernel.org>; Wed, 30 Oct 2024 09:53:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730281996; cv=none; b=UP3mOm7gn71RvcW/rcDtTYmih4vU2ddDw7FfyEDH5y1HtmqQIA/J8KZsjWl4VwXJdisxUvzU+eC0TKNpL+00Ix5Utd0qB9POm5iHFyPXrvELu99Vc+JoGjkWmrnU+0+QbQxQ6CmdMpAosiaOXSUKXvwAfag1M8GmWhYlUHDSw9E=
+	t=1730281996; cv=none; b=e0AiewQkUOMjBBmIcWjowkET7vUZYHeRzOGj3ZwgSAiW/wFimmh2dTcYs78rablO+oNw3pUqaq1KIUcIm+Jht7Q0vv51TM+wMXZzmcVmwPH1UUad1sztAdMK7iKYSfwFkxhxPLwiPq31Q2ERSc3A7V3BV2P9v4GScRDS5FGHtm4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1730281996; c=relaxed/simple;
-	bh=EQwhzztD65cJj2p7AqI5ixXDqyiNWK4zQiyj2ETYCa4=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=Jqdm0tpB7/qmZDscnoeHN/8QxJUY14Ut2ITNEFsENoZ/GPgbYpyTHXd9bZCxVqnTpiWzM+BgtNGdIZF2bmVVSxFjCd/sGDGUe36MRwCndcELVmMEUNUARqd1ALmIvFT5wGt51HX7anwS4kaI9m/+Y0y9xQfz4lUqG+HMo7MAQb8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
+	bh=5nNYhrbMmxaB2EP7T8vbeOpxSUD1iR5DhOUecPieD/o=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=a2LuQ9/+4Ir5FrYtM+ALEXLRybjcfFrMIJWIoWBuApABIDggdcLaykDCj9jo/LQivIGk9YAqgR+w6h32Cb3ghMiDNsyhWETcFFrySO7GbFjFSz8J2a95AkkMFscj6VUB2RhaKPLMxr7AEOY5Fd8efoVOpsrkyOnPFGT0ZhnSSLc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.235])
-	by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4Xdj9J1ng6z4f3jdl
-	for <bpf@vger.kernel.org>; Wed, 30 Oct 2024 17:52:52 +0800 (CST)
+Received: from mail.maildlp.com (unknown [172.19.163.216])
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4Xdj9M4Xg8z4f3m7h
+	for <bpf@vger.kernel.org>; Wed, 30 Oct 2024 17:52:55 +0800 (CST)
 Received: from mail02.huawei.com (unknown [10.116.40.128])
-	by mail.maildlp.com (Postfix) with ESMTP id EBEE11A0568
-	for <bpf@vger.kernel.org>; Wed, 30 Oct 2024 17:53:09 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTP id 3D61A1A0196
+	for <bpf@vger.kernel.org>; Wed, 30 Oct 2024 17:53:08 +0800 (CST)
 Received: from huaweicloud.com (unknown [10.175.124.27])
-	by APP4 (Coremail) with SMTP id gCh0CgCXc4cAAiJn97dvAQ--.24244S7;
-	Wed, 30 Oct 2024 17:53:09 +0800 (CST)
+	by APP4 (Coremail) with SMTP id gCh0CgCXc4cAAiJn97dvAQ--.24244S4;
+	Wed, 30 Oct 2024 17:53:05 +0800 (CST)
 From: Hou Tao <houtao@huaweicloud.com>
 To: bpf@vger.kernel.org
 Cc: Martin KaFai Lau <martin.lau@linux.dev>,
@@ -40,12 +39,10 @@ Cc: Martin KaFai Lau <martin.lau@linux.dev>,
 	Yafang Shao <laoar.shao@gmail.com>,
 	houtao1@huawei.com,
 	xukuohai@huawei.com
-Subject: [PATCH bpf v4 3/5] bpf: Check the validity of nr_words in bpf_iter_bits_new()
-Date: Wed, 30 Oct 2024 18:05:14 +0800
-Message-Id: <20241030100516.3633640-4-houtao@huaweicloud.com>
+Subject: [PATCH bpf v4 0/5] Fixes for bits iterator
+Date: Wed, 30 Oct 2024 18:05:11 +0800
+Message-Id: <20241030100516.3633640-1-houtao@huaweicloud.com>
 X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20241030100516.3633640-1-houtao@huaweicloud.com>
-References: <20241030100516.3633640-1-houtao@huaweicloud.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -53,88 +50,71 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:gCh0CgCXc4cAAiJn97dvAQ--.24244S7
-X-Coremail-Antispam: 1UD129KBjvJXoW7KryUZFWxurW8Kw13GF4DJwb_yoW5JrykpF
-	4fJ3s0yr48tF4xGw1Dtan7Ca4rX3yktw17GFZ7Jr1a9Fs5WFnF9r17Kr1Yqas3CrWjvF12
-	vryv9rySvayDZaUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUPIb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUWw
-	A2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
-	w2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
-	W8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v2
-	6rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMc
-	Ij6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_
-	Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AFwI
-	0_Jw0_GFyl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG
-	67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MI
-	IYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E
-	14v26F4j6r4UJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr
-	0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZFpf9x07UA
-	CztUUUUU=
+X-CM-TRANSID:gCh0CgCXc4cAAiJn97dvAQ--.24244S4
+X-Coremail-Antispam: 1UD129KBjvJXoW7KFW7WrWrCry7KrWfKw1kGrg_yoW8CF18pF
+	W3Jw45tr4kJF43JwnIk3W2ka4Fyw4rKayUWFsxtw15CF48ur1q9r18KrW5uasrJFWfGF17
+	Zr1vk3Z3Ga4UZaUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUvFb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I
+	0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+	x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+	0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAa
+	w2AFwI0_Jw0_GFyl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxV
+	Aqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a
+	6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6x
+	kF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AK
+	xVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvj
+	xUFku4UUUUU
 X-CM-SenderInfo: xkrx3t3r6k3tpzhluzxrxghudrp/
 
 From: Hou Tao <houtao1@huawei.com>
 
-Check the validity of nr_words in bpf_iter_bits_new(). Without this
-check, when multiplication overflow occurs for nr_bits (e.g., when
-nr_words = 0x0400-0001, nr_bits becomes 64), stack corruption may occur
-due to bpf_probe_read_kernel_common(..., nr_bytes = 0x2000-0008).
+Hi,
 
-Fix it by limiting the maximum value of nr_words to 511. The value is
-derived from the current implementation of BPF memory allocator. To
-ensure compatibility if the BPF memory allocator's size limitation
-changes in the future, use the helper bpf_mem_alloc_check_size() to
-check whether nr_bytes is too larger. And return -E2BIG instead of
--ENOMEM for oversized nr_bytes.
+The patch set fixes several issues in bits iterator. Patch #1 fixes the
+kmemleak problem of bits iterator. Patch #2~#3 fix the overflow problem
+of nr_bits. Patch #4 fixes the potential stack corruption when bits
+iterator is used on 32-bit host. Patch #5 adds more test cases for bits
+iterator.
 
-Fixes: 4665415975b0 ("bpf: Add bits iterator")
-Signed-off-by: Hou Tao <houtao1@huawei.com>
+Please see the individual patches for more details. And comments are
+always welcome.
+
 ---
- kernel/bpf/helpers.c | 10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
+v4:
+ * patch #1: add ack from Yafang
+ * patch #3: revert code-churn like changes:
+   (1) compute nr_bytes and nr_bits before the check of nr_words.
+   (2) use nr_bits == 64 to check for single u64, preventing build
+       warning on 32-bit hosts.
+ * patch #4: use "BITS_PER_LONG == 32" instead of "!defined(CONFIG_64BIT)"
 
-diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-index d913a8f1fbd9..018985ebc5ce 100644
---- a/kernel/bpf/helpers.c
-+++ b/kernel/bpf/helpers.c
-@@ -2851,6 +2851,8 @@ struct bpf_iter_bits {
- 	__u64 __opaque[2];
- } __aligned(8);
- 
-+#define BITS_ITER_NR_WORDS_MAX 511
-+
- struct bpf_iter_bits_kern {
- 	union {
- 		unsigned long *bits;
-@@ -2865,7 +2867,8 @@ struct bpf_iter_bits_kern {
-  * @it: The new bpf_iter_bits to be created
-  * @unsafe_ptr__ign: A pointer pointing to a memory area to be iterated over
-  * @nr_words: The size of the specified memory area, measured in 8-byte units.
-- * Due to the limitation of memalloc, it can't be greater than 512.
-+ * The maximum value of @nr_words is @BITS_ITER_NR_WORDS_MAX. This limit may be
-+ * further reduced by the BPF memory allocator implementation.
-  *
-  * This function initializes a new bpf_iter_bits structure for iterating over
-  * a memory area which is specified by the @unsafe_ptr__ign and @nr_words. It
-@@ -2892,6 +2895,8 @@ bpf_iter_bits_new(struct bpf_iter_bits *it, const u64 *unsafe_ptr__ign, u32 nr_w
- 
- 	if (!unsafe_ptr__ign || !nr_words)
- 		return -EINVAL;
-+	if (nr_words > BITS_ITER_NR_WORDS_MAX)
-+		return -E2BIG;
- 
- 	/* Optimization for u64 mask */
- 	if (nr_bits == 64) {
-@@ -2903,6 +2908,9 @@ bpf_iter_bits_new(struct bpf_iter_bits *it, const u64 *unsafe_ptr__ign, u32 nr_w
- 		return 0;
- 	}
- 
-+	if (bpf_mem_alloc_check_size(false, nr_bytes))
-+		return -E2BIG;
-+
- 	/* Fallback to memalloc */
- 	kit->bits = bpf_mem_alloc(&bpf_global_ma, nr_bytes);
- 	if (!kit->bits)
+v3: https://lore.kernel.org/bpf/20241025013233.804027-1-houtao@huaweicloud.com/T/#t
+  * split the bits-iterator related patches from "Misc fixes for bpf"
+    patch set
+  * patch #1: use "!nr_bits || bits >= nr_bits" to stop the iteration
+  * patch #2: add a new helper for the overflow problem
+  * patch #3: decrease the limitation from 512 to 511 and check whether
+    nr_bytes is too large for bpf memory allocator explicitly
+  * patch #5: add two more test cases for bit iterator
+
+v2: http://lore.kernel.org/bpf/d49fa2f4-f743-c763-7579-c3cab4dd88cb@huaweicloud.com
+
+Hou Tao (5):
+  bpf: Free dynamically allocated bits in bpf_iter_bits_destroy()
+  bpf: Add bpf_mem_alloc_check_size() helper
+  bpf: Check the validity of nr_words in bpf_iter_bits_new()
+  bpf: Use __u64 to save the bits in bits iterator
+  selftests/bpf: Add three test cases for bits_iter
+
+ include/linux/bpf_mem_alloc.h                 |  3 +
+ kernel/bpf/helpers.c                          | 54 +++++++++++++---
+ kernel/bpf/memalloc.c                         | 14 ++++-
+ .../selftests/bpf/progs/verifier_bits_iter.c  | 61 ++++++++++++++++++-
+ 4 files changed, 118 insertions(+), 14 deletions(-)
+
 -- 
 2.29.2
 
