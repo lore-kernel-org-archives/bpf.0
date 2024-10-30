@@ -1,51 +1,74 @@
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CF5F1E1A31
-	for <bpf@vger.kernel.org>; Wed, 30 Oct 2024 09:53:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8FFE1E25E0;
+	Wed, 30 Oct 2024 10:01:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730281997; cv=none; b=WnadQK29RZJujOL1yRu36b3lg0UFNYQb/+1QoeMuF9J4RRgtutyeysXfZIm3IgYbogzuYV2k1p+4/zUUjkyU16H+PdqgqJAdIkXb/yWtB3mWStETR9Xck3izBbWY1VkPabSvsOkB1JjKrbSn9oczIhm5G6T9hRuqv0WhMEsS8yA=
+	t=1730282492; cv=none; b=M0aVZt7hHkXPKSgbc1U01rjJKS+Sc5FQVI834O73BSX3A34+swjcyAAB+dFswL4UrnAvaCbKKqoLE1S2h2AEC6q3g07n0pvEWLXdYVqcoQO6+xcIvSvROrWF5cwYCd30p1A/z9A601sM6ZPI3TYY3LA8H9sp/1jMPO14VnIk9Yw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730281997; c=relaxed/simple;
-	bh=GVqxR3Y/eu8jCyy50zwWKwW3EyJmVKX2A1Cw2gLqWA0=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=D8rZZgmyzbx5/5qbOUaR5Y/X3bnoC+azCshYFWhlceYmf8g1D/kHl0aEnxzL8ucMRsaLaNNwfSzRFkEGKDWZWCadLl5NcwRef77ysGKYqLsgoovbcG9YneOroMNiv9HgZsgqyXbo8B/jZD6Jjo/7ywZJL2l+2WOJIVBFTa/kllo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.93.142])
-	by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4Xdj9N1PpGz4f3m7m
-	for <bpf@vger.kernel.org>; Wed, 30 Oct 2024 17:52:56 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.128])
-	by mail.maildlp.com (Postfix) with ESMTP id C591D1A07B6
-	for <bpf@vger.kernel.org>; Wed, 30 Oct 2024 17:53:08 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.175.124.27])
-	by APP4 (Coremail) with SMTP id gCh0CgCXc4cAAiJn97dvAQ--.24244S5;
-	Wed, 30 Oct 2024 17:53:08 +0800 (CST)
-From: Hou Tao <houtao@huaweicloud.com>
-To: bpf@vger.kernel.org
-Cc: Martin KaFai Lau <martin.lau@linux.dev>,
-	Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+	s=arc-20240116; t=1730282492; c=relaxed/simple;
+	bh=7Lb9jgXBsueULSwXmVHO9S0yQGKVhSQ+fOmcIjWvodw=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=lOwyHHgx5UZ/O/LsD2j2RbWqurKH5qhzLuCK0ZNIkdgFA506tSOfy9aG1Ybt4eIqpIAVQ6e2+i6qHaOhjuJl1ZnpJ+7fiX6GhI8glxilMN1XA/pRmk0WOrI3fpa23/igcXkIizlst1CT6TcDcdIL9e0uMfcIJd0+JOkA4bWs4ic=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=U2F9aeuq; arc=none smtp.client-ip=209.85.216.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="U2F9aeuq"
+Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-2e2a999b287so5216254a91.0;
+        Wed, 30 Oct 2024 03:01:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1730282490; x=1730887290; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=4AzW1atrg/A1gulnP13fPkOgabCdL8saqqVxwhxHSn4=;
+        b=U2F9aeuqsZk0lyjsr4T3OSGDggYV0+fiXcDjdCRjJ0xZrDAqsCmsEOGiDb5kseGy53
+         zxmMwd8YQL8RBAw7e7V3LvBWSjQn3wSs5pOmC+PLXuL2ggxd8PAJzf098Bh8s1m9CaBb
+         KG3QcIPWup4ZxVEIUWrjWuGkrt45iuOkoQpV3jN/3aomR8Tq/GbfcLVNeENsifAtDH1U
+         a7YUAmMipve0THjVFw+JzdtitsqNvxVaxMUlYne5Seoe2HxpB55TpCdgrVRnW/Uy+zNn
+         8yBGr7ChYWCaHnpWZYDV8IUYC0hZGQ5WIK9q+90OtIwfwbQzX0KzNzmSWloZyKPDR1aY
+         S2WQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1730282490; x=1730887290;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=4AzW1atrg/A1gulnP13fPkOgabCdL8saqqVxwhxHSn4=;
+        b=tSBoVMhUCQTs8nLz73arHPMdzcNIGe1C54l0vcDpY14LasdqZL3fwXVQAPPCThTg/s
+         zxrOFqsTFAxVtGCuhhGiS5P5W16NlTU+G3dt5FUAoPBLiBwKFdxAW5FoSWTGT2wr5j56
+         Y2DuEWC7YjNrZId3UsykKo0nI9l2my5ltVlyFt0/0ys1MC/Tp37jDijEhPyaBlAXOBbM
+         9XocBPexgWxNR9xUB+juVEZA5TTb9gFlG6vrC0sErpnYRQmU1EUplk32rsXhdyPD7Sdf
+         R3kBl8+R7M6DStlRJrztCca8ftSXtoHlB7N+MDrIHk9KMXXSpP+wG9IVvW/k83mmeTcr
+         vOWg==
+X-Forwarded-Encrypted: i=1; AJvYcCV93U7ONck6J7nE6hk9RmIIJDXkr6CQ/j8+QZBKSQfublcj0YDeKsVmEcGWZ7bBkLgzr0sken+RirtY2ax3Fzp4@vger.kernel.org, AJvYcCVDtSLxxuLObo4rCuRtbAqz+d9z2b1jIKrWbVMojAMNymgCg3s3bJFb482EnBXlA/Dv5CBCXhAtu6tCQAU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzKPvQ/zwqxkTLtuN38/dXiJJv5Ev764GCz4PWccGqtqxDeg7FQ
+	Hd0+rsQtnonaF+Y0VwkMSiB4+L+T354rjVVqjcjJ0XpupKYaekIx+aGDuQ==
+X-Google-Smtp-Source: AGHT+IEEymCR2vDG/9y53R5Zf9cd1nP744F8u68gMP4feSlmPSZtEdAZ4OCPtMvXE5+WpvBw4aF6Kg==
+X-Received: by 2002:a17:90a:b305:b0:2e2:9038:4a48 with SMTP id 98e67ed59e1d1-2e8f10a6e39mr16216607a91.32.1730282489470;
+        Wed, 30 Oct 2024 03:01:29 -0700 (PDT)
+Received: from localhost ([116.198.225.81])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2e92fa3dbd2sm1294830a91.20.2024.10.30.03.01.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 30 Oct 2024 03:01:29 -0700 (PDT)
+From: Tao Chen <chen.dylane@gmail.com>
+To: Matthieu Baerts <matttbe@kernel.org>,
+	Mat Martineau <martineau@kernel.org>,
+	Geliang Tang <geliang@kernel.org>,
 	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Hao Luo <haoluo@google.com>,
-	Yonghong Song <yonghong.song@linux.dev>,
+	Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Jiri Olsa <jolsa@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Yafang Shao <laoar.shao@gmail.com>,
-	houtao1@huawei.com,
-	xukuohai@huawei.com
-Subject: [PATCH bpf v4 1/5] bpf: Free dynamically allocated bits in bpf_iter_bits_destroy()
-Date: Wed, 30 Oct 2024 18:05:12 +0800
-Message-Id: <20241030100516.3633640-2-houtao@huaweicloud.com>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20241030100516.3633640-1-houtao@huaweicloud.com>
-References: <20241030100516.3633640-1-houtao@huaweicloud.com>
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>
+Cc: bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	mptcp@lists.linux.dev,
+	Tao Chen <chen.dylane@gmail.com>
+Subject: [PATCH bpf-next] selftests/bpf: Fix compile error when MPTCP not support
+Date: Wed, 30 Oct 2024 18:01:08 +0800
+Message-Id: <20241030100108.2443371-1-chen.dylane@gmail.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -53,109 +76,116 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:gCh0CgCXc4cAAiJn97dvAQ--.24244S5
-X-Coremail-Antispam: 1UD129KBjvJXoWxAryDXrWfCF48XFW8tF48Crg_yoW5ZF4fpF
-	W3uw1DKr4xJF42yw1Uta1UKa45Jw4qkay8GF4rtrn09F45XFyDWF1UGry3Xas0krs8tFW7
-	Z34vk3sYy3yUCaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUPYb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUGw
-	A2048vs2IY020Ec7CjxVAFwI0_Gr0_Xr1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
-	w2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
-	WxJVW8Jr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
-	GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx
-	0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWU
-	JVW8JwACjcxG0xvY0x0EwIxGrwACI402YVCY1x02628vn2kIc2xKxwCY1x0262kKe7AKxV
-	WUtVW8ZwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E
-	14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIx
-	kGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAF
-	wI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r
-	4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07jnpnQU
-	UUUU=
-X-CM-SenderInfo: xkrx3t3r6k3tpzhluzxrxghudrp/
 
-From: Hou Tao <houtao1@huawei.com>
+Fix compile error when MPTCP feature not support, though eBPF core check
+already done which seems invalid in this situation, the error info like:
+progs/mptcp_sock.c:49:40: error: no member named 'is_mptcp' in 'struct
+tcp_sock'
+   49 |         is_mptcp = bpf_core_field_exists(tsk->is_mptcp) ?
 
-bpf_iter_bits_destroy() uses "kit->nr_bits <= 64" to check whether the
-bits are dynamically allocated. However, the check is incorrect and may
-cause a kmemleak as shown below:
+The filed created in new definitions with eBPF core feature to solve
+this build problem, and test case result still ok in MPTCP kernel.
 
-unreferenced object 0xffff88812628c8c0 (size 32):
-  comm "swapper/0", pid 1, jiffies 4294727320
-  hex dump (first 32 bytes):
-	b0 c1 55 f5 81 88 ff ff f0 f0 f0 f0 f0 f0 f0 f0  ..U...........
-	f0 f0 f0 f0 f0 f0 f0 f0 00 00 00 00 00 00 00 00  ..............
-  backtrace (crc 781e32cc):
-	[<00000000c452b4ab>] kmemleak_alloc+0x4b/0x80
-	[<0000000004e09f80>] __kmalloc_node_noprof+0x480/0x5c0
-	[<00000000597124d6>] __alloc.isra.0+0x89/0xb0
-	[<000000004ebfffcd>] alloc_bulk+0x2af/0x720
-	[<00000000d9c10145>] prefill_mem_cache+0x7f/0xb0
-	[<00000000ff9738ff>] bpf_mem_alloc_init+0x3e2/0x610
-	[<000000008b616eac>] bpf_global_ma_init+0x19/0x30
-	[<00000000fc473efc>] do_one_initcall+0xd3/0x3c0
-	[<00000000ec81498c>] kernel_init_freeable+0x66a/0x940
-	[<00000000b119f72f>] kernel_init+0x20/0x160
-	[<00000000f11ac9a7>] ret_from_fork+0x3c/0x70
-	[<0000000004671da4>] ret_from_fork_asm+0x1a/0x30
+176/1   mptcp/base:OK
+176/2   mptcp/mptcpify:OK
+176     mptcp:OK
+Summary: 1/2 PASSED, 0 SKIPPED, 0 FAILED
 
-That is because nr_bits will be set as zero in bpf_iter_bits_next()
-after all bits have been iterated.
-
-Fix the issue by setting kit->bit to kit->nr_bits instead of setting
-kit->nr_bits to zero when the iteration completes in
-bpf_iter_bits_next(). In addition, use "!nr_bits || bits >= nr_bits" to
-check whether the iteration is complete and still use "nr_bits > 64" to
-indicate whether bits are dynamically allocated. The "!nr_bits" check is
-necessary because bpf_iter_bits_new() may fail before setting
-kit->nr_bits, and this condition will stop the iteration early instead
-of accessing the zeroed or freed kit->bits.
-
-Considering the initial value of kit->bits is -1 and the type of
-kit->nr_bits is unsigned int, change the type of kit->nr_bits to int.
-The potential overflow problem will be handled in the following patch.
-
-Fixes: 4665415975b0 ("bpf: Add bits iterator")
-Acked-by: Yafang Shao <laoar.shao@gmail.com>
-Signed-off-by: Hou Tao <houtao1@huawei.com>
+Fixes: 8039d353217c ("selftests/bpf: Add MPTCP test base")
+Signed-off-by: Tao Chen <chen.dylane@gmail.com>
 ---
- kernel/bpf/helpers.c | 11 +++++------
- 1 file changed, 5 insertions(+), 6 deletions(-)
+ .../testing/selftests/bpf/progs/mptcp_sock.c  | 42 ++++++++++++++-----
+ 1 file changed, 32 insertions(+), 10 deletions(-)
 
-diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-index ca3f0a2e5ed5..d913a8f1fbd9 100644
---- a/kernel/bpf/helpers.c
-+++ b/kernel/bpf/helpers.c
-@@ -2856,7 +2856,7 @@ struct bpf_iter_bits_kern {
- 		unsigned long *bits;
- 		unsigned long bits_copy;
- 	};
--	u32 nr_bits;
-+	int nr_bits;
- 	int bit;
- } __aligned(8);
+diff --git a/tools/testing/selftests/bpf/progs/mptcp_sock.c b/tools/testing/selftests/bpf/progs/mptcp_sock.c
+index f3acb90588c7..2f80d042686a 100644
+--- a/tools/testing/selftests/bpf/progs/mptcp_sock.c
++++ b/tools/testing/selftests/bpf/progs/mptcp_sock.c
+@@ -25,13 +25,23 @@ struct {
+ 	__type(value, struct mptcp_storage);
+ } socket_storage_map SEC(".maps");
  
-@@ -2930,17 +2930,16 @@ bpf_iter_bits_new(struct bpf_iter_bits *it, const u64 *unsafe_ptr__ign, u32 nr_w
- __bpf_kfunc int *bpf_iter_bits_next(struct bpf_iter_bits *it)
++struct tcp_sock___new {
++	bool is_mptcp;
++} __attribute__((preserve_access_index));
++
++struct mptcp_sock___new {
++	__u32 token;
++	struct sock *first;
++	char ca_name[TCP_CA_NAME_MAX];
++} __attribute__((preserve_access_index));
++
+ SEC("sockops")
+ int _sockops(struct bpf_sock_ops *ctx)
  {
- 	struct bpf_iter_bits_kern *kit = (void *)it;
--	u32 nr_bits = kit->nr_bits;
-+	int bit = kit->bit, nr_bits = kit->nr_bits;
- 	const unsigned long *bits;
--	int bit;
+ 	struct mptcp_storage *storage;
+-	struct mptcp_sock *msk;
++	struct mptcp_sock___new *msk;
+ 	int op = (int)ctx->op;
+-	struct tcp_sock *tsk;
++	struct tcp_sock___new *tsk;
+ 	struct bpf_sock *sk;
+ 	bool is_mptcp;
  
--	if (nr_bits == 0)
-+	if (!nr_bits || bit >= nr_bits)
- 		return NULL;
+@@ -42,11 +52,16 @@ int _sockops(struct bpf_sock_ops *ctx)
+ 	if (!sk)
+ 		return 1;
  
- 	bits = nr_bits == 64 ? &kit->bits_copy : kit->bits;
--	bit = find_next_bit(bits, nr_bits, kit->bit + 1);
-+	bit = find_next_bit(bits, nr_bits, bit + 1);
- 	if (bit >= nr_bits) {
--		kit->nr_bits = 0;
-+		kit->bit = bit;
- 		return NULL;
+-	tsk = bpf_skc_to_tcp_sock(sk);
++	/* recast pointer to capture new type for compiler */
++	tsk = (void *)bpf_skc_to_tcp_sock(sk);
+ 	if (!tsk)
+ 		return 1;
+ 
+-	is_mptcp = bpf_core_field_exists(tsk->is_mptcp) ? tsk->is_mptcp : 0;
++	if (bpf_core_field_exists(tsk->is_mptcp))
++		is_mptcp = BPF_CORE_READ(tsk, is_mptcp);
++	else
++		is_mptcp = 0;
++
+ 	if (!is_mptcp) {
+ 		storage = bpf_sk_storage_get(&socket_storage_map, sk, 0,
+ 					     BPF_SK_STORAGE_GET_F_CREATE);
+@@ -57,7 +72,7 @@ int _sockops(struct bpf_sock_ops *ctx)
+ 		__builtin_memset(storage->ca_name, 0, TCP_CA_NAME_MAX);
+ 		storage->first = NULL;
+ 	} else {
+-		msk = bpf_skc_to_mptcp_sock(sk);
++		msk = (void *)bpf_skc_to_mptcp_sock(sk);
+ 		if (!msk)
+ 			return 1;
+ 
+@@ -66,9 +81,9 @@ int _sockops(struct bpf_sock_ops *ctx)
+ 		if (!storage)
+ 			return 1;
+ 
+-		storage->token = msk->token;
+-		__builtin_memcpy(storage->ca_name, msk->ca_name, TCP_CA_NAME_MAX);
+-		storage->first = msk->first;
++		storage->token = BPF_CORE_READ(msk, token);
++		BPF_CORE_READ_STR_INTO(&storage->ca_name, msk, ca_name);
++		storage->first = BPF_CORE_READ(msk, first);
  	}
+ 	storage->invoked++;
+ 	storage->is_mptcp = is_mptcp;
+@@ -81,8 +96,15 @@ SEC("fentry/mptcp_pm_new_connection")
+ int BPF_PROG(trace_mptcp_pm_new_connection, struct mptcp_sock *msk,
+ 	     const struct sock *ssk, int server_side)
+ {
+-	if (!server_side)
+-		token = msk->token;
++	struct mptcp_sock___new *mskw;
++
++	if (!server_side) {
++		mskw = (void *)msk;
++		if (bpf_core_field_exists(mskw->token))
++			token = BPF_CORE_READ(mskw, token);
++		else
++			token = 0;
++	}
  
+ 	return 0;
+ }
 -- 
-2.29.2
+2.43.0
 
