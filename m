@@ -1,29 +1,29 @@
-Received: from out30-99.freemail.mail.aliyun.com (out30-99.freemail.mail.aliyun.com [115.124.30.99])
+Received: from out30-100.freemail.mail.aliyun.com (out30-100.freemail.mail.aliyun.com [115.124.30.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22D3E1E25EF;
-	Wed, 30 Oct 2024 08:25:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.99
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A6CB1E201C;
+	Wed, 30 Oct 2024 08:25:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.100
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730276711; cv=none; b=Khh016OJSWQ+WYt98M1z117L+UQZqw4zLYTVzAJDrrm2kToelRHYlU3mpyIK8fr5my0SQ8m6xnOnZwVcpnz1zRsIbXddpsmVbE2pSbZuc9+lwt/MCuAZeCX7CQnJlotSTFdpA+BcuUBZQFXf0b7Hb69VuHTxjGZk2FwIE+AgUcs=
+	t=1730276712; cv=none; b=ruasQjW54YswTXlBY/3XtNIWL0kAm3Viap9DgRMITty0r2KbwZ1MUS8gfmfG3WyJZxpOsVrDlK2NyuHOgS/esCDq5shsiVMXXqGCkAsKwZMFTuujspDkTwUmnZC+KJzZ3yXwHkImP1d5BBS0onkyg5PRBnRbXLIXLWdQPzuFp1U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730276711; c=relaxed/simple;
-	bh=suz4/wIUjvCp2KxBQ9i/vB6ENzm2A0f6k0//N6jEHF8=;
+	s=arc-20240116; t=1730276712; c=relaxed/simple;
+	bh=o33/iuXJvX53yFY4Q1uL1uROK6+j2OYdKs+SHOwpyZg=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=CWuqEwLN/BJVUsMTXOx6fYVauzPZuQw9iu6Y/RTpP1rIzbvSDtkLCPZ/G37CcZz0dQPfo+Ae0VH/hLMPXDIg+IG21pMLMqihRx4/4eVoY8n2L+VYQ1OBPGN4ooBSpWvLFYoIGBs4foM7cNdTwJxtMOu6CHtP4mgUxIuqhD5RPRg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=PRIkdCcm; arc=none smtp.client-ip=115.124.30.99
+	 MIME-Version; b=nWLcxWWpLQMW3pSwxJXjwv41W8IRR+YhP1XXGnAUU1ZS7KzRluv+LI/6xl+ZCS6F4E7+ImY9c5D5UTa0LtDXAMtDem6zik5aC0g/QNm63m4FqycFMh0A20UiJ775F/xhobTMjgO8TVFSNXZ2kKnHYvmaX3ZRbh64Z6bZ4s9oQE8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=iTDHse2H; arc=none smtp.client-ip=115.124.30.100
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="PRIkdCcm"
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="iTDHse2H"
 DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
 	d=linux.alibaba.com; s=default;
-	t=1730276706; h=From:To:Subject:Date:Message-Id:MIME-Version;
-	bh=cOdJ5apOhrU/PhlRyQA/lMXJqnGIVbREsBpXXR0lajI=;
-	b=PRIkdCcmQocY6uF3SuNW5dBOn7tjXZ+fXy2g7oS/EoHRm4YQTin4Yql/zlQ0IIR3RrlUiPvzpVskfo28MvqpcbpOWKsRW8ti2i4fTjURriadau4sM3dxrRMFQa+f8Cay400Seggeq6Pere9iWcvghq+Ixg3Qg02TSQ4CEHjvNmw=
-Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0WIDKNMO_1730276705 cluster:ay36)
+	t=1730276704; h=From:To:Subject:Date:Message-Id:MIME-Version;
+	bh=VK7WtAzvv/SyRzJ6XyamVbRFpFwDbRGMoKWxDfSvIr4=;
+	b=iTDHse2HX1qfXKPBHl6ScjrrKOMDHHKaYed6vqy31M/x4G/bOUo13yz+iLw5Xbjddf16+rDjka/tZBquKZhQYTBPSgouGQQ88PnAWuVRPAbHdP2j1e7TBe0ma657BnT3iOGu4JjK8TTZFYkjAWLSn4QlSH8Bi1YpiM+OLmxj51s=
+Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0WIDFbWr_1730276702 cluster:ay36)
           by smtp.aliyun-inc.com;
-          Wed, 30 Oct 2024 16:25:06 +0800
+          Wed, 30 Oct 2024 16:25:03 +0800
 From: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
 To: netdev@vger.kernel.org
 Cc: "Michael S. Tsirkin" <mst@redhat.com>,
@@ -41,9 +41,9 @@ Cc: "Michael S. Tsirkin" <mst@redhat.com>,
 	John Fastabend <john.fastabend@gmail.com>,
 	virtualization@lists.linux.dev,
 	bpf@vger.kernel.org
-Subject: [PATCH net-next v2 12/13] virtio_net: update tx timeout record
-Date: Wed, 30 Oct 2024 16:24:52 +0800
-Message-Id: <20241030082453.97310-13-xuanzhuo@linux.alibaba.com>
+Subject: [PATCH net-next v2 09/13] virtio_net: xsk: bind/unbind xsk for tx
+Date: Wed, 30 Oct 2024 16:24:49 +0800
+Message-Id: <20241030082453.97310-10-xuanzhuo@linux.alibaba.com>
 X-Mailer: git-send-email 2.32.0.3.g01195cf9f
 In-Reply-To: <20241030082453.97310-1-xuanzhuo@linux.alibaba.com>
 References: <20241030082453.97310-1-xuanzhuo@linux.alibaba.com>
@@ -56,33 +56,138 @@ MIME-Version: 1.0
 X-Git-Hash: 87bfcb32ef14
 Content-Transfer-Encoding: 8bit
 
-If send queue sent some packets, we update the tx timeout
-record to prevent the tx timeout.
+This patch implement the logic of bind/unbind xsk pool to sq and rq.
 
 Signed-off-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
 Acked-by: Jason Wang <jasowang@redhat.com>
 ---
- drivers/net/virtio_net.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+ drivers/net/virtio_net.c | 53 ++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 53 insertions(+)
 
 diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
-index 4d00d73d8088..091e3ed0cafa 100644
+index 37e86e0a1d8e..2d2658fcad07 100644
 --- a/drivers/net/virtio_net.c
 +++ b/drivers/net/virtio_net.c
-@@ -1490,6 +1490,13 @@ static bool virtnet_xsk_xmit(struct send_queue *sq, struct xsk_buff_pool *pool,
- 	if (!is_xdp_raw_buffer_queue(vi, sq - vi->sq))
- 		check_sq_full_and_disable(vi, vi->dev, sq);
+@@ -295,6 +295,10 @@ struct send_queue {
  
-+	if (sent) {
-+		struct netdev_queue *txq;
+ 	/* Record whether sq is in reset state. */
+ 	bool reset;
 +
-+		txq = netdev_get_tx_queue(vi->dev, sq - vi->sq);
-+		txq_trans_cond_update(txq);
++	struct xsk_buff_pool *xsk_pool;
++
++	dma_addr_t xsk_hdr_dma_addr;
+ };
+ 
+ /* Internal representation of a receive virtqueue */
+@@ -497,6 +501,8 @@ struct virtio_net_common_hdr {
+ 	};
+ };
+ 
++static struct virtio_net_common_hdr xsk_hdr;
++
+ static void virtnet_sq_free_unused_buf(struct virtqueue *vq, void *buf);
+ static int virtnet_xdp_handler(struct bpf_prog *xdp_prog, struct xdp_buff *xdp,
+ 			       struct net_device *dev,
+@@ -5496,6 +5502,29 @@ static int virtnet_rq_bind_xsk_pool(struct virtnet_info *vi, struct receive_queu
+ 	return err;
+ }
+ 
++static int virtnet_sq_bind_xsk_pool(struct virtnet_info *vi,
++				    struct send_queue *sq,
++				    struct xsk_buff_pool *pool)
++{
++	int err, qindex;
++
++	qindex = sq - vi->sq;
++
++	virtnet_tx_pause(vi, sq);
++
++	err = virtqueue_reset(sq->vq, virtnet_sq_free_unused_buf);
++	if (err) {
++		netdev_err(vi->dev, "reset tx fail: tx queue index: %d err: %d\n", qindex, err);
++		pool = NULL;
 +	}
 +
- 	u64_stats_update_begin(&sq->stats.syncp);
- 	u64_stats_add(&sq->stats.packets, stats.packets);
- 	u64_stats_add(&sq->stats.bytes,   stats.bytes);
++	sq->xsk_pool = pool;
++
++	virtnet_tx_resume(vi, sq);
++
++	return err;
++}
++
+ static int virtnet_xsk_pool_enable(struct net_device *dev,
+ 				   struct xsk_buff_pool *pool,
+ 				   u16 qid)
+@@ -5504,6 +5533,7 @@ static int virtnet_xsk_pool_enable(struct net_device *dev,
+ 	struct receive_queue *rq;
+ 	struct device *dma_dev;
+ 	struct send_queue *sq;
++	dma_addr_t hdr_dma;
+ 	int err, size;
+ 
+ 	if (vi->hdr_len > xsk_pool_get_headroom(pool))
+@@ -5541,6 +5571,11 @@ static int virtnet_xsk_pool_enable(struct net_device *dev,
+ 	if (!rq->xsk_buffs)
+ 		return -ENOMEM;
+ 
++	hdr_dma = virtqueue_dma_map_single_attrs(sq->vq, &xsk_hdr, vi->hdr_len,
++						 DMA_TO_DEVICE, 0);
++	if (virtqueue_dma_mapping_error(sq->vq, hdr_dma))
++		return -ENOMEM;
++
+ 	err = xsk_pool_dma_map(pool, dma_dev, 0);
+ 	if (err)
+ 		goto err_xsk_map;
+@@ -5549,11 +5584,24 @@ static int virtnet_xsk_pool_enable(struct net_device *dev,
+ 	if (err)
+ 		goto err_rq;
+ 
++	err = virtnet_sq_bind_xsk_pool(vi, sq, pool);
++	if (err)
++		goto err_sq;
++
++	/* Now, we do not support tx offload(such as tx csum), so all the tx
++	 * virtnet hdr is zero. So all the tx packets can share a single hdr.
++	 */
++	sq->xsk_hdr_dma_addr = hdr_dma;
++
+ 	return 0;
+ 
++err_sq:
++	virtnet_rq_bind_xsk_pool(vi, rq, NULL);
+ err_rq:
+ 	xsk_pool_dma_unmap(pool, 0);
+ err_xsk_map:
++	virtqueue_dma_unmap_single_attrs(rq->vq, hdr_dma, vi->hdr_len,
++					 DMA_TO_DEVICE, 0);
+ 	return err;
+ }
+ 
+@@ -5562,19 +5610,24 @@ static int virtnet_xsk_pool_disable(struct net_device *dev, u16 qid)
+ 	struct virtnet_info *vi = netdev_priv(dev);
+ 	struct xsk_buff_pool *pool;
+ 	struct receive_queue *rq;
++	struct send_queue *sq;
+ 	int err;
+ 
+ 	if (qid >= vi->curr_queue_pairs)
+ 		return -EINVAL;
+ 
++	sq = &vi->sq[qid];
+ 	rq = &vi->rq[qid];
+ 
+ 	pool = rq->xsk_pool;
+ 
+ 	err = virtnet_rq_bind_xsk_pool(vi, rq, NULL);
++	err |= virtnet_sq_bind_xsk_pool(vi, sq, NULL);
+ 
+ 	xsk_pool_dma_unmap(pool, 0);
+ 
++	virtqueue_dma_unmap_single_attrs(sq->vq, sq->xsk_hdr_dma_addr,
++					 vi->hdr_len, DMA_TO_DEVICE, 0);
+ 	kvfree(rq->xsk_buffs);
+ 
+ 	return err;
 -- 
 2.32.0.3.g01195cf9f
 
