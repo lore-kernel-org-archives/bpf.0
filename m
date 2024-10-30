@@ -1,66 +1,51 @@
-Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0210A1E22F5
-	for <bpf@vger.kernel.org>; Wed, 30 Oct 2024 09:48:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0B901E22F5
+	for <bpf@vger.kernel.org>; Wed, 30 Oct 2024 09:53:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730281682; cv=none; b=YYoytJyIJgYCOoG6zc09BfwLDFa1Y+P5sNp3sdnwxlD7tsSN26XGepl4bU/xBcknu+9V3vbCK5fTQAquVQIaGnxO8oKimm13siPhIuvxYFR5a9/6UH6vMrDff5oDv5Z9/C0HvD+a3bclymqoErqOa2rSVw9yLD/Vb0Gbqcx/N/M=
+	t=1730281995; cv=none; b=M0cgDXETmuNnOgYxzJorKYsBFzW4GABiVQNfgp4yAbqJpilp7Co7WkQanJ79F6NqinlmwjUSHp1WJ2fhDhELSCH48EQ+yZe6jlV0WRu/bcFzO+BrlqHGpctawv6gYiY+nitaRQt8vqCarNvp+tguZSP/XjT1HobjDywcZ+ekMww=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730281682; c=relaxed/simple;
-	bh=Z5hKlNyATGwPuRIPOX5uum6xAppJ3G2lWkzT96l65v8=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=oYUGDAR7djOq5vu1zgRW0gxqChOW6UVMfjrmVGXp5OzcKZwEWbJntYCqIavX5OupOpz4weQ9KDSd9NJ0hceNzazkI3ccnz2SArnz8re3YF1AyZIOUUHy7Q6ysgUNwSYitkRGF9Sq/ywdLvprItgskZEi5GF+J/3n+CKDpLPA+Wk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RuSZg8p+; arc=none smtp.client-ip=209.85.210.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RuSZg8p+"
-Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-71e49ef3b2bso4792040b3a.2
-        for <bpf@vger.kernel.org>; Wed, 30 Oct 2024 02:48:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1730281680; x=1730886480; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=SbxBRdiw4vuwNFRi6uO8o4Znbe87vlxR3OzuEocHlY8=;
-        b=RuSZg8p+p+NZ7TWh509vOMmbfJjHbn6gwZMsrO4zfsCfT20k7SBbRx4gTwV1TK7Lv3
-         pqxj3VNSHTPP/GRbxSLy2M+F4nnqHUntgo8A7nbnvE6k5eqSD8OHOeNtzkniiE6kek69
-         WdO+G3Cpqxj9d5zJ2xAc3J5hrZWZtp9slCjJIS9T+hX7wn2aVvfR/3Cpvnh3OoBz1KJw
-         q//MuPQtbtDd8hEVGAZzqT9wtgnLfkzOLB2Mq2il3vLAn5kHg6blRENRmTNHfr2LTSfc
-         HwdgeSjMOQBYzCJqrgdw39Q5IpYhZmQ5Hl70H9i3Q89OFE9Llmo3tRy23o0BLYoHXpzw
-         oGlA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730281680; x=1730886480;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=SbxBRdiw4vuwNFRi6uO8o4Znbe87vlxR3OzuEocHlY8=;
-        b=EgioXWTmbspGJ43xF0jBNeYa/qhEVa8VlsNgEqDCeX7BnImrsugVJSxzLLUCpE3+u2
-         T1AYh1hYrLHyCaWjspsbHap5BBjSjScQCFLAFEOi5ku/EZaNor2FVHGRcktp1wR3GAk5
-         ohEa2dxQkDmYDiteH/D6riScfFJ+kC+hIDXDty04R44vV4/WtgKCGbyoWFomE6OXqw67
-         RvB22BiCaINXsPa73V9coVpZXk7jMK9w3uA6yFZ1LP40aCKW+gIeSXNRGfGKHD2vOry8
-         C0g/13+bEdoOTVdszi8sWVt23CaUM7eptRhUGmvO7KhiBWwBnlXwAMABeFkUqVfQYmkT
-         z3cQ==
-X-Gm-Message-State: AOJu0Yz9dp2xBL+viC8sEtpa+jFPrW4SQDPVS6QCGpjjtynmYbx7jgCv
-	Pdjggrvrmu3VtII6RFlWmQjCFkbprDVRUYOHKsVm4sy8ypgkJCWFUSSrVA==
-X-Google-Smtp-Source: AGHT+IEpEOVvVc4+nQi+uo/ncBkGLci5e0Sufw9w8UNJxnF9Kh94Y6CAItD42Wpma56/BnTddeAHqg==
-X-Received: by 2002:a05:6a00:811:b0:71e:50ef:20f3 with SMTP id d2e1a72fcca58-720ab4c705fmr3281526b3a.28.1730281679872;
-        Wed, 30 Oct 2024 02:47:59 -0700 (PDT)
-Received: from localhost.localdomain ([117.20.154.127])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-72057a3f0a9sm8853394b3a.213.2024.10.30.02.47.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Oct 2024 02:47:59 -0700 (PDT)
-From: Leon Hwang <hffilwlqm@gmail.com>
+	s=arc-20240116; t=1730281995; c=relaxed/simple;
+	bh=bsl7zSI0Z2/07tz7PtPMyP0Vmk/WmN3dcQwUArY4KK0=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=tQhCUGJm2RMuGLdjbhgeqFQU3hDSQ0IxPEMFXWWwZoDseNjaxU7quzwtkrMD0KhqKxMvBpQN74pERlcO2HknDkTPLbZ1rX+doYsdieNc6uxqvZdzk10mXcQMrdlemZjZ/2BWkTROunbabBF6bq2MCdXyc/8oZ3ntbm4Gypv2a3E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.216])
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4Xdj9G5vQfz4f3nb8
+	for <bpf@vger.kernel.org>; Wed, 30 Oct 2024 17:52:50 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.128])
+	by mail.maildlp.com (Postfix) with ESMTP id 5CB091A0196
+	for <bpf@vger.kernel.org>; Wed, 30 Oct 2024 17:53:09 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.175.124.27])
+	by APP4 (Coremail) with SMTP id gCh0CgCXc4cAAiJn97dvAQ--.24244S6;
+	Wed, 30 Oct 2024 17:53:09 +0800 (CST)
+From: Hou Tao <houtao@huaweicloud.com>
 To: bpf@vger.kernel.org
-Cc: qmo@kernel.org,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	leon.hwang@linux.dev,
-	kernel-patches-bot@fb.com
-Subject: [PATCH bpf] bpf, bpftool: Fix incorrect disasm pc
-Date: Wed, 30 Oct 2024 17:47:41 +0800
-Message-ID: <20241030094741.22929-1-hffilwlqm@gmail.com>
-X-Mailer: git-send-email 2.44.0
+Cc: Martin KaFai Lau <martin.lau@linux.dev>,
+	Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Hao Luo <haoluo@google.com>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Jiri Olsa <jolsa@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Yafang Shao <laoar.shao@gmail.com>,
+	houtao1@huawei.com,
+	xukuohai@huawei.com
+Subject: [PATCH bpf v4 2/5] bpf: Add bpf_mem_alloc_check_size() helper
+Date: Wed, 30 Oct 2024 18:05:13 +0800
+Message-Id: <20241030100516.3633640-3-houtao@huaweicloud.com>
+X-Mailer: git-send-email 2.29.2
+In-Reply-To: <20241030100516.3633640-1-houtao@huaweicloud.com>
+References: <20241030100516.3633640-1-houtao@huaweicloud.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -68,48 +53,92 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:gCh0CgCXc4cAAiJn97dvAQ--.24244S6
+X-Coremail-Antispam: 1UD129KBjvJXoW7Aw17Aw1rCFW3uF18ZrW7CFg_yoW5JryxpF
+	W7tr18AFs8JF48W3W2gw1xAas8Xw40g3W7tay7XryUZF93GrnrWFs8Jry7WF9ayrW5Aayx
+	JrnYgrWfAryUZ3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUPFb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUXw
+	A2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
+	w2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
+	W8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v2
+	6rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMc
+	Ij6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_
+	Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AFwI
+	0_Jw0_GFyl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG
+	67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MI
+	IYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E
+	14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJV
+	W8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUFSdy
+	UUUUU
+X-CM-SenderInfo: xkrx3t3r6k3tpzhluzxrxghudrp/
 
-From: Leon Hwang <leon.hwang@linux.dev>
+From: Hou Tao <houtao1@huawei.com>
 
-This patch addresses the bpftool issue "Wrong callq address displayed"[0].
+Introduce bpf_mem_alloc_check_size() to check whether the allocation
+size exceeds the limitation for the kmalloc-equivalent allocator. The
+upper limit for percpu allocation is LLIST_NODE_SZ bytes larger than
+non-percpu allocation, so a percpu argument is added to the helper.
 
-The issue stemmed from an incorrect program counter (PC) value used during
-disassembly with LLVM or libbfd. To calculate the correct address for
-relative calls, the PC argument must reflect the actual address in the
-kernel.
+The helper will be used in the following patch to check whether the size
+parameter passed to bpf_mem_alloc() is too big.
 
-[0] https://github.com/libbpf/bpftool/issues/109
-
-Fixes: e1947c750ffe ("bpftool: Refactor disassembler for JIT-ed programs")
-Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
+Signed-off-by: Hou Tao <houtao1@huawei.com>
 ---
- tools/bpf/bpftool/jit_disasm.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ include/linux/bpf_mem_alloc.h |  3 +++
+ kernel/bpf/memalloc.c         | 14 +++++++++++++-
+ 2 files changed, 16 insertions(+), 1 deletion(-)
 
-diff --git a/tools/bpf/bpftool/jit_disasm.c b/tools/bpf/bpftool/jit_disasm.c
-index 7b8d9ec89ebd3..fe8fabba4b05f 100644
---- a/tools/bpf/bpftool/jit_disasm.c
-+++ b/tools/bpf/bpftool/jit_disasm.c
-@@ -114,8 +114,7 @@ disassemble_insn(disasm_ctx_t *ctx, unsigned char *image, ssize_t len, int pc)
- 	char buf[256];
- 	int count;
+diff --git a/include/linux/bpf_mem_alloc.h b/include/linux/bpf_mem_alloc.h
+index aaf004d94322..e45162ef59bb 100644
+--- a/include/linux/bpf_mem_alloc.h
++++ b/include/linux/bpf_mem_alloc.h
+@@ -33,6 +33,9 @@ int bpf_mem_alloc_percpu_init(struct bpf_mem_alloc *ma, struct obj_cgroup *objcg
+ int bpf_mem_alloc_percpu_unit_init(struct bpf_mem_alloc *ma, int size);
+ void bpf_mem_alloc_destroy(struct bpf_mem_alloc *ma);
  
--	count = LLVMDisasmInstruction(*ctx, image + pc, len - pc, pc,
--				      buf, sizeof(buf));
-+	count = LLVMDisasmInstruction(*ctx, image, len, pc, buf, sizeof(buf));
- 	if (json_output)
- 		printf_json(buf);
- 	else
-@@ -360,7 +359,8 @@ int disasm_print_insn(unsigned char *image, ssize_t len, int opcodes,
- 			printf("%4x:" DISASM_SPACER, pc);
- 		}
++/* Check the allocation size for kmalloc equivalent allocator */
++int bpf_mem_alloc_check_size(bool percpu, size_t size);
++
+ /* kmalloc/kfree equivalent: */
+ void *bpf_mem_alloc(struct bpf_mem_alloc *ma, size_t size);
+ void bpf_mem_free(struct bpf_mem_alloc *ma, void *ptr);
+diff --git a/kernel/bpf/memalloc.c b/kernel/bpf/memalloc.c
+index b3858a76e0b3..146f5b57cfb1 100644
+--- a/kernel/bpf/memalloc.c
++++ b/kernel/bpf/memalloc.c
+@@ -35,6 +35,8 @@
+  */
+ #define LLIST_NODE_SZ sizeof(struct llist_node)
  
--		count = disassemble_insn(&ctx, image, len, pc);
-+		count = disassemble_insn(&ctx, image + pc, len - pc,
-+					 func_ksym + pc);
++#define BPF_MEM_ALLOC_SIZE_MAX 4096
++
+ /* similar to kmalloc, but sizeof == 8 bucket is gone */
+ static u8 size_index[24] __ro_after_init = {
+ 	3,	/* 8 */
+@@ -65,7 +67,7 @@ static u8 size_index[24] __ro_after_init = {
  
- 		if (json_output) {
- 			/* Operand array, was started in fprintf_json. Before
+ static int bpf_mem_cache_idx(size_t size)
+ {
+-	if (!size || size > 4096)
++	if (!size || size > BPF_MEM_ALLOC_SIZE_MAX)
+ 		return -1;
+ 
+ 	if (size <= 192)
+@@ -1005,3 +1007,13 @@ void notrace *bpf_mem_cache_alloc_flags(struct bpf_mem_alloc *ma, gfp_t flags)
+ 
+ 	return !ret ? NULL : ret + LLIST_NODE_SZ;
+ }
++
++int bpf_mem_alloc_check_size(bool percpu, size_t size)
++{
++	/* The size of percpu allocation doesn't have LLIST_NODE_SZ overhead */
++	if ((percpu && size > BPF_MEM_ALLOC_SIZE_MAX) ||
++	    (!percpu && size > BPF_MEM_ALLOC_SIZE_MAX - LLIST_NODE_SZ))
++		return -E2BIG;
++
++	return 0;
++}
 -- 
-2.44.0
+2.29.2
 
