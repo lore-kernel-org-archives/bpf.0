@@ -1,62 +1,35 @@
-Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9600F19E99C;
-	Thu, 31 Oct 2024 15:22:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=167.114.26.122
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8150019E7EB;
+	Thu, 31 Oct 2024 15:30:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730388161; cv=none; b=QQkQ57hr71f/tCadpNJxNt5UyaISXluclQ9AMTyOxhFHJgl6A2GgOm2tKWrJkl8/RfyEksVtBhXCEuxUsF3+F8N6OY80iE5lRQ8J1FxeiTZH+FM2ZNVrcjPNwDnc2QmDI05uEaoalkQ1MRpHL5kg6iuX/8+mbvcc57+5gB3jx14=
+	t=1730388623; cv=none; b=emlUc5D57zHg9YkZx7L3TlwWqSiLJSmDdAa4XE9xvzB/VSjHy2h6ClSI1IPPGuwe5rLn6nRuk9ywvttUjr+hkrT30Q8Hw09382gleYNBLVQy92RzXb2HHNjFeVqGnj1zPcMbXOBrWAJnlbCb6SBfN5bgcYVYY46L77sJFIp+pBM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730388161; c=relaxed/simple;
-	bh=ZqpK2Tzlh2NaO9S+TPcvuIa3DNo8WQ0Kp8dlvt/m/dM=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=SDsEDUWeif/Ngsbk5l5gRZeyeeXWvCKHomYymj1L9EwrrVbSdLlpsa5aLgbjIzcZSMlBi04SkmUEl/Wvg5oFGcS7+dns8cLI4+bd6krhP2Uj36wgnTi4ei7lHzyEgWZsuROj+4GtxOjCm2PKzEN5qNU4m9SM+sQdYABCIbcIXCM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com; spf=pass smtp.mailfrom=efficios.com; dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b=IBH7L0QS; arc=none smtp.client-ip=167.114.26.122
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=efficios.com
+	s=arc-20240116; t=1730388623; c=relaxed/simple;
+	bh=OvzSifmX4gwDA00DM+e60niTQxZ4iyWIF7c+fO+Tc60=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=PZcsko+s/8LIFpNgAHblEfMmNhCXBmTC9eBymmHN/UPW0kYS26GicAs94/+tPjpyFglzeawcAwiMCdfBsbHnjgHnkv14GNgcsr/0x6UoD80viqp9I4wNlM/XL13pwoLuQtc0o7mL/XrcXr/nohcwAtJMxp/xjqGpDkN1bpdlLj0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nQzU+5mX; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b="IBH7L0QS"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
-	s=smtpout1; t=1730388157;
-	bh=ZqpK2Tzlh2NaO9S+TPcvuIa3DNo8WQ0Kp8dlvt/m/dM=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=IBH7L0QSqdcbSyQWoYgEmlDWEPdg1dDtCIR+iRKeGkj8m3ydPWgAWAmP04uUzARTn
-	 Zd7k6lMoFXP3QkmZbNsrZOuD1k7XHFZ0tAuVwlyI1r9cyqr0a3yhK58fP+IX7WXEau
-	 2rB5X+G8Jjn2hLkzGpmZ0uGGpjkH1it79xJzYm5EI64QnOA5QPyGbPpr6bKqq+IibE
-	 ydljVJp3e5Il/POnZjhrXKsufKzkPLAmnkoxZDy535bCE8bLvLgGKe2cLpk2qgeSF9
-	 ThqsrjcctIJGnCL8nGlmeSnTl5PAFdQeH6TkgX8dpwP8FHn0wa66y0lRqvc5tTtu+Q
-	 0mD09lDz8LedQ==
-Received: from thinkos.internal.efficios.com (96-127-217-162.qc.cable.ebox.net [96.127.217.162])
-	by smtpout.efficios.com (Postfix) with ESMTPSA id 4XfSRK188CzYqT;
-	Thu, 31 Oct 2024 11:22:37 -0400 (EDT)
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-To: Steven Rostedt <rostedt@goodmis.org>
-Cc: linux-kernel@vger.kernel.org,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Michael Jeanson <mjeanson@efficios.com>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Yonghong Song <yhs@fb.com>,
-	"Paul E . McKenney" <paulmck@kernel.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Namhyung Kim <namhyung@kernel.org>,
-	Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-	bpf@vger.kernel.org,
-	Joel Fernandes <joel@joelfernandes.org>,
-	Jordan Rife <jrife@google.com>,
-	linux-trace-kernel@vger.kernel.org,
-	Andrii Nakryiko <andrii@kernel.org>
-Subject: [PATCH v5 resend 2/4] tracing: Introduce tracepoint_is_faultable()
-Date: Thu, 31 Oct 2024 11:20:54 -0400
-Message-Id: <20241031152056.744137-3-mathieu.desnoyers@efficios.com>
-X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20241031152056.744137-1-mathieu.desnoyers@efficios.com>
-References: <20241031152056.744137-1-mathieu.desnoyers@efficios.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nQzU+5mX"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A74DC4DE03;
+	Thu, 31 Oct 2024 15:30:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1730388623;
+	bh=OvzSifmX4gwDA00DM+e60niTQxZ4iyWIF7c+fO+Tc60=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=nQzU+5mXm0F0SZGc7/g6+7JJdaxLLP4Wbt7FmYSZQNTYIxHyIdpsLQK9MG3XdbCop
+	 YckXd5jpixxbNhoU4FgJfIrgFS3CA3DBr6tjUfs3gCg6fcEdALXXa0MjsfIluZWz8x
+	 wL1xvgB8OdN7XxrhLYWY0mLj6THS5Q8t49GdOq5lS2JobgiWClE6gZO/Bg5ZASr2oV
+	 Lglip5WgThmA/lXyvEJz6M8rud1mhrMD4ezVy4k0kslngj2oo0BouPCsa6dxOducZt
+	 G7HT/ISorhuMS7Az5Kd7dkCgCjr4/LXuldqWSBazrNhdH3IoW58Vd/AloHpEq2FbaQ
+	 aNlNrg3udzlGA==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 33D44380AC0A;
+	Thu, 31 Oct 2024 15:30:32 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -64,125 +37,45 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf] bpf, test_run: Fix LIVE_FRAME frame update after a
+ page has been recycled
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <173038863101.1997785.11856320294725217143.git-patchwork-notify@kernel.org>
+Date: Thu, 31 Oct 2024 15:30:31 +0000
+References: <20241030-test-run-mem-fix-v1-1-41e88e8cae43@redhat.com>
+In-Reply-To: <20241030-test-run-mem-fix-v1-1-41e88e8cae43@redhat.com>
+To: =?utf-8?b?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2VuIDx0b2tlQHJlZGhhdC5jb20+?=@aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+ martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
+ yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
+ sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org, davem@davemloft.net,
+ edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, horms@kernel.org,
+ hawk@kernel.org, aleksander.lobakin@intel.com, bpf@vger.kernel.org,
+ netdev@vger.kernel.org, syzbot+d121e098da06af416d23@syzkaller.appspotmail.com
 
-Introduce a "faultable" flag within the extended structure to know
-whether a tracepoint needs rcu tasks trace grace period before reclaim.
-This can be queried using tracepoint_is_faultable().
+Hello:
 
-Acked-by: Andrii Nakryiko <andrii@kernel.org>
-Tested-by: Jordan Rife <jrife@google.com>
-Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: Michael Jeanson <mjeanson@efficios.com>
-Cc: Steven Rostedt <rostedt@goodmis.org>
-Cc: Masami Hiramatsu <mhiramat@kernel.org>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Alexei Starovoitov <ast@kernel.org>
-Cc: Yonghong Song <yhs@fb.com>
-Cc: Paul E. McKenney <paulmck@kernel.org>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc: Mark Rutland <mark.rutland@arm.com>
-Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
-Cc: Namhyung Kim <namhyung@kernel.org>
-Cc: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: bpf@vger.kernel.org
-Cc: Joel Fernandes <joel@joelfernandes.org>
-Cc: Jordan Rife <jrife@google.com>
-Cc: linux-trace-kernel@vger.kernel.org
----
-Changes since v4:
-- Add static to DEFINE_TRACE_SYSCALL.
----
- include/linux/tracepoint-defs.h |  2 ++
- include/linux/tracepoint.h      | 24 ++++++++++++++++++++++++
- include/trace/define_trace.h    |  2 +-
- 3 files changed, 27 insertions(+), 1 deletion(-)
+This patch was applied to bpf/bpf.git (master)
+by Daniel Borkmann <daniel@iogearbox.net>:
 
-diff --git a/include/linux/tracepoint-defs.h b/include/linux/tracepoint-defs.h
-index 967c08d9da84..aebf0571c736 100644
---- a/include/linux/tracepoint-defs.h
-+++ b/include/linux/tracepoint-defs.h
-@@ -32,6 +32,8 @@ struct tracepoint_func {
- struct tracepoint_ext {
- 	int (*regfunc)(void);
- 	void (*unregfunc)(void);
-+	/* Flags. */
-+	unsigned int faultable:1;
- };
- 
- struct tracepoint {
-diff --git a/include/linux/tracepoint.h b/include/linux/tracepoint.h
-index 862ab49177a4..906f3091d23d 100644
---- a/include/linux/tracepoint.h
-+++ b/include/linux/tracepoint.h
-@@ -104,6 +104,12 @@ void for_each_tracepoint_in_module(struct module *mod,
-  * tracepoint_synchronize_unregister must be called between the last tracepoint
-  * probe unregistration and the end of module exit to make sure there is no
-  * caller executing a probe when it is freed.
-+ *
-+ * An alternative is to use the following for batch reclaim associated
-+ * with a given tracepoint:
-+ *
-+ * - tracepoint_is_faultable() == false: call_rcu()
-+ * - tracepoint_is_faultable() == true:  call_rcu_tasks_trace()
-  */
- #ifdef CONFIG_TRACEPOINTS
- static inline void tracepoint_synchronize_unregister(void)
-@@ -111,9 +117,17 @@ static inline void tracepoint_synchronize_unregister(void)
- 	synchronize_rcu_tasks_trace();
- 	synchronize_rcu();
- }
-+static inline bool tracepoint_is_faultable(struct tracepoint *tp)
-+{
-+	return tp->ext && tp->ext->faultable;
-+}
- #else
- static inline void tracepoint_synchronize_unregister(void)
- { }
-+static inline bool tracepoint_is_faultable(struct tracepoint *tp)
-+{
-+	return false;
-+}
- #endif
- 
- #ifdef CONFIG_HAVE_SYSCALL_TRACEPOINTS
-@@ -345,6 +359,15 @@ static inline struct tracepoint *tracepoint_ptr_deref(tracepoint_ptr_t *p)
- 	static struct tracepoint_ext __tracepoint_ext_##_name = {	\
- 		.regfunc = _reg,					\
- 		.unregfunc = _unreg,					\
-+		.faultable = false,					\
-+	};								\
-+	__DEFINE_TRACE_EXT(_name, &__tracepoint_ext_##_name, PARAMS(_proto), PARAMS(_args));
-+
-+#define DEFINE_TRACE_SYSCALL(_name, _reg, _unreg, _proto, _args)	\
-+	static struct tracepoint_ext __tracepoint_ext_##_name = {	\
-+		.regfunc = _reg,					\
-+		.unregfunc = _unreg,					\
-+		.faultable = true,					\
- 	};								\
- 	__DEFINE_TRACE_EXT(_name, &__tracepoint_ext_##_name, PARAMS(_proto), PARAMS(_args));
- 
-@@ -389,6 +412,7 @@ static inline struct tracepoint *tracepoint_ptr_deref(tracepoint_ptr_t *p)
- #define __DECLARE_TRACE_SYSCALL	__DECLARE_TRACE
- 
- #define DEFINE_TRACE_FN(name, reg, unreg, proto, args)
-+#define DEFINE_TRACE_SYSCALL(name, reg, unreg, proto, args)
- #define DEFINE_TRACE(name, proto, args)
- #define EXPORT_TRACEPOINT_SYMBOL_GPL(name)
- #define EXPORT_TRACEPOINT_SYMBOL(name)
-diff --git a/include/trace/define_trace.h b/include/trace/define_trace.h
-index ff5fa17a6259..63fea2218afa 100644
---- a/include/trace/define_trace.h
-+++ b/include/trace/define_trace.h
-@@ -48,7 +48,7 @@
- 
- #undef TRACE_EVENT_SYSCALL
- #define TRACE_EVENT_SYSCALL(name, proto, args, struct, assign, print, reg, unreg) \
--	DEFINE_TRACE_FN(name, reg, unreg, PARAMS(proto), PARAMS(args))
-+	DEFINE_TRACE_SYSCALL(name, reg, unreg, PARAMS(proto), PARAMS(args))
- 
- #undef TRACE_EVENT_NOP
- #define TRACE_EVENT_NOP(name, proto, args, struct, assign, print)
+On Wed, 30 Oct 2024 11:48:26 +0100 you wrote:
+> The test_run code detects whether a page has been modified and
+> re-initialises the xdp_frame structure if it has, using
+> xdp_update_frame_from_buff(). However, xdp_update_frame_from_buff()
+> doesn't touch frame->mem, so that wasn't correctly re-initialised, which
+> led to the pages from page_pool not being returned correctly. Syzbot
+> noticed this as a memory leak.
+> 
+> [...]
+
+Here is the summary with links:
+  - [bpf] bpf, test_run: Fix LIVE_FRAME frame update after a page has been recycled
+    https://git.kernel.org/bpf/bpf/c/c40dd8c47325
+
+You are awesome, thank you!
 -- 
-2.39.5
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
