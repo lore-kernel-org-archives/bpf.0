@@ -1,36 +1,35 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F2741A726B;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFD911AA782;
 	Fri,  1 Nov 2024 10:36:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730457370; cv=none; b=pfpQVJm7XBc+428OxjEFyfEcInuVkZ1IfmxYI3/KqtZzh14qCWGS4c92/lVRsY445IK6nyqTF8+UX+7PQ6lFfNhrXGboP/9ReXJ2KkwbY+kgoJ1aSm0eLVZiyQ2ZyzYi6823w4aenV1I6LGCZrofickQVnnGmJAIltVM2sEFLBk=
+	t=1730457370; cv=none; b=N4FFp5xIfpXMWn5GbmNN4IkVMo4Ok4WCXV5BLRqNuqY6QrFaJn4A/r5sqKFomrSStQMtbC6bRzpcJDNxfqPgsaJuYcbBU/fjDLC7qWxSEqOtLJwlgx2TbURxQK8UIYv3scFb3ryXiBZOpQ3doYuDfV/TtfGuGp8RN4mpaRsSdio=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1730457370; c=relaxed/simple;
-	bh=xxPVhVtwZlCs28URhdLLLEJa8UByNgRj/zGcg84wWvA=;
+	bh=E5aIvIh/79Y8klDUzv69R95Ek4HDw81gwTgCQmUzMWU=;
 	h=Message-ID:Date:From:To:Cc:Subject:References:MIME-Version:
-	 Content-Type; b=PR6A1c+OPKpwq1yQ1jBLW4FD6NPMpz1wdKt1ufI74IIXmr1yjDwHM0Z+/vGX/U2P/wFeYgO1T1Cc//tGwmfJytiRQgjBKWkHJDkVrJNyMhfU4SS1y6pfXG13g2xlrIFI8rFcG8KI4nABn71N4rBxXQ12Tx3TdABAjrtu0Ys6WFA=
+	 Content-Type; b=rhL+055zV6Vrbq2OHUx7KZpC9pfuaf6Acg5YvqC/cAr9bpKN70kLE+vYV8NmIeRJ/elwkZ2nwehAaDkMnHKNATFEH8lu9F95avE1GD4+vt/VvBPDEt0AjzSnalBIySBup2IvY2hSiSIOnH4ab9pl9lVaAOIL1T/Q5WSvJ6/7ndA=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1349BC4CEDA;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4689CC4CED2;
 	Fri,  1 Nov 2024 10:36:10 +0000 (UTC)
 Received: from rostedt by gandalf with local (Exim 4.98)
 	(envelope-from <rostedt@goodmis.org>)
-	id 1t6p1g-00000005S8Y-1fDO;
+	id 1t6p1g-00000005S92-2L6K;
 	Fri, 01 Nov 2024 06:37:08 -0400
-Message-ID: <20241101103708.252744660@goodmis.org>
+Message-ID: <20241101103708.417405830@goodmis.org>
 User-Agent: quilt/0.68
-Date: Fri, 01 Nov 2024 06:36:56 -0400
+Date: Fri, 01 Nov 2024 06:36:57 -0400
 From: Steven Rostedt <rostedt@goodmis.org>
 To: linux-kernel@vger.kernel.org
 Cc: Masami Hiramatsu <mhiramat@kernel.org>,
  Mark Rutland <mark.rutland@arm.com>,
  Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
  Andrew Morton <akpm@linux-foundation.org>,
- syzbot+b390c8062d8387b6272a@syzkaller.appspotmail.com,
+ Thomas Gleixner <tglx@linutronix.de>,
  Jordan Rife <jrife@google.com>,
  Michael Jeanson <mjeanson@efficios.com>,
- Thomas Gleixner <tglx@linutronix.de>,
  Peter Zijlstra <peterz@infradead.org>,
  Alexei Starovoitov <ast@kernel.org>,
  Yonghong Song <yhs@fb.com>,
@@ -43,7 +42,7 @@ Cc: Masami Hiramatsu <mhiramat@kernel.org>,
  bpf@vger.kernel.org,
  Joel Fernandes <joel@joelfernandes.org>,
  linux-trace-kernel@vger.kernel.org
-Subject: [for-next][PATCH 09/11] tracing: Fix syscall tracepoint use-after-free
+Subject: [for-next][PATCH 10/11] tracing: Add might_fault() check in __DECLARE_TRACE_SYSCALL
 References: <20241101103647.011707614@goodmis.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -55,26 +54,14 @@ Content-Type: text/plain; charset=UTF-8
 
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 
-The grace period used internally within tracepoint.c:release_probes()
-uses call_rcu() to batch waiting for quiescence of old probe arrays,
-rather than using the tracepoint_synchronize_unregister() which blocks
-while waiting for quiescence.
+Catch incorrect use of syscall tracepoints even if no probes are
+registered by adding a might_fault() check in trace_##name()
+emitted by __DECLARE_TRACE_SYSCALL.
 
-With the introduction of faultable syscall tracepoints, this causes
-use-after-free issues reproduced with syzkaller.
-
-Fix this by using the appropriate call_rcu() or call_rcu_tasks_trace()
-before invoking the rcu_free_old_probes callback. This can be chosen
-using the tracepoint_is_faultable() API.
-
-A similar issue exists in bpf use of call_rcu(). Fixing this is left to
-a separate change.
-
-Reported-by: syzbot+b390c8062d8387b6272a@syzkaller.appspotmail.com
-Fixes: a363d27cdbc2 ("tracing: Allow system call tracepoints to handle page faults")
+Suggested-by: Thomas Gleixner <tglx@linutronix.de>
 Tested-by: Jordan Rife <jrife@google.com>
-Cc: Michael Jeanson <mjeanson@efficios.com>
 Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Michael Jeanson <mjeanson@efficios.com>
 Cc: Masami Hiramatsu <mhiramat@kernel.org>
 Cc: Peter Zijlstra <peterz@infradead.org>
 Cc: Alexei Starovoitov <ast@kernel.org>
@@ -90,54 +77,25 @@ Cc: bpf@vger.kernel.org
 Cc: Joel Fernandes <joel@joelfernandes.org>
 Cc: Jordan Rife <jrife@google.com>
 Cc: linux-trace-kernel@vger.kernel.org
-Link: https://lore.kernel.org/20241031152056.744137-4-mathieu.desnoyers@efficios.com
+Link: https://lore.kernel.org/20241031152056.744137-5-mathieu.desnoyers@efficios.com
 Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 ---
- kernel/tracepoint.c | 11 +++++++----
- 1 file changed, 7 insertions(+), 4 deletions(-)
+ include/linux/tracepoint.h | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/kernel/tracepoint.c b/kernel/tracepoint.c
-index 5658dc92f5b5..1848ce7e2976 100644
---- a/kernel/tracepoint.c
-+++ b/kernel/tracepoint.c
-@@ -106,13 +106,16 @@ static void rcu_free_old_probes(struct rcu_head *head)
- 	kfree(container_of(head, struct tp_probes, rcu));
- }
- 
--static inline void release_probes(struct tracepoint_func *old)
-+static inline void release_probes(struct tracepoint *tp, struct tracepoint_func *old)
- {
- 	if (old) {
- 		struct tp_probes *tp_probes = container_of(old,
- 			struct tp_probes, probes[0]);
- 
--		call_rcu(&tp_probes->rcu, rcu_free_old_probes);
-+		if (tracepoint_is_faultable(tp))
-+			call_rcu_tasks_trace(&tp_probes->rcu, rcu_free_old_probes);
-+		else
-+			call_rcu(&tp_probes->rcu, rcu_free_old_probes);
- 	}
- }
- 
-@@ -334,7 +337,7 @@ static int tracepoint_add_func(struct tracepoint *tp,
- 		break;
- 	}
- 
--	release_probes(old);
-+	release_probes(tp, old);
- 	return 0;
- }
- 
-@@ -405,7 +408,7 @@ static int tracepoint_remove_func(struct tracepoint *tp,
- 		WARN_ON_ONCE(1);
- 		break;
- 	}
--	release_probes(old);
-+	release_probes(tp, old);
- 	return 0;
- }
- 
+diff --git a/include/linux/tracepoint.h b/include/linux/tracepoint.h
+index 906f3091d23d..425123e921ac 100644
+--- a/include/linux/tracepoint.h
++++ b/include/linux/tracepoint.h
+@@ -301,6 +301,7 @@ static inline struct tracepoint *tracepoint_ptr_deref(tracepoint_ptr_t *p)
+ 	__DECLARE_TRACE_COMMON(name, PARAMS(proto), PARAMS(args), cond, PARAMS(data_proto)) \
+ 	static inline void trace_##name(proto)				\
+ 	{								\
++		might_fault();						\
+ 		if (static_branch_unlikely(&__tracepoint_##name.key))	\
+ 			__DO_TRACE(name,				\
+ 				TP_ARGS(args),				\
 -- 
 2.45.2
 
