@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B56021D415B;
-	Mon,  4 Nov 2024 10:53:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F8831D88D0;
+	Mon,  4 Nov 2024 10:53:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730717586; cv=none; b=QNjOr3WaGuiJOOyFj2nwzD+5QxhZjqPYqOO9mlEylsYVzsm14JPsuqQsoldj+aNAj6VZCKxWY4qkg/Wq8yboa4zqyjxp9mvDtiN8I674Y8mcub2uPa5VrjmILiqAWczbND8qRlrJL3rQrF0PC3ONfOq1oHOIT48QqrN/mKqm/qE=
+	t=1730717637; cv=none; b=ebfuI1R3ClLpFNa1+xJO+X5LvzE6tUhsOaqVIMq39n5wr3/kowf0xdRNSj9z53SBqNdJaaRT4gq/lrFPyjK0wyh6nFAqLA8vJpb0Y7YTMcTh2mddjgaGwcKU0Y3DJcL5ZrLH2nBsA9VQLHkDksV/aUnJ/A+UtRC12iYMIJkEJGw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730717586; c=relaxed/simple;
-	bh=SxhuDvpyLe08lQ2cNq/7Bt+sb16e8KR2Hp9PnBmPFoE=;
+	s=arc-20240116; t=1730717637; c=relaxed/simple;
+	bh=M17UFKuQXLwyH4RUZSo9NLj/fpjaDLtaPCNoxViMqt8=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=tMd8xUE6fq+C7r/M77j1TBVHVhl1+J3Zk59TqBB1XylJuC7nRhpYeZlIQwnkeSbQB1jWuDJPQAlAgHP0PHCdR7TEa74Od8vmjdfMUdQgm8deOu0G+x37krGyRWN2BZ7XBu2GHvMWIQM5KhLdHJbpKL9Lleh6cOd5xuUFFJbwGKo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=e8WVVwx7; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=hjqORzZLC/8jyVpT5Zj9knsaMBJSRiuW4w9DJGLgLWwZpzSBR+1Qmj8+KEapHNWxXC/C/uBt7kgwhcilcKmtI+6+wIWlnKzuZr7mO8ckIyc01qQZV8OuV0OmA3QLcZ38qIlkU2GNE4fFJEZdTss4oKsRQifaQ2XtggfxQIHFUBY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DVJKSEYY; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="e8WVVwx7"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1EA2C4CED1;
-	Mon,  4 Nov 2024 10:53:04 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DVJKSEYY"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D870C4CED1;
+	Mon,  4 Nov 2024 10:53:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1730717586;
-	bh=SxhuDvpyLe08lQ2cNq/7Bt+sb16e8KR2Hp9PnBmPFoE=;
+	s=k20201202; t=1730717637;
+	bh=M17UFKuQXLwyH4RUZSo9NLj/fpjaDLtaPCNoxViMqt8=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=e8WVVwx7PeH4Sc6raEOUzLUfqX43fun3eWWUyMLjdV2WcdGttO4O0FwvUs54qLLhC
-	 7FG7LnYdr6P1wRv0Flx66myVmgSRHlym/Md/TL+D9mdSqIvmRJA0LuKED7OoSN74Sn
-	 EquwnCPO4SOT/xTRNcGtB2DWPjiJgCi1SpWZAX1TzMjDREUifSqIDDQpup6n5hA/s3
-	 KBDTNfquiCFzA5r9R6FPeJsZ81TPn2h4NgYnbVg+8Jna3AsrTMUmJlvSANQ0GS+LS2
-	 3EMsKrchwwygh6NOo6tqhS20yiTBFCSeWEnlmHcnewAq81G7+nck4sLTocrL3IGuzE
-	 3YaWJIWxctmXQ==
+	b=DVJKSEYYHg2I1QPNNUyqjrTuthWJil75WScS3jxhuHCdAP9k7NoJ666+5XNtyFP/X
+	 B3bR6CSgmdCZWnL3RnFHGGchdZGhNkeQaNnBrfVI+d93FkRwdUYvUCLSD3MN28zsud
+	 jepKK09AP96aLL6yVFbsL1r3uDilgyIkCbzHBbS/ZpdPKK1f9kEsDBV6BrxIym8p99
+	 Q4sqqQEhQD7cXp0IpVeApN2UjIXI0+fCPpXFRAavedBPlw8H6uTR4uCEQeHfe2G52u
+	 Xv/XU7CLyIW4rtFfdhdCf6Ioedt2UspLml972ybRqf+rzjGIRBUnyyvWrRhoLvIiXU
+	 P+gXYBI3zJspQ==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -41,12 +41,12 @@ Cc: Jiayuan Chen <mrpre@163.com>,
 	pabeni@redhat.com,
 	netdev@vger.kernel.org,
 	bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.6 13/14] bpf: fix filed access without lock
-Date: Mon,  4 Nov 2024 05:52:05 -0500
-Message-ID: <20241104105228.97053-13-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.1 10/11] bpf: fix filed access without lock
+Date: Mon,  4 Nov 2024 05:53:08 -0500
+Message-ID: <20241104105324.97393-10-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20241104105228.97053-1-sashal@kernel.org>
-References: <20241104105228.97053-1-sashal@kernel.org>
+In-Reply-To: <20241104105324.97393-1-sashal@kernel.org>
+References: <20241104105324.97393-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -55,7 +55,7 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.6.59
+X-stable-base: Linux 6.1.115
 Content-Transfer-Encoding: 8bit
 
 From: Jiayuan Chen <mrpre@163.com>
@@ -87,10 +87,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 4 insertions(+), 3 deletions(-)
 
 diff --git a/net/ipv4/tcp_bpf.c b/net/ipv4/tcp_bpf.c
-index fe6178715ba05..915286c3615a2 100644
+index 07a896685d0d3..f67e4c9f8d40e 100644
 --- a/net/ipv4/tcp_bpf.c
 +++ b/net/ipv4/tcp_bpf.c
-@@ -221,11 +221,11 @@ static int tcp_bpf_recvmsg_parser(struct sock *sk,
+@@ -216,11 +216,11 @@ static int tcp_bpf_recvmsg_parser(struct sock *sk,
  				  int flags,
  				  int *addr_len)
  {
@@ -104,7 +104,7 @@ index fe6178715ba05..915286c3615a2 100644
  
  	if (unlikely(flags & MSG_ERRQUEUE))
  		return inet_recv_error(sk, msg, len, addr_len);
-@@ -238,7 +238,8 @@ static int tcp_bpf_recvmsg_parser(struct sock *sk,
+@@ -233,7 +233,8 @@ static int tcp_bpf_recvmsg_parser(struct sock *sk,
  		return tcp_recvmsg(sk, msg, len, flags, addr_len);
  
  	lock_sock(sk);
