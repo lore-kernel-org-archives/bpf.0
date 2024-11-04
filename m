@@ -1,561 +1,225 @@
-Received: from mail-ed1-f65.google.com (mail-ed1-f65.google.com [209.85.208.65])
+Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C20B1E6DCD
-	for <bpf@vger.kernel.org>; Mon,  4 Nov 2024 20:27:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.65
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BDA71FA266
+	for <bpf@vger.kernel.org>; Mon,  4 Nov 2024 21:06:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730752036; cv=none; b=OB6n+7op9gYbTCXf7FOzxL06P4q6YKViB+YCINqUZoTma5DrcHIdHTuWw2x1HVZB3LpbZroErb0GLeg/UD11UNeeB6uRlmZmrdn4pxffCBo4u4LZ6Y0K1E+hEPker/qkGYroJkSqTTY/UU01u29deE/9eshfm5lEUKyM0mSCahk=
+	t=1730754405; cv=none; b=ShUUqurNoj83sck6WOMqFKpmh2UIoUGkU3+mk9svLt+sYiI4LUAo6tkhiWropVGdRw7p7udpuV4jsYWizSmhzOq5W9mlfrBx5cvyxObhbT37lZrMGWhxKswQNRtS2uUNUllIYjF6TsAs68qp6Y0Ki1ZPoOhAPrCheWkmXEndiiI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730752036; c=relaxed/simple;
-	bh=ZbmVCSP2LLFgJ7tTorE2IfxLlFgY00q7B5lgZEk5Rkg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=VZqOqK80je0ElQI2gBZOQIrv3Tjw8xLaMHyYAAJIqP60XHVnciGbtlzmADl8DLCRulowAY6gfjTUpHpBH1zdh8VisSh3/SmB24wfRuel6i8qnKN48vlBXjcTO+LxMAKQPnITCuTlM6jil/HN1EWoZX+80+vR+A2CzDU/EPDt3GI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=P0d9/maG; arc=none smtp.client-ip=209.85.208.65
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1730754405; c=relaxed/simple;
+	bh=5/i4aYa+bDmYTyC5+2MiIF90lU7UD7sa8a5447uXxv8=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=bHK58pvYVUSBBupb8sndr3wuBveRqZGJAN9rcy6jkK2Gm/D5b7WSE7RYp4y1ISZ9u8TKxIG71BMMZXo5LD25SNwSSjGjqdk+EOQGtcU82wHvxffGuPgXdvfDLOBh2uJKA7PStxuSkNcAFxi54tsmgxjIH6EcNFBMCGF1v/oXOwY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=z1yOEn+f; arc=none smtp.client-ip=209.85.210.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="P0d9/maG"
-Received: by mail-ed1-f65.google.com with SMTP id 4fb4d7f45d1cf-5c984352742so5498064a12.1
-        for <bpf@vger.kernel.org>; Mon, 04 Nov 2024 12:27:14 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="z1yOEn+f"
+Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-71e3fce4a60so3713125b3a.0
+        for <bpf@vger.kernel.org>; Mon, 04 Nov 2024 13:06:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1730752033; x=1731356833; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wxSarzpg+if7WsT27M5VQmF/VuPHnFVvcc7XtNxK8/Q=;
-        b=P0d9/maGSR/4AUNkVtts1wVolp08JZcvD8xhXja3lUYgkfjzlI7S64ECkFCxCK45Ak
-         YZpS3+yLSsSGJ3olGoVTEbt1aVaDNPf/mmjx/wa1AaZFxYOz/JnVUbrqDlzUcuT6n5Ut
-         LpwGqvu0+uWSXsJroZIgxg+CoAY8w5766YQpiVIoy38IiibusJCzJcfNHDjNm+guuNTb
-         I1CR/hbDMLoy85M4shBsWvD+ONJRiZzCJRg1NlO5JRMIY/a8RtnPtZjolWbj1JI+g0a1
-         JEPN78Nd1wiomYXWMZRmJeuiIBryOPqIhMPR+uFXI5dT9D0zrMGVeO653OJkV2hYtMCR
-         MY0A==
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1730754402; x=1731359202; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=4V9Yv2fAvOK/vMiP82IoKQz/aaC4GtvY8C8de1dPo6U=;
+        b=z1yOEn+flhKXg8I1JSj4uCDyhQcr++5qhPuW4e9nTtRUhby6Iefe42ANg2SspvsKfv
+         KaIcgOL45jgrnR9I0HEBcgjbTjTCodEvlvwTY+pH3AUb+laFPqyJGEd1YN6P3W5KGxt3
+         RUycyDy9/OGrKHnqqUKQSUkliPPfIEF5ipHIpUq/BO84d/EXAk4Thpdaj3y41xNkPVtc
+         0KMckUeSErZiXjnMPLlrGGPHXCg9wJhlHUUu6YrXyjhMcZNo4zX5SQHZ/mfoQ8ZKMH0V
+         49iqVr9vmjmHmw0YvhXb1/AnuTA0OhkgJeRCBbD9eKTjFWcNa8CJaHq7f8ZFT91h7daz
+         lsvA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730752033; x=1731356833;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=wxSarzpg+if7WsT27M5VQmF/VuPHnFVvcc7XtNxK8/Q=;
-        b=o99kJzjrlVD/EawHLH+5k9wAN+QqkNS/aTvIH+po7rCJDZOJlneF9PLPVWQkbDZHQa
-         LFBOShOLX1oWoeJX65zrAGr56l6GJMm1gid8R0YSaHXSfqZ04eXt+1kkzwY1wCO+oEp4
-         yCpzUcBt3wWHuH1baxDp9KvWjWiiWzRTGxsLQejM+XlFP/R6a9eB3fPugTTuJoHi4vXU
-         e7MUzS8jlWistre0kmbLici9BgUuL2LuOPPDue4PCNZOmMIsveK2Qe1N53WmAyUM735r
-         0Ix5En5FNwtIFlo6sd+pn8yngY1NDFKXs8Y9uj3/GQz22FndkU7xJPjk9XBVwRwNGpgj
-         A5sw==
-X-Gm-Message-State: AOJu0YxUDTiZ5QHlHk39QrDKKuu8EdfqBBzxOeIYRnedBVxwxgLt1scp
-	B2Tq/3tPEdfcGGPXTUJZF7c67/Rz5tv7huu3LuU6Jw7NJVUwHUgCTbSQcexccg+0c5iN0Ud9jFk
-	YjUFOdxb9bxD/cm/GGBBaGPVH6q8=
-X-Google-Smtp-Source: AGHT+IHhLQeLnjdeLMrZvnr3hL0Sxry9vJ44T78wMhljT87++xn8Frlj8bAEvKmLG1en4OarjmDvMH3Nw5MHpaOqNCA=
-X-Received: by 2002:a05:6402:390b:b0:5ca:d0c:c2c9 with SMTP id
- 4fb4d7f45d1cf-5cbbf8b614cmr26148219a12.19.1730752032386; Mon, 04 Nov 2024
- 12:27:12 -0800 (PST)
+        d=1e100.net; s=20230601; t=1730754402; x=1731359202;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=4V9Yv2fAvOK/vMiP82IoKQz/aaC4GtvY8C8de1dPo6U=;
+        b=qMmUd7HRShVpEwWwKDBGyePyCKMdOKGP1QYv9ZmpYmuFU5V0McqyKXPNi480Q7gc/x
+         +RYYZvGaW/odPBY0L7rnP0FeBimwnZrLDojiyf6j++FxDr+5RtARYzyQeNFCCGUlH539
+         hqG/oycx7Rhg5KJon8pTgvjE6gKk0mO9ISM5Azn0F36KJbalO5rfNnPSTvULYDmuOIqO
+         vZaYsZ6Tz2hxAnmlhBjgrPdTF+yRMwGzAB9jJQmvALjNAc30ttHGhzjwPz6G2LLO0wYd
+         TX6wumongXmpfG6UDWBxsdSJwm9P6ydMS8WUd+eY8/GG3WURWavkIy+x9l5x5bFcGIxG
+         +/Vg==
+X-Forwarded-Encrypted: i=1; AJvYcCWQaEimlMTa1F7bDxQ/KVj3WCDJUn4lXLt2Jg0RXq4YRusOjnAdkmh4zxCCVE7jOtv9BbU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwMNuZFU+2EfHdZdLJ10grxlh/GpzcyUuLwRtSfMqKpOIyHG24e
+	6nw3LRs+beFGl97B4CaiHaAN+XmbeqgPWK4gnswCz20nmL+CDx/kTaxUDor9iM0=
+X-Google-Smtp-Source: AGHT+IFk0UULo9afhQbnlnWjUo65KmcRu9RXVFubvhCDhtDv1i7bMZR037d187cAIN7jV72mG65BAw==
+X-Received: by 2002:a05:6a00:398f:b0:71e:3b8:666f with SMTP id d2e1a72fcca58-72062f712a6mr45086642b3a.11.1730754402245;
+        Mon, 04 Nov 2024 13:06:42 -0800 (PST)
+Received: from charlie.ba.rivosinc.com ([64.71.180.162])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-7ee490e08f4sm7248293a12.40.2024.11.04.13.06.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 04 Nov 2024 13:06:41 -0800 (PST)
+From: Charlie Jenkins <charlie@rivosinc.com>
+Subject: [PATCH RFT 00/16] perf tools: Use generic syscall scripts for all
+ archs
+Date: Mon, 04 Nov 2024 13:06:02 -0800
+Message-Id: <20241104-perf_syscalltbl-v1-0-9adae5c761ef@rivosinc.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241104151716.2079893-1-memxor@gmail.com> <CAADnVQKufpRn5JXhb14K-WKr5oiz8q711DVQdBCHSuQoCanMDg@mail.gmail.com>
-In-Reply-To: <CAADnVQKufpRn5JXhb14K-WKr5oiz8q711DVQdBCHSuQoCanMDg@mail.gmail.com>
-From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Date: Mon, 4 Nov 2024 14:26:36 -0600
-Message-ID: <CAP01T74F6VcKTqO6msucjvTMLiHKjLTXk2u_5bQTBq9oJ0fGTQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3] bpf: Refactor active lock management
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: bpf <bpf@vger.kernel.org>, kkd@meta.com, Alexei Starovoitov <ast@kernel.org>, 
-	Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Martin KaFai Lau <martin.lau@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Kernel Team <kernel-team@fb.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIADs3KWcC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDIxMDS0Nj3YLUorT44sri5MScnJKkHF2zNEuLlNS05GSzNFMloK6CotS0zAq
+ widFKQW4hSrG1tQBojDoLZgAAAA==
+To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+ Arnaldo Carvalho de Melo <acme@kernel.org>, 
+ Namhyung Kim <namhyung@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
+ Alexander Shishkin <alexander.shishkin@linux.intel.com>, 
+ Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>, 
+ Adrian Hunter <adrian.hunter@intel.com>, 
+ Paul Walmsley <paul.walmsley@sifive.com>, 
+ Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+ =?utf-8?q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>, 
+ =?utf-8?q?G=C3=BCnther_Noack?= <gnoack@google.com>, 
+ Christian Brauner <brauner@kernel.org>, Guo Ren <guoren@kernel.org>, 
+ John Garry <john.g.garry@oracle.com>, Will Deacon <will@kernel.org>, 
+ James Clark <james.clark@linaro.org>, Mike Leach <mike.leach@linaro.org>, 
+ Leo Yan <leo.yan@linux.dev>, Jonathan Corbet <corbet@lwn.net>, 
+ Arnd Bergmann <arnd@arndb.de>
+Cc: linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org, 
+ linux-riscv@lists.infradead.org, linux-security-module@vger.kernel.org, 
+ bpf@vger.kernel.org, linux-csky@vger.kernel.org, 
+ linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org, 
+ Charlie Jenkins <charlie@rivosinc.com>
+X-Mailer: b4 0.13.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=7158; i=charlie@rivosinc.com;
+ h=from:subject:message-id; bh=5/i4aYa+bDmYTyC5+2MiIF90lU7UD7sa8a5447uXxv8=;
+ b=owGbwMvMwCHWx5hUnlvL8Y3xtFoSQ7qmeciNY1P03++xMXAsfRHbpe+78drinTw1tXbGz7+Wr
+ Ju8KWh2RykLgxgHg6yYIgvPtQbm1jv6ZUdFyybAzGFlAhnCwMUpABM5EsbI8GVF2ZM24Xkrris0
+ z/sq5lEb29TY+lRskptvquex1zdnTmVkeMmzRCpUqM1DZ3Uzn/zaQNNXQb5t557syf19M6pitXc
+ /DwA=
+X-Developer-Key: i=charlie@rivosinc.com; a=openpgp;
+ fpr=7D834FF11B1D8387E61C776FFB10D1F27D6B1354
 
-On Mon, 4 Nov 2024 at 13:33, Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> On Mon, Nov 4, 2024 at 7:17=E2=80=AFAM Kumar Kartikeya Dwivedi <memxor@gm=
-ail.com> wrote:
-> >
-> > When bpf_spin_lock was introduced originally, there was deliberation on
-> > whether to use an array of lock IDs, but since bpf_spin_lock is limited
-> > to holding a single lock at any given time, we've been using a single I=
-D
-> > to identify the held lock.
-> >
-> > In preparation for introducing spin locks that can be taken multiple
-> > times, introduce support for acquiring multiple lock IDs. For this
-> > purpose, reuse the acquired_refs array and store both lock and pointer
-> > references. We tag the entry with REF_TYPE_PTR or REF_TYPE_BPF_LOCK to
-> > disambiguate and find the relevant entry. The ptr field is used to trac=
-k
-> > the map_ptr or btf (for bpf_obj_new allocations) to ensure locks can be
-> > matched with protected fields within the same "allocation", i.e.
-> > bpf_obj_new object or map value.
-> >
-> > The struct active_lock is changed to a boolean as the state is part of
-> > the acquired_refs array, and we only need active_lock as a cheap way
-> > of detecting lock presence.
-> >
-> > Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-> > ---
-> > Changelog:
-> > v2 -> v3
-> > v2: https://lore.kernel.org/bpf/20241103212252.547071-1-memxor@gmail.co=
-m
-> >
-> >  * Rebase on bpf-next to resolve merge conflict
-> >
-> > v1 -> v2
-> > v1: https://lore.kernel.org/bpf/20241103205856.345580-1-memxor@gmail.co=
-m
-> >
-> >  * Fix refsafe state comparison to check callback_ref and ptr separatel=
-y.
-> > ---
-> >  include/linux/bpf_verifier.h |  34 ++++++---
-> >  kernel/bpf/verifier.c        | 138 ++++++++++++++++++++++++++---------
-> >  2 files changed, 126 insertions(+), 46 deletions(-)
-> >
-> > diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.=
-h
-> > index 4513372c5bc8..1e7e1803d78b 100644
-> > --- a/include/linux/bpf_verifier.h
-> > +++ b/include/linux/bpf_verifier.h
-> > @@ -266,6 +266,10 @@ struct bpf_stack_state {
-> >  };
-> >
-> >  struct bpf_reference_state {
-> > +       /* Each reference object has a type. Ensure REF_TYPE_PTR is zer=
-o to
-> > +        * default to pointer reference on zero initialization of a sta=
-te.
-> > +        */
-> > +       enum { REF_TYPE_PTR =3D 0, REF_TYPE_BPF_LOCK } type;
->
-> In the future commit two more values will be added, right?
-> And it may push it over line limit.
-> I think cleaner to do each value on separate line:
->   enum ref_state_type {
->     REF_TYPE_PTR =3D 0,
->     REF_TYPE_BPF_LOCK
->   } type;
->
-> easier to read and less churn.
-> Also name that enum type to use later.
->
-> Also I'd drop _BPF_ from the middle.
-> Just REF_TYPE_LOCK would do.
+Standardize the generation of syscall headers around syscall tables.
+Previously each architecture independently selected how syscall headers
+would be generated, or would not define a way and fallback onto
+libaudit. Convert all architectures to use a standard syscall header
+generation script and allow each architecture to override the syscall
+table to use if they do not use the generic table.
 
-We're going to have a different lock type though.
-But I can rename it when I add it later.
+As a result of these changes, no architecture will require libaudit, and
+so the fallback case of using libaudit is removed by this series.
 
->
-> >         /* Track each reference created with a unique id, even if the s=
-ame
-> >          * instruction creates the reference multiple times (eg, via CA=
-LL).
-> >          */
-> > @@ -274,17 +278,23 @@ struct bpf_reference_state {
-> >          * is used purely to inform the user of a reference leak.
-> >          */
-> >         int insn_idx;
-> > -       /* There can be a case like:
-> > -        * main (frame 0)
-> > -        *  cb (frame 1)
-> > -        *   func (frame 3)
-> > -        *    cb (frame 4)
-> > -        * Hence for frame 4, if callback_ref just stored boolean, it w=
-ould be
-> > -        * impossible to distinguish nested callback refs. Hence store =
-the
-> > -        * frameno and compare that to callback_ref in check_reference_=
-leak when
-> > -        * exiting a callback function.
-> > -        */
-> > -       int callback_ref;
-> > +       union {
-> > +               /* There can be a case like:
-> > +                * main (frame 0)
-> > +                *  cb (frame 1)
-> > +                *   func (frame 3)
-> > +                *    cb (frame 4)
-> > +                * Hence for frame 4, if callback_ref just stored boole=
-an, it would be
-> > +                * impossible to distinguish nested callback refs. Henc=
-e store the
-> > +                * frameno and compare that to callback_ref in check_re=
-ference_leak when
-> > +                * exiting a callback function.
-> > +                */
-> > +               int callback_ref;
-> > +               /* Use to keep track of the source object of a lock, to=
- ensure
-> > +                * it matches on unlock.
-> > +                */
-> > +               void *ptr;
-> > +       };
-> >  };
-> >
-> >  struct bpf_retval_range {
-> > @@ -434,7 +444,7 @@ struct bpf_verifier_state {
-> >         u32 insn_idx;
-> >         u32 curframe;
-> >
-> > -       struct bpf_active_lock active_lock;
->
-> remove struct bpf_active_lock as well.
->
+Testing:
 
-Ack.
+I have tested that the syscall mappings of id to name generation works
+as expected for every architecture, but I have only validated that perf
+trace compiles and runs as expected on riscv, arm64, and x86_64.
 
-> > +       bool active_lock;
->
-> In the next patch it becomes 'int',
-> so let's make it 'int' right away and move it to bpf_func_state
-> next to:
->         int acquired_refs;
->         struct bpf_reference_state *refs;
->
-> since it's counting locks in this array.
-> 'bool' is just a weird from of 1 or 0.
-> So 'int' is cleaner in this patch too.
->
+Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
+---
+Charlie Jenkins (16):
+      perf tools: Create generic syscall table support
+      perf tools: arc: Support generic syscall headers
+      perf tools: csky: Support generic syscall headers
+      perf tools: arm: Support syscall headers
+      perf tools: sh: Support syscall headers
+      perf tools: sparc: Support syscall headers
+      perf tools: xtensa: Support syscall header
+      perf tools: x86: Use generic syscall scripts
+      perf tools: alpha: Support syscall header
+      perf tools: parisc: Support syscall header
+      perf tools: arm64: Use syscall table
+      perf tools: loongarch: Use syscall table
+      perf tools: mips: Use generic syscall scripts
+      perf tools: powerpc: Use generic syscall table scripts
+      perf tools: s390: Use generic syscall table scripts
+      perf tools: Remove dependency on libaudit
 
-Ack.
+ Documentation/admin-guide/workload-tracing.rst     |   2 +-
+ tools/build/feature/Makefile                       |   4 -
+ tools/build/feature/test-libaudit.c                |  11 -
+ tools/perf/Documentation/perf-check.txt            |   1 -
+ tools/perf/Makefile.config                         |  28 +-
+ tools/perf/Makefile.perf                           |  12 +-
+ tools/perf/arch/alpha/entry/syscalls/Kbuild        |   2 +
+ .../arch/alpha/entry/syscalls/Makefile.syscalls    |   5 +
+ tools/perf/arch/alpha/entry/syscalls/syscall.tbl   | 504 ++++++++++++++++++++
+ tools/perf/arch/alpha/include/syscall_table.h      |   2 +
+ tools/perf/arch/arc/entry/syscalls/Kbuild          |   2 +
+ .../perf/arch/arc/entry/syscalls/Makefile.syscalls |   3 +
+ tools/perf/arch/arc/include/syscall_table.h        |   2 +
+ tools/perf/arch/arm/entry/syscalls/Kbuild          |   4 +
+ .../perf/arch/arm/entry/syscalls/Makefile.syscalls |   2 +
+ tools/perf/arch/arm/entry/syscalls/syscall.tbl     | 479 +++++++++++++++++++
+ tools/perf/arch/arm/include/syscall_table.h        |   2 +
+ tools/perf/arch/arm64/Makefile                     |  22 -
+ tools/perf/arch/arm64/entry/syscalls/Kbuild        |   3 +
+ .../arch/arm64/entry/syscalls/Makefile.syscalls    |   6 +
+ tools/perf/arch/arm64/entry/syscalls/mksyscalltbl  |  46 --
+ .../perf/arch/arm64/entry/syscalls/syscall_32.tbl  | 476 +++++++++++++++++++
+ .../perf/arch/arm64/entry/syscalls/syscall_64.tbl  |   1 +
+ tools/perf/arch/arm64/include/syscall_table.h      |   8 +
+ tools/perf/arch/csky/entry/syscalls/Kbuild         |   2 +
+ .../arch/csky/entry/syscalls/Makefile.syscalls     |   3 +
+ tools/perf/arch/csky/include/syscall_table.h       |   2 +
+ tools/perf/arch/loongarch/Makefile                 |  22 -
+ tools/perf/arch/loongarch/entry/syscalls/Kbuild    |   2 +
+ .../loongarch/entry/syscalls/Makefile.syscalls     |   3 +
+ .../arch/loongarch/entry/syscalls/mksyscalltbl     |  45 --
+ tools/perf/arch/loongarch/include/syscall_table.h  |   2 +
+ tools/perf/arch/mips/Makefile                      |  18 -
+ tools/perf/arch/mips/entry/syscalls/Kbuild         |   2 +
+ .../arch/mips/entry/syscalls/Makefile.syscalls     |   5 +
+ tools/perf/arch/mips/entry/syscalls/mksyscalltbl   |  32 --
+ tools/perf/arch/mips/include/syscall_table.h       |   2 +
+ tools/perf/arch/parisc/entry/syscalls/Kbuild       |   3 +
+ .../arch/parisc/entry/syscalls/Makefile.syscalls   |   6 +
+ tools/perf/arch/parisc/entry/syscalls/syscall.tbl  | 463 +++++++++++++++++++
+ tools/perf/arch/parisc/include/syscall_table.h     |   8 +
+ tools/perf/arch/powerpc/Makefile                   |  25 -
+ tools/perf/arch/powerpc/entry/syscalls/Kbuild      |   3 +
+ .../arch/powerpc/entry/syscalls/Makefile.syscalls  |   6 +
+ .../perf/arch/powerpc/entry/syscalls/mksyscalltbl  |  39 --
+ tools/perf/arch/powerpc/include/syscall_table.h    |   8 +
+ tools/perf/arch/riscv/entry/syscalls/Kbuild        |   2 +
+ .../arch/riscv/entry/syscalls/Makefile.syscalls    |   4 +
+ tools/perf/arch/riscv/include/syscall_table.h      |   8 +
+ tools/perf/arch/s390/Makefile                      |  21 -
+ tools/perf/arch/s390/entry/syscalls/Kbuild         |   2 +
+ .../arch/s390/entry/syscalls/Makefile.syscalls     |   5 +
+ tools/perf/arch/s390/entry/syscalls/mksyscalltbl   |  32 --
+ tools/perf/arch/s390/include/syscall_table.h       |   2 +
+ tools/perf/arch/sh/entry/syscalls/Kbuild           |   2 +
+ .../perf/arch/sh/entry/syscalls/Makefile.syscalls  |   4 +
+ tools/perf/arch/sh/entry/syscalls/syscall.tbl      | 468 +++++++++++++++++++
+ tools/perf/arch/sh/include/syscall_table.h         |   2 +
+ tools/perf/arch/sparc/entry/syscalls/Kbuild        |   3 +
+ .../arch/sparc/entry/syscalls/Makefile.syscalls    |   5 +
+ tools/perf/arch/sparc/entry/syscalls/syscall.tbl   | 510 +++++++++++++++++++++
+ tools/perf/arch/sparc/include/syscall_table.h      |   8 +
+ tools/perf/arch/x86/Build                          |   1 -
+ tools/perf/arch/x86/Makefile                       |  25 -
+ tools/perf/arch/x86/entry/syscalls/Kbuild          |   3 +
+ .../perf/arch/x86/entry/syscalls/Makefile.syscalls |   6 +
+ tools/perf/arch/x86/entry/syscalls/syscalltbl.sh   |  42 --
+ tools/perf/arch/x86/include/syscall_table.h        |   8 +
+ tools/perf/arch/xtensa/entry/syscalls/Kbuild       |   2 +
+ .../arch/xtensa/entry/syscalls/Makefile.syscalls   |   4 +
+ tools/perf/arch/xtensa/entry/syscalls/syscall.tbl  | 435 ++++++++++++++++++
+ tools/perf/arch/xtensa/include/syscall_table.h     |   2 +
+ tools/perf/builtin-check.c                         |   1 -
+ tools/perf/builtin-help.c                          |   2 -
+ tools/perf/builtin-trace.c                         |  30 --
+ tools/perf/check-headers.sh                        |   9 +
+ tools/perf/perf.c                                  |   6 +-
+ tools/perf/scripts/Makefile.syscalls               |  69 +++
+ tools/perf/scripts/syscalltbl.sh                   |  86 ++++
+ tools/perf/tests/make                              |   7 +-
+ tools/perf/util/env.c                              |   4 +-
+ tools/perf/util/generate-cmdlist.sh                |   4 +-
+ tools/perf/util/syscalltbl.c                       |  87 +---
+ tools/scripts/syscall.tbl                          | 405 ++++++++++++++++
+ 84 files changed, 4089 insertions(+), 555 deletions(-)
+---
+base-commit: 59b723cd2adbac2a34fc8e12c74ae26ae45bf230
+change-id: 20240913-perf_syscalltbl-6f98defcc6f5
+-- 
+- Charlie
 
-> >         bool speculative;
-> >         bool active_rcu_lock;
-> >         u32 active_preempt_lock;
-> > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> > index ba800c7611e3..ea8ad320e6cc 100644
-> > --- a/kernel/bpf/verifier.c
-> > +++ b/kernel/bpf/verifier.c
-> > @@ -1335,6 +1335,7 @@ static int acquire_reference_state(struct bpf_ver=
-ifier_env *env, int insn_idx)
-> >         if (err)
-> >                 return err;
-> >         id =3D ++env->id_gen;
-> > +       state->refs[new_ofs].type =3D REF_TYPE_PTR;
-> >         state->refs[new_ofs].id =3D id;
-> >         state->refs[new_ofs].insn_idx =3D insn_idx;
-> >         state->refs[new_ofs].callback_ref =3D state->in_callback_fn ? s=
-tate->frameno : 0;
-> > @@ -1342,6 +1343,23 @@ static int acquire_reference_state(struct bpf_ve=
-rifier_env *env, int insn_idx)
-> >         return id;
-> >  }
-> >
-> > +static int acquire_lock_state(struct bpf_verifier_env *env, int insn_i=
-dx, int type, int id, void *ptr)
->
-> enum ref_state_type instead of 'int type' ?
->
-
-Ack, but eventually it may require passing OR of flags, which I
-believe makes the compiler unhappy.
-I can make that change later though.
-
-> > +{
-> > +       struct bpf_func_state *state =3D cur_func(env);
-> > +       int new_ofs =3D state->acquired_refs;
-> > +       int err;
-> > +
-> > +       err =3D resize_reference_state(state, state->acquired_refs + 1)=
-;
-> > +       if (err)
-> > +               return err;
-> > +       state->refs[new_ofs].type =3D type;
-> > +       state->refs[new_ofs].id =3D id;
-> > +       state->refs[new_ofs].insn_idx =3D insn_idx;
-> > +       state->refs[new_ofs].ptr =3D ptr;
-> > +
-> > +       return 0;
-> > +}
-> > +
-> >  /* release function corresponding to acquire_reference_state(). Idempo=
-tent. */
-> >  static int release_reference_state(struct bpf_func_state *state, int p=
-tr_id)
-> >  {
-> > @@ -1349,6 +1367,8 @@ static int release_reference_state(struct bpf_fun=
-c_state *state, int ptr_id)
-> >
-> >         last_idx =3D state->acquired_refs - 1;
-> >         for (i =3D 0; i < state->acquired_refs; i++) {
-> > +               if (state->refs[i].type !=3D REF_TYPE_PTR)
-> > +                       continue;
-> >                 if (state->refs[i].id =3D=3D ptr_id) {
-> >                         /* Cannot release caller references in callback=
-s */
-> >                         if (state->in_callback_fn && state->refs[i].cal=
-lback_ref !=3D state->frameno)
-> > @@ -1364,6 +1384,43 @@ static int release_reference_state(struct bpf_fu=
-nc_state *state, int ptr_id)
-> >         return -EINVAL;
-> >  }
-> >
-> > +static int release_lock_state(struct bpf_func_state *state, int type, =
-int id, void *ptr)
-> > +{
-> > +       int i, last_idx;
-> > +
-> > +       last_idx =3D state->acquired_refs - 1;
-> > +       for (i =3D 0; i < state->acquired_refs; i++) {
-> > +               if (state->refs[i].type !=3D type)
-> > +                       continue;
-> > +               if (state->refs[i].id =3D=3D id && state->refs[i].ptr =
-=3D=3D ptr) {
-> > +                       if (last_idx && i !=3D last_idx)
-> > +                               memcpy(&state->refs[i], &state->refs[la=
-st_idx],
-> > +                                      sizeof(*state->refs));
-> > +                       memset(&state->refs[last_idx], 0, sizeof(*state=
-->refs));
-> > +                       state->acquired_refs--;
-> > +                       return 0;
-> > +               }
-> > +       }
-> > +       return -EINVAL;
-> > +}
-> > +
-> > +static struct bpf_reference_state *find_lock_state(struct bpf_verifier=
-_env *env, int id, void *ptr)
-> > +{
-> > +       struct bpf_func_state *state =3D cur_func(env);
-> > +       int i;
-> > +
-> > +       for (i =3D 0; i < state->acquired_refs; i++) {
-> > +               struct bpf_reference_state *s =3D &state->refs[i];
-> > +
-> > +               if (s->type =3D=3D REF_TYPE_PTR)
-> > +                       continue;
->
-> Let's pass 'enum ref_state_type type' and compare here
-> to make it similar to release_lock_state().
-> I think it will clean up future patches too.
->
-
-Ok.
-
-> > +
-> > +               if (s->id =3D=3D id && s->ptr =3D=3D ptr)
-> > +                       return s;
-> > +       }
-> > +       return NULL;
-> > +}
-> > +
-> >  static void free_func_state(struct bpf_func_state *state)
-> >  {
-> >         if (!state)
-> > @@ -1430,12 +1487,11 @@ static int copy_verifier_state(struct bpf_verif=
-ier_state *dst_state,
-> >                 dst_state->frame[i] =3D NULL;
-> >         }
-> >         dst_state->speculative =3D src->speculative;
-> > +       dst_state->active_lock =3D src->active_lock;
-> >         dst_state->active_rcu_lock =3D src->active_rcu_lock;
-> >         dst_state->active_preempt_lock =3D src->active_preempt_lock;
-> >         dst_state->in_sleepable =3D src->in_sleepable;
-> >         dst_state->curframe =3D src->curframe;
-> > -       dst_state->active_lock.ptr =3D src->active_lock.ptr;
-> > -       dst_state->active_lock.id =3D src->active_lock.id;
-> >         dst_state->branches =3D src->branches;
-> >         dst_state->parent =3D src->parent;
-> >         dst_state->first_insn_idx =3D src->first_insn_idx;
-> > @@ -5423,7 +5479,7 @@ static bool in_sleepable(struct bpf_verifier_env =
-*env)
-> >  static bool in_rcu_cs(struct bpf_verifier_env *env)
-> >  {
-> >         return env->cur_state->active_rcu_lock ||
-> > -              env->cur_state->active_lock.ptr ||
-> > +              env->cur_state->active_lock ||
-> >                !in_sleepable(env);
-> >  }
-> >
-> > @@ -7698,6 +7754,7 @@ static int process_spin_lock(struct bpf_verifier_=
-env *env, int regno,
-> >         struct bpf_map *map =3D NULL;
-> >         struct btf *btf =3D NULL;
-> >         struct btf_record *rec;
-> > +       int err;
-> >
-> >         if (!is_const) {
-> >                 verbose(env,
-> > @@ -7729,16 +7786,27 @@ static int process_spin_lock(struct bpf_verifie=
-r_env *env, int regno,
-> >                 return -EINVAL;
-> >         }
-> >         if (is_lock) {
-> > -               if (cur->active_lock.ptr) {
-> > +               void *ptr;
-> > +
-> > +               if (map)
-> > +                       ptr =3D map;
-> > +               else
-> > +                       ptr =3D btf;
-> > +
-> > +               if (cur->active_lock) {
-> >                         verbose(env,
-> >                                 "Locking two bpf_spin_locks are not all=
-owed\n");
-> >                         return -EINVAL;
-> >                 }
-> > -               if (map)
-> > -                       cur->active_lock.ptr =3D map;
-> > -               else
-> > -                       cur->active_lock.ptr =3D btf;
-> > -               cur->active_lock.id =3D reg->id;
-> > +               err =3D acquire_lock_state(env, env->insn_idx, REF_TYPE=
-_BPF_LOCK, reg->id, ptr);
-> > +               if (err < 0) {
-> > +                       verbose(env, "Failed to acquire lock state\n");
-> > +                       return err;
-> > +               }
-> > +               /* It is not safe to allow multiple bpf_spin_lock calls=
-, so
-> > +                * disallow them until this lock has been unlocked.
-> > +                */
-> > +               cur->active_lock =3D true;
-> >         } else {
-> >                 void *ptr;
-> >
-> > @@ -7747,20 +7815,18 @@ static int process_spin_lock(struct bpf_verifie=
-r_env *env, int regno,
-> >                 else
-> >                         ptr =3D btf;
-> >
-> > -               if (!cur->active_lock.ptr) {
-> > +               if (!cur->active_lock) {
-> >                         verbose(env, "bpf_spin_unlock without taking a =
-lock\n");
-> >                         return -EINVAL;
-> >                 }
-> > -               if (cur->active_lock.ptr !=3D ptr ||
-> > -                   cur->active_lock.id !=3D reg->id) {
-> > +
-> > +               if (release_lock_state(cur_func(env), REF_TYPE_BPF_LOCK=
-, reg->id, ptr)) {
-> >                         verbose(env, "bpf_spin_unlock of different lock=
-\n");
-> >                         return -EINVAL;
-> >                 }
-> >
-> >                 invalidate_non_owning_refs(env);
-> > -
-> > -               cur->active_lock.ptr =3D NULL;
-> > -               cur->active_lock.id =3D 0;
-> > +               cur->active_lock =3D false;
-> >         }
-> >         return 0;
-> >  }
-> > @@ -9818,7 +9884,7 @@ static int check_func_call(struct bpf_verifier_en=
-v *env, struct bpf_insn *insn,
-> >                 const char *sub_name =3D subprog_name(env, subprog);
-> >
-> >                 /* Only global subprogs cannot be called with a lock he=
-ld. */
-> > -               if (env->cur_state->active_lock.ptr) {
-> > +               if (env->cur_state->active_lock) {
-> >                         verbose(env, "global function calls are not all=
-owed while holding a lock,\n"
-> >                                      "use static function instead\n");
-> >                         return -EINVAL;
-> > @@ -10343,6 +10409,8 @@ static int check_reference_leak(struct bpf_veri=
-fier_env *env, bool exception_exi
-> >                 return 0;
-> >
-> >         for (i =3D 0; i < state->acquired_refs; i++) {
-> > +               if (state->refs[i].type !=3D REF_TYPE_PTR)
-> > +                       continue;
->
-> why ?
-> check_reference_leak() should complain about unreleased locks too.
->
-
-I'm trying to change that here. Locks will be checked with the
-active_locks counter everywhere, reference types are separate, and
-only REF_TYPE_PTR.
-Now that we've unified everything in check_resource_leak, it should
-not be problematic.
-
-> >                 if (!exception_exit && state->in_callback_fn && state->=
-refs[i].callback_ref !=3D state->frameno)
-> >                         continue;
-> >                 verbose(env, "Unreleased reference id=3D%d alloc_insn=
-=3D%d\n",
-> > @@ -10356,7 +10424,7 @@ static int check_resource_leak(struct bpf_verif=
-ier_env *env, bool exception_exit
-> >  {
-> >         int err;
-> >
-> > -       if (check_lock && env->cur_state->active_lock.ptr) {
-> > +       if (check_lock && env->cur_state->active_lock) {
-> >                 verbose(env, "%s cannot be used inside bpf_spin_lock-ed=
- region\n", prefix);
-> >                 return -EINVAL;
-> >         }
-> > @@ -11580,7 +11648,7 @@ static int ref_set_non_owning(struct bpf_verifi=
-er_env *env, struct bpf_reg_state
-> >         struct bpf_verifier_state *state =3D env->cur_state;
-> >         struct btf_record *rec =3D reg_btf_record(reg);
-> >
-> > -       if (!state->active_lock.ptr) {
-> > +       if (!state->active_lock) {
-> >                 verbose(env, "verifier internal error: ref_set_non_owni=
-ng w/o active lock\n");
-> >                 return -EFAULT;
-> >         }
-> > @@ -11677,6 +11745,7 @@ static int ref_convert_owning_non_owning(struct=
- bpf_verifier_env *env, u32 ref_o
-> >   */
-> >  static int check_reg_allocation_locked(struct bpf_verifier_env *env, s=
-truct bpf_reg_state *reg)
-> >  {
-> > +       struct bpf_reference_state *s;
-> >         void *ptr;
-> >         u32 id;
-> >
-> > @@ -11693,10 +11762,10 @@ static int check_reg_allocation_locked(struct=
- bpf_verifier_env *env, struct bpf_
-> >         }
-> >         id =3D reg->id;
-> >
-> > -       if (!env->cur_state->active_lock.ptr)
-> > +       if (!env->cur_state->active_lock)
-> >                 return -EINVAL;
-> > -       if (env->cur_state->active_lock.ptr !=3D ptr ||
-> > -           env->cur_state->active_lock.id !=3D id) {
-> > +       s =3D find_lock_state(env, id, ptr);
-> > +       if (!s) {
-> >                 verbose(env, "held lock and object are not in the same =
-allocation\n");
-> >                 return -EINVAL;
-> >         }
-> > @@ -17561,8 +17630,19 @@ static bool refsafe(struct bpf_func_state *old=
-, struct bpf_func_state *cur,
-> >                 return false;
-> >
-> >         for (i =3D 0; i < old->acquired_refs; i++) {
-> > -               if (!check_ids(old->refs[i].id, cur->refs[i].id, idmap)=
-)
-> > +               if (!check_ids(old->refs[i].id, cur->refs[i].id, idmap)=
- ||
-> > +                   old->refs[i].type !=3D cur->refs[i].type)
-> >                         return false;
-> > +               switch (old->refs[i].type) {
-> > +               case REF_TYPE_PTR:
-> > +                       if (old->refs[i].callback_ref !=3D cur->refs[i]=
-.callback_ref)
-> > +                               return false;
-> > +                       break;
-> > +               default:
-> > +                       if (old->refs[i].ptr !=3D cur->refs[i].ptr)
-> > +                               return false;
-> > +                       break;
->
-> I'd future proof a bit by explicitly handling all enum values
-> and WARN_ONCE in default.
->
-
-Ok.
-
-> pw-bot: cr
