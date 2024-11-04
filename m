@@ -1,108 +1,89 @@
-Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 693DE83CD3;
-	Mon,  4 Nov 2024 22:32:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1AD33C6BA;
+	Mon,  4 Nov 2024 23:27:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730759559; cv=none; b=SfiAst0hQroPCW6dvciYM9WkyAkSY+DVZMJBVEem0st1iaq5JG6Ha8I7/S0o2SnhIVxEyu+kIWJXH+aQrZuM9ennNEI0EjVy0jaiLyTBygNnzzlrJh0iFpFFc9U9ysLsB421RRL83gUvkf2YvXR6nZRNHtK4pucZgVxFt57Bihw=
+	t=1730762865; cv=none; b=Z1Qp4x0P7nK1CJ7gMcR9lklc4rvPTF+sW3joHTegwBXHIgPV3RWuve6Ga3nKPRNt72xHBubaXwg4yJctlVPrJ0uqBA6dfc1OLUGbvxU6ZGbWqJ+2sQSGLIjHx56uFIJopwxriURLop1DMmZV8U9RCqbkuZUg5ioIY5CbUX3ddxE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730759559; c=relaxed/simple;
-	bh=mjrv4wTdlcKzFJuhdOyAICGhdxETluIkpGMZRYRv3J0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Mb6f12dJScWEXrEL1r0lVYs6fQ9JBnt2DyJAF66+iX4nlQeM5+di4RI9em1MaWO7Kkgc+apfFwrV1baCjd8sZDgQnu+xhW/eJxILQg5hyiC6OsSh/sv0VhSvkwAWLLEAgPllIiNyycG/0J5DgJNXeUzIl3cfpwdnBKp8wkZfaxk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YtPbXOx5; arc=none smtp.client-ip=209.85.221.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1730762865; c=relaxed/simple;
+	bh=eJE0p80D+T3UvwAPfjYdm4dQfV/JHA4oN4J3eSvWb3I=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ddKXS20tDuyvwhIDHxUPWveWe9bZv09n9klp8E/T8pfNAszjHBp/G61jII09F+d5CjqI7JIHy8nQZOR+Teg0DWu21TC1iOEoj8NKY77shoVmvXtjirUaaFGjxmJxYnAoDJmeYmV7jqFtoh90x/nt49kraZLpP1zWd0qNLDYbDMs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=D7qlqngr; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YtPbXOx5"
-Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-3807dd08cfcso4055360f8f.1;
-        Mon, 04 Nov 2024 14:32:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1730759556; x=1731364356; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mjrv4wTdlcKzFJuhdOyAICGhdxETluIkpGMZRYRv3J0=;
-        b=YtPbXOx5GBJfaU4SM9qbDg9F7KyM4VeljOXuQkTwoL92rKVGMMjqztSnieZth66hjJ
-         L1Q7DrgKkHnyHvMGlPW2yS66fkslhdDD4erKa6yoiDkPpRuhVP+5Pxk3s9mgMcm0NitH
-         IciLEd9QaI7mdCV5lvFk02pfVFMh9SGl8Kl8fvQNhe66Ot1hRqWSUkZnvVUTfqBnE3rd
-         O5PHMHPZRlZ4sf/YAkZ98mwr8xUC+ZA9hIffI8cFTyxKSDHqlz0bzqsTfhTIeLCliRLE
-         5tv4faHND0WFXnF6QLpQVJNfs4RWd6jgerb9CvoOmiIPENHoJ0VSY5QPOnlnvCiCUvmE
-         tzOA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730759556; x=1731364356;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=mjrv4wTdlcKzFJuhdOyAICGhdxETluIkpGMZRYRv3J0=;
-        b=A4sBAAW55ge5fw0J9QatouAnot+KGj2BE9n+6/rRB53jV7Vw/jpD55gIaf2XBG8SkF
-         CvlqRm0J8jVb7WSffSCB+xxy3qHFOThgC21D8X+B55OCPAh2mURF0MX0uf6dj2IcqSgp
-         AGy66swdMc3CNib6mGJUQVpeTU7vbuAEG0GI6KDbgAqkKaBJBfQZzfUtjnnSbeaMUxcK
-         R7NiZFvR7fZwSjWNfo1wUXo8SC3zk3VcXFDw43Rxip0i4Baz/QEVIsQnyaS5263oWQg0
-         k9A6AN9t6z150ftjUyb4DNBpxmyT5ZhMksBb70Lndt0CZSZOsp1u6flOy9J3lBoae00J
-         Eecg==
-X-Forwarded-Encrypted: i=1; AJvYcCU6FrsR4n1Wba52AiQsytL2Dj1uSaSQZDzxLPsbkhW8Ydj6mrYmRTPStytT0ibYeqJ0bv0=@vger.kernel.org, AJvYcCVmEdxn6Ici7RT0dhC+CgNQjE/FK5dyX+HvrL8OW7KMLAup3EG0p3fdVqYssnI29+gpUHVILQkq@vger.kernel.org
-X-Gm-Message-State: AOJu0YwLROUiahilZ3cR/Ea3zhUFqTTFSBWp09vKhxexdQ3Z8NC/QzhH
-	48TUImlCrJQZrjlBiG95OeR/RxUpnhSCB0/au7DBGWuaMc+QwIzDsJx5eBylvbt5DGl7AZx5h1x
-	b09qwLBxRig7d5OiTcA+ykiOQZpA=
-X-Google-Smtp-Source: AGHT+IGK4ZJI9qMe1A38LGaeof9HgpRBPQEJ6YWzV01dbldSAuXAsO8U+wSf0RbxJ9Fma63rPV81lyoJ7muRUIJK6GQ=
-X-Received: by 2002:adf:e199:0:b0:37d:4eeb:7370 with SMTP id
- ffacd0b85a97d-381c7ae14bdmr15071294f8f.56.1730759555465; Mon, 04 Nov 2024
- 14:32:35 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="D7qlqngr"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B829BC4CED1;
+	Mon,  4 Nov 2024 23:27:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1730762865;
+	bh=eJE0p80D+T3UvwAPfjYdm4dQfV/JHA4oN4J3eSvWb3I=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=D7qlqngrtdkOAwNOIsMxxe+dYaUBO2X5GMoy+pVhG+R3rnds/8XURvZShUEMjNu1N
+	 6aBFNnuMzgEerGxRWNOdbnZ/osDjgsCsaYl4am8bVABUBxfHanMAlfDk99xqNFaXuH
+	 EcsIH1tmxXmCVkGYcBjv2Dp1USX5M2Bnwxy9BbdGI38lfilA+uyTc5+3ugjPrYK9mi
+	 K7VZLFnWEwFYtGPUZoZZhMJEGl8KnvOvistMuWyaACYyt/mTf5s42DAMyB9ZcrZjiS
+	 NsnMmPMc+wfiZM9FLg76cMOzX92SvDpy+l6hmQPBAYPEeTR+etvH1vFyDPLG25QxiP
+	 vNyBGZGudvFew==
+Date: Tue, 5 Nov 2024 00:27:42 +0100
+From: Frederic Weisbecker <frederic@kernel.org>
+To: "Paul E. McKenney" <paulmck@kernel.org>
+Cc: rcu@vger.kernel.org, linux-kernel@vger.kernel.org, kernel-team@meta.com,
+	rostedt@goodmis.org, kernel test robot <oliver.sang@intel.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Kent Overstreet <kent.overstreet@linux.dev>, bpf@vger.kernel.org
+Subject: Re: [PATCH rcu 08/15] srcu: Add srcu_read_lock_lite() and
+ srcu_read_unlock_lite()
+Message-ID: <ZylYbsU7uE7jX5Yd@pavilion.home>
+References: <ddf64299-de71-41a2-b575-56ec173faf75@paulmck-laptop>
+ <20241015161112.442758-8-paulmck@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241101111948.1570547-1-xukuohai@huaweicloud.com>
- <CAADnVQKnJkJpWkuxC32UPc4cvTnT2+YEnm8TktrEnDNO7ZbCdA@mail.gmail.com>
- <5c16fb2f-efa2-4639-862d-99acbd231660@huaweicloud.com> <CAADnVQLvpwLp=t1oz3ic-EKnaio2DhOCanmuBQ+8nSf-jzBePw@mail.gmail.com>
- <85160853-cc20-40df-b090-62b4359bec37@linux.dev>
-In-Reply-To: <85160853-cc20-40df-b090-62b4359bec37@linux.dev>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Mon, 4 Nov 2024 14:32:24 -0800
-Message-ID: <CAADnVQJEE5yfhpqJ0f4BQVtVh+SWrPeA-9pPu0gfRZB6rm59Ag@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2] bpf: Add kernel symbol for struct_ops trampoline
-To: Martin KaFai Lau <martin.lau@linux.dev>
-Cc: Xu Kuohai <xukuohai@huaweicloud.com>, Martin KaFai Lau <martin.lau@kernel.org>, 
-	bpf <bpf@vger.kernel.org>, Network Development <netdev@vger.kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Yonghong Song <yonghong.song@linux.dev>, Kui-Feng Lee <thinker.li@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20241015161112.442758-8-paulmck@kernel.org>
 
-On Mon, Nov 4, 2024 at 2:13=E2=80=AFPM Martin KaFai Lau <martin.lau@linux.d=
-ev> wrote:
->
-> On 11/4/24 9:53 AM, Alexei Starovoitov wrote:
->
-> > As a separate clean up I would switch the freeing to call_rcu_tasks.
-> > Synchronous waiting is expensive.
-> >
-> > Martin,
-> >
-> > any suggestions?
->
-> There is a map->rcu now. May be add a "bool free_after_rcu_tasks_gp" to "=
-struct
-> bpf_map" and do the call_rcu_tasks() in bpf_map_put(). The
-> bpf_struct_ops_map_alloc() can set the map->free_after_rcu_tasks_gp.
+Le Tue, Oct 15, 2024 at 09:11:05AM -0700, Paul E. McKenney a écrit :
+> This patch adds srcu_read_lock_lite() and srcu_read_unlock_lite(), which
+> dispense with the read-side smp_mb() but also are restricted to code
+> regions that RCU is watching.  If a given srcu_struct structure uses
+> srcu_read_lock_lite() and srcu_read_unlock_lite(), it is not permitted
+> to use any other SRCU read-side marker, before, during, or after.
+> 
+> Another price of light-weight readers is heavier weight grace periods.
+> Such readers mean that SRCU grace periods on srcu_struct structures
+> used by light-weight readers will incur at least two calls to
+> synchronize_rcu().  In addition, normal SRCU grace periods for
+> light-weight-reader srcu_struct structures never auto-expedite.
+> Note that expedited SRCU grace periods for light-weight-reader
+> srcu_struct structures still invoke synchronize_rcu(), not
+> synchronize_srcu_expedited().  Something about wishing to keep
+> the IPIs down to a dull roar.
+> 
+> The srcu_read_lock_lite() and srcu_read_unlock_lite() functions may not
+> (repeat, *not*) be used from NMI handlers, but if this is needed, an
+> additional flavor of SRCU reader can be added by some future commit.
+> 
+> [ paulmck: Apply Alexei Starovoitov expediting feedback. ]
+> [ paulmck: Apply kernel test robot feedback. ]
+> 
+> Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+> Tested-by: kernel test robot <oliver.sang@intel.com>
+> Cc: Alexei Starovoitov <ast@kernel.org>
+> Cc: Andrii Nakryiko <andrii@kernel.org>
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> Cc: Kent Overstreet <kent.overstreet@linux.dev>
+> Cc: <bpf@vger.kernel.org>
 
-Ohh. Great point.
-struct_ops map can just set the existing free_after_mult_rcu_gp flag
-and get rid of this sync call.
-Another flag is overkill imo.
+This might be a dump question but I have to ask. Could this replace
+RCU-TASKS-TRACE?
 
-> Take this chance to remove the "st_map->rcu" from "struct bpf_struct_ops_=
-map"
-> also. It is a left over after cleaning up the kvalue->refcnt in the
-> commit b671c2067a04 ("bpf: Retire the struct_ops map kvalue->refcnt.").
-
-+1
-
-> Xu, it will be great if you can follow up with this cleanup. Otherwise, I=
- will
-> put it under the top of my todo list. Let me know what you prefer.
+Thanks.
