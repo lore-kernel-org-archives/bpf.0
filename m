@@ -1,70 +1,75 @@
-Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0D331D47C0
-	for <bpf@vger.kernel.org>; Mon,  4 Nov 2024 20:05:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71BF41C876D;
+	Mon,  4 Nov 2024 20:27:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730750704; cv=none; b=mLIIAGqy5wH6GsVUtnh3QsyrzeLTxLl+83jEazK4vtT4ppxLHOGsjK16I3C/D3W31z72jEQuGGoycSuP7QvqX/HUt79D/HOzda+DIVVEij1fisJiQlwpy9Wy0xtsgV41qVElMaNvtgsABPaiLuCdYwQYwWPinBk+e4ogDAW++UY=
+	t=1730752031; cv=none; b=PpY1YNVVS2ihh9KLSwYOs5Rk9L+ur6RNCmkeVPEdLiWmzq80N77TzeMnJx0m9dhAwj5irS5/U64doBRIAbfr+dMO8LgZp1SD7aICgLt20PeEdlk7GlCeiUI4rcKmWxygiIN5qNr/wx5fmk6vindYVnxdlNQK8uT5zStCE+UIj5I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730750704; c=relaxed/simple;
-	bh=XIUdvSlCnzbEcy0YniPv49flYBxSP4mV/idspgIeXh8=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=BkcvXT4Nulpo86VHFjwHczrPOUMHxEh+jzHAjkB56rNbpo4n59wgbXV4Rk+awWa5eEWWbCq3zyzLaEM6iRuWfIbac0N38zc89ueg3ytvICYJt9l9DyDZv914tnI9SmOepi0XKmxmnOz7c7+Xs8YcFRrodfVfHXxIjI0hxpheejg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=grsecurity.net; spf=pass smtp.mailfrom=opensrcsec.com; dkim=pass (2048-bit key) header.d=grsecurity.net header.i=@grsecurity.net header.b=ntCrfejz; arc=none smtp.client-ip=209.85.208.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=grsecurity.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=opensrcsec.com
+	s=arc-20240116; t=1730752031; c=relaxed/simple;
+	bh=zNFhcFpEP65NUzbAtTkXf545aP3mOPVQlH7TWQL+oVc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=f9hya3KuGmjDabWyybYLzFCn1hUpId3GVkhf4dgG6JB9gS/VEapTltpvTEwuJ8jvHi4ZsC7STt00ls89hqeNKobEkM0aaUM7CPskHRA4I/ZpzpwNbqLinelloio95oy/+D1ju7qVQ2vei746F0B7YCqq90AFQptQ9JgxIB0wV0w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jCQaniXB; arc=none smtp.client-ip=209.85.214.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=grsecurity.net header.i=@grsecurity.net header.b="ntCrfejz"
-Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-5c948c41edeso5914523a12.1
-        for <bpf@vger.kernel.org>; Mon, 04 Nov 2024 12:05:02 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jCQaniXB"
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-20c693b68f5so49832345ad.1;
+        Mon, 04 Nov 2024 12:27:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=grsecurity.net; s=grsec; t=1730750701; x=1731355501; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=LqXyBeqTqhNf+awLvPMY72W00ptpe9CxNn7gsTTON+g=;
-        b=ntCrfejzMaIxdXYdOG0M6qCF/O1in5cjp2JWxLXouxDticBceHF7u8GyRpkOn1iVlQ
-         j+uTWKz+GyubPj9Ts548uUpc3nYHe6qvjQpYahiZykHjqXfVE5ZrfMsv0zmMab4Pcg0Q
-         NgeiGbrPp6kOrdmNl5OTxn5/QDBiny6PZCpadAphkW/+V2G/QI6Eg69z9GM7//pb+yhV
-         1jQCISIv1uufTE0K45GfgxhG+Qfq3rYvlAeEWohkTDK/PDwWdQkK2AHH6QKP3zPvQszQ
-         z+t3p6/VB0eWmOk3qXozjS5aqvOkKtCZirLSDfDKBNK8XKUOXU9I59x9/wCT5FMlSCC2
-         geDw==
+        d=gmail.com; s=20230601; t=1730752029; x=1731356829; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=RHtMBfQecyyKv9bmAtAYemSSyWK9CXs7Ly84qsFf5U8=;
+        b=jCQaniXBwpLOtbgAm8+k5Ttu+/9MfIEemRaPNfqaqUy12DoCPut3MMa/ujisdDYXmQ
+         bVyTmLhLocIN63QcUomWaEgGH80iXHtCgI2KSAvDUOML/eb1S5W0cxLidep+swtyyMbc
+         Uq2GZfH9P9LDvXUbuYFjOaoiMeMKxTH5wU8p12kmv7sNULv5ErAepBwo++t3sJeVcmRA
+         0TKeCuzjPRW2LoJUpM/EMF7kp55tUYEGfPqGwALjTVs18sM5s+U4W+ePOcApfmzMIP/x
+         BiMGrQrb2lJe7l+j9ltF+4VdL6+dH/YMUaNHvZ4JFSXHvDuckpKpoh58ZtfDwjxfuH0D
+         6Tww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730750701; x=1731355501;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=LqXyBeqTqhNf+awLvPMY72W00ptpe9CxNn7gsTTON+g=;
-        b=D0xmTaQcS/4zIeBwBc5XRENjq3lM/tktdSEJ65hvMllLpUb32/JCCxJbFe7mMrnuqw
-         IBdezteq1CTe7YobQqoVwqDJJgg/Qtuvb/sk8xWxnpzziqsfgU2S6x8IUj7/A3370jyJ
-         A1xiGR+5vDRIFjabXKNj9PPzKmukxBgXHDx9QCVjSIcxsiNu6eowO2dW4VVi0Q1hxN1N
-         lYKGcIphMH1U4SJTqq0wpazUh3XeCiEmd1359f10xKPXwsL8NXhZpwSMsXRJFBe06Isq
-         s8eUiDYC/5o0KeBBQz7jj4WneU0ylG4koyhHVq0dx0xU5Y9Bld22tbj/PDSkL3xKc1Vm
-         aqLw==
-X-Gm-Message-State: AOJu0YxjRc1i9SZQ336YObU/qMAj3NG8et8ZBiD/hvhoi8l5NbQfg40V
-	iLnVl3+SpNwUTSsd5GpntpDoHEH63xzUCDW8YuGRuWzQDa21Q2k6gzadyZxjBApaMkZSs4rnTt1
-	QRco=
-X-Google-Smtp-Source: AGHT+IFfiWwMUqcQi3JT4VkZBNOmJCL/e1pON4K+ovIlwLvD1jQ9g7w8ja3e8ARtKuc2HFxLxH64nw==
-X-Received: by 2002:a05:6402:3596:b0:5ce:cbce:ccbb with SMTP id 4fb4d7f45d1cf-5cecbcecfcdmr7407916a12.35.1730750700586;
-        Mon, 04 Nov 2024 12:05:00 -0800 (PST)
-Received: from bell.fritz.box (p200300f6af056e00c6570c15b61f00e3.dip0.t-ipconnect.de. [2003:f6:af05:6e00:c657:c15:b61f:e3])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5cee6a9a5c6sm249160a12.17.2024.11.04.12.04.59
+        d=1e100.net; s=20230601; t=1730752029; x=1731356829;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=RHtMBfQecyyKv9bmAtAYemSSyWK9CXs7Ly84qsFf5U8=;
+        b=Dsor7MRM7GbZg5WrCjCFFMPShvQFabXnwUAUD3C2fYbaB0ToVtAyYu2S4wcUtL3843
+         TsMaKlVKbonh4S4s4kgPx1ZxRZMhIPiGN7D8ejU3K0N+mq54O4tbeC7sinnkyI1Yi03l
+         fLS3KUuhcqEbOgsiFH/9lgh/Pwpswo153eQ4Q8LGvvVixL7zQPJOZu9Uhqo71l4kDgor
+         45GIgTLnMdGjFUyFVB/h5YTuxzOxX0LoBFru2jSKqA85hgxT4h5XD5FF0yzKxVvozwtM
+         Sx7qH4yKdT0M5YAP4Obsa7z6//+3myobVFdBu4LO3lLpwHs4rRPslu4v5a5+B8tXvVS1
+         mM/Q==
+X-Forwarded-Encrypted: i=1; AJvYcCW3bJRRYGvK72m6ouOEmAgK38OQxoazg/4VE7NhAeYXU1FwmTmT2AQ6RSGtm94bb+z0RPo=@vger.kernel.org, AJvYcCXvx6KxdfSBfpovkiqEtUnjd1WI1JeZAHMXINplqkpwh3BqtZCjKTtTJk6qRZKNbJYe1ON+edz2orAdZLNf@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywf8+e2FyzDFr8ZCDSE9AbeUaVcYpWeBBfCK5yO4VNC6ncxR/6X
+	HPjzFp8v7AFQtBlCEi93xviYDTtzsCo9OI/gsZzUe+WxKMJD8fgAmrIcb6SP
+X-Google-Smtp-Source: AGHT+IGwx4SmI9ceRF/57XXFL+jnLXt/f43mLfRRmWIi1TEpIz9VSsTQSeK140PRBYiXCKNFROOojg==
+X-Received: by 2002:a17:902:ea0a:b0:20c:b876:b4eb with SMTP id d9443c01a7336-21103ca9ebemr256880845ad.59.1730752028558;
+        Mon, 04 Nov 2024 12:27:08 -0800 (PST)
+Received: from ryzen.lan ([2601:644:8200:dab8::a86])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-211057d5326sm63976945ad.278.2024.11.04.12.27.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Nov 2024 12:05:00 -0800 (PST)
-From: Mathias Krause <minipli@grsecurity.net>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
+        Mon, 04 Nov 2024 12:27:08 -0800 (PST)
+From: Rosen Penev <rosenp@gmail.com>
+To: netdev@vger.kernel.org
+Cc: Edward Cree <ecree.xilinx@gmail.com>,
+	Martin Habets <habetsm.xilinx@gmail.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Mathias Krause <minipli@grsecurity.net>,
-	Johan Almbladh <johan.almbladh@anyfinetworks.com>
-Subject: [PATCH bpf-next 3/3] bpf/tests: Make staggered jump tests constant blinding compatible
-Date: Mon,  4 Nov 2024 21:04:52 +0100
-Message-Id: <20241104200452.2651529-4-minipli@grsecurity.net>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20241104200452.2651529-1-minipli@grsecurity.net>
-References: <20241104200452.2651529-1-minipli@grsecurity.net>
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	linux-net-drivers@amd.com (open list:SFC NETWORK DRIVER),
+	linux-kernel@vger.kernel.org (open list),
+	bpf@vger.kernel.org (open list:XDP (eXpress Data Path):Keyword:(?:\b|_)xdp(?:\b|_))
+Subject: [PATCH net-next] net: sfc: use ethtool string helpers
+Date: Mon,  4 Nov 2024 12:27:05 -0800
+Message-ID: <20241104202705.120939-1-rosenp@gmail.com>
+X-Mailer: git-send-email 2.47.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -73,85 +78,249 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The "staggered jumps" tests currently fail with constant blinding
-enabled as the increased program size makes jump offsets overflow.
+The latter is the preferred way to copy ethtool strings.
 
-Fix that by decreasing the number of jumps depending on the expected
-size increase caused by blinding the program.
+Avoids manually incrementing the pointer. Cleans up the code quite well.
 
-As the test for JIT blinding makes use of bpf_jit_blinding_enabled(NULL)
-and test_bpf.ko is a kernel modules, 'bpf_token_capable' and
-'bpf_jit_harden' need to be exported.
-
-Fixes: a7d2e752e520 ("bpf/tests: Add staggered JMP and JMP32 tests")
-Cc: Johan Almbladh <johan.almbladh@anyfinetworks.com>
-Signed-off-by: Mathias Krause <minipli@grsecurity.net>
+Signed-off-by: Rosen Penev <rosenp@gmail.com>
 ---
- kernel/bpf/core.c  |  3 +++
- kernel/bpf/token.c |  3 +++
- lib/test_bpf.c     | 19 +++++++++++++++++--
- 3 files changed, 23 insertions(+), 2 deletions(-)
+ drivers/net/ethernet/sfc/ethtool_common.c     | 34 +++++++------------
+ drivers/net/ethernet/sfc/falcon/ethtool.c     | 24 +++++--------
+ drivers/net/ethernet/sfc/falcon/nic.c         |  7 ++--
+ drivers/net/ethernet/sfc/nic.c                |  7 ++--
+ .../net/ethernet/sfc/siena/ethtool_common.c   | 34 +++++++------------
+ drivers/net/ethernet/sfc/siena/nic.c          |  7 ++--
+ 6 files changed, 40 insertions(+), 73 deletions(-)
 
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index 233ea78f8f1b..fe7eada54d4b 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -570,6 +570,9 @@ int bpf_jit_kallsyms __read_mostly = IS_BUILTIN(CONFIG_BPF_JIT_DEFAULT_ON);
- int bpf_jit_harden   __read_mostly;
- long bpf_jit_limit   __read_mostly;
- long bpf_jit_limit_max __read_mostly;
-+#if IS_MODULE(CONFIG_TEST_BPF)
-+EXPORT_SYMBOL_GPL(bpf_jit_harden);
-+#endif
+diff --git a/drivers/net/ethernet/sfc/ethtool_common.c b/drivers/net/ethernet/sfc/ethtool_common.c
+index ae32e08540fa..d46972f45ec1 100644
+--- a/drivers/net/ethernet/sfc/ethtool_common.c
++++ b/drivers/net/ethernet/sfc/ethtool_common.c
+@@ -403,24 +403,19 @@ static size_t efx_describe_per_queue_stats(struct efx_nic *efx, u8 *strings)
+ 	efx_for_each_channel(channel, efx) {
+ 		if (efx_channel_has_tx_queues(channel)) {
+ 			n_stats++;
+-			if (strings != NULL) {
+-				snprintf(strings, ETH_GSTRING_LEN,
+-					 "tx-%u.tx_packets",
+-					 channel->tx_queue[0].queue /
+-					 EFX_MAX_TXQ_PER_CHANNEL);
+-
+-				strings += ETH_GSTRING_LEN;
+-			}
++			if (strings)
++				ethtool_sprintf(
++					&strings, "tx-%u.tx_packets",
++					channel->tx_queue[0].queue /
++						EFX_MAX_TXQ_PER_CHANNEL);
+ 		}
+ 	}
+ 	efx_for_each_channel(channel, efx) {
+ 		if (efx_channel_has_rx_queue(channel)) {
+ 			n_stats++;
+-			if (strings != NULL) {
+-				snprintf(strings, ETH_GSTRING_LEN,
+-					 "rx-%d.rx_packets", channel->channel);
+-				strings += ETH_GSTRING_LEN;
+-			}
++			if (strings)
++				ethtool_sprintf(&strings, "rx-%d.rx_packets",
++						channel->channel);
+ 		}
+ 	}
+ 	if (efx->xdp_tx_queue_count && efx->xdp_tx_queues) {
+@@ -428,11 +423,10 @@ static size_t efx_describe_per_queue_stats(struct efx_nic *efx, u8 *strings)
  
- static void
- bpf_prog_ksym_set_addr(struct bpf_prog *prog)
-diff --git a/kernel/bpf/token.c b/kernel/bpf/token.c
-index dcbec1a0dfb3..aed98a958c73 100644
---- a/kernel/bpf/token.c
-+++ b/kernel/bpf/token.c
-@@ -26,6 +26,9 @@ bool bpf_token_capable(const struct bpf_token *token, int cap)
- 		return false;
- 	return true;
- }
-+#if IS_MODULE(CONFIG_TEST_BPF)
-+EXPORT_SYMBOL_GPL(bpf_token_capable);
-+#endif
+ 		for (xdp = 0; xdp < efx->xdp_tx_queue_count; xdp++) {
+ 			n_stats++;
+-			if (strings) {
+-				snprintf(strings, ETH_GSTRING_LEN,
+-					 "tx-xdp-cpu-%hu.tx_packets", xdp);
+-				strings += ETH_GSTRING_LEN;
+-			}
++			if (strings)
++				ethtool_sprintf(&strings,
++						"tx-xdp-cpu-%hu.tx_packets",
++						xdp);
+ 		}
+ 	}
  
- void bpf_token_inc(struct bpf_token *token)
- {
-diff --git a/lib/test_bpf.c b/lib/test_bpf.c
-index c1140bab280d..3469631c0aba 100644
---- a/lib/test_bpf.c
-+++ b/lib/test_bpf.c
-@@ -2700,10 +2700,25 @@ static int __bpf_fill_staggered_jumps(struct bpf_test *self,
- 				      u64 r1, u64 r2)
- {
- 	int size = self->test[0].result - 1;
--	int len = 4 + 3 * (size + 1);
- 	struct bpf_insn *insns;
--	int off, ind;
-+	int len, off, ind;
+@@ -467,9 +461,7 @@ void efx_ethtool_get_strings(struct net_device *net_dev,
+ 		strings += (efx->type->describe_stats(efx, strings) *
+ 			    ETH_GSTRING_LEN);
+ 		for (i = 0; i < EFX_ETHTOOL_SW_STAT_COUNT; i++)
+-			strscpy(strings + i * ETH_GSTRING_LEN,
+-				efx_sw_stat_desc[i].name, ETH_GSTRING_LEN);
+-		strings += EFX_ETHTOOL_SW_STAT_COUNT * ETH_GSTRING_LEN;
++			ethtool_puts(&strings, efx_sw_stat_desc[i].name);
+ 		strings += (efx_describe_per_queue_stats(efx, strings) *
+ 			    ETH_GSTRING_LEN);
+ 		efx_ptp_describe_stats(efx, strings);
+diff --git a/drivers/net/ethernet/sfc/falcon/ethtool.c b/drivers/net/ethernet/sfc/falcon/ethtool.c
+index f4db683b80f7..41bd63d0c40c 100644
+--- a/drivers/net/ethernet/sfc/falcon/ethtool.c
++++ b/drivers/net/ethernet/sfc/falcon/ethtool.c
+@@ -361,24 +361,18 @@ static size_t ef4_describe_per_queue_stats(struct ef4_nic *efx, u8 *strings)
+ 	ef4_for_each_channel(channel, efx) {
+ 		if (ef4_channel_has_tx_queues(channel)) {
+ 			n_stats++;
+-			if (strings != NULL) {
+-				snprintf(strings, ETH_GSTRING_LEN,
+-					 "tx-%u.tx_packets",
+-					 channel->tx_queue[0].queue /
+-					 EF4_TXQ_TYPES);
+-
+-				strings += ETH_GSTRING_LEN;
+-			}
++			if (strings)
++				ethtool_sprintf(&strings, "tx-%u.tx_packets",
++						channel->tx_queue[0].queue /
++							EF4_TXQ_TYPES);
+ 		}
+ 	}
+ 	ef4_for_each_channel(channel, efx) {
+ 		if (ef4_channel_has_rx_queue(channel)) {
+ 			n_stats++;
+-			if (strings != NULL) {
+-				snprintf(strings, ETH_GSTRING_LEN,
+-					 "rx-%d.rx_packets", channel->channel);
+-				strings += ETH_GSTRING_LEN;
+-			}
++			if (strings)
++				ethtool_sprintf(&strings, "rx-%d.rx_packets",
++						channel->channel);
+ 		}
+ 	}
+ 	return n_stats;
+@@ -412,9 +406,7 @@ static void ef4_ethtool_get_strings(struct net_device *net_dev,
+ 		strings += (efx->type->describe_stats(efx, strings) *
+ 			    ETH_GSTRING_LEN);
+ 		for (i = 0; i < EF4_ETHTOOL_SW_STAT_COUNT; i++)
+-			strscpy(strings + i * ETH_GSTRING_LEN,
+-				ef4_sw_stat_desc[i].name, ETH_GSTRING_LEN);
+-		strings += EF4_ETHTOOL_SW_STAT_COUNT * ETH_GSTRING_LEN;
++			ethtool_puts(&strings, ef4_sw_stat_desc[i].name);
+ 		strings += (ef4_describe_per_queue_stats(efx, strings) *
+ 			    ETH_GSTRING_LEN);
+ 		break;
+diff --git a/drivers/net/ethernet/sfc/falcon/nic.c b/drivers/net/ethernet/sfc/falcon/nic.c
+index 78c851b5a56f..a7f0caa8710f 100644
+--- a/drivers/net/ethernet/sfc/falcon/nic.c
++++ b/drivers/net/ethernet/sfc/falcon/nic.c
+@@ -451,11 +451,8 @@ size_t ef4_nic_describe_stats(const struct ef4_hw_stat_desc *desc, size_t count,
  
-+	/* Constant blinding triples the size of each instruction making use
-+	 * of immediate values. Tweak the test to not overflow jump offsets.
-+	 */
-+	if (bpf_jit_blinding_enabled(NULL)) {
-+		int bloat_factor = 2 * 3;
-+
-+		if (BPF_SRC(jmp->code) == BPF_K)
-+			bloat_factor += 3;
-+
-+		size /= bloat_factor;
-+		size &= ~1;
-+
-+		self->test[0].result = size + 1;
-+	}
-+
-+	len = 4 + 3 * (size + 1);
- 	insns = kmalloc_array(len, sizeof(*insns), GFP_KERNEL);
- 	if (!insns)
- 		return -ENOMEM;
+ 	for_each_set_bit(index, mask, count) {
+ 		if (desc[index].name) {
+-			if (names) {
+-				strscpy(names, desc[index].name,
+-					ETH_GSTRING_LEN);
+-				names += ETH_GSTRING_LEN;
+-			}
++			if (names)
++				ethtool_puts(&names, desc[index].name);
+ 			++visible;
+ 		}
+ 	}
+diff --git a/drivers/net/ethernet/sfc/nic.c b/drivers/net/ethernet/sfc/nic.c
+index a33ed473cc8a..51c975cff4fe 100644
+--- a/drivers/net/ethernet/sfc/nic.c
++++ b/drivers/net/ethernet/sfc/nic.c
+@@ -306,11 +306,8 @@ size_t efx_nic_describe_stats(const struct efx_hw_stat_desc *desc, size_t count,
+ 
+ 	for_each_set_bit(index, mask, count) {
+ 		if (desc[index].name) {
+-			if (names) {
+-				strscpy(names, desc[index].name,
+-					ETH_GSTRING_LEN);
+-				names += ETH_GSTRING_LEN;
+-			}
++			if (names)
++				ethtool_puts(&names, desc[index].name);
+ 			++visible;
+ 		}
+ 	}
+diff --git a/drivers/net/ethernet/sfc/siena/ethtool_common.c b/drivers/net/ethernet/sfc/siena/ethtool_common.c
+index 075fef64de68..53b1cdf872d8 100644
+--- a/drivers/net/ethernet/sfc/siena/ethtool_common.c
++++ b/drivers/net/ethernet/sfc/siena/ethtool_common.c
+@@ -403,24 +403,19 @@ static size_t efx_describe_per_queue_stats(struct efx_nic *efx, u8 *strings)
+ 	efx_for_each_channel(channel, efx) {
+ 		if (efx_channel_has_tx_queues(channel)) {
+ 			n_stats++;
+-			if (strings != NULL) {
+-				snprintf(strings, ETH_GSTRING_LEN,
+-					 "tx-%u.tx_packets",
+-					 channel->tx_queue[0].queue /
+-					 EFX_MAX_TXQ_PER_CHANNEL);
+-
+-				strings += ETH_GSTRING_LEN;
+-			}
++			if (strings)
++				ethtool_sprintf(
++					&strings, "tx-%u.tx_packets",
++					channel->tx_queue[0].queue /
++						EFX_MAX_TXQ_PER_CHANNEL);
+ 		}
+ 	}
+ 	efx_for_each_channel(channel, efx) {
+ 		if (efx_channel_has_rx_queue(channel)) {
+ 			n_stats++;
+-			if (strings != NULL) {
+-				snprintf(strings, ETH_GSTRING_LEN,
+-					 "rx-%d.rx_packets", channel->channel);
+-				strings += ETH_GSTRING_LEN;
+-			}
++			if (strings)
++				ethtool_sprintf(&strings, "rx-%d.rx_packets",
++						channel->channel);
+ 		}
+ 	}
+ 	if (efx->xdp_tx_queue_count && efx->xdp_tx_queues) {
+@@ -428,11 +423,10 @@ static size_t efx_describe_per_queue_stats(struct efx_nic *efx, u8 *strings)
+ 
+ 		for (xdp = 0; xdp < efx->xdp_tx_queue_count; xdp++) {
+ 			n_stats++;
+-			if (strings) {
+-				snprintf(strings, ETH_GSTRING_LEN,
+-					 "tx-xdp-cpu-%hu.tx_packets", xdp);
+-				strings += ETH_GSTRING_LEN;
+-			}
++			if (strings)
++				ethtool_sprintf(&strings,
++						"tx-xdp-cpu-%hu.tx_packets",
++						xdp);
+ 		}
+ 	}
+ 
+@@ -467,9 +461,7 @@ void efx_siena_ethtool_get_strings(struct net_device *net_dev,
+ 		strings += (efx->type->describe_stats(efx, strings) *
+ 			    ETH_GSTRING_LEN);
+ 		for (i = 0; i < EFX_ETHTOOL_SW_STAT_COUNT; i++)
+-			strscpy(strings + i * ETH_GSTRING_LEN,
+-				efx_sw_stat_desc[i].name, ETH_GSTRING_LEN);
+-		strings += EFX_ETHTOOL_SW_STAT_COUNT * ETH_GSTRING_LEN;
++			ethtool_puts(&strings, efx_sw_stat_desc[i].name);
+ 		strings += (efx_describe_per_queue_stats(efx, strings) *
+ 			    ETH_GSTRING_LEN);
+ 		efx_siena_ptp_describe_stats(efx, strings);
+diff --git a/drivers/net/ethernet/sfc/siena/nic.c b/drivers/net/ethernet/sfc/siena/nic.c
+index 0ea0433a6230..06b97218b490 100644
+--- a/drivers/net/ethernet/sfc/siena/nic.c
++++ b/drivers/net/ethernet/sfc/siena/nic.c
+@@ -457,11 +457,8 @@ size_t efx_siena_describe_stats(const struct efx_hw_stat_desc *desc, size_t coun
+ 
+ 	for_each_set_bit(index, mask, count) {
+ 		if (desc[index].name) {
+-			if (names) {
+-				strscpy(names, desc[index].name,
+-					ETH_GSTRING_LEN);
+-				names += ETH_GSTRING_LEN;
+-			}
++			if (names)
++				ethtool_puts(&names, desc[index].name);
+ 			++visible;
+ 		}
+ 	}
 -- 
-2.30.2
+2.47.0
 
