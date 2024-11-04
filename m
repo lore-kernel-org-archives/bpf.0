@@ -1,78 +1,139 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 118D81C9ED1;
-	Mon,  4 Nov 2024 17:53:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D61161C9ED6
+	for <bpf@vger.kernel.org>; Mon,  4 Nov 2024 18:09:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730742815; cv=none; b=j43R6IndmT8qUJA1ultuWND/ZK0VrQ/Xm0pez6uPqi0Y3ETMBg9psdGMcAJ4BHo+EKI5iTenNvjbbcTK+l+7G4L+MntsrR7bs9rvMLXGKr1qZwYLloG8thvK9D8PccizdzpvtTkcv75SBnrpHjyQqFBmJYbd6zAz57ioMpv+jWA=
+	t=1730743791; cv=none; b=AGWk5/uks1Z8g+ZZ3FOsFP0+9csZljappyAEY50RWB9au5i0qcHsaZ/4KUfofB8mXTkl7wohmh8MtOgTUngz43/E8pj1QMID0AWcnXcEa2MFvX0l9FK1ERj790PrpgBMQgBnSHxHPNX3QbN1egW8gW0pK4ZksQf4T5Q7E3N/G/c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730742815; c=relaxed/simple;
-	bh=mw2rwn+q9uVitr1d19uhuql+QGixsSd1sWtFZO10diA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=l4itwXVL2mPA497zWPU9O35UVBW2Ced57+LkbPs/Cz0W54bvk1bvge8/wSc1kx8aPLcOfwxfgIEFjzr3kNdcNY0B06n631DkZWKrZ9ZC+khUiJo3oqxUN5mVU28BKR37deLN2+dlLrK2dj0WKRrU7lRLi0ItoTgPZI6PmWzxCNI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sTaMl1BE; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1730743791; c=relaxed/simple;
+	bh=kgxJ9IgKTYJC4IqPD4+Aom+bXgB5VVHsiouoDB7iJv8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=VUOM2PsREkjpua5k5KwNvKCh2qPJXUwslb5tg7grXE5KriD6G+2ywp+uqi0ZNCBFLgfjK+kQ2uS8UBVhfODNJfBeWYdX90lQVdrRnJIxhsvY96SP3FRE8KX0bfyqPCR5hzP6tvsv1Kp0uvS0t5oTi45z5foEf6d7sZSsi5QDMDI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PizpS6ym; arc=none smtp.client-ip=198.175.65.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sTaMl1BE"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E560C4CED1;
-	Mon,  4 Nov 2024 17:53:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1730742814;
-	bh=mw2rwn+q9uVitr1d19uhuql+QGixsSd1sWtFZO10diA=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=sTaMl1BEX5DNIgIRuweImV+fd+oxS2EZR/kuMtfMEdpyszA1mGHYUV9Lmu5u5ORUG
-	 g36kTbX1Sndk1TRN5vYDj1Ti6gXL66wTQljbWoaWdFtsJcTHHI3mILDp+wdkr0wTBj
-	 nsW+ObUaI4Dja6sGNSZA4X+khq+xRpCvFtFdhDOoQbYrZFtg39068Gi0Di1yV+NX4y
-	 mfvR8BCjOgOe2lhkWhaWW8Jjga/q17AAkofvBFNGgyzAXdtDN7y0ORYPJJyHaBSqZu
-	 6gdSU5At5Jlhokvc3xy/znE2pzYMxJGwCgFPqB0FYigj+1dypyUX4zahBc2qZ4p3+V
-	 tm8pdsK2+PXDg==
-From: Jiri Olsa <jolsa@kernel.org>
-To: stable@vger.kernel.org
-Cc: Andrii Nakryiko <andrii@kernel.org>,
-	bpf@vger.kernel.org,
-	Daniel Borkmann <daniel@iogearbox.net>
-Subject: [PATCH stable 6.11] lib/buildid: Fix build ID parsing logic
-Date: Mon,  4 Nov 2024 18:52:56 +0100
-Message-ID: <20241104175256.2327164-5-jolsa@kernel.org>
-X-Mailer: git-send-email 2.47.0
-In-Reply-To: <20241104175256.2327164-1-jolsa@kernel.org>
-References: <20241104175256.2327164-1-jolsa@kernel.org>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PizpS6ym"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1730743790; x=1762279790;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=kgxJ9IgKTYJC4IqPD4+Aom+bXgB5VVHsiouoDB7iJv8=;
+  b=PizpS6ym4gUVGVfx+QgETIfu1KI5Shsjs973i6sN5hU8GOJVVWRT4wT1
+   bAMlr0pt5UzW5IeA17fqXolS351ft3Sf33sa6hJ63UQc5tkV9Uz88nDWD
+   JRAz9OfWo1p5qgm9Kp0HWB0d7H4viPbqXMFW2nEem7IptwAaeYgFzeRYm
+   mTiKt5lZcTCoZ4yhFWQiv6QxP7PHN/u8a14LlAbNg2+nQnO15lrop5oO3
+   jnB3vtS7F9UOKKj4SZDr7P8+PuOJ1ZZlwckoA+BYRWwyWgnKYRAhQZZiR
+   XDeRpKvP9cXyOcQFRWiFjDZFj/hYdoFekhL3pQvtlOo32/u5K8Q/UsDks
+   g==;
+X-CSE-ConnectionGUID: KRbuG+54S7SN8/YyJ+miNQ==
+X-CSE-MsgGUID: kwmfDT8pTKKuLFQH7W8FbQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="41562060"
+X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
+   d="scan'208";a="41562060"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Nov 2024 10:09:49 -0800
+X-CSE-ConnectionGUID: brYT7lhDS0ChbhXjYDdZCg==
+X-CSE-MsgGUID: 3MJkzDbHQUSalfF+eKnXLA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,257,1725346800"; 
+   d="scan'208";a="107071570"
+Received: from tfalcon-desk.amr.corp.intel.com (HELO [10.124.221.97]) ([10.124.221.97])
+  by fmviesa002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Nov 2024 10:09:48 -0800
+Message-ID: <b9395010-d59a-4ac9-9af8-2cb6710e06c2@intel.com>
+Date: Mon, 4 Nov 2024 10:09:47 -0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v3 1/2] x86: Perform BPF exception fixup in
+ do_user_addr_fault
+To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: bpf@vger.kernel.org, kkd@meta.com, Puranjay Mohan <puranjay@kernel.org>,
+ Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>,
+ Martin KaFai Lau <martin.lau@kernel.org>,
+ Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>,
+ Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+ "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+ Dave Hansen <dave.hansen@linux.intel.com>, Andy Lutomirski
+ <luto@kernel.org>, Peter Zijlstra <peterz@infradead.org>,
+ Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+ Borislav Petkov <bp@alien8.de>, Rishabh Iyer <rishabh.iyer@berkeley.edu>,
+ Sanidhya Kashyap <sanidhya.kashyap@epfl.ch>, x86@kernel.org,
+ kernel-team@fb.com, "Shutemov, Kirill" <kirill.shutemov@intel.com>
+References: <20241103193512.4076710-1-memxor@gmail.com>
+ <20241103193512.4076710-2-memxor@gmail.com>
+ <92dfb8cc-f6eb-4753-950b-944cc26e379f@intel.com>
+ <CAP01T77v+__RvLOpfyezfwvyZ1EjZ3gGRPkQMn_6uim0HfB31g@mail.gmail.com>
+From: Dave Hansen <dave.hansen@intel.com>
+Content-Language: en-US
+Autocrypt: addr=dave.hansen@intel.com; keydata=
+ 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
+In-Reply-To: <CAP01T77v+__RvLOpfyezfwvyZ1EjZ3gGRPkQMn_6uim0HfB31g@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-The parse_build_id_buf does not account Elf32_Nhdr header size
-when getting the build id data pointer and returns wrong build
-id data as result.
+On 11/4/24 09:50, Kumar Kartikeya Dwivedi wrote:
+> While reading invalid memory is a rare case that should not happen,
+> it may be possible if some kernel field contains a stale address
+> etc.
 
-This is problem only for stable trees that merged 768d731b8a0d
-fix, the upstream build id code was refactored and returns proper
-build id.
+Reading random (unaccepted) memory in a TDX guest is fatal, even from
+kernel addresses.  We had a lot of fun even getting
+load_unaligned_zeropad() to work.
 
-Acked-by: Andrii Nakryiko <andrii@kernel.org>
-Fixes: 768d731b8a0d ("lib/buildid: harden build ID parsing logic")
-Signed-off-by: Jiri Olsa <jolsa@kernel.org>
----
- lib/buildid.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+So, honestly, if you've letting buggy BFP programs get loaded and read
+random memory (kernel or user), you've got bigger problems than a
+verbose kernel panic when the buggy program happens to touch userspace.
 
-diff --git a/lib/buildid.c b/lib/buildid.c
-index 26007cc99a38..aee749f2647d 100644
---- a/lib/buildid.c
-+++ b/lib/buildid.c
-@@ -40,7 +40,7 @@ static int parse_build_id_buf(unsigned char *build_id,
- 		    name_sz == note_name_sz &&
- 		    memcmp(nhdr + 1, note_name, note_name_sz) == 0 &&
- 		    desc_sz > 0 && desc_sz <= BUILD_ID_SIZE_MAX) {
--			data = note_start + note_off + ALIGN(note_name_sz, 4);
-+			data = note_start + note_off + sizeof(Elf32_Nhdr) + ALIGN(note_name_sz, 4);
- 			memcpy(build_id, data, desc_sz);
- 			memset(build_id + desc_sz, 0, BUILD_ID_SIZE_MAX - desc_sz);
- 			if (size)
--- 
-2.47.0
-
+I'd rather not hack code into the page fault handler to add to the
+illusion that this is a good idea or safe in any way.
