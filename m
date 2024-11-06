@@ -1,273 +1,452 @@
-Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05olkn2086.outbound.protection.outlook.com [40.92.89.86])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACB6220A5E0;
-	Wed,  6 Nov 2024 19:41:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.92.89.86
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730922111; cv=fail; b=d/uH/fXikeg2vRXcmQg1A+OJxiTTDfa/J9LflfmIRMvNk+wvk7aBkDEd4s1FjxHrmV8IVHjTbaTsM+tcJBp7YFma1ZxjyxoAwlcoGg6perBQYVNIwHQfE3MNcDBV2yfgK4KfIE0XrLnb2FlzX6OoE9JnSyMH9vHmOsxiV6l6U7s=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730922111; c=relaxed/simple;
-	bh=KXnSoYq23pKPhySia7NA6P3OqJA/RlteqQmtQgIkxMo=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=fUUWWG69BnpJ0xwhyC5M9amrmPy63IFpJSf0KWu/djvvlNsGiLkJXMxJia+rK0GSLWZ5f8pgcNr/Fis0IbfJeEQwuIEU4FtBkY3sc+doWxXOZDaRhNJaFqE6S35bH24MD2ktP6qIWbm+cSArbQabHQAW89ZF97a+bSzyZ/8wixs=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com; spf=pass smtp.mailfrom=outlook.com; dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b=howoHFO0; arc=fail smtp.client-ip=40.92.89.86
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=outlook.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 762FF208225;
+	Wed,  6 Nov 2024 19:45:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.47
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1730922322; cv=none; b=KtNl7Z0hKI4JWEAJuRvPAneMyijTNqLqY5211R7FBWUXJ8lwgPRFOCvsVSjrx2ZYHPHofWlb/poC91BlvdoBAdONmeWbR65nk+Dv677k+MGHIMueuXterhLEKPxEbqrF389uCr18DNt8SFrT+B2+5E7G1hu3iEQJca89Sh89pQY=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1730922322; c=relaxed/simple;
+	bh=BF65O3jHtf3kOsBmTMPSdvix63/S+nl9LQpxGnAyA4c=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ZkN+cvOy5AvMBlAPaIsYmwgpvKeiQFdDRx5FkdMlFPDAM2egud9L2YcqZGdwYctK4PF4TKw/0XBp0NP/2s3oN2+cCZiw0ag7v7+rBmQXAV0WDR3MMtwAa9mHrTlbn3MPR2h2rXvcGdNtc0WX569NjhdyBLCliSlC4ZGc8RXA+tQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MKcRigRf; arc=none smtp.client-ip=209.85.216.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b="howoHFO0"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=B1Pp2mNKOEH6kjHTTEe5KacS9HaE39lYl74xZ63C2w9vnidyq6L73FRmrovfttgE7LcJv2/sWI8HHkhrx/ZN+pQzPrrpSDNLrl/NGOmpWBtwoe+bC9ynivXcKrQtN9el4lN8YlkP8ROOG0YX1n8Zfwv1LIPO8p5y7WgoUU2sIZPw5/6pEaurb7R7abEoCjsv/u8piZk4qtPNjhcva+HZ+0bbgmb2ouZlNJ/cSPHPoBTpJ3LhvxJlnf2L2BJASK56kiXr2g9Tn8tygHHZYR4sr89JUr8ZdBhP0YxDU+SOpUEDJOSpkRS8CGYNafW7vik7VNBuS3Q1hBRs08iSigtGuQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=jv1sJZwx9eKR8V9NrmGKUvTF3Jqh7OwSXf9NEFqVf5k=;
- b=ejhzey36M4tCTdJgZ7yybr5H9lFqLQuF4/i0X85aSRv7ZF9hnVDMpoZ2e5I+tWvmC4sEmJrld7Py/YW6fXbeii2UN3NvASVV3v7Wsw5kOum8sf9GC9IeSuhCmnTkie3xL02nj6CLgXY6x3+oAvyCzwzmTKtoPxTrTf67IKC/doR1P20daI1dQ4gfAgE2ZXXNuE7iP9zG8yMRO/zSvHcHyjxAnon2ci865nrt/v0pYe1mkkiP2JsW+95QfHg2XWeiUEvJ5Qry21jyjBOG9Zir110tPelO/+0Y4nrmrhy7rlWH0okNqL/CXWFCPVK8+aAZRn9KXgP59Yk6xGeDP5Q0DA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=jv1sJZwx9eKR8V9NrmGKUvTF3Jqh7OwSXf9NEFqVf5k=;
- b=howoHFO0QeWQ7vFJ/diSapXIzjwwCyaDPfgmy/Pm7g1WM5L6bP6c7eIiR9rBgWIxRw+0QBd0+aKgGiYdkr1aAmTCvNzO0ugxDF4uAjqh4StcibZhGG5UjStcVXs3XpaKbTYaAH5Ks7IADParajdf9iRmixfyBMUMzZWk/EOlkTZAVNbh+wbh/8x1AXx+wMlbNy8AQ7HFxsuKNhZrX106QB1BE5cBRqEKRI9/qGuNm7ym/XV2ZZV9YGi+WlHx5uoihIUE1qcP3eyeidviqBup1s6uZo3BH5zdqquTkblK9MmKpm29BdqEOScXlbhFAVDatyYc9u52LCi+8vUV6k/N/Q==
-Received: from AM6PR03MB5848.eurprd03.prod.outlook.com (2603:10a6:20b:e4::10)
- by AS2PR03MB9792.eurprd03.prod.outlook.com (2603:10a6:20b:608::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8137.18; Wed, 6 Nov
- 2024 19:41:47 +0000
-Received: from AM6PR03MB5848.eurprd03.prod.outlook.com
- ([fe80::4b97:bbdb:e0ac:6f7]) by AM6PR03MB5848.eurprd03.prod.outlook.com
- ([fe80::4b97:bbdb:e0ac:6f7%4]) with mapi id 15.20.8093.027; Wed, 6 Nov 2024
- 19:41:47 +0000
-From: Juntong Deng <juntong.deng@outlook.com>
-To: ast@kernel.org,
-	daniel@iogearbox.net,
-	john.fastabend@gmail.com,
-	andrii@kernel.org,
-	martin.lau@linux.dev,
-	eddyz87@gmail.com,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	kpsingh@kernel.org,
-	sdf@fomichev.me,
-	haoluo@google.com,
-	jolsa@kernel.org,
-	memxor@gmail.com,
-	snorcht@gmail.com,
-	brauner@kernel.org
-Cc: bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org
-Subject: [PATCH bpf-next v3 4/4] selftests/bpf: Add tests for struct file related CRIB kfuncs
-Date: Wed,  6 Nov 2024 19:38:48 +0000
-Message-ID:
- <AM6PR03MB5848464E27435C30A51C8DDF99532@AM6PR03MB5848.eurprd03.prod.outlook.com>
-X-Mailer: git-send-email 2.39.5
-In-Reply-To: <AM6PR03MB58488FD29EB0D0B89D52AABB99532@AM6PR03MB5848.eurprd03.prod.outlook.com>
-References: <AM6PR03MB58488FD29EB0D0B89D52AABB99532@AM6PR03MB5848.eurprd03.prod.outlook.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: LO4P265CA0280.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:37a::17) To AM6PR03MB5848.eurprd03.prod.outlook.com
- (2603:10a6:20b:e4::10)
-X-Microsoft-Original-Message-ID:
- <20241106193848.160447-4-juntong.deng@outlook.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MKcRigRf"
+Received: by mail-pj1-f47.google.com with SMTP id 98e67ed59e1d1-2e30fb8cb07so148056a91.3;
+        Wed, 06 Nov 2024 11:45:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1730922320; x=1731527120; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ERW3U817ICJVWH5C1bIPnSiPS7bcsAi0OHsZw8R5di4=;
+        b=MKcRigRfChDtkNbFqJwCiaxrOJr2Wn11S6AOM+dOhDjGvoaWudCqeBCh6PV5KKIxTR
+         7V0aAeX4yzdQ28+IbHGWItEqj9ZeAce+6E1zZ01Sbr8Ae0o6qpFU1dK9ggZWcmTTqnhB
+         mjOhf4HOcQ1+OI+XzFKYAHigKHN8CrUGMongQg989BPCJUp7sigqZHCPxDez/Je52yJn
+         m+DOocsSqtqpSa6j/GC34wL4e5RjbRP1+TNtOuRi0ZAJNiL31VlErqaOJopZ0NxAZqGk
+         9tmv8PKhAhg5G0zn+AC9qVMFW0HmC010g/5xfwHXB+GChYZSM/1WI68a7yUXPF0zDcnM
+         WliQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1730922320; x=1731527120;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ERW3U817ICJVWH5C1bIPnSiPS7bcsAi0OHsZw8R5di4=;
+        b=NjkwFcg2iAPbf9PLj3cSv67sORLUSRVc2NowPtQayGoeFtbymN7/GguULV+xgoA0OU
+         IiCZuMwUyagbktWW/rms6FSFX3v4RRre+QjdiWg8FWbXJJM6oGtgvS8ii8q0jtan+k+u
+         s+D91KnvyhgmYC/L4sa/uDsh1J/iZqz4D+sTro0qzId570MZJ/TYgP+5Af0smEC5SN+P
+         6MroHo2yA2dG2+PbWaR/lAyH7ahkab3pXPik17b/h4KZRhYkaP2HIKT/S0sClb0sqrsO
+         IxgZfNRGczYC4D9dZa4Xlxgv3ouICemeBADXBaWrAtWiNagJIXkNlBaCRQhOZmFmXIqs
+         6zbg==
+X-Forwarded-Encrypted: i=1; AJvYcCUHcml7IVI6cOvS0JHxwP5RqfWwIJO8RK45Vo0V57Ek+CDDdQlYKFGLoXjKV1o1cg6OwByD/HJTX6+uTNy/@vger.kernel.org, AJvYcCWl2J6FzNhYtOneahxUdTo++qIJPK+rAteRKp6iO7hzlKWQjKjynrc03sFoJTi4byauz9k=@vger.kernel.org, AJvYcCXYkAFGXd5a6xp4IbMvKm5C1M60b46B3qqcB40Y8bxvvedNDtY0GDQnxE5FzZj2KX8F2mQIRnTS3im4/67+jAfiZqby@vger.kernel.org
+X-Gm-Message-State: AOJu0YzbQi3DO3EJkpKWgmyDonx3w4tE9oD+g5wQArQ1OKsCzv4WJGh1
+	8n3HtLbJ3yMyswTIXvvMJq1HQsKS/acCM8RbVb8YhSNK7YIlYa+0OYTE37jVXLnEFrHPafIMw/f
+	o3AOCqcbUHwHmXap5z2xU6oJ5efk=
+X-Google-Smtp-Source: AGHT+IFbmQxTWeLNB8XV7BIfN4wjfQBgzF4RxF4R5uqD3wQNs02fm9aOsTQRWdT5wxISCZLrRRJ6WTjtbBhWxYa886M=
+X-Received: by 2002:a17:90a:ad91:b0:2d1:bf48:e767 with SMTP id
+ 98e67ed59e1d1-2e92cf2dc3emr31095159a91.29.1730922318060; Wed, 06 Nov 2024
+ 11:45:18 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AM6PR03MB5848:EE_|AS2PR03MB9792:EE_
-X-MS-Office365-Filtering-Correlation-Id: 436bb76b-76aa-4469-6468-08dcfe9b0d05
-X-Microsoft-Antispam:
-	BCL:0;ARA:14566002|461199028|15080799006|19110799003|5072599009|8060799006|3412199025|440099028;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?7KYmVp8YR3KN6qJnOmGZdSYoWW86NBvzaTR+n5sTB86mDjEfPhT8Y/RkOo8O?=
- =?us-ascii?Q?0v3ZJ4ryKrAUfNUbnIzIQXBIu4JXAZq5FOwqMm2YFwblFiFMG0t2S6gTkG8+?=
- =?us-ascii?Q?FJn/YGe1IdOgugr1Jwpx5YoIyMl00FUNL7D7YX4SLFE+gk9dBSvOKzPLdjBm?=
- =?us-ascii?Q?pgYBXvylRUnkZwdPTYdtfN6Bi2LTY1l7APa385Dx/UEEZvnseskMadsmCsBS?=
- =?us-ascii?Q?6aCMbhc4o6/z+sWFijGvKxyQSDY2KTmgHISSuZp31SQcLcvZTWW+FZufeGR0?=
- =?us-ascii?Q?xKKmZa8z/gE44T/DEkxJSP0egEAdgM/BGDHmEybMaWgOJ2K3X0eevxOD0CGH?=
- =?us-ascii?Q?AsnsY4arpF+lti92s/jy4C46c+KxeTLKwWSESLt5C7gdc+nMAB1j8iz9H+yA?=
- =?us-ascii?Q?s5TRT7U5wg7hYaf+Uqw0CB4e50JU37SWDfwCUHwryy3vRzEB3VPmKp9ioUDw?=
- =?us-ascii?Q?uCz89hmX0EQzsCcJhU21tmR9Q+a0nuGYGFnz1UFRaD1vGfQ3OzY0HHX0koFv?=
- =?us-ascii?Q?C4Bb5edF8UIqqG27zdzDFg8k2vxH5pRZ2K3NCQspFn7UVjwKwoyFT9t9d0hx?=
- =?us-ascii?Q?d9V1djKwa3uSOv6RKINSKhuNkT4YzMGkqeoi4isYLVqDT5xZ5bowhwYXLP33?=
- =?us-ascii?Q?KJgU+7h6qeSbiFq7MszAvlmpAjZm3y0U7HiwliSIcwiNZiSsjzPa+4dsD8xj?=
- =?us-ascii?Q?5lm+5OyKKarK1sZ/WV/6h4Lmheh0wl44zpTqiZqloXYTfuofkCRRMLBU9WCN?=
- =?us-ascii?Q?zq+Mzhhau5K3iTuJm/i6EI3PTicu50X8QPZfdJwKZAiMxcisaD/rmmXkfz7z?=
- =?us-ascii?Q?1CrwNeJYYvH2Z0lPGVUQ+385EYCR3HeeQKrC1/jK4rj9zMTYy+7zZ4DD85yQ?=
- =?us-ascii?Q?6ZVPy0DriziHhAGMeE0drR1iPPPcP48WwBWI5LrmU8VTBP1K6D0ib2jmJMdR?=
- =?us-ascii?Q?SS5GGWIJPkjDHR7VP63watQL3IsHYw4Rwp189+gnxZHpTe79f9mOYpDftcYT?=
- =?us-ascii?Q?yLLxDizTdHEJmU+PkPRr5roEVg=3D=3D?=
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?9kAlLZI9k6wLynyKFkqXw0evzIRWGkj3O7Px9qxKh6WCNC2lPeQBa4p4olfg?=
- =?us-ascii?Q?fTJAmzVeiJzWG1icIEP0vhUmZqdZkC2lgdVRUc9BMuWt5NH+goScSICcN5O4?=
- =?us-ascii?Q?sYCMeeU0RZp1nmp3OgUBvivTrmQzj9EslniG4yuCR+8E4ol/G1QjuuwAsr30?=
- =?us-ascii?Q?FG4g9rLgFOHrP6Pn1pWSLTfnY2Qt04bczM7GJawxvIMi0zUVvtcewLMiQIKp?=
- =?us-ascii?Q?xgQXp6IZaUzyuTRQCgIn3rrLEyZpDheCiEcJOHeNTIBvjwy+6tcZS2phJr5J?=
- =?us-ascii?Q?YJHd4sPVbR8lt4Z/W9AK/BpKKfYMrDElIqEHvw8DXdKN467nhpzybR/fbM/N?=
- =?us-ascii?Q?ew7EtFuW+MZntdqgC+q39/rbf2jRj4yt/1tkXWxM8RS+urJ7TAppGkKBAdia?=
- =?us-ascii?Q?truQ3F9+okyo15Cu1EM1lFknJNpX8anQ/zzDg44BAtQRdSrEca4QUnF9LwMZ?=
- =?us-ascii?Q?wjjUZa/gz+qnG+9/iPzrf1DbyzAcahcjqg5fVHQPsQGoEcjcuK0iFkeruufG?=
- =?us-ascii?Q?uj4etUMjXpvYQZ7CkYP6yNNdY6F9526A+3+CVqG6n+q5m/H6KBIFl+l7X51F?=
- =?us-ascii?Q?jq8gtSqTpTBV64PQliKAa0G+bUjhXR1feotjt2Wxv8KFqm+6W7syIzlGZVzc?=
- =?us-ascii?Q?Cb55TS325D7qlHgCUu823fL+f34q+acvupBUuQRUsK/MoZFrAB09vtOLpY0r?=
- =?us-ascii?Q?gVRRvTsqAGuRHNPvOgSn00ytUb6sY5uAhtUl8xMDuPYr37S+jEwIu8b2uYPm?=
- =?us-ascii?Q?k67Q7KgTEFhHomMbD//xVLq+cfvSrnaoQenNRiBiwbjNSW7As9DqP9hbFm1b?=
- =?us-ascii?Q?36VLKlg6VSgYJnfFSLCLis2ByZgonGzm5nPK5UGevtTT7uS5EYMHeKNbsM4N?=
- =?us-ascii?Q?07i7iI21bMoc57PHZXMvt+nd4SXJ1aO+yLN0ePV57aVUv5hIX/0nfGTdqUIp?=
- =?us-ascii?Q?rT/N61wXkzSNqzIJAqU0pDbadWsb5nirirVgtfuV27BGiL+xMyFIuKaPJo9m?=
- =?us-ascii?Q?quG4AndW4uZOiRes4PmQlFFpelNeWnBxVJaXz6lCLFHsPa8+hxBJv3ZUxQJP?=
- =?us-ascii?Q?6UPOIokkWMKgcTGF5/wUjWpQGqS62SLxoYYKYv2qOTCUS+9uaksbDxa13+9z?=
- =?us-ascii?Q?d/4gLFvv7Z1ymOj14zD8fAZJPE0UQXMM7XRtkVtmPnqj6xCHRiHZVQ6vQgEj?=
- =?us-ascii?Q?Ytff4INU46n1y2t+Ts6JU2YfF+wQzSJ1JmkfLgnryNOdTv+ItogXkqGBSzxA?=
- =?us-ascii?Q?mvQMZx3ITkLYt+3A7wn8?=
-X-OriginatorOrg: outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 436bb76b-76aa-4469-6468-08dcfe9b0d05
-X-MS-Exchange-CrossTenant-AuthSource: AM6PR03MB5848.eurprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Nov 2024 19:41:47.4011
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg:
-	00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS2PR03MB9792
+References: <20240910060407.1427716-1-liaochang1@huawei.com>
+ <ZxpUX1rbppLqS0bD@J2N7QTR9R3.cambridge.arm.com> <CAEf4Bzb9fM+hx8quHpCCeRh2p7UVk9Kk6yGj3XvyJLTQu9C-2w@mail.gmail.com>
+ <46451dbe-056c-4c13-bfae-7ee8d6e115b5@huawei.com>
+In-Reply-To: <46451dbe-056c-4c13-bfae-7ee8d6e115b5@huawei.com>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Wed, 6 Nov 2024 11:45:06 -0800
+Message-ID: <CAEf4BzYBAtNbCyCLybPxQrp-CZ9NVOco9X=xctnQ7BuDfhoadA@mail.gmail.com>
+Subject: Re: [PATCH] arm64: uprobes: Simulate STP for pushing fp/lr into user stack
+To: "Liao, Chang" <liaochang1@huawei.com>
+Cc: Mark Rutland <mark.rutland@arm.com>, catalin.marinas@arm.com, will@kernel.org, 
+	mhiramat@kernel.org, oleg@redhat.com, peterz@infradead.org, ast@kernel.org, 
+	puranjay@kernel.org, andrii@kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
+	bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-This patch adds test cases for struct file related CRIB kfuncs.
+On Tue, Nov 5, 2024 at 4:22=E2=80=AFAM Liao, Chang <liaochang1@huawei.com> =
+wrote:
+>
+> Andrii and Mark.
+>
+> =E5=9C=A8 2024/10/26 4:51, Andrii Nakryiko =E5=86=99=E9=81=93:
+> > On Thu, Oct 24, 2024 at 7:06=E2=80=AFAM Mark Rutland <mark.rutland@arm.=
+com> wrote:
+> >>
+> >> On Tue, Sep 10, 2024 at 06:04:07AM +0000, Liao Chang wrote:
+> >>> This patch is the second part of a series to improve the selftest ben=
+ch
+> >>> of uprobe/uretprobe [0]. The lack of simulating 'stp fp, lr, [sp, #im=
+m]'
+> >>> significantly impact uprobe/uretprobe performance at function entry i=
+n
+> >>> most user cases. Profiling results below reveals the STP that execute=
+s
+> >>> in the xol slot and trap back to kernel, reduce redis RPS and increas=
+e
+> >>> the time of string grep obviously.
+> >>>
+> >>> On Kunpeng916 (Hi1616), 4 NUMA nodes, 64 Arm64 cores@2.4GHz.
+> >>>
+> >>> Redis GET (higher is better)
+> >>> ----------------------------
+> >>> No uprobe: 49149.71 RPS
+> >>> Single-stepped STP: 46750.82 RPS
+> >>> Emulated STP: 48981.19 RPS
+> >>>
+> >>> Redis SET (larger is better)
+> >>> ----------------------------
+> >>> No uprobe: 49761.14 RPS
+> >>> Single-stepped STP: 45255.01 RPS
+> >>> Emulated stp: 48619.21 RPS
+> >>>
+> >>> Grep (lower is better)
+> >>> ----------------------
+> >>> No uprobe: 2.165s
+> >>> Single-stepped STP: 15.314s
+> >>> Emualted STP: 2.216s
+> >>
+> >> The results for grep are concerning.
+> >>
+> >> In theory, the overhead for stepping should be roughly double the
+> >> overhead for emulating, assuming the exception-entry and
+> >> exception-return are the dominant cost. The cost of stepping should be
+> >> trivial.
+> >>
+> >> Those results show emulating adds 0.051s (for a ~2.4% overhead), while
+> >> stepping adds 13.149s (for a ~607% overhead), meaning stepping is 250x
+> >> more expensive.
+> >>
+> >> Was this tested bare-metal, or in a VM?
+> >
+> > Hey Mark, I hope Liao will have a chance to reply, I don't know the
+> > details of his benchmarking. But I can try to give you my numbers and
+> > maybe answer a few questions, hopefully that helps move the
+> > conversation forward.
+> >
+> > So, first of all, I did a quick benchmark on bare metal (without
+> > Liao's optimization, though), here are my results:
+> >
+> > uprobe-nop            ( 1 cpus):    2.334 =C2=B1 0.011M/s  (  2.334M/s/=
+cpu)
+> > uprobe-push           ( 1 cpus):    2.321 =C2=B1 0.010M/s  (  2.321M/s/=
+cpu)
+> > uprobe-ret            ( 1 cpus):    4.144 =C2=B1 0.041M/s  (  4.144M/s/=
+cpu)
+> >
+> > uretprobe-nop         ( 1 cpus):    1.684 =C2=B1 0.004M/s  (  1.684M/s/=
+cpu)
+> > uretprobe-push        ( 1 cpus):    1.736 =C2=B1 0.003M/s  (  1.736M/s/=
+cpu)
+> > uretprobe-ret         ( 1 cpus):    2.502 =C2=B1 0.006M/s  (  2.502M/s/=
+cpu)
+> >
+> > uretprobes are inherently slower, so I'll just compare uprobe, as the
+> > differences are very clear either way.
+> >
+> > -nop is literally nop (Liao solved that issue, I just don't have his
+> > patch applied on my test machine). -push has `stp     x29, x30, [sp,
+> > #-0x10]!` instruction traced. -ret is literally just `ret`
+> > instruction.
+> >
+> > So you can see that -ret is almost twice as fast as the -push variant
+> > (it's a microbenchmark, yes, but still).
+> >
+> >>
+> >> AFAICT either:
+> >>
+> >> * Single-stepping is unexpectedly expensive.
+> >>
+> >>   Historically we had performance issues with hypervisor trapping of
+> >>   debug features, and there are things we might be able to improve in
+> >>   the hypervisor and kernel, which would improve stepping *all*
+> >>   instructions.
+> >>
+> >
+> > Single-stepping will always be more expensive, as it necessitates
+> > extra hop kernel->user space->kernel, so no matter the optimization
+> > for single-stepping, if we can avoid it, we should. It will be
+> > noticeable.
+> >
+> >>   If stepping is the big problem, we could move uprobes over to a BRK
+> >>   rather than a single-step. That would require require updating and
+> >>   fixing the logic to decide which instructions are steppable, but
+> >>   that's necessary anyway given it has extant soundness issues.
+> >
+> > I'm afraid I don't understand what BRK means and what are the
+> > consequences in terms of overheads. I'm not an ARM person either, so
+> > sorry if that's a stupid question. But either way, I can't address
+> > this. But see above, emulating an instruction feels like a much better
+> > approach, if possible.
+>
+> As I understand, Mark's suggestion is to place a BRK instruction next to
+> the instruction in the xol slot. Once the instruction in the xol slot
+> executed, the BRK instruction would trigger a trap into kernel. This is
+> a common technique used on platforms that don't support hardware single-
+> step. However, since Arm64 does support hardware single-stepping, kernel
+> enables it in pre_ssout(), allowing the CPU to automatically trap into ke=
+rnel
+> after instruction in xol slot executed. But even we move uprobes over
+> to a BRK rather than a single-step. It can't reduce the overhead of user-=
+>
+> kernel->user context switch on the bare-metal. Maybe I am wrong, Mark,
+> could you give more details about the BRK.
+>
 
-The test case for bpf_fget_task() is written based on
-files_test_process(), so there should only be 3 opened files,
-corresponding to file descriptors 0, 1, 2.
+I see, thanks for elaborating. So the suggestion was to go from very
+expensive single-stepping mode to still expensive breakpoint-based
+kernel->user->kernel workflow.
 
-bpf_get_file_ops_type() currently only returns FILE_OPS_UNKNOWN,
-so no test cases are needed for now.
+I think either way it's going to be much slower than avoiding
+kernel->user->kernel hop, so we should emulate STP instead, yep.
 
-In addition, this patch adds failure test cases where bpf programs
-cannot pass the verifier due to untrusted pointer arguments.
+> >
+> >>
+> >> * XOL management is absurdly expensive.
+> >>
+> >>   Does uprobes keep the XOL slot around (like krpobes does), or does i=
+t
+> >>   create the slot afresh for each trap?
+> >
+> > XOL *page* is created once per process, lazily, and then we just
+> > juggle a bunch of fixed slots there for each instance of
+> > single-stepped uprobe. And yes, there are some bottlenecks in XOL
+> > management, though it's mostly due to lock contention (as it is
+> > implemented right now). Liao and Oleg have been improving XOL
+> > management, but still, avoiding XOL in the first place is the much
+> > preferred way.
+> >
+> >>
+> >>   If that's trying to create a slot afresh for each trap, there are
+> >>   several opportunities for improvement, e.g. keep the slot around for
+> >>   as long as the uprobe exists, or pre-allocate shared slots for commo=
+n
+> >>   instructions and use those.
+> >
+> > As I mentioned, a XOL page is allocated and mapped once, but yes, it
+> > seems like we dynamically get a slot in it for each single-stepped
+> > execution (see xol_take_insn_slot() in kernel/events/uprobes.c). It's
+> > probably not a bad idea to just cache and hold a XOL slot for each
+> > specific uprobe, I don't see why we should limit ourselves to just one
+> > XOL page. We also don't need to pre-size each slot, we can probably
+> > allocate just the right amount of space for a given uprobe.
+> >
+> > All good ideas for sure, we should do them, IMO. But we'll still be
+> > paying an extra kernel->user->kernel switch, which almost certainly is
+> > slower than doing a simple stack push emulation just like we do in
+> > x86-64 case, no?
+> >
+> >
+> > BTW, I did a quick local profiling run. I don't think XOL management
+> > is the main source of overhead. I see 5% of CPU cycles spent in
+> > arch_uprobe_copy_ixol, but other than that XOL doesn't figure in stack
+> > traces. There are at least 22% CPU cycles spent in some
+> > local_daif_restore function, though, not sure what that is, but might
+> > be related to interrupt handling, right?
+>
+> The local_daif_restore() is part of the path for all user->kernel->user
+> context switch, including interrupt handling, breakpoints, and single-ste=
+pping
+> etc. I am surprised to see it consuming 22% of CPU cycles as well. I have=
+n't
+> been enable to reproduce this on my local machine.
+>
+> Andrii, could you use the patch below to see if it can reduce the 5% of
+> CPU cycles spent in arch_uprobe_copy_ixol, I doubt that D/I cache
+> synchronization is the cause of this part of overhead.
+>
+> https://lore.kernel.org/all/20240919121719.2148361-1-liaochang1@huawei.co=
+m/
 
-Signed-off-by: Juntong Deng <juntong.deng@outlook.com>
----
- tools/testing/selftests/bpf/prog_tests/crib.c |  1 +
- .../testing/selftests/bpf/progs/crib_common.h |  4 ++
- .../selftests/bpf/progs/crib_files_failure.c  | 22 +++++++++
- .../selftests/bpf/progs/crib_files_success.c  | 46 +++++++++++++++++++
- 4 files changed, 73 insertions(+)
+tbh, I think pre-allocating and setting up fixed XOL slots instead of
+dynamically allocating them is the way to go. We can allocate as many
+special "[uprobes]" pages as necessary to accommodate all the
+single-stepped uprobes in XOL, remember their index, etc. I think
+that's much more performant (and simpler, IMO) approach overall. All
+this preparation, however expensive it might be, will be done once per
+each attached/detached uprobe/uretprobe, which is the place where we
+want to do expensive stuff. Not when uprobe/uretprobe is actually
+triggered.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/crib.c b/tools/testing/selftests/bpf/prog_tests/crib.c
-index 48c5156504ad..5ef887e43170 100644
---- a/tools/testing/selftests/bpf/prog_tests/crib.c
-+++ b/tools/testing/selftests/bpf/prog_tests/crib.c
-@@ -108,6 +108,7 @@ static void run_files_success_test(const char *prog_name)
- 
- static const char * const files_success_tests[] = {
- 	"test_bpf_iter_task_file",
-+	"test_bpf_fget_task",
- };
- 
- void test_crib(void)
-diff --git a/tools/testing/selftests/bpf/progs/crib_common.h b/tools/testing/selftests/bpf/progs/crib_common.h
-index 93b8f9b1bdf8..0bc77d1b02b2 100644
---- a/tools/testing/selftests/bpf/progs/crib_common.h
-+++ b/tools/testing/selftests/bpf/progs/crib_common.h
-@@ -18,4 +18,8 @@ extern struct file *bpf_iter_task_file_next(struct bpf_iter_task_file *it) __ksy
- extern int bpf_iter_task_file_get_fd(struct bpf_iter_task_file *it__iter) __ksym;
- extern void bpf_iter_task_file_destroy(struct bpf_iter_task_file *it) __ksym;
- 
-+extern struct file *bpf_fget_task(struct task_struct *task, unsigned int fd) __ksym;
-+extern unsigned int bpf_get_file_ops_type(struct file *file) __ksym;
-+extern void bpf_put_file(struct file *file) __ksym;
-+
- #endif /* __CRIB_COMMON_H */
-diff --git a/tools/testing/selftests/bpf/progs/crib_files_failure.c b/tools/testing/selftests/bpf/progs/crib_files_failure.c
-index ebae01d87ff9..9360aad50c15 100644
---- a/tools/testing/selftests/bpf/progs/crib_files_failure.c
-+++ b/tools/testing/selftests/bpf/progs/crib_files_failure.c
-@@ -84,3 +84,25 @@ int bpf_iter_task_file_destroy_uninit_iter(void *ctx)
- 
- 	return 0;
- }
-+
-+SEC("syscall")
-+__failure __msg("Possibly NULL pointer passed to trusted arg0")
-+int bpf_fget_task_untrusted_file(void *ctx)
-+{
-+	struct task_struct *task = NULL;
-+
-+	bpf_fget_task(task, 1);
-+
-+	return 0;
-+}
-+
-+SEC("syscall")
-+__failure __msg("Possibly NULL pointer passed to trusted arg0")
-+int bpf_get_file_ops_type_untrusted_file(void *ctx)
-+{
-+	struct file *file = NULL;
-+
-+	bpf_get_file_ops_type(file);
-+
-+	return 0;
-+}
-diff --git a/tools/testing/selftests/bpf/progs/crib_files_success.c b/tools/testing/selftests/bpf/progs/crib_files_success.c
-index 8de43dedbb02..f2e8becbfd04 100644
---- a/tools/testing/selftests/bpf/progs/crib_files_success.c
-+++ b/tools/testing/selftests/bpf/progs/crib_files_success.c
-@@ -71,3 +71,49 @@ int test_bpf_iter_task_file(void *ctx)
- 	bpf_task_release(task);
- 	return 0;
- }
-+
-+SEC("syscall")
-+int test_bpf_fget_task(void *ctx)
-+{
-+	struct task_struct *task;
-+	struct file *file;
-+
-+	task = bpf_task_from_vpid(pid);
-+	if (task == NULL) {
-+		err = 1;
-+		return 0;
-+	}
-+
-+	file = bpf_fget_task(task, 0);
-+	if (file == NULL) {
-+		err = 2;
-+		goto cleanup;
-+	}
-+
-+	bpf_put_file(file);
-+
-+	file = bpf_fget_task(task, 1);
-+	if (file == NULL) {
-+		err = 3;
-+		goto cleanup;
-+	}
-+
-+	bpf_put_file(file);
-+
-+	file = bpf_fget_task(task, 2);
-+	if (file == NULL) {
-+		err = 4;
-+		goto cleanup;
-+	}
-+
-+	bpf_put_file(file);
-+
-+	file = bpf_fget_task(task, 3);
-+	if (file != NULL) {
-+		err = 5;
-+		bpf_put_file(file);
-+	}
-+cleanup:
-+	bpf_task_release(task);
-+	return 0;
-+}
--- 
-2.39.5
+>
+> >
+> >
+> > The take away I'd like to communicate here is avoiding the
+> > single-stepping need is *the best way* to go, IMO. So if we can
+> > emulate those STP instructions for uprobe *cheaply*, that would be
+> > awesome.
+>
+> Given some significant uprobe optimizations from Oleg and Andrii
+> merged, I am curious to see how these changes impact the profiling
+> result on Arm64. So I re-ran the selftest bench on the latest kernel
+> (based on tag next-20241104) and the kernel (based on tag next-20240909)
+> that I used when I submitted this patch. The results re-ran are shown
+> below.
+>
+> next-20240909(xol stp + xol nop)
+> --------------------------------
+> uprobe-nop      ( 1 cpus):    0.424 =C2=B1 0.000M/s  (  0.424M/s/cpu)
+> uprobe-push     ( 1 cpus):    0.415 =C2=B1 0.001M/s  (  0.415M/s/cpu)
+> uprobe-ret      ( 1 cpus):    2.101 =C2=B1 0.002M/s  (  2.101M/s/cpu)
+> uretprobe-nop   ( 1 cpus):    0.347 =C2=B1 0.000M/s  (  0.347M/s/cpu)
+> uretprobe-push  ( 1 cpus):    0.349 =C2=B1 0.000M/s  (  0.349M/s/cpu)
+> uretprobe-ret   ( 1 cpus):    1.051 =C2=B1 0.001M/s  (  1.051M/s/cpu)
+>
+> next-20240909(sim stp + sim nop)
+> --------------------------------
+> uprobe-nop      ( 1 cpus):    2.042 =C2=B1 0.002M/s  (  2.042M/s/cpu)
+> uprobe-push     ( 1 cpus):    1.363 =C2=B1 0.002M/s  (  1.363M/s/cpu)
+> uprobe-ret      ( 1 cpus):    2.052 =C2=B1 0.002M/s  (  2.052M/s/cpu)
+> uretprobe-nop   ( 1 cpus):    1.049 =C2=B1 0.001M/s  (  1.049M/s/cpu)
+> uretprobe-push  ( 1 cpus):    0.780 =C2=B1 0.000M/s  (  0.780M/s/cpu)
+> uretprobe-ret   ( 1 cpus):    1.065 =C2=B1 0.001M/s  (  1.065M/s/cpu)
+>
+> next-20241104 (xol stp + sim nop)
+> ---------------------------------
+> uprobe-nop      ( 1 cpus):    2.044 =C2=B1 0.003M/s  (  2.044M/s/cpu)
+> uprobe-push     ( 1 cpus):    0.415 =C2=B1 0.001M/s  (  0.415M/s/cpu)
+> uprobe-ret      ( 1 cpus):    2.047 =C2=B1 0.001M/s  (  2.047M/s/cpu)
+> uretprobe-nop   ( 1 cpus):    0.832 =C2=B1 0.003M/s  (  0.832M/s/cpu)
+> uretprobe-push  ( 1 cpus):    0.328 =C2=B1 0.000M/s  (  0.328M/s/cpu)
+> uretprobe-ret   ( 1 cpus):    0.833 =C2=B1 0.003M/s  (  0.833M/s/cpu)
+>
+> next-20241104 (sim stp + sim nop)
+> ---------------------------------
+> uprobe-nop      ( 1 cpus):    2.052 =C2=B1 0.002M/s  (  2.052M/s/cpu)
+> uprobe-push     ( 1 cpus):    1.411 =C2=B1 0.002M/s  (  1.411M/s/cpu)
+> uprobe-ret      ( 1 cpus):    2.052 =C2=B1 0.005M/s  (  2.052M/s/cpu)
+> uretprobe-nop   ( 1 cpus):    0.839 =C2=B1 0.005M/s  (  0.839M/s/cpu)
+> uretprobe-push  ( 1 cpus):    0.702 =C2=B1 0.002M/s  (  0.702M/s/cpu)
+> uretprobe-ret   ( 1 cpus):    0.837 =C2=B1 0.001M/s  (  0.837M/s/cpu)
+>
+> It seems that the STP simluation approach in this patch significantly
+> improves uprobe-push throughtput by 240% (from 0.415Ms/ to 1.411M/s)
+> and uretprobe-push by 114% (from 0.328M/s to 0.702M/s) on kernels
+> bases on next-20240909 and next-20241104. While there is still room
+> for improvement to reach the throughput of -nop and -ret, the gains
+> are very substantail.
+>
+> But I'm a bit puzzled by the throughput of uprobe/uretprobe-push using
+> single-stepping stp, which are far lower compared to the result when
+> when I submitted patch(look closely to the uprobe-push and uretprobe-push
+> results in commit log). I'm certain that the tests were run on the
+> same bare-metal machine with background tasked minimized. I doubt some
+> uncommitted uprobe optimization on my local repo twist the result of
+> -push using single-step.
 
+You can always profiler and compare before/after, right? See where
+added costs are coming from?
+
+>
+> In addition to the micro benchmark, I also re-ran Redis benchmark to
+> compare the impact of single-stepping STP and simluated STP to the
+> throughput of redis-server. I believe the impact of uprobe on the real
+> application depends on the frequency of uprobe triggered and the applicat=
+ion's
+> hot paths. Therefore, I wouldn't say the simluated STP will benefit all
+> real world applications.
+
+It will benefit *a lot* of real world applications, though, so I think
+it's very important to improve.
+
+>
+> $ redis-benchmark -h [redis-server IP] -p 7778 -n 64000 -d 4 -c 128 -t SE=
+T
+> $ redis-server --port 7778 --protected-mode no --save "" --appendonly no =
+& &&
+>   bpftrace -e 'uprobe:redis-server:readQueryFromClient{}
+>                uprobe:redis-server:processCommand{}
+>                uprobe:redis-server:aeApiPoll {}'
+>
+> next-20241104
+> -------------
+> RPS: 55602.1
+>
+> next-20241104 + ss stp
+> ----------------------
+> RPS: 47220.9
+> uprobe@@aeApiPoll: 554565
+> uprobe@processCommand: 1275160
+> uprobe@readQueryFromClient: 1277710
+>
+> next-20241104 + sim stp
+> -----------------------
+> RPS           54290.09
+> uprobe@aeApiPoll: 496007
+> uprobe@processCommand: 1275160
+> uprobe@readQueryFromClient: 1277710
+>
+> Andrii expressed concern that the STP simulation in this patch is too
+> expensive. If we believe the result I re-ran, perhaps it is not a
+> bad way to simluate STP. Looking forward to your feedbacks, or someone
+> could propose a cheaper way to simluate STP, I'm very happy to test it
+> on my machine, thanks.
+
+I'm no ARM64 expert, but seeing that we simulate stack pushes with
+just memory reads/write for x86-64, it feels like that should be
+satisfactory for ARM64. So I'd suggest you to go back to the initial
+implementation, clean it up, rebase, re-benchmark, and send a new
+revision. Let's continue the discussion there?
+
+>
+> [...]
+>
+> >>>
+> >>> xol-stp
+> >>> -------
+> >>> uprobe-nop      ( 1 cpus):    1.566 =C2=B1 0.006M/s  (  1.566M/s/cpu)
+> >>> uprobe-push     ( 1 cpus):    0.868 =C2=B1 0.001M/s  (  0.868M/s/cpu)
+> >>> uprobe-ret      ( 1 cpus):    1.629 =C2=B1 0.001M/s  (  1.629M/s/cpu)
+> >>> uretprobe-nop   ( 1 cpus):    0.871 =C2=B1 0.001M/s  (  0.871M/s/cpu)
+> >>> uretprobe-push  ( 1 cpus):    0.616 =C2=B1 0.001M/s  (  0.616M/s/cpu)
+> >>> uretprobe-ret   ( 1 cpus):    0.878 =C2=B1 0.002M/s  (  0.878M/s/cpu)
+> >>>
+> >>> simulated-stp
+> >>> -------------
+> >>> uprobe-nop      ( 1 cpus):    1.544 =C2=B1 0.001M/s  (  1.544M/s/cpu)
+> >>> uprobe-push     ( 1 cpus):    1.128 =C2=B1 0.002M/s  (  1.128M/s/cpu)
+> >>> uprobe-ret      ( 1 cpus):    1.550 =C2=B1 0.005M/s  (  1.550M/s/cpu)
+> >>> uretprobe-nop   ( 1 cpus):    0.872 =C2=B1 0.004M/s  (  0.872M/s/cpu)
+> >>> uretprobe-push  ( 1 cpus):    0.714 =C2=B1 0.001M/s  (  0.714M/s/cpu)
+> >>> uretprobe-ret   ( 1 cpus):    0.896 =C2=B1 0.001M/s  (  0.896M/s/cpu)
+> >>>
+> >>> The profiling results based on the upstream kernel with spinlock
+> >>> optimization patches [2] reveals the simulation of STP increase the
+> >>> uprobe-push throughput by 29.3% (from 0.868M/s/cpu to 1.1238M/s/cpu) =
+and
+> >>> uretprobe-push by 15.9% (from 0.616M/s/cpu to 0.714M/s/cpu).
+> >>>
+> >>> [0] https://lore.kernel.org/all/CAEf4BzaO4eG6hr2hzXYpn+7Uer4chS0R99zL=
+n02ezZ5YruVuQw@mail.gmail.com/
+> >>> [1] https://lore.kernel.org/all/Zr3RN4zxF5XPgjEB@J2N7QTR9R3/
+> >>> [2] https://lore.kernel.org/all/20240815014629.2685155-1-liaochang1@h=
+uawei.com/
+> >>>
+> >>> Signed-off-by: Liao Chang <liaochang1@huawei.com>
+> >>> ---
+> >>>  arch/arm64/include/asm/insn.h            |  1 +
+> >>>  arch/arm64/kernel/probes/decode-insn.c   | 16 +++++
+> >>>  arch/arm64/kernel/probes/decode-insn.h   |  1 +
+> >>>  arch/arm64/kernel/probes/simulate-insn.c | 89 ++++++++++++++++++++++=
+++
+> >>>  arch/arm64/kernel/probes/simulate-insn.h |  1 +
+> >>>  arch/arm64/kernel/probes/uprobes.c       | 21 ++++++
+> >>>  arch/arm64/lib/insn.c                    |  5 ++
+> >>>  7 files changed, 134 insertions(+)
+> >>>
+> >
+> > [...]
+>
+> --
+> BR
+> Liao, Chang
+>
