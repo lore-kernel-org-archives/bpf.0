@@ -1,104 +1,107 @@
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f196.google.com (mail-yw1-f196.google.com [209.85.128.196])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 743061DACBB;
-	Wed,  6 Nov 2024 11:06:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1D4C1D2784;
+	Wed,  6 Nov 2024 11:57:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.196
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730891170; cv=none; b=MZnpVqLE8p/1Itgor0VIrRnrkEJQcVoRB4Fd3KXxErl5H34qTsuSVgyrqv2ce9WFlivxjDXLUI66B34kuh6o72sQgtgK2v2TgPg51wtkzavqeweNr+H4bWfAKoZK4OWKm81xbk9ZA6l51Wa9S/FvNHjQfIpCuKzmLvtYnj67wio=
+	t=1730894243; cv=none; b=tbW3Gblx/jYu8DEcUiofSn+X8GQ1a3RwFKeo2UA+B+Q2U5wCdg2lZInFUqGxNib+zZK9Yi0cqCqJWP9dtdeCf8hO+LvAO4h2hFa03gJvMIRJjZ34K8LyQuHz+SsigebHTgMcQybKVNhxHaXcz1dkCxFxjg7ZSO8n7GrJYsg8ExQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730891170; c=relaxed/simple;
-	bh=x1daPAci/sH83L77hKsJtfM7BbABjcNhbB9A2zFZeIY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fUt1f6iM3o/M30r91Ea3/YG2k9Vt5uwQ9MHFF3LxrEoAGfH7eveV4Jal5EfHhE6qg6RWh5vx0QkRZi0A/eG00iCucg2VCzMEu7ocAbcNK147tf7dd5keNbzQgaJyJETtntb47dHlaO7WBGZKtG9ZYPCHfMgjVI73wzWQzc6BeVo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=YYc5yuky; arc=none smtp.client-ip=90.155.92.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+	s=arc-20240116; t=1730894243; c=relaxed/simple;
+	bh=vyTp09Kt056FuIQHGo/DAlBjwjbN8kCcV3oLDoXZyOQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=BKJJCtaYBN0z+oiFv7Yjk7Dlxcp3lc8UJ9C4AGTJmYrpLnhaSBcvyA5rbxbk4nYm642jF1GS9oIOk3cZQP4G8+ML46lmNptvEO0l7WRUPVZi584h1QQn+ntaRpr7XjlXDO714PQKgLo+Gz1sWhY8F/PWXhfrM6qmvCAXNxVgIjc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PpOc6x1d; arc=none smtp.client-ip=209.85.128.196
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="YYc5yuky"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Transfer-Encoding:
-	Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
-	Sender:Reply-To:Content-ID:Content-Description;
-	bh=KHhlvkY8UlSzLnmAPPPFJYM+1mV9xaApz1N9IxO+X3E=; b=YYc5yukyNei5Uqg2meExPOJ1cv
-	4/f75h4eVieapeaztoHVEuXr6JM6ZSh3S95Iiz0oH29FJR5dNlaftCulT51z+1KKUMbX2j7lVKXOi
-	fYN8I7PAKZgVQdUYlkqbHjowT6i1HBz0lEpO7N59D4wzQSOHJf15Z0/h/gQrEe9/MATutq/npDHO4
-	BpqRuiztCUgxSok5E0he8kysi3woj0V0vqAhbDvc9QHVeOgUp0+132q3n16FwiruXa2FLQBnsAm2Y
-	fRJ7oUjdqvbHU0OyKMhw7qv5bMoVeQdp4RSjS9OxVMs62DwKgLL81/9xylcyLEC3ruN/DXUG6obDO
-	eCsXzMnA==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-	by desiato.infradead.org with esmtpsa (Exim 4.98 #2 (Red Hat Linux))
-	id 1t8drK-0000000BwK8-1Hm8;
-	Wed, 06 Nov 2024 11:05:58 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 809ED300478; Wed,  6 Nov 2024 12:05:57 +0100 (CET)
-Date: Wed, 6 Nov 2024 12:05:57 +0100
-From: Peter Zijlstra <peterz@infradead.org>
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: Jiri Olsa <olsajiri@gmail.com>, Ingo Molnar <mingo@kernel.org>,
-	Will Deacon <will@kernel.org>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Linux trace kernel <linux-trace-kernel@vger.kernel.org>,
-	bpf <bpf@vger.kernel.org>, Oleg Nesterov <oleg@redhat.com>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Liao Chang <liaochang1@huawei.com>,
-	linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-	open list <linux-kernel@vger.kernel.org>,
-	"linux-perf-use." <linux-perf-users@vger.kernel.org>,
-	Kernel Team <kernel-team@meta.com>
-Subject: Re: The state of uprobes work and logistics
-Message-ID: <20241106110557.GY33184@noisy.programming.kicks-ass.net>
-References: <CAEf4BzarhiBHAQXECJzP5e-z0fbSaTpfQNPaSXwdgErz2f0vUA@mail.gmail.com>
- <ZyH_fWNeL3XYNEH1@krava>
- <CAEf4BzZTTuBdCT2Qe=n7gqhf3yENZwHYUdsrQP9WfaEC4C35rw@mail.gmail.com>
- <20241106104639.GL10375@noisy.programming.kicks-ass.net>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PpOc6x1d"
+Received: by mail-yw1-f196.google.com with SMTP id 00721157ae682-6ea5b97e31cso7692867b3.1;
+        Wed, 06 Nov 2024 03:57:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1730894240; x=1731499040; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=M6w3ZCB6zmWm7DPLmF3ULV02jMnZ0BDFI1Mq0GUN2Ks=;
+        b=PpOc6x1dMdoQHmVQxUxAwxZyQZHv03L19P/AWiVPC04j8iGfXhKU3PI2qEGB6vxpfs
+         1DWgI7JCyQ+hSelVrsRc2xsI7znbL0C/UeaBb/l5GD0v90uYC/BVolcigL3EMWONQifo
+         b5IeanHappIM1YH4oFqcNhcYYKkuQHE3GM0UxYZ/gGlxK1clGMrGoeZqtepoh9NWBmnY
+         45+4s3hLy2nj0tJS6Te3TIwdObO05yFc+Es+ikHdIYZqEkd6yfPhFQlfMPqZsE8t1fRS
+         8Vh8IS/k0Es4rg5vyWNroNYOzDk9MVKrilxW0ZFZwYktUWXh0cZIPARn41Z+bnZ/ylxS
+         oGMA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1730894240; x=1731499040;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=M6w3ZCB6zmWm7DPLmF3ULV02jMnZ0BDFI1Mq0GUN2Ks=;
+        b=nbZj9nPzm7KsqxuLn/HN8J2Omx9ZESp7sdKVuDf/HPQD2FMmwk0Az8h9ZF/u8ulLvj
+         UArpYddaK4InYfUy0yw4XrY5fQIa5ArqtU9BnUlB9GyLWfeWPHe4nwjkDIukxOw7erdV
+         46Dj0mYQjY8EtebP9Gsi6LEzS+2dRIHdhhkk7moOMkYXITX0NV5EebEvZcnM2nxquuDb
+         hDD07YkOxSDkdpfsG9RfAwC/9tTYk6qgF4J/U8PoLWYtr91SR6gHfkgVY7ofdjbQY1jf
+         Fl9PhcjPtlzj9TZE5nBviaOsvCRmaWj5Fnwdtkhvk9ve2rRvoLEwJ9u9vItRpuA01pJK
+         pE4w==
+X-Forwarded-Encrypted: i=1; AJvYcCVdr40w6mzqV/IALEGH/K3RhK+hhBnKuUvuIeFWr7YyLtMjHge5qloqO7koS4OzUwiWUMg=@vger.kernel.org, AJvYcCW2CTAD4chTycmWzmvHfYHKNKpBCfrpR6JAztuYSEPLmBrU3ZwSb6knv84BZiqJ+aLxiieGPxLFFJDoyP04@vger.kernel.org, AJvYcCWQBNKAOeWh1wa97S2L3cedUmPLJr4nGO+6lLCObBTosni9Jt3cp6pftE+zq5HgsI3FyqrjyT6TRWixjZLtLJVG@vger.kernel.org, AJvYcCXymRkLkUwtegPveHRod3YnZfk/M7bDMeYOJH1ErYay64rAh2MS3r4rKZ6rURXXYWc2yxft8KG0@vger.kernel.org
+X-Gm-Message-State: AOJu0YyaFiAUU9fh8wMu04OLtrDOZ4uKlyvtRYohMK/bw/uVy/W2sU/A
+	RTnpGIT8EyJ6JWburVJcL/yRb/jL86I3njp5wxKNFdaYf+b2o7v3lfEDspxcgIpGaZw6YEr8WBE
+	IDWMiF9RhKtQkm7Gl0o7W/O6wfvg=
+X-Google-Smtp-Source: AGHT+IEXBfeFoiOB+fEMxTsXACuSVQL2ysa8XWrdoUI8KD1G2wDOAZIO6rXenVvdCBA8S96MOfWzKujBjQG2V8YVs/w=
+X-Received: by 2002:a05:690c:64ca:b0:6e2:41fa:9d4 with SMTP id
+ 00721157ae682-6eabf02be83mr15361397b3.15.1730894240626; Wed, 06 Nov 2024
+ 03:57:20 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20241106104639.GL10375@noisy.programming.kicks-ass.net>
+References: <20241030014145.1409628-1-dongml2@chinatelecom.cn>
+ <20241030014145.1409628-9-dongml2@chinatelecom.cn> <7b8b83b4-f745-4f3b-8cac-2f190937667a@redhat.com>
+In-Reply-To: <7b8b83b4-f745-4f3b-8cac-2f190937667a@redhat.com>
+From: Menglong Dong <menglong8.dong@gmail.com>
+Date: Wed, 6 Nov 2024 19:58:28 +0800
+Message-ID: <CADxym3Z6GdXdFoXcex-h300xxAbCPtbVoxPMRNx9sKaWh7_MHw@mail.gmail.com>
+Subject: Re: [PATCH RESEND net-next v4 8/9] net: ip: make ip_mkroute_input/__mkroute_input
+ return drop reasons
+To: Paolo Abeni <pabeni@redhat.com>
+Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org, 
+	horms@kernel.org, dsahern@kernel.org, pablo@netfilter.org, 
+	kadlec@netfilter.org, roopa@nvidia.com, razor@blackwall.org, 
+	gnault@redhat.com, bigeasy@linutronix.de, hawk@kernel.org, idosch@nvidia.com, 
+	dongml2@chinatelecom.cn, netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	netfilter-devel@vger.kernel.org, coreteam@netfilter.org, 
+	bridge@lists.linux.dev, bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Nov 06, 2024 at 11:46:39AM +0100, Peter Zijlstra wrote:
-> On Tue, Nov 05, 2024 at 06:11:07PM -0800, Andrii Nakryiko wrote:
-> > On Wed, Oct 30, 2024 at 2:42 AM Jiri Olsa <olsajiri@gmail.com> wrote:
-> > >
-> > > On Wed, Oct 16, 2024 at 12:35:21PM -0700, Andrii Nakryiko wrote:
-> > >
-> > > SNIP
-> > >
-> > > >   - Jiri Olsa's uprobe "session" support ([5]). This is less
-> > > > performance focused, but important functionality by itself. But I'm
-> > > > calling this out here because the first two patches are pure uprobe
-> > > > internal changes, and I believe they should go into tip/perf/core to
-> > > > avoid conflicts with the rest of pending uprobe changes.
-> > > >
-> > > > Peter, do you mind applying those two and creating a stable tag for
-> > > > bpf-next to pull? We'll apply the rest of Jiri's series to
-> > > > bpf-next/master.
-> > >
-> > >
-> > > Hi Ingo,
-> > > there's uprobe session support change that already landed in tip tree,
-> > > but we have bpf related changes that need to go in through bpf-next tree
-> > >
-> > > could you please create the stable tag that we could pull to bpf-next/master
-> > > and apply the rest of the uprobe session changes in there?
-> > 
-> > Ping. We (BPF) are blocked on this, we can't apply Jiri's uprobe
-> > session series ([0]), until we merge two of his patches that landed
-> > into perf/core. Can we please get a stable tag which we can use to
-> > pull perf/core's patches into bpf-next/master?
-> 
-> The whole tip/perf/core should be stable, but let me try and figure out
-> how git tags work.. might as well read a man-page today.
+On Tue, Nov 5, 2024 at 7:25=E2=80=AFPM Paolo Abeni <pabeni@redhat.com> wrot=
+e:
+>
+> On 10/30/24 02:41, Menglong Dong wrote:
+> > @@ -1820,7 +1822,8 @@ static int __mkroute_input(struct sk_buff *skb, c=
+onst struct fib_result *res,
+> >                */
+> >               if (out_dev =3D=3D in_dev &&
+> >                   IN_DEV_PROXY_ARP_PVLAN(in_dev) =3D=3D 0) {
+> > -                     err =3D -EINVAL;
+> > +                     /* what do we name this situation? */
+> > +                     reason =3D SKB_DROP_REASON_ARP_PVLAN_DISABLE;
+>
+> I don't have a better suggestion :(
+>
+> Please drop the comment and re-iterate the question in the commit
+> message after a '---' separator, so we can merge the patch unmodified if
+> nobody suggests a better one.
 
-I might have managed to create a perf-core-for-bpf-next tag, but I'm not
-sure I know enough about git to even test it.
+Okay, I'll move this comment into the commit log, which
+I usually place the change logs in.
 
-Let me know..
+Thanks!
+Menglong Dong
+
+>
+> Thanks,
+>
+> Paolo
+>
