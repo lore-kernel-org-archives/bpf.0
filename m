@@ -1,29 +1,29 @@
-Received: from out30-111.freemail.mail.aliyun.com (out30-111.freemail.mail.aliyun.com [115.124.30.111])
+Received: from out30-98.freemail.mail.aliyun.com (out30-98.freemail.mail.aliyun.com [115.124.30.98])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AE9F1DD543;
-	Thu,  7 Nov 2024 08:55:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.111
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D83FE1DF736;
+	Thu,  7 Nov 2024 08:55:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.98
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730969716; cv=none; b=HZNFhrAqoX+8hATTdOBiPOWUchaFo6ytNpymWLKb13xo80X3IgKOzEsdpo2GInkccogubgoQLoam80k1U4PBf79+XS3vSFHiIFr6Rcnuvarl5qbgHGbjRH3b9nh1S0Y+A0DBPctk+ueabQtc+I/iDRTVUeX7Yb9WIMYt4ATRE+8=
+	t=1730969719; cv=none; b=QFQ1+YimTJonYCJQSGkfmyA5NsnNYy5/zOeECx6tCtZ+VrTEPWeekW8yMCF7uNatBTPU4xJYZbzdpgy6+WYx7ST9agBGC+XfAgRyJkGfGM9Z6UAMiVxJoBJuw3un4Gdz4JL5QR3xwaOLRZ1w33M+AQIXD9lXcBz798YnLcFovqU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730969716; c=relaxed/simple;
-	bh=OLL51eOxgF6EA/BUCu9JHkdInS8Hr8nFmCDwfuCPuUA=;
+	s=arc-20240116; t=1730969719; c=relaxed/simple;
+	bh=Y8aU+oMfiSGoqDuKIs1mAjIVTOQhMbBjsMw8gBWkYAM=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=EBE563z/ibur7uTfwuLV/SYKAoGn8i3wYZD985G/0AQl0T/2Qop6SVGVWmJ7fqIp2TEk8y1U3aK0uha3ieL2m/m5s7slje7INcgb4bXd3kb05rQB+X4cqBTTkk9y2mvRNpmlo44ShwTDDGbl0vbKQx3S0cdb22t9Dsl/jLmc5iI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=jnXAvSgN; arc=none smtp.client-ip=115.124.30.111
+	 MIME-Version; b=qKMxMmPghQcQrlLUTor52dwuWqhneb7h97C0/2h5FQySOtfTEYSrdQNgOpQvBsp5YiIqEooy9drptPUOKUo3GElaJf4fQ6cd0ceI5LGYjklgN2BcMEwHS8LyETsm1qvKOBS0C62JEHUx2SmgY3m6rPR1KY2uz3dL2ApxfMoSG8Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=XM6/fry7; arc=none smtp.client-ip=115.124.30.98
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="jnXAvSgN"
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="XM6/fry7"
 DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
 	d=linux.alibaba.com; s=default;
-	t=1730969711; h=From:To:Subject:Date:Message-Id:MIME-Version;
-	bh=gbAhWwtmNWJP1qvm4V1+2kl2EwcvK2UuAErUIu7yeUM=;
-	b=jnXAvSgNtWJwWhXLWNwVmlEyCd98bWIaSYxvgmA84IN0rHhyqsCpWM6uN8CInWixOd5w/3n+XUj6iq8H14njTXtFFpqrlSESbzkokLOHuF+2Y2L8qfG7xSbTTquyDzL7L3RJNonQsr41tuXFcBBuloSirA0KzITmPvDmy8+t8jc=
-Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0WIv0ukG_1730969710 cluster:ay36)
+	t=1730969708; h=From:To:Subject:Date:Message-Id:MIME-Version;
+	bh=5+UZBnG0FO1eJHy+zVIqre5bDRyY2n5viTT5KXRWgws=;
+	b=XM6/fry7edEijgEj0IEOvOwxbOfR+29Gqu8h6Z9MsXLWMjZqkSohlPw8llH52WG8l7Mm1zEA9NQYbo15rMG3NSZ9/7COxVhhQe6vWQib/zPb62o2sctF3zPCPIBqeeHJpEKHnGH8qbAIAxSb6UgRZhL3HOHux8EoQN+ouKXJHME=
+Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0WIux-6B_1730969707 cluster:ay36)
           by smtp.aliyun-inc.com;
-          Thu, 07 Nov 2024 16:55:11 +0800
+          Thu, 07 Nov 2024 16:55:08 +0800
 From: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
 To: netdev@vger.kernel.org
 Cc: "Michael S. Tsirkin" <mst@redhat.com>,
@@ -41,9 +41,9 @@ Cc: "Michael S. Tsirkin" <mst@redhat.com>,
 	John Fastabend <john.fastabend@gmail.com>,
 	virtualization@lists.linux.dev,
 	bpf@vger.kernel.org
-Subject: [PATCH net-next v3 06/13] virtio-net: rq submits premapped per-buffer
-Date: Thu,  7 Nov 2024 16:54:57 +0800
-Message-Id: <20241107085504.63131-7-xuanzhuo@linux.alibaba.com>
+Subject: [PATCH net-next v3 03/13] virtio_ring: packed: record extras for indirect buffers
+Date: Thu,  7 Nov 2024 16:54:54 +0800
+Message-Id: <20241107085504.63131-4-xuanzhuo@linux.alibaba.com>
 X-Mailer: git-send-email 2.32.0.3.g01195cf9f
 In-Reply-To: <20241107085504.63131-1-xuanzhuo@linux.alibaba.com>
 References: <20241107085504.63131-1-xuanzhuo@linux.alibaba.com>
@@ -56,81 +56,146 @@ MIME-Version: 1.0
 X-Git-Hash: 2634baada01d
 Content-Transfer-Encoding: 8bit
 
-virtio-net rq submits premapped per-buffer by setting sg page to NULL;
+The subsequent commit needs to know whether every indirect buffer is
+premapped or not. So we need to introduce an extra struct for every
+indirect buffer to record this info.
 
 Signed-off-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
 ---
- drivers/net/virtio_net.c | 22 +++++++++++-----------
- 1 file changed, 11 insertions(+), 11 deletions(-)
+ drivers/virtio/virtio_ring.c | 60 +++++++++++++++++++++---------------
+ 1 file changed, 36 insertions(+), 24 deletions(-)
 
-diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
-index 4b27ded8fc16..862beacef5d7 100644
---- a/drivers/net/virtio_net.c
-+++ b/drivers/net/virtio_net.c
-@@ -539,6 +539,12 @@ static struct sk_buff *ptr_to_skb(void *ptr)
- 	return (struct sk_buff *)((unsigned long)ptr & ~VIRTIO_ORPHAN_FLAG);
- }
+diff --git a/drivers/virtio/virtio_ring.c b/drivers/virtio/virtio_ring.c
+index 405d5a348795..cfe70c40f630 100644
+--- a/drivers/virtio/virtio_ring.c
++++ b/drivers/virtio/virtio_ring.c
+@@ -78,7 +78,11 @@ struct vring_desc_state_split {
  
-+static void sg_fill_dma(struct scatterlist *sg, dma_addr_t addr, u32 len)
-+{
-+	sg_dma_address(sg) = addr;
-+	sg_dma_len(sg) = len;
-+}
+ struct vring_desc_state_packed {
+ 	void *data;			/* Data for callback. */
+-	struct vring_packed_desc *indir_desc; /* Indirect descriptor, if any. */
 +
- static void __free_old_xmit(struct send_queue *sq, struct netdev_queue *txq,
- 			    bool in_napi, struct virtnet_sq_free_stats *stats)
- {
-@@ -916,8 +922,7 @@ static void virtnet_rq_init_one_sg(struct receive_queue *rq, void *buf, u32 len)
- 	addr = dma->addr - sizeof(*dma) + offset;
- 
- 	sg_init_table(rq->sg, 1);
--	rq->sg[0].dma_address = addr;
--	rq->sg[0].length = len;
-+	sg_fill_dma(rq->sg, addr, len);
- }
- 
- static void *virtnet_rq_alloc(struct receive_queue *rq, u32 size, gfp_t gfp)
-@@ -1067,12 +1072,6 @@ static void check_sq_full_and_disable(struct virtnet_info *vi,
++	/* Indirect desc table and extra table, if any. These two will be
++	 * allocated together. So we won't stress more to the memory allocator.
++	 */
++	struct vring_packed_desc *indir_desc;
+ 	u16 num;			/* Descriptor list length. */
+ 	u16 last;			/* The last desc state in a list. */
+ };
+@@ -1238,27 +1242,12 @@ static void vring_unmap_extra_packed(const struct vring_virtqueue *vq,
  	}
  }
  
--static void sg_fill_dma(struct scatterlist *sg, dma_addr_t addr, u32 len)
+-static void vring_unmap_desc_packed(const struct vring_virtqueue *vq,
+-				    const struct vring_packed_desc *desc)
 -{
--	sg->dma_address = addr;
--	sg->length = len;
+-	u16 flags;
+-
+-	if (!vring_need_unmap_buffer(vq))
+-		return;
+-
+-	flags = le16_to_cpu(desc->flags);
+-
+-	dma_unmap_page(vring_dma_dev(vq),
+-		       le64_to_cpu(desc->addr),
+-		       le32_to_cpu(desc->len),
+-		       (flags & VRING_DESC_F_WRITE) ?
+-		       DMA_FROM_DEVICE : DMA_TO_DEVICE);
 -}
 -
- static struct xdp_buff *buf_to_xdp(struct virtnet_info *vi,
- 				   struct receive_queue *rq, void *buf, u32 len)
+ static struct vring_packed_desc *alloc_indirect_packed(unsigned int total_sg,
+ 						       gfp_t gfp)
  {
-@@ -1353,7 +1352,8 @@ static int virtnet_add_recvbuf_xsk(struct virtnet_info *vi, struct receive_queue
- 		sg_init_table(rq->sg, 1);
- 		sg_fill_dma(rq->sg, addr, len);
++	struct vring_desc_extra *extra;
+ 	struct vring_packed_desc *desc;
++	int i, size;
  
--		err = virtqueue_add_inbuf(rq->vq, rq->sg, 1, xsk_buffs[i], gfp);
-+		err = virtqueue_add_inbuf_premapped(rq->vq, rq->sg, 1,
-+						    xsk_buffs[i], NULL, gfp);
- 		if (err)
- 			goto err;
+ 	/*
+ 	 * We require lowmem mappings for the descriptors because
+@@ -1267,7 +1256,16 @@ static struct vring_packed_desc *alloc_indirect_packed(unsigned int total_sg,
+ 	 */
+ 	gfp &= ~__GFP_HIGHMEM;
+ 
+-	desc = kmalloc_array(total_sg, sizeof(struct vring_packed_desc), gfp);
++	size = (sizeof(*desc) + sizeof(*extra)) * total_sg;
++
++	desc = kmalloc(size, gfp);
++	if (!desc)
++		return NULL;
++
++	extra = (struct vring_desc_extra *)&desc[total_sg];
++
++	for (i = 0; i < total_sg; i++)
++		extra[i].next = i + 1;
+ 
+ 	return desc;
+ }
+@@ -1280,6 +1278,7 @@ static int virtqueue_add_indirect_packed(struct vring_virtqueue *vq,
+ 					 void *data,
+ 					 gfp_t gfp)
+ {
++	struct vring_desc_extra *extra;
+ 	struct vring_packed_desc *desc;
+ 	struct scatterlist *sg;
+ 	unsigned int i, n, err_idx;
+@@ -1291,6 +1290,8 @@ static int virtqueue_add_indirect_packed(struct vring_virtqueue *vq,
+ 	if (!desc)
+ 		return -ENOMEM;
+ 
++	extra = (struct vring_desc_extra *)&desc[total_sg];
++
+ 	if (unlikely(vq->vq.num_free < 1)) {
+ 		pr_debug("Can't add buf len 1 - avail = 0\n");
+ 		kfree(desc);
+@@ -1312,6 +1313,13 @@ static int virtqueue_add_indirect_packed(struct vring_virtqueue *vq,
+ 						0 : VRING_DESC_F_WRITE);
+ 			desc[i].addr = cpu_to_le64(addr);
+ 			desc[i].len = cpu_to_le32(sg->length);
++
++			if (unlikely(vq->use_dma_api)) {
++				extra[i].addr = addr;
++				extra[i].len = sg->length;
++				extra[i].flags = n < out_sgs ?  0 : VRING_DESC_F_WRITE;
++			}
++
+ 			i++;
+ 		}
  	}
-@@ -2433,7 +2433,7 @@ static int add_recvbuf_small(struct virtnet_info *vi, struct receive_queue *rq,
+@@ -1381,7 +1389,7 @@ static int virtqueue_add_indirect_packed(struct vring_virtqueue *vq,
+ 	err_idx = i;
  
- 	virtnet_rq_init_one_sg(rq, buf, vi->hdr_len + GOOD_PACKET_LEN);
+ 	for (i = 0; i < err_idx; i++)
+-		vring_unmap_desc_packed(vq, &desc[i]);
++		vring_unmap_extra_packed(vq, &extra[i]);
  
--	err = virtqueue_add_inbuf_ctx(rq->vq, rq->sg, 1, buf, ctx, gfp);
-+	err = virtqueue_add_inbuf_premapped(rq->vq, rq->sg, 1, buf, ctx, gfp);
- 	if (err < 0) {
- 		virtnet_rq_unmap(rq, buf, 0);
- 		put_page(virt_to_head_page(buf));
-@@ -2553,7 +2553,7 @@ static int add_recvbuf_mergeable(struct virtnet_info *vi,
- 	virtnet_rq_init_one_sg(rq, buf, len);
+ free_desc:
+ 	kfree(desc);
+@@ -1617,7 +1625,8 @@ static void detach_buf_packed(struct vring_virtqueue *vq,
+ 	}
  
- 	ctx = mergeable_len_to_ctx(len + room, headroom);
--	err = virtqueue_add_inbuf_ctx(rq->vq, rq->sg, 1, buf, ctx, gfp);
-+	err = virtqueue_add_inbuf_premapped(rq->vq, rq->sg, 1, buf, ctx, gfp);
- 	if (err < 0) {
- 		virtnet_rq_unmap(rq, buf, 0);
- 		put_page(virt_to_head_page(buf));
+ 	if (vq->indirect) {
+-		u32 len;
++		struct vring_desc_extra *extra;
++		u32 len, num;
+ 
+ 		/* Free the indirect table, if any, now that it's unmapped. */
+ 		desc = state->indir_desc;
+@@ -1626,9 +1635,12 @@ static void detach_buf_packed(struct vring_virtqueue *vq,
+ 
+ 		if (vring_need_unmap_buffer(vq)) {
+ 			len = vq->packed.desc_extra[id].len;
+-			for (i = 0; i < len / sizeof(struct vring_packed_desc);
+-					i++)
+-				vring_unmap_desc_packed(vq, &desc[i]);
++			num = len / sizeof(struct vring_packed_desc);
++
++			extra = (struct vring_desc_extra *)&desc[num];
++
++			for (i = 0; i < num; i++)
++				vring_unmap_extra_packed(vq, &extra[i]);
+ 		}
+ 		kfree(desc);
+ 		state->indir_desc = NULL;
 -- 
 2.32.0.3.g01195cf9f
 
