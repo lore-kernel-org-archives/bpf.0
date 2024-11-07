@@ -1,21 +1,21 @@
 Received: from 69-171-232-181.mail-mxout.facebook.com (69-171-232-181.mail-mxout.facebook.com [69.171.232.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3289F38382
-	for <bpf@vger.kernel.org>; Thu,  7 Nov 2024 02:42:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7C0944C6C
+	for <bpf@vger.kernel.org>; Thu,  7 Nov 2024 02:42:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=69.171.232.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730947327; cv=none; b=CLM3pUuB78lBlP9+NIoDxNKP9EZrUPxeWhucOrLeV6x6CuaodH0lSErYD7Ri3wEPRv9+puZ84KJmf3fJGFCOI9JinS6l0rvfTbo6NVl5HQV4Vt7ZaKtVDXb+pCUpld2J8UjM4ltQ/ZYMhe3wO+tlaFi4E2lpjYtlvuZFTmhu3aA=
+	t=1730947338; cv=none; b=sE2KItHqVFxA9P2BD1AhYgwK3gc65KEVdzI7jIu3mHpGrw26MgcbOyRRXmnGah1DcMkBogp3kAFP2++Svt7DUUNminBOCoGgT4TmEG8lhFFjDg2Gj/ppC3iA8tV0h+0mF0OSVzqKgR1czovI+6FPWg4iAUBQ7L0nljInSK3TCPY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730947327; c=relaxed/simple;
-	bh=tWB/NxTANERwo35Lh7sAmL7cWRgbyw2tgrMoxtEQRJ0=;
+	s=arc-20240116; t=1730947338; c=relaxed/simple;
+	bh=KqtsTZwcHTK/W1p/zMMtwpERxtAgOk0hju8bAemVcjw=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=u2npTx6EM2O947bxWX8Qslye7XLqy07nuECs/q9OCbP1OpFinNTbSVmjbmfnGNFCCNwguX5sIxGPcARAgeKuK0WpTtWuKR2E/o3/tnNv+zRtJv7y//PXSAIVd/sUaKnsNCqPo2imtwjhGH5w4lz4ICUhzRrIzD8RIVfOLtIWlC4=
+	 MIME-Version; b=BcTe95lh1voF6+uI8RoI71P/zjorQaUrOMSk+HVG3gra5yOabahH60mlCuvz6Toud5Zq6gwbNJmdLdxTQB3CRQYDEl3rr7k+vQRqqfqEKR6p6qsKLvb/txG0adgOJy6ybgp9gL3kLVIslKc+zwLM7k2OAocwOsCHF8cTmS3jowI=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=69.171.232.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
 Received: by devbig309.ftw3.facebook.com (Postfix, from userid 128203)
-	id 4EB24AD19F48; Wed,  6 Nov 2024 18:41:59 -0800 (PST)
+	id 8DF2DAD19F90; Wed,  6 Nov 2024 18:42:09 -0800 (PST)
 From: Yonghong Song <yonghong.song@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -24,9 +24,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	kernel-team@fb.com,
 	Martin KaFai Lau <martin.lau@kernel.org>,
 	Tejun Heo <tj@kernel.org>
-Subject: [PATCH bpf-next v10 4/7] bpf, x86: Support private stack in jit
-Date: Wed,  6 Nov 2024 18:41:59 -0800
-Message-ID: <20241107024159.3356656-1-yonghong.song@linux.dev>
+Subject: [PATCH bpf-next v10 6/7] bpf: Support private stack for struct_ops progs
+Date: Wed,  6 Nov 2024 18:42:09 -0800
+Message-ID: <20241107024209.3357227-1-yonghong.song@linux.dev>
 X-Mailer: git-send-email 2.43.5
 In-Reply-To: <20241107024138.3355687-1-yonghong.song@linux.dev>
 References: <20241107024138.3355687-1-yonghong.song@linux.dev>
@@ -38,212 +38,114 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 
-Private stack is allocated in function bpf_int_jit_compile() with
-alignment 16. The x86 register 9 (X86_REG_R9) is used to replace
-bpf frame register (BPF_REG_10). The private stack is used per
-subprog per cpu. The X86_REG_R9 is saved and restored around every
-func call (not including tailcall) to maintain correctness of
-X86_REG_R9.
+For struct_ops progs, whether a particular prog uses private stack
+depends on prog->aux->priv_stack_requested setting before actual
+insn-level verification for that prog. One particular implementation
+is to piggyback on struct_ops->check_member(). The next patch has
+an example for this. The struct_ops->check_member() sets
+prog->aux->priv_stack_requested to be true which enables private stack
+usage.
+
+The struct_ops prog follows the same rule as kprobe/tracing progs after
+function bpf_enable_priv_stack(). For example, even a struct_ops prog
+requests private stack, it could still use normal kernel stack if
+the stack size is small (< 64 bytes).
+
+The prog->aux->priv_stack_requested is also used for recursion checking
+for struct_ops progs. Similar to tracing progs, nested same cpu same
+prog run will be skipped. A field (recursion_detected()) is added to
+bpf_prog_aux structure. If bpf_prog->aux->recursion_detected
+is implemented by the struct_ops subsystem and nested same cpu/prog
+happens, the function will be triggered to report an error, collect
+related info, etc.
 
 Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
 ---
- arch/x86/net/bpf_jit_comp.c | 77 +++++++++++++++++++++++++++++++++++++
- include/linux/bpf.h         |  1 +
- 2 files changed, 78 insertions(+)
+ include/linux/bpf.h          | 1 +
+ include/linux/bpf_verifier.h | 1 +
+ kernel/bpf/trampoline.c      | 4 ++++
+ kernel/bpf/verifier.c        | 6 ++++++
+ 4 files changed, 12 insertions(+)
 
-diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
-index 3ff638c37999..a96ab2fac2b9 100644
---- a/arch/x86/net/bpf_jit_comp.c
-+++ b/arch/x86/net/bpf_jit_comp.c
-@@ -325,6 +325,22 @@ struct jit_context {
- /* Number of bytes that will be skipped on tailcall */
- #define X86_TAIL_CALL_OFFSET	(12 + ENDBR_INSN_SIZE)
-=20
-+static void push_r9(u8 **pprog)
-+{
-+	u8 *prog =3D *pprog;
-+
-+	EMIT2(0x41, 0x51);   /* push r9 */
-+	*pprog =3D prog;
-+}
-+
-+static void pop_r9(u8 **pprog)
-+{
-+	u8 *prog =3D *pprog;
-+
-+	EMIT2(0x41, 0x59);   /* pop r9 */
-+	*pprog =3D prog;
-+}
-+
- static void push_r12(u8 **pprog)
- {
- 	u8 *prog =3D *pprog;
-@@ -1404,6 +1420,24 @@ static void emit_shiftx(u8 **pprog, u32 dst_reg, u=
-8 src_reg, bool is64, u8 op)
- 	*pprog =3D prog;
- }
-=20
-+static void emit_priv_frame_ptr(u8 **pprog, void __percpu *priv_frame_pt=
-r)
-+{
-+	u8 *prog =3D *pprog;
-+
-+	/* movabs r9, priv_frame_ptr */
-+	emit_mov_imm64(&prog, X86_REG_R9, (__force long) priv_frame_ptr >> 32,
-+		       (u32) (__force long) priv_frame_ptr);
-+
-+#ifdef CONFIG_SMP
-+	/* add <r9>, gs:[<off>] */
-+	EMIT2(0x65, 0x4c);
-+	EMIT3(0x03, 0x0c, 0x25);
-+	EMIT((u32)(unsigned long)&this_cpu_off, 4);
-+#endif
-+
-+	*pprog =3D prog;
-+}
-+
- #define INSN_SZ_DIFF (((addrs[i] - addrs[i - 1]) - (prog - temp)))
-=20
- #define __LOAD_TCC_PTR(off)			\
-@@ -1421,6 +1455,7 @@ static int do_jit(struct bpf_prog *bpf_prog, int *a=
-ddrs, u8 *image, u8 *rw_image
- 	int insn_cnt =3D bpf_prog->len;
- 	bool seen_exit =3D false;
- 	u8 temp[BPF_MAX_INSN_SIZE + BPF_INSN_SAFETY];
-+	void __percpu *priv_frame_ptr =3D NULL;
- 	u64 arena_vm_start, user_vm_start;
- 	int i, excnt =3D 0;
- 	int ilen, proglen =3D 0;
-@@ -1429,6 +1464,10 @@ static int do_jit(struct bpf_prog *bpf_prog, int *=
-addrs, u8 *image, u8 *rw_image
- 	int err;
-=20
- 	stack_depth =3D bpf_prog->aux->stack_depth;
-+	if (bpf_prog->aux->priv_stack_ptr) {
-+		priv_frame_ptr =3D bpf_prog->aux->priv_stack_ptr + round_up(stack_dept=
-h, 16);
-+		stack_depth =3D 0;
-+	}
-=20
- 	arena_vm_start =3D bpf_arena_get_kern_vm_start(bpf_prog->aux->arena);
- 	user_vm_start =3D bpf_arena_get_user_vm_start(bpf_prog->aux->arena);
-@@ -1457,6 +1496,9 @@ static int do_jit(struct bpf_prog *bpf_prog, int *a=
-ddrs, u8 *image, u8 *rw_image
- 		emit_mov_imm64(&prog, X86_REG_R12,
- 			       arena_vm_start >> 32, (u32) arena_vm_start);
-=20
-+	if (priv_frame_ptr)
-+		emit_priv_frame_ptr(&prog, priv_frame_ptr);
-+
- 	ilen =3D prog - temp;
- 	if (rw_image)
- 		memcpy(rw_image + proglen, temp, ilen);
-@@ -1476,6 +1518,14 @@ static int do_jit(struct bpf_prog *bpf_prog, int *=
-addrs, u8 *image, u8 *rw_image
- 		u8 *func;
- 		int nops;
-=20
-+		if (priv_frame_ptr) {
-+			if (src_reg =3D=3D BPF_REG_FP)
-+				src_reg =3D X86_REG_R9;
-+
-+			if (dst_reg =3D=3D BPF_REG_FP)
-+				dst_reg =3D X86_REG_R9;
-+		}
-+
- 		switch (insn->code) {
- 			/* ALU */
- 		case BPF_ALU | BPF_ADD | BPF_X:
-@@ -2136,9 +2186,15 @@ st:			if (is_imm8(insn->off))
- 			}
- 			if (!imm32)
- 				return -EINVAL;
-+			if (priv_frame_ptr) {
-+				push_r9(&prog);
-+				ip +=3D 2;
-+			}
- 			ip +=3D x86_call_depth_emit_accounting(&prog, func, ip);
- 			if (emit_call(&prog, func, ip))
- 				return -EINVAL;
-+			if (priv_frame_ptr)
-+				pop_r9(&prog);
- 			break;
- 		}
-=20
-@@ -3323,6 +3379,7 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_pro=
-g *prog)
- 	struct bpf_binary_header *rw_header =3D NULL;
- 	struct bpf_binary_header *header =3D NULL;
- 	struct bpf_prog *tmp, *orig_prog =3D prog;
-+	void __percpu *priv_stack_ptr =3D NULL;
- 	struct x64_jit_data *jit_data;
- 	int proglen, oldproglen =3D 0;
- 	struct jit_context ctx =3D {};
-@@ -3359,6 +3416,15 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_pr=
-og *prog)
- 		}
- 		prog->aux->jit_data =3D jit_data;
- 	}
-+	priv_stack_ptr =3D prog->aux->priv_stack_ptr;
-+	if (!priv_stack_ptr && prog->aux->priv_stack_requested) {
-+		priv_stack_ptr =3D __alloc_percpu_gfp(prog->aux->stack_depth, 16, GFP_=
-KERNEL);
-+		if (!priv_stack_ptr) {
-+			prog =3D orig_prog;
-+			goto out_priv_stack;
-+		}
-+		prog->aux->priv_stack_ptr =3D priv_stack_ptr;
-+	}
- 	addrs =3D jit_data->addrs;
- 	if (addrs) {
- 		ctx =3D jit_data->ctx;
-@@ -3494,6 +3560,11 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_pr=
-og *prog)
- 			bpf_prog_fill_jited_linfo(prog, addrs + 1);
- out_addrs:
- 		kvfree(addrs);
-+		if (!image && priv_stack_ptr) {
-+			free_percpu(priv_stack_ptr);
-+			prog->aux->priv_stack_ptr =3D NULL;
-+		}
-+out_priv_stack:
- 		kfree(jit_data);
- 		prog->aux->jit_data =3D NULL;
- 	}
-@@ -3547,6 +3618,7 @@ void bpf_jit_free(struct bpf_prog *prog)
- 		prog->bpf_func =3D (void *)prog->bpf_func - cfi_get_offset();
- 		hdr =3D bpf_jit_binary_pack_hdr(prog);
- 		bpf_jit_binary_pack_free(hdr, NULL);
-+		free_percpu(prog->aux->priv_stack_ptr);
- 		WARN_ON_ONCE(!bpf_prog_kallsyms_verify_off(prog));
- 	}
-=20
-@@ -3562,6 +3634,11 @@ bool bpf_jit_supports_exceptions(void)
- 	return IS_ENABLED(CONFIG_UNWINDER_ORC);
- }
-=20
-+bool bpf_jit_supports_private_stack(void)
-+{
-+	return true;
-+}
-+
- void arch_bpf_stack_walk(bool (*consume_fn)(void *cookie, u64 ip, u64 sp=
-, u64 bp), void *cookie)
- {
- #if defined(CONFIG_UNWINDER_ORC)
 diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index dc1e58b90493..644ad35b88ec 100644
+index 644ad35b88ec..938e9c4fa9b1 100644
 --- a/include/linux/bpf.h
 +++ b/include/linux/bpf.h
-@@ -1507,6 +1507,7 @@ struct bpf_prog_aux {
- 	u32 max_rdwr_access;
- 	struct btf *attach_btf;
- 	const struct bpf_ctx_arg_aux *ctx_arg_info;
-+	void __percpu *priv_stack_ptr;
- 	struct mutex dst_mutex; /* protects dst_* pointers below, *after* prog =
-becomes visible */
- 	struct bpf_prog *dst_prog;
- 	struct bpf_trampoline *dst_trampoline;
+@@ -1528,6 +1528,7 @@ struct bpf_prog_aux {
+ 	u64 prog_array_member_cnt; /* counts how many times as member of prog_a=
+rray */
+ 	struct mutex ext_mutex; /* mutex for is_extended and prog_array_member_=
+cnt */
+ 	struct bpf_arena *arena;
++	void (*recursion_detected)(struct bpf_prog *prog); /* callback if recur=
+sion is detected */
+ 	/* BTF_KIND_FUNC_PROTO for valid attach_btf_id */
+ 	const struct btf_type *attach_func_proto;
+ 	/* function name for valid attach_btf_id */
+diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+index 456fd2265345..6c1a173c30e6 100644
+--- a/include/linux/bpf_verifier.h
++++ b/include/linux/bpf_verifier.h
+@@ -895,6 +895,7 @@ static inline bool bpf_prog_check_recur(const struct =
+bpf_prog *prog)
+ 	case BPF_PROG_TYPE_TRACING:
+ 		return prog->expected_attach_type !=3D BPF_TRACE_ITER;
+ 	case BPF_PROG_TYPE_STRUCT_OPS:
++		return prog->aux->priv_stack_requested;
+ 	case BPF_PROG_TYPE_LSM:
+ 		return false;
+ 	default:
+diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
+index 9f36c049f4c2..a8d188b31da5 100644
+--- a/kernel/bpf/trampoline.c
++++ b/kernel/bpf/trampoline.c
+@@ -899,6 +899,8 @@ static u64 notrace __bpf_prog_enter_recur(struct bpf_=
+prog *prog, struct bpf_tram
+=20
+ 	if (unlikely(this_cpu_inc_return(*(prog->active)) !=3D 1)) {
+ 		bpf_prog_inc_misses_counter(prog);
++		if (prog->aux->recursion_detected)
++			prog->aux->recursion_detected(prog);
+ 		return 0;
+ 	}
+ 	return bpf_prog_start_time();
+@@ -975,6 +977,8 @@ u64 notrace __bpf_prog_enter_sleepable_recur(struct b=
+pf_prog *prog,
+=20
+ 	if (unlikely(this_cpu_inc_return(*(prog->active)) !=3D 1)) {
+ 		bpf_prog_inc_misses_counter(prog);
++		if (prog->aux->recursion_detected)
++			prog->aux->recursion_detected(prog);
+ 		return 0;
+ 	}
+ 	return bpf_prog_start_time();
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 09bb9dc939d6..d0e5038a844a 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -6279,6 +6279,7 @@ static int check_max_stack_depth(struct bpf_verifie=
+r_env *env)
+ 		}
+ 	}
+=20
++	env->prog->aux->priv_stack_requested =3D false;
+ 	if (si[0].priv_stack_mode =3D=3D PRIV_STACK_ADAPTIVE)
+ 		env->prog->aux->priv_stack_requested =3D true;
+=20
+@@ -21986,6 +21987,11 @@ static int check_struct_ops_btf_id(struct bpf_ve=
+rifier_env *env)
+ 		}
+ 	}
+=20
++	if (prog->aux->priv_stack_requested && !bpf_jit_supports_private_stack(=
+)) {
++		verbose(env, "Private stack not supported by jit\n");
++		return -EACCES;
++	}
++
+ 	/* btf_ctx_access() used this to provide argument type info */
+ 	prog->aux->ctx_arg_info =3D
+ 		st_ops_desc->arg_info[member_idx].info;
 --=20
 2.43.5
 
