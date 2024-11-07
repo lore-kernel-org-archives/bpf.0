@@ -1,212 +1,208 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9911C216E11;
-	Thu,  7 Nov 2024 16:13:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 897A8216E01;
+	Thu,  7 Nov 2024 16:13:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730996024; cv=none; b=mT4lGw0EMpxeLfoBnfCqb30lDqEH8ts8QkwEmTz4fA9uJw2AnLuhxbUrYVXLYtr7BmqyWNjdt/0ROE2LaJXPFdJ29+zHUl8Jw8jEDVUM0FE7eKIfx+4GM9ev9bKvsN6UjV6QRIm9UZGs0ZGU+d97EyRm/CWvNaxUn/k/yirZOtA=
+	t=1730996027; cv=none; b=SQljbLt0+An862TeCkvlfo6z3MpiWgYDJ9FO8Eyhg1BHm6GSKZR+v4T3HecCgR+dERSy/FrIwu2ckXyjb9hdg7OyXjm9rTDNFjJj9lRk2m3i9bOhxkRpwDhyliNEQeXF5BNvMmLdqd3mR4oMzDxArtTvYrwM+Uk2MdqTVtwPg7E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730996024; c=relaxed/simple;
-	bh=FHR30uhF6DB2gIDAdsPiv6Yh2i+bB/ZarNlpamdV/8U=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=E7LdgnaPYmYrzIyKMHKg4MGSB2J2kFuPFcOySsUeJgdrlb8S7M4V/pZWvgKkg+AwFtOV6jup6A5eqXFN4+UotgxqYTpUbqtVc6ZEDMWKrRn/SAKgwr7a9fBqqGbW9Ec+JqF+4+H/A0pgWA4Db1CrXQY3caj3SWEu8XuYo+0m18o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iIorGii7; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1730996027; c=relaxed/simple;
+	bh=2KVewH6gbI7QLh7PVS2aZtluQpiu+xwJYuj2THd+jEs=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=SgqTlqXujj156i9L8rBwuPH1JqbhrXs8EqEFGtcKSiYnKoh9il6az22eY3OGyH2gLJmtThl8OQV4sbrGxh1zapiXB7piqF9e4lA8R15oddI0HES0P+TMYFOgorS6GlGK9h1jPoC/AHVlYtoEREHMuDXPNoLufKuEIubM3YMsEqQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=U0UHJf1F; arc=none smtp.client-ip=198.175.65.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iIorGii7"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2BCF1C4CECD;
-	Thu,  7 Nov 2024 16:13:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1730996024;
-	bh=FHR30uhF6DB2gIDAdsPiv6Yh2i+bB/ZarNlpamdV/8U=;
-	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-	b=iIorGii7VPFbRUVtUE5c5O3wF/9CYPC2R7Zhv6L1KDgv4fIqUVa1A5w0d26/HbeIE
-	 Jf2O7i1mnX/JVQMR/wCvmYNwyOBatttLt+0/SGL9jC3kGD8Lbt1SMdTKGp6eLnlJ1m
-	 AlLCJmTn4dPOwWfrSEYiT/dW1g6ANs/hpD6mpFsZaZvA2j2J3dZVnSjGE9WPCXP/w1
-	 +iVUs74Zo0hFGkFW3hm0yF+t3y3Kct7iNpYh9EldCWFI17sXeVFxDLxQ+kAlWBNQUw
-	 tMZ33tmI101nEF3e0lgTP9FIyUZL14kwM6hXujkI7qvO3yXSbxedwPp+/Vk+dhNMjw
-	 DghCR1xtvWLbw==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-	id C32DCCE04CE; Thu,  7 Nov 2024 08:13:43 -0800 (PST)
-Date: Thu, 7 Nov 2024 08:13:43 -0800
-From: "Paul E. McKenney" <paulmck@kernel.org>
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: Breno Leitao <leitao@debian.org>, Andrii Nakryiko <andrii@kernel.org>,
-	linux-trace-kernel@vger.kernel.org, peterz@infradead.org,
-	oleg@redhat.com, rostedt@goodmis.org, mhiramat@kernel.org,
-	bpf@vger.kernel.org, linux-kernel@vger.kernel.org, jolsa@kernel.org,
-	willy@infradead.org, surenb@google.com, akpm@linux-foundation.org,
-	linux-mm@kvack.org
-Subject: Re: [PATCH v5 4/8] uprobes: travers uprobe's consumer list
- locklessly under SRCU protection
-Message-ID: <4d034c81-34cd-480b-bab9-6645204fc713@paulmck-laptop>
-Reply-To: paulmck@kernel.org
-References: <20240903174603.3554182-1-andrii@kernel.org>
- <20240903174603.3554182-5-andrii@kernel.org>
- <20241106-transparent-athletic-ammonite-586af8@leitao>
- <CAEf4Bza3+WYN8dstn1v99yeh+G0cjAeRQy8d5GAbvvecLmbO0A@mail.gmail.com>
- <20241107-uncovered-swinging-bull-1e812e@leitao>
- <CAEf4BzanXs4yAexVXdAp-Q-0anmOVCYx+GObvaHPVDnXobkdSA@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="U0UHJf1F"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1730996026; x=1762532026;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=2KVewH6gbI7QLh7PVS2aZtluQpiu+xwJYuj2THd+jEs=;
+  b=U0UHJf1FehyvNyR4baVv3C2xtrQl88Wk828y0eRt1eYlEpIgxf9pJ/yM
+   w+XMQNK29M/45rY/CqnNoDupPQTwqJuix2+O/9tKfHYB7JsoZigysM7/+
+   hY07y82R5DRdq1kMx483lJNMBc+aQ2weHGhvsNoMyfvoc+lDhxO8nF8Xa
+   IPocP1V5SPUfCXJ4fR7yet3fNhb9rSd7acFbU8LpCvHNkX9il5Uz8dgFM
+   qPaUzlwW7owZxPTbBO3yHhqj79wnE649FND7n6/E2EV3+f2Yx1mhlKwZZ
+   BDcEf474hgLbMY/Zgeh02h0h2uIyS1bU76mAi0G82ttGvk0gkj4+plOLO
+   g==;
+X-CSE-ConnectionGUID: mxvHTS4iTk2q69c4t3Uhuw==
+X-CSE-MsgGUID: Q9axvU3rQDuUyTM0Ikh18A==
+X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="41955674"
+X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
+   d="scan'208";a="41955674"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Nov 2024 08:13:45 -0800
+X-CSE-ConnectionGUID: Hskh+WlhRZWk5VW1fdVZYA==
+X-CSE-MsgGUID: zYG0p20DTfOrFToP1OQp0A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,135,1728975600"; 
+   d="scan'208";a="90258131"
+Received: from newjersey.igk.intel.com ([10.102.20.203])
+  by orviesa004.jf.intel.com with ESMTP; 07 Nov 2024 08:13:41 -0800
+From: Alexander Lobakin <aleksander.lobakin@intel.com>
+To: "David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>
+Cc: Alexander Lobakin <aleksander.lobakin@intel.com>,
+	=?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Magnus Karlsson <magnus.karlsson@intel.com>,
+	nex.sw.ncis.osdt.itp.upstreaming@intel.com,
+	bpf@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH net-next v4 00/19] xdp: a fistful of generic changes (+libeth_xdp)
+Date: Thu,  7 Nov 2024 17:10:07 +0100
+Message-ID: <20241107161026.2903044-1-aleksander.lobakin@intel.com>
+X-Mailer: git-send-email 2.47.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAEf4BzanXs4yAexVXdAp-Q-0anmOVCYx+GObvaHPVDnXobkdSA@mail.gmail.com>
 
-oN tHU, nov 07, 2024 at 08:01:05AM -0800, Andrii Nakryiko wrote:
-> On Thu, Nov 7, 2024 at 3:35 AM Breno Leitao <leitao@debian.org> wrote:
-> >
-> > Hello Andrii,
-> >
-> > On Wed, Nov 06, 2024 at 08:25:25AM -0800, Andrii Nakryiko wrote:
-> > > On Wed, Nov 6, 2024 at 4:03 AM Breno Leitao <leitao@debian.org> wrote:
-> > > > On Tue, Sep 03, 2024 at 10:45:59AM -0700, Andrii Nakryiko wrote:
-> > > > > uprobe->register_rwsem is one of a few big bottlenecks to scalability of
-> > > > > uprobes, so we need to get rid of it to improve uprobe performance and
-> > > > > multi-CPU scalability.
-> > > > >
-> > > > > First, we turn uprobe's consumer list to a typical doubly-linked list
-> > > > > and utilize existing RCU-aware helpers for traversing such lists, as
-> > > > > well as adding and removing elements from it.
-> > > > >
-> > > > > For entry uprobes we already have SRCU protection active since before
-> > > > > uprobe lookup. For uretprobe we keep refcount, guaranteeing that uprobe
-> > > > > won't go away from under us, but we add SRCU protection around consumer
-> > > > > list traversal.
-> > > >
-> > > > I am seeing the following message in a kernel with RCU_PROVE_LOCKING:
-> > > >
-> > > >         kernel/events/uprobes.c:937 RCU-list traversed without holding the required lock!!
-> > > >
-> > > > It seems the SRCU is not held, when coming from mmap_region ->
-> > > > uprobe_mmap. Here is the message I got in my debug kernel. (sorry for
-> > > > not decoding it, but, the stack trace is clear enough).
-> > > >
-> > > >          WARNING: suspicious RCU usage
-> > > >            6.12.0-rc5-kbuilder-01152-gc688a96c432e #26 Tainted: G        W   E    N
-> > > >            -----------------------------
-> > > >            kernel/events/uprobes.c:938 RCU-list traversed without holding the required lock!!
-> > > >
-> > > > other info that might help us debug this:
-> > > >
-> > > > rcu_scheduler_active = 2, debug_locks = 1
-> > > >            3 locks held by env/441330:
-> > > >             #0: ffff00021c1bc508 (&mm->mmap_lock){++++}-{3:3}, at: vm_mmap_pgoff+0x84/0x1d0
-> > > >             #1: ffff800089f3ab48 (&uprobes_mmap_mutex[i]){+.+.}-{3:3}, at: uprobe_mmap+0x20c/0x548
-> > > >             #2: ffff0004e564c528 (&uprobe->consumer_rwsem){++++}-{3:3}, at: filter_chain+0x30/0xe8
-> > > >
-> > > > stack backtrace:
-> > > >            CPU: 4 UID: 34133 PID: 441330 Comm: env Kdump: loaded Tainted: G        W   E    N 6.12.0-rc5-kbuilder-01152-gc688a96c432e #26
-> > > >            Tainted: [W]=WARN, [E]=UNSIGNED_MODULE, [N]=TEST
-> > > >            Hardware name: Quanta S7GM 20S7GCU0010/S7G MB (CG1), BIOS 3D22 07/03/2024
-> > > >            Call trace:
-> > > >             dump_backtrace+0x10c/0x198
-> > > >             show_stack+0x24/0x38
-> > > >             __dump_stack+0x28/0x38
-> > > >             dump_stack_lvl+0x74/0xa8
-> > > >             dump_stack+0x18/0x28
-> > > >             lockdep_rcu_suspicious+0x178/0x2c8
-> > > >             filter_chain+0xdc/0xe8
-> > > >             uprobe_mmap+0x2e0/0x548
-> > > >             mmap_region+0x510/0x988
-> > > >             do_mmap+0x444/0x528
-> > > >             vm_mmap_pgoff+0xf8/0x1d0
-> > > >             ksys_mmap_pgoff+0x184/0x2d8
-> > > >
-> > > >
-> > > > That said, it seems we want to hold the SRCU, before reaching the
-> > > > filter_chain(). I hacked a bit, and adding the lock in uprobe_mmap()
-> > > > solves the problem, but, I might be missing something, since I am not familiar
-> > > > with this code.
-> > > >
-> > > > How does the following patch look like?
-> > > >
-> > > > commit 1bd7bcf03031ceca86fdddd8be2e5500497db29f
-> > > > Author: Breno Leitao <leitao@debian.org>
-> > > > Date:   Mon Nov 4 06:53:31 2024 -0800
-> > > >
-> > > >     uprobes: Get SRCU lock before traverseing the list
-> > > >
-> > > >     list_for_each_entry_srcu() is being called without holding the lock,
-> > > >     which causes LOCKDEP (when enabled with RCU_PROVING) to complain such
-> > > >     as:
-> > > >
-> > > >             kernel/events/uprobes.c:937 RCU-list traversed without holding the required lock!!
-> > > >
-> > > >     Get the SRCU uprobes_srcu lock before calling filter_chain(), which
-> > > >     needs to have the SRCU lock hold, since it is going to call
-> > > >     list_for_each_entry_srcu().
-> > > >
-> > > >     Signed-off-by: Breno Leitao <leitao@debian.org>
-> > > >     Fixes: cc01bd044e6a ("uprobes: travers uprobe's consumer list locklessly under SRCU protection")
-> > > >
-> > > > diff --git a/kernel/events/uprobes.c b/kernel/events/uprobes.c
-> > > > index 4b52cb2ae6d62..cc9d4ddeea9a6 100644
-> > > > --- a/kernel/events/uprobes.c
-> > > > +++ b/kernel/events/uprobes.c
-> > > > @@ -1391,6 +1391,7 @@ int uprobe_mmap(struct vm_area_struct *vma)
-> > > >         struct list_head tmp_list;
-> > > >         struct uprobe *uprobe, *u;
-> > > >         struct inode *inode;
-> > > > +       int srcu_idx;
-> > > >
-> > > >         if (no_uprobe_events())
-> > > >                 return 0;
-> > > > @@ -1409,6 +1410,7 @@ int uprobe_mmap(struct vm_area_struct *vma)
-> > > >
-> > > >         mutex_lock(uprobes_mmap_hash(inode));
-> > > >         build_probe_list(inode, vma, vma->vm_start, vma->vm_end, &tmp_list);
-> > > > +       srcu_idx = srcu_read_lock(&uprobes_srcu);
-> > >
-> > > Thanks for catching that (production testing FTW, right?!).
-> >
-> > Correct. I am running some hosts with RCU_PROVING and I am finding some
-> > cases where RCU protected areas are touched without holding the RCU read
-> > lock.
-> >
-> > > But I think you a) adding wrong RCU protection flavor (it has to be
-> > > rcu_read_lock_trace()/rcu_read_unlock_trace(), see uprobe_apply() for
-> > > an example) and b) I think this is the wrong place to add it. We
-> > > should add it inside filter_chain(). filter_chain() is called from
-> > > three places, only one of which is already RCU protected (that's the
-> > > handler_chain() case). But there is also register_for_each_vma(),
-> > > which needs RCU protection as well.
-> >
-> > Thanks for the guidance!
-> >
-> > My initial plan was to protect filter_chain(), but, handler_chain()
-> > already has the lock. Is it OK to get into a critical section in a
-> > nested form?
-> >
-> > The code will be something like:
-> >
-> > handle_swbp() {
-> >         rcu_read_lock_trace();
-> >         handler_chain() {
-> >                 filter_chain() {
-> >                         rcu_read_lock_trace();
-> >                         list_for_each_entry_rcu()
-> >                         rcu_read_lock_trace();
-> >                 }
-> >         }
-> >         rcu_read_lock_trace();
-> > }
-> >
-> > Is this nested locking fine?
-> 
-> Yes, it's totally fine to nest RCU lock regions.
+XDP for idpf is currently 5 chapters:
+* convert Rx to libeth;
+* convert Tx and stats to libeth;
+* generic XDP and XSk code changes (this);
+* actual XDP for idpf via libeth_xdp;
+* XSk for idpf (^).
 
-As long as you don't nest them more than 255 deep in CONFIG_PREEMPT=n
-kernels that also have CONFIG_PREEMPT_COUNT=y, or more than 2G deep in
-CONFIG_PREEMPT=y kernels.  For a limited time only, in CONFIG_PREEMPT=n
-kernels that also have CONFIG_PREEMPT_COUNT=n, you can nest as deeply
-as you want.  ;-)
+Part III does the following:
+* does some cleanups with marking read-only bpf_prog and xdp_buff
+  arguments const for some generic functions;
+* allows attaching already registered XDP memory model to Rxq info;
+* allows mixing pages from several Page Pools within one XDP frame;
+* optimizes &xdp_frame structure and removes no-more-used field;
+* adds generic functions to build skbs from xdp_buffs (regular and
+  XSk) and attach frags to xdp_buffs (regular and XSk);
+* adds helper to optimize XSk xmit in drivers;
+* extends libeth Rx to support XDP requirements (headroom etc.) on Rx;
+* adds libeth_xdp -- libeth module with common XDP and XSk routines.
 
-Sorry, couldn't resist...
+They are implemented mostly as inlines with inline callback arguments.
+They will be then uninlined in the drivers with sane function sizes,
+but without any indirect calls.
+All those inlines and macros really removes tons of driver code, which
+is mostly the same across the drivers minus HW-specific part. You just
+basically need functions which read Rx descriptors and fill Tx
+descriptors, call a couple macros and that's it. The rest is written
+once in libeth_xdp.
+All exception and cold code are external. Error handling etc, anything
+that don't happen at line rates, are external. Only the hottest things
+are inlined ensuring driver code doesn't bloat for no gain and that
+cold code won't push hot code into more cachelines than wanted.
 
-							Thanx, Paul
+Note on diffstat: don't be scared, almost 1500 lines are documentation
+explaining everything in details. The actual new code is around 2500.
+
+Alexander Lobakin (18):
+  jump_label: export static_key_slow_{inc,dec}_cpuslocked()
+  skbuff: allow 2-4-argument skb_frag_dma_map()
+  unroll: add generic loop unroll helpers
+  bpf, xdp: constify some bpf_prog * function arguments
+  xdp, xsk: constify read-only arguments of some static inline helpers
+  xdp: allow attaching already registered memory model to xdp_rxq_info
+  page_pool: make page_pool_put_page_bulk() actually handle array of
+    pages
+  page_pool: allow mixing PPs within one bulk
+  xdp: get rid of xdp_frame::mem.id
+  xdp: add generic xdp_buff_add_frag()
+  xdp: add generic xdp_build_skb_from_buff()
+  xsk: align &xdp_buff_xsk harder
+  xsk: allow attaching XSk pool via xdp_rxq_info_reg_mem_model()
+  xsk: make xsk_buff_add_frag really add a frag via
+    __xdp_buff_add_frag()
+  xsk: add generic XSk &xdp_buff -> skb conversion
+  xsk: add helper to get &xdp_desc's DMA and meta pointer in one go
+  libeth: support native XDP and register memory model
+  libeth: add a couple of XDP helpers (libeth_xdp)
+
+Toke Høiland-Jørgensen (1):
+  xdp: register system page pool as an XDP memory model
+
+ drivers/net/ethernet/intel/libeth/Kconfig     |    6 +
+ drivers/net/ethernet/intel/libeth/Makefile    |    6 +
+ include/net/libeth/types.h                    |  102 +-
+ include/net/page_pool/types.h                 |    6 +-
+ drivers/net/ethernet/intel/libeth/priv.h      |   37 +
+ include/linux/bpf.h                           |   12 +-
+ include/linux/filter.h                        |    9 +-
+ include/linux/netdevice.h                     |    7 +-
+ include/linux/skbuff.h                        |   49 +-
+ include/linux/unroll.h                        |   43 +
+ include/net/libeth/rx.h                       |    6 +-
+ include/net/libeth/tx.h                       |   34 +-
+ include/net/libeth/xdp.h                      | 1864 +++++++++++++++++
+ include/net/libeth/xsk.h                      |  684 ++++++
+ include/net/xdp.h                             |  185 +-
+ include/net/xdp_sock_drv.h                    |   52 +-
+ include/net/xsk_buff_pool.h                   |   12 +-
+ .../net/ethernet/freescale/dpaa/dpaa_eth.c    |    2 +-
+ drivers/net/ethernet/intel/i40e/i40e_xsk.c    |   30 +-
+ drivers/net/ethernet/intel/ice/ice_xsk.c      |   32 +-
+ drivers/net/ethernet/intel/libeth/rx.c        |   22 +-
+ drivers/net/ethernet/intel/libeth/tx.c        |   39 +
+ drivers/net/ethernet/intel/libeth/xdp.c       |  444 ++++
+ drivers/net/ethernet/intel/libeth/xsk.c       |  264 +++
+ drivers/net/veth.c                            |    4 +-
+ kernel/bpf/cpumap.c                           |    2 +-
+ kernel/bpf/devmap.c                           |    8 +-
+ kernel/jump_label.c                           |    2 +
+ net/bpf/test_run.c                            |    4 +-
+ net/core/dev.c                                |   20 +-
+ net/core/filter.c                             |   41 +-
+ net/core/page_pool.c                          |   60 +-
+ net/core/skbuff.c                             |    2 +-
+ net/core/xdp.c                                |  311 ++-
+ net/xdp/xsk_buff_pool.c                       |   40 +
+ 35 files changed, 4220 insertions(+), 221 deletions(-)
+ create mode 100644 drivers/net/ethernet/intel/libeth/priv.h
+ create mode 100644 include/net/libeth/xdp.h
+ create mode 100644 include/net/libeth/xsk.h
+ create mode 100644 drivers/net/ethernet/intel/libeth/tx.c
+ create mode 100644 drivers/net/ethernet/intel/libeth/xdp.c
+ create mode 100644 drivers/net/ethernet/intel/libeth/xsk.c
+
+---
+From v3[0]:
+* rebase on top of the latest net-next to solve conflict (Jakub);
+* 09: use iterative approach instead of recursive to not blow the stack
+  (Toke);
+* 12: rephrase the commitmsg since the functionality changed, so that
+  it's not actual anymore (Toke);
+* align &xdp_buff_xsk a bit harder since its alignment degraded
+  recently;
+* pick RBs from Toke.
+
+From v2[1]:
+* cover: rename the series;
+* collect RBs and Acks from Maciej;
+* 007: reword the commitmsg;
+* 011: fix typos in the commitmsg (M);
+* 012: 'ts' -> 'tsize' (M; not 'truesize' to fit into 80 cols =\);
+* 016: fix the intro sentence (M);
+* no functional changes.
+
+From v1[2]:
+* rebase on top of the latest net-next;
+* no other changes.
+
+[0] https://lore.kernel.org/netdev/20241030165201.442301-1-aleksander.lobakin@intel.com
+[1] https://lore.kernel.org/netdev/20241015145350.4077765-1-aleksander.lobakin@intel.com
+[2] https://lore.kernel.org/netdev/20241009152756.3113697-1-aleksander.lobakin@intel.com
+-- 
+2.47.0
+
