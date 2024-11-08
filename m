@@ -1,102 +1,146 @@
-Received: from out162-62-57-137.mail.qq.com (out162-62-57-137.mail.qq.com [162.62.57.137])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C4131DACA1;
-	Fri,  8 Nov 2024 08:19:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.62.57.137
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99EE71F5FA;
+	Fri,  8 Nov 2024 08:35:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731053950; cv=none; b=f5UGPk9jS0ohws4EX57QmrGDB4sZWCjjbXktly+kbAW8wVbHD+NEJGwZk51CK93ceqjBq88KjzVpkjFE8Ifo2d+1SHDSGrA7dmdYiB93EKDG/aZOSLfmQ6R9aLxM78z1cG/RktYdh8DjIUumxe5QBZugZ++gv0Vx/eIRNHiVng0=
+	t=1731054940; cv=none; b=T8C7wwEmvbZmY0DoR1On2q9zqt1zHgFCM4ZUQuc4JLgy3n+LB37WGru1jZigqlBG9k/opmfE0gm31T5khDV8CzfiCQ2buegry8XEjnd840mLqmsWsMcK9/dHesXjia7OZX7ZB6BLsZJI2suX5Ueide3DxrXJYhqxhJ34GV+Qc+8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731053950; c=relaxed/simple;
-	bh=iXHrBL4LQP1zfCQw9hd4nGFRXBxeQitQM7MrOkznPzc=;
-	h=Message-ID:From:To:Cc:Subject:Date:MIME-Version; b=UsHfPaDE+xjH4Sd8KyYp8p7yQwvAr3bBIpcjxCDefjzLZP4zDjXIfOIgZX0yiNRXR9PaaVQT0yFx8skd12af5feueo0lFaiw8JPT8Ye4dyAPrF5mbK4YlQJJZ5AH7O3WcYK7j46RHBppaD7QFbtSBIpX4GF40WS3ddt2SdKnZGU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com; spf=pass smtp.mailfrom=foxmail.com; dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b=smORHAsT; arc=none smtp.client-ip=162.62.57.137
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foxmail.com
+	s=arc-20240116; t=1731054940; c=relaxed/simple;
+	bh=O+/+S076NvjXKoCnCGtPzOmgOPCrXENMgPUPkH5hqPQ=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=hy7z29wOSaGQxDNxAfgWo6bdRbfVZI6JAtu9gLl0/eend3JtxG7gEqn+cbIWS6X4icNuvYOzkNELDzsiY1mw7T4mpkP4UDZPohFGQ3rvA8bux+o6sjmE5pm1w6a1rhG+LPER8jYxrfBgJQgM+N2vg6wPUQluYq8aufk+2ee/DlM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hAaDdgms; arc=none smtp.client-ip=209.85.208.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b="smORHAsT"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-	s=s201512; t=1731053935;
-	bh=G5AasHwJUPIvWba5jjKssBCTEs7Viz1urDez9UtIGzc=;
-	h=From:To:Cc:Subject:Date;
-	b=smORHAsTdH+SaYHmUQE6XY8GXKLweSmecF3RMEPV+3Dw6wMLRHW3LU4hVjPtFkmns
-	 ouvugG75fFU1qt6xs3KcPEOgO6ieoP6UdWYqXybBMlQ5YEHCKaPICDZhnW1jsPDxnX
-	 8UIwpKHCoV/+jqWS/7riFW07/5XZViW5iettoZzI=
-Received: from localhost.localdomain ([114.246.200.160])
-	by newxmesmtplogicsvrszc25-0.qq.com (NewEsmtp) with SMTP
-	id 4B4A2013; Fri, 08 Nov 2024 16:18:52 +0800
-X-QQ-mid: xmsmtpt1731053932tsxe9qji1
-Message-ID: <tencent_CFD3D1C3D68B45EA9F52D8EC76D2C4134306@qq.com>
-X-QQ-XMAILINFO: MvTK+AXQ7a4FRRnkPllYZNdQ/lMUxf8qYP61N+F2M9eOeuDg+Aj2hJ9HXQwA+p
-	 gNx7R6MEjXFKeDh0fJ9SZ3e1PIvZf3SAhotqftLNRborP5RWDmdt+H3SPw6dvoGk5yniv+j2VQym
-	 yf6XWlLOfBDgueGwlt+T1p2ncskLXiY6bLp98czjmafHe4yLNRLqWzY7HQaW2d0khiYjNfBgTk13
-	 VQNoJ/QyFdzJWhcsLWjSJmtOVGX/cRzq3qkiGQnJQrcRymn2gTJDNLAULQkrWxwHX8R5DxD+xek6
-	 plyuNE093/ypGQotP4QrcqTIba3vsahKnKAdv+AdFV7KOLOptM8heC2rp8hu1NaSmhfTuX+Mndky
-	 RSuG5e+7XpjBxcBS8prgBSTUezTPPgRpCHh/VdSF7fGLBRKdAVTPwAMpRPa3wU5m8RLkBmoQ4S9Z
-	 VOeC2GuvJSHTQr21AG8rJlZ1YBPsbDS+zMAazYSB5oIfAXAIkmlKFiNlPjRLGNWRx4TeSMSjjjNS
-	 zTsLdfr2PZ1zd06BEl/BG5b5GpaSJoBObGjJ7cOXoauKO2TbfUlja1d2f8hyx2Ng8GR4aRdTVYCK
-	 No+1LvEp0foOqU0OM2CSPa11eKbCWh2ZTN7cQVc+nNqJJIjJ4vtIfvXfgqwHv9xGVMN1MfAOqHtb
-	 R2tUKk18MJf829paRMGMGGW9m+kC3rzRuZYMX/9KUbUCbAB0F7R/zHKVwmWNtRVHKimhxtiibZ5P
-	 GwtNAtycL6SU0R7cDubYNGrL/LR0jo1OHgLAvMJmAnKCtEbsamYwIIXWN6EGo0UZJQQVPp4ARO2C
-	 QBkjD8cYJ4xk++MvLUCN2LXVlgGLLElYcW2Rn85jgd5KGikxypShUyuWBd8Xtd+/9hp3zr54l/cJ
-	 Fb6+hoOAfi8GNf8DFq3TdH0MWFYdYxWcYiPVDSxxzHViZY/ZWENcq0B5WSVfNAk8CAMl+NXRg5JR
-	 k8bKpgnYEvdkLHLK0Bti4MUvirFOyLtHQFCt8PWUhRIHXO0lxIZkBpiZDh42deZ2+0Dz1CofWwk9
-	 0u17MGAzyCkMSr2sO/orLwcy1Og7D7qWXsVfvgtw==
-X-QQ-XMRINFO: MSVp+SPm3vtS1Vd6Y4Mggwc=
-From: Jiawei Ye <jiawei.ye@foxmail.com>
-To: martin.lau@linux.dev,
-	daniel@iogearbox.net,
-	edumazet@google.com,
-	kuba@kernel.org
-Cc: bpf@vger.kernel.org,
-	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] bpf: Fix mismatched RCU unlock flavour in bpf_out_neigh_v6
-Date: Fri,  8 Nov 2024 08:18:52 +0000
-X-OQ-MSGID: <20241108081852.2188323-1-jiawei.ye@foxmail.com>
-X-Mailer: git-send-email 2.34.1
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hAaDdgms"
+Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-5cec7cde922so2403588a12.3;
+        Fri, 08 Nov 2024 00:35:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1731054937; x=1731659737; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=/E2JQn1w8PZb9OK5WGvb8o22/47bYA0PR0jq9rxm3pc=;
+        b=hAaDdgms3dlOnx3RwVbogn8Npj+Q8biD92zPpAfNEXnzhefrygvYGiBdcpjPB2KfAo
+         xVemvXErXZrBWEgudPAlu/v7N5E+/Ia8qSY/J2qPISCjqzC6vcH8vbnRK188G8GgPuVv
+         cJ0A+MXepYPsmFicAZBdpVh1tgBZNKHKEY9PL8ejZCqUZ3Z84f6rLDXPcr/KtHeNUxSN
+         vqoTT2eJSpNStpvtgum8xNfQYlrXbgSpx4a46k0DrWiyaJ3w19VfKKxbZz1h+qAwaMOE
+         ejjeXhC3GY1O9lsN8wKPu+HqHCXOQcntB72iCIawT59rwrJWqNP923C4z59PDMOWFvbT
+         km7Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1731054937; x=1731659737;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/E2JQn1w8PZb9OK5WGvb8o22/47bYA0PR0jq9rxm3pc=;
+        b=ReDQHAEGbC7HOb9Kr8yF/YIExoGeoZANkLszH0rNsONSj7DaZEzawI+XnOOOSJVzyo
+         b4EQN9JKbxUsGRfOfiWk4uGu7gxMbdb8ZiuzIWhMgMJFKpMVJOXtVniZ2TjdFSvm5/an
+         hoFclIb37iZbFv/+rO1oMWiTlg3ExMhoc3vyV9HyYKg8nD7maE7DgTwYORW7R6rN8JMG
+         fTALNCgUo4igN6c5n+phOrs4iRE5+6b3yyJT79e8Zbp4vnvGh4q2EkFt0PLezazT6QAu
+         /xEGZV40KpnM3GROAS6bUSZn21Y4Gd/futFdGQlFF3E98LLYEfO6WcrFaolDBkgXI1Jw
+         nRow==
+X-Forwarded-Encrypted: i=1; AJvYcCUnUv/gkDPJN0J4nCQUaWcCdID10Ad4OMefWjxs/LxgCOpdTt7thynp4r5k+M83hcJpAxg=@vger.kernel.org, AJvYcCXosZ1/gNxOUNvpt3PDOHR14zxBFeSwnepfnj7pXMjoUsBUjktcz38PnOjY6Co+9d1Lya8WkVY0@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz/LzeZ+kqo0dVJAhFU5qGrcI3xZwNeF1nzWrY6kPMdXNp2TXd5
+	PIfiB+jNLB7ZnATuuvCutjWF8t+4FPx6G3o8coEII0Crw/y1V7znBrYOyA==
+X-Google-Smtp-Source: AGHT+IFdIUe113pQ9aBMOx/Kec2tqsyE4hd//z7X6rppgZT+x1Cc7dpwlCSlJ6Hm7EO+IR6epmXO6Q==
+X-Received: by 2002:a05:6402:d0d:b0:5c2:439d:90d4 with SMTP id 4fb4d7f45d1cf-5cf0a45f22bmr1352065a12.30.1731054936670;
+        Fri, 08 Nov 2024 00:35:36 -0800 (PST)
+Received: from krava (2001-1ae9-1c2-4c00-726e-c10f-8833-ff22.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:726e:c10f:8833:ff22])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5cf03c4ecd5sm1724334a12.59.2024.11.08.00.35.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 08 Nov 2024 00:35:36 -0800 (PST)
+From: Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date: Fri, 8 Nov 2024 09:35:34 +0100
+To: Omar Sandoval <osandov@osandov.com>
+Cc: Jiri Olsa <olsajiri@gmail.com>, Greg KH <gregkh@linuxfoundation.org>,
+	stable@vger.kernel.org, bpf@vger.kernel.org,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>
+Subject: Re: Fix build ID parsing logic in stable trees
+Message-ID: <Zy3NVkewYPO9ZSDx@krava>
+References: <20241104175256.2327164-1-jolsa@kernel.org>
+ <2024110536-agonizing-campus-21f0@gregkh>
+ <ZyniGMz5QLhGVWSY@krava>
+ <2024110636-rebound-chip-f389@gregkh>
+ <ZytZrt31Y1N7-hXK@krava>
+ <Zy0dNahbYlHISjkU@telecaster>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Zy0dNahbYlHISjkU@telecaster>
 
-In the bpf_out_neigh_v6 function, rcu_read_lock() is used to begin an RCU
-read-side critical section. However, when unlocking, one branch
-incorrectly uses a different RCU unlock flavour rcu_read_unlock_bh()
-instead of rcu_read_unlock(). This mismatch in RCU locking flavours can
-lead to unexpected behavior and potential concurrency issues.
+On Thu, Nov 07, 2024 at 12:04:05PM -0800, Omar Sandoval wrote:
+> On Wed, Nov 06, 2024 at 12:57:34PM +0100, Jiri Olsa wrote:
+> > On Wed, Nov 06, 2024 at 07:12:05AM +0100, Greg KH wrote:
+> > > On Tue, Nov 05, 2024 at 10:15:04AM +0100, Jiri Olsa wrote:
+> > > > On Tue, Nov 05, 2024 at 07:54:48AM +0100, Greg KH wrote:
+> > > > > On Mon, Nov 04, 2024 at 06:52:52PM +0100, Jiri Olsa wrote:
+> > > > > > hi,
+> > > > > > sending fix for buildid parsing that affects only stable trees
+> > > > > > after merging upstream fix [1].
+> > > > > > 
+> > > > > > Upstream then factored out the whole buildid parsing code, so it
+> > > > > > does not have the problem.
+> > > > > 
+> > > > > Why not just take those patches instead?
+> > > > 
+> > > > I guess we could, but I thought it's too big for stable
+> > > > 
+> > > > we'd need following 2 changes to fix the issue:
+> > > >   de3ec364c3c3 lib/buildid: add single folio-based file reader abstraction
+> > > >   60c845b4896b lib/buildid: take into account e_phoff when fetching program headers
+> > > > 
+> > > > and there's also few other follow ups:
+> > > >   5ac9b4e935df lib/buildid: Handle memfd_secret() files in build_id_parse()
+> > > >   cdbb44f9a74f lib/buildid: don't limit .note.gnu.build-id to the first page in ELF
+> > > >   ad41251c290d lib/buildid: implement sleepable build_id_parse() API
+> > > >   45b8fc309654 lib/buildid: rename build_id_parse() into build_id_parse_nofault()
+> > > >   4e9d360c4cdf lib/buildid: remove single-page limit for PHDR search
+> > > > 
+> > > > which I guess are not strictly needed
+> > > 
+> > > Can you verify what exact ones are needed here?  We'll be glad to take
+> > > them if you can verify that they work properly.
+> > 
+> > ok, will check
+> 
+> Hello,
+> 
+> I noticed that the BUILD-ID field in vmcoreinfo is broken on
+> stable/longterm kernels and found this thread. Can we please get this
+> fixed soon?
+> 
+> I tried cherry-picking the patches mentioned above ("lib/buildid: add
+> single folio-based file reader abstraction" and "lib/buildid: take into
+> account e_phoff when fetching program headers"), but they don't apply
+> cleanly before 6.11, and they'd need to be reworked for 5.15, which was
+> before folios were introduced. Jiri's minimal fix works for me and seems
+> like a much safer option.
 
-This possible bug was identified using a static analysis tool developed
-by myself, specifically designed to detect RCU-related issues.
+hi,
+thanks for testing
 
-This patch corrects the mismatched unlock flavour by replacing the
-incorrect rcu_read_unlock_bh() with the appropriate rcu_read_unlock(),
-ensuring that the RCU critical section is properly exited. This change
-prevents potential synchronization issues and aligns with proper RCU
-usage patterns.
+I think for 6.11 we could go with backport of:
+  de3ec364c3c3 lib/buildid: add single folio-based file reader abstraction
+  60c845b4896b lib/buildid: take into account e_phoff when fetching program headers
 
-Fixes: 09eed1192cec ("neighbour: switch to standard rcu, instead of rcu_bh")
-Signed-off-by: Jiawei Ye <jiawei.ye@foxmail.com>
----
- net/core/filter.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+and with the small fix for the rest
 
-diff --git a/net/core/filter.c b/net/core/filter.c
-index 64248d0ac4ad..44bbc1dbfb50 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -2232,7 +2232,7 @@ static int bpf_out_neigh_v6(struct net *net, struct sk_buff *skb,
- 		rcu_read_unlock();
- 		return ret;
- 	}
--	rcu_read_unlock_bh();
-+	rcu_read_unlock();
- 	if (dst)
- 		IP6_INC_STATS(net, ip6_dst_idev(dst), IPSTATS_MIB_OUTNOROUTES);
- out_drop:
--- 
-2.34.1
+but I still need to figure out why also 60c845b4896b is needed
+to fix the issue on 6.11.. hopefully today
 
+jirka
+
+> 
+> Tested-by: Omar Sandoval <osandov@fb.com>
+> 
+> Thanks,
+> Omar
