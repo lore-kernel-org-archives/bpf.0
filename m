@@ -1,107 +1,122 @@
-Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 110597464
-	for <bpf@vger.kernel.org>; Fri,  8 Nov 2024 01:20:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3255E7E9
+	for <bpf@vger.kernel.org>; Fri,  8 Nov 2024 01:55:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731028861; cv=none; b=WZj3T8yqLJvAGe2zHg2ae3skzrlBCBi1tir9nNQTeYAbN42AM8OQ78bs5tsyq6zi7rfA4V2UYFB8N8OUM6nvHTTNfIIioG51Yth5OfNtENL33aqCIb+H31D9R2KqaHwcLbyhnrrJptIjTsZmXFNAsinI1moMPY0o0VITYkL2uyg=
+	t=1731030947; cv=none; b=uzKcIEDDcViXFQiihIPQz23tdELuRMC/cA3reXcgPiwbYTOd5k+vi4zt6mHN2HazMnD+Uo5k0IhWGzDvoyNUvYnm/tvyJL4BEjPSlPCGuq5YGO1B5GAbJqk1UEbAhFNFevE4Pps/X9/75nAeWSzWFby7LUBkU5oK6U3zxQCEY6M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731028861; c=relaxed/simple;
-	bh=y2Z6rDXqtVhYy+az9EA6lxeENtS7gCrnC+61nB1PU3E=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Lks4lopWS388eS0c8zNUzYtj86Oi7tbDn8g9/+PYtBMZNVgdSevibSWlPsEaiDVXMPlG1Uh5GDer7r+iZEY9PFYTqCRBzbVoEPOxO62gFpuyq7QQ94KB+ZbPykeT1Clbyfwj0OwnAXRtXZdQXZBf0y3PFNY5AHPc/mSKha7x+gw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kmRlcWQX; arc=none smtp.client-ip=209.85.221.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1731030947; c=relaxed/simple;
+	bh=wGy1Wsb1E4yL+Ca1HhWlwyNDxjAwf6T3rfN5JIN+Aag=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=bfKyqKKBtLIhx9B2b9Bvgb31STeeM/2jUcFOLJaD5ICOsEq7qE9mZ0oRwXHXAgVtUMjtot3/KYMNW+LwHKMDRt6wB9V5yxs774fu1ITDF2doD5vBeUKPX7y7Ix331TLG5YcvZF568Ys3hsoCjDVsTPvUe0bG6VbraiBjJqiMsJI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XTroKPKg; arc=none smtp.client-ip=198.175.65.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kmRlcWQX"
-Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-37d518f9abcso1001901f8f.2
-        for <bpf@vger.kernel.org>; Thu, 07 Nov 2024 17:20:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1731028858; x=1731633658; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=csXEQJ0hOWDqTcb5yESFfn1ne2rBnPQKOjpHE+1KT3o=;
-        b=kmRlcWQXXtou7DD7L7Jc+lsC14E/WYm2naD9SqFXJcgyTvB0JQrRZWRCe3HLW1PKsg
-         zBCENWpRrAw9GcLKjaGRyN6b/UDv4C60bU1o5DuvABKRFeSH9ciCjLhEBvBrE6m9S4MB
-         UhBQQ1uvQ7Q/PZ8BK8uKoyzc56nhRznKgH/DxbK5ymbGV5Jz/DFnDoRlqB3rmCZpaS+N
-         H4VCjXDR/9ZH+KWX5KDrGZv51t9TOMpPoei4nKano+8RE2WFQ2p0sZlugMQHTrb8GMg1
-         VMBtkoNggAihgFbTB8/hcRVRX85FTD7MPK2aTNozrLQXFBklJWfa/DMp+izwfX0cK5nQ
-         6DLQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731028858; x=1731633658;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=csXEQJ0hOWDqTcb5yESFfn1ne2rBnPQKOjpHE+1KT3o=;
-        b=t4peM9aZUbSTWQX/msIvdgwXAXlf9QPUTYpU+yJkr4mv+ykP3rlu6Ig+zERCLyQ8WE
-         p16N5xAxwMMnkITOnahxNgloM43JwTk0QYLQKYn7aEVOdr15KavmcdIuG/5knps+R0Hi
-         eULKNHnllViP9hf1ryg84Sodwt5/v+U6d7yZ0iRJwNSSf04x2Gun7L9zpgsHeCO4UYNk
-         pltbfwzfKG3V2jMIwhQ4Gk12k7vQZFFP/cG+h6RzrhjP8DD14BLxwQVeMltdykAJJ3ml
-         AKDyMUd7P3TL9RT0I2DHkgLjNNVwOOOK2ZQIhvcgg3fF2wj+PgxUKzLd3CPpzxptsGAe
-         odWA==
-X-Gm-Message-State: AOJu0YykSRhtnjBALl2LD5ymxcuKsqgz5HWaWY+Xf/1+kwF1jVsrkvuT
-	D/gmKlmueriLDTT4hbIPVpv6h1ka19wHBAHPmrCYhL4N3+rYFoeyXpnM90TvWJxEmfyo8PfcGgs
-	AAZh0Lo7zU0QgZKT96MJZ4pitMSllJw==
-X-Google-Smtp-Source: AGHT+IGv+N35bYAXi2ED91kiigdt2gFXgegiInZyRgIz29V/KnLU08Z7EGRSjBE/pUniNsL6oH5bCieF8fIFO/nhyIo=
-X-Received: by 2002:a05:6000:1f81:b0:37d:398f:44f9 with SMTP id
- ffacd0b85a97d-381f1872f2dmr700190f8f.32.1731028858034; Thu, 07 Nov 2024
- 17:20:58 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XTroKPKg"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1731030946; x=1762566946;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=wGy1Wsb1E4yL+Ca1HhWlwyNDxjAwf6T3rfN5JIN+Aag=;
+  b=XTroKPKgZeg6WrdT+E4yKDa2m6MFRf/yhm54WPgVVxGOzZAFujwnhenq
+   3DSARITgtsFT6CiBQFQCEvh0aU58u7HmkqdxfqIXDAP9cPa1Wj+Do+dJt
+   xDskEiKCDMww1mERF88UxoBHqB1nKGPkIUQbm0YtpElpcj5KeSptkFBsm
+   XoRf8mBXl1jCNXSxLwjWcPJIvcuTEMlfJqUw7ymmVWiXkFrB8QXf05lCP
+   VLXOlwmAT6f2uybIppU93hsR1xPIFaaIoVV5DDEbna6w9SuIjH7vZV/PY
+   NLIHpLSlhv9jCLeBu7+/IY4iHOARa5Uqex5qW7uQYuy40+2u+9HROneg0
+   A==;
+X-CSE-ConnectionGUID: z9tmltcPQFy5M4dcCpfD+w==
+X-CSE-MsgGUID: BXRj01YZSAuqrxzaKhKOQw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="31072764"
+X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
+   d="scan'208";a="31072764"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Nov 2024 17:55:45 -0800
+X-CSE-ConnectionGUID: ONa7SasNTeOWSey1f7g4xg==
+X-CSE-MsgGUID: LubL3y6hQCGM3Ch3OhWJZw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,136,1728975600"; 
+   d="scan'208";a="89865669"
+Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
+  by fmviesa005.fm.intel.com with ESMTP; 07 Nov 2024 17:55:41 -0800
+Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1t9EDr-000qtU-0g;
+	Fri, 08 Nov 2024 01:55:39 +0000
+Date: Fri, 8 Nov 2024 09:54:54 +0800
+From: kernel test robot <lkp@intel.com>
+To: Vadim Fedorenko <vadfed@meta.com>, Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Vadim Fedorenko <vadim.fedorenko@linux.dev>,
+	Mykola Lysenko <mykolal@fb.com>, Jakub Kicinski <kuba@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, x86@kernel.org,
+	bpf@vger.kernel.org, Martin KaFai Lau <martin.lau@linux.dev>
+Subject: Re: [PATCH bpf-next v4 1/4] bpf: add bpf_get_cpu_cycles kfunc
+Message-ID: <202411080912.TtCTNymw-lkp@intel.com>
+References: <20241107211206.2814069-1-vadfed@meta.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241105212001.38980-1-alexei.starovoitov@gmail.com> <20241105212001.38980-2-alexei.starovoitov@gmail.com>
-In-Reply-To: <20241105212001.38980-2-alexei.starovoitov@gmail.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Thu, 7 Nov 2024 17:20:46 -0800
-Message-ID: <CAADnVQLMwA1fgApP=H8_jeTeF8JRUXDtMt13qcwUGezvcAQg_Q@mail.gmail.com>
-Subject: Re: [PATCH v2 bpf-next 1/2] drm, bpf: Move drm_mm.c to lib to be used
- by bpf arena
-To: bpf <bpf@vger.kernel.org>
-Cc: Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, maarten.lankhorst@linux.intel.com, mripard@kernel.org, 
-	tzimmermann@suse.de, airlied@gmail.com, simona@ffwll.ch, 
-	dri-devel@lists.freedesktop.org, Kernel Team <kernel-team@fb.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241107211206.2814069-1-vadfed@meta.com>
 
-On Tue, Nov 5, 2024 at 1:20=E2=80=AFPM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> From: Alexei Starovoitov <ast@kernel.org>
->
-> Move drm_mm.c to lib:
-> - The next commit will use drm_mm to manage memory regions
->   in bpf arena.
-> - Move drm_mm_print to drivers/gpu/drm/drm_print.c, since
->   it's not a core functionality of drm_mm and it depeneds
->   on drm_printer while drm_mm is generic and usuable as-is
->   by other subsystems.
-> - Replace DRM_ERROR with pr_err to fix build.
->   DRM_ERROR is deprecated in favor of pr_err anyway.
-> - Also add __maybe_unused to suppress compiler warnings.
-> - Update MAINTAINERS file as well.
->
-> Acked-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-> Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-> ---
->  MAINTAINERS                       |  1 +
->  drivers/gpu/drm/Makefile          |  1 -
->  drivers/gpu/drm/drm_print.c       | 39 +++++++++++++++++++++++++
->  lib/Makefile                      |  1 +
->  {drivers/gpu/drm =3D> lib}/drm_mm.c | 48 ++++---------------------------
->  5 files changed, 46 insertions(+), 44 deletions(-)
->  rename {drivers/gpu/drm =3D> lib}/drm_mm.c (95%)
+Hi Vadim,
 
-DRM folks seem unresponsive :(
-A simple move of the file shouldn't take a week to acknowledge.
-I had plans to tailor drm_mm to bpf needs, but at this pace
-it will take too long, so I'm abandoning this approach
-and going a different route. It was worth a try. Fail fast.
+kernel test robot noticed the following build errors:
 
-pw-bot: cr
+[auto build test ERROR on bpf-next/master]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Vadim-Fedorenko/bpf-add-bpf_cpu_cycles_to_ns-helper/20241108-051950
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
+patch link:    https://lore.kernel.org/r/20241107211206.2814069-1-vadfed%40meta.com
+patch subject: [PATCH bpf-next v4 1/4] bpf: add bpf_get_cpu_cycles kfunc
+config: arm-randconfig-003-20241108 (https://download.01.org/0day-ci/archive/20241108/202411080912.TtCTNymw-lkp@intel.com/config)
+compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241108/202411080912.TtCTNymw-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202411080912.TtCTNymw-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   kernel/bpf/helpers.c:3029:18: warning: extra tokens at end of #ifdef directive [-Wextra-tokens]
+   #ifdef IS_ENABLED(CONFIG_GENERIC_GETTIMEOFDAY)
+                    ^
+                    //
+>> kernel/bpf/helpers.c:3032:9: error: call to undeclared function '__arch_get_hw_counter'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
+           return __arch_get_hw_counter(1, NULL);
+                  ^
+   kernel/bpf/helpers.c:3128:18: warning: extra tokens at end of #ifdef directive [-Wextra-tokens]
+   #ifdef IS_ENABLED(CONFIG_GENERIC_GETTIMEOFDAY)
+                    ^
+                    //
+   2 warnings and 1 error generated.
+
+
+vim +/__arch_get_hw_counter +3032 kernel/bpf/helpers.c
+
+  3028	
+  3029	#ifdef IS_ENABLED(CONFIG_GENERIC_GETTIMEOFDAY)
+  3030	__bpf_kfunc u64 bpf_get_cpu_cycles(void)
+  3031	{
+> 3032		return __arch_get_hw_counter(1, NULL);
+  3033	}
+  3034	#endif
+  3035	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
