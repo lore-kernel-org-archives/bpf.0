@@ -1,167 +1,174 @@
-Received: from mail-qk1-f181.google.com (mail-qk1-f181.google.com [209.85.222.181])
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE1B3233D60
-	for <bpf@vger.kernel.org>; Fri,  8 Nov 2024 18:28:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B146E1A9B53
+	for <bpf@vger.kernel.org>; Fri,  8 Nov 2024 18:38:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731090509; cv=none; b=Jen50T5XWBbFOs/Qwdq/K3tGtv7DLbLf1gzkU6L782Gbc1jj4iRxJROk3z64n2Y0rj8NMrnjxXjDpV1j4M2kjkzNp9shIl/xoX8jo/pMuql33SKMoA3OE8IESjQ2tYpE681roEaztJwc4DmhAjnrfAMziQ1BLxUCq3nsftXY2YI=
+	t=1731091111; cv=none; b=epOv5hCPhHo5YlyuI6kbXYI7KDTotR5sEQ+tX32Aj8JQLBXi7aV9RZN3pzY4KMuMV6ppugY5Omfni5ek1P/sy5MBltSYrqoIBAGTJT4W3VPsvU/fl6vNd1qlPca5etbzTXUzYAhau/iS2MrxsUhjLPv+m2mFgOESm2Skq1Zx1q4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731090509; c=relaxed/simple;
-	bh=aomfWlwmh/DGJ3+fy8dkpzWlh+NgDtApGrsMDMYyB5M=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Ccj7xizEv7B8oPpbRnLNnY+e6JIRm3y66k4aqgya5qxiNjw8thfBe9L5ZYVHWusC+GBLN354XsA4BbtNGLCjJoxxo4RCiGcQPmx3gZfqWiy4usVoJ2TAacn2+2qN3x826wfAh7YhnKFAWgh87vhqAwHhxQraC4w/niHzz+ukZhU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com; spf=pass smtp.mailfrom=bytedance.com; dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b=QiDGOCZZ; arc=none smtp.client-ip=209.85.222.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bytedance.com
+	s=arc-20240116; t=1731091111; c=relaxed/simple;
+	bh=6pUYbvKzNeSo5VmwBUuFNlecEYxPCn+6EbF+goCXeXo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Udppyc5AJZgaMdCW1HKTT28zvkTDaYyn3b16UZjDMCPN/L8mRzsJg97NEKSOgmXMhE0V8MBZ+put1PHNWnXi8VKHp6JTzBzJZWVkk49b+qk17KkGf4upVL1c6C4lZN7wqrnWIUMIa0g6VoKpd2uZDLScGm7T34jMNW1/wkzhTlE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EC2PLlO8; arc=none smtp.client-ip=209.85.128.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b="QiDGOCZZ"
-Received: by mail-qk1-f181.google.com with SMTP id af79cd13be357-7b15467f383so172344985a.3
-        for <bpf@vger.kernel.org>; Fri, 08 Nov 2024 10:28:27 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EC2PLlO8"
+Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-4315c1c7392so22199625e9.1
+        for <bpf@vger.kernel.org>; Fri, 08 Nov 2024 10:38:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1731090507; x=1731695307; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=wWt0QTmkUmV9Tp/JVuTsCK3jbXPMK6hXiV333qvXKtQ=;
-        b=QiDGOCZZxblNzWHL0id1BZtHqWX/RYbam7FWXoQ8HYTMK30u2TNVUPTQ8e0oby2XfL
-         SBtiVqnA+Y2XdSgfYMljZOYSH4muyWiKcGwC6wZ16bSXS5qQ4Ct7FlBXyEPE66o/L3/i
-         7LnUpOsfH4dTiLC8aWYKfdVG/K5y0/jY6F9WyQpNDso5F3DCp0IxdB52DmDcPwG/u1xF
-         tqVrv7I8aVWZBMPVJ4hUTQIH5Nvfct3AvATHR9w26V6hNfSCRgVahQ+fjEBngWriJwG7
-         5cLlvZ+MRX4u6bMCHei/pmXVyl7YsK16UTTx1W8luCk8Cf4Twhev/hCf2BXlJjMsneNs
-         ctsA==
+        d=gmail.com; s=20230601; t=1731091108; x=1731695908; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5zIiMHXCn8GO3wjMXnWJoqz2jTfy5Whqa2GXeUkA2KI=;
+        b=EC2PLlO8N+rlh8Wm1CVS7afJu6e0X50ieaGJzAuEAPRndZHovB9UBgdrz8/9SrZuEi
+         ebC9vMRGn0iZqNmpHwslOhYls+5EynLmm6E6gm61R02M+zIdQJbm7Ur5wWFLfvw9ZV/X
+         MBI9eXnA9Ha67knr7a+bgCSBJRmOlWoe/h/NO1dAdQfM3FpsdmJxfv8Z2EQDLX/9L6j9
+         1E9gnVqKYJDYG0tVVl5zVUx0rSQq7MldDcbsx9Cq/SsHrFuahkW6+DBYL+IWmOdYznbY
+         ma4MTGkOI73nazMAWMBeNVVnmVHQyBS9ZtBnGtG2Yf8+jbUBZah9G1gb/p0QmsARncqI
+         vzAA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731090507; x=1731695307;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=wWt0QTmkUmV9Tp/JVuTsCK3jbXPMK6hXiV333qvXKtQ=;
-        b=nkwlGkM14mN5iG9CTutNIudJDGx1XA14pFT7r8BwbnVc/5h4vHEdLeP977VspVkJe5
-         AlysHih+JCvtERt7mFPIV5qi9JdrWSxcJE22X46mbVwgYPps3rt+d2UTLROSdXfiIjvX
-         reJ8awx4I+GlwLll5buiDqI7NctMVBeuhOTxdthN1lvH1LTyIb8KGUdLrgES59n26YyE
-         82RQ0l3vCC7tsjw5t5dN8q/7xiDogky4ByVsAoxKyhWpc3fEfbucsKL+T4w9hbfk6oBM
-         kx2gan8lf/w3Y1Td3rW7+ofedXxl6g/9Xc4Ny6osrwY/96ker80tGJBaadDM++9T+6Gy
-         dEog==
-X-Gm-Message-State: AOJu0Yz5xbYAFOEfUrmagjaIlygqhQtgq3d3F49RG/w8UTKz8RmyNOC9
-	9vBPBYD+qK5ar8oSyVFp2MCVmM4mCrbqPMVp4I7y356Tuy7XHsFvxgehgz2z2lo=
-X-Google-Smtp-Source: AGHT+IHmZYkgO0mMRiqiwCpCNOTh+1bYly26r67Tsj8ccO33Oezw4Rv/52fZCQXG3sX6Lf+gYpAjZg==
-X-Received: by 2002:a05:620a:4510:b0:7a7:dd3a:a699 with SMTP id af79cd13be357-7b331d81d49mr504881285a.11.1731090506810;
-        Fri, 08 Nov 2024 10:28:26 -0800 (PST)
-Received: from ?IPV6:2601:647:4200:9750:c471:fcfc:9a61:b786? ([2601:647:4200:9750:c471:fcfc:9a61:b786])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-7b32acb0496sm182379985a.89.2024.11.08.10.28.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 08 Nov 2024 10:28:26 -0800 (PST)
-Message-ID: <1016b317-d521-4787-80dc-3b92320f2d19@bytedance.com>
-Date: Fri, 8 Nov 2024 10:28:22 -0800
+        d=1e100.net; s=20230601; t=1731091108; x=1731695908;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=5zIiMHXCn8GO3wjMXnWJoqz2jTfy5Whqa2GXeUkA2KI=;
+        b=ie9bmEhAsqMF7kcUFzGXjj5URiWJWegldbwCKvax4nOYA1TxyqxuGnf0/oJBV+UXQc
+         seBuUZ3xfafC2WiOogScBNGv74dgp4V4DqCaImpY3naiTnmBQgf63WDGcK0MyPzXI8XR
+         ert9fOTEz6R+2g/ediP0Uimar2sY1xa7FlFe03ki5FRUCWMtce9bUSPWF8uV2PIw7GXs
+         P8QGi4UmndC8rc2+OCVsLP6PMDPAc3g64UGWvuUn8in2Q+iyFVeUw4lxSBy8mb/nfe6O
+         0FURdM4PqudB+C3B7qIMt1SAnADUqKaIfGX9eNZWXnFrjAvkKIlPLHvDLhBgvu0wTCPl
+         skFQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXZDtGzGbknYhGrSCTZMwASqA/XtSDx7NODfWKrrBTMgDxwhYzMYIa6/A2PGIlqrmqQweA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxXtZPREUJWv7rnLgr5oB/vH91YCcDozKDcSpEIj2wTTOuGEq0a
+	U/13Brh6mJrI0dUjVa+EKeYQAA0Lnc8MmWLZAL4lDx/zFc8WanJQA69B3sCKhgSADSxiCk4+edn
+	jSlIje2CZn8+D9tLawDn7VKHhDvM=
+X-Google-Smtp-Source: AGHT+IHjoQgBL0kJXlbhWSeGhscglfi3McNpI1x0JYhFBBtvKjRQU6Md1q+N8Vav3koZeSpE6+fU9DAVIgKFeQFloOI=
+X-Received: by 2002:a05:600c:1c98:b0:426:6edf:6597 with SMTP id
+ 5b1f17b1804b1-432b750a358mr33550055e9.19.1731091107756; Fri, 08 Nov 2024
+ 10:38:27 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [External] Re: [PATCH bpf 2/2] tcp_bpf: add sk_rmem_alloc related
- logic for ingress redirection
-To: Cong Wang <xiyou.wangcong@gmail.com>
-Cc: bpf@vger.kernel.org, john.fastabend@gmail.com, jakub@cloudflare.com,
- davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
- pabeni@redhat.com, dsahern@kernel.org, netdev@vger.kernel.org,
- cong.wang@bytedance.com
-References: <20241017005742.3374075-1-zijianzhang@bytedance.com>
- <20241017005742.3374075-3-zijianzhang@bytedance.com>
- <Zy2N48atzfYYTY6X@pop-os.localdomain>
-Content-Language: en-US
-From: Zijian Zhang <zijianzhang@bytedance.com>
-In-Reply-To: <Zy2N48atzfYYTY6X@pop-os.localdomain>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20240927033904.2702474-1-yonghong.song@linux.dev>
+ <CAADnVQJZLRnT3J31CLB85by=SmC2UY1pmUZX0kkyePtVdTdy9A@mail.gmail.com>
+ <e93729b5-199f-4809-84f5-7efdf7c8aaf3@linux.dev> <181301db143b$ba6fd9c0$2f4f8d40$@gmail.com>
+ <CAADnVQKDwZ0+Fjiz21AFAbOgEonVojvpojU1ZyQDu8V4Jm0DYQ@mail.gmail.com> <000c01db3186$1dd30930$59791b90$@gmail.com>
+In-Reply-To: <000c01db3186$1dd30930$59791b90$@gmail.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Fri, 8 Nov 2024 10:38:16 -0800
+Message-ID: <CAADnVQKHHvrJjAMuXC5-wQHfMfxoSXnOBnqrZ5PC7p3C8ut3rQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] docs/bpf: Document some special sdiv/smod operations
+To: Dave Thaler <dthaler1968@googlemail.com>
+Cc: Yonghong Song <yonghong.song@linux.dev>, bpf@ietf.org, bpf <bpf@vger.kernel.org>, 
+	Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai Lau <martin.lau@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+On Thu, Nov 7, 2024 at 6:30=E2=80=AFPM Dave Thaler <dthaler1968@googlemail.=
+com> wrote:
+>
+>
+> Alexei Starovoitov <alexei.starovoitov@gmail.com> wrote:
+> > On Tue, Oct 1, 2024 at 12:54=E2=80=AFPM Dave Thaler <dthaler1968@google=
+mail.com>
+> > wrote:
+> [...]
+> > > I'm adding bpf@ietf.org to the To line since all changes in the
+> > > standardization directory should include that mailing list.
+> > >
+> > > The WG should discuss whether any changes should be done via a new RF=
+C
+> > > that obsoletes the first one, or as RFCs that Update and just describ=
+e
+> > > deltas (additions, etc.).
+> > >
+> > > There are precedents both ways and I don't have a strong preference,
+> > > but I have a weak preference for delta-based ones since they're
+> > > shorter and are less likely to re-open discussion on previously
+> > > resolved issues, thus often saving the WG time.
+> >
+> > Delta-based additions make sense to me.
+> >
+> > > Also FYI to Linux kernel folks:
+> > > With WG and AD approval, it's also possible (but not ideal) to take
+> > > changes at AUTH48.  That'd be up to the chairs and AD to decide
+> > > though, and normally that's just for purely editorial clarifications,
+> > > e.g., to confusion called out by the RFC editor pass.
+> >
+> > Also agree. We should keep AUTH going its course as-is.
+> > All ISA additions can be in the future delta RFC.
+> >
+> > As far as file logistics... my preference is to keep
+> > Documentation/bpf/standardization/instruction-set.rst
+> > up to date.
+> > Right now it's effectively frozen while awaiting changes (if any) neces=
+sary for AUTH.
+> > After official RFC is issued we can start landing patches into instruct=
+ion-set.rst and
+> > git diff 04efaebd72d1..whatever_future_sha instruction-set.rst will aut=
+omatically
+> > generate the future delta RFC.
+> > Once RFC number is issued we can add a git tag for the particular sha t=
+hat was the
+> > base for RFC as a documentation step and to simplify future 'git diff'.
+>
+> My concern is that index.rst says:
+> > This directory contains documents that are being iterated on as part of=
+ the BPF
+> > standardization effort with the IETF. See the `IETF BPF Working Group`_=
+ page
+> > for the working group charter, documents, and more.
+>
+> So having a document that is NOT part of the IETF BPF Working Group would=
+ seem
+> out of place and, in my view, better located up a level (outside standard=
+ization).
 
-On 11/7/24 8:04 PM, Cong Wang wrote:
-> On Thu, Oct 17, 2024 at 12:57:42AM +0000, zijianzhang@bytedance.com wrote:
->> From: Zijian Zhang <zijianzhang@bytedance.com>
->>
->> Although we sk_rmem_schedule and add sk_msg to the ingress_msg of sk_redir
->> in bpf_tcp_ingress, we do not update sk_rmem_alloc. As a result, except
->> for the global memory limit, the rmem of sk_redir is nearly unlimited.
->>
->> Thus, add sk_rmem_alloc related logic to limit the recv buffer.
->>
->> Signed-off-by: Zijian Zhang <zijianzhang@bytedance.com>
->> ---
->>   include/linux/skmsg.h | 11 ++++++++---
->>   net/core/skmsg.c      |  6 +++++-
->>   net/ipv4/tcp_bpf.c    |  4 +++-
->>   3 files changed, 16 insertions(+), 5 deletions(-)
->>
->> diff --git a/include/linux/skmsg.h b/include/linux/skmsg.h
->> index d9b03e0746e7..2cbe0c22a32f 100644
->> --- a/include/linux/skmsg.h
->> +++ b/include/linux/skmsg.h
->> @@ -317,17 +317,22 @@ static inline void sock_drop(struct sock *sk, struct sk_buff *skb)
->>   	kfree_skb(skb);
->>   }
->>   
->> -static inline void sk_psock_queue_msg(struct sk_psock *psock,
->> +static inline bool sk_psock_queue_msg(struct sk_psock *psock,
->>   				      struct sk_msg *msg)
->>   {
->> +	bool ret;
->> +
->>   	spin_lock_bh(&psock->ingress_lock);
->> -	if (sk_psock_test_state(psock, SK_PSOCK_TX_ENABLED))
->> +	if (sk_psock_test_state(psock, SK_PSOCK_TX_ENABLED)) {
->>   		list_add_tail(&msg->list, &psock->ingress_msg);
->> -	else {
->> +		ret = true;
->> +	} else {
->>   		sk_msg_free(psock->sk, msg);
->>   		kfree(msg);
->> +		ret = false;
->>   	}
->>   	spin_unlock_bh(&psock->ingress_lock);
->> +	return ret;
->>   }
->>   
->>   static inline struct sk_msg *sk_psock_dequeue_msg(struct sk_psock *psock)
->> diff --git a/net/core/skmsg.c b/net/core/skmsg.c
->> index b1dcbd3be89e..110ee0abcfe0 100644
->> --- a/net/core/skmsg.c
->> +++ b/net/core/skmsg.c
->> @@ -445,8 +445,10 @@ int sk_msg_recvmsg(struct sock *sk, struct sk_psock *psock, struct msghdr *msg,
->>   			if (likely(!peek)) {
->>   				sge->offset += copy;
->>   				sge->length -= copy;
->> -				if (!msg_rx->skb)
->> +				if (!msg_rx->skb) {
->>   					sk_mem_uncharge(sk, copy);
->> +					atomic_sub(copy, &sk->sk_rmem_alloc);
->> +				}
->>   				msg_rx->sg.size -= copy;
->>   
->>   				if (!sge->length) {
->> @@ -772,6 +774,8 @@ static void __sk_psock_purge_ingress_msg(struct sk_psock *psock)
->>   
->>   	list_for_each_entry_safe(msg, tmp, &psock->ingress_msg, list) {
->>   		list_del(&msg->list);
->> +		if (!msg->skb)
->> +			atomic_sub(msg->sg.size, &psock->sk->sk_rmem_alloc);
->>   		sk_msg_free(psock->sk, msg);
-> 
-> Why not calling this atomic_sub() in sk_msg_free_elem()?
-> 
-> Thanks.
+It's a part of bpf wg. It's not a new document.
 
-sk_msg_free_elem called by sk_msg_free or sk_msg_free_no_charge will
-be invoked in multiple locations including TX/RX/Error and etc.
+> Here=E2=80=99s some examples of delta-based RFCs which explain the gap an=
+d provide
+> the addition or clarification, and formally Update (not replace/obsolete)=
+ the original
+> RFC:
+> * https://www.rfc-editor.org/rfc/rfc6585.html: Additional HTTP Status Cod=
+es
+> * https://www.rfc-editor.org/rfc/rfc6840.html: Clarifications and Impleme=
+ntation Notes
+>    for DNS Security (DNSSEC)
+> * https://www.rfc-editor.org/rfc/rfc9295.html: Clarifications for Ed25519=
+, Ed448,
+>    X25519, and X448 Algorithm Identifiers
+> * https://www.rfc-editor.org/rfc/rfc5756.html: Updates for RSAES-OAEP and
+>    RSASSA-PSS Algorithm Parameters
+>
+> Having a full document too is valuable but unless the IETF BPF WG
+> decides to take on a -bis document, I'd suggest keeping it out of the "st=
+andardization"
+> (say up 1 level) to avoid confusion, and just have one or more delta-base=
+d rst files
+> in the standardization directory.
 
-We should call atomic_sub(&sk->sk_rmem_alloc) for sk_msgs that have
-been atomic_add before. In other words, we need to call atomic_sub
-only for sk_msgs in ingress_msg.
+This patch is effectively a fix to the standard.
+It's a standard git development process when fixes are applied
+to the existing document.
+Forking the whole doc into a different file just to apply fixes
+makes no sense to me.
 
-As for "!msg->skb" check here, I want to make sure the sk_msg is not
-from function sk_psock_skb_ingress_enqueue, because these sk_msgs'
-rmem accounting has already handled by skb_set_owner_r in function
-sk_psock_skb_ingress.
+The formal delta-s for IETF can be created out of git.
+We only need to tag the current version and then
+git diff rfc9669_tag..HEAD
+will give us that delta.
+That will satisfy IETF process and won't mess up normal git style
+kernel development.
 
-
+btw do we still need to do any minor edit/fixes to instruction-set.rst
+before tagging it as RFC9669 ?
