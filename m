@@ -1,207 +1,308 @@
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from 66-220-155-179.mail-mxout.facebook.com (66-220-155-179.mail-mxout.facebook.com [66.220.155.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD5C117C7C;
-	Sat,  9 Nov 2024 02:46:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C5A281AD7
+	for <bpf@vger.kernel.org>; Sat,  9 Nov 2024 02:53:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.155.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731120382; cv=none; b=G1MgsB+r9RPuEuoDuV1DNDWBCg5HVdVsvlW5fp+qLuSH4BRLOvt+WAE6r5etkBnZ69FRWytAtOQc7AXzcgznIInTY4MeyQr7iaP3bza2pAif06SB7PDOf5VoBPKT9polmJ7J/Dm3AVhgm6aM1L6GUrBhzxBfkaKEnmtuO+M05eg=
+	t=1731120807; cv=none; b=u90hnnRqdyzvWGD0Np8M/TbyTxAEm3PovD8O4Pfah7eswUG8zX/Kn5hPju9QgEZxZqWuoWH0NTXh+0uooiSofQoZ3Dd9L62yXd92cvTao/GCTOB2DoaAWovSG9ttihCKlhbe7P1jtmyf0/qh3SVR3wdqISsmrLXuOqgnwpCczZo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731120382; c=relaxed/simple;
-	bh=BTrxe8BRxQB6xm1Tx6vzyZJeFDO8zSbZX5OzaGTvjto=;
-	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
-	 In-Reply-To:Content-Type; b=bv7YTqqMe//lm/HFJXJL2v4iTYzRznHv77TqcfYhzilk9MLQK4S4dB7cUc3UUxbFDjGZ0VV50/ZggjGO86PCZwI5JSmovJhz1s17V5+IWiJ5kpZiLuNu6o4FKk5r0zhY4h+vysXEX9rMZKwAIwOsF0lADTZAHSCusAeSjLqXeXw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.93.142])
-	by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4XlgD50VFnz4f3lVL;
-	Sat,  9 Nov 2024 10:45:57 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.112])
-	by mail.maildlp.com (Postfix) with ESMTP id 05B6A1A018D;
-	Sat,  9 Nov 2024 10:46:16 +0800 (CST)
-Received: from [10.174.176.117] (unknown [10.174.176.117])
-	by APP1 (Coremail) with SMTP id cCh0CgAXDK7xzC5nE0PpBA--.19966S2;
-	Sat, 09 Nov 2024 10:46:13 +0800 (CST)
-Subject: Re: [PATCH] bpf: Convert lpm_trie::lock to 'raw_spinlock_t'
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
- Kunwu Chan <kunwu.chan@linux.dev>
+	s=arc-20240116; t=1731120807; c=relaxed/simple;
+	bh=OIyH1dlv7qtdRP+gVhw1J0HeySnxhen9IZUzXIMth94=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=APk7KLminXqChqngWrxiW+uzHrmihnpWSVKTXiqAaGPuL6pQ7fWTkug7ot+1d21Sio27JJj7vDja3UoZ1p1jMwx54NVQGErU94024G9FKoG575I672Pbu5uWPf6RjSql1AUCw1UW9Ra/JPFlqd0N2X+sJRMvhG+K8T3g27rqWow=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.155.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
+Received: by devbig309.ftw3.facebook.com (Postfix, from userid 128203)
+	id 5D259AE0754B; Fri,  8 Nov 2024 18:53:17 -0800 (PST)
+From: Yonghong Song <yonghong.song@linux.dev>
+To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, Eddy Z <eddyz87@gmail.com>,
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Sebastian Sewior <bigeasy@linutronix.de>,
- clrkwllms@kernel.org, Steven Rostedt <rostedt@goodmis.org>,
- Thomas Gleixner <tglx@linutronix.de>, bpf <bpf@vger.kernel.org>,
- LKML <linux-kernel@vger.kernel.org>, linux-rt-devel@lists.linux.dev,
- Kunwu Chan <chentao@kylinos.cn>,
- syzbot+b506de56cbbb63148c33@syzkaller.appspotmail.com
-References: <20241108063214.578120-1-kunwu.chan@linux.dev>
- <CAADnVQJ8KzVdScXM=qhdT4jMrZLBPpgd+pf1Fqyc-9TFnfabAg@mail.gmail.com>
-From: Hou Tao <houtao@huaweicloud.com>
-Message-ID: <78012426-80d2-4d77-23c4-ae000148fadd@huaweicloud.com>
-Date: Sat, 9 Nov 2024 10:46:09 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+	Andrii Nakryiko <andrii@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	kernel-team@fb.com,
+	Martin KaFai Lau <martin.lau@kernel.org>,
+	Tejun Heo <tj@kernel.org>
+Subject: [PATCH bpf-next v11 1/7] bpf: Find eligible subprogs for private stack support
+Date: Fri,  8 Nov 2024 18:53:17 -0800
+Message-ID: <20241109025317.148820-1-yonghong.song@linux.dev>
+X-Mailer: git-send-email 2.43.5
+In-Reply-To: <20241109025312.148539-1-yonghong.song@linux.dev>
+References: <20241109025312.148539-1-yonghong.song@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <CAADnVQJ8KzVdScXM=qhdT4jMrZLBPpgd+pf1Fqyc-9TFnfabAg@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-CM-TRANSID:cCh0CgAXDK7xzC5nE0PpBA--.19966S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxKFy3Gry7CF4kur4DKw43Awb_yoWxAF1UpF
-	WfCFZrAr4UXa4j9ay0vw4jvay5Xws8Kw43GrWfWryxZF1agrn2qrs2yr1fXr90yryvyFZI
-	yF1qqFWkKw18ZaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUU9Ib4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
-	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-	6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-	Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7Mxk0xIA0c2IE
-	e2xFo4CEbIxvr21lc7CjxVAaw2AFwI0_GFv_Wryl42xK82IYc2Ij64vIr41l4I8I3I0E4I
-	kC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWU
-	WwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr
-	0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWU
-	JVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJb
-	IYCTnIWIevJa73UjIFyTuYvjxUIa0PDUUUU
-X-CM-SenderInfo: xkrx3t3r6k3tpzhluzxrxghudrp/
+Content-Transfer-Encoding: quoted-printable
 
-Hi Alexei,
+Private stack will be allocated with percpu allocator in jit time.
+To avoid complexity at runtime, only one copy of private stack is
+available per cpu per prog. So runtime recursion check is necessary
+to avoid stack corruption.
 
-On 11/9/2024 4:22 AM, Alexei Starovoitov wrote:
-> On Thu, Nov 7, 2024 at 10:32 PM Kunwu Chan <kunwu.chan@linux.dev> wrote:
->> From: Kunwu Chan <chentao@kylinos.cn>
->>
->> When PREEMPT_RT is enabled, 'spinlock_t' becomes preemptible
->> and bpf program has owned a raw_spinlock under a interrupt handler,
->> which results in invalid lock acquire context.
->>
->> [ BUG: Invalid wait context ]
->> 6.12.0-rc5-next-20241031-syzkaller #0 Not tainted
->> -----------------------------
->> swapper/0/0 is trying to lock:
->> ffff8880261e7a00 (&trie->lock){....}-{3:3},
->> at: trie_delete_elem+0x96/0x6a0 kernel/bpf/lpm_trie.c:462
->> other info that might help us debug this:
->> context-{3:3}
->> 5 locks held by swapper/0/0:
->>  #0: ffff888020bb75c8 (&vp_dev->lock){-...}-{3:3},
->> at: vp_vring_interrupt drivers/virtio/virtio_pci_common.c:80 [inline]
->>  #0: ffff888020bb75c8 (&vp_dev->lock){-...}-{3:3},
->> at: vp_interrupt+0x142/0x200 drivers/virtio/virtio_pci_common.c:113
->>  #1: ffff88814174a120 (&vb->stop_update_lock){-...}-{3:3},
->> at: spin_lock include/linux/spinlock.h:351 [inline]
->>  #1: ffff88814174a120 (&vb->stop_update_lock){-...}-{3:3},
->> at: stats_request+0x6f/0x230 drivers/virtio/virtio_balloon.c:438
->>  #2: ffffffff8e939f20 (rcu_read_lock){....}-{1:3},
->> at: rcu_lock_acquire include/linux/rcupdate.h:337 [inline]
->>  #2: ffffffff8e939f20 (rcu_read_lock){....}-{1:3},
->> at: rcu_read_lock include/linux/rcupdate.h:849 [inline]
->>  #2: ffffffff8e939f20 (rcu_read_lock){....}-{1:3},
->> at: __queue_work+0x199/0xf50 kernel/workqueue.c:2259
->>  #3: ffff8880b863dd18 (&pool->lock){-.-.}-{2:2},
->> at: __queue_work+0x759/0xf50
->>  #4: ffffffff8e939f20 (rcu_read_lock){....}-{1:3},
->> at: rcu_lock_acquire include/linux/rcupdate.h:337 [inline]
->>  #4: ffffffff8e939f20 (rcu_read_lock){....}-{1:3},
->> at: rcu_read_lock include/linux/rcupdate.h:849 [inline]
->>  #4: ffffffff8e939f20 (rcu_read_lock){....}-{1:3},
->> at: __bpf_trace_run kernel/trace/bpf_trace.c:2339 [inline]
->>  #4: ffffffff8e939f20 (rcu_read_lock){....}-{1:3},
->> at: bpf_trace_run1+0x1d6/0x520 kernel/trace/bpf_trace.c:2380
->> stack backtrace:
->> CPU: 0 UID: 0 PID: 0 Comm: swapper/0 Not tainted
->> 6.12.0-rc5-next-20241031-syzkaller #0
->> Hardware name: Google Compute Engine/Google Compute Engine,
->> BIOS Google 09/13/2024
->> Call Trace:
->>  <IRQ>
->>  __dump_stack lib/dump_stack.c:94 [inline]
->>  dump_stack_lvl+0x241/0x360 lib/dump_stack.c:120
->>  print_lock_invalid_wait_context kernel/locking/lockdep.c:4826 [inline]
->>  check_wait_context kernel/locking/lockdep.c:4898 [inline]
->>  __lock_acquire+0x15a8/0x2100 kernel/locking/lockdep.c:5176
->>  lock_acquire+0x1ed/0x550 kernel/locking/lockdep.c:5849
->>  __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:110 [inline]
->>  _raw_spin_lock_irqsave+0xd5/0x120 kernel/locking/spinlock.c:162
->>  trie_delete_elem+0x96/0x6a0 kernel/bpf/lpm_trie.c:462
-> This trace is from non-RT kernel where spin_lock == raw_spin_lock.
+Current private stack only supports kprobe/perf_event/tp/raw_tp
+which has recursion check in the kernel, and prog types that use
+bpf trampoline recursion check. For trampoline related prog types,
+currently only tracing progs have recursion checking.
 
-Yes. However, I think the reason for the warning is that lockdep
-considers the case is possible under PREEMPT_RT and it violates the rule
-of lock [1].
+To avoid complexity, all async_cb subprogs use normal kernel stack
+including those subprogs used by both main prog subtree and async_cb
+subtree. Any prog having tail call also uses kernel stack.
 
-[1]:
-https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=560af5dc839eef08a273908f390cfefefb82aa04
->
-> I don't think Hou's explanation earlier is correct.
-> https://lore.kernel.org/bpf/e14d8882-4760-7c9c-0cfc-db04eda494ee@huaweicloud.com/
+To avoid jit penalty with private stack support, a subprog stack
+size threshold is set such that only if the stack size is no less
+than the threshold, private stack is supported. The current threshold
+is 64 bytes. This avoids jit penality if the stack usage is small.
 
-OK. Is the bpf mem allocator part OK for you ?
->
->>  bpf_prog_2c29ac5cdc6b1842+0x43/0x47
->>  bpf_dispatcher_nop_func include/linux/bpf.h:1290 [inline]
->>  __bpf_prog_run include/linux/filter.h:701 [inline]
->>  bpf_prog_run include/linux/filter.h:708 [inline]
->>  __bpf_trace_run kernel/trace/bpf_trace.c:2340 [inline]
->>  bpf_trace_run1+0x2ca/0x520 kernel/trace/bpf_trace.c:2380
->>  trace_workqueue_activate_work+0x186/0x1f0 include/trace/events/workqueue.h:59
->>  __queue_work+0xc7b/0xf50 kernel/workqueue.c:2338
->>  queue_work_on+0x1c2/0x380 kernel/workqueue.c:2390
-> here irqs are disabled, but raw_spin_lock in lpm should be fine.
->
->>  queue_work include/linux/workqueue.h:662 [inline]
->>  stats_request+0x1a3/0x230 drivers/virtio/virtio_balloon.c:441
->>  vring_interrupt+0x21d/0x380 drivers/virtio/virtio_ring.c:2595
->>  vp_vring_interrupt drivers/virtio/virtio_pci_common.c:82 [inline]
->>  vp_interrupt+0x192/0x200 drivers/virtio/virtio_pci_common.c:113
->>  __handle_irq_event_percpu+0x29a/0xa80 kernel/irq/handle.c:158
->>  handle_irq_event_percpu kernel/irq/handle.c:193 [inline]
->>  handle_irq_event+0x89/0x1f0 kernel/irq/handle.c:210
->>  handle_fasteoi_irq+0x48a/0xae0 kernel/irq/chip.c:720
->>  generic_handle_irq_desc include/linux/irqdesc.h:173 [inline]
->>  handle_irq arch/x86/kernel/irq.c:247 [inline]
->>  call_irq_handler arch/x86/kernel/irq.c:259 [inline]
->>  __common_interrupt+0x136/0x230 arch/x86/kernel/irq.c:285
->>  common_interrupt+0xb4/0xd0 arch/x86/kernel/irq.c:278
->>  </IRQ>
->>
->> Reported-by: syzbot+b506de56cbbb63148c33@syzkaller.appspotmail.com
->> Closes: https://lore.kernel.org/bpf/6723db4a.050a0220.35b515.0168.GAE@google.com/
->> Fixes: 66150d0dde03 ("bpf, lpm: Make locking RT friendly")
->> Signed-off-by: Kunwu Chan <chentao@kylinos.cn>
->> ---
->>  kernel/bpf/lpm_trie.c | 12 ++++++------
->>  1 file changed, 6 insertions(+), 6 deletions(-)
->>
->> diff --git a/kernel/bpf/lpm_trie.c b/kernel/bpf/lpm_trie.c
->> index 9b60eda0f727..373cdcfa0505 100644
->> --- a/kernel/bpf/lpm_trie.c
->> +++ b/kernel/bpf/lpm_trie.c
->> @@ -35,7 +35,7 @@ struct lpm_trie {
->>         size_t                          n_entries;
->>         size_t                          max_prefixlen;
->>         size_t                          data_size;
->> -       spinlock_t                      lock;
->> +       raw_spinlock_t                  lock;
->>  };
-> We're certainly not going back.
+A useless 'continue' is also removed from a loop in func
+check_max_stack_depth().
 
-Only switching from spinlock_t to raw_spinlock_t is not enough, running
-it under PREEMPT_RT after the change will still trigger the similar
-lockdep warning. That is because kmalloc() may acquire a spinlock_t as
-well. However, after changing the kmalloc and its variants to bpf memory
-allocator, I think the switch to raw_spinlock_t will be safe. I have
-already written a draft patch set. Will post after after polishing and
-testing it. WDYT ?
->
-> pw-bot: cr
+Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
+---
+ include/linux/bpf_verifier.h |  7 +++
+ include/linux/filter.h       |  1 +
+ kernel/bpf/core.c            |  5 ++
+ kernel/bpf/verifier.c        | 96 ++++++++++++++++++++++++++++++++----
+ 4 files changed, 99 insertions(+), 10 deletions(-)
+
+diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+index 4513372c5bc8..456fd2265345 100644
+--- a/include/linux/bpf_verifier.h
++++ b/include/linux/bpf_verifier.h
+@@ -649,6 +649,12 @@ struct bpf_subprog_arg_info {
+ 	};
+ };
+=20
++enum priv_stack_mode {
++	PRIV_STACK_UNKNOWN,
++	NO_PRIV_STACK,
++	PRIV_STACK_ADAPTIVE,
++};
++
+ struct bpf_subprog_info {
+ 	/* 'start' has to be the first field otherwise find_subprog() won't wor=
+k */
+ 	u32 start; /* insn idx of function entry point */
+@@ -669,6 +675,7 @@ struct bpf_subprog_info {
+ 	/* true if bpf_fastcall stack region is used by functions that can't be=
+ inlined */
+ 	bool keep_fastcall_stack: 1;
+=20
++	enum priv_stack_mode priv_stack_mode;
+ 	u8 arg_cnt;
+ 	struct bpf_subprog_arg_info args[MAX_BPF_FUNC_REG_ARGS];
+ };
+diff --git a/include/linux/filter.h b/include/linux/filter.h
+index 7d7578a8eac1..3a21947f2fd4 100644
+--- a/include/linux/filter.h
++++ b/include/linux/filter.h
+@@ -1119,6 +1119,7 @@ bool bpf_jit_supports_exceptions(void);
+ bool bpf_jit_supports_ptr_xchg(void);
+ bool bpf_jit_supports_arena(void);
+ bool bpf_jit_supports_insn(struct bpf_insn *insn, bool in_arena);
++bool bpf_jit_supports_private_stack(void);
+ u64 bpf_arch_uaddress_limit(void);
+ void arch_bpf_stack_walk(bool (*consume_fn)(void *cookie, u64 ip, u64 sp=
+, u64 bp), void *cookie);
+ bool bpf_helper_changes_pkt_data(void *func);
+diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+index 233ea78f8f1b..14d9288441f2 100644
+--- a/kernel/bpf/core.c
++++ b/kernel/bpf/core.c
+@@ -3045,6 +3045,11 @@ bool __weak bpf_jit_supports_exceptions(void)
+ 	return false;
+ }
+=20
++bool __weak bpf_jit_supports_private_stack(void)
++{
++	return false;
++}
++
+ void __weak arch_bpf_stack_walk(bool (*consume_fn)(void *cookie, u64 ip,=
+ u64 sp, u64 bp), void *cookie)
+ {
+ }
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 132fc172961f..ebaf44329b83 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -194,6 +194,8 @@ struct bpf_verifier_stack_elem {
+=20
+ #define BPF_GLOBAL_PERCPU_MA_MAX_SIZE  512
+=20
++#define BPF_PRIV_STACK_MIN_SIZE		64
++
+ static int acquire_reference_state(struct bpf_verifier_env *env, int ins=
+n_idx);
+ static int release_reference(struct bpf_verifier_env *env, int ref_obj_i=
+d);
+ static void invalidate_non_owning_refs(struct bpf_verifier_env *env);
+@@ -6034,6 +6036,34 @@ static int check_ptr_alignment(struct bpf_verifier=
+_env *env,
+ 					   strict);
+ }
+=20
++static enum priv_stack_mode bpf_enable_priv_stack(struct bpf_prog *prog)
++{
++	if (!bpf_jit_supports_private_stack())
++		return NO_PRIV_STACK;
++
++	/* bpf_prog_check_recur() checks all prog types that use bpf trampoline
++	 * while kprobe/tp/perf_event/raw_tp don't use trampoline hence checked
++	 * explicitly.
++	 */
++	switch (prog->type) {
++	case BPF_PROG_TYPE_KPROBE:
++	case BPF_PROG_TYPE_TRACEPOINT:
++	case BPF_PROG_TYPE_PERF_EVENT:
++	case BPF_PROG_TYPE_RAW_TRACEPOINT:
++		return PRIV_STACK_ADAPTIVE;
++	case BPF_PROG_TYPE_TRACING:
++	case BPF_PROG_TYPE_LSM:
++	case BPF_PROG_TYPE_STRUCT_OPS:
++		if (bpf_prog_check_recur(prog))
++			return PRIV_STACK_ADAPTIVE;
++		fallthrough;
++	default:
++		break;
++	}
++
++	return NO_PRIV_STACK;
++}
++
+ static int round_up_stack_depth(struct bpf_verifier_env *env, int stack_=
+depth)
+ {
+ 	if (env->prog->jit_requested)
+@@ -6051,17 +6081,20 @@ static int round_up_stack_depth(struct bpf_verifi=
+er_env *env, int stack_depth)
+  * Since recursion is prevented by check_cfg() this algorithm
+  * only needs a local stack of MAX_CALL_FRAMES to remember callsites
+  */
+-static int check_max_stack_depth_subprog(struct bpf_verifier_env *env, i=
+nt idx)
++static int check_max_stack_depth_subprog(struct bpf_verifier_env *env, i=
+nt idx,
++					 bool priv_stack_supported)
+ {
+ 	struct bpf_subprog_info *subprog =3D env->subprog_info;
+ 	struct bpf_insn *insn =3D env->prog->insnsi;
+-	int depth =3D 0, frame =3D 0, i, subprog_end;
++	int depth =3D 0, frame =3D 0, i, subprog_end, subprog_depth;
+ 	bool tail_call_reachable =3D false;
+ 	int ret_insn[MAX_CALL_FRAMES];
+ 	int ret_prog[MAX_CALL_FRAMES];
+ 	int j;
+=20
+ 	i =3D subprog[idx].start;
++	if (!priv_stack_supported)
++		subprog[idx].priv_stack_mode =3D NO_PRIV_STACK;
+ process_func:
+ 	/* protect against potential stack overflow that might happen when
+ 	 * bpf2bpf calls get combined with tailcalls. Limit the caller's stack
+@@ -6088,11 +6121,31 @@ static int check_max_stack_depth_subprog(struct b=
+pf_verifier_env *env, int idx)
+ 			depth);
+ 		return -EACCES;
+ 	}
+-	depth +=3D round_up_stack_depth(env, subprog[idx].stack_depth);
+-	if (depth > MAX_BPF_STACK) {
+-		verbose(env, "combined stack size of %d calls is %d. Too large\n",
+-			frame + 1, depth);
+-		return -EACCES;
++
++	subprog_depth =3D round_up_stack_depth(env, subprog[idx].stack_depth);
++	if (priv_stack_supported) {
++		/* Request private stack support only if the subprog stack
++		 * depth is no less than BPF_PRIV_STACK_MIN_SIZE. This is to
++		 * avoid jit penalty if the stack usage is small.
++		 */
++		if (subprog[idx].priv_stack_mode =3D=3D PRIV_STACK_UNKNOWN &&
++		    subprog_depth >=3D BPF_PRIV_STACK_MIN_SIZE)
++			subprog[idx].priv_stack_mode =3D PRIV_STACK_ADAPTIVE;
++	}
++
++	if (subprog[idx].priv_stack_mode =3D=3D PRIV_STACK_ADAPTIVE) {
++		if (subprog_depth > MAX_BPF_STACK) {
++			verbose(env, "stack size of subprog %d is %d. Too large\n",
++				idx, subprog_depth);
++			return -EACCES;
++		}
++	} else {
++		depth +=3D subprog_depth;
++		if (depth > MAX_BPF_STACK) {
++			verbose(env, "combined stack size of %d calls is %d. Too large\n",
++				frame + 1, depth);
++			return -EACCES;
++		}
+ 	}
+ continue_func:
+ 	subprog_end =3D subprog[idx + 1].start;
+@@ -6149,6 +6202,8 @@ static int check_max_stack_depth_subprog(struct bpf=
+_verifier_env *env, int idx)
+ 		}
+ 		i =3D next_insn;
+ 		idx =3D sidx;
++		if (!priv_stack_supported)
++			subprog[idx].priv_stack_mode =3D NO_PRIV_STACK;
+=20
+ 		if (subprog[idx].has_tail_call)
+ 			tail_call_reachable =3D true;
+@@ -6182,7 +6237,8 @@ static int check_max_stack_depth_subprog(struct bpf=
+_verifier_env *env, int idx)
+ 	 */
+ 	if (frame =3D=3D 0)
+ 		return 0;
+-	depth -=3D round_up_stack_depth(env, subprog[idx].stack_depth);
++	if (subprog[idx].priv_stack_mode !=3D PRIV_STACK_ADAPTIVE)
++		depth -=3D round_up_stack_depth(env, subprog[idx].stack_depth);
+ 	frame--;
+ 	i =3D ret_insn[frame];
+ 	idx =3D ret_prog[frame];
+@@ -6191,16 +6247,36 @@ static int check_max_stack_depth_subprog(struct b=
+pf_verifier_env *env, int idx)
+=20
+ static int check_max_stack_depth(struct bpf_verifier_env *env)
+ {
++	enum priv_stack_mode priv_stack_mode =3D PRIV_STACK_UNKNOWN;
+ 	struct bpf_subprog_info *si =3D env->subprog_info;
++	bool priv_stack_supported;
+ 	int ret;
+=20
+ 	for (int i =3D 0; i < env->subprog_cnt; i++) {
++		if (si[i].has_tail_call) {
++			priv_stack_mode =3D NO_PRIV_STACK;
++			break;
++		}
++	}
++
++	if (priv_stack_mode =3D=3D PRIV_STACK_UNKNOWN)
++		priv_stack_mode =3D bpf_enable_priv_stack(env->prog);
++
++	/* All async_cb subprogs use normal kernel stack. If a particular
++	 * subprog appears in both main prog and async_cb subtree, that
++	 * subprog will use normal kernel stack to avoid potential nesting.
++	 * The reverse subprog traversal ensures when main prog subtree is
++	 * checked, the subprogs appearing in async_cb subtrees are already
++	 * marked as using normal kernel stack, so stack size checking can
++	 * be done properly.
++	 */
++	for (int i =3D env->subprog_cnt - 1; i >=3D 0; i--) {
+ 		if (!i || si[i].is_async_cb) {
+-			ret =3D check_max_stack_depth_subprog(env, i);
++			priv_stack_supported =3D !i && priv_stack_mode =3D=3D PRIV_STACK_ADAP=
+TIVE;
++			ret =3D check_max_stack_depth_subprog(env, i, priv_stack_supported);
+ 			if (ret < 0)
+ 				return ret;
+ 		}
+-		continue;
+ 	}
+ 	return 0;
+ }
+--=20
+2.43.5
 
