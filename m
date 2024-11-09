@@ -1,39 +1,41 @@
 Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71B10D2FB
-	for <bpf@vger.kernel.org>; Sat,  9 Nov 2024 00:42:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79DA18C0B
+	for <bpf@vger.kernel.org>; Sat,  9 Nov 2024 00:42:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.145.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731112965; cv=none; b=AX8DsG/SMzGtS+l9Bfy9DvJm9wUmXOqc9oNQs1IgKFeoePSAQIGAUhi6Hg3j87sNL+t8WClkaGUo7uiVKJlA8vmN22popPKbN7hVXcPJCYDXBt53GyJkUiMQD6jk+110Jt1nYl+2B4CoPAuOzEUtf2osXrCqlNGaR1lGfpIZ9sQ=
+	t=1731112970; cv=none; b=eyijPT704qC2NTzjKlk2BJyk6P3EXHXXHjTrN5guSs3u8Rr12cSJuyvIkQ/jhp1RsJaWIOD7qs6kfB2V74MnPu67ZiMFHizGnfWw3AiJgpd5FLkhpaV42JVkWxywKZurJzx2ndxjHedFPLYXlCrkGcJlThIZZmsq0GvxJJAaEk4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731112965; c=relaxed/simple;
-	bh=FC8OeIxBlGVyD3KmNtL1d1NOWPH8xmLzYFcRs519h8M=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=iwjgvoVqjpvtudfQ8VGpV6fG1maFtPI2Lbm/dTVKGpZFKkiCjkbVtVaB8Oh1ux2fh822PgU4Ux+e2Hn4P0X6tQ4lD6guiWdNBoboryF2XMLuLHVCC8hSeTeRfWUiE0BV/3Hd3MCx6zXk3gC2aiO5PGfqALKm71V8ZvqeP1UEysA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com; spf=pass smtp.mailfrom=meta.com; dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b=FKXskP7J; arc=none smtp.client-ip=67.231.145.42
+	s=arc-20240116; t=1731112970; c=relaxed/simple;
+	bh=WGsV1SaFfLC/K3ND2x1htghQvqRTeu5V6tnV/ziQL4Y=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=H54jj6nZNM4+J+fTkK5tmlzpLIcwW30U1AtN5IjGYK0/VIL8X48sZ5tuZAWre+KQlLFReRN7xQ9z/walv5Rminljv9tcsIt+Mpae75C71ab4WT5dFLyiAN40m0rGoigU8MghKdgKM8H4rNy6ZXz0Dz9nimnqksGTaqkJOj0mfEk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com; spf=pass smtp.mailfrom=meta.com; dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b=XmKgOkQt; arc=none smtp.client-ip=67.231.145.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b="FKXskP7J"
+	dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b="XmKgOkQt"
 Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4A8LFGTd023316;
-	Fri, 8 Nov 2024 16:42:09 -0800
+	by mx0a-00082601.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4A8LFFAU023237;
+	Fri, 8 Nov 2024 16:42:14 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=cc
-	:content-transfer-encoding:content-type:date:from:message-id
-	:mime-version:subject:to; s=s2048-2021-q4; bh=EYzQ1pHzoHnEVrijzk
-	BBLtGrjKwtKv52fx5MPaCAesY=; b=FKXskP7JIYG0/sK5GoKwo6XUfKDxAAY9Na
-	f+Y5ZtFTDscqTpM6OBX7tReh+MRq+Jqt2s5gq3NzL1qO+t6nXABOQA7YnFpsxeoo
-	b4Xnjc2Y6TNpy3GPSTwK6oDfxHLwjVCrR0hMc3dFWUYByhrDTUcu1n+Ro2/FcUy/
-	aeQCkBESxzKWecbXE1IKblFXShxhI7zUOFTHQqYZ9Ljav1iE5YKhT61k4jCGwVUs
-	82C0paiThybPomhnPpA/Sub2eCiW3oRfxpniCmbLuhLqZtvBjsvV9KYf98xhGp0t
-	6OECBbrgvmouMbrpt4FV+nx545DSPjhEQrbTojSAgVKx4v1LNfVg==
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=s2048-2021-q4;
+	 bh=dcI28znQL45vPqQFKE1MV54vNgiEo9OBLY6TCGqUKGs=; b=XmKgOkQtV4Qk
+	7lv3pG8SCORw894q/56JLFP9rAWy9oAzOnLbjTfKKim3qj2FjOYckcvJYQQwshma
+	tWK1az7xFCyjCXpn0+tF0bADROccy2MjXUfTThvWm19YNPH32alr5DbZHivL7Trn
+	FqweW9/ZcsTKOMCXzcgtqlFjM7HXEGkak9fIZHmfzz19bleq1pItGikT33skcuUA
+	qexx7Na0c3WC2NvUAwDWZZzijb8JuvMogtMYVsk7kM0OS+OhB7Bf5t2zQCF2uXRP
+	br0/a9wJWzRGsXeEYbbIQHV1sdbKvkXT1TV/DvYn5q7b0mllxgY5k0PGOonBA+oP
+	Ihlojd7Ppw==
 Received: from mail.thefacebook.com ([163.114.134.16])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 42sn58bstp-1
+	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 42sn58bsu2-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-	Fri, 08 Nov 2024 16:42:09 -0800 (PST)
+	Fri, 08 Nov 2024 16:42:14 -0800 (PST)
 Received: from devvm4158.cln0.facebook.com (2620:10d:c085:108::4) by
  mail.thefacebook.com (2620:10d:c08b:78::2ac9) with Microsoft SMTP Server id
- 15.2.1544.11; Sat, 9 Nov 2024 00:42:06 +0000
+ 15.2.1544.11; Sat, 9 Nov 2024 00:42:11 +0000
 From: Vadim Fedorenko <vadfed@meta.com>
 To: Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann
@@ -50,10 +52,12 @@ CC: <x86@kernel.org>, <bpf@vger.kernel.org>,
         Vadim Fedorenko
 	<vadfed@meta.com>,
         Martin KaFai Lau <martin.lau@linux.dev>
-Subject: [PATCH bpf-next v5 1/4] bpf: add bpf_get_cpu_cycles kfunc
-Date: Fri, 8 Nov 2024 16:41:54 -0800
-Message-ID: <20241109004158.2259301-1-vadfed@meta.com>
+Subject: [PATCH bpf-next v5 3/4] selftests/bpf: add selftest to check rdtsc jit
+Date: Fri, 8 Nov 2024 16:41:56 -0800
+Message-ID: <20241109004158.2259301-3-vadfed@meta.com>
 X-Mailer: git-send-email 2.43.5
+In-Reply-To: <20241109004158.2259301-1-vadfed@meta.com>
+References: <20241109004158.2259301-1-vadfed@meta.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -62,273 +66,152 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: 8ie3mUxZiEy2DeNWFXLD_8lVFw7jBz05
-X-Proofpoint-GUID: 8ie3mUxZiEy2DeNWFXLD_8lVFw7jBz05
+X-Proofpoint-ORIG-GUID: zykTJXMSLZjWqG1RwYnTt80TNgEtOdP2
+X-Proofpoint-GUID: zykTJXMSLZjWqG1RwYnTt80TNgEtOdP2
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
  definitions=2024-10-05_03,2024-10-04_01,2024-09-30_01
 
-New kfunc to return ARCH-specific timecounter. For x86 BPF JIT converts
-it into rdtsc ordered call. Other architectures will get JIT
-implementation too if supported. The fallback is to
-__arch_get_hw_counter().
+get_cpu_cycles() is replaced with rdtsc instruction on x86_64. Add
+tests to check it.
 
 Signed-off-by: Vadim Fedorenko <vadfed@meta.com>
 ---
-v4 -> v5:
-* use if instead of ifdef with IS_ENABLED
-v3 -> v4:
-* change name of the helper to bpf_get_cpu_cycles (Andrii)
-* Hide the helper behind CONFIG_GENERIC_GETTIMEOFDAY to avoid exposing
-  it on architectures which do not have vDSO functions and data
-* reduce the scope of check of inlined functions in verifier to only 2,
-  which are actually inlined.
-v2 -> v3:
-* change name of the helper to bpf_get_cpu_cycles_counter to explicitly
-  mention what counter it provides (Andrii)
-* move kfunc definition to bpf.h to use it in JIT.
-* introduce another kfunc to convert cycles into nanoseconds as more
-  meaningful time units for generic tracing use case (Andrii)
-v1 -> v2:
-* Fix incorrect function return value type to u64
-* Introduce bpf_jit_inlines_kfunc_call() and use it in
-  mark_fastcall_pattern_for_call() to avoid clobbering in case of
-  running programs with no JIT (Eduard)
-* Avoid rewriting instruction and check function pointer directly
-  in JIT (Alexei)
-* Change includes to fix compile issues on non x86 architectures
----
- arch/x86/net/bpf_jit_comp.c   | 28 ++++++++++++++++++++++++++++
- arch/x86/net/bpf_jit_comp32.c | 14 ++++++++++++++
- include/linux/bpf.h           |  5 +++++
- include/linux/filter.h        |  1 +
- kernel/bpf/core.c             | 11 +++++++++++
- kernel/bpf/helpers.c          | 13 +++++++++++++
- kernel/bpf/verifier.c         | 30 +++++++++++++++++++++++++++++-
- 7 files changed, 101 insertions(+), 1 deletion(-)
+ .../selftests/bpf/prog_tests/verifier.c       |   2 +
+ .../selftests/bpf/progs/verifier_cpu_cycles.c | 104 ++++++++++++++++++
+ 2 files changed, 106 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/progs/verifier_cpu_cycles.c
 
-diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
-index 06b080b61aa5..4f78ed93ee7f 100644
---- a/arch/x86/net/bpf_jit_comp.c
-+++ b/arch/x86/net/bpf_jit_comp.c
-@@ -2126,6 +2126,26 @@ st:			if (is_imm8(insn->off))
- 		case BPF_JMP | BPF_CALL: {
- 			u8 *ip = image + addrs[i - 1];
+diff --git a/tools/testing/selftests/bpf/prog_tests/verifier.c b/tools/testing/selftests/bpf/prog_tests/verifier.c
+index 75f7a2ce334b..d76cc90f4bfb 100644
+--- a/tools/testing/selftests/bpf/prog_tests/verifier.c
++++ b/tools/testing/selftests/bpf/prog_tests/verifier.c
+@@ -97,6 +97,7 @@
+ #include "verifier_xdp_direct_packet_access.skel.h"
+ #include "verifier_bits_iter.skel.h"
+ #include "verifier_lsm.skel.h"
++#include "verifier_cpu_cycles.skel.h"
  
-+			if (insn->src_reg == BPF_PSEUDO_KFUNC_CALL &&
-+			    imm32 == BPF_CALL_IMM(bpf_get_cpu_cycles)) {
-+				/* Save RDX because RDTSC will use EDX:EAX to return u64 */
-+				emit_mov_reg(&prog, true, AUX_REG, BPF_REG_3);
-+				if (boot_cpu_has(X86_FEATURE_LFENCE_RDTSC))
-+					EMIT_LFENCE();
-+				EMIT2(0x0F, 0x31);
-+
-+				/* shl RDX, 32 */
-+				maybe_emit_1mod(&prog, BPF_REG_3, true);
-+				EMIT3(0xC1, add_1reg(0xE0, BPF_REG_3), 32);
-+				/* or RAX, RDX */
-+				maybe_emit_mod(&prog, BPF_REG_0, BPF_REG_3, true);
-+				EMIT2(0x09, add_2reg(0xC0, BPF_REG_0, BPF_REG_3));
-+				/* restore RDX from R11 */
-+				emit_mov_reg(&prog, true, BPF_REG_3, AUX_REG);
-+
-+				break;
-+			}
-+
- 			func = (u8 *) __bpf_call_base + imm32;
- 			if (tail_call_reachable) {
- 				LOAD_TAIL_CALL_CNT_PTR(bpf_prog->aux->stack_depth);
-@@ -3652,3 +3672,11 @@ u64 bpf_arch_uaddress_limit(void)
+ #define MAX_ENTRIES 11
+ 
+@@ -223,6 +224,7 @@ void test_verifier_xdp(void)                  { RUN(verifier_xdp); }
+ void test_verifier_xdp_direct_packet_access(void) { RUN(verifier_xdp_direct_packet_access); }
+ void test_verifier_bits_iter(void) { RUN(verifier_bits_iter); }
+ void test_verifier_lsm(void)                  { RUN(verifier_lsm); }
++void test_verifier_cpu_cycles(void)           { RUN(verifier_cpu_cycles); }
+ 
+ void test_verifier_mtu(void)
  {
- 	return 0;
- }
+diff --git a/tools/testing/selftests/bpf/progs/verifier_cpu_cycles.c b/tools/testing/selftests/bpf/progs/verifier_cpu_cycles.c
+new file mode 100644
+index 000000000000..88bfa7211858
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/verifier_cpu_cycles.c
+@@ -0,0 +1,104 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2022 Meta Inc. */
++#include "vmlinux.h"
++#include <bpf/bpf_helpers.h>
++#include <bpf/bpf_tracing.h>
++#include "bpf_misc.h"
 +
-+/* x86-64 JIT can inline kfunc */
-+bool bpf_jit_inlines_kfunc_call(s32 imm)
++extern u64 bpf_cpu_cycles_to_ns(u64 cycles) __weak __ksym;
++extern u64 bpf_get_cpu_cycles(void) __weak __ksym;
++
++SEC("syscall")
++__arch_x86_64
++__xlated("0: call kernel-function")
++__naked int bpf_rdtsc(void)
 +{
-+	if (imm == BPF_CALL_IMM(bpf_get_cpu_cycles))
-+		return true;
-+	return false;
-+}
-diff --git a/arch/x86/net/bpf_jit_comp32.c b/arch/x86/net/bpf_jit_comp32.c
-index de0f9e5f9f73..e6097a371b69 100644
---- a/arch/x86/net/bpf_jit_comp32.c
-+++ b/arch/x86/net/bpf_jit_comp32.c
-@@ -2094,6 +2094,13 @@ static int do_jit(struct bpf_prog *bpf_prog, int *addrs, u8 *image,
- 			if (insn->src_reg == BPF_PSEUDO_KFUNC_CALL) {
- 				int err;
- 
-+				if (imm32 == BPF_CALL_IMM(bpf_get_cpu_cycles)) {
-+					if (boot_cpu_has(X86_FEATURE_LFENCE_RDTSC))
-+						EMIT3(0x0F, 0xAE, 0xE8);
-+					EMIT2(0x0F, 0x31);
-+					break;
-+				}
-+
- 				err = emit_kfunc_call(bpf_prog,
- 						      image + addrs[i],
- 						      insn, &prog);
-@@ -2621,3 +2628,10 @@ bool bpf_jit_supports_kfunc_call(void)
- {
- 	return true;
- }
-+
-+bool bpf_jit_inlines_kfunc_call(s32 imm)
-+{
-+	if (imm == BPF_CALL_IMM(bpf_get_cpu_cycles))
-+		return true;
-+	return false;
-+}
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 1b84613b10ac..fed5f36d387a 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -3328,6 +3328,11 @@ void bpf_user_rnd_init_once(void);
- u64 bpf_user_rnd_u32(u64 r1, u64 r2, u64 r3, u64 r4, u64 r5);
- u64 bpf_get_raw_cpu_id(u64 r1, u64 r2, u64 r3, u64 r4, u64 r5);
- 
-+/* Inlined kfuncs */
-+#if IS_ENABLED(CONFIG_GENERIC_GETTIMEOFDAY)
-+u64 bpf_get_cpu_cycles(void);
-+#endif
-+
- #if defined(CONFIG_NET)
- bool bpf_sock_common_is_valid_access(int off, int size,
- 				     enum bpf_access_type type,
-diff --git a/include/linux/filter.h b/include/linux/filter.h
-index 7d7578a8eac1..8bdd5e6b2a65 100644
---- a/include/linux/filter.h
-+++ b/include/linux/filter.h
-@@ -1111,6 +1111,7 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *prog);
- void bpf_jit_compile(struct bpf_prog *prog);
- bool bpf_jit_needs_zext(void);
- bool bpf_jit_inlines_helper_call(s32 imm);
-+bool bpf_jit_inlines_kfunc_call(s32 imm);
- bool bpf_jit_supports_subprog_tailcalls(void);
- bool bpf_jit_supports_percpu_insn(void);
- bool bpf_jit_supports_kfunc_call(void);
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index 233ea78f8f1b..ab6a2452ade0 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -2965,6 +2965,17 @@ bool __weak bpf_jit_inlines_helper_call(s32 imm)
- 	return false;
- }
- 
-+/* Return true if the JIT inlines the call to the kfunc corresponding to
-+ * the imm.
-+ *
-+ * The verifier will not patch the insn->imm for the call to the helper if
-+ * this returns true.
-+ */
-+bool __weak bpf_jit_inlines_kfunc_call(s32 imm)
-+{
-+	return false;
++	asm volatile(
++	"call %[bpf_get_cpu_cycles];"
++	"exit"
++	:
++	: __imm(bpf_get_cpu_cycles)
++	: __clobber_all
++	);
 +}
 +
- /* Return TRUE if the JIT backend supports mixing bpf2bpf and tailcalls. */
- bool __weak bpf_jit_supports_subprog_tailcalls(void)
- {
-diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-index 395221e53832..5c6c0383ebf4 100644
---- a/kernel/bpf/helpers.c
-+++ b/kernel/bpf/helpers.c
-@@ -23,6 +23,9 @@
- #include <linux/btf_ids.h>
- #include <linux/bpf_mem_alloc.h>
- #include <linux/kasan.h>
-+#if IS_ENABLED(CONFIG_GENERIC_GETTIMEOFDAY)
-+#include <vdso/datapage.h>
-+#endif
- 
- #include "../../lib/kstrtox.h"
- 
-@@ -3023,6 +3026,13 @@ __bpf_kfunc int bpf_copy_from_user_str(void *dst, u32 dst__sz, const void __user
- 	return ret + 1;
- }
- 
-+#if IS_ENABLED(CONFIG_GENERIC_GETTIMEOFDAY)
-+__bpf_kfunc u64 bpf_get_cpu_cycles(void)
++SEC("syscall")
++__arch_x86_64
++/* program entry for bpf_rdtsc_jit_x86_64(), regular function prologue */
++__jited("	endbr64")
++__jited("	nopl	(%rax,%rax)")
++__jited("	nopl	(%rax)")
++__jited("	pushq	%rbp")
++__jited("	movq	%rsp, %rbp")
++__jited("	endbr64")
++/* save RDX in R11 as it will be overwritten */
++__jited("	movq	%rdx, %r11")
++/* lfence may not be executed depending on cpu features */
++__jited("	{{(lfence|)}}")
++__jited("	rdtsc")
++/* combine EDX:EAX into RAX */
++__jited("	shlq	${{(32|0x20)}}, %rdx")
++__jited("	orq	%rdx, %rax")
++/* restore RDX from R11 */
++__jited("	movq	%r11, %rdx")
++__jited("	leave")
++__naked int bpf_rdtsc_jit_x86_64(void)
 +{
-+	return __arch_get_hw_counter(1, NULL);
-+}
-+#endif
-+
- __bpf_kfunc_end_defs();
- 
- BTF_KFUNCS_START(generic_btf_ids)
-@@ -3115,6 +3125,9 @@ BTF_ID_FLAGS(func, bpf_get_kmem_cache)
- BTF_ID_FLAGS(func, bpf_iter_kmem_cache_new, KF_ITER_NEW | KF_SLEEPABLE)
- BTF_ID_FLAGS(func, bpf_iter_kmem_cache_next, KF_ITER_NEXT | KF_RET_NULL | KF_SLEEPABLE)
- BTF_ID_FLAGS(func, bpf_iter_kmem_cache_destroy, KF_ITER_DESTROY | KF_SLEEPABLE)
-+#if IS_ENABLED(CONFIG_GENERIC_GETTIMEOFDAY)
-+BTF_ID_FLAGS(func, bpf_get_cpu_cycles, KF_FASTCALL)
-+#endif
- BTF_KFUNCS_END(common_btf_ids)
- 
- static const struct btf_kfunc_id_set common_kfunc_set = {
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 7958d6ff6b73..b5220d996231 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -16273,6 +16273,24 @@ static bool verifier_inlines_helper_call(struct bpf_verifier_env *env, s32 imm)
- 	}
- }
- 
-+/* True if fixup_kfunc_call() replaces calls to kfunc number 'imm',
-+ * replacement patch is presumed to follow bpf_fastcall contract
-+ * (see mark_fastcall_pattern_for_call() below).
-+ */
-+static bool verifier_inlines_kfunc_call(struct bpf_verifier_env *env, s32 imm)
-+{
-+	const struct bpf_kfunc_desc *desc = find_kfunc_desc(env->prog, imm, 0);
-+
-+	if (!env->prog->jit_requested)
-+		return false;
-+
-+	if (desc->func_id == special_kfunc_list[KF_bpf_cast_to_kern_ctx] ||
-+	    desc->func_id == special_kfunc_list[KF_bpf_rdonly_cast])
-+		return true;
-+
-+	return false;
++	asm volatile(
++	"call %[bpf_get_cpu_cycles];"
++	"exit"
++	:
++	: __imm(bpf_get_cpu_cycles)
++	: __clobber_all
++	);
 +}
 +
- /* Same as helper_fastcall_clobber_mask() but for kfuncs, see comment above */
- static u32 kfunc_fastcall_clobber_mask(struct bpf_kfunc_call_arg_meta *meta)
- {
-@@ -16400,7 +16418,10 @@ static void mark_fastcall_pattern_for_call(struct bpf_verifier_env *env,
- 			return;
- 
- 		clobbered_regs_mask = kfunc_fastcall_clobber_mask(&meta);
--		can_be_inlined = is_fastcall_kfunc_call(&meta);
-+		can_be_inlined = is_fastcall_kfunc_call(&meta) &&
-+				 (verifier_inlines_kfunc_call(env, call->imm) ||
-+				 (meta.btf == btf_vmlinux &&
-+				  bpf_jit_inlines_kfunc_call(call->imm)));
- 	}
- 
- 	if (clobbered_regs_mask == ALL_CALLER_SAVED_REGS)
-@@ -20402,6 +20423,7 @@ static int fixup_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
- 			    struct bpf_insn *insn_buf, int insn_idx, int *cnt)
- {
- 	const struct bpf_kfunc_desc *desc;
-+	s32 imm = insn->imm;
- 
- 	if (!insn->imm) {
- 		verbose(env, "invalid kernel function call not eliminated in verifier pass\n");
-@@ -20488,6 +20510,12 @@ static int fixup_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
- 						node_offset_reg, insn, insn_buf, cnt);
- 	} else if (desc->func_id == special_kfunc_list[KF_bpf_cast_to_kern_ctx] ||
- 		   desc->func_id == special_kfunc_list[KF_bpf_rdonly_cast]) {
-+		if (!verifier_inlines_kfunc_call(env, imm)) {
-+			verbose(env, "verifier internal error: kfunc id %d is not defined in checker\n",
-+				desc->func_id);
-+			return -EFAULT;
-+		}
++SEC("syscall")
++__arch_x86_64
++__xlated("0: r1 = 42")
++__xlated("1: call kernel-function")
++__naked int bpf_cyc2ns(void)
++{
++	asm volatile(
++	"r1=0x2a;"
++	"call %[bpf_cpu_cycles_to_ns];"
++	"exit"
++	:
++	: __imm(bpf_cpu_cycles_to_ns)
++	: __clobber_all
++	);
++}
 +
- 		insn_buf[0] = BPF_MOV64_REG(BPF_REG_0, BPF_REG_1);
- 		*cnt = 1;
- 	} else if (is_bpf_wq_set_callback_impl_kfunc(desc->func_id)) {
++SEC("syscall")
++__arch_x86_64
++/* program entry for bpf_rdtsc_jit_x86_64(), regular function prologue */
++__jited("	endbr64")
++__jited("	nopl	(%rax,%rax)")
++__jited("	nopl	(%rax)")
++__jited("	pushq	%rbp")
++__jited("	movq	%rsp, %rbp")
++__jited("	endbr64")
++/* save RDX in R11 as it will be overwritten */
++__jited("	movabsq	$0x2a2a2a2a2a, %rdi")
++__jited("	imulq	${{.*}}, %rdi, %rax")
++__jited("	shrq	${{.*}}, %rax")
++__jited("	leave")
++__naked int bpf_cyc2ns_jit_x86(void)
++{
++	asm volatile(
++	"r1=0x2a2a2a2a2a ll;"
++	"call %[bpf_cpu_cycles_to_ns];"
++	"exit"
++	:
++	: __imm(bpf_cpu_cycles_to_ns)
++	: __clobber_all
++	);
++}
++
++void rdtsc(void)
++{
++	bpf_get_cpu_cycles();
++	bpf_cpu_cycles_to_ns(42);
++}
++
++char _license[] SEC("license") = "GPL";
 -- 
 2.43.5
 
