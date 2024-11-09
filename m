@@ -1,179 +1,226 @@
-Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC43A1DC06B;
-	Fri,  8 Nov 2024 23:26:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1E798C07
+	for <bpf@vger.kernel.org>; Sat,  9 Nov 2024 00:42:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.153.30
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731108395; cv=none; b=mi6Mc9rHecWRGWy/5fVqPYfFnQWkOrNatXLSVfeTNEVWhpOvfKO5k6sqwDHULSYbFDYZ5rXp9hIdD4TiElL7mtYb7j8UJNlkhuXdX0yV0xXbZYEK8xBzRuIFKBCO8AcW7x1MIF7kg0Bw33lhsu3UohGozJIrxea5yTTWu2b0J5c=
+	t=1731112959; cv=none; b=rM2aPM4uJpman0vuiWBU3OXavInPztciowj+43Nj57OTw72OfqfZXL7SWZponEGeCMnzFw9M9Dqxxb/chb8SIFBgVLBwt+TTxD/tPWRwbwnAdx+WBAV7sPNFRZMOnrM+G4YFo61H1jq9XTE4fVLLuEhZnJVxITLwz1Y9jBg5kpw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731108395; c=relaxed/simple;
-	bh=sxA+We695iipQ4eZV9aeSTLGXVdWZwHQT9IuQKh8rl0=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=crhRoE+3BAAvlSXd/MKY098Jeb5x5g4N+2vMEdcghrjareMuew4ZT93iQxC5J+oK0BeqoRmutYKWJyJdbf1J4eD4Oelr04m6eewJ+/NTzyHBqRDk+tMlb3yGJjSx9I1Bfcu5cyWCLG/VDrFNjcCJ/e0PjbnrU6i5syfak01sVPY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aJYJ75Kk; arc=none smtp.client-ip=209.85.221.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1731112959; c=relaxed/simple;
+	bh=lCA7kE8eJPbbby/OWYXwaSgudjElro42JjrwaPz8fko=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=hpc7L5/Ef3Hr4o+pfuDM4ucWG9HwRZIWEHjRELfVFZGwqpgH/G0BHIVbcJi4xvCbqI33quelRzCYFmYdhmDAYFDqKfBEY56Nf4TWpKB5aMkF3KUtqyjVrOSUTvHyEmVFsh4/Vws6iZzRLOKLOS9KzxPPd57oesI1uAMa3qhAkEQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com; spf=pass smtp.mailfrom=meta.com; dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b=QVgvVCTb; arc=none smtp.client-ip=67.231.153.30
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aJYJ75Kk"
-Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-37d473c4bb6so2237255f8f.3;
-        Fri, 08 Nov 2024 15:26:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1731108392; x=1731713192; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Y372NZXOCshw1bVMFXTnFTZlB5n9lu8kCY0Rrvuncr4=;
-        b=aJYJ75KkhQWuACICEBlytc+wVOWZN02173Da2X4Am4C1+ujNeKqIQiME0t37HWOGj7
-         YSsPzvHl+YA4OAbe+h8RVlg7OvRutjZjjT8+Cjem0gW4/is5aoadvsT3WB5qLGrCF5SL
-         4neoS3PC4arWdARyLkFa4vutG322Mru3Hq4DE+15jaqmA6Qc1yKJSiIv4oxtN2qkPRgR
-         eMHT6M4S7jF3H94YTl2ohfGv2mYc2xb5KI8szLjJwXj9YsVXz/A2sXw/E2JqpWUyDZ8s
-         9EPCjA8mICD7Vz/CWBlZwhI69HW7QUgosQixHr5VrwVDyDZ19n9JXzbH+d97y2J0fKRX
-         /6pQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731108392; x=1731713192;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Y372NZXOCshw1bVMFXTnFTZlB5n9lu8kCY0Rrvuncr4=;
-        b=gjeIFcitAzcCjDspZHhkW5dRoNJXzVwH5g3GmYQV5qeS4mpnR+t5MdzdXwVGY5Z77M
-         NQ+zIfGjgQ3dd2vODvGVXzvwGRYrNhMb2yP3GpJYOE98qNuw8LoPCdwXV35aI09HE60P
-         o5V9TgVDAQAypX6ukgdgyVPSt8TxImHd01tOZ9Szqo5IIEG0XCwzt5McdW+xzFO3LZ3f
-         hmcwUGfV37vbI8Gui26t8XPCGe0bDDMrlJE46Jk4Q0E4mEe79S00Mjpvi4M1CxNT4xl4
-         B/11VvXB26who0ygjUOLtEPE1WxrBCHnUUiz9ThPNm7Zb3eXynHz3t/bfiR7F5xC1fBJ
-         5oSw==
-X-Forwarded-Encrypted: i=1; AJvYcCWA6qW35JCSERMso8mAR/j7rmBdwBbdpbYQuYtzLqeZoTAuaPvFaK11cW/8vXoq1lZA1F8++Ug3@vger.kernel.org, AJvYcCXOhiI9N+G799mYgzMbijr/UFzl2p9OfmdPUS+P4iS5qtmRiGND3FkHnouvNmc4//Gw7Rs=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz7ctTN9EEjMGXDFz74oDQfAcKY4WVErutpXoQo6/10Ge5dbqCK
-	VtcLoQ3o1OjJEmr0NEGxcaNfCWrqfZHgMN/bseP0BVed1pGKZGII
-X-Google-Smtp-Source: AGHT+IEkL/K3Y9tz8xmrufY9me3usEv0F8ozJQaRjEh6waSAev7wq5HlOzUzqA5MDO6lZftgdX0V9A==
-X-Received: by 2002:a05:6000:1a89:b0:37d:4cf9:e08b with SMTP id ffacd0b85a97d-381f18723d4mr4377981f8f.31.1731108391817;
-        Fri, 08 Nov 2024 15:26:31 -0800 (PST)
-Received: from krava (85-193-35-42.rib.o2.cz. [85.193.35.42])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-381eda04ad0sm6166510f8f.100.2024.11.08.15.26.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Nov 2024 15:26:31 -0800 (PST)
-From: Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Sat, 9 Nov 2024 00:26:29 +0100
-To: Jiri Olsa <olsajiri@gmail.com>
-Cc: Omar Sandoval <osandov@osandov.com>,
-	Greg KH <gregkh@linuxfoundation.org>, stable@vger.kernel.org,
-	bpf@vger.kernel.org, Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>
-Subject: Re: Fix build ID parsing logic in stable trees
-Message-ID: <Zy6eJdwR3LWOlrQg@krava>
-References: <20241104175256.2327164-1-jolsa@kernel.org>
- <2024110536-agonizing-campus-21f0@gregkh>
- <ZyniGMz5QLhGVWSY@krava>
- <2024110636-rebound-chip-f389@gregkh>
- <ZytZrt31Y1N7-hXK@krava>
- <Zy0dNahbYlHISjkU@telecaster>
- <Zy3NVkewYPO9ZSDx@krava>
+	dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b="QVgvVCTb"
+Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
+	by m0001303.ppops.net (8.18.1.2/8.18.1.2) with ESMTP id 4A905Rcd031770;
+	Fri, 8 Nov 2024 16:42:12 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=s2048-2021-q4;
+	 bh=KSj1dXaY4HBmCHkzSYAKNoaKkZ7HsCKIEK6LG7RtK+U=; b=QVgvVCTb/QvV
+	A7YVp5WJdWUj0SpTMdnZtp/NOAp7umAE8ekwQKVgnMADiZuXzleqTC6HQMIDF6i7
+	XXl3ewzVYCHdujNL+sx90TMjEywEiVBDFCl5SjWz5IaA4kbqxwqrrMPhax+zNPl0
+	hjhqtOA6QVQ2YQjOTDUtoMYYVgoTov3928wV8ATX1i4ypyFJq/S2qguUxUOeC2C2
+	RcsrR7a4Vsye1CIEEuNQemQVRNdrZQV9EnHmH1pCo2Tp+pzADcv5/PcEFJWRguae
+	CA3SlvczStP9qXD9GcTTKA5p/M/rRSPu/lvyNsnslFH6H9hG5H4LNflZShi0CGrk
+	4dn9Mv/6ig==
+Received: from mail.thefacebook.com ([163.114.134.16])
+	by m0001303.ppops.net (PPS) with ESMTPS id 42svvsg65e-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+	Fri, 08 Nov 2024 16:42:12 -0800 (PST)
+Received: from devvm4158.cln0.facebook.com (2620:10d:c085:108::4) by
+ mail.thefacebook.com (2620:10d:c08b:78::2ac9) with Microsoft SMTP Server id
+ 15.2.1544.11; Sat, 9 Nov 2024 00:42:08 +0000
+From: Vadim Fedorenko <vadfed@meta.com>
+To: Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann
+	<daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Eduard Zingerman
+	<eddyz87@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vadim Fedorenko
+	<vadim.fedorenko@linux.dev>,
+        Mykola Lysenko <mykolal@fb.com>, Jakub Kicinski
+	<kuba@kernel.org>
+CC: <x86@kernel.org>, <bpf@vger.kernel.org>,
+        Vadim Fedorenko
+	<vadfed@meta.com>,
+        Martin KaFai Lau <martin.lau@linux.dev>
+Subject: [PATCH bpf-next v5 2/4] bpf: add bpf_cpu_cycles_to_ns helper
+Date: Fri, 8 Nov 2024 16:41:55 -0800
+Message-ID: <20241109004158.2259301-2-vadfed@meta.com>
+X-Mailer: git-send-email 2.43.5
+In-Reply-To: <20241109004158.2259301-1-vadfed@meta.com>
+References: <20241109004158.2259301-1-vadfed@meta.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Zy3NVkewYPO9ZSDx@krava>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Proofpoint-ORIG-GUID: X2YPAdLbcbBEVufkNP00XKR47RdL772g
+X-Proofpoint-GUID: X2YPAdLbcbBEVufkNP00XKR47RdL772g
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
+ definitions=2024-10-05_03,2024-10-04_01,2024-09-30_01
 
-On Fri, Nov 08, 2024 at 09:35:34AM +0100, Jiri Olsa wrote:
-> On Thu, Nov 07, 2024 at 12:04:05PM -0800, Omar Sandoval wrote:
-> > On Wed, Nov 06, 2024 at 12:57:34PM +0100, Jiri Olsa wrote:
-> > > On Wed, Nov 06, 2024 at 07:12:05AM +0100, Greg KH wrote:
-> > > > On Tue, Nov 05, 2024 at 10:15:04AM +0100, Jiri Olsa wrote:
-> > > > > On Tue, Nov 05, 2024 at 07:54:48AM +0100, Greg KH wrote:
-> > > > > > On Mon, Nov 04, 2024 at 06:52:52PM +0100, Jiri Olsa wrote:
-> > > > > > > hi,
-> > > > > > > sending fix for buildid parsing that affects only stable trees
-> > > > > > > after merging upstream fix [1].
-> > > > > > > 
-> > > > > > > Upstream then factored out the whole buildid parsing code, so it
-> > > > > > > does not have the problem.
-> > > > > > 
-> > > > > > Why not just take those patches instead?
-> > > > > 
-> > > > > I guess we could, but I thought it's too big for stable
-> > > > > 
-> > > > > we'd need following 2 changes to fix the issue:
-> > > > >   de3ec364c3c3 lib/buildid: add single folio-based file reader abstraction
-> > > > >   60c845b4896b lib/buildid: take into account e_phoff when fetching program headers
-> > > > > 
-> > > > > and there's also few other follow ups:
-> > > > >   5ac9b4e935df lib/buildid: Handle memfd_secret() files in build_id_parse()
-> > > > >   cdbb44f9a74f lib/buildid: don't limit .note.gnu.build-id to the first page in ELF
-> > > > >   ad41251c290d lib/buildid: implement sleepable build_id_parse() API
-> > > > >   45b8fc309654 lib/buildid: rename build_id_parse() into build_id_parse_nofault()
-> > > > >   4e9d360c4cdf lib/buildid: remove single-page limit for PHDR search
-> > > > > 
-> > > > > which I guess are not strictly needed
-> > > > 
-> > > > Can you verify what exact ones are needed here?  We'll be glad to take
-> > > > them if you can verify that they work properly.
-> > > 
-> > > ok, will check
-> > 
-> > Hello,
-> > 
-> > I noticed that the BUILD-ID field in vmcoreinfo is broken on
-> > stable/longterm kernels and found this thread. Can we please get this
-> > fixed soon?
-> > 
-> > I tried cherry-picking the patches mentioned above ("lib/buildid: add
-> > single folio-based file reader abstraction" and "lib/buildid: take into
-> > account e_phoff when fetching program headers"), but they don't apply
-> > cleanly before 6.11, and they'd need to be reworked for 5.15, which was
-> > before folios were introduced. Jiri's minimal fix works for me and seems
-> > like a much safer option.
-> 
-> hi,
-> thanks for testing
-> 
-> I think for 6.11 we could go with backport of:
->   de3ec364c3c3 lib/buildid: add single folio-based file reader abstraction
->   60c845b4896b lib/buildid: take into account e_phoff when fetching program headers
-> 
-> and with the small fix for the rest
-> 
-> but I still need to figure out why also 60c845b4896b is needed
-> to fix the issue on 6.11.. hopefully today
+The new helper should be used to convert cycles received by
+bpf_get_cpu_cycle() into nanoseconds.
 
-ok, so the fix the issue in 6.11 with upstream backports we'd need both:
-
-  1) de3ec364c3c3 lib/buildid: add single folio-based file reader abstraction
-  2) 60c845b4896b lib/buildid: take into account e_phoff when fetching program headers
-
-2) is needed because 1) seems to omit ehdr->e_phoff addition (patch below)
-which is added back in 2)
-
-IMO 6.11 is close to upstream and by taking above upstream fixes it will be
-easier to backport other possible fixes in the future, for other trees I'd
-take the original one line fix I posted
-
-jirka
-
-
+Signed-off-by: Vadim Fedorenko <vadfed@meta.com>
 ---
-diff --git a/lib/buildid.c b/lib/buildid.c
-index bfe00b66b1e8..19d9a0f6ce99 100644
---- a/lib/buildid.c
-+++ b/lib/buildid.c
-@@ -234,7 +234,7 @@ static int get_build_id_32(struct freader *r, unsigned char *build_id, __u32 *si
- 		return -EINVAL;
+v5:
+* no changes
+v4:
+* change helper name to bpf_cpu_cycles_to_ns.
+* hide it behind CONFIG_GENERIC_GETTIMEOFDAY to avoid exposing on
+  unsupported architectures.
+---
+ arch/x86/net/bpf_jit_comp.c   | 22 ++++++++++++++++++++++
+ arch/x86/net/bpf_jit_comp32.c | 19 +++++++++++++++++++
+ include/linux/bpf.h           |  1 +
+ kernel/bpf/helpers.c          | 10 +++++++++-
+ 4 files changed, 51 insertions(+), 1 deletion(-)
+
+diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+index 4f78ed93ee7f..ddc73d9a90f4 100644
+--- a/arch/x86/net/bpf_jit_comp.c
++++ b/arch/x86/net/bpf_jit_comp.c
+@@ -11,6 +11,7 @@
+ #include <linux/bpf.h>
+ #include <linux/memory.h>
+ #include <linux/sort.h>
++#include <linux/clocksource.h>
+ #include <asm/extable.h>
+ #include <asm/ftrace.h>
+ #include <asm/set_memory.h>
+@@ -2146,6 +2147,24 @@ st:			if (is_imm8(insn->off))
+ 				break;
+ 			}
  
- 	for (i = 0; i < phnum; ++i) {
--		phdr = freader_fetch(r, i * sizeof(Elf32_Phdr), sizeof(Elf32_Phdr));
-+		phdr = freader_fetch(r, sizeof(Elf32_Ehdr) + i * sizeof(Elf32_Phdr), sizeof(Elf32_Phdr));
- 		if (!phdr)
- 			return r->err;
++			if (insn->src_reg == BPF_PSEUDO_KFUNC_CALL &&
++			    imm32 == BPF_CALL_IMM(bpf_cpu_cycles_to_ns) &&
++			    boot_cpu_has(X86_FEATURE_CONSTANT_TSC)) {
++				u32 mult, shift;
++
++				clocks_calc_mult_shift(&mult, &shift, tsc_khz, USEC_PER_SEC, 0);
++				/* imul RAX, RDI, mult */
++				maybe_emit_mod(&prog, BPF_REG_1, BPF_REG_0, true);
++				EMIT2_off32(0x69, add_2reg(0xC0, BPF_REG_1, BPF_REG_0),
++					    mult);
++
++				/* shr RAX, shift (which is less than 64) */
++				maybe_emit_1mod(&prog, BPF_REG_0, true);
++				EMIT3(0xC1, add_1reg(0xE8, BPF_REG_0), shift);
++
++				break;
++			}
++
+ 			func = (u8 *) __bpf_call_base + imm32;
+ 			if (tail_call_reachable) {
+ 				LOAD_TAIL_CALL_CNT_PTR(bpf_prog->aux->stack_depth);
+@@ -3678,5 +3697,8 @@ bool bpf_jit_inlines_kfunc_call(s32 imm)
+ {
+ 	if (imm == BPF_CALL_IMM(bpf_get_cpu_cycles))
+ 		return true;
++	if (imm == BPF_CALL_IMM(bpf_cpu_cycles_to_ns) &&
++	    boot_cpu_has(X86_FEATURE_CONSTANT_TSC))
++		return true;
+ 	return false;
+ }
+diff --git a/arch/x86/net/bpf_jit_comp32.c b/arch/x86/net/bpf_jit_comp32.c
+index e6097a371b69..34f762f28c82 100644
+--- a/arch/x86/net/bpf_jit_comp32.c
++++ b/arch/x86/net/bpf_jit_comp32.c
+@@ -12,6 +12,7 @@
+ #include <linux/netdevice.h>
+ #include <linux/filter.h>
+ #include <linux/if_vlan.h>
++#include <linux/clocksource.h>
+ #include <asm/cacheflush.h>
+ #include <asm/set_memory.h>
+ #include <asm/nospec-branch.h>
+@@ -2100,6 +2101,24 @@ static int do_jit(struct bpf_prog *bpf_prog, int *addrs, u8 *image,
+ 					EMIT2(0x0F, 0x31);
+ 					break;
+ 				}
++				if (imm32 == BPF_CALL_IMM(bpf_cpu_cycles_to_ns) &&
++				    boot_cpu_has(X86_FEATURE_CONSTANT_TSC)) {
++					u32 mult, shift;
++
++					clocks_calc_mult_shift(&mult, &shift, tsc_khz,
++							       USEC_PER_SEC, 0);
++
++					/* move parameter to BPF_REG_0 */
++					emit_ia32_mov_r64(true, bpf2ia32[BPF_REG_0],
++							  bpf2ia32[BPF_REG_1], true, true,
++							  &prog, bpf_prog->aux);
++					/* multiply parameter by mut */
++					emit_ia32_mul_i64(bpf2ia32[BPF_REG_0],
++							  mult, true, &prog);
++					/* shift parameter by shift which is less than 64 */
++					emit_ia32_rsh_i64(bpf2ia32[BPF_REG_0],
++							  shift, true, &prog);
++				}
  
-@@ -272,7 +272,7 @@ static int get_build_id_64(struct freader *r, unsigned char *build_id, __u32 *si
- 		return -EINVAL;
+ 				err = emit_kfunc_call(bpf_prog,
+ 						      image + addrs[i],
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index fed5f36d387a..46fa662d95e4 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -3331,6 +3331,7 @@ u64 bpf_get_raw_cpu_id(u64 r1, u64 r2, u64 r3, u64 r4, u64 r5);
+ /* Inlined kfuncs */
+ #if IS_ENABLED(CONFIG_GENERIC_GETTIMEOFDAY)
+ u64 bpf_get_cpu_cycles(void);
++u64 bpf_cpu_cycles_to_ns(u64 cycles);
+ #endif
  
- 	for (i = 0; i < phnum; ++i) {
--		phdr = freader_fetch(r, i * sizeof(Elf64_Phdr), sizeof(Elf64_Phdr));
-+		phdr = freader_fetch(r, sizeof(Elf64_Ehdr) + i * sizeof(Elf64_Phdr), sizeof(Elf64_Phdr));
- 		if (!phdr)
- 			return r->err;
+ #if defined(CONFIG_NET)
+diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+index 5c6c0383ebf4..72d5819e5df2 100644
+--- a/kernel/bpf/helpers.c
++++ b/kernel/bpf/helpers.c
+@@ -25,6 +25,7 @@
+ #include <linux/kasan.h>
+ #if IS_ENABLED(CONFIG_GENERIC_GETTIMEOFDAY)
+ #include <vdso/datapage.h>
++#include <asm/vdso/vsyscall.h>
+ #endif
  
+ #include "../../lib/kstrtox.h"
+@@ -3031,8 +3032,14 @@ __bpf_kfunc u64 bpf_get_cpu_cycles(void)
+ {
+ 	return __arch_get_hw_counter(1, NULL);
+ }
+-#endif
+ 
++__bpf_kfunc u64 bpf_cpu_cycles_to_ns(u64 cycles)
++{
++	const struct vdso_data *vd = __arch_get_k_vdso_data();
++
++	return mul_u64_u32_shr(cycles, vd->mult, vd->shift);
++}
++#endif
+ __bpf_kfunc_end_defs();
+ 
+ BTF_KFUNCS_START(generic_btf_ids)
+@@ -3127,6 +3134,7 @@ BTF_ID_FLAGS(func, bpf_iter_kmem_cache_next, KF_ITER_NEXT | KF_RET_NULL | KF_SLE
+ BTF_ID_FLAGS(func, bpf_iter_kmem_cache_destroy, KF_ITER_DESTROY | KF_SLEEPABLE)
+ #if IS_ENABLED(CONFIG_GENERIC_GETTIMEOFDAY)
+ BTF_ID_FLAGS(func, bpf_get_cpu_cycles, KF_FASTCALL)
++BTF_ID_FLAGS(func, bpf_cpu_cycles_to_ns, KF_FASTCALL)
+ #endif
+ BTF_KFUNCS_END(common_btf_ids)
+ 
+-- 
+2.43.5
+
