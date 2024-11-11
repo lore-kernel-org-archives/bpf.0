@@ -1,56 +1,56 @@
-Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
+Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A12C156644
-	for <bpf@vger.kernel.org>; Mon, 11 Nov 2024 21:29:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58B6F1BAEFC
+	for <bpf@vger.kernel.org>; Mon, 11 Nov 2024 21:29:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731360572; cv=none; b=PCM4p0xaAuJ+BxdTO5aeCdWQIHhiHVLdgonEJ6mJIbSSEvt0//mGOJrViwi/pgQLF9XIyuv68u6HBX0Ttl3G11nVQNec8I+sGkHfxmgKBKnh3aVi7oU+zkstZJy50c74BwfNDq96htziJkzXy9e12/B6eiznlFV2hgAN4wUCb8U=
+	t=1731360575; cv=none; b=hnrKN3oDhlc3UniZ/QRWLiLLFYuALRG8SCNHBAx7HdjDfm9wAk/l0WH82wgsk0WffgtX+Qgfetr/pivTzmVy9eHMsteOmWP0+79I5f5zycAeb6GKLJdoNcADrWTn4UKjgKlcyZy5QC1wO33qjp8ajrd8HLk8zaqdil2j4WGyi2g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731360572; c=relaxed/simple;
-	bh=RSYyNiZIi6mO3JMMfCl1AZGQVGHJvI2MkKk3T0ygrX4=;
+	s=arc-20240116; t=1731360575; c=relaxed/simple;
+	bh=7KjidYkLBcPZ+5VraYK57PAsVIiB/8sTVUkfl0oeW78=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=MNDW57Rc8YjHH1/mntSndbQa5W2oPenovTfUBowgx5z8vox2CEFLKKdnVfgW/oPZiBvDJUP56TufK/fz0VzqbgZ4l03hVsUMMY7cHqPJKGwV5zz+wawbPZPf9VAoRbV65ULdic1LDUH7P7SpwaFEr7trMcJ/uiv0RljgC+V5URs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=R2giizAE; arc=none smtp.client-ip=209.85.218.48
+	 MIME-Version; b=UdJMVGy8kPOW/ffXR4GWxutUBkmiSGloyhzeow1wDQOaZ4rYyZPDwPXdx15fUVcU8jgOegUKIgdRVVAjo4stLlk33HEQ9FAqFhKCpyqbwO4T2vO/JyzeWkfBF/F18sxg+z+fmhxN7ndr/fAooqqeLF/OJOtihG3f1lD1mE8nv8M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LnyMOe+3; arc=none smtp.client-ip=209.85.218.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="R2giizAE"
-Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-a99e3b3a411so1032649566b.0
-        for <bpf@vger.kernel.org>; Mon, 11 Nov 2024 13:29:30 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LnyMOe+3"
+Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-a93c1cc74fdso845853266b.3
+        for <bpf@vger.kernel.org>; Mon, 11 Nov 2024 13:29:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1731360569; x=1731965369; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1731360572; x=1731965372; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=beH5iaxbGlcBFcC2AvDILXcT9XOS9MS2kCicKxJu2cY=;
-        b=R2giizAEiKMJ9JoMglGB5EvTdHD05UHJJS7APQxE4/NuM6P6woRJEJnqVHWbS4jJ3u
-         rtn9BaT/wNOcZxFtEJ1TRDDybJLSjZT9o9cT5FPb8jTT4f5xKWi4mpEadJk+yhVsEXNu
-         +TMA93ir25F8BJsXPabKlLsZmajQbfWcwbYJXCFmPWB9j8iPnMVtDXqpspmAiKJ1gte0
-         XtwWCnhJMABMfwqGxCcZPMcQ9YVv1fE2+yPQDvas7Ue3sDgqbovu6kK3OyOpL8SFnL8P
-         JShqBjGFl8DeSDJV1+l8Fg/gIMWUvWPwmpv+fb6zvlxOH+fmYeuVnP2OLfenQC+tKCrx
-         8mag==
+        bh=NYbybi1xb+8t2tFTa6T9Dlhs2DUIrFn1tCgEK2bmhvE=;
+        b=LnyMOe+3M0nVXA+lJDSiqK83njW0clUD8IuP20ZPdUBFurpWmD7oZrwInsUs1rv3OO
+         lPZeVvzZH7mW+BACJ9DoA5tiTo7L69hvr0rFZa/Fixavfs23cygID5F9Ix6JpVI3VbBR
+         c7fi+HjPjJFst5Wc5BYo5VzFm7Mftglheg08mD8lrpeD3gVS3+cS++HQlYh6XqJsgO6M
+         h128MtK1HLhdgf21mehatwyI5UHeeUm9x7w7b1jhMZ8WBpn7Omgl5eg0CGRVUjROtT6G
+         lOaRRpbw4dV/dRQoFbtLwCjvbbUeKHx7zku+rC8VCsZH3zv708pS71g3e7bG0CjqNnb/
+         dUnQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731360569; x=1731965369;
+        d=1e100.net; s=20230601; t=1731360572; x=1731965372;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=beH5iaxbGlcBFcC2AvDILXcT9XOS9MS2kCicKxJu2cY=;
-        b=bsr4uHjEtgks9sg5K2xhwFqSXbJrL79lI9zXS7/QNLVZZNvmcgvQbAswegnZ0NxgaI
-         WejFyVXL3mnSVsZd0UyFxJ4Ona8rsp0Cx9P1VEhr3LYTnbeLY+N7KMDsO3gfdDfk7u1C
-         9E/HpRU062ABW+kffAiFxrBzF8kHFKa6n0A+0S9jldB89NrIm4e3ctFXtzUIFq5YIdzS
-         ZfDqKZ0lw2xxyln41iuyHwiC+KEE2k55Cylz99v2+hOv5/d1tqoNbkXpVflsDCjcwIiu
-         r++2KTBbC+Gt3PVWsNVqTKjzQH8xYiRiUdDs+uzrMkKhgIqC6iXhwCp7KOnuQMa1/F0q
-         AP6w==
-X-Gm-Message-State: AOJu0Yy+IwaHg19+f8W2tSLkRncXzN9xRuWmG69FLnTci4JbfuWj9uaI
-	0WJ6uy0ktB7B8CnsciMElDfz10nvdVfmw89HE6GFjnH1KruxyfmmLjQTgw==
-X-Google-Smtp-Source: AGHT+IFbZJ6g/U7x2fY8RyjXaWkOWAmF4j6zgxw/V9iN2h+hHXj50NYJqpAXf2hNfewbbHjVXm8sRA==
-X-Received: by 2002:a17:907:1c0f:b0:a9e:df83:ba57 with SMTP id a640c23a62f3a-a9eeca83660mr1352284766b.22.1731360569258;
-        Mon, 11 Nov 2024 13:29:29 -0800 (PST)
+        bh=NYbybi1xb+8t2tFTa6T9Dlhs2DUIrFn1tCgEK2bmhvE=;
+        b=S1tl2PpfYL2EZZa4DiQJFsiXrqMzDsYiS4otXr4d7MctLoPyz8liaw3bf7+eFF5u4G
+         zXMhieZSBdUT6PJ7jnliMOae0sK39AqFmtW/9uJJJ0X0TLJVfpVqHCMabg1cr3+r09xy
+         bw9i3PUouaRYJcweo76ytUHPNL4WCGUZLih92rDZuEY3uykfATL7P45tEYkfjEZOi0Lt
+         ldhzg6FV76ZRMHLZ6X743/Z+MmP6INM8f2T4pUcGeCnLdPhV4cj7RwFL0otsXDYaXRi7
+         1hYk/1VpcxMoSSL9zsIPhDbxkslCHuci4W5dNAzNotFqRIdbNguHxi/sQ1LhzmeE7Wbn
+         deZw==
+X-Gm-Message-State: AOJu0YweVfsLnT8q72gzN96tOxsAV7vE4DncUvWSA/AeqwmoOtS6kI/6
+	5N0uGMq/4KDVpNZ0ogDKOf4AHcQqKxSgyxuMn3hQHSwuI5aq+1oBHXUSrA==
+X-Google-Smtp-Source: AGHT+IHE62kYpVgf17skZnQC+J0KDxhXJ2eeIHCFFT8MCdLaHFL7X9IwxhSJsJfCHMmlSJrQZmR9hg==
+X-Received: by 2002:a17:907:9815:b0:a9a:bcd:b726 with SMTP id a640c23a62f3a-a9eeff25c74mr1376336566b.25.1731360571558;
+        Mon, 11 Nov 2024 13:29:31 -0800 (PST)
 Received: from msi-laptop.thefacebook.com ([2620:10d:c092:500::5:3961])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a9ee0defc3csm629570266b.166.2024.11.11.13.29.27
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a9ee0defc3csm629570266b.166.2024.11.11.13.29.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Nov 2024 13:29:28 -0800 (PST)
+        Mon, 11 Nov 2024 13:29:31 -0800 (PST)
 From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
 To: bpf@vger.kernel.org,
 	ast@kernel.org,
@@ -59,9 +59,9 @@ To: bpf@vger.kernel.org,
 	kafai@meta.com,
 	kernel-team@meta.com
 Cc: Mykyta Yatsenko <yatsenko@meta.com>
-Subject: [PATCH bpf-next v3 1/4] libbpf: introduce errstr() for stringifying errno
-Date: Mon, 11 Nov 2024 21:29:16 +0000
-Message-ID: <20241111212919.368971-2-mykyta.yatsenko5@gmail.com>
+Subject: [PATCH bpf-next v3 3/4] libbpf: stringify errno in log messages in btf*.c
+Date: Mon, 11 Nov 2024 21:29:18 +0000
+Message-ID: <20241111212919.368971-4-mykyta.yatsenko5@gmail.com>
 X-Mailer: git-send-email 2.47.0
 In-Reply-To: <20241111212919.368971-1-mykyta.yatsenko5@gmail.com>
 References: <20241111212919.368971-1-mykyta.yatsenko5@gmail.com>
@@ -75,105 +75,136 @@ Content-Transfer-Encoding: 8bit
 
 From: Mykyta Yatsenko <yatsenko@meta.com>
 
-Add function errstr(int err) that allows converting numeric error codes
-into string representations.
+Convert numeric error codes into the string representations in log
+messages in btf.c and btf_dump.c.
 
 Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
 ---
- tools/lib/bpf/str_error.c | 59 +++++++++++++++++++++++++++++++++++++++
- tools/lib/bpf/str_error.h |  7 +++++
- 2 files changed, 66 insertions(+)
+ tools/lib/bpf/btf.c      | 26 ++++++++++++++------------
+ tools/lib/bpf/btf_dump.c |  3 ++-
+ 2 files changed, 16 insertions(+), 13 deletions(-)
 
-diff --git a/tools/lib/bpf/str_error.c b/tools/lib/bpf/str_error.c
-index 5e6a1e27ddf9..cf817c0c7ddd 100644
---- a/tools/lib/bpf/str_error.c
-+++ b/tools/lib/bpf/str_error.c
-@@ -5,6 +5,10 @@
- #include <errno.h>
- #include "str_error.h"
+diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
+index e9673c0ecbe7..8befb8103e32 100644
+--- a/tools/lib/bpf/btf.c
++++ b/tools/lib/bpf/btf.c
+@@ -22,6 +22,7 @@
+ #include "libbpf_internal.h"
+ #include "hashmap.h"
+ #include "strset.h"
++#include "str_error.h"
  
-+#ifndef ENOTSUPP
-+#define ENOTSUPP	524
-+#endif
-+
- /* make sure libbpf doesn't use kernel-only integer typedefs */
- #pragma GCC poison u8 u16 u32 u64 s8 s16 s32 s64
- 
-@@ -31,3 +35,58 @@ char *libbpf_strerror_r(int err, char *dst, int len)
+ #define BTF_MAX_NR_TYPES 0x7fffffffU
+ #define BTF_MAX_STR_OFFSET 0x7fffffffU
+@@ -1179,7 +1180,7 @@ static struct btf *btf_parse_elf(const char *path, struct btf *base_btf,
+ 	fd = open(path, O_RDONLY | O_CLOEXEC);
+ 	if (fd < 0) {
+ 		err = -errno;
+-		pr_warn("failed to open %s: %s\n", path, strerror(errno));
++		pr_warn("failed to open %s: %s\n", path, errstr(err));
+ 		return ERR_PTR(err);
  	}
- 	return dst;
- }
-+
-+const char *errstr(int err)
-+{
-+	static __thread char buf[12];
-+
-+	if (err > 0)
-+		err = -err;
-+
-+	switch (err) {
-+	case -EINVAL: return "-EINVAL";
-+	case -EPERM: return "-EPERM";
-+	case -ENXIO: return "-ENXIO";
-+	case -ENOMEM: return "-ENOMEM";
-+	case -ENOENT: return "-ENOENT";
-+	case -E2BIG: return "-E2BIG";
-+	case -EEXIST: return "-EEXIST";
-+	case -EFAULT: return "-EFAULT";
-+	case -ENOSPC: return "-ENOSPC";
-+	case -EACCES: return "-EACCES";
-+	case -EAGAIN: return "-EAGAIN";
-+	case -EBADF: return "-EBADF";
-+	case -ENAMETOOLONG: return "-ENAMETOOLONG";
-+	case -ESRCH: return "-ESRCH";
-+	case -EBUSY: return "-EBUSY";
-+	case -ENOTSUPP: return "-ENOTSUPP";
-+	case -EPROTO: return "-EPROTO";
-+	case -ERANGE: return "-ERANGE";
-+	case -EMSGSIZE: return "-EMSGSIZE";
-+	case -EINTR: return "-EINTR";
-+	case -ENODATA: return "-ENODATA";
-+	case -ENODEV: return "-ENODEV";
-+	case -ENOLINK:return "-ENOLINK";
-+	case -EIO: return "-EIO";
-+	case -EUCLEAN: return "-EUCLEAN";
-+	case -EDOM: return "-EDOM";
-+	case -ELOOP: return "-ELOOP";
-+	case -EPROTONOSUPPORT: return "-EPROTONOSUPPORT";
-+	case -EDEADLK: return "-EDEADLK";
-+	case -EOVERFLOW: return "-EOVERFLOW";
-+	case -EOPNOTSUPP: return "-EOPNOTSUPP";
-+	case -EINPROGRESS: return "-EINPROGRESS";
-+	case -EBADFD: return "-EBADFD";
-+	case -EADDRINUSE: return "-EADDRINUSE";
-+	case -EADDRNOTAVAIL: return "-EADDRNOTAVAIL";
-+	case -ECANCELED: return "-ECANCELED";
-+	case -EILSEQ: return "-EILSEQ";
-+	case -EMFILE: return "-EMFILE";
-+	case -ENOTTY: return "-ENOTTY";
-+	case -EALREADY: return "-EALREADY";
-+	case -ECHILD: return "-ECHILD";
-+	default:
-+		snprintf(buf, sizeof(buf), "%d", err);
-+		return buf;
-+	}
-+}
-diff --git a/tools/lib/bpf/str_error.h b/tools/lib/bpf/str_error.h
-index 626d7ffb03d6..66ffebde0684 100644
---- a/tools/lib/bpf/str_error.h
-+++ b/tools/lib/bpf/str_error.h
-@@ -6,4 +6,11 @@
  
- char *libbpf_strerror_r(int err, char *dst, int len);
+@@ -1445,7 +1446,7 @@ int btf_load_into_kernel(struct btf *btf,
+ 			goto retry_load;
  
-+/**
-+ * @brief **errstr()** returns string corresponding to numeric errno
-+ * @param err negative numeric errno
-+ * @return pointer to string representation of the errno, that is invalidated
-+ * upon the next call.
-+ */
-+const char *errstr(int err);
- #endif /* __LIBBPF_STR_ERROR_H */
+ 		err = -errno;
+-		pr_warn("BTF loading error: %d\n", err);
++		pr_warn("BTF loading error: %s\n", errstr(err));
+ 		/* don't print out contents of custom log_buf */
+ 		if (!log_buf && buf[0])
+ 			pr_warn("-- BEGIN BTF LOAD LOG ---\n%s\n-- END BTF LOAD LOG --\n", buf);
+@@ -3464,42 +3465,42 @@ int btf__dedup(struct btf *btf, const struct btf_dedup_opts *opts)
+ 
+ 	err = btf_dedup_prep(d);
+ 	if (err) {
+-		pr_debug("btf_dedup_prep failed:%d\n", err);
++		pr_debug("btf_dedup_prep failed: %s\n", errstr(err));
+ 		goto done;
+ 	}
+ 	err = btf_dedup_strings(d);
+ 	if (err < 0) {
+-		pr_debug("btf_dedup_strings failed:%d\n", err);
++		pr_debug("btf_dedup_strings failed: %s\n", errstr(err));
+ 		goto done;
+ 	}
+ 	err = btf_dedup_prim_types(d);
+ 	if (err < 0) {
+-		pr_debug("btf_dedup_prim_types failed:%d\n", err);
++		pr_debug("btf_dedup_prim_types failed: %s\n", errstr(err));
+ 		goto done;
+ 	}
+ 	err = btf_dedup_struct_types(d);
+ 	if (err < 0) {
+-		pr_debug("btf_dedup_struct_types failed:%d\n", err);
++		pr_debug("btf_dedup_struct_types failed: %s\n", errstr(err));
+ 		goto done;
+ 	}
+ 	err = btf_dedup_resolve_fwds(d);
+ 	if (err < 0) {
+-		pr_debug("btf_dedup_resolve_fwds failed:%d\n", err);
++		pr_debug("btf_dedup_resolve_fwds failed: %s\n", errstr(err));
+ 		goto done;
+ 	}
+ 	err = btf_dedup_ref_types(d);
+ 	if (err < 0) {
+-		pr_debug("btf_dedup_ref_types failed:%d\n", err);
++		pr_debug("btf_dedup_ref_types failed: %s\n", errstr(err));
+ 		goto done;
+ 	}
+ 	err = btf_dedup_compact_types(d);
+ 	if (err < 0) {
+-		pr_debug("btf_dedup_compact_types failed:%d\n", err);
++		pr_debug("btf_dedup_compact_types failed: %s\n", errstr(err));
+ 		goto done;
+ 	}
+ 	err = btf_dedup_remap_types(d);
+ 	if (err < 0) {
+-		pr_debug("btf_dedup_remap_types failed:%d\n", err);
++		pr_debug("btf_dedup_remap_types failed: %s\n", errstr(err));
+ 		goto done;
+ 	}
+ 
+@@ -5218,7 +5219,8 @@ struct btf *btf__load_vmlinux_btf(void)
+ 		btf = btf__parse(sysfs_btf_path, NULL);
+ 		if (!btf) {
+ 			err = -errno;
+-			pr_warn("failed to read kernel BTF from '%s': %d\n", sysfs_btf_path, err);
++			pr_warn("failed to read kernel BTF from '%s': %s\n",
++				sysfs_btf_path, errstr(err));
+ 			return libbpf_err_ptr(err);
+ 		}
+ 		pr_debug("loaded kernel BTF from '%s'\n", sysfs_btf_path);
+@@ -5235,7 +5237,7 @@ struct btf *btf__load_vmlinux_btf(void)
+ 
+ 		btf = btf__parse(path, NULL);
+ 		err = libbpf_get_error(btf);
+-		pr_debug("loading kernel BTF '%s': %d\n", path, err);
++		pr_debug("loading kernel BTF '%s': %s\n", path, errstr(err));
+ 		if (err)
+ 			continue;
+ 
+diff --git a/tools/lib/bpf/btf_dump.c b/tools/lib/bpf/btf_dump.c
+index 468392f9882d..a3fc6908f6c9 100644
+--- a/tools/lib/bpf/btf_dump.c
++++ b/tools/lib/bpf/btf_dump.c
+@@ -21,6 +21,7 @@
+ #include "hashmap.h"
+ #include "libbpf.h"
+ #include "libbpf_internal.h"
++#include "str_error.h"
+ 
+ static const char PREFIXES[] = "\t\t\t\t\t\t\t\t\t\t\t\t\t";
+ static const size_t PREFIX_CNT = sizeof(PREFIXES) - 1;
+@@ -1304,7 +1305,7 @@ static void btf_dump_emit_type_decl(struct btf_dump *d, __u32 id,
+ 			 * chain, restore stack, emit warning, and try to
+ 			 * proceed nevertheless
+ 			 */
+-			pr_warn("not enough memory for decl stack: %d\n", err);
++			pr_warn("not enough memory for decl stack: %s\n", errstr(err));
+ 			d->decl_stack_cnt = stack_start;
+ 			return;
+ 		}
 -- 
 2.47.0
 
