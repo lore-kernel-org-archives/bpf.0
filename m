@@ -1,21 +1,20 @@
 Received: from 66-220-155-178.mail-mxout.facebook.com (66-220-155-178.mail-mxout.facebook.com [66.220.155.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0074520651E
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00801206944
 	for <bpf@vger.kernel.org>; Tue, 12 Nov 2024 16:39:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.155.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731429561; cv=none; b=OetD7aAE+Z73KSPWTHPH5nHjZoN+2AbgHwo6zZHJmjfot5cJOwdrFrCO5zc9dLzMYW4XYo6ZhMBYZCEp4rKta3gjiT+vESnvt8vvELmUQXtLNiQcBkyqDmVqWSpt6CGofIz4O66mNQCglvhVtn0YcdTfLpu7tiVk7ZhX6UKk3Ws=
+	t=1731429561; cv=none; b=tSwucO/L0qHXcRaXHd5Z35cDHoi5SxREgtqGm4yWPcpXpQjOD1l8oUSXxNqnZV7SYp1yzIgDsIgHIcoaVPR7KzqeyXJPTpQURxVSWU/PVIxs6GXbqp2deQnTZK0iYnywb+arDSN3Bqmx6xlWCbpwmI9lhQjzv0ToU8zsyK+Ye9Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1731429561; c=relaxed/simple;
-	bh=ApM6jTYMNEP7rwBAJhWlCxSLrXFH0f2OcZ0rpXzUxbY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=LSEyXMFuh+bSGZ52BSQcY34VUGZAMYOJ0JE46K9jYdbje/TPcZfml2wl6yVqlVWwb3/9EfNtCPiJXJuHepwfxA6S5+9GkRS9ZnWHJFqoopZ9V1RzRGLLA3TPhjF8dncquk42yMMYFwjX6AcvbShUJTwapTEQe5LR1QRTGMWXEgs=
+	bh=FMaDkt4KE7bgT/1Msd2G9MyMAA/+yiV08+fWss3f69M=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=kqQ709zYjTzN6MsNoeDi423OyuOD+nu/XQGa5Ru34U1aLmjdHC+k6SgB7CFbwIlFtzaspYmajiAKeSBQAFkfvOGsRedRfz23rFwiyOZ6nN5LbgCAl/J7giDTelX96nV0QSioAdfDbqCpv7q8TwoMBg8RdXGv69IN10bap5ak3dA=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.155.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
 Received: by devbig309.ftw3.facebook.com (Postfix, from userid 128203)
-	id 583E2AFAF890; Tue, 12 Nov 2024 08:39:12 -0800 (PST)
+	id 23201AFAF84A; Tue, 12 Nov 2024 08:39:02 -0800 (PST)
 From: Yonghong Song <yonghong.song@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -24,12 +23,10 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	kernel-team@fb.com,
 	Martin KaFai Lau <martin.lau@kernel.org>,
 	Tejun Heo <tj@kernel.org>
-Subject: [PATCH bpf-next v12 2/7] bpf: Enable private stack for eligible subprogs
-Date: Tue, 12 Nov 2024 08:39:12 -0800
-Message-ID: <20241112163912.2224007-1-yonghong.song@linux.dev>
+Subject: [PATCH bpf-next v12 0/7] bpf: Support private stack for bpf progs
+Date: Tue, 12 Nov 2024 08:39:02 -0800
+Message-ID: <20241112163902.2223011-1-yonghong.song@linux.dev>
 X-Mailer: git-send-email 2.43.5
-In-Reply-To: <20241112163902.2223011-1-yonghong.song@linux.dev>
-References: <20241112163902.2223011-1-yonghong.song@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -38,68 +35,183 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 
-If private stack is used by any subprog, set that subprog
-prog->aux->jits_use_priv_stack to be true so later jit can allocate
-private stack for that subprog properly.
+The main motivation for private stack comes from nested scheduler in
+sched-ext from Tejun. The basic idea is that
+ - each cgroup will its own associated bpf program,
+ - bpf program with parent cgroup will call bpf programs
+   in immediate child cgroups.
 
-Also set env->prog->aux->jits_use_priv_stack to be true if
-any subprog uses private stack. This is a use case for a
-single main prog (no subprogs) to use private stack, and
-also a use case for later struct-ops progs where
-env->prog->aux->jits_use_priv_stack will enable recursion
-check if any subprog uses private stack.
+Let us say we have the following cgroup hierarchy:
+  root_cg (prog0):
+    cg1 (prog1):
+      cg11 (prog11):
+        cg111 (prog111)
+        cg112 (prog112)
+      cg12 (prog12):
+        cg121 (prog121)
+        cg122 (prog122)
+    cg2 (prog2):
+      cg21 (prog21)
+      cg22 (prog22)
+      cg23 (prog23)
 
-Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
----
- include/linux/bpf.h   |  1 +
- kernel/bpf/verifier.c | 11 +++++++++++
- 2 files changed, 12 insertions(+)
+In the above example, prog0 will call a kfunc which will call prog1 and
+prog2 to get sched info for cg1 and cg2 and then the information is
+summarized and sent back to prog0. Similarly, prog11 and prog12 will be
+invoked in the kfunc and the result will be summarized and sent back to
+prog1, etc. The following illustrates a possible call sequence:
+   ... -> bpf prog A -> kfunc -> ops.<callback_fn> (bpf prog B) ...
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 1b84613b10ac..15f20d508174 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -1523,6 +1523,7 @@ struct bpf_prog_aux {
- 	bool exception_cb;
- 	bool exception_boundary;
- 	bool is_extended; /* true if extended by freplace program */
-+	bool jits_use_priv_stack;
- 	u64 prog_array_member_cnt; /* counts how many times as member of prog_a=
-rray */
- 	struct mutex ext_mutex; /* mutex for is_extended and prog_array_member_=
-cnt */
- 	struct bpf_arena *arena;
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index fb23793ac53d..176d19ad9d07 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -6334,6 +6334,14 @@ static int check_max_stack_depth(struct bpf_verifi=
-er_env *env)
- 				return ret;
- 		}
- 	}
-+
-+	for (int i =3D 0; i < env->subprog_cnt; i++) {
-+		if (si[i].priv_stack_mode =3D=3D PRIV_STACK_ADAPTIVE) {
-+			env->prog->aux->jits_use_priv_stack =3D true;
-+			break;
-+		}
-+	}
-+
- 	return 0;
- }
-=20
-@@ -20274,6 +20282,9 @@ static int jit_subprogs(struct bpf_verifier_env *=
-env)
-=20
- 		func[i]->aux->name[0] =3D 'F';
- 		func[i]->aux->stack_depth =3D env->subprog_info[i].stack_depth;
-+		if (env->subprog_info[i].priv_stack_mode =3D=3D PRIV_STACK_ADAPTIVE)
-+			func[i]->aux->jits_use_priv_stack =3D true;
-+
- 		func[i]->jit_requested =3D 1;
- 		func[i]->blinding_requested =3D prog->blinding_requested;
- 		func[i]->aux->kfunc_tab =3D prog->aux->kfunc_tab;
+Currently, for each thread, the x86 kernel allocate 16KB stack. Each
+bpf program (including its subprograms) has maximum 512B stack size to
+avoid potential stack overflow. Nested bpf programs further increase the
+risk of stack overflow. To avoid potential stack overflow caused by bpf
+programs, this patch set supported private stack and bpf program stack
+space is allocated during jit time. Using private stack for bpf progs
+can reduce or avoid potential kernel stack overflow.
+
+Currently private stack is applied to tracing programs like kprobe/uprobe=
+,
+perf_event, tracepoint, raw tracepoint and struct_ops progs.
+Tracing progs enable private stack if any subprog stack size is more
+than a threshold (i.e. 64B). Struct-ops progs enable private stack
+based on particular struct op implementation which can enable private
+stack before verification at per-insn level. Struct-ops progs have
+the same treatment as tracing progs w.r.t when to enable private stack.
+
+For all these progs, the kernel will do recursion check (no nesting for
+per prog per cpu) to ensure that private stack won't be overwritten.
+The bpf_prog_aux struct has a callback func recursion_detected() which
+can be implemented by kernel subsystem to synchronously detect recursion,
+report error, etc.
+
+Only x86_64 arch supports private stack now. It can be extended to other
+archs later. Please see each individual patch for details.
+
+Change logs:
+  v11 -> v12:
+    - v11 link: https://lore.kernel.org/bpf/20241109025312.148539-1-yongh=
+ong.song@linux.dev/
+    - Fix a bug where allocated percpu space is less than actual private =
+stack.
+    - Add guard memory (before and after actual prog stack) to detect pot=
+ential
+      underflow/overflow.
+  v10 -> v11:
+    - v10 link: https://lore.kernel.org/bpf/20241107024138.3355687-1-yong=
+hong.song@linux.dev/
+    - Use two bool variables, priv_stack_requested (used by struct-ops on=
+ly) and
+      jits_use_priv_stack, in order to make code cleaner.
+    - Set env->prog->aux->jits_use_priv_stack to true if any subprog uses=
+ private stack.
+      This is for struct-ops use case to kick in recursion protection.
+  v9 -> v10:
+    - v9 link: https://lore.kernel.org/bpf/20241104193455.3241859-1-yongh=
+ong.song@linux.dev/
+    - Simplify handling async cbs by making those async cb related progs =
+using normal
+      kernel stack.
+    - Do percpu allocation in jit instead of verifier.
+  v8 -> v9:
+    - v8 link: https://lore.kernel.org/bpf/20241101030950.2677215-1-yongh=
+ong.song@linux.dev/
+    - Use enum to express priv stack mode.
+    - Use bits in bpf_subprog_info struct to do subprog recursion check b=
+etween
+      main/async and async subprogs.
+    - Fix potential memory leak.
+    - Rename recursion detection func from recursion_skipped() to recursi=
+on_detected().
+  v7 -> v8:
+    - v7 link: https://lore.kernel.org/bpf/20241029221637.264348-1-yongho=
+ng.song@linux.dev/
+    - Add recursion_skipped() callback func to bpf_prog->aux structure su=
+ch that if
+      a recursion miss happened and bpf_prog->aux->recursion_skipped is n=
+ot NULL, the
+      callback fn will be called so the subsystem can do proper action ba=
+sed on their
+      respective design.
+  v6 -> v7:
+    - v6 link: https://lore.kernel.org/bpf/20241020191341.2104841-1-yongh=
+ong.song@linux.dev/
+    - Going back to do private stack allocation per prog instead per subt=
+ree. This can
+      simplify implementation and avoid verifier complexity.
+    - Handle potential nested subprog run if async callback exists.
+    - Use struct_ops->check_member() callback to set whether a particular=
+ struct-ops
+      prog wants private stack or not.
+  v5 -> v6:
+    - v5 link: https://lore.kernel.org/bpf/20241017223138.3175885-1-yongh=
+ong.song@linux.dev/
+    - Instead of using (or not using) private stack at struct_ops level,
+      each prog in struct_ops can decide whether to use private stack or =
+not.
+  v4 -> v5:
+    - v4 link: https://lore.kernel.org/bpf/20241010175552.1895980-1-yongh=
+ong.song@linux.dev/
+    - Remove bpf_prog_call() related implementation.
+    - Allow (opt-in) private stack for sched-ext progs.
+  v3 -> v4:
+    - v3 link: https://lore.kernel.org/bpf/20240926234506.1769256-1-yongh=
+ong.song@linux.dev/
+      There is a long discussion in the above v3 link trying to allow pri=
+vate
+      stack to be used by kernel functions in order to simplify implement=
+ation.
+      But unfortunately we didn't find a workable solution yet, so we ret=
+urn
+      to the approach where private stack is only used by bpf programs.
+    - Add bpf_prog_call() kfunc.
+  v2 -> v3:
+    - Instead of per-subprog private stack allocation, allocate private
+      stacks at main prog or callback entry prog. Subprogs not main or ca=
+llback
+      progs will increment the inherited stack pointer to be their
+      frame pointer.
+    - Private stack allows each prog max stack size to be 512 bytes, inte=
+ad
+      of the whole prog hierarchy to be 512 bytes.
+    - Add some tests.
+
+Yonghong Song (7):
+  bpf: Find eligible subprogs for private stack support
+  bpf: Enable private stack for eligible subprogs
+  bpf, x86: Avoid repeated usage of bpf_prog->aux->stack_depth
+  bpf, x86: Support private stack in jit
+  selftests/bpf: Add tracing prog private stack tests
+  bpf: Support private stack for struct_ops progs
+  selftests/bpf: Add struct_ops prog private stack tests
+
+ arch/x86/net/bpf_jit_comp.c                   | 147 +++++++++-
+ include/linux/bpf.h                           |   4 +
+ include/linux/bpf_verifier.h                  |   8 +
+ include/linux/filter.h                        |   1 +
+ kernel/bpf/core.c                             |   5 +
+ kernel/bpf/trampoline.c                       |   4 +
+ kernel/bpf/verifier.c                         | 112 +++++++-
+ .../selftests/bpf/bpf_testmod/bpf_testmod.c   | 104 +++++++
+ .../selftests/bpf/bpf_testmod/bpf_testmod.h   |   5 +
+ .../bpf/prog_tests/struct_ops_private_stack.c | 106 +++++++
+ .../selftests/bpf/prog_tests/verifier.c       |   2 +
+ .../bpf/progs/struct_ops_private_stack.c      |  62 ++++
+ .../bpf/progs/struct_ops_private_stack_fail.c |  62 ++++
+ .../progs/struct_ops_private_stack_recur.c    |  50 ++++
+ .../bpf/progs/verifier_private_stack.c        | 272 ++++++++++++++++++
+ 15 files changed, 930 insertions(+), 14 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/struct_ops_pri=
+vate_stack.c
+ create mode 100644 tools/testing/selftests/bpf/progs/struct_ops_private_=
+stack.c
+ create mode 100644 tools/testing/selftests/bpf/progs/struct_ops_private_=
+stack_fail.c
+ create mode 100644 tools/testing/selftests/bpf/progs/struct_ops_private_=
+stack_recur.c
+ create mode 100644 tools/testing/selftests/bpf/progs/verifier_private_st=
+ack.c
+
 --=20
 2.43.5
 
