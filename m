@@ -1,100 +1,110 @@
-Received: from out-189.mta1.migadu.com (out-189.mta1.migadu.com [95.215.58.189])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E38821A710
-	for <bpf@vger.kernel.org>; Tue, 12 Nov 2024 23:26:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.189
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86F7921B42A;
+	Tue, 12 Nov 2024 23:43:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731454016; cv=none; b=elU8iXklL9/9RgrnauIumhggkBzImHmSv8jOX1vW4AaWknvVQM24nnO6KtGoJFmVp/Vam3eWVNOt5g8C+IwW/jG+EzctAFgoQqBo0O2ub8M8hyP7FlrGSwDeGQB8bTszfG4b7E8ZMtFll6XwnW6vWzX5aFlCXqZz3szED7NlNIQ=
+	t=1731455015; cv=none; b=j8dbDqVdufa5P3CjkKl6Ga9m9Qj+IkALooOO/XJXEvH11PnPzQvgYhuMZuZU9Ro9oJ3mkHMCk+cAix+GlF3YQ/uQAPvFs7UDZJesgiHZzpRW93n5zMfmg7u9EhJo+TUSSm3TGpkbRftMWh/xnMXB5ZxtSCz9bUhSWfkpLoqmf08=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731454016; c=relaxed/simple;
-	bh=8kMaQixG7RxCy4KI4oHAOvzbh9jRezSBR49xHjKZYbY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=mCv7GmKh7lTZ8XKEYP2SJA1IfwpJ2Lg2TwtbpJbnVDhYNJ5AT1LMix2gzNZDrKauBGwn+qFM8Mzn/KP+0CWAscnsHre+p1ywkdI+cZDXB2iNdnthtvPoY4OeGxTlRZyapCXKmYbSGC6p9f1RE5xCMH+o+6568soko5yrd4l/CFk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=fIFZlYOh; arc=none smtp.client-ip=95.215.58.189
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1731455015; c=relaxed/simple;
+	bh=hb1Htn+5sDXBHE+CTAnltprKQkxsZPkpf1Cx8nA+0gE=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=pBulwNb+pcxRZcRXusbTpg9apV43f4tpYufQu1jncve/zhVKln6Qdz9pB8BZ1yIeFBezaTZFroQUBnz3aHDgIyJFyLUwo6cpYB3vzjlkR4hL4IxEBXULu3zO/3KZDCL91K+6Ka93wgWa/gCy2o062IHHtdOAhR+1C3Sw9HSQSL8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=URFA3fSM; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="fIFZlYOh"
-Message-ID: <c2239508-6d00-4176-b0d6-3e07e06a367f@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1731454012;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=2S8Z8cF1RQIyQ6StHC2v3AQfecASJCXdndvixzbj32M=;
-	b=fIFZlYOhSL9R8UhiJvythCYpiTEQLGqSsgbJ39dznH74qaXM4yVllETK51FLpKWYHnnhlA
-	kH3pJTP7wTAwJ41LHtYdD/O2W7OdtkslYnXaUXALZ+o+0J171G+UebRSjg+0Xm2R/IK/wT
-	OEjAg+OnhMderQoxShHiJRuGqpuBoAM=
-Date: Tue, 12 Nov 2024 15:26:43 -0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="URFA3fSM"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60632C4CECD;
+	Tue, 12 Nov 2024 23:43:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1731455014;
+	bh=hb1Htn+5sDXBHE+CTAnltprKQkxsZPkpf1Cx8nA+0gE=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=URFA3fSMK8EIXeMZ0vESdJGmupyx9D8vAPUB2v7VtD4SV3JlPsmGkiFYDVfe0HMji
+	 dr9JJqLtxB5bvSYy06WtXI3pQmfjizEUnvtj7Ykc8X3P38HQr9HUD3ftqn/PmQMVlk
+	 aP/kjOUUuRH8Al20dwBf3TzGKszrhzLYAGnBQ0mZRZQ5vfFPCF+QBcyJGfFXOHbDLi
+	 wKv0beyyMkHH2s9Sl58ock67+jA6Ujo0pKFBULkpn0xbSu48ARN5croBQpLE4OGn6c
+	 Xj9Beedm7j8H1lBw09yxfHshaUidSi8UTNK0q3WehymSJqjEeYxZ8gMM4j9SvJNtOX
+	 vJn3V8okTmEsg==
+Date: Wed, 13 Nov 2024 08:43:25 +0900
+From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To: Steven Rostedt <rostedt@goodmis.org>
+Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>, Florent Revest
+ <revest@chromium.org>, linux-trace-kernel@vger.kernel.org, LKML
+ <linux-kernel@vger.kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>,
+ bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>, Jiri Olsa
+ <jolsa@kernel.org>, Alan Maguire <alan.maguire@oracle.com>, Mark Rutland
+ <mark.rutland@arm.com>, linux-arch@vger.kernel.org, Catalin Marinas
+ <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Huacai Chen
+ <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>, Paul Walmsley
+ <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou
+ <aou@eecs.berkeley.edu>, Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik
+ <gor@linux.ibm.com>, Alexander Gordeev <agordeev@linux.ibm.com>, Christian
+ Borntraeger <borntraeger@linux.ibm.com>, Sven Schnelle
+ <svens@linux.ibm.com>, Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar
+ <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, Dave Hansen
+ <dave.hansen@linux.intel.com>, x86@kernel.org, "H. Peter Anvin"
+ <hpa@zytor.com>, Arnd Bergmann <arnd@arndb.de>, Mathieu Desnoyers
+ <mathieu.desnoyers@efficios.com>
+Subject: Re: [PATCH v18 12/17] fprobe: Add fprobe_header encoding feature
+Message-Id: <20241113084325.86ce3d6bb44e7d67f5008825@kernel.org>
+In-Reply-To: <20241112094437.59848631@gandalf.local.home>
+References: <172991731968.443985.4558065903004844780.stgit@devnote2>
+	<172991747946.443985.11014834036464028393.stgit@devnote2>
+	<20241101102212.5e9d74d9@gandalf.local.home>
+	<20241110001054.b0a5afb2d7bb1c09b4bd6b0b@kernel.org>
+	<20241112094437.59848631@gandalf.local.home>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Subject: Re: [PATCH v2 bpf-next 3/4] bpf: Add recursion prevention logic for
- inode storage
-To: Song Liu <song@kernel.org>
-Cc: bpf@vger.kernel.org, linux-fsdevel@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org,
- kernel-team@meta.com, andrii@kernel.org, eddyz87@gmail.com, ast@kernel.org,
- daniel@iogearbox.net, viro@zeniv.linux.org.uk, brauner@kernel.org,
- jack@suse.cz, kpsingh@kernel.org, mattbobrowski@google.com,
- amir73il@gmail.com, repnop@google.com, jlayton@kernel.org,
- josef@toxicpanda.com, mic@digikod.net, gnoack@google.com
-References: <20241112083700.356299-1-song@kernel.org>
- <20241112083700.356299-4-song@kernel.org>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Martin KaFai Lau <martin.lau@linux.dev>
-In-Reply-To: <20241112083700.356299-4-song@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
 
-On 11/12/24 12:36 AM, Song Liu wrote:
-> +static void *__bpf_inode_storage_get(struct bpf_map *map, struct inode *inode,
-> +				     void *value, u64 flags, gfp_t gfp_flags, bool nobusy)
->   {
->   	struct bpf_local_storage_data *sdata;
->   
-> -	WARN_ON_ONCE(!bpf_rcu_lock_held());
-> -	if (flags & ~(BPF_LOCAL_STORAGE_GET_F_CREATE))
-> -		return (unsigned long)NULL;
-> -
-> +	/* explicitly check that the inode not NULL */
->   	if (!inode)
-> -		return (unsigned long)NULL;
-> +		return NULL;
->   
->   	sdata = inode_storage_lookup(inode, map, true);
+On Tue, 12 Nov 2024 09:44:37 -0500
+Steven Rostedt <rostedt@goodmis.org> wrote:
 
-s/true/nobusy/
+> On Sun, 10 Nov 2024 00:10:54 +0900
+> Masami Hiramatsu (Google) <mhiramat@kernel.org> wrote:
+> 
+> > > > +++ b/arch/x86/include/asm/fprobe.h
+> > > > @@ -0,0 +1,9 @@
+> > > > +/* SPDX-License-Identifier: GPL-2.0 */
+> > > > +#ifndef _ASM_X86_FPROBE_H
+> > > > +#define _ASM_X86_FPROBE_H
+> > > > +
+> > > > +#ifdef CONFIG_64BIT
+> > > > +#include <asm-generic/fprobe.h>
+> > > > +#endif
+> > > > +
+> > > > +#endif /* _ASM_X86_FPROBE_H */
+> > > > \ No newline at end of file  
+> > > 
+> > > Same for the above.  
+> > 
+> > OK, but x86 and riscv, we need this default template on 64bit only.
+> > So those may keep it, right?
+> 
+> Hmm, I wonder if we could just add:
+> 
+>   generic-$(CONFIG_X86_32)
+> 
+> But since I don't see that used anywhere, we may need this for archs that
+> partially have it.
 
->   	if (sdata)
-> -		return (unsigned long)sdata->data;
-> +		return sdata->data;
->   
-> -	/* This helper must only called from where the inode is guaranteed
-> -	 * to have a refcount and cannot be freed.
-> -	 */
-> -	if (flags & BPF_LOCAL_STORAGE_GET_F_CREATE) {
-> +	/* only allocate new storage, when the inode is refcounted */
-> +	if (atomic_read(&inode->i_count) &&
-> +	    flags & BPF_LOCAL_STORAGE_GET_F_CREATE) {
+Since this mask is not available on 32bit (since 32-4 = 28bit is 256MB,
+which is too small for kernel space), I checked CONFIG_64BIT in 
+asm-generic header in v19. So now I can use generic-y for most
+architecture.
 
-	    (flags & BPF_LOCAL_STORAGE_GET_F_CREATE) && nobusy) {
+Thank you,
 
->   		sdata = bpf_local_storage_update(
->   			inode, (struct bpf_local_storage_map *)map, value,
->   			BPF_NOEXIST, false, gfp_flags);
-> -		return IS_ERR(sdata) ? (unsigned long)NULL :
-> -					     (unsigned long)sdata->data;
-> +		return IS_ERR(sdata) ? NULL : sdata->data;
->   	}
->   
-> -	return (unsigned long)NULL;
-> +	return NULL;
-> +}
+> 
+> -- Steve
+
+
+-- 
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
