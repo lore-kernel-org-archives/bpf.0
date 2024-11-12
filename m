@@ -1,111 +1,178 @@
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E75691FCF6C
-	for <bpf@vger.kernel.org>; Tue, 12 Nov 2024 23:46:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10C2620ADC6;
+	Tue, 12 Nov 2024 23:49:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731455177; cv=none; b=g5NhwLC/iKZM3u5oGQZxyZagRdZqdwZD39rP3R5aV9v7EyjcCC/zwd2v1Sn8iCXDGesD6t+nTpen/SMtTghUua5S7/WtIruulsBqYT3lxhXgvfSlNohnZd8jCtIIZxgPshSyK+rEPGqGqDBykcAg6zpV4JJtIJ1vlZLEc19MXoU=
+	t=1731455341; cv=none; b=sW3sp4w1zRDFUwHgSksZx/xsvv6cgpYeuiJi0Ii2ZRyAdOuB27VP+i+kyY529nObPG75LsCmxCCXdxQJL/UgnTDMhMz2lTKLGyhEgCJiS3F+OSeXX9Q2gPsZ/k8/7PqPdBw0tuVunz0Fioec7EAg4motpa05Rf7jVsrkDyK6Si0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731455177; c=relaxed/simple;
-	bh=isA3xXAK4WAIqbq3kII4RHKCuCkMlTdXmGPlOjqgYuA=;
-	h=Message-ID:Date:MIME-Version:To:From:Subject:Content-Type; b=pmIqJM8UANoTRTNjbKVcpzSLNPGQ38enjISAYYVSLzlG5fRnzw8iD1sD8FCovPA7xDZjLtHg5hZlxR2ZbZjFp5slkR+NphUTQvH7dyXVmOh4rR0EsOMr7ggTf13zaqER4GSFP+96KD6nkj4BFutIoxU5kCgWUKyeSRgEWk4yVw0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=RHTHpKsX; arc=none smtp.client-ip=213.133.104.62
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
+	s=arc-20240116; t=1731455341; c=relaxed/simple;
+	bh=cDlrFqORAmp5emql+69NznXzQgn4UDJSwI2wrBQJcFc=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=bPCra+PvJMIBKXpwJSsqf8jCLBQfax0ow75+xl8EGvHE/yq8j5SOVT8H66+nlfIcpnJ3RJVhnJf7rGG7UQ7GU90k28Id+/uEH++e8AR3KO93T/Rt4f+xMv6KqMnN1/kTedmA1xybX/Iw92JmopBNfk7xezOCm8E5Hl5gLwQWgK8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WuFVYI1+; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="RHTHpKsX"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
-	Subject:From:To:MIME-Version:Date:Message-ID:Sender:Reply-To:Cc:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:In-Reply-To:References;
-	bh=oPzhGoPSimi9pdw9qIsscZWUluc5YqkWZU55YOgxJUA=; b=RHTHpKsXxm0BorlkUtcCEQRKBL
-	cEAmLNg07Tx+ipbhj73OEFgj1DCzZpqO8BxVRs0U05NBoFRAbFTN39FaAP5kAr4I539H6eZ7hm2pO
-	GO/m/rId+bE2XS3jcELjvkjOmK1aUZuiX3rIh/8sVU4EMDwZpzEiFBmXi7Hk/iS1bcKmaliLIaUQS
-	4t6UZPTKIXoBNukklUFe6mo/q9QHFb8S15DrlyvQdi4e0ugpj9sKOsznmBC7saALa/3E/XKvGKGG7
-	Yl6/sY9/XUJJ1K4v8Lt6UT2BCNSaNiLRO5tMqQZlMW7KOmhcs25p7h3m+MSteEoump6Du+vgWpBKk
-	EoMkz6zw==;
-Received: from sslproxy03.your-server.de ([88.198.220.132])
-	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1tB0CW-000GuJ-Vz
-	for bpf@vger.kernel.org; Wed, 13 Nov 2024 00:21:37 +0100
-Received: from [194.230.145.122] (helo=[172.20.10.7])
-	by sslproxy03.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1tB0CW-000OWO-0C
-	for bpf@vger.kernel.org;
-	Wed, 13 Nov 2024 00:21:36 +0100
-Message-ID: <dc05b101-2aff-47fb-bc88-01180224b15a@iogearbox.net>
-Date: Wed, 13 Nov 2024 00:21:31 +0100
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WuFVYI1+"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8C33C4CECD;
+	Tue, 12 Nov 2024 23:48:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1731455340;
+	bh=cDlrFqORAmp5emql+69NznXzQgn4UDJSwI2wrBQJcFc=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=WuFVYI1+IKCTbvtt0oi5mmbx/JgG2Q5My3qVWGqXPgigrZ90ssTNhFrFXGGpoXcwK
+	 9VF7f4pN8D6Fu53tVAa781dvqB9b3hBqmf1xFnPh+HdUlZKTWWDa6VFgirtFYcvrVV
+	 ceVSBA2Irj3jEJX5Lw/a8T6HLcM4ILPWjcWQpNWwUJLSpUPf2XKUT+eyBtA7r53H/A
+	 gaNN7fNjo4/lMrMG4SGphYw3Btd4hYXejlKg03u49nbDSd9wxhV4em0m+yl4EV8e0d
+	 S44VLS0bRxzs1dMCkLrKvuNfVZg/Lu9hqynl+372WdpcSHsyU9ipsKw0rffGP4QnZV
+	 H+wsTFnES1aiQ==
+Date: Wed, 13 Nov 2024 08:48:57 +0900
+From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To: Steven Rostedt <rostedt@goodmis.org>
+Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>, Florent Revest
+ <revest@chromium.org>, linux-trace-kernel@vger.kernel.org, LKML
+ <linux-kernel@vger.kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>,
+ bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>, Jiri Olsa
+ <jolsa@kernel.org>, Alan Maguire <alan.maguire@oracle.com>, Mark Rutland
+ <mark.rutland@arm.com>, linux-arch@vger.kernel.org
+Subject: Re: [PATCH v18 16/17] Documentation: probes: Update fprobe on
+ function-graph tracer
+Message-Id: <20241113084857.962b4af542fe700542ace929@kernel.org>
+In-Reply-To: <20241101101448.10a3a0a9@gandalf.local.home>
+References: <172991731968.443985.4558065903004844780.stgit@devnote2>
+	<172991752671.443985.17111177875574390269.stgit@devnote2>
+	<20241101101448.10a3a0a9@gandalf.local.home>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: bpf@vger.kernel.org
-Content-Language: en-US
-From: Daniel Borkmann <daniel@iogearbox.net>
-Subject: [ANN] bpf verifier audit
-Autocrypt: addr=daniel@iogearbox.net; keydata=
- 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
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.10/27456/Tue Nov 12 10:49:43 2024)
 
-Fyi, NCC Group conducted a BPF verifier audit and today published their report. This work
-was sponsored by the eBPF foundation.
+On Fri, 1 Nov 2024 10:14:48 -0400
+Steven Rostedt <rostedt@goodmis.org> wrote:
 
-Please find the public report here:
+> On Sat, 26 Oct 2024 13:38:46 +0900
+> "Masami Hiramatsu (Google)" <mhiramat@kernel.org> wrote:
+> 
+> > From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> > 
+> > Update fprobe documentation for the new fprobe on function-graph
+> > tracer. This includes some bahvior changes and pt_regs to
+> > ftrace_regs interface change.
+> > 
+> > Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> > ---
+> >  Changes in v2:
+> >   - Update @fregs parameter explanation.
+> > ---
+> >  Documentation/trace/fprobe.rst |   42 ++++++++++++++++++++++++++--------------
+> >  1 file changed, 27 insertions(+), 15 deletions(-)
+> > 
+> > diff --git a/Documentation/trace/fprobe.rst b/Documentation/trace/fprobe.rst
+> > index 196f52386aaa..f58bdc64504f 100644
+> > --- a/Documentation/trace/fprobe.rst
+> > +++ b/Documentation/trace/fprobe.rst
+> > @@ -9,9 +9,10 @@ Fprobe - Function entry/exit probe
+> >  Introduction
+> >  ============
+> >  
+> > -Fprobe is a function entry/exit probe mechanism based on ftrace.
+> > -Instead of using ftrace full feature, if you only want to attach callbacks
+> > -on function entry and exit, similar to the kprobes and kretprobes, you can
+> > +Fprobe is a function entry/exit probe mechanism based on the function-graph
+> > +tracer.
+> 
+> You could still say "ftrace" as function-graph is part of the "ftrace"
+> infrastructure. But I don't care either way.
+> 
+> > +Instead of tracing all functions, if you want to attach callbacks on specific
+> > +function entry and exit, similar to the kprobes and kretprobes, you can
+> >  use fprobe. Compared with kprobes and kretprobes, fprobe gives faster
+> >  instrumentation for multiple functions with single handler. This document
+> >  describes how to use fprobe.
+> > @@ -91,12 +92,14 @@ The prototype of the entry/exit callback function are as follows:
+> >  
+> >  .. code-block:: c
+> >  
+> > - int entry_callback(struct fprobe *fp, unsigned long entry_ip, unsigned long ret_ip, struct pt_regs *regs, void *entry_data);
+> > + int entry_callback(struct fprobe *fp, unsigned long entry_ip, unsigned long ret_ip, struct ftrace_regs *fregs, void *entry_data);
+> >  
+> > - void exit_callback(struct fprobe *fp, unsigned long entry_ip, unsigned long ret_ip, struct pt_regs *regs, void *entry_data);
+> > + void exit_callback(struct fprobe *fp, unsigned long entry_ip, unsigned long ret_ip, struct ftrace_regs *fregs, void *entry_data);
+> >  
+> > -Note that the @entry_ip is saved at function entry and passed to exit handler.
+> > -If the entry callback function returns !0, the corresponding exit callback will be cancelled.
+> > +Note that the @entry_ip is saved at function entry and passed to exit
+> > +handler.
+> > +If the entry callback function returns !0, the corresponding exit callback
+> > +will be cancelled.
+> >  
+> >  @fp
+> >          This is the address of `fprobe` data structure related to this handler.
+> > @@ -112,12 +115,10 @@ If the entry callback function returns !0, the corresponding exit callback will
+> >          This is the return address that the traced function will return to,
+> >          somewhere in the caller. This can be used at both entry and exit.
+> >  
+> > -@regs
+> > -        This is the `pt_regs` data structure at the entry and exit. Note that
+> > -        the instruction pointer of @regs may be different from the @entry_ip
+> > -        in the entry_handler. If you need traced instruction pointer, you need
+> > -        to use @entry_ip. On the other hand, in the exit_handler, the instruction
+> > -        pointer of @regs is set to the current return address.
+> > +@fregs
+> > +        This is the `ftrace_regs` data structure at the entry and exit. This
+> > +        includes the function parameters, or the return values. So user can
+> > +        access thos values via appropriate `ftrace_regs_*` APIs.
+> >  
+> >  @entry_data
+> >          This is a local storage to share the data between entry and exit handlers.
+> > @@ -125,6 +126,17 @@ If the entry callback function returns !0, the corresponding exit callback will
+> >          and `entry_data_size` field when registering the fprobe, the storage is
+> >          allocated and passed to both `entry_handler` and `exit_handler`.
+> >  
+> > +Entry data size and exit handlers on the same function
+> > +======================================================
+> > +
+> > +Since the entry data is passed via per-task stack and it is has limited size,
+> 
+> 						"and it has limited size"
 
-   https://www.nccgroup.com/media/4lilthtf/ncc_group_nccgroup_e015561_report_2024-11-11_v10.pdf
+Ah, I missed updating this document patch in v19. Need to fix that.
 
-Thanks,
-Daniel
+Thank you!
+
+
+> 
+> > +the entry data size per probe is limited to `15 * sizeof(long)`. You also need
+> > +to take care that the different fprobes are probing on the same function, this
+> > +limit becomes smaller. The entry data size is aligned to `sizeof(long)` and
+> > +each fprobe which has exit handler uses a `sizeof(long)` space on the stack,
+> > +you should keep the number of fprobes on the same function as small as
+> > +possible.
+> 
+> -- Steve
+> 
+> > +
+> >  Share the callbacks with kprobes
+> >  ================================
+> >  
+> > @@ -165,8 +177,8 @@ This counter counts up when;
+> >   - fprobe fails to take ftrace_recursion lock. This usually means that a function
+> >     which is traced by other ftrace users is called from the entry_handler.
+> >  
+> > - - fprobe fails to setup the function exit because of the shortage of rethook
+> > -   (the shadow stack for hooking the function return.)
+> > + - fprobe fails to setup the function exit because of failing to allocate the
+> > +   data buffer from the per-task shadow stack.
+> >  
+> >  The `fprobe::nmissed` field counts up in both cases. Therefore, the former
+> >  skips both of entry and exit callback and the latter skips the exit
+> 
+
+
+-- 
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
