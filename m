@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 399491FF056;
-	Tue, 12 Nov 2024 14:52:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3144B1FF056;
+	Tue, 12 Nov 2024 14:52:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731423150; cv=none; b=CRffaEMkr1ylxt/+x5aR+8K+hXrqkcdAQZJZWShjRsVEGJRwtCOvszTtybRn+VAjoIJnurow45PoeCo0Rfhhc6ysfTkYinP4L3rjEpKm9DgUKuLR8VxkxqsfPTj9F/nfz+OIuKVhsVaxmsXrnPPfXRpGzdyRkvP3feISW4JfYsQ=
+	t=1731423158; cv=none; b=lD9MhSFo0OjGUh8ldpPIU3zh2CnkHwZie9LMfXAyWoAYScXBqkhPGp/VqPfJT5CfX3WVrWXWLtjYcshJowM984y8kYFikq+GC++0Abp2y11qdIKmGCFFPyEfqSaKIWFUjiU7g/ScbUa26h0jP36hrc8bNeLxI2EM5SFMtpu/RpA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731423150; c=relaxed/simple;
-	bh=QJOH44h7yAycsL8NQ2uV4M+pwPZccjc5Vep5GFxRuxY=;
+	s=arc-20240116; t=1731423158; c=relaxed/simple;
+	bh=XHUlBJ+mKYT+6k4IYtYtDy0V0TjePNkPX4AfboMkkeo=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=o7hHsLTdJZ1rgaRYt+ulvfmHXqO6bQBFoODDVqDEWiXxKeNyIeNSYLN+TFfSGeqJh+CKLPaoqXFLcyXEPXtHANBtk574OpNVPSU9pn9JDAhS8tJzfsPtQtsTw7+segxjgOUjg810yebUH5rr5C7VSKes0NPZbOGRsTVuQ5u9nCo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=U91YU9b6; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=an1H7s5XVZ3dsI46boT+5x2LGyo220zhcBAR4LBJxoXj/wjpmn36ZAYo7ca8u/0/fxvoyazlRj4k2xi195SZHtCi4QQW/406slXMTqmlnB05g1xib3FROYtAxPr96iY9hYdMyFKe4SlyPXru0gK4z3+ba05mPvs8KxC4Z3UIExs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UIaby/0O; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="U91YU9b6"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4EBF3C4CECD;
-	Tue, 12 Nov 2024 14:52:26 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UIaby/0O"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01806C4CECD;
+	Tue, 12 Nov 2024 14:52:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1731423150;
-	bh=QJOH44h7yAycsL8NQ2uV4M+pwPZccjc5Vep5GFxRuxY=;
+	s=k20201202; t=1731423157;
+	bh=XHUlBJ+mKYT+6k4IYtYtDy0V0TjePNkPX4AfboMkkeo=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=U91YU9b6TSi3vNs1qAwTlqUkUE5tp6I/w1TxduxAySrONB5SrOuDu6lghpnAWjFm2
-	 2klk3QUsTT0OvHf2CA/Fezc8uMzqNrKcoE3e0bEMV+JntBCkZru6qVJ1SlWe6KJFuA
-	 9kCpjGq7hXYQ6m77potKf3lONXQ7VZlEKFEceKkBL3/Qsqd82J5HKO5DuExkmMJIkU
-	 JrchAsaDmllSLBD7Hhb6OQxbP41yLjKQYFbdxcJ0xq7QZhZWLmgRNOSrq9TCNbQOIQ
-	 wbVzygkFB4hFPW95Z7alW9bxsnByjEycomRcsroJx+FsEYU/SkqrNGOO8gEuhZWC7x
-	 dMnoLQqzaKkKA==
+	b=UIaby/0OJfZLGuEU9xoWWlvVpghxrlhsQ57edyJGRLUBbHXZtb9z1n5F41v3cDyOJ
+	 6hc1e5kOsHBDJR8tcwP8vcGYd+/CwWdqiFOrzF4vV9P75DocB8Y0ixrOuZkRDbHOxi
+	 mSqh5oKexrap/owERE6mdWStr3g/G+YrWjI6w+iZdu3A8aG2xEUcPLZnjc5YZ6mfu8
+	 s5NR2Hzwb4Mr6VrBZ7SSvRPY1NaPip+57jgDxXL0dW3GsO4Ts7eooAij/ExWRoRPuT
+	 ojoKlx4Lt/SLUPnqbC0qi70IY83iXj1xBzrO6lcKFcekMfFDH1Q6hU7qhyVV/dAKYt
+	 lJHKgDeJnA5kg==
 From: Frederic Weisbecker <frederic@kernel.org>
 To: LKML <linux-kernel@vger.kernel.org>
 Cc: "Paul E. McKenney" <paulmck@kernel.org>,
@@ -46,9 +46,9 @@ Cc: "Paul E. McKenney" <paulmck@kernel.org>,
 	bpf@vger.kernel.org,
 	Neeraj Upadhyay <Neeraj.Upadhyay@amd.com>,
 	Frederic Weisbecker <frederic@kernel.org>
-Subject: [PATCH 06/16] srcu: Standardize srcu_data pointers to "sdp" and similar
-Date: Tue, 12 Nov 2024 15:51:49 +0100
-Message-ID: <20241112145159.23032-7-frederic@kernel.org>
+Subject: [PATCH 08/16] srcu: Create CPP macros for normal and NMI-safe SRCU readers
+Date: Tue, 12 Nov 2024 15:51:51 +0100
+Message-ID: <20241112145159.23032-9-frederic@kernel.org>
 X-Mailer: git-send-email 2.46.0
 In-Reply-To: <20241112145159.23032-1-frederic@kernel.org>
 References: <20241112145159.23032-1-frederic@kernel.org>
@@ -62,10 +62,12 @@ Content-Transfer-Encoding: 8bit
 
 From: "Paul E. McKenney" <paulmck@kernel.org>
 
-This commit changes a few "cpuc" variables to "sdp" to align with usage
-elsewhere.
-
-[ paulmck: Apply Neeraj Upadhyay feedback. ]
+This commit creates SRCU_READ_FLAVOR_NORMAL and SRCU_READ_FLAVOR_NMI
+C-preprocessor macros for srcu_read_lock() and srcu_read_lock_nmisafe(),
+respectively.  These replace the old true/false values that were
+previously passed to srcu_check_read_flavor().  In addition, the
+srcu_check_read_flavor() function itself requires a bit of rework to
+handle bitmasks instead of true/false values.
 
 Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 Cc: Alexei Starovoitov <ast@kernel.org>
@@ -73,61 +75,161 @@ Cc: Andrii Nakryiko <andrii@kernel.org>
 Cc: Peter Zijlstra <peterz@infradead.org>
 Cc: Kent Overstreet <kent.overstreet@linux.dev>
 Cc: <bpf@vger.kernel.org>
+Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 Reviewed-by: Neeraj Upadhyay <Neeraj.Upadhyay@amd.com>
 Signed-off-by: Frederic Weisbecker <frederic@kernel.org>
 ---
- kernel/rcu/srcutree.c | 20 ++++++++++----------
- 1 file changed, 10 insertions(+), 10 deletions(-)
+ include/linux/srcu.h     | 20 ++++++++------------
+ include/linux/srcutree.h |  4 ++++
+ kernel/rcu/srcutree.c    | 21 +++++++++++----------
+ 3 files changed, 23 insertions(+), 22 deletions(-)
 
+diff --git a/include/linux/srcu.h b/include/linux/srcu.h
+index 46fd06b212ba..84daaa33ea0a 100644
+--- a/include/linux/srcu.h
++++ b/include/linux/srcu.h
+@@ -176,10 +176,6 @@ static inline int srcu_read_lock_held(const struct srcu_struct *ssp)
+ 
+ #endif /* #else #ifdef CONFIG_DEBUG_LOCK_ALLOC */
+ 
+-#define SRCU_NMI_UNKNOWN	0x0
+-#define SRCU_NMI_UNSAFE		0x1
+-#define SRCU_NMI_SAFE		0x2
+-
+ #if defined(CONFIG_PROVE_RCU) && defined(CONFIG_TREE_SRCU)
+ void srcu_check_read_flavor(struct srcu_struct *ssp, int read_flavor);
+ #else
+@@ -247,7 +243,7 @@ static inline int srcu_read_lock(struct srcu_struct *ssp) __acquires(ssp)
+ {
+ 	int retval;
+ 
+-	srcu_check_read_flavor(ssp, false);
++	srcu_check_read_flavor(ssp, SRCU_READ_FLAVOR_NORMAL);
+ 	retval = __srcu_read_lock(ssp);
+ 	srcu_lock_acquire(&ssp->dep_map);
+ 	return retval;
+@@ -268,7 +264,7 @@ static inline int srcu_read_lock_nmisafe(struct srcu_struct *ssp) __acquires(ssp
+ {
+ 	int retval;
+ 
+-	srcu_check_read_flavor(ssp, true);
++	srcu_check_read_flavor(ssp, SRCU_READ_FLAVOR_NMI);
+ 	retval = __srcu_read_lock_nmisafe(ssp);
+ 	rcu_try_lock_acquire(&ssp->dep_map);
+ 	return retval;
+@@ -280,7 +276,7 @@ srcu_read_lock_notrace(struct srcu_struct *ssp) __acquires(ssp)
+ {
+ 	int retval;
+ 
+-	srcu_check_read_flavor(ssp, false);
++	srcu_check_read_flavor(ssp, SRCU_READ_FLAVOR_NORMAL);
+ 	retval = __srcu_read_lock(ssp);
+ 	return retval;
+ }
+@@ -309,7 +305,7 @@ srcu_read_lock_notrace(struct srcu_struct *ssp) __acquires(ssp)
+ static inline int srcu_down_read(struct srcu_struct *ssp) __acquires(ssp)
+ {
+ 	WARN_ON_ONCE(in_nmi());
+-	srcu_check_read_flavor(ssp, false);
++	srcu_check_read_flavor(ssp, SRCU_READ_FLAVOR_NORMAL);
+ 	return __srcu_read_lock(ssp);
+ }
+ 
+@@ -324,7 +320,7 @@ static inline void srcu_read_unlock(struct srcu_struct *ssp, int idx)
+ 	__releases(ssp)
+ {
+ 	WARN_ON_ONCE(idx & ~0x1);
+-	srcu_check_read_flavor(ssp, false);
++	srcu_check_read_flavor(ssp, SRCU_READ_FLAVOR_NORMAL);
+ 	srcu_lock_release(&ssp->dep_map);
+ 	__srcu_read_unlock(ssp, idx);
+ }
+@@ -340,7 +336,7 @@ static inline void srcu_read_unlock_nmisafe(struct srcu_struct *ssp, int idx)
+ 	__releases(ssp)
+ {
+ 	WARN_ON_ONCE(idx & ~0x1);
+-	srcu_check_read_flavor(ssp, true);
++	srcu_check_read_flavor(ssp, SRCU_READ_FLAVOR_NMI);
+ 	rcu_lock_release(&ssp->dep_map);
+ 	__srcu_read_unlock_nmisafe(ssp, idx);
+ }
+@@ -349,7 +345,7 @@ static inline void srcu_read_unlock_nmisafe(struct srcu_struct *ssp, int idx)
+ static inline notrace void
+ srcu_read_unlock_notrace(struct srcu_struct *ssp, int idx) __releases(ssp)
+ {
+-	srcu_check_read_flavor(ssp, false);
++	srcu_check_read_flavor(ssp, SRCU_READ_FLAVOR_NORMAL);
+ 	__srcu_read_unlock(ssp, idx);
+ }
+ 
+@@ -366,7 +362,7 @@ static inline void srcu_up_read(struct srcu_struct *ssp, int idx)
+ {
+ 	WARN_ON_ONCE(idx & ~0x1);
+ 	WARN_ON_ONCE(in_nmi());
+-	srcu_check_read_flavor(ssp, false);
++	srcu_check_read_flavor(ssp, SRCU_READ_FLAVOR_NORMAL);
+ 	__srcu_read_unlock(ssp, idx);
+ }
+ 
+diff --git a/include/linux/srcutree.h b/include/linux/srcutree.h
+index ab7d8d215b84..79ad809c7f03 100644
+--- a/include/linux/srcutree.h
++++ b/include/linux/srcutree.h
+@@ -43,6 +43,10 @@ struct srcu_data {
+ 	struct srcu_struct *ssp;
+ };
+ 
++/* Values for ->srcu_reader_flavor. */
++#define SRCU_READ_FLAVOR_NORMAL	0x1		// srcu_read_lock().
++#define SRCU_READ_FLAVOR_NMI	0x2		// srcu_read_lock_nmisafe().
++
+ /*
+  * Node in SRCU combining tree, similar in function to rcu_data.
+  */
 diff --git a/kernel/rcu/srcutree.c b/kernel/rcu/srcutree.c
-index 9774bc500de5..b85da944d794 100644
+index b85da944d794..602b4b8c4b89 100644
 --- a/kernel/rcu/srcutree.c
 +++ b/kernel/rcu/srcutree.c
-@@ -438,9 +438,9 @@ static unsigned long srcu_readers_lock_idx(struct srcu_struct *ssp, int idx)
- 	unsigned long sum = 0;
- 
- 	for_each_possible_cpu(cpu) {
--		struct srcu_data *cpuc = per_cpu_ptr(ssp->sda, cpu);
-+		struct srcu_data *sdp = per_cpu_ptr(ssp->sda, cpu);
- 
--		sum += atomic_long_read(&cpuc->srcu_lock_count[idx]);
-+		sum += atomic_long_read(&sdp->srcu_lock_count[idx]);
- 	}
- 	return sum;
- }
-@@ -456,11 +456,11 @@ static unsigned long srcu_readers_unlock_idx(struct srcu_struct *ssp, int idx)
- 	unsigned long sum = 0;
- 
- 	for_each_possible_cpu(cpu) {
--		struct srcu_data *cpuc = per_cpu_ptr(ssp->sda, cpu);
-+		struct srcu_data *sdp = per_cpu_ptr(ssp->sda, cpu);
- 
--		sum += atomic_long_read(&cpuc->srcu_unlock_count[idx]);
-+		sum += atomic_long_read(&sdp->srcu_unlock_count[idx]);
- 		if (IS_ENABLED(CONFIG_PROVE_RCU))
--			mask = mask | READ_ONCE(cpuc->srcu_reader_flavor);
-+			mask = mask | READ_ONCE(sdp->srcu_reader_flavor);
+@@ -463,7 +463,7 @@ static unsigned long srcu_readers_unlock_idx(struct srcu_struct *ssp, int idx)
+ 			mask = mask | READ_ONCE(sdp->srcu_reader_flavor);
  	}
  	WARN_ONCE(IS_ENABLED(CONFIG_PROVE_RCU) && (mask & (mask - 1)),
- 		  "Mixed NMI-safe readers for srcu_struct at %ps.\n", ssp);
-@@ -564,12 +564,12 @@ static bool srcu_readers_active(struct srcu_struct *ssp)
- 	unsigned long sum = 0;
- 
- 	for_each_possible_cpu(cpu) {
--		struct srcu_data *cpuc = per_cpu_ptr(ssp->sda, cpu);
-+		struct srcu_data *sdp = per_cpu_ptr(ssp->sda, cpu);
- 
--		sum += atomic_long_read(&cpuc->srcu_lock_count[0]);
--		sum += atomic_long_read(&cpuc->srcu_lock_count[1]);
--		sum -= atomic_long_read(&cpuc->srcu_unlock_count[0]);
--		sum -= atomic_long_read(&cpuc->srcu_unlock_count[1]);
-+		sum += atomic_long_read(&sdp->srcu_lock_count[0]);
-+		sum += atomic_long_read(&sdp->srcu_lock_count[1]);
-+		sum -= atomic_long_read(&sdp->srcu_unlock_count[0]);
-+		sum -= atomic_long_read(&sdp->srcu_unlock_count[1]);
- 	}
+-		  "Mixed NMI-safe readers for srcu_struct at %ps.\n", ssp);
++		  "Mixed reader flavors for srcu_struct at %ps.\n", ssp);
  	return sum;
  }
+ 
+@@ -703,20 +703,21 @@ EXPORT_SYMBOL_GPL(cleanup_srcu_struct);
+  */
+ void srcu_check_read_flavor(struct srcu_struct *ssp, int read_flavor)
+ {
+-	int reader_flavor_mask = 1 << read_flavor;
+-	int old_reader_flavor_mask;
++	int old_read_flavor;
+ 	struct srcu_data *sdp;
+ 
+-	/* NMI-unsafe use in NMI is a bad sign */
+-	WARN_ON_ONCE(!read_flavor && in_nmi());
++	/* NMI-unsafe use in NMI is a bad sign, as is multi-bit read_flavor values. */
++	WARN_ON_ONCE((read_flavor != SRCU_READ_FLAVOR_NMI) && in_nmi());
++	WARN_ON_ONCE(read_flavor & (read_flavor - 1));
++
+ 	sdp = raw_cpu_ptr(ssp->sda);
+-	old_reader_flavor_mask = READ_ONCE(sdp->srcu_reader_flavor);
+-	if (!old_reader_flavor_mask) {
+-		old_reader_flavor_mask = cmpxchg(&sdp->srcu_reader_flavor, 0, reader_flavor_mask);
+-		if (!old_reader_flavor_mask)
++	old_read_flavor = READ_ONCE(sdp->srcu_reader_flavor);
++	if (!old_read_flavor) {
++		old_read_flavor = cmpxchg(&sdp->srcu_reader_flavor, 0, read_flavor);
++		if (!old_read_flavor)
+ 			return;
+ 	}
+-	WARN_ONCE(old_reader_flavor_mask != reader_flavor_mask, "CPU %d old state %d new state %d\n", sdp->cpu, old_reader_flavor_mask, reader_flavor_mask);
++	WARN_ONCE(old_read_flavor != read_flavor, "CPU %d old state %d new state %d\n", sdp->cpu, old_read_flavor, read_flavor);
+ }
+ EXPORT_SYMBOL_GPL(srcu_check_read_flavor);
+ #endif /* CONFIG_PROVE_RCU */
 -- 
 2.46.0
 
