@@ -1,186 +1,186 @@
-Received: from out-187.mta1.migadu.com (out-187.mta1.migadu.com [95.215.58.187])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E367343AA1
-	for <bpf@vger.kernel.org>; Tue, 12 Nov 2024 21:43:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.187
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 834AF218594
+	for <bpf@vger.kernel.org>; Tue, 12 Nov 2024 21:53:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731447793; cv=none; b=HSxD1YISKp4Vvc+sfuYUJfm9EikCrS2z2KTHg7MaR4ot5iUnTJmL2+86hEmV5rVr0DeYgu3tfH39fMJj7X+pstnVyfBPNSef543m7+KA6oIjl/5rx6+FwtlirB+SQ5Q3wgO6L6bn4fxbYsN8/WNkyC2Eah+K6k+CLmoel7r5/gc=
+	t=1731448398; cv=none; b=jYZwcEO1+Yf+dnNPcGGMWMHVCbz7b9KfBDSmxAjBTjRFjizw+Haz3kwnFURUIWo+Qu9au3b3HNPwDwLbCLnCgaq+sa2ekhNqEGseYu7k4tjNFWZkM/nvZHeqmshYUIViiLDE7mFNgrtRgvDZMjY4fsafui8uJVHt7Nwr9lB/SAQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731447793; c=relaxed/simple;
-	bh=86NjfET2uejBLh/NQF0Ra97kYqEVmkCQ4F38yMNfrz4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=o5o9qVksiXrq6vm+z0i5WrAZW6xyqDIEmSCuA4JZgLPI04TBbaSfk1tKSVrIZIqHZpmXo3iCf+DTCNYgQN6Bd29mG65wpBR8Rgi5K2HrQ2nXJyad1/7e/dlJM3euamGd4O88FYfjEBpJF2SZZ/xBHA8W+W9+hzLoGfNi2z1xh2o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ByCXuI7s; arc=none smtp.client-ip=95.215.58.187
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1731448398; c=relaxed/simple;
+	bh=jYyB/j8VbEEQKZQ0YNRpScbe3o+liHhRiMy733K6re4=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=DKC8QzBw9uk9AJR9u4igj44pZ3KmltlzBKI9hksp+NrZxB18z9Fj/xDkcU2j8DwghQj27G4/7/i9X2SGh3YvKMayQ28k3fxSTbmt1DcFx3nNR0du4HFjvrsSybYWZHD0ZNgEgtNa46+vGBXoBJ+77ekJslA2u2xazI+HLiYfyZU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EVDrmUfh; arc=none smtp.client-ip=209.85.210.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ByCXuI7s"
-Message-ID: <946c61c2-ab1e-43cb-adfd-cc5b7716b915@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1731447789;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Oz3lc4Dspu/SVXRnRvB9yEwrfZKMbCPAsuQlqHh2SRk=;
-	b=ByCXuI7szeAn77trsvzVnzkwU7vrfH9cPJS7MB6/hE+b5oA7vrU+IHX5qq0TP/KBfPJI01
-	LuItqHKfiKmM5SMg4LBBjehFfXIVHYPKa/i0ICJB8n3IF63jvt6bGQUwL3fyVfwJuZkv6R
-	g+eGDheY03mMEevdr7MrJCacT3OfOmA=
-Date: Tue, 12 Nov 2024 21:43:01 +0000
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EVDrmUfh"
+Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-724455f40a0so1477648b3a.0
+        for <bpf@vger.kernel.org>; Tue, 12 Nov 2024 13:53:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1731448396; x=1732053196; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=JmDSPaVv4LtDiwHraqQ+SB2rCXteTHzo7WWaKcb06qI=;
+        b=EVDrmUfhbvb0fuIYN33e4KlV7v4My+uiZV2K19AQlDuFlIiDkjngSw/GZ4rQpBlshA
+         Z8nBGczaE7EtpfwoUQcxEEA5EKYK1/ykXXq1/lxQB8boWJmpjyfGHHcJEK7sVS8ZjUoD
+         07N2F21mHBNZuANNQUZ3a0iMBGtb1YWXTiP15JFWpJ5625qh77h+wDw1trm4610qCE3u
+         kwTDHxNdcFRe9LbVxr8m/+4Us6iNrfF/+OqYyRbr4+V+9s9oICDmGwxMvzLXJyXNx8lJ
+         TwNEnk1bRDcP6v3mAPBybd0nq7Xsyk23OMivlhXM1EuSOnfR+DIlHT0W19LH0Wp7BFFm
+         vLBw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1731448396; x=1732053196;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=JmDSPaVv4LtDiwHraqQ+SB2rCXteTHzo7WWaKcb06qI=;
+        b=SWA0/A31wXjIpvfuTMThuzjeNJBb7w031XYgIQBD8Qtcny1amrvXUa3tsIE0Idv7WH
+         TVCjW/Lqmp1sE7EzkBz/N/a8ilaHD8xabzZbvS4KQ/6g67MMZ55pEByspf6TKd/7BcpR
+         c0KDRWwawR8+rOHUhSb2qDs9vz9vPICb39YJAsUJMRc02Kan44jF9UJ3KgXHp7dHy4sw
+         BxfZJeVpc0VuIeHAvXZ63ruhOoQLRA0kmIK/6C2EPToS8bZwoxcrRiC1FxNipnJXAzuq
+         tTRj1RXDU8pzlHrjYxebqTV7Pti2p3+P/OS+/cReZ+DNEGZvTfW0okuy+dA+aKlu/MLG
+         kkFA==
+X-Forwarded-Encrypted: i=1; AJvYcCUx44heD9sXJCdBpJvitXMSoAanprEGHLrKCctBEywosNONDrOJKvOB2IKolxcTcqmI1xc=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzr/PNjkEzkFeurBjHOtuzdyQSSkzTg7wSMglblpn82bZWGcgOT
+	NCvJ3FGdZtPN9Ilo9B6+zHoL+M7QUT6J6Hx0bwRSOI/zPhX/HWAB
+X-Google-Smtp-Source: AGHT+IHI8xz0IGIMDydznMO86Y7pv7dt/opx33F169fg6wkvC4zYyZ48NSNSCBZNmmJkz5qEMIHuBA==
+X-Received: by 2002:a05:6a00:2ea8:b0:71e:6046:87c2 with SMTP id d2e1a72fcca58-724133b7d62mr21282678b3a.26.1731448395643;
+        Tue, 12 Nov 2024 13:53:15 -0800 (PST)
+Received: from [192.168.0.235] ([38.34.87.7])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-72407a17ebcsm11699462b3a.138.2024.11.12.13.53.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Nov 2024 13:53:14 -0800 (PST)
+Message-ID: <c2936ebf75e76c77b04dc88aed9dacf8e784214a.camel@gmail.com>
+Subject: Re: [PATCH bpf-next v5 1/4] bpf: add bpf_get_cpu_cycles kfunc
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Vadim Fedorenko <vadim.fedorenko@linux.dev>, Vadim Fedorenko
+ <vadfed@meta.com>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
+ <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, Thomas
+ Gleixner <tglx@linutronix.de>, Mykola Lysenko <mykolal@fb.com>, Jakub
+ Kicinski <kuba@kernel.org>
+Cc: x86@kernel.org, bpf@vger.kernel.org, Martin KaFai Lau
+ <martin.lau@linux.dev>
+Date: Tue, 12 Nov 2024 13:53:09 -0800
+In-Reply-To: <03bcf4ca-5e6f-4523-9661-46102b4f02b0@linux.dev>
+References: <20241109004158.2259301-1-vadfed@meta.com>
+	 <cd904b908d0d84c4f8454683495977f64d081004.camel@gmail.com>
+	 <03bcf4ca-5e6f-4523-9661-46102b4f02b0@linux.dev>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.52.4 (3.52.4-1.fc40) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v5 1/4] bpf: add bpf_get_cpu_cycles kfunc
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>,
- Vadim Fedorenko <vadfed@meta.com>
-Cc: Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Eduard Zingerman <eddyz87@gmail.com>, Thomas Gleixner <tglx@linutronix.de>,
- Mykola Lysenko <mykolal@fb.com>, Jakub Kicinski <kuba@kernel.org>,
- x86@kernel.org, bpf@vger.kernel.org, Martin KaFai Lau <martin.lau@linux.dev>
-References: <20241109004158.2259301-1-vadfed@meta.com>
- <CAEf4BzaRb+fUK17wrj4sWnYM5oKxTvwZC=U-GjvsdUtF94PqrA@mail.gmail.com>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Vadim Fedorenko <vadim.fedorenko@linux.dev>
-In-Reply-To: <CAEf4BzaRb+fUK17wrj4sWnYM5oKxTvwZC=U-GjvsdUtF94PqrA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
 
-On 12/11/2024 05:50, Andrii Nakryiko wrote:
-> On Fri, Nov 8, 2024 at 4:42 PM Vadim Fedorenko <vadfed@meta.com> wrote:
->>
->> New kfunc to return ARCH-specific timecounter. For x86 BPF JIT converts
->> it into rdtsc ordered call. Other architectures will get JIT
->> implementation too if supported. The fallback is to
->> __arch_get_hw_counter().
->>
->> Signed-off-by: Vadim Fedorenko <vadfed@meta.com>
->> ---
-> 
-> nit: please add cover letter for the next revision, multi-patch sets
-> generally should come with a cover letter, unless it's some set of
-> trivial and mostly independent patches. Anyways...
+On Tue, 2024-11-12 at 21:39 +0000, Vadim Fedorenko wrote:
 
-Yeah, sure. This series has grown from the first small version...
+[...]
 
-> 
-> I haven't yet looked through the code (yet), but I was curious to
-> benchmark the perf benefit, so that's what I did for fun this evening.
-> 
-> (!!!) BTW, a complete aside, but I think it's interesting. It turned
-> out that using bpf_test_prog_run() scales *VERY POORLY* with large
-> number of CPUs, because we start spending tons of time in
-> fdget()/fdput(), so I initially got pretty unscalable results,
-> profiled a bit, and then switched to just doing
-> syscall(syscall(__NR_getpgid); + SEC("raw_tp/sys_enter")). Anyways,
-> the point is that microbenchmarking is tricky and we need to improve
-> our existing bench setup for some benchmarks. Anyways, getting back to
-> the main topic.
-> 
-> I wrote a quick two benchmarks testing what I see as intended use case
-> for these kfuncs (batching amortizes the cost of triggering BPF
-> program, batch_iters = 500 in my case):
-> 
-> SEC("?raw_tp/sys_enter")
-> int trigger_driver_ktime(void *ctx)
-> {
->          volatile __u64 total = 0;
->          int i;
-> 
->          for (i = 0; i < batch_iters; i++) {
->                  __u64 start, end;
-> 
->                  start = bpf_ktime_get_ns();
->                  end = bpf_ktime_get_ns();
->                  total += end - start;
->          }
->          inc_counter_batch(batch_iters);
-> 
->          return 0;
-> }
-> 
-> extern __u64 bpf_get_cpu_cycles(void) __weak __ksym;
-> extern __u64 bpf_cpu_cycles_to_ns(__u64 cycles) __weak __ksym;
-> 
-> SEC("?raw_tp/sys_enter")
-> int trigger_driver_cycles(void *ctx)
-> {
->          volatile __u64 total = 0;
->          int i;
-> 
->          for (i = 0; i < batch_iters; i++) {
->                  __u64 start, end;
-> 
->                  start = bpf_get_cpu_cycles();
->                  end = bpf_get_cpu_cycles();
->                  total += bpf_cpu_cycles_to_ns(end - start);
->          }
->          inc_counter_batch(batch_iters);
-> 
->          return 0;
-> }
-> 
-> And here's what I got across multiple numbers of parallel CPUs on our
-> production host.
-> 
-> # ./bench_timing.sh
-> 
-> ktime                 ( 1 cpus):   32.286 ± 0.309M/s  ( 32.286M/s/cpu)
-> ktime                 ( 2 cpus):   63.021 ± 0.538M/s  ( 31.511M/s/cpu)
-> ktime                 ( 3 cpus):   94.211 ± 0.686M/s  ( 31.404M/s/cpu)
-> ktime                 ( 4 cpus):  124.757 ± 0.691M/s  ( 31.189M/s/cpu)
-> ktime                 ( 5 cpus):  154.855 ± 0.693M/s  ( 30.971M/s/cpu)
-> ktime                 ( 6 cpus):  185.551 ± 2.304M/s  ( 30.925M/s/cpu)
-> ktime                 ( 7 cpus):  211.117 ± 4.755M/s  ( 30.160M/s/cpu)
-> ktime                 ( 8 cpus):  236.454 ± 0.226M/s  ( 29.557M/s/cpu)
-> ktime                 (10 cpus):  295.526 ± 0.126M/s  ( 29.553M/s/cpu)
-> ktime                 (12 cpus):  322.282 ± 0.153M/s  ( 26.857M/s/cpu)
-> ktime                 (14 cpus):  375.347 ± 0.087M/s  ( 26.811M/s/cpu)
-> ktime                 (16 cpus):  399.813 ± 0.181M/s  ( 24.988M/s/cpu)
-> ktime                 (24 cpus):  617.675 ± 7.053M/s  ( 25.736M/s/cpu)
-> ktime                 (32 cpus):  819.695 ± 0.231M/s  ( 25.615M/s/cpu)
-> ktime                 (40 cpus):  996.264 ± 0.290M/s  ( 24.907M/s/cpu)
-> ktime                 (48 cpus): 1180.201 ± 0.160M/s  ( 24.588M/s/cpu)
-> ktime                 (56 cpus): 1321.084 ± 0.099M/s  ( 23.591M/s/cpu)
-> ktime                 (64 cpus): 1482.061 ± 0.121M/s  ( 23.157M/s/cpu)
-> ktime                 (72 cpus): 1666.540 ± 0.460M/s  ( 23.146M/s/cpu)
-> ktime                 (80 cpus): 1851.419 ± 0.439M/s  ( 23.143M/s/cpu)
-> 
-> cycles                ( 1 cpus):   45.815 ± 0.018M/s  ( 45.815M/s/cpu)
-> cycles                ( 2 cpus):   86.706 ± 0.068M/s  ( 43.353M/s/cpu)
-> cycles                ( 3 cpus):  129.899 ± 0.101M/s  ( 43.300M/s/cpu)
-> cycles                ( 4 cpus):  168.435 ± 0.073M/s  ( 42.109M/s/cpu)
-> cycles                ( 5 cpus):  210.520 ± 0.164M/s  ( 42.104M/s/cpu)
-> cycles                ( 6 cpus):  252.596 ± 0.050M/s  ( 42.099M/s/cpu)
-> cycles                ( 7 cpus):  294.356 ± 0.159M/s  ( 42.051M/s/cpu)
-> cycles                ( 8 cpus):  317.167 ± 0.163M/s  ( 39.646M/s/cpu)
-> cycles                (10 cpus):  396.141 ± 0.208M/s  ( 39.614M/s/cpu)
-> cycles                (12 cpus):  431.938 ± 0.511M/s  ( 35.995M/s/cpu)
-> cycles                (14 cpus):  503.055 ± 0.070M/s  ( 35.932M/s/cpu)
-> cycles                (16 cpus):  534.261 ± 0.107M/s  ( 33.391M/s/cpu)
-> cycles                (24 cpus):  836.838 ± 0.141M/s  ( 34.868M/s/cpu)
-> cycles                (32 cpus): 1099.689 ± 0.314M/s  ( 34.365M/s/cpu)
-> cycles                (40 cpus): 1336.573 ± 0.015M/s  ( 33.414M/s/cpu)
-> cycles                (48 cpus): 1571.734 ± 11.151M/s  ( 32.744M/s/cpu)
-> cycles                (56 cpus): 1819.242 ± 4.627M/s  ( 32.486M/s/cpu)
-> cycles                (64 cpus): 2046.285 ± 5.169M/s  ( 31.973M/s/cpu)
-> cycles                (72 cpus): 2287.683 ± 0.787M/s  ( 31.773M/s/cpu)
-> cycles                (80 cpus): 2505.414 ± 0.626M/s  ( 31.318M/s/cpu)
-> 
-> So, from about +42% on a single CPU, to +36% at 80 CPUs. Not that bad.
-> Scalability-wise, we still see some drop off in performance, but
-> believe me, with bpf_prog_test_run() it was so much worse :) I also
-> verified that now we spend cycles almost exclusively inside the BPF
-> program (so presumably in those benchmarked kfuncs).
+> > > +			if (insn->src_reg =3D=3D BPF_PSEUDO_KFUNC_CALL &&
+> > > +			    imm32 =3D=3D BPF_CALL_IMM(bpf_get_cpu_cycles)) {
+> > > +				/* Save RDX because RDTSC will use EDX:EAX to return u64 */
+> > > +				emit_mov_reg(&prog, true, AUX_REG, BPF_REG_3);
+> > > +				if (boot_cpu_has(X86_FEATURE_LFENCE_RDTSC))
+> > > +					EMIT_LFENCE();
+> > > +				EMIT2(0x0F, 0x31);
+> > > +
+> > > +				/* shl RDX, 32 */
+> > > +				maybe_emit_1mod(&prog, BPF_REG_3, true);
+> > > +				EMIT3(0xC1, add_1reg(0xE0, BPF_REG_3), 32);
+> > > +				/* or RAX, RDX */
+> > > +				maybe_emit_mod(&prog, BPF_REG_0, BPF_REG_3, true);
+> > > +				EMIT2(0x09, add_2reg(0xC0, BPF_REG_0, BPF_REG_3));
+> > > +				/* restore RDX from R11 */
+> > > +				emit_mov_reg(&prog, true, BPF_REG_3, AUX_REG);
+> >=20
+> > Note: The default implementation of this kfunc uses __arch_get_hw_count=
+er(),
+> >        which is implemented as `(u64)rdtsc_ordered() & S64_MAX`.
+> >        Here we don't do `& S64_MAX`.
+> >        The masking in __arch_get_hw_counter() was added by this commit:
+> >        77750f78b0b3 ("x86/vdso: Fix gettimeofday masking").
+>=20
+> I think we already discussed it with Alexey in v1, we don't really need
+> any masking here for BPF case. We can use values provided by CPU
+> directly. It will never happen that within one BPF program we will have
+> inlined and non-inlined implementation of this helper, hence the values
+> to compare will be of the same source.
+>=20
+> >        Also, the default implementation does not issue `lfence`.
+> >        Not sure if this makes any real-world difference.
+>=20
+> Well, it actually does. rdtsc_ordered is translated into `lfence; rdtsc`
+> or `rdtscp` (which is rdtsc + lfence + u32 cookie) depending on the cpu
+> features.
 
-Am I right that the numbers show how many iterations were done during
-the very same amount of time? It would be also great to understand if
-we get more precise measurements - just in case you have your tests
-ready...
+I see the following disassembly:
+
+0000000000008980 <bpf_get_cpu_cycles>:
+; {
+    8980: f3 0f 1e fa                   endbr64
+    8984: e8 00 00 00 00                callq   0x8989 <bpf_get_cpu_cycles+=
+0x9>
+                0000000000008985:  R_X86_64_PLT32       __fentry__-0x4
+;       asm volatile(ALTERNATIVE_2("rdtsc",
+    8989: 0f 31                         rdtsc
+    898b: 90                            nop
+    898c: 90                            nop
+    898d: 90                            nop
+;       return EAX_EDX_VAL(val, low, high);
+    898e: 48 c1 e2 20                   shlq    $0x20, %rdx
+    8992: 48 09 d0                      orq     %rdx, %rax
+    8995: 48 b9 ff ff ff ff ff ff ff 7f movabsq $0x7fffffffffffffff, %rcx #=
+ imm =3D 0x7FFFFFFFFFFFFFFF
+;               return (u64)rdtsc_ordered() & S64_MAX;
+    899f: 48 21 c8                      andq    %rcx, %rax
+;       return __arch_get_hw_counter(1, NULL);
+    89a2: 2e e9 00 00 00 00             jmp     0x89a8 <bpf_get_cpu_cycles+=
+0x28>
+
+Is it patched when kernel is loaded to replace nops with lfence?
+By real-world difference I meant difference between default
+implementation and inlined assembly.
+
+[...]
+
+> > > @@ -20488,6 +20510,12 @@ static int fixup_kfunc_call(struct bpf_verif=
+ier_env *env, struct bpf_insn *insn,
+> > >   						node_offset_reg, insn, insn_buf, cnt);
+> > >   	} else if (desc->func_id =3D=3D special_kfunc_list[KF_bpf_cast_to_=
+kern_ctx] ||
+> > >   		   desc->func_id =3D=3D special_kfunc_list[KF_bpf_rdonly_cast]) {
+> > > +		if (!verifier_inlines_kfunc_call(env, imm)) {
+> > > +			verbose(env, "verifier internal error: kfunc id %d is not defined=
+ in checker\n",
+> > > +				desc->func_id);
+> > > +			return -EFAULT;
+> > > +		}
+> > > +
+> >=20
+> > Nit: still think that moving this check as the first conditional would
+> >       have been better:
+> >=20
+> >       if (verifier_inlines_kfunc_call(env, imm)) {
+> >          if (desc->func_id =3D=3D special_kfunc_list[KF_bpf_cast_to_ker=
+n_ctx] ||
+> >             desc->func_id =3D=3D special_kfunc_list[KF_bpf_rdonly_cast]=
+) {
+> >             // ...
+> >          } else {
+> >             // report error
+> >          }
+> >       } else if (...) {
+> >         // ... rest of the cases
+> >       }
+>=20
+> I can change it in the next iteration (if it's needed) if you insist
+
+No need to change if there would be no next iteration.
+
+[...]
 
