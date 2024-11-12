@@ -1,108 +1,368 @@
-Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out30-118.freemail.mail.aliyun.com (out30-118.freemail.mail.aliyun.com [115.124.30.118])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B673C20493F
-	for <bpf@vger.kernel.org>; Tue, 12 Nov 2024 01:29:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0216820ADE5;
+	Tue, 12 Nov 2024 01:29:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.118
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731374989; cv=none; b=K+wgtNqGSeXUwaGn8cAzo1aIJ1A0Q1eSuVgaM0hBm7+X2k4toJI8bkbkE7zFAPcVEsdJwPxL7Vy1XUFG/yLNKistpCHf0glY/aDPdlWCf/kKxH6S6rxi5wdajyK/hYqbSxqLVk/qrljAsCdfXiG4Agn2jxrW+2P0xgh5edhClls=
+	t=1731374992; cv=none; b=TbdnJJL+V4EnpXPetzM1kzE+va48MS4WIHlQe3cGg597kGB/prCKgoPdF3TLiR9zxqia3fsDUyonkRLPqFf+lmE7wHvY7wcPnN6/nM9ZOsyd7eNqefAyRzRM61Y8L8iCpkAF/3wP9Bkjlpca8+M4lFWKGFSoxWqJPX0tSk2cAOA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731374989; c=relaxed/simple;
-	bh=nkYT3n8m61RRJRpuhf9G/elVoMHFWHCcU/BpZUpeHeM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gd2AnSbj4PQHo6ImcsEZqzgXOcLSMrxGaAn1xrnUmOwxFgXM/ekuL72wEr/32vb2UBM6gxT2n5dGKO4XOraJvsUTlWu1YC1bUXQcpha4zo7TyA3+NGN5YiTEMaSVWlcnnzFupKqwu8rNTezAxFGm9LICfRLS8DIapwm4nKyB4Zc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=LvyrQW83; arc=none smtp.client-ip=209.85.210.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+	s=arc-20240116; t=1731374992; c=relaxed/simple;
+	bh=nsRnayahamcVc7qCaSPryyCvf15emOHP4AAqBb8/9PE=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=kxKc7o8T7UsQ0T3n7CWgp/LQtpE7+h/rAbFXVBlzrabuPvBuTC0pJBH75UYTfsdX+yuF26/B252oMnBewWSdPKZfX1UWKwM3wOfcRQeAuD36BPne9cRsCo5JtRazGaI7CmJ4Dgj+VxtyqPU8+Au7xfp31Mq/IFxAlTZIM1YmfHk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=VJ1py6k+; arc=none smtp.client-ip=115.124.30.118
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="LvyrQW83"
-Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-71e5130832aso3934650b3a.0
-        for <bpf@vger.kernel.org>; Mon, 11 Nov 2024 17:29:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1731374987; x=1731979787; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=unMes6tk+yAGpxvui8SQySSJdgFoHnSMIQwrPN8JKpM=;
-        b=LvyrQW83Ai33ruMiKHFEk1ExpJVxTimWCFg3Ct3JtoF2XVO9b9A0goFPv0LUQKRJfM
-         nIizvW6qf+IW7SjACiMwiTEicQnJikeKGvwLoZQeOGXymTVITz9snNj5VScubbcU/RLv
-         UXVK4bUVLEfSsaAMKGSOgEv9L9AOPKPIZUths=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731374987; x=1731979787;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=unMes6tk+yAGpxvui8SQySSJdgFoHnSMIQwrPN8JKpM=;
-        b=KnyZmbUitcUBDZVKXw3o/rixWOS+wXU3qADJB3BVIwNkHeMno7QhunH6Abj3GVJkCT
-         Q7jhZ2YVRDJSLWMlQKtQRT7LaptnyDnxME+NDfDvr/MfWyUB/wS8g93MATVA6oiUSWY3
-         2JknxF0hzJ4GsLTHaREhVwGsMtMxogNxGviuJLJaiFVXiBIQHUWOkjnyquFr+f9begDJ
-         V0ZYM+SjVl3zFcEhIAvqtvCr/8QkjrDhRjl9L3P9hoVaAeafFEL3vpkLFgySf8XTHOXy
-         dT3x5EAzhhr3s/yWiFPxq9eAYnarE/hgo/kBdy0JlWLfdNGCOIL2yuNVflzx8NtTKsa9
-         Ykbg==
-X-Forwarded-Encrypted: i=1; AJvYcCUUgk9gZJwkfHr0oNpZ7ksQ5twsAm5OT7hfZbJYFp+FVW7BsUnJeUHMHio3olYcmd6eWsU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzFfspXchhFs/MSlcefzgVkn9Pp8a/NqrHfbhvK5e3iN68N40cV
-	nEkEl/4JwDn0NhewunmSkGEpZr6RaeXtePRk65+YVft2G122miw+3pfqb2Uuxw==
-X-Google-Smtp-Source: AGHT+IF1Dmx7codECfSiIexmKZDkdrD7kqBfP8QQ6WUWW43AnX7ZXdcoXYQtfAUKOWms8jZxU6Dykw==
-X-Received: by 2002:a05:6a21:205:b0:1db:ec2b:7322 with SMTP id adf61e73a8af0-1dc22b8c05cmr10818183637.46.1731374987152;
-        Mon, 11 Nov 2024 17:29:47 -0800 (PST)
-Received: from google.com ([2401:fa00:8f:203:a43c:b34:8b29:4f8])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-724078a7f22sm9820976b3a.56.2024.11.11.17.29.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Nov 2024 17:29:46 -0800 (PST)
-Date: Tue, 12 Nov 2024 10:29:41 +0900
-From: Sergey Senozhatsky <senozhatsky@chromium.org>
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: Sergey Senozhatsky <senozhatsky@chromium.org>,
-	Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
-	linux-mm@kvack.org, akpm@linux-foundation.org, adobriyan@gmail.com,
-	shakeel.butt@linux.dev, hannes@cmpxchg.org, ak@linux.intel.com,
-	osandov@osandov.com, song@kernel.org, jannh@google.com,
-	linux-fsdevel@vger.kernel.org, willy@infradead.org,
-	Eduard Zingerman <eddyz87@gmail.com>
-Subject: Re: [PATCH v7 bpf-next 09/10] bpf: wire up sleepable bpf_get_stack()
- and bpf_get_task_stack() helpers
-Message-ID: <20241112012941.GC1458936@google.com>
-References: <20240829174232.3133883-1-andrii@kernel.org>
- <20240829174232.3133883-10-andrii@kernel.org>
- <20241111055146.GA1458936@google.com>
- <CAEf4BzZz_L5yc8OE21x93zb2RU+bujNsyQJTmvOvpm3Y--Uwpw@mail.gmail.com>
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="VJ1py6k+"
+DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux.alibaba.com; s=default;
+	t=1731374982; h=From:To:Subject:Date:Message-Id:MIME-Version;
+	bh=JWft6HfMcuGu89D6wPnlIr7IK28NxAcs/7saARORgwY=;
+	b=VJ1py6k+Q8JKeF/rYsql6q0xyGSG/9WmU9ceodgtKK6C8PL3PpHqBK6zrSudmPOws2c5kKmqoznX+XNpX5mibFCWseVKAlMBd4X+2ssIdSbBxdXHKpk/zzaRmly07hzQda76yWCjUJH7yUMC411NGUQJW9EQzHVw47Ztg5s44E0=
+Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0WJF2Wv8_1731374980 cluster:ay36)
+          by smtp.aliyun-inc.com;
+          Tue, 12 Nov 2024 09:29:40 +0800
+From: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+To: netdev@vger.kernel.org
+Cc: "Michael S. Tsirkin" <mst@redhat.com>,
+	Jason Wang <jasowang@redhat.com>,
+	Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+	=?UTF-8?q?Eugenio=20P=C3=A9rez?= <eperezma@redhat.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	virtualization@lists.linux.dev,
+	bpf@vger.kernel.org
+Subject: [PATCH net-next v4 11/13] virtio_net: xsk: tx: support xmit xsk buffer
+Date: Tue, 12 Nov 2024 09:29:26 +0800
+Message-Id: <20241112012928.102478-12-xuanzhuo@linux.alibaba.com>
+X-Mailer: git-send-email 2.32.0.3.g01195cf9f
+In-Reply-To: <20241112012928.102478-1-xuanzhuo@linux.alibaba.com>
+References: <20241112012928.102478-1-xuanzhuo@linux.alibaba.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAEf4BzZz_L5yc8OE21x93zb2RU+bujNsyQJTmvOvpm3Y--Uwpw@mail.gmail.com>
+X-Git-Hash: ee9bd377a389
+Content-Transfer-Encoding: 8bit
 
-On (24/11/11 09:49), Andrii Nakryiko wrote:
-> > On (24/08/29 10:42), Andrii Nakryiko wrote:
-> > > Now that build ID related internals in kernel/bpf/stackmap.c can be used
-> > > both in sleepable and non-sleepable contexts, we need to add additional
-> > > rcu_read_lock()/rcu_read_unlock() protection around fetching
-> > > perf_callchain_entry, but with the refactoring in previous commit it's
-> > > now pretty straightforward. We make sure to do rcu_read_unlock (in
-> > > sleepable mode only) right before stack_map_get_build_id_offset() call
-> > > which can sleep. By that time we don't have any more use of
-> > > perf_callchain_entry.
-> >
-> > Shouldn't this be backported to stable kernels?  It seems that those still
-> > do suspicious-RCU deference:
-> >
-> > __bpf_get_stack()
-> >   get_perf_callchain()
-> >     perf_callchain_user()
-> >       perf_get_guest_cbs()
-> 
-> Do you see this issue in practice or have some repro?
-> __bpf_get_stack() shouldn't be callable from sleepable BPF programs
-> until my patch set, so I don't think there is anything to be
-> backported. But maybe I'm missing something, which is why I'm asking
-> whether this is a conclusion drawn from source code analysis, or there
-> was actually a report somewhere.
+The driver's tx napi is very important for XSK. It is responsible for
+obtaining data from the XSK queue and sending it out.
 
-I see a syzkaller report (internal) which triggers this call chain
-and RCU-usage error.  Not sure how practical that is, but syzkaller
-was able to hit it (the report I'm looking at is against 5.15, but
-__bpf_get_stack()-wise I don't see any differences between 5.15,
-6.1 and 6.6)
+At the beginning, we need to trigger tx napi.
+
+virtnet_free_old_xmit distinguishes three type ptr(skb, xdp frame, xsk
+buffer) by the last bits of the pointer.
+
+Signed-off-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+Acked-by: Jason Wang <jasowang@redhat.com>
+---
+ drivers/net/virtio_net.c | 179 ++++++++++++++++++++++++++++++++++++---
+ 1 file changed, 168 insertions(+), 11 deletions(-)
+
+diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
+index d5b8567f77d0..57642bd83b7b 100644
+--- a/drivers/net/virtio_net.c
++++ b/drivers/net/virtio_net.c
+@@ -83,6 +83,7 @@ struct virtnet_sq_free_stats {
+ 	u64 bytes;
+ 	u64 napi_packets;
+ 	u64 napi_bytes;
++	u64 xsk;
+ };
+ 
+ struct virtnet_sq_stats {
+@@ -512,11 +513,13 @@ static struct sk_buff *virtnet_skb_append_frag(struct sk_buff *head_skb,
+ 					       struct sk_buff *curr_skb,
+ 					       struct page *page, void *buf,
+ 					       int len, int truesize);
++static void virtnet_xsk_completed(struct send_queue *sq, int num);
+ 
+ enum virtnet_xmit_type {
+ 	VIRTNET_XMIT_TYPE_SKB,
+ 	VIRTNET_XMIT_TYPE_SKB_ORPHAN,
+ 	VIRTNET_XMIT_TYPE_XDP,
++	VIRTNET_XMIT_TYPE_XSK,
+ };
+ 
+ static int rss_indirection_table_alloc(struct virtio_net_ctrl_rss *rss, u16 indir_table_size)
+@@ -541,6 +544,8 @@ static void rss_indirection_table_free(struct virtio_net_ctrl_rss *rss)
+ /* We use the last two bits of the pointer to distinguish the xmit type. */
+ #define VIRTNET_XMIT_TYPE_MASK (BIT(0) | BIT(1))
+ 
++#define VIRTIO_XSK_FLAG_OFFSET 2
++
+ static enum virtnet_xmit_type virtnet_xmit_ptr_unpack(void **ptr)
+ {
+ 	unsigned long p = (unsigned long)*ptr;
+@@ -563,6 +568,11 @@ static int virtnet_add_outbuf(struct send_queue *sq, int num, void *data,
+ 				    GFP_ATOMIC);
+ }
+ 
++static u32 virtnet_ptr_to_xsk_buff_len(void *ptr)
++{
++	return ((unsigned long)ptr) >> VIRTIO_XSK_FLAG_OFFSET;
++}
++
+ static void sg_fill_dma(struct scatterlist *sg, dma_addr_t addr, u32 len)
+ {
+ 	sg_dma_address(sg) = addr;
+@@ -603,11 +613,27 @@ static void __free_old_xmit(struct send_queue *sq, struct netdev_queue *txq,
+ 			stats->bytes += xdp_get_frame_len(frame);
+ 			xdp_return_frame(frame);
+ 			break;
++
++		case VIRTNET_XMIT_TYPE_XSK:
++			stats->bytes += virtnet_ptr_to_xsk_buff_len(ptr);
++			stats->xsk++;
++			break;
+ 		}
+ 	}
+ 	netdev_tx_completed_queue(txq, stats->napi_packets, stats->napi_bytes);
+ }
+ 
++static void virtnet_free_old_xmit(struct send_queue *sq,
++				  struct netdev_queue *txq,
++				  bool in_napi,
++				  struct virtnet_sq_free_stats *stats)
++{
++	__free_old_xmit(sq, txq, in_napi, stats);
++
++	if (stats->xsk)
++		virtnet_xsk_completed(sq, stats->xsk);
++}
++
+ /* Converting between virtqueue no. and kernel tx/rx queue no.
+  * 0:rx0 1:tx0 2:rx1 3:tx1 ... 2N:rxN 2N+1:txN 2N+2:cvq
+  */
+@@ -1037,7 +1063,7 @@ static void free_old_xmit(struct send_queue *sq, struct netdev_queue *txq,
+ {
+ 	struct virtnet_sq_free_stats stats = {0};
+ 
+-	__free_old_xmit(sq, txq, in_napi, &stats);
++	virtnet_free_old_xmit(sq, txq, in_napi, &stats);
+ 
+ 	/* Avoid overhead when no packets have been processed
+ 	 * happens when called speculatively from start_xmit.
+@@ -1399,6 +1425,113 @@ static int virtnet_add_recvbuf_xsk(struct virtnet_info *vi, struct receive_queue
+ 	return err;
+ }
+ 
++static void *virtnet_xsk_to_ptr(u32 len)
++{
++	unsigned long p;
++
++	p = len << VIRTIO_XSK_FLAG_OFFSET;
++
++	return virtnet_xmit_ptr_pack((void *)p, VIRTNET_XMIT_TYPE_XSK);
++}
++
++static int virtnet_xsk_xmit_one(struct send_queue *sq,
++				struct xsk_buff_pool *pool,
++				struct xdp_desc *desc)
++{
++	struct virtnet_info *vi;
++	dma_addr_t addr;
++
++	vi = sq->vq->vdev->priv;
++
++	addr = xsk_buff_raw_get_dma(pool, desc->addr);
++	xsk_buff_raw_dma_sync_for_device(pool, addr, desc->len);
++
++	sg_init_table(sq->sg, 2);
++	sg_fill_dma(sq->sg, sq->xsk_hdr_dma_addr, vi->hdr_len);
++	sg_fill_dma(sq->sg + 1, addr, desc->len);
++
++	return virtqueue_add_outbuf_premapped(sq->vq, sq->sg, 2,
++					      virtnet_xsk_to_ptr(desc->len),
++					      GFP_ATOMIC);
++}
++
++static int virtnet_xsk_xmit_batch(struct send_queue *sq,
++				  struct xsk_buff_pool *pool,
++				  unsigned int budget,
++				  u64 *kicks)
++{
++	struct xdp_desc *descs = pool->tx_descs;
++	bool kick = false;
++	u32 nb_pkts, i;
++	int err;
++
++	budget = min_t(u32, budget, sq->vq->num_free);
++
++	nb_pkts = xsk_tx_peek_release_desc_batch(pool, budget);
++	if (!nb_pkts)
++		return 0;
++
++	for (i = 0; i < nb_pkts; i++) {
++		err = virtnet_xsk_xmit_one(sq, pool, &descs[i]);
++		if (unlikely(err)) {
++			xsk_tx_completed(sq->xsk_pool, nb_pkts - i);
++			break;
++		}
++
++		kick = true;
++	}
++
++	if (kick && virtqueue_kick_prepare(sq->vq) && virtqueue_notify(sq->vq))
++		(*kicks)++;
++
++	return i;
++}
++
++static bool virtnet_xsk_xmit(struct send_queue *sq, struct xsk_buff_pool *pool,
++			     int budget)
++{
++	struct virtnet_info *vi = sq->vq->vdev->priv;
++	struct virtnet_sq_free_stats stats = {};
++	struct net_device *dev = vi->dev;
++	u64 kicks = 0;
++	int sent;
++
++	/* Avoid to wakeup napi meanless, so call __free_old_xmit instead of
++	 * free_old_xmit().
++	 */
++	__free_old_xmit(sq, netdev_get_tx_queue(dev, sq - vi->sq), true, &stats);
++
++	if (stats.xsk)
++		xsk_tx_completed(sq->xsk_pool, stats.xsk);
++
++	sent = virtnet_xsk_xmit_batch(sq, pool, budget, &kicks);
++
++	if (!is_xdp_raw_buffer_queue(vi, sq - vi->sq))
++		check_sq_full_and_disable(vi, vi->dev, sq);
++
++	u64_stats_update_begin(&sq->stats.syncp);
++	u64_stats_add(&sq->stats.packets, stats.packets);
++	u64_stats_add(&sq->stats.bytes,   stats.bytes);
++	u64_stats_add(&sq->stats.kicks,   kicks);
++	u64_stats_add(&sq->stats.xdp_tx,  sent);
++	u64_stats_update_end(&sq->stats.syncp);
++
++	if (xsk_uses_need_wakeup(pool))
++		xsk_set_tx_need_wakeup(pool);
++
++	return sent;
++}
++
++static void xsk_wakeup(struct send_queue *sq)
++{
++	if (napi_if_scheduled_mark_missed(&sq->napi))
++		return;
++
++	local_bh_disable();
++	virtqueue_napi_schedule(&sq->napi, sq->vq);
++	local_bh_enable();
++}
++
+ static int virtnet_xsk_wakeup(struct net_device *dev, u32 qid, u32 flag)
+ {
+ 	struct virtnet_info *vi = netdev_priv(dev);
+@@ -1412,14 +1545,19 @@ static int virtnet_xsk_wakeup(struct net_device *dev, u32 qid, u32 flag)
+ 
+ 	sq = &vi->sq[qid];
+ 
+-	if (napi_if_scheduled_mark_missed(&sq->napi))
+-		return 0;
++	xsk_wakeup(sq);
++	return 0;
++}
+ 
+-	local_bh_disable();
+-	virtqueue_napi_schedule(&sq->napi, sq->vq);
+-	local_bh_enable();
++static void virtnet_xsk_completed(struct send_queue *sq, int num)
++{
++	xsk_tx_completed(sq->xsk_pool, num);
+ 
+-	return 0;
++	/* If this is called by rx poll, start_xmit and xdp xmit we should
++	 * wakeup the tx napi to consume the xsk tx queue, because the tx
++	 * interrupt may not be triggered.
++	 */
++	xsk_wakeup(sq);
+ }
+ 
+ static int __virtnet_xdp_xmit_one(struct virtnet_info *vi,
+@@ -1535,8 +1673,8 @@ static int virtnet_xdp_xmit(struct net_device *dev,
+ 	}
+ 
+ 	/* Free up any pending old buffers before queueing new ones. */
+-	__free_old_xmit(sq, netdev_get_tx_queue(dev, sq - vi->sq),
+-			false, &stats);
++	virtnet_free_old_xmit(sq, netdev_get_tx_queue(dev, sq - vi->sq),
++			      false, &stats);
+ 
+ 	for (i = 0; i < n; i++) {
+ 		struct xdp_frame *xdpf = frames[i];
+@@ -2993,7 +3131,7 @@ static int virtnet_poll_tx(struct napi_struct *napi, int budget)
+ 	struct virtnet_info *vi = sq->vq->vdev->priv;
+ 	unsigned int index = vq2txq(sq->vq);
+ 	struct netdev_queue *txq;
+-	int opaque;
++	int opaque, xsk_done = 0;
+ 	bool done;
+ 
+ 	if (unlikely(is_xdp_raw_buffer_queue(vi, index))) {
+@@ -3005,7 +3143,11 @@ static int virtnet_poll_tx(struct napi_struct *napi, int budget)
+ 	txq = netdev_get_tx_queue(vi->dev, index);
+ 	__netif_tx_lock(txq, raw_smp_processor_id());
+ 	virtqueue_disable_cb(sq->vq);
+-	free_old_xmit(sq, txq, !!budget);
++
++	if (sq->xsk_pool)
++		xsk_done = virtnet_xsk_xmit(sq, sq->xsk_pool, budget);
++	else
++		free_old_xmit(sq, txq, !!budget);
+ 
+ 	if (sq->vq->num_free >= 2 + MAX_SKB_FRAGS) {
+ 		if (netif_tx_queue_stopped(txq)) {
+@@ -3016,6 +3158,11 @@ static int virtnet_poll_tx(struct napi_struct *napi, int budget)
+ 		netif_tx_wake_queue(txq);
+ 	}
+ 
++	if (xsk_done >= budget) {
++		__netif_tx_unlock(txq);
++		return budget;
++	}
++
+ 	opaque = virtqueue_enable_cb_prepare(sq->vq);
+ 
+ 	done = napi_complete_done(napi, 0);
+@@ -6058,6 +6205,12 @@ static void free_receive_page_frags(struct virtnet_info *vi)
+ 
+ static void virtnet_sq_free_unused_buf(struct virtqueue *vq, void *buf)
+ {
++	struct virtnet_info *vi = vq->vdev->priv;
++	struct send_queue *sq;
++	int i = vq2rxq(vq);
++
++	sq = &vi->sq[i];
++
+ 	switch (virtnet_xmit_ptr_unpack(&buf)) {
+ 	case VIRTNET_XMIT_TYPE_SKB:
+ 	case VIRTNET_XMIT_TYPE_SKB_ORPHAN:
+@@ -6067,6 +6220,10 @@ static void virtnet_sq_free_unused_buf(struct virtqueue *vq, void *buf)
+ 	case VIRTNET_XMIT_TYPE_XDP:
+ 		xdp_return_frame(buf);
+ 		break;
++
++	case VIRTNET_XMIT_TYPE_XSK:
++		xsk_tx_completed(sq->xsk_pool, 1);
++		break;
+ 	}
+ }
+ 
+-- 
+2.32.0.3.g01195cf9f
+
