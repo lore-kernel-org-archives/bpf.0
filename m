@@ -1,368 +1,370 @@
-Received: from out30-118.freemail.mail.aliyun.com (out30-118.freemail.mail.aliyun.com [115.124.30.118])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0216820ADE5;
-	Tue, 12 Nov 2024 01:29:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.118
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1BA8204F7B
+	for <bpf@vger.kernel.org>; Tue, 12 Nov 2024 01:29:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731374992; cv=none; b=TbdnJJL+V4EnpXPetzM1kzE+va48MS4WIHlQe3cGg597kGB/prCKgoPdF3TLiR9zxqia3fsDUyonkRLPqFf+lmE7wHvY7wcPnN6/nM9ZOsyd7eNqefAyRzRM61Y8L8iCpkAF/3wP9Bkjlpca8+M4lFWKGFSoxWqJPX0tSk2cAOA=
+	t=1731375001; cv=none; b=Z9Gd/oRgNHV7XF6MzF+pM9LAQgr1woK3El4H2BI686p/6b1ilnpzTY4E+dqsDYlUDUSvS0mks5DjfqnERCFJ4NbZBO+ZIPlMs5P1THL8E2lh1cA5OC+scQ/xCKGhWPHvqGeBlFwE44jsSapcMMi0Rv/ZdiMTY1hhmlkdVpJvvTc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731374992; c=relaxed/simple;
-	bh=nsRnayahamcVc7qCaSPryyCvf15emOHP4AAqBb8/9PE=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=kxKc7o8T7UsQ0T3n7CWgp/LQtpE7+h/rAbFXVBlzrabuPvBuTC0pJBH75UYTfsdX+yuF26/B252oMnBewWSdPKZfX1UWKwM3wOfcRQeAuD36BPne9cRsCo5JtRazGaI7CmJ4Dgj+VxtyqPU8+Au7xfp31Mq/IFxAlTZIM1YmfHk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=VJ1py6k+; arc=none smtp.client-ip=115.124.30.118
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
+	s=arc-20240116; t=1731375001; c=relaxed/simple;
+	bh=pqNLa3Rp9pf1yOx70D4wCkFBnFWgxhdR19SnSipVznM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=W5xj7imieT33oIWA0rtrSdeed2FSxM9ju4/8DN7bIVkeYjuPd0nNFX+JjailgMNWt6Bo6CrscnfHg2oFzdiWkZRGwELES2iHYfeA/sUBGUoOyRdEi93Jz0H8EaEgIE8EmeS81ApQP5RsFqw62iQFJ3H6fKpi/zlr+hhQailrhwg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MB/dGvht; arc=none smtp.client-ip=209.85.128.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="VJ1py6k+"
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux.alibaba.com; s=default;
-	t=1731374982; h=From:To:Subject:Date:Message-Id:MIME-Version;
-	bh=JWft6HfMcuGu89D6wPnlIr7IK28NxAcs/7saARORgwY=;
-	b=VJ1py6k+Q8JKeF/rYsql6q0xyGSG/9WmU9ceodgtKK6C8PL3PpHqBK6zrSudmPOws2c5kKmqoznX+XNpX5mibFCWseVKAlMBd4X+2ssIdSbBxdXHKpk/zzaRmly07hzQda76yWCjUJH7yUMC411NGUQJW9EQzHVw47Ztg5s44E0=
-Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0WJF2Wv8_1731374980 cluster:ay36)
-          by smtp.aliyun-inc.com;
-          Tue, 12 Nov 2024 09:29:40 +0800
-From: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-To: netdev@vger.kernel.org
-Cc: "Michael S. Tsirkin" <mst@redhat.com>,
-	Jason Wang <jasowang@redhat.com>,
-	Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
-	=?UTF-8?q?Eugenio=20P=C3=A9rez?= <eperezma@redhat.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	virtualization@lists.linux.dev,
-	bpf@vger.kernel.org
-Subject: [PATCH net-next v4 11/13] virtio_net: xsk: tx: support xmit xsk buffer
-Date: Tue, 12 Nov 2024 09:29:26 +0800
-Message-Id: <20241112012928.102478-12-xuanzhuo@linux.alibaba.com>
-X-Mailer: git-send-email 2.32.0.3.g01195cf9f
-In-Reply-To: <20241112012928.102478-1-xuanzhuo@linux.alibaba.com>
-References: <20241112012928.102478-1-xuanzhuo@linux.alibaba.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MB/dGvht"
+Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-43158625112so44926015e9.3
+        for <bpf@vger.kernel.org>; Mon, 11 Nov 2024 17:29:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1731374998; x=1731979798; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5/SsN8VdKmGV1pQl33orMkMZzmXlVBSgJ6zPbn9T8ng=;
+        b=MB/dGvhtEETfdPgZTF2NVhUpzczdnE979CFpWZcQMmZmMjKKf2XCNgXX8GOKcxv6L5
+         up3flbigRtX62CW0F+utrVXwS75ARzSQWtn61iQ+XbhybzvjHLObScKBtznxRFYBdGhe
+         GUGMmDs1Vu4dU5zNrmI1hZe/KftV+nGY1VpvwxHWa3/gScD1Nj8fLzU4G6way10S2Qh0
+         Idx5tDEU5OOrk8QeV0S86qFbad4phHXF7QQJDalHAADYgst1Dgg5xwrxc//Qw1ZpqWw/
+         DbtAGjPdBt/j1bRqXER3L7r+mSlnoUk2BS7hThK0Hzen8u9J3MpuBO/Jxp3Pv/HZSo53
+         nE4g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1731374998; x=1731979798;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=5/SsN8VdKmGV1pQl33orMkMZzmXlVBSgJ6zPbn9T8ng=;
+        b=ts8ceqgh44Y3PCYkW5XkOpg6GKhlsuvEzx0891XtXVQnpUr7wfvnb3IAks/B3+By9J
+         XncHkRfek+jdV3B+11MTqp8HajxX3LXy7Js2FgHlnwdC0dacKpQ2rIO2U8SptEGYAapa
+         +E1KaS8TIYcMoCcevTqODONyrt1vif6p2cZQy5MM88nabcGTgvjveuZ9noGv4uZmX5zX
+         Q5cF0qeGT+w2AnttvQpeAUmUqJpm/15z6qogjHgqoRUDTQ5kjj849+bi+jhKNvAfEkEC
+         sRfmTDX6CfZLAp3Kqr0y+/BHG83Hz63Tmyl8QtDjHJS1JerZSK1dRlSG8ieVxKlKpQST
+         Oq3Q==
+X-Gm-Message-State: AOJu0Yzxvsvlkxz1VkbyzNCsI0P1s4bvLWL2HMxecUCz8Q7qJZWqzGcJ
+	AJGEWrY0OZSuLvUODFQ5JT0NyLOtNUVnQSUMaektXb3UoZ2spC9rivs+HGintXTjjMmyL45sWFN
+	pM92zV4bsLiiYe7pX9OznFXdxSfw=
+X-Google-Smtp-Source: AGHT+IGI826OHicDV+MfTL1WthPXt8CUFEM4HbaCijSTudDbJWwcgSNmpVL9HoDgu2kZzegZhiO+oE12WF56UJJVRNE=
+X-Received: by 2002:a05:600c:3ca8:b0:426:616e:db8d with SMTP id
+ 5b1f17b1804b1-432b7509717mr104709275e9.15.1731374997781; Mon, 11 Nov 2024
+ 17:29:57 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Git-Hash: ee9bd377a389
-Content-Transfer-Encoding: 8bit
+References: <20241109025312.148539-1-yonghong.song@linux.dev>
+ <20241109025332.150019-1-yonghong.song@linux.dev> <CAADnVQJ4OiJbVMU-xrQhokPoECh4v4fWf-N-0YMx0k=h12f8EQ@mail.gmail.com>
+ <a339f24d-eeb3-4086-b2b4-914e4c41766a@linux.dev>
+In-Reply-To: <a339f24d-eeb3-4086-b2b4-914e4c41766a@linux.dev>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Mon, 11 Nov 2024 17:29:46 -0800
+Message-ID: <CAADnVQ+X29PzexOqHiKnT4w7w+X95WjH6RT=-UFGisr-xgapPA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v11 4/7] bpf, x86: Support private stack in jit
+To: Yonghong Song <yonghong.song@linux.dev>
+Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Kernel Team <kernel-team@fb.com>, Martin KaFai Lau <martin.lau@kernel.org>, Tejun Heo <tj@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-The driver's tx napi is very important for XSK. It is responsible for
-obtaining data from the XSK queue and sending it out.
+On Mon, Nov 11, 2024 at 3:18=E2=80=AFPM Yonghong Song <yonghong.song@linux.=
+dev> wrote:
+>
+>
+>
+>
+> On 11/9/24 12:14 PM, Alexei Starovoitov wrote:
+> > On Fri, Nov 8, 2024 at 6:53=E2=80=AFPM Yonghong Song <yonghong.song@lin=
+ux.dev> wrote:
+> >>
+> >>          stack_depth =3D bpf_prog->aux->stack_depth;
+> >> +       if (bpf_prog->aux->priv_stack_ptr) {
+> >> +               priv_frame_ptr =3D bpf_prog->aux->priv_stack_ptr + rou=
+nd_up(stack_depth, 16);
+> >> +               stack_depth =3D 0;
+> >> +       }
+> > ...
+> >
+> >> +       priv_stack_ptr =3D prog->aux->priv_stack_ptr;
+> >> +       if (!priv_stack_ptr && prog->aux->jits_use_priv_stack) {
+> >> +               priv_stack_ptr =3D __alloc_percpu_gfp(prog->aux->stack=
+_depth, 16, GFP_KERNEL);
+> > After applying I started to see crashes running test_progs -j like:
+> >
+> > [  173.465191] Oops: general protection fault, probably for
+> > non-canonical address 0xdffffc0000000af9: 0000 [#1] PREEMPT SMP KASAN
+> > [  173.466053] KASAN: probably user-memory-access in range
+> > [0x00000000000057c8-0x00000000000057cf]
+> > [  173.466053] RIP: 0010:dst_dev_put+0x1e/0x220
+> > [  173.466053] Call Trace:
+> > [  173.466053]  <IRQ>
+> > [  173.466053]  ? die_addr+0x40/0xa0
+> > [  173.466053]  ? exc_general_protection+0x138/0x1f0
+> > [  173.466053]  ? asm_exc_general_protection+0x26/0x30
+> > [  173.466053]  ? dst_dev_put+0x1e/0x220
+> > [  173.466053]  rt_fibinfo_free_cpus.part.0+0x8c/0x130
+> > [  173.466053]  fib_nh_common_release+0xd6/0x2a0
+> > [  173.466053]  free_fib_info_rcu+0x129/0x360
+> > [  173.466053]  ? rcu_core+0xa55/0x1340
+> > [  173.466053]  rcu_core+0xa55/0x1340
+> > [  173.466053]  ? rcutree_report_cpu_dead+0x380/0x380
+> > [  173.466053]  ? hrtimer_interrupt+0x319/0x7c0
+> > [  173.466053]  handle_softirqs+0x14c/0x4d0
+> >
+> > [   35.134115] Oops: general protection fault, probably for
+> > non-canonical address 0xe0000bfff101fbbc: 0000 [#1] PREEMPT SMP KASAN
+> > [   35.135089] KASAN: probably user-memory-access in range
+> > [0x00007fff880fdde0-0x00007fff880fdde7]
+> > [   35.135089] RIP: 0010:destroy_workqueue+0x4b4/0xa70
+> > [   35.135089] Call Trace:
+> > [   35.135089]  <TASK>
+> > [   35.135089]  ? die_addr+0x40/0xa0
+> > [   35.135089]  ? exc_general_protection+0x138/0x1f0
+> > [   35.135089]  ? asm_exc_general_protection+0x26/0x30
+> > [   35.135089]  ? destroy_workqueue+0x4b4/0xa70
+> > [   35.135089]  ? destroy_workqueue+0x592/0xa70
+> > [   35.135089]  ? __mutex_unlock_slowpath.isra.0+0x270/0x270
+> > [   35.135089]  ext4_put_super+0xff/0xd70
+> > [   35.135089]  generic_shutdown_super+0x148/0x4c0
+> > [   35.135089]  kill_block_super+0x3b/0x90
+> > [   35.135089]  ext4_kill_sb+0x65/0x90
+> >
+> > I think I see the bug... quoted it above...
+> >
+> > Please make sure you reproduce it first.
+>
+> Indeed, to use the allocation size round_up(stack_depth, 16) for __alloc_=
+percpu_gfp()
+> indeed fixed the problem.
+>
+> The following is additional change on top of this patch set to
+>    - fix the memory access bug as suggested by Alexei in the above
+>    - Add guard space for private stack, additional 16 bytes at the
+>      end of stack will be the guard space. The content is prepopulated
+>      and checked at per cpu private stack free site. If the content
+>      is not expected, a kernel message will emit.
+>    - Add kasan support for guard space.
+>
+> diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+> index 55556a64f776..d796d419bb48 100644
+> --- a/arch/x86/net/bpf_jit_comp.c
+> +++ b/arch/x86/net/bpf_jit_comp.c
+> @@ -1446,6 +1446,9 @@ static void emit_priv_frame_ptr(u8 **pprog, void __=
+percpu *priv_frame_ptr)
+>   #define LOAD_TAIL_CALL_CNT_PTR(stack)                          \
+>          __LOAD_TCC_PTR(BPF_TAIL_CALL_CNT_PTR_STACK_OFF(stack))
+>
+> +#define PRIV_STACK_GUARD_SZ    16
+> +#define PRIV_STACK_GUARD_VAL   0xEB9F1234eb9f1234ULL
+> +
+>   static int do_jit(struct bpf_prog *bpf_prog, int *addrs, u8 *image, u8 =
+*rw_image,
+>                    int oldproglen, struct jit_context *ctx, bool jmp_padd=
+ing)
+>   {
+> @@ -1462,10 +1465,11 @@ static int do_jit(struct bpf_prog *bpf_prog, int =
+*addrs, u8 *image, u8 *rw_image
+>          u8 *prog =3D temp;
+>          u32 stack_depth;
+>          int err;
+> +       // int stack_size;
+>
+>          stack_depth =3D bpf_prog->aux->stack_depth;
+>          if (bpf_prog->aux->priv_stack_ptr) {
+> -               priv_frame_ptr =3D bpf_prog->aux->priv_stack_ptr + round_=
+up(stack_depth, 16);
+> +               priv_frame_ptr =3D bpf_prog->aux->priv_stack_ptr + round_=
+up(stack_depth, 16) + PRIV_STACK_GUARD_SZ;
+>                  stack_depth =3D 0;
 
-At the beginning, we need to trigger tx napi.
+Since priv stack is not really a stack there is no need to align it to 16
+and no need to round_up() either.
+let's drop these parts and it will simplify the code.
 
-virtnet_free_old_xmit distinguishes three type ptr(skb, xdp frame, xsk
-buffer) by the last bits of the pointer.
+Re: GUARD_SZ.
+I think it's better to guard top and bottom.
+8 byte for each will do.
 
-Signed-off-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-Acked-by: Jason Wang <jasowang@redhat.com>
----
- drivers/net/virtio_net.c | 179 ++++++++++++++++++++++++++++++++++++---
- 1 file changed, 168 insertions(+), 11 deletions(-)
+>          }
+>
+> @@ -1496,8 +1500,18 @@ static int do_jit(struct bpf_prog *bpf_prog, int *=
+addrs, u8 *image, u8 *rw_image
+>                  emit_mov_imm64(&prog, X86_REG_R12,
+>                                 arena_vm_start >> 32, (u32) arena_vm_star=
+t);
+>
+> -       if (priv_frame_ptr)
+> +       if (priv_frame_ptr) {
+> +#if 0
+> +               /* hack to emit and write some data to guard area */
+> +               emit_priv_frame_ptr(&prog, bpf_prog->aux->priv_stack_ptr)=
+;
+> +
+> +               /* See case BPF_ST | BPF_MEM | BPF_W */
+> +               EMIT2(0x41, 0xC7);
+> +               EMIT2(add_1reg(0x40, X86_REG_R9), 0);
+> +               EMIT(0xFFFFFFFF, bpf_size_to_x86_bytes(BPF_W));
+> +#endif
+>                  emit_priv_frame_ptr(&prog, priv_frame_ptr);
+> +       }
+>
+>          ilen =3D prog - temp;
+>          if (rw_image)
+> @@ -3383,11 +3397,13 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_p=
+rog *prog)
+>          struct x64_jit_data *jit_data;
+>          int proglen, oldproglen =3D 0;
+>          struct jit_context ctx =3D {};
+> +       int priv_stack_size, cpu;
+>          bool tmp_blinded =3D false;
+>          bool extra_pass =3D false;
+>          bool padding =3D false;
+>          u8 *rw_image =3D NULL;
+>          u8 *image =3D NULL;
+> +       u64 *guard_ptr;
+>          int *addrs;
+>          int pass;
+>          int i;
+> @@ -3418,11 +3434,17 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_p=
+rog *prog)
+>          }
+>          priv_stack_ptr =3D prog->aux->priv_stack_ptr;
+>          if (!priv_stack_ptr && prog->aux->jits_use_priv_stack) {
+> -               priv_stack_ptr =3D __alloc_percpu_gfp(prog->aux->stack_de=
+pth, 16, GFP_KERNEL);
+> +               priv_stack_size =3D round_up(prog->aux->stack_depth, 16) =
++ PRIV_STACK_GUARD_SZ;
+> +               priv_stack_ptr =3D __alloc_percpu_gfp(priv_stack_size, 16=
+, GFP_KERNEL);
+>                  if (!priv_stack_ptr) {
+>                          prog =3D orig_prog;
+>                          goto out_priv_stack;
+>                  }
+> +               for_each_possible_cpu(cpu) {
+> +                       guard_ptr =3D per_cpu_ptr(priv_stack_ptr, cpu);
+> +                       guard_ptr[0] =3D guard_ptr[1] =3D PRIV_STACK_GUAR=
+D_VAL;
+> +                       kasan_poison_vmalloc(guard_ptr, PRIV_STACK_GUARD_=
+SZ);
 
-diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
-index d5b8567f77d0..57642bd83b7b 100644
---- a/drivers/net/virtio_net.c
-+++ b/drivers/net/virtio_net.c
-@@ -83,6 +83,7 @@ struct virtnet_sq_free_stats {
- 	u64 bytes;
- 	u64 napi_packets;
- 	u64 napi_bytes;
-+	u64 xsk;
- };
- 
- struct virtnet_sq_stats {
-@@ -512,11 +513,13 @@ static struct sk_buff *virtnet_skb_append_frag(struct sk_buff *head_skb,
- 					       struct sk_buff *curr_skb,
- 					       struct page *page, void *buf,
- 					       int len, int truesize);
-+static void virtnet_xsk_completed(struct send_queue *sq, int num);
- 
- enum virtnet_xmit_type {
- 	VIRTNET_XMIT_TYPE_SKB,
- 	VIRTNET_XMIT_TYPE_SKB_ORPHAN,
- 	VIRTNET_XMIT_TYPE_XDP,
-+	VIRTNET_XMIT_TYPE_XSK,
- };
- 
- static int rss_indirection_table_alloc(struct virtio_net_ctrl_rss *rss, u16 indir_table_size)
-@@ -541,6 +544,8 @@ static void rss_indirection_table_free(struct virtio_net_ctrl_rss *rss)
- /* We use the last two bits of the pointer to distinguish the xmit type. */
- #define VIRTNET_XMIT_TYPE_MASK (BIT(0) | BIT(1))
- 
-+#define VIRTIO_XSK_FLAG_OFFSET 2
-+
- static enum virtnet_xmit_type virtnet_xmit_ptr_unpack(void **ptr)
- {
- 	unsigned long p = (unsigned long)*ptr;
-@@ -563,6 +568,11 @@ static int virtnet_add_outbuf(struct send_queue *sq, int num, void *data,
- 				    GFP_ATOMIC);
- }
- 
-+static u32 virtnet_ptr_to_xsk_buff_len(void *ptr)
-+{
-+	return ((unsigned long)ptr) >> VIRTIO_XSK_FLAG_OFFSET;
-+}
-+
- static void sg_fill_dma(struct scatterlist *sg, dma_addr_t addr, u32 len)
- {
- 	sg_dma_address(sg) = addr;
-@@ -603,11 +613,27 @@ static void __free_old_xmit(struct send_queue *sq, struct netdev_queue *txq,
- 			stats->bytes += xdp_get_frame_len(frame);
- 			xdp_return_frame(frame);
- 			break;
-+
-+		case VIRTNET_XMIT_TYPE_XSK:
-+			stats->bytes += virtnet_ptr_to_xsk_buff_len(ptr);
-+			stats->xsk++;
-+			break;
- 		}
- 	}
- 	netdev_tx_completed_queue(txq, stats->napi_packets, stats->napi_bytes);
- }
- 
-+static void virtnet_free_old_xmit(struct send_queue *sq,
-+				  struct netdev_queue *txq,
-+				  bool in_napi,
-+				  struct virtnet_sq_free_stats *stats)
-+{
-+	__free_old_xmit(sq, txq, in_napi, stats);
-+
-+	if (stats->xsk)
-+		virtnet_xsk_completed(sq, stats->xsk);
-+}
-+
- /* Converting between virtqueue no. and kernel tx/rx queue no.
-  * 0:rx0 1:tx0 2:rx1 3:tx1 ... 2N:rxN 2N+1:txN 2N+2:cvq
-  */
-@@ -1037,7 +1063,7 @@ static void free_old_xmit(struct send_queue *sq, struct netdev_queue *txq,
- {
- 	struct virtnet_sq_free_stats stats = {0};
- 
--	__free_old_xmit(sq, txq, in_napi, &stats);
-+	virtnet_free_old_xmit(sq, txq, in_napi, &stats);
- 
- 	/* Avoid overhead when no packets have been processed
- 	 * happens when called speculatively from start_xmit.
-@@ -1399,6 +1425,113 @@ static int virtnet_add_recvbuf_xsk(struct virtnet_info *vi, struct receive_queue
- 	return err;
- }
- 
-+static void *virtnet_xsk_to_ptr(u32 len)
-+{
-+	unsigned long p;
-+
-+	p = len << VIRTIO_XSK_FLAG_OFFSET;
-+
-+	return virtnet_xmit_ptr_pack((void *)p, VIRTNET_XMIT_TYPE_XSK);
-+}
-+
-+static int virtnet_xsk_xmit_one(struct send_queue *sq,
-+				struct xsk_buff_pool *pool,
-+				struct xdp_desc *desc)
-+{
-+	struct virtnet_info *vi;
-+	dma_addr_t addr;
-+
-+	vi = sq->vq->vdev->priv;
-+
-+	addr = xsk_buff_raw_get_dma(pool, desc->addr);
-+	xsk_buff_raw_dma_sync_for_device(pool, addr, desc->len);
-+
-+	sg_init_table(sq->sg, 2);
-+	sg_fill_dma(sq->sg, sq->xsk_hdr_dma_addr, vi->hdr_len);
-+	sg_fill_dma(sq->sg + 1, addr, desc->len);
-+
-+	return virtqueue_add_outbuf_premapped(sq->vq, sq->sg, 2,
-+					      virtnet_xsk_to_ptr(desc->len),
-+					      GFP_ATOMIC);
-+}
-+
-+static int virtnet_xsk_xmit_batch(struct send_queue *sq,
-+				  struct xsk_buff_pool *pool,
-+				  unsigned int budget,
-+				  u64 *kicks)
-+{
-+	struct xdp_desc *descs = pool->tx_descs;
-+	bool kick = false;
-+	u32 nb_pkts, i;
-+	int err;
-+
-+	budget = min_t(u32, budget, sq->vq->num_free);
-+
-+	nb_pkts = xsk_tx_peek_release_desc_batch(pool, budget);
-+	if (!nb_pkts)
-+		return 0;
-+
-+	for (i = 0; i < nb_pkts; i++) {
-+		err = virtnet_xsk_xmit_one(sq, pool, &descs[i]);
-+		if (unlikely(err)) {
-+			xsk_tx_completed(sq->xsk_pool, nb_pkts - i);
-+			break;
-+		}
-+
-+		kick = true;
-+	}
-+
-+	if (kick && virtqueue_kick_prepare(sq->vq) && virtqueue_notify(sq->vq))
-+		(*kicks)++;
-+
-+	return i;
-+}
-+
-+static bool virtnet_xsk_xmit(struct send_queue *sq, struct xsk_buff_pool *pool,
-+			     int budget)
-+{
-+	struct virtnet_info *vi = sq->vq->vdev->priv;
-+	struct virtnet_sq_free_stats stats = {};
-+	struct net_device *dev = vi->dev;
-+	u64 kicks = 0;
-+	int sent;
-+
-+	/* Avoid to wakeup napi meanless, so call __free_old_xmit instead of
-+	 * free_old_xmit().
-+	 */
-+	__free_old_xmit(sq, netdev_get_tx_queue(dev, sq - vi->sq), true, &stats);
-+
-+	if (stats.xsk)
-+		xsk_tx_completed(sq->xsk_pool, stats.xsk);
-+
-+	sent = virtnet_xsk_xmit_batch(sq, pool, budget, &kicks);
-+
-+	if (!is_xdp_raw_buffer_queue(vi, sq - vi->sq))
-+		check_sq_full_and_disable(vi, vi->dev, sq);
-+
-+	u64_stats_update_begin(&sq->stats.syncp);
-+	u64_stats_add(&sq->stats.packets, stats.packets);
-+	u64_stats_add(&sq->stats.bytes,   stats.bytes);
-+	u64_stats_add(&sq->stats.kicks,   kicks);
-+	u64_stats_add(&sq->stats.xdp_tx,  sent);
-+	u64_stats_update_end(&sq->stats.syncp);
-+
-+	if (xsk_uses_need_wakeup(pool))
-+		xsk_set_tx_need_wakeup(pool);
-+
-+	return sent;
-+}
-+
-+static void xsk_wakeup(struct send_queue *sq)
-+{
-+	if (napi_if_scheduled_mark_missed(&sq->napi))
-+		return;
-+
-+	local_bh_disable();
-+	virtqueue_napi_schedule(&sq->napi, sq->vq);
-+	local_bh_enable();
-+}
-+
- static int virtnet_xsk_wakeup(struct net_device *dev, u32 qid, u32 flag)
- {
- 	struct virtnet_info *vi = netdev_priv(dev);
-@@ -1412,14 +1545,19 @@ static int virtnet_xsk_wakeup(struct net_device *dev, u32 qid, u32 flag)
- 
- 	sq = &vi->sq[qid];
- 
--	if (napi_if_scheduled_mark_missed(&sq->napi))
--		return 0;
-+	xsk_wakeup(sq);
-+	return 0;
-+}
- 
--	local_bh_disable();
--	virtqueue_napi_schedule(&sq->napi, sq->vq);
--	local_bh_enable();
-+static void virtnet_xsk_completed(struct send_queue *sq, int num)
-+{
-+	xsk_tx_completed(sq->xsk_pool, num);
- 
--	return 0;
-+	/* If this is called by rx poll, start_xmit and xdp xmit we should
-+	 * wakeup the tx napi to consume the xsk tx queue, because the tx
-+	 * interrupt may not be triggered.
-+	 */
-+	xsk_wakeup(sq);
- }
- 
- static int __virtnet_xdp_xmit_one(struct virtnet_info *vi,
-@@ -1535,8 +1673,8 @@ static int virtnet_xdp_xmit(struct net_device *dev,
- 	}
- 
- 	/* Free up any pending old buffers before queueing new ones. */
--	__free_old_xmit(sq, netdev_get_tx_queue(dev, sq - vi->sq),
--			false, &stats);
-+	virtnet_free_old_xmit(sq, netdev_get_tx_queue(dev, sq - vi->sq),
-+			      false, &stats);
- 
- 	for (i = 0; i < n; i++) {
- 		struct xdp_frame *xdpf = frames[i];
-@@ -2993,7 +3131,7 @@ static int virtnet_poll_tx(struct napi_struct *napi, int budget)
- 	struct virtnet_info *vi = sq->vq->vdev->priv;
- 	unsigned int index = vq2txq(sq->vq);
- 	struct netdev_queue *txq;
--	int opaque;
-+	int opaque, xsk_done = 0;
- 	bool done;
- 
- 	if (unlikely(is_xdp_raw_buffer_queue(vi, index))) {
-@@ -3005,7 +3143,11 @@ static int virtnet_poll_tx(struct napi_struct *napi, int budget)
- 	txq = netdev_get_tx_queue(vi->dev, index);
- 	__netif_tx_lock(txq, raw_smp_processor_id());
- 	virtqueue_disable_cb(sq->vq);
--	free_old_xmit(sq, txq, !!budget);
-+
-+	if (sq->xsk_pool)
-+		xsk_done = virtnet_xsk_xmit(sq, sq->xsk_pool, budget);
-+	else
-+		free_old_xmit(sq, txq, !!budget);
- 
- 	if (sq->vq->num_free >= 2 + MAX_SKB_FRAGS) {
- 		if (netif_tx_queue_stopped(txq)) {
-@@ -3016,6 +3158,11 @@ static int virtnet_poll_tx(struct napi_struct *napi, int budget)
- 		netif_tx_wake_queue(txq);
- 	}
- 
-+	if (xsk_done >= budget) {
-+		__netif_tx_unlock(txq);
-+		return budget;
-+	}
-+
- 	opaque = virtqueue_enable_cb_prepare(sq->vq);
- 
- 	done = napi_complete_done(napi, 0);
-@@ -6058,6 +6205,12 @@ static void free_receive_page_frags(struct virtnet_info *vi)
- 
- static void virtnet_sq_free_unused_buf(struct virtqueue *vq, void *buf)
- {
-+	struct virtnet_info *vi = vq->vdev->priv;
-+	struct send_queue *sq;
-+	int i = vq2rxq(vq);
-+
-+	sq = &vi->sq[i];
-+
- 	switch (virtnet_xmit_ptr_unpack(&buf)) {
- 	case VIRTNET_XMIT_TYPE_SKB:
- 	case VIRTNET_XMIT_TYPE_SKB_ORPHAN:
-@@ -6067,6 +6220,10 @@ static void virtnet_sq_free_unused_buf(struct virtqueue *vq, void *buf)
- 	case VIRTNET_XMIT_TYPE_XDP:
- 		xdp_return_frame(buf);
- 		break;
-+
-+	case VIRTNET_XMIT_TYPE_XSK:
-+		xsk_tx_completed(sq->xsk_pool, 1);
-+		break;
- 	}
- }
- 
--- 
-2.32.0.3.g01195cf9f
+with top and bottom guards there will be two calls to poison.
 
+But did you check that percpu allocs come from the vmalloc region?
+Does kasan_poison_vmalloc() actually work or silently nop ?
+
+> +               }
+>                  prog->aux->priv_stack_ptr =3D priv_stack_ptr;
+>          }
+>          addrs =3D jit_data->addrs;
+> @@ -3561,6 +3583,10 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_pr=
+og *prog)
+>   out_addrs:
+>                  kvfree(addrs);
+>                  if (!image && priv_stack_ptr) {
+> +                       for_each_possible_cpu(cpu) {
+> +                               guard_ptr =3D per_cpu_ptr(priv_stack_ptr,=
+ cpu);
+> +                               kasan_unpoison_vmalloc(guard_ptr, PRIV_ST=
+ACK_GUARD_SZ, KASAN_VMALLOC_PROT_NORMAL);
+> +                       }
+>                          free_percpu(priv_stack_ptr);
+>                          prog->aux->priv_stack_ptr =3D NULL;
+>                  }
+> @@ -3603,6 +3629,9 @@ void bpf_jit_free(struct bpf_prog *prog)
+>          if (prog->jited) {
+>                  struct x64_jit_data *jit_data =3D prog->aux->jit_data;
+>                  struct bpf_binary_header *hdr;
+> +               void __percpu *priv_stack_ptr;
+> +               u64 *guard_ptr;
+> +               int cpu;
+>
+>                  /*
+>                   * If we fail the final pass of JIT (from jit_subprogs),
+> @@ -3618,7 +3647,21 @@ void bpf_jit_free(struct bpf_prog *prog)
+>                  prog->bpf_func =3D (void *)prog->bpf_func - cfi_get_offs=
+et();
+>                  hdr =3D bpf_jit_binary_pack_hdr(prog);
+>                  bpf_jit_binary_pack_free(hdr, NULL);
+> -               free_percpu(prog->aux->priv_stack_ptr);
+> +
+> +               priv_stack_ptr =3D prog->aux->priv_stack_ptr;
+> +               if (priv_stack_ptr) {
+> +                       int stack_size;
+> +
+> +                       stack_size =3D round_up(prog->aux->stack_depth, 1=
+6) + PRIV_STACK_GUARD_SZ;
+> +                       for_each_possible_cpu(cpu) {
+> +                               guard_ptr =3D per_cpu_ptr(priv_stack_ptr,=
+ cpu);
+> +                               kasan_unpoison_vmalloc(guard_ptr, PRIV_ST=
+ACK_GUARD_SZ, KASAN_VMALLOC_PROT_NORMAL);
+> +                               if (guard_ptr[0] !=3D PRIV_STACK_GUARD_VA=
+L || guard_ptr[1] !=3D PRIV_STACK_GUARD_VAL)
+> +                                       pr_err("Private stack Overflow ha=
+ppened for prog %sx\n", prog->aux->name);
+> +                       }
+
+Common helper is needed to check guards before free_percpu.
+
+> +                       free_percpu(priv_stack_ptr);
+> +               }
+> +
+>                  WARN_ON_ONCE(!bpf_prog_kallsyms_verify_off(prog));
+>          }
+>
+> This fixed the issue Alexei discovered.
+>
+> 16 bytes guard space is allocated since allocation is done with 16byte al=
+igned
+> with multiple-16 size. If bpf program overflows the stack (change '#if 0'=
+ to '#if 1')
+> in the above change, we will see:
+>
+> [root@arch-fb-vm1 bpf]# ./test_progs -n 336
+> [   28.447390] bpf_testmod: loading out-of-tree module taints kernel.
+> [   28.448180] bpf_testmod: module verification failed: signature and/or =
+required key missing - tainting kernel
+> #336/1   struct_ops_private_stack/private_stack:OK
+> #336/2   struct_ops_private_stack/private_stack_fail:OK
+> #336/3   struct_ops_private_stack/private_stack_recur:OK
+> #336     struct_ops_private_stack:OK
+> Summary: 1/3 PASSED, 0 SKIPPED, 0 FAILED
+> [   28.737710] Private stack Overflow happened for prog Fx
+> [   28.739284] Private stack Overflow happened for prog Fx
+> [   28.968732] Private stack Overflow happened for prog Fx
+>
+> Here the func name is 'Fx' (representing the sub prog). We might need
+> to add more meaningful info (e.g. main prog name) to make message more
+> meaningful.
+
+Probably worth introducing a helper like:
+
+const char *bpf_get_prog_name(prog)
+{
+  if (fp->aux->ksym.prog)
+    return prog->aux->ksym.name;
+  return prog->aux->name;
+}
+
+
+>
+> I added some changes related kasan. If I made a change to guard space in =
+kernel (not in bpf prog),
+> the kasan can print out the error message properly. But unfortunately, in=
+ jit, there is no
+> kasan instrumentation so warning (with "#if 1" change) is not reported. O=
+ne possibility is
+> if kernel config enables kasan, bpf jit could add kasan to jited binary. =
+Not sure the
+> complexity and whether it is worthwhile or not since supposedly verifier =
+should already
+> prevent overflow and we already have a guard check (Private stack overflo=
+w happened ...)
+> in jit.
+
+As a follow up we should teach JIT to emit calls __asan_loadN/storeN
+when processing LDX/STX.
+imo it's been long overdue.
