@@ -1,225 +1,63 @@
-Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D72CA13049E
-	for <bpf@vger.kernel.org>; Wed, 13 Nov 2024 17:15:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 197BE1632FD;
+	Wed, 13 Nov 2024 17:19:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731518125; cv=none; b=sCo5P5B2VMntuk0vB8Pz2aNJxHJUtOeYLJDlfaYUeO4H3GjLRr2wJ54DLi9K4nLmeY0cUr4RLE+OYf15NAm/wJDLA/LocP4tsrObv/SGhc9l2Dscdo+OXEB7zUts2sohkpzDlfZ9FY1QUe/LnYO5Yt2A3x6LhDMDUea/hY/3BWg=
+	t=1731518344; cv=none; b=pUZpDa4NjF7QUcJUorV/Fx1mc0fuBcNwiciLXnk2g4EBjmOTVAFmigtSVTh1guZasukCivT1vIGJUHm1PBi9sFXwzAC348uQcj5ibErUpSf3fs9NworEZsZ0GUCWaqfKAP2dLBP+gc4Sb5IzZZWUId0lXtNt4ntwC/jYLBCL71A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731518125; c=relaxed/simple;
-	bh=WERDNI0LGwVY3RbweBxSs7T16pb32PWza3c0CSA8vS4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rwGwJfIyUo/IWsbIBOl4w8i97N5SQvgjKAqDZu1D5kTe2vETtWAPwvilgJoZrkrP9cmWVTfe8GCbIM1xuUm15RQhoCA01Z+zpAKxZkaIgrahsdTRg9VvXXY3pX12zJYSsNCrjreYJrmlJLOVZerwokPhbaCRXdBmotjII1TY1iI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=MH9uZI/t; arc=none smtp.client-ip=209.85.214.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1731518344; c=relaxed/simple;
+	bh=eTYbVJIlt9pjDfQQC/rqZPZIrsQ0kAelz2j0zUwZgs8=;
+	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=QEaNFffurws/m2yfUoCJ839F99gIVJnnQFqj71BN5fn9HydCjnDiam6zwy2Q/XpGeTo+tcnWVIoB9PEWC1UNQw/6kEefzl0Tn2PJB4I9GlCmrezFqG3MkrZpMShiUrtkSfCC8OP1atlgueBwLANo6puD8OvId3PZB9Sbo57qE68=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Cm91Zimk; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="MH9uZI/t"
-Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-20c805a0753so71685945ad.0
-        for <bpf@vger.kernel.org>; Wed, 13 Nov 2024 09:15:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1731518123; x=1732122923; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=TmnyoVBogdAY8x4kmLAsg1HFi2F5M2VCC5E3t36HwWM=;
-        b=MH9uZI/tahjLauBLF+d2t8/dNLtsBKbR3fDLESbPtmjWNvqJYKb8m7kdNFTQ7lG4zB
-         XJb9N8ZnDtUltO9N8UOx/pTsFIB/kI8MOnOZ/vktrnu4yGgVUn+R4SMf4b6yZm6c9q2/
-         AK4qxGbHoQ/lx2hM6jF0TTighBs9CJYnb4i5CjLc3/tg3SJp+r2QqvnYQ3X/6yb0wE0G
-         lLeKD2VQzc6gbwcWRmOoPBtaZwudQy4HZVkVd7eJ4ShbZFIs9HbiFlbhJwrF11s1j6nP
-         /1TugoTFnjTQX4rf5Mpci7hrcI18ykOjmgLxVUQVaHyC3wHhPZwUMrnuFT/Rpr0kc/3c
-         NnBw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731518123; x=1732122923;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=TmnyoVBogdAY8x4kmLAsg1HFi2F5M2VCC5E3t36HwWM=;
-        b=Hd+RS+Kbkn84T5mGnRdwtUl96zEl8RjsVwMetmj9GDGm2qnZlfsCIbLgPje3Fp8YCR
-         CF/0EcHvi+mh6ZAh+7etAoQlbR90KlMplPuoNIQuO3Rqjkr3qMvJ7+iWBPWZZLIDP5p9
-         E/joYUCRdU37o4+JGBiTanAhxmektD/Z0E+yR3O9FFbi0JU+wkN7eSe1szQjuugx8lBB
-         k5UQfUaIxkbgpJwRmgR1CXkTZMaWygOJ62b+jZQpRM1ZC08Fuk9CEcEsJV2aQH8BnuYq
-         +y1shXd3oc6hWIHWmWdRf8I7cOyRcGzzwtMKI1oZ/ESXasDLDTLW0rmeZAHf6Ox3PLis
-         wT+Q==
-X-Forwarded-Encrypted: i=1; AJvYcCXbGxiKwlrQHSq54MfUim/EMVJTl5S8FGqGz2UopV5EyswLnrn3xlaRVfm8CU959RVksyo=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy1Q18C6KG9BEQ+biOjg9Td49tN+j8er/RbDO61rHEpCP2rrnyX
-	WXjEyxB8ItftmBsKTERxUyucc3jpUK9qppGeXYfbmK845JhrWV4rbLrqsZQO6A==
-X-Google-Smtp-Source: AGHT+IHzuQZcyCrKEu2zhDf6vGWpfQpSsivZTFz9ERjtI5rVRvb2nqfyzm+YGxn9leeh1yDA8kfSug==
-X-Received: by 2002:a17:903:41ca:b0:20b:9f8c:e9de with SMTP id d9443c01a7336-21183cff8a2mr257327955ad.13.1731518123010;
-        Wed, 13 Nov 2024 09:15:23 -0800 (PST)
-Received: from thinkpad ([117.213.102.160])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21177dc8f25sm112819815ad.22.2024.11.13.09.15.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Nov 2024 09:15:22 -0800 (PST)
-Date: Wed, 13 Nov 2024 22:45:11 +0530
-From: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To: Frank Li <Frank.Li@nxp.com>
-Cc: Bjorn Helgaas <bhelgaas@google.com>, Richard Zhu <hongxing.zhu@nxp.com>,
-	Lucas Stach <l.stach@pengutronix.de>,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-	Rob Herring <robh@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>, linux-pci@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	imx@lists.linux.dev, alyssa@rosenzweig.io, bpf@vger.kernel.org,
-	broonie@kernel.org, jgg@ziepe.ca, joro@8bytes.org,
-	lgirdwood@gmail.com, maz@kernel.org, p.zabel@pengutronix.de,
-	robin.murphy@arm.com, will@kernel.org
-Subject: Re: [PATCH v5 1/2] PCI: Add enable_device() and disable_device()
- callbacks for bridges
-Message-ID: <20241113171511.6d4gh3x27nej55qw@thinkpad>
-References: <20241104-imx95_lut-v5-0-feb972f3f13b@nxp.com>
- <20241104-imx95_lut-v5-1-feb972f3f13b@nxp.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Cm91Zimk"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CAD01C4CEED;
+	Wed, 13 Nov 2024 17:19:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1731518343;
+	bh=eTYbVJIlt9pjDfQQC/rqZPZIrsQ0kAelz2j0zUwZgs8=;
+	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+	b=Cm91ZimkU6i/o90xLDL4T5a8HUs7va+wIwNovkw59iFTOSge72pvLLGrXkYHpmqxZ
+	 bapVuUrSVlE2X/gcWc4E2rW84v/zPBmjUB6VDBi9pvh44UheSRFjW1IqHdcUOMibs1
+	 jqr3ihFbaEeOA5jVsoZ1R7Zz1Wkfnys+5fZXSK+tAgKj6ZQZWEK+10IiAzRrrI9FcA
+	 B5jgTH6mF3cmOPCZ9ivz6gkI4vPjfdHnwrg9AN3bBZdUmdTwfHleCsVF/f1VoKZeQH
+	 k0bFPVQKHExolieM7H0EsZyVuhAtW981EKBdNNd0qUZPnRdWdxu5eQZwRco66fWRJI
+	 4eMvbf48OIViA==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 33CD63809A80;
+	Wed, 13 Nov 2024 17:19:15 +0000 (UTC)
+Subject: Re: [GIT PULL] bpf for v6.12-rc8
+From: pr-tracker-bot@kernel.org
+In-Reply-To: <20241113030640.24492-1-daniel@iogearbox.net>
+References: <20241113030640.24492-1-daniel@iogearbox.net>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20241113030640.24492-1-daniel@iogearbox.net>
+X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git tags/bpf-fixes
+X-PR-Tracked-Commit-Id: fb86c42a2a5d44e849ddfbc98b8d2f4f40d36ee3
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 9f8e716d46c68112484a23d1742d9ec725e082fc
+Message-Id: <173151835375.1293865.15470561655588494554.pr-tracker-bot@kernel.org>
+Date: Wed, 13 Nov 2024 17:19:13 +0000
+To: Daniel Borkmann <daniel@iogearbox.net>
+Cc: torvalds@linux-foundation.org, bpf@vger.kernel.org, netdev@vger.kernel.org, linux-kernel@vger.kernel.org, alexei.starovoitov@gmail.com, andrii@kernel.org, daniel@iogearbox.net, martin.lau@kernel.org
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20241104-imx95_lut-v5-1-feb972f3f13b@nxp.com>
 
-On Mon, Nov 04, 2024 at 02:22:59PM -0500, Frank Li wrote:
-> Some PCIe host bridges require special handling when enabling or disabling
-> PCIe Endpoints. For example, the i.MX95 platform has a lookup table to map
-> Requester IDs to StreamIDs, which are used by the SMMU and MSI controller
-> to identify the source of DMA accesses.
-> 
-> Without this mapping, DMA accesses may target unintended memory, which
-> would corrupt memory or read the wrong data.
-> 
-> Add a host bridge .enable_device() hook the imx6 driver can use to
-> configure the Requester ID to StreamID mapping. The hardware table isn't
-> big enough to map all possible Requester IDs, so this hook may fail if no
-> table space is available. In that case, return failure from
-> pci_enable_device().
-> 
-> It might make more sense to make pci_set_master() decline to enable bus
-> mastering and return failure, but it currently doesn't have a way to return
-> failure.
-> 
-> Signed-off-by: Frank Li <Frank.Li@nxp.com>
+The pull request you sent on Wed, 13 Nov 2024 04:06:40 +0100:
 
-Acked-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git tags/bpf-fixes
 
-- Mani
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/9f8e716d46c68112484a23d1742d9ec725e082fc
 
-> ---
-> Change from v4 to v5
-> - Add two static help functions
-> int pci_host_bridge_enable_device(dev);
-> void pci_host_bridge_disable_device(dev);
-> - remove tags because big change
-> Acked-by: Bjorn Helgaas <bhelgaas@google.com>
-> Reviewed-by: Marc Zyngier <maz@kernel.org>
-> Tested-by: Marc Zyngier <maz@kernel.org>
-> 
-> Change from v3 to v4
-> - Add Bjorn's ack tag
-> 
-> Change from v2 to v3
-> - use Bjorn suggest's commit message.
-> - call disable_device() when error happen.
-> 
-> Change from v1 to v2
-> - move enable(disable)device ops to pci_host_bridge
-> ---
->  drivers/pci/pci.c   | 36 +++++++++++++++++++++++++++++++++++-
->  include/linux/pci.h |  2 ++
->  2 files changed, 37 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
-> index 67013df89a694..4735bc665ab3b 100644
-> --- a/drivers/pci/pci.c
-> +++ b/drivers/pci/pci.c
-> @@ -2055,6 +2055,28 @@ int __weak pcibios_enable_device(struct pci_dev *dev, int bars)
->  	return pci_enable_resources(dev, bars);
->  }
->  
-> +static int pci_host_bridge_enable_device(struct pci_dev *dev)
-> +{
-> +	struct pci_host_bridge *host_bridge = pci_find_host_bridge(dev->bus);
-> +	int err;
-> +
-> +	if (host_bridge && host_bridge->enable_device) {
-> +		err = host_bridge->enable_device(host_bridge, dev);
-> +		if (err)
-> +			return err;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static void pci_host_bridge_disable_device(struct pci_dev *dev)
-> +{
-> +	struct pci_host_bridge *host_bridge = pci_find_host_bridge(dev->bus);
-> +
-> +	if (host_bridge && host_bridge->disable_device)
-> +		host_bridge->disable_device(host_bridge, dev);
-> +}
-> +
->  static int do_pci_enable_device(struct pci_dev *dev, int bars)
->  {
->  	int err;
-> @@ -2070,9 +2092,13 @@ static int do_pci_enable_device(struct pci_dev *dev, int bars)
->  	if (bridge)
->  		pcie_aspm_powersave_config_link(bridge);
->  
-> +	err = pci_host_bridge_enable_device(dev);
-> +	if (err)
-> +		return err;
-> +
->  	err = pcibios_enable_device(dev, bars);
->  	if (err < 0)
-> -		return err;
-> +		goto err_enable;
->  	pci_fixup_device(pci_fixup_enable, dev);
->  
->  	if (dev->msi_enabled || dev->msix_enabled)
-> @@ -2087,6 +2113,12 @@ static int do_pci_enable_device(struct pci_dev *dev, int bars)
->  	}
->  
->  	return 0;
-> +
-> +err_enable:
-> +	pci_host_bridge_disable_device(dev);
-> +
-> +	return err;
-> +
->  }
->  
->  /**
-> @@ -2270,6 +2302,8 @@ void pci_disable_device(struct pci_dev *dev)
->  	if (atomic_dec_return(&dev->enable_cnt) != 0)
->  		return;
->  
-> +	pci_host_bridge_disable_device(dev);
-> +
->  	do_pci_disable_device(dev);
->  
->  	dev->is_busmaster = 0;
-> diff --git a/include/linux/pci.h b/include/linux/pci.h
-> index a17edc6c28fda..5f75c30f263be 100644
-> --- a/include/linux/pci.h
-> +++ b/include/linux/pci.h
-> @@ -596,6 +596,8 @@ struct pci_host_bridge {
->  	u8 (*swizzle_irq)(struct pci_dev *, u8 *); /* Platform IRQ swizzler */
->  	int (*map_irq)(const struct pci_dev *, u8, u8);
->  	void (*release_fn)(struct pci_host_bridge *);
-> +	int (*enable_device)(struct pci_host_bridge *bridge, struct pci_dev *dev);
-> +	void (*disable_device)(struct pci_host_bridge *bridge, struct pci_dev *dev);
->  	void		*release_data;
->  	unsigned int	ignore_reset_delay:1;	/* For entire hierarchy */
->  	unsigned int	no_ext_tags:1;		/* No Extended Tags */
-> 
-> -- 
-> 2.34.1
-> 
+Thank you!
 
 -- 
-மணிவண்ணன் சதாசிவம்
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
