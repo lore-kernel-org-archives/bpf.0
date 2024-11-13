@@ -1,166 +1,137 @@
-Received: from sonic310-30.consmr.mail.ne1.yahoo.com (sonic310-30.consmr.mail.ne1.yahoo.com [66.163.186.211])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-172.mta1.migadu.com (out-172.mta1.migadu.com [95.215.58.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FD0613D8B1
-	for <bpf@vger.kernel.org>; Wed, 13 Nov 2024 18:16:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.163.186.211
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DF332076A6;
+	Wed, 13 Nov 2024 18:27:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731521803; cv=none; b=NVUBRZFbLewSLmmFVTLvDgGGEQ98pg9mtFGcC3MNJb0B837Q7JdFq5d9omjDxSXgJjIsQFfeNWzhM3rnbpHvM9+a+bGIJjvUMIc5XgMAz3F3AlqlucuC5QvW5dWxaZjGVn/anKf4ugpaTCHJvUoURt+FLoTXuqNPbyOi79ZspCs=
+	t=1731522464; cv=none; b=jqT03nKTZ2JFJjG7IwjHfKryXvdQnV43kQbKkS7iJTxi+BoxRXvToIvpoftR8vc2r4L3v1aQBL9kx+LbiVvs5QyWqXjl+pHXa+OazcXVlEgvs+maioI3ZXwKTAk/+NenNFowdRvcTAcpURwM4MBfyscVopdHWkBIZpCEoe60NZI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731521803; c=relaxed/simple;
-	bh=98TZmzT2MooiEezIeSkgUrdFZXX490rOVv6Tto3W0wQ=;
+	s=arc-20240116; t=1731522464; c=relaxed/simple;
+	bh=E6exQRgO4sdK82FYXUgJ7ORg1cC4LHmn/GIadt+Xi3I=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=JPk4+oArE+EGMFuhtkb3a9ZgXD8GV6OCcSHzVUoDT7fOtB85kZM77DObO2czj0ZlYjheMDAauF7etas7Rb4Nr2uH8xy5PqfU4jilppxWq0Mq+a60ZQLShLoou+OL5jJCKNRL2B071I3+0/SaAsZhek8k46YX1R/TYUiKPCz3d/Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com; spf=none smtp.mailfrom=schaufler-ca.com; dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b=BBQGjNFK; arc=none smtp.client-ip=66.163.186.211
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=schaufler-ca.com
+	 In-Reply-To:Content-Type; b=DASnv8JFmwdODlsS7W7JFFKMQS38ljMSmD794nirlvH3l+dv1YZutLmoxKb1R8b+WUTa3BHt3miadoWOD5g3LoKFmihCPsYxV5/PPFx5dDHaqX3YUkfw3m62C647FYMdwIQ7kwpZGHUFRiBwSDKaPXq3U9XAuNMFCmnIplTK4PU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=tK59r/pI; arc=none smtp.client-ip=95.215.58.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b="BBQGjNFK"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1731521795; bh=nK3uVT0icuqVtInCsSNHN4I+MCkUBZj85NQuNcPcveQ=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=BBQGjNFKCOrMnODOnGG382npnC7ZeH5NRQmjZdBM2kHpbeqVdxERVJ7Tvii8qj5k3CL6usuj3yrdh8PWWZ+8oDTV/6HZ3jWJmLgrkL9dg9GZG39gHpdfmlq+kOnkfJkmXu1DbA3H0UrAKkSdQfy2D1+azEpjJJfNiSTKvV6ckIjasLm8hMbOE48vQ8hZg/u07WzBpYMlyAaqzpazPR7sNRaPQ/Bi0J3sCKfdhd3zY2TrmBQiFdmrvOHQXgjv4MZM6haF1lRRIzYWzBeyLzcbbXIOqXyO0hdd+U2IgazYm3WZgJKH7B+lanAcmdE/5eRJSR1a0Y502kXDFe+xVlhyMA==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1731521795; bh=BNlNYR5UrzceehY+vKtuO8A7BaaRHoKIyqXSV5Kqeoc=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=m6X530obMM8UbRAc0/PVTz8pGlU3lSWeSlibtRMbT7cqkWuFtdMo0GdCK+zTn8A6nL5vpb04z5UMWykmWUuUhJ5zs5SO19ZpjdD+af2QEuTlOGRlNpD+k0ZHkbV00QSUxkTWDNxuTS1IzAV8wgxHs+nMc++k8rHw5x/g/4O2kGQ+EgxdEiy0Fkvjc6R4QcgVmnWB5rssFeQMBZjAODKRxTNXV2geUIFYJeaAd8J/xjUhjh/1n/5ZieCD6hRzMDjIGobpaMETayQEEhSvaGJuIoJQ7orjXsVjVxcZQpxBw9N20agrxUHEZWnygU4LDfTjqodSKdygBKJ9oNxO0g2N3A==
-X-YMail-OSG: Uxjk32kVM1luneeRTquscdUZ4LgKFH.IAkCUxC5LV.UP.gulMSYd04ah4LUwcU0
- LD3.wRosaVEzYtfAkWU7Z_LTYnQ06y_oxjnJmpDKzhMCWg2njhnkUHtCgITevk6nyHfbi5UH2NOU
- 2IxCzvy1k4ZlfLkvf2jIFDytUpSSOYI7k3c.6JGqQjF.8V5kadDoX8nejGdOVIB8rOuLeA.7pAmX
- zMZ_X2NpJBcO8kOZpCFDte2lwLxsWn4Sct6mXUDJt7_y5.FZXQHx0my9ULIphC2sZRHvAukfYO9P
- s2Y19pY_Onm5JTnCqj4Wj8xFKcI9ku6bdZLSqQCmaIFTLSrrqfZ8brcTUW8gRQQ.28yCrJhBO7fU
- KYxUUMApjUTiLDj4Nwt4GR.B_BOfcH7QK5.kQBQ3HFYmhn2XYIURB7cXmyP8xYlK0qqTSJYPTfiX
- w0vQ4xksf_WkGwjXZCG6AukyhckFdWTXLMAhw8GoyJ9Qsspx39XR8HqioGmxM30yzdmIyIybZUkt
- WCU6blPIEextXkCMEJDDf_8JrCq4zSEaWlqU3wC0B9FAOTQkrLDhoZNcqrXxmzkx7fxst.ooBHxn
- EsXfJMegnFMoYeZna9WALp9v8TVFiKniRPioMjmR9RGcdolK3QzxDdddO0_EOr1TCSoFk1gE..Iu
- 6mSRCiOctTPG9ZdDhZ6PPLfn.PUHHfrRncIlVtTxf_g6WmKo_lJXorFe.ginNVOWXt4m1sW77FOM
- xbg.C5nI9lDIVCFjhp6uRbociKZtOYdhhXzqKYPYVwgXhRjznQX4jp9QuWWtycetTQRi8l1DjCeG
- CAWgMGQDsK1aYkEhamOF48xjHFnuH8x7Tby8NZtrZ1g4IS1OgRN9l381_35EnPp8hYXFmvKzRSLw
- Cu8OvKIhjvpeXJqxOHH5XY4iJNNMxvgB29_rMPxotTzWIbUmUshaQwLuHIkZgC9GFFRuXpHDqBnW
- WShy4OBMVtxy8PgSa7oLGN7VO7bV6vE0K4.srHyEdQb9YTrEYUSvUmcrKRgCexTusTzp9NuTl8LS
- _tLM6OcOMMyVVj00GRip_5yF0qqv5lTI5OAzos73R4WkyT6d1BElDysgjrokJnJqxn8IAjp8rkMF
- dZIYsaagoaBwwrp_KpbVBTGTh8RtLU5wcqSS0pNSoz2MdMIIlUCU_li3omFvzLuvv.eqExNoffwJ
- 9I_sJB9uvHsSVjRjb0XIuc9awy0m_twhjpRajB4I9rXYiHPYZG_B_YpNjiD9ZwGWkz6xqgwknNvS
- jbwNXzqxvJBniwa4won.ARKeNwvJPKrppCyMohuH49R_4CeyCwiUpdv09sTjke.tbhxW1GYqqGMd
- 7.7vrE5_ahv_zbFAdlvS9Fx5HwHP5niboB2eUNCdTNAIvX_Q7QclcWZeuEDK8gaMRA8rJ3NscHey
- iOvAYcDkwHWSaBfY4a598zmt1yrwmTsrch0L1jkwQaxuN9Twpxq1szlzv6e66RtrDZsZQd.2fP7x
- xRP__yFGS4mxecz7GjTVA6PzGR4ZCWke0jGnWK8ip8fCZwbdRVdkt1ewz5o0MpikZ1a_Tq9_cN00
- AidJstdHNRuQp6DQp9pLPiHnVaM8fOk9npgbWM.MbyBfJK.B5tYVK3naQRhUe_sDsOALGufxY4PQ
- KP34cqMdSNvN1_cJuJDK0eLpQAs5RyjM4Pf3mFizK2th4jlDEBgfKQOHgC3yFzcFOSsDnX7vKgcE
- 4kCdfpnEPX7R2Tim0tkpJXD3sGFtjYxE_PzKOyFeBeEN3wM2EdzjKDGWIXZVSMnfFVNngiCrrB9N
- 1INigPvBNyKnbTNipkn8NcBaRQUQcabmuODql7VM6kN9EjVVP6JpxT6wdxvmAnXibOyKCi.S0JVG
- krRtnxnSxNT_xA_fi5LEOxzWCW31NL9fluxf3DrfFGmXtD.x4Ez4m.F.qBWfOixt1w3VjXXtp.Vm
- Tw59EGEFR4FMnWCG94LAgA7MPLyWSsEaQrqr0d9y3TPemyTvmywQSnJtrECtSbyyPq3019SZ6McB
- .D3zJG.np3KJBCS_2zqwY0JxsZWRXQ828z0aVjIeRxYvfX4UUK8SAZrOQo9kxUhaRkeLdmJmyqfQ
- Q2e1YQ4U5VlEBf4s_TxpbQo3sV_LL2pJEdOe.wHkDeSTG_KOkS.qihmw3kv2a0j83aM_n3TmGa.t
- EmczdJBbd7lxkO.UrBsxA3Ckd66HZEyAWMewm3VKLKbUiUXPfCE9fOmbJyUg3ZMTpawiWUVAtKG.
- zacAbSPsGR9jyeME6WTudQxkDth.eSqgrS1sLdY94lV4KhLS8vMzxdCUhtM5bx_spqA99NTgX.fw
- -
-X-Sonic-MF: <casey@schaufler-ca.com>
-X-Sonic-ID: 523fd01a-36c6-4113-a0a5-f206da02e08a
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic310.consmr.mail.ne1.yahoo.com with HTTP; Wed, 13 Nov 2024 18:16:35 +0000
-Received: by hermes--production-gq1-5dd4b47f46-ps69l (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 3a47f707b068f3c37ad3e14e6ceee550;
-          Wed, 13 Nov 2024 18:06:25 +0000 (UTC)
-Message-ID: <8c86c2b4-cd23-42e0-9eb6-2c8f7a4cbcd4@schaufler-ca.com>
-Date: Wed, 13 Nov 2024 10:06:23 -0800
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="tK59r/pI"
+Message-ID: <548c7b6b-3b84-4053-baa7-72976731ab87@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1731522460;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=wtq/hCa1avqHR2oznEXfOIIBcgWPUCwPcwLPqp3rxH0=;
+	b=tK59r/pI3vHGzA1E1Vb/b0Or2d9yDK/P7Ko0+iD3P+ZEgxb0tosMamBfp5VYJuettaOUW7
+	kpXUXSk4AnKUk7FY2UHXRI10MuJg5wvbtOfBOQ/M7Yt5rQSfdlNT9PVhHud+w4Y+kCjVRK
+	6Ku2bmKNEQWyyUy/ycvlHr8IsnTK6Rs=
+Date: Wed, 13 Nov 2024 10:27:32 -0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next 0/4] Make inode storage available to tracing prog
-To: Song Liu <songliubraving@meta.com>
-Cc: Song Liu <song@kernel.org>, "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
- "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- "linux-security-module@vger.kernel.org"
- <linux-security-module@vger.kernel.org>, Kernel Team <kernel-team@meta.com>,
- "andrii@kernel.org" <andrii@kernel.org>,
- "eddyz87@gmail.com" <eddyz87@gmail.com>, "ast@kernel.org" <ast@kernel.org>,
- "daniel@iogearbox.net" <daniel@iogearbox.net>,
- "martin.lau@linux.dev" <martin.lau@linux.dev>,
- "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
- "brauner@kernel.org" <brauner@kernel.org>, "jack@suse.cz" <jack@suse.cz>,
- "kpsingh@kernel.org" <kpsingh@kernel.org>,
- "mattbobrowski@google.com" <mattbobrowski@google.com>,
- "amir73il@gmail.com" <amir73il@gmail.com>,
- "repnop@google.com" <repnop@google.com>,
- "jlayton@kernel.org" <jlayton@kernel.org>, Josef Bacik
- <josef@toxicpanda.com>, "mic@digikod.net" <mic@digikod.net>,
- "gnoack@google.com" <gnoack@google.com>,
- Casey Schaufler <casey@schaufler-ca.com>
-References: <20241112082600.298035-1-song@kernel.org>
- <d3e82f51-d381-4aaf-a6aa-917d5ec08150@schaufler-ca.com>
- <ACCC67D1-E206-4D9B-98F7-B24A2A44A532@fb.com>
- <d7d23675-88e6-4f63-b04d-c732165133ba@schaufler-ca.com>
- <332BDB30-BCDC-4F24-BB8C-DD29D5003426@fb.com>
-Content-Language: en-US
-From: Casey Schaufler <casey@schaufler-ca.com>
-In-Reply-To: <332BDB30-BCDC-4F24-BB8C-DD29D5003426@fb.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Mailer: WebService/1.1.22876 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
+Subject: Re: [PATCH dwarves 3/3] dwarf_loader: Check DW_OP_[GNU_]entry_value
+ for possible parameter matching
+Content-Language: en-GB
+To: Alan Maguire <alan.maguire@oracle.com>,
+ Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc: Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
+ dwarves@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+ Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
+ Daniel Borkmann <daniel@iogearbox.net>, kernel-team@fb.com,
+ Song Liu <song@kernel.org>
+References: <20241108180508.1196431-1-yonghong.song@linux.dev>
+ <20241108180524.1198900-1-yonghong.song@linux.dev>
+ <b32b2892-31b1-4dc0-8398-d8fadfaafcc6@oracle.com>
+ <5be88704-1bb0-4332-8626-26e7c908184c@linux.dev>
+ <e311899e-5502-4d46-b9ee-edc0ee9dd023@oracle.com>
+ <48a2d5a2-38e0-4c36-90cc-122602ff6386@linux.dev>
+ <5e640168-7753-413a-ab00-f297948e84ef@oracle.com> <ZzOoGJBiL-l6BfQd@x1>
+ <71778df3-62a6-4b1d-9ccf-4a8eb0e23828@oracle.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <71778df3-62a6-4b1d-9ccf-4a8eb0e23828@oracle.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-On 11/12/2024 5:37 PM, Song Liu wrote:
->
->> On Nov 12, 2024, at 5:10 PM, Casey Schaufler <casey@schaufler-ca.com> wrote:
+
+
+
+On 11/13/24 9:33 AM, Alan Maguire wrote:
+> On 12/11/2024 19:10, Arnaldo Carvalho de Melo wrote:
+>> On Tue, Nov 12, 2024 at 06:33:38PM +0000, Alan Maguire wrote:
+>>> On 12/11/2024 17:07, Yonghong Song wrote:
+>>>> On 11/12/24 8:56 AM, Alan Maguire wrote:
+>>>>> On 12/11/2024 01:51, Yonghong Song wrote:
+>>>>>> On 11/11/24 7:39 AM, Alan Maguire wrote:
+>>>>> "for one of internal 6.11 kernel, there are 62498 functions in BTF and
+>>>>> perf_event_read() is not there. With this patch, there are 61552
+>>>>> functions in BTF and perf_event_read() is included."
+>>>>> These numbers suggest you lost nearly 1000 functions when building
+>>>>> vmlinux BTF with pahole using this series. That's the part I don't
+>>>>> understand - we should just see a gain in numbers of functions in
+>>>>> vmlinux BTF, right? Did you mean 62552 functions rather than 61552
+>>>>> perhaps?tion
+>>   
+>>>> Sorry, really embarrassing. it is typo. Indeed it should be 62552 functions
+>>>> in BTF instead.
+>>   
+>>> No problem, makes perfect sense now, thanks! I'm trying to reproduce the
+>>> core dumps Eduard saw now with this setup; I'll report back if I manage
+>>> to do so and see if locks as Jiri and Arnaldo suggested help. If so a v2
+>>> along the lines of Eduard's suggested change plus locking might be the
+>>> best approach, what do you think? Thanks!
+>> So the idea is to try to see what are the data structures that are
+>> being corrupted in the features we use from elfutils libraries and check
+>> how they are being protected via their non-default enabled experimental
+>> thread safety locks and then use it before calling their functions that
+>> would use those locks.
 >>
->> On 11/12/2024 10:44 AM, Song Liu wrote:
->>> Hi Casey, 
->>>
->>> Thanks for your input. 
->>>
->>>> On Nov 12, 2024, at 10:09 AM, Casey Schaufler <casey@schaufler-ca.com> wrote:
->>>>
->>>> On 11/12/2024 12:25 AM, Song Liu wrote:
->>>>> bpf inode local storage can be useful beyond LSM programs. For example,
->>>>> bcc/libbpf-tools file* can use inode local storage to simplify the logic.
->>>>> This set makes inode local storage available to tracing program.
->>>> Mixing the storage and scope of LSM data and tracing data leaves all sorts
->>>> of opportunities for abuse. Add inode data for tracing if you can get the
->>>> patch accepted, but do not move the LSM data out of i_security. Moving
->>>> the LSM data would break the integrity (such that there is) of the LSM
->>>> model.
->>> I honestly don't see how this would cause any issues. Each bpf inode 
->>> storage maps are independent of each other, and the bpf local storage is 
->>> designed to handle multiple inode storage maps properly. Therefore, if
->>> the user decide to stick with only LSM hooks, there isn't any behavior 
->>> change. OTOH, if the user decides some tracing hooks (on tracepoints, 
->>> etc.) are needed, making a inode storage map available for both tracing 
->>> programs and LSM programs would help simplify the logic. (Alternatively,
->>> the tracing programs need to store per inode data in a hash map, and 
->>> the LSM program would read that instead of the inode storage map.)
->>>
->>> Does this answer the question and address the concerns?
->> First off, I had no question. No, this does not address my concern.
->> LSM data should be kept in and managed by the LSMs. We're making an
->> effort to make the LSM infrastructure more consistent.
-> Could you provide more information on the definition of "more 
-> consistent" LSM infrastructure?
+>> At some point we need to do some feature check to see if the lock is
+>> enabled there and avoid adding it from pahole's side.
+>>
+>> I.e. a transitional strategy to keep pahole -j feature that works with
+>> older elfutils versions as well as with modern, thread safe ones.
+>>
+>> This was used with the existing libdw__lock we have in the pahole
+>> codebase with, AFAIK, good results.
+>>
+> Thanks for the additional info! From Eduard's analysis, it seems like it
+> is safer to take the libdw__lock around dwarf_getlocation(s), since
+> multiple threads can access the CU location cache. I've tried tweaking
+> Eduard's modification of Yonghong's original patch and adding a second
+> patch to add locking; with these two patches applied
+>
+> - we see the desired behaviour where perf_event_read() is present in
+> BTF; and
+> - we don't see any segmentation faults after ~700 iterations where I saw
+> one every 200 or so before
+>
+> Yonghong, Eduard - do these changes look okay from your side? Feel free
+> to resubmit if so (fixing up attributions as you see fit if they look
+> wrong of course). Thanks!
 
-We're doing several things. The management of security blobs
-(e.g. inode->i_security) has been moved out of the individual
-modules and into the infrastructure. The use of a u32 secid is
-being replaced with a more general lsm_prop structure, except
-where networking code won't allow it. A good deal of work has
-gone into making the return values of LSM hooks consistent.
+Thanks Alan for working on this. The following are some suggestions for patch one:
+   1. rename __dwarf_getlocations() to __parameter__locations()?
+   2. rename param_reg_at_entry to parameter__locations()?
+   3. You missed the following:
+static int param_reg_at_entry(Dwarf_Attribute *attr, int expected_reg)
+{
+...
+         if (first_expr)                     // this line
+                 return first_expr->atom;    // this line
+         return -1;
+}
 
-Some of this was done as part of the direct call change, and some
-in support of LSM stacking. There are also some hardening changes
-that aren't ready for prime-time, but that are in the works.
-There have been concerns about the potential expoitability of the
-LSM infrastructure, and we're serious about addressing those.
+Patch 2 needs adjustment as well due to the above point #3.
+Otherwise, LGTM. Since you are already preparing the patch,
+please go ahead to pose v2 after you fixing the above things.
 
 >
-> BPF LSM programs have full access to regular BPF maps (hash map, 
-> array, etc.). There was never a separation of LSM data vs. other 
-> data. 
->
-> AFAICT, other LSMs also use kzalloc and similar APIs for memory 
-> allocation. So data separation is not a goal for any LSM, right?
->
-> Thanks,
-> Song
->
->> Moving some of
->> the LSM data into an LSM specific field in the inode structure goes
->> against this. What you're proposing is a one-off clever optimization
->> hack. We have too many of those already.
->
->
+> Alan
+
