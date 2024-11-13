@@ -1,434 +1,166 @@
-Received: from EUR03-AM7-obe.outbound.protection.outlook.com (mail-am7eur03on2062.outbound.protection.outlook.com [40.107.105.62])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from sonic310-30.consmr.mail.ne1.yahoo.com (sonic310-30.consmr.mail.ne1.yahoo.com [66.163.186.211])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC25D1FAC4F;
-	Wed, 13 Nov 2024 18:10:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.105.62
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731521417; cv=fail; b=c+Q0KeVPQ6S++wGeYTmoITG/zMPxiafgpdTv5KEJMta8Gyq44d0EcAczVr0lIF6IvbCIDooDl9F6o+ffDl1rg/rUPNusBv5syDgloJW+uqtcue8cSFj16cqpyBu3qVbkfo7x+2vszR1An96+ZE2FIabsqHqF/uZR6p85mDDwwHE=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731521417; c=relaxed/simple;
-	bh=2r7WKMk6vGbTEizywnMEOpWGV0fhiu5+dlgVDv5+LGk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=W2iU5G4Peer4Jfqmc92edCW+gQOLoML8XLlQ5IQ8+7hy9RIR/0+gW3F/9KzLucTDZ4Jok+txbxIfRBw6A8epA328JMzXlIoiccauHUrJwPXtK1qm5F4uJ/oBTChhxpY4tXoiavKSFh/CjjyCp3WsKEsps2jxP3HZwk5295V9zL0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=SM6UlOUz; arc=fail smtp.client-ip=40.107.105.62
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FD0613D8B1
+	for <bpf@vger.kernel.org>; Wed, 13 Nov 2024 18:16:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.163.186.211
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1731521803; cv=none; b=NVUBRZFbLewSLmmFVTLvDgGGEQ98pg9mtFGcC3MNJb0B837Q7JdFq5d9omjDxSXgJjIsQFfeNWzhM3rnbpHvM9+a+bGIJjvUMIc5XgMAz3F3AlqlucuC5QvW5dWxaZjGVn/anKf4ugpaTCHJvUoURt+FLoTXuqNPbyOi79ZspCs=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1731521803; c=relaxed/simple;
+	bh=98TZmzT2MooiEezIeSkgUrdFZXX490rOVv6Tto3W0wQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=JPk4+oArE+EGMFuhtkb3a9ZgXD8GV6OCcSHzVUoDT7fOtB85kZM77DObO2czj0ZlYjheMDAauF7etas7Rb4Nr2uH8xy5PqfU4jilppxWq0Mq+a60ZQLShLoou+OL5jJCKNRL2B071I3+0/SaAsZhek8k46YX1R/TYUiKPCz3d/Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com; spf=none smtp.mailfrom=schaufler-ca.com; dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b=BBQGjNFK; arc=none smtp.client-ip=66.163.186.211
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=schaufler-ca.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="SM6UlOUz"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=sICDMF8ltCpgyCavLPCWMViU04Pg3tiWtZccUG/oJw88HyXvKG5NixjHTqi1P0+6b3tveqcMvwvlB7gIV9uPu0RW5JL/8XBTYkrcirxqStpBYy4O6fOY7Z8AaXBgI3kbymr+5M7CFsyfHMMsjGyzTyru6HC9Xjng5oIBxT5JcZx0YzZKUgWDaTLfg8N3LhQimqTkUMgRAHXglRRYr397wqqe3yjszdyTzYodBVIFJQBhBCOjbAgHYIE6wBUTPVPOwHGXKF14dI9gYjRxMaVcWZTw2wzUpS1wEmbCpEqUQLcRgNf5wJtKvrYWMWGvBmonsJqGlHkorAd7rebDmGcwWw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=6eFqxGhBIoymFPi4CO2LDUVTosP4+QRLTpqBT/fGjkk=;
- b=Un8jcEb5CHKpR0Qgw+7czjHREZ8wvtZk4ej/7YXUSe3fs8RYG0DI3lcar1LHk55/sTojIfRSxjsp2lLi/CsG2qwMg3oxUQCIMrEqdjnrqxS/t6Iij2QKTeQLVpAE4M26/OWRyD0WiStBR00uwNN9ieD1balrnK96NNN/H+QfDBsCZPomu9UWzdhPPiG/mZsobeKEH9TZL1K6x88B13GkzL7Nl2dtPdYrsUuG6TvnLqU+FUOMzN86ee+pwzkNDmPlz42FMy72gzKR/ZWGbJmmc/1+pFS4QDOqVvaQQ9F5S8dMjMpMupj8LiAZeiiBiNMUMjKLrGiJ35yrueWWHBwweQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=6eFqxGhBIoymFPi4CO2LDUVTosP4+QRLTpqBT/fGjkk=;
- b=SM6UlOUzTvSd8fhct/XEjuh9WFlZXT7z6yr3WEGvlvJORM9W0tE8zRYezvHNLprC7dJA7JjiXREOQlJVNMk9BIrYEMUeLV9GzeWbYheOTzHV05e56CY8P1ovWkFPtPr2tkdEfdyYz3+z1BtJ3CUxa4yavp6r5NOFA/JMmzvoB8zctKMt7QcQpoBVFc04eX+BlzS0U8CGyV8nO4D0XRazyqGcJi9SKOxooSLjw/0nENB6A/cleFoz24Z38DrmKUBQ4HbqZrNTX+GEgM3ZcPKJ9QK5pTMnOPOcoDdrFOeC+rW8dA/mQcrSYTtoWy/HKzTHGqIeKqb5GkTip8QP73enoQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from PAXPR04MB9642.eurprd04.prod.outlook.com (2603:10a6:102:240::14)
- by DBBPR04MB7836.eurprd04.prod.outlook.com (2603:10a6:10:1f3::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8137.28; Wed, 13 Nov
- 2024 18:10:07 +0000
-Received: from PAXPR04MB9642.eurprd04.prod.outlook.com
- ([fe80::9126:a61e:341d:4b06]) by PAXPR04MB9642.eurprd04.prod.outlook.com
- ([fe80::9126:a61e:341d:4b06%4]) with mapi id 15.20.8137.027; Wed, 13 Nov 2024
- 18:10:07 +0000
-Date: Wed, 13 Nov 2024 13:09:57 -0500
-From: Frank Li <Frank.li@nxp.com>
-To: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc: Bjorn Helgaas <bhelgaas@google.com>, Richard Zhu <hongxing.zhu@nxp.com>,
-	Lucas Stach <l.stach@pengutronix.de>,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-	Rob Herring <robh@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>, linux-pci@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	imx@lists.linux.dev, alyssa@rosenzweig.io, bpf@vger.kernel.org,
-	broonie@kernel.org, jgg@ziepe.ca, joro@8bytes.org,
-	lgirdwood@gmail.com, maz@kernel.org, p.zabel@pengutronix.de,
-	robin.murphy@arm.com, will@kernel.org
-Subject: Re: [PATCH v5 2/2] PCI: imx6: Add IOMMU and ITS MSI support for
- i.MX95
-Message-ID: <ZzTrdUX0NUsHQLvd@lizhi-Precision-Tower-5810>
-References: <20241104-imx95_lut-v5-0-feb972f3f13b@nxp.com>
- <20241104-imx95_lut-v5-2-feb972f3f13b@nxp.com>
- <20241113174841.olnyu5l6rbmr3tqh@thinkpad>
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20241113174841.olnyu5l6rbmr3tqh@thinkpad>
-X-ClientProxiedBy: BY3PR05CA0024.namprd05.prod.outlook.com
- (2603:10b6:a03:254::29) To PAXPR04MB9642.eurprd04.prod.outlook.com
- (2603:10a6:102:240::14)
+	dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b="BBQGjNFK"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1731521795; bh=nK3uVT0icuqVtInCsSNHN4I+MCkUBZj85NQuNcPcveQ=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=BBQGjNFKCOrMnODOnGG382npnC7ZeH5NRQmjZdBM2kHpbeqVdxERVJ7Tvii8qj5k3CL6usuj3yrdh8PWWZ+8oDTV/6HZ3jWJmLgrkL9dg9GZG39gHpdfmlq+kOnkfJkmXu1DbA3H0UrAKkSdQfy2D1+azEpjJJfNiSTKvV6ckIjasLm8hMbOE48vQ8hZg/u07WzBpYMlyAaqzpazPR7sNRaPQ/Bi0J3sCKfdhd3zY2TrmBQiFdmrvOHQXgjv4MZM6haF1lRRIzYWzBeyLzcbbXIOqXyO0hdd+U2IgazYm3WZgJKH7B+lanAcmdE/5eRJSR1a0Y502kXDFe+xVlhyMA==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1731521795; bh=BNlNYR5UrzceehY+vKtuO8A7BaaRHoKIyqXSV5Kqeoc=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=m6X530obMM8UbRAc0/PVTz8pGlU3lSWeSlibtRMbT7cqkWuFtdMo0GdCK+zTn8A6nL5vpb04z5UMWykmWUuUhJ5zs5SO19ZpjdD+af2QEuTlOGRlNpD+k0ZHkbV00QSUxkTWDNxuTS1IzAV8wgxHs+nMc++k8rHw5x/g/4O2kGQ+EgxdEiy0Fkvjc6R4QcgVmnWB5rssFeQMBZjAODKRxTNXV2geUIFYJeaAd8J/xjUhjh/1n/5ZieCD6hRzMDjIGobpaMETayQEEhSvaGJuIoJQ7orjXsVjVxcZQpxBw9N20agrxUHEZWnygU4LDfTjqodSKdygBKJ9oNxO0g2N3A==
+X-YMail-OSG: Uxjk32kVM1luneeRTquscdUZ4LgKFH.IAkCUxC5LV.UP.gulMSYd04ah4LUwcU0
+ LD3.wRosaVEzYtfAkWU7Z_LTYnQ06y_oxjnJmpDKzhMCWg2njhnkUHtCgITevk6nyHfbi5UH2NOU
+ 2IxCzvy1k4ZlfLkvf2jIFDytUpSSOYI7k3c.6JGqQjF.8V5kadDoX8nejGdOVIB8rOuLeA.7pAmX
+ zMZ_X2NpJBcO8kOZpCFDte2lwLxsWn4Sct6mXUDJt7_y5.FZXQHx0my9ULIphC2sZRHvAukfYO9P
+ s2Y19pY_Onm5JTnCqj4Wj8xFKcI9ku6bdZLSqQCmaIFTLSrrqfZ8brcTUW8gRQQ.28yCrJhBO7fU
+ KYxUUMApjUTiLDj4Nwt4GR.B_BOfcH7QK5.kQBQ3HFYmhn2XYIURB7cXmyP8xYlK0qqTSJYPTfiX
+ w0vQ4xksf_WkGwjXZCG6AukyhckFdWTXLMAhw8GoyJ9Qsspx39XR8HqioGmxM30yzdmIyIybZUkt
+ WCU6blPIEextXkCMEJDDf_8JrCq4zSEaWlqU3wC0B9FAOTQkrLDhoZNcqrXxmzkx7fxst.ooBHxn
+ EsXfJMegnFMoYeZna9WALp9v8TVFiKniRPioMjmR9RGcdolK3QzxDdddO0_EOr1TCSoFk1gE..Iu
+ 6mSRCiOctTPG9ZdDhZ6PPLfn.PUHHfrRncIlVtTxf_g6WmKo_lJXorFe.ginNVOWXt4m1sW77FOM
+ xbg.C5nI9lDIVCFjhp6uRbociKZtOYdhhXzqKYPYVwgXhRjznQX4jp9QuWWtycetTQRi8l1DjCeG
+ CAWgMGQDsK1aYkEhamOF48xjHFnuH8x7Tby8NZtrZ1g4IS1OgRN9l381_35EnPp8hYXFmvKzRSLw
+ Cu8OvKIhjvpeXJqxOHH5XY4iJNNMxvgB29_rMPxotTzWIbUmUshaQwLuHIkZgC9GFFRuXpHDqBnW
+ WShy4OBMVtxy8PgSa7oLGN7VO7bV6vE0K4.srHyEdQb9YTrEYUSvUmcrKRgCexTusTzp9NuTl8LS
+ _tLM6OcOMMyVVj00GRip_5yF0qqv5lTI5OAzos73R4WkyT6d1BElDysgjrokJnJqxn8IAjp8rkMF
+ dZIYsaagoaBwwrp_KpbVBTGTh8RtLU5wcqSS0pNSoz2MdMIIlUCU_li3omFvzLuvv.eqExNoffwJ
+ 9I_sJB9uvHsSVjRjb0XIuc9awy0m_twhjpRajB4I9rXYiHPYZG_B_YpNjiD9ZwGWkz6xqgwknNvS
+ jbwNXzqxvJBniwa4won.ARKeNwvJPKrppCyMohuH49R_4CeyCwiUpdv09sTjke.tbhxW1GYqqGMd
+ 7.7vrE5_ahv_zbFAdlvS9Fx5HwHP5niboB2eUNCdTNAIvX_Q7QclcWZeuEDK8gaMRA8rJ3NscHey
+ iOvAYcDkwHWSaBfY4a598zmt1yrwmTsrch0L1jkwQaxuN9Twpxq1szlzv6e66RtrDZsZQd.2fP7x
+ xRP__yFGS4mxecz7GjTVA6PzGR4ZCWke0jGnWK8ip8fCZwbdRVdkt1ewz5o0MpikZ1a_Tq9_cN00
+ AidJstdHNRuQp6DQp9pLPiHnVaM8fOk9npgbWM.MbyBfJK.B5tYVK3naQRhUe_sDsOALGufxY4PQ
+ KP34cqMdSNvN1_cJuJDK0eLpQAs5RyjM4Pf3mFizK2th4jlDEBgfKQOHgC3yFzcFOSsDnX7vKgcE
+ 4kCdfpnEPX7R2Tim0tkpJXD3sGFtjYxE_PzKOyFeBeEN3wM2EdzjKDGWIXZVSMnfFVNngiCrrB9N
+ 1INigPvBNyKnbTNipkn8NcBaRQUQcabmuODql7VM6kN9EjVVP6JpxT6wdxvmAnXibOyKCi.S0JVG
+ krRtnxnSxNT_xA_fi5LEOxzWCW31NL9fluxf3DrfFGmXtD.x4Ez4m.F.qBWfOixt1w3VjXXtp.Vm
+ Tw59EGEFR4FMnWCG94LAgA7MPLyWSsEaQrqr0d9y3TPemyTvmywQSnJtrECtSbyyPq3019SZ6McB
+ .D3zJG.np3KJBCS_2zqwY0JxsZWRXQ828z0aVjIeRxYvfX4UUK8SAZrOQo9kxUhaRkeLdmJmyqfQ
+ Q2e1YQ4U5VlEBf4s_TxpbQo3sV_LL2pJEdOe.wHkDeSTG_KOkS.qihmw3kv2a0j83aM_n3TmGa.t
+ EmczdJBbd7lxkO.UrBsxA3Ckd66HZEyAWMewm3VKLKbUiUXPfCE9fOmbJyUg3ZMTpawiWUVAtKG.
+ zacAbSPsGR9jyeME6WTudQxkDth.eSqgrS1sLdY94lV4KhLS8vMzxdCUhtM5bx_spqA99NTgX.fw
+ -
+X-Sonic-MF: <casey@schaufler-ca.com>
+X-Sonic-ID: 523fd01a-36c6-4113-a0a5-f206da02e08a
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic310.consmr.mail.ne1.yahoo.com with HTTP; Wed, 13 Nov 2024 18:16:35 +0000
+Received: by hermes--production-gq1-5dd4b47f46-ps69l (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 3a47f707b068f3c37ad3e14e6ceee550;
+          Wed, 13 Nov 2024 18:06:25 +0000 (UTC)
+Message-ID: <8c86c2b4-cd23-42e0-9eb6-2c8f7a4cbcd4@schaufler-ca.com>
+Date: Wed, 13 Nov 2024 10:06:23 -0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PAXPR04MB9642:EE_|DBBPR04MB7836:EE_
-X-MS-Office365-Filtering-Correlation-Id: 3057cfce-b694-475b-7763-08dd040e67cd
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|1800799024|52116014|7416014|376014|38350700014;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?djFrT1dHMWRnNVQrbDhpS2NoTW9HTGwrWFEwMUFaMExENzBmM2hiQXBxM0pS?=
- =?utf-8?B?ZFhlSGh4dTJUYW5ZMEVRZ2NkWjVxN3JvUDFUQUs1NXpubHRmVjhNVzFpQzZE?=
- =?utf-8?B?RlNiZHlIdGJZYnFHNk5wZGRObDNITnNGRjFCeitzZFhGb2RhUjcwQUx6Z2J6?=
- =?utf-8?B?WTdWSE1BcDNiSlFCZE9nWlJ5YU01TjUzRHdRU3lGRGJQN2VsejNwd2RzZGZ5?=
- =?utf-8?B?dFRvOUNkTWhpYkRSdlR4OHQrbzlHNVhYUkJXdHh6VTR0MHp2QlhPOWN6M0Uy?=
- =?utf-8?B?MTlsNUdyZjBOSWl6aEpGdTNNMnllNlk3b0J4YzMzNW8va1drS1VQU3lpMk1U?=
- =?utf-8?B?aWcrTHRGalhBdGxxelJ6ZFZIVzBhS3pWelg4eGcwVUFBSFZ5MDdPRTZTUFJn?=
- =?utf-8?B?bDJ4aERsakJrNkVOaTVrUWYxLy9TYWo0WGRSbm42amZSNmtDT2hwQ3JKaUY5?=
- =?utf-8?B?WTRVKzRBSjlDRHhadjRtY3lSZzNOam1CNnRBUVdLVGg5VmxOTHB1U2lFODhv?=
- =?utf-8?B?aVJrUU9tc3I2T25lY2JyQ0hhUURBK2w1S1NtY0w4K21zRllrM2N2aEZHWDhz?=
- =?utf-8?B?aUtPZnA4R0lKdk1XdEl5MnIwcS9nd0h2UlhIK1BWMDQ1T0VJS3RoY3JCRFl1?=
- =?utf-8?B?NFZJYzdGMVFVVzRQTXk4OVpIazZ6akFGYlRxeWVsSm1YYUM5d2p0NGhXY055?=
- =?utf-8?B?bWhjYUtzY3QwQzc1RlVzUUVkWUpNNU9BcmhCTklwMDM0OTd6QzlpYm44bHhW?=
- =?utf-8?B?c040QzA5VlZQOEF1YUZwU0tnZXBvWjNna0dNU0pPbXNEdjJ5WlFRSTJvZkJF?=
- =?utf-8?B?VEVFTU9SVlB5S012WFlHY0tGTzhKSjBORmYvZXcza2VXR3pCb2wyR1g0ZlQv?=
- =?utf-8?B?Z29LK0t4WFNiaGdzWWtqUXhLejFvNitudXlWV0ZoTkYwOGFacVorcHJoaURG?=
- =?utf-8?B?Vm9kUnUvblhtMGdxV3NhMzFFQ0hNc3h3UnhOMkRoZWVQQTFzVDJHbUdpa2NC?=
- =?utf-8?B?ZTQwQ3kyVDAyMmwzZzJsMzFUTmNSckxFTVpsK1MyL1cvdFBQOUk1d21oTUI3?=
- =?utf-8?B?VlpLK1VsbTVlZVVXWExobmVUZzd2SUxMUDlac1ljL3hJOWVNbDdnQloybGJG?=
- =?utf-8?B?ZWxLQU9XeTdSUlJxK2Jwdk1sZXEyNnVSV1AwRHphWFljaGdNTjZhWDlyQUxN?=
- =?utf-8?B?eUR3aE1wazE4S2prMW1yYm1WWDhZL0dESTdXUXZyVG4wdTRPRGZ1a1owVGRu?=
- =?utf-8?B?QkVqbW9OdTRwVEZsU3JZMmdZRTE5TXVveWlMTFJaUzNIb3l3THFSQk53YkJl?=
- =?utf-8?B?NGVTT014clFVUUkycW5wQjNvemxRS0pXMGZWVDdsczhKcUxrZW5VdWdSb3Qy?=
- =?utf-8?B?b0laVFU1c0pKcEJzb3cvVzJKZU1hcldGb1ViaHRjMy8vRjVUUjRSUlF2a1Az?=
- =?utf-8?B?MEFkRzR4OWI2RkFDODBYejNFdjZZSEhMdThoc3JjbG80Nit3L29LOU5vZUVI?=
- =?utf-8?B?V2xNbytOWEc0dDk4TGQxTUhXeU1lUnFqTHBWVzZuTGxsVGlBMW02N0VKWFU3?=
- =?utf-8?B?MldiYWVkcGhldklMeWxKTXZlTWlodkc1TkVycmVUQVJ2ZjZuQW5BWlM5N2dr?=
- =?utf-8?B?Ylk5cFJuNDdvUlVuaEhtS2g4Vk9uS1U5VkRMMmtDdG5QSGRWZ2Y3dkpYRkI0?=
- =?utf-8?B?MmNlaktROGxZT0l5QUViM2dNMEVwak80Z0FkK0FrWGZNb3RzcjZNUHhuVHZ3?=
- =?utf-8?B?SXFGcS8ybzFxRDdONk1aOGFEMDVtVDIrWjJFdi9JRklueXBZZHovdTJlbjdw?=
- =?utf-8?Q?cINnOA+s19+wHsDJcVfnVIIWWcoDtcHlU1l3Q=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB9642.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(52116014)(7416014)(376014)(38350700014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?UXJKbGoyYm9hZ3R2RVNDMWh4RmFoQk1UL2FlNjRLRVRtWlI0cC9hd2wyMSt4?=
- =?utf-8?B?TFRmOXp2d244aXlRVVFjeGg1S01ad3V5OWVzMXZ3bXBWY1IxaXN1Q2cydVhQ?=
- =?utf-8?B?aVVmdVVxVktrdklhdHFtWHFHYzRnY0ExVGhoMmhORGlFSWp0ekhQL2lDL2pq?=
- =?utf-8?B?bmtYU3NDTzZJa3llU0hGQmRPbjZSV2hRdDRXZEhsd1Eyb1Y3MTllM3RqOWJa?=
- =?utf-8?B?Zy9YNHdoSTF6RWQyR0RjN0Mvcmw5cm8zNzJ5VHJMYnFTSXdoMWRyS3VEdmRo?=
- =?utf-8?B?RHFucEJXbGtXdG1TS0xtR0I0Z2RPcThhTUZkQmZ0YjByUHVaWUwzeUx1K0RJ?=
- =?utf-8?B?SitCaDl6bmZXQU91MkUyUW1Nd1UwR3NYdS96UWxLVlZValhPUHFhS2xuRGFk?=
- =?utf-8?B?SUt4NytIV1AzdUpZNWVmV01GQW5TTkQ3d240Ri84WmNGTjhzMFBoUVBOeXdw?=
- =?utf-8?B?bUlaVGhrOVdPb2pQaDVNRERpaVp2RXdpMnpwK1pWU0MweitFdG9NeDVxTmRM?=
- =?utf-8?B?M2MycXc0akg3Z3Z3YzV6NUpRTFV5dVRlRjVPTEV3K1BQS01SS0NVaVpOR0xx?=
- =?utf-8?B?Q004cVRXN1ZINEZJMTE2OEErSFZDc1V0eUNmeVRrUERsZ0Y4OVJTSFQ2bVFU?=
- =?utf-8?B?Nnk2b1VwSEVqWDc1SFd3VVoycDlacGRyb2FGLzFCQUl4UEcxbTBnNFJDUkZ6?=
- =?utf-8?B?d1RjaXdXK1JJd05nZW9PNWcwMWRzc1k5L3VXaFNPVkNTdFFWeXVEb2ZJZXEr?=
- =?utf-8?B?eEV4cFhXYkNrRlBmNmhWYitJK2xSUWx2clZyVE43emhIdmNnblpBVUE2ek1P?=
- =?utf-8?B?UDU1TjdMMUpia1MrVmYyS0Q2OUdyb1hMYldHc3FiWjk4MGd1NGcxNnoyd01u?=
- =?utf-8?B?S09UVmE4Rk5icEM1K1M4R0YrTkRJUFhyc1FQY0dCZTQ4MkVtUGpiWFNTYnJr?=
- =?utf-8?B?SUx2bDgxZ29aOUs0dWZUV0JJaUdUdWNEVFoyMDhYT0x2bWpaT3VyY1ZKbUtw?=
- =?utf-8?B?bHI3QVk3amRuYWRHVFZSRThBa2ZIb2Z0MGtYaDczSjZpaWQyZTJkdkc0N0lw?=
- =?utf-8?B?MWh0OTBZenp0QTZwSUJsTUI5UTRneGFYbGlKWjh4ZXk0SndlNnNYanU4ZlNE?=
- =?utf-8?B?UENsL2tQbmFxSkZNR05TQzl5bUxzU1B5aCtRUHRLd2N2bzA4Vys1Rkx2K3ZD?=
- =?utf-8?B?MXhyeTYzWFIyMFREM28zdXR1aExWMTNWYzQzNTdzMVQ4dTNtTUR1NndKWmhN?=
- =?utf-8?B?Tzd2VE1uY1JaUXA4WU9zOGcwVjFyOHdoQjlvaUdST2pqSGJiOC9YSEVzNmd3?=
- =?utf-8?B?eWVHWm9lNlRDanZFSUw0eVIxK2NqL01TT1NkN2QxSE9qTVVBZ2poKzJuNUx4?=
- =?utf-8?B?ZlhpZHRRWkJpaGI4V1VnQVZSbkphSHY5NU1tQ3RickVjK3MxcVpudSs2NnVt?=
- =?utf-8?B?TnVMSi9kNTJWZUZyNkhZUEhlQVpHd1NUbWl0YXFjZlJJOEV5cXMxZWlQRVJX?=
- =?utf-8?B?b3JXamkrNGIzYUNZendtN1ZpbUpXbkFwSiszMzhnYjlWSlorRXA1R29pczl2?=
- =?utf-8?B?bmdvMUJhazNKS3NJVms0LzRFS3RKTkpDNTgwNHFWSitHdE5tcnNkbkg3eWZM?=
- =?utf-8?B?dzZ5bWtQNm5kSkpSSDZMemZCNnl1bUZ1TUtrK1dIMlFoT0JQZnBSZWdvY3BD?=
- =?utf-8?B?THc0bG1wMW9MalJ2eHJWUDFWdnZEVE5WQ0p1aThSdWU3WVhWbXdDVTREYk1D?=
- =?utf-8?B?a1lrU1VxOFdWYTFWS1dmMys3N0tzWDV4RnNXRHovZGI4Njg1QXJ2ZUtJL3d4?=
- =?utf-8?B?WlN3T0ZMc3FETDY2TTBkcEJYZjRJYnlaeklVVFI5eXYzSFlWUU5EYXB4d3Nt?=
- =?utf-8?B?OVAxYUFjckZMK0tnTmNTbHhFWmJCVlNvVElpbnY2TjMrdDRJT3k3U05qUENT?=
- =?utf-8?B?bHdGK3Q5M1JmdXd4Wlp3R1JIU3FVZXZuMHhDM0I0VkxHbXRic1NiTzZ5ejdw?=
- =?utf-8?B?M1hzVE1DZzBrQWdrRHlabWFRSnJZSFlxMU9pa242SzNlM0dOVXpjTkpqZVJa?=
- =?utf-8?B?QTJuZmFKUGVLd2VrS2cwTHJhcGMzS1lrdjI1KzlUb2RiSUlkQkppMjd6ZDhj?=
- =?utf-8?Q?qXHY=3D?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3057cfce-b694-475b-7763-08dd040e67cd
-X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB9642.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Nov 2024 18:10:07.6665
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 1j/JqEF84OAwvum3KrJqNeYr6UEVvEGYm/PcCFBeUSHcsnyjoKx7VIZKhtlNA+uqfiOe7KO541l9JLNKT7MZaw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBBPR04MB7836
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next 0/4] Make inode storage available to tracing prog
+To: Song Liu <songliubraving@meta.com>
+Cc: Song Liu <song@kernel.org>, "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+ "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ "linux-security-module@vger.kernel.org"
+ <linux-security-module@vger.kernel.org>, Kernel Team <kernel-team@meta.com>,
+ "andrii@kernel.org" <andrii@kernel.org>,
+ "eddyz87@gmail.com" <eddyz87@gmail.com>, "ast@kernel.org" <ast@kernel.org>,
+ "daniel@iogearbox.net" <daniel@iogearbox.net>,
+ "martin.lau@linux.dev" <martin.lau@linux.dev>,
+ "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
+ "brauner@kernel.org" <brauner@kernel.org>, "jack@suse.cz" <jack@suse.cz>,
+ "kpsingh@kernel.org" <kpsingh@kernel.org>,
+ "mattbobrowski@google.com" <mattbobrowski@google.com>,
+ "amir73il@gmail.com" <amir73il@gmail.com>,
+ "repnop@google.com" <repnop@google.com>,
+ "jlayton@kernel.org" <jlayton@kernel.org>, Josef Bacik
+ <josef@toxicpanda.com>, "mic@digikod.net" <mic@digikod.net>,
+ "gnoack@google.com" <gnoack@google.com>,
+ Casey Schaufler <casey@schaufler-ca.com>
+References: <20241112082600.298035-1-song@kernel.org>
+ <d3e82f51-d381-4aaf-a6aa-917d5ec08150@schaufler-ca.com>
+ <ACCC67D1-E206-4D9B-98F7-B24A2A44A532@fb.com>
+ <d7d23675-88e6-4f63-b04d-c732165133ba@schaufler-ca.com>
+ <332BDB30-BCDC-4F24-BB8C-DD29D5003426@fb.com>
+Content-Language: en-US
+From: Casey Schaufler <casey@schaufler-ca.com>
+In-Reply-To: <332BDB30-BCDC-4F24-BB8C-DD29D5003426@fb.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Mailer: WebService/1.1.22876 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
 
-On Wed, Nov 13, 2024 at 11:18:41PM +0530, Manivannan Sadhasivam wrote:
-> On Mon, Nov 04, 2024 at 02:23:00PM -0500, Frank Li wrote:
-> > For the i.MX95, configuration of a LUT is necessary to convert Bus Device
-> > Function (BDF) to stream IDs, which are utilized by both IOMMU and ITS.
-> > This involves examining the msi-map and smmu-map to ensure consistent
-> > mapping of PCI BDF to the same stream IDs. Subsequently, LUT-related
-> > registers are configured. In the absence of an msi-map, the built-in MSI
-> > controller is utilized as a fallback.
-> >
-> > Register a PCI bus callback function to handle enable_device() and
-> > disable_device() operations, setting up the LUT whenever a new PCI device
-> > is enabled.
-> >
-> > Acked-by: Richard Zhu <hongxing.zhu@nxp.com>
-> > Signed-off-by: Frank Li <Frank.Li@nxp.com>
+On 11/12/2024 5:37 PM, Song Liu wrote:
 >
-> Some minor comments below. It'd be good to get Robin's Ack for this patch.
->
-> > ---
-> > Change from v4 to v5
-> > - rework commt message
-> > - add comment for mutex
-> > - s/reqid/rid/
-> > - keep only one loop when enable lut
-> > - add warning when try to add duplicate rid
-> > - Replace hardcode 0xffff with IMX95_PE0_LUT_MASK
-> > - Fix some error message
-> >
-> > Change from v3 to v4
-> > - Check target value at of_map_id().
-> > - of_node_put() for target.
-> > - add case for msi-map exist, but rid entry is not exist.
-> >
-> > Change from v2 to v3
-> > - Use the "target" argument of of_map_id()
-> > - Check if rid already in lut table when enable device
-> >
-> > change from v1 to v2
-> > - set callback to pci_host_bridge instead pci->ops.
-> > ---
-> >  drivers/pci/controller/dwc/pci-imx6.c | 176 +++++++++++++++++++++++++++++++++-
-> >  1 file changed, 175 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/pci/controller/dwc/pci-imx6.c b/drivers/pci/controller/dwc/pci-imx6.c
-> > index 94f3411352bf0..e75dc361e284e 100644
-> > --- a/drivers/pci/controller/dwc/pci-imx6.c
-> > +++ b/drivers/pci/controller/dwc/pci-imx6.c
-> > @@ -55,6 +55,22 @@
-> >  #define IMX95_PE0_GEN_CTRL_3			0x1058
-> >  #define IMX95_PCIE_LTSSM_EN			BIT(0)
-> >
-> > +#define IMX95_PE0_LUT_ACSCTRL			0x1008
-> > +#define IMX95_PEO_LUT_RWA			BIT(16)
-> > +#define IMX95_PE0_LUT_ENLOC			GENMASK(4, 0)
-> > +
-> > +#define IMX95_PE0_LUT_DATA1			0x100c
-> > +#define IMX95_PE0_LUT_VLD			BIT(31)
-> > +#define IMX95_PE0_LUT_DAC_ID			GENMASK(10, 8)
-> > +#define IMX95_PE0_LUT_STREAM_ID			GENMASK(5, 0)
-> > +
-> > +#define IMX95_PE0_LUT_DATA2			0x1010
-> > +#define IMX95_PE0_LUT_REQID			GENMASK(31, 16)
-> > +#define IMX95_PE0_LUT_MASK			GENMASK(15, 0)
-> > +
-> > +#define IMX95_SID_MASK				GENMASK(5, 0)
-> > +#define IMX95_MAX_LUT				32
-> > +
-> >  #define to_imx_pcie(x)	dev_get_drvdata((x)->dev)
-> >
-> >  enum imx_pcie_variants {
-> > @@ -82,6 +98,7 @@ enum imx_pcie_variants {
-> >  #define IMX_PCIE_FLAG_HAS_PHY_RESET		BIT(5)
-> >  #define IMX_PCIE_FLAG_HAS_SERDES		BIT(6)
-> >  #define IMX_PCIE_FLAG_SUPPORT_64BIT		BIT(7)
-> > +#define IMX_PCIE_FLAG_HAS_LUT			BIT(8)
-> >
-> >  #define imx_check_flag(pci, val)	(pci->drvdata->flags & val)
-> >
-> > @@ -134,6 +151,9 @@ struct imx_pcie {
-> >  	struct device		*pd_pcie_phy;
-> >  	struct phy		*phy;
-> >  	const struct imx_pcie_drvdata *drvdata;
-> > +
-> > +	/* Ensure that only one device's LUT is configured at any given time */
-> > +	struct mutex		lock;
-> >  };
-> >
-> >  /* Parameters for the waiting for PCIe PHY PLL to lock on i.MX7 */
-> > @@ -925,6 +945,152 @@ static void imx_pcie_stop_link(struct dw_pcie *pci)
-> >  	imx_pcie_ltssm_disable(dev);
-> >  }
-> >
-> > +static int imx_pcie_add_lut(struct imx_pcie *imx_pcie, u16 rid, u8 sid)
-> > +{
-> > +	struct dw_pcie *pci = imx_pcie->pci;
-> > +	struct device *dev = pci->dev;
-> > +	u32 data1, data2;
-> > +	int free = -1;
-> > +	int i;
-> > +
-> > +	if (sid >= 64) {
-> > +		dev_err(dev, "Invalid SID for index %d\n", sid);
-> > +		return -EINVAL;
-> > +	}
-> > +
-> > +	guard(mutex)(&imx_pcie->lock);
-> > +
-> > +	for (i = 0; i < IMX95_MAX_LUT; i++) {
-> > +		regmap_write(imx_pcie->iomuxc_gpr, IMX95_PE0_LUT_ACSCTRL, IMX95_PEO_LUT_RWA | i);
-> > +		regmap_read(imx_pcie->iomuxc_gpr, IMX95_PE0_LUT_DATA1, &data1);
-> > +
-> > +		if (!(data1 & IMX95_PE0_LUT_VLD)) {
-> > +			if (free < 0)
-> > +				free = i;
->
-> So you don't increment 'free' once it becomes >=0? Why can't you use the loop
-> iterator 'i' itself instead of 'free'?
+>> On Nov 12, 2024, at 5:10 PM, Casey Schaufler <casey@schaufler-ca.com> wrote:
+>>
+>> On 11/12/2024 10:44 AM, Song Liu wrote:
+>>> Hi Casey, 
+>>>
+>>> Thanks for your input. 
+>>>
+>>>> On Nov 12, 2024, at 10:09 AM, Casey Schaufler <casey@schaufler-ca.com> wrote:
+>>>>
+>>>> On 11/12/2024 12:25 AM, Song Liu wrote:
+>>>>> bpf inode local storage can be useful beyond LSM programs. For example,
+>>>>> bcc/libbpf-tools file* can use inode local storage to simplify the logic.
+>>>>> This set makes inode local storage available to tracing program.
+>>>> Mixing the storage and scope of LSM data and tracing data leaves all sorts
+>>>> of opportunities for abuse. Add inode data for tracing if you can get the
+>>>> patch accepted, but do not move the LSM data out of i_security. Moving
+>>>> the LSM data would break the integrity (such that there is) of the LSM
+>>>> model.
+>>> I honestly don't see how this would cause any issues. Each bpf inode 
+>>> storage maps are independent of each other, and the bpf local storage is 
+>>> designed to handle multiple inode storage maps properly. Therefore, if
+>>> the user decide to stick with only LSM hooks, there isn't any behavior 
+>>> change. OTOH, if the user decides some tracing hooks (on tracepoints, 
+>>> etc.) are needed, making a inode storage map available for both tracing 
+>>> programs and LSM programs would help simplify the logic. (Alternatively,
+>>> the tracing programs need to store per inode data in a hash map, and 
+>>> the LSM program would read that instead of the inode storage map.)
+>>>
+>>> Does this answer the question and address the concerns?
+>> First off, I had no question. No, this does not address my concern.
+>> LSM data should be kept in and managed by the LSMs. We're making an
+>> effort to make the LSM infrastructure more consistent.
+> Could you provide more information on the definition of "more 
+> consistent" LSM infrastructure?
 
-It is used to find first free slot. This loop check if there are duplicated
-entry. If no duplicated rid entry, then use first free slot.
+We're doing several things. The management of security blobs
+(e.g. inode->i_security) has been moved out of the individual
+modules and into the infrastructure. The use of a u32 secid is
+being replaced with a more general lsm_prop structure, except
+where networking code won't allow it. A good deal of work has
+gone into making the return values of LSM hooks consistent.
 
-Frank
+Some of this was done as part of the direct call change, and some
+in support of LSM stacking. There are also some hardening changes
+that aren't ready for prime-time, but that are in the works.
+There have been concerns about the potential expoitability of the
+LSM infrastructure, and we're serious about addressing those.
 
 >
-> > +			continue;
-> > +		}
-> > +
-> > +		regmap_read(imx_pcie->iomuxc_gpr, IMX95_PE0_LUT_DATA2, &data2);
-> > +
-> > +		/* Needn't add duplicated Request ID */
+> BPF LSM programs have full access to regular BPF maps (hash map, 
+> array, etc.). There was never a separation of LSM data vs. other 
+> data. 
 >
-> "Do not add duplicate RID"
+> AFAICT, other LSMs also use kzalloc and similar APIs for memory 
+> allocation. So data separation is not a goal for any LSM, right?
 >
-> > +		if (rid == FIELD_GET(IMX95_PE0_LUT_REQID, data2)) {
-> > +			dev_warn(dev, "Try to enable rid(%d) twice without disable it\n", rid);
+> Thanks,
+> Song
 >
-> "Existing LUT entry available for RID (%d)\n"
+>> Moving some of
+>> the LSM data into an LSM specific field in the inode structure goes
+>> against this. What you're proposing is a one-off clever optimization
+>> hack. We have too many of those already.
 >
-> > +			return 0;
-> > +		}
-> > +	}
-> > +
-> > +	if (free < 0) {
-> > +		dev_err(dev, "LUT entry is not available\n");
-> > +		return -EINVAL;
 >
-> ENOSPC?
->
-> > +	}
-> > +
-> > +	data1 = FIELD_PREP(IMX95_PE0_LUT_DAC_ID, 0);
-> > +	data1 |= FIELD_PREP(IMX95_PE0_LUT_STREAM_ID, sid);
-> > +	data1 |= IMX95_PE0_LUT_VLD;
-> > +	regmap_write(imx_pcie->iomuxc_gpr, IMX95_PE0_LUT_DATA1, data1);
-> > +
-> > +	data2 = IMX95_PE0_LUT_MASK; /* Match all bits of rid */
->
-> Please use 'RID' in comments everywhere.
->
-> > +	data2 |= FIELD_PREP(IMX95_PE0_LUT_REQID, rid);
-> > +	regmap_write(imx_pcie->iomuxc_gpr, IMX95_PE0_LUT_DATA2, data2);
-> > +
-> > +	regmap_write(imx_pcie->iomuxc_gpr, IMX95_PE0_LUT_ACSCTRL, free);
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +static void imx_pcie_remove_lut(struct imx_pcie *imx_pcie, u16 rid)
-> > +{
-> > +	u32 data2;
-> > +	int i;
-> > +
-> > +	guard(mutex)(&imx_pcie->lock);
-> > +
-> > +	for (i = 0; i < IMX95_MAX_LUT; i++) {
-> > +		regmap_write(imx_pcie->iomuxc_gpr, IMX95_PE0_LUT_ACSCTRL, IMX95_PEO_LUT_RWA | i);
-> > +
->
-> Remove newline.
->
-> > +		regmap_read(imx_pcie->iomuxc_gpr, IMX95_PE0_LUT_DATA2, &data2);
-> > +		if (FIELD_GET(IMX95_PE0_LUT_REQID, data2) == rid) {
-> > +			regmap_write(imx_pcie->iomuxc_gpr, IMX95_PE0_LUT_DATA1, 0);
-> > +			regmap_write(imx_pcie->iomuxc_gpr, IMX95_PE0_LUT_DATA2, 0);
-> > +			regmap_write(imx_pcie->iomuxc_gpr, IMX95_PE0_LUT_ACSCTRL, i);
-> > +
-> > +			break;
-> > +		}
-> > +	}
-> > +}
-> > +
-> > +static int imx_pcie_enable_device(struct pci_host_bridge *bridge, struct pci_dev *pdev)
-> > +{
-> > +	struct imx_pcie *imx_pcie = to_imx_pcie(to_dw_pcie_from_pp(bridge->sysdata));
-> > +	u32 sid_i = 0, sid_m = 0, rid = pci_dev_id(pdev);
->
-> No need to initialize sid_{i/m}.
->
-> > +	struct device_node *target;
-> > +	struct device *dev;
-> > +	int err_i, err_m;
-> > +
-> > +	dev = imx_pcie->pci->dev;
-> > +
-> > +	target = NULL;
-> > +	err_i = of_map_id(dev->of_node, rid, "iommu-map", "iommu-map-mask", &target, &sid_i);
-> > +	if (target)
-> > +		of_node_put(target);
-> > +	else
-> > +		err_i = -EINVAL;
-> > +
-> > +	target = NULL;
-> > +	err_m = of_map_id(dev->of_node, rid, "msi-map", "msi-map-mask", &target, &sid_m);
-> > +
-> > +	/*
-> > +	 * Return failure if msi-map exist and no entry for rid because dwc common
-> > +	 * driver will skip setting up built-in MSI controller if msi-map existed.
-> > +	 *
-> > +	 *   err_m      target
-> > +	 *	0	NULL		Return failure, function not work.
-> > +	 *      !0      NULL		msi-map not exist, use built-in MSI.
-> > +	 *	0	!NULL		Find one entry.
-> > +	 *	!0	!NULL		Invalidate case.
-> > +	 */
-> > +	if (!err_m && !target)
-> > +		return -EINVAL;
-> > +	else if (target)
-> > +		of_node_put(target); /* Find entry for rid in msi-map */
-> > +
-> > +	/*
-> > +	 * msi-map        iommu-map
-> > +	 *   Y                Y            ITS + SMMU, require the same sid
-> > +	 *   Y                N            ITS
-> > +	 *   N                Y            DWC MSI Ctrl + SMMU
-> > +	 *   N                N            DWC MSI Ctrl
-> > +	 */
-> > +	if (!err_i && !err_m)
-> > +		if ((sid_i & IMX95_SID_MASK) != (sid_m & IMX95_SID_MASK)) {
-> > +			dev_err(dev, "iommu-map and msi-map entries mismatch!\n");
-> > +			return -EINVAL;
-> > +		}
-> > +
-> > +	/*
-> > +	 * Both iommu-map and msi-map not exist, use dwc built-in MSI
-> > +	 * controller, do nothing here.
-> > +	 */
-> > +	if (err_i && err_m)
-> > +		return 0;
-> > +
-> > +	if (!err_i)
-> > +		return imx_pcie_add_lut(imx_pcie, rid, sid_i);
-> > +	else if (!err_m)
-> > +		/* Hardware auto add 2 bit controller id ahead of stream ID */
->
-> What is this comment for? I don't find it relevant here.
-
-The comment for why need mask 2bits before config lut. for example, dts
-set stream id is 0xC4, but lut only need 0x4.
-
-Frank
->
-> - Mani
->
-> --
-> மணிவண்ணன் சதாசிவம்
