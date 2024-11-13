@@ -1,58 +1,58 @@
-Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19D6E1F80C8;
-	Wed, 13 Nov 2024 17:31:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFBC87E111;
+	Wed, 13 Nov 2024 17:32:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731519067; cv=none; b=bUkYhxA94VgXKS5ajPPNPXvciObCy8r16OxlJs7hnzxk+I4b0Mm01ob6Gbx+ySxSfuF8LKmwsknnDonctYw5Ync49X4fb8L0PNf7aN3n9NGZrx4+UlwyrZou9PZyy4KR0P7Y+rLFm1EwWZu9XT8CjW2hmXe0VZVlUkEQ1muHBTY=
+	t=1731519170; cv=none; b=aEx/CG3yUgrJ0XFcKRw+cMVdFslp6MpmP/HYnoF9Nxb+MukaB1mwVFY0/dvthdY54MB0WXGLxU0htoYjKNMa0IE410rvSFid7TrKJFQALdGkfdTRAA6kL5V/NgLKFhkho+TJPU+KgwPyCMTvBvqnHCq+c7VuIAuVn6sl/mHYJTw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731519067; c=relaxed/simple;
-	bh=wM2LIeZuwho5MTyajMgsnq+6TqtS6xgt18ptAgYsbK4=;
+	s=arc-20240116; t=1731519170; c=relaxed/simple;
+	bh=ImFnpaT3fWX+jbI6AoZKXrHFpBNoXUfag1kP5kmZeG0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oDpbV4EzaAdZP5jWvrvMAMlwnCPd/6zIO/Z70nHQOJX4hlMvIV9mOBckbcgdfI49cEUQfTVHfaaINujeFPQU6cCUvPqL1ruXNOK+8jnWsmNCnjC59f08K31cfcRzhoZ3wojydjqy9VCizQ2QZCiQEela0s7MQbnQhkT4xkjl4UI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=j1ULK3OI; arc=none smtp.client-ip=209.85.215.177
+	 Content-Type:Content-Disposition:In-Reply-To; b=gSBSjNK05MzIkxMHLUDfaluiXM+grN6cwDgITu0p1mZJLHy0uBNHtIsfwzRM2ZMiMiqLV96mYTZFa5RXWLSyR3wGQSkkeBlwMP2SAmY/INKjef74Ik8I584A5ooORc+QGj5i+V1GQ2U0bEEf+wouUNOPTUSaHqkFbIJl2Tc5PD0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AczsdmsQ; arc=none smtp.client-ip=209.85.214.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="j1ULK3OI"
-Received: by mail-pg1-f177.google.com with SMTP id 41be03b00d2f7-7eae96e6624so4995675a12.2;
-        Wed, 13 Nov 2024 09:31:05 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AczsdmsQ"
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-20ca1b6a80aso78635285ad.2;
+        Wed, 13 Nov 2024 09:32:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1731519065; x=1732123865; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1731519168; x=1732123968; darn=vger.kernel.org;
         h=in-reply-to:content-transfer-encoding:content-disposition
          :mime-version:references:message-id:subject:cc:to:from:date:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=2SnJeBCneJsNVP3wKudY4HbBDGuh/E7PxPQpfhhhdww=;
-        b=j1ULK3OIEIztYmlek6g1rr9STWSI+Wm1dZnWpmo1aNinNK9kvQ5S3TymP5MUVaMEeY
-         n4DkR24sJ2s5vmbUWefGB3XzGM32vDdgwtMyuxv0iY4JVsf323m+YcXJZ1+ePX8vWYKp
-         kryKX62rQXULCZu2bH2JeshSa8PpponEdZsii1AbRmddPEYEcnQQCsUaLfOl2PJQFNF2
-         rGaYk6zIGZprLn3X/wGFgPpTDjVPabsXF2z3XfpYJbwKUj9yXV0JyJP1nNdZvHcKtJqN
-         iNi2fHrZluIhj9xKd6XSvY0c3oiAvzNht2Ib0WBgFBADnQSMkgoCy+nn1Qvg7Kp0ejcw
-         A9XQ==
+        bh=NyIy0y+LWo1AomMNgNueEzGS37WFUxrwnWKqwan2aiw=;
+        b=AczsdmsQeQOb8wqc/avfsQvlh7sTbjvDPEWqkd7dR7JXXX9Jll1aKKnhteu4ehvP9M
+         wwgyi/uDDOdwJNwEB3mQhffdqXNCP2lpOU4BS0yeeRRPwTEYdaPxKpjp4mIaGXDHXn2z
+         a81HOqP1F12Xu8xeokYsgly7xkX11L/Wkd5HcdQwRWjeOvht2O/nk+HtJP6mBJUr2IlX
+         26CiIDTUE8OwptnLjlVl+IKEJlf8pywzwS6h1S77EwS+VKHHngcvYIK56OccdUH/VaPG
+         LHj3pAay6qSb1UouZ0M/yeq86larsFa2bT4jd2EAQQHuHMQSGEeJGEYsjDQO58vbiITA
+         Uz7A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731519065; x=1732123865;
+        d=1e100.net; s=20230601; t=1731519168; x=1732123968;
         h=in-reply-to:content-transfer-encoding:content-disposition
          :mime-version:references:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2SnJeBCneJsNVP3wKudY4HbBDGuh/E7PxPQpfhhhdww=;
-        b=Czs4Gkx3XYnM5SS8KnfEEet+o2Wv1O2fc/Tt1Xc29SGDc36X5g8ko6AVP1yMBwfCBZ
-         ph/ou5hwNtYWvo2l6UTFxfnov4jRTowva4HvSTMt6nvi2baVQkwr0f56cycqiCYJMKDl
-         DRFeJEnrFeorGoMrGQW8dDREyjMMLHNzUck42XW4rZEAVb3gBS9WUmzQ3SJaLBpAEDIp
-         Pxm62L+peM3XdZXY1xGipYT4U6xyZsFF7vmNvEaU3s3MZ4zxQDbu0naGywW7dGMzt3XU
-         KWBjEexA0xR1c6hgFjrFP4VLaFr77IJg1AqujzyNRofHmrWk3shdwXU+vn7acc/twLMX
-         YvJA==
-X-Forwarded-Encrypted: i=1; AJvYcCWzvK8uJKMM8YsLttSgtBt4qGvjmp6ImfKm4W5frvjpifv0iDvAGsRMzgMG1KmLbl5SBJM=@vger.kernel.org, AJvYcCXTI9NMjicnJXJUSmA74n8TWfg/KLS5nxzqUe0+0s37rYMjZYMmyvsZhcN3VbPX8HuvCDiwOVUbauTLkO52Juje@vger.kernel.org, AJvYcCXx3Tc3mapMg7h5L3gb5zBEtuJDgOek+bbnRWtYV/75T4uc2xzo8+B38rZCZlGcKIfLxJkAXttfwYEXe56I@vger.kernel.org
-X-Gm-Message-State: AOJu0YzD1oOBXZ8oopGfi7g5lpTZS27qe/GEDBbdIV82H0nmpiQz0y5m
-	okw/QqrbL0xODa2zo5F8F9rYWALYipE9fNe9sAxu4qGhuROlSNU=
-X-Google-Smtp-Source: AGHT+IG9PteFS9WiKoGXgKwgDAw8HaSTb1BxroQtjfOr0tK6g0cn2Yzke9177Wjn0cpTZ7sCdN3xng==
-X-Received: by 2002:a05:6a21:7886:b0:1dc:5e5:ea65 with SMTP id adf61e73a8af0-1dc22b60950mr30420141637.34.1731519065222;
-        Wed, 13 Nov 2024 09:31:05 -0800 (PST)
+        bh=NyIy0y+LWo1AomMNgNueEzGS37WFUxrwnWKqwan2aiw=;
+        b=j+DJ+EOgnXDVK6BgLyMqjo0inUFfNNIS/GrvHMpQjIQmk1tsJrUnYfTAsFYOm+LkgD
+         +zcsK/DNq1Y+ts9121cN2BSxUsZSqYeHGIJfaMTWMgCp0OKhu+C0MVsnmTClmoCXzW+M
+         JdgQ6QWPH+Y9fUEythBmcuCLBgBZcXKJE7ph9J+EJ2mGtU4nrTimP/g6om5l8cPAVc6f
+         CA3TWyCvj+RmLFUqmvGji9dwSRrhjJXaivhYgohhcl0KbDLBEQ/QYFM+XpayUJnEri9j
+         vcAFaVG9Z9OOkmOubz49k4I/fqYFMYekv5nSKPUS5nA5fY1fUYFYTsMBfKSdDzINqrzm
+         ME3A==
+X-Forwarded-Encrypted: i=1; AJvYcCU2CFs7Quui1HxiF07/3UhTVccbuba2I6AksxidwBOTr8pPLUhb9Z/dvmoLRwcOjD+Q/JPg0AV+X2ZUv4Tp@vger.kernel.org, AJvYcCWNM8ZM0jFzttM6oUViWqMcQ65GIvcT0z5aAAz8y7RHO9+XdPG+MUb0ufHK/Z1ryUBbvrVh1DoaENGyPL/vkft+@vger.kernel.org, AJvYcCXT4eErHGSrKf0+FbJeU67hAfDKDmKig7bttx5fO3uc02zTyIQq+kIrCjcx1hmAAMTl6SE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwWBhfpWPlAiwVA3x7xtGbssz2zUq3dBtdHWt3eI6DzU0cUf1WM
+	kloRe8CRbxp851CwOhEqj1HEA+qOs8F/kURBlCGFcjp0AdjgeJ8=
+X-Google-Smtp-Source: AGHT+IGbl3E0Lz/dc2uP2mflsGmCThFPUgYryuGzgVE8RCm2pt4+oWW9BYbK7r3zcep78AzgjxCJcA==
+X-Received: by 2002:a17:902:e803:b0:20b:920e:8fd3 with SMTP id d9443c01a7336-21183d5532amr288529055ad.35.1731519167912;
+        Wed, 13 Nov 2024 09:32:47 -0800 (PST)
 Received: from localhost ([2601:646:9e00:f56e:123b:cea3:439a:b3e3])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-7f41f5df334sm12738452a12.34.2024.11.13.09.31.04
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21177e83eb4sm111708745ad.269.2024.11.13.09.32.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Nov 2024 09:31:04 -0800 (PST)
-Date: Wed, 13 Nov 2024 09:31:04 -0800
+        Wed, 13 Nov 2024 09:32:47 -0800 (PST)
+Date: Wed, 13 Nov 2024 09:32:46 -0800
 From: Stanislav Fomichev <stfomichev@gmail.com>
 To: Alexis =?utf-8?Q?Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
 Cc: Andrii Nakryiko <andrii@kernel.org>,
@@ -70,11 +70,11 @@ Cc: Andrii Nakryiko <andrii@kernel.org>,
 	Bastien Curutchet <bastien.curutchet@bootlin.com>,
 	Petar Penkov <ppenkov@google.com>, bpf@vger.kernel.org,
 	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH bpf-next 01/10] selftests/bpf: add a macro to compare raw
- memory
-Message-ID: <ZzTiWBLaUDex4ieA@mini-arch>
+Subject: Re: [PATCH bpf-next 02/10] selftests/bpf: use ASSERT_MEMEQ to
+ compare bpf flow keys
+Message-ID: <ZzTivljZIKEHwlHG@mini-arch>
 References: <20241113-flow_dissector-v1-0-27c4df0592dc@bootlin.com>
- <20241113-flow_dissector-v1-1-27c4df0592dc@bootlin.com>
+ <20241113-flow_dissector-v1-2-27c4df0592dc@bootlin.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -84,48 +84,17 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20241113-flow_dissector-v1-1-27c4df0592dc@bootlin.com>
+In-Reply-To: <20241113-flow_dissector-v1-2-27c4df0592dc@bootlin.com>
 
 On 11/13, Alexis Lothoré (eBPF Foundation) wrote:
-> We sometimes need to compare whole structures in an assert. It is
-> possible to use the existing macros on each field, but when the whole
-> structure has to be checked, it is more convenient to simply compare the
-> whole structure memory
+> The flow_dissector program currently compares flow keys returned by bpf
+> program with the expected one thanks to a custom macro using memcmp.
 > 
-> Add a dedicated assert macro, ASSERT_MEMEQ, to allow bare memory
-> comparision
+> Use the new ASSERT_MEMEQ macro to perform this comparision. This update
+> also allows to get rid of the unused bpf_test_run_opts variable in
+> run_tests_skb_less (it was only used by the CHECK macro for its duration
+> field)
 > 
 > Signed-off-by: Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
-> ---
->  tools/testing/selftests/bpf/test_progs.h | 25 +++++++++++++++++++++++++
->  1 file changed, 25 insertions(+)
-> 
-> diff --git a/tools/testing/selftests/bpf/test_progs.h b/tools/testing/selftests/bpf/test_progs.h
-> index 74de33ae37e56c90646cd1e0bb58ed7e3f345ec0..bdde741543836991398daacfe5423e6af8ef9151 100644
-> --- a/tools/testing/selftests/bpf/test_progs.h
-> +++ b/tools/testing/selftests/bpf/test_progs.h
-> @@ -186,6 +186,19 @@ void test__skip(void);
->  void test__fail(void);
->  int test__join_cgroup(const char *path);
 
-[..]
- 
-> +#define DUMP_BUFFER(name, buf, len)						\
-> +	({									\
-> +		fprintf(stdout, "%s:\n", name);					\
-> +		for (int i = 0; i < len; i++) {					\
-> +			if (i && !(i % 16))					\
-> +				fprintf(stdout, "\n");				\
-> +			if (i && !(i % 8) && (i % 16))				\
-> +				fprintf(stdout, "\t");				\
-> +			fprintf(stdout, "%02X ", ((uint8_t *)(buf))[i]);	\
-> +		}								\
-> +		fprintf(stdout, "\n");						\
-> +	})
-
-nit: should we rewrite this as a real function?
-
-void hexdump(const char *prefix, void *buf, size_t len)
-{
-..
-}
+Acked-by: Stanislav Fomichev <sdf@fomichev.me>
