@@ -1,204 +1,291 @@
-Received: from mx0b-00206402.pphosted.com (mx0b-00206402.pphosted.com [148.163.152.16])
+Received: from out-181.mta1.migadu.com (out-181.mta1.migadu.com [95.215.58.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08194187876
-	for <bpf@vger.kernel.org>; Fri, 15 Nov 2024 21:06:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.152.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0EE6204934
+	for <bpf@vger.kernel.org>; Fri, 15 Nov 2024 21:54:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731704798; cv=none; b=mfY5B7YR3V/u+4KizVBS6G3/bklaP8ON9rheb0DwBDHiyg/zHMt9hLPXL3CWAYTbpFjss11FPhodik9I2aA9KP3QHgAFsoKcKA0XWPlxVAVwItaMJnshyQldM1RiO3+f7QLQaWrWQULRj8oLeYTGOkGBBOHCtyp9rk42cpHSm1k=
+	t=1731707691; cv=none; b=d8vTyW1NPRm8MWBNYy68li9H/oERzMMSuzqaoGm5j+Os1wwquZPSEuzr+7MwIyfh4smHVs0yZiO/orCzbVq9orC8wPgMckRqhA7Psdgs25ucTYb56hx0gUUrzCPh6QTXWlVAU9tS/YhRn0VsxW4QyfZTEiThuDBMPB50b1slfIQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731704798; c=relaxed/simple;
-	bh=kGWfRNwMOGHK2iShLEZtc+smJ59Ir1XDguQpHHNEWxI=;
-	h=From:To:CC:Subject:Date:Message-ID:Content-Type:MIME-Version; b=dlOVsv4PvK8zuY+r/O4ZP8Duef8gXqR0CiLcKcnYpjrLr3b4iGva0WZjVIPyeVLe3mOrCfiYaTFslT5xT0u8F22ynC3xjjSV1FD7aTVKFruaWlDmHYxik6lGwlZqvfGBzTlXN/2Kp78BFTNdYsS+IQVZkUSzrrHAU3IvtpCxfEc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com; spf=pass smtp.mailfrom=crowdstrike.com; dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b=AK7eyw2w; arc=none smtp.client-ip=148.163.152.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=crowdstrike.com
+	s=arc-20240116; t=1731707691; c=relaxed/simple;
+	bh=UQajRaSLsBL7pg7h1+0C7DEjl70JEpI/uP4Uz/N2m98=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Np8V6hduW8o1HS0UvyP3JBfcCzZjFRQR7yeQKkUTTOiSb7w5SRrJllbkwOr7sriQClvDG4zxL29A5910vaLM++5IYN9jbI8HwWMd9gjN8OD++7L7iNJ80RodCuZphEuWThwTXf0X51Z4fjNjHoXGiDRwr2Vbdu5N+dYW6Np3GpU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=OHCtA3wT; arc=none smtp.client-ip=95.215.58.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b="AK7eyw2w"
-Received: from pps.filterd (m0354655.ppops.net [127.0.0.1])
-	by mx0b-00206402.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4AFKVHMO021656;
-	Fri, 15 Nov 2024 20:59:45 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crowdstrike.com;
-	 h=cc:content-id:content-transfer-encoding:content-type:date
-	:from:message-id:mime-version:subject:to; s=default; bh=kGWfRNwM
-	OGHK2iShLEZtc+smJ59Ir1XDguQpHHNEWxI=; b=AK7eyw2wn5eUEf5FSXnZmsQ9
-	34w+jAZhLNqkB34NsmvjiGXK9ZxvvEP11+92KTx5CElpKNC6qgAA8hX/s/nFw0L+
-	jjrY+986FTP+R3WkQvA3dMu6WaRl0GfJdHb/9Axo6e5Il6ZFJwYV2in2FIgoOk7N
-	l79+KkD0cKybFxnl9ol3UtRYs5whD689mEN8mizIPL8abekOlabeXeXV28qXjbbp
-	h5awk8MWg2VZ06//kgBYzFhJ3/5892gDo8W6iWxjFvCPtlCHpVCyD/oPFp54lE/y
-	lRkK7qqB5FpIvF91japoBn8HvUMu1OcRp1fGMhhpfn/UkuD8jIAhE8P0oghNCA==
-Received: from mail.crowdstrike.com (74-209-223-77.static.ash01.latisys.net [74.209.223.77] (may be forged))
-	by mx0b-00206402.pphosted.com (PPS) with ESMTPS id 42x9wsgnwy-2
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 15 Nov 2024 20:59:44 +0000 (GMT)
-Received: from 03WPEXCH10.crowdstrike.sys (10.80.52.140) by
- 03WPEXCH10.crowdstrike.sys (10.80.52.140) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.9; Fri, 15 Nov 2024 20:59:43 +0000
-Received: from 03WPEXCH10.crowdstrike.sys ([fe80::3707:e9de:74e7:2dde]) by
- 03WPEXCH10.crowdstrike.sys ([fe80::3707:e9de:74e7:2dde%9]) with mapi id
- 15.02.1544.009; Fri, 15 Nov 2024 20:59:43 +0000
-From: Francis Deslauriers <francis.deslauriers@crowdstrike.com>
-To: "bpf@vger.kernel.org" <bpf@vger.kernel.org>
-CC: "daniel@iogearbox.net" <daniel@iogearbox.net>,
-        "maxim@isovalent.com"
-	<maxim@isovalent.com>,
-        "ast@kernel.org" <ast@kernel.org>
-Subject: Recent eBPF verifier rejects program that was accepted by 6.8 eBPF
- verifier
-Thread-Topic: Recent eBPF verifier rejects program that was accepted by 6.8
- eBPF verifier
-Thread-Index: AQHbN6FLPkxKgIt6x0qNvWYtvrdmvQ==
-Date: Fri, 15 Nov 2024 20:59:43 +0000
-Message-ID: <50b7301fcfd0682c9923b3639c1589f3eb37af33.camel@crowdstrike.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-x-disclaimer: USA
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <4FF800A75C193E4D8648A015A573B635@crowdstrike.sys>
-Content-Transfer-Encoding: base64
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="OHCtA3wT"
+Message-ID: <c6eb8ab6-2db4-40dc-9ce5-3f0985c93f58@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1731707685;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=eRmb96yZ9RNaJd0plG0WzCpDuzgYQDks6kSUyNZftRc=;
+	b=OHCtA3wTfdJKICSzusu5wkk+pTMvuT5ZbdzLQ3CmGTggBoIizNJwnkC6rpfNBTbOzs6g45
+	LgwW9ZHFfsR7zGXBkX/BpLBewEwyuHFGtYK5m12JKguGfTNDfBCEoNeTlwzTKsGzvuiLE0
+	VGpFJSoeHGZsOnqKFdhdmUYO1zo7jzs=
+Date: Fri, 15 Nov 2024 13:54:32 -0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Proofpoint-GUID: H0KE9sd3uCFIqgU3oRTM-OVaNcxFDCKU
-X-Proofpoint-ORIG-GUID: H0KE9sd3uCFIqgU3oRTM-OVaNcxFDCKU
-X-Authority-Analysis: v=2.4 cv=VIGPnMPX c=1 sm=1 tr=0 ts=6737b641 cx=c_pps a=gZx6DIAxr9wtOoIAvRqG0Q==:117 a=gZx6DIAxr9wtOoIAvRqG0Q==:17 a=xqWC_Br6kY4A:10 a=EjBHVkixTFsA:10 a=IkcTkHD0fZMA:10 a=VlfZXiiP6vEA:10 a=p8Hr7QA-AAAA:8 a=YHSwVt2hJG3k4It3B-YA:9
- a=QEXdDO2ut3YA:10 a=Nk6gH44JAh1yPMgKJKsv:22
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
- definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 bulkscore=0
- clxscore=1011 mlxlogscore=999 spamscore=0 priorityscore=1501 mlxscore=0
- impostorscore=0 lowpriorityscore=0 adultscore=0 malwarescore=0
- phishscore=0 classifier=spam authscore=0 adjust=0 reason=mlx scancount=1
- engine=8.19.0-2409260000 definitions=main-2411150176
+Subject: Re: [PATCH bpf-next v6 1/4] bpf: add bpf_get_cpu_cycles kfunc
+Content-Language: en-GB
+To: Vadim Fedorenko <vadfed@meta.com>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Eduard Zingerman <eddyz87@gmail.com>, Thomas Gleixner <tglx@linutronix.de>,
+ Vadim Fedorenko <vadim.fedorenko@linux.dev>, Mykola Lysenko <mykolal@fb.com>
+Cc: x86@kernel.org, bpf@vger.kernel.org,
+ Martin KaFai Lau <martin.lau@linux.dev>
+References: <20241115194841.2108634-1-vadfed@meta.com>
+ <20241115194841.2108634-2-vadfed@meta.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <20241115194841.2108634-2-vadfed@meta.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-SGkgYWxsLA0KSSdkIGxpa2UgdG8gcmVwb3J0IHdoYXQgSSB0aGluayBpcyBhIGVCUEYgdmVyaWZp
-ZXIgcmVncmVzc2lvbi4gSSBoYXZlIGEgZUJQRg0KcHJvZ3JhbSB0aGF0IGlzIGFjY2VwdGVkIGJ5
-IHRoZSA2LjggZUJQRiB2ZXJpZmllciBidXQgaXMgcmVqZWN0ZWQgb24gNi45IGFuZMKgDQpsYXRl
-ci4gSXQncyBteSB1bmRlcnN0YW5kaW5nIHRoYXQgYSBlQlBGIHByb2dyYW0gdGhhdCBpcyBhY2Nl
-cHRlZCBieSBvbmUNCnZlcnNpb24gb2YgdGhlIHZlcmlmaWVyIHNob3VsZCBiZSBhY2NlcHRlZCBv
-biBhbGwgc3Vic2VxdWVudCB2ZXJzaW9ucy4NCg0KSSBhZGRlZCBhIHN0cmlwcGVkIGRvd24gbGli
-YnBmIHJlcHJvZHVjZXIgYmFzZWQgb24gdGhlIGxpYmJwZi1ib290c3RyYXAgcmVwbyB0bw0Kc2hv
-d2Nhc2UgdGhpcyBpc3N1ZSAoc2VlIGJlbG93KS4gTm90ZSB0aGF0IGlmIEkgY2hhbmdlIHRoZSBS
-VUxFX0xJU1RfU0laRSBmcm9tDQozODAgdG8gMzAsIHRoZSB2ZXJpZmllciBhY2NlcHRzIHRoZSBw
-cm9ncmFtLg0KDQpJIGJpc2VjdGVkIHRoZSBpc3N1ZSBkb3duIHRvIHRoaXMgY29tbWl0Og0KCWNv
-bW1pdCA4ZWNmYzM3MWQ4MjliZmVkNzVlMGVmMmNhYjQ1YjIyOTBiOTgyZjY0DQoJQXV0aG9yOiBN
-YXhpbSBNaWtpdHlhbnNraXkgPG1heGltQGlzb3ZhbGVudC5jb20+DQoJRGF0ZTogICBNb24gSmFu
-IDggMjI6NTI6MDIgMjAyNCArMDIwMA0KDQogICAgCWJwZjogQXNzaWduIElEIHRvIHNjYWxhcnMg
-b24gc3BpbGwNCg0KCQ0KQmVmb3JlIGNvbW1pdCA4ZWNmYzM3MWQ4Mg0KCSQgdW5hbWUgLXIgDQoJ
-Ni43LjAtMTIyOTEtZzg3ZTUxYWM2Y2IxOQ0KDQoJJCBzdWRvIC4vdGMNCglsb2FkcyBzdWNjZXNm
-dWxseQ0KDQpBZnRlciBjb21taXQgOGVjZmMzNzFkODINCgkkIHVuYW1lIC1yDQoJNi43LjAtMTIy
-OTItZzhlY2ZjMzcxZDgyOQ0KDQoJJCBzdWRvIC4vdGMgIDI+JjEgfCBncmVwIC1BNCAidG9vIGxh
-cmdlIg0KCUJQRiBwcm9ncmFtIGlzIHRvbyBsYXJnZS4gUHJvY2Vzc2VkIDEwMDAwMDEgaW5zbg0K
-CXByb2Nlc3NlZCAxMDAwMDAxIGluc25zIChsaW1pdCAxMDAwMDAwKSBtYXhfc3RhdGVzX3Blcl9p
-bnNuIDI2IHRvdGFsX3N0YXRlcyA2MjQ3MyBwZWFrX3N0YXRlcyA1NDU2IG1hcmtfcmVhZCAxNjIN
-CgktLSBFTkQgUFJPRyBMT0FEIExPRyAtLQ0KCWxpYmJwZjogcHJvZyAndGNfaW5ncmVzcyc6IGZh
-aWxlZCB0byBsb2FkOiAtNw0KCWxpYmJwZjogZmFpbGVkIHRvIGxvYWQgb2JqZWN0ICd0Y19icGYn
-DQoNCkkgY29uZmlybWVkIHRoZSBpc3N1ZSBhZmZlY3RzIG1hc3RlciBhcyB3ZWxsLg0KCSQgdW5h
-bWUgLXINCgk2LjEyLjAtcmM3LTAwMTI1LWdjZmFhYTdkMDEwZDENCg0KCSQgc3VkbyAuL3RjIDI+
-JjEgfCBncmVwIC1BNCAidG9vIGxhcmdlIiANCglCUEYgcHJvZ3JhbSBpcyB0b28gbGFyZ2UuIFBy
-b2Nlc3NlZCAxMDAwMDAxIGluc24NCglwcm9jZXNzZWQgMTAwMDAwMSBpbnNucyAobGltaXQgMTAw
-MDAwMCkgbWF4X3N0YXRlc19wZXJfaW5zbiAyNiB0b3RhbF9zdGF0ZXMgNjI0NzMgcGVha19zdGF0
-ZXMgNTQ1NiBtYXJrX3JlYWQgMTYyDQoJLS0gRU5EIFBST0cgTE9BRCBMT0cgLS0NCglsaWJicGY6
-IHByb2cgJ3RjX2luZ3Jlc3MnOiBmYWlsZWQgdG8gbG9hZDogLTcNCglsaWJicGY6IGZhaWxlZCB0
-byBsb2FkIG9iamVjdCAndGNfYnBmJw0KDQoNCkknbSBpbnZlc3RpZ2F0aW5nIGhvdyB0aGlzIGNv
-bW1pdCBhZmZlY3RzIGhvdyBpbnN0cnVjdGlvbnMgYXJlIGNvdW50ZWQNCiBhbmQgd2h5IGl0IGxl
-YWRzIHRvIHN1Y2ggYSBkcmFzdGljIGNoYW5nZSBmb3IgdGhpcyBwYXJ0aWN1bGFyIHByb2dyYW0u
-DQpJIHdhbnRlZCB0byBzaGFyZSBteSBmaW5kaW5ncyBlYXJseSBpbiBjYXNlIHNvbWVvbmUgaGFz
-IGFueSBoaW50cyBmb3IgbWUuDQoNClRvIHJlcHJvZHVjZSwgdXNlIHRoZSBmb2xsb3dpbmcgZmls
-ZSBhcyBhIGRyb3AgaW4gcmVwbGFjZW1lbnQgb2bCoA0KbGliYnBmLWJvb3N0cmFwJ3MgZXhhbXBs
-ZXMvYy90Yy5icGYuYzoNCi0tLT44LS0tDQojaW5jbHVkZSA8dm1saW51eC5oPg0KI2luY2x1ZGUg
-PGJwZi9icGZfY29yZV9yZWFkLmg+DQojaW5jbHVkZSA8YnBmL2JwZl9oZWxwZXJzLmg+DQojaW5j
-bHVkZSA8YnBmL2JwZl9lbmRpYW4uaD4NCg0KY2hhciBMSUNFTlNFW10gU0VDKCJsaWNlbnNlIikg
-PSAiR1BMIjsNCg0KdHlwZWRlZiBlbnVtIDogdWludDhfdCB7DQoJQ09OTl9ESVJfT1VUQk9VTkQg
-PSAwLA0KCUNPTk5fRElSX0lOQk9VTkQgPSAxLA0KCUNPTk5fRElSX05FSVRIRVIgPSAyLA0KfSBj
-b25uZWN0aW9uX2Rpcl90Ow0KDQp0eXBlZGVmIGVudW0gOiB1aW50OF90IHsNCglBQ1RJT05fQUxM
-T1cgPSAwLA0KCUFDVElPTl9ERU5ZID0gMSwNCn0gcnVsZV9hY3Rpb25fdDsNCg0KDQojZGVmaW5l
-IFRDX0FDVF9VTlNQRUMgICAoLTEpDQojZGVmaW5lIFRDX0FDVF9PSyAgICAgICAwDQojZGVmaW5l
-IFRDX0FDVF9SRUNMQVNTSUZZICAgMQ0KI2RlZmluZSBUQ19BQ1RfU0hPVCAgICAgMg0KDQojZGVm
-aW5lIEFGX1VOU1BFQyAgICAgMA0KI2RlZmluZSBBRl9JTkVUICAgICAyDQojZGVmaW5lIEVUSF9Q
-X0lQIDB4MDgwMA0KI2RlZmluZSBFVEhfUF9JUFY2IDB4ODZERA0KDQojZGVmaW5lIFJVTEVfTElT
-VF9TSVpFIDM4MA0KI2RlZmluZSBSVUxFX0NPTlRST0xTIDB4MDAwMDAwMDENCg0Kc3RydWN0IGNv
-bm5lY3Rpb25fdHVwbGVfdjQgew0KCXVpbnQzMl90IHNhZGRyOw0KCXVpbnQzMl90IGRhZGRyOw0K
-fTsNCg0KdHlwZWRlZiBzdHJ1Y3QgcGt0X2luZm8gew0KCXN0cnVjdCBjb25uZWN0aW9uX3R1cGxl
-X3Y0IGlwNDsNCgl1aW50MTZfdCBmYW1pbHk7DQoJdWludDE2X3QgaXBfcHJvdG9jb2w7DQoJdWlu
-dDE2X3QgZXRoX3Byb3RvY29sOw0KCXJ1bGVfYWN0aW9uX3QgYWN0aW9uOw0KCWJvb2wgaXBfcHJv
-dG9fdWRwX29yX3RjcDsNCgl1aW50OF90IHBhZFs3XTsNCn0gcGt0X2luZm9fdDsNCg0KdHlwZWRl
-ZiBzdHJ1Y3QgcGt0X2luZm9fcnVsZSB7DQoJcGt0X2luZm9fdCBpbmZvOw0KCXVpbnQzMl90IHBh
-ZDsNCglzdHJ1Y3QgY29ubmVjdGlvbl90dXBsZV92NCBpcDRfbWFzazsNCn0gcGt0X2luZm9fcnVs
-ZV90Ow0KDQpzdHJ1Y3Qgew0KCV9fdWludCh0eXBlLCBCUEZfTUFQX1RZUEVfSEFTSCk7DQoJX191
-aW50KG1heF9lbnRyaWVzLCAyKTsNCglfX3R5cGUoa2V5LCB1MzIpOw0KCV9fdHlwZSh2YWx1ZSwg
-cGt0X2luZm9fcnVsZV90W1JVTEVfTElTVF9TSVpFXSk7DQoJX191aW50KG1hcF9mbGFncywgQlBG
-X0ZfUkRPTkxZX1BST0cgfCBCUEZfRl9XUk9OTFkpOw0KfSBydWxlc19tYXAgU0VDKCIubWFwcyIp
-Ow0KDQpzdGF0aWMgX19hbHdheXNfaW5saW5lIGJvb2wNCm1hdGNoX2lwYWRkcl93aXRoX21hc2tf
-aXB2NChjb25zdCB1aW50MzJfdCAqcnVsZV9hZGRyLA0KCQkJICAgIGNvbnN0IHVpbnQzMl90ICpy
-dWxlX2FkZHJfbWFzaywNCgkJCSAgICBjb25zdCB1aW50MzJfdCAqZGF0YV9wYWNrZXRfYWRkcikN
-CnsNCglpZiAoKCpydWxlX2FkZHIgPT0gMCkgfHwgKCpkYXRhX3BhY2tldF9hZGRyID09IDApKSB7
-DQoJCXJldHVybiB0cnVlOw0KCX0NCgllbHNlIGlmICgoKnJ1bGVfYWRkcl9tYXNrID09IDApICYm
-ICgqcnVsZV9hZGRyID09ICpkYXRhX3BhY2tldF9hZGRyKSkgew0KCQlyZXR1cm4gdHJ1ZTsNCgl9
-DQoJZWxzZSBpZiAoKCpydWxlX2FkZHJfbWFzayAhPSAwKSAmJg0KCQkgKCgqcnVsZV9hZGRyICYg
-KnJ1bGVfYWRkcl9tYXNrKSA9PQ0KCQkgICgqZGF0YV9wYWNrZXRfYWRkciAmICpydWxlX2FkZHJf
-bWFzaykpKSB7DQoJCXJldHVybiB0cnVlOw0KCX0NCglyZXR1cm4gZmFsc2U7DQp9DQoNCnN0YXRp
-YyBfX2Fsd2F5c19pbmxpbmUgYm9vbCBwcm90b2NvbF9tYXRjaChpbnQgcnVsZV9wcm90b2NvbCwN
-CgkJCQkJICAgaW50IHBhY2tldF9wcm90b2NvbCkNCnsNCglyZXR1cm4gKHJ1bGVfcHJvdG9jb2wg
-PT0gMCB8fCBydWxlX3Byb3RvY29sID09IHBhY2tldF9wcm90b2NvbCk7DQp9DQoNCnN0cnVjdCBt
-YXRjaF9pcHY0X3BrdCB7DQoJdWludDMyX3QgbG9jYWxfYWRkcjsNCgl1aW50MzJfdCByZW1vdGVf
-YWRkcjsNCn07DQoNCnN0YXRpYyBfX2Fsd2F5c19pbmxpbmUgYm9vbCBtYXRjaF9pcHY0KGNvbnN0
-IHBrdF9pbmZvX3J1bGVfdCAqcnVsZSwNCgkJCQkgICAgICAgcGt0X2luZm9fdCAqcGt0LA0KCQkJ
-CSAgICAgICBjb25zdCBzdHJ1Y3QgbWF0Y2hfaXB2NF9wa3QgKmNtcCwNCgkJCQkgICAgICAgaW50
-ICpvdXRwdXQpDQp7DQoJaWYgKHByb3RvY29sX21hdGNoKHJ1bGUtPmluZm8uaXBfcHJvdG9jb2ws
-IHBrdC0+aXBfcHJvdG9jb2wpICYmDQoJICAgIChtYXRjaF9pcGFkZHJfd2l0aF9tYXNrX2lwdjQo
-JnJ1bGUtPmluZm8uaXA0LnNhZGRyLA0KCQkJCQkgJnJ1bGUtPmlwNF9tYXNrLnNhZGRyLA0KCQkJ
-CQkgJmNtcC0+bG9jYWxfYWRkcikpICYmDQoJICAgIChtYXRjaF9pcGFkZHJfd2l0aF9tYXNrX2lw
-djQoJnJ1bGUtPmluZm8uaXA0LmRhZGRyLA0KCQkJCQkgJnJ1bGUtPmlwNF9tYXNrLmRhZGRyLA0K
-CQkJCQkgJmNtcC0+cmVtb3RlX2FkZHIpKSkgew0KCQlpZiAocGt0LT5pcF9wcm90b191ZHBfb3Jf
-dGNwKSB7DQoJCQlyZXR1cm4gZmFsc2U7DQoJCX0NCg0KCQkqb3V0cHV0ID0gcnVsZS0+aW5mby5h
-Y3Rpb247DQoJCXJldHVybiB0cnVlOw0KCX0NCg0KCXJldHVybiBmYWxzZTsNCn0NCg0Kc3RhdGlj
-IF9fYWx3YXlzX2lubGluZSBpbnQgYXBwbHlfcnVsZXNfaXB2NChwa3RfaW5mb190ICpwa3QsDQoJ
-CQkJCSAgICBjb25zdCBwa3RfaW5mb19ydWxlX3QgKnJ1bGVzKQ0Kew0KCWlmICgocGt0ID09IE5V
-TEwpIHx8IChydWxlcyA9PSBOVUxMKSkgew0KCQlyZXR1cm4gVENfQUNUX1VOU1BFQzsNCgl9DQoN
-CglpbnQgb3V0cHV0ID0gQUNUSU9OX0FMTE9XOw0KCXN0cnVjdCBtYXRjaF9pcHY0X3BrdCBkaXJf
-Y21wOw0KDQoJZGlyX2NtcC5sb2NhbF9hZGRyID0gcGt0LT5pcDQuZGFkZHI7DQoJZGlyX2NtcC5y
-ZW1vdGVfYWRkciA9IHBrdC0+aXA0LnNhZGRyOw0KDQoJZm9yIChpbnQgaSA9IDA7IGkgPCBSVUxF
-X0xJU1RfU0laRTsgaSsrKSB7DQoJCWNvbnN0IHBrdF9pbmZvX3J1bGVfdCBydWxlID0gcnVsZXNb
-aV07DQoNCgkJYm9vbCByZXQ7DQoJCXJldCA9IG1hdGNoX2lwdjQoJnJ1bGUsIHBrdCwgJmRpcl9j
-bXAsICZvdXRwdXQpOw0KCQlpZiAocmV0KSB7DQoJCQlicmVhazsNCgkJfQ0KCX0NCg0KCWlmIChv
-dXRwdXQgPT0gQUNUSU9OX0FMTE9XKSB7DQoJCXJldHVybiBUQ19BQ1RfVU5TUEVDOw0KCX0gZWxz
-ZSB7DQoJCXJldHVybiBUQ19BQ1RfU0hPVDsNCgl9DQp9DQoNCiNkZWZpbmUgSEVBREVSX0JPVU5E
-U19DSEVDSyhoZHIsIHNrYikgXA0KCSgodW5zaWduZWQgbG9uZykoaGRyICsgMSkgPiAodW5zaWdu
-ZWQgbG9uZylza2ItPmRhdGFfZW5kKQ0KDQpzdGF0aWMgX19hbHdheXNfaW5saW5lIGJvb2wgZ2V0
-X3R1cGxlKGNvbnN0IHN0cnVjdCBfX3NrX2J1ZmYgKnNrYiwNCgkJCQkgICAgICBjb25zdCBzdHJ1
-Y3QgZXRoaGRyICpldGgsIHBrdF9pbmZvX3QgKnBrdCkNCnsNCglwa3QtPmV0aF9wcm90b2NvbCA9
-IGJwZl9udG9ocyhCUEZfQ09SRV9SRUFEKGV0aCwgaF9wcm90bykpOw0KDQoJaWYgKChwa3QtPmV0
-aF9wcm90b2NvbCA9PSBFVEhfUF9JUCkgfHwNCgkgICAgKChza2ItPnByb3RvY29sID09IF9fYnBm
-X2NvbnN0YW50X2h0b25zKEVUSF9QX0lQKSkpKSB7DQoJCXN0cnVjdCBpcGhkciAqaXBoID0gKHN0
-cnVjdCBpcGhkciAqKShza2ItPmRhdGEgKyBzaXplb2YoKmV0aCkpOw0KDQoJCWlmIChIRUFERVJf
-Qk9VTkRTX0NIRUNLKGlwaCwgc2tiKSkgew0KCQkJcmV0dXJuIGZhbHNlOw0KCQl9DQoNCgkJcGt0
-LT5mYW1pbHkgPSBBRl9JTkVUOw0KDQoJCXBrdC0+aXA0LnNhZGRyID0gQlBGX0NPUkVfUkVBRChp
-cGgsIHNhZGRyKTsNCgkJcGt0LT5pcDQuZGFkZHIgPSBCUEZfQ09SRV9SRUFEKGlwaCwgZGFkZHIp
-Ow0KDQoJCXBrdC0+aXBfcHJvdG9jb2wgPSBCUEZfQ09SRV9SRUFEKGlwaCwgcHJvdG9jb2wpOw0K
-DQoJCXBrdC0+aXBfcHJvdG9fdWRwX29yX3RjcCA9IChwa3QtPmlwX3Byb3RvY29sID09IElQUFJP
-VE9fVENQKSB8fA0KCQkJCQkgICAocGt0LT5pcF9wcm90b2NvbCA9PSBJUFBST1RPX1VEUCk7DQoN
-CgkJcmV0dXJuIHRydWU7DQoNCgl9IGVsc2Ugew0KCQlwa3QtPmZhbWlseSA9IEFGX1VOU1BFQzsN
-CgkJcmV0dXJuIGZhbHNlOw0KCX0NCn0NCg0Kc3RhdGljIF9fYWx3YXlzX2lubGluZSBib29sIHBv
-cHVsYXRlX3BrdF9pbmZvKGNvbnN0IHN0cnVjdCBfX3NrX2J1ZmYgKnNrYiwNCgkJCQkJICAgICAg
-cGt0X2luZm9fdCAqcGt0KQ0Kew0KCXN0cnVjdCBldGhoZHIgKmV0aCA9IChzdHJ1Y3QgZXRoaGRy
-ICopKHVuc2lnbmVkIGxvbmcpKHNrYi0+ZGF0YSk7DQoNCglpZiAoSEVBREVSX0JPVU5EU19DSEVD
-SyhldGgsIHNrYikpIHsNCgkJcmV0dXJuIGZhbHNlOw0KCX0NCg0KCXJldHVybiBnZXRfdHVwbGUo
-c2tiLCBldGgsIHBrdCk7DQp9DQoNCnN0YXRpYyBfX2Fsd2F5c19pbmxpbmUgaW50IGFsbG93X3Br
-dChwa3RfaW5mb190ICpwa3QpDQp7DQoJdWludDMyX3Qga2V5ID0gcGt0LT5mYW1pbHk7DQoJY29u
-c3QgcGt0X2luZm9fcnVsZV90ICpydWxlcyA9IGJwZl9tYXBfbG9va3VwX2VsZW0oJnJ1bGVzX21h
-cCwgJmtleSk7DQoJaWYgKHJ1bGVzID09IE5VTEwpIHsNCgkJcmV0dXJuIFRDX0FDVF9VTlNQRUM7
-DQoJfQ0KDQoJc3dpdGNoIChwa3QtPmZhbWlseSkgew0KCWNhc2UgQUZfSU5FVDoNCgkJcmV0dXJu
-IGFwcGx5X3J1bGVzX2lwdjQocGt0LCBydWxlcyk7DQoJZGVmYXVsdDoNCgkJcmV0dXJuIFRDX0FD
-VF9VTlNQRUM7DQoJfQ0KfQ0KDQpTRUMoInRjIikNCmludCB0Y19pbmdyZXNzKHN0cnVjdCBfX3Nr
-X2J1ZmYgKnNrYikNCnsNCglwa3RfaW5mb190IHBrdCA9ezB9Ow0KDQoJYm9vbCByZXQgPSBwb3B1
-bGF0ZV9wa3RfaW5mbyhza2IsICZwa3QpOw0KCWlmIChyZXQgIT0gdHJ1ZSkgew0KCQlyZXR1cm4g
-VENfQUNUX1VOU1BFQzsNCgl9DQoNCglyZXR1cm4gYWxsb3dfcGt0KCZwa3QpOw0KfQ0KDQotLS0+
-OC0tLQ0KDQoNClRoYW5rIHlvdSwNCkZyYW5jaXMNCg==
+
+
+On 11/15/24 11:48 AM, Vadim Fedorenko wrote:
+> New kfunc to return ARCH-specific timecounter. For x86 BPF JIT converts
+> it into rdtsc ordered call. Other architectures will get JIT
+> implementation too if supported. The fallback is to
+> __arch_get_hw_counter().
+>
+> Acked-by: Eduard Zingerman <eddyz87@gmail.com>
+> Signed-off-by: Vadim Fedorenko <vadfed@meta.com>
+
+LGTM with a small nit below.
+
+Acked-by: Yonghong Song <yonghong.song@linux.dev>
+
+> ---
+> v5 -> v6:
+> * add comment about dropping S64_MAX manipulation in jitted
+>    implementation of rdtsc_oredered (Alexey)
+> * add comment about using 'lfence;rdtsc' variant (Alexey)
+> * change the check in fixup_kfunc_call() (Eduard)
+> * make __arch_get_hw_counter() call more aligned with vDSO
+>    implementation (Yonghong)
+> v4 -> v5:
+> * use if instead of ifdef with IS_ENABLED
+> v3 -> v4:
+> * change name of the helper to bpf_get_cpu_cycles (Andrii)
+> * Hide the helper behind CONFIG_GENERIC_GETTIMEOFDAY to avoid exposing
+>    it on architectures which do not have vDSO functions and data
+> * reduce the scope of check of inlined functions in verifier to only 2,
+>    which are actually inlined.
+> v2 -> v3:
+> * change name of the helper to bpf_get_cpu_cycles_counter to explicitly
+>    mention what counter it provides (Andrii)
+> * move kfunc definition to bpf.h to use it in JIT.
+> * introduce another kfunc to convert cycles into nanoseconds as more
+>    meaningful time units for generic tracing use case (Andrii)
+> v1 -> v2:
+> * Fix incorrect function return value type to u64
+> * Introduce bpf_jit_inlines_kfunc_call() and use it in
+>    mark_fastcall_pattern_for_call() to avoid clobbering in case of
+>    running programs with no JIT (Eduard)
+> * Avoid rewriting instruction and check function pointer directly
+>    in JIT (Alexei)
+> * Change includes to fix compile issues on non x86 architectures
+> ---
+>   arch/x86/net/bpf_jit_comp.c   | 39 +++++++++++++++++++++++++++++++++
+>   arch/x86/net/bpf_jit_comp32.c | 14 ++++++++++++
+>   include/linux/bpf.h           |  5 +++++
+>   include/linux/filter.h        |  1 +
+>   kernel/bpf/core.c             | 11 ++++++++++
+>   kernel/bpf/helpers.c          | 21 ++++++++++++++++++
+>   kernel/bpf/verifier.c         | 41 ++++++++++++++++++++++++++++++-----
+>   7 files changed, 126 insertions(+), 6 deletions(-)
+>
+> diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+> index a43fc5af973d..107bd921f104 100644
+> --- a/arch/x86/net/bpf_jit_comp.c
+> +++ b/arch/x86/net/bpf_jit_comp.c
+> @@ -2185,6 +2185,37 @@ st:			if (is_imm8(insn->off))
+>   		case BPF_JMP | BPF_CALL: {
+>   			u8 *ip = image + addrs[i - 1];
+>   
+> +			if (insn->src_reg == BPF_PSEUDO_KFUNC_CALL &&
+> +			    imm32 == BPF_CALL_IMM(bpf_get_cpu_cycles)) {
+> +				/* The default implementation of this kfunc uses
+> +				 * __arch_get_hw_counter() which is implemented as
+> +				 * `(u64)rdtsc_ordered() & S64_MAX`. We skip masking
+> +				 * part because we assume it's not needed in BPF
+> +				 * use case (two measurements close in time).
+> +				 * Original code for rdtsc_ordered() uses sequence:
+> +				 * 'rdtsc; nop; nop; nop' to patch it into
+> +				 * 'lfence; rdtsc' or 'rdtscp' depending on CPU features.
+> +				 * JIT uses 'lfence; rdtsc' variant because BPF program
+> +				 * doesn't care about cookie provided by rdtsp in RCX.
+
+rdtsp -> tdtscp?
+
+> +				 * Save RDX because RDTSC will use EDX:EAX to return u64
+> +				 */
+> +				emit_mov_reg(&prog, true, AUX_REG, BPF_REG_3);
+> +				if (boot_cpu_has(X86_FEATURE_LFENCE_RDTSC))
+> +					EMIT_LFENCE();
+> +				EMIT2(0x0F, 0x31);
+> +
+> +				/* shl RDX, 32 */
+> +				maybe_emit_1mod(&prog, BPF_REG_3, true);
+> +				EMIT3(0xC1, add_1reg(0xE0, BPF_REG_3), 32);
+> +				/* or RAX, RDX */
+> +				maybe_emit_mod(&prog, BPF_REG_0, BPF_REG_3, true);
+> +				EMIT2(0x09, add_2reg(0xC0, BPF_REG_0, BPF_REG_3));
+> +				/* restore RDX from R11 */
+> +				emit_mov_reg(&prog, true, BPF_REG_3, AUX_REG);
+> +
+> +				break;
+> +			}
+> +
+>   			func = (u8 *) __bpf_call_base + imm32;
+>   			if (src_reg == BPF_PSEUDO_CALL && tail_call_reachable) {
+>   				LOAD_TAIL_CALL_CNT_PTR(stack_depth);
+> @@ -3791,3 +3822,11 @@ u64 bpf_arch_uaddress_limit(void)
+>   {
+>   	return 0;
+>   }
+> +
+> +/* x86-64 JIT can inline kfunc */
+> +bool bpf_jit_inlines_kfunc_call(s32 imm)
+> +{
+> +	if (imm == BPF_CALL_IMM(bpf_get_cpu_cycles))
+> +		return true;
+> +	return false;
+> +}
+> diff --git a/arch/x86/net/bpf_jit_comp32.c b/arch/x86/net/bpf_jit_comp32.c
+> index de0f9e5f9f73..e6097a371b69 100644
+> --- a/arch/x86/net/bpf_jit_comp32.c
+> +++ b/arch/x86/net/bpf_jit_comp32.c
+> @@ -2094,6 +2094,13 @@ static int do_jit(struct bpf_prog *bpf_prog, int *addrs, u8 *image,
+>   			if (insn->src_reg == BPF_PSEUDO_KFUNC_CALL) {
+>   				int err;
+>   
+> +				if (imm32 == BPF_CALL_IMM(bpf_get_cpu_cycles)) {
+> +					if (boot_cpu_has(X86_FEATURE_LFENCE_RDTSC))
+> +						EMIT3(0x0F, 0xAE, 0xE8);
+> +					EMIT2(0x0F, 0x31);
+> +					break;
+> +				}
+> +
+>   				err = emit_kfunc_call(bpf_prog,
+>   						      image + addrs[i],
+>   						      insn, &prog);
+> @@ -2621,3 +2628,10 @@ bool bpf_jit_supports_kfunc_call(void)
+>   {
+>   	return true;
+>   }
+> +
+> +bool bpf_jit_inlines_kfunc_call(s32 imm)
+> +{
+> +	if (imm == BPF_CALL_IMM(bpf_get_cpu_cycles))
+> +		return true;
+> +	return false;
+> +}
+> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+> index 3ace0d6227e3..43a5207a1591 100644
+> --- a/include/linux/bpf.h
+> +++ b/include/linux/bpf.h
+> @@ -3333,6 +3333,11 @@ void bpf_user_rnd_init_once(void);
+>   u64 bpf_user_rnd_u32(u64 r1, u64 r2, u64 r3, u64 r4, u64 r5);
+>   u64 bpf_get_raw_cpu_id(u64 r1, u64 r2, u64 r3, u64 r4, u64 r5);
+>   
+> +/* Inlined kfuncs */
+> +#if IS_ENABLED(CONFIG_GENERIC_GETTIMEOFDAY)
+> +u64 bpf_get_cpu_cycles(void);
+> +#endif
+> +
+>   #if defined(CONFIG_NET)
+>   bool bpf_sock_common_is_valid_access(int off, int size,
+>   				     enum bpf_access_type type,
+> diff --git a/include/linux/filter.h b/include/linux/filter.h
+> index 3a21947f2fd4..9cf57233874f 100644
+> --- a/include/linux/filter.h
+> +++ b/include/linux/filter.h
+> @@ -1111,6 +1111,7 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *prog);
+>   void bpf_jit_compile(struct bpf_prog *prog);
+>   bool bpf_jit_needs_zext(void);
+>   bool bpf_jit_inlines_helper_call(s32 imm);
+> +bool bpf_jit_inlines_kfunc_call(s32 imm);
+>   bool bpf_jit_supports_subprog_tailcalls(void);
+>   bool bpf_jit_supports_percpu_insn(void);
+>   bool bpf_jit_supports_kfunc_call(void);
+> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+> index 14d9288441f2..daa3ab458c8a 100644
+> --- a/kernel/bpf/core.c
+> +++ b/kernel/bpf/core.c
+> @@ -2965,6 +2965,17 @@ bool __weak bpf_jit_inlines_helper_call(s32 imm)
+>   	return false;
+>   }
+>   
+> +/* Return true if the JIT inlines the call to the kfunc corresponding to
+> + * the imm.
+> + *
+> + * The verifier will not patch the insn->imm for the call to the helper if
+> + * this returns true.
+> + */
+> +bool __weak bpf_jit_inlines_kfunc_call(s32 imm)
+> +{
+> +	return false;
+> +}
+> +
+>   /* Return TRUE if the JIT backend supports mixing bpf2bpf and tailcalls. */
+>   bool __weak bpf_jit_supports_subprog_tailcalls(void)
+>   {
+> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+> index 751c150f9e1c..12d40537e57b 100644
+> --- a/kernel/bpf/helpers.c
+> +++ b/kernel/bpf/helpers.c
+> @@ -23,6 +23,10 @@
+>   #include <linux/btf_ids.h>
+>   #include <linux/bpf_mem_alloc.h>
+>   #include <linux/kasan.h>
+> +#if IS_ENABLED(CONFIG_GENERIC_GETTIMEOFDAY)
+> +#include <vdso/datapage.h>
+> +#include <asm/vdso/vsyscall.h>
+> +#endif
+>   
+>   #include "../../lib/kstrtox.h"
+>   
+> @@ -3057,6 +3061,20 @@ __bpf_kfunc int bpf_copy_from_user_str(void *dst, u32 dst__sz, const void __user
+>   	return ret + 1;
+>   }
+>   
+> +#if IS_ENABLED(CONFIG_GENERIC_GETTIMEOFDAY)
+> +__bpf_kfunc u64 bpf_get_cpu_cycles(void)
+> +{
+> +	const struct vdso_data *vd = __arch_get_k_vdso_data();
+> +
+> +	vd = &vd[CS_RAW];
+> +
+> +	/* CS_RAW clock_mode translates to VDSO_CLOCKMODE_TSC on x86 and
+> +	 * to VDSO_CLOCKMODE_ARCHTIMER on aarch64/risc-v.
+> +	 */
+> +	return __arch_get_hw_counter(vd->clock_mode, vd);
+> +}
+> +#endif
+> +
+>   __bpf_kfunc_end_defs();
+>   
+>   BTF_KFUNCS_START(generic_btf_ids)
+> @@ -3149,6 +3167,9 @@ BTF_ID_FLAGS(func, bpf_get_kmem_cache)
+>   BTF_ID_FLAGS(func, bpf_iter_kmem_cache_new, KF_ITER_NEW | KF_SLEEPABLE)
+>   BTF_ID_FLAGS(func, bpf_iter_kmem_cache_next, KF_ITER_NEXT | KF_RET_NULL | KF_SLEEPABLE)
+>   BTF_ID_FLAGS(func, bpf_iter_kmem_cache_destroy, KF_ITER_DESTROY | KF_SLEEPABLE)
+> +#if IS_ENABLED(CONFIG_GENERIC_GETTIMEOFDAY)
+> +BTF_ID_FLAGS(func, bpf_get_cpu_cycles, KF_FASTCALL)
+> +#endif
+>   BTF_KFUNCS_END(common_btf_ids)
+>   
+>   static const struct btf_kfunc_id_set common_kfunc_set = {
+[...]
