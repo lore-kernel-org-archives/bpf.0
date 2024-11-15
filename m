@@ -1,393 +1,239 @@
-Received: from gnu.wildebeest.org (gnu.wildebeest.org [45.83.234.184])
+Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E991E18E047;
-	Fri, 15 Nov 2024 16:33:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.83.234.184
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731688427; cv=none; b=XW19uidLmj3jWBURP5EGsKZCogItlcu/Qb+o5vAbxIPl0AnBAIj0ac5Z40M/5QlCcc9XIxeF0/B9ZF8wmi/QG/fX9u66MktKAC7FCwl2xINFEW0AMsvWXqkNbGi85kqm25rTAR2pTl7PEOtVLPTACD6h+Ypf02dt7H4ipXAchsw=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731688427; c=relaxed/simple;
-	bh=LWFChiepHfjiCg/7dWHFOZF3rLF7gY1u8jVuWTKeAXM=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=MyPAy1EL5ld+xiWkfR46fUMZYfPjFNq9czFGhO+kXoM3tGvBTNBylzQ1zx4RPyjYn9C+8pC1I/dtLCFYm3QqN85QhdsmB1IQFhZq8+GshyOi7IW2svL8byRPASdZM0Okge0Pc7Q2sutYkEAJtllQZNvbC+h2AwJBkxlayamQRk8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=klomp.org; spf=pass smtp.mailfrom=klomp.org; arc=none smtp.client-ip=45.83.234.184
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=klomp.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=klomp.org
-Received: from r6.localdomain (82-217-174-174.cable.dynamic.v4.ziggo.nl [82.217.174.174])
-	(using TLSv1.2 with cipher ADH-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by gnu.wildebeest.org (Postfix) with ESMTPSA id A1EAA303C2A0;
-	Fri, 15 Nov 2024 17:26:09 +0100 (CET)
-Received: by r6.localdomain (Postfix, from userid 1000)
-	id 2F470340511; Fri, 15 Nov 2024 17:26:09 +0100 (CET)
-Message-ID: <1c5596cb29bbafecda69737ce097dd1e8714eb9f.camel@klomp.org>
-Subject: elfutils thread-safety (Was: [PATCH dwarves 3/3] dwarf_loader:
- Check DW_OP_[GNU_]entry_value for possible parameter matching)
-From: Mark Wielaard <mark@klomp.org>
-To: Arnaldo Carvalho de Melo <acme@kernel.org>, Jiri Olsa
- <olsajiri@gmail.com>
-Cc: Eduard Zingerman <eddyz87@gmail.com>, Yonghong Song	
- <yonghong.song@linux.dev>, Alan Maguire <alan.maguire@oracle.com>, Arnaldo
- Carvalho de Melo <arnaldo.melo@gmail.com>, dwarves@vger.kernel.org, Alexei
- Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
- bpf@vger.kernel.org, Daniel Borkmann <daniel@iogearbox.net>, 
-	kernel-team@fb.com, Song Liu <song@kernel.org>,
- elfutils-devel@sourceware.org
-Date: Fri, 15 Nov 2024 17:26:09 +0100
-In-Reply-To: <ZzIJqnFh2WfzHirN@x1>
-References: <20241108180508.1196431-1-yonghong.song@linux.dev>
-	 <20241108180524.1198900-1-yonghong.song@linux.dev>
-	 <31dea31e6f75916fdc078d433263daa6bb0bffdc.camel@gmail.com>
-	 <080794545d8eb3df3d6eba90ac621111ab7171f5.camel@gmail.com>
-	 <ZzH6ZDucO2nm9Y52@krava> <ZzIJqnFh2WfzHirN@x1>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.54.1 (3.54.1-1.fc41) 
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E75B1D5173;
+	Fri, 15 Nov 2024 17:11:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=67.231.153.30
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1731690694; cv=fail; b=W43T8y6L/9z1Fo06wK/W21m/Mn36+QMOoACTrgqKKedsGCX1Z6sFF6p2nnp1fAgsU9TggIPhsPLQa4/r4W1ThWScqiJCGxBmMf+EcC+AICNIXxX3vs1YW57SABkoe86x6nrPCJ8VlRK+r/KTQ84ulJK9rprYWWaI813gs0wmg6U=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1731690694; c=relaxed/simple;
+	bh=1L5BF1hsDXgqLx4oTJOoheenWnv/UTLBgoui1yoEwY0=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=XlvIhceRXFzvSoeldLXWxfABvtEIYU5mKIiOewHwiuAP2Za421uGwAVm3y7G1JGhpO98CTv2fbuf6kWe3XEqjWF1xRm3mP6TohEttF/b8zYo+yil5yet3at87B8smskKSWFwPXouBDbWhnc4TsTera5pRs8QXvKcmeEj8lrS/fM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com; spf=pass smtp.mailfrom=meta.com; dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b=PWDUTYfe; arc=fail smtp.client-ip=67.231.153.30
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b="PWDUTYfe"
+Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
+	by mx0a-00082601.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4AFGZxiO029114;
+	Fri, 15 Nov 2024 09:11:32 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=cc
+	:content-id:content-transfer-encoding:content-type:date:from
+	:in-reply-to:message-id:mime-version:references:subject:to; s=
+	s2048-2021-q4; bh=1L5BF1hsDXgqLx4oTJOoheenWnv/UTLBgoui1yoEwY0=; b=
+	PWDUTYfeXLo3A86Ij4yXPd4TrGU7tozgfoOwBzkTA6X0FVidN1c4X2zlhf4+hXB1
+	MaziT6/SX9v1Olw6CSDn8zFyBAN9LH7IhD/cL1LiGNndeNU5l8HIpFEV4j1gQoRz
+	NM3dPx/whlttEjCU/6k7xJCmkXuBVf+P3ipzpeOB0f+R/NylViFIhS4Q9ADlUOb/
+	u9GX3WQOmlq/ODjRW/NEVH8so7c8a2a3YxSan3TcF/lAWSk1qtf8rHOCEkFkQOmT
+	QvmNSfJ9cJMw78CoHKnOQ6FkoQpwN9iw//S+CnWCksxEFjq9DGybNhmIoBghz2Ym
+	p2QMH6236w4zKDmnhxUaBA==
+Received: from nam12-bn8-obe.outbound.protection.outlook.com (mail-bn8nam12lp2172.outbound.protection.outlook.com [104.47.55.172])
+	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 42x7gy1g45-2
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 15 Nov 2024 09:11:31 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=hUAKwee45btdHsCFU8xMiWOTcWb12fQtMIX3LZ2soj7GFuAZ6R+X75B+kFIwwXA9e42ndsz2d2vf4mEC6DaTyL9b2/vFxx2YkzY2QF/nBiPPJbxuAV3ORjOXf90AhTeIw1wWGNoBBhZIKu28eh0rRUb69hMHndg2F4tSz1QtSfkfG4FtyetTqiPw8ldrqB6zHilITe3TYvpxhREWEx4vbyhzjjLGc4GVMIRnDFWEV8gKsKRNdhTRwqiCv0rxln5MtZsMJj1lJoIHhcYaUEcPrLuvUDJcwn9HLEfvIsTRasCB6HmEgm+ZCqAyfurPpOiLwCiuyrHG/hWWcmE/5Ovpeg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=1L5BF1hsDXgqLx4oTJOoheenWnv/UTLBgoui1yoEwY0=;
+ b=EcdWaMpsLXt4t0A32oWeiiWd+AXiTYfyBgWdPKWHXE+pN3HKxAS6USWU/LP8b4yITr6W+Ju3UdQ5UcgwOzPzEwBkNy8bGkBEooa3MAo/IqpdVxRxgeVXPccA59xB1r8ZpXKOy+bWOASEIbYZdFs4wk1+I9OzQkKlNdm6Ei+5kEoD2w5Ldrv6xB7MFRV1YSX534BI7URdKggNgnhT6lHzUYZv2OAn4KiXVxZnCzBzVN05cIOV5RnMS1qvDMMz64NDdzmy9ukJjeCE/NlffB2BXp1wUlXCw5h9kWVDAyT4GDvMX0YlbGHU/Bc/qDiMUuXIN7EIibqNPopGaPeLToH47w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=meta.com; dmarc=pass action=none header.from=meta.com;
+ dkim=pass header.d=meta.com; arc=none
+Received: from SA1PR15MB5109.namprd15.prod.outlook.com (2603:10b6:806:1dc::10)
+ by DS0PR15MB6185.namprd15.prod.outlook.com (2603:10b6:8:114::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8158.17; Fri, 15 Nov
+ 2024 17:11:27 +0000
+Received: from SA1PR15MB5109.namprd15.prod.outlook.com
+ ([fe80::662b:d7bd:ab1b:2610]) by SA1PR15MB5109.namprd15.prod.outlook.com
+ ([fe80::662b:d7bd:ab1b:2610%3]) with mapi id 15.20.8158.017; Fri, 15 Nov 2024
+ 17:11:27 +0000
+From: Song Liu <songliubraving@meta.com>
+To: Amir Goldstein <amir73il@gmail.com>
+CC: Song Liu <song@kernel.org>, "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-security-module@vger.kernel.org"
+	<linux-security-module@vger.kernel.org>,
+        Kernel Team <kernel-team@meta.com>,
+        "andrii@kernel.org" <andrii@kernel.org>,
+        "eddyz87@gmail.com"
+	<eddyz87@gmail.com>,
+        "ast@kernel.org" <ast@kernel.org>,
+        "daniel@iogearbox.net" <daniel@iogearbox.net>,
+        "martin.lau@linux.dev"
+	<martin.lau@linux.dev>,
+        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
+        "brauner@kernel.org" <brauner@kernel.org>,
+        "jack@suse.cz" <jack@suse.cz>,
+        "kpsingh@kernel.org" <kpsingh@kernel.org>,
+        "mattbobrowski@google.com"
+	<mattbobrowski@google.com>,
+        "repnop@google.com" <repnop@google.com>,
+        "jlayton@kernel.org" <jlayton@kernel.org>,
+        Josef Bacik
+	<josef@toxicpanda.com>,
+        "mic@digikod.net" <mic@digikod.net>,
+        "gnoack@google.com" <gnoack@google.com>
+Subject: Re: [RFC/PATCH v2 bpf-next fanotify 1/7] fanotify: Introduce fanotify
+ fastpath handler
+Thread-Topic: [RFC/PATCH v2 bpf-next fanotify 1/7] fanotify: Introduce
+ fanotify fastpath handler
+Thread-Index: AQHbNnF1JE+3KJtsIUKJQ3ltj7B6crK4ChwAgACLxIA=
+Date: Fri, 15 Nov 2024 17:11:27 +0000
+Message-ID: <E48C3CBB-7712-4707-AE70-1326445CE4C4@fb.com>
+References: <20241114084345.1564165-1-song@kernel.org>
+ <20241114084345.1564165-2-song@kernel.org>
+ <CAOQ4uxjFpsOLipPN5tXgBG4SsLJEFpndnmoc67Nr7z66QTuHnQ@mail.gmail.com>
+In-Reply-To:
+ <CAOQ4uxjFpsOLipPN5tXgBG4SsLJEFpndnmoc67Nr7z66QTuHnQ@mail.gmail.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+x-mailer: Apple Mail (2.3826.200.121)
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: SA1PR15MB5109:EE_|DS0PR15MB6185:EE_
+x-ms-office365-filtering-correlation-id: 24ffa53b-a8d3-43bc-7ebf-08dd05988aa6
+x-fb-source: Internal
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam:
+ BCL:0;ARA:13230040|1800799024|376014|10070799003|7416014|366016|38070700018;
+x-microsoft-antispam-message-info:
+ =?utf-8?B?UXZ1ZTdNdWx5SER0SHcvblo3KzFrcWt5cXovYnFFVE1wcWZ5cm9rMEZzdC9E?=
+ =?utf-8?B?ZDVyTGFscDkxYTFCVWFXSmJ0VDNSb1ZyS2V6b2RIaGN4TXFhOEY0WmxLalpF?=
+ =?utf-8?B?VkNEUjJWV0g3bEEwRm1OUXVnM1B1eWk1WUNpWVFtWGVZcWNNQkUvR29pWERl?=
+ =?utf-8?B?d1BnV2tEOGRuSkl5RFhiU3Y5TXRjcTBTUUNaUy9oUER0RHRYOEduSDYrQnVr?=
+ =?utf-8?B?R21Ec2lkaFp3R25tUWlta1NVeXBXaWZJendIQ0g0d1NLQlVIekUyaXhMbWdm?=
+ =?utf-8?B?NkZYTmJVempObmd2RkRBdHFRaUg3c1J4TTg1bzF4c1FNQ2NIb1M5dndXTndH?=
+ =?utf-8?B?MzlrZllBamxJVWdNTTNGNDE2ZE9KcHg1TkdMMlJVWXp3YUl5S25GVGhsbHh5?=
+ =?utf-8?B?M2VEZTlkWHhudVV3UVI0YlprT2lSSkVVYTZObjgyNldGSGIyRTdHSWlOc2Vl?=
+ =?utf-8?B?OXBvS01oTEZ0TU5PYmZndVF0VC9QTXo0d3NpcThhSHE5NWxwelJSNVhkdzhU?=
+ =?utf-8?B?cFJOZnFDMXYwdHNPSm90OTBwS1ZRQTFIenJReE90dlVnNzlzOGg2a1JlTGMw?=
+ =?utf-8?B?WDJ2T3RXWXRRVHQzdnJNMzlJZlJrakZkNjFxSDdLa1RydGkvVVI2YWhtakNv?=
+ =?utf-8?B?NC9mTDQ0RTdSVW8xV0E3RGdNMzUvY25XYWVCSitTeGphalA0Y1RMNmN6Tnpj?=
+ =?utf-8?B?c2VFSnIreU41UGIzdnZQRGFmTGRlRnh4WXZsMGJmcUtWRlR3RWVKbGdaWVdD?=
+ =?utf-8?B?UzBEamc5Q2F3ZWVLTW50WURyRFN1QndQNDRsTVJ5TjhpV0dPeFMzRk5TMXJ0?=
+ =?utf-8?B?bkVUdXZWeFVjWkt3VmFDYXlEU2J0c29jVSsvTWJSTkpQaEpRUXoxUmdCcXZU?=
+ =?utf-8?B?SkRsWEZvVFNOd0NlM0pqbVk2NDJscXlTQnVGNzVnbS9yNUM3RXBIbitWR3pY?=
+ =?utf-8?B?UnJPTUdXMGZjMFBKbTZtZGx4Rm1MclgzY2pCUUtMZndsb0UyWUFRM2NWaHRt?=
+ =?utf-8?B?UUtqWUZXd2dDbmNONUszWVd1czNCbnJBWGNtQlJXSGVVUGpWS0xhOHNMaWxQ?=
+ =?utf-8?B?TkwvVWNIYXdRZnUzUFV3QVpodkVvWTZ4M2c0NGJDV0wyZDFlUTdMa0lyc3hM?=
+ =?utf-8?B?cC9lSHZVSE1lZU0rakxlOG1qYjBIc3lObitqWnA0SURtZjFoQ2V6dmIySHp4?=
+ =?utf-8?B?YUFwSjFFc29ZYi9vei8zVXR3bENSYmpWZmduSmNlenEwNStWazU4OWdEMFNq?=
+ =?utf-8?B?dS92WkVKc1d0OFZBUE44SDMrOExNdUdIYXA5TnBwUFhkckVzWlhPWFNGc3V2?=
+ =?utf-8?B?dnBWZDF4eTRQTVNjc2tmakRrdkVXbzdVdWU5TXdZMzFSQlJESmJmQ21FQjRE?=
+ =?utf-8?B?RGNnWkFVVXVHd1kvSkF3Q25RWVdtb1pGa3ZnWGlrMmxaRldZT2gvVE1sSkQz?=
+ =?utf-8?B?bGwvRlQvamw2SnhLL3lPN3ZwS3FZZHhTZHA1RTdUMSt4R2plNDI5eGl2NjJE?=
+ =?utf-8?B?OHpYWmRFK2lqcnA2eEtNNDVMMmhkaU02aEpGeUEvYVg5L20wekVzSUc2N29V?=
+ =?utf-8?B?aW15a0VuQ1BrSFprUmhMRlFzbHRHZTlwMEN0L2JmMDlrRlF1SGhjOXI4WUtC?=
+ =?utf-8?B?QjlKWElMcEU1L0EwSjJ1ZGR5YjB1THorMGwxbnNOQVhRK0VSRU1oMU9HTWlV?=
+ =?utf-8?B?TUdNSTdWL1JmaEhYbm5RcWVBaGd4Z1FIek9EL0lmWXpHT0lFd1hYTkpLSmdX?=
+ =?utf-8?B?WWd1OHNlREluTE9aQktQRTdKOVNsSkt6VFp5VTJoZE4rcS94Qk40UlJlTS9K?=
+ =?utf-8?Q?mAM617HC/cGGpcPR1+LrPtokdMP7I66Fi/y4k=3D?=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR15MB5109.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(10070799003)(7416014)(366016)(38070700018);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?utf-8?B?RVlhdHcvZkswWkNGVERPcnc5N0w3bUZWMTI0NGRLZktlKzZZaSswTGVHQ3pZ?=
+ =?utf-8?B?bjRTbEhhVkRydFpreDBsenQrMmJiVFI2a1BOaHFaTzBsOWRLTlcvWmo2ZWht?=
+ =?utf-8?B?LzFSMTZyRnFUQ0FTNGpMV2c4OWVvZW40NSt2RmNpMjFyTFM2ekRTNm5McElZ?=
+ =?utf-8?B?YlJ0eTdTZUtXQ1lWMjZjZlh2QUdyYW5IbW1VS3JsdFljTDhaVGZPQU9YcVRs?=
+ =?utf-8?B?UWc1cENRZHBZcGZRUk9pLzIyZUcwam9ZekJXb3lpUVozK1YvNXZpRXRMbk5Q?=
+ =?utf-8?B?VnV0THRGZzRmU2Y4UURvRThFYmtUVSt2RitVU3hsclBhbFMrKzdUSlBneng5?=
+ =?utf-8?B?TVl5d3hqSXFRZU5JcStBeVo3S3VUSG9sanlOL1lDT29ScFAzTkxvVnV2ZWFw?=
+ =?utf-8?B?R1lCVFRIcUU3ZFBSYk9PMGg5OU1nQlZoUmloWWlrSjJydEdWRkNrWXB2eEtD?=
+ =?utf-8?B?dWVaV0YrYjc2WXNLSUFPc0M2OG8zY3JRK1VyazZDWDlqNUpaa2lja2RZMSts?=
+ =?utf-8?B?enNMdDNGOHdQT3E0Z3lXQjhUeVRWNzBOcGtiSlRkeW1STmtsMEJIcE5Ha0Qw?=
+ =?utf-8?B?N2xvZXFUWXBuZzkvbUdtbW9jNG1pbG1sUkI1Zkp0R3BLazZFbkJmaXdPNWx4?=
+ =?utf-8?B?R3JPVzU3Y2pDSjEvR1lwd3p6cXdMaXlQSkJYbmtWSGVCMmlkKzBTSnJ1TXBj?=
+ =?utf-8?B?NWJZOUFVL2hNWUp2bE1mZmNVOVd3eDVReDlaTXp4aDBMOUxXL1dDYWFkanRp?=
+ =?utf-8?B?ODN4Vlc1UVJmckRHUXQxbzJ1eUtoOU9WNzU4aC9hM3YzN1VtdysraWlUSlRE?=
+ =?utf-8?B?YTR0bGJmYjllN0VIUnhtdWRwaXl3eG1ORGNsNFY0Q3VPQWV4dlIzSGltcDIz?=
+ =?utf-8?B?OUdvMWhjYnBUKzE3bmtSYmlEY0FOcy9Ob1B4UGZId3FXRzR0TXRJOXlpN21u?=
+ =?utf-8?B?Mi9GMGV3ek0yM2dyclI4T2NUU0VGejQ0azVzUzROdFVpM01ITFFwbDBWQkh6?=
+ =?utf-8?B?bmNZdnk5MGg4aGd3NWhhL1FzN0hPaXRraDZtdWNGbmZIZjJKTndOQ0N2WUVa?=
+ =?utf-8?B?WWNNRVZhTWo2RTZOdDd0UGcwSUVXNGRsNjVveU1hNlFXSDZSSGJpMlltRVJu?=
+ =?utf-8?B?SUNhaTA2V2xPelNMVUxBWGlTQU9yNlh5VjZMZXBVeVBDakpEUTFwQU9VRW9B?=
+ =?utf-8?B?SlE1bkZLQU4zdkpId1RjZWlhWTlqM2xmOVVlZzZTQ0VFNDBROXFHZEsvODA3?=
+ =?utf-8?B?SUlvVFZlZVkvczdsK2NlQzhFc1RmYjJ2RUV4d0JzUlVCSjJrUDhVUTFIdXlG?=
+ =?utf-8?B?eUxPSXlFZElNOElPT2U5ZzdSaFVNdmJiQ3R2RGNnYlZyemV2cUZwdXlsRXE0?=
+ =?utf-8?B?SGxZbWxFN3RWOVpkTFhmT2Y3MjNodXJsV3pQTmtudjIvcTgzNWtWSVpHLzFP?=
+ =?utf-8?B?dE45SVNiM05TdWFZWkk4Y0N2SnM2QkhLQ0M2RjJYUzQ4TUdzRzJRNVppd1pk?=
+ =?utf-8?B?VlFxY2FXMFNXNUtqdkJaK3JLLys3TGxjVEdiZlorVDc1U3NMT0tiTXM0RUdz?=
+ =?utf-8?B?b3J3YjlUc2dFRG11dDFBOXVzVXA5Z2tZNmZ1aEQrVWFLSml0WGcxeWVwMUdY?=
+ =?utf-8?B?MDlNL2ZCakNXaFBpT0tRcEYrYWVmVFg5Slg3ZmgwdUpuSUlJRXlnaWJ3YTlu?=
+ =?utf-8?B?RzQ1T1F4Um9wMHRCV0FvK1RMRDV3RUJoWE1lK1B6d21NcWJFUk9McENrWExt?=
+ =?utf-8?B?Y081ODhqa0ZpTHlWY215dU5UcXMxZkh5SEY3T2N0VFhIa0p5MjF2R050ZjNF?=
+ =?utf-8?B?aTBKOXpxRGtpYzZGOTdJdDNHZlU5OGlxajVIeEtaUzVlREp2UnpLaXhhaUJo?=
+ =?utf-8?B?OUprbU9Vek93TGlEN1g4TXg0ZkJkMHVta2thSnQ0VU0zL3FaNHQvbXp6VExp?=
+ =?utf-8?B?ZEc3dlFsR3pobXRTTGhIekxpVGlNRysvZU4xMjB2Y1BGbkZ5SVhRSXlSS2pF?=
+ =?utf-8?B?bzBidGNkdzJ4SGRtellmRzAvZXpXQzhja0MvT0dBRUJjdXpRTUhRdDFVeVVP?=
+ =?utf-8?B?SE9RZzIxaWFEeFdvTlhuUytZYWsrL0g5eWpTb2F0K1J6cm9UcDZOaXVPb0x6?=
+ =?utf-8?B?VXpMNWttb0NNNlZHV1Izb2pFQ2JCcm82eHlzekQrSjZXUHplcldJYnkvSXBm?=
+ =?utf-8?Q?NT+vvvjP33g0MuoxIIbO18g=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <F467A5B8478C7644AABBC9D4AC70E0DC@namprd15.prod.outlook.com>
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Spam-Flag: NO
+X-OriginatorOrg: meta.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SA1PR15MB5109.namprd15.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 24ffa53b-a8d3-43bc-7ebf-08dd05988aa6
+X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Nov 2024 17:11:27.5627
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: fpfQuoQRcdhdriun0DlJfnTGbKYzM1mIOAaAw4qjNbH2Yco+Y1htNH9Cm2KOuzKTywJOF2plXuvv1XcBKn6M+A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR15MB6185
+X-Proofpoint-GUID: zdWjqaIVt96I9oeh3lTRiwUWfRxbUpOf
+X-Proofpoint-ORIG-GUID: zdWjqaIVt96I9oeh3lTRiwUWfRxbUpOf
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
+ definitions=2024-10-05_03,2024-10-04_01,2024-09-30_01
 
-Hi Arnaldo,
-
-On Mon, 2024-11-11 at 10:42 -0300, Arnaldo Carvalho de Melo wrote:
-> Adding Mark to the CC list.
-
-And CC elfutils-devel so this gets more exposure to the people working
-on elfutils thread-safety. For those missing some context the whole
-thread is here:
-https://lore.kernel.org/dwarves/ZzIJqnFh2WfzHirN@x1/T/#u
-
-pahole source code can be found here:
-https://git.kernel.org/pub/scm/devel/pahole/pahole.git
-(See the README for build instructions.)
-
-> On Mon, Nov 11, 2024 at 01:36:52PM +0100, Jiri Olsa wrote:
-> > On Mon, Nov 11, 2024 at 12:01:13AM -0800, Eduard Zingerman wrote:
-> > > On Sun, 2024-11-10 at 03:38 -0800, Eduard Zingerman wrote:
-> > >=20
-> > > [...]
-> > >=20
-> > > > Also, it appears there is some bug either in pahole or in libdw's
-> > > > implementation of dwarf_getlocation(). When I try both your patch-s=
-et
-> > > > and my variant there is a segfault once in a while:
-> > > >=20
-> > > >   $ for i in $(seq 1 100); \
-> > > >     do echo "---> $i"; \
-> > > >        pahole -j --skip_encoding_btf_inconsistent_proto -J --btf_en=
-code_detached=3D/dev/null vmlinux ; \
-> > > >     done
-> > > >   ---> 1
-> > > >   ...
-> > > >   ---> 71
-> > > >   Segmentation fault (core dumped)
-> > > >   ...
-> > > >=20
-> > > > The segfault happens only when -j (multiple threads) is passed.
-> > > > If pahole is built with sanitizers
-> > > > (passing -DCMAKE_C_FLAGS=3D"-fsanitize=3Dundefined,address")
-> > > > the stack trace looks as follows:
-> > >=20
-> > > Did some additional research for these SEGFAULTs.
-> > > Looks like all we are in trouble.
-> > >=20
-> > > # TLDR
-> > >=20
-> > > libdw is not supposed to be used in a concurrent context.
-> > > libdw is a part of elfutils package, the configuration flag
-> > > making API thread-safe is documented as experimental:
-> > >   --enable-thread-safety  enable thread safety of libraries EXPERIMEN=
-TAL
-> > > At-least Fedora 40 does not ship elfutils built with this flag set.
-> > > This colours all current parallel DWARF decoding questionable.
-
-Unfortunately true. The good news is that there is a serious effort to
-complete the work so that --enable-thread-safety can be turned on by
-default, but that work isn't complete yet. Which is why we currently
-have it marked as EXPERIMENTAL.
-
-It would be really nice if people did try it out though and reported
-any remaining issues.
-https://sourceware.org/bugzilla/enter_bug.cgi?product=3Delfutils or sent
-email to elfutils-devel@sourceware.org
-
-> > > # Why segfault happens
-> > >=20
-> > > Any references to elfutils source code are for commit [1].
-> > > The dwarf_getlocation() is one of a few libdw APIs that uses memory
-> > > allocation internally. The function dwarf_getlocation.c:__libdw_inter=
-n_expression
-> > > iterates over expression encodings in DWARF and allocates
-> > > a set of objects of type `struct loclist` and `Dwarf_Op`.
-> > > Pointers to allocated objects are put to a binary tree for caching,
-> > > see dwarf_getlocation.c:660, the call to eu_tsearch() function.
-> > > The eu_tsearch() is a wrapper around libc tsearch() function.
-> > > This wrapper provides locking for the tree,
-> > > but only if --enable-thread-safety was set during elfutils configurat=
-ion.
-> > > The SEGFAULT happens inside tsearch() call because binary tree is mal=
-formed, e.g.:
-> > >=20
-> > >   Thread 8 "pahole" received signal SIGSEGV, Segmentation fault.
-> > >   [Switching to Thread 0x7fffd9c006c0 (LWP 2630074)]
-> > >   0x00007ffff7c5d200 in maybe_split_for_insert (...) at tsearch.c:228
-> > >   228	      if (parentp !=3D NULL && RED(DEREFNODEPTR(parentp)))
-> > >   (gdb) bt
-> > >   #0  0x00007ffff7c5d200 in maybe_split_for_insert (...) at tsearch.c=
-:228
-> > >   #1  0x00007ffff7c5d466 in __GI___tsearch (...) at tsearch.c:358
-> > >   #2  __GI___tsearch (...) at tsearch.c:290
-> > >   #3  0x000000000048f096 in __interceptor_tsearch ()
-> > >   #4  0x00007ffff7f5c482 in __libdw_intern_expression (...) at dwarf_=
-getlocation.c:660
-> > >   #5  0x00007ffff7f5cf51 in getlocation (...) at dwarf_getlocation.c:=
-678
-> > >   #6  getlocation (...) at dwarf_getlocation.c:667
-> > >   #7  dwarf_getlocation (..._ at dwarf_getlocation.c:708
-> > >   #8  0x00000000005a2ee5 in parameter.new ()
-> > >   #9  0x00000000005a0122 in die.process_function ()
-> > >   #10 0x0000000000597efd in __die__process_tag ()
-> > >   #11 0x0000000000595ad9 in die.process_unit ()
-> > >   #12 0x0000000000595436 in die.process ()
-> > >   #13 0x00000000005b0187 in dwarf_cus.process_cu ()
-> > >   #14 0x00000000005afa38 in dwarf_cus.process_cu_thread ()
-> > >   #15 0x00000000004c7b8d in asan_thread_start(void*) ()
-> > >   #16 0x00007ffff7bda6d7 in start_thread (arg=3D<optimized out>) at p=
-thread_create.c:447
-> > >   #17 0x00007ffff7c5e60c in clone3 () at ../sysdeps/unix/sysv/linux/x=
-86_64/clone3.S:78
-> > >   (gdb) p parentp
-> > >   $1 =3D (node *) 0x50300079d2a0
-> > >   (gdb) p *parentp
-> > >   $2 =3D (node) 0x0
-> > >=20
-> > > glibc provides a way to validate binary tree structure.
-> > > For this misc/tsearch.c has to be changed to define DEBUGGING variabl=
-e.
-> > > (I used glibc 2.39 as provided by source rpm for Fedora 40 for experi=
-ments).
-> > > If this is done and custom glibc is used for pahole execution,
-> > > the following error is reported if '-j' flag is present:
-> > >=20
-> > >   $ pahole -j --skip_encoding_btf_inconsistent_proto -J --btf_encode_=
-detached=3D/home/eddy/work/tmp/my-new.btf vmlinux=20
-> > >   Fatal glibc error: tsearch.c:164 (check_tree_recurse): assertion fa=
-iled: d_sofar =3D=3D d_total
-> > >   Fatal glibc error: tsearch.c:164 (check_tree_recurse): assertion fa=
-iled: d_sofar =3D=3D d_total
-> > >   Aborted (core dumped)
-> > >=20
-> > > Executing pahole using a custom-built libdw,
-> > > built with --enable-thread-safety resolves the issue.
-> >=20
-> > could we use libdw__lock around that? but I guess we use it on other
-> > places as well..
->=20
-> Right, if you look at the cset where I intrduced libdw__lock (at the end
-> of this message), its a similar case, probably we should rename it to
-> libdw__decl_lock and introduce a libdw__getlocation_lock? This way, for
-> these known to be not thread safe we use libdw in serially while not
-> having a libdw "big lock" getting too much in the way of pahole's
-> parallel operation?
-
-The trouble with a "big lock" is that it is easy to create a big
-deadlock, especially given that libdw provides various callbacks which
-are then run under the big lock and must be careful to not call back
-into libdw trying to reacquire the big lock.
-
-So you are currently only using that libdw__lock around the
-dwarf_decl_file/line calls?
-
-Is there a pahole tesstsuite which exercises the -j parallel option?
-
-Are you trying to check thread-safety of pahole with any tools like
-valgrind helgrind?
-
-Thanks,
-
-Mark
-
-> $ git show 1caed1c443d4a0dc5
-> commit 1caed1c443d4a0dc5794f21954be7d5ae0396c90
-> Author: Arnaldo Carvalho de Melo <acme@redhat.com>
-> Date:   Thu Jul 8 16:07:50 2021 -0300
->=20
->     dwarf_loader: Add a lock around dwarf_decl_file() and dwarf_decl_line=
-() calls
->    =20
->     As this ends up racing on a tsearch() call, probably for some libdw
->     cache that gets updated/lookedup in concurrent pahole threads (-j N).
->    =20
->     This cures the following, a patch for libdw will be cooked up and sen=
-t.
->    =20
->       (gdb) run -j -I -F dwarf vmlinux > /dev/null
->       Starting program: /var/home/acme/git/pahole/build/pahole -j -I -F d=
-warf vmlinux > /dev/null
->       warning: Expected absolute pathname for libpthread in the inferior,=
- but got .gnu_debugdata for /lib64/libpthread.so.0.
->       warning: File "/usr/lib64/libthread_db-1.0.so" auto-loading has bee=
-n declined by your `auto-load safe-path' set to "$debugdir:$datadir/auto-lo=
-ad".
->       warning: Unable to find libthread_db matching inferior's thread lib=
-rary, thread debugging will not be available.
->       [New LWP 844789]
->       [New LWP 844790]
->       [New LWP 844791]
->       [New LWP 844792]
->       [New LWP 844793]
->       [New LWP 844794]
->       [New LWP 844795]
->       [New LWP 844796]
->       [New LWP 844797]
->       [New LWP 844798]
->       [New LWP 844799]
->       [New LWP 844800]
->       [New LWP 844801]
->       [New LWP 844802]
->       [New LWP 844803]
->       [New LWP 844804]
->       [New LWP 844805]
->       [New LWP 844806]
->       [New LWP 844807]
->       [New LWP 844808]
->       [New LWP 844809]
->       [New LWP 844810]
->       [New LWP 844811]
->       [New LWP 844812]
->       [New LWP 844813]
->       [New LWP 844814]
->    =20
->       Thread 2 "pahole" received signal SIGSEGV, Segmentation fault.
->       [Switching to LWP 844789]
->       0x00007ffff7dfa321 in ?? () from /lib64/libc.so.6
->       (gdb) bt
->       #0  0x00007ffff7dfa321 in ?? () from /lib64/libc.so.6
->       #1  0x00007ffff7dfa4bb in ?? () from /lib64/libc.so.6
->       #2  0x00007ffff7f5eaa6 in __libdw_getsrclines (dbg=3D0x4a7f90, debu=
-g_line_offset=3D10383710, comp_dir=3D0x7ffff3c29f01 "/var/home/acme/git/bui=
-ld/v5.13.0-rc6+", address_size=3Daddress_size@entry=3D8, linesp=3Dlinesp@en=
-try=3D0x7fffcfe04ba0, filesp=3Dfilesp@entry=3D0x7fffcfe04ba8)
->           at dwarf_getsrclines.c:1129
->       #3  0x00007ffff7f5ed14 in dwarf_getsrclines (cudie=3Dcudie@entry=3D=
-0x7fffd210caf0, lines=3Dlines@entry=3D0x7fffd210cac0, nlines=3Dnlines@entry=
-=3D0x7fffd210cac8) at dwarf_getsrclines.c:1213
->       #4  0x00007ffff7f64883 in dwarf_decl_file (die=3D<optimized out>) a=
-t dwarf_decl_file.c:66
->       #5  0x0000000000425f24 in tag__init (tag=3D0x7fff0421b710, cu=3D0x7=
-fffcc001e40, die=3D0x7fffd210cd30) at /var/home/acme/git/pahole/dwarf_loade=
-r.c:476
->       #6  0x00000000004262ec in namespace__init (namespace=3D0x7fff0421b7=
-10, die=3D0x7fffd210cd30, cu=3D0x7fffcc001e40, conf=3D0x475600 <conf_load>)=
- at /var/home/acme/git/pahole/dwarf_loader.c:576
->       #7  0x00000000004263ac in type__init (type=3D0x7fff0421b710, die=3D=
-0x7fffd210cd30, cu=3D0x7fffcc001e40, conf=3D0x475600 <conf_load>) at /var/h=
-ome/acme/git/pahole/dwarf_loader.c:595
->       #8  0x00000000004264d1 in type__new (die=3D0x7fffd210cd30, cu=3D0x7=
-fffcc001e40, conf=3D0x475600 <conf_load>) at /var/home/acme/git/pahole/dwar=
-f_loader.c:614
->       #9  0x0000000000427ba6 in die__create_new_typedef (die=3D0x7fffd210=
-cd30, cu=3D0x7fffcc001e40, conf=3D0x475600 <conf_load>) at /var/home/acme/g=
-it/pahole/dwarf_loader.c:1212
->       #10 0x0000000000428df5 in __die__process_tag (die=3D0x7fffd210cd30,=
- cu=3D0x7fffcc001e40, top_level=3D1, fn=3D0x45cee0 <__FUNCTION__.10> "die__=
-process_unit", conf=3D0x475600 <conf_load>) at /var/home/acme/git/pahole/dw=
-arf_loader.c:1823
->       #11 0x0000000000428ea1 in die__process_unit (die=3D0x7fffd210cd30, =
-cu=3D0x7fffcc001e40, conf=3D0x475600 <conf_load>) at /var/home/acme/git/pah=
-ole/dwarf_loader.c:1848
->       #12 0x0000000000429e45 in die__process (die=3D0x7fffd210ce20, cu=3D=
-0x7fffcc001e40, conf=3D0x475600 <conf_load>) at /var/home/acme/git/pahole/d=
-warf_loader.c:2311
->       #13 0x0000000000429ecb in die__process_and_recode (die=3D0x7fffd210=
-ce20, cu=3D0x7fffcc001e40, conf=3D0x475600 <conf_load>) at /var/home/acme/g=
-it/pahole/dwarf_loader.c:2326
->       #14 0x000000000042a9d6 in dwarf_cus__create_and_process_cu (dcus=3D=
-0x7fffffffddc0, cu_die=3D0x7fffd210ce20, pointer_size=3D8 '\b') at /var/hom=
-e/acme/git/pahole/dwarf_loader.c:2644
->       #15 0x000000000042ab28 in dwarf_cus__process_cu_thread (arg=3D0x7ff=
-fffffddc0) at /var/home/acme/git/pahole/dwarf_loader.c:2687
->       #16 0x00007ffff7ed6299 in start_thread () from /lib64/libpthread.so=
-.0
->       #17 0x00007ffff7dfe353 in ?? () from /lib64/libc.so.6
->       (gdb)
->       (gdb) fr 2
->       1085
->       (gdb) list files_lines_compare
->       1086    static int
->       1087    files_lines_compare (const void *p1, const void *p2)
->       1088    {
->       1089    const struct files_lines_s *t1 =3D p1;
->       1090    const struct files_lines_s *t2 =3D p2;
->       1091
->       1092    if (t1->debug_line_offset < t2->debug_line_offset)
->       (gdb)
->       1093        return -1;
->       1094    if (t1->debug_line_offset > t2->debug_line_offset)
->       1095        return 1;
->       1096
->       1097    return 0;
->       1098    }
->       1099
->       1100    int
->       1101    internal_function
->       1102    __libdw_getsrclines (Dwarf *dbg, Dwarf_Off debug_line_offse=
-t,
->       (gdb) list __libdw_getsrclines
->       1100    int
->       1101    internal_function
->       1102    __libdw_getsrclines (Dwarf *dbg, Dwarf_Off debug_line_offse=
-t,
->       1103                         const char *comp_dir, unsigned address=
-_size,
->       1104                         Dwarf_Lines **linesp, Dwarf_Files **fi=
-lesp)
->       1105    {
->       1106    struct files_lines_s fake =3D { .debug_line_offset =3D debu=
-g_line_offset };
->       1107    struct files_lines_s **found =3D tfind (&fake, &dbg->files_=
-lines,
->       1108                                            files_lines_compare=
-);
->       1109    if (found =3D=3D NULL)
->       (gdb)
->       1110        {
->       1111          Elf_Data *data =3D __libdw_checked_get_data (dbg, IDX=
-_debug_line);
->       1112          if (data =3D=3D NULL
->       1113              || __libdw_offset_in_section (dbg, IDX_debug_line=
-,
->       1114                                            debug_line_offset, =
-1) !=3D 0)
->       1115            return -1;
->       1116
->       1117          const unsigned char *linep =3D data->d_buf + debug_li=
-ne_offset;
->       1118          const unsigned char *lineendp =3D data->d_buf + data-=
->d_size;
->       1119
->       (gdb)
->       1120          struct files_lines_s *node =3D libdw_alloc (dbg, stru=
-ct files_lines_s,
->       1121                                                    sizeof *nod=
-e, 1);
->       1122
->       1123          if (read_srclines (dbg, linep, lineendp, comp_dir, ad=
-dress_size,
->       1124                             &node->lines, &node->files) !=3D 0=
-)
->       1125            return -1;
->       1126
->       1127          node->debug_line_offset =3D debug_line_offset;
->       1128
->       1129          found =3D tsearch (node, &dbg->files_lines, files_lin=
-es_compare);
->       (gdb)
->    =20
->     Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
-
+SGkgQW1pciwNCg0KPiBPbiBOb3YgMTUsIDIwMjQsIGF0IDEyOjUx4oCvQU0sIEFtaXIgR29sZHN0
+ZWluIDxhbWlyNzNpbEBnbWFpbC5jb20+IHdyb3RlOg0KDQpbLi4uXQ0KDQo+PiANCj4+ICsjaWZk
+ZWYgQ09ORklHX0ZBTk9USUZZX0ZBU1RQQVRIDQo+PiArICAgICAgIGZwX2hvb2sgPSBzcmN1X2Rl
+cmVmZXJlbmNlKGdyb3VwLT5mYW5vdGlmeV9kYXRhLmZwX2hvb2ssICZmc25vdGlmeV9tYXJrX3Ny
+Y3UpOw0KPj4gKyAgICAgICBpZiAoZnBfaG9vaykgew0KPj4gKyAgICAgICAgICAgICAgIHN0cnVj
+dCBmYW5vdGlmeV9mYXN0cGF0aF9ldmVudCBmcF9ldmVudCA9IHsNCj4+ICsgICAgICAgICAgICAg
+ICAgICAgICAgIC5tYXNrID0gbWFzaywNCj4+ICsgICAgICAgICAgICAgICAgICAgICAgIC5kYXRh
+ID0gZGF0YSwNCj4+ICsgICAgICAgICAgICAgICAgICAgICAgIC5kYXRhX3R5cGUgPSBkYXRhX3R5
+cGUsDQo+PiArICAgICAgICAgICAgICAgICAgICAgICAuZGlyID0gZGlyLA0KPj4gKyAgICAgICAg
+ICAgICAgICAgICAgICAgLmZpbGVfbmFtZSA9IGZpbGVfbmFtZSwNCj4+ICsgICAgICAgICAgICAg
+ICAgICAgICAgIC5mc2lkID0gJmZzaWQsDQo+PiArICAgICAgICAgICAgICAgICAgICAgICAubWF0
+Y2hfbWFzayA9IG1hdGNoX21hc2ssDQo+PiArICAgICAgICAgICAgICAgfTsNCj4+ICsNCj4+ICsg
+ICAgICAgICAgICAgICByZXQgPSBmcF9ob29rLT5vcHMtPmZwX2hhbmRsZXIoZ3JvdXAsIGZwX2hv
+b2ssICZmcF9ldmVudCk7DQo+PiArICAgICAgICAgICAgICAgaWYgKHJldCA9PSBGQU5fRlBfUkVU
+X1NLSVBfRVZFTlQpIHsNCj4+ICsgICAgICAgICAgICAgICAgICAgICAgIHJldCA9IDA7DQo+PiAr
+ICAgICAgICAgICAgICAgICAgICAgICBnb3RvIGZpbmlzaDsNCj4+ICsgICAgICAgICAgICAgICB9
+DQo+PiArICAgICAgIH0NCj4+ICsjZW5kaWYNCj4+ICsNCj4gDQo+IFRvIG1lIGl0IG1ha2VzIHNl
+bnNlIHRoYXQgdGhlIGZhc3RwYXRoIG1vZHVsZSBjb3VsZCBhbHNvIHJldHVybiBhIG5lZ2F0aXZl
+DQo+IChkZW55KSByZXN1bHQgZm9yIHBlcm1pc3Npb24gZXZlbnRzLg0KDQpZZXMsIHRoaXMgc2hv
+dWxkIGp1c3Qgd29yay4gQW5kIEkgYWN0dWFsbHkgcGxhbiB0byB1c2UgaXQuIA0KDQo+IElzIHRo
+ZXJlIGEgc3BlY2lmaWMgcmVhc29uIHRoYXQgeW91IGRpZCBub3QgaGFuZGxlIHRoaXMgb3IganVz
+dCBkaWRuJ3QgdGhpbmsNCj4gb2YgdGhpcyBvcHRpb24/DQoNCkJ1dCBJIGhhdmVuJ3QgdGVzdGVk
+IHBlcm1pc3Npb24gZXZlbnRzIHlldC4gQXQgZmlyc3QgZ2xhbmNlLCBtYXliZSB3ZSBqdXN0DQpu
+ZWVkIHRvIGNoYW5nZSB0aGUgYWJvdmUgY29kZSBhIGJpdCwgYXM6DQoNCg0KPj4gZiAocmV0ID09
+IEZBTl9GUF9SRVRfU0tJUF9FVkVOVCkgew0KPj4gKyAgICAgICAgICAgICAgICAgICAgICAgcmV0
+ID0gMDsNCj4+ICsgICAgICAgICAgICAgICAgICAgICAgIGdvdG8gZmluaXNoOw0KPj4gKyAgICAg
+ICAgICAgICAgIH0NCg0KaWYgKHJldCAhPSBGQU5fRlBfUkVUX1NFTkRfVE9fVVNFUlNQQUNFKSB7
+IA0KCWlmIChyZXQgPT0gRkFOX0ZQX1JFVF9TS0lQX0VWRU5UKQ0KCQlyZXQgPSAwOw0KCWdvdG8g
+ZmluaXNoOw0KfQ0KDQpXZWxsLCBJIGd1ZXNzIHdlIHNob3VsZCBjaGFuZ2UgdGhlIHZhbHVlIG9m
+IEZBTl9GUF9SRVRfU0VORF9UT19VU0VSU1BBQ0UsDQpzbyB0aGF0IHRoaXMgY29uZGl0aW9uIHdp
+bGwgbG9vayBiZXR0ZXIuIA0KDQpXZSBtYXkgYWxzbyBjb25zaWRlciByZW9yZGVyIHRoZSBjb2Rl
+IHNvIHRoYXQgd2UgZG8gbm90IGNhbGwNCmZzbm90aWZ5X3ByZXBhcmVfdXNlcl93YWl0KCkgd2hl
+biB0aGUgZmFzdHBhdGggaGFuZGxlcyB0aGUgZXZlbnQuIA0KDQpEb2VzIHRoaXMgbG9vayByZWFz
+b25hYmxlPw0KDQpUaGFua3MsDQpTb25nDQoNCg==
