@@ -1,78 +1,157 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-189.mta1.migadu.com (out-189.mta1.migadu.com [95.215.58.189])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37FEE1BD4FD
-	for <bpf@vger.kernel.org>; Fri, 15 Nov 2024 16:20:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 629B61632F1
+	for <bpf@vger.kernel.org>; Fri, 15 Nov 2024 16:30:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.189
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731687620; cv=none; b=M9RQ4abkNfYuIJ6OcQ9K1FFKO7ooRvq586sU0Wt8+On5WFpTfzPBbCYWxwvxFs71CL4YWhiOBQfw6TUtnng57lIqRSWJo4J4sORyZxgPSHiL0eKqTsa/aUSBK0EHa+3bJvgbzd/KlTQucYOTd6M065Bh75uJ/pxuDnxKp9T/tHU=
+	t=1731688249; cv=none; b=HRghq+YFKfg9t6+Lcblq9HATUHNNmhHqlD7jmZgj7MXB8GDq6qXu5B+F1buZwgbntpuUPxykuCsB4tIx+oZ58WpS66usaxnK/Py/oTvhqpXZYlvYzKDLq2cl3nUgsKmYfdN+mwtGHprAKFOUbI0Z+Ldzcb854/1hKPCLI/BKcjs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731687620; c=relaxed/simple;
-	bh=5rxsIBRpKwsct60++6PQbxOi19L1j5TjQbCzdGmJzP0=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=AftSZJX6eUdnWAP0SpKioUuHvDFYfCtPkaJsEQf+X6hl9SzXcA92+xfOZ4s7/TyImiF6uN3n0Ib9qZUgo79AjC9Pl2K7G5Hhwssv9r+cqG4dvTslLVQ97svFWAAX3LBTPj5lNCz+4YWIpr1r3dbg0AVujoKCUb/dBxkVvcQIU2o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HH7ha9CW; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1731688249; c=relaxed/simple;
+	bh=Pe8fJkgd7Zaskzc42ork99f0MYlSn6Ce3xgfqCRmM8o=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=MK/yzyCzKKZrIP4To3OLD3Pg9X6unj9pxH1BVzZeZGh+qydv0SOhn+rz8Z+Jon3zyLeiW85MeW9y6QvSJDvKUQ82ZBP+8+gJ/MsB57YDsTC5m4ce2eYmK7tpmh9oSmVkDz+b4XcoVEQLRbMBuu2xKQXkXFiGoVPCIaRZFPFz7r8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=YjxND6d6; arc=none smtp.client-ip=95.215.58.189
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HH7ha9CW"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C45DC4CECF;
-	Fri, 15 Nov 2024 16:20:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1731687620;
-	bh=5rxsIBRpKwsct60++6PQbxOi19L1j5TjQbCzdGmJzP0=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=HH7ha9CWeoH9zXmzGun4bIFMN20GUqes4wCeCvbpm/XLQWsHIRywJOSNdiTzVYfde
-	 HywR+wdB3CjtDzsV3y2QWVgdMvshOGJnayqH0GPN2oYT6lSitViML5/vMgl0rE90Zi
-	 Ln3lCcyqHv5uYWmJcz/xGvkjkIdQ61khD44943NzeZkRGX1MVAD5xK73b6/WqUct7d
-	 aOiMWtPu9Yoiv5/DT4DSNc89ggjK0+dObAZTywG3u9S0wiLPj65AwIKg4o32G3Je9h
-	 863SMeedGzop/uBjN9lc+72C+8KLVAekqUnbvyJiWWFTQ6T9PxZvm8HTFr5zcnJsQW
-	 CIWyht9Mzz9pg==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id EAD903809A80;
-	Fri, 15 Nov 2024 16:20:31 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="YjxND6d6"
+Message-ID: <3c98dc9c-0014-49a1-8d7a-910f0992cccc@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1731688245;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=y40YgIL3ENozyFk1Cl+tmCyVKVUxE9kL63oUaS5z6t8=;
+	b=YjxND6d69F+tiCJzDyBljTtuWRy4Z8up7O7kWTQHvUdBWDHAwV9MGz8n3y1ykN4L/xFEDR
+	s1CPuTP4mQcZXhvlDcFxajswBMSyw66GuvKVpN2Ta/xQ3yRoM8W3shoCVn3GK96IUNpIlI
+	9wVGe/whZ3TUVGtp2emQpTxBmhkHPIk=
+Date: Fri, 15 Nov 2024 08:30:32 -0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next] bpf: Do not alloc arena on unsupported arches
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <173168763049.2635622.13543213341607100159.git-patchwork-notify@kernel.org>
-Date: Fri, 15 Nov 2024 16:20:30 +0000
-References: <20241115082548.74972-1-vmalik@redhat.com>
-In-Reply-To: <20241115082548.74972-1-vmalik@redhat.com>
-To: Viktor Malik <vmalik@redhat.com>
-Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
- andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
- yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
- sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org
+Subject: Re: [PATCH bpf-next 2/2] selftests/bpf: Add a test for arena range
+ tree algorithm
+Content-Language: en-GB
+To: Jiri Olsa <olsajiri@gmail.com>,
+ Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: bpf@vger.kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+ martin.lau@kernel.org, memxor@gmail.com, eddyz87@gmail.com,
+ djwong@kernel.org, kernel-team@fb.com
+References: <20241108025616.17625-1-alexei.starovoitov@gmail.com>
+ <20241108025616.17625-3-alexei.starovoitov@gmail.com>
+ <Zzc8pVMtTAkqUdvA@krava>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <Zzc8pVMtTAkqUdvA@krava>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-Hello:
 
-This patch was applied to bpf/bpf-next.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
 
-On Fri, 15 Nov 2024 09:25:48 +0100 you wrote:
-> Do not allocate BPF arena on arches that do not support it, instead
-> return EOPNOTSUPP. This is useful to prevent bugs such as soft lockups
-> while trying to free the arena which we have witnessed on ppc64le [1].
-> 
-> [1] https://lore.kernel.org/bpf/4afdcb50-13f2-4772-8db1-3fd02bd985b3@redhat.com/
-> 
-> Signed-off-by: Viktor Malik <vmalik@redhat.com>
-> 
-> [...]
 
-Here is the summary with links:
-  - [bpf-next] bpf: Do not alloc arena on unsupported arches
-    https://git.kernel.org/bpf/bpf-next/c/ab4dc30c5322
+On 11/15/24 4:20 AM, Jiri Olsa wrote:
+> On Thu, Nov 07, 2024 at 06:56:16PM -0800, Alexei Starovoitov wrote:
+>> From: Alexei Starovoitov <ast@kernel.org>
+>>
+>> Add a test that verifies specific behavior of arena range tree
+>> algorithm and just existing bif_alloc1 test due to use
+>> of global data in arena.
+>>
+>> Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+>> ---
+>>   .../bpf/progs/verifier_arena_large.c          | 110 +++++++++++++++++-
+>>   1 file changed, 108 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/tools/testing/selftests/bpf/progs/verifier_arena_large.c b/tools/testing/selftests/bpf/progs/verifier_arena_large.c
+>> index 6065f862d964..8a9af79db884 100644
+>> --- a/tools/testing/selftests/bpf/progs/verifier_arena_large.c
+>> +++ b/tools/testing/selftests/bpf/progs/verifier_arena_large.c
+>> @@ -29,12 +29,12 @@ int big_alloc1(void *ctx)
+>>   	if (!page1)
+>>   		return 1;
+>>   	*page1 = 1;
+>> -	page2 = bpf_arena_alloc_pages(&arena, base + ARENA_SIZE - PAGE_SIZE,
+>> +	page2 = bpf_arena_alloc_pages(&arena, base + ARENA_SIZE - PAGE_SIZE * 2,
+>>   				      1, NUMA_NO_NODE, 0);
+>>   	if (!page2)
+>>   		return 2;
+>>   	*page2 = 2;
+>> -	no_page = bpf_arena_alloc_pages(&arena, base + ARENA_SIZE,
+>> +	no_page = bpf_arena_alloc_pages(&arena, base + ARENA_SIZE - PAGE_SIZE,
+>>   					1, NUMA_NO_NODE, 0);
+>>   	if (no_page)
+>>   		return 3;
+>> @@ -66,4 +66,110 @@ int big_alloc1(void *ctx)
+>>   #endif
+>>   	return 0;
+>>   }
+>> +
+>> +#if defined(__BPF_FEATURE_ADDR_SPACE_CAST)
+>> +#define PAGE_CNT 100
+>> +__u8 __arena * __arena page[PAGE_CNT]; /* occupies the first page */
+>> +__u8 __arena *base;
+>> +
+>> +/*
+>> + * Check that arena's range_tree algorithm allocates pages sequentially
+>> + * on the first pass and then fills in all gaps on the second pass.
+>> + */
+>> +__noinline int alloc_pages(int page_cnt, int pages_atonce, bool first_pass,
+>> +		int max_idx, int step)
+>> +{
+>> +	__u8 __arena *pg;
+>> +	int i, pg_idx;
+>> +
+>> +	for (i = 0; i < page_cnt; i++) {
+>> +		pg = bpf_arena_alloc_pages(&arena, NULL, pages_atonce,
+>> +					   NUMA_NO_NODE, 0);
+>> +		if (!pg)
+>> +			return step;
+>> +		pg_idx = (pg - base) / PAGE_SIZE;
+> hi,
+> I'm getting compile error below with clang 20.0.0:
+>
+>        CLNG-BPF [test_progs] verifier_arena_large.bpf.o
+>      progs/verifier_arena_large.c:90:24: error: unsupported signed division, please convert to unsigned div/mod.
+>         90 |                 pg_idx = (pg - base) / PAGE_SIZE;
+>
+> should we just convert it to unsigned div like below?
+>
+> also I saw recent llvm change [1] that might help, I'll give it a try
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+I am using latest clang 20 and compilation is successful due to the llvm change [1].
 
+>
+> jirka
+>
+>
+> [1] 38a8000f30aa [BPF] Use mul for certain div/mod operations (#110712)
+> ---
+> diff --git a/tools/testing/selftests/bpf/progs/verifier_arena_large.c b/tools/testing/selftests/bpf/progs/verifier_arena_large.c
+> index 8a9af79db884..e743d008697e 100644
+> --- a/tools/testing/selftests/bpf/progs/verifier_arena_large.c
+> +++ b/tools/testing/selftests/bpf/progs/verifier_arena_large.c
+> @@ -87,7 +87,7 @@ __noinline int alloc_pages(int page_cnt, int pages_atonce, bool first_pass,
+>   					   NUMA_NO_NODE, 0);
+>   		if (!pg)
+>   			return step;
+> -		pg_idx = (pg - base) / PAGE_SIZE;
+> +		pg_idx = (unsigned int) (pg - base) / PAGE_SIZE;
+>   		if (first_pass) {
+>   			/* Pages must be allocated sequentially */
+>   			if (pg_idx != i)
+
+I think this patch is still good.
+Compiling the current verifier_arena_large.c will be okay for llvm <= 18 and >= 20.
+But llvm19 will have compilation failure as you mentioned in the above.
+
+So once bpf ci upgrades compiler to llvm19 we will see the above compilation failure.
+
+Please verifify it as well. If this is the case in your side, please submit a patch.
+Thanks!
 
