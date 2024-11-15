@@ -1,169 +1,131 @@
-Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
+Received: from 66-220-155-179.mail-mxout.facebook.com (66-220-155-179.mail-mxout.facebook.com [66.220.155.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C395A14F9D9
-	for <bpf@vger.kernel.org>; Fri, 15 Nov 2024 03:30:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83FC41C68F
+	for <bpf@vger.kernel.org>; Fri, 15 Nov 2024 03:53:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.155.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731641447; cv=none; b=Q01L1ZZhwQ7+zsjz0ZeQT5D/guchNHZu32OSAss3DqSlcinxnmBFIIyrK65RCKA/Yt4r0rtm5RSYAAcKjKp9YagftPn3NfYA6r5w6ihj3XJdx1A1O/nSEeWBAU15bdeYw7ndWw7IZQo5vMnxFf/jiNJ4nXq6ijSqtF2AuLJmlWw=
+	t=1731642797; cv=none; b=jpMqqUU46sByAFK7aSPQWWh6G2tXQy1vep9nlvGpE3J6CNEHpogSE/EztmcT5TAEMUsVO8TQCBzDk7YIUfruBmoH/BUFgh+eqgWJjtvC9bdWYOG3dueT5rD8pROuC3NXvht6dhN1uok/QkwxiqK1rIQvkTcewCuxYeNXlSWQZ3A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731641447; c=relaxed/simple;
-	bh=x6YMwpLv2Qvb6BIQxCAnausJEQy3zrvEXJ8kqYv3DT8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=JJXbWpBS4iEWHrQm3iY1pcYtBXsMW/iVhxpQZb+D8mns/grz7luXXnQZ0dLEUz+/HgfdfxiIzCb6lj1E49A2fbpIPoTkxpS+mWg1URyI2DQUVbDdmeLl/+BLKC/BdegHPrnMxctWB/KGpjAg2BG5sNdjrbVFAPYHi6w7RDpYIpk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nSQcnopm; arc=none smtp.client-ip=209.85.216.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nSQcnopm"
-Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-2ea14c863c1so354147a91.0
-        for <bpf@vger.kernel.org>; Thu, 14 Nov 2024 19:30:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1731641445; x=1732246245; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=R+TEM9TJ09P/OndWInPb8TT7J/8dUOAZSVSdyxaL0jk=;
-        b=nSQcnopm2lriRvZaMhWxHImgONJr9/df5QDm7DG816EAwGsbXCdpPR1Hl3lWDjB3zR
-         bbF5XL0KVGx2EOw/chfNCYbsWUCgUoN39enoygCJr+uiE2EClJiRN8CNncL8qKe2uvJj
-         ihwDvVimS119mVdmxCPqV1Tq8OtMkaUJpxm2QAX1uYlQVt0dAOrA6CLPeDz4/sC/8nWf
-         euqlPvBjRYamoDOqiMBqNqO/bM9C14QVL3xSWIWpzsdfdO8kShaH8v/ihTyFNcwx9kDm
-         yrN6n1pPjOZeOOYtOJ0nZnYfIDBOz07mBhHXdFBvnZi2BmOIsbxxtJc2cvlvnommc/GJ
-         vHGQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731641445; x=1732246245;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=R+TEM9TJ09P/OndWInPb8TT7J/8dUOAZSVSdyxaL0jk=;
-        b=TShnRhW/dxWixxFg6t2vY9rFhSK0QqRoqpDzIG8JBrIepo3oxAuwwRvW9WRsU+4NbZ
-         EpmrqBuBZWNYo0NPgN8PT7Jb9zK3bjLp+WiHX7paMqW+aPgqi90agg0i0J0BJUCQ8lVR
-         uY2OhvKRhexfAaqjLtX8hlEpLGBtUuqgXafSBeWrjnVSkOzsb31QmVRdckgStzXne7qI
-         y4CEZBnI9GPSH8ln/JIfd6B5N1Ah7v22mt4mzloHXapXA+wLzCJw+bQXEsAk2sohnOeX
-         DYjIULxGZoxQE3jB2bup4mzxvTZIM8uGP2RhVVUO/CBO7zIWVfDyVoh9m06Sd0lq1Fas
-         skiQ==
-X-Gm-Message-State: AOJu0YxERWL2kEdClZiN1zrE5Tt9wK2jJlcEH8lyWZiJHi18AE/MnKEU
-	ejfxzTQiHTCTXt6kNSR1XmmUG1NewCFxt1Ewd+BajuEcDp4zRgJHJk0GS6ijGZz7QdTh4/J6EYK
-	82kk8cYpQem79qeEdWPhIgZZ0T4kbqQ==
-X-Google-Smtp-Source: AGHT+IHlTNgbIweNtEyyEmF2D3CI86bt2FUaKjfQNT06yR+rmehgDWiv0wQdkB0L/R1uy9MmRt42TU8BRBYJLdKQJx0=
-X-Received: by 2002:a17:90b:4ecd:b0:2e2:cd5e:7eef with SMTP id
- 98e67ed59e1d1-2ea15585ba3mr1423413a91.27.1731641444961; Thu, 14 Nov 2024
- 19:30:44 -0800 (PST)
+	s=arc-20240116; t=1731642797; c=relaxed/simple;
+	bh=c7idHWvzix1KdF8+P7iLuCmtdYY9aSmHp4MBexmrRO0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=XWZlJsByD+YzyXmWRtaXuQC/MZprNP4UJR89tPFNhDrG75d976PxUqEl82bjAMLDZOd+YF3NIthYr3BIZQe+aXJrkljOyLQ93Ms1ExVADLR5gM2kSVwAKh60VRYy7qY3FuTqR9+RxxiXlDdT5OqWNpQDkd/0AORxJTShzgrYeSQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.155.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
+Received: by devbig309.ftw3.facebook.com (Postfix, from userid 128203)
+	id 7A857B0E472C; Thu, 14 Nov 2024 19:52:57 -0800 (PST)
+From: Yonghong Song <yonghong.song@linux.dev>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	kernel-team@fb.com,
+	Martin KaFai Lau <martin.lau@kernel.org>
+Subject: [PATCH bpf-next] bpf: Add necessary migrate_{disable,enable} in bpf arena
+Date: Thu, 14 Nov 2024 19:52:57 -0800
+Message-ID: <20241115035257.2181074-1-yonghong.song@linux.dev>
+X-Mailer: git-send-email 2.43.5
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241115003853.864397-1-ihor.solodrai@pm.me>
-In-Reply-To: <20241115003853.864397-1-ihor.solodrai@pm.me>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Thu, 14 Nov 2024 19:30:32 -0800
-Message-ID: <CAEf4BzY=5gw5nwx2jA5wzLcuc3=h1vALO=gkk1y=DrzHxdXzgw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] selftests/bpf: set test path for token/obj_priv_implicit_token_envvar
-To: Ihor Solodrai <ihor.solodrai@pm.me>
-Cc: bpf@vger.kernel.org, andrii@kernel.org, ast@kernel.org, 
-	daniel@iogearbox.net, eddyz87@gmail.com, mykolal@fb.com
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Nov 14, 2024 at 4:39=E2=80=AFPM Ihor Solodrai <ihor.solodrai@pm.me>=
- wrote:
->
-> token/obj_priv_implicit_token_envvar test may fail in an environment
-> where the process executing tests can not write to the root path.
->
-> Example:
-> https://github.com/libbpf/libbpf/actions/runs/11844507007/job/33007897936
->
-> Change default path used by the test to /tmp/bpf-token-fs, and make it
-> runtime configurable via an environment variable.
->
-> Signed-off-by: Ihor Solodrai <ihor.solodrai@pm.me>
-> ---
->  tools/testing/selftests/bpf/prog_tests/token.c | 18 +++++++++++-------
->  1 file changed, 11 insertions(+), 7 deletions(-)
->
-> diff --git a/tools/testing/selftests/bpf/prog_tests/token.c b/tools/testi=
-ng/selftests/bpf/prog_tests/token.c
-> index fe86e4fdb89c..39f5414b674b 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/token.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/token.c
-> @@ -828,8 +828,11 @@ static int userns_obj_priv_btf_success(int mnt_fd, s=
-truct token_lsm *lsm_skel)
->         return validate_struct_ops_load(mnt_fd, true /* should succeed */=
-);
->  }
->
-> +static const char* token_bpffs_custom_dir() {
-> +       return getenv("BPF_SELFTESTS_BPF_TOKEN_DIR") ? : "/tmp/bpf-token-=
-fs";
+When running bpf selftest (./test_progs -j), the following warnings
+showed up:
 
-reformatted it to kernel C style, applied to bpf-next
+  $ ./test_progs -t arena_atomics
+  ...
+  BUG: using smp_processor_id() in preemptible [00000000] code: kworker/u=
+19:0/12501
+  caller is bpf_mem_free+0x128/0x330
+  ...
+  Call Trace:
+   <TASK>
+   dump_stack_lvl
+   check_preemption_disabled
+   bpf_mem_free
+   range_tree_destroy
+   arena_map_free
+   bpf_map_free_deferred
+   process_scheduled_works
+   ...
 
-> +}
-> +
->  #define TOKEN_ENVVAR "LIBBPF_BPF_TOKEN_PATH"
-> -#define TOKEN_BPFFS_CUSTOM "/bpf-token-fs"
->
->  static int userns_obj_priv_implicit_token(int mnt_fd, struct token_lsm *=
-lsm_skel)
->  {
-> @@ -892,6 +895,7 @@ static int userns_obj_priv_implicit_token(int mnt_fd,=
- struct token_lsm *lsm_skel
->
->  static int userns_obj_priv_implicit_token_envvar(int mnt_fd, struct toke=
-n_lsm *lsm_skel)
->  {
-> +       const char *custom_dir =3D token_bpffs_custom_dir();
->         LIBBPF_OPTS(bpf_object_open_opts, opts);
->         struct dummy_st_ops_success *skel;
->         int err;
-> @@ -909,10 +913,10 @@ static int userns_obj_priv_implicit_token_envvar(in=
-t mnt_fd, struct token_lsm *l
->          * BPF token implicitly, unless pointed to it through
->          * LIBBPF_BPF_TOKEN_PATH envvar
->          */
-> -       rmdir(TOKEN_BPFFS_CUSTOM);
-> -       if (!ASSERT_OK(mkdir(TOKEN_BPFFS_CUSTOM, 0777), "mkdir_bpffs_cust=
-om"))
-> +       rmdir(custom_dir);
-> +       if (!ASSERT_OK(mkdir(custom_dir, 0777), "mkdir_bpffs_custom"))
->                 goto err_out;
-> -       err =3D sys_move_mount(mnt_fd, "", AT_FDCWD, TOKEN_BPFFS_CUSTOM, =
-MOVE_MOUNT_F_EMPTY_PATH);
-> +       err =3D sys_move_mount(mnt_fd, "", AT_FDCWD, custom_dir, MOVE_MOU=
-NT_F_EMPTY_PATH);
->         if (!ASSERT_OK(err, "move_mount_bpffs"))
->                 goto err_out;
->
-> @@ -925,7 +929,7 @@ static int userns_obj_priv_implicit_token_envvar(int =
-mnt_fd, struct token_lsm *l
->                 goto err_out;
->         }
->
-> -       err =3D setenv(TOKEN_ENVVAR, TOKEN_BPFFS_CUSTOM, 1 /*overwrite*/)=
-;
-> +       err =3D setenv(TOKEN_ENVVAR, custom_dir, 1 /*overwrite*/);
->         if (!ASSERT_OK(err, "setenv_token_path"))
->                 goto err_out;
->
-> @@ -951,11 +955,11 @@ static int userns_obj_priv_implicit_token_envvar(in=
-t mnt_fd, struct token_lsm *l
->         if (!ASSERT_ERR(err, "obj_empty_token_path_load"))
->                 goto err_out;
->
-> -       rmdir(TOKEN_BPFFS_CUSTOM);
-> +       rmdir(custom_dir);
->         unsetenv(TOKEN_ENVVAR);
->         return 0;
->  err_out:
-> -       rmdir(TOKEN_BPFFS_CUSTOM);
-> +       rmdir(custom_dir);
->         unsetenv(TOKEN_ENVVAR);
->         return -EINVAL;
->  }
-> --
-> 2.47.0
->
->
+For selftests arena_htab and arena_list, similar smp_process_id() BUGs ar=
+e
+dumped, and the following are two stack trace:
+
+   <TASK>
+   dump_stack_lvl
+   check_preemption_disabled
+   bpf_mem_alloc
+   range_tree_set
+   arena_map_alloc
+   map_create
+   ...
+
+   <TASK>
+   dump_stack_lvl
+   check_preemption_disabled
+   bpf_mem_alloc
+   range_tree_clear
+   arena_vm_fault
+   do_pte_missing
+   handle_mm_fault
+   do_user_addr_fault
+   ...
+
+Adding migrate_{disable,enable}() around related arena_*() calls can fix =
+the issue.
+
+Fixes: b795379757eb ("bpf: Introduce range_tree data structure and use it=
+ in bpf arena")
+Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
+---
+ kernel/bpf/arena.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/kernel/bpf/arena.c b/kernel/bpf/arena.c
+index 3e1dfe349ced..9a55d18032a4 100644
+--- a/kernel/bpf/arena.c
++++ b/kernel/bpf/arena.c
+@@ -134,7 +134,9 @@ static struct bpf_map *arena_map_alloc(union bpf_attr=
+ *attr)
+ 	INIT_LIST_HEAD(&arena->vma_list);
+ 	bpf_map_init_from_attr(&arena->map, attr);
+ 	range_tree_init(&arena->rt);
++	migrate_disable();
+ 	range_tree_set(&arena->rt, 0, attr->max_entries);
++	migrate_enable();
+ 	mutex_init(&arena->lock);
+=20
+ 	return &arena->map;
+@@ -185,7 +187,9 @@ static void arena_map_free(struct bpf_map *map)
+ 	apply_to_existing_page_range(&init_mm, bpf_arena_get_kern_vm_start(aren=
+a),
+ 				     KERN_VM_SZ - GUARD_SZ, existing_page_cb, NULL);
+ 	free_vm_area(arena->kern_vm);
++	migrate_disable();
+ 	range_tree_destroy(&arena->rt);
++	migrate_enable();
+ 	bpf_map_area_free(arena);
+ }
+=20
+@@ -276,7 +280,9 @@ static vm_fault_t arena_vm_fault(struct vm_fault *vmf=
+)
+ 		/* User space requested to segfault when page is not allocated by bpf =
+prog */
+ 		return VM_FAULT_SIGSEGV;
+=20
++	migrate_disable();
+ 	ret =3D range_tree_clear(&arena->rt, vmf->pgoff, 1);
++	migrate_enable();
+ 	if (ret)
+ 		return VM_FAULT_SIGSEGV;
+=20
+--=20
+2.43.5
+
