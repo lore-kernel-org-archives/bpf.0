@@ -1,77 +1,71 @@
 Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04DC438DC0
-	for <bpf@vger.kernel.org>; Fri, 15 Nov 2024 00:43:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABA8D1EA91
+	for <bpf@vger.kernel.org>; Fri, 15 Nov 2024 00:50:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731631417; cv=none; b=ZXYufkp2y9DStsQ2YMS/yC0GRWwdSogD51Af8ne+hdPx2znpLcgLtwE1wFTERP1U9dhEnafolCDCy+7DlBA5w5KtA/rsU2yore0138q6aAXv8wb8xbrc44APzNX6xeURLbEFpe8iPUfYJTfL9R5PG8lwrr2Mst8h0VdOP2eLtSA=
+	t=1731631836; cv=none; b=UqUDZYl46sNsAGsVHbDHm4gjSXbNRtf3dIRw+vla2K4w+ZPb9pIwIP+AN5a4BGKvQ0sojMUOXEkO1FJ288fdnczpkA05LZo4LZ77ArRde/1UEA6gRRXvOsPCUVn04l5PXlnSOvqpeAJbBG+PijSRymr5RYjjcep6kPd/VY/e9NE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731631417; c=relaxed/simple;
-	bh=CHqacG3x36iB7oLaJxLdifxVbhYwwCvLTR8xF6EDq54=;
+	s=arc-20240116; t=1731631836; c=relaxed/simple;
+	bh=66pl17jJTBeDGibo35WfEE2wEDENd0xHS0SzHS38T+c=;
 	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=i8PlavPwo3fyY6uIwX+PngEk24fOr63wJcSuE+C3ckDfqqFgp6IhGMpVHpUPpv3tUGVFmkBcd57qnvjedSRBqTp90/BTiTmMBTsNN6F0Hu5eUGwsOYqaZp/o4iFZMkSesa5n1oxA1YNsQwoeCEefIijxZi1VC7Kik1D8+UMpx2A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jb91M8u3; arc=none smtp.client-ip=209.85.214.171
+	 Content-Type:MIME-Version; b=NMXjNwLK1BlB6zM4BcpF/hFjgRbLkt5aNs1jG8Ae2V30IgDQONeYicBvgDXbDScXZgX0i8hP3PKhbVTZbRwNTY8RyAP8oKIAhH30HlKFvNDK2P3PT5oIgnycLn6Zgn3nPfFZBNJyvX6QPxBTJHFop8cf71s7zaW4Ie3yAWjJMuo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mL5pIEWe; arc=none smtp.client-ip=209.85.214.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jb91M8u3"
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-21145812538so10279465ad.0
-        for <bpf@vger.kernel.org>; Thu, 14 Nov 2024 16:43:35 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mL5pIEWe"
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-20c77459558so11567985ad.0
+        for <bpf@vger.kernel.org>; Thu, 14 Nov 2024 16:50:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1731631415; x=1732236215; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1731631834; x=1732236634; darn=vger.kernel.org;
         h=mime-version:user-agent:content-transfer-encoding:references
          :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=ddP9oSWtuB14d68X5LVkgBBgtbWDCzsIHxObUABxV1s=;
-        b=jb91M8u3F9mgBEbqbKs1C/ksWjE5kXEpUJvpj/yelpUUQeGSWj8jbKz9FqjLx3Sq91
-         ifyuE7ef9Ef8Mfr7UBWSYcEUE3JsjUWoxvo7C5IdDbzihOcTfvjSSmp6s1fwpJX/+cYn
-         zrQes8H+w7kyr7U4bIN+hzYgzcVzVX5qT+9PQwEr2X0IGwHesE0FLYTWQMHKfAmyOJsz
-         aVUp5I+LthP5oyAlwgorXg6yJjx9rs8SNz8sGF7uv8o6hhX20sPKE021m9zVWO61HYSp
-         UQrgshnhxVk4smOjqpxDU6p+0n0FJBRuf9EFoUOGfpM+mzcg4p4nMNmHApb3IpY9dhOO
-         1h3A==
+        bh=aiQ4oePn+twaYsVayK2MFtxDBUJmMu6qCA4lQpU8Xbs=;
+        b=mL5pIEWep9aoPk3bV3BL2+4Wb0ilQ69gCra1wdeVyT7tcN3ENFmn9fgXa1B511M4IC
+         F+NqJRH0maSb9vtqOyJMHQ14ntRFHRRyok/mo372+b/eR6nlmzH4RW3BmF1Ms1ZnXFWQ
+         GtKqgkl1AM8b4OlyeP/+mfxWcQe/ZRX6JVNoyQHe063lEyyQzL8iQxhwsxbl83Vm8huy
+         dv57k8PNmsWhTeqMoq89wq8esEk2klTTURjv81oPex4BNBEVrxpgv6XrDehJU3nuj8vj
+         jDo7TFXm1o6GZGy+zFCOAgs+HWIdLFMRWdE0UPou7M0D35OcGyZkCVyOGXhq6LQySbHJ
+         mvfg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731631415; x=1732236215;
+        d=1e100.net; s=20230601; t=1731631834; x=1732236634;
         h=mime-version:user-agent:content-transfer-encoding:references
          :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=ddP9oSWtuB14d68X5LVkgBBgtbWDCzsIHxObUABxV1s=;
-        b=RmFaAXwkIaSvIavJ+A2yIdQHQ11RfmkSbuyDfDGK5wn6DA1d3dSSLL0/RAc1OIqgri
-         PU6Y1hN78OW05sAMzsluzDUHnjO3BZqmxdXPeq4aHDm+gngpEaYXXfNFAlIxIZQXIX3B
-         7CTYZvokXJEcxhWvB1Z3laGP2dmuG+gnUXXWG3hlmvjsB+tk6LoYL2tbBTnaLcmUfvdU
-         PbNTGQBLSwC1Sq7U4AOwQlDLmpzD/b63tzJiszRKyVdg3rJeL7XADabBEA56NtJAox3k
-         Shaje0lwhcQL9m6/m8/v/+inqTRYMRbLDD+3BH1jZTjRVDOFNiGJsLsvgxdjHEwC5b7Y
-         KLVA==
-X-Forwarded-Encrypted: i=1; AJvYcCVjF/w2WCZJoCrwShNhj/mLkK1wh3K/PcdTF1KlzdUphJqR1qV0syGaHXyfj2SoyA4mW1o=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw8iQaNV7q6eRyyoqpQymADqCjcv7Y2G7DkiN4eUMEJ4Ssc2ZIm
-	KFezSpkMZq0s/G+4pqQ3tlvTvhfy5q7/5kd/vSNoe3N1IPbxvqku
-X-Google-Smtp-Source: AGHT+IEqTnAfkkSbSeISG81CySPjdP8G285uKuGm52DA7L5ZCYYgtDTKOndcgPgcEIymDTa2xS4PYw==
-X-Received: by 2002:a17:903:18e:b0:20f:c225:f28c with SMTP id d9443c01a7336-211d0eceae5mr11040015ad.52.1731631415182;
-        Thu, 14 Nov 2024 16:43:35 -0800 (PST)
+        bh=aiQ4oePn+twaYsVayK2MFtxDBUJmMu6qCA4lQpU8Xbs=;
+        b=mkC18Q+5KgmMTdzAU1XG9rHAOUllkhJFF7WyS5Zfm09D7oyAEEhDzI9oXh7tcuQdMi
+         Ajz0rXnWoqqKKomVp9xciwBoc7bjkGhe6OSwIN8CVJqTp+KElZ+Cjg3D89a900j1MQK5
+         BRD4RUWg5AcA+wNCV+DJR7YQDkbhyb1RYjiGgGK9AO6C4pg4QGfrR/2GC0482Oc0+yth
+         Lz3/csh5nPAnhHWMSR/UxSLGA+JmYi/sVgM1sNdg9Wq9cFsK7spLJwQlnvGMKPvUPxej
+         vDCmyQ6PIfIatcMQoG8jGnM40fuGBa8AnIrRZNJXkjh4nOfkB/xOrBFr/IjXgncu3Gay
+         3sFw==
+X-Gm-Message-State: AOJu0YywIJ3s1oA7zAlzYodbQ4lE8bQQoDAkY8rDG5vIM/xNqsl8AY52
+	P+E9kVATlfUQPf30tKM2qiY2fvavRVD3yoiga9lwAQh2jFcugRjxYegEArWh
+X-Google-Smtp-Source: AGHT+IGXjqDPC+8tpnbKo28pZI3kJS2tH8y2gxJx49eJAQkpLlw5nL7JyUIi3Bw3yM4bL0yA0dhnWQ==
+X-Received: by 2002:a17:902:e885:b0:20f:aee9:d8d7 with SMTP id d9443c01a7336-211d0d81e71mr13523795ad.32.1731631833884;
+        Thu, 14 Nov 2024 16:50:33 -0800 (PST)
 Received: from [192.168.0.235] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-211d0dc5df5sm2319795ad.10.2024.11.14.16.43.34
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-211d0eca48fsm2357755ad.84.2024.11.14.16.50.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Nov 2024 16:43:34 -0800 (PST)
-Message-ID: <6855cb2475d684ed9f93e9a3f4bed2c8d4536ef2.camel@gmail.com>
+        Thu, 14 Nov 2024 16:50:33 -0800 (PST)
+Message-ID: <da1040939abff53c84bcd3a6dc7b7bd6ebdcea58.camel@gmail.com>
 Subject: Re: [RFC bpf-next 01/11] bpf: use branch predictions in
  opt_hard_wire_dead_code_branches()
 From: Eduard Zingerman <eddyz87@gmail.com>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Andrii Nakryiko <andrii.nakryiko@gmail.com>, bpf <bpf@vger.kernel.org>, 
- Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai Lau
- <martin.lau@linux.dev>, Kernel Team <kernel-team@fb.com>, Yonghong Song
- <yonghong.song@linux.dev>, Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Date: Thu, 14 Nov 2024 16:43:29 -0800
-In-Reply-To: <CAADnVQJ0mPBaVDpLHmHHrV3N3u_7M4D12MiOPv6=-fVSSC=o8g@mail.gmail.com>
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
+ daniel@iogearbox.net,  martin.lau@linux.dev, kernel-team@fb.com,
+ yonghong.song@linux.dev,  memxor@gmail.com
+Date: Thu, 14 Nov 2024 16:50:28 -0800
+In-Reply-To: <CAEf4Bza57teg+vOc_P2Fk02gEFPY69u7yPRzksr4GRVvS7o1Cg@mail.gmail.com>
 References: <20241107175040.1659341-1-eddyz87@gmail.com>
 	 <20241107175040.1659341-2-eddyz87@gmail.com>
 	 <0f0cf220fa711f0bd376bdb167c035e53dd409f9.camel@gmail.com>
 	 <CAEf4BzYUMMOdfwsWovDqQMgDnd8eGQVEyJLVRvqzmSwsZoW-wA@mail.gmail.com>
-	 <d34cbd7bf86d01ecccd70220078a7279756c8ec6.camel@gmail.com>
-	 <CAADnVQJoRiZXRgzJt6pMFKqsCh93caARjA0hGQ_-V-B0VZ-+-w@mail.gmail.com>
-	 <595a43d159bec96fd774c63024038006e8be2722.camel@gmail.com>
-	 <CAADnVQJ0mPBaVDpLHmHHrV3N3u_7M4D12MiOPv6=-fVSSC=o8g@mail.gmail.com>
+	 <CAEf4Bza57teg+vOc_P2Fk02gEFPY69u7yPRzksr4GRVvS7o1Cg@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 User-Agent: Evolution 3.52.4 (3.52.4-1.fc40) 
@@ -82,27 +76,36 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
-On Thu, 2024-11-14 at 16:38 -0800, Alexei Starovoitov wrote:
+On Thu, 2024-11-14 at 16:19 -0800, Andrii Nakryiko wrote:
 
 [...]
 
-> > The 101m -> 116m is for inlining w/o known branch removal -> inlining w=
-ith branch removal.
-> > (With 76m being no inlining at all).
+> I was also always hoping that we'll eventually optimize the following pat=
+tern:
 >=20
-> Not following. Which patch # does branch removal then?
+> r1 =3D *(global var)
+> if r1 =3D=3D 1 /* always 1 or 0 */
+>    goto +...
+> ...
+>=20
+>=20
+> This is extremely common with .rodata global variables, and while the
+> branches are dead code eliminated, memory reads are not. Not sure how
+> involved it would be to do this.
 
-- "bpf: shared BPF/native kfuncs" (patch #3)
-  Build system integration and kfuncs inlining after verification.
+Could you please elaborate a bit.
+For a simple test like below compiler replaces 'flag' with 1,
+so no action is needed from verifier:
 
-- "bpf: instantiate inlinable kfuncs before verification" (patch #7)
-  Adds a pass that clones inlinable kfunc bodies as hidden
-  subprograms, one subprogram per callsite.
+    const int flag =3D 1;
 
-#3 does inlining, but does not remove any branches.
-#7 moves where inlining is done which allows to remove branches.
-
-Performance numbers for the simple test:
-- #3 alone : 76m -> 101m
-- #3 + #7  : 76m -> 116m
+    SEC("socket")
+    __success
+    __xlated("foobar")
+    int rodata_test(void *ctx)
+    {
+    	if (flag)
+    		return 1;
+    	return 0;
+    }
 
