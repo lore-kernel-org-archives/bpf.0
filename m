@@ -1,222 +1,109 @@
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A5491E2843
-	for <bpf@vger.kernel.org>; Fri, 15 Nov 2024 19:49:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.145.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D46616D4E6;
+	Fri, 15 Nov 2024 19:57:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731700169; cv=none; b=VqK/5b6FZrwEBfXo8aQ1tIdLRG9aAM4E6L9HodTwSlPzr9ou/lTRLpdYqAdJS0awxkZ+RDLZ7obD2ufu+0ciCxYsz0o4C4pavI/8Jiq56mbao3KyYxKLIj/AUhDLykYmey7u4RiUcb5IJfcS4YSsZQfkPc3+fn76X60vnhaEdoI=
+	t=1731700658; cv=none; b=DjGYx+0oqh+HNtPs1Xm0QIkkFsIafiSD5u+HftcJhu0FEn+Eni6htsEKUzBZQfKAjYW68/dQQq6AXNnPXVwe5VtUhe/V71Cg7OLK+mfhDC1Z06NnD80P4DWYBKDiZJEVwGdiZ0A6TQWc7j8rjQbyIWx2FTwW1+WP6NJvdoxF4aA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731700169; c=relaxed/simple;
-	bh=z55QMGHuyU79Lo0rgWIuj7M6h2JF0d6bWRj3SaLRuMc=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=q2YWxtn6lW3+zcC3uIXj5SgK8aDrYtRVV+yyyu21EKFnoU2HWc2E/KW+cTS076QzcOMDhwm14jxD+0l5sWCLATJwJba6nY1U6/U/QlEJlLGOqriESTnF2uPdOQc9jD+m/sxPys9DXnM4xJJqZFwrduO/0Dsr2VBu7KpqOIBS2+E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com; spf=pass smtp.mailfrom=meta.com; dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b=MHLFIh7k; arc=none smtp.client-ip=67.231.145.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
+	s=arc-20240116; t=1731700658; c=relaxed/simple;
+	bh=EHiLgshycf1eieqiOpzzDDPKAvfiKoyQOr9THsKU62w=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=GwUDWz+gE0nMzObfA33ty9VevvhxTRGiEY/IvFscjF5SqcNnGuVoqrIWwwkwRnTV24bVCwJfoZMcnqirUtl0IESn+lkAAu8o5h77TBiBi+nzGfvGTbS1ACMaf/EIQypbjHDpkNSC9lgQrOw5vWobPeo6pg7iSV0c0+jS8N2GuRA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aUT0tYdg; arc=none smtp.client-ip=209.85.210.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b="MHLFIh7k"
-Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4AFIVHoG001670;
-	Fri, 15 Nov 2024 11:48:53 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=s2048-2021-q4;
-	 bh=2L+peR7S2VvIoHrnyDWB/FySR1z6OXVk418UFVTrmvs=; b=MHLFIh7k7kel
-	W1LtLjFP3BeP3ZG5qZqdR+u3XOalMcCBj4FbR35dG0ypVbA12kI/YC0Qe6a2Eng1
-	cr0tzB4zCfLPZtXnwA+4KrXeBpnhdnfW8K8HMJKPWh5I4x+qL6OB7j4lYLDvsKeD
-	6jdEe3fANo4F42z7ytJIR4i4iMuMQl0VKG1xou2PkZ0fauNNLl0tqFBnbzPWG2uI
-	VdjGQedUdzPdasUiVfET5nJz+as6tmcizUh2QbdWp2nMwK7XAI+AJdHzG1HVnpTi
-	QFXPyzdK4DL/F3lUFJKtCuC2vgbCo63anxe1fh3DOQfnSrVcMnDMWGIwc4HbS1GU
-	XJDH9+sPPg==
-Received: from maileast.thefacebook.com ([163.114.135.16])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 42x6cmk29d-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-	Fri, 15 Nov 2024 11:48:53 -0800 (PST)
-Received: from devvm4158.cln0.facebook.com (2620:10d:c0a8:1b::2d) by
- mail.thefacebook.com (2620:10d:c0a9:6f::237c) with Microsoft SMTP Server id
- 15.2.1544.11; Fri, 15 Nov 2024 19:48:51 +0000
-From: Vadim Fedorenko <vadfed@meta.com>
-To: Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann
-	<daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Eduard Zingerman
-	<eddyz87@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vadim Fedorenko
-	<vadim.fedorenko@linux.dev>,
-        Mykola Lysenko <mykolal@fb.com>
-CC: <x86@kernel.org>, <bpf@vger.kernel.org>,
-        Vadim Fedorenko
-	<vadfed@meta.com>,
-        Martin KaFai Lau <martin.lau@linux.dev>
-Subject: [PATCH bpf-next v6 2/4] bpf: add bpf_cpu_cycles_to_ns helper
-Date: Fri, 15 Nov 2024 11:48:39 -0800
-Message-ID: <20241115194841.2108634-3-vadfed@meta.com>
-X-Mailer: git-send-email 2.43.5
-In-Reply-To: <20241115194841.2108634-1-vadfed@meta.com>
-References: <20241115194841.2108634-1-vadfed@meta.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aUT0tYdg"
+Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-723db2798caso1947549b3a.0;
+        Fri, 15 Nov 2024 11:57:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1731700656; x=1732305456; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8xwg26uJqyJJNoApjHYibPOjhnbtOYqw9dx9vp0pAww=;
+        b=aUT0tYdgWd3lOGZiPCJo2v9N1AfX84d/1fM3m0su0CzvAdS3/y9MAKm0EfO/x6wolq
+         HIPc7qWVKQ0G7ojG9YBJYKvz5y8bQyQxL+myvUBhatPjBL9pXE6/lr4PzYuaiJcSN6nR
+         YYGKwZ3nY/YV2fDfJx4Y+eifNylURBB92WRnIHEslioXBliusvoXS18PgNJdbiFWcuyc
+         gYAOFRUpxJQNKNTgUFTGsN9Ldz8JspLUfP0HVCfI7pvvBPtSPjwl199Yk7q0MGA3EDKb
+         OBsaUCABdVWyb6VTBWlLUpd/L5rSwURZrCgpA6GajW2F76R4mABBSJ8RxxT+MDr8kBIv
+         IW/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1731700656; x=1732305456;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=8xwg26uJqyJJNoApjHYibPOjhnbtOYqw9dx9vp0pAww=;
+        b=qFAr56M6BbSW9OFn04E/2IdIwGDJesemGwjTFU5uE07tl8XCHg6kUW6mybaZccsyDC
+         HW7/W1SgmXS04p+kutzmt1U38dX+mA09ZvZgzGqBZoaJhBz5WCA2qh46SjkX4i5CTUQX
+         ErB0EK85ZIpRXuoZI9WG3zezSJjIPxfe2JecDGCo0+tEUjJcHb5Zt95p/Pks9F3Q5o/K
+         1XOnBcTi0/qb2npP1AWNPr8kkv04xFDva4S4vl2w1GA6Ptp00ln4u/FQKEspzPhA3Fc8
+         NeNIfiAwpxcUAs9OdAGsM3Q3PLLjEOwU4qk7JAHxdpDOWLLKQcQPDMNwFr0IDRVS+wFx
+         l3nw==
+X-Forwarded-Encrypted: i=1; AJvYcCX4fnTx97lFhvWKE0P3OZtSSdSNfUYu1L7hcfAtYgO73feW948B4ixNQLZHXanaUxeSi5X/+38vzCIftFJq@vger.kernel.org, AJvYcCXveXJrCEp93hAbJBRpkuLBLpPk004bmbK/gDgZqlTDlb9cghjzlUgrfidoExmwQJ2b6gI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwfKBNHmTRTpJ5ZH+lfWohsW/dktWasaY/rK+d6DQLUl01IaCRw
+	b7mvyNkFGQJGv8zqMQ1HSLB8w9y7hYVvectw7397n8R2Sueb/uTWB8VjZxa6pPrR6BuBLKZ7EHt
+	JZcgEIt7z2eVgCxOwomOhRtWh9x8=
+X-Google-Smtp-Source: AGHT+IGtcGamPjh1CkOd9RJI6X+OCqPljcJPXvqCzPOoiRWyDCtXN7lFmzHEouLVnuO65mUnUDFdkVpMbo1BeACEEPA=
+X-Received: by 2002:a17:90b:4d86:b0:2d8:dd14:79ed with SMTP id
+ 98e67ed59e1d1-2ea155943cbmr4259464a91.31.1731700656505; Fri, 15 Nov 2024
+ 11:57:36 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Proofpoint-GUID: 7XoHtLBla1uH8yg5Uwk71iP3hZzi_H-p
-X-Proofpoint-ORIG-GUID: 7XoHtLBla1uH8yg5Uwk71iP3hZzi_H-p
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
- definitions=2024-10-05_03,2024-10-04_01,2024-09-30_01
+References: <20241115103422.55040-1-sidong.yang@furiosa.ai>
+In-Reply-To: <20241115103422.55040-1-sidong.yang@furiosa.ai>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Fri, 15 Nov 2024 11:57:24 -0800
+Message-ID: <CAEf4BzYape9gtc7k1NQMD5BrfakzDXV_9SHNqZeamcaSKn744Q@mail.gmail.com>
+Subject: Re: [RFC PATCH] libbpf: Change hash_combine parameters from long to __u32
+To: Sidong Yang <sidong.yang@furiosa.ai>
+Cc: Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-The new helper should be used to convert cycles received by
-bpf_get_cpu_cycle() into nanoseconds.
+On Fri, Nov 15, 2024 at 2:51=E2=80=AFAM Sidong Yang <sidong.yang@furiosa.ai=
+> wrote:
+>
+> The hash_combine() could be trapped when compiled with sanitizer like "zi=
+g cc".
+> This patch changes parameters to __u32 to fix it.
 
-Reviewed-by: Eduard Zingerman <eddyz87@gmail.com>
-Signed-off-by: Vadim Fedorenko <vadfed@meta.com>
----
-v4 -> v6:
-* add comment about simplified implementation (Eduard)
-v4:
-* change helper name to bpf_cpu_cycles_to_ns.
-* hide it behind CONFIG_GENERIC_GETTIMEOFDAY to avoid exposing on
-  unsupported architectures.
----
- arch/x86/net/bpf_jit_comp.c   | 22 ++++++++++++++++++++++
- arch/x86/net/bpf_jit_comp32.c | 19 +++++++++++++++++++
- include/linux/bpf.h           |  1 +
- kernel/bpf/helpers.c          | 13 ++++++++++++-
- 4 files changed, 54 insertions(+), 1 deletion(-)
+Can you please elaborate? What exactly are you fixing? "Undefined"
+signed integer overflow? I can consider changing long to unsigned
+long, but I don't think we should downgrade from long all the way to
+32-bit u32. I'd rather keep all those 64 bits for hash.
 
-diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
-index 107bd921f104..b87233d41a75 100644
---- a/arch/x86/net/bpf_jit_comp.c
-+++ b/arch/x86/net/bpf_jit_comp.c
-@@ -11,6 +11,7 @@
- #include <linux/bpf.h>
- #include <linux/memory.h>
- #include <linux/sort.h>
-+#include <linux/clocksource.h>
- #include <asm/extable.h>
- #include <asm/ftrace.h>
- #include <asm/set_memory.h>
-@@ -2216,6 +2217,24 @@ st:			if (is_imm8(insn->off))
- 				break;
- 			}
- 
-+			if (insn->src_reg == BPF_PSEUDO_KFUNC_CALL &&
-+			    imm32 == BPF_CALL_IMM(bpf_cpu_cycles_to_ns) &&
-+			    boot_cpu_has(X86_FEATURE_CONSTANT_TSC)) {
-+				u32 mult, shift;
-+
-+				clocks_calc_mult_shift(&mult, &shift, tsc_khz, USEC_PER_SEC, 0);
-+				/* imul RAX, RDI, mult */
-+				maybe_emit_mod(&prog, BPF_REG_1, BPF_REG_0, true);
-+				EMIT2_off32(0x69, add_2reg(0xC0, BPF_REG_1, BPF_REG_0),
-+					    mult);
-+
-+				/* shr RAX, shift (which is less than 64) */
-+				maybe_emit_1mod(&prog, BPF_REG_0, true);
-+				EMIT3(0xC1, add_1reg(0xE8, BPF_REG_0), shift);
-+
-+				break;
-+			}
-+
- 			func = (u8 *) __bpf_call_base + imm32;
- 			if (src_reg == BPF_PSEUDO_CALL && tail_call_reachable) {
- 				LOAD_TAIL_CALL_CNT_PTR(stack_depth);
-@@ -3828,5 +3847,8 @@ bool bpf_jit_inlines_kfunc_call(s32 imm)
- {
- 	if (imm == BPF_CALL_IMM(bpf_get_cpu_cycles))
- 		return true;
-+	if (imm == BPF_CALL_IMM(bpf_cpu_cycles_to_ns) &&
-+	    boot_cpu_has(X86_FEATURE_CONSTANT_TSC))
-+		return true;
- 	return false;
- }
-diff --git a/arch/x86/net/bpf_jit_comp32.c b/arch/x86/net/bpf_jit_comp32.c
-index e6097a371b69..34f762f28c82 100644
---- a/arch/x86/net/bpf_jit_comp32.c
-+++ b/arch/x86/net/bpf_jit_comp32.c
-@@ -12,6 +12,7 @@
- #include <linux/netdevice.h>
- #include <linux/filter.h>
- #include <linux/if_vlan.h>
-+#include <linux/clocksource.h>
- #include <asm/cacheflush.h>
- #include <asm/set_memory.h>
- #include <asm/nospec-branch.h>
-@@ -2100,6 +2101,24 @@ static int do_jit(struct bpf_prog *bpf_prog, int *addrs, u8 *image,
- 					EMIT2(0x0F, 0x31);
- 					break;
- 				}
-+				if (imm32 == BPF_CALL_IMM(bpf_cpu_cycles_to_ns) &&
-+				    boot_cpu_has(X86_FEATURE_CONSTANT_TSC)) {
-+					u32 mult, shift;
-+
-+					clocks_calc_mult_shift(&mult, &shift, tsc_khz,
-+							       USEC_PER_SEC, 0);
-+
-+					/* move parameter to BPF_REG_0 */
-+					emit_ia32_mov_r64(true, bpf2ia32[BPF_REG_0],
-+							  bpf2ia32[BPF_REG_1], true, true,
-+							  &prog, bpf_prog->aux);
-+					/* multiply parameter by mut */
-+					emit_ia32_mul_i64(bpf2ia32[BPF_REG_0],
-+							  mult, true, &prog);
-+					/* shift parameter by shift which is less than 64 */
-+					emit_ia32_rsh_i64(bpf2ia32[BPF_REG_0],
-+							  shift, true, &prog);
-+				}
- 
- 				err = emit_kfunc_call(bpf_prog,
- 						      image + addrs[i],
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 43a5207a1591..af47704afeaa 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -3336,6 +3336,7 @@ u64 bpf_get_raw_cpu_id(u64 r1, u64 r2, u64 r3, u64 r4, u64 r5);
- /* Inlined kfuncs */
- #if IS_ENABLED(CONFIG_GENERIC_GETTIMEOFDAY)
- u64 bpf_get_cpu_cycles(void);
-+u64 bpf_cpu_cycles_to_ns(u64 cycles);
- #endif
- 
- #if defined(CONFIG_NET)
-diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-index 12d40537e57b..e89eff53c340 100644
---- a/kernel/bpf/helpers.c
-+++ b/kernel/bpf/helpers.c
-@@ -3073,8 +3073,18 @@ __bpf_kfunc u64 bpf_get_cpu_cycles(void)
- 	 */
- 	return __arch_get_hw_counter(vd->clock_mode, vd);
- }
--#endif
- 
-+__bpf_kfunc u64 bpf_cpu_cycles_to_ns(u64 cycles)
-+{
-+	const struct vdso_data *vd = __arch_get_k_vdso_data();
-+
-+	/* kfunc implementation does less manipulations than vDSO
-+	 * implementation. BPF use-case assumes two measurements are close
-+	 * in time and can simplify the logic.
-+	 */
-+	return mul_u64_u32_shr(cycles, vd->mult, vd->shift);
-+}
-+#endif
- __bpf_kfunc_end_defs();
- 
- BTF_KFUNCS_START(generic_btf_ids)
-@@ -3169,6 +3179,7 @@ BTF_ID_FLAGS(func, bpf_iter_kmem_cache_next, KF_ITER_NEXT | KF_RET_NULL | KF_SLE
- BTF_ID_FLAGS(func, bpf_iter_kmem_cache_destroy, KF_ITER_DESTROY | KF_SLEEPABLE)
- #if IS_ENABLED(CONFIG_GENERIC_GETTIMEOFDAY)
- BTF_ID_FLAGS(func, bpf_get_cpu_cycles, KF_FASTCALL)
-+BTF_ID_FLAGS(func, bpf_cpu_cycles_to_ns, KF_FASTCALL)
- #endif
- BTF_KFUNCS_END(common_btf_ids)
- 
--- 
-2.43.5
+pw-bot: cr
 
+>
+> Signed-off-by: Sidong Yang <sidong.yang@furiosa.ai>
+> ---
+>  tools/lib/bpf/btf.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
+> index 8befb8103e32..11ccb5aa4958 100644
+> --- a/tools/lib/bpf/btf.c
+> +++ b/tools/lib/bpf/btf.c
+> @@ -3548,7 +3548,7 @@ struct btf_dedup {
+>         struct strset *strs_set;
+>  };
+>
+> -static long hash_combine(long h, long value)
+> +static __u32 hash_combine(__u32 h, __u32 value)
+>  {
+>         return h * 31 + value;
+>  }
+> --
+> 2.42.0
+>
+>
