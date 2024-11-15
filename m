@@ -1,114 +1,108 @@
-Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1862A4F8A0
-	for <bpf@vger.kernel.org>; Fri, 15 Nov 2024 00:43:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04DC438DC0
+	for <bpf@vger.kernel.org>; Fri, 15 Nov 2024 00:43:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731631405; cv=none; b=BuZjW+wlY3U93gZ5WHo/89c+tuhU06N8Ze3UTQXt1sUZnG/1mpA6Q/t6UKHwvMZKq6FXPHdQE+CzsfNrpEWpd/M7XWgX3/E7Iic23Io1LdvnKHQiZ+uAJMw6Lq1E5qvp32oFUooa5WeAf4viuYzpvr/HQUKo53uYzyV0MYZWfWw=
+	t=1731631417; cv=none; b=ZXYufkp2y9DStsQ2YMS/yC0GRWwdSogD51Af8ne+hdPx2znpLcgLtwE1wFTERP1U9dhEnafolCDCy+7DlBA5w5KtA/rsU2yore0138q6aAXv8wb8xbrc44APzNX6xeURLbEFpe8iPUfYJTfL9R5PG8lwrr2Mst8h0VdOP2eLtSA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731631405; c=relaxed/simple;
-	bh=+leBIfGTx3qYqG0qr3EMc/+ailKE10I/dQRiyX0z0CA=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=TLN1bUD3DFLwtS9hRGdl/4g7yzYctfWEEm9ZBJnddaMruTBxwLVfiosPsR202CE4baPZIy426lutMNBxq1auQyn3/fN8i2oSfk0xzxNZcOOc8Xog4Jul1VKdTQTRrcPrNMJtFhQ0WeewUJyakoM/VJJCRxcLnZqRo9ElOrJexyw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=isovalent.com; spf=pass smtp.mailfrom=isovalent.com; dkim=pass (2048-bit key) header.d=isovalent.com header.i=@isovalent.com header.b=DPfL32rr; arc=none smtp.client-ip=209.85.221.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=isovalent.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=isovalent.com
+	s=arc-20240116; t=1731631417; c=relaxed/simple;
+	bh=CHqacG3x36iB7oLaJxLdifxVbhYwwCvLTR8xF6EDq54=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=i8PlavPwo3fyY6uIwX+PngEk24fOr63wJcSuE+C3ckDfqqFgp6IhGMpVHpUPpv3tUGVFmkBcd57qnvjedSRBqTp90/BTiTmMBTsNN6F0Hu5eUGwsOYqaZp/o4iFZMkSesa5n1oxA1YNsQwoeCEefIijxZi1VC7Kik1D8+UMpx2A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jb91M8u3; arc=none smtp.client-ip=209.85.214.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=isovalent.com header.i=@isovalent.com header.b="DPfL32rr"
-Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-37d63a79bb6so120611f8f.0
-        for <bpf@vger.kernel.org>; Thu, 14 Nov 2024 16:43:23 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jb91M8u3"
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-21145812538so10279465ad.0
+        for <bpf@vger.kernel.org>; Thu, 14 Nov 2024 16:43:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=isovalent.com; s=google; t=1731631402; x=1732236202; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=G329gGS4RBx9EPCJNPCJhs4+g77tte1wqZgFhLBI2LE=;
-        b=DPfL32rr/EP+Oq/VdWeQWRNkmZDeiM8eV7sw2V1dGHtKUY8G4ozMgMtzbsAF/TSjsk
-         qqAfS9KNuDPzWMupbcarr4Y73mw82IoboldufakFwIA0G7nOXddlKqRTs5xVXJ+WN0sE
-         ejwi9bKdR4HrFrWVGuu+1wfFrnBq4KQpQUGwqZPmiWgaoe2uSTS0cj08HwCumV4FSHBS
-         +eSjvxHR6xIfQDhnqFIKqYfM7c5nB9QSP0rGxULUDAXwtmTrvJQuyoExwL2vA1Ys7Sh6
-         8TDJz1w9IutXlpLDEAhMNK3gAmcqwCBCEvEE73Rn5fqjqLblFAfQ2ZyBZUF/nD8AZal4
-         BVqw==
+        d=gmail.com; s=20230601; t=1731631415; x=1732236215; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=ddP9oSWtuB14d68X5LVkgBBgtbWDCzsIHxObUABxV1s=;
+        b=jb91M8u3F9mgBEbqbKs1C/ksWjE5kXEpUJvpj/yelpUUQeGSWj8jbKz9FqjLx3Sq91
+         ifyuE7ef9Ef8Mfr7UBWSYcEUE3JsjUWoxvo7C5IdDbzihOcTfvjSSmp6s1fwpJX/+cYn
+         zrQes8H+w7kyr7U4bIN+hzYgzcVzVX5qT+9PQwEr2X0IGwHesE0FLYTWQMHKfAmyOJsz
+         aVUp5I+LthP5oyAlwgorXg6yJjx9rs8SNz8sGF7uv8o6hhX20sPKE021m9zVWO61HYSp
+         UQrgshnhxVk4smOjqpxDU6p+0n0FJBRuf9EFoUOGfpM+mzcg4p4nMNmHApb3IpY9dhOO
+         1h3A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731631402; x=1732236202;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=G329gGS4RBx9EPCJNPCJhs4+g77tte1wqZgFhLBI2LE=;
-        b=w4tE3rA/mae18X7qLIUc/8vTbvkAJG1sJL9t3s5nBIJV03XHhnhFVSnJ2WlTiIr+M+
-         Pe2PWOaTQgioSQg+xYyoju0OLMopQzZVvYlk8sm8dCbPbTq1I4HcwfepCt/iwFd8iWfk
-         ygGb7VqUYm43DZunaBTwFD6JJbbiRYQRW8Vx3DRvk4XuPpVxoaegTfwPSpnWsK0LyRmy
-         oH16IXY0+ohRk79pguhDXHot1kcYy6xhWXimuOzHJuk1xLCirhH0VbhYq1nBMNi2Felp
-         Yytg5uHsivKXKQnQdgcMRRiYgPd+PXGa+P/wVeUc9ZDz8lq4OAiFkxpN1uj6OjWcOsCZ
-         BwoQ==
-X-Gm-Message-State: AOJu0YwTj22TSDC5KAwnGfRH55aSUPqkW1sOeqz/yeaLFpRMYhMQu5JU
-	Re29K2m4bTkUpeKPdJlLoRC28y/+zxM0svF/1kMUoMKlxoZBMGIDRuKjqMukK9ag1vv+VaUEDFB
-	fZgM=
-X-Google-Smtp-Source: AGHT+IGZ+NDCXZrcnuKyG16OR19KVrggceWJ991Sv5SI+7lDy3fsd0zjvB3Q3N1NXPo7pcVNoouKaw==
-X-Received: by 2002:a5d:6d01:0:b0:37d:4d80:34ae with SMTP id ffacd0b85a97d-38225901fe2mr451606f8f.4.1731631402211;
-        Thu, 14 Nov 2024 16:43:22 -0800 (PST)
-Received: from localhost.localdomain ([2a04:ee41:4:b2de:1ac0:4dff:fe0f:3782])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-432dab78783sm36781975e9.12.2024.11.14.16.43.20
+        d=1e100.net; s=20230601; t=1731631415; x=1732236215;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ddP9oSWtuB14d68X5LVkgBBgtbWDCzsIHxObUABxV1s=;
+        b=RmFaAXwkIaSvIavJ+A2yIdQHQ11RfmkSbuyDfDGK5wn6DA1d3dSSLL0/RAc1OIqgri
+         PU6Y1hN78OW05sAMzsluzDUHnjO3BZqmxdXPeq4aHDm+gngpEaYXXfNFAlIxIZQXIX3B
+         7CTYZvokXJEcxhWvB1Z3laGP2dmuG+gnUXXWG3hlmvjsB+tk6LoYL2tbBTnaLcmUfvdU
+         PbNTGQBLSwC1Sq7U4AOwQlDLmpzD/b63tzJiszRKyVdg3rJeL7XADabBEA56NtJAox3k
+         Shaje0lwhcQL9m6/m8/v/+inqTRYMRbLDD+3BH1jZTjRVDOFNiGJsLsvgxdjHEwC5b7Y
+         KLVA==
+X-Forwarded-Encrypted: i=1; AJvYcCVjF/w2WCZJoCrwShNhj/mLkK1wh3K/PcdTF1KlzdUphJqR1qV0syGaHXyfj2SoyA4mW1o=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw8iQaNV7q6eRyyoqpQymADqCjcv7Y2G7DkiN4eUMEJ4Ssc2ZIm
+	KFezSpkMZq0s/G+4pqQ3tlvTvhfy5q7/5kd/vSNoe3N1IPbxvqku
+X-Google-Smtp-Source: AGHT+IEqTnAfkkSbSeISG81CySPjdP8G285uKuGm52DA7L5ZCYYgtDTKOndcgPgcEIymDTa2xS4PYw==
+X-Received: by 2002:a17:903:18e:b0:20f:c225:f28c with SMTP id d9443c01a7336-211d0eceae5mr11040015ad.52.1731631415182;
+        Thu, 14 Nov 2024 16:43:35 -0800 (PST)
+Received: from [192.168.0.235] ([38.34.87.7])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-211d0dc5df5sm2319795ad.10.2024.11.14.16.43.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Nov 2024 16:43:20 -0800 (PST)
-From: Anton Protopopov <aspsk@isovalent.com>
-To: bpf@vger.kernel.org
-Cc: Anton Protopopov <aspsk@isovalent.com>,
-	Jiri Olsa <jolsa@kernel.org>
-Subject: [PATCH bpf-next 5/5] bpf: fix potential error return
-Date: Fri, 15 Nov 2024 00:46:07 +0000
-Message-Id: <20241115004607.3144806-6-aspsk@isovalent.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20241115004607.3144806-1-aspsk@isovalent.com>
-References: <20241115004607.3144806-1-aspsk@isovalent.com>
+        Thu, 14 Nov 2024 16:43:34 -0800 (PST)
+Message-ID: <6855cb2475d684ed9f93e9a3f4bed2c8d4536ef2.camel@gmail.com>
+Subject: Re: [RFC bpf-next 01/11] bpf: use branch predictions in
+ opt_hard_wire_dead_code_branches()
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Andrii Nakryiko <andrii.nakryiko@gmail.com>, bpf <bpf@vger.kernel.org>, 
+ Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai Lau
+ <martin.lau@linux.dev>, Kernel Team <kernel-team@fb.com>, Yonghong Song
+ <yonghong.song@linux.dev>, Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Date: Thu, 14 Nov 2024 16:43:29 -0800
+In-Reply-To: <CAADnVQJ0mPBaVDpLHmHHrV3N3u_7M4D12MiOPv6=-fVSSC=o8g@mail.gmail.com>
+References: <20241107175040.1659341-1-eddyz87@gmail.com>
+	 <20241107175040.1659341-2-eddyz87@gmail.com>
+	 <0f0cf220fa711f0bd376bdb167c035e53dd409f9.camel@gmail.com>
+	 <CAEf4BzYUMMOdfwsWovDqQMgDnd8eGQVEyJLVRvqzmSwsZoW-wA@mail.gmail.com>
+	 <d34cbd7bf86d01ecccd70220078a7279756c8ec6.camel@gmail.com>
+	 <CAADnVQJoRiZXRgzJt6pMFKqsCh93caARjA0hGQ_-V-B0VZ-+-w@mail.gmail.com>
+	 <595a43d159bec96fd774c63024038006e8be2722.camel@gmail.com>
+	 <CAADnVQJ0mPBaVDpLHmHHrV3N3u_7M4D12MiOPv6=-fVSSC=o8g@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.52.4 (3.52.4-1.fc40) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-The bpf_remove_insns() function returns WARN_ON_ONCE(error), where
-error is a result of bpf_adj_branches(), and thus should be always 0
-However, if for any reason it is not 0, then it will be converted to
-boolean by WARN_ON_ONCE and returned to user space as 1, not an actual
-error value. Fix this by returning the original err after the WARN check.
+On Thu, 2024-11-14 at 16:38 -0800, Alexei Starovoitov wrote:
 
-Signed-off-by: Anton Protopopov <aspsk@isovalent.com>
-Acked-by: Jiri Olsa <jolsa@kernel.org>
----
- kernel/bpf/core.c | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+[...]
 
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index 14d9288441f2..a15059918768 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -539,6 +539,8 @@ struct bpf_prog *bpf_patch_insn_single(struct bpf_prog *prog, u32 off,
- 
- int bpf_remove_insns(struct bpf_prog *prog, u32 off, u32 cnt)
- {
-+	int err;
-+
- 	/* Branch offsets can't overflow when program is shrinking, no need
- 	 * to call bpf_adj_branches(..., true) here
- 	 */
-@@ -546,7 +548,12 @@ int bpf_remove_insns(struct bpf_prog *prog, u32 off, u32 cnt)
- 		sizeof(struct bpf_insn) * (prog->len - off - cnt));
- 	prog->len -= cnt;
- 
--	return WARN_ON_ONCE(bpf_adj_branches(prog, off, off + cnt, off, false));
-+	err = bpf_adj_branches(prog, off, off + cnt, off, false);
-+	WARN_ON_ONCE(err);
-+	if (err)
-+		return err;
-+
-+	return 0;
- }
- 
- static void bpf_prog_kallsyms_del_subprogs(struct bpf_prog *fp)
--- 
-2.34.1
+> > The 101m -> 116m is for inlining w/o known branch removal -> inlining w=
+ith branch removal.
+> > (With 76m being no inlining at all).
+>=20
+> Not following. Which patch # does branch removal then?
+
+- "bpf: shared BPF/native kfuncs" (patch #3)
+  Build system integration and kfuncs inlining after verification.
+
+- "bpf: instantiate inlinable kfuncs before verification" (patch #7)
+  Adds a pass that clones inlinable kfunc bodies as hidden
+  subprograms, one subprogram per callsite.
+
+#3 does inlining, but does not remove any branches.
+#7 moves where inlining is done which allows to remove branches.
+
+Performance numbers for the simple test:
+- #3 alone : 76m -> 101m
+- #3 + #7  : 76m -> 116m
 
