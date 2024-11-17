@@ -1,118 +1,94 @@
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D59081798C
-	for <bpf@vger.kernel.org>; Tue, 19 Nov 2024 01:35:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
+Received: from cmccmta2.chinamobile.com (cmccmta4.chinamobile.com [111.22.67.137])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 278AD33F7;
+	Tue, 19 Nov 2024 02:47:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=111.22.67.137
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731980163; cv=none; b=QIrCFIxirlAm3b0pA0ihf5PCSUyfVLy3+mGEyWmsA4f+mGFjNEceZb1BW3peLB2ZAZ01RRZLxQRcCen7dsOlTWmGrNl/ud/VUGOKGT1W4bmP5sDfveY9hcVqSApqotZ2XDSuUNHsGK9S3yqc3qf3DImAgyPv18Ee24Zl2+b0dd0=
+	t=1731984425; cv=none; b=VX9zzWeib73T2h5HjCF33asUwru7VxlG9xVLfZznwikTfKQ/MuFi91MlX0tS7cA4M+UKSbrk7gtM6MhNWqQPd1AOw1BoHyCnNsIUgfk6YbYlFVtRopKir0F1LFWXEBziIuYIAKvJIleqtwfxVh/9zRAmA8KFY0T54I9JnjXdndg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731980163; c=relaxed/simple;
-	bh=ig7zb2hR76j2vT0zIP1eVz5jFyV924pUgZTCVpmwdZ4=;
-	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
-	 In-Reply-To:Content-Type; b=NwPPVXMcAsDUqurdRS5CADZ3E2Wb2VKb6BeNBtxXxldYdz/oqKThS4Zuu+70SkgoO6iyEPw7OrG+1ocHjGkVhK7TT6JpOsMwTEJg4JHK3VSHQO8EVLVMTQzCJ4PfBNRYcsA+MKnPiEVZLxoOlPHIuCWrRpwM1GebrKwUnx4q75A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.235])
-	by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4XsnBQ4ZQgz4f3l7t
-	for <bpf@vger.kernel.org>; Tue, 19 Nov 2024 09:35:42 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.128])
-	by mail.maildlp.com (Postfix) with ESMTP id 0AF941A058E
-	for <bpf@vger.kernel.org>; Tue, 19 Nov 2024 09:35:56 +0800 (CST)
-Received: from [10.174.176.117] (unknown [10.174.176.117])
-	by APP4 (Coremail) with SMTP id gCh0CgDHoYV36ztnd8rCCA--.16905S2;
-	Tue, 19 Nov 2024 09:35:55 +0800 (CST)
-Subject: Re: [PATCH bpf-next 00/10] Fixes for LPM trie
-To: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc: bpf@vger.kernel.org, Martin KaFai Lau <martin.lau@linux.dev>,
- Alexei Starovoitov <alexei.starovoitov@gmail.com>,
- Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
- Song Liu <song@kernel.org>, Hao Luo <haoluo@google.com>,
- Yonghong Song <yonghong.song@linux.dev>,
- Daniel Borkmann <daniel@iogearbox.net>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@fomichev.me>, Jiri Olsa <jolsa@kernel.org>,
- John Fastabend <john.fastabend@gmail.com>,
- Thomas Gleixner <tglx@linutronix.de>, =?UTF-8?Q?Thomas_Wei=c3=9fschuh?=
- <linux@weissschuh.net>, houtao1@huawei.com, xukuohai@huawei.com
-References: <20241118010808.2243555-1-houtao@huaweicloud.com>
- <20241118153901.izwoXYhc@linutronix.de>
-From: Hou Tao <houtao@huaweicloud.com>
-Message-ID: <6919992c-179e-300e-9f5f-dc3a8a7bdaf3@huaweicloud.com>
-Date: Tue, 19 Nov 2024 09:35:51 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+	s=arc-20240116; t=1731984425; c=relaxed/simple;
+	bh=l7EGQCVzS8e+Cm9uLnOIk+DQliZX4oyPru3AsAUlqBU=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=mZyATknYAylfGvaMhqKh6KTpdqlTykxbMwnYEoM0akTGgPx+m75DhktF2pRBb+1JDRjYyx8sAdELNS06ICzKzWvcEFPuA9pENpzeHExEEHQ/KTw9DrKjJASsKxlqdwNk7Fcy+M0oPuOBWShZmAnPFvP7BVpxfjsI7hPO5U+Mdio=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cmss.chinamobile.com; spf=pass smtp.mailfrom=cmss.chinamobile.com; arc=none smtp.client-ip=111.22.67.137
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cmss.chinamobile.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cmss.chinamobile.com
+X-RM-TagInfo: emlType=0                                       
+X-RM-SPAM-FLAG:00000000
+Received:from spf.mail.chinamobile.com (unknown[10.188.0.87])
+	by rmmx-syy-dmz-app08-12008 (RichMail) with SMTP id 2ee8673bfc2197e-819c9;
+	Tue, 19 Nov 2024 10:46:59 +0800 (CST)
+X-RM-TRANSID:2ee8673bfc2197e-819c9
+X-RM-TagInfo: emlType=0                                       
+X-RM-SPAM-FLAG:00000000
+Received:from localhost.localdomain (unknown[223.108.79.101])
+	by rmsmtp-syy-appsvr06-12006 (RichMail) with SMTP id 2ee6673bfc163b6-0b1a5;
+	Tue, 19 Nov 2024 10:46:59 +0800 (CST)
+X-RM-TRANSID:2ee6673bfc163b6-0b1a5
+From: guanjing <guanjing@cmss.chinamobile.com>
+To: andrii@kernel.org,
+	eddyz87@gmail.com,
+	mykolal@fb.com,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	martin.lau@linux.dev,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	john.fastabend@gmail.com,
+	kpsingh@kernel.org,
+	sdf@fomichev.me,
+	haoluo@google.com,
+	jolsa@kernel.org,
+	shuah@kernel.org,
+	dxu@dxuuu.xyz,
+	antony.antony@secunet.com,
+	cupertino.miranda@oracle.com,
+	asavkov@redhat.com
+Cc: bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	guanjing <guanjing@cmss.chinamobile.com>
+Subject: [PATCH v1] selftests/bpf: fix application of sizeof to pointer
+Date: Sun, 17 Nov 2024 11:18:38 +0800
+Message-Id: <20241117031838.161576-1-guanjing@cmss.chinamobile.com>
+X-Mailer: git-send-email 2.33.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20241118153901.izwoXYhc@linutronix.de>
-Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-CM-TRANSID:gCh0CgDHoYV36ztnd8rCCA--.16905S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7tr1xGF43uw4xurWDZr1UKFg_yoW8Aw4DpF
-	4fta4Yqa1kXryvvw10yw4DWa4Fkwn3Ar1YgryrKr4Ykwn0q34S9FyxKF4j9FZ2krZ2934j
-	qa1vqrZ3Gas8ZrJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUU9Ib4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
-	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-	6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-	Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7Mxk0xIA0c2IE
-	e2xFo4CEbIxvr21lc7CjxVAaw2AFwI0_GFv_Wryl42xK82IYc2Ij64vIr41l4I8I3I0E4I
-	kC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWU
-	WwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr
-	0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWU
-	JVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJb
-	IYCTnIWIevJa73UjIFyTuYvjxUIa0PDUUUU
-X-CM-SenderInfo: xkrx3t3r6k3tpzhluzxrxghudrp/
 
-Hi Sebastian,
+sizeof when applied to a pointer typed expression gives the size of
+the pointer.
 
-On 11/18/2024 11:39 PM, Sebastian Andrzej Siewior wrote:
-> On 2024-11-18 09:07:58 [+0800], Hou Tao wrote:
->> From: Hou Tao <houtao1@huawei.com>
->>
->> Hi,
-> Hi,
->
->> Please see individual patches for more details. Comments are always
->> welcome.
-> This might be a coincidence but it seems I get
->
-> | helper_fill_hashmap(282):FAIL:can't update hashmap err: Unknown error -12
-> | test_maps: test_maps.c:1379: __run_parallel: Assertion `status == 0' failed.
->
-> more often with the series when I do ./test_maps. I never managed to
-> pass the test with series while it passed on v6.12. I'm not blaming the
-> series, just pointing this out it might be known…
+tools/testing/selftests/bpf/progs/test_tunnel_kern.c:678:41-47: ERROR: application of sizeof to pointer
 
-Thanks for the information. 12 is ENOMEM, so the hash map failed to
-allocate an element for it. There are multiple possible reasons for ENOMEM:
+The proper fix in this particular case is to code sizeof(*gopt)
+instead of sizeof(gopt).
 
-1) something is wrong for bpf mem allocator. E.g., it could not refill
-the free list timely. It may be possible when running under RT, because
-the irq work is threaded under RT.
-2) the series causes the shortage of memory (e.g., It uses a lot memory
-then free these memory, but the reclaim of the memory is slow)
+This issue was detected with the help of Coccinelle.
 
-Could you please share the kernel config file and the VM setup, so I
-could try to reproduce the problem ?
->
-> In 08/10 you switch the locks to raw_spinlock_t. I was a little worried
-> that a lot of elements will make the while() loop go for a long time. Is
-> there a test for this? I run into "test_progs -a map_kptr" and noticed
-> something else…
+Fixes: 5ddafcc377f9 ("selftests/bpf: Fix a few tests for GCC related warnings.")
+Signed-off-by: guanjing <guanjing@cmss.chinamobile.com>
+---
+ tools/testing/selftests/bpf/progs/test_tunnel_kern.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-The concern is the possibility of hard-lockup, right ? The total time
-used for update or deletion is decided by the max_prefixlen. The typical
-use case will use 32 or 128 as the max_prefixlen. The max value of
-max_prefixlen is LPM_DATA_SIZE_MAX * 8 = 2048, I think the loop time
-will be fine. Will try to construct some test cases for it.
->
-> Sebastian
+diff --git a/tools/testing/selftests/bpf/progs/test_tunnel_kern.c b/tools/testing/selftests/bpf/progs/test_tunnel_kern.c
+index 32127f1cd687..3a437cdc5c15 100644
+--- a/tools/testing/selftests/bpf/progs/test_tunnel_kern.c
++++ b/tools/testing/selftests/bpf/progs/test_tunnel_kern.c
+@@ -675,7 +675,7 @@ int ip6geneve_set_tunnel(struct __sk_buff *skb)
+ 	gopt->length = 2; /* 4-byte multiple */
+ 	*(int *) &gopt->opt_data = bpf_htonl(0xfeedbeef);
+ 
+-	ret = bpf_skb_set_tunnel_opt(skb, gopt, sizeof(gopt));
++	ret = bpf_skb_set_tunnel_opt(skb, gopt, sizeof(*gopt));
+ 	if (ret < 0) {
+ 		log_err(ret);
+ 		return TC_ACT_SHOT;
+-- 
+2.33.0
+
+
 
