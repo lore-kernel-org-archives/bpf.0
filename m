@@ -1,115 +1,95 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A86772FB2
-	for <bpf@vger.kernel.org>; Sun, 17 Nov 2024 05:59:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 989C81392
+	for <bpf@vger.kernel.org>; Sun, 17 Nov 2024 10:50:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731823145; cv=none; b=JtSdLKAtDVftwkgX1iaNluDHXI8yKpkCk2tHvNqU/s9X71Lvs3bSh9z6f7ImtPvzwSr/QutdwLPzy0g537XLb1IH9uoJ5yBW2v970UaQk+7AMNeRqx1bStpnCSIq8/G1Kxg9MF2d43lBm6mMgi8kC4KjQ21MjIFqcakkQjzrWhg=
+	t=1731840625; cv=none; b=eES/Zqc4pfdOnua1eUYnCSMq1Ft4V/Z8dwlmWiM/Nwj1pNga9Ryx21OBvd3sdcP24oU4qQTQ8VJcWyFJHRoTCjTjrfuLiwXT1qmwu588dIF9w1fNOOHKukCW9AQL6c67S+j9TAoKnlkLlm7XGVNLu+s+XvaKq3Hu6KHKCh5tQRo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731823145; c=relaxed/simple;
-	bh=T2GcPHJog4D0cnSWEIDBbIgrdlMYSsy57HStasQYYzw=;
+	s=arc-20240116; t=1731840625; c=relaxed/simple;
+	bh=dZEpdMNktylf3JiHSsjSYHDlL4tRbc2K1rKO3wBWqPs=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UdCn4Qfm842aeBCfoRnXaUuYF/DOj8SetcdtQI2HUCMvZY7E2y6Gu/V+4izcU2eTOw5pyDbBlepErapI8HyzrXLX6FDjxteNxcPDCClVQJSU+w2f4TCbGma9bMdpFtEfpnLDZGgc4rSBLMf8G1wXO3dthBdGD8Hesi4yS6EoIUs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=R+SfCDbv; arc=none smtp.client-ip=198.175.65.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=h4gn1dWTyyzp06NJ/RhLYezAtt2SJcyKMXf8JvtLfcI5k6vojxm8hdcPHrkcK1HoHCs30a6Chsbu1SCoKyXtTEvptiewlQWLy8/8Seszy0aPhLyMr2N6Gk1/JYQuEigpAFCF6iWPL2rg3tVxkY/2JCBsuv4MsHXSPsalreYJuZ0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=I5XhPSiD; arc=none smtp.client-ip=90.155.92.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="R+SfCDbv"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1731823144; x=1763359144;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=T2GcPHJog4D0cnSWEIDBbIgrdlMYSsy57HStasQYYzw=;
-  b=R+SfCDbvdixmDrEBE/LxWTSoNPf06TsX2v/hWCyzv1vsxUHDu6KINBCv
-   DeA9WYk8lyCpI4zDkUcq8TXR656junve4WA0ZUqOXKAO/1ibVweRJx4Gi
-   0AIauNpqWRRSQAGk40wNknUZTsVdPHpuaWYKPTJGnXeZnimfNJAEpBKhR
-   FfKju0fyfMDT9XDrB/ZQQlc7XgNI8rUpzNiF3vkt3I8Opp3j94WfYg4u3
-   XmCmv1K9KUMdc6O4oztnLg2OaLnBagSuateCF3mOU4cB58b8+dTNRDUgu
-   dh+ZKnsBVaLNXJUqNDRLk01WgZkraLNwZchmp/VK0E9sqKuR/OhKvb1WO
-   g==;
-X-CSE-ConnectionGUID: rbf9hZHNS1y+eHVDlsfhdQ==
-X-CSE-MsgGUID: 5+F6QHkJQieMGKx+39ILbQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11258"; a="31944472"
-X-IronPort-AV: E=Sophos;i="6.12,161,1728975600"; 
-   d="scan'208";a="31944472"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2024 21:59:04 -0800
-X-CSE-ConnectionGUID: cxN6Bk2TRg2ZGIqOk/gaEw==
-X-CSE-MsgGUID: AwqxCMpZRES9x6k+YRitAA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,161,1728975600"; 
-   d="scan'208";a="88920145"
-Received: from lkp-server01.sh.intel.com (HELO 1e3cc1889ffb) ([10.239.97.150])
-  by orviesa009.jf.intel.com with ESMTP; 16 Nov 2024 21:59:00 -0800
-Received: from kbuild by 1e3cc1889ffb with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tCYJF-0001a7-2g;
-	Sun, 17 Nov 2024 05:58:57 +0000
-Date: Sun, 17 Nov 2024 13:58:50 +0800
-From: kernel test robot <lkp@intel.com>
-To: Vadim Fedorenko <vadfed@meta.com>, Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Vadim Fedorenko <vadim.fedorenko@linux.dev>,
-	Mykola Lysenko <mykolal@fb.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, x86@kernel.org,
-	bpf@vger.kernel.org, Martin KaFai Lau <martin.lau@linux.dev>
-Subject: Re: [PATCH bpf-next v6 1/4] bpf: add bpf_get_cpu_cycles kfunc
-Message-ID: <202411171347.9Yb9hhnX-lkp@intel.com>
-References: <20241115194841.2108634-2-vadfed@meta.com>
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="I5XhPSiD"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Transfer-Encoding:
+	Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
+	Sender:Reply-To:Content-ID:Content-Description;
+	bh=pshiIs3frOWk0a9YBcwoAUViLhisC1xEmCnwHIj23MA=; b=I5XhPSiDYaBULLTJ4FiFE0Cves
+	a9n2Sg0Ig6GTtSO6ABAGVePvOdGx9abwZ9dAl5xACUslE41B285l1G4Vtjy6MVGpAEe5jhHid2tt6
+	HmT0i1A1C4C0bUqtghrY+lyQ4jL4ROjHFW1/UoNvMJhhVj185WyYwbrSDmhEU2sv+4fScOjrXx8Gx
+	nu0ugpUr5XUEHbf0EN1iGvPb4JmENI3B9gRj22/dqDL3cqAWa+W62muw0oOigh1jm72GU64uW/THH
+	BWSVA0ekDlMUmDInqcW1TriJ11Lhnyf+Up7kl1d7kdKugMG8989eg2knMCvKbhpd7ijQCxUuUPKiZ
+	KDB5sxsQ==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+	by desiato.infradead.org with esmtpsa (Exim 4.98 #2 (Red Hat Linux))
+	id 1tCcr0-000000007T5-3cpd;
+	Sun, 17 Nov 2024 10:50:07 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 04BC23006B7; Sun, 17 Nov 2024 11:50:06 +0100 (CET)
+Date: Sun, 17 Nov 2024 11:50:05 +0100
+From: Peter Zijlstra <peterz@infradead.org>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: bpf <bpf@vger.kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Vlastimil Babka <vbabka@suse.cz>, Hou Tao <houtao1@huawei.com>,
+	Johannes Weiner <hannes@cmpxchg.org>, shakeel.butt@linux.dev,
+	Michal Hocko <mhocko@suse.com>, Tejun Heo <tj@kernel.org>,
+	linux-mm <linux-mm@kvack.org>, Kernel Team <kernel-team@fb.com>
+Subject: Re: [PATCH bpf-next 1/2] mm, bpf: Introduce __GFP_TRYLOCK for
+ opportunistic page allocation
+Message-ID: <20241117105005.GA27667@noisy.programming.kicks-ass.net>
+References: <20241116014854.55141-1-alexei.starovoitov@gmail.com>
+ <20241116194202.GR22801@noisy.programming.kicks-ass.net>
+ <CAADnVQLOyY=Jvibq-hnv6dpXy+hAJFWojyHh7wuEiMn-itMvaw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20241115194841.2108634-2-vadfed@meta.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAADnVQLOyY=Jvibq-hnv6dpXy+hAJFWojyHh7wuEiMn-itMvaw@mail.gmail.com>
 
-Hi Vadim,
+On Sat, Nov 16, 2024 at 01:13:20PM -0800, Alexei Starovoitov wrote:
+> On Sat, Nov 16, 2024 at 11:42 AM Peter Zijlstra <peterz@infradead.org> wrote:
+> >
+> > On Fri, Nov 15, 2024 at 05:48:53PM -0800, Alexei Starovoitov wrote:
+> > > +static inline struct page *try_alloc_page_noprof(int nid)
+> > > +{
+> > > +     /* If spin_locks are not held and interrupts are enabled, use normal path. */
+> > > +     if (preemptible())
+> > > +             return alloc_pages_node_noprof(nid, GFP_NOWAIT | __GFP_ZERO, 0);
+> >
+> > This isn't right for PREEMPT_RT, spinlock_t will be preemptible, but you
+> > very much do not want regular allocation calls while inside the
+> > allocator itself for example.
+> 
+> I'm aware that spinlocks are preemptible in RT.
+> Here is my understanding of why the above is correct...
+> - preemptible() means that IRQs are not disabled and preempt_count == 0.
+> 
+> - All page alloc operations are protected either by
+> pcp_spin_trylock() or by spin_lock_irqsave(&zone->lock, flags)
+> or both together.
+> 
+> - In non-RT spin_lock_irqsave disables IRQs, so preemptible()
+> check guarantees that we're not holding zone->lock.
+> The page alloc logic can hold pcp lock when try_alloc_page() is called,
+> but it's always using pcp_trylock, so it's still ok to call it
+> with GFP_NOWAIT. pcp trylock will fail and zone->lock will proceed
+> to acquire zone->lock.
+> 
+> - In RT spin_lock_irqsave doesn't disable IRQs despite its name.
+> It calls rt_spin_lock() which calls rcu_read_lock()
+> which increments preempt_count.
 
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on bpf-next/master]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Vadim-Fedorenko/bpf-add-bpf_get_cpu_cycles-kfunc/20241117-002106
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
-patch link:    https://lore.kernel.org/r/20241115194841.2108634-2-vadfed%40meta.com
-patch subject: [PATCH bpf-next v6 1/4] bpf: add bpf_get_cpu_cycles kfunc
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20241117/202411171347.9Yb9hhnX-lkp@intel.com/config)
-compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241117/202411171347.9Yb9hhnX-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202411171347.9Yb9hhnX-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> ld.lld: error: undefined hidden symbol: pvclock_page
-   >>> referenced by pvclock.h:25 (arch/x86/include/asm/pvclock.h:25)
-   >>>               vmlinux.o:(vread_pvclock)
-   >>> referenced by gettimeofday.h:228 (arch/x86/include/asm/vdso/gettimeofday.h:228)
-   >>>               vmlinux.o:(vread_pvclock)
-   >>> referenced by pvclock.h:86 (arch/x86/include/asm/pvclock.h:86)
-   >>>               vmlinux.o:(vread_pvclock)
-   >>> referenced 4 more times
---
->> ld.lld: error: undefined hidden symbol: hvclock_page
-   >>> referenced by hyperv_timer.h:65 (include/clocksource/hyperv_timer.h:65)
-   >>>               vmlinux.o:(vread_hvclock)
-   >>> referenced by hyperv_timer.h:74 (include/clocksource/hyperv_timer.h:74)
-   >>>               vmlinux.o:(vread_hvclock)
-   >>> referenced by hyperv_timer.h:75 (include/clocksource/hyperv_timer.h:75)
-   >>>               vmlinux.o:(vread_hvclock)
-   >>> referenced 1 more times
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+It does not on PREEMPT_RCU, which is mandatory for PREEMPT_RT.
