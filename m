@@ -1,55 +1,53 @@
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5AFC1392
-	for <bpf@vger.kernel.org>; Sun, 17 Nov 2024 10:54:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF9F780054;
+	Sun, 17 Nov 2024 11:49:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731840879; cv=none; b=mzrdK71dnfaHObM42RkdKy7B+eCo4LXEBT1HBHSEXg3bxgmHu6KYQAUrbk2aqQjJn8W0I7jogQrKIXwGpSFvHHGrGAIykP+qVQjIZmsgdc+mUTffHJPgR+x/WqAS4sgvm27KYfF4CYNWhAQbiSAl6BgpmWnL+6TaFT1ljtDLIqo=
+	t=1731844199; cv=none; b=DHSgdlldv1lTY4BvwT49H7hnCNgmPak6Dd//CPHvGu65c8CPdfp5ktv7swBN94xSxkdclzEQB5KqYPcspAL4VTxnuXHckbIFmGCGsbRtasvc7SE9b62zT9TdVaWJxuYsYTrkhmYkmQWEtsil6czPVbS9xRG80WSSie5KN56tRNc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731840879; c=relaxed/simple;
-	bh=Pe/iO81j/gY8AcnuTZXUH7AN5K1YH2xoiEStLjEZeVE=;
+	s=arc-20240116; t=1731844199; c=relaxed/simple;
+	bh=BR6tEUEAXyNktteiJU0Ti9OpaPc5VMyZ8NsUTmLYRk4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BFuiXXSzzYOTiHOk4M/9sH6ad0ESWYf8v28qoWK2/WBmIMizHvbSobOiRVcaVuF2EpDk3QTypGouCcj4DcjOvGTH2FvaP0CmTOOhwEU+o7UCkH/HS6LOyZw920mbD89bF3UePHi2vc99saw+NXOgqXChQXTTTOmL2BUexAQ46jo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=biJo/NU9; arc=none smtp.client-ip=90.155.50.34
+	 Content-Type:Content-Disposition:In-Reply-To; b=dy0CqLNiIebhs4y4p8fVG15URJBLL0jHCqr8BeptMiMWQQMf9Mn9MsBzMFOvWPbFC/tu/sF1qsKWt1c2QTVXygyVxpj4JdSVK4n9nTcAWWV/sXyq2Ta44r3KGxmFMbzj4mRu0JZ5VKRJ0CHfnNtqNmaQIhLyfuZ+NW0iwhTfcKk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=LhASRHp6; arc=none smtp.client-ip=90.155.92.199
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="biJo/NU9"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="LhASRHp6"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
 	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
 	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=OCoqRWIGHsL5rtX+IV8/Gk+P9vZjZrxcGz8V37nCfYM=; b=biJo/NU9RX9dHQ6M+BMDgVdWs3
-	BYNY1QX5RiZBUXPsA5LIjrh0JMOd8ujD+dtruLrbroRPMcJrmCTlTv04Fcu5ohmEW7CUq2UzdOHTu
-	xO87IneWWv/Tsf5KKAfiYm7TdICauytRfIkQueZXfaMpupluGJL8Byls7V/CvgKZiM1KrAaFrE+T+
-	KoPMCeOkC7Mzx3z1R9KOVdfIhyrN1LOqJ6cmmfcINDPEsgIUxqtw8ub7amFgYoERSsn1IPQzJMer6
-	UqL6mGl5GonvrvW0noc3pLtlPBa2rT2zFgiDzppWaJFztfr6o6MnuVCHT7Gq+6TVekqg0YiWiMn3Z
-	fR61FVeg==;
+	bh=M/R6LRXdublxiC2V1kGQuuBfrcKBn4lBOlKqBBRk3QM=; b=LhASRHp6waAsZb724BndWI0NMu
+	1supTlUkplgKlO9Fj2BMINBr8rSQ3kcUSFkHNa9AJYjrpTonUfZpYjrkuNzOOIWFH4+/F4pscQ3wy
+	OnFMz+mOKvJUi16OWaR3iatQc04GYG6jT9DVk0/9Qz4VrARmN89pw72Mbz/YHrQyhG0bCJVRGkLC+
+	BwYiUhhuPxAchpxlTjmhOqJRfd2SeKbLF51XkKGqfAIV5Z5tOTdfc/kd7koejGMFECiDiQQC2NxN5
+	j9uaS8kxMMZ4YakdRar7eu8qKcH7j5CXstnhPPfOuXuPVT2vr3HmMEqxOCrU1b7m9lzMHx8CwGS7b
+	YFg+tE7A==;
 Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-	by casper.infradead.org with esmtpsa (Exim 4.98 #2 (Red Hat Linux))
-	id 1tCcv7-00000001vS7-0o9t;
-	Sun, 17 Nov 2024 10:54:23 +0000
+	by desiato.infradead.org with esmtpsa (Exim 4.98 #2 (Red Hat Linux))
+	id 1tCdml-000000007gm-1IyX;
+	Sun, 17 Nov 2024 11:49:47 +0000
 Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id B4A733006B7; Sun, 17 Nov 2024 11:54:21 +0100 (CET)
-Date: Sun, 17 Nov 2024 11:54:21 +0100
+	id B92A63006B7; Sun, 17 Nov 2024 12:49:46 +0100 (CET)
+Date: Sun, 17 Nov 2024 12:49:46 +0100
 From: Peter Zijlstra <peterz@infradead.org>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: bpf <bpf@vger.kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Vlastimil Babka <vbabka@suse.cz>, Hou Tao <houtao1@huawei.com>,
-	Johannes Weiner <hannes@cmpxchg.org>, shakeel.butt@linux.dev,
-	Michal Hocko <mhocko@suse.com>, Tejun Heo <tj@kernel.org>,
-	linux-mm <linux-mm@kvack.org>, Kernel Team <kernel-team@fb.com>
-Subject: Re: [PATCH bpf-next 1/2] mm, bpf: Introduce __GFP_TRYLOCK for
- opportunistic page allocation
-Message-ID: <20241117105421.GB27667@noisy.programming.kicks-ass.net>
-References: <20241116014854.55141-1-alexei.starovoitov@gmail.com>
- <20241116194202.GR22801@noisy.programming.kicks-ass.net>
- <CAADnVQLOyY=Jvibq-hnv6dpXy+hAJFWojyHh7wuEiMn-itMvaw@mail.gmail.com>
- <CAADnVQLA9CkUtcEyjvrTCPZfMWdDXGRzr1O-GD58XM6xjfLTJg@mail.gmail.com>
- <CAADnVQJm64vyeXehTVRbyFqHuuPQWgD-iBYqCChjQE+tHTbKGA@mail.gmail.com>
+To: Jiri Olsa <jolsa@kernel.org>
+Cc: Oleg Nesterov <oleg@redhat.com>, Andrii Nakryiko <andrii@kernel.org>,
+	bpf@vger.kernel.org, Song Liu <songliubraving@fb.com>,
+	Yonghong Song <yhs@fb.com>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Hao Luo <haoluo@google.com>, Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Alan Maguire <alan.maguire@oracle.com>,
+	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+	Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>
+Subject: Re: [RFC 00/11] uprobes: Add support to optimize usdt probes on
+ x86_64
+Message-ID: <20241117114946.GD27667@noisy.programming.kicks-ass.net>
+References: <20241105133405.2703607-1-jolsa@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -58,19 +56,28 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAADnVQJm64vyeXehTVRbyFqHuuPQWgD-iBYqCChjQE+tHTbKGA@mail.gmail.com>
+In-Reply-To: <20241105133405.2703607-1-jolsa@kernel.org>
 
-On Sat, Nov 16, 2024 at 01:41:41PM -0800, Alexei Starovoitov wrote:
-
-> > The maze of ifdef-s beat me :(
-> > It doesn't increment in PREEMPT_RCU.
-> > Need an additional check then. hmm.
+On Tue, Nov 05, 2024 at 02:33:54PM +0100, Jiri Olsa wrote:
+> hi,
+> this patchset adds support to optimize usdt probes on top of 5-byte
+> nop instruction.
 > 
-> Like:
-> if (preemptible() && !rcu_preempt_depth())
->   return alloc_pages_node_noprof(nid, GFP_NOWAIT | __GFP_ZERO, 0);
+> The generic approach (optimize all uprobes) is hard due to emulating
+> possible multiple original instructions and its related issues. The
+> usdt case, which stores 5-byte nop seems much easier, so starting
+> with that.
 > 
-> Not pretty, but should do.
+> The basic idea is to replace breakpoint exception with syscall which
+> is faster on x86_64. For more details please see changelog of patch 7.
 
-Yeah, I suppose that should work. Thanks!
+So this is really about the fact that syscalls are faster than traps on
+x86_64? Is there something similar on ARM64, or are they roughly the
+same speed there?
 
+That is, I don't think this scheme will work for the various RISC
+architectures, given their very limited immediate range turns a typical
+call into a multi-instruction trainwreck real quick.
+
+Now, that isn't a problem if their exceptions and syscalls are of equal
+speed.
