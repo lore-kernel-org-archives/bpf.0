@@ -1,117 +1,95 @@
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 388E7A945;
-	Sun, 17 Nov 2024 01:25:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.188
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59AC0EAFA
+	for <bpf@vger.kernel.org>; Sun, 17 Nov 2024 03:37:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731806743; cv=none; b=aEIdQkdIH2D6FjQboeib76W6NT4aTohAXS43rk1wFGnxsxfMETMoXr7GiBpyYgiHcIunnDyfte51UDYnixT/SDQNshRS+BJDU0NzdQvAmt43FzyLHQ6iztFKCXtKlqrbc+76gUHbMAwdnr/0kPyhKZ0qD5Fl5yfrdzbTuFL4l80=
+	t=1731814667; cv=none; b=Rng4EyWmqvqElavFOdhra+QI4mbRpiu17mZg4uRelTgN1Ilq3ExFNmkALkfQeqKDfNdEjpr0UjZ4suPPt3Awel86cifasbzTI0apbWZTSHRvH66nt5Uw6TdRim7fcr9ePse7qgCYFIHwR60OFCKkdjmLfi386qiHnD/XsA0M1Ww=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731806743; c=relaxed/simple;
-	bh=yRpliie+ArulndQE8yACjhS1R7McHB8t9iuOlOoptYs=;
-	h=Subject:To:CC:References:From:Message-ID:Date:MIME-Version:
-	 In-Reply-To:Content-Type; b=qo8xiGXZs5VrBwh3DkyvaeJXwS4fM30t7mQxp5uly+cEP6k7IsA/LWmY0JBDsrqLPT52MbGxB5/my88ASh62yc2Q0kk0OV35ZFQQujbu7NXmAIdL2IYKdcbtHsK2tSPfbEZ+CygZpEHX9oCYU/FmfxMfaNMPWSWZgGg7wXQtXbk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.188
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.88.105])
-	by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4XrY1S5XqQzpbK3;
-	Sun, 17 Nov 2024 09:23:40 +0800 (CST)
-Received: from kwepemh200010.china.huawei.com (unknown [7.202.181.119])
-	by mail.maildlp.com (Postfix) with ESMTPS id BBA2D1400D1;
-	Sun, 17 Nov 2024 09:25:32 +0800 (CST)
-Received: from [10.174.176.117] (10.174.176.117) by
- kwepemh200010.china.huawei.com (7.202.181.119) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Sun, 17 Nov 2024 09:24:50 +0800
-Subject: Re: [PATCH] bpf: Convert lpm_trie::lock to 'raw_spinlock_t'
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-	=?UTF-8?Q?Thomas_Wei=c3=9fschuh?= <linux@weissschuh.net>
-CC: Sebastian Andrzej Siewior <bigeasy@linutronix.de>, Thomas Gleixner
-	<tglx@linutronix.de>, Kunwu Chan <kunwu.chan@linux.dev>, Alexei Starovoitov
-	<ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko
-	<andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, Eddy Z
-	<eddyz87@gmail.com>, Song Liu <song@kernel.org>, Yonghong Song
-	<yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, KP
- Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo
-	<haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, <clrkwllms@kernel.org>,
-	Steven Rostedt <rostedt@goodmis.org>, bpf <bpf@vger.kernel.org>, LKML
-	<linux-kernel@vger.kernel.org>, <linux-rt-devel@lists.linux.dev>,
-	<syzbot+b506de56cbbb63148c33@syzkaller.appspotmail.com>,
-	=?UTF-8?Q?Thomas_Wei=c3=9fschuh?= <thomas.weissschuh@linutronix.de>
-References: <20241108063214.578120-1-kunwu.chan@linux.dev>
- <87v7wsmqv4.ffs@tglx> <1e5910b1-ea54-4b7a-a68b-a02634a517dd@linux.dev>
- <87sersyvuc.ffs@tglx> <20241116092102.O_30pj9W@linutronix.de>
- <CAADnVQ+ToRZ6ZQL44Z9TAn6c=ecqrDgrnJenH7-miHJSWe7Nsw@mail.gmail.com>
- <1ed46394-f065-4e8b-8f37-c450b0c1b3a9@t-8ch.de>
- <CAADnVQJBGKioLA0JuyCQdD-jRKn2bpb7A7r6Yo4drBb9G1tvbg@mail.gmail.com>
-From: Hou Tao <houtao1@huawei.com>
-Message-ID: <10d39b66-2be9-c023-bffe-ffae1de4ea41@huawei.com>
-Date: Sun, 17 Nov 2024 09:24:49 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+	s=arc-20240116; t=1731814667; c=relaxed/simple;
+	bh=DJ02RtNjrNPMn5Ag6Ve0e9HpyEO3fCUM3EcDrUJ0ROY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ZGoPHoc/9n53Z2MN5MSApRuYs4AmvwalBYe+7NPZd0Xo552cdIHZ/uM7bHpW1yQOH8oubj66Sj2olRt/0NT9EkVhC28U3ix2NgEJnVs4gNaZddWFeCfYhVsDlZOuGpq6FQeXVKu+HRGePLtw7BQKiWs+/CFRPQpootaqtjBGRoQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dHnAiepZ; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dHnAiepZ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1731814666; x=1763350666;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=DJ02RtNjrNPMn5Ag6Ve0e9HpyEO3fCUM3EcDrUJ0ROY=;
+  b=dHnAiepZaRUFNUh58yHnvY+w+UlKwdLdmmg98dnUXcdb5FJQnBj6BKqv
+   60XUgYNGYLflKOENRIJs3vZ64pX8zPFXZFBrhx12Rcsy7qL8SMlqdNrtq
+   lefFJejs4XIL9vXMbkdhC7OWhFnSUNGiTWXgytDLrO6U9KSXDZ8rtYCFM
+   /A9+H7yl3HLuqdtFsFeINZyMZwEQM90aYbPfD9nmpUpW0yYgZK02zw2kS
+   6bz/Zo5TibTzZotnhTD0YQ8cvyuNhhjjVuDZiYiY8tSzN2s0H1Nx3PW7X
+   HZ1NCBNrtiD9rPOKq9+bA7Jlm8U1e07KuLtiIssIsvaMhN6aOH7S7HdN8
+   g==;
+X-CSE-ConnectionGUID: bVNvsatyRD2dZ+Ui6QP6bQ==
+X-CSE-MsgGUID: rqksREolRSC4aHb/1vE2mA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11258"; a="35558698"
+X-IronPort-AV: E=Sophos;i="6.12,161,1728975600"; 
+   d="scan'208";a="35558698"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2024 19:37:45 -0800
+X-CSE-ConnectionGUID: oK2cWgXRQKq6Tb1rTFy8yg==
+X-CSE-MsgGUID: enb6Q7l8S6q6byp8BWuj8g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,161,1728975600"; 
+   d="scan'208";a="88802284"
+Received: from lkp-server01.sh.intel.com (HELO 1e3cc1889ffb) ([10.239.97.150])
+  by orviesa010.jf.intel.com with ESMTP; 16 Nov 2024 19:37:43 -0800
+Received: from kbuild by 1e3cc1889ffb with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tCW6W-0001Mn-20;
+	Sun, 17 Nov 2024 03:37:40 +0000
+Date: Sun, 17 Nov 2024 11:36:57 +0800
+From: kernel test robot <lkp@intel.com>
+To: Ryan Wilson <ryantimwilson@gmail.com>, bpf@vger.kernel.org,
+	ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net
+Cc: oe-kbuild-all@lists.linux.dev, ryantimwilson@meta.com
+Subject: Re: [PATCH bpf-next] bpf: Add multi-prog support for XDP BPF programs
+Message-ID: <202411171129.PWAzidIE-lkp@intel.com>
+References: <20241114170721.3939099-1-ryantimwilson@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <CAADnVQJBGKioLA0JuyCQdD-jRKn2bpb7A7r6Yo4drBb9G1tvbg@mail.gmail.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- kwepemh200010.china.huawei.com (7.202.181.119)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241114170721.3939099-1-ryantimwilson@gmail.com>
 
-Hi,
+Hi Ryan,
 
-On 11/17/2024 12:42 AM, Alexei Starovoitov wrote:
-> On Sat, Nov 16, 2024 at 8:15 AM Thomas Weißschuh <linux@weissschuh.net> wrote:
->> On 2024-11-16 08:01:49-0800, Alexei Starovoitov wrote:
->>> On Sat, Nov 16, 2024 at 1:21 AM Sebastian Andrzej Siewior
->>> <bigeasy@linutronix.de> wrote:
->>>> On 2024-11-15 23:29:31 [+0100], Thomas Gleixner wrote:
->>>>> IIRC, BPF has it's own allocator which can be used everywhere.
->>>> Thomas Weißschuh made something. It appears to work. Need to take a
->>>> closer look.
->>> Any more details?
->>> bpf_mem_alloc is a stop gap.
->> It is indeed using bpf_mem_alloc.
->> It is a fairly straightforward conversion, using one cache for
->> intermediate and one for non-intermediate nodes.
-> Sounds like you're proposing to allocate two lpm specific bpf_ma-s ?
-> Just use bpf_global_ma.
-> More ma-s means more memory pinned in bpf specific freelists.
-> That's the main reason to teach slub and page_alloc about bpf requirements.
-> All memory should be shared by all subsystems.
-> Custom memory pools / freelists, whether it's bpf, networking
-> or whatever else, is a pain point for somebody.
-> The kernel needs to be optimal for all use cases.
+kernel test robot noticed the following build errors:
 
-I have been working on it since last week [1] and have already written a
-patch (a patch in a patch set) for it. In my patch, these two allocators
-will be merged if they are mergable and now the merge is decided by the
-return value of kmalloc_size_roundup(). Also considering about using
-bpf_global_ma instead, but the biggest problem for bpf_global_ma is the
-memory accounting. The allocated memory will be accounted under root
-memory cgroup instead of the memory cgroup of users.
+[auto build test ERROR on bpf-next/master]
 
-[1]:
-https://lore.kernel.org/bpf/e14d8882-4760-7c9c-0cfc-db04eda494ee@huaweicloud.com/
->
->> I'll try to send it early next week.
-> Looking forward.
->
->>> As Vlastimil Babka suggested long ago:
->>> https://lwn.net/Articles/974138/
->>> "...next on the target list is the special allocator used by the BPF
->>> subsystem. This allocator is intended to succeed in any calling
->>> context, including in non-maskable interrupts (NMIs). BPF maintainer
->>> Alexei Starovoitov is evidently in favor of this removal if SLUB is
->>> able to handle the same use cases..."
->>>
->>> Here is the first step:
->>> https://lore.kernel.org/bpf/20241116014854.55141-1-alexei.starovoitov@gmail.com/
->
-> .
+url:    https://github.com/intel-lab-lkp/linux/commits/Ryan-Wilson/bpf-Add-multi-prog-support-for-XDP-BPF-programs/20241115-015104
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
+patch link:    https://lore.kernel.org/r/20241114170721.3939099-1-ryantimwilson%40gmail.com
+patch subject: [PATCH bpf-next] bpf: Add multi-prog support for XDP BPF programs
+config: openrisc-defconfig (https://download.01.org/0day-ci/archive/20241117/202411171129.PWAzidIE-lkp@intel.com/config)
+compiler: or1k-linux-gcc (GCC) 14.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241117/202411171129.PWAzidIE-lkp@intel.com/reproduce)
 
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202411171129.PWAzidIE-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   or1k-linux-ld: net/core/dev.o: in function `dev_xdp_attach_netlink.constprop.0':
+>> dev.c:(.text+0x12290): undefined reference to `bpf_mprog_detach'
+>> dev.c:(.text+0x12290): relocation truncated to fit: R_OR1K_INSN_REL_26 against undefined symbol `bpf_mprog_detach'
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
