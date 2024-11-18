@@ -1,28 +1,28 @@
 Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEDCD1946B
-	for <bpf@vger.kernel.org>; Mon, 18 Nov 2024 01:13:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A40CEEBB
+	for <bpf@vger.kernel.org>; Mon, 18 Nov 2024 01:13:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731892438; cv=none; b=VoxCEAdqCmlksSO2TyZItJWJ9dr0TIrwSlU14nVHDl7I9CSxUqS69FBWViXiAELPBa5W76tcbydKRpGIVeJPWBOxFcUJnbXCwLa1eTrp7WohqESlTYs5nV+Kz1BdJ6G5+8hTX22gVj/8GkTl4nel48P2E5YWGrtg1Kz3Vrj+WPo=
+	t=1731892439; cv=none; b=rOXk1KfDcN7D0eyMRs0GB6lMjKdWirDR+eOFd93HZK3YsBy0TkrqTIG3GUHz1w8FWWoKyipH9T08iRiDtnvQ8DX7IYIW7hBYw3tmzE4bOc0R7UGcNY3ysVorvTpylJ2vJK/5cEjF39F1XYAwRTHDwDzQ9XvaelwCzrnDaiP8isU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731892438; c=relaxed/simple;
-	bh=YkIbSCeD1PXhVNI3KRAxnUyBFPS+VmerbPTNXeFCgJA=;
+	s=arc-20240116; t=1731892439; c=relaxed/simple;
+	bh=5SF4SXib61J8oIfFNFEz4RzsVwOlAf+XGfIVJWzhiak=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=kSJvFkZ3K8Ak5zxeia3DMet1f2jEv4eSqJO0bdvaMUX4T5MD84U0QgNeoa9z4kcAHc7LToL/KtAcU+YmX/fwmQzjDH1D2Y1hxhSbHEv3FmA2YBYNNdh2AWX1Kex1k0+qv6E/98nd2AeJltkT7IH8qY4CHqhpcJtewLZ+Wev5mtY=
+	 MIME-Version; b=FzeKx05zE1iJodgDjvrK6Kvcj6vcjh5p/cMYiQ2U4bvFTeN9tfIxW1LuGTjcQjBJSw5de1iZ7lgrKha9VKwkODiozIxsMEhG2Pd48V0q9IzYBsLSOKLz+lfd9rO3T9E/2tr5/5vTVziOXTAaRiDrSS4aawdDxY/kuaSX0jp96yQ=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.235])
-	by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4Xs8Ls40S7z4f3jt9
-	for <bpf@vger.kernel.org>; Mon, 18 Nov 2024 08:55:49 +0800 (CST)
+Received: from mail.maildlp.com (unknown [172.19.163.216])
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4Xs8Lj3kfqz4f3lfV
+	for <bpf@vger.kernel.org>; Mon, 18 Nov 2024 08:55:41 +0800 (CST)
 Received: from mail02.huawei.com (unknown [10.116.40.128])
-	by mail.maildlp.com (Postfix) with ESMTP id DFF951A0568
-	for <bpf@vger.kernel.org>; Mon, 18 Nov 2024 08:56:02 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTP id D59BE1A0196
+	for <bpf@vger.kernel.org>; Mon, 18 Nov 2024 08:56:00 +0800 (CST)
 Received: from huaweicloud.com (unknown [10.175.124.27])
-	by APP4 (Coremail) with SMTP id gCh0CgCXc4eckDpn2G5fCA--.44635S10;
-	Mon, 18 Nov 2024 08:56:02 +0800 (CST)
+	by APP4 (Coremail) with SMTP id gCh0CgCXc4eckDpn2G5fCA--.44635S7;
+	Mon, 18 Nov 2024 08:56:00 +0800 (CST)
 From: Hou Tao <houtao@huaweicloud.com>
 To: bpf@vger.kernel.org
 Cc: Martin KaFai Lau <martin.lau@linux.dev>,
@@ -42,9 +42,9 @@ Cc: Martin KaFai Lau <martin.lau@linux.dev>,
 	=?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>,
 	houtao1@huawei.com,
 	xukuohai@huawei.com
-Subject: [PATCH bpf-next 06/10] bpf: Add bpf_mem_cache_is_mergeable() helper
-Date: Mon, 18 Nov 2024 09:08:04 +0800
-Message-Id: <20241118010808.2243555-7-houtao@huaweicloud.com>
+Subject: [PATCH bpf-next 03/10] bpf: Handle BPF_EXIST and BPF_NOEXIST for LPM trie
+Date: Mon, 18 Nov 2024 09:08:01 +0800
+Message-Id: <20241118010808.2243555-4-houtao@huaweicloud.com>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20241118010808.2243555-1-houtao@huaweicloud.com>
 References: <20241118010808.2243555-1-houtao@huaweicloud.com>
@@ -55,69 +55,86 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:gCh0CgCXc4eckDpn2G5fCA--.44635S10
-X-Coremail-Antispam: 1UD129KBjvJXoW7Kw4DCryUJFWkXF1UXFW8WFg_yoW8Ww4fpF
-	W2kr18AF4FvF48Xw47Wrn2ya98Xw4Ig3W7Ka43XryUur13urnrGws8Gry7XF9Yvrs8KF40
-	kr1DKr4fC348ZrJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUPvb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAV
-	Cq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0
-	rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x0267
-	AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E
-	14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7
-	xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Y
-	z7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2
-	AFwI0_GFv_Wryl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAq
-	x4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6r
-	W5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2IY6xkF
-	7I0E14v26r4UJVWxJr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14
-	v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuY
-	vjxUI-eODUUUU
+X-CM-TRANSID:gCh0CgCXc4eckDpn2G5fCA--.44635S7
+X-Coremail-Antispam: 1UD129KBjvJXoW7Cr1xGryUWrWrCr45Kr1rZwb_yoW8XFyfpF
+	1SkFWYkrW8Wr13Ca1Sv3Z8Jry5Ga4rG3y29FyxA34ayrWjyF9IgF1ruay5tr43trWxZrW3
+	AF4rtFWDKryq9rJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUP2b4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUWw
+	A2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
+	w2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
+	W8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v2
+	6rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMc
+	Ij6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_
+	Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AFwI
+	0_GFv_Wryl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG
+	67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MI
+	IYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E
+	14v26F4j6r4UJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr
+	0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU04x
+	RDUUUUU==
 X-CM-SenderInfo: xkrx3t3r6k3tpzhluzxrxghudrp/
 
 From: Hou Tao <houtao1@huawei.com>
 
-Add bpf_mem_cache_is_mergeable() to check whether two bpf mem allocator
-for fixed-size objects are mergeable or not. The merging could reduce
-the memory overhead of bpf mem allocator.
+There is exact match during the update of LPM trie, therefore, add the
+missed handling for BPF_EXIST and BPF_NOEXIST flags.
 
 Signed-off-by: Hou Tao <houtao1@huawei.com>
 ---
- include/linux/bpf_mem_alloc.h |  1 +
- kernel/bpf/memalloc.c         | 12 ++++++++++++
- 2 files changed, 13 insertions(+)
+ kernel/bpf/lpm_trie.c | 23 ++++++++++++++++++++---
+ 1 file changed, 20 insertions(+), 3 deletions(-)
 
-diff --git a/include/linux/bpf_mem_alloc.h b/include/linux/bpf_mem_alloc.h
-index e45162ef59bb..faa54b9c7a04 100644
---- a/include/linux/bpf_mem_alloc.h
-+++ b/include/linux/bpf_mem_alloc.h
-@@ -47,5 +47,6 @@ void bpf_mem_cache_free(struct bpf_mem_alloc *ma, void *ptr);
- void bpf_mem_cache_free_rcu(struct bpf_mem_alloc *ma, void *ptr);
- void bpf_mem_cache_raw_free(void *ptr);
- void *bpf_mem_cache_alloc_flags(struct bpf_mem_alloc *ma, gfp_t flags);
-+bool bpf_mem_cache_is_mergeable(size_t size, size_t new_size, bool percpu);
- 
- #endif /* _BPF_MEM_ALLOC_H */
-diff --git a/kernel/bpf/memalloc.c b/kernel/bpf/memalloc.c
-index 889374722d0a..49dd08ad1d4f 100644
---- a/kernel/bpf/memalloc.c
-+++ b/kernel/bpf/memalloc.c
-@@ -1014,3 +1014,15 @@ int bpf_mem_alloc_check_size(bool percpu, size_t size)
- 
- 	return 0;
- }
+diff --git a/kernel/bpf/lpm_trie.c b/kernel/bpf/lpm_trie.c
+index c6f036e3044b..4300bd51ec6e 100644
+--- a/kernel/bpf/lpm_trie.c
++++ b/kernel/bpf/lpm_trie.c
+@@ -375,6 +375,10 @@ static long trie_update_elem(struct bpf_map *map,
+ 	 * simply assign the @new_node to that slot and be done.
+ 	 */
+ 	if (!node) {
++		if (flags == BPF_EXIST) {
++			ret = -ENOENT;
++			goto out;
++		}
+ 		rcu_assign_pointer(*slot, new_node);
+ 		goto out;
+ 	}
+@@ -383,18 +387,31 @@ static long trie_update_elem(struct bpf_map *map,
+ 	 * which already has the correct data array set.
+ 	 */
+ 	if (node->prefixlen == matchlen) {
++		if (!(node->flags & LPM_TREE_NODE_FLAG_IM)) {
++			if (flags == BPF_NOEXIST) {
++				ret = -EEXIST;
++				goto out;
++			}
++			trie->n_entries--;
++		} else if (flags == BPF_EXIST) {
++			ret = -ENOENT;
++			goto out;
++		}
 +
-+bool bpf_mem_cache_is_mergeable(size_t size, size_t new_size, bool percpu)
-+{
-+	/* Only for fixed-size object allocator */
-+	if (!size || !new_size)
-+		return false;
+ 		new_node->child[0] = node->child[0];
+ 		new_node->child[1] = node->child[1];
+ 
+-		if (!(node->flags & LPM_TREE_NODE_FLAG_IM))
+-			trie->n_entries--;
+-
+ 		rcu_assign_pointer(*slot, new_node);
+ 		free_node = node;
+ 
+ 		goto out;
+ 	}
+ 
++	if (flags == BPF_EXIST) {
++		ret = -ENOENT;
++		goto out;
++	}
 +
-+	return (percpu && ALIGN(size, PCPU_MIN_ALLOC_SIZE) ==
-+			  ALIGN(new_size, PCPU_MIN_ALLOC_SIZE)) ||
-+	       (!percpu && kmalloc_size_roundup(size + LLIST_NODE_SZ) ==
-+			   kmalloc_size_roundup(new_size + LLIST_NODE_SZ));
-+}
+ 	/* If the new node matches the prefix completely, it must be inserted
+ 	 * as an ancestor. Simply insert it between @node and *@slot.
+ 	 */
 -- 
 2.29.2
 
