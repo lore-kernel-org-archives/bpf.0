@@ -1,120 +1,88 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E753525760;
-	Mon, 18 Nov 2024 04:16:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7F4A13D50C
+	for <bpf@vger.kernel.org>; Mon, 18 Nov 2024 06:20:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731903374; cv=none; b=uCrRESrwtGnPLblo8Io3UqZS5E3b/x8Mf28jApqALxmsAyaNezjJZ0nxHHdPyRrUmv5uxwjpISuVAQwZ4HXOznR//tA5+4lhJeZvUYxN3sNxbD6wBvLDz/IPcLFHyWo3lXMYgtzZOghIQhZTfak6y7L0PLdYWK9GgGb/7fiPv6Y=
+	t=1731910834; cv=none; b=SCoq6EegCAQ1j+y0cyiH9ugfVfzL1DqHom5U0XHDOQc6M8E1k6Y9VPhMKSbhV/YMT90kcjDs5YvopAv8nXDeGbDHN0VKgg400SFAEwU4Zp9J9m+7rGmnZjnL461FXFT9zB/Ok4uU0jPZCU45VZDbMMdzVT+fQ7OplTVNbqUOksc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731903374; c=relaxed/simple;
-	bh=+kTbOpdo0OuywXlLwtJIwaTwO0qz6pqXuSdPodIB3bU=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=BUUnFwAr+xeFMv7bm1BwjH8JX8HJfpjXxADH0rz+Iiwd+2Vpx6+BO6d2mdVo0Gw6oq51ROp+k1j18+YJlfa9hEVl+bFi9QtHHsqVJfDz8TlXgrDRPx/AWBgENH5JvVK70zWb1YGE9IdR4VIPAdNsR8gB45C41SX9zpPvKCTGUZY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Ab8C/0a+; arc=none smtp.client-ip=192.198.163.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Ab8C/0a+"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1731903372; x=1763439372;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=+kTbOpdo0OuywXlLwtJIwaTwO0qz6pqXuSdPodIB3bU=;
-  b=Ab8C/0a+q9FyzkPFeDeIsrriJdaV7uY0F6pN8XNzo/l5SIiwZcxOj0cm
-   K7vpx7kkhoaRpMYaYOLZ9lQHkTaTo75giz9xVjhfrvkkdJrsIkVJKX9H2
-   moSTSsntAj2LY7cY1URKlIUCYdYv3uw10fypvOEiOeYgwtUZyLkIa10z0
-   dL/Gycmz03cyfAb+kjh9tXiuDl8u1kxfYt0XuzRNP/dfIWZKWtqh/8DI9
-   IPRv8eY0MXmLAma6SeyDINW6x3HVAmzZESRSYkbfM3mQaKEAIxl3ueJaT
-   n3HXYyBfzgXevDvaCzXZ4R95ycqRvo/v2PmaoaJcg9XpAf9NKM9mGb9sQ
-   g==;
-X-CSE-ConnectionGUID: Hhirg3EURImxJie8TDhiLg==
-X-CSE-MsgGUID: CuwfljY9RXKaYEXla1VttA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11259"; a="34699879"
-X-IronPort-AV: E=Sophos;i="6.12,163,1728975600"; 
-   d="scan'208";a="34699879"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2024 20:16:11 -0800
-X-CSE-ConnectionGUID: C+3iAYv2SFyg/X7ST70BDA==
-X-CSE-MsgGUID: c4UaTHy9SEGeVVTPYjp+tQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,163,1728975600"; 
-   d="scan'208";a="94037833"
-Received: from p12ill20yoongsia.png.intel.com ([10.88.227.28])
-  by orviesa005.jf.intel.com with ESMTP; 17 Nov 2024 20:16:08 -0800
-From: Song Yoong Siang <yoong.siang.song@intel.com>
-To: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	"David S . Miller" <davem@davemloft.net>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Tony Nguyen <anthony.l.nguyen@intel.com>,
-	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	Eric Dumazet <edumazet@google.com>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Vinicius Costa Gomes <vinicius.gomes@intel.com>
-Cc: intel-wired-lan@lists.osuosl.org,
-	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org
-Subject: [PATCH iwl-next 1/1] igc: Allow hot-swapping XDP program
-Date: Mon, 18 Nov 2024 12:15:45 +0800
-Message-Id: <20241118041545.1845287-1-yoong.siang.song@intel.com>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1731910834; c=relaxed/simple;
+	bh=tTspQRPqL6psxjcaDar8pXC8pPqUmv1tiUZplSfH9MY=;
+	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=BXbtSN3KHyI4JbQN7Rfy714v43RWwgRQpKE6NGYJAajlMtNZs56iE8Mm3DWC9G/sI0hrvB6Jr/8V4Vq7izKJkMMMnknXIKe1GTjfmHwy3SJ1UWbCbaJzMY3S5eVPBHF0waLrwApfe0sGITl7zSgV1krQNjv2i1+ZP+y770Oyc+U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.235])
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4XsHY300sYz4f3lg7
+	for <bpf@vger.kernel.org>; Mon, 18 Nov 2024 14:20:06 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.128])
+	by mail.maildlp.com (Postfix) with ESMTP id 54E381A06D7
+	for <bpf@vger.kernel.org>; Mon, 18 Nov 2024 14:20:26 +0800 (CST)
+Received: from [10.174.176.117] (unknown [10.174.176.117])
+	by APP4 (Coremail) with SMTP id gCh0CgAX84ak3Dpns0t1CA--.55900S2;
+	Mon, 18 Nov 2024 14:20:23 +0800 (CST)
+Subject: Re: [PATCH bpf-next 00/10] Fixes for LPM trie
+To: bot+bpf-ci@kernel.org
+Cc: kernel-ci@meta.com, andrii@kernel.org, daniel@iogearbox.net,
+ martin.lau@linux.dev, bpf <bpf@vger.kernel.org>
+References: <20241118010808.2243555-1-houtao@huaweicloud.com>
+ <46268aa9ef13a24388af833b17f6cef8bdd3a7be8402fec7640e65a2f1118468@mail.kernel.org>
+From: Hou Tao <houtao@huaweicloud.com>
+Message-ID: <fd947bab-1445-4d43-ce7e-ed53697d466a@huaweicloud.com>
+Date: Mon, 18 Nov 2024 14:20:20 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <46268aa9ef13a24388af833b17f6cef8bdd3a7be8402fec7640e65a2f1118468@mail.kernel.org>
+Content-Type: text/plain; charset=windows-1252
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-CM-TRANSID:gCh0CgAX84ak3Dpns0t1CA--.55900S2
+X-Coremail-Antispam: 1UD129KBjvdXoW7GF15Gr4UGw47Zw45uFy8Zrb_yoW3uFXEkw
+	4kur97GrnxA3Z8KF1xXr4xWFs2gry8ZFyFyr4DtrW7Zwn0kryDXrs5Gr93ZF98Xa9xXr9x
+	Z3Z3J390krnxCjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+	9fnUUIcSsGvfJTRUUUbxxYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20E
+	Y4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwV
+	A0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x02
+	67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I
+	0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+	x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+	0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0VAS07AlzVAYIcxG8wCY1x0262kKe7AK
+	xVWUAVWUtwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F4
+	0E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1l
+	IxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxV
+	AFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j
+	6F4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuYvjxU7I
+	JmUUUUU
+X-CM-SenderInfo: xkrx3t3r6k3tpzhluzxrxghudrp/
 
-Currently, the driver would always close and reopen the network interface
-when setting/removing the XDP program, regardless of the presence of XDP
-resources. This could cause unnecessary disruptions.
+Hi,
 
-To avoid this, introduces a check to determine if there is a need to
-close and reopen the interface, allowing for seamless hot-swapping of
-XDP programs.
+On 11/18/2024 9:42 AM, bot+bpf-ci@kernel.org wrote:
+> Dear patch submitter,
+>
+> CI has tested the following submission:
+> Status:     SUCCESS
+> Name:       [bpf-next,00/10] Fixes for LPM trie
+> Patchwork:  https://patchwork.kernel.org/project/netdevbpf/list/?series=910440&state=*
+> Matrix:     https://github.com/kernel-patches/bpf/actions/runs/11884065937
+>
+> No further action is necessary on your part.
+>
+>
+> Please note: this email is coming from an unmonitored mailbox. If you have
+> questions or feedback, please reach out to the Meta Kernel CI team at
+> kernel-ci@meta.com.
 
-Signed-off-by: Song Yoong Siang <yoong.siang.song@intel.com>
----
- drivers/net/ethernet/intel/igc/igc_xdp.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+I am curious about the reason on why test_maps on s390 is disabled. If I
+remember correctly, test_maps on s390 was still enabled last year [1].
 
-diff --git a/drivers/net/ethernet/intel/igc/igc_xdp.c b/drivers/net/ethernet/intel/igc/igc_xdp.c
-index e27af72aada8..869815f48ac1 100644
---- a/drivers/net/ethernet/intel/igc/igc_xdp.c
-+++ b/drivers/net/ethernet/intel/igc/igc_xdp.c
-@@ -13,6 +13,7 @@ int igc_xdp_set_prog(struct igc_adapter *adapter, struct bpf_prog *prog,
- 	struct net_device *dev = adapter->netdev;
- 	bool if_running = netif_running(dev);
- 	struct bpf_prog *old_prog;
-+	bool need_update;
- 
- 	if (dev->mtu > ETH_DATA_LEN) {
- 		/* For now, the driver doesn't support XDP functionality with
-@@ -22,7 +23,8 @@ int igc_xdp_set_prog(struct igc_adapter *adapter, struct bpf_prog *prog,
- 		return -EOPNOTSUPP;
- 	}
- 
--	if (if_running)
-+	need_update = !!adapter->xdp_prog != !!prog;
-+	if (if_running && need_update)
- 		igc_close(dev);
- 
- 	old_prog = xchg(&adapter->xdp_prog, prog);
-@@ -34,7 +36,7 @@ int igc_xdp_set_prog(struct igc_adapter *adapter, struct bpf_prog *prog,
- 	else
- 		xdp_features_clear_redirect_target(dev);
- 
--	if (if_running)
-+	if (if_running && need_update)
- 		igc_open(dev);
- 
- 	return 0;
--- 
-2.34.1
+[1]: https://github.com/kernel-patches/bpf/actions/runs/7164372250
 
