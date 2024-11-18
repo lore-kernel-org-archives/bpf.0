@@ -1,27 +1,28 @@
-Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.5])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 716A729CF4;
-	Mon, 18 Nov 2024 03:10:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.5
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.3])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6AFA53BBF2;
+	Mon, 18 Nov 2024 03:11:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.3
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731899447; cv=none; b=WdqTUFb5ZX4cu9ltFeexMZi8tTOJpgiWj8dizO6VPJf+eR1IPt/QWtJpboS/+rOeOXHZfqShbVgedaMXWJvPt+dGO1iT4FckgbkR+A7Sz4lvDIQ8CUY6fSaV8l3HzFyL05ZgbKS4tTBFNSggK0Touh7VXGXiPnIHSHRVLM/psVA=
+	t=1731899466; cv=none; b=ikXYNdK7YcHWVdcq4GIQD+lJZGdXDhxfeCFP27HsIrluSa8MKp3vH+aMUiaNrV/D3GQ38PICO//wE1BBNovgnBcpOttIxXOEQtKNL3Kwnkn5hXrItDBSAnL+KYoOdrtNhyFFAZ1T2S53yAozaXudDQaxzHzVNm3OtYxRWdhW5oU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731899447; c=relaxed/simple;
-	bh=B/+10sqbKSupSATuAe447F4+PEOQapad9igdJjmyZfY=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=c+u+R2gHOMB7roTPrCgvckBN3Fl06mHQ7/8hdEPRrCljiG7OyODWBVdcl25i+x5MimIV3Co3HDvsYc0FPrX2KGByZ6l8hCBuaOtc0mkxyuZ3nXFY0NQbcuSLoBeC0R1SQHlNh8+hiXlqNHXzItVj3lDb3QxB1Kvh8Mibp+ZaaE4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=hICkSiS3; arc=none smtp.client-ip=117.135.210.5
+	s=arc-20240116; t=1731899466; c=relaxed/simple;
+	bh=m1Bf8pTAXZVAmctcbTeIv1DRTTkwBXvgdiGG7t0IUt0=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=TnehGfQ1xQWRInq2jULFam4Ek4fv0pkY2vIUqC4MMt99gYqepldKS+PT+Qpz7vkpQSWPigOkSn9eH/hmtlaaO01X+qqHTLrVA+nQCI2EdNNvqgK3JApKEHoTn+Ng8sWYWdz5SGe38cNXQYlsW1js4Hkf/6AEqsCTwYLos+nObCM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=QmA5W5u8; arc=none smtp.client-ip=117.135.210.3
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="hICkSiS3"
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="QmA5W5u8"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:Subject:Date:Message-ID:MIME-Version; bh=sUror
-	PIhK+TqCTUr2mfTT198WUfxzfyaZdwozHF9NK0=; b=hICkSiS39dcHt3DiJ9IjV
-	F8tN8DGHHbkehV044Txi2wEzFIbqfpaUIUBrP9w1JTbwzibez2Fi2BWT9EcpdSza
-	zKv3HDqJOrAGFa0B/8/4HuCLgGIKJ2FezE8HrFJKkCNsEMWhrIRIb/qfX/l/y0/A
-	u2l/UjLp/vNSX6tv/BC9t4=
+	s=s110527; h=From:Subject:Date:Message-ID:MIME-Version; bh=DvEpP
+	j+D0VN2cgQ0y1KaqjfX8SObfBeJKjuhl+zvTNM=; b=QmA5W5u8bkbfqnKWVBzpK
+	Kivjt5RN9meZxvr3xcC7q6k636mcuDwSKmxCBNGN/JRoyv7FN9d/4HpnlwgYjVy0
+	+O6wvbBbV5Mly9YyKKaTUW5yRtyS2Kb82rF0hgZMWWs39Dwvt8LWUgOh683STZTm
+	PAV9kwhkkBKwXTztHgKbGw=
 Received: from localhost.localdomain (unknown [47.252.33.72])
-	by gzga-smtp-mtada-g0-1 (Coremail) with SMTP id _____wDnTyXirzpnA_TwCQ--.780S2;
-	Mon, 18 Nov 2024 11:09:31 +0800 (CST)
+	by gzga-smtp-mtada-g0-1 (Coremail) with SMTP id _____wDnTyXirzpnA_TwCQ--.780S4;
+	Mon, 18 Nov 2024 11:10:01 +0800 (CST)
 From: Jiayuan Chen <mrpre@163.com>
 To: martin.lau@linux.dev,
 	edumazet@google.com,
@@ -50,10 +51,12 @@ Cc: mykolal@fb.com,
 	mhal@rbox.co,
 	yonghong.song@linux.dev,
 	Jiayuan Chen <mrpre@163.com>
-Subject: [PATCH bpf v4 0/2] bpf: fix recursive lock and add test
-Date: Mon, 18 Nov 2024 11:09:08 +0800
-Message-ID: <20241118030910.36230-1-mrpre@163.com>
+Subject: [PATCH bpf v4 2/2] selftests/bpf: Add some tests with sockmap SK_PASS
+Date: Mon, 18 Nov 2024 11:09:10 +0800
+Message-ID: <20241118030910.36230-3-mrpre@163.com>
 X-Mailer: git-send-email 2.43.5
+In-Reply-To: <20241118030910.36230-1-mrpre@163.com>
+References: <20241118030910.36230-1-mrpre@163.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -61,36 +64,92 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wDnTyXirzpnA_TwCQ--.780S2
-X-Coremail-Antispam: 1Uf129KBjvdXoWruw4rWF1fZFyfCw4ktryrWFg_yoWfKrX_ur
-	Wjy34kJ3srJF45tFWjqanY9Fy093y0y348AFy3tr129w47Zrs8ZF4kur9Yy34UZa1fA34a
-	q3W5urZaywsxWjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-	9fnUUvcSsGvfC2KfnxnUUI43ZEXa7xRXXo2UUUUUU==
-X-CM-SenderInfo: xpus2vi6rwjhhfrp/1tbiDxqbp2c6rMNmmAAAsl
+X-CM-TRANSID:_____wDnTyXirzpnA_TwCQ--.780S4
+X-Coremail-Antispam: 1Uf129KBjvJXoWxGr4DJrWkXFyDJr4rAr47Arb_yoW5WFW5pa
+	4kC34YkFs3Aa42qrs8Gw1I9Fy5WF4rZ3y5KF4jg345CrnrWr1fur1xKayYyr1fGrZaq3W8
+	uw13uayfG34UJFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0ziyrWrUUUUU=
+X-CM-SenderInfo: xpus2vi6rwjhhfrp/1tbiDwibp2c6rMNqYAAAsD
 
-1. fix recursive lock when ebpf prog return SK_PASS.
-2. add selftest to reproduce recursive lock.
+Add a new tests in sockmap_basic.c to test SK_PASS for sockmap
 
-Note that the test code can reproduce the 'dead-lock' and if just
-the selftest merged without first patch, the test case will
-definitely fail, because the issue of deadlock is inevitable.
-
+Signed-off-by: Jiayuan Chen <mrpre@163.com>
 ---
-v2->v4: fix line length reported by patchwork and remove unused code.
-        (max_line_length is set to 80 in patchwork but default is 100 in kernel tree)
-v1->v2: 1.inspired by martin.lau to add selftest to reproduce the issue.
-        2. follow the community rules for patch.
-        v1: https://lore.kernel.org/bpf/55fc6114-7e64-4b65-86d2-92cfd1e9e92f@linux.dev/T/#u
----
-
-Jiayuan Chen (2):
-  bpf: fix recursive lock when verdict program return SK_PASS
-  selftests/bpf: Add some tests with sockmap SK_PASS
-
- net/core/skmsg.c                              |  4 +-
  .../selftests/bpf/prog_tests/sockmap_basic.c  | 54 +++++++++++++++++++
- 2 files changed, 56 insertions(+), 2 deletions(-)
+ 1 file changed, 54 insertions(+)
 
+diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
+index 82bfb266741c..a2041f8e32eb 100644
+--- a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
++++ b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
+@@ -501,6 +501,58 @@ static void test_sockmap_skb_verdict_shutdown(void)
+ 	test_sockmap_pass_prog__destroy(skel);
+ }
+ 
++static void test_sockmap_stream_pass(void)
++{
++	int zero = 0, sent, recvd;
++	int verdict, parser;
++	int err, map;
++	int c = -1, p = -1;
++	struct test_sockmap_pass_prog *pass = NULL;
++	char snd[256] = "0123456789";
++	char rcv[256] = "0";
++
++	pass = test_sockmap_pass_prog__open_and_load();
++	verdict = bpf_program__fd(pass->progs.prog_skb_verdict);
++	parser = bpf_program__fd(pass->progs.prog_skb_parser);
++	map = bpf_map__fd(pass->maps.sock_map_rx);
++
++	err = bpf_prog_attach(parser, map, BPF_SK_SKB_STREAM_PARSER, 0);
++	if (!ASSERT_OK(err, "bpf_prog_attach stream parser"))
++		goto out;
++
++	err = bpf_prog_attach(verdict, map, BPF_SK_SKB_STREAM_VERDICT, 0);
++	if (!ASSERT_OK(err, "bpf_prog_attach stream verdict"))
++		goto out;
++
++	err = create_pair(AF_INET, SOCK_STREAM, &c, &p);
++	if (err)
++		goto out;
++
++	/* sk_data_ready of 'p' will be replaced by strparser handler */
++	err = bpf_map_update_elem(map, &zero, &p, BPF_NOEXIST);
++	if (!ASSERT_OK(err, "bpf_map_update_elem(p)"))
++		goto out_close;
++
++	/*
++	 * as 'prog_skb_parser' return the original skb len and
++	 * 'prog_skb_verdict' return SK_PASS, the kernel will just
++	 * pass it through to original socket 'p'
++	 */
++	sent = xsend(c, snd, sizeof(snd), 0);
++	ASSERT_EQ(sent, sizeof(snd), "xsend(c)");
++
++	recvd = recv_timeout(p, rcv, sizeof(rcv), SOCK_NONBLOCK,
++			     IO_TIMEOUT_SEC);
++	ASSERT_EQ(recvd, sizeof(rcv), "recv_timeout(p)");
++
++out_close:
++	close(c);
++	close(p);
++
++out:
++	test_sockmap_pass_prog__destroy(pass);
++}
++
+ static void test_sockmap_skb_verdict_fionread(bool pass_prog)
+ {
+ 	int err, map, verdict, c0 = -1, c1 = -1, p0 = -1, p1 = -1;
+@@ -923,6 +975,8 @@ void test_sockmap_basic(void)
+ 		test_sockmap_progs_query(BPF_SK_SKB_VERDICT);
+ 	if (test__start_subtest("sockmap skb_verdict shutdown"))
+ 		test_sockmap_skb_verdict_shutdown();
++	if (test__start_subtest("sockmap stream parser and verdict pass"))
++		test_sockmap_stream_pass();
+ 	if (test__start_subtest("sockmap skb_verdict fionread"))
+ 		test_sockmap_skb_verdict_fionread(true);
+ 	if (test__start_subtest("sockmap skb_verdict fionread on drop"))
 -- 
 2.43.5
 
