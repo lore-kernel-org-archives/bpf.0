@@ -1,28 +1,28 @@
 Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A3D4D517
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A34E8BFF
 	for <bpf@vger.kernel.org>; Mon, 18 Nov 2024 01:13:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731892437; cv=none; b=ucVN3swS4aTl41gdeyNw9U+UexCXQ7qcKdcSxNxlib8oPXV4XquwR896ML7FTQEVdc3XBCEsa2c7PxmmK5iZTOGgZQvy9lcafOD096sluLcRPDhtauD0WAiORZE/2th9LrEew+BgnPPq+J5FDlDn/vGcHuJTZbssxzHT/DcCJOI=
+	t=1731892437; cv=none; b=iAwmWv5rtdMh+m0vEDgQdJ/VZ2uxhQ0H5K2aH7KzCAdFQ4zqui5SD7dl+mQeQni07EmoClFeJRwF19Vdqv89I/ZfRRa0Poejan0UGkxbVbK0IXpdCa30mOCqv1LefK4RAni7jVFQzfMJ1wzIuErntSZ/buYiNFebCGSjBn+9KFI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1731892437; c=relaxed/simple;
-	bh=75mNHbnjXH1zfTVi9SVBeaPbDWG8GXIRthteSNiCK8E=;
+	bh=iT8ZUSEM7IlxGZyL8663ba3PW85q+uAow0c5s95HLEk=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=DVoodQJfwva4HthmGAYpCh/9sZsMfcskWg/i+fAHWCTxj66UCcVitLwuSMsRvvblqPSSZu0/5AYQ3UQn6o8wb3DirmjIY8BLLq8/V7WYKEdvs1SHo6eXEOKrsTwy3OJY9mPoJB/VP9oN2Z2JJsGUoLC9/1Ouk8yXBoOBKCty7fg=
+	 MIME-Version; b=twHxpkGUJUx8GqtVP6HqD0eTkt5AtcCqk2dsZO4qdQYF/1pm0beiB1EKSHqfVkq+J5hknQMjRp5nJOJ6oWkuCCD5DZzawdlaNzQG+NShmLp56e7WheSMgIn2IwMHS9I9VY/qzsB5/+NEXa5kmPCsx/nFpOF2u11JxeWhxVlJfCM=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.93.142])
-	by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4Xs8Lh16tVz4f3kvw
-	for <bpf@vger.kernel.org>; Mon, 18 Nov 2024 08:55:40 +0800 (CST)
+Received: from mail.maildlp.com (unknown [172.19.163.235])
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4Xs8Lk1kt2z4f3lW5
+	for <bpf@vger.kernel.org>; Mon, 18 Nov 2024 08:55:42 +0800 (CST)
 Received: from mail02.huawei.com (unknown [10.116.40.128])
-	by mail.maildlp.com (Postfix) with ESMTP id 794ED1A018D
-	for <bpf@vger.kernel.org>; Mon, 18 Nov 2024 08:55:59 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTP id 8D1851A0568
+	for <bpf@vger.kernel.org>; Mon, 18 Nov 2024 08:56:01 +0800 (CST)
 Received: from huaweicloud.com (unknown [10.175.124.27])
-	by APP4 (Coremail) with SMTP id gCh0CgCXc4eckDpn2G5fCA--.44635S5;
-	Mon, 18 Nov 2024 08:55:59 +0800 (CST)
+	by APP4 (Coremail) with SMTP id gCh0CgCXc4eckDpn2G5fCA--.44635S8;
+	Mon, 18 Nov 2024 08:56:01 +0800 (CST)
 From: Hou Tao <houtao@huaweicloud.com>
 To: bpf@vger.kernel.org
 Cc: Martin KaFai Lau <martin.lau@linux.dev>,
@@ -42,9 +42,9 @@ Cc: Martin KaFai Lau <martin.lau@linux.dev>,
 	=?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>,
 	houtao1@huawei.com,
 	xukuohai@huawei.com
-Subject: [PATCH bpf-next 01/10] bpf: Remove unnecessary check when updating LPM trie
-Date: Mon, 18 Nov 2024 09:07:59 +0800
-Message-Id: <20241118010808.2243555-2-houtao@huaweicloud.com>
+Subject: [PATCH bpf-next 04/10] bpf: Handle in-place update for full LPM trie correctly
+Date: Mon, 18 Nov 2024 09:08:02 +0800
+Message-Id: <20241118010808.2243555-5-houtao@huaweicloud.com>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20241118010808.2243555-1-houtao@huaweicloud.com>
 References: <20241118010808.2243555-1-houtao@huaweicloud.com>
@@ -55,58 +55,153 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:gCh0CgCXc4eckDpn2G5fCA--.44635S5
-X-Coremail-Antispam: 1UD129KBjvJXoW7Xr18Jr13KFy8JFyDCrW3Wrg_yoW8JF13pF
-	Wrtr1Yqa15JF1fCwnayw4rGr98Jw48Ww42qa4kWryYkry8Xr93Kr1rur4Sqa18Jr4xJFnx
-	JrWUJryfKw1DXaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUPFb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUGw
-	A2048vs2IY020Ec7CjxVAFwI0_Gr0_Xr1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
-	w2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
-	W8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v2
-	6rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMc
-	Ij6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_
-	Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AFwI
-	0_GFv_Wryl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG
-	67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MI
-	IYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E
-	14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJV
-	W8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxU3cTm
-	DUUUU
+X-CM-TRANSID:gCh0CgCXc4eckDpn2G5fCA--.44635S8
+X-Coremail-Antispam: 1UD129KBjvJXoWxCrWxKF1DCFWfXr48AF1DWrg_yoW5tryfpF
+	WSkF90yr18Jr4UWr4Fva98JrZ8Zw4rG3yj9F93W347AFySkr93tF18uayFyrW5ArWUXrWY
+	yF45tFyqgrZ5ZrJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUPSb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAV
+	Cq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0
+	rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x0267
+	AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E
+	14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7
+	xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Y
+	z7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2
+	AFwI0_GFv_Wryl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAq
+	x4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6r
+	W5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF
+	7I0E14v26F4j6r4UJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI
+	0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7I
+	U0sqXPUUUUU==
 X-CM-SenderInfo: xkrx3t3r6k3tpzhluzxrxghudrp/
 
 From: Hou Tao <houtao1@huawei.com>
 
-When "node->prefixlen == matchlen" is true, it means that the node is
-fully matched. If "node->prefixlen == key->prefixlen" is false, it means
-the prefix length of key is greater than the prefix length of node,
-otherwise, matchlen will not be equal with node->prefixlen. However, it
-also implies that the prefix length of node must be less than
-max_prefixlen.
+When a LPM trie is full, in-place updates of existing elements
+incorrectly return -ENOSPC.
 
-Therefore, "node->prefixlen == trie->max_prefixlen" will always be false
-when the check of "node->prefixlen == key->prefixlen" returns false.
-Remove this unnecessary comparison.
+Fix this by deferring the check of trie->n_entries. For new insertions,
+n_entries must not exceed max_entries. However, in-place updates are
+allowed even when the trie is full.
 
 Signed-off-by: Hou Tao <houtao1@huawei.com>
 ---
- kernel/bpf/lpm_trie.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ kernel/bpf/lpm_trie.c | 46 +++++++++++++++++++++----------------------
+ 1 file changed, 23 insertions(+), 23 deletions(-)
 
 diff --git a/kernel/bpf/lpm_trie.c b/kernel/bpf/lpm_trie.c
-index 9b60eda0f727..73fd593d3745 100644
+index 4300bd51ec6e..ff57e35357ae 100644
 --- a/kernel/bpf/lpm_trie.c
 +++ b/kernel/bpf/lpm_trie.c
-@@ -364,8 +364,7 @@ static long trie_update_elem(struct bpf_map *map,
- 		matchlen = longest_prefix_match(trie, node, key);
+@@ -310,6 +310,15 @@ static struct lpm_trie_node *lpm_trie_node_alloc(const struct lpm_trie *trie,
+ 	return node;
+ }
  
- 		if (node->prefixlen != matchlen ||
--		    node->prefixlen == key->prefixlen ||
--		    node->prefixlen == trie->max_prefixlen)
-+		    node->prefixlen == key->prefixlen)
- 			break;
++static int trie_check_noreplace_update(const struct lpm_trie *trie, u64 flags)
++{
++	if (flags == BPF_EXIST)
++		return -ENOENT;
++	if (trie->n_entries == trie->map.max_entries)
++		return -ENOSPC;
++	return 0;
++}
++
+ /* Called from syscall or from eBPF program */
+ static long trie_update_elem(struct bpf_map *map,
+ 			     void *_key, void *value, u64 flags)
+@@ -333,20 +342,12 @@ static long trie_update_elem(struct bpf_map *map,
+ 	spin_lock_irqsave(&trie->lock, irq_flags);
  
- 		next_bit = extract_bit(key->data, node->prefixlen);
+ 	/* Allocate and fill a new node */
+-
+-	if (trie->n_entries == trie->map.max_entries) {
+-		ret = -ENOSPC;
+-		goto out;
+-	}
+-
+ 	new_node = lpm_trie_node_alloc(trie, value);
+ 	if (!new_node) {
+ 		ret = -ENOMEM;
+ 		goto out;
+ 	}
+ 
+-	trie->n_entries++;
+-
+ 	new_node->prefixlen = key->prefixlen;
+ 	RCU_INIT_POINTER(new_node->child[0], NULL);
+ 	RCU_INIT_POINTER(new_node->child[1], NULL);
+@@ -375,10 +376,11 @@ static long trie_update_elem(struct bpf_map *map,
+ 	 * simply assign the @new_node to that slot and be done.
+ 	 */
+ 	if (!node) {
+-		if (flags == BPF_EXIST) {
+-			ret = -ENOENT;
++		ret = trie_check_noreplace_update(trie, flags);
++		if (ret)
+ 			goto out;
+-		}
++
++		trie->n_entries++;
+ 		rcu_assign_pointer(*slot, new_node);
+ 		goto out;
+ 	}
+@@ -392,10 +394,11 @@ static long trie_update_elem(struct bpf_map *map,
+ 				ret = -EEXIST;
+ 				goto out;
+ 			}
+-			trie->n_entries--;
+-		} else if (flags == BPF_EXIST) {
+-			ret = -ENOENT;
+-			goto out;
++		} else {
++			ret = trie_check_noreplace_update(trie, flags);
++			if (ret)
++				goto out;
++			trie->n_entries++;
+ 		}
+ 
+ 		new_node->child[0] = node->child[0];
+@@ -407,15 +410,15 @@ static long trie_update_elem(struct bpf_map *map,
+ 		goto out;
+ 	}
+ 
+-	if (flags == BPF_EXIST) {
+-		ret = -ENOENT;
++	ret = trie_check_noreplace_update(trie, flags);
++	if (ret)
+ 		goto out;
+-	}
+ 
+ 	/* If the new node matches the prefix completely, it must be inserted
+ 	 * as an ancestor. Simply insert it between @node and *@slot.
+ 	 */
+ 	if (matchlen == key->prefixlen) {
++		trie->n_entries++;
+ 		next_bit = extract_bit(node->data, matchlen);
+ 		rcu_assign_pointer(new_node->child[next_bit], node);
+ 		rcu_assign_pointer(*slot, new_node);
+@@ -428,6 +431,7 @@ static long trie_update_elem(struct bpf_map *map,
+ 		goto out;
+ 	}
+ 
++	trie->n_entries++;
+ 	im_node->prefixlen = matchlen;
+ 	im_node->flags |= LPM_TREE_NODE_FLAG_IM;
+ 	memcpy(im_node->data, node->data, trie->data_size);
+@@ -445,12 +449,8 @@ static long trie_update_elem(struct bpf_map *map,
+ 	rcu_assign_pointer(*slot, im_node);
+ 
+ out:
+-	if (ret) {
+-		if (new_node)
+-			trie->n_entries--;
++	if (ret)
+ 		kfree(new_node);
+-	}
+-
+ 	spin_unlock_irqrestore(&trie->lock, irq_flags);
+ 	kfree_rcu(free_node, rcu);
+ 
 -- 
 2.29.2
 
