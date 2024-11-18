@@ -1,53 +1,63 @@
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A40CEEBB
-	for <bpf@vger.kernel.org>; Mon, 18 Nov 2024 01:13:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.2])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E8BE9139D;
+	Mon, 18 Nov 2024 03:10:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.2
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731892439; cv=none; b=rOXk1KfDcN7D0eyMRs0GB6lMjKdWirDR+eOFd93HZK3YsBy0TkrqTIG3GUHz1w8FWWoKyipH9T08iRiDtnvQ8DX7IYIW7hBYw3tmzE4bOc0R7UGcNY3ysVorvTpylJ2vJK/5cEjF39F1XYAwRTHDwDzQ9XvaelwCzrnDaiP8isU=
+	t=1731899444; cv=none; b=rZv7y3oIJUBTFMrB41BaX73GRvgVi8JKLqowWkYd4ywb2GAMDwRt8bN8plFjaF3M+E4rogUWG0LpVLckDFfaekyw03DNx5oOElq2UWcrIX2U5ZlzFS4Bj8M8NSgRfF4GUw0U3pmIP9V+ldnDCxhbIYLF2tziJBx8f0o9V03w2Y8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731892439; c=relaxed/simple;
-	bh=5SF4SXib61J8oIfFNFEz4RzsVwOlAf+XGfIVJWzhiak=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=FzeKx05zE1iJodgDjvrK6Kvcj6vcjh5p/cMYiQ2U4bvFTeN9tfIxW1LuGTjcQjBJSw5de1iZ7lgrKha9VKwkODiozIxsMEhG2Pd48V0q9IzYBsLSOKLz+lfd9rO3T9E/2tr5/5vTVziOXTAaRiDrSS4aawdDxY/kuaSX0jp96yQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.216])
-	by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4Xs8Lj3kfqz4f3lfV
-	for <bpf@vger.kernel.org>; Mon, 18 Nov 2024 08:55:41 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.128])
-	by mail.maildlp.com (Postfix) with ESMTP id D59BE1A0196
-	for <bpf@vger.kernel.org>; Mon, 18 Nov 2024 08:56:00 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.175.124.27])
-	by APP4 (Coremail) with SMTP id gCh0CgCXc4eckDpn2G5fCA--.44635S7;
-	Mon, 18 Nov 2024 08:56:00 +0800 (CST)
-From: Hou Tao <houtao@huaweicloud.com>
-To: bpf@vger.kernel.org
-Cc: Martin KaFai Lau <martin.lau@linux.dev>,
-	Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Hao Luo <haoluo@google.com>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Jiri Olsa <jolsa@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	=?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>,
-	houtao1@huawei.com,
-	xukuohai@huawei.com
-Subject: [PATCH bpf-next 03/10] bpf: Handle BPF_EXIST and BPF_NOEXIST for LPM trie
-Date: Mon, 18 Nov 2024 09:08:01 +0800
-Message-Id: <20241118010808.2243555-4-houtao@huaweicloud.com>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20241118010808.2243555-1-houtao@huaweicloud.com>
-References: <20241118010808.2243555-1-houtao@huaweicloud.com>
+	s=arc-20240116; t=1731899444; c=relaxed/simple;
+	bh=s/HE862Ebjc4x9QSbLryT2tjzrtXi+x51IAifw3w0tQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=gLw7P0NaSkoizdVw4qUBoXX/95wE8bVBJirbRxClk/J6PwKFrZbojswjJx5Q3e1whC87DBuFw0Cby1WbFea0wg2Z3X/OGvEz919eRuTOMwcm0NUSAKVTm1oFtuAhsyPWM7hEBibLganCO9+zD2rIsasws9LNTWHEsWmdy2UzVrQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=O8x9f828; arc=none smtp.client-ip=117.135.210.2
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="O8x9f828"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:Subject:Date:Message-ID:MIME-Version; bh=0mQMe
+	EqbIH1W/gwL+X7sQKXQSByBBidMVZJPmvHc5LI=; b=O8x9f828FIf+pdv0PSFbN
+	s8pEPtPhcfMbA51V1bFjHNef+ia4TnUEtja5wognArgPz3J1woE4HTKRBg+G2c+I
+	ZkpdHrdt1GIi6/Nixe3OM/Bm1ROEk9mL3NKe2rQHpxzFfvzZQmUjuyiRmLeaavzZ
+	qai+/Lfot0YZ38+y4QvPgI=
+Received: from localhost.localdomain (unknown [47.252.33.72])
+	by gzga-smtp-mtada-g0-1 (Coremail) with SMTP id _____wDnTyXirzpnA_TwCQ--.780S3;
+	Mon, 18 Nov 2024 11:09:50 +0800 (CST)
+From: Jiayuan Chen <mrpre@163.com>
+To: martin.lau@linux.dev,
+	edumazet@google.com,
+	jakub@cloudflare.com,
+	davem@davemloft.net,
+	dsahern@kernel.org,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	netdev@vger.kernel.org,
+	bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	horms@kernel.org,
+	daniel@iogearbox.net
+Cc: mykolal@fb.com,
+	ast@kernel.org,
+	kpsingh@kernel.org,
+	jolsa@kernel.org,
+	eddyz87@gmail.com,
+	shuah@kernel.org,
+	sdf@fomichev.me,
+	linux-kselftest@vger.kernel.org,
+	haoluo@google.com,
+	song@kernel.org,
+	john.fastabend@gmail.com,
+	andrii@kernel.org,
+	mhal@rbox.co,
+	yonghong.song@linux.dev,
+	Jiayuan Chen <mrpre@163.com>,
+	Vincent Whitchurch <vincent.whitchurch@datadoghq.com>
+Subject: [PATCH bpf v4 1/2] bpf: fix recursive lock when verdict program return SK_PASS
+Date: Mon, 18 Nov 2024 11:09:09 +0800
+Message-ID: <20241118030910.36230-2-mrpre@163.com>
+X-Mailer: git-send-email 2.43.5
+In-Reply-To: <20241118030910.36230-1-mrpre@163.com>
+References: <20241118030910.36230-1-mrpre@163.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -55,86 +65,63 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:gCh0CgCXc4eckDpn2G5fCA--.44635S7
-X-Coremail-Antispam: 1UD129KBjvJXoW7Cr1xGryUWrWrCr45Kr1rZwb_yoW8XFyfpF
-	1SkFWYkrW8Wr13Ca1Sv3Z8Jry5Ga4rG3y29FyxA34ayrWjyF9IgF1ruay5tr43trWxZrW3
-	AF4rtFWDKryq9rJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUP2b4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUWw
-	A2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
-	w2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
-	W8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v2
-	6rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMc
-	Ij6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_
-	Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AFwI
-	0_GFv_Wryl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG
-	67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MI
-	IYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E
-	14v26F4j6r4UJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr
-	0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU04x
-	RDUUUUU==
-X-CM-SenderInfo: xkrx3t3r6k3tpzhluzxrxghudrp/
+X-CM-TRANSID:_____wDnTyXirzpnA_TwCQ--.780S3
+X-Coremail-Antispam: 1Uf129KBjvJXoW7KrWkAr1DXF4Duw48JF4fKrg_yoW8Aw1Dpa
+	4ku3y5GF9rZr18Z3s3KF97Xr1jgw1vgay2gr1ruw1fZrn0gry5urZ5KFy2vF4YvrsrKF98
+	Zr4jqFsrtw17XaUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0z_WrX_UUUUU=
+X-CM-SenderInfo: xpus2vi6rwjhhfrp/1tbiWwWbp2c6rkc3iAAAsp
 
-From: Hou Tao <houtao1@huawei.com>
+When the stream_verdict program returns SK_PASS, it places the received skb
+into its own receive queue, but a recursive lock eventually occurs, leading
+to an operating system deadlock. This issue has been present since v6.9.
 
-There is exact match during the update of LPM trie, therefore, add the
-missed handling for BPF_EXIST and BPF_NOEXIST flags.
+'''
+sk_psock_strp_data_ready
+    write_lock_bh(&sk->sk_callback_lock)
+    strp_data_ready
+      strp_read_sock
+        read_sock -> tcp_read_sock
+          strp_recv
+            cb.rcv_msg -> sk_psock_strp_read
+              # now stream_verdict return SK_PASS without peer sock assign
+              __SK_PASS = sk_psock_map_verd(SK_PASS, NULL)
+              sk_psock_verdict_apply
+                sk_psock_skb_ingress_self
+                  sk_psock_skb_ingress_enqueue
+                    sk_psock_data_ready
+                      read_lock_bh(&sk->sk_callback_lock) <= dead lock
 
-Signed-off-by: Hou Tao <houtao1@huawei.com>
+'''
+
+This topic has been discussed before, but it has not been fixed.
+Previous discussion:
+https://lore.kernel.org/all/6684a5864ec86_403d20898@john.notmuch
+
+Fixes: 6648e613226e ("bpf, skmsg: Fix NULL pointer dereference in sk_psock_skb_ingress_enqueue")
+Reported-by: Vincent Whitchurch <vincent.whitchurch@datadoghq.com>
+Signed-off-by: Jiayuan Chen <mrpre@163.com>
+Signed-off-by: John Fastabend <john.fastabend@gmail.com>
 ---
- kernel/bpf/lpm_trie.c | 23 ++++++++++++++++++++---
- 1 file changed, 20 insertions(+), 3 deletions(-)
+ net/core/skmsg.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/kernel/bpf/lpm_trie.c b/kernel/bpf/lpm_trie.c
-index c6f036e3044b..4300bd51ec6e 100644
---- a/kernel/bpf/lpm_trie.c
-+++ b/kernel/bpf/lpm_trie.c
-@@ -375,6 +375,10 @@ static long trie_update_elem(struct bpf_map *map,
- 	 * simply assign the @new_node to that slot and be done.
- 	 */
- 	if (!node) {
-+		if (flags == BPF_EXIST) {
-+			ret = -ENOENT;
-+			goto out;
-+		}
- 		rcu_assign_pointer(*slot, new_node);
- 		goto out;
+diff --git a/net/core/skmsg.c b/net/core/skmsg.c
+index b1dcbd3be89e..e90fbab703b2 100644
+--- a/net/core/skmsg.c
++++ b/net/core/skmsg.c
+@@ -1117,9 +1117,9 @@ static void sk_psock_strp_data_ready(struct sock *sk)
+ 		if (tls_sw_has_ctx_rx(sk)) {
+ 			psock->saved_data_ready(sk);
+ 		} else {
+-			write_lock_bh(&sk->sk_callback_lock);
++			read_lock_bh(&sk->sk_callback_lock);
+ 			strp_data_ready(&psock->strp);
+-			write_unlock_bh(&sk->sk_callback_lock);
++			read_unlock_bh(&sk->sk_callback_lock);
+ 		}
  	}
-@@ -383,18 +387,31 @@ static long trie_update_elem(struct bpf_map *map,
- 	 * which already has the correct data array set.
- 	 */
- 	if (node->prefixlen == matchlen) {
-+		if (!(node->flags & LPM_TREE_NODE_FLAG_IM)) {
-+			if (flags == BPF_NOEXIST) {
-+				ret = -EEXIST;
-+				goto out;
-+			}
-+			trie->n_entries--;
-+		} else if (flags == BPF_EXIST) {
-+			ret = -ENOENT;
-+			goto out;
-+		}
-+
- 		new_node->child[0] = node->child[0];
- 		new_node->child[1] = node->child[1];
- 
--		if (!(node->flags & LPM_TREE_NODE_FLAG_IM))
--			trie->n_entries--;
--
- 		rcu_assign_pointer(*slot, new_node);
- 		free_node = node;
- 
- 		goto out;
- 	}
- 
-+	if (flags == BPF_EXIST) {
-+		ret = -ENOENT;
-+		goto out;
-+	}
-+
- 	/* If the new node matches the prefix completely, it must be inserted
- 	 * as an ancestor. Simply insert it between @node and *@slot.
- 	 */
+ 	rcu_read_unlock();
 -- 
-2.29.2
+2.43.5
 
