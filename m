@@ -1,105 +1,82 @@
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F082A920
-	for <bpf@vger.kernel.org>; Wed, 20 Nov 2024 01:16:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
+Received: from cmccmta2.chinamobile.com (cmccmta2.chinamobile.com [111.22.67.135])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 55ACD3F9C5;
+	Wed, 20 Nov 2024 02:32:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=111.22.67.135
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732065399; cv=none; b=EK9Iy2VLj7mCKh8O3x4kEEKjjdNJp0QZ0MHbXvTMT4aHrwSN6DYmm1ww9AM1J1MzduCBNbrQgnvrxnahkf+sS2wv8fOVvBnqcmTaECY+sLzcnG7X7fn3Vqv1k2f3UPHLe+GG5/SdtLxBcqA3T5lqHSdooiP0BR4g7MOH+1WzwUg=
+	t=1732069961; cv=none; b=jtfI+y9SbI7V6Kk3ZZhbscejuF6KPYigpNsEt6hckwR4dg9/PaVDRi8BVQfvEiT2gIXwoMa1qF6BdYGg5Cx9SqGlUQ8/HLJDiX8+YYJ/RaXdvbmBnosNQX2DNj56aWouQGq1WD0GfnamZdsIbOLTuPL+NFVAtH7yXXleESosu3k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732065399; c=relaxed/simple;
-	bh=c1kpPFn1UmTv6UynV3Q2Ua/wQwVvyAfCzOZptteybtw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=mYnUpKcsl4IBl5qXeV5B7JHXv3Z/im+zujIJmKwHHNQ2N/wmB0XqQR5I/3TqbE+0F++uS0FFsnLNSE6ClaCdVfDoArFxACOxh805D2898G7p19vB7JfmVHRXb6luNuEQVTb0L+TLuWXwil8BjtoDrGe4Z9+w4Fq5a8UZcAjUVBk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RulcnjGr; arc=none smtp.client-ip=209.85.128.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RulcnjGr"
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-432d866f70fso14190295e9.2
-        for <bpf@vger.kernel.org>; Tue, 19 Nov 2024 17:16:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1732065396; x=1732670196; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bLGbLzjvYLT2PuGiyv5EUR4GvrkePKsCo0pbtctqFOo=;
-        b=RulcnjGroQK45gn1ZnUG8If7fNaQYlE8bUHiKJbfYIhpxb7s3zqLZoi/UXVn2NGxGd
-         31mC81L1xqSo3ktVPfl8eyGvuvETpj/EyllOOa0W9jWwvB4tZSAcwHqHYWd5YALJnC83
-         COIJHtaFlnz8/V++UMGVvKhKt8r8qYhMarz3PEkS0xrt6O7Hxu7m/CrZU8Vnzsv/NRPV
-         wcE1Myxj5K9U02PyV97WZAkfx0hsgik9lFDRzKtBlfdEA/bGPe5botgu174gsNxTrDL3
-         9yoK9q2csd8DPBMo033wMP02Tu6btojLiF9OnhVRA9eUueNNasstQSGP9YqpHypCSlTC
-         h6mg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1732065396; x=1732670196;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=bLGbLzjvYLT2PuGiyv5EUR4GvrkePKsCo0pbtctqFOo=;
-        b=PgUlNQaBC9FtFv1hLSsUB+rAiD2RVffd5MF0kqbVCfSaGIo4lMzZi9KVLVPWiX1PzS
-         gLJKCGyaM2LdtMvNfXtoYY6kZuSYpE7lgA773/kdBq2W6C1UmOBnoZ0PLVgcOUQTvRIo
-         vL0Id2LNTU+hNGZf1/27Ke3W2pwWnVY+pftMkoPeYEj10h1UACZoiUe1o3dxxdoVPvzw
-         yUlMBiQz7EnG16qUJRW/N2M0mHiGJ5a5eODHYyGgTTE0qE4KHywF5QQp2sue41sg2MI5
-         pMDuLxXm+2T5fKZY5YqWdd40Hp8A7hc1KlPdnLOp1Rds+ingQ1REPEKHxTuKQWxncn9w
-         j2uw==
-X-Gm-Message-State: AOJu0YylCEjio3tRNpN0yNiZMppy0YSHVBUl/d2ljreDc9+7erR8eM/X
-	ySX6MSPXN6H/7U+XuJMMfbd4bS85lUlCbNiGaJhxW+wwbeSMO/U5zx7fDOgm5I8nsyekgf+IWVK
-	1NfmAPHxVS3wYf5TQ5AmyeQ7Nmk4=
-X-Gm-Gg: ASbGncubMOq1uoPrPJVmOpFtiYc/DxaLVa/dw7FGo1zur5EpbSX9F8+S2503Y2yRCpT
-	i1sdOvZCJ4usitbmH0PLLqChyoxTe8g==
-X-Google-Smtp-Source: AGHT+IFJ5lw/WCwFvb/RCZeV8quxPU6rzgw3tWqQKGZqAqeAvcK9A0kcX3zuk4vDkt0sqIQ/9fN0xIz9couoLOrg0Ms=
-X-Received: by 2002:a05:600c:4fd5:b0:42c:b905:2bf9 with SMTP id
- 5b1f17b1804b1-433489d46ecmr8478645e9.16.1732065396235; Tue, 19 Nov 2024
- 17:16:36 -0800 (PST)
+	s=arc-20240116; t=1732069961; c=relaxed/simple;
+	bh=M6eWbrJh9EXvL33sg7IgSaTZviGzfJgQ7VzmUtmc9Jw=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=fU7jDLMYYcd1URlQzuU8Ao42n8ZoQ/3yAcq4H5uYgt58DczriQob33GRJNMWZtQG5+bIorEmaFmAcSljONgAvmoO368WCjCo22NyA8t+4qMZVsuyNsJzOMD/ziyqD5bxtMh0DS0uArU0ixqJjarLOmf1GvQ0enWAam0dz0jWtlY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cmss.chinamobile.com; spf=pass smtp.mailfrom=cmss.chinamobile.com; arc=none smtp.client-ip=111.22.67.135
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cmss.chinamobile.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cmss.chinamobile.com
+X-RM-TagInfo: emlType=0                                       
+X-RM-SPAM-FLAG:00000000
+Received:from spf.mail.chinamobile.com (unknown[10.188.0.87])
+	by rmmx-syy-dmz-app07-12007 (RichMail) with SMTP id 2ee7673d4a4122a-50247;
+	Wed, 20 Nov 2024 10:32:33 +0800 (CST)
+X-RM-TRANSID:2ee7673d4a4122a-50247
+X-RM-TagInfo: emlType=0                                       
+X-RM-SPAM-FLAG:00000000
+Received:from localhost.localdomain (unknown[223.108.79.101])
+	by rmsmtp-syy-appsvr03-12003 (RichMail) with SMTP id 2ee3673d4a30dd0-5c7b3;
+	Wed, 20 Nov 2024 10:32:33 +0800 (CST)
+X-RM-TRANSID:2ee3673d4a30dd0-5c7b3
+From: guanjing <guanjing@cmss.chinamobile.com>
+To: peterz@infradead.org,
+	mingo@redhat.com,
+	acme@kernel.org,
+	namhyung@kernel.org,
+	mark.rutland@arm.com,
+	alexander.shishkin@linux.intel.com,
+	jolsa@kernel.org,
+	irogers@google.com,
+	adrian.hunter@intel.com,
+	kan.liang@linux.intel.com,
+	james.clark@linaro.org,
+	yangjihong1@huawei.com
+Cc: linux-perf-users@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org,
+	guanjing <guanjing@cmss.chinamobile.com>
+Subject: [PATCH v2] perf kwork: Fix unnecessary conversion to bool in 'valid_kwork_class_type'
+Date: Mon, 18 Nov 2024 12:39:39 +0800
+Message-Id: <20241118043939.270819-1-guanjing@cmss.chinamobile.com>
+X-Mailer: git-send-email 2.33.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241118010808.2243555-1-houtao@huaweicloud.com> <20241118010808.2243555-8-houtao@huaweicloud.com>
-In-Reply-To: <20241118010808.2243555-8-houtao@huaweicloud.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Tue, 19 Nov 2024 17:16:25 -0800
-Message-ID: <CAADnVQJPhkNbq0nHANJ5W03-dQ3t7ZPeh3gk+WJbtXFOL=GwUA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 07/10] bpf: Switch to bpf mem allocator for LPM trie
-To: Hou Tao <houtao@huaweicloud.com>
-Cc: bpf <bpf@vger.kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Hao Luo <haoluo@google.com>, Yonghong Song <yonghong.song@linux.dev>, 
-	Daniel Borkmann <daniel@iogearbox.net>, KP Singh <kpsingh@kernel.org>, 
-	Stanislav Fomichev <sdf@fomichev.me>, Jiri Olsa <jolsa@kernel.org>, 
-	John Fastabend <john.fastabend@gmail.com>, 
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>, Thomas Gleixner <tglx@linutronix.de>, 
-	=?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>, 
-	Hou Tao <houtao1@huawei.com>, Xu Kuohai <xukuohai@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Sun, Nov 17, 2024 at 4:56=E2=80=AFPM Hou Tao <houtao@huaweicloud.com> wr=
-ote:
->
->
-> +enum {
-> +       LPM_TRIE_MA_IM =3D 0,
-> +       LPM_TRIE_MA_LEAF,
-> +       LPM_TRIE_MA_CNT,
-> +};
-> +
->  struct lpm_trie {
->         struct bpf_map                  map;
->         struct lpm_trie_node __rcu      *root;
-> +       struct bpf_mem_alloc            ma[LPM_TRIE_MA_CNT];
-> +       struct bpf_mem_alloc            *im_ma;
-> +       struct bpf_mem_alloc            *leaf_ma;
+Fixes the following coccicheck:
 
-We cannot use bpf_ma-s liberally like that.
-Freelists are not huge, but we shouldn't be adding new bpf_ma
-in every map and every use case.
+tools/perf/util/bpf_kwork.c:145:53-58: WARNING: conversion to bool not needed here
 
-bpf_mem_cache_is_mergeable() in the previous patch also
-leaks implementation details.
+Fixes: daf07d220710 ("perf kwork: Implement BPF trace")
+Signed-off-by: guanjing <guanjing@cmss.chinamobile.com>
+---
+ tools/perf/util/bpf_kwork.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Can you use bpf_global_ma for all nodes?
+diff --git a/tools/perf/util/bpf_kwork.c b/tools/perf/util/bpf_kwork.c
+index 6c7126b7670d..c71461082683 100644
+--- a/tools/perf/util/bpf_kwork.c
++++ b/tools/perf/util/bpf_kwork.c
+@@ -142,7 +142,7 @@ kwork_class_bpf_supported_list[KWORK_CLASS_MAX] = {
+ 
+ static bool valid_kwork_class_type(enum kwork_class_type type)
+ {
+-	return type >= 0 && type < KWORK_CLASS_MAX ? true : false;
++	return type >= 0 && type < KWORK_CLASS_MAX;
+ }
+ 
+ static int setup_filters(struct perf_kwork *kwork)
+-- 
+2.33.0
 
-pw-bot: cr
+
+
