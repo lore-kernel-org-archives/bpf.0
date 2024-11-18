@@ -1,45 +1,44 @@
 Received: from mailtransmit04.runbox.com (mailtransmit04.runbox.com [185.226.149.37])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CAEA1BE852;
-	Mon, 18 Nov 2024 21:05:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5782C1E5739;
+	Mon, 18 Nov 2024 21:05:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.37
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731963932; cv=none; b=sl14RS073ZnxqNH7UtyD+E/RmFrlh28BOYVi4W2JBvUTKOXzZVKzmVkhkDKfdyZeZXYeMZbnVx4FisIHk06I6sp2gMsW9m3TRRV+i2CX8Iei9HyBENcAYzCkpvBWCE6MCI33dLdiSRatfI5w+LQWJRJ+Yykg3t3mC4AhlH8uO6g=
+	t=1731963932; cv=none; b=eH0qMcMQozf0Q8q9EpHy05E/n8MPFsYUxUi2ZzhBp8RfgqpEGIpdwpWPZTDoVM7F0UHVOoAEJC+nfEzgFWyErNizVz8jYaybg30rmJyLfBQz6Q8Zk8tL0XaN2/FVg071gCNcLTjf52Z1zx3/ifi396Wb5S/uXFHZNpuxwMfg3ws=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1731963932; c=relaxed/simple;
-	bh=HRwRGhetPBMzrx45PazriPu+7lTX6gtWD6dSKBj34NY=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=kkWolBmmcwf5hzrJPCKV9YD2MtUUhnHttIIvKt/S24KysfWZlcE0J3rbSdlBlQtPz0gV+wBgO154aIHntEVR+0ICtnb7VGfB8N8bojXB/hZ46Z0BacPNQGMRU9BghS1KXaWBjIiElOiDLq0jjElhQu9I/Laxz7zi1rvcFoa55uA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co; spf=pass smtp.mailfrom=rbox.co; dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b=fi55r38Y; arc=none smtp.client-ip=185.226.149.37
+	bh=cCmISK6BnKASPnPfisyoQZpkhJsYpv3tV4Awm1tVG+s=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=lUcFbWNWR0TfnW6cvFH0R0KUCNi8iRxxvTXMheWrUKbm22jx5UO5qi61Hvl3qLudKb2kKkxvc/RDe3rSkzfWvH9r9p//ZaRbtGGM5Wqoz/HAQ91dntdusgoY7IPq0Z3AosKzDLOs/ehook3qodh8sab6ZTX+EtCVIhmU8DT8h/U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co; spf=pass smtp.mailfrom=rbox.co; dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b=ZhFZjeFb; arc=none smtp.client-ip=185.226.149.37
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rbox.co
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b="fi55r38Y"
+	dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b="ZhFZjeFb"
 Received: from mailtransmit03.runbox ([10.9.9.163] helo=aibo.runbox.com)
 	by mailtransmit04.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
 	(Exim 4.93)
 	(envelope-from <mhal@rbox.co>)
-	id 1tD8vq-00HaW3-Ow; Mon, 18 Nov 2024 22:05:14 +0100
+	id 1tD8vv-00HaWW-SO; Mon, 18 Nov 2024 22:05:19 +0100
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=rbox.co;
-	s=selector2; h=Cc:To:In-Reply-To:References:Message-Id:
-	Content-Transfer-Encoding:Content-Type:MIME-Version:Subject:Date:From;
-	bh=pPN/BWurefmC6LQUpb6rfp0E4vot5oX/Lls6hWFCJiw=; b=fi55r38YhN8BHRFZxQ4ikCHEAu
-	E+iIWx6h1jPPZzhtyTqY/993Jw/258ACOZj6+HGpnK1Icg1e9zuFbazC+k/XC6Uw9VfCE29UV+DEj
-	Ds5ltpy+4qvGYKMhnp1yMtQx4ibprBWXYNy4kAZNNQ9l8kDiyunUgul35r8V6dgqS/YSOzopgtPtx
-	aiQakNIZCtixYtfyQHmY2C7xakBAbKZuTT5A67mDRZTudomtUamQQ0goF+XNGU7k1AImI2aFJDtUk
-	0PaqRynQbRdiKwWxslz1m7JO15HPGPwwTO475NsVfGU5Uf9bF7hXp62KkL+nI4dQzW/oyIe2HA/MS
-	VHmSYfyQ==;
+	s=selector2; h=Cc:To:Content-Transfer-Encoding:Content-Type:MIME-Version:
+	Message-Id:Date:Subject:From; bh=SZ4ULW7QA2NHTeEfsW9RD+SClsi51owWe7zBsnnPzcM=
+	; b=ZhFZjeFbAKKEVzE5Snnwy+OMXz+pUH37PvMQDtjQiKIPcF86lH3EfniXju3sGD6nj1F94p5nt
+	IczTht1X+yzrxM5jyuIWiHhh49GqXFt9N0bRzyZypVe+IuBRe+gzNraOtU+8W/drsm/cISeKlVpwY
+	t2zstNtLTfZnByxadbEK6dSFwPHUoCIH2FLMOZdAinRpxqB+8KEkFg8AmTZr6ewVHTPE2ws6BrVFG
+	CgceAfD1WlmjDyPn4+UWLsH81+8FOetwDJSfnB5sDHVtcy34Jt286B5d4F/ZUpqNO9/n4BlnSs+Mv
+	mn+Ozp2R20ZfOvlIMyQ6uPa6n3VXtBWV+U9eCw==;
 Received: from [10.9.9.74] (helo=submission03.runbox)
 	by mailtransmit03.runbox with esmtp (Exim 4.86_2)
 	(envelope-from <mhal@rbox.co>)
-	id 1tD8vp-0007d4-72; Mon, 18 Nov 2024 22:05:13 +0100
+	id 1tD8vv-0007dS-E1; Mon, 18 Nov 2024 22:05:19 +0100
 Received: by submission03.runbox with esmtpsa  [Authenticated ID (604044)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
 	(Exim 4.93)
-	id 1tD8vh-00DME4-7C; Mon, 18 Nov 2024 22:05:05 +0100
+	id 1tD8vd-00DME4-Tz; Mon, 18 Nov 2024 22:05:02 +0100
 From: Michal Luczaj <mhal@rbox.co>
-Date: Mon, 18 Nov 2024 22:03:43 +0100
-Subject: [PATCH bpf 3/4] bpf, vsock: Invoke proto::close on close()
+Subject: [PATCH bpf 0/4] bpf, vsock: Fix poll() and close()
+Date: Mon, 18 Nov 2024 22:03:40 +0100
+Message-Id: <20241118-vsock-bpf-poll-close-v1-0-f1b9669cacdc@rbox.co>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -48,9 +47,10 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20241118-vsock-bpf-poll-close-v1-3-f1b9669cacdc@rbox.co>
-References: <20241118-vsock-bpf-poll-close-v1-0-f1b9669cacdc@rbox.co>
-In-Reply-To: <20241118-vsock-bpf-poll-close-v1-0-f1b9669cacdc@rbox.co>
+X-B4-Tracking: v=1; b=H4sIAKyrO2cC/x2MQQqAIBAAvxJ7biFNJPpKdChba0lSXIhA+nvSc
+ WBmCghlJoGxKZDpZuF4VVBtA+5Yrp2Qt8qgO22UUgPeEt2Ja/KYYgjoQhRCa7zpNdlBk4Oapky
+ en387QXVhft8Pku03EmsAAAA=
+X-Change-ID: 20241118-vsock-bpf-poll-close-64f432e682ec
 To: Stefano Garzarella <sgarzare@redhat.com>, 
  "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
  Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
@@ -69,129 +69,25 @@ Cc: netdev@vger.kernel.org, bpf@vger.kernel.org,
  linux-kselftest@vger.kernel.org, Michal Luczaj <mhal@rbox.co>
 X-Mailer: b4 0.14.2
 
-vsock defines a BPF callback to be invoked when close() is called. However,
-this callback is never actually executed. As a result, a closed vsock
-socket is not automatically removed from the sockmap/sockhash.
+Two small fixes for vsock: poll() missing a queue check, and close() not
+invoking sockmap cleanup.
 
-Introduce a dummy vsock_close() and make vsock_release() call proto::close.
-
-Note: changes in __vsock_release() look messy, but it's only due to indent
-level reduction and variables xmas tree reorder.
-
-Fixes: 634f1a7110b4 ("vsock: support sockmap")
 Signed-off-by: Michal Luczaj <mhal@rbox.co>
 ---
- net/vmw_vsock/af_vsock.c | 67 +++++++++++++++++++++++++++++-------------------
- 1 file changed, 40 insertions(+), 27 deletions(-)
+Michal Luczaj (4):
+      bpf, vsock: Fix poll() missing a queue
+      selftest/bpf: Add test for af_vsock poll()
+      bpf, vsock: Invoke proto::close on close()
+      selftest/bpf: Add test for vsock removal from sockmap on close()
 
-diff --git a/net/vmw_vsock/af_vsock.c b/net/vmw_vsock/af_vsock.c
-index 919da8edd03c838cbcdbf1618425da6c5ec2df1a..b52b798aa4c2926c3f233aad6cd31b4056f6fee2 100644
---- a/net/vmw_vsock/af_vsock.c
-+++ b/net/vmw_vsock/af_vsock.c
-@@ -117,12 +117,14 @@
- static int __vsock_bind(struct sock *sk, struct sockaddr_vm *addr);
- static void vsock_sk_destruct(struct sock *sk);
- static int vsock_queue_rcv_skb(struct sock *sk, struct sk_buff *skb);
-+static void vsock_close(struct sock *sk, long timeout);
- 
- /* Protocol family. */
- struct proto vsock_proto = {
- 	.name = "AF_VSOCK",
- 	.owner = THIS_MODULE,
- 	.obj_size = sizeof(struct vsock_sock),
-+	.close = vsock_close,
- #ifdef CONFIG_BPF_SYSCALL
- 	.psock_update_sk_prot = vsock_bpf_update_proto,
- #endif
-@@ -797,39 +799,37 @@ static bool sock_type_connectible(u16 type)
- 
- static void __vsock_release(struct sock *sk, int level)
- {
--	if (sk) {
--		struct sock *pending;
--		struct vsock_sock *vsk;
--
--		vsk = vsock_sk(sk);
--		pending = NULL;	/* Compiler warning. */
-+	struct vsock_sock *vsk;
-+	struct sock *pending;
- 
--		/* When "level" is SINGLE_DEPTH_NESTING, use the nested
--		 * version to avoid the warning "possible recursive locking
--		 * detected". When "level" is 0, lock_sock_nested(sk, level)
--		 * is the same as lock_sock(sk).
--		 */
--		lock_sock_nested(sk, level);
-+	vsk = vsock_sk(sk);
-+	pending = NULL;	/* Compiler warning. */
- 
--		if (vsk->transport)
--			vsk->transport->release(vsk);
--		else if (sock_type_connectible(sk->sk_type))
--			vsock_remove_sock(vsk);
-+	/* When "level" is SINGLE_DEPTH_NESTING, use the nested
-+	 * version to avoid the warning "possible recursive locking
-+	 * detected". When "level" is 0, lock_sock_nested(sk, level)
-+	 * is the same as lock_sock(sk).
-+	 */
-+	lock_sock_nested(sk, level);
- 
--		sock_orphan(sk);
--		sk->sk_shutdown = SHUTDOWN_MASK;
-+	if (vsk->transport)
-+		vsk->transport->release(vsk);
-+	else if (sock_type_connectible(sk->sk_type))
-+		vsock_remove_sock(vsk);
- 
--		skb_queue_purge(&sk->sk_receive_queue);
-+	sock_orphan(sk);
-+	sk->sk_shutdown = SHUTDOWN_MASK;
- 
--		/* Clean up any sockets that never were accepted. */
--		while ((pending = vsock_dequeue_accept(sk)) != NULL) {
--			__vsock_release(pending, SINGLE_DEPTH_NESTING);
--			sock_put(pending);
--		}
-+	skb_queue_purge(&sk->sk_receive_queue);
- 
--		release_sock(sk);
--		sock_put(sk);
-+	/* Clean up any sockets that never were accepted. */
-+	while ((pending = vsock_dequeue_accept(sk)) != NULL) {
-+		__vsock_release(pending, SINGLE_DEPTH_NESTING);
-+		sock_put(pending);
- 	}
-+
-+	release_sock(sk);
-+	sock_put(sk);
- }
- 
- static void vsock_sk_destruct(struct sock *sk)
-@@ -901,9 +901,22 @@ void vsock_data_ready(struct sock *sk)
- }
- EXPORT_SYMBOL_GPL(vsock_data_ready);
- 
-+/* Dummy callback required by sockmap.
-+ * See unconditional call of saved_close() in sock_map_close().
-+ */
-+static void vsock_close(struct sock *sk, long timeout)
-+{
-+}
-+
- static int vsock_release(struct socket *sock)
- {
--	__vsock_release(sock->sk, 0);
-+	struct sock *sk = sock->sk;
-+
-+	if (!sk)
-+		return 0;
-+
-+	sk->sk_prot->close(sk, 0);
-+	__vsock_release(sk, 0);
- 	sock->sk = NULL;
- 	sock->state = SS_FREE;
- 
+ net/vmw_vsock/af_vsock.c                           | 70 ++++++++++++--------
+ .../selftests/bpf/prog_tests/sockmap_basic.c       | 77 ++++++++++++++++++++++
+ 2 files changed, 120 insertions(+), 27 deletions(-)
+---
+base-commit: 6c4139b0f19b7397286897caee379f8321e78272
+change-id: 20241118-vsock-bpf-poll-close-64f432e682ec
 
+Best regards,
 -- 
-2.46.2
+Michal Luczaj <mhal@rbox.co>
 
