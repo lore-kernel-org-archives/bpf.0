@@ -1,329 +1,554 @@
-Received: from wind.enjellic.com (wind.enjellic.com [76.10.64.91])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 93CD1150994;
-	Wed, 20 Nov 2024 16:55:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=76.10.64.91
+Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D038155330
+	for <bpf@vger.kernel.org>; Wed, 20 Nov 2024 17:02:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.153.30
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732121727; cv=none; b=lCZpJ6+oU1IOgeZqNW9LIfbqJyuxEHFqvlHf4AgZrXzlnPlyhmx47DL1STLgvFeuTmt3Z0dgTqI+u12ur9DrvnvUcwV2OwcV3ja0aHbnDWFd38DhNirz65qhK56xjrg6/hMaQbWpFbSJ8MZBzhnctcR3D7jm+hNBqRhtFp+WdNc=
+	t=1732122176; cv=none; b=oXJUv4SWfeU7OGSC87YLuwOiqyfctNnlppo5NrYYw4qc8LTnGmoluZWvMu5j2IthY4Kaflx151fd/XUoAopYbFjecERE3PJW4ycTeTrZZdNfobwOOAfEMxhK431YdGznmsAlp4wMrcJx3Q9B6saIvimH/XSgCWKNV1AfDmAi1UM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732121727; c=relaxed/simple;
-	bh=VX+3BK6Bok/eIK8oDpdMei+evdB4wKdIEyIm/oeGrWs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Mime-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UF1oAodZwBziPuoKL0R4CwZWE5o9wjNg4PJq7uoqUUCmt9VFYG1Y6f4CIZ4HHLwgMaTn58/hc8uk1DCmwdgds7izCYpoR0tD+eYpPQZkSvhOQ7wq1ukD7OYk+sXTpFjR3FRXyGhnhW96gwGkjL6IO0Cc9Rpi/fnsas+3mn2GBuY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=enjellic.com; spf=pass smtp.mailfrom=wind.enjellic.com; arc=none smtp.client-ip=76.10.64.91
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=enjellic.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wind.enjellic.com
-Received: from wind.enjellic.com (localhost [127.0.0.1])
-	by wind.enjellic.com (8.15.2/8.15.2) with ESMTP id 4AKGsQ9j001857;
-	Wed, 20 Nov 2024 10:54:26 -0600
-Received: (from greg@localhost)
-	by wind.enjellic.com (8.15.2/8.15.2/Submit) id 4AKGsPi8001856;
-	Wed, 20 Nov 2024 10:54:25 -0600
-Date: Wed, 20 Nov 2024 10:54:25 -0600
-From: "Dr. Greg" <greg@enjellic.com>
-To: Casey Schaufler <casey@schaufler-ca.com>
-Cc: Song Liu <songliubraving@meta.com>,
-        James Bottomley <James.Bottomley@HansenPartnership.com>,
-        "jack@suse.cz" <jack@suse.cz>,
-        "brauner@kernel.org" <brauner@kernel.org>, Song Liu <song@kernel.org>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" <linux-security-module@vger.kernel.org>,
-        Kernel Team <kernel-team@meta.com>,
-        "andrii@kernel.org" <andrii@kernel.org>,
-        "eddyz87@gmail.com" <eddyz87@gmail.com>,
-        "ast@kernel.org" <ast@kernel.org>,
-        "daniel@iogearbox.net" <daniel@iogearbox.net>,
-        "martin.lau@linux.dev" <martin.lau@linux.dev>,
-        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
-        "kpsingh@kernel.org" <kpsingh@kernel.org>,
-        "mattbobrowski@google.com" <mattbobrowski@google.com>,
-        "amir73il@gmail.com" <amir73il@gmail.com>,
-        "repnop@google.com" <repnop@google.com>,
-        "jlayton@kernel.org" <jlayton@kernel.org>,
-        Josef Bacik <josef@toxicpanda.com>,
-        "mic@digikod.net" <mic@digikod.net>,
-        "gnoack@google.com" <gnoack@google.com>
-Subject: Re: [PATCH bpf-next 0/4] Make inode storage available to tracing prog
-Message-ID: <20241120165425.GA1723@wind.enjellic.com>
-Reply-To: "Dr. Greg" <greg@enjellic.com>
-References: <332BDB30-BCDC-4F24-BB8C-DD29D5003426@fb.com> <8c86c2b4-cd23-42e0-9eb6-2c8f7a4cbcd4@schaufler-ca.com> <CAPhsuW5zDzUp7eSut9vekzH7WZHpk38fKHmFVRTMiBbeW10_SQ@mail.gmail.com> <20241114163641.GA8697@wind.enjellic.com> <53a3601e-0999-4603-b69f-7bed39d4d89a@schaufler-ca.com> <4BF6D271-51D5-4768-A460-0853ABC5602D@fb.com> <b1e82da8daa1c372e4678b1984ac942c98db998d.camel@HansenPartnership.com> <A7017094-1A0C-42C8-BE9D-7352D2200ECC@fb.com> <20241119122706.GA19220@wind.enjellic.com> <561687f7-b7f3-4d56-a54c-944c52ed18b7@schaufler-ca.com>
+	s=arc-20240116; t=1732122176; c=relaxed/simple;
+	bh=YVuF9wncXib6inBcfsW0WwxuVZJJSkLPIcjE8zJr3fQ=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=VB6K4wKTMcze2mHcyfgn3Lvcer0txyFqJjcAfqbsyQ/k0I71i+3Bvqc05dno4SvmNWQ5lw/86oIO1k6HmB8FafsEuQ83ZUPJ7JSxLc34U2OgtwqaEETh6Z1myiEOfwh90HmPHp6ZDHBljOm+gqb3lap62fBFoWx0BUjzPdrp1JE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com; spf=pass smtp.mailfrom=meta.com; dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b=ReQq3wSg; arc=none smtp.client-ip=67.231.153.30
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b="ReQq3wSg"
+Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
+	by m0001303.ppops.net (8.18.1.2/8.18.1.2) with ESMTP id 4AKEoRMJ007258
+	for <bpf@vger.kernel.org>; Wed, 20 Nov 2024 09:02:53 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=cc
+	:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=s2048-2021-q4; bh=ZjircFNmTTq+3Rk34y
+	r73hZjGbQQiy1K8MXpKR6r0CA=; b=ReQq3wSguYRajpnmLKHU4CjSuVLl+GyHza
+	G2EfM1mcRJDv7DQH88KcLZiPhSS8b06upn7ay02eqRgBIYfYhO+sfCcyJPtsxmPu
+	SneYsf88sL0StLdmG3lOTJYcoNq38Ze6kse9xHYet3URdEItavZmcIq25BcrD0eN
+	46ch0y4GyEJ43L76Ttq7eoFi8DXBcovQ49L9WouFndhRR7BABRAURmQTk2dBk9st
+	fL9uvfGqUbYKLJrGcsIvKF1HQy1R6i7rUiomrL45UUfPNMx63pqO9O/TkGvbwLwF
+	wkyQxK4BXmzU7VYb9kq9NisRzhQvssCJv8te0e5+ercoo+9phfug==
+Received: from mail.thefacebook.com ([163.114.134.16])
+	by m0001303.ppops.net (PPS) with ESMTPS id 431h659ay3-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <bpf@vger.kernel.org>; Wed, 20 Nov 2024 09:02:53 -0800 (PST)
+Received: from twshared10900.35.frc1.facebook.com (2620:10d:c085:108::4) by
+ mail.thefacebook.com (2620:10d:c08b:78::c78f) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.2.1544.11; Wed, 20 Nov 2024 17:02:51 +0000
+Received: by devbig020.cln3.facebook.com (Postfix, from userid 546475)
+	id E637CC949506; Wed, 20 Nov 2024 09:02:39 -0800 (PST)
+From: Alastair Robertson <ajor@meta.com>
+To: <bpf@vger.kernel.org>, <andrii@kernel.org>
+CC: Alastair Robertson <ajor@meta.com>
+Subject: [PATCH bpf-next] libbpf: Extend linker API to support in-memory ELF files
+Date: Wed, 20 Nov 2024 09:02:06 -0800
+Message-ID: <20241120170206.2592931-1-ajor@meta.com>
+X-Mailer: git-send-email 2.43.5
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <561687f7-b7f3-4d56-a54c-944c52ed18b7@schaufler-ca.com>
-User-Agent: Mutt/1.4i
-X-Greylist: Sender passed SPF test, not delayed by milter-greylist-4.2.3 (wind.enjellic.com [127.0.0.1]); Wed, 20 Nov 2024 10:54:26 -0600 (CST)
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-ORIG-GUID: Ne1O78IhMlVz89cOWv3gOMLu4qfUVhke
+X-Proofpoint-GUID: Ne1O78IhMlVz89cOWv3gOMLu4qfUVhke
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
+ definitions=2024-10-05_03,2024-10-04_01,2024-09-30_01
 
-On Tue, Nov 19, 2024 at 10:14:29AM -0800, Casey Schaufler wrote:
+The new_fd, add_fd and finalize_fd functions correspond to the original
+new, add_file and finalize functions, but accept an FD instead of a file
+name. This gives API consumers the option of using anonymous
+files/memfds to avoid writing ELFs to disk.
 
-Good morning, I hope the day is goning well for everyone.
+This new API will be useful for performing linking as part of
+bpftrace's JIT compilation.
 
-> On 11/19/2024 4:27 AM, Dr. Greg wrote:
-> > On Sun, Nov 17, 2024 at 10:59:18PM +0000, Song Liu wrote:
-> >
-> >> Hi Christian, James and Jan, 
-> > Good morning, I hope the day is starting well for everyone.
-> >
-> >>> On Nov 14, 2024, at 1:49???PM, James Bottomley <James.Bottomley@HansenPartnership.com> wrote:
-> >> [...]
-> >>
-> >>>> We can address this with something like following:
-> >>>>
-> >>>> #ifdef CONFIG_SECURITY
-> >>>>         void                    *i_security;
-> >>>> #elif CONFIG_BPF_SYSCALL
-> >>>>         struct bpf_local_storage __rcu *i_bpf_storage;
-> >>>> #endif
-> >>>>
-> >>>> This will help catch all misuse of the i_bpf_storage at compile
-> >>>> time, as i_bpf_storage doesn't exist with CONFIG_SECURITY=y. 
-> >>>>
-> >>>> Does this make sense?
-> >>> Got to say I'm with Casey here, this will generate horrible and failure
-> >>> prone code.
-> >>>
-> >>> Since effectively you're making i_security always present anyway,
-> >>> simply do that and also pull the allocation code out of security.c in a
-> >>> way that it's always available?  That way you don't have to special
-> >>> case the code depending on whether CONFIG_SECURITY is defined. 
-> >>> Effectively this would give everyone a generic way to attach some
-> >>> memory area to an inode.  I know it's more complex than this because
-> >>> there are LSM hooks that run from security_inode_alloc() but if you can
-> >>> make it work generically, I'm sure everyone will benefit.
-> >> On a second thought, I think making i_security generic is not 
-> >> the right solution for "BPF inode storage in tracing use cases". 
-> >>
-> >> This is because i_security serves a very specific use case: it 
-> >> points to a piece of memory whose size is calculated at system 
-> >> boot time. If some of the supported LSMs is not enabled by the 
-> >> lsm= kernel arg, the kernel will not allocate memory in 
-> >> i_security for them. The only way to change lsm= is to reboot 
-> >> the system. BPF LSM programs can be disabled at the boot time, 
-> >> which fits well in i_security. However, BPF tracing programs 
-> >> cannot be disabled at boot time (even we change the code to 
-> >> make it possible, we are not likely to disable BPF tracing). 
-> >> IOW, as long as CONFIG_BPF_SYSCALL is enabled, we expect some 
-> >> BPF tracing programs to load at some point of time, and these 
-> >> programs may use BPF inode storage. 
-> >>
-> >> Therefore, with CONFIG_BPF_SYSCALL enabled, some extra memory 
-> >> always will be attached to i_security (maybe under a different 
-> >> name, say, i_generic) of every inode. In this case, we should 
-> >> really add i_bpf_storage directly to the inode, because another 
-> >> pointer jump via i_generic gives nothing but overhead. 
-> >>
-> >> Does this make sense? Or did I misunderstand the suggestion?
-> > There is a colloquialism that seems relevant here: "Pick your poison".
-> >
-> > In the greater interests of the kernel, it seems that a generic
-> > mechanism for attaching per inode information is the only realistic
-> > path forward, unless Christian changes his position on expanding
-> > the size of struct inode.
-> >
-> > There are two pathways forward.
-> >
-> > 1.) Attach a constant size 'blob' of storage to each inode.
-> >
-> > This is a similar approach to what the LSM uses where each blob is
-> > sized as follows:
-> >
-> > S = U * sizeof(void *)
-> >
-> > Where U is the number of sub-systems that have a desire to use inode
-> > specific storage.
+The add_buf function is a convenience wrapper that does the work of
+creating a memfd for the caller.
 
-> I can't tell for sure, but it looks like you don't understand how
-> LSM i_security blobs are used. It is *not* the case that each LSM
-> gets a pointer in the i_security blob. Each LSM that wants storage
-> tells the infrastructure at initialization time how much space it
-> wants in the blob. That can be a pointer, but usually it's a struct
-> with flags, pointers and even lists.
+Signed-off-by: Alastair Robertson <ajor@meta.com>
+---
+ tools/lib/bpf/libbpf.h   |   9 ++
+ tools/lib/bpf/libbpf.map |   4 +
+ tools/lib/bpf/linker.c   | 229 +++++++++++++++++++++++++++++----------
+ 3 files changed, 185 insertions(+), 57 deletions(-)
 
-I can state unequivocably for everyone's benefit, that as a team, we
-have an intimate understanding of how LSM i_security blobs are used.
+diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
+index b2ce3a72b11d..aae8f954c4fc 100644
+--- a/tools/lib/bpf/libbpf.h
++++ b/tools/lib/bpf/libbpf.h
+@@ -1796,10 +1796,19 @@ struct bpf_linker_file_opts {
+ struct bpf_linker;
+=20
+ LIBBPF_API struct bpf_linker *bpf_linker__new(const char *filename, stru=
+ct bpf_linker_opts *opts);
++LIBBPF_API struct bpf_linker *bpf_linker__new_fd(const char *name, int f=
+d,
++						 struct bpf_linker_opts *opts);
+ LIBBPF_API int bpf_linker__add_file(struct bpf_linker *linker,
+ 				    const char *filename,
+ 				    const struct bpf_linker_file_opts *opts);
++LIBBPF_API int bpf_linker__add_fd(struct bpf_linker *linker,
++				  const char *name, int fd,
++				  const struct bpf_linker_file_opts *opts);
++LIBBPF_API int bpf_linker__add_buf(struct bpf_linker *linker, const char=
+ *name,
++				   void *buffer, int buffer_sz,
++				   const struct bpf_linker_file_opts *opts);
+ LIBBPF_API int bpf_linker__finalize(struct bpf_linker *linker);
++LIBBPF_API int bpf_linker__finalize_fd(struct bpf_linker *linker);
+ LIBBPF_API void bpf_linker__free(struct bpf_linker *linker);
+=20
+ /*
+diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
+index 54b6f312cfa8..e767f34c1d08 100644
+--- a/tools/lib/bpf/libbpf.map
++++ b/tools/lib/bpf/libbpf.map
+@@ -432,4 +432,8 @@ LIBBPF_1.5.0 {
+ } LIBBPF_1.4.0;
+=20
+ LIBBPF_1.6.0 {
++		bpf_linker__new_fd;
++		bpf_linker__add_fd;
++		bpf_linker__add_buf;
++		bpf_linker__finalize_fd;
+ } LIBBPF_1.5.0;
+diff --git a/tools/lib/bpf/linker.c b/tools/lib/bpf/linker.c
+index cf71d149fe26..6571ed8b858f 100644
+--- a/tools/lib/bpf/linker.c
++++ b/tools/lib/bpf/linker.c
+@@ -4,6 +4,8 @@
+  *
+  * Copyright (c) 2021 Facebook
+  */
++#define _GNU_SOURCE
++
+ #include <stdbool.h>
+ #include <stddef.h>
+ #include <stdio.h>
+@@ -16,6 +18,7 @@
+ #include <elf.h>
+ #include <libelf.h>
+ #include <fcntl.h>
++#include <sys/mman.h>
+ #include "libbpf.h"
+ #include "btf.h"
+ #include "libbpf_internal.h"
+@@ -157,9 +160,9 @@ struct bpf_linker {
+ #define pr_warn_elf(fmt, ...)									\
+ 	libbpf_print(LIBBPF_WARN, "libbpf: " fmt ": %s\n", ##__VA_ARGS__, elf_e=
+rrmsg(-1))
+=20
+-static int init_output_elf(struct bpf_linker *linker, const char *file);
++static int init_output_elf(struct bpf_linker *linker);
+=20
+-static int linker_load_obj_file(struct bpf_linker *linker, const char *f=
+ilename,
++static int linker_load_obj_file(struct bpf_linker *linker,
+ 				const struct bpf_linker_file_opts *opts,
+ 				struct src_obj *obj);
+ static int linker_sanity_check_elf(struct src_obj *obj);
+@@ -233,9 +236,56 @@ struct bpf_linker *bpf_linker__new(const char *filen=
+ame, struct bpf_linker_opts
+ 	if (!linker)
+ 		return errno =3D ENOMEM, NULL;
+=20
+-	linker->fd =3D -1;
++	linker->filename =3D strdup(filename);
++	if (!linker->filename)
++		return errno =3D ENOMEM, NULL;
++
++	linker->fd =3D open(filename, O_WRONLY | O_CREAT | O_TRUNC | O_CLOEXEC,=
+ 0644);
++	if (linker->fd < 0) {
++		err =3D -errno;
++		pr_warn("failed to create '%s': %d\n", filename, err);
++		goto err_out;
++	}
++
++	err =3D init_output_elf(linker);
++	if (err)
++		goto err_out;
++
++	return linker;
++
++err_out:
++	bpf_linker__free(linker);
++	return errno =3D -err, NULL;
++}
++
++struct bpf_linker *bpf_linker__new_fd(const char *name, int fd,
++				      struct bpf_linker_opts *opts)
++{
++	struct bpf_linker *linker;
++	int err;
++
++	if (fd < 0)
++		return errno =3D EINVAL, NULL;
++
++	if (!OPTS_VALID(opts, bpf_linker_opts))
++		return errno =3D EINVAL, NULL;
++
++	if (elf_version(EV_CURRENT) =3D=3D EV_NONE) {
++		pr_warn_elf("libelf initialization failed");
++		return errno =3D EINVAL, NULL;
++	}
++
++	linker =3D calloc(1, sizeof(*linker));
++	if (!linker)
++		return errno =3D ENOMEM, NULL;
++
++	linker->filename =3D strdup(name);
++	if (!linker->filename)
++		return errno =3D ENOMEM, NULL;
++
++	linker->fd =3D fd;
+=20
+-	err =3D init_output_elf(linker, filename);
++	err =3D init_output_elf(linker);
+ 	if (err)
+ 		goto err_out;
+=20
+@@ -294,23 +344,12 @@ static Elf64_Sym *add_new_sym(struct bpf_linker *li=
+nker, size_t *sym_idx)
+ 	return sym;
+ }
+=20
+-static int init_output_elf(struct bpf_linker *linker, const char *file)
++static int init_output_elf(struct bpf_linker *linker)
+ {
+ 	int err, str_off;
+ 	Elf64_Sym *init_sym;
+ 	struct dst_sec *sec;
+=20
+-	linker->filename =3D strdup(file);
+-	if (!linker->filename)
+-		return -ENOMEM;
+-
+-	linker->fd =3D open(file, O_WRONLY | O_CREAT | O_TRUNC | O_CLOEXEC, 064=
+4);
+-	if (linker->fd < 0) {
+-		err =3D -errno;
+-		pr_warn("failed to create '%s': %s\n", file, errstr(err));
+-		return err;
+-	}
+-
+ 	linker->elf =3D elf_begin(linker->fd, ELF_C_WRITE, NULL);
+ 	if (!linker->elf) {
+ 		pr_warn_elf("failed to create ELF object");
+@@ -436,10 +475,9 @@ static int init_output_elf(struct bpf_linker *linker=
+, const char *file)
+ 	return 0;
+ }
+=20
+-int bpf_linker__add_file(struct bpf_linker *linker, const char *filename=
+,
+-			 const struct bpf_linker_file_opts *opts)
++static int linker_add_common(struct bpf_linker *linker, struct src_obj *=
+obj,
++			     const struct bpf_linker_file_opts *opts)
+ {
+-	struct src_obj obj =3D {};
+ 	int err =3D 0;
+=20
+ 	if (!OPTS_VALID(opts, bpf_linker_file_opts))
+@@ -448,25 +486,91 @@ int bpf_linker__add_file(struct bpf_linker *linker,=
+ const char *filename,
+ 	if (!linker->elf)
+ 		return libbpf_err(-EINVAL);
+=20
+-	err =3D err ?: linker_load_obj_file(linker, filename, opts, &obj);
+-	err =3D err ?: linker_append_sec_data(linker, &obj);
+-	err =3D err ?: linker_append_elf_syms(linker, &obj);
+-	err =3D err ?: linker_append_elf_relos(linker, &obj);
+-	err =3D err ?: linker_append_btf(linker, &obj);
+-	err =3D err ?: linker_append_btf_ext(linker, &obj);
++	err =3D err ?: linker_load_obj_file(linker, opts, obj);
++	err =3D err ?: linker_append_sec_data(linker, obj);
++	err =3D err ?: linker_append_elf_syms(linker, obj);
++	err =3D err ?: linker_append_elf_relos(linker, obj);
++	err =3D err ?: linker_append_btf(linker, obj);
++	err =3D err ?: linker_append_btf_ext(linker, obj);
+=20
+ 	/* free up src_obj resources */
+-	free(obj.btf_type_map);
+-	btf__free(obj.btf);
+-	btf_ext__free(obj.btf_ext);
+-	free(obj.secs);
+-	free(obj.sym_map);
+-	if (obj.elf)
+-		elf_end(obj.elf);
++	free(obj->btf_type_map);
++	btf__free(obj->btf);
++	btf_ext__free(obj->btf_ext);
++	free(obj->secs);
++	free(obj->sym_map);
++	if (obj->elf)
++		elf_end(obj->elf);
++	/* leave obj->fd for the caller to clean up if appropriate */
++
++	return libbpf_err(err);
++}
++
++int bpf_linker__add_file(struct bpf_linker *linker, const char *filename=
+,
++			 const struct bpf_linker_file_opts *opts)
++{
++	struct src_obj obj =3D {};
++	int ret;
++
++	obj.filename =3D filename;
++	obj.fd =3D open(filename, O_RDONLY | O_CLOEXEC);
++	if (obj.fd < 0) {
++		pr_warn("failed to open file '%s': %s\n", filename, errstr(errno));
++		return -errno;
++	}
++
++	ret =3D linker_add_common(linker, &obj, opts);
++
+ 	if (obj.fd >=3D 0)
+ 		close(obj.fd);
+=20
+-	return libbpf_err(err);
++	return ret;
++}
++
++int bpf_linker__add_fd(struct bpf_linker *linker, const char *name, int =
+fd,
++		       const struct bpf_linker_file_opts *opts)
++{
++	struct src_obj obj =3D {};
++
++	if (fd < 0)
++		return libbpf_err(-EINVAL);
++
++	obj.filename =3D name;
++	obj.fd =3D fd;
++
++	return linker_add_common(linker, &obj, opts);
++}
++
++int bpf_linker__add_buf(struct bpf_linker *linker, const char *name,
++			void *buffer, int buffer_sz,
++			const struct bpf_linker_file_opts *opts)
++{
++	struct src_obj obj =3D {};
++	int written, ret;
++
++	obj.filename =3D name;
++	obj.fd =3D memfd_create(name, 0);
++	if (obj.fd < 0) {
++		pr_warn("failed to create memfd '%s': %s\n", name, errstr(errno));
++		return -errno;
++	}
++
++	written =3D 0;
++	while (written < buffer_sz) {
++		ret =3D write(obj.fd, buffer, buffer_sz);
++		if (ret < 0) {
++			pr_warn("failed to write '%s': %s\n", name, errstr(errno));
++			return -errno;
++		}
++		written +=3D ret;
++	}
++
++	ret =3D linker_add_common(linker, &obj, opts);
++
++	if (obj.fd >=3D 0)
++		close(obj.fd);
++
++	return ret;
+ }
+=20
+ static bool is_dwarf_sec_name(const char *name)
+@@ -534,7 +638,7 @@ static struct src_sec *add_src_sec(struct src_obj *ob=
+j, const char *sec_name)
+ 	return sec;
+ }
+=20
+-static int linker_load_obj_file(struct bpf_linker *linker, const char *f=
+ilename,
++static int linker_load_obj_file(struct bpf_linker *linker,
+ 				const struct bpf_linker_file_opts *opts,
+ 				struct src_obj *obj)
+ {
+@@ -554,20 +658,12 @@ static int linker_load_obj_file(struct bpf_linker *=
+linker, const char *filename,
+ #error "Unknown __BYTE_ORDER__"
+ #endif
+=20
+-	pr_debug("linker: adding object file '%s'...\n", filename);
+-
+-	obj->filename =3D filename;
++	pr_debug("linker: adding object file '%s'...\n", obj->filename);
+=20
+-	obj->fd =3D open(filename, O_RDONLY | O_CLOEXEC);
+-	if (obj->fd < 0) {
+-		err =3D -errno;
+-		pr_warn("failed to open file '%s': %s\n", filename, errstr(err));
+-		return err;
+-	}
+ 	obj->elf =3D elf_begin(obj->fd, ELF_C_READ_MMAP, NULL);
+ 	if (!obj->elf) {
+ 		err =3D -errno;
+-		pr_warn_elf("failed to parse ELF file '%s'", filename);
++		pr_warn_elf("failed to parse ELF file '%s'", obj->filename);
+ 		return err;
+ 	}
+=20
+@@ -575,7 +671,7 @@ static int linker_load_obj_file(struct bpf_linker *li=
+nker, const char *filename,
+ 	ehdr =3D elf64_getehdr(obj->elf);
+ 	if (!ehdr) {
+ 		err =3D -errno;
+-		pr_warn_elf("failed to get ELF header for %s", filename);
++		pr_warn_elf("failed to get ELF header for %s", obj->filename);
+ 		return err;
+ 	}
+=20
+@@ -583,7 +679,7 @@ static int linker_load_obj_file(struct bpf_linker *li=
+nker, const char *filename,
+ 	obj_byteorder =3D ehdr->e_ident[EI_DATA];
+ 	if (obj_byteorder !=3D ELFDATA2LSB && obj_byteorder !=3D ELFDATA2MSB) {
+ 		err =3D -EOPNOTSUPP;
+-		pr_warn("unknown byte order of ELF file %s\n", filename);
++		pr_warn("unknown byte order of ELF file %s\n", obj->filename);
+ 		return err;
+ 	}
+ 	if (link_byteorder =3D=3D ELFDATANONE) {
+@@ -593,7 +689,7 @@ static int linker_load_obj_file(struct bpf_linker *li=
+nker, const char *filename,
+ 			 obj_byteorder =3D=3D ELFDATA2MSB ? "big" : "little");
+ 	} else if (link_byteorder !=3D obj_byteorder) {
+ 		err =3D -EOPNOTSUPP;
+-		pr_warn("byte order mismatch with ELF file %s\n", filename);
++		pr_warn("byte order mismatch with ELF file %s\n", obj->filename);
+ 		return err;
+ 	}
+=20
+@@ -601,13 +697,13 @@ static int linker_load_obj_file(struct bpf_linker *=
+linker, const char *filename,
+ 	    || ehdr->e_machine !=3D EM_BPF
+ 	    || ehdr->e_ident[EI_CLASS] !=3D ELFCLASS64) {
+ 		err =3D -EOPNOTSUPP;
+-		pr_warn_elf("unsupported kind of ELF file %s", filename);
++		pr_warn_elf("unsupported kind of ELF file %s", obj->filename);
+ 		return err;
+ 	}
+=20
+ 	if (elf_getshdrstrndx(obj->elf, &obj->shstrs_sec_idx)) {
+ 		err =3D -errno;
+-		pr_warn_elf("failed to get SHSTRTAB section index for %s", filename);
++		pr_warn_elf("failed to get SHSTRTAB section index for %s", obj->filena=
+me);
+ 		return err;
+ 	}
+=20
+@@ -620,7 +716,7 @@ static int linker_load_obj_file(struct bpf_linker *li=
+nker, const char *filename,
+ 		if (!shdr) {
+ 			err =3D -errno;
+ 			pr_warn_elf("failed to get section #%zu header for %s",
+-				    sec_idx, filename);
++				    sec_idx, obj->filename);
+ 			return err;
+ 		}
+=20
+@@ -628,7 +724,7 @@ static int linker_load_obj_file(struct bpf_linker *li=
+nker, const char *filename,
+ 		if (!sec_name) {
+ 			err =3D -errno;
+ 			pr_warn_elf("failed to get section #%zu name for %s",
+-				    sec_idx, filename);
++				    sec_idx, obj->filename);
+ 			return err;
+ 		}
+=20
+@@ -636,7 +732,7 @@ static int linker_load_obj_file(struct bpf_linker *li=
+nker, const char *filename,
+ 		if (!data) {
+ 			err =3D -errno;
+ 			pr_warn_elf("failed to get section #%zu (%s) data from %s",
+-				    sec_idx, sec_name, filename);
++				    sec_idx, sec_name, obj->filename);
+ 			return err;
+ 		}
+=20
+@@ -672,7 +768,7 @@ static int linker_load_obj_file(struct bpf_linker *li=
+nker, const char *filename,
+ 				err =3D libbpf_get_error(obj->btf);
+ 				if (err) {
+ 					pr_warn("failed to parse .BTF from %s: %s\n",
+-						filename, errstr(err));
++						obj->filename, errstr(err));
+ 					return err;
+ 				}
+ 				sec->skipped =3D true;
+@@ -683,7 +779,7 @@ static int linker_load_obj_file(struct bpf_linker *li=
+nker, const char *filename,
+ 				err =3D libbpf_get_error(obj->btf_ext);
+ 				if (err) {
+ 					pr_warn("failed to parse .BTF.ext from '%s': %s\n",
+-						filename, errstr(err));
++						obj->filename, errstr(err));
+ 					return err;
+ 				}
+ 				sec->skipped =3D true;
+@@ -700,7 +796,7 @@ static int linker_load_obj_file(struct bpf_linker *li=
+nker, const char *filename,
+ 			break;
+ 		default:
+ 			pr_warn("unrecognized section #%zu (%s) in %s\n",
+-				sec_idx, sec_name, filename);
++				sec_idx, sec_name, obj->filename);
+ 			err =3D -EINVAL;
+ 			return err;
+ 		}
+@@ -2634,7 +2730,7 @@ static int linker_append_btf_ext(struct bpf_linker =
+*linker, struct src_obj *obj)
+ 	return 0;
+ }
+=20
+-int bpf_linker__finalize(struct bpf_linker *linker)
++int linker_finalize_common(struct bpf_linker *linker)
+ {
+ 	struct dst_sec *sec;
+ 	size_t strs_sz;
+@@ -2693,9 +2789,28 @@ int bpf_linker__finalize(struct bpf_linker *linker=
+)
+ 	}
+=20
+ 	elf_end(linker->elf);
++	linker->elf =3D NULL;
++
++	/* leave linker->fd for the caller to close if appropriate */
++
++	return 0;
++}
++
++int bpf_linker__finalize(struct bpf_linker *linker)
++{
++	linker_finalize_common(linker);
++
+ 	close(linker->fd);
++	linker->fd =3D -1;
+=20
+-	linker->elf =3D NULL;
++	return 0;
++}
++
++int bpf_linker__finalize_fd(struct bpf_linker *linker)
++{
++	linker_finalize_common(linker);
++
++	/* linker->fd was opened by the caller, so do not close it here */
+ 	linker->fd =3D -1;
+=20
+ 	return 0;
+--=20
+2.43.5
 
-It was 0500 in the morning when I wrote the reply and I had personally
-been working for 22 hours straight, so my apologies for being
-imprecise.
-
-I should not have specified sizeof(void *), I should have written
-sizeof(allocation), for lack of a better syntax.
-
-Also for the record, in a universal allocation scheme, when I say
-sub-system I mean any implementation that would make use of per inode
-information.  So the LSM, bpf tracing et.al., could all be considered
-sub-systems that would register at boot time for a section of the
-arena.
-
-> > Each sub-system uses it's pointer slot to manage any additional
-> > storage that it desires to attach to the inode.
-
-> Again, an LSM may choose to do it that way, but most don't.  SELinux
-> and Smack need data on every inode. It makes much more sense to put
-> it directly in the blob than to allocate a separate chunk for every
-> inode.
-
-See my correction above.
-
-> > This has the obvious advantage of O(1) cost complexity for any
-> > sub-system that wants to access its inode specific storage.
-> >
-> > The disadvantage, as you note, is that it wastes memory if a
-> > sub-system does not elect to attach per inode information, for example
-> > the tracing infrastructure.
-
-> To be clear, that disadvantage only comes up if the sub-system uses
-> inode data on an occasional basis. If it never uses inode data there
-> is no need to have a pointer to it.
-
-I think we all agree on that, therein lies the rub with a common arena
-architecture, which is why I indicated in my earlier e-mail that this
-comes down to engineering trade-off decisions.
-
-That is why there would be a probable assumption that such sub-systems
-would only request a pointer per arena slot and use that to reference
-a dynamically allocated structure.  If, as a group, we are really
-concerned about inode memory consumption the assumption would be that
-the maintainers would have to whine about sparse consumers requesting
-a structure sized allocation rather than a pointer sized allocation.
-
-> > This disadvantage is parried by the fact that it reduces the size of
-> > the inode proper by 24 bytes (4 pointers down to 1) and allows future
-> > extensibility without colliding with the interests and desires of the
-> > VFS maintainers.
-
-> You're adding a level of indirection. Even I would object based on
-> the performance impact.
-
-I'm not sure that a thorough and complete analysis of the costs
-associated with a sub-system touching inode local storage would
-support the notion of a tangible performance hit.
-
-The pointer in an arena slot would presumably be a pointer to a data
-structure that a sub-system allocates at inode creation time.  After
-computing the arena slot address in classic style (i_arena + offset)
-the sub-system uses the pointer at that location to dereference
-its structure elements or to find subordinate members in its arena.
-
-If we take SMACK as an example, the smack inode contains three
-pointers and a scalar.  So, if there is a need to access storage behind
-one of those pointers, there is an additional indirection hit.
-
-The three pointers are each to a structure (smack_known) that has
-three list pointers and a mutex lock inside of it.
-
-The SeLinux inode has a back pointer to the sponsoring inode, a list
-head, a spinlock and some scalars.
-
-So there is lots of potential indirection and locking going on with
-access to inode local storage.
-
-To extend further, for everyone thinking about this from an
-engineering perspective.
-
-A common arena model where everyone asks for a structure sized blob is
-inherently cache pessimal.  Unless you are the first blob in the arena
-you are going to need to hit another cache-line in order to start the
-indirection process for your structure.
-
-A pointer based arena architecture would allow up to eight sub-systems
-to get their inode storage pointer for the cost of a single cache-line
-fetch.
-
-Let me offer another line of thinking on this drawn from the
-discussion above.
-
-A further optimization in the single pointer arena model is for the
-LSM to place a pointer to a standard LSM sized memory blob in its
-pointer slot on behalf of all the individual LSM's.  All of the
-individual participating LSM's take that pointer and do the offset
-calculation into the LSM arena for that inode as they normally would.
-
-So there would seem to be a lot of engineering issues to consider that
-are beyond the simple predicate that indirection is bad.
-
-See, I do understand how the LSM arena model works.
-
-> > 2.) Implement key/value mapping for inode specific storage.
-> >
-> > The key would be a sub-system specific numeric value that returns a
-> > pointer the sub-system uses to manage its inode specific memory for a
-> > particular inode.
-> >
-> > A participating sub-system in turn uses its identifier to register an
-> > inode specific pointer for its sub-system.
-> >
-> > This strategy loses O(1) lookup complexity but reduces total memory
-> > consumption and only imposes memory costs for inodes when a sub-system
-> > desires to use inode specific storage.
-
-> SELinux and Smack use an inode blob for every inode. The performance
-> regression boggles the mind. Not to mention the additional
-> complexity of managing the memory.
-
-I guess we would have to measure the performance impacts to understand
-their level of mind boggliness.
-
-My first thought is that we hear a huge amount of fanfare about BPF
-being a game changer for tracing and network monitoring.  Given
-current networking speeds, if its ability to manage storage needed for
-it purposes are truely abysmal the industry wouldn't be finding the
-technology useful.
-
-Beyond that.
-
-As I noted above, the LSM could be an independent subscriber.  The
-pointer to register would come from the the kmem_cache allocator as it
-does now, so that cost is idempotent with the current implementation.
-The pointer registration would also be a single instance cost.
-
-So the primary cost differential over the common arena model will be
-the complexity costs associated with lookups in a red/black tree, if
-we used the old IMA integrity cache as an example implementation.
-
-As I noted above, these per inode local storage structures are complex
-in of themselves, including lists and locks.  If touching an inode
-involves locking and walking lists and the like it would seem that
-those performance impacts would quickly swamp an r/b lookup cost.
-
-> > Approach 2 requires the introduction of generic infrastructure that
-> > allows an inode's key/value mappings to be located, presumably based
-> > on the inode's pointer value.  We could probably just resurrect the
-> > old IMA iint code for this purpose.
-> >
-> > In the end it comes down to a rather standard trade-off in this
-> > business, memory vs. execution cost.
-> >
-> > We would posit that option 2 is the only viable scheme if the design
-> > metric is overall good for the Linux kernel eco-system.
-
-> No. Really, no. You need look no further than secmarks to understand
-> how a key based blob allocation scheme leads to tears. Keys are fine
-> in the case where use of data is sparse. They have no place when data
-> use is the norm.
-
-Then it would seem that we need to get everyone to agree that we can
-get by with using two pointers in struct inode.  One for uses best
-served by common arena allocation and one for a key/pointer mapping,
-and then convert the sub-systems accordingly.
-
-Or alternately, getting everyone to agree that allocating a mininum of
-eight additional bytes for every subscriber to private inode data
-isn't the end of the world, even if use of the resource is sparse.
-
-Of course, experience would suggest, that getting everyone in this
-community to agree on something is roughly akin to throwing a hand
-grenade into a chicken coop with an expectation that all of the
-chickens will fly out in a uniform flock formation.
-
-As always,
-Dr. Greg
-
-The Quixote Project - Flailing at the Travails of Cybersecurity
-              https://github.com/Quixote-Project
