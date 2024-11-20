@@ -1,38 +1,39 @@
 Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F85515533F;
-	Wed, 20 Nov 2024 07:43:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A62D15B12A;
+	Wed, 20 Nov 2024 07:43:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.193
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732088613; cv=none; b=iKaejunu/kcoOh7fqaIBxMp7d936Ea5ic5E9wa0Grh0iLlfbMhVIfoj9kzsz23dN2+56fZwNFfG3f9GSPxLjd0oMUdelrazuQZmd7EKYNWOu7DrJHdK0UBnnCBVUNaqyBXeJtdzRDMqhY6I5ejAGQ8oKPeR28wSZWaYHGi+6Iz4=
+	t=1732088613; cv=none; b=YJWDJ14BbyI7H83E+nsE2462axSTGC4EAGtlyyb2+TyMBjUSMALEYyworP5mcrcTkjYqkHWGPo7ivZIEjIPdBzuWawomQ0QAwFqEjQqGYYaNE2KMxTKe4rZ1oRGZ/eh9PFNyAXuLWPu4XA2l0nWK0qPdGKQD6HuXfr8/ghU1CyE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1732088613; c=relaxed/simple;
-	bh=0CdquCFaES4KDH1W2g2KxERpmc7esmrg9IkJD3SUXD4=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=eQAEvPw8Pk7GXm+VhMgWGjDVyUtJexX7DHbG2bAIvRsbra7csGOfsj730/EiM/pq2UYstNb9uAdMzEyTxEwoUlzrHGaSMXztF8KhKynGuCc9hPA2uk1D9t/6C4y2299Rqv+Z844cK36HLW7Qc3AUur9d5kxBC3nkvYE6PxmTW9s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=CD6qGQI3; arc=none smtp.client-ip=217.70.183.193
+	bh=ui0K11h2BqAi3EQXmTlSk58FD0MSwpDPwFk9EMELXTA=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=DOzRuUtd5UWcq//2qwyG8u7MvrTTM9gjFtx279WPoO+na8amBuoXA2rO5o9VudKR73i0bjbWma5PNBu6Kq7o35fA61B8IfxvPmJq4/7KVWmqYMzIWth93BamqS2ps1SF6O5IsNGc2xLuLbIzPxUVQ46EWAlU6ApZoamHGTTrcGw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=WebqPXUD; arc=none smtp.client-ip=217.70.183.193
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="CD6qGQI3"
-Received: by mail.gandi.net (Postfix) with ESMTPSA id E5F38240003;
-	Wed, 20 Nov 2024 07:43:24 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="WebqPXUD"
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 1867224000A;
+	Wed, 20 Nov 2024 07:43:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1732088606;
+	t=1732088609;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=KMZdNfbUY+BAlC109d0n5H3KzVea6UjxKkrWS1zAHd8=;
-	b=CD6qGQI3r+u88yac/u7L4e2TEA148/TLyUabiSBOlRDttm6mESPVamNyqqiaFyIKZIONAS
-	YYYKl6eBPFzZ9puZLLpQ8scbm4EHDlM/+GwtdDkfvDSzsnbMQZsN3Kdlk4i7LjhviMMR5b
-	DlPt7MIfjo/2kXlzFnmWtBhMrtSfE3kWbbg6o9xG4+3Y54gcNKTI9ixQr39M4letDsaKh/
-	c2ee8srL00HgHHeyhoLzAX+8xgk1bod6+MfgsYJB7A8K8KWGiUWjcDo30zxlei35AenKxO
-	JiV6Qmx5+2fvczBg2gbA/AZThDmoIDA7YcDbtEUyFlrqs01coSzeX/Wh5ihFTg==
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=2ZZkZHeM1n0I1stm2HVSZd+R9ir7TPI/7m/y4WMl+Yw=;
+	b=WebqPXUDHr9FUjnVioUVvQ20E4cYTf6qj1EVrMDPeqsC0zbg/6Fm7YEBd1dTD9WpyhPLY0
+	LjWeYNcpDfkNHzaaoHpbRq6HotaNHisyMNRT9ngp++LjHKRPUeEtv4VHVLb5aQH2CDmbq0
+	TygiclMISrFkbcU87FDNBRuTY4T2VM443ixZVZLl0tAuUrduf9goFCT9tGBU0Ygh/56+1x
+	pYCD7Dc+3EGKqNFWlhB7RIm3N5pq2V6ga1/bM0yjQgok1gh/wSoAWQ4wJAZWUxMsnjNoQj
+	n8scEhvJ6Hy9hEh6yb4B2omoVST5mGK+xCDxYo1/7NIOQ/CqI1kio3Go1YizOw==
 From: =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
-Subject: [PATCH bpf-next v3 00/14] selftests/bpf: migrate
- test_flow_dissector.sh to test_progs
-Date: Wed, 20 Nov 2024 08:43:10 +0100
-Message-Id: <20241120-flow_dissector-v3-0-45b46494f937@bootlin.com>
+Date: Wed, 20 Nov 2024 08:43:12 +0100
+Subject: [PATCH bpf-next v3 02/14] selftests/bpf: use ASSERT_MEMEQ to
+ compare bpf flow keys
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -41,11 +42,9 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-B4-Tracking: v=1; b=H4sIAA6TPWcC/2XNywqDMBQE0F+Ru25KXip21f8opZjkpgaskURSi
- /jvDVn1sRyGObNBxOAwwqnaIGBy0fkpB3GoQA/9dEfiTM7AKZeMso7Y0T9vxsWIevGBCFRU09Z
- q1gjIozmgdWsBL6BmSyZcF7jmZnAxD17lKbHSF5Qx8YsmRijhrZbG0rrjRp+V98vopqP2j4Il/
- gnIP4BnAFH2QqEw2NTfwL7vb2w1GNr5AAAA
-X-Change-ID: 20241019-flow_dissector-3eb0c07fc163
+Message-Id: <20241120-flow_dissector-v3-2-45b46494f937@bootlin.com>
+References: <20241120-flow_dissector-v3-0-45b46494f937@bootlin.com>
+In-Reply-To: <20241120-flow_dissector-v3-0-45b46494f937@bootlin.com>
 To: Andrii Nakryiko <andrii@kernel.org>, 
  Eduard Zingerman <eddyz87@gmail.com>, Mykola Lysenko <mykolal@fb.com>, 
  Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
@@ -65,93 +64,95 @@ Cc: ebpf@linuxfoundation.org,
 X-Mailer: b4 0.14.2
 X-GND-Sasl: alexis.lothore@bootlin.com
 
-Hello,
-this is the revision 3 of test_flow_dissector_migration.sh into
-test_progs. This revision addresses comments from Stanislas, especially
-about proper reuse of pseudo-header checksuming in new network helpers.
+The flow_dissector program currently compares flow keys returned by bpf
+program with the expected one thanks to a custom macro using memcmp.
 
-There are 2 "main" parts in test_flow_dissector.sh:
-- a set of tests checking flow_dissector programs attachment to either
-  root namespace or non-root namespace
-- dissection test
+Use the new ASSERT_MEMEQ macro to perform this comparision. This update
+also allows to get rid of the unused bpf_test_run_opts variable in
+run_tests_skb_less (it was only used by the CHECK macro for its duration
+field)
 
-The first set is integrated in flow_dissector.c, which already contains
-some existing tests for flow_dissector programs. This series uses the
-opportunity to update a bit this file (use new assert, re-split tests,
-etc)
-The second part is migrated into a new file under test_progs,
-flow_dissector_classification.c. It uses the same eBPF programs as
-flow_dissector.c, but the difference is rather about how those program
-are executed:
-- flow_dissector.c manually runs programs with BPF_PROG_RUN
-- flow_dissector_classification.c sends real packets to be dissected, and
-  so it also executes kernel code related to eBPF flow dissector (eg:
-__skb_flow_bpf_to_target)
-
+Acked-by: Stanislav Fomichev <sdf@fomichev.me>
+Signed-off-by: Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
 ---
 Changes in v3:
-- Keep new helpers name in sync with kernel ones
-- Document some existing network helpers
-- Properly reuse pseudo-header csum helper in transport layer csum
-  helper
-- Drop duplicate assert
-- Use const for test structure in the migrated test
-- Simplify shutdown callchain for basic test
-- collect Acked-by
-- Link to v2: https://lore.kernel.org/r/20241114-flow_dissector-v2-0-ee4a3be3de65@bootlin.com
+- none
 
 Changes in v2:
-- allow tests to run in parallel
-- move some generic helpers to network_helpers.h
-- define proper function for ASSERT_MEMEQ
-- fetch acked-by tags
-- Link to v1: https://lore.kernel.org/r/20241113-flow_dissector-v1-0-27c4df0592dc@bootlin.com
-
+- fetch acked-by tag
 ---
-Alexis Lothoré (eBPF Foundation) (14):
-      selftests/bpf: add a macro to compare raw memory
-      selftests/bpf: use ASSERT_MEMEQ to compare bpf flow keys
-      selftests/bpf: replace CHECK calls with ASSERT macros in flow_dissector test
-      selftests/bpf: re-split main function into dedicated tests
-      selftests/bpf: expose all subtests from flow_dissector
-      selftests/bpf: add gre packets testing to flow_dissector
-      selftests/bpf: migrate flow_dissector namespace exclusivity test
-      selftests/bpf: Enable generic tc actions in selftests config
-      selftests/bpf: move ip checksum helper to network helpers
-      selftests/bpf: document pseudo-header checksum helpers
-      selftests/bpf: use the same udp and tcp headers in tests under test_progs
-      selftests/bpf: add network helpers to generate udp checksums
-      selftests/bpf: migrate bpf flow dissectors tests to test_progs
-      selftests/bpf: remove test_flow_dissector.sh
+ .../selftests/bpf/prog_tests/flow_dissector.c      | 36 ++++------------------
+ 1 file changed, 6 insertions(+), 30 deletions(-)
 
- tools/testing/selftests/bpf/.gitignore             |   1 -
- tools/testing/selftests/bpf/Makefile               |   3 +-
- tools/testing/selftests/bpf/config                 |   1 +
- tools/testing/selftests/bpf/network_helpers.c      |   2 +-
- tools/testing/selftests/bpf/network_helpers.h      |  96 +++
- .../selftests/bpf/prog_tests/flow_dissector.c      | 323 +++++++--
- .../bpf/prog_tests/flow_dissector_classification.c | 792 +++++++++++++++++++++
- .../testing/selftests/bpf/prog_tests/sockopt_sk.c  |   2 +-
- .../testing/selftests/bpf/prog_tests/xdp_bonding.c |   2 +-
- .../selftests/bpf/prog_tests/xdp_do_redirect.c     |   2 +-
- .../selftests/bpf/prog_tests/xdp_flowtable.c       |   2 +-
- .../selftests/bpf/prog_tests/xdp_metadata.c        |  21 +-
- .../selftests/bpf/progs/test_cls_redirect.c        |   2 +-
- .../selftests/bpf/progs/test_cls_redirect.h        |   2 +-
- .../selftests/bpf/progs/test_cls_redirect_dynptr.c |   2 +-
- tools/testing/selftests/bpf/test_flow_dissector.c  | 780 --------------------
- tools/testing/selftests/bpf/test_flow_dissector.sh | 178 -----
- tools/testing/selftests/bpf/test_progs.c           |  15 +
- tools/testing/selftests/bpf/test_progs.h           |  15 +
- tools/testing/selftests/bpf/xdp_hw_metadata.c      |   2 +-
- 20 files changed, 1176 insertions(+), 1067 deletions(-)
----
-base-commit: 8e403f7465a7c73e3a8ef62bba8cd75ef525e4b1
-change-id: 20241019-flow_dissector-3eb0c07fc163
+diff --git a/tools/testing/selftests/bpf/prog_tests/flow_dissector.c b/tools/testing/selftests/bpf/prog_tests/flow_dissector.c
+index cfcc90cb7ffbe0fb6a1c8c3b1357f7b68ebe923f..3ea25ecdf3c92959f56ba0819130b453fd2379f7 100644
+--- a/tools/testing/selftests/bpf/prog_tests/flow_dissector.c
++++ b/tools/testing/selftests/bpf/prog_tests/flow_dissector.c
+@@ -13,33 +13,6 @@
+ #define IP_MF 0x2000
+ #endif
+ 
+-#define CHECK_FLOW_KEYS(desc, got, expected)				\
+-	_CHECK(memcmp(&got, &expected, sizeof(got)) != 0,		\
+-	      desc,							\
+-	      topts.duration,						\
+-	      "nhoff=%u/%u "						\
+-	      "thoff=%u/%u "						\
+-	      "addr_proto=0x%x/0x%x "					\
+-	      "is_frag=%u/%u "						\
+-	      "is_first_frag=%u/%u "					\
+-	      "is_encap=%u/%u "						\
+-	      "ip_proto=0x%x/0x%x "					\
+-	      "n_proto=0x%x/0x%x "					\
+-	      "flow_label=0x%x/0x%x "					\
+-	      "sport=%u/%u "						\
+-	      "dport=%u/%u\n",						\
+-	      got.nhoff, expected.nhoff,				\
+-	      got.thoff, expected.thoff,				\
+-	      got.addr_proto, expected.addr_proto,			\
+-	      got.is_frag, expected.is_frag,				\
+-	      got.is_first_frag, expected.is_first_frag,		\
+-	      got.is_encap, expected.is_encap,				\
+-	      got.ip_proto, expected.ip_proto,				\
+-	      got.n_proto, expected.n_proto,				\
+-	      got.flow_label, expected.flow_label,			\
+-	      got.sport, expected.sport,				\
+-	      got.dport, expected.dport)
+-
+ struct ipv4_pkt {
+ 	struct ethhdr eth;
+ 	struct iphdr iph;
+@@ -545,7 +518,6 @@ static void run_tests_skb_less(int tap_fd, struct bpf_map *keys)
+ 		/* Keep in sync with 'flags' from eth_get_headlen. */
+ 		__u32 eth_get_headlen_flags =
+ 			BPF_FLOW_DISSECTOR_F_PARSE_1ST_FRAG;
+-		LIBBPF_OPTS(bpf_test_run_opts, topts);
+ 		struct bpf_flow_keys flow_keys = {};
+ 		__u32 key = (__u32)(tests[i].keys.sport) << 16 |
+ 			    tests[i].keys.dport;
+@@ -567,7 +539,9 @@ static void run_tests_skb_less(int tap_fd, struct bpf_map *keys)
+ 		err = bpf_map_lookup_elem(keys_fd, &key, &flow_keys);
+ 		ASSERT_OK(err, "bpf_map_lookup_elem");
+ 
+-		CHECK_FLOW_KEYS(tests[i].name, flow_keys, tests[i].keys);
++		ASSERT_MEMEQ(&flow_keys, &tests[i].keys,
++			     sizeof(struct bpf_flow_keys),
++			     "returned flow keys");
+ 
+ 		err = bpf_map_delete_elem(keys_fd, &key);
+ 		ASSERT_OK(err, "bpf_map_delete_elem");
+@@ -656,7 +630,9 @@ void test_flow_dissector(void)
+ 			continue;
+ 		ASSERT_EQ(topts.data_size_out, sizeof(flow_keys),
+ 			  "test_run data_size_out");
+-		CHECK_FLOW_KEYS(tests[i].name, flow_keys, tests[i].keys);
++		ASSERT_MEMEQ(&flow_keys, &tests[i].keys,
++			     sizeof(struct bpf_flow_keys),
++			     "returned flow keys");
+ 	}
+ 
+ 	/* Do the same tests but for skb-less flow dissector.
 
-Best regards,
 -- 
-Alexis Lothoré, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.47.0
 
