@@ -1,73 +1,166 @@
-Received: from cmccmta2.chinamobile.com (cmccmta6.chinamobile.com [111.22.67.139])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5FE34E545;
-	Wed, 20 Nov 2024 03:22:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=111.22.67.139
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C03F4158D79;
+	Wed, 20 Nov 2024 07:43:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.193
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732072976; cv=none; b=A9z5eIGLD8zi4O8760qV/3n06meSkKz2Mp06BNJMFLCBH2xmmKoRuv/1gRy+9Hc4GGbu8nsHbQcgdbmqAvj9VIvL5KWq4HdP3Zc1r2ywjYCvH8x2C2CZvDU9mBmpVY2i0cAlWTmQ8huIkDYicUOznj+AgKdzw5Be1CIPX3ZskVc=
+	t=1732088613; cv=none; b=SeGoKzGuuhrl95/iim75EV7SCdfj89AuVcqglUPBxDbFtCG69wybcvIMiqVIbSRohnqH1+V5S89wrYqu68R5TG1/QA961dhjlGPEbCm823+HxvjjYshDvassGHJ4wVFovDGWkE6Gvn22gOHOSbzaCa4rNxLv3ILa2pcmVuH6BMc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732072976; c=relaxed/simple;
-	bh=zieIBsncEidNacUls1QLyahkP9BMPYQJc1K2JSfcddg=;
-	h=From:To:Cc:Subject:Date:Message-Id; b=BY1+C7cMlzyPYaqoPpDf2MYiIkLJa3cVJq39l2RP9mUaNwH/l47dUaqm0lKcLVg7IHAg895QzETLt6OLxt02YxETMdz4dO3xUZv4nPTASRyxvMNM8URD3SX9KfAhtQxzVPuYxwL7M2Bc3y4aVGxgyt/xFHRcnmt2+wAZ0GAltw8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cmss.chinamobile.com; spf=pass smtp.mailfrom=cmss.chinamobile.com; arc=none smtp.client-ip=111.22.67.139
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cmss.chinamobile.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cmss.chinamobile.com
-X-RM-TagInfo: emlType=0                                       
-X-RM-SPAM-FLAG:00000000
-Received:from spf.mail.chinamobile.com (unknown[10.188.0.87])
-	by rmmx-syy-dmz-app05-12005 (RichMail) with SMTP id 2ee5673d560462d-50643;
-	Wed, 20 Nov 2024 11:22:44 +0800 (CST)
-X-RM-TRANSID:2ee5673d560462d-50643
-X-RM-TagInfo: emlType=0                                       
-X-RM-SPAM-FLAG:00000000
-Received:from ubuntu.localdomain (unknown[10.55.1.70])
-	by rmsmtp-syy-appsvr08-12008 (RichMail) with SMTP id 2ee8673d5603e67-59b00;
-	Wed, 20 Nov 2024 11:22:44 +0800 (CST)
-X-RM-TRANSID:2ee8673d5603e67-59b00
-From: Zhu Jun <zhujun2@cmss.chinamobile.com>
-To: martin.lau@linux.dev
-Cc: song@kernel.org,
-	eddyz87@gmail.com,
-	yonghong.song@linux.dev,
-	kpsingh@kernel.org,
-	sdf@fomichev.me,
-	haoluo@google.com,
-	jolsa@kernel.org,
-	netdev@vger.kernel.org,
-	bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	zhujun2@cmss.chinamobile.com
-Subject: [PATCH] samples/bpf: Remove unused variable
-Date: Tue, 19 Nov 2024 19:22:41 -0800
-Message-Id: <20241120032241.5657-1-zhujun2@cmss.chinamobile.com>
-X-Mailer: git-send-email 2.17.1
+	s=arc-20240116; t=1732088613; c=relaxed/simple;
+	bh=nY1ABuW5bsvP34Tc/ZBG35W0W3ziUMfwf8JaBTNVBqk=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=Rlzjx/ICyaGribqKE85iJTTTMDhkKCG/+LCINyvsR7SiCTWnvnyap0d+93CltQddcicxS2WvV6uJnS62syzKyEiEiAI7YDcCajQIDRQwKHTsedY0RZT3SDNefZGNmwaisjNYbs9Yv6y0/Vu8duRrjiGDQ6lcNKRG4HE3EzYXLtw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=naIQ+pK/; arc=none smtp.client-ip=217.70.183.193
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="naIQ+pK/"
+Received: by mail.gandi.net (Postfix) with ESMTPSA id B8985240004;
+	Wed, 20 Nov 2024 07:43:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1732088608;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=5t7U3zj6C7oj9CfjNAnX9OzAUYLiCf7cJ4qumLlNgoU=;
+	b=naIQ+pK/3LTilZec2zX0pGsX2qvwxnaa64/kdqYJCatna3EHlSlx3QDHeIqz6OPKGOMgDZ
+	JMqAX4sO2ITAhgHlROSgDMgH0SI4Dhb/9Pxhs3BAkb/VaIzyvy5BrC5JXqEvoY8x09gB4x
+	Xp9qvnUzi5olJRhbU9y80e/raN5hKDThm0BltWZ3Q68LyiUg58ZeFhcZ5shtoAyEQ8X3mt
+	5MKPRrfrZ4q5lqUnB7BxmTi0VSR1/Y+y3N8TpdeVBh3V5BHW/V3Bxxd41rLdBHXIdn91XQ
+	XMB4S4ZUgYHfRIx0vIisqM7FTOmbkedewBH9DKpbe6+zknyAb11eS5Zy2nBMIQ==
+From: =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
+Date: Wed, 20 Nov 2024 08:43:11 +0100
+Subject: [PATCH bpf-next v3 01/14] selftests/bpf: add a macro to compare
+ raw memory
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Message-Id: <20241120-flow_dissector-v3-1-45b46494f937@bootlin.com>
+References: <20241120-flow_dissector-v3-0-45b46494f937@bootlin.com>
+In-Reply-To: <20241120-flow_dissector-v3-0-45b46494f937@bootlin.com>
+To: Andrii Nakryiko <andrii@kernel.org>, 
+ Eduard Zingerman <eddyz87@gmail.com>, Mykola Lysenko <mykolal@fb.com>, 
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, 
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+ Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>, 
+ "David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, 
+ Jesper Dangaard Brouer <hawk@kernel.org>
+Cc: ebpf@linuxfoundation.org, 
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
+ Bastien Curutchet <bastien.curutchet@bootlin.com>, bpf@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ netdev@vger.kernel.org, 
+ =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
+X-Mailer: b4 0.14.2
+X-GND-Sasl: alexis.lothore@bootlin.com
 
-The variable is never referenced in the code, just remove it
-that this problem was discovered by reading code
+We sometimes need to compare whole structures in an assert. It is
+possible to use the existing macros on each field, but when the whole
+structure has to be checked, it is more convenient to simply compare the
+whole structure memory
 
-Signed-off-by: Zhu Jun <zhujun2@cmss.chinamobile.com>
+Add a dedicated assert macro, ASSERT_MEMEQ, to allow bare memory
+comparision
+The output generated by this new macro looks like the following:
+[...]
+run_tests_skb_less:FAIL:returned flow keys unexpected memory mismatch
+actual:
+	00 00 00 00 00 00 00 00 	00 00 00 00 00 00 00 00
+	00 00 00 00 00 00 00 00 	00 00 00 00 00 00 00 00
+	00 00 00 00 00 00 00 00 	00 00 00 00 00 00 00 00
+	00 00 00 00 00 00 00 00
+expected:
+	0E 00 3E 00 DD 86 01 01 	00 06 86 DD 50 00 90 1F
+	00 00 00 00 00 00 00 00 	00 00 00 00 00 00 00 00
+	00 00 00 00 00 00 00 00 	00 00 00 00 00 00 00 00
+	01 00 00 00 00 00 00 00
+[...]
+
+Acked-by: Stanislav Fomichev <sdf@fomichev.me>
+Signed-off-by: Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
 ---
- samples/bpf/xdp2skb_meta_kern.c | 1 -
- 1 file changed, 1 deletion(-)
+Changes in v3:
+- none
 
-diff --git a/samples/bpf/xdp2skb_meta_kern.c b/samples/bpf/xdp2skb_meta_kern.c
-index af29a1bde..3c36c25d9 100644
---- a/samples/bpf/xdp2skb_meta_kern.c
-+++ b/samples/bpf/xdp2skb_meta_kern.c
-@@ -63,7 +63,6 @@ SEC("tc_mark")
- int _tc_mark(struct __sk_buff *ctx)
- {
- 	void *data      = (void *)(unsigned long)ctx->data;
--	void *data_end  = (void *)(unsigned long)ctx->data_end;
- 	void *data_meta = (void *)(unsigned long)ctx->data_meta;
- 	struct meta_info *meta = data_meta;
+Changes in v2:
+- replace DUMP_BUFFER with a real function
+- make this function take a prefix
+- add formatting example in the commit message
+---
+ tools/testing/selftests/bpf/test_progs.c | 15 +++++++++++++++
+ tools/testing/selftests/bpf/test_progs.h | 15 +++++++++++++++
+ 2 files changed, 30 insertions(+)
+
+diff --git a/tools/testing/selftests/bpf/test_progs.c b/tools/testing/selftests/bpf/test_progs.c
+index 6088d8222d5905c3df6e6ebfb095c6bc5bf22399..c9e745d49493e594b55d79ac26061b0466f9a039 100644
+--- a/tools/testing/selftests/bpf/test_progs.c
++++ b/tools/testing/selftests/bpf/test_progs.c
+@@ -1282,6 +1282,21 @@ void crash_handler(int signum)
+ 	backtrace_symbols_fd(bt, sz, STDERR_FILENO);
+ }
  
++void hexdump(const char *prefix, const void *buf, size_t len)
++{
++	for (int i = 0; i < len; i++) {
++		if (!(i % 16)) {
++			if (i)
++				fprintf(stdout, "\n");
++			fprintf(stdout, "%s", prefix);
++		}
++		if (i && !(i % 8) && (i % 16))
++			fprintf(stdout, "\t");
++		fprintf(stdout, "%02X ", ((uint8_t *)(buf))[i]);
++	}
++	fprintf(stdout, "\n");
++}
++
+ static void sigint_handler(int signum)
+ {
+ 	int i;
+diff --git a/tools/testing/selftests/bpf/test_progs.h b/tools/testing/selftests/bpf/test_progs.h
+index 74de33ae37e56c90646cd1e0bb58ed7e3f345ec0..404d0d4915d54fe15f6c33dbabdb58cccc3b2781 100644
+--- a/tools/testing/selftests/bpf/test_progs.h
++++ b/tools/testing/selftests/bpf/test_progs.h
+@@ -185,6 +185,7 @@ void test__end_subtest(void);
+ void test__skip(void);
+ void test__fail(void);
+ int test__join_cgroup(const char *path);
++void hexdump(const char *prefix, const void *buf, size_t len);
+ 
+ #define PRINT_FAIL(format...)                                                  \
+ 	({                                                                     \
+@@ -344,6 +345,20 @@ int test__join_cgroup(const char *path);
+ 	___ok;								\
+ })
+ 
++#define ASSERT_MEMEQ(actual, expected, len, name) ({			\
++	static int duration = 0;					\
++	const void *__act = actual;					\
++	const void *__exp = expected;					\
++	int __len = len;						\
++	bool ___ok = memcmp(__act, __exp, __len) == 0;			\
++	CHECK(!___ok, (name), "unexpected memory mismatch\n");		\
++	fprintf(stdout, "actual:\n");					\
++	hexdump("\t", __act, __len);					\
++	fprintf(stdout, "expected:\n");					\
++	hexdump("\t", __exp, __len);					\
++	___ok;								\
++})
++
+ #define ASSERT_OK(res, name) ({						\
+ 	static int duration = 0;					\
+ 	long long ___res = (res);					\
+
 -- 
-2.17.1
-
-
+2.47.0
 
