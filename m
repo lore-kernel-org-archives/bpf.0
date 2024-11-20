@@ -1,82 +1,73 @@
-Received: from cmccmta2.chinamobile.com (cmccmta2.chinamobile.com [111.22.67.135])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 55ACD3F9C5;
-	Wed, 20 Nov 2024 02:32:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=111.22.67.135
+Received: from cmccmta2.chinamobile.com (cmccmta6.chinamobile.com [111.22.67.139])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5FE34E545;
+	Wed, 20 Nov 2024 03:22:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=111.22.67.139
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732069961; cv=none; b=jtfI+y9SbI7V6Kk3ZZhbscejuF6KPYigpNsEt6hckwR4dg9/PaVDRi8BVQfvEiT2gIXwoMa1qF6BdYGg5Cx9SqGlUQ8/HLJDiX8+YYJ/RaXdvbmBnosNQX2DNj56aWouQGq1WD0GfnamZdsIbOLTuPL+NFVAtH7yXXleESosu3k=
+	t=1732072976; cv=none; b=A9z5eIGLD8zi4O8760qV/3n06meSkKz2Mp06BNJMFLCBH2xmmKoRuv/1gRy+9Hc4GGbu8nsHbQcgdbmqAvj9VIvL5KWq4HdP3Zc1r2ywjYCvH8x2C2CZvDU9mBmpVY2i0cAlWTmQ8huIkDYicUOznj+AgKdzw5Be1CIPX3ZskVc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732069961; c=relaxed/simple;
-	bh=M6eWbrJh9EXvL33sg7IgSaTZviGzfJgQ7VzmUtmc9Jw=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=fU7jDLMYYcd1URlQzuU8Ao42n8ZoQ/3yAcq4H5uYgt58DczriQob33GRJNMWZtQG5+bIorEmaFmAcSljONgAvmoO368WCjCo22NyA8t+4qMZVsuyNsJzOMD/ziyqD5bxtMh0DS0uArU0ixqJjarLOmf1GvQ0enWAam0dz0jWtlY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cmss.chinamobile.com; spf=pass smtp.mailfrom=cmss.chinamobile.com; arc=none smtp.client-ip=111.22.67.135
+	s=arc-20240116; t=1732072976; c=relaxed/simple;
+	bh=zieIBsncEidNacUls1QLyahkP9BMPYQJc1K2JSfcddg=;
+	h=From:To:Cc:Subject:Date:Message-Id; b=BY1+C7cMlzyPYaqoPpDf2MYiIkLJa3cVJq39l2RP9mUaNwH/l47dUaqm0lKcLVg7IHAg895QzETLt6OLxt02YxETMdz4dO3xUZv4nPTASRyxvMNM8URD3SX9KfAhtQxzVPuYxwL7M2Bc3y4aVGxgyt/xFHRcnmt2+wAZ0GAltw8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cmss.chinamobile.com; spf=pass smtp.mailfrom=cmss.chinamobile.com; arc=none smtp.client-ip=111.22.67.139
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cmss.chinamobile.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cmss.chinamobile.com
 X-RM-TagInfo: emlType=0                                       
 X-RM-SPAM-FLAG:00000000
 Received:from spf.mail.chinamobile.com (unknown[10.188.0.87])
-	by rmmx-syy-dmz-app07-12007 (RichMail) with SMTP id 2ee7673d4a4122a-50247;
-	Wed, 20 Nov 2024 10:32:33 +0800 (CST)
-X-RM-TRANSID:2ee7673d4a4122a-50247
+	by rmmx-syy-dmz-app05-12005 (RichMail) with SMTP id 2ee5673d560462d-50643;
+	Wed, 20 Nov 2024 11:22:44 +0800 (CST)
+X-RM-TRANSID:2ee5673d560462d-50643
 X-RM-TagInfo: emlType=0                                       
 X-RM-SPAM-FLAG:00000000
-Received:from localhost.localdomain (unknown[223.108.79.101])
-	by rmsmtp-syy-appsvr03-12003 (RichMail) with SMTP id 2ee3673d4a30dd0-5c7b3;
-	Wed, 20 Nov 2024 10:32:33 +0800 (CST)
-X-RM-TRANSID:2ee3673d4a30dd0-5c7b3
-From: guanjing <guanjing@cmss.chinamobile.com>
-To: peterz@infradead.org,
-	mingo@redhat.com,
-	acme@kernel.org,
-	namhyung@kernel.org,
-	mark.rutland@arm.com,
-	alexander.shishkin@linux.intel.com,
+Received:from ubuntu.localdomain (unknown[10.55.1.70])
+	by rmsmtp-syy-appsvr08-12008 (RichMail) with SMTP id 2ee8673d5603e67-59b00;
+	Wed, 20 Nov 2024 11:22:44 +0800 (CST)
+X-RM-TRANSID:2ee8673d5603e67-59b00
+From: Zhu Jun <zhujun2@cmss.chinamobile.com>
+To: martin.lau@linux.dev
+Cc: song@kernel.org,
+	eddyz87@gmail.com,
+	yonghong.song@linux.dev,
+	kpsingh@kernel.org,
+	sdf@fomichev.me,
+	haoluo@google.com,
 	jolsa@kernel.org,
-	irogers@google.com,
-	adrian.hunter@intel.com,
-	kan.liang@linux.intel.com,
-	james.clark@linaro.org,
-	yangjihong1@huawei.com
-Cc: linux-perf-users@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
+	netdev@vger.kernel.org,
 	bpf@vger.kernel.org,
-	guanjing <guanjing@cmss.chinamobile.com>
-Subject: [PATCH v2] perf kwork: Fix unnecessary conversion to bool in 'valid_kwork_class_type'
-Date: Mon, 18 Nov 2024 12:39:39 +0800
-Message-Id: <20241118043939.270819-1-guanjing@cmss.chinamobile.com>
-X-Mailer: git-send-email 2.33.0
+	linux-kernel@vger.kernel.org,
+	zhujun2@cmss.chinamobile.com
+Subject: [PATCH] samples/bpf: Remove unused variable
+Date: Tue, 19 Nov 2024 19:22:41 -0800
+Message-Id: <20241120032241.5657-1-zhujun2@cmss.chinamobile.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-Fixes the following coccicheck:
+The variable is never referenced in the code, just remove it
+that this problem was discovered by reading code
 
-tools/perf/util/bpf_kwork.c:145:53-58: WARNING: conversion to bool not needed here
-
-Fixes: daf07d220710 ("perf kwork: Implement BPF trace")
-Signed-off-by: guanjing <guanjing@cmss.chinamobile.com>
+Signed-off-by: Zhu Jun <zhujun2@cmss.chinamobile.com>
 ---
- tools/perf/util/bpf_kwork.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ samples/bpf/xdp2skb_meta_kern.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/tools/perf/util/bpf_kwork.c b/tools/perf/util/bpf_kwork.c
-index 6c7126b7670d..c71461082683 100644
---- a/tools/perf/util/bpf_kwork.c
-+++ b/tools/perf/util/bpf_kwork.c
-@@ -142,7 +142,7 @@ kwork_class_bpf_supported_list[KWORK_CLASS_MAX] = {
- 
- static bool valid_kwork_class_type(enum kwork_class_type type)
+diff --git a/samples/bpf/xdp2skb_meta_kern.c b/samples/bpf/xdp2skb_meta_kern.c
+index af29a1bde..3c36c25d9 100644
+--- a/samples/bpf/xdp2skb_meta_kern.c
++++ b/samples/bpf/xdp2skb_meta_kern.c
+@@ -63,7 +63,6 @@ SEC("tc_mark")
+ int _tc_mark(struct __sk_buff *ctx)
  {
--	return type >= 0 && type < KWORK_CLASS_MAX ? true : false;
-+	return type >= 0 && type < KWORK_CLASS_MAX;
- }
+ 	void *data      = (void *)(unsigned long)ctx->data;
+-	void *data_end  = (void *)(unsigned long)ctx->data_end;
+ 	void *data_meta = (void *)(unsigned long)ctx->data_meta;
+ 	struct meta_info *meta = data_meta;
  
- static int setup_filters(struct perf_kwork *kwork)
 -- 
-2.33.0
+2.17.1
 
 
 
