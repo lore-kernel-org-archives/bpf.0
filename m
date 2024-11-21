@@ -1,218 +1,122 @@
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6D2A33D8
-	for <bpf@vger.kernel.org>; Thu, 21 Nov 2024 00:14:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.145.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 214AB29A0
+	for <bpf@vger.kernel.org>; Thu, 21 Nov 2024 00:51:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732148055; cv=none; b=gPFvj5jPch2ip3b5n0WCaSIZvOucmaZYoXLiq8lu4GMdYU+DsguLqlx50liY60OlWrM4wEtuJUsmv/QBVS9+/icmW72k7uBuRutgwnqQwMwJoiq0yGDKachrOeQ+ItmMg1/j/gTEwbw8c9kgxa7wxL31jgrWOyyMDEk0jjkGzhE=
+	t=1732150310; cv=none; b=tKSHtwtaLeRP5QtV1EP8gfalG/nK2HLYYIMWqZC5aLOIitgESDT9kx+oi4NfcVKHhssVwCZmZ8Zw+f+0IsoSAoDm67CXDGTM3Ma2YDFMwTtpr5PV9exiP41eOE+3aF2r464HrlfSwLI3fm4ju8Py3UJOUV5H7sJRBt+KgNNOsPU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732148055; c=relaxed/simple;
-	bh=xUWr+0qkISItOBfwcoa9DwfYXWHED5wx8aS3483aOCY=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=NUIpGg1PfjmbgdK07t+yhCNdABr7lM3eyQ5D1k2AsGpeU449Zt4hcnlkYOi1UojpL0Qm3Y4Zs/OGolmSJaFaON2Gbf5uDe5cSpuzSEReeJTI4qamFeUbbJ53FJZ055PQnURsZCv+cVyu3FqjesHIpnlj1cOmA1tzlncrpl6BeeQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com; spf=pass smtp.mailfrom=meta.com; dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b=DHGAzbeO; arc=none smtp.client-ip=67.231.145.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
+	s=arc-20240116; t=1732150310; c=relaxed/simple;
+	bh=VvXaxGul5eyjvbzM9SqgLN8iLVBsZ/CC8nmQYOWLsCc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=AzorCUOyTgfenn3AX46GD2NNGnymFyh8aXeD6sL3OKo4KrcwMHQc5V5b/RpfuaGOUWRkIvRP55RT9/XW7+U1YbBJLBhu+Xt0glX48FCmOORtDrkYNEuuiFPHaqZ3kAzmvcNxPQUetHGgYZsNFwbo3a+nkwo8kyNNlhh5Q9OJL9Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JjLcekoi; arc=none smtp.client-ip=209.85.128.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b="DHGAzbeO"
-Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4AKKZ2mZ001523;
-	Wed, 20 Nov 2024 16:08:35 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=s2048-2021-q4;
-	 bh=wf/D/EcSrogfjXEOCn36KW8Q4Mu2zhxdFqhFawT85go=; b=DHGAzbeOdwjS
-	Ua+wPnPGLKcKFFATfyGwfZq6qUoKY/I/2KTMQ481FVuekkL/VDaPaWRjDJsFu384
-	IPChgrtJCjTLBVBK/mkfpTL/QSq8Ye2ZZhaw8sDkfnjQ/VNMSpazrfEbjDsG1vxU
-	d8MSsDhl+mtKfV9Vw2/DgOnQGBkB6Wc23r0XmYbAbA0ghsWGz6qFshujkO2DfAdT
-	xYRBtPXiUDROiKyUOsvB6BodO6LCTxv1hF8Vov8G8aMiWutEp8N35aJE+DmSMzZk
-	EYgKiknl3UePnwIbGbUhC4eKsShIOSXiLgCL4jxrPbVVDTPOHa2V7Rg26dzZq72G
-	kMpC7v0myg==
-Received: from maileast.thefacebook.com ([163.114.135.16])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 431pxah760-16
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-	Wed, 20 Nov 2024 16:08:35 -0800 (PST)
-Received: from devvm4158.cln0.facebook.com (2620:10d:c0a8:1b::30) by
- mail.thefacebook.com (2620:10d:c0a9:6f::8fd4) with Microsoft SMTP Server id
- 15.2.1544.11; Thu, 21 Nov 2024 00:08:31 +0000
-From: Vadim Fedorenko <vadfed@meta.com>
-To: Borislav Petkov <bp@alien8.de>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Eduard Zingerman <eddyz87@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Yonghong Song <yonghong.song@linux.dev>,
-        Vadim Fedorenko
-	<vadim.fedorenko@linux.dev>,
-        Mykola Lysenko <mykolal@fb.com>
-CC: <x86@kernel.org>, <bpf@vger.kernel.org>,
-        Peter Zijlstra
-	<peterz@infradead.org>,
-        Vadim Fedorenko <vadfed@meta.com>,
-        Martin KaFai Lau
-	<martin.lau@linux.dev>
-Subject: [PATCH bpf-next v8 3/4] selftests/bpf: add selftest to check rdtsc jit
-Date: Wed, 20 Nov 2024 16:08:13 -0800
-Message-ID: <20241121000814.3821326-4-vadfed@meta.com>
-X-Mailer: git-send-email 2.43.5
-In-Reply-To: <20241121000814.3821326-1-vadfed@meta.com>
-References: <20241121000814.3821326-1-vadfed@meta.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JjLcekoi"
+Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-431688d5127so2452125e9.0
+        for <bpf@vger.kernel.org>; Wed, 20 Nov 2024 16:51:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1732150307; x=1732755107; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=VvXaxGul5eyjvbzM9SqgLN8iLVBsZ/CC8nmQYOWLsCc=;
+        b=JjLcekoiP9UHqUEkqAsETIckHXd1fNmUMz91kxK27f1hWSL3xd+kJvtwLqDzR7Cxfi
+         bL7V1fTfLuU8g+0e8MksSasIi7rfLN0FkObDA6PM28PgjVcitxrjzgYK511KDf6EANPI
+         n+LkuCPlUezipj76MxNlcJE4FORzLFpCnC/ISIix42Jn90Oij5QtovbsdQhwHbiaUG1A
+         i7rQFd7xhX//7uqVHdq5FISt4oRsWBjxokGS3BeStT5ETVEZ0eEWO9USdiO1R0O5hIhY
+         BbBjsdvTUyB2tOKxxT+kR7qOdpVPxQjEmkqJHuEYvYC1RFw9ScOeq+a6D/L9FlU24RvS
+         Nqfw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1732150307; x=1732755107;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=VvXaxGul5eyjvbzM9SqgLN8iLVBsZ/CC8nmQYOWLsCc=;
+        b=a5sRRKOhYLheexmU12NqU+Qi4lkFofUTt3pVFsllV9WDfI0nqLwJTWMkp88IhmiIBS
+         OFNG9eK2WBWlEtyHTk+GKVBiM9RCUQ4O0sh57t0qri+ssv7peyUFuWgpbUeU0sICo9Mj
+         bgBliF1BH2wWmDOpdP27kF9QEo9JNMsIV6KI4vK6v5/hzRyIN7UfocoPK4ByROO24WE7
+         wZAykecgIFQWdLjNN34I4x1/HieDsTZEJcabvMqvWw6kzFPkZRB9POYNaxgoh150aQh/
+         2u0uyS+5F5Dz0WHlAi+vT8PsZbkUoJ+0713y0UoYkXy04lK9Vhq0q/N+GtHCiizn3CMG
+         52xw==
+X-Gm-Message-State: AOJu0YyEs/u7Yt84Jqhpi89YCetwVB2SvMDmABip08vY3xjh7FCQBgBI
+	p3104LzCS3aDpmUF3QZQMWRWO2SGR9/A3sqXO6hpmlsIdSzerPUapoUoIWNpd2kzXAnhQr6DTod
+	mV8WgavPsyI270XYZr3hmJyLUF0+KvA==
+X-Gm-Gg: ASbGncuoJjAkFCVvt6t02x3Dg1LkYQ/8Bg43/1QcTDCdU23rRykUwVwHC41ip8cqSLP
+	qSswh6I7XQ/TaD+ieLOGt0oh90E6afg==
+X-Google-Smtp-Source: AGHT+IHPKLbXoO0qWGt+uKPMDfUfA4tcefrBj5AnxD22BWtF91efgGQMhBybUUDt44LSQMOUZnnPMcJyUTSc8kSFZ/g=
+X-Received: by 2002:a05:600c:1d95:b0:42c:a6da:a149 with SMTP id
+ 5b1f17b1804b1-4334f01fb66mr38940725e9.25.1732150307207; Wed, 20 Nov 2024
+ 16:51:47 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Proofpoint-GUID: xw_Xzz6g5Vl479w0CFqj7Q0ItZZXRhUW
-X-Proofpoint-ORIG-GUID: xw_Xzz6g5Vl479w0CFqj7Q0ItZZXRhUW
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
- definitions=2024-10-05_03,2024-10-04_01,2024-09-30_01
+References: <ZzyDCKrmgAGa4NDD@google.com>
+In-Reply-To: <ZzyDCKrmgAGa4NDD@google.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Wed, 20 Nov 2024 16:51:36 -0800
+Message-ID: <CAADnVQ+4qCnVBPbJdwYOakc+Sg-_55pekSsuavFxYS7eyMycOg@mail.gmail.com>
+Subject: Re: bpf: adding BPF linked list iteration support
+To: Matt Bobrowski <mattbobrowski@google.com>
+Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, KP Singh <kpsingh@kernel.org>, 
+	Jiri Olsa <jolsa@kernel.org>, Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-bpf_get_cpu_time_counter() is replaced with rdtsc instruction on x86_64.
-Add tests to check it.
+On Tue, Nov 19, 2024 at 4:22=E2=80=AFAM Matt Bobrowski <mattbobrowski@googl=
+e.com> wrote:
+>
+> Hi,
+>
+> Currently, we have BPF kfuncs which allow BPF programs to add and
+> remove elements from a BPF linked list. However, we're currently
+> missing other simple capabilities, like being able to iterate over the
+> elements within the BPF linked lists. What is our current appetite
+> with regards to adding new BPF kfuncs that support this kind of
+> capability to BPF linked lists?
 
-Acked-by: Eduard Zingerman <eddyz87@gmail.com>
-Signed-off-by: Vadim Fedorenko <vadfed@meta.com>
----
- .../selftests/bpf/prog_tests/verifier.c       |   2 +
- .../selftests/bpf/progs/verifier_cpu_cycles.c | 104 ++++++++++++++++++
- 2 files changed, 106 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/progs/verifier_cpu_cycles.c
+What kind of kfuncs do you have in mind for link lists ?
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/verifier.c b/tools/testing/selftests/bpf/prog_tests/verifier.c
-index d9f65adb456b..6cbb8949164a 100644
---- a/tools/testing/selftests/bpf/prog_tests/verifier.c
-+++ b/tools/testing/selftests/bpf/prog_tests/verifier.c
-@@ -98,6 +98,7 @@
- #include "verifier_xdp_direct_packet_access.skel.h"
- #include "verifier_bits_iter.skel.h"
- #include "verifier_lsm.skel.h"
-+#include "verifier_cpu_cycles.skel.h"
- 
- #define MAX_ENTRIES 11
- 
-@@ -225,6 +226,7 @@ void test_verifier_xdp(void)                  { RUN(verifier_xdp); }
- void test_verifier_xdp_direct_packet_access(void) { RUN(verifier_xdp_direct_packet_access); }
- void test_verifier_bits_iter(void) { RUN(verifier_bits_iter); }
- void test_verifier_lsm(void)                  { RUN(verifier_lsm); }
-+void test_verifier_cpu_cycles(void)           { RUN(verifier_cpu_cycles); }
- 
- void test_verifier_mtu(void)
- {
-diff --git a/tools/testing/selftests/bpf/progs/verifier_cpu_cycles.c b/tools/testing/selftests/bpf/progs/verifier_cpu_cycles.c
-new file mode 100644
-index 000000000000..5b62e3690362
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/verifier_cpu_cycles.c
-@@ -0,0 +1,104 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2022 Meta Inc. */
-+#include "vmlinux.h"
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+#include "bpf_misc.h"
-+
-+extern u64 bpf_cpu_time_counter_to_ns(u64 cycles) __weak __ksym;
-+extern u64 bpf_get_cpu_time_counter(void) __weak __ksym;
-+
-+SEC("syscall")
-+__arch_x86_64
-+__xlated("0: call kernel-function")
-+__naked int bpf_rdtsc(void)
-+{
-+	asm volatile(
-+	"call %[bpf_get_cpu_time_counter];"
-+	"exit"
-+	:
-+	: __imm(bpf_get_cpu_time_counter)
-+	: __clobber_all
-+	);
-+}
-+
-+SEC("syscall")
-+__arch_x86_64
-+/* program entry for bpf_rdtsc_jit_x86_64(), regular function prologue */
-+__jited("	endbr64")
-+__jited("	nopl	(%rax,%rax)")
-+__jited("	nopl	(%rax)")
-+__jited("	pushq	%rbp")
-+__jited("	movq	%rsp, %rbp")
-+__jited("	endbr64")
-+/* save RDX in R11 as it will be overwritten */
-+__jited("	movq	%rdx, %r11")
-+/* lfence may not be executed depending on cpu features */
-+__jited("	{{(lfence|)}}")
-+__jited("	rdtsc")
-+/* combine EDX:EAX into RAX */
-+__jited("	shlq	${{(32|0x20)}}, %rdx")
-+__jited("	orq	%rdx, %rax")
-+/* restore RDX from R11 */
-+__jited("	movq	%r11, %rdx")
-+__jited("	leave")
-+__naked int bpf_rdtsc_jit_x86_64(void)
-+{
-+	asm volatile(
-+	"call %[bpf_get_cpu_time_counter];"
-+	"exit"
-+	:
-+	: __imm(bpf_get_cpu_time_counter)
-+	: __clobber_all
-+	);
-+}
-+
-+SEC("syscall")
-+__arch_x86_64
-+__xlated("0: r1 = 42")
-+__xlated("1: call kernel-function")
-+__naked int bpf_cyc2ns(void)
-+{
-+	asm volatile(
-+	"r1=0x2a;"
-+	"call %[bpf_cpu_time_counter_to_ns];"
-+	"exit"
-+	:
-+	: __imm(bpf_cpu_time_counter_to_ns)
-+	: __clobber_all
-+	);
-+}
-+
-+SEC("syscall")
-+__arch_x86_64
-+/* program entry for bpf_rdtsc_jit_x86_64(), regular function prologue */
-+__jited("	endbr64")
-+__jited("	nopl	(%rax,%rax)")
-+__jited("	nopl	(%rax)")
-+__jited("	pushq	%rbp")
-+__jited("	movq	%rsp, %rbp")
-+__jited("	endbr64")
-+/* save RDX in R11 as it will be overwritten */
-+__jited("	movabsq	$0x2a2a2a2a2a, %rdi")
-+__jited("	imulq	${{.*}}, %rdi, %rax")
-+__jited("	shrq	${{.*}}, %rax")
-+__jited("	leave")
-+__naked int bpf_cyc2ns_jit_x86(void)
-+{
-+	asm volatile(
-+	"r1=0x2a2a2a2a2a ll;"
-+	"call %[bpf_cpu_time_counter_to_ns];"
-+	"exit"
-+	:
-+	: __imm(bpf_cpu_time_counter_to_ns)
-+	: __clobber_all
-+	);
-+}
-+
-+void rdtsc(void)
-+{
-+	bpf_get_cpu_time_counter();
-+	bpf_cpu_time_counter_to_ns(42);
-+}
-+
-+char _license[] SEC("license") = "GPL";
--- 
-2.43.5
+So far the only user of bpf_rbtree is sched-ext.
+It was used in one scheduler and the experience was painful.
+There is a chance that we will remove rbtree and link list
+support from the verifier to reduce complexity.
+So new link list kfuncs may be ok, but potentially not for too long.
 
+> I know that we're now somewhat advocating for using BPF arenas
+> whenever and wherever possible, especially when it comes to building
+> out and supporting more complicated data structures in BPF. However,
+> IMO BPF linked lists still have their place. Specifically, and as of
+> now, I'd argue that the BPF linked list implementation could be
+> considered more memory efficient when compared to a BPF arena backed
+> linked list implementation. This is purely due to the fact that the
+> BPF linked list implementation can perform more constrained memory
+> allocations for elements via bpf_obj_new_impl() based on the demand,
+> whereas for a BPF arena based implementation a BPF program needs to
+> allocate memory upfront in terms of the number of pages (modulo the
+> fact that not all pages for the BPF arena will necessarily be reserved
+> upfront). The fact that allocations are performed in terms of
+> multiples of PAGE_SIZE can lead to unnecessary memory wastage.
+
+I don't follow this logic.
+bpf_mem_alloc is relying on slab that relies on page alloc.
+So either arena or bpf_ma allocates a page at a time.
+So from that pov the cost is the same.
+But in practice bpf_ma needs extra 8 bytes for every allocation
+whereas arena allocs don't have this overhead.
+Right now arena allocs need to be sleepable and that is
+a severe limitation for tracing use cases.
+We're working on lifting that. Once that happens
+allocs in arena will be more usable than bpf_ma.
+kptr-s in arena is another required feature.
+There were few proposals. So it will be done as well. Eventually.
+
+So new link list kfuncs are ok, but might get removed in the future.
