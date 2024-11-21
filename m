@@ -1,147 +1,135 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f194.google.com (mail-lj1-f194.google.com [209.85.208.194])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A2C71DBB19;
-	Thu, 21 Nov 2024 21:45:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 385C81A4F20
+	for <bpf@vger.kernel.org>; Thu, 21 Nov 2024 22:04:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732225505; cv=none; b=R33sdyZoXyCKDyPFYavTW9tUrhzKtcIj3NC7HACs1Jdae7o7+WQYbYfIkJC0AjlP+hDcwgm7VUjwNMkOe1gwHKa6m0L4VkANTYEtITtImU0UT3zgOXd90rISlyKgh5YNQ2DQgqtWySgAYoAdIfzmAZXfLTFElKUr4J0/+rONMe4=
+	t=1732226683; cv=none; b=oFKhoFR9h+AJPbk/Cmw0TmD3iJCE3RPljoevlXtP6B6idADyYduQR0MwTQ7qjgTSYp0PFra5gwQbVv61VKp/S2jzAHXbNwYg1SyHiaIQimENLSlT2cYcMvoRgMUPVrdQSN28BUCbi+nV+bhe4zDSZi5BN3feUXPysB1lSOqPUc4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732225505; c=relaxed/simple;
-	bh=NIUcN6+T+wki60rCRnwepyQ8KRF0PBbMkb47VLXLqKM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dVjNpgzoCzoV3P1SY4M70VTAZDlaKb1VAwsEM1ItD1jSqnZ8oEk4WbA4Yunuk6z/XrGBwY98cbCOG6yyN8Y5LUwzUJUxn2ke5vVrTyBL2hpXx5sUPfyED/Yex9E+kuvhjlDku0JhfrIeEnH7gxMJTIFYcRdTDLF3XzpUc0yYB/A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BNFcApkC; arc=none smtp.client-ip=198.175.65.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1732226683; c=relaxed/simple;
+	bh=t2L/E3UzzPDfVQBhWoWgRtWph1B81U74fF5oxgYLAXg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=NJBBO+tNt+QLuDy4fFUpKgpY2UmVzLRddqXXIBbAhdmmpcSO4OSwgFb+YmWz2r5ILUyMwnuNJPP4mXyHPo7Y7zGMMKFTxZ0XSDgABZwrROjHMOTkGbbdE0B5j23LrhNm5re2JOKV0J0AA+R3QUPfskaMICQUdSKx6A6cNjszC5s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IEV++uf/; arc=none smtp.client-ip=209.85.208.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BNFcApkC"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1732225504; x=1763761504;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=NIUcN6+T+wki60rCRnwepyQ8KRF0PBbMkb47VLXLqKM=;
-  b=BNFcApkCceVM9sS7dM7XHFFI8lIuy0mmm3XqLpRVhM+3qy5qt7P8kU4T
-   f/8rIOxMJXlnwqnAi+F/DijxT8xYFwtyGKOLXSj+8Tb23nEbIwvBWQewe
-   cFUuZd92N6PDupXXYMyNHL+GuBAQExGC+OITiX7sY8pwYweFr45jgh2p1
-   6ArBuuiGy1vRY6YcTCdIeuNsjVizmxfhe0ZtF/V4MN5DveTlaWvScF5Rt
-   7m/pbMhsNuxyC8wQ256oABy1O6lp+x9sVy6QFMHLOSQ6sVLGvcLzF0T5B
-   nDnRm8CHu7/JpKQSCWQzAva8/7hLpyH4mPx+Efl2AhMNXL47O4aZBD7+8
-   w==;
-X-CSE-ConnectionGUID: UGYcYd7LRrqR+VMlrOAW0g==
-X-CSE-MsgGUID: oCnwJEQ7Rc6PzIy/7uIaPA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11263"; a="32514204"
-X-IronPort-AV: E=Sophos;i="6.12,173,1728975600"; 
-   d="scan'208";a="32514204"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2024 13:45:01 -0800
-X-CSE-ConnectionGUID: xdpPO1RmQrC72kpFCsgzmg==
-X-CSE-MsgGUID: zhZedUIBSeupQFYJAgkZ8A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,173,1728975600"; 
-   d="scan'208";a="90753178"
-Received: from lkp-server01.sh.intel.com (HELO 8122d2fc1967) ([10.239.97.150])
-  by fmviesa010.fm.intel.com with ESMTP; 21 Nov 2024 13:44:56 -0800
-Received: from kbuild by 8122d2fc1967 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tEEyr-0003O1-1A;
-	Thu, 21 Nov 2024 21:44:53 +0000
-Date: Fri, 22 Nov 2024 05:43:56 +0800
-From: kernel test robot <lkp@intel.com>
-To: Xiao Liang <shaw.leon@gmail.com>, netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Kuniyuki Iwashima <kuniyu@amazon.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Donald Hunter <donald.hunter@gmail.com>
-Cc: oe-kbuild-all@lists.linux.dev, David Ahern <dsahern@kernel.org>,
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
-	Ido Schimmel <idosch@nvidia.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	Simon Horman <horms@kernel.org>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Jiri Pirko <jiri@resnulli.us>, Hangbin Liu <liuhangbin@gmail.com>,
-	linux-rdma@vger.kernel.org, linux-can@vger.kernel.org,
-	osmocom-net-gprs@lists.osmocom.org, bpf@vger.kernel.org,
-	linux-ppp@vger.kernel.org, wireguard@lists.zx2c4.com,
-	linux-wireless@vger.kernel.org, b.a.t.m.a.n@lists.open-mesh.org,
-	bridge@lists.linux.dev, linux-wpan@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next v4 3/5] rtnetlink: Decouple net namespaces in
- rtnl_newlink_create()
-Message-ID: <202411220516.rokej98E-lkp@intel.com>
-References: <20241118143244.1773-4-shaw.leon@gmail.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IEV++uf/"
+Received: by mail-lj1-f194.google.com with SMTP id 38308e7fff4ca-2fb5014e2daso16639731fa.0
+        for <bpf@vger.kernel.org>; Thu, 21 Nov 2024 14:04:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1732226679; x=1732831479; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=FTwkHWmFvIQbSA3h/UlfgB5YmwFsTo2G+wVmtp+thOo=;
+        b=IEV++uf/sGQe1skm0LLC/2YCtWO8l6i4ljPuIo2wr2EfOu01fsKxvMJEWiZo9vrlG+
+         Y0KGXKyBZbyVWZbRC/TuMQ0hNB0As6Fls5pnH+YLlnqowBOjhAeUX+5POxoEP35ynKHn
+         jXAU376P9P8wME3vT3gnPlL5L2lQtVwNnxRr5u822DY49F7G9U4UyIxO7WOlnnsrCoTl
+         wNyyj9AmTGWNUOaWv9Fmm9ES0kEGC7I1qAolb0SNWBq+rmwqnyhRuCqO51/FpTXFGmwP
+         Vi55r+9+Y54j+yKdBLkS5/FPu1r8K7zW5XtKgJiLkm4mOl5obLDumBUIXAxrms1aj8dj
+         QYwQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1732226679; x=1732831479;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=FTwkHWmFvIQbSA3h/UlfgB5YmwFsTo2G+wVmtp+thOo=;
+        b=kAHvcZErwkrC91l1Czk22Z7LKO9LhekhoOig6hmXofxKCkFZGpj2Uv8WrjxFYE1mPX
+         2O5v3t4bUcJ8nR1o0P8Mwg4Fgrhp1pmQFEgU65Ggg4/jn6KRTWFNR9YgXysIe0jb9J7k
+         ekBKS9roUmH8H9XN9Qusvn3+vg92YJXSXpd0NwUpSV0Lt3cIxMoB7vJ32fenD3Ko/AbB
+         6mU7bMtZW+MR3fxsnjAtiUNLEkVaQyv/19R2PZ/9jlJkedNfY2hPjBgXQlFFygbNK8xr
+         WgnXrAdstIcS4xJBpGd5Idj1vnYnw4DDvXmecS5+qkLCVLvTXKhQ/kU5tpmyQZ/mLS9M
+         VyLw==
+X-Gm-Message-State: AOJu0YwT26b37vPbVXViZJg1EVD7FWODeIVpttFu3e2Yk8g6ARVKbcdM
+	FE7rwViv50vrkRmJJJANfhzI9NEZaQbYs7kADE9OF5HHofEWVskxrDLzEvdyqqfjpkcEAYmeJPB
+	cJ45XsEBtwhU4k9uCI5qWleyjOWw=
+X-Gm-Gg: ASbGncvUSv1+1Mavjk9e84P+aqx5bdeZ+e3w/7paFdBUObGp0vS9JeukoL5eKxGs2Qd
+	tPLuz4cyAhLIHaYZy+LVwUli1W4vrQvwgsQ==
+X-Google-Smtp-Source: AGHT+IFu8z6QrbDoj5HJD7GbFewvB/cHK/UqheHny7FjniEKcrvS+3o/Phh1Kuv1mq18++lvHe0sRI+1CDXqfF5Zapc=
+X-Received: by 2002:a05:651c:b0f:b0:2fb:65c8:b4ae with SMTP id
+ 38308e7fff4ca-2ffa71a7b98mr1630521fa.31.1732226678975; Thu, 21 Nov 2024
+ 14:04:38 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241118143244.1773-4-shaw.leon@gmail.com>
+References: <20241121005329.408873-1-memxor@gmail.com> <20241121005329.408873-4-memxor@gmail.com>
+ <dfe594d893ce83a3be0ddaa3559043908465eaec.camel@gmail.com>
+ <CAP01T75sz0YB7dj3fchyw-E2kjftaewcXhWJP_=hf_OBnWBDQA@mail.gmail.com> <763a88cb28f66ac5c62ddbeef763b77fc6833418.camel@gmail.com>
+In-Reply-To: <763a88cb28f66ac5c62ddbeef763b77fc6833418.camel@gmail.com>
+From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Date: Thu, 21 Nov 2024 23:04:02 +0100
+Message-ID: <CAP01T766TUw03pB2B9GMX61_6N1m4xLKJht74dgsC96sp9A7_A@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v1 3/7] bpf: Consolidate RCU and preempt locks in bpf_func_state
+To: Eduard Zingerman <eddyz87@gmail.com>
+Cc: bpf@vger.kernel.org, kkd@meta.com, Alexei Starovoitov <ast@kernel.org>, 
+	Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Martin KaFai Lau <martin.lau@kernel.org>, kernel-team@fb.com
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Xiao,
+On Thu, 21 Nov 2024 at 19:54, Eduard Zingerman <eddyz87@gmail.com> wrote:
+>
+> On Thu, 2024-11-21 at 19:12 +0100, Kumar Kartikeya Dwivedi wrote:
+> > On Thu, 21 Nov 2024 at 19:09, Eduard Zingerman <eddyz87@gmail.com> wrote:
+> > >
+> > > On Wed, 2024-11-20 at 16:53 -0800, Kumar Kartikeya Dwivedi wrote:
+> > > > To ensure consistency in resource handling, move RCU and preemption
+> > > > state counters to bpf_func_state, and convert all users to access them
+> > > > through cur_func(env).
+> > > >
+> > > > For the sake of consistency, also compare active_locks in ressafe as a
+> > > > quick way to eliminate iteration and entry matching if the number of
+> > > > locks are not the same.
+> > > >
+> > > > OTOH, the comparison of active_preempt_locks and active_rcu_lock is
+> > > > needed for correctness, as state exploration cannot be avoided if these
+> > > > counters do not match, and not comparing them will lead to problems
+> > > > since they lack an actual entry in the acquired_res array.
+> > > >
+> > > > Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+> > > > ---
+> > >
+> > > This change is a bit confusing to me.
+> > > The following is done currently:
+> > > - in setup_func_entry() called from check_func_call():
+> > >   copy_resource_state(callee, caller);
+> > > - in prepare_func_exit():
+> > >   copy_resource_state(caller, callee);
+> > >
+> > > So it seems that it is logical to track resources in the
+> > > bpf_verifier_state and avoid copying.
+> > > There is probably something I don't understand.
+> > >
+> >
+> > This is what we were doing all along, and you're right, it is sort of
+> > a global entity.
+>
+> Right, but since this patch-set does a refactoring,
+> might be a good time to change.
+>
+> > But we've moved active_locks to bpf_func_state, where references reside, while
+> > RCU and preempt lock state stays in verifier state. Either everything
+> > should be in
+> > cur_func, or in bpf_verifier_state. I am fine with either of them,
+> > because it would
+> > materially does not matter too much.
+> >
+> > Alexei's preference has been stashing this in bpf_func_state instead in [0].
+> > Let me know what you think.
+> >
+> >   [0] https://lore.kernel.org/bpf/CAADnVQKxgE7=WhjNckvMDTZ5GZujPuT3Dqd+sY=pW8CWoaF9FA@mail.gmail.com
+>
+> As far as I understand check_func_call(), function calls to static
+> functions are allowed while holding each kind of resources currently
+> tracked. So it seems odd to track it as a part of function state.
+> The way I understand Alexei in the thread [0] the idea is more
+> to track all counters in one place.
+>
+> Let's wait what Alexei has to say.
+>
 
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on net-next/main]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Xiao-Liang/net-ip_tunnel-Build-flow-in-underlay-net-namespace/20241121-112705
-base:   net-next/main
-patch link:    https://lore.kernel.org/r/20241118143244.1773-4-shaw.leon%40gmail.com
-patch subject: [PATCH net-next v4 3/5] rtnetlink: Decouple net namespaces in rtnl_newlink_create()
-config: arc-randconfig-002-20241122 (https://download.01.org/0day-ci/archive/20241122/202411220516.rokej98E-lkp@intel.com/config)
-compiler: arceb-elf-gcc (GCC) 13.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241122/202411220516.rokej98E-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202411220516.rokej98E-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> net/batman-adv/soft-interface.c:1075: warning: Function parameter or struct member 'params' not described in 'batadv_softif_newlink'
->> net/batman-adv/soft-interface.c:1075: warning: Excess function parameter 'nets' description in 'batadv_softif_newlink'
->> net/batman-adv/soft-interface.c:1075: warning: Excess function parameter 'dev' description in 'batadv_softif_newlink'
->> net/batman-adv/soft-interface.c:1075: warning: Excess function parameter 'tb' description in 'batadv_softif_newlink'
->> net/batman-adv/soft-interface.c:1075: warning: Excess function parameter 'data' description in 'batadv_softif_newlink'
->> net/batman-adv/soft-interface.c:1075: warning: Excess function parameter 'extack' description in 'batadv_softif_newlink'
-
-
-vim +1075 net/batman-adv/soft-interface.c
-
-128254ceea6ffe Sven Eckelmann 2020-10-11  1063  
-128254ceea6ffe Sven Eckelmann 2020-10-11  1064  /**
-128254ceea6ffe Sven Eckelmann 2020-10-11  1065   * batadv_softif_newlink() - pre-initialize and register new batadv link
-c19808cb1d05d1 Xiao Liang     2024-11-18  1066   * @nets: the applicable net namespaces
-128254ceea6ffe Sven Eckelmann 2020-10-11  1067   * @dev: network device to register
-128254ceea6ffe Sven Eckelmann 2020-10-11  1068   * @tb: IFLA_INFO_DATA netlink attributes
-128254ceea6ffe Sven Eckelmann 2020-10-11  1069   * @data: enum batadv_ifla_attrs attributes
-128254ceea6ffe Sven Eckelmann 2020-10-11  1070   * @extack: extended ACK report struct
-128254ceea6ffe Sven Eckelmann 2020-10-11  1071   *
-128254ceea6ffe Sven Eckelmann 2020-10-11  1072   * Return: 0 if successful or error otherwise.
-128254ceea6ffe Sven Eckelmann 2020-10-11  1073   */
-c19808cb1d05d1 Xiao Liang     2024-11-18  1074  static int batadv_softif_newlink(struct rtnl_newlink_params *params)
-128254ceea6ffe Sven Eckelmann 2020-10-11 @1075  {
-c19808cb1d05d1 Xiao Liang     2024-11-18  1076  	struct net_device *dev = params->dev;
-c19808cb1d05d1 Xiao Liang     2024-11-18  1077  	struct nlattr **data = params->data;
-a5ad457eea41ef Sven Eckelmann 2020-10-11  1078  	struct batadv_priv *bat_priv = netdev_priv(dev);
-a5ad457eea41ef Sven Eckelmann 2020-10-11  1079  	const char *algo_name;
-a5ad457eea41ef Sven Eckelmann 2020-10-11  1080  	int err;
-a5ad457eea41ef Sven Eckelmann 2020-10-11  1081  
-a5ad457eea41ef Sven Eckelmann 2020-10-11  1082  	if (data && data[IFLA_BATADV_ALGO_NAME]) {
-a5ad457eea41ef Sven Eckelmann 2020-10-11  1083  		algo_name = nla_data(data[IFLA_BATADV_ALGO_NAME]);
-a5ad457eea41ef Sven Eckelmann 2020-10-11  1084  		err = batadv_algo_select(bat_priv, algo_name);
-a5ad457eea41ef Sven Eckelmann 2020-10-11  1085  		if (err)
-a5ad457eea41ef Sven Eckelmann 2020-10-11  1086  			return -EINVAL;
-a5ad457eea41ef Sven Eckelmann 2020-10-11  1087  	}
-a5ad457eea41ef Sven Eckelmann 2020-10-11  1088  
-128254ceea6ffe Sven Eckelmann 2020-10-11  1089  	return register_netdevice(dev);
-128254ceea6ffe Sven Eckelmann 2020-10-11  1090  }
-128254ceea6ffe Sven Eckelmann 2020-10-11  1091  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Discussed with Alexei (who discussed with you I presume) that we're
+doing this in bpf_verifier_state, will fix.
