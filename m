@@ -1,85 +1,88 @@
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11A9B11CBA
-	for <bpf@vger.kernel.org>; Fri, 22 Nov 2024 13:56:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54D0B12BEBB
+	for <bpf@vger.kernel.org>; Fri, 22 Nov 2024 14:57:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732283802; cv=none; b=YXgl3zWTFkyST4VvTk0dWXdJm1rAyXSS/xawR2HP95wtsfZ/Qs5SyT7Yi+rfGLSH5GlcNR7Ll2mW6/Sh4V7eUYXkx3duhYgdZ6XaKesHBCKZ8rjTWjGE84FP8LNpt6G4xH+aCxRFer3tx22mORWzOrnWFO0HTJAREdugBp8YY+4=
+	t=1732287434; cv=none; b=egqKOLSho3KfCt6n1Lk+F2uSg3XnTB455S5AD6BHRQWB2YXNPKmnE2T4tLLtafb0v1oBleZ4FX4jhHdi4KRM27Dfcoltv04DbdOK1tPpP9v6kI5eqQ9SZxg52ThXmtNerdDDuPUhx+iI4DYfsk6nLn6MdDVh9/TUoyRbvtsm2zw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732283802; c=relaxed/simple;
-	bh=8WMrdbry8cYbb3PwBwFzfa4t8XIIPzo0aJN5xmp6Bzw=;
+	s=arc-20240116; t=1732287434; c=relaxed/simple;
+	bh=tqqa48xgvR9pXkWvcyLzXe0k1qdpgquZatajbiXvd10=;
 	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=AVcko5PEVaeKJ0WRVocb5Vgmxrs4pqYRaKSEgKrT+OBxFbcWOx35kWe5dCH1steaIfqkti9KlgV3q7ePBO9r5o2pQwzw8+7ipJh4JG+M77hrA3oisAO3fxd7n6uVTLyLMCS/Ez0bZUwUTf7tb+VB+y/Idh4sz+Gv6N8eNweGhNg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=JT21EBqH; arc=none smtp.client-ip=170.10.129.124
+	 MIME-Version:Content-Type; b=l9gOdxFI/Il4beAuedg3AFerkt3DH4NHJu3MLrh/fEchrZouJj2FsduleVPdx70MUmOyPARSP+2Q9F77r6tZMuld+EIZu+RT1ZmvaUl4GL2SiLBR3cMAdneDJ2jGaGUPeItTIOnEf272jv1l4kB3Kq3WDUJrOG+06VX/2+1+nrk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=UDAgDFlG; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="JT21EBqH"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="UDAgDFlG"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1732283800;
+	s=mimecast20190719; t=1732287431;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=SsHaI1ei1IfQPr0KsTU1Bgjr9RwL5hBLdlpSc5oHDTU=;
-	b=JT21EBqHCsSyPl3ffxSYLitOS3ro9JY0IAUhMjt9E36t6a+G6X/H/tySP9VReojvYaO77b
-	6IGOJhOGa70iW84GramlQRpeVRMH6U22TFnURm2+dF89PZ3SaG9KetU82JAEVLekpAqBe1
-	AumAMroVV+cpwlFwA82P7JIRuEyxAVs=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=Sptth2+J7xYYlvrpOuYTMVo9n+vm/HkHIiB9PfWHJ6k=;
+	b=UDAgDFlG8XED7/CIpXsjVmEqeunIT4eXDsw31icDRspjRg3A11iQwsvIpuAOxtoL29DUwL
+	eT/DwuAgXRLT+KTr0P+lwaE3cS7GnSAAZP3UwmtcpkN75aRXZD4Hmm5XiHAWoewCkFpq5R
+	EUCb9iKMcoJFJ/01SZ1vSlSlNStYTe8=
+Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
+ [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-487-2WMMF9vVPKyNRGcdiWXaFg-1; Fri, 22 Nov 2024 08:56:39 -0500
-X-MC-Unique: 2WMMF9vVPKyNRGcdiWXaFg-1
-X-Mimecast-MFC-AGG-ID: 2WMMF9vVPKyNRGcdiWXaFg
-Received: by mail-wr1-f69.google.com with SMTP id ffacd0b85a97d-381d0582ad3so1508546f8f.0
-        for <bpf@vger.kernel.org>; Fri, 22 Nov 2024 05:56:38 -0800 (PST)
+ us-mta-503-gYZUuanAP2OWQ38DnCaWuQ-1; Fri, 22 Nov 2024 09:57:10 -0500
+X-MC-Unique: gYZUuanAP2OWQ38DnCaWuQ-1
+X-Mimecast-MFC-AGG-ID: gYZUuanAP2OWQ38DnCaWuQ
+Received: by mail-qk1-f200.google.com with SMTP id af79cd13be357-7b14073eabdso283611785a.3
+        for <bpf@vger.kernel.org>; Fri, 22 Nov 2024 06:57:10 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1732283798; x=1732888598;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SsHaI1ei1IfQPr0KsTU1Bgjr9RwL5hBLdlpSc5oHDTU=;
-        b=AgT56u1ejkq/PJKgoCCmaF2FpedVbR/oB6ASDXqsUutUGD7Y6OqRAkFL5+OMelqXid
-         XLMd2835WneuCFatTqNs9iRU66dcfG+ylzh6AT0LYxI5mQf/fkf3NrmoR+XupHmbvj1F
-         jfvSL1rkj5EXXxdnPup2B5IyATPkzNPyFt5wRT+7biAAq2ZeLOhse45no9H1JdzryNhG
-         +vCK4zCn/bNkIJDsgPBxCV/7T9V6yUNgr20YmGAHWsnor0MxuxBVO32wqe7rU4EFT7Kv
-         QUIQ9CsqzbxoEA+jwDSiIT2p0zllcwj2HTxlWH9hsUDMFf0ECjQSXh7KR7hWA+YKNvar
-         iUbQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXzZzYiRHm4NyyfAd1pyOau47viDVtr89uiLvFcMaoFwwqaHT8K+aHUDf/DUgHNGO2mHNw=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxrk3BNAbLX/weEBg29ymwRIbKEEEh/WE+62rAH9floFfy6APsz
-	OIfnQtQ499ikjJ6OAI+dl49CJWmvXa8oUydMQtruG7lxoHpVPf7SGxvnJ1flNhR8x/5F5patvyq
-	TQayh43RnCF6zOtQcZ4oUJRYAVYosWgcdFWX16hlKrD9oH1CsDQ==
-X-Gm-Gg: ASbGncv12Bu/k1jSSnIM3BsiyukEtsv02QMSj3hGvkD8LjeWF+lUamj5lzS162EtUq7
-	XyqkGYvJO/+g7fg2Kw15ArNpO6ydBRMlY+XUZNjVupkbwb45PsoZ76evj9dZpbek1X/8/pz+5YG
-	9t8thqEQjuh8GgBsOGmNuv/DH+Xa9ihe8cDh4q3kYKr96slbrwv3ppRGQZac8FK7dEn8PK4ZHoo
-	qhcoGjoR/kCkt1D4bOpoLsa85U9X5Fv1OhaIRJdSf0/Zb9KJkhuj5r8q+2T0qFeWOLBjNP3Rd+w
-	YU9n+RUtNTX2MOmT24i8AdBiMTP741jl8Q4=
-X-Received: by 2002:a5d:64a9:0:b0:382:4fa4:e544 with SMTP id ffacd0b85a97d-38260b3caf5mr2941896f8f.6.1732283797785;
-        Fri, 22 Nov 2024 05:56:37 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IGiRi9yMi/lEmTBvU6LjIZoyT2mo/EJzfL6hLaHeWfXh/dSLFhhXDExODAa08mxumRLkt9jSw==
-X-Received: by 2002:a5d:64a9:0:b0:382:4fa4:e544 with SMTP id ffacd0b85a97d-38260b3caf5mr2941848f8f.6.1732283797392;
-        Fri, 22 Nov 2024 05:56:37 -0800 (PST)
+        d=1e100.net; s=20230601; t=1732287429; x=1732892229;
+        h=content-transfer-encoding:mime-version:message-id:date:references
+         :in-reply-to:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Sptth2+J7xYYlvrpOuYTMVo9n+vm/HkHIiB9PfWHJ6k=;
+        b=aiH6a48wxuo5Ll50p+wIE9b+3ylMH0e0AhW9c/ywJ+951iH2jliierbvLdUZPxR/40
+         lzXyTA5uXxm5zpKDYVX/S1EwcM5vI19K233eWWaEA1O/opJHF1UMEE2wZ75I5aXPMoM4
+         wv5BhO0fw5RKjiR+1HduyKHf6VihWyaD8dYTooaruhOa+4LPUFk1CXe6iWCme5Hw4kTO
+         nn055bd745PxMWxXV4bT8JCZ6zqdjJW6FfpnFn4PVt9wQwLSXfgDp3SARuXOieR6Mlmj
+         ZynGlegaZjoKPXgqbtpBzSaioOHMVQ84HG3rqMNyM1cNctBxJ8DGaVsLnGTp2Vl/UHlA
+         O2WQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUCFbe08qXKcFRen2BLU0mr6qS+6OgEC2RwDK2d4TOxEO8JaIrJGgSIQoSxSZeUVCzHFhg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwQxgnToePbvScRbJxicU71Xjhr+oZtievsEtsTakAeY4UACIXF
+	IrEhmUYMmvI4UrWTvX150bfxPAofWHw7c1Dm3nDQpkGkzwzvNIMgTN8ZZAlOwYSFrRvswRsBBtx
+	CsGL0lZ+EDt562Gx+jCAuMgtLpE2R/ng/OhtbkX3kMy6U0sfu5g==
+X-Gm-Gg: ASbGncuQA4TejCwjKEYJ9NXfTOhTVo9Ax+TBUwazzJ8YXlcKIQF3Dm+soalkn1pLMrR
+	T7CXrFeJ94xU0NLabWUHIo/FvyNFc6IEBATSlT9Ey8D8IngFlAN0gFELh6cBmT13SqQaaJoMfLh
+	FbwetC6SsJCY39Ck+i/7QyZ36Y+Bl28293P1yASpfCWE9nKKtyeUcVA8JUhj4yxXPoLRj5qfEws
+	tVazPxm0ed7vvfZ1LXCOcRKCmft9C/987vmxcrA+AC73Mtui6F02KfDpikVsrjW088r6FcQHZZu
+	xem8zHImpDlsrwa3uOU0nXeH6BSHYyrxFbY=
+X-Received: by 2002:a05:620a:4551:b0:7b1:522a:b05 with SMTP id af79cd13be357-7b514488166mr373604285a.7.1732287429600;
+        Fri, 22 Nov 2024 06:57:09 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IHo66xOB/q1z1C9fiLdA8QOFwiL4+kiR9reyJMdimFadi7v3LEk57578pB7zv1XQEy4GyU/yA==
+X-Received: by 2002:a05:620a:4551:b0:7b1:522a:b05 with SMTP id af79cd13be357-7b514488166mr373597785a.7.1732287429065;
+        Fri, 22 Nov 2024 06:57:09 -0800 (PST)
 Received: from vschneid-thinkpadt14sgen2i.remote.csb (213-44-141-166.abo.bbox.fr. [213.44.141.166])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3825fbedf40sm2418281f8f.98.2024.11.22.05.56.35
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-7b513faf57dsm93769985a.48.2024.11.22.06.57.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Nov 2024 05:56:36 -0800 (PST)
+        Fri, 22 Nov 2024 06:57:08 -0800 (PST)
 From: Valentin Schneider <vschneid@redhat.com>
-To: paulmck@kernel.org
+To: Frederic Weisbecker <frederic@kernel.org>
 Cc: linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
  kvm@vger.kernel.org, linux-mm@kvack.org, bpf@vger.kernel.org,
  x86@kernel.org, rcu@vger.kernel.org, linux-kselftest@vger.kernel.org,
- Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
- <mhiramat@kernel.org>, Jonathan Corbet <corbet@lwn.net>, Thomas Gleixner
- <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov
- <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, "H. Peter
- Anvin" <hpa@zytor.com>, Paolo Bonzini <pbonzini@redhat.com>, Wanpeng Li
- <wanpengli@tencent.com>, Vitaly Kuznetsov <vkuznets@redhat.com>, Andy
- Lutomirski <luto@kernel.org>, Peter Zijlstra <peterz@infradead.org>,
- Frederic Weisbecker <frederic@kernel.org>, Neeraj Upadhyay
- <quic_neeraju@quicinc.com>, Joel Fernandes <joel@joelfernandes.org>, Josh
- Triplett <josh@joshtriplett.org>, Boqun Feng <boqun.feng@gmail.com>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Lai Jiangshan
- <jiangshanlai@gmail.com>, Zqiang <qiang.zhang1211@gmail.com>, Andrew
- Morton <akpm@linux-foundation.org>, Uladzislau Rezki <urezki@gmail.com>,
+ Nicolas Saenz Julienne <nsaenzju@redhat.com>, Steven Rostedt
+ <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>, Jonathan
+ Corbet <corbet@lwn.net>, Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar
+ <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, Dave Hansen
+ <dave.hansen@linux.intel.com>, "H. Peter Anvin" <hpa@zytor.com>, Paolo
+ Bonzini <pbonzini@redhat.com>, Wanpeng Li <wanpengli@tencent.com>, Vitaly
+ Kuznetsov <vkuznets@redhat.com>, Andy Lutomirski <luto@kernel.org>, Peter
+ Zijlstra <peterz@infradead.org>, "Paul E. McKenney" <paulmck@kernel.org>,
+ Neeraj Upadhyay <quic_neeraju@quicinc.com>, Joel Fernandes
+ <joel@joelfernandes.org>, Josh Triplett <josh@joshtriplett.org>, Boqun
+ Feng <boqun.feng@gmail.com>, Mathieu Desnoyers
+ <mathieu.desnoyers@efficios.com>, Lai Jiangshan <jiangshanlai@gmail.com>,
+ Zqiang <qiang.zhang1211@gmail.com>, Andrew Morton
+ <akpm@linux-foundation.org>, Uladzislau Rezki <urezki@gmail.com>,
  Christoph Hellwig <hch@infradead.org>, Lorenzo Stoakes
  <lstoakes@gmail.com>, Josh Poimboeuf <jpoimboe@kernel.org>, Jason Baron
  <jbaron@akamai.com>, Kees Cook <keescook@chromium.org>, Sami Tolvanen
@@ -96,55 +99,87 @@ Cc: linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
  <linux@weissschuh.net>, Juri Lelli <juri.lelli@redhat.com>, Marcelo
  Tosatti <mtosatti@redhat.com>, Yair Podemsky <ypodemsk@redhat.com>, Daniel
  Wagner <dwagner@suse.de>, Petr Tesarik <ptesarik@suse.com>
-Subject: Re: [RFC PATCH v3 04/15] rcu: Add a small-width RCU watching
- counter debug option
-In-Reply-To: <f85c0f84-7ae3-4fb5-889a-d9b83f9603fe@paulmck-laptop>
+Subject: Re: [RFC PATCH v3 11/15] context-tracking: Introduce work deferral
+ infrastructure
+In-Reply-To: <Zz4cqfVfyb1enxql@localhost.localdomain>
 References: <20241119153502.41361-1-vschneid@redhat.com>
- <20241119153502.41361-5-vschneid@redhat.com>
- <f85c0f84-7ae3-4fb5-889a-d9b83f9603fe@paulmck-laptop>
-Date: Fri, 22 Nov 2024 14:56:34 +0100
-Message-ID: <xhsmh7c8v9xt9.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
+ <20241119153502.41361-12-vschneid@redhat.com>
+ <Zz2_7MbxvfjKsz08@pavilion.home> <Zz3w0o_3wZDgJn0K@localhost.localdomain>
+ <xhsmho729hlv0.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
+ <Zz4cqfVfyb1enxql@localhost.localdomain>
+Date: Fri, 22 Nov 2024 15:56:59 +0100
+Message-ID: <xhsmh1pz39v0k.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On 22/11/24 04:53, Paul E. McKenney wrote:
-> On Tue, Nov 19, 2024 at 04:34:51PM +0100, Valentin Schneider wrote:
->> +config RCU_DYNTICKS_TORTURE
->> +	bool "Minimize RCU dynticks counter size"
->> +	depends on RCU_EXPERT
->> +	default n
->> +	help
->> +	  This option controls the width of the dynticks counter.
->> +
->> +	  Lower values will make overflows more frequent, which will increase
->> +	  the likelihood of extending grace-periods. This option sets the width
->> +	  to its minimum usable value.
->
-> The second sentence ("Lower values ...") sounds at first reading like
-> this Kconfig option directly controls the width.  The third sentence sets
-> things straight, but the reader might well be irretrievably confused by
-> that point.  How about something like this instead?
->
->       help
->         This option sets the width of the dynticks counter to its
->         minimum usable value.  This minimum width greatly increases
->         the probability of flushing out bugs involving counter wrap,
->         but it also increases the probability of extending grace period
->         durations.  This Kconfig option should therefore be avoided in
->         production due to the consequent increased probability of OOMs.
->
->         This has no value for production and is only for testing.
->
-
-Much better, I'll take that, thank you!
-
->>  endmenu # "RCU Debugging"
->> --
->> 2.43.0
+On 20/11/24 18:30, Frederic Weisbecker wrote:
+> Le Wed, Nov 20, 2024 at 06:10:43PM +0100, Valentin Schneider a =C3=A9crit=
+ :
+>> On 20/11/24 15:23, Frederic Weisbecker wrote:
 >>
+>> > Ah but there is CT_STATE_GUEST and I see the last patch also applies t=
+hat to
+>> > CT_STATE_IDLE.
+>> >
+>> > So that could be:
+>> >
+>> > bool ct_set_cpu_work(unsigned int cpu, unsigned int work)
+>> > {
+>> >    struct context_tracking *ct =3D per_cpu_ptr(&context_tracking, cpu);
+>> >    unsigned int old;
+>> >    bool ret =3D false;
+>> >
+>> >    preempt_disable();
+>> >
+>> >    old =3D atomic_read(&ct->state);
+>> >
+>> >    /* CT_STATE_IDLE can be added to last patch here */
+>> >    if (!(old & (CT_STATE_USER | CT_STATE_GUEST))) {
+>> >            old &=3D ~CT_STATE_MASK;
+>> >            old |=3D CT_STATE_USER;
+>> >    }
+>>
+>> Hmph, so that lets us leverage the cmpxchg for a !CT_STATE_KERNEL check,
+>> but we get an extra loop if the target CPU exits kernelspace not to
+>> userspace (e.g. vcpu or idle) in the meantime - not great, not terrible.
+>
+> The thing is, what you read with atomic_read() should be close to reality.
+> If it already is !=3D CT_STATE_KERNEL then you're good (minus racy change=
+s).
+> If it is CT_STATE_KERNEL then you still must do a failing cmpxchg() in an=
+y case,
+> at least to make sure you didn't miss a context tracking change. So the b=
+est
+> you can do is a bet.
+>
+>>
+>> At the cost of one extra bit for the CT_STATE area, with CT_STATE_KERNEL=
+=3D1
+>> we could do:
+>>
+>>   old =3D atomic_read(&ct->state);
+>>   old &=3D ~CT_STATE_KERNEL;
+>
+> And perhaps also old |=3D CT_STATE_IDLE (I'm seeing the last patch now),
+> so you at least get a chance of making it right (only ~CT_STATE_KERNEL
+> will always fail) and CPUs usually spend most of their time idle.
+>
+
+I'm thinking with:
+
+        CT_STATE_IDLE		=3D 0,
+        CT_STATE_USER		=3D 1,
+        CT_STATE_GUEST		=3D 2,
+        CT_STATE_KERNEL		=3D 4, /* Keep that as a standalone bit */
+
+we can stick with old &=3D ~CT_STATE_KERNEL; and that'll let the cmpxchg
+succeed for any of IDLE/USER/GUEST.
+
+> Thanks.
 
