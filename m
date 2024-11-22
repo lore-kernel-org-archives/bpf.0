@@ -1,69 +1,69 @@
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 573A11E1A1C
-	for <bpf@vger.kernel.org>; Fri, 22 Nov 2024 16:21:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42474156883
+	for <bpf@vger.kernel.org>; Fri, 22 Nov 2024 17:27:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732292483; cv=none; b=SoXa9eL7ZrHCKfg7EcRqWQhCvzz2yYWzEJ92xeiFjZ478roh39aea2mMhdyTjmMrFLWBrY12nL5hAkaxbH4X6tFG6wz+MTXzdGks1kArjcKKdQlk3DGOamNOX68OEegPeOIM6HsD4OSiYFYD/UHUrqbBw9KHFceSpbBhf29Lxrk=
+	t=1732296426; cv=none; b=nUG+YmMifCg7UPQQdEhKEIJ4fend1ynDLCh2m9xJ0PGACRMfnt2letbsHKGpsnm363VvgiDxOAQlgurhCwxOZvJ6NpeEqfODYe/F2F6YWoayOxROxjxheIA5rRHTBXbL9xMHPA6xjmMF+fVA4eiJsifagLoqg95xYWl+2QI+8zY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732292483; c=relaxed/simple;
-	bh=qKtTB5DV3Zl7Y+bAH9RuF3TD9YvDTYHWYvVeSislgT4=;
+	s=arc-20240116; t=1732296426; c=relaxed/simple;
+	bh=ClLKHDqr6PkmVcgcEQS26XuKU5WAQb5CRj4MznEbpvY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=cXA3V7x8L9mabQ5BxtCgfXEOf+Li4S1YdHTRsjNCOBFvqu1lZOydnTuqJxbik04QqyOBZmxwGmGoBr/6G93ocowjNpFIjlUD9AzZYDBP+8L/W9Wm4IaRGhDn0Iljm0pnRtXso2GFzYnkiBWu4WNXKcY9IO+nR7oVTcIYfWQBREw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=MctXfxfP; arc=none smtp.client-ip=170.10.133.124
+	 MIME-Version; b=C/p/+lcggnsnrPhl876VkRdihx30M7p90hUqNuCYYo4vLpbO29ivuu2IoqNhYp1qjEs0Nhp5GmB1/KFbZRoKEbMyHffsn1IpHH4ZvJzyi/gXyhNwHs7nEHSq/0iznpOkcWrRrucp9S5tfq8zOjQL5jFI9EH56XSY8fZ5lrgbkwA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=hzpftI8M; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="MctXfxfP"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="hzpftI8M"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1732292479;
+	s=mimecast20190719; t=1732296419;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=qKtTB5DV3Zl7Y+bAH9RuF3TD9YvDTYHWYvVeSislgT4=;
-	b=MctXfxfPobufAJTIZN1DFV1XrTqVYArGsgZysGxdZ22pctOnR8obDojkRN//qpmJlZm9ap
-	oklp/UsRR4spujdGbQIfSYbRfAFC3mNfAPv9kQ7KjBFcEwC2MP/bbNJhoI1iUW1ATFhdy2
-	Z/fifoAG6t2KxIn54yyLzjAz/AndwxQ=
-Received: from mail-lf1-f69.google.com (mail-lf1-f69.google.com
- [209.85.167.69]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=bonjTJEsrDIaVijnWhdP+tUvaZ22+wg4ayk5WPuEpAc=;
+	b=hzpftI8MVcQb9YtSAjIo4mF5YWKYGV8o1YZv7fIamFPtYviYoRrNI2H73j5eDYeCpUrerp
+	jWXsev7LyKgmN+AA4JQ1siibAQjoS/bVvnlWYV3GHelTutpeT+r2+uegNYp8+fmH4rmckG
+	IOMmDFVwGkWO8berNWTHeaz7lcgTrho=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-56-uF-0LgduNHCWGVKX-XWosg-1; Fri, 22 Nov 2024 11:21:18 -0500
-X-MC-Unique: uF-0LgduNHCWGVKX-XWosg-1
-X-Mimecast-MFC-AGG-ID: uF-0LgduNHCWGVKX-XWosg
-Received: by mail-lf1-f69.google.com with SMTP id 2adb3069b0e04-539fb5677c9so2301301e87.0
-        for <bpf@vger.kernel.org>; Fri, 22 Nov 2024 08:21:17 -0800 (PST)
+ us-mta-8-lflmpJpTOuabCsV9w_yM3w-1; Fri, 22 Nov 2024 12:26:58 -0500
+X-MC-Unique: lflmpJpTOuabCsV9w_yM3w-1
+X-Mimecast-MFC-AGG-ID: lflmpJpTOuabCsV9w_yM3w
+Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-432d04b3d40so15009475e9.1
+        for <bpf@vger.kernel.org>; Fri, 22 Nov 2024 09:26:58 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1732292476; x=1732897276;
+        d=1e100.net; s=20230601; t=1732296417; x=1732901217;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=qKtTB5DV3Zl7Y+bAH9RuF3TD9YvDTYHWYvVeSislgT4=;
-        b=IJhkSrC6G1T6XKSYmCDWQ3+Hg8ITQmNCMexdlvPcuGWOdC436vkbNXYVTB+IYmI58d
-         zAPurfLJSjum9rQarl2kGSofC8JfvrZ+2HZOULLSEgs1e/RennSP/WOkP/9vJ0Oj4hEU
-         dc0uei1RuFhD0zjCC1+cf6QKuln2gR7pY5CS98hRMz+HMjeQi8Zh0wLqrIOkNN8npJ7M
-         8SZv4sSilRtrGGgHEBq8oKfSzNQkwePuMIX0+xworDfFLp/fklQQ5qkhefTeA8Di+I+E
-         05VLu1/mpp5olzNPlOhBqwctwPedlfYoNKEMa8cr5i/Vk9UnkHSYGHmsK9+an5vqvvy0
-         mRJg==
-X-Forwarded-Encrypted: i=1; AJvYcCXdIb7cydzFgmIWVdY/+n9t6cl+dOysCssPwofhL6hJgaa5e3y2jjGgil+pVEvs6qMtVoE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YywAbHPOmaGYZJKgfqsJ7A4GiRHX7pEDSmXjl3DiPsWOPhZ6VlS
-	P9Rj+bzcGR+AVqGpmCiVLVgkSvxV16QmfWPlExwG1omDM0wywKNadXUGIdcoeHTbjvfmFG2Ar8q
-	fbx//DbH0b0e0UbITqBciSCUGSKVTYSPbghk8FQYcTKQcPxoYXA==
-X-Gm-Gg: ASbGncu16BI9LPfchfu00PNJR59IG+h1Edj1VRiEBfc69je5LHf3dpE85I0oH6Yr6sS
-	JrmN77U/fSrhiyhHgajvorfCRahAiPj802XIB4m4oBnO3KyIYEhAcsmYKyJC9gZ0fOf+fCHTZoB
-	xBTnWDlzpIfuvqdagSXVmSVxuqExy9WUMuFR2m2hCg044z+MjR7nExLbXxUiLV4TU3SZ7gazG77
-	mi6cjZ4tBW/a5E+XqGcmpZCau8P4h8N9H29fE+Ouw712TJ4uzTxzbFS68m8mAj4vkF+a7iqq8dQ
-	nC85Xw==
-X-Received: by 2002:ac2:51c9:0:b0:53d:8c79:ace5 with SMTP id 2adb3069b0e04-53dd3aabeffmr2344585e87.54.1732292476485;
-        Fri, 22 Nov 2024 08:21:16 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IFR0ePfE3lovnWGuzpFCv2uMYuHyzHPO1LZjbHFLMvu00pbafujzeSDjCej37Sftl/YHlPHDg==
-X-Received: by 2002:ac2:51c9:0:b0:53d:8c79:ace5 with SMTP id 2adb3069b0e04-53dd3aabeffmr2344568e87.54.1732292476130;
-        Fri, 22 Nov 2024 08:21:16 -0800 (PST)
+        bh=bonjTJEsrDIaVijnWhdP+tUvaZ22+wg4ayk5WPuEpAc=;
+        b=NRB8Qu19gsJKsHIeFoP9SD4KZoSQdOme5HxqZDMOBcIPyaR3PPVWlyS+zbTe7YUmLG
+         fBX2PLwBC4YYr3lkLgdGBufonJRnDAGleXAL/4NI7noTdCjIVz6igHx3Doa5WpXgbRoF
+         vDtVmTn/mNnb7GJKQVeoXLQtnqdI1Yrbhdy6gZZyWMTRoTSJR2jnU99ZrUNSxaditWar
+         1w03czMnEOf8W/UKNlXxWorh5YO3e5hGAXKXmtcJMwDvkoH8kFLtkSQUbGKtx2Jbs99f
+         /fUoNG7MGoo7XuRi5PZl6yPoQtAQGejJQOcXZfxt++0KpyFEf3hXNStcCoSloWrDjzP6
+         jviQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU6obzvty9RXTITcgxwUD1tkeWsO16f0kfKjCfEonbHM172NO3diUYXgRu+t3pc9hqXrUE=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw+njEGPv8GVNvmfsxp49kgPyFXhNRKcAN4Cfev757JjKdazBuc
+	9cnyJHqBTEA4Bl6e0sgw4UmV8ply9+HSn4MlSN1MdR9ZMmBiiw1K/9Or4uyLPJdQt4l2poCuf0/
+	L2j6qHP4LUwkeRByT+pyUVbl152f+CqoKhKQnmgUNDgreotpuaA==
+X-Gm-Gg: ASbGncuGrKA+JAjnsUDJfjwEpvIN56+KpkKXWZsrCWpih9Ots4dp1or/ux/L2iTnhYW
+	8aQtLaaip4SEj1gxwC0CXfsStMrjoid3nTlm7S2yUqpXoxXb5KcbCh9Aow8ztLJzUywhM7tbB+S
+	Qt9vwPIkT8cwSrXYFPyfielPPmc3lyj88IZm+mrS95+PeRdy1FOBnUkENLcQ1CpIXXWLiXxIlmN
+	tu4lWVMnbPEv71IJrgLIe31JzGOfW07lK/4FnuFL4snN1mX+/bJAAJHQFZnQ5Im7OMCfe0ayQVW
+	ParzxQ==
+X-Received: by 2002:a5d:5f8c:0:b0:382:39a7:3995 with SMTP id ffacd0b85a97d-38260b5b5a5mr3051897f8f.17.1732296417181;
+        Fri, 22 Nov 2024 09:26:57 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IFJ8cnKY3PHy55oSgMvuyy7GftnO8GWR0CeQCP0dYaT9/4MetPL4C2V96vIO3UU3FglDdAiFg==
+X-Received: by 2002:a5d:5f8c:0:b0:382:39a7:3995 with SMTP id ffacd0b85a97d-38260b5b5a5mr3051859f8f.17.1732296416829;
+        Fri, 22 Nov 2024 09:26:56 -0800 (PST)
 Received: from lleonard-thinkpadp16vgen1.rmtit.csb ([176.206.22.110])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-433b463ab5fsm98768945e9.27.2024.11.22.08.21.14
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3825fbc3557sm3016023f8f.81.2024.11.22.09.26.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Nov 2024 08:21:15 -0800 (PST)
+        Fri, 22 Nov 2024 09:26:56 -0800 (PST)
 From: Luigi Leonardi <leonardi@redhat.com>
 To: mhal@rbox.co
 Cc: andrii@kernel.org,
@@ -92,12 +92,12 @@ Cc: andrii@kernel.org,
 	song@kernel.org,
 	yonghong.song@linux.dev,
 	Luigi Leonardi <leonardi@redhat.com>
-Subject: Re: [PATCH bpf 3/4] bpf, vsock: Invoke proto::close on close()
-Date: Fri, 22 Nov 2024 17:20:31 +0100
-Message-ID: <20241122162031.55141-1-leonardi@redhat.com>
+Subject: Re: [PATCH bpf 1/4] bpf, vsock: Fix poll() missing a queue
+Date: Fri, 22 Nov 2024 18:26:29 +0100
+Message-ID: <20241122172629.62588-1-leonardi@redhat.com>
 X-Mailer: git-send-email 2.47.0
-In-Reply-To: <20241118-vsock-bpf-poll-close-v1-3-f1b9669cacdc@rbox.co>
-References: <20241118-vsock-bpf-poll-close-v1-3-f1b9669cacdc@rbox.co>
+In-Reply-To: <20241118-vsock-bpf-poll-close-v1-1-f1b9669cacdc@rbox.co>
+References: <20241118-vsock-bpf-poll-close-v1-1-f1b9669cacdc@rbox.co>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -106,11 +106,31 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-I spent some time checking and nobody but __sock_create (net/socket.c)
-and vsock_release can set sock->sk to NULL.
+>When a verdict program simply passes a packet without redirection, sk_msg
+>is enqueued on sk_psock::ingress_msg. Add a missing check to poll().
+>
+>Fixes: 634f1a7110b4 ("vsock: support sockmap")
+>Signed-off-by: Michal Luczaj <mhal@rbox.co>
+>---
+> net/vmw_vsock/af_vsock.c | 3 +++
+> 1 file changed, 3 insertions(+)
+>
+>diff --git a/net/vmw_vsock/af_vsock.c b/net/vmw_vsock/af_vsock.c
+>index dfd29160fe11c4675f872c1ee123d65b2da0dae6..919da8edd03c838cbcdbf1618425da6c5ec2df1a 100644
+>--- a/net/vmw_vsock/af_vsock.c
+>+++ b/net/vmw_vsock/af_vsock.c
+>@@ -1054,6 +1054,9 @@ static __poll_t vsock_poll(struct file *file, struct socket *sock,
+> 		mask |= EPOLLRDHUP;
+> 	}
+> 
+>+	if (sk_is_readable(sk))
+>+		mask |= EPOLLIN | EPOLLRDNORM;
+>+
+> 	if (sock->type == SOCK_DGRAM) {
+> 		/* For datagram sockets we can read if there is something in
+> 		 * the queue and write as long as the socket isn't shutdown for
 
-I also ran checkpatch, everything LGTM.
-Thanks for the fix!
+LGTM, thanks!
 
 Reviewed-by: Luigi Leonardi <leonardi@redhat.com>
 
