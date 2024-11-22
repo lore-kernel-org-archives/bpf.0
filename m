@@ -1,89 +1,118 @@
-Received: from out-184.mta1.migadu.com (out-184.mta1.migadu.com [95.215.58.184])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15A5A1DE2A2
-	for <bpf@vger.kernel.org>; Fri, 22 Nov 2024 15:41:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.184
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 350D81DFE06
+	for <bpf@vger.kernel.org>; Fri, 22 Nov 2024 16:20:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732290071; cv=none; b=I5oR/0RS2ys9Ac21ihIT2W+ArrwMNdUi+/2gfeDA+qPPK/cBeGr1LkM6vlBMG2D5n0ludSZckU7E9cXkfjqaioE48iQg3lMLEkR4MIMQYh+HgUnqX8uu9LF5D6rRqcA0jLoChmYzfupOjKm6r5EYky5nZpSEEQbwK5l46C+/8SU=
+	t=1732292442; cv=none; b=PklFV0xRR1KkHyMlT94XZexYOts+dF2nC5+iMYB/0VNr3pCP6HzK483cF7nG4MSgGMoLr4sgni/0bC8vTVo7XOJQPHdALyptWhYUrvopUpX4j6qr3I4HjQtWMVi3PAPi6rPR4gkLkWk01aeAU6VsZvA/yt8tlAi2N3VUMlaOW3U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732290071; c=relaxed/simple;
-	bh=XLD+hDJ+pI5hMg5OdYLBoJ3qV765S66CniFZTuU/3LU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=td8Bxieoo/W8iDT2i+VnaIV/JQSPulazxe7HWsE963bewDUF7QSvHbySHrTJNliFGiS+nzEECS6k85kGUKLL8CjwD9bI12GCw7BoJpglBrVDmf/4a1auNzShuvxnR1SGgmqRN/z0zLdC+kxq15GvMV5Laviwzw3QImlOpstHXUw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=VYLbc2or; arc=none smtp.client-ip=95.215.58.184
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1732292442; c=relaxed/simple;
+	bh=wbzJg7Rh0/IJD93w2qv9ayIORHCQa+JXkVfav46PNLg=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=NMRfICKYrzn5i2fsPF5zKqOtM4hLIyxBUKyiRqpToMPu2OxuVIN9CtIcgMvlpDpsSM3dx7+ak2dn01+e1GhxdAPkjyjaycWpNDXe/1U6ch6XkiN6tIgoRt77Bu9A7Za1p6vDRx33cXOp++wJ8g1UeYhK0bXdoSg9BSoMscYi8Tk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=L1uSW2Ml; arc=none smtp.client-ip=209.85.218.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="VYLbc2or"
-Message-ID: <5ef82652-25f4-43d4-bad5-f3766aafcc1f@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1732290064;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=UFPSclUZkv19c0ljNhkyouPklMoXEK1Msn9XWFloIng=;
-	b=VYLbc2orAto9T6CU3SKAzROIqdKeuEGOIMpADcoUb1goNBrcveUBSK+6+/JXpmw2INtKvt
-	ncNc095jH1E3qiiuQrvSyyrMRF+w5l/YL6lOWZ1UMA7GntLkwXKlxnoN1wSTQm9ywdWdYu
-	lGPDQz4sjUXKPTsSrEBuVVpe+bjN/DI=
-Date: Fri, 22 Nov 2024 07:40:58 -0800
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="L1uSW2Ml"
+Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-a9a0ec0a94fso337950966b.1
+        for <bpf@vger.kernel.org>; Fri, 22 Nov 2024 08:20:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1732292438; x=1732897238; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=3dwNOyYmk12DopNVn2ZcrR1xTULhE8ZG0b8p3Tx9hLw=;
+        b=L1uSW2Mlvt+Dwt5d3LWaCqgxfCit3lO2ob/BsVYxbLK9+ZrhOaskVb7kQh/ZBlweV/
+         aSh7+rLalrcqij5znUn0T5P0rIFaM4HHhJJV5ASZRNkxGQfBZVaNGJhxhLjjq1ClO1rA
+         ZeVsKAUqcoc+lQWDtOqiuqyalOOLsH19d36Xpt2wdxwly7UH8D69bugrdfvuiOY/a07a
+         7hZHsIjN/Gg5XhBFa0eIvbrcPu4GVnFv2usp5eQ9c2nbJ/t2K8fjQrNM/bpy8Cw93JGR
+         9PVgRQRRs1mzs1iGTp5XiPMdOWbhRxyIDXj1DrJESeeaX0rG1syJdhjmpKhuWi2MZKhP
+         U0Xw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1732292438; x=1732897238;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3dwNOyYmk12DopNVn2ZcrR1xTULhE8ZG0b8p3Tx9hLw=;
+        b=FpTPjl5MKeFvRc7oIqXmSxzUj0d6qHfdNGVVE6IksiBod4ZV1Qej85mZi3CvVbsohN
+         +UZaBVC16KAKF010IrLAgtguJGkkgSs9j2IXrFWrOZBU8drGyN+3TIf1Zmj1TEIH+J5/
+         Zjzjpk1UjXdih3+uc3V8+8fD6T1UPc3hHPWXADVoVjULto/+hr0TO3wxbuPn7TlM/s3X
+         EsoH6y3dsYXvJgSKZPGNkK5NcUqm+OBTr0KqxAf4bNFThur1f93+FqDfH8uAQubtNREz
+         jVue5e0ZhL+rGJ26IEVMT16kV5dmLgk9xKQ8XBCOMUfC7/+y4WYX2QziF3d4yPgEcLnQ
+         FzNQ==
+X-Gm-Message-State: AOJu0YyXmji3fw7mXx26C81JjRQcRS4mOHsPp8r09rDktPvyEeg7a8c7
+	h14gT9dYQpOQmtV1IbrbyHO0hL3OXTinfd/+N9Mjkk11duA5qKtk
+X-Gm-Gg: ASbGncttyGzJ7Kh5kPS/OgEp8siAOMu+63jm+k6KRyDqTlm9Rb7bMjAd8Dh/IxwxLgW
+	+3Mxf6qOILwj3igKJRi+x2DeS301JpXzjTHLHxqeJAIJX/jjWZAoW/dJ8dZDLhx3GU6wBRpA8i4
+	qNjxgZ1b/B/9eWgVo7L2gGsVfAEMsFynmnPk/dYsjsRky76QXoC1gLHIbX/S6yEKex5jPtjaqzl
+	8VDAgeeQsiAEohwbD27uZ38Rk2KX/RTed8DAdfkNAW4YaziBh4CMq4drKsYWyWrlxhfxI2n
+X-Google-Smtp-Source: AGHT+IEUl+DE92Rw6d+0Gq3IkP2D0aXdQ0krI9rjQGtooA895zp+kIvHGxvy3w8gIDqi/jkSh8ek4A==
+X-Received: by 2002:a17:907:7751:b0:a8d:6648:813f with SMTP id a640c23a62f3a-aa5099065afmr299549166b.3.1732292438278;
+        Fri, 22 Nov 2024 08:20:38 -0800 (PST)
+Received: from krava (static-84-42-143-70.bb.vodafone.cz. [84.42.143.70])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-aa50b2f9e25sm117017666b.78.2024.11.22.08.20.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 22 Nov 2024 08:20:37 -0800 (PST)
+From: Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date: Fri, 22 Nov 2024 17:20:36 +0100
+To: Andrii Nakryiko <andrii@kernel.org>
+Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+	martin.lau@kernel.org, kernel-team@meta.com
+Subject: Re: [PATCH bpf-next] libbpf: don't adjust USDT semaphore address if
+ .stapsdt.base addr is missing
+Message-ID: <Z0CvVOjlaknq-vZ5@krava>
+References: <20241121224558.796110-1-andrii@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v8 0/4] bpf: add cpu cycles kfuncss
-To: Peter Zijlstra <peterz@infradead.org>, Vadim Fedorenko <vadfed@meta.com>
-Cc: Borislav Petkov <bp@alien8.de>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Eduard Zingerman <eddyz87@gmail.com>, Thomas Gleixner <tglx@linutronix.de>,
- Yonghong Song <yonghong.song@linux.dev>, Mykola Lysenko <mykolal@fb.com>,
- x86@kernel.org, bpf@vger.kernel.org, Martin KaFai Lau <martin.lau@linux.dev>
-References: <20241121000814.3821326-1-vadfed@meta.com>
- <20241122113409.GV24774@noisy.programming.kicks-ass.net>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Vadim Fedorenko <vadim.fedorenko@linux.dev>
-In-Reply-To: <20241122113409.GV24774@noisy.programming.kicks-ass.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241121224558.796110-1-andrii@kernel.org>
 
-On 22/11/2024 03:34, Peter Zijlstra wrote:
-> On Wed, Nov 20, 2024 at 04:08:10PM -0800, Vadim Fedorenko wrote:
->> This patchset adds 2 kfuncs to provide a way to precisely measure the
->> time spent running some code. The first patch provides a way to get cpu
->> cycles counter which is used to feed CLOCK_MONOTONIC_RAW. On x86
->> architecture it is effectively rdtsc_ordered() function while on other
->> architectures it falls back to __arch_get_hw_counter(). The second patch
->> adds a kfunc to convert cpu cycles to nanoseconds using shift/mult
->> constants discovered by kernel. The main use-case for this kfunc is to
->> convert deltas of timestamp counter values into nanoseconds. It is not
->> supposed to get CLOCK_MONOTONIC_RAW values as offset part is skipped.
->> JIT version is done for x86 for now, on other architectures it falls
->> back to slightly simplified version of vdso_calc_ns.
+On Thu, Nov 21, 2024 at 02:45:58PM -0800, Andrii Nakryiko wrote:
+> USDT ELF note optionally can record an offset of .stapsdt.base, which is
+> used to make adjustments to USDT target attach address. Currently,
+> libbpf will do this address adjustment unconditionally if it finds
+> .stapsdt.base ELF section in target binary. But there is a corner case
+> where .stapsdt.base ELF section is present, but specific USDT note
+> doesn't reference it. In such case, libbpf will basically just add base
+> address and end up with absolutely incorrect USDT target address.
 > 
-> So having now read this. I'm still left wondering why you would want to
-> do this.
+> This adjustment has to be done only if both .stapsdt.sema section is
+> present and USDT note is recording a reference to it.
 > 
-> Is this just debug stuff, for when you're doing a poor man's profile
-> run? If it is, why do we care about all the precision or the ns. And why
-> aren't you using perf?
-> 
-> Is it something else?
-> 
-> Again, what are you going to do with this information?
+> Fixes: 74cc6311cec9 ("libbpf: Add USDT notes parsing and resolution logic")
+> Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 
-We do a lot of benchmarking at scale. We benchmark kernel function as
-well as our own BPF programs. We already do it using bpf_ktime_get_ns().
-And this patchset optimizes benchmark use-case by removing overhead
-created double conversion from tsc to ns in case when we only need delta
-value as a result of benchmarks. Another optimization, which has even
-better effect, is to remove the overhead of function calls. As you can
-see, both helpers are fully inlined for x86, reducing the amount of 
-instructions from hundreds to single digit number and removing function
-calls. The precision comes next, now we can better understand the effect
-of fast-exits of some programs, but it's more like micro-benchmarking
-and may have less benefits.
+nice, lgtm
+
+Acked-by: Jiri Olsa <jolsa@kernel.org>
+
+jirka
+
+> ---
+>  tools/lib/bpf/usdt.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/tools/lib/bpf/usdt.c b/tools/lib/bpf/usdt.c
+> index 5f085736c6c4..4e4a52742b01 100644
+> --- a/tools/lib/bpf/usdt.c
+> +++ b/tools/lib/bpf/usdt.c
+> @@ -661,7 +661,7 @@ static int collect_usdt_targets(struct usdt_manager *man, Elf *elf, const char *
+>  		 *   [0] https://sourceware.org/systemtap/wiki/UserSpaceProbeImplementation
+>  		 */
+>  		usdt_abs_ip = note.loc_addr;
+> -		if (base_addr)
+> +		if (base_addr && note.base_addr)
+>  			usdt_abs_ip += base_addr - note.base_addr;
+>  
+>  		/* When attaching uprobes (which is what USDTs basically are)
+> -- 
+> 2.43.5
+> 
+> 
