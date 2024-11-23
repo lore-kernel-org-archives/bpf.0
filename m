@@ -1,31 +1,31 @@
 Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A12B5D530;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1284566A;
 	Sat, 23 Nov 2024 13:33:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732368827; cv=none; b=ZomkbxI0nUsEycqj3W81h8b5IZUugjaQO8RB9h55YJznVQG6GyOtZpW0nReaYUv6tSiKp65Uh0HzKZlYR1V7KcvWnjJn/UY8nhF5M2ugEEUqSALpynNvSN7fgWJemsehSzO5xD7njG55Z+dM5pzQtV7ZUEOA3ZzFCfPJfWcjZAM=
+	t=1732368827; cv=none; b=oXWNsbSmTUAiE1EvKsmbS0fKJvYzimlDNUOK7u18nGW1OhM2sD7ySsCskpFsWTzZ9iOrAsLgZ0e2fBcbUMLDk0AusaSvP+fRbnqWn7g8KslPk5QFiRA/ghX9rynpFA7BlXBnU+GS90Y6Ih6efV5JdQYhiLU5YDabSheIfNT7vik=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1732368827; c=relaxed/simple;
-	bh=/06I1MoPIpkLkreP+KQguVn1tqSQj5oeCpTznnOHjbM=;
+	bh=c6CdDGMpfwLEdjJ2eCMkd1FUqsRSkbiB2A1jKRSH2R0=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=IdTKUUWkB3DfTad2ZuylTrNedh+qQYt2MQTAf0+FCoamcleOsXa8Xe9AERiPVJDAzbpsAVAwtjdzl75t253iwLqUYiW+2RUqQ7dghJGcbxW0USOAYbCts1KzpSDw3+otGe+ilvgic1iFGIRu1O0M5nJtpgJfPpKLfblLbVIzkc8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=uFkttppJ; arc=none smtp.client-ip=159.69.126.157
+	 In-Reply-To:To:Cc; b=YJCkZZyJAjzTfxEsuOuYKn+cu2yOVJ2+Cg1N3slkaU7fWak3O6I9lsaR54mQgUs1KQM6aKlDETuQneG6evu6dMbYBKDFxYTdFl62k1yYg7tEOGmSL455FKYeFtWgt6ETArOriCzdjPp74KumC0178N+lFB2KJgDJHSzNJKtCQtI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=G+1EnYnP; arc=none smtp.client-ip=159.69.126.157
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="uFkttppJ"
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="G+1EnYnP"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
 	s=mail; t=1732368822;
-	bh=/06I1MoPIpkLkreP+KQguVn1tqSQj5oeCpTznnOHjbM=;
+	bh=c6CdDGMpfwLEdjJ2eCMkd1FUqsRSkbiB2A1jKRSH2R0=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=uFkttppJJwmvrOYW9H2Ach4pr6cGoGtG3/phWY/8ed+Yb1cUS3OIHYRhn4HDXS7FP
-	 RJRNEj8hfr7FrlpdjkjHozQlaVTPTq1c/YXKwZ6uMVsGigBkgKvJdpECpepgYDmGx6
-	 TWtPI/QgDafJLjzNqkDWdAuNu4oAq3gguhqgAj7I=
+	b=G+1EnYnP3Wvn/a4GhQ/bIL6JW6Sje4DBg+z/58yTceYS3vIUcNc1c/4ZRDXni9W+B
+	 jNfzv4xmfcsNJcrPmElsrdQuUNXwLn0hATH+gyzDyv4FWWL22xdzc3T+fZS1EptR9t
+	 +8NcbdlzGmJ6lHnAqqkcnnjCEpzC79PJldePy6d0=
 From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Date: Sat, 23 Nov 2024 14:33:39 +0100
-Subject: [PATCH 3/3] kbuild: propagate CONFIG_WERROR to resolve_btfids
+Date: Sat, 23 Nov 2024 14:33:37 +0100
+Subject: [PATCH 1/3] kbuild: add dependency from vmlinux to resolve_btfids
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -34,7 +34,7 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20241123-resolve_btfids-v1-3-927700b641d1@weissschuh.net>
+Message-Id: <20241123-resolve_btfids-v1-1-927700b641d1@weissschuh.net>
 References: <20241123-resolve_btfids-v1-0-927700b641d1@weissschuh.net>
 In-Reply-To: <20241123-resolve_btfids-v1-0-927700b641d1@weissschuh.net>
 To: Masahiro Yamada <masahiroy@kernel.org>, 
@@ -51,39 +51,38 @@ Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
  bpf@vger.kernel.org, 
  =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1732368820; l=888;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1732368820; l=909;
  i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=/06I1MoPIpkLkreP+KQguVn1tqSQj5oeCpTznnOHjbM=;
- b=/jYbuVCPM0A6oIljCDR4iF1HCMJnWdK2l0duNbTV74jCkkW0qfY3GRz3j7bO9rBomPgYzsrxf
- DYnks9cVXG7D04vUD+AbSYLD2CYvd1lXm2TEyKfP/BfukoAUV4V97Lc
+ bh=c6CdDGMpfwLEdjJ2eCMkd1FUqsRSkbiB2A1jKRSH2R0=;
+ b=CrIzTkeL7ZmqLczaKpIoJ60WdaDLhaFzDtFg5Lu3jJ7df/Ynj6jOHRyWKqMwNBE00uKC/Ray7
+ tJ9W426ko4xCnkfQkPmpcjG69itJainyqwfO7PhORkaALNUwsEX8WpH
 X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
  pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 
-Use CONFIG_WERROR to also fail on warnings emitted by resolve_btfids.
-Allow the CI bots to prevent the introduction of new warnings.
+resolve_btfids is used by link-vmlinux.sh.
+In contrast to other configuration options and targets no transitive
+dependency between resolve_btfids and vmlinux.
+Add an explicit one.
 
 Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
 ---
- scripts/link-vmlinux.sh | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ scripts/Makefile.vmlinux | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/scripts/link-vmlinux.sh b/scripts/link-vmlinux.sh
-index a9b3f34a78d2cd4514e73a728f1a784eee891768..61f1f670291351a276221153146d66001eca556c 100755
---- a/scripts/link-vmlinux.sh
-+++ b/scripts/link-vmlinux.sh
-@@ -274,7 +274,11 @@ vmlinux_link vmlinux
- # fill in BTF IDs
- if is_enabled CONFIG_DEBUG_INFO_BTF; then
- 	info BTFIDS vmlinux
--	${RESOLVE_BTFIDS} vmlinux
-+	RESOLVE_BTFIDS_ARGS=""
-+	if is_enabled CONFIG_WERROR; then
-+		RESOLVE_BTFIDS_ARGS=" --fatal-warnings "
-+	fi
-+	${RESOLVE_BTFIDS} ${RESOLVE_BTFIDS_ARGS} vmlinux
- fi
+diff --git a/scripts/Makefile.vmlinux b/scripts/Makefile.vmlinux
+index 1284f05555b97f726c6d167a09f6b92f20e120a2..599b486adb31cfb653e54707b7d77052d372b7c1 100644
+--- a/scripts/Makefile.vmlinux
++++ b/scripts/Makefile.vmlinux
+@@ -32,6 +32,9 @@ cmd_link_vmlinux =							\
+ targets += vmlinux
+ vmlinux: scripts/link-vmlinux.sh vmlinux.o $(KBUILD_LDS) FORCE
+ 	+$(call if_changed_dep,link_vmlinux)
++ifdef CONFIG_DEBUG_INFO_BTF
++vmlinux: $(RESOLVE_BTFIDS)
++endif
  
- mksysmap vmlinux System.map
+ # module.builtin.ranges
+ # ---------------------------------------------------------------------------
 
 -- 
 2.47.0
