@@ -1,375 +1,141 @@
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59FEC29A1
-	for <bpf@vger.kernel.org>; Sat, 23 Nov 2024 01:00:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.145.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D49F7E0E8
+	for <bpf@vger.kernel.org>; Sat, 23 Nov 2024 03:30:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732323617; cv=none; b=Md7cE7uZt8Cd/sGrnVsUgCRiKUoaX7PUjnHgdgzYXh6SN0yA8cZ/LwFihZBfXlS0EF7UgzHK5MwW8OQhR4IyOmf+nmlbAKaYd2eCTy0fQXD2jGtykxqQ4df16coq2JrKUs6hDuhO3Gj88jUR1LFqQzfYOVVb74XghjnAAy8ItqQ=
+	t=1732332605; cv=none; b=hkrlKPYK0iBtb4GtDMpKJuomCjrX3ftasfs+7+T/mwwLn5rpKzUJ2KR7sKeqTMW6G3Nst6cBE+AA/cr/4wxx1ZMo14QWt/id5xRmqRq0iDyYjcUwjtrdqNdTuspCxYNbAAIAeyHUjTlzRHZItr735kCbUHqV/ljZOgI9WCKP5yc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732323617; c=relaxed/simple;
-	bh=3Uqd2JyZGMh20zcK7rfRlgZBgt3xIEkSudMa8c5iXFY=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=GpiLHtHxZdCmOc+3L6QcfM7pwisPHNmjGF5zfKR3loRr0TuvKUfJrlHDloHujUr2eZsTCU8cNyyzDj8/Jvw+kOb29Lj+ShABT/lxPipr+9nlXGmGJaKZMsV3ArOybtA9p2XrZyfMpCzRE64HZ1xJDUIVmcJI6hng4sOSawk813k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com; spf=pass smtp.mailfrom=meta.com; dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b=lGo7AgwW; arc=none smtp.client-ip=67.231.145.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
+	s=arc-20240116; t=1732332605; c=relaxed/simple;
+	bh=gLCySCqmitIZOkgYvthNxXzgPnx6jw9DNtPHQ0ejU00=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=e6iglsWgvhspmDCXJ8WI6Os/DZUqyE1JjxT9AF1zwofQ/0ZKZgpu+tu3Jl0nbv2RC9SpaLNmmCj3U10aVfbT2KRNcile/nqNAMXckyxbaQRO4FB+c0RhXUFDY2/mbz06Bwv2tCrDV6U2W/1ahIvQCbkioUUYXcGxuck6IHuLv1c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mY0y3Mmk; arc=none smtp.client-ip=209.85.128.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b="lGo7AgwW"
-Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4AMLTlnI011576;
-	Fri, 22 Nov 2024 16:59:31 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=s2048-2021-q4;
-	 bh=GKWzCi9LxsxXvqCjvZ6DIH5Z9e5NWU8nsi8/QhxgrTQ=; b=lGo7AgwWlmRZ
-	+Y5qWJlCECBOozlBeNSzT0y/wURZ9bLFqGSE6N9PxiW9rC86hiUJyFmR+7aUqvyq
-	iMbnuiE/sQeCUodU83rpIXrotj6DwB01TxWWj6u3gW1hwOfnBIe3c5ibYc2g0GBN
-	Qf1y908q9A2oA9Yko9Y7R9wzwlpmGWTtkQf/aOn/8VooVUp0bKCz8gkVM2t7IeRZ
-	TZbs9rOVUd/NROiV5FDOqUtHzSm7Rk8WuMV5peqwtuXujs6anW/g9NzIIE9oWTWF
-	U2uyGqMvReUE/5vIB0OR6Qq3FESdfY3eadU97eldaXW7fIvxFXjzFanUUH4VU76l
-	5x+A45JPvQ==
-Received: from maileast.thefacebook.com ([163.114.135.16])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 4331wrh333-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-	Fri, 22 Nov 2024 16:59:30 -0800 (PST)
-Received: from devvm4158.cln0.facebook.com (2620:10d:c0a8:1b::8e35) by
- mail.thefacebook.com (2620:10d:c0a9:6f::237c) with Microsoft SMTP Server id
- 15.2.1544.11; Sat, 23 Nov 2024 00:58:58 +0000
-From: Vadim Fedorenko <vadfed@meta.com>
-To: Borislav Petkov <bp@alien8.de>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Eduard Zingerman <eddyz87@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Yonghong Song <yonghong.song@linux.dev>,
-        Vadim Fedorenko
-	<vadim.fedorenko@linux.dev>,
-        Mykola Lysenko <mykolal@fb.com>
-CC: <x86@kernel.org>, <bpf@vger.kernel.org>,
-        Peter Zijlstra
-	<peterz@infradead.org>,
-        Vadim Fedorenko <vadfed@meta.com>,
-        Martin KaFai Lau
-	<martin.lau@linux.dev>
-Subject: [PATCH bpf-next v9 1/4] bpf: add bpf_get_cpu_time_counter kfunc
-Date: Fri, 22 Nov 2024 16:58:30 -0800
-Message-ID: <20241123005833.810044-2-vadfed@meta.com>
-X-Mailer: git-send-email 2.43.5
-In-Reply-To: <20241123005833.810044-1-vadfed@meta.com>
-References: <20241123005833.810044-1-vadfed@meta.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mY0y3Mmk"
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-432d86a3085so24807455e9.2
+        for <bpf@vger.kernel.org>; Fri, 22 Nov 2024 19:30:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1732332602; x=1732937402; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=VI4J0t3RribSXpGRviLIwfUdVhZrWbx0PD/wh2BE1AA=;
+        b=mY0y3Mmk8SNMBaPg48iApfgdDGEmRtX50oR/+a6TX6sfGGvoo3H1dxGiJ6GGUqH+SV
+         5w5J0XJxX4CL/vHLvuvTKvWEksZrQvM/GZuCWcydDXqjupskN1DVd4ZSVxnyFfk7gM8N
+         RyrjnzOV+/fJX++cKItXuChAfhfHVIfq4R5o1iaDkbY6hGx7d3gXGEZ698SFPcaN4QWQ
+         bBbApp2P7k2rZxUK4UHS4AUlwdw4dV0ZFWoYEqN5IEow2w0lefv8mD7sGTQlUwRqQcW+
+         9Ed9EUY6uUpSUDWV18ZZj+LNUKuQINMyf0pSsAvrCfUlp+S6lhSdpHZy2u10uSPA2Pep
+         KXkQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1732332602; x=1732937402;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=VI4J0t3RribSXpGRviLIwfUdVhZrWbx0PD/wh2BE1AA=;
+        b=jdUKyZjo+vpp6/Pf9BLBDC8jz43trzHQxGeHww5TuJZsh+et7C2ZzXSIwMZLGLy3Zv
+         0AvwbjakPHpFhNHCIgcmuYq9NMvNRFiWPzFZO9kISsZcjqilxuO9i6dE5R0ROzLrnB/c
+         AxwSo4c1MXnt8KojSvVp6jxdFq601HohP3EayqhTqDQew4s7tfjLARgf0rEobqP0aHy8
+         buVaew4DBZMDf8K6wrLA9ka4SwtpoF7VeFOmp21DagSNz+gUOkUIOkm2FGyx9onyXA4K
+         Ug/lo1smwPFmuSDjJbrXcrtrqEqkcGo8WBu+/23UhKhgsmzG3Tdfuu8z7Ef3pmMh1llN
+         el+Q==
+X-Gm-Message-State: AOJu0Ywk0xpTlbd+OcCiytSOxG+7n8LFxRW4KVSM1yRn49rwRXVI+/Jm
+	X3Fu2G6eqjiDHA9yedNSXhe6D3mpTYqc+rIH5tVjTZY/lZdnl53PZHZY46C476bC4mSO7kYtyt/
+	PxI4E5DVrOWDYLmO2a+Qb8JJm5kg=
+X-Gm-Gg: ASbGncvpJnHtFn3NfcUJBlpuSnWy660oLwYC2FhmNa4oFD6ERjN2lYGXUexm2kHzBv8
+	i+cQgdzohrE1C8Jks5TJK6ZP+RpWYOw==
+X-Google-Smtp-Source: AGHT+IEzFiaQEFo8nrMqSRTeUrwCBVmHtmnSmp1vz7oFbny7L6uq1EAg4YZu08swTI/CBgfbgzhhe0wMaNHqk0i48I4=
+X-Received: by 2002:a05:6000:186b:b0:382:49bb:a5c8 with SMTP id
+ ffacd0b85a97d-38260b864b9mr3627751f8f.32.1732332602176; Fri, 22 Nov 2024
+ 19:30:02 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Proofpoint-GUID: sjp8GEK9DqI_Ke_hsZOWWFGDIgHJYkDE
-X-Proofpoint-ORIG-GUID: sjp8GEK9DqI_Ke_hsZOWWFGDIgHJYkDE
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
- definitions=2024-10-05_03,2024-10-04_01,2024-09-30_01
+References: <20241118010808.2243555-1-houtao@huaweicloud.com>
+ <20241118010808.2243555-8-houtao@huaweicloud.com> <CAADnVQJPhkNbq0nHANJ5W03-dQ3t7ZPeh3gk+WJbtXFOL=GwUA@mail.gmail.com>
+ <31bf6193-2154-443e-4811-9f71a4fab7cf@huaweicloud.com>
+In-Reply-To: <31bf6193-2154-443e-4811-9f71a4fab7cf@huaweicloud.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Fri, 22 Nov 2024 19:29:50 -0800
+Message-ID: <CAADnVQK2pxtLHWs_1tL9CzXN3FimmOvB=nEagj-YaWDyu2R6jA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 07/10] bpf: Switch to bpf mem allocator for LPM trie
+To: Hou Tao <houtao@huaweicloud.com>
+Cc: bpf <bpf@vger.kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Hao Luo <haoluo@google.com>, Yonghong Song <yonghong.song@linux.dev>, 
+	Daniel Borkmann <daniel@iogearbox.net>, KP Singh <kpsingh@kernel.org>, 
+	Stanislav Fomichev <sdf@fomichev.me>, Jiri Olsa <jolsa@kernel.org>, 
+	John Fastabend <john.fastabend@gmail.com>, 
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>, Thomas Gleixner <tglx@linutronix.de>, 
+	=?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>, 
+	Hou Tao <houtao1@huawei.com>, Xu Kuohai <xukuohai@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-New kfunc to return ARCH-specific timecounter. The main reason to
-implement this kfunc is to avoid extra overhead of benchmark
-measurements, which are usually done by a pair of bpf_ktime_get_ns()
-at the beginnig and at the end of the code block under benchmark.
-This function doesn't implement conversion to the monotonic clock and
-saves some CPU cycles because of it. Another point is when it's properly
-JITed, it saves extra hundreds of cycles by receiving timecounter values
-in single-digit amount of instructions. The delta values can be
-translated into nanoseconds using kfunc introduced in the next patch.
-For x86 BPF JIT converts this kfunc into rdtsc ordered call. Other
-architectures will get JIT implementation too if supported. The fallback
-is to call __arch_get_hw_counter().
+On Wed, Nov 20, 2024 at 5:20=E2=80=AFPM Hou Tao <houtao@huaweicloud.com> wr=
+ote:
+>
+> Hi Alexei,
+>
+> On 11/20/2024 9:16 AM, Alexei Starovoitov wrote:
+> > On Sun, Nov 17, 2024 at 4:56=E2=80=AFPM Hou Tao <houtao@huaweicloud.com=
+> wrote:
+> >>
+> >> +enum {
+> >> +       LPM_TRIE_MA_IM =3D 0,
+> >> +       LPM_TRIE_MA_LEAF,
+> >> +       LPM_TRIE_MA_CNT,
+> >> +};
+> >> +
+> >>  struct lpm_trie {
+> >>         struct bpf_map                  map;
+> >>         struct lpm_trie_node __rcu      *root;
+> >> +       struct bpf_mem_alloc            ma[LPM_TRIE_MA_CNT];
+> >> +       struct bpf_mem_alloc            *im_ma;
+> >> +       struct bpf_mem_alloc            *leaf_ma;
+> > We cannot use bpf_ma-s liberally like that.
+> > Freelists are not huge, but we shouldn't be adding new bpf_ma
+> > in every map and every use case.
+> >
+> > bpf_mem_cache_is_mergeable() in the previous patch also
+> > leaks implementation details.
+> >
+> > Can you use bpf_global_ma for all nodes?
+>
+> Will try. However, there are mainly two differences between
+> bpf_global_ma and map specific bpf_mem_alloc. The first one is the
+> memory accounting problem. All memories allocated from bpf_global_ma
+> will be accounted to the root memory cgroup instead of the current
+> memory cgroup (due to the return value of get_memcg()). I think we could
+> fix this partially by returning NULL instead of root_mem_cgroup when
+> c->objcg is NULL. However, even with the fix, the memory account is
+> still inaccurate, because these pre-allocated objects may be used by
+> other maps instead of the map which triggers the pre-allocation.
 
-The simplest use-case is added in 4th patch, where we calculate the time
-spent by bpf_get_ns_current_pid_tgid() kfunc. More complex example is to
-use session cookie to store timecounter value at kprobe/uprobe using
-kprobe.session/uprobe.session, and calculate the difference at
-kretprobe/uretprobe.
+That's a valid point.
+Though we ignore this issue in bpf_obj_new and other places
+if we can account into memgcg correctly we should do it.
 
-Acked-by: Eduard Zingerman <eddyz87@gmail.com>
-Acked-by: Andrii Nakryiko <andrii@kernel.org>
-Acked-by: Yonghong Song <yonghong.song@linux.dev>
-Signed-off-by: Vadim Fedorenko <vadfed@meta.com>
----
- arch/x86/net/bpf_jit_comp.c   | 39 +++++++++++++++++++++++++++++++++
- arch/x86/net/bpf_jit_comp32.c | 14 ++++++++++++
- include/linux/bpf.h           |  5 +++++
- include/linux/filter.h        |  1 +
- kernel/bpf/core.c             | 11 ++++++++++
- kernel/bpf/helpers.c          | 27 +++++++++++++++++++++++
- kernel/bpf/verifier.c         | 41 ++++++++++++++++++++++++++++++-----
- 7 files changed, 132 insertions(+), 6 deletions(-)
+> The
+> second one is the freeing of freed objects  when destroying the map. For
+> a map specific bpf_mem_alloc, most of these freed objects could be freed
+> immediately back to slub, However, it is not true for the bpf_global_ma,
+> because we could not tell whether the object belongs to a to-be-freed
+> map or not. And also we can not drain the bpf_global_ma just like we do
+> for bpf_mem_alloc.
 
-diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
-index a43fc5af973d..92431ab1a21e 100644
---- a/arch/x86/net/bpf_jit_comp.c
-+++ b/arch/x86/net/bpf_jit_comp.c
-@@ -2185,6 +2185,37 @@ st:			if (is_imm8(insn->off))
- 		case BPF_JMP | BPF_CALL: {
- 			u8 *ip = image + addrs[i - 1];
- 
-+			if (insn->src_reg == BPF_PSEUDO_KFUNC_CALL &&
-+			    imm32 == BPF_CALL_IMM(bpf_get_cpu_time_counter)) {
-+				/* The default implementation of this kfunc uses
-+				 * __arch_get_hw_counter() which is implemented as
-+				 * `(u64)rdtsc_ordered() & S64_MAX`. We skip masking
-+				 * part because we assume it's not needed in BPF
-+				 * use case (two measurements close in time).
-+				 * Original code for rdtsc_ordered() uses sequence:
-+				 * 'rdtsc; nop; nop; nop' to patch it into
-+				 * 'lfence; rdtsc' or 'rdtscp' depending on CPU features.
-+				 * JIT uses 'lfence; rdtsc' variant because BPF program
-+				 * doesn't care about cookie provided by rdtscp in RCX.
-+				 * Save RDX because RDTSC will use EDX:EAX to return u64
-+				 */
-+				emit_mov_reg(&prog, true, AUX_REG, BPF_REG_3);
-+				if (cpu_feature_enabled(X86_FEATURE_LFENCE_RDTSC))
-+					EMIT_LFENCE();
-+				EMIT2(0x0F, 0x31);
-+
-+				/* shl RDX, 32 */
-+				maybe_emit_1mod(&prog, BPF_REG_3, true);
-+				EMIT3(0xC1, add_1reg(0xE0, BPF_REG_3), 32);
-+				/* or RAX, RDX */
-+				maybe_emit_mod(&prog, BPF_REG_0, BPF_REG_3, true);
-+				EMIT2(0x09, add_2reg(0xC0, BPF_REG_0, BPF_REG_3));
-+				/* restore RDX from R11 */
-+				emit_mov_reg(&prog, true, BPF_REG_3, AUX_REG);
-+
-+				break;
-+			}
-+
- 			func = (u8 *) __bpf_call_base + imm32;
- 			if (src_reg == BPF_PSEUDO_CALL && tail_call_reachable) {
- 				LOAD_TAIL_CALL_CNT_PTR(stack_depth);
-@@ -3791,3 +3822,11 @@ u64 bpf_arch_uaddress_limit(void)
- {
- 	return 0;
- }
-+
-+/* x86-64 JIT can inline kfunc */
-+bool bpf_jit_inlines_kfunc_call(s32 imm)
-+{
-+	if (imm == BPF_CALL_IMM(bpf_get_cpu_time_counter))
-+		return true;
-+	return false;
-+}
-diff --git a/arch/x86/net/bpf_jit_comp32.c b/arch/x86/net/bpf_jit_comp32.c
-index de0f9e5f9f73..a549aea25f5f 100644
---- a/arch/x86/net/bpf_jit_comp32.c
-+++ b/arch/x86/net/bpf_jit_comp32.c
-@@ -2094,6 +2094,13 @@ static int do_jit(struct bpf_prog *bpf_prog, int *addrs, u8 *image,
- 			if (insn->src_reg == BPF_PSEUDO_KFUNC_CALL) {
- 				int err;
- 
-+				if (imm32 == BPF_CALL_IMM(bpf_get_cpu_time_counter)) {
-+					if (cpu_feature_enabled(X86_FEATURE_LFENCE_RDTSC))
-+						EMIT3(0x0F, 0xAE, 0xE8);
-+					EMIT2(0x0F, 0x31);
-+					break;
-+				}
-+
- 				err = emit_kfunc_call(bpf_prog,
- 						      image + addrs[i],
- 						      insn, &prog);
-@@ -2621,3 +2628,10 @@ bool bpf_jit_supports_kfunc_call(void)
- {
- 	return true;
- }
-+
-+bool bpf_jit_inlines_kfunc_call(s32 imm)
-+{
-+	if (imm == BPF_CALL_IMM(bpf_get_cpu_time_counter))
-+		return true;
-+	return false;
-+}
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 3ace0d6227e3..6d540253cfb4 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -3333,6 +3333,11 @@ void bpf_user_rnd_init_once(void);
- u64 bpf_user_rnd_u32(u64 r1, u64 r2, u64 r3, u64 r4, u64 r5);
- u64 bpf_get_raw_cpu_id(u64 r1, u64 r2, u64 r3, u64 r4, u64 r5);
- 
-+/* Inlined kfuncs */
-+#if IS_ENABLED(CONFIG_GENERIC_GETTIMEOFDAY)
-+u64 bpf_get_cpu_time_counter(void);
-+#endif
-+
- #if defined(CONFIG_NET)
- bool bpf_sock_common_is_valid_access(int off, int size,
- 				     enum bpf_access_type type,
-diff --git a/include/linux/filter.h b/include/linux/filter.h
-index 3a21947f2fd4..9cf57233874f 100644
---- a/include/linux/filter.h
-+++ b/include/linux/filter.h
-@@ -1111,6 +1111,7 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *prog);
- void bpf_jit_compile(struct bpf_prog *prog);
- bool bpf_jit_needs_zext(void);
- bool bpf_jit_inlines_helper_call(s32 imm);
-+bool bpf_jit_inlines_kfunc_call(s32 imm);
- bool bpf_jit_supports_subprog_tailcalls(void);
- bool bpf_jit_supports_percpu_insn(void);
- bool bpf_jit_supports_kfunc_call(void);
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index a2327c4fdc8b..4f79a6ed1d3a 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -2965,6 +2965,17 @@ bool __weak bpf_jit_inlines_helper_call(s32 imm)
- 	return false;
- }
- 
-+/* Return true if the JIT inlines the call to the kfunc corresponding to
-+ * the imm.
-+ *
-+ * The verifier will not patch the insn->imm for the call to the helper if
-+ * this returns true.
-+ */
-+bool __weak bpf_jit_inlines_kfunc_call(s32 imm)
-+{
-+	return false;
-+}
-+
- /* Return TRUE if the JIT backend supports mixing bpf2bpf and tailcalls. */
- bool __weak bpf_jit_supports_subprog_tailcalls(void)
- {
-diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-index 751c150f9e1c..23f1a1606f8b 100644
---- a/kernel/bpf/helpers.c
-+++ b/kernel/bpf/helpers.c
-@@ -23,6 +23,10 @@
- #include <linux/btf_ids.h>
- #include <linux/bpf_mem_alloc.h>
- #include <linux/kasan.h>
-+#if IS_ENABLED(CONFIG_GENERIC_GETTIMEOFDAY)
-+#include <vdso/datapage.h>
-+#include <asm/vdso/vsyscall.h>
-+#endif
- 
- #include "../../lib/kstrtox.h"
- 
-@@ -3057,6 +3061,26 @@ __bpf_kfunc int bpf_copy_from_user_str(void *dst, u32 dst__sz, const void __user
- 	return ret + 1;
- }
- 
-+#if IS_ENABLED(CONFIG_GENERIC_GETTIMEOFDAY)
-+__bpf_kfunc u64 bpf_get_cpu_time_counter(void)
-+{
-+	const struct vdso_data *vd = __arch_get_k_vdso_data();
-+
-+	vd = &vd[CS_RAW];
-+
-+	/* CS_RAW clock_mode translates to VDSO_CLOCKMODE_TSC on x86 and
-+	 * to VDSO_CLOCKMODE_ARCHTIMER on aarch64/risc-v. We cannot use
-+	 * vd->clock_mode directly because it brings possible access to
-+	 * pages visible by user-space only via vDSO. But the constant value
-+	 * of 1 is exactly what we need - it works for any architecture and
-+	 * translates to reading of HW timecounter regardles of architecture.
-+	 * We still have to provide vdso_data for some architectures to avoid
-+	 * NULL pointer dereference.
-+	 */
-+	return __arch_get_hw_counter(1, vd);
-+}
-+#endif
-+
- __bpf_kfunc_end_defs();
- 
- BTF_KFUNCS_START(generic_btf_ids)
-@@ -3149,6 +3173,9 @@ BTF_ID_FLAGS(func, bpf_get_kmem_cache)
- BTF_ID_FLAGS(func, bpf_iter_kmem_cache_new, KF_ITER_NEW | KF_SLEEPABLE)
- BTF_ID_FLAGS(func, bpf_iter_kmem_cache_next, KF_ITER_NEXT | KF_RET_NULL | KF_SLEEPABLE)
- BTF_ID_FLAGS(func, bpf_iter_kmem_cache_destroy, KF_ITER_DESTROY | KF_SLEEPABLE)
-+#if IS_ENABLED(CONFIG_GENERIC_GETTIMEOFDAY)
-+BTF_ID_FLAGS(func, bpf_get_cpu_time_counter, KF_FASTCALL)
-+#endif
- BTF_KFUNCS_END(common_btf_ids)
- 
- static const struct btf_kfunc_id_set common_kfunc_set = {
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 1c4ebb326785..dbfad4457bef 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -16407,6 +16407,24 @@ static bool verifier_inlines_helper_call(struct bpf_verifier_env *env, s32 imm)
- 	}
- }
- 
-+/* True if fixup_kfunc_call() replaces calls to kfunc number 'imm',
-+ * replacement patch is presumed to follow bpf_fastcall contract
-+ * (see mark_fastcall_pattern_for_call() below).
-+ */
-+static bool verifier_inlines_kfunc_call(struct bpf_verifier_env *env, s32 imm)
-+{
-+	const struct bpf_kfunc_desc *desc = find_kfunc_desc(env->prog, imm, 0);
-+
-+	if (!env->prog->jit_requested)
-+		return false;
-+
-+	if (desc->func_id == special_kfunc_list[KF_bpf_cast_to_kern_ctx] ||
-+	    desc->func_id == special_kfunc_list[KF_bpf_rdonly_cast])
-+		return true;
-+
-+	return false;
-+}
-+
- /* Same as helper_fastcall_clobber_mask() but for kfuncs, see comment above */
- static u32 kfunc_fastcall_clobber_mask(struct bpf_kfunc_call_arg_meta *meta)
- {
-@@ -16534,7 +16552,10 @@ static void mark_fastcall_pattern_for_call(struct bpf_verifier_env *env,
- 			return;
- 
- 		clobbered_regs_mask = kfunc_fastcall_clobber_mask(&meta);
--		can_be_inlined = is_fastcall_kfunc_call(&meta);
-+		can_be_inlined = is_fastcall_kfunc_call(&meta) &&
-+				 (verifier_inlines_kfunc_call(env, call->imm) ||
-+				 (meta.btf == btf_vmlinux &&
-+				  bpf_jit_inlines_kfunc_call(call->imm)));
- 	}
- 
- 	if (clobbered_regs_mask == ALL_CALLER_SAVED_REGS)
-@@ -20541,6 +20562,7 @@ static int fixup_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
- 			    struct bpf_insn *insn_buf, int insn_idx, int *cnt)
- {
- 	const struct bpf_kfunc_desc *desc;
-+	s32 imm = insn->imm;
- 
- 	if (!insn->imm) {
- 		verbose(env, "invalid kernel function call not eliminated in verifier pass\n");
-@@ -20564,7 +20586,18 @@ static int fixup_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
- 		insn->imm = BPF_CALL_IMM(desc->addr);
- 	if (insn->off)
- 		return 0;
--	if (desc->func_id == special_kfunc_list[KF_bpf_obj_new_impl] ||
-+	if (verifier_inlines_kfunc_call(env, imm)) {
-+		if (desc->func_id == special_kfunc_list[KF_bpf_cast_to_kern_ctx] ||
-+		    desc->func_id == special_kfunc_list[KF_bpf_rdonly_cast]) {
-+			insn_buf[0] = BPF_MOV64_REG(BPF_REG_0, BPF_REG_1);
-+			*cnt = 1;
-+		} else {
-+			verbose(env, "verifier internal error: kfunc id %d has no inline code\n",
-+				desc->func_id);
-+			return -EFAULT;
-+		}
-+
-+	} else if (desc->func_id == special_kfunc_list[KF_bpf_obj_new_impl] ||
- 	    desc->func_id == special_kfunc_list[KF_bpf_percpu_obj_new_impl]) {
- 		struct btf_struct_meta *kptr_struct_meta = env->insn_aux_data[insn_idx].kptr_struct_meta;
- 		struct bpf_insn addr[2] = { BPF_LD_IMM64(BPF_REG_2, (long)kptr_struct_meta) };
-@@ -20625,10 +20658,6 @@ static int fixup_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
- 
- 		__fixup_collection_insert_kfunc(&env->insn_aux_data[insn_idx], struct_meta_reg,
- 						node_offset_reg, insn, insn_buf, cnt);
--	} else if (desc->func_id == special_kfunc_list[KF_bpf_cast_to_kern_ctx] ||
--		   desc->func_id == special_kfunc_list[KF_bpf_rdonly_cast]) {
--		insn_buf[0] = BPF_MOV64_REG(BPF_REG_0, BPF_REG_1);
--		*cnt = 1;
- 	} else if (is_bpf_wq_set_callback_impl_kfunc(desc->func_id)) {
- 		struct bpf_insn ld_addrs[2] = { BPF_LD_IMM64(BPF_REG_4, (long)env->prog->aux) };
- 
--- 
-2.43.5
+I don't think it's a big issue here. Optimizing delays in the free path
+is imo too soon. The extra complexity is not worth it.
 
+Let's do one bpf_ma for lpm of size LPM_TRIE_MA_LEAF.
+Inner nodes may be wasting memory and it's ok.
+The whole LPM trie is not efficient anyway.
+Micro-optiming at bpf_ma level is a small improvement compared
+to rewriting the whole LPM map as a more performance and memory
+efficient algorithm.
