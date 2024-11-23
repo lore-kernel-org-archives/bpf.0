@@ -1,31 +1,31 @@
 Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A12504C97;
-	Sat, 23 Nov 2024 13:33:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 231EC195;
+	Sat, 23 Nov 2024 13:33:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732368826; cv=none; b=OXZyWeG2+xZGH85AwIdsi3hljacn+s4LDUGdxhS5k4oZHPwXBu+pYwD1FhSP+C1yldnZAs7+BvMsxaMwN4L0/dduoS/i88HHQD6oWS3dn0PpX3RKCsMxUhFPfsCmiGDB9QsYja2pdwR7aHqsn+RXOItJbhKB1qr24/lP4DSyFkw=
+	t=1732368827; cv=none; b=b7FaYjDBvAHBX6jY8a5P05a+FajfN1rMXXVHfM/aisa0o9BAnKwVUzWlxRakd92O54v6gz2xiAJeyjXTKuoe+mP05GMZE4owtkM6KMtQ447A5uz0ibxw9wSqJFIK3/N44jbU3SG3wHcV0KwWUprFStbclBjYlbovvLnDobdEE38=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732368826; c=relaxed/simple;
-	bh=QubjNFdX217NlqW7CQI80P2rI7rS9Zd9/BBlXZBgtCM=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=icatJNCtSjmByoVutpHR3sUj83mapa4vfq0UdBNBknmlKKTD/sTWyOz5I7Qu8OWki7yytFSYaimjg3J9gUTZUgoOmL0hLRoK4+TbxTQpgRHS9T3vK4a8kXV8G/KyjL8/1xsr4VjLE+tRu4F3SRaTV82075ofNud1fl5V59elKPc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=Hy9SlGtr; arc=none smtp.client-ip=159.69.126.157
+	s=arc-20240116; t=1732368827; c=relaxed/simple;
+	bh=b2w80aj/337drIii2E6x6QjQqcUkYdT/ByK0kIRLqXE=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=dqHa2xGdTEYDJQ5cVyp7ZqwwEzI4a4MaD1dphY6BVn5Lck2cQit3Du++fdqFsyeior+gtVh9XT6x9q5gux29rQocY+4p6h238j70w/wzbRSz80xu2PYpy4UD8l4gcLOXVEE/yTx0uefsh0YxI4InndbLSrNpX3MMB5psyvFCmq0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=Oq9aIHEk; arc=none smtp.client-ip=159.69.126.157
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="Hy9SlGtr"
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="Oq9aIHEk"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
 	s=mail; t=1732368822;
-	bh=QubjNFdX217NlqW7CQI80P2rI7rS9Zd9/BBlXZBgtCM=;
-	h=From:Subject:Date:To:Cc:From;
-	b=Hy9SlGtr9emaXXrIc8ZoSQpoJZ6i3HVk/rLn8HdmFy9+HPGHovO+GKHZ2ZdDQA5CJ
-	 IjBwJ9/ikKL18Klui9Zx7Mij5NchNfgY2sXzgmmc8EwGZz25iODiwZg+ChpomlnR8Z
-	 jfUHr6BjKOSLjBngulkZiZWtGbeL7NsJz6l7mkNc=
+	bh=b2w80aj/337drIii2E6x6QjQqcUkYdT/ByK0kIRLqXE=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
+	b=Oq9aIHEktYwMJqjdQSAInSwjkc/qEgdDS+PFYTXNpNUL1Oei0x6N/kMmO7kvL9JBP
+	 gUBhFVsGHoVjjR3N98darrrj3nTZnktHQ96DOucH6lz5FJ34kztgVq+DFHlnCjH1I4
+	 FyAT74Yf9GQD4np3nBgXVC3hC7zfQk0EKuzPHy04=
 From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Subject: [PATCH 0/3] kbuild: propagate CONFIG_WERROR to resolve_btfids
-Date: Sat, 23 Nov 2024 14:33:36 +0100
-Message-Id: <20241123-resolve_btfids-v1-0-927700b641d1@weissschuh.net>
+Date: Sat, 23 Nov 2024 14:33:38 +0100
+Subject: [PATCH 2/3] tools/resolve_btfids: Add --fatal-warnings option
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -34,10 +34,9 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-B4-Tracking: v=1; b=H4sIALDZQWcC/x3MQQqAIBBA0avErBPUbGFXiYjUsQaiwgkJwrsnL
- d/i/xcYEyHD0LyQMBPTeVSotgG/LceKgkI1aKmNUroTCfncM87ujhRYoLO9t87oICXU6EoY6fm
- H41TKB7PEtkVgAAAA
-X-Change-ID: 20241123-resolve_btfids-eb95c9b42d00
+Message-Id: <20241123-resolve_btfids-v1-2-927700b641d1@weissschuh.net>
+References: <20241123-resolve_btfids-v1-0-927700b641d1@weissschuh.net>
+In-Reply-To: <20241123-resolve_btfids-v1-0-927700b641d1@weissschuh.net>
 To: Masahiro Yamada <masahiroy@kernel.org>, 
  Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>, 
  Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
@@ -52,38 +51,80 @@ Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
  bpf@vger.kernel.org, 
  =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1732368820; l=961;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1732368820; l=2182;
  i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=QubjNFdX217NlqW7CQI80P2rI7rS9Zd9/BBlXZBgtCM=;
- b=pyhaXNi0xIiF7prH/ASswKAJnjgeYIadj5viNkBuO7kXVu0tsSuPKPrGKQuLDI4PcTP89ELH5
- Vlmgrq0nZkeD1GxOfSa7RrkC6HcEAWKmTcisqGN8i7abpjBf8REP7E7
+ bh=b2w80aj/337drIii2E6x6QjQqcUkYdT/ByK0kIRLqXE=;
+ b=G0B/rmQnA2tpKvxmlrof8LTfU+EcPwyPnajMu4SUpWefSNYVbb8eTcZKdcbmR/BmI9L2Kr1kJ
+ +YCDtia4zbAD0mG7LFGVg+I8LiVPCZMoLMjMl0Hs0GzHAIl6PjfLCuD
 X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
  pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 
-Use CONFIG_WERROR to also fail on warnings emitted by resolve_btfids.
-Allow the CI bots to prevent the introduction of new warnings.
-
-This series currently depends on
-"[PATCH] bpf, lsm: Fix getlsmprop hooks BTF IDs" [0]
-
-[0] https://lore.kernel.org/lkml/20241123-bpf_lsm_task_getsecid_obj-v1-1-0d0f94649e05@weissschuh.net/
+Currently warnings emitted by resolve_btfids are buried in the build log
+and are slipping into mainline frequently.
+Add an option to elevate warnings to hard errors so the CI bots can
+catch any new warnings.
 
 Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
 ---
-Thomas Weißschuh (3):
-      kbuild: add dependency from vmlinux to resolve_btfids
-      tools/resolve_btfids: Add --fatal-warnings option
-      kbuild: propagate CONFIG_WERROR to resolve_btfids
-
- scripts/Makefile.vmlinux        |  3 +++
- scripts/link-vmlinux.sh         |  6 +++++-
  tools/bpf/resolve_btfids/main.c | 12 ++++++++++--
- 3 files changed, 18 insertions(+), 3 deletions(-)
----
-base-commit: 228a1157fb9fec47eb135b51c0202b574e079ebf
-change-id: 20241123-resolve_btfids-eb95c9b42d00
+ 1 file changed, 10 insertions(+), 2 deletions(-)
 
-Best regards,
+diff --git a/tools/bpf/resolve_btfids/main.c b/tools/bpf/resolve_btfids/main.c
+index bd9f960bce3d5b74dc34159b35af1e0b33524d2d..a6ffd6b5fc3ebe9e0983556bfb178642a1c6639d 100644
+--- a/tools/bpf/resolve_btfids/main.c
++++ b/tools/bpf/resolve_btfids/main.c
+@@ -141,6 +141,7 @@ struct object {
+ };
+ 
+ static int verbose;
++static int warnings;
+ 
+ static int eprintf(int level, int var, const char *fmt, ...)
+ {
+@@ -604,6 +605,7 @@ static int symbols_resolve(struct object *obj)
+ 			if (id->id) {
+ 				pr_info("WARN: multiple IDs found for '%s': %d, %d - using %d\n",
+ 					str, id->id, type_id, id->id);
++				warnings++;
+ 			} else {
+ 				id->id = type_id;
+ 				(*nr)--;
+@@ -625,8 +627,10 @@ static int id_patch(struct object *obj, struct btf_id *id)
+ 	int i;
+ 
+ 	/* For set, set8, id->id may be 0 */
+-	if (!id->id && !id->is_set && !id->is_set8)
++	if (!id->id && !id->is_set && !id->is_set8) {
+ 		pr_err("WARN: resolve_btfids: unresolved symbol %s\n", id->name);
++		warnings++;
++	}
+ 
+ 	for (i = 0; i < id->addr_cnt; i++) {
+ 		unsigned long addr = id->addr[i];
+@@ -782,9 +786,12 @@ int main(int argc, const char **argv)
+ 		.funcs    = RB_ROOT,
+ 		.sets     = RB_ROOT,
+ 	};
++	int fatal_warnings;
+ 	struct option btfid_options[] = {
+ 		OPT_INCR('v', "verbose", &verbose,
+ 			 "be more verbose (show errors, etc)"),
++		OPT_INCR(0, "fatal-warnings", &fatal_warnings,
++			 "turn warnings into errors"),
+ 		OPT_STRING(0, "btf", &obj.btf, "BTF data",
+ 			   "BTF data"),
+ 		OPT_STRING('b', "btf_base", &obj.base_btf_path, "file",
+@@ -823,7 +830,8 @@ int main(int argc, const char **argv)
+ 	if (symbols_patch(&obj))
+ 		goto out;
+ 
+-	err = 0;
++	if (!(fatal_warnings && warnings))
++		err = 0;
+ out:
+ 	if (obj.efile.elf) {
+ 		elf_end(obj.efile.elf);
+
 -- 
-Thomas Weißschuh <linux@weissschuh.net>
+2.47.0
 
