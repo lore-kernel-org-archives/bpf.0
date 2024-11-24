@@ -1,26 +1,26 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5301718873F;
-	Sun, 24 Nov 2024 23:49:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51D46188704;
+	Sun, 24 Nov 2024 23:49:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732492173; cv=none; b=hU25NrVNWiobV0hltE4uhiWxr8fbwFhgqa5m0A29mYFxT/ScbjSqR87mHEGBPArCMkLWvmuC0dQAlUQqdslC4g3qwWkIkz+w/WSkesCG3vxrYDjB7hHMU+f4fQrPkFSjwLuanXjFEpNwqUJj0QoNt4/6b43Sg/hOqHNc26Yo/NI=
+	t=1732492173; cv=none; b=ASuxBGO2IjJwIhEVZyiL1akUrn9cu5Up4RQ17W0PUMNnt8CFgMrPubQWTDV2L7JphlEHhoQZZPUC+AdldaPczXnmxAbHJ7JQs6NNPLSdctL4P6qzfoSF9pOdgCKMtezKMY1isnruIVcYOb6+mywCXwbfp84AS64lmLMpmSa3hxs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1732492173; c=relaxed/simple;
-	bh=uvmRKB6hMrxNIblTFCPkCu7S+gNjAWEdtf0pOA/AyAY=;
+	bh=rVl59srqCL8+wmOTj6ciPu2sqqN4TSM7onriJ55rBgQ=;
 	h=Message-ID:Date:From:To:Cc:Subject:References:MIME-Version:
-	 Content-Type; b=ar4ptmeO0rl0sQ0oDvRVPJBkVu1tqDU6ZB1DSJZS+BrNlIQ/2wUZR5gawtI8vuARYF8dqoBCh1FS6HVc6i5J/xr1Tw2n4WC9Q36Ye2fCT+tBvZrzhz3UlgbVLAQFfRMBrJEbxYb4UiX0WB4MAaITOtn7JvmhuCBFLb3vWJmZeyE=
+	 Content-Type; b=JLkViFRmv35d/bNS1v6AqAZOkodVetuzlh1MFHMoRnm204+kX5MLYHKDLcYobnh7rCigb+k9LtHkd6RIBBGsqnhp6eLuzHeP7+YTvYv7G5BUfwbn3x9cBhV+fQrUDWcenOcZsKQAp9wU/IDoc7kOMgBYRQbNrm022ZNmq+mJO74=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2463C4CEDD;
-	Sun, 24 Nov 2024 23:49:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1FA1CC4CECC;
+	Sun, 24 Nov 2024 23:49:33 +0000 (UTC)
 Received: from rostedt by gandalf with local (Exim 4.98)
 	(envelope-from <rostedt@goodmis.org>)
-	id 1tFMMt-00000006vk9-0MAP;
+	id 1tFMMt-00000006vl8-1mBI;
 	Sun, 24 Nov 2024 18:50:19 -0500
-Message-ID: <20241124235018.937057267@goodmis.org>
+Message-ID: <20241124235019.274562787@goodmis.org>
 User-Agent: quilt/0.68
-Date: Sun, 24 Nov 2024 18:49:43 -0500
+Date: Sun, 24 Nov 2024 18:49:45 -0500
 From: Steven Rostedt <rostedt@goodmis.org>
 To: linux-kernel@vger.kernel.org
 Cc: Masami Hiramatsu <mhiramat@kernel.org>,
@@ -41,8 +41,9 @@ Cc: Masami Hiramatsu <mhiramat@kernel.org>,
  Andrii Nakryiko <andrii.nakryiko@gmail.com>,
  bpf@vger.kernel.org,
  Joel Fernandes <joel@joelfernandes.org>,
- Jordan Rife <jrife@google.com>
-Subject: [for-next][PATCH 3/6] tracing: Remove __idx variable from __DO_TRACE
+ Jordan Rife <jrife@google.com>,
+ linux-trace-kernel@vger.kernel.org
+Subject: [for-next][PATCH 5/6] tracing: Remove conditional locking from __DO_TRACE()
 References: <20241124234940.017394686@goodmis.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -54,10 +55,41 @@ Content-Type: text/plain; charset=UTF-8
 
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 
-Since the removal of SRCU-protected tracepoints, the __idx variable in
-__DO_TRACE is unused. Remove this variable.
+Remove conditional locking by moving the __DO_TRACE() code into
+trace_##name().
 
-Fixes: 48bcda684823 ("tracing: Remove definition of trace_*_rcuidle()")
+When the faultable syscall tracepoints were implemented, __DO_TRACE()
+had a rcuidle argument which selected between SRCU and preempt disable.
+Therefore, the RCU tasks trace protection for faultable syscall
+tracepoints was introduced using the same pattern.
+
+At that point, it did not appear obvious that this feedback from Linus [1]
+applied here as well, because the __DO_TRACE() modification was
+extending a pre-existing pattern.
+
+Shortly before pulling the faultable syscall tracepoints modifications,
+Steven removed the rcuidle argument and SRCU protection scheme entirely
+from tracepoint.h:
+
+commit 48bcda684823 ("tracing: Remove definition of trace_*_rcuidle()")
+
+This required a rebase of the faultable syscall tracepoints series,
+which missed a perfect opportunity to integrate the prior recommendation
+from Linus.
+
+In response to the pull request, Linus pointed out [2] that he was not
+pleased by the implementation, expecting this to be fixed in a follow up
+patch series.
+
+Move __DO_TRACE() code into trace_##name() within each of
+__DECLARE_TRACE() and __DECLARE_TRACE_SYSCALL(). Use a scoped guard
+to guard the preempt disable notrace and RCU tasks trace critical
+sections.
+
+Link: https://lore.kernel.org/all/CAHk-=wggDLDeTKbhb5hh--x=-DQd69v41137M72m6NOTmbD-cw@mail.gmail.com/ [1]
+Link: https://lore.kernel.org/lkml/CAHk-=witPrLcu22dZ93VCyRQonS7+-dFYhQbna=KBa-TAhayMw@mail.gmail.com/ [2]
+
+Fixes: a363d27cdbc2 ("tracing: Allow system call tracepoints to handle page faults")
 Cc: Linus Torvalds <torvalds@linux-foundation.org>
 Cc: Thomas Gleixner <tglx@linutronix.de>
 Cc: Michael Jeanson <mjeanson@efficios.com>
@@ -75,26 +107,84 @@ Cc: Andrii Nakryiko <andrii.nakryiko@gmail.com>
 Cc: bpf@vger.kernel.org
 Cc: Joel Fernandes <joel@joelfernandes.org>
 Cc: Jordan Rife <jrife@google.com>
-Link: https://lore.kernel.org/20241123153031.2884933-3-mathieu.desnoyers@efficios.com
+Cc: linux-trace-kernel@vger.kernel.org
+Link: https://lore.kernel.org/20241123153031.2884933-5-mathieu.desnoyers@efficios.com
 Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 ---
- include/linux/tracepoint.h | 2 --
- 1 file changed, 2 deletions(-)
+ include/linux/tracepoint.h | 45 ++++++++++----------------------------
+ 1 file changed, 12 insertions(+), 33 deletions(-)
 
 diff --git a/include/linux/tracepoint.h b/include/linux/tracepoint.h
-index d390e8cabf02..867f3c1ac7dc 100644
+index 867f3c1ac7dc..832f49b56b1f 100644
 --- a/include/linux/tracepoint.h
 +++ b/include/linux/tracepoint.h
-@@ -218,8 +218,6 @@ static inline struct tracepoint *tracepoint_ptr_deref(tracepoint_ptr_t *p)
-  */
- #define __DO_TRACE(name, args, cond, syscall)				\
- 	do {								\
--		int __maybe_unused __idx = 0;				\
+@@ -209,31 +209,6 @@ static inline struct tracepoint *tracepoint_ptr_deref(tracepoint_ptr_t *p)
+ #define __DO_TRACE_CALL(name, args)	__traceiter_##name(NULL, args)
+ #endif /* CONFIG_HAVE_STATIC_CALL */
+ 
+-/*
+- * With @syscall=0, the tracepoint callback array dereference is
+- * protected by disabling preemption.
+- * With @syscall=1, the tracepoint callback array dereference is
+- * protected by Tasks Trace RCU, which allows probes to handle page
+- * faults.
+- */
+-#define __DO_TRACE(name, args, cond, syscall)				\
+-	do {								\
+-		if (!(cond))						\
+-			return;						\
 -									\
- 		if (!(cond))						\
- 			return;						\
- 									\
+-		if (syscall)						\
+-			rcu_read_lock_trace();				\
+-		else							\
+-			preempt_disable_notrace();			\
+-									\
+-		__DO_TRACE_CALL(name, TP_ARGS(args));			\
+-									\
+-		if (syscall)						\
+-			rcu_read_unlock_trace();			\
+-		else							\
+-			preempt_enable_notrace();			\
+-	} while (0)
+-
+ /*
+  * Make sure the alignment of the structure in the __tracepoints section will
+  * not add unwanted padding between the beginning of the section and the
+@@ -282,10 +257,12 @@ static inline struct tracepoint *tracepoint_ptr_deref(tracepoint_ptr_t *p)
+ 	__DECLARE_TRACE_COMMON(name, PARAMS(proto), PARAMS(args), cond, PARAMS(data_proto)) \
+ 	static inline void trace_##name(proto)				\
+ 	{								\
+-		if (static_branch_unlikely(&__tracepoint_##name.key))	\
+-			__DO_TRACE(name,				\
+-				TP_ARGS(args),				\
+-				TP_CONDITION(cond), 0);			\
++		if (static_branch_unlikely(&__tracepoint_##name.key)) { \
++			if (cond) {					\
++				scoped_guard(preempt_notrace)		\
++					__DO_TRACE_CALL(name, TP_ARGS(args)); \
++			}						\
++		}							\
+ 		if (IS_ENABLED(CONFIG_LOCKDEP) && (cond)) {		\
+ 			WARN_ONCE(!rcu_is_watching(),			\
+ 				  "RCU not watching for tracepoint");	\
+@@ -297,10 +274,12 @@ static inline struct tracepoint *tracepoint_ptr_deref(tracepoint_ptr_t *p)
+ 	static inline void trace_##name(proto)				\
+ 	{								\
+ 		might_fault();						\
+-		if (static_branch_unlikely(&__tracepoint_##name.key))	\
+-			__DO_TRACE(name,				\
+-				TP_ARGS(args),				\
+-				TP_CONDITION(cond), 1);			\
++		if (static_branch_unlikely(&__tracepoint_##name.key)) {	\
++			if (cond) {					\
++				scoped_guard(rcu_tasks_trace)		\
++					__DO_TRACE_CALL(name, TP_ARGS(args)); \
++			}						\
++		}							\
+ 		if (IS_ENABLED(CONFIG_LOCKDEP) && (cond)) {		\
+ 			WARN_ONCE(!rcu_is_watching(),			\
+ 				  "RCU not watching for tracepoint");	\
 -- 
 2.45.2
 
