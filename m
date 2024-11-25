@@ -1,61 +1,59 @@
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 815312C181
-	for <bpf@vger.kernel.org>; Mon, 25 Nov 2024 15:26:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 713A8199FD0
+	for <bpf@vger.kernel.org>; Mon, 25 Nov 2024 15:26:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732548389; cv=none; b=WN4CMXg5P+unBBJ84daQ6Wu2aEAoTsgpa4APy0/fM0Ay8Do468yCgNdRBOiJMUGPI234z8nMifL4+x1WtV3C1r87VC4oUYB3fxgPfQooc0LNanqpwsUTSXvGsGG//vz0wo+u6uw7Z/CUz+Z1bvnoksd35V0k0BniigpZWKWuFBQ=
+	t=1732548390; cv=none; b=d1P2C3qqsUDc8Fc6Dx24dYGbCuzKWqelVzrMlMIN0VM9kYmfLxKSKCg+q9/qLgykZ66cKysjv7xOoxDjg8c2EpyArlNy+zP+kisrQTI+Deafzc0ceZUPlqILCnxqDoP2j+a1gYTo2x7yPgyznczA5RyeAhpyK/a00FRY9Ag6+Yk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732548389; c=relaxed/simple;
-	bh=3sH+3ptQHoXjGk1keUOvvaY7MkN6lVoC+JU6/fR8J6Q=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=KszLExao1NJW1q3M9l2se3BnQTxmKZmR8RUKiuSfk+XtU7nI7pcHPshTwqOLddOyhaZ+Rmk051Ju9cOlS2z9fosuNlTpn226zf43D2JzliCJwyONdOFNOAf8MX2JTjZLu3v/kwkhTMwd5AdVCT1LgAgOvP6GAJhCQoYiZFS9P0E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Wsxq9QFE; arc=none smtp.client-ip=209.85.128.45
+	s=arc-20240116; t=1732548390; c=relaxed/simple;
+	bh=MBHVocct5wgUNQ2BMzMhaLL5JlFSiyh3R85XtRwhijY=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=fUDHJUvZrIA+gaWbeN4pKQuACQmy4Dj8CsRxeGLxzij22UKEUiYGwjKiVa2xRmIanb7GEcfvOOF49PIrnqSzMnO3qzpJj3kMYkBEruKNXuu8UrzhDgTySi3SE5uwTTxR6vGCoeazQpmUre7ggTqHBPpSv1rkT3aIxigxO/HvPIY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EYrPOkWn; arc=none smtp.client-ip=209.85.128.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Wsxq9QFE"
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-434a099ba95so7364005e9.0
-        for <bpf@vger.kernel.org>; Mon, 25 Nov 2024 07:26:27 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EYrPOkWn"
+Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-431616c23b5so25948205e9.0
+        for <bpf@vger.kernel.org>; Mon, 25 Nov 2024 07:26:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1732548386; x=1733153186; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=MbN3KskAwtvqVJsecgNtoKg0lykGif0Gt79JX9EOBJI=;
-        b=Wsxq9QFEdJpFmxSWjd7N1B91qITHBzrYyOZcud+s2cuzYuwmq3L4wf4T5ou2R887aW
-         cwg3fEpIrwqscP4B9cGPPPIRioSs9lN7m//JsKzyQ+OPGtbXR5GVK7cLx5St50Bvx71K
-         t7LAxTu5W+jSNgHt8ZZ5bsO+YznmKNTF++2DwCEeGSABcVIGl2mqZS9fLTmyXFZupzwg
-         fhyn6bRjUTf8Nj3Is6tFd9jFtyTgKQAoJb/ryez3tVRA/fdVjcfSxfegc8PUqnyaXnqc
-         q3Z01GlsOL7UPZZAZjnqd7FGFXY+/UCnencRNg/583n+1yKV+PzjjFj1VMiIjSPp2Fp8
-         AUHQ==
+        d=gmail.com; s=20230601; t=1732548385; x=1733153185; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=M/o/RQoKS+0BoeTliePLVahhp9WrQfWqa4ABMjvMABE=;
+        b=EYrPOkWn8ZvmGaVKHMrh+fu29iXkAjZJr2jd0lJNhTIvJ9S1RcYLq2L2lIFIFPzrMf
+         F0ruJ+coGNVQC3y8LnNbUOhQ9xh55mwzTVn3nmOuCqSDcfUlaM3cZJdpV7oTxFbeADAQ
+         MhUquVVK1LXbR/hO8JQU801PkVOAR6hhmdyoOpAdftK7Kz5LAW3mVw6TJZVQAeY8ndtC
+         HOgnwRdu3Bo3lilO4sY1cQfCh8aihkPDceZTQvhNAtuEiwf6Ti6k2LuBzj7GYIcy3eAl
+         eThAJwNkSaVjyRtThPV12HBC/QAVBimoHHyxzv2OBSYXVSGLVO5DMqJ6O6PrCzM4KB5v
+         YShA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1732548386; x=1733153186;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=MbN3KskAwtvqVJsecgNtoKg0lykGif0Gt79JX9EOBJI=;
-        b=t90DCMTeBKv4J72gZIGOJ4d2XQNNXwMCMoiAQczPzaLhAifgh1zSiT66LbWcs3/icI
-         u06J/eMM1cV7Xz954AFtKshpsn1emsvsPGITIn9eF7vysRsp4ea8VqBB4foqoXPH+6RN
-         nYD/Uibx8rj57GHBYnfCAxnHEizGqfB/0bcec2lTotAOWwHyrFolEU12Wr55uKuJfklB
-         mWj9Z468QEmr87ieDMVcbz2LCN76qZ7t/Ft5f7zt/Bd2kexB7vosmSd5k3pXiDkOFkA2
-         Wrfz/kEQAVMR+x6T3xgbIGwCqCSWzRuDFX+IKhXR/d3vo3dONcI617It1byYRPVdrvEV
-         QO2w==
-X-Gm-Message-State: AOJu0YybqAzgeZE2qzq+bySdacn5P5my0vf6MM09YnJpwcU+p41LEXk7
-	TZfgB+IcUCB2sxs1xK/kYp4egTg+woHaP2nBTqaQbbfC++/POxNhtVIR/qmKmlZIbTAe
-X-Gm-Gg: ASbGnctljS3cTM6cKbfu4Q9ppGcWOqv/wF02WTJDHFlqx3LItI4Lly8IjrJP1GfAQul
-	erBhfvJwhsgfBVLt8k8bP2rsZbvo/Umsf61KmyaoQKyJDbEJWD7+61GZgDTHwhme1GMiS9np2Ot
-	qOosIlS79+OH0pF1VyE7DHKc8gtNRcLvgr1US5RXF+i0IZ/me1fxdfbcx60cf7bVpVG/vIuCcRz
-	zsW0FJIAd+hjNF0T0fdYcHwjPreGExq+t1SbNDrRUqipejrmpw4gzkYMl8j++TyhyMF2cE6lWqv
-	C1PY4stXE7eNAskFCZGTVcTMrlhLV0FJyLUEVoNEOG7ZTsSkfWFEPRe80GgrMA==
-X-Google-Smtp-Source: AGHT+IHAQIObVvJ7wySizeTh1KM53wCcCXil8XAqLhsBzkByItuj7DS+UVbUwT7qUHD+K5WvsP4nVg==
-X-Received: by 2002:a05:600c:1d28:b0:431:5df7:b337 with SMTP id 5b1f17b1804b1-433ce41c804mr112500865e9.8.1732548385629;
+        d=1e100.net; s=20230601; t=1732548385; x=1733153185;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=M/o/RQoKS+0BoeTliePLVahhp9WrQfWqa4ABMjvMABE=;
+        b=gUDoUw7exwhA+blpid/u80o8xNu17sA1FRJM2pypH7ht52T7yJthLzmf+wFYmepvKR
+         thD/o+xrD2b2Q/lH7ZdQzvbKssZAq7BrIYy4e69Owr60gvsfm14pKjp1PxOi6eR4hQ/x
+         3wbBWT1T81FS6qVywiNfFfoU2BDMYBS265g0lcyyoFZXCK5mPATzNcjyMT3aJOHMGJaI
+         XkIIf1DkCnGKzVCAnHHRS6X0UtBacXUuyhQzp5FR7V9z1Jib38TShbXS9MvglemDr8bF
+         a+6CWVEI5fz92eSQAl8LExImqAo2gRoTLkAlrOcWOCOID6rsyaLzpuTetmxeGHfP61C8
+         NxWQ==
+X-Gm-Message-State: AOJu0Yxk9Cbj+Oewy0OP58cSaA9XUvJFN3ErbTsvQJbEUeUjHXqb96UE
+	vOaTVLDzuI8L/yO17VBd4xcNuxCjUw+SXCGNZvvSny3VKi8xzS/EfBL3tUjM+qpEOEF5
+X-Gm-Gg: ASbGnctAIo/47VxdT7s8+W2siPq+8OoMqflnk02Ybro+F4M7VVJPajJlADld0Di7wjb
+	pLKe+h32lcMXq+foApxYhgNA232Qn2qolO2TOapzZVLAjT+u5dO/nj9PtPZjT6LpppgydM5b5BM
+	jj1w+SimpRb+V1/dSufQeeKuXIEVeIfQQf9f2bFsJ0UgywlIjf5DhADsYfXUcsl/lhljERPM/Um
+	T6N13VXqQHbCDsou8wRqwVwA4WDabc+OB4a9Mof5k39tY+Kd4zNEZ+be5TGEpoQaUZ63XduOLNE
+	2v5wuCIVr/uRU76EWTKq5qYe7sUishOOSrHflwCcUILcnuhhle1LIMQMQMBPtA==
+X-Google-Smtp-Source: AGHT+IHICkBuebT1gAPKJXjSybA50lO+QlBGSN7qkgphTYyllFnR0tWTKbWQ+HQkRwukrcklZ8sCsA==
+X-Received: by 2002:a05:600c:1d19:b0:433:c463:62d7 with SMTP id 5b1f17b1804b1-433cda11064mr97749345e9.4.1732548385156;
         Mon, 25 Nov 2024 07:26:25 -0800 (PST)
 Received: from mtardy-friendly-lvh-runner.c.cilium-dev.internal (36.24.240.35.bc.googleusercontent.com. [35.240.24.36])
-        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-433b45d4dd6sm202793815e9.24.2024.11.25.07.26.25
+        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-433b45d4dd6sm202793815e9.24.2024.11.25.07.26.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Nov 2024 07:26:25 -0800 (PST)
+        Mon, 25 Nov 2024 07:26:24 -0800 (PST)
 From: Mahe Tardy <mahe.tardy@gmail.com>
 To: bpf@vger.kernel.org
 Cc: martin.lau@linux.dev,
@@ -64,12 +62,10 @@ Cc: martin.lau@linux.dev,
 	song@kernel.org,
 	ast@kernel.org,
 	Mahe Tardy <mahe.tardy@gmail.com>
-Subject: [PATCH bpf-next 2/2] selftests/bpf: add cgroup skb direct packet access test
-Date: Mon, 25 Nov 2024 15:26:03 +0000
-Message-Id: <20241125152603.375898-2-mahe.tardy@gmail.com>
+Subject: [PATCH bpf-next 1/2] bpf: fix cgroup_skb prog test run direct packet access
+Date: Mon, 25 Nov 2024 15:26:02 +0000
+Message-Id: <20241125152603.375898-1-mahe.tardy@gmail.com>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20241125152603.375898-1-mahe.tardy@gmail.com>
-References: <20241125152603.375898-1-mahe.tardy@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -78,73 +74,36 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This verifies that programs of BPF_PROG_TYPE_CGROUP_SKB can access
-skb->data_end with direct packet access when being run with
-BPF_PROG_TEST_RUN.
+This is needed in the context of Tetragon to test cgroup_skb programs
+using BPF_PROG_TEST_RUN with direct packet access.
+
+Commit b39b5f411dcf ("bpf: add cg_skb_is_valid_access for
+BPF_PROG_TYPE_CGROUP_SKB") added direct packet access for cgroup_skb
+programs and following commit 2cb494a36c98 ("bpf: add tests for direct
+packet access from CGROUP_SKB") added tests to the verifier to ensure
+that access to skb fields was possible and also fixed
+bpf_prog_test_run_skb. However, is_direct_pkt_access was never set to
+true for this program type, so data pointers were not computed when
+using prog_test_run, making data_end always equal to zero (data_meta is
+not accessible for cgroup_skb).
 
 Signed-off-by: Mahe Tardy <mahe.tardy@gmail.com>
 ---
- .../cgroup_skb_direct_packet_access.c         | 28 +++++++++++++++++++
- .../progs/cgroup_skb_direct_packet_access.c   | 15 ++++++++++
- 2 files changed, 43 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/cgroup_skb_direct_packet_access.c
- create mode 100644 tools/testing/selftests/bpf/progs/cgroup_skb_direct_packet_access.c
+ net/bpf/test_run.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/cgroup_skb_direct_packet_access.c b/tools/testing/selftests/bpf/prog_tests/cgroup_skb_direct_packet_access.c
-new file mode 100644
-index 000000000000..e1a90c10db8c
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/cgroup_skb_direct_packet_access.c
-@@ -0,0 +1,28 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <test_progs.h>
-+#include "cgroup_skb_direct_packet_access.skel.h"
-+
-+void test_cgroup_skb_prog_run_direct_packet_access(void)
-+{
-+	int err;
-+	struct cgroup_skb_direct_packet_access *skel;
-+	char test_skb[64] = {};
-+
-+	LIBBPF_OPTS(bpf_test_run_opts, topts,
-+		.data_in = test_skb,
-+		.data_size_in = sizeof(test_skb),
-+	);
-+
-+	skel = cgroup_skb_direct_packet_access__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "cgroup_skb_direct_packet_access__open_and_load"))
-+		return;
-+
-+	err = bpf_prog_test_run_opts(bpf_program__fd(skel->progs.direct_packet_access), &topts);
-+	ASSERT_OK(err, "bpf_prog_test_run_opts err");
-+	ASSERT_EQ(topts.retval, 1, "retval");
-+
-+	ASSERT_NEQ(skel->bss->data_end, 0, "data_end");
-+
-+	cgroup_skb_direct_packet_access__destroy(skel);
-+}
-diff --git a/tools/testing/selftests/bpf/progs/cgroup_skb_direct_packet_access.c b/tools/testing/selftests/bpf/progs/cgroup_skb_direct_packet_access.c
-new file mode 100644
-index 000000000000..e32b07d802bb
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/cgroup_skb_direct_packet_access.c
-@@ -0,0 +1,15 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include "vmlinux.h"
-+#include <bpf/bpf_helpers.h>
-+
-+__u32 data_end;
-+
-+SEC("cgroup_skb/ingress")
-+int direct_packet_access(struct __sk_buff *skb)
-+{
-+	data_end = skb->data_end;
-+	return 1;
-+}
-+
-+char _license[] SEC("license") = "GPL";
+diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
+index 501ec4249fed..5586c1392607 100644
+--- a/net/bpf/test_run.c
++++ b/net/bpf/test_run.c
+@@ -1018,6 +1018,7 @@ int bpf_prog_test_run_skb(struct bpf_prog *prog, const union bpf_attr *kattr,
+ 	case BPF_PROG_TYPE_LWT_IN:
+ 	case BPF_PROG_TYPE_LWT_OUT:
+ 	case BPF_PROG_TYPE_LWT_XMIT:
++	case BPF_PROG_TYPE_CGROUP_SKB:
+ 		is_direct_pkt_access = true;
+ 		break;
+ 	default:
 --
 2.34.1
 
