@@ -1,138 +1,222 @@
-Received: from mail-ej1-f73.google.com (mail-ej1-f73.google.com [209.85.218.73])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F2541D8E16
-	for <bpf@vger.kernel.org>; Tue, 26 Nov 2024 16:54:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C02DF78C91
+	for <bpf@vger.kernel.org>; Tue, 26 Nov 2024 17:03:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732640070; cv=none; b=BvId9oKzcR2ZKTvl+aKWTotSafSkHKe5kBF65jg4zYFwImPV9gBb64gqmPkfbpMFJCw1vyZzvh2LHQ3OOT2q7qe9lqI1q1ovFTGb2qUvYpCtKH635afSiC6uR2l2PRUzgY80i3+AP9XnmupZcWsxTFfgmshO7bjVO7P6RMUurDE=
+	t=1732640587; cv=none; b=Rq1cKzmMGTEi88j988H5Je7m+cKCDytuw8OTCt2jS2CUTwpYuCN2MeE2bsIAfllKVwAvfIkPusAQV/4aTqh/Q2YkgIEsN63e1/NdIZJa6rsoYVFBRkSyy1IvhSZfX/T1ZdwqAFXJ5fNp3KkW1n6du8FYVI7I/Tj/IcgK2fXYaAE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732640070; c=relaxed/simple;
-	bh=DIp+sKw/YUR5DOvPGmLkXi+5hSkr25LLRbjXxJw9Sww=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=EmkvSn6n6AlcO8oHayFSzqHqfrHPVNfFHU04y0M9ztKzU9e4CWk+pt8N3BTmIEkg0piWcvJVYJVsc+GW6xg3fMxhKLuh7+W5opRKAd7v/sYIkvsX9m8MvQo5c69Ew2iFp21pKW5cz5VDe471J8uz8JXsXkJV3jN8JaICQvgPWQw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--elver.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=dzLhhl+f; arc=none smtp.client-ip=209.85.218.73
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--elver.bounces.google.com
+	s=arc-20240116; t=1732640587; c=relaxed/simple;
+	bh=Vc44FpdxSEPcvHgnCbkopatpzZicbTvysePlsiWncdI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=e8NSRTgz3K/D9NM9qCPSjMdLLPj/loTswxomuORloZ9wXzT8MwWEwjLOkhYlewb3uegKWQ2NOCDQl84oENZAyRMzdC6pPJPINGv7rI2PoTUXMkpl4sy1kAsjh5R/0fz3PI+5RmumTgYeD90x0x2H0nzS5YxLloGyO96wxQMUVEc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Tj1kEHuV; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="dzLhhl+f"
-Received: by mail-ej1-f73.google.com with SMTP id a640c23a62f3a-aa53914509eso173464666b.0
-        for <bpf@vger.kernel.org>; Tue, 26 Nov 2024 08:54:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1732640066; x=1733244866; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=FVWAMpSCzHg3fGvJUBSfxRuCq7EFAuyV0JzFHGbmGlM=;
-        b=dzLhhl+fcO+4h2td232vfisI8ogmKMBrkGUcsB3l/+wydHxr23LGzaeKxsv9SGyGSI
-         T7oZjMBUPMDnsCxJjLi6nZECBIcQlL3pkJLYjHduZlNmJRg40qp6cv9OGDlFwYh+0ccU
-         Q+Cyq1CaczL3FRLgnohbwX7rwqvxOtZ5SeMOx/Bpz9hn3/itQnfTKYJGhyObQ0H2xD3G
-         NCZ4WSSB5N251y38GDYWEUTe8JZBRd+JaDX4wyvk0LCCdysYip/Pr6LTd1grv/c0ShXU
-         KcLbplBEqVbxTTrOPgOzYrTuhTplRX+xThj0TkyYDNCXf9QqGJ3rtVjfGg5lwIBMrTcK
-         +12w==
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Tj1kEHuV"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1732640584;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=mm/2Kyik/1arX0uU2PP1mSD7NrkT0+1YjB4HchLmHvs=;
+	b=Tj1kEHuVMfSA3+8Ys8UEghUCePlZoea56FCaOG289z6N7iW8gPM4wE7OXpPLmWFIFbXioi
+	HtEch6u686b9nWkHjzl3geMSalPEwqRpeEwzP140yf1yFNfs9cqY0ikXH9tOX/npnd3Rp3
+	Ch1gmtxrGWTxD7ZXPPeelOywnF5iZYQ=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-16-9mQOmTgLOZynaTMxgOpA3w-1; Tue, 26 Nov 2024 12:03:03 -0500
+X-MC-Unique: 9mQOmTgLOZynaTMxgOpA3w-1
+X-Mimecast-MFC-AGG-ID: 9mQOmTgLOZynaTMxgOpA3w
+Received: by mail-wr1-f71.google.com with SMTP id ffacd0b85a97d-3822ecd84b3so3117030f8f.3
+        for <bpf@vger.kernel.org>; Tue, 26 Nov 2024 09:03:02 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1732640066; x=1733244866;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=FVWAMpSCzHg3fGvJUBSfxRuCq7EFAuyV0JzFHGbmGlM=;
-        b=lx2j6jT1f9R89Alt2dTwQPVm783exZgbgw9C1MQfWsdpI1ZEO+3sei6jNoKdoeKWO1
-         dQtZwwBWi3CDMRglWiWhIslXR79/uY7MZ56kMnOieB9stXQRT2DYVZr5Y4sHCci1rdk3
-         AV1VWQv479op5vpBPRfuagUBphhM2cYm+s8uLO41TkwuSFqQ+BWkGPu/f8DHlyixtnRH
-         xrOa1F58gHKHUnF0LExgbREwzVzwlEu92cuXHTD/fZnCsVX0McxPYheblLtRRxEEnehK
-         6K2pnjVwYnRV4qN97O7KQbwWd+sMcrjOrKlKwp6LsVELUNBJ6GPorMfLOKSxfLA+UmFD
-         b56Q==
-X-Forwarded-Encrypted: i=1; AJvYcCVY23YlAOZOsnvH7y3E+DxgSf5fkkHXnrImWvFwlXnfCKPVHpf29nmbD5+AHJqmy/Qs254=@vger.kernel.org
-X-Gm-Message-State: AOJu0YztLQeDdSEPzxt2zGVAPbw6hur4IcRD7T/Q1PmKlSMd42Kbe3LE
-	MpqeyOgLRu24MoaI+r5cVavlKKMSZuqhChp+HOBHI0mH3cY/JiST31VFDPd264oDGLz328ealA=
-	=
-X-Google-Smtp-Source: AGHT+IGnQ1RVPZpYNr4V2vsGwSrr1TfgOgeHTUES9Lyk5V8C/M8niDnuj/9jgzaUoqUes4SWLxjdrGEpAg==
-X-Received: from ejkk23.prod.google.com ([2002:a17:906:32d7:b0:aa5:1a39:9444])
- (user=elver job=prod-delivery.src-stubby-dispatcher) by 2002:a17:906:30c9:b0:a9a:1739:91e9
- with SMTP id a640c23a62f3a-aa521fdce0emr1032268766b.24.1732640065788; Tue, 26
- Nov 2024 08:54:25 -0800 (PST)
-Date: Tue, 26 Nov 2024 17:52:33 +0100
+        d=1e100.net; s=20230601; t=1732640582; x=1733245382;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mm/2Kyik/1arX0uU2PP1mSD7NrkT0+1YjB4HchLmHvs=;
+        b=AlIixD5S0zwO/zKMZAhH5e2pUKRtBCOiQkpG7Udi3vI08DRpjLDJsnS1F0l14OlPX4
+         Z5nT+RubxcHP3bhpSX9WbOB56YLIdqGkU7b1qajJYi+2cykUInd6MCTbfmDGxpZd1gcW
+         oQC3Vzgtf/1B+ktog+cblYXEiKKooyN0S17r/xLlqlWVTg4WbehCyoZyr1Qt1Or7O0KB
+         Gq6+UcoUvM9gIWLnzYgcRffFEokCIC89lKj/tYlQMUzA7Uak7+49sjKq73bYdFmqd72G
+         /cNRX2p26jKs3LLbs3vhVV4D3DOZcEmY9T1dAnhs1D2ajh/jjBC5ejC5WUhp3xGIrjQc
+         gQLg==
+X-Forwarded-Encrypted: i=1; AJvYcCVyLxA6kbhdRKHBYQ1ret0DhCCqfySf6Asiz/jgs6GzpwgLfadhgtaZm63+G3+S3zDRnF4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxJ9pMhoabHoJOEekjyewylukg7HXGHFl+IBRWk7Iph9Tk+7g2z
+	18OTScm4NqWafYFBu/Tm3GBt0bD4cn12WLLtLxVY+bDmw7ZhlClMrag80+igqHNL4b65/ezn6iU
+	+0HOo+GOUEEhhfGJ2rf28jP6YC6SE7XmSrdhanY4xIzvaSPrWJw==
+X-Gm-Gg: ASbGnct2f38kKcKQKSA87v5ecRrkdwSJpABA5yRDE5TxTDQu/Y5wYxHONIjUkNsPJin
+	2SpecTLdPviqvym98WtEeq6g4be7T+sikeRmqO8LamVbbh+JLkkEq8nfJn9RlYEEGabaqkdSTrP
+	yUV9oI01SOhB3/PICM+lvSNR3XJNjuWQuLkahfSs2gOdI5a4x+4JppO2FctPrR9XNBuXkP6Ev/f
+	AXoTdzG6QPsVHglIAzFnEslLIUgerYLvbGF+i/NU7x3NumL3WltUcQ1HWfeqFCp4SetUEJ+SYcJ
+	O2udypcl3OfRrV29eTQ8yg==
+X-Received: by 2002:a5d:5f47:0:b0:37d:4dcc:7fb4 with SMTP id ffacd0b85a97d-38260b4599fmr14673907f8f.10.1732640581399;
+        Tue, 26 Nov 2024 09:03:01 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IHr8NYJcMREmunQfPgtRUJ+6vWmZoL9RuaYlOmIYZwV1pzISCOwDVS/dXl1poRYeBl/8PZYEw==
+X-Received: by 2002:a5d:5f47:0:b0:37d:4dcc:7fb4 with SMTP id ffacd0b85a97d-38260b4599fmr14673660f8f.10.1732640579381;
+        Tue, 26 Nov 2024 09:02:59 -0800 (PST)
+Received: from localhost (net-93-146-37-148.cust.vodafonedsl.it. [93.146.37.148])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-433cde059a6sm174986745e9.4.2024.11.26.09.02.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 26 Nov 2024 09:02:58 -0800 (PST)
+Date: Tue, 26 Nov 2024 18:02:58 +0100
+From: Lorenzo Bianconi <lorenzo.bianconi@redhat.com>
+To: Alexander Lobakin <aleksander.lobakin@intel.com>
+Cc: Daniel Xu <dxu@dxuuu.xyz>, Jakub Kicinski <kuba@kernel.org>,
+	Lorenzo Bianconi <lorenzo@kernel.org>,
+	"bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	David Miller <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
+	netdev@vger.kernel.org
+Subject: Re: [RFC/RFT v2 0/3] Introduce GRO support to cpumap codebase
+Message-ID: <Z0X_Qv24e-A4Nxao@lore-desk>
+References: <55d2ac1c-0619-4b24-b8ab-6eb5f553c1dd@intel.com>
+ <ZwZ7fr_STZStsnln@lore-desk>
+ <c3e20036-2bb3-4bca-932c-33fd3801f138@intel.com>
+ <c21dc62c-f03e-4b26-b097-562d45407618@intel.com>
+ <01dcfecc-ab8e-43b8-b20c-96cc476a826d@intel.com>
+ <b319014e-519c-4c2d-8b6d-1632357e66cd@app.fastmail.com>
+ <rntmnecd6w7ntnazqloxo44dub2snqf73zn2jqwuur6io2xdv7@4iqbg5odgmfq>
+ <05991551-415c-49d0-8f14-f99cb84fc5cb@intel.com>
+ <a2ebba59-bf19-4bb9-9952-c2f63123b7cd@app.fastmail.com>
+ <6db67537-6b7b-4700-9801-72b6640fc609@intel.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.47.0.338.g60cca15819-goog
-Message-ID: <20241126165414.1378338-1-elver@google.com>
-Subject: [PATCH bpf-next] bpf: Improve bpf_probe_write_user() warning message
-From: Marco Elver <elver@google.com>
-To: elver@google.com, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>
-Cc: Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, bpf@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Nikola Grcevski <nikola.grcevski@grafana.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="79Xh1BHeJHl1mt/8"
+Content-Disposition: inline
+In-Reply-To: <6db67537-6b7b-4700-9801-72b6640fc609@intel.com>
 
-The warning message for bpf_probe_write_user() was introduced in
-96ae52279594 ("bpf: Add bpf_probe_write_user BPF helper to be called in
-tracers"), with the following in the commit message:
 
-    Given this feature is meant for experiments, and it has a risk of
-    crashing the system, and running programs, we print a warning on
-    when a proglet that attempts to use this helper is installed,
-    along with the pid and process name.
+--79Xh1BHeJHl1mt/8
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-After 8 years since 96ae52279594, bpf_probe_write_user() has found
-successful applications beyond experiments [1, 2], with no other good
-alternatives. Despite its intended purpose for "experiments", that
-doesn't stop Hyrum's law, and there are likely many more users depending
-on this helper: "[..] it does not matter what you promise [..] all
-observable behaviors of your system will be depended on by somebody."
+> From: Daniel Xu <dxu@dxuuu.xyz>
+> Date: Mon, 25 Nov 2024 16:56:49 -0600
+>=20
+> >=20
+> >=20
+> > On Mon, Nov 25, 2024, at 9:12 AM, Alexander Lobakin wrote:
+> >> From: Daniel Xu <dxu@dxuuu.xyz>
+> >> Date: Fri, 22 Nov 2024 17:10:06 -0700
+> >>
+> >>> Hi Olek,
+> >>>
+> >>> Here are the results.
+> >>>
+> >>> On Wed, Nov 13, 2024 at 03:39:13PM GMT, Daniel Xu wrote:
+> >>>>
+> >>>>
+> >>>> On Tue, Nov 12, 2024, at 9:43 AM, Alexander Lobakin wrote:
+> >>
+> >> [...]
+> >>
+> >>> Baseline (again)
+> >>>
+> >>> 	Transactions	Latency P50 (s)	Latency P90 (s)	Latency P99 (s)			Throu=
+ghput (Mbit/s)
+> >>> Run 1	3169917	        0.00007295	0.00007871	0.00009343		Run 1	21749.43
+> >>> Run 2	3228290	        0.00007103	0.00007679	0.00009215		Run 2	21897.17
+> >>> Run 3	3226746	        0.00007231	0.00007871	0.00009087		Run 3	21906.82
+> >>> Run 4	3191258	        0.00007231	0.00007743	0.00009087		Run 4	21155.15
+> >>> Run 5	3235653	        0.00007231	0.00007743	0.00008703		Run 5	21397.06
+> >>> Average	3210372.8	0.000072182	0.000077814	0.00009087		Average	21621.1=
+26
+> >>>
+> >>> cpumap v2 Olek
+> >>>
+> >>> 	Transactions	Latency P50 (s)	Latency P90 (s)	Latency P99 (s)			Throu=
+ghput (Mbit/s)
+> >>> Run 1	3253651	        0.00007167	0.00007807	0.00009343		Run 1	13497.57
+> >>> Run 2	3221492	        0.00007231	0.00007743	0.00009087		Run 2	12115.53
+> >>> Run 3	3296453	        0.00007039	0.00007807	0.00009087		Run 3	12323.38
+> >>> Run 4	3254460	        0.00007167	0.00007807	0.00009087		Run 4	12901.88
+> >>> Run 5	3173327	        0.00007295	0.00007871	0.00009215		Run 5	12593.22
+> >>> Average	3239876.6	0.000071798	0.00007807	0.000091638		Average	12686.3=
+16
+> >>> Delta	0.92%	        -0.53%	        0.33%	        0.85%			        -41.=
+32%
+> >>>
+> >>>
+> >>> It's very interesting that we see -40% tput w/ the patches. I went ba=
+ck
+> >>
+> >> Oh no, I messed up something =3D\
+> >>
+> >> Could you please also test not the whole series, but patches 1-3 (up to
+> >> "bpf:cpumap: switch to GRO...") and 1-4 (up to "bpf: cpumap: reuse skb
+> >> array...")? Would be great to see whether this implementation works
+> >> worse right from the start or I just broke something later on.
+> >=20
+> > Patches 1-3 reproduces the -40% tput numbers.=20
+>=20
+> Ok, thanks! Seems like using the hybrid approach (GRO, but on top of
+> cpumap's kthreads instead of NAPI) really performs worse than switching
+> cpumap to NAPI.
+>=20
+> >=20
+> > With patches 1-4 the numbers get slightly worse (~1gbps lower) but it w=
+as noisy.
+>=20
+> Interesting, I was sure patch 4 optimizes stuff... Maybe I'll give up on =
+it.
+>=20
+> >=20
+> > tcp_rr results were unaffected.
+>=20
+> @ Jakub,
+>=20
+> Looks like I can't just use GRO without Lorenzo's conversion to NAPI, at
+> least for now =3D\ I took a look on the backlog NAPI and it could be used,
+> although we'd need a pointer in the backlog to the corresponding cpumap
+> + also some synchronization point to make sure backlog NAPI won't access
+> already destroyed cpumap.
+>=20
+> Maybe Lorenzo could take a look...
 
-As such, the warning message can be improved:
+it seems to me the only difference would be we will use the shared backlog_=
+napi
+kthreads instead of having a dedicated kthread for each cpumap entry but we=
+ still
+need the napi poll logic. I can look into it if you prefer the shared kthre=
+ad
+approach.
+@Jakub: what do you think?
 
-1. The ominous "helper that may corrupt user memory!" offers no real
-   benefit, and has been found to lead to confusion where the system
-   administrator is loading programs with valid use cases.  Remove it.
-   No information is lost, and administrators who know their system
-   should not load eBPF programs that use bpf_probe_write_user() know
-   what they are looking for.
+Regards,
+Lorenzo
 
-2. If multiple programs with bpf_probe_write_user() are loaded by the
-   same task/PID consecutively, only print the message once. If another
-   task loads a program with the helper, the message is printed once
-   more, and so on. This also makes the need for rate limiting
-   redundant.
+>=20
+> Thanks,
+> Olek
+>=20
 
-3. Every printk line needs to be concluded with "\n" to be flushed. With
-   the old version the warning message only appeared after any following
-   printk. Fix this.
+--79Xh1BHeJHl1mt/8
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Link: https://lore.kernel.org/lkml/20240404190146.1898103-1-elver@google.com/ [1]
-Link: https://lore.kernel.org/r/lkml/CAAn3qOUMD81-vxLLfep0H6rRd74ho2VaekdL4HjKq+Y1t9KdXQ@mail.gmail.com/ [2]
-Signed-off-by: Marco Elver <elver@google.com>
----
- kernel/trace/bpf_trace.c | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+-----BEGIN PGP SIGNATURE-----
 
-diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-index 630b763e5240..0ead3d66f8db 100644
---- a/kernel/trace/bpf_trace.c
-+++ b/kernel/trace/bpf_trace.c
-@@ -359,11 +359,16 @@ static const struct bpf_func_proto bpf_probe_write_user_proto = {
- 
- static const struct bpf_func_proto *bpf_get_probe_write_proto(void)
- {
-+	static pid_t last_warn_pid = -1;
-+
- 	if (!capable(CAP_SYS_ADMIN))
- 		return NULL;
- 
--	pr_warn_ratelimited("%s[%d] is installing a program with bpf_probe_write_user helper that may corrupt user memory!",
--			    current->comm, task_pid_nr(current));
-+	if (READ_ONCE(last_warn_pid) != task_pid_nr(current)) {
-+		pr_warn("%s[%d] is installing a program with bpf_probe_write_user\n",
-+			current->comm, task_pid_nr(current));
-+		WRITE_ONCE(last_warn_pid, task_pid_nr(current));
-+	}
- 
- 	return &bpf_probe_write_user_proto;
- }
--- 
-2.47.0.338.g60cca15819-goog
+iHUEABYKAB0WIQTquNwa3Txd3rGGn7Y6cBh0uS2trAUCZ0X/QQAKCRA6cBh0uS2t
+rOMVAP9sfomXx8kbm2KqBUkFS0IBD3Qk4xQs87FNINYbSG6VyQEAxUlOgtod8Cvs
+Xx6AHmLLh8qJ5h/w2pd6dTEQxPAHrwo=
+=+Ql1
+-----END PGP SIGNATURE-----
+
+--79Xh1BHeJHl1mt/8--
 
