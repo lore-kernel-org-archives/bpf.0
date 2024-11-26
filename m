@@ -1,146 +1,91 @@
-Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7680C2500D5;
-	Tue, 26 Nov 2024 21:16:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E99511DE2B3;
+	Tue, 26 Nov 2024 21:17:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732655762; cv=none; b=krdBXjnaduZuxjQagJtxat6/2mDymmGg7wO2ObkK/wzazdc9isRU8dKD4BZQQSwrXn+PUi1C/IrympilywHgVDfb7maMMYVLYB/Y960AIVMYb12xy3c5FrA5WrbqbyG469A37VP9xTlPN8eQ9JMcn9tk3CaT1EDoGw3bqzccDoM=
+	t=1732655848; cv=none; b=GbGdjRMpYLGqDOHQyCUenIUsZ8M0OUV4//TZMUg9E4eFLdTRsf9zP1J9K0QQBG+RcIoLCwr6alzzycsRKJceKfuciu9XSIBUoPKyRBdC8YBlHVWKv7EFFjnMoYHJY1C0s/bI1gNNkZmMY4PU6TZuYtG24qImRbuR+E/wamzm4Dk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732655762; c=relaxed/simple;
-	bh=8zBIAsY7KhKfrx093oiz+bgPbdi4AqBYllyRBnwEjcA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Kvv+9vjC9UoH2/QKjCPngt2RyzBIfSt3ayZGaiVL1BLL+xViZaTz+a44eUReC2JRAlNfOqTF8NSrmT7x9KzOVY6b/VR2dgkYO3WZAnj5zzn2hwRbdp52HMSfeIoL56gQNGUfq0sCFoHDqgZTdEy6IKVpxgMyRsdYZZFrNMBm3CQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eCG7IZec; arc=none smtp.client-ip=209.85.215.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1732655848; c=relaxed/simple;
+	bh=qUel6NrnvGwtQ1zz0ZBdXrr8Q3TIOXkey8rp6qUc4OQ=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=IyLLVNSCR4EM9d3HtqE2GBxHWJdDD+8/w8Wm/wLNac4pRDknFO9rXLO+R4plhcXBO5iNuhWvXiFGIvWyLGh9a7JS4PPyan12Skmql9npa6tVtA08ptUD/PdAMyKPElj2x32Y4Ip/t1skiHnwAT9/NCzj5JOICIvdYKFp3U30pDk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=QHZIu4z6; arc=none smtp.client-ip=159.69.126.157
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eCG7IZec"
-Received: by mail-pg1-f172.google.com with SMTP id 41be03b00d2f7-7e6cbf6cd1dso4182879a12.3;
-        Tue, 26 Nov 2024 13:16:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1732655761; x=1733260561; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=DCYkoe4/s2sGIo+e9CICa6BBY2Gz1FRZ8QT5IIMcEsI=;
-        b=eCG7IZecg05HBJfx3sRuOm3tBFo6h0eY1QA8jDM/sFEPTgYaCgcXXf7LEgUsHwFpZH
-         uzI6KJF9ZeSKJPD7mumqhRw/yvt6sRMoFTVeKpahPbyEeZWMfGJOww+aUFtzqR7QZ+B/
-         zQ3JPKPvsRPsvI92z6vZxOKE8MCcoOnn3oHMYZeWXLfye4yJNUaCUoB6y1xpvvF09sbN
-         l5cvoRsW0MWaGG07RVmVhXW8oEsEVT0GPnQd6YyGIm+XG9vx6YDqEQBOTsjx7xAtlBIN
-         KDDUVD6KLEV/puFwDqfXuS5++odaCNAi4sKydqxbq3ZLH634m4OLfA/maDEnwqVx/zo/
-         ZRdg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1732655761; x=1733260561;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=DCYkoe4/s2sGIo+e9CICa6BBY2Gz1FRZ8QT5IIMcEsI=;
-        b=Z2gblATwqERe5JvwKZ7FsIIoirXUYj1MAmqzMA/IVqfg7joUxphCW/J35IriVVmkDe
-         T11cqHBx5pRW8ND4Sbr4MZAKstWbAqDwPbbpPyPNukzpfLpgDnIX8qyW0168sOGM74oJ
-         wOHhq/qN8OWrILPHlrU+8fSwxrB61eE/u5mYbBrrGQ7cz28GxNLgS47/r02JlFcOlXB6
-         HXJC5SwVlDu+vTGLyob1NMwm/TSDhquw1g9Q+e08l8sGqWteMZ3iY6xfzf326PZ8YmkL
-         1xUKN/3tbMtLI1pJvqlwghwbbn5l0eQ0cliWKLWem9LUWegCE9WiQ/TpagVA2Tkdew6o
-         +PZg==
-X-Forwarded-Encrypted: i=1; AJvYcCULE4KZXbq5QWMbNidn9UvyaIqtcRJQmUZPbeS4nzKrIQ4paKBdnJ5BIbX51jx0J9JpcGm7dHE7@vger.kernel.org, AJvYcCUqiyL9Q2FxKR85SsN0V1uAcjuS51q4HApvQEInmRw3yKAiFN47vA6JS49cqVbNpyAbQNQ=@vger.kernel.org, AJvYcCVv8z5RLjtFL4SvwbqnrKpcSB4HNfiCESjE26sLXKc1QhrPUF+8VpY+XYMTrkVIXt21nJOE2zwRGFfpkgVaVuEXXJkG@vger.kernel.org, AJvYcCWjg2MoPL5PkMhbS48QRbFSv1GxHjy+Q/M3TfoSxl6Ulx7Er+Y6uhjTwuGB3J1QyvwylWhaI1m1QS5b4P86@vger.kernel.org
-X-Gm-Message-State: AOJu0YwcdscQ+Lb9fiA4lcvunebeZ4LjLKuvzKhBEM0rgjF3zAt+nJI6
-	YWt4vWi5sk/jjnzYxX/E+fw5nKpFgbLt2gePMQ70uUDlgU6C6FXq9eLcDr68bpZV6x6U523fnNW
-	EzR5w1z9RPdSAGYRNMJAp5O5bc+Q=
-X-Gm-Gg: ASbGncv9n322ak12PFV+PyncB/rNhCcZ8wzZA/w/sGDBDtKZxcdrFy6tghRq7uRRV0v
-	8HECVIbWO7r/5UDcDWDGkLHYjo9q7AXY72MVPorMAOl2U/J8=
-X-Google-Smtp-Source: AGHT+IFZpSUfgo8UkY5MOU8q7SMXyP0VRD2sfkfUurm23P4frAw83y0qvmOzmOSggFzJcXEkU6unnV9i2uU1VYlwjco=
-X-Received: by 2002:a17:90b:4b8d:b0:2ea:94a1:f63f with SMTP id
- 98e67ed59e1d1-2ee097e5f5cmr1129433a91.33.1732655760621; Tue, 26 Nov 2024
- 13:16:00 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="QHZIu4z6"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+	s=mail; t=1732655836;
+	bh=qUel6NrnvGwtQ1zz0ZBdXrr8Q3TIOXkey8rp6qUc4OQ=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
+	b=QHZIu4z619/ko/QCySe/Cx8g6kNrefkJOlxIQ2tYOF5PMW4sMOmMppLOxVcLgTX0b
+	 kQO8cSS6zprdxGuXDcIT/L/FGEDDZ7MmI8zcUkwW0fu4fasPL7hbLqLy3y/aV21gWy
+	 Pv2G3SodHMH1c6BEWWN6Ok3kLk8Jf1xY6q0ZK6A0=
+From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+Date: Tue, 26 Nov 2024 22:17:10 +0100
+Subject: [PATCH v2 2/2] kbuild: propagate CONFIG_WERROR to resolve_btfids
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <24481522-69BF-4CE7-A05D-1E7398400D80@u.nus.edu>
- <20241123202744.GB20633@noisy.programming.kicks-ass.net> <20241123180000.5e219f2e@gandalf.local.home>
- <CAADnVQLBhV_sSuH+BKu66ZsxTcsvw7RSLnjRGLwQX3TFSjs-Gg@mail.gmail.com>
- <20241124223045.4e47e8b7@rorschach.local.home> <20241124224441.5614c15a@rorschach.local.home>
- <5489FB30-8B09-4F74-9C2B-FF25F4654A3F@u.nus.edu> <20241125094426.GO39245@noisy.programming.kicks-ass.net>
-In-Reply-To: <20241125094426.GO39245@noisy.programming.kicks-ass.net>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Tue, 26 Nov 2024 13:15:48 -0800
-Message-ID: <CAEf4BzYHeh_=iHOYL88pXXdHGZuAmQNM0jM+9iPUou+7+YLjjQ@mail.gmail.com>
-Subject: Re: [BUG] possible deadlock in __schedule (with reproducer available)
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: Ruan Bonan <bonan.ruan@u.nus.edu>, Steven Rostedt <rostedt@goodmis.org>, 
-	Alexei Starovoitov <alexei.starovoitov@gmail.com>, "mingo@redhat.com" <mingo@redhat.com>, 
-	"will@kernel.org" <will@kernel.org>, "longman@redhat.com" <longman@redhat.com>, 
-	"boqun.feng@gmail.com" <boqun.feng@gmail.com>, 
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, "kpsingh@kernel.org" <kpsingh@kernel.org>, 
-	"mattbobrowski@google.com" <mattbobrowski@google.com>, "ast@kernel.org" <ast@kernel.org>, 
-	"daniel@iogearbox.net" <daniel@iogearbox.net>, "andrii@kernel.org" <andrii@kernel.org>, 
-	"martin.lau@linux.dev" <martin.lau@linux.dev>, "eddyz87@gmail.com" <eddyz87@gmail.com>, 
-	"song@kernel.org" <song@kernel.org>, "yonghong.song@linux.dev" <yonghong.song@linux.dev>, 
-	"john.fastabend@gmail.com" <john.fastabend@gmail.com>, "sdf@fomichev.me" <sdf@fomichev.me>, 
-	"haoluo@google.com" <haoluo@google.com>, "jolsa@kernel.org" <jolsa@kernel.org>, 
-	"mhiramat@kernel.org" <mhiramat@kernel.org>, 
-	"mathieu.desnoyers@efficios.com" <mathieu.desnoyers@efficios.com>, 
-	"bpf@vger.kernel.org" <bpf@vger.kernel.org>, 
-	"linux-trace-kernel@vger.kernel.org" <linux-trace-kernel@vger.kernel.org>, 
-	"netdev@vger.kernel.org" <netdev@vger.kernel.org>, Fu Yeqi <e1374359@u.nus.edu>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Message-Id: <20241126-resolve_btfids-v2-2-288c37cb89ee@weissschuh.net>
+References: <20241126-resolve_btfids-v2-0-288c37cb89ee@weissschuh.net>
+In-Reply-To: <20241126-resolve_btfids-v2-0-288c37cb89ee@weissschuh.net>
+To: Masahiro Yamada <masahiroy@kernel.org>, 
+ Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>, 
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+ Andrii Nakryiko <andrii@kernel.org>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, 
+ Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, 
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+ Jiri Olsa <jolsa@kernel.org>
+Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ bpf@vger.kernel.org, 
+ =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1732655835; l=928;
+ i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
+ bh=qUel6NrnvGwtQ1zz0ZBdXrr8Q3TIOXkey8rp6qUc4OQ=;
+ b=iZdeC9osjgnTQJeB05GcRBFuABstvQYxT1en54Otzg5IdShYnTxMrytV6i8py/pEsc7i7Yv3E
+ gNCSMRTpGLzBTAfGjeW3ol7NpqQ+VnIstIBGtrf3ToH/rqFthLpV+7F
+X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
+ pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 
-On Mon, Nov 25, 2024 at 1:44=E2=80=AFAM Peter Zijlstra <peterz@infradead.or=
-g> wrote:
->
-> On Mon, Nov 25, 2024 at 05:24:05AM +0000, Ruan Bonan wrote:
->
-> > From the discussion, it appears that the root cause might involve
-> > specific printk or BPF operations in the given context. To clarify and
-> > possibly avoid similar issues in the future, are there guidelines or
-> > best practices for writing BPF programs/hooks that interact with
-> > tracepoints, especially those related to scheduler events, to prevent
-> > such deadlocks?
->
-> The general guideline and recommendation for all tracepoints is to be
-> wait-free. Typically all tracer code should be.
->
-> Now, BPF (users) (ab)uses tracepoints to do all sorts and takes certain
-> liberties with them, but it is very much at the discretion of the BPF
-> user.
+Use CONFIG_WERROR to also fail on warnings emitted by resolve_btfids.
+Allow the CI bots to prevent the introduction of new warnings.
 
-We do assume that tracepoints are just like kprobes and can run in
-NMI. And in this case BPF is just a vehicle to trigger a
-promised-to-be-wait-free strncpy_from_user_nofault(). That's as far as
-BPF involvement goes, we should stop discussing BPF in this context,
-it's misleading.
+Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+Acked-by: Jiri Olsa <jolsa@kernel.org>
+---
+ scripts/link-vmlinux.sh | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-As Alexei mentioned, this is the problem with printk code, not in BPF.
-I'll just copy-paste the relevant parts of stack trace to make this
-clear:
+diff --git a/scripts/link-vmlinux.sh b/scripts/link-vmlinux.sh
+index a3c634b2f348f9c976cff9693caf290db7f31666..7288fe501b57e29003d922441c8d5e2f48dee6ad 100755
+--- a/scripts/link-vmlinux.sh
++++ b/scripts/link-vmlinux.sh
+@@ -279,7 +279,11 @@ vmlinux_link vmlinux
+ # fill in BTF IDs
+ if is_enabled CONFIG_DEBUG_INFO_BTF; then
+ 	info BTFIDS vmlinux
+-	${RESOLVE_BTFIDS} vmlinux
++	RESOLVE_BTFIDS_ARGS=""
++	if is_enabled CONFIG_WERROR; then
++		RESOLVE_BTFIDS_ARGS=" --fatal-warnings "
++	fi
++	${RESOLVE_BTFIDS} ${RESOLVE_BTFIDS_ARGS} vmlinux
+ fi
+ 
+ mksysmap vmlinux System.map
 
-       console_trylock_spinning kernel/printk/printk.c:1990 [inline]
-       vprintk_emit+0x414/0xb90 kernel/printk/printk.c:2406
-       _printk+0x7a/0xa0 kernel/printk/printk.c:2432
-       fail_dump lib/fault-inject.c:46 [inline]
-       should_fail_ex+0x3be/0x570 lib/fault-inject.c:154
-       strncpy_from_user+0x36/0x230 lib/strncpy_from_user.c:118
-       strncpy_from_user_nofault+0x71/0x140 mm/maccess.c:186
-       bpf_probe_read_user_str_common kernel/trace/bpf_trace.c:215 [inline]
+-- 
+2.47.1
 
->
-> Slightly relaxed guideline would perhaps be to consider the context of
-> the tracepoint, notably one of: NMI, IRQ, SoftIRQ or Task context -- and
-> to not exceed the bounds of the given context.
->
-> More specifically, when the tracepoint is inside critical sections of
-> any sort (as is the case here) then it very much is on the BPF user to
-> not cause inversions.
->
-> At this point there really is no substitute for knowing what you're
-> doing. Knowledge is key.
->
-> In short; tracepoints should be wait-free, if you know what you're doing
-> you can perhaps get away with a little more.
-
-From BPF perspective tracepoints are wait-free and we don't allow any
-sleepable code to be called (until sleepable tracepoints are properly
-supported, which is a separate "blessed" case of tracepoints).
