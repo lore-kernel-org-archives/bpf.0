@@ -1,28 +1,28 @@
 Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CEFB819
-	for <bpf@vger.kernel.org>; Wed, 27 Nov 2024 00:34:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8D067464
+	for <bpf@vger.kernel.org>; Wed, 27 Nov 2024 00:34:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732667687; cv=none; b=rVWfZ1dc1U6Exy9+fA0MogeDoD9gTwuRCavv5fCyYp7KqMHvEjFTy/weXGAHL04Zywmgfzmmq16Iouq/u66ZjofKKKEzi3Nc6iDfr3FHMG7z+xlzYBlFHKB8LHmnaiK5ma4nxUIwqnv61ncjcUoXpX+zt5RKDNjiBKqWWWajVeE=
+	t=1732667687; cv=none; b=ArRTp9WTBV6jwe5WiaPW0v+MnOJc5L6qU42flC1R0B4oHmidOdVNQX39YU6l57umvDGTTcSLp57OWM+1WycpHGsSOniFkhNyu1fBynOFfnVQEZbMNIzD8wpgK+P+Q2KTRWfYnNfrfa2xOrtvEsdRn+SI2YKr6CeHJC1++5iIM+I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1732667687; c=relaxed/simple;
-	bh=rvajiBXTNe8kf+7G7Y1wZE+7yjdwuGzLIRLuI5KJi7k=;
+	bh=Ag+VAWNVTa4T0DiGO7+FRvTQnCQCaMZ3tc4auLRZEDo=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=fGiA3PARKWNXV4wCIbxlF34SQ906r9/hMfN8leBlkbiqAcPeawkehcZhDpiBnx35DFqV9z2QD7iJLmob5yV4r33yVUA48BPKFAWpP/SpTxRbNpbaMi+JevlL+3DcdJaaQ84n8TVneL/Plqor4kHQB2BpcILCoOUnOc1dmeVdu4w=
+	 MIME-Version:Content-Type; b=ncW/zAOQqwf2G2UPaVICzhoDkwynBP2AXgYryZtwGpNMQyPv2FhDMgldYK80Xak21bOnEHFzwVHtMFSNaNC3K0XgwL9fKdB1irLrAFQSSk+6U32GCgManlW5/1BrM3s1yqlsitJxGn7yGZsZCc9Iq1TcWW1PP8b4g9Qt1i0T95A=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
 Received: from mail.maildlp.com (unknown [172.19.163.235])
-	by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4XygRt58qHz4f3jsX
-	for <bpf@vger.kernel.org>; Wed, 27 Nov 2024 08:34:18 +0800 (CST)
+	by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4XygRs22Vmz4f3kFm
+	for <bpf@vger.kernel.org>; Wed, 27 Nov 2024 08:34:17 +0800 (CST)
 Received: from mail02.huawei.com (unknown [10.116.40.128])
-	by mail.maildlp.com (Postfix) with ESMTP id 7AB8A1A06D7
-	for <bpf@vger.kernel.org>; Wed, 27 Nov 2024 08:34:37 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTP id 0F7D21A0568
+	for <bpf@vger.kernel.org>; Wed, 27 Nov 2024 08:34:36 +0800 (CST)
 Received: from huaweicloud.com (unknown [10.175.124.27])
-	by APP4 (Coremail) with SMTP id gCh0CgBHI4cVaUZn5pO9Cw--.38194S9;
-	Wed, 27 Nov 2024 08:34:37 +0800 (CST)
+	by APP4 (Coremail) with SMTP id gCh0CgBHI4cVaUZn5pO9Cw--.38194S7;
+	Wed, 27 Nov 2024 08:34:35 +0800 (CST)
 From: Hou Tao <houtao@huaweicloud.com>
 To: bpf@vger.kernel.org
 Cc: Martin KaFai Lau <martin.lau@linux.dev>,
@@ -43,9 +43,9 @@ Cc: Martin KaFai Lau <martin.lau@linux.dev>,
 	=?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>,
 	houtao1@huawei.com,
 	xukuohai@huawei.com
-Subject: [PATCH bpf v2 5/9] bpf: Fix exact match conditions in trie_get_next_key()
-Date: Wed, 27 Nov 2024 08:46:37 +0800
-Message-Id: <20241127004641.1118269-6-houtao@huaweicloud.com>
+Subject: [PATCH bpf v2 3/9] bpf: Handle BPF_EXIST and BPF_NOEXIST for LPM trie
+Date: Wed, 27 Nov 2024 08:46:35 +0800
+Message-Id: <20241127004641.1118269-4-houtao@huaweicloud.com>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20241127004641.1118269-1-houtao@huaweicloud.com>
 References: <20241127004641.1118269-1-houtao@huaweicloud.com>
@@ -57,70 +57,89 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:gCh0CgBHI4cVaUZn5pO9Cw--.38194S9
-X-Coremail-Antispam: 1UD129KBjvJXoW7WFWDXFW5JFWxKF18CF1fCrg_yoW8ZrykpF
-	4rt34vyF45Gay2ka9Yqa18WryFqF17Gw4xJas5G3sYk3s0qr93tr10gFWYga43AFZ3JF1a
-	yr40qr9Yqw1DXaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUPvb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAV
-	Cq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0
-	rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x0267
-	AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E
-	14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7
-	xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Y
-	z7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2
-	AFwI0_GFv_Wryl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAq
-	x4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6r
-	W5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2IY6xkF
-	7I0E14v26r4UJVWxJr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14
-	v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuY
-	vjxUI-eODUUUU
+X-CM-TRANSID:gCh0CgBHI4cVaUZn5pO9Cw--.38194S7
+X-Coremail-Antispam: 1UD129KBjvJXoWxJr4rGFyUZFW3XF1rJw15XFb_yoW8ArWkpF
+	4SkFyYgrW8JF13Cwsav3ZxJFy5Wa48G3y2gFyxC34ayFWjkF9aqF1Fgay5tF43JrW7ZrW3
+	AF4YqFyvgryDZrJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUP2b4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUWw
+	A2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
+	w2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
+	W8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v2
+	6rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMc
+	Ij6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_
+	Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AFwI
+	0_GFv_Wryl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG
+	67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MI
+	IYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E
+	14v26F4j6r4UJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr
+	0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU04x
+	RDUUUUU==
 X-CM-SenderInfo: xkrx3t3r6k3tpzhluzxrxghudrp/
 
 From: Hou Tao <houtao1@huawei.com>
 
-trie_get_next_key() uses node->prefixlen == key->prefixlen to identify
-an exact match, However, it is incorrect because when the target key
-doesn't fully match the found node (e.g., node->prefixlen != matchlen),
-these two nodes may also have the same prefixlen. It will return
-expected result when the passed key exist in the trie. However when a
-recently-deleted key or nonexistent key is passed to
-trie_get_next_key(), it may skip keys and return incorrect result.
+Add the currently missing handling for the BPF_EXIST and BPF_NOEXIST
+flags. These flags can be specified by users and are relevant since LPM
+trie supports exact matches during update.
 
-Fix it by using node->prefixlen == matchlen to identify exact matches.
-When the condition is true after the search, it also implies
-node->prefixlen equals key->prefixlen, otherwise, the search would
-return NULL instead.
-
-Fixes: b471f2f1de8b ("bpf: implement MAP_GET_NEXT_KEY command for LPM_TRIE map")
+Fixes: b95a5c4db09b ("bpf: add a longest prefix match trie map implementation")
 Reviewed-by: Toke Høiland-Jørgensen <toke@redhat.com>
 Signed-off-by: Hou Tao <houtao1@huawei.com>
 ---
- kernel/bpf/lpm_trie.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ kernel/bpf/lpm_trie.c | 23 ++++++++++++++++++++---
+ 1 file changed, 20 insertions(+), 3 deletions(-)
 
 diff --git a/kernel/bpf/lpm_trie.c b/kernel/bpf/lpm_trie.c
-index 3b43ebae9cc9..a1d72d2ec22f 100644
+index c6f036e3044b..4300bd51ec6e 100644
 --- a/kernel/bpf/lpm_trie.c
 +++ b/kernel/bpf/lpm_trie.c
-@@ -645,7 +645,7 @@ static int trie_get_next_key(struct bpf_map *map, void *_key, void *_next_key)
- 	struct lpm_trie_node **node_stack = NULL;
- 	int err = 0, stack_ptr = -1;
- 	unsigned int next_bit;
--	size_t matchlen;
-+	size_t matchlen = 0;
- 
- 	/* The get_next_key follows postorder. For the 4 node example in
- 	 * the top of this file, the trie_get_next_key() returns the following
-@@ -684,7 +684,7 @@ static int trie_get_next_key(struct bpf_map *map, void *_key, void *_next_key)
- 		next_bit = extract_bit(key->data, node->prefixlen);
- 		node = rcu_dereference(node->child[next_bit]);
+@@ -375,6 +375,10 @@ static long trie_update_elem(struct bpf_map *map,
+ 	 * simply assign the @new_node to that slot and be done.
+ 	 */
+ 	if (!node) {
++		if (flags == BPF_EXIST) {
++			ret = -ENOENT;
++			goto out;
++		}
+ 		rcu_assign_pointer(*slot, new_node);
+ 		goto out;
  	}
--	if (!node || node->prefixlen != key->prefixlen ||
-+	if (!node || node->prefixlen != matchlen ||
- 	    (node->flags & LPM_TREE_NODE_FLAG_IM))
- 		goto find_leftmost;
+@@ -383,18 +387,31 @@ static long trie_update_elem(struct bpf_map *map,
+ 	 * which already has the correct data array set.
+ 	 */
+ 	if (node->prefixlen == matchlen) {
++		if (!(node->flags & LPM_TREE_NODE_FLAG_IM)) {
++			if (flags == BPF_NOEXIST) {
++				ret = -EEXIST;
++				goto out;
++			}
++			trie->n_entries--;
++		} else if (flags == BPF_EXIST) {
++			ret = -ENOENT;
++			goto out;
++		}
++
+ 		new_node->child[0] = node->child[0];
+ 		new_node->child[1] = node->child[1];
  
+-		if (!(node->flags & LPM_TREE_NODE_FLAG_IM))
+-			trie->n_entries--;
+-
+ 		rcu_assign_pointer(*slot, new_node);
+ 		free_node = node;
+ 
+ 		goto out;
+ 	}
+ 
++	if (flags == BPF_EXIST) {
++		ret = -ENOENT;
++		goto out;
++	}
++
+ 	/* If the new node matches the prefix completely, it must be inserted
+ 	 * as an ancestor. Simply insert it between @node and *@slot.
+ 	 */
 -- 
 2.29.2
 
