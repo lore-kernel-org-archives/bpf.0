@@ -1,99 +1,193 @@
-Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
+Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBD2DA23;
-	Wed, 27 Nov 2024 00:35:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47283360;
+	Wed, 27 Nov 2024 00:50:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732667714; cv=none; b=gV7E7W5mAUkOP5PxtbL+v91ZRSZMYXh+QpqhHB7wXHmbO+NNrD2+zS/ZNwtVPZ9QxaKBlxG/CEF7hDhFJJpU5OdyqgK8A/iyOh+nCIg2LNfiwoD8aHvRFU8NA0ZceMI3UMLOF7etvU6SMLrG8AYokpHxV0Haj90ZXpqoixLxNyE=
+	t=1732668638; cv=none; b=aE/SLPM1teykufm3iEyV7m6tYwqA3oJvwRbTRs/gFcV2FenKUATdU3me4WCijsd+xbx489ZuTMSrQ3tj879EKstAiX/+SZQ3FLIA3fFDID21G7KXeo6oTecNe9PZx0wiB60ZAUXJPMEBrvvSE0nk27l7LqGunMBLY2zZcNakNGw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732667714; c=relaxed/simple;
-	bh=wwEHHjeePOFS8sifKhXNpJZ8wSDgwVbUUuXuwR9Q1ZM=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=VGxFZ/rv0WTzBxl97IOTwzlXG4a/Sd7bpgQZpgLUe5TNx96S9s3e+9HJm9/9RoqQoonIazsdV6unHE+f6K6jJqWXTHVNofDNj+FhPTshR7D4gne6NcYNjH3mzB/1AZNDQ/cnomOXvL2yBzjVLhl+pMa2AGP2LMcOfcWp7sJsD7E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FZHbC8aI; arc=none smtp.client-ip=209.85.210.181
+	s=arc-20240116; t=1732668638; c=relaxed/simple;
+	bh=t1hVwwhncVAUj/Lm9r7LI34ioqQ7kMq0x+fo0u4M8Q0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=pyoyJFf9vDBNBwidywUODSbgMQa/DytmVIp4AApJXcJTiq5j61nXolfOuUFhMspKmcQcNssk1Vx7dXwylPYk0liAExZTgQwUTJVgWryPUQintj0Tby9WDW8gOvGO4ubTFz0naiSwjsayfob1MKIbvTx7/ci2xEf/OesN2oxf8Hk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QPkJ7nTO; arc=none smtp.client-ip=209.85.128.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FZHbC8aI"
-Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-7250844b0ecso2868229b3a.1;
-        Tue, 26 Nov 2024 16:35:12 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QPkJ7nTO"
+Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-43497839b80so27619645e9.2;
+        Tue, 26 Nov 2024 16:50:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1732667712; x=1733272512; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=wwEHHjeePOFS8sifKhXNpJZ8wSDgwVbUUuXuwR9Q1ZM=;
-        b=FZHbC8aIYCryoOUFjEqIWpXFUXfMAeROiari77/ePPd+ZUP/cTlzihAwbqW8eA/Es6
-         npcl3MwxK44uHghbw/ZhqqvEEzt7DUZ5G9ltmEh3bkpunoieSigjuxTnNJkNMRVJYO/c
-         FIJW6qEOo69OoHsvRsHA4MRskUo+nGefWNyY6znk+HUDwmP7whuMGvbeSEO19Uc/5Wts
-         Kn0JtlZPlx+ZMj+7STOGU5gEiGU9ZOFfCRpHvRc2LytHAvF0tEhleG8DTn31fJeIR4k7
-         2AMKyjWVgOteMPaAW+n7DpbQKzNBPUiiHEoUkKzPHYozACEHYhLRBP5SYuN1BxjryYnK
-         MPgQ==
+        d=gmail.com; s=20230601; t=1732668634; x=1733273434; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=j3EkoerGTLMLe4OrsMDgak1/GJweiL9MEJTp4Bxm4Oc=;
+        b=QPkJ7nTOAqL7nwYQZbew6Jcz+9wC6VCi1AJtWi0Eyp5d5CnDpTQ+9voWMZpJkzt+yC
+         RTb5h+v74CF1YKDVw6atVKGg9qcI3Pezl3ZRJJscESDOa4fFO95izCqb4qDLYqI8HDG7
+         Nv5+DzJheds/FLqrleTKPqOXRCkpXeCtIoGf+/hLt7+A+ZhLpdzBSrqBBsuF6PB92Odn
+         6wXOC1A0qmDQsEIsZyOkoCQ8jLn7hlfUTUoT79RQRcQ60COGqfWKe5L+fI0JayxAWwE4
+         oPIwjFSqpBqs6T94EA6kFxBfNSiXALj8IOZDkeXgRryDPMXNuLMQldxmPiUiU/UZDBRK
+         6cLA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1732667712; x=1733272512;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=wwEHHjeePOFS8sifKhXNpJZ8wSDgwVbUUuXuwR9Q1ZM=;
-        b=Rz8hXUTF3y0SIM7Xx9tcs2/czaZICMwA0WZdyismnhKgH+9jOcbmNfHt17awSmH1Av
-         oiQILjvI11N8fqib0FG6iqxvRAVoVfCPJV1mcLUjxyenoRRycv8Z/frmtShMTaVvgdVw
-         68pxHDzUv07x2P7hU/2oFwQ1wwZsB1SCvObormPVrjjyw/39E0tQdOw/TKIQnzxejT9B
-         ur2xUcbERFeglJ5KP2dEXgPZETpuTUYsY1/8We92YCDY1OXn6lYZ2OZQjR99Wy6BbyQE
-         rb8tUkZte2kWaMce7/e2wjfjWJ0c33wta7OSkUS3zgeeVHzDsE0b6ZnnmftpNBRrQ/DB
-         nxiA==
-X-Forwarded-Encrypted: i=1; AJvYcCUAAsoprjH7Yb0FfC0WEbnYkC4XCAe4HB5UP5cqVvEON0qTiZ7i2i6/8T2h5OSvqZ1mWqQ=@vger.kernel.org, AJvYcCUSxPNJsttHQIPFL2ojJfZ7OOoP6QxnWyenEloicvUaqzHksgYGGdgL9c4IUrPgsaH5hXU6WCNMXw==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx/lKqvSWuFfkVLqDNl9CBKJQo01epW76S7zOA7Kqn761i0UlNr
-	Ch1ZOyC/Q+5JKKgAsT02K3STbwGORU5Xy7unwXXgTxt0RpJa9d/X
-X-Gm-Gg: ASbGnctlYIUCOFlsOCawhcl3bzRuXAke74d9ae7VH0sRUsO5UIZL4jZBVOgtSKmci1w
-	4A1+TONCtPhlTWaVUkSzQABtR2G3eNnNcsS89xT+ee170L2IJOfPE/kMfp8HnxrwsEmVwCH2qTY
-	DpBi1xU9XjnUhVszfjIQMrMmb5srS3t9xRZ21T8+0q6Ek3/CDiF/PH3RGGH+1/jAKel8ynae5e9
-	eJB034ItFq7he+QSDcObfN6d8FsZQcneE6HlPNaLbL6xAM=
-X-Google-Smtp-Source: AGHT+IHD1XuN8URbcGc6l2ZUECnAebfDlrucXcXvHYpCgKIL6IvV6a9BgOMV68Tu5uvyT0d+4xPENA==
-X-Received: by 2002:a17:90b:5483:b0:2ea:5823:c13d with SMTP id 98e67ed59e1d1-2ee08ecf50emr1603912a91.18.1732667712058;
-        Tue, 26 Nov 2024 16:35:12 -0800 (PST)
-Received: from [192.168.0.235] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2ee0fa33374sm175760a91.4.2024.11.26.16.35.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Nov 2024 16:35:11 -0800 (PST)
-Message-ID: <ba62f39bf3670008a6e1a2af114b14dd7fdc1c96.camel@gmail.com>
-Subject: Re: [PATCH dwarves v2 1/1] btf_encoder: handle .BTF_ids section
- endianness
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc: Jiri Olsa <olsajiri@gmail.com>, dwarves@vger.kernel.org, 
-	arnaldo.melo@gmail.com, bpf@vger.kernel.org, kernel-team@fb.com,
- ast@kernel.org, 	daniel@iogearbox.net, andrii@kernel.org,
- yonghong.song@linux.dev, Alan Maguire	 <alan.maguire@oracle.com>, Daniel Xu
- <dxu@dxuuu.xyz>, Kumar Kartikeya Dwivedi	 <memxor@gmail.com>, Vadim
- Fedorenko <vadfed@meta.com>, Vadim Fedorenko	 <vadim.fedorenko@linux.dev>
-Date: Tue, 26 Nov 2024 16:35:06 -0800
-In-Reply-To: <Z0YbQr_QTNrfNqAE@x1>
-References: <20241122214431.292196-1-eddyz87@gmail.com>
-	 <20241122214431.292196-2-eddyz87@gmail.com> <Z0HXqLswziDAjNrk@krava>
-	 <Z0X2YnMyzNlZyQtP@x1>
-	 <b2e5cb3b1478d6900f126d4de223500d6be4c97d.camel@gmail.com>
-	 <Z0YbQr_QTNrfNqAE@x1>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.54.1 (3.54.1-1.fc41) 
+        d=1e100.net; s=20230601; t=1732668634; x=1733273434;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=j3EkoerGTLMLe4OrsMDgak1/GJweiL9MEJTp4Bxm4Oc=;
+        b=wV1joy3pFX7CFyQKMnr6RcojZdFOrmCOM1VeJtkiybeLPWf7eTr1Ml0k2Fv5CJDB+y
+         EFiBCSLwTYu7Nx1zvYJl5FUglfeP4/23QIlzZWUf76XVvjPvL4iUwF7k+4okOXI2uumj
+         jmPX1QgCSLt03Y9buIl9FbJjadVoYNrU1FeSZcKyGiLeYWAevi76BR0666I/5Kz5YRlv
+         znZe96IzRyO26V4Rn0MWR5x4X6NdEQq1CAcPt6Lw1186U7CgZcnkmeWpHxGu+8evZSnf
+         RT+R2T5REI3AZlpCQvohYja45HbOlfLdpFRkHUvM5iGTpQIVkKDy5AmW1skNLepXaP8Q
+         978w==
+X-Forwarded-Encrypted: i=1; AJvYcCV5txyAorvv3Ewd8gcRmWwULuuW26thTaFlRQt16qkRslAtMjUhqrR0HG2+gfnKFHi6plPCx0VNMmwsRPAL@vger.kernel.org, AJvYcCVvHLKb/Pm9Iyg+aDukr/drsYgmCxBAvmGnQjZva/fk2M0v8wCVo3ZTzCvntiZ+hcgQwWy/f9WpumXywPM0mQ==@vger.kernel.org, AJvYcCWUev8K6l1iM8mlO9a9NCk6tNenu1vDneLdw1dAFkn/+soVOCzisfTThBxpZtxJhnmDfFo=@vger.kernel.org, AJvYcCWzEpW0vng2fSzHMNferCARPcCh3pABmWVq/9JevUD9SRgYciS53SUOlcxE65YOtL2waxMAMAJZfGeLvNgCy3Ty9TEyjUVM@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw54rS6hGxSPE51KBQLnxCb0+tsq/pXQNesjTM0CSOLOYhzcx1B
+	V0kAZk3rxSFsaGq5mWDTY1WU+2N0YJwer4/7/x3Oa6jJz4hZf+9pFH+ET1qZp3Cy3PhfMI9dvbQ
+	xcIk6siAAVuP1VAXeuIlixAjP4QA=
+X-Gm-Gg: ASbGncsZ5AiWUiihJdGK3ye3Wt7UIg0ovju+mbmtUajwfUN5VSt9wjaqYJqEO1ZU91X
+	weIciTThg1YEGTPqcKKt9uz9NW/Q9PXhdU59mgDwat7cqQeA=
+X-Google-Smtp-Source: AGHT+IFylzibwq1l1tgeIghi7zw0a98fwkBarp9Liyrr2JP3fgWDlTpjUXEBRNTykRpSKDm4u8WaYRM6y926pb50xhI=
+X-Received: by 2002:a05:6000:18ab:b0:381:f08b:71a4 with SMTP id
+ ffacd0b85a97d-385c6edd52dmr635501f8f.45.1732668634501; Tue, 26 Nov 2024
+ 16:50:34 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+References: <20241122225958.1775625-1-song@kernel.org> <20241122225958.1775625-3-song@kernel.org>
+ <CAOQ4uxhfd8ryQ6ua5u60yN5sh06fyiieS3XgfR9jvkAOeDSZUg@mail.gmail.com>
+In-Reply-To: <CAOQ4uxhfd8ryQ6ua5u60yN5sh06fyiieS3XgfR9jvkAOeDSZUg@mail.gmail.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Tue, 26 Nov 2024 16:50:23 -0800
+Message-ID: <CAADnVQK-6MFdwD_0j-3x2-t8VUjbNJUuGrTXEWJ0ttdpHvtLOA@mail.gmail.com>
+Subject: Re: [PATCH v3 fanotify 2/2] samples/fanotify: Add a sample fanotify fiter
+To: Amir Goldstein <amir73il@gmail.com>
+Cc: Song Liu <song@kernel.org>, bpf <bpf@vger.kernel.org>, 
+	Linux-Fsdevel <linux-fsdevel@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
+	LSM List <linux-security-module@vger.kernel.org>, Kernel Team <kernel-team@meta.com>, 
+	Andrii Nakryiko <andrii@kernel.org>, Eddy Z <eddyz87@gmail.com>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Alexander Viro <viro@zeniv.linux.org.uk>, 
+	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, KP Singh <kpsingh@kernel.org>, 
+	Matt Bobrowski <mattbobrowski@google.com>, repnop@google.com, 
+	Jeff Layton <jlayton@kernel.org>, Josef Bacik <josef@toxicpanda.com>, 
+	=?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>, gnoack@google.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Arnaldo,
+On Sat, Nov 23, 2024 at 9:07=E2=80=AFPM Amir Goldstein <amir73il@gmail.com>=
+ wrote:
+> > +++ b/samples/fanotify/filter-mod.c
+> > @@ -0,0 +1,105 @@
+> > +// SPDX-License-Identifier: GPL-2.0-only
+> > +/* Copyright (c) 2024 Meta Platforms, Inc. and affiliates. */
+> > +
+> > +#include <linux/fsnotify.h>
+> > +#include <linux/fanotify.h>
+> > +#include <linux/module.h>
+> > +#include <linux/path.h>
+> > +#include <linux/file.h>
+> > +#include "filter.h"
+> > +
+> > +struct fan_filter_sample_data {
+> > +       struct path subtree_path;
+> > +       enum fan_filter_sample_mode mode;
+> > +};
+> > +
+> > +static int sample_filter(struct fsnotify_group *group,
+> > +                        struct fanotify_filter_hook *filter_hook,
+> > +                        struct fanotify_filter_event *filter_event)
+> > +{
+> > +       struct fan_filter_sample_data *data;
+> > +       struct dentry *dentry;
+> > +
+> > +       dentry =3D fsnotify_data_dentry(filter_event->data, filter_even=
+t->data_type);
+> > +       if (!dentry)
+> > +               return FAN_FILTER_RET_SEND_TO_USERSPACE;
+> > +
+> > +       data =3D filter_hook->data;
+> > +
+> > +       if (is_subdir(dentry, data->subtree_path.dentry)) {
+> > +               if (data->mode =3D=3D FAN_FILTER_SAMPLE_MODE_BLOCK)
+> > +                       return -EPERM;
+> > +               return FAN_FILTER_RET_SEND_TO_USERSPACE;
+> > +       }
+> > +       return FAN_FILTER_RET_SKIP_EVENT;
+> > +}
+> > +
+> > +static int sample_filter_init(struct fsnotify_group *group,
+> > +                             struct fanotify_filter_hook *filter_hook,
+> > +                             void *argp)
+> > +{
+> > +       struct fan_filter_sample_args *args;
+> > +       struct fan_filter_sample_data *data;
+> > +       struct file *file;
+> > +       int fd;
+> > +
+> > +       args =3D (struct fan_filter_sample_args *)argp;
+> > +       fd =3D args->subtree_fd;
+> > +
+> > +       file =3D fget(fd);
+> > +       if (!file)
+> > +               return -EBADF;
+> > +       data =3D kzalloc(sizeof(struct fan_filter_sample_data), GFP_KER=
+NEL);
+> > +       if (!data) {
+> > +               fput(file);
+> > +               return -ENOMEM;
+> > +       }
+> > +       path_get(&file->f_path);
+> > +       data->subtree_path =3D file->f_path;
+> > +       fput(file);
+> > +       data->mode =3D args->mode;
+> > +       filter_hook->data =3D data;
+> > +       return 0;
+> > +}
+> > +
+> > +static void sample_filter_free(struct fanotify_filter_hook *filter_hoo=
+k)
+> > +{
+> > +       struct fan_filter_sample_data *data =3D filter_hook->data;
+> > +
+> > +       path_put(&data->subtree_path);
+> > +       kfree(data);
+> > +}
+> > +
+>
+> Hi Song,
+>
+> This example looks fine but it raises a question.
+> This filter will keep the mount of subtree_path busy until the group is c=
+losed
+> or the filter is detached.
+> This is probably fine for many services that keep the mount busy anyway.
+>
+> But what if this wasn't the intention?
+> What if an Anti-malware engine that watches all mounts wanted to use that
+> for configuring some ignore/block subtree filters?
+>
+> One way would be to use a is_subtree() variant that looks for a
+> subtree root inode
+> number and then verifies it with a subtree root fid.
+> A production subtree filter will need to use a variant of is_subtree()
+> anyway that
+> looks for a set of subtree root inodes, because doing a loop of is_subtre=
+e() for
+> multiple paths is a no go.
+>
+> Don't need to change anything in the example, unless other people
+> think that we do need to set a better example to begin with...
 
-Please note a message [0] from Andrii,
-where he suggests using elf_getdata_rawchunk() libelf function.
-I tried it, it works, makes the patch much smaller.
-I'll send a v3 shortly.
-
-[0] https://lore.kernel.org/dwarves/8744c86ba355245f7ecc14d00351c82285fbf64=
-4.camel@gmail.com/T/#me4c02e4a4e7fdd0e69dd52b2a6bf598966dc2145
-
-Thanks,
-Eduard
-
+I think we have to treat this patch as a real filter and not as an example
+to make sure that the whole approach is workable end to end.
+The point about not holding path/dentry is very valid.
+The algorithm needs to support that.
+It may very well turn out that the logic of handling many filters
+without a loop and not grabbing a path refcnt is too complex for bpf.
+Then this subtree filtering would have to stay as a kernel module
+or extra flag/feature for fanotify.
