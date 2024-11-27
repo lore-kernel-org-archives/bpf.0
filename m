@@ -1,28 +1,28 @@
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A376953A7
-	for <bpf@vger.kernel.org>; Wed, 27 Nov 2024 00:34:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CEFB819
+	for <bpf@vger.kernel.org>; Wed, 27 Nov 2024 00:34:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732667686; cv=none; b=JuWGwQwuuiCzLkNnFAhncgwdu39SnOoCJkbVvhQah+9O6/Cms+2HyEAlTib7xWDtoToy34Po/avztUkl3Vg2eQjG6KPzyYgfTwekL76dlJwX3cj7UeljC+7hAAhSR+bBC/ITtBGrpoxK+WE7+oQNYa5aJHvWtK7tQpQwfHrIz9E=
+	t=1732667687; cv=none; b=rVWfZ1dc1U6Exy9+fA0MogeDoD9gTwuRCavv5fCyYp7KqMHvEjFTy/weXGAHL04Zywmgfzmmq16Iouq/u66ZjofKKKEzi3Nc6iDfr3FHMG7z+xlzYBlFHKB8LHmnaiK5ma4nxUIwqnv61ncjcUoXpX+zt5RKDNjiBKqWWWajVeE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732667686; c=relaxed/simple;
-	bh=DdA1PbFjubhIDgObznYrbOhMHrVixV9Yw1JtsAWK3rg=;
+	s=arc-20240116; t=1732667687; c=relaxed/simple;
+	bh=rvajiBXTNe8kf+7G7Y1wZE+7yjdwuGzLIRLuI5KJi7k=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=MXBVbqmUQT25L6h6vY9UBEmv4vgQVWIPHUHd8V8Ld/x+/Futw9Ctl3yHk6+TRZPvR+Q7c/GWZT9Lft6wCGHejjPty8x1Lys7lEJjBLouuodb8X20JM/UXdJMW2g34NmOQrXa7v8G38Y/ngpOrt+Q6ntLgVJDsnyQcfmAnR9t7Gs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
+	 MIME-Version:Content-Type; b=fGiA3PARKWNXV4wCIbxlF34SQ906r9/hMfN8leBlkbiqAcPeawkehcZhDpiBnx35DFqV9z2QD7iJLmob5yV4r33yVUA48BPKFAWpP/SpTxRbNpbaMi+JevlL+3DcdJaaQ84n8TVneL/Plqor4kHQB2BpcILCoOUnOc1dmeVdu4w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.216])
-	by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4XygRx5Vbfz4f3mHr
-	for <bpf@vger.kernel.org>; Wed, 27 Nov 2024 08:34:21 +0800 (CST)
+Received: from mail.maildlp.com (unknown [172.19.163.235])
+	by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4XygRt58qHz4f3jsX
+	for <bpf@vger.kernel.org>; Wed, 27 Nov 2024 08:34:18 +0800 (CST)
 Received: from mail02.huawei.com (unknown [10.116.40.128])
-	by mail.maildlp.com (Postfix) with ESMTP id 7909E1A018C
-	for <bpf@vger.kernel.org>; Wed, 27 Nov 2024 08:34:41 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTP id 7AB8A1A06D7
+	for <bpf@vger.kernel.org>; Wed, 27 Nov 2024 08:34:37 +0800 (CST)
 Received: from huaweicloud.com (unknown [10.175.124.27])
-	by APP4 (Coremail) with SMTP id gCh0CgBHI4cVaUZn5pO9Cw--.38194S12;
-	Wed, 27 Nov 2024 08:34:41 +0800 (CST)
+	by APP4 (Coremail) with SMTP id gCh0CgBHI4cVaUZn5pO9Cw--.38194S9;
+	Wed, 27 Nov 2024 08:34:37 +0800 (CST)
 From: Hou Tao <houtao@huaweicloud.com>
 To: bpf@vger.kernel.org
 Cc: Martin KaFai Lau <martin.lau@linux.dev>,
@@ -43,9 +43,9 @@ Cc: Martin KaFai Lau <martin.lau@linux.dev>,
 	=?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>,
 	houtao1@huawei.com,
 	xukuohai@huawei.com
-Subject: [PATCH bpf v2 8/9] selftests/bpf: Move test_lpm_map.c to map_tests
-Date: Wed, 27 Nov 2024 08:46:40 +0800
-Message-Id: <20241127004641.1118269-9-houtao@huaweicloud.com>
+Subject: [PATCH bpf v2 5/9] bpf: Fix exact match conditions in trie_get_next_key()
+Date: Wed, 27 Nov 2024 08:46:37 +0800
+Message-Id: <20241127004641.1118269-6-houtao@huaweicloud.com>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20241127004641.1118269-1-houtao@huaweicloud.com>
 References: <20241127004641.1118269-1-houtao@huaweicloud.com>
@@ -55,11 +55,12 @@ List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:gCh0CgBHI4cVaUZn5pO9Cw--.38194S12
-X-Coremail-Antispam: 1UD129KBjvJXoWxCw45tFyrWF1kXw4xZFykuFg_yoW5WFWfpa
-	48t3WqkF1SvFnxX3WxuayUZF40gFsrXw40y3W8try5Zrn7Jr1xtr1xKFW7JFnxurZ3XFnx
-	Aas3KFyfZFy8JaUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+X-CM-TRANSID:gCh0CgBHI4cVaUZn5pO9Cw--.38194S9
+X-Coremail-Antispam: 1UD129KBjvJXoW7WFWDXFW5JFWxKF18CF1fCrg_yoW8ZrykpF
+	4rt34vyF45Gay2ka9Yqa18WryFqF17Gw4xJas5G3sYk3s0qr93tr10gFWYga43AFZ3JF1a
+	yr40qr9Yqw1DXaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
 	9KBjDU0xBIdaVrnRJUUUPvb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
 	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAV
 	Cq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0
@@ -78,86 +79,48 @@ X-CM-SenderInfo: xkrx3t3r6k3tpzhluzxrxghudrp/
 
 From: Hou Tao <houtao1@huawei.com>
 
-Move test_lpm_map.c to map_tests/ to include LPM trie test cases in
-regular test_maps run. Most code remains unchanged, including the use of
-assert(). Only reduce n_lookups from 64K to 512, which decreases
-test_lpm_map runtime from 37s to 0.7s.
+trie_get_next_key() uses node->prefixlen == key->prefixlen to identify
+an exact match, However, it is incorrect because when the target key
+doesn't fully match the found node (e.g., node->prefixlen != matchlen),
+these two nodes may also have the same prefixlen. It will return
+expected result when the passed key exist in the trie. However when a
+recently-deleted key or nonexistent key is passed to
+trie_get_next_key(), it may skip keys and return incorrect result.
 
+Fix it by using node->prefixlen == matchlen to identify exact matches.
+When the condition is true after the search, it also implies
+node->prefixlen equals key->prefixlen, otherwise, the search would
+return NULL instead.
+
+Fixes: b471f2f1de8b ("bpf: implement MAP_GET_NEXT_KEY command for LPM_TRIE map")
+Reviewed-by: Toke Høiland-Jørgensen <toke@redhat.com>
 Signed-off-by: Hou Tao <houtao1@huawei.com>
 ---
- tools/testing/selftests/bpf/.gitignore                 |  1 -
- tools/testing/selftests/bpf/Makefile                   |  2 +-
- .../lpm_trie_map_basic_ops.c}                          | 10 +++-------
- 3 files changed, 4 insertions(+), 9 deletions(-)
- rename tools/testing/selftests/bpf/{test_lpm_map.c => map_tests/lpm_trie_map_basic_ops.c} (99%)
+ kernel/bpf/lpm_trie.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/.gitignore b/tools/testing/selftests/bpf/.gitignore
-index c2a1842c3d8b..e9c377001f93 100644
---- a/tools/testing/selftests/bpf/.gitignore
-+++ b/tools/testing/selftests/bpf/.gitignore
-@@ -5,7 +5,6 @@ bpf-syscall*
- test_verifier
- test_maps
- test_lru_map
--test_lpm_map
- test_tag
- FEATURE-DUMP.libbpf
- FEATURE-DUMP.selftests
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index 6ad3b1ba1920..7eeb3cbe18c7 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -83,7 +83,7 @@ CLANG_CPUV4 := 1
- endif
+diff --git a/kernel/bpf/lpm_trie.c b/kernel/bpf/lpm_trie.c
+index 3b43ebae9cc9..a1d72d2ec22f 100644
+--- a/kernel/bpf/lpm_trie.c
++++ b/kernel/bpf/lpm_trie.c
+@@ -645,7 +645,7 @@ static int trie_get_next_key(struct bpf_map *map, void *_key, void *_next_key)
+ 	struct lpm_trie_node **node_stack = NULL;
+ 	int err = 0, stack_ptr = -1;
+ 	unsigned int next_bit;
+-	size_t matchlen;
++	size_t matchlen = 0;
  
- # Order correspond to 'make run_tests' order
--TEST_GEN_PROGS = test_verifier test_tag test_maps test_lru_map test_lpm_map test_progs \
-+TEST_GEN_PROGS = test_verifier test_tag test_maps test_lru_map test_progs \
- 	test_sockmap \
- 	test_tcpnotify_user test_sysctl \
- 	test_progs-no_alu32
-diff --git a/tools/testing/selftests/bpf/test_lpm_map.c b/tools/testing/selftests/bpf/map_tests/lpm_trie_map_basic_ops.c
-similarity index 99%
-rename from tools/testing/selftests/bpf/test_lpm_map.c
-rename to tools/testing/selftests/bpf/map_tests/lpm_trie_map_basic_ops.c
-index d98c72dc563e..f375c89d78a4 100644
---- a/tools/testing/selftests/bpf/test_lpm_map.c
-+++ b/tools/testing/selftests/bpf/map_tests/lpm_trie_map_basic_ops.c
-@@ -223,7 +223,7 @@ static void test_lpm_map(int keysize)
- 	n_matches = 0;
- 	n_matches_after_delete = 0;
- 	n_nodes = 1 << 8;
--	n_lookups = 1 << 16;
-+	n_lookups = 1 << 9;
+ 	/* The get_next_key follows postorder. For the 4 node example in
+ 	 * the top of this file, the trie_get_next_key() returns the following
+@@ -684,7 +684,7 @@ static int trie_get_next_key(struct bpf_map *map, void *_key, void *_next_key)
+ 		next_bit = extract_bit(key->data, node->prefixlen);
+ 		node = rcu_dereference(node->child[next_bit]);
+ 	}
+-	if (!node || node->prefixlen != key->prefixlen ||
++	if (!node || node->prefixlen != matchlen ||
+ 	    (node->flags & LPM_TREE_NODE_FLAG_IM))
+ 		goto find_leftmost;
  
- 	data = alloca(keysize);
- 	memset(data, 0, keysize);
-@@ -770,16 +770,13 @@ static void test_lpm_multi_thread(void)
- 	close(map_fd);
- }
- 
--int main(void)
-+void test_lpm_trie_map_basic_ops(void)
- {
- 	int i;
- 
- 	/* we want predictable, pseudo random tests */
- 	srand(0xf00ba1);
- 
--	/* Use libbpf 1.0 API mode */
--	libbpf_set_strict_mode(LIBBPF_STRICT_ALL);
--
- 	test_lpm_basic();
- 	test_lpm_order();
- 
-@@ -792,6 +789,5 @@ int main(void)
- 	test_lpm_get_next_key();
- 	test_lpm_multi_thread();
- 
--	printf("test_lpm: OK\n");
--	return 0;
-+	printf("%s: PASS\n", __func__);
- }
 -- 
 2.29.2
 
