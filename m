@@ -1,107 +1,97 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CA4D200B95
-	for <bpf@vger.kernel.org>; Wed, 27 Nov 2024 19:08:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAADE83A17;
+	Wed, 27 Nov 2024 19:20:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732734503; cv=none; b=ZYVbebQLfzHHo5CnFuxKubuWkU98M8IQYScUhzArPTzA0tSjxNM1FIauiMaOqzXZ47hZoP8bZU9YfPdEgPc+7KA1vgwYNJ2wXcYJNL1HmZYANreVQpfiR0yHwu77yPv5jI8lto+ik1aEQm941FCK77SWxn5PZYo+70KsS2uuK40=
+	t=1732735251; cv=none; b=vCNEG5j1ZCkpZVSJI2U4C3hYTlDf0vo9SZ5LrmybKyQdl1ZrJcDOs9oiJzNneYVu7kBf0k84jFEtiqSQK04/v8yyCWv8FPF41x1YsE1bJnz2clAgBlw28OgyOVonzBLHOq9Tl943vGj9ZwZyE21B6fbmNRivvq68Y0TZzJQH3WY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732734503; c=relaxed/simple;
-	bh=5LwZDPSlSkSsmNY/E2BsYUbQLFmDNktBZoMBMy5tXqA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qCyC29rnwH+YfKffAFtu03yc6ud2+KGL1kd6DniuqLZfdyAqi+x50ZrTQsegD/OY2HnF9T62DeKuL/gKJjV3pEYBFrLz40aAHOqd+58RdVERkH+JoPDNaZMXewU6i67ssyu5qNuJsVVS0hDMlXQgNCsZHkXmRsTcsGsFiF/PUqw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=n2ClR7TM; arc=none smtp.client-ip=198.175.65.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1732735251; c=relaxed/simple;
+	bh=SPP5A1FLuqjp7YWIjzGFzkMuvaLaozdDJfexWQfvdfA=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=iK42B7hDoBhSwD/4dVu9zDsXUUZcrA+Eu7N64Kusto1bvBfYpVoZEgrQMListnNJAtG8+fNQOm220EDfqV4pHGn7VK88oNBckHIJe5inGA2CpWXkjn7EP9flzJIaleeP2xsdD9+DJP+k+V2XNA2MZKWfDmfUXXhQf0is0ZqSyTg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=ffDLLbXM; arc=none smtp.client-ip=159.69.126.157
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="n2ClR7TM"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1732734502; x=1764270502;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=5LwZDPSlSkSsmNY/E2BsYUbQLFmDNktBZoMBMy5tXqA=;
-  b=n2ClR7TM19XdG2/kKJ5nvE0I56YXQ22W/WiX3A5P4nWSKcf/mggeZDWv
-   qFgd83n9+TLrrzFnj026orlTKA80WJw9JASNpHuEadY4GVihyAKDpAoNI
-   DfxamUbcvps3lUAELV6i+1O7KK4P3JJKbML6rXGH0jzKoIZiwtgPZPURU
-   /08M9Xqu08LdGwfXj7rnbbx4rJnThbYGztiVXPNhAtX5T461gYskhELzo
-   SIdHEE5wyt5Akbup+aWsKx4FqCZhOMHYluOw+Od5srUoWiBbXlin0M4+/
-   4ZFLssupGXJ/XxLhNxnqzx3buQAhNPbRxG3z6aZp9DOUNzvhm+P+i/FBO
-   A==;
-X-CSE-ConnectionGUID: LmG5hG13T+mRb0Q4AOQ8Ag==
-X-CSE-MsgGUID: Tz5Ev83oR6mY4vORpThbiw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11269"; a="44014986"
-X-IronPort-AV: E=Sophos;i="6.12,190,1728975600"; 
-   d="scan'208";a="44014986"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Nov 2024 11:08:22 -0800
-X-CSE-ConnectionGUID: SxsoylPkTFiNCAfiadqRmg==
-X-CSE-MsgGUID: BHjxgVYpQX6noeZoD0le9A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,190,1728975600"; 
-   d="scan'208";a="97104013"
-Received: from lkp-server01.sh.intel.com (HELO 8122d2fc1967) ([10.239.97.150])
-  by orviesa004.jf.intel.com with ESMTP; 27 Nov 2024 11:08:19 -0800
-Received: from kbuild by 8122d2fc1967 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tGNOa-0008HH-0h;
-	Wed, 27 Nov 2024 19:08:16 +0000
-Date: Thu, 28 Nov 2024 03:07:49 +0800
-From: kernel test robot <lkp@intel.com>
-To: Vadim Fedorenko <vadfed@meta.com>, Borislav Petkov <bp@alien8.de>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Vadim Fedorenko <vadim.fedorenko@linux.dev>,
-	Mykola Lysenko <mykolal@fb.com>
-Cc: oe-kbuild-all@lists.linux.dev, x86@kernel.org, bpf@vger.kernel.org,
-	Peter Zijlstra <peterz@infradead.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>
-Subject: Re: [PATCH bpf-next v9 2/4] bpf: add bpf_cpu_time_counter_to_ns
- helper
-Message-ID: <202411280258.urOdkuWz-lkp@intel.com>
-References: <20241123005833.810044-3-vadfed@meta.com>
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="ffDLLbXM"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+	s=mail; t=1732735245;
+	bh=SPP5A1FLuqjp7YWIjzGFzkMuvaLaozdDJfexWQfvdfA=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
+	b=ffDLLbXMINI3aaTSl45JsazDmUpbn4W+EfqQTkrzumTBybsKHHwAYup9HVu8d6SX0
+	 3icCN2XAHfFFuw//q6SzsoiyxOrocRnMORBXvb09SarMlo+qK2kJ1FS5DxSp3MCsHP
+	 vzVJI4FwQY/6wQTXt2w6ldnRHEweHPd3IrxUuA58=
+From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+Date: Wed, 27 Nov 2024 20:15:20 +0100
+Subject: [PATCH bpf-next 1/9] bpf: tcp: Remove inaccurate comment about
+ extern
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241123005833.810044-3-vadfed@meta.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Message-Id: <20241127-bpf-const-ops-v1-1-a698b8d58680@weissschuh.net>
+References: <20241127-bpf-const-ops-v1-0-a698b8d58680@weissschuh.net>
+In-Reply-To: <20241127-bpf-const-ops-v1-0-a698b8d58680@weissschuh.net>
+To: "David S. Miller" <davem@davemloft.net>, 
+ David Ahern <dsahern@kernel.org>, Eric Dumazet <edumazet@google.com>, 
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+ Simon Horman <horms@kernel.org>, Martin KaFai Lau <martin.lau@kernel.org>, 
+ Kui-Feng Lee <thinker.li@gmail.com>, Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, 
+ John Fastabend <john.fastabend@gmail.com>, 
+ Andrii Nakryiko <andrii@kernel.org>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, 
+ Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+ Jiri Olsa <jolsa@kernel.org>, Jiri Kosina <jikos@kernel.org>, 
+ Benjamin Tissoires <bentiss@kernel.org>, Tejun Heo <tj@kernel.org>, 
+ David Vernet <void@manifault.com>, Ingo Molnar <mingo@redhat.com>, 
+ Peter Zijlstra <peterz@infradead.org>, Juri Lelli <juri.lelli@redhat.com>, 
+ Vincent Guittot <vincent.guittot@linaro.org>, 
+ Dietmar Eggemann <dietmar.eggemann@arm.com>, 
+ Steven Rostedt <rostedt@goodmis.org>, Ben Segall <bsegall@google.com>, 
+ Mel Gorman <mgorman@suse.de>, Valentin Schneider <vschneid@redhat.com>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ bpf@vger.kernel.org, linux-input@vger.kernel.org, 
+ =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1732735245; l=782;
+ i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
+ bh=SPP5A1FLuqjp7YWIjzGFzkMuvaLaozdDJfexWQfvdfA=;
+ b=KN/aWxe/VChXuEDXwVRvceUnWWLhuyTogCfxgTBGVFF0Y/k72S+3+6FI1HX5L6DeNfT3TvlK5
+ Zx+f01lMb9QBRVgzGOkguEDk+x7e0ZuqvNuEpWW66CBHCe0oOJBWMwH
+X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
+ pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 
-Hi Vadim,
+The "extern" qualifier which the comment refers to was removed.
+Also remove the comment.
 
-kernel test robot noticed the following build errors:
+Fixes: f6be98d19985 ("bpf, net: switch to dynamic registration")
+Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+---
+ net/ipv4/bpf_tcp_ca.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-[auto build test ERROR on bpf-next/master]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Vadim-Fedorenko/bpf-add-bpf_get_cpu_time_counter-kfunc/20241125-122255
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
-patch link:    https://lore.kernel.org/r/20241123005833.810044-3-vadfed%40meta.com
-patch subject: [PATCH bpf-next v9 2/4] bpf: add bpf_cpu_time_counter_to_ns helper
-config: x86_64-randconfig-104-20241127 (https://download.01.org/0day-ci/archive/20241128/202411280258.urOdkuWz-lkp@intel.com/config)
-compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241128/202411280258.urOdkuWz-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202411280258.urOdkuWz-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> ld.lld: error: undefined symbol: bpf_cpu_time_counter_to_ns
-   >>> referenced by bpf_jit_comp.c:0 (arch/x86/net/bpf_jit_comp.c:0)
-   >>>               vmlinux.o:(do_jit)
-   >>> referenced by bpf_jit_comp.c:3855 (arch/x86/net/bpf_jit_comp.c:3855)
-   >>>               vmlinux.o:(bpf_jit_inlines_kfunc_call)
+diff --git a/net/ipv4/bpf_tcp_ca.c b/net/ipv4/bpf_tcp_ca.c
+index 554804774628e4b3d03bc3b19b96d717a581439e..ce5012f6821d543541b13275aff87bef0abf4677 100644
+--- a/net/ipv4/bpf_tcp_ca.c
++++ b/net/ipv4/bpf_tcp_ca.c
+@@ -11,7 +11,6 @@
+ #include <net/tcp.h>
+ #include <net/bpf_sk_storage.h>
+ 
+-/* "extern" is to avoid sparse warning.  It is only used in bpf_struct_ops.c. */
+ static struct bpf_struct_ops bpf_tcp_congestion_ops;
+ 
+ static const struct btf_type *tcp_sock_type;
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.47.1
+
