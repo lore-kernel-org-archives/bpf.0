@@ -1,110 +1,115 @@
-Received: from mail-pg1-f169.google.com (mail-pg1-f169.google.com [209.85.215.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3453DC8FE;
-	Wed, 27 Nov 2024 00:30:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32BF32F30
+	for <bpf@vger.kernel.org>; Wed, 27 Nov 2024 00:34:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732667454; cv=none; b=FYJWv6z8lXfPdPBO+sxkERbashjZMIAj1ZBlCt2r2N3X3ESAS+5cDOUijHnKUmXCP3hqxLvFLMZ3q8n9b+knU88Ecl4mK1ETFz1Edr/X3IwTD1N5jkigiLY81gUgbKAGtjPneJisC6W7RpQa6R/jO/XqAlrE4BnBc0tjNc1mquY=
+	t=1732667681; cv=none; b=ileww0IJvGEbcDCS2ceiEd0cAa8sww+evWX55VwFupzDyJU7MWYRZr8lhqF7liyYE5ubay/HhcWe5nSELYB3SAoeVuMOPthwMRy7b296w8BVCcXvYS9Pa65fAtDCL+5VOd2lRcBfqUXhli/w73JAPvCsDMOkx8fFUci740sd0BQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732667454; c=relaxed/simple;
-	bh=3qEFGNwL7tBfo43htStj+/Swd7nSlEqy4fAivZCfoq0=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=BaJ3PjxghqIYw7kRBEwiIZQX+/v8lT+h5ijhb2voN+L3PaiaksKcgtHfQZ1icYTy1II2Fo9M/DdJXrnEmarInAVPxcKu5cmctIuWoL8tjZNbewN5iKOD8+A3IG0qOULMxDgWqDuF9wT5ua5DcrO0BL15uQjjtv0TQDJTEyZLv10=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kQ/6vGRz; arc=none smtp.client-ip=209.85.215.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kQ/6vGRz"
-Received: by mail-pg1-f169.google.com with SMTP id 41be03b00d2f7-7f46d5d1ad5so5157935a12.3;
-        Tue, 26 Nov 2024 16:30:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1732667452; x=1733272252; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=8Tm/28sX7XbLq+0lE5feUXECP+wmu5qLRQRQ2+hOQcg=;
-        b=kQ/6vGRzeZMZLP38pSjnjdjddcqnqcZ0V34Xlv5dIn4yEvC9z7PynSpbOiKp2RUWDB
-         KAc26tvPdwH6nZRxBZgfoskso+TcWMnl8HuPgdYnR8/QRGAmKFsTakn9Gsiho6ksOc+k
-         M8GMnbgpUWN8+d9oJdBmSoX8Q54sdmtS92eqIuh765d1Jf1GkO0Vs0ZpCqGelOLkjIrL
-         UZO1aHntbIdHplIshJfOUJ7MAuP/6CsHDslrCv8nHOa5xgi4I2Je/oSUuOiXtEAX+GaA
-         m4SEm5SqElqG+SocPf2ronaIAG4QJS1bCIIk18LvBRDldvxe7vyPN5SOC4n9bgnS1rpG
-         OdEA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1732667452; x=1733272252;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=8Tm/28sX7XbLq+0lE5feUXECP+wmu5qLRQRQ2+hOQcg=;
-        b=o5Q3r5L+p4gIz4OGfT3EMfmNjEXjEi3+vgHK0i5+32HgRw41xYlfZcsukwCrqMOS68
-         fUUTKHVQXJNnyJ/DFNewDizItupmQgxZuuS27FKHlfelRtgUvLCT/qocY4xOVqY3+Gbc
-         SxHMCacj6eOQVj8dx5pSzGL+YjRvuX7cvMpPTpnD3hYIti2ZtClp5TwLiDoZt7nMRQgG
-         /YVSMbznb1QZJkhzCMgHpqV9gBBlENqSiTMOLl6+KLZVm2mcYNzRbF93IsZXHmSAvjH4
-         75S/fIWvF1LsCmvTViTjPpNFobyDtHrWZS6RIsfh69wwWEw8WIRlJr9WK4VJQhDrjfgQ
-         2nhg==
-X-Forwarded-Encrypted: i=1; AJvYcCVILQ72nTwNnwMn1JOLNd2bDLyC7XZhiN8yAkR/cOeTqJSNKdAD34B4sHAsfUOVhK54Njk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxR/D6TxWzIUQ5E5bpj1e86BqMpEAdXuKISttJqvYbJgApEfCwn
-	hMMOG71MBo90TNQlnaQK74KlpZ/jY0fCXf1UOC0VIE1T2I5YphVM
-X-Gm-Gg: ASbGncuBTmE6AKFYnDiJQnpVcSzWy/2Zq79Q5AyhwL35HHw7uYwwGNDylnGr7o9g007
-	diC6YX37jcqjJ7ulaeSxmu7VCigryQ+Py5O8RO5mm39ipn1GgHgkBUMi9yDNtCcIveoraFYWQiw
-	ryZIZJCJ3S82jv+s5ZWUBEYbxjjvtO4W8AFoKBALew98FepOTclVaxEfPKxz9wkyN9Da4EOV9vL
-	W1aQh3Zt8qZb3PXpxYUUiheEgOnvHbkXHhel4+aT1x6UWI=
-X-Google-Smtp-Source: AGHT+IE+PjhQo6fapXdUJQbuu4UTdttropjsbVzP3tJ/lMg/O9Msl6paqQHUFQBSwTZK7En0/4Qw2Q==
-X-Received: by 2002:a17:90b:38cd:b0:2ea:addc:9f51 with SMTP id 98e67ed59e1d1-2ee08e5e3e0mr1629057a91.2.1732667452506;
-        Tue, 26 Nov 2024 16:30:52 -0800 (PST)
-Received: from [192.168.0.235] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2ee0fb0df0dsm164373a91.44.2024.11.26.16.30.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Nov 2024 16:30:52 -0800 (PST)
-Message-ID: <8744c86ba355245f7ecc14d00351c82285fbf644.camel@gmail.com>
-Subject: Re: [PATCH dwarves v1] btf_encoder: handle .BTF_ids section
- endianness when cross-compiling
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: dwarves@vger.kernel.org, arnaldo.melo@gmail.com, bpf@vger.kernel.org, 
-	kernel-team@fb.com, ast@kernel.org, daniel@iogearbox.net,
- andrii@kernel.org, 	yonghong.song@linux.dev, Alan Maguire
- <alan.maguire@oracle.com>, Daniel Xu	 <dxu@dxuuu.xyz>, Kumar Kartikeya
- Dwivedi <memxor@gmail.com>, Vadim Fedorenko	 <vadfed@meta.com>
-Date: Tue, 26 Nov 2024 16:30:47 -0800
-In-Reply-To: <CAEf4Bzb-PMAs7+B85qanUinQrk4aVs4Qk6orbyDP11uBcW-mWA@mail.gmail.com>
-References: <20241122070218.3832680-1-eddyz87@gmail.com>
-	 <CAEf4BzakAiPWF9x2h-F737LbJ9ovXCJLbXV9R5vKg0Et5CbqSQ@mail.gmail.com>
-	 <69af35e3718748b99e4d295bead4072588a50296.camel@gmail.com>
-	 <CAEf4Bzb-PMAs7+B85qanUinQrk4aVs4Qk6orbyDP11uBcW-mWA@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.54.1 (3.54.1-1.fc41) 
+	s=arc-20240116; t=1732667681; c=relaxed/simple;
+	bh=q6c3uLx2OCyZe8bjtWlq+6wtFqn3BvjllJCKmCwLzAc=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Bz6ZU0QyS7Ap4cCD3x+DV/lujrnEIdR6z4Fh159jp7Ktr4q/pvYeU81S3lvPrs85QFMkzxQnipei7wfHbfb5HJ15y/PMaebCt1iobWXbfgXD/a/r/02mj+enHJDkxmzFg58p55ladOr83sdbX6Xmp3tPM0gX6MydDOWUo4kvBYE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.235])
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4XygRp68y1z4f3mHk
+	for <bpf@vger.kernel.org>; Wed, 27 Nov 2024 08:34:14 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.128])
+	by mail.maildlp.com (Postfix) with ESMTP id 8DEDD1A06D7
+	for <bpf@vger.kernel.org>; Wed, 27 Nov 2024 08:34:34 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.175.124.27])
+	by APP4 (Coremail) with SMTP id gCh0CgBHI4cVaUZn5pO9Cw--.38194S5;
+	Wed, 27 Nov 2024 08:34:34 +0800 (CST)
+From: Hou Tao <houtao@huaweicloud.com>
+To: bpf@vger.kernel.org
+Cc: Martin KaFai Lau <martin.lau@linux.dev>,
+	Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Hao Luo <haoluo@google.com>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Jiri Olsa <jolsa@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	=?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	=?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>,
+	houtao1@huawei.com,
+	xukuohai@huawei.com
+Subject: [PATCH bpf v2 1/9] bpf: Remove unnecessary check when updating LPM trie
+Date: Wed, 27 Nov 2024 08:46:33 +0800
+Message-Id: <20241127004641.1118269-2-houtao@huaweicloud.com>
+X-Mailer: git-send-email 2.29.2
+In-Reply-To: <20241127004641.1118269-1-houtao@huaweicloud.com>
+References: <20241127004641.1118269-1-houtao@huaweicloud.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:gCh0CgBHI4cVaUZn5pO9Cw--.38194S5
+X-Coremail-Antispam: 1UD129KBjvJXoW7Kw17GF43XFWfKF1DGw1rJFb_yoW8Jw4DpF
+	4rtr15ta1rJr1fCwnayw4rGr98Jr48Ww42qa4kWryYkryUJr93tr1rur4Sqa18Jr4xJFnx
+	JrWUtryfKw1DXaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUPYb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUGw
+	A2048vs2IY020Ec7CjxVAFwI0_Gr0_Xr1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
+	w2x7M28EF7xvwVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
+	WxJVW8Jr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
+	GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx
+	0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWU
+	JVW8JwACjcxG0xvY0x0EwIxGrwACI402YVCY1x02628vn2kIc2xKxwCY1x0262kKe7AKxV
+	W8ZVWrXwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E
+	14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIx
+	kGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAF
+	wI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r
+	4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07jqYL9U
+	UUUU=
+X-CM-SenderInfo: xkrx3t3r6k3tpzhluzxrxghudrp/
 
-On Tue, 2024-11-26 at 13:51 -0800, Andrii Nakryiko wrote:
+From: Hou Tao <houtao1@huawei.com>
 
-[...]
+When "node->prefixlen == matchlen" is true, it means that the node is
+fully matched. If "node->prefixlen == key->prefixlen" is false, it means
+the prefix length of key is greater than the prefix length of node,
+otherwise, matchlen will not be equal with node->prefixlen. However, it
+also implies that the prefix length of node must be less than
+max_prefixlen.
 
-> > When I tried 'data->d_type =3D ELF_T_WORD' + gelf_xlatetom() snippet
-> > suggested by Tony Ambardar some time ago, I got a write protection erro=
-r.
-> > Concluded that this is so, because file is opened in O_RDONLY mode.
->=20
-> Ok, maybe don't follow my words *exactly*, just in spirit ;) I see
-> there is elf_getdata_rawchunk() API in libelf, which seems useful:
->=20
-> /* Get data translated from a chunk of the file contents as section data
->    would be for TYPE.  The resulting Elf_Data pointer is valid until
->    elf_end (ELF) is called.  */
-> extern Elf_Data *elf_getdata_rawchunk (Elf *__elf,
->                                        int64_t __offset, size_t __size,
->                                        Elf_Type __type);
->=20
-> I don't know the surrounding code, I was just hoping to leverage
-> libelf's byte swapping support (which I think I learned from Tony as
-> well). But if it's too inconvenient, so be it.
+Therefore, "node->prefixlen == trie->max_prefixlen" will always be false
+when the check of "node->prefixlen == key->prefixlen" returns false.
+Remove this unnecessary comparison.
 
-I missed this API, it works and makes the patch much smaller,
-thank you for finding it.
+Reviewed-by: Toke Høiland-Jørgensen <toke@redhat.com>
+Signed-off-by: Hou Tao <houtao1@huawei.com>
+---
+ kernel/bpf/lpm_trie.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/kernel/bpf/lpm_trie.c b/kernel/bpf/lpm_trie.c
+index 9b60eda0f727..73fd593d3745 100644
+--- a/kernel/bpf/lpm_trie.c
++++ b/kernel/bpf/lpm_trie.c
+@@ -364,8 +364,7 @@ static long trie_update_elem(struct bpf_map *map,
+ 		matchlen = longest_prefix_match(trie, node, key);
+ 
+ 		if (node->prefixlen != matchlen ||
+-		    node->prefixlen == key->prefixlen ||
+-		    node->prefixlen == trie->max_prefixlen)
++		    node->prefixlen == key->prefixlen)
+ 			break;
+ 
+ 		next_bit = extract_bit(key->data, node->prefixlen);
+-- 
+2.29.2
 
