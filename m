@@ -1,122 +1,146 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1911E1A9B22
-	for <bpf@vger.kernel.org>; Thu, 28 Nov 2024 13:07:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C66DA1A3BC0;
+	Thu, 28 Nov 2024 13:27:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732799249; cv=none; b=XCfjlnsyvW02mjo0Kg7iXrC7Lf9aZKfAwT140GR8QeT3nZv6kJ21tGyLFR8jcbUhs6FHgKtwYP+wG6/Fj7iayGv7WtaS0XF9Yx+879igC7aTso6fn2AJUUFht0CAjomvKBOg8WzREswTqpZpyve0ThOwnM3cs9nWZLjZ0czAoZ0=
+	t=1732800442; cv=none; b=lfmB9qSxWrYicUCpG0mP4aJn/Z8f+0JQ7ykIw4zW7YvZ4BcEUeDA8jYYTMvBh0qPetDTuk1wQMZrYmoKrRlzg8+vDcAdSrzjgF0VZOHzJRwYyyJgThah0q/z3y5iGnXLWtM9UniKgE6MTi6yWIY3iHi5PXRfS8ivxFHZkP1SXg8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732799249; c=relaxed/simple;
-	bh=cAXH3dA3hXdD9DhMWQf4k+asQ47TKDyVsQWDK1csVME=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=gaOqapDgeT3LTHoucPznp0XXNyPZVoYJ6WFcovZob2r0/RCOhp+7JzqwDUd1c2UZQEVrwE9E+fUio7QsVpRXWy1JRrW8u5Zx2ltHm3sgnF1Of+xhJDKJY0wPTL/gHjvDaqtuF0FMP1ljS9M1AplJang6j6ItR7XY1s4mm5830Ak=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=NbC0lIXT; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1732800442; c=relaxed/simple;
+	bh=s7ntmLyoK0Ige0yP54n7nzwN2qCmpmvx316Vpb4inks=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=CXxoh26umEpvjPbSABpoEANAQ6Bkx0PoejZFN7QuSVZoCTpTf5sIQzJzemRpy/6QxPjYd/ze88J+jmVDgwneuCOVvObO+vCdO2uEhb1UNGaHYjMrkoPyMMDznSajBU4KrYFQ0L3pnKzW8BvGYlf7fGuo2AO8gXgWl9Ljk3N/aWI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=W4x8dQLJ; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="NbC0lIXT"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1732799245;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=cAXH3dA3hXdD9DhMWQf4k+asQ47TKDyVsQWDK1csVME=;
-	b=NbC0lIXTtF2aSuGzTE3LPxSIxjRSXKQUiXuXIIdFWW1uKufxb7VXvrAgyV4WxWqRhGraM+
-	oGQPEPXv4cl4q1uj7wmW5Bi4Xg4pWnl/rREJataAK92JCs4WmxeM1XWEznA3mwplv1c61M
-	ZdRc1c9OOyouCHRPASRNqSUC306Toi4=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-288-AOlkngTLNPuBEvyqGyae9Q-1; Thu, 28 Nov 2024 08:07:24 -0500
-X-MC-Unique: AOlkngTLNPuBEvyqGyae9Q-1
-X-Mimecast-MFC-AGG-ID: AOlkngTLNPuBEvyqGyae9Q
-Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-434a04437cdso6353025e9.2
-        for <bpf@vger.kernel.org>; Thu, 28 Nov 2024 05:07:23 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1732799243; x=1733404043;
-        h=content-transfer-encoding:mime-version:message-id:date:references
-         :in-reply-to:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=cAXH3dA3hXdD9DhMWQf4k+asQ47TKDyVsQWDK1csVME=;
-        b=m+vVjheN3WhbcAfG1+UaH9nHooRk/Ljb5hBRMSLTcOpwNrE3OcdT7sWOOS8CgEuVtF
-         zPy+ObDQmbBaBCZ8xbg3YFf+oVSRdyz+EBp3cF4gj1DSsxBJywDpfP+7UY4jVfGCzEPm
-         bc6qTvSZ/VAYU+ifzn3znTpa2VwDKMt/5FJP5RljfjP+pEnSzmaL6Sd4AFp13BmqcIQy
-         7H+z8GIBQaZ9fWRD8Z5bAsISJYuwJYE/r4XEteznjAmAGbNwbDf6CEcjTxshh686tRT3
-         nL+FXYDuxEMtpMjZ0GNO+1qMzWmfw12O9mTKJxHs4k/4xlxUyV1qyAie9GhS7tBlPEBD
-         juEA==
-X-Forwarded-Encrypted: i=1; AJvYcCWV+5/CYnhCLjYbviM8VZW+2OLdUpCzDJh6GKcM6vmA15DKQGJT7nB+uXsoKuRRZFPOpM0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwqeoxjLSA+3hZU73j4LI8RgvsOFgTxgdYZxpf5Eg1WD3ZQ3tDP
-	FewJ83niXzLeYQR7jrWUVOtwyn/Dd0gaj/fzVD/d7HAEFTG1p9qmsQNTwX3maD6NcptSq4TfBFq
-	/r+0hTEVtO26CihkDhsHBrj5zwRSDbaPkKXvjXg6K/edM4TjPjQ==
-X-Gm-Gg: ASbGncsXrCx8/Zbtut331LIorLy8SyUgH0178oW3x9p6ODY/p9dM5OOGMEnH9cB9QWN
-	QgF247FzdaaYqNUX9oEXAD9gplAJ4n0IdCXhCfAhIpnhoafUqAAGJ/Dq/2oWGhlJWhNvOfsYA/s
-	zSeKIizu+6SGKt3NaV2RYts3ecUwoFytuEpZKqiOA2yyh4hVQrE/WYdTKaGxikDe9xupZCyFs9K
-	VCrSfACwN2Yc8hERqNop1xGiwc1PJQLEuy/fQuMkEe4VItI9QIQlSsFBf858Su7B+0dVkXrWMc=
-X-Received: by 2002:a05:600c:4e8a:b0:431:5e3c:2ff0 with SMTP id 5b1f17b1804b1-434a9dc5003mr65339365e9.8.1732799242814;
-        Thu, 28 Nov 2024 05:07:22 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IG2psrPhjev3bJrjSIB+JHRV7XwXM7FdQVe1Lk4BWmEHa6+pF1hXmW+7huHZUP0OGwp9t/s8w==
-X-Received: by 2002:a05:600c:4e8a:b0:431:5e3c:2ff0 with SMTP id 5b1f17b1804b1-434a9dc5003mr65339055e9.8.1732799242505;
-        Thu, 28 Nov 2024 05:07:22 -0800 (PST)
-Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-385ccd367f9sm1582466f8f.31.2024.11.28.05.07.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Nov 2024 05:07:21 -0800 (PST)
-Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-	id D262C164E1A8; Thu, 28 Nov 2024 14:07:20 +0100 (CET)
-From: Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-To: =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
- bpf@vger.kernel.org,
- linux-perf-users@vger.kernel.org, Alexandre Ghiti
- <alexghiti@rivosinc.com>, Arnaldo Carvalho de Melo <acme@redhat.com>,
- Jean-Philippe Brucker <jean-philippe@linaro.org>, Quentin Monnet
- <qmo@kernel.org>, Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@rivosinc.com>, Paul Walmsley
- <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou
- <aou@eecs.berkeley.edu>, linux-riscv@lists.infradead.org,
- linux-kernel@vger.kernel.org, David Abdurachmanov <davidlt@rivosinc.com>,
- Namhyung Kim <namhyung@kernel.org>
-Subject: Re: [PATCH bpf v2] tools: Override makefile ARCH variable if
- defined, but empty
-In-Reply-To: <20241127101748.165693-1-bjorn@kernel.org>
-References: <20241127101748.165693-1-bjorn@kernel.org>
-X-Clacks-Overhead: GNU Terry Pratchett
-Date: Thu, 28 Nov 2024 14:07:20 +0100
-Message-ID: <87o71zik1j.fsf@toke.dk>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="W4x8dQLJ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1117BC4CED3;
+	Thu, 28 Nov 2024 13:27:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1732800442;
+	bh=s7ntmLyoK0Ige0yP54n7nzwN2qCmpmvx316Vpb4inks=;
+	h=From:Date:Subject:To:Cc:From;
+	b=W4x8dQLJLyeKbmnDT2QjsgZfRNMP4shFyIT/3c8z4rXM1Q/HOOYiYE34+B0dse2ok
+	 1+ykhOG408CCgxPWHbaO+oPmaBISGvzv+9xC5qywv17Kn84nzFjhejrE3LevibFyiz
+	 GO8cD4fznOGsQyuRrH4UVUylijcfaxocejNrCdD/mA692bOAE2lI0Agnth1vGEFLSb
+	 pot7E1hZkYLaZuKVPp8IHfmFYxO/vpeP8tznGvRIUecQzi2j2/IHFLdozbuA1/SVK7
+	 bzziZ6k3yNig+NLDXsg1lTAIxAGJfGIl3R6wzsedWNepAfakRrLu1QkVr6Sgl0TbKZ
+	 PslcPSFNW+O7A==
+From: Benjamin Tissoires <bentiss@kernel.org>
+Date: Thu, 28 Nov 2024 14:27:16 +0100
+Subject: [PATCH HID] selftests/hid: fix kfunc inclusions with newer bpftool
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20241128-fix-new-bpftool-v1-1-c9abdf94a719@kernel.org>
+X-B4-Tracking: v=1; b=H4sIALNvSGcC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDIxNDQyML3bTMCt281HLdpIK0kvz8HF1jw0TLNBPjxMS0pCQloK6ColSgErC
+ J0Uoeni5KsbW1ADG4jtxmAAAA
+X-Change-ID: 20241128-fix-new-bpftool-31a9f43aafbb
+To: Jiri Kosina <jikos@kernel.org>, Shuah Khan <shuah@kernel.org>
+Cc: linux-input@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
+ Benjamin Tissoires <bentiss@kernel.org>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1732800440; l=3659;
+ i=bentiss@kernel.org; s=20230215; h=from:subject:message-id;
+ bh=s7ntmLyoK0Ige0yP54n7nzwN2qCmpmvx316Vpb4inks=;
+ b=PREaqb+BXRq/tIkrsTWycjKGYBT+dINU4VsCFZL2/q0/YXm/vlTEaUZriVdHDTZk7HtnLrfUL
+ /Lrw153FIwxDPxv8iyaIJ2+xt8XzW80dC/LigpAPfgDnrsD++kjCNvz
+X-Developer-Key: i=bentiss@kernel.org; a=ed25519;
+ pk=7D1DyAVh6ajCkuUTudt/chMuXWIJHlv2qCsRkIizvFw=
 
-Bj=C3=B6rn T=C3=B6pel <bjorn@kernel.org> writes:
+bpftool now embeds the kfuncs definitions directly in the generated
+vmlinux.h
 
-> From: Bj=C3=B6rn T=C3=B6pel <bjorn@rivosinc.com>
->
-> There are a number of tools (bpftool, selftests), that require a
-> "bootstrap" build. Here, a bootstrap build is a build host variant of
-> a target. E.g., assume that you're performing a bpftool cross-build on
-> x86 to riscv, a bootstrap build would then be an x86 variant of
-> bpftool. The typical way to perform the host build variant, is to pass
-> "ARCH=3D" in a sub-make. However, if a variable has been set with a
-> command argument, then ordinary assignments in the makefile are
-> ignored.
->
-> This side-effect results in that ARCH, and variables depending on ARCH
-> are not set.
->
-> Workaround by overriding ARCH to the host arch, if ARCH is empty.
->
-> Fixes: 8859b0da5aac ("tools/bpftool: Fix cross-build")
-> Reviewed-by: Jean-Philippe Brucker <jean-philippe@linaro.org>
-> Tested-by: Alexandre Ghiti <alexghiti@rivosinc.com>
-> Reviewed-by: Namhyung Kim <namhyung@kernel.org>
-> Acked-by: Quentin Monnet <qmo@kernel.org>
-> Signed-off-by: Bj=C3=B6rn T=C3=B6pel <bjorn@rivosinc.com>
+This is great, but because the selftests dir might be compiled with
+HID_BPF disabled, we have no guarantees to be able to compile the
+sources with the generated kfuncs.
 
-Reviewed-by: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
+If we have the kfuncs, because we have the `__not_used` hack, the newly
+defined kfuncs do not match the ones from vmlinux.h and things go wrong.
+
+Prevent vmlinux.h to define its kfuncs and also add the missing `__weak`
+symbols for our custom kfuncs definitions
+
+Signed-off-by: Benjamin Tissoires <bentiss@kernel.org>
+---
+This was noticed while bumping the CI to fedora 41 which has an update
+of bpftool.
+
+I'll probably take this in for-6.13/upstream-fixes tomorrow if no bots
+comes back at me.
+
+Cheers,
+Benjamin
+---
+ tools/testing/selftests/hid/progs/hid_bpf_helpers.h | 19 +++++++++++--------
+ 1 file changed, 11 insertions(+), 8 deletions(-)
+
+diff --git a/tools/testing/selftests/hid/progs/hid_bpf_helpers.h b/tools/testing/selftests/hid/progs/hid_bpf_helpers.h
+index e5db897586bbfe010d8799f6f52fc5c418344e6b..531228b849daebcf40d994abb8bf35e760b3cc4e 100644
+--- a/tools/testing/selftests/hid/progs/hid_bpf_helpers.h
++++ b/tools/testing/selftests/hid/progs/hid_bpf_helpers.h
+@@ -22,6 +22,9 @@
+ #define HID_REQ_SET_IDLE         HID_REQ_SET_IDLE___not_used
+ #define HID_REQ_SET_PROTOCOL     HID_REQ_SET_PROTOCOL___not_used
+ 
++/* do not define kfunc through vmlinux.h as this messes up our custom hack */
++#define BPF_NO_KFUNC_PROTOTYPES
++
+ #include "vmlinux.h"
+ 
+ #undef hid_bpf_ctx
+@@ -91,31 +94,31 @@ struct hid_bpf_ops {
+ /* following are kfuncs exported by HID for HID-BPF */
+ extern __u8 *hid_bpf_get_data(struct hid_bpf_ctx *ctx,
+ 			      unsigned int offset,
+-			      const size_t __sz) __ksym;
+-extern struct hid_bpf_ctx *hid_bpf_allocate_context(unsigned int hid_id) __ksym;
+-extern void hid_bpf_release_context(struct hid_bpf_ctx *ctx) __ksym;
++			      const size_t __sz) __weak __ksym;
++extern struct hid_bpf_ctx *hid_bpf_allocate_context(unsigned int hid_id) __weak __ksym;
++extern void hid_bpf_release_context(struct hid_bpf_ctx *ctx) __weak __ksym;
+ extern int hid_bpf_hw_request(struct hid_bpf_ctx *ctx,
+ 			      __u8 *data,
+ 			      size_t buf__sz,
+ 			      enum hid_report_type type,
+-			      enum hid_class_request reqtype) __ksym;
++			      enum hid_class_request reqtype) __weak __ksym;
+ extern int hid_bpf_hw_output_report(struct hid_bpf_ctx *ctx,
+-				    __u8 *buf, size_t buf__sz) __ksym;
++				    __u8 *buf, size_t buf__sz) __weak __ksym;
+ extern int hid_bpf_input_report(struct hid_bpf_ctx *ctx,
+ 				enum hid_report_type type,
+ 				__u8 *data,
+-				size_t buf__sz) __ksym;
++				size_t buf__sz) __weak __ksym;
+ extern int hid_bpf_try_input_report(struct hid_bpf_ctx *ctx,
+ 				    enum hid_report_type type,
+ 				    __u8 *data,
+-				    size_t buf__sz) __ksym;
++				    size_t buf__sz) __weak __ksym;
+ 
+ /* bpf_wq implementation */
+ extern int bpf_wq_init(struct bpf_wq *wq, void *p__map, unsigned int flags) __weak __ksym;
+ extern int bpf_wq_start(struct bpf_wq *wq, unsigned int flags) __weak __ksym;
+ extern int bpf_wq_set_callback_impl(struct bpf_wq *wq,
+ 		int (callback_fn)(void *map, int *key, void *wq),
+-		unsigned int flags__k, void *aux__ign) __ksym;
++		unsigned int flags__k, void *aux__ign) __weak __ksym;
+ #define bpf_wq_set_callback(timer, cb, flags) \
+ 	bpf_wq_set_callback_impl(timer, cb, flags, NULL)
+ 
+
+---
+base-commit: 919464deeca24e5bf13b6c8efd0b1d25cc43866f
+change-id: 20241128-fix-new-bpftool-31a9f43aafbb
+
+Best regards,
+-- 
+Benjamin Tissoires <bentiss@kernel.org>
 
