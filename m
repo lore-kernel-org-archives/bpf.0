@@ -1,67 +1,68 @@
-Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
+Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4790C19DF99
-	for <bpf@vger.kernel.org>; Fri, 29 Nov 2024 13:25:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1632619C566
+	for <bpf@vger.kernel.org>; Fri, 29 Nov 2024 13:26:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732886761; cv=none; b=coK+kvjkV7Z2MEQ69INSx7j52TtRDr+uzvq1GGSVxx6w7Q/b/nrATiBpMyiP8szNUr3t1gELFSe/AID8YY1SKIlFK+B6C3W36ylCqfG0+mq176vBoP7FDZ9jNp7VIQQV+vg6T9P/lDwDrYk7lgw9f4DGWIF+/rV3BU+LK+pyc0g=
+	t=1732886762; cv=none; b=pgj9/3C+hkcw1MZhFY5gicR9EveetRvjcgvMCy8b/V0Ut/PJy4Tj8F6njt2vQUFf3mxPzn8DRcs2/1xFJTe/43kYS0G5wHhnRNEfGzI/KU/d975ysgCz5OS2+NH5x65BGMXSKJrLd7Rya40dhxjgfXPy9NHw03hLqW/6dxVjndo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732886761; c=relaxed/simple;
-	bh=SfiHhxW8L0Lmn3ihd8debUXb8wBmxj5Pu01khKVp4tw=;
+	s=arc-20240116; t=1732886762; c=relaxed/simple;
+	bh=N4fVQPXJXo2Th6B1WGHku4ZK0MSeXujnBW5iXtm9jAw=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=ca9VOk03C6XUaoEsgKFijnpLVj0MIeMbHta4L4ifWoeV9o42pzgBgyuaTA3SuVl4LjhugVBHKLrkwaptrDEBk1m9Z0uf4ZX5CJgTPjxZYeyQHF2Rv6SL2MpR3APw6JslOzbvl2BaH6O3GugGnEzO2BiTP2O1sVkA44+XQVPxn4A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=isovalent.com; spf=pass smtp.mailfrom=isovalent.com; dkim=pass (2048-bit key) header.d=isovalent.com header.i=@isovalent.com header.b=W79bkyBp; arc=none smtp.client-ip=209.85.218.41
+	 MIME-Version; b=QB2lhiNrIftXxcsv5+2WFtT1DFlcRqsHcZ6dWsv9JVvb0gJPO+KwSMuIW1kJKCWgtZmWStER83r+YjeL4cI4UuGqOYpVRfuDZmRvlHJn4BCpSo04ExYbMyQ/Qe5ImCug7Pa82NXUjhcMBp8DjKGxj/d3FW0shUsZkvBs5Ky923c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=isovalent.com; spf=pass smtp.mailfrom=isovalent.com; dkim=pass (2048-bit key) header.d=isovalent.com header.i=@isovalent.com header.b=YwVW02Uz; arc=none smtp.client-ip=209.85.208.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=isovalent.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=isovalent.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=isovalent.com header.i=@isovalent.com header.b="W79bkyBp"
-Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-aa545dc7105so252481766b.3
-        for <bpf@vger.kernel.org>; Fri, 29 Nov 2024 05:25:58 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=isovalent.com header.i=@isovalent.com header.b="YwVW02Uz"
+Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-5d0062e9c80so2294704a12.2
+        for <bpf@vger.kernel.org>; Fri, 29 Nov 2024 05:26:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=isovalent.com; s=google; t=1732886757; x=1733491557; darn=vger.kernel.org;
+        d=isovalent.com; s=google; t=1732886759; x=1733491559; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=JP3QAMrozbgzwuk6m5bfUUTya1nGlDpj7m4OrmHYW7M=;
-        b=W79bkyBpaUV1rjtne64H3/eg5E3eKGAaniajZgL3x2/EDl30M1EipJQlspkJeJUHgY
-         /SUVqqcneyeMLkWcB4LNHTnAHMveXwaLyfoOw+L5b7XrfqQI+nljtZlrwM4BzZ3oLa4j
-         fXtdQShVIY3EnuqLtxVLTxr5EeO/Y2YUFawtntKJg0qbNS101mJ2pgsZAu/6p8X6a8ck
-         Voq1VbEgIwnA96MFi0ZJ3fhtGA8P2WBoWMieZz4dG7CV0orP9bVmGOGEhHpurjRBgETV
-         tIrdn6XfSvLixflRQKGlAsfQLVu+u1VwnwxcWedGnWo4I3eU0vLt8AA1Z00lb436NVdA
-         rm7Q==
+        bh=u/uCtoS5e1shwI4lkh3m+//bTjTAkVIgPynZLquHrvs=;
+        b=YwVW02Uz/MkrSA5ohuiYsFo0wwwPsGl3Fvi+ZEtB/qon2P1UMaXWYXDjXwYKYcoYmU
+         NHraJTKJ7AVnEzXi7/7x0YPaz/g1VefkQb29MKX/oFd1Vbpnla/6t1RS2zTWUS1pZNnn
+         1UzUy3Szq3Q5Mc0HwzuaFfS2jwUjX9sL5WzWz1z0gol9S7VCdOJvYLXNnUJD+V+wpcgE
+         BeG/7bj4jz2q3YREpDw/yOmoKBGvNeEvVt5RZH+JUYFZtbEXbckVRd8cBlTWF05FzDyw
+         0N5WrtQBD9cj8gBFRsGpYw1QBuT49oRy++Ev5YiYaft8wgAwsr1LDYpriFSIqIWhax+H
+         Ix8Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1732886757; x=1733491557;
+        d=1e100.net; s=20230601; t=1732886759; x=1733491559;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=JP3QAMrozbgzwuk6m5bfUUTya1nGlDpj7m4OrmHYW7M=;
-        b=oG6MpimON7Cj5PSDjGO2D9NLsXO5DdfD9YVkXcYd9xWZjUYdZ23Z6K0d6ttfByUcM4
-         Tzd5FlfR6rpF7dpq4a0t5DD+kbhtshBLCi4tdAQwMhWCwssu8RLL2TE4Wp0QX/pSMVMH
-         ZXADbIeP1aJteTyGXi9pEhnxS+8VMfq3vduxJYuWoquTRV/dJFlnk53fFfa3onAjtWfk
-         IdWfIex2YAnLffBpaoGJiAybYqeBkZ0mEW4Su9CKuENt0LVotpUGWQopVlgahr2haYk+
-         I4GGgaRVpQl+i4d2TJUoTGfYSoauktRsQxYfSM8OvWPokPGXAirMxmqzr+E1psyUC46w
-         duUw==
-X-Gm-Message-State: AOJu0YzYXAPXNgZAtp/I/OHxXBHvgxFYGkCXBygdInDVNTMmpQZTA9Pg
-	Vk0m+ZSP8d2mXfbBW2ibf9JhH9JZkgQ0KMnV6SXouSioACHaOZdq7LTMU8ZLYHT8JfBBTt0/09R
-	e
-X-Gm-Gg: ASbGncsvl6HBzcN543GdvftGKe0RII8t/Xp3pHLdQVMx80ygKvh0kTEcfv2nmBPEjQZ
-	Z9axK6Hqhg67rmUszQ2xeuVWTyi6K6l25fIUZq9FKYTlg73mRGTQIjTAaFEAxlA9/EZIyKuBsE4
-	r8qhseyXVc/BCTZqYsluA8iZiONjJpZnno+jF3icqTJRr5PF3yQszwEZoeDmqrItg5uWf0t1Uf7
-	CB71mdM4+YKhUKC2CwrENsBWLMKoqWOiWU5djzKdALuj+pSrZiwI5SFtsnJ25s=
-X-Google-Smtp-Source: AGHT+IGyGc7cxDLL4nZQOcckaBf+ME9jmw6o1RXnPptr9L/wHiKZdeOKQ8YNYLWpx0Kwyh9i5ZhNRg==
-X-Received: by 2002:a17:906:3d22:b0:a9a:597:8cca with SMTP id a640c23a62f3a-aa5810333b8mr691092766b.45.1732886756783;
-        Fri, 29 Nov 2024 05:25:56 -0800 (PST)
+        bh=u/uCtoS5e1shwI4lkh3m+//bTjTAkVIgPynZLquHrvs=;
+        b=g6GQ/TKeaP7Sr4eBm/zwA4a6Wlz8MxOl5rAw4EuCySwyZwBapnrilP7nLG0MBT8QI8
+         Kg8qzCyfKO2zM9wOwt/04o7IAD6cbtlh/UUc421p6mjSFhkdh7SKGjDHWf+OhI5WU86E
+         f+8ge8dU16S7+s9QO7alWfaazhjyz1zrVq1Z196S2z1FeO2gsDDQPwp4j0sUuoq759hW
+         qY0TmGbQ7TlmTk+yO51qv0jHBbl4qwq/E5/GJDYnssqj2b5faztriD7KJvYpqwztWm9E
+         SY0cu0axwuuvOLqVs5trTb63GzZIytjhgXsUXpFiXG4sz4JA1yfh2PAE0f9v+68mASRW
+         EJwg==
+X-Gm-Message-State: AOJu0YyPG/8OL7kUNjEEGFM0MjcZdwf1VyE0QYXGmb0f9oSN9/izc78A
+	0+a1IeVzqdvvu5dJbqQZkNytJVhPplErgLDEv61tn5jG6x2dZDvm+vjAtSQ/28t80DkxAqIt6wI
+	5
+X-Gm-Gg: ASbGnctgWxVdLbl8uO/ndN4ty8IwF50zVGvkz6lINr5ahuM+ysvdYA1etCjPHTVkRHi
+	akSWaUHO5xQ/QR1D1RpoPS0N0VP3YrHMGO7UpLvGRk3TNLzGcex3/gdXeLApNxL3zh7j28aRkVP
+	dDMzZHAy+uaBI4u5U3c5qg44Dg6tt+iF0NwJm2tgZK1Ig5hbpmx9Aot4t0PgH0xEZTu78C+fH4Q
+	JGCbLJVo2IP4UY80zPuUvDxfMvRSc4uWpFFiVDoauhSG67mRFskUWMlfGH7uyA=
+X-Google-Smtp-Source: AGHT+IFsJu8f4czyvQxnVGXKoGjlPhxC1a5uCdNKPpAQ7SOIAxTb9P03gtVrYjbU4IAzKr5XRl21ZA==
+X-Received: by 2002:a17:906:4c9:b0:aa5:33f0:c50e with SMTP id a640c23a62f3a-aa5810634b5mr867375666b.57.1732886759195;
+        Fri, 29 Nov 2024 05:25:59 -0800 (PST)
 Received: from localhost.localdomain ([2a04:ee41:4:b2de:1ac0:4dff:fe0f:3782])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-aa599904f33sm173295066b.135.2024.11.29.05.25.56
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-aa599904f33sm173295066b.135.2024.11.29.05.25.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 Nov 2024 05:25:56 -0800 (PST)
+        Fri, 29 Nov 2024 05:25:58 -0800 (PST)
 From: Anton Protopopov <aspsk@isovalent.com>
 To: bpf@vger.kernel.org
-Cc: Anton Protopopov <aspsk@isovalent.com>
-Subject: [PATCH v3 bpf-next 4/7] libbpf: prog load: allow to use fd_array_cnt
-Date: Fri, 29 Nov 2024 13:28:10 +0000
-Message-Id: <20241129132813.1452294-5-aspsk@isovalent.com>
+Cc: Anton Protopopov <aspsk@isovalent.com>,
+	Jiri Olsa <jolsa@kernel.org>
+Subject: [PATCH v3 bpf-next 6/7] bpf: fix potential error return
+Date: Fri, 29 Nov 2024 13:28:12 +0000
+Message-Id: <20241129132813.1452294-7-aspsk@isovalent.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20241129132813.1452294-1-aspsk@isovalent.com>
 References: <20241129132813.1452294-1-aspsk@isovalent.com>
@@ -73,77 +74,42 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add new fd_array_cnt field to bpf_prog_load_opts
-and pass it in bpf_attr, if set.
+The bpf_remove_insns() function returns WARN_ON_ONCE(error), where
+error is a result of bpf_adj_branches(), and thus should be always 0
+However, if for any reason it is not 0, then it will be converted to
+boolean by WARN_ON_ONCE and returned to user space as 1, not an actual
+error value. Fix this by returning the original err after the WARN check.
 
 Signed-off-by: Anton Protopopov <aspsk@isovalent.com>
+Acked-by: Jiri Olsa <jolsa@kernel.org>
 ---
- tools/lib/bpf/bpf.c      | 5 +++--
- tools/lib/bpf/bpf.h      | 5 ++++-
- tools/lib/bpf/features.c | 2 +-
- 3 files changed, 8 insertions(+), 4 deletions(-)
+ kernel/bpf/core.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
-index becdfa701c75..0e7f59224936 100644
---- a/tools/lib/bpf/bpf.c
-+++ b/tools/lib/bpf/bpf.c
-@@ -105,7 +105,7 @@ int sys_bpf_prog_load(union bpf_attr *attr, unsigned int size, int attempts)
-  */
- int probe_memcg_account(int token_fd)
- {
--	const size_t attr_sz = offsetofend(union bpf_attr, prog_token_fd);
-+	const size_t attr_sz = offsetofend(union bpf_attr, fd_array_cnt);
- 	struct bpf_insn insns[] = {
- 		BPF_EMIT_CALL(BPF_FUNC_ktime_get_coarse_ns),
- 		BPF_EXIT_INSN(),
-@@ -238,7 +238,7 @@ int bpf_prog_load(enum bpf_prog_type prog_type,
- 		  const struct bpf_insn *insns, size_t insn_cnt,
- 		  struct bpf_prog_load_opts *opts)
- {
--	const size_t attr_sz = offsetofend(union bpf_attr, prog_token_fd);
-+	const size_t attr_sz = offsetofend(union bpf_attr, fd_array_cnt);
- 	void *finfo = NULL, *linfo = NULL;
- 	const char *func_info, *line_info;
- 	__u32 log_size, log_level, attach_prog_fd, attach_btf_obj_fd;
-@@ -311,6 +311,7 @@ int bpf_prog_load(enum bpf_prog_type prog_type,
- 	attr.line_info_cnt = OPTS_GET(opts, line_info_cnt, 0);
+diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+index 14d9288441f2..35a306ce9d94 100644
+--- a/kernel/bpf/core.c
++++ b/kernel/bpf/core.c
+@@ -539,6 +539,8 @@ struct bpf_prog *bpf_patch_insn_single(struct bpf_prog *prog, u32 off,
  
- 	attr.fd_array = ptr_to_u64(OPTS_GET(opts, fd_array, NULL));
-+	attr.fd_array_cnt = OPTS_GET(opts, fd_array_cnt, 0);
- 
- 	if (log_level) {
- 		attr.log_buf = ptr_to_u64(log_buf);
-diff --git a/tools/lib/bpf/bpf.h b/tools/lib/bpf/bpf.h
-index a4a7b1ad1b63..435da95d2058 100644
---- a/tools/lib/bpf/bpf.h
-+++ b/tools/lib/bpf/bpf.h
-@@ -107,9 +107,12 @@ struct bpf_prog_load_opts {
- 	 */
- 	__u32 log_true_size;
- 	__u32 token_fd;
+ int bpf_remove_insns(struct bpf_prog *prog, u32 off, u32 cnt)
+ {
++	int err;
 +
-+	/* if set, provides the length of fd_array */
-+	__u32 fd_array_cnt;
- 	size_t :0;
- };
--#define bpf_prog_load_opts__last_field token_fd
-+#define bpf_prog_load_opts__last_field fd_array_cnt
+ 	/* Branch offsets can't overflow when program is shrinking, no need
+ 	 * to call bpf_adj_branches(..., true) here
+ 	 */
+@@ -546,7 +548,9 @@ int bpf_remove_insns(struct bpf_prog *prog, u32 off, u32 cnt)
+ 		sizeof(struct bpf_insn) * (prog->len - off - cnt));
+ 	prog->len -= cnt;
  
- LIBBPF_API int bpf_prog_load(enum bpf_prog_type prog_type,
- 			     const char *prog_name, const char *license,
-diff --git a/tools/lib/bpf/features.c b/tools/lib/bpf/features.c
-index 760657f5224c..5afc9555d9ac 100644
---- a/tools/lib/bpf/features.c
-+++ b/tools/lib/bpf/features.c
-@@ -22,7 +22,7 @@ int probe_fd(int fd)
+-	return WARN_ON_ONCE(bpf_adj_branches(prog, off, off + cnt, off, false));
++	err = bpf_adj_branches(prog, off, off + cnt, off, false);
++	WARN_ON_ONCE(err);
++	return err;
+ }
  
- static int probe_kern_prog_name(int token_fd)
- {
--	const size_t attr_sz = offsetofend(union bpf_attr, prog_token_fd);
-+	const size_t attr_sz = offsetofend(union bpf_attr, fd_array_cnt);
- 	struct bpf_insn insns[] = {
- 		BPF_MOV64_IMM(BPF_REG_0, 0),
- 		BPF_EXIT_INSN(),
+ static void bpf_prog_kallsyms_del_subprogs(struct bpf_prog *fp)
 -- 
 2.34.1
 
