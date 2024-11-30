@@ -1,95 +1,125 @@
-Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD3C228EA;
-	Sat, 30 Nov 2024 00:43:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DAAE1993B4;
+	Sat, 30 Nov 2024 13:39:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732927413; cv=none; b=J1JatFVz3a+j7Cen0Lt2B2w+vEeCjTfrZEuX2ir+NCytncO7A6xqkCm1+P0aWFIyzZEoopflKDT0rTuEFV5FerKrEvlYG//uNSpFyC58AJobq5+B6qE1d3SpTEslHNMZeNq8c5pqsGRFGfQiWrHkerVJlfzgSA4qbBAMaTUA0uo=
+	t=1732973954; cv=none; b=E45uzamc4c4zyW5MkR7xDcjm0nM6RFZZwUq2aOyIcgY/EEAKXP8c9ld0zXgkfETWVYFKvyd57vhzamtCis7NBlU7TimI5Ik9Zt9Yl33IbIbQLIaK4w+lHfA9cJllLf8XaTNU/OoKX1ND3bUvi59LCQWkSxH7Cl7PaeuxmjEzAqY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732927413; c=relaxed/simple;
-	bh=KuRo4uCbWKz+FqYQncpemBAEXoi2K2b0kXIOuq1XSNg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Ew9fRgiZAfG/O86m041ofTM1qHIbPe7zueFbtEO/3E+C2s69UlZmlmlTj/GHatZZUdCpyQMlPSpbP1HeJcMX9Gc/+ddKDsV8UOWezMxKVOpcrbSNWDZ/Va8nXJGXrnWBjCHiL11t9hrg5FlhA4Cyhai7JGipdEnFePZkNnTIals=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GG5/8gWe; arc=none smtp.client-ip=209.85.214.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1732973954; c=relaxed/simple;
+	bh=xNoawWxL5Y6li8c9tLsL2y/MxQevmVgjNhHQfuMu8o8=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=ur/9NeiFDK0tqtHxISRQhS/dMHAN7D+Zn7zAouFLQCl1sCB8aYyOgSv6w4irDWJLszb8jKhCV955k+CRMR5XNQMlbrlOOcc92l0VsLE/dZXXfthb1oSyWX+s/VFQMnYSQpz/zM1QtNw9mL8atbN2S31sikjRWsB8bw2+/Nq2HHQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kC2gHsXP; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GG5/8gWe"
-Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-2155157c58cso4753835ad.0;
-        Fri, 29 Nov 2024 16:43:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1732927411; x=1733532211; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=csgRMHYFsJTvCVxa5kFhLp6akKuS7lLHkAJW6CKOQI0=;
-        b=GG5/8gWevn9q9DCMM5KuaIfudwZ32G0hQ1/eg3WsHzAyEDwakPlS4yGwgaURKrLqtp
-         xGIX2tWIBhDnxjZC6r6W/0HyS1RunKl2U7Gy9Eh/c8BwPZeu8eFfjQh584Mkcbv1t4jS
-         MBl97Db8KsZZZd6lxH3OLNhvIIPhiQC3uIaUcLBlgKBuF3lsHrb2v5uZLkxfYsJnOPWs
-         yuvvBU+95f0i8tzf+VGuYBqtZIAAAQfYFCjZxnjBpL6IrPa0KK7hVVwqJGGSkt99d2fj
-         jUNLEyUaGjGZoWadjracI/18VuTTq4xrxFURKWfWKSlr1F6Ol4SvZ1RU2aJxtrV2oHbX
-         DB6Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1732927411; x=1733532211;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=csgRMHYFsJTvCVxa5kFhLp6akKuS7lLHkAJW6CKOQI0=;
-        b=MEwlNPB71MppkN5+9cYjxlmelAQoRx5XnqynScYkf4xRf/EL7r6vyQTlKOjFHDdk3i
-         g8TXSilkBKPe9ZKfRm2e+lcuRus1ossj6OqoJzmLMwh+dH1WY3CffeP4dYcIyaG/Vuwg
-         ni2z7c+5Kul6iJkUPq+/R4UfOLA3neCzqifpABEbi4SoddSueJX3uM44LkHkMQq+D3lY
-         PTpi4DXm9IYS8Ed0/ov+fDARLljxfSRA9AeHMdTjPq9JreclISuSjFsrXmsZst/+8vbY
-         IHfsMnC2rM4GTfGddihViI2X+tUQ3Dz0U1jbzR3tvFO6VwiJxYY/IoG+cDtKK9881Pux
-         93qQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWhTyI6B7Z1Syz4Epx+ilkn98N9bsPyz17yjJWm9wis1Pfkz2g4Ezikd5Ti680qe5YSmIX6HGY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwwmybKBSxbAyTVKiOYweeFVVysYzPm41JP0NNPqmOu3LkZXhBT
-	9YahqWSJDgvCJG4R9m57zUprEA8GmqSAC5zr89YmVLEoWmGFmUw0
-X-Gm-Gg: ASbGnctu8MMzOvhxQDzZQ7iD/NHxiVVq4QMNk1/VsmvAM5WcquDmpWK11+BUX4zJ0Cg
-	oJ1gqQw9JKX0W3CjwKcx1nlZqfkCBxBXbwz6AFE7y/1PCubyymY+K80q8eyJv9wcn9AMACS/UYS
-	YOH933a1k5Xep19OiGy4XrOJrbnncMdgiKOCc6BUSSc1Mf4mmBPpt0prYd3AP+nEBtGrpLSYkIg
-	VlsVK/G/oN1xte4kq2EbqSE0FV/K5ZmBnjTxC0gTcPaAWMoYTEqVsxW
-X-Google-Smtp-Source: AGHT+IGzLM51VCB9JAOMQCXu5eLjeIT5mzuFUlXm1DhA/gitN8lpuED5VPyZTOh1DhJ9NdBuLVL3Kg==
-X-Received: by 2002:a17:902:f604:b0:215:5ea2:6543 with SMTP id d9443c01a7336-2155ea26658mr7277605ad.28.1732927411230;
-        Fri, 29 Nov 2024 16:43:31 -0800 (PST)
-Received: from localhost ([2601:647:6881:9060:22e0:3259:eab0:7dee])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21521989750sm35776205ad.202.2024.11.29.16.43.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 Nov 2024 16:43:30 -0800 (PST)
-Date: Fri, 29 Nov 2024 16:43:29 -0800
-From: Cong Wang <xiyou.wangcong@gmail.com>
-To: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
-	andrii@kernel.org, netdev@vger.kernel.org,
-	magnus.karlsson@intel.com, bjorn@kernel.org, jordyzomer@google.com,
-	security@kernel.org
-Subject: Re: [PATCH v2 bpf 0/2] bpf: fix OOB accesses in map_delete_elem
- callbacks
-Message-ID: <Z0pfsWqRoxaTTC2t@pop-os.localdomain>
-References: <20241122121030.716788-1-maciej.fijalkowski@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kC2gHsXP"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 43149C4CED3;
+	Sat, 30 Nov 2024 13:39:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1732973954;
+	bh=xNoawWxL5Y6li8c9tLsL2y/MxQevmVgjNhHQfuMu8o8=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
+	b=kC2gHsXPMdMygOCBv6KC5Z6BdFCC9RM+cIwBj0cE4WwueRfWWjZI5QxErmta1heDR
+	 yklTRGBjiuKcWZ6dk8dWnOdHFjur+jXOOtDQqX17GuT6y9RJmpPAJXvpGvA8YOamk3
+	 mR/khdt5SGvoX4H8lE6kVpuLk5Bq5OsWmzJSg/7S6a8X6ZBKI6aHdQb9HBU7ZdBO1k
+	 KrNWKG+ROb8o0lvBwh8rVfLGvgm7jTC2mRef9s0ish+BzQUuGgdPxu95bHgd6Kzwgt
+	 Pk+XMSU8C0N256dOH18FsuDnuv6axZ+ZdXEIQSTu3SX7gcnWlxhAGIVs3Swbmu32qA
+	 OSoyRNqWC61pg==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2F795D73606;
+	Sat, 30 Nov 2024 13:39:14 +0000 (UTC)
+From: Levi Zim via B4 Relay <devnull+rsworktech.outlook.com@kernel.org>
+Date: Sat, 30 Nov 2024 21:38:22 +0800
+Subject: [PATCH net 1/2] skmsg: return copied bytes in
+ sk_msg_memcopy_from_iter
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241122121030.716788-1-maciej.fijalkowski@intel.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20241130-tcp-bpf-sendmsg-v1-1-bae583d014f3@outlook.com>
+References: <20241130-tcp-bpf-sendmsg-v1-0-bae583d014f3@outlook.com>
+In-Reply-To: <20241130-tcp-bpf-sendmsg-v1-0-bae583d014f3@outlook.com>
+To: John Fastabend <john.fastabend@gmail.com>, 
+ Jakub Sitnicki <jakub@cloudflare.com>, 
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+ Simon Horman <horms@kernel.org>, David Ahern <dsahern@kernel.org>
+Cc: netdev@vger.kernel.org, bpf@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, Levi Zim <rsworktech@outlook.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1296;
+ i=rsworktech@outlook.com; h=from:subject:message-id;
+ bh=+jh9LaMvNTwv+zmDx2vk37sFrN9lWR5dQyH5HZC8Q2M=;
+ b=owEBbQKS/ZANAwAIAW87mNQvxsnYAcsmYgBnSxV+cY/4xWp+AOu+HS1pF3mD1lkW8ZroPbktI
+ OGHl4YPTW+JAjMEAAEIAB0WIQQolnD5HDY18KF0JEVvO5jUL8bJ2AUCZ0sVfgAKCRBvO5jUL8bJ
+ 2O4mD/9uiFluDIQT5sursakLeOiycc85GUFuCghVJQyfsOzbd6i1STV1z0tniaX2ZFkcha+XtZK
+ Tn/qA3C6do92pLsRW0VpVB2JpWJS/Bgh80SSj0AHo9pfAqH7Rz9Z1nwznelejLdKFwbPK86zvVN
+ Nd8ar9fgT9f+lvptiLNjUefXXNU53Zv+yQpzZDM9/DWNFvBQ3MFltNWWTbi5NCPpxzoC/Eg243O
+ NoON2+47hgJyprsrI+nyuSwZZGJLwXEw6zNPWPuoC0dkD6sO2qKgJWQ46QfWUQh+ciIHd7cTvpA
+ T5oVR558KA1JDRt8a3prsYkXsGLDmeZ7TDiEzfYDXPZbuvDDuQaXcP9SqxY2i0moRHZqapRMUNo
+ 4ZYho5sDiVRM7L1lz3tUBUeWUH9JYgSOhCXmoP5IxkzAo22iDrd0ePZVAADcqcB15VtCkp6VgTT
+ I5+DdO8cyNgomya2WVLTUKeXFxurvyBAE4BWyt+EGnhlZJLwfR7cQELw/JOYB/RIedqlAyr05bd
+ b+vey1/eH12e3aRy/xMb6hOV4FbG8RczF7+Csj2WO8C+1lChytqCKRFus3On6S1OuO7KYKzZfZl
+ oPG/UpE4AQ6/2R1qV2YdJz3h00IA3T2KTywVhdYFDcEbD3pYc5LWcAtW7FIs6HWzImeirVgX9TO
+ 6tB4maLwLVTPTCA==
+X-Developer-Key: i=rsworktech@outlook.com; a=openpgp;
+ fpr=17AADD6726DDC58B8EE5881757670CCFA42CCF0A
+X-Endpoint-Received: by B4 Relay for rsworktech@outlook.com/default with
+ auth_id=219
+X-Original-From: Levi Zim <rsworktech@outlook.com>
+Reply-To: rsworktech@outlook.com
 
-On Fri, Nov 22, 2024 at 01:10:28PM +0100, Maciej Fijalkowski wrote:
-> v1->v2:
-> - CC stable and collect tags from Toke & John
-> 
-> Hi,
-> 
-> Jordy reported that for big enough XSKMAPs and DEVMAPs, when deleting
-> elements, OOB writes occur.
-> 
-> Reproducer below:
-> 
+From: Levi Zim <rsworktech@outlook.com>
 
-Please consider adding it to tools/testing/selftests/bpf/, since it is
-pretty small and self-contained. (A follow up patch is definitely
-welcome.)
+Previously sk_msg_memcopy_from_iter returns the copied bytes from the
+last copy_from_iter{,_nocache} call upon success.
 
-Thanks.
+This commit changes it to return the total number of copied bytes on
+success.
+
+Signed-off-by: Levi Zim <rsworktech@outlook.com>
+---
+ net/core/skmsg.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/net/core/skmsg.c b/net/core/skmsg.c
+index e90fbab703b2db1da49068b5a53338ce7ff99087..a65c2e64645863b80ddd94c464d86fcc587b5c04 100644
+--- a/net/core/skmsg.c
++++ b/net/core/skmsg.c
+@@ -369,8 +369,8 @@ int sk_msg_memcopy_from_iter(struct sock *sk, struct iov_iter *from,
+ 			     struct sk_msg *msg, u32 bytes)
+ {
+ 	int ret = -ENOSPC, i = msg->sg.curr;
++	u32 copy, buf_size, copied = 0;
+ 	struct scatterlist *sge;
+-	u32 copy, buf_size;
+ 	void *to;
+ 
+ 	do {
+@@ -397,6 +397,7 @@ int sk_msg_memcopy_from_iter(struct sock *sk, struct iov_iter *from,
+ 			goto out;
+ 		}
+ 		bytes -= copy;
++		copied += copy;
+ 		if (!bytes)
+ 			break;
+ 		msg->sg.copybreak = 0;
+@@ -404,7 +405,7 @@ int sk_msg_memcopy_from_iter(struct sock *sk, struct iov_iter *from,
+ 	} while (i != msg->sg.end);
+ out:
+ 	msg->sg.curr = i;
+-	return ret;
++	return (ret < 0) ? ret : copied;
+ }
+ EXPORT_SYMBOL_GPL(sk_msg_memcopy_from_iter);
+ 
+
+-- 
+2.47.1
+
+
