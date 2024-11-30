@@ -1,37 +1,37 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DA5D1990C0;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBDE319B3EC;
 	Sat, 30 Nov 2024 13:39:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732973954; cv=none; b=XzHuedE8GWYTBVfnsGT2piSPC/RHZJUugXrZpTxJWjsViZT6rMbRmo16Oy7lk/OPgbVU7x8cD+XMs6j5BXSf2SI42BTI77PHeEr+jcOADrSmUi137iS35HqDGBthYL4amXSZIY69B8yZWz4Gok0okLlqB4ZlOocZk09Kg03tf4o=
+	t=1732973955; cv=none; b=ku+vFsMDm7yvPaHDclYm8NGWnEoGlrjpTja/qz60N8cmwlTwlZCQT6UpW/1AyubiiaqjNl9Ki6qg6s22TY8c2yEQsp0pSi0yneYTHv7K/Demp8FdZj6IVcOsQCjdPSfOMdd0puyFE4NZbiBmUyhg+EMYBqKnIY44Y8FwIgo5cCI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732973954; c=relaxed/simple;
-	bh=AtoMv+qZEg3Jrjb92TD+QP+vPH9tNZ1fEkpRkBwkvCs=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=iEuMX3UjzHHjwsUepWWxIWbQlhe6yuiebjI6JoNJHKZvlxP19/qeKmCVZHKklgTgIw+OryTiWzS2q1QxuzX3F18mGORJlSb3E4Ftu9ywOM3v5bJSXchuAFMmcd4ueKU6RXia78zLxT/a4G60XNFOel9phI01GCyroDNWBpKXg7k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FtWhyN5S; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1732973955; c=relaxed/simple;
+	bh=YoSM2//cc1OE75pq1asOHygr+KnTmSM58GCnV79QVXU=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=STYx8VzZRmF0cdhu/5T0COBc5wnn5x41cE0p0Q07KhRjyFw9FstFXc08jL+KcwpGE41w2zS7g9UJ6oIZHXXJbLoVTkhfwOFNHA9pTT7UyxeoZsF4FJX5uBlHFAtJKrnyaD52QP3eocpOGxG9MmGVCfHg3o38DlntMi44WP2QLD8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=K90m6ATG; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FtWhyN5S"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 2D313C4CECC;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="K90m6ATG"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 5B1E6C4CED9;
 	Sat, 30 Nov 2024 13:39:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1732973954;
-	bh=AtoMv+qZEg3Jrjb92TD+QP+vPH9tNZ1fEkpRkBwkvCs=;
-	h=From:Subject:Date:To:Cc:Reply-To:From;
-	b=FtWhyN5SGodUWhs/LCaXDVaYgeAgHu957ETyuDh+cqKsAiU/Y/y7ZddQgta4Fr3Kn
-	 dFWIT5SwX4Pku9jXBJNqZxzmXAUgu0NzHThNgvek0RVG9thWnhZ5+rj8FjOcxiIr3R
-	 hI0ReOZV4veZIAaWmlgz6uh05Fg4gNODOm3BzeaVbzq5W/xUEK/dVLDXwmCA2bGYZw
-	 X9QEs+kU0Lz25wJg8ftS7eFe2ukS3CCzWbaI7GPvbc/9uF6Sa6fSFUhfBr7fn3BMaj
-	 bCxb8SGx0iNmIAxhg0nuLFG15QqudtXD4JSwNBuncuQ3iE4ABRQTIOJAKsQ2EZOtyJ
-	 hq4byjdPNRUTA==
+	bh=YoSM2//cc1OE75pq1asOHygr+KnTmSM58GCnV79QVXU=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
+	b=K90m6ATGI1uKjxBiHQT7I4cq4mR9KgA7lpS8DCJUjc9x2EFHpUsAC6hpvHYVCv+l2
+	 USCsStfVNmx2NtiNA5vckPD7TuXflE9weef1+3Pt90qGXsS6a08SxxdyL5MiJhStud
+	 WDv/fQT8siw6nTE2SWeUxdW9YBZNYRZ3NCa9VSanphcMM+iP8+hjoADWqDnLO+HhNY
+	 iWuoQYS/l/k15LDNN8HG46s8oFyx7hwdYRSx1GcArvQpzgTqdPgyK8Ba1r1iviKPie
+	 JAI7k1LzYfFlrF73ZbwZkvi3Z4lSk72KrR8wadadTHQvcV7rctH60d1qIaSaBsOYb1
+	 Nflp13jCfwj8w==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 116ABD73607;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4CB0BD73607;
 	Sat, 30 Nov 2024 13:39:14 +0000 (UTC)
 From: Levi Zim via B4 Relay <devnull+rsworktech.outlook.com@kernel.org>
-Subject: [PATCH net 0/2] Fix NPE discovered by running bpf kselftest
-Date: Sat, 30 Nov 2024 21:38:21 +0800
-Message-Id: <20241130-tcp-bpf-sendmsg-v1-0-bae583d014f3@outlook.com>
+Date: Sat, 30 Nov 2024 21:38:23 +0800
+Subject: [PATCH net 2/2] tcp_bpf: fix copied value in tcp_bpf_sendmsg
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -40,10 +40,9 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAE0VS2cC/x3MQQqAIBBA0avErBvQjMiuEi1Kx5pFJk5EEN09a
- fkW/z8glJkEhuqBTBcLH7FA1xW4bY4rIftiaFTTam0Uni7hkgIKRb/LiiEYZ33fUmcNlCplCnz
- /xxEinTC97wd7UFMuZgAAAA==
-X-Change-ID: 20241130-tcp-bpf-sendmsg-ff3c9d84e693
+Message-Id: <20241130-tcp-bpf-sendmsg-v1-2-bae583d014f3@outlook.com>
+References: <20241130-tcp-bpf-sendmsg-v1-0-bae583d014f3@outlook.com>
+In-Reply-To: <20241130-tcp-bpf-sendmsg-v1-0-bae583d014f3@outlook.com>
 To: John Fastabend <john.fastabend@gmail.com>, 
  Jakub Sitnicki <jakub@cloudflare.com>, 
  "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
@@ -52,21 +51,21 @@ To: John Fastabend <john.fastabend@gmail.com>,
 Cc: netdev@vger.kernel.org, bpf@vger.kernel.org, 
  linux-kernel@vger.kernel.org, Levi Zim <rsworktech@outlook.com>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1994;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2613;
  i=rsworktech@outlook.com; h=from:subject:message-id;
- bh=AtoMv+qZEg3Jrjb92TD+QP+vPH9tNZ1fEkpRkBwkvCs=;
- b=owEBbQKS/ZANAwAIAW87mNQvxsnYAcsmYgBnSxV3VGLEL49AHZ7R/d7EbVg6R8VkrJZM9QKxj
- wCbxoE/uROJAjMEAAEIAB0WIQQolnD5HDY18KF0JEVvO5jUL8bJ2AUCZ0sVdwAKCRBvO5jUL8bJ
- 2HlIEACiRItsYjOk5RJI2/JZUvDi3jlt5j1sj93UCDJRXYAm7dQQpxq38P+uHO3Iyxuz3kgIYfi
- uZmFtrsoU8/kikiFo+JFV7iMebGXZWugkcZFrZ2TpCWXvpKHd7bU/vwo9KhaeC0gQ2e0wsLI8Ee
- Y3DRi7EZyxX/mKIWzLxogiHDpT6esl6AslnH+sbdkIgeK9dpBtB1Ni+ligxBduKwgQDAKqM0MqX
- T1iQoTEAucGQXrAum66ejeeJ81quXXUKl1S/U+rJ0V1Yz2O3m6KZxy8Igz5nxcjbbe5hOHG3xm1
- JCgRW//D/ixRf4fy75vATRQp9tdQsSD/qp4AYBysk5LeBkvz88im03z2W7INhtzMwoONTwfG9ia
- rFQRjDvjfnXuTQ6v1P/3DGiXxPSK/VxAeScG5YTuUA62DcC1lZ38ToiL2wEdWfeSQmCd4lIBk8T
- aBZnwb3dlzy8eXrx/u6CNGIi8N9MWHuTvrdaEHwnXTZat2oLitWCc7ZT5Nmjw/IX7xWnVGKP/R9
- RmxOW/Xb5tBj2vpmViC61p3JFxeqvVVp4CWp0/3fJ2+pF+5MqusfPNAz17qLUifRFRWvdWFhR5J
- OG69JQPI8jYZnBJk3hqGtAgAo/OVeDy0Jl5TEiwte8qdOrbAwV9xptooTrXljidJ3iIs8FQNU4W
- +SqowYYutsCwnIg==
+ bh=BSkGG9GTRoR+hvU0RGsIgrZN4wSOYMDvwCLwhO4xA0I=;
+ b=owEBbQKS/ZANAwAIAW87mNQvxsnYAcsmYgBnSxV/R4dBaQRVcQRIIaNhbEPgxR11GIvnSrfk0
+ FNrgI8Ds9qJAjMEAAEIAB0WIQQolnD5HDY18KF0JEVvO5jUL8bJ2AUCZ0sVfwAKCRBvO5jUL8bJ
+ 2JhIEADFnoc0KrtgtrkTiauoo1Nu6q/SztNB5pqKgENVv6F8U11ZtAThNKgJZ0bAqOedmgz5Sa5
+ rNVW2ooN6hS4zKVq5SGypoGoMqx9k+dEX8B7NP7eQpcU+HOhyXx0eTKZs8P8Yre2UL9N4ZJdRMF
+ AiCTaPnh+Cs3nnuJTK5yMsPsc9c4miizFTzs34FidtHRZ/mRayXqMkVqBnI5aVx6WzoThrtI/mY
+ wGbDC9Qa2jzzAovMCbooG9lxTch9mzRM/p0sbBOAve5eMRnkagDDEqWRPP+sbfhkd+U06REtM8S
+ 95K8uBtqDgQUXSvVdwD2vv2CgDqvkAtHoSehPN47Rcq9JnATvSLxkQqqi1kWWRKvdgHz6Dmm2cy
+ Iy83wsC5iydLapfsWp/vUn60NAHBYBQtaBNpOMl/mZIiWXZCLaq2+UMT+Ybf9tTx3bn/9wdgSUC
+ yIiMvdl57DAobJRLzr+tcFQ6AiKTHOAZ1pmuzkAY9sv3VCDdyZWTlvdljJdiGoM1lf1pNX5VAdq
+ cQcc2hQ1Kmzz1xoUQGv2eRlZ7yiT0YgDVPWs900RGh5N34V6cml7qhDy36RIpv0EIOu/OIBmstL
+ rJ887YIecSfwhK311xHvFjyrCiDcj+4e9SAfYZhV0+ZwirotZ+QM7aiSbZAaoc32pC1pp4ct0HD
+ 3VbRGGq8Qa/z4rw==
 X-Developer-Key: i=rsworktech@outlook.com; a=openpgp;
  fpr=17AADD6726DDC58B8EE5881757670CCFA42CCF0A
 X-Endpoint-Received: by B4 Relay for rsworktech@outlook.com/default with
@@ -74,8 +73,10 @@ X-Endpoint-Received: by B4 Relay for rsworktech@outlook.com/default with
 X-Original-From: Levi Zim <rsworktech@outlook.com>
 Reply-To: rsworktech@outlook.com
 
-I found that bpf kselftest sockhash::test_txmsg_cork_hangs in
-test_sockmap.c triggers a kernel NULL pointer dereference:
+From: Levi Zim <rsworktech@outlook.com>
+
+bpf kselftest sockhash::test_txmsg_cork_hangs in test_sockmap.c triggers a
+kernel NULL pointer dereference:
 
 BUG: kernel NULL pointer dereference, address: 0000000000000008
  ? __die_body+0x6e/0xb0
@@ -106,32 +107,53 @@ BUG: kernel NULL pointer dereference, address: 0000000000000008
  entry_SYSCALL_64_after_hwframe+0x4b/0x53
 
 This is caused by tcp_bpf_sendmsg() returning a larger value(12289) than
-size(8192), which causes the while loop in splice_to_socket() to release
+size (8192), which causes the while loop in splice_to_socket() to release
 an uninitialized pipe buf.
 
 The underlying cause is that this code assumes sk_msg_memcopy_from_iter()
 will copy all bytes upon success but it actually might only copy part of
 it.
 
-This series change sk_msg_memcopy_from_iter() to return copied bytes on
-success and tcp_bpf_sendmsg() to use the real copied bytes instead of
-assuming all bytes gets copied.
+This commit changes it to use the real copied bytes.
 
 Signed-off-by: Levi Zim <rsworktech@outlook.com>
 ---
-Levi Zim (2):
-      skmsg: return copied bytes in sk_msg_memcopy_from_iter
-      tcp_bpf: fix copied value in tcp_bpf_sendmsg
-
- net/core/skmsg.c   | 5 +++--
  net/ipv4/tcp_bpf.c | 8 ++++----
- 2 files changed, 7 insertions(+), 6 deletions(-)
----
-base-commit: f1cd565ce57760923d5e0fbd9e9914b415c0620a
-change-id: 20241130-tcp-bpf-sendmsg-ff3c9d84e693
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-Best regards,
+diff --git a/net/ipv4/tcp_bpf.c b/net/ipv4/tcp_bpf.c
+index 370993c03d31363c0f82a003d9e5b0ca3bbed721..8e46c4d618cbbff0d120fe4cd917624e5d5cae15 100644
+--- a/net/ipv4/tcp_bpf.c
++++ b/net/ipv4/tcp_bpf.c
+@@ -496,7 +496,7 @@ static int tcp_bpf_send_verdict(struct sock *sk, struct sk_psock *psock,
+ static int tcp_bpf_sendmsg(struct sock *sk, struct msghdr *msg, size_t size)
+ {
+ 	struct sk_msg tmp, *msg_tx = NULL;
+-	int copied = 0, err = 0;
++	int copied = 0, err = 0, ret = 0;
+ 	struct sk_psock *psock;
+ 	long timeo;
+ 	int flags;
+@@ -539,14 +539,14 @@ static int tcp_bpf_sendmsg(struct sock *sk, struct msghdr *msg, size_t size)
+ 			copy = msg_tx->sg.size - osize;
+ 		}
+ 
+-		err = sk_msg_memcopy_from_iter(sk, &msg->msg_iter, msg_tx,
++		ret = sk_msg_memcopy_from_iter(sk, &msg->msg_iter, msg_tx,
+ 					       copy);
+-		if (err < 0) {
++		if (ret < 0) {
+ 			sk_msg_trim(sk, msg_tx, osize);
+ 			goto out_err;
+ 		}
+ 
+-		copied += copy;
++		copied += ret;
+ 		if (psock->cork_bytes) {
+ 			if (size > psock->cork_bytes)
+ 				psock->cork_bytes = 0;
+
 -- 
-Levi Zim <rsworktech@outlook.com>
+2.47.1
 
 
