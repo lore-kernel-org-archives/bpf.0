@@ -1,87 +1,110 @@
-Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74514481C4;
-	Mon,  2 Dec 2024 12:12:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.255.230.98
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11A9C1D86C9;
+	Mon,  2 Dec 2024 12:38:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733141531; cv=none; b=W+ePTW88oxnLNFpKnLGv6CWnzLUgRjqErRG8aUCsL4xPTBE7Km/PB1i269ylZqMxJqTMslvAtbhPhcpmo664GzSXJycp+hZQqYsX4hpruoVqQbGavOV5nKucH/UAUKFO3bxRhXrxnl1PkmqlUR+TFGFuUnSIkvPRU8xKMBBLW1g=
+	t=1733143108; cv=none; b=M13WYoXdXVGjKLw9bKUgr9Gmb7HlxrkCojlztLlXe0lUS74VNDiuOQ8jnj6OK5VdUSDDE7uDvgg7a0NIWIRC6cwibl0kJeqBcmeEZQP2i40vurEoGoYmHhiiq+I8RmZz8/uyGkmANsmny44CcwUU+Vlml6siVZgI1euPB7LjzXc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733141531; c=relaxed/simple;
-	bh=MkzK6dus06fMlQwf7cDlcwQoJ7ROfhuxKa5GPAQRKaw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=vC2Iw8JGR9mDqVoSdBwjz0CdvNr6yz5MCoieR2q1nexy7EfflDLiR20lIJviySKnV5ZxA+H0y2xva1RKLxrztKYlnwVZ0Q9KNfSlc9FMZ8e+2pL9s6Ydr7U+CghrN0kHMtuQNEx5piQ+byRdJ65nc6Fdl9Ux1pZWxlUEabi/qgU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=denx.de; spf=fail smtp.mailfrom=denx.de; arc=none smtp.client-ip=46.255.230.98
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=denx.de
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=denx.de
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-	id 7D53B1C00C4; Mon,  2 Dec 2024 13:12:07 +0100 (CET)
-Date: Mon, 2 Dec 2024 13:12:07 +0100
-From: Pavel Machek <pavel@denx.de>
-To: Sasha Levin <sashal@kernel.org>
-Cc: linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-	Zhu Jun <zhujun2@cmss.chinamobile.com>,
-	Andrii Nakryiko <andrii@kernel.org>, ast@kernel.org,
-	daniel@iogearbox.net, bpf@vger.kernel.org
-Subject: Re: [PATCH AUTOSEL 4.19 02/21] samples/bpf: Fix a resource leak
-Message-ID: <Z02kF5egZ//yB7Tf@duo.ucw.cz>
-References: <20241124135709.3351371-1-sashal@kernel.org>
- <20241124135709.3351371-2-sashal@kernel.org>
+	s=arc-20240116; t=1733143108; c=relaxed/simple;
+	bh=g20qBYlXeNwQUsiewfivl+fCumQUvVsethy31GmWhWA=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=KkiUloCySQ4a7d50dt5CnTPwGZMArWZy4WMBKQZRmKjviLV6t4cyk2n3u9fTfqeFKmcRfCyLRfcdiPiHsnQ65PmmdMkDT7dystbM+Xdn8i4K/ruoziLn2Tcxahan98wBkq6KEW7iwJ9hvN9dtOnjpiuHSbaJNOlE6bSTGQ0wsMI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VPhy1djw; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VPhy1djw"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91CC4C4CED1;
+	Mon,  2 Dec 2024 12:38:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1733143107;
+	bh=g20qBYlXeNwQUsiewfivl+fCumQUvVsethy31GmWhWA=;
+	h=Date:From:To:Cc:Subject:From;
+	b=VPhy1djwN2JsmpJlUbIw4kNwHT+eZ5MP+e6rw9LdNFWUjIHazHMeOSoA4YwqjrqWE
+	 NIQyeiXbP6F1fCbGQB+Ami8wgMF3wgXnAc7UHIXElLTx0aDiklhX4aL+nWcIKTMl8+
+	 IaRX5DquGC2CZQ21sTAwJySyr7LgkT0b8t9VayG6rA7PJF+I99Bqi744VbFYLznbiD
+	 pT4wOqgHmtB4ZC/S6bgVAuBklpsX+pzMV4/fuJn14gp4s6yWTdtmC6+Tl2V4ZCH/Fr
+	 9V6LP89mxWn/1d+Rx8MVGVznjIdUx1Omku+fPVkkPjNVFwTmiT/mGjiFNJClWATZya
+	 1+zDxN+5kwkFw==
+Date: Mon, 2 Dec 2024 13:38:22 +0100
+From: Christian Brauner <brauner@kernel.org>
+To: Alexei Starovoitov <ast@kernel.org>, Song Liu <song@kernel.org>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	KP Singh <kpsingh@kernel.org>
+Cc: linux-fsdevel@vger.kernel.org, bpf@vger.kernel.org
+Subject: bpf_task_storage improvement question
+Message-ID: <qwinzohs4pwawth5i6g7hfb2376pyfmkurbo2rwvglv77asbkr@mq2goetrtmpu>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-	protocol="application/pgp-signature"; boundary="QWZ96iafGrXzatfO"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20241124135709.3351371-2-sashal@kernel.org>
+
+Hey,
+
+I just had to take a quick look at kernel/bpf/bpf_task_storage.c and
+realized that you're doing:
 
 
---QWZ96iafGrXzatfO
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+	fd = *(int *)key;
+	pid = pidfd_get_pid(fd, &f_flags);
 
-Hi!
+	// something something
 
-> [ Upstream commit f3ef53174b23246fe9bc2bbc2542f3a3856fa1e2 ]
->=20
-> The opened file should be closed in show_sockopts(), otherwise resource
-> leak will occur that this problem was discovered by reading code
+	task = pid_task(pid, PIDTYPE_PID);
 
-Well, code exits when this fails, so there's really no leak.
+	bpf_task_storage_lock();
+	// something something
+	bpf_task_storage_unlock();
+	put_pid(pid);
 
-Best regards,
-								Pavel
+That reference count bump on struct pid seems unnecessary and I suspect
+your lookup routines are supposed to be fast. So why don't you just
+open-code this. Something like:
 
-> +++ b/samples/bpf/test_cgrp2_sock.c
-> @@ -174,8 +174,10 @@ static int show_sockopts(int family)
->  		return 1;
->  	}
-> =20
-> -	if (get_bind_to_device(sd, name, sizeof(name)) < 0)
-> +	if (get_bind_to_device(sd, name, sizeof(name)) < 0) {
-> +		close(sd);
->  		return 1;
-> +	}
-> =20
->  	mark =3D get_somark(sd);
->  	prio =3D get_priority(sd);
+diff --git a/kernel/bpf/bpf_task_storage.c b/kernel/bpf/bpf_task_storage.c
+index bf7fa15fdcc6..dc36a33c7b6d 100644
+--- a/kernel/bpf/bpf_task_storage.c
++++ b/kernel/bpf/bpf_task_storage.c
+@@ -92,10 +92,12 @@ static void *bpf_pid_task_storage_lookup_elem(struct bpf_map *map, void *key)
+        struct task_struct *task;
+        unsigned int f_flags;
+        struct pid *pid;
+-       int fd, err;
 
---=20
-DENX Software Engineering GmbH,        Managing Director: Erika Unter
-HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
+-       fd = *(int *)key;
+-       pid = pidfd_get_pid(fd, &f_flags);
++       CLASS(fd, f)(*(int *)key);
++       if (fd_empty(f))
++               return -EBADF;
++
++       pid = pidfd_pid(f);
+        if (IS_ERR(pid))
+                return ERR_CAST(pid);
 
---QWZ96iafGrXzatfO
-Content-Type: application/pgp-signature; name="signature.asc"
+@@ -104,19 +106,13 @@ static void *bpf_pid_task_storage_lookup_elem(struct bpf_map *map, void *key)
+         */
+        WARN_ON_ONCE(!rcu_read_lock_held());
+        task = pid_task(pid, PIDTYPE_PID);
+-       if (!task) {
+-               err = -ENOENT;
+-               goto out;
+-       }
++       if (!task)
++               return ERR_PTR(-ENOENT);
 
------BEGIN PGP SIGNATURE-----
+        bpf_task_storage_lock();
+        sdata = task_storage_lookup(task, map, true);
+        bpf_task_storage_unlock();
+-       put_pid(pid);
+        return sdata ? sdata->data : NULL;
+-out:
+-       put_pid(pid);
+-       return ERR_PTR(err);
+ }
 
-iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCZ02kFgAKCRAw5/Bqldv6
-8uO/AJ4yu02w5oJJFG44mmAXcBPNDsbUPwCaA0u9To22S1kITmJIDKIl6rEP8tA=
-=FaIJ
------END PGP SIGNATURE-----
-
---QWZ96iafGrXzatfO--
+which avoids the reference count bumps on @pid.
+It remains pinned by the pidfd anyway.
