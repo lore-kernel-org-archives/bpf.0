@@ -1,76 +1,83 @@
-Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9EACA175D29;
-	Mon,  2 Dec 2024 16:15:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F40DD13B797;
+	Mon,  2 Dec 2024 16:18:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733156148; cv=none; b=QeyVRebC1luZPMbbIz/PISYy1snKoz/55LGNKeqgk0r7zcvMlBFuFMayIjnR8agRctarYxtKK86ijww2oTtE5iw7heOL6f8lYf/oFwu8fvaElRtEbDxWbgkNJ17UWOjPEoOEtAzwOuldUHVIDo8uAuIMhTo8BQSFY8+NaQ4tUno=
+	t=1733156339; cv=none; b=TPEty/yva3IdFecVSZ0x5DJO/DQxdplJ5h1CCsgalm1Z58GXxxLfYsX3eiZVeOr5aNLWrE085vKhcIn27sEhHtJ5itub/rajYxNczzyrVM6v3fdTkyEWDkA+cJif99AwE3ICGqMYwZENDpjUtuh7DdXw3ABJ9bZ7rEmzQnuM7OQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733156148; c=relaxed/simple;
-	bh=vKH/VyHGs5Vu3c6cGYEA/Eqhr391RwOu84Z53Nh4V3w=;
+	s=arc-20240116; t=1733156339; c=relaxed/simple;
+	bh=qfIaJ4ShSCmpqUV1XleP9ul0qvjJ8F7UcMNkf7an9qU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fPG92GKII652+oMDrc78buJnv21Qgrcjyt4W62y3NCsijaJSZUsw2u2fasyqDupPIWpFoka0YZdljv1elasYT73bYRMC7agI0UDJbaVubiujtyIg0KhhB+xs1rUK8tI1KQqmtb4VL0BjQw2iYyXqn/zXvOzxiHjJ0HX5VEj7Z7s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jEXQ+8al; arc=none smtp.client-ip=209.85.210.177
+	 Content-Type:Content-Disposition:In-Reply-To; b=cTEg2nbnvgw1hYvmC5ZcCqG4i0eHEuLx/VrUxw2kIE5qulgn4+lngJrKhpMAyMpqa7inVT+bFGz89uL2uNECUiZ18SXZVZTSV1hg4iuce/sQkkavcnriKu7TEqo6f9cqYYaxBlirgHeuFlCBw9dQ+OXo6OlHQ49wtV638Hr90Q8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CUtlshLS; arc=none smtp.client-ip=209.85.214.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jEXQ+8al"
-Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-7250906bc63so3285598b3a.1;
-        Mon, 02 Dec 2024 08:15:46 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CUtlshLS"
+Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-2154e3af730so22581015ad.3;
+        Mon, 02 Dec 2024 08:18:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1733156146; x=1733760946; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=eW/wfnh8N5no52Gp+owhRKuizaBDFaei5Sky6tMENBs=;
-        b=jEXQ+8alsh6XT1yZJ5IOADOyZKZdlMS7RCyaZb7zT1ErA0FXiORUgOyOBcOxu42mIz
-         rQWJ+rPbGBzzqfDa3HMVPp25No1IZf0QTqYTlHs0MR0E5IWKnEuqjaoyGekEBmRvxPEt
-         nMSsThsFmscn+dMYF1PHddaW6G+yde7Z+ZUNFglwaifJ2fpNmSCxsjFgwyck/atrgkob
-         Bz1FsAqrYIymjeMFrhpMsy1zwRfZwC2oEIG3XoR0jQrzFK/JXCJMe6PUie37hbl86wxX
-         bLpBv+SC20mqjzOxvJNG1r3c1jriIXmkLbMNXtRojitpheKix9yXqG9nDooC92hFSyEN
-         0PMw==
+        d=gmail.com; s=20230601; t=1733156337; x=1733761137; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=RsOuljns2/quAly2UNcpAnHyOi4kXlWKKxpMymqaib8=;
+        b=CUtlshLSGXZXVtGz6cbWh9Pp9df+PjwLBVhd9aY8PkT8XpU20bo0sN3gt/+otNomB8
+         qPTA/k0fKLTuyhb1WfhR/rjgxW3K31012OKEb4wLusvTasO6UyzCuZgL9lD0HO15QkiW
+         CoICCE41G/gcdUbs3R3ATihfSZz39agX74PTxwjvl7F6llWOZTg5Tu3NHC7QxBWvBnRD
+         jD2uYDhsA1FjEvBORfR0xtKSwSaOwq4c62DZ5WwmkQAqTBOfSfbsfoUL0RvuFgv85+J/
+         1FE8MTNC7VdyEymvvzmMwzB4qLpIofZpfh11nHi8UXB8NFuSig+SI9EVFS8ChGPImGjO
+         m4cQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733156146; x=1733760946;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=eW/wfnh8N5no52Gp+owhRKuizaBDFaei5Sky6tMENBs=;
-        b=XjAbc5ilsOvvy9NE1XRO5liz37Hwl3sWJHxw4ijcnSPVon/k7pTeaLzel9IW66pPkk
-         R7HCBvE4kGTpxn+DSG4HA8ASnFbm+Mnb/igetCtZgsuZSEHtDsbeSfu4bz1w25SdXfIE
-         WumdiePeODgtmNL8U8sILY4IKlstYcAJm1fPv4lfdDOwSP22wbGYsTXuhrRrWiyI++H+
-         RprBWnw5GPJvC0DeoSiUJjYBBBkbK8Ok3Y1XQw7dyK54c9A4zIw1tS7AmN2G73OAon3Q
-         2wbTVpzSG16R+/FF4kBM9mCV+ivd6mVyAsc/8YXhhdxZS4qTjgZkwEmWXepxc22a5CmV
-         9EjA==
-X-Forwarded-Encrypted: i=1; AJvYcCXNcqHzpprLZWLHXLnzaqD7ZPAHffN3Gj2zYagub7/R/ZTZY5xlQhejABBGy6uKXJ5KUQ0=@vger.kernel.org, AJvYcCXz4Z/Qsu3vpTJ5hnGQy8ZUPBBwaHjf7niKqnsoTYPKFCG7btndlwPz/k4SLlLYU7I7OovnnYbQ@vger.kernel.org
-X-Gm-Message-State: AOJu0YyuA2d+uqeyUuMRn8234BumAuxp++Y/zw5pM/GlVwNLdP0MyylP
-	DXh1ptqYuGIDDjfcCHm60KYu36m25yZvddiOq6Tjh+mWLFqk1Ms=
-X-Gm-Gg: ASbGncvOVMwT/ekfCAPOQHW6JOXPY0J1aOVfuFgmJDLMa8Kcu2avVnevsBry9/KdQ3d
-	g8g0vFRvh38Wxz982Yb+nhgd3ysQKK2dcIFxSbotRcG6GKdTFlfnRYj6rUHwyzJ9DKix+jHTyZh
-	WZGLQsG2ASKTmkNXBr1OpSvAbcAm2aeFfcCjeT0Ja4EtIdZkeNhMPDKl3E4+XzQnRu/sTdA31dx
-	9rjXlMvrIiUC45FWmxZ7mNBbkgJngOkzpxGgENHZZ2yIJDS2g==
-X-Google-Smtp-Source: AGHT+IHdKZ4DjXfo0tLnEtHRICNhBAhY92uoAXU97x9uWgtkTFfPImHj4pxzZtATdJeGIfa2kd0P3A==
-X-Received: by 2002:a05:6a00:22cf:b0:725:37a4:8827 with SMTP id d2e1a72fcca58-7253f2df712mr31237136b3a.3.1733156145693;
-        Mon, 02 Dec 2024 08:15:45 -0800 (PST)
+        d=1e100.net; s=20230601; t=1733156337; x=1733761137;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=RsOuljns2/quAly2UNcpAnHyOi4kXlWKKxpMymqaib8=;
+        b=MaWxatgOSei8JI8X52qFSRLlY0WbX5L/xArx/hfnj85fYH5yoh+yQ2vfyTVs0mMsHj
+         ZlUXscPs/KKCXaCaMQrNAJJ1nhMLNOqGZkdev6AzpZ1+NTjowLOi//PZQ65T+Ai2YElR
+         1iGcMFLQtTzGCiulkaUbE1q/gEe+SNwYUAhHD++aQhS1gwA/kJ0zHcGUj/Pad3AtF/xM
+         399AVoWIY5fflPOkR3u5Ft7GNfHiEtpQqSBSJ7Vy/BEOp0rl7v9kr2vFbfXQ7yXKzs8Y
+         OzG01fGtdOXBMG96kFVOqMeVWSDDvGwbO2u1A/9WzFA5qiqRKQCWNlAh90mNPGz3El7G
+         QdMg==
+X-Forwarded-Encrypted: i=1; AJvYcCVDg+f4b2CNO9u15A/pQznlM8HLkAu4T9ZhKzxpx2lxQryZBlJOU16YzQklFEFLSMlA3XU5CW3plgBkun7E4dJC@vger.kernel.org, AJvYcCVTzSvD+8HQca3kUowu+7BB9Gqz9fimUaPmb8zDGDrgYAnwdLCFRdwVFdr9tt95QeHvafQ=@vger.kernel.org, AJvYcCXKVLJ+uMSI44dr1Vr+89HqYKe1Iae79hIelsc6CUBExNgIuXcrh9kLFAwlfKpK1yL5VzYF2LgWjAWU3Cz1@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxq/l26FXaXJm5HXg1sYnotzqZ0eq6yo5rfxk1aOw7AUXGQ5fwE
+	6dkoP0TYHCBR8ra7qlDcs0gFHXO8R0yL6gYNty+mHtcYGI6yjVA=
+X-Gm-Gg: ASbGncswWTejEr5Fz8MTKvN7QmfvZr62t/Z7Vi9o1D6e4gdfLUuWzvNB95CxqDRIM5x
+	w5beyu5PhnNCb0e+9L0OyiLGo5Hp6epNgiqg0FEvMAWhV8d0CLNQOmXMiERmLPQsGpyQ9olA1KL
+	Qs36Naq+PuHE6N/+yv+QMIHZ48fOfXCL2I06FjOoxRPHQrO4XUk5Jg30biF78ZAR8CBYSEzrOyK
+	4NJx3A9g30x286tHCGk71JrtuER8FOEzLw0+DpRUkwW0fEhMQ==
+X-Google-Smtp-Source: AGHT+IF6AZPwROzlvBT9zSLGk0RRa3aXEZ9DLjEW3tv6xUKcm9Fkbfb3twVm1UvkwajoSg03oGZGrg==
+X-Received: by 2002:a17:902:d4c7:b0:215:86c2:3fe0 with SMTP id d9443c01a7336-21586c242f4mr76817585ad.38.1733156336999;
+        Mon, 02 Dec 2024 08:18:56 -0800 (PST)
 Received: from localhost ([2601:646:9e00:f56e:123b:cea3:439a:b3e3])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-72541762411sm8970776b3a.20.2024.12.02.08.15.44
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-215413d0579sm61600345ad.133.2024.12.02.08.18.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Dec 2024 08:15:45 -0800 (PST)
-Date: Mon, 2 Dec 2024 08:15:43 -0800
+        Mon, 02 Dec 2024 08:18:56 -0800 (PST)
+Date: Mon, 2 Dec 2024 08:18:56 -0800
 From: Stanislav Fomichev <stfomichev@gmail.com>
-To: Shigeru Yoshida <syoshida@redhat.com>
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-	martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
-	yonghong.song@linux.dev, john.fastabend@gmail.com,
-	kpsingh@kernel.org, sdf@fomichev.me, haoluo@google.com,
-	jolsa@kernel.org, davem@davemloft.net, edumazet@google.com,
-	kuba@kernel.org, pabeni@redhat.com, horms@kernel.org,
-	hawk@kernel.org, lorenzo@kernel.org, toke@redhat.com,
-	bpf@vger.kernel.org, netdev@vger.kernel.org,
-	syzkaller <syzkaller@googlegroups.com>
-Subject: Re: [PATCH bpf] bpf, test_run: Fix use-after-free issue in
- eth_skb_pkt_type()
-Message-ID: <Z03dL0zxEnmzZUN7@mini-arch>
-References: <20241201152735.106681-1-syoshida@redhat.com>
+To: Alexis =?utf-8?Q?Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
+Cc: Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Mykola Lysenko <mykolal@fb.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+	Shuah Khan <shuah@kernel.org>, ebpf@linuxfoundation.org,
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+	Bastien Curutchet <bastien.curutchet@bootlin.com>,
+	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH bpf-next] selftests/bpf: ensure proper root namespace
+ cleanup when test fail
+Message-ID: <Z03d8FqVOVZJhxMu@mini-arch>
+References: <20241128-small_flow_test_fix-v1-1-c12d45c98c59@bootlin.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -79,81 +86,21 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20241201152735.106681-1-syoshida@redhat.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20241128-small_flow_test_fix-v1-1-c12d45c98c59@bootlin.com>
 
-On 12/02, Shigeru Yoshida wrote:
-> KMSAN reported a use-after-free issue in eth_skb_pkt_type()[1]. The
-> cause of the issue was that eth_skb_pkt_type() accessed skb's data
-> that didn't contain an Ethernet header. This occurs when
-> bpf_prog_test_run_xdp() passes an invalid value as the user_data
-> argument to bpf_test_init().
+On 11/28, Alexis Lothoré (eBPF Foundation) wrote:
+> serial_test_flow_dissector_namespace manipulates both the root net
+> namespace and a dedicated non-root net namespace. If for some reason a
+> program attach on root namespace succeeds while it was expected to
+> fail, the unexpected program will remain attached to the root namespace,
+> possibly affecting other runs or even other tests in the same run.
 > 
-> Fix this by returning an error when user_data is less than ETH_HLEN in
-> bpf_test_init().
+> Fix undesired test failure side effect by explicitly detaching programs
+> on failing tests expecting attach to fail. As a side effect of this
+> change, do not test errno value if the tested operation do not fail.
 > 
-> [1]
-> BUG: KMSAN: use-after-free in eth_skb_pkt_type include/linux/etherdevice.h:627 [inline]
-> BUG: KMSAN: use-after-free in eth_type_trans+0x4ee/0x980 net/ethernet/eth.c:165
->  eth_skb_pkt_type include/linux/etherdevice.h:627 [inline]
->  eth_type_trans+0x4ee/0x980 net/ethernet/eth.c:165
->  __xdp_build_skb_from_frame+0x5a8/0xa50 net/core/xdp.c:635
->  xdp_recv_frames net/bpf/test_run.c:272 [inline]
->  xdp_test_run_batch net/bpf/test_run.c:361 [inline]
->  bpf_test_run_xdp_live+0x2954/0x3330 net/bpf/test_run.c:390
->  bpf_prog_test_run_xdp+0x148e/0x1b10 net/bpf/test_run.c:1318
->  bpf_prog_test_run+0x5b7/0xa30 kernel/bpf/syscall.c:4371
->  __sys_bpf+0x6a6/0xe20 kernel/bpf/syscall.c:5777
->  __do_sys_bpf kernel/bpf/syscall.c:5866 [inline]
->  __se_sys_bpf kernel/bpf/syscall.c:5864 [inline]
->  __x64_sys_bpf+0xa4/0xf0 kernel/bpf/syscall.c:5864
->  x64_sys_call+0x2ea0/0x3d90 arch/x86/include/generated/asm/syscalls_64.h:322
->  do_syscall_x64 arch/x86/entry/common.c:52 [inline]
->  do_syscall_64+0xd9/0x1d0 arch/x86/entry/common.c:83
->  entry_SYSCALL_64_after_hwframe+0x77/0x7f
-> 
-> Uninit was created at:
->  free_pages_prepare mm/page_alloc.c:1056 [inline]
->  free_unref_page+0x156/0x1320 mm/page_alloc.c:2657
->  __free_pages+0xa3/0x1b0 mm/page_alloc.c:4838
->  bpf_ringbuf_free kernel/bpf/ringbuf.c:226 [inline]
->  ringbuf_map_free+0xff/0x1e0 kernel/bpf/ringbuf.c:235
->  bpf_map_free kernel/bpf/syscall.c:838 [inline]
->  bpf_map_free_deferred+0x17c/0x310 kernel/bpf/syscall.c:862
->  process_one_work kernel/workqueue.c:3229 [inline]
->  process_scheduled_works+0xa2b/0x1b60 kernel/workqueue.c:3310
->  worker_thread+0xedf/0x1550 kernel/workqueue.c:3391
->  kthread+0x535/0x6b0 kernel/kthread.c:389
->  ret_from_fork+0x6e/0x90 arch/x86/kernel/process.c:147
->  ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:244
-> 
-> CPU: 1 UID: 0 PID: 17276 Comm: syz.1.16450 Not tainted 6.12.0-05490-g9bb88c659673 #8
-> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.16.3-3.fc41 04/01/2014
-> 
-> Fixes: be3d72a2896c ("bpf: move user_size out of bpf_test_init")
-> Reported-by: syzkaller <syzkaller@googlegroups.com>
-> Signed-off-by: Shigeru Yoshida <syoshida@redhat.com>
-> ---
->  net/bpf/test_run.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
-> index 501ec4249fed..756250aa890f 100644
-> --- a/net/bpf/test_run.c
-> +++ b/net/bpf/test_run.c
-> @@ -663,7 +663,7 @@ static void *bpf_test_init(const union bpf_attr *kattr, u32 user_size,
->  	if (size < ETH_HLEN || size > PAGE_SIZE - headroom - tailroom)
->  		return ERR_PTR(-EINVAL);
->  
-> -	if (user_size > size)
-> +	if (user_size < ETH_HLEN || user_size > size)
->  		return ERR_PTR(-EMSGSIZE);
->  
->  	size = SKB_DATA_ALIGN(size);
-> -- 
-> 2.47.0
-> 
-
-I wonder whether 'size < ETH_HLEN' above is needed after your patch.
-Feels like 'user_size < ETH_HLEN' supersedes it.
+> Fixes: 284ed00a59dd ("selftests/bpf: migrate flow_dissector namespace exclusivity test")
+> Signed-off-by: Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
 
 Acked-by: Stanislav Fomichev <sdf@fomichev.me>
