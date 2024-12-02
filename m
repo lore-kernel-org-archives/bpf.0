@@ -1,111 +1,151 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFBE51FECB4
-	for <bpf@vger.kernel.org>; Mon,  2 Dec 2024 12:56:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3076201265;
+	Mon,  2 Dec 2024 13:55:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733144183; cv=none; b=Rq89B1Rm19e7b6uwqa2tBKoaMkT9KibMiVYjCSxkAGTjhrVE5Rd36kH19xRc7e8czT3GVUMMHGnf9Dbu3ejP28+6iF45dS6uxw1cAZOUq9TQOcjCfkkE/XqsTvVeGuiHU+UeQJnrOrpRX40ND4w3b7vMD9gvDjests5ovES8/7o=
+	t=1733147750; cv=none; b=R+QRHovArk/7BdT8oxLJaxhHBVJkV+3NZ7bp2N3ucay3Vqf9Zq5PcqiYtsuHPZT7tZXqeDi8tSdZUqg2uAeC1/TAb03YJh7tLUhPsvd6pijcyGdpfjQ6+U06wOz4AvDlD4izL52LZpn/QGcmbH0VL1rNvBYg+BWgKh8ILHnHa8g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733144183; c=relaxed/simple;
-	bh=XKcSpIqleiLKXzA/UBD2mf8atNVNWe36NG8cwqXHUyQ=;
-	h=Date:Message-Id:To:Cc:Subject:From:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=oYR52FDlDllwTXbKN1n5jqPmxV+BWTGUTkNL4quUmg5XpVnEyjPAccAD9s1AfCT9AOozCOg7JXRN2GX6XD4fjScYRResw1uIVqeG5x6t+L8AAzMO22YOsiTpQgxuQkFJPyBvr34El2chXkql3Yd8o0VrZyaXx5Nb1VQ9DfekXxk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=FSf78ilW; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1733147750; c=relaxed/simple;
+	bh=Ydj8DV5t6ezBarawKFIkqn56lPCfEsiVscFuKj8QUaY=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=pBs/d72VRThkS4sJUR0QQsqizCSVqvT3auAHBHyHWsvfeo90P0KQ50HgPkFZP27KWVNewv6OqGuVAYsFnEDmDy5lRg6QPv4A7jfnQx2qBzmXB2rH9Ap1IpE0KubkTzF/AgIx2CULRrdVy2QZpwDT60nM28wrr9S54aQepdpMET0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PYDhRaBU; arc=none smtp.client-ip=209.85.218.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="FSf78ilW"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1733144181;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=XKcSpIqleiLKXzA/UBD2mf8atNVNWe36NG8cwqXHUyQ=;
-	b=FSf78ilWrOJEJrsJxbXfDf4kH0VcsKYdMET2QQXaeI7HGgFZP/mvTPIv9MjIk2Q6kIMkIJ
-	NTEaWW/kTIAqhBApXwmzwbGhKTRi0C7Yq85kI/BFUixsrNvCA8gQ/D11bIwJEzBW/UeqFT
-	PZoWa6RJ+swcOLfxf4xCmtG7+am9Az0=
-Received: from mail-pl1-f200.google.com (mail-pl1-f200.google.com
- [209.85.214.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-48-RIUT68BPM-eb2YghwVH6Ew-1; Mon, 02 Dec 2024 07:56:19 -0500
-X-MC-Unique: RIUT68BPM-eb2YghwVH6Ew-1
-X-Mimecast-MFC-AGG-ID: RIUT68BPM-eb2YghwVH6Ew
-Received: by mail-pl1-f200.google.com with SMTP id d9443c01a7336-215a3fbb8d4so6111525ad.3
-        for <bpf@vger.kernel.org>; Mon, 02 Dec 2024 04:56:19 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PYDhRaBU"
+Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-aa51d32fa69so674993466b.2;
+        Mon, 02 Dec 2024 05:55:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1733147747; x=1733752547; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=PA539ENGyPb/F01SAT3XpfaroeO9b4eH8ud/s0JxHkw=;
+        b=PYDhRaBUw0G4TGqcvkvl5Ir3GNSxR5RX4G8DibmSHi5MBdmzI0lCYKeuGGA09XJKF9
+         hYRXw6QCKLG4MBPmJ7SCKHQdjd96LxeZpaeQMzEubUH+GQEowxjq3nu6ZAor8pVPpqTB
+         1z1q8zC4AjIpS3qTQKutEZVsyA2YeWbepmuWgF5shePMMe5ktMCc+JfURu9t4tIlk7cA
+         /OaTT8E5yG4m/Aqj05SKolzgdZn7ba8zytIQ1uRB1i9Th259EMlwVEUrFLho+vunwLNL
+         TJRWGqTp3UaLfrwEit5k0+1jYSdM0RdwSS9TygdqhAMhCcKkYVAGwiOXdv6KGBZtuFSF
+         +x+g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733144178; x=1733748978;
-        h=content-transfer-encoding:mime-version:references:in-reply-to:from
-         :subject:cc:to:message-id:date:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=XKcSpIqleiLKXzA/UBD2mf8atNVNWe36NG8cwqXHUyQ=;
-        b=XxKzOGUypVLXBdVDDfGl/Ns6mtG65udPTI8SsP7SNmwUdErJvVFv/25k+IkK/BHwnt
-         8+QceUeMXIoi3s44hvDuRhR2utU0Zz0iKuWhSnp1o0YpJrUL/GnJSz8uCCT6DP+DeUk7
-         I4cCxy2iczGZM+OKqR98gCMJI5Z9Aus6pBqBJCpwCOZCmf9MaIbBwNtn9v1jYN9iznbA
-         ZvVnQUloTiy34PV23CtiS8SIiR6WMRb+nt+TuApBz5vAjS2tE0mhxSumrtChh4Nky4NH
-         BF8bF1tNQyCJg24cqgvL9v3fXeh1jDUSF1IRDY7+JVF1AJNYRoG/ASx4CbWysoKpaKtb
-         gAXg==
-X-Forwarded-Encrypted: i=1; AJvYcCVSVx6HwE2Yc9yCSxhnT6tDxmIFv8u1kPNzk/H6DzGZgBEMQyUuXzEezyU1TMg9UawzTjU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YykgAT6q5Pv4kxk38MIo5YeOi3urIQ6m7Oqq+TXnGMhAciOvojg
-	rertxQBW4YkMj88quYoD98x5TOT6IAiTD9nu//mSy2okMMZKJRpAMLJGACfvgj1iC/zbQ6Z274m
-	dXjlUuoO55UJ8zIyfApz4P1sdYJiMcGXeZN4046iG0wRnjO1VRA==
-X-Gm-Gg: ASbGncs8jM1AJKn72DieKqpmC0CAPmGouinZP1qj/3YWNGhvSEJ7BUjhME+NAGnkskE
-	KWZorX4RjroEFuhsiUMgiO+mNlh/fXTRdUi5vCO205hANyfxmp5plbMDvUTjmJFQ8KZH1aFoxnd
-	7xJ1eTnKMURDEHZ78gV98bp7RCjpIBcCGodRY7SA3xcG/ZutsftKsN9fhVVL7kPHtL1MEEEqi5Y
-	IibJz0PX3QGzoUzan6h5o1QgVXIV0QMsuFjds/o5nOOeh4=
-X-Received: by 2002:a17:903:230d:b0:215:6e01:ad07 with SMTP id d9443c01a7336-2156e01b95fmr108932035ad.6.1733144178716;
-        Mon, 02 Dec 2024 04:56:18 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IHF2hbG8ic2+7SJeIpAEUnuyceBg+L9EW/IcZgt10HVRUVQF9A3JgMViVeeM6wluV6tH16bJQ==
-X-Received: by 2002:a17:903:230d:b0:215:6e01:ad07 with SMTP id d9443c01a7336-2156e01b95fmr108931605ad.6.1733144178425;
-        Mon, 02 Dec 2024 04:56:18 -0800 (PST)
-Received: from localhost ([240d:1a:c0d:9f00:523b:c871:32d4:ccd0])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-215a6fc2d31sm9763385ad.236.2024.12.02.04.56.12
+        d=1e100.net; s=20230601; t=1733147747; x=1733752547;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=PA539ENGyPb/F01SAT3XpfaroeO9b4eH8ud/s0JxHkw=;
+        b=jX3O6R/D5EpLhZHsGxO7wJU/YE894kfE5KBnpn7ets6uThVzzT4BR6sMQcd7saW2Rv
+         Zm0IeLNmsoQthgAgOGFeWimBZrmF1coSTh9ch41l5mqBpGhOEcGPYWTUCARkDgmS8hYa
+         +k6a8hyIHzPaaSas+Z/uAHeM7DZP0R3L+5wmPcaF+OtulPdGPkuALJxO+gaJOva7YqMi
+         GCQeGMvU/T8nOTQWTpptejSUmbfOIw9wxNK52jtZPmLzLquEzXuI/RNzI3BoGyLJUp1h
+         pJcM9VDtirD7UtTj5201WJJXjBCWGhj+HjVJetTDDk/FG6uosOpRUIl5GSWN8TDS4O3j
+         gaAw==
+X-Forwarded-Encrypted: i=1; AJvYcCXUmx11IyHrZx7BqUlgx6jBGucD1U0nx5zUg9SRGOJZ5y+f7xtiOxzsLkYCO8YgXN8hiHI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwQQLg+j54wAzjB93D0pAIy8TNfBIZib+TGpHkcxlt/KkcBqRQZ
+	PhAq+1FDgdGaMpU0gHRFScO9eA/HMtG2GBQ9c/mzdORfgGK1eYk/
+X-Gm-Gg: ASbGncsPEUmW6uia8TeqjvruxEOjGmriN33wqL8oVS/LC2r1rqSiLOCdY9SA2jKCgCF
+	UVmfOUWLB50BEJrRmab/YxgihToTQ4OOHt2j32cGHMWgNi8FiOTRTFNEwJoPSmkYs6DtJ+jEfzX
+	idmnze/Y2ctTC/1dOzIUVGdO25MpPnT1aPWdLqikFJJUWHSo+w3OoA01oFh37/UJf1N39pZPyyF
+	Erg5FVeKZD8sjfPt8oB7D4/mgNToWPjnD6DSxXUPWdhY7iEQmTEYodJ0prLumL9bksA1KdhdSan
+	OzHqcsv7SwHUkLjnFSvn/QM=
+X-Google-Smtp-Source: AGHT+IFbiAnceJQ6wHqsqmWoLH3bctwuYtX0/ueCNrTBmE9o5CxHZXly4Jy60FzEtPBhFASWIEDJYA==
+X-Received: by 2002:a17:906:3d29:b0:aa5:152c:1995 with SMTP id a640c23a62f3a-aa581028f89mr1666316266b.45.1733147746976;
+        Mon, 02 Dec 2024 05:55:46 -0800 (PST)
+Received: from krava (2001-1ae9-1c2-4c00-726e-c10f-8833-ff22.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:726e:c10f:8833:ff22])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-aa5997d574fsm513054366b.58.2024.12.02.05.55.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Dec 2024 04:56:18 -0800 (PST)
-Date: Mon, 02 Dec 2024 21:56:09 +0900 (JST)
-Message-Id: <20241202.215609.382397812745347709.syoshida@redhat.com>
-To: glider@google.com
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
- martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
- yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
- sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org, davem@davemloft.net,
- edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, horms@kernel.org,
- hawk@kernel.org, lorenzo@kernel.org, toke@redhat.com, bpf@vger.kernel.org,
- netdev@vger.kernel.org, syzkaller@googlegroups.com
-Subject: Re: [PATCH bpf] bpf, test_run: Fix use-after-free issue in
- eth_skb_pkt_type()
-From: Shigeru Yoshida <syoshida@redhat.com>
-In-Reply-To: <CAG_fn=VqUi=sGzz+0PJ9L7QrtOcgcn0ju=30BEGwB=D728wE8A@mail.gmail.com>
-References: <20241201152735.106681-1-syoshida@redhat.com>
-	<CAG_fn=VqUi=sGzz+0PJ9L7QrtOcgcn0ju=30BEGwB=D728wE8A@mail.gmail.com>
-X-Mailer: Mew version 6.9 on Emacs 29.4
+        Mon, 02 Dec 2024 05:55:46 -0800 (PST)
+From: Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date: Mon, 2 Dec 2024 14:55:44 +0100
+To: Ihor Solodrai <ihor.solodrai@pm.me>
+Cc: dwarves@vger.kernel.org, acme@kernel.org, bpf@vger.kernel.org,
+	alan.maguire@oracle.com, eddyz87@gmail.com, andrii@kernel.org,
+	mykolal@fb.com
+Subject: Re: [RFC PATCH 0/9] pahole: shared ELF and faster reproducible BTF
+ encoding
+Message-ID: <Z028YOBN_EnUA9Qm@krava>
+References: <20241128012341.4081072-1-ihor.solodrai@pm.me>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: Text/Plain; charset=utf-8
-Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241128012341.4081072-1-ihor.solodrai@pm.me>
 
-T24gTW9uLCAyIERlYyAyMDI0IDEwOjMyOjA0ICswMTAwLCBBbGV4YW5kZXIgUG90YXBlbmtvIHdy
-b3RlOg0KPiBPbiBTdW4sIERlYyAxLCAyMDI0IGF0IDQ6MjfigK9QTSBTaGlnZXJ1IFlvc2hpZGEg
-PHN5b3NoaWRhQHJlZGhhdC5jb20+IHdyb3RlOg0KPj4NCj4+IEtNU0FOIHJlcG9ydGVkIGEgdXNl
-LWFmdGVyLWZyZWUgaXNzdWUgaW4gZXRoX3NrYl9wa3RfdHlwZSgpWzFdLiBUaGUNCj4+IGNhdXNl
-IG9mIHRoZSBpc3N1ZSB3YXMgdGhhdCBldGhfc2tiX3BrdF90eXBlKCkgYWNjZXNzZWQgc2tiJ3Mg
-ZGF0YQ0KPj4gdGhhdCBkaWRuJ3QgY29udGFpbiBhbiBFdGhlcm5ldCBoZWFkZXIuIFRoaXMgb2Nj
-dXJzIHdoZW4NCj4+IGJwZl9wcm9nX3Rlc3RfcnVuX3hkcCgpIHBhc3NlcyBhbiBpbnZhbGlkIHZh
-bHVlIGFzIHRoZSB1c2VyX2RhdGENCj4+IGFyZ3VtZW50IHRvIGJwZl90ZXN0X2luaXQoKS4NCj4g
-DQo+IEhpIFNoaWdlcnUsDQo+IA0KPiBUaGFua3MgZm9yIHRha2luZyBjYXJlIG9mIHRoaXMhDQo+
-IA0KPiBBbSBJIHVuZGVyc3RhbmRpbmcgcmlnaHQgdGhhdCB0aGlzIGJ1ZyB3YXMgcmVwb3J0ZWQg
-YnkgeW91ciBvd24NCj4gc3l6a2FsbGVyIGluc3RhbmNlPw0KDQpIaSBBbGV4YW5kZXIsDQoNClRo
-YW5rIHlvdSBmb3IgeW91ciBjb21tZW50IQ0KDQpZZXMsIHRoaXMgaXNzdWUgd2FzIGlkZW50aWZp
-ZWQgYnkgcnVubmluZyBteSBvd24gc3l6a2FsbGVyIGxvY2FsbHkuDQoNCkkgYWRkZWQgdGhlICJS
-ZXBvcnRlZC1ieTogc3l6a2FsbGVyIDxzeXprYWxsZXJAZ29vZ2xlZ3JvdXBzLmNvbT4iIHRhZw0K
-dG8gZ2l2ZSBjcmVkaXQgdG8gdGhlIHN5emthbGxlciBjb21tdW5pdHkuDQoNCj4gT3RoZXJ3aXNl
-LCBpZiB0aGUgcmVwb3J0IG9yaWdpbmF0ZXMgZnJvbSBzeXprYWxsZXIuYXBwc3BvdC5jb20sIGNv
-dWxkDQo+IHlvdSBwbGVhc2UgYXBwZW5kIHRoZSBidWcgaGFzaCB0byB0aGUgUmVwb3J0ZWQtYnk6
-IHRhZz8NCg0KSSBjaGVja2VkIHN5emthbGxlci5hcHBzcG90LmNvbSwgYnV0IHRoaXMgaXNzdWUg
-ZG9lcyBub3Qgc2VlbSB0byBiZQ0KcmVwb3J0ZWQuDQoNClRoYW5rcywgIA0KU2hpZ2VydQ0K
+On Thu, Nov 28, 2024 at 01:23:44AM +0000, Ihor Solodrai wrote:
 
+SNIP
+
+> Test results for this patch series:
+> 
+>   1: Validation of BTF encoding of functions; this may take some time: Ok
+>   2: Default BTF on a system without BTF: Ok
+>   3: Flexible arrays accounting: WARNING: still unsuported BTF_KIND_DECL_TAG(bpf_fastcall) for bpf_cast_to_kern_ctx already with attribute (bpf_kfunc), ignoring
+> WARNING: still unsuported BTF_KIND_DECL_TAG(bpf_fastcall) for bpf_rdonly_cast already with attribute (bpf_kfunc), ignoring
+> pahole: type 'nft_pipapo_elem' not found
+> pahole: type 'ip6t_standard' not found
+> pahole: type 'ip6t_error' not found
+> pahole: type 'nft_rbtree_elem' not found
+> pahole: type 'nft_rule_dp_last' not found
+> pahole: type 'nft_bitmap_elem' not found
+> pahole: type 'fuse_direntplus' not found
+> pahole: type 'ipt_standard' not found
+> pahole: type 'ipt_error' not found
+> pahole: type 'tls_rec' not found
+> pahole: type 'nft_rhash_elem' not found
+> pahole: type 'nft_hash_elem' not found
+> Ok
+>   4: Pretty printing of files using DWARF type information: Ok
+>   5: Parallel reproducible DWARF Loading/Serial BTF encoding: Ok
+
+hi,
+when trying selftests with this change, I'm getting wrong .BTF
+on bpf selftest bpf_testmod.ko module
+
+$ bpftool btf dump file ./bpf_testmod.ko
+Error: failed to load BTF from ./bpf_testmod.ko: Invalid argument
+
+jirka
+
+> 
+> 
+> [1]: https://lore.kernel.org/dwarves/20241016001025.857970-1-ihor.solodrai@pm.me/
+> [2]: https://github.com/theihor/dwarves/pull/3
+> [3]: https://lore.kernel.org/dwarves/8678ce40-3ce2-4ece-985b-a40427386d57@oracle.com/
+> [4]: https://github.com/acmel/dwarves/compare/master...alan-maguire:dwarves:elf-prep
+> [5]: https://github.com/theihor/dwarves/pull/8
+> [6]: https://gist.github.com/theihor/f000ce89427828e61fdaa567b332649b
+> [7]: https://github.com/theihor/dwarves/pull/8/commits/a7bc67d79d90f98776c6dc5fdaf9f088eb09909d
+> 
+> 
+> Alan Maguire (3):
+>   btf_encoder: simplify function encoding
+>   btf_encoder: store,use section-relative addresses in ELF function
+>     representation
+>   btf_encoder: separate elf function, saved function representations
+> 
+> Ihor Solodrai (6):
+>   dwarf_loader: introduce pre_load_module hook to conf_load
+>   btf_encoder: introduce elf_functions struct type
+>   btf_encoder: collect elf_functions in btf_encoder__pre_load_module
+>   btf_encoder: switch to shared elf_functions table
+>   btf_encoder: introduce btf_encoding_context
+>   pahole: faster reproducible BTF encoding
+> 
+>  btf_encoder.c  | 661 ++++++++++++++++++++++++++++++-------------------
+>  btf_encoder.h  |   6 +
+>  dwarf_loader.c |  18 +-
+>  dwarves.c      |  47 ++--
+>  dwarves.h      |  16 +-
+>  pahole.c       | 265 +++++++++-----------
+>  6 files changed, 567 insertions(+), 446 deletions(-)
+> 
+> -- 
+> 2.47.0
+> 
+> 
