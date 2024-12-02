@@ -1,120 +1,95 @@
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailtransmit04.runbox.com (mailtransmit04.runbox.com [185.226.149.37])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5488A1FC0FA;
-	Mon,  2 Dec 2024 12:00:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 465A31FE46C
+	for <bpf@vger.kernel.org>; Mon,  2 Dec 2024 12:00:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.37
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733140845; cv=none; b=Ik18wg8w8njrUuMYOxN8LpWcyVrlwZS9BWUOEHvs5ffphzhB/xHQ5IfjbTYIIj/XGBzJXuZzoZLIdOKi1wVtv5a0+bSqOYDsUZZl1rFIRu//d6F1mwFtp1/o5lYIMrri3puezlqHtIFbj738LjeT7FO6nhXMj1kH/dz8PJKC+q8=
+	t=1733140849; cv=none; b=iV0SxYdmel1MGzJVgbjpQS2WTYuUm/oKkFpJ1XRrnYY+QoLvQarWjXF8k0O9+UxjtMQMUD0gUqJwZWzxbFkeMrXirDop9td6VTgNzYs563mKjPHK8ol6vNEtZNGU7weuHdrLb3RvV182os6I6sahHVqFBN9IjhxnygdOD2kyZ5s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733140845; c=relaxed/simple;
-	bh=JGYBHesYIbhC7aBl5yCYh/PzDEWQVUhlwalGax3dWiY=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WMGIK8MY0iAACYzwIYeXW9WZsMs2Jqy2RmoZ2R7+0aAREllUBRcghHQqf+wcLVpTZfluKwZDdPyxKUDtR13Q5uqmSdOwdA+m6shCpPrHNOO1NWKJyG033NxSb9080P0oBCs9NTfQKpg/Hh68Jtf4Tap2bEoOuq9iWytXUuJQQds=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mOLX9a97; arc=none smtp.client-ip=209.85.128.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1733140849; c=relaxed/simple;
+	bh=8w0r3ktu1M5FUF105N4Rsn60q1AcX5GbCp8n4ZRd1As=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=O0/y+/ZGYy7I5VBNSabAdoPxooOkYmdeNZfUOM2bfALEUANMI2QYYrCJJ5Gk5kDSPjzd7mvHtcUJUhO2Z5YX1x/qY/WclFgxMHMo44LI76a+T6HpI07gzeBmDFJi8NcTju+b6EDtx5YlCYVkXn/LuLJDlP1+hbYuS6sEzohCcZY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co; spf=pass smtp.mailfrom=rbox.co; dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b=fQ/sPKxh; arc=none smtp.client-ip=185.226.149.37
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rbox.co
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mOLX9a97"
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-434a1fe2b43so37390325e9.2;
-        Mon, 02 Dec 2024 04:00:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1733140843; x=1733745643; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=MQnantWxCB7aLJu1F0kD476uJFD2vd0GkTEQYnGy5wg=;
-        b=mOLX9a97jirvY0sKTqzVtRymLx1fTYgt9+YkTqzvTjFMjR63I2xYxHFiJuiP7vHy7C
-         dneq35YaF51dbSlDwiPrVOUEwwb0WqcUkDHxT8CITApoQXr+OvUQCAhZ31y9z+VyFXqM
-         +kLUyjul6LuFpZnSfxb7SXymLfxp/LqhgOJ2ggxnU4zyyJrAjxX6k52mDqPgdnVhXyQ/
-         GJpCTqhkzMXpW0bMrv4gxLGft1hYf7OyuwteS2oHVm56XnzyBlw8FhZ+Dqs4OE+PMu4F
-         Sbg6DvyphFhNjB7A68f3zH8MdNMocCeAAMYyutN5OdVu0OhFq1k4b3HKPAKhAwwpP4JQ
-         4XWw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733140843; x=1733745643;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=MQnantWxCB7aLJu1F0kD476uJFD2vd0GkTEQYnGy5wg=;
-        b=mI9buOci5Fu0hLR1SQnFGclByTHmC7bpuDtwlLMFYWCMRaoBBvUJm1ptpQ7EeclX2o
-         GSKaqW9L7bQf8Zg8OVkUS5UmrZ4y0p09t5YMOFJjV7wwzo8YrUXy9kxGML83JwONjiIw
-         35gvnImWbd9RKBzXHH1YQby4exF9DTSHEfkLBtQBgU4a6uJEzinR3wSKg/zNFX1UWP2T
-         3b6j+LbfrAQVPIVGLzvpZzYk2VluaLciaJnU+vNF01bVrZCYi5VXSwZwUBfFST7NADMX
-         WaGaNwWrssWg0plENQ1bl40lbd5QFjAey6Y1s2DVADIqGJjt9miFLh4D7AteI3JqajH+
-         GX3w==
-X-Forwarded-Encrypted: i=1; AJvYcCWS9Q0l86ihNPtaCHIu7xsqfpPIdHuxrTE1/Zp5C6VAkiWdquXOnlPqCy6dQlnLUr1RwBg=@vger.kernel.org, AJvYcCWkXjM9Nc7FscYOB2ROIqXgOvQNSMakhzP5Bit4eiX+zB2ThsUDFVjMrZpM5mi/Vr2Xgrvlnfbr6kHI0wFy@vger.kernel.org, AJvYcCX3xzK+dE/iCMv6z3Vszmtj9ytR/F/KP2hvlNbEnuKtoarwVQ6Ye7ZFD5ECe3qm3ArL6zluV26PTg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxB23XR6UF0Tffaxnjd+VPeLXX3PhoFfzgRGaJVWF64yHtRF1tx
-	Hfx7v427DdiCvC2ixYQz3hr2H5pqcmcoZZm6hQPKR2G6Ih/JZK66
-X-Gm-Gg: ASbGncvVbbLoVnVlfkirQ7USU6P33FPHSGa48Zx3PlSXxO6reqGc8ZP+149H+TyzuDx
-	oqWKfGHYOe5YRBcQl4K/L7xxuIYu/5MIso80WsG8/exuhs8k0j2sK/zPMQnvQovry2dbMa7NFA4
-	igVUWF2P518oS3V9eIpqLKy7aXUsovEhemCjaG9H5oN+ElVgjZolnSy7M8caf4MLDJiksIO983Z
-	ZBWe2fjzcN4YRJHfpcY9e9vIIGbjWDIb9OAR02kJikI/lU/5o33MvMBCs2nLGpc+NvaAtLvkDcd
-	iIxpc9n9iHAVCldN+QkAjjE=
-X-Google-Smtp-Source: AGHT+IFUnVztOxsIywsf2K4G+S+p56Y2jH9xH9k5ei+h2anBWbIlAMqqxZ0Jl6BPHhhsppFFnIdtUg==
-X-Received: by 2002:a05:600c:314a:b0:434:9de2:b101 with SMTP id 5b1f17b1804b1-434a9dbae1amr200448405e9.2.1733140842328;
-        Mon, 02 Dec 2024 04:00:42 -0800 (PST)
-Received: from krava (2001-1ae9-1c2-4c00-726e-c10f-8833-ff22.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:726e:c10f:8833:ff22])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-434aa7d29fbsm182935605e9.29.2024.12.02.04.00.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Dec 2024 04:00:41 -0800 (PST)
-From: Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Mon, 2 Dec 2024 13:00:40 +0100
-To: Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc: Alan Maguire <alan.maguire@oracle.com>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>, Daniel Xu <dxu@dxuuu.xyz>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Jan Alexander Steffens <heftig@archlinux.org>,
-	Domenico Andreoli <cavok@debian.org>,
-	Matthias Schwarzott <zzam@gentoo.org>,
-	Dominique Leuenberger <dimstar@opensuse.org>,
-	Dominique Martinet <asmadeus@codewreck.org>, bpf@vger.kernel.org,
-	kernel-team@fb.com, dwarves@vger.kernel.org,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: RFT: Testing pahole for the release of v1.28
-Message-ID: <Z02haBRcetTCNK7A@krava>
-References: <Z0jVLcpgyENlGg6E@x1>
+	dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b="fQ/sPKxh"
+Received: from mailtransmit03.runbox ([10.9.9.163] helo=aibo.runbox.com)
+	by mailtransmit04.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+	(Exim 4.93)
+	(envelope-from <mhal@rbox.co>)
+	id 1tI4dF-008GeA-Tl; Mon, 02 Dec 2024 12:30:25 +0100
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=rbox.co;
+	s=selector2; h=Cc:To:Content-Transfer-Encoding:Content-Type:MIME-Version:
+	Message-Id:Date:Subject:From; bh=SC1SAF+IARgGsN+DYWrWfiuj6Ct7UFuzudPQw8Fn9tE=
+	; b=fQ/sPKxh9nul6IWGHhds48hDA3TVcVtByLCZ6ENFVNswVL5jrrGUjkhibQOF4BO8NGxyuGLpp
+	rFsReiga4RfrD30f/WgBgwFH3Wyd8ExZuvwLlhux99QReFEavbs7Wy89FqKDeSTbrGYseF/yim7UO
+	q5U6UDPtYmTw43+RH46czAzy2qgkRFruzw5jez1N1yjDHhzit01E8lZ9A3dB9yQbeBnhfwV5aoE+m
+	KjdG6G6O49g6Yoh6YcRfdzZ1UvtV76FQ6qJntETS3hJEBiNCiE/spSVLcGqVJ1YgP5eB0gUriKjl1
+	geuDdnp2+3qqZo5WlGxuC8pdEfOcp2wBpx7tIQ==;
+Received: from [10.9.9.73] (helo=submission02.runbox)
+	by mailtransmit03.runbox with esmtp (Exim 4.86_2)
+	(envelope-from <mhal@rbox.co>)
+	id 1tI4dE-0007ES-Da; Mon, 02 Dec 2024 12:30:24 +0100
+Received: by submission02.runbox with esmtpsa  [Authenticated ID (604044)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.93)
+	id 1tI4d2-007H5a-4r; Mon, 02 Dec 2024 12:30:12 +0100
+From: Michal Luczaj <mhal@rbox.co>
+Subject: [PATCH bpf 0/3] bpf, sockmap: Fix the element replace
+Date: Mon, 02 Dec 2024 12:29:22 +0100
+Message-Id: <20241202-sockmap-replace-v1-0-1e88579e7bd5@rbox.co>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Z0jVLcpgyENlGg6E@x1>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIABKaTWcC/x3MTQqAIBBA4avErBP8iYSuEi3MxhoqFYUIxLsnL
+ b/FewUyJsIMU1cg4UOZgm8QfQf2MH5HRlszSC4HIblgOdjzNpEljJexyEZtNdfaKaMEtComdPT
+ +xxnW6GCp9QOSUogNZgAAAA==
+X-Change-ID: 20241201-sockmap-replace-67c7077f3a31
+To: Andrii Nakryiko <andrii@kernel.org>, 
+ Eduard Zingerman <eddyz87@gmail.com>, Mykola Lysenko <mykolal@fb.com>, 
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, 
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+ Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>, 
+ Jakub Sitnicki <jakub@cloudflare.com>, 
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+ Simon Horman <horms@kernel.org>
+Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ netdev@vger.kernel.org, Michal Luczaj <mhal@rbox.co>
+X-Mailer: b4 0.14.2
 
-On Thu, Nov 28, 2024 at 05:40:13PM -0300, Arnaldo Carvalho de Melo wrote:
-> Hi,
-> 
-> 	Please consider testing what is in the master branch both in
-> kernel.org as in github:
-> 
-> https://git.kernel.org/pub/scm/devel/pahole/pahole.git
-> https://github.com/acmel/dwarves.git
-> 
-> 	So that we can release v1.28, we want to follow the cadence of
-> the kernel, i.e. since the kernel was recently released, we should
-> release a new version of pahole, and this one is long overdue.
-> 
-> 	We'll then try to release v1.29 shortly after Linus releases
-> v6.13, and so on.
-> 
-> 	Alan Maguire accepted to co-maintain pahole and as soon as he
-> gets a kernel.org account he'll be able to help me in processing
-> patches, that we expect to continue with the current fashion of being
-> tested and reviewed by as many developers as possible, its greatly
-> appreciated and a good way for us to keep this codebase in shape.
-> 
-> Thanks a lot for all the help,
+Series takes care of two issues with sockmap update: inconsistent behaviour
+after update with same, and race/refcount imbalance on element replace.
 
-hi,
-works fine on my setup
+I am hesitant if patch 3/3 ("bpf, sockmap: Fix race between element replace
+and close()") is the right approach. I might have missed some detail of the
+current __sock_map_delete() implementation. I'd be grateful for comments,
+thanks.
 
-Tested-by: Jiri Olsa <jolsa@kernel.org>
+Signed-off-by: Michal Luczaj <mhal@rbox.co>
+---
+Michal Luczaj (3):
+      bpf, sockmap: Fix update element with same
+      selftest/bpf: Extend test for sockmap update with same
+      bpf, sockmap: Fix race between element replace and close()
 
-thanks,
-jirka
+ net/core/sock_map.c                                    | 6 +++---
+ tools/testing/selftests/bpf/prog_tests/sockmap_basic.c | 8 +++++---
+ 2 files changed, 8 insertions(+), 6 deletions(-)
+---
+base-commit: 537a2525eaf76ea9b0dca62b994500d8670b39d5
+change-id: 20241201-sockmap-replace-67c7077f3a31
+
+Best regards,
+-- 
+Michal Luczaj <mhal@rbox.co>
+
