@@ -1,128 +1,136 @@
-Received: from mail-lf1-f67.google.com (mail-lf1-f67.google.com [209.85.167.67])
+Received: from mail-lf1-f65.google.com (mail-lf1-f65.google.com [209.85.167.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADCB81F9A92
-	for <bpf@vger.kernel.org>; Mon,  2 Dec 2024 08:38:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.67
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D48B81F9EB0
+	for <bpf@vger.kernel.org>; Mon,  2 Dec 2024 08:38:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.65
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733128701; cv=none; b=IcBF2GVPKOsNKubPrzUbsruLTh03Bp7frMx/HZGLwKtyn43eFVTs7ytzpYDMZcsfn1IGYSUcxXPPNMFA+cOPxd5pGB8V/rKYoVANVe+tAK0kye/rU8LnBQHfNVxzfiV2fRT5HmLDez11369+/vkq5DTgFBNcSrLl7gMmy50wkQY=
+	t=1733128702; cv=none; b=gm4yycDx9cwhrnMxMpRUhp2eiSvBxLwxbd6ZOYjSaflA0Xo2tUM1j5B40B4kWW9/gpj3d4q6O9Sm/SnkybuCs4PaYcNcoQfRizZDZ3ohNdmXoO0XEMwdDSr/qzYTvAxX8ggmTIFySKUDIeixp3nTEVXrikP4cUrHATRJh9AH+k0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733128701; c=relaxed/simple;
-	bh=sB44DCTgb5gmlhUu3ScZybua8CSPIBJJu7aUY16jRfI=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=tq0BOL6FK8aWgxe5Nd5PysOXTkAHzYc73jQhpgEVwWwI55qrfVXhFCbSsP18n6zppmgn0QIeKlLL17vykxD00y83xPARRfLgzPRcj6zNmQE0dLL5WKAd0sNybEGEa8KIYtvElJxk5H/coCg7DGANudsmBS1VkNgno4bK6xvc3fM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GADBugVi; arc=none smtp.client-ip=209.85.167.67
+	s=arc-20240116; t=1733128702; c=relaxed/simple;
+	bh=6hBaUCoLMQRT9OMYIV/E4fQ+WFggaHezKACaBhUmbxY=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=OAufY5w1ad3uo6lUjiZ6wpeIbHTU0xsaU9fMwtLZOPQK1MN783U02XApiGR/vjl/STMIGcdVmDpxhDxc1g6lLbU8k3t3f9sFmHugVfyxVH9cXoNH3vY4E+aAOOF/dibiFpAvnHtaFi2NYILKvyPCCzaGqy9ucjC+vsAxUtt0pC4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MkELEJw+; arc=none smtp.client-ip=209.85.167.65
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GADBugVi"
-Received: by mail-lf1-f67.google.com with SMTP id 2adb3069b0e04-53de8ecafeeso4159694e87.1
-        for <bpf@vger.kernel.org>; Mon, 02 Dec 2024 00:38:19 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MkELEJw+"
+Received: by mail-lf1-f65.google.com with SMTP id 2adb3069b0e04-53de8ecafeeso4159708e87.1
+        for <bpf@vger.kernel.org>; Mon, 02 Dec 2024 00:38:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1733128697; x=1733733497; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Oq8E3qN0gtID92mrTfB2zo7JVUwiqhsddWdHKwhF9lM=;
-        b=GADBugViPp2OVaqWhx8REots62m28XmULWISasREF8ixedEomf7j25UJKLT5S9ymWN
-         XVeD9tHpedWH8UsaBdKPvncSfKw1RY17SgYoggTVvjel60Ixe2ISGPAupa183Ls8t4S1
-         s5ay0yIqBzRfEDUc2Uc/oeBGlLvvfQx38vnPulUtKp8He85Z3IiOdh5GcE57M/P7NZt7
-         VJZdbgl59snJ6DSGVsUG2uxW4t4uxMa/yIWYjEHWshYz/wNKK2LfiKoqzTaG+ODLl4Xm
-         7tmajVxJcAmpMJyQ/yVx76+mXzPY1ngz03Pwn6cPhz1yBo1CjjMN66pAi69Wpqda2G6S
-         pQJQ==
+        d=gmail.com; s=20230601; t=1733128699; x=1733733499; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=TBuWEvdApgxP5Q2IqHCQIxx5djraKO4paNwwTeZrtNI=;
+        b=MkELEJw+PkEarNGnnhUOW4fZkj7+GcRq9h8DE+YVDLZA3Pcvb/GDLBnxXVPN4b8cCB
+         q85AyK3gVx0uo9YZXNJngxjvxvJCX0uTEwZVwcwH9LoMNLZI5tklpbzeiNieclkwphWG
+         Vqnv1uuSyFQVhvrapDFtRKWmrfZWMZNe3Zkx4FcJBXs2pN+dA4mn0h9fiC7Lkt7KG+Ve
+         6NXbo/iHKvA0N/zcKJRtVZSUFBF7sXDjLKQDvKoMt/SNw7yX0n44s6iz671QW+c1joQD
+         9TAoUelJh20oflB9mLaVDg2YQwLDV+qQFf9wQhMc3QZ7s9o6Xs55pusBhTT5Lx0vHDQP
+         Qb/w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733128697; x=1733733497;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Oq8E3qN0gtID92mrTfB2zo7JVUwiqhsddWdHKwhF9lM=;
-        b=Cok6p5e0VLU1VrkUQMQI+lDDIarN5sCrOiD3Zve3x4U/lhheM1ArKL8MqnLVEHjZWx
-         16Rl1vbcApiNhIg+wfWcicW2pmb5KI/mII4+3uWkvar9Pb8z2LUbafyWlp9RknvvRCMS
-         mf7Ih2k/+W3N0jTl0P/jYYhdIEKscA0RVh7OlC64z7Qbus8WyUKuPaOAlBs8DltUl18N
-         +cegbOW0F7VU5a31dDlYtzBZKAY7dF9sTJ2DtNd3OUn30NoI6fTM39KTQvinkL8N8UG6
-         7BbdJX/np+7g7qqfoEVzNcENV1nzaF6jlVbWcNOq8AO3jUXfl8bwTliKJ9cjYw+vdxyD
-         OmrQ==
-X-Gm-Message-State: AOJu0Yz9dy8OW6g3gkDfj/h4+GCSjRIQ9hsgSPSA9DyCQOKuiNXV6S3/
-	bQ1Gx1whCcBfCFYcxyzN1aXRfZI5i7LPkgsJQ6laJkngdaWzobpMq03mky4+73U=
-X-Gm-Gg: ASbGnct1FdO3FHpgdJgK4zgi2Bs1mZNd/33OKf2WX+pval/FHHMplp+qjrn7Igqe6gs
-	F1U3IQXW278ZUsvifg5meYtrAlWEEPFoJDySH5dcNBoGH/ZGV1PBLf+cuI6BG+7sI4DdwGbTOpu
-	9KHlHKpLT2/qhXwOXPBoLqFLZQVBh4nw75M3M8ctpyGjTuWZVRsROZBQuptLWlFZOs+UXIMBvPb
-	B+emB28eYGabj3++dOyBMMX7OuSKJ4uvGTtOAPvh9UVlffV67TfvJRrq2Q7NiWjNCuIJrBwcE5f
-X-Google-Smtp-Source: AGHT+IEdmDtobGvpJ515IJefewNlZGzFWLJKUYvdOsOpbQkz2INVyk3TPHnN/3j0QLG1znRNU8jK3Q==
-X-Received: by 2002:ac2:4e0b:0:b0:53d:e5c0:b9cf with SMTP id 2adb3069b0e04-53df010e441mr12403794e87.52.1733128695881;
-        Mon, 02 Dec 2024 00:38:15 -0800 (PST)
-Received: from localhost (fwdproxy-cln-004.fbsv.net. [2a03:2880:31ff:4::face:b00c])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-434b0d9bed7sm146202125e9.8.2024.12.02.00.38.15
+        d=1e100.net; s=20230601; t=1733128699; x=1733733499;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=TBuWEvdApgxP5Q2IqHCQIxx5djraKO4paNwwTeZrtNI=;
+        b=ie4GS65fnw8JaQAsOpJ9FRnnHyYaWqNQxcLMydPibUVRLsqTRYoXW6sFs5tnUkv5vg
+         l+tDVD6QUJYDeFaqcHQQTvKLxsBVOaTTSrnNNmhdXOTbDmvfpbyFLn2lPVrv90UKfITl
+         Nxx7YnaQTcmdpnyKi1Mdzz0hUV24Y9LYgf2jJT3j2XNKZzIXf7dv87vvh0BfFX+nSGAM
+         fA5Y/xLZvrJpQjwzOWLjgumxGmSfIEWc8xJSvfwdTj4+62GijfYiR61hSxlA4br0mXKY
+         S4jE9rao75JeSMpuZT9U8aUMEeiZEXTfzikvaKBlQ6VvPYmMRY9tRYXrHp4liDVb8pC4
+         ZE6Q==
+X-Gm-Message-State: AOJu0YyAngdO336Mrve4vUvbaUzhf1LyrzkTazuT83evmKBczwhfak85
+	sJz0eEQhDyA4D9r/bclnZzGY19jxp6PmOLbcnbWFo5uj8P6uIrlvGqUQI7IXv4w=
+X-Gm-Gg: ASbGnctmMJ6aTU3BS3/L9T/0E87byTwoGDsWXcrRtLw3BgJcpCFnqUet1wDQzINV5sW
+	zSlGjEQdi9XAOX0IOg9J3X799GI8H/HG/A08GESKsVRukKibi6CqXEMOpVJJrFeihPOS/y+Z1Eq
+	v12zDtVt8yVUMNTdiw0XT1KwxpGw9oq/yqOSQvjpYack6imime1s194jc9uLGphoKt83lSFcS4a
+	uHgrHxlH9w94W7B6XH24XiqjI1G90kN2WCzPT5fBOBQusqczBa8ICSX37amVsOlJ0gaUxEYT9WH
+	Kg==
+X-Google-Smtp-Source: AGHT+IEEuGZhXzKxq+rPHMMAcYPFXjoBAj0XJjezKLHltLgs7NjLMR2HK9kOo+jm+7qOqPhnCkRXFQ==
+X-Received: by 2002:a05:6512:224f:b0:53d:d3f1:13aa with SMTP id 2adb3069b0e04-53df00d1177mr11328366e87.20.1733128698479;
+        Mon, 02 Dec 2024 00:38:18 -0800 (PST)
+Received: from localhost (fwdproxy-cln-030.fbsv.net. [2a03:2880:31ff:1e::face:b00c])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-434b0d9bee2sm145354065e9.1.2024.12.02.00.38.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Dec 2024 00:38:15 -0800 (PST)
+        Mon, 02 Dec 2024 00:38:17 -0800 (PST)
 From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To: bpf@vger.kernel.org
 Cc: kkd@meta.com,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Tao Lyu <tao.lyu@epfl.ch>,
 	Alexei Starovoitov <ast@kernel.org>,
 	Andrii Nakryiko <andrii@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	Martin KaFai Lau <martin.lau@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Tao Lyu <tao.lyu@epfl.ch>,
 	Mathias Payer <mathias.payer@nebelwelt.net>,
 	Meng Xu <meng.xu.cs@uwaterloo.ca>,
 	Sanidhya Kashyap <sanidhya.kashyap@epfl.ch>
-Subject: [PATCH bpf-next v3 0/5] Fixes for stack with allow_ptr_leaks
-Date: Mon,  2 Dec 2024 00:38:09 -0800
-Message-ID: <20241202083814.1888784-1-memxor@gmail.com>
+Subject: [PATCH bpf-next v3 2/5] bpf: Fix narrow scalar spill onto 64-bit spilled scalar slots
+Date: Mon,  2 Dec 2024 00:38:11 -0800
+Message-ID: <20241202083814.1888784-3-memxor@gmail.com>
 X-Mailer: git-send-email 2.43.5
+In-Reply-To: <20241202083814.1888784-1-memxor@gmail.com>
+References: <20241202083814.1888784-1-memxor@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1790; h=from:subject; bh=sB44DCTgb5gmlhUu3ScZybua8CSPIBJJu7aUY16jRfI=; b=owEBbQKS/ZANAwAIAUzgyIZIvxHKAcsmYgBnTXG09tHhhSGa69R00qT5tMLPZkvTp5HIHhlj8Pq8 dAklx92JAjMEAAEIAB0WIQRLvip+Buz51YI8YRFM4MiGSL8RygUCZ01xtAAKCRBM4MiGSL8Ryk+sD/ 9+Y48Pwb1Guwszb7cdzIC1A+1MM3N5h1YDWYld6S0NPaDJXXeiq452ddvp0EfH3SJl3S2rGPOEi4ee Z7BJXktHOS43GztKFgmAd3aPAFogH5aiCq3DQ5Y4VAhoKLtYLnJoCARLD5xzXup9WmZGcKbv6Wxnk3 jplRVSL900K1zm037MQSMGE1s7B2n/9jgvmxN9Mh0RF3l5/GlZaMmTCocY1FlrDFXiTHWcUJ67+hIH HNM95yM/MlBpD1Jcl4EKrn4dteGxMl2T8yfSdvrqdgP/2mNSt/GBT+1P57EwkX8/1/qia60Jp2EIL5 VtjqVPr9lE/BDDcjhbLQYe57VGuyF8uXXlRQsGbGaakkcWOHkqLATWYh8FJOGyuvAP1Olwn5Z/0d+o O/SKtYaZY6RwfwB3PcyBukCO+Kl1WCMz3w0UVgxVAq8bP8/YM9hHFuCsONyR4+4Bwq3f491+aFrDER 9j+kbiIk7BteAsN0mN0verMIB1SMKI1ZfTRv9d7+kB1YUwHfTvREvY98KC6mpbzEIDy1pXMO/IreGh f1lQrPQ6JmdXqmD1xc8FCjEUd+HIxqj7jCWfZ4fL6DRm/UyutAAr58VzvPTrY0jFDdev5VKCgMBZn0 GUIX38eDmVKLk+3EnmzFRM4uwzo4pjk4yBbrlYNOLZ01luflo9aCI9kC+Row==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1871; i=memxor@gmail.com; h=from:subject; bh=zMweRPTEA82WhEH1Z7QTD3IVzZuxXUvMdTmeHQkETiw=; b=owEBbQKS/ZANAwAIAUzgyIZIvxHKAcsmYgBnTXG0UdAHJwvnhgJJEdo0njXcQv4Aa9507/CwHytU UrfOov2JAjMEAAEIAB0WIQRLvip+Buz51YI8YRFM4MiGSL8RygUCZ01xtAAKCRBM4MiGSL8RytIID/ 0dbSx3x+Ask/7LXskTQQHKfyjKuKc2UUvfXbrRKR3cSfTcEhav2EL6pzwnB3sFVgYqWcS7s0MSHMQc PjglpqzLswHWBbFjrVl3RF922lcZEq5/y/LB9D7h+gRCwbqnqexDpTSnBYnfBsMAPqNxYxsZo6jtXM 22oJLMYLS2e6aUK3oHcAT4m5kEKODFxo7/zWsybmRmTzWpNucARmTA2tlcDOA8UM6JYHtTLbfKNlwi uZFNDOdaWznZ8Yyb2osIzcfI+9hfqwIq+zLeOxMfNzh7jnTGonAbSalETkRp5cZ/g9aGGvuomgvyeq Byvf/H83pGPGsgJ6hl/shY1q2lqWz2YNoBM6OYNhybrVUCENqUnnl060jk72+4zR5js8PI/z7AJnmh HHrlaG+Pl1pM8OrhI+GzksqnkAQliusUjfx6JRoXD+Z4LOP+ouNQ1E4HbT2uh9IODFdij1UBbtrocl qC1xNtU2fZcuw06ZnMDXVjEznf30RXgIk0y8qiwMQHC54LXQRenB/T0W0V0nGUUM/InRXco2/qW00M KMMJgLRJm4NfXKDgY8iy19OYKm1JBqJ2Qp0EtS33TOAvldIHTAFQqI8EW9c3MPRazmr0sszdQzXbX0 Rk88Ult4pC4hwfL+R0hfXk3lkRgWRTyyBqsxsij7GdvODWYWpgPZphgkTrHA==
 X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=4BBE2A7E06ECF9D5823C61114CE0C88648BF11CA
 Content-Transfer-Encoding: 8bit
 
-Two fixes for usability/correctness gaps when interacting with the stack
-without CAP_PERFMON (i.e. with allow_ptr_leaks = false). See the commits
-for details. I've verified that the tests fail when run without the fixes.
+From: Tao Lyu <tao.lyu@epfl.ch>
 
-Changelog:
-----------
-v2 -> v3
-v2: https://lore.kernel.org/bpf/20241127212026.3580542-1-memxor@gmail.com
+When CAP_PERFMON and CAP_SYS_ADMIN (allow_ptr_leaks) are disabled, the
+verifier aims to reject partial overwrite on an 8-byte stack slot that
+contains a spilled pointer.
 
- * Address comments from Eduard
-   * Fix comment for mark_stack_slot_misc
-   * We can simply always return early when stype == STACK_INVALID
-   * Drop allow_ptr_leaks conditionals
-   * Add Eduard's __caps_unpriv patch into the series
-   * Convert test_verifier_mtu to use it
-   * Move existing tests to __caps_unpriv annotation and verifier_spill_fill.c
-   * Add Acked-by from Eduard
+However, in such a scenario, it rejects all partial stack overwrites as
+long as the targeted stack slot is a spilled register, because it does
+not check if the stack slot is a spilled pointer.
 
-v1 -> v2
-v1: https://lore.kernel.org/bpf/20241127185135.2753982-1-memxor@gmail.com
+Incomplete checks will result in the rejection of valid programs, which
+spill narrower scalar values onto scalar slots, as shown below.
 
- * Fix CI errors in selftest by removing dependence on BPF_ST
+0: R1=ctx() R10=fp0
+; asm volatile ( @ repro.bpf.c:679
+0: (7a) *(u64 *)(r10 -8) = 1          ; R10=fp0 fp-8_w=1
+1: (62) *(u32 *)(r10 -8) = 1
+attempt to corrupt spilled pointer on stack
+processed 2 insns (limit 1000000) max_states_per_insn 0 total_states 0 peak_states 0 mark_read 0.
 
-Eduard Zingerman (1):
-  selftests/bpf: Introduce __caps_unpriv annotation for tests
+Fix this by expanding the check to not consider spilled scalar registers
+when rejecting the write into the stack.
 
-Kumar Kartikeya Dwivedi (3):
-  bpf: Don't mark STACK_INVALID as STACK_MISC in mark_stack_slot_misc
-  selftests/bpf: Add test for reading from STACK_INVALID slots
-  selftests/bpf: Add test for narrow spill into 64-bit spilled scalar
+Previous discussion on this patch is at link [0].
 
-Tao Lyu (1):
-  bpf: Fix narrow scalar spill onto 64-bit spilled scalar slots
+  [0]: https://lore.kernel.org/bpf/20240403202409.2615469-1-tao.lyu@epfl.ch
 
- kernel/bpf/verifier.c                         | 10 +++--
- .../selftests/bpf/prog_tests/verifier.c       | 19 +--------
- tools/testing/selftests/bpf/progs/bpf_misc.h  |  2 +
- .../selftests/bpf/progs/verifier_mtu.c        |  3 +-
- .../selftests/bpf/progs/verifier_spill_fill.c | 33 +++++++++++++++
- tools/testing/selftests/bpf/test_loader.c     | 41 +++++++++++++++++++
- 6 files changed, 86 insertions(+), 22 deletions(-)
+Fixes: ab125ed3ec1c ("bpf: fix check for attempt to corrupt spilled pointer")
+Acked-by: Eduard Zingerman <eddyz87@gmail.com>
+Signed-off-by: Tao Lyu <tao.lyu@epfl.ch>
+Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+---
+ kernel/bpf/verifier.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-
-base-commit: 45e04eb4d9d85603539984bc9ca930c380c93b15
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index c6a5c431495c..51f7a846d719 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -4703,6 +4703,7 @@ static int check_stack_write_fixed_off(struct bpf_verifier_env *env,
+ 	 */
+ 	if (!env->allow_ptr_leaks &&
+ 	    is_spilled_reg(&state->stack[spi]) &&
++	    !is_spilled_scalar_reg(&state->stack[spi]) &&
+ 	    size != BPF_REG_SIZE) {
+ 		verbose(env, "attempt to corrupt spilled pointer on stack\n");
+ 		return -EACCES;
 -- 
 2.43.5
 
