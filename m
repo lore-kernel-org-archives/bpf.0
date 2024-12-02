@@ -1,118 +1,120 @@
-Received: from mailtransmit04.runbox.com (mailtransmit04.runbox.com [185.226.149.37])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9ACBB1FE44D;
-	Mon,  2 Dec 2024 11:57:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.37
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5488A1FC0FA;
+	Mon,  2 Dec 2024 12:00:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733140664; cv=none; b=nW2J3ro4AArrPsz4iNWKMB2Z8cgvtfbI74SnWe4+XlHmyLRiy21MCW3fIPXDQ8kwVRYftg8aw1gXkAdDkRqyp+NHGE13BnwP/Ur6fLfnbV+nWHAimrBVwwvKfGgiAEQ2500CpEDakNkRHwVp6ChIqQ/qke6PlHd66QD8YfHqfh4=
+	t=1733140845; cv=none; b=Ik18wg8w8njrUuMYOxN8LpWcyVrlwZS9BWUOEHvs5ffphzhB/xHQ5IfjbTYIIj/XGBzJXuZzoZLIdOKi1wVtv5a0+bSqOYDsUZZl1rFIRu//d6F1mwFtp1/o5lYIMrri3puezlqHtIFbj738LjeT7FO6nhXMj1kH/dz8PJKC+q8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733140664; c=relaxed/simple;
-	bh=Qp54G1wDVlff83pTPgjxhEijVs1GRnWXj9GeuRHDTV0=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=ALn9hhBQjlDCoKUvS30CS/FCrpMpnDhYJPeg+9tcpWVjsvzBTlViwJsBc2iZ3AMe67RB61KGP6EuDjBc01u6IPjzNkhOzCmA6BhwH/Rs5D9I9diaOHzJHpM9hJmE2YQRhgBqNPTTMUi4c5YKQ4BC+Ld0apdwN7jzp8Gl1MqdxFg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co; spf=pass smtp.mailfrom=rbox.co; dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b=iMTR94ZQ; arc=none smtp.client-ip=185.226.149.37
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rbox.co
+	s=arc-20240116; t=1733140845; c=relaxed/simple;
+	bh=JGYBHesYIbhC7aBl5yCYh/PzDEWQVUhlwalGax3dWiY=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=WMGIK8MY0iAACYzwIYeXW9WZsMs2Jqy2RmoZ2R7+0aAREllUBRcghHQqf+wcLVpTZfluKwZDdPyxKUDtR13Q5uqmSdOwdA+m6shCpPrHNOO1NWKJyG033NxSb9080P0oBCs9NTfQKpg/Hh68Jtf4Tap2bEoOuq9iWytXUuJQQds=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mOLX9a97; arc=none smtp.client-ip=209.85.128.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b="iMTR94ZQ"
-Received: from mailtransmit02.runbox ([10.9.9.162] helo=aibo.runbox.com)
-	by mailtransmit04.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-	(Exim 4.93)
-	(envelope-from <mhal@rbox.co>)
-	id 1tI4dI-008GeO-0E; Mon, 02 Dec 2024 12:30:28 +0100
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=rbox.co;
-	s=selector2; h=Cc:To:In-Reply-To:References:Message-Id:
-	Content-Transfer-Encoding:Content-Type:MIME-Version:Subject:Date:From;
-	bh=N4MXPX46bSsTiOsfmmAde5fJTpY4yHbLGYMqDMKBx3k=; b=iMTR94ZQetOTqTZUdkPxJlPB8j
-	5IZ6+mI8Gm4riCySLodBQZ69uaqupzIq4z/sCQh/tCS4C3ru4A4DQOLewIIeE1kPTEZ6vh8nrHIDT
-	JjCi3fycfPdhzeOBd6lZDEKxWXkUMk9mEdHsTdut8yuEKuHOIjQoA9YnRczjZkY8HowSg11qrUo9P
-	zDeVoYzps7hTG2m+q8mRbKIk24cEGKZubqcbn4E8qmmPhkLp3Js1l4Qn/njLPG2RQlkrP480fmw85
-	yfNMEN+n7GZ2oSgzZTEJKq5/WvxW4ORNjCBtiLPn+Ch6SN3FVw8ms74otQGslwWp2dkXmkSGoiyGu
-	eMmyrBTA==;
-Received: from [10.9.9.73] (helo=submission02.runbox)
-	by mailtransmit02.runbox with esmtp (Exim 4.86_2)
-	(envelope-from <mhal@rbox.co>)
-	id 1tI4dH-0005dz-Bz; Mon, 02 Dec 2024 12:30:27 +0100
-Received: by submission02.runbox with esmtpsa  [Authenticated ID (604044)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.93)
-	id 1tI4d3-007H5a-5a; Mon, 02 Dec 2024 12:30:13 +0100
-From: Michal Luczaj <mhal@rbox.co>
-Date: Mon, 02 Dec 2024 12:29:23 +0100
-Subject: [PATCH bpf 1/3] bpf, sockmap: Fix update element with same
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mOLX9a97"
+Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-434a1fe2b43so37390325e9.2;
+        Mon, 02 Dec 2024 04:00:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1733140843; x=1733745643; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=MQnantWxCB7aLJu1F0kD476uJFD2vd0GkTEQYnGy5wg=;
+        b=mOLX9a97jirvY0sKTqzVtRymLx1fTYgt9+YkTqzvTjFMjR63I2xYxHFiJuiP7vHy7C
+         dneq35YaF51dbSlDwiPrVOUEwwb0WqcUkDHxT8CITApoQXr+OvUQCAhZ31y9z+VyFXqM
+         +kLUyjul6LuFpZnSfxb7SXymLfxp/LqhgOJ2ggxnU4zyyJrAjxX6k52mDqPgdnVhXyQ/
+         GJpCTqhkzMXpW0bMrv4gxLGft1hYf7OyuwteS2oHVm56XnzyBlw8FhZ+Dqs4OE+PMu4F
+         Sbg6DvyphFhNjB7A68f3zH8MdNMocCeAAMYyutN5OdVu0OhFq1k4b3HKPAKhAwwpP4JQ
+         4XWw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1733140843; x=1733745643;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=MQnantWxCB7aLJu1F0kD476uJFD2vd0GkTEQYnGy5wg=;
+        b=mI9buOci5Fu0hLR1SQnFGclByTHmC7bpuDtwlLMFYWCMRaoBBvUJm1ptpQ7EeclX2o
+         GSKaqW9L7bQf8Zg8OVkUS5UmrZ4y0p09t5YMOFJjV7wwzo8YrUXy9kxGML83JwONjiIw
+         35gvnImWbd9RKBzXHH1YQby4exF9DTSHEfkLBtQBgU4a6uJEzinR3wSKg/zNFX1UWP2T
+         3b6j+LbfrAQVPIVGLzvpZzYk2VluaLciaJnU+vNF01bVrZCYi5VXSwZwUBfFST7NADMX
+         WaGaNwWrssWg0plENQ1bl40lbd5QFjAey6Y1s2DVADIqGJjt9miFLh4D7AteI3JqajH+
+         GX3w==
+X-Forwarded-Encrypted: i=1; AJvYcCWS9Q0l86ihNPtaCHIu7xsqfpPIdHuxrTE1/Zp5C6VAkiWdquXOnlPqCy6dQlnLUr1RwBg=@vger.kernel.org, AJvYcCWkXjM9Nc7FscYOB2ROIqXgOvQNSMakhzP5Bit4eiX+zB2ThsUDFVjMrZpM5mi/Vr2Xgrvlnfbr6kHI0wFy@vger.kernel.org, AJvYcCX3xzK+dE/iCMv6z3Vszmtj9ytR/F/KP2hvlNbEnuKtoarwVQ6Ye7ZFD5ECe3qm3ArL6zluV26PTg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxB23XR6UF0Tffaxnjd+VPeLXX3PhoFfzgRGaJVWF64yHtRF1tx
+	Hfx7v427DdiCvC2ixYQz3hr2H5pqcmcoZZm6hQPKR2G6Ih/JZK66
+X-Gm-Gg: ASbGncvVbbLoVnVlfkirQ7USU6P33FPHSGa48Zx3PlSXxO6reqGc8ZP+149H+TyzuDx
+	oqWKfGHYOe5YRBcQl4K/L7xxuIYu/5MIso80WsG8/exuhs8k0j2sK/zPMQnvQovry2dbMa7NFA4
+	igVUWF2P518oS3V9eIpqLKy7aXUsovEhemCjaG9H5oN+ElVgjZolnSy7M8caf4MLDJiksIO983Z
+	ZBWe2fjzcN4YRJHfpcY9e9vIIGbjWDIb9OAR02kJikI/lU/5o33MvMBCs2nLGpc+NvaAtLvkDcd
+	iIxpc9n9iHAVCldN+QkAjjE=
+X-Google-Smtp-Source: AGHT+IFUnVztOxsIywsf2K4G+S+p56Y2jH9xH9k5ei+h2anBWbIlAMqqxZ0Jl6BPHhhsppFFnIdtUg==
+X-Received: by 2002:a05:600c:314a:b0:434:9de2:b101 with SMTP id 5b1f17b1804b1-434a9dbae1amr200448405e9.2.1733140842328;
+        Mon, 02 Dec 2024 04:00:42 -0800 (PST)
+Received: from krava (2001-1ae9-1c2-4c00-726e-c10f-8833-ff22.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:726e:c10f:8833:ff22])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-434aa7d29fbsm182935605e9.29.2024.12.02.04.00.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 02 Dec 2024 04:00:41 -0800 (PST)
+From: Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date: Mon, 2 Dec 2024 13:00:40 +0100
+To: Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc: Alan Maguire <alan.maguire@oracle.com>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>, Daniel Xu <dxu@dxuuu.xyz>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Jan Alexander Steffens <heftig@archlinux.org>,
+	Domenico Andreoli <cavok@debian.org>,
+	Matthias Schwarzott <zzam@gentoo.org>,
+	Dominique Leuenberger <dimstar@opensuse.org>,
+	Dominique Martinet <asmadeus@codewreck.org>, bpf@vger.kernel.org,
+	kernel-team@fb.com, dwarves@vger.kernel.org,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: RFT: Testing pahole for the release of v1.28
+Message-ID: <Z02haBRcetTCNK7A@krava>
+References: <Z0jVLcpgyENlGg6E@x1>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20241202-sockmap-replace-v1-1-1e88579e7bd5@rbox.co>
-References: <20241202-sockmap-replace-v1-0-1e88579e7bd5@rbox.co>
-In-Reply-To: <20241202-sockmap-replace-v1-0-1e88579e7bd5@rbox.co>
-To: Andrii Nakryiko <andrii@kernel.org>, 
- Eduard Zingerman <eddyz87@gmail.com>, Mykola Lysenko <mykolal@fb.com>, 
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, 
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
- Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>, 
- Jakub Sitnicki <jakub@cloudflare.com>, 
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
- Simon Horman <horms@kernel.org>
-Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- netdev@vger.kernel.org, Michal Luczaj <mhal@rbox.co>
-X-Mailer: b4 0.14.2
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Z0jVLcpgyENlGg6E@x1>
 
-Consider a sockmap entry being updated with the same socket:
+On Thu, Nov 28, 2024 at 05:40:13PM -0300, Arnaldo Carvalho de Melo wrote:
+> Hi,
+> 
+> 	Please consider testing what is in the master branch both in
+> kernel.org as in github:
+> 
+> https://git.kernel.org/pub/scm/devel/pahole/pahole.git
+> https://github.com/acmel/dwarves.git
+> 
+> 	So that we can release v1.28, we want to follow the cadence of
+> the kernel, i.e. since the kernel was recently released, we should
+> release a new version of pahole, and this one is long overdue.
+> 
+> 	We'll then try to release v1.29 shortly after Linus releases
+> v6.13, and so on.
+> 
+> 	Alan Maguire accepted to co-maintain pahole and as soon as he
+> gets a kernel.org account he'll be able to help me in processing
+> patches, that we expect to continue with the current fashion of being
+> tested and reviewed by as many developers as possible, its greatly
+> appreciated and a good way for us to keep this codebase in shape.
+> 
+> Thanks a lot for all the help,
 
-	osk = stab->sks[idx];
-	sock_map_add_link(psock, link, map, &stab->sks[idx]);
-	stab->sks[idx] = sk;
-	if (osk)
-		sock_map_unref(osk, &stab->sks[idx]);
+hi,
+works fine on my setup
 
-Due to sock_map_unref(), which invokes sock_map_del_link(), all the psock's
-links for stab->sks[idx] are torn:
+Tested-by: Jiri Olsa <jolsa@kernel.org>
 
-	list_for_each_entry_safe(link, tmp, &psock->link, list) {
-		if (link->link_raw == link_raw) {
-			...
-			list_del(&link->list);
-			sk_psock_free_link(link);
-		}
-	}
-
-And that includes the new link sock_map_add_link() added just before the
-unref.
-
-This results in a sockmap holding a socket, but without the respective
-link. This in turn means that close(sock) won't trigger the cleanup, i.e. a
-closed socket will not be automatically removed from the sockmap.
-
-Stop tearing the links when a matching link_raw is found.
-
-Signed-off-by: Michal Luczaj <mhal@rbox.co>
----
- net/core/sock_map.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/net/core/sock_map.c b/net/core/sock_map.c
-index 78347d7d25ef31525f8ec0a755a18e5793ad92c0..20b348b1964a10a1b0bfbe1a90a4a4cd99715b81 100644
---- a/net/core/sock_map.c
-+++ b/net/core/sock_map.c
-@@ -159,6 +159,7 @@ static void sock_map_del_link(struct sock *sk,
- 				verdict_stop = true;
- 			list_del(&link->list);
- 			sk_psock_free_link(link);
-+			break;
- 		}
- 	}
- 	spin_unlock_bh(&psock->link_lock);
-
--- 
-2.46.2
-
+thanks,
+jirka
