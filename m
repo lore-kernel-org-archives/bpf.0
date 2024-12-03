@@ -1,104 +1,103 @@
-Received: from mail-lj1-f178.google.com (mail-lj1-f178.google.com [209.85.208.178])
+Received: from mail-vk1-f179.google.com (mail-vk1-f179.google.com [209.85.221.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 775461F8933
-	for <bpf@vger.kernel.org>; Tue,  3 Dec 2024 16:26:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 056AF1F471B
+	for <bpf@vger.kernel.org>; Tue,  3 Dec 2024 17:24:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733243212; cv=none; b=Q1lpkMYo+E/tUDYCk2BMZlKmViUCUnyC85RezXQYytOWEHWkJ2bVIJwF5ApcanUiy2DwkmkbK03136Dr9R7IybhIQly6qhMDZcnietm85dRgy24BbYaNVgfHj641DMw79tbBIx1+wgIrbX8fblk80rLVK+ae6WFW7HTr60cTFAk=
+	t=1733246661; cv=none; b=RI1pF10Yhn1UmhvL1g1HwvkcQ0O8eCZ5oiPkNB1/J2fbXEmG0FWLyWFwmo5pNu5TKruhKrrWUVFNqTClr9+owOoVVzpxOv/rfx4t1DfkefWV8gd1f4E6ojUm6UJs8/9qjGjVci1DoWHhbypj0cYuqEevkoKWKjPjamlfXSnagMk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733243212; c=relaxed/simple;
-	bh=BkSzMCMwBhXw1RJp2P+9QtJ2Nu6otyn05ju5zUKJGFo=;
-	h=From:Content-Type:Mime-Version:Subject:Message-Id:Date:To; b=gCnO9jDrVIuoTv53JlrUsRNMB0hS3BTO6/kO+0wdLzCAnnoAUMhEBNQryylLH+RBrWxjy2NreQVa5JE9dPUlEyncOEFgQZPHMCKnq8mU1685Vc8JlOLKyfuM9UY+KcWXjG+Xx0eNmiD+xRbCzDArszoC2AYCuQMMe682hYcV/a0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MLoCLy36; arc=none smtp.client-ip=209.85.208.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1733246661; c=relaxed/simple;
+	bh=uHhOCluAWImlIGsIXn1ThfxKnnC7/xPE7QIUhoZLgQk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=sJIgGnxZ//jJHjXJgIDg3CLI9EJ1icC8DYYNIX2/qRUSO5VveE7c4BJE6Xkd8lvBIWypGMvVCQg958gF4ac44wQmyA3k+akxp+R2NVeuL0oG4J8VychuabsKfS3tAQzqsTSAJGe01kCa0hwgkYxJsaCPXAewLrzem5wiMhDJebA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=zSahc4ZK; arc=none smtp.client-ip=209.85.221.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MLoCLy36"
-Received: by mail-lj1-f178.google.com with SMTP id 38308e7fff4ca-2ffb3cbcbe4so62141891fa.0
-        for <bpf@vger.kernel.org>; Tue, 03 Dec 2024 08:26:50 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="zSahc4ZK"
+Received: by mail-vk1-f179.google.com with SMTP id 71dfb90a1353d-515192490c3so1648572e0c.3
+        for <bpf@vger.kernel.org>; Tue, 03 Dec 2024 09:24:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1733243208; x=1733848008; darn=vger.kernel.org;
-        h=to:date:message-id:subject:mime-version:content-transfer-encoding
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=ax5q7VmGj3/BaYNXmu8U7t8oSydl1mzaSCDys4BGvzQ=;
-        b=MLoCLy3656u4KjMdHIsX8Q5yCvJvC+rJMJC1zKDKmdhoPggtfOEO5li9mLvJkw7zV8
-         UfL8HbPY+wP5R8KGplIP3e6g30nzf5SxEiiBPAX9pOnDGDc69GutZbn6FSvg70lJaNP6
-         RM1UxNcJAksQrNe6xIPmlv8QelaqlHGN5N3Lxxr2LcT2LHV3y/k5T5c+7lhCsZVzNGp/
-         m7K0oVcWKMX/rWgvdUFYDy5PYmsjCOD4rkAedTiMJt2J+WNTxYdG2wyRT+QnEdW9nqbL
-         IW++mw4AyQy9LPgS+AbYoDgRxLD0AM5gHMW/ZjxiZ5HrozNL0rDYJz9Msw9gse3pais/
-         ng0A==
+        d=google.com; s=20230601; t=1733246659; x=1733851459; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=uHhOCluAWImlIGsIXn1ThfxKnnC7/xPE7QIUhoZLgQk=;
+        b=zSahc4ZKmWqVMYt4+SUPdW82xrAOdrsaiVA07OWXcieX9HbYS4pJQdfQ3lLuVjqErp
+         8IJFDNRnfo8zcIeASMsDzj/n8GVa/lCSkWDIsiynqXZcU78GjRpTTFVy+SFiR+iKbjtH
+         XfGtD0wkMlVM1PELvkXGpnUXarepCXyIYL/cg25VwKjkv28ALx4hqWO2wp67k+1M1Hx/
+         gHnq5zTUr0ucIt0ajYBUxstdb/zXg+sF0bn1Zlzmo7Jr1PIbZjW75S1dbiEPL9FLN+d3
+         +jRPc9NPOrUQ81JIoOGcp2NH9GuKG4BWAEWL+NXnjCjTMGmT75Aw5CHC8M/qhoqom5gq
+         18ng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733243208; x=1733848008;
-        h=to:date:message-id:subject:mime-version:content-transfer-encoding
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ax5q7VmGj3/BaYNXmu8U7t8oSydl1mzaSCDys4BGvzQ=;
-        b=EmRvuvVuGEUTHZOHNizZ+/Jc4BvgVB5G7Kqd3V0t1jaAcB619AllWtV5BcMOvYWMQl
-         /CuoB+Tu4VzYODsoDlmNQvho2/E4n8KMnV04BhQaOeesAw7h2KOVGRkBoMK0NJXl7QLt
-         veTKKVNNe4a2QPPdRYhQPfyWfauh8y/Fjre0zRyvpBDckLbYow3ci/I3HRauQHOfvCi5
-         l7REg41699xe3VoHB/XwW53HpKOdF3arcCBziXDEeC94lT75uXDFlOZ6VbbrJ//VNWAv
-         OuHtMNOdd/OACEHU0CB8udorxfnSP2DBTBXoQ8oNL4cegISsxqYMjbjpHL3T5dVRaLsD
-         lX2g==
-X-Gm-Message-State: AOJu0YxNBJRUdwGGboENdPKN/msvBZXYjdLRbmG+Bjrw13OZdZsNS0u0
-	ZXLXNdUtfthxAAa+93t8H4vp4qZfEBUWKzmbL6eemaOg3SBWE0gJT3SEraaHK9s=
-X-Gm-Gg: ASbGncv0vtn+rpYBY3hU5zKt2K6Zl3VpaSRgYHWzFlf6ClUyZFBEMPU0w8E1enqUjyr
-	03DrMCQjGOth8j3/nDz6YuGmh426MI6NfZusuogqm1FHzoD8G1d12+Y/xqheeQtg10r6WvukD6y
-	vonveKnpg4Xz4nDarqmzsgY4L1kqAWHkNRtNw2DLm3bVT23twwihxsK43UN6iCs9RxOk4mx+yTY
-	tNhrFhVT9NTkokq0J8BIMEOxTUpVFGrcJmUN/G78cLkIFLr/nsSTGNb4Lr6Ylhn5t3Fz6wr3AE=
-X-Google-Smtp-Source: AGHT+IEgO9TWFYdY5Qj4tLay3BM5XcAuBOmncE0aji/hH5utLopf9Hj/mHm41wk3Q1mDi46kgR1otg==
-X-Received: by 2002:a05:651c:892:b0:2ff:c741:db84 with SMTP id 38308e7fff4ca-30009bf618dmr25558471fa.1.1733243208429;
-        Tue, 03 Dec 2024 08:26:48 -0800 (PST)
-Received: from smtpclient.apple ([2a02:8109:9291:f500:15a7:6a63:17f6:c1f5])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5d097e8dcefsm6508641a12.55.2024.12.03.08.26.45
-        for <bpf@vger.kernel.org>
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 03 Dec 2024 08:26:46 -0800 (PST)
-From: Nick Zavaritsky <mejedi@gmail.com>
-X-Google-Original-From: Nick Zavaritsky <MeJedi@gmail.com>
-Content-Type: text/plain;
-	charset=us-ascii
-Content-Transfer-Encoding: 7bit
+        d=1e100.net; s=20230601; t=1733246659; x=1733851459;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=uHhOCluAWImlIGsIXn1ThfxKnnC7/xPE7QIUhoZLgQk=;
+        b=M4W47mRN9o10p5qdigIqfREfPXhZ8XceOKhza4WKRzTwUhJ57sb+f7sYMKmHqg7le0
+         70BM6tYEUHP+VIvPt+RJASLlZzJINGjHFC5r+4/TXap+Y4d8FXe+JZJJLhO25T1cQBXh
+         bLnqA6X1EWVnPw09GySAVFBOEFpJyxSecTVt+sgaaZE4Ss9iIZjgYO0LfpxUugH891n6
+         Sj1qMCy6LiGAmP44Ijin1v/pMLzogmWdL8vRYqaz+ryZW4DN09LFd6oStscEcCxsD2Jk
+         tzxRuaYF3bbvt+QPEgvIDYjxuxDBtRhz8BgtG/IKfwTKpwIYWkcDrQhYF9KDWqHKMWDm
+         Y+Og==
+X-Forwarded-Encrypted: i=1; AJvYcCU67Zeik/bxOjG/jXy+uzGkRIsNmrvrsDR7GZKutOldnHaQgNb8bjMrQ3FA0rGx0HJwQOI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxxwA4P8qcI6OZxpWsgJmpK08newuYCGvMkhNcQfXO0AzaGeYcU
+	ib61P/eSpZ4IuZAHJaBUyHDiSzdDCxhFlLtUuU6reXbJ3J0exfAzzmmIiaHHQzlXgqpUI6eoXBg
+	wW3Y1x69gaNXDMsE/URPeCPdsL1yHGEseyy4R
+X-Gm-Gg: ASbGncvqQqRSSxmlP9V2IPrZ97kvgZgImGgYIhcSRP72ncu72FhD7CjM7cNWKygR7xg
+	q2cA/NSvb+2WwhNbVfcYh/BV+OGcpX0OR
+X-Google-Smtp-Source: AGHT+IHYXYoqonmkZPTMlbc42ImybA+UEjnRdgYrQbkXonBRpfG03UbuA+XwLsr71xscM4WaS2Sc80eQ5GXkKX6c0HE=
+X-Received: by 2002:a05:6122:6593:b0:515:3bfb:d422 with SMTP id
+ 71dfb90a1353d-515bf5c0701mr4617322e0c.12.1733246658855; Tue, 03 Dec 2024
+ 09:24:18 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3826.200.121\))
-Subject: Packet pointer invalidation and subprograms
-Message-Id: <0498CA22-5779-4767-9C0C-A9515CEA711F@gmail.com>
-Date: Tue, 3 Dec 2024 17:26:34 +0100
-To: bpf@vger.kernel.org
-X-Mailer: Apple Mail (2.3826.200.121)
+MIME-Version: 1.0
+References: <20241202204530.1143448-1-leogrande@google.com> <Z05NhvyagBbHs8Gq@mini-arch>
+In-Reply-To: <Z05NhvyagBbHs8Gq@mini-arch>
+From: Marco Leogrande <leogrande@google.com>
+Date: Tue, 3 Dec 2024 09:23:51 -0800
+Message-ID: <CAD1qLz0UwaFsk3ZnQ9e5RG1XvJ2i=7FJhtf_9AB6KVZ1fbEh3w@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] tools/testing/selftests/bpf/test_tc_tunnel.sh:
+ Fix wait for server bind
+To: Stanislav Fomichev <stfomichev@gmail.com>
+Cc: Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Mykola Lysenko <mykolal@fb.com>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>, 
+	"Alessandro Carminati (Red Hat)" <alessandro.carminati@gmail.com>, willemb@google.com, zhuyifei@google.com, 
+	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi,
+On Mon, Dec 2, 2024 at 4:15=E2=80=AFPM Stanislav Fomichev <stfomichev@gmail=
+.com> wrote:
+> Do you see this failing in your CI or in the BPF CI?
 
-Calls to helpers such as bpf_skb_pull_data, are supposed to invalidate
-all prior checks on packet pointers.
+I see this failing in our internal CI, in around 1% to 2% of the CI runs.
 
-I noticed that if I wrap a call to bpf_skb_pull_data in a function with
-global linkage, pointers checked prior to the call are still considered
-valid after the call. The program is accepted on 6.8 and 6.13-rc1.
+> It seems ok
+> to add wait_for_port here, but the likelihood of the issue seems
+> minuscule. There is a bunch of ip/tc/etc calls between this
+> server_listen and the next client_connect (and I'd be surprised to hear
+> that netcat is still not listening by the time we reach next
+> client_connect).
 
-I'm curious if it is by design and if not, if it is a known issue.
-Please find the program below.
+I'm surprised as well, and I've not found a good correlation with the
+root cause of the delayed server start, besides generic "slowness".
 
-#include <linux/bpf.h>
-#include <bpf/bpf_helpers.h>
-
-__attribute__((__noinline__))
-long skb_pull_data(struct __sk_buff *sk, __u32 len)
-{
-    return bpf_skb_pull_data(sk, len);
-}
-
-SEC("tc")
-int test_invalidate_checks(struct __sk_buff *sk)
-{
-    int *p = (void *)(long)sk->data;
-    if ((void *)(p + 1) > (void *)(long)sk->data_end) return TCX_DROP;
-    skb_pull_data(sk, 0);
-    *p = 42;
-    return TCX_PASS;
-}
-
-If I remove noinline or add static, the program is rejected as expected.
+You also make a good point - by calling wait_for_port this early we
+"waste" the opportunity to run the other ip commands in parallel in
+the meantime.
+I had considered moving this wait down, just before the next
+client_connect, but I concluded it might be less readable since it
+would be so distant from the server_listen it pairs with. But I can
+make that change if it seems better.
