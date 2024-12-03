@@ -1,182 +1,120 @@
-Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
+Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 610661FA16E
-	for <bpf@vger.kernel.org>; Tue,  3 Dec 2024 18:22:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAE412500D3
+	for <bpf@vger.kernel.org>; Tue,  3 Dec 2024 20:19:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733250165; cv=none; b=arKdgB/FHznVuEG560wLQBSQv0sr4ixkd+x85P5iP3fsNj0b8ReUZnFB7AlsqiArpmv3FikyDiWIVR8FOVgKkiqR8c3TK3Q+RKlWylFXLC/6xgHO5zn6CGSlMdldIgMDgTAfL9nwG/iUHGORxE12WK5lKYS6FwYmuJS5p1NvYHA=
+	t=1733257168; cv=none; b=UbutgLuBRO6t43r982lEZia07/F5Aqrp2X8EbodOQz0CKdo6Bdu74zyIZ1xcrJoDmhk0v+VaTH+9DxMwzQwvxB82+B/9XygtvaBddsydLgBcKbMIWTOBed8BRQiqHArYEXaQlQk56D6NX7J7qUK3qBB9jLT9ZEF3rb2ypx0rGTc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733250165; c=relaxed/simple;
-	bh=oPlfCwv7dFgg5nfzz3sCeEFTDYmqgtTKzCZhiUaPBUI=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=dmQWleTQLmR5aOp4prhj/WtCiY0tSEqHzwb4mbD62DenEm+bT+5qPL8/ladrX9wjqaw0Q79gjBhTtawvzsU/XZNXS+lnLc5AybOj4Nh9D4FMlrzWTvrGRVo1jp1tJ2yHUWv4mPdruglVnnKeoDm1/c3TbMfjlxW6LZvRh1TINUM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AwvyDXcy; arc=none smtp.client-ip=209.85.214.176
+	s=arc-20240116; t=1733257168; c=relaxed/simple;
+	bh=bAFxSx/q5gm/0wSygIG0DxQZ3HmxNstyvjSWiUJ0ulA=;
+	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=RTRo2iSOCsUkjRZdF4g4Nv14cNgIjLRVeWNqW/g1295Yx7ToNGJ/dirnayZO/ngRmCbG0z46BYqyU+yZ1MZkRvdUIpVmkuIwmXWs0MqXJFDGqD7mZOMc1LCtL5Lf7sU+OVfQE07QXGhGc8k89bDQN40Yrx/OWniETJjD1fMFEoY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YOEBYBHD; arc=none smtp.client-ip=209.85.215.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AwvyDXcy"
-Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-215770613dbso23179205ad.2
-        for <bpf@vger.kernel.org>; Tue, 03 Dec 2024 10:22:43 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YOEBYBHD"
+Received: by mail-pg1-f178.google.com with SMTP id 41be03b00d2f7-7fc41dab8e3so4100168a12.3
+        for <bpf@vger.kernel.org>; Tue, 03 Dec 2024 12:19:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1733250162; x=1733854962; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Nt7EgOueeZPP9i7HIXoMixPag6gc+rZDJdNn0ad5OtU=;
-        b=AwvyDXcySILkOwt/gDYT4GH079bI7X5UPPEhlUCHhwGvG/5s+rUnt0pqIK5vQmBYwP
-         QpN4L2I+Bzhx/tNDxITJNCon5lLRnvOP5Mnw0d/FAOxQa1pf/dcIBuatyM/UBEEmiQML
-         rIooNj0KKDf2CSqZKni+DYbfbsCb0z3zi3qpmbp/KWfryHLmAKO3Lv2kxz7EfuOIl0CQ
-         PoMSIjaPWam/Dl9m6wF+aGGfhWT/d1uY9quT72opyWeb7+4iyqfkvw+Jn6VinM8MptMf
-         XsXB5sl5TuOPGWUII2G779NvycTuDwejg04o6mkYx+nyRP8wvEq6tgM5Fq2yL8J02kox
-         PDYw==
+        d=gmail.com; s=20230601; t=1733257166; x=1733861966; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:to:from:subject:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wKnYgaX8MkaMjdhIbc+5cvkLu65UodV/R01j6NvY5vw=;
+        b=YOEBYBHDHTXHtq8jzb9twysIM/zMPIbYm2++IwufKHD2rCr1XZ/86Y8wsqQoySaEp0
+         5uE0oMzTkeI6VfbaffoMav0PoFFDrhrX5bixRb6f7zpFFqSNij69f62ZlJjLHGChdY9B
+         IHTrzTaK2GnZdOjnN6D61nUXiDfeuBthVjGQPh0Ee7I60M18iDbXuaLSjLruCbk+slsQ
+         6n32BhHBBawAdLmWp33wBIxuxPa8DITid9kww+vvf49kwZMqnU7QdwLW7r6TkH98i0Uv
+         +TL64+JThMQ+zYqBGjik+w88yZh4Cwqcnd2kpezkvOoXfM9+tjai0RbDAl1phkT3/FVT
+         VunQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733250162; x=1733854962;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Nt7EgOueeZPP9i7HIXoMixPag6gc+rZDJdNn0ad5OtU=;
-        b=nqnp6I60WTC3IaXO2s0WiapcILjbXxG5VmoiLyIbeWTEKoyukqIQuwrkkbQZYF+PzZ
-         LJ7SiWHHzHY4HZCY8DfUHjmlxnf4AfYRApETsxqGL6oHncu3aHGRjMrDkEWFwpHwkZJ6
-         t//c/0htyWWLOPqpvfY/OWF3oul7HlBFHM2jlECWaJL4+FanBUn8QQ7Dk0eMw438WLFx
-         3mUB13LdiZW1COjYFup05NC+N9vGxlXLSG7mZFoLVqxZsRm7OhxeG8EWZXVCwVGOpaMZ
-         bWAHqDIFBvBnolW0fqdlPkOmq37YSLLo3lMV86qZldEe+Koedar8R0ZmgTjr05Z00qVG
-         kaXA==
-X-Gm-Message-State: AOJu0YyEcE51eXFv6CbZpDZdAEw7EqgsFTZOV+TODmMy0Z+cgcaSaSAV
-	E2jsP0PDvMhzirG1B8L+/nkFwRN9b9oppDeojJtYrrc5Vp5HuxmhLgp8Fw==
-X-Gm-Gg: ASbGnctTrT5OiNOZ2inIHAVogVmpN/goDiQ3SA/r0krjPG9M30uQZxGS6dFN7qKx7yv
-	be7+0TFhGVUnNbniw9HnoEWTDTPbw+4nIFyu9Oot8dq0EhslZjkG+tBflZq/z0YAGMIdTyKGCW0
-	0QInwlaXHPpV1hsSbr6lP3z16UVGhxvZA8cBHC49RTwGifwoNpsHVIsPrN6vcWJqse7kCpuM5sE
-	RnEQdW3KMrSPTi5M9G5pn+OicynCb2i3MC0XBp/JAc4Gg==
-X-Google-Smtp-Source: AGHT+IEFF6mZDK0JiwE0zPEFuNnXNYM/7GqPcWW8zIAnjsJH2W/6lfeKovtvY1lEQwLt7fBSsD3vqA==
-X-Received: by 2002:a17:902:ccd2:b0:215:8ca3:3bac with SMTP id d9443c01a7336-215bd0d7646mr49679015ad.16.1733250162348;
-        Tue, 03 Dec 2024 10:22:42 -0800 (PST)
-Received: from honey-badger.. ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2153bad2480sm83772285ad.75.2024.12.03.10.22.41
+        d=1e100.net; s=20230601; t=1733257166; x=1733861966;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:to:from:subject:message-id:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=wKnYgaX8MkaMjdhIbc+5cvkLu65UodV/R01j6NvY5vw=;
+        b=Centx7lOx3CLrwQDee1NjrES3C2W1GGy2OJ58C5XBf9Fl7lgekCEKbi+w+a8hXiJEK
+         StJP+y7YKL2TAN2Cug9EbhuT1Yh6KQOno3FItOXHgTgtgLpH+eqDbmNot0Qk9bn7BPRM
+         XQCm2NVTa+F6aQIevEoCxHIStsSgXsIHJNV5DzJ5+H0oHn4G4iysGKpiCvg42G9Nk8EX
+         JWoLTZSPS58PPd6ED/hPS8jGU2RC20ezKqQsrAs/5ikqiEg2qcqrArR+oBa+xaSQC8pE
+         14v07qLD1Ol9AcqnsqynsLnYdzvxMpm8d9Zbxg+URtJnlpIrAVik2yde7EZTUXRMVslg
+         6m0Q==
+X-Forwarded-Encrypted: i=1; AJvYcCX7+AAapiGXlPFLqRXY7BCN8pxkZO5OzAYZRQ+fcGYoAP0092mNAXpPgU3LB4LIyeklLmo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwsbpQr588A3kTGh0hyz21DLuSFvLeBHp7n9q0rIDhNooVbV8Ce
+	quH8v8CrOnB1ZYzZ3MyeW/1U6XRqu6ZZK4SUv56G4sLmsC4Ce3ZZ/Rq37A==
+X-Gm-Gg: ASbGncvXXMvj2YA0WQJuPK8Hb3Mel5m6oMnoSN7V2Q2GK8mZnRepbmP0Lay9tn0qZi5
+	inCFLiqne4nXl20ZqbREryppiGkF0AjF9avVT6c75iN9a+zOJ2CeTEVpxM4o2pdeXnXMQqrswIb
+	KM0gCwEhPvyKZ0kGEMDCooy7W528AXF8USbfCiE1sSZw5lElFy6gyfFgtKyikVStuoN2HdkNeHg
+	0EPdzuSCed8xUX9OdFf8eLfCckwi5Vn0nwW/2yB+hMhYko=
+X-Google-Smtp-Source: AGHT+IHaqmqJfjbNCLQxiA9TL9O2l2cHzsOt8FBKuEln4bp/zmlzVijbamtLjpRHyIw/IHp7zANTNg==
+X-Received: by 2002:a05:6a21:339c:b0:1e0:d2f5:6ed3 with SMTP id adf61e73a8af0-1e1653a2a94mr4949982637.3.1733257165864;
+        Tue, 03 Dec 2024 12:19:25 -0800 (PST)
+Received: from [192.168.0.235] ([38.34.87.7])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-725417fbae3sm11196735b3a.102.2024.12.03.12.19.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Dec 2024 10:22:41 -0800 (PST)
+        Tue, 03 Dec 2024 12:19:25 -0800 (PST)
+Message-ID: <1b8e139bd6983045c747f1b6d703aa6eabab2c82.camel@gmail.com>
+Subject: Re: Packet pointer invalidation and subprograms
 From: Eduard Zingerman <eddyz87@gmail.com>
-To: bpf@vger.kernel.org,
-	ast@kernel.org
-Cc: andrii@kernel.org,
-	daniel@iogearbox.net,
-	martin.lau@linux.dev,
-	kernel-team@fb.com,
-	yonghong.song@linux.dev,
-	masahiroy@kernel.org,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>
-Subject: [PATCH bpf v3] samples/bpf: remove unnecessary -I flags from libbpf EXTRA_CFLAGS
-Date: Tue,  3 Dec 2024 10:22:22 -0800
-Message-ID: <20241203182222.3915763-1-eddyz87@gmail.com>
-X-Mailer: git-send-email 2.47.0
+To: Nick Zavaritsky <mejedi@gmail.com>, bpf@vger.kernel.org
+Date: Tue, 03 Dec 2024 12:19:20 -0800
+In-Reply-To: <0498CA22-5779-4767-9C0C-A9515CEA711F@gmail.com>
+References: <0498CA22-5779-4767-9C0C-A9515CEA711F@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.54.1 (3.54.1-1.fc41) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-Commit [0] breaks samples/bpf build:
+On Tue, 2024-12-03 at 17:26 +0100, Nick Zavaritsky wrote:
+> Hi,
+>=20
+> Calls to helpers such as bpf_skb_pull_data, are supposed to invalidate
+> all prior checks on packet pointers.
+>=20
+> I noticed that if I wrap a call to bpf_skb_pull_data in a function with
+> global linkage, pointers checked prior to the call are still considered
+> valid after the call. The program is accepted on 6.8 and 6.13-rc1.
+>=20
+> I'm curious if it is by design and if not, if it is a known issue.
+> Please find the program below.
+>=20
+> #include <linux/bpf.h>
+> #include <bpf/bpf_helpers.h>
+>=20
+> __attribute__((__noinline__))
+> long skb_pull_data(struct __sk_buff *sk, __u32 len)
+> {
+>     return bpf_skb_pull_data(sk, len);
+> }
+>=20
+> SEC("tc")
+> int test_invalidate_checks(struct __sk_buff *sk)
+> {
+>     int *p =3D (void *)(long)sk->data;
+>     if ((void *)(p + 1) > (void *)(long)sk->data_end) return TCX_DROP;
+>     skb_pull_data(sk, 0);
+>     *p =3D 42;
+>     return TCX_PASS;
+> }
+>=20
+> If I remove noinline or add static, the program is rejected as expected.
+>=20
 
-    $ make M=samples/bpf
-    ...
-    make -C /path/to/kernel/samples/bpf/../../tools/lib/bpf \
-     ...
-     EXTRA_CFLAGS=" \
-     ...
-     -fsanitize=bounds \
-     -I/path/to/kernel/usr/include \
-     ...
-    	/path/to/kernel/samples/bpf/libbpf/libbpf.a install_headers
-      CC      /path/to/kernel/samples/bpf/libbpf/staticobjs/libbpf.o
-    In file included from libbpf.c:29:
-    /path/to/kernel/tools/include/linux/err.h:35:8: error: 'inline' can only appear on functions
-       35 | static inline void * __must_check ERR_PTR(long error_)
-          |        ^
+Hi Nick,
 
-The error is caused by `objtree` variable changing definition from `.`
-(dot) to an absolute path:
-- The variable TPROGS_CFLAGS is constructed as follows:
-  ...
-  TPROGS_CFLAGS += -I$(objtree)/usr/include
-- It is passed as EXTRA_CFLAGS for libbpf compilation:
-  $(LIBBPF): ...
-    ...
-	$(MAKE) -C $(LIBBPF_SRC) RM='rm -rf' EXTRA_CFLAGS="$(TPROGS_CFLAGS)"
-- Before commit [0], the line passed to libbpf makefile was
-  '-I./usr/include', where '.' referred to LIBBPF_SRC due to -C flag.
-  The directory $(LIBBPF_SRC)/usr/include does not exist and thus
-  was never resolved by C compiler.
-- After commit [0], the line passed to libbpf makefile became:
-  '<output-dir>/usr/include', this directory exists and is resolved by
-  C compiler.
-- Both 'tools/include' and 'usr/include' define files err.h and types.h.
-- libbpf expects headers like 'linux/err.h' and 'linux/types.h'
-  defined in 'tools/include', not 'usr/include', hence the compilation
-  error.
-
-This commit removes unnecessary -I flags from libbpf compilation.
-(libbpf sets up the necessary includes at lib/bpf/Makefile:63).
-
-Changes v1 [1] -> v2:
-- dropped unnecessary replacement of KBUILD_OUTPUT with $(objtree)
-  (Andrii)
-Changes v2 [2] -> v3:
-- make sure --sysroot option is set for libbpf's EXTRA_CFLAGS,
-  if $(SYSROOT) is set (Stanislav)
-
-[0] commit 13b25489b6f8 ("kbuild: change working directory to external module directory with M=")
-[1] https://lore.kernel.org/bpf/20241202212154.3174402-1-eddyz87@gmail.com/
-[2] https://lore.kernel.org/bpf/20241202234741.3492084-1-eddyz87@gmail.com/
-
-Fixes: 13b25489b6f8 ("kbuild: change working directory to external module directory with M=")
-Acked-by: Stanislav Fomichev <sdf@fomichev.me>
-Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
----
- samples/bpf/Makefile | 13 +++++++------
- 1 file changed, 7 insertions(+), 6 deletions(-)
-
-diff --git a/samples/bpf/Makefile b/samples/bpf/Makefile
-index bcf103a4c14f..96a05e70ace3 100644
---- a/samples/bpf/Makefile
-+++ b/samples/bpf/Makefile
-@@ -146,13 +146,14 @@ ifeq ($(ARCH), x86)
- BPF_EXTRA_CFLAGS += -fcf-protection
- endif
- 
--TPROGS_CFLAGS += -Wall -O2
--TPROGS_CFLAGS += -Wmissing-prototypes
--TPROGS_CFLAGS += -Wstrict-prototypes
--TPROGS_CFLAGS += $(call try-run,\
-+COMMON_CFLAGS += -Wall -O2
-+COMMON_CFLAGS += -Wmissing-prototypes
-+COMMON_CFLAGS += -Wstrict-prototypes
-+COMMON_CFLAGS += $(call try-run,\
- 	printf "int main() { return 0; }" |\
- 	$(CC) -Werror -fsanitize=bounds -x c - -o "$$TMP",-fsanitize=bounds,)
- 
-+TPROGS_CFLAGS += $(COMMON_CFLAGS)
- TPROGS_CFLAGS += -I$(objtree)/usr/include
- TPROGS_CFLAGS += -I$(srctree)/tools/testing/selftests/bpf/
- TPROGS_CFLAGS += -I$(LIBBPF_INCLUDE)
-@@ -162,7 +163,7 @@ TPROGS_CFLAGS += -I$(srctree)/tools/lib
- TPROGS_CFLAGS += -DHAVE_ATTR_TEST=0
- 
- ifdef SYSROOT
--TPROGS_CFLAGS += --sysroot=$(SYSROOT)
-+COMMON_CFLAGS += --sysroot=$(SYSROOT)
- TPROGS_LDFLAGS := -L$(SYSROOT)/usr/lib
- endif
- 
-@@ -229,7 +230,7 @@ clean:
- 
- $(LIBBPF): $(wildcard $(LIBBPF_SRC)/*.[ch] $(LIBBPF_SRC)/Makefile) | $(LIBBPF_OUTPUT)
- # Fix up variables inherited from Kbuild that tools/ build system won't like
--	$(MAKE) -C $(LIBBPF_SRC) RM='rm -rf' EXTRA_CFLAGS="$(TPROGS_CFLAGS)" \
-+	$(MAKE) -C $(LIBBPF_SRC) RM='rm -rf' EXTRA_CFLAGS="$(COMMON_CFLAGS)" \
- 		LDFLAGS="$(TPROGS_LDFLAGS)" srctree=$(BPF_SAMPLES_PATH)/../../ \
- 		O= OUTPUT=$(LIBBPF_OUTPUT)/ DESTDIR=$(LIBBPF_DESTDIR) prefix= \
- 		$@ install_headers
--- 
-2.47.0
+Thank you for the report. This is a bug. Technically, packet pointers
+are invalidated by clear_all_pkt_pointers() called from check_helper_callf(=
+).
+This functions looks through all packets in current verifier state.
+However, global functions are verified independent of call sites,
+so pointer 'p' does not exist in verifier state when 'skb_pull_data'
+is verified, and thus is not invalidated.
 
