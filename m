@@ -1,103 +1,177 @@
-Received: from mail-vk1-f179.google.com (mail-vk1-f179.google.com [209.85.221.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 056AF1F471B
-	for <bpf@vger.kernel.org>; Tue,  3 Dec 2024 17:24:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 280EC1FAC51;
+	Tue,  3 Dec 2024 17:40:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733246661; cv=none; b=RI1pF10Yhn1UmhvL1g1HwvkcQ0O8eCZ5oiPkNB1/J2fbXEmG0FWLyWFwmo5pNu5TKruhKrrWUVFNqTClr9+owOoVVzpxOv/rfx4t1DfkefWV8gd1f4E6ojUm6UJs8/9qjGjVci1DoWHhbypj0cYuqEevkoKWKjPjamlfXSnagMk=
+	t=1733247651; cv=none; b=IPfsUpVPLATaEqwXTaSvpuq9UMdcY0H42p3Kbhuc0qsJfRYuGRzYWgeFtqjbgJOz1hu6gmrUiAc1KGl9oQD0KxnKx09aiPg5PHhm8zpTjCMn8sky4rqT83OFPQqqrrQkBdfwwvzRgPiWGDDj04lkhJ4T9JROQvOr/vKqOwd6O5I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733246661; c=relaxed/simple;
-	bh=uHhOCluAWImlIGsIXn1ThfxKnnC7/xPE7QIUhoZLgQk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=sJIgGnxZ//jJHjXJgIDg3CLI9EJ1icC8DYYNIX2/qRUSO5VveE7c4BJE6Xkd8lvBIWypGMvVCQg958gF4ac44wQmyA3k+akxp+R2NVeuL0oG4J8VychuabsKfS3tAQzqsTSAJGe01kCa0hwgkYxJsaCPXAewLrzem5wiMhDJebA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=zSahc4ZK; arc=none smtp.client-ip=209.85.221.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1733247651; c=relaxed/simple;
+	bh=5f8V0ViCWSwHPKr9N1Ee9MvOVQtipiD141WC9doMRfs=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=odpbwVu0Nt4Cj5bozIlHnMTy5IYuGG6Ogru5x1yYXyfvlpsLTOxU3ObiSp8eiI72kwk0O74p3D10dUMob9bwD9AcYyAjh28qVTwDNSRVdh7MdjSnOmmzQO7jAXLtfUwTcvtz68loXUA8ApSDkIPy56nBLYTzd9OuJOQ5QBHX8u0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=AVNnOntV; arc=none smtp.client-ip=198.175.65.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="zSahc4ZK"
-Received: by mail-vk1-f179.google.com with SMTP id 71dfb90a1353d-515192490c3so1648572e0c.3
-        for <bpf@vger.kernel.org>; Tue, 03 Dec 2024 09:24:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1733246659; x=1733851459; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=uHhOCluAWImlIGsIXn1ThfxKnnC7/xPE7QIUhoZLgQk=;
-        b=zSahc4ZKmWqVMYt4+SUPdW82xrAOdrsaiVA07OWXcieX9HbYS4pJQdfQ3lLuVjqErp
-         8IJFDNRnfo8zcIeASMsDzj/n8GVa/lCSkWDIsiynqXZcU78GjRpTTFVy+SFiR+iKbjtH
-         XfGtD0wkMlVM1PELvkXGpnUXarepCXyIYL/cg25VwKjkv28ALx4hqWO2wp67k+1M1Hx/
-         gHnq5zTUr0ucIt0ajYBUxstdb/zXg+sF0bn1Zlzmo7Jr1PIbZjW75S1dbiEPL9FLN+d3
-         +jRPc9NPOrUQ81JIoOGcp2NH9GuKG4BWAEWL+NXnjCjTMGmT75Aw5CHC8M/qhoqom5gq
-         18ng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733246659; x=1733851459;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=uHhOCluAWImlIGsIXn1ThfxKnnC7/xPE7QIUhoZLgQk=;
-        b=M4W47mRN9o10p5qdigIqfREfPXhZ8XceOKhza4WKRzTwUhJ57sb+f7sYMKmHqg7le0
-         70BM6tYEUHP+VIvPt+RJASLlZzJINGjHFC5r+4/TXap+Y4d8FXe+JZJJLhO25T1cQBXh
-         bLnqA6X1EWVnPw09GySAVFBOEFpJyxSecTVt+sgaaZE4Ss9iIZjgYO0LfpxUugH891n6
-         Sj1qMCy6LiGAmP44Ijin1v/pMLzogmWdL8vRYqaz+ryZW4DN09LFd6oStscEcCxsD2Jk
-         tzxRuaYF3bbvt+QPEgvIDYjxuxDBtRhz8BgtG/IKfwTKpwIYWkcDrQhYF9KDWqHKMWDm
-         Y+Og==
-X-Forwarded-Encrypted: i=1; AJvYcCU67Zeik/bxOjG/jXy+uzGkRIsNmrvrsDR7GZKutOldnHaQgNb8bjMrQ3FA0rGx0HJwQOI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxxwA4P8qcI6OZxpWsgJmpK08newuYCGvMkhNcQfXO0AzaGeYcU
-	ib61P/eSpZ4IuZAHJaBUyHDiSzdDCxhFlLtUuU6reXbJ3J0exfAzzmmIiaHHQzlXgqpUI6eoXBg
-	wW3Y1x69gaNXDMsE/URPeCPdsL1yHGEseyy4R
-X-Gm-Gg: ASbGncvqQqRSSxmlP9V2IPrZ97kvgZgImGgYIhcSRP72ncu72FhD7CjM7cNWKygR7xg
-	q2cA/NSvb+2WwhNbVfcYh/BV+OGcpX0OR
-X-Google-Smtp-Source: AGHT+IHYXYoqonmkZPTMlbc42ImybA+UEjnRdgYrQbkXonBRpfG03UbuA+XwLsr71xscM4WaS2Sc80eQ5GXkKX6c0HE=
-X-Received: by 2002:a05:6122:6593:b0:515:3bfb:d422 with SMTP id
- 71dfb90a1353d-515bf5c0701mr4617322e0c.12.1733246658855; Tue, 03 Dec 2024
- 09:24:18 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AVNnOntV"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1733247651; x=1764783651;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=5f8V0ViCWSwHPKr9N1Ee9MvOVQtipiD141WC9doMRfs=;
+  b=AVNnOntV90hiZXOqX2mMQps7nFFfPsr4CZQZ02V+Jtc3frAlTu3fbtHL
+   8e4jSxPaVM0p+XUA2diEZgQ3x9NNb8/lAiJroS24espMJ/ARSoZBvUZj1
+   37cDDra1GJUN49Moh/ibskq9DnqJLX+aceYIgMWwOlZx2D8IFeZWKYEVq
+   yczEzDCNSyf5FLuUO9dYeNNoGVcnO+y8RdWRZ41cxC8fXmIr+Se0tDmtp
+   fbnSW0Rvr5s1ChtVHsoxkHOVPjGIgNwCiyM7Fqx7LvbuC+OuGKYMScAg4
+   703Btoti6Bh1a4IEN34A+k2ZMmtYI/0SBeEDKjjvoMnpau9VQa8hZJKes
+   w==;
+X-CSE-ConnectionGUID: mNeqAZu1Tsub2Uf8JAfkUw==
+X-CSE-MsgGUID: LSUlTI4xQkqs8dmZ791XBg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11275"; a="37135271"
+X-IronPort-AV: E=Sophos;i="6.12,205,1728975600"; 
+   d="scan'208";a="37135271"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Dec 2024 09:40:50 -0800
+X-CSE-ConnectionGUID: y/5LGjzMRACcXQoC2TjPLg==
+X-CSE-MsgGUID: n7FXlJYgTGGlQccDcgKKoQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,205,1728975600"; 
+   d="scan'208";a="124336982"
+Received: from newjersey.igk.intel.com ([10.102.20.203])
+  by orviesa002.jf.intel.com with ESMTP; 03 Dec 2024 09:40:46 -0800
+From: Alexander Lobakin <aleksander.lobakin@intel.com>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>
+Cc: Alexander Lobakin <aleksander.lobakin@intel.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	=?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
+	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Magnus Karlsson <magnus.karlsson@intel.com>,
+	nex.sw.ncis.osdt.itp.upstreaming@intel.com,
+	bpf@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH net-next v6 00/10] xdp: a fistful of generic changes pt. I
+Date: Tue,  3 Dec 2024 18:37:23 +0100
+Message-ID: <20241203173733.3181246-1-aleksander.lobakin@intel.com>
+X-Mailer: git-send-email 2.47.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241202204530.1143448-1-leogrande@google.com> <Z05NhvyagBbHs8Gq@mini-arch>
-In-Reply-To: <Z05NhvyagBbHs8Gq@mini-arch>
-From: Marco Leogrande <leogrande@google.com>
-Date: Tue, 3 Dec 2024 09:23:51 -0800
-Message-ID: <CAD1qLz0UwaFsk3ZnQ9e5RG1XvJ2i=7FJhtf_9AB6KVZ1fbEh3w@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] tools/testing/selftests/bpf/test_tc_tunnel.sh:
- Fix wait for server bind
-To: Stanislav Fomichev <stfomichev@gmail.com>
-Cc: Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Mykola Lysenko <mykolal@fb.com>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>, 
-	"Alessandro Carminati (Red Hat)" <alessandro.carminati@gmail.com>, willemb@google.com, zhuyifei@google.com, 
-	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Mon, Dec 2, 2024 at 4:15=E2=80=AFPM Stanislav Fomichev <stfomichev@gmail=
-.com> wrote:
-> Do you see this failing in your CI or in the BPF CI?
+XDP for idpf is currently 6 chapters:
+* convert Rx to libeth;
+* convert Tx and stats to libeth;
+* generic XDP and XSk code changes (you are here);
+* generic XDP and XSk code additions;
+* actual XDP for idpf via new libeth_xdp;
+* XSk for idpf (via ^).
 
-I see this failing in our internal CI, in around 1% to 2% of the CI runs.
+Part III does the following:
+* improve &xdp_buff_xsk cacheline placement;
+* does some cleanups with marking read-only bpf_prog and xdp_buff
+  arguments const for some generic functions;
+* allows attaching already registered XDP memory model to RxQ info;
+* makes system percpu page_pools valid XDP memory models;
+* starts using netmems in the XDP core code (1 function);
+* allows mixing pages from several page_pools within one XDP frame;
+* optimizes &xdp_frame layout and removes no-more-used field.
 
-> It seems ok
-> to add wait_for_port here, but the likelihood of the issue seems
-> minuscule. There is a bunch of ip/tc/etc calls between this
-> server_listen and the next client_connect (and I'd be surprised to hear
-> that netcat is still not listening by the time we reach next
-> client_connect).
+Bullets 4-6 are the most important ones. All of them are prereqs to
+libeth_xdp.
 
-I'm surprised as well, and I've not found a good correlation with the
-root cause of the delayed server start, besides generic "slowness".
+Alexander Lobakin (9):
+  xsk: align &xdp_buff_xsk harder
+  bpf, xdp: constify some bpf_prog * function arguments
+  xdp, xsk: constify read-only arguments of some static inline helpers
+  xdp: allow attaching already registered memory model to xdp_rxq_info
+  xsk: allow attaching XSk pool via xdp_rxq_info_reg_mem_model()
+  netmem: add a couple of page helper wrappers
+  page_pool: make page_pool_put_page_bulk() handle array of netmems
+  page_pool: allow mixing PPs within one bulk
+  xdp: get rid of xdp_frame::mem.id
 
-You also make a good point - by calling wait_for_port this early we
-"waste" the opportunity to run the other ip commands in parallel in
-the meantime.
-I had considered moving this wait down, just before the next
-client_connect, but I concluded it might be less readable since it
-would be so distant from the server_listen it pairs with. But I can
-make that change if it seems better.
+Toke Høiland-Jørgensen (1):
+  xdp: register system page pool as an XDP memory model
+
+ include/net/page_pool/types.h                 |   6 +-
+ include/linux/bpf.h                           |  12 +-
+ include/linux/filter.h                        |   9 +-
+ include/linux/netdevice.h                     |   7 +-
+ include/linux/skbuff.h                        |   2 +-
+ include/net/netmem.h                          |  78 +++++++++++-
+ include/net/xdp.h                             |  93 ++++++++++----
+ include/net/xdp_sock_drv.h                    |  11 +-
+ include/net/xsk_buff_pool.h                   |   4 +-
+ .../net/ethernet/freescale/dpaa/dpaa_eth.c    |   2 +-
+ drivers/net/veth.c                            |   4 +-
+ kernel/bpf/cpumap.c                           |   2 +-
+ kernel/bpf/devmap.c                           |   8 +-
+ net/bpf/test_run.c                            |   4 +-
+ net/core/dev.c                                |  20 ++-
+ net/core/filter.c                             |  41 +++---
+ net/core/page_pool.c                          |  79 ++++++++----
+ net/core/skbuff.c                             |   2 +-
+ net/core/xdp.c                                | 118 +++++++++++-------
+ 19 files changed, 348 insertions(+), 154 deletions(-)
+
+---
+From v5[0]:
+* split the overgrowth series into 2 parts: changes and additions
+  (Jakub);
+* 008: future-proof: make the touched function MP-agnostic to avoid
+  double work in future;
+* send to better fitting now bpf instead of netdev.
+
+From v4[1]:
+* 12: pick RB from Toke;
+* 19: drop redundant ';'s (Jakub);
+* 19: fix a couple context imbalance warnings by moving __acquires() /
+  __releases() to the proper place (smatch);
+* no functional changes.
+
+From v3[2]:
+* rebase on top of the latest net-next to solve conflict (Jakub);
+* 09: use iterative approach instead of recursive to not blow the stack
+  (Toke);
+* 12: rephrase the commitmsg since the functionality changed, so that
+  it's not actual anymore (Toke);
+* align &xdp_buff_xsk a bit harder since its alignment degraded
+  recently;
+* pick RBs from Toke.
+
+From v2[3]:
+* cover: rename the series;
+* collect RBs and Acks from Maciej;
+* 007: reword the commitmsg;
+* 011: fix typos in the commitmsg (M);
+* 012: 'ts' -> 'tsize' (M; not 'truesize' to fit into 80 cols =\);
+* 016: fix the intro sentence (M);
+* no functional changes.
+
+From v1[4]:
+* rebase on top of the latest net-next;
+* no other changes.
+
+[0] https://lore.kernel.org/netdev/20241113152442.4000468-1-aleksander.lobakin@intel.com
+[1] https://lore.kernel.org/netdev/20241107161026.2903044-1-aleksander.lobakin@intel.com
+[2] https://lore.kernel.org/netdev/20241030165201.442301-1-aleksander.lobakin@intel.com
+[3] https://lore.kernel.org/netdev/20241015145350.4077765-1-aleksander.lobakin@intel.com
+[4] https://lore.kernel.org/netdev/20241009152756.3113697-1-aleksander.lobakin@intel.com
+-- 
+2.47.0
+
