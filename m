@@ -1,32 +1,32 @@
 Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 720D31F03C8;
-	Wed,  4 Dec 2024 19:37:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D8DA1F03C5;
+	Wed,  4 Dec 2024 19:37:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733341081; cv=none; b=PW6ZPej+5LI5X+Qrdmu/WXVmtFRcck2Os+LtTmWDtO7n6HpYxjUjmWux1yEVJafC6tGVBWfme4jUmAwBSl9vRFMFUkbQpchFwpksc0vwhXGuBU1apxDad5Eaba4waFDrvmrIoB/8b+BBjihdo4WLvgarlgPgmjYB8Ofm2zwXJHk=
+	t=1733341081; cv=none; b=PKD3UQ6L74U9PYNyX6CFNAoqfLz+Lj20Bk1Hav+vgFKqB+GjPVO58Xr5pC8rBwVB4hcCmoh2pDYwWpYaGGigkV6gXjqVcC0pXVOtJ6P0nxSOZGIC7iRSDIG3BmqS6D2JzgQmD/7nOmU1ZfLcvsuMMhiF5PsOugxKRbTLDcWetm4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1733341081; c=relaxed/simple;
-	bh=j4sqUbGoK+7beKPluyYhWDONOZvAHpifoflwWglXinA=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=e9dl35b8LKO13/Youfay3QluC9Bb/0bxEtgUwbECjq2xT5b8U/g+DqKeYucj5dUA6myzmAjXJllJifPYUkrNFTYDH5qF6NYcjtSjXNJgI9Q8EOBo8uTu9dW9A+Qda4bu4L5YYWcm5CrdlSNf4v6iRVDTW0a1pHcbCuyJV68jp8k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=T4FPTuzd; arc=none smtp.client-ip=159.69.126.157
+	bh=jFeJZEPDFXb0Fdzj3M7fCgu/RQZ/R/c/YJGWz+5Gtj4=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=r4UkO1nrq7sBR+CBgMMbhvPVC8tnZJ0oMQu/tsUcsb8wFUVAzWIzlZWJbQ7rwhELmyykLZSR5qAK5YXFiu2SmMh80etNwCBrerfQ4dwenttRJKWieV4W/p+ahLmMO+1rG0gGEc5GagCFK98MNwdfw0iFbpBk7BsOX7mM1srpsKA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=tOeidKd2; arc=none smtp.client-ip=159.69.126.157
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="T4FPTuzd"
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="tOeidKd2"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-	s=mail; t=1733341069;
-	bh=j4sqUbGoK+7beKPluyYhWDONOZvAHpifoflwWglXinA=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=T4FPTuzd3zCvKuXeeoHzJ8IF18uvFPxonjM3k0d5eedOGVBjIj9qILRxftSdzFpL/
-	 OWhCw6bSjlCgDqbyxsRbz7zQoQYrD3rDHQbDu8fmf23IScGtxjfnfHikOGhUuTPueU
-	 Rs8byCQVRhBJZDkWp68s0vg7tv0lZft0aWOW4UZ8=
+	s=mail; t=1733341068;
+	bh=jFeJZEPDFXb0Fdzj3M7fCgu/RQZ/R/c/YJGWz+5Gtj4=;
+	h=From:Subject:Date:To:Cc:From;
+	b=tOeidKd2tLfXx33+0bTqMS7SQWS6GYpFvqT8lK0rCyOWHKPV26LLA2CPS9VcqPOBq
+	 O59fj/E0rUQRp1FYRRHGT6b+7HEwGm0dfq8NgZqpAn1wfeEHgTSLYMQMAR6bxJLB2b
+	 R1G2vr32DuX8Xb8lScnGxQ1JzS5eW/w0I/kuPeSk=
 From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Date: Wed, 04 Dec 2024 20:37:45 +0100
-Subject: [PATCH bpf-next v3 2/2] kbuild: propagate CONFIG_WERROR to
+Subject: [PATCH bpf-next v3 0/2] kbuild: propagate CONFIG_WERROR to
  resolve_btfids
+Date: Wed, 04 Dec 2024 20:37:43 +0100
+Message-Id: <20241204-resolve_btfids-v3-0-e6a279a74cfd@weissschuh.net>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -35,9 +35,11 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20241204-resolve_btfids-v3-2-e6a279a74cfd@weissschuh.net>
-References: <20241204-resolve_btfids-v3-0-e6a279a74cfd@weissschuh.net>
-In-Reply-To: <20241204-resolve_btfids-v3-0-e6a279a74cfd@weissschuh.net>
+X-B4-Tracking: v=1; b=H4sIAIevUGcC/3XNQQrCMBQE0KuUvzaSpLVtXHkPETHJrwlIWvJrr
+ JTe3VA3QnE5DPNmBsLokeBYzBAxefJ9yKHcFWDcLdyReZszSC4rIWTJIlL/SHjVY+ctMdTqYJS
+ upOUc8miI2PlpBc+gh44FnEa45MZ5Gvv4Xp+SWPt/aBKMMyWbhnNdV8KK0ws9ERn3dPuAXy/JX
+ 6PeGDIbsm1N2RjdKsSNsSzLB05ySvv/AAAA
+X-Change-ID: 20241123-resolve_btfids-eb95c9b42d00
 To: Masahiro Yamada <masahiroy@kernel.org>, 
  Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>, 
  Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
@@ -52,41 +54,48 @@ Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
  bpf@vger.kernel.org, 
  =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1733341067; l=928;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1733341067; l=1325;
  i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=j4sqUbGoK+7beKPluyYhWDONOZvAHpifoflwWglXinA=;
- b=sfU1PGfUVeGccb2dwsXPUlkNGKdHhTSeyPF98pmXqLJ6JAV7Ki2AIC7IwwSjWB3kA31Ey8rQR
- yA2vGNaOtwHCMVFF0OhnckjjII4euJxi14jFM0vV5FjZuuw82TWu5mk
+ bh=jFeJZEPDFXb0Fdzj3M7fCgu/RQZ/R/c/YJGWz+5Gtj4=;
+ b=opTi36LO29JR5ssDWGaMUzHEI5p6j8qrGISkjMhYd1AWZebEmlxOs+N+lFLFMsZB7rD0V7zJJ
+ PoPZqO005L6A0nZmPHeqH/FQxoMnQlg93CL9d025mBGFSogHCz42WmI
 X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
  pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 
 Use CONFIG_WERROR to also fail on warnings emitted by resolve_btfids.
 Allow the CI bots to prevent the introduction of new warnings.
 
+This series currently depends on
+"[PATCH] bpf, lsm: Fix getlsmprop hooks BTF IDs" [0]
+
+[0] https://lore.kernel.org/lkml/20241123-bpf_lsm_task_getsecid_obj-v1-1-0d0f94649e05@weissschuh.net/
+
 Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
-Acked-by: Jiri Olsa <jolsa@kernel.org>
 ---
- scripts/link-vmlinux.sh | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+Changes in v3:
+- Retarget to bpf-next tree
+- Rename --fatal-warnings to --fatal_warnings for consistency
+- Link to v2: https://lore.kernel.org/r/20241126-resolve_btfids-v2-0-288c37cb89ee@weissschuh.net
 
-diff --git a/scripts/link-vmlinux.sh b/scripts/link-vmlinux.sh
-index a3c634b2f348f9c976cff9693caf290db7f31666..991d08c0042c68fc452210a8423d67162891c585 100755
---- a/scripts/link-vmlinux.sh
-+++ b/scripts/link-vmlinux.sh
-@@ -279,7 +279,11 @@ vmlinux_link vmlinux
- # fill in BTF IDs
- if is_enabled CONFIG_DEBUG_INFO_BTF; then
- 	info BTFIDS vmlinux
--	${RESOLVE_BTFIDS} vmlinux
-+	RESOLVE_BTFIDS_ARGS=""
-+	if is_enabled CONFIG_WERROR; then
-+		RESOLVE_BTFIDS_ARGS=" --fatal_warnings "
-+	fi
-+	${RESOLVE_BTFIDS} ${RESOLVE_BTFIDS_ARGS} vmlinux
- fi
- 
- mksysmap vmlinux System.map
+Changes in v2:
+- Avoid uninitialized read of fatal_warnings
+- Use OPT_BOOLEAN over OPT_INCR
+- Drop dependency patch, which went in via the kbuild tree
+- Link to v1: https://lore.kernel.org/r/20241123-resolve_btfids-v1-0-927700b641d1@weissschuh.net
 
+---
+Thomas Weißschuh (2):
+      tools/resolve_btfids: Add --fatal_warnings option
+      kbuild: propagate CONFIG_WERROR to resolve_btfids
+
+ scripts/link-vmlinux.sh         |  6 +++++-
+ tools/bpf/resolve_btfids/main.c | 12 ++++++++++--
+ 2 files changed, 15 insertions(+), 3 deletions(-)
+---
+base-commit: e2cf913314b9543f4479788443c7e9009c6c56d8
+change-id: 20241123-resolve_btfids-eb95c9b42d00
+
+Best regards,
 -- 
-2.47.1
+Thomas Weißschuh <linux@weissschuh.net>
 
