@@ -1,47 +1,58 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FDEE20DD67;
-	Wed,  4 Dec 2024 16:58:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F68420E31E;
+	Wed,  4 Dec 2024 16:59:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733331508; cv=none; b=g1soB/3+357hep8WGLyxkdGGlvmgRhLY4e6P/Py1vgmjQM9rzT86L8MS/OI6k2yQFd7cl+2cFre+/7syoOmunHlNHVn5kZKkiNBMqGkLDMXkwiwBJzneVYKHmVmVa+7OTmW8aDgXCMZLPCAeIJHZ1XITVHPU9a+seaUzHsLoalU=
+	t=1733331584; cv=none; b=CVB6pysYrmlcrS04CVk8NG0JwR4mdRthuUS5/Hn0slTbmK2+/5y1HomzkxCsBLPAYmfJq2rPHr/jZEIXnj2hqsB4Hozs/5VHXJgFhH/BHHYpnxfrIdIfFv72jGqcNyTSEuvPi1Mc380lQeLnDBQREwUlJRd5gMPbtJQaG3PNwVg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733331508; c=relaxed/simple;
-	bh=udSRhDBulGplchZ3ggP60P1EzgTxgPhSkL0dcvpLWgg=;
+	s=arc-20240116; t=1733331584; c=relaxed/simple;
+	bh=xA4hv32S/aRiQr/YRkoltWGnKXMJn6y03OnFDfjppRY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=edcWeqM5Dijsgt7xTm/66Untz2M3aWG6hqAupJjICgRgAka5+DX++Ej0+LuUJjD1zq3gquitjGwXpt1JFuAMqCXTAw94Uf8u9JQ/6bLlGMf+sP5e6jNTZ9I1sJocBcnzYx1QZ1YbHzKMK70n1t5MyShz467hgMghBD5utaYqzr4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oa8zLjEm; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=ED6qcdVUqnCl5JVPYT6XZ77Im5/WJFzZNwzStILH4B7b6hU240YRYsWqg269xFOqtx7WGYGGackXHqohhagUvVTNCgkFLhBrNs0biPALx9iOO2ngNDVmNfXnTc4AhGjkGFXGV/SxSGIkF4F/VdqqLKWs43JXhFmq3vqBeSsTjio=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pn3pyqC3; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oa8zLjEm"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 395EDC4CED1;
-	Wed,  4 Dec 2024 16:58:25 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pn3pyqC3"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5553CC4CECD;
+	Wed,  4 Dec 2024 16:59:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1733331506;
-	bh=udSRhDBulGplchZ3ggP60P1EzgTxgPhSkL0dcvpLWgg=;
+	s=k20201202; t=1733331584;
+	bh=xA4hv32S/aRiQr/YRkoltWGnKXMJn6y03OnFDfjppRY=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=oa8zLjEmOEjTiscjmQL2W5oL24DNBDUsq1gYUYysF0+yu5BppsZxZpA/SYImVN8B5
-	 xoSBmtL7iRM840ntnvKoCTTXvOKQedHiu/5n6ypO78AsmITM5XzfGPirKXHiAhv3Q7
-	 90WKij2KKTfeQKM1pcOf1cvW/E9WzxaFJGf/27C4r5paOfRT8KuvhitBYQWvzony4Z
-	 HFI+oYTtIBcdLOAPBIvtpwnh6qcJ8K2PFUjhdrZxzMJpX9wT38duIMCgoQbzCVs3LM
-	 hjzM5ZZte+SpM2APrK/bddpFlb54VS47IyI8buXE7OFziVgKAY1XafXUWTYwGzts3E
-	 xJVzCv2BVnDFQ==
+	b=pn3pyqC3axWOuN1Z9MbGrVkX2675wfylIGH2zMgSzC9iDCGrCkT130MLLwbxKsgL9
+	 AL+Cucge21TDXFG9Be00ff7hkYgQRJPRU9FqxGF3uiev3VQB/1KyfmsrjeXpjxv2W+
+	 8mJBF9tsxtr8iboqnLb4vB5qh9ch4HPmC7vopr2MPn138eKOzlwWH0/ZOYblBiVhMs
+	 0LUgWGnrtfzIrvoAUCmxKNQA0cbZpm8RmIQUIk/sVLP8rDG+w9NJoFAmfqNFG07oUJ
+	 mU4fpU2zhRtDhMyHvZXqwEKAbGyMd+n6FHpnvuqXbbY5d3TvoCrJvqv1OfqaMnkwL9
+	 Guxd2RyIy4jaQ==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
-Cc: Andrii Nakryiko <andrii@kernel.org>,
-	Jordan Rife <jrife@google.com>,
+Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Michael Jeanson <mjeanson@efficios.com>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Yonghong Song <yhs@fb.com>,
+	"Paul E . McKenney" <paulmck@kernel.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Namhyung Kim <namhyung@kernel.org>,
+	Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+	bpf@vger.kernel.org,
+	Joel Fernandes <joel@joelfernandes.org>,
 	Steven Rostedt <rostedt@goodmis.org>,
 	Sasha Levin <sashal@kernel.org>,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.12 16/36] bpf: put bpf_link's program when link is safe to be deallocated
-Date: Wed,  4 Dec 2024 10:45:32 -0500
-Message-ID: <20241204154626.2211476-16-sashal@kernel.org>
+	linux-trace-kernel@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.11 03/33] tracing/ftrace: disable preemption in syscall probe
+Date: Wed,  4 Dec 2024 10:47:16 -0500
+Message-ID: <20241204154817.2212455-3-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20241204154626.2211476-1-sashal@kernel.org>
-References: <20241204154626.2211476-1-sashal@kernel.org>
+In-Reply-To: <20241204154817.2212455-1-sashal@kernel.org>
+References: <20241204154817.2212455-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -50,104 +61,146 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.12.1
+X-stable-base: Linux 6.11.10
 Content-Transfer-Encoding: 8bit
 
-From: Andrii Nakryiko <andrii@kernel.org>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 
-[ Upstream commit f44ec8733a8469143fde1984b5e6931b2e2f6f3f ]
+[ Upstream commit 13d750c2c03e9861e15268574ed2c239cca9c9d5 ]
 
-In general, BPF link's underlying BPF program should be considered to be
-reachable through attach hook -> link -> prog chain, and, pessimistically,
-we have to assume that as long as link's memory is not safe to free,
-attach hook's code might hold a pointer to BPF program and use it.
+In preparation for allowing system call enter/exit instrumentation to
+handle page faults, make sure that ftrace can handle this change by
+explicitly disabling preemption within the ftrace system call tracepoint
+probes to respect the current expectations within ftrace ring buffer
+code.
 
-As such, it's not (generally) correct to put link's program early before
-waiting for RCU GPs to go through. More eager bpf_prog_put() that we
-currently do is mostly correct due to BPF program's release code doing
-similar RCU GP waiting, but as will be shown in the following patches,
-BPF program can be non-sleepable (and, thus, reliant on only "classic"
-RCU GP), while BPF link's attach hook can have sleepable semantics and
-needs to be protected by RCU Tasks Trace, and for such cases BPF link
-has to go through RCU Tasks Trace + "classic" RCU GPs before being
-deallocated. And so, if we put BPF program early, we might free BPF
-program before we free BPF link, leading to use-after-free situation.
+This change does not yet allow ftrace to take page faults per se within
+its probe, but allows its existing probes to adapt to the upcoming
+change.
 
-So, this patch defers bpf_prog_put() until we are ready to perform
-bpf_link's deallocation. At worst, this delays BPF program freeing by
-one extra RCU GP, but that seems completely acceptable. Alternatively,
-we'd need more elaborate ways to determine BPF hook, BPF link, and BPF
-program lifetimes, and how they relate to each other, which seems like
-an unnecessary complication.
-
-Note, for most BPF links we still will perform eager bpf_prog_put() and
-link dealloc, so for those BPF links there are no observable changes
-whatsoever. Only BPF links that use deferred dealloc might notice
-slightly delayed freeing of BPF programs.
-
-Also, to reduce code and logic duplication, extract program put + link
-dealloc logic into bpf_link_dealloc() helper.
-
-Link: https://lore.kernel.org/20241101181754.782341-1-andrii@kernel.org
-Tested-by: Jordan Rife <jrife@google.com>
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+Cc: Michael Jeanson <mjeanson@efficios.com>
+Cc: Masami Hiramatsu <mhiramat@kernel.org>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Alexei Starovoitov <ast@kernel.org>
+Cc: Yonghong Song <yhs@fb.com>
+Cc: Paul E. McKenney <paulmck@kernel.org>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc: Mark Rutland <mark.rutland@arm.com>
+Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
+Cc: Namhyung Kim <namhyung@kernel.org>
+Cc: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: bpf@vger.kernel.org
+Cc: Joel Fernandes <joel@joelfernandes.org>
+Link: https://lore.kernel.org/20241009010718.2050182-3-mathieu.desnoyers@efficios.com
+Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- kernel/bpf/syscall.c | 22 +++++++++++++++++-----
- 1 file changed, 17 insertions(+), 5 deletions(-)
+ include/trace/trace_events.h  | 36 +++++++++++++++++++++++++++++++----
+ kernel/trace/trace_syscalls.c | 12 ++++++++++++
+ 2 files changed, 44 insertions(+), 4 deletions(-)
 
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index c5aa127ed4cc0..2e99fedb9e4ab 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -2976,12 +2976,24 @@ void bpf_link_inc(struct bpf_link *link)
- 	atomic64_inc(&link->refcnt);
- }
+diff --git a/include/trace/trace_events.h b/include/trace/trace_events.h
+index c2f9cabf154d1..fa0d51cad57a8 100644
+--- a/include/trace/trace_events.h
++++ b/include/trace/trace_events.h
+@@ -244,6 +244,9 @@ static struct trace_event_fields trace_event_fields_##call[] = {	\
+ 	tstruct								\
+ 	{} };
  
-+static void bpf_link_dealloc(struct bpf_link *link)
-+{
-+	/* now that we know that bpf_link itself can't be reached, put underlying BPF program */
-+	if (link->prog)
-+		bpf_prog_put(link->prog);
++#undef DECLARE_EVENT_SYSCALL_CLASS
++#define DECLARE_EVENT_SYSCALL_CLASS DECLARE_EVENT_CLASS
 +
-+	/* free bpf_link and its containing memory */
-+	if (link->ops->dealloc_deferred)
-+		link->ops->dealloc_deferred(link);
-+	else
-+		link->ops->dealloc(link);
+ #undef DEFINE_EVENT_PRINT
+ #define DEFINE_EVENT_PRINT(template, name, proto, args, print)
+ 
+@@ -374,11 +377,11 @@ static inline notrace int trace_event_get_offsets_##call(		\
+ 
+ #include "stages/stage6_event_callback.h"
+ 
+-#undef DECLARE_EVENT_CLASS
+-#define DECLARE_EVENT_CLASS(call, proto, args, tstruct, assign, print)	\
+-									\
++
++#undef __DECLARE_EVENT_CLASS
++#define __DECLARE_EVENT_CLASS(call, proto, args, tstruct, assign, print) \
+ static notrace void							\
+-trace_event_raw_event_##call(void *__data, proto)			\
++do_trace_event_raw_event_##call(void *__data, proto)			\
+ {									\
+ 	struct trace_event_file *trace_file = __data;			\
+ 	struct trace_event_data_offsets_##call __maybe_unused __data_offsets;\
+@@ -403,6 +406,29 @@ trace_event_raw_event_##call(void *__data, proto)			\
+ 									\
+ 	trace_event_buffer_commit(&fbuffer);				\
+ }
++
++#undef DECLARE_EVENT_CLASS
++#define DECLARE_EVENT_CLASS(call, proto, args, tstruct, assign, print)	\
++__DECLARE_EVENT_CLASS(call, PARAMS(proto), PARAMS(args), PARAMS(tstruct), \
++		      PARAMS(assign), PARAMS(print))			\
++static notrace void							\
++trace_event_raw_event_##call(void *__data, proto)			\
++{									\
++	do_trace_event_raw_event_##call(__data, args);			\
 +}
 +
- static void bpf_link_defer_dealloc_rcu_gp(struct rcu_head *rcu)
- {
- 	struct bpf_link *link = container_of(rcu, struct bpf_link, rcu);
++#undef DECLARE_EVENT_SYSCALL_CLASS
++#define DECLARE_EVENT_SYSCALL_CLASS(call, proto, args, tstruct, assign, print) \
++__DECLARE_EVENT_CLASS(call, PARAMS(proto), PARAMS(args), PARAMS(tstruct), \
++		      PARAMS(assign), PARAMS(print))			\
++static notrace void							\
++trace_event_raw_event_##call(void *__data, proto)			\
++{									\
++	preempt_disable_notrace();					\
++	do_trace_event_raw_event_##call(__data, args);			\
++	preempt_enable_notrace();					\
++}
++
+ /*
+  * The ftrace_test_probe is compiled out, it is only here as a build time check
+  * to make sure that if the tracepoint handling changes, the ftrace probe will
+@@ -418,6 +444,8 @@ static inline void ftrace_test_probe_##call(void)			\
  
--	/* free bpf_link and its containing memory */
--	link->ops->dealloc_deferred(link);
-+	bpf_link_dealloc(link);
- }
+ #include TRACE_INCLUDE(TRACE_INCLUDE_FILE)
  
- static void bpf_link_defer_dealloc_mult_rcu_gp(struct rcu_head *rcu)
-@@ -3003,7 +3015,6 @@ static void bpf_link_free(struct bpf_link *link)
- 		sleepable = link->prog->sleepable;
- 		/* detach BPF program, clean up used resources */
- 		ops->release(link);
--		bpf_prog_put(link->prog);
- 	}
- 	if (ops->dealloc_deferred) {
- 		/* schedule BPF link deallocation; if underlying BPF program
-@@ -3014,8 +3025,9 @@ static void bpf_link_free(struct bpf_link *link)
- 			call_rcu_tasks_trace(&link->rcu, bpf_link_defer_dealloc_mult_rcu_gp);
- 		else
- 			call_rcu(&link->rcu, bpf_link_defer_dealloc_rcu_gp);
--	} else if (ops->dealloc)
--		ops->dealloc(link);
-+	} else if (ops->dealloc) {
-+		bpf_link_dealloc(link);
-+	}
- }
++#undef __DECLARE_EVENT_CLASS
++
+ #include "stages/stage7_class_define.h"
  
- static void bpf_link_put_deferred(struct work_struct *work)
+ #undef DECLARE_EVENT_CLASS
+diff --git a/kernel/trace/trace_syscalls.c b/kernel/trace/trace_syscalls.c
+index 9c581d6da843a..f76efcb6336aa 100644
+--- a/kernel/trace/trace_syscalls.c
++++ b/kernel/trace/trace_syscalls.c
+@@ -299,6 +299,12 @@ static void ftrace_syscall_enter(void *data, struct pt_regs *regs, long id)
+ 	int syscall_nr;
+ 	int size;
+ 
++	/*
++	 * Syscall probe called with preemption enabled, but the ring
++	 * buffer and per-cpu data require preemption to be disabled.
++	 */
++	guard(preempt_notrace)();
++
+ 	syscall_nr = trace_get_syscall_nr(current, regs);
+ 	if (syscall_nr < 0 || syscall_nr >= NR_syscalls)
+ 		return;
+@@ -338,6 +344,12 @@ static void ftrace_syscall_exit(void *data, struct pt_regs *regs, long ret)
+ 	struct trace_event_buffer fbuffer;
+ 	int syscall_nr;
+ 
++	/*
++	 * Syscall probe called with preemption enabled, but the ring
++	 * buffer and per-cpu data require preemption to be disabled.
++	 */
++	guard(preempt_notrace)();
++
+ 	syscall_nr = trace_get_syscall_nr(current, regs);
+ 	if (syscall_nr < 0 || syscall_nr >= NR_syscalls)
+ 		return;
 -- 
 2.43.0
 
