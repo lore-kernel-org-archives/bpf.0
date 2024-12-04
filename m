@@ -1,206 +1,82 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDDCC217660;
-	Wed,  4 Dec 2024 17:02:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F836768FD;
+	Wed,  4 Dec 2024 17:10:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733331749; cv=none; b=G0zhWwDTfHvl1bGl87YXYITiLX1F/nUVWIl0LBJ3+6JiLOdTstMaOYyZ6fsVaSJBNXhV4Zf608S3wWbzjWELSMTt7TDhWLVq9NwpHOwHoi92bJ7V6GrU/PiyYjLScgCseiMjf5pxzwyEI4C5I9QxPVXGZ7Aiu39vzn0hA0aRjTg=
+	t=1733332214; cv=none; b=T8N4V1c807dmpN0dZC6zpTyv0CUCM2twGKtJx9V8lB3fo2KlR8QM7/TcRJH60l1yZmFJOPnvCWEa0EbHf/ypf7Iw4ce+bL74QIM+nN3m8t5o4rVEFLIZ2unAOnNKHOwbVzlBhTKSNz6dDQ1uTyQRueC8a3H12ql+nLAWY/6L9Go=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733331749; c=relaxed/simple;
-	bh=M8u1x8f0D/+eUI2lQz/WEZewQjvuESEihTZT0YW/4tk=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=fEPnCZEii0tbpH5CBpQ1eGNj+rUqreAdpKIl2VMebHKNgH2BOz9fxRivTDZ/rV5zC7yfDoKbPjBCZcM8Kf96OBSSq1sDv8GoWHMyY5quSLf2LXy+Wjb8aIa49oXrhSqiOfPtXZazbHRPaHsQWZ8j1TTEYBKA2Dz04mV+Vy4CEHw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lPYcXkIv; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1733332214; c=relaxed/simple;
+	bh=srhR42igPHOP88vC5+31EX3+TZIitMY6D0mNNuXDRkE=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=e+S6tlYFiWp2/1LFkxTeSOxnerC8W1GGkQ3SPovkOVbglEGUGA+g3qiSL7ZmW/LDoADoEw7RbXwNdFnQJ9dNiCA5NZsJu149yEiWVRW+ZmbdZ6QtsYea07JWVZJKuLzwFlHZDHoZ9kqQDM7fRSITTSwq7QSUIMjADUQCOeR5rTE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pz/m5ukH; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lPYcXkIv"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55ABBC4CECD;
-	Wed,  4 Dec 2024 17:02:26 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pz/m5ukH"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB9B7C4CED1;
+	Wed,  4 Dec 2024 17:10:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1733331748;
-	bh=M8u1x8f0D/+eUI2lQz/WEZewQjvuESEihTZT0YW/4tk=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=lPYcXkIvpkWHIXB4CSZtQIVmSNl7rGzPAp/GMT5DRY3pg7QJNEe20bnnByXEs353T
-	 LmIJ2sMxoT7acXprY1r1a//ckESYSFO+075KFl4F+1/H83r6GKnySR5ITfcIE2Ovlx
-	 aXRV3DtGWYdL06u2v1RRvSF5qCkDDeyQSwbmv31BghAkIe/8S2QvfoC8gOucu8jFox
-	 +N6JtHn2K4OmrGQlu2koArAmtEcGFPIPGRiz02IFL8hIlDEhbBIL2mQhemPfUuulmH
-	 PDKWIMpi83gyrdHLiTC0/CSKh3sj+AdcDwL0mEGygPLo868emjxAmfuTDy9dzs7PDD
-	 osbKXEtB8EyYw==
-From: Sasha Levin <sashal@kernel.org>
-To: linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Michael Jeanson <mjeanson@efficios.com>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Yonghong Song <yhs@fb.com>,
-	"Paul E . McKenney" <paulmck@kernel.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Namhyung Kim <namhyung@kernel.org>,
-	Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-	bpf@vger.kernel.org,
-	Joel Fernandes <joel@joelfernandes.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Sasha Levin <sashal@kernel.org>,
-	linux-trace-kernel@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.1 02/15] tracing/ftrace: disable preemption in syscall probe
-Date: Wed,  4 Dec 2024 10:50:41 -0500
-Message-ID: <20241204155105.2214350-2-sashal@kernel.org>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20241204155105.2214350-1-sashal@kernel.org>
-References: <20241204155105.2214350-1-sashal@kernel.org>
+	s=k20201202; t=1733332213;
+	bh=srhR42igPHOP88vC5+31EX3+TZIitMY6D0mNNuXDRkE=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=pz/m5ukHO+JFf5myDR57agTDiLQwze+wDGy/I+x6glQi/paUofY7JkTxdzAHkTicI
+	 IkJfFOUJS7wkDxdpqEnQqEzy3K5GjyYT2Jq3HrV5zIdT6x5jRhsJw33gDN5+Qt7krW
+	 g0v5CTnLG2cH2Znyy1I2cew3Q7fpMbgzTB1SJUNuEXs9QnzzbBYcn+8Qd/FL1s7N7o
+	 M1v1RP/FXJnHcX8qhdxvyi+tPkOJz6C5GtAHwYkf+KRAJm2+4+MiNlLC8Aerbnbj4x
+	 EOf1//FAnBUIKqMXsTvCvSJhnZkJmAq5cFwmUUmC1fcVgF0DlckantaoGHmE/q6Gtc
+	 0M3dv60ALUoSA==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 710503806659;
+	Wed,  4 Dec 2024 17:10:29 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.1.119
 Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next] tools/testing/selftests/bpf/test_tc_tunnel.sh: Fix
+ wait for server bind
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <173333222826.1270267.13827895138847245146.git-patchwork-notify@kernel.org>
+Date: Wed, 04 Dec 2024 17:10:28 +0000
+References: <20241202204530.1143448-1-leogrande@google.com>
+In-Reply-To: <20241202204530.1143448-1-leogrande@google.com>
+To: Marco Leogrande <leogrande@google.com>
+Cc: andrii@kernel.org, eddyz87@gmail.com, mykolal@fb.com, ast@kernel.org,
+ daniel@iogearbox.net, martin.lau@linux.dev, song@kernel.org,
+ yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
+ sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org, shuah@kernel.org,
+ alessandro.carminati@gmail.com, willemb@google.com, zhuyifei@google.com,
+ bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org
 
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Hello:
 
-[ Upstream commit 13d750c2c03e9861e15268574ed2c239cca9c9d5 ]
+This patch was applied to bpf/bpf-next.git (master)
+by Alexei Starovoitov <ast@kernel.org>:
 
-In preparation for allowing system call enter/exit instrumentation to
-handle page faults, make sure that ftrace can handle this change by
-explicitly disabling preemption within the ftrace system call tracepoint
-probes to respect the current expectations within ftrace ring buffer
-code.
+On Mon,  2 Dec 2024 12:45:30 -0800 you wrote:
+> Commit f803bcf9208a ("selftests/bpf: Prevent client connect before
+> server bind in test_tc_tunnel.sh") added code that waits for the
+> netcat server to start before the netcat client attempts to connect to
+> it. However, not all calls to 'server_listen' were guarded.
+> 
+> This patch adds the existing 'wait_for_port' guard after the remaining
+> call to 'server_listen'.
+> 
+> [...]
 
-This change does not yet allow ftrace to take page faults per se within
-its probe, but allows its existing probes to adapt to the upcoming
-change.
+Here is the summary with links:
+  - [bpf-next] tools/testing/selftests/bpf/test_tc_tunnel.sh: Fix wait for server bind
+    https://git.kernel.org/bpf/bpf-next/c/e2f0791124a1
 
-Cc: Michael Jeanson <mjeanson@efficios.com>
-Cc: Masami Hiramatsu <mhiramat@kernel.org>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Alexei Starovoitov <ast@kernel.org>
-Cc: Yonghong Song <yhs@fb.com>
-Cc: Paul E. McKenney <paulmck@kernel.org>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc: Mark Rutland <mark.rutland@arm.com>
-Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
-Cc: Namhyung Kim <namhyung@kernel.org>
-Cc: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: bpf@vger.kernel.org
-Cc: Joel Fernandes <joel@joelfernandes.org>
-Link: https://lore.kernel.org/20241009010718.2050182-3-mathieu.desnoyers@efficios.com
-Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- include/trace/trace_events.h  | 36 +++++++++++++++++++++++++++++++----
- kernel/trace/trace_syscalls.c | 12 ++++++++++++
- 2 files changed, 44 insertions(+), 4 deletions(-)
-
-diff --git a/include/trace/trace_events.h b/include/trace/trace_events.h
-index c2f9cabf154d1..fa0d51cad57a8 100644
---- a/include/trace/trace_events.h
-+++ b/include/trace/trace_events.h
-@@ -244,6 +244,9 @@ static struct trace_event_fields trace_event_fields_##call[] = {	\
- 	tstruct								\
- 	{} };
- 
-+#undef DECLARE_EVENT_SYSCALL_CLASS
-+#define DECLARE_EVENT_SYSCALL_CLASS DECLARE_EVENT_CLASS
-+
- #undef DEFINE_EVENT_PRINT
- #define DEFINE_EVENT_PRINT(template, name, proto, args, print)
- 
-@@ -374,11 +377,11 @@ static inline notrace int trace_event_get_offsets_##call(		\
- 
- #include "stages/stage6_event_callback.h"
- 
--#undef DECLARE_EVENT_CLASS
--#define DECLARE_EVENT_CLASS(call, proto, args, tstruct, assign, print)	\
--									\
-+
-+#undef __DECLARE_EVENT_CLASS
-+#define __DECLARE_EVENT_CLASS(call, proto, args, tstruct, assign, print) \
- static notrace void							\
--trace_event_raw_event_##call(void *__data, proto)			\
-+do_trace_event_raw_event_##call(void *__data, proto)			\
- {									\
- 	struct trace_event_file *trace_file = __data;			\
- 	struct trace_event_data_offsets_##call __maybe_unused __data_offsets;\
-@@ -403,6 +406,29 @@ trace_event_raw_event_##call(void *__data, proto)			\
- 									\
- 	trace_event_buffer_commit(&fbuffer);				\
- }
-+
-+#undef DECLARE_EVENT_CLASS
-+#define DECLARE_EVENT_CLASS(call, proto, args, tstruct, assign, print)	\
-+__DECLARE_EVENT_CLASS(call, PARAMS(proto), PARAMS(args), PARAMS(tstruct), \
-+		      PARAMS(assign), PARAMS(print))			\
-+static notrace void							\
-+trace_event_raw_event_##call(void *__data, proto)			\
-+{									\
-+	do_trace_event_raw_event_##call(__data, args);			\
-+}
-+
-+#undef DECLARE_EVENT_SYSCALL_CLASS
-+#define DECLARE_EVENT_SYSCALL_CLASS(call, proto, args, tstruct, assign, print) \
-+__DECLARE_EVENT_CLASS(call, PARAMS(proto), PARAMS(args), PARAMS(tstruct), \
-+		      PARAMS(assign), PARAMS(print))			\
-+static notrace void							\
-+trace_event_raw_event_##call(void *__data, proto)			\
-+{									\
-+	preempt_disable_notrace();					\
-+	do_trace_event_raw_event_##call(__data, args);			\
-+	preempt_enable_notrace();					\
-+}
-+
- /*
-  * The ftrace_test_probe is compiled out, it is only here as a build time check
-  * to make sure that if the tracepoint handling changes, the ftrace probe will
-@@ -418,6 +444,8 @@ static inline void ftrace_test_probe_##call(void)			\
- 
- #include TRACE_INCLUDE(TRACE_INCLUDE_FILE)
- 
-+#undef __DECLARE_EVENT_CLASS
-+
- #include "stages/stage7_class_define.h"
- 
- #undef DECLARE_EVENT_CLASS
-diff --git a/kernel/trace/trace_syscalls.c b/kernel/trace/trace_syscalls.c
-index 942ddbdace4a4..e39c5ca76eabb 100644
---- a/kernel/trace/trace_syscalls.c
-+++ b/kernel/trace/trace_syscalls.c
-@@ -299,6 +299,12 @@ static void ftrace_syscall_enter(void *data, struct pt_regs *regs, long id)
- 	int syscall_nr;
- 	int size;
- 
-+	/*
-+	 * Syscall probe called with preemption enabled, but the ring
-+	 * buffer and per-cpu data require preemption to be disabled.
-+	 */
-+	guard(preempt_notrace)();
-+
- 	syscall_nr = trace_get_syscall_nr(current, regs);
- 	if (syscall_nr < 0 || syscall_nr >= NR_syscalls)
- 		return;
-@@ -338,6 +344,12 @@ static void ftrace_syscall_exit(void *data, struct pt_regs *regs, long ret)
- 	struct trace_event_buffer fbuffer;
- 	int syscall_nr;
- 
-+	/*
-+	 * Syscall probe called with preemption enabled, but the ring
-+	 * buffer and per-cpu data require preemption to be disabled.
-+	 */
-+	guard(preempt_notrace)();
-+
- 	syscall_nr = trace_get_syscall_nr(current, regs);
- 	if (syscall_nr < 0 || syscall_nr >= NR_syscalls)
- 		return;
+You are awesome, thank you!
 -- 
-2.43.0
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
