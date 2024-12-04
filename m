@@ -1,116 +1,117 @@
-Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
+Received: from mail-ej1-f65.google.com (mail-ej1-f65.google.com [209.85.218.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEE03154433
-	for <bpf@vger.kernel.org>; Wed,  4 Dec 2024 20:12:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 624851F540C
+	for <bpf@vger.kernel.org>; Wed,  4 Dec 2024 20:19:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.65
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733343132; cv=none; b=CVNVx4yo9RB6870LJh1oZA/k7Rvnp+W0pDnmC6mIrw8BgcLusag/baKe+IpzHDs7PVWSAII+YQacscmIfjthWkLyWyJilx3ZF9Mf5iOIHSC42bn0mqv5AvjwYud6ZSGEv+oVwBX2sObesiEWWnRMYNUssGGuXPDeNAz0yLiADWk=
+	t=1733343600; cv=none; b=HiWcy0nYIcGJwLpbj+wcNevBa5ZUlN5aUTspQ6+amrlFcStPuFqkWyx9hJmv9y6AWUMBILgpHYitN69Dq4Mdht6KLVD8k13kC4TyAWMR2/JznrYBKO4Yy7H2wNNWaCtXSjisjrSjMwt/uz05U0rqI0J/Nkyp3HKdockfgHrVQtk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733343132; c=relaxed/simple;
-	bh=+tYABKE+9VZ7RMyRCTc+tYyfN2yVNZw/8jxpGDZTedc=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=PekNRqB2RVmvBKOzNYaPDpW2d76zV41S9PbOAisrktfXYDM3sQp9w9rJfEyNclbImh0YA1x4h6rAWDz9x2K82xiQQ817FXWEnTOT3A2+T+OQ3dx9ZkE3XDXbQBVhyfFqgF0HiA5eC2hkA0Nwc7W4hF4ZSSW2QbZwwyioxsDJtnE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mIIldsYj; arc=none smtp.client-ip=209.85.214.176
+	s=arc-20240116; t=1733343600; c=relaxed/simple;
+	bh=TGkYHWLC/rPgS3NuSQiwXSMCMLfHD6/iE2s1qvtlNd4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=tUaxEiVXFDPirsNXHquGhRiHNFxh7dRz8amHMpMcbn7vrq5coM7YJzW8Fp6vb1pfyU+92sWyNNtyq3rGHZlX5ldgzZWAcaOnhPi14zQ1vWo3RHX7EXCr3m7k3i2FJlgZZeE6Z3WMC/WYfm+o1qeS0Zon+cdeTHTyJpYaI848DAc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZARDYtRz; arc=none smtp.client-ip=209.85.218.65
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mIIldsYj"
-Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-215909152c5so1418865ad.3
-        for <bpf@vger.kernel.org>; Wed, 04 Dec 2024 12:12:10 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZARDYtRz"
+Received: by mail-ej1-f65.google.com with SMTP id a640c23a62f3a-aa549d9dffdso14636566b.2
+        for <bpf@vger.kernel.org>; Wed, 04 Dec 2024 12:19:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1733343130; x=1733947930; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=7GBC6xfTNsIXbNlV9Qs00AxRvgqJbQsfnGWeYO27AeE=;
-        b=mIIldsYjpL6sgoy3x9JbF6WtzoHZjelRKlsdT7iJbqY084n6irmrq3XVR1gb6lPAHK
-         PW6Ogres96D0cvOzVQ05hCYptxvm0iR6vUu+HvfnMzjt/3cAC9rz7WJKxXAaCRypTI7r
-         H3ojAUCCQqejKgfYGgemKhxO0nQHGM+Lzy7LoWyul5mp/19u1ASwCcjEzaGpDexCDsHH
-         DCuUCQW3Nz+sutvz/0pqg3YQdU66A7FPsCSFkGP7DnVEkcM1GfB+skbBKUGtsba2tVms
-         SZWALeEVIiAODzS0EP9eJdC0HxAmmE5hd7if0XwZ16qjyYT7sW02Ngszl2bHADOr7W+o
-         EXEA==
+        d=gmail.com; s=20230601; t=1733343597; x=1733948397; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=QdfvIUyQ4oaN+bErdtBtL+OQMcaGwwxmrBKD9Hh6xEU=;
+        b=ZARDYtRzZFO3/boiECeFdizNzvAtppHBuK99cSupvq7SemUejL84wDI/LXsCQIU4xX
+         x5GJx6+TrORvxllvU21BGDc5RicNHJ1hycgSpcjFbkZvd3d96agIrtjU6mwCxxxvwrDr
+         f+sgSVuUjc8NehmTr7O4vzmEj0xjaYJtFLx/ey527LxAy14PUplHPNhMIWIXxBjono+0
+         nLE+fwc8FRLrmtUlvGseWU7cULGIypf4fGI0yEFJ/FvowW9SF553euPgWiH8Pfk9lzio
+         xoQ61Jdnw36DCuFPs6Lpb7oDhCtqwC5OM14SooA+kMJ+YoT1XxHEaxynqevZ+l7aiOd7
+         U+hw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733343130; x=1733947930;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=7GBC6xfTNsIXbNlV9Qs00AxRvgqJbQsfnGWeYO27AeE=;
-        b=fWLFY7YEfbmswZU8pmEdkqSsf0B0y2OarvPKGJ7fCmneYF2oEns7qSF+bHf7PWoWaz
-         aD1VOj8Gb8RYHOxCWKXklFdZf1SGFtTGP2NjCdPmzDQbr4TuoYBwYUmgKRBlNMGlDPTf
-         IBgGEle3fplloKs00E74WQ2dMPTtrUFlc2sePtJk5mQ8O3IIwAcl7cNU1jTjvjObWLQM
-         Hz0EY+EbXuebWkX7PpeBwhduJ8hNgXgCTbr8Cd852ZJGqceA7YkDnkI2IbbAZIlwSanv
-         1cWy1kGqLmwOOIGHkww4JNSc4oqRCg3sPFmf70TtiMy/FiStuyEVeFA5gRnFwZXez4lO
-         O4Hg==
-X-Forwarded-Encrypted: i=1; AJvYcCUSIi2ddgDWbq6FyA76ddFGJgGuGFpTHPE0IOHTxXfQ2FVIsAmGSM8VUzVC+b7MaljgLIo=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzu8LEp1cPDEHGMxaF7JtR+yYgbVAhLuKtqoqdI5LtvFL4rx7is
-	H/aVnSdilGrMwrViQ5SEg7jsn75rZttqp60TfmR0jCqL1B/eqx1N
-X-Gm-Gg: ASbGncuIypTV+aEhai6T+eqzB+1pBKQNwuqWzyARMtxH+OKAmLq4ymeXMHOoFpuGWXp
-	llrgJFS29pf3Gjnon0I2xnvxjF7xDxWbmmRQ8xARgRdFR+mdG/BgtRrK9dVW9ol5toH3TC7ntV7
-	b8yNeQtt7lyVCSASwi3i+bBmv32Al0Y5cHZRi4Hf6grQy3+KAPjhNsnXqb3/YBn4exsc6BSD5PW
-	IbYZzMRBYRSYspUgoPClhyCO4/nNi+K8hoQ7u0J3bQWVTbN0s2kCL7UIaaVLXKvWT4OLuF88Mic
-X-Google-Smtp-Source: AGHT+IFxYpodVK+rq3YAN1p1uS5dI4YBFBncPPJ6GOs2Uh9HBCIY7W2L+1wKhYDVuQ0XkikzC2nPxQ==
-X-Received: by 2002:a17:902:e80f:b0:215:86cf:f10b with SMTP id d9443c01a7336-215bd1b453cmr113058345ad.11.1733343130152;
-        Wed, 04 Dec 2024 12:12:10 -0800 (PST)
-Received: from ?IPv6:2620:10d:c096:14a:ab16:b297:5216:f3f1? ([2620:10d:c090:600::1:468e])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21589aa5478sm61730395ad.59.2024.12.04.12.12.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Dec 2024 12:12:09 -0800 (PST)
-Message-ID: <f844604cb8f85688c9faf4bf0c6d5566eba5dcdb.camel@gmail.com>
-Subject: Re: [PATCH bpf v1 2/2] selftests/bpf: Add raw_tp tests for
- PTR_MAYBE_NULL marking
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Kumar Kartikeya Dwivedi <memxor@gmail.com>, bpf@vger.kernel.org
-Cc: kkd@meta.com, Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko
- <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai
- Lau <martin.lau@kernel.org>, Manu Bretelle <chantra@meta.com>,
- kernel-team@fb.com
-Date: Wed, 04 Dec 2024 12:12:07 -0800
-In-Reply-To: <20241204024154.21386-3-memxor@gmail.com>
-References: <20241204024154.21386-1-memxor@gmail.com>
-	 <20241204024154.21386-3-memxor@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4-0ubuntu2 
+        d=1e100.net; s=20230601; t=1733343597; x=1733948397;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=QdfvIUyQ4oaN+bErdtBtL+OQMcaGwwxmrBKD9Hh6xEU=;
+        b=cW0mDDXhR1C4WgYX4Bhs82k5Mkuw9cL2WKEaifn0xEQ1p2RBmGfbh/vlLRMOLE8a3z
+         qZQIfSscZMxyhcNQior6ouY3FTWC4tRNVEPQ7RggahAjVeza/o4OrPv9FHmqZSxsexc8
+         iT7UEx5N0+cwmsgHXXG0qL+igJzNCY/bMj7IswQuzCf4okjvy3hbue/8cJZV1welPS8F
+         KHj0hGamSmbrItg4wNIHmWIk2RIvDfErAPzdrMXb2kDlISsOZxC1YMAILJw8Vaxw4EvR
+         5yiZJQaBuaT5lHjcfkir9nfL7RLEz62/HNPp2rolojTLczqxzf1715Sm9nYzkxNZ56XL
+         ziiA==
+X-Gm-Message-State: AOJu0YwvmR4XukYqz9olrUtPHoJDIqEEPlkbTX0XVIro7k73/b2hD356
+	qAPw1i+LDPmOtvFiGO3LlUHX2LS9hupn/J3ow4kx2S+tZkux0nfcYLONGucas1E1R7RYvGloJE5
+	gMN/xkc9XgVZMCAM37YO0rjtIZW8=
+X-Gm-Gg: ASbGncvWTZuZAIA5GP2ic5tZClkK+3KTzlkRfsddKwE6zGpJwAjnBa+R6VX6/+2mD5h
+	p2muvIC78vT8w4yjnfji2VHeKX4cn/p+nftLaDE2a0ufcD9Lx1hAi9ZHSXwSG8wd6
+X-Google-Smtp-Source: AGHT+IHyPZ+GEc7tGco/Cv1kU46BU00z/klEtqfYno3NqDdu8tOV4fVQjDmq+IBI84aMqQ6W9197opFNAdRn8DNL2/k=
+X-Received: by 2002:a17:907:a088:b0:a9a:129a:1862 with SMTP id
+ a640c23a62f3a-aa5f7f4acddmr602731366b.60.1733343596558; Wed, 04 Dec 2024
+ 12:19:56 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+References: <20241204024154.21386-1-memxor@gmail.com> <20241204024154.21386-3-memxor@gmail.com>
+ <f844604cb8f85688c9faf4bf0c6d5566eba5dcdb.camel@gmail.com>
+In-Reply-To: <f844604cb8f85688c9faf4bf0c6d5566eba5dcdb.camel@gmail.com>
+From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Date: Wed, 4 Dec 2024 21:19:20 +0100
+Message-ID: <CAP01T77v3ctFfT37iOfMm0XOqOD_bzfYuLcjnvT=JeokCZ=2BQ@mail.gmail.com>
+Subject: Re: [PATCH bpf v1 2/2] selftests/bpf: Add raw_tp tests for
+ PTR_MAYBE_NULL marking
+To: Eduard Zingerman <eddyz87@gmail.com>
+Cc: bpf@vger.kernel.org, kkd@meta.com, Alexei Starovoitov <ast@kernel.org>, 
+	Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Martin KaFai Lau <martin.lau@kernel.org>, Manu Bretelle <chantra@meta.com>, kernel-team@fb.com
+Content-Type: text/plain; charset="UTF-8"
 
-On Tue, 2024-12-03 at 18:41 -0800, Kumar Kartikeya Dwivedi wrote:
+On Wed, 4 Dec 2024 at 21:12, Eduard Zingerman <eddyz87@gmail.com> wrote:
+>
+> On Tue, 2024-12-03 at 18:41 -0800, Kumar Kartikeya Dwivedi wrote:
+>
+> [...]
+>
+> > +/* r2 with offset is checked, which marks r1 with off=0 as non-NULL */
+> > +SEC("tp_btf/bpf_testmod_test_raw_tp_null")
+> > +__failure
+> > +__msg("3: (07) r2 += 8                       ; R2_w=trusted_ptr_or_null_sk_buff(id=1,off=8)")
+> > +__msg("4: (15) if r2 == 0x0 goto pc+2        ; R2_w=trusted_ptr_or_null_sk_buff(id=2,off=8)")
+> > +__msg("5: (bf) r1 = r1                       ; R1_w=trusted_ptr_sk_buff()")
+>
+> This looks like a bug.
+> 'r1 != 0' does not follow from 'r2 == r1 + 8 and r2 != 0'.
+>
 
-[...]
+Hmm, yes, it's broken.
+I am realizing where we do it now will walk r1 first and we'll not see
+r2 off != 0 until after we mark it already.
+I guess we need to do the check sooner outside this function in
+mark_ptr_or_null_regs.
+There we have the register being operated on, so if off != 0 we don't
+walk all regs in state.
 
-> +/* r2 with offset is checked, which marks r1 with off=3D0 as non-NULL */
-> +SEC("tp_btf/bpf_testmod_test_raw_tp_null")
-> +__failure
-> +__msg("3: (07) r2 +=3D 8                       ; R2_w=3Dtrusted_ptr_or_n=
-ull_sk_buff(id=3D1,off=3D8)")
-> +__msg("4: (15) if r2 =3D=3D 0x0 goto pc+2        ; R2_w=3Dtrusted_ptr_or=
-_null_sk_buff(id=3D2,off=3D8)")
-> +__msg("5: (bf) r1 =3D r1                       ; R1_w=3Dtrusted_ptr_sk_b=
-uff()")
+Do you think that should fix this?
 
-This looks like a bug.
-'r1 !=3D 0' does not follow from 'r2 =3D=3D r1 + 8 and r2 !=3D 0'.
-
-> +int BPF_PROG(test_raw_tp_null_copy_check_with_off, struct sk_buff *skb)
-> +{
-> +	asm volatile (
-> +		"r1 =3D *(u64 *)(r1 +0);			\
-> +		 r2 =3D r1;				\
-> +		 r3 =3D 0;				\
-> +		 r2 +=3D 8;				\
-> +		 if r2 =3D=3D 0 goto jmp2;			\
-> +		 r1 =3D r1;				\
-> +		 *(u64 *)(r3 +0) =3D r3;			\
-> +		 jmp2:					"
-> +		::
-> +		: __clobber_all
-> +	);
-> +	return 0;
-> +}
-
-[...]
+> > +int BPF_PROG(test_raw_tp_null_copy_check_with_off, struct sk_buff *skb)
+> > +{
+> > +     asm volatile (
+> > +             "r1 = *(u64 *)(r1 +0);                  \
+> > +              r2 = r1;                               \
+> > +              r3 = 0;                                \
+> > +              r2 += 8;                               \
+> > +              if r2 == 0 goto jmp2;                  \
+> > +              r1 = r1;                               \
+> > +              *(u64 *)(r3 +0) = r3;                  \
+> > +              jmp2:                                  "
+> > +             ::
+> > +             : __clobber_all
+> > +     );
+> > +     return 0;
+> > +}
+>
+> [...]
