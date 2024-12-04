@@ -1,138 +1,206 @@
-Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEA76214A64;
-	Wed,  4 Dec 2024 17:01:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C299B2144B7;
+	Wed,  4 Dec 2024 17:01:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733331681; cv=none; b=pu/FzFEIjiBZhK6NOsfxHCOGww+ZVQllHbcuX0XLH9LAtzgBeYIRt5xLH/C3fqjeE+soM8Nwf6Sznox2uWnZ8gHTC2Cd7Do3OvXCErwLpdJXxXv2WfMMk2TXohaBCc94Inx+k12i47sTQYuq4M/S9kxxHK6NPAzfLsBXPjpqjQY=
+	t=1733331686; cv=none; b=QWNuRMAtrC6shHQ7ADk5k03oxNF7RkDzEp+MCRmYjiYSI5SoW5BWDw0U+/pdWivJ9WBewscMa+Q3co7nry0bwIC3ihM76wePLZhvDvIXdUccLfm91loQGbkvUeBvS+dCP606XAM3/3bXpI50NcXmaK/JCZGPjDGcW8DQRHFK5F4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733331681; c=relaxed/simple;
-	bh=6gPE+fenbPtKeQLn3Z+1VggrmVSyTAw3blFgm50DDCQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=EplQKT8Cu5PexO8dQofS4nrW0t3OZgd4hMI+4K4wv1f+UQwubNQmtVlmldaVHtkigrEXJz/I1iH27xq0ptcWrXW1JgVd/lhoOxRzaPtySYNpeRfWUuwFlrJYxh/40D5QxZ5LOY4zTQEXRXt3Vi44ZHa9HvJsOJEuZ+qPOcRiLBw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Cs52pY+U; arc=none smtp.client-ip=209.85.221.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1733331686; c=relaxed/simple;
+	bh=sqBdNa8t5nLUyQ3KChbLy9m2qJB438JQ/Fx3k/AoHU4=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=LIbrHq2fBDWPiogA4hqU9OlNj4HSaLe3uod3kggEt8WDQYmCLL4+iu7DFg4RJlXg9+AT5yLRL667lx3JvVF1Fs7KbXWsWi4YK9c3w2EJhm8r57t6dpABpiWL2QqxeAUaEACRy0g5CD6/VZyDSgQiwpcSDnqeQSHwG/EZQ/fxRV8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rKyF9JyN; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Cs52pY+U"
-Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-385e87b25f0so726169f8f.0;
-        Wed, 04 Dec 2024 09:01:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1733331678; x=1733936478; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=m0pOXTmAKAV8r7uAQE4p3uR7vbfVoxqeLgjHnVe01Fk=;
-        b=Cs52pY+UOQP45ARZHkQLT38LSCfzMfN8xGVN0L+IXSBs+zKfyxd8YJHM+EWnfIXFmO
-         1I+pdE4fiZt7dzWawuzQMwd7fi+kIaMVl206aSK0kcfDM2V2k9vG6WwQ+9UriFtB0/xY
-         /DPy90Ivg64oLtI01u4Z0ix5r3nx5VMe5ySNzENdHlDhOVH9pnbdPzew8BD8Vsdl3+I2
-         OsqOpGj4sM1zAopmhlywmoGwqOy/viQbXRBZCoO4H0nmYX6BjzljdOxAw/pvgUanQ46w
-         0BJHlLHeweZzwYSnGb5YHFIw31zZA3tM75zKnYolwyeg0dImflGVVgSW+29cBvXaQwLC
-         muiA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733331678; x=1733936478;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=m0pOXTmAKAV8r7uAQE4p3uR7vbfVoxqeLgjHnVe01Fk=;
-        b=EsI44VF/LIqgz8Quw4o/Ih/0w42JlI413ZcdfTNs4OO5+2GgFGDgMtLlJqUR+g+hZm
-         g4zoZdqW5cw+y7V9HYWm8fKQb1vrTwbZ4qoy3D47GutJ01KRuc0fxSZM4ftC6svR07nH
-         29TPvX36mcSr2THv5uni+WEXQ4fwS2pMOFeZrZpnyKnmlEuNGre3SEOMmE7lxna40pYA
-         gcdo3DIhJtaJewdlDtwmCFoMdw5cqShV1HECPg4My7pvbDZ2iYJvGLkz7q8MtbtPvX31
-         Ba+osuK4exNr5rhGSmbYF0adEPMiawA7SiPWePIlyiir6R56sG0RayXDqsPq5Sb+5zNs
-         FFQw==
-X-Forwarded-Encrypted: i=1; AJvYcCVgt0106Abedngm+r9uW75oVMCbpZwKXqfQYRvEX3lxmDm/47RHDXC+k4O9ffUIq/e+Lpg=@vger.kernel.org, AJvYcCX9ZREtb4KP3qL0eJthIZnG0LSFvriGfiomXEMyAAJ0rqwJzx1fD27B1BBLa3etEq0ByCydeGaSmlJbhgZ7@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx6WyzOHlbYZForbch6aipAmzzL5LlEdfAphHVvGAz0V/ADXxD9
-	dYGi/b4ydwW78LMXx17+jHlmqzz3V5G2ehBdbB2O7yVexSUIFpUGxURVY7rDbcv7pkXswA2MTOK
-	ACrMJ5XaZM7u8FDoJZBRUvLFiTRg=
-X-Gm-Gg: ASbGncu3sBJwBefN5tgm2RaKCP1Y2y3fOn8IXPHShxFGWhPmzhleNwNdhQ+65BNIUne
-	9jUALgF3Xpt8PEPginUdaCrPzr6GnmXm4Ng==
-X-Google-Smtp-Source: AGHT+IH1NBy6bWFZw7pkijVpmV68E0djJQ+VXoqqh5rsAmEl6Cif36GjAkNjEZfz2bgrojCnwjYaLtlxrBeG8uhkMtA=
-X-Received: by 2002:a5d:47ad:0:b0:385:e9c0:85d9 with SMTP id
- ffacd0b85a97d-3861bb8936cmr102707f8f.16.1733331676993; Wed, 04 Dec 2024
- 09:01:16 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rKyF9JyN"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 901FBC4CEDF;
+	Wed,  4 Dec 2024 17:01:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1733331686;
+	bh=sqBdNa8t5nLUyQ3KChbLy9m2qJB438JQ/Fx3k/AoHU4=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=rKyF9JyNp6R9gh/p56GPXopNoJb/XHnUIn5smQ6zjsv/H5oSB1d169XfCsfbL3Nkw
+	 OyXZTvUa3clfIuI/crbGTF4GFzCQVh5i+15ZR3CEgd2kcEQ73pKMb3ieuuSU/XDMXf
+	 bfu4dsgx4+bu7SEVwJLbCanB9aUlPRWYmqGKeX6Hv6rqy5626dHotUDlwgfilQGM0Z
+	 lNjHjHWNi75mjO7EWgWVU5CvGPRUeDfsC8g26X1F52lXgPzQqSn+FAYTzLojEHT4Dj
+	 JBX7qFrCflBrCWDgvN8zQCjmJV47pSIPaVyJ1K7WJqOj+fQWfI/gFu3mL0Y7/2i9+C
+	 TqSFlOwS3Sjhg==
+From: Sasha Levin <sashal@kernel.org>
+To: linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Michael Jeanson <mjeanson@efficios.com>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Yonghong Song <yhs@fb.com>,
+	"Paul E . McKenney" <paulmck@kernel.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Namhyung Kim <namhyung@kernel.org>,
+	Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+	bpf@vger.kernel.org,
+	Joel Fernandes <joel@joelfernandes.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Sasha Levin <sashal@kernel.org>,
+	linux-trace-kernel@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.6 02/24] tracing/ftrace: disable preemption in syscall probe
+Date: Wed,  4 Dec 2024 10:49:22 -0500
+Message-ID: <20241204155003.2213733-2-sashal@kernel.org>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20241204155003.2213733-1-sashal@kernel.org>
+References: <20241204155003.2213733-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241126005206.3457974-1-andrii@kernel.org> <20241127165848.42331fd7078565c0f4e0a7e9@linux-foundation.org>
- <CAEf4BzZF8Gt_H=7J9SYXGorcjukQAqPJoX-a8vqBFdo73ZnXFA@mail.gmail.com>
-In-Reply-To: <CAEf4BzZF8Gt_H=7J9SYXGorcjukQAqPJoX-a8vqBFdo73ZnXFA@mail.gmail.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Wed, 4 Dec 2024 09:01:06 -0800
-Message-ID: <CAADnVQKwZqajMd04Fp2CMmNbSAkfSKkUZiBwzoo4Dno1AzX7zQ@mail.gmail.com>
-Subject: Re: [PATCH mm/stable] mm: fix vrealloc()'s KASAN poisoning logic
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>, Andrii Nakryiko <andrii@kernel.org>, 
-	linux-mm <linux-mm@kvack.org>, Uladzislau Rezki <urezki@gmail.com>, 
-	Christoph Hellwig <hch@infradead.org>, Vlastimil Babka <vbabka@suse.cz>, dakr@kernel.org, 
-	Michal Hocko <mhocko@suse.com>, LKML <linux-kernel@vger.kernel.org>, 
-	bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-stable: review
+X-Patchwork-Hint: Ignore
+X-stable-base: Linux 6.6.63
+Content-Transfer-Encoding: 8bit
 
-Andrew,
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 
-What is the status of this urgent fix ?
+[ Upstream commit 13d750c2c03e9861e15268574ed2c239cca9c9d5 ]
 
-vrealloc() is broken with kasan atm.
+In preparation for allowing system call enter/exit instrumentation to
+handle page faults, make sure that ftrace can handle this change by
+explicitly disabling preemption within the ftrace system call tracepoint
+probes to respect the current expectations within ftrace ring buffer
+code.
 
-On Wed, Nov 27, 2024 at 10:16=E2=80=AFPM Andrii Nakryiko
-<andrii.nakryiko@gmail.com> wrote:
->
-> On Wed, Nov 27, 2024 at 4:58=E2=80=AFPM Andrew Morton <akpm@linux-foundat=
-ion.org> wrote:
-> >
-> > On Mon, 25 Nov 2024 16:52:06 -0800 Andrii Nakryiko <andrii@kernel.org> =
-wrote:
-> >
-> > > When vrealloc() reuses already allocated vmap_area, we need to
-> > > re-annotate poisoned and unpoisoned portions of underlying memory
-> > > according to the new size.
-> >
-> > What are the consequences of this oversight?
-> >
-> > When fixing a flaw, please always remember to describe the visible
-> > effects of that flaw.
-> >
->
-> See [0] for false KASAN splat. I should have left a link to that, sorry.
->
->   [0] https://lore.kernel.org/bpf/67450f9b.050a0220.21d33d.0004.GAE@googl=
-e.com/
->
-> > > Note, hard-coding KASAN_VMALLOC_PROT_NORMAL might not be exactly
-> > > correct, but KASAN flag logic is pretty involved and spread out
-> > > throughout __vmalloc_node_range_noprof(), so I'm using the bare minim=
-um
-> > > flag here and leaving the rest to mm people to refactor this logic an=
-d
-> > > reuse it here.
-> > >
-> > > Fixes: 3ddc2fefe6f3 ("mm: vmalloc: implement vrealloc()")
-> >
-> > Because a cc:stable might be appropriate here.  But without knowing the
-> > effects, it's hard to determine this.
->
-> This is KASAN-related, so the effect is a KASAN mis-reporting issue
-> where there is none.
->
-> >
-> > > --- a/mm/vmalloc.c
-> > > +++ b/mm/vmalloc.c
-> > > @@ -4093,7 +4093,8 @@ void *vrealloc_noprof(const void *p, size_t siz=
-e, gfp_t flags)
-> > >               /* Zero out spare memory. */
-> > >               if (want_init_on_alloc(flags))
-> > >                       memset((void *)p + size, 0, old_size - size);
-> > > -
-> > > +             kasan_poison_vmalloc(p + size, old_size - size);
-> > > +             kasan_unpoison_vmalloc(p, size, KASAN_VMALLOC_PROT_NORM=
-AL);
-> > >               return (void *)p;
-> > >       }
-> > >
-> >
+This change does not yet allow ftrace to take page faults per se within
+its probe, but allows its existing probes to adapt to the upcoming
+change.
+
+Cc: Michael Jeanson <mjeanson@efficios.com>
+Cc: Masami Hiramatsu <mhiramat@kernel.org>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Alexei Starovoitov <ast@kernel.org>
+Cc: Yonghong Song <yhs@fb.com>
+Cc: Paul E. McKenney <paulmck@kernel.org>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc: Mark Rutland <mark.rutland@arm.com>
+Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
+Cc: Namhyung Kim <namhyung@kernel.org>
+Cc: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: bpf@vger.kernel.org
+Cc: Joel Fernandes <joel@joelfernandes.org>
+Link: https://lore.kernel.org/20241009010718.2050182-3-mathieu.desnoyers@efficios.com
+Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ include/trace/trace_events.h  | 36 +++++++++++++++++++++++++++++++----
+ kernel/trace/trace_syscalls.c | 12 ++++++++++++
+ 2 files changed, 44 insertions(+), 4 deletions(-)
+
+diff --git a/include/trace/trace_events.h b/include/trace/trace_events.h
+index c2f9cabf154d1..fa0d51cad57a8 100644
+--- a/include/trace/trace_events.h
++++ b/include/trace/trace_events.h
+@@ -244,6 +244,9 @@ static struct trace_event_fields trace_event_fields_##call[] = {	\
+ 	tstruct								\
+ 	{} };
+ 
++#undef DECLARE_EVENT_SYSCALL_CLASS
++#define DECLARE_EVENT_SYSCALL_CLASS DECLARE_EVENT_CLASS
++
+ #undef DEFINE_EVENT_PRINT
+ #define DEFINE_EVENT_PRINT(template, name, proto, args, print)
+ 
+@@ -374,11 +377,11 @@ static inline notrace int trace_event_get_offsets_##call(		\
+ 
+ #include "stages/stage6_event_callback.h"
+ 
+-#undef DECLARE_EVENT_CLASS
+-#define DECLARE_EVENT_CLASS(call, proto, args, tstruct, assign, print)	\
+-									\
++
++#undef __DECLARE_EVENT_CLASS
++#define __DECLARE_EVENT_CLASS(call, proto, args, tstruct, assign, print) \
+ static notrace void							\
+-trace_event_raw_event_##call(void *__data, proto)			\
++do_trace_event_raw_event_##call(void *__data, proto)			\
+ {									\
+ 	struct trace_event_file *trace_file = __data;			\
+ 	struct trace_event_data_offsets_##call __maybe_unused __data_offsets;\
+@@ -403,6 +406,29 @@ trace_event_raw_event_##call(void *__data, proto)			\
+ 									\
+ 	trace_event_buffer_commit(&fbuffer);				\
+ }
++
++#undef DECLARE_EVENT_CLASS
++#define DECLARE_EVENT_CLASS(call, proto, args, tstruct, assign, print)	\
++__DECLARE_EVENT_CLASS(call, PARAMS(proto), PARAMS(args), PARAMS(tstruct), \
++		      PARAMS(assign), PARAMS(print))			\
++static notrace void							\
++trace_event_raw_event_##call(void *__data, proto)			\
++{									\
++	do_trace_event_raw_event_##call(__data, args);			\
++}
++
++#undef DECLARE_EVENT_SYSCALL_CLASS
++#define DECLARE_EVENT_SYSCALL_CLASS(call, proto, args, tstruct, assign, print) \
++__DECLARE_EVENT_CLASS(call, PARAMS(proto), PARAMS(args), PARAMS(tstruct), \
++		      PARAMS(assign), PARAMS(print))			\
++static notrace void							\
++trace_event_raw_event_##call(void *__data, proto)			\
++{									\
++	preempt_disable_notrace();					\
++	do_trace_event_raw_event_##call(__data, args);			\
++	preempt_enable_notrace();					\
++}
++
+ /*
+  * The ftrace_test_probe is compiled out, it is only here as a build time check
+  * to make sure that if the tracepoint handling changes, the ftrace probe will
+@@ -418,6 +444,8 @@ static inline void ftrace_test_probe_##call(void)			\
+ 
+ #include TRACE_INCLUDE(TRACE_INCLUDE_FILE)
+ 
++#undef __DECLARE_EVENT_CLASS
++
+ #include "stages/stage7_class_define.h"
+ 
+ #undef DECLARE_EVENT_CLASS
+diff --git a/kernel/trace/trace_syscalls.c b/kernel/trace/trace_syscalls.c
+index de753403cdafb..9508d9022940f 100644
+--- a/kernel/trace/trace_syscalls.c
++++ b/kernel/trace/trace_syscalls.c
+@@ -299,6 +299,12 @@ static void ftrace_syscall_enter(void *data, struct pt_regs *regs, long id)
+ 	int syscall_nr;
+ 	int size;
+ 
++	/*
++	 * Syscall probe called with preemption enabled, but the ring
++	 * buffer and per-cpu data require preemption to be disabled.
++	 */
++	guard(preempt_notrace)();
++
+ 	syscall_nr = trace_get_syscall_nr(current, regs);
+ 	if (syscall_nr < 0 || syscall_nr >= NR_syscalls)
+ 		return;
+@@ -338,6 +344,12 @@ static void ftrace_syscall_exit(void *data, struct pt_regs *regs, long ret)
+ 	struct trace_event_buffer fbuffer;
+ 	int syscall_nr;
+ 
++	/*
++	 * Syscall probe called with preemption enabled, but the ring
++	 * buffer and per-cpu data require preemption to be disabled.
++	 */
++	guard(preempt_notrace)();
++
+ 	syscall_nr = trace_get_syscall_nr(current, regs);
+ 	if (syscall_nr < 0 || syscall_nr >= NR_syscalls)
+ 		return;
+-- 
+2.43.0
+
