@@ -1,214 +1,546 @@
-Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
+Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com [209.85.215.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EB5A2B9B4
-	for <bpf@vger.kernel.org>; Wed,  4 Dec 2024 18:08:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44D97239184
+	for <bpf@vger.kernel.org>; Wed,  4 Dec 2024 18:10:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733335740; cv=none; b=LFapDgpPYiFkvt+ouSQAmfXsa02pArTlBy9OGPoKqxa4Tj66yklNR0lx3KOXWbuW3Zynk4GeDm6MWk7yBFI9UDmlblgvLLBWyzhVPVN4ZMSeg7Wv4/ZxxSwVg2sqGmSkjPxWNNHuvxw2zpNrLnC0QZjLOZYhdtZX6iWMq5Fjg70=
+	t=1733335824; cv=none; b=tal5Vf3P9khNnIhE1VfSMykkRPexqPu5Ns2TVuJ24yVQN5+vt/zuQAqcYvPq3MH1zAg948lQ6zdsKZwk0ymDcedICyspP3JFcKeiVhG6dnz/KDQRHfxSTQvNa+yR3TTgz58vVQK251woM4rf1VZDaFAOaAo5q2/zsGuzJ0YPpWU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733335740; c=relaxed/simple;
-	bh=aai92D0q3lxQkpYp6a6L+AjNCmuBnj8LLOwevlp7RZo=;
+	s=arc-20240116; t=1733335824; c=relaxed/simple;
+	bh=kUekum4HbWbQDYDTKOb9fknyoZ6+mi63k3jIbf0CwPg=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=k8koeMtskdqeSzj3qo7w+gGxdOedjEH4/jWHGn3poaQAIK1SVxyIACWCptKL5kNQLc4zDi+9QEsJ6MZL9bQ1Hxdj92PtsDvRI7HdQmQnUEKVBBjYwpyGSl+fGm0qOMhbguPX0/lmO09q/ShS5Dyd3umc/AmO7SJ/rIuPruiiTgs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZVamlkm+; arc=none smtp.client-ip=209.85.216.49
+	 To:Cc:Content-Type; b=Z0aZYGINVkDnsihn0NTkCH0yVmJuR8qJrmd6G5OTB30tUk2915I2YQFkANSWi79OcQZThLxdj/ZaY32AHVaWu3toSwoRjt9NhL9ToM+KnK6gPVNNOaRPWdkAqz0NBHgm875jUgpQkJ7cAMNNw5h0K/LVxPI+RdXhupdYZ1y9Fzw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HERP3IhY; arc=none smtp.client-ip=209.85.215.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZVamlkm+"
-Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-2ee50ffcf14so1026855a91.0
-        for <bpf@vger.kernel.org>; Wed, 04 Dec 2024 10:08:58 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HERP3IhY"
+Received: by mail-pg1-f176.google.com with SMTP id 41be03b00d2f7-7fc41b4c78bso51124a12.3
+        for <bpf@vger.kernel.org>; Wed, 04 Dec 2024 10:10:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1733335737; x=1733940537; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1733335820; x=1733940620; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=j1yizenPsgWkfdhte50yxjFcNJ2t9IU4LBGDBeoo6Ts=;
-        b=ZVamlkm+lKcfB4RN1qqi6aGSZG9b8803r5PCVl0UqQ23ROfAj63xwigMrZPY4/tibM
-         etbk1Ug1LVkrJBmQExWK4pO3oA/4QgOrEGdZ+ehRRyZe3ppnXoTZVn6ymFfm0JpP82NQ
-         X/DPNC4Zgz33H3qMjBLoJlDOdsCkhwHMDaa2r85F9WMXlzNpWrp9NGETtfHKKB7pAYRv
-         iezX2QBmPmoiute89/rq8UCS4QKRzzNlayTA65PqOQZQsjFTimo6gP0V8ABSP3D0Qu2W
-         oOi56ljo4xZZbWfc/ezxjsR70/A+tTdHywGruAr7HpwT6LoF/5Z3HTS40OZPXaNFARHa
-         IusQ==
+        bh=UJ335oQMBaA/zyXP0cU1/+XrqHe4J5M73D0xeuBpnDM=;
+        b=HERP3IhYXz40RAk1tUGuVa/XCHuOa8ht+FA0RdawSqMJg2VXutzcAkqQ/u1Q1wQQ3W
+         Lx/BH6N/zApJdvxY+BMOw8HfjnJvip2Lz03wXRcMqphjnH1mNT7bAze/eQaBPPAz8Ssd
+         WihdXTnQ0V5NmU/QNo18VBJaJ6zI/5ZW3zx4Vvle5gScVLOXrfkEuu0oU7scAf/uaM23
+         JyTbKmODY+JM9CNUeSX50bPVo+V3zVA2Y/AnzPkp7UOelhcTY1aNythVp5D2BzGzCaRC
+         cSDiPEj/qBGyArhkdmuoCeRsOz/QxH/QPGq86gpWpZpJ7Ym/CzluI45fcvDLyeSqpif8
+         V2Xg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733335737; x=1733940537;
+        d=1e100.net; s=20230601; t=1733335820; x=1733940620;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=j1yizenPsgWkfdhte50yxjFcNJ2t9IU4LBGDBeoo6Ts=;
-        b=SX5t8XV6/p0OEK+KLvVIquitg8bTsN0zSCb7sp3G8WwpfSh2ojZGCSMFJgkO1R5LYz
-         vmM/MK4S6v/MnCEgjJHyMz6fGEsc6eVK1Y0dIB4VlFb37GSCmfE781q8ybTqANbe5hcX
-         4nGHKTg6zYagB+pfvuXjfihmDGyRofE9lPnOLtLHmFg3m6SvNW8JplixeitcUTRzt9k2
-         Fa2d/VvN+CDWQ7FPlfzIeolPbtbdo16bd0TlXsUf/Rmz+Suit76qQJWg0XqhFEeIoYRZ
-         1wJYH60lkpe0bjkFBgMX8wfJbgcWiW/OTC2PKZ+xUjIsp/R70+8vQ5CkHOZL6zECACd4
-         9DiQ==
-X-Gm-Message-State: AOJu0Yxhl81EkTa940oohdlECUrprlhHnObd739Y1/Z+nGMGLsZCgTp0
-	H5JRn1RF4+OkLfPsUq1l4+7IXFQg90aEpf7QP5jQxiNslvhLW6DzT3N0BiP/q7Nv7iQbanb3qRK
-	VMfVDmmTmyanhaHC5SRDUv6X8HTPmbOnx
-X-Gm-Gg: ASbGncsTrU48eWmTR4oTEzfmTXC4NtBCRh5L+NTq1E+1C8fz0/cJKPI8x4AwdCT31rh
-	GEpYQOwSSUYWlj3n0CXcVCoibmrXS/eVQ560sxLTW6xVg/JI=
-X-Google-Smtp-Source: AGHT+IH7QU0ZBKq89n06MFB2NlBNK4nzYHB83WKG5EGgRTE69QMTtSLsTBCz1bw3nycGJ34asgqAce9pzZyW1nX+3wI=
-X-Received: by 2002:a17:90b:1b10:b0:2ee:ee77:226d with SMTP id
- 98e67ed59e1d1-2ef41bd644bmr477555a91.4.1733335737478; Wed, 04 Dec 2024
- 10:08:57 -0800 (PST)
+        bh=UJ335oQMBaA/zyXP0cU1/+XrqHe4J5M73D0xeuBpnDM=;
+        b=FvhoPKE7+9CM0E2R3Ir5DtFGYx/Iw4TfN6KbTuYIp6Hh1ln29c2Tfs/wFndrW7CXmF
+         PPt7yVuFKuJUtwUhBFGLVUqgCJze5Wdbp2IYHg4tA9Y/NBg44pWE/awiEVkvtxCDKlen
+         t/3/yQkildLsWMIsLVqEr9wO/s1OTUcZjDBcnLd7v+ZdouGpOwtPTUJ+EnWH6g67KDWE
+         XOavIA64Dh4gARCDu79HHwGMxgFHM88o2xyX9vA2QOlzRmJWGjnP+ayQ7FTI/XqcECnz
+         2aHT8JRaEAiju+0Nz+CoudXsuBnJ+r2Y2iWCNSMzO0WAsjgtLsuuA7iIdiwc+tGxoBC5
+         On3w==
+X-Gm-Message-State: AOJu0YxK3CV3h8/MDbulUaML5aln5f2rBvx6C8Gi2pHkfcDPdX/8qn8q
+	B9g3wLhh8A2fEfSGTrUD1+5nG8ecUtB9NosMxVXziUafgtXYKHCkqQnrHVd7nVkG9gVa3FKCMZZ
+	Y2FLr8EnOxdjqubf1ZpGt/7SXPp+qTw==
+X-Gm-Gg: ASbGnctbhAuaHL5dqKPydWw6N3BM4B/26nQoLHp9gIcms1KPoMjQ+Txcos67UkiFck9
+	Uya7/iRlSpazE2MRQz2ChDqCX2qTBqSqhDSsC1H+J7bqNmYU=
+X-Google-Smtp-Source: AGHT+IFCKrrDhgdA5dllJyREDyWVUlnwzdYdozjacp7ccu19NPVkpgbzJ6ku2RY0D7kYEnfOPGuzp1Kx45cJyyIqyeM=
+X-Received: by 2002:a17:90b:380a:b0:2ef:30ec:14c9 with SMTP id
+ 98e67ed59e1d1-2ef30ec1c96mr2651069a91.18.1733335820312; Wed, 04 Dec 2024
+ 10:10:20 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241203135052.3380721-1-aspsk@isovalent.com> <20241203135052.3380721-4-aspsk@isovalent.com>
- <CAEf4BzZiD_iYpBkf5q5U9VoSUAFJN8dxOBWNJdT5y9DxAe=_UQ@mail.gmail.com> <Z1BJc/iK3ecPKTUx@eis>
-In-Reply-To: <Z1BJc/iK3ecPKTUx@eis>
+References: <20241203135052.3380721-1-aspsk@isovalent.com> <20241203135052.3380721-6-aspsk@isovalent.com>
+ <CAEf4BzYBGfMttkMTN44158oOTm2uESMExEMxOcAF8Jy12ihAOQ@mail.gmail.com> <Z1BK0NQO/Ub8uBeY@eis>
+In-Reply-To: <Z1BK0NQO/Ub8uBeY@eis>
 From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Wed, 4 Dec 2024 10:08:45 -0800
-Message-ID: <CAEf4BzZVkNRV+8ROMMM-oGdHd1HUSx3WVv77TK+H4Fr8PhHHBQ@mail.gmail.com>
-Subject: Re: [PATCH v4 bpf-next 3/7] bpf: add fd_array_cnt attribute for prog_load
+Date: Wed, 4 Dec 2024 10:10:08 -0800
+Message-ID: <CAEf4BzZ6V6yUVyJuX3r12rPEHj2uiJ_gNGr8bbCA+yxJntVqng@mail.gmail.com>
+Subject: Re: [PATCH v4 bpf-next 5/7] selftests/bpf: Add tests for fd_array_cnt
 To: Anton Protopopov <aspsk@isovalent.com>
 Cc: bpf@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Dec 4, 2024 at 4:19=E2=80=AFAM Anton Protopopov <aspsk@isovalent.co=
+On Wed, Dec 4, 2024 at 4:25=E2=80=AFAM Anton Protopopov <aspsk@isovalent.co=
 m> wrote:
 >
-> On 24/12/03 01:25PM, Andrii Nakryiko wrote:
-> > On Tue, Dec 3, 2024 at 5:48=E2=80=AFAM Anton Protopopov <aspsk@isovalen=
+> On 24/12/03 01:27PM, Andrii Nakryiko wrote:
+> > On Tue, Dec 3, 2024 at 6:13=E2=80=AFAM Anton Protopopov <aspsk@isovalen=
 t.com> wrote:
 > > >
-> > > The fd_array attribute of the BPF_PROG_LOAD syscall may contain a set
-> > > of file descriptors: maps or btfs. This field was introduced as a
-> > > sparse array. Introduce a new attribute, fd_array_cnt, which, if
-> > > present, indicates that the fd_array is a continuous array of the
-> > > corresponding length.
+> > > Add a new set of tests to test the new field in PROG_LOAD-related
+> > > part of bpf_attr: fd_array_cnt.
 > > >
-> > > If fd_array_cnt is non-zero, then every map in the fd_array will be
-> > > bound to the program, as if it was used by the program. This
-> > > functionality is similar to the BPF_PROG_BIND_MAP syscall, but such
-> > > maps can be used by the verifier during the program load.
+> > > Add the following test cases:
+> > >
+> > >   * fd_array_cnt/no-fd-array: program is loaded in a normal
+> > >     way, without any fd_array present
+> > >
+> > >   * fd_array_cnt/fd-array-ok: pass two extra non-used maps,
+> > >     check that they're bound to the program
+> > >
+> > >   * fd_array_cnt/fd-array-dup-input: pass a few extra maps,
+> > >     only two of which are unique
+> > >
+> > >   * fd_array_cnt/fd-array-ref-maps-in-array: pass a map in
+> > >     fd_array which is also referenced from within the program
+> > >
+> > >   * fd_array_cnt/fd-array-trash-input: pass array with some trash
+> > >
+> > >   * fd_array_cnt/fd-array-with-holes: pass an array with holes (fd=3D=
+0)
+> >
+> > nit: should be removed, there is no such test anymore
+> >
+> > >
+> > >   * fd_array_cnt/fd-array-2big: pass too large array
+> > >
+> > > All the tests above are using the bpf(2) syscall directly,
+> > > no libbpf involved.
 > > >
 > > > Signed-off-by: Anton Protopopov <aspsk@isovalent.com>
 > > > ---
-> > >  include/uapi/linux/bpf.h       | 10 ++++
-> > >  kernel/bpf/syscall.c           |  2 +-
-> > >  kernel/bpf/verifier.c          | 98 ++++++++++++++++++++++++++++----=
---
-> > >  tools/include/uapi/linux/bpf.h | 10 ++++
-> > >  4 files changed, 104 insertions(+), 16 deletions(-)
+> > >  .../selftests/bpf/prog_tests/fd_array.c       | 340 ++++++++++++++++=
+++
+> > >  1 file changed, 340 insertions(+)
+> > >  create mode 100644 tools/testing/selftests/bpf/prog_tests/fd_array.c
 > > >
-> >
-> > [...]
-> >
-> > > +/*
-> > > + * The add_fd_from_fd_array() is executed only if fd_array_cnt is no=
-n-zero. In
-> > > + * this case expect that every file descriptor in the array is eithe=
-r a map or
-> > > + * a BTF. Everything else is considered to be trash.
-> > > + */
-> > > +static int add_fd_from_fd_array(struct bpf_verifier_env *env, int fd=
-)
+> > > diff --git a/tools/testing/selftests/bpf/prog_tests/fd_array.c b/tool=
+s/testing/selftests/bpf/prog_tests/fd_array.c
+> > > new file mode 100644
+> > > index 000000000000..1d4bff4a1269
+> > > --- /dev/null
+> > > +++ b/tools/testing/selftests/bpf/prog_tests/fd_array.c
+> > > @@ -0,0 +1,340 @@
+> > > +// SPDX-License-Identifier: GPL-2.0
+> > > +
+> > > +#include <test_progs.h>
+> > > +
+> > > +#include <linux/btf.h>
+> > > +#include <bpf/bpf.h>
+> > > +
+> > > +#include "../test_btf.h"
+> > > +
+> > > +static inline int new_map(void)
 > > > +{
-> > > +       struct bpf_map *map;
-> > > +       CLASS(fd, f)(fd);
-> > > +       int ret;
+> > > +       LIBBPF_OPTS(bpf_map_create_opts, opts);
+> > > +       const char *name =3D NULL;
+> > > +       __u32 max_entries =3D 1;
+> > > +       __u32 value_size =3D 8;
+> > > +       __u32 key_size =3D 4;
 > > > +
-> > > +       map =3D __bpf_map_get(f);
-> > > +       if (!IS_ERR(map)) {
-> > > +               ret =3D __add_used_map(env, map);
-> > > +               if (ret < 0)
-> > > +                       return ret;
-> > > +               return 0;
-> > > +       }
-> > > +
-> > > +       /*
-> > > +        * Unlike "unused" maps which do not appear in the BPF progra=
-m,
-> > > +        * BTFs are visible, so no reason to refcnt them now
+> > > +       return bpf_map_create(BPF_MAP_TYPE_ARRAY, name,
+> > > +                             key_size, value_size,
+> > > +                             max_entries, &opts);
 > >
-> > What does "BTFs are visible" mean? I find this behavior surprising,
-> > tbh. Map is added to used_maps, but BTF is *not* added to used_btfs?
-> > Why?
->
-> This functionality is added to catch maps, and work with them during
-> verification, which aren't otherwise referenced by program code. The
-> actual application is those "instructions set" maps for static keys.
-> All other objects are "visible" during verification.
-
-That's your specific intended use case, but API is semantically more
-generic and shouldn't tailor to your specific interpretation on how it
-will/should be used. I think this is a landmine to add reference to
-just BPF maps and not to BTF objects, we won't be able to retrofit the
-proper and uniform treatment later without extra flags or backwards
-compatibility breakage.
-
-Even though we don't need extra "detached" BTF objects associated with
-BPF program, right now, I can anticipate some interesting use case
-where we might want to attach additional BTF objects to BPF programs
-(for whatever reasons, BTFs are a convenient bag of strings and
-graph-based types, so could be useful for extra
-debugging/metadata/whatever information).
-
-So I can see only two ways forward. Either we disable BTFs in fd_array
-if fd_array_cnt>0, which will prevent its usage from light skeleton,
-so not great. Or we bump refcount both BPF maps and BTFs in fd_array.
-
-
-The latter seems saner and I don't think is a problem at all, we
-already have used_btfs that function similarly to used_maps.
-
->
-> > > +        */
-> > > +       if (!IS_ERR(__btf_get_by_fd(f)))
-> > > +               return 0;
-> > > +
-> > > +       verbose(env, "fd %d is not pointing to valid bpf_map or btf\n=
-", fd);
-> > > +       return PTR_ERR(map);
+> > nit: you don't really need to pass empty opts, passing NULL is always
+> > ok if no options are specified
+> >
 > > > +}
 > > > +
-> > > +static int process_fd_array(struct bpf_verifier_env *env, union bpf_=
-attr *attr, bpfptr_t uattr)
+> > > +static int new_btf(void)
 > > > +{
-> > > +       size_t size =3D sizeof(int);
-> > > +       int ret;
-> > > +       int fd;
-> > > +       u32 i;
+> > > +       LIBBPF_OPTS(bpf_btf_load_opts, opts);
+> > > +       struct btf_blob {
+> > > +               struct btf_header btf_hdr;
+> > > +               __u32 types[8];
+> > > +               __u32 str;
+> > > +       } raw_btf =3D {
+> > > +               .btf_hdr =3D {
+> > > +                       .magic =3D BTF_MAGIC,
+> > > +                       .version =3D BTF_VERSION,
+> > > +                       .hdr_len =3D sizeof(struct btf_header),
+> > > +                       .type_len =3D sizeof(raw_btf.types),
+> > > +                       .str_off =3D offsetof(struct btf_blob, str) -=
+ offsetof(struct btf_blob, types),
+> > > +                       .str_len =3D sizeof(raw_btf.str),
+> > > +               },
+> > > +               .types =3D {
+> > > +                       /* long */
+> > > +                       BTF_TYPE_INT_ENC(0, BTF_INT_SIGNED, 0, 64, 8)=
+,  /* [1] */
+> > > +                       /* unsigned long */
+> > > +                       BTF_TYPE_INT_ENC(0, 0, 0, 64, 8),  /* [2] */
+> > > +               },
+> > > +       };
 > > > +
-> > > +       env->fd_array =3D make_bpfptr(attr->fd_array, uattr.is_kernel=
-);
-> > > +
-> > > +       /*
-> > > +        * The only difference between old (no fd_array_cnt is given)=
- and new
-> > > +        * APIs is that in the latter case the fd_array is expected t=
-o be
-> > > +        * continuous and is scanned for map fds right away
-> > > +        */
-> > > +       if (!attr->fd_array_cnt)
-> > > +               return 0;
-> > > +
-> > > +       for (i =3D 0; i < attr->fd_array_cnt; i++) {
-> > > +               if (copy_from_bpfptr_offset(&fd, env->fd_array, i * s=
-ize, size))
+> > > +       return bpf_btf_load(&raw_btf, sizeof(raw_btf), &opts);
 > >
-> > potential overflow in `i * size`? Do we limit fd_array_cnt anywhere to
-> > less than INT_MAX/4?
->
-> Right. So, probably cap to (UINT_MAX/size)?
-
-either that or use check_mul_overflow()
-
->
-> > > +                       return -EFAULT;
+> > same, you don't seem to actually use opts
+> >
+> > > +}
 > > > +
-> > > +               ret =3D add_fd_from_fd_array(env, fd);
-> > > +               if (ret)
-> > > +                       return ret;
+> > > +static bool map_exists(__u32 id)
+> > > +{
+> > > +       int fd;
+> > > +
+> > > +       fd =3D bpf_map_get_fd_by_id(id);
+> > > +       if (fd >=3D 0) {
+> > > +               close(fd);
+> > > +               return true;
 > > > +       }
+> > > +       return false;
+> > > +}
+> > > +
+> > > +static inline int bpf_prog_get_map_ids(int prog_fd, __u32 *nr_map_id=
+s, __u32 *map_ids)
+> > > +{
+> > > +       __u32 len =3D sizeof(struct bpf_prog_info);
+> > > +       struct bpf_prog_info info =3D {
+> > > +               .nr_map_ids =3D *nr_map_ids,
+> > > +               .map_ids =3D ptr_to_u64(map_ids),
+> > > +       };
+> >
+> > nit: bpf_prog_info should be explicitly memset(0), and only then
+> > fields should be filled out. It might be ok right now because we don't
+> > have any padding (or compiler does zero that padding out, even though
+> > it's not required to do that), but this might pop up later, so best to
+> > avoid that.
+> >
+> > > +       int err;
+> > > +
+> > > +       err =3D bpf_prog_get_info_by_fd(prog_fd, &info, &len);
+> > > +       if (!ASSERT_OK(err, "bpf_prog_get_info_by_fd"))
+> > > +               return -1;
+> > > +
+> > > +       *nr_map_ids =3D info.nr_map_ids;
 > > > +
 > > > +       return 0;
 > > > +}
 > > > +
+> > > +static int __load_test_prog(int map_fd, const int *fd_array, int fd_=
+array_cnt)
+> > > +{
+> > > +       /* A trivial program which uses one map */
+> > > +       struct bpf_insn insns[] =3D {
+> > > +               BPF_LD_MAP_FD(BPF_REG_1, map_fd),
+> > > +               BPF_ST_MEM(BPF_DW, BPF_REG_10, -8, 0),
+> > > +               BPF_MOV64_REG(BPF_REG_2, BPF_REG_10),
+> > > +               BPF_ALU64_IMM(BPF_ADD, BPF_REG_2, -8),
+> > > +               BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_ma=
+p_lookup_elem),
+> > > +               BPF_MOV64_IMM(BPF_REG_0, 0),
+> > > +               BPF_EXIT_INSN(),
+> > > +       };
+> > > +       LIBBPF_OPTS(bpf_prog_load_opts, opts);
+> > > +
+> > > +       opts.fd_array =3D fd_array;
+> > > +       opts.fd_array_cnt =3D fd_array_cnt;
+> > > +
+> > > +       return bpf_prog_load(BPF_PROG_TYPE_XDP, NULL, "GPL", insns, A=
+RRAY_SIZE(insns), &opts);
+> > > +}
+> > > +
+> > > +static int load_test_prog(const int *fd_array, int fd_array_cnt)
+> > > +{
+> > > +       int map_fd;
+> > > +       int ret;
+> > > +
+> > > +       map_fd =3D new_map();
+> > > +       if (!ASSERT_GE(map_fd, 0, "new_map"))
+> > > +               return map_fd;
+> > > +
+> > > +       ret =3D __load_test_prog(map_fd, fd_array, fd_array_cnt);
+> > > +       close(map_fd);
+> > > +
+> > > +       /* switch back to returning the actual value */
+> > > +       if (ret < 0)
+> > > +               return -errno;
 > >
-> > [...]
+> > this errno might have been modified by close(), but you actually don't
+> > need errno, libbpf will return errno directly from bpf_prog_load(), so
+> > you can just do:
+> >
+> > ret =3D __load_test_prog(...);
+> > close(map_fd);
+> > return ret;
+> >
+> > > +       return ret;
+> > > +}
+> > > +
+> > > +static bool check_expected_map_ids(int prog_fd, int expected, __u32 =
+*map_ids, __u32 *nr_map_ids)
+> > > +{
+> > > +       int err;
+> > > +
+> > > +       err =3D bpf_prog_get_map_ids(prog_fd, nr_map_ids, map_ids);
+> > > +       if (!ASSERT_OK(err, "bpf_prog_get_map_ids"))
+> > > +               return false;
+> > > +       if (!ASSERT_EQ(*nr_map_ids, expected, "unexpected nr_map_ids"=
+))
+> > > +               return false;
+> > > +
+> > > +       return true;
+> > > +}
+> > > +
+> > > +/*
+> > > + * Load a program, which uses one map. No fd_array maps are present.
+> > > + * On return only one map is expected to be bound to prog.
+> > > + */
+> > > +static void check_fd_array_cnt__no_fd_array(void)
+> > > +{
+> > > +       __u32 map_ids[16];
+> > > +       __u32 nr_map_ids;
+> > > +       int prog_fd =3D -1;
+> > > +
+> > > +       prog_fd =3D load_test_prog(NULL, 0);
+> > > +       if (!ASSERT_GE(prog_fd, 0, "BPF_PROG_LOAD"))
+> > > +               return;
+> > > +       nr_map_ids =3D ARRAY_SIZE(map_ids);
+> > > +       check_expected_map_ids(prog_fd, 1, map_ids, &nr_map_ids);
+> > > +       close(prog_fd);
+> > > +}
+> > > +
+> > > +/*
+> > > + * Load a program, which uses one map, and pass two extra, non-equal=
+, maps in
+> > > + * fd_array with fd_array_cnt=3D2. On return three maps are expected=
+ to be bound
+> > > + * to the program.
+> > > + */
+> > > +static void check_fd_array_cnt__fd_array_ok(void)
+> > > +{
+> > > +       int extra_fds[2] =3D { -1, -1 };
+> > > +       __u32 map_ids[16];
+> > > +       __u32 nr_map_ids;
+> > > +       int prog_fd =3D -1;
+> > > +
+> > > +       extra_fds[0] =3D new_map();
+> > > +       if (!ASSERT_GE(extra_fds[0], 0, "new_map"))
+> > > +               goto cleanup;
+> > > +       extra_fds[1] =3D new_map();
+> > > +       if (!ASSERT_GE(extra_fds[1], 0, "new_map"))
+> > > +               goto cleanup;
+> > > +       prog_fd =3D load_test_prog(extra_fds, 2);
+> > > +       if (!ASSERT_GE(prog_fd, 0, "BPF_PROG_LOAD"))
+> > > +               goto cleanup;
+> > > +       nr_map_ids =3D ARRAY_SIZE(map_ids);
+> > > +       if (!check_expected_map_ids(prog_fd, 3, map_ids, &nr_map_ids)=
+)
+> > > +               goto cleanup;
+> > > +
+> > > +       /* maps should still exist when original file descriptors are=
+ closed */
+> > > +       close(extra_fds[0]);
+> > > +       close(extra_fds[1]);
+> > > +       if (!ASSERT_EQ(map_exists(map_ids[0]), true, "map_ids[0] shou=
+ld exist"))
+> > > +               goto cleanup;
+> > > +       if (!ASSERT_EQ(map_exists(map_ids[1]), true, "map_ids[1] shou=
+ld exist"))
+> > > +               goto cleanup;
+> > > +
+> > > +       /* some fds might be invalid, so ignore return codes */
+> > > +cleanup:
+> > > +       close(extra_fds[1]);
+> > > +       close(extra_fds[0]);
+> > > +       close(prog_fd);
+> >
+> > nit: technically, you should check each fd to be >=3D 0 before closing =
+it
+> >
+> > > +}
+> > > +
+> > > +/*
+> > > + * Load a program with a few extra maps duplicated in the fd_array.
+> > > + * After the load maps should only be referenced once.
+> > > + */
+> > > +static void check_fd_array_cnt__duplicated_maps(void)
+> > > +{
+> > > +       int extra_fds[4] =3D { -1, -1, -1, -1 };
+> > > +       __u32 map_ids[16];
+> > > +       __u32 nr_map_ids;
+> > > +       int prog_fd =3D -1;
+> > > +
+> > > +       extra_fds[0] =3D extra_fds[2] =3D new_map();
+> > > +       if (!ASSERT_GE(extra_fds[0], 0, "new_map"))
+> > > +               goto cleanup;
+> > > +       extra_fds[1] =3D extra_fds[3] =3D new_map();
+> > > +       if (!ASSERT_GE(extra_fds[1], 0, "new_map"))
+> > > +               goto cleanup;
+> > > +       prog_fd =3D load_test_prog(extra_fds, 4);
+> > > +       if (!ASSERT_GE(prog_fd, 0, "BPF_PROG_LOAD"))
+> > > +               goto cleanup;
+> > > +       nr_map_ids =3D ARRAY_SIZE(map_ids);
+> > > +       if (!check_expected_map_ids(prog_fd, 3, map_ids, &nr_map_ids)=
+)
+> > > +               goto cleanup;
+> > > +
+> > > +       /* maps should still exist when original file descriptors are=
+ closed */
+> > > +       close(extra_fds[0]);
+> > > +       close(extra_fds[1]);
+> > > +       if (!ASSERT_EQ(map_exists(map_ids[0]), true, "map should exis=
+t"))
+> > > +               goto cleanup;
+> > > +       if (!ASSERT_EQ(map_exists(map_ids[1]), true, "map should exis=
+t"))
+> > > +               goto cleanup;
+> > > +
+> > > +       /* some fds might be invalid, so ignore return codes */
+> > > +cleanup:
+> > > +       close(extra_fds[1]);
+> > > +       close(extra_fds[0]);
+> > > +       close(prog_fd);
+> >
+> > same about if (fd >=3D0) close(fd); pattern
+> >
+> > > +}
+> > > +
+> > > +/*
+> > > + * Check that if maps which are referenced by a program are
+> > > + * passed in fd_array, then they will be referenced only once
+> > > + */
+> > > +static void check_fd_array_cnt__referenced_maps_in_fd_array(void)
+> > > +{
+> > > +       int extra_fds[1] =3D { -1 };
+> > > +       __u32 map_ids[16];
+> > > +       __u32 nr_map_ids;
+> > > +       int prog_fd =3D -1;
+> > > +
+> > > +       extra_fds[0] =3D new_map();
+> > > +       if (!ASSERT_GE(extra_fds[0], 0, "new_map"))
+> > > +               goto cleanup;
+> > > +       prog_fd =3D __load_test_prog(extra_fds[0], extra_fds, 1);
+> > > +       if (!ASSERT_GE(prog_fd, 0, "BPF_PROG_LOAD"))
+> > > +               goto cleanup;
+> > > +       nr_map_ids =3D ARRAY_SIZE(map_ids);
+> > > +       if (!check_expected_map_ids(prog_fd, 1, map_ids, &nr_map_ids)=
+)
+> > > +               goto cleanup;
+> > > +
+> > > +       /* map should still exist when original file descriptor is cl=
+osed */
+> > > +       close(extra_fds[0]);
+> > > +       if (!ASSERT_EQ(map_exists(map_ids[0]), true, "map should exis=
+t"))
+> > > +               goto cleanup;
+> > > +
+> > > +       /* some fds might be invalid, so ignore return codes */
+> > > +cleanup:
+> > > +       close(extra_fds[0]);
+> > > +       close(prog_fd);
+> >
+> > ditto
+> >
+> > > +}
+> > > +
+> > > +/*
+> > > + * Test that a program with trash in fd_array can't be loaded:
+> > > + * only map and BTF file descriptors should be accepted.
+> > > + */
+> > > +static void check_fd_array_cnt__fd_array_with_trash(void)
+> > > +{
+> > > +       int extra_fds[3] =3D { -1, -1, -1 };
+> > > +       int prog_fd =3D -1;
+> > > +
+> > > +       extra_fds[0] =3D new_map();
+> > > +       if (!ASSERT_GE(extra_fds[0], 0, "new_map"))
+> > > +               goto cleanup;
+> > > +       extra_fds[1] =3D new_btf();
+> > > +       if (!ASSERT_GE(extra_fds[1], 0, "new_btf"))
+> > > +               goto cleanup;
+> > > +
+> > > +       /* trash 1: not a file descriptor */
+> > > +       extra_fds[2] =3D 0xbeef;
+> > > +       prog_fd =3D load_test_prog(extra_fds, 3);
+> > > +       if (!ASSERT_EQ(prog_fd, -EBADF, "prog should have been reject=
+ed with -EBADF"))
+> > > +               goto cleanup;
+> > > +
+> > > +       /* trash 2: not a map or btf */
+> > > +       extra_fds[2] =3D socket(AF_INET, SOCK_STREAM, 0);
+> > > +       if (!ASSERT_GE(extra_fds[2], 0, "socket"))
+> > > +               goto cleanup;
+> > > +
+> > > +       prog_fd =3D load_test_prog(extra_fds, 3);
+> > > +       if (!ASSERT_EQ(prog_fd, -EINVAL, "prog should have been rejec=
+ted with -EINVAL"))
+> > > +               goto cleanup;
+> > > +
+> > > +       /* some fds might be invalid, so ignore return codes */
+> > > +cleanup:
+> > > +       close(extra_fds[2]);
+> > > +       close(extra_fds[1]);
+> > > +       close(extra_fds[0]);
+> >
+> > ditto
+> >
+> > > +}
+> > > +
+> > > +/*
+> > > + * Test that a program with too big fd_array can't be loaded.
+> > > + */
+> > > +static void check_fd_array_cnt__fd_array_too_big(void)
+> > > +{
+> > > +       int extra_fds[65];
+> > > +       int prog_fd =3D -1;
+> > > +       int i;
+> > > +
+> > > +       for (i =3D 0; i < 65; i++) {
+> > > +               extra_fds[i] =3D new_map();
+> > > +               if (!ASSERT_GE(extra_fds[i], 0, "new_map"))
+> > > +                       goto cleanup_fds;
+> > > +       }
+> > > +
+> > > +       prog_fd =3D load_test_prog(extra_fds, 65);
+> >
+> > nit: hard-coding 65 as the limit seems iffy, when we change
+> > MAX_USED_MAPS this will need adjustment immediately. How about picking
+> > something significantly larger, like 4096, creating just one map with
+> > new_map(), but using that map FD in each entry, then doing
+> > load_test_prog() once and check for -E2BIG?
+>
+> This will not work with -E2BIG, as when maps are the same,
+> they will not be added to used_maps multiple times. I still
+> can try to bump the number here, but not sure if this is
+> possible to track MAX_USED_MAPS from userspace?
+
+ah, makes sense, it has to be all different maps... Ok, never mind
+then, we will detect breakage easily if we ever change internal
+constant, so not really a big deal
+
+>
+> (All your comments above make sense, will fix.)
+>
+> >
+> > > +       ASSERT_EQ(prog_fd, -E2BIG, "prog should have been rejected wi=
+th -E2BIG");
+> > > +
+> > > +cleanup_fds:
+> > > +       while (i > 0)
+> > > +               close(extra_fds[--i]);
+> > > +}
+> > > +
+> > > +void test_fd_array_cnt(void)
+> > > +{
+> > > +       if (test__start_subtest("no-fd-array"))
+> > > +               check_fd_array_cnt__no_fd_array();
+> > > +
+> > > +       if (test__start_subtest("fd-array-ok"))
+> > > +               check_fd_array_cnt__fd_array_ok();
+> > > +
+> > > +       if (test__start_subtest("fd-array-dup-input"))
+> > > +               check_fd_array_cnt__duplicated_maps();
+> > > +
+> > > +       if (test__start_subtest("fd-array-ref-maps-in-array"))
+> > > +               check_fd_array_cnt__referenced_maps_in_fd_array();
+> > > +
+> > > +       if (test__start_subtest("fd-array-trash-input"))
+> > > +               check_fd_array_cnt__fd_array_with_trash();
+> > > +
+> > > +       if (test__start_subtest("fd-array-2big"))
+> > > +               check_fd_array_cnt__fd_array_too_big();
+> > > +}
+> > > --
+> > > 2.34.1
+> > >
+> > >
