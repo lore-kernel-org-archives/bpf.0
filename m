@@ -1,109 +1,116 @@
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA9561D5CE7;
-	Thu,  5 Dec 2024 08:45:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30D241D4342
+	for <bpf@vger.kernel.org>; Thu,  5 Dec 2024 08:52:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733388357; cv=none; b=O3z4GVW23Dx1FysYk06wWEpaq2fDyvu3sUSnDH2QPl0IzY0v7fMb3s3ympkbhjf2odq+zKaoxok21CPQiee4dqflWmFDR72HOAlPdVfZoNrLKyB/L7wx4xywdk52osTYokk2HsyksWAVGdHXOWszaxvImpXULbex8z3GOaL7Umc=
+	t=1733388782; cv=none; b=J2YbzXH878IuigCaV3/Eap3pYYIiwdgpA3zUsnSqMh6Pi4iFucoV4iYaVIDLGNk6qGcRHI9kSLZWLgybK7drHN565BEqxQ2p+QSmnv96j4X6UQhQYAonNd9J0UL7fv6Eihz77fJVtMQwVQEe1vHrWqZqFfXxVAotvPEB7iSzaYU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733388357; c=relaxed/simple;
-	bh=TGub+nnAnx+mngP881hWmOhOaQbFve+Of/d7IUxl9rI=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=I0eE3lynLT9BRdTt9b/t023qoAai7EaTmCC0dAyXVN7uvcHdFjYbqakh22d3o4fCv5o/j2U0lYSjxAPN1UIH6aVsRE62U+mBMVK55dNNzok53Hyh9u6WYdC8ux8S1iIpxwETBwTR3EkS6ljwB/oq3XwcrSNogwEkulh2FS3EPew=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=OwPLMNcM; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="OwPLMNcM"
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4B56npgH011461;
-	Thu, 5 Dec 2024 08:45:24 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	dAnrLVoF02cKvKJnUNPdsTtlf1wMvv8SdyQ2JCZLSG8=; b=OwPLMNcMhtm2zrnb
-	kavwhJ1OcQhU1tB1xOQrjhWGEacod9Di9b4YiOKdo//DgVCCF5pb7X0i91/GNAFX
-	xZQUbqehmWX60D4SuP2cwDzOGqrGwzy2ztrI7pcV6hGXcaGSDaag7a2dGYcvRfgN
-	CvMMMUcAD/M5xPVskoH0ELMqv5/X1Z7aCBOcU1YBbijcFt/wdEBpmCHLzxJAkGJ8
-	ea2L3GSlFPolNByj9ikGfVnDpiHOz2JKsD9FJ+eafBcZWsDt0qgGjRW2V8hbEiM9
-	DnXMjlK6BSXVmCkMsMnj9muqd56aL3pVyHPVT7G5ZS2Fy5G82oAWmZDToAAPTVQ+
-	kNuZGg==
-Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 43a4by5kh4-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 05 Dec 2024 08:45:24 +0000 (GMT)
-Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
-	by NASANPPMTA02.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 4B58jNJB003644
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 5 Dec 2024 08:45:23 GMT
-Received: from zhonhan-gv.qualcomm.com (10.80.80.8) by
- nasanex01c.na.qualcomm.com (10.45.79.139) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.9; Thu, 5 Dec 2024 00:45:19 -0800
-From: Zhongqiu Han <quic_zhonhan@quicinc.com>
-To: <peterz@infradead.org>, <mingo@redhat.com>, <acme@kernel.org>,
-        <namhyung@kernel.org>, <mark.rutland@arm.com>,
-        <alexander.shishkin@linux.intel.com>, <jolsa@kernel.org>,
-        <irogers@google.com>, <adrian.hunter@intel.com>,
-        <kan.liang@linux.intel.com>, <song@kernel.org>,
-        <james.clark@linaro.org>, <yangyicong@hisilicon.com>
-CC: <linux-perf-users@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <bpf@vger.kernel.org>, <quic_zhonhan@quicinc.com>
-Subject: [PATCH v2 1/3] perf header: Fix one memory leakage in process_bpf_btf()
-Date: Thu, 5 Dec 2024 16:44:58 +0800
-Message-ID: <20241205084500.823660-2-quic_zhonhan@quicinc.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20241205084500.823660-1-quic_zhonhan@quicinc.com>
-References: <20241205084500.823660-1-quic_zhonhan@quicinc.com>
+	s=arc-20240116; t=1733388782; c=relaxed/simple;
+	bh=R+vE3YUz5ddq9eeRj9eq60pYN+Njpoy1bn02S1tDpQk=;
+	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=XRNrT3NoMow01ynEEvUwlOgIQraD4SlNKx30ACtBG15GtsWEzIgeLYghdISqXkPiUkM9waAn66iFJxbyZpoageoMGbpSXL7UFx8B17VA3BbgyJOa0bybuWMxwQL2RqA5RbVIiYOViGZvjG0RSuR5RJiT42Bt6miJCiVMjInpL2Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.93.142])
+	by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4Y3p733mHgz4f3js0
+	for <bpf@vger.kernel.org>; Thu,  5 Dec 2024 16:52:31 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.112])
+	by mail.maildlp.com (Postfix) with ESMTP id 8E8971A07B6
+	for <bpf@vger.kernel.org>; Thu,  5 Dec 2024 16:52:50 +0800 (CST)
+Received: from [10.174.176.117] (unknown [10.174.176.117])
+	by APP1 (Coremail) with SMTP id cCh0CgCXjK7eaVFnVz2EDg--.6614S2;
+	Thu, 05 Dec 2024 16:52:50 +0800 (CST)
+Subject: Re: [PATCH bpf v2 7/9] bpf: Use raw_spinlock_t for LPM trie
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+ =?UTF-8?Q?Toke_H=c3=b8iland-J=c3=b8rgensen?= <toke@redhat.com>
+Cc: bpf <bpf@vger.kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>,
+ Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
+ Song Liu <song@kernel.org>, Hao Luo <haoluo@google.com>,
+ Yonghong Song <yonghong.song@linux.dev>,
+ Daniel Borkmann <daniel@iogearbox.net>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@fomichev.me>, Jiri Olsa <jolsa@kernel.org>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+ Thomas Gleixner <tglx@linutronix.de>, =?UTF-8?Q?Thomas_Wei=c3=9fschuh?=
+ <linux@weissschuh.net>, Hou Tao <houtao1@huawei.com>,
+ Xu Kuohai <xukuohai@huawei.com>
+References: <20241127004641.1118269-1-houtao@huaweicloud.com>
+ <20241127004641.1118269-8-houtao@huaweicloud.com> <87frnai67q.fsf@toke.dk>
+ <CAADnVQLD+m_L-K0GiFsZ3SO94o3vvdi6dT3cWM=HPuTQ2_AUAQ@mail.gmail.com>
+From: Hou Tao <houtao@huaweicloud.com>
+Message-ID: <fede4cf9-60df-ce3a-9290-18d371622d3b@huaweicloud.com>
+Date: Thu, 5 Dec 2024 16:52:46 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+In-Reply-To: <CAADnVQLD+m_L-K0GiFsZ3SO94o3vvdi6dT3cWM=HPuTQ2_AUAQ@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01c.na.qualcomm.com (10.45.79.139)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: IhXAhm7f-ZBUPvRi_adCuRpNsB9LjIvN
-X-Proofpoint-ORIG-GUID: IhXAhm7f-ZBUPvRi_adCuRpNsB9LjIvN
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
- definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 clxscore=1015
- impostorscore=0 suspectscore=0 adultscore=0 phishscore=0 spamscore=0
- priorityscore=1501 malwarescore=0 lowpriorityscore=0 mlxlogscore=999
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2411120000 definitions=main-2412050062
+Content-Language: en-US
+X-CM-TRANSID:cCh0CgCXjK7eaVFnVz2EDg--.6614S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7ZrW3WF17KF17WFWxZry3XFb_yoW8CFW7pF
+	W8t3WrKa1kGr1rAwnFk397u34UAw1fK34ayF4rJr97u3s0gryfKr1Iqr45ua1rZr48KF4a
+	qw40qa47A3sYya7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUU9Ib4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
+	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+	6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+	Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7Mxk0xIA0c2IE
+	e2xFo4CEbIxvr21lc7CjxVAaw2AFwI0_GFv_Wryl42xK82IYc2Ij64vIr41l4I8I3I0E4I
+	kC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWU
+	WwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr
+	0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWU
+	JVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJb
+	IYCTnIWIevJa73UjIFyTuYvjxUIa0PDUUUU
+X-CM-SenderInfo: xkrx3t3r6k3tpzhluzxrxghudrp/
 
-If __perf_env__insert_btf() returns false due to a duplicate btf node
-insertion, the temporary node will leak. Add a check to ensure the memory
-is freed if the function returns false.
+Hi,
 
-Fixes: a70a1123174a ("perf bpf: Save BTF information as headers to perf.data")
-Signed-off-by: Zhongqiu Han <quic_zhonhan@quicinc.com>
-Reviewed-by: Namhyung Kim <namhyung@kernel.org>
----
- tools/perf/util/header.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+On 12/3/2024 9:42 AM, Alexei Starovoitov wrote:
+> On Fri, Nov 29, 2024 at 4:18 AM Toke Høiland-Jørgensen <toke@redhat.com> wrote:
+>> Hou Tao <houtao@huaweicloud.com> writes:
+>>
+>>> From: Hou Tao <houtao1@huawei.com>
+>>>
+>>> After switching from kmalloc() to the bpf memory allocator, there will be
+>>> no blocking operation during the update of LPM trie. Therefore, change
+>>> trie->lock from spinlock_t to raw_spinlock_t to make LPM trie usable in
+>>> atomic context, even on RT kernels.
+>>>
+>>> The max value of prefixlen is 2048. Therefore, update or deletion
+>>> operations will find the target after at most 2048 comparisons.
+>>> Constructing a test case which updates an element after 2048 comparisons
+>>> under a 8 CPU VM, and the average time and the maximal time for such
+>>> update operation is about 210us and 900us.
+>> That is... quite a long time? I'm not sure we have any guidance on what
+>> the maximum acceptable time is (perhaps the RT folks can weigh in
+>> here?), but stalling for almost a millisecond seems long.
+>>
+>> Especially doing this unconditionally seems a bit risky; this means that
+>> even a networking program using the lpm map in the data path can stall
+>> the system for that long, even if it would have been perfectly happy to
+>> be preempted.
+> I don't share this concern.
+> 2048 comparisons is an extreme case.
+> I'm sure there are a million other ways to stall bpf prog for that long.
 
-diff --git a/tools/perf/util/header.c b/tools/perf/util/header.c
-index 3451e542b69a..fbba6ffafec4 100644
---- a/tools/perf/util/header.c
-+++ b/tools/perf/util/header.c
-@@ -3205,7 +3205,8 @@ static int process_bpf_btf(struct feat_fd *ff, void *data __maybe_unused)
- 		if (__do_read(ff, node->data, data_size))
- 			goto out;
- 
--		__perf_env__insert_btf(env, node);
-+		if (!__perf_env__insert_btf(env, node))
-+			free(node);
- 		node = NULL;
- 	}
- 
--- 
-2.25.1
+2048 is indeed an extreme case. I would do some test to check how much
+time is used for the normal cases with prefixlen=32 or prefixlen=128.
+>
+>> So one option here could be to make it conditional? As in, have a map
+>> flag (on creation) that switches to raw_spinlock usage, and reject using
+>> the map from atomic context if that flag is not set?
+> No. Let's not complicate the LPM map unnecessarily.
+> I'd rather see it's being rewritten into faster and more efficient
+> algorithm.
 
