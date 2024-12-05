@@ -1,32 +1,32 @@
 Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1103224B0F;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AB4F225768;
 	Thu,  5 Dec 2024 17:35:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733420142; cv=none; b=ozAyV6z+v97qpX0fugw+7/6mqbiTtGJRnqOM4xgrOhqlo98zo/LQyonMp8h7boXx6LXifo9oC58MveboIXZhK/26Nbl5+IeLvlEAPgWtSs5XF58jbjJfWv0U52yavtf1GMAKeSPRD2yrVhXwSQi6RfbsVV/1RiLAcEPG9pKQ+sM=
+	t=1733420142; cv=none; b=ci2GCWyaYkgimgLXLfrR+Ysn7Da/L8j3RfUNyzjNHk4cqRZliGmYl+C6ZpAD8bI1wplHUFhJUt3/bvyMjr3rBpYHazPFPeU+LCEm8hBfHvyIfTe/C36DVkSy2YeNwQXmU1cyVhOoGsIKOad60505eTDbSkQN3TIvGDwf0JjIuSc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1733420142; c=relaxed/simple;
-	bh=cfuC4VjJZbJslwembV87HLGJheNWpA6IXa9jHRZu/TI=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=sOlaQ3xoIpu3ZfrrvDlcTILqRASfAIi4MYpJkk653GtBuMni+FJL6Mar7Shi0YMlV5enjHhIGfAR6YG6Dg4kQVIJ3qFRMcUCzpzfzkFWhuHlIEvBo9CF7UZY0+dtuE5wOV3KGCDFYJ1PuX7JAu1j4ReA/K5zz/b3seEMmCLfcsk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=guoxc6ji; arc=none smtp.client-ip=159.69.126.157
+	bh=68WNMR27/Jh6Vy7PvAle7AaTWkBct2qgXVk12kHAaEY=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=uvRMqxu1HUONNWwKW4NyzS7TRNa+H0XEX5Npy4RYuLunN3PrL/DeRdd3UOrw3SXeen9rH4TFczpfiAW/9kbuvi2P97uC/6mfzobj9Gc03qtzp0729UUpG4sgr6p8WO8aSig8bTGIp580nF7VFg6MvNNORkaYT6+Rg7jzLPZauME=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=osaoXBUG; arc=none smtp.client-ip=159.69.126.157
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="guoxc6ji"
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="osaoXBUG"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
 	s=mail; t=1733420137;
-	bh=cfuC4VjJZbJslwembV87HLGJheNWpA6IXa9jHRZu/TI=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=guoxc6jiRIqYEGgM6BDygebSsXZ13mk0XDHwVPTvCXJki6yuOI+VMVHt/REiIuCp3
-	 5PH3S7I1rR5ECLEBN+pPHNQKosnLzkuyeTaP0HRnoKS91a4VeTxCdX7qXj6M8oBX9J
-	 pPlkZUr/1HRJkQYaW1Zp5F16MRkEAaHCkW1k8zbU=
+	bh=68WNMR27/Jh6Vy7PvAle7AaTWkBct2qgXVk12kHAaEY=;
+	h=From:Subject:Date:To:Cc:From;
+	b=osaoXBUGfRb46luXfjCGTPlnbK7q0cEYSDeeHPKe6F5/8fT1bXolzVbZEr743sp7n
+	 OYCOlxC/xSo+G3OjW0YG7pLTN295Pga9v2NcIMjRFaP+ZC6R3UrV8BOWJePkDk1HGc
+	 yOQXl/blyJageLhTjzhHwYNhUOVSru+iMXlM/kHE=
 From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Date: Thu, 05 Dec 2024 18:35:16 +0100
-Subject: [PATCH 4/4] btf: Switch module BTF attribute to
+Subject: [PATCH 0/4] sysfs: constify bin_attribute argument of
  sysfs_bin_attr_simple_read()
+Date: Thu, 05 Dec 2024 18:35:12 +0100
+Message-Id: <20241205-sysfs-const-bin_attr-simple-v1-0-4a4e4ced71e3@weissschuh.net>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -35,9 +35,10 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20241205-sysfs-const-bin_attr-simple-v1-4-4a4e4ced71e3@weissschuh.net>
-References: <20241205-sysfs-const-bin_attr-simple-v1-0-4a4e4ced71e3@weissschuh.net>
-In-Reply-To: <20241205-sysfs-const-bin_attr-simple-v1-0-4a4e4ced71e3@weissschuh.net>
+X-B4-Tracking: v=1; b=H4sIAFDkUWcC/x3MwQpAQBAA0F/RnE3ZSSm/IondWaZY2tlE8u82x
+ 3d5DyhHYYW2eCDyKSp7yDBlAXYZw8woLhuootoYItRbvaLdgyacJAxjShFVtmNlbGzl3ETeekO
+ QhyOyl+vfu/59P/HJDYRtAAAA
+X-Change-ID: 20241122-sysfs-const-bin_attr-simple-7c0ddb2fcf12
 To: Michael Ellerman <mpe@ellerman.id.au>, 
  Nicholas Piggin <npiggin@gmail.com>, 
  Christophe Leroy <christophe.leroy@csgroup.eu>, 
@@ -62,55 +63,40 @@ Cc: linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
  bpf@vger.kernel.org, 
  =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1733420137; l=1356;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1733420137; l=1170;
  i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=cfuC4VjJZbJslwembV87HLGJheNWpA6IXa9jHRZu/TI=;
- b=e241/DoQXymqExeN+SMwvZ808XE79ecCrN8XFKqhJnW3U8HuphVENS4R6ai//luSj/YPr30lo
- NqTPg+Nmf9/Dvw7MuaG3SlMfMc+h0AAu8h+lEG2k3oNOjl5IwrAmm5N
+ bh=68WNMR27/Jh6Vy7PvAle7AaTWkBct2qgXVk12kHAaEY=;
+ b=T+PbqYnqnoXWLbF5FULrGKTEWzZ8sXpbVXoqId9h5bVMynN1gxzdjACjy9czZW5+/hfIaiOMY
+ 927yDeHmNmiBbYl7QYj+NHuMWTZRXQl9ozjUUHoyQqHpqA28sdx295H
 X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
  pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 
-The generic function from the sysfs core can replace the custom one.
+Most users use this function through the BIN_ATTR_SIMPLE* macros,
+they can handle the switch transparently.
+
+This series is meant to be merged through the driver core tree.
 
 Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
 ---
- kernel/bpf/btf.c | 15 ++-------------
- 1 file changed, 2 insertions(+), 13 deletions(-)
+Thomas Weißschuh (4):
+      sysfs: constify bin_attribute argument of sysfs_bin_attr_simple_read()
+      platform/x86: wmi-bmof: Switch to sysfs_bin_attr_simple_read()
+      btf: Switch vmlinux BTF attribute to sysfs_bin_attr_simple_read()
+      btf: Switch module BTF attribute to sysfs_bin_attr_simple_read()
 
-diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index e7a59e6462a9331d0acb17a88a4ebf641509c050..69caa86ae6085dce17e95107c4497d2d8cf81544 100644
---- a/kernel/bpf/btf.c
-+++ b/kernel/bpf/btf.c
-@@ -7870,17 +7870,6 @@ struct btf_module {
- static LIST_HEAD(btf_modules);
- static DEFINE_MUTEX(btf_module_mutex);
- 
--static ssize_t
--btf_module_read(struct file *file, struct kobject *kobj,
--		struct bin_attribute *bin_attr,
--		char *buf, loff_t off, size_t len)
--{
--	const struct btf *btf = bin_attr->private;
--
--	memcpy(buf, btf->data + off, len);
--	return len;
--}
--
- static void purge_cand_cache(struct btf *btf);
- 
- static int btf_module_notify(struct notifier_block *nb, unsigned long op,
-@@ -7941,8 +7930,8 @@ static int btf_module_notify(struct notifier_block *nb, unsigned long op,
- 			attr->attr.name = btf->name;
- 			attr->attr.mode = 0444;
- 			attr->size = btf->data_size;
--			attr->private = btf;
--			attr->read = btf_module_read;
-+			attr->private = btf->data;
-+			attr->read_new = sysfs_bin_attr_simple_read;
- 
- 			err = sysfs_create_bin_file(btf_kobj, attr);
- 			if (err) {
+ arch/powerpc/platforms/powernv/opal.c |  2 +-
+ drivers/platform/x86/wmi-bmof.c       | 12 ++----------
+ fs/sysfs/file.c                       |  2 +-
+ include/linux/sysfs.h                 |  4 ++--
+ kernel/bpf/btf.c                      | 15 ++-------------
+ kernel/bpf/sysfs_btf.c                | 12 ++----------
+ kernel/module/sysfs.c                 |  2 +-
+ 7 files changed, 11 insertions(+), 38 deletions(-)
+---
+base-commit: feffde684ac29a3b7aec82d2df850fbdbdee55e4
+change-id: 20241122-sysfs-const-bin_attr-simple-7c0ddb2fcf12
 
+Best regards,
 -- 
-2.47.1
+Thomas Weißschuh <linux@weissschuh.net>
 
