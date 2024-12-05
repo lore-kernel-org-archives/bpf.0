@@ -1,32 +1,32 @@
 Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AB4F225768;
-	Thu,  5 Dec 2024 17:35:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E619622576B;
+	Thu,  5 Dec 2024 17:35:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733420142; cv=none; b=ci2GCWyaYkgimgLXLfrR+Ysn7Da/L8j3RfUNyzjNHk4cqRZliGmYl+C6ZpAD8bI1wplHUFhJUt3/bvyMjr3rBpYHazPFPeU+LCEm8hBfHvyIfTe/C36DVkSy2YeNwQXmU1cyVhOoGsIKOad60505eTDbSkQN3TIvGDwf0JjIuSc=
+	t=1733420142; cv=none; b=cAMYePGS4KflR7oG2rAA1EZSwxZ9uzxQcje1cbdmVl0HCNVF0T58Ck0dw3sw+59HJgBXW0lQjKr/u/uW12mx8TvhBN3oNJp4+Zl20D0pniBn0X8JTUyxdZJHaFlfbadKmpebCY7kjggvDJtPZU5TNGbJRwZeWXSDcwi1kEB2O8U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1733420142; c=relaxed/simple;
-	bh=68WNMR27/Jh6Vy7PvAle7AaTWkBct2qgXVk12kHAaEY=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=uvRMqxu1HUONNWwKW4NyzS7TRNa+H0XEX5Npy4RYuLunN3PrL/DeRdd3UOrw3SXeen9rH4TFczpfiAW/9kbuvi2P97uC/6mfzobj9Gc03qtzp0729UUpG4sgr6p8WO8aSig8bTGIp580nF7VFg6MvNNORkaYT6+Rg7jzLPZauME=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=osaoXBUG; arc=none smtp.client-ip=159.69.126.157
+	bh=5LgMscy8fNMxkSnBk89bFZtOweO+ubs1BjcR/pPmVkk=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=Z7rM1xUWHSVsqX/iK4iqrbGpXolqDy4kJlKN7X2G5KCLhY0lgsqLrMZobya5cTpbvu5HS3b6GbUS25mxk/4zuDVTPPgunUmTfZe1T3v/kzte7bJEiAGUp7eTP44G+N0iwe4ESJL/oQv1FUjed5JQA7rpqUodLjKq8YC+HIq57qE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=N3aE/who; arc=none smtp.client-ip=159.69.126.157
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="osaoXBUG"
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="N3aE/who"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
 	s=mail; t=1733420137;
-	bh=68WNMR27/Jh6Vy7PvAle7AaTWkBct2qgXVk12kHAaEY=;
-	h=From:Subject:Date:To:Cc:From;
-	b=osaoXBUGfRb46luXfjCGTPlnbK7q0cEYSDeeHPKe6F5/8fT1bXolzVbZEr743sp7n
-	 OYCOlxC/xSo+G3OjW0YG7pLTN295Pga9v2NcIMjRFaP+ZC6R3UrV8BOWJePkDk1HGc
-	 yOQXl/blyJageLhTjzhHwYNhUOVSru+iMXlM/kHE=
+	bh=5LgMscy8fNMxkSnBk89bFZtOweO+ubs1BjcR/pPmVkk=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
+	b=N3aE/whoh0KniNiOdttnlBkPGxTSvIZRmCSS4tM8MAPBalxnpZjR3OoaUI3/xXTIo
+	 fNNtedHUR+sbdbMnShhmacrx6v0eWcsU3TYdFPa16wzAGR6XJ7jGXiDVl6/n1HjBz+
+	 JSalKw3c9i0jJhAAfKdCvzOzYA+mk+CgGniZjEaI=
 From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Subject: [PATCH 0/4] sysfs: constify bin_attribute argument of
+Date: Thu, 05 Dec 2024 18:35:14 +0100
+Subject: [PATCH 2/4] platform/x86: wmi-bmof: Switch to
  sysfs_bin_attr_simple_read()
-Date: Thu, 05 Dec 2024 18:35:12 +0100
-Message-Id: <20241205-sysfs-const-bin_attr-simple-v1-0-4a4e4ced71e3@weissschuh.net>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -35,10 +35,9 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-B4-Tracking: v=1; b=H4sIAFDkUWcC/x3MwQpAQBAA0F/RnE3ZSSm/IondWaZY2tlE8u82x
- 3d5DyhHYYW2eCDyKSp7yDBlAXYZw8woLhuootoYItRbvaLdgyacJAxjShFVtmNlbGzl3ETeekO
- QhyOyl+vfu/59P/HJDYRtAAAA
-X-Change-ID: 20241122-sysfs-const-bin_attr-simple-7c0ddb2fcf12
+Message-Id: <20241205-sysfs-const-bin_attr-simple-v1-2-4a4e4ced71e3@weissschuh.net>
+References: <20241205-sysfs-const-bin_attr-simple-v1-0-4a4e4ced71e3@weissschuh.net>
+In-Reply-To: <20241205-sysfs-const-bin_attr-simple-v1-0-4a4e4ced71e3@weissschuh.net>
 To: Michael Ellerman <mpe@ellerman.id.au>, 
  Nicholas Piggin <npiggin@gmail.com>, 
  Christophe Leroy <christophe.leroy@csgroup.eu>, 
@@ -63,40 +62,52 @@ Cc: linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
  bpf@vger.kernel.org, 
  =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1733420137; l=1170;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1733420137; l=1583;
  i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=68WNMR27/Jh6Vy7PvAle7AaTWkBct2qgXVk12kHAaEY=;
- b=T+PbqYnqnoXWLbF5FULrGKTEWzZ8sXpbVXoqId9h5bVMynN1gxzdjACjy9czZW5+/hfIaiOMY
- 927yDeHmNmiBbYl7QYj+NHuMWTZRXQl9ozjUUHoyQqHpqA28sdx295H
+ bh=5LgMscy8fNMxkSnBk89bFZtOweO+ubs1BjcR/pPmVkk=;
+ b=FFE0LC+lWyL41OWKcLih/cJP43TX/qUmNdEXnIWxYkdVLt0K7dsR35ynGht17m6UhezsKb9iC
+ ql1zd1NvQ0BAvkF0dWD1XVGmm/v8XCf3L6eiabSOtHoMnaMvizVK/An
 X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
  pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 
-Most users use this function through the BIN_ATTR_SIMPLE* macros,
-they can handle the switch transparently.
-
-This series is meant to be merged through the driver core tree.
+The generic function from the sysfs core can replace the custom one.
 
 Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
 ---
-Thomas Weißschuh (4):
-      sysfs: constify bin_attribute argument of sysfs_bin_attr_simple_read()
-      platform/x86: wmi-bmof: Switch to sysfs_bin_attr_simple_read()
-      btf: Switch vmlinux BTF attribute to sysfs_bin_attr_simple_read()
-      btf: Switch module BTF attribute to sysfs_bin_attr_simple_read()
+ drivers/platform/x86/wmi-bmof.c | 12 ++----------
+ 1 file changed, 2 insertions(+), 10 deletions(-)
 
- arch/powerpc/platforms/powernv/opal.c |  2 +-
- drivers/platform/x86/wmi-bmof.c       | 12 ++----------
- fs/sysfs/file.c                       |  2 +-
- include/linux/sysfs.h                 |  4 ++--
- kernel/bpf/btf.c                      | 15 ++-------------
- kernel/bpf/sysfs_btf.c                | 12 ++----------
- kernel/module/sysfs.c                 |  2 +-
- 7 files changed, 11 insertions(+), 38 deletions(-)
----
-base-commit: feffde684ac29a3b7aec82d2df850fbdbdee55e4
-change-id: 20241122-sysfs-const-bin_attr-simple-7c0ddb2fcf12
+diff --git a/drivers/platform/x86/wmi-bmof.c b/drivers/platform/x86/wmi-bmof.c
+index df6f0ae6e6c7904f97c125297a21166f56d0b1f0..e6c217d70086a2896dc70cf8ac1c27dafb501a95 100644
+--- a/drivers/platform/x86/wmi-bmof.c
++++ b/drivers/platform/x86/wmi-bmof.c
+@@ -25,15 +25,6 @@ struct bmof_priv {
+ 	struct bin_attribute bmof_bin_attr;
+ };
+ 
+-static ssize_t read_bmof(struct file *filp, struct kobject *kobj, struct bin_attribute *attr,
+-			 char *buf, loff_t off, size_t count)
+-{
+-	struct bmof_priv *priv = container_of(attr, struct bmof_priv, bmof_bin_attr);
+-
+-	return memory_read_from_buffer(buf, count, &off, priv->bmofdata->buffer.pointer,
+-				       priv->bmofdata->buffer.length);
+-}
+-
+ static int wmi_bmof_probe(struct wmi_device *wdev, const void *context)
+ {
+ 	struct bmof_priv *priv;
+@@ -60,7 +51,8 @@ static int wmi_bmof_probe(struct wmi_device *wdev, const void *context)
+ 	sysfs_bin_attr_init(&priv->bmof_bin_attr);
+ 	priv->bmof_bin_attr.attr.name = "bmof";
+ 	priv->bmof_bin_attr.attr.mode = 0400;
+-	priv->bmof_bin_attr.read = read_bmof;
++	priv->bmof_bin_attr.read_new = sysfs_bin_attr_simple_read;
++	priv->bmof_bin_attr.private = priv->bmofdata->buffer.pointer;
+ 	priv->bmof_bin_attr.size = priv->bmofdata->buffer.length;
+ 
+ 	ret = device_create_bin_file(&wdev->dev, &priv->bmof_bin_attr);
 
-Best regards,
 -- 
-Thomas Weißschuh <linux@weissschuh.net>
+2.47.1
 
