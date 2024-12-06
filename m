@@ -1,129 +1,134 @@
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4A1D20E326;
-	Fri,  6 Dec 2024 15:34:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 340EEBA20
+	for <bpf@vger.kernel.org>; Fri,  6 Dec 2024 16:08:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733499287; cv=none; b=EJpo4fgwuvQLX209zMpeVDKtnZK/XFWlcjhSxPdmuJDzxdBjTDppWRsLI/Sak+RK5NNs8qXiUzHZBNhJX73w66qr7oIJCJ8yjQbzDGxsY7+IXIyuboT6Iz+Ijm7TpnYMl1ysayuAUXecKrCj+3NntW/onjDxGgym/Z7UIUkmfC8=
+	t=1733501289; cv=none; b=dbmkaCZAYI8/mqA6BqtUs9hYaJDJKDM6yIOzUmF8VlRCjMl9cS52mNDf9H2Rj/dGFySNm2zhs/dIf8vG9orqP7Bt3o2FPwzRfLfbw2Yc7dJgoRrJN8lGxTsn7m6SVmahsE9W12EpoYIyxQsGrN0vljVv/QgSochE851KOxEHspE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733499287; c=relaxed/simple;
-	bh=Ml9fPtqpS2jX04AGKx5b27f6hYa1vg7okrZl7lM86Dc=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=I07JVsqmD7+Hljyx7VcoglQ5RSm49Ah6H+A0Ss1qr1dFjmVonXJQgg+KvnWBAGSa3z4qfXI2MM9ziIJ+DrtpFIQE+ie0d8plZsVQn7YnM3lLbhVyVbZ2lEFSXzFZyKrdhUa72/eYbxAumA1N35mccCXeLCAu/m5Ysg0Z89epNZA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=QTgt0pxR; arc=none smtp.client-ip=213.133.104.62
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
+	s=arc-20240116; t=1733501289; c=relaxed/simple;
+	bh=7ZE+5pa21zu3nzjXqijaT+RQkZdMEqvIhiKNMJ2ZqDk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ee1i7+ovfC/poPjUaLnBiLcZX4DDXJVPBNKAYDi8E+j7eU3vI5uBUUBWjW3rg+kgsSZ0INgYd7CzH+q9bGW5LNiUAHABw1JmRTFZGQlbt/1RDzOwC5trb4lDbE66AAFIjXq0xKj9pApbYGtDLFWkzQ7iuE6t3wA0bc3baiYlA98=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AmgLAWr0; arc=none smtp.client-ip=209.85.128.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="QTgt0pxR"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:MIME-Version:
-	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
-	Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=M4rJE/PwlxUmiB0Axf+gy2W+JpmH655/hsr3pi3m+rE=; b=QTgt0pxRQq3FzppCfrTov62nvV
-	N1LumNrb/jlNeZOHRaZmZKI74eOzC63W2itwmixXU7YkaNawqyOxuSCI4OSVk7mRUrDkCxGRQp5Do
-	oepCtLTFh0V7Mh8TfZPAvM6W1qQbivmSZmPVPsNmTeVPjE/zbHvmWDU3I6FWY36fC9L1U0FKpcAaL
-	MAW4HLoWassiMn8Ue0j3jUUFrzGISCz3iksDGasq82ePy7dFlzkaDerDyxnXNe6C3KU7nrDZcBbdJ
-	2eme5UxGJhW9MkUsRs1E6MkESGHqJGiIJRt6J0YHPRKcxboY/HySSKl8i3IWePRN1N9PkGkPhe/tT
-	w2S1RQPA==;
-Received: from 226.206.1.85.dynamic.cust.swisscom.net ([85.1.206.226] helo=localhost)
-	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1tJaLY-000ERv-7Y; Fri, 06 Dec 2024 16:34:24 +0100
-From: Daniel Borkmann <daniel@iogearbox.net>
-To: gregkh@linuxfoundation.org
-Cc: stable@vger.kernel.org,
-	netdev@vger.kernel.org,
-	bpf@vger.kernel.org,
-	leitao@debian.org,
-	martin.lau@linux.dev,
-	peilin.ye@bytedance.com,
-	kuba@kernel.org,
-	Youlun Zhang <zhangyoulun@bytedance.com>,
-	Nikolay Aleksandrov <razor@blackwall.org>,
-	Martin KaFai Lau <martin.lau@kernel.org>
-Subject: [PATCH stable 6.1 2/3] bpf: Fix dev's rx stats for bpf_redirect_peer traffic
-Date: Fri,  6 Dec 2024 16:34:02 +0100
-Message-ID: <20241206153403.273068-2-daniel@iogearbox.net>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20241206153403.273068-1-daniel@iogearbox.net>
-References: <20241206153403.273068-1-daniel@iogearbox.net>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AmgLAWr0"
+Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-43497839b80so14978775e9.2
+        for <bpf@vger.kernel.org>; Fri, 06 Dec 2024 08:08:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1733501287; x=1734106087; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=7ZE+5pa21zu3nzjXqijaT+RQkZdMEqvIhiKNMJ2ZqDk=;
+        b=AmgLAWr0gNNfmBFjzLpS1fECGe03HofjZVrGXi1mpawyYSJCL1a4Myj8tHIE5Dzcqt
+         lWVEtDIqmfkHicCiNBJ3DxJew7/bb674Oy5vzYgjfkmTaoh/AnU4J73t1atkCr51mp4k
+         84k20HLtgq237SoapGZ187KOVK3w2FbJQUaU6UT/lT5+m37BWD0AZaHrGXMmxk1NnAmg
+         IlAz396JtGnP4teMid4w9QbFJc192IiNO8lptWTSQsgGRkEVsm5GXUtrI9EGzu+0kyhN
+         W5zGB7me7KLuBl9UaSDkH36dXEOQD+LzIiHTwqWRGvqqha5rzKeeVIisiAqr90zbxF0Z
+         ke0g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1733501287; x=1734106087;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=7ZE+5pa21zu3nzjXqijaT+RQkZdMEqvIhiKNMJ2ZqDk=;
+        b=rHj5e5LHeJf7j4LJAlrn3okErRTB9NKh4Vq8pZkQoLvGy6cl6BVBgTDBHeTVI/NtxX
+         kRS7ZqTERz9OeWjXz34zjc1juzMQEO9vDq4SiQ829R/9vL8hYm9DqzKaaMwPKScM7o4N
+         f1U3kZE4tawCX6EbPIuWK1kueW3onvXeWqPwT6jdSqD4dc7U4EYtymoIBDBaqne+aErg
+         wUVUGb+ls2cyftzus6bkoVsrCVtm+Sb+8XHOVWB3ovjMEQFDmZF1iqb3POYbuFBNmKxF
+         kjkVPMPRAYWsyaZopXU5FV3wSK7IJW2Aze2hLmMwh9nY1p59v833Ojpa+yot1C28DRSx
+         N2mw==
+X-Forwarded-Encrypted: i=1; AJvYcCWpTTeuK2a4sVt1vUNMo2HD2nQtEZ8oZ+/OZ9HFqzJBJFIHSD99u5LjDDASj95XruN4JLo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyOHurl+70uXCbnfpcRiCngc3Ynt8X4q8INo7rsi8MufIMDPV5F
+	5YAh51LcFzWlmjUeAyDlnxpv030P48hWPGGHwpoHvea3QECxG6sN01+5kS2SweXPN+f0YrAR9Gc
+	EWdy5g34Xnjtbn9G8okrQgBaKRIS5NRkL
+X-Gm-Gg: ASbGncs2q7k8SNxH9Zoglw2nyh62s89y/nY3LsKlDLmpSPzA3ARaT4IAmwqwQh+3amr
+	ebeW4fAqU78s/eqIDvSIKOzu56/AfvAiR4v/SXSot88egVns=
+X-Google-Smtp-Source: AGHT+IFxCJi5ZBsTcY3zd+ITvo0djivXIBpoAMQXs36KveThux2LF4jaEePGkU+gEjmThNtmyWXe1bhaJMRRwzLa66c=
+X-Received: by 2002:a05:600c:1c82:b0:434:a968:89b5 with SMTP id
+ 5b1f17b1804b1-434ddeb5285mr33463735e9.9.1733501286242; Fri, 06 Dec 2024
+ 08:08:06 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 1.0.7/27479/Fri Dec  6 10:40:14 2024)
+References: <0498CA22-5779-4767-9C0C-A9515CEA711F@gmail.com>
+ <1b8e139bd6983045c747f1b6d703aa6eabab2c82.camel@gmail.com>
+ <47f2a827d4946208e984110541e4324e653338e0.camel@gmail.com>
+ <CAEf4BzZBPp40E-_itj1jFT2_+VSL9QcqjK4OQvt6sy5=iJx8Yw@mail.gmail.com>
+ <4bbdf595be6afbe52f44c362be6d7e4f22b8b00f.camel@gmail.com>
+ <CAADnVQKscY7UC-5nAYxaEM4FQZGiFdLUv-27O+-qvQqQX0To5A@mail.gmail.com>
+ <1f77772b8c8775b922ae577a6c3877f6ada4a0a1.camel@gmail.com> <CAEf4BzZybLU0bmYJqH2XJYG_g8Pvm+STRdHBtE1c5zbhHvtrcg@mail.gmail.com>
+In-Reply-To: <CAEf4BzZybLU0bmYJqH2XJYG_g8Pvm+STRdHBtE1c5zbhHvtrcg@mail.gmail.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Fri, 6 Dec 2024 08:07:55 -0800
+Message-ID: <CAADnVQJ7WuFge8YZ-g07VK6XhmMCf1RHa0B64O0_S4TLzu0yUg@mail.gmail.com>
+Subject: Re: Packet pointer invalidation and subprograms
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: Eduard Zingerman <eddyz87@gmail.com>, Alexei Starovoitov <ast@kernel.org>, andrii <andrii@kernel.org>, 
+	Nick Zavaritsky <mejedi@gmail.com>, bpf <bpf@vger.kernel.org>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: Peilin Ye <peilin.ye@bytedance.com>
+On Thu, Dec 5, 2024 at 10:23=E2=80=AFPM Andrii Nakryiko
+<andrii.nakryiko@gmail.com> wrote:
+>
+> On Thu, Dec 5, 2024 at 8:07=E2=80=AFPM Eduard Zingerman <eddyz87@gmail.co=
+m> wrote:
+> >
+> > On Thu, 2024-12-05 at 17:44 -0800, Alexei Starovoitov wrote:
+> > > On Thu, Dec 5, 2024 at 4:29=E2=80=AFPM Eduard Zingerman <eddyz87@gmai=
+l.com> wrote:
+> > > >
+> > > > so I went ahead and the fix does look simple:
+> > > > https://github.com/eddyz87/bpf/tree/skb-pull-data-global-func-bug
+> > >
+> > > Looks simple enough to me.
+> > > Ship it for bpf tree.
+> > > If we can come up with something better we can do it later in bpf-nex=
+t.
+> > >
+> > > I very much prefer to avoid complexity as much as possible.
+> >
+> > Sent the patch-set for "simple".
+> > It is better then "dumb" by any metric anyways.
+> > Will try what Andrii suggests, as allowing calling global sub-programs
+> > from non-sleepable context sounds interesting.
+> >
+>
+> I haven't looked at your patches yet, but keep in mind another gotcha
+> with subprograms: they can be freplace'd by another BPF program
+> (clearly freplace programs were a successful reduction of
+> complexity... ;)
+>
+> What this means in practice is whatever deductions you get out of
+> analyzing any specific original subprogram might be violated by
+> freplace program if we don't enforce them during freplace attachment.
+>
+>
+> Anyways, I came here to say that I think I have a much simpler
+> solution that won't require big changes to the BPF verifier: tags. We
+> can shift the burden to the user having to declare the intent upfront
+> through subprog tags. And then, during verification of that global
+> subprog, the verifier can enforce that only explicitly declared side
+> effects can be enacted by the subprogram's code (taking into account
+> lazy dead code detection logic).
+>
+> We already take advantage of declarative tags for global subprog args
+> (__arg_trusted, etc), we can do the same for the function itself. We
+> can have __subprog_invalidates_all_pkt_pointers tag (and yes, I do
+> insist on this laconic name, of course), and during verification of
+> subprogram we just make sure that subprog was annotated as such, if
+> one of those fancy helpers is called directly in subprog itself or
+> transitively through any of *actually* called subprogs.
 
-[ Upstream commit 024ee930cb3c9ae49e4266aee89cfde0ebb407e1 ]
-
-Traffic redirected by bpf_redirect_peer() (used by recent CNIs like Cilium)
-is not accounted for in the RX stats of supported devices (that is, veth
-and netkit), confusing user space metrics collectors such as cAdvisor [0],
-as reported by Youlun.
-
-Fix it by calling dev_sw_netstats_rx_add() in skb_do_redirect(), to update
-RX traffic counters. Devices that support ndo_get_peer_dev _must_ use the
-@tstats per-CPU counters (instead of @lstats, or @dstats).
-
-To make this more fool-proof, error out when ndo_get_peer_dev is set but
-@tstats are not selected.
-
-  [0] Specifically, the "container_network_receive_{byte,packet}s_total"
-      counters are affected.
-
-Fixes: 9aa1206e8f48 ("bpf: Add redirect_peer helper")
-Reported-by: Youlun Zhang <zhangyoulun@bytedance.com>
-Signed-off-by: Peilin Ye <peilin.ye@bytedance.com>
-Co-developed-by: Daniel Borkmann <daniel@iogearbox.net>
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Reviewed-by: Nikolay Aleksandrov <razor@blackwall.org>
-Link: https://lore.kernel.org/r/20231114004220.6495-6-daniel@iogearbox.net
-Signed-off-by: Martin KaFai Lau <martin.lau@kernel.org>
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
----
- net/core/dev.c    | 8 ++++++++
- net/core/filter.c | 1 +
- 2 files changed, 9 insertions(+)
-
-diff --git a/net/core/dev.c b/net/core/dev.c
-index 5151f69dd724..2ee1a535b3cb 100644
---- a/net/core/dev.c
-+++ b/net/core/dev.c
-@@ -9995,6 +9995,14 @@ static int netdev_do_alloc_pcpu_stats(struct net_device *dev)
- {
- 	void __percpu *v;
- 
-+	/* Drivers implementing ndo_get_peer_dev must support tstat
-+	 * accounting, so that skb_do_redirect() can bump the dev's
-+	 * RX stats upon network namespace switch.
-+	 */
-+	if (dev->netdev_ops->ndo_get_peer_dev &&
-+	    dev->pcpu_stat_type != NETDEV_PCPU_STAT_TSTATS)
-+		return -EOPNOTSUPP;
-+
- 	switch (dev->pcpu_stat_type) {
- 	case NETDEV_PCPU_STAT_NONE:
- 		return 0;
-diff --git a/net/core/filter.c b/net/core/filter.c
-index 2f6fef5f5864..e766e66ef62a 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -2491,6 +2491,7 @@ int skb_do_redirect(struct sk_buff *skb)
- 			     net_eq(net, dev_net(dev))))
- 			goto out_drop;
- 		skb->dev = dev;
-+		dev_sw_netstats_rx_add(dev, skb->len);
- 		return -EAGAIN;
- 	}
- 	return flags & BPF_F_NEIGH ?
--- 
-2.43.0
-
+tags for args was an aid to the verifier. Nothing is broken without them.
+Here it's about correctness.
+So we cannot use tags to solve this case.
