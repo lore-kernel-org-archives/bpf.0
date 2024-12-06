@@ -1,152 +1,116 @@
-Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D3A31DFD89
-	for <bpf@vger.kernel.org>; Fri,  6 Dec 2024 10:44:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 891661DE2C7
+	for <bpf@vger.kernel.org>; Fri,  6 Dec 2024 10:54:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733481862; cv=none; b=Oim61Kc3AUQmBJr/fCzkwhmUH29OGKgi/KH0RD5ayUXS2T906NIPd3x2zGmux8e6/lk/6yEi5Vz45UlwMwDa6BI/4xf9aPM3UgAyISkEg1UMfv2YCHOIjEdZduHbSiYestAQIGsqQeM8hBUDurUPkFR97dmeLNPqzVql50K7wDg=
+	t=1733482460; cv=none; b=RVJ6mw+Cs8ULoq4VmxK64JcB3yzs2+NYjkdg5uOhpI4AVKJd9HC071IjVt0usnCNL0RxLJzq3bFiAc+8yd7B42Qen7n+/9VU5HQ3hZB1JkcrrRbjoCDhl3OpADy9CrkTKpLqVfLjVcAJ0YM+2hYao7nFQ8a0rXWII797iTC0Ims=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733481862; c=relaxed/simple;
-	bh=nTeXRexHxmWZDUZ2GwfRLJEOIQ5SEyCBipbLQd91jjg=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=LaYsYM5zq3suasbUD9YTSHeoMTUjn9IRLHzWp7zznZdEPW2JtIs8wGXIBE3UzlXfAgHiJ0fMfaCaxnvHJIphOHieXyAVKmHlN2B1VSeUjzkp2DsU3Oi4aqQFHXSuJEolHxYRvWlgJLkMIb4Xg3q6GtTmGtM04Xx+cBj5OX43SBg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CRKTOyjF; arc=none smtp.client-ip=209.85.210.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CRKTOyjF"
-Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-7259a26ad10so1518291b3a.1
-        for <bpf@vger.kernel.org>; Fri, 06 Dec 2024 02:44:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1733481859; x=1734086659; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=nTeXRexHxmWZDUZ2GwfRLJEOIQ5SEyCBipbLQd91jjg=;
-        b=CRKTOyjFj1LE9caV9krX6qdq7eiXiQVTduhQxh+dg2X2pvvtqJJh2zzqR3WVA9+PMn
-         qDpWeDxqPSYVgDyQWi1ZIs2Mg0yVriqV03fttXwMSAZrQXO4MkNPFY8Y79igdenZ96g/
-         Qt58e/Da8G5nwTSErTQOy08ABFosvDALUZ0Hh3nfWSLFpEAgCHYVb0UQubM/YtaqrC+h
-         QlKF539REmgVFihPgwtBH9LMqcpNCoKcqCjIyQ9X74Uij8AgYkNsbohDToH8DW7TGbf0
-         /hgk95voljxzDI5aViDj4oV9xq0XH5nV6MgdAew8Ch9PrCtWEEJzawRnvc30ghZLKwtP
-         O8gw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733481859; x=1734086659;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=nTeXRexHxmWZDUZ2GwfRLJEOIQ5SEyCBipbLQd91jjg=;
-        b=gZBmWOOF8C12PuSCt0lp5/iw/4OJgzGl/gMh8j6QxuVwD48fxyMuGsQedXOnw3M3eL
-         ZPlDV950Ws+Nk3gNsL948fDH8RsQgtGQPVjyh7l33kwkfdihI1T61GJwPdRfwZbAKGQ9
-         xmXapSl3B7N8anXLXJck/J7jBVnUzS1NEGP+DXljxm8TOAANwqtn8SOxlb5F+7dxGq/i
-         1e5QcEKZSb/+BOldtQeSvmKRXQIExEXvmVw/TEQL6CfJLq9mAxcvWRpfrWAxwhh8AFRI
-         IxgeL/JPW+C39ndaxsFhIuhSK13TSxzsEnEVGUZ6KejAhSF+6UPcavg0cVW4dhnesNU7
-         ai3Q==
-X-Forwarded-Encrypted: i=1; AJvYcCWZoq3ubmbGUNn8Sw1Dt3PKDqETO25EpS796VQ47VQLgrM9rY/acroAd8ZgZMHv/ecLqRk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxbakcNhedHvVi1uCngVk2rI9CP+/tCJHmCtWgRdF9XdTxaT7g8
-	wPjeqKK9QUn0Upp+SlmmJFNDvB5Ftub+p0NLZFTL2jXF6d2NV/QJh91mRQ==
-X-Gm-Gg: ASbGncvgr2aBBE/0kNphVMjWcA4ATHTJEd4/nCA/HAmfJcSM5nWrwu/DGyLRs3+uWzf
-	E8aBFHSeep192QX6V6PhEvdhqyNzx51Se2qezf/pgkFJ7MG9Cvy4zcWyvsxyQ6e6KQUMR0lvCGc
-	+MX8dWwBAjulOQgxbWxJQqP6AQoWsfFzTcedxDE42+ccSFu7V6vjTFY7QoYSHRFrJyT/I4ROCun
-	yHQ8HrLt+oTx47HiWjcL0okVZsCJYJf7fXjPjaefXeT/MI=
-X-Google-Smtp-Source: AGHT+IE52Uxs5zTM9GXGYUzOVQQi2pNlJ1eMkwrmeVMZ9qc/OhGVrmTY9Izk10uuqKzCHQn1L9Wszg==
-X-Received: by 2002:a05:6a00:218d:b0:725:8a29:27e4 with SMTP id d2e1a72fcca58-725b7c52e8fmr4425901b3a.0.1733481859300;
-        Fri, 06 Dec 2024 02:44:19 -0800 (PST)
-Received: from [192.168.0.235] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-725a2cc6c2bsm2752643b3a.184.2024.12.06.02.44.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Dec 2024 02:44:18 -0800 (PST)
-Message-ID: <1f49e00de4e5a17740e4e04ddb77b60e5ff46526.camel@gmail.com>
-Subject: Re: Packet pointer invalidation and subprograms
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>, Alexei Starovoitov	
- <ast@kernel.org>, andrii <andrii@kernel.org>, Nick Zavaritsky
- <mejedi@gmail.com>,  bpf <bpf@vger.kernel.org>, Kumar Kartikeya Dwivedi
- <memxor@gmail.com>
-Date: Fri, 06 Dec 2024 02:44:13 -0800
-In-Reply-To: <CAEf4BzZybLU0bmYJqH2XJYG_g8Pvm+STRdHBtE1c5zbhHvtrcg@mail.gmail.com>
-References: <0498CA22-5779-4767-9C0C-A9515CEA711F@gmail.com>
-	 <1b8e139bd6983045c747f1b6d703aa6eabab2c82.camel@gmail.com>
-	 <47f2a827d4946208e984110541e4324e653338e0.camel@gmail.com>
-	 <CAEf4BzZBPp40E-_itj1jFT2_+VSL9QcqjK4OQvt6sy5=iJx8Yw@mail.gmail.com>
-	 <4bbdf595be6afbe52f44c362be6d7e4f22b8b00f.camel@gmail.com>
-	 <CAADnVQKscY7UC-5nAYxaEM4FQZGiFdLUv-27O+-qvQqQX0To5A@mail.gmail.com>
-	 <1f77772b8c8775b922ae577a6c3877f6ada4a0a1.camel@gmail.com>
-	 <CAEf4BzZybLU0bmYJqH2XJYG_g8Pvm+STRdHBtE1c5zbhHvtrcg@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.54.1 (3.54.1-1.fc41) 
+	s=arc-20240116; t=1733482460; c=relaxed/simple;
+	bh=FBq76GqPXQtED86XuZdmC7v6or+wJrzk12H4Pn9puz0=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=fQriguh2gI+pxvjhk3+rKKTR6/xD4RP3Rfeybqvt432tvbs8tdzU3mJg6Hrnb6/+Alwr00Hou2MtQ/LnogjznKuTW3NwRxXDwbGcw2H56Vvdzqhao0S79WuCkOhfjOxlD2u1yd8d/ZoVFyISXZ15jvTgHpnRWSJy3DvLrk5LtoY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.235])
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4Y4Smn06nxz4f3jkt
+	for <bpf@vger.kernel.org>; Fri,  6 Dec 2024 18:54:01 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.128])
+	by mail.maildlp.com (Postfix) with ESMTP id 169A61A0568
+	for <bpf@vger.kernel.org>; Fri,  6 Dec 2024 18:54:15 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.175.124.27])
+	by APP4 (Coremail) with SMTP id gCh0CgBHI4fS11JnmMhIDw--.40874S5;
+	Fri, 06 Dec 2024 18:54:14 +0800 (CST)
+From: Hou Tao <houtao@huaweicloud.com>
+To: bpf@vger.kernel.org
+Cc: Martin KaFai Lau <martin.lau@linux.dev>,
+	Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Hao Luo <haoluo@google.com>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Jiri Olsa <jolsa@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	=?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	=?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>,
+	houtao1@huawei.com,
+	xukuohai@huawei.com
+Subject: [PATCH bpf v3 1/9] bpf: Remove unnecessary check when updating LPM trie
+Date: Fri,  6 Dec 2024 19:06:14 +0800
+Message-Id: <20241206110622.1161752-2-houtao@huaweicloud.com>
+X-Mailer: git-send-email 2.29.2
+In-Reply-To: <20241206110622.1161752-1-houtao@huaweicloud.com>
+References: <20241206110622.1161752-1-houtao@huaweicloud.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:gCh0CgBHI4fS11JnmMhIDw--.40874S5
+X-Coremail-Antispam: 1UD129KBjvJXoW7Kw17GF43XFWfKF1DGw1rJFb_yoW8GF1rpF
+	4rt345ta1rJF1xCwnayw4fGr98Jw48Ww42qa4kWryYkryUXr93tr1rur4Sga18Jr4xAFnx
+	JrWjqryfKw1DXFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUPFb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUGw
+	A2048vs2IY020Ec7CjxVAFwI0_Gr0_Xr1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
+	w2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
+	W8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v2
+	6rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMc
+	Ij6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_
+	Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AFwI
+	0_GFv_Wryl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG
+	67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MI
+	IYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E
+	14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJV
+	W8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxU3cTm
+	DUUUU
+X-CM-SenderInfo: xkrx3t3r6k3tpzhluzxrxghudrp/
 
-On Thu, 2024-12-05 at 22:22 -0800, Andrii Nakryiko wrote:
-> On Thu, Dec 5, 2024 at 8:07=E2=80=AFPM Eduard Zingerman <eddyz87@gmail.co=
-m> wrote:
-> >=20
-> > On Thu, 2024-12-05 at 17:44 -0800, Alexei Starovoitov wrote:
-> > > On Thu, Dec 5, 2024 at 4:29=E2=80=AFPM Eduard Zingerman <eddyz87@gmai=
-l.com> wrote:
-> > > >=20
-> > > > so I went ahead and the fix does look simple:
-> > > > https://github.com/eddyz87/bpf/tree/skb-pull-data-global-func-bug
-> > >=20
-> > > Looks simple enough to me.
-> > > Ship it for bpf tree.
-> > > If we can come up with something better we can do it later in bpf-nex=
-t.
-> > >=20
-> > > I very much prefer to avoid complexity as much as possible.
-> >=20
-> > Sent the patch-set for "simple".
-> > It is better then "dumb" by any metric anyways.
-> > Will try what Andrii suggests, as allowing calling global sub-programs
-> > from non-sleepable context sounds interesting.
-> >=20
->=20
-> I haven't looked at your patches yet, but keep in mind another gotcha
-> with subprograms: they can be freplace'd by another BPF program
-> (clearly freplace programs were a successful reduction of
-> complexity... ;)
+From: Hou Tao <houtao1@huawei.com>
 
-If there would be no general objections for the patch-set I posted,
-I'll do a v2 with an additional flag in bpf_prog_aux/bpf_func_info_aux
-to be checked when freplace attachment is done.
+When "node->prefixlen == matchlen" is true, it means that the node is
+fully matched. If "node->prefixlen == key->prefixlen" is false, it means
+the prefix length of key is greater than the prefix length of node,
+otherwise, matchlen will not be equal with node->prefixlen. However, it
+also implies that the prefix length of node must be less than
+max_prefixlen.
 
-> What this means in practice is whatever deductions you get out of
-> analyzing any specific original subprogram might be violated by
-> freplace program if we don't enforce them during freplace attachment.
->=20
->=20
-> Anyways, I came here to say that I think I have a much simpler
-> solution that won't require big changes to the BPF verifier: tags. We
-> can shift the burden to the user having to declare the intent upfront
-> through subprog tags. And then, during verification of that global
-> subprog, the verifier can enforce that only explicitly declared side
-> effects can be enacted by the subprogram's code (taking into account
-> lazy dead code detection logic).
+Therefore, "node->prefixlen == trie->max_prefixlen" will always be false
+when the check of "node->prefixlen == key->prefixlen" returns false.
+Remove this unnecessary comparison.
 
-I considered tags, but didn't like it much for something so easily computab=
-le.
-Please take a look at the patch, the change for check_cfg() is 32 lines.
+Reviewed-by: Toke Høiland-Jørgensen <toke@redhat.com>
+Acked-by: Daniel Borkmann <daniel@iogearbox.net>
+Signed-off-by: Hou Tao <houtao1@huawei.com>
+---
+ kernel/bpf/lpm_trie.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-> We already take advantage of declarative tags for global subprog args
-> (__arg_trusted, etc), we can do the same for the function itself. We
-> can have __subprog_invalidates_all_pkt_pointers tag (and yes, I do
-> insist on this laconic name, of course), and during verification of
-> subprogram we just make sure that subprog was annotated as such, if
-> one of those fancy helpers is called directly in subprog itself or
-> transitively through any of *actually* called subprogs.
->=20
-> All this will preserve the lazy approach we have with no need to look
-> ahead into subprog's implementation. I'd keep the concept of global
-> subprog completely and exhaustively described with its type signature
-> and associated tags as much as possible.
->=20
-> P.S. We still need to keep in mind freplace complications, of course.
-
+diff --git a/kernel/bpf/lpm_trie.c b/kernel/bpf/lpm_trie.c
+index 9b60eda0f727..73fd593d3745 100644
+--- a/kernel/bpf/lpm_trie.c
++++ b/kernel/bpf/lpm_trie.c
+@@ -364,8 +364,7 @@ static long trie_update_elem(struct bpf_map *map,
+ 		matchlen = longest_prefix_match(trie, node, key);
+ 
+ 		if (node->prefixlen != matchlen ||
+-		    node->prefixlen == key->prefixlen ||
+-		    node->prefixlen == trie->max_prefixlen)
++		    node->prefixlen == key->prefixlen)
+ 			break;
+ 
+ 		next_bit = extract_bit(key->data, node->prefixlen);
+-- 
+2.29.2
 
