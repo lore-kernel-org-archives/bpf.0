@@ -1,28 +1,27 @@
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F8D11F130D
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DEDA1DE2C7
 	for <bpf@vger.kernel.org>; Fri,  6 Dec 2024 10:54:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733482465; cv=none; b=PF0RqWXA90wA+E5ZL6Ea0VaKq2Bnj1CVspbg3bT7sEhIiuBblipuuvSNnuDSkWqLKp3sVzghVG5jaMTCHyNT8OnNH16DOkTpqgPwFODqM/k1bcVtIj3JYk9CpkCzXKQYiW2SOWF/ntwFo5aG6HzmX1bSNhlbfhqW0RTpKZgTPSc=
+	t=1733482466; cv=none; b=t71SKGMLUl89e7NgaTnF48x+ugFb24sKr1VY1satcYxs/f0T+spMjypnO9BKSp3CKSWLhq8KE3c/cK4U+/h2ZXyH4/P3dkXKcWn5J6WWTjRMTIdPSI8v2uDS5NndIY8YlmCErHa8gquJ6CbNp7Hli0bakPQbUx8F/jEg16whpwk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733482465; c=relaxed/simple;
-	bh=0bteGhvcDwGjsdyyjiEokZ//GHxwjp1oWDP5JFhWPHw=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=nS0+Z8U/ElzhfgwUr55SvKC0HghmonKZ+1HnUqkamiyerA8VJJdMHY2/QzWqr2n8XSCjWL0cEO4GWemHNhCIl3bESBtV9UnJxCO0lmTUJ/p1D8t+W6twO27zRkGVFcIw822y5biqi94O4CwFIDcZBjAL4sQEtGmsUry9FR6QGBQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
+	s=arc-20240116; t=1733482466; c=relaxed/simple;
+	bh=qX3jkYQgn/ZUs8arhYYoStB2eat+QnaA5USOc0Ufe/0=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=Syp199EwtmnYBnavf92yE7RoSclfBWsD8ifQSaiGc6ZlozvzbQZi7gPDoNdAlYgpvgZB6TmJBVefFURn6tktYJGOp65bsG6evpbDFYT1KuX+Fz2ZElWZcfoKAXxRZPSOXDOlBRrISj0lk6e7KTnkaUDUhFx58deghTleoqyoiGs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.235])
-	by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4Y4Smt2RBxz4f3jqM
-	for <bpf@vger.kernel.org>; Fri,  6 Dec 2024 18:54:06 +0800 (CST)
+Received: from mail.maildlp.com (unknown [172.19.93.142])
+	by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4Y4Smg1tnkz4f3jdR
+	for <bpf@vger.kernel.org>; Fri,  6 Dec 2024 18:53:55 +0800 (CST)
 Received: from mail02.huawei.com (unknown [10.116.40.128])
-	by mail.maildlp.com (Postfix) with ESMTP id 6524F1A0568
-	for <bpf@vger.kernel.org>; Fri,  6 Dec 2024 18:54:20 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTP id 57E7C1A0359
+	for <bpf@vger.kernel.org>; Fri,  6 Dec 2024 18:54:14 +0800 (CST)
 Received: from huaweicloud.com (unknown [10.175.124.27])
-	by APP4 (Coremail) with SMTP id gCh0CgBHI4fS11JnmMhIDw--.40874S11;
-	Fri, 06 Dec 2024 18:54:20 +0800 (CST)
+	by APP4 (Coremail) with SMTP id gCh0CgBHI4fS11JnmMhIDw--.40874S4;
+	Fri, 06 Dec 2024 18:54:12 +0800 (CST)
 From: Hou Tao <houtao@huaweicloud.com>
 To: bpf@vger.kernel.org
 Cc: Martin KaFai Lau <martin.lau@linux.dev>,
@@ -43,115 +42,103 @@ Cc: Martin KaFai Lau <martin.lau@linux.dev>,
 	=?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>,
 	houtao1@huawei.com,
 	xukuohai@huawei.com
-Subject: [PATCH bpf v3 7/9] bpf: Use raw_spinlock_t for LPM trie
-Date: Fri,  6 Dec 2024 19:06:20 +0800
-Message-Id: <20241206110622.1161752-8-houtao@huaweicloud.com>
+Subject: [PATCH bpf v3 0/9] Fixes for LPM trie
+Date: Fri,  6 Dec 2024 19:06:13 +0800
+Message-Id: <20241206110622.1161752-1-houtao@huaweicloud.com>
 X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20241206110622.1161752-1-houtao@huaweicloud.com>
-References: <20241206110622.1161752-1-houtao@huaweicloud.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:gCh0CgBHI4fS11JnmMhIDw--.40874S11
-X-Coremail-Antispam: 1UD129KBjvJXoWxZw48JF1fuFW7Ary7tF1fWFg_yoW5Wr4DpF
-	WxKas0ya18Zr4Yqw48t39YqrW5uws5Ww4UKaykWryxAr9Iq3sxtr18AFyFvay5AFWIyrsx
-	AF1YqrWFvay5uFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUPvb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAV
-	Cq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0
-	rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x0267
-	AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E
-	14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7
-	xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Y
-	z7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2
-	AFwI0_GFv_Wryl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAq
-	x4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6r
-	W5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2IY6xkF
-	7I0E14v26r4UJVWxJr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14
-	v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuY
-	vjxUI-eODUUUU
+X-CM-TRANSID:gCh0CgBHI4fS11JnmMhIDw--.40874S4
+X-Coremail-Antispam: 1UD129KBjvJXoWxXrWDuFWDCr48Gw13tFy7ZFb_yoW5ArWkpa
+	yfKrn8Ar1FgF9xXw4Ika1jq3Wruw4fGw12ga15G34YvFy3ZFy3Jr4IgF1YvFy5ZFs3J3Wa
+	yF4SqF1kX3Wvva7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUv2b4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
+	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+	6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+	Cjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0E
+	n4kS14v26r4a6rW5MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I
+	0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8
+	ZVWrXwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcV
+	CY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAF
+	wI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa
+	7IU0s2-5UUUUU==
 X-CM-SenderInfo: xkrx3t3r6k3tpzhluzxrxghudrp/
 
 From: Hou Tao <houtao1@huawei.com>
 
-After switching from kmalloc() to the bpf memory allocator, there will be
-no blocking operation during the update of LPM trie. Therefore, change
-trie->lock from spinlock_t to raw_spinlock_t to make LPM trie usable in
-atomic context, even on RT kernels.
+Hi,
 
-The max value of prefixlen is 2048. Therefore, update or deletion
-operations will find the target after at most 2048 comparisons.
-Constructing a test case which updates an element after 2048 comparisons
-under a 8 CPU VM, and the average time and the maximal time for such
-update operation is about 210us and 900us.
+This patch set fixes several issues for LPM trie. These issues were
+found during adding new test cases or were reported by syzbot.
 
-Signed-off-by: Hou Tao <houtao1@huawei.com>
----
- kernel/bpf/lpm_trie.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+The patch set is structured as follows:
 
-diff --git a/kernel/bpf/lpm_trie.c b/kernel/bpf/lpm_trie.c
-index f850360e75ce..f8bc1e096182 100644
---- a/kernel/bpf/lpm_trie.c
-+++ b/kernel/bpf/lpm_trie.c
-@@ -36,7 +36,7 @@ struct lpm_trie {
- 	size_t				n_entries;
- 	size_t				max_prefixlen;
- 	size_t				data_size;
--	spinlock_t			lock;
-+	raw_spinlock_t			lock;
- };
- 
- /* This trie implements a longest prefix match algorithm that can be used to
-@@ -349,7 +349,7 @@ static long trie_update_elem(struct bpf_map *map,
- 	if (!new_node)
- 		return -ENOMEM;
- 
--	spin_lock_irqsave(&trie->lock, irq_flags);
-+	raw_spin_lock_irqsave(&trie->lock, irq_flags);
- 
- 	new_node->prefixlen = key->prefixlen;
- 	RCU_INIT_POINTER(new_node->child[0], NULL);
-@@ -450,7 +450,7 @@ static long trie_update_elem(struct bpf_map *map,
- 	rcu_assign_pointer(*slot, im_node);
- 
- out:
--	spin_unlock_irqrestore(&trie->lock, irq_flags);
-+	raw_spin_unlock_irqrestore(&trie->lock, irq_flags);
- 
- 	migrate_disable();
- 	if (ret)
-@@ -477,7 +477,7 @@ static long trie_delete_elem(struct bpf_map *map, void *_key)
- 	if (key->prefixlen > trie->max_prefixlen)
- 		return -EINVAL;
- 
--	spin_lock_irqsave(&trie->lock, irq_flags);
-+	raw_spin_lock_irqsave(&trie->lock, irq_flags);
- 
- 	/* Walk the tree looking for an exact key/length match and keeping
- 	 * track of the path we traverse.  We will need to know the node
-@@ -553,7 +553,7 @@ static long trie_delete_elem(struct bpf_map *map, void *_key)
- 	free_node = node;
- 
- out:
--	spin_unlock_irqrestore(&trie->lock, irq_flags);
-+	raw_spin_unlock_irqrestore(&trie->lock, irq_flags);
- 
- 	migrate_disable();
- 	bpf_mem_cache_free_rcu(&trie->ma, free_parent);
-@@ -604,7 +604,7 @@ static struct bpf_map *trie_alloc(union bpf_attr *attr)
- 			  offsetof(struct bpf_lpm_trie_key_u8, data);
- 	trie->max_prefixlen = trie->data_size * 8;
- 
--	spin_lock_init(&trie->lock);
-+	raw_spin_lock_init(&trie->lock);
- 
- 	/* Allocate intermediate and leaf nodes from the same allocator */
- 	leaf_size = sizeof(struct lpm_trie_node) + trie->data_size +
+Patch #1~#2 are clean-ups for lpm_trie_update_elem().
+Patch #3 handles BPF_EXIST and BPF_NOEXIST correctly for LPM trie.
+Patch #4 fixes the accounting of n_entries when doing in-place update.
+Patch #5 fixes the exact match condition in trie_get_next_key() and it
+may skip keys when the passed key is not found in the map.
+Patch #6~#7 switch from kmalloc() to bpf memory allocator for LPM trie
+to fix several lock order warnings reported by syzbot. It also enables
+raw_spinlock_t for LPM trie again. After these changes, the LPM trie will
+be closer to being usable in any context (though the reentrance check of
+trie->lock is still missing, but it is on my todo list).
+Patch #8: move test_lpm_map to map_tests to make it run regularly.
+Patch #9: add test cases for the issues fixed by patch #3~#5.
+
+Please see individual patches for more details. Comments are always
+welcome.
+
+Change Log:
+v3:
+  * patch #2: remove the unnecessary NULL-init for im_node
+  * patch #6: alloc the leaf node before disabling IRQ to low
+    the possibility of -ENOMEM when leaf_size is large; Free
+    these nodes outside the trie lock (Suggested by Alexei)
+  * collect review and ack tags (Thanks for Toke & Daniel)
+
+v2: https://lore.kernel.org/bpf/20241127004641.1118269-1-houtao@huaweicloud.com/
+  * collect review tags (Thanks for Toke)
+  * drop "Add bpf_mem_cache_is_mergeable() helper" patch
+  * patch #3~#4: add fix tag
+  * patch #4: rename the helper to trie_check_add_elem() and increase
+    n_entries in it.
+  * patch #6: use one bpf mem allocator and update commit message to
+    clarify that using bpf mem allocator is more appropriate.
+  * patch #7: update commit message to add the possible max running time
+    for update operation.
+  * patch #9: update commit message to specify the purpose of these test
+    cases.
+
+v1: https://lore.kernel.org/bpf/20241118010808.2243555-1-houtao@huaweicloud.com/
+
+Hou Tao (9):
+  bpf: Remove unnecessary check when updating LPM trie
+  bpf: Remove unnecessary kfree(im_node) in lpm_trie_update_elem
+  bpf: Handle BPF_EXIST and BPF_NOEXIST for LPM trie
+  bpf: Handle in-place update for full LPM trie correctly
+  bpf: Fix exact match conditions in trie_get_next_key()
+  bpf: Switch to bpf mem allocator for LPM trie
+  bpf: Use raw_spinlock_t for LPM trie
+  selftests/bpf: Move test_lpm_map.c to map_tests
+  selftests/bpf: Add more test cases for LPM trie
+
+ kernel/bpf/lpm_trie.c                         | 133 +++---
+ tools/testing/selftests/bpf/.gitignore        |   1 -
+ tools/testing/selftests/bpf/Makefile          |   2 +-
+ .../lpm_trie_map_basic_ops.c}                 | 405 +++++++++++++++++-
+ 4 files changed, 484 insertions(+), 57 deletions(-)
+ rename tools/testing/selftests/bpf/{test_lpm_map.c => map_tests/lpm_trie_map_basic_ops.c} (65%)
+
 -- 
 2.29.2
 
