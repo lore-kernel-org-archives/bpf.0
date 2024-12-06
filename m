@@ -1,36 +1,37 @@
 Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC10320E003;
-	Fri,  6 Dec 2024 15:34:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5019820E016;
+	Fri,  6 Dec 2024 15:34:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733499283; cv=none; b=FgksSSOaJV+wbmh7EF0DplVCfbpHgTg8m3BICWJQak5sC7kAJslV/ntwvhd1gpDbC+fsO1ML2aQeQ4yAa5sNbH1knhldI5AMAhxU+oaysSLs5C7gD0flqVGB6HN7B8TE6YCD+qP8K2pLCBxj5wJ5L92GhUPe7Uju8Zc4tL5FBcQ=
+	t=1733499284; cv=none; b=kw5HAOqMR7VRSx8RogFYKdne8e4iOqEU+zqDrOx2STr7BZbbuVv++kZ3Dz+iOGk3HEx/ur9MCES2E81HLWqbXvCW6XM4RcFo6mhGRUxIkuxsyiD0RiIDOFC4sVyX8urQ0d5UJrs5YEtKNJIFdh9EbTxARIsWCHxt4V/qLn7qUOQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733499283; c=relaxed/simple;
-	bh=bmPoN0dz5Erv+oTPTYgXxJqjTEvypkK40KNFeBvHyg0=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=CK3/vTC2X2slxCP8e3utMCWtpF2UKU5D8GXEyshiA5rwUo7G1IztZ7COI44TZKy9wSAzsf4qXsyd8cDTYm2vagDmwza1TFysbrXgDcTtVyWNdn8QTGJKioa6avbV3B0pA/s30evsNNAOEFa+FCOyqlYTyRPDS+zJ+E3Q61PanUU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=Gev/swZd; arc=none smtp.client-ip=213.133.104.62
+	s=arc-20240116; t=1733499284; c=relaxed/simple;
+	bh=1ITbAn22++Ob7kA1nEk7YQEuphiXTzhZj2P7KDqtLQY=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=Fkeqhu1HsgVZVOEwmc8N4dYJm5a0Xvgd+X5B0WwfyzA8xe7CwG3fWBXFDm9XQ8Ft4vgUEb55Gxwb6D6HG94oW2DeUIdS/fxlr/Hr3zhoAH2NDKbZSr1fjBTAaR9LMasElSon0ECZ2Wh17DTh/jDlkiNCL3ZgXQRXwKQm71YuchI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=hzbUznQC; arc=none smtp.client-ip=213.133.104.62
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="Gev/swZd"
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="hzbUznQC"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:MIME-Version:
-	Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:In-Reply-To:References;
-	bh=jJUCC0+zAfm/qgdYfQUvLg3e720QEXlqqaYJAFyzHLE=; b=Gev/swZdu/HBwPXh5jeWxwy8T8
-	WbNtuah/1OnbbvcV9RgSMhch7KxfTDfuql51lq9CVw2QtmQSSBb0GFZ3fJuNl4zCVuGNRsXxJ+AMg
-	8eNNYCh53UAi+YC3Vk3QSDjTq8O6PkyfP635AcAaaZoAQAANEwyWxl4iBTafM9AnGsmGasY43fBBQ
-	KUW0CDaJfFk1Jf6jhe5yvVOoI3t/jlUjBli1FzysbqXvvU5hyd8bnC855WsI/rEU9bHmzdfzyxruy
-	BFEFlyHW6AlRu/UoV0ito1Ut+rLUucAVjfbZCuXpbwO6VOQ33XqmGml9l3fVYnzGHUbXE+gTfM9mM
-	+ToDvi0Q==;
+	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
+	Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=yDvV13jrwvg/8LFAnBn/yTTKslVhcmcZpdcecddhnVw=; b=hzbUznQC2tNOQ2Oolvrlp6bH4J
+	72/NVj7vTywifcs8H7GO74W/4l6j/sCtHNmQgf5Gtog7wZRDWGxXcFy9NIq3+lcJXXckTqI/kLNPF
+	+T8df0sFfVilfwzWjbfKhA3ZtKTYL/M0gSHmWB0pCco0xWGjzev84qhyM34kqV3R6CQBTSbQxJyjD
+	CUJ2X2J7KOIBMcyuRJnF8+/v8Rj4QmaYRw149VKRLeqtsnD5KJFnm+iiRCUSU3TgIeurX+iRVH51l
+	GkIfi+6+lJSaId2vo/2nQI8cHK4pHd7ygPfECyU4fP65qczV5ns1Yckj5hxAtsHFRU1tlh0/+5Z2x
+	jxXVMM9g==;
 Received: from 226.206.1.85.dynamic.cust.swisscom.net ([85.1.206.226] helo=localhost)
 	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.94.2)
 	(envelope-from <daniel@iogearbox.net>)
-	id 1tJaLS-000EQw-3H; Fri, 06 Dec 2024 16:34:18 +0100
+	id 1tJaLZ-000ESD-0q; Fri, 06 Dec 2024 16:34:25 +0100
 From: Daniel Borkmann <daniel@iogearbox.net>
 To: gregkh@linuxfoundation.org
 Cc: stable@vger.kernel.org,
@@ -41,12 +42,13 @@ Cc: stable@vger.kernel.org,
 	peilin.ye@bytedance.com,
 	kuba@kernel.org,
 	Nikolay Aleksandrov <razor@blackwall.org>,
-	David Ahern <dsahern@kernel.org>,
 	Martin KaFai Lau <martin.lau@kernel.org>
-Subject: [PATCH stable 6.1 1/3] net: Move {l,t,d}stats allocation to core and convert veth & vrf
-Date: Fri,  6 Dec 2024 16:34:01 +0100
-Message-ID: <20241206153403.273068-1-daniel@iogearbox.net>
+Subject: [PATCH stable 6.1 3/3] veth: Use tstats per-CPU traffic counters
+Date: Fri,  6 Dec 2024 16:34:03 +0100
+Message-ID: <20241206153403.273068-3-daniel@iogearbox.net>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20241206153403.273068-1-daniel@iogearbox.net>
+References: <20241206153403.273068-1-daniel@iogearbox.net>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -57,298 +59,113 @@ Content-Transfer-Encoding: 8bit
 X-Authenticated-Sender: daniel@iogearbox.net
 X-Virus-Scanned: Clear (ClamAV 1.0.7/27479/Fri Dec  6 10:40:14 2024)
 
-[ Upstream commit 34d21de99cea9cb17967874313e5b0262527833c ]
-[ Note: Simplified vrf bits to reduce patch given unrelated to the fix ]
+From: Peilin Ye <peilin.ye@bytedance.com>
 
-Move {l,t,d}stats allocation to the core and let netdevs pick the stats
-type they need. That way the driver doesn't have to bother with error
-handling (allocation failure checking, making sure free happens in the
-right spot, etc) - all happening in the core.
+[ Upstream commit 6f2684bf2b4460c84d0d34612a939f78b96b03fc ]
 
-Co-developed-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Currently veth devices use the lstats per-CPU traffic counters, which only
+cover TX traffic. veth_get_stats64() actually populates RX stats of a veth
+device from its peer's TX counters, based on the assumption that a veth
+device can _only_ receive packets from its peer, which is no longer true:
+
+For example, recent CNIs (like Cilium) can use the bpf_redirect_peer() BPF
+helper to redirect traffic from NIC's tc ingress to veth's tc ingress (in
+a different netns), skipping veth's peer device. Unfortunately, this kind
+of traffic isn't currently accounted for in veth's RX stats.
+
+In preparation for the fix, use tstats (instead of lstats) to maintain
+both RX and TX counters for each veth device. We'll use RX counters for
+bpf_redirect_peer() traffic, and keep using TX counters for the usual
+"peer-to-peer" traffic. In veth_get_stats64(), calculate RX stats by
+_adding_ RX count to peer's TX count, in order to cover both kinds of
+traffic.
+
+veth_stats_rx() might need a name change (perhaps to "veth_stats_xdp()")
+for less confusion, but let's leave it to another patch to keep the fix
+minimal.
+
+Signed-off-by: Peilin Ye <peilin.ye@bytedance.com>
+Co-developed-by: Daniel Borkmann <daniel@iogearbox.net>
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
 Reviewed-by: Nikolay Aleksandrov <razor@blackwall.org>
-Cc: David Ahern <dsahern@kernel.org>
-Link: https://lore.kernel.org/r/20231114004220.6495-3-daniel@iogearbox.net
+Link: https://lore.kernel.org/r/20231114004220.6495-5-daniel@iogearbox.net
 Signed-off-by: Martin KaFai Lau <martin.lau@kernel.org>
-Stable-dep-of: 024ee930cb3c ("bpf: Fix dev's rx stats for bpf_redirect_peer traffic")
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
 ---
- drivers/net/veth.c        | 16 ++----------
- drivers/net/vrf.c         | 24 ++++++------------
- include/linux/netdevice.h | 30 +++++++++++++++++++---
- net/core/dev.c            | 53 ++++++++++++++++++++++++++++++++++++---
- 4 files changed, 85 insertions(+), 38 deletions(-)
+ drivers/net/veth.c | 30 +++++++++++-------------------
+ 1 file changed, 11 insertions(+), 19 deletions(-)
 
 diff --git a/drivers/net/veth.c b/drivers/net/veth.c
-index 8dcd3b6e143b..0a8154611d7f 100644
+index 0a8154611d7f..e1e7df00e85c 100644
 --- a/drivers/net/veth.c
 +++ b/drivers/net/veth.c
-@@ -1381,25 +1381,12 @@ static void veth_free_queues(struct net_device *dev)
- 
- static int veth_dev_init(struct net_device *dev)
- {
--	int err;
--
--	dev->lstats = netdev_alloc_pcpu_stats(struct pcpu_lstats);
--	if (!dev->lstats)
--		return -ENOMEM;
--
--	err = veth_alloc_queues(dev);
--	if (err) {
--		free_percpu(dev->lstats);
--		return err;
--	}
--
--	return 0;
-+	return veth_alloc_queues(dev);
+@@ -342,7 +342,7 @@ static netdev_tx_t veth_xmit(struct sk_buff *skb, struct net_device *dev)
+ 	skb_tx_timestamp(skb);
+ 	if (likely(veth_forward_skb(rcv, skb, rq, use_napi) == NET_RX_SUCCESS)) {
+ 		if (!use_napi)
+-			dev_lstats_add(dev, length);
++			dev_sw_netstats_tx_add(dev, 1, length);
+ 	} else {
+ drop:
+ 		atomic64_inc(&priv->dropped);
+@@ -357,14 +357,6 @@ static netdev_tx_t veth_xmit(struct sk_buff *skb, struct net_device *dev)
+ 	return ret;
  }
  
- static void veth_dev_free(struct net_device *dev)
+-static u64 veth_stats_tx(struct net_device *dev, u64 *packets, u64 *bytes)
+-{
+-	struct veth_priv *priv = netdev_priv(dev);
+-
+-	dev_lstats_read(dev, packets, bytes);
+-	return atomic64_read(&priv->dropped);
+-}
+-
+ static void veth_stats_rx(struct veth_stats *result, struct net_device *dev)
  {
- 	veth_free_queues(dev);
--	free_percpu(dev->lstats);
- }
+ 	struct veth_priv *priv = netdev_priv(dev);
+@@ -402,24 +394,24 @@ static void veth_get_stats64(struct net_device *dev,
+ 	struct veth_priv *priv = netdev_priv(dev);
+ 	struct net_device *peer;
+ 	struct veth_stats rx;
+-	u64 packets, bytes;
  
- #ifdef CONFIG_NET_POLL_CONTROLLER
-@@ -1625,6 +1612,7 @@ static void veth_setup(struct net_device *dev)
+-	tot->tx_dropped = veth_stats_tx(dev, &packets, &bytes);
+-	tot->tx_bytes = bytes;
+-	tot->tx_packets = packets;
++	tot->tx_dropped = atomic64_read(&priv->dropped);
++	dev_fetch_sw_netstats(tot, dev->tstats);
+ 
+ 	veth_stats_rx(&rx, dev);
+ 	tot->tx_dropped += rx.xdp_tx_err;
+ 	tot->rx_dropped = rx.rx_drops + rx.peer_tq_xdp_xmit_err;
+-	tot->rx_bytes = rx.xdp_bytes;
+-	tot->rx_packets = rx.xdp_packets;
++	tot->rx_bytes += rx.xdp_bytes;
++	tot->rx_packets += rx.xdp_packets;
+ 
+ 	rcu_read_lock();
+ 	peer = rcu_dereference(priv->peer);
+ 	if (peer) {
+-		veth_stats_tx(peer, &packets, &bytes);
+-		tot->rx_bytes += bytes;
+-		tot->rx_packets += packets;
++		struct rtnl_link_stats64 tot_peer = {};
++
++		dev_fetch_sw_netstats(&tot_peer, peer->tstats);
++		tot->rx_bytes += tot_peer.tx_bytes;
++		tot->rx_packets += tot_peer.tx_packets;
+ 
+ 		veth_stats_rx(&rx, peer);
+ 		tot->tx_dropped += rx.peer_tq_xdp_xmit_err;
+@@ -1612,7 +1604,7 @@ static void veth_setup(struct net_device *dev)
  			       NETIF_F_HW_VLAN_STAG_RX);
  	dev->needs_free_netdev = true;
  	dev->priv_destructor = veth_dev_free;
-+	dev->pcpu_stat_type = NETDEV_PCPU_STAT_LSTATS;
+-	dev->pcpu_stat_type = NETDEV_PCPU_STAT_LSTATS;
++	dev->pcpu_stat_type = NETDEV_PCPU_STAT_TSTATS;
  	dev->max_mtu = ETH_MAX_MTU;
  
  	dev->hw_features = VETH_FEATURES;
-diff --git a/drivers/net/vrf.c b/drivers/net/vrf.c
-index 208df4d41939..c8a1009d659e 100644
---- a/drivers/net/vrf.c
-+++ b/drivers/net/vrf.c
-@@ -121,22 +121,12 @@ struct net_vrf {
- 	int			ifindex;
- };
- 
--struct pcpu_dstats {
--	u64			tx_pkts;
--	u64			tx_bytes;
--	u64			tx_drps;
--	u64			rx_pkts;
--	u64			rx_bytes;
--	u64			rx_drps;
--	struct u64_stats_sync	syncp;
--};
--
- static void vrf_rx_stats(struct net_device *dev, int len)
- {
- 	struct pcpu_dstats *dstats = this_cpu_ptr(dev->dstats);
- 
- 	u64_stats_update_begin(&dstats->syncp);
--	dstats->rx_pkts++;
-+	dstats->rx_packets++;
- 	dstats->rx_bytes += len;
- 	u64_stats_update_end(&dstats->syncp);
- }
-@@ -161,10 +151,10 @@ static void vrf_get_stats64(struct net_device *dev,
- 		do {
- 			start = u64_stats_fetch_begin_irq(&dstats->syncp);
- 			tbytes = dstats->tx_bytes;
--			tpkts = dstats->tx_pkts;
--			tdrops = dstats->tx_drps;
-+			tpkts = dstats->tx_packets;
-+			tdrops = dstats->tx_drops;
- 			rbytes = dstats->rx_bytes;
--			rpkts = dstats->rx_pkts;
-+			rpkts = dstats->rx_packets;
- 		} while (u64_stats_fetch_retry_irq(&dstats->syncp, start));
- 		stats->tx_bytes += tbytes;
- 		stats->tx_packets += tpkts;
-@@ -421,7 +411,7 @@ static int vrf_local_xmit(struct sk_buff *skb, struct net_device *dev,
- 	if (likely(__netif_rx(skb) == NET_RX_SUCCESS))
- 		vrf_rx_stats(dev, len);
- 	else
--		this_cpu_inc(dev->dstats->rx_drps);
-+		this_cpu_inc(dev->dstats->rx_drops);
- 
- 	return NETDEV_TX_OK;
- }
-@@ -616,11 +606,11 @@ static netdev_tx_t vrf_xmit(struct sk_buff *skb, struct net_device *dev)
- 		struct pcpu_dstats *dstats = this_cpu_ptr(dev->dstats);
- 
- 		u64_stats_update_begin(&dstats->syncp);
--		dstats->tx_pkts++;
-+		dstats->tx_packets++;
- 		dstats->tx_bytes += len;
- 		u64_stats_update_end(&dstats->syncp);
- 	} else {
--		this_cpu_inc(dev->dstats->tx_drps);
-+		this_cpu_inc(dev->dstats->tx_drops);
- 	}
- 
- 	return ret;
-diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
-index fbbd0df1106b..662183994e88 100644
---- a/include/linux/netdevice.h
-+++ b/include/linux/netdevice.h
-@@ -1747,6 +1747,13 @@ enum netdev_ml_priv_type {
- 	ML_PRIV_CAN,
- };
- 
-+enum netdev_stat_type {
-+	NETDEV_PCPU_STAT_NONE,
-+	NETDEV_PCPU_STAT_LSTATS, /* struct pcpu_lstats */
-+	NETDEV_PCPU_STAT_TSTATS, /* struct pcpu_sw_netstats */
-+	NETDEV_PCPU_STAT_DSTATS, /* struct pcpu_dstats */
-+};
-+
- /**
-  *	struct net_device - The DEVICE structure.
-  *
-@@ -1941,10 +1948,14 @@ enum netdev_ml_priv_type {
-  *
-  * 	@ml_priv:	Mid-layer private
-  *	@ml_priv_type:  Mid-layer private type
-- * 	@lstats:	Loopback statistics
-- * 	@tstats:	Tunnel statistics
-- * 	@dstats:	Dummy statistics
-- * 	@vstats:	Virtual ethernet statistics
-+ *
-+ *	@pcpu_stat_type:	Type of device statistics which the core should
-+ *				allocate/free: none, lstats, tstats, dstats. none
-+ *				means the driver is handling statistics allocation/
-+ *				freeing internally.
-+ *	@lstats:		Loopback statistics: packets, bytes
-+ *	@tstats:		Tunnel statistics: RX/TX packets, RX/TX bytes
-+ *	@dstats:		Dummy statistics: RX/TX/drop packets, RX/TX bytes
-  *
-  *	@garp_port:	GARP
-  *	@mrp_port:	MRP
-@@ -2287,6 +2298,7 @@ struct net_device {
- 	void				*ml_priv;
- 	enum netdev_ml_priv_type	ml_priv_type;
- 
-+	enum netdev_stat_type		pcpu_stat_type:8;
- 	union {
- 		struct pcpu_lstats __percpu		*lstats;
- 		struct pcpu_sw_netstats __percpu	*tstats;
-@@ -2670,6 +2682,16 @@ struct pcpu_sw_netstats {
- 	struct u64_stats_sync   syncp;
- } __aligned(4 * sizeof(u64));
- 
-+struct pcpu_dstats {
-+	u64			rx_packets;
-+	u64			rx_bytes;
-+	u64			rx_drops;
-+	u64			tx_packets;
-+	u64			tx_bytes;
-+	u64			tx_drops;
-+	struct u64_stats_sync	syncp;
-+} __aligned(8 * sizeof(u64));
-+
- struct pcpu_lstats {
- 	u64_stats_t packets;
- 	u64_stats_t bytes;
-diff --git a/net/core/dev.c b/net/core/dev.c
-index 42c16b3e86b9..5151f69dd724 100644
---- a/net/core/dev.c
-+++ b/net/core/dev.c
-@@ -9991,6 +9991,46 @@ void netif_tx_stop_all_queues(struct net_device *dev)
- }
- EXPORT_SYMBOL(netif_tx_stop_all_queues);
- 
-+static int netdev_do_alloc_pcpu_stats(struct net_device *dev)
-+{
-+	void __percpu *v;
-+
-+	switch (dev->pcpu_stat_type) {
-+	case NETDEV_PCPU_STAT_NONE:
-+		return 0;
-+	case NETDEV_PCPU_STAT_LSTATS:
-+		v = dev->lstats = netdev_alloc_pcpu_stats(struct pcpu_lstats);
-+		break;
-+	case NETDEV_PCPU_STAT_TSTATS:
-+		v = dev->tstats = netdev_alloc_pcpu_stats(struct pcpu_sw_netstats);
-+		break;
-+	case NETDEV_PCPU_STAT_DSTATS:
-+		v = dev->dstats = netdev_alloc_pcpu_stats(struct pcpu_dstats);
-+		break;
-+	default:
-+		return -EINVAL;
-+	}
-+
-+	return v ? 0 : -ENOMEM;
-+}
-+
-+static void netdev_do_free_pcpu_stats(struct net_device *dev)
-+{
-+	switch (dev->pcpu_stat_type) {
-+	case NETDEV_PCPU_STAT_NONE:
-+		return;
-+	case NETDEV_PCPU_STAT_LSTATS:
-+		free_percpu(dev->lstats);
-+		break;
-+	case NETDEV_PCPU_STAT_TSTATS:
-+		free_percpu(dev->tstats);
-+		break;
-+	case NETDEV_PCPU_STAT_DSTATS:
-+		free_percpu(dev->dstats);
-+		break;
-+	}
-+}
-+
- /**
-  * register_netdevice() - register a network device
-  * @dev: device to register
-@@ -10051,11 +10091,15 @@ int register_netdevice(struct net_device *dev)
- 		goto err_uninit;
- 	}
- 
-+	ret = netdev_do_alloc_pcpu_stats(dev);
-+	if (ret)
-+		goto err_uninit;
-+
- 	ret = -EBUSY;
- 	if (!dev->ifindex)
- 		dev->ifindex = dev_new_index(net);
- 	else if (__dev_get_by_index(net, dev->ifindex))
--		goto err_uninit;
-+		goto err_free_pcpu;
- 
- 	/* Transfer changeable features to wanted_features and enable
- 	 * software offloads (GSO and GRO).
-@@ -10102,14 +10146,14 @@ int register_netdevice(struct net_device *dev)
- 	ret = call_netdevice_notifiers(NETDEV_POST_INIT, dev);
- 	ret = notifier_to_errno(ret);
- 	if (ret)
--		goto err_uninit;
-+		goto err_free_pcpu;
- 
- 	ret = netdev_register_kobject(dev);
- 	write_lock(&dev_base_lock);
- 	dev->reg_state = ret ? NETREG_UNREGISTERED : NETREG_REGISTERED;
- 	write_unlock(&dev_base_lock);
- 	if (ret)
--		goto err_uninit;
-+		goto err_free_pcpu;
- 
- 	__netdev_update_features(dev);
- 
-@@ -10156,6 +10200,8 @@ int register_netdevice(struct net_device *dev)
- out:
- 	return ret;
- 
-+err_free_pcpu:
-+	netdev_do_free_pcpu_stats(dev);
- err_uninit:
- 	if (dev->netdev_ops->ndo_uninit)
- 		dev->netdev_ops->ndo_uninit(dev);
-@@ -10409,6 +10455,7 @@ void netdev_run_todo(void)
- 		WARN_ON(rcu_access_pointer(dev->ip_ptr));
- 		WARN_ON(rcu_access_pointer(dev->ip6_ptr));
- 
-+		netdev_do_free_pcpu_stats(dev);
- 		if (dev->priv_destructor)
- 			dev->priv_destructor(dev);
- 		if (dev->needs_free_netdev)
 -- 
 2.43.0
 
