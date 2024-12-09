@@ -1,318 +1,489 @@
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.4])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 14F7A1E9B1A;
-	Mon,  9 Dec 2024 15:30:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.4
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA68313D518;
+	Mon,  9 Dec 2024 16:36:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733758261; cv=none; b=ejKt2VtPeaGVfCMIlTKYy+qHL+AUHK2cKsqgxxMkwH5vv2cLykWCfIFmmGMQ+c/+BGAoxfnvZ2MvI8BsW1inhj4bLipjAP2Uw/G4vcHtW/m+n72OX/iedmohhFF/O2FcC45OvlJ6d62vH3TIER/mLcDu0xI3ywJZw+9CvmIHGFA=
+	t=1733762213; cv=none; b=hR8IWOCMK4EGxqxMKvJSazw7tAAdGdp9zC1y1CHaO8C8RDKL6c5yCLehGFu1L68YRvBPOn29t4rx+8+n/hOJE9yKjtVLVD51MY0KQfworu+d3nfEUv5maUmgzjMW87NflVeiV0B1S654JMzu+aOjhe44k20u+ZRK3hnzohqzlJU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733758261; c=relaxed/simple;
-	bh=FxHWo/dMUIA31b9D/kKXeS/piBOobQlucV+ivJNqIek=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=awf1G2coeAlhOz++d9WqrNDjpNo+OMFqcTv8a3sI799XmnEnwkvtvrMbMtKwI+XL7RNlQ2lcG0CWMK3CYT3zEKXMYJ7/q2+uorSyt+O/n2vwaS7ihwP/T8/DwnqFSPGGaJo2L+Fqa7VEMvYKNYMk1NymMAnG34gLcFX5wqSTvWU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=ZlmWE4Ao; arc=none smtp.client-ip=220.197.31.4
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+	s=arc-20240116; t=1733762213; c=relaxed/simple;
+	bh=xa7uGctjLvsFpBlOpMHL99eSdYWGnTss9OQOf0wxaZA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=H9vBfiJKEYLXOsiI4mg7fruTv7T5jLtnlKmR2SeAWv1aRQOPS0wPRvaJprqPjx5DLi76tYeOKEWy1FtMbRg4b5sPAeUASYjVtOuVdqM6WNQkIM7We48JpLMV0fyQ7C9ymc/y8RmUVrk0sDnk/naktlBqtqzgT2QdUTPxAseY7W8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Zsh0SZOq; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="ZlmWE4Ao"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:Subject:Date:Message-ID:MIME-Version; bh=Mu4WN
-	nUUHPE/kOjSWB5541tV6oeU3re6rJEaCTuKAUk=; b=ZlmWE4Ao/pMcYuiigJtB4
-	922CJVap4lHSqS+cw+SU5kv2C/OE06EtUrNUgxzV8rmzdObhA+RyWbvlG84S1xnR
-	NzJtUajk3iHeMQV6uFC0xKpvsGoThU8jO45QZxanPLn0guvaAcxM7oDULuyYQJk4
-	XVpYxk2h5xSBmqjpUp/sA4=
-Received: from localhost.localdomain (unknown [47.252.33.72])
-	by gzga-smtp-mtada-g1-3 (Coremail) with SMTP id _____wAnl61uDFdn8utwDA--.9599S3;
-	Mon, 09 Dec 2024 23:27:57 +0800 (CST)
-From: Jiayuan Chen <mrpre@163.com>
-To: bpf@vger.kernel.org
-Cc: martin.lau@linux.dev,
-	ast@kernel.org,
-	edumazet@google.com,
-	jakub@cloudflare.com,
-	davem@davemloft.net,
-	dsahern@kernel.org,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	linux-kernel@vger.kernel.org,
-	song@kernel.org,
-	john.fastabend@gmail.com,
-	andrii@kernel.org,
-	mhal@rbox.co,
-	yonghong.song@linux.dev,
-	daniel@iogearbox.net,
-	xiyou.wangcong@gmail.com,
-	horms@kernel.org,
-	Jiayuan Chen <mrpre@163.com>
-Subject: [PATCH bpf v2 1/2] bpf: fix wrong copied_seq calculation
-Date: Mon,  9 Dec 2024 23:27:39 +0800
-Message-ID: <20241209152740.281125-2-mrpre@163.com>
-X-Mailer: git-send-email 2.43.5
-In-Reply-To: <20241209152740.281125-1-mrpre@163.com>
-References: <20241209152740.281125-1-mrpre@163.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Zsh0SZOq"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EAC55C4CED1;
+	Mon,  9 Dec 2024 16:36:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1733762212;
+	bh=xa7uGctjLvsFpBlOpMHL99eSdYWGnTss9OQOf0wxaZA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Zsh0SZOqiDXfgN1fTzfHs3GWJx7+YWsbZvdfavJmCxZj8/2bJGyY2AaET893Z4tZ0
+	 ZfB3pRZr6ZG/eaKD3oR9dP90rJSJIiN1b6qaSsQYCGP/4AEsg6WOC1dovNfE+W8/J0
+	 X4nGRcmijuGD6CbJMwUVGF2IDoY9VGSaL3KB1jRkVpeNNdZV2RcjgKHPTUY0cKbQM0
+	 wLbfSqNmvJysPWu7n5iIjDSrZXvfejD1Ol0rfXI3jpPiEzEpJCviLaFffr7VAUGrXo
+	 mdw7mR7H2iJZwEfTAOCj+iX5OtdFZk7sSpp6+Uu9O+PVS36iooN85kfyXB2WIRgt6m
+	 z3uIRSUf8LNRw==
+Date: Mon, 9 Dec 2024 13:36:48 -0300
+From: Arnaldo Carvalho de Melo <acme@kernel.org>
+To: Namhyung Kim <namhyung@kernel.org>
+Cc: Ian Rogers <irogers@google.com>, Kan Liang <kan.liang@linux.intel.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+	linux-perf-users@vger.kernel.org,
+	Andrii Nakryiko <andrii@kernel.org>, Song Liu <song@kernel.org>,
+	bpf@vger.kernel.org, Stephane Eranian <eranian@google.com>,
+	Vlastimil Babka <vbabka@suse.cz>,
+	Roman Gushchin <roman.gushchin@linux.dev>,
+	Hyeonggon Yoo <42.hyeyoo@gmail.com>, Kees Cook <kees@kernel.org>
+Subject: Re: [PATCH v2 2/4] perf lock contention: Run BPF slab cache iterator
+Message-ID: <Z1ccoNOl4Z8c5DCz@x1>
+References: <20241108061500.2698340-1-namhyung@kernel.org>
+ <20241108061500.2698340-3-namhyung@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wAnl61uDFdn8utwDA--.9599S3
-X-Coremail-Antispam: 1Uf129KBjvJXoWxKryrKFW7tFyfXFW7CFyfZwb_yoWfAr13pF
-	1DA3yfZF4DGFW7W3ZYyFZrXr4ag3yrCayjk348W3yfArsFgr1SyF95KFyayF4rGrWDuw13
-	JrWjqw4UCr1DAa7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0piBHqfUUUUU=
-X-CM-SenderInfo: xpus2vi6rwjhhfrp/xtbBDx2wp2dXCYWxXgABsX
+In-Reply-To: <20241108061500.2698340-3-namhyung@kernel.org>
 
-'sk->copied_seq' was updated in the tcp_eat_skb() function when the
-action of a BPF program was SK_REDIRECT. For other actions, like SK_PASS,
-the update logic for 'sk->copied_seq' was moved to
-tcp_bpf_recvmsg_parser() to ensure the accuracy of the 'fionread' feature.
+On Thu, Nov 07, 2024 at 10:14:57PM -0800, Namhyung Kim wrote:
+> Recently the kernel got the kmem_cache iterator to traverse metadata of
+> slab objects.  This can be used to symbolize dynamic locks in a slab.
+> 
+> The new slab_caches hash map will have the pointer of the kmem_cache as
+> a key and save the name and a id.  The id will be saved in the flags
+> part of the lock.
 
-It works for a single stream_verdict scenario, as it also modified
-'sk_data_ready->sk_psock_verdict_data_ready->tcp_read_skb'
-to remove updating 'sk->copied_seq'.
+Trying to fix this 
 
-However, for programs where both stream_parser and stream_verdict are
-active(strparser purpose), tcp_read_sock() was used instead of
-tcp_read_skb() (sk_data_ready->strp_data_ready->tcp_read_sock)
-tcp_read_sock() now still update 'sk->copied_seq', leading to duplicated
-updates.
+cd . && make GEN_VMLINUX_H=1 FEATURES_DUMP=/home/acme/git/perf-tools-next/tools/perf/BUILD_TEST_FEATURE_DUMP -j28 O=/tmp/tmp.DWo9tIFvWU DESTDIR=/tmp/tmp.ex3iljqLBT
+  BUILD:   Doing 'make -j28' parallel build
+Warning: Kernel ABI header differences:
+  diff -u tools/include/uapi/drm/drm.h include/uapi/drm/drm.h
+  diff -u tools/include/uapi/linux/kvm.h include/uapi/linux/kvm.h
+  diff -u tools/include/uapi/linux/perf_event.h include/uapi/linux/perf_event.h
+  diff -u tools/arch/x86/include/asm/cpufeatures.h arch/x86/include/asm/cpufeatures.h
+  diff -u tools/arch/x86/include/uapi/asm/kvm.h arch/x86/include/uapi/asm/kvm.h
+  diff -u tools/arch/arm64/include/uapi/asm/kvm.h arch/arm64/include/uapi/asm/kvm.h
+  diff -u tools/arch/arm64/include/uapi/asm/unistd.h arch/arm64/include/uapi/asm/unistd.h
+  diff -u tools/include/uapi/asm-generic/unistd.h include/uapi/asm-generic/unistd.h
+  diff -u tools/include/uapi/asm-generic/mman.h include/uapi/asm-generic/mman.h
+  diff -u tools/perf/arch/x86/entry/syscalls/syscall_32.tbl arch/x86/entry/syscalls/syscall_32.tbl
+  diff -u tools/perf/arch/x86/entry/syscalls/syscall_64.tbl arch/x86/entry/syscalls/syscall_64.tbl
+  diff -u tools/perf/arch/powerpc/entry/syscalls/syscall.tbl arch/powerpc/kernel/syscalls/syscall.tbl
+  diff -u tools/perf/arch/s390/entry/syscalls/syscall.tbl arch/s390/kernel/syscalls/syscall.tbl
+  diff -u tools/perf/arch/mips/entry/syscalls/syscall_n64.tbl arch/mips/kernel/syscalls/syscall_n64.tbl
+  diff -u tools/perf/trace/beauty/include/uapi/linux/fcntl.h include/uapi/linux/fcntl.h
+  diff -u tools/perf/trace/beauty/include/uapi/linux/mount.h include/uapi/linux/mount.h
+  diff -u tools/perf/trace/beauty/include/uapi/linux/prctl.h include/uapi/linux/prctl.h
+Makefile.config:989: No libllvm 13+ found, slower source file resolution, please install llvm-devel/llvm-dev
+Makefile.config:1171: No openjdk development package found, please install JDK package, e.g. openjdk-8-jdk, java-1.8.0-openjdk-devel
 
-In summary, for strparser + SK_PASS, copied_seq is redundantly calculated
-in both tcp_read_sock() and tcp_bpf_recvmsg_parser().
+  GEN     /tmp/tmp.DWo9tIFvWU/common-cmds.h
+  CC      /tmp/tmp.DWo9tIFvWU/dlfilters/dlfilter-test-api-v0.o
+  CC      /tmp/tmp.DWo9tIFvWU/dlfilters/dlfilter-test-api-v2.o
+  CC      /tmp/tmp.DWo9tIFvWU/dlfilters/dlfilter-show-cycles.o
+  GEN     /tmp/tmp.DWo9tIFvWU/arch/arm64/include/generated/asm/sysreg-defs.h
+  LINK    /tmp/tmp.DWo9tIFvWU/dlfilters/dlfilter-test-api-v2.so
+  LINK    /tmp/tmp.DWo9tIFvWU/dlfilters/dlfilter-show-cycles.so
+  LINK    /tmp/tmp.DWo9tIFvWU/dlfilters/dlfilter-test-api-v0.so
+  PERF_VERSION = 6.13.rc1.g61c6ae4ddd41
+  GEN     perf-iostat
+  GEN     perf-archive
+  INSTALL /tmp/tmp.DWo9tIFvWU/libsubcmd/include/subcmd/exec-cmd.h
+  INSTALL /tmp/tmp.DWo9tIFvWU/libsubcmd/include/subcmd/help.h
+  INSTALL /tmp/tmp.DWo9tIFvWU/libsubcmd/include/subcmd/pager.h
+  INSTALL /tmp/tmp.DWo9tIFvWU/libsubcmd/include/subcmd/parse-options.h
+  INSTALL /tmp/tmp.DWo9tIFvWU/libsubcmd/include/subcmd/run-command.h
+  INSTALL libsubcmd_headers
+  INSTALL /tmp/tmp.DWo9tIFvWU/libperf/include/perf/bpf_perf.h
+  INSTALL /tmp/tmp.DWo9tIFvWU/libperf/include/perf/core.h
+  INSTALL /tmp/tmp.DWo9tIFvWU/libperf/include/perf/cpumap.h
+  INSTALL /tmp/tmp.DWo9tIFvWU/libperf/include/perf/threadmap.h
+  INSTALL /tmp/tmp.DWo9tIFvWU/libperf/include/perf/evlist.h
+  INSTALL /tmp/tmp.DWo9tIFvWU/libperf/include/perf/evsel.h
+  INSTALL /tmp/tmp.DWo9tIFvWU/libperf/include/perf/event.h
+  INSTALL /tmp/tmp.DWo9tIFvWU/libperf/include/perf/mmap.h
+  CC      /tmp/tmp.DWo9tIFvWU/libperf/core.o
+  INSTALL /tmp/tmp.DWo9tIFvWU/libperf/include/internal/cpumap.h
+  INSTALL /tmp/tmp.DWo9tIFvWU/libperf/include/internal/evlist.h
+  INSTALL /tmp/tmp.DWo9tIFvWU/libapi/include/api/cpu.h
+  CC      /tmp/tmp.DWo9tIFvWU/libperf/cpumap.o
+  INSTALL /tmp/tmp.DWo9tIFvWU/libsymbol/include/symbol/kallsyms.h
+  INSTALL /tmp/tmp.DWo9tIFvWU/libperf/include/internal/evsel.h
+  INSTALL /tmp/tmp.DWo9tIFvWU/libapi/include/api/io.h
+  INSTALL /tmp/tmp.DWo9tIFvWU/libapi/include/api/debug.h
+  INSTALL /tmp/tmp.DWo9tIFvWU/libperf/include/internal/lib.h
+  CC      /tmp/tmp.DWo9tIFvWU/libsymbol/kallsyms.o
+  CC      /tmp/tmp.DWo9tIFvWU/libperf/threadmap.o
+  GEN     /tmp/tmp.DWo9tIFvWU/libbpf/bpf_helper_defs.h
+  INSTALL /tmp/tmp.DWo9tIFvWU/libperf/include/internal/mmap.h
+  MKDIR   /tmp/tmp.DWo9tIFvWU/util/bpf_skel/.tmp/bootstrap/libbpf/include/bpf
+  CC      /tmp/tmp.DWo9tIFvWU/libperf/evsel.o
+  INSTALL /tmp/tmp.DWo9tIFvWU/libperf/include/internal/rc_check.h
+  INSTALL /tmp/tmp.DWo9tIFvWU/libapi/include/api/fd/array.h
+  INSTALL /tmp/tmp.DWo9tIFvWU/libperf/include/internal/threadmap.h
+  INSTALL /tmp/tmp.DWo9tIFvWU/libbpf/include/bpf/bpf.h
+  CC      /tmp/tmp.DWo9tIFvWU/libperf/evlist.o
+  INSTALL /tmp/tmp.DWo9tIFvWU/libapi/include/api/fs/fs.h
+  CC      /tmp/tmp.DWo9tIFvWU/libapi/cpu.o
+  INSTALL libsymbol_headers
+  INSTALL /tmp/tmp.DWo9tIFvWU/libapi/include/api/fs/tracing_path.h
+  MKDIR   /tmp/tmp.DWo9tIFvWU/util/bpf_skel/.tmp/bootstrap/
+  INSTALL /tmp/tmp.DWo9tIFvWU/libbpf/include/bpf/libbpf.h
+  CC      /tmp/tmp.DWo9tIFvWU/libperf/mmap.o
+  MKDIR   /tmp/tmp.DWo9tIFvWU/libapi/fd/
+  INSTALL /tmp/tmp.DWo9tIFvWU/libperf/include/internal/xyarray.h
+  MKDIR   /tmp/tmp.DWo9tIFvWU/libapi/fs/
+  INSTALL /tmp/tmp.DWo9tIFvWU/libbpf/include/bpf/btf.h
+  CC      /tmp/tmp.DWo9tIFvWU/libperf/zalloc.o
+  CC      /tmp/tmp.DWo9tIFvWU/libapi/debug.o
+  CC      /tmp/tmp.DWo9tIFvWU/libapi/fd/array.o
+  CC      /tmp/tmp.DWo9tIFvWU/libapi/fs/fs.o
+  INSTALL /tmp/tmp.DWo9tIFvWU/libbpf/include/bpf/libbpf_common.h
+  INSTALL /tmp/tmp.DWo9tIFvWU/libbpf/include/bpf/libbpf_legacy.h
+  CC      /tmp/tmp.DWo9tIFvWU/libapi/str_error_r.o
+  INSTALL /tmp/tmp.DWo9tIFvWU/libbpf/include/bpf/bpf_helpers.h
+  MKDIR   /tmp/tmp.DWo9tIFvWU/util/bpf_skel/.tmp/bootstrap/libbpf/
+  INSTALL libperf_headers
+  INSTALL libapi_headers
+  INSTALL /tmp/tmp.DWo9tIFvWU/libbpf/include/bpf/bpf_tracing.h
+  CC      /tmp/tmp.DWo9tIFvWU/libapi/fs/tracing_path.o
+  INSTALL /tmp/tmp.DWo9tIFvWU/libbpf/include/bpf/bpf_endian.h
+  CC      /tmp/tmp.DWo9tIFvWU/libperf/xyarray.o
+  CC      /tmp/tmp.DWo9tIFvWU/libapi/fs/cgroup.o
+  INSTALL /tmp/tmp.DWo9tIFvWU/libbpf/include/bpf/bpf_core_read.h
+  INSTALL /tmp/tmp.DWo9tIFvWU/libbpf/include/bpf/skel_internal.h
+  INSTALL /tmp/tmp.DWo9tIFvWU/libbpf/include/bpf/libbpf_version.h
+  CC      /tmp/tmp.DWo9tIFvWU/libperf/lib.o
+  INSTALL /tmp/tmp.DWo9tIFvWU/libbpf/include/bpf/usdt.bpf.h
+  INSTALL /tmp/tmp.DWo9tIFvWU/util/bpf_skel/.tmp/bootstrap/libbpf/include/bpf/hashmap.h
+  INSTALL /tmp/tmp.DWo9tIFvWU/util/bpf_skel/.tmp/bootstrap/libbpf/include/bpf/relo_core.h
+  INSTALL /tmp/tmp.DWo9tIFvWU/util/bpf_skel/.tmp/bootstrap/libbpf/include/bpf/libbpf_internal.h
+  CC      /tmp/tmp.DWo9tIFvWU/libsubcmd/help.o
+  CC      /tmp/tmp.DWo9tIFvWU/libsubcmd/exec-cmd.o
+  CC      /tmp/tmp.DWo9tIFvWU/libsubcmd/pager.o
+  CC      /tmp/tmp.DWo9tIFvWU/libsubcmd/parse-options.o
+  CC      /tmp/tmp.DWo9tIFvWU/libsubcmd/run-command.o
+  CC      /tmp/tmp.DWo9tIFvWU/libsubcmd/sigchain.o
+  CC      /tmp/tmp.DWo9tIFvWU/libsubcmd/subcmd-config.o
+  INSTALL /tmp/tmp.DWo9tIFvWU/libbpf/include/bpf/bpf_helper_defs.h
+  INSTALL libbpf_headers
+  GEN     /tmp/tmp.DWo9tIFvWU/util/bpf_skel/.tmp/bootstrap/libbpf/bpf_helper_defs.h
+  INSTALL /tmp/tmp.DWo9tIFvWU/util/bpf_skel/.tmp/bootstrap/libbpf/include/bpf/bpf.h
+  INSTALL /tmp/tmp.DWo9tIFvWU/util/bpf_skel/.tmp/bootstrap/libbpf/include/bpf/libbpf.h
+  INSTALL /tmp/tmp.DWo9tIFvWU/util/bpf_skel/.tmp/bootstrap/libbpf/include/bpf/btf.h
+  INSTALL /tmp/tmp.DWo9tIFvWU/util/bpf_skel/.tmp/bootstrap/libbpf/include/bpf/libbpf_common.h
+  INSTALL /tmp/tmp.DWo9tIFvWU/util/bpf_skel/.tmp/bootstrap/libbpf/include/bpf/libbpf_legacy.h
+  INSTALL /tmp/tmp.DWo9tIFvWU/util/bpf_skel/.tmp/bootstrap/libbpf/include/bpf/bpf_helpers.h
+  INSTALL /tmp/tmp.DWo9tIFvWU/util/bpf_skel/.tmp/bootstrap/libbpf/include/bpf/bpf_tracing.h
+  INSTALL /tmp/tmp.DWo9tIFvWU/util/bpf_skel/.tmp/bootstrap/libbpf/include/bpf/bpf_endian.h
+  INSTALL /tmp/tmp.DWo9tIFvWU/util/bpf_skel/.tmp/bootstrap/libbpf/include/bpf/bpf_core_read.h
+  INSTALL /tmp/tmp.DWo9tIFvWU/util/bpf_skel/.tmp/bootstrap/libbpf/include/bpf/skel_internal.h
+  INSTALL /tmp/tmp.DWo9tIFvWU/util/bpf_skel/.tmp/bootstrap/libbpf/include/bpf/libbpf_version.h
+  INSTALL /tmp/tmp.DWo9tIFvWU/util/bpf_skel/.tmp/bootstrap/libbpf/include/bpf/usdt.bpf.h
+  LD      /tmp/tmp.DWo9tIFvWU/libapi/fd/libapi-in.o
+  LD      /tmp/tmp.DWo9tIFvWU/libsymbol/libsymbol-in.o
+  AR      /tmp/tmp.DWo9tIFvWU/libsymbol/libsymbol.a
+  LD      /tmp/tmp.DWo9tIFvWU/libapi/fs/libapi-in.o
+  INSTALL /tmp/tmp.DWo9tIFvWU/util/bpf_skel/.tmp/bootstrap/libbpf/include/bpf/bpf_helper_defs.h
+  INSTALL libbpf_headers
+  LD      /tmp/tmp.DWo9tIFvWU/libapi/libapi-in.o
+  CC      /tmp/tmp.DWo9tIFvWU/libbpf/staticobjs/libbpf.o
+  CC      /tmp/tmp.DWo9tIFvWU/libbpf/staticobjs/bpf.o
+  CC      /tmp/tmp.DWo9tIFvWU/libbpf/staticobjs/nlattr.o
+  CC      /tmp/tmp.DWo9tIFvWU/libbpf/staticobjs/btf.o
+  CC      /tmp/tmp.DWo9tIFvWU/libbpf/staticobjs/libbpf_errno.o
+  CC      /tmp/tmp.DWo9tIFvWU/libbpf/staticobjs/str_error.o
+  LD      /tmp/tmp.DWo9tIFvWU/libperf/libperf-in.o
+  AR      /tmp/tmp.DWo9tIFvWU/libapi/libapi.a
+  CC      /tmp/tmp.DWo9tIFvWU/libbpf/staticobjs/netlink.o
+  CC      /tmp/tmp.DWo9tIFvWU/libbpf/staticobjs/bpf_prog_linfo.o
+  CC      /tmp/tmp.DWo9tIFvWU/libbpf/staticobjs/libbpf_probes.o
+  CC      /tmp/tmp.DWo9tIFvWU/libbpf/staticobjs/hashmap.o
+  CC      /tmp/tmp.DWo9tIFvWU/libbpf/staticobjs/btf_dump.o
+  CC      /tmp/tmp.DWo9tIFvWU/libbpf/staticobjs/ringbuf.o
+  CC      /tmp/tmp.DWo9tIFvWU/libbpf/staticobjs/strset.o
+  CC      /tmp/tmp.DWo9tIFvWU/libbpf/staticobjs/linker.o
+  CC      /tmp/tmp.DWo9tIFvWU/libbpf/staticobjs/gen_loader.o
+  CC      /tmp/tmp.DWo9tIFvWU/libbpf/staticobjs/relo_core.o
+  CC      /tmp/tmp.DWo9tIFvWU/libbpf/staticobjs/usdt.o
+  AR      /tmp/tmp.DWo9tIFvWU/libperf/libperf.a
+  CC      /tmp/tmp.DWo9tIFvWU/libbpf/staticobjs/zip.o
+  CC      /tmp/tmp.DWo9tIFvWU/libbpf/staticobjs/elf.o
+  CC      /tmp/tmp.DWo9tIFvWU/libbpf/staticobjs/features.o
+  CC      /tmp/tmp.DWo9tIFvWU/libbpf/staticobjs/btf_iter.o
+  CC      /tmp/tmp.DWo9tIFvWU/libbpf/staticobjs/btf_relocate.o
+  CC      /tmp/tmp.DWo9tIFvWU/util/bpf_skel/.tmp/bootstrap/libbpf/staticobjs/libbpf.o
+  CC      /tmp/tmp.DWo9tIFvWU/util/bpf_skel/.tmp/bootstrap/libbpf/staticobjs/bpf.o
+  CC      /tmp/tmp.DWo9tIFvWU/util/bpf_skel/.tmp/bootstrap/libbpf/staticobjs/nlattr.o
+  CC      /tmp/tmp.DWo9tIFvWU/util/bpf_skel/.tmp/bootstrap/libbpf/staticobjs/btf.o
+  CC      /tmp/tmp.DWo9tIFvWU/util/bpf_skel/.tmp/bootstrap/libbpf/staticobjs/libbpf_errno.o
+  CC      /tmp/tmp.DWo9tIFvWU/util/bpf_skel/.tmp/bootstrap/libbpf/staticobjs/str_error.o
+  CC      /tmp/tmp.DWo9tIFvWU/util/bpf_skel/.tmp/bootstrap/libbpf/staticobjs/netlink.o
+  CC      /tmp/tmp.DWo9tIFvWU/util/bpf_skel/.tmp/bootstrap/libbpf/staticobjs/bpf_prog_linfo.o
+  CC      /tmp/tmp.DWo9tIFvWU/util/bpf_skel/.tmp/bootstrap/libbpf/staticobjs/libbpf_probes.o
+  CC      /tmp/tmp.DWo9tIFvWU/util/bpf_skel/.tmp/bootstrap/libbpf/staticobjs/hashmap.o
+  CC      /tmp/tmp.DWo9tIFvWU/util/bpf_skel/.tmp/bootstrap/libbpf/staticobjs/btf_dump.o
+  CC      /tmp/tmp.DWo9tIFvWU/util/bpf_skel/.tmp/bootstrap/libbpf/staticobjs/ringbuf.o
+  CC      /tmp/tmp.DWo9tIFvWU/util/bpf_skel/.tmp/bootstrap/libbpf/staticobjs/strset.o
+  CC      /tmp/tmp.DWo9tIFvWU/util/bpf_skel/.tmp/bootstrap/libbpf/staticobjs/linker.o
+  CC      /tmp/tmp.DWo9tIFvWU/util/bpf_skel/.tmp/bootstrap/libbpf/staticobjs/gen_loader.o
+  CC      /tmp/tmp.DWo9tIFvWU/util/bpf_skel/.tmp/bootstrap/libbpf/staticobjs/relo_core.o
+  CC      /tmp/tmp.DWo9tIFvWU/util/bpf_skel/.tmp/bootstrap/libbpf/staticobjs/usdt.o
+  CC      /tmp/tmp.DWo9tIFvWU/util/bpf_skel/.tmp/bootstrap/libbpf/staticobjs/zip.o
+  CC      /tmp/tmp.DWo9tIFvWU/util/bpf_skel/.tmp/bootstrap/libbpf/staticobjs/elf.o
+  CC      /tmp/tmp.DWo9tIFvWU/util/bpf_skel/.tmp/bootstrap/libbpf/staticobjs/features.o
+  CC      /tmp/tmp.DWo9tIFvWU/util/bpf_skel/.tmp/bootstrap/libbpf/staticobjs/btf_iter.o
+  CC      /tmp/tmp.DWo9tIFvWU/util/bpf_skel/.tmp/bootstrap/libbpf/staticobjs/btf_relocate.o
+  LD      /tmp/tmp.DWo9tIFvWU/libsubcmd/libsubcmd-in.o
+  AR      /tmp/tmp.DWo9tIFvWU/libsubcmd/libsubcmd.a
+  LD      /tmp/tmp.DWo9tIFvWU/libbpf/staticobjs/libbpf-in.o
+  LINK    /tmp/tmp.DWo9tIFvWU/libbpf/libbpf.a
+  LD      /tmp/tmp.DWo9tIFvWU/util/bpf_skel/.tmp/bootstrap/libbpf/staticobjs/libbpf-in.o
+  LINK    /tmp/tmp.DWo9tIFvWU/util/bpf_skel/.tmp/bootstrap/libbpf/libbpf.a
+  CC      /tmp/tmp.DWo9tIFvWU/util/bpf_skel/.tmp/bootstrap/main.o
+  CC      /tmp/tmp.DWo9tIFvWU/util/bpf_skel/.tmp/bootstrap/common.o
+  CC      /tmp/tmp.DWo9tIFvWU/util/bpf_skel/.tmp/bootstrap/json_writer.o
+  CC      /tmp/tmp.DWo9tIFvWU/util/bpf_skel/.tmp/bootstrap/gen.o
+  CC      /tmp/tmp.DWo9tIFvWU/util/bpf_skel/.tmp/bootstrap/btf.o
+  LINK    /tmp/tmp.DWo9tIFvWU/util/bpf_skel/.tmp/bootstrap/bpftool
+  GEN     /tmp/tmp.DWo9tIFvWU/util/bpf_skel/vmlinux.h
+  CLANG   /tmp/tmp.DWo9tIFvWU/util/bpf_skel/.tmp/bpf_prog_profiler.bpf.o
+  CLANG   /tmp/tmp.DWo9tIFvWU/util/bpf_skel/.tmp/bperf_leader.bpf.o
+  CLANG   /tmp/tmp.DWo9tIFvWU/util/bpf_skel/.tmp/bperf_follower.bpf.o
+  CLANG   /tmp/tmp.DWo9tIFvWU/util/bpf_skel/.tmp/bperf_cgroup.bpf.o
+  CLANG   /tmp/tmp.DWo9tIFvWU/util/bpf_skel/.tmp/func_latency.bpf.o
+  CLANG   /tmp/tmp.DWo9tIFvWU/util/bpf_skel/.tmp/off_cpu.bpf.o
+  CLANG   /tmp/tmp.DWo9tIFvWU/util/bpf_skel/.tmp/lock_contention.bpf.o
+  CLANG   /tmp/tmp.DWo9tIFvWU/util/bpf_skel/.tmp/kwork_trace.bpf.o
+  CLANG   /tmp/tmp.DWo9tIFvWU/util/bpf_skel/.tmp/sample_filter.bpf.o
+  CLANG   /tmp/tmp.DWo9tIFvWU/util/bpf_skel/.tmp/kwork_top.bpf.o
+  CLANG   /tmp/tmp.DWo9tIFvWU/util/bpf_skel/.tmp/bench_uprobe.bpf.o
+  CLANG   /tmp/tmp.DWo9tIFvWU/util/bpf_skel/.tmp/augmented_raw_syscalls.bpf.o
+  GENSKEL /tmp/tmp.DWo9tIFvWU/util/bpf_skel/bench_uprobe.skel.h
+  GENSKEL /tmp/tmp.DWo9tIFvWU/util/bpf_skel/func_latency.skel.h
+util/bpf_skel/lock_contention.bpf.c:612:28: error: declaration of 'struct bpf_iter__kmem_cache' will not be visible outside of this function [-Werror,-Wvisibility]
+  612 | int slab_cache_iter(struct bpf_iter__kmem_cache *ctx)
+      |                            ^
+util/bpf_skel/lock_contention.bpf.c:614:28: error: incomplete definition of type 'struct bpf_iter__kmem_cache'
+  614 |         struct kmem_cache *s = ctx->s;
+      |                                ~~~^
+util/bpf_skel/lock_contention.bpf.c:612:28: note: forward declaration of 'struct bpf_iter__kmem_cache'
+  612 | int slab_cache_iter(struct bpf_iter__kmem_cache *ctx)
+      |                            ^
+2 errors generated.
+make[4]: *** [Makefile.perf:1248: /tmp/tmp.DWo9tIFvWU/util/bpf_skel/.tmp/lock_contention.bpf.o] Error 1
+make[4]: *** Waiting for unfinished jobs....
+make[3]: *** [Makefile.perf:292: sub-make] Error 2
+make[2]: *** [Makefile:76: all] Error 2
+make[1]: *** [tests/make:344: make_gen_vmlinux_h_O] Error 1
+make: *** [Makefile:109: build-test] Error 2
+make: Leaving directory '/home/acme/git/perf-tools-next/tools/perf'
 
-The issue causes incorrect copied_seq calculations, which prevent
-correct data reads from the recv() interface in user-land.
+real	3m43.896s
+user	29m30.716s
+sys	6m36.609s
+⬢ [acme@toolbox perf-tools-next]$ 
 
-Modifying tcp_read_sock() or strparser implementation directly is
-unreasonable, as it is widely used in other modules.
 
-Here, we introduce a method tcp_bpf_read_sock() to replace
-'sk->sk_socket->ops->read_sock' (like 'tls_build_proto()' does in
-tls_main.c). Such replacement action was also used in updating
-tcp_bpf_prots in tcp_bpf.c, so it's not weird.
-(Note that checkpatch.pl may complain missing 'const' qualifier when we
-define the bpf-specified 'proto_ops', but we have to do because we need
-update it).
-
-Also we remove strparser check in tcp_eat_skb() since we implement custom
-function tcp_bpf_read_sock() without copied_seq updating.
-
-Since strparser currently supports only TCP, it's sufficient for 'ops' to
-inherit inet_stream_ops.
-
-In strparser's implementation, regardless of partial or full reads,
-it completely clones the entire skb, allowing us to unconditionally
-free skb in tcp_bpf_read_sock().
-
-Fixes: e5c6de5fa025 ("bpf, sockmap: Incorrectly handling copied_seq")
-Signed-off-by: Jiayuan Chen <mrpre@163.com>
----
- include/linux/skmsg.h |  1 +
- include/net/tcp.h     |  1 +
- net/core/skmsg.c      |  3 ++
- net/ipv4/tcp.c        |  2 +-
- net/ipv4/tcp_bpf.c    | 77 +++++++++++++++++++++++++++++++++++++++++--
- 5 files changed, 80 insertions(+), 4 deletions(-)
-
-diff --git a/include/linux/skmsg.h b/include/linux/skmsg.h
-index d9b03e0746e7..db1a6fff3cc1 100644
---- a/include/linux/skmsg.h
-+++ b/include/linux/skmsg.h
-@@ -112,6 +112,7 @@ struct sk_psock {
- 	int  (*psock_update_sk_prot)(struct sock *sk, struct sk_psock *psock,
- 				     bool restore);
- 	struct proto			*sk_proto;
-+	const struct proto_ops		*sk_proto_ops;
- 	struct mutex			work_mutex;
- 	struct sk_psock_work_state	work_state;
- 	struct delayed_work		work;
-diff --git a/include/net/tcp.h b/include/net/tcp.h
-index e9b37b76e894..fb3215936ece 100644
---- a/include/net/tcp.h
-+++ b/include/net/tcp.h
-@@ -353,6 +353,7 @@ ssize_t tcp_splice_read(struct socket *sk, loff_t *ppos,
- 			unsigned int flags);
- struct sk_buff *tcp_stream_alloc_skb(struct sock *sk, gfp_t gfp,
- 				     bool force_schedule);
-+void tcp_eat_recv_skb(struct sock *sk, struct sk_buff *skb);
  
- static inline void tcp_dec_quickack_mode(struct sock *sk)
- {
-diff --git a/net/core/skmsg.c b/net/core/skmsg.c
-index e90fbab703b2..99dd75c9e689 100644
---- a/net/core/skmsg.c
-+++ b/net/core/skmsg.c
-@@ -702,6 +702,7 @@ struct sk_psock *sk_psock_init(struct sock *sk, int node)
- {
- 	struct sk_psock *psock;
- 	struct proto *prot;
-+	const struct proto_ops *proto_ops;
- 
- 	write_lock_bh(&sk->sk_callback_lock);
- 
-@@ -722,9 +723,11 @@ struct sk_psock *sk_psock_init(struct sock *sk, int node)
- 	}
- 
- 	prot = READ_ONCE(sk->sk_prot);
-+	proto_ops = likely(sk->sk_socket) ? sk->sk_socket->ops : NULL;
- 	psock->sk = sk;
- 	psock->eval = __SK_NONE;
- 	psock->sk_proto = prot;
-+	psock->sk_proto_ops = proto_ops;
- 	psock->saved_unhash = prot->unhash;
- 	psock->saved_destroy = prot->destroy;
- 	psock->saved_close = prot->close;
-diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
-index 0d704bda6c41..6a07d98017f7 100644
---- a/net/ipv4/tcp.c
-+++ b/net/ipv4/tcp.c
-@@ -1517,7 +1517,7 @@ void tcp_cleanup_rbuf(struct sock *sk, int copied)
- 	__tcp_cleanup_rbuf(sk, copied);
- }
- 
--static void tcp_eat_recv_skb(struct sock *sk, struct sk_buff *skb)
-+void tcp_eat_recv_skb(struct sock *sk, struct sk_buff *skb)
- {
- 	__skb_unlink(skb, &sk->sk_receive_queue);
- 	if (likely(skb->destructor == sock_rfree)) {
-diff --git a/net/ipv4/tcp_bpf.c b/net/ipv4/tcp_bpf.c
-index 99cef92e6290..94553d2367a0 100644
---- a/net/ipv4/tcp_bpf.c
-+++ b/net/ipv4/tcp_bpf.c
-@@ -19,9 +19,6 @@ void tcp_eat_skb(struct sock *sk, struct sk_buff *skb)
- 	if (!skb || !skb->len || !sk_is_tcp(sk))
- 		return;
- 
--	if (skb_bpf_strparser(skb))
--		return;
--
- 	tcp = tcp_sk(sk);
- 	copied = tcp->copied_seq + skb->len;
- 	WRITE_ONCE(tcp->copied_seq, copied);
-@@ -578,6 +575,50 @@ static int tcp_bpf_sendmsg(struct sock *sk, struct msghdr *msg, size_t size)
- 	return copied > 0 ? copied : err;
- }
- 
-+static void sock_replace_proto_ops(struct sock *sk,
-+				   const struct proto_ops *proto_ops)
-+{
-+	if (sk->sk_socket)
-+		WRITE_ONCE(sk->sk_socket->ops, proto_ops);
-+}
-+
-+/* The tcp_bpf_read_sock() is an alternative implementation
-+ * of tcp_read_sock(), except that it does not update copied_seq.
-+ */
-+static int tcp_bpf_read_sock(struct sock *sk, read_descriptor_t *desc,
-+			     sk_read_actor_t recv_actor)
-+{
-+	struct sk_buff *skb;
-+	int copied = 0;
-+
-+	if (sk->sk_state == TCP_LISTEN)
-+		return -ENOTCONN;
-+
-+	while ((skb = skb_peek(&sk->sk_receive_queue)) != NULL) {
-+		u8 tcp_flags;
-+		int used;
-+
-+		WARN_ON_ONCE(!skb_set_owner_sk_safe(skb, sk));
-+		tcp_flags = TCP_SKB_CB(skb)->tcp_flags;
-+		used = recv_actor(desc, skb, 0, skb->len);
-+		/* strparser clone and consume all input skb
-+		 * even in waiting head or body status
-+		 */
-+		tcp_eat_recv_skb(sk, skb);
-+		if (used <= 0) {
-+			if (!copied)
-+				copied = used;
-+			break;
-+		}
-+		copied += used;
-+		if (!desc->count)
-+			break;
-+		if (tcp_flags & TCPHDR_FIN)
-+			break;
-+	}
-+	return copied;
-+}
-+
- enum {
- 	TCP_BPF_IPV4,
- 	TCP_BPF_IPV6,
-@@ -595,6 +636,10 @@ enum {
- static struct proto *tcpv6_prot_saved __read_mostly;
- static DEFINE_SPINLOCK(tcpv6_prot_lock);
- static struct proto tcp_bpf_prots[TCP_BPF_NUM_PROTS][TCP_BPF_NUM_CFGS];
-+/* we do not use 'const' here because it will be polluted later.
-+ * It may cause const check warning by script, just ignore it.
-+ */
-+static struct proto_ops tcp_bpf_proto_ops[TCP_BPF_NUM_PROTS];
- 
- static void tcp_bpf_rebuild_protos(struct proto prot[TCP_BPF_NUM_CFGS],
- 				   struct proto *base)
-@@ -615,6 +660,13 @@ static void tcp_bpf_rebuild_protos(struct proto prot[TCP_BPF_NUM_CFGS],
- 	prot[TCP_BPF_TXRX].recvmsg		= tcp_bpf_recvmsg_parser;
- }
- 
-+static void tcp_bpf_rebuild_proto_ops(struct proto_ops *ops,
-+				      const struct proto_ops *base)
-+{
-+	*ops		= *base;
-+	ops->read_sock	= tcp_bpf_read_sock;
-+}
-+
- static void tcp_bpf_check_v6_needs_rebuild(struct proto *ops)
- {
- 	if (unlikely(ops != smp_load_acquire(&tcpv6_prot_saved))) {
-@@ -627,6 +679,19 @@ static void tcp_bpf_check_v6_needs_rebuild(struct proto *ops)
- 	}
- }
- 
-+static int __init tcp_bpf_build_proto_ops(void)
-+{
-+	/* We update ops separately for further scalability
-+	 * although v4 and v6 use same ops.
-+	 */
-+	tcp_bpf_rebuild_proto_ops(&tcp_bpf_proto_ops[TCP_BPF_IPV4],
-+				  &inet_stream_ops);
-+	tcp_bpf_rebuild_proto_ops(&tcp_bpf_proto_ops[TCP_BPF_IPV6],
-+				  &inet_stream_ops);
-+	return 0;
-+}
-+late_initcall(tcp_bpf_build_proto_ops);
-+
- static int __init tcp_bpf_v4_build_proto(void)
- {
- 	tcp_bpf_rebuild_protos(tcp_bpf_prots[TCP_BPF_IPV4], &tcp_prot);
-@@ -648,6 +713,7 @@ int tcp_bpf_update_proto(struct sock *sk, struct sk_psock *psock, bool restore)
- {
- 	int family = sk->sk_family == AF_INET6 ? TCP_BPF_IPV6 : TCP_BPF_IPV4;
- 	int config = psock->progs.msg_parser   ? TCP_BPF_TX   : TCP_BPF_BASE;
-+	bool strp = psock->progs.stream_verdict && psock->progs.stream_parser;
- 
- 	if (psock->progs.stream_verdict || psock->progs.skb_verdict) {
- 		config = (config == TCP_BPF_TX) ? TCP_BPF_TXRX : TCP_BPF_RX;
-@@ -666,6 +732,7 @@ int tcp_bpf_update_proto(struct sock *sk, struct sk_psock *psock, bool restore)
- 			sk->sk_write_space = psock->saved_write_space;
- 			/* Pairs with lockless read in sk_clone_lock() */
- 			sock_replace_proto(sk, psock->sk_proto);
-+			sock_replace_proto_ops(sk, psock->sk_proto_ops);
- 		}
- 		return 0;
- 	}
-@@ -679,6 +746,10 @@ int tcp_bpf_update_proto(struct sock *sk, struct sk_psock *psock, bool restore)
- 
- 	/* Pairs with lockless read in sk_clone_lock() */
- 	sock_replace_proto(sk, &tcp_bpf_prots[family][config]);
-+
-+	if (strp)
-+		sock_replace_proto_ops(sk, &tcp_bpf_proto_ops[family]);
-+
- 	return 0;
- }
- EXPORT_SYMBOL_GPL(tcp_bpf_update_proto);
--- 
-2.43.5
-
+> Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+> ---
+>  tools/perf/util/bpf_lock_contention.c         | 50 +++++++++++++++++++
+>  .../perf/util/bpf_skel/lock_contention.bpf.c  | 28 +++++++++++
+>  tools/perf/util/bpf_skel/lock_data.h          | 12 +++++
+>  tools/perf/util/bpf_skel/vmlinux/vmlinux.h    |  8 +++
+>  4 files changed, 98 insertions(+)
+> 
+> diff --git a/tools/perf/util/bpf_lock_contention.c b/tools/perf/util/bpf_lock_contention.c
+> index 41a1ad08789511c3..558590c3111390fc 100644
+> --- a/tools/perf/util/bpf_lock_contention.c
+> +++ b/tools/perf/util/bpf_lock_contention.c
+> @@ -12,12 +12,59 @@
+>  #include <linux/zalloc.h>
+>  #include <linux/string.h>
+>  #include <bpf/bpf.h>
+> +#include <bpf/btf.h>
+>  #include <inttypes.h>
+>  
+>  #include "bpf_skel/lock_contention.skel.h"
+>  #include "bpf_skel/lock_data.h"
+>  
+>  static struct lock_contention_bpf *skel;
+> +static bool has_slab_iter;
+> +
+> +static void check_slab_cache_iter(struct lock_contention *con)
+> +{
+> +	struct btf *btf = btf__load_vmlinux_btf();
+> +	s32 ret;
+> +
+> +	if (btf == NULL) {
+> +		pr_debug("BTF loading failed: %s\n", strerror(errno));
+> +		return;
+> +	}
+> +
+> +	ret = btf__find_by_name_kind(btf, "bpf_iter__kmem_cache", BTF_KIND_STRUCT);
+> +	if (ret < 0) {
+> +		bpf_program__set_autoload(skel->progs.slab_cache_iter, false);
+> +		pr_debug("slab cache iterator is not available: %d\n", ret);
+> +		goto out;
+> +	}
+> +
+> +	has_slab_iter = true;
+> +
+> +	bpf_map__set_max_entries(skel->maps.slab_caches, con->map_nr_entries);
+> +out:
+> +	btf__free(btf);
+> +}
+> +
+> +static void run_slab_cache_iter(void)
+> +{
+> +	int fd;
+> +	char buf[256];
+> +
+> +	if (!has_slab_iter)
+> +		return;
+> +
+> +	fd = bpf_iter_create(bpf_link__fd(skel->links.slab_cache_iter));
+> +	if (fd < 0) {
+> +		pr_debug("cannot create slab cache iter: %d\n", fd);
+> +		return;
+> +	}
+> +
+> +	/* This will run the bpf program */
+> +	while (read(fd, buf, sizeof(buf)) > 0)
+> +		continue;
+> +
+> +	close(fd);
+> +}
+>  
+>  int lock_contention_prepare(struct lock_contention *con)
+>  {
+> @@ -109,6 +156,8 @@ int lock_contention_prepare(struct lock_contention *con)
+>  			skel->rodata->use_cgroup_v2 = 1;
+>  	}
+>  
+> +	check_slab_cache_iter(con);
+> +
+>  	if (lock_contention_bpf__load(skel) < 0) {
+>  		pr_err("Failed to load lock-contention BPF skeleton\n");
+>  		return -1;
+> @@ -304,6 +353,7 @@ static void account_end_timestamp(struct lock_contention *con)
+>  
+>  int lock_contention_start(void)
+>  {
+> +	run_slab_cache_iter();
+>  	skel->bss->enabled = 1;
+>  	return 0;
+>  }
+> diff --git a/tools/perf/util/bpf_skel/lock_contention.bpf.c b/tools/perf/util/bpf_skel/lock_contention.bpf.c
+> index 1069bda5d733887f..fd24ccb00faec0ba 100644
+> --- a/tools/perf/util/bpf_skel/lock_contention.bpf.c
+> +++ b/tools/perf/util/bpf_skel/lock_contention.bpf.c
+> @@ -100,6 +100,13 @@ struct {
+>  	__uint(max_entries, 1);
+>  } cgroup_filter SEC(".maps");
+>  
+> +struct {
+> +	__uint(type, BPF_MAP_TYPE_HASH);
+> +	__uint(key_size, sizeof(long));
+> +	__uint(value_size, sizeof(struct slab_cache_data));
+> +	__uint(max_entries, 1);
+> +} slab_caches SEC(".maps");
+> +
+>  struct rw_semaphore___old {
+>  	struct task_struct *owner;
+>  } __attribute__((preserve_access_index));
+> @@ -136,6 +143,8 @@ int perf_subsys_id = -1;
+>  
+>  __u64 end_ts;
+>  
+> +__u32 slab_cache_id;
+> +
+>  /* error stat */
+>  int task_fail;
+>  int stack_fail;
+> @@ -563,4 +572,23 @@ int BPF_PROG(end_timestamp)
+>  	return 0;
+>  }
+>  
+> +SEC("iter/kmem_cache")
+> +int slab_cache_iter(struct bpf_iter__kmem_cache *ctx)
+> +{
+> +	struct kmem_cache *s = ctx->s;
+> +	struct slab_cache_data d;
+> +
+> +	if (s == NULL)
+> +		return 0;
+> +
+> +	d.id = ++slab_cache_id << LCB_F_SLAB_ID_SHIFT;
+> +	bpf_probe_read_kernel_str(d.name, sizeof(d.name), s->name);
+> +
+> +	if (d.id >= LCB_F_SLAB_ID_END)
+> +		return 0;
+> +
+> +	bpf_map_update_elem(&slab_caches, &s, &d, BPF_NOEXIST);
+> +	return 0;
+> +}
+> +
+>  char LICENSE[] SEC("license") = "Dual BSD/GPL";
+> diff --git a/tools/perf/util/bpf_skel/lock_data.h b/tools/perf/util/bpf_skel/lock_data.h
+> index 4f0aae5483745dfa..c15f734d7fc4aecb 100644
+> --- a/tools/perf/util/bpf_skel/lock_data.h
+> +++ b/tools/perf/util/bpf_skel/lock_data.h
+> @@ -32,9 +32,16 @@ struct contention_task_data {
+>  #define LCD_F_MMAP_LOCK		(1U << 31)
+>  #define LCD_F_SIGHAND_LOCK	(1U << 30)
+>  
+> +#define LCB_F_SLAB_ID_SHIFT	16
+> +#define LCB_F_SLAB_ID_START	(1U << 16)
+> +#define LCB_F_SLAB_ID_END	(1U << 26)
+> +#define LCB_F_SLAB_ID_MASK	0x03FF0000U
+> +
+>  #define LCB_F_TYPE_MAX		(1U << 7)
+>  #define LCB_F_TYPE_MASK		0x0000007FU
+>  
+> +#define SLAB_NAME_MAX  28
+> +
+>  struct contention_data {
+>  	u64 total_time;
+>  	u64 min_time;
+> @@ -55,4 +62,9 @@ enum lock_class_sym {
+>  	LOCK_CLASS_RQLOCK,
+>  };
+>  
+> +struct slab_cache_data {
+> +	u32 id;
+> +	char name[SLAB_NAME_MAX];
+> +};
+> +
+>  #endif /* UTIL_BPF_SKEL_LOCK_DATA_H */
+> diff --git a/tools/perf/util/bpf_skel/vmlinux/vmlinux.h b/tools/perf/util/bpf_skel/vmlinux/vmlinux.h
+> index 4dcad7b682bdee9c..7b81d3173917fdb5 100644
+> --- a/tools/perf/util/bpf_skel/vmlinux/vmlinux.h
+> +++ b/tools/perf/util/bpf_skel/vmlinux/vmlinux.h
+> @@ -195,4 +195,12 @@ struct bpf_perf_event_data_kern {
+>   */
+>  struct rq {};
+>  
+> +struct kmem_cache {
+> +	const char *name;
+> +} __attribute__((preserve_access_index));
+> +
+> +struct bpf_iter__kmem_cache {
+> +	struct kmem_cache *s;
+> +} __attribute__((preserve_access_index));
+> +
+>  #endif // __VMLINUX_H
+> -- 
+> 2.47.0.277.g8800431eea-goog
