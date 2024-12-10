@@ -1,56 +1,72 @@
-Received: from out30-132.freemail.mail.aliyun.com (out30-132.freemail.mail.aliyun.com [115.124.30.132])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56B6C223C78;
-	Tue, 10 Dec 2024 04:09:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.132
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C33F41C6C
+	for <bpf@vger.kernel.org>; Tue, 10 Dec 2024 04:11:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733803779; cv=none; b=OhL+D5tuKy8tIr0Q1btAefmTFxjkELjoo9MLfRqvCk5+OwiPTRk1IAaazXaeXX3v1Gg1iCF0xC7vkX8KiNsIlIEe+vyQOH2tVYVE9P987EfDZSWkMaXkTEKE5sK0OTq7P5sDI3RRSSj7GG0ZmdKvBWwHbYNrM5rfFg6hvQ+2Xd8=
+	t=1733803875; cv=none; b=mn6E/80RDmXe5qJ8BQhtO28Mdh7pWQ9yHhEHelzqfrTTxWEfqYMhlcmsgRTh4jMCcB+fG7/NZIYHiFp9OAAm9pxEAWzCoIwteoM6BtTIac40S1SH8xttHS/lH9qO5kq654czT5otJpdWY5QlsdPzGK14+3leBE1Q46AoJBU+GHw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733803779; c=relaxed/simple;
-	bh=g9mkesjaUq+e5IZEottqPnsqKLrsHTRONfsXjeGbtac=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=q2QfeW/NeYsQG0+KX//70iEAWT3/hP5IA/KGA4asgYSFT21CwG8LeRX2qQjtK9yoyDfA3zxYlHO833nU3iL04A+JM3wjGKQTzNbeO5X1IBzsLfGXAkrc45q+wvVRKbsz6dBvYXbnfij5qs9f++NVelgSwKDCd2udx5S8Aem2iTs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=tBEOA5V0; arc=none smtp.client-ip=115.124.30.132
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
+	s=arc-20240116; t=1733803875; c=relaxed/simple;
+	bh=gavOXAYOXp/lMaST0Z3A+OZ9Dgubzi16F483fiqLP7M=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=tIvDCQwR+nLnTlWuhNvnLjEvUKLEDJ44BgtcCkRPDvgKoJxIu67fOEbJMxm160XSA+mnZUfQHxpCbmgZezkb9HhpPLiR34LpA/1nlasAhqpKIjM9Ic5wMM9Dzo/4gtFJ+xiB7OfucIOiwvAxd0yr9BBu4WjncYBnGimCWoYoE8o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eEC7XksG; arc=none smtp.client-ip=209.85.214.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="tBEOA5V0"
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux.alibaba.com; s=default;
-	t=1733803774; h=From:To:Subject:Date:Message-ID:MIME-Version;
-	bh=6/Q1dEfws+7LpmLlumD7UVn5idRysTZwYHoRdWNn8ws=;
-	b=tBEOA5V0JHj0eLFO1v1YHxhdfu+7Gtl6E1cohD8BYL+RB5LyCH3GO9EL2byi5/+wmg1/kyMRG6CG4RAv2El8KHdVzrCjw78QGtuk7gei7Y6v8s+9bV1qIHI+kFT4PhT1OMBjGMcoDT8Vr9823d0+nbfCgqjy6FzGoa0EVC2xi+c=
-Received: from j66a10360.sqa.eu95.tbsite.net(mailfrom:alibuda@linux.alibaba.com fp:SMTPD_---0WLDSEVj_1733803444 cluster:ay36)
-          by smtp.aliyun-inc.com;
-          Tue, 10 Dec 2024 12:04:09 +0800
-From: "D. Wythe" <alibuda@linux.alibaba.com>
-To: kgraul@linux.ibm.com,
-	wenjia@linux.ibm.com,
-	jaka@linux.ibm.com,
-	ast@kernel.org,
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eEC7XksG"
+Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-2166022c5caso11539815ad.2
+        for <bpf@vger.kernel.org>; Mon, 09 Dec 2024 20:11:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1733803873; x=1734408673; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=WVRdn8ymwDb86lYpiMqdT79OxWskdPc6YoMqevy8Q5c=;
+        b=eEC7XksGpS5dmUzGi1ikZP1kmdSvBXmtss0/vxY0G13/eK87xsfHkjBL2qc7tp32Ls
+         zIPY7j6hNuOwl5lB+zjOZIa8JTEfobWFyrj88YxQayCW8IPbx89Uxh1ein9OwVy5/dmn
+         Kk9jauAt33tblni2xuGh6dm9A8OoxA0pBMHDEo/uU4k+Pk8x2VVlR0dm2wF7FdIiPxjm
+         dcwZ3y0bc6Vz+jCf5bGnttmaCzcsDO8llJLEabJInettItpIolcTO3wYeHRAGLEUNl6T
+         jLPu1Waz80FafVkvEjuwF25aDr7iTh8DxUfuybnZLnOn63PxqA6V30+uIJiXlgnfv8Ac
+         5kug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1733803873; x=1734408673;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=WVRdn8ymwDb86lYpiMqdT79OxWskdPc6YoMqevy8Q5c=;
+        b=GlzEiKt0MDzyDdNTkdd4sQZpIDJ5s8AuwHNlhONuqdFeGTOSymV9c3fm1GiJFEvwFj
+         t/XHcF2dHiSJtFeDJ1hW0eTFiGq0lPnxT4jsBkgBNpdzJSLail3SqFEPg5Q6ANngL+Ux
+         1ZpB6QzfyhetaFG3AMOXuNn01UEQMz/0e602If+GMlgX3KaSV2+neGQkDXbGQot6X47o
+         XbgIfSWxnNHh5Kwgz0wpq9RBj6A6Ll1P2UAHhSN982bMVG8wy5rwP7CUZA7WkokcndnH
+         GqrwUOgWT6YugiTpcz4fVCLKyh2khIjNtFfUdpfXBkWm/kn95STnZHyW8aJKTgdtW1qo
+         ePMg==
+X-Gm-Message-State: AOJu0Ywz+rE87scrwqEeb4umPTDU7zQtrr4EBgdGRYUh8wwsaXXg+zPZ
+	3fJTtmqjDj8C6XQV5phwTGyUVKTDr4YAi13ueSfpoET7enAL13gzlutcjw==
+X-Gm-Gg: ASbGncsK3Ofid7zVRc9dFcyt9M8Oit+l7WxmOzm+80cjqs8ZbFN7tyB0SPl4dFBoHIX
+	2tUWDirnjdc9428gy9vM2PmtBygMR1sLGgqxP3+iNz2u5ezkPnQVj1s4HbK3W7iQr3Om7uEuiwd
+	7GBBMs3gmf6eAMiXiD0XQBhNeH9+b5oVqGuhVlZ9bd4gPQgr8jKrXu0BgY3yFwm9RPsemFtsvq1
+	/8ONHr5p0o5j3+mauILDSUKZ5it4ViDgKA3nnGUGFvmz3gu/g==
+X-Google-Smtp-Source: AGHT+IFoTLxa1SAdKK8utMX3yqDP0hR8lfNXsNwRO6+BVn9A0sx8pNbjdj9EzqUJoy8Kv5eQpyLVDw==
+X-Received: by 2002:a17:902:ced2:b0:216:4972:f8e0 with SMTP id d9443c01a7336-2164973002fmr81020995ad.44.1733803873159;
+        Mon, 09 Dec 2024 20:11:13 -0800 (PST)
+Received: from honey-badger.. ([38.34.87.7])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21631d6b3b8sm44296265ad.136.2024.12.09.20.11.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 Dec 2024 20:11:12 -0800 (PST)
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: bpf@vger.kernel.org,
+	ast@kernel.org
+Cc: andrii@kernel.org,
 	daniel@iogearbox.net,
-	andrii@kernel.org,
 	martin.lau@linux.dev,
-	pabeni@redhat.com,
-	song@kernel.org,
-	sdf@google.com,
-	haoluo@google.com,
-	yhs@fb.com,
-	edumazet@google.com,
-	john.fastabend@gmail.com,
-	kpsingh@kernel.org,
-	jolsa@kernel.org,
-	guwen@linux.alibaba.com
-Cc: kuba@kernel.org,
-	davem@davemloft.net,
-	netdev@vger.kernel.org,
-	linux-s390@vger.kernel.org,
-	linux-rdma@vger.kernel.org,
-	bpf@vger.kernel.org
-Subject: [PATCH bpf-next v2 0/5] net/smc: Introduce smc_ops
-Date: Tue, 10 Dec 2024 12:03:59 +0800
-Message-ID: <20241210040404.10606-1-alibuda@linux.alibaba.com>
-X-Mailer: git-send-email 2.45.0
+	kernel-team@fb.com,
+	yonghong.song@linux.dev,
+	mejedi@gmail.com,
+	Eduard Zingerman <eddyz87@gmail.com>
+Subject: [PATCH bpf v2 0/8] bpf: track changes_pkt_data property for global functions
+Date: Mon,  9 Dec 2024 20:10:52 -0800
+Message-ID: <20241210041100.1898468-1-eddyz87@gmail.com>
+X-Mailer: git-send-email 2.47.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -59,63 +75,81 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This patches attempt to introduce BPF injection capability for SMC,
-and add selftest to ensure code stability.
+Nick Zavaritsky reported [0] a bug in verifier, where the following
+unsafe program is not rejected:
 
-Since the SMC protocol is not suitable for all scenarios,
-especially for short-lived. For most applications, they cannot
-guarantee that there are no such scenarios at all. Therefore, apps
-may need some specific strategies to decide shall we need to use SMC
-or not, for example, apps can limit the scope of the SMC to a specific
-IP address or port.
+    __attribute__((__noinline__))
+    long skb_pull_data(struct __sk_buff *sk, __u32 len)
+    {
+        return bpf_skb_pull_data(sk, len);
+    }
 
-Based on the consideration of transparent replacement, we hope that apps
-can remain transparent even if they need to formulate some specific
-strategies for SMC using. That is, do not need to recompile their code.
+    SEC("tc")
+    int test_invalidate_checks(struct __sk_buff *sk)
+    {
+        int *p = (void *)(long)sk->data;
+        if ((void *)(p + 1) > (void *)(long)sk->data_end) return TCX_DROP;
+        skb_pull_data(sk, 0);
+        /* not safe, p is invalid after bpf_skb_pull_data call */
+        *p = 42;
+        return TCX_PASS;
+    }
 
-On the other hand, we need to ensure the scalability of strategies
-implementation. Although it is simple to use socket options or sysctl,
-it will bring more complexity to subsequent expansion.
+This happens because verifier does not track package invalidation
+effect of global sub-programs.
 
-Fortunately, BPF can solve these concerns very well, users can write
-thire own strategies in eBPF to choose whether to use SMC or not.
-And it's quite easy for them to modify their strategies in the future.
+This patch-set fixes the issue by modifying check_cfg() to compute
+whether or not each sub-program calls (directly or indirectly)
+helper invalidating packet pointers.
 
-v2:
-  1. Rename smc_bpf_ops to smc_ops.
-  2. Change the scope of smc_ops from global to per netns.
-  3. Directly pass parameters to ops instead of smc_ops_ctx.
-  4. Remove struct smc_ops_ctx.
-  5. Remove exports that are no longer needed.
+As global functions could be replaced with extension programs,
+a new field 'changes_pkt_data' is added to struct bpf_prog_aux.
+Verifier only allows replacing functions that do not change packet
+data with functions that do not change packet data.
 
-D. Wythe (5):
-  bpf: export necessary sympols for modules with struct_ops
-  net/smc: Introduce generic hook smc_ops
-  net/smc: bpf: register smc_ops info struct_ops
-  libbpf: fix error when st-prefix_ops and ops from differ btf
-  bpf/selftests: add simple selftest for bpf_smc_ops
+In case if there is a need to a have a global function that does not
+change packet data, but allow replacing it with function that does,
+the recommendation is to add a noop call to a helper, e.g.:
+- for skb do 'bpf_skb_change_proto(skb, 0, 0)';
+- for xdp do 'bpf_xdp_adjust_meta(xdp, 0)'.
 
- include/net/netns/smc.h                       |   3 +
- include/net/smc.h                             |  51 ++++++
- kernel/bpf/bpf_struct_ops.c                   |   2 +
- kernel/bpf/syscall.c                          |   1 +
- net/ipv4/tcp_output.c                         |  15 +-
- net/smc/Kconfig                               |  12 ++
- net/smc/Makefile                              |   1 +
- net/smc/af_smc.c                              |  10 ++
- net/smc/smc_ops.c                             | 150 ++++++++++++++++++
- net/smc/smc_ops.h                             |  31 ++++
- net/smc/smc_sysctl.c                          |  95 +++++++++++
- tools/lib/bpf/libbpf.c                        |  34 +++-
- tools/testing/selftests/bpf/config            |   3 +
- .../selftests/bpf/prog_tests/test_bpf_smc.c   |  25 +++
- tools/testing/selftests/bpf/progs/bpf_smc.c   |  27 ++++
- 15 files changed, 453 insertions(+), 7 deletions(-)
- create mode 100644 net/smc/smc_ops.c
- create mode 100644 net/smc/smc_ops.h
- create mode 100644 tools/testing/selftests/bpf/prog_tests/test_bpf_smc.c
- create mode 100644 tools/testing/selftests/bpf/progs/bpf_smc.c
+Functions also can do tail calls. Effects of the tail call cannot be
+analyzed before-hand, thus verifier assumes that tail calls always
+change packet data.
+
+Changes v1 [1] -> v2:
+- added handling of extension programs and tail calls
+  (thanks, Alexei, for all the input).
+
+[0] https://lore.kernel.org/bpf/0498CA22-5779-4767-9C0C-A9515CEA711F@gmail.com/
+[1] https://lore.kernel.org/bpf/20241206040307.568065-1-eddyz87@gmail.com/
+
+Eduard Zingerman (8):
+  bpf: add find_containing_subprog() utility function
+  bpf: refactor bpf_helper_changes_pkt_data to use helper number
+  bpf: track changes_pkt_data property for global functions
+  selftests/bpf: test for changing packet data from global functions
+  bpf: check changes_pkt_data property for extension programs
+  selftests/bpf: freplace tests for tracking of changes_packet_data
+  bpf: consider that tail calls invalidate packet pointers
+  selftests/bpf: validate that tail call invalidates packet pointers
+
+ include/linux/bpf.h                           |  1 +
+ include/linux/bpf_verifier.h                  |  1 +
+ include/linux/filter.h                        |  2 +-
+ kernel/bpf/core.c                             |  2 +-
+ kernel/bpf/verifier.c                         | 78 ++++++++++++++++---
+ net/core/filter.c                             | 65 +++++++---------
+ .../bpf/prog_tests/changes_pkt_data.c         | 76 ++++++++++++++++++
+ .../selftests/bpf/progs/changes_pkt_data.c    | 26 +++++++
+ .../bpf/progs/changes_pkt_data_freplace.c     | 18 +++++
+ .../testing/selftests/bpf/progs/tc_bpf2bpf.c  |  2 +
+ .../selftests/bpf/progs/verifier_sock.c       | 56 +++++++++++++
+ 11 files changed, 280 insertions(+), 47 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/changes_pkt_data.c
+ create mode 100644 tools/testing/selftests/bpf/progs/changes_pkt_data.c
+ create mode 100644 tools/testing/selftests/bpf/progs/changes_pkt_data_freplace.c
 
 -- 
-2.45.0
+2.47.0
 
