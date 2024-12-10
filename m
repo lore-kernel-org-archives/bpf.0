@@ -1,56 +1,57 @@
-Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9337723ED78
-	for <bpf@vger.kernel.org>; Tue, 10 Dec 2024 21:53:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CBD41EE7A1
+	for <bpf@vger.kernel.org>; Tue, 10 Dec 2024 22:06:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733867640; cv=none; b=A3lfthJuTF2pfVrQ9yLEW7A1YwtMJLh9wLzKudF9J3edxZqtLiDRwzRsr7NjLLYWnZHRpMb7EGjFnZzpbbRqN24/tdsqHDBagcN51s7vAbsSGlIY9weQCkimVM2RbYoUFRgwKF9vQZRZ2HPQwrSrwAwGETPQnvsq61r2JXVKtNI=
+	t=1733868407; cv=none; b=OthZxA4j2+1HUtgbxF1AcwDhXIkEhogBxHUhJI1koy9IFO+CcK5bR6bJQCcE58053Zy9oJ3yhzrc8AxrLfl/y4bryO2dTgIevNNy9HyrvdnaTvR2c0i1dlpNJnxeQCwm7UrcGYVj/vW7U3H5OK5KQ2DyW6PjuKe9aYqUZZ4JPLw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733867640; c=relaxed/simple;
-	bh=nU6L/6q4fycGnb1IfLNF6RjJrVjEHLRk43yjWb/OKv4=;
+	s=arc-20240116; t=1733868407; c=relaxed/simple;
+	bh=kTXkMeyaSbg7ZJvce8GgCpBi8Y5Nmyiexlx6P1LNAgA=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=jLUhA0U8OromrKb7HYYFKzVu1V7TlJWcd7kRbTLj9ql1xrfkZAZyJH1XQ9h2AWuJcRMjvR6ECnr/hO+NsNOXkVy+sLh0bJsW2M9HOA+EfTqkLFoK8w2j+1dTZH7+m/Wt2aPGVp2fLesT/bZAry8BStVuO/ukGxsizaSjbpQR9UY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VhkS4mjA; arc=none smtp.client-ip=209.85.221.43
+	 To:Cc:Content-Type; b=gC25dmXXXEHqIG5gAy+i9zX0/nMCBw4bAA5Cod0KtzKWbB+rnGfI8UyKYXLqF8mfxPRlCm136URXVNwQjtBdQ2h7qtAn0AzfG+aED1x+Qj7/+BmBhCJeddmPMARXAcFkimHgZ3f4HHUU+H5fdlVWryeo4O9Q2/4PO/wKwpMEo1c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gAboepKK; arc=none smtp.client-ip=209.85.221.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VhkS4mjA"
-Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-382610c7116so3149128f8f.0
-        for <bpf@vger.kernel.org>; Tue, 10 Dec 2024 13:53:58 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gAboepKK"
+Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-385e3621518so3955243f8f.1
+        for <bpf@vger.kernel.org>; Tue, 10 Dec 2024 14:06:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1733867637; x=1734472437; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1733868404; x=1734473204; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=nU6L/6q4fycGnb1IfLNF6RjJrVjEHLRk43yjWb/OKv4=;
-        b=VhkS4mjAnaVmOL5m2O/KGmUClFuaBYn/IQrxaOGs6dpF0JBz0nu+RRqye2VC36D0vB
-         aBoKIlpzsBDf9HZiEAVJyLIKrOJaRALYv9vM0FZkDhBsFtBa8ilZ/FQSOGs9NF9ll0Vn
-         PJsubx4OMgP3dUd1fd+dXiDq1mFZaxkynKEZUdsPBD/h4kLdLUtREWZKb1u8a+HYqXqf
-         IDd8EToDfm94XIkxdkLl88n03OUcXyBqIikV1eAk6ZtiwBNaxfKikETtcFxHm/7fi2IM
-         t0mLnQUPXAe4IwULn9PwnkQzEbaCeeOYorDriL6jU7BKCCP1q5nLe23s5uXVV3zxV+qr
-         feSQ==
+        bh=J7r/ujUSA8WI6llNNMSkcXsP+FVbV3O9MXAN4gtJ0t4=;
+        b=gAboepKKolsgWxkterZa4h5ONtzflsnLiYLKB3SunyY6yRrJk8PHQ5ErDPqxYEZDoW
+         sv1Gp6dV4fiVN+PjFmWra0izUeezzWjjsfe5boV+14DvESf/vAATrvvP0EwxcKg0a6wW
+         abRo7hdZo9VduQBH/yPky9yAaho2WEFDOhg4oSiLJ0QIf23iq9U5SiKOmqSgrEjITQMB
+         xFz1cU5XCj3ynJtYNFAx7Gdpxq371oFeqd3C/KjS0agPIFk+/xgxzZY9344Xm8sW3JXE
+         ESnMf1pw+ak85eqXaDilzJkHupHz7crXI+A3JstB+eNFueFIsojSFPhC1TtAIYkXvSy4
+         qywg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733867637; x=1734472437;
+        d=1e100.net; s=20230601; t=1733868404; x=1734473204;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=nU6L/6q4fycGnb1IfLNF6RjJrVjEHLRk43yjWb/OKv4=;
-        b=pumvVP/H2FAN602R1mlRvid6i2320rXLMh6315GyjmZbZpXV5u9YH6bw2/uvpJeMYw
-         OsOD9gW8leFhLsNRTAC5Zfg2FK9OLDROKWEIRUF4B5k7ibmWIOD6kSMZuaXZn0bo8lf5
-         aNqfilO/17+Xc5J/AOuRpZKfL1pcGCr7/tJ59SIJaAoaqLiJt3GQdR4HFknzL5J6ShiT
-         R4M7ygjwASDBIId9Cx4NlPHOsNmVewqGRz52WbpPSfeFlyiVBQ0ZKbX5///CMsYlpPXO
-         xAY3zWKCQ8nbUUL4byK6/Bt4rIKOVcNlrQEvbzwfJrEj6/76fMgZHrxp1BE2VwDd48K7
-         OKpQ==
-X-Gm-Message-State: AOJu0Ywrkngs8avXwjnB6chk3PmAKXmvWNZhdZ7rjaqPJJDljHz4PZpU
-	sr03UJ6YkBUc2+OS+gjrH4c1xGEsDjxDECmO+at44axltNgzW+Gvx55AH1OcCNbeoicNylz2zwJ
-	vksmLof5qE2oiSzjEpKMTZ3xLdKw=
-X-Gm-Gg: ASbGncs+X6Pun2DzNigEPchSXrnMb+mNfCBF00bWcPdbP6Updz1g8HbAGTMMjpIpVv+
-	pv7K55O/5ZircK6huTV5Dd7b1voyLtWvhjBkzlUFwktMhlSuNLJ8=
-X-Google-Smtp-Source: AGHT+IH9Pnj16gzbnddOYI8nZHGvVHzysHGw9SWtsSIM0/9Jl5uCgv9FIGEWbyDEn37isp/TeHJEEhEhsPkUSXMfSXo=
-X-Received: by 2002:a5d:64cf:0:b0:386:39fd:5ec with SMTP id
- ffacd0b85a97d-3864cea567cmr398753f8f.57.1733867636768; Tue, 10 Dec 2024
- 13:53:56 -0800 (PST)
+        bh=J7r/ujUSA8WI6llNNMSkcXsP+FVbV3O9MXAN4gtJ0t4=;
+        b=aeqzwKIdmu44Hn9SA9FxzNkBlHiBQImCTWLFmfEFKVa3fhAvBradsZNWWxxjL2/Gxk
+         cMieV4IE+oSJvv4zAAPKX73GwmtLR2RoQ/IMTO9F1lE1WqzB2EaXMzCOEAbAtMC17MJX
+         JjRnmZhbEkGW1WkPAU+22jjQ7/zedEEuWBNxNOGxjkmB1DyFlj0gup1V+AxtZcXxAQ6H
+         ry3ulcArhlgPtmwtuwXO0yyrFPL63mwzN0b/X1D9x8Afs3lCya6Hj6csyTfDTL4Jp4uH
+         FzxU2f9OlKQCO6zb8l9ZowdCVCGn9Iows01tZKQeIhYbLETFsZiD28tWvZoBKYzeHk5v
+         j4Rw==
+X-Forwarded-Encrypted: i=1; AJvYcCXGy/Vg7QKLQi+PapJCdBS4YLfRcboSAA0cslXEf3DENQpb8MzvJWmjHefy99XDdFxbUxg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzN97TM3xB7KveBUWrG+BjnUwHoJmioJKq5wzbVTEFhh7UlO5Kr
+	M3EvIH8dwoyWcIoS95ZKBS4J5yssURws005PxCtO5PniZafUav+fPMLv9AVbMXGo4dWrx0+8U/x
+	LP8nbfbrE2z8rjwWm4uP83Y8zCeY=
+X-Gm-Gg: ASbGncvxmODet6hnHizr0rXVW3L7Bmzj5j184XHTVjl3fMbypXJAdvKXGhNOrgJlKtm
+	fWFQvR7ZVojMxU2IfhA17CyWTFerPQRZz23Nblxq4fMAKJZ4uUD0=
+X-Google-Smtp-Source: AGHT+IGDmmtb22UuyrBBvK3V9jG5ErcHX3MG2LurkjPVBWfp7ZCC778kP32UIzbrh9Bl9mOTwwrvDvEwrjFZRM3ZrBU=
+X-Received: by 2002:a5d:5849:0:b0:385:f6c7:90c6 with SMTP id
+ ffacd0b85a97d-3864ce55a98mr519902f8f.20.1733868404233; Tue, 10 Dec 2024
+ 14:06:44 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -58,74 +59,116 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 References: <20241210023936.46871-1-alexei.starovoitov@gmail.com>
- <20241210023936.46871-2-alexei.starovoitov@gmail.com> <20241210090136.DGfYLmeo@linutronix.de>
-In-Reply-To: <20241210090136.DGfYLmeo@linutronix.de>
+ <20241210023936.46871-2-alexei.starovoitov@gmail.com> <Z1fSMhHdSTpurYCW@casper.infradead.org>
+ <Z1gEUmHkF1ikgbor@tiehlicka>
+In-Reply-To: <Z1gEUmHkF1ikgbor@tiehlicka>
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Tue, 10 Dec 2024 13:53:44 -0800
-Message-ID: <CAADnVQK_oFD9+HbcEgqy0+JMygje8fB9qdhkJ5uoofQntZoywg@mail.gmail.com>
+Date: Tue, 10 Dec 2024 14:06:32 -0800
+Message-ID: <CAADnVQKj40zerCcfcLwXOTcL+13rYzrraxWABRSRQcPswz6Brw@mail.gmail.com>
 Subject: Re: [PATCH bpf-next v2 1/6] mm, bpf: Introduce __GFP_TRYLOCK for
  opportunistic page allocation
-To: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc: bpf <bpf@vger.kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Andrew Morton <akpm@linux-foundation.org>, 
-	Peter Zijlstra <peterz@infradead.org>, Vlastimil Babka <vbabka@suse.cz>, 
+To: Michal Hocko <mhocko@suse.com>
+Cc: Matthew Wilcox <willy@infradead.org>, bpf <bpf@vger.kernel.org>, 
+	Andrii Nakryiko <andrii@kernel.org>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, Peter Zijlstra <peterz@infradead.org>, 
+	Vlastimil Babka <vbabka@suse.cz>, Sebastian Sewior <bigeasy@linutronix.de>, 
 	Steven Rostedt <rostedt@goodmis.org>, Hou Tao <houtao1@huawei.com>, 
-	Johannes Weiner <hannes@cmpxchg.org>, shakeel.butt@linux.dev, Michal Hocko <mhocko@suse.com>, 
-	Matthew Wilcox <willy@infradead.org>, Thomas Gleixner <tglx@linutronix.de>, Tejun Heo <tj@kernel.org>, 
-	linux-mm <linux-mm@kvack.org>, Kernel Team <kernel-team@fb.com>
+	Johannes Weiner <hannes@cmpxchg.org>, shakeel.butt@linux.dev, 
+	Thomas Gleixner <tglx@linutronix.de>, Tejun Heo <tj@kernel.org>, linux-mm <linux-mm@kvack.org>, 
+	Kernel Team <kernel-team@fb.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Dec 10, 2024 at 1:01=E2=80=AFAM Sebastian Andrzej Siewior
-<bigeasy@linutronix.de> wrote:
+On Tue, Dec 10, 2024 at 1:05=E2=80=AFAM Michal Hocko <mhocko@suse.com> wrot=
+e:
 >
-> On 2024-12-09 18:39:31 [-0800], Alexei Starovoitov wrote:
-> > From: Alexei Starovoitov <ast@kernel.org>
+> On Tue 10-12-24 05:31:30, Matthew Wilcox wrote:
+> > On Mon, Dec 09, 2024 at 06:39:31PM -0800, Alexei Starovoitov wrote:
+> > > +   if (preemptible() && !rcu_preempt_depth())
+> > > +           return alloc_pages_node_noprof(nid,
+> > > +                                          GFP_NOWAIT | __GFP_ZERO,
+> > > +                                          order);
+> > > +   return alloc_pages_node_noprof(nid,
+> > > +                                  __GFP_TRYLOCK | __GFP_NOWARN | __G=
+FP_ZERO,
+> > > +                                  order);
 > >
-> > Tracing BPF programs execute from tracepoints and kprobes where running
-> > context is unknown, but they need to request additional memory.
-> > The prior workarounds were using pre-allocated memory and BPF specific
-> > freelists to satisfy such allocation requests. Instead, introduce
-> > __GFP_TRYLOCK flag that makes page allocator accessible from any contex=
-t.
-> > It relies on percpu free list of pages that rmqueue_pcplist() should be
-> > able to pop the page from. If it fails (due to IRQ re-entrancy or list
-> > being empty) then try_alloc_pages() attempts to spin_trylock zone->lock
-> > and refill percpu freelist as normal.
-> > BPF program may execute with IRQs disabled and zone->lock is sleeping i=
-n RT,
-> > so trylock is the only option.
+> > [...]
+> >
+> > > @@ -4009,7 +4018,7 @@ gfp_to_alloc_flags(gfp_t gfp_mask, unsigned int=
+ order)
+> > >      * set both ALLOC_NON_BLOCK and ALLOC_MIN_RESERVE(__GFP_HIGH).
+> > >      */
+> > >     alloc_flags |=3D (__force int)
+> > > -           (gfp_mask & (__GFP_HIGH | __GFP_KSWAPD_RECLAIM));
+> > > +           (gfp_mask & (__GFP_HIGH | __GFP_KSWAPD_RECLAIM | __GFP_TR=
+YLOCK));
+> >
+> > It's not quite clear to me that we need __GFP_TRYLOCK to implement this=
+.
+> > I was originally wondering if this wasn't a memalloc_nolock_save() /
+> > memalloc_nolock_restore() situation (akin to memalloc_nofs_save/restore=
+),
+> > but I wonder if we can simply do:
+> >
+> >       if (!preemptible() || rcu_preempt_depth())
+> >               alloc_flags |=3D ALLOC_TRYLOCK;
 >
-> The __GFP_TRYLOCK flag looks reasonable given the challenges for BPF
-> where it is not known how much memory will be needed and what the
-> calling context is.
+> preemptible is unusable without CONFIG_PREEMPT_COUNT but I do agree that
+> __GFP_TRYLOCK is not really a preferred way to go forward. For 3
+> reasons.
+>
+> First I do not really like the name as it tells what it does rather than
+> how it should be used. This is a general pattern of many gfp flags
+> unfotrunatelly and historically it has turned out error prone. If a gfp
+> flag is really needed then something like __GFP_ANY_CONTEXT should be
+> used.  If the current implementation requires to use try_lock for
+> zone->lock or other changes is not an implementation detail but the user
+> should have a clear understanding that allocation is allowed from any
+> context (NMI, IRQ or otherwise atomic contexts).
 
-Exactly.
+__GFP_ANY_CONTEXT would make sense if we wanted to make it available
+for all kernel users. In this case I agree with Sebastian.
+This is bpf specific feature, since it doesn't know the context.
+All other kernel users should pick GFP_KERNEL or ATOMIC or NOWAIT.
+Exposing GFP_ANY_CONTEXT to all may lead to sloppy code in drivers
+and elsewhere.
 
-> I hope it does not spread across the kernel where
-> people do ATOMIC in preempt/ IRQ-off on PREEMPT_RT and then once they
-> learn that this does not work, add this flag to the mix to make it work
-> without spending some time on reworking it.
+> Is there any reason why GFP_ATOMIC cannot be extended to support new
+> contexts? This allocation mode is already documented to be usable from
+> atomic contexts except from NMI and raw_spinlocks. But is it feasible to
+> extend the current implementation to use only trylock on zone->lock if
+> called from in_nmi() to reduce unexpected failures on contention for
+> existing users?
 
-We can call it __GFP_BPF to discourage any other usage,
-but that seems like an odd "solution" to code review problem.
-If people start using __GFP_TRYLOCK just to shut up lockdep splats
-they will soon realize that it's an _oportunistic_ allocator.
-bpf doesn't need more than a page and single page will likely
-will be found in percpu free page pool, so this opportunistic approach
-will work most of the time for bpf, but unlikely for others
-that need order >=3D PAGE_ALLOC_COSTLY_ORDER (3).
+No. in_nmi() doesn't help. It's the lack of reentrance of slab and page
+allocator that is an issue.
+The page alloctor might grab zone lock. In !RT it will disable irqs.
+In RT will stay sleepable. Both paths will be calling other
+kernel code including tracepoints, potential kprobes, etc
+and bpf prog may be attached somewhere.
+If it calls alloc_page() it may deadlock on zone->lock.
+pcpu lock is thankfully trylock already.
+So !irqs_disabled() part of preemptible() guarantees that
+zone->lock won't deadlock in !RT.
+And rcu_preempt_depth() case just steers bpf into try lock only path in RT.
+Since there is no way to tell whether it's safe to call
+sleepable spin_lock(&zone->lock).
 
-> Side note: I am in the process of hopefully getting rid of the
-> preempt_disable() from trace points. What remains then is attaching BPF
-> programs to any code/ function with a raw_spinlock_t and I am not yet
-> sure what to do here.
+>
+> Third, do we even want such a strong guarantee in the generic page
+> allocator path and make it even more complex and harder to maintain?
 
-That won't help the bpf core.
-There are tracepoints that are called after preemption is disabled.
-The worst is trace_contention_begin() and people have good reasons
-to attach bpf prog there to collect contention stats.
-In such case bpf prog has no idea what kind of spin_lock is contending.
-It might have disabled preemption and/or irqs before getting to
-that tracepoint. So removal of preempt_disable from tracepoint
-handling logic doesn't help bpf core. It's a good thing to do anyway.
+I'm happy to add myself as R: or M: for trylock bits,
+since that will be a fundamental building block for bpf.
+
+> We
+> already have a precence in form of __alloc_pages_bulk which is a special
+> case allocator mode living outside of the page allocator path. It seems
+> that it covers most of your requirements except the fallback to the
+> regular allocation path AFAICS. Is this something you could piggy back
+> on?
+
+__alloc_pages_bulk() has all the same issues. It takes locks.
+Also it doesn't support GFP_ACCOUNT which is a show stopper.
+All bpf allocations are going through memcg.
