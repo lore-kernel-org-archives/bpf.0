@@ -1,85 +1,59 @@
-Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out30-118.freemail.mail.aliyun.com (out30-118.freemail.mail.aliyun.com [115.124.30.118])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFFE127456
-	for <bpf@vger.kernel.org>; Tue, 10 Dec 2024 02:40:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 123394EB48;
+	Tue, 10 Dec 2024 04:04:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.118
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733798412; cv=none; b=Q/VQQOQVV8ULyF4e7Ms0is3g1pTIG9yYXVHyhFhi5tZCKhh16+aEybFnN1UqzgR0gf2sXoc8mWUOuTtvVtEvXnOYXoDJTSE7SnNAFvctvw8AF6wB4rDkoXNo18PXD2KGsSRMXNYUvbEDr/1D+86xdrrYdcr7ebmrkV+UDpqhiSc=
+	t=1733803457; cv=none; b=mxdKILoomurkKDMFAvyg/CJqxsfIgOV8nr+BaPFAxUtASblF2R15zGDbdU3NERu2Htb536xbDNu3m5TdM46Sdhwl8PqfPzDKm4/YbY+lrEBsdAVDKWCEIKwxTkBWb9i9FgRou4FdMPetpELGltHM246ZHwPyWSjSp8uZ71DodG8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733798412; c=relaxed/simple;
-	bh=JR613i1llUMzESxxaqycZ9MjvkFCwoZDaJ+9bxjM9vk=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=YrwrVeHM1SV78BnGrpHmOROnWIh6sEe1aitqoXZcj2cNLTdCbii6MXdhdS2d1SWYuZXnxQT6tTioS0jCGOJ1PczBZFi9dEy9K8xBvO13TQoe3JMZtUSp2vExaJ45mtcXtlKBEFxRPuU8JBcXmJY5FFLsvtpV7rIIngSMOGu3iko=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fSltBbeG; arc=none smtp.client-ip=209.85.215.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1733803457; c=relaxed/simple;
+	bh=8Me0+ORdUwnQJJZusQP7gsBibbKOgKoUBm5L+YNIMj0=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=qXKkKB32PC2JxTnMORP+cyw8WwEsK5Dn3C/mxve5GzMgfsf5hAZRJUZ0Jq49n5intLzZu3t7PJk1mAULs9+JVABMbDlyulopoo1o6+3PHhqEldKmGXXTk2FiVH/XjS74SUvRRyaKBVAVvOWusgvYTqZlz7AcWO/6C4DXir9GhvQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=sxlmZFw7; arc=none smtp.client-ip=115.124.30.118
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fSltBbeG"
-Received: by mail-pg1-f177.google.com with SMTP id 41be03b00d2f7-7feb6871730so308291a12.2
-        for <bpf@vger.kernel.org>; Mon, 09 Dec 2024 18:40:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1733798409; x=1734403209; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=uiTKIgIWEw4pjiXWRJupFp29ffG8tRf5Pk0epbA95Ok=;
-        b=fSltBbeGvVjaiUwSeXJgCVW+e/QifyesUDhVGYu+wGA0E/gKR7vb00BKIzZg3CL/hY
-         2Zg2llFP24OgFB1gXYNNssAXfS/7N34qKla09XCmfsC8vPFuzCsghluJ3gxNfH4mFjmE
-         UlxFRLL4dR/Lp/R0AzUFGcO8MhmYxn40lszgx2tcKPAL07bIsN2aCJBz/5fS7UrOVs/f
-         K9EMhcD6aL/FdlIghQR+boAtNFjfZF+Z6rcxWtOgICUf0ewgi1GDCx+iQecxFs7noGYv
-         ml0p3VgVjx+Ms2pV9JXtV7cEVRy9cm2pBIgHu4Z0uzzs/X9TYTB6GQMWtLMIv8lf2k0r
-         uvZw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733798409; x=1734403209;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=uiTKIgIWEw4pjiXWRJupFp29ffG8tRf5Pk0epbA95Ok=;
-        b=xE1LWmw6go1XmV1/ZEu7ohIcOs3IgnW4evAS5/sXgFVisFOVw49IQNnDVvFq+ZQ+d8
-         5524naTPmihPCjJiA6oUzC1YmnTqWj1IQqwoOj+KZd6RuwaIv8Eigps0+va1sy8Ax/pN
-         cVvhqUqMQ9XMVQFocTJ23KMSqKyo3vwrZJP3r+B7fSop7U3678DJ61C2I90qhXrQgYnb
-         gukYpqSOuQe6Y7xdyMV/vLkkefJ+3Epi09M+LjH93o4UNLeecZ0RluQ0FOapzDeRpppH
-         Y48TM9dN8YyZCnDrTbb97CxhqtLLwCmIzuH3o5RaGrs3x07jMiN6hXLbixkXTB9PcRRq
-         AMHw==
-X-Gm-Message-State: AOJu0Yz0PZiABbm8LdlHSyaKVdUF9tehO89gR6biPrbLx81pKG0M8+3z
-	aFi/4oR5wHCMwiPpiD04WTEo1r8UTWWkl6tughUwpPzSQ7a0VcX9LDkYbA==
-X-Gm-Gg: ASbGncu0ogAtTUpA4EYuneCoWdAwKo4juvl+Nj+rQ4UfKO/9iCxqVCjunmr+kXh3t4A
-	bn4WF+5IIa2umcPaY00ql5om377czXUznmwIWrbFCdgs988Hu22dGQWSQI2l2dg3T0rjYaAwabb
-	QF43HtsLRP7hwK6nfh6amH0wsjzheLNIHjgpr711JUdl2F43hJGWuutybzTnBUyCMh0ahY0wE0T
-	FrixCTdDMhAJ/vQBxQbHSDy1kGzojZiQEGvBdzr7tmhHkvxmUfBtJEDJEydWcDVVt7Aj0KKmzdu
-	D3f55w==
-X-Google-Smtp-Source: AGHT+IEyaw7MLXSrpLiOPJxXq3UM5b+L21nSTK6Jj0nYt9CgSbssrgPTsovcJ8e9A4v907+avThj1Q==
-X-Received: by 2002:a17:90b:3847:b0:2ee:c4f2:a77d with SMTP id 98e67ed59e1d1-2efcf16f547mr3957084a91.21.1733798409404;
-        Mon, 09 Dec 2024 18:40:09 -0800 (PST)
-Received: from localhost.localdomain ([2620:10d:c090:400::5:83b0])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2ef1e920587sm8088928a91.1.2024.12.09.18.40.06
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Mon, 09 Dec 2024 18:40:09 -0800 (PST)
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To: bpf@vger.kernel.org
-Cc: andrii@kernel.org,
-	memxor@gmail.com,
-	akpm@linux-foundation.org,
-	peterz@infradead.org,
-	vbabka@suse.cz,
-	bigeasy@linutronix.de,
-	rostedt@goodmis.org,
-	houtao1@huawei.com,
-	hannes@cmpxchg.org,
-	shakeel.butt@linux.dev,
-	mhocko@suse.com,
-	willy@infradead.org,
-	tglx@linutronix.de,
-	tj@kernel.org,
-	linux-mm@kvack.org,
-	kernel-team@fb.com
-Subject: [PATCH bpf-next v2 6/6] bpf: Use try_alloc_pages() to allocate pages for bpf needs.
-Date: Mon,  9 Dec 2024 18:39:36 -0800
-Message-Id: <20241210023936.46871-7-alexei.starovoitov@gmail.com>
-X-Mailer: git-send-email 2.39.5 (Apple Git-154)
-In-Reply-To: <20241210023936.46871-1-alexei.starovoitov@gmail.com>
-References: <20241210023936.46871-1-alexei.starovoitov@gmail.com>
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="sxlmZFw7"
+DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux.alibaba.com; s=default;
+	t=1733803452; h=From:To:Subject:Date:Message-ID:MIME-Version;
+	bh=GAH1Lz6yySHh0akD6UjVzqvmSG58TUkUU80VrEvWcyY=;
+	b=sxlmZFw7s6VzJfVmzdCfdKQImSPYnNajXlQuwK1YZA3kyit6qSdUXptcwxPfQd9zBMJyVm9KZrWZpHQXwSnfFmod59oIy0ucs6OPhtaWJuYINfC1cB5KeDYZUtuurZqEiXy7geF82SGH8RsErALM3yN0tK0NzkyzkLK3muZjWJU=
+Received: from j66a10360.sqa.eu95.tbsite.net(mailfrom:alibuda@linux.alibaba.com fp:SMTPD_---0WLDSEXv_1733803449 cluster:ay36)
+          by smtp.aliyun-inc.com;
+          Tue, 10 Dec 2024 12:04:10 +0800
+From: "D. Wythe" <alibuda@linux.alibaba.com>
+To: kgraul@linux.ibm.com,
+	wenjia@linux.ibm.com,
+	jaka@linux.ibm.com,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	martin.lau@linux.dev,
+	pabeni@redhat.com,
+	song@kernel.org,
+	sdf@google.com,
+	haoluo@google.com,
+	yhs@fb.com,
+	edumazet@google.com,
+	john.fastabend@gmail.com,
+	kpsingh@kernel.org,
+	jolsa@kernel.org,
+	guwen@linux.alibaba.com
+Cc: kuba@kernel.org,
+	davem@davemloft.net,
+	netdev@vger.kernel.org,
+	linux-s390@vger.kernel.org,
+	linux-rdma@vger.kernel.org,
+	bpf@vger.kernel.org
+Subject: [PATCH bpf-next v2 1/5] bpf: export necessary sympols for modules with struct_ops
+Date: Tue, 10 Dec 2024 12:04:00 +0800
+Message-ID: <20241210040404.10606-2-alibuda@linux.alibaba.com>
+X-Mailer: git-send-email 2.45.0
+In-Reply-To: <20241210040404.10606-1-alibuda@linux.alibaba.com>
+References: <20241210040404.10606-1-alibuda@linux.alibaba.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -88,36 +62,54 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Alexei Starovoitov <ast@kernel.org>
+Exports three necessary symbols for implementing struct_ops with
+tristate subsystem.
 
-Use try_alloc_pages() and free_pages_nolock()
+To hold or release refcnt of struct_ops refcnt by inline funcs
+bpf_try_module_get and bpf_module_put which use bpf_struct_ops_get(put)
+conditionally.
 
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+And to copy obj name from one to the other with effective checks by
+bpf_obj_name_cpy.
+
+Signed-off-by: D. Wythe <alibuda@linux.alibaba.com>
 ---
- kernel/bpf/syscall.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ kernel/bpf/bpf_struct_ops.c | 2 ++
+ kernel/bpf/syscall.c        | 1 +
+ 2 files changed, 3 insertions(+)
 
+diff --git a/kernel/bpf/bpf_struct_ops.c b/kernel/bpf/bpf_struct_ops.c
+index 606efe32485a..00c212e0ad39 100644
+--- a/kernel/bpf/bpf_struct_ops.c
++++ b/kernel/bpf/bpf_struct_ops.c
+@@ -1119,6 +1119,7 @@ bool bpf_struct_ops_get(const void *kdata)
+ 	map = __bpf_map_inc_not_zero(&st_map->map, false);
+ 	return !IS_ERR(map);
+ }
++EXPORT_SYMBOL_GPL(bpf_struct_ops_get);
+ 
+ void bpf_struct_ops_put(const void *kdata)
+ {
+@@ -1130,6 +1131,7 @@ void bpf_struct_ops_put(const void *kdata)
+ 
+ 	bpf_map_put(&st_map->map);
+ }
++EXPORT_SYMBOL_GPL(bpf_struct_ops_put);
+ 
+ int bpf_struct_ops_supported(const struct bpf_struct_ops *st_ops, u32 moff)
+ {
 diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index 5684e8ce132d..70589208b545 100644
+index 5684e8ce132d..62238ec989dc 100644
 --- a/kernel/bpf/syscall.c
 +++ b/kernel/bpf/syscall.c
-@@ -582,14 +582,14 @@ int bpf_map_alloc_pages(const struct bpf_map *map, gfp_t gfp, int nid,
- 	old_memcg = set_active_memcg(memcg);
- #endif
- 	for (i = 0; i < nr_pages; i++) {
--		pg = alloc_pages_node(nid, gfp | __GFP_ACCOUNT, 0);
-+		pg = try_alloc_pages(nid, 0);
+@@ -1167,6 +1167,7 @@ int bpf_obj_name_cpy(char *dst, const char *src, unsigned int size)
  
- 		if (pg) {
- 			pages[i] = pg;
- 			continue;
- 		}
- 		for (j = 0; j < i; j++)
--			__free_page(pages[j]);
-+			free_pages_nolock(pages[j], 0);
- 		ret = -ENOMEM;
- 		break;
- 	}
+ 	return src - orig_src;
+ }
++EXPORT_SYMBOL_GPL(bpf_obj_name_cpy);
+ 
+ int map_check_no_btf(const struct bpf_map *map,
+ 		     const struct btf *btf,
 -- 
-2.43.5
+2.45.0
 
