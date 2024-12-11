@@ -1,317 +1,215 @@
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E9301DDC28
-	for <bpf@vger.kernel.org>; Wed, 11 Dec 2024 16:40:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.153.30
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733935254; cv=none; b=MBkXCNYUJ8YxbHuA8lBtHTh7CC3XHqu5reLPc8jDJvzN5WygEFR2BO7WGuJS9Ihz+ikveRgDW1l4j85Ww6vU/AIV5/dqHee1XSJ4Vh7fSOLs9Kbfxhr1xZAwAfxCG9WuGtCDbsRju2Mm+lGDAETs08yPSmiKyZonxFLAs31FwSM=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733935254; c=relaxed/simple;
-	bh=UGqooN44QP0yvvkU4awbg/Jj59nn91kEbkUTd45bC84=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ttQJ5mJjyhPsNFNZpGWnyYCO+U3jRcIYBuWwKE1GOj4a5MCxOjSh2MQJU+cKAcG8gnOIdCweQLRk3rrD6zR669wKYWwt9Z9DuyJmjATiNfyU96gQWqwkATacEabqASDfPVw8YdJEiKopT6/YDP7F3daMfFv2NXnVI5Mqe/DXF28=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com; spf=pass smtp.mailfrom=meta.com; dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b=KkEJCqSw; arc=none smtp.client-ip=67.231.153.30
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD4C6139CF2;
+	Wed, 11 Dec 2024 16:48:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=67.231.145.42
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1733935698; cv=fail; b=IsmJ941gSSMtCbo3wU4rdd4Jla2YJdjww4wh4rMfYAdV+te1NvKvxuwNEdkoajb8uRH1cOJpfNPxQTDSxXCUhjCXDkprhGztqUPv5DEFgKJC3K7wqTnYxYox/pwxN3K3b/jymg3pq0iz6HMUaj3LR4BMEom87QgUlm9Uz8xd6XI=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1733935698; c=relaxed/simple;
+	bh=Cgcd/w2eQfzvMVvalV3/OkWjfcTJ/Gps0zk8CSPlQZ0=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=TiUdFIv8jnS0eq+3Wf+WvOrQjTsM0017ETnK0UGD5l6M08ldBKFlhzIF8lzLSlpg6QTj1Gh/XDfbxP3lfSMquW95DKznwp6wV864trKWeOgO6dgdNq7uASxQmDy7yicNYceiv90/yo4Nbnuh8ELgCE/S947LCMaO7HzjgDF3feI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com; spf=pass smtp.mailfrom=meta.com; dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b=mh2M0lHF; arc=fail smtp.client-ip=67.231.145.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b="KkEJCqSw"
-Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4BBFIXWm018110
-	for <bpf@vger.kernel.org>; Wed, 11 Dec 2024 08:40:51 -0800
+	dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b="mh2M0lHF"
+Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
+	by mx0a-00082601.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4BBFI5VC009880;
+	Wed, 11 Dec 2024 08:48:16 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=s2048-2021-q4;
-	 bh=FPQF7Blv516U2c3K8sanMxY+nhDtcUr4bdRsbNq78BQ=; b=KkEJCqSwPfq/
-	UfJ2nn7URqULqHvfi1sCbUV+qdt7sv1NJu461OGPz15uICOG66x4D95ahXQGG4Dy
-	Hwp16yRmTVqRWMVP4a4KoUfFdMPe8rcX1eD5ts1XBPRPAWKLnfZo0olfRBaa3xU1
-	bbfaBiVY75zMa045uQH/us+h/e83YMsCvxgoAGQWQxpIH4DYu43k9CEaCgxsdatX
-	ucZ/CzNGDwMtoZ0CnqTHK3ioUZXeISzlVnELsGM/Cpzpl2zlQCt4c+LFnKSfelY/
-	dagV26AzTNC9p6115kVdyeudqFo/1/fFxNWcpTsS1+/QuzR9YSY9h6tZoR2xFibR
-	XH2yYPiTpQ==
-Received: from mail.thefacebook.com ([163.114.134.16])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 43fcews3u0-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <bpf@vger.kernel.org>; Wed, 11 Dec 2024 08:40:50 -0800 (PST)
-Received: from twshared7122.08.ash9.facebook.com (2620:10d:c085:208::7cb7) by
- mail.thefacebook.com (2620:10d:c08b:78::2ac9) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.2.1544.11; Wed, 11 Dec 2024 16:40:46 +0000
-Received: by devbig020.cln3.facebook.com (Postfix, from userid 546475)
-	id 6F950D41CD37; Wed, 11 Dec 2024 08:40:36 -0800 (PST)
-From: Alastair Robertson <ajor@meta.com>
-To: <bpf@vger.kernel.org>, <andrii@kernel.org>
-CC: Alastair Robertson <ajor@meta.com>
-Subject: [PATCH bpf-next v3 1/2] libbpf: Pull file-opening logic up to top-level functions
-Date: Wed, 11 Dec 2024 08:40:29 -0800
-Message-ID: <20241211164030.573042-2-ajor@meta.com>
-X-Mailer: git-send-email 2.43.5
-In-Reply-To: <20241211164030.573042-1-ajor@meta.com>
-References: <20241211164030.573042-1-ajor@meta.com>
+	:content-id:content-transfer-encoding:content-type:date:from
+	:in-reply-to:message-id:mime-version:references:subject:to; s=
+	s2048-2021-q4; bh=Cgcd/w2eQfzvMVvalV3/OkWjfcTJ/Gps0zk8CSPlQZ0=; b=
+	mh2M0lHFa0NEItnF3EUiYiQJ1wpqvs4HAFVgXG/lpvitke5GBRg3B+H0BCju1SRM
+	5j2NB4S4kc1j+fCxD8czwzl7pf1j3Bu0ZunDfi7nVxdutjNbaf6ZSUD0zng/4jQZ
+	wNyO66UEpHxQZ/YpR4kvn0M/tNudDCK0+zY4pBY5o9I4USHy4dAHLuhMYeNBuScv
+	ulBxwzZg6jmKvNsG5uUxCTXWWOw0Gkedla5tLCPoytvl4+Blnb3veqqMwRN7QmTT
+	UiKhLzaRdiC/8IvsvXrRwxBgYJgLTSqYHX9ewPXXJJPlORD7XKsrWZjn3/guV0u+
+	aMXgWSpjC9yElcg/BkISTQ==
+Received: from nam02-bn1-obe.outbound.protection.outlook.com (mail-bn1nam02lp2042.outbound.protection.outlook.com [104.47.51.42])
+	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 43fcd115v4-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 11 Dec 2024 08:48:15 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=HI+NFDFsxSkNO0YdKgsTNDBQsP3LINm7SOGLXFfJpc2heu8hCnmIVzkaH27WIOj2PguXzFf9irFmYkTOyOwwG1XFRkRPh615z9RQRQM+21op6bDZV8Ax2tUjkGX9C1J1LWiISyaruNqQ/W2mC2/Wm8cWmHNAQN+1VArKIZl0WPCo85moAr5g4lq8bAxpw6hf6jExqQQzA/HAOHIU2HcwonOUHcw6t9D+0i86RU909Kgux24TRXoT4893KrhYC25ZkftqoLWo4PdJrMJ4pPYRbhbb/9GMMEN8bmNpjFERpSZkvTGHpAy/0CM9XXFqBOkrjHOf/m/z2BOJITSsLQ67Qw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Cgcd/w2eQfzvMVvalV3/OkWjfcTJ/Gps0zk8CSPlQZ0=;
+ b=oGk6n/YhsEduVee+rf/Sdx1aG518N/0YnKqTPgnyp3SgPJcfv4NhWTdD3fb4gSpCGVevCnZhrI4xGfkfKm8YWRsXtTfuPiSO8E1UlN9nwm8mddGWFus99FetrGRm/A5Yjf89DDml3nfH1zxCSjyUI1uEKkfRykf8R0ueG/csg4LxSvv7deEKx8HNpPSoZ8vLyBCvX2y/I1c+1lz0utHATmBYBKkYng0w38rxbpyWyU3BaXurdpGotgTbpTeW75nvCdOjxPe6pRXEpWoY7IkHO5045TXVgDI9swH5NE2BtvRcOOyi3mqvBKtL5Ixl82ngWTNUSE2IARZEwKpPP8i1Lw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=meta.com; dmarc=pass action=none header.from=meta.com;
+ dkim=pass header.d=meta.com; arc=none
+Received: from SA1PR15MB5109.namprd15.prod.outlook.com (2603:10b6:806:1dc::10)
+ by MW4PR15MB4522.namprd15.prod.outlook.com (2603:10b6:303:107::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8251.15; Wed, 11 Dec
+ 2024 16:48:10 +0000
+Received: from SA1PR15MB5109.namprd15.prod.outlook.com
+ ([fe80::662b:d7bd:ab1b:2610]) by SA1PR15MB5109.namprd15.prod.outlook.com
+ ([fe80::662b:d7bd:ab1b:2610%7]) with mapi id 15.20.8251.008; Wed, 11 Dec 2024
+ 16:48:10 +0000
+From: Song Liu <songliubraving@meta.com>
+To: Theodore Ts'o <tytso@mit.edu>
+CC: Song Liu <song@kernel.org>, "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-security-module@vger.kernel.org"
+	<linux-security-module@vger.kernel.org>,
+        Kernel Team <kernel-team@meta.com>,
+        "andrii@kernel.org" <andrii@kernel.org>,
+        "eddyz87@gmail.com"
+	<eddyz87@gmail.com>,
+        "ast@kernel.org" <ast@kernel.org>,
+        "daniel@iogearbox.net" <daniel@iogearbox.net>,
+        "martin.lau@linux.dev"
+	<martin.lau@linux.dev>,
+        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
+        "brauner@kernel.org" <brauner@kernel.org>,
+        "jack@suse.cz" <jack@suse.cz>,
+        "kpsingh@kernel.org" <kpsingh@kernel.org>,
+        "mattbobrowski@google.com"
+	<mattbobrowski@google.com>,
+        Liam Wisehart <liamwisehart@meta.com>,
+        Shankaran
+ Gnanashanmugam <shankaran@meta.com>
+Subject: Re: [PATCH v3 bpf-next 0/6] Enable writing xattr from BPF programs
+Thread-Topic: [PATCH v3 bpf-next 0/6] Enable writing xattr from BPF programs
+Thread-Index: AQHbS0/TWovw/o4pI0quVN/ywUaUArLhB5gAgAA6qAA=
+Date: Wed, 11 Dec 2024 16:48:10 +0000
+Message-ID: <24F57160-0FCB-4505-A2D8-1AB0E07B46A9@fb.com>
+References: <20241210220627.2800362-1-song@kernel.org>
+ <20241211131804.GA1912640@mit.edu>
+In-Reply-To: <20241211131804.GA1912640@mit.edu>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+x-mailer: Apple Mail (2.3826.200.121)
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: SA1PR15MB5109:EE_|MW4PR15MB4522:EE_
+x-ms-office365-filtering-correlation-id: 17e5f3f4-6243-471c-1024-08dd1a0398ac
+x-fb-source: Internal
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam:
+ BCL:0;ARA:13230040|376014|7416014|1800799024|366016|38070700018;
+x-microsoft-antispam-message-info:
+ =?utf-8?B?TVUxMTRjRlZMdkNvQ0hGTHZtOWxGeDhoQ1lXbGxzQndLR2paemdXazVaR3pO?=
+ =?utf-8?B?aEkrNlFlRldOU1RiMGhrazE4SU04QVoyRDhxSTREQ21yRCtLWk1nN1ZLWStJ?=
+ =?utf-8?B?Z0pPa2lQNVBXL2Y0cUlWZzNyTmVxYnluTDJ2dFNscjhHbUV1V1RuTk9tZXpG?=
+ =?utf-8?B?VGV1akxsQkdTdEV2c1RmS29Cb3phN3pEdzlMMGVVR243ZVFyOHplVWZmSUp6?=
+ =?utf-8?B?SHZ4elAvT01KS0VYSFFCTGJkdUdmRmRGSm52cFdvalNubDh5UW5zTVdDTGJu?=
+ =?utf-8?B?UXJxbmFDOVFQblc3aGdabmJvMC9ONW9SZkdzN0pDQUJwdUxyMXZUaStzN2xv?=
+ =?utf-8?B?a0V6RFdwUVJybDFrSHloKzdIc1I2ODZnNnV3a2d6T2VDZFFTUWdaNDVxYVRt?=
+ =?utf-8?B?L3l6Vkl2d2gyWkhCcjhLOFcvUitsS3ZoREhsM3Z1VzAydk5yWmszUkVNc3Ri?=
+ =?utf-8?B?d2tHYWlMQ2RodzFHRDBNMEdreGVtQkh0LzBqcnl0UW1UZkxaOWVtcWtTY1VG?=
+ =?utf-8?B?aXR1YWlRZUx0YWxwNnRZTGZNMDZ5SThQL1dadVo0YUNMaDd3cnlaUjJPc1Jj?=
+ =?utf-8?B?eTNzVUpTa1lCK3hlVXN6RHRoTDExTFlIdkFoanhNTUx0WEN5ZWhLelZxNXY2?=
+ =?utf-8?B?UEJObTR1VXdPR2xTR1VZNUYwN05qdklza0V5QVpFOXJ0eXF1MmhhTWNtdk5w?=
+ =?utf-8?B?TDQ3TVd0YkFoRlU5cjJkZzRjVjRIZTkwUVNMS1NhQUZWM3JYREtBUGNlaHVv?=
+ =?utf-8?B?TnVJMXpXd1ZKODFoU00xZ3c2NHZROFE0M1VUTE5ZSkFSTVUzMDVwS1JqZ29r?=
+ =?utf-8?B?YVNHMmNjSm1PYmd1SzJqalA5eWFPKzBWV056dFJ5Mkc4QlVZc0l1OUN5OXRU?=
+ =?utf-8?B?Y3crNlRmMm5oVHo2K2x1WnVSZVE2MGxvY2ZHdWFralFBYlh2bXJHQnBpUGNO?=
+ =?utf-8?B?QXJoajhKdlJNeDhGajg3bWFubnExZUdyaFFZaEp0ZDNPQXV4SlNGZFBHcjgy?=
+ =?utf-8?B?V1d2dlhzTndtVTc4c1N5ZlRZZnVRQkxsTXpaRUdJa1ZxaVZrUm03NEcwaDdY?=
+ =?utf-8?B?bzRTenJGeWg0dHZyNU1qK0swL3pUalc1OFMrc1U5S1JrWmpnajdMbjhBeHBq?=
+ =?utf-8?B?SzJ1dFdWSGZQMWpjQnBFaXZNSUpXMWZpcmg1VVh6L01GM3duaXNselErd0th?=
+ =?utf-8?B?bmo0MHl5WXRqeHVCa25NczNLUzQzbFZJTGtGZ0ZIWWVhQUNETnVUTGhQdm9s?=
+ =?utf-8?B?ajNyclQzS2owVkpxQnRzTGJDekY3K1lUa3Yyend0RElobS9peitGYVpINWJK?=
+ =?utf-8?B?RStsZXQ3a0t1TVl1eFl6azlrOGV3QmFEMFRibjJJZE83cGVuTlkwcGN6SWU0?=
+ =?utf-8?B?djVhY3JvUmtvRytHQWpyZTVIRXdTTVY1Qm92Nk84dHYwcFRLU3pGWWduRzdq?=
+ =?utf-8?B?RElxK1lacjNlQml5NTJZQlBTK3N3cTRGajl2NTJJTTJWT0ZkcjZwRm95clF1?=
+ =?utf-8?B?a0JuRkszU05idSt1ejNmcFNPS0wxUk9zSGM5QytoYnI3VU1xYXB5LzJZTXQ3?=
+ =?utf-8?B?cmxvUzFVc1krS01OV2pGMWwyWVdPL2xXdmtheU1nYXpXOE5XZkZLazdwazlR?=
+ =?utf-8?B?K1FVMmJPLzN6QnBDcEJEZmYzT2JrZ00wZXpyQUgxNDNPZzRlbTNRVWhEd3Vw?=
+ =?utf-8?B?YnNDV2R2WDBQejJoY09tWlZLRVZpSEI1dzg1TlhJMDNZbUZvUnlWMFN4NVpN?=
+ =?utf-8?B?ekd2UzZDZEtSUXNyOHhhMUlQZ2RHVGtKbXBRK25tSUQzTUxGRmMvSzJSUFM5?=
+ =?utf-8?B?c3lqaEFXdUNwY0twVjJvRkxEdmZUN3VQZ0cvRlF2Uk1oYXhiYmk3OEE4Qng4?=
+ =?utf-8?B?TDlZSU1JbjNSbllzOTlLMHFNcTBYMXJJWnRFQ0xDZTZBemc9PQ==?=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR15MB5109.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(1800799024)(366016)(38070700018);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?utf-8?B?aHI3d3BINXRHTElvU0hxaFZxK2pyOWdlZVUxRW9uNlphWEVnWXJmMk1TeVdE?=
+ =?utf-8?B?OUhBam5vS1BvT2F4UDNJR3RvTTBuYXYzeDBjUUxhTFNSbzhBODZTb1RYcjVr?=
+ =?utf-8?B?aTBydjIwUDhGRnQ1TnF4YlU4T1ZNVTV1RUQ4eVgvdmV6Y0lBRXU1S0JjUStS?=
+ =?utf-8?B?cWVPUFBGWFAvNG05L3BLb2NOOHA0cUR6cHorTUJTV1ovbnlOWVdxbVZBNjMz?=
+ =?utf-8?B?UjJZU1VoNDM1VGF6bjlSYjVvb1lQU0pUWXFSY0xtTzFpc0pDSHBhL3NCM1py?=
+ =?utf-8?B?MitVTVJpYTNhWkVLTGJQSDMyS0lCQUZpUmVYckQ5eXZObHdUMzhaaTFWVzg2?=
+ =?utf-8?B?YnpCWm1wWGFjSWtya0VDR2I3WUF2dk16eUhNcWpicEpiQ3pUM0RJVExVRWRS?=
+ =?utf-8?B?MThvbXdrVWxmb2NVNTkzRWZ4K1Z4Z1ZLYmJPZTdVUjFLTlhFK1R5Zm5uak80?=
+ =?utf-8?B?MDhQTXZmY1A4S3J1c2hTZ1ZPNG1GaVNCSTlqNE9XSlJMbkNZSlZxd2ZwTFJk?=
+ =?utf-8?B?L3cwNERET0lWOTZLMWZ2TVVRUUoxSlMxSkxWWkNvSVBMZENMbEtPVGxtekJq?=
+ =?utf-8?B?QTRsaHdYOUtVSkRaWHQ2WWFWTUhhaytqWmx4c2RyR01Db2ZGc042bFV0UGJv?=
+ =?utf-8?B?V2FmQTNqdE5yVFJSRm85aTdSMTlsWDR2ZlhjYkQ5ZGpja0VCMmpmREVibGwz?=
+ =?utf-8?B?cE05emxoUDgyNlVJVVpKd0lpMU9LZmtYRUFOcHZqV0d1UjRiSVhsbmR0Z2Qw?=
+ =?utf-8?B?YWpnblhDS1JUOUhwek5YYm9jTGdDZ1UwT0s4ajBjQnMvVnNRbC92eXgyQlZ0?=
+ =?utf-8?B?cFlHUzVFZWdnL21tNUh0cEQwT1VQMHFmVTZsd0J1U1Z0MU44Nkx3dWlkNWhN?=
+ =?utf-8?B?VzlEZGM2VHVnbWNHa1V5N205Njl1dmI4V2pUWXl1QlVWKzNBdWs5dFNPeWlC?=
+ =?utf-8?B?dzhmbThLK1F1VHdKUkd6Y09UWWxCQkhsdndIL0cyNU1iRThCT2k0K094VWZp?=
+ =?utf-8?B?Y2xvYzNmSjd5MXlkOFlockkrclFjWFg2UzdPNlRSd2lFZE1MSWd0QWY0dmFQ?=
+ =?utf-8?B?SmR2THdFcGYyUHpFMTBIWTdwS3dGczkyeE91Zi9IRFZWUTNrUWhocE5UYWl1?=
+ =?utf-8?B?dHZ6WDRMWC96UzFCRWlSemU1djlaaTBLWEFoVEZvREZudytHZnRWcURQcFVr?=
+ =?utf-8?B?NkhHS1lnM0FXa1ZkOE1QYnBuTWZoek9zVVBaVmN0dDREcHBzdWFwWTQ5YWRl?=
+ =?utf-8?B?VWlEQ0R4WnE1RXpMNmZIbklyM2doN2w0ZTNBdzNlVW1UdnVrSjZUTE15d1Mx?=
+ =?utf-8?B?bmlQY1ErZUlUdUtvOHpNUTlQbU5OZnhneENnaGIxYW1XNE9CV0oxRWQ5VGRs?=
+ =?utf-8?B?eVVjQmd2aHd3dWdZY2dJaXBZKzJ1bmpteHAxRTVla2x1NkFwclZZQ3RBb2Ur?=
+ =?utf-8?B?L0pyVDI0OE9FSzQzeTVUeS8vWWxhRytYdnZhdlJHVndNdkFTNnJBUlhvdE12?=
+ =?utf-8?B?TjJPaDBmK1huRUJoUnUvK3VlZm90OGZpSWNuWTFTL3pRZHloQThKZTUzdi9Y?=
+ =?utf-8?B?Q2MvOUFHeXc2eGRPZGF5VGpzdDZEVThoN0R4S3dTTER1SHUzamNCTkVpQ0lH?=
+ =?utf-8?B?ZFVRVzU3blNUR2NGK2pNT0ZtQkVIcWtNanZyYzAyZnpmdXZobE84V3J1SVNI?=
+ =?utf-8?B?aXBKOC9HNytUUWNQN3VmaWZGNUpORkRHby9jaC85UFlZaFVScU8yUTAyZHh0?=
+ =?utf-8?B?d0xHQ1Z1aFMzbk44TjlFb3VDMXJZOGpGWXhXNjZZNUxMRnkvazA3R3pjQzhY?=
+ =?utf-8?B?RlpMTDFnV0ZpRVZGbDlocVNvK3RVNUdWa2d3RC9CQm9zeS9nemczS3FoNTFP?=
+ =?utf-8?B?K21hRlJ1NWVDcjZKNHo4SWxnV1lJR01sRm9tSXN4bGJBWU1pK20veVpIbGVH?=
+ =?utf-8?B?K3B4SVVWdTRXUGNQb3hkanlUbm1IOHM0Rkl2TnJZeWx5QUxnbStDWjdiMkhW?=
+ =?utf-8?B?S3Z6TlphbGN5Wk1Vb3g0eXFUODgvTTFQa0xrU09BdkdxNTU5UUQzbXBsS3VL?=
+ =?utf-8?B?aEplVXRaQlF1bFZhYTQweDZsMkNpVGZEUTVJUVRyWlNRMEMyL2pUR0Nzd0hY?=
+ =?utf-8?B?OVJHbzhFWXFaQmFOblFxNlFXSXBLbFJhSlU0N2pTTzlpeEVPZTdDc1dBZ1FB?=
+ =?utf-8?B?Ymc9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <B3A9BA06F4DFCB40ACD3F8C85BD21D2A@namprd15.prod.outlook.com>
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-GUID: zMu9xxXD3TducOHdBBVO4KvjX6iSRcuk
-X-Proofpoint-ORIG-GUID: zMu9xxXD3TducOHdBBVO4KvjX6iSRcuk
+X-OriginatorOrg: meta.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SA1PR15MB5109.namprd15.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 17e5f3f4-6243-471c-1024-08dd1a0398ac
+X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Dec 2024 16:48:10.4685
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: KREfte43Fr2s2Q1Ch7BxHhAPCb0j1TfO2vOnqN6X/CUxsxTIicOl2+WogQnwJE3EhKdY/3LpTIsTW7ZM2MNRxg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR15MB4522
+X-Proofpoint-ORIG-GUID: p-O-z9oxChD-lZJsEGanTMITMECuwDYA
+X-Proofpoint-GUID: p-O-z9oxChD-lZJsEGanTMITMECuwDYA
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
- definitions=2024-10-05_03,2024-10-04_01,2024-09-30_01
+ definitions=2024-10-05_02,2024-10-04_01,2024-09-30_01
 
-Move the filename arguments and file-descriptor handling from
-init_output_elf() and linker_load_obj_file() and instead handle them
-at the top-level in bpf_linker__new() and bpf_linker__add_file().
-
-This will allow the inner functions to be shared with a new,
-non-filename-based, API in the next commit.
-
-Signed-off-by: Alastair Robertson <ajor@meta.com>
----
- tools/lib/bpf/linker.c | 83 +++++++++++++++++++++---------------------
- 1 file changed, 41 insertions(+), 42 deletions(-)
-
-diff --git a/tools/lib/bpf/linker.c b/tools/lib/bpf/linker.c
-index e56ba6e67451..eb2ac7afce01 100644
---- a/tools/lib/bpf/linker.c
-+++ b/tools/lib/bpf/linker.c
-@@ -157,10 +157,9 @@ struct bpf_linker {
- #define pr_warn_elf(fmt, ...)									\
- 	libbpf_print(LIBBPF_WARN, "libbpf: " fmt ": %s\n", ##__VA_ARGS__, elf_e=
-rrmsg(-1))
-=20
--static int init_output_elf(struct bpf_linker *linker, const char *file);
-+static int init_output_elf(struct bpf_linker *linker);
-=20
--static int linker_load_obj_file(struct bpf_linker *linker, const char *f=
-ilename,
--				const struct bpf_linker_file_opts *opts,
-+static int linker_load_obj_file(struct bpf_linker *linker,
- 				struct src_obj *obj);
- static int linker_sanity_check_elf(struct src_obj *obj);
- static int linker_sanity_check_elf_symtab(struct src_obj *obj, struct sr=
-c_sec *sec);
-@@ -233,9 +232,20 @@ struct bpf_linker *bpf_linker__new(const char *filen=
-ame, struct bpf_linker_opts
- 	if (!linker)
- 		return errno =3D ENOMEM, NULL;
-=20
--	linker->fd =3D -1;
-+	linker->filename =3D strdup(filename);
-+	if (!linker->filename) {
-+		err =3D -ENOMEM;
-+		goto err_out;
-+	}
-+
-+	linker->fd =3D open(filename, O_WRONLY | O_CREAT | O_TRUNC | O_CLOEXEC,=
- 0644);
-+	if (linker->fd < 0) {
-+		err =3D -errno;
-+		pr_warn("failed to create '%s': %d\n", filename, err);
-+		goto err_out;
-+	}
-=20
--	err =3D init_output_elf(linker, filename);
-+	err =3D init_output_elf(linker);
- 	if (err)
- 		goto err_out;
-=20
-@@ -294,23 +304,12 @@ static Elf64_Sym *add_new_sym(struct bpf_linker *li=
-nker, size_t *sym_idx)
- 	return sym;
- }
-=20
--static int init_output_elf(struct bpf_linker *linker, const char *file)
-+static int init_output_elf(struct bpf_linker *linker)
- {
- 	int err, str_off;
- 	Elf64_Sym *init_sym;
- 	struct dst_sec *sec;
-=20
--	linker->filename =3D strdup(file);
--	if (!linker->filename)
--		return -ENOMEM;
--
--	linker->fd =3D open(file, O_WRONLY | O_CREAT | O_TRUNC | O_CLOEXEC, 064=
-4);
--	if (linker->fd < 0) {
--		err =3D -errno;
--		pr_warn("failed to create '%s': %s\n", file, errstr(err));
--		return err;
--	}
--
- 	linker->elf =3D elf_begin(linker->fd, ELF_C_WRITE, NULL);
- 	if (!linker->elf) {
- 		pr_warn_elf("failed to create ELF object");
-@@ -440,7 +439,7 @@ int bpf_linker__add_file(struct bpf_linker *linker, c=
-onst char *filename,
- 			 const struct bpf_linker_file_opts *opts)
- {
- 	struct src_obj obj =3D {};
--	int err =3D 0;
-+	int err =3D 0, fd;
-=20
- 	if (!OPTS_VALID(opts, bpf_linker_file_opts))
- 		return libbpf_err(-EINVAL);
-@@ -448,7 +447,16 @@ int bpf_linker__add_file(struct bpf_linker *linker, =
-const char *filename,
- 	if (!linker->elf)
- 		return libbpf_err(-EINVAL);
-=20
--	err =3D err ?: linker_load_obj_file(linker, filename, opts, &obj);
-+	fd =3D open(filename, O_RDONLY | O_CLOEXEC);
-+	if (fd < 0) {
-+		pr_warn("failed to open file '%s': %s\n", filename, errstr(errno));
-+		return -errno;
-+	}
-+
-+	obj.filename =3D filename;
-+	obj.fd =3D fd;
-+
-+	err =3D err ?: linker_load_obj_file(linker, &obj);
- 	err =3D err ?: linker_append_sec_data(linker, &obj);
- 	err =3D err ?: linker_append_elf_syms(linker, &obj);
- 	err =3D err ?: linker_append_elf_relos(linker, &obj);
-@@ -534,8 +542,7 @@ static struct src_sec *add_src_sec(struct src_obj *ob=
-j, const char *sec_name)
- 	return sec;
- }
-=20
--static int linker_load_obj_file(struct bpf_linker *linker, const char *f=
-ilename,
--				const struct bpf_linker_file_opts *opts,
-+static int linker_load_obj_file(struct bpf_linker *linker,
- 				struct src_obj *obj)
- {
- 	int err =3D 0;
-@@ -554,26 +561,18 @@ static int linker_load_obj_file(struct bpf_linker *=
-linker, const char *filename,
- #error "Unknown __BYTE_ORDER__"
- #endif
-=20
--	pr_debug("linker: adding object file '%s'...\n", filename);
--
--	obj->filename =3D filename;
-+	pr_debug("linker: adding object file '%s'...\n", obj->filename);
-=20
--	obj->fd =3D open(filename, O_RDONLY | O_CLOEXEC);
--	if (obj->fd < 0) {
--		err =3D -errno;
--		pr_warn("failed to open file '%s': %s\n", filename, errstr(err));
--		return err;
--	}
- 	obj->elf =3D elf_begin(obj->fd, ELF_C_READ_MMAP, NULL);
- 	if (!obj->elf) {
--		pr_warn_elf("failed to parse ELF file '%s'", filename);
-+		pr_warn_elf("failed to parse ELF file '%s'", obj->filename);
- 		return -EINVAL;
- 	}
-=20
- 	/* Sanity check ELF file high-level properties */
- 	ehdr =3D elf64_getehdr(obj->elf);
- 	if (!ehdr) {
--		pr_warn_elf("failed to get ELF header for %s", filename);
-+		pr_warn_elf("failed to get ELF header for %s", obj->filename);
- 		return -EINVAL;
- 	}
-=20
-@@ -581,7 +580,7 @@ static int linker_load_obj_file(struct bpf_linker *li=
-nker, const char *filename,
- 	obj_byteorder =3D ehdr->e_ident[EI_DATA];
- 	if (obj_byteorder !=3D ELFDATA2LSB && obj_byteorder !=3D ELFDATA2MSB) {
- 		err =3D -EOPNOTSUPP;
--		pr_warn("unknown byte order of ELF file %s\n", filename);
-+		pr_warn("unknown byte order of ELF file %s\n", obj->filename);
- 		return err;
- 	}
- 	if (link_byteorder =3D=3D ELFDATANONE) {
-@@ -591,7 +590,7 @@ static int linker_load_obj_file(struct bpf_linker *li=
-nker, const char *filename,
- 			 obj_byteorder =3D=3D ELFDATA2MSB ? "big" : "little");
- 	} else if (link_byteorder !=3D obj_byteorder) {
- 		err =3D -EOPNOTSUPP;
--		pr_warn("byte order mismatch with ELF file %s\n", filename);
-+		pr_warn("byte order mismatch with ELF file %s\n", obj->filename);
- 		return err;
- 	}
-=20
-@@ -599,12 +598,12 @@ static int linker_load_obj_file(struct bpf_linker *=
-linker, const char *filename,
- 	    || ehdr->e_machine !=3D EM_BPF
- 	    || ehdr->e_ident[EI_CLASS] !=3D ELFCLASS64) {
- 		err =3D -EOPNOTSUPP;
--		pr_warn_elf("unsupported kind of ELF file %s", filename);
-+		pr_warn_elf("unsupported kind of ELF file %s", obj->filename);
- 		return err;
- 	}
-=20
- 	if (elf_getshdrstrndx(obj->elf, &obj->shstrs_sec_idx)) {
--		pr_warn_elf("failed to get SHSTRTAB section index for %s", filename);
-+		pr_warn_elf("failed to get SHSTRTAB section index for %s", obj->filena=
-me);
- 		return -EINVAL;
- 	}
-=20
-@@ -616,21 +615,21 @@ static int linker_load_obj_file(struct bpf_linker *=
-linker, const char *filename,
- 		shdr =3D elf64_getshdr(scn);
- 		if (!shdr) {
- 			pr_warn_elf("failed to get section #%zu header for %s",
--				    sec_idx, filename);
-+				    sec_idx, obj->filename);
- 			return -EINVAL;
- 		}
-=20
- 		sec_name =3D elf_strptr(obj->elf, obj->shstrs_sec_idx, shdr->sh_name);
- 		if (!sec_name) {
- 			pr_warn_elf("failed to get section #%zu name for %s",
--				    sec_idx, filename);
-+				    sec_idx, obj->filename);
- 			return -EINVAL;
- 		}
-=20
- 		data =3D elf_getdata(scn, 0);
- 		if (!data) {
- 			pr_warn_elf("failed to get section #%zu (%s) data from %s",
--				    sec_idx, sec_name, filename);
-+				    sec_idx, sec_name, obj->filename);
- 			return -EINVAL;
- 		}
-=20
-@@ -666,7 +665,7 @@ static int linker_load_obj_file(struct bpf_linker *li=
-nker, const char *filename,
- 				err =3D libbpf_get_error(obj->btf);
- 				if (err) {
- 					pr_warn("failed to parse .BTF from %s: %s\n",
--						filename, errstr(err));
-+						obj->filename, errstr(err));
- 					return err;
- 				}
- 				sec->skipped =3D true;
-@@ -677,7 +676,7 @@ static int linker_load_obj_file(struct bpf_linker *li=
-nker, const char *filename,
- 				err =3D libbpf_get_error(obj->btf_ext);
- 				if (err) {
- 					pr_warn("failed to parse .BTF.ext from '%s': %s\n",
--						filename, errstr(err));
-+						obj->filename, errstr(err));
- 					return err;
- 				}
- 				sec->skipped =3D true;
-@@ -694,7 +693,7 @@ static int linker_load_obj_file(struct bpf_linker *li=
-nker, const char *filename,
- 			break;
- 		default:
- 			pr_warn("unrecognized section #%zu (%s) in %s\n",
--				sec_idx, sec_name, filename);
-+				sec_idx, sec_name, obj->filename);
- 			err =3D -EINVAL;
- 			return err;
- 		}
---=20
-2.43.5
-
+SGkgVGVkLCANCg0KPiBPbiBEZWMgMTEsIDIwMjQsIGF0IDU6MTjigK9BTSwgVGhlb2RvcmUgVHMn
+byA8dHl0c29AbWl0LmVkdT4gd3JvdGU6DQo+IA0KPiBPbiBUdWUsIERlYyAxMCwgMjAyNCBhdCAw
+MjowNjoyMVBNIC0wODAwLCBTb25nIExpdSB3cm90ZToNCj4+IEFkZCBzdXBwb3J0IHRvIHNldCBh
+bmQgcmVtb3ZlIHhhdHRyIGZyb20gQlBGIHByb2dyYW0uIEFsc28gYWRkDQo+PiBzZWN1cml0eS5i
+cGYuIHhhdHRyIG5hbWUgcHJlZml4Lg0KPiANCj4gSWYgdGhlIHN5c3RlbSBhbGxvd3MgZm9yIHRo
+ZSBleGVjdXRpb24gb2YgdW5wcml2aWxlZ2VkIEJQRiBwcm9ncmFtcw0KPiAoZS5nLiwgb25lcyB3
+aGVyZSBhIHJhbmRvbSB1c2VyIGNhbiBsb2FkIHRoZWlyIG93biBCUEYgcHJvZ3JhbXMpLCB3aWxs
+DQo+IHRoZXkgaGF2ZSBodGUgYWJpbGl0eSB0byBzZXQgYW5kIHJlbW92ZSBzZWN1cml0eS5icGYu
+KiB4YXR0cnM/ICBJZiB0aGUNCj4gYW5zd2VyIGlzIHllcywgc2hvdWxkIHRoaXMgYmUgZGlzYWxs
+b3dlZD8NCj4gDQo+IEkgbm90ZSB0aGF0IG9uZSBvZiB0aGUgdXNlIGNhc2VzIHNlZW1zIHRvIGJl
+IEJQRi1iYXNlZCBMU00ncywgc28gd2UNCj4gbWF5IHdhbnQgdG8gaGF2ZSBzb21ldGhpbmcgZXZl
+biBtb3JlIHJlc3RyaWN0aXZlIHNpbmNlIG90aGVyd2lzZSBhbnkNCj4gQlBGIHByb2dyYW0gY291
+bGQgcG90ZW50aWFsbHkgaGF2ZSB0aGUgc2FtZSBwb3dlciBhcyB0aGUgTFNNPw0KDQpUaGVzZSBr
+ZnVuY3MgYXJlIG9ubHkgYWxsb3dlZCBpbiBCUEYgTFNNIHByb2dyYW1zLiBUaGVyZWZvcmUsIG90
+aGVyDQpwcm9ncmFtIHR5cGVzICh0cmFjaW5nLCBYRFAsIGV0Yy4pIGNhbm5vdCB1c2UgdGhlc2Ug
+a2Z1bmNzLiANCg0KVGhhbmtzLA0KU29uZw0KDQo=
