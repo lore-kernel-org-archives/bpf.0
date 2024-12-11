@@ -1,111 +1,99 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC2171EA6F;
-	Wed, 11 Dec 2024 12:48:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 189F723027B;
+	Wed, 11 Dec 2024 13:18:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733921322; cv=none; b=OunoVobOzfSzt70JbstYGNw5AeqZvhTBvHreElitC4Arc7wVAoHziDQ3XC9hqzFoa2zQoaovlJORMnMnAP7k/4zsXDGA45Pp9VeptinYZAG4vF7PKcSXL3q/CiTUqzcWc/gS/yEzCx8wAaXxJJKpYY+u4vS/ltYxIW51L/2aaSA=
+	t=1733923095; cv=none; b=GU0ufi123fbHIzVSqR4l2VTZ+KaMNEh/hkHXeah9mK/vNoMPUje965jr0dsZxGjgfEBD2STIxjVEFHv8q400Kqm3bl+c/uAmnNUmoN4h/PSRiPAHZ5auxmmY1U2dRgps78D66tWpS2dYKYGGk60ML/HxY1WUdfuYB3BywLogqUY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733921322; c=relaxed/simple;
-	bh=q7AL29J4p6NG4lXcJwqdyKDnOw/+E2JcQFmUdbqKZYQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=k6tbO2Bbh4N7bhBdNKJPPuyXGKaJP1lLwX3mZdtRNronHoZ2H+/yepVPdgHMeLvfvXh9m3kHdqvngxlTpKVRaLv2CbpaDImpduxeKGRy+xO+65w2prvymQdg0CP1Bj3bK/gRWzmBJIG9MGeqqlVbW64A/HxexcCkqxuNmWUdZ0I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aZv0hZKc; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1733923095; c=relaxed/simple;
+	bh=PQLkiEpSAqfQOdP48tewy/yiI9/+9NdmNBOuITix0t0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=nLUJiBOXZWQXGXgtqg71TbLuC4FGAYgzUQJ45xYIejvDg115yjTBZZLpwuL+vOLNA1JYRfiO/wFHjIkiS1SQ9F+fwnBScQQu73j+XXoNxzzV7q1Xhh6qDHDS8lPYIV/xPHqS7cE3n+UdPG2WZ6jNS1d7D1tjZWcv7ZwT6k4kYgU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=u0xD4zK7; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aZv0hZKc"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74CFBC4CEDE;
-	Wed, 11 Dec 2024 12:48:38 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="u0xD4zK7"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1BD7DC4CEDE;
+	Wed, 11 Dec 2024 13:18:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1733921322;
-	bh=q7AL29J4p6NG4lXcJwqdyKDnOw/+E2JcQFmUdbqKZYQ=;
-	h=Date:Subject:To:References:From:In-Reply-To:From;
-	b=aZv0hZKc9VvDW9/i4njbAeb5HOeviBRCJWvaeoT3sS3yMLog8+5dIzYV+2kd3QaQW
-	 aqrKSv2HD4EUuJZ/F0zP7eNTYPPP1wgDAOvjkocRu+LtS1JEMLi3hjFKKyHNHA0PP5
-	 U+jqzEGlFsmrSb5dIh6mZD1HrbTu+S0jIVl1wpI0JviKPbE4TbTOPkBbEPguXYGDq7
-	 A1JrmxtS9qXmJHBge6RUOAwUK5g9l+kUiasgLWrtizdB57xz+71pTGYn7iKIu0rBmu
-	 QYYUFBTsyQ3txm29FURoNEVF0r5zrfWWnLWIuPUy8pVfgvQ6F2Ru/q+G9EfW4Jzhlh
-	 6IGvAAGpfUigg==
-Message-ID: <5d4dde77-b50b-4160-ad2f-f7ddcbe9feb2@kernel.org>
-Date: Wed, 11 Dec 2024 12:48:38 +0000
+	s=k20201202; t=1733923093;
+	bh=PQLkiEpSAqfQOdP48tewy/yiI9/+9NdmNBOuITix0t0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=u0xD4zK7JFbJkpJzIwg9fshUDAG2vB9c0VPqj5HJEq6d4O31nJ0s8OC422odK3oMP
+	 9DY7t2Ph9j8L4oTNmzHkuEymI7ZpKVQOwLSKbds2dyCXwZXYJ1iU/mfwTEaxP6i8lA
+	 2Hjls13Esh5kMLdOFDTf6kYaO2mKzCa9c6FXLRsnh+V4qlmQ3hoBuLHkYru/ngIA10
+	 F69UDuhWuBgdW1yrmnfRs3LxkR9BsjEb+Fv+4OAuiz1gscuIseWGXS2DDeF6+QBBMQ
+	 B37IuFtFF5SEYH06wrl1oacgp4ogF+IxfyJmffJbCcGR7sxkB7tNeLev1QjtMx/IKg
+	 pIgI6YCdqD4LA==
+Date: Wed, 11 Dec 2024 10:18:10 -0300
+From: Arnaldo Carvalho de Melo <acme@kernel.org>
+To: Leo Yan <leo.yan@arm.com>
+Cc: Quentin Monnet <qmo@kernel.org>, Namhyung Kim <namhyung@kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+	Nick Terrell <terrelln@fb.com>, Ian Rogers <irogers@google.com>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	"Liang, Kan" <kan.liang@linux.intel.com>,
+	James Clark <james.clark@linaro.org>,
+	Guilherme Amadio <amadio@gentoo.org>, linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org, linux-perf-users@vger.kernel.org
+Subject: Re: [PATCH v2 0/3] bpftool: Fix the static linkage failure
+Message-ID: <Z1mREhJElE6cSrPT@x1>
+References: <20241211093114.263742-1-leo.yan@arm.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 3/3] bpftool: Link zstd lib required by libelf
-To: Leo Yan <leo.yan@arm.com>, Arnaldo Carvalho de Melo <acme@kernel.org>,
- Namhyung Kim <namhyung@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
- <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Nick Terrell <terrelln@fb.com>,
- Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>,
- "Liang, Kan" <kan.liang@linux.intel.com>,
- James Clark <james.clark@linaro.org>, Guilherme Amadio <amadio@gentoo.org>,
- linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
- linux-perf-users@vger.kernel.org
-References: <20241211093114.263742-1-leo.yan@arm.com>
- <20241211093114.263742-4-leo.yan@arm.com>
-From: Quentin Monnet <qmo@kernel.org>
-Content-Language: en-GB
-In-Reply-To: <20241211093114.263742-4-leo.yan@arm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241211093114.263742-1-leo.yan@arm.com>
 
-2024-12-11 09:31 UTC+0000 ~ Leo Yan <leo.yan@arm.com>
-> When the feature-libelf-zstd is detected, the zstd lib is required by
-> libelf.  Link the zstd lib in this case.
+On Wed, Dec 11, 2024 at 09:31:11AM +0000, Leo Yan wrote:
+> This series follows up on the discussion in [1] for fixing the static
+> linkage issue in bpftool.
 > 
-> Signed-off-by: Leo Yan <leo.yan@arm.com>
-> ---
->  tools/bpf/bpftool/Makefile | 8 ++++++++
->  1 file changed, 8 insertions(+)
+> Patch 01 introduces a new feature for libelf-zstd.  If this feature
+> is detected, it means the zstd lib is required by libelf.
 > 
-> diff --git a/tools/bpf/bpftool/Makefile b/tools/bpf/bpftool/Makefile
-> index a4263dfb5e03..469f841abaff 100644
-> --- a/tools/bpf/bpftool/Makefile
-> +++ b/tools/bpf/bpftool/Makefile
-> @@ -106,6 +106,7 @@ FEATURE_TESTS += libbfd-liberty
->  FEATURE_TESTS += libbfd-liberty-z
->  FEATURE_TESTS += disassembler-four-args
->  FEATURE_TESTS += disassembler-init-styled
-> +FEATURE_TESTS += libelf-zstd
->  
->  FEATURE_DISPLAY := clang-bpf-co-re
->  FEATURE_DISPLAY += llvm
-> @@ -113,6 +114,7 @@ FEATURE_DISPLAY += libcap
->  FEATURE_DISPLAY += libbfd
->  FEATURE_DISPLAY += libbfd-liberty
->  FEATURE_DISPLAY += libbfd-liberty-z
-> +FEATURE_DISPLAY += libelf-zstd
+> Patch 02 is a minor improvement for linking the zstd lib in the perf.
+> 
+> Patch 03 fixes the static build failure by linking the zstd lib when
+> the feature-libelf-zstd is detected.
+> 
+> [1] https://lore.kernel.org/linux-perf-users/Z1H9-9xrWM4FBbNI@mini-arch/T/#m2300b127424e9e2ace7da497a20d88534eb6866f
 
+So, this was originally reported as a perf build failure when trying a
+static build, so something not so common, no urgency, I guess, but it
+involves a tools/perf/bpftool/Makefile change, I think I can process
+this as I'll then test it in the many build containers for old distros I
+have, ok?
 
-Let's not display this one, please, it brings no information to the user
-about what features bpftool will support.
-
-Looks good otherwise, thank you!
-
-
->  
->  check_feat := 1
->  NON_CHECK_FEAT_TARGETS := clean uninstall doc doc-clean doc-install doc-uninstall
-> @@ -132,6 +134,12 @@ endif
->  
->  LIBS = $(LIBBPF) -lelf -lz
->  LIBS_BOOTSTRAP = $(LIBBPF_BOOTSTRAP) -lelf -lz
-> +
-> +ifeq ($(feature-libelf-zstd),1)
-> +LIBS += -lzstd
-> +LIBS_BOOTSTRAP += -lzstd
-> +endif
-> +
->  ifeq ($(feature-libcap), 1)
->  CFLAGS += -DUSE_LIBCAP
->  LIBS += -lcap
-
+- Arnaldo
+ 
+> 
+> Leo Yan (3):
+>   tools build: Add feature test for libelf with ZSTD
+>   perf: build: Minor improvement for linking libzstd
+>   bpftool: Link zstd lib required by libelf
+> 
+>  tools/bpf/bpftool/Makefile             | 8 ++++++++
+>  tools/build/Makefile.feature           | 1 +
+>  tools/build/feature/Makefile           | 4 ++++
+>  tools/build/feature/test-all.c         | 4 ++++
+>  tools/build/feature/test-libelf-zstd.c | 9 +++++++++
+>  tools/perf/Makefile.config             | 8 +++++++-
+>  6 files changed, 33 insertions(+), 1 deletion(-)
+>  create mode 100644 tools/build/feature/test-libelf-zstd.c
+> 
+> -- 
+> 2.34.1
