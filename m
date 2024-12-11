@@ -1,94 +1,146 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF6791F4E57;
-	Wed, 11 Dec 2024 22:32:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA84717838C
+	for <bpf@vger.kernel.org>; Wed, 11 Dec 2024 23:48:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733956345; cv=none; b=HOA+kLRATcm6rdnFeUUu44fRHPtKRlg0lfjD0MUu0BfHuLBuM8PBQFoTpUUEzVujmwycPFTazTZPNCJRg8WaAfEluIKUC8bGjsLSakAFYGfe170sbzneRBfeNl2juosA5qf72i37fi86M8WPaQJkor6TFBMQalaqjUGX6o1MyCo=
+	t=1733960919; cv=none; b=AWT7D7UZ1nXsS7PZIoDCW3GegeOaWY0jQwsBL3dh6BDs5LU3/PylVM9bpsCocTta1gOqkKA1vrNUWbyqNbdLPf3DCWuAY/Nov3lwpcqqRwBayTL2kunfgbcJX3BwASaY51aNeIX/lDfcjL7JEHb9c7I5AWKQJeOQ+nnl/PSV/38=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733956345; c=relaxed/simple;
-	bh=NGdHSLNI0l4aBJ0f/wN2z7bSGQikMSaNjVw2lkQNoSI=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=DHbudQZ1J5ne/WjFWu34AlpgeC1loquMnY///N7cr1WseQnFp24sjtcIi8pHZfNT37BzM2w2cg6Ym5C6RwPkftQZteG4wORQlXXR3ldrtIn7g26mCoHx0wKWIstRDIGmOVhx6QsQXZoJSrrNTm8HFwzxhVgfbF8t/sMrMmJPXk8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BjfwijMb; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1733960919; c=relaxed/simple;
+	bh=HT9vWnuJvMkKoH6OJBts+t/Nw8Pw/TFcNjyZbryYkBA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=WOzUaHHrpgSV3PltspPG+bLQ7GKYpHjomn1WpVBDTAy/0HrDSbWJPC0k+ESCihgtbwHIYpvx9Bk+A7ZMQ3QcKA1dsw7WX0NtFtgNSaeaALL9IGOzgSMPtRi0dAa2OwajlrfljufnYYbzkRQ07AuQpsK+z8YsD/zUL0z+wZmr5+A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hMTKd8Zj; arc=none smtp.client-ip=192.198.163.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BjfwijMb"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70C33C4CED3;
-	Wed, 11 Dec 2024 22:32:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1733956344;
-	bh=NGdHSLNI0l4aBJ0f/wN2z7bSGQikMSaNjVw2lkQNoSI=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=BjfwijMbLAHcxokg+pJC2/UdLPu8w5NNJmdVSAOq2BH6ThTgopYBX0+fTtZ0X5Kuy
-	 NfKs4ecBx8K7owJiX4gaHbZBZVEBE69mG9OnadEwoaVEg/YlWV4VJLxNr+lfzV/GM4
-	 iA1E8xJfJ2sY3w+RU6+3M4tkCTnE8gjvlGNhbmRMLplxytpDE2GUi7CltDLER9CJyH
-	 af7l45Q1lRTiP73iaTZ93p0r8Fdwq1sRnbHHxXRYZbnkmrZjFr7m4xdrLOhsG8VX23
-	 P33IqFJvqHyO4uQPBwp0R1LbM7vOM2Cv0K1r4G6XH+u5VBDgJKVnd2C0jB45rqkTCf
-	 vX12KmEy4LCbw==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id ADC8A380A965;
-	Wed, 11 Dec 2024 22:32:41 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hMTKd8Zj"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1733960917; x=1765496917;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=HT9vWnuJvMkKoH6OJBts+t/Nw8Pw/TFcNjyZbryYkBA=;
+  b=hMTKd8ZjAF8WS1u4wB8C10XfRQQ1/DCDvTP6/UGc4mHV+DszRKCNqd82
+   zXREhwGUv3pPSm/8xkR///9doD6gPsrOmhW2LbhXh3AAUlOtKs+uZNu2f
+   sgQzULbMMG5uIu7TI0JdpbWggDDoJ3aOTHupTZtM6wGeAOE8J3LUcTQlU
+   laAhVC89PRKP5jyoo6jN/nPux/d+Ks0QGP61mv/2DMFk4Nkx5CgFD3KrH
+   oQAiXs5kJZi3HbCSXvHCdWeXHWsMi3ksXVcS68qyw7rSDJ98JDthX3pop
+   jvPVlUrDPH4UqMtt8sE4mv6KIFbqs3B+C2Ye2AW8Id0SbZt1nR8vruJta
+   A==;
+X-CSE-ConnectionGUID: 4u82s2b7R46z7IzPZtWPeA==
+X-CSE-MsgGUID: +bjEIwzVQH6Q4er4tfyIsQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11283"; a="33691235"
+X-IronPort-AV: E=Sophos;i="6.12,226,1728975600"; 
+   d="scan'208";a="33691235"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Dec 2024 15:48:36 -0800
+X-CSE-ConnectionGUID: bq3i4svtSZSf5WOqLcGDeQ==
+X-CSE-MsgGUID: DQbRrX2SRLOXrlcvAGAUZA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="133384402"
+Received: from lkp-server01.sh.intel.com (HELO 82a3f569d0cb) ([10.239.97.150])
+  by orviesa001.jf.intel.com with ESMTP; 11 Dec 2024 15:48:32 -0800
+Received: from kbuild by 82a3f569d0cb with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tLWRQ-0007DZ-2m;
+	Wed, 11 Dec 2024 23:48:28 +0000
+Date: Thu, 12 Dec 2024 07:47:41 +0800
+From: kernel test robot <lkp@intel.com>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org
+Cc: oe-kbuild-all@lists.linux.dev, andrii@kernel.org, memxor@gmail.com,
+	akpm@linux-foundation.org, peterz@infradead.org, vbabka@suse.cz,
+	bigeasy@linutronix.de, rostedt@goodmis.org, houtao1@huawei.com,
+	hannes@cmpxchg.org, shakeel.butt@linux.dev, mhocko@suse.com,
+	willy@infradead.org, tglx@linutronix.de, tj@kernel.org,
+	linux-mm@kvack.org, kernel-team@fb.com
+Subject: Re: [PATCH bpf-next v2 4/6] memcg: Add __GFP_TRYLOCK support.
+Message-ID: <202412120745.nnianRgw-lkp@intel.com>
+References: <20241210023936.46871-5-alexei.starovoitov@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v3 0/4] Optimize bpf_csum_diff() and homogenize for
- all archs
-From: patchwork-bot+linux-riscv@kernel.org
-Message-Id: 
- <173395636024.1729195.5884060368915845974.git-patchwork-notify@kernel.org>
-Date: Wed, 11 Dec 2024 22:32:40 +0000
-References: <20241026125339.26459-1-puranjay@kernel.org>
-In-Reply-To: <20241026125339.26459-1-puranjay@kernel.org>
-To: Puranjay Mohan <puranjay@kernel.org>
-Cc: linux-riscv@lists.infradead.org, aou@eecs.berkeley.edu, ast@kernel.org,
- akpm@linux-foundation.org, andrii@kernel.org, bpf@vger.kernel.org,
- daniel@iogearbox.net, davem@davemloft.net, eddyz87@gmail.com,
- edumazet@google.com, haoluo@google.com, deller@gmx.de, kuba@kernel.org,
- James.Bottomley@HansenPartnership.com, jolsa@kernel.org,
- john.fastabend@gmail.com, kpsingh@kernel.org, linux-kernel@vger.kernel.org,
- linux-parisc@vger.kernel.org, martin.lau@linux.dev, mykolal@fb.com,
- netdev@vger.kernel.org, palmer@dabbelt.com, pabeni@redhat.com,
- paul.walmsley@sifive.com, puranjay12@gmail.com, shuah@kernel.org,
- song@kernel.org, sdf@fomichev.me, yonghong.song@linux.dev
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241210023936.46871-5-alexei.starovoitov@gmail.com>
 
-Hello:
+Hi Alexei,
 
-This series was applied to riscv/linux.git (fixes)
-by Daniel Borkmann <daniel@iogearbox.net>:
+kernel test robot noticed the following build warnings:
 
-On Sat, 26 Oct 2024 12:53:35 +0000 you wrote:
-> Changes in v3:
-> v2: https://lore.kernel.org/all/20241023153922.86909-1-puranjay@kernel.org/
-> - Fix sparse warning in patch 2
-> 
-> Changes in v2:
-> v1: https://lore.kernel.org/all/20241021122112.101513-1-puranjay@kernel.org/
-> - Remove the patch that adds the benchmark as it is not useful enough to be
->   added to the tree.
-> - Fixed a sparse warning in patch 1.
-> - Add reviewed-by and acked-by tags.
-> 
-> [...]
+[auto build test WARNING on bpf-next/master]
 
-Here is the summary with links:
-  - [bpf-next,v3,1/4] net: checksum: move from32to16() to generic header
-    https://git.kernel.org/riscv/c/db71aae70e3e
-  - [bpf-next,v3,2/4] bpf: bpf_csum_diff: optimize and homogenize for all archs
-    https://git.kernel.org/riscv/c/6a4794d5a3e2
-  - [bpf-next,v3,3/4] selftests/bpf: don't mask result of bpf_csum_diff() in test_verifier
-    https://git.kernel.org/riscv/c/b87f584024e1
-  - [bpf-next,v3,4/4] selftests/bpf: Add a selftest for bpf_csum_diff()
-    https://git.kernel.org/riscv/c/00c1f3dc66a3
+url:    https://github.com/intel-lab-lkp/linux/commits/Alexei-Starovoitov/mm-bpf-Introduce-__GFP_TRYLOCK-for-opportunistic-page-allocation/20241210-104250
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
+patch link:    https://lore.kernel.org/r/20241210023936.46871-5-alexei.starovoitov%40gmail.com
+patch subject: [PATCH bpf-next v2 4/6] memcg: Add __GFP_TRYLOCK support.
+config: x86_64-buildonly-randconfig-001-20241210 (https://download.01.org/0day-ci/archive/20241212/202412120745.nnianRgw-lkp@intel.com/config)
+compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241212/202412120745.nnianRgw-lkp@intel.com/reproduce)
 
-You are awesome, thank you!
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202412120745.nnianRgw-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> mm/memcontrol.c:1761: warning: Function parameter or struct member 'gfp_mask' not described in 'consume_stock'
+
+
+vim +1761 mm/memcontrol.c
+
+cdec2e4265dfa0 KAMEZAWA Hiroyuki         2009-12-15  1743  
+56751146238723 Sebastian Andrzej Siewior 2022-03-22  1744  static struct obj_cgroup *drain_obj_stock(struct memcg_stock_pcp *stock);
+bf4f059954dcb2 Roman Gushchin            2020-08-06  1745  static bool obj_stock_flush_required(struct memcg_stock_pcp *stock,
+bf4f059954dcb2 Roman Gushchin            2020-08-06  1746  				     struct mem_cgroup *root_memcg);
+bf4f059954dcb2 Roman Gushchin            2020-08-06  1747  
+a0956d54492eb7 Suleiman Souhlal          2012-12-18  1748  /**
+a0956d54492eb7 Suleiman Souhlal          2012-12-18  1749   * consume_stock: Try to consume stocked charge on this cpu.
+a0956d54492eb7 Suleiman Souhlal          2012-12-18  1750   * @memcg: memcg to consume from.
+a0956d54492eb7 Suleiman Souhlal          2012-12-18  1751   * @nr_pages: how many pages to charge.
+a0956d54492eb7 Suleiman Souhlal          2012-12-18  1752   *
+a0956d54492eb7 Suleiman Souhlal          2012-12-18  1753   * The charges will only happen if @memcg matches the current cpu's memcg
+a0956d54492eb7 Suleiman Souhlal          2012-12-18  1754   * stock, and at least @nr_pages are available in that stock.  Failure to
+a0956d54492eb7 Suleiman Souhlal          2012-12-18  1755   * service an allocation will refill the stock.
+a0956d54492eb7 Suleiman Souhlal          2012-12-18  1756   *
+a0956d54492eb7 Suleiman Souhlal          2012-12-18  1757   * returns true if successful, false otherwise.
+cdec2e4265dfa0 KAMEZAWA Hiroyuki         2009-12-15  1758   */
+c889f3c0bc9a18 Alexei Starovoitov        2024-12-09  1759  static bool consume_stock(struct mem_cgroup *memcg, unsigned int nr_pages,
+c889f3c0bc9a18 Alexei Starovoitov        2024-12-09  1760  			  gfp_t gfp_mask)
+cdec2e4265dfa0 KAMEZAWA Hiroyuki         2009-12-15 @1761  {
+cdec2e4265dfa0 KAMEZAWA Hiroyuki         2009-12-15  1762  	struct memcg_stock_pcp *stock;
+1872b3bcd5874b Breno Leitao              2024-05-01  1763  	unsigned int stock_pages;
+db2ba40c277dc5 Johannes Weiner           2016-09-19  1764  	unsigned long flags;
+3e32cb2e0a12b6 Johannes Weiner           2014-12-10  1765  	bool ret = false;
+cdec2e4265dfa0 KAMEZAWA Hiroyuki         2009-12-15  1766  
+a983b5ebee5720 Johannes Weiner           2018-01-31  1767  	if (nr_pages > MEMCG_CHARGE_BATCH)
+3e32cb2e0a12b6 Johannes Weiner           2014-12-10  1768  		return ret;
+a0956d54492eb7 Suleiman Souhlal          2012-12-18  1769  
+c889f3c0bc9a18 Alexei Starovoitov        2024-12-09  1770  	if (!local_trylock_irqsave(&memcg_stock.stock_lock, flags)) {
+c889f3c0bc9a18 Alexei Starovoitov        2024-12-09  1771  		if (gfp_mask & __GFP_TRYLOCK)
+c889f3c0bc9a18 Alexei Starovoitov        2024-12-09  1772  			return ret;
+56751146238723 Sebastian Andrzej Siewior 2022-03-22  1773  		local_lock_irqsave(&memcg_stock.stock_lock, flags);
+c889f3c0bc9a18 Alexei Starovoitov        2024-12-09  1774  	}
+db2ba40c277dc5 Johannes Weiner           2016-09-19  1775  
+db2ba40c277dc5 Johannes Weiner           2016-09-19  1776  	stock = this_cpu_ptr(&memcg_stock);
+1872b3bcd5874b Breno Leitao              2024-05-01  1777  	stock_pages = READ_ONCE(stock->nr_pages);
+1872b3bcd5874b Breno Leitao              2024-05-01  1778  	if (memcg == READ_ONCE(stock->cached) && stock_pages >= nr_pages) {
+1872b3bcd5874b Breno Leitao              2024-05-01  1779  		WRITE_ONCE(stock->nr_pages, stock_pages - nr_pages);
+3e32cb2e0a12b6 Johannes Weiner           2014-12-10  1780  		ret = true;
+3e32cb2e0a12b6 Johannes Weiner           2014-12-10  1781  	}
+db2ba40c277dc5 Johannes Weiner           2016-09-19  1782  
+56751146238723 Sebastian Andrzej Siewior 2022-03-22  1783  	local_unlock_irqrestore(&memcg_stock.stock_lock, flags);
+db2ba40c277dc5 Johannes Weiner           2016-09-19  1784  
+cdec2e4265dfa0 KAMEZAWA Hiroyuki         2009-12-15  1785  	return ret;
+cdec2e4265dfa0 KAMEZAWA Hiroyuki         2009-12-15  1786  }
+cdec2e4265dfa0 KAMEZAWA Hiroyuki         2009-12-15  1787  
+
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
