@@ -1,99 +1,179 @@
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0ED4C1422D4;
-	Thu, 12 Dec 2024 20:36:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C5811CCEE0;
+	Thu, 12 Dec 2024 21:08:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734035814; cv=none; b=gEXbiKL7wN2iHKpNDz6+W465ymqtcMrPzN5Py9JfLUYDQfQ9lUclvT+I9eYO0ruhGVMmwYF206tKSufNLFsWsacBNSbSuEajMCIhtmcUVY0wFWKIUmKxNjCLc/sjdpisQUtcXOrQ82SNJAuvPkFFwIooBez+N18KYIFcf/atys0=
+	t=1734037688; cv=none; b=QcmsU7HcW1JWFNICqac+cXWhSL0TMapnAGhMnIp/YCpEwWf/y7f+zEUPcRsQw5g2YdAtcg0MvbJjd5tKp44NI8y960Vid2TNfie7madc6Cl4B7PsvpnA2R7v6FwK2vTuBcfy3BIqSPu2rILUntjhXcA+6+Y+CG7hFXtbiknu6hk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734035814; c=relaxed/simple;
-	bh=vVt9xQa2C9bSymeBUDB+KYRr0O7HCgjXlrIMt5Jr1xE=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=SP8ehrWiw2gTV25mwAVE3akYsfU0wnmUDQNc+Zx9/WyjOcIlTViLxz8LqtSeKD3+CP2JzUKTeqGR0b8nvN6VkYzybYHhNr1j0mVhd6EcQKGHH4HCwa1bOf/1gIRG24Rl6V/UThcJ27tNXZ1F6bOEED42kW9AM5hX9WOMlVdLa1w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=K9srsSQ7; arc=none smtp.client-ip=209.85.214.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1734037688; c=relaxed/simple;
+	bh=Oz60QXYrQ9KYyUZgqU/a7cC+v7HQv3mC+ucMNvm8EOc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=R3a8ulw7IAeSw4E/kwUceh3yfFwdqw7i0DZmwzRAZDRkxYhQz7tzG1DpsSur1UgJv76Pto/g3yw/Xj9u+nr/WaiTe53Mu3N3GRVOqsBN8UdlFH58Rfba41Z6h7vmfRNlYxOjki0/9UZwd1K4pFXZ1s98xCKva+bCXPt80gFxAhI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=hFYaHO5+; arc=none smtp.client-ip=159.69.126.157
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="K9srsSQ7"
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-21654fdd5daso9511695ad.1;
-        Thu, 12 Dec 2024 12:36:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1734035812; x=1734640612; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=KYFige5tsHFxZMyzjI5KhwQjHxQ/KTWwqPFjXJN9c+c=;
-        b=K9srsSQ7fRKhdlB8Oxm10PHYGEopi903O2pg3zJmBoAPTmvDiBs8pBwjeYZHi0VnWQ
-         +sN1qfYW8eyF0nAfLvbCVbN09Q4i2vlFAd1G37lNd8sTWEaSbH3ZBUhpoGxOwzrvfkf2
-         SXfwYIvOfi2nWtxpTCbZC/APZtjKEVk2JXMUiReYtyp2RZcBYZb6q0w/HRCVscJVadMz
-         iVO9qXyJ22EiwtwJjRDO82e18vvBw4K+1Yxm//o11A8VQa/cofL4gclVhQbaTpvsLIPS
-         FHg2HrFaqaPZaNTJ7O+/Qg3e/Eaqm2FVQGaXZ6sbO6EoMhHzb/eXkd06D3QjMdR/xado
-         oe4Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1734035812; x=1734640612;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=KYFige5tsHFxZMyzjI5KhwQjHxQ/KTWwqPFjXJN9c+c=;
-        b=VVrt8tLeqcG41yeSDeaCLjtki2017gx2bFmPPeVMxHybEQxdE7s2DHttLU5e/jLa5m
-         IQXYd9sBP7sljL59Xcc41Jc4H/9aTvTY/txEhPJD18Cqh6r0ZjlYRhIXIueTK03pofvk
-         EAgow7bUiWyP4MIHagBAb10NaI5VBvD401GMGh6HilDrjTFu6G/PA5Bc5zJAhZJr6HCT
-         qWD1l9E54xbF0zHv7brTJz106nPA/XAwMACu2kwDL/OGsyFDE78KHx/zhkikw6iKbmwQ
-         xHOMJRVovyS3SXSw3CM9FOA3eyUAmMVaLNmi76b90TVmtZYT8H3/wIQAAV781Ya0pVl9
-         pHRg==
-X-Forwarded-Encrypted: i=1; AJvYcCWZBsbbF2BF9HjNFghU31Of1PksVXdXLu+o9xPL1jf8KPoQKMAF6Q8Im0AHkkYybw3/tXGKgQl9@vger.kernel.org
-X-Gm-Message-State: AOJu0YyEfd8ovk+iyqTuxWMXpofJ+02V1DRqmJQlhqApkemGzkvnOWPO
-	naZXOGgF9Lcay4NvwJXHLVOu885AupFZeLlbQ2u9QVHF5aZkIYmP
-X-Gm-Gg: ASbGncuIW9zDVesPHUKqX6ao2w4I3v1JgPGPbKZCXaDCdcGQIYZMtMebeqXZw/u48XN
-	UkOcDPF6302sqvuebes2Xo0FRe9GxiiY0wbGui/LNtC3gqN0BF6Di/HWd4ZI3xuUvStb3nhfRkF
-	nL5BJKa9HDY7OpYRxLzk8/seIISIPgTkw9H1dH5sRJNRrC9FvFs+tX66RQivBuUW2adhee7T9eR
-	wovVixZ8afzj0TD4OvJe2JASstxpsZPpfQPXRAP0P1pX/1DzZ03pw==
-X-Google-Smtp-Source: AGHT+IEjrEZ8s4Kk1j8hI49/9EaxCfCnXZkThTlC4QCdlWySHtIuevvg2s+zt5Ng34FCLhGrHmZHVg==
-X-Received: by 2002:a17:902:cccb:b0:216:760c:3879 with SMTP id d9443c01a7336-21892a76c7fmr1223565ad.46.1734035812143;
-        Thu, 12 Dec 2024 12:36:52 -0800 (PST)
-Received: from [192.168.0.235] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-7fd3af6ef9csm9306217a12.62.2024.12.12.12.36.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Dec 2024 12:36:51 -0800 (PST)
-Message-ID: <7f1eeeac169356ba9e75af3034b9e941d771561b.camel@gmail.com>
-Subject: Re: [PATCH dwarves v1 1/2] btf_loader: support for multiple
- BTF_DECL_TAGs pointing to same tag
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Alan Maguire <alan.maguire@oracle.com>, dwarves@vger.kernel.org, 
-	arnaldo.melo@gmail.com
-Cc: bpf@vger.kernel.org, kernel-team@fb.com, ast@kernel.org,
- daniel@iogearbox.net, 	andrii@kernel.org, yonghong.song@linux.dev, Arnaldo
- Carvalho de Melo	 <acme@kernel.org>
-Date: Thu, 12 Dec 2024 12:36:47 -0800
-In-Reply-To: <f76a8cfa-73e7-4978-bd25-637db5d98dc9@oracle.com>
-References: <20241211021227.2341735-1-eddyz87@gmail.com>
-	 <f76a8cfa-73e7-4978-bd25-637db5d98dc9@oracle.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.54.1 (3.54.1-1.fc41) 
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="hFYaHO5+"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+	s=mail; t=1734037673;
+	bh=Oz60QXYrQ9KYyUZgqU/a7cC+v7HQv3mC+ucMNvm8EOc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=hFYaHO5+OW8IYLiJKvsuPjwxiHo8S53cfj4lkbUB/Ic22Qm7PKJokYb69mOwVqeab
+	 4UeA8Ta0ZRrjMxLk47DM7OB8zFDtFdqTvoV47ek9HYCECQxYoY+34MvkRYnxT4eTB8
+	 fkHNJuAIp5lYZLcHXvOTTrZvsWcCJT27k6AnfyaY=
+Date: Thu, 12 Dec 2024 22:07:52 +0100
+From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: Ihor Solodrai <ihor.solodrai@pm.me>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, 
+	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Masahiro Yamada <masahiroy@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nicolas Schier <nicolas@fjasle.eu>, Kui-Feng Lee <kuifeng@fb.com>, 
+	Alan Maguire <alan.maguire@oracle.com>, Martin Rodriguez Reboredo <yakoyoku@gmail.com>, 
+	Miguel Ojeda <ojeda@kernel.org>, bpf@vger.kernel.org, linux-kbuild@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH bpf-next] kbuild, bpf: Enable reproducible BTF generation
+Message-ID: <acf36eab-f906-42f7-9299-1473c0451dd1@t-8ch.de>
+References: <20241211-pahole-reproducible-v1-1-22feae19bad9@weissschuh.net>
+ <REDzg-0aL2-Qw7QvYCKTfsLGh6E6Iq8dgWJPo5a94ym2x5DiUkwdHA-naUtaDO7HJgvOr6zd201E5P_WAquOyOFIiUij6Bi183EyxPusDuo=@pm.me>
+ <3b834807-9f20-4f04-b788-f45dfac5cb1f@t-8ch.de>
+ <CAEf4BzZSB2nzhYag_LKACXXJLwqLLfddXMV9_JRGYi+Y48rC-w@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAEf4BzZSB2nzhYag_LKACXXJLwqLLfddXMV9_JRGYi+Y48rC-w@mail.gmail.com>
 
-On Thu, 2024-12-12 at 20:29 +0000, Alan Maguire wrote:
+Hi Andrii,
 
-[...]
+On 2024-12-12 11:23:03-0800, Andrii Nakryiko wrote:
+> On Tue, Dec 10, 2024 at 10:24 PM Thomas Weißschuh <linux@weissschuh.net> wrote:
+> > On 2024-12-11 00:17:02+0000, Ihor Solodrai wrote:
+> > > On Tuesday, December 10th, 2024 at 3:23 PM, Thomas Weißschuh <linux@weissschuh.net> wrote:
+> > >
+> > > >
+> > > >
+> > > > Pahole v1.27 added a new BTF generation feature to support
+> > > > reproducibility in the face of multithreading.
+> > > > Enable it if supported and reproducible builds are requested.
+> > > >
+> > > > As unknown --btf_features are ignored, avoid the test for the pahole
+> > > > version to keep the line readable.
+> > > >
+> > > > Fixes: b4f72786429c ("scripts/pahole-flags.sh: Parse DWARF and generate BTF with multithreading.")
+> > > > Fixes: 72d091846de9 ("kbuild: avoid too many execution of scripts/pahole-flags.sh")
+> > > > Link: https://lore.kernel.org/lkml/4154d202-5c72-493e-bf3f-bce882a296c6@gentoo.org/
+> > > > Link: https://lore.kernel.org/lkml/20240322-pahole-reprodicible-v1-1-3eaafb1842da@weissschuh.net/
+> > > > Signed-off-by: Thomas Weißschuh linux@weissschuh.net
+> > > >
+> > > > ---
+> > > > scripts/Makefile.btf | 1 +
+> > > > 1 file changed, 1 insertion(+)
+> > > >
+> > > > diff --git a/scripts/Makefile.btf b/scripts/Makefile.btf
+> > > > index c3cbeb13de503555adcf00029a0b328e74381f13..da23265bc8b3cf43c0a1c89fbc4f53815a290e13 100644
+> > > > --- a/scripts/Makefile.btf
+> > > > +++ b/scripts/Makefile.btf
+> > > > @@ -22,6 +22,7 @@ else
+> > > >
+> > > > # Switch to using --btf_features for v1.26 and later.
+> > > > pahole-flags-$(call test-ge, $(pahole-ver), 126) = -j$(JOBS) --btf_features=encode_force,var,float,enum64,decl_tag,type_tag,optimized_func,consistent_func,decl_tag_kfuncs
+> > > > +pahole-flags-$(if $(KBUILD_BUILD_TIMESTAMP),y) += --btf_features=reproducible_build
+> > >
+> > > Hi Thomas,
+> > >
+> > > There are a couple of issues with reproducible_build flag which I
+> > > think are worth mentioning here. I don't know all the reasons behind
+> > > adding this now, and it's optional too, so feel free to discard my
+> > > comments.
+> > >
+> > > Currently with this flag, the BTF output is deterministic for a given
+> > > order of DWARF compilation units. So the BTF will be the same for the
+> > > same vmlinux binary. However, if the vmlinux is rebuilt due to an
+> > > incremental change in a source code, my understanding is that there is
+> > > no guarantee that DWARF CUs will be in the same order in the binary.
+> >
+> > The goal behind reproducible builds is to produce bit-by-bit idential
+> > binaries. If the CUs are in a different order then that requirement
+> > would have been broken there already.
+> 
+> I'm curious, how do we guarantee that we get bit-by-bit identical
+> DWARF? Do we enforce the order of linking of .o files into the final
+> vmlinux? Is this described anywhere?
 
-> Looks good to me. I _think_ we're safe enough in assuming the tag
-> ordering "bpf_kfunc bpf_fastcall" in the btf_functions.sh test, right?
+The CU order has to be fixed, otherwise the non-debugging parts of the
+binary would not be reproducible either.
+For docs is Documentation/kbuild/reproducible-builds.rst, the linked 
+reproducible-builds.org project has much more information.
 
-For "bpf_kfunc bpf_fastcall" yes, we should be safe.
-On the other hand, I don't think the below could be simplified with
-this knowledge:
+Also besides reproducible builds, lots of kernel components rely
+(accidentally or intentionally) on a stable initialization order, which
+is also defined by linking order.
 
-+	awk '{ gsub("^(bpf_kfunc |bpf_fastcall )+",""); print $0}'|sort|uniq
+From Documentation/kbuild/makefiles.rst:
 
-Because there are situations when only "bpf_kfunc" is present
-and when both "bpf_kfunc", "bpf_fastcall" are present.
+	Link order is significant, because certain functions
+	(module_init() / __initcall) will be called during boot in the
+	order they appear. So keep in mind that changing the link
+	order may e.g. change the order in which your SCSI
+	controllers are detected, and thus your disks are renumbered.
 
-[...]
+> > For an incremental build a full relink with *all* CUs is done, not only
+> > the changed once, so the order should always be the same.
+> 
+> The concern here is whether linker guarantees that CUs' DWARF data
+> will be appended in exactly the same order in such case?
 
+Otherwise it wouldn't be reproducible in general.
+The pahole developers specifically implemented
+--btf_features=reproducible_build for use in the kernel; after I sent
+a precursor patch to this one (also linked in the patch):
+
+https://lore.kernel.org/lkml/20240322-pahole-reprodicible-v1-1-3eaafb1842da@weissschuh.net/
+
+In general the kernel already supports reproducible builds.
+
+For my personal kernel builds only two incompatibilities/rough edges remain:
+
+* (parallel) BTF generation, which is fixed with this patch
+* CONFIG_MODULE_SIG with non-precreated keys (which I am working on)
+
+> > > At the same time, reproducible_build slows down BTF generation by
+> > > 30-50%, maybe more depending on the kernel config.
+> >
+> > If a user explicitly requests reproducibility then they should get it,
+> > even if it is slower.
+> >
+> > > Hopefully these problems will be solved in upcoming pahole releases.
+> >
+> > I don't see it as big problem. This is used for release builds, not
+> > during development.
+> >
+> > > Question: why KBUILD_BUILD_TIMESTAMP flag? Isn't it more appropriate
+> > > to use a separate flag for this particular feature?
+> >
+> > Adding an additional variable would need to be documented and would
+> > makes the feature harder to use. KBUILD_BUILD_TIMESTAMP already needs to
+> > be set by the user if they are building for reproducibility.
+> >
+> > > > ifneq ($(KBUILD_EXTMOD),)
+> > > > module-pahole-flags-$(call test-ge, $(pahole-ver), 126) += --btf_features=distilled_base
+> > > >
+> > > > ---
+> > > > base-commit: 7cb1b466315004af98f6ba6c2546bb713ca3c237
+> > > > change-id: 20241124-pahole-reproducible-2b879ac8bdab
+> > > >
+> > > > Best regards,
+> > > > --
+> > > > Thomas Weißschuh linux@weissschuh.net
