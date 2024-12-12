@@ -1,74 +1,46 @@
-Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E942B206278
-	for <bpf@vger.kernel.org>; Thu, 12 Dec 2024 07:07:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C4CD2010F2;
+	Thu, 12 Dec 2024 08:00:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733987250; cv=none; b=Bozoarmxoee1mQebFqZoCdps+bpmHeh7VUh45ma3cZlVJaePQWj46DDxIUxsNHMDX3Mq/txIj3GfiX81qLDwB5GmMFW2LnUZ6/tHVdDSDbfDjjdRAU2RGDfOt42wl6fkOs5M3jceMcosFPFMDLEEZq+rYe1cF3HaBjxexlgWNzQ=
+	t=1733990401; cv=none; b=hiwimtPE+SSkGar1cU1aEjs7d4S1uLkpNL9fWwcK7sOtaq9qhFG9ug0gab0ZXCSBY2mxPsVJzEkob/aCyv5BO9ic06MS1iJ2FGyNI6f/FEgL3NUh47zU7lt4qJ5zQMD2lpaz2v7pr8ooiVfYZH/MI6WHcP994KLoAUrLRDRL4h8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733987250; c=relaxed/simple;
-	bh=CNN1tzGSlWyQuHNjfFOip6+XNFd2pY7xASbPWiFfvvI=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Qc8NYSMzb6R14XJDf0ouuW9sLRY2Hey0DY5Ccva/mDcbW2/a+Kwuhh2u+mDxbQ/pqJWlUpA9OINEMFQd3ZPI0ebinDyFTem6AjrVtkQyJLVpT+TnUhSJ3grguhEbLunSIkW+NNb1sjVR2rmf1q4/buWL6uxC+N3bADFDuuKJUsw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hd0rBb7e; arc=none smtp.client-ip=209.85.215.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1733990401; c=relaxed/simple;
+	bh=wqcCObgwvwuBvGZlSNF/mijMawDsoOqIAedNageBYGE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=FUTUzWy0S1zo3eh24XgP5c5feNIWJKSPk+agAofpLtpgDuD25W5TppB1jfsaXKVUwr/lkBZZOo27F+P3MJAntKenOv43Ebw08L4g7W3EY9YWrR3Ky/30arKm8ZypWvPi5MF/tv0iSwRgjCP5rvh8jvfg/x9wenq9Ux9LRQZRDts=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=N4JFCXI+; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hd0rBb7e"
-Received: by mail-pg1-f177.google.com with SMTP id 41be03b00d2f7-7feb6871730so202379a12.2
-        for <bpf@vger.kernel.org>; Wed, 11 Dec 2024 23:07:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1733987246; x=1734592046; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=oo2HvqJfyyczUF61w4dstsX8Ca1IntU4zGLNKXpDkY8=;
-        b=hd0rBb7e/WhpvxM3EdqicX7lCD5afynKP8WJqW37Ic8bL+/OvAxpsM/7Z7Pp65G8SY
-         wcXWAt+kGzmFxL+SeNcWkagpxQFqLGdTyOlWY2eX95MAaJHHILxUEJfNWkG+x9pBSdRc
-         oKmwBCn4wUPyAaF2a1zB2M6h87TUK+2iKBRkOSZx8AJoHb0T2ptKVpTXH6NzS0sTr9+m
-         f5JUy4i6AKfl5+yYOhTGl4FoV6PU44JXYyd4jMc7Lpcg4JcJTS+nHiHMuunCh4WU2FRw
-         J6QGzgg65B6hHHZT0rOLfIVDOYVIHeiuwKzr2sMkf6sKr/qcfLZma/PAXDiM2OXiFJrg
-         W3UA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733987246; x=1734592046;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=oo2HvqJfyyczUF61w4dstsX8Ca1IntU4zGLNKXpDkY8=;
-        b=txMcDxPbHrly7HE7dvq9lp7hhCRFAWfk7HSFfzuX1bMPrajAo6F/sNQN1D5w6H316A
-         U/sRPLf/qE60esvluN62Mr7Fj9VXwYCxyOb0RmtwoRJ7SRAR0Sl1RuwAJZLeFlfu8Rxf
-         yR9s7nWtds3Ev01UzShbq9Mq9Ns/TWouXjBYPSxZqMRfec76T8dmkbJiw6tlcL7bDoWh
-         x6wfwTi66gQHDtNZ/90+RwPLJvDFYvubvUEiKQGoU1MCYdLB68MSPpOdNjZmUcZkAJt+
-         z2z1Vy7G8m6tUg5tuXCOyCnsrJmnZD5+OxawJdUL7F4fsWoa8L70KlC0HWP06BcHme+M
-         +3KQ==
-X-Gm-Message-State: AOJu0YyN7VrGKDAaDlLNJuEhCZqEThPpfe03fF6dB4ILhZIpfro18t36
-	6oMWvUftriSmjwSHcjxWZCTnkLytMXt5/Umas5N86QTCBVwbqpJUcryJhQ==
-X-Gm-Gg: ASbGncvoLW3uuFh/ZfVMlkx/gGZIY5goBit7gTRBQRzQ04aYdstyDDm2Scyx9NFi9vt
-	shXLl3TdtJOulYdEbuUx8xkWgt+mz5tzQjcyDsoZyYvSx0V7t/KCnW/LMX0uYuBPaWzbMYUN7kW
-	AqP4C2OOz63lJqkw7wbpbsnKoj99kIaw3Sm7UZxZjqiXM8r2jY4ww7bxm4ZibTqq+d4yajc8AqN
-	dtVFNBmIRQaYE4TafteNNQHf5xVttKjnPuRH2lZz0XjXAR+ljGB
-X-Google-Smtp-Source: AGHT+IH9yMPudEk+qGCNfGKIGCOKbBLD1MCFmVJX05aqdOyLkCEQp99A6TYUDLIdlPg/m6vvT0O23A==
-X-Received: by 2002:a17:90b:3c44:b0:2ee:e113:815d with SMTP id 98e67ed59e1d1-2f127f7e1fdmr9056053a91.8.1733987245743;
-        Wed, 11 Dec 2024 23:07:25 -0800 (PST)
-Received: from honey-badger.. ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2f142d90bd8sm600217a91.10.2024.12.11.23.07.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Dec 2024 23:07:25 -0800 (PST)
-From: Eduard Zingerman <eddyz87@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="N4JFCXI+"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 268E5C4CECE;
+	Thu, 12 Dec 2024 07:59:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1733990400;
+	bh=wqcCObgwvwuBvGZlSNF/mijMawDsoOqIAedNageBYGE=;
+	h=From:To:Cc:Subject:Date:From;
+	b=N4JFCXI+2uk+yGh8yCwsJNIopzUKNHNuIxLzmr3Go1WhwipuJ2fIdXQ1PFr85C708
+	 NXV1yzPoV82LozFDHh3Dx79T5v/ZlqhOGk/5aEVgvkuXK+flm7LFSli7mF+FF1IBh/
+	 QX8NMJDujwTWaCAK5mk48LoKW1y3YtbKS/KNBY0jF3l7s62Kbi02A0XLV3p8/5cm1O
+	 pgLhoFeHVnT/MqJ1OSckKOv7+1r7YPVpJv9/g9fg5mpux6pe1fAxX5EhNIRRavvDHn
+	 bPsDfDv1bPLCi3rqqRLVsaqIWlmbxFCPMRLkKAW8RL9sDP5+pvGd7vYTQYCwOItppN
+	 /1iGU9HxkMCqA==
+From: Song Liu <song@kernel.org>
 To: bpf@vger.kernel.org,
-	ast@kernel.org
-Cc: andrii@kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-security-module@vger.kernel.org
+Cc: kernel-team@meta.com,
+	andrii@kernel.org,
+	ast@kernel.org,
 	daniel@iogearbox.net,
 	martin.lau@linux.dev,
-	kernel-team@fb.com,
-	yonghong.song@linux.dev,
-	mejedi@gmail.com,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	kernel test robot <lkp@intel.com>,
-	Dan Carpenter <dan.carpenter@linaro.org>
-Subject: [PATCH bpf 1/2] bpf: fix NPE when computing changes_pkt_data of program w/o subprograms
-Date: Wed, 11 Dec 2024 23:07:10 -0800
-Message-ID: <20241212070711.427443-1-eddyz87@gmail.com>
-X-Mailer: git-send-email 2.47.0
+	kpsingh@kernel.org,
+	mattbobrowski@google.com,
+	Song Liu <song@kernel.org>
+Subject: [PATCH bpf-next] bpf: lsm: Remove hook to bpf_task_storage_free
+Date: Wed, 11 Dec 2024 23:59:56 -0800
+Message-ID: <20241212075956.2614894-1-song@kernel.org>
+X-Mailer: git-send-email 2.43.5
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -77,65 +49,33 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-bpf_prog_aux->func field might be NULL if program does not have
-subprograms except for main sub-program. The fixed commit does
-bpf_prog_aux->func access unconditionally, which might lead to null
-pointer dereference.
+free_task() already calls bpf_task_storage_free(). It is not necessary
+to call it again on security_task_free(). Remove the hook.
 
-The bug could be triggered by replacing the following BPF program:
+Signed-off-by: Song Liu <song@kernel.org>
 
-    SEC("tc")
-    int main_changes(struct __sk_buff *sk)
-    {
-        bpf_skb_pull_data(sk, 0);
-        return 0;
-    }
-
-With the following BPF program:
-
-    SEC("freplace")
-    long changes_pkt_data(struct __sk_buff *sk)
-    {
-        return bpf_skb_pull_data(sk, 0);
-    }
-
-bpf_prog_aux instance itself represents the main sub-program,
-use this property to fix the bug.
-
-Fixes: 81f6d0530ba0 ("bpf: check changes_pkt_data property for extension programs")
-Reported-by: kernel test robot <lkp@intel.com>
-Reported-by: Dan Carpenter <dan.carpenter@linaro.org>
-Closes: https://lore.kernel.org/r/202412111822.qGw6tOyB-lkp@intel.com/
-Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
 ---
- kernel/bpf/verifier.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index c2e5d0e6e3d0..5e541339b2f6 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -22193,6 +22193,7 @@ int bpf_check_attach_target(struct bpf_verifier_log *log,
- 	}
- 	if (tgt_prog) {
- 		struct bpf_prog_aux *aux = tgt_prog->aux;
-+		bool tgt_changes_pkt_data;
+This was initially sent in a patchset [1]. However, this patch is not
+closely related to other patches in the set, so sending it alone.
+
+[1] https://lore.kernel.org/bpf/20241112083700.356299-1-song@kernel.org/
+---
+ security/bpf/hooks.c | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/security/bpf/hooks.c b/security/bpf/hooks.c
+index 3663aec7bcbd..db759025abe1 100644
+--- a/security/bpf/hooks.c
++++ b/security/bpf/hooks.c
+@@ -13,7 +13,6 @@ static struct security_hook_list bpf_lsm_hooks[] __ro_after_init = {
+ 	#include <linux/lsm_hook_defs.h>
+ 	#undef LSM_HOOK
+ 	LSM_HOOK_INIT(inode_free_security, bpf_inode_storage_free),
+-	LSM_HOOK_INIT(task_free, bpf_task_storage_free),
+ };
  
- 		if (bpf_prog_is_dev_bound(prog->aux) &&
- 		    !bpf_prog_dev_bound_match(prog, tgt_prog)) {
-@@ -22227,8 +22228,10 @@ int bpf_check_attach_target(struct bpf_verifier_log *log,
- 					"Extension programs should be JITed\n");
- 				return -EINVAL;
- 			}
--			if (prog->aux->changes_pkt_data &&
--			    !aux->func[subprog]->aux->changes_pkt_data) {
-+			tgt_changes_pkt_data = aux->func
-+					       ? aux->func[subprog]->aux->changes_pkt_data
-+					       : aux->changes_pkt_data;
-+			if (prog->aux->changes_pkt_data && !tgt_changes_pkt_data) {
- 				bpf_log(log,
- 					"Extension program changes packet data, while original does not\n");
- 				return -EINVAL;
+ static const struct lsm_id bpf_lsmid = {
 -- 
-2.47.0
+2.43.5
 
