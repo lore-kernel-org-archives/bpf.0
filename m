@@ -1,202 +1,89 @@
-Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com [209.85.215.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AAD6189F57;
-	Fri, 13 Dec 2024 23:02:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63BAC1922E9
+	for <bpf@vger.kernel.org>; Fri, 13 Dec 2024 23:10:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734130946; cv=none; b=rRyC/5AbJlvJxNODpM/tEoqyWnYKNE43BOOE/TsKerBeBmPNvFN8Z6Qt9X4xfrHUvGfMyE6kWHT4GEbLu8WdUKqEDEDhbWIUicDWDoIDgEAU6u/jmQR/H0DVoNdw7JXlXC8niatsoFIZpfL4HW8FB96B0ajp4TFIXF9R/TusHpA=
+	t=1734131416; cv=none; b=rh1g/J6KECc0ln3umf28a1Bvy//W9I/DxoHVgV4F87J1uGkNy72V6/2d8DZaEMQIXat8ozgjbHWXuSuHZfYTxVSfa6+t4O/MdxtFLbZ+DUqSe2osoHZiwEqk3cXCsWqKp8T6Je4iA3ekA7a6Na3+B0+3U1NcL0g2WMEStNnl+j8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734130946; c=relaxed/simple;
-	bh=0hXPPeazK47KkVCir4tsVhL3yxd1Kary+/TTq7stzMs=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=YgpZHQrQGDgVqBPVDO7ATrUh2ZtPqAzCXDGr7ASBIKv3E3BXlbF3UqkTvdqPmJ8KWnbSwnJb+eydsGYwl56eajwdosVLDDK1eYCTaMwmfhAPj6o7aWO2AV5kcwIWJyyZfzAN/+FLW0fXHZd/IUvGw7o9vHmIsPtvcTt7LK2xX6s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=m+tFVfyT; arc=none smtp.client-ip=209.85.215.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1734131416; c=relaxed/simple;
+	bh=cdNWf2GTt/2LkIyoL2YquWQrVRBYsEEN03/NxPdfI0I=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=s7yKggrrmn5vh283Pk7AQtplDQ9ncFMqMuC24bFE6xC/wTsRh/7i1sIMdep+FrNGfFS/mEK/CC5Y0uOQmTwfAhW8ZSmlzOIwFOxu2XIHmbbdLuue1dISJcwwxd6IaXCK6Q69A9H9NB4ZmWkle38AFrAUQwKw4rCg/KV+ErYvUPM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Uibj7KRA; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="m+tFVfyT"
-Received: by mail-pg1-f170.google.com with SMTP id 41be03b00d2f7-8019f048bc7so1648914a12.1;
-        Fri, 13 Dec 2024 15:02:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1734130944; x=1734735744; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=NKv5XzUh0C4meBPgAZwwhAJ6ZgqRgXN0C8Ta/CNq1Sk=;
-        b=m+tFVfyTEDzRCkZOtjXGe7mynSAQmvaCddnRQkg+emjFZnZoJHZnfcAgy0hDSyx7SJ
-         LRTo8Q6kA4UVPtvk0Uc0WQkY0rjpAQAI9es7WohJmTdIvT6LAVuJFXZ8/9XzitOSibG4
-         3z/FiXyKBOuP7MUxJzaQqoOSEpMEIrWHC6sL/4DreABKPOiAhDCgqRDh2DKUmqbM8Hwv
-         LTWM7PM1lYMuvTc+D8GgyKacevhZEXZavtS6hx/MVvYzovRM5NU5H4m1sB82zUCoNqgr
-         Zu9En7ZuUIJe7FwMmzWgCTFrz5ooLu3ZFZ2NDm2/8DyomwGsSPMW5kjhQ2Frov1QRskv
-         x30w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1734130944; x=1734735744;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=NKv5XzUh0C4meBPgAZwwhAJ6ZgqRgXN0C8Ta/CNq1Sk=;
-        b=L83+JgQKSWYUnK639lb6e/FFfW4Ny2ccr3bOUBuZjiav2RG5vWYBcgtPtgx5DUy+VN
-         Gl/kxbl9xT8n660zCC+Kg7HJ2Qq1Ef5SYMO4XJc7Xhwq/puRLplfEdlBdqivyu7S8MgH
-         bAM/9SfIz9VX760rtUSrtbh/EjJ5RvCD0PvE3Y+VweMkFqSAHeysuaubI7syQPMviVoD
-         fK0OgKnxqplebUjkA3QlOGRramT+MfDE5CRxBBlj4suVrMj++lflvy2AU0vofsMcH8Ec
-         xXujpTreWEXIj6Ag1NI6L884IpXbItTyLCXNdO/JRWtbGMXLeRqLcGvu/AHTKNe60YnO
-         WW5A==
-X-Forwarded-Encrypted: i=1; AJvYcCUaDJCLn+FNV36g53KoPKZGn9Hl1lR9GvRYjpQGXJoWg95Zj4Y4PiG2PhLUHlf3GOcbMTM=@vger.kernel.org, AJvYcCVn13wN4ngknalZgPDrrE/NsXU3v6SJm+W/7Lx4RL3TtlAL/HfpOZ6SG3D0/1U8VzOX1rYvbuPOvJBNyXSrUlqK@vger.kernel.org, AJvYcCW9bykodn6Eud1ruF7Cdm3vDoGsiFlKSp2NitdjNUF8R6KSjJDNZNCLqQ8tvWUwPJo+75WVkmxp1Oy5Ceuj@vger.kernel.org, AJvYcCWWRwlei3zXiqCklISJPJebKFM8uOdbWVI7+BULoXptHUbRZlwjNp3plW08z1mGl+KK2KaJ9C0Z@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx76ADVMN9ivbhXbo2MV+nr6TANEReY9J4pqwzsBJIKGCUTbx4g
-	bCeZSeDIHQSGx+1ym8YlDfrqsZDGhTYEg6u1qzEpMFBpdNYkvwf90JnTsAZtxfElzDY6COvmTEe
-	U/4Hx+BR0SCESlW3376TnooGJUfI=
-X-Gm-Gg: ASbGncsO5EAuodpXuiV7Ff2rnC1k8nExSyTwHIjc/crl/+k9oTIQu6XEbuiYJ46LxeF
-	zziF4uAXiNtAEMtsv9/XOrGR61/hhDtPMIwB/udh0aUFCNkLQENm3UQ==
-X-Google-Smtp-Source: AGHT+IEgTN9e12AHmnF7HTjA1lax9Frb1p24w1dpS+ljzdVozwO5C+WHDrmStzbx4j/IoTB4mh2jvLb24bzCZlZyNZI=
-X-Received: by 2002:a17:90b:1a92:b0:2ee:c4f2:a77d with SMTP id
- 98e67ed59e1d1-2f28fd6e7d2mr5785464a91.21.1734130944218; Fri, 13 Dec 2024
- 15:02:24 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Uibj7KRA"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0D5CC4CED0;
+	Fri, 13 Dec 2024 23:10:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1734131416;
+	bh=cdNWf2GTt/2LkIyoL2YquWQrVRBYsEEN03/NxPdfI0I=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=Uibj7KRAtkpCWTN5YBDrxJ+CQmo9/hwXBHxsBwxrKy29J0bAgds/sdSMOCj92Mfhl
+	 bhIc7Z53B/+3NZnK7Ia1mNAQExyn5Ia3u07OvU8LKZu9Vor5EYB+eO+0HcCsJc5PNY
+	 1M+q7Vvy7xbnHkBmuJoP5b1A2jnI7GNIWJh+KtS09zvi/nYIxvUYeo77REurAPnIto
+	 RvCJ6Hbz3DrHfFRAHdNNV29G+HTIOzyhmwoKezEIJW37L4eo/c2jBHmZJpC57lgl3H
+	 Jc+0Dx+NLNYVu3n3web9CwlxB8w8rYUEMTQ2lI5x9lWWO2il7G3+HF4wyWe22J3D7U
+	 hnU5tYMe7+66Q==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id AE059380A959;
+	Fri, 13 Dec 2024 23:10:33 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1734045451.git.dxu@dxuuu.xyz> <92065ca054beccd6d0f35efe9715ef965e8d379f.1734045451.git.dxu@dxuuu.xyz>
-In-Reply-To: <92065ca054beccd6d0f35efe9715ef965e8d379f.1734045451.git.dxu@dxuuu.xyz>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Fri, 13 Dec 2024 15:02:11 -0800
-Message-ID: <CAEf4BzaqCgW9keiT+tJUBQWT6Q+jMwuvn4O2ZghO0c+ZvACNrw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v5 4/5] bpf: verifier: Support eliding map lookup nullness
-To: Daniel Xu <dxu@dxuuu.xyz>
-Cc: andrii@kernel.org, ast@kernel.org, eddyz87@gmail.com, shuah@kernel.org, 
-	daniel@iogearbox.net, john.fastabend@gmail.com, martin.lau@linux.dev, 
-	song@kernel.org, yonghong.song@linux.dev, kpsingh@kernel.org, sdf@fomichev.me, 
-	haoluo@google.com, jolsa@kernel.org, mykolal@fb.com, bpf@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v5 bpf-next 0/7] Add fd_array_cnt attribute for BPF_PROG_LOAD
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <173413143251.3187520.18077942591138065487.git-patchwork-notify@kernel.org>
+Date: Fri, 13 Dec 2024 23:10:32 +0000
+References: <20241213130934.1087929-1-aspsk@isovalent.com>
+In-Reply-To: <20241213130934.1087929-1-aspsk@isovalent.com>
+To: Anton Protopopov <aspsk@isovalent.com>
+Cc: bpf@vger.kernel.org
 
-On Thu, Dec 12, 2024 at 3:23=E2=80=AFPM Daniel Xu <dxu@dxuuu.xyz> wrote:
->
-> This commit allows progs to elide a null check on statically known map
-> lookup keys. In other words, if the verifier can statically prove that
-> the lookup will be in-bounds, allow the prog to drop the null check.
->
-> This is useful for two reasons:
->
-> 1. Large numbers of nullness checks (especially when they cannot fail)
->    unnecessarily pushes prog towards BPF_COMPLEXITY_LIMIT_JMP_SEQ.
-> 2. It forms a tighter contract between programmer and verifier.
->
-> For (1), bpftrace is starting to make heavier use of percpu scratch
-> maps. As a result, for user scripts with large number of unrolled loops,
-> we are starting to hit jump complexity verification errors.  These
-> percpu lookups cannot fail anyways, as we only use static key values.
-> Eliding nullness probably results in less work for verifier as well.
->
-> For (2), percpu scratch maps are often used as a larger stack, as the
-> currrent stack is limited to 512 bytes. In these situations, it is
-> desirable for the programmer to express: "this lookup should never fail,
-> and if it does, it means I messed up the code". By omitting the null
-> check, the programmer can "ask" the verifier to double check the logic.
->
-> Tests also have to be updated in sync with these changes, as the
-> verifier is more efficient with this change. Notable, iters.c tests had
-> to be changed to use a map type that still requires null checks, as it's
-> exercising verifier tracking logic w.r.t iterators.
->
-> Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
-> ---
->  kernel/bpf/verifier.c                         | 80 ++++++++++++++++++-
->  tools/testing/selftests/bpf/progs/iters.c     | 14 ++--
->  .../selftests/bpf/progs/map_kptr_fail.c       |  2 +-
->  .../selftests/bpf/progs/verifier_map_in_map.c |  2 +-
->  .../testing/selftests/bpf/verifier/map_kptr.c |  2 +-
->  5 files changed, 87 insertions(+), 13 deletions(-)
->
+Hello:
 
-Eduard has great points. I've added a few more comments below.
+This series was applied to bpf/bpf-next.git (master)
+by Andrii Nakryiko <andrii@kernel.org>:
 
-pw-bot: cr
+On Fri, 13 Dec 2024 13:09:27 +0000 you wrote:
+> Add a new attribute to the bpf(BPF_PROG_LOAD) system call. If this
+> new attribute is non-zero, then the fd_array is considered to be a
+> continuous array of the fd_array_cnt length and to contain only
+> proper map file descriptors or btf file descriptors.
+> 
+> This change allows maps (and btfs), which aren't referenced directly
+> by a BPF program, to be bound to the program _and_ also to be present
+> during the program verification (so BPF_PROG_BIND_MAP is not enough
+> for this use case).
+> 
+> [...]
 
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 58b36cc96bd5..4947ef884a18 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -287,6 +287,7 @@ struct bpf_call_arg_meta {
->         u32 ret_btf_id;
->         u32 subprogno;
->         struct btf_field *kptr_field;
-> +       s64 const_map_key;
->  };
->
->  struct bpf_kfunc_call_arg_meta {
-> @@ -9163,6 +9164,53 @@ static int check_reg_const_str(struct bpf_verifier=
-_env *env,
->         return 0;
->  }
->
-> +/* Returns constant key value if possible, else -1 */
-> +static s64 get_constant_map_key(struct bpf_verifier_env *env,
-> +                               struct bpf_reg_state *key,
-> +                               u32 key_size)
-> +{
-> +       struct bpf_func_state *state =3D func(env, key);
-> +       struct bpf_reg_state *reg;
-> +       int zero_size =3D 0;
-> +       int stack_off;
-> +       u8 *stype;
-> +       int slot;
-> +       int spi;
-> +       int i;
-> +
-> +       if (!env->bpf_capable)
-> +               return -1;
-> +       if (key->type !=3D PTR_TO_STACK)
-> +               return -1;
-> +       if (!tnum_is_const(key->var_off))
-> +               return -1;
-> +
-> +       stack_off =3D key->off + key->var_off.value;
-> +       slot =3D -stack_off - 1;
-> +       spi =3D slot / BPF_REG_SIZE;
-> +
-> +       /* First handle precisely tracked STACK_ZERO, up to BPF_REG_SIZE =
-*/
-> +       stype =3D state->stack[spi].slot_type;
-> +       for (i =3D 0; i < BPF_REG_SIZE && stype[i] =3D=3D STACK_ZERO; i++=
-)
+Here is the summary with links:
+  - [v5,bpf-next,1/7] bpf: add a __btf_get_by_fd helper
+    https://git.kernel.org/bpf/bpf-next/c/4e885fab7164
+  - [v5,bpf-next,2/7] bpf: move map/prog compatibility checks
+    https://git.kernel.org/bpf/bpf-next/c/928f3221cb14
+  - [v5,bpf-next,3/7] bpf: refactor check_pseudo_btf_id
+    https://git.kernel.org/bpf/bpf-next/c/76145f725532
+  - [v5,bpf-next,4/7] bpf: add fd_array_cnt attribute for prog_load
+    https://git.kernel.org/bpf/bpf-next/c/4d3ae294f900
+  - [v5,bpf-next,5/7] libbpf: prog load: allow to use fd_array_cnt
+    https://git.kernel.org/bpf/bpf-next/c/f9933acda31a
+  - [v5,bpf-next,6/7] selftests/bpf: Add tests for fd_array_cnt
+    https://git.kernel.org/bpf/bpf-next/c/1c593d7402b1
+  - [v5,bpf-next,7/7] selftest/bpf: replace magic constants by macros
+    https://git.kernel.org/bpf/bpf-next/c/d677a10f80ab
 
-it's Friday and I'm lazy, but please double-check that this works for
-both big-endian and little-endian :)
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-with Eduard's suggestion this also becomes interesting when you have
-000mmm mix (as one example), because that gives you a small range, and
-all values might be valid keys for arrays
 
-> +               zero_size++;
-> +       if (zero_size =3D=3D key_size)
-> +               return 0;
-> +
-> +       if (!is_spilled_reg(&state->stack[spi]))
-> +               /* Not pointer to stack */
-
-!is_spilled_reg and "Not pointer to stack" seem to be not exactly the
-same things?
-
-btw, we also have is_spilled_scalar_reg() which you can use here
-instead of two separate checks?
-
-> +               return -1;
-> +
-> +       reg =3D &state->stack[spi].spilled_ptr;
-> +       if (reg->type !=3D SCALAR_VALUE)
-> +               /* Only scalars are valid array map keys */
-> +               return -1;
-> +       else if (!tnum_is_const(reg->var_off))
-> +               /* Stack value not statically known */
-> +               return -1;
-> +
-> +       return reg->var_off.value;
-> +}
-> +
-
-[...]
