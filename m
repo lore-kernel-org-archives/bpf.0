@@ -1,172 +1,87 @@
-Received: from mail-41104.protonmail.ch (mail-41104.protonmail.ch [185.70.41.104])
+Received: from out-184.mta1.migadu.com (out-184.mta1.migadu.com [95.215.58.184])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8AB052114;
-	Fri, 13 Dec 2024 22:44:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.70.41.104
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9C55194A45
+	for <bpf@vger.kernel.org>; Fri, 13 Dec 2024 22:46:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.184
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734129871; cv=none; b=EqUy0IA3tlYO/AAZ3eB+OYDCPcUvmULNtNxTVv19xwH7hBLLI7qq2ytBM46Zd1R9zx/7pOjXNHSHOcJLUJc9m4LYYHmnJSs/apl1B+lPLZ95Qsdvc5B8lnNGoxLuLPg84oEDx/C9nhY+uf+nUbvO1mT+9qYcH+tEsPOxCqIjpW4=
+	t=1734129983; cv=none; b=b2aSeOXqOnuMxiWTMAPpHtK9taIudu/u71PjZxKQvOntt7cnSUKPrXLPuioDEIo1Xiuv4wC0sKCh2d+0HRfMzRGOfJSxoW1sJvzdJH2BazqntvnxaguQueLPQ7ZGtCEFTyIehv1EzaCctyou14NpspHtteu060pSirkN4hdi+sM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734129871; c=relaxed/simple;
-	bh=RbczOgHsGXIER7X+jNi80wUCGUSXVPkI7ZuC8GIW4SE=;
-	h=Date:To:From:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=pXRy4luiTl4IJDcmzlm5bob/t/T3r5ZB4BCZyOgELH/GXURj56rPk8O1msreZWkLRF2UoBKbcASr3AD+Qgo4NqxuPD3zlIn3ckQb25Pi94ytvZGiCG086662EsgSP2Dsm5kVknWhQHNgDOF476qUnqY9KpRObZE/kKNs1Uifujw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me; spf=pass smtp.mailfrom=pm.me; dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b=lUklpFUJ; arc=none smtp.client-ip=185.70.41.104
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pm.me
+	s=arc-20240116; t=1734129983; c=relaxed/simple;
+	bh=pldTG33Z3ZiKjZyS6wsPvmta2kq7xnN/YDpPNoiExao=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=kRLRcKjFtmfggLr1w/3waZyFkucpA8SPpARNyFIG2IWa3OuJbP7qOexu5IrQpsEygxaMrTJYzw1Nb/a0RQKdn9D4J4T1bw/+x+ryYNzQ42YtSEbBWxPe7rM8eTVUmuOjMSb7kg4/28U70ldeeMVykC/ZK6SHYFpCaK8MajY3XUc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=MxeCU9HA; arc=none smtp.client-ip=95.215.58.184
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b="lUklpFUJ"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me;
-	s=protonmail3; t=1734129408; x=1734388608;
-	bh=mUNAOEoXBmfz7j1ty8fJxCmAtNy9S/BSE5lH8G5BHSA=;
-	h=Date:To:From:Cc:Subject:Message-ID:Feedback-ID:From:To:Cc:Date:
-	 Subject:Reply-To:Feedback-ID:Message-ID:BIMI-Selector:
-	 List-Unsubscribe:List-Unsubscribe-Post;
-	b=lUklpFUJ5//hCao5DBFoX8Pt3uLd2okeYjq3v38keY95QVN+YqsYKVEENfNKTCieu
-	 uWjlFBb5BERm4yCmkxXY8y19J2zlfWnQubTJklnoUiXnt0PwnQMhR0Tjo2lT41qAci
-	 FAkPaFdyNe/y0Y7KJ1v/PH1gC5f4YOeXy90I2KMIlcurF7IcW+xW0eFTtd3kuvt5yH
-	 QznQALTLaf/BZEOxUnuGL8xSug68GEzSHlzi21d+C5C0eZjN7bePX+zG83bMqhO3jb
-	 cfgqGJ+l4m0DmBqzRRzyllpQUwwhb1kCuItfO3M9u/S0DB67OqsaenkxDBRAQYOIqP
-	 h4qxAeAlb7+rA==
-Date: Fri, 13 Dec 2024 22:36:44 +0000
-To: dwarves@vger.kernel.org
-From: Ihor Solodrai <ihor.solodrai@pm.me>
-Cc: acme@kernel.org, alan.maguire@oracle.com, eddyz87@gmail.com, andrii@kernel.org, mykolal@fb.com, bpf@vger.kernel.org
-Subject: [PATCH dwarves v2 00/10] pahole: shared ELF and faster reproducible BTF encoding
-Message-ID: <20241213223641.564002-1-ihor.solodrai@pm.me>
-Feedback-ID: 27520582:user:proton
-X-Pm-Message-ID: ca3db792d39a9621d0414aa669e7e0432e85243f
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="MxeCU9HA"
+Message-ID: <b6fe9866-99d1-4715-8d95-9fcef4ac8064@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1734129978;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=KaODDZWd2snUEdraqNCS4T9Pt9wv1svzoBdSYaBYfnU=;
+	b=MxeCU9HAbowWvuMvJvwROOcD05Rn0CO06gafTr7vfKmhYZKLVoOl0pZPepDimv/8joHOlX
+	YuBKeCQcgCSDj4SctrR01zgN4bD3xaPwuHTFUIojGWmyMNJfaI3jhdDiDPfjuxxPjtiHDx
+	2xQBHGZgaVtm4rg7PjTXbU+uKjcA14w=
+Date: Fri, 13 Dec 2024 14:46:09 -0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH net-next v4 06/11] net-timestamp: support SCM_TSTAMP_ACK
+ for bpf extension
+To: Jason Xing <kerneljasonxing@gmail.com>, willemdebruijn.kernel@gmail.com
+Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+ pabeni@redhat.com, dsahern@kernel.org, willemb@google.com, ast@kernel.org,
+ daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com, song@kernel.org,
+ yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
+ sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org, bpf@vger.kernel.org,
+ netdev@vger.kernel.org, Jason Xing <kernelxing@tencent.com>
+References: <20241207173803.90744-1-kerneljasonxing@gmail.com>
+ <20241207173803.90744-7-kerneljasonxing@gmail.com>
+ <6ccdc72c-f21c-4b02-aba3-b70363e58982@linux.dev>
+ <CAL+tcoD+hf+o8SFpnxLRQPKiuqopbHMbU5taap=Va+0hMjJP5A@mail.gmail.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Martin KaFai Lau <martin.lau@linux.dev>
+Content-Language: en-US
+In-Reply-To: <CAL+tcoD+hf+o8SFpnxLRQPKiuqopbHMbU5taap=Va+0hMjJP5A@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-This is a v2 of the patchset aiming to speed up parallel BTF encoding
-when reproducible_build flag is set (see link [1]).
+On 12/13/24 6:49 AM, Jason Xing wrote:
+>>> diff --git a/net/ipv4/tcp_input.c b/net/ipv4/tcp_input.c
+>>> index 5bdf13ac26ef..82bb26f5b214 100644
+>>> --- a/net/ipv4/tcp_input.c
+>>> +++ b/net/ipv4/tcp_input.c
+>>> @@ -3321,7 +3321,8 @@ static void tcp_ack_tstamp(struct sock *sk, struct sk_buff *skb,
+>>>        const struct skb_shared_info *shinfo;
+>>>
+>>>        /* Avoid cache line misses to get skb_shinfo() and shinfo->tx_flags */
+> Please take a look at the above comment.
+> 
+>>> -     if (likely(!TCP_SKB_CB(skb)->txstamp_ack))
+>>> +     if (likely(!TCP_SKB_CB(skb)->txstamp_ack &&
+>>> +                !TCP_SKB_CB(skb)->txstamp_ack_bpf))
+>> Change the test here to:
+>>          if (likely(!TCP_SKB_CB(skb)->txstamp_ack &&
+>>                     !(skb_shinfo(skb)->tx_flags & SKBTX_BPF)))
+>>
+>> Does it make sense?
+> It surely works. Talking about the result only, introducing SKBTX_BPF
+> can work for all the cases. However, in the ACK case, the above code
+> snippet will access the shinfo->tx_flags, which triggers cache line
+> misses. I also mentioned this on purpose in the patch [06/11].
 
-In comparison to v1:
-  * patch #2 adding section-relative addresses to elf_functions is
-    removed as unrelated [2]
-  * patch #9 [3] is replaced with patches #8, #9 and #10 (the biggest
-    and most important in this series)
+ah. my bad. I somehow totally skipped the comment and message in this patch when 
+jumping between patch 6 and 7.
 
-Patch #10 rewrites multithreading implementation to job/worker
-model. See the details in the commit message.
-
-The ./tests/tests pass with a vmlinux build on bpf-next.
-
-I also confrimed that the reproducible bpftool dump of BTF produced
-for vmlinux is identical between this patch series and pahole/next.
-
-With this patch series, the performance of parallel BTF encoding is
-comparable to non-reproducible runs on pahole/next. Depending on the
-number of threads and allowed memory usage (indirectly controlled by
-max_decoded_cus parameter of the queue in the dwarf_loader.c), it may
-be a little slower or a little faster.
-
-Note that the number of CPU cycles is significantly less, although the
-wall-clock time is somewhat greater for -j24, as reported by perf.
-
-See sample measurements below (host nproc=3D24).
-
-This patch (always reproducible)
-
-    -j1 mem 842020 Kb, time 6.31 sec
-    -j3 mem 864604 Kb, time 2.90 sec
-    -j6 mem 927760 Kb, time 2.21 sec
-    -j12 mem 1026616 Kb, time 2.29 sec
-    -j24 mem 1188448 Kb, time 2.36 sec
-    -j48 mem 1462656 Kb, time 2.48 sec
-
-     Performance counter stats for '/home/theihor/dev/dwarves/build/pahole =
--J -j24 --btf_features=3Dencode_force,var,float,enum64,decl_tag,type_tag,op=
-timized_func,consistent_func,decl_tag_kfuncs,reproducible_build --btf_encod=
-e_detached=3D/dev/null --lang_exclude=3Drust /home/theihor/git/kernel.org/b=
-pf-next/kbuild-output/.tmp_vmlinux1' (13 runs):
-
-        46,771,092,586      cycles:u                                       =
-                         ( +-  0.17% )
-
-               2.36785 +- 0.00503 seconds time elapsed  ( +-  0.21% )
-
-pahole/next (1cb4202) non-reproducible
-
-    -j1 mem 834004 Kb, time 6.25 sec
-    -j3 mem 976480 Kb, time 3.21 sec
-    -j6 mem 1081432 Kb, time 2.36 sec
-    -j12 mem 1161252 Kb, time 2.07 sec
-    -j24 mem 1303060 Kb, time 2.13 sec
-    -j48 mem 1537800 Kb, time 2.39 sec
-
-     Performance counter stats for '/home/theihor/dev/dwarves/build/pahole =
--J -j24 --btf_features=3Dencode_force,var,float,enum64,decl_tag,type_tag,op=
-timized_func,consistent_func,decl_tag_kfuncs --btf_encode_detached=3D/dev/n=
-ull --lang_exclude=3Drust /home/theihor/git/kernel.org/bpf-next/kbuild-outp=
-ut/.tmp_vmlinux1' (13 runs):
-
-        60,436,382,442      cycles:u                                       =
-                         ( +-  0.22% )
-
-                2.2024 +- 0.0151 seconds time elapsed  ( +-  0.68% )
-
-pahole/next (1cb4202) reproducible
-
-    -j1 mem 4745764 Kb, time 7.64 sec
-    -j3 mem 4744556 Kb, time 3.95 sec
-    -j6 mem 4744592 Kb, time 2.98 sec
-    -j12 mem 4744680 Kb, time 2.99 sec
-    -j24 mem 4745252 Kb, time 2.99 sec
-    -j48 mem 4744520 Kb, time 2.98 sec
-
-     Performance counter stats for '/home/theihor/dev/dwarves/build/pahole =
--J -j24 --btf_features=3Dencode_force,var,float,enum64,decl_tag,type_tag,op=
-timized_func,consistent_func,decl_tag_kfuncs,reproducible_build --btf_encod=
-e_detached=3D/dev/null --lang_exclude=3Drust /home/theihor/git/kernel.org/b=
-pf-next/kbuild-output/.tmp_vmlinux1' (13 runs):
-
-        38,155,725,721      cycles:u                                       =
-                         ( +-  0.29% )
-
-               3.00290 +- 0.00501 seconds time elapsed  ( +-  0.17% )
-
-[1] https://lore.kernel.org/dwarves/20241128012341.4081072-1-ihor.solodrai@=
-pm.me/
-[2] https://lore.kernel.org/dwarves/20241128012341.4081072-3-ihor.solodrai@=
-pm.me/
-[3] https://lore.kernel.org/dwarves/20241128012341.4081072-10-ihor.solodrai=
-@pm.me/
-
-Alan Maguire (2):
-  btf_encoder: simplify function encoding
-  btf_encoder: separate elf function, saved function representations
-
-Ihor Solodrai (8):
-  dwarf_loader: introduce pre_load_module hook to conf_load
-  btf_encoder: introduce elf_functions struct type
-  btf_encoder: collect elf_functions in btf_encoder__pre_load_module
-  btf_encoder: switch to shared elf_functions table
-  btf_encoder: introduce btf_encoding_context
-  btf_encoder: remove skip_encoding_inconsistent_proto
-  dwarf_loader: introduce cu->id
-  dwarf_loader: multithreading with a job/worker model
-
- btf_encoder.c               | 639 +++++++++++++++++++++---------------
- btf_encoder.h               |   8 +-
- btf_loader.c                |   2 +-
- ctf_loader.c                |   2 +-
- dwarf_loader.c              | 352 ++++++++++++++------
- dwarves.c                   |  44 ---
- dwarves.h                   |  21 +-
- pahole.c                    | 237 +++----------
- pdwtags.c                   |   3 +-
- pfunct.c                    |   3 +-
- tests/reproducible_build.sh |   5 +-
- 11 files changed, 685 insertions(+), 631 deletions(-)
-
---=20
-2.47.1
-
-
+Not an expert. so curious if it matters testing skb_shinfo(skb)->tx_flags or not 
+here? e.g. The tcp_v4_fill_cb() in the earlier rx path, 
+skb_hwtstamps(skb)->hwtstamp is also read. Willem?
