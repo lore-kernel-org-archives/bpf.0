@@ -1,98 +1,256 @@
-Received: from out-174.mta0.migadu.com (out-174.mta0.migadu.com [91.218.175.174])
+Received: from mail-4322.protonmail.ch (mail-4322.protonmail.ch [185.70.43.22])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 552DF15573A
-	for <bpf@vger.kernel.org>; Fri, 13 Dec 2024 22:26:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86E17185949
+	for <bpf@vger.kernel.org>; Fri, 13 Dec 2024 22:36:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.70.43.22
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734128804; cv=none; b=e4Nh6ZSj9iZsMHS8cA920VCu2ORQtJuwDGlozST+3YjEe87ydz4atT9Hc/dnLPrcyq0rzdJK5jd2VwXFIuzJ/rbkpHQCe4P7PuLBGqhDzfQ03gVsRge2aWaoNU8O2DnZ/VcCFPFDHiA8WLqonHhr1WsSLe7uP+ZjKf//cWBuBC0=
+	t=1734129421; cv=none; b=NlW82FEf2i7AU0ZcoEZgT5vKFLQ0fG74cpRapJoHzkqQoo/oxDa30o0bABcRWIyhkgwgJ7oZsa50NZgFy8napkgOxfX36cErT5zDFu0h0UHaeXj1jNZLwK5DV2P9KPIptMTuMWPXCZb/dmv7e++15q3OVmiDcZKqrjB5N1OgynM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734128804; c=relaxed/simple;
-	bh=XX91Xi0yFJjRfC7Mk2DYxMUHNqgtt1Y0buHqAPALJbs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=tX6uTCLb4r6f6fjHgvf1Rm6ICjuGVvzd50TRQXQH5b8J8wq7CJMi5lRNmYVqTpD64QKuJEJEQpHQGIMocZEk5LS2mv52EBCYE/Rc1feGI/CNQIk0krqXOiuxzqIyXJ4oU/n0oAGuFrHLR3HQNSxlcyj1tAOlN6PVEIdPbWDgQXc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=sY6pK1H5; arc=none smtp.client-ip=91.218.175.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1734129421; c=relaxed/simple;
+	bh=TUw3Llck66SYK61hj79ad5POlF75naV24pODusLLN5g=;
+	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=jH4VkheTuOJktRMY3u4fXATPc+LpGYs5NCcSIYeZ6+xRY2CAb7ITLUC829DT59sqe1wWNqrfwqz3qn0wgLhsbaWQNKsbDyd3rduxV+nRW0aP+T1aqxAHRx9T5F4GnW5WeVf8JGYXJZxvz3f+FMtZZdzTbXIqsQP4pv/5cbY9xvA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me; spf=pass smtp.mailfrom=pm.me; dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b=pn5h+l7A; arc=none smtp.client-ip=185.70.43.22
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pm.me
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="sY6pK1H5"
-Message-ID: <c1701350-236d-4a9e-9c53-4badc0738309@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1734128799;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=MG6FDJJsoBDRM7h+Zj8HQ5/vOReax2EY7pVl0sF3C0Y=;
-	b=sY6pK1H5k4yNY68I/XoeOH/Iw8jNPCsidwJ65lQjB7iilAyvCMI9LSMZ74gDpeB4Ohv0or
-	2/F4jGRIvBogBTj3M78nIOfBtxdHKIt9I4bsYQ6c19Mjz3ggkQLPIhh3Ot9Mk20b1OJl84
-	I6RcAhwVX9A6KGr9E6oqvPtqqmDlYiI=
-Date: Fri, 13 Dec 2024 14:26:26 -0800
+	dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b="pn5h+l7A"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me;
+	s=protonmail3; t=1734129411; x=1734388611;
+	bh=lvasfu5NHd+ek+ZaTdm1p1DsuVNRzoLV0m37JdwsILM=;
+	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+	 Message-ID:BIMI-Selector:List-Unsubscribe:List-Unsubscribe-Post;
+	b=pn5h+l7Ai8DPigTk3d5O8Zo/Ijxuu4OoAFnJQ18J9KtgwqWKheDb9JIX3kl0+YiCL
+	 pR9751x/UuyJnkgPEbQnQNQZYE/jCkZYH2Xk73U3sKX/DZAQ3ZuOH8C/2n8OTFzR6m
+	 ShUmRlA07A0zjz7RTkBphDq8T3dO2DVZtwpm+H8+OilPLcGk6vcTB36VOlhcFCcWUP
+	 wbaP2I/ZIbpGWJYObn2f6sW08uqfaCR/p8CFNEF9OcAZdOaZi13+6NFVeSbNUlJvCI
+	 35rA181LBnOpe8buKkY77NzqEPSmZ9NLTd437A5OAf/PIyuIBjkl9BKnlZEEp3vSb5
+	 hupeqxE0RkktQ==
+Date: Fri, 13 Dec 2024 22:36:48 +0000
+To: dwarves@vger.kernel.org
+From: Ihor Solodrai <ihor.solodrai@pm.me>
+Cc: acme@kernel.org, alan.maguire@oracle.com, eddyz87@gmail.com, andrii@kernel.org, mykolal@fb.com, bpf@vger.kernel.org
+Subject: [PATCH dwarves v2 01/10] btf_encoder: simplify function encoding
+Message-ID: <20241213223641.564002-2-ihor.solodrai@pm.me>
+In-Reply-To: <20241213223641.564002-1-ihor.solodrai@pm.me>
+References: <20241213223641.564002-1-ihor.solodrai@pm.me>
+Feedback-ID: 27520582:user:proton
+X-Pm-Message-ID: 9129c3469d7b412f96e4440bb0a5a57d6a27f717
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH net-next v4 02/11] net-timestamp: prepare for bpf prog use
-To: Jason Xing <kerneljasonxing@gmail.com>
-Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
- pabeni@redhat.com, dsahern@kernel.org, willemdebruijn.kernel@gmail.com,
- willemb@google.com, ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
- eddyz87@gmail.com, song@kernel.org, yonghong.song@linux.dev,
- john.fastabend@gmail.com, kpsingh@kernel.org, sdf@fomichev.me,
- haoluo@google.com, jolsa@kernel.org, bpf@vger.kernel.org,
- netdev@vger.kernel.org, Jason Xing <kernelxing@tencent.com>
-References: <20241207173803.90744-1-kerneljasonxing@gmail.com>
- <20241207173803.90744-3-kerneljasonxing@gmail.com>
- <f8e9ab4a-38b9-43a5-aaf4-15f95a3463d0@linux.dev>
- <CAL+tcoDGq8Jih9vwsz=-O8byC1S0R1uojShMvUiTZKQvMDnfTQ@mail.gmail.com>
- <996cbe46-e2cd-44b6-a53a-13fd6ebfc4c0@linux.dev>
- <CAL+tcoAxmHj9_d5PUqvSHswavKFspd_D5tOt81fon-UtEf_OMA@mail.gmail.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Martin KaFai Lau <martin.lau@linux.dev>
-Content-Language: en-US
-In-Reply-To: <CAL+tcoAxmHj9_d5PUqvSHswavKFspd_D5tOt81fon-UtEf_OMA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On 12/13/24 6:42 AM, Jason Xing wrote:
->>>> I just noticed a trickier one, sockops bpf prog can write to sk->sk_txhash. The
->>>> same should go for reading from sk. Also, sockops prog assumes a fullsock sk is
->>>> a tcp_sock which also won't work for the udp case. A quick thought is to do
->>>> something similar to is_fullsock. May be repurpose the is_fullsock somehow or a
->>>> new u8 is needed. Take a look at SOCK_OPS_{GET,SET}_FIELD. It avoids
->>>> writing/reading the sk when is_fullsock is false.
+From: Alan Maguire <alan.maguire@oracle.com>
 
-May be this message buried in the earlier reply or some piece was not clear, so 
-worth to highlight here.
+Currently we have two modes of function encoding; one adds functions
+based upon the first instance found and ignores inconsistent
+representations.  The second saves function representations and later
+finds inconsistencies.  The mode chosen is determined by
+conf_load->skip_encoding_btf_inconsistent_proto.
 
-Take a look at how is_fullsock is used in SOCK_OPS_{GET,SET}_FIELD. I think a 
-similar idea can be borrowed here.
+The knock-on effect is that we need to support two modes in
+btf_encoder__add_func(); one for each case.  Simplify by using
+the "save function" approach for both cases; only difference is
+that we allow inconsistent representations if
+skip_encoding_btf_inconsistent_proto is not set (it is set by default
+for upstream kernels and has been for a while).
 
->>>
->>> Do you mean that if we introduce a new field, then bpf prog can
->>> read/write the socket?
->>
->> The same goes for writing the sk, e.g. writing the sk->sk_txhash. It needs the
->> sk_lock held. Reading may be ok-ish. The bpf prog can read it anyway by
->> bpf_probe_read...etc.
->>
->> When adding udp timestamp callback later, it needs to stop reading the tcp_sock
->> through skops from the udp callback for sure. Do take a look at
->> SOCK_OPS_GET_TCP_SOCK_FIELD. I think we need to ensure the udp timestamp
->> callback won't break here before moving forward.
-> 
-> Agreed. Removing the "sock_ops.sk = sk;" is simple, but I still want
-> the bpf prog to be able to read some fields from the socket under
-> those new callbacks.
+Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
+Signed-off-by: Ihor Solodrai <ihor.solodrai@pm.me>
+Acked-by: Eduard Zingerman <eddyz87@gmail.com>
+Acked-by: Jiri Olsa <jolsa@kernel.org>
 
-No need to remove "sock_ops.sk = sk;". Try to borrow the is_fullsock idea.
+Link: https://lore.kernel.org/dwarves/20241128012341.4081072-2-ihor.solodra=
+i@pm.me/
+---
+ btf_encoder.c | 79 +++++++++++++++++----------------------------------
+ 1 file changed, 26 insertions(+), 53 deletions(-)
 
-Overall, the new timestamp callback breaks assumptions like, sk_lock is held and 
-is_fullsock must be a tcp_sock. This needs to be audited. In particular, please 
-check sock_ops_func_proto() for all accessible bpf helpers. Also check the 
-sock_ops_is_valid_access() and sock_ops_convert_ctx_access() for directly 
-accessible fields without the helpers. In particular, the BPF_WRITE (able) 
-fields and the tcp_sock fields.
+diff --git a/btf_encoder.c b/btf_encoder.c
+index b715bc2..b9a98f5 100644
+--- a/btf_encoder.c
++++ b/btf_encoder.c
+@@ -88,7 +88,6 @@ struct btf_encoder_func_state {
+ struct elf_function {
+ =09const char=09*name;
+ =09char=09=09*alias;
+-=09bool=09=09 generated;
+ =09size_t=09=09prefixlen;
+ =09struct btf_encoder_func_state state;
+ };
+@@ -120,6 +119,7 @@ struct btf_encoder {
+ =09=09=09  force,
+ =09=09=09  gen_floats,
+ =09=09=09  skip_encoding_decl_tag,
++=09=09=09  skip_encoding_inconsistent_proto,
+ =09=09=09  tag_kfuncs,
+ =09=09=09  gen_distilled_base;
+ =09uint32_t=09  array_index_id;
+@@ -1165,18 +1165,18 @@ out:
+ =09return err;
+ }
+=20
+-static int32_t btf_encoder__add_func(struct btf_encoder *encoder, struct f=
+unction *fn,
++static int32_t btf_encoder__add_func(struct btf_encoder *encoder,
+ =09=09=09=09     struct elf_function *func)
+ {
++=09struct btf_encoder_func_state *state =3D &func->state;
+ =09int btf_fnproto_id, btf_fn_id, tag_type_id =3D 0;
+ =09int16_t component_idx =3D -1;
+ =09const char *name;
+ =09const char *value;
+ =09char tmp_value[KSYM_NAME_LEN];
++=09uint16_t idx;
+=20
+-=09assert(fn !=3D NULL || func !=3D NULL);
+-
+-=09btf_fnproto_id =3D btf_encoder__add_func_proto(encoder, fn ? &fn->proto=
+ : NULL, func);
++=09btf_fnproto_id =3D btf_encoder__add_func_proto(encoder, NULL, func);
+ =09name =3D func->alias ?: func->name;
+ =09if (btf_fnproto_id >=3D 0)
+ =09=09btf_fn_id =3D btf_encoder__add_ref_type(encoder, BTF_KIND_FUNC, btf_=
+fnproto_id,
+@@ -1186,40 +1186,23 @@ static int32_t btf_encoder__add_func(struct btf_enc=
+oder *encoder, struct functio
+ =09=09       name, btf_fnproto_id < 0 ? "proto" : "func");
+ =09=09return -1;
+ =09}
+-=09if (!fn) {
+-=09=09struct btf_encoder_func_state *state =3D &func->state;
+-=09=09uint16_t idx;
+-
+-=09=09if (state->nr_annots =3D=3D 0)
+-=09=09=09return 0;
++=09if (state->nr_annots =3D=3D 0)
++=09=09return 0;
+=20
+-=09=09for (idx =3D 0; idx < state->nr_annots; idx++) {
+-=09=09=09struct btf_encoder_func_annot *a =3D &state->annots[idx];
++=09for (idx =3D 0; idx < state->nr_annots; idx++) {
++=09=09struct btf_encoder_func_annot *a =3D &state->annots[idx];
+=20
+-=09=09=09value =3D btf__str_by_offset(encoder->btf, a->value);
+-=09=09=09/* adding BTF data may result in a mode of the
+-=09=09=09 * value string memory, so make a temporary copy.
+-=09=09=09 */
+-=09=09=09strncpy(tmp_value, value, sizeof(tmp_value) - 1);
+-=09=09=09component_idx =3D a->component_idx;
+-
+-=09=09=09tag_type_id =3D btf_encoder__add_decl_tag(encoder, tmp_value,
+-=09=09=09=09=09=09=09=09btf_fn_id, component_idx);
+-=09=09=09if (tag_type_id < 0)
+-=09=09=09=09break;
+-=09=09}
+-=09} else {
+-=09=09struct llvm_annotation *annot;
+-
+-=09=09list_for_each_entry(annot, &fn->annots, node) {
+-=09=09=09value =3D annot->value;
+-=09=09=09component_idx =3D annot->component_idx;
++=09=09value =3D btf__str_by_offset(encoder->btf, a->value);
++=09=09/* adding BTF data may result in a mode of the
++=09=09 * value string memory, so make a temporary copy.
++=09=09 */
++=09=09strncpy(tmp_value, value, sizeof(tmp_value) - 1);
++=09=09component_idx =3D a->component_idx;
+=20
+-=09=09=09tag_type_id =3D btf_encoder__add_decl_tag(encoder, value, btf_fn_=
+id,
+-=09=09=09=09=09=09=09=09component_idx);
+-=09=09=09if (tag_type_id < 0)
+-=09=09=09=09break;
+-=09=09}
++=09=09tag_type_id =3D btf_encoder__add_decl_tag(encoder, tmp_value,
++=09=09=09=09=09=09=09btf_fn_id, component_idx);
++=09=09if (tag_type_id < 0)
++=09=09=09break;
+ =09}
+ =09if (tag_type_id < 0) {
+ =09=09fprintf(stderr,
+@@ -1277,8 +1260,9 @@ static int btf_encoder__add_saved_funcs(struct btf_en=
+coder *encoder)
+ =09=09 * just do not _use_ them.  Only exclude functions with
+ =09=09 * unexpected register use or multiple inconsistent prototypes.
+ =09=09 */
+-=09=09if (!state->unexpected_reg && !state->inconsistent_proto) {
+-=09=09=09if (btf_encoder__add_func(encoder, NULL, func))
++=09=09if (!encoder->skip_encoding_inconsistent_proto ||
++=09=09    (!state->unexpected_reg && !state->inconsistent_proto)) {
++=09=09=09if (btf_encoder__add_func(encoder, func))
+ =09=09=09=09return -1;
+ =09=09}
+ =09=09state->processed =3D 1;
+@@ -2361,6 +2345,7 @@ struct btf_encoder *btf_encoder__new(struct cu *cu, c=
+onst char *detached_filenam
+ =09=09encoder->force=09=09 =3D conf_load->btf_encode_force;
+ =09=09encoder->gen_floats=09 =3D conf_load->btf_gen_floats;
+ =09=09encoder->skip_encoding_decl_tag=09 =3D conf_load->skip_encoding_btf_=
+decl_tag;
++=09=09encoder->skip_encoding_inconsistent_proto =3D conf_load->skip_encodi=
+ng_btf_inconsistent_proto;
+ =09=09encoder->tag_kfuncs=09 =3D conf_load->btf_decl_tag_kfuncs;
+ =09=09encoder->gen_distilled_base =3D conf_load->btf_gen_distilled_base;
+ =09=09encoder->verbose=09 =3D verbose;
+@@ -2566,7 +2551,6 @@ int btf_encoder__encode_cu(struct btf_encoder *encode=
+r, struct cu *cu, struct co
+=20
+ =09cu__for_each_function(cu, core_id, fn) {
+ =09=09struct elf_function *func =3D NULL;
+-=09=09bool save =3D false;
+=20
+ =09=09/*
+ =09=09 * Skip functions that:
+@@ -2588,15 +2572,8 @@ int btf_encoder__encode_cu(struct btf_encoder *encod=
+er, struct cu *cu, struct co
+=20
+ =09=09=09/* prefer exact function name match... */
+ =09=09=09func =3D btf_encoder__find_function(encoder, name, 0);
+-=09=09=09if (func) {
+-=09=09=09=09if (func->generated)
+-=09=09=09=09=09continue;
+-=09=09=09=09if (conf_load->skip_encoding_btf_inconsistent_proto)
+-=09=09=09=09=09save =3D true;
+-=09=09=09=09else
+-=09=09=09=09=09func->generated =3D true;
+-=09=09=09} else if (encoder->functions.suffix_cnt &&
+-=09=09=09=09   conf_load->btf_gen_optimized) {
++=09=09=09if (!func && encoder->functions.suffix_cnt &&
++=09=09=09    conf_load->btf_gen_optimized) {
+ =09=09=09=09/* falling back to name.isra.0 match if no exact
+ =09=09=09=09 * match is found; only bother if we found any
+ =09=09=09=09 * .suffix function names.  The function
+@@ -2607,7 +2584,6 @@ int btf_encoder__encode_cu(struct btf_encoder *encode=
+r, struct cu *cu, struct co
+ =09=09=09=09func =3D btf_encoder__find_function(encoder, name,
+ =09=09=09=09=09=09=09=09  strlen(name));
+ =09=09=09=09if (func) {
+-=09=09=09=09=09save =3D true;
+ =09=09=09=09=09if (encoder->verbose)
+ =09=09=09=09=09=09printf("matched function '%s' with '%s'%s\n",
+ =09=09=09=09=09=09       name, func->name,
+@@ -2625,10 +2601,7 @@ int btf_encoder__encode_cu(struct btf_encoder *encod=
+er, struct cu *cu, struct co
+ =09=09if (!func)
+ =09=09=09continue;
+=20
+-=09=09if (save)
+-=09=09=09err =3D btf_encoder__save_func(encoder, fn, func);
+-=09=09else
+-=09=09=09err =3D btf_encoder__add_func(encoder, fn, func);
++=09=09err =3D btf_encoder__save_func(encoder, fn, func);
+ =09=09if (err)
+ =09=09=09goto out;
+ =09}
+--=20
+2.47.1
+
+
