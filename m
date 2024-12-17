@@ -1,161 +1,137 @@
-Received: from mail-ej1-f67.google.com (mail-ej1-f67.google.com [209.85.218.67])
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCBF01F867D;
-	Tue, 17 Dec 2024 18:32:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.67
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B150A1F8929;
+	Tue, 17 Dec 2024 18:38:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734460382; cv=none; b=RFRuR9Gk0N7zdcCvtnIPZw2xUqLs4NK6sX02FuHAsETWlAk1aRtBvZZzzDexZKdDckESbnuM3qiIvzFOUTZsTd681WmBrRxPyR1jqU+Aw7JPFhbtFBHwQY8iEPuaofmIsWeNHeYDT9YhEnI6+G5kPB/FC1e+HZ8r0FeUkBbwMb8=
+	t=1734460698; cv=none; b=fzbaJpUvvHL+oI+XDtd9zSZuvtaOmzqAcKttQMrbJClNC5wm/WgGjIxh4vETXS9w2URYMSMAERnHYtvrpr26Uck7Btr0vxg1rfr8mwoPZbtpLxxuAiCquBCQ+sy33OSWHvJNNSPVfOqBouzkIySE8tqxcRDXLHd80i0dkuOmeis=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734460382; c=relaxed/simple;
-	bh=w9pYrgnaWj1ewcUC5uehoE4l2crEY1uOPkQ5NXBYUN0=;
+	s=arc-20240116; t=1734460698; c=relaxed/simple;
+	bh=f2FzyaOyPDsaxGvjsPFzwqvEoZrvAjj453BH8q7XiRc=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=XAS6OTedEaWOHFzgJ+1JMqYUZe2XNwCM5hVSeMfxEBDrGWfbwRyWyfPTO0Ygmg0J3xrw4LnHxUw+GrwL6x43vn2ETb/TXAJBT1LSnxPkjjsDuSaXuvJ8MjHWvbIdieSNfv8CxhzsGseFwccHnpneVeBJSIoqVSz3grzne/Y0OPs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OHyz0DEU; arc=none smtp.client-ip=209.85.218.67
+	 To:Cc:Content-Type; b=i5Key6jEJL8IBaB2M6M8yvUqoAr/Q4hz6+7UJFcIlb1kbCcWnsarFqumlVrS2KAnMykoOv5ymhTgBv8NqjQktWNgLfl/H1sV4apG5mKyXoQ9cJQ5+iWrcrgNFpnFDds03FHa6szKHxnRII+58s5Mbb9Co2aoRvNaFzwnYkMWLYs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Dyp9/OYf; arc=none smtp.client-ip=209.85.214.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OHyz0DEU"
-Received: by mail-ej1-f67.google.com with SMTP id a640c23a62f3a-aa6c0dbce1fso777680866b.2;
-        Tue, 17 Dec 2024 10:32:59 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Dyp9/OYf"
+Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-2161eb95317so52590885ad.1;
+        Tue, 17 Dec 2024 10:38:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1734460378; x=1735065178; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1734460696; x=1735065496; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=KyLfj9GHrrqzTUNE0LK7GJy5olirvva9Gvx5K9CGs5s=;
-        b=OHyz0DEUbcnQfj5lZk6OqzcpPnXCEt0BIcVHt+doDVf5AkqbpOdhpe/fpKQPTajjnx
-         KEjfKH8Nwsuit5GUhfcD6bF78T59IUZeiLcmTF39XyuF/FA2Xc0gz7a33sQhfTOJgm6B
-         k9JY+nlKM54ZIrnKEAo2Kpz8yGiz6geN8c8yHheZaZdYCif0dW10TprWPRwSqpChtrWC
-         MMdNlS9e/Gl0LRSp6lAu4s0I5bjBrDaD2HIILl1UpbbwmFp6TZMwfqW3E0Ycb6ln3sWJ
-         WUxQlJDuhOGoINu4Becr11+6zAGLtpZx97AfVJNalKylRptuV8Ti2JR7vi/+hA+CCTEe
-         5lXg==
+        bh=aRGe4dTLtYwj2VBbTgj28SHXLo2nIoOZT7krPn0WOLo=;
+        b=Dyp9/OYf8gNBATmCgDUeIyk5m8XzjqDMNyKasSsVjXM0SljRgmKRJ5UmYFP8ZQmblP
+         kd47wwgXLbPOFHGkksqTBjjyleaRaAgOZX0ZdGkk0gB+iaYCFPPpHo/Wq4SGZhte8+vc
+         KdJTHypQgbe+euf6lqaSUXg/CedOZUPj3eoJQOFk3SyLU9eN39ZY7M62gE/cOnDZXVf7
+         Fik335abDnUBF7mba4ge24rr9bZqbqs8OyWf+9u7yCCVfOX7wuW7ogsDfS+aK2v5EfO3
+         YGZNDTYJt9h3iOxQs9CbCl7ukzOA0B+h5uumvzHV1V3Cm5XawkH5748wy/P2nkIgLd+B
+         gK5g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1734460378; x=1735065178;
+        d=1e100.net; s=20230601; t=1734460696; x=1735065496;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=KyLfj9GHrrqzTUNE0LK7GJy5olirvva9Gvx5K9CGs5s=;
-        b=BtrasCvp6UO5WcuoRsvukEwD0gWYcT26BWbT+8XxmqtvYT12LF+PqcPZNgyxdVAYS1
-         44cqNQ+OtL9Rl/erZdyC6awonazApTs5Tq8KytdAUxtiU74FJj8cefHaDnHXT9ploGOW
-         d+bbUJt0TYAQUXo7ib0T3o/adnfrm6MQ1yAjviic8/s08Sxh0XGKzQonta/U08heb78l
-         BAHTVU9yNJK5iupTZuMsBc3YW9TvvNAEMVCvBelcKQfbxMY4HCR34jKW/yXFLf4SqtYq
-         H5Zc0hcKt9Qke036tzQyRlDzAuH3eAvXIDXSZIiFr9AXznIDk7BFWZCUCfl/Ik19pswN
-         tjqA==
-X-Forwarded-Encrypted: i=1; AJvYcCU5msdfgM5ftN+06RN15NpoTRO8ljGo8/d4MnyzGlfhDzlnLRyWend1SqX8V/cHvsjXhOoI+utH4mUUiV6/8w==@vger.kernel.org, AJvYcCWKEWDBF5Wg/MG1b6lc9iap9iZ5EAhwns84v2pvxJIDF5rTPTSfQ5kxaIzrdTy7ZeLMDsaRH/Gkuh5YH9iy@vger.kernel.org, AJvYcCX/aicK/z53ULR0Zs3kcVWenCERMvTMSLo/Zef5m1HXMyn86NVvrnuHiOL0RqxmJVEC80E=@vger.kernel.org, AJvYcCX9+FLGQLIRkZA2+TwVnyh7ral4ypBYFZMbK0i1xYWBb52AFpZMG7Mab5Lklroh7ZXd6is0CYnfiR3ksNT0hPo1cN/oNx6P@vger.kernel.org
-X-Gm-Message-State: AOJu0YzZyXphE2xxUI0r/hU5AMijoyfVQ5fyuOGSXy+fg+VBere5LsGn
-	tcT/A/bRP+IJ1a7f4uCslZWt//cYvLYiHhgIkQ5a5rtDxFL8k3cM3RoLIq0/CBgZMMN5Q99e/rw
-	68AgSFP3Qg1U4IgQKBuqHZHJ9bn8=
-X-Gm-Gg: ASbGnct7zDx/ScHZDdbBfx7bbwDtuRV7cDagsMtmYTKUPGXDij2iwmTJpDE4uR/IKWp
-	CPexEdAfrT5dll6BTO3Go3OnQBeomUEVMrhzeJUsnvi9spuX0a+/6VMGZSGs=
-X-Google-Smtp-Source: AGHT+IE0D/9Vd3yi0S/mmNzZKU8P1GTbXnQCQ7s25+McRC8HupAM0mu1u0pwKZUxm/xxqzbOI7IqDHNoKS5+GIDw2W4=
-X-Received: by 2002:a05:6402:35c6:b0:5d1:2377:5af3 with SMTP id
- 4fb4d7f45d1cf-5d7ee3772f8mr356233a12.5.1734460378086; Tue, 17 Dec 2024
- 10:32:58 -0800 (PST)
+        bh=aRGe4dTLtYwj2VBbTgj28SHXLo2nIoOZT7krPn0WOLo=;
+        b=Dxzf988NuaIuZhhZzFxPy4KAwTVS15/A3Imwmvd+qQruAMRP56IMNlbpm8KMvbfMUr
+         P05kp9dUYxMAN1dNUR0J4hMz/TxduHkOS1+vdnIv2DAuk6gexxRSSGo8bXlGSkICAcZ4
+         m1IkRSnJ0icEMV7ylgcNKFfLO7IKJnYaRJUeIf2zMELY33GgzZZ+4mHXBsTlw6pjSZsk
+         OZy+ztpTkEK+/8hOj9Zd4czU2eA5wWPHn7DdJvEKSR2bO9keQxMSFgfkSRIOozljlGb+
+         2EU9vxoADqE+9+693dDXtDlOlbUtKfqvCcxXbQtd+Av5L5HRbcyqTlg3UDrzduLHOm6g
+         h/wA==
+X-Forwarded-Encrypted: i=1; AJvYcCUcH4abNpRJhDtiKRFhtsZByRFOSKlZ5Um9PTWYHLvrXEp0/6moIeeSP4FBC2Alj05nU1E=@vger.kernel.org, AJvYcCXgY8POITllJf5232G+6+/764n9QuKm+61Cm/L0BD8h1OtByTHg/aGa0lKyEYqUoba7fRqSe2isdk27kQnF@vger.kernel.org
+X-Gm-Message-State: AOJu0YydOL49Rlbx7IMBsQubgKJgyzY1m+BvmAoeIoHSDqEgOwOHcSvP
+	fHI+Gwhv5lRHo/ryapKN0Ajpr+738JCOLPg+Df1nG/egWNN2MTs2bc2ujXFgljZ7iUyWJPRY6zu
+	g5ZYNULKAAbpbSwHF3iaGpPt2/WM=
+X-Gm-Gg: ASbGnctFX1dJ3HZlMfm3PhQsmW1B6wBhsUgFbaHBuwC9p63LKL9069yBuDeKeyRcDNV
+	EdjP8nYfWSYzctwzHgz0zxG+r6VcrTi6EE3VFGv5xyVN9n0TuVZRzpg==
+X-Google-Smtp-Source: AGHT+IFADJk/V58dwhr51hK6ZTD8QXMcJm0GrImcTeXtre7ml3uwCxBqdwX/u0y6Z9dO1DDy1js2m/uLEUa1z8MzI5I=
+X-Received: by 2002:a17:903:946:b0:215:a179:14d2 with SMTP id
+ d9443c01a7336-21892a5c0ecmr241780545ad.50.1734460696019; Tue, 17 Dec 2024
+ 10:38:16 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241217063821.482857-1-song@kernel.org> <20241217063821.482857-5-song@kernel.org>
- <CAADnVQKnscWKZHbWt9cgTm7NZ4ZWQkHQ+41Hz=NWoEhUjCAbaw@mail.gmail.com> <7A7A74A6-ED23-455E-A963-8FE7E250C9AA@fb.com>
-In-Reply-To: <7A7A74A6-ED23-455E-A963-8FE7E250C9AA@fb.com>
-From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Date: Tue, 17 Dec 2024 19:32:21 +0100
-Message-ID: <CAP01T76SVQ=TJgkTgkvSLY3DFTDUswj_aypAWmQhwKWFBEk_yw@mail.gmail.com>
-Subject: Re: [PATCH v4 bpf-next 4/6] bpf: fs/xattr: Add BPF kfuncs to set and
- remove xattrs
-To: Song Liu <songliubraving@meta.com>
-Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>, Song Liu <song@kernel.org>, 
-	bpf <bpf@vger.kernel.org>, Linux-Fsdevel <linux-fsdevel@vger.kernel.org>, 
-	LKML <linux-kernel@vger.kernel.org>, 
-	LSM List <linux-security-module@vger.kernel.org>, Kernel Team <kernel-team@meta.com>, 
-	Andrii Nakryiko <andrii@kernel.org>, Eddy Z <eddyz87@gmail.com>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Alexander Viro <viro@zeniv.linux.org.uk>, 
-	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, KP Singh <kpsingh@kernel.org>, 
-	Matt Bobrowski <mattbobrowski@google.com>, Liam Wisehart <liamwisehart@meta.com>, 
-	Shankaran Gnanashanmugam <shankaran@meta.com>
+References: <20241216210031.551278-1-arighi@nvidia.com>
+In-Reply-To: <20241216210031.551278-1-arighi@nvidia.com>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Tue, 17 Dec 2024 10:38:04 -0800
+Message-ID: <CAEf4BzbKZ3JL7FigJ1aRDJSiRYBA8wYjh0+TYNfnsNVHd30j7g@mail.gmail.com>
+Subject: Re: [PATCH v2] bpf: Fix bpf_get_smp_processor_id() on !CONFIG_SMP
+To: Andrea Righi <arighi@nvidia.com>
+Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	John Fastabend <john.fastabend@gmail.com>, Andrii Nakryiko <andrii@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
+	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
+	bpf@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, 17 Dec 2024 at 19:25, Song Liu <songliubraving@meta.com> wrote:
+On Mon, Dec 16, 2024 at 1:00=E2=80=AFPM Andrea Righi <arighi@nvidia.com> wr=
+ote:
 >
-> Hi Alexei,
+> On x86-64 calling bpf_get_smp_processor_id() in a kernel with CONFIG_SMP
+> disabled can trigger the following bug, as pcpu_hot is unavailable:
 >
-> Thanks for the review!
+>  [    8.471774] BUG: unable to handle page fault for address: 00000000936=
+a290c
+>  [    8.471849] #PF: supervisor read access in kernel mode
+>  [    8.471881] #PF: error_code(0x0000) - not-present page
 >
-> > On Dec 17, 2024, at 8:50=E2=80=AFAM, Alexei Starovoitov <alexei.starovo=
-itov@gmail.com> wrote:
-> >
-> > On Mon, Dec 16, 2024 at 10:38=E2=80=AFPM Song Liu <song@kernel.org> wro=
-te:
-> >>
-> >> Add the following kfuncs to set and remove xattrs from BPF programs:
-> >>
-> >>  bpf_set_dentry_xattr
-> >>  bpf_remove_dentry_xattr
-> >>  bpf_set_dentry_xattr_locked
-> >>  bpf_remove_dentry_xattr_locked
-> >>
-> >> The _locked version of these kfuncs are called from hooks where
-> >> dentry->d_inode is already locked.
-> >
-> > ...
-> >
-> >> + *
-> >> + * Setting and removing xattr requires exclusive lock on dentry->d_in=
-ode.
-> >> + * Some hooks already locked d_inode, while some hooks have not locke=
-d
-> >> + * d_inode. Therefore, we need different kfuncs for different hooks.
-> >> + * Specifically, hooks in the following list (d_inode_locked_hooks)
-> >> + * should call bpf_[set|remove]_dentry_xattr_locked; while other hook=
-s
-> >> + * should call bpf_[set|remove]_dentry_xattr.
-> >> + */
-> >
-> > the inode locking rules might change, so let's hide this
-> > implementation detail from the bpf progs by making kfunc polymorphic.
-> >
-> > To struct bpf_prog_aux add:
-> > bool use_locked_kfunc:1;
-> > and set it in bpf_check_attach_target() if it's attaching
-> > to one of d_inode_locked_hooks
-> >
-> > Then in fixup_kfunc_call() call some helper that
-> > if (prog->aux->use_locked_kfunc &&
-> >    insn->imm =3D=3D special_kfunc_list[KF_bpf_remove_dentry_xattr])
-> >     insn->imm =3D special_kfunc_list[KF_bpf_remove_dentry_xattr_locked]=
-;
-> >
-> > The progs will be simpler and will suffer less churn
-> > when the kernel side changes.
+> Fix by inlining a return 0 in the !CONFIG_SMP case.
 >
-> I was thinking about something in similar direction.
+> Fixes: 1ae6921009e5 ("bpf: inline bpf_get_smp_processor_id() helper")
+> Cc: Daniel Borkmann <daniel@iogearbox.net>
+> Signed-off-by: Andrea Righi <arighi@nvidia.com>
+> ---
+>  kernel/bpf/verifier.c | 6 +++++-
+>  1 file changed, 5 insertions(+), 1 deletion(-)
 >
-> If we do this, shall we somehow hide the _locked version of the
-> kfuncs, so that the user cannot use it? If so, what's the best
-> way to do it?
+> ChangeLog v1 -> v2:
+>   - inline a "return 0" instead of not inlining bpf_get_smp_processor_id(=
+) at
+>     all in the !CONFIG_SMP case, as suggested by Daniel
+>
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index f7f892a52a37..761c70899754 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -21281,11 +21281,15 @@ static int do_misc_fixups(struct bpf_verifier_e=
+nv *env)
+>                          * changed in some incompatible and hard to suppo=
+rt
+>                          * way, it's fine to back out this inlining logic
+>                          */
+> +#ifdef CONFIG_SMP
+>                         insn_buf[0] =3D BPF_MOV32_IMM(BPF_REG_0, (u32)(un=
+signed long)&pcpu_hot.cpu_number);
+>                         insn_buf[1] =3D BPF_MOV64_PERCPU_REG(BPF_REG_0, B=
+PF_REG_0);
+>                         insn_buf[2] =3D BPF_LDX_MEM(BPF_W, BPF_REG_0, BPF=
+_REG_0, 0);
+>                         cnt =3D 3;
+> -
+> +#else
+> +                       BPF_ALU32_REG(BPF_XOR, BPF_REG_0, BPF_REG_0),
 
-Just don't add BTF_ID_FLAGS entries for them.
-You'd also need to make an extra call to add_kfunc_call to add its
-details before you can do the fixup.
-That allows find_kfunc_desc to work.
-I did something similar in earlier versions of resilient locks.
-In add_kfunc_call's end (instead of directly returning):
-func_id =3D get_shadow_kfunc_id(func_id, offset);
-if (!func_id)
-  return err;
-return add_kfunc_call(env, func_id, offset);
+um... shouldn't this be `insns_buf[0] =3D ` assignment? And that comma
+instead of semicolon at the end?
 
-Then check in fixup_kfunc_call to find shadow kfunc id and substitute imm.
-Can use some other naming instead of "shadow".
-Probably need to take a prog pointer to make a decision to find the
-underlying kfunc id in your case.
+pw-bot: cr
 
->
-> Thanks,
-> Song
+> +                       cnt =3D 1;
+> +#endif
+>                         new_prog =3D bpf_patch_insn_data(env, i + delta, =
+insn_buf, cnt);
+>                         if (!new_prog)
+>                                 return -ENOMEM;
+> --
+> 2.47.1
 >
