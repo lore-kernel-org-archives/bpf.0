@@ -1,239 +1,195 @@
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 415B41F893B;
-	Tue, 17 Dec 2024 18:24:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=67.231.153.30
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734459890; cv=fail; b=YX1C5TjIX+o8Ck3sEuzAjyl1/EEFcepG1iv/iLW380+9+Lu/2hMIa6pzMyMYUDfjl8BGI5d6WYMFhea67/IXY007OzjEKH1LLCQF1kGx2v0hq0VPkZ77GR3bvPSS8zbG/yu4T+zl1x5UUp4lfKy6sbqXrF1ntBjkDq1XOXZgnDI=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734459890; c=relaxed/simple;
-	bh=mZyoARHrnIOps3OAyfWOiFZdh9yljBBCsvSD8lZ4xBM=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=KzXltx/LNDaCHa1yzW7n5KTyHaOQ2QahTDb94TtMld2aYFPIbq1vItsC42YKJv3eSzXUF8U/fWUlJjCYqiUUksuc9TEGUHIvwS3TZG7Ww/k223O2L1KwhhI45pUBRslSNOj/DeWqJz92zCykhpRdvolw1iWLfgSkrpvxBqVB66A=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com; spf=pass smtp.mailfrom=meta.com; dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b=BntSWMOR; arc=fail smtp.client-ip=67.231.153.30
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 459DE1F8ACD;
+	Tue, 17 Dec 2024 18:32:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.178
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1734460357; cv=none; b=dPL7iPDOnhecilvYT8VpvLzhdrRDvDFyD1eOJoHO3bN1Y/+MYzGhCbFwRyP8uIZilxgjtaLCj7MfSR4j2RMDLED24Ow5mPg38EIBg9FRijfJM55WG4adUZQ7H7uGJDrcOlrCFixM83hqKwwFZxKP+Vvaymk7oODR67FANNPdPk4=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1734460357; c=relaxed/simple;
+	bh=5nb+i4GUEBvuEtR/XlIKTCQSOtKx3rOfpIbIfnEuQds=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=tlooTPYe1K7yniYKlc2bKIkK2G2SKv5eSqKebd02Q9BdTyWh1NTLJhsYcK24pE7vSTm4OTuNhA/sPJRtmC8ZwyVG6HJxOgvTaUPIVFQ9FEpPAedjU6u90jI0J5Nqtnc77Npe1fQqcCM/x12spe0vz7Bokclx3XHj7DXK12sEz+c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=W0qwGjT3; arc=none smtp.client-ip=209.85.210.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b="BntSWMOR"
-Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4BHGsEMW002529;
-	Tue, 17 Dec 2024 10:24:47 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=cc
-	:content-id:content-transfer-encoding:content-type:date:from
-	:in-reply-to:message-id:mime-version:references:subject:to; s=
-	s2048-2021-q4; bh=mZyoARHrnIOps3OAyfWOiFZdh9yljBBCsvSD8lZ4xBM=; b=
-	BntSWMORxgLXEdsWDoEeb2mLnXf3iBE2JwihkSE4KPHXc7UbOQ90CdDRltrIvadi
-	e0GLAO+bwwmd/rML7qEuxsUbQDw4vxThjiHeS0nUyTzx5WhoGDRF3A6YC1YtSLao
-	Jyzx+2mXyNGzg2dG486uHsmHRhbSi3L3kfrN+0g3huB62MicF0J4R28yNcf60ryz
-	VkmFXe8mYolwQZrx3l1AF/3ZTlMafPhUNEsfJzNYukM+LkH6hkeB0zJTn8Yktq5P
-	eyUM4jlfcwPkJr67DjmdkyoGkhqDiiiz0oDgBGlnC3Ew2sZop7S3Z6DBBiFy+U6T
-	7ivtYtBoCjlHo+s5Vzje3A==
-Received: from nam04-bn8-obe.outbound.protection.outlook.com (mail-bn8nam04lp2042.outbound.protection.outlook.com [104.47.74.42])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 43kbgw1s1e-2
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 17 Dec 2024 10:24:47 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=jIdUUi1hdyLrUS/EUjuhbftDyZFuL381MQPsuFYYITsXJsV7pmmnfANE/P53D+wG00HztFvcegMpryPY76Jtxumu7iV1aPnnQ+esGB99r1LiXLo9afhhtoJGEdzuFZJprv+Nr2rVtB6t5fv3H2UGRC6dcove3V7N9j5KlGalOSADdv7SXmUN/BOvJBzJaLKaBzJ7zvWUWheKt0J8Bp3RWf880vpG89Q+6h+coVIKRlgekHo0JiPY85RYlpNlxQX+cv917orACB6igUr8ZoJPOWSNswB7JNo4ed4Q+Ue1SFwg6i6VCtyf9eEq88WWE6iJxr+7fgWKJZmsYj29ACdd3w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=mZyoARHrnIOps3OAyfWOiFZdh9yljBBCsvSD8lZ4xBM=;
- b=ch1OlvXb2x87cuksnMlksHPEmCcoXEE89wGW8MIuGzotSqskso/S4KiGFozgiYL/avZ0ZxqsTMbuXVX/ar2VZzJsJGqQn5dL3QSd22odXxVdPKWqxgOUQAHo98ASJ3QNpd+kjZdnRid6za04ZnYs4e+mLrf1eHoPJOURpYG5cShn3SPM0izL31Yq/F7UFFTA10ecwpMjIJKjyXZGFd9TpDcZFGbQj27a9F/HLByIckMUc80NBAJNI3hK+gfPZOq+9cRksSE7Oozcrz3pNP5Bm+jV1zpWiNMM/OD/Fx+WnJ2JXRNuyg6TED04BZFMTa4re3Z7B39dCNXksrt8yo0gkw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=meta.com; dmarc=pass action=none header.from=meta.com;
- dkim=pass header.d=meta.com; arc=none
-Received: from SA1PR15MB5109.namprd15.prod.outlook.com (2603:10b6:806:1dc::10)
- by SA0PR15MB3951.namprd15.prod.outlook.com (2603:10b6:806:89::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8251.22; Tue, 17 Dec
- 2024 18:24:43 +0000
-Received: from SA1PR15MB5109.namprd15.prod.outlook.com
- ([fe80::662b:d7bd:ab1b:2610]) by SA1PR15MB5109.namprd15.prod.outlook.com
- ([fe80::662b:d7bd:ab1b:2610%7]) with mapi id 15.20.8251.015; Tue, 17 Dec 2024
- 18:24:43 +0000
-From: Song Liu <songliubraving@meta.com>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-CC: Song Liu <song@kernel.org>, bpf <bpf@vger.kernel.org>,
-        Linux-Fsdevel
-	<linux-fsdevel@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        LSM
- List <linux-security-module@vger.kernel.org>,
-        Kernel Team
-	<kernel-team@meta.com>,
-        Andrii Nakryiko <andrii@kernel.org>, Eddy Z
-	<eddyz87@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann
-	<daniel@iogearbox.net>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Alexander
- Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>, Jan
- Kara <jack@suse.cz>,
-        KP Singh <kpsingh@kernel.org>,
-        Matt Bobrowski
-	<mattbobrowski@google.com>,
-        Liam Wisehart <liamwisehart@meta.com>,
-        Shankaran
- Gnanashanmugam <shankaran@meta.com>
-Subject: Re: [PATCH v4 bpf-next 4/6] bpf: fs/xattr: Add BPF kfuncs to set and
- remove xattrs
-Thread-Topic: [PATCH v4 bpf-next 4/6] bpf: fs/xattr: Add BPF kfuncs to set and
- remove xattrs
-Thread-Index: AQHbUE5vyorksDdnSkCocDtARlbXhLLqpv4AgAAaOgA=
-Date: Tue, 17 Dec 2024 18:24:42 +0000
-Message-ID: <7A7A74A6-ED23-455E-A963-8FE7E250C9AA@fb.com>
-References: <20241217063821.482857-1-song@kernel.org>
- <20241217063821.482857-5-song@kernel.org>
- <CAADnVQKnscWKZHbWt9cgTm7NZ4ZWQkHQ+41Hz=NWoEhUjCAbaw@mail.gmail.com>
-In-Reply-To:
- <CAADnVQKnscWKZHbWt9cgTm7NZ4ZWQkHQ+41Hz=NWoEhUjCAbaw@mail.gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-x-mailer: Apple Mail (2.3826.200.121)
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: SA1PR15MB5109:EE_|SA0PR15MB3951:EE_
-x-ms-office365-filtering-correlation-id: 96fc3d8d-e433-410e-81f3-08dd1ec813bc
-x-fb-source: Internal
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam:
- BCL:0;ARA:13230040|366016|10070799003|7416014|376014|1800799024|38070700018;
-x-microsoft-antispam-message-info:
- =?utf-8?B?WnR4MW1MNkIwTGtwK0FrMGVxc1hySFI5Z1hERWNZV3pRVURrQmVNVy9oNzl4?=
- =?utf-8?B?MW9qNGVSMXF0d0RlTVV6dVRhRkMyQVRYVGJHcmt5RnlqSXNPaENYZ2VZU0cv?=
- =?utf-8?B?M3p5d0loL3pxZnVzUjhvNTlQOWZSTUwzQ2t6SVFSWUdKUDhuVlNOS0hQR0RC?=
- =?utf-8?B?Y09vZHN2OVMzTit0QVNHUnNSd21TVlp4N1BYUldNRk5vTGEyMVZndHBpaWR5?=
- =?utf-8?B?bUN4QVFVV3RNWGtKUzNuaVNHQWkrT1ZBTXFLMUVhYXdVaUJuU1RNdVdpRklV?=
- =?utf-8?B?MnRXbm9IS2Zoc2pXSUVvZWtScGJoZEFoTWNtVUJ1VGI1anJrTnFUa3FSeHIv?=
- =?utf-8?B?eDhCUjNKK2xLWXk4UlZ4V0dmR0F5YTN4ME5QOUJtR2FWL2h2WGVMZEpLODJv?=
- =?utf-8?B?SzgxWFVlU2huNFlVZ3R4eXJ0elIxNGtKU2h5SlVmeklzRi92a2VhSW1QeStO?=
- =?utf-8?B?MzQ1em0rTGNLQzQyYU90eWkzY0F1R2Yyc3A3Tk81NVpxM2RWbkdxZFpKT2hT?=
- =?utf-8?B?aG9HUlA3MzlVemlLaHF0OHR5czk2N2xVcFJjUFVSSUIvZ1NyTUFNbnVyeWpE?=
- =?utf-8?B?dXNMZ3Y2VUdCY25zSGw5aEZsVVdJWExPR3pkNWZOZksxbjJtQ1lDWTJ6cksz?=
- =?utf-8?B?T0hCb1JIa1Z1d3ViV29ORzVadk5SZnppTk45MFlJdEl3NDU0RlREbndaclBt?=
- =?utf-8?B?WUdKQ08yelNzTzFHWTN6c3N0RktUOTZLNm5DODNjWkRsR3ZTakRsK21KbS9t?=
- =?utf-8?B?dGRqV0VnMFpTamw3NUFLdWprR09JOGlNZVg0N1BhSDRLaXpNTDZGR0t0cG1o?=
- =?utf-8?B?RkJ5MHdkVk1QVHJCUmdQRXh3TVBiVzNZVytJVTExWVd3bWtibnRwS1gzSFkw?=
- =?utf-8?B?VFE0TXpWeWFNbWRwQWFPQm4vTCtTbXZVR0VSbElkUFFnV0M5Vm5TVzdoVmNu?=
- =?utf-8?B?dEpHUGNhN3BGT3ZLVk80Vy9lT2JicStnbnl2bXhpRkRhM2wvYUNVWm1uVzR5?=
- =?utf-8?B?TG1FcW5LeEpLMGxMdmhYUEI4ZzNhRzZMMEVEMTJCQjJYUml3Lzd1aC9zbXlK?=
- =?utf-8?B?ZmtqUEVxRFZpRzl2YkxNTVpZQXVaNEJQSTF4K1RLdGh3d2xOOExOaG9lYXl1?=
- =?utf-8?B?VkRMdFVrMFQ3Q2lieXVTc245UjlDQUNUdnJ6SnAxSTRvQ2VjSWZDckFWMTJs?=
- =?utf-8?B?YUdTaTFwNmFqaWZXZzVacm9qSmFVVE9CVW9FKzcyd1lXRjlsSjRXZ3ZVK1VK?=
- =?utf-8?B?NGtZV3dRcVk1dWlKVm5Vc2l5WGxaa3IybU5PdFJNTElES0ZBZUs1T0ZIeWRa?=
- =?utf-8?B?TXJMeWxwT2ZLOThORWRMSUdyczhBWDlYNEI4UHVXYk5vcXBFYUlpczMreXgr?=
- =?utf-8?B?bW5rcWU1UERjMHJDc1JrKzh2WnU3WUZ2dTQ4ZTZLN1RNb01BMDdrR1hVTjlY?=
- =?utf-8?B?MUlwWjhJeGJhdGMxR3htdWFWTCtuMmp6eUx1bkxXcWRiMVlaRFNQTEZMYjNj?=
- =?utf-8?B?V0IyK1B1STkvaVlsZFQwMmlBd3FCMFdTaUpUVFVwYUYwSmtpUTVORVIyV1Nn?=
- =?utf-8?B?Mnd2aTlhR3pUa2lYcjV6dW84NkY5T3VPOFRCNmt2Umc2cE5RZkR3dTNIUXpI?=
- =?utf-8?B?R2pqRFlaaisyQlNpdGYzUUJ3S1B0QXo0TGduQU5nMkdtWmdodmQ3TVZndFF5?=
- =?utf-8?B?RnZQZ2Z5eXRVRXBIUmhDVGxublMzMXZZaDVld1NsaXhzRDUrZVlyR3BUZU9n?=
- =?utf-8?B?dk1Vd1F2R2hDdkhzN3JycW1SbHJRT2lwdTZGQ0R4RTJ3cWdrVW9CNzFlN0xZ?=
- =?utf-8?B?WnV2L0IrNlJXUkg4eThPWFFyTU84bXFJMm15TjJaVi9UQ2x2NWlTcnZwRjJq?=
- =?utf-8?B?cVpkVDNIZFN2NWJCN2xydDZmZG45amEydDEwVDlQc1lENm54ckZuUG9vT2xs?=
- =?utf-8?Q?bFga9H2jCwr3a1gEgGAEaQFFS5laqHJM?=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR15MB5109.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(10070799003)(7416014)(376014)(1800799024)(38070700018);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?utf-8?B?akgxUjZ1T3RkODNETTdXZ2hFQnplOVhGcHJHWlpTcm5Odnkzb29KL3N2RlMv?=
- =?utf-8?B?SGtMbGgvczA5U3RqR0h2SzRQQXF6NnNqTTZ3ZHlVcGhJWGtjWnJvS0NlUWl3?=
- =?utf-8?B?Rzh1UEhzNWJuWjlMMTdtUW1uSzRYV3J2amVyNGZsNGRmVWxrUXVKOXlNdUJF?=
- =?utf-8?B?WTdIZVhhSlhEcnpQUi9mRnhxM2lhSjlFT1A4LzRIbWRWbTIvdG1TNDFWbWtB?=
- =?utf-8?B?VDEvRHdEYmMxUVgyN3Q4R3JsZ3BrejVNdXJYTTJOT0hpbzU5Y1NISEZ4dW1u?=
- =?utf-8?B?YlFKZjBzU056Z2RtWUZnVUFQNGN6c3B5aHZoanJvcFRtb00wMEsxRkRQWUNx?=
- =?utf-8?B?cnRQK1JBNm5Bb1JqTVhvNHczY1FvN0dod0ExL0xtL0xoTG55SlJYTUk5bENM?=
- =?utf-8?B?ejQ5U2l2WUxEOXlOT2c3QzRXKzdWQ2ErbHRKbEgvckg2aENRWS9NeGZsckVE?=
- =?utf-8?B?K2tXV1BIeENSaE1GWSs3Ky91TU5ZcFEweEJCWktQdS84Z0RnNy96U3hEZDdD?=
- =?utf-8?B?Z21vYkNQZTlaOHJMeVRPUjhUcldpcGdObXdtS0toaUl3U2VqOWJDVldEUnJy?=
- =?utf-8?B?aks5a1lwdEFFYURiY1pwZnBIVi80K2pIMTF4eWViV3ZlOURaTzdQSk5vaVlQ?=
- =?utf-8?B?dDhVeDAvZmQ1aXBsMUFITnR5eEw4em0rZVl5TEpzSVNydS9Oa3c2bHNLeTNU?=
- =?utf-8?B?bmYrbGQybkh5YW9PYVRkLzB4V3VVdzlkbVg4RC9GMnluTUZBd3daTnFpaHhF?=
- =?utf-8?B?WVBNOVBKVmhmMDZhOVlPZXd5b2dEUXFHb1M2aFVVS1Z3SlJ0dEs5dDU4SEJT?=
- =?utf-8?B?YWdKYW1EdzBBYUZsVjJsV2hHMlB0VFBkVmtWdHlkVlA1c3VxVlUxcXgxa0da?=
- =?utf-8?B?NlMrMlRZL0t2c0YyaTRXYmlTZXE3QmJ6NC8rN0dOb2JYQ3pJQmZWb0VrNHNY?=
- =?utf-8?B?dGhZTmo0bDNRblBWVHV5TVl3amhKSk9LZHpWNHRkSDA3RDhpSjcwK3N6NlNX?=
- =?utf-8?B?UW1NbHk1ay9YZTVjUkpWZ21PSjZ4L2thWmVsTGFneXBDV3lCNVBzc3BVNjdP?=
- =?utf-8?B?ZE9tblRaVjRGOGdzT3RQY0F4elRMVVprQ2RIaUxCV2lyQUkwNmVLaStnazV3?=
- =?utf-8?B?akQwMW1wdjlFQTFTaWNMQzhzWEhqRWhibXpiNHhGQ3NDVzBkZnlocG1sZFcy?=
- =?utf-8?B?ajlScTBZejNRQkVvZGZBazlZTmZUeUcwQzlxTTRHUmdJeXVCWVU4UHhHZlZM?=
- =?utf-8?B?Qm5QTysrSE4zRXV2YlBwOFR5NDlhYXlQTGpwTXFhWXBEbi9jWG0yV3VSUyt2?=
- =?utf-8?B?LzN0V3RtVlg2MVFsL2d2RG1SMm91RDQvRkk5VkZCTVJBcExzdmpYNDVmNVV3?=
- =?utf-8?B?VWFqbHZQVEtWWXJ0TGhEcExXMWJzQ3lXUjZ2MGhmY3hOYmZnM3R6Y2dPUWlp?=
- =?utf-8?B?bnRhOGxkTVYyUlF2blYvdmRiVzlidW1JNk1jaHRtb3d2d0RNNjl6SDNGOUtq?=
- =?utf-8?B?aS9ablM2RHMrdklaeTZJZEVaaTZUcGJYY3lBRFZhWmg4b0JxWCtKUWRxT1pj?=
- =?utf-8?B?NTVyT0ZJRThXZVEzS20ybjBmWTAramxYR3RHMUdGMUZscnFCMnA4Nk9rNlZs?=
- =?utf-8?B?YlJ1U0hJd3pRMTZCK29vbTRhdWgvc0t2ZnphOWt0NGcyUTVCbGVrVGJIQ1p2?=
- =?utf-8?B?aWNWZWk0bk11dUJPb1lZckFSOWtsWjJDVUFIUTgzVHNkUXd6cnQ1UENUQytE?=
- =?utf-8?B?MVpPRU1PcjdNTk51eHBPTnFpTGtQaWY3ZE9YM2JpQnlSZXlpNFZoOTFzaDht?=
- =?utf-8?B?YVVPSmVqQ2dnSjNDMFJTMHgveERiUmdNdEd5NkFFT3pkRG5uVHBIQzJjeWxU?=
- =?utf-8?B?VmFPTW5PYWd5RDJ3OHlvSmxYRHllTUR4eHZRSmh5UExFQTV2K1cyY25jRG81?=
- =?utf-8?B?Q25mSFAwMGtIbXlzZWlDR2JLcTVUVzlPWmRKaytEeW1xM3pOYUlXaFNpd2Fu?=
- =?utf-8?B?dDFYRnFqSDZFSDhCL3FoUitqcVZtUDZkbERpbVdFakRBUjlwZlRoZnhNK1lT?=
- =?utf-8?B?dVVvR3BiZWhsbXE5TW9ScDlpRG5uN0t6M3cwZWlCOHBNTCtSWVF1Q3ZNQWhS?=
- =?utf-8?B?WW5mUjc2Q2dLQnhvaHNPZ3Q2eXYveXFwaHhyQlBTMzYzSnhIRWR3UHMyTXQv?=
- =?utf-8?Q?zNS+3zmhgrxCjTcUG7Q1TBY=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <AC0571E35401A1478FCAACD85CC0EAF7@namprd15.prod.outlook.com>
-Content-Transfer-Encoding: base64
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="W0qwGjT3"
+Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-725f4623df7so5022894b3a.2;
+        Tue, 17 Dec 2024 10:32:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1734460355; x=1735065155; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=p5FXtkjb0FK4e0OHg+/7n+qyAizRnGYdC1ZI9qRZxxw=;
+        b=W0qwGjT3kwAT921j0AvtUMMRhORXK+qCJfWfoR0BfEATmQlTMfherus6bdBEXBBhu4
+         MKVYXEptyE1Xe0Ff7EChiVSrMRRjKkunv/oSZ+zEGRgq9aiLSB3/NzAr/GYilG/7gE37
+         9kr180zMkp+IrF+MX0uq/BARAjnb7R9C/7ehDBVcwTW7YHxM9dx8LCJR7Y21vR7wO8ju
+         2ohTeiDB0FGsPtMQz+2K/B2Wry12eebkXKG/4uHEaFeGdy+a7TdVBtp1jBy6o6gqL7An
+         VIF11DnJobzLRIyaMo5Q5ewiow4S7Visa7L2fRiEK61jVBS/TmkbepvNQ9vCwMC5PS0i
+         P5sA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1734460355; x=1735065155;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=p5FXtkjb0FK4e0OHg+/7n+qyAizRnGYdC1ZI9qRZxxw=;
+        b=Q7+ZshMMmtCK/EG6SWr/2GfNRPrbZCiFOrZKC50vMrvyO5tJBpQ3uTB8SfsvUQSG9n
+         SFvgo1lVovvZC+EnAH0iU4WQt7d9rYwCxAgI9Mm6iMis1QCebmdnsoZCFKdwBdNg11W2
+         4UVIIHYJrs0F9jqMdPSA/HSOr2Aq79BL/+NTJ5DG4zRmWWpStq3YYkBktv1KcGdm3zC4
+         oaQxQJQebFgahry5Hge4OLC3ij5CClI7uu66uzL0hHvtIZBuJvlcu7Zh0Dy/hdVbbHVL
+         7Blt8SDf9S5o1t7C+UyVSRt09BMBO46racbOa3x54JN88bjmk5p8YrauD6GFnCGUAjTD
+         HsjA==
+X-Forwarded-Encrypted: i=1; AJvYcCXwTZ9bL8bo0dNwYVJd9QvIPDLcz/j6PxbN7+w6BVhVxrqVxOjUJ6r1lK+D6uKkKzeD+xs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwMsnZ2ouuUWIWj4xoSrw3Z0aAT5My3RRNda1OOcgzWd2ihxTO+
+	5tpDa8eBr4pe819A0ArcdiAngvz1PtdF6TAK9O6wN7BhdpbzQihDWTbKb5oBGdOC0BspItp6MIa
+	I5Xq7YATFzu6zca86b9x2lVJvTzA=
+X-Gm-Gg: ASbGncuRxHqNljtcIOVUU4XKaaN8SoJ47f1sxvvW5q0hO1l+52SniJ83Q4inE8B53Ke
+	pvzw82EgQJev4FZT/rQZK0wP70u1M6q6fAgqPgNyrQmPHS8hG24WROw==
+X-Google-Smtp-Source: AGHT+IHDFNV+EJHBFM2xKZ7Srkfl6cUouqIu/9vplePKLd4IOoyNomz9E+2IYqCboHhHPLrEPYhXlgLiDPgnvIKWZK4=
+X-Received: by 2002:a17:90b:5250:b0:2ee:8e75:4ae1 with SMTP id
+ 98e67ed59e1d1-2f2e7899645mr785351a91.21.1734460355489; Tue, 17 Dec 2024
+ 10:32:35 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: meta.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SA1PR15MB5109.namprd15.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 96fc3d8d-e433-410e-81f3-08dd1ec813bc
-X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Dec 2024 18:24:42.9485
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: i/GSkJ8SuaPavv/WZiQfzqtYyT/E0GrvxEGpYgBGBtYEV8IfU4B9UKDBOqgADM+ZtvLtzxv3k6DXZkFpX7bC2g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR15MB3951
-X-Proofpoint-GUID: VDdYa0JDJhUDBV2dCbMFRG4xDpsUVthl
-X-Proofpoint-ORIG-GUID: VDdYa0JDJhUDBV2dCbMFRG4xDpsUVthl
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
- definitions=2024-10-05_03,2024-10-04_01,2024-09-30_01
+References: <20241213232958.2388301-1-amery.hung@bytedance.com> <20241213232958.2388301-12-amery.hung@bytedance.com>
+In-Reply-To: <20241213232958.2388301-12-amery.hung@bytedance.com>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Tue, 17 Dec 2024 10:32:23 -0800
+Message-ID: <CAEf4BzY5E7JEPJ_W3T-bcKmdAJa-zpM4G+4H2rv2dOtLZMFbvA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v1 11/13] libbpf: Support creating and destroying qdisc
+To: Amery Hung <amery.hung@bytedance.com>
+Cc: netdev@vger.kernel.org, bpf@vger.kernel.org, daniel@iogearbox.net, 
+	andrii@kernel.org, alexei.starovoitov@gmail.com, martin.lau@kernel.org, 
+	sinquersw@gmail.com, toke@redhat.com, jhs@mojatatu.com, jiri@resnulli.us, 
+	stfomichev@gmail.com, ekarani.silvestre@ccc.ufcg.edu.br, 
+	yangpeihao@sjtu.edu.cn, xiyou.wangcong@gmail.com, yepeilin.cs@gmail.com, 
+	ameryhung@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-SGkgQWxleGVpLCANCg0KVGhhbmtzIGZvciB0aGUgcmV2aWV3IQ0KDQo+IE9uIERlYyAxNywgMjAy
-NCwgYXQgODo1MOKAr0FNLCBBbGV4ZWkgU3Rhcm92b2l0b3YgPGFsZXhlaS5zdGFyb3ZvaXRvdkBn
-bWFpbC5jb20+IHdyb3RlOg0KPiANCj4gT24gTW9uLCBEZWMgMTYsIDIwMjQgYXQgMTA6MzjigK9Q
-TSBTb25nIExpdSA8c29uZ0BrZXJuZWwub3JnPiB3cm90ZToNCj4+IA0KPj4gQWRkIHRoZSBmb2xs
-b3dpbmcga2Z1bmNzIHRvIHNldCBhbmQgcmVtb3ZlIHhhdHRycyBmcm9tIEJQRiBwcm9ncmFtczoN
-Cj4+IA0KPj4gIGJwZl9zZXRfZGVudHJ5X3hhdHRyDQo+PiAgYnBmX3JlbW92ZV9kZW50cnlfeGF0
-dHINCj4+ICBicGZfc2V0X2RlbnRyeV94YXR0cl9sb2NrZWQNCj4+ICBicGZfcmVtb3ZlX2RlbnRy
-eV94YXR0cl9sb2NrZWQNCj4+IA0KPj4gVGhlIF9sb2NrZWQgdmVyc2lvbiBvZiB0aGVzZSBrZnVu
-Y3MgYXJlIGNhbGxlZCBmcm9tIGhvb2tzIHdoZXJlDQo+PiBkZW50cnktPmRfaW5vZGUgaXMgYWxy
-ZWFkeSBsb2NrZWQuDQo+IA0KPiAuLi4NCj4gDQo+PiArICoNCj4+ICsgKiBTZXR0aW5nIGFuZCBy
-ZW1vdmluZyB4YXR0ciByZXF1aXJlcyBleGNsdXNpdmUgbG9jayBvbiBkZW50cnktPmRfaW5vZGUu
-DQo+PiArICogU29tZSBob29rcyBhbHJlYWR5IGxvY2tlZCBkX2lub2RlLCB3aGlsZSBzb21lIGhv
-b2tzIGhhdmUgbm90IGxvY2tlZA0KPj4gKyAqIGRfaW5vZGUuIFRoZXJlZm9yZSwgd2UgbmVlZCBk
-aWZmZXJlbnQga2Z1bmNzIGZvciBkaWZmZXJlbnQgaG9va3MuDQo+PiArICogU3BlY2lmaWNhbGx5
-LCBob29rcyBpbiB0aGUgZm9sbG93aW5nIGxpc3QgKGRfaW5vZGVfbG9ja2VkX2hvb2tzKQ0KPj4g
-KyAqIHNob3VsZCBjYWxsIGJwZl9bc2V0fHJlbW92ZV1fZGVudHJ5X3hhdHRyX2xvY2tlZDsgd2hp
-bGUgb3RoZXIgaG9va3MNCj4+ICsgKiBzaG91bGQgY2FsbCBicGZfW3NldHxyZW1vdmVdX2RlbnRy
-eV94YXR0ci4NCj4+ICsgKi8NCj4gDQo+IHRoZSBpbm9kZSBsb2NraW5nIHJ1bGVzIG1pZ2h0IGNo
-YW5nZSwgc28gbGV0J3MgaGlkZSB0aGlzDQo+IGltcGxlbWVudGF0aW9uIGRldGFpbCBmcm9tIHRo
-ZSBicGYgcHJvZ3MgYnkgbWFraW5nIGtmdW5jIHBvbHltb3JwaGljLg0KPiANCj4gVG8gc3RydWN0
-IGJwZl9wcm9nX2F1eCBhZGQ6DQo+IGJvb2wgdXNlX2xvY2tlZF9rZnVuYzoxOw0KPiBhbmQgc2V0
-IGl0IGluIGJwZl9jaGVja19hdHRhY2hfdGFyZ2V0KCkgaWYgaXQncyBhdHRhY2hpbmcNCj4gdG8g
-b25lIG9mIGRfaW5vZGVfbG9ja2VkX2hvb2tzDQo+IA0KPiBUaGVuIGluIGZpeHVwX2tmdW5jX2Nh
-bGwoKSBjYWxsIHNvbWUgaGVscGVyIHRoYXQNCj4gaWYgKHByb2ctPmF1eC0+dXNlX2xvY2tlZF9r
-ZnVuYyAmJg0KPiAgICBpbnNuLT5pbW0gPT0gc3BlY2lhbF9rZnVuY19saXN0W0tGX2JwZl9yZW1v
-dmVfZGVudHJ5X3hhdHRyXSkNCj4gICAgIGluc24tPmltbSA9IHNwZWNpYWxfa2Z1bmNfbGlzdFtL
-Rl9icGZfcmVtb3ZlX2RlbnRyeV94YXR0cl9sb2NrZWRdOw0KPiANCj4gVGhlIHByb2dzIHdpbGwg
-YmUgc2ltcGxlciBhbmQgd2lsbCBzdWZmZXIgbGVzcyBjaHVybg0KPiB3aGVuIHRoZSBrZXJuZWwg
-c2lkZSBjaGFuZ2VzLg0KDQpJIHdhcyB0aGlua2luZyBhYm91dCBzb21ldGhpbmcgaW4gc2ltaWxh
-ciBkaXJlY3Rpb24uIA0KDQpJZiB3ZSBkbyB0aGlzLCBzaGFsbCB3ZSBzb21laG93IGhpZGUgdGhl
-IF9sb2NrZWQgdmVyc2lvbiBvZiB0aGUgDQprZnVuY3MsIHNvIHRoYXQgdGhlIHVzZXIgY2Fubm90
-IHVzZSBpdD8gSWYgc28sIHdoYXQncyB0aGUgYmVzdCANCndheSB0byBkbyBpdD8gDQoNClRoYW5r
-cywNClNvbmcNCg0K
+On Fri, Dec 13, 2024 at 3:30=E2=80=AFPM Amery Hung <amery.hung@bytedance.co=
+m> wrote:
+>
+> Extend struct bpf_tc_hook with handle, qdisc name and a new attach type,
+> BPF_TC_QDISC, to allow users to add or remove any qdisc specified in
+> addition to clsact.
+>
+> Signed-off-by: Amery Hung <amery.hung@bytedance.com>
+> ---
+>  tools/lib/bpf/libbpf.h  |  5 ++++-
+>  tools/lib/bpf/netlink.c | 20 +++++++++++++++++---
+>  2 files changed, 21 insertions(+), 4 deletions(-)
+>
+> diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
+> index b2ce3a72b11d..b05d95814776 100644
+> --- a/tools/lib/bpf/libbpf.h
+> +++ b/tools/lib/bpf/libbpf.h
+> @@ -1268,6 +1268,7 @@ enum bpf_tc_attach_point {
+>         BPF_TC_INGRESS =3D 1 << 0,
+>         BPF_TC_EGRESS  =3D 1 << 1,
+>         BPF_TC_CUSTOM  =3D 1 << 2,
+> +       BPF_TC_QDISC   =3D 1 << 3,
+>  };
+>
+>  #define BPF_TC_PARENT(a, b)    \
+> @@ -1282,9 +1283,11 @@ struct bpf_tc_hook {
+>         int ifindex;
+>         enum bpf_tc_attach_point attach_point;
+>         __u32 parent;
+> +       __u32 handle;
+> +       char *qdisc;
+
+const char *?
+
+>         size_t :0;
+>  };
+> -#define bpf_tc_hook__last_field parent
+> +#define bpf_tc_hook__last_field qdisc
+>
+>  struct bpf_tc_opts {
+>         size_t sz;
+> diff --git a/tools/lib/bpf/netlink.c b/tools/lib/bpf/netlink.c
+> index 68a2def17175..72db8c0add21 100644
+> --- a/tools/lib/bpf/netlink.c
+> +++ b/tools/lib/bpf/netlink.c
+> @@ -529,9 +529,9 @@ int bpf_xdp_query_id(int ifindex, int flags, __u32 *p=
+rog_id)
+>  }
+>
+>
+> -typedef int (*qdisc_config_t)(struct libbpf_nla_req *req);
+> +typedef int (*qdisc_config_t)(struct libbpf_nla_req *req, struct bpf_tc_=
+hook *hook);
+
+should hook pointer be const?
+
+>
+> -static int clsact_config(struct libbpf_nla_req *req)
+> +static int clsact_config(struct libbpf_nla_req *req, struct bpf_tc_hook =
+*hook)
+
+const?
+
+>  {
+>         req->tc.tcm_parent =3D TC_H_CLSACT;
+>         req->tc.tcm_handle =3D TC_H_MAKE(TC_H_CLSACT, 0);
+> @@ -539,6 +539,16 @@ static int clsact_config(struct libbpf_nla_req *req)
+>         return nlattr_add(req, TCA_KIND, "clsact", sizeof("clsact"));
+>  }
+>
+> +static int qdisc_config(struct libbpf_nla_req *req, struct bpf_tc_hook *=
+hook)
+
+same, const, it's not written into, right?
+
+> +{
+> +       char *qdisc =3D OPTS_GET(hook, qdisc, NULL);
+> +
+> +       req->tc.tcm_parent =3D OPTS_GET(hook, parent, TC_H_ROOT);
+> +       req->tc.tcm_handle =3D OPTS_GET(hook, handle, 0);
+> +
+> +       return nlattr_add(req, TCA_KIND, qdisc, strlen(qdisc) + 1);
+> +}
+> +
+>  static int attach_point_to_config(struct bpf_tc_hook *hook,
+>                                   qdisc_config_t *config)
+>  {
+> @@ -552,6 +562,9 @@ static int attach_point_to_config(struct bpf_tc_hook =
+*hook,
+>                 return 0;
+>         case BPF_TC_CUSTOM:
+>                 return -EOPNOTSUPP;
+> +       case BPF_TC_QDISC:
+> +               *config =3D &qdisc_config;
+> +               return 0;
+>         default:
+>                 return -EINVAL;
+>         }
+> @@ -596,7 +609,7 @@ static int tc_qdisc_modify(struct bpf_tc_hook *hook, =
+int cmd, int flags)
+>         req.tc.tcm_family  =3D AF_UNSPEC;
+>         req.tc.tcm_ifindex =3D OPTS_GET(hook, ifindex, 0);
+>
+> -       ret =3D config(&req);
+> +       ret =3D config(&req, hook);
+>         if (ret < 0)
+>                 return ret;
+>
+> @@ -639,6 +652,7 @@ int bpf_tc_hook_destroy(struct bpf_tc_hook *hook)
+>         case BPF_TC_INGRESS:
+>         case BPF_TC_EGRESS:
+>                 return libbpf_err(__bpf_tc_detach(hook, NULL, true));
+> +       case BPF_TC_QDISC:
+>         case BPF_TC_INGRESS | BPF_TC_EGRESS:
+>                 return libbpf_err(tc_qdisc_delete(hook));
+>         case BPF_TC_CUSTOM:
+> --
+> 2.20.1
+>
