@@ -1,183 +1,114 @@
-Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B99014A0A4
-	for <bpf@vger.kernel.org>; Tue, 17 Dec 2024 05:30:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C446315B111;
+	Tue, 17 Dec 2024 06:38:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734413447; cv=none; b=XydRN9ISfhvXZ7LECDYhRBOfl93LSiC5rWmKGNoROO/FqHvNNFgiuiUwUWjoI5hlCMHvkxdO2WoWwup/8Vt/SjpwRaXnBRm6+xafOC40AsDNdJvJg4ChlkKWRxZcep6CXY24IYqxt8f3zGH4VGy1WR4v9XYRqc0kMu3mBrdcPA4=
+	t=1734417509; cv=none; b=W8D4Jpj/rNi+p4bGT6RqM+ehDPgHxQUsHdmNF6sVvE1hak8e/oJU2UMNfN3J8tS/XgKwO7RlTseI5iLUi5bnzDYPbvkUa1JgoLVvoXo/V26RuVqotYGySctBxtibKn16w6xNBbElslfLZV57W5LtmXsHoQNCe7nRmKyMhatqZ60=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734413447; c=relaxed/simple;
-	bh=NXcQdo0wRRKb2/WNDagRZfaOG1sq8tDTThIxnEioR2U=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RkaF/xyGRGscGj3u9CBCckO4TO7aYuXiR4zzzw3Z14w9h5oCXnRvtNdIiBOf+hlOr3BFTbozkzc6F8aLm1S1Qft1RdF/+A81nDNToOzG8HCY5Pvpoks5HOC6oGxBC+gZw6ifXLtaNHallhSBiPx6E6ZDGCWtQ/OYmMVtkkhUS6I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=G3E8wujk; arc=none smtp.client-ip=209.85.210.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
+	s=arc-20240116; t=1734417509; c=relaxed/simple;
+	bh=boyS65jhqMXSVcqNQBzlAGscorMmiO3BTj7FviB7ydg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=jXAvqhTXnsU7Yknjw3dJGHM114T3CUkPAU15TJsulsVRdWrCuMwGslpH0PU661CrU6I3fS8Rx733d1Sq5Wnd8LNlgnu0YorUIhU5TNbAq1vgLUldYZsqsHgtN/Gj78NSU2RR+wAgDJ87xvJbLLPtnSmdlv14nApCyst0NGf9cCk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=c5RWmFRT; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="G3E8wujk"
-Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-728d1a2f180so3635456b3a.1
-        for <bpf@vger.kernel.org>; Mon, 16 Dec 2024 21:30:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1734413443; x=1735018243; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=3eprAB6mL99nuDvuDpZ7xteMR+o2NtdFYL2yb/syKiQ=;
-        b=G3E8wujkDoPb5DgpzmCfuvZsQOGcrS92LDJRcjmjK6pq9ot5malWkaYU15mvJ8FEmB
-         +Q+Ms3gzw9vo2LoxeJBVo2zrCXgOWa01I0IKCrJCFWJyD0naf00xciH8vTot2hIUjoMJ
-         ElIgCuqOzEshWo+4NpzmMazwJ6sCFHyN9abVILbqri9UXMSFulPpdqnvCGplq9ynI/kJ
-         gpNuezQA95tLAMRKtn9nk0tJL/zaMqRgPCDE1+P6GwXGP2yVLlWR0zVwmX0FZsZWeNDq
-         3qAnpJL8TXHrn84zKL6ov3ZB1p0RfmcV+doHCQkk4lfyVLf1wKDa0WD1uz8zKBuzlWzl
-         v9uw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1734413443; x=1735018243;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3eprAB6mL99nuDvuDpZ7xteMR+o2NtdFYL2yb/syKiQ=;
-        b=k+OMO5cpJdMnCtvWVTLymM2JXhIlhZPX2qdiIG9nU0fKQFtBtayGVeLjxlonls4dpF
-         VrncOTXs/UK67Ktle1DrhBbudk2/JiEEZIfMiBWxevODhe2icSKC5N8IlEIA21WpoCuQ
-         HzzpLZzph27wsqkjdR1AoODlk6yrjy3nNb0n3SrCySN35Hm0RhqQX6YOM99WrMhgZSLm
-         A9pPTxX80k3Y32jSy8mC8CsX2MZ948htl5Epj+7HiNnemHpeFkO9DrD2IbbKpcBQ7lZG
-         83xMoGaXCPV8E7/16sBm6LlZ87C2YuwA/O/0YfeTh92RhREmwUJ7HPaIKcoJPIoIW8Wg
-         HwHw==
-X-Forwarded-Encrypted: i=1; AJvYcCW4CIUpH7xpc1CiNBgaVSluUc9GuhVWnkamLiJ4LGtd1zlYhQfuTRiOmQMlTcejK9kAlhA=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw6m4aQholPpT+eWEosSZZ8ZlZnUCAm2HOc0tzRr2ZfgtMw0/lC
-	JUkK2LGIrJq8yx37t8uZU3GlU7hPLDTX9TgMVr+D8v4pUViXCky+Dx4b2f9aMuk=
-X-Gm-Gg: ASbGncujvXYmd9u33I5wRoyIgTBwin1IyWDdHYmjnwC63Ps/NmmgwdLDQmylrkR2xh+
-	/te/8uThLfK3Dentgz4L1y7ccaJTVlTsRRbXRHLyqUn/aMzY+Y1YyUBvnsp4MNAnKtv960u0ZBu
-	s/lsna5eM/jgJnMl7Hfab+P5enBQn28KE681+eKMG/e+HRHYG2ax1SMGubZOg8tTJbgesXdM/fG
-	Q4PLuUciShvDkp65bkCY7ThWI1YxCyx6qheVfcrVsrlm9LzYMI=
-X-Google-Smtp-Source: AGHT+IGGG8XVKg+X8rmGZK6CbMCJ7mkfFmLPI5+tN+Ymugv6wmhrKZix3qMLXbksYQCVWS+ftd5fVg==
-X-Received: by 2002:a05:6a00:7c6:b0:725:e386:3c5b with SMTP id d2e1a72fcca58-72a7872b694mr2639309b3a.5.1734413443517;
-        Mon, 16 Dec 2024 21:30:43 -0800 (PST)
-Received: from ghost ([2601:647:6700:64d0:9708:a71e:40e6:860])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-72918ad5883sm5945241b3a.63.2024.12.16.21.30.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Dec 2024 21:30:42 -0800 (PST)
-Date: Mon, 16 Dec 2024 21:30:39 -0800
-From: Charlie Jenkins <charlie@rivosinc.com>
-To: Namhyung Kim <namhyung@kernel.org>
-Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
-	Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
-	Adrian Hunter <adrian.hunter@intel.com>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	=?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
-	=?iso-8859-1?Q?G=FCnther?= Noack <gnoack@google.com>,
-	Christian Brauner <brauner@kernel.org>, Guo Ren <guoren@kernel.org>,
-	John Garry <john.g.garry@oracle.com>, Will Deacon <will@kernel.org>,
-	James Clark <james.clark@linaro.org>,
-	Mike Leach <mike.leach@linaro.org>, Leo Yan <leo.yan@linux.dev>,
-	Jonathan Corbet <corbet@lwn.net>,
-	=?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@rivosinc.com>,
-	Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org,
-	linux-perf-users@vger.kernel.org, linux-riscv@lists.infradead.org,
-	linux-security-module@vger.kernel.org, bpf@vger.kernel.org,
-	linux-csky@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-doc@vger.kernel.org
-Subject: Re: [PATCH v2 02/16] perf tools: arc: Support generic syscall headers
-Message-ID: <Z2EMf8_oShdXHyL1@ghost>
-References: <20241212-perf_syscalltbl-v2-0-f8ca984ffe40@rivosinc.com>
- <20241212-perf_syscalltbl-v2-2-f8ca984ffe40@rivosinc.com>
- <Z1zIlKq19lAXMoGs@google.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="c5RWmFRT"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 433F4C4CED3;
+	Tue, 17 Dec 2024 06:38:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1734417509;
+	bh=boyS65jhqMXSVcqNQBzlAGscorMmiO3BTj7FviB7ydg=;
+	h=From:To:Cc:Subject:Date:From;
+	b=c5RWmFRTKIRNea2VlCt5c5VKABGJkbbcbCOr/N2W+kfBso8Mih/qiQrIc55/NbwQS
+	 9ajnyN8mEbL0AY92I5AwfObXDXhF4evOlR319cHu08Rc1MR3gCUOZSdFCHSRDTFNbA
+	 uju1nFyiAg8UBrAnp5pbKLeP874QRKXP5ikjiQ0qbT/BIuR5IofiXty/evMBMpQGOL
+	 zEmvBetSYgkbf4YT6FwIt6BBUzmhxHs/ekJw/kMmdfMA7cRFqTMw6tgdphkgHDiORK
+	 qPwW5Am6vRAfVKoPB4uX/DNbI+Hjebp6mU6J848AnQPMyC92QqNvn1jCspSzqRtIf6
+	 iwA28jeC84nVA==
+From: Song Liu <song@kernel.org>
+To: bpf@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-security-module@vger.kernel.org
+Cc: kernel-team@meta.com,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	martin.lau@linux.dev,
+	viro@zeniv.linux.org.uk,
+	brauner@kernel.org,
+	jack@suse.cz,
+	kpsingh@kernel.org,
+	mattbobrowski@google.com,
+	liamwisehart@meta.com,
+	shankaran@meta.com,
+	Song Liu <song@kernel.org>
+Subject: [PATCH v4 bpf-next 0/6] Enable writing xattr from BPF programs
+Date: Mon, 16 Dec 2024 22:38:15 -0800
+Message-ID: <20241217063821.482857-1-song@kernel.org>
+X-Mailer: git-send-email 2.43.5
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Z1zIlKq19lAXMoGs@google.com>
+Content-Transfer-Encoding: 8bit
 
-On Fri, Dec 13, 2024 at 03:51:48PM -0800, Namhyung Kim wrote:
-> On Thu, Dec 12, 2024 at 04:32:52PM -0800, Charlie Jenkins wrote:
-> > Arc uses the generic syscall table, use that in perf instead of
-> > requiring libaudit.
-> > 
-> > Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
-> > ---
-> >  tools/perf/Makefile.config                           | 2 +-
-> >  tools/perf/Makefile.perf                             | 2 +-
-> >  tools/perf/arch/arc/entry/syscalls/Kbuild            | 2 ++
-> >  tools/perf/arch/arc/entry/syscalls/Makefile.syscalls | 3 +++
-> >  tools/perf/arch/arc/include/syscall_table.h          | 2 ++
-> >  5 files changed, 9 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/tools/perf/Makefile.config b/tools/perf/Makefile.config
-> > index a72f25162714f0117a88d94474da336814d4f030..3959a9c9972999f6d1bb85e8c1d7dc5dce92fd09 100644
-> > --- a/tools/perf/Makefile.config
-> > +++ b/tools/perf/Makefile.config
-> > @@ -36,7 +36,7 @@ ifneq ($(NO_SYSCALL_TABLE),1)
-> >    endif
-> >  
-> >    # architectures that use the generic syscall table scripts
-> > -  ifeq ($(SRCARCH),riscv)
-> > +  ifeq ($(SRCARCH),$(filter $(SRCARCH),riscv arc))
-> 
-> This might work as well.
-> 
->   ifneq ($(filter $(SRCARCH), riscv arc),)
-> 
-> And maybe you can add a variable for supported archs.
+Add support to set and remove xattr from BPF program. Also add
+security.bpf. xattr name prefix.
 
-Yeah I can do that. All of this is just temporary though. The final
-patch removes all of this, since this series implements this for every
-architecture.
+kfuncs are added to set and remove xattrs with security.bpf. name
+prefix. Update kfuncs bpf_get_[file|dentry]_xattr to read xattrs
+with security.bpf. name prefix. Note that BPF programs can read
+user. xattrs, but not write and remove them.
 
-- Charlie
+Cover letter of v1 and v2:
 
-> 
-> Thanks,
-> Namhyung
-> 
-> 
-> >      NO_SYSCALL_TABLE := 0
-> >      CFLAGS += -DGENERIC_SYSCALL_TABLE
-> >      CFLAGS += -I$(OUTPUT)/tools/perf/arch/$(SRCARCH)/include/generated
-> > diff --git a/tools/perf/Makefile.perf b/tools/perf/Makefile.perf
-> > index f5278ed9f778f928436693a14e016c5c3c5171c1..3b463b42b0e3982e74056e672b2ee6adad5a3f0e 100644
-> > --- a/tools/perf/Makefile.perf
-> > +++ b/tools/perf/Makefile.perf
-> > @@ -311,7 +311,7 @@ FEATURE_TESTS := all
-> >  endif
-> >  endif
-> >  # architectures that use the generic syscall table
-> > -ifeq ($(SRCARCH),riscv)
-> > +ifeq ($(SRCARCH),$(filter $(SRCARCH),riscv arc))
-> >  include $(srctree)/tools/perf/scripts/Makefile.syscalls
-> >  endif
-> >  include Makefile.config
-> > diff --git a/tools/perf/arch/arc/entry/syscalls/Kbuild b/tools/perf/arch/arc/entry/syscalls/Kbuild
-> > new file mode 100644
-> > index 0000000000000000000000000000000000000000..11707c481a24ecf4e220e51eb1aca890fe929a13
-> > --- /dev/null
-> > +++ b/tools/perf/arch/arc/entry/syscalls/Kbuild
-> > @@ -0,0 +1,2 @@
-> > +# SPDX-License-Identifier: GPL-2.0
-> > +syscall-y += syscalls_32.h
-> > diff --git a/tools/perf/arch/arc/entry/syscalls/Makefile.syscalls b/tools/perf/arch/arc/entry/syscalls/Makefile.syscalls
-> > new file mode 100644
-> > index 0000000000000000000000000000000000000000..391d30ab7a831b72d2ed3f2e7966fdbf558a9ed7
-> > --- /dev/null
-> > +++ b/tools/perf/arch/arc/entry/syscalls/Makefile.syscalls
-> > @@ -0,0 +1,3 @@
-> > +# SPDX-License-Identifier: GPL-2.0
-> > +
-> > +syscall_abis_32 += arc time32 renameat stat64 rlimit
-> > diff --git a/tools/perf/arch/arc/include/syscall_table.h b/tools/perf/arch/arc/include/syscall_table.h
-> > new file mode 100644
-> > index 0000000000000000000000000000000000000000..4c942821662d95216765b176a84d5fc7974e1064
-> > --- /dev/null
-> > +++ b/tools/perf/arch/arc/include/syscall_table.h
-> > @@ -0,0 +1,2 @@
-> > +/* SPDX-License-Identifier: GPL-2.0 */
-> > +#include <asm/syscalls_32.h>
-> > 
-> > -- 
-> > 2.34.1
-> > 
+Follow up discussion in LPC 2024 [1], that we need security.bpf xattr
+prefix. This set adds "security.bpf." xattr name prefix, and allows
+bpf kfuncs bpf_get_[file|dentry]_xattr() to read these xattrs.
+
+[1] https://lpc.events/event/18/contributions/1940/
+
+Changes v3 => v4
+1. Do write permission check with inode locked. (Jan Kara)
+2. Fix some source_inline warnings.
+
+v3: https://lore.kernel.org/bpf/20241210220627.2800362-1-song@kernel.org/
+
+Changes v2 => v3
+1. Add kfuncs to set and remove xattr from BPF programs.
+
+v2: https://lore.kernel.org/bpf/20241016070955.375923-1-song@kernel.org/
+
+Changes v1 => v2
+1. Update comment of bpf_get_[file|dentry]_xattr. (Jiri Olsa)
+2. Fix comment for return value of bpf_get_[file|dentry]_xattr.
+
+v1: https://lore.kernel.org/bpf/20241002214637.3625277-1-song@kernel.org/
+
+Song Liu (6):
+  fs/xattr: bpf: Introduce security.bpf. xattr name prefix
+  selftests/bpf: Extend test fs_kfuncs to cover security.bpf. xattr
+    names
+  bpf: lsm: Add two more sleepable hooks
+  bpf: fs/xattr: Add BPF kfuncs to set and remove xattrs
+  selftests/bpf: Test kfuncs that set and remove xattr from BPF programs
+  selftests/bpf: Add __failure tests for set/remove xattr kfuncs
+
+ fs/bpf_fs_kfuncs.c                            | 262 +++++++++++++++++-
+ include/uapi/linux/xattr.h                    |   4 +
+ kernel/bpf/bpf_lsm.c                          |   2 +
+ tools/testing/selftests/bpf/bpf_kfuncs.h      |  10 +
+ .../selftests/bpf/prog_tests/fs_kfuncs.c      | 165 ++++++++++-
+ .../selftests/bpf/progs/test_get_xattr.c      |  28 +-
+ .../bpf/progs/test_set_remove_xattr.c         | 129 +++++++++
+ .../bpf/progs/test_set_remove_xattr_failure.c |  56 ++++
+ 8 files changed, 636 insertions(+), 20 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/progs/test_set_remove_xattr.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_set_remove_xattr_failure.c
+
+--
+2.43.5
