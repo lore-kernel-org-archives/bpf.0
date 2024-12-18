@@ -1,168 +1,262 @@
-Received: from mail-pg1-f202.google.com (mail-pg1-f202.google.com [209.85.215.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B58E1E9B39
-	for <bpf@vger.kernel.org>; Wed, 18 Dec 2024 13:34:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 420D0481B3;
+	Wed, 18 Dec 2024 15:31:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734528875; cv=none; b=FmCDrm4DKuac8JSUP93vmuVX9M2hqtAB73FjxzoMc8Ah5308rYlMYgAYI14at9o3iw/hSg4nfSkonfycOpmVdBRl7dxoxeQzqpIq33MHDTUN/KA8Ks/PuLQY14UBY5Xp6np7dFoWFBj4ZWBIlTl+67ktNC9cqKluapB7eyHgp94=
+	t=1734535902; cv=none; b=oXSf3NXPW+Xz/tCExtk2LszZ1wIKrPJT4V7s3Q+8HcTfJ5gbRBQUTIgClxbu9N4scxSCLZhrawGSPw314FkVRNG0ua2pSWBtWUKsjmv3DAyPEl9veFs3H5f/AQbU5A1I3fiH3vOwYj6syRcBU8BtTqEgu0iM+jF5t1yCbgDumAw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734528875; c=relaxed/simple;
-	bh=5nW61vOKeFgt2Ca3diR0gPzoG2D8KLy0Ubznq3j8i3w=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=pxFIm17VAhl4aoUZX+u7tsL+PLphrCBV2w7V76rFyCZ58NUb45sdcJWvTIEEPHPL88zUD4UHheHZ+fclLFntg2r1iMaAtC3b9fXCe/erpG+qknw7FfxVXVzJPcW1F2CbSqdbsL9nbsPAxJ268GpKR7hAgeG3kjzdcX/6lBVbit0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--pkaligineedi.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=xfz5QjC+; arc=none smtp.client-ip=209.85.215.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--pkaligineedi.bounces.google.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="xfz5QjC+"
-Received: by mail-pg1-f202.google.com with SMTP id 41be03b00d2f7-7fcd2430636so4424428a12.2
-        for <bpf@vger.kernel.org>; Wed, 18 Dec 2024 05:34:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1734528873; x=1735133673; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=T5p6vlUBAsmQyOt8BuyoWsG+1hipC/LRRSVT0CsAjCw=;
-        b=xfz5QjC+/jESiv2uFvLF7rUuOSlvdU5UBtL8Zkt4O0ZXCoAZdgPaXDdijcxVsWITru
-         HcmSIsWy80R71wgIMCGdjrJeeDRX++FLMrlmeZLjS4oHGnjYypKkni4/blLGJxCEInth
-         eip0fZuoxqh/nDopdSQzPsdp6RGkqFaFCbft0UsNrXDW2rUIlNhg+a93nXNc22tB0WcE
-         9UGJI/u/6mLWyg61qAA0Zv256zRIRNQtCTVHbg7/A6Gh0mtZ0KikFiDRi5++rsZC1SfX
-         hsF4gs0h/yhycSJtQEg/bIWRs/ljOomEIPdn+IAuNv7FMUwJyP37DFdSwcBRpyd0FkU+
-         LgFg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1734528873; x=1735133673;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=T5p6vlUBAsmQyOt8BuyoWsG+1hipC/LRRSVT0CsAjCw=;
-        b=jY0WdKhOBQ4BPHxxgjJURg93dS6MFVq8Jeli4YAiQuHIwxOPqp9SPbXYhgm2u8F+3G
-         +eA9tLA2MZR6J/soeISKQSnOgozrRfpuWngFttiXzFjP7+yU5qZNhe20Epu5wWBIsSPP
-         B6FXqOEykwMP7XktKuC+lie5Jlz7wPnfztiHzraYeoSd6Qp4Zvmjsin7vR6aqvUkACzg
-         Jl7EVIUkj0Wa/BNHB+nFwX+lUmy5WVuZ9jud/txjyRbF5B28IOV3oVGpMRKdH/plJLTO
-         1CJGO9hoK158oB0EaJhaFHA/I8LXmGLLSdS2iL8fbQh4YTAIHya+vOIOrw7U/CWep7bD
-         Sikg==
-X-Forwarded-Encrypted: i=1; AJvYcCWEfsdINyjwF6Ayv2yFNd2+LJaE2OxecmJxAsEcRTPNJsM3alKP6cyov5ElMqtYob99v2s=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw4ZDfZUu/wfVW52uMdo4mgOqnOgDDA9nhkmoh3tFdEIbAE25E6
-	JcF50vAAhba3AVGBdtXWcM4a5h+PCVs4dgPYo4MZd+XnCszs252RhfTCrd8XnM5iDiKMujI8Oy/
-	y1JUbEbYFC48gc1fQ3JGQowaT0A==
-X-Google-Smtp-Source: AGHT+IESNBKLCTm0uqLX+DRFxTtWjk+95d5i9mTaDJzn1eicqwfkpRcGBjtCrRCjQo4wMO7Q8jBDvY0A+fhe0GGi+qI=
-X-Received: from pjbqx3.prod.google.com ([2002:a17:90b:3e43:b0:2ee:4b69:50e1])
- (user=pkaligineedi job=prod-delivery.src-stubby-dispatcher) by
- 2002:a17:90b:2b8f:b0:2ee:df57:b194 with SMTP id 98e67ed59e1d1-2f2e91fef48mr3520473a91.21.1734528873500;
- Wed, 18 Dec 2024 05:34:33 -0800 (PST)
-Date: Wed, 18 Dec 2024 05:34:15 -0800
-In-Reply-To: <20241218133415.3759501-1-pkaligineedi@google.com>
+	s=arc-20240116; t=1734535902; c=relaxed/simple;
+	bh=uxoW3dZR+pAQw4zfTbsB1zo6/gQDW9tYH4aVUTgWSU0=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=fkcfhcSKgMjS2l/9gqZ0vHeCLVsgKnSwNyaqqgZ1wA4k6gcEz7Hsusv081KDIL6IkLlXxN9l+zYvD6V2WCtBjiMYvP7CDkhd6eeH03yaKdax5DrSM/IRHtM8Lgua9tHsM/TcVOi66prFREzqF4VDFTtKOy2iI8/pH9xpe37QKok=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2C51C4CECD;
+	Wed, 18 Dec 2024 15:31:40 +0000 (UTC)
+Date: Wed, 18 Dec 2024 10:32:18 -0500
+From: Steven Rostedt <rostedt@goodmis.org>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>, Daniel Borkmann
+ <daniel@iogearbox.net>, Florent Revest <revest@google.com>, LKML
+ <linux-kernel@vger.kernel.org>, bpf <bpf@vger.kernel.org>
+Subject: Re: [PATCH] vsprintf: simplify number handling
+Message-ID: <20241218103218.7dc82306@gandalf.local.home>
+In-Reply-To: <20241218013620.1679088-1-torvalds@linux-foundation.org>
+References: <CAHk-=whOM+D1D4wb5M_SGQeiDSQbmUTrpjghy2+ivo6s1aXwFQ@mail.gmail.com>
+	<20241218013620.1679088-1-torvalds@linux-foundation.org>
+X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20241218133415.3759501-1-pkaligineedi@google.com>
-X-Mailer: git-send-email 2.47.1.613.gc27f4b7a9f-goog
-Message-ID: <20241218133415.3759501-6-pkaligineedi@google.com>
-Subject: [PATCH net 5/5] gve: fix XDP allocation path in edge cases
-From: Praveen Kaligineedi <pkaligineedi@google.com>
-To: netdev@vger.kernel.org
-Cc: jeroendb@google.com, shailend@google.com, willemb@google.com, 
-	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com, 
-	kuba@kernel.org, pabeni@redhat.com, ast@kernel.org, daniel@iogearbox.net, 
-	hawk@kernel.org, john.fastabend@gmail.com, horms@kernel.org, 
-	hramamurthy@google.com, joshwash@google.com, ziweixiao@google.com, 
-	linux-kernel@vger.kernel.org, bpf@vger.kernel.org, stable@vger.kernel.org, 
-	Praveen Kaligineedi <pkaligineedi@google.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-From: Joshua Washington <joshwash@google.com>
+On Tue, 17 Dec 2024 17:32:09 -0800
+Linus Torvalds <torvalds@linux-foundation.org> wrote:
 
-This patch fixes a number of consistency issues in the queue allocation
-path related to XDP.
+> @@ -2747,6 +2737,17 @@ set_precision(struct printf_spec *spec, int prec)
+>  	}
+>  }
+>  
+> +/* Turn a 1/2/4-byte value into a 64-bit one with sign handling */
+> +static unsigned long long get_num(unsigned int val, struct printf_spec spec)
+> +{
+> +	unsigned int shift = 32 - spec.type*8;
+> +
+> +	val <<= shift;
+> +	if (!(spec.flags & SIGN))
+> +		return val >> shift;
+> +	return (int)val >> shift;
+> +}
 
-As it stands, the number of allocated XDP queues changes in three
-different scenarios.
-1) Adding an XDP program while the interface is up via
-   gve_add_xdp_queues
-2) Removing an XDP program while the interface is up via
-   gve_remove_xdp_queues
-3) After queues have been allocated and the old queue memory has been
-   removed in gve_queues_start.
+I was about to make the same comment that Rasmus said about not bothering
+with the shift if it is not signed, but I won't repeat that.
 
-However, the requirement for the interface to be up for
-gve_(add|remove)_xdp_queues to be called, in conjunction with the fact
-that the number of queues stored in priv isn't updated until _after_ XDP
-queues have been allocated in the normal queue allocation path means
-that if an XDP program is added while the interface is down, XDP queues
-won't be added until the _second_ if_up, not the first.
+> +
+>  /**
+>   * vsnprintf - Format a string and place it in a buffer
+>   * @buf: The buffer to place the result into
+> @@ -2873,43 +2874,10 @@ int vsnprintf(char *buf, size_t size, const char *fmt, va_list args)
+>  			goto out;
+>  
+>  		default:
+> -			switch (spec.type) {
+> -			case FORMAT_TYPE_LONG_LONG:
+> +			if (spec.type == FORMAT_TYPE_8BYTE)
+>  				num = va_arg(args, long long);
+> -				break;
+> -			case FORMAT_TYPE_ULONG:
+> -				num = va_arg(args, unsigned long);
+> -				break;
+> -			case FORMAT_TYPE_LONG:
+> -				num = va_arg(args, long);
+> -				break;
+> -			case FORMAT_TYPE_SIZE_T:
+> -				if (spec.flags & SIGN)
+> -					num = va_arg(args, ssize_t);
+> -				else
+> -					num = va_arg(args, size_t);
+> -				break;
+> -			case FORMAT_TYPE_PTRDIFF:
+> -				num = va_arg(args, ptrdiff_t);
+> -				break;
+> -			case FORMAT_TYPE_UBYTE:
+> -				num = (unsigned char) va_arg(args, int);
+> -				break;
+> -			case FORMAT_TYPE_BYTE:
+> -				num = (signed char) va_arg(args, int);
+> -				break;
+> -			case FORMAT_TYPE_USHORT:
+> -				num = (unsigned short) va_arg(args, int);
+> -				break;
+> -			case FORMAT_TYPE_SHORT:
+> -				num = (short) va_arg(args, int);
+> -				break;
+> -			case FORMAT_TYPE_INT:
+> -				num = (int) va_arg(args, int);
+> -				break;
+> -			default:
+> -				num = va_arg(args, unsigned int);
+> -			}
+> +			else
+> +				num = get_num(va_arg(args, int), spec);
 
-Given the expectation that the number of XDP queues is equal to the
-number of RX queues, scenario (3) has another problematic implication.
-When changing the number of queues while an XDP program is loaded, the
-number of XDP queues must be updated as well, as there is logic in the
-driver (gve_xdp_tx_queue_id()) which relies on every RX queue having a
-corresponding XDP TX queue. However, the number of XDP queues stored in
-priv would not be updated until _after_ a close/open leading to a
-mismatch in the number of XDP queues reported vs the number of XDP
-queues which actually exist after the queue count update completes.
+The function name should likely be called:
 
-This patch remedies these issues by doing the following:
-1) The allocation config getter function is set up to retrieve the
-   _expected_ number of XDP queues to allocate instead of relying
-   on the value stored in `priv` which is only updated once the queues
-   have been allocated.
-2) When adjusting queues, XDP queues are adjusted to match the number of
-   RX queues when XDP is enabled. This only works in the case when
-   queues are live, so part (1) of the fix must still be available in
-   the case that queues are adjusted when there is an XDP program and
-   the interface is down.
+    make_num_long_long(va_arg(args, int), spec);
 
-Fixes: 5f08cd3d6423 ("gve: Alloc before freeing when adjusting queues")
-Cc: stable@vger.kernel.org
-Signed-off-by: Joshua Washington <joshwash@google.com>
-Signed-off-by: Praveen Kaligineedi <pkaligineedi@google.com>
-Reviewed-by: Praveen Kaligineedi <pkaligineedi@google.com>
-Reviewed-by: Shailend Chand <shailend@google.com>
-Reviewed-by: Willem de Bruijn <willemb@google.com>
----
- drivers/net/ethernet/google/gve/gve_main.c | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+Because after even reading the get_num() function, when I came down here I
+had to go back up to make sure that was the function I was looking at, as
+"get_num()" doesn't mean anything to me.
 
-diff --git a/drivers/net/ethernet/google/gve/gve_main.c b/drivers/net/ethernet/google/gve/gve_main.c
-index 5cab7b88610f..09fb7f16f73e 100644
---- a/drivers/net/ethernet/google/gve/gve_main.c
-+++ b/drivers/net/ethernet/google/gve/gve_main.c
-@@ -930,11 +930,13 @@ static void gve_init_sync_stats(struct gve_priv *priv)
- static void gve_tx_get_curr_alloc_cfg(struct gve_priv *priv,
- 				      struct gve_tx_alloc_rings_cfg *cfg)
- {
-+	int num_xdp_queues = priv->xdp_prog ? priv->rx_cfg.num_queues : 0;
+
+>  
+>  			str = number(str, end, num, spec);
+>  		}
+> @@ -3183,26 +3151,13 @@ int vbin_printf(u32 *bin_buf, size_t size, const char *fmt, va_list args)
+>  
+>  		default:
+>  			switch (spec.type) {
+> -
+> -			case FORMAT_TYPE_LONG_LONG:
+> +			case FORMAT_TYPE_8BYTE:
+>  				save_arg(long long);
+>  				break;
+> -			case FORMAT_TYPE_ULONG:
+> -			case FORMAT_TYPE_LONG:
+> -				save_arg(unsigned long);
+> -				break;
+> -			case FORMAT_TYPE_SIZE_T:
+> -				save_arg(size_t);
+> -				break;
+> -			case FORMAT_TYPE_PTRDIFF:
+> -				save_arg(ptrdiff_t);
+> -				break;
+> -			case FORMAT_TYPE_UBYTE:
+> -			case FORMAT_TYPE_BYTE:
+> +			case FORMAT_TYPE_1BYTE:
+>  				save_arg(char);
+>  				break;
+> -			case FORMAT_TYPE_USHORT:
+> -			case FORMAT_TYPE_SHORT:
+> +			case FORMAT_TYPE_2BYTE:
+>  				save_arg(short);
+>  				break;
+>  			default:
+> @@ -3375,37 +3330,17 @@ int bstr_printf(char *buf, size_t size, const char *fmt, const u32 *bin_buf)
+>  			unsigned long long num;
+>  
+>  			switch (spec.type) {
+> -
+> -			case FORMAT_TYPE_LONG_LONG:
+> +			case FORMAT_TYPE_8BYTE:
+>  				num = get_arg(long long);
+>  				break;
+> -			case FORMAT_TYPE_ULONG:
+> -			case FORMAT_TYPE_LONG:
+> -				num = get_arg(unsigned long);
+> +			case FORMAT_TYPE_2BYTE:
+> +				num = get_num(get_arg(short), spec);
+>  				break;
+> -			case FORMAT_TYPE_SIZE_T:
+> -				num = get_arg(size_t);
+> -				break;
+> -			case FORMAT_TYPE_PTRDIFF:
+> -				num = get_arg(ptrdiff_t);
+> -				break;
+> -			case FORMAT_TYPE_UBYTE:
+> -				num = get_arg(unsigned char);
+> -				break;
+> -			case FORMAT_TYPE_BYTE:
+> -				num = get_arg(signed char);
+> -				break;
+> -			case FORMAT_TYPE_USHORT:
+> -				num = get_arg(unsigned short);
+> -				break;
+> -			case FORMAT_TYPE_SHORT:
+> -				num = get_arg(short);
+> -				break;
+> -			case FORMAT_TYPE_UINT:
+> -				num = get_arg(unsigned int);
+> +			case FORMAT_TYPE_1BYTE:
+> +				num = get_num(get_arg(char), spec);
+>  				break;
+>  			default:
+> -				num = get_arg(int);
+> +				num = get_num(get_arg(int), spec);
+>  			}
+>  
+>  			str = number(str, end, num, spec);
+> -- 
+
+I went to test this by adding the following:
+
+diff --git a/samples/trace_printk/trace-printk.c b/samples/trace_printk/trace-printk.c
+index cfc159580263..1ff688637404 100644
+--- a/samples/trace_printk/trace-printk.c
++++ b/samples/trace_printk/trace-printk.c
+@@ -43,6 +43,17 @@ static int __init trace_printk_init(void)
+ 
+ 	trace_printk(trace_printk_test_global_str_fmt, "", "dynamic string");
+ 
++	trace_printk("Print unsigned long long %llu\n", -1LL);
++	trace_printk("Print long long %lld\n", -1LL);
++	trace_printk("Print unsigned long %llu\n", -1L);
++	trace_printk("Print long  %ld\n", -1L);
++	trace_printk("Print unsigned int %u\n", -1);
++	trace_printk("Print int %d\n", -1);
++	trace_printk("Print unsigned short %hu\n", (short)-1);
++	trace_printk("Print short %hd\n", (short)-1);
++	trace_printk("Print unsigned char %hhu\n", (char)-1);
++	trace_printk("Print char %hhd\n", (char)-1);
 +
- 	cfg->qcfg = &priv->tx_cfg;
- 	cfg->raw_addressing = !gve_is_qpl(priv);
- 	cfg->ring_size = priv->tx_desc_cnt;
- 	cfg->start_idx = 0;
--	cfg->num_rings = gve_num_tx_queues(priv);
-+	cfg->num_rings = priv->tx_cfg.num_queues + num_xdp_queues;
- 	cfg->tx = priv->tx;
+ 	return 0;
  }
  
-@@ -1843,6 +1845,7 @@ int gve_adjust_queues(struct gve_priv *priv,
- {
- 	struct gve_tx_alloc_rings_cfg tx_alloc_cfg = {0};
- 	struct gve_rx_alloc_rings_cfg rx_alloc_cfg = {0};
-+	int num_xdp_queues;
- 	int err;
- 
- 	gve_get_curr_alloc_cfgs(priv, &tx_alloc_cfg, &rx_alloc_cfg);
-@@ -1853,6 +1856,10 @@ int gve_adjust_queues(struct gve_priv *priv,
- 	rx_alloc_cfg.qcfg = &new_rx_config;
- 	tx_alloc_cfg.num_rings = new_tx_config.num_queues;
- 
-+	/* Add dedicated XDP TX queues if enabled. */
-+	num_xdp_queues = priv->xdp_prog ? new_rx_config.num_queues : 0;
-+	tx_alloc_cfg.num_rings += num_xdp_queues;
-+
- 	if (netif_running(priv->dev)) {
- 		err = gve_adjust_config(priv, &tx_alloc_cfg, &rx_alloc_cfg);
- 		return err;
--- 
-2.47.1.613.gc27f4b7a9f-goog
+And the trace file looks fine:
 
+ # modprobe trace-printk
+ # cat /sys/kernel/tracing/trace
+
+        modprobe-905     [003] .....   113.624838: init_module: Print unsigned long long 18446744073709551615
+        modprobe-905     [003] .....   113.624838: init_module: Print long long -1
+        modprobe-905     [003] .....   113.624839: init_module: Print unsigned long 18446744073709551615
+        modprobe-905     [003] .....   113.624839: init_module: Print long  -1
+        modprobe-905     [003] .....   113.624840: init_module: Print unsigned int 4294967295
+        modprobe-905     [003] .....   113.624841: init_module: Print int -1
+        modprobe-905     [003] .....   113.624841: init_module: Print unsigned short 65535
+        modprobe-905     [003] .....   113.624842: init_module: Print short -1
+        modprobe-905     [003] .....   113.624843: init_module: Print unsigned char 255
+        modprobe-905     [003] .....   113.624843: init_module: Print char -1
+
+But when I did the following:
+
+ # trace-cmd extract
+ # trace-cmd report
+
+It showed:
+
+        modprobe-905   [003] .....   113.624838: bprint:               init_module: Print unsigned long long 18446744073709551615
+        modprobe-905   [003] .....   113.624838: bprint:               init_module: Print long long -1
+        modprobe-905   [003] .....   113.624839: bprint:               init_module: Print unsigned long 18446744073709551615
+        modprobe-905   [003] .....   113.624839: bprint:               init_module: Print long  -1
+        modprobe-905   [003] .....   113.624840: bprint:               init_module: Print unsigned int 4294967295
+        modprobe-905   [003] .....   113.624841: bprint:               init_module: Print int -1
+        modprobe-905   [003] .....   113.624841: bprint:               init_module: Print unsigned short u
+        modprobe-905   [003] .....   113.624842: bprint:               [FAILED TO PARSE] ip=0xffffffffc060e045 fmt=0xffff8c05c338e760 buf=ARRAY[]
+        modprobe-905   [003] .....   113.624843: bprint:               [FAILED TO PARSE] ip=0xffffffffc060e045 fmt=0xffff8c05c338ec40 buf=ARRAY[]
+        modprobe-905   [003] .....   113.624843: bprint:               [FAILED TO PARSE] ip=0xffffffffc060e045 fmt=0xffff8c05c338e280 buf=ARRAY[]
+
+Those "[FAILED TO PARSE]" messages have nothing to do with your code, but
+it means that it doesn't handle 'h' at all. Even the "unsigned short"
+printed but still failed to parse properly.
+
+This is because libtraceevent appears to not support "%h" in print formats.
+That at least means there would be no breakage if they are modified in any
+way.
+
+-- Steve
