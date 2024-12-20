@@ -1,35 +1,50 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 802EE227B94;
-	Fri, 20 Dec 2024 22:20:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80F091A01BD;
+	Fri, 20 Dec 2024 23:47:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734733217; cv=none; b=RR3ZMVyfp/sPBG1DGp/dSMkl1FFvJYmAcS76XczN74WSrMfcLENP5Zxo4PFw6miIjN6BwcBBqp1g+ppcKatjCEZ3oDd2AqtdXGLnPXWfSswNnjVCa9wezPqb8+ZEVnSZRyg6V0/tLiB3FugLcGW7lQJINg2Fe2BZdyFQ0ZSTtgs=
+	t=1734738429; cv=none; b=XdoOsPA3GfgMaPMdO9EecookrcYeUy5GTbigq7sol7kZkg23ru7lqUJT9mBM9H38hDMyK8y2XTaTqCqnr3n1uaEng/xCGRG7+5Z2h7wOABIFbJBjM06E+9vCFJebwZLL6MKTg/E8TUEub0x7LtgUvIONN1Mwfvnn9x+jDWeqaPI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734733217; c=relaxed/simple;
-	bh=7SZ1eF0pxYedrhawWxd0yixMBjGQ+fZtPvYJTM2ques=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=mIFB2VcIQYmapvicDMwZfxVhCCe2YYkuKD4340od2zNh7LbPrsaqAX1FCwFpdNMbbi10aOnNHGa6iMkW6c1lSGFuhCLUxTaWKSQgLZhkBbjONyUGCc9njKDy4pUI7bXJzx5e3RbgzZZvpBEa0RUxZc15LkZHop0tpiVUXF6IYr8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pnVL+l8g; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1734738429; c=relaxed/simple;
+	bh=Qwj5zUiYJ5C7w1yk4PrmhOazfHT/8mw2RrIgrXZ7UfY=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=aKmQv+2nhRxIME/KGWwzy/V9ghdoU2q83i/41Xpc9XMBs4IRfNTLISIMOa6qqdXCKwoq4uOVdyZAzYhZ8FhQfQUgsk7NvBTDD9AGDuk65sQoXYcxU7xRxQIcxK0NQ9biNumt0gSa35CGAWEQNSv46y1eQ6ocveSAMQS1pEhp/Rk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=As0i6QJa; arc=none smtp.client-ip=213.133.104.62
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pnVL+l8g"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59634C4CECD;
-	Fri, 20 Dec 2024 22:20:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1734733217;
-	bh=7SZ1eF0pxYedrhawWxd0yixMBjGQ+fZtPvYJTM2ques=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=pnVL+l8gEHpALSt4qG44/FPswpHrZ3PgQHfK6GcSnIkyv8xkCVdFskkAR+oUKsq3F
-	 74MJoo9cDolLfrmHcPFBk50+V51V+E8vvotf3XrarqjwFwVJNUJP83nhUMVkAC23dM
-	 daRpdNHRZSpCYWw2L9LHkXvj0rjSrv8+syjBiiV+gbEf5/p2FYKo/aZPOQLyc8CVcn
-	 b9Ym3rJXiWmTuiYTbcoIEOBrvIpd4fIFKjizYkXrBErfdHSeqoL7sIUnAiyBtVA7nk
-	 DUqw6i1ST1E6c/Wk+eKtdJOFj5CnBd/lJhyIqao4f4kCzkxjMy8PbqgVn+CPCXN79y
-	 azId46gJzZPWg==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 7741C3806656;
-	Fri, 20 Dec 2024 22:20:36 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="As0i6QJa"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:MIME-Version:
+	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
+	Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=tYKOX4rHpeNX+6/TYEQ8f2DrPyEghKzfu11FgQwFLg4=; b=As0i6QJa8NbluKR9WPDu1jPGZD
+	FtLDsBojBMQzPLe83Q1XzaV8RxNnYucdn3S4VcvOm0rpmLabJ45YKSJpmhoC1QeoB9y1l8emP/4yp
+	YL8SAuJnZJte5L6rY0s3r/WiWPgT7mCc+EeJp+7UDfXGgWgvctANziWyrLFJ4fUx0VJTeN+Q4LaWR
+	6KIW8ugvT2HBvJcmtwgraPhPuwJ4nxWCJGkHE77D+Wq4Bhb0omvRg67Is6tlpC3fAhgLGLz1hiq6f
+	282PwxAIlxKejKY17CYlYrKkANGbymnJ524R33ee3oki2e9Sv96DFGk+VvOHWHLi86jlRqvJFpaNB
+	yqsvpPRw==;
+Received: from 226.206.1.85.dynamic.cust.swisscom.net ([85.1.206.226] helo=localhost)
+	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1tOmhv-000ISq-Q4; Sat, 21 Dec 2024 00:46:59 +0100
+From: Daniel Borkmann <daniel@iogearbox.net>
+To: martin.lau@linux.dev
+Cc: razor@blackwall.org,
+	pabeni@redhat.com,
+	kuba@kernel.org,
+	bpf@vger.kernel.org,
+	netdev@vger.kernel.org
+Subject: [PATCH bpf-next v2 2/3] netkit: Add add netkit {head,tail}room to rt_link.yaml
+Date: Sat, 21 Dec 2024 00:46:57 +0100
+Message-ID: <20241220234658.490686-2-daniel@iogearbox.net>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20241220234658.490686-1-daniel@iogearbox.net>
+References: <20241220234658.490686-1-daniel@iogearbox.net>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -37,48 +52,54 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [Patch bpf v3 0/4] bpf: a bug fix and test cases for
- bpf_skb_change_tail()
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <173473323519.3037384.12810053109977507523.git-patchwork-notify@kernel.org>
-Date: Fri, 20 Dec 2024 22:20:35 +0000
-References: <20241213034057.246437-1-xiyou.wangcong@gmail.com>
-In-Reply-To: <20241213034057.246437-1-xiyou.wangcong@gmail.com>
-To: Cong Wang <xiyou.wangcong@gmail.com>
-Cc: netdev@vger.kernel.org, bpf@vger.kernel.org, cong.wang@bytedance.com
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 1.0.7/27493/Fri Dec 20 10:46:49 2024)
 
-Hello:
+Add netkit {head,tail}room attribute support to the rt_link.yaml spec file.
 
-This series was applied to bpf/bpf.git (master)
-by Daniel Borkmann <daniel@iogearbox.net>:
+Example:
 
-On Thu, 12 Dec 2024 19:40:53 -0800 you wrote:
-> From: Cong Wang <cong.wang@bytedance.com>
-> 
-> This patchset fixes a bug in bpf_skb_change_tail() helper and adds test
-> cases for it, as requested by Daniel and John.
-> 
-> ---
-> v3: switched to TCX prog attaching API
->     switched to UDP from TCP for TC test
->     cleaned up TC test code
-> 
-> [...]
+  # ./tools/net/ynl/cli.py --spec Documentation/netlink/specs/rt_link.yaml \
+   --do getlink --json '{"ifname": "nk0"}' --output-json | jq
+  [...]
+  "linkinfo": {
+    "kind": "netkit",
+    "data": {
+      "primary": 0,
+      "policy": "forward",
+      "mode": "l3",
+      "scrub": "default",
+      "headroom": 0,
+      "tailroom": 0,
+      "peer-policy": "forward",
+      "peer-scrub": "default"
+    }
+  },
+  [...]
 
-Here is the summary with links:
-  - [bpf,v3,1/4] bpf: Check negative offsets in __bpf_skb_min_len()
-    https://git.kernel.org/bpf/bpf/c/9ecc4d858b92
-  - [bpf,v3,2/4] selftests/bpf: Add a BPF selftest for bpf_skb_change_tail()
-    https://git.kernel.org/bpf/bpf/c/9ee0c7b86543
-  - [bpf,v3,3/4] selftests/bpf: Introduce socket_helpers.h for TC tests
-    https://git.kernel.org/bpf/bpf/c/472759c9f537
-  - [bpf,v3,4/4] selftests/bpf: Test bpf_skb_change_tail() in TC ingress
-    https://git.kernel.org/bpf/bpf/c/4a58963d10fa
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Cc: Nikolay Aleksandrov <razor@blackwall.org>
+---
+ Documentation/netlink/specs/rt_link.yaml | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-You are awesome, thank you!
+diff --git a/Documentation/netlink/specs/rt_link.yaml b/Documentation/netlink/specs/rt_link.yaml
+index 9ffa13b77dcf..dbeae6b1c548 100644
+--- a/Documentation/netlink/specs/rt_link.yaml
++++ b/Documentation/netlink/specs/rt_link.yaml
+@@ -2166,6 +2166,12 @@ attribute-sets:
+         name: peer-scrub
+         type: u32
+         enum: netkit-scrub
++      -
++        name: headroom
++        type: u16
++      -
++        name: tailroom
++        type: u16
+ 
+ sub-messages:
+   -
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.43.0
 
