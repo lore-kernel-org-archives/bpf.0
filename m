@@ -1,61 +1,61 @@
-Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
+Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2015C227567;
-	Fri, 20 Dec 2024 19:56:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D0AE227BB9;
+	Fri, 20 Dec 2024 19:56:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734724597; cv=none; b=lqI5nAumTO3haHPyn6fj7mauwMRs/kvv1WzvtSUOpLVW7nX04wvCgdn8JRL3tZDzsMSY+8uMY6eiIlTWQeF1HT+wvMt2ro2Ol9JiQdF4z5UI913ZtdSpcf9BO4BU448ruCs0UoU0YAq3nRAc6gaKf3+IDG9fCy+4zkfD82zbnyQ=
+	t=1734724599; cv=none; b=uT3lQDPa5k9pe1GENAeee+4Ih5gCCIXw50lGvs8kyCacXKfUQ3asYuTpCw6l51gCKQCpQftsvPRLaMYKbI9d9NsIZxt7Zb6crEOZynVXaV7HNj56RaqPWcxLQBuGqmzqw5jWTLl2QZM5xlCfZZjFTt4/SgiTID424HCsVWibDig=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734724597; c=relaxed/simple;
-	bh=7VTKmqevgwD2T3vHTnzqDkUUJE0B8xtaL03/gd0M7oM=;
+	s=arc-20240116; t=1734724599; c=relaxed/simple;
+	bh=bJ4fRTQDsJLP+TAqkbvy8ATF64cWWM0drr4CpUrcOHA=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=KtFArYOejjSkMfaTcpk88NJjMjDnvJMgeH81rE12j1fBDM3CfjmCFwEoeeQrEEk4MCbtkXh0CqNYENm5sx6F2J//9SYdf+qWjGRsDeBE8vnCf+Wx4WiB4kCADohXDpuFkVTHgOtHigSKBscyTDDmyXdz+GdT/p/yUJtJ2GqllNY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hD3JGs+B; arc=none smtp.client-ip=209.85.215.172
+	 MIME-Version; b=Pf68XJriguzfKFNo1vrjLb76P7mntfV5VAsuC05sf04uwGJpaqJ3ka/yVkpBRU6U47042pK8FGedVMzmHZs+C3i+4IV4vZypfiWSdl+v0U5V1kFUSf13ONNpMF3Z5REVHCH6CDVb07ik3LC5fbStapoFwM5eFmZ/ShU3kN20w3k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=D252skAF; arc=none smtp.client-ip=209.85.210.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hD3JGs+B"
-Received: by mail-pg1-f172.google.com with SMTP id 41be03b00d2f7-7fd526d4d9eso1766103a12.2;
-        Fri, 20 Dec 2024 11:56:35 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="D252skAF"
+Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-728ea1e0bdbso2239767b3a.0;
+        Fri, 20 Dec 2024 11:56:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1734724595; x=1735329395; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1734724597; x=1735329397; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=3pVqW4kyTwbSxeSE3OUqtXEyeML27KshGWKHBkIuQrc=;
-        b=hD3JGs+BWqaz93RgHNJSejc6x5ECShPcd4iQWW0n+Li+iB7xJUJWnEmspbsSrPhp38
-         WIk2TfHbT0ZQa8eZrY4SNY9vAFHVR+Bam6S7x5foPXC5Qnh6BNAStDysfhvFniwogwAw
-         3Oxce2QmBU5L4XicoN9PCBQSsA1xaPyVd+m5sdQY2hlQJcg9PCa1xz9GKw1hITobq52i
-         icelhXC1B5w/gzUb4WQjVAaQMjYyMNmEBReXg/UJP/haOSwBCxnaNSAf4B2sFDKobyUN
-         zLnnDCg+5iKCXZEZjgM3AuXnzJ0hRwY+PiY1U5Yb2R+rUFdzAY7qPQJSyYPqejZA3wHp
-         HC2A==
+        bh=pFyFpVy1vmyR3zXTCfx76JfAwKafHxDwBgzFEvy/ujc=;
+        b=D252skAFeuHFRndOTfnS4K9ar+90Jk33B2xA3jwskFo8sGuig7EYu6RsCsbZbJyqyj
+         nKXlrgTasGD8yWALYBkU3fOHYICnSnT5cfhDH6G1SIOC2pktapVHS8E5gvWeFjkTp7MY
+         xSfxZDo3HnC/otgvWW5gI8YTVDrSeDF/KP12K2Q8FncKYgtmSqvwp60+EcVSSzgtJiZs
+         LW0/ScewONv8iKO+l9Q/tZyAus26Nr0TOZaCVg7A/AgUmTF6mqFAH5wtJ07RuMl/qxSL
+         1boqdOPTE3K4s/fcXIQHqCSm+lILNsT2ub8/qlvacY9g2Fh+oVH5+rWOk2hw84GIbAx8
+         km9Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1734724595; x=1735329395;
+        d=1e100.net; s=20230601; t=1734724597; x=1735329397;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=3pVqW4kyTwbSxeSE3OUqtXEyeML27KshGWKHBkIuQrc=;
-        b=rQuDjTAwcbrDitzVzw7RtZcSeDxY/XKnTiStz37ZPpB7d4xM4hJwdfNeDZ1/3MAzkE
-         FckKrh2X8YFJSYaoYCtXWgxwK2NIF5lfW9devfHt7y1uHTbGYCVZa7Y/FxfNhlUgYagD
-         48lyhDrkJSInju3KkWynp2RZldmws2W4yVXEjQ6OoH5LMjDTnDLSZfhTOIEQzGhn6bpw
-         KtumZ+sA2+JXSniD29IQ3MYXc+fvsgoiral0hbClpiRUSP6zun5sNR3j16izlMqIa+LR
-         KRdevWC94KO3qBPOo45T4Czc20gkzouWdkquM1b7nPKs0XMxITUZqofttVqSDs953kPt
-         3ANg==
-X-Gm-Message-State: AOJu0Ywa1/bsa55Xyx8RM3H+yZvI6zIVfahoiWWrEWhv2hImFTa2BMSn
-	VyR9wTpRkFl0ENRiVpfk18dpJICddo7e/+sHfWt1HLSpL7p2d2wRFjlABA==
-X-Gm-Gg: ASbGncteUX1CJY1dWmPwLMM8WSu45ZLYqjlA6p+z4VO3FHxmcXcWl1ShMfmqELJHT6N
-	Jc97k6f6+ZYxSkjL1a8yfdQakYif0lCvZs+zo4LrQHx35tLZVRS18pJuUVR6Zq8ZLNMO76BvuZ/
-	xS95hzEiPjbPghD2WuzhK4gpEe6FbROHUx1eBwBN6Mf3s0rhnbFuv5e7v//n72+bdOqrx2KI55b
-	p5P/S1gKToNfHbaweemK4Df8fOP/0eN/i7cqJvk45/BfaaNyxb4u2H5dfB11amdbfpBFltk6Kfj
-	lLuXPRu9fP+LbQZUdSQPbey6mGohc0Ea
-X-Google-Smtp-Source: AGHT+IEEz5M/z8tYwRcmPtDwIciVMVaTLXI5ltjtZLcP2vze1Rmfe8O6DYxFr/gp/wwBuC44qziTZw==
-X-Received: by 2002:a05:6a21:339e:b0:1e1:aba4:209c with SMTP id adf61e73a8af0-1e5e07ffc0amr7662403637.29.1734724595385;
-        Fri, 20 Dec 2024 11:56:35 -0800 (PST)
+        bh=pFyFpVy1vmyR3zXTCfx76JfAwKafHxDwBgzFEvy/ujc=;
+        b=TEiGOsJVYHuR1XNTSASO1v6xU3+HnFZD+ungQc4aqMH/AsN0fWd0a22yThX0UgYI+j
+         7YCRj0gIM9phSBqlUX2oCclMa6iU4vb8dr8+VHE6RLcEbRQot6txpyQykuIEjvoABAIR
+         Nxbn0XjCeeLMCYFDr85pArf+oRamQJZ9HQfrwPffIB7FZzbnVS1bMqOuu7/8NLNHNGxz
+         loXLsgKc9E5LR1npHdkJPpofcnHDPXmCvAFgfAqzeV4c6RaXxO5cjMHWUgKIaTKi1wHA
+         XwxRTMYEXXc84QSkvqWEWjgwzU77KbkQb2Vt/780amJWMS97lsa80KQM7m2SK+ewA+4d
+         UYow==
+X-Gm-Message-State: AOJu0YwEgV+XDzclXZE0hverxuMHtMFOgSz4hDIMZkJJu8ALhX8u781O
+	CeEZbmbhF+VRWwXFf/wZrlQmjy4zFRRaFQ4os9k7ixIbN/oNLsB1Ev53Aw==
+X-Gm-Gg: ASbGncthTmT9z+OFSrqwMsEaRffyrcI8HbVhsyEUdiVHQ58b8y/4GNk93OWPbpg6g5H
+	TpqDnZ+ILUXrR26micMhjl/5TnBw1okMeSXtC4OWEtXS4tHC0t5cHBcSisi/DdrtF23mLuL7AVN
+	QluzV0UrsZ6iBysLvS2OjhNYoEg9pqKpNr4UESKp/Ma0BSTg5kavrMFZ2s+ypBAaAKTqjOXc+bQ
+	SjUpSDIY9+cXxYSJJj7JldZVAuVXOrpmLeHDCsSkXm3q2qRd5mZzcNHISfSWxcXQog6x20+SFPA
+	yX4uyzw4HUSbiAdMnPVaAKviNQTXz1KP
+X-Google-Smtp-Source: AGHT+IER6AZe7MjnhGMPynqqes2HIr6gfFCPX7hGgmJQ9JUs1nV8DmF7k11hW3eHKR8q9+3MfcLpVQ==
+X-Received: by 2002:a05:6a21:900e:b0:1db:ec0f:5cf4 with SMTP id adf61e73a8af0-1e5e081c8bbmr7501500637.39.1734724597307;
+        Fri, 20 Dec 2024 11:56:37 -0800 (PST)
 Received: from localhost.localdomain (c-76-146-13-146.hsd1.wa.comcast.net. [76.146.13.146])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-842b17273dasm3240342a12.19.2024.12.20.11.56.34
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-842b17273dasm3240342a12.19.2024.12.20.11.56.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Dec 2024 11:56:35 -0800 (PST)
+        Fri, 20 Dec 2024 11:56:37 -0800 (PST)
 From: Amery Hung <ameryhung@gmail.com>
 X-Google-Original-From: Amery Hung <amery.hung@gmail.com>
 To: netdev@vger.kernel.org
@@ -75,9 +75,9 @@ Cc: bpf@vger.kernel.org,
 	yepeilin.cs@gmail.com,
 	ameryhung@gmail.com,
 	amery.hung@bytedance.com
-Subject: [PATCH bpf-next v2 07/14] bpf: Search and add kfuncs in struct_ops prologue and epilogue
-Date: Fri, 20 Dec 2024 11:55:33 -0800
-Message-ID: <20241220195619.2022866-8-amery.hung@gmail.com>
+Subject: [PATCH bpf-next v2 09/14] bpf: net_sched: Support updating bstats
+Date: Fri, 20 Dec 2024 11:55:35 -0800
+Message-ID: <20241220195619.2022866-10-amery.hung@gmail.com>
 X-Mailer: git-send-email 2.47.0
 In-Reply-To: <20241220195619.2022866-1-amery.hung@gmail.com>
 References: <20241220195619.2022866-1-amery.hung@gmail.com>
@@ -91,75 +91,50 @@ Content-Transfer-Encoding: 8bit
 
 From: Amery Hung <amery.hung@bytedance.com>
 
-Currently, add_kfunc_call() is only invoked once before the main
-verification loop. Therefore, the verifier could not find the
-bpf_kfunc_btf_tab of a new kfunc call which is not seen in user defined
-struct_ops operators but introduced in gen_prologue or gen_epilogue
-during do_misc_fixup(). Fix this by searching kfuncs in the patching
-instruction buffer and add them to prog->aux->kfunc_tab.
+Add a kfunc to update Qdisc bstats when an skb is dequeued. The kfunc is
+only available in .dequeue programs.
 
 Signed-off-by: Amery Hung <amery.hung@bytedance.com>
 ---
- kernel/bpf/verifier.c | 25 ++++++++++++++++++++++++-
- 1 file changed, 24 insertions(+), 1 deletion(-)
+ net/sched/bpf_qdisc.c | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 0e6a3c4daa7d..949812d955ca 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -3214,6 +3214,21 @@ bpf_jit_find_kfunc_model(const struct bpf_prog *prog,
- 	return res ? &res->func_model : NULL;
+diff --git a/net/sched/bpf_qdisc.c b/net/sched/bpf_qdisc.c
+index bbe7aded6f24..39f01daed48a 100644
+--- a/net/sched/bpf_qdisc.c
++++ b/net/sched/bpf_qdisc.c
+@@ -210,6 +210,15 @@ __bpf_kfunc void bpf_qdisc_reset_destroy_epilogue(struct Qdisc *sch)
+ 	qdisc_watchdog_cancel(&q->watchdog);
  }
  
-+static int add_kfunc_in_insns(struct bpf_verifier_env *env,
-+			      struct bpf_insn *insn, int cnt)
++/* bpf_qdisc_bstats_update - Update Qdisc basic statistics
++ * @sch: The qdisc from which an skb is dequeued.
++ * @skb: The skb to be dequeued.
++ */
++__bpf_kfunc void bpf_qdisc_bstats_update(struct Qdisc *sch, const struct sk_buff *skb)
 +{
-+	int i, ret;
-+
-+	for (i = 0; i < cnt; i++, insn++) {
-+		if (bpf_pseudo_kfunc_call(insn)) {
-+			ret = add_kfunc_call(env, insn->imm, insn->off);
-+			if (ret < 0)
-+				return ret;
-+		}
-+	}
-+	return 0;
++	bstats_update(&sch->bstats, skb);
 +}
 +
- static int add_subprog_and_kfunc(struct bpf_verifier_env *env)
- {
- 	struct bpf_subprog_info *subprog = env->subprog_info;
-@@ -20278,7 +20293,7 @@ static int convert_ctx_accesses(struct bpf_verifier_env *env)
- {
- 	struct bpf_subprog_info *subprogs = env->subprog_info;
- 	const struct bpf_verifier_ops *ops = env->ops;
--	int i, cnt, size, ctx_field_size, delta = 0, epilogue_cnt = 0;
-+	int i, cnt, size, ctx_field_size, ret, delta = 0, epilogue_cnt = 0;
- 	const int insn_cnt = env->prog->len;
- 	struct bpf_insn *epilogue_buf = env->epilogue_buf;
- 	struct bpf_insn *insn_buf = env->insn_buf;
-@@ -20307,6 +20322,10 @@ static int convert_ctx_accesses(struct bpf_verifier_env *env)
- 				return -ENOMEM;
- 			env->prog = new_prog;
- 			delta += cnt - 1;
-+
-+			ret = add_kfunc_in_insns(env, epilogue_buf, epilogue_cnt - 1);
-+			if (ret < 0)
-+				return ret;
- 		}
- 	}
+ __bpf_kfunc_end_defs();
  
-@@ -20327,6 +20346,10 @@ static int convert_ctx_accesses(struct bpf_verifier_env *env)
+ BTF_KFUNCS_START(qdisc_kfunc_ids)
+@@ -220,6 +229,7 @@ BTF_ID_FLAGS(func, bpf_dynptr_from_skb, KF_TRUSTED_ARGS)
+ BTF_ID_FLAGS(func, bpf_qdisc_watchdog_schedule, KF_TRUSTED_ARGS)
+ BTF_ID_FLAGS(func, bpf_qdisc_init_prologue, KF_TRUSTED_ARGS)
+ BTF_ID_FLAGS(func, bpf_qdisc_reset_destroy_epilogue, KF_TRUSTED_ARGS)
++BTF_ID_FLAGS(func, bpf_qdisc_bstats_update, KF_TRUSTED_ARGS)
+ BTF_KFUNCS_END(qdisc_kfunc_ids)
  
- 			env->prog = new_prog;
- 			delta += cnt - 1;
-+
-+			ret = add_kfunc_in_insns(env, insn_buf, cnt - 1);
-+			if (ret < 0)
-+				return ret;
- 		}
- 	}
+ BTF_SET_START(qdisc_common_kfunc_set)
+@@ -234,6 +244,7 @@ BTF_SET_END(qdisc_enqueue_kfunc_set)
  
+ BTF_SET_START(qdisc_dequeue_kfunc_set)
+ BTF_ID(func, bpf_qdisc_watchdog_schedule)
++BTF_ID(func, bpf_qdisc_bstats_update)
+ BTF_SET_END(qdisc_dequeue_kfunc_set)
+ 
+ static int bpf_qdisc_kfunc_filter(const struct bpf_prog *prog, u32 kfunc_id)
 -- 
 2.47.0
 
