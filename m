@@ -1,173 +1,158 @@
-Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.eurecom.fr (smtp.eurecom.fr [193.55.113.210])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 945AA219EAB
-	for <bpf@vger.kernel.org>; Fri, 20 Dec 2024 16:11:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E0C533062;
+	Fri, 20 Dec 2024 16:28:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.55.113.210
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734711062; cv=none; b=ONAgv8AGcKBDH0ZbrPiQMRM7kkduourLG2qJO1Shb71kIVZdW/ohb/qN2q4oHRq+Fc4Hwou3BJ6HEMfg+2sz79QHS39XahDHZ3LJfXQfGLha981floqYk5przTC091EjF7LlDnHf73+L3xP5DaQ+lbfpt2osyMT8omMyuEs88mA=
+	t=1734712123; cv=none; b=h+Ysk9JTCUmOucB1iUt2NXLArpsAqpKlPTV91AgPM9NTtv68QXcnObTk0mkHdxoodXBnXj9eby/B1J0GD6XAQ91BZQTZDRZHE5haDFxOGpUPzSo3nRLUFJFvTqcpMPf1PNaqHrjiKjUYr7kg+tysKV15vF83NjeghoYaIlaKwgM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734711062; c=relaxed/simple;
-	bh=CBrH5ZeEZIrubxW04IGe/2OpySYncMamgt9MdkqiVZg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=XV6O8Watkd3XabuDcwthzAzGML/rA2P/1AzyHW6bH1/2IyWNPP6/aSlAofO5TcTIF+2X2dZ5d7Oer1wLHU3nHSP4hQuel5KYYgxOCb3w0VGnA0XMP7ovc1Xm6fEwRIA+cp1idpS3QUIHrNW0QsDKiIJC+sjUTmSxxoFDajM98Zs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ArL/3c6f; arc=none smtp.client-ip=209.85.221.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1734712123; c=relaxed/simple;
+	bh=PA3ZJkqXu9pMasVcAutpfftrCDpDHcnMzzbP4VgFp2Y=;
+	h=From:In-Reply-To:Content-Type:References:Date:Cc:To:MIME-Version:
+	 Message-ID:Subject; b=P51t/pAiVBO1C8yqX7nzUa25biqQqe44ihR86enzYSfusQ44/s45/8RaRtdWAOTJhm1qqHsrb69+ZPrf5DNxC9T4AFcvdMT63fmWRyryF3RsCk0+1fi16obSW6EFOu9WxzBJIll9akHqBnynJg1piCpYM79TGeKh4LmraY6hgQ0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=eurecom.fr; spf=pass smtp.mailfrom=eurecom.fr; dkim=pass (1024-bit key) header.d=eurecom.fr header.i=@eurecom.fr header.b=ylScyeoc; arc=none smtp.client-ip=193.55.113.210
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=eurecom.fr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=eurecom.fr
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ArL/3c6f"
-Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-38637614567so1074676f8f.3
-        for <bpf@vger.kernel.org>; Fri, 20 Dec 2024 08:11:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1734711059; x=1735315859; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=v5ApsFhZd+Y7Oges9Z73UxPFo1bv6HIbsG+URH0gKCk=;
-        b=ArL/3c6fpZs6HqiZLqd80eZE/9ktcZNBe8YEdjV3UaXuln6MUcdqGj5+6r6QW62IIa
-         glB5jRIk0bYvp9xFSqik6MqlCSvCZKOadClUd+YYcFXIxnD15j/VqRcgvqCeax2P0tLN
-         A/X+PRWy0AqbgunIKaRx3DR8UpxP7GqGVeBefy0ZvIhdmI90Ed6AGbWKqwBVcZZ5y5ha
-         1Qj5gXZLGTBHZ8p/NxjeJB/k+7gjvD6Hb4YUZ8/khLVtOX7QdvxXA1buWizrtwytWEjs
-         YruYaw0WrI0s0hJVkZ2jvciGYRebey27jGfMtw4k0KpBdGpBcnXNomJMkF6dsUiHmLzO
-         ew1Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1734711059; x=1735315859;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=v5ApsFhZd+Y7Oges9Z73UxPFo1bv6HIbsG+URH0gKCk=;
-        b=Drvk19az7jtOYtsAuxZDMWmxAsKfVhsZY8eWtFXBGtaPzZJInj1M7XBowbwgUpFYbZ
-         5+lUI4qH1MrWIud2n6iDv8TS8l3Mg0s6mi2vfUV0rTDJU03plwAV/68LX8Lpa+02T5ss
-         d20qGSRDolICx9zfxdYZLt6cdp7CJhvSB1LEeZMGkIx/TdscsylH9BWD3QxdSWH7wv0N
-         5aR02hnfnIXY6YDzG3Bd7jLsWPuB3M6PZ7+sqESBYGEh8TjkWPlHkaWspmzyh5E+PYyh
-         ALYbCeAwXr/pudOEDaKcLP335TWk/I5MeFjSNTUIpqUmt+O+6gm6RSLX3NLSkERsZP8U
-         Si4Q==
-X-Gm-Message-State: AOJu0YwE9948tcdXLFoMXaOBcxPzpHeEohJRpRtcl3ty+CDtxE3/TnMK
-	EAWcqXHkwuh3mw46hVB3I+tEgMeKPlKTOfov7tJqqGPAVh4ofAqMSiplqbC757Zl4ZVzKVQlfev
-	2FiJVS4w6pRMKvZyLdzgIHghP1aY=
-X-Gm-Gg: ASbGncvwfPTke070Kt1cb6OXoFcv8KYI7jN9LazjN65hO6PgPQ8R6Zaia/D94mb6OMO
-	82RQG+y+1+xHA4RHKq1u223EJpBrQQlHtR5XTHQ==
-X-Google-Smtp-Source: AGHT+IGbj7k+HgHOlNNhDTO+5U0mZry/FWsFevnxV7HGtrtVAL96ReRaig6LfPIpw4zjooBXQiHAB5p1guaXtLs4IvE=
-X-Received: by 2002:a05:6000:2ad:b0:385:e8f9:e839 with SMTP id
- ffacd0b85a97d-38a224063b2mr3139132f8f.56.1734711058618; Fri, 20 Dec 2024
- 08:10:58 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=eurecom.fr header.i=@eurecom.fr header.b="ylScyeoc"
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=eurecom.fr; i=@eurecom.fr; q=dns/txt; s=default;
+  t=1734712119; x=1766248119;
+  h=from:in-reply-to:references:date:cc:to:mime-version:
+   message-id:subject:content-transfer-encoding;
+  bh=PA3ZJkqXu9pMasVcAutpfftrCDpDHcnMzzbP4VgFp2Y=;
+  b=ylScyeoc7TopQS528imsICvl/8a/LIR+ttftQbil+HmvhLebkB2LDCM+
+   FczVDsPDmlWHFCV+7kOtxE+JGjRbrr/eeVoOOJfEYmhPub+0mXLsDBbP+
+   ERlEEIAxwTAqBfWOgOsZmC+xzY8PnJxqo7mcHIvibGMcsc0RMSVikC238
+   c=;
+X-CSE-ConnectionGUID: XVGw9OvtQ/2b0OoQkojBwQ==
+X-CSE-MsgGUID: VmnHP89GQbu75PBmc1IH9Q==
+X-IronPort-AV: E=Sophos;i="6.12,251,1728943200"; 
+   d="scan'208";a="28280029"
+Received: from quovadis.eurecom.fr ([10.3.2.233])
+  by drago1i.eurecom.fr with ESMTP; 20 Dec 2024 17:28:36 +0100
+From: "Ariel Otilibili-Anieli" <Ariel.Otilibili-Anieli@eurecom.fr>
+In-Reply-To: <26180f2e-1ef7-45de-8e9e-f08a4e6a6d36@qmon.net>
+Content-Type: text/plain; charset="utf-8"
+X-Forward: 88.183.119.157
+References: <20241211220012.714055-1-ariel.otilibili-anieli@eurecom.fr>
+ <20241211220012.714055-2-ariel.otilibili-anieli@eurecom.fr> <26180f2e-1ef7-45de-8e9e-f08a4e6a6d36@qmon.net>
+Date: Fri, 20 Dec 2024 17:28:36 +0100
+Cc: bpf@vger.kernel.org, "Alexei Starovoitov" <ast@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>, "Andrii Nakryiko" <andrii@kernel.org>, "Shuah Khan" <shuah@kernel.org>, linux-kernel@vger.kernel.org
+To: "Quentin Monnet" <qmo@qmon.net>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241218030720.1602449-1-alexei.starovoitov@gmail.com>
- <20241218030720.1602449-5-alexei.starovoitov@gmail.com> <Z2Ky2idzyPn08JE-@tiehlicka>
- <CAADnVQKv_J-8CdSZsJh3uMz2XFh_g+fHZVGCmq6KTaAkupqi5w@mail.gmail.com>
- <Z2PGetahl-7EcoIi@tiehlicka> <Z2PKyU3hJY5e0DUE@tiehlicka> <Z2PQv8dVNBopIiYN@tiehlicka>
- <CAADnVQLm=gSAh2u3iF4HoGmLEqa-AV0FAEnDqcoFYDgZ06d+gQ@mail.gmail.com> <Z2Up17maf6FHkVu5@tiehlicka>
-In-Reply-To: <Z2Up17maf6FHkVu5@tiehlicka>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Fri, 20 Dec 2024 08:10:47 -0800
-Message-ID: <CAADnVQ+t3EF_CDrsYuY4eR87u1YnoSoj2S7fCQS7gi67cdhz0A@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3 4/6] memcg: Use trylock to access memcg stock_lock.
-To: Michal Hocko <mhocko@suse.com>
-Cc: bpf <bpf@vger.kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Andrew Morton <akpm@linux-foundation.org>, 
-	Peter Zijlstra <peterz@infradead.org>, Vlastimil Babka <vbabka@suse.cz>, 
-	Sebastian Sewior <bigeasy@linutronix.de>, Steven Rostedt <rostedt@goodmis.org>, 
-	Hou Tao <houtao1@huawei.com>, Johannes Weiner <hannes@cmpxchg.org>, 
-	Shakeel Butt <shakeel.butt@linux.dev>, Matthew Wilcox <willy@infradead.org>, 
-	Thomas Gleixner <tglx@linutronix.de>, Jann Horn <jannh@google.com>, Tejun Heo <tj@kernel.org>, 
-	linux-mm <linux-mm@kvack.org>, Kernel Team <kernel-team@fb.com>
-Content-Type: text/plain; charset="UTF-8"
+Message-ID: <2f7a83-67659b00-a301-5cf12280@99585095>
+Subject: =?utf-8?q?Re=3A?= [PATCH 1/1] =?utf-8?q?selftests/bpf=3A?= clear out Python 
+ syntax warnings
+User-Agent: SOGoMail 5.11.1
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Dec 20, 2024 at 12:24=E2=80=AFAM Michal Hocko <mhocko@suse.com> wro=
-te:
->
-> > +static inline bool gfpflags_allow_spinning(const gfp_t gfp_flags)
-> > +{
-> > +       /*
-> > +        * !__GFP_DIRECT_RECLAIM -> direct claim is not allowed.
-> > +        * !__GFP_KSWAPD_RECLAIM -> it's not safe to wake up kswapd.
-> > +        * All GFP_* flags including GFP_NOWAIT use one or both flags.
-> > +        * try_alloc_pages() is the only API that doesn't specify eithe=
-r flag.
->
-> I wouldn't be surprised if we had other allocations like that. git grep
-> is generally not very helpful as many/most allocations use gfp argument
-> of a sort. I would slightly reword this to be more explicit.
->           /*
->            * This is stronger than GFP_NOWAIT or GFP_ATOMIC because
->            * those are guaranteed to never block on a sleeping lock.
->            * Here we are enforcing that the allaaction doesn't ever spin
->            * on any locks (i.e. only trylocks). There is no highlevel
->            * GFP_$FOO flag for this use try_alloc_pages as the
->            * regular page allocator doesn't fully support this
->            * allocation mode.
+On Friday, December 20, 2024 17:24 CET, Quentin Monnet <qmo@qmon.net> w=
+rote:
 
-Makes sense. I like this new wording. Will incorporate.
+> 2024-12-11 22:57 UTC+0100 ~ Ariel Otilibili
+> <ariel.otilibili-anieli@eurecom.fr>
+> > Invalid escape sequences are used, and produced syntax warnings:
+> >=20
+> > ```
+> > $ test=5Fbpftool=5Fsynctypes.py
+> > test=5Fbpftool=5Fsynctypes.py:69: SyntaxWarning: invalid escape seq=
+uence '\['
+> >   self.start=5Fmarker =3D re.compile(f'(static )?const bool {self.a=
+rray=5Fname}\[.*\] =3D {{\n')
+> > test=5Fbpftool=5Fsynctypes.py:83: SyntaxWarning: invalid escape seq=
+uence '\['
+> >   pattern =3D re.compile('\[(BPF=5F\w*)\]\s*=3D (true|false),?$')
+> > test=5Fbpftool=5Fsynctypes.py:181: SyntaxWarning: invalid escape se=
+quence '\s'
+> >   pattern =3D re.compile('^\s*(BPF=5F\w+),?(\s+/\*.*\*/)?$')
+> > test=5Fbpftool=5Fsynctypes.py:229: SyntaxWarning: invalid escape se=
+quence '\*'
+> >   start=5Fmarker =3D re.compile(f'\*{block=5Fname}\* :=3D {{')
+> > test=5Fbpftool=5Fsynctypes.py:229: SyntaxWarning: invalid escape se=
+quence '\*'
+> >   start=5Fmarker =3D re.compile(f'\*{block=5Fname}\* :=3D {{')
+> > test=5Fbpftool=5Fsynctypes.py:230: SyntaxWarning: invalid escape se=
+quence '\*'
+> >   pattern =3D re.compile('\*\*([\w/-]+)\*\*')
+> > test=5Fbpftool=5Fsynctypes.py:248: SyntaxWarning: invalid escape se=
+quence '\s'
+> >   start=5Fmarker =3D re.compile(f'"\s*{block=5Fname} :=3D {{')
+> > test=5Fbpftool=5Fsynctypes.py:249: SyntaxWarning: invalid escape se=
+quence '\w'
+> >   pattern =3D re.compile('([\w/]+) [|}]')
+> > test=5Fbpftool=5Fsynctypes.py:267: SyntaxWarning: invalid escape se=
+quence '\s'
+> >   start=5Fmarker =3D re.compile(f'"\s*{macro}\s*" [|}}]')
+> > test=5Fbpftool=5Fsynctypes.py:267: SyntaxWarning: invalid escape se=
+quence '\s'
+> >   start=5Fmarker =3D re.compile(f'"\s*{macro}\s*" [|}}]')
+> > test=5Fbpftool=5Fsynctypes.py:268: SyntaxWarning: invalid escape se=
+quence '\w'
+> >   pattern =3D re.compile('([\w-]+) ?(?:\||}[ }\]])')
+> > test=5Fbpftool=5Fsynctypes.py:287: SyntaxWarning: invalid escape se=
+quence '\w'
+> >   pattern =3D re.compile('(?:.*=3D\')?([\w/]+)')
+> > test=5Fbpftool=5Fsynctypes.py:319: SyntaxWarning: invalid escape se=
+quence '\w'
+> >   pattern =3D re.compile('([\w-]+) ?(?:\||}[ }\]"])')
+> > test=5Fbpftool=5Fsynctypes.py:341: SyntaxWarning: invalid escape se=
+quence '\|'
+> >   start=5Fmarker =3D re.compile('\|COMMON=5FOPTIONS\| replace:: {')
+> > test=5Fbpftool=5Fsynctypes.py:342: SyntaxWarning: invalid escape se=
+quence '\*'
+> >   pattern =3D re.compile('\*\*([\w/-]+)\*\*')
+> > ```
+> >=20
+> > Escaping them clears out the warnings.
+> >=20
+> > ```
+> > $ tools/testing/selftests/bpf/test=5Fbpftool=5Fsynctypes.py; echo $=
+?
+> > 0
+> > ```
+> >=20
+> > Link: https://docs.python.org/fr/3/library/re.html
+>=20
+>=20
+> En version anglaise : https://docs.python.org/3/library/re.html
 
-> > +        */
-> > +       return !(gfp_flags & __GFP_RECLAIM);
-> > +}
-> > +
-> >  #ifdef CONFIG_HIGHMEM
-> >  #define OPT_ZONE_HIGHMEM ZONE_HIGHMEM
-> >  #else
-> > diff --git a/mm/memcontrol.c b/mm/memcontrol.c
-> > index f168d223375f..545d345c22de 100644
-> > --- a/mm/memcontrol.c
-> > +++ b/mm/memcontrol.c
-> > @@ -1768,7 +1768,7 @@ static bool consume_stock(struct mem_cgroup
-> > *memcg, unsigned int nr_pages,
-> >                 return ret;
-> >
-> >         if (!local_trylock_irqsave(&memcg_stock.stock_lock, flags)) {
-> > -               if (gfp_mask & __GFP_TRYLOCK)
-> > +               if (!gfpflags_allow_spinning(gfp_mask))
-> >                         return ret;
-> >                 local_lock_irqsave(&memcg_stock.stock_lock, flags);
-> >         }
-> >
-> > If that's acceptable then such an approach will work for
-> > my slub.c reentrance changes too.
->
-> It certainly is acceptable for me.
+Merci!
+>=20
+>=20
+> > CC: Alexei Starovoitov <ast@kernel.org>
+> > CC: Daniel Borkmann <daniel@iogearbox.net>
+> > CC: Andrii Nakryiko <andrii@kernel.org>
+> > CC: Shuah Khan <shuah@kernel.org>
+> > Signed-off-by: Ariel Otilibili <ariel.otilibili-anieli@eurecom.fr>
+>=20
+> Right, this seems to be a change in Python 3.12 [0][1]:
+>=20
+> 'A backslash-character pair that is not a valid escape sequence now
+> generates a SyntaxWarning, instead of DeprecationWarning. For example=
+,
+> re.compile("\d+\.\d+") now emits a SyntaxWarning ("\d" is an invalid
+> escape sequence, use raw strings for regular expression:
+> re.compile(r"\d+\.\d+")).'
+>=20
+> although I can't remember seeing any DeprecationWarning before.
+>=20
+> Anyway, the fix makes sense, and does address the warnings. Thank you
+> for this!
+>=20
+> Tested-by: Quentin Monnet <qmo@kernel.org>
+> Reviewed-by: Quentin Monnet <qmo@kernel.org>
 
-Great.
+Awesome, Quentin! Thanks for the feedback!
+>=20
+>=20
+> [0] https://docs.python.org/3.12/whatsnew/3.12.html#other-language-ch=
+anges
+> [1] https://github.com/python/cpython/issues/98401
 
-> Do not forget to add another hunk to
-> avoid charging the full batch in this case.
-
-Well. It looks like you spotted the existing bug ?
-
-Instead of
-+       if (!gfpflags_allow_blockingk(gfp_mask))
-+               batch =3D nr_pages;
-
-it should be unconditional:
-
-+               batch =3D nr_pages;
-
-after consume_stock() returns false.
-
-Consider:
-        stock_pages =3D READ_ONCE(stock->nr_pages);
-        if (memcg =3D=3D READ_ONCE(stock->cached) && stock_pages >=3D nr_pa=
-ges) {
-
-stock_pages =3D=3D 10
-nr_pages =3D=3D 20
-
-so after consume_stock() returns false
-the batch will stay =3D=3D MEMCG_CHARGE_BATCH =3D=3D 64
-and
-page_counter_try_charge(&memcg->memsw, batch,...
-
-will charge too much ?
-
-and the bug was there for a long time.
-
-Johaness,
-
-looks like it's mostly your code?
-
-Pls help us out.
