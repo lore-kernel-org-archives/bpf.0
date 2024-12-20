@@ -1,141 +1,118 @@
-Received: from outbound.soverin.net (outbound.soverin.net [185.233.34.18])
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAD2E21A422
-	for <bpf@vger.kernel.org>; Fri, 20 Dec 2024 16:30:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.233.34.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 663F522332B;
+	Fri, 20 Dec 2024 16:51:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734712228; cv=none; b=TiTQSH41rYP9+matcF0ZhIHacEsWQ7hOZiBAUlBTvuhB5ehP7IqI/zihtodRCRk3uASYe+pnwiwkKE+8LyXjr74V2EMwc0GG2BPHvOxw+f/a876WrP+8dP1XKwIPW7kH9mcKuz7RWSdBJDiHxe5Y7TX5tO5ImJtgR4kmGgtky2Q=
+	t=1734713497; cv=none; b=qxsNNTDEaNT7Fs39wwoCsjOhfwi0OulAX/nO8T1+cB9Ufnloh0TmgLXZA4BA13gYpfb01ROGkEhlMLKkS3gf0i3k1DD8f6E8RtLSnKkHIVMYE1U3vKTATKtpy77K4xfHc3aAZU4bDuWbHh7F5Yo3caqfIu/uVFAgBTTUGmsmhWQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734712228; c=relaxed/simple;
-	bh=PtzNnkyAshIW/NuP+j7v4sKNWhNMFcZjKLUkITq9I4A=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=CPrv5ierkGCnpDmA/oqzU7m9wT3h65xPoWaTSLpuOyTfz05WC6g0BWdjdyxYbbrR05UBAVkHqggwfmJ7GSw3Sgymje1OY4T29vi2AyEtLazW6c9Zu4LErBj2BCM6BtH+kSFBLMTwVPUERJlMj35f5IBvwOcv77T124b7JK6DUDc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=qmon.net; spf=pass smtp.mailfrom=qmon.net; dkim=pass (2048-bit key) header.d=qmon.net header.i=@qmon.net header.b=tc4metBu; arc=none smtp.client-ip=185.233.34.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=qmon.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qmon.net
+	s=arc-20240116; t=1734713497; c=relaxed/simple;
+	bh=HPkhIBw/4uEx84HWtKiBxCfbApwv+OS0b7/QpplHQec=;
+	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
+	 Mime-Version:Content-Type; b=t6+vIOhIwAcx6bUjxoQ3VJs9Qs0oD9IciKhYMzkJOxKBhfUVJqKuh3aRQNnZ7mp3CHIFGh65rMTpOd1EsudYfLXZcoqZvlx+dxjvyP0CET42w7pCMnHTNUMGIT7DvJfOdmK4lHy1WO4Mh1IiNhkOrLDJWXosgisRKPVS7b8j9fc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=C+9lL9f8; arc=none smtp.client-ip=209.85.214.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qmon.net header.i=@qmon.net header.b="tc4metBu"
-Received: from smtp.soverin.net (c04cst-smtp-sov01.int.sover.in [10.10.4.99])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by outbound.soverin.net (Postfix) with ESMTPS id 4YFCRj4l6lz5W;
-	Fri, 20 Dec 2024 16:24:33 +0000 (UTC)
-Received: from smtp.soverin.net (smtp.soverin.net [10.10.4.99]) by soverin.net (Postfix) with ESMTPSA id 4YFCRj0Qc0z7g;
-	Fri, 20 Dec 2024 16:24:33 +0000 (UTC)
-Authentication-Results: smtp.soverin.net;
-	dkim=pass (2048-bit key; unprotected) header.d=qmon.net header.i=@qmon.net header.a=rsa-sha256 header.s=soverin1 header.b=tc4metBu;
-	dkim-atps=neutral
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qmon.net; s=soverin1;
-	t=1734711873;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=pu90mrkymPQjbUcZIeu588GxLJBiMM1st3A/eSubJvM=;
-	b=tc4metBuwZXT9zH8aON6Dtc6tRL5C5F2VfFWkxt77SVIonccC/irHdzSBRDIxATNOk9QA2
-	kb09gl8PM4KhpqRtF5huXcSroJ/m1f32thAFc8kHXOI4k07t1JHVH1mj2ZRhpG4ztktQYI
-	dpKGXAIERUuScYc9Fnjc3oKORF1AL0QG2RakQausLCx3LqqeqeQUux+wWplr9pIkcWwHX7
-	MBhExLICjYbE+6XdtoW6/Qx9HBXaeyPG/ptdbJJDkxgthV7E5SjC/2KluV8XTIHZIlWYvX
-	ztLKlSHbiBOkRfMlGSZjSJE1gRD1so2BHCNAiaTbAXm/I9FEXYNX/5r858xlGw==
-X-CMAE-Score: 0
-X-CM-Analysis: v=2.4 cv=WMmFXmsR c=1 sm=1 tr=0 ts=67659a41 a=IkcTkHD0fZMA:10 a=8AHkEIZyAAAA:8 a=NEAV23lmAAAA:8 a=VwQbUJbxAAAA:8 a=hWMQpYRtAAAA:8 a=e2U0C865cM52ObQbgCsA:9 a=QEXdDO2ut3YA:10 a=2GJFMtwbh24A:10 a=fX4k_0L6AFcA:10 a=X1AoViHaI6kA:10 a=KCsI-UfzjElwHeZNREa_:22
-Message-ID: <26180f2e-1ef7-45de-8e9e-f08a4e6a6d36@qmon.net>
-Date: Fri, 20 Dec 2024 16:24:31 +0000
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="C+9lL9f8"
+Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-2161eb94cceso15288595ad.2;
+        Fri, 20 Dec 2024 08:51:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1734713495; x=1735318295; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lEud0HpUzW8AGsAHXsgRgKAN5zSUNFNJtoYvN7JgreE=;
+        b=C+9lL9f8eEuT2GqFtYwxpZvSR6lK/5RCR/ZyH8H7T65h8Ipc+StMnCsS99V2Hh87VX
+         AjrVNwVb9MBIjvYSkai6/GgYTNmZvAIpzP7waQBez/1UnBQBd82zsD7Es4f8rDtqmVR7
+         H9OsFt3uLGLUZkmZOmQw/WxSTc8b8LxmrIT2gryg5BCel+507GtKgujyxjBBCzgbz3Gi
+         sZJ2iZ7uklqdooOj/vigpt1MBcMPP8poYAYcDXVWz7Xn4K+xIvn9sIYcvvdEyILK2VHu
+         SbPF3Vg7xhuEMAaT2/5PmSIUjNHSLj9pVS1HURMAlH4N4UStURDIjjgE2d0g6N79COpM
+         y89Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1734713495; x=1735318295;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=lEud0HpUzW8AGsAHXsgRgKAN5zSUNFNJtoYvN7JgreE=;
+        b=I3/J/W0qHtuoSSVtJYufJsB7pgMMFiWphRFo1TxaxnpuUGj70BMLytnNg792h9KVnS
+         SP03GioVFV+d2bkudMY1a2AEdNjskek/V/l+vSyrFnsDXPJPsGv/Ue61R2CGKwpLM79/
+         hVvMl9LkuOrjfHlGt8VwLVGtdDnDzgeG0hcyWsjQPbBoEwD9PwYpS+UzNne+MbHdUpIF
+         GLPQOCc8PFFHipR5c+DAjbQGnZ7xH1dJ/heo0Qw4V40S4j9WZm/P/OtMDCemQIkwRSd7
+         h0n/rVQz5vT5xyi7xF68EGPVv6VHA+WWDytVIRlq+nCihFvgr+N1gt9ii/hDpxKcjjBD
+         erTg==
+X-Forwarded-Encrypted: i=1; AJvYcCW65AAhUukDgEC5IIlZiXszxcjtXi18xVGvwH83NgAXhaUliV6Vf7rN6EjW+A8h1VZP7fgOrpy5@vger.kernel.org, AJvYcCX+hE0H3HVkKYSF7x5X/AJEmtFZ+u3F/M/vrril/4cSTq0WjatpDQWclUJ63IC+eFe5SDk=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzm2PGT1D9PzaquI4MfIES8gl/w0wKrtqf8bS6EDOWdhNfp9nGf
+	SZQeHXqE9MAkgobB8XGXLFPsX9zRUZAMJkCef9Cn69AFuXeyx2gPrR/9Fw==
+X-Gm-Gg: ASbGncub8nEsRAyQ8dEutodADUwUG4+JSMeIOJZ1l/fi6kGNoz1BroSLs6aslC8Kg3N
+	2B7zJ5PYh5yKXKqKDeJ7iBVoSYaGMq1qHokmKKVLkoAnnzPXWYhbkC4YSzYzFUTiZX+QpTX5Lgn
+	kYb1KUJIptUTIOJA1imXoJYIrSfxnUKvvkuMrmUqcn+g8jIGlWB9co1u+oaD4Z+N8AcK+z7xqPf
+	35N+9iYDEhHxBOJzuUvVdQHuJ6e26u/yRntNOCyaHS2GpnPqUL5V0s=
+X-Google-Smtp-Source: AGHT+IH6hncF/IXzQqsfRxzRQS3FjeB5XNGzIaaBFZ6mk/sB7K7m1zCBlM90qhx2V3qOr/jvkYfJYw==
+X-Received: by 2002:a17:902:e54e:b0:216:45eb:5e4d with SMTP id d9443c01a7336-219e6e8c529mr52391405ad.6.1734713495643;
+        Fri, 20 Dec 2024 08:51:35 -0800 (PST)
+Received: from localhost ([98.97.44.4])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-219dca006fasm31240115ad.227.2024.12.20.08.51.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 20 Dec 2024 08:51:35 -0800 (PST)
+Date: Fri, 20 Dec 2024 08:51:32 -0800
+From: John Fastabend <john.fastabend@gmail.com>
+To: zijianzhang@bytedance.com, 
+ bpf@vger.kernel.org
+Cc: john.fastabend@gmail.com, 
+ jakub@cloudflare.com, 
+ davem@davemloft.net, 
+ edumazet@google.com, 
+ kuba@kernel.org, 
+ pabeni@redhat.com, 
+ dsahern@kernel.org, 
+ horms@kernel.org, 
+ ast@kernel.org, 
+ daniel@iogearbox.net, 
+ netdev@vger.kernel.org, 
+ Zijian Zhang <zijianzhang@bytedance.com>
+Message-ID: <6765a094c9db5_21de2208d9@john.notmuch>
+In-Reply-To: <20241210012039.1669389-1-zijianzhang@bytedance.com>
+References: <20241210012039.1669389-1-zijianzhang@bytedance.com>
+Subject: RE: [PATCH v2 bpf 0/2] tcp_bpf: update the rmem scheduling for
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Subject: Re: [PATCH 1/1] selftests/bpf: clear out Python syntax warnings
-To: Ariel Otilibili <ariel.otilibili-anieli@eurecom.fr>, bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Shuah Khan <shuah@kernel.org>
-References: <20241211220012.714055-1-ariel.otilibili-anieli@eurecom.fr>
- <20241211220012.714055-2-ariel.otilibili-anieli@eurecom.fr>
-From: Quentin Monnet <qmo@qmon.net>
-Content-Language: en-GB
-In-Reply-To: <20241211220012.714055-2-ariel.otilibili-anieli@eurecom.fr>
-Content-Type: text/plain; charset=UTF-8
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
 Content-Transfer-Encoding: 7bit
-X-Spampanel-Class: ham
 
-2024-12-11 22:57 UTC+0100 ~ Ariel Otilibili
-<ariel.otilibili-anieli@eurecom.fr>
-> Invalid escape sequences are used, and produced syntax warnings:
+zijianzhang@ wrote:
+> From: Zijian Zhang <zijianzhang@bytedance.com>
 > 
-> ```
-> $ test_bpftool_synctypes.py
-> test_bpftool_synctypes.py:69: SyntaxWarning: invalid escape sequence '\['
->   self.start_marker = re.compile(f'(static )?const bool {self.array_name}\[.*\] = {{\n')
-> test_bpftool_synctypes.py:83: SyntaxWarning: invalid escape sequence '\['
->   pattern = re.compile('\[(BPF_\w*)\]\s*= (true|false),?$')
-> test_bpftool_synctypes.py:181: SyntaxWarning: invalid escape sequence '\s'
->   pattern = re.compile('^\s*(BPF_\w+),?(\s+/\*.*\*/)?$')
-> test_bpftool_synctypes.py:229: SyntaxWarning: invalid escape sequence '\*'
->   start_marker = re.compile(f'\*{block_name}\* := {{')
-> test_bpftool_synctypes.py:229: SyntaxWarning: invalid escape sequence '\*'
->   start_marker = re.compile(f'\*{block_name}\* := {{')
-> test_bpftool_synctypes.py:230: SyntaxWarning: invalid escape sequence '\*'
->   pattern = re.compile('\*\*([\w/-]+)\*\*')
-> test_bpftool_synctypes.py:248: SyntaxWarning: invalid escape sequence '\s'
->   start_marker = re.compile(f'"\s*{block_name} := {{')
-> test_bpftool_synctypes.py:249: SyntaxWarning: invalid escape sequence '\w'
->   pattern = re.compile('([\w/]+) [|}]')
-> test_bpftool_synctypes.py:267: SyntaxWarning: invalid escape sequence '\s'
->   start_marker = re.compile(f'"\s*{macro}\s*" [|}}]')
-> test_bpftool_synctypes.py:267: SyntaxWarning: invalid escape sequence '\s'
->   start_marker = re.compile(f'"\s*{macro}\s*" [|}}]')
-> test_bpftool_synctypes.py:268: SyntaxWarning: invalid escape sequence '\w'
->   pattern = re.compile('([\w-]+) ?(?:\||}[ }\]])')
-> test_bpftool_synctypes.py:287: SyntaxWarning: invalid escape sequence '\w'
->   pattern = re.compile('(?:.*=\')?([\w/]+)')
-> test_bpftool_synctypes.py:319: SyntaxWarning: invalid escape sequence '\w'
->   pattern = re.compile('([\w-]+) ?(?:\||}[ }\]"])')
-> test_bpftool_synctypes.py:341: SyntaxWarning: invalid escape sequence '\|'
->   start_marker = re.compile('\|COMMON_OPTIONS\| replace:: {')
-> test_bpftool_synctypes.py:342: SyntaxWarning: invalid escape sequence '\*'
->   pattern = re.compile('\*\*([\w/-]+)\*\*')
-> ```
+> We should do sk_rmem_schedule instead of sk_wmem_schedule in function
+> bpf_tcp_ingress. We also need to update sk_rmem_alloc in bpf_tcp_ingress
+> accordingly to account for the rmem.
 > 
-> Escaping them clears out the warnings.
+> v2:
+>   - Update the commit message to indicate the reason for msg->skb check
 > 
-> ```
-> $ tools/testing/selftests/bpf/test_bpftool_synctypes.py; echo $?
-> 0
-> ```
+> Cong Wang (1):
+>   tcp_bpf: charge receive socket buffer in bpf_tcp_ingress()
 > 
-> Link: https://docs.python.org/fr/3/library/re.html
+> Zijian Zhang (1):
+>   tcp_bpf: add sk_rmem_alloc related logic for tcp_bpf ingress
+>     redirection
+> 
+>  include/linux/skmsg.h | 11 ++++++++---
+>  include/net/sock.h    | 10 ++++++++--
+>  net/core/skmsg.c      |  6 +++++-
+>  net/ipv4/tcp_bpf.c    |  6 ++++--
+>  4 files changed, 25 insertions(+), 8 deletions(-)
+> 
+> -- 
+> 2.20.1
+> 
 
+Thanks. Sorry fo rthe delay I thought this had an ACK already. My fault.
 
-En version anglaise : https://docs.python.org/3/library/re.html
-
-
-> CC: Alexei Starovoitov <ast@kernel.org>
-> CC: Daniel Borkmann <daniel@iogearbox.net>
-> CC: Andrii Nakryiko <andrii@kernel.org>
-> CC: Shuah Khan <shuah@kernel.org>
-> Signed-off-by: Ariel Otilibili <ariel.otilibili-anieli@eurecom.fr>
-
-Right, this seems to be a change in Python 3.12 [0][1]:
-
-'A backslash-character pair that is not a valid escape sequence now
-generates a SyntaxWarning, instead of DeprecationWarning. For example,
-re.compile("\d+\.\d+") now emits a SyntaxWarning ("\d" is an invalid
-escape sequence, use raw strings for regular expression:
-re.compile(r"\d+\.\d+")).'
-
-although I can't remember seeing any DeprecationWarning before.
-
-Anyway, the fix makes sense, and does address the warnings. Thank you
-for this!
-
-Tested-by: Quentin Monnet <qmo@kernel.org>
-Reviewed-by: Quentin Monnet <qmo@kernel.org>
-
-
-[0] https://docs.python.org/3.12/whatsnew/3.12.html#other-language-changes
-[1] https://github.com/python/cpython/issues/98401
+Reviewed-by: John Fastabend <john.fastabend@gmail.com>
