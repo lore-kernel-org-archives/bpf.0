@@ -1,36 +1,37 @@
 Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80FB121B1AA;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8101F2206B5;
 	Fri, 20 Dec 2024 23:47:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734738429; cv=none; b=kqEx54fAWTDGFWe4rge/d4g5RtoY5L3qbm8Bqw8kSm6DMRDdkzZc57Url9aySaWwGfj6JItcnwgCeX+zg0DFufsvi7xhRFHKmf2XCg3L9LhTqgvg3ev8vFtx2myQi4jeCkk+FxA2f7xoXrhTsJ4Pl0YK/w/Gmy6slSTKuF3MrY8=
+	t=1734738430; cv=none; b=oR4J2OK9SQRkz24a+sF8ka86HOAdEaGOzqge9fXMuxzBC4vw/wIAWsa/fR1epVEDpEvt97W/QJK2LdUTI+S4regUbhaWxPLzVfgtYNVX70uo835DqS62Q8HcFT8tyeXrq7R+QCInOJ02j3Ml1BOaBP+B/NMEKQ5/ADpF3p+4jdY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734738429; c=relaxed/simple;
-	bh=3qUBXucaptKEEUcUhFb3sxD/v2aUsr6ZneMrV6kugCk=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ElT3gg18qbjPKtdWwwW12I47/yncFj1iWSB7doaicHcuCAO/oZcZdjZbXFhBEBqFs6kpCR/Vyg0SVa/HiJFqpcUMc3frtHRIYHQjYdcC/gDNzyvMRAthRyU2+S0ftw3ItvgzUoR4Y1Dsp88dO+ACYovDSecya4dXgPZ5IzcM03g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=EZ/iX5f/; arc=none smtp.client-ip=213.133.104.62
+	s=arc-20240116; t=1734738430; c=relaxed/simple;
+	bh=Z/LdRIvY620pygs5zgVRdsJFWIkHF6hgs+XnHWEMtq0=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=YUVKs2SI14WEZ1tiDDn13iJNLhYDloJ+w3YgIAuiE62BK8OM2FgQ4hlhbbggF28wUmAz6WZrTHOOIryB22cxpCWzcsIsF7O6NQgikH8EfbzJupJCUm6CIi6TvxpfPPwAD95K6wWrr9V45BMY/U2+PPFQXRcAobXJExK38jfGRyM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=p5vpkCFX; arc=none smtp.client-ip=213.133.104.62
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="EZ/iX5f/"
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="p5vpkCFX"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:MIME-Version:
-	Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:In-Reply-To:References;
-	bh=rzdll8vCVFWIOmkqSZzOOIFEiBlTCDerv251D5cmiIc=; b=EZ/iX5f/iec73ft5OHRsj6OQHw
-	bWiDZDjfCnrjWjj7Hq803W84um45PUqa0O8ZBEAR4iz+cfxRW/Zd0I74/KUnlXLZCID7Fr0e+7/BR
-	DFUcdOs4lPEIVJrrrmZtyQF2cybEuY0Vw1trinL87ZiORv1w8rwOXp1J8xqHcmhxkR9D+k3UZKF9p
-	yx/GLSrrabU162P3SHnMTt30pdAcVV6LgzvTYzSolPyRPkUMvMaejoLsrTlaIycJQahxwX1eUiaA+
-	lzBUElcGXnS0GOLayMTTsA9KS/PuoPQBbinZHVKcR7l5whgxJSDvm/sL75YQYbiFOARjaOqhjSNIF
-	s3x8jfdg==;
+	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
+	Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=FEbnGn9GnSTZj0GETED4Of/KjHNRULwfIHoHmgRf7UE=; b=p5vpkCFXLFVhc72GEwHDQhnEXM
+	4NldN36R9N/Nkfnu7N+efS2C1J1iLpslsk/tWgrIFeYWlC2rCIwy8lrRfPnzTNME9fTDvsjyzFu0D
+	3D7a2PnXPUbHl0kP48bF4NhFNmZZlmA6n+j62IOu9uyHmauSr4f86R27sdIfwuet4Fa0uBGOaNHQj
+	pQ9odJiAeT25KI0ZTFtu3tPXtcSaN7uB7p2Jgii0sQ0P/s+aV/M18CdKrYiuyXAASDu/52EeN2Wb6
+	T0M1GFBJpdaCd7OzGmbJVmwkI5PmBuUCg4EPYrjTTTUwrVq3l7OlLWfd1TXOMmq4JmmWK3LtVIsxv
+	8cXt1HHg==;
 Received: from 226.206.1.85.dynamic.cust.swisscom.net ([85.1.206.226] helo=localhost)
 	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.94.2)
 	(envelope-from <daniel@iogearbox.net>)
-	id 1tOmhv-000ISV-6j; Sat, 21 Dec 2024 00:46:59 +0100
+	id 1tOmhw-000ISw-Ct; Sat, 21 Dec 2024 00:47:00 +0100
 From: Daniel Borkmann <daniel@iogearbox.net>
 To: martin.lau@linux.dev
 Cc: razor@blackwall.org,
@@ -38,10 +39,12 @@ Cc: razor@blackwall.org,
 	kuba@kernel.org,
 	bpf@vger.kernel.org,
 	netdev@vger.kernel.org
-Subject: [PATCH bpf-next v2 1/3] netkit: Allow for configuring needed_{head,tail}room
-Date: Sat, 21 Dec 2024 00:46:56 +0100
-Message-ID: <20241220234658.490686-1-daniel@iogearbox.net>
+Subject: [PATCH bpf-next v2 3/3] selftests/bpf: Extend netkit tests to validate set {head,tail}room
+Date: Sat, 21 Dec 2024 00:46:58 +0100
+Message-ID: <20241220234658.490686-3-daniel@iogearbox.net>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20241220234658.490686-1-daniel@iogearbox.net>
+References: <20241220234658.490686-1-daniel@iogearbox.net>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -52,200 +55,234 @@ Content-Transfer-Encoding: 8bit
 X-Authenticated-Sender: daniel@iogearbox.net
 X-Virus-Scanned: Clear (ClamAV 1.0.7/27493/Fri Dec 20 10:46:49 2024)
 
-Allow the user to configure needed_{head,tail}room for both netkit
-devices. The idea is similar to 163e529200af ("veth: implement
-ndo_set_rx_headroom") with the difference that the two parameters
-can be specified upon device creation. By default the current behavior
-stays as is which is needed_{head,tail}room is 0.
+Extend the netkit selftests to specify and validate the {head,tail}room
+on the netdevice:
 
-In case of Cilium, for example, the netkit devices are not enslaved
-into a bridge or openvswitch device (rather, BPF-based redirection
-is used out of tcx), and as such these parameters are not propagated
-into the Pod's netns via peer device.
-
-Given Cilium can run in vxlan/geneve tunneling mode (needed_headroom)
-and/or be used in combination with WireGuard (needed_{head,tail}room),
-allow the Cilium CNI plugin to specify these two upon netkit device
-creation.
+  # ./vmtest.sh -- ./test_progs -t netkit
+  [...]
+  ./test_progs -t netkit
+  [    1.174147] bpf_testmod: loading out-of-tree module taints kernel.
+  [    1.174585] bpf_testmod: module verification failed: signature and/or required key missing - tainting kernel
+  [    1.422307] tsc: Refined TSC clocksource calibration: 3407.983 MHz
+  [    1.424511] clocksource: tsc: mask: 0xffffffffffffffff max_cycles: 0x311fc3e5084, max_idle_ns: 440795359833 ns
+  [    1.428092] clocksource: Switched to clocksource tsc
+  #363     tc_netkit_basic:OK
+  #364     tc_netkit_device:OK
+  #365     tc_netkit_multi_links:OK
+  #366     tc_netkit_multi_opts:OK
+  #367     tc_netkit_neigh_links:OK
+  #368     tc_netkit_pkt_type:OK
+  #369     tc_netkit_scrub:OK
+  Summary: 7/0 PASSED, 0 SKIPPED, 0 FAILED
 
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Cc: Paolo Abeni <pabeni@redhat.com>
 Cc: Nikolay Aleksandrov <razor@blackwall.org>
 ---
- v2:
-  - static struct (Jakub)
+  v2:
+    - Rework to pass flags to create_netkit
 
- drivers/net/netkit.c               | 66 +++++++++++++++++++-----------
- include/uapi/linux/if_link.h       |  2 +
- tools/include/uapi/linux/if_link.h |  2 +
- 3 files changed, 47 insertions(+), 23 deletions(-)
+ .../selftests/bpf/prog_tests/tc_netkit.c      | 49 ++++++++++++-------
+ .../selftests/bpf/progs/test_tc_link.c        | 15 ++++++
+ 2 files changed, 46 insertions(+), 18 deletions(-)
 
-diff --git a/drivers/net/netkit.c b/drivers/net/netkit.c
-index c1d881dc6409..d4979eb01624 100644
---- a/drivers/net/netkit.c
-+++ b/drivers/net/netkit.c
-@@ -338,6 +338,7 @@ static int netkit_new_link(struct net *peer_net, struct net_device *dev,
- 	enum netkit_scrub scrub_peer = NETKIT_SCRUB_DEFAULT;
- 	enum netkit_mode mode = NETKIT_L3;
- 	unsigned char ifname_assign_type;
-+	u16 headroom = 0, tailroom = 0;
- 	struct ifinfomsg *ifmp = NULL;
- 	struct net_device *peer;
- 	char ifname[IFNAMSIZ];
-@@ -371,6 +372,10 @@ static int netkit_new_link(struct net *peer_net, struct net_device *dev,
- 			if (err < 0)
- 				return err;
- 		}
-+		if (data[IFLA_NETKIT_HEADROOM])
-+			headroom = nla_get_u16(data[IFLA_NETKIT_HEADROOM]);
-+		if (data[IFLA_NETKIT_TAILROOM])
-+			tailroom = nla_get_u16(data[IFLA_NETKIT_TAILROOM]);
- 	}
+diff --git a/tools/testing/selftests/bpf/prog_tests/tc_netkit.c b/tools/testing/selftests/bpf/prog_tests/tc_netkit.c
+index 151a4210028f..2461d183dee5 100644
+--- a/tools/testing/selftests/bpf/prog_tests/tc_netkit.c
++++ b/tools/testing/selftests/bpf/prog_tests/tc_netkit.c
+@@ -14,10 +14,16 @@
+ #include "netlink_helpers.h"
+ #include "tc_helpers.h"
  
- 	if (ifmp && tbp[IFLA_IFNAME]) {
-@@ -390,6 +395,14 @@ static int netkit_new_link(struct net *peer_net, struct net_device *dev,
- 		return PTR_ERR(peer);
++#define NETKIT_HEADROOM	32
++#define NETKIT_TAILROOM	8
++
+ #define MARK		42
+ #define PRIO		0xeb9f
+ #define ICMP_ECHO	8
  
- 	netif_inherit_tso_max(peer, dev);
-+	if (headroom) {
-+		peer->needed_headroom = headroom;
-+		dev->needed_headroom = headroom;
++#define FLAG_ADJUST_ROOM (1 << 0)
++#define FLAG_SAME_NETNS  (1 << 1)
++
+ struct icmphdr {
+ 	__u8		type;
+ 	__u8		code;
+@@ -35,7 +41,7 @@ struct iplink_req {
+ };
+ 
+ static int create_netkit(int mode, int policy, int peer_policy, int *ifindex,
+-			 bool same_netns, int scrub, int peer_scrub)
++			 int scrub, int peer_scrub, __u32 flags)
+ {
+ 	struct rtnl_handle rth = { .fd = -1 };
+ 	struct iplink_req req = {};
+@@ -63,6 +69,10 @@ static int create_netkit(int mode, int policy, int peer_policy, int *ifindex,
+ 	addattr32(&req.n, sizeof(req), IFLA_NETKIT_SCRUB, scrub);
+ 	addattr32(&req.n, sizeof(req), IFLA_NETKIT_PEER_SCRUB, peer_scrub);
+ 	addattr32(&req.n, sizeof(req), IFLA_NETKIT_MODE, mode);
++	if (flags & FLAG_ADJUST_ROOM) {
++		addattr16(&req.n, sizeof(req), IFLA_NETKIT_HEADROOM, NETKIT_HEADROOM);
++		addattr16(&req.n, sizeof(req), IFLA_NETKIT_TAILROOM, NETKIT_TAILROOM);
 +	}
-+	if (tailroom) {
-+		peer->needed_tailroom = tailroom;
-+		dev->needed_tailroom = tailroom;
-+	}
+ 	addattr_nest_end(&req.n, data);
+ 	addattr_nest_end(&req.n, linkinfo);
  
- 	if (mode == NETKIT_L2 && !(ifmp && tbp[IFLA_ADDRESS]))
- 		eth_hw_addr_random(peer);
-@@ -401,6 +414,7 @@ static int netkit_new_link(struct net *peer_net, struct net_device *dev,
- 	nk->policy = policy_peer;
- 	nk->scrub = scrub_peer;
- 	nk->mode = mode;
-+	nk->headroom = headroom;
- 	bpf_mprog_bundle_init(&nk->bundle);
- 
- 	err = register_netdevice(peer);
-@@ -426,6 +440,7 @@ static int netkit_new_link(struct net *peer_net, struct net_device *dev,
- 	nk->policy = policy_prim;
- 	nk->scrub = scrub_prim;
- 	nk->mode = mode;
-+	nk->headroom = headroom;
- 	bpf_mprog_bundle_init(&nk->bundle);
- 
- 	err = register_netdevice(dev);
-@@ -850,7 +865,18 @@ static int netkit_change_link(struct net_device *dev, struct nlattr *tb[],
- 	struct net_device *peer = rtnl_dereference(nk->peer);
- 	enum netkit_action policy;
- 	struct nlattr *attr;
--	int err;
-+	int err, i;
-+	static struct {
-+		u32 attr;
-+		char *name;
-+	} fixed_params[] = {
-+		{ IFLA_NETKIT_MODE,       "operating mode" },
-+		{ IFLA_NETKIT_SCRUB,      "scrubbing" },
-+		{ IFLA_NETKIT_PEER_SCRUB, "peer scrubbing" },
-+		{ IFLA_NETKIT_PEER_INFO,  "peer info" },
-+		{ IFLA_NETKIT_HEADROOM,   "headroom" },
-+		{ IFLA_NETKIT_TAILROOM,   "tailroom" },
-+	};
- 
- 	if (!nk->primary) {
- 		NL_SET_ERR_MSG(extack,
-@@ -858,28 +884,14 @@ static int netkit_change_link(struct net_device *dev, struct nlattr *tb[],
- 		return -EACCES;
+@@ -87,7 +97,7 @@ static int create_netkit(int mode, int policy, int peer_policy, int *ifindex,
+ 				 " addr ee:ff:bb:cc:aa:dd"),
+ 				 "set hwaddress");
  	}
+-	if (same_netns) {
++	if (flags & FLAG_SAME_NETNS) {
+ 		ASSERT_OK(system("ip link set dev " netkit_peer " up"),
+ 				 "up peer");
+ 		ASSERT_OK(system("ip addr add dev " netkit_peer " 10.0.0.2/24"),
+@@ -184,8 +194,8 @@ void serial_test_tc_netkit_basic(void)
+ 	int err, ifindex;
  
--	if (data[IFLA_NETKIT_MODE]) {
--		NL_SET_ERR_MSG_ATTR(extack, data[IFLA_NETKIT_MODE],
--				    "netkit link operating mode cannot be changed after device creation");
--		return -EACCES;
--	}
--
--	if (data[IFLA_NETKIT_SCRUB]) {
--		NL_SET_ERR_MSG_ATTR(extack, data[IFLA_NETKIT_SCRUB],
--				    "netkit scrubbing cannot be changed after device creation");
--		return -EACCES;
--	}
--
--	if (data[IFLA_NETKIT_PEER_SCRUB]) {
--		NL_SET_ERR_MSG_ATTR(extack, data[IFLA_NETKIT_PEER_SCRUB],
--				    "netkit scrubbing cannot be changed after device creation");
--		return -EACCES;
--	}
--
--	if (data[IFLA_NETKIT_PEER_INFO]) {
--		NL_SET_ERR_MSG_ATTR(extack, data[IFLA_NETKIT_PEER_INFO],
--				    "netkit peer info cannot be changed after device creation");
--		return -EINVAL;
-+	for (i = 0; i < ARRAY_SIZE(fixed_params); i++) {
-+		attr = data[fixed_params[i].attr];
-+		if (attr) {
-+			NL_SET_ERR_MSG_ATTR_FMT(extack, attr,
-+						"netkit link %s cannot be changed after device creation",
-+						fixed_params[i].name);
-+			return -EACCES;
-+		}
- 	}
+ 	err = create_netkit(NETKIT_L2, NETKIT_PASS, NETKIT_PASS,
+-			    &ifindex, false, NETKIT_SCRUB_DEFAULT,
+-			    NETKIT_SCRUB_DEFAULT);
++			    &ifindex, NETKIT_SCRUB_DEFAULT,
++			    NETKIT_SCRUB_DEFAULT, 0);
+ 	if (err)
+ 		return;
  
- 	if (data[IFLA_NETKIT_POLICY]) {
-@@ -914,6 +926,8 @@ static size_t netkit_get_size(const struct net_device *dev)
- 	       nla_total_size(sizeof(u32)) + /* IFLA_NETKIT_PEER_SCRUB */
- 	       nla_total_size(sizeof(u32)) + /* IFLA_NETKIT_MODE */
- 	       nla_total_size(sizeof(u8))  + /* IFLA_NETKIT_PRIMARY */
-+	       nla_total_size(sizeof(u16)) + /* IFLA_NETKIT_HEADROOM */
-+	       nla_total_size(sizeof(u16)) + /* IFLA_NETKIT_TAILROOM */
- 	       0;
+@@ -299,8 +309,8 @@ static void serial_test_tc_netkit_multi_links_target(int mode, int target)
+ 	int err, ifindex;
+ 
+ 	err = create_netkit(mode, NETKIT_PASS, NETKIT_PASS,
+-			    &ifindex, false, NETKIT_SCRUB_DEFAULT,
+-			    NETKIT_SCRUB_DEFAULT);
++			    &ifindex, NETKIT_SCRUB_DEFAULT,
++			    NETKIT_SCRUB_DEFAULT, 0);
+ 	if (err)
+ 		return;
+ 
+@@ -428,8 +438,8 @@ static void serial_test_tc_netkit_multi_opts_target(int mode, int target)
+ 	int err, ifindex;
+ 
+ 	err = create_netkit(mode, NETKIT_PASS, NETKIT_PASS,
+-			    &ifindex, false, NETKIT_SCRUB_DEFAULT,
+-			    NETKIT_SCRUB_DEFAULT);
++			    &ifindex, NETKIT_SCRUB_DEFAULT,
++			    NETKIT_SCRUB_DEFAULT, 0);
+ 	if (err)
+ 		return;
+ 
+@@ -543,8 +553,8 @@ void serial_test_tc_netkit_device(void)
+ 	int err, ifindex, ifindex2;
+ 
+ 	err = create_netkit(NETKIT_L3, NETKIT_PASS, NETKIT_PASS,
+-			    &ifindex, true, NETKIT_SCRUB_DEFAULT,
+-			    NETKIT_SCRUB_DEFAULT);
++			    &ifindex, NETKIT_SCRUB_DEFAULT,
++			    NETKIT_SCRUB_DEFAULT, FLAG_SAME_NETNS);
+ 	if (err)
+ 		return;
+ 
+@@ -655,8 +665,8 @@ static void serial_test_tc_netkit_neigh_links_target(int mode, int target)
+ 	int err, ifindex;
+ 
+ 	err = create_netkit(mode, NETKIT_PASS, NETKIT_PASS,
+-			    &ifindex, false, NETKIT_SCRUB_DEFAULT,
+-			    NETKIT_SCRUB_DEFAULT);
++			    &ifindex, NETKIT_SCRUB_DEFAULT,
++			    NETKIT_SCRUB_DEFAULT, 0);
+ 	if (err)
+ 		return;
+ 
+@@ -733,8 +743,8 @@ static void serial_test_tc_netkit_pkt_type_mode(int mode)
+ 	struct bpf_link *link;
+ 
+ 	err = create_netkit(mode, NETKIT_PASS, NETKIT_PASS,
+-			    &ifindex, true, NETKIT_SCRUB_DEFAULT,
+-			    NETKIT_SCRUB_DEFAULT);
++			    &ifindex, NETKIT_SCRUB_DEFAULT,
++			    NETKIT_SCRUB_DEFAULT, FLAG_SAME_NETNS);
+ 	if (err)
+ 		return;
+ 
+@@ -799,7 +809,7 @@ void serial_test_tc_netkit_pkt_type(void)
+ 	serial_test_tc_netkit_pkt_type_mode(NETKIT_L3);
  }
  
-@@ -930,6 +944,10 @@ static int netkit_fill_info(struct sk_buff *skb, const struct net_device *dev)
- 		return -EMSGSIZE;
- 	if (nla_put_u32(skb, IFLA_NETKIT_SCRUB, nk->scrub))
- 		return -EMSGSIZE;
-+	if (nla_put_u16(skb, IFLA_NETKIT_HEADROOM, dev->needed_headroom))
-+		return -EMSGSIZE;
-+	if (nla_put_u16(skb, IFLA_NETKIT_TAILROOM, dev->needed_tailroom))
-+		return -EMSGSIZE;
+-static void serial_test_tc_netkit_scrub_type(int scrub)
++static void serial_test_tc_netkit_scrub_type(int scrub, bool room)
+ {
+ 	LIBBPF_OPTS(bpf_netkit_opts, optl);
+ 	struct test_tc_link *skel;
+@@ -807,7 +817,8 @@ static void serial_test_tc_netkit_scrub_type(int scrub)
+ 	int err, ifindex;
  
- 	if (peer) {
- 		nk = netkit_priv(peer);
-@@ -947,6 +965,8 @@ static const struct nla_policy netkit_policy[IFLA_NETKIT_MAX + 1] = {
- 	[IFLA_NETKIT_MODE]		= NLA_POLICY_MAX(NLA_U32, NETKIT_L3),
- 	[IFLA_NETKIT_POLICY]		= { .type = NLA_U32 },
- 	[IFLA_NETKIT_PEER_POLICY]	= { .type = NLA_U32 },
-+	[IFLA_NETKIT_HEADROOM]		= { .type = NLA_U16 },
-+	[IFLA_NETKIT_TAILROOM]		= { .type = NLA_U16 },
- 	[IFLA_NETKIT_SCRUB]		= NLA_POLICY_MAX(NLA_U32, NETKIT_SCRUB_DEFAULT),
- 	[IFLA_NETKIT_PEER_SCRUB]	= NLA_POLICY_MAX(NLA_U32, NETKIT_SCRUB_DEFAULT),
- 	[IFLA_NETKIT_PRIMARY]		= { .type = NLA_REJECT,
-diff --git a/include/uapi/linux/if_link.h b/include/uapi/linux/if_link.h
-index 2575e0cd9b48..2fa2c265dcba 100644
---- a/include/uapi/linux/if_link.h
-+++ b/include/uapi/linux/if_link.h
-@@ -1315,6 +1315,8 @@ enum {
- 	IFLA_NETKIT_MODE,
- 	IFLA_NETKIT_SCRUB,
- 	IFLA_NETKIT_PEER_SCRUB,
-+	IFLA_NETKIT_HEADROOM,
-+	IFLA_NETKIT_TAILROOM,
- 	__IFLA_NETKIT_MAX,
- };
- #define IFLA_NETKIT_MAX	(__IFLA_NETKIT_MAX - 1)
-diff --git a/tools/include/uapi/linux/if_link.h b/tools/include/uapi/linux/if_link.h
-index 8516c1ccd57a..7e46ca4cd31b 100644
---- a/tools/include/uapi/linux/if_link.h
-+++ b/tools/include/uapi/linux/if_link.h
-@@ -1315,6 +1315,8 @@ enum {
- 	IFLA_NETKIT_MODE,
- 	IFLA_NETKIT_SCRUB,
- 	IFLA_NETKIT_PEER_SCRUB,
-+	IFLA_NETKIT_HEADROOM,
-+	IFLA_NETKIT_TAILROOM,
- 	__IFLA_NETKIT_MAX,
- };
- #define IFLA_NETKIT_MAX	(__IFLA_NETKIT_MAX - 1)
+ 	err = create_netkit(NETKIT_L2, NETKIT_PASS, NETKIT_PASS,
+-			    &ifindex, false, scrub, scrub);
++			    &ifindex, scrub, scrub,
++			    room ? FLAG_ADJUST_ROOM : 0);
+ 	if (err)
+ 		return;
+ 
+@@ -842,6 +853,8 @@ static void serial_test_tc_netkit_scrub_type(int scrub)
+ 	ASSERT_EQ(skel->bss->seen_tc8, true, "seen_tc8");
+ 	ASSERT_EQ(skel->bss->mark, scrub == NETKIT_SCRUB_NONE ? MARK : 0, "mark");
+ 	ASSERT_EQ(skel->bss->prio, scrub == NETKIT_SCRUB_NONE ? PRIO : 0, "prio");
++	ASSERT_EQ(skel->bss->headroom, room ? NETKIT_HEADROOM : 0, "headroom");
++	ASSERT_EQ(skel->bss->tailroom, room ? NETKIT_TAILROOM : 0, "tailroom");
+ cleanup:
+ 	test_tc_link__destroy(skel);
+ 
+@@ -852,6 +865,6 @@ static void serial_test_tc_netkit_scrub_type(int scrub)
+ 
+ void serial_test_tc_netkit_scrub(void)
+ {
+-	serial_test_tc_netkit_scrub_type(NETKIT_SCRUB_DEFAULT);
+-	serial_test_tc_netkit_scrub_type(NETKIT_SCRUB_NONE);
++	serial_test_tc_netkit_scrub_type(NETKIT_SCRUB_DEFAULT, false);
++	serial_test_tc_netkit_scrub_type(NETKIT_SCRUB_NONE, true);
+ }
+diff --git a/tools/testing/selftests/bpf/progs/test_tc_link.c b/tools/testing/selftests/bpf/progs/test_tc_link.c
+index 10d825928499..630f12e51b07 100644
+--- a/tools/testing/selftests/bpf/progs/test_tc_link.c
++++ b/tools/testing/selftests/bpf/progs/test_tc_link.c
+@@ -8,6 +8,7 @@
+ #include <linux/if_packet.h>
+ #include <bpf/bpf_endian.h>
+ #include <bpf/bpf_helpers.h>
++#include <bpf/bpf_core_read.h>
+ 
+ char LICENSE[] SEC("license") = "GPL";
+ 
+@@ -27,6 +28,7 @@ bool seen_host;
+ bool seen_mcast;
+ 
+ int mark, prio;
++unsigned short headroom, tailroom;
+ 
+ SEC("tc/ingress")
+ int tc1(struct __sk_buff *skb)
+@@ -104,11 +106,24 @@ int tc7(struct __sk_buff *skb)
+ 	return TCX_PASS;
+ }
+ 
++struct sk_buff {
++	struct net_device *dev;
++};
++
++struct net_device {
++	unsigned short needed_headroom;
++	unsigned short needed_tailroom;
++};
++
+ SEC("tc/egress")
+ int tc8(struct __sk_buff *skb)
+ {
++	struct net_device *dev = BPF_CORE_READ((struct sk_buff *)skb, dev);
++
+ 	seen_tc8 = true;
+ 	mark = skb->mark;
+ 	prio = skb->priority;
++	headroom = BPF_CORE_READ(dev, needed_headroom);
++	tailroom = BPF_CORE_READ(dev, needed_tailroom);
+ 	return TCX_PASS;
+ }
 -- 
 2.43.0
 
