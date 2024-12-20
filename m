@@ -1,177 +1,150 @@
-Received: from fout-b2-smtp.messagingengine.com (fout-b2-smtp.messagingengine.com [202.12.124.145])
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA2167DA7F;
-	Fri, 20 Dec 2024 04:00:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.145
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF9583214;
+	Fri, 20 Dec 2024 04:07:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.187
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734667243; cv=none; b=NBnP1TSM6Vbigfdd60zlmz2dkA5/UpvKI6zV2xC6ybaijfZlIaNJpVEm06NOC5fxAqRHOD3nKY6YhbrXlgG5uN6D2pRY4x8u5cjV6++TKh6Ns5io2pA/ADs+SMhZ0f4EdNMVLIUDe7vaUtxCzbGaHUMbQDVqKPs0IJMMgRBdGw4=
+	t=1734667671; cv=none; b=CS5JkSa5r9eBWT0x9ROQl7h9+ZCE6IEzECMkkqPaoklksTF0WqCwlBDbCDNooZ7LEnUpMcN3jx1ght4fx3czhpQNmU8KFOnr3bkkM3tadOoVEV+HJ4Dkt4ZYHLRJhau3NnPwJdJD9dFEz29ZqMeimfeKkuWQOycSKuxfeTZ2BMI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734667243; c=relaxed/simple;
-	bh=/YBlrGNICdQHzth9nNWjpLOs63Mw+gXp+zl06s9QO4U=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ik09kapKwyti39OW8ky7GaG2oMpz5TVhY4C/5t8d4hnC3MSVq8sYz3fgWhYglnJ5kRqeT85XBZSwrmKML6WUOk4E4eAD3Y0s2M9jkBRTaJnKIOteigNZPQ9S46IMjCNz5rEHlUHiXevD7Cn6eNu3pEcKzddQYeGQTPoNHgBQLVY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dxuuu.xyz; spf=pass smtp.mailfrom=dxuuu.xyz; dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b=Clp+poIk; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=d4GjNwJC; arc=none smtp.client-ip=202.12.124.145
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dxuuu.xyz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dxuuu.xyz
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b="Clp+poIk";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="d4GjNwJC"
-Received: from phl-compute-02.internal (phl-compute-02.phl.internal [10.202.2.42])
-	by mailfout.stl.internal (Postfix) with ESMTP id 2E95A11401A2;
-	Thu, 19 Dec 2024 23:00:30 -0500 (EST)
-Received: from phl-mailfrontend-02 ([10.202.2.163])
-  by phl-compute-02.internal (MEProxy); Thu, 19 Dec 2024 23:00:30 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm3; t=1734667230;
-	 x=1734753630; bh=a93/s60Sb4m7eEnvHamsltol0F+Fr3WeswnBsnKBOFQ=; b=
-	Clp+poIk5n7YEKcj5hxjLSTL/Mft/jPfWozhDry030atNMcTQNGYUWmkZtGij8bm
-	fherECYxSnc/we9g1PEbFGKRGO6Wsi/QE7H9/A0HpoeCwE6+W8QN3H1okt+L3Hav
-	mxCv9bAlgUSU6I3mDllI7lbqxNbi1EfAiKFecg6Fxw4qlFNAV+kpr0LWrzIiyoeQ
-	pe1cfuRZcLSx55W7Nr58qad+DPwyOiyVxh3NNa0UNb3WIyU0Lb4SuAxmEcALQY1B
-	9pSVt45wHfYWH1clgxBJwtALG+7rV1tK+psGC/JiUFDch2c1KAAIYvyh0Xa+CFFh
-	erL4ZsW4rtbwfrDGObH53w==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1734667230; x=
-	1734753630; bh=a93/s60Sb4m7eEnvHamsltol0F+Fr3WeswnBsnKBOFQ=; b=d
-	4GjNwJCA9B3ilEpqIRwiag+IgBpfJD1fmueAmR6G0OK9pBK8WfqXK/aYXz6tqbws
-	KFOYNEwhiwMlhtLMu38ntFMrOiWkWctYsJGDRQefZyGu744jNgn2ADXWgWa214hY
-	d0DJ5bTFDe4VdGOxrBJbDWzogITK7hS83HgVXiNT82ayNh8QFA9Xbr1qiEHPsPDj
-	u4GeLAuOU+b+Eba6CmLa7gCPlploLIJVh56IfBTWEbkW+nxY7LrLIjJdTzDWTZSh
-	rwiuyCgbURXAyyi4NLf0Vo1l3tP2SWuaZD9YSgjcNFuQGQgim69UiQ6usJfp+R7o
-	6qDLu8iz/FnYZiW+SGHow==
-X-ME-Sender: <xms:3etkZ7oDqzbzKYA7xrzzwyAX5he_rVdsybR91R5JZBzNneBqGp040Q>
-    <xme:3etkZ1rOl-8cLEKo703Ug0KwD-JoSbksLeRGDAVJmzG6doOm6GrwdgeY5NmAFmhgs
-    WGzzf62ATdhK55TEw>
-X-ME-Received: <xmr:3etkZ4MQYKWhOb2eMAlMYQHHf3WmwlCBBXJxt8VB3fT5AFdadm7IZD0SaIoYmolU0SGvQvF1U3L5qxW9fjN_1s0lcptW7UDNOeCLhQWnWS1XRg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefuddruddtuddgieegucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
-    rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnh
-    htshculddquddttddmnegfrhhlucfvnfffucdljedtmdenucfjughrpeffhffvvefukfhf
-    gggtugfgjgestheksfdttddtjeenucfhrhhomhepffgrnhhivghlucgiuhcuoegugihuse
-    gugihuuhhurdighiiiqeenucggtffrrghtthgvrhhnpedtgfeuueeukeeikefgieeukeff
-    leetkeekkeeggeffvedtvdejueehueeuleefteenucevlhhushhtvghrufhiiigvpedtne
-    curfgrrhgrmhepmhgrihhlfhhrohhmpegugihusegugihuuhhurdighiiipdhnsggprhgt
-    phhtthhopedvtddpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtoheprghlvgigvghird
-    hsthgrrhhovhhoihhtohhvsehgmhgrihhlrdgtohhmpdhrtghpthhtohepvgguugihiiek
-    jeesghhmrghilhdrtghomhdprhgtphhtthhopegrnhgurhhiihdrnhgrkhhrhihikhhose
-    hgmhgrihhlrdgtohhmpdhrtghpthhtoheprghnughrihhisehkvghrnhgvlhdrohhrghdp
-    rhgtphhtthhopegrshhtsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehshhhurghhse
-    hkvghrnhgvlhdrohhrghdprhgtphhtthhopegurghnihgvlhesihhoghgvrghrsghogidr
-    nhgvthdprhgtphhtthhopehjohhhnhdrfhgrshhtrggsvghnugesghhmrghilhdrtghomh
-    dprhgtphhtthhopehmrghrthhinhdrlhgruheslhhinhhugidruggvvh
-X-ME-Proxy: <xmx:3etkZ-4lZNDPJ4GtnVBYWqwLaK-JuaGV6C7mAr9WH98Q2XL6SLw0kQ>
-    <xmx:3etkZ66-Y0ziRQKj7Nm7yedgu30lck8XwFO3DaGQlgri7CK3xuhpGA>
-    <xmx:3etkZ2ggF1HOUvgzDzxSWrL-nIaP0yhyxCr78LjBTLgekuUnsiz7gw>
-    <xmx:3etkZ87Nc9BluhaxS8uTU1MUNH1bMvKRaI4Qn_PHNetTvSRxzK10wg>
-    <xmx:3utkZw76pJc4VRYkDBC_VnTeauMOntkclIKxYIXtXDu7pBB_psxKBdpI>
-Feedback-ID: i6a694271:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 19 Dec 2024 23:00:27 -0500 (EST)
-Date: Thu, 19 Dec 2024 21:00:26 -0700
-From: Daniel Xu <dxu@dxuuu.xyz>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Eduard Zingerman <eddyz87@gmail.com>, 
-	Andrii Nakryiko <andrii.nakryiko@gmail.com>, Andrii Nakryiko <andrii@kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Shuah Khan <shuah@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
-	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Mykola Lysenko <mykolal@fb.com>, bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, Network Development <netdev@vger.kernel.org>
-Subject: Re: [PATCH bpf-next v5 4/5] bpf: verifier: Support eliding map
- lookup nullness
-Message-ID: <wqcsx7bejn7zz7o4pdpavc2ufjmtoaf47pkyzrng2666xriqqx@glo4iwpho3ah>
-References: <92065ca054beccd6d0f35efe9715ef965e8d379f.1734045451.git.dxu@dxuuu.xyz>
- <CAEf4BzaqCgW9keiT+tJUBQWT6Q+jMwuvn4O2ZghO0c+ZvACNrw@mail.gmail.com>
- <zow3q3nhlz6vedbni3upag5yr7zzrhyiqysl5nwyubebmbwojk@th7kbm62x36g>
- <31b0c85dbf85486df116ade20caf8685843899b4.camel@gmail.com>
- <CAEf4BzaEOBtrSWZTx40AdT=SQY6Qaia405KWgU-NowaqNdmpkA@mail.gmail.com>
- <kghvgxu5wdkupssnq7dy5upuf2wscsxgsnwl2yoam4mwk3h5pn@wjjsliwg6fzl>
- <a2999d8b4827516fe4bfd17646d2284580712d08.camel@gmail.com>
- <f7taicw6c3f3yae4d6lrdagv26jiuihumklo4tkmqduvauargi@ld4bcmsbbiqn>
- <d0b5e424445f498fdedca04fd4b0f138fbb6ae36.camel@gmail.com>
- <CAADnVQKs3=pEea7VeTfxpuB7uxzZRCjikPGu17uusTpGdqLxDA@mail.gmail.com>
+	s=arc-20240116; t=1734667671; c=relaxed/simple;
+	bh=zSISzR/qx/NgWraMuwe30F3SNrhRM9ntxto7RmkcBZs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=pFXWL2yIBiZRbUsAD8QQfFpLmT5lLlfI9qJGio/kCOkaRWTFjo6EKYEbZ3Ece14Vgpgtq6VyBy2Wd5NudY6fze0jv0tpnleCcg0QAszsJD9QfaPxPEvMtc6hVgggIpmG4rQfUmx2vMH4P0bdfiulU9TfUEVYBg7h/STK4qfycho=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.187
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.88.105])
+	by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4YDv2b3xx2zhZWm;
+	Fri, 20 Dec 2024 12:05:11 +0800 (CST)
+Received: from kwepemd100013.china.huawei.com (unknown [7.221.188.163])
+	by mail.maildlp.com (Postfix) with ESMTPS id 91FA7140154;
+	Fri, 20 Dec 2024 12:07:45 +0800 (CST)
+Received: from [10.67.109.79] (10.67.109.79) by kwepemd100013.china.huawei.com
+ (7.221.188.163) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1258.34; Fri, 20 Dec
+ 2024 12:07:44 +0800
+Message-ID: <cafb38a5-0832-4af4-a3b2-cca32ce63d10@huawei.com>
+Date: Fri, 20 Dec 2024 12:07:44 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1] cgroup/cpuset: remove kernfs active break
+To: Waiman Long <llong@redhat.com>, Chen Ridong <chenridong@huaweicloud.com>,
+	<tj@kernel.org>, <hannes@cmpxchg.org>, <mkoutny@suse.com>,
+	<roman.gushchin@linux.dev>
+CC: <cgroups@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<bpf@vger.kernel.org>, <wangweiyang2@huawei.com>
+References: <20241220013106.3603227-1-chenridong@huaweicloud.com>
+ <5c48f188-0059-46a2-9ccd-aad6721d96bb@redhat.com>
+Content-Language: en-US
+From: chenridong <chenridong@huawei.com>
+In-Reply-To: <5c48f188-0059-46a2-9ccd-aad6721d96bb@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAADnVQKs3=pEea7VeTfxpuB7uxzZRCjikPGu17uusTpGdqLxDA@mail.gmail.com>
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ kwepemd100013.china.huawei.com (7.221.188.163)
 
-On Thu, Dec 19, 2024 at 04:49:13PM -0800, Alexei Starovoitov wrote:
-> On Thu, Dec 19, 2024 at 4:43 PM Eduard Zingerman <eddyz87@gmail.com> wrote:
-> >
-> > On Thu, 2024-12-19 at 17:40 -0700, Daniel Xu wrote:
-> >
-> > [...]
-> >
-> > > > Ok, thinking a bit more, the best test I can come up with is:
-> > > >
-> > > >   u8 vals[8];
-> > > >   vals[0] = 0;
-> > > >   ...
-> > > >   vals[6] = 0;
-> > > >   vals[7] = 0xf;
-> > > >   p = bpf_map_lookup_elem(... vals ...);
-> > > >   *p = 42;
-> > > >
-> > > > For LE vals as u32 should be 0x0f;
-> > > > For BE vals as u32 should be 0xf000_0000.
-> > > > Hence, it is not safe to remove null check for this program.
-> > > > What would verifier think about the value of such key?
-> > > > As far as I understand, there would be stack zero for for vals[0-6]
-> > > > and u8 stack spill for vals[7].
-> > >
-> > > Right. By checking that spill size is same as key size, we stay endian
-> > > neutral, as constant values are tracked in native endianness.
-> > >
-> > > However, if we were to start interpreting combinations of STACK_ZERO,
-> > > STACK_MISC, and STACK_SPILL, the verifier would have to be endian aware
-> > > (IIUC). Which makes it a somewhat interesting problem but also requires
-> > > some thought to correctly handle the state space.
-> >
-> > Right.
-> >
-> > > > You were going to add a check for the spill size, which should help here.
-> > > > So, a negative test like above that checks that verifier complains
-> > > > that 'p' should be checked for nullness first?
-> > > >
-> > > > If anyone has better test in mind, please speak-up.
-> > >
-> > > I think this case reduces down to a spill_size != key_size test. As long
-> > > as the sizes match, we don't have to worry about endianness.
-> >
-> > Agree.
+
+
+On 2024/12/20 10:55, Waiman Long wrote:
+> On 12/19/24 8:31 PM, Chen Ridong wrote:
+>> From: Chen Ridong <chenridong@huawei.com>
+>>
+>> A warning was found:
+>>
+>> WARNING: CPU: 10 PID: 3486953 at fs/kernfs/file.c:828
+>> CPU: 10 PID: 3486953 Comm: rmdir Kdump: loaded Tainted: G
+>> RIP: 0010:kernfs_should_drain_open_files+0x1a1/0x1b0
+>> RSP: 0018:ffff8881107ef9e0 EFLAGS: 00010202
+>> RAX: 0000000080000002 RBX: ffff888154738c00 RCX: dffffc0000000000
+>> RDX: 0000000000000007 RSI: 0000000000000004 RDI: ffff888154738c04
+>> RBP: ffff888154738c04 R08: ffffffffaf27fa15 R09: ffffed102a8e7180
+>> R10: ffff888154738c07 R11: 0000000000000000 R12: ffff888154738c08
+>> R13: ffff888750f8c000 R14: ffff888750f8c0e8 R15: ffff888154738ca0
+>> FS:  00007f84cd0be740(0000) GS:ffff8887ddc00000(0000)
+>> knlGS:0000000000000000
+>> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+>> CR2: 0000555f9fbe00c8 CR3: 0000000153eec001 CR4: 0000000000370ee0
+>> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+>> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+>> Call Trace:
+>>   kernfs_drain+0x15e/0x2f0
+>>   __kernfs_remove+0x165/0x300
+>>   kernfs_remove_by_name_ns+0x7b/0xc0
+>>   cgroup_rm_file+0x154/0x1c0
+>>   cgroup_addrm_files+0x1c2/0x1f0
+>>   css_clear_dir+0x77/0x110
+>>   kill_css+0x4c/0x1b0
+>>   cgroup_destroy_locked+0x194/0x380
+>>   cgroup_rmdir+0x2a/0x140
+> Were you using cgroup v1 or v2 when this warning happened?
+
+I was using cgroup v1.
+
+>>
+>> It can be explained by:
+>> rmdir                 echo 1 > cpuset.cpus
+>>                 kernfs_fop_write_iter // active=0
+>> cgroup_rm_file
+>> kernfs_remove_by_name_ns    kernfs_get_active // active=1
+>> __kernfs_remove                      // active=0x80000002
+>> kernfs_drain            cpuset_write_resmask
+>> wait_event
+>> //waiting (active == 0x80000001)
+>>                 kernfs_break_active_protection
+>>                 // active = 0x80000001
+>> // continue
+>>                 kernfs_unbreak_active_protection
+>>                 // active = 0x80000002
+>> ...
+>> kernfs_should_drain_open_files
+>> // warning occurs
+>>                 kernfs_put_active
+>>
+>> This warning is caused by 'kernfs_break_active_protection' when it is
+>> writing to cpuset.cpus, and the cgroup is removed concurrently.
+>>
+>> The commit 3a5a6d0c2b03 ("cpuset: don't nest cgroup_mutex inside
+>> get_online_cpus()") made cpuset_hotplug_workfn asynchronous, which grabs
+>> the cgroup_mutex. To avoid deadlock. the commit 76bb5ab8f6e3 ("cpuset:
+>> break kernfs active protection in cpuset_write_resmask()") added
+>> 'kernfs_break_active_protection' in the cpuset_write_resmask. This could
+>> lead to this warning.
+>>
+>> After the commit 2125c0034c5d ("cgroup/cpuset: Make cpuset hotplug
+>> processing synchronous"), the cpuset_write_resmask no longer needs to
+>> wait the hotplug to finish, which means that cpuset_write_resmask won't
+>> grab the cgroup_mutex. So the deadlock doesn't exist anymore. Therefore,
+>> remove kernfs_break_active_protection operation in the
+>> 'cpuset_write_resmask'
 > 
-> Earlier I suggested to generalize this zero/misc/spill counting
-> into a helper and reuse here and in check_stack_read_fixed_off().
+> The hotplug operation itself is now being done synchronously, but task
+> transfer (cgroup_transfer_tasks()) because of lacking online CPUs is
+> still being done asynchronously. So kernfs_break_active_protection()
+> will still be needed for cgroup v1.
 > 
-> We do very similar checks there with a similar purpose.
-
-Looked again, didn't see any obvious way to share code that doesn't make
-it more confusing. Let me post v6 without this particular refactor. If I
-missed something I'll fix it up in v7.
-
+> Cheers,
+> Longman
 > 
-> It sounds there are ideas to make this particular feature smarter
-> than what we have in check_stack_read_fixed_off().
-> Let's not overdo it.
-> Even if a common helper is not possible, keep things consistent.
-> The simpler the better.
+> 
 
-Fair enough. We can keep it simple. 
+Thank you, Longman.
+IIUC, The commit 2125c0034c5d ("cgroup/cpuset: Make cpuset hotplug
+processing synchronous") deleted the 'flush_work(&cpuset_hotplug_work)'
+in the cpuset_write_resmask. And I do not see any process within the
+cpuset_write_resmask that will grab cgroup_mutex, except for
+'flush_work(&cpuset_hotplug_work)'.
 
-Thanks,
-Daniel
+Although cgroup_transfer_tasks() is asynchronous, the
+cpuset_write_resmask will not wait any work that will grab cgroup_mutex.
+Consequently, the deadlock does not exist anymore.
+
+Did I miss something?
+
+Best regards
+Ridong
