@@ -1,138 +1,129 @@
-Received: from out30-101.freemail.mail.aliyun.com (out30-101.freemail.mail.aliyun.com [115.124.30.101])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com [209.85.128.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18C06632;
-	Mon, 23 Dec 2024 02:16:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.101
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C75B61B59A;
+	Mon, 23 Dec 2024 03:06:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734920168; cv=none; b=jhnrZ5bFp3J5lOzGpHF0JlJA5+o6dwL8CU2mrnHh4d94tRX3A4cAcvIleNyU9/foccjALN7AhpreROodDqAQ4n0fvOlTsBo/1jAcXp25HseBhLfWFKGkuftJ934XDAZ2aMnIN9+9tf9fhEp7xPx138ewjqp5jb0aVkztBVCfSFM=
+	t=1734923209; cv=none; b=tJMGI+rYd7mG0RJ4dBqlWLTB9XU35bnKF6Hv30WUMOHtnbRmYrQaQtuErfyJKk6NRX1hlztQjufx9smVJCjXOoUwPH9+KAwFuYpWH0oAAO8ib2NXQpu+PN3b7PhnTu3E6KsJWe8JRx39Po59aDM3pTYyFLECFzRYOYjJjATN9Rc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734920168; c=relaxed/simple;
-	bh=fYb8/eRsED0a5QPevVYXqFlTk81Xxf99AFlxwor7Bx4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RUnI4W1X0wnWmRiHjGQjLeYybXtVJj+ZYkFTkFt2zFskr+VtuRXR3PVcyCh0awz/YDCqO4kN83gdTlnYzeu+GZU5mapQ5/kO1D8T1Ui1oMKys7nBwZa84GBSu+ISYeNEn5jG59wKm8bKGXQkmbraAZDMqSRromxWvHkvGfGNs+k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=bn+cKf+6; arc=none smtp.client-ip=115.124.30.101
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
+	s=arc-20240116; t=1734923209; c=relaxed/simple;
+	bh=/5cOQIV5EO+wRwZFloIhQyJWz25gsXLcTMOzxnXDMnw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=PcE1CBo/tZvTg7cufZyYjBYBI0nt4fFG80nICDh0KpZEetBQiMVGNuoqOnVo1p5Lz5TyaEbVAe49FjOAFO1WNi3Jc9Ou4D3J7ojXKQ/uZ6Wz0PtxD1UNiTOVwUXxLKyBxIYJ0WS21SQu4Som9ztOwxe2i+OQaDTlQ5QvvwuxbPk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MGSdXo3T; arc=none smtp.client-ip=209.85.128.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="bn+cKf+6"
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux.alibaba.com; s=default;
-	t=1734920161; h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
-	bh=X8L9prpbeK1sda734hduULb78ArRrtxowYpuEuW1bZM=;
-	b=bn+cKf+6jWnT90k7Mr6akem1g6VMseS2C7F/L/smAJ6fTPoqWn0qHbpVV1WPRZRBBMLGaAzuNQazGUFKuK5bFlVKukAtu0hXoFQCe7/wq/fzr7+dICUCapIoS5VSqQcHB+DAGLrolI1Q9YjlZpD8ZDJMmq7GTLuw0GBcu226Fuw=
-Received: from localhost(mailfrom:alibuda@linux.alibaba.com fp:SMTPD_---0WM-5smN_1734919836 cluster:ay36)
-          by smtp.aliyun-inc.com;
-          Mon, 23 Dec 2024 10:10:37 +0800
-Date: Mon, 23 Dec 2024 10:10:36 +0800
-From: "D. Wythe" <alibuda@linux.alibaba.com    >
-To: Martin KaFai Lau <martin.lau@linux.dev>
-Cc: "D. Wythe" <alibuda@linux.alibaba.com>, kgraul@linux.ibm.com,
-	wenjia@linux.ibm.com, jaka@linux.ibm.com, ast@kernel.org,
-	daniel@iogearbox.net, andrii@kernel.org, pabeni@redhat.com,
-	song@kernel.org, sdf@google.com, haoluo@google.com, yhs@fb.com,
-	edumazet@google.com, john.fastabend@gmail.com, kpsingh@kernel.org,
-	jolsa@kernel.org, guwen@linux.alibaba.com, kuba@kernel.org,
-	davem@davemloft.net, netdev@vger.kernel.org,
-	linux-s390@vger.kernel.org, linux-rdma@vger.kernel.org,
-	bpf@vger.kernel.org, Daniel Xu <dlxu@meta.com>
-Subject: Re: [PATCH bpf-next v3 4/5] libbpf: fix error when st-prefix_ops and
- ops from differ btf
-Message-ID: <20241223021036.GC36000@j66a10360.sqa.eu95>
-References: <20241218024422.23423-1-alibuda@linux.alibaba.com>
- <20241218024422.23423-5-alibuda@linux.alibaba.com>
- <2f56aca3-a27a-49b6-90de-7f1b2ff39df1@linux.dev>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MGSdXo3T"
+Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-6efe5c1dea4so27862237b3.3;
+        Sun, 22 Dec 2024 19:06:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1734923207; x=1735528007; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=oDLS+F1yQuD2upk7EmeHo5UCz999emMAB0fBft9hjxg=;
+        b=MGSdXo3TuDZz3VZdXydrYadXmoP8I5NmqnXWNcr7MWm5/W0DmWFoTa9i0uu/jecEnz
+         jNV7XnYLbhlFzm01VZlv90lcylLuiHsz6ueI8ETaSjMSJbcpUB/oeNKXTdJwAQ/jmqbv
+         wt3KtP5OBxEA54cfPI7XZrrMVkT7kQV+AvmvRUIqpvy3FH1QdOgymV6ijPs36fRY5l1N
+         J9D5IHlk6P/YTyOa9brKkTzHoFxEFxsYlJ/ouJl7g1i98ppCl+JYA9R+LIIFqjzwDf+O
+         HoweciBrEXNvqBD5Ugizk12TBGIvrkRHCtHrvEkZjbXYNnU1Io2ozE5uynHu+wIRtDUo
+         20Eg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1734923207; x=1735528007;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=oDLS+F1yQuD2upk7EmeHo5UCz999emMAB0fBft9hjxg=;
+        b=ootoZWu5dROmvApmoiUaxhWYfdKHRT4Xcok70gNMbKaQx2OhV/soBiSyMG5ss1FNrc
+         7oMrI080S8s+yE76Ql8zsP8aAL6Jor9OYVMI7W3isCNQubcEsdyCc3y8JR9nG27P+tD1
+         mRwvSlCQsCqqQyxqoqwRelJM5Ft5wjzwxKoxRiMJT6tUaAp5VewvXh0K/u7L+cBy47J/
+         +wJICfwAsOFKHQZ8pLjyAWELXYfIwF2RMyUulhkgh2VmdTfKpy2b6rf9rgCbg7vXPCeR
+         oEldXXFT8dfL88H7rsIUfM4kWlbai+zO1XaNwL5ADyR7M1qGUaHFIbMfC0sXQXoNajtX
+         3CpQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVFKbAiA5hEKqAxS36S1oTpSO37gywUgXKTmC40V21Sgmd52dL8me6RGebE6jO915WudqwLIuQAypyrIZcJ@vger.kernel.org, AJvYcCVeGufW4z4CADHHTyTGv0/WyHZEYUA5k98w0cPEw5AHp9JOuWc6V/1z/rVA1dCCMHHYLBzW7cXOcFa7CjFyDayBXA==@vger.kernel.org, AJvYcCVnRok4EeQd84DQ652GcHtKk7KHJ1e69dAhGSXzyHrc/MTGZ965iZ3nfM2IYdcjKbfvCHw=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx6FxcYdN+ObJPSv2psErKLh9t3f5OTiGwjhjW102usHLSPGTyA
+	uQtfLEVbtPpbNkL6mwUmtGSy6/njS3IEPZT6kRzV0IIDSE3t6gdUV7pF4sUNyJBz7zpWawVtSYT
+	osreb5mL+a5U7T7v7qrOMlzztUME=
+X-Gm-Gg: ASbGncutXSALH7KXgybvzXDN1GwU6E1CaFcsEj90mD9Nkm8wPQum4etDvCHzI3sjBXV
+	idF6eF5l5iFkcBeLDz59A+VqEo+3PnJQHukME
+X-Google-Smtp-Source: AGHT+IFyHmlBFyKSpebsq2R1VBIC7wC1QEihc9xcEcoIDXS+5NhDWO0utAKyr0yDMx3ndLs5JtCDSE6d6LCG2StTXsI=
+X-Received: by 2002:a05:690c:6911:b0:6ef:96f9:2f48 with SMTP id
+ 00721157ae682-6f3f823eb81mr90934647b3.37.1734923206592; Sun, 22 Dec 2024
+ 19:06:46 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2f56aca3-a27a-49b6-90de-7f1b2ff39df1@linux.dev>
-User-Agent: Mutt/1.5.21 (2010-09-15)
+References: <20241219183400.350308-1-namhyung@kernel.org>
+In-Reply-To: <20241219183400.350308-1-namhyung@kernel.org>
+From: Howard Chu <howardchu95@gmail.com>
+Date: Sun, 22 Dec 2024 19:06:35 -0800
+Message-ID: <CAH0uvohROTgAN2ugPmSTLzEp-09LcZimCAsB4UbyCYpnwQhOEA@mail.gmail.com>
+Subject: Re: [PATCH v2] perf trace: Add --syscall-sample option
+To: Namhyung Kim <namhyung@kernel.org>
+Cc: Arnaldo Carvalho de Melo <acme@kernel.org>, Ian Rogers <irogers@google.com>, 
+	Kan Liang <kan.liang@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Adrian Hunter <adrian.hunter@intel.com>, Peter Zijlstra <peterz@infradead.org>, 
+	Ingo Molnar <mingo@kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
+	linux-perf-users@vger.kernel.org, Song Liu <song@kernel.org>, bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Dec 19, 2024 at 02:43:30PM -0800, Martin KaFai Lau wrote:
-> On 12/17/24 6:44 PM, D. Wythe wrote:
-> >Here are four possible case:
-> >
-> >+--------+-------------+-------------+---------------------------------+
-> >|        | st_opx_xxx  | xxx         |                                 |
-> >+--------+-------------+-------------+---------------------------------+
-> >| case 0 | btf_vmlinux | bft_vmlinux | be used and reg only in vmlinux |
-> >+--------+-------------+-------------+---------------------------------+
-> >| case 1 | btf_vmlinux | bpf_mod     | INVALID                         |
-> >+--------+-------------+-------------+---------------------------------+
-> >| case 2 | btf_mod     | btf_vmlinux | reg in mod but be used both in  |
-> >|        |             |             | vmlinux and mod.                |
-> >+--------+-------------+-------------+---------------------------------+
-> >| case 3 | btf_mod     | btf_mod     | be used and reg only in mod     |
-> >+--------+-------------+-------------+---------------------------------+
-> >
-> >At present, cases 0, 1, and 3 can be correctly identified, because
-> >st_ops_xxx is searched from the same btf with xxx. In order to
-> >handle case 2 correctly without affecting other cases, we cannot simply
-> >change the search method for st_ops_xxx from find_btf_by_prefix_kind()
-> >to find_ksym_btf_id(), because in this way, case 1 will not be
-> >recognized anymore.
-> >  	snprintf(tname, sizeof(tname), "%.*s",
-> >@@ -1020,17 +1021,25 @@ find_struct_ops_kern_types(struct bpf_object *obj, const char *tname_raw,
-> >  	}
-> >  	kern_type = btf__type_by_id(btf, kern_type_id);
-> >+	ret = snprintf(stname, sizeof(stname), "%s%s", STRUCT_OPS_VALUE_PREFIX, tname);
-> 
-> How about always look for "struct bpf_struct_ops_smc_ops" first,
-> figure out the btf, and then look for "struct smc_ops", would it
-> work?
+Hello Namhyung,
 
-I think this might not work, as the core issue lies in the fact that
-bpf_struct_ops_smc_ops and smc_ops are located on different btf.
-Searching for one fisrt cannot lead to the inference of the other.
+On Thu, Dec 19, 2024 at 10:34=E2=80=AFAM Namhyung Kim <namhyung@kernel.org>=
+ wrote:
+>
+> This option is to implement the event sampling for system calls in BPF.
+> When it's used, it picks up a syscall in the given sampling period and
+> discard others.  The period is in msec as it shows the time in msec.
+>
+>   # perf trace -C 0 --syscall-sample 100 sleep 1
+>            ? (         ): fleetspeakd/1828559  ... [continued]: futex()) =
+                                           =3D -1 ETIMEDOUT (Connection tim=
+ed out)
+>        0.050 (100.247 ms): gnome-shell/572531 recvmsg(fd: 10<socket:[3355=
+761]>, msg: 0x7ffef8b39d20)                =3D 40
+>      100.357 (100.149 ms): pipewire-pulse/572245 read(fd: 5<anon_inode:[e=
+ventfd]>, buf: 0x7ffc0b9dc8f0, count: 8)      =3D 8
+>      200.553 (100.268 ms): NetworkManager/3424 epoll_wait(epfd: 19<anon_i=
+node:[eventpoll]>, events: 0x5607b85bb880, maxevents: 6) =3D 0
+>      300.876 (         ): mon/4932 poll(ufds: 0x7fa392784df0, nfds: 1, ti=
+meout_msecs: 100)            ...
+>      400.901 ( 0.025 ms): TaskCon~ller #/620145 futex(uaddr: 0x7f3fc596fa=
+00, op: WAKE|PRIVATE_FLAG, val: 1)           =3D 0
+>      300.876 (100.123 ms): mon/4932  ... [continued]: poll())            =
+                                 =3D 0 (Timeout)
+>      500.901 ( 0.012 ms): evdefer/2/2335122 futex(uaddr: 0x5640baac5198, =
+op: WAKE|PRIVATE_FLAG, val: 1)           =3D 0
+>      602.701 ( 0.017 ms): Compositor/1992200 futex(uaddr: 0x7f1a51dfdd40,=
+ op: WAKE|PRIVATE_FLAG, val: 1)           =3D 0
+>      705.589 ( 0.017 ms): JS Watchdog/947933 futex(uaddr: 0x7f4cac1d4240,=
+ op: WAKE|PRIVATE_FLAG, val: 1)           =3D 0
+>      812.667 ( 0.027 ms): fix/1985151 futex(uaddr: 0xc0008f7148, op: WAKE=
+|PRIVATE_FLAG, val: 1)             =3D 1
+>      912.807 ( 0.017 ms): Xorg/572315 setitimer(value: 0x7ffc375d6ba0)   =
+                                   =3D 0
+>
+> The timestamp is kept in a per-cpu array and the allowed task is saved
+> in a BPF hash map.  For non-BPF use cases, it won't work so an error
+> message would be displayed.
+>
+>   # perf trace --syscall-sample 100 sleep 1
+>   ERROR: --syscall-sample works only for BPF
+>
+> Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+> ---
+> v2 changes)
+> * rename to --syscall-sample and update the description
+> * print error when BPF is not available  (Arnaldo)
+> * rename to sample_period_ns  (Ian)
 
-> 
-> If CONFIG_SMC=y instead of =m, this change cannot be tested?
-> 
+Acked-by: Howard Chu <howardchu95@gmail.com>
 
-That is indeed a problem, but currently there is no better solution
-unless the CI can add a step to run 'make modules_install'.
-
-
-Best wishes,
-D. Wythe
-
-> >+	if (ret < 0 || ret >= sizeof(stname))
-> >+		return -ENAMETOOLONG;
-> >+
-> >  	/* Find the corresponding "map_value" type that will be used
-> >  	 * in map_update(BPF_MAP_TYPE_STRUCT_OPS).  For example,
-> >  	 * find "struct bpf_struct_ops_tcp_congestion_ops" from the
-> >  	 * btf_vmlinux.
-> >  	 */
-> >-	kern_vtype_id = find_btf_by_prefix_kind(btf, STRUCT_OPS_VALUE_PREFIX,
-> >-						tname, BTF_KIND_STRUCT);
-> >+	kern_vtype_id = btf__find_by_name_kind(btf, stname, BTF_KIND_STRUCT);
-> >  	if (kern_vtype_id < 0) {
-> >-		pr_warn("struct_ops init_kern: struct %s%s is not found in kernel BTF\n",
-> >-			STRUCT_OPS_VALUE_PREFIX, tname);
-> >-		return kern_vtype_id;
-> >+		if (kern_vtype_id == -ENOENT && !*mod_btf)
-> >+			kern_vtype_id = find_ksym_btf_id(obj, stname, BTF_KIND_STRUCT,
-> >+							 &btf, mod_btf);
-> >+		if (kern_vtype_id < 0) {
-> >+			pr_warn("struct_ops init_kern: struct %s is not found in kernel BTF\n",
-> >+				stname);
-> >+			return kern_vtype_id;
-> >+		}
-> >  	}
-> >  	kern_vtype = btf__type_by_id(btf, kern_vtype_id);
-> >@@ -1046,8 +1055,8 @@ find_struct_ops_kern_types(struct bpf_object *obj, const char *tname_raw,
-> >  			break;
-> >  	}
-> >  	if (i == btf_vlen(kern_vtype)) {
-> >-		pr_warn("struct_ops init_kern: struct %s data is not found in struct %s%s\n",
-> >-			tname, STRUCT_OPS_VALUE_PREFIX, tname);
-> >+		pr_warn("struct_ops init_kern: struct %s data is not found in struct %s\n",
-> >+			tname, stname);
-> >  		return -EINVAL;
-> >  	}
+Thanks,
+Howard
