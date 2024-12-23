@@ -1,26 +1,26 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1E271CDA05;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB9EE1D4610;
 	Mon, 23 Dec 2024 20:14:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734984890; cv=none; b=iMDJa85hbF3bhR9oPCS7nOEm8Qd1gZQPn/ZdWkJuifsPhEBI23d7xQCWjZZx5oj5+BniVUOC7+WYoNltCzMLss1k+2/V8Sa/riJ68v6bq8sRK3/S0aWZAQJWtHLg9b2/eiYMzZ23Dk/i9qeRJ+cvfOZvhCOoEam+XpUzh73llbU=
+	t=1734984890; cv=none; b=lQeNO/5mg7EO2cKvt1cagqHgjtmondlcIlLlIHlqU/xFQZ15QJV2PyZxcoVF9fBDUzQHswW7yvRIusLfM/9+aPHI/BJT+RyUOdzigy+hM4Kk19xomjxEFM64oaI2vqjbum1PYNk9wzGFlFi2n40C9qleul9v66fzlKs9emawCL8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1734984890; c=relaxed/simple;
-	bh=KoYSwSCFYv4fDZF7WNZTJdGOQR7hwoCI4nFLaSQ1Pjw=;
+	bh=aioXTzNoufIGKq8lGq2O+Xy3xmBkovxOiAm5ccPP91s=;
 	h=Message-ID:Date:From:To:Cc:Subject:References:MIME-Version:
-	 Content-Type; b=ES0C9Vr2S5A22Z9KIv9FQQnMuPRSshqH3O6spQIlaiEtDYi5aD8flV9in29jIB9iTGorzTblnNi1DBYJ/pJKyhokO5dv3Tpbbg7T3rsXc5P34NTqnSFWVPuYQusJ7SYtvSFZnPDEP2rc951Udca6SPt4i0i0eZrHX+PJSBfCa8s=
+	 Content-Type; b=gcNpaW0nAT58Qjf/Z2N0i2QVzkkse9S7FZhXoyVRsLrR2loP33zvS4qwiToESKpJ12nKkfT0+DDp1ys6WOgR/JPSv4K+vNUw0uoQO0npowEVW3bLhi/CXuVWgggJvgEb9FFAKwnVdNTDivv28qGwLnhMlnOONLjA0V5/xeIVkbI=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B3A7C4CED6;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B2EAC4CEE2;
 	Mon, 23 Dec 2024 20:14:50 +0000 (UTC)
 Received: from rostedt by gandalf with local (Exim 4.98)
 	(envelope-from <rostedt@goodmis.org>)
-	id 1tPoq6-0000000Dg8m-0CCL;
+	id 1tPoq6-0000000Dg9p-1fXj;
 	Mon, 23 Dec 2024 15:15:42 -0500
-Message-ID: <20241223201541.898496620@goodmis.org>
+Message-ID: <20241223201542.240760965@goodmis.org>
 User-Agent: quilt/0.68
-Date: Mon, 23 Dec 2024 15:13:48 -0500
+Date: Mon, 23 Dec 2024 15:13:50 -0500
 From: Steven Rostedt <rostedt@goodmis.org>
 To: linux-kernel@vger.kernel.org,
  linux-trace-kernel@vger.kernel.org
@@ -36,7 +36,7 @@ Cc: Masami Hiramatsu <mhiramat@kernel.org>,
  Donglin Peng <dolinux.peng@gmail.com>,
  Zheng Yejian <zhengyejian@huaweicloud.com>,
  bpf@vger.kernel.org
-Subject: [PATCH v2 1/4] ftrace: Add print_function_args()
+Subject: [PATCH v2 3/4] ftrace: Have funcgraph-args take affect during tracing
 References: <20241223201347.609298489@goodmis.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -46,196 +46,72 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 
-From: Sven Schnelle <svens@linux.ibm.com>
+From: Steven Rostedt <rostedt@goodmis.org>
 
-Add a function to decode argument types with the help of BTF. Will
-be used to display arguments in the function and function graph
-tracer.
+Currently, when function_graph is started, it looks at the option
+funcgraph-args, and if it is set, it will enable tracing of the arguments.
 
-It can only handle simply arguments and up to FTRACE_REGS_MAX_ARGS number
-of arguments. When it hits a max, it will print ", ...":
+But if tracing is already running, and the user enables funcgraph-args, it
+will have no effect. Instead, it should enable argument tracing when it is
+enabled, even if it means disabling the function graph tracing for a short
+time in order to do the transition.
 
-   page_to_skb(vi=0xffff8d53842dc980, rq=0xffff8d53843a0800, page=0xfffffc2e04337c00, offset=6160, len=64, truesize=1536, ...)
-
-And if it hits an argument that is not recognized, it will print the raw
-value and the type of argument it is:
-
-   make_vfsuid(idmap=0xffffffff87f99db8, fs_userns=0xffffffff87e543c0, kuid=0x0 (STRUCT))
-   __pti_set_user_pgtbl(pgdp=0xffff8d5384ab47f8, pgd=0x110e74067 (STRUCT))
-
-Co-developed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-Signed-off-by: Sven Schnelle <svens@linux.ibm.com>
 Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 ---
-Changes since v1: https://lore.kernel.org/20240904065908.1009086-5-svens@linux.ibm.com
+ kernel/trace/trace_functions_graph.c | 27 ++++++++++++++++++++++++++-
+ 1 file changed, 26 insertions(+), 1 deletion(-)
 
- - Added Config option FUNCTION_TRACE_ARGS to this patch
-  (unconditional if dependencies are met)
-
- - Changed the print_function_args() function to take an array of
-   unsigned long args and not the ftrace_regs pointer. The ftrace_regs
-   should be opaque from generic code.
-
- - Have the function print the name of an BTF type that is not supported.
-
- - Added FTRACE_REGS_MAX_ARGS as the number of arguments saved in
-   the event and printed out.
-
- - Print "...," if the number of arguments goes past FTRACE_REGS_MAX_ARGS.
-
- include/linux/ftrace_regs.h |  5 +++
- kernel/trace/Kconfig        |  6 +++
- kernel/trace/trace_output.c | 78 +++++++++++++++++++++++++++++++++++++
- kernel/trace/trace_output.h |  9 +++++
- 4 files changed, 98 insertions(+)
-
-diff --git a/include/linux/ftrace_regs.h b/include/linux/ftrace_regs.h
-index bbc1873ca6b8..15627ceea9bc 100644
---- a/include/linux/ftrace_regs.h
-+++ b/include/linux/ftrace_regs.h
-@@ -35,4 +35,9 @@ struct ftrace_regs;
+diff --git a/kernel/trace/trace_functions_graph.c b/kernel/trace/trace_functions_graph.c
+index c8eda9bebdf4..d1ee001f5a8e 100644
+--- a/kernel/trace/trace_functions_graph.c
++++ b/kernel/trace/trace_functions_graph.c
+@@ -469,7 +469,7 @@ static int graph_trace_init(struct trace_array *tr)
+ 	else
+ 		tr->gops->retfunc = trace_graph_return;
  
- #endif /* HAVE_ARCH_FTRACE_REGS */
+-	/* Make gops functions are visible before we start tracing */
++	/* Make gops functions visible before we start tracing */
+ 	smp_mb();
  
-+/* This can be overridden by the architectures */
-+#ifndef FTRACE_REGS_MAX_ARGS
-+# define FTRACE_REGS_MAX_ARGS	6
-+#endif
-+
- #endif /* _LINUX_FTRACE_REGS_H */
-diff --git a/kernel/trace/Kconfig b/kernel/trace/Kconfig
-index d570b8b9c0a9..60412c1012ef 100644
---- a/kernel/trace/Kconfig
-+++ b/kernel/trace/Kconfig
-@@ -263,6 +263,12 @@ config FUNCTION_GRAPH_RETADDR
- 	  the function is called. This feature is off by default, and you can
- 	  enable it via the trace option funcgraph-retaddr.
- 
-+config FUNCTION_TRACE_ARGS
-+       bool
-+	depends on HAVE_FUNCTION_ARG_ACCESS_API
-+	depends on DEBUG_INFO_BTF
-+	default y
-+
- config DYNAMIC_FTRACE
- 	bool "enable/disable function tracing dynamically"
- 	depends on FUNCTION_TRACER
-diff --git a/kernel/trace/trace_output.c b/kernel/trace/trace_output.c
-index da748b7cbc4d..40d6c7a9e0c4 100644
---- a/kernel/trace/trace_output.c
-+++ b/kernel/trace/trace_output.c
-@@ -12,8 +12,11 @@
- #include <linux/sched/clock.h>
- #include <linux/sched/mm.h>
- #include <linux/idr.h>
-+#include <linux/btf.h>
-+#include <linux/bpf.h>
- 
- #include "trace_output.h"
-+#include "trace_btf.h"
- 
- /* must be a power of 2 */
- #define EVENT_HASHSIZE	128
-@@ -680,6 +683,81 @@ int trace_print_lat_context(struct trace_iterator *iter)
- 	return !trace_seq_has_overflowed(s);
+ 	ret = register_ftrace_graph(tr->gops);
+@@ -480,6 +480,28 @@ static int graph_trace_init(struct trace_array *tr)
+ 	return 0;
  }
  
-+#ifdef CONFIG_FUNCTION_TRACE_ARGS
-+void print_function_args(struct trace_seq *s, unsigned long *args,
-+			 unsigned long func)
++static int ftrace_graph_trace_args(struct trace_array *tr, int set)
 +{
-+	const struct btf_param *param;
-+	const struct btf_type *t;
-+	const char *param_name;
-+	char name[KSYM_NAME_LEN];
-+	unsigned long arg;
-+	struct btf *btf;
-+	s32 tid, nr = 0;
-+	int i;
++	trace_func_graph_ent_t entry;
 +
-+	trace_seq_printf(s, "(");
++	if (set)
++		entry = trace_graph_entry_args;
++	else
++		entry = trace_graph_entry;
 +
-+	if (!args)
-+		goto out;
-+	if (lookup_symbol_name(func, name))
-+		goto out;
++	/* See if there's any changes */
++	if (tr->gops->entryfunc == entry)
++		return 0;
 +
-+	btf = bpf_get_btf_vmlinux();
-+	if (IS_ERR_OR_NULL(btf))
-+		goto out;
++	unregister_ftrace_graph(tr->gops);
 +
-+	t = btf_find_func_proto(name, &btf);
-+	if (IS_ERR_OR_NULL(t))
-+		goto out;
++	tr->gops->entryfunc = entry;
 +
-+	param = btf_get_func_param(t, &nr);
-+	if (!param)
-+		goto out_put;
-+
-+	for (i = 0; i < nr; i++) {
-+		/* This only prints what the arch allows (6 args by default) */
-+		if (i == FTRACE_REGS_MAX_ARGS) {
-+			trace_seq_puts(s, "...");
-+			break;
-+		}
-+
-+		arg = args[i];
-+
-+		param_name = btf_name_by_offset(btf, param[i].name_off);
-+		if (param_name)
-+			trace_seq_printf(s, "%s=", param_name);
-+		t = btf_type_skip_modifiers(btf, param[i].type, &tid);
-+
-+		switch (t ? BTF_INFO_KIND(t->info) : BTF_KIND_UNKN) {
-+		case BTF_KIND_UNKN:
-+			trace_seq_putc(s, '?');
-+			/* Still print unknown type values */
-+			fallthrough;
-+		case BTF_KIND_PTR:
-+			trace_seq_printf(s, "0x%lx", arg);
-+			break;
-+		case BTF_KIND_INT:
-+			trace_seq_printf(s, "%ld", arg);
-+			break;
-+		case BTF_KIND_ENUM:
-+			trace_seq_printf(s, "%ld", arg);
-+			break;
-+		default:
-+			/* This does not handle complex arguments */
-+			trace_seq_printf(s, "0x%lx (%s)", arg, btf_type_str(t));
-+			break;
-+		}
-+		if (i < nr - 1)
-+			trace_seq_printf(s, ", ");
-+	}
-+out_put:
-+	btf_put(btf);
-+out:
-+	trace_seq_printf(s, ")");
++	/* Make gops functions visible before we start tracing */
++	smp_mb();
++	return register_ftrace_graph(tr->gops);
 +}
-+#endif
 +
- /**
-  * ftrace_find_event - find a registered event
-  * @type: the type of event to look for
-diff --git a/kernel/trace/trace_output.h b/kernel/trace/trace_output.h
-index dca40f1f1da4..2e305364f2a9 100644
---- a/kernel/trace/trace_output.h
-+++ b/kernel/trace/trace_output.h
-@@ -41,5 +41,14 @@ extern struct rw_semaphore trace_event_sem;
- #define SEQ_PUT_HEX_FIELD(s, x)				\
- 	trace_seq_putmem_hex(s, &(x), sizeof(x))
+ static void graph_trace_reset(struct trace_array *tr)
+ {
+ 	tracing_stop_cmdline_record();
+@@ -1609,6 +1631,9 @@ func_graph_set_flag(struct trace_array *tr, u32 old_flags, u32 bit, int set)
+ 	if (bit == TRACE_GRAPH_GRAPH_TIME)
+ 		ftrace_graph_graph_time_control(set);
  
-+#ifdef CONFIG_FUNCTION_TRACE_ARGS
-+void print_function_args(struct trace_seq *s, unsigned long *args,
-+			 unsigned long func);
-+#else
-+static inline void print_function_args(struct trace_seq *s, unsigned long *args,
-+				       unsigned long func) {
-+	trace_seq_puts(s, "()");
-+}
-+#endif
- #endif
++	if (bit == TRACE_GRAPH_ARGS)
++		return ftrace_graph_trace_args(tr, set);
++
+ 	return 0;
+ }
  
 -- 
 2.45.2
