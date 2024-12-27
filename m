@@ -1,26 +1,26 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 274CE1F76BD;
-	Fri, 27 Dec 2024 15:13:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 300AC1F76BE;
+	Fri, 27 Dec 2024 15:13:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735312382; cv=none; b=jmkMLGuCsws0PzTC0qbumx6IWK0QGuE5VWHbqyjW1zV5GZ/PUMB0jto53+ME/zycIOA+jCvABXg8KGubxBrTjyC2qKlzhoKGPztBeA/U8KpNz3MlbBiCFxjvgjtnRZRGXnOI9gIV0blVevpvIKHZijBAj6L3LzQUqcQnOzDmclc=
+	t=1735312382; cv=none; b=rFqf0siN6pOiGEUVm8eosc/0fs0P7ceK7ph5XrFrN7SFwRZjW/mmQ3jJg6Cv9AajE+FKcVdk64n0X+z9NnftRm807ufXZy3ydhKFG79biFtUctfpHfNZNg9EiYHHAXG8+GazQ4kc5AQg58u4LY4UR0mb4MS0a/PHDYKDfd2Ypqc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1735312382; c=relaxed/simple;
-	bh=fpvJn/qg/zJZnNLIZ4p18NHSLfHWXdhJR9BoJO0Vf7g=;
+	bh=aPtLpgomIJk3PDufAe5hfkQYKJZ5CzsaNRZS+4fC+LU=;
 	h=Message-ID:Date:From:To:Cc:Subject:References:MIME-Version:
-	 Content-Type; b=ItCxNKaVTi76rRkOa7yfcvDenBdTO9zcg621ZF6VtHfpKfzGnfQ6zDVto2HZCY0jp8UcQntZHVsTO5NNJYmlBz9lZ1EFCyYykamuHSc1iD3fi7QgUag62+iEN8SRoKlrvpPOinMEgAxteT6L03Pm5BSViAR/T9IkG8OyK/8p57Q=
+	 Content-Type; b=KYFGIDSPbKp38snpPZuw4eizedyv5s2FA2fJ09A8IAOyGlVdDR2+vdaOMdLT1vMtHzM+hJE8+vXCgQg6ZN9t3U8oXTgXiN33AL3rAMRDQrPjdY+Rnr8aRIm9ivxMhZPrOdWH8UeewJbXqADDQ8ulM4veRA5mM43rhf2cIVAxmU4=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1846EC2BCB5;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ACA95C4CED0;
 	Fri, 27 Dec 2024 15:13:01 +0000 (UTC)
 Received: from rostedt by gandalf with local (Exim 4.98)
 	(envelope-from <rostedt@goodmis.org>)
-	id 1tRC2M-0000000GxXO-2Ukh;
-	Fri, 27 Dec 2024 10:14:02 -0500
-Message-ID: <20241227151402.443592487@goodmis.org>
+	id 1tRC2N-0000000GxYw-0QYr;
+	Fri, 27 Dec 2024 10:14:03 -0500
+Message-ID: <20241227151402.958521423@goodmis.org>
 User-Agent: quilt/0.68
-Date: Fri, 27 Dec 2024 10:13:46 -0500
+Date: Fri, 27 Dec 2024 10:13:49 -0500
 From: Steven Rostedt <rostedt@goodmis.org>
 To: linux-kernel@vger.kernel.org
 Cc: Masami Hiramatsu <mhiramat@kernel.org>,
@@ -33,10 +33,8 @@ Cc: Masami Hiramatsu <mhiramat@kernel.org>,
  bpf <bpf@vger.kernel.org>,
  Alexei Starovoitov <ast@kernel.org>,
  Jiri Olsa <jolsa@kernel.org>,
- Alan Maguire <alan.maguire@oracle.com>,
- Sven Schnelle <svens@linux.ibm.com>,
- Heiko Carstens <hca@linux.ibm.com>
-Subject: [for-next][PATCH 11/18] s390/tracing: Enable HAVE_FTRACE_GRAPH_FUNC
+ Alan Maguire <alan.maguire@oracle.com>
+Subject: [for-next][PATCH 14/18] tracing/fprobe: Remove nr_maxactive from fprobe
 References: <20241227151335.898746489@goodmis.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -46,11 +44,10 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 
-From: Sven Schnelle <svens@linux.ibm.com>
+From: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
 
-Add ftrace_graph_func() which is required for fprobe to access registers.
-This also eliminates the need for calling prepare_ftrace_return() from
-ftrace_caller().
+Remove depercated fprobe::nr_maxactive. This involves fprobe events to
+rejects the maxactive number.
 
 Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 Cc: Florent Revest <revest@chromium.org>
@@ -60,149 +57,137 @@ Cc: Alexei Starovoitov <ast@kernel.org>
 Cc: Jiri Olsa <jolsa@kernel.org>
 Cc: Alan Maguire <alan.maguire@oracle.com>
 Cc: Mark Rutland <mark.rutland@arm.com>
-Link: https://lore.kernel.org/173519002875.391279.7060964632119674159.stgit@devnote2
-Signed-off-by: Sven Schnelle <svens@linux.ibm.com>
-Acked-by: Heiko Carstens <hca@linux.ibm.com>
+Link: https://lore.kernel.org/173519007257.391279.946804046982289337.stgit@devnote2
+Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 ---
- arch/s390/Kconfig              |  1 +
- arch/s390/include/asm/ftrace.h |  5 ++++
- arch/s390/kernel/entry.h       |  1 -
- arch/s390/kernel/ftrace.c      | 48 ++++++++++------------------------
- arch/s390/kernel/mcount.S      | 11 --------
- 5 files changed, 20 insertions(+), 46 deletions(-)
+ include/linux/fprobe.h      |  2 --
+ kernel/trace/trace_fprobe.c | 43 ++++++-------------------------------
+ 2 files changed, 6 insertions(+), 39 deletions(-)
 
-diff --git a/arch/s390/Kconfig b/arch/s390/Kconfig
-index d8eee56c10b6..622ea2e9a87e 100644
---- a/arch/s390/Kconfig
-+++ b/arch/s390/Kconfig
-@@ -190,6 +190,7 @@ config S390
- 	select HAVE_EFFICIENT_UNALIGNED_ACCESS
- 	select HAVE_GUP_FAST
- 	select HAVE_FENTRY
-+	select HAVE_FTRACE_GRAPH_FUNC
- 	select HAVE_FTRACE_MCOUNT_RECORD
- 	select HAVE_FUNCTION_ARG_ACCESS_API
- 	select HAVE_FUNCTION_ERROR_INJECTION
-diff --git a/arch/s390/include/asm/ftrace.h b/arch/s390/include/asm/ftrace.h
-index 5b7cb49c41ee..fd3f0fe9f7b3 100644
---- a/arch/s390/include/asm/ftrace.h
-+++ b/arch/s390/include/asm/ftrace.h
-@@ -39,6 +39,7 @@ struct dyn_arch_ftrace { };
+diff --git a/include/linux/fprobe.h b/include/linux/fprobe.h
+index 91337bcb452f..702099f08929 100644
+--- a/include/linux/fprobe.h
++++ b/include/linux/fprobe.h
+@@ -54,7 +54,6 @@ struct fprobe_hlist {
+  * @nmissed: The counter for missing events.
+  * @flags: The status flag.
+  * @entry_data_size: The private data storage size.
+- * @nr_maxactive: The max number of active functions. (*deprecated)
+  * @entry_handler: The callback function for function entry.
+  * @exit_handler: The callback function for function exit.
+  * @hlist_array: The fprobe_hlist for fprobe search from IP hash table.
+@@ -63,7 +62,6 @@ struct fprobe {
+ 	unsigned long		nmissed;
+ 	unsigned int		flags;
+ 	size_t			entry_data_size;
+-	int			nr_maxactive;
  
- struct module;
- struct dyn_ftrace;
-+struct ftrace_ops;
- 
- bool ftrace_need_init_nop(void);
- #define ftrace_need_init_nop ftrace_need_init_nop
-@@ -122,6 +123,10 @@ static inline bool arch_syscall_match_sym_name(const char *sym,
- 	return !strcmp(sym + 7, name) || !strcmp(sym + 8, name);
- }
- 
-+void ftrace_graph_func(unsigned long ip, unsigned long parent_ip,
-+		       struct ftrace_ops *op, struct ftrace_regs *fregs);
-+#define ftrace_graph_func ftrace_graph_func
-+
- #endif /* __ASSEMBLY__ */
- 
- #ifdef CONFIG_FUNCTION_TRACER
-diff --git a/arch/s390/kernel/entry.h b/arch/s390/kernel/entry.h
-index 21969520f947..a1f28879c87e 100644
---- a/arch/s390/kernel/entry.h
-+++ b/arch/s390/kernel/entry.h
-@@ -41,7 +41,6 @@ void do_restart(void *arg);
- void __init startup_init(void);
- void die(struct pt_regs *regs, const char *str);
- int setup_profiling_timer(unsigned int multiplier);
--unsigned long prepare_ftrace_return(unsigned long parent, unsigned long sp, unsigned long ip);
- 
- struct s390_mmap_arg_struct;
- struct fadvise64_64_args;
-diff --git a/arch/s390/kernel/ftrace.c b/arch/s390/kernel/ftrace.c
-index 51439a71e392..c0b2c97efefb 100644
---- a/arch/s390/kernel/ftrace.c
-+++ b/arch/s390/kernel/ftrace.c
-@@ -261,43 +261,23 @@ void ftrace_arch_code_modify_post_process(void)
- }
- 
- #ifdef CONFIG_FUNCTION_GRAPH_TRACER
--/*
-- * Hook the return address and push it in the stack of return addresses
-- * in current thread info.
-- */
--unsigned long prepare_ftrace_return(unsigned long ra, unsigned long sp,
--				    unsigned long ip)
--{
--	if (unlikely(ftrace_graph_is_dead()))
--		goto out;
--	if (unlikely(atomic_read(&current->tracing_graph_pause)))
--		goto out;
--	ip -= MCOUNT_INSN_SIZE;
--	if (!function_graph_enter(ra, ip, 0, (void *) sp))
--		ra = (unsigned long) return_to_handler;
--out:
--	return ra;
--}
--NOKPROBE_SYMBOL(prepare_ftrace_return);
- 
--/*
-- * Patch the kernel code at ftrace_graph_caller location. The instruction
-- * there is branch relative on condition. To enable the ftrace graph code
-- * block, we simply patch the mask field of the instruction to zero and
-- * turn the instruction into a nop.
-- * To disable the ftrace graph code the mask field will be patched to
-- * all ones, which turns the instruction into an unconditional branch.
-- */
--int ftrace_enable_ftrace_graph_caller(void)
-+void ftrace_graph_func(unsigned long ip, unsigned long parent_ip,
-+		       struct ftrace_ops *op, struct ftrace_regs *fregs)
+ 	fprobe_entry_cb entry_handler;
+ 	fprobe_exit_cb  exit_handler;
+diff --git a/kernel/trace/trace_fprobe.c b/kernel/trace/trace_fprobe.c
+index 5030aaae8183..f487fadc2c08 100644
+--- a/kernel/trace/trace_fprobe.c
++++ b/kernel/trace/trace_fprobe.c
+@@ -424,7 +424,6 @@ static struct trace_fprobe *alloc_trace_fprobe(const char *group,
+ 					       const char *symbol,
+ 					       struct tracepoint *tpoint,
+ 					       struct module *mod,
+-					       int maxactive,
+ 					       int nargs, bool is_return)
  {
--	/* Expect brc 0xf,... */
--	return ftrace_patch_branch_mask(ftrace_graph_caller, 0xa7f4, false);
--}
-+	unsigned long *parent = &arch_ftrace_regs(fregs)->regs.gprs[14];
-+	int bit;
+ 	struct trace_fprobe *tf;
+@@ -445,7 +444,6 @@ static struct trace_fprobe *alloc_trace_fprobe(const char *group,
  
--int ftrace_disable_ftrace_graph_caller(void)
--{
--	/* Expect brc 0x0,... */
--	return ftrace_patch_branch_mask(ftrace_graph_caller, 0xa704, true);
-+	if (unlikely(ftrace_graph_is_dead()))
-+		return;
-+	if (unlikely(atomic_read(&current->tracing_graph_pause)))
-+		return;
-+	bit = ftrace_test_recursion_trylock(ip, *parent);
-+	if (bit < 0)
-+		return;
-+	if (!function_graph_enter_regs(*parent, ip, 0, parent, fregs))
-+		*parent = (unsigned long)&return_to_handler;
-+	ftrace_test_recursion_unlock(bit);
- }
+ 	tf->tpoint = tpoint;
+ 	tf->mod = mod;
+-	tf->fp.nr_maxactive = maxactive;
  
- #endif /* CONFIG_FUNCTION_GRAPH_TRACER */
-diff --git a/arch/s390/kernel/mcount.S b/arch/s390/kernel/mcount.S
-index 2b628aa3d809..1fec370fecf4 100644
---- a/arch/s390/kernel/mcount.S
-+++ b/arch/s390/kernel/mcount.S
-@@ -104,17 +104,6 @@ SYM_CODE_START(ftrace_common)
- 	lgr	%r3,%r14
- 	la	%r5,STACK_FREGS(%r15)
- 	BASR_EX	%r14,%r1
--#ifdef CONFIG_FUNCTION_GRAPH_TRACER
--# The j instruction gets runtime patched to a nop instruction.
--# See ftrace_enable_ftrace_graph_caller.
--SYM_INNER_LABEL(ftrace_graph_caller, SYM_L_GLOBAL)
--	j	.Lftrace_graph_caller_end
--	lmg	%r2,%r3,(STACK_FREGS_PTREGS_GPRS+14*8)(%r15)
--	lg	%r4,(STACK_FREGS_PTREGS_PSW+8)(%r15)
--	brasl	%r14,prepare_ftrace_return
--	stg	%r2,(STACK_FREGS_PTREGS_GPRS+14*8)(%r15)
--.Lftrace_graph_caller_end:
--#endif
- 	lg	%r0,(STACK_FREGS_PTREGS_PSW+8)(%r15)
- #ifdef MARCH_HAS_Z196_FEATURES
- 	ltg	%r1,STACK_FREGS_PTREGS_ORIG_GPR2(%r15)
+ 	ret = trace_probe_init(&tf->tp, event, group, false, nargs);
+ 	if (ret < 0)
+@@ -1098,12 +1096,11 @@ static int __trace_fprobe_create(int argc, const char *argv[])
+ 	 *  FETCHARG:TYPE : use TYPE instead of unsigned long.
+ 	 */
+ 	struct trace_fprobe *tf = NULL;
+-	int i, len, new_argc = 0, ret = 0;
++	int i, new_argc = 0, ret = 0;
+ 	bool is_return = false;
+ 	char *symbol = NULL;
+ 	const char *event = NULL, *group = FPROBE_EVENT_SYSTEM;
+ 	const char **new_argv = NULL;
+-	int maxactive = 0;
+ 	char buf[MAX_EVENT_NAME_LEN];
+ 	char gbuf[MAX_EVENT_NAME_LEN];
+ 	char sbuf[KSYM_NAME_LEN];
+@@ -1126,33 +1123,13 @@ static int __trace_fprobe_create(int argc, const char *argv[])
+ 
+ 	trace_probe_log_init("trace_fprobe", argc, argv);
+ 
+-	event = strchr(&argv[0][1], ':');
+-	if (event)
+-		event++;
+-
+-	if (isdigit(argv[0][1])) {
+-		if (event)
+-			len = event - &argv[0][1] - 1;
+-		else
+-			len = strlen(&argv[0][1]);
+-		if (len > MAX_EVENT_NAME_LEN - 1) {
+-			trace_probe_log_err(1, BAD_MAXACT);
+-			goto parse_error;
+-		}
+-		memcpy(buf, &argv[0][1], len);
+-		buf[len] = '\0';
+-		ret = kstrtouint(buf, 0, &maxactive);
+-		if (ret || !maxactive) {
++	if (argv[0][1] != '\0') {
++		if (argv[0][1] != ':') {
++			trace_probe_log_set_index(0);
+ 			trace_probe_log_err(1, BAD_MAXACT);
+ 			goto parse_error;
+ 		}
+-		/* fprobe rethook instances are iterated over via a list. The
+-		 * maximum should stay reasonable.
+-		 */
+-		if (maxactive > RETHOOK_MAXACTIVE_MAX) {
+-			trace_probe_log_err(1, MAXACT_TOO_BIG);
+-			goto parse_error;
+-		}
++		event = &argv[0][2];
+ 	}
+ 
+ 	trace_probe_log_set_index(1);
+@@ -1162,12 +1139,6 @@ static int __trace_fprobe_create(int argc, const char *argv[])
+ 	if (ret < 0)
+ 		goto parse_error;
+ 
+-	if (!is_return && maxactive) {
+-		trace_probe_log_set_index(0);
+-		trace_probe_log_err(1, BAD_MAXACT_TYPE);
+-		goto parse_error;
+-	}
+-
+ 	trace_probe_log_set_index(0);
+ 	if (event) {
+ 		ret = traceprobe_parse_event_name(&event, &group, gbuf,
+@@ -1235,7 +1206,7 @@ static int __trace_fprobe_create(int argc, const char *argv[])
+ 
+ 	/* setup a probe */
+ 	tf = alloc_trace_fprobe(group, event, symbol, tpoint, tp_mod,
+-				maxactive, argc, is_return);
++				argc, is_return);
+ 	if (IS_ERR(tf)) {
+ 		ret = PTR_ERR(tf);
+ 		/* This must return -ENOMEM, else there is a bug */
+@@ -1315,8 +1286,6 @@ static int trace_fprobe_show(struct seq_file *m, struct dyn_event *ev)
+ 		seq_putc(m, 't');
+ 	else
+ 		seq_putc(m, 'f');
+-	if (trace_fprobe_is_return(tf) && tf->fp.nr_maxactive)
+-		seq_printf(m, "%d", tf->fp.nr_maxactive);
+ 	seq_printf(m, ":%s/%s", trace_probe_group_name(&tf->tp),
+ 				trace_probe_name(&tf->tp));
+ 
 -- 
 2.45.2
 
