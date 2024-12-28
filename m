@@ -1,145 +1,92 @@
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+Received: from mout.web.de (mout.web.de [212.227.17.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36C262AE84;
-	Sat, 28 Dec 2024 08:43:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C70BA4D8C8;
+	Sat, 28 Dec 2024 14:48:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735375433; cv=none; b=cF554kor0tSrlsEt5PsyKfAWT2S0FCKv8F/ao9heSbf66IB7gmu6NN5jXyXW3YQMqiqLQ3dEXr20CHPkFDcm/XAGphEdxiqpSsmwX7hXvLODMZI5cz9uUyF+mw0wGSgKqYQrYh3GNBS/Qhwlq2NpbpuFyur74NPk5amqA/efwzs=
+	t=1735397303; cv=none; b=FQklRc2IDffvB3Oa6MKaswxdgbAoDfWmab80AVTLk63/PLeU1HU+OOIBqyji83+RHvdub6N77hVvPwn71EPAGiF2nXhVhYM//09/kO4qUm+aIYsD5zFkHEX+VOxXo/7MDBQcpFTqocy3mI6qWDAqDn0/E6KoYe4jyPWF2ub3pkY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735375433; c=relaxed/simple;
-	bh=yFTZIDT/d9HKSr1VCybVUXBQPCUX/YWCdCVUCfZE2/M=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=piA+naPcVUUOFNWKgqFqWly4WFFso+F8niTcB/h7qQ8/pFP7rxcgmn24P0zbkbC4s9JHZyzutaLTtWYV240jJ3DfOriEvSik6XpRttNnE9ookgSHftp/bedh/wKcPMtheKPGeF7oRqN8pEyxLzPMhFVLK6+b+Qb0x02tg0QgM38=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=Xl1pH8fM; arc=none smtp.client-ip=159.69.126.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
+	s=arc-20240116; t=1735397303; c=relaxed/simple;
+	bh=V9Xf5dQCY2um4+iby1cyctrdcn21UwiCo/Bz8PDcUJw=;
+	h=Message-ID:Date:MIME-Version:To:Cc:References:Subject:From:
+	 In-Reply-To:Content-Type; b=bS/iRVJx3PWkFjJefgWnRXDbb6LGBXTlGd/Fp8pO/9pPOzHS3JbiKCOft578i7yTMqUo4wXtXEUIukqfKGlzoYkuiCPPIUfFW8+/fL1s/mQA3l07aIgSoQCs8+rOJZShP7t7icaIE2eBmnxL1mKQbEc3MijHSevmwPPfV9EcVCs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=kFwOvwp5; arc=none smtp.client-ip=212.227.17.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="Xl1pH8fM"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-	s=mail; t=1735375425;
-	bh=yFTZIDT/d9HKSr1VCybVUXBQPCUX/YWCdCVUCfZE2/M=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=Xl1pH8fMwJkWtxghK0js1fvN2LWVyc5ULtS0ciesFEvCSGFDV3o6XNp5iqtG5kcDo
-	 qOkgzq5oNnUA+HIIYCqMh854PKCnzsAG19g+HM68z3tN7UYrzLuSZ3uQQiM/mEiS9K
-	 ihiUUYZ+Q0TdGEW82PgH5ELbsqoT2H+DIpC8LwgE=
-From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Date: Sat, 28 Dec 2024 09:43:41 +0100
-Subject: [PATCH v2 1/3] sysfs: constify bin_attribute argument of
- sysfs_bin_attr_simple_read()
+	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="kFwOvwp5"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
+	s=s29768273; t=1735397290; x=1736002090; i=markus.elfring@web.de;
+	bh=V9Xf5dQCY2um4+iby1cyctrdcn21UwiCo/Bz8PDcUJw=;
+	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:To:Cc:References:
+	 Subject:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:
+	 cc:content-transfer-encoding:content-type:date:from:message-id:
+	 mime-version:reply-to:subject:to;
+	b=kFwOvwp5IYVl11AcFxEOI6CgXbGpXSjgmED5IIKaCt6AEzDfOpYnzRWn7rskNFOQ
+	 JtF8E3mFPlseuqtY3LFxwUf0/9JnbskTNGquu064DYa6yRqnwV3NzpWPxrwJFk7vZ
+	 k3FZtDNxuKB3aNlpn5opRpX+SQAh5lMnQmbW2SBgEWkjgZEupNAJjX3M5BXjAsVc2
+	 zxJ8/xJfHWzxzoDiLDOwYGQtpuLY51YCusZc0D0W6U6ImbRlmPa2ejViSD0JoPnfl
+	 WPva2E3GZf1vR3cS8wCJrMmyAA6Jdhia1SqcRIz+6NBxGJAGQRcER/mk/+tCCOaO2
+	 j6jU3LqD6D5VuGiQSg==
+X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
+Received: from [192.168.178.21] ([94.31.93.40]) by smtp.web.de (mrweb106
+ [213.165.67.124]) with ESMTPSA (Nemesis) id 1MnG2Q-1ttDLh3LE4-00qZpk; Sat, 28
+ Dec 2024 15:48:09 +0100
+Message-ID: <33a2b169-150b-4015-abce-791da3d1c32b@web.de>
+Date: Sat, 28 Dec 2024 15:48:04 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20241228-sysfs-const-bin_attr-simple-v2-1-7c6f3f1767a3@weissschuh.net>
-References: <20241228-sysfs-const-bin_attr-simple-v2-0-7c6f3f1767a3@weissschuh.net>
-In-Reply-To: <20241228-sysfs-const-bin_attr-simple-v2-0-7c6f3f1767a3@weissschuh.net>
-To: Michael Ellerman <mpe@ellerman.id.au>, 
- Nicholas Piggin <npiggin@gmail.com>, 
- Christophe Leroy <christophe.leroy@csgroup.eu>, 
- Naveen N Rao <naveen@kernel.org>, Madhavan Srinivasan <maddy@linux.ibm.com>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- "Rafael J. Wysocki" <rafael@kernel.org>, 
- Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
- Sami Tolvanen <samitolvanen@google.com>, 
- Daniel Gomez <da.gomez@samsung.com>, Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
- Martin KaFai Lau <martin.lau@linux.dev>, 
- Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, 
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
- Jiri Olsa <jolsa@kernel.org>
-Cc: linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org, 
- linux-modules@vger.kernel.org, bpf@vger.kernel.org, 
- =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1735375424; l=3142;
- i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=yFTZIDT/d9HKSr1VCybVUXBQPCUX/YWCdCVUCfZE2/M=;
- b=Ni8nIBAGjX6qgotF8fSZOwTJVXCzznB2lw/kHPdISFKxwDtDfbonQu5zAuNxSCK4uO/EeMAlU
- JPfsg2Ov3aUDl6ja2Pz8DczKxR2KsqWByNAwSr+CzMkm1Sc7LA+e/uQ
-X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
- pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
+User-Agent: Mozilla Thunderbird
+To: Masami Hiramatsu <mhiramat@kernel.org>,
+ Steven Rostedt <rostedt@goodmis.org>, bpf@vger.kernel.org
+Cc: LKML <linux-kernel@vger.kernel.org>,
+ Alan Maguire <alan.maguire@oracle.com>,
+ Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+ Alexei Starovoitov <ast@kernel.org>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ Florent Revest <revest@chromium.org>, Jiri Olsa <jolsa@kernel.org>,
+ Mark Rutland <mark.rutland@arm.com>, Martin KaFai Lau
+ <martin.lau@linux.dev>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+References: <20241227151403.121602937@goodmis.org>
+Subject: Re: [for-next][PATCH 15/18] selftests: ftrace: Remove obsolate
+ maxactive syntax check
+Content-Language: en-GB
+From: Markus Elfring <Markus.Elfring@web.de>
+In-Reply-To: <20241227151403.121602937@goodmis.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Provags-ID: V03:K1:Y/VZvamizXakc1dyqCoWHqO/CeCIhhBmnwsDBTf/xuXH50NcZXO
+ rlreKJQ4oerAXBWws+DajQIu+rpLdlb/OXfUzRjowos+4AMhCSdcDuZqhprfsRYnwIlvLku
+ n95lNT+JolvAG8ItvlgJS+c27/HEIy6exNX07JlnlHpGj5RWPPtGeDbIBD+S4l/IvG2Pxcy
+ z93pdf+BgkHvY83lCdyAg==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:TeL20CtBgOc=;2UJX3JnW6BxS2G2jN375RxrbRjU
+ 4LI185gUFJ0s0lZYCyAdmiVJUdYdbMJlzfBOJji+aAFdNrfmr0HlYpY0ELQnAbXzHxrvXd9er
+ WWsfMr4f4peLpHGtxPks6fKkA9+FDV+Xf52np0NnoyqqVqO4qxXpDQDvtSfONWBnmTY9tzvlF
+ c19S/WL6Z7Z/xI9c/lWW3y+LkN1hUij7+C+JTiFaZZQ9jUUFQjVt2f/ug8hXzwi67YLWoOy4e
+ hAvPvCF8V6uZE0OFdZRpHU57/vceMslT8s47N1fMKgG5HLTKTo2X36iApKXQ5eQLw48O8aW7k
+ V1kiZ90Dmh2tSeLNdMo9axqO3jj9dggRdOsQenFfe5K3LwN7Z6JgPWCcbkS0wTgtCrixHoHCd
+ XsWSTBqXJ46hFqaH6oKD0ye8SnS7Wfx1HiZKg7BVaeJ4zcS2siGMKiYbHcS5nvkIH4qocKgm3
+ OO7oh07VSdXFd9/FOLoXk4xPt3zfrIAUiBCyODbVdcsZE6+iVgMdjIlCOFkD4DIO6i0hhv52L
+ ASlFq9jVd+oxHIgnhW7Avm7F5/BkAlmF1vPnrGgAaZblQAcRSveiP2ShNgn2BJaOdtFgJ1ipq
+ xmD6YeTThx9+x2aC8ctF40UDK7KNxOBF0kZtOa9RRYZt/lQYSOrGFUP8FrTAtr1QJovtMEibf
+ 8vmB394oAMgu1VOlRHq7ZuRXF5xxGS0llg9WBiZWnRrfMXcXsbVWiM5k2pq96RG7N7tnt0gtP
+ 21YMbYxWxMlmM/gPuOCGCWp5wT5wc4CCP2kKIhrZcpWWBwrliGlq1qRCjYol366XzT3GeGg9H
+ NVw2RBP8F0ujko2hWlGexCoubiha9VTYYtONUBdcm3pty90db4P1wgIar5tpAP6XtG1LRhp2h
+ 5gXVlBpjDCnyGKeyQeCbTqgUV5PJnryDpLftcAYaMyKHnDyzwcupqgmpU8f9f/ZaCptIm9Y/w
+ HIlKuxBgdWK19TO0ozYeIfPihwSvboTJDn1Rga/kkuMAQnlV5ysfW/oSe418bLEumRuLxtxaO
+ G5bP+fSB0jS/GgqmfOApMtw0IyGDFW9tKQnkSMxTRVK3yUlj/K17NCsWGqmtyIlD0/d1a3LlX
+ ZxOZRemHc=
 
-Most users use this function through the BIN_ATTR_SIMPLE* macros,
-they can handle the switch transparently.
-Also adapt the two non-macro users in the same change.
+> Since the fprobe event does not support maxactive anymore, stop
+> testing the maxactive syntax error checking.
 
-Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
----
- arch/powerpc/platforms/powernv/opal.c | 2 +-
- fs/sysfs/file.c                       | 2 +-
- include/linux/sysfs.h                 | 4 ++--
- kernel/module/sysfs.c                 | 2 +-
- 4 files changed, 5 insertions(+), 5 deletions(-)
+Please avoid a typo in the summary phrase.
 
-diff --git a/arch/powerpc/platforms/powernv/opal.c b/arch/powerpc/platforms/powernv/opal.c
-index 5d0f35bb917ebced8c741cd3af2c511949a1d2ef..013637e2b2a8e6a4ec6b93a520f8d5d9d3245467 100644
---- a/arch/powerpc/platforms/powernv/opal.c
-+++ b/arch/powerpc/platforms/powernv/opal.c
-@@ -818,7 +818,7 @@ static int opal_add_one_export(struct kobject *parent, const char *export_name,
- 	sysfs_bin_attr_init(attr);
- 	attr->attr.name = name;
- 	attr->attr.mode = 0400;
--	attr->read = sysfs_bin_attr_simple_read;
-+	attr->read_new = sysfs_bin_attr_simple_read;
- 	attr->private = __va(vals[0]);
- 	attr->size = vals[1];
- 
-diff --git a/fs/sysfs/file.c b/fs/sysfs/file.c
-index 785408861c01c89fc84c787848243a13c1338367..6931308876c4ac3b4c19878d5e1158ad8fe4f16f 100644
---- a/fs/sysfs/file.c
-+++ b/fs/sysfs/file.c
-@@ -817,7 +817,7 @@ EXPORT_SYMBOL_GPL(sysfs_emit_at);
-  * Returns number of bytes written to @buf.
-  */
- ssize_t sysfs_bin_attr_simple_read(struct file *file, struct kobject *kobj,
--				   struct bin_attribute *attr, char *buf,
-+				   const struct bin_attribute *attr, char *buf,
- 				   loff_t off, size_t count)
- {
- 	memcpy(buf, attr->private + off, count);
-diff --git a/include/linux/sysfs.h b/include/linux/sysfs.h
-index 0f2fcd244523f050c5286f19d4fe1846506f9214..2205561159afdb57d0a250bb0439b28c01d9010e 100644
---- a/include/linux/sysfs.h
-+++ b/include/linux/sysfs.h
-@@ -511,7 +511,7 @@ __printf(3, 4)
- int sysfs_emit_at(char *buf, int at, const char *fmt, ...);
- 
- ssize_t sysfs_bin_attr_simple_read(struct file *file, struct kobject *kobj,
--				   struct bin_attribute *attr, char *buf,
-+				   const struct bin_attribute *attr, char *buf,
- 				   loff_t off, size_t count);
- 
- #else /* CONFIG_SYSFS */
-@@ -774,7 +774,7 @@ static inline int sysfs_emit_at(char *buf, int at, const char *fmt, ...)
- 
- static inline ssize_t sysfs_bin_attr_simple_read(struct file *file,
- 						 struct kobject *kobj,
--						 struct bin_attribute *attr,
-+						 const struct bin_attribute *attr,
- 						 char *buf, loff_t off,
- 						 size_t count)
- {
-diff --git a/kernel/module/sysfs.c b/kernel/module/sysfs.c
-index 456358e1fdc43e6b5b24f383bbefa37812971174..254017b58b645d4afcf6876d29bcc2e2113a8dc4 100644
---- a/kernel/module/sysfs.c
-+++ b/kernel/module/sysfs.c
-@@ -196,7 +196,7 @@ static int add_notes_attrs(struct module *mod, const struct load_info *info)
- 			nattr->attr.mode = 0444;
- 			nattr->size = info->sechdrs[i].sh_size;
- 			nattr->private = (void *)info->sechdrs[i].sh_addr;
--			nattr->read = sysfs_bin_attr_simple_read;
-+			nattr->read_new = sysfs_bin_attr_simple_read;
- 			++nattr;
- 		}
- 		++loaded;
-
--- 
-2.47.1
-
+Regards,
+Markus
