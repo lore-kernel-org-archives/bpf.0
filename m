@@ -1,1090 +1,155 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 190111DF27A;
-	Mon,  6 Jan 2025 16:17:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD5F3148316
+	for <bpf@vger.kernel.org>; Mon,  6 Jan 2025 16:19:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736180242; cv=none; b=t6s/fQsUCzUhUJRQRPF0T3P7cCP0hlrbpc5WNhnmINjC0yFZJtSih0Hq9uhCZlE2RP93sIxidJEgcssexTux9ZsTL8zGgsnSuqP8NmhNXG5gvm9zqsjGyEZNlWsUW+F35K1GOcVYCR0+MyqyB7k2+Fv/PHy0VaG9P7e3wAd+ta0=
+	t=1736180368; cv=none; b=gfKAkvPs2R4xbMZY8sxBoKz7X3bao/QGYrcCIdDV2SmCnOdNtZjeCym8fScQ3Z1gSWujMcd9jx6tC2ADg0nFg+ipOUyhOsSgVbYvBzRlgp6zSyMQvovad5dZDL9OV5r3EKNuAkGZkLxwtilYieP5hfoo4rUssSQDAV3oKZQm5sU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736180242; c=relaxed/simple;
-	bh=zSO4iq9bPGe80Qi1eFMaS8i47nQmUhTJpDrsNhVn09Q=;
-	h=Message-ID:Date:From:To:Cc:Subject:References:MIME-Version:
-	 Content-Type; b=fsOkMNkI/kHL3T16tRPcCarjpcUpVBuBkN/z8Usyb3IvRzUjjhjq530SxUf5PwXjb+Y8HUCgYiqQ/iUbf7FCWgNSQt+HAc2zKC603p+Ab5QdgHfJCqrVno+axNyzmbQ8kdFJFDqwkAggwwN7iKaSuXvHT0umQ5hyDizxl9I9VNI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F347C4CED2;
-	Mon,  6 Jan 2025 16:17:21 +0000 (UTC)
-Received: from rostedt by gandalf with local (Exim 4.98)
-	(envelope-from <rostedt@goodmis.org>)
-	id 1tUpoW-00000009J5I-0nCs;
-	Mon, 06 Jan 2025 11:18:48 -0500
-Message-ID: <20250106161848.037329500@goodmis.org>
-User-Agent: quilt/0.68
-Date: Mon, 06 Jan 2025 11:17:39 -0500
-From: Steven Rostedt <rostedt@goodmis.org>
-To: linux-kernel@vger.kernel.org
-Cc: Masami Hiramatsu <mhiramat@kernel.org>,
- Mark Rutland <mark.rutland@arm.com>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Andrew Morton <akpm@linux-foundation.org>,
- bpf <bpf@vger.kernel.org>,
- Peter Zijlstra <peterz@infradead.org>,
- Linus Torvalds <torvalds@linux-foundation.org>,
- Masahiro Yamada <masahiroy@kernel.org>,
- Nathan Chancellor <nathan@kernel.org>,
- Nicolas Schier <nicolas@fjasle.eu>,
- Zheng Yejian <zhengyejian1@huawei.com>,
- Martin  Kelly <martin.kelly@crowdstrike.com>,
- Christophe Leroy <christophe.leroy@csgroup.eu>,
- Josh Poimboeuf <jpoimboe@redhat.com>
-Subject: [for-next][PATCH 13/14] scripts/sorttable: Move code from sorttable.h into sorttable.c
-References: <20250106161726.131794583@goodmis.org>
+	s=arc-20240116; t=1736180368; c=relaxed/simple;
+	bh=EeDQ4RNOtH3K6faNsiclo3sW9GHA0bFobaDmyktUK/s=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=WuV98BbxmgqQmri5mD79fVUY8BJ0Vyq9PkNocrwiRvcRWazIhb33GD5z8helbS7WMqW44j40mxdvQ6nY9UlJQEnzAaEYKP6Q0Uo2i83sl04EjKBiz5SG6t6hNSk3GmhHGPYX++UWAmG+8pa+xJ8MbpkB18GBUA6jH4/mVCgTSIk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=ado/jRdy; arc=none smtp.client-ip=213.133.104.62
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="ado/jRdy"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=uurdLwiYxeGfKFzCjTXYYNVPJvKCw1qvrF34bjdacrM=; b=ado/jRdytkskMGkViygoOaNJJW
+	WrjAGG4vmRTiiVvirXVOlRxYhOl14sMtG8fO8qZB1MTddBNMdWSzQlHqpQUiGBztO9E3ifAGacj69
+	m7DpPXRN5HUNR5A/qQIw50PRfmgLDHmOW8nHIZls+rnPBqsaq+La392roidk9tusDXtlMoIDHYHgf
+	DTKEt7IEpETayaWmtvLYH9xk0oAVMTZqn26NCI8hgcxYm96OpLToKXMXdK/JrE98ZNQWkRpNJk2a0
+	uyTrGl4rxf1XGJXQxNNT41fbtivIry8rLFeik1WFsqs+emilix4iznX9l2ethzCNS+LJOnxaH4mUh
+	fb6vDk6g==;
+Received: from sslproxy03.your-server.de ([88.198.220.132])
+	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1tUpp5-0009VB-3X; Mon, 06 Jan 2025 17:19:23 +0100
+Received: from [178.197.248.26] (helo=[192.168.1.114])
+	by sslproxy03.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1tUpp4-000IvY-2F;
+	Mon, 06 Jan 2025 17:19:22 +0100
+Message-ID: <28acb589-6632-4250-a8ca-00eacda03305@iogearbox.net>
+Date: Mon, 6 Jan 2025 17:19:22 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next 0/4] expose number of map entries to userspace
+To: Charalampos Stylianopoulos <charalampos.stylianopoulos@gmail.com>,
+ bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>, Nick Zavaritsky <mejedi@gmail.com>,
+ aspsk2@gmail.com
+References: <20250106145328.399610-1-charalampos.stylianopoulos@gmail.com>
+Content-Language: en-US
+From: Daniel Borkmann <daniel@iogearbox.net>
+Autocrypt: addr=daniel@iogearbox.net; keydata=
+ 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
+In-Reply-To: <20250106145328.399610-1-charalampos.stylianopoulos@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 1.0.7/27510/Mon Jan  6 10:45:39 2025)
 
-From: Steven Rostedt <rostedt@goodmis.org>
+On 1/6/25 3:53 PM, Charalampos Stylianopoulos wrote:
+> This patch series provides an easy way for userspace applications to
+> query the number of entries currently present in a map.
+> 
+> Currently, the number of entries in a map is accessible only from kernel space
+> and eBPF programs. A userspace program that wants to track map utilization has to
+> create and attach an eBPF program solely for that purpose.
+> 
+> This series makes the number of entries in a map easily accessible, by extending the
+> main bpf syscall with a new command. The command supports only maps that already
+> track utilization, namely hash maps, LPM maps and queue/stack maps.
 
-Instead of having the main code live in a header file and included twice
-with MACROs that define the Elf structures for 64 bit or 32 bit, move the
-code in the C file now that the Elf structures are defined in a union that
-has both. All accesses to the Elf structure fields are done through helper
-function pointers. If the file being parsed if for a 64 bit architecture,
-all the helper functions point to the 64 bit versions to retrieve the Elf
-fields. The same is true if the architecture is 32 bit, where the function
-pointers will point to the 32 bit helper functions.
+An earlier attempt to directly expose it to user space can be found here [0], which
+eventually led to [1] to only expose it via kfunc for BPF programs in order to avoid
+extending UAPI.
 
-Note, when the value of a field can be either 32 bit or 64 bit, a 64 bit
-is always returned, as it works for the 32 bit code as well.
+Perhaps instead add a small libbpf helper (e.g. bpf_map__current_entries to complement
+bpf_map__max_entries) which does all the work to extract that info via [1] underneath?
 
-This makes the code easier to read and maintain, and it now all exists in
-sorttable.c and sorttable.h may be removed.
+Thanks,
+Daniel
 
-Cc: bpf <bpf@vger.kernel.org>
-Cc: Masami Hiramatsu <mhiramat@kernel.org>
-Cc: Mark Rutland <mark.rutland@arm.com>
-Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Masahiro Yamada <masahiroy@kernel.org>
-Cc: Nathan Chancellor <nathan@kernel.org>
-Cc: Nicolas Schier <nicolas@fjasle.eu>
-Cc: Zheng Yejian <zhengyejian1@huawei.com>
-Cc: Martin  Kelly <martin.kelly@crowdstrike.com>
-Cc: Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc: Josh Poimboeuf <jpoimboe@redhat.com>
-Link: https://lore.kernel.org/20250105162346.576750146@goodmis.org
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
----
- scripts/sorttable.c | 470 ++++++++++++++++++++++++++++++++++++++++--
- scripts/sorttable.h | 482 --------------------------------------------
- 2 files changed, 457 insertions(+), 495 deletions(-)
- delete mode 100644 scripts/sorttable.h
+   [0] https://lore.kernel.org/bpf/20230531110511.64612-1-aspsk@isovalent.com/
+   [1] https://lore.kernel.org/bpf/20230705160139.19967-1-aspsk@isovalent.com/
+       https://lore.kernel.org/bpf/20230719092952.41202-1-aspsk@isovalent.com/
 
-diff --git a/scripts/sorttable.c b/scripts/sorttable.c
-index 20615de18276..b9d9eb6f01f1 100644
---- a/scripts/sorttable.c
-+++ b/scripts/sorttable.c
-@@ -327,10 +327,420 @@ static inline void *get_index(void *start, int entsize, int index)
- 	return start + (entsize * index);
- }
- 
--/* 32 bit and 64 bit are very similar */
--#include "sorttable.h"
--#define SORTTABLE_64
--#include "sorttable.h"
-+
-+static int (*compare_extable)(const void *a, const void *b);
-+static uint64_t (*ehdr_shoff)(Elf_Ehdr *ehdr);
-+static uint16_t (*ehdr_shstrndx)(Elf_Ehdr *ehdr);
-+static uint16_t (*ehdr_shentsize)(Elf_Ehdr *ehdr);
-+static uint16_t (*ehdr_shnum)(Elf_Ehdr *ehdr);
-+static uint64_t (*shdr_addr)(Elf_Shdr *shdr);
-+static uint64_t (*shdr_offset)(Elf_Shdr *shdr);
-+static uint64_t (*shdr_size)(Elf_Shdr *shdr);
-+static uint64_t (*shdr_entsize)(Elf_Shdr *shdr);
-+static uint32_t (*shdr_link)(Elf_Shdr *shdr);
-+static uint32_t (*shdr_name)(Elf_Shdr *shdr);
-+static uint32_t (*shdr_type)(Elf_Shdr *shdr);
-+static uint8_t (*sym_type)(Elf_Sym *sym);
-+static uint32_t (*sym_name)(Elf_Sym *sym);
-+static uint64_t (*sym_value)(Elf_Sym *sym);
-+static uint16_t (*sym_shndx)(Elf_Sym *sym);
-+
-+static int extable_ent_size;
-+static int long_size;
-+
-+
-+#ifdef UNWINDER_ORC_ENABLED
-+/* ORC unwinder only support X86_64 */
-+#include <asm/orc_types.h>
-+
-+#define ERRSTR_MAXSZ	256
-+
-+static char g_err[ERRSTR_MAXSZ];
-+static int *g_orc_ip_table;
-+static struct orc_entry *g_orc_table;
-+
-+static pthread_t orc_sort_thread;
-+
-+static inline unsigned long orc_ip(const int *ip)
-+{
-+	return (unsigned long)ip + *ip;
-+}
-+
-+static int orc_sort_cmp(const void *_a, const void *_b)
-+{
-+	struct orc_entry *orc_a;
-+	const int *a = g_orc_ip_table + *(int *)_a;
-+	const int *b = g_orc_ip_table + *(int *)_b;
-+	unsigned long a_val = orc_ip(a);
-+	unsigned long b_val = orc_ip(b);
-+
-+	if (a_val > b_val)
-+		return 1;
-+	if (a_val < b_val)
-+		return -1;
-+
-+	/*
-+	 * The "weak" section terminator entries need to always be on the left
-+	 * to ensure the lookup code skips them in favor of real entries.
-+	 * These terminator entries exist to handle any gaps created by
-+	 * whitelisted .o files which didn't get objtool generation.
-+	 */
-+	orc_a = g_orc_table + (a - g_orc_ip_table);
-+	return orc_a->type == ORC_TYPE_UNDEFINED ? -1 : 1;
-+}
-+
-+static void *sort_orctable(void *arg)
-+{
-+	int i;
-+	int *idxs = NULL;
-+	int *tmp_orc_ip_table = NULL;
-+	struct orc_entry *tmp_orc_table = NULL;
-+	unsigned int *orc_ip_size = (unsigned int *)arg;
-+	unsigned int num_entries = *orc_ip_size / sizeof(int);
-+	unsigned int orc_size = num_entries * sizeof(struct orc_entry);
-+
-+	idxs = (int *)malloc(*orc_ip_size);
-+	if (!idxs) {
-+		snprintf(g_err, ERRSTR_MAXSZ, "malloc idxs: %s",
-+			 strerror(errno));
-+		pthread_exit(g_err);
-+	}
-+
-+	tmp_orc_ip_table = (int *)malloc(*orc_ip_size);
-+	if (!tmp_orc_ip_table) {
-+		snprintf(g_err, ERRSTR_MAXSZ, "malloc tmp_orc_ip_table: %s",
-+			 strerror(errno));
-+		pthread_exit(g_err);
-+	}
-+
-+	tmp_orc_table = (struct orc_entry *)malloc(orc_size);
-+	if (!tmp_orc_table) {
-+		snprintf(g_err, ERRSTR_MAXSZ, "malloc tmp_orc_table: %s",
-+			 strerror(errno));
-+		pthread_exit(g_err);
-+	}
-+
-+	/* initialize indices array, convert ip_table to absolute address */
-+	for (i = 0; i < num_entries; i++) {
-+		idxs[i] = i;
-+		tmp_orc_ip_table[i] = g_orc_ip_table[i] + i * sizeof(int);
-+	}
-+	memcpy(tmp_orc_table, g_orc_table, orc_size);
-+
-+	qsort(idxs, num_entries, sizeof(int), orc_sort_cmp);
-+
-+	for (i = 0; i < num_entries; i++) {
-+		if (idxs[i] == i)
-+			continue;
-+
-+		/* convert back to relative address */
-+		g_orc_ip_table[i] = tmp_orc_ip_table[idxs[i]] - i * sizeof(int);
-+		g_orc_table[i] = tmp_orc_table[idxs[i]];
-+	}
-+
-+	free(idxs);
-+	free(tmp_orc_ip_table);
-+	free(tmp_orc_table);
-+	pthread_exit(NULL);
-+}
-+#endif
-+
-+#ifdef MCOUNT_SORT_ENABLED
-+static pthread_t mcount_sort_thread;
-+
-+struct elf_mcount_loc {
-+	Elf_Ehdr *ehdr;
-+	Elf_Shdr *init_data_sec;
-+	uint64_t start_mcount_loc;
-+	uint64_t stop_mcount_loc;
-+};
-+
-+/* Sort the addresses stored between __start_mcount_loc to __stop_mcount_loc in vmlinux */
-+static void *sort_mcount_loc(void *arg)
-+{
-+	struct elf_mcount_loc *emloc = (struct elf_mcount_loc *)arg;
-+	uint64_t offset = emloc->start_mcount_loc - shdr_addr(emloc->init_data_sec)
-+					+ shdr_offset(emloc->init_data_sec);
-+	uint64_t count = emloc->stop_mcount_loc - emloc->start_mcount_loc;
-+	unsigned char *start_loc = (void *)emloc->ehdr + offset;
-+
-+	qsort(start_loc, count/long_size, long_size, compare_extable);
-+	return NULL;
-+}
-+
-+/* Get the address of __start_mcount_loc and __stop_mcount_loc in System.map */
-+static void get_mcount_loc(uint64_t *_start, uint64_t *_stop)
-+{
-+	FILE *file_start, *file_stop;
-+	char start_buff[20];
-+	char stop_buff[20];
-+	int len = 0;
-+
-+	file_start = popen(" grep start_mcount System.map | awk '{print $1}' ", "r");
-+	if (!file_start) {
-+		fprintf(stderr, "get start_mcount_loc error!");
-+		return;
-+	}
-+
-+	file_stop = popen(" grep stop_mcount System.map | awk '{print $1}' ", "r");
-+	if (!file_stop) {
-+		fprintf(stderr, "get stop_mcount_loc error!");
-+		pclose(file_start);
-+		return;
-+	}
-+
-+	while (fgets(start_buff, sizeof(start_buff), file_start) != NULL) {
-+		len = strlen(start_buff);
-+		start_buff[len - 1] = '\0';
-+	}
-+	*_start = strtoul(start_buff, NULL, 16);
-+
-+	while (fgets(stop_buff, sizeof(stop_buff), file_stop) != NULL) {
-+		len = strlen(stop_buff);
-+		stop_buff[len - 1] = '\0';
-+	}
-+	*_stop = strtoul(stop_buff, NULL, 16);
-+
-+	pclose(file_start);
-+	pclose(file_stop);
-+}
-+#endif
-+static int do_sort(Elf_Ehdr *ehdr,
-+		   char const *const fname,
-+		   table_sort_t custom_sort)
-+{
-+	int rc = -1;
-+	Elf_Shdr *shdr_start;
-+	Elf_Shdr *strtab_sec = NULL;
-+	Elf_Shdr *symtab_sec = NULL;
-+	Elf_Shdr *extab_sec = NULL;
-+	Elf_Shdr *string_sec;
-+	Elf_Sym *sym;
-+	const Elf_Sym *symtab;
-+	Elf32_Word *symtab_shndx = NULL;
-+	Elf_Sym *sort_needed_sym = NULL;
-+	Elf_Shdr *sort_needed_sec;
-+	uint32_t *sort_needed_loc;
-+	void *sym_start;
-+	void *sym_end;
-+	const char *secstrings;
-+	const char *strtab;
-+	char *extab_image;
-+	int sort_need_index;
-+	int symentsize;
-+	int shentsize;
-+	int idx;
-+	int i;
-+	unsigned int shnum;
-+	unsigned int shstrndx;
-+#ifdef MCOUNT_SORT_ENABLED
-+	struct elf_mcount_loc mstruct = {0};
-+	uint64_t _start_mcount_loc = 0;
-+	uint64_t _stop_mcount_loc = 0;
-+#endif
-+#ifdef UNWINDER_ORC_ENABLED
-+	unsigned int orc_ip_size = 0;
-+	unsigned int orc_size = 0;
-+	unsigned int orc_num_entries = 0;
-+#endif
-+
-+	shdr_start = (Elf_Shdr *)((char *)ehdr + ehdr_shoff(ehdr));
-+	shentsize = ehdr_shentsize(ehdr);
-+
-+	shstrndx = ehdr_shstrndx(ehdr);
-+	if (shstrndx == SHN_XINDEX)
-+		shstrndx = shdr_link(shdr_start);
-+	string_sec = get_index(shdr_start, shentsize, shstrndx);
-+	secstrings = (const char *)ehdr + shdr_offset(string_sec);
-+
-+	shnum = ehdr_shnum(ehdr);
-+	if (shnum == SHN_UNDEF)
-+		shnum = shdr_size(shdr_start);
-+
-+	for (i = 0; i < shnum; i++) {
-+		Elf_Shdr *shdr = get_index(shdr_start, shentsize, i);
-+
-+		idx = shdr_name(shdr);
-+		if (!strcmp(secstrings + idx, "__ex_table"))
-+			extab_sec = shdr;
-+		if (!strcmp(secstrings + idx, ".symtab"))
-+			symtab_sec = shdr;
-+		if (!strcmp(secstrings + idx, ".strtab"))
-+			strtab_sec = shdr;
-+
-+		if (shdr_type(shdr) == SHT_SYMTAB_SHNDX)
-+			symtab_shndx = (Elf32_Word *)((const char *)ehdr +
-+						      shdr_offset(shdr));
-+
-+#ifdef MCOUNT_SORT_ENABLED
-+		/* locate the .init.data section in vmlinux */
-+		if (!strcmp(secstrings + idx, ".init.data")) {
-+			get_mcount_loc(&_start_mcount_loc, &_stop_mcount_loc);
-+			mstruct.ehdr = ehdr;
-+			mstruct.init_data_sec = shdr;
-+			mstruct.start_mcount_loc = _start_mcount_loc;
-+			mstruct.stop_mcount_loc = _stop_mcount_loc;
-+		}
-+#endif
-+
-+#ifdef UNWINDER_ORC_ENABLED
-+		/* locate the ORC unwind tables */
-+		if (!strcmp(secstrings + idx, ".orc_unwind_ip")) {
-+			orc_ip_size = shdr_size(shdr);
-+			g_orc_ip_table = (int *)((void *)ehdr +
-+						   shdr_offset(shdr));
-+		}
-+		if (!strcmp(secstrings + idx, ".orc_unwind")) {
-+			orc_size = shdr_size(shdr);
-+			g_orc_table = (struct orc_entry *)((void *)ehdr +
-+							     shdr_offset(shdr));
-+		}
-+#endif
-+	} /* for loop */
-+
-+#ifdef UNWINDER_ORC_ENABLED
-+	if (!g_orc_ip_table || !g_orc_table) {
-+		fprintf(stderr,
-+			"incomplete ORC unwind tables in file: %s\n", fname);
-+		goto out;
-+	}
-+
-+	orc_num_entries = orc_ip_size / sizeof(int);
-+	if (orc_ip_size % sizeof(int) != 0 ||
-+	    orc_size % sizeof(struct orc_entry) != 0 ||
-+	    orc_num_entries != orc_size / sizeof(struct orc_entry)) {
-+		fprintf(stderr,
-+			"inconsistent ORC unwind table entries in file: %s\n",
-+			fname);
-+		goto out;
-+	}
-+
-+	/* create thread to sort ORC unwind tables concurrently */
-+	if (pthread_create(&orc_sort_thread, NULL,
-+			   sort_orctable, &orc_ip_size)) {
-+		fprintf(stderr,
-+			"pthread_create orc_sort_thread failed '%s': %s\n",
-+			strerror(errno), fname);
-+		goto out;
-+	}
-+#endif
-+
-+#ifdef MCOUNT_SORT_ENABLED
-+	if (!mstruct.init_data_sec || !_start_mcount_loc || !_stop_mcount_loc) {
-+		fprintf(stderr,
-+			"incomplete mcount's sort in file: %s\n",
-+			fname);
-+		goto out;
-+	}
-+
-+	/* create thread to sort mcount_loc concurrently */
-+	if (pthread_create(&mcount_sort_thread, NULL, &sort_mcount_loc, &mstruct)) {
-+		fprintf(stderr,
-+			"pthread_create mcount_sort_thread failed '%s': %s\n",
-+			strerror(errno), fname);
-+		goto out;
-+	}
-+#endif
-+	if (!extab_sec) {
-+		fprintf(stderr,	"no __ex_table in file: %s\n", fname);
-+		goto out;
-+	}
-+
-+	if (!symtab_sec) {
-+		fprintf(stderr,	"no .symtab in file: %s\n", fname);
-+		goto out;
-+	}
-+
-+	if (!strtab_sec) {
-+		fprintf(stderr,	"no .strtab in file: %s\n", fname);
-+		goto out;
-+	}
-+
-+	extab_image = (void *)ehdr + shdr_offset(extab_sec);
-+	strtab = (const char *)ehdr + shdr_offset(strtab_sec);
-+	symtab = (const Elf_Sym *)((const char *)ehdr + shdr_offset(symtab_sec));
-+
-+	if (custom_sort) {
-+		custom_sort(extab_image, shdr_size(extab_sec));
-+	} else {
-+		int num_entries = shdr_size(extab_sec) / extable_ent_size;
-+		qsort(extab_image, num_entries,
-+		      extable_ent_size, compare_extable);
-+	}
-+
-+	/* find the flag main_extable_sort_needed */
-+	sym_start = (void *)ehdr + shdr_offset(symtab_sec);
-+	sym_end = sym_start + shdr_size(symtab_sec);
-+	symentsize = shdr_entsize(symtab_sec);
-+
-+	for (sym = sym_start; (void *)sym + symentsize < sym_end;
-+	     sym = (void *)sym + symentsize) {
-+		if (sym_type(sym) != STT_OBJECT)
-+			continue;
-+		if (!strcmp(strtab + sym_name(sym),
-+			    "main_extable_sort_needed")) {
-+			sort_needed_sym = sym;
-+			break;
-+		}
-+	}
-+
-+	if (!sort_needed_sym) {
-+		fprintf(stderr,
-+			"no main_extable_sort_needed symbol in file: %s\n",
-+			fname);
-+		goto out;
-+	}
-+
-+	sort_need_index = get_secindex(sym_shndx(sym),
-+				       ((void *)sort_needed_sym - (void *)symtab) / symentsize,
-+				       symtab_shndx);
-+	sort_needed_sec = get_index(shdr_start, shentsize, sort_need_index);
-+	sort_needed_loc = (void *)ehdr +
-+		shdr_offset(sort_needed_sec) +
-+		sym_value(sort_needed_sym) - shdr_addr(sort_needed_sec);
-+
-+	/* extable has been sorted, clear the flag */
-+	w(0, sort_needed_loc);
-+	rc = 0;
-+
-+out:
-+#ifdef UNWINDER_ORC_ENABLED
-+	if (orc_sort_thread) {
-+		void *retval = NULL;
-+		/* wait for ORC tables sort done */
-+		rc = pthread_join(orc_sort_thread, &retval);
-+		if (rc) {
-+			fprintf(stderr,
-+				"pthread_join failed '%s': %s\n",
-+				strerror(errno), fname);
-+		} else if (retval) {
-+			rc = -1;
-+			fprintf(stderr,
-+				"failed to sort ORC tables '%s': %s\n",
-+				(char *)retval, fname);
-+		}
-+	}
-+#endif
-+
-+#ifdef MCOUNT_SORT_ENABLED
-+	if (mcount_sort_thread) {
-+		void *retval = NULL;
-+		/* wait for mcount sort done */
-+		rc = pthread_join(mcount_sort_thread, &retval);
-+		if (rc) {
-+			fprintf(stderr,
-+				"pthread_join failed '%s': %s\n",
-+				strerror(errno), fname);
-+		} else if (retval) {
-+			rc = -1;
-+			fprintf(stderr,
-+				"failed to sort mcount '%s': %s\n",
-+				(char *)retval, fname);
-+		}
-+	}
-+#endif
-+	return rc;
-+}
- 
- static int compare_relative_table(const void *a, const void *b)
- {
-@@ -399,7 +809,6 @@ static void sort_relative_table_with_data(char *extab_image, int image_size)
- 
- static int do_file(char const *const fname, void *addr)
- {
--	int rc = -1;
- 	Elf_Ehdr *ehdr = addr;
- 	table_sort_t custom_sort = NULL;
- 
-@@ -462,29 +871,64 @@ static int do_file(char const *const fname, void *addr)
- 		    r2(&ehdr->e32.e_shentsize) != sizeof(Elf32_Shdr)) {
- 			fprintf(stderr,
- 				"unrecognized ET_EXEC/ET_DYN file: %s\n", fname);
--			break;
-+			return -1;
- 		}
--		rc = do_sort_32(ehdr, fname, custom_sort);
-+
-+		compare_extable		= compare_extable_32;
-+		ehdr_shoff		= ehdr32_shoff;
-+		ehdr_shentsize		= ehdr32_shentsize;
-+		ehdr_shstrndx		= ehdr32_shstrndx;
-+		ehdr_shnum		= ehdr32_shnum;
-+		shdr_addr		= shdr32_addr;
-+		shdr_offset		= shdr32_offset;
-+		shdr_link		= shdr32_link;
-+		shdr_size		= shdr32_size;
-+		shdr_name		= shdr32_name;
-+		shdr_type		= shdr32_type;
-+		shdr_entsize		= shdr32_entsize;
-+		sym_type		= sym32_type;
-+		sym_name		= sym32_name;
-+		sym_value		= sym32_value;
-+		sym_shndx		= sym32_shndx;
-+		long_size		= 4;
-+		extable_ent_size	= 8;
- 		break;
- 	case ELFCLASS64:
--		{
- 		if (r2(&ehdr->e64.e_ehsize) != sizeof(Elf64_Ehdr) ||
- 		    r2(&ehdr->e64.e_shentsize) != sizeof(Elf64_Shdr)) {
- 			fprintf(stderr,
- 				"unrecognized ET_EXEC/ET_DYN file: %s\n",
- 				fname);
--			break;
--		}
--		rc = do_sort_64(ehdr, fname, custom_sort);
-+			return -1;
- 		}
-+
-+		compare_extable		= compare_extable_64;
-+		ehdr_shoff		= ehdr64_shoff;
-+		ehdr_shentsize		= ehdr64_shentsize;
-+		ehdr_shstrndx		= ehdr64_shstrndx;
-+		ehdr_shnum		= ehdr64_shnum;
-+		shdr_addr		= shdr64_addr;
-+		shdr_offset		= shdr64_offset;
-+		shdr_link		= shdr64_link;
-+		shdr_size		= shdr64_size;
-+		shdr_name		= shdr64_name;
-+		shdr_type		= shdr64_type;
-+		shdr_entsize		= shdr64_entsize;
-+		sym_type		= sym64_type;
-+		sym_name		= sym64_name;
-+		sym_value		= sym64_value;
-+		sym_shndx		= sym64_shndx;
-+		long_size		= 8;
-+		extable_ent_size	= 16;
-+
- 		break;
- 	default:
- 		fprintf(stderr, "unrecognized ELF class %d %s\n",
- 			ehdr->e32.e_ident[EI_CLASS], fname);
--		break;
-+		return -1;
- 	}
- 
--	return rc;
-+	return do_sort(ehdr, fname, custom_sort);
- }
- 
- int main(int argc, char *argv[])
-diff --git a/scripts/sorttable.h b/scripts/sorttable.h
-deleted file mode 100644
-index b9c0716ee72c..000000000000
---- a/scripts/sorttable.h
-+++ /dev/null
-@@ -1,482 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0-only */
--/*
-- * sorttable.h
-- *
-- * Added ORC unwind tables sort support and other updates:
-- * Copyright (C) 1999-2019 Alibaba Group Holding Limited. by:
-- * Shile Zhang <shile.zhang@linux.alibaba.com>
-- *
-- * Copyright 2011 - 2012 Cavium, Inc.
-- *
-- * Some of code was taken out of arch/x86/kernel/unwind_orc.c, written by:
-- * Copyright (C) 2017 Josh Poimboeuf <jpoimboe@redhat.com>
-- *
-- * Some of this code was taken out of recordmcount.h written by:
-- *
-- * Copyright 2009 John F. Reiser <jreiser@BitWagon.com>. All rights reserved.
-- * Copyright 2010 Steven Rostedt <srostedt@redhat.com>, Red Hat Inc.
-- */
--
--#undef extable_ent_size
--#undef compare_extable
--#undef get_mcount_loc
--#undef sort_mcount_loc
--#undef elf_mcount_loc
--#undef do_sort
--#undef ehdr_shoff
--#undef ehdr_shentsize
--#undef ehdr_shstrndx
--#undef ehdr_shnum
--#undef shdr_addr
--#undef shdr_offset
--#undef shdr_link
--#undef shdr_size
--#undef shdr_name
--#undef shdr_type
--#undef shdr_entsize
--#undef sym_type
--#undef sym_name
--#undef sym_value
--#undef sym_shndx
--#undef long_size
--
--#ifdef SORTTABLE_64
--# define extable_ent_size	16
--# define compare_extable	compare_extable_64
--# define get_mcount_loc		get_mcount_loc_64
--# define sort_mcount_loc	sort_mcount_loc_64
--# define elf_mcount_loc		elf_mcount_loc_64
--# define do_sort		do_sort_64
--# define ehdr_shoff		ehdr64_shoff
--# define ehdr_shentsize		ehdr64_shentsize
--# define ehdr_shstrndx		ehdr64_shstrndx
--# define ehdr_shnum		ehdr64_shnum
--# define shdr_addr		shdr64_addr
--# define shdr_offset		shdr64_offset
--# define shdr_link		shdr64_link
--# define shdr_size		shdr64_size
--# define shdr_name		shdr64_name
--# define shdr_type		shdr64_type
--# define shdr_entsize		shdr64_entsize
--# define sym_type		sym64_type
--# define sym_name		sym64_name
--# define sym_value		sym64_value
--# define sym_shndx		sym64_shndx
--# define long_size		8
--#else
--# define extable_ent_size	8
--# define compare_extable	compare_extable_32
--# define get_mcount_loc		get_mcount_loc_32
--# define sort_mcount_loc	sort_mcount_loc_32
--# define elf_mcount_loc		elf_mcount_loc_32
--# define do_sort		do_sort_32
--# define ehdr_shoff		ehdr32_shoff
--# define ehdr_shentsize		ehdr32_shentsize
--# define ehdr_shstrndx		ehdr32_shstrndx
--# define ehdr_shnum		ehdr32_shnum
--# define shdr_addr		shdr32_addr
--# define shdr_offset		shdr32_offset
--# define shdr_link		shdr32_link
--# define shdr_size		shdr32_size
--# define shdr_name		shdr32_name
--# define shdr_type		shdr32_type
--# define shdr_entsize		shdr32_entsize
--# define sym_type		sym32_type
--# define sym_name		sym32_name
--# define sym_value		sym32_value
--# define sym_shndx		sym32_shndx
--# define long_size		4
--#endif
--
--#if defined(SORTTABLE_64) && defined(UNWINDER_ORC_ENABLED)
--/* ORC unwinder only support X86_64 */
--#include <asm/orc_types.h>
--
--#define ERRSTR_MAXSZ	256
--
--char g_err[ERRSTR_MAXSZ];
--int *g_orc_ip_table;
--struct orc_entry *g_orc_table;
--
--pthread_t orc_sort_thread;
--
--static inline unsigned long orc_ip(const int *ip)
--{
--	return (unsigned long)ip + *ip;
--}
--
--static int orc_sort_cmp(const void *_a, const void *_b)
--{
--	struct orc_entry *orc_a;
--	const int *a = g_orc_ip_table + *(int *)_a;
--	const int *b = g_orc_ip_table + *(int *)_b;
--	unsigned long a_val = orc_ip(a);
--	unsigned long b_val = orc_ip(b);
--
--	if (a_val > b_val)
--		return 1;
--	if (a_val < b_val)
--		return -1;
--
--	/*
--	 * The "weak" section terminator entries need to always be on the left
--	 * to ensure the lookup code skips them in favor of real entries.
--	 * These terminator entries exist to handle any gaps created by
--	 * whitelisted .o files which didn't get objtool generation.
--	 */
--	orc_a = g_orc_table + (a - g_orc_ip_table);
--	return orc_a->type == ORC_TYPE_UNDEFINED ? -1 : 1;
--}
--
--static void *sort_orctable(void *arg)
--{
--	int i;
--	int *idxs = NULL;
--	int *tmp_orc_ip_table = NULL;
--	struct orc_entry *tmp_orc_table = NULL;
--	unsigned int *orc_ip_size = (unsigned int *)arg;
--	unsigned int num_entries = *orc_ip_size / sizeof(int);
--	unsigned int orc_size = num_entries * sizeof(struct orc_entry);
--
--	idxs = (int *)malloc(*orc_ip_size);
--	if (!idxs) {
--		snprintf(g_err, ERRSTR_MAXSZ, "malloc idxs: %s",
--			 strerror(errno));
--		pthread_exit(g_err);
--	}
--
--	tmp_orc_ip_table = (int *)malloc(*orc_ip_size);
--	if (!tmp_orc_ip_table) {
--		snprintf(g_err, ERRSTR_MAXSZ, "malloc tmp_orc_ip_table: %s",
--			 strerror(errno));
--		pthread_exit(g_err);
--	}
--
--	tmp_orc_table = (struct orc_entry *)malloc(orc_size);
--	if (!tmp_orc_table) {
--		snprintf(g_err, ERRSTR_MAXSZ, "malloc tmp_orc_table: %s",
--			 strerror(errno));
--		pthread_exit(g_err);
--	}
--
--	/* initialize indices array, convert ip_table to absolute address */
--	for (i = 0; i < num_entries; i++) {
--		idxs[i] = i;
--		tmp_orc_ip_table[i] = g_orc_ip_table[i] + i * sizeof(int);
--	}
--	memcpy(tmp_orc_table, g_orc_table, orc_size);
--
--	qsort(idxs, num_entries, sizeof(int), orc_sort_cmp);
--
--	for (i = 0; i < num_entries; i++) {
--		if (idxs[i] == i)
--			continue;
--
--		/* convert back to relative address */
--		g_orc_ip_table[i] = tmp_orc_ip_table[idxs[i]] - i * sizeof(int);
--		g_orc_table[i] = tmp_orc_table[idxs[i]];
--	}
--
--	free(idxs);
--	free(tmp_orc_ip_table);
--	free(tmp_orc_table);
--	pthread_exit(NULL);
--}
--#endif
--
--#ifdef MCOUNT_SORT_ENABLED
--pthread_t mcount_sort_thread;
--
--struct elf_mcount_loc {
--	Elf_Ehdr *ehdr;
--	Elf_Shdr *init_data_sec;
--	uint64_t start_mcount_loc;
--	uint64_t stop_mcount_loc;
--};
--
--/* Sort the addresses stored between __start_mcount_loc to __stop_mcount_loc in vmlinux */
--static void *sort_mcount_loc(void *arg)
--{
--	struct elf_mcount_loc *emloc = (struct elf_mcount_loc *)arg;
--	uint64_t offset = emloc->start_mcount_loc - shdr_addr(emloc->init_data_sec)
--					+ shdr_offset(emloc->init_data_sec);
--	uint64_t count = emloc->stop_mcount_loc - emloc->start_mcount_loc;
--	unsigned char *start_loc = (void *)emloc->ehdr + offset;
--
--	qsort(start_loc, count/long_size, long_size, compare_extable);
--	return NULL;
--}
--
--/* Get the address of __start_mcount_loc and __stop_mcount_loc in System.map */
--static void get_mcount_loc(uint64_t *_start, uint64_t *_stop)
--{
--	FILE *file_start, *file_stop;
--	char start_buff[20];
--	char stop_buff[20];
--	int len = 0;
--
--	file_start = popen(" grep start_mcount System.map | awk '{print $1}' ", "r");
--	if (!file_start) {
--		fprintf(stderr, "get start_mcount_loc error!");
--		return;
--	}
--
--	file_stop = popen(" grep stop_mcount System.map | awk '{print $1}' ", "r");
--	if (!file_stop) {
--		fprintf(stderr, "get stop_mcount_loc error!");
--		pclose(file_start);
--		return;
--	}
--
--	while (fgets(start_buff, sizeof(start_buff), file_start) != NULL) {
--		len = strlen(start_buff);
--		start_buff[len - 1] = '\0';
--	}
--	*_start = strtoul(start_buff, NULL, 16);
--
--	while (fgets(stop_buff, sizeof(stop_buff), file_stop) != NULL) {
--		len = strlen(stop_buff);
--		stop_buff[len - 1] = '\0';
--	}
--	*_stop = strtoul(stop_buff, NULL, 16);
--
--	pclose(file_start);
--	pclose(file_stop);
--}
--#endif
--static int do_sort(Elf_Ehdr *ehdr,
--		   char const *const fname,
--		   table_sort_t custom_sort)
--{
--	int rc = -1;
--	Elf_Shdr *shdr_start;
--	Elf_Shdr *strtab_sec = NULL;
--	Elf_Shdr *symtab_sec = NULL;
--	Elf_Shdr *extab_sec = NULL;
--	Elf_Shdr *string_sec;
--	Elf_Sym *sym;
--	const Elf_Sym *symtab;
--	Elf32_Word *symtab_shndx = NULL;
--	Elf_Sym *sort_needed_sym = NULL;
--	Elf_Shdr *sort_needed_sec;
--	uint32_t *sort_needed_loc;
--	void *sym_start;
--	void *sym_end;
--	const char *secstrings;
--	const char *strtab;
--	char *extab_image;
--	int sort_need_index;
--	int symentsize;
--	int shentsize;
--	int idx;
--	int i;
--	unsigned int shnum;
--	unsigned int shstrndx;
--#ifdef MCOUNT_SORT_ENABLED
--	struct elf_mcount_loc mstruct = {0};
--	uint64_t _start_mcount_loc = 0;
--	uint64_t _stop_mcount_loc = 0;
--#endif
--#if defined(SORTTABLE_64) && defined(UNWINDER_ORC_ENABLED)
--	unsigned int orc_ip_size = 0;
--	unsigned int orc_size = 0;
--	unsigned int orc_num_entries = 0;
--#endif
--
--	shdr_start = (Elf_Shdr *)((char *)ehdr + ehdr_shoff(ehdr));
--	shentsize = ehdr_shentsize(ehdr);
--
--	shstrndx = ehdr_shstrndx(ehdr);
--	if (shstrndx == SHN_XINDEX)
--		shstrndx = shdr_link(shdr_start);
--	string_sec = get_index(shdr_start, shentsize, shstrndx);
--	secstrings = (const char *)ehdr + shdr_offset(string_sec);
--
--	shnum = ehdr_shnum(ehdr);
--	if (shnum == SHN_UNDEF)
--		shnum = shdr_size(shdr_start);
--
--	for (i = 0; i < shnum; i++) {
--		Elf_Shdr *shdr = get_index(shdr_start, shentsize, i);
--
--		idx = shdr_name(shdr);
--		if (!strcmp(secstrings + idx, "__ex_table"))
--			extab_sec = shdr;
--		if (!strcmp(secstrings + idx, ".symtab"))
--			symtab_sec = shdr;
--		if (!strcmp(secstrings + idx, ".strtab"))
--			strtab_sec = shdr;
--
--		if (shdr_type(shdr) == SHT_SYMTAB_SHNDX)
--			symtab_shndx = (Elf32_Word *)((const char *)ehdr +
--						      shdr_offset(shdr));
--
--#ifdef MCOUNT_SORT_ENABLED
--		/* locate the .init.data section in vmlinux */
--		if (!strcmp(secstrings + idx, ".init.data")) {
--			get_mcount_loc(&_start_mcount_loc, &_stop_mcount_loc);
--			mstruct.ehdr = ehdr;
--			mstruct.init_data_sec = shdr;
--			mstruct.start_mcount_loc = _start_mcount_loc;
--			mstruct.stop_mcount_loc = _stop_mcount_loc;
--		}
--#endif
--
--#if defined(SORTTABLE_64) && defined(UNWINDER_ORC_ENABLED)
--		/* locate the ORC unwind tables */
--		if (!strcmp(secstrings + idx, ".orc_unwind_ip")) {
--			orc_ip_size = shdr_size(shdr);
--			g_orc_ip_table = (int *)((void *)ehdr +
--						   shdr_offset(shdr));
--		}
--		if (!strcmp(secstrings + idx, ".orc_unwind")) {
--			orc_size = shdr_size(shdr);
--			g_orc_table = (struct orc_entry *)((void *)ehdr +
--							     shdr_offset(shdr));
--		}
--#endif
--	} /* for loop */
--
--#if defined(SORTTABLE_64) && defined(UNWINDER_ORC_ENABLED)
--	if (!g_orc_ip_table || !g_orc_table) {
--		fprintf(stderr,
--			"incomplete ORC unwind tables in file: %s\n", fname);
--		goto out;
--	}
--
--	orc_num_entries = orc_ip_size / sizeof(int);
--	if (orc_ip_size % sizeof(int) != 0 ||
--	    orc_size % sizeof(struct orc_entry) != 0 ||
--	    orc_num_entries != orc_size / sizeof(struct orc_entry)) {
--		fprintf(stderr,
--			"inconsistent ORC unwind table entries in file: %s\n",
--			fname);
--		goto out;
--	}
--
--	/* create thread to sort ORC unwind tables concurrently */
--	if (pthread_create(&orc_sort_thread, NULL,
--			   sort_orctable, &orc_ip_size)) {
--		fprintf(stderr,
--			"pthread_create orc_sort_thread failed '%s': %s\n",
--			strerror(errno), fname);
--		goto out;
--	}
--#endif
--
--#ifdef MCOUNT_SORT_ENABLED
--	if (!mstruct.init_data_sec || !_start_mcount_loc || !_stop_mcount_loc) {
--		fprintf(stderr,
--			"incomplete mcount's sort in file: %s\n",
--			fname);
--		goto out;
--	}
--
--	/* create thread to sort mcount_loc concurrently */
--	if (pthread_create(&mcount_sort_thread, NULL, &sort_mcount_loc, &mstruct)) {
--		fprintf(stderr,
--			"pthread_create mcount_sort_thread failed '%s': %s\n",
--			strerror(errno), fname);
--		goto out;
--	}
--#endif
--	if (!extab_sec) {
--		fprintf(stderr,	"no __ex_table in file: %s\n", fname);
--		goto out;
--	}
--
--	if (!symtab_sec) {
--		fprintf(stderr,	"no .symtab in file: %s\n", fname);
--		goto out;
--	}
--
--	if (!strtab_sec) {
--		fprintf(stderr,	"no .strtab in file: %s\n", fname);
--		goto out;
--	}
--
--	extab_image = (void *)ehdr + shdr_offset(extab_sec);
--	strtab = (const char *)ehdr + shdr_offset(strtab_sec);
--	symtab = (const Elf_Sym *)((const char *)ehdr + shdr_offset(symtab_sec));
--
--	if (custom_sort) {
--		custom_sort(extab_image, shdr_size(extab_sec));
--	} else {
--		int num_entries = shdr_size(extab_sec) / extable_ent_size;
--		qsort(extab_image, num_entries,
--		      extable_ent_size, compare_extable);
--	}
--
--	/* find the flag main_extable_sort_needed */
--	sym_start = (void *)ehdr + shdr_offset(symtab_sec);
--	sym_end = sym_start + shdr_size(symtab_sec);
--	symentsize = shdr_entsize(symtab_sec);
--
--	for (sym = sym_start; (void *)sym + symentsize < sym_end;
--	     sym = (void *)sym + symentsize) {
--		if (sym_type(sym) != STT_OBJECT)
--			continue;
--		if (!strcmp(strtab + sym_name(sym),
--			    "main_extable_sort_needed")) {
--			sort_needed_sym = sym;
--			break;
--		}
--	}
--
--	if (!sort_needed_sym) {
--		fprintf(stderr,
--			"no main_extable_sort_needed symbol in file: %s\n",
--			fname);
--		goto out;
--	}
--
--	sort_need_index = get_secindex(sym_shndx(sym),
--				       ((void *)sort_needed_sym - (void *)symtab) / symentsize,
--				       symtab_shndx);
--	sort_needed_sec = get_index(shdr_start, shentsize, sort_need_index);
--	sort_needed_loc = (void *)ehdr +
--		shdr_offset(sort_needed_sec) +
--		sym_value(sort_needed_sym) - shdr_addr(sort_needed_sec);
--
--	/* extable has been sorted, clear the flag */
--	w(0, sort_needed_loc);
--	rc = 0;
--
--out:
--#if defined(SORTTABLE_64) && defined(UNWINDER_ORC_ENABLED)
--	if (orc_sort_thread) {
--		void *retval = NULL;
--		/* wait for ORC tables sort done */
--		rc = pthread_join(orc_sort_thread, &retval);
--		if (rc) {
--			fprintf(stderr,
--				"pthread_join failed '%s': %s\n",
--				strerror(errno), fname);
--		} else if (retval) {
--			rc = -1;
--			fprintf(stderr,
--				"failed to sort ORC tables '%s': %s\n",
--				(char *)retval, fname);
--		}
--	}
--#endif
--
--#ifdef MCOUNT_SORT_ENABLED
--	if (mcount_sort_thread) {
--		void *retval = NULL;
--		/* wait for mcount sort done */
--		rc = pthread_join(mcount_sort_thread, &retval);
--		if (rc) {
--			fprintf(stderr,
--				"pthread_join failed '%s': %s\n",
--				strerror(errno), fname);
--		} else if (retval) {
--			rc = -1;
--			fprintf(stderr,
--				"failed to sort mcount '%s': %s\n",
--				(char *)retval, fname);
--		}
--	}
--#endif
--	return rc;
--}
--- 
-2.45.2
-
+> Charalampos Stylianopoulos (4):
+>    bpf: Add map_num_entries map op
+>    bpf: Add bpf command to get number of map entries
+>    libbpf: Add support for MAP_GET_NUM_ENTRIES command
+>    selftests/bpf: Add tests for bpf_map_get_num_entries
+> 
+>   include/linux/bpf.h                           |  3 ++
+>   include/linux/bpf_local_storage.h             |  1 +
+>   include/uapi/linux/bpf.h                      | 17 +++++++++
+>   kernel/bpf/devmap.c                           | 14 ++++++++
+>   kernel/bpf/hashtab.c                          | 10 ++++++
+>   kernel/bpf/lpm_trie.c                         |  8 +++++
+>   kernel/bpf/queue_stack_maps.c                 | 11 +++++-
+>   kernel/bpf/syscall.c                          | 32 +++++++++++++++++
+>   tools/include/uapi/linux/bpf.h                | 17 +++++++++
+>   tools/lib/bpf/bpf.c                           | 16 +++++++++
+>   tools/lib/bpf/bpf.h                           |  2 ++
+>   tools/lib/bpf/libbpf.map                      |  1 +
+>   .../bpf/map_tests/lpm_trie_map_basic_ops.c    |  5 +++
+>   tools/testing/selftests/bpf/test_maps.c       | 35 +++++++++++++++++++
+>   14 files changed, 171 insertions(+), 1 deletion(-)
+> 
 
