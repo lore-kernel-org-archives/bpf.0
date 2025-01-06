@@ -1,26 +1,26 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21B4714E2CF;
-	Mon,  6 Jan 2025 16:17:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 457EB17799F;
+	Mon,  6 Jan 2025 16:17:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736180240; cv=none; b=sZFRCy6ZxklSaAnS6dPaFtG+ws4xitfLE94AePOeNckFMY2t1bM7jO+PnX+bW8R7LNC21+G4zIK68fSMRxjK1noHp76P93fU4xqXZVcQLsffd6+faxeMJJyvefuxSuq36oU0wwu9ARiRzBg3sOFUyl0RviVxqbdu+hbpWljlFXs=
+	t=1736180240; cv=none; b=afq/HJyMjof2cPoqWuPTW5t7/gA5cM/MlbnuzYGP32tY3ZI4CTC5i+j8YcqZqwGbDC85yAcqKfOe9LsU5vZRkq+AUDxVNgaDp12F0MuXBnh+g5xEAMmtBNKeGkDLiA6CcqW4CgeEgLxnR5yTR2bMQ7yrstz1zHX9lqoUvjHo5PQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1736180240; c=relaxed/simple;
-	bh=hPJMF92mBogM/dxXMcpU+sIiA76bvESzbDZTgxMCwyM=;
+	bh=DQ7EH9i23/yGs3Y8LsmMVcN0j+K2pY6jjjeIMnUKv60=;
 	h=Message-ID:Date:From:To:Cc:Subject:References:MIME-Version:
-	 Content-Type; b=b5kN5FkUsryf47Hbl9/9/Vu5n/IlG4jeS5tMaTd2nRg0tk+7kV2PR5X6hgyJdqqrsJuRz7+uHoLZB03bzgUyq0W/mg8Fhj60g9NNYkbx62dXg2LZjRu2wpPQOTgKqPOBimBVjPpJr0huQeEKpOZrkcLBA7iaX03DeEgyc220CPA=
+	 Content-Type; b=uFFhTyCvPbFnSkVDjzEv7D8KGOI25FyIZCAfMmgthRh0u0b4Lrwu3dnlwwop237/hV+V85QaV8U05OYt0vfJinkwYnbBgu4juPRx57Wca/aFuKwjLIYALwk8yyiu+dpqDZqQr1g420znASmYc/j17nztQN1qVXQm6PLl5KVbMCY=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB94FC4CEE3;
-	Mon,  6 Jan 2025 16:17:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16978C4CEEC;
+	Mon,  6 Jan 2025 16:17:20 +0000 (UTC)
 Received: from rostedt by gandalf with local (Exim 4.98)
 	(envelope-from <rostedt@goodmis.org>)
-	id 1tUpoU-00000009Izo-1GZY;
+	id 1tUpoU-00000009J0m-2hSS;
 	Mon, 06 Jan 2025 11:18:46 -0500
-Message-ID: <20250106161846.151121836@goodmis.org>
+Message-ID: <20250106161846.492818648@goodmis.org>
 User-Agent: quilt/0.68
-Date: Mon, 06 Jan 2025 11:17:28 -0500
+Date: Mon, 06 Jan 2025 11:17:30 -0500
 From: Steven Rostedt <rostedt@goodmis.org>
 To: linux-kernel@vger.kernel.org
 Cc: Masami Hiramatsu <mhiramat@kernel.org>,
@@ -37,7 +37,7 @@ Cc: Masami Hiramatsu <mhiramat@kernel.org>,
  Martin  Kelly <martin.kelly@crowdstrike.com>,
  Christophe Leroy <christophe.leroy@csgroup.eu>,
  Josh Poimboeuf <jpoimboe@redhat.com>
-Subject: [for-next][PATCH 02/14] scripts/sorttable: Remove unused write functions
+Subject: [for-next][PATCH 04/14] scripts/sorttable: Have the ORC code use the _r() functions to read
 References: <20250106161726.131794583@goodmis.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -49,10 +49,11 @@ Content-Type: text/plain; charset=UTF-8
 
 From: Steven Rostedt <rostedt@goodmis.org>
 
-The code of sorttable.h was copied from the recordmcount.h  which defined
-various write functions for different sizes (2, 4, 8 byte lengths). But
-sorttable only uses the 4 byte writes. Remove the extra versions as they
-are not used.
+The ORC code reads the section information directly from the file. This
+currently works because the default read function is for 64bit little
+endian machines. But if for some reason that ever changes, this will
+break. Instead of having a surprise breakage, use the _r() functions that
+will read the values from the file properly.
 
 Cc: bpf <bpf@vger.kernel.org>
 Cc: Masami Hiramatsu <mhiramat@kernel.org>
@@ -68,74 +69,35 @@ Cc: Zheng Yejian <zhengyejian1@huawei.com>
 Cc: Martin  Kelly <martin.kelly@crowdstrike.com>
 Cc: Christophe Leroy <christophe.leroy@csgroup.eu>
 Cc: Josh Poimboeuf <jpoimboe@redhat.com>
-Link: https://lore.kernel.org/20250105162344.314385504@goodmis.org
+Link: https://lore.kernel.org/20250105162344.721480386@goodmis.org
 Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 ---
- scripts/sorttable.c | 26 --------------------------
- 1 file changed, 26 deletions(-)
+ scripts/sorttable.h | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/scripts/sorttable.c b/scripts/sorttable.c
-index 83cdb843d92f..4dcdbf7a5e26 100644
---- a/scripts/sorttable.c
-+++ b/scripts/sorttable.c
-@@ -68,8 +68,6 @@ static uint32_t (*r)(const uint32_t *);
- static uint16_t (*r2)(const uint16_t *);
- static uint64_t (*r8)(const uint64_t *);
- static void (*w)(uint32_t, uint32_t *);
--static void (*w2)(uint16_t, uint16_t *);
--static void (*w8)(uint64_t, uint64_t *);
- typedef void (*table_sort_t)(char *, int);
- 
- /*
-@@ -146,31 +144,11 @@ static void wbe(uint32_t val, uint32_t *x)
- 	put_unaligned_be32(val, x);
- }
- 
--static void w2be(uint16_t val, uint16_t *x)
--{
--	put_unaligned_be16(val, x);
--}
--
--static void w8be(uint64_t val, uint64_t *x)
--{
--	put_unaligned_be64(val, x);
--}
--
- static void wle(uint32_t val, uint32_t *x)
- {
- 	put_unaligned_le32(val, x);
- }
- 
--static void w2le(uint16_t val, uint16_t *x)
--{
--	put_unaligned_le16(val, x);
--}
--
--static void w8le(uint64_t val, uint64_t *x)
--{
--	put_unaligned_le64(val, x);
--}
--
- /*
-  * Move reserved section indices SHN_LORESERVE..SHN_HIRESERVE out of
-  * the way to -256..-1, to avoid conflicting with real section
-@@ -277,16 +255,12 @@ static int do_file(char const *const fname, void *addr)
- 		r2	= r2le;
- 		r8	= r8le;
- 		w	= wle;
--		w2	= w2le;
--		w8	= w8le;
- 		break;
- 	case ELFDATA2MSB:
- 		r	= rbe;
- 		r2	= r2be;
- 		r8	= r8be;
- 		w	= wbe;
--		w2	= w2be;
--		w8	= w8be;
- 		break;
- 	default:
- 		fprintf(stderr, "unrecognized ELF data encoding %d: %s\n",
+diff --git a/scripts/sorttable.h b/scripts/sorttable.h
+index aa7a8499a516..7c06a754e31a 100644
+--- a/scripts/sorttable.h
++++ b/scripts/sorttable.h
+@@ -296,14 +296,14 @@ static int do_sort(Elf_Ehdr *ehdr,
+ #if defined(SORTTABLE_64) && defined(UNWINDER_ORC_ENABLED)
+ 		/* locate the ORC unwind tables */
+ 		if (!strcmp(secstrings + idx, ".orc_unwind_ip")) {
+-			orc_ip_size = s->sh_size;
++			orc_ip_size = _r(&s->sh_size);
+ 			g_orc_ip_table = (int *)((void *)ehdr +
+-						   s->sh_offset);
++						   _r(&s->sh_offset));
+ 		}
+ 		if (!strcmp(secstrings + idx, ".orc_unwind")) {
+-			orc_size = s->sh_size;
++			orc_size = _r(&s->sh_size);
+ 			g_orc_table = (struct orc_entry *)((void *)ehdr +
+-							     s->sh_offset);
++							     _r(&s->sh_offset));
+ 		}
+ #endif
+ 	} /* for loop */
 -- 
 2.45.2
 
