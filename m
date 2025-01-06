@@ -1,133 +1,220 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out30-132.freemail.mail.aliyun.com (out30-132.freemail.mail.aliyun.com [115.124.30.132])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29CEA184F;
-	Mon,  6 Jan 2025 01:54:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77F6E1F19A;
+	Mon,  6 Jan 2025 02:22:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.132
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736128484; cv=none; b=BkDHKQ6ZiCMwPEZ8CuZszBKFYiJZ/LFSTXu28XC19Uybv3XNVt9fZ6Gz/h/e3wE8AbVi14jieNoZOw+J8vVWeo5Z6VSbv3Q4EnljhdbAcD2rdjEo0BF3xU7EmHRmohUHJeej3VlXjZ4Qu2wmtzmk37aGpLPD0Iay4PupMcqMKWU=
+	t=1736130161; cv=none; b=P/KTSGLlACYWMauFs3tQbXs8p3UAbzSfQlQZW1Fm30Nhn5iGVvNED0j/ahfcsNnuvPnDMqIUttpirbav6SXw3wWaQ/CRRtUrraOVN/llG0ewDWnR1fvxEPPyR8wTZytMLZ/ftk0dDuy+dcoASgD9h/DVM/h3dYOSY1yKTGfccYc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736128484; c=relaxed/simple;
-	bh=VXHTSlWVeej65C6gWEdXhGhaNxkRXr5jGN61emh9ek8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=W68WIVWLBHEmaXk9fj7oqmqJF7u0nDeWhpfQ4zr7h6xHdEXU6xrZSGZfd8fpFcMyxerOhQPPrtgd7/zuf4udQCUj46JMAmk26b79lLyHZ0Xbqc2EaLWAJu6sWlDDvNb50rR4qIm0uGbI13JglPlt3d45/rFiAfUEUuxexDMBvDw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eEtf3Saw; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1736130161; c=relaxed/simple;
+	bh=BndSGjZeeV8yhLuRMYNsncQZ7TF/PC+gXFAxaM11Isw=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=ksiSEK3KLMi4m8OsHRXoSl3xTraxZBNJqZ1taIRaXO42kwmSUQjgqRmVCsVp5cf7Z/7Xy5LBSgQEY+crGN6jHJNFhyLM+e+J5ekWaCDJ7RyUcXdqegDa48fwRjK4eFd79dFpb4u+CINorFTLdkeB3xCe/iKR9qDyc8crGMaQnFM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=kaTx6/US; arc=none smtp.client-ip=115.124.30.132
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eEtf3Saw"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BEA98C4CED0;
-	Mon,  6 Jan 2025 01:54:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1736128483;
-	bh=VXHTSlWVeej65C6gWEdXhGhaNxkRXr5jGN61emh9ek8=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=eEtf3Sawb5gYw3jcbVvK/g+/c3EDSX2rcB/mxneDgQOI9p2znVsjTklVuQxF7/DAy
-	 yuErRnUtSZXCbqRdy/KAE++Yea+gXBb12mvvaKI28WpVy5rRHvoRlPx6iPPq2hvtch
-	 CCtvF8OrHJG0Aa6lvXY7Buaf9eMZLXh7EOzquUmq9adf3LextO2sUsXV0RH2XG7eR2
-	 vBsyPAi3k4O7KXKNHQyE7HmQsd7cclN3x5HRZm4uRLrmoPIAMndZaN7R8RGYcB2mXu
-	 XGMHIiJThc2+fF0lXn+i0st5Jysv0qnhyJikf84UoqGHA0CfYkBfXqfyUVooFhFchv
-	 m0BqcxcVZSV6Q==
-Message-ID: <ee32c284-aeda-4efa-adb1-bb4af724d097@kernel.org>
-Date: Mon, 6 Jan 2025 10:53:58 +0900
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="kaTx6/US"
+DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux.alibaba.com; s=default;
+	t=1736130154; h=From:To:Subject:Date:Message-ID:MIME-Version;
+	bh=8XcwzEH1Li0PZHViDS8i234tbohuRUg6Knq6W29/4RE=;
+	b=kaTx6/USLpFVSlbkuUvrKUOw3DOsFtuOVD1GQyhMtcN7cw5brovciVAv8oNtJ15XVijxREfqquOB65NWJ++mWbyq797gZoSPRDYQiyqiQsCTdBAFbwQuRVHJvcwYFau+zpjHL2P6/dzWVXwvS6hqS/86AvSLaAWsZlZ28l3QQ6s=
+Received: from j66a10360.sqa.eu95.tbsite.net(mailfrom:alibuda@linux.alibaba.com fp:SMTPD_---0WMzlXYf_1736130152 cluster:ay36)
+          by smtp.aliyun-inc.com;
+          Mon, 06 Jan 2025 10:22:32 +0800
+From: "D. Wythe" <alibuda@linux.alibaba.com>
+To: kgraul@linux.ibm.com,
+	wenjia@linux.ibm.com,
+	jaka@linux.ibm.com,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	martin.lau@linux.dev,
+	pabeni@redhat.com,
+	song@kernel.org,
+	sdf@google.com,
+	haoluo@google.com,
+	yhs@fb.com,
+	edumazet@google.com,
+	john.fastabend@gmail.com,
+	kpsingh@kernel.org,
+	jolsa@kernel.org,
+	guwen@linux.alibaba.com
+Cc: kuba@kernel.org,
+	davem@davemloft.net,
+	netdev@vger.kernel.org,
+	linux-s390@vger.kernel.org,
+	linux-rdma@vger.kernel.org,
+	bpf@vger.kernel.org
+Subject: [PATCH bpf-next v4 3/5] net/smc: bpf: register smc_ops info struct_ops
+Date: Mon,  6 Jan 2025 10:22:20 +0800
+Message-ID: <20250106022222.80203-4-alibuda@linux.alibaba.com>
+X-Mailer: git-send-email 2.45.0
+In-Reply-To: <20250106022222.80203-1-alibuda@linux.alibaba.com>
+References: <20250106022222.80203-1-alibuda@linux.alibaba.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [LSF/MM/BPF TOPIC] Improving Block Layer Tracepoints for
- Next-Generation Backup Systems
-To: Vishnu ks <ksvishnu56@gmail.com>, Song Liu <song@kernel.org>,
- hch@infradead.org, yanjun.zhu@linux.dev
-Cc: lsf-pc@lists.linux-foundation.org, linux-block@vger.kernel.org,
- bpf@vger.kernel.org, linux-nvme@lists.infradead.org
-References: <CAJHDoJac2Qa6QjhDFi7YZf0D05=Svc13ZQyX=92KsM7pkkVbJA@mail.gmail.com>
- <CAPhsuW7+ORExwn5fkRykEmEp-wm0YE788Tkd39rK5cZ-Q3dfUw@mail.gmail.com>
- <CAJHDoJYESDzDf9KJgfSfGGit6JPyxtf3miNbnM7BzNfjOi7CQw@mail.gmail.com>
-From: Damien Le Moal <dlemoal@kernel.org>
-Content-Language: en-US
-Organization: Western Digital Research
-In-Reply-To: <CAJHDoJYESDzDf9KJgfSfGGit6JPyxtf3miNbnM7BzNfjOi7CQw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 1/5/25 2:52 AM, Vishnu ks wrote:
-> Thank you all for your valuable feedback. I'd like to provide more
-> technical context about our implementation and the specific challenges
-> we're facing.
-> 
-> System Architecture:
-> We've built a block-level continuous data protection system that:
-> 1. Uses eBPF to monitor block_rq_complete tracepoint to track modified sectors
-> 2. Captures sector numbers (not data) of changed blocks in real-time
-> 3. Periodically syncs the actual data from these sectors based on
-> configurable RPO
-> 4. Layers these incremental changes on top of base snapshots
-> 
-> Current Implementation:
-> - eBPF program attached to block_rq_complete tracks sector ranges from
-> bio requests
-> - Changed sector numbers are transmitted to a central dispatcher via websocket
-> - Dispatcher initiates periodic data sync (1-2 min intervals)
-> requesting data from tracked sectors
-> - Base snapshot + incremental changes provide point-in-time recovery capability
-> 
-> @Christoph: Regarding stability concerns - we're not using tracepoints
-> for data integrity, but rather for change detection. The actual data
-> synchronization happens through standard block device reads.
-> 
-> Technical Challenge:
-> The core issue we've identified is the gap between write completion
-> notification and data availability:
-> - block_rq_complete tracepoint triggers before data is actually
-> persisted to disk
+To implement injection capability for smc via struct_ops, so that
+user can make their own smc_ops to modify the behavior of smc stack.
 
-Then do a flush, or disable the write cache on the device (which can totally
-kill write performance depending on the device). Nothing new here. File systems
-have journaling for this reason (among others).
+Currently, user can write their own implememtion to choose whether to
+use SMC or not before TCP 3rd handshake to be comleted. In the future,
+users can implement more complex functions on smc by expanding it.
 
-> - Reading sectors immediately after block_rq_complete often returns stale data
+Signed-off-by: D. Wythe <alibuda@linux.alibaba.com>
+---
+ net/smc/af_smc.c  | 10 ++++++
+ net/smc/smc_ops.c | 79 +++++++++++++++++++++++++++++++++++++++++++++++
+ net/smc/smc_ops.h |  5 +++
+ 3 files changed, 94 insertions(+)
 
-That is what POSIX mandates and also what most storage protocols specify (SCSI,
-ATA, NVMe): reading sectors that were just written give you back what you just
-wrote, regardless of the actual location of the data on the device (persisted
-to non volatile media or not).
-
-> - Observed delay between completion and actual disk persistence ranges
-> from 3-7 minutes
-
-That depends on how often/when/how the drive flushes its write cache, which you
-cannot know from the host. If you want to reduce this, explicitly flush the
-device write cache more often (execute blkdev_issue_flush() or similar).
-
-> - Data becomes immediately available only after unmount/sync/reboot
-
-??
-
-You can read data that was written even without a sync/flush.
-
-> Proposed Enhancement:
-> We're looking for ways to:
-> 1. Detect when data is actually flushed to disk
-
-If you have the write cache enabled on the device, there is no device interface
-that notifies this. This simply does not exist. If you want to guarantee data
-persistence to non-volatile media on the device, issue a synchronize cache
-command (which blkdev_issue_flush() does), or sync your file system if you are
-using one. Or as mentioned already, disable the device write cache.
-
-> 2. Track the relationship between bio requests and cache flushes
-
-That is up to you to do that. File systems do so for sync()/fsync(). Note that
-data persistence guarantees are always for write requests that have already
-completed.
-
-> 3. Potentially add tracepoints around such operations
-
-As Christoph said, tracepoints are not a stable ABI. So relying on tracepoints
-for tracking data persistence is really not a good idea.
-
-
+diff --git a/net/smc/af_smc.c b/net/smc/af_smc.c
+index 9d76e902fd77..6adedae2986d 100644
+--- a/net/smc/af_smc.c
++++ b/net/smc/af_smc.c
+@@ -55,6 +55,7 @@
+ #include "smc_sysctl.h"
+ #include "smc_loopback.h"
+ #include "smc_inet.h"
++#include "smc_ops.h"
+ 
+ static DEFINE_MUTEX(smc_server_lgr_pending);	/* serialize link group
+ 						 * creation on server
+@@ -3576,8 +3577,17 @@ static int __init smc_init(void)
+ 		pr_err("%s: smc_inet_init fails with %d\n", __func__, rc);
+ 		goto out_ulp;
+ 	}
++
++	rc = smc_bpf_struct_ops_init();
++	if (rc) {
++		pr_err("%s: smc_bpf_struct_ops_init fails with %d\n", __func__, rc);
++		goto out_inet;
++	}
++
+ 	static_branch_enable(&tcp_have_smc);
+ 	return 0;
++out_inet:
++	smc_inet_exit();
+ out_ulp:
+ 	tcp_unregister_ulp(&smc_ulp_ops);
+ out_lo:
+diff --git a/net/smc/smc_ops.c b/net/smc/smc_ops.c
+index 0fc19cadd760..67b6b2b92771 100644
+--- a/net/smc/smc_ops.c
++++ b/net/smc/smc_ops.c
+@@ -10,6 +10,10 @@
+  *  Author: D. Wythe <alibuda@linux.alibaba.com>
+  */
+ 
++#include <linux/bpf_verifier.h>
++#include <linux/bpf.h>
++#include <linux/btf.h>
++
+ #include "smc_ops.h"
+ 
+ static DEFINE_SPINLOCK(smc_ops_list_lock);
+@@ -49,3 +53,78 @@ struct smc_ops *smc_ops_find_by_name(const char *name)
+ 	}
+ 	return NULL;
+ }
++
++static int __bpf_smc_stub_set_tcp_option(struct tcp_sock *tp) { return 1; }
++static int __bpf_smc_stub_set_tcp_option_cond(const struct tcp_sock *tp,
++					      struct inet_request_sock *ireq)
++{
++	return 1;
++}
++
++static struct smc_ops __bpf_smc_bpf_ops = {
++	.set_option		= __bpf_smc_stub_set_tcp_option,
++	.set_option_cond	= __bpf_smc_stub_set_tcp_option_cond,
++};
++
++static int smc_bpf_ops_init(struct btf *btf) { return 0; }
++
++static int smc_bpf_ops_reg(void *kdata, struct bpf_link *link)
++{
++	return smc_ops_reg(kdata);
++}
++
++static void smc_bpf_ops_unreg(void *kdata, struct bpf_link *link)
++{
++	smc_ops_unreg(kdata);
++}
++
++static int smc_bpf_ops_init_member(const struct btf_type *t,
++				   const struct btf_member *member,
++				   void *kdata, const void *udata)
++{
++	const struct smc_ops *u_ops;
++	struct smc_ops *k_ops;
++	u32 moff;
++
++	u_ops = (const struct smc_ops *)udata;
++	k_ops = (struct smc_ops *)kdata;
++
++	moff = __btf_member_bit_offset(t, member) / 8;
++	switch (moff) {
++	case offsetof(struct smc_ops, name):
++		if (bpf_obj_name_cpy(k_ops->name, u_ops->name,
++				     sizeof(u_ops->name)) <= 0)
++			return -EINVAL;
++		return 1;
++	case offsetof(struct smc_ops, flags):
++		if (u_ops->flags & ~SMC_OPS_ALL_FLAGS)
++			return -EINVAL;
++		k_ops->flags = u_ops->flags;
++		return 1;
++	default:
++		break;
++	}
++
++	return 0;
++}
++
++static const struct bpf_verifier_ops smc_bpf_verifier_ops = {
++	.get_func_proto		= bpf_base_func_proto,
++	.is_valid_access	= bpf_tracing_btf_ctx_access,
++};
++
++static struct bpf_struct_ops bpf_smc_bpf_ops = {
++	.name		= "smc_ops",
++	.init		= smc_bpf_ops_init,
++	.reg		= smc_bpf_ops_reg,
++	.unreg		= smc_bpf_ops_unreg,
++	.cfi_stubs	= &__bpf_smc_bpf_ops,
++	.verifier_ops	= &smc_bpf_verifier_ops,
++	.init_member	= smc_bpf_ops_init_member,
++	.owner		= THIS_MODULE,
++};
++
++int smc_bpf_struct_ops_init(void)
++{
++	return register_bpf_struct_ops(&bpf_smc_bpf_ops, smc_ops);
++}
+diff --git a/net/smc/smc_ops.h b/net/smc/smc_ops.h
+index 4b33dc2d65b9..06dc30363a83 100644
+--- a/net/smc/smc_ops.h
++++ b/net/smc/smc_ops.h
+@@ -21,5 +21,10 @@
+  * Note: Caller MUST ensure it's was invoked under rcu_read_lock.
+  */
+ struct smc_ops *smc_ops_find_by_name(const char *name);
++#if IS_ENABLED(CONFIG_SMC_OPS)
++int smc_bpf_struct_ops_init(void);
++#else
++static inline int smc_bpf_struct_ops_init(void) { return 0; }
++#endif
+ 
+ #endif /* __SMC_OPS */
 -- 
-Damien Le Moal
-Western Digital Research
+2.45.0
+
