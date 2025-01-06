@@ -1,136 +1,175 @@
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 800B7B676;
-	Mon,  6 Jan 2025 07:54:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11ACA1D7E5B;
+	Mon,  6 Jan 2025 08:06:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736150072; cv=none; b=n6srBVHO2LECKIA/UNn+sbSjl484CJcd2fdH3TqJQqWDZ9skAtQi94YvnJHX+TEtPWAZgRw2gAmsaltotbqLRMKXJ93X3Y4Y9A9CCnOhks4ya0X5MsEZxGQ5K4+cOLHyRUEuxrfHCGz8uqStGnpMco+RWUAutCwsocH+E5XLJMo=
+	t=1736150820; cv=none; b=kkVeMTiK7ZC5g1UwGMd9pTYySlbOMgpgFclq0ZgB8niMMUShmlsc55+RcttjX3SkfDdrTIkXrPvRh6YTX+Ve1dk55Wb4kwy0LDIW2HNTrg9B8TIeO66xmpzYgv0J8ktLCYItEvFGQZH6B2yxGIoFxSzXlLyNAspyCkDJ2mYGKP0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736150072; c=relaxed/simple;
-	bh=uVhaCB8dTvQKOKi/9Zpe3Ckh4EC4m1wh+mtzskJQF+s=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=H3Rood0GaGEImYtkL06NUMPIWSK/sZ67h3iudxJJ1jSdnycKbmnLbd1RC03q1Ge2hnZAk5T6b6TS+TqHXfEF5juzV4Esu01wSB23nYb3HY7OIjQJeUBIvUqvrc/6trzz+loL64Wp8F0PFLHL/a5Hk9GLgYEJy/4rtLjqkWyja4E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=Qx+eqjqg; arc=none smtp.client-ip=217.70.183.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="Qx+eqjqg"
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 1467340005;
-	Mon,  6 Jan 2025 07:54:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1736150060;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=N/Sjodq7qq2EI8HalXNJGQv85lzSJjUANME+DYv7yG0=;
-	b=Qx+eqjqgPlBBZ4Q652C3bmAM5CdL8koUIdmX6WiQ41eCELpQcqVM8dsiB8a6eXWyL6xQ/m
-	gVscO+rYVkII4ZYa3lzV9DgLhg9Xp5mzzeBMFc4c4qN21aWS2wv74prbmpqoZMj0hWztDj
-	KwwGDpqYxgtBxmBWFUptCyTJbTZVAXzJvA02kTUbVR7U9ykLb7dv8G+eXs88w4oztSJDxJ
-	ojXuCQhOQjCY06qryHNQrj9RzA5mV/Bvh2qKbxUWcNYssG16ABWN0H1DpbClVPyz7H1Pg1
-	NbC4cJ5qMBZ+vYhSXNYrVeX+vtXOq9FTmwPburl9Td5BR1z2QQ+azBX9uJ5Lhw==
-Message-ID: <9a18fec7-8f73-48c6-81d4-5baa5b701f76@bootlin.com>
-Date: Mon, 6 Jan 2025 08:54:18 +0100
+	s=arc-20240116; t=1736150820; c=relaxed/simple;
+	bh=VCq7PzB+FtO3wyqs9j/jG+yOuA3G8HstksXwcT6fueQ=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=m3p1jRLHDpE5pIvs8xoGbjTD97Jf2a0x2dWg9z7f7mV10p5jVUFy1/0GnCe1K8xQUB0bE5QTEK+QC3Gi9acGKnHi0neU6W2o90xpdM0WQWyCH+kBmhVV5rl7Cp01c5guXyHc9H0ucU1PdfI4yD3paPsexnDQL3fDuYYUGO4jm5o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.93.142])
+	by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4YRRbG4JBdz4f3jR3;
+	Mon,  6 Jan 2025 16:06:34 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.128])
+	by mail.maildlp.com (Postfix) with ESMTP id AF47B1A1496;
+	Mon,  6 Jan 2025 16:06:54 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.175.124.27])
+	by APP4 (Coremail) with SMTP id gCh0CgD3W2AZj3tnVG29AA--.29272S5;
+	Mon, 06 Jan 2025 16:06:54 +0800 (CST)
+From: Hou Tao <houtao@huaweicloud.com>
+To: bpf@vger.kernel.org,
+	netdev@vger.kernel.org
+Cc: Martin KaFai Lau <martin.lau@linux.dev>,
+	Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Hao Luo <haoluo@google.com>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Jiri Olsa <jolsa@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	houtao1@huawei.com,
+	xukuohai@huawei.com
+Subject: [PATCH bpf-next 01/19] bpf: Remove migrate_{disable|enable} from LPM trie
+Date: Mon,  6 Jan 2025 16:18:42 +0800
+Message-Id: <20250106081900.1665573-2-houtao@huaweicloud.com>
+X-Mailer: git-send-email 2.29.2
+In-Reply-To: <20250106081900.1665573-1-houtao@huaweicloud.com>
+References: <20250106081900.1665573-1-houtao@huaweicloud.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/3] selftests/bpf: Migrate test_xdp_redirect.sh to
- xdp_do_redirect.c
-To: =?UTF-8?Q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- "David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
- Jesper Dangaard Brouer <hawk@kernel.org>,
- John Fastabend <john.fastabend@gmail.com>,
- Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
- <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
- KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
- Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
- Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, netdev@vger.kernel.org,
- bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20250103-xdp_redirect-v1-0-e93099f59069@bootlin.com>
- <20250103-xdp_redirect-v1-2-e93099f59069@bootlin.com>
- <c7ff7788-d3af-4867-8b13-57a0bf1f529a@bootlin.com>
-Content-Language: en-US
-From: Bastien Curutchet <bastien.curutchet@bootlin.com>
-In-Reply-To: <c7ff7788-d3af-4867-8b13-57a0bf1f529a@bootlin.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-GND-Sasl: bastien.curutchet@bootlin.com
+X-CM-TRANSID:gCh0CgD3W2AZj3tnVG29AA--.29272S5
+X-Coremail-Antispam: 1UD129KBjvJXoWxJFy5XryDCw4fWw18ZrWfGrg_yoW5CFyxpF
+	WxK3sYyr4UXr4Ygr4IqrZ5Jry5Aw4xKay7Gayvga40q3s09F97Jr18Z3W0gFy5ArW7tr4a
+	qF1UK34IvF48CrJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUPFb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUGw
+	A2048vs2IY020Ec7CjxVAFwI0_Gr0_Xr1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
+	w2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
+	W8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v2
+	6rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMc
+	Ij6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_
+	Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AFwI
+	0_Jw0_GFyl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG
+	67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MI
+	IYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E
+	14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJV
+	W8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxU2HGQ
+	DUUUU
+X-CM-SenderInfo: xkrx3t3r6k3tpzhluzxrxghudrp/
 
-Hi Alexis,
+From: Hou Tao <houtao1@huawei.com>
 
-On 1/3/25 1:54 PM, Alexis Lothoré wrote:
-> Hi Bastien,
-> 
-> On 1/3/25 11:10, Bastien Curutchet (eBPF Foundation) wrote:
-> 
-> [...]
-> 
->> +		SYS(fail, "ip link add veth%d index %d%d%d type veth peer name veth0 netns %s",
->> +		    i, i, i, i, ns_name);
-> 
-> nit: since you have to run an ip command through SYS anyway, you can reduce the
-> open ns/run command/close ns dance (and all the resulting error checks) by
-> running directly `SYS("ip netns exec %s ip link add [...]", NS0, [...])`
-> 
-> [...]
-> 
+Both bpf program and bpf syscall may invoke ->update or ->delete
+operation for LPM trie. For bpf program, its running context has already
+disabled migration explicitly through (migrate_disable()) or implicitly
+through (preempt_disable() or disable irq). For bpf syscall, the
+migration is disabled through the use of bpf_disable_instrumentation()
+before invoking the corresponding map operation callback.
 
-True, thanks.
+Therefore, it is safe to remove the migrate_{disable|enable){} pair from
+LPM trie. To ensure the guarantee will not be voilated later, also add
+cant_migrate() check in both update and delete operation.
 
->> +	ret = bpf_xdp_attach(if_nametoindex("veth2"),
->> +			     bpf_program__fd(prog_to_111),
->> +			     data->xdp_flags, NULL);
-> 
-> nit: since we are setting static if index at veth creation (which looks needed
-> for this test), the if_nametoindex could be replaced by the corresponding index,
-> which could be directly a define
-> 
+Signed-off-by: Hou Tao <houtao1@huawei.com>
+---
+ kernel/bpf/lpm_trie.c | 24 ++++++++----------------
+ 1 file changed, 8 insertions(+), 16 deletions(-)
 
-Also true, thanks.
+diff --git a/kernel/bpf/lpm_trie.c b/kernel/bpf/lpm_trie.c
+index f8bc1e096182..1a3585a485df 100644
+--- a/kernel/bpf/lpm_trie.c
++++ b/kernel/bpf/lpm_trie.c
+@@ -289,16 +289,11 @@ static void *trie_lookup_elem(struct bpf_map *map, void *_key)
+ }
+ 
+ static struct lpm_trie_node *lpm_trie_node_alloc(struct lpm_trie *trie,
+-						 const void *value,
+-						 bool disable_migration)
++						 const void *value)
+ {
+ 	struct lpm_trie_node *node;
+ 
+-	if (disable_migration)
+-		migrate_disable();
+ 	node = bpf_mem_cache_alloc(&trie->ma);
+-	if (disable_migration)
+-		migrate_enable();
+ 
+ 	if (!node)
+ 		return NULL;
+@@ -342,10 +337,10 @@ static long trie_update_elem(struct bpf_map *map,
+ 	if (key->prefixlen > trie->max_prefixlen)
+ 		return -EINVAL;
+ 
+-	/* Allocate and fill a new node. Need to disable migration before
+-	 * invoking bpf_mem_cache_alloc().
+-	 */
+-	new_node = lpm_trie_node_alloc(trie, value, true);
++	cant_migrate();
++
++	/* Allocate and fill a new node */
++	new_node = lpm_trie_node_alloc(trie, value);
+ 	if (!new_node)
+ 		return -ENOMEM;
+ 
+@@ -425,8 +420,7 @@ static long trie_update_elem(struct bpf_map *map,
+ 		goto out;
+ 	}
+ 
+-	/* migration is disabled within the locked scope */
+-	im_node = lpm_trie_node_alloc(trie, NULL, false);
++	im_node = lpm_trie_node_alloc(trie, NULL);
+ 	if (!im_node) {
+ 		trie->n_entries--;
+ 		ret = -ENOMEM;
+@@ -452,11 +446,9 @@ static long trie_update_elem(struct bpf_map *map,
+ out:
+ 	raw_spin_unlock_irqrestore(&trie->lock, irq_flags);
+ 
+-	migrate_disable();
+ 	if (ret)
+ 		bpf_mem_cache_free(&trie->ma, new_node);
+ 	bpf_mem_cache_free_rcu(&trie->ma, free_node);
+-	migrate_enable();
+ 
+ 	return ret;
+ }
+@@ -477,6 +469,8 @@ static long trie_delete_elem(struct bpf_map *map, void *_key)
+ 	if (key->prefixlen > trie->max_prefixlen)
+ 		return -EINVAL;
+ 
++	cant_migrate();
++
+ 	raw_spin_lock_irqsave(&trie->lock, irq_flags);
+ 
+ 	/* Walk the tree looking for an exact key/length match and keeping
+@@ -555,10 +549,8 @@ static long trie_delete_elem(struct bpf_map *map, void *_key)
+ out:
+ 	raw_spin_unlock_irqrestore(&trie->lock, irq_flags);
+ 
+-	migrate_disable();
+ 	bpf_mem_cache_free_rcu(&trie->ma, free_parent);
+ 	bpf_mem_cache_free_rcu(&trie->ma, free_node);
+-	migrate_enable();
+ 
+ 	return ret;
+ }
+-- 
+2.29.2
 
->> +	if (!ASSERT_GE(ret, 0, "bpf_xdp_attach"))
->> +		goto close;
->> +
->> +	ret = bpf_xdp_attach(if_nametoindex("veth1"),
->> +			     bpf_program__fd(prog_to_222),
->> +			     data->xdp_flags, NULL);
->> +	if (!ASSERT_GE(ret, 0, "bpf_xdp_attach"))
->> +		goto close;
->> +
->> +	close_netns(nstoken);
->> +
->> +	nstoken = open_netns(NS1);
->> +	if (!ASSERT_OK_PTR(nstoken, "open NS1"))
->> +		goto close;
->> +
->> +	SYS(close, "ping -c 1 %s.2", IPV4_NETWORK);
->> +
->> +	close_netns(nstoken);
->> +
->> +	nstoken = open_netns(NS2);
->> +	if (!ASSERT_OK_PTR(nstoken, "open NS2"))
->> +		goto close;
->> +
->> +	SYS(close, "ping -c 1 %s.1", IPV4_NETWORK);
-> 
-> Is it really useful to check ping originating from both interfaces, isn´t a
-> single ping able to stimulate programs attached to both veth0 ?
-> 
-
-Indeed, I think a single ping would be enough, I just wanted to stick 
-with what test_xdp_redirect.sh does.
-
-> Aside from those minor points, LGTM :)
-> 
-
-Best regards,
-Bastien
