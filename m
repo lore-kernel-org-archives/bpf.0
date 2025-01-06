@@ -1,28 +1,28 @@
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECFE11DA636;
-	Mon,  6 Jan 2025 08:07:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B7F21DA0E1;
+	Mon,  6 Jan 2025 08:07:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736150836; cv=none; b=FL1vGKY91lsNEt0rMPbAw1+A238KDHT4XXGBHnm0hRug614junXPkCeLDGiEHJlfHM9fh+ZpZ/gujnUQyby8iOWa/V5ObLtcRohYU80Fi6MYV2PJV77DUJPScNz7Fa4YxoVsNxDowiwQwZ26pmjfsfI2s+L4+2OmplYqzliGNBk=
+	t=1736150836; cv=none; b=KVTyCsoBiP017BC5o6N0QGHEWI6dyckuBhqw1CrefYje2qjb4t7VY2uMMG/aiw/4ZQ2hEaShG9dgnakOE39t0Nz1mgi++tIPSZT5w0XQ3cbscE567WrR0Tu5pPF++g0i7HGoQEOASvSLGIW2o1uQqiLuDdL2+zVHvG79ar1SYmk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1736150836; c=relaxed/simple;
-	bh=3Sz+ywtkER1M9h387/qHdktL3V9OGGrTpmLyuJjOW4g=;
+	bh=XPAyxuEqoQ9kPmaRjBByoeA0kuBk23qq7DNXlnka/4c=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=tEtb9WyL3mBjGEGCNpjvEeJSDvCtpU7EJhV+hK62j3K1lYRP2gqTVEyGoQXqBy1WCfsazuozLw28geV1SVvUCf0DsUlqYU/9VrmtH6NMe2SaJIm55WfKrqtYyXSJ+oPIV9Qn1qQSbgkOQPCHpkowaInhwf4lckPNygnSn1Nyiq8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
+	 MIME-Version; b=DBsBqWg2MVVytdN+WWH9zwy6nOdbQbLg8F1WmTlzZDD6StLICc5ocWomxaRwP4W+/qvmnNRX/EVPcoXzJYuAtRP88zQA5jULrpUJ5Nm6XjyeFUrwlN6oa9PMAaTJAAA38OePcENY0Gs9Ox/quzd+kBJLx1foomdhEvQZeveNLLc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
 Received: from mail.maildlp.com (unknown [172.19.93.142])
-	by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4YRRbZ0Jnxz4f3jss;
-	Mon,  6 Jan 2025 16:06:50 +0800 (CST)
+	by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4YRRbV1C8lz4f3jd9;
+	Mon,  6 Jan 2025 16:06:46 +0800 (CST)
 Received: from mail02.huawei.com (unknown [10.116.40.128])
-	by mail.maildlp.com (Postfix) with ESMTP id 005A91A14E0;
-	Mon,  6 Jan 2025 16:07:04 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTP id 44BB91A10C2;
+	Mon,  6 Jan 2025 16:07:06 +0800 (CST)
 Received: from huaweicloud.com (unknown [10.175.124.27])
-	by APP4 (Coremail) with SMTP id gCh0CgD3W2AZj3tnVG29AA--.29272S21;
-	Mon, 06 Jan 2025 16:07:04 +0800 (CST)
+	by APP4 (Coremail) with SMTP id gCh0CgD3W2AZj3tnVG29AA--.29272S23;
+	Mon, 06 Jan 2025 16:07:06 +0800 (CST)
 From: Hou Tao <houtao@huaweicloud.com>
 To: bpf@vger.kernel.org,
 	netdev@vger.kernel.org
@@ -40,9 +40,9 @@ Cc: Martin KaFai Lau <martin.lau@linux.dev>,
 	John Fastabend <john.fastabend@gmail.com>,
 	houtao1@huawei.com,
 	xukuohai@huawei.com
-Subject: [PATCH bpf-next 17/19] bpf: Remove migrate_{disable|enable} from bpf_local_storage_alloc()
-Date: Mon,  6 Jan 2025 16:18:58 +0800
-Message-Id: <20250106081900.1665573-18-houtao@huaweicloud.com>
+Subject: [PATCH bpf-next 19/19] bpf: Remove migrate_{disable|enable} from bpf_selem_free()
+Date: Mon,  6 Jan 2025 16:19:00 +0800
+Message-Id: <20250106081900.1665573-20-houtao@huaweicloud.com>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20250106081900.1665573-1-houtao@huaweicloud.com>
 References: <20250106081900.1665573-1-houtao@huaweicloud.com>
@@ -53,10 +53,10 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:gCh0CgD3W2AZj3tnVG29AA--.29272S21
-X-Coremail-Antispam: 1UD129KBjvJXoW7tF4rJw48AF4xXr13Cw18uFg_yoW8JFyDpF
-	Z7Kr1rCrWYqa1rZa9rJF4fAry5Gw1fWr12kws8ZrySqrsxZr95Ww1xK3W2va43Jryjqr4f
-	ZFyYgF1j9r1DZFDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+X-CM-TRANSID:gCh0CgD3W2AZj3tnVG29AA--.29272S23
+X-Coremail-Antispam: 1UD129KBjvJXoW7Kr1fCr48CF1ftr1rtr48tFb_yoW8tFWfpF
+	Z7Xr95Cr4Uta1F9FsrJF4fCryrXw48Wr17Kr4DA34rtrsxZF93Gr4IkF18Za43Gw1UXryf
+	ZF1Yga4Uuw4UCFDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
 	9KBjDU0xBIdaVrnRJUUUPvb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
 	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAV
 	Cq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0
@@ -75,43 +75,63 @@ X-CM-SenderInfo: xkrx3t3r6k3tpzhluzxrxghudrp/
 
 From: Hou Tao <houtao1@huawei.com>
 
-These two callers of bpf_local_storage_alloc() are the same as
-bpf_selem_alloc(): bpf_sk_storage_clone() and
-bpf_local_storage_update(). The running contexts of these two callers
-have already disabled migration, therefore, there is no need to add
-extra migrate_{disable|enable} pair in bpf_local_storage_alloc(). Also
-add a cant_migrate() check in bpf_local_storage_alloc() to ensure such
-guarantee will not be broken.
+bpf_selem_free() has the following three callers:
+
+(1) bpf_local_storage_update
+It will be invoked through ->map_update_elem syscall or helpers for
+storage map. Migration has already been disabled in these running
+contexts.
+
+(2) bpf_sk_storage_clone
+It has already disabled migration before invoking bpf_selem_free().
+
+(3) bpf_selem_free_list
+bpf_selem_free_list() has three callers: bpf_selem_unlink_storage(),
+bpf_local_storage_update() and bpf_local_storage_destroy().
+
+The callers of bpf_selem_unlink_storage() includes: storage map
+->map_delete_elem syscall, storage map delete helpers and
+bpf_local_storage_map_free(). These contexts have already disabled
+migration when invoking bpf_selem_unlink() which invokes
+bpf_selem_unlink_storage() and bpf_selem_free_list() correspondingly.
+
+bpf_local_storage_update() has been analyzed as the first caller above.
+bpf_local_storage_destroy() is invoked when freeing the local storage
+for the kernel object. Now cgroup, task, inode and sock storage have
+already disabled migration before invoking bpf_local_storage_destroy().
+
+After the analyses above, it is safe to remove migrate_{disable|enable}
+from bpf_selem_free(). Also add a cant_migrate() check in
+bpf_selem_free().
 
 Signed-off-by: Hou Tao <houtao1@huawei.com>
 ---
- kernel/bpf/bpf_local_storage.c | 10 ++++------
- 1 file changed, 4 insertions(+), 6 deletions(-)
+ kernel/bpf/bpf_local_storage.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/kernel/bpf/bpf_local_storage.c b/kernel/bpf/bpf_local_storage.c
-index fd48a2a17ccd..0970766278f7 100644
+index d67ba116aee8..f196093db0a0 100644
 --- a/kernel/bpf/bpf_local_storage.c
 +++ b/kernel/bpf/bpf_local_storage.c
-@@ -500,15 +500,13 @@ int bpf_local_storage_alloc(void *owner,
- 	if (err)
- 		return err;
- 
--	if (smap->bpf_ma) {
--		migrate_disable();
+@@ -235,6 +235,8 @@ void bpf_selem_free(struct bpf_local_storage_elem *selem,
+ 		    struct bpf_local_storage_map *smap,
+ 		    bool reuse_now)
+ {
 +	cant_migrate();
 +
-+	if (smap->bpf_ma)
- 		storage = bpf_mem_cache_alloc_flags(&smap->storage_ma, gfp_flags);
+ 	if (!smap->bpf_ma) {
+ 		/* Only task storage has uptrs and task storage
+ 		 * has moved to bpf_mem_alloc. Meaning smap->bpf_ma == true
+@@ -258,9 +260,7 @@ void bpf_selem_free(struct bpf_local_storage_elem *selem,
+ 		 * bpf_mem_cache_free will be able to reuse selem
+ 		 * immediately.
+ 		 */
+-		migrate_disable();
+ 		bpf_mem_cache_free(&smap->selem_ma, selem);
 -		migrate_enable();
--	} else {
-+	else
- 		storage = bpf_map_kzalloc(&smap->map, sizeof(*storage),
- 					  gfp_flags | __GFP_NOWARN);
--	}
--
- 	if (!storage) {
- 		err = -ENOMEM;
- 		goto uncharge;
+ 		return;
+ 	}
+ 
 -- 
 2.29.2
 
