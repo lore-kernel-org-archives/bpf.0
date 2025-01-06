@@ -1,28 +1,28 @@
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C2F71D7E42;
-	Mon,  6 Jan 2025 08:07:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 433881C4A1C;
+	Mon,  6 Jan 2025 08:07:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736150828; cv=none; b=QeAR6HnH8N2Rnb8aIk9sEO1aF+1GqNAgelKNXo7hkrF2reOqSC2y/FnCvIfwogxIwHx9wmc8eVcqyAqyAK3ikrtENLIz8EAKCWWJli0FYo/VtZuN/n6Np1tKILgQKC1jNf2P2T9k5CgEY92EvBfw98OG/KC7RyjoZWAZWOFBgaM=
+	t=1736150827; cv=none; b=TBDRQi2s3rXySVvspsshXKwuUI3B3AWiSBjgmgB/4nP8+OkifuGA7C/3+alrEc4Hj/XKitHQKYlu88YzSWqY8UdKSbQLyzX3n1h0sRIX+wgzAeoU9jj7vuPvH61OI696t/0aaJGIk16TbG2dqOdc1KZXi+lyjwDJzilrAZwGs+o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736150828; c=relaxed/simple;
-	bh=nokPECxiWnuJREYY086A3+hRWJ9OBOpS1uU++LBiyGs=;
+	s=arc-20240116; t=1736150827; c=relaxed/simple;
+	bh=OLnJ60MXVHbnChRm7xvDOUWS7wmMXSVUiNYpaMdRd8E=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=ghsKPO58F2oSUADHHM8dzj0seJUqF02psFnQckotOfWXyz+4+HKtxhQM2SlRApmsxXlozhLGJkAlGnmXts7Camkt2b97wX6KYjiarGr1vL/4Q5utRqNrYg8ry/cYMxGMI792ub41szdxu0220PVoDWOnodC+LfK5v6CucN+MYSA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
+	 MIME-Version; b=Y6AQRm+LuoSmOZ4u7GMpPDVFvmLsf8CasAx7GStDYgFZ4KfA+Fa43hvoekTp6JIH4NTxPn2z1ZOlTTnJA+OSNpCyhwdh7AjFiF77Dk5uiixdMqg/SAGuIFD26u7MPMSOVSY9mzCdaQGZinbkIoFa4SoncENGlHhb8UUjFZKBA2I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.235])
-	by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4YRRbN3ckJz4f3kvv;
-	Mon,  6 Jan 2025 16:06:40 +0800 (CST)
+Received: from mail.maildlp.com (unknown [172.19.163.216])
+	by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4YRRbK6KGQz4f3jR1;
+	Mon,  6 Jan 2025 16:06:37 +0800 (CST)
 Received: from mail02.huawei.com (unknown [10.116.40.128])
-	by mail.maildlp.com (Postfix) with ESMTP id C424C1A0E7B;
-	Mon,  6 Jan 2025 16:07:01 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTP id E934A1A1A96;
+	Mon,  6 Jan 2025 16:06:57 +0800 (CST)
 Received: from huaweicloud.com (unknown [10.175.124.27])
-	by APP4 (Coremail) with SMTP id gCh0CgD3W2AZj3tnVG29AA--.29272S16;
-	Mon, 06 Jan 2025 16:07:01 +0800 (CST)
+	by APP4 (Coremail) with SMTP id gCh0CgD3W2AZj3tnVG29AA--.29272S10;
+	Mon, 06 Jan 2025 16:06:57 +0800 (CST)
 From: Hou Tao <houtao@huaweicloud.com>
 To: bpf@vger.kernel.org,
 	netdev@vger.kernel.org
@@ -40,9 +40,9 @@ Cc: Martin KaFai Lau <martin.lau@linux.dev>,
 	John Fastabend <john.fastabend@gmail.com>,
 	houtao1@huawei.com,
 	xukuohai@huawei.com
-Subject: [PATCH bpf-next 12/19] bpf: Disable migration for bpf_selem_unlink in bpf_local_storage_map_free()
-Date: Mon,  6 Jan 2025 16:18:53 +0800
-Message-Id: <20250106081900.1665573-13-houtao@huaweicloud.com>
+Subject: [PATCH bpf-next 06/19] bpf: Disable migration when destroying inode storage
+Date: Mon,  6 Jan 2025 16:18:47 +0800
+Message-Id: <20250106081900.1665573-7-houtao@huaweicloud.com>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20250106081900.1665573-1-houtao@huaweicloud.com>
 References: <20250106081900.1665573-1-houtao@huaweicloud.com>
@@ -53,10 +53,10 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:gCh0CgD3W2AZj3tnVG29AA--.29272S16
-X-Coremail-Antispam: 1UD129KBjvJXoW7Ar1fCFyrCrW8uF4UWFW8tFb_yoW8CrykpF
-	93GryUtr4vqFWkursrJw4xAry3Aw4rW343KayDK34FvrsxAr98Xw1IkF1Fqa45Krn7tr1f
-	Zas0g3WjyrWUZFDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+X-CM-TRANSID:gCh0CgD3W2AZj3tnVG29AA--.29272S10
+X-Coremail-Antispam: 1UD129KBjvJXoW7AF15Gw1kZw4kGF13WFWDXFb_yoW8AFWfpF
+	Z7try5tw4qq3yF9rs7Xw4xCryxAayfWay7Gr4qkw1ftrsxXF98Kw1IyF1Fva43Jryvgr4I
+	vFn0gFn8Zr1UZFDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
 	9KBjDU0xBIdaVrnRJUUUPvb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
 	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAV
 	Cq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0
@@ -67,60 +67,61 @@ X-Coremail-Antispam: 1UD129KBjvJXoW7Ar1fCFyrCrW8uF4UWFW8tFb_yoW8CrykpF
 	z7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2
 	AFwI0_Jw0_GFyl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAq
 	x4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6r
-	W5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Gr0_Xr1lIxAIcVC0I7IYx2IY6xkF
+	W5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2IY6xkF
 	7I0E14v26r4UJVWxJr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14
-	v26r4j6F4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuY
+	v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuY
 	vjxUF9NVUUUUU
 X-CM-SenderInfo: xkrx3t3r6k3tpzhluzxrxghudrp/
 
 From: Hou Tao <houtao1@huawei.com>
 
-bpf_local_storage_map_free() invokes bpf_selem_unlink() to unlink and
-free the element from the storage map. It may invoke
-bpf_obj_free_fields() to free the special fields in the map value. Since
-these special fields may be allocated from bpf memory allocator,
-migrate_{disable|enable} pairs are necessary for the freeing of these
-objects.
+When destroying inode storage, it invokes bpf_local_storage_destroy() to
+remove all storage elements saved in the inode storage. The destroy
+procedure will call bpf_selem_free() to free the element, and
+bpf_selem_free() calls bpf_obj_free_fields() to free the special fields
+in map value (e.g., kptr). Since kptrs may be allocated from bpf memory
+allocator, migrate_{disable|enable} pairs are necessary for the freeing
+of these kptrs.
 
 To simplify reasoning about when migrate_disable() is needed for the
-freeing of these dynamically-allocated objects, let the caller to
+freeing of these dynamically-allocated kptrs, let the caller to
 guarantee migration is disabled before invoking bpf_obj_free_fields().
-
-Therefore, the patch moves migrate_{disable|enable} out of the
-busy_counter condition and calls migrate_disable() before invoking
-bpf_obj_free_fields(). The migrate_{disable|enable} pairs in the
+Therefore, the patch adds migrate_{disable|enable} pair in
+bpf_inode_storage_free(). The migrate_{disable|enable} pairs in the
 underlying implementation of bpf_obj_free_fields() will be removed by
 the following patch.
 
 Signed-off-by: Hou Tao <houtao1@huawei.com>
 ---
- kernel/bpf/bpf_local_storage.c | 10 ++++------
- 1 file changed, 4 insertions(+), 6 deletions(-)
+ kernel/bpf/bpf_inode_storage.c | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/kernel/bpf/bpf_local_storage.c b/kernel/bpf/bpf_local_storage.c
-index 615a3034baeb..b649cf736438 100644
---- a/kernel/bpf/bpf_local_storage.c
-+++ b/kernel/bpf/bpf_local_storage.c
-@@ -905,15 +905,13 @@ void bpf_local_storage_map_free(struct bpf_map *map,
- 		while ((selem = hlist_entry_safe(
- 				rcu_dereference_raw(hlist_first_rcu(&b->list)),
- 				struct bpf_local_storage_elem, map_node))) {
--			if (busy_counter) {
--				migrate_disable();
-+			migrate_disable();
-+			if (busy_counter)
- 				this_cpu_inc(*busy_counter);
--			}
- 			bpf_selem_unlink(selem, true);
--			if (busy_counter) {
-+			if (busy_counter)
- 				this_cpu_dec(*busy_counter);
--				migrate_enable();
--			}
-+			migrate_enable();
- 			cond_resched_rcu();
- 		}
- 		rcu_read_unlock();
+diff --git a/kernel/bpf/bpf_inode_storage.c b/kernel/bpf/bpf_inode_storage.c
+index a51c82dee1bd..15a3eb9b02d9 100644
+--- a/kernel/bpf/bpf_inode_storage.c
++++ b/kernel/bpf/bpf_inode_storage.c
+@@ -62,16 +62,17 @@ void bpf_inode_storage_free(struct inode *inode)
+ 	if (!bsb)
+ 		return;
+ 
++	migrate_disable();
+ 	rcu_read_lock();
+ 
+ 	local_storage = rcu_dereference(bsb->storage);
+-	if (!local_storage) {
+-		rcu_read_unlock();
+-		return;
+-	}
++	if (!local_storage)
++		goto out;
+ 
+ 	bpf_local_storage_destroy(local_storage);
++out:
+ 	rcu_read_unlock();
++	migrate_enable();
+ }
+ 
+ static void *bpf_fd_inode_storage_lookup_elem(struct bpf_map *map, void *key)
 -- 
 2.29.2
 
