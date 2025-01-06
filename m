@@ -1,51 +1,79 @@
-Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B7F21DA0E1;
-	Mon,  6 Jan 2025 08:07:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0638B1A2631;
+	Mon,  6 Jan 2025 08:10:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736150836; cv=none; b=KVTyCsoBiP017BC5o6N0QGHEWI6dyckuBhqw1CrefYje2qjb4t7VY2uMMG/aiw/4ZQ2hEaShG9dgnakOE39t0Nz1mgi++tIPSZT5w0XQ3cbscE567WrR0Tu5pPF++g0i7HGoQEOASvSLGIW2o1uQqiLuDdL2+zVHvG79ar1SYmk=
+	t=1736151060; cv=none; b=eqgXtWz8wZ9Fge5cuTdECadZ3jMXIFW9kgUZ+RZ9yV82VIPfcp9JSTe1L3LD1QDNp8pJrxd1Cefj/aK0+HnL6Op1UPafRJG9YZa7BBD7ajvsxXOyipHzCyye86XesgjLXKDqKT7uzRuI1MYy/CVpWcPOgCbU+SSQasmsYEiYBKw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736150836; c=relaxed/simple;
-	bh=XPAyxuEqoQ9kPmaRjBByoeA0kuBk23qq7DNXlnka/4c=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=DBsBqWg2MVVytdN+WWH9zwy6nOdbQbLg8F1WmTlzZDD6StLICc5ocWomxaRwP4W+/qvmnNRX/EVPcoXzJYuAtRP88zQA5jULrpUJ5Nm6XjyeFUrwlN6oa9PMAaTJAAA38OePcENY0Gs9Ox/quzd+kBJLx1foomdhEvQZeveNLLc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.93.142])
-	by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4YRRbV1C8lz4f3jd9;
-	Mon,  6 Jan 2025 16:06:46 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.128])
-	by mail.maildlp.com (Postfix) with ESMTP id 44BB91A10C2;
-	Mon,  6 Jan 2025 16:07:06 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.175.124.27])
-	by APP4 (Coremail) with SMTP id gCh0CgD3W2AZj3tnVG29AA--.29272S23;
-	Mon, 06 Jan 2025 16:07:06 +0800 (CST)
-From: Hou Tao <houtao@huaweicloud.com>
-To: bpf@vger.kernel.org,
-	netdev@vger.kernel.org
-Cc: Martin KaFai Lau <martin.lau@linux.dev>,
-	Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Hao Luo <haoluo@google.com>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Jiri Olsa <jolsa@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	houtao1@huawei.com,
-	xukuohai@huawei.com
-Subject: [PATCH bpf-next 19/19] bpf: Remove migrate_{disable|enable} from bpf_selem_free()
-Date: Mon,  6 Jan 2025 16:19:00 +0800
-Message-Id: <20250106081900.1665573-20-houtao@huaweicloud.com>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20250106081900.1665573-1-houtao@huaweicloud.com>
-References: <20250106081900.1665573-1-houtao@huaweicloud.com>
+	s=arc-20240116; t=1736151060; c=relaxed/simple;
+	bh=z6rapFQsJJuLWWLJVSfKW1IPI0ctzTNB5tuk0C7Ws2s=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=rEFVnsXdym6u+BNk26+WCsdacM99qdvEOW8neKdgq25vvyNihPDFacHvJCQDQ6jnLety6MmrJsA6zEsW5XdxjJx2IsRlR9zGLdMS2ObhkFZd92zbkffZB08wzJOH4biRFJp2piuzn53ZndSjzUtwXBt5RK7qGBFbpOphXSWBF5U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lezsdofa; arc=none smtp.client-ip=209.85.214.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lezsdofa"
+Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-21628b3fe7dso194787895ad.3;
+        Mon, 06 Jan 2025 00:10:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1736151058; x=1736755858; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=UNj5EB3CBzzHNe2564u4Vg3r3GIGTo09F7r1zlnGu1M=;
+        b=lezsdofasqPgOyVLFOjFD/yX8VTozt/G13Q7oTlHdreAa3ZIJm5G+/eBdyxVNtvwt3
+         MlskO3fGfylxHI/AN7AomyB6Le4OXWeWeyc3VhE1JSLx640Bm5YiU8Dd1h80StbrlWC6
+         LlGpHIGsFd1SJ3r2lAvj9ZOU2l5DPTHUfIqOSmfzllgi5JUJ2yhlHgD7D5km+qaFYnXF
+         SP0Cu3IPHVIdDM/XlvrHXG54abKXb5ZynSuWla07IPwsfV5Fd/keVmWjvnEovGJDbeQ3
+         NfoQ1XDJYTbpUIqOKCNi1YPHGl0FAi96dWn1esaCL4qL2F6Ixice8WrHsIZ9Tg1nbh6m
+         nCxA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1736151058; x=1736755858;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=UNj5EB3CBzzHNe2564u4Vg3r3GIGTo09F7r1zlnGu1M=;
+        b=QdhE9o12A4GOwqpQAHNQwlY/jwgtrJIK9aRifipAv0zCKtFPa6QeOODIhBlBsPgF6j
+         ZApnHNV+AivaUAVZU8PhaEZDjSZR0mYh9XQSeKl2k7x8Huyh7VRVkFMA/VW2p4czaEeb
+         VL2dO9PrhdA0HtBb1toLuSTDufi3dumiyiAjrrV1xSHapB3OOYGTpoIPi6XthjsZ3lJ7
+         +R1/n2Oy5kai6RlbtE6FGNDnbzbLd1BOJ6PkIhKAEsnIiAbUNh5ChpVH7mp7N2rKLYY5
+         Sh/g6yO3sr+jc7D1TA8dFIKiBlej61vh1jJxIhopeMC+TTcwhs34wZeCzXFGb7obSlyz
+         EgMA==
+X-Forwarded-Encrypted: i=1; AJvYcCU/h4OdRhQyLSFtMldvsEwu2F0smIEQEUdtf5R+aczoqnW/ASsN1zEeTBXOcpyYToO7uMujaBwmTK4uR1KOKeTH@vger.kernel.org, AJvYcCUrgcMxLhx7gM8j3WeRcTUyTUw8w9POh8ssiSaoxtbGePQbH39KOJYTxJJRGSEukSQy47E=@vger.kernel.org, AJvYcCX/VoWVMe/m5vG5vmh6fKrNzUutLavGfz7ZaYFqJptJmKQCpRUvbBpBs/o/xpGuKObyiHud7xe36/zeIaXP@vger.kernel.org
+X-Gm-Message-State: AOJu0YxGa5MgE9oW9CjLDni6hYXch2n/BPiy5ZKY5P28K6fNIikeukXD
+	PX3qr0znQwcjF96zmRtQthrluMtCNNtbW5aFz8ijCDEPNOChUdgRnvUjuA==
+X-Gm-Gg: ASbGncs2CcSWo6dRMxGhZ41H79Nod0X1vfxp2erxkYyt0VQl03vGHuFhzUGbt/GItki
+	Bm1tljzpKNBq7DRi13tOwKz+kF49Yx9GlwuJGczPEcJU4I1V0uh/oAuA34VWHitsnilDT6cgq2P
+	VzUBeZxFLH5GVAoWyN2F9deHO56Lit5VNEZXHYyghP6bnbcCKy+wKRsxZRLfxid5Afxpsg3n1Ei
+	dwGpVc04zXpJ+OQjdbCFRUWPzfiqIjpfEntxemVE8C2ixfZIYQLve8/THznMUtGeRLH/vvrIlip
+X-Google-Smtp-Source: AGHT+IHjMYJ+kYgL9lIpddes5A+CsRLnuYBEZZhoqovTAHBKAqmupPfBM7y9cycXTJ4TnPKyShex5Q==
+X-Received: by 2002:a05:6a21:3189:b0:1e1:ab8b:dda1 with SMTP id adf61e73a8af0-1e5e080c4a3mr6061674637.35.1736151057881;
+        Mon, 06 Jan 2025 00:10:57 -0800 (PST)
+Received: from fedora.dns.podman ([43.228.180.230])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-72aad835469sm31910429b3a.60.2025.01.06.00.10.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Jan 2025 00:10:57 -0800 (PST)
+From: Hangbin Liu <liuhangbin@gmail.com>
+To: netdev@vger.kernel.org
+Cc: "Jason A. Donenfeld" <Jason@zx2c4.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Simon Horman <horms@kernel.org>,
+	Phil Sutter <phil@nwl.cc>,
+	Florian Westphal <fw@strlen.de>,
+	Petr Mladek <pmladek@suse.com>,
+	Yoann Congal <yoann.congal@smile.fr>,
+	wireguard@lists.zx2c4.com,
+	bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Hangbin Liu <liuhangbin@gmail.com>
+Subject: [PATCHv4 RESEND net-next 0/2] selftests: wireguards: use nftables for testing
+Date: Mon,  6 Jan 2025 08:10:41 +0000
+Message-ID: <20250106081043.2073169-1-liuhangbin@gmail.com>
+X-Mailer: git-send-email 2.46.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -53,85 +81,23 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:gCh0CgD3W2AZj3tnVG29AA--.29272S23
-X-Coremail-Antispam: 1UD129KBjvJXoW7Kr1fCr48CF1ftr1rtr48tFb_yoW8tFWfpF
-	Z7Xr95Cr4Uta1F9FsrJF4fCryrXw48Wr17Kr4DA34rtrsxZF93Gr4IkF18Za43Gw1UXryf
-	ZF1Yga4Uuw4UCFDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUPvb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAV
-	Cq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0
-	rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267
-	AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E
-	14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7
-	xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Y
-	z7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2
-	AFwI0_Jw0_GFyl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAq
-	x4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6r
-	W5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Gr0_Xr1lIxAIcVC0I7IYx2IY6xkF
-	7I0E14v26r4UJVWxJr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14
-	v26r4j6F4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuY
-	vjxUF9NVUUUUU
-X-CM-SenderInfo: xkrx3t3r6k3tpzhluzxrxghudrp/
 
-From: Hou Tao <houtao1@huawei.com>
+This patch set convert iptables to nftables for wireguard testing, as
+iptables is deparated and nftables is the default framework of most releases.
 
-bpf_selem_free() has the following three callers:
+v3: drop iptables directly (Jason A. Donenfeld)
+    Also convert to using nft for qemu testing (Jason A. Donenfeld)
+v2: use one nft table for testing (Phil Sutter)
 
-(1) bpf_local_storage_update
-It will be invoked through ->map_update_elem syscall or helpers for
-storage map. Migration has already been disabled in these running
-contexts.
+Hangbin Liu (2):
+  selftests: wireguards: convert iptables to nft
+  selftests: wireguard: update to using nft for qemu test
 
-(2) bpf_sk_storage_clone
-It has already disabled migration before invoking bpf_selem_free().
+ tools/testing/selftests/wireguard/netns.sh    | 29 +++++++++-----
+ .../testing/selftests/wireguard/qemu/Makefile | 40 ++++++++++++++-----
+ .../selftests/wireguard/qemu/kernel.config    |  7 ++--
+ 3 files changed, 53 insertions(+), 23 deletions(-)
 
-(3) bpf_selem_free_list
-bpf_selem_free_list() has three callers: bpf_selem_unlink_storage(),
-bpf_local_storage_update() and bpf_local_storage_destroy().
-
-The callers of bpf_selem_unlink_storage() includes: storage map
-->map_delete_elem syscall, storage map delete helpers and
-bpf_local_storage_map_free(). These contexts have already disabled
-migration when invoking bpf_selem_unlink() which invokes
-bpf_selem_unlink_storage() and bpf_selem_free_list() correspondingly.
-
-bpf_local_storage_update() has been analyzed as the first caller above.
-bpf_local_storage_destroy() is invoked when freeing the local storage
-for the kernel object. Now cgroup, task, inode and sock storage have
-already disabled migration before invoking bpf_local_storage_destroy().
-
-After the analyses above, it is safe to remove migrate_{disable|enable}
-from bpf_selem_free(). Also add a cant_migrate() check in
-bpf_selem_free().
-
-Signed-off-by: Hou Tao <houtao1@huawei.com>
----
- kernel/bpf/bpf_local_storage.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/kernel/bpf/bpf_local_storage.c b/kernel/bpf/bpf_local_storage.c
-index d67ba116aee8..f196093db0a0 100644
---- a/kernel/bpf/bpf_local_storage.c
-+++ b/kernel/bpf/bpf_local_storage.c
-@@ -235,6 +235,8 @@ void bpf_selem_free(struct bpf_local_storage_elem *selem,
- 		    struct bpf_local_storage_map *smap,
- 		    bool reuse_now)
- {
-+	cant_migrate();
-+
- 	if (!smap->bpf_ma) {
- 		/* Only task storage has uptrs and task storage
- 		 * has moved to bpf_mem_alloc. Meaning smap->bpf_ma == true
-@@ -258,9 +260,7 @@ void bpf_selem_free(struct bpf_local_storage_elem *selem,
- 		 * bpf_mem_cache_free will be able to reuse selem
- 		 * immediately.
- 		 */
--		migrate_disable();
- 		bpf_mem_cache_free(&smap->selem_ma, selem);
--		migrate_enable();
- 		return;
- 	}
- 
 -- 
-2.29.2
+2.46.0
 
