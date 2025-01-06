@@ -1,26 +1,26 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67F9B1DDA2E;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 646BC1DD0FE;
 	Mon,  6 Jan 2025 16:17:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736180240; cv=none; b=mwgKOTwrNQSR0jjHBG/qsukOYFdg7mmgWllP5EcGxw1r0BROABGEx+aBMkQS7pEXhLK+6ReLwHTRNEH5qU+qHiioFQxTMn0dUo8pKufklGITkQfDqy9yGEk9mZdjdmU2TkwQIbXs654i8jmX/1Gfug3QWZ7sVsbyfL2yxBSQvvo=
+	t=1736180240; cv=none; b=hZgmr7QU5RmwWQPrdOZVOP3uspgzWn8MYDQ/JmgwCDcam3pFBbThmndYqMxsCkfhkmxiMSi5IKtpuruorsZS2EzeZb8yCR5SRKuNLdQAYPkfB4i3T/M/tMcO4Ngwp81IJbc9GkX1vHTBbnoO0eMoM004XUAxbR8WZll4t+1rDRs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1736180240; c=relaxed/simple;
-	bh=kzPAcTMWcZPeAwr8haTqBdSj8wDywdjA3mcZv2MWptA=;
+	bh=rolb2hNPLfLRA+V7hBiHARtWSQSp1k++scv0RMxo1cg=;
 	h=Message-ID:Date:From:To:Cc:Subject:References:MIME-Version:
-	 Content-Type; b=UtAz4DtriHObLaL83JjjEEPeXGJNMv+KPztmp5EReECls1EPZZ5xtWYKxRJNXrjCXtpTfVCYgWZ9AtNiqA2Ut4AdHenUJLexi/RXtu2QkvmwyPhHbcyy+QepBx9LpoTpsBDjzfJC8xqzaxYwprfCAud+WIxhCEUaqFkDgGNth/s=
+	 Content-Type; b=WtShWWeGLqBHiBVfOpcwsQtGFGfxF4DitgxffmI26dULoYcqtk2hP0FDUuJ3ofVzgeNu6evDNqzzSfsYkRgLynt5X8UVQnHTeVjFHfam1mEHtrrpGpqaVREdwLex+5AjD1io956MwL6pd03syRzeoGjgl7ti2KUulAeYy1dlaEk=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D648C4CED2;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BB23C4CEE6;
 	Mon,  6 Jan 2025 16:17:20 +0000 (UTC)
 Received: from rostedt by gandalf with local (Exim 4.98)
 	(envelope-from <rostedt@goodmis.org>)
-	id 1tUpoU-00000009J1H-3PpZ;
+	id 1tUpoU-00000009J0I-1yWg;
 	Mon, 06 Jan 2025 11:18:46 -0500
-Message-ID: <20250106161846.664804433@goodmis.org>
+Message-ID: <20250106161846.323200780@goodmis.org>
 User-Agent: quilt/0.68
-Date: Mon, 06 Jan 2025 11:17:31 -0500
+Date: Mon, 06 Jan 2025 11:17:29 -0500
 From: Steven Rostedt <rostedt@goodmis.org>
 To: linux-kernel@vger.kernel.org
 Cc: Masami Hiramatsu <mhiramat@kernel.org>,
@@ -37,7 +37,7 @@ Cc: Masami Hiramatsu <mhiramat@kernel.org>,
  Martin  Kelly <martin.kelly@crowdstrike.com>,
  Christophe Leroy <christophe.leroy@csgroup.eu>,
  Josh Poimboeuf <jpoimboe@redhat.com>
-Subject: [for-next][PATCH 05/14] scripts/sorttable: Make compare_extable() into two functions
+Subject: [for-next][PATCH 03/14] scripts/sorttable: Remove unneeded Elf_Rel
 References: <20250106161726.131794583@goodmis.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -49,25 +49,8 @@ Content-Type: text/plain; charset=UTF-8
 
 From: Steven Rostedt <rostedt@goodmis.org>
 
-Instead of having the compare_extable() part of the sorttable.h header
-where it get's defined twice, since it is a very simple function, just
-define it twice in sorttable.c, and then it can use the proper read
-functions for the word size and endianess and the Elf_Addr macro can be
-removed from sorttable.h.
-
-Also add a micro optimization. Instead of:
-
-    if (a < b)
-        return -1;
-    if (a > b)
-        return 1;
-    return 0;
-
-That can be shorten to:
-
-   if (a < b)
-      return -1;
-   return a > b;
+The code had references to initialize the Elf_Rel relocation tables, but
+it was never used. Remove it.
 
 Cc: bpf <bpf@vger.kernel.org>
 Cc: Masami Hiramatsu <mhiramat@kernel.org>
@@ -83,90 +66,92 @@ Cc: Zheng Yejian <zhengyejian1@huawei.com>
 Cc: Martin  Kelly <martin.kelly@crowdstrike.com>
 Cc: Christophe Leroy <christophe.leroy@csgroup.eu>
 Cc: Josh Poimboeuf <jpoimboe@redhat.com>
-Link: https://lore.kernel.org/20250105162344.945299671@goodmis.org
+Link: https://lore.kernel.org/20250105162344.515342233@goodmis.org
 Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 ---
- scripts/sorttable.c | 20 ++++++++++++++++++++
- scripts/sorttable.h | 14 --------------
- 2 files changed, 20 insertions(+), 14 deletions(-)
+ scripts/sorttable.h | 23 ++---------------------
+ 1 file changed, 2 insertions(+), 21 deletions(-)
 
-diff --git a/scripts/sorttable.c b/scripts/sorttable.c
-index 4dcdbf7a5e26..3e2c17e91485 100644
---- a/scripts/sorttable.c
-+++ b/scripts/sorttable.c
-@@ -173,6 +173,26 @@ static inline unsigned int get_secindex(unsigned int shndx,
- 	return r(&symtab_shndx_start[sym_offs]);
- }
- 
-+static int compare_extable_32(const void *a, const void *b)
-+{
-+	Elf32_Addr av = r(a);
-+	Elf32_Addr bv = r(b);
-+
-+	if (av < bv)
-+		return -1;
-+	return av > bv;
-+}
-+
-+static int compare_extable_64(const void *a, const void *b)
-+{
-+	Elf64_Addr av = r8(a);
-+	Elf64_Addr bv = r8(b);
-+
-+	if (av < bv)
-+		return -1;
-+	return av > bv;
-+}
-+
- /* 32 bit and 64 bit are very similar */
- #include "sorttable.h"
- #define SORTTABLE_64
 diff --git a/scripts/sorttable.h b/scripts/sorttable.h
-index 7c06a754e31a..58e9cebe8362 100644
+index 2a9ec5046e9a..aa7a8499a516 100644
 --- a/scripts/sorttable.h
 +++ b/scripts/sorttable.h
-@@ -23,7 +23,6 @@
- #undef sort_mcount_loc
- #undef elf_mcount_loc
- #undef do_sort
--#undef Elf_Addr
+@@ -26,7 +26,6 @@
+ #undef Elf_Addr
  #undef Elf_Ehdr
  #undef Elf_Shdr
+-#undef Elf_Rel
  #undef Elf_Sym
-@@ -38,7 +37,6 @@
- # define sort_mcount_loc	sort_mcount_loc_64
- # define elf_mcount_loc		elf_mcount_loc_64
- # define do_sort		do_sort_64
--# define Elf_Addr		Elf64_Addr
+ #undef ELF_ST_TYPE
+ #undef uint_t
+@@ -42,7 +41,6 @@
+ # define Elf_Addr		Elf64_Addr
  # define Elf_Ehdr		Elf64_Ehdr
  # define Elf_Shdr		Elf64_Shdr
+-# define Elf_Rel		Elf64_Rel
  # define Elf_Sym		Elf64_Sym
-@@ -52,7 +50,6 @@
- # define sort_mcount_loc	sort_mcount_loc_32
- # define elf_mcount_loc		elf_mcount_loc_32
- # define do_sort		do_sort_32
--# define Elf_Addr		Elf32_Addr
+ # define ELF_ST_TYPE		ELF64_ST_TYPE
+ # define uint_t			uint64_t
+@@ -57,7 +55,6 @@
+ # define Elf_Addr		Elf32_Addr
  # define Elf_Ehdr		Elf32_Ehdr
  # define Elf_Shdr		Elf32_Shdr
+-# define Elf_Rel		Elf32_Rel
  # define Elf_Sym		Elf32_Sym
-@@ -157,17 +154,6 @@ static void *sort_orctable(void *arg)
- }
- #endif
+ # define ELF_ST_TYPE		ELF32_ST_TYPE
+ # define uint_t			uint32_t
+@@ -245,14 +242,10 @@ static int do_sort(Elf_Ehdr *ehdr,
+ 	Elf32_Word *symtab_shndx = NULL;
+ 	Elf_Sym *sort_needed_sym = NULL;
+ 	Elf_Shdr *sort_needed_sec;
+-	Elf_Rel *relocs = NULL;
+-	int relocs_size = 0;
+ 	uint32_t *sort_needed_loc;
+ 	const char *secstrings;
+ 	const char *strtab;
+ 	char *extab_image;
+-	int extab_index = 0;
+-	int i;
+ 	int idx;
+ 	unsigned int shnum;
+ 	unsigned int shstrndx;
+@@ -276,23 +269,15 @@ static int do_sort(Elf_Ehdr *ehdr,
+ 	if (shnum == SHN_UNDEF)
+ 		shnum = _r(&shdr[0].sh_size);
  
--static int compare_extable(const void *a, const void *b)
--{
--	Elf_Addr av = _r(a);
--	Elf_Addr bv = _r(b);
+-	for (i = 0, s = shdr; s < shdr + shnum; i++, s++) {
++	for (s = shdr; s < shdr + shnum; s++) {
+ 		idx = r(&s->sh_name);
+-		if (!strcmp(secstrings + idx, "__ex_table")) {
++		if (!strcmp(secstrings + idx, "__ex_table"))
+ 			extab_sec = s;
+-			extab_index = i;
+-		}
+ 		if (!strcmp(secstrings + idx, ".symtab"))
+ 			symtab_sec = s;
+ 		if (!strcmp(secstrings + idx, ".strtab"))
+ 			strtab_sec = s;
+ 
+-		if ((r(&s->sh_type) == SHT_REL ||
+-		     r(&s->sh_type) == SHT_RELA) &&
+-		    r(&s->sh_info) == extab_index) {
+-			relocs = (void *)ehdr + _r(&s->sh_offset);
+-			relocs_size = _r(&s->sh_size);
+-		}
+ 		if (r(&s->sh_type) == SHT_SYMTAB_SHNDX)
+ 			symtab_shndx = (Elf32_Word *)((const char *)ehdr +
+ 						      _r(&s->sh_offset));
+@@ -394,10 +379,6 @@ static int do_sort(Elf_Ehdr *ehdr,
+ 		      extable_ent_size, compare_extable);
+ 	}
+ 
+-	/* If there were relocations, we no longer need them. */
+-	if (relocs)
+-		memset(relocs, 0, relocs_size);
 -
--	if (av < bv)
--		return -1;
--	if (av > bv)
--		return 1;
--	return 0;
--}
- #ifdef MCOUNT_SORT_ENABLED
- pthread_t mcount_sort_thread;
- 
+ 	/* find the flag main_extable_sort_needed */
+ 	for (sym = (void *)ehdr + _r(&symtab_sec->sh_offset);
+ 	     sym < sym + _r(&symtab_sec->sh_size) / sizeof(Elf_Sym);
 -- 
 2.45.2
 
