@@ -1,313 +1,168 @@
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 300381EC01E;
-	Tue,  7 Jan 2025 12:16:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE40A1E9B18;
+	Tue,  7 Jan 2025 12:53:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736252200; cv=none; b=EJDAfXsPotgWtYGVIrn5Y+CpPH54hPT2d+vLMi35SI4aX0XOPzIN8kc01W1TQa4pAMHn88kFmlDhx95zqIR3nfYsn/fRMduKzufEYUmU3KgcjsmlF0pMk8HzdFsU/HAKWl5GmPQWQOhWg1PDGfMzq8yy8eoNTJ5trYQHiwcgrUQ=
+	t=1736254440; cv=none; b=phWYxdIL48pZ49OMKLmuN/Et6Fb3W5dvTDRCTwik57sFZbGpqdnaB8U62RUFJWAUBIiic03ss3pr/gVy52lpat42ucl/AFIjl0/xs2V7A9+say7drb6S9IXsQVMM1T4CcTae403vmQkNAa/5AfzEpNXSrAzvqTYF5tjm/GUk90E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736252200; c=relaxed/simple;
-	bh=2qD7JRXYOvlfkmYR5r6JnWWjk3xDVrsZmCrn+a3Pj5U=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=n7jHzqwNmOubXF2rLV0Fv4gj0buerxLIEvUj11wXVLMBzzEdouVcLNV1AOr6UNUz41KYYWL0rCxBrHtlB2oq20BSFCwLwOLKsKJeuFdXd+b3OTJp2e1GjemmAv7fQHfaFMJpHO1ayZyO8Qb8jDT6J6iHsTy8grbutK0++QH4/ZA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Vlltfxr+; arc=none smtp.client-ip=209.85.214.177
+	s=arc-20240116; t=1736254440; c=relaxed/simple;
+	bh=inq18haWLx2b6yOB0em2RillkH2hQMFoTDPjGmfyXlM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Np1nWXoiIYYydbRvvx1bySUGoR4D3tQRPNIqDnKcoEnt4+o4vrDwjssrSvsK4xb6MvNpmqND002eOQhi2FUkBXTVgAGp2tdTaW3Py/WRaMEdNHhdx4v3nWaeGuXf0z9RV4l/OOHsyX1ba6qfEndooZ0VRG4Psg8bPPLbJX9nVr0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JCYsGSj0; arc=none smtp.client-ip=209.85.221.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Vlltfxr+"
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-21644aca3a0so47107155ad.3;
-        Tue, 07 Jan 2025 04:16:36 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JCYsGSj0"
+Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-3862df95f92so6821154f8f.2;
+        Tue, 07 Jan 2025 04:53:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1736252196; x=1736856996; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1736254437; x=1736859237; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=l1IzBXLoCjFub0ZAHnwNc3v4ROMZgYPRLWuwGG7QubQ=;
-        b=Vlltfxr+7UJ+7f+szEvT9OLKwDYbKLtevr6Z6OCcJmUJ3FBkYfTrcWtot+EIXWlW3p
-         aIS3iE/csKOQwSGUyterhBS62iF4rJQVwLDifO6z+KtKO7hmy/9w5BH85s8ya19aRfwD
-         sOjHTyxPUW14s/W6lQgWmz+uTF2hYf6K6aSsAGBddrIXxL3cBHpm9vEX3jNFVscEPG1g
-         WroSTNc5JRj6u/FWd2yNDXCN4WUeNIvuGyfFvJZSNRstG3DqoAno0E+zTSe7tYELZ6mx
-         w/txUgpXkRaDKcS2JFTbdtGFnffSDXG8T8tLuySiomk04OigPPL+pUA09G0z1q9mmk1K
-         px+w==
+        bh=F66Eu0GAg36EcgkwSAQsoLttohjhJJSzBhrgfuDrfa8=;
+        b=JCYsGSj0Ozsv7WXXWBE5vGxLV1giyFmwp9fqNQ6SV5l2qzXDhqqTTwbNTXRKipgTMU
+         GP6kQJGdbCBi7fh9CJnvDm42jAq/WoMXlgwKRpZISOwRczhcQt1LoE2B8FOakd+WYa0M
+         jPKT3sJAV/OQQyy4dkbWEWcqOYEPn8LR+Ytl1Ykxxa9RFdqEhCENHQ9slSy0/RuZoFNl
+         FdtRCqsdPaN2yDv2T/hnH89K9magsbWh44CaVoOH06zzN80+oMn0flWYrF/awZL0Tj6l
+         Ioc5B5LHKzsT+DxOwjr3vZ43oHFQnCsWWPqp6QRBQX5bHbOZjlhIhVZnoYMYk05WGZaG
+         F0CQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736252196; x=1736856996;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1736254437; x=1736859237;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=l1IzBXLoCjFub0ZAHnwNc3v4ROMZgYPRLWuwGG7QubQ=;
-        b=iQpaPIUjb5aRqqQH5R1q/X7uBORgG6XmIGh0eVuFqm+hGznTHsqPoZjtVwRjGmvprw
-         G31ku4dPSqongLmf07cj29BBCv2oSEKjM85mwjb91aQuuDXPJy7N5hVYr9VSyOiyW92i
-         DD0qUyTSADEbfR4d1Y4nWjIV6tW9ZWaWM1yWmXHQU1sGjn+WaisqsegYlppI9ciYoiSg
-         m5aA1XKzbrxbxpJ4ruE0YhRqe+j1634ANrOIqKMnA7UhlieLEwiRwbzyfODswm5nQh8p
-         +k8pP98FTjIKZZ7zld5B20Buowsc8t2ILrwp0/KtQVDYxHgp6ZKIhn6Vmx5oXcdDEZ4U
-         vr4w==
-X-Forwarded-Encrypted: i=1; AJvYcCWpiR9jY9eZ2pR2SvpAXQE3ES+pw8CjcFOSvG+h93sNr88z+NPY67VOX+bGTB+cW8Di+yocNMUnsoS7og==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxYf6ChctPUJMagIaqZZE5/aTnK0l0HtPakVLmodVBkcmU5hCKz
-	7ZOHa2R6Z+mgHWp4RXQP7HZG2b8pstyExS2rHqItxAEmo5J7W48XHq8tmBtuflc=
-X-Gm-Gg: ASbGnctPWcifGtl2ImzcH3ZJR9ws/CCx/YNmgerm35PxkpjvenO/JhiKmC/gS+OVhVM
-	rMcgo8XOFn0hmKXwqAFdmM74DcJSs1jBgzL0ikhuCshwgysOmU5dD19b3darj4cbnMebXiL+Mv0
-	Y7ZHSRvmPJ2KSZ9NBc3aUH4NoOEQzUFHMPq8g0yMOIOUmd85qr0RNRJLzPWJSYvNy8Ve6SMgzgU
-	mv0/Rp0y0Goo+xcOnhD0xOw0S7+FFx8Z0cq2V8Rr/z0bL2upIrjXPol8OtWM+J0sisg
-X-Google-Smtp-Source: AGHT+IGTsINaaLmInB+0gPDXxGddb3lHVZPN4pP3+Y/7JAdNdqaFpnGgCOZJ0whUpgZ3dwwQkfLLEQ==
-X-Received: by 2002:a05:6a20:8427:b0:1e0:ca95:3cb2 with SMTP id adf61e73a8af0-1e5e0458eb9mr109041326637.8.1736251718952;
-        Tue, 07 Jan 2025 04:08:38 -0800 (PST)
-Received: from fedora.redhat.com ([2001:250:3c1e:503:ffff:ffff:ffea:4903])
-        by smtp.googlemail.com with ESMTPSA id d2e1a72fcca58-72aad835b8dsm34245118b3a.63.2025.01.07.04.08.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Jan 2025 04:08:38 -0800 (PST)
-From: Ming Lei <tom.leiming@gmail.com>
-To: Jens Axboe <axboe@kernel.dk>,
-	linux-block@vger.kernel.org
-Cc: bpf@vger.kernel.org,
-	Alexei Starovoitov <ast@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Ming Lei <tom.leiming@gmail.com>
-Subject: [RFC PATCH 14/22] selftests: ublk: add tests for covering redirecting to userspace
-Date: Tue,  7 Jan 2025 20:04:05 +0800
-Message-ID: <20250107120417.1237392-15-tom.leiming@gmail.com>
-X-Mailer: git-send-email 2.47.0
-In-Reply-To: <20250107120417.1237392-1-tom.leiming@gmail.com>
-References: <20250107120417.1237392-1-tom.leiming@gmail.com>
+        bh=F66Eu0GAg36EcgkwSAQsoLttohjhJJSzBhrgfuDrfa8=;
+        b=OoMfESW2J/Dmb/B1e0+l0EfcD43Wu4xqAALbcm6/TIxdp7Pmj3Zno3ansvVcJhiKSm
+         vkf5F7y05TfDigbxRJPnK0fHXT25OhnZa9gVzljWYODYfr+7BtT+iFRx3W5sG2qp8nCv
+         vFhI3RMVyQlrdV/9zm+ZItobJGVxc+ptQvMPAEPkazHulH4GDhUJITH3ODMnELvLbWjU
+         4UWRsJ+3B1EtWklqLX9+sOdh+10OHX2yE2OEbc3wNef0sbg4ieM+cJ77YY0ZUdJ7C34U
+         9cxxey+/GujSzfOI22SLGuUWwovPNq0QyIyItWc2Qt1h0Nfl/JUsnMacu2wsziMjS2K+
+         n/rg==
+X-Forwarded-Encrypted: i=1; AJvYcCU0XnkoQ5hoIx9QAVhUquF/kQa0Z//9pvCeGJ0pCC1wJlrsltT84CgagfEoycR9QbujJJZJKds3HYpZ@vger.kernel.org, AJvYcCUE/0Adt020PWhyAsC2bKBHweiflNywzgpY5Biymkxgfplk6WReW7ltvOAyp9uXMn/SPObppyTSwZBgUyAXS52D@vger.kernel.org, AJvYcCVeQ1enEUxexP1GhEdy7ur8hyWjLfM4eWl2aeNSPDINEhWl3stmuvVYDQZrui5mLuS4dgamDxOk8xsyaA==@vger.kernel.org, AJvYcCVoYovxlTxVqdHC1hTGJLJee3Od/uvGHG6A84Plf02IguVCtJjSyWz9HBjTnqtnlZNGuQFNmwQVew48QQ==@vger.kernel.org, AJvYcCW+xm/Ymz7i7TFlRoiHFSB31ghWDK+a7TYUMmLt3jUl79mcCAaC9i5kI1LA6JSpyy/GfnqpOMlkSeolHmYH0/k=@vger.kernel.org, AJvYcCWKSm2v0nDKKLIJ1fmRYOaps1hTWdvV0MmFVqVwUqc6Xaw/p7JO3SqFrxyDw3V4kcyThFv2kL2t6j335Fqc@vger.kernel.org, AJvYcCWUJe8yuL5zTp7DNhaETLOmQwHojSuBzJPF3g+/V0EbhOy6yUekoj/hOjNQr0lNynrExQgamy0woPVp@vger.kernel.org, AJvYcCX8viDrYX/X8hWsPb9GZiUs47am/zXkLXR5PDP5IoRdHFUCPnhZa2EiaZSj5BjRz+2h4+Ks4i4x@vger.kernel.org, AJvYcCXfJzmDwYlSccjdYPBHZXCCDsbveNI39VlZrTAW4Of4oAO6Nb3KLbznKGgzKrfg84mi6FA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxNjRZtVjM75gxKDr8ugr5xAC4uQ5OUgJFumt8H7RrW6mZA5UsG
+	rpk4i4weRqjt9we9041ooy//ivV3sRmugCiAsk0emOh5xWfnyRfL0XkAd+QhPG+vtWlZ24oNRJ+
+	V5UitLeTLfglYaJprvEBdaam4OhM=
+X-Gm-Gg: ASbGncsVhoCwfPPNt/S+ohS/TQ5R7pM0/Emgr9ZFJ1FDYQ16SDRxb7TUaHi6ZhLIpWa
+	v4JE1Ha+C6bPyFdhd3mANmJCwkLuylPpDaCNS
+X-Google-Smtp-Source: AGHT+IHLmQYT6Nfe/TxqetejkNmjRWULhNkXti9Y+FoSO0oNz6JKWmwppacRVdUE20hj8uvdZwuWTQu822tlGBPGUFc=
+X-Received: by 2002:adf:a15d:0:b0:38a:615c:8222 with SMTP id
+ ffacd0b85a97d-38a615c828emr14509037f8f.4.1736254436561; Tue, 07 Jan 2025
+ 04:53:56 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20250104125732.17335-1-shaw.leon@gmail.com> <20250107085646.42302-1-kuniyu@amazon.com>
+In-Reply-To: <20250107085646.42302-1-kuniyu@amazon.com>
+From: Xiao Liang <shaw.leon@gmail.com>
+Date: Tue, 7 Jan 2025 20:53:19 +0800
+Message-ID: <CABAhCOQdBL6h9M2C+kd+bGivRJ9Q72JUxW+-gur0nub_=PmFPA@mail.gmail.com>
+Subject: Re: [PATCH net-next v7 00/11] net: Improve netns handling in rtnetlink
+To: Kuniyuki Iwashima <kuniyu@amazon.com>
+Cc: andrew+netdev@lunn.ch, b.a.t.m.a.n@lists.open-mesh.org, 
+	bpf@vger.kernel.org, bridge@lists.linux.dev, davem@davemloft.net, 
+	donald.hunter@gmail.com, dsahern@kernel.org, edumazet@google.com, 
+	horms@kernel.org, idosch@nvidia.com, jiri@resnulli.us, kuba@kernel.org, 
+	linux-can@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-ppp@vger.kernel.org, 
+	linux-rdma@vger.kernel.org, linux-wireless@vger.kernel.org, 
+	linux-wpan@vger.kernel.org, liuhangbin@gmail.com, netdev@vger.kernel.org, 
+	osmocom-net-gprs@lists.osmocom.org, pabeni@redhat.com, shuah@kernel.org, 
+	wireguard@lists.zx2c4.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Reuse ublk-null for testing UBLK_BPF_IO_REDIRECT:
+On Tue, Jan 7, 2025 at 4:57=E2=80=AFPM Kuniyuki Iwashima <kuniyu@amazon.com=
+> wrote:
+[...]
+>
+> We can fix this by linking the dev to the socket's netns and
+> clean them up in __net_exit hook as done in bareudp and geneve.
+>
+> ---8<---
+> diff --git a/drivers/net/gtp.c b/drivers/net/gtp.c
+> index 89a996ad8cd0..77638a815873 100644
+> --- a/drivers/net/gtp.c
+> +++ b/drivers/net/gtp.c
+> @@ -70,6 +70,7 @@ struct pdp_ctx {
+>  /* One instance of the GTP device. */
+>  struct gtp_dev {
+>         struct list_head        list;
+> +       struct list_head        sock_list;
+>
+>         struct sock             *sk0;
+>         struct sock             *sk1u;
+> @@ -102,6 +103,7 @@ static unsigned int gtp_net_id __read_mostly;
+>
+>  struct gtp_net {
+>         struct list_head gtp_dev_list;
+> +       struct list_head gtp_sock_list;
 
-- queue & complete io with odd tag number
-- redirect io with even tag number, and let userspace handle their
-queueing & completion
-- also select some ios, and returns -EAGAIN from userspace & marking
-it as ready for bpf prog to handle, then finally completed with bpf
-prog in 2nd time
+After a closer look at the GTP driver, I'm confused about
+the gtp_dev_list here. GTP device is linked to this list at
+creation time, but netns can be changed afterwards.
+The list is used in gtp_net_exit_batch_rtnl(), but to my
+understanding net devices can already be deleted in
+default_device_exit_batch() by default.
+And I wonder if the use in gtp_genl_dump_pdp() can be
+replaced by something like for_each_netdev_rcu().
 
-So we can cover code path for UBLK_BPF_IO_REDIRECT.
 
-Signed-off-by: Ming Lei <tom.leiming@gmail.com>
----
- tools/testing/selftests/ublk/Makefile         |  1 +
- .../selftests/ublk/progs/ublk_bpf_kfunc.h     | 10 +++
- .../testing/selftests/ublk/progs/ublk_null.c  | 68 +++++++++++++++++++
- tools/testing/selftests/ublk/test_null_04.sh  | 21 ++++++
- tools/testing/selftests/ublk/ublk_bpf.c       | 39 ++++++++++-
- 5 files changed, 136 insertions(+), 3 deletions(-)
- create mode 100755 tools/testing/selftests/ublk/test_null_04.sh
-
-diff --git a/tools/testing/selftests/ublk/Makefile b/tools/testing/selftests/ublk/Makefile
-index 5a940bae9cbb..38903f05d99d 100644
---- a/tools/testing/selftests/ublk/Makefile
-+++ b/tools/testing/selftests/ublk/Makefile
-@@ -22,6 +22,7 @@ endif
- TEST_PROGS := test_null_01.sh
- TEST_PROGS += test_null_02.sh
- TEST_PROGS += test_null_03.sh
-+TEST_PROGS += test_null_04.sh
- 
- # Order correspond to 'make run_tests' order
- TEST_GEN_PROGS_EXTENDED = ublk_bpf
-diff --git a/tools/testing/selftests/ublk/progs/ublk_bpf_kfunc.h b/tools/testing/selftests/ublk/progs/ublk_bpf_kfunc.h
-index acab490d933c..1db8870b57d6 100644
---- a/tools/testing/selftests/ublk/progs/ublk_bpf_kfunc.h
-+++ b/tools/testing/selftests/ublk/progs/ublk_bpf_kfunc.h
-@@ -20,4 +20,14 @@ extern void ublk_bpf_complete_io(const struct ublk_bpf_io *io, int res) __ksym;
- extern int ublk_bpf_get_dev_id(const struct ublk_bpf_io *io) __ksym;
- extern int ublk_bpf_get_queue_id(const struct ublk_bpf_io *io) __ksym;
- extern int ublk_bpf_get_io_tag(const struct ublk_bpf_io *io) __ksym;
-+
-+static inline unsigned long long build_io_key(const struct ublk_bpf_io *io)
-+{
-+	unsigned long long dev_id = (unsigned short)ublk_bpf_get_dev_id(io);
-+	unsigned long long q_id = (unsigned short)ublk_bpf_get_queue_id(io);
-+	unsigned long long tag = ublk_bpf_get_io_tag(io);
-+
-+	return (dev_id << 32) | (q_id << 16) | tag;
-+}
-+
- #endif
-diff --git a/tools/testing/selftests/ublk/progs/ublk_null.c b/tools/testing/selftests/ublk/progs/ublk_null.c
-index 523bf8ff3ef8..cebdc8a2a214 100644
---- a/tools/testing/selftests/ublk/progs/ublk_null.c
-+++ b/tools/testing/selftests/ublk/progs/ublk_null.c
-@@ -9,6 +9,14 @@
- //#define DEBUG
- #include "ublk_bpf.h"
- 
-+/* todo: make it writable payload of ublk_bpf_io */
-+struct {
-+	__uint(type, BPF_MAP_TYPE_HASH);
-+	__uint(max_entries, 10240);
-+	__type(key, unsigned long long);	/* dev_id + q_id + tag */
-+	__type(value, int);
-+} io_map SEC(".maps");
-+
- /* libbpf v1.4.5 is required for struct_ops to work */
- 
- static inline ublk_bpf_return_t __ublk_null_handle_io_split(const struct ublk_bpf_io *io, unsigned int _off)
-@@ -44,6 +52,54 @@ static inline ublk_bpf_return_t __ublk_null_handle_io_split(const struct ublk_bp
- 	return ublk_bpf_return_val(UBLK_BPF_IO_QUEUED, 0);
- }
- 
-+static inline ublk_bpf_return_t __ublk_null_handle_io_redirect(const struct ublk_bpf_io *io, unsigned int _off)
-+{
-+	unsigned int tag = ublk_bpf_get_io_tag(io);
-+	unsigned long off = -1, sects = -1;
-+	const struct ublksrv_io_desc *iod;
-+	int res;
-+
-+	iod = ublk_bpf_get_iod(io);
-+	if (iod) {
-+		res = iod->nr_sectors << 9;
-+		off = iod->start_sector;
-+		sects = iod->nr_sectors;
-+	} else
-+		res = -EINVAL;
-+
-+	BPF_DBG("ublk dev %u qid %u: handle io tag %u %lx-%d res %d",
-+			ublk_bpf_get_dev_id(io),
-+			ublk_bpf_get_queue_id(io),
-+			ublk_bpf_get_io_tag(io),
-+			off, sects, res);
-+	if (res < 0) {
-+		ublk_bpf_complete_io(io, res);
-+		return ublk_bpf_return_val(UBLK_BPF_IO_QUEUED, 0);
-+	}
-+
-+	if (tag & 0x1) {
-+		/* complete the whole io command after the 2nd sub-io is queued */
-+		ublk_bpf_complete_io(io, res);
-+		return ublk_bpf_return_val(UBLK_BPF_IO_QUEUED, 0);
-+	} else {
-+		unsigned long long key = build_io_key(io);
-+		int *pv;
-+
-+		/* stored value means if it is ready to complete IO */
-+		pv = bpf_map_lookup_elem(&io_map, &key);
-+		if (pv && *pv) {
-+			ublk_bpf_complete_io(io, res);
-+			return ublk_bpf_return_val(UBLK_BPF_IO_QUEUED, 0);
-+		} else {
-+			int v = 0;
-+			res = bpf_map_update_elem(&io_map, &key, &v, BPF_ANY);
-+			if (res)
-+				bpf_printk("update io map element failed %d key %llx\n", res, key);
-+			return ublk_bpf_return_val(UBLK_BPF_IO_REDIRECT, 0);
-+		}
-+	}
-+}
-+
- 
- static inline ublk_bpf_return_t __ublk_null_handle_io(const struct ublk_bpf_io *io, unsigned int _off)
- {
-@@ -106,4 +162,16 @@ struct ublk_bpf_ops null_ublk_bpf_ops_split = {
- 	.queue_io_cmd = (void *)ublk_null_handle_io_split,
- };
- 
-+SEC("struct_ops/ublk_bpf_queue_io_cmd")
-+ublk_bpf_return_t BPF_PROG(ublk_null_handle_io_redirect, struct ublk_bpf_io *io, unsigned int off)
-+{
-+	return __ublk_null_handle_io_redirect(io, off);
-+}
-+
-+SEC(".struct_ops.link")
-+struct ublk_bpf_ops null_ublk_bpf_ops_redirect = {
-+	.id = 2,
-+	.queue_io_cmd = (void *)ublk_null_handle_io_redirect,
-+};
-+
- char LICENSE[] SEC("license") = "GPL";
-diff --git a/tools/testing/selftests/ublk/test_null_04.sh b/tools/testing/selftests/ublk/test_null_04.sh
-new file mode 100755
-index 000000000000..f175e2ddb5cd
---- /dev/null
-+++ b/tools/testing/selftests/ublk/test_null_04.sh
-@@ -0,0 +1,21 @@
-+#!/bin/bash
-+
-+. test_common.sh
-+
-+TID="null_04"
-+ERR_CODE=0
-+
-+# prepare and register & pin bpf prog
-+_prep_bpf_test "null" ublk_null.bpf.o
-+
-+# add two ublk null disks with the pinned bpf prog
-+_add_ublk_dev -t null -n 0 --bpf_prog 2 --quiet
-+
-+# run fio over the ublk disk
-+fio --name=job1 --filename=/dev/ublkb0 --ioengine=libaio --rw=readwrite --iodepth=32 --size=256M > /dev/null 2>&1
-+ERR_CODE=$?
-+
-+# clean and unregister & unpin the bpf prog
-+_cleanup_bpf_test "null"
-+
-+_show_result $TID $ERR_CODE
-diff --git a/tools/testing/selftests/ublk/ublk_bpf.c b/tools/testing/selftests/ublk/ublk_bpf.c
-index 2d923e42845d..e2c2e92268e1 100644
---- a/tools/testing/selftests/ublk/ublk_bpf.c
-+++ b/tools/testing/selftests/ublk/ublk_bpf.c
-@@ -1283,6 +1283,16 @@ static int cmd_dev_help(char *exe)
- }
- 
- /****************** part 2: target implementation ********************/
-+//extern int bpf_map_update_elem(int fd, const void *key, const void *value,
-+//                                   __u64 flags);
-+
-+static inline unsigned long long build_io_key(struct ublk_queue *q, int tag)
-+{
-+       unsigned long long dev_id = (unsigned short)q->dev->dev_info.dev_id;
-+       unsigned long long q_id = (unsigned short)q->q_id;
-+
-+       return (dev_id << 32) | (q_id << 16) | tag;
-+}
- 
- static int ublk_null_tgt_init(struct ublk_dev *dev)
- {
-@@ -1314,12 +1324,35 @@ static int ublk_null_tgt_init(struct ublk_dev *dev)
- static int ublk_null_queue_io(struct ublk_queue *q, int tag)
- {
- 	const struct ublksrv_io_desc *iod = ublk_get_iod(q, tag);
-+	bool bpf = q->dev->dev_info.flags & UBLK_F_BPF;
- 
--	/* won't be called for UBLK_F_BPF */
--	assert(!(q->dev->dev_info.flags & UBLK_F_BPF));
-+	/* either !UBLK_F_BPF or UBLK_F_BPF with redirect */
-+	assert(!bpf || (bpf && !(tag & 0x1)));
- 
--	ublk_complete_io(q, tag, iod->nr_sectors << 9);
-+	if (bpf && (tag % 4)) {
-+		unsigned long long key = build_io_key(q, tag);
-+		int map_fd;
-+		int err;
-+		int val = 1;
-+
-+		map_fd = bpf_obj_get("/sys/fs/bpf/ublk/null/io_map");
-+		if (map_fd < 0) {
-+			ublk_err("Error finding BPF map fd from pinned path\n");
-+			goto exit;
-+		}
-+
-+		/* make this io ready for bpf prog to handle */
-+		err = bpf_map_update_elem(map_fd, &key, &val, BPF_ANY);
-+		if (err) {
-+			ublk_err("Error updating map element: %d\n", errno);
-+			goto exit;
-+		}
-+		ublk_complete_io(q, tag, -EAGAIN);
-+		return 0;
-+	}
- 
-+exit:
-+	ublk_complete_io(q, tag, iod->nr_sectors << 9);
- 	return 0;
- }
- 
--- 
-2.47.0
-
+>  };
+>
+>  static u32 gtp_h_initval;
+> @@ -1526,6 +1528,10 @@ static int gtp_newlink(struct net *src_net, struct=
+ net_device *dev,
+>
+>         gn =3D net_generic(dev_net(dev), gtp_net_id);
+>         list_add_rcu(&gtp->list, &gn->gtp_dev_list);
+> +
+> +       gn =3D net_generic(src_net, gtp_net_id);
+> +       list_add(&gtp->sock_list, &gn->gtp_sock_list);
+> +
+>         dev->priv_destructor =3D gtp_destructor;
+>
+>         netdev_dbg(dev, "registered new GTP interface\n");
+> @@ -1552,6 +1558,7 @@ static void gtp_dellink(struct net_device *dev, str=
+uct list_head *head)
+>                         pdp_context_delete(pctx);
+>
+>         list_del_rcu(&gtp->list);
+> +       list_del(&gtp->sock_list);
+>         unregister_netdevice_queue(dev, head);
+>  }
+>
+> @@ -2465,6 +2472,8 @@ static int __net_init gtp_net_init(struct net *net)
+>         struct gtp_net *gn =3D net_generic(net, gtp_net_id);
+>
+>         INIT_LIST_HEAD(&gn->gtp_dev_list);
+> +       INIT_LIST_HEAD(&gn->gtp_sock_list);
+> +
+>         return 0;
+>  }
+>
+> @@ -2475,9 +2484,12 @@ static void __net_exit gtp_net_exit_batch_rtnl(str=
+uct list_head *net_list,
+>
+>         list_for_each_entry(net, net_list, exit_list) {
+>                 struct gtp_net *gn =3D net_generic(net, gtp_net_id);
+> -               struct gtp_dev *gtp;
+> +               struct gtp_dev *gtp, *next;
+> +
+> +               list_for_each_entry_safe(gtp, next, &gn->gtp_dev_list, li=
+st)
+> +                       gtp_dellink(gtp->dev, dev_to_kill);
+>
+> -               list_for_each_entry(gtp, &gn->gtp_dev_list, list)
+> +               list_for_each_entry_safe(gtp, next, &gn->gtp_sock_list, s=
+ock_list)
+>                         gtp_dellink(gtp->dev, dev_to_kill);
+>         }
+>  }
+> ---8<---
