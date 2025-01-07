@@ -1,220 +1,104 @@
-Received: from out30-118.freemail.mail.aliyun.com (out30-118.freemail.mail.aliyun.com [115.124.30.118])
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B20918C0C;
-	Tue,  7 Jan 2025 04:22:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.118
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2E301DD543;
+	Tue,  7 Jan 2025 06:16:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736223776; cv=none; b=uV2DPiL0n7yKVOwWpZ8Lu5TWIQBRoJxKC5k46VOl1I1lG/WKgzhuL9fjjr6YyaUZh45z35cHI1kQutrAC9JdkRfbkWFJL5F4BrvJj+s7ROaXzvF1r7b4jvly9Ledvte5mc2NkMLO46aadb80kt7JmDpRWfrXafVdW+2GMqHzbPI=
+	t=1736230568; cv=none; b=qrIlyKXaqMLdkm3nC/aGm+fmTg9cxsB+RsT75RJ7sAMYVSUdw+61sdijHTC8iPvsaY2XfySgro5OuyTnhbikOtO5TYqA+UFnx05WYnyQ3T/Z2zVoh0N2pkE3CdWvpSFhnfzjnHGjKA1pwlkGsj5b93d0EKeSzOcos77HPW3myGA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736223776; c=relaxed/simple;
-	bh=BndSGjZeeV8yhLuRMYNsncQZ7TF/PC+gXFAxaM11Isw=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ONzQj2u4fy0GgwKsgW0Xg3T4rwix9FPPybnyGoG7A571iz5+x3T2zehHW3YnrXidVQt4HNeP20fpb5202tWbRpwVkpuVX2xK0HazqWVcGNlNlBT0CVu5xPFA4W13yhQKQSuDaoGPTR7pP+PhLWJKyzYsI1VMgQTZuyKKrlbwnM0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=P2uH12Uk; arc=none smtp.client-ip=115.124.30.118
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="P2uH12Uk"
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux.alibaba.com; s=default;
-	t=1736223765; h=From:To:Subject:Date:Message-ID:MIME-Version;
-	bh=8XcwzEH1Li0PZHViDS8i234tbohuRUg6Knq6W29/4RE=;
-	b=P2uH12UkA3ib4mJfAt1ZTzmYtdXB6p1VLBtHmX2DovYvSxxOFdofSBwQpb9qeKG3Nhk4Pqqc0deItDjMruEm1b87KuXIe7O2dvX2AWdzPUDVQBQSwlqV9KirefMeF0WhWev72l2nKr5Acc7nPSPgtTf0EhsF4ksDOlNxG5C+Jqo=
-Received: from j66a10360.sqa.eu95.tbsite.net(mailfrom:alibuda@linux.alibaba.com fp:SMTPD_---0WN9KZaX_1736223442 cluster:ay36)
-          by smtp.aliyun-inc.com;
-          Tue, 07 Jan 2025 12:17:23 +0800
-From: "D. Wythe" <alibuda@linux.alibaba.com>
-To: kgraul@linux.ibm.com,
-	wenjia@linux.ibm.com,
-	jaka@linux.ibm.com,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	martin.lau@linux.dev,
-	pabeni@redhat.com,
-	song@kernel.org,
-	sdf@google.com,
-	haoluo@google.com,
-	yhs@fb.com,
-	edumazet@google.com,
-	john.fastabend@gmail.com,
-	kpsingh@kernel.org,
-	jolsa@kernel.org,
-	guwen@linux.alibaba.com
-Cc: kuba@kernel.org,
-	davem@davemloft.net,
-	netdev@vger.kernel.org,
-	linux-s390@vger.kernel.org,
-	linux-rdma@vger.kernel.org,
-	bpf@vger.kernel.org
-Subject: [PATCH bpf-next v5 3/5] net/smc: bpf: register smc_ops info struct_ops
-Date: Tue,  7 Jan 2025 12:17:13 +0800
-Message-ID: <20250107041715.98342-4-alibuda@linux.alibaba.com>
-X-Mailer: git-send-email 2.45.0
-In-Reply-To: <20250107041715.98342-1-alibuda@linux.alibaba.com>
-References: <20250107041715.98342-1-alibuda@linux.alibaba.com>
+	s=arc-20240116; t=1736230568; c=relaxed/simple;
+	bh=6qigaCJI7jPGiRLXGrw413iothpRqqC7zQtgW+r1qzU=;
+	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=CL3pONXyEI/9r3io2tWRw42qszcgrqC7iOLkErpAqbjj+ZuPPnlFtDo+53Xvo6X2XqaWJl6RE8WMwckCl0qkDM50Z6dBFJ+r+KkgQYbagQOpDRaqRux4jbXjx0Ys9OR1wfNYlE7LQsJCW2fR6XleAG/ikvfsJqC23ikCArUOFv8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.216])
+	by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4YS14l6l86z4f3jXP;
+	Tue,  7 Jan 2025 14:15:35 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.128])
+	by mail.maildlp.com (Postfix) with ESMTP id 161501A15F9;
+	Tue,  7 Jan 2025 14:15:56 +0800 (CST)
+Received: from [10.174.176.117] (unknown [10.174.176.117])
+	by APP4 (Coremail) with SMTP id gCh0CgA3mFyYxnxnOsEUAQ--.60863S2;
+	Tue, 07 Jan 2025 14:15:55 +0800 (CST)
+Subject: Re: [PATCH] bpf: fix range_tree_set error handling
+To: Soma Nakata <soma.nakata@somane.sakura.ne.jp>
+Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
+ <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
+ Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>
+References: <20250106231536.52856-1-soma.nakata@somane.sakura.ne.jp>
+From: Hou Tao <houtao@huaweicloud.com>
+Message-ID: <ab96c4f1-fdf3-a657-fb5c-14c57d3859bc@huaweicloud.com>
+Date: Tue, 7 Jan 2025 14:15:52 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250106231536.52856-1-soma.nakata@somane.sakura.ne.jp>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-CM-TRANSID:gCh0CgA3mFyYxnxnOsEUAQ--.60863S2
+X-Coremail-Antispam: 1UD129KBjvdXoWrKFy5Xw17uFW3Jr15Kr1UAwb_yoWDCrg_Cr
+	W09r93urZ8G3W2gFy7Wr4Fgr93t393Kr109w1IyFsrXwn8Ga1kGwsakr13ZrykCr43KFZ7
+	Arsavr92yr17WjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+	9fnUUIcSsGvfJTRUUUbaxYFVCjjxCrM7AC8VAFwI0_Gr0_Xr1l1xkIjI8I6I8E6xAIw20E
+	Y4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwV
+	A0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x02
+	67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I
+	0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+	x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+	0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7I2V7IY0VAS
+	07AlzVAYIcxG8wCY1x0262kKe7AKxVWUtVW8ZwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4
+	IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1r
+	MI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJV
+	WUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j
+	6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYx
+	BIdaVFxhVjvjDU0xZFpf9x07UAwIDUUUUU=
+X-CM-SenderInfo: xkrx3t3r6k3tpzhluzxrxghudrp/
 
-To implement injection capability for smc via struct_ops, so that
-user can make their own smc_ops to modify the behavior of smc stack.
 
-Currently, user can write their own implememtion to choose whether to
-use SMC or not before TCP 3rd handshake to be comleted. In the future,
-users can implement more complex functions on smc by expanding it.
 
-Signed-off-by: D. Wythe <alibuda@linux.alibaba.com>
----
- net/smc/af_smc.c  | 10 ++++++
- net/smc/smc_ops.c | 79 +++++++++++++++++++++++++++++++++++++++++++++++
- net/smc/smc_ops.h |  5 +++
- 3 files changed, 94 insertions(+)
+On 1/7/2025 7:15 AM, Soma Nakata wrote:
+> `range_tree_set` might fail and return -ENOMEM,
+> causing subsequent `bpf_arena_alloc_pages` to fail.
+> Added the error handling.
+>
+> Signed-off-by: Soma Nakata <soma.nakata@somane.sakura.ne.jp>
+> ---
+>  kernel/bpf/arena.c | 6 +++++-
+>  1 file changed, 5 insertions(+), 1 deletion(-)
+>
+> diff --git a/kernel/bpf/arena.c b/kernel/bpf/arena.c
+> index 41a76ca56040..4b22a651b5d5 100644
+> --- a/kernel/bpf/arena.c
+> +++ b/kernel/bpf/arena.c
+> @@ -138,7 +138,11 @@ static struct bpf_map *arena_map_alloc(union bpf_attr *attr)
+>  	INIT_LIST_HEAD(&arena->vma_list);
+>  	bpf_map_init_from_attr(&arena->map, attr);
+>  	range_tree_init(&arena->rt);
+> -	range_tree_set(&arena->rt, 0, attr->max_entries);
+> +	err = range_tree_set(&arena->rt, 0, attr->max_entries);
+> +	if (err) {
+> +		bpf_map_area_free(arena);
+> +		goto err;
+> +	}
+>  	mutex_init(&arena->lock);
+>  
+>  	return &arena->map;
 
-diff --git a/net/smc/af_smc.c b/net/smc/af_smc.c
-index 9d76e902fd77..6adedae2986d 100644
---- a/net/smc/af_smc.c
-+++ b/net/smc/af_smc.c
-@@ -55,6 +55,7 @@
- #include "smc_sysctl.h"
- #include "smc_loopback.h"
- #include "smc_inet.h"
-+#include "smc_ops.h"
- 
- static DEFINE_MUTEX(smc_server_lgr_pending);	/* serialize link group
- 						 * creation on server
-@@ -3576,8 +3577,17 @@ static int __init smc_init(void)
- 		pr_err("%s: smc_inet_init fails with %d\n", __func__, rc);
- 		goto out_ulp;
- 	}
-+
-+	rc = smc_bpf_struct_ops_init();
-+	if (rc) {
-+		pr_err("%s: smc_bpf_struct_ops_init fails with %d\n", __func__, rc);
-+		goto out_inet;
-+	}
-+
- 	static_branch_enable(&tcp_have_smc);
- 	return 0;
-+out_inet:
-+	smc_inet_exit();
- out_ulp:
- 	tcp_unregister_ulp(&smc_ulp_ops);
- out_lo:
-diff --git a/net/smc/smc_ops.c b/net/smc/smc_ops.c
-index 0fc19cadd760..67b6b2b92771 100644
---- a/net/smc/smc_ops.c
-+++ b/net/smc/smc_ops.c
-@@ -10,6 +10,10 @@
-  *  Author: D. Wythe <alibuda@linux.alibaba.com>
-  */
- 
-+#include <linux/bpf_verifier.h>
-+#include <linux/bpf.h>
-+#include <linux/btf.h>
-+
- #include "smc_ops.h"
- 
- static DEFINE_SPINLOCK(smc_ops_list_lock);
-@@ -49,3 +53,78 @@ struct smc_ops *smc_ops_find_by_name(const char *name)
- 	}
- 	return NULL;
- }
-+
-+static int __bpf_smc_stub_set_tcp_option(struct tcp_sock *tp) { return 1; }
-+static int __bpf_smc_stub_set_tcp_option_cond(const struct tcp_sock *tp,
-+					      struct inet_request_sock *ireq)
-+{
-+	return 1;
-+}
-+
-+static struct smc_ops __bpf_smc_bpf_ops = {
-+	.set_option		= __bpf_smc_stub_set_tcp_option,
-+	.set_option_cond	= __bpf_smc_stub_set_tcp_option_cond,
-+};
-+
-+static int smc_bpf_ops_init(struct btf *btf) { return 0; }
-+
-+static int smc_bpf_ops_reg(void *kdata, struct bpf_link *link)
-+{
-+	return smc_ops_reg(kdata);
-+}
-+
-+static void smc_bpf_ops_unreg(void *kdata, struct bpf_link *link)
-+{
-+	smc_ops_unreg(kdata);
-+}
-+
-+static int smc_bpf_ops_init_member(const struct btf_type *t,
-+				   const struct btf_member *member,
-+				   void *kdata, const void *udata)
-+{
-+	const struct smc_ops *u_ops;
-+	struct smc_ops *k_ops;
-+	u32 moff;
-+
-+	u_ops = (const struct smc_ops *)udata;
-+	k_ops = (struct smc_ops *)kdata;
-+
-+	moff = __btf_member_bit_offset(t, member) / 8;
-+	switch (moff) {
-+	case offsetof(struct smc_ops, name):
-+		if (bpf_obj_name_cpy(k_ops->name, u_ops->name,
-+				     sizeof(u_ops->name)) <= 0)
-+			return -EINVAL;
-+		return 1;
-+	case offsetof(struct smc_ops, flags):
-+		if (u_ops->flags & ~SMC_OPS_ALL_FLAGS)
-+			return -EINVAL;
-+		k_ops->flags = u_ops->flags;
-+		return 1;
-+	default:
-+		break;
-+	}
-+
-+	return 0;
-+}
-+
-+static const struct bpf_verifier_ops smc_bpf_verifier_ops = {
-+	.get_func_proto		= bpf_base_func_proto,
-+	.is_valid_access	= bpf_tracing_btf_ctx_access,
-+};
-+
-+static struct bpf_struct_ops bpf_smc_bpf_ops = {
-+	.name		= "smc_ops",
-+	.init		= smc_bpf_ops_init,
-+	.reg		= smc_bpf_ops_reg,
-+	.unreg		= smc_bpf_ops_unreg,
-+	.cfi_stubs	= &__bpf_smc_bpf_ops,
-+	.verifier_ops	= &smc_bpf_verifier_ops,
-+	.init_member	= smc_bpf_ops_init_member,
-+	.owner		= THIS_MODULE,
-+};
-+
-+int smc_bpf_struct_ops_init(void)
-+{
-+	return register_bpf_struct_ops(&bpf_smc_bpf_ops, smc_ops);
-+}
-diff --git a/net/smc/smc_ops.h b/net/smc/smc_ops.h
-index 4b33dc2d65b9..06dc30363a83 100644
---- a/net/smc/smc_ops.h
-+++ b/net/smc/smc_ops.h
-@@ -21,5 +21,10 @@
-  * Note: Caller MUST ensure it's was invoked under rcu_read_lock.
-  */
- struct smc_ops *smc_ops_find_by_name(const char *name);
-+#if IS_ENABLED(CONFIG_SMC_OPS)
-+int smc_bpf_struct_ops_init(void);
-+#else
-+static inline int smc_bpf_struct_ops_init(void) { return 0; }
-+#endif
- 
- #endif /* __SMC_OPS */
--- 
-2.45.0
+The fix is straightforward, so
+
+Acked-by: Hou Tao <houtao1@huawei.com>
 
