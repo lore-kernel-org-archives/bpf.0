@@ -1,28 +1,28 @@
-Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB55F1E0081;
-	Tue,  7 Jan 2025 08:43:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BE241E0DBD;
+	Tue,  7 Jan 2025 08:43:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736239442; cv=none; b=tIbwe9GnWg4YAlCwNyXpYCPplpNMKi+AT3krRMlPvuhpJL6sM/5kdokDGOPVZocoXaeQWDuwdztBQsvX7Z/fG3DfmLmZUyUdb5MHGCVFpusVR88QyWalh/y7f+sPJGs/Y+NhgHP9qEjNmoMDFvjcVKNrK8u3laOv2bxLVKEMT4k=
+	t=1736239442; cv=none; b=rSjOdmqbl2q8MvbzJgLCnnkEtv4m6ejorSbL/Ef5CGXWW4OTMGapoVdyPojsH0YSrlIiyFHOgLaqz9kEANabb8YBUugvd7I3kp8SrQhGtwZY8L/hHZtddmJmb5XX6Dx+Gs75JDDzwcVbEgzj6VUamkUhN3RRrMNhhIwJIt3Cj1o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1736239442; c=relaxed/simple;
-	bh=lhnhxSv5zKbJCqmAxSQ/AntzPxJ+BQvoBoUQQpKr44g=;
+	bh=fOzFlEYNx94TpKuNiuVGI/gUQQ6pvir22fyOVxwPZpo=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=oG82eQ0WTHR+ZOg1d2rlsCmVb9Jpi8mm/V3XINNlgC5TiIBqfvFFoBBlyqV425TaJY7qDM/9v6VWx63m3UQGykz6HQYbYvJUkuBzIQYagr/lTYTCO+BF1F64S11zX+lZV1gMxpqnwe5k3pEmGJq9gx+Ec0J2uR5HiBaLTQKdOeA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
+	 MIME-Version; b=qkkrKkXZuMrkv6FXe3lYKxKu1HrWeWEv+c7ko0wZ4wPPJ/SxMoxshCEoGc+QA1NrJYCDD8SVJE1otroq+mfl+FT84Qf+M0FapwtaztkVSIxWU9XFq+1hhZkpupHC/3kLVin4uAlri7gYIDTPYozYBpIkovQbxNlkUeaEcAfzd88=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.93.142])
-	by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4YS4MT3XNDz4f3jXK;
+Received: from mail.maildlp.com (unknown [172.19.163.216])
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4YS4MT4cFYz4f3lDF;
 	Tue,  7 Jan 2025 16:43:33 +0800 (CST)
 Received: from mail02.huawei.com (unknown [10.116.40.128])
-	by mail.maildlp.com (Postfix) with ESMTP id 9CFD11A166C;
-	Tue,  7 Jan 2025 16:43:53 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTP id EBF1B1A1C82;
+	Tue,  7 Jan 2025 16:43:54 +0800 (CST)
 Received: from huaweicloud.com (unknown [10.175.124.27])
-	by APP4 (Coremail) with SMTP id gCh0CgC3Gl9E6XxnpFgeAQ--.43336S5;
-	Tue, 07 Jan 2025 16:43:53 +0800 (CST)
+	by APP4 (Coremail) with SMTP id gCh0CgC3Gl9E6XxnpFgeAQ--.43336S7;
+	Tue, 07 Jan 2025 16:43:54 +0800 (CST)
 From: Hou Tao <houtao@huaweicloud.com>
 To: bpf@vger.kernel.org,
 	netdev@vger.kernel.org
@@ -41,9 +41,9 @@ Cc: Martin KaFai Lau <martin.lau@linux.dev>,
 	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
 	houtao1@huawei.com,
 	xukuohai@huawei.com
-Subject: [PATCH bpf-next 1/7] bpf: Free special fields after unlock in htab_lru_map_delete_node()
-Date: Tue,  7 Jan 2025 16:55:53 +0800
-Message-Id: <20250107085559.3081563-2-houtao@huaweicloud.com>
+Subject: [PATCH bpf-next 3/7] bpf: Free element after unlock in __htab_map_lookup_and_delete_elem()
+Date: Tue,  7 Jan 2025 16:55:55 +0800
+Message-Id: <20250107085559.3081563-4-houtao@huaweicloud.com>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20250107085559.3081563-1-houtao@huaweicloud.com>
 References: <20250107085559.3081563-1-houtao@huaweicloud.com>
@@ -54,13 +54,13 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:gCh0CgC3Gl9E6XxnpFgeAQ--.43336S5
-X-Coremail-Antispam: 1UD129KBjvJXoW7KFyDGw4rKw48Gw1rtw1kKrg_yoW8GF1Dpa
-	n5Gay3Ga1kZF1qkayrtF4vgry5Cw45Gw47KFW8GFyYy3W7JFyDW3W5KF93KFyaqrWkZrsa
-	qrWqq3s8ta4UurDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUPFb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUGw
-	A2048vs2IY020Ec7CjxVAFwI0_Gr0_Xr1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
+X-CM-TRANSID:gCh0CgC3Gl9E6XxnpFgeAQ--.43336S7
+X-Coremail-Antispam: 1UD129KBjvJXoW7AFy7JryfXrWDZw43tF4xJFb_yoW8Gry5pF
+	Z5K3y2ga1kWrnYva4rJa1vkrWUGw1rXw1UGFykG34rtF1rWr97Gw1I9F9aqFyfZr9YyFZ5
+	XFW2yw45t3y5CrDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUP2b4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUWw
+	A2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
 	w2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
 	W8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v2
 	6rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMc
@@ -69,49 +69,55 @@ X-Coremail-Antispam: 1UD129KBjvJXoW7KFyDGw4rKw48Gw1rtw1kKrg_yoW8GF1Dpa
 	0_GFv_Wryl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG
 	67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MI
 	IYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E
-	14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJV
-	W8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxU3cTm
-	DUUUU
+	14v26F4j6r4UJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr
+	0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU04x
+	RDUUUUU==
 X-CM-SenderInfo: xkrx3t3r6k3tpzhluzxrxghudrp/
 
 From: Hou Tao <houtao1@huawei.com>
 
-When bpf_timer is used in LRU hash map, calling check_and_free_fields()
-in htab_lru_map_delete_node() will invoke bpf_timer_cancel_and_free() to
-free the bpf_timer. If the timer is running on other CPUs and PREEMPT_RT
-is enabled, hrtimer_cancel will invoke hrtimer_cancel_wait_running() and
-it will try to acquire a spin-lock, however, htab_lru_map_delete_node()
-has already acquired a raw-spin-lock, it violates the lockdep rule and
-may trigger the "BUG: scheduling while atomic" warning.
+The freeing of special fields in map value may acquire a spin-lock
+(e.g., the freeing of bpf_timer), however, the lookup_and_delete_elem
+procedure has already held a raw-spin-lock, which violates the lockdep
+rule.
 
-Fix the issue by moving the invocation of check_and_free_fields() out of
-bucket lock.
+The running context of __htab_map_lookup_and_delete_elem() has already
+disabled the migration. Therefore, it is OK to invoke free_htab_elem()
+after unlocking the bucket lock.
+
+Fix the potential problem by freeing element after unlocking bucket lock
+in __htab_map_lookup_and_delete_elem().
 
 Signed-off-by: Hou Tao <houtao1@huawei.com>
 ---
- kernel/bpf/hashtab.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ kernel/bpf/hashtab.c | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
 diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
-index 007571ce4343..8fecf21c132a 100644
+index 59eb117908c5..903447a340d3 100644
 --- a/kernel/bpf/hashtab.c
 +++ b/kernel/bpf/hashtab.c
-@@ -826,13 +826,14 @@ static bool htab_lru_map_delete_node(void *arg, struct bpf_lru_node *node)
- 	hlist_nulls_for_each_entry_rcu(l, n, head, hash_node)
- 		if (l == tgt_l) {
- 			hlist_nulls_del_rcu(&l->hash_node);
--			check_and_free_fields(htab, l);
- 			bpf_map_dec_elem_count(&htab->map);
- 			break;
- 		}
+@@ -1669,14 +1669,16 @@ static int __htab_map_lookup_and_delete_elem(struct bpf_map *map, void *key,
+ 		check_and_init_map_value(map, value);
+ 	}
+ 	hlist_nulls_del_rcu(&l->hash_node);
+-	if (!is_lru_map)
+-		free_htab_elem(htab, l);
  
- 	htab_unlock_bucket(htab, b, tgt_l->hash, flags);
+ out_unlock:
+ 	htab_unlock_bucket(htab, b, hash, bflags);
  
-+	if (l == tgt_l)
-+		check_and_free_fields(htab, l);
- 	return l == tgt_l;
+-	if (is_lru_map && l)
+-		htab_lru_push_free(htab, l);
++	if (l) {
++		if (is_lru_map)
++			htab_lru_push_free(htab, l);
++		else
++			free_htab_elem(htab, l);
++	}
+ 
+ 	return ret;
  }
- 
 -- 
 2.29.2
 
