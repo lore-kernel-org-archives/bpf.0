@@ -1,261 +1,256 @@
-Received: from mail-il1-f182.google.com (mail-il1-f182.google.com [209.85.166.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail-10630.protonmail.ch (mail-10630.protonmail.ch [79.135.106.30])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C53241F37AB
-	for <bpf@vger.kernel.org>; Tue,  7 Jan 2025 18:45:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B10E718FDD2;
+	Tue,  7 Jan 2025 19:09:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.135.106.30
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736275505; cv=none; b=GR/PYNRad1JHN9Yo1DdHg6GoVdHNS7/LMxy3b1aINa54jeE0B5VSQteFG2xO0XFITrtRgRdbz1sIlSW6ckZ4gVdR6Dh8k3gRQRmog0x47Kpk3TQLZUTUz9l3RgDAc3IBeb5GqKtV7dw6knbQ7+JFIgbYWoQ5BJIsA3v1Bq2vssQ=
+	t=1736276952; cv=none; b=RJ9xwEuQVxtHlqxaiJWSf+X+iFjpIgPZGitdPLD0B5n2cTUkUUcQ+WPFgUj/5Cp17Phihrx4SlQH9s1mWvEd+38OaRy+6JtP4B1GEylVrplHnDV/lRjxyBr79q6NhbJDKUJDi2yXf8P784C0O/AVNEFlDruCoqkgB2ktfqoY8Mw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736275505; c=relaxed/simple;
-	bh=Ix8CwgupWnsJ2NHz+6bGRcZAT6fmMTgIODWckWOqE2I=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Ikd6WCCt6G6GrahUsb+Pl845A4+RNRu5ARukKs+PReTCca9CMPyX+gFFI7TfaC4bWTgsc9zVTNSibKy37PmVhP5U5cmB+8Y6i8cAx5Qg+/7oYwS/JrpfABc4PCiBvOR/6NRhAdSBuIPP/bFt+XAVLI80sl7vHZrEt+DHngWsA1c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=uQsODK6V; arc=none smtp.client-ip=209.85.166.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1736276952; c=relaxed/simple;
+	bh=dySSB0RGJEkU2f2fyoTgxCQRAftkucTKcJk4MztaF4o=;
+	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Ll5wSE8yR6M8wJIoMDU7pwtm+MKGqAUN0kFXp8ecJFHPz9PCyzh9l9kW9e1ziFNlHkkss3jU6BZnfK3jS3z9RXoC+b+tMi2DxEqyXEND7gifGG8rXIVpZD+xzHd2jvJpFX4XLkgJjtkEWfyqt7eJzh/v9SlxNcPW47sr8Y/d7nU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me; spf=pass smtp.mailfrom=pm.me; dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b=OybTIgW1; arc=none smtp.client-ip=79.135.106.30
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pm.me
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="uQsODK6V"
-Received: by mail-il1-f182.google.com with SMTP id e9e14a558f8ab-3a815a5fb60so9175ab.0
-        for <bpf@vger.kernel.org>; Tue, 07 Jan 2025 10:45:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1736275501; x=1736880301; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VJJx+P1BM3o2AclN0fARVZxzF2vJee5sNA/yq96x/gk=;
-        b=uQsODK6VCc6/KMLKhOCN21VX7Xt3DTjNxjce7xZVMkkFabDMhAbmKhqW+Yn6yIZkCF
-         OHtM1RHjKRpl5VFNUNkeEiCBOePlhgsM3EXhd737svqH+rMaja3/h3SEyvR53pxOaq+M
-         kd6N5HYFQatuK6C69+Cw2ATPqV5usdGs3YhoXf2ukyVL8zgfoXMuNdStFh+NaGNjqpLP
-         IOhE27O6Fea84b9a0YOr4gINh4FlMnhCHDsXQm1yYImiJymurUCPyMAxfYtxtnSZj83z
-         N/HxTg2K02JAlNw504U6HIoEThXEzSPU/psFpwfKPhmNXz/iJaIolSnFXteIfm0n/Anl
-         O1hw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736275501; x=1736880301;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=VJJx+P1BM3o2AclN0fARVZxzF2vJee5sNA/yq96x/gk=;
-        b=ckZZdfVaSaFI1UIielnJpbkRDFbjeFYsM+iSR2XVbRBoOp8/WRhNjYs3tbR23xBvbU
-         CXO7YyS/ZITbw0LW+wDOs2YkOPiRkhQYaFp0CHzijyKFX0SttZQNnSO8P0GeYouEfWhS
-         P3t7JHmRXqf+KydT8Gj8KEEKbXSHwU/2KmmuIWH7x8gfi85fopMAl1fNkQoVKFCkksVm
-         TcX0RZ1MUwYLVQye6MrxJjx11W7qKYBtlCe+i55dvnoqwJmslm6YXY4vFGe9zcJDtGn9
-         ZwO3sY42Rn+oI6Ip5CIQLznHBn0e7WZRpuKV1y2eDZ1uk0l0PpKNxp+oeVQAgCnuPTKg
-         G6Sw==
-X-Forwarded-Encrypted: i=1; AJvYcCUNA6WOfKdMd3v7IhOye/d7l8Va3Ensw72GCkxf3R6sw78cQTFFvuQSpS4mN6e0Dig0+ek=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxNS2uYU6nBFRDhGIkL0WLfWfdtZoqcMLY016Um27IaE3GHXtdx
-	48n1m9kgqM4lTHAsBYizR5y3WTrQULYKhThfOASKHIDMKVhZnTN27ofETE2nPNjveuarYJUVFjN
-	8kMBNebrWnXZYRhJ4057BjvOGXzhY0UlFVuko
-X-Gm-Gg: ASbGncsjYfZrzzjENA9rvYnqjCUahR5k6Og/R3Lx5gz42T4DtwKv3CAzloy6gO1Tgsj
-	5bki8aXXl+9LIFJCTVe4g0O2dixvq73KkbxahJmmXgAmqVfx9+yXOmkuHGIOoX1mnBRQv9Q==
-X-Google-Smtp-Source: AGHT+IEseKvNZN6+1U5xaeEFYg5v0HSjPQ42KLZsijQ/hQCyvb+Yo8x6RDlu2GEmFg6ThF8oNhQEjR4YLtlu8w6G6hY=
-X-Received: by 2002:a92:cd09:0:b0:3a7:dcc1:9936 with SMTP id
- e9e14a558f8ab-3ce333ac737mr3451575ab.23.1736275500747; Tue, 07 Jan 2025
- 10:45:00 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b="OybTIgW1"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me;
+	s=protonmail3; t=1736276947; x=1736536147;
+	bh=2Q4VXTMtpMVCKGOkGDpzz8LKAjMiPCKFGdDDgMYRKKI=;
+	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+	 Message-ID:BIMI-Selector:List-Unsubscribe:List-Unsubscribe-Post;
+	b=OybTIgW1MSGaHUHl9xhrDQAX0RSFP8MB6PBAK0QoyFg+s0rqY6WNrbKWJH/ZZ9SRK
+	 FemD5/+x3/sqOE9NDI5Z2oTojinpL1pQ4s/S8p+pjstdZDc26PJmwjgobIZ7B3qDkX
+	 NUjP055MInvx8oOQxKA6VBakHWogLJXyNtJ47AhcwrPY+FfFVUawZlso1ADF2XiX0S
+	 o9iiRAHvm44EYkNM9FHBI7ffOhE7pzWUVGA9f9xPeOwY9NeDO/LD5/olwRpIrQiUHh
+	 nMVb+Qg3KcYcHWnpEgyDgNH+OMH8chpPwpMOesq9nGzwoZRAvcv4X9RCjG7GNCdUIO
+	 L1d9VE//PYWoQ==
+Date: Tue, 07 Jan 2025 19:09:03 +0000
+To: dwarves@vger.kernel.org
+From: Ihor Solodrai <ihor.solodrai@pm.me>
+Cc: bpf@vger.kernel.org, acme@kernel.org, alan.maguire@oracle.com, eddyz87@gmail.com, andrii@kernel.org, mykolal@fb.com, olsajiri@gmail.com
+Subject: [PATCH dwarves v4 01/10] btf_encoder: simplify function encoding
+Message-ID: <20250107190855.2312210-2-ihor.solodrai@pm.me>
+In-Reply-To: <20250107190855.2312210-1-ihor.solodrai@pm.me>
+References: <20250107190855.2312210-1-ihor.solodrai@pm.me>
+Feedback-ID: 27520582:user:proton
+X-Pm-Message-ID: 01a2101a254da4c1b43707bf361aeb26425b7d9c
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241218-perf_syscalltbl-v4-0-bc8caef2ca8e@rivosinc.com>
-In-Reply-To: <20241218-perf_syscalltbl-v4-0-bc8caef2ca8e@rivosinc.com>
-From: Ian Rogers <irogers@google.com>
-Date: Tue, 7 Jan 2025 10:44:49 -0800
-X-Gm-Features: AbW1kvZ2ue7zebeJn1ASl6IcPrVI85kIxnXUJ0ZFdYfd60rswaW74SbtuHBtKwI
-Message-ID: <CAP-5=fVoH3_naH_UzwBKy9ayCC=Ee5ck6=iJQ9bVPuVCame6Gg@mail.gmail.com>
-Subject: Re: [PATCH v4 00/16] perf tools: Use generic syscall scripts for all archs
-To: Charlie Jenkins <charlie@rivosinc.com>
-Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
-	Mark Rutland <mark.rutland@arm.com>, 
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Adrian Hunter <adrian.hunter@intel.com>, Paul Walmsley <paul.walmsley@sifive.com>, 
-	Palmer Dabbelt <palmer@dabbelt.com>, =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>, 
-	=?UTF-8?Q?G=C3=BCnther_Noack?= <gnoack@google.com>, 
-	Christian Brauner <brauner@kernel.org>, Guo Ren <guoren@kernel.org>, 
-	John Garry <john.g.garry@oracle.com>, Will Deacon <will@kernel.org>, 
-	James Clark <james.clark@linaro.org>, Mike Leach <mike.leach@linaro.org>, 
-	Leo Yan <leo.yan@linux.dev>, Jonathan Corbet <corbet@lwn.net>, =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@rivosinc.com>, 
-	Arnd Bergmann <arnd@arndb.de>, Albert Ou <aou@eecs.berkeley.edu>, linux-kernel@vger.kernel.org, 
-	linux-perf-users@vger.kernel.org, linux-riscv@lists.infradead.org, 
-	linux-security-module@vger.kernel.org, bpf@vger.kernel.org, 
-	linux-csky@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-doc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Dec 18, 2024 at 1:24=E2=80=AFAM Charlie Jenkins <charlie@rivosinc.c=
-om> wrote:
->
-> Standardize the generation of syscall headers around syscall tables.
-> Previously each architecture independently selected how syscall headers
-> would be generated, or would not define a way and fallback onto
-> libaudit. Convert all architectures to use a standard syscall header
-> generation script and allow each architecture to override the syscall
-> table to use if they do not use the generic table.
->
-> As a result of these changes, no architecture will require libaudit, and
-> so the fallback case of using libaudit is removed by this series.
->
-> Testing:
->
-> I have tested that the syscall mappings of id to name generation works
-> as expected for every architecture, but I have only validated that perf
-> trace compiles and runs as expected on riscv, arm64, and x86_64.
->
-> Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
-> Reviewed-by: Ian Rogers <irogers@google.com>
->
-> On x86-64:
-> Tested-by: Ian Rogers <irogers@google.com>
+From: Alan Maguire <alan.maguire@oracle.com>
 
-I'd like to see this land. The patches apply cleanly on
-perf-tools-next for me and except for a 1 liner on patch 16 everything
-has my:
-Tested-by: Ian Rogers <irogers@google.com>
+Currently we have two modes of function encoding; one adds functions
+based upon the first instance found and ignores inconsistent
+representations.  The second saves function representations and later
+finds inconsistencies.  The mode chosen is determined by
+conf_load->skip_encoding_btf_inconsistent_proto.
 
-Thanks,
-Ian
+The knock-on effect is that we need to support two modes in
+btf_encoder__add_func(); one for each case.  Simplify by using
+the "save function" approach for both cases; only difference is
+that we allow inconsistent representations if
+skip_encoding_btf_inconsistent_proto is not set (it is set by default
+for upstream kernels and has been for a while).
 
-> ---
-> Changes in v4:
-> - Remove audit_machine member of syscalltbl struct (Ian)
-> - Rebase on perf-tools-next
-> - Link to v3: https://lore.kernel.org/r/20241216-perf_syscalltbl-v3-0-239=
-f032481d5@rivosinc.com
->
-> Changes in v3:
-> - Fix compiliation when OUTPUT is empty
-> - Correct unused headers to be .h instead of .c  (Namhyung)
-> - Make variable definition of supported archs (Namhyung)
-> - Convert +=3D into :=3D for syscalls headers (Namhyung)
-> - Link to v2: https://lore.kernel.org/r/20241212-perf_syscalltbl-v2-0-f8c=
-a984ffe40@rivosinc.com
->
-> Changes in v2:
-> - Rebase onto 6.13-rc2
-> - Fix output path so it generates to /tools/perf/arch properly
-> - Link to v1: https://lore.kernel.org/r/20241104-perf_syscalltbl-v1-0-9ad=
-ae5c761ef@rivosinc.com
->
-> ---
-> Charlie Jenkins (16):
->       perf tools: Create generic syscall table support
->       perf tools: arc: Support generic syscall headers
->       perf tools: csky: Support generic syscall headers
->       perf tools: arm: Support syscall headers
->       perf tools: sh: Support syscall headers
->       perf tools: sparc: Support syscall headers
->       perf tools: xtensa: Support syscall header
->       perf tools: x86: Use generic syscall scripts
->       perf tools: alpha: Support syscall header
->       perf tools: parisc: Support syscall header
->       perf tools: arm64: Use syscall table
->       perf tools: loongarch: Use syscall table
->       perf tools: mips: Use generic syscall scripts
->       perf tools: powerpc: Use generic syscall table scripts
->       perf tools: s390: Use generic syscall table scripts
->       perf tools: Remove dependency on libaudit
->
->  Documentation/admin-guide/workload-tracing.rst     |   2 +-
->  tools/build/feature/Makefile                       |   4 -
->  tools/build/feature/test-libaudit.c                |  11 -
->  tools/perf/Documentation/perf-check.txt            |   1 -
->  tools/perf/Makefile.config                         |  39 +-
->  tools/perf/Makefile.perf                           |  12 +-
->  tools/perf/arch/alpha/entry/syscalls/Kbuild        |   2 +
->  .../arch/alpha/entry/syscalls/Makefile.syscalls    |   5 +
->  tools/perf/arch/alpha/entry/syscalls/syscall.tbl   | 504 +++++++++++++++=
-+++++
->  tools/perf/arch/alpha/include/syscall_table.h      |   2 +
->  tools/perf/arch/arc/entry/syscalls/Kbuild          |   2 +
->  .../perf/arch/arc/entry/syscalls/Makefile.syscalls |   3 +
->  tools/perf/arch/arc/include/syscall_table.h        |   2 +
->  tools/perf/arch/arm/entry/syscalls/Kbuild          |   4 +
->  .../perf/arch/arm/entry/syscalls/Makefile.syscalls |   2 +
->  tools/perf/arch/arm/entry/syscalls/syscall.tbl     | 483 +++++++++++++++=
-++++
->  tools/perf/arch/arm/include/syscall_table.h        |   2 +
->  tools/perf/arch/arm64/Makefile                     |  22 -
->  tools/perf/arch/arm64/entry/syscalls/Kbuild        |   3 +
->  .../arch/arm64/entry/syscalls/Makefile.syscalls    |   6 +
->  tools/perf/arch/arm64/entry/syscalls/mksyscalltbl  |  46 --
->  .../perf/arch/arm64/entry/syscalls/syscall_32.tbl  | 476 +++++++++++++++=
-++++
->  .../perf/arch/arm64/entry/syscalls/syscall_64.tbl  |   1 +
->  tools/perf/arch/arm64/include/syscall_table.h      |   8 +
->  tools/perf/arch/csky/entry/syscalls/Kbuild         |   2 +
->  .../arch/csky/entry/syscalls/Makefile.syscalls     |   3 +
->  tools/perf/arch/csky/include/syscall_table.h       |   2 +
->  tools/perf/arch/loongarch/Makefile                 |  22 -
->  tools/perf/arch/loongarch/entry/syscalls/Kbuild    |   2 +
->  .../loongarch/entry/syscalls/Makefile.syscalls     |   3 +
->  .../arch/loongarch/entry/syscalls/mksyscalltbl     |  45 --
->  tools/perf/arch/loongarch/include/syscall_table.h  |   2 +
->  tools/perf/arch/mips/entry/syscalls/Kbuild         |   2 +
->  .../arch/mips/entry/syscalls/Makefile.syscalls     |   5 +
->  tools/perf/arch/mips/entry/syscalls/mksyscalltbl   |  32 --
->  tools/perf/arch/mips/include/syscall_table.h       |   2 +
->  tools/perf/arch/parisc/entry/syscalls/Kbuild       |   3 +
->  .../arch/parisc/entry/syscalls/Makefile.syscalls   |   6 +
->  tools/perf/arch/parisc/entry/syscalls/syscall.tbl  | 463 +++++++++++++++=
-++++
->  tools/perf/arch/parisc/include/syscall_table.h     |   8 +
->  tools/perf/arch/powerpc/Makefile                   |  25 -
->  tools/perf/arch/powerpc/entry/syscalls/Kbuild      |   3 +
->  .../arch/powerpc/entry/syscalls/Makefile.syscalls  |   6 +
->  .../perf/arch/powerpc/entry/syscalls/mksyscalltbl  |  39 --
->  tools/perf/arch/powerpc/include/syscall_table.h    |   8 +
->  tools/perf/arch/riscv/Makefile                     |  22 -
->  tools/perf/arch/riscv/entry/syscalls/Kbuild        |   2 +
->  .../arch/riscv/entry/syscalls/Makefile.syscalls    |   4 +
->  tools/perf/arch/riscv/entry/syscalls/mksyscalltbl  |  47 --
->  tools/perf/arch/riscv/include/syscall_table.h      |   8 +
->  tools/perf/arch/s390/Makefile                      |  21 -
->  tools/perf/arch/s390/entry/syscalls/Kbuild         |   2 +
->  .../arch/s390/entry/syscalls/Makefile.syscalls     |   5 +
->  tools/perf/arch/s390/entry/syscalls/mksyscalltbl   |  32 --
->  tools/perf/arch/s390/include/syscall_table.h       |   2 +
->  tools/perf/arch/sh/entry/syscalls/Kbuild           |   2 +
->  .../perf/arch/sh/entry/syscalls/Makefile.syscalls  |   4 +
->  tools/perf/arch/sh/entry/syscalls/syscall.tbl      | 472 +++++++++++++++=
-++++
->  tools/perf/arch/sh/include/syscall_table.h         |   2 +
->  tools/perf/arch/sparc/entry/syscalls/Kbuild        |   3 +
->  .../arch/sparc/entry/syscalls/Makefile.syscalls    |   5 +
->  tools/perf/arch/sparc/entry/syscalls/syscall.tbl   | 514 +++++++++++++++=
-++++++
->  tools/perf/arch/sparc/include/syscall_table.h      |   8 +
->  tools/perf/arch/x86/Build                          |   1 -
->  tools/perf/arch/x86/Makefile                       |  25 -
->  tools/perf/arch/x86/entry/syscalls/Kbuild          |   3 +
->  .../perf/arch/x86/entry/syscalls/Makefile.syscalls |   6 +
->  tools/perf/arch/x86/entry/syscalls/syscalltbl.sh   |  42 --
->  tools/perf/arch/x86/include/syscall_table.h        |   8 +
->  tools/perf/arch/xtensa/entry/syscalls/Kbuild       |   2 +
->  .../arch/xtensa/entry/syscalls/Makefile.syscalls   |   4 +
->  tools/perf/arch/xtensa/entry/syscalls/syscall.tbl  | 439 +++++++++++++++=
-+++
->  tools/perf/arch/xtensa/include/syscall_table.h     |   2 +
->  tools/perf/builtin-check.c                         |   1 -
->  tools/perf/builtin-help.c                          |   2 -
->  tools/perf/builtin-trace.c                         |  30 --
->  tools/perf/check-headers.sh                        |   9 +
->  tools/perf/perf.c                                  |   6 +-
->  tools/perf/scripts/Makefile.syscalls               |  61 +++
->  tools/perf/scripts/syscalltbl.sh                   |  86 ++++
->  tools/perf/tests/make                              |   7 +-
->  tools/perf/util/env.c                              |   4 +-
->  tools/perf/util/generate-cmdlist.sh                |   4 +-
->  tools/perf/util/syscalltbl.c                       |  90 +---
->  tools/perf/util/syscalltbl.h                       |   1 -
->  tools/scripts/syscall.tbl                          | 409 +++++++++++++++=
-+
->  86 files changed, 4102 insertions(+), 620 deletions(-)
-> ---
-> base-commit: e8b3012cbd8f2263777347c2e8310b3f00d494f5
-> change-id: 20240913-perf_syscalltbl-6f98defcc6f5
-> --
-> - Charlie
->
+Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
+Signed-off-by: Ihor Solodrai <ihor.solodrai@pm.me>
+Acked-by: Eduard Zingerman <eddyz87@gmail.com>
+Acked-by: Jiri Olsa <jolsa@kernel.org>
+
+Link: https://lore.kernel.org/dwarves/20241128012341.4081072-2-ihor.solodra=
+i@pm.me/
+---
+ btf_encoder.c | 79 +++++++++++++++++----------------------------------
+ 1 file changed, 26 insertions(+), 53 deletions(-)
+
+diff --git a/btf_encoder.c b/btf_encoder.c
+index fbc9509..2e51afd 100644
+--- a/btf_encoder.c
++++ b/btf_encoder.c
+@@ -88,7 +88,6 @@ struct btf_encoder_func_state {
+ struct elf_function {
+ =09const char=09*name;
+ =09char=09=09*alias;
+-=09bool=09=09 generated;
+ =09size_t=09=09prefixlen;
+ =09struct btf_encoder_func_state state;
+ };
+@@ -120,6 +119,7 @@ struct btf_encoder {
+ =09=09=09  force,
+ =09=09=09  gen_floats,
+ =09=09=09  skip_encoding_decl_tag,
++=09=09=09  skip_encoding_inconsistent_proto,
+ =09=09=09  tag_kfuncs,
+ =09=09=09  gen_distilled_base;
+ =09uint32_t=09  array_index_id;
+@@ -1165,18 +1165,18 @@ out:
+ =09return err;
+ }
+=20
+-static int32_t btf_encoder__add_func(struct btf_encoder *encoder, struct f=
+unction *fn,
++static int32_t btf_encoder__add_func(struct btf_encoder *encoder,
+ =09=09=09=09     struct elf_function *func)
+ {
++=09struct btf_encoder_func_state *state =3D &func->state;
+ =09int btf_fnproto_id, btf_fn_id, tag_type_id =3D 0;
+ =09int16_t component_idx =3D -1;
+ =09const char *name;
+ =09const char *value;
+ =09char tmp_value[KSYM_NAME_LEN];
++=09uint16_t idx;
+=20
+-=09assert(fn !=3D NULL || func !=3D NULL);
+-
+-=09btf_fnproto_id =3D btf_encoder__add_func_proto(encoder, fn ? &fn->proto=
+ : NULL, func);
++=09btf_fnproto_id =3D btf_encoder__add_func_proto(encoder, NULL, func);
+ =09name =3D func->alias ?: func->name;
+ =09if (btf_fnproto_id >=3D 0)
+ =09=09btf_fn_id =3D btf_encoder__add_ref_type(encoder, BTF_KIND_FUNC, btf_=
+fnproto_id,
+@@ -1186,40 +1186,23 @@ static int32_t btf_encoder__add_func(struct btf_enc=
+oder *encoder, struct functio
+ =09=09       name, btf_fnproto_id < 0 ? "proto" : "func");
+ =09=09return -1;
+ =09}
+-=09if (!fn) {
+-=09=09struct btf_encoder_func_state *state =3D &func->state;
+-=09=09uint16_t idx;
+-
+-=09=09if (state->nr_annots =3D=3D 0)
+-=09=09=09return 0;
++=09if (state->nr_annots =3D=3D 0)
++=09=09return 0;
+=20
+-=09=09for (idx =3D 0; idx < state->nr_annots; idx++) {
+-=09=09=09struct btf_encoder_func_annot *a =3D &state->annots[idx];
++=09for (idx =3D 0; idx < state->nr_annots; idx++) {
++=09=09struct btf_encoder_func_annot *a =3D &state->annots[idx];
+=20
+-=09=09=09value =3D btf__str_by_offset(encoder->btf, a->value);
+-=09=09=09/* adding BTF data may result in a mode of the
+-=09=09=09 * value string memory, so make a temporary copy.
+-=09=09=09 */
+-=09=09=09strncpy(tmp_value, value, sizeof(tmp_value) - 1);
+-=09=09=09component_idx =3D a->component_idx;
+-
+-=09=09=09tag_type_id =3D btf_encoder__add_decl_tag(encoder, tmp_value,
+-=09=09=09=09=09=09=09=09btf_fn_id, component_idx);
+-=09=09=09if (tag_type_id < 0)
+-=09=09=09=09break;
+-=09=09}
+-=09} else {
+-=09=09struct llvm_annotation *annot;
+-
+-=09=09list_for_each_entry(annot, &fn->annots, node) {
+-=09=09=09value =3D annot->value;
+-=09=09=09component_idx =3D annot->component_idx;
++=09=09value =3D btf__str_by_offset(encoder->btf, a->value);
++=09=09/* adding BTF data may result in a mode of the
++=09=09 * value string memory, so make a temporary copy.
++=09=09 */
++=09=09strncpy(tmp_value, value, sizeof(tmp_value) - 1);
++=09=09component_idx =3D a->component_idx;
+=20
+-=09=09=09tag_type_id =3D btf_encoder__add_decl_tag(encoder, value, btf_fn_=
+id,
+-=09=09=09=09=09=09=09=09component_idx);
+-=09=09=09if (tag_type_id < 0)
+-=09=09=09=09break;
+-=09=09}
++=09=09tag_type_id =3D btf_encoder__add_decl_tag(encoder, tmp_value,
++=09=09=09=09=09=09=09btf_fn_id, component_idx);
++=09=09if (tag_type_id < 0)
++=09=09=09break;
+ =09}
+ =09if (tag_type_id < 0) {
+ =09=09fprintf(stderr,
+@@ -1277,8 +1260,9 @@ static int btf_encoder__add_saved_funcs(struct btf_en=
+coder *encoder)
+ =09=09 * just do not _use_ them.  Only exclude functions with
+ =09=09 * unexpected register use or multiple inconsistent prototypes.
+ =09=09 */
+-=09=09if (!state->unexpected_reg && !state->inconsistent_proto) {
+-=09=09=09if (btf_encoder__add_func(encoder, NULL, func))
++=09=09if (!encoder->skip_encoding_inconsistent_proto ||
++=09=09    (!state->unexpected_reg && !state->inconsistent_proto)) {
++=09=09=09if (btf_encoder__add_func(encoder, func))
+ =09=09=09=09return -1;
+ =09=09}
+ =09=09state->processed =3D 1;
+@@ -2359,6 +2343,7 @@ struct btf_encoder *btf_encoder__new(struct cu *cu, c=
+onst char *detached_filenam
+ =09=09encoder->force=09=09 =3D conf_load->btf_encode_force;
+ =09=09encoder->gen_floats=09 =3D conf_load->btf_gen_floats;
+ =09=09encoder->skip_encoding_decl_tag=09 =3D conf_load->skip_encoding_btf_=
+decl_tag;
++=09=09encoder->skip_encoding_inconsistent_proto =3D conf_load->skip_encodi=
+ng_btf_inconsistent_proto;
+ =09=09encoder->tag_kfuncs=09 =3D conf_load->btf_decl_tag_kfuncs;
+ =09=09encoder->gen_distilled_base =3D conf_load->btf_gen_distilled_base;
+ =09=09encoder->verbose=09 =3D verbose;
+@@ -2564,7 +2549,6 @@ int btf_encoder__encode_cu(struct btf_encoder *encode=
+r, struct cu *cu, struct co
+=20
+ =09cu__for_each_function(cu, core_id, fn) {
+ =09=09struct elf_function *func =3D NULL;
+-=09=09bool save =3D false;
+=20
+ =09=09/*
+ =09=09 * Skip functions that:
+@@ -2586,15 +2570,8 @@ int btf_encoder__encode_cu(struct btf_encoder *encod=
+er, struct cu *cu, struct co
+=20
+ =09=09=09/* prefer exact function name match... */
+ =09=09=09func =3D btf_encoder__find_function(encoder, name, 0);
+-=09=09=09if (func) {
+-=09=09=09=09if (func->generated)
+-=09=09=09=09=09continue;
+-=09=09=09=09if (conf_load->skip_encoding_btf_inconsistent_proto)
+-=09=09=09=09=09save =3D true;
+-=09=09=09=09else
+-=09=09=09=09=09func->generated =3D true;
+-=09=09=09} else if (encoder->functions.suffix_cnt &&
+-=09=09=09=09   conf_load->btf_gen_optimized) {
++=09=09=09if (!func && encoder->functions.suffix_cnt &&
++=09=09=09    conf_load->btf_gen_optimized) {
+ =09=09=09=09/* falling back to name.isra.0 match if no exact
+ =09=09=09=09 * match is found; only bother if we found any
+ =09=09=09=09 * .suffix function names.  The function
+@@ -2605,7 +2582,6 @@ int btf_encoder__encode_cu(struct btf_encoder *encode=
+r, struct cu *cu, struct co
+ =09=09=09=09func =3D btf_encoder__find_function(encoder, name,
+ =09=09=09=09=09=09=09=09  strlen(name));
+ =09=09=09=09if (func) {
+-=09=09=09=09=09save =3D true;
+ =09=09=09=09=09if (encoder->verbose)
+ =09=09=09=09=09=09printf("matched function '%s' with '%s'%s\n",
+ =09=09=09=09=09=09       name, func->name,
+@@ -2624,10 +2600,7 @@ int btf_encoder__encode_cu(struct btf_encoder *encod=
+er, struct cu *cu, struct co
+ =09=09if (!func)
+ =09=09=09continue;
+=20
+-=09=09if (save)
+-=09=09=09err =3D btf_encoder__save_func(encoder, fn, func);
+-=09=09else
+-=09=09=09err =3D btf_encoder__add_func(encoder, fn, func);
++=09=09err =3D btf_encoder__save_func(encoder, fn, func);
+ =09=09if (err)
+ =09=09=09goto out;
+ =09}
+--=20
+2.47.1
+
+
