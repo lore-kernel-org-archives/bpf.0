@@ -1,28 +1,28 @@
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B236A70818;
-	Wed,  8 Jan 2025 00:55:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1448618B03;
+	Wed,  8 Jan 2025 00:55:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736297727; cv=none; b=PP4yl0fCTEB1/eeGmQiTV9Qse7YgvheI6sP2JjyszIpKBW6KDgEleW9KwvBQXp7AL6sWpNqhdyaoRspCxVTMq9r6ozl0a++ELiajwdGfBUcnqynR2tm4eEMA2XdEAtk8uCeMBRbMoogRxpp22Ot3QmgjXEPM2Wujp5+9w/cEJ38=
+	t=1736297727; cv=none; b=Bebdc3lE5J5HZ/Ys+UZxAg3XdJrrukpjK9Y47Y3p9ue9bGaJxHnfDMnIHKpx2TCyNDtBEtAzeycOQlnI296r6qE8K4QkiHoN02xBmq2le+BKpqA6NTM/L+wLr0QE1XLzmTXLUhUm8c2dDzcMK6Zmw5794tAySGeiXU9EMaZ6mo0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1736297727; c=relaxed/simple;
-	bh=kXxVK/q3MuKspswfzamV6qyTo4xorE5V0zGoJrIHy70=;
+	bh=L6h6mxd9TaOxniOk/vvdwyZPTNG5rV4cSRgnwuuziFM=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=LSOfNedDG3o49uRN0PjR91FW5umrnQpHyYoH0xYjd8kCG492mb5AJBQ1WSbWhnS1xs+WMJr0O1HmG6UC6XFvADo/EU8RPH3zH8ctE+DLV3/pq9mkN+1yF6bJ49GGzI43Del0ocdfbwuXiHBEwsc0FzuKqybhAj4orGhamncZvaA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
+	 MIME-Version; b=nUaQMEBTxVXmbjjjffz9Y5RaB7xCrYpKXzmliglS8MKaKZOiT2T7IRCP4/Y06kimlL5FMZ95Wf+oRUtO8i0ctqhwttRJGcQSnH4sH8WVCVZcr7nm7MuV/AGDh+MPRBHYK1RcThWent2F2ARz7NbV5qcTN7HtRtna/Vsc02AlhbI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.235])
-	by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4YSTwV74q7z4f3jqr;
-	Wed,  8 Jan 2025 08:55:06 +0800 (CST)
+Received: from mail.maildlp.com (unknown [172.19.93.142])
+	by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4YSTwR0VT7z4f3kFm;
+	Wed,  8 Jan 2025 08:55:03 +0800 (CST)
 Received: from mail02.huawei.com (unknown [10.116.40.128])
-	by mail.maildlp.com (Postfix) with ESMTP id 00EAD1A0B23;
-	Wed,  8 Jan 2025 08:55:21 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTP id 3A4FA1A1024;
+	Wed,  8 Jan 2025 08:55:23 +0800 (CST)
 Received: from huaweicloud.com (unknown [10.175.124.27])
-	by APP4 (Coremail) with SMTP id gCh0CgBHq1_1zH1nBtZdAQ--.51859S6;
-	Wed, 08 Jan 2025 08:55:21 +0800 (CST)
+	by APP4 (Coremail) with SMTP id gCh0CgBHq1_1zH1nBtZdAQ--.51859S8;
+	Wed, 08 Jan 2025 08:55:22 +0800 (CST)
 From: Hou Tao <houtao@huaweicloud.com>
 To: bpf@vger.kernel.org,
 	netdev@vger.kernel.org
@@ -40,9 +40,9 @@ Cc: Martin KaFai Lau <martin.lau@linux.dev>,
 	John Fastabend <john.fastabend@gmail.com>,
 	houtao1@huawei.com,
 	xukuohai@huawei.com
-Subject: [PATCH bpf-next v2 02/16] bpf: Remove migrate_{disable|enable} in ->map_for_each_callback
-Date: Wed,  8 Jan 2025 09:07:14 +0800
-Message-Id: <20250108010728.207536-3-houtao@huaweicloud.com>
+Subject: [PATCH bpf-next v2 04/16] bpf: Remove migrate_{disable|enable} from bpf_cgrp_storage_lock helpers
+Date: Wed,  8 Jan 2025 09:07:16 +0800
+Message-Id: <20250108010728.207536-5-houtao@huaweicloud.com>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20250108010728.207536-1-houtao@huaweicloud.com>
 References: <20250108010728.207536-1-houtao@huaweicloud.com>
@@ -53,106 +53,98 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:gCh0CgBHq1_1zH1nBtZdAQ--.51859S6
-X-Coremail-Antispam: 1UD129KBjvJXoW7Zw1UurWktF4xCr17Aw43ZFb_yoW5JFWrpF
-	409Fyxtr48X3ZrX3y3J34q9ry5Aw1YgayxG3s5ta4Fyr45GrnIqry8AayFqFyYvw4jyr1S
-	va4jvw12ya4kWrDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUPYb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUXw
-	A2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
-	w2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
-	WxJVW8Jr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
-	GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx
-	0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWU
-	JVW8JwACjcxG0xvY0x0EwIxGrwACI402YVCY1x02628vn2kIc2xKxwCY1x0262kKe7AKxV
-	WUtVW8ZwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E
-	14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIx
-	kGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAF
-	wI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r
-	4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UCZXrU
-	UUUU=
+X-CM-TRANSID:gCh0CgBHq1_1zH1nBtZdAQ--.51859S8
+X-Coremail-Antispam: 1UD129KBjvJXoW7Zw48urW5Xw4UJw1rZFW3GFg_yoW8tF4Dpr
+	WxKasxZr4UA3WrZrZrJr4xAFy5C3WSgr17KFWDJr4xC395XF9xWr12yFZ8Zay3Z34Uur1a
+	v3WYgF4UCr18ZFUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUPSb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAV
+	Cq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0
+	rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x0267
+	AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E
+	14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7
+	xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Y
+	z7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2
+	AFwI0_Jw0_GFyl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAq
+	x4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6r
+	W5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF
+	7I0E14v26F4j6r4UJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI
+	0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7I
+	U1aLvJUUUUU==
 X-CM-SenderInfo: xkrx3t3r6k3tpzhluzxrxghudrp/
 
 From: Hou Tao <houtao1@huawei.com>
 
-BPF program may call bpf_for_each_map_elem(), and it will call
-the ->map_for_each_callback callback of related bpf map. Considering the
-running context of bpf program has already disabled migration, remove
-the unnecessary migrate_{disable|enable} pair in the implementations of
-->map_for_each_callback. To ensure the guarantee will not be voilated
-later, also add cant_migrate() check in the implementations.
+Three callers of bpf_cgrp_storage_lock() are ->map_lookup_elem,
+->map_update_elem, ->map_delete_elem from bpf syscall. BPF syscall for
+these three operations of cgrp storage has already disabled migration.
+
+Two call sites of bpf_cgrp_storage_trylock() are bpf_cgrp_storage_get(),
+and bpf_cgrp_storage_delete() helpers. The running contexts of these
+helpers have already disabled migration.
+
+Therefore, it is safe to remove migrate_disable() for these callers.
+However, bpf_cgrp_storage_free() also invokes bpf_cgrp_storage_lock()
+and its running context doesn't disable migration. Therefore, also add
+the missed migrate_{disabled|enable} in bpf_cgrp_storage_free().
 
 Signed-off-by: Hou Tao <houtao1@huawei.com>
 ---
- kernel/bpf/arraymap.c |  6 ++----
- kernel/bpf/hashtab.c  | 11 +++++------
- 2 files changed, 7 insertions(+), 10 deletions(-)
+ kernel/bpf/bpf_cgrp_storage.c | 15 +++++++--------
+ 1 file changed, 7 insertions(+), 8 deletions(-)
 
-diff --git a/kernel/bpf/arraymap.c b/kernel/bpf/arraymap.c
-index 6cdbb4c33d31d..eb28c0f219ee4 100644
---- a/kernel/bpf/arraymap.c
-+++ b/kernel/bpf/arraymap.c
-@@ -735,13 +735,13 @@ static long bpf_for_each_array_elem(struct bpf_map *map, bpf_callback_t callback
- 	u64 ret = 0;
- 	void *val;
+diff --git a/kernel/bpf/bpf_cgrp_storage.c b/kernel/bpf/bpf_cgrp_storage.c
+index 20f05de92e9c3..d5dc65bb17550 100644
+--- a/kernel/bpf/bpf_cgrp_storage.c
++++ b/kernel/bpf/bpf_cgrp_storage.c
+@@ -15,22 +15,20 @@ static DEFINE_PER_CPU(int, bpf_cgrp_storage_busy);
  
+ static void bpf_cgrp_storage_lock(void)
+ {
+-	migrate_disable();
 +	cant_migrate();
-+
- 	if (flags != 0)
- 		return -EINVAL;
- 
- 	is_percpu = map->map_type == BPF_MAP_TYPE_PERCPU_ARRAY;
- 	array = container_of(map, struct bpf_array, map);
--	if (is_percpu)
--		migrate_disable();
- 	for (i = 0; i < map->max_entries; i++) {
- 		if (is_percpu)
- 			val = this_cpu_ptr(array->pptrs[i]);
-@@ -756,8 +756,6 @@ static long bpf_for_each_array_elem(struct bpf_map *map, bpf_callback_t callback
- 			break;
- 	}
- 
--	if (is_percpu)
--		migrate_enable();
- 	return num_elems;
+ 	this_cpu_inc(bpf_cgrp_storage_busy);
  }
  
-diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
-index 8e2775848e0dc..3c1122281d986 100644
---- a/kernel/bpf/hashtab.c
-+++ b/kernel/bpf/hashtab.c
-@@ -2230,17 +2230,18 @@ static long bpf_for_each_hash_elem(struct bpf_map *map, bpf_callback_t callback_
- 	bool is_percpu;
- 	u64 ret = 0;
- 
-+	cant_migrate();
-+
- 	if (flags != 0)
- 		return -EINVAL;
- 
- 	is_percpu = htab_is_percpu(htab);
- 
- 	roundup_key_size = round_up(map->key_size, 8);
--	/* disable migration so percpu value prepared here will be the
--	 * same as the one seen by the bpf program with bpf_map_lookup_elem().
-+	/* migration has been disabled, so percpu value prepared here will be
-+	 * the same as the one seen by the bpf program with
-+	 * bpf_map_lookup_elem().
- 	 */
--	if (is_percpu)
--		migrate_disable();
- 	for (i = 0; i < htab->n_buckets; i++) {
- 		b = &htab->buckets[i];
- 		rcu_read_lock();
-@@ -2266,8 +2267,6 @@ static long bpf_for_each_hash_elem(struct bpf_map *map, bpf_callback_t callback_
- 		rcu_read_unlock();
- 	}
- out:
--	if (is_percpu)
--		migrate_enable();
- 	return num_elems;
+ static void bpf_cgrp_storage_unlock(void)
+ {
+ 	this_cpu_dec(bpf_cgrp_storage_busy);
+-	migrate_enable();
  }
  
+ static bool bpf_cgrp_storage_trylock(void)
+ {
+-	migrate_disable();
++	cant_migrate();
+ 	if (unlikely(this_cpu_inc_return(bpf_cgrp_storage_busy) != 1)) {
+ 		this_cpu_dec(bpf_cgrp_storage_busy);
+-		migrate_enable();
+ 		return false;
+ 	}
+ 	return true;
+@@ -47,17 +45,18 @@ void bpf_cgrp_storage_free(struct cgroup *cgroup)
+ {
+ 	struct bpf_local_storage *local_storage;
+ 
++	migrate_disable();
+ 	rcu_read_lock();
+ 	local_storage = rcu_dereference(cgroup->bpf_cgrp_storage);
+-	if (!local_storage) {
+-		rcu_read_unlock();
+-		return;
+-	}
++	if (!local_storage)
++		goto out;
+ 
+ 	bpf_cgrp_storage_lock();
+ 	bpf_local_storage_destroy(local_storage);
+ 	bpf_cgrp_storage_unlock();
++out:
+ 	rcu_read_unlock();
++	migrate_enable();
+ }
+ 
+ static struct bpf_local_storage_data *
 -- 
 2.29.2
 
