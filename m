@@ -1,46 +1,48 @@
 Received: from mx0a-0016f401.pphosted.com (mx0a-0016f401.pphosted.com [67.231.148.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F09E201256;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F0FB201259;
 	Wed,  8 Jan 2025 18:30:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.148.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736361042; cv=none; b=sugYIBwZK1h5S2ZQS8Nc6yRmwCSRHduSliNDQ79IXjyjQJpbsfcvpO3Xvj6d3vMY0gcVJSlY4HkfbK0HfFcdIdlh+LnhY0OTZk2TF0UgYGI8yhXVKEE7uNZF5D8lVMiQ8dnl/OmaSsWqk81LCJftMuy5Ge5ishfdDaILGyugwKE=
+	t=1736361042; cv=none; b=JuMX3EMvx+xrS7BO7QJhlWXZFNy6h4mUXHD/JGIgCQ0MTvXWP3waYyk+64bF58e0Dz1SI3gn9NPOxX75ncHunQHEPnZQUtM8Ld/7c0TROJ1eng2/wFzqIvtKrIMxwtgcgRJ5tPJUcsmuPPyPYElH/CMS5rgIr13c6ALAfybfw48=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1736361042; c=relaxed/simple;
-	bh=uOFpUTOI1C71zkkHFH2Hw3J9Z4OeD7nsT3ge0WLBhJM=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=qDi+t6ifUKswLDdzoMqBlT/X3tP05YJOw+WjJX/0h+THtM+uzp3NwDr/uei34O9nGqi1H5F8+RicF0o7qZ8K/hw/oYJZTlIK/8/s6i9o2WWXJDLYwzevUimlxJYvr1v81nT882zGPeguxOYmmbKL7rHqjd3i+FpTzxtTUfarI4w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marvell.com; spf=pass smtp.mailfrom=marvell.com; dkim=pass (2048-bit key) header.d=marvell.com header.i=@marvell.com header.b=Qj4jTaUU; arc=none smtp.client-ip=67.231.148.174
+	bh=WiQqmhQ0r6o90Tw4KSdM/40GfEijhS60JJvJS0Z+6LE=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Cdf1nR30jLShBfg3C3IDRt8Akxq2pk7f09EqLx6Mccb3jkaT1/Q8/JOOZzttsxUwj+tejrNMKeq1ppKRZUzbf7udUHvTwWVcVpWndKodptMRPvXqayUkfG8rg/efyQM/6gxeeFzWlgudC5YxwAmRulR9VrjbQW33uHkNcgIRutI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marvell.com; spf=pass smtp.mailfrom=marvell.com; dkim=pass (2048-bit key) header.d=marvell.com header.i=@marvell.com header.b=R1nprl1R; arc=none smtp.client-ip=67.231.148.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marvell.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=marvell.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=marvell.com header.i=@marvell.com header.b="Qj4jTaUU"
+	dkim=pass (2048-bit key) header.d=marvell.com header.i=@marvell.com header.b="R1nprl1R"
 Received: from pps.filterd (m0431384.ppops.net [127.0.0.1])
-	by mx0a-0016f401.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 508HduKn020996;
-	Wed, 8 Jan 2025 10:30:10 -0800
+	by mx0a-0016f401.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 508HduKp020996;
+	Wed, 8 Jan 2025 10:30:21 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=
-	cc:content-transfer-encoding:content-type:date:from:message-id
-	:mime-version:subject:to; s=pfpt0220; bh=lQk8noi7KT0SO/sCiOnpHXf
-	NOlFwsQLIcBfY+VjQH2I=; b=Qj4jTaUUZoKfFVzZZgvHdCGmbjVpVYHXK6L5G9L
-	DCfdekarOFc0cxGLMnAARn8flLNrsbQ0PPYtxJ14jGi933HqWWOiyMNI4lMrAcPO
-	4xirZhv+YBuppl3ZluyYwfdCV2R52aDlxyJaapBurjy3ix1uvIjkgYxOU7wR3Av0
-	UqZd8TLIX0gbYJhBg9/Td4wDB7oSjydPsvhUK8aMfksaybQ8PUM/DyljxfJr3Lc1
-	0goV+k9kFWe2w0SVn+5GMUOCUSR0m1le4F6tkXM2Bd2uh2qKikC4nS9PaCULqpEa
-	fpYBe1X7yqlkjY6kLwT8039pt75Cp9JkE1t0sF61OUoEhYQ==
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pfpt0220; bh=H
+	7mXEF0QQy/H/nI2p6oVUncF0pme2ICFpfGEFeMBE/c=; b=R1nprl1Rxims3Ou7/
+	Z7UPS5LCfdPYAEinAhWI9dL6ayctavav6WrK32Q3hPRZ+5M4dEB0ddf+eak6PAdr
+	oZZ58k8jIwsiOEktPq7EIUn8E0AiM4ucpSJt0akRhGdsyPteM86X/f8V9pBZItDt
+	zg0M5DfrdcsvMDaRXg2jD/DwoecVLlnqomsG0UKo/amboan2GNCt1EYwQje/jhN0
+	L72lobii6zMH+5BiccEEqK2oU9qM08encXJTpm0bWFjCLdyEFOKOfePdNXaDAT10
+	0zDFhMK/jEojTeyuo0POtMqOc0HkLPA2lZLUsHKF3atayQEsGkNyVhX7OSuBPrV6
+	aG2Ew==
 Received: from dc6wp-exch02.marvell.com ([4.21.29.225])
-	by mx0a-0016f401.pphosted.com (PPS) with ESMTPS id 441wy9r3w0-1
+	by mx0a-0016f401.pphosted.com (PPS) with ESMTPS id 441wy9r3wm-2
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 08 Jan 2025 10:30:09 -0800 (PST)
+	Wed, 08 Jan 2025 10:30:21 -0800 (PST)
 Received: from DC6WP-EXCH02.marvell.com (10.76.176.209) by
  DC6WP-EXCH02.marvell.com (10.76.176.209) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.4; Wed, 8 Jan 2025 10:30:08 -0800
+ 15.2.1544.4; Wed, 8 Jan 2025 10:30:20 -0800
 Received: from maili.marvell.com (10.69.176.80) by DC6WP-EXCH02.marvell.com
  (10.76.176.209) with Microsoft SMTP Server id 15.2.1544.4 via Frontend
- Transport; Wed, 8 Jan 2025 10:30:08 -0800
+ Transport; Wed, 8 Jan 2025 10:30:20 -0800
 Received: from localhost.localdomain (unknown [10.28.36.166])
-	by maili.marvell.com (Postfix) with ESMTP id D9C7B3F70A8;
-	Wed,  8 Jan 2025 10:30:02 -0800 (PST)
+	by maili.marvell.com (Postfix) with ESMTP id A79C83F7092;
+	Wed,  8 Jan 2025 10:30:14 -0800 (PST)
 From: Suman Ghosh <sumang@marvell.com>
 To: <sgoutham@marvell.com>, <gakula@marvell.com>, <sbhatta@marvell.com>,
         <hkelam@marvell.com>, <davem@davemloft.net>, <edumazet@google.com>,
@@ -50,10 +52,12 @@ To: <sgoutham@marvell.com>, <gakula@marvell.com>, <sbhatta@marvell.com>,
         <bbhushan2@marvell.com>, <hawk@kernel.org>, <andrew+netdev@lunn.ch>,
         <ast@kernel.org>, <daniel@iogearbox.net>, <bpf@vger.kernel.org>
 CC: Suman Ghosh <sumang@marvell.com>
-Subject: [net-next PATCH v2 0/6] Add af_xdp support for cn10k
-Date: Wed, 8 Jan 2025 23:59:53 +0530
-Message-ID: <20250108182959.2207450-1-sumang@marvell.com>
+Subject: [net-next PATCH v2 2/6] octeontx2-pf: Don't unmap page pool buffer used by XDP
+Date: Wed, 8 Jan 2025 23:59:55 +0530
+Message-ID: <20250108182959.2207450-3-sumang@marvell.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20250108182959.2207450-1-sumang@marvell.com>
+References: <20250108182959.2207450-1-sumang@marvell.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -62,59 +66,191 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-Proofpoint-GUID: EFL-gwrB803eHterdmXFx2k0xS-ZotE6
-X-Proofpoint-ORIG-GUID: EFL-gwrB803eHterdmXFx2k0xS-ZotE6
+X-Proofpoint-GUID: GR_dLOHxpT7lsT4qGvqKAvDMbhkgmt6V
+X-Proofpoint-ORIG-GUID: GR_dLOHxpT7lsT4qGvqKAvDMbhkgmt6V
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.687,Hydra:6.0.235,FMLib:17.0.607.475
  definitions=2020-10-13_15,2020-10-13_02,2020-04-07_01
 
-This patchset includes changes to support AF_XDP for cn10k chipsets. Both
-non-zero copy and zero copy will be supported after these changes. Also,
-the RSS will be reconfigured once a particular receive queue is
-added/removed to/from AF_XDP support.
+From: Geetha sowjanya <gakula@marvell.com>
 
-Patch #1: octeontx2-pf: Add AF_XDP non-zero copy support
+When xdp buffers are from page pool do not dma unmap
+the buffers. DMA map/unmap are handled by the page_pool
+APIs.
 
-Patch #2: octeontx2-pf: Don't unmap page pool buffer used by XDP
+Signed-off-by: Geetha sowjanya <gakula@marvell.com>
+Signed-off-by: Suman Ghosh <sumang@marvell.com>
+---
+ .../marvell/octeontx2/nic/otx2_common.h       |  4 +-
+ .../ethernet/marvell/octeontx2/nic/otx2_pf.c  |  8 +++-
+ .../marvell/octeontx2/nic/otx2_txrx.c         | 42 ++++++++++++-------
+ .../marvell/octeontx2/nic/otx2_txrx.h         |  1 +
+ 4 files changed, 37 insertions(+), 18 deletions(-)
 
-Patch #3: octeontx2-pf: AF_XDP zero copy receive support
-
-Patch #4: octeontx2-pf: Reconfigure RSS table after enabling AF_XDP
-zerocopy on rx queue
-
-Patch #5: octeontx2-pf: Prepare for AF_XDP transmit
-
-Patch #6: octeontx2-pf: AF_XDP zero copy transmit support
-
-Geetha sowjanya (1):
-  octeontx2-pf: Don't unmap page pool buffer used by XDP
-
-Hariprasad Kelam (2):
-  Octeontx2-pf: Prepare for AF_XDP
-  octeontx2-pf: AF_XDP zero copy transmit support
-
-Suman Ghosh (3):
-  octeontx2-pf: Add AF_XDP non-zero copy support
-  octeontx2-pf: Add AF_XDP zero copy receive support
-  octeontx2-pf: Reconfigure RSS table after enabling AF_XDP zerocopy on
-    rx queue
-
- .../ethernet/marvell/octeontx2/nic/Makefile   |   2 +-
- .../ethernet/marvell/octeontx2/nic/cn10k.c    |   6 +-
- .../marvell/octeontx2/nic/otx2_common.c       | 125 +++++++---
- .../marvell/octeontx2/nic/otx2_common.h       |  17 +-
- .../marvell/octeontx2/nic/otx2_ethtool.c      |   6 +-
- .../ethernet/marvell/octeontx2/nic/otx2_pf.c  |  33 ++-
- .../marvell/octeontx2/nic/otx2_txrx.c         | 181 +++++++++++---
- .../marvell/octeontx2/nic/otx2_txrx.h         |   9 +
- .../ethernet/marvell/octeontx2/nic/otx2_vf.c  |  12 +-
- .../ethernet/marvell/octeontx2/nic/otx2_xsk.c | 225 ++++++++++++++++++
- .../ethernet/marvell/octeontx2/nic/otx2_xsk.h |  24 ++
- .../ethernet/marvell/octeontx2/nic/qos_sq.c   |   2 +-
- 12 files changed, 561 insertions(+), 81 deletions(-)
- create mode 100644 drivers/net/ethernet/marvell/octeontx2/nic/otx2_xsk.c
- create mode 100644 drivers/net/ethernet/marvell/octeontx2/nic/otx2_xsk.h
-
+diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.h b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.h
+index 65814e3dc93f..951fdf6bc2c4 100644
+--- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.h
++++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.h
+@@ -21,6 +21,7 @@
+ #include <linux/time64.h>
+ #include <linux/dim.h>
+ #include <uapi/linux/if_macsec.h>
++#include <net/page_pool/helpers.h>
+ 
+ #include <mbox.h>
+ #include <npc.h>
+@@ -1094,7 +1095,8 @@ int otx2_del_macfilter(struct net_device *netdev, const u8 *mac);
+ int otx2_add_macfilter(struct net_device *netdev, const u8 *mac);
+ int otx2_enable_rxvlan(struct otx2_nic *pf, bool enable);
+ int otx2_install_rxvlan_offload_flow(struct otx2_nic *pfvf);
+-bool otx2_xdp_sq_append_pkt(struct otx2_nic *pfvf, u64 iova, int len, u16 qidx);
++bool otx2_xdp_sq_append_pkt(struct otx2_nic *pfvf, u64 iova, int len,
++			    u16 qidx, u16 flags);
+ u16 otx2_get_max_mtu(struct otx2_nic *pfvf);
+ int otx2_handle_ntuple_tc_features(struct net_device *netdev,
+ 				   netdev_features_t features);
+diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_pf.c b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_pf.c
+index e1dde93e8af8..8ba44164736a 100644
+--- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_pf.c
++++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_pf.c
+@@ -2701,11 +2701,15 @@ static int otx2_xdp_xmit_tx(struct otx2_nic *pf, struct xdp_frame *xdpf,
+ 	if (dma_mapping_error(pf->dev, dma_addr))
+ 		return -ENOMEM;
+ 
+-	err = otx2_xdp_sq_append_pkt(pf, dma_addr, xdpf->len, qidx);
++	err = otx2_xdp_sq_append_pkt(pf, dma_addr, xdpf->len,
++				     qidx, XDP_REDIRECT);
+ 	if (!err) {
+ 		otx2_dma_unmap_page(pf, dma_addr, xdpf->len, DMA_TO_DEVICE);
+ 		page = virt_to_page(xdpf->data);
+-		put_page(page);
++		if (page->pp)
++			page_pool_recycle_direct(page->pp, page);
++		else
++			put_page(page);
+ 		return -ENOMEM;
+ 	}
+ 	return 0;
+diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_txrx.c b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_txrx.c
+index ed8b37eb2054..730f2b7742db 100644
+--- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_txrx.c
++++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_txrx.c
+@@ -101,19 +101,20 @@ static void otx2_xdp_snd_pkt_handler(struct otx2_nic *pfvf,
+ 	struct nix_send_comp_s *snd_comp = &cqe->comp;
+ 	struct sg_list *sg;
+ 	struct page *page;
+-	u64 pa;
++	u64 pa, iova;
+ 
+ 	sg = &sq->sg[snd_comp->sqe_id];
+ 
+-	pa = otx2_iova_to_phys(pfvf->iommu_domain, sg->dma_addr[0]);
+-	otx2_dma_unmap_page(pfvf, sg->dma_addr[0],
+-			    sg->size[0], DMA_TO_DEVICE);
++	iova = sg->dma_addr[0] - OTX2_HEAD_ROOM;
++	pa = otx2_iova_to_phys(pfvf->iommu_domain, iova);
+ 	page = virt_to_page(phys_to_virt(pa));
++	if (sg->flags & XDP_REDIRECT)
++		otx2_dma_unmap_page(pfvf, sg->dma_addr[0], sg->size[0], DMA_TO_DEVICE);
++
+ 	if (page->pp) {
+ 		page_pool_recycle_direct(page->pp, page);
+ 		return;
+ 	}
+-
+ 	put_page(page);
+ }
+ 
+@@ -1365,7 +1366,7 @@ void otx2_free_pending_sqe(struct otx2_nic *pfvf)
+ }
+ 
+ static void otx2_xdp_sqe_add_sg(struct otx2_snd_queue *sq, u64 dma_addr,
+-				int len, int *offset)
++				int len, int *offset, u16 flags)
+ {
+ 	struct nix_sqe_sg_s *sg = NULL;
+ 	u64 *iova = NULL;
+@@ -1382,9 +1383,11 @@ static void otx2_xdp_sqe_add_sg(struct otx2_snd_queue *sq, u64 dma_addr,
+ 	sq->sg[sq->head].dma_addr[0] = dma_addr;
+ 	sq->sg[sq->head].size[0] = len;
+ 	sq->sg[sq->head].num_segs = 1;
++	sq->sg[sq->head].flags = flags;
+ }
+ 
+-bool otx2_xdp_sq_append_pkt(struct otx2_nic *pfvf, u64 iova, int len, u16 qidx)
++bool otx2_xdp_sq_append_pkt(struct otx2_nic *pfvf, u64 iova, int len,
++			    u16 qidx, u16 flags)
+ {
+ 	struct nix_sqe_hdr_s *sqe_hdr;
+ 	struct otx2_snd_queue *sq;
+@@ -1410,7 +1413,7 @@ bool otx2_xdp_sq_append_pkt(struct otx2_nic *pfvf, u64 iova, int len, u16 qidx)
+ 
+ 	offset = sizeof(*sqe_hdr);
+ 
+-	otx2_xdp_sqe_add_sg(sq, iova, len, &offset);
++	otx2_xdp_sqe_add_sg(sq, iova, len, &offset, flags);
+ 	sqe_hdr->sizem1 = (offset / 16) - 1;
+ 	pfvf->hw_ops->sqe_flush(pfvf, sq, offset, qidx);
+ 
+@@ -1451,19 +1454,24 @@ static bool otx2_xdp_rcv_pkt_handler(struct otx2_nic *pfvf,
+ 	case XDP_TX:
+ 		qidx += pfvf->hw.tx_queues;
+ 		cq->pool_ptrs++;
+-		return otx2_xdp_sq_append_pkt(pfvf, iova,
+-					      cqe->sg.seg_size, qidx);
++		return otx2_xdp_sq_append_pkt(pfvf, cqe->sg.seg_addr,
++					      cqe->sg.seg_size, qidx, XDP_TX);
+ 	case XDP_REDIRECT:
+ 		cq->pool_ptrs++;
+ 		err = xdp_do_redirect(pfvf->netdev, &xdp, prog);
+ 
+-		otx2_dma_unmap_page(pfvf, iova, pfvf->rbsize,
+-				    DMA_FROM_DEVICE);
+ 		if (!err) {
+ 			*need_xdp_flush = true;
+ 			return true;
+ 		}
+-		page_pool_recycle_direct(pool->page_pool, page);
++		if (page->pp) {
++			page_pool_recycle_direct(pool->page_pool, page);
++			return false;
++		}
++
++		otx2_dma_unmap_page(pfvf, iova, pfvf->rbsize,
++				    DMA_FROM_DEVICE);
++		put_page(page);
+ 		break;
+ 	default:
+ 		bpf_warn_invalid_xdp_action(pfvf->netdev, prog, act);
+@@ -1472,10 +1480,14 @@ static bool otx2_xdp_rcv_pkt_handler(struct otx2_nic *pfvf,
+ 		trace_xdp_exception(pfvf->netdev, prog, act);
+ 		break;
+ 	case XDP_DROP:
++		cq->pool_ptrs++;
++		if (page->pp) {
++			page_pool_recycle_direct(pool->page_pool, page);
++			return true;
++		}
+ 		otx2_dma_unmap_page(pfvf, iova, pfvf->rbsize,
+ 				    DMA_FROM_DEVICE);
+-		page_pool_recycle_direct(pool->page_pool, page);
+-		cq->pool_ptrs++;
++		put_page(page);
+ 		return true;
+ 	}
+ 	return false;
+diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_txrx.h b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_txrx.h
+index d23810963fdb..92e1e84cad75 100644
+--- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_txrx.h
++++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_txrx.h
+@@ -76,6 +76,7 @@ struct otx2_rcv_queue {
+ 
+ struct sg_list {
+ 	u16	num_segs;
++	u16	flags;
+ 	u64	skb;
+ 	u64	size[OTX2_MAX_FRAGS_IN_SQE];
+ 	u64	dma_addr[OTX2_MAX_FRAGS_IN_SQE];
 -- 
 2.25.1
 
