@@ -1,161 +1,232 @@
-Received: from mail-yb1-f182.google.com (mail-yb1-f182.google.com [209.85.219.182])
+Received: from mail-qv1-f42.google.com (mail-qv1-f42.google.com [209.85.219.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE28D126C18;
-	Thu,  9 Jan 2025 15:01:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4959D219A97;
+	Thu,  9 Jan 2025 15:22:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736434910; cv=none; b=KVMqQT3AxgjE4FDGbseCRRZ4XiwaXlauKfM3e9yz5AM78rvNYxPy72U/kmJX6y0BijjPitTYLlrE+7UAKh1Dj05IUVUXR+VbTFksrmiY9+A1NYmUdeNzm5snVBONchKM6bmitV9TLujTBtzd3lbMsgsYc7t0SZJ+1qpnS6CiWic=
+	t=1736436151; cv=none; b=WpunDbJmBeqPJiuecENOrZWJ2UbW53tf8CjAXaIZj3pPFwIcU5EELUnzSSfc2+54/zvWo3x7s/hsWvfvtVTLOvQLK2IrKADTUAILMRCNGPbgLP1uCl/sF7diFgdM+yAeI8r9mH82wamBQTufC9tDVDEF81sJvyu7FMr5HFkrKXg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736434910; c=relaxed/simple;
-	bh=ff+4ID3IFefdrduc7sNMCBmj6ptNHLYZHEId6E8XSLY=;
+	s=arc-20240116; t=1736436151; c=relaxed/simple;
+	bh=deHBZmmhZJQ1mB96LT50et1dZHJDRyTgJ1K59XCtvHE=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=WCWxPHZZICHs5PJw3oJOwHlxmpQBF+ETRbrI/oi3PFlz0bfwEiP37xJb4cMEdsDqXXnMM0h4sQLn4ZHeuwQpyAeJXdI/ZRwnkTp2O9NsE9nfh2+Ieo6CqzJfu5LfZgbFwXjvPm6wY3QJ7toYiukabG0nijdfNQLMRKhdUc+uiqQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Qc+iGs2U; arc=none smtp.client-ip=209.85.219.182
+	 To:Cc:Content-Type; b=Z21lWDU+VAymhGRzt47cw3jGvJcCF/YzXLiHgL939g8I4UJafbgwzxlSrHK3tTepLVX+STLrtWg5OzN4LCm/3iBzQaVXU9PbQpFM/XWB3zg09S3Ftns7MQxdtYAVbaK6wnkdXT4bKe9UzAAyYsryNMEeExL6XPpbBG0vDgw/eDY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=l+aSG3jn; arc=none smtp.client-ip=209.85.219.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Qc+iGs2U"
-Received: by mail-yb1-f182.google.com with SMTP id 3f1490d57ef6-e54bd61e793so1594633276.2;
-        Thu, 09 Jan 2025 07:01:48 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="l+aSG3jn"
+Received: by mail-qv1-f42.google.com with SMTP id 6a1803df08f44-6dce7263beaso9519276d6.3;
+        Thu, 09 Jan 2025 07:22:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1736434908; x=1737039708; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=eWfuwOBUl6cOitwiEIHV5z9m+DKUUcfRYCOSfvut16o=;
-        b=Qc+iGs2U2JR6r34jSimCJkJ3xw4Y22fVFxqVL+bmQ2cagPN2KkNrDdjDuaNaZDKEPt
-         KHYRT1WfUiidlsmDoFA9RU+WKwM+9GAIBqyolRf0kOaHcJQELfxi5hhr83QfmP0DXgcj
-         2fqy0bbIuF3ifPCUM0LSV2mHaoaukIMcNX176yuGKk/m3EhJkIlDps36hrBt+ZoylSiI
-         7lCS4VIN0LftPbdL9B1gckyrmjtZP4o/Q9bMFWJp1iU3K87kuOLFkV2yVSmiwkDRQqhz
-         s9BJTxMbVU+uU/uUhxj3Kr1TPknn7ub5j0GFFIFBIU4S16Cl47aqCZdrfLzLxnlGuiom
-         GusA==
+        d=gmail.com; s=20230601; t=1736436148; x=1737040948; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=fcg3/DfftZTPey65NfLlkT9BL5qUIuwyMqfC8or7FBA=;
+        b=l+aSG3jnne+74k1qATakYaopgMJtA0AU9qvU7VNNm0W6xJfeAWuXIvaTQDAGCHrET5
+         ihSGPOKDZ+aZsARrU62IYKaqcCrrC0oISCk5itI5PrJofmPyufzG48o6imzmNtntqlXv
+         7+pB4Dbu0HzRksyfUnhKupEiSvB9cbxxTj63ZDCxv66ilhlurs8pS936CjfsbG8tlWGz
+         OifGCS0e/tiLdXH/A7Tiufm9+Dv896KjJfiso3fN8QfM6KKwmIf5jnZRg2x62Lwo2k6Y
+         ldCFrDboxEf8g3m2cI4ZiJW07XZqqcN+b7/yu7Xe4NI/3mFIe0Vm4yI6zqNe+WNsjMq8
+         7MBg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736434908; x=1737039708;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=eWfuwOBUl6cOitwiEIHV5z9m+DKUUcfRYCOSfvut16o=;
-        b=upTuv7pEaNltu0RoWk1kD5DlGimJok2C4zHM8Tf4wHocwPAmct1kr1NrkXCD851YOl
-         Q7DRPd/pen0HJl1sq4OKhwVWE5tN2Gdu2jVSXcQgpZb+ld8nW+Re18HLq/uETsxnxnDv
-         YpOTvl/R7q3eiFi7u4FxRP3gD49nytsFQ4glK+4h0V1IxwTfdtoX/xEdAMBj4PVk5R02
-         p2Rt0WbHO1DAuW5r7fhNxTmWYA2veeo/szmFCTsqOfmXr2l3AVoA3htzPEYTBADetW2v
-         gF6PIIvCkR1U5J6C46DjgdkWiJv2UlvzPpUpx0Fim42DiAKOdu2NlnjfZWaOOKxxSNi0
-         q7qg==
-X-Forwarded-Encrypted: i=1; AJvYcCUkibjfszEwKazou6hsuAs77NEcnJkkb0++RhCT1m9Np02zHXuiQ6MAheN6ybblkMm1oLuBUzQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywg+Jp5ofmOUKP6mv5r9e1ON6T0Ju1idBRvPU5Gn2gOmcvBLsLv
-	GJMSkEir9UPKelY/PSlGQxRyCsCIixYZsNQ3Hq+WOqUamJ9bz7Kf/hYYJH2ZEW02K5g4qfNgsOk
-	8Mjm4Ze93XPMYah8wkMpCf+/JRVI=
-X-Gm-Gg: ASbGncvaIwP+FL+Mn+DENaRFZutnwnZ8yt/496dQu6Cthv0Adm7jc1vb7r6lHGCrOpY
-	bWYtMpPg3mzNfV277FjYIfqjJi7F6mkgXAbxdRk6b9iLMwtCS3Je7AA==
-X-Google-Smtp-Source: AGHT+IGzgAgSGrbI0Qqg8yvoVvqUWZvvrBrWK41N8uBkoAlROJp/T5EWUfV7SoQSgDv7sz86gdceZA8A3KmiM03WLoE=
-X-Received: by 2002:a05:690c:f10:b0:6ef:6c57:ddae with SMTP id
- 00721157ae682-6f5312a3301mr56923377b3.34.1736434907714; Thu, 09 Jan 2025
- 07:01:47 -0800 (PST)
+        d=1e100.net; s=20230601; t=1736436148; x=1737040948;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=fcg3/DfftZTPey65NfLlkT9BL5qUIuwyMqfC8or7FBA=;
+        b=DLk/eIFC5gjRIk7Yu6I+zqRNzHpwjglFGplEeRjGBsRuJ/Q5VaipWAqVgiUG3ZecP1
+         aW78rogULBxC1MFzSq5bXuM8KmZhHGtrjD1fovDjmnziY2A1IU4aArvk+mpwK+cA0MXr
+         zTm802lUfDQn11lYtOscY7wqgvVgXODGU/byTmNQCmXgl5Gd3FZovIx5uOTRWTBUkvKe
+         CiDnv2kOYQNSnWPc6hngFM/MvyGMK2R3cwi2w9OIGw+g2hO2Uu6xIWPFuLCCPUPnGM5A
+         gVO74zz6cjekNUPxWl4btWGrGnGYKn9avLGgIsJwYICZ5pOzy3cPVOQeqdk2xQzhiR28
+         dm3Q==
+X-Forwarded-Encrypted: i=1; AJvYcCWR9FSbeR4Qcwi0zGjcjFuYBBprYb30pekkWageQ27cIqsGpLgl76dJu/mdQ6GRpSbwNEc=@vger.kernel.org, AJvYcCXrlEfv1t35teAwmZo4jN6/0/Z6PoWo64yQMW+UvAlTwzCODuFMdTr56C+hKKBUZFSCVypFseuhoSCjwwEV@vger.kernel.org
+X-Gm-Message-State: AOJu0YzJG9h9MuokiUrSHMXS4q8LIYYcQ+mmy/agB3HmVG72+Zphi41S
+	uLd9Uc5xyBpqteF9iSA2xyCPzLe5U0baCOmsD1AfA96sF+FegiwK8G8wL1ToGxgO0LpRdUFfVaR
+	0j2dfXCgn7wH7Q0gMpAKV+ATSe64=
+X-Gm-Gg: ASbGncseg6+FS7cbC+47Obv+jCPJ+4QyVIYhj3oyEmL9tzLd4exqXpxq7pkW6H410dA
+	GPC22J+z+mPltPTSj6ofvFL+X3ZDAHxdGgacUUw==
+X-Google-Smtp-Source: AGHT+IGtc8B05KJhD7xy2xdv1NbTLL6qgEF2fS/9anHBEUYll0detRjgRUi5idu/CfzHA5R40YHpLPMnELv0MemNIhY=
+X-Received: by 2002:ad4:5c68:0:b0:6d8:9065:2033 with SMTP id
+ 6a1803df08f44-6df9b285eb0mr113381566d6.31.1736436148035; Thu, 09 Jan 2025
+ 07:22:28 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241220195619.2022866-1-amery.hung@gmail.com>
- <20241220195619.2022866-9-amery.hung@gmail.com> <3961c9ce-21d3-4a35-956c-5e1a6eb6031b@linux.dev>
-In-Reply-To: <3961c9ce-21d3-4a35-956c-5e1a6eb6031b@linux.dev>
-From: Amery Hung <ameryhung@gmail.com>
-Date: Thu, 9 Jan 2025 07:00:00 -0800
-X-Gm-Features: AbW1kvazz7DxogB4aWKus50XwQWS6BOfbyqO1fk83gOIYsQR7b817fFBnIX5FRs
-Message-ID: <CAMB2axNoh1uDLC4KubHjKSfRBfNWnG_tbuPK6BWzx4VA6Hx0tQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 08/14] bpf: net_sched: Add a qdisc watchdog timer
-To: Martin KaFai Lau <martin.lau@linux.dev>
-Cc: bpf@vger.kernel.org, netdev@vger.kernel.org, daniel@iogearbox.net, 
-	andrii@kernel.org, alexei.starovoitov@gmail.com, martin.lau@kernel.org, 
-	sinquersw@gmail.com, toke@redhat.com, jhs@mojatatu.com, jiri@resnulli.us, 
-	stfomichev@gmail.com, ekarani.silvestre@ccc.ufcg.edu.br, 
-	yangpeihao@sjtu.edu.cn, xiyou.wangcong@gmail.com, yepeilin.cs@gmail.com, 
-	amery.hung@bytedance.com
+References: <20250109003436.2829560-1-sdf@fomichev.me>
+In-Reply-To: <20250109003436.2829560-1-sdf@fomichev.me>
+From: Magnus Karlsson <magnus.karlsson@gmail.com>
+Date: Thu, 9 Jan 2025 16:22:16 +0100
+X-Gm-Features: AbW1kvYG-Dt_dpM4v0JLNFOS4TcDIMxcJ4A-lYMpAUp7D6v_JhnnQusvGrKv9FQ
+Message-ID: <CAJ8uoz3bMk_0bbtGdEAkbXNHu0c5Zr+-sAUyqk2M84VLE4FtpQ@mail.gmail.com>
+Subject: Re: [PATCH net] xsk: Bring back busy polling support
+To: Stanislav Fomichev <sdf@fomichev.me>
+Cc: netdev@vger.kernel.org, davem@davemloft.net, edumazet@google.com, 
+	kuba@kernel.org, pabeni@redhat.com, linux-kernel@vger.kernel.org, 
+	bpf@vger.kernel.org, horms@kernel.org, ast@kernel.org, daniel@iogearbox.net, 
+	hawk@kernel.org, john.fastabend@gmail.com, bjorn@kernel.org, 
+	magnus.karlsson@intel.com, maciej.fijalkowski@intel.com, 
+	jonathan.lemon@gmail.com, jdamato@fastly.com, mkarsten@uwaterloo.ca
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jan 8, 2025 at 4:20=E2=80=AFPM Martin KaFai Lau <martin.lau@linux.d=
-ev> wrote:
+On Thu, 9 Jan 2025 at 01:35, Stanislav Fomichev <sdf@fomichev.me> wrote:
 >
-> On 12/20/24 11:55 AM, Amery Hung wrote:
-> > diff --git a/net/sched/bpf_qdisc.c b/net/sched/bpf_qdisc.c
-> > index 1c92bfcc3847..bbe7aded6f24 100644
-> > --- a/net/sched/bpf_qdisc.c
-> > +++ b/net/sched/bpf_qdisc.c
-> > @@ -8,6 +8,10 @@
-> >
-> >   static struct bpf_struct_ops bpf_Qdisc_ops;
-> >
-> > +struct bpf_sched_data {
-> > +     struct qdisc_watchdog watchdog;
-> > +};
-> > +
-> >   struct bpf_sk_buff_ptr {
-> >       struct sk_buff *skb;
-> >   };
-> > @@ -108,6 +112,46 @@ static int bpf_qdisc_btf_struct_access(struct bpf_=
-verifier_log *log,
-> >       return 0;
-> >   }
-> >
-> > +BTF_ID_LIST(bpf_qdisc_init_prologue_ids)
-> > +BTF_ID(func, bpf_qdisc_init_prologue)
-> > +
-> > +static int bpf_qdisc_gen_prologue(struct bpf_insn *insn_buf, bool dire=
-ct_write,
-> > +                               const struct bpf_prog *prog)
-> > +{
-> > +     struct bpf_insn *insn =3D insn_buf;
-> > +
-> > +     if (strcmp(prog->aux->attach_func_name, "init"))
-> > +             return 0;
-> > +
-> > +     *insn++ =3D BPF_MOV64_REG(BPF_REG_6, BPF_REG_1);
-> > +     *insn++ =3D BPF_LDX_MEM(BPF_DW, BPF_REG_1, BPF_REG_1, 0);
-> > +     *insn++ =3D BPF_CALL_KFUNC(0, bpf_qdisc_init_prologue_ids[0]);
+> Commit 86e25f40aa1e ("net: napi: Add napi_config") moved napi->napi_id
+> assignment to a later point in time (napi_hash_add_with_id). This breaks
+> __xdp_rxq_info_reg which copies napi_id at an earlier time and now
+> stores 0 napi_id. It also makes sk_mark_napi_id_once_xdp and
+> __sk_mark_napi_id_once useless because they now work against 0 napi_id.
+> Since sk_busy_loop requires valid napi_id to busy-poll on, there is no way
+> to busy-poll AF_XDP sockets anymore.
 >
-> I was wondering if patch 7 is needed if BPF_EMIT_CALL() and BPF_CALL_1() =
-were
-> used, so it looks more like a bpf helper instead of kfunc. I tried but fa=
-iled at
-> the "fn =3D env->ops->get_func_proto(insn->imm, env->prog);" in do_misc_f=
-ixups().
-> I think the change in patch 7 is simple enough instead of getting
-> get_func_proto() works for this case.
+> Bring back the ability to busy-poll on XSK by resolving socket's napi_id
+> at bind time. This relies on relatively recent netif_queue_set_napi,
+> but (assume) at this point most popular drivers should have been converted.
+> This also removes per-tx/rx cycles which used to check and/or set
+> the napi_id value.
 >
+> Confirmed by running a busy-polling AF_XDP socket
+> (github.com/fomichev/xskrtt) on mlx5 and looking at BusyPollRxPackets
+> from /proc/net/netstat.
 
-Yeah. Making BPF_EMIT_CALL + BPF_CALL_xxx work in
-gen_prologue/epilogue doesn't seem trivial to me at least when
-compared with BPF_CALL_KFUNC.
+Thanks Stanislav for finding and fixing this. As a bonus, the
+resulting code is much nicer too.
 
-> > +     *insn++ =3D BPF_MOV64_REG(BPF_REG_1, BPF_REG_6);
-> > +     *insn++ =3D prog->insnsi[0];
-> > +
-> > +     return insn - insn_buf;
-> > +}
-> > +
-> > +BTF_ID_LIST(bpf_qdisc_reset_destroy_epilogue_ids)
-> > +BTF_ID(func, bpf_qdisc_reset_destroy_epilogue)
-> > +
-> > +static int bpf_qdisc_gen_epilogue(struct bpf_insn *insn_buf, const str=
-uct bpf_prog *prog,
-> > +                               s16 ctx_stack_off)
-> > +{
-> > +     struct bpf_insn *insn =3D insn_buf;
-> > +
-> > +     if (strcmp(prog->aux->attach_func_name, "reset") &&
-> > +         strcmp(prog->aux->attach_func_name, "destroy"))
-> > +             return 0;
-> > +
-> > +     *insn++ =3D BPF_LDX_MEM(BPF_DW, BPF_REG_1, BPF_REG_FP, ctx_stack_=
-off);
-> > +     *insn++ =3D BPF_LDX_MEM(BPF_DW, BPF_REG_1, BPF_REG_1, 0);
-> > +     *insn++ =3D BPF_CALL_KFUNC(0, bpf_qdisc_reset_destroy_epilogue_id=
-s[0]);
-> > +     *insn++ =3D BPF_EXIT_INSN();
-> > +
-> > +     return insn - insn_buf;
-> > +}
-> > +
+I just took a look at the Intel drivers and some of our drivers have
+not been converted to use netif_queue_set_napi() yet. Just ice, e1000,
+and e1000e use it. But that is on us to fix.
+
+From the xsk point of view:
+Acked-by: Magnus Karlsson <magnus.karlsson@intel.com>
+
+> Fixes: 86e25f40aa1e ("net: napi: Add napi_config")
+> Signed-off-by: Stanislav Fomichev <sdf@fomichev.me>
+> ---
+>  include/net/busy_poll.h    |  8 --------
+>  include/net/xdp.h          |  1 -
+>  include/net/xdp_sock_drv.h | 14 --------------
+>  net/core/xdp.c             |  1 -
+>  net/xdp/xsk.c              | 14 +++++++++-----
+>  5 files changed, 9 insertions(+), 29 deletions(-)
+>
+> diff --git a/include/net/busy_poll.h b/include/net/busy_poll.h
+> index c858270141bc..c39a426ebf52 100644
+> --- a/include/net/busy_poll.h
+> +++ b/include/net/busy_poll.h
+> @@ -174,12 +174,4 @@ static inline void sk_mark_napi_id_once(struct sock *sk,
+>  #endif
+>  }
+>
+> -static inline void sk_mark_napi_id_once_xdp(struct sock *sk,
+> -                                           const struct xdp_buff *xdp)
+> -{
+> -#ifdef CONFIG_NET_RX_BUSY_POLL
+> -       __sk_mark_napi_id_once(sk, xdp->rxq->napi_id);
+> -#endif
+> -}
+> -
+>  #endif /* _LINUX_NET_BUSY_POLL_H */
+> diff --git a/include/net/xdp.h b/include/net/xdp.h
+> index e6770dd40c91..b5b10f2b88e5 100644
+> --- a/include/net/xdp.h
+> +++ b/include/net/xdp.h
+> @@ -62,7 +62,6 @@ struct xdp_rxq_info {
+>         u32 queue_index;
+>         u32 reg_state;
+>         struct xdp_mem_info mem;
+> -       unsigned int napi_id;
+>         u32 frag_size;
+>  } ____cacheline_aligned; /* perf critical, avoid false-sharing */
+>
+> diff --git a/include/net/xdp_sock_drv.h b/include/net/xdp_sock_drv.h
+> index 40085afd9160..7a7316d9c0da 100644
+> --- a/include/net/xdp_sock_drv.h
+> +++ b/include/net/xdp_sock_drv.h
+> @@ -59,15 +59,6 @@ static inline void xsk_pool_fill_cb(struct xsk_buff_pool *pool,
+>         xp_fill_cb(pool, desc);
+>  }
+>
+> -static inline unsigned int xsk_pool_get_napi_id(struct xsk_buff_pool *pool)
+> -{
+> -#ifdef CONFIG_NET_RX_BUSY_POLL
+> -       return pool->heads[0].xdp.rxq->napi_id;
+> -#else
+> -       return 0;
+> -#endif
+> -}
+> -
+>  static inline void xsk_pool_dma_unmap(struct xsk_buff_pool *pool,
+>                                       unsigned long attrs)
+>  {
+> @@ -306,11 +297,6 @@ static inline void xsk_pool_fill_cb(struct xsk_buff_pool *pool,
+>  {
+>  }
+>
+> -static inline unsigned int xsk_pool_get_napi_id(struct xsk_buff_pool *pool)
+> -{
+> -       return 0;
+> -}
+> -
+>  static inline void xsk_pool_dma_unmap(struct xsk_buff_pool *pool,
+>                                       unsigned long attrs)
+>  {
+> diff --git a/net/core/xdp.c b/net/core/xdp.c
+> index bcc5551c6424..2315feed94ef 100644
+> --- a/net/core/xdp.c
+> +++ b/net/core/xdp.c
+> @@ -186,7 +186,6 @@ int __xdp_rxq_info_reg(struct xdp_rxq_info *xdp_rxq,
+>         xdp_rxq_info_init(xdp_rxq);
+>         xdp_rxq->dev = dev;
+>         xdp_rxq->queue_index = queue_index;
+> -       xdp_rxq->napi_id = napi_id;
+>         xdp_rxq->frag_size = frag_size;
+>
+>         xdp_rxq->reg_state = REG_STATE_REGISTERED;
+> diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
+> index 3fa70286c846..89d2bef96469 100644
+> --- a/net/xdp/xsk.c
+> +++ b/net/xdp/xsk.c
+> @@ -322,7 +322,6 @@ static int xsk_rcv_check(struct xdp_sock *xs, struct xdp_buff *xdp, u32 len)
+>                 return -ENOSPC;
+>         }
+>
+> -       sk_mark_napi_id_once_xdp(&xs->sk, xdp);
+>         return 0;
+>  }
+>
+> @@ -908,11 +907,8 @@ static int __xsk_sendmsg(struct socket *sock, struct msghdr *m, size_t total_len
+>         if (unlikely(!xs->tx))
+>                 return -ENOBUFS;
+>
+> -       if (sk_can_busy_loop(sk)) {
+> -               if (xs->zc)
+> -                       __sk_mark_napi_id_once(sk, xsk_pool_get_napi_id(xs->pool));
+> +       if (sk_can_busy_loop(sk))
+>                 sk_busy_loop(sk, 1); /* only support non-blocking sockets */
+> -       }
+>
+>         if (xs->zc && xsk_no_wakeup(sk))
+>                 return 0;
+> @@ -1298,6 +1294,14 @@ static int xsk_bind(struct socket *sock, struct sockaddr *addr, int addr_len)
+>         xs->queue_id = qid;
+>         xp_add_xsk(xs->pool, xs);
+>
+> +       if (xs->zc && qid < dev->real_num_rx_queues) {
+> +               struct netdev_rx_queue *rxq;
+> +
+> +               rxq = __netif_get_rx_queue(dev, qid);
+> +               if (rxq->napi)
+> +                       __sk_mark_napi_id_once(sk, rxq->napi->napi_id);
+> +       }
+> +
+>  out_unlock:
+>         if (err) {
+>                 dev_put(dev);
+> --
+> 2.47.1
+>
+>
