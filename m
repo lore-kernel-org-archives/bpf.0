@@ -1,27 +1,28 @@
-Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.3])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 12B6F4A2D;
-	Thu,  9 Jan 2025 03:42:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.3
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.4])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 95146768FD;
+	Thu,  9 Jan 2025 03:42:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736394137; cv=none; b=ryiXTUa0F40wSQFHx80Nq2W/IfyD9m2KcXpszLO+hd2kaaCLqG+nJdMyuJ8k2u+nGJVmrHbZdI0K0dMRij9gGgvUCNWaq6aeO4ZTYuFdYRUcmGzXurvRe4sEBK3fBoyLN9V0o2tq3mDjBtj+fsJwq2kYUcFON/ErMQC9AiS9+jQ=
+	t=1736394152; cv=none; b=d7TZ3QSdOfHCi4ga46krgIyVhD87gNcShSp/fs94VDV8entlxXsDdVQdSq1lWjeGBM0ocIABUa0KDj7TZhRd8uV7KTzbj6mG3icUnoZc1jki8gCW4liZJMvdlHiVWJb6aPQg7bM6LPMTxDhHykukbTYhQKdTMwUhrwmowDaN6QM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736394137; c=relaxed/simple;
-	bh=LJZ2nUI/GG2GnRM8M1WxMzv6vt9edqJCSAD+UOgdUmw=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=eO8L6bD/zGCAoz7BcGL1jSAIBcIs0E721NRJNYj1GuJ2bkFMjqhvIVjjfQt6H7IudS+3nuzaQQiecyMZuuL9lfYw73DzsEnJbxKg0S9vv90sOn/YaeaD6aIt1NhQqp+0npVG+cCV172fE5pikYwtc23NAWxqtZ9WhFGNWCM8kPk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=oB4alu/p; arc=none smtp.client-ip=117.135.210.3
+	s=arc-20240116; t=1736394152; c=relaxed/simple;
+	bh=RJmrHncmAiYfQZgHBbGZ9N6pX/NJqX1TU++10eqVLQ4=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=EbaMn4tLN6xAZbK3I7AF6IYC73YoZLNG1v8cKoemn4YiqsMUc2ftASFSIl65rHSCXAojVoyp/h7+OKs9UnF2YbxTiPL/VnUUJCbgbKmSXEnG7agX9Tone9cQbLjryVjcNrKTFSpf55S77NbQA8w41sN63T7cII0GAcKuHu/qr7Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=E3gSkZz6; arc=none smtp.client-ip=117.135.210.4
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="oB4alu/p"
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="E3gSkZz6"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:Subject:Date:Message-ID:MIME-Version; bh=CebMC
-	NI4PIbKZdhA2SCMDBTyDltj8KPOIjjMYZgPmkw=; b=oB4alu/pe6qBbOXN3IdZ2
-	BTps/B432eL58V4dCx1TDs4hoQqIHAi0gm3SYsXo4wO0hjevUA18VtIT9gsLDrUa
-	nQkk9iOAouIk6qinObfrMOk+bzo1K6d65TDp3cxnPcZiZrIW+ubA60Bt37f730I9
-	cdpnBCXinNQ+An/UJ5k+Ew=
+	s=s110527; h=From:Subject:Date:Message-ID:MIME-Version; bh=W1HRi
+	UHKkNK4KFvLch5WDTwcRDvo+NOPbJJW0YrzMOo=; b=E3gSkZz65S9UfMaBWsFCI
+	jLjAPf/vESCmPCUVnz5P3bWNIU16Z5uETQHSxJ3cNTRFmS6kATjumOQioVKRPFCw
+	nnoza+ZVRXOlVelEQVCwJQxTBDhdXZbudDzQJHafgyp8QOtuKsdL49EoBu2+6X8z
+	Re/5NQVQl9cjc2yzmT2GrE=
 Received: from localhost.localdomain (unknown [47.252.33.72])
-	by gzsmtp5 (Coremail) with SMTP id QCgvCgAXYaYcRX9na6O1Jw--.42275S2;
-	Thu, 09 Jan 2025 11:40:22 +0800 (CST)
+	by gzsmtp5 (Coremail) with SMTP id QCgvCgAXYaYcRX9na6O1Jw--.42275S5;
+	Thu, 09 Jan 2025 11:40:55 +0800 (CST)
 From: Jiayuan Chen <mrpre@163.com>
 To: bpf@vger.kernel.org,
 	jakub@cloudflare.com,
@@ -53,10 +54,12 @@ Cc: netdev@vger.kernel.org,
 	kpsingh@kernel.org,
 	linux-doc@vger.kernel.org,
 	Jiayuan Chen <mrpre@163.com>
-Subject: [PATCH bpf v4 0/3] bpf: fix wrong copied_seq calculation
-Date: Thu,  9 Jan 2025 11:40:02 +0800
-Message-ID: <20250109034005.861063-1-mrpre@163.com>
+Subject: [PATCH bpf v4 3/3] bpf, strparser, docs: Add new callback for bpf
+Date: Thu,  9 Jan 2025 11:40:05 +0800
+Message-ID: <20250109034005.861063-4-mrpre@163.com>
 X-Mailer: git-send-email 2.43.5
+In-Reply-To: <20250109034005.861063-1-mrpre@163.com>
+References: <20250109034005.861063-1-mrpre@163.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -64,74 +67,50 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:QCgvCgAXYaYcRX9na6O1Jw--.42275S2
-X-Coremail-Antispam: 1Uf129KBjvJXoWxWFyrGFyfXw4kuryDAFyxKrg_yoW5GFWDpa
-	ykC34rGrsrtFyIvwsrA3yIgF4Fgw4rGayUGr1Fg3yfZr4UKryYqrs7Kayayr98GrWrZFyU
-	ur15Wrs0934DuFDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0piCeHfUUUUU=
-X-CM-SenderInfo: xpus2vi6rwjhhfrp/1tbiWxnPp2d-PnPPEgAAsi
+X-CM-TRANSID:QCgvCgAXYaYcRX9na6O1Jw--.42275S5
+X-Coremail-Antispam: 1Uf129KBjvdXoWrKryDXFyruFy5GF4rAw17trb_yoWkCrcEka
+	yS9Fs5GFykZF43KayUua1kWr93GrWI9r18ZF4rtFZxC348XrykXF95Jrn5Zr18WrW3ury3
+	K3s5JFyfJr129jkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+	9fnUUvcSsGvfC2KfnxnUUI43ZEXa7xRRdWrJUUUUU==
+X-CM-SenderInfo: xpus2vi6rwjhhfrp/1tbiDwbPp2d-QGaV3wACsX
 
-A previous commit described in this topic
-http://lore.kernel.org/bpf/20230523025618.113937-9-john.fastabend@gmail.com
-directly updated 'sk->copied_seq' in the tcp_eat_skb() function when the
-action of a BPF program was SK_REDIRECT. For other actions, like SK_PASS,
-the update logic for 'sk->copied_seq' was moved to
-tcp_bpf_recvmsg_parser() to ensure the accuracy of the 'fionread' feature.
+sockmap with strparser need customized read operations to fix copied_seq
+error.
 
-That commit works for a single stream_verdict scenario, as it also
-modified 'sk_data_ready->sk_psock_verdict_data_ready->tcp_read_skb'
-to remove updating 'sk->copied_seq'.
-
-However, for programs where both stream_parser and stream_verdict are
-active(strparser purpose), tcp_read_sock() was used instead of
-tcp_read_skb() (sk_data_ready->strp_data_ready->tcp_read_sock)
-tcp_read_sock() now still update 'sk->copied_seq', leading to duplicated
-updates.
-
-In summary, for strparser + SK_PASS, copied_seq is redundantly calculated
-in both tcp_read_sock() and tcp_bpf_recvmsg_parser().
-
-The issue causes incorrect copied_seq calculations, which prevent
-correct data reads from the recv() interface in user-land.
-
-Also we added test cases for bpf + strparser and separated them from
-sockmap_basic, as strparser has more encapsulation and parsing
-capabilities compared to sockmap.
-
-Fixes: e5c6de5fa025 ("bpf, sockmap: Incorrectly handling copied_seq")
-
+Signed-off-by: Jiayuan Chen <mrpre@163.com>
 ---
-V3 -> v4:
-https://lore.kernel.org/bpf/20241218053408.437295-1-mrpre@163.com/
-Avoid introducing new proto_ops. (Daniel Borkmann).
-Add more edge test cases for strparser + bpf.
-Fix patchwork fail of test cases code.
+ Documentation/networking/strparser.rst | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
 
-V1 -> V3:
-https://lore.kernel.org/bpf/20241209152740.281125-1-mrpre@163.com/
-Fix patchwork fail by adding Fixes tag.
-Save skb data offset for ENOMEM. (John Fastabend)
----
-
-Jiayuan Chen (3):
-  bpf: fix wrong copied_seq calculation
-  selftests/bpf: add strparser test for bpf
-  bpf, strparser, docs: Add new callback for bpf
-
- Documentation/networking/strparser.rst        |  11 +-
- include/linux/skmsg.h                         |   2 +
- include/net/strparser.h                       |   2 +
- include/net/tcp.h                             |   3 +
- net/core/skmsg.c                              |  42 ++
- net/ipv4/tcp.c                                |  31 +-
- net/strparser/strparser.c                     |  11 +-
- .../selftests/bpf/prog_tests/sockmap_basic.c  |  53 --
- .../selftests/bpf/prog_tests/sockmap_strp.c   | 452 ++++++++++++++++++
- .../selftests/bpf/progs/test_sockmap_strp.c   |  53 ++
- 10 files changed, 599 insertions(+), 61 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/sockmap_strp.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_sockmap_strp.c
-
+diff --git a/Documentation/networking/strparser.rst b/Documentation/networking/strparser.rst
+index 6cab1f74ae05..e41c18eee2f4 100644
+--- a/Documentation/networking/strparser.rst
++++ b/Documentation/networking/strparser.rst
+@@ -112,7 +112,7 @@ Functions
+ Callbacks
+ =========
+ 
+-There are six callbacks:
++There are seven callbacks:
+ 
+     ::
+ 
+@@ -182,6 +182,15 @@ There are six callbacks:
+     the length of the message. skb->len - offset may be greater
+     then full_len since strparser does not trim the skb.
+ 
++    ::
++
++	int (*read_sock)(struct strparser *strp, read_descriptor_t *desc,
++                     sk_read_actor_t recv_actor);
++
++    read_sock is called when the user specify it, allowing for customized
++    read operations. If the callback is not set (NULL in strp_init) native
++    read_sock operation of the socket is used.
++
+     ::
+ 
+ 	int (*read_sock_done)(struct strparser *strp, int err);
 -- 
 2.43.5
 
