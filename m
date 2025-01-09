@@ -1,28 +1,28 @@
-Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C85D25949C;
-	Thu,  9 Jan 2025 06:07:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83D412147F9;
+	Thu,  9 Jan 2025 06:07:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736402822; cv=none; b=hyAQhhPW152w97AmvsjzCihF+/xkeb6CuUwMohEQ/hbQ2UKIx0wxiyXalfQLsC1xdD++TaguU2fUikh7HBu7GSZSzj+khaMxSNQLOE86Qx8oLN4SmGBXHliRgeGl36JaZifqNSeKvTru2VW4QFLoNfbUdYc1A20PsH1Trrdfcx4=
+	t=1736402825; cv=none; b=XwJCPMzp5vmLFJZeEYyJFDz4OyIB+aCpWOnUvqlkCUJ0PPAlQXgkpeCPnYdeD8MAoCVN/jlSq7xzIhBwxAqFk86eQtBGWbl/YI/5zpD3PWMSNdgHSGhaBs0J+D2HZ3jB6anOhqgCDp+twelYPWdwOSCXf3pewe+71ALyLwD9kAw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736402822; c=relaxed/simple;
-	bh=FI+NkTda/WuOdm2ZoJy+YlzC8D7pemqKRf1RPO8NzYQ=;
+	s=arc-20240116; t=1736402825; c=relaxed/simple;
+	bh=nbp0Q7q1gCbD5AWkKWqKPqpK5Z6sb+YCTvS4T7koG80=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=CRjdu0Mzh6vQAn0pGgpNHuOKYyr0LFOpgYcr9XU2Z79mNKqp62iHBQdDX3HyKOILCJF2A0qDAX5yYahVGXubdzQkn3eC+7PAZDWl5VGhatn1LbO6kIm6nS3E4kcYf3qtQuXswL/ruAkgwsy1Gf6MHKpGpcvDGuFUBTX4fYkJHrk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
+	 MIME-Version; b=M8U/XLsijrt2zN6Wvan7gmyGwcOWhlLuOL9OsZFEgBbn7XVPd5hTtHjf/UUPNFY9Y2Xdjg9uFc+nud4wca9cawFRfqtoqyhtcePwbvJcwSvwDQKCCG1ceoW5yBElq2APVDLuCoNQWOhZrAuyiV78W5bifO4lKjjdcsTQIDTVUwo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.235])
-	by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4YTDnT1gP7z4f3jXV;
-	Thu,  9 Jan 2025 14:06:37 +0800 (CST)
+Received: from mail.maildlp.com (unknown [172.19.163.216])
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4YTDnQ0YbSz4f3jLp;
+	Thu,  9 Jan 2025 14:06:34 +0800 (CST)
 Received: from mail02.huawei.com (unknown [10.116.40.128])
-	by mail.maildlp.com (Postfix) with ESMTP id 6BDA41A0B7C;
-	Thu,  9 Jan 2025 14:06:57 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTP id 79D101A1799;
+	Thu,  9 Jan 2025 14:06:55 +0800 (CST)
 Received: from huaweicloud.com (unknown [10.175.124.27])
-	by APP4 (Coremail) with SMTP id gCh0CgAni196Z39nvD3QAQ--.4010S9;
-	Thu, 09 Jan 2025 14:06:57 +0800 (CST)
+	by APP4 (Coremail) with SMTP id gCh0CgAni196Z39nvD3QAQ--.4010S6;
+	Thu, 09 Jan 2025 14:06:55 +0800 (CST)
 From: Hou Tao <houtao@huaweicloud.com>
 To: bpf@vger.kernel.org,
 	netdev@vger.kernel.org
@@ -41,9 +41,9 @@ Cc: Martin KaFai Lau <martin.lau@linux.dev>,
 	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
 	houtao1@huawei.com,
 	xukuohai@huawei.com
-Subject: [PATCH bpf-next v2 5/5] selftests/bpf: Add test case for the freeing of bpf_timer
-Date: Thu,  9 Jan 2025 14:19:01 +0800
-Message-Id: <20250109061901.2620825-6-houtao@huaweicloud.com>
+Subject: [PATCH bpf-next v2 2/5] bpf: Bail out early in __htab_map_lookup_and_delete_elem()
+Date: Thu,  9 Jan 2025 14:18:58 +0800
+Message-Id: <20250109061901.2620825-3-houtao@huaweicloud.com>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20250109061901.2620825-1-houtao@huaweicloud.com>
 References: <20250109061901.2620825-1-houtao@huaweicloud.com>
@@ -54,296 +54,106 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:gCh0CgAni196Z39nvD3QAQ--.4010S9
-X-Coremail-Antispam: 1UD129KBjvJXoWxKr1kZF4xuF1ruF15XFW7CFg_yoWxuw1Upa
-	yrK345Kr4rXw47Ww48tFn7GrWfKrs5XFyxGry0gw1UZr1Iqws5tF92gFy5tFW3CFWDWryS
-	vF4FkFZ8GrZrJrJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUPvb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAV
-	Cq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0
-	rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x0267
-	AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E
-	14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7
-	xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Y
-	z7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2
-	AFwI0_GFv_Wryl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAq
-	x4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6r
-	W5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2IY6xkF
-	7I0E14v26r4UJVWxJr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14
-	v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuY
-	vjxUI-eODUUUU
+X-CM-TRANSID:gCh0CgAni196Z39nvD3QAQ--.4010S6
+X-Coremail-Antispam: 1UD129KBjvJXoW7ZFW5tw1rXry8tw1fGw1xKrg_yoW5JFyxpF
+	Z3KrWxWry8ursIqa4ftw1jkayrJ34jyw48Ka4DJFyrCF13Zryvqw13AF93GFy3Gr92yr4r
+	trZ2qF1fK3y2qrDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUP2b4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUXw
+	A2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
+	w2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
+	W8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v2
+	6rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMc
+	Ij6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_
+	Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AFwI
+	0_GFv_Wryl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG
+	67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MI
+	IYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E
+	14v26F4j6r4UJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr
+	0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU0I3
+	85UUUUU==
 X-CM-SenderInfo: xkrx3t3r6k3tpzhluzxrxghudrp/
 
 From: Hou Tao <houtao1@huawei.com>
 
-The main purpose of the test is to demonstrate the lock problem for the
-free of bpf_timer under PREEMPT_RT. When freeing a bpf_timer which is
-running on other CPU in bpf_timer_cancel_and_free(), hrtimer_cancel()
-will try to acquire a spin-lock (namely softirq_expiry_lock), however
-the freeing procedure has already held a raw-spin-lock.
-
-The test first creates two threads: one to start timers and the other to
-free timers. The start-timers thread will start the timer and then wake
-up the free-timers thread to free these timers when the starts complete.
-After freeing, the free-timer thread will wake up the start-timer thread
-to complete the current iteration. A loop of 10 iterations is used.
+Use goto statement to bail out early when the target element is not
+found, instead of using a large else branch to handle the more likely
+case. This change doesn't affect functionality and simply make the code
+cleaner.
 
 Signed-off-by: Hou Tao <houtao1@huawei.com>
 ---
- .../selftests/bpf/prog_tests/free_timer.c     | 165 ++++++++++++++++++
- .../testing/selftests/bpf/progs/free_timer.c  |  71 ++++++++
- 2 files changed, 236 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/free_timer.c
- create mode 100644 tools/testing/selftests/bpf/progs/free_timer.c
+ kernel/bpf/hashtab.c | 51 ++++++++++++++++++++++----------------------
+ 1 file changed, 26 insertions(+), 25 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/free_timer.c b/tools/testing/selftests/bpf/prog_tests/free_timer.c
-new file mode 100644
-index 0000000000000..b7b77a6b29799
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/free_timer.c
-@@ -0,0 +1,165 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (C) 2025. Huawei Technologies Co., Ltd */
-+#define _GNU_SOURCE
-+#include <unistd.h>
-+#include <sys/syscall.h>
-+#include <test_progs.h>
-+
-+#include "free_timer.skel.h"
-+
-+struct run_ctx {
-+	struct bpf_program *start_prog;
-+	struct bpf_program *overwrite_prog;
-+	pthread_barrier_t notify;
-+	int loop;
-+	bool start;
-+	bool stop;
-+};
-+
-+static void start_threads(struct run_ctx *ctx)
-+{
-+	ctx->start = true;
-+}
-+
-+static void stop_threads(struct run_ctx *ctx)
-+{
-+	ctx->stop = true;
-+	/* Guarantee the order between ->stop and ->start */
-+	__atomic_store_n(&ctx->start, true, __ATOMIC_RELEASE);
-+}
-+
-+static int wait_for_start(struct run_ctx *ctx)
-+{
-+	while (!__atomic_load_n(&ctx->start, __ATOMIC_ACQUIRE))
-+		usleep(10);
-+
-+	return ctx->stop;
-+}
-+
-+static void *overwrite_timer_fn(void *arg)
-+{
-+	struct run_ctx *ctx = arg;
-+	int loop, fd, err;
-+	cpu_set_t cpuset;
-+	long ret = 0;
-+
-+	/* Pin on CPU 0 */
-+	CPU_ZERO(&cpuset);
-+	CPU_SET(0, &cpuset);
-+	pthread_setaffinity_np(pthread_self(), sizeof(cpuset), &cpuset);
-+
-+	/* Is the thread being stopped ? */
-+	err = wait_for_start(ctx);
-+	if (err)
-+		return NULL;
-+
-+	fd = bpf_program__fd(ctx->overwrite_prog);
-+	loop = ctx->loop;
-+	while (loop-- > 0) {
-+		LIBBPF_OPTS(bpf_test_run_opts, opts);
-+
-+		/* Wait for start thread to complete */
-+		pthread_barrier_wait(&ctx->notify);
-+
-+		/* Overwrite timers */
-+		err = bpf_prog_test_run_opts(fd, &opts);
-+		if (err)
-+			ret |= 1;
-+		else if (opts.retval)
-+			ret |= 2;
-+
-+		/* Notify start thread to start timers */
-+		pthread_barrier_wait(&ctx->notify);
+diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
+index 963cccb01daae..6545ef40e128a 100644
+--- a/kernel/bpf/hashtab.c
++++ b/kernel/bpf/hashtab.c
+@@ -1635,37 +1635,38 @@ static int __htab_map_lookup_and_delete_elem(struct bpf_map *map, void *key,
+ 	l = lookup_elem_raw(head, hash, key, key_size);
+ 	if (!l) {
+ 		ret = -ENOENT;
+-	} else {
+-		if (is_percpu) {
+-			u32 roundup_value_size = round_up(map->value_size, 8);
+-			void __percpu *pptr;
+-			int off = 0, cpu;
++		goto out_unlock;
 +	}
-+
-+	return (void *)ret;
-+}
-+
-+static void *start_timer_fn(void *arg)
-+{
-+	struct run_ctx *ctx = arg;
-+	int loop, fd, err;
-+	cpu_set_t cpuset;
-+	long ret = 0;
-+
-+	/* Pin on CPU 1 */
-+	CPU_ZERO(&cpuset);
-+	CPU_SET(1, &cpuset);
-+	pthread_setaffinity_np(pthread_self(), sizeof(cpuset), &cpuset);
-+
-+	/* Is the thread being stopped ? */
-+	err = wait_for_start(ctx);
-+	if (err)
-+		return NULL;
-+
-+	fd = bpf_program__fd(ctx->start_prog);
-+	loop = ctx->loop;
-+	while (loop-- > 0) {
-+		LIBBPF_OPTS(bpf_test_run_opts, opts);
-+
-+		/* Run the prog to start timer */
-+		err = bpf_prog_test_run_opts(fd, &opts);
-+		if (err)
-+			ret |= 4;
-+		else if (opts.retval)
-+			ret |= 8;
-+
-+		/* Notify overwrite thread to do overwrite */
-+		pthread_barrier_wait(&ctx->notify);
-+
-+		/* Wait for overwrite thread to complete */
-+		pthread_barrier_wait(&ctx->notify);
-+	}
-+
-+	return (void *)ret;
-+}
-+
-+void test_free_timer(void)
-+{
-+	struct free_timer *skel;
-+	struct bpf_program *prog;
-+	struct run_ctx ctx;
-+	pthread_t tid[2];
-+	void *ret;
-+	int err;
-+
-+	skel = free_timer__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "open_load"))
-+		return;
-+
-+	memset(&ctx, 0, sizeof(ctx));
-+
-+	prog = bpf_object__find_program_by_name(skel->obj, "start_timer");
-+	if (!ASSERT_OK_PTR(prog, "find start prog"))
-+		goto out;
-+	ctx.start_prog = prog;
-+
-+	prog = bpf_object__find_program_by_name(skel->obj, "overwrite_timer");
-+	if (!ASSERT_OK_PTR(prog, "find overwrite prog"))
-+		goto out;
-+	ctx.overwrite_prog = prog;
-+
-+	pthread_barrier_init(&ctx.notify, NULL, 2);
-+	ctx.loop = 10;
-+
-+	err = pthread_create(&tid[0], NULL, start_timer_fn, &ctx);
-+	if (!ASSERT_OK(err, "create start_timer"))
-+		goto out;
-+
-+	err = pthread_create(&tid[1], NULL, overwrite_timer_fn, &ctx);
-+	if (!ASSERT_OK(err, "create overwrite_timer")) {
-+		stop_threads(&ctx);
-+		goto out;
-+	}
-+
-+	start_threads(&ctx);
-+
-+	ret = NULL;
-+	err = pthread_join(tid[0], &ret);
-+	ASSERT_EQ(err | (long)ret, 0, "start_timer");
-+	ret = NULL;
-+	err = pthread_join(tid[1], &ret);
-+	ASSERT_EQ(err | (long)ret, 0, "overwrite_timer");
-+out:
-+	free_timer__destroy(skel);
-+}
-diff --git a/tools/testing/selftests/bpf/progs/free_timer.c b/tools/testing/selftests/bpf/progs/free_timer.c
-new file mode 100644
-index 0000000000000..4501ae8fc4143
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/free_timer.c
-@@ -0,0 +1,71 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (C) 2025. Huawei Technologies Co., Ltd */
-+#include <linux/bpf.h>
-+#include <time.h>
-+#include <bpf/bpf_tracing.h>
-+#include <bpf/bpf_helpers.h>
-+
-+#define MAX_ENTRIES 8
-+
-+struct map_value {
-+	struct bpf_timer timer;
-+};
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_HASH);
-+	__type(key, int);
-+	__type(value, struct map_value);
-+	__uint(max_entries, MAX_ENTRIES);
-+} map SEC(".maps");
-+
-+static int timer_cb(void *map, void *key, struct map_value *value)
-+{
-+	volatile int sum = 0;
-+	int i;
-+
-+	bpf_for(i, 0, 1024 * 1024) sum += i;
-+
-+	return 0;
-+}
-+
-+static int start_cb(int key)
-+{
-+	struct map_value *value;
-+
-+	value = bpf_map_lookup_elem(&map, (void *)&key);
-+	if (!value)
-+		return 0;
-+
-+	bpf_timer_init(&value->timer, &map, CLOCK_MONOTONIC);
-+	bpf_timer_set_callback(&value->timer, timer_cb);
-+	/* Hope 100us will be enough to wake-up and run the overwrite thread */
-+	bpf_timer_start(&value->timer, 100000, BPF_F_TIMER_CPU_PIN);
-+
-+	return 0;
-+}
-+
-+static int overwrite_cb(int key)
-+{
-+	struct map_value zero = {};
-+
-+	/* Free the timer which may run on other CPU */
-+	bpf_map_update_elem(&map, (void *)&key, &zero, BPF_ANY);
-+
-+	return 0;
-+}
-+
-+SEC("syscall")
-+int BPF_PROG(start_timer)
-+{
-+	bpf_loop(MAX_ENTRIES, start_cb, NULL, 0);
-+	return 0;
-+}
-+
-+SEC("syscall")
-+int BPF_PROG(overwrite_timer)
-+{
-+	bpf_loop(MAX_ENTRIES, overwrite_cb, NULL, 0);
-+	return 0;
-+}
-+
-+char _license[] SEC("license") = "GPL";
+ 
+-			pptr = htab_elem_get_ptr(l, key_size);
+-			for_each_possible_cpu(cpu) {
+-				copy_map_value_long(&htab->map, value + off, per_cpu_ptr(pptr, cpu));
+-				check_and_init_map_value(&htab->map, value + off);
+-				off += roundup_value_size;
+-			}
+-		} else {
+-			u32 roundup_key_size = round_up(map->key_size, 8);
++	if (is_percpu) {
++		u32 roundup_value_size = round_up(map->value_size, 8);
++		void __percpu *pptr;
++		int off = 0, cpu;
+ 
+-			if (flags & BPF_F_LOCK)
+-				copy_map_value_locked(map, value, l->key +
+-						      roundup_key_size,
+-						      true);
+-			else
+-				copy_map_value(map, value, l->key +
+-					       roundup_key_size);
+-			/* Zeroing special fields in the temp buffer */
+-			check_and_init_map_value(map, value);
++		pptr = htab_elem_get_ptr(l, key_size);
++		for_each_possible_cpu(cpu) {
++			copy_map_value_long(&htab->map, value + off, per_cpu_ptr(pptr, cpu));
++			check_and_init_map_value(&htab->map, value + off);
++			off += roundup_value_size;
+ 		}
++	} else {
++		u32 roundup_key_size = round_up(map->key_size, 8);
+ 
+-		hlist_nulls_del_rcu(&l->hash_node);
+-		if (!is_lru_map)
+-			free_htab_elem(htab, l);
++		if (flags & BPF_F_LOCK)
++			copy_map_value_locked(map, value, l->key +
++					      roundup_key_size,
++					      true);
++		else
++			copy_map_value(map, value, l->key +
++				       roundup_key_size);
++		/* Zeroing special fields in the temp buffer */
++		check_and_init_map_value(map, value);
+ 	}
++	hlist_nulls_del_rcu(&l->hash_node);
++	if (!is_lru_map)
++		free_htab_elem(htab, l);
+ 
++out_unlock:
+ 	htab_unlock_bucket(htab, b, hash, bflags);
+ 
+ 	if (is_lru_map && l)
 -- 
 2.29.2
 
