@@ -1,43 +1,48 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF566132C38;
-	Tue, 14 Jan 2025 14:02:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D23C130E58
+	for <bpf@vger.kernel.org>; Tue, 14 Jan 2025 14:06:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736863362; cv=none; b=lFn/TsAa5PgmwVNz6SlTI0bCXSVsoiW+H9u4mGf0/jwy3ME2o0HOP4PyYGtvGGuOoT15A16M3XWm9jgnUTiH/xLUw91ic5ffylsSoQQQiH4xpLbBEFYtpPljHSZOBMUcp/WIx+TgdVGstdRK7oC7yE4jofOLbJlqQpBu0Fbn5hM=
+	t=1736863610; cv=none; b=f41Dc3pLLeUIPGC0NXQOVCWTBMFA949FToyhhyJGWvOz+MQR+V9OOaXQJgbjbnVX/o1k0GbQF4tYnVkFESXEhAa6HqbNsOgI86fHhDqOkudbGx3FiwUi2ljZCznaKYYj3jbp8r2CgAkpUw0FKiF3EaJHLHfiZHwvYLzpOYC89lM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736863362; c=relaxed/simple;
-	bh=qSiSyz0nz58Pw8DcYBJ6s3CMd++11JYIbNRxyePh+KA=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=O69C62GHtE+1rk3uNGvoD1Gr/KYgmPz+RB0DF+YG+WYPryGiCY/gN2XqVixIh/gpjjHG9QfezaKpoYFDTWX1sUs0VGePbE2FIB8H6ibSGloh3LJKj1wD6dWU3/YVQmFHKXS8Wv07Idz9ob+UxYYMRxY3nqunuSBL71gmDiZ58I8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=B8LsWrLK; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="B8LsWrLK"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38AACC4CEE1;
-	Tue, 14 Jan 2025 14:02:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1736863361;
-	bh=qSiSyz0nz58Pw8DcYBJ6s3CMd++11JYIbNRxyePh+KA=;
-	h=From:To:Cc:Subject:Date:From;
-	b=B8LsWrLK7da58elU8aMXNmfT7+w85czlSzHAPLoBS9Qoj0iT4FpPh4thdlvZpq5C/
-	 5VXb32LdAkoOX03OeL4lAeu6PIZO2qj+vdIiZmYecMi7nzX34ulrcygP3jvE8XbB/K
-	 hV5rANh4Z1K55nhf8BUNbWDTS5sQe7kxfehuW446zDfoQmSAvlYWQaaBXR0kukuwyE
-	 PrbH/3WhTwKjbD2bfdhMRtBKXNdUaeOsIbt7z//F4e6naPFvjopHyVcyxFeU5Y5M2S
-	 ao5WbS86T/pWn0+sLxBuu0IMsDcd9Jqxle8JJCHpbPNT2TRuP7xCVUDCxta6MQ+H+r
-	 9Vplh/kxTImrQ==
-From: Jiri Olsa <jolsa@kernel.org>
-To: Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	David Laight <David.Laight@ACULAB.COM>,
-	Peter Zijlstra <peterz@infradead.org>
-Cc: lkml <linux-kernel@vger.kernel.org>,
-	linux-trace-kernel@vger.kernel.org,
-	bpf@vger.kernel.org,
-	x86@kernel.org
-Subject: [RFC] x86/alternatives: Merge first and second step in text_poke_bp_batch
-Date: Tue, 14 Jan 2025 15:02:37 +0100
-Message-ID: <20250114140237.3506624-1-jolsa@kernel.org>
-X-Mailer: git-send-email 2.47.0
+	s=arc-20240116; t=1736863610; c=relaxed/simple;
+	bh=N2h2t85gdytpw1ZRM8jnukQd03nHoS20+cpXsdKi43Y=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=iXEJz81VBZXOQ+3Lh7itPlQKI/8+NtvMa3s+10yWc2EHbHJq6vT63kBtZiRkqCFW8263iXHBdPd6THECzxIbdL5KOsgFY8VPPfKgdia8bU3J02ltpkFD/iQvTJOdqurFR6AZn+/kgNQFmmfwgvXEZiYlnMhEOuE0Y1Y1hDPHLEc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.216])
+	by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4YXWBm30jHz4f3jdS
+	for <bpf@vger.kernel.org>; Tue, 14 Jan 2025 22:06:24 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.75])
+	by mail.maildlp.com (Postfix) with ESMTP id C708C1A1586
+	for <bpf@vger.kernel.org>; Tue, 14 Jan 2025 22:06:44 +0800 (CST)
+Received: from ultra.huawei.com (unknown [10.90.53.71])
+	by APP2 (Coremail) with SMTP id Syh0CgCnsWRzb4ZnzsHBAw--.3782S2;
+	Tue, 14 Jan 2025 22:06:44 +0800 (CST)
+From: Pu Lehui <pulehui@huaweicloud.com>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Alan Maguire <alan.maguire@oracle.com>,
+	Pu Lehui <pulehui@huawei.com>,
+	Pu Lehui <pulehui@huaweicloud.com>
+Subject: [PATCH bpf 1/2] libbpf: Fix return zero when elf_begin failed
+Date: Tue, 14 Jan 2025 14:09:30 +0000
+Message-Id: <20250114140931.3844196-1-pulehui@huaweicloud.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -45,134 +50,48 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:Syh0CgCnsWRzb4ZnzsHBAw--.3782S2
+X-Coremail-Antispam: 1UD129KBjvdXoWrZr17uw18GFykuF47CF1kuFg_yoW3WrcEka
+	4xGr1fKrW5Gry3Zw15CrZIgFW8GFs0gFnaqFs8trZ0ka1DKwn5CFsrZ3s7tFZxG3y2qFya
+	gF95Wr4fXr43KjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+	9fnUUIcSsGvfJTRUUUb3kFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+	6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+	A2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j
+	6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+	Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+	I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
+	4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628v
+	n2kIc2xKxwCY1x0262kKe7AKxVWUtVW8ZwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7x
+	kEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E
+	67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCw
+	CI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1x
+	MIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIda
+	VFxhVjvjDU0xZFpf9x0JUd-B_UUUUU=
+X-CM-SenderInfo: psxovxtxl6x35dzhxuhorxvhhfrp/
 
-hi,
-while checking on similar code for uprobes I was wondering if we
-can merge first 2 steps of instruction update in text_poke_bp_batch
-function.
+From: Pu Lehui <pulehui@huawei.com>
 
-Basically the first step now would be to write int3 byte together
-with the rest of the bytes of the new instruction instead of doing
-that separately. And the second step would be to overwrite int3
-byte with first byte of the new instruction.
+The error number of elf_begin is omitted when encapsulating the
+btf_find_elf_sections function.
 
-Would that work or do I miss some x86 detail that could lead to crash?
-
-I tried to hack it together in attached patch and it speeds up a bit
-text_poke_bp_batch as shown below.
-
-thoughts? thanks,
-jirka
-
-
+Fixes: c86f180ffc99 ("libbpf: Make btf_parse_elf process .BTF.base transparently")
+Signed-off-by: Pu Lehui <pulehui@huawei.com>
 ---
-  # cat ~/test.sh
-  for i in `seq 1 50`; do echo function > current_tracer ; echo nop > current_tracer ; done
+ tools/lib/bpf/btf.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-current code:
-
-  # perf stat -e cycles:k,instructions:k -a --  ~jolsa/test.sh
-
-   Performance counter stats for 'system wide':
-
-     158,872,470,494      cycles:k
-      61,529,351,096      instructions:k                   #    0.39  insn per cycle
-
-        12.847083584 seconds time elapsed
-
-with the change below:
-
-  # perf stat -e cycles:k,instructions:k -a --  ~jolsa/test.sh
-
-   Performance counter stats for 'system wide':
-
-     105,687,644,963      cycles:k
-      45,981,957,996      instructions:k                   #    0.44  insn per cycle
-
-        10.011825294 seconds time elapsed
----
- arch/x86/kernel/alternative.c | 30 +++++++++---------------------
- 1 file changed, 9 insertions(+), 21 deletions(-)
-
-diff --git a/arch/x86/kernel/alternative.c b/arch/x86/kernel/alternative.c
-index 243843e44e89..99830e9cd641 100644
---- a/arch/x86/kernel/alternative.c
-+++ b/arch/x86/kernel/alternative.c
-@@ -2125,9 +2125,9 @@ struct text_poke_loc {
- 	s32 disp;
- 	u8 len;
- 	u8 opcode;
--	const u8 text[POKE_MAX_OPCODE_SIZE];
-+	u8 text[POKE_MAX_OPCODE_SIZE];
- 	/* see text_poke_bp_batch() */
--	u8 old;
-+	u8 first;
- };
+diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
+index 12468ae0d573..7e810fa468ea 100644
+--- a/tools/lib/bpf/btf.c
++++ b/tools/lib/bpf/btf.c
+@@ -1186,6 +1186,7 @@ static struct btf *btf_parse_elf(const char *path, struct btf *base_btf,
  
- struct bp_patching_desc {
-@@ -2282,7 +2282,6 @@ static int tp_vec_nr;
-  */
- static void text_poke_bp_batch(struct text_poke_loc *tp, unsigned int nr_entries)
- {
--	unsigned char int3 = INT3_INSN_OPCODE;
- 	unsigned int i;
- 	int do_sync;
- 
-@@ -2313,29 +2312,20 @@ static void text_poke_bp_batch(struct text_poke_loc *tp, unsigned int nr_entries
- 	 */
- 	smp_wmb();
- 
--	/*
--	 * First step: add a int3 trap to the address that will be patched.
--	 */
--	for (i = 0; i < nr_entries; i++) {
--		tp[i].old = *(u8 *)text_poke_addr(&tp[i]);
--		text_poke(text_poke_addr(&tp[i]), &int3, INT3_INSN_SIZE);
--	}
--
--	text_poke_sync();
--
- 	/*
- 	 * Second step: update all but the first byte of the patched range.
- 	 */
- 	for (do_sync = 0, i = 0; i < nr_entries; i++) {
--		u8 old[POKE_MAX_OPCODE_SIZE+1] = { tp[i].old, };
-+		u8 old[POKE_MAX_OPCODE_SIZE+1];
- 		u8 _new[POKE_MAX_OPCODE_SIZE+1];
- 		const u8 *new = tp[i].text;
- 		int len = tp[i].len;
- 
-+		tp[i].first = tp[i].text[0];
-+		tp[i].text[0] = (u8) INT3_INSN_OPCODE;
-+
- 		if (len - INT3_INSN_SIZE > 0) {
--			memcpy(old + INT3_INSN_SIZE,
--			       text_poke_addr(&tp[i]) + INT3_INSN_SIZE,
--			       len - INT3_INSN_SIZE);
-+			memcpy(old, text_poke_addr(&tp[i]), len);
- 
- 			if (len == 6) {
- 				_new[0] = 0x0f;
-@@ -2343,9 +2333,7 @@ static void text_poke_bp_batch(struct text_poke_loc *tp, unsigned int nr_entries
- 				new = _new;
- 			}
- 
--			text_poke(text_poke_addr(&tp[i]) + INT3_INSN_SIZE,
--				  new + INT3_INSN_SIZE,
--				  len - INT3_INSN_SIZE);
-+			text_poke(text_poke_addr(&tp[i]), new, len);
- 
- 			do_sync++;
- 		}
-@@ -2391,7 +2379,7 @@ static void text_poke_bp_batch(struct text_poke_loc *tp, unsigned int nr_entries
- 	 * replacing opcode.
- 	 */
- 	for (do_sync = 0, i = 0; i < nr_entries; i++) {
--		u8 byte = tp[i].text[0];
-+		u8 byte = tp[i].first;
- 
- 		if (tp[i].len == 6)
- 			byte = 0x0f;
+ 	elf = elf_begin(fd, ELF_C_READ, NULL);
+ 	if (!elf) {
++		err = -LIBBPF_ERRNO__FORMAT;
+ 		pr_warn("failed to open %s as ELF file\n", path);
+ 		goto done;
+ 	}
 -- 
-2.47.0
+2.34.1
 
