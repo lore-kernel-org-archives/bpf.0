@@ -1,163 +1,158 @@
-Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from esa12.hc1455-7.c3s2.iphmx.com (esa12.hc1455-7.c3s2.iphmx.com [139.138.37.100])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1D3235952;
-	Wed, 15 Jan 2025 01:36:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63F12227B88;
+	Wed, 15 Jan 2025 01:46:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=139.138.37.100
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736905021; cv=none; b=dQWZOPruVaV2kN4SAg2GF8A572ugPszLxfwPvg7PW8FsCW0qdwCnjqK572w0xYxx0NGWipAWj00FAOCX8f/bL4M1HM+OsbHs0MS46U7oD91rEciBNn7dC20NMiBVGzLSBIwRbJ6W/Hji/DXDf7Li5PFSSUiTiykHbV9zzVGVjg4=
+	t=1736905610; cv=none; b=AEo8t9qWGDT872xwn4hqHBUD+4oMuLJ/3al+iWu7B4Ga6r9ng4pWvizIwR2P3O9cFR091kygyhEH42jPmaQviriLgTRugzjcSeYaIytE2vTCET+xUVG5/8xiz2GgrecCQYsnBE09MOj7GRtk72K8cInMcbl4vgGRixAH5xXVUek=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736905021; c=relaxed/simple;
-	bh=VlL2fuH1xcTEylsDJgq8x2460ruCRLeTPR7D/8O+vXE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=YIVvikRoyoP7kuWIEKr23FV/dK3M73xxDxs7kGPxum9WNIiJsD7n6ARgMb6moAEB98bNWB0lnTFEvHyeacPt6WPM328uZQHjSu42/3Zp5HMP2/iUmCHqiEKHx1wX1vqotPISLD3QNp+JU0iJlrh27bGk1DKU6mNIc5J2qcSM5qM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OKJB1OYX; arc=none smtp.client-ip=209.85.221.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1736905610; c=relaxed/simple;
+	bh=21TcC/rql3eON+hX7CuhqWrvpu5XXzotwJKQP7ydNKM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=g0foORLZqAgUW+JHT7/T+1ayDIyUnCAFWweNetv0afLonIh5tTFrPw9AWYT1t5Vx7Q6OGJn7xLRlx/IRGz0yJ126Y6mXWor550C3Az4BTdgqkEFudrsMwRq5sh0NV/FmpHmuj+cENbvhe7MxRi0DYgcrbDDeawKziCouV+ZTdyY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fujitsu.com; spf=pass smtp.mailfrom=fujitsu.com; dkim=pass (2048-bit key) header.d=fujitsu.com header.i=@fujitsu.com header.b=UkHSp+En; arc=none smtp.client-ip=139.138.37.100
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fujitsu.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fujitsu.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OKJB1OYX"
-Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-385e1fcb0e1so3176607f8f.2;
-        Tue, 14 Jan 2025 17:36:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1736905018; x=1737509818; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=yZ1zBqhNu/8YjuTWSvGlB+uuuXiyLyxUTjhwIcvniK8=;
-        b=OKJB1OYXfJn12XVGl4bKs2W7faMwTQSkqbzpunX88lv4EL1bu0lDc70ESaH//cfVGl
-         RUYrmXI4N+rFuDSIiZfzG1xw/zS/wpI8NExWF9z18WQhCNDi1GdkswFuiV10Gz9aDKKf
-         dsDtxOB9rOs7q90I5HEK6KUZq0TWzonYswfvf3CIEzOMPxpNBZoZ9kcYYExKnEhavK0P
-         y9KC4dPmh9jQ/Us7Ouqkoz71x1cc2zkb9ylPO/qqpMBrtDG2Ql87GOhOjICIAYFEeuAc
-         TE0g7mUX2irnTpqK3IJcUkr9OOGvpDAjKgqByCIBea7SYLyLBc8GXMfPro9P0pFavtH+
-         l4mA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736905018; x=1737509818;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=yZ1zBqhNu/8YjuTWSvGlB+uuuXiyLyxUTjhwIcvniK8=;
-        b=QREsO1ZEoOXQQO2G6hMRR+fsv0wBV3Rk/TQgq3TMd7IdDAeHwRfY/ZNj1p49vL+Lj7
-         yJmb5hHS1f00Ld2l0wxhLlI1J9qmR45w6oD6X4JdXjurVRZYYlX84v28kQ3A/lJWsQMq
-         Zzfo/TEhsUxYj19Gkhb84oOjldPS1AHNUHuJv5Rb0Pj9+eLbGxynUPoYnAowmh5uwb6a
-         NZyvhg39m79sPNtl6fQr/q0lxFtqsr/NVLk5TBBueloiCUUN1R6d45oMNtLR056N80kw
-         QCFhPtROLGSOotfJkP2Hmy0a+M3xAlMVESL4zV5GS3xdZUYjNC2nQvs5e0hncCWuCqro
-         /Vzw==
-X-Forwarded-Encrypted: i=1; AJvYcCXuSaXnxkDz0lSL4lzWKBlNVIm6DMHp07U9luC/nrByE297Id9MwqqkVe7fC8LdtjLHewVgErY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzfuoqeHXLBELUzwKVoJnby1zKV+BeEW+hkmOCDXZSijs0N8dOR
-	WBhXhXFQq5W9xv5SUZvKJUIAMDKw1TRWIz9gjdeDb5w1J3LlhLX2dmwWNqxzUm0mC5Jypk2jGF5
-	9e3MrCzQhrjWdt3YQ2mPgMjkondc=
-X-Gm-Gg: ASbGnctOBTw7qTPssR9iL1C7pjKYXp0iPfPbyI/zB5WTg0NbYeWWpw9FFS75NyqvzVP
-	ePBXjpvIG7xEFv8jkJqy0vWTLNBZkL6DMuUZ9LMcy8vWfKNKKatt9fQ==
-X-Google-Smtp-Source: AGHT+IEfhb5eoQMIzQKA4kgyO2g7pTqRXKlGCrl68JkqJIjHyUC7w/9MLKqWoohRLMWlZmg3/7Rrgk7c2GUTPY5MyrM=
-X-Received: by 2002:a05:6000:18ac:b0:385:ef39:6cd5 with SMTP id
- ffacd0b85a97d-38a872f6ed6mr8868026f8f.1.1736905018159; Tue, 14 Jan 2025
- 17:36:58 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=fujitsu.com header.i=@fujitsu.com header.b="UkHSp+En"
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=fujitsu.com; i=@fujitsu.com; q=dns/txt; s=fj2;
+  t=1736905609; x=1768441609;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=21TcC/rql3eON+hX7CuhqWrvpu5XXzotwJKQP7ydNKM=;
+  b=UkHSp+EnLmK5Y9PKG1yRGdcokuHJO7BQQDl1AIug1YMz+LtykOFY8vPD
+   YGPJo6BvrjQA6/ZEvaZf+FRSkjRiwPkCuxzFJvxoKGhfb1K+wGeNwApkb
+   pNGMEvBFVzM80XFRt5Xz/ZYXYXNkS/Xgz3o2zePYIVDICrYkkvHxrMu7M
+   iIuaiJdXQfx8VjrG4WKA9Jl8jjhICUxHCTKK7oODcvIn3aii1qXvu5ob7
+   pUqqcAJssdgfqMcJOld28OGtHZR2CcwPAYLJBHFBJE6J9J77cvlFgvAUv
+   lwA50y+Ibd8z4sEttOwDe4sh9boDq3oVwihNAfRZlKZCewxl1ePqm/fc1
+   w==;
+X-CSE-ConnectionGUID: Nzg6XFEJSGGyZ7Of+MnG7g==
+X-CSE-MsgGUID: 46L8MYSDRt2SYdtRHFf7wQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11315"; a="165479798"
+X-IronPort-AV: E=Sophos;i="6.12,315,1728918000"; 
+   d="scan'208";a="165479798"
+Received: from unknown (HELO yto-r4.gw.nic.fujitsu.com) ([218.44.52.220])
+  by esa12.hc1455-7.c3s2.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jan 2025 10:46:40 +0900
+Received: from yto-m2.gw.nic.fujitsu.com (yto-nat-yto-m2.gw.nic.fujitsu.com [192.168.83.65])
+	by yto-r4.gw.nic.fujitsu.com (Postfix) with ESMTP id 8EA0CD500F;
+	Wed, 15 Jan 2025 10:46:37 +0900 (JST)
+Received: from kws-ab3.gw.nic.fujitsu.com (kws-ab3.gw.nic.fujitsu.com [192.51.206.21])
+	by yto-m2.gw.nic.fujitsu.com (Postfix) with ESMTP id 5F8D6D5036;
+	Wed, 15 Jan 2025 10:46:37 +0900 (JST)
+Received: from edo.cn.fujitsu.com (edo.cn.fujitsu.com [10.167.33.5])
+	by kws-ab3.gw.nic.fujitsu.com (Postfix) with ESMTP id D055120071A06;
+	Wed, 15 Jan 2025 10:46:36 +0900 (JST)
+Received: from iaas-rdma.. (unknown [10.167.135.44])
+	by edo.cn.fujitsu.com (Postfix) with ESMTP id B25311A0071;
+	Wed, 15 Jan 2025 09:46:35 +0800 (CST)
+From: Li Zhijian <lizhijian@fujitsu.com>
+To: bpf@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Shuah Khan <shuah@kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Li Zhijian <lizhijian@fujitsu.com>,
+	Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+	Quentin Monnet <qmo@kernel.org>,
+	Masahiro Yamada <masahiroy@kernel.org>
+Subject: [PATCH bpf-next v3] selftests/Makefile: override the srctree for out-of-tree builds
+Date: Wed, 15 Jan 2025 09:47:34 +0800
+Message-ID: <20250115014734.438225-1-lizhijian@fujitsu.com>
+X-Mailer: git-send-email 2.44.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250109061901.2620825-1-houtao@huaweicloud.com> <20250109061901.2620825-5-houtao@huaweicloud.com>
-In-Reply-To: <20250109061901.2620825-5-houtao@huaweicloud.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Tue, 14 Jan 2025 17:36:44 -0800
-X-Gm-Features: AbW1kva5oR-Ri39ynxwMtvd3LaBw7qcztqogda1B7sW8_5W0yicXSDgGji7cMMY
-Message-ID: <CAADnVQKPEPAt4rZiZ33WPpcZA9qiM5hogC4AyCN1r5d_B4Debw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 4/5] bpf: Cancel the running bpf_timer through kworker
-To: Hou Tao <houtao@huaweicloud.com>
-Cc: bpf <bpf@vger.kernel.org>, Network Development <netdev@vger.kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Andrii Nakryiko <andrii@kernel.org>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, Hao Luo <haoluo@google.com>, 
-	Yonghong Song <yonghong.song@linux.dev>, Daniel Borkmann <daniel@iogearbox.net>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Jiri Olsa <jolsa@kernel.org>, 
-	John Fastabend <john.fastabend@gmail.com>, 
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>, Hou Tao <houtao1@huawei.com>, 
-	Xu Kuohai <xukuohai@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-TM-AS-Product-Ver: IMSS-9.1.0.1417-9.0.0.1002-28924.003
+X-TM-AS-User-Approved-Sender: Yes
+X-TMASE-Version: IMSS-9.1.0.1417-9.0.1002-28924.003
+X-TMASE-Result: 10--2.378300-10.000000
+X-TMASE-MatchedRID: QxNw5Kr7aBeh8NIgadoMHh1kSRHxj+Z5ohrMq0nEhQciKqWY7QWAeyJ1
+	YT6M2y/ptjClCUseMxHZ5nzC46YpxcwitucT3dE7v8fLAX0P50DNKdtHc3A3XFHpIy6wt5Uw2Ca
+	d5s625rB2Ve4lIas8vPv7YatA3DRB0ekSi+00U24ReM8i8p3vgI5UEPjB4tXTYKqjwB8QwAfkYB
+	DLwsbmZ5kvRcwHwyS1nagtny7ZPcQfE8yM4pjsDwtuKBGekqUpnH7sbImOEBRcrZUZpIpVuY0MN
+	210hdsMUVQg0hCHTxQSbjtxD1tRN3YVT44NixONSphYGXunSvyR88aL5Jmd22FLtpZ6hBUpo9GD
+	1VwsMaabDRBqS2n66yzP5xAyz9Oenvkw4sh/+PcMX5CwH5DTUmgGZNLBHGNe
+X-TMASE-SNAP-Result: 1.821001.0001-0-1-22:0,33:0,34:0-0
 
-On Wed, Jan 8, 2025 at 10:07=E2=80=AFPM Hou Tao <houtao@huaweicloud.com> wr=
-ote:
->
-> From: Hou Tao <houtao1@huawei.com>
->
-> During the update procedure, when overwrite element in a pre-allocated
-> htab, the freeing of old_element is protected by the bucket lock. The
-> reason why the bucket lock is necessary is that the old_element has
-> already been stashed in htab->extra_elems after alloc_htab_elem()
-> returns. If freeing the old_element after the bucket lock is unlocked,
-> the stashed element may be reused by concurrent update procedure and the
-> freeing of old_element will run concurrently with the reuse of the
-> old_element. However, the invocation of check_and_free_fields() may
-> acquire a spin-lock which violates the lockdep rule because its caller
-> has already held a raw-spin-lock (bucket lock). The following warning
-> will be reported when such race happens:
->
->   BUG: scheduling while atomic: test_progs/676/0x00000003
->   3 locks held by test_progs/676:
->   #0: ffffffff864b0240 (rcu_read_lock_trace){....}-{0:0}, at: bpf_prog_te=
-st_run_syscall+0x2c0/0x830
->   #1: ffff88810e961188 (&htab->lockdep_key){....}-{2:2}, at: htab_map_upd=
-ate_elem+0x306/0x1500
->   #2: ffff8881f4eac1b8 (&base->softirq_expiry_lock){....}-{2:2}, at: hrti=
-mer_cancel_wait_running+0xe9/0x1b0
->   Modules linked in: bpf_testmod(O)
->   Preemption disabled at:
->   [<ffffffff817837a3>] htab_map_update_elem+0x293/0x1500
->   CPU: 0 UID: 0 PID: 676 Comm: test_progs Tainted: G ... 6.12.0+ #11
->   Tainted: [W]=3DWARN, [O]=3DOOT_MODULE
->   Hardware name: QEMU Standard PC (i440FX + PIIX, 1996)...
->   Call Trace:
->   <TASK>
->   dump_stack_lvl+0x57/0x70
->   dump_stack+0x10/0x20
->   __schedule_bug+0x120/0x170
->   __schedule+0x300c/0x4800
->   schedule_rtlock+0x37/0x60
->   rtlock_slowlock_locked+0x6d9/0x54c0
->   rt_spin_lock+0x168/0x230
->   hrtimer_cancel_wait_running+0xe9/0x1b0
+Fixes an issue where out-of-tree kselftest builds fail when building
+the BPF and bpftools components. The failure occurs because the top-level
+Makefile passes a relative srctree path to its sub-Makefiles, which
+leads to errors in locating necessary files.
 
-Since this issue is limited to RT
+For example, the following error is encountered:
 
-#ifdef CONFIG_PREEMPT_RT
-void hrtimer_cancel_wait_running(const struct hrtimer *timer);
-#else
-static inline void hrtimer_cancel_wait_running(struct hrtimer *timer)
-{
-        cpu_relax();
-}
-#endif
+```
+$ make V=1 O=$build/ TARGETS=hid kselftest-all
+...
+make -C ../tools/testing/selftests all
+make[4]: Entering directory '/path/to/linux/tools/testing/selftests/hid'
+make  -C /path/to/linux/tools/testing/selftests/../../../tools/lib/bpf OUTPUT=/path/to/linux/O/kselftest/hid/tools/build/libbpf/ \
+            EXTRA_CFLAGS='-g -O0'                                      \
+            DESTDIR=/path/to/linux/O/kselftest/hid/tools prefix= all install_headers
+make[5]: Entering directory '/path/to/linux/tools/lib/bpf'
+...
+make[5]: Entering directory '/path/to/linux/tools/bpf/bpftool'
+Makefile:127: ../tools/build/Makefile.feature: No such file or directory
+make[5]: *** No rule to make target '../tools/build/Makefile.feature'.  Stop.
+```
 
-let's avoid overloading system_unbound_wq in !RT.
+To resolve this, override the srctree in the kselftests's top Makefile
+when performing an out-of-tree build. This ensures that all sub-Makefiles
+have the correct path to the source tree, preventing directory resolution
+errors.
 
+Cc: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Signed-off-by: Li Zhijian <lizhijian@fujitsu.com>
+Tested-by: Quentin Monnet <qmo@kernel.org>
+---
+Cc: Masahiro Yamada <masahiroy@kernel.org>
 
-> -       if (this_cpu_read(hrtimer_running))
-> -               queue_work(system_unbound_wq, &t->cb.delete_work);
-> -       else
-> -               bpf_timer_delete_work(&t->cb.delete_work);
+V3:
+  collected Tested-by and rebased on bpf-next
 
-keep this sync call on !RT,
+V2:
+ - handle srctree in selftests itself rather than the linux' top Makefile # Masahiro Yamada <masahiroy@kernel.org>
 
-> +       if (!this_cpu_read(hrtimer_running) && hrtimer_try_to_cancel(&t->=
-timer) >=3D 0) {
-> +               kfree_rcu(t, cb.rcu);
-> +               return;
-> +       }
-> +
-> +       /* The timer is running on current or other CPU. Use a kworker to=
- wait
-> +        * for the completion of the timer instead of spinning on current=
- CPU
-> +        * or trying to acquire a sleepable lock to wait for its completi=
-on.
-> +        */
-> +       queue_work(system_unbound_wq, &t->cb.delete_work);
+V1: https://lore.kernel.org/lkml/20241217031052.69744-1-lizhijian@fujitsu.com/
+---
+ tools/testing/selftests/Makefile | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-overloading system_unbound_wq even in !RT when hrtimer_running
-is an issue to solve as well,
-but let's not double down on the problem to avoid making things worse.
+diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
+index 2401e973c359..f04a3b0003f6 100644
+--- a/tools/testing/selftests/Makefile
++++ b/tools/testing/selftests/Makefile
+@@ -154,15 +154,19 @@ override LDFLAGS =
+ override MAKEFLAGS =
+ endif
+ 
++top_srcdir ?= ../../..
++
+ # Append kselftest to KBUILD_OUTPUT and O to avoid cluttering
+ # KBUILD_OUTPUT with selftest objects and headers installed
+ # by selftests Makefile or lib.mk.
++# Override the `srctree` variable to ensure it is correctly resolved in
++# sub-Makefiles, such as those within `bpf`, when managing targets like
++# `net` and `hid`.
+ ifdef building_out_of_srctree
+ override LDFLAGS =
++override srctree := $(top_srcdir)
+ endif
+ 
+-top_srcdir ?= ../../..
+-
+ ifeq ("$(origin O)", "command line")
+   KBUILD_OUTPUT := $(O)
+ endif
+-- 
+2.44.0
 
-The rest looks good.
-pw-bot: cr
