@@ -1,45 +1,45 @@
 Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 994E54085D;
-	Wed, 15 Jan 2025 14:57:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88D0D20326;
+	Wed, 15 Jan 2025 15:06:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736953039; cv=none; b=EiSvfEjYlF7a0sVToG2FF6KVNFvmwgxEJ0mEf9325DFCOOCl7GW4z8gbXNZVL2jmRre+0mWkZRzynEl7GX/lDTaM9F+wEJfD4WECWcVaQlq4Yx6R/UFVZAC5fChY8IUINGYoqrunqAQE+ecnf1T0jqBBXmGFtGTFEmfTcgQ2YMc=
+	t=1736953598; cv=none; b=dbIukZ5ZL8ctyFc6S45GnZACKDpriXKSTYGYXV8/hDIUxks99sg/Bc5lIfj46lJs8v/vvkLvMy2ClrcdsO35orB6sbDoQVMk9/hlk8hkR8ryZ1Y8jPggFrVX8aJuRqhIEF0DTVm4ke36BP5w42yByYzeCHo2Q+MvH4AYQLNtT9M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736953039; c=relaxed/simple;
-	bh=twKehQpAyg9rb6JeImclK3oMdwX+swtkktNM+EV3vlc=;
+	s=arc-20240116; t=1736953598; c=relaxed/simple;
+	bh=S5whKp393r67OyZqAAZZd1yqiw2Po0JdmH/hoJOktpg=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=MlUyj7XmhVz+MyCnBMuF4nenR7G3QpqZgdKPBopRzZsDO1k2dCaBB+qmSb5e2UkEOhpy1N8m+W45LSDzVzpqRKj3a+QT/bA1Q+cbdelyNyN45U7F0VYW984yJ2LV7+ot3H+4+Z3Ddo6cCaOH/maNqPM8qljhqMbC+HuZhOrFFVs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=b9Wb3wPn; arc=none smtp.client-ip=213.133.104.62
+	 In-Reply-To:Content-Type; b=nSmae6Hm6TyZCavYX6VZs/OBkhbSoVrRZZomEunHrU4H2K2ghmGWZ0q9m+oF3KTO8riQQCEeIzNA8fdMv6tIHy9msj86vQxYtlA3rw3Vw6i2cytmUAAS8fbA5ccNrVDULDsoboFZ+IhJFNrZ9WX9i2fAHx+faYo1j8w31yGMwA0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=Gzgj1KKL; arc=none smtp.client-ip=213.133.104.62
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="b9Wb3wPn"
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="Gzgj1KKL"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
 	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
 	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=6me/X+4LxjEp+sy3R72SDp2DksDkpZRqq231Z/5RZqg=; b=b9Wb3wPnUeoGa4JpS9VfGXIW2c
-	H6SXqI+vab7bfcQ0PG4sfv1g53lVTuCGC4dSoYW3UhSWoqRbPZAMVc70tAqWM4y2aksHqKipl4tbt
-	JVX5YN0vJhyMwZ5FqBX396OvOM3QpfpGwtXhRwx+xkbJKuP6P3uzDwuILG5UN7YIFQPQcO6ei2vco
-	wsH6duhMKuWHvNE/kppAiqDITn/gWdpOTL2MsTAWGRo+vtJ764N1mJVV8d0R9knC2iiSwW2r0VG4c
-	F5uXCZFFFVW50YXxVcK8Pd3aIJrNzge5XM4Oj1R0FmTujnm5UYq8k+Ai270VqSGp1+84A3s9RR3kv
-	3xPlWFZA==;
-Received: from sslproxy05.your-server.de ([78.46.172.2])
+	bh=5I9ltPjgGow7JSjs5Xpf3xrC+FFnf3IxE0cYyxbxMUU=; b=Gzgj1KKLSHM7u0Rg75ZUL3tjp5
+	N+x69FPkj7ZIH5Hr7VYcpVf5YiyKIIvt56bVIXnEmb0Sv0DXtPLQLIZG2eXYZ0/nrnpirsbSpKfmX
+	Lavrlj6G4nMAsLdjAA6wy3Zlqboz23QuDS3QKSw0mOKW2iYpttbEvl9lGcuJEWIkh6GFhrdAGsGIg
+	lARfilMKHIeBHqz1Fm0PmZXlYNlYjD68ehd+wrNYVhuXOnkS/H7YUCqtR68YsHdShxGc753Uz2zjG
+	H7VeskOxqBWfgak3fhSTWj67egv/mUXtJ1x7uBLOZoOvuLLKDk/rnIxbBKr0ScrXazLJeI4sgMnox
+	1XAM4uag==;
+Received: from sslproxy07.your-server.de ([78.47.199.104])
 	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.94.2)
 	(envelope-from <daniel@iogearbox.net>)
-	id 1tY4p2-00018p-4k; Wed, 15 Jan 2025 15:56:44 +0100
+	id 1tY4yW-00025v-Sk; Wed, 15 Jan 2025 16:06:32 +0100
 Received: from [85.1.206.226] (helo=[192.168.1.114])
-	by sslproxy05.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	by sslproxy07.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.96)
 	(envelope-from <daniel@iogearbox.net>)
-	id 1tY4oz-0004iu-19;
-	Wed, 15 Jan 2025 15:56:41 +0100
-Message-ID: <e273b1f1-868f-440e-b226-84b493ef7ee2@iogearbox.net>
-Date: Wed, 15 Jan 2025 15:56:40 +0100
+	id 1tY4yW-0008LB-1W;
+	Wed, 15 Jan 2025 16:06:32 +0100
+Message-ID: <af9c413d-136a-413a-ad99-8aaf98f1e31c@iogearbox.net>
+Date: Wed, 15 Jan 2025 16:06:31 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -47,41 +47,15 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v5 2/4] selftests/bpf: Add launch time request to
- xdp_hw_metadata
-To: Song Yoong Siang <yoong.siang.song@intel.com>,
- "David S . Miller" <davem@davemloft.net>, Eric Dumazet
- <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
- Willem de Bruijn <willemb@google.com>,
- Florian Bezdeka <florian.bezdeka@siemens.com>,
- Donald Hunter <donald.hunter@gmail.com>, Jonathan Corbet <corbet@lwn.net>,
- Bjorn Topel <bjorn@kernel.org>, Magnus Karlsson <magnus.karlsson@intel.com>,
- Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
- Jonathan Lemon <jonathan.lemon@gmail.com>,
- Andrew Lunn <andrew+netdev@lunn.ch>, Alexei Starovoitov <ast@kernel.org>,
- Jesper Dangaard Brouer <hawk@kernel.org>,
- John Fastabend <john.fastabend@gmail.com>, Joe Damato <jdamato@fastly.com>,
- Stanislav Fomichev <sdf@fomichev.me>, Xuan Zhuo
- <xuanzhuo@linux.alibaba.com>, Mina Almasry <almasrymina@google.com>,
- Daniel Jurgens <danielj@nvidia.com>, Andrii Nakryiko <andrii@kernel.org>,
- Eduard Zingerman <eddyz87@gmail.com>, Mykola Lysenko <mykolal@fb.com>,
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>,
- Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
- Shuah Khan <shuah@kernel.org>,
- Alexandre Torgue <alexandre.torgue@foss.st.com>,
- Jose Abreu <joabreu@synopsys.com>,
- Maxime Coquelin <mcoquelin.stm32@gmail.com>,
- Tony Nguyen <anthony.l.nguyen@intel.com>,
- Przemek Kitszel <przemyslaw.kitszel@intel.com>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-doc@vger.kernel.org, bpf@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
- linux-arm-kernel@lists.infradead.org, intel-wired-lan@lists.osuosl.org,
- xdp-hints@xdp-project.net
-References: <20250114152718.120588-1-yoong.siang.song@intel.com>
- <20250114152718.120588-3-yoong.siang.song@intel.com>
+Subject: Re: [PATCH bpf-next v3] selftests/Makefile: override the srctree for
+ out-of-tree builds
+To: Li Zhijian <lizhijian@fujitsu.com>, bpf@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ Shuah Khan <shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+ Andrii Nakryiko <andrii@kernel.org>,
+ Andrii Nakryiko <andrii.nakryiko@gmail.com>, Quentin Monnet
+ <qmo@kernel.org>, Masahiro Yamada <masahiroy@kernel.org>
+References: <20250115014734.438225-1-lizhijian@fujitsu.com>
 Content-Language: en-US
 From: Daniel Borkmann <daniel@iogearbox.net>
 Autocrypt: addr=daniel@iogearbox.net; keydata=
@@ -127,49 +101,47 @@ Autocrypt: addr=daniel@iogearbox.net; keydata=
  rUD9YI1Je/WifL/HbIubHCCdK8/N7rblgUrZJMG3W+7vAvZsOh/6VTZeP4wCe7Gs/cJhE2gI
  DmGcR+7rQvbFQC4zQxEjo8fNaTwjpzLM9NIp4vG9SDIqAm20MXzLBAeVkofixCsosUWUODxP
  owLbpg7pFRJGL9YyEHpS7MGPb3jSLzucMAFXgoI8rVqoq6si2sxr2l0VsNH5o3NgoAgJNIg=
-In-Reply-To: <20250114152718.120588-3-yoong.siang.song@intel.com>
+In-Reply-To: <20250115014734.438225-1-lizhijian@fujitsu.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-Authenticated-Sender: daniel@iogearbox.net
 X-Virus-Scanned: Clear (ClamAV 1.0.7/27519/Wed Jan 15 10:36:26 2025)
 
-On 1/14/25 4:27 PM, Song Yoong Siang wrote:
+On 1/15/25 2:47 AM, Li Zhijian wrote:
+> Fixes an issue where out-of-tree kselftest builds fail when building
+> the BPF and bpftools components. The failure occurs because the top-level
+> Makefile passes a relative srctree path to its sub-Makefiles, which
+> leads to errors in locating necessary files.
+> 
+> For example, the following error is encountered:
+> 
+> ```
+> $ make V=1 O=$build/ TARGETS=hid kselftest-all
+> ...
+> make -C ../tools/testing/selftests all
+> make[4]: Entering directory '/path/to/linux/tools/testing/selftests/hid'
+> make  -C /path/to/linux/tools/testing/selftests/../../../tools/lib/bpf OUTPUT=/path/to/linux/O/kselftest/hid/tools/build/libbpf/ \
+>              EXTRA_CFLAGS='-g -O0'                                      \
+>              DESTDIR=/path/to/linux/O/kselftest/hid/tools prefix= all install_headers
+> make[5]: Entering directory '/path/to/linux/tools/lib/bpf'
+> ...
+> make[5]: Entering directory '/path/to/linux/tools/bpf/bpftool'
+> Makefile:127: ../tools/build/Makefile.feature: No such file or directory
+> make[5]: *** No rule to make target '../tools/build/Makefile.feature'.  Stop.
+> ```
+> 
+> To resolve this, override the srctree in the kselftests's top Makefile
+> when performing an out-of-tree build. This ensures that all sub-Makefiles
+> have the correct path to the source tree, preventing directory resolution
+> errors.
+> 
+> Cc: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+> Signed-off-by: Li Zhijian <lizhijian@fujitsu.com>
+> Tested-by: Quentin Monnet <qmo@kernel.org>
+
 [...]
-> +	/* Add mqprio qdisc with TC and hardware queue one-to-one mapping */
-> +	char map[256] = {0};
-> +	char queues[256] = {0};
-> +
-> +	for (i = 0; i < rxq; i++) {
-> +		char buf[8];
-> +
-> +		snprintf(buf, sizeof(buf), "%d ", i);
-> +		strcat(map, buf);
-> +
-> +		snprintf(buf, sizeof(buf), "1@%d ", i);
-> +		strcat(queues, buf);
-> +	}
-> +	run_command("sudo tc qdisc add dev %s handle 8001: parent root mqprio num_tc %d map %s queues %s hw 0",
-> +		    ifname, rxq, map, queues);
+>   tools/testing/selftests/Makefile | 8 ++++++--
+>   1 file changed, 6 insertions(+), 2 deletions(-)
 
-Fyi, above triggers selftest build errors:
-
-   xdp_hw_metadata.c: In function ‘main’:
-   xdp_hw_metadata.c:763:45: error: ‘%d’ directive output may be truncated writing between 1 and 10 bytes into a region of size 8 [-Werror=format-truncation=]
-     763 |                 snprintf(buf, sizeof(buf), "%d ", i);
-         |                                             ^~
-     TEST-OBJ [test_progs] arg_parsing.test.o
-   xdp_hw_metadata.c:763:44: note: directive argument in the range [0, 2147483646]
-     763 |                 snprintf(buf, sizeof(buf), "%d ", i);
-         |                                            ^~~~~
-   xdp_hw_metadata.c:763:17: note: ‘snprintf’ output between 3 and 12 bytes into a destination of size 8
-     763 |                 snprintf(buf, sizeof(buf), "%d ", i);
-         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   xdp_hw_metadata.c:766:47: error: ‘%d’ directive output may be truncated writing between 1 and 10 bytes into a region of size 6 [-Werror=format-truncation=]
-     766 |                 snprintf(buf, sizeof(buf), "1@%d ", i);
-         |                                               ^~
-   xdp_hw_metadata.c:766:44: note: directive argument in the range [0, 2147483646]
-     766 |                 snprintf(buf, sizeof(buf), "1@%d ", i);
-         |                                            ^~~~~~~
-   xdp_hw_metadata.c:766:17: note: ‘snprintf’ output between 5 and 14 bytes into a destination of size 8
-     766 |                 snprintf(buf, sizeof(buf), "1@%d ", i);
-         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Shuah, want to pick this up given its the top-level Makefile or want us to
+route it via bpf-next with your Ack? Fwiw, BPF CI went through fine.
