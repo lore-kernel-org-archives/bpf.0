@@ -1,110 +1,172 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DABE1448DC
-	for <bpf@vger.kernel.org>; Wed, 15 Jan 2025 15:06:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4FEB70801;
+	Wed, 15 Jan 2025 15:19:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736953613; cv=none; b=mFoAYK0AxYrKLxHv9EprFKz4mBeonYf6o8/xVyrBStPZh76ibkKDdJ5UEqmj7tY2WuZMTakWftYaJBSkTMppgEMk9BTrcme1yw8ae/MEk9UZNRhndmMmFNZlAW8zvbnmfre6Eh7OceujgsFmY1IAsrT+aeuEdHCRCWagr3Uka58=
+	t=1736954384; cv=none; b=WO3DLYpkFkGD8xhpgeY63sk8YHrE3S6Cr3UMCXOmmfgxWLE+M1O9ivSMGwcbRB2HIMnI7ILc4g1kwSJcMMEh2Cu3SwhJD4mDHfGS6HABAEE5TOv+TloPeayFLK4xf3TZfxHYMHIbuz+G8aqGmNT6YZId9TtbVvBeFk9QmEJw77E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736953613; c=relaxed/simple;
-	bh=ruXm3GwWSRO7cfPH2em1+ggx/3wul5ki73+B7i4Ubjc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tW7ow+s9mEBFis2+SyyD3rTOmRpkKPDmXAZGRWHEVfGZeYTX/f/yM0lJxMxVUitO+pOirJpQmvTseCJFmXYh+WZA/r4blbJ2e790nIneR5Gk6EgLKZiM9YESbcHpgxBQNXg8cWHhD3afsu2ETj0ZwLVv1o5taACntcHkYhaD33E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=RWAxcduu; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1736954384; c=relaxed/simple;
+	bh=7ejRYevHYOXah2gzkbZoNHZ3U+tY63P81luAAusOV5c=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ARQLnxW6F3kyIUbXtasbAN0eNIDe8LWO4/5uqE9bX3iU0gS0g2Bc52K9VYS+o2/S3lloo4ngw6EPty0XRSbjbVoKSkgYx6IgrWGYu79PwhFSbGZ4mp1BKFPe5uXRjOlJEW84T9uT6cI3fG987cZ17uDiqJXEiP51g5Z/uMXIAls=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Nyg/v2wF; arc=none smtp.client-ip=192.198.163.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="RWAxcduu"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1736953611;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=d3r2M9S+yWLkHCYFD8BRRAu7UcanN7f8eRTtVxwZV0g=;
-	b=RWAxcduu+/HMY+8BgzxKdXcMFfxsXfzs6Mxiz5ev6UATaKdQuTJ2k7sEH9AeG6lBDpo4QK
-	V715/H5Hlj3Ng8iw/sWp/8PFaWHJnxERS9PsxagRdzwq7sAx072xb+QXRvXqf/I0dgkNvS
-	fnQvcdmW2e5iGfRO9XRoi2nRTpqxrfM=
-Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-620-vsNLaPoUNp2-nLJGDYdKvQ-1; Wed,
- 15 Jan 2025 10:06:45 -0500
-X-MC-Unique: vsNLaPoUNp2-nLJGDYdKvQ-1
-X-Mimecast-MFC-AGG-ID: vsNLaPoUNp2-nLJGDYdKvQ
-Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 957CF19560B1;
-	Wed, 15 Jan 2025 15:06:42 +0000 (UTC)
-Received: from dhcp-27-174.brq.redhat.com (unknown [10.45.224.39])
-	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with SMTP id AA29319560A3;
-	Wed, 15 Jan 2025 15:06:33 +0000 (UTC)
-Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
-	oleg@redhat.com; Wed, 15 Jan 2025 16:06:17 +0100 (CET)
-Date: Wed, 15 Jan 2025 16:06:07 +0100
-From: Oleg Nesterov <oleg@redhat.com>
-To: Jiri Olsa <olsajiri@gmail.com>
-Cc: Eyal Birger <eyal.birger@gmail.com>, Aleksa Sarai <cyphar@cyphar.com>,
-	mhiramat@kernel.org, linux-kernel <linux-kernel@vger.kernel.org>,
-	linux-trace-kernel@vger.kernel.org,
-	BPF-dev-list <bpf@vger.kernel.org>,
-	Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-	John Fastabend <john.fastabend@gmail.com>, peterz@infradead.org,
-	tglx@linutronix.de, bp@alien8.de, x86@kernel.org,
-	linux-api@vger.kernel.org, Andrii Nakryiko <andrii@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Nyg/v2wF"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1736954383; x=1768490383;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=7ejRYevHYOXah2gzkbZoNHZ3U+tY63P81luAAusOV5c=;
+  b=Nyg/v2wFv5GjbopIdgMumt426wMZJ8ArFpurSVm2365LgBKW2cTXZ+5O
+   /U9+u5NyaI+Th7mTuqRzhmz5YDSl3urcUfhUIQ02/Ad/DlDBt+FkbrWHE
+   8tStd+9bcDHn6mnO9xLj7OzZf/0wLfulOauXq3mZjmiHUMRKfObVT+2yl
+   UuqBsxWi4aUxkIjjhh1fZLLhSPLj7W/uZ73PGUN+zvfple7JPC4oq1ZiM
+   QKnzCe48p0ySmoThPn254RPG5oHsQm6KcEVNbGayurqLwFuA3ggpgZ6gX
+   zDMjGkp2kApi6NwfLIZE4sg+jtPKN5grkQCX6tIgLQyKinenYd6LYiUw1
+   A==;
+X-CSE-ConnectionGUID: qIpaeHGKTN++xMZWw1kJ7A==
+X-CSE-MsgGUID: wylSEl8uTfeJjUtSCm0g6A==
+X-IronPort-AV: E=McAfee;i="6700,10204,11316"; a="37451756"
+X-IronPort-AV: E=Sophos;i="6.13,206,1732608000"; 
+   d="scan'208";a="37451756"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jan 2025 07:19:41 -0800
+X-CSE-ConnectionGUID: GyD+oBEsRR+ALt26wRX3rw==
+X-CSE-MsgGUID: EBVu00rWTdOolhOuqOIJNg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.13,206,1732608000"; 
+   d="scan'208";a="105116640"
+Received: from newjersey.igk.intel.com ([10.102.20.203])
+  by fmviesa007.fm.intel.com with ESMTP; 15 Jan 2025 07:19:37 -0800
+From: Alexander Lobakin <aleksander.lobakin@intel.com>
+To: Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>
+Cc: Alexander Lobakin <aleksander.lobakin@intel.com>,
+	Lorenzo Bianconi <lorenzo@kernel.org>,
+	Daniel Xu <dxu@dxuuu.xyz>,
 	Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-	"rostedt@goodmis.org" <rostedt@goodmis.org>, rafi@rbk.io,
-	Shmulik Ladkani <shmulik.ladkani@gmail.com>
-Subject: Re: Crash when attaching uretprobes to processes running in Docker
-Message-ID: <20250115150607.GA11980@redhat.com>
-References: <CAHsH6Gs3Eh8DFU0wq58c_LF8A4_+o6z456J7BidmcVY2AqOnHQ@mail.gmail.com>
- <20250110.152323-sassy.torch.lavish.rent-vKX3ul5B3qyi@cyphar.com>
- <Z4K7D10rjuVeRCKq@krava>
- <Z4YszJfOvFEAaKjF@krava>
- <CAHsH6Gst+UGCtiCaNq2ikaknZGghpTq2SFZX7S0A8=uDsXt=Zw@mail.gmail.com>
- <20250114143313.GA29305@redhat.com>
- <Z4Z7OkrtXBauaLcm@krava>
- <20250114172519.GB29305@redhat.com>
- <Z4eBs0-kJ3iVZjXL@krava>
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	=?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@kernel.org>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	netdev@vger.kernel.org,
+	bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH net-next v3 0/8] bpf: cpumap: enable GRO for XDP_PASS frames
+Date: Wed, 15 Jan 2025 16:18:53 +0100
+Message-ID: <20250115151901.2063909-1-aleksander.lobakin@intel.com>
+X-Mailer: git-send-email 2.48.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Z4eBs0-kJ3iVZjXL@krava>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
+Content-Transfer-Encoding: 8bit
 
-On 01/15, Jiri Olsa wrote:
->
-> On Tue, Jan 14, 2025 at 06:25:20PM +0100, Oleg Nesterov wrote:
-> >
-> > Sorry, I don't understand... What exactly we can do? Aside from checking
-> > IS_ENABLED(CONFIG_SECCOMP) in arch_uprobe_trampoline() ?
->
-> I need to check more on seccomp, but I imagine we could do following:
->   - when seccomp filter is installed we could check uprobe trampoline
->     and if it's already installed we change it to int3 trampoline
->   - when uprobe trampoline is getting installed we check if there's
->     seccomp filter installed for task and we use int3 trampoline
+Several months ago, I had been looking through my old XDP hints tree[0]
+to check whether some patches not directly related to hints can be sent
+standalone. Roughly at the same time, Daniel appeared and asked[1] about
+GRO for cpumap from that tree.
 
-I still don't understand... But whatever you meant, I doubt it can work.
+Currently, cpumap uses its own kthread which processes cpumap-redirected
+frames by batches of 8, without any weighting (but with rescheduling
+points). The resulting skbs get passed to the stack via
+netif_receive_skb_list(), which means no GRO happens.
+Even though we can't currently pass checksum status from the drivers,
+in many cases GRO performs better than the listified Rx without the
+aggregation, confirmed by tests.
 
-> other than that I guess we will have to add sysctl to enable uretprobe
-> trampoline..
+In order to enable GRO in cpumap, we need to do the following:
 
-Or we can change __secure_computing() to do nothing if
-this_syscall == __NR_uretprobe. Or even change syscall_trace_enter/exit
-to do this check.
+* patches 1-2: decouple the GRO struct from the NAPI struct and allow
+  using it out of a NAPI entity within the kernel core code;
+* patch 3: switch cpumap from netif_receive_skb_list() to
+  gro_receive_skb().
 
-But I don't really like this idea, I don't feel this is the right solution...
+Additional improvements:
 
-Oleg.
+* patch 4: optimize XDP_PASS in cpumap by using arrays instead of linked
+  lists;
+* patch 5-6: introduce and use function do get skbs from the NAPI percpu
+  caches by bulks, not one at a time;
+* patch 7-8: use that function in veth as well and remove the one that
+  was now superseded by it.
+
+My trafficgen UDP GRO tests, small frame sizes:
+
+                GRO off    GRO on
+baseline        2.7        N/A       Mpps
+patch 3         2.3        4         Mpps
+patch 8         2.4        4.7       Mpps
+
+1...3 diff      -17        +48       %
+1...8 diff      -11        +74       %
+
+Daniel reported from +14%[2] to +18%[3] of throughput in neper's TCP RR
+tests. On my system however, the same test gave me up to +100%.
+
+Note that there's a series from Lorenzo[4] which achieves the same, but
+in a different way. During the discussions, the approach using a
+standalone GRO instance was preferred over the threaded NAPI.
+
+[0] https://github.com/alobakin/linux/tree/xdp_hints
+[1] https://lore.kernel.org/bpf/cadda351-6e93-4568-ba26-21a760bf9a57@app.fastmail.com
+[2] https://lore.kernel.org/bpf/merfatcdvwpx2lj4j2pahhwp4vihstpidws3jwljwazhh76xkd@t5vsh4gvk4mh
+[3] https://lore.kernel.org/bpf/yzda66wro5twmzpmjoxvy4si5zvkehlmgtpi6brheek3sj73tj@o7kd6nurr3o6
+[4] https://lore.kernel.org/bpf/20241130-cpumap-gro-v1-0-c1180b1b5758@kernel.org
+
+Alexander Lobakin (8):
+  net: gro: decouple GRO from the NAPI layer
+  net: gro: expose GRO init/cleanup to use outside of NAPI
+  bpf: cpumap: switch to GRO from netif_receive_skb_list()
+  bpf: cpumap: reuse skb array instead of a linked list to chain skbs
+  net: skbuff: introduce napi_skb_cache_get_bulk()
+  bpf: cpumap: switch to napi_skb_cache_get_bulk()
+  veth: use napi_skb_cache_get_bulk() instead of xdp_alloc_skb_bulk()
+  xdp: remove xdp_alloc_skb_bulk()
+
+ include/linux/netdevice.h                  |  26 ++--
+ include/linux/skbuff.h                     |   1 +
+ include/net/busy_poll.h                    |  11 +-
+ include/net/gro.h                          |  38 ++++--
+ include/net/xdp.h                          |   1 -
+ drivers/net/ethernet/brocade/bna/bnad.c    |   1 +
+ drivers/net/ethernet/cortina/gemini.c      |   1 +
+ drivers/net/veth.c                         |   3 +-
+ drivers/net/wwan/t7xx/t7xx_hif_dpmaif_rx.c |   1 +
+ kernel/bpf/cpumap.c                        | 145 +++++++++++++--------
+ net/core/dev.c                             |  77 +++--------
+ net/core/gro.c                             | 101 +++++++++-----
+ net/core/skbuff.c                          |  62 +++++++++
+ net/core/xdp.c                             |  10 --
+ 14 files changed, 298 insertions(+), 180 deletions(-)
+
+---
+From v2[5]:
+* 1: remove napi_id duplication in both &gro_node and &napi_struct by
+     using a tagged struct group. The most efficient approach I've
+     found so far: no additional branches, no inline expansion, no tail
+     calls / double calls, saves 8 bytes of &napi_struct in comparison
+     with v2 (Jakub, Paolo, me);
+* 4: improve and streamline skb allocation fails (-1 branch per frame),
+     skip more code for skb-only batches.
+
+From v1[6]:
+* use a standalone GRO instance instead of the threaded NAPI (Jakub);
+* rebase and send to net-next as it's now more networking than BPF.
+
+[5] https://lore.kernel.org/netdev/20250107152940.26530-1-aleksander.lobakin@intel.com
+[6] https://lore.kernel.org/bpf/20240830162508.1009458-1-aleksander.lobakin@intel.com
+-- 
+2.48.0
 
