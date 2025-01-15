@@ -1,27 +1,26 @@
-Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B71091DB14D
-	for <bpf@vger.kernel.org>; Wed, 15 Jan 2025 09:59:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDDF523F26F
+	for <bpf@vger.kernel.org>; Wed, 15 Jan 2025 10:00:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736935200; cv=none; b=AwTZGfbwjhj1/cN6BIY0hTqillb+1DXzxIbrzsCl9K2mflmfk2a+pmYlUIc1ufG0zvdYhdKFggvw37CYJ10/gWD9LpaDGNi5l2DUDi4toUb7yEYO+1ZA3p7hCcCkaS6HQqgi9XI+9fMU4KtkOO46AgOE/XgCECkEv/9HZkcVNGE=
+	t=1736935204; cv=none; b=Dr9dTm6GzUlD3dEcCFjtVB0g3gXGYfHQ68q1in7bL3wJXRF/iKu7N/rzV+Oe/HTzrjx0CVDoPv/wTwyZA7ROFGiUvz1qlPvPa9mBD5J0bOpp9BkCzCQ6CwxDByHc3ZkAzD97Y16iImZta8N3IOqBUlunX8U6ciWPyAcbO1uxITs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736935200; c=relaxed/simple;
-	bh=WVdQNMNpanAWC0NScMZ8KYPhzeEMN3+PJRlQcWSgLVQ=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=qnyEx+QDVyrM3We9nvpJVPOP8MJF5D/b4pXrpNCEEWwkzMHXm0q+Ean/VSVvl9XSoUb2F1RbWcv9W23YSqPoUaG7tCLGJkCBedDRM8gvGj6DW0bN6xgAcD0oTeYYsBHoW1GfXcZBd9JOubnIn7RJ+8ZHzQsYKu7Wdw88JeoHSwY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
+	s=arc-20240116; t=1736935204; c=relaxed/simple;
+	bh=VBwtW4jlSdS8/uOjiy8I6xnOiaNeu0ecqA+PHNu+7b4=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=fK/A5Q+Md37o8uUkUf9OtP+vo8j6zwAdVcyHvq3qEcR8q63cEJcCdfkfM2cP5DV/bjAEAssBxsqguRXAodTZxDYTKeeFQMp0UFQthG/vI9cP8b/ABmk+/HCs8OlGXwobxup/w2Y290uUWNUKSfCNe1ekUS5yVgRmj2fVcdL+RAk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.216])
-	by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4YY1gT48vxz4f3khQ
-	for <bpf@vger.kernel.org>; Wed, 15 Jan 2025 17:59:33 +0800 (CST)
+Received: from mail.maildlp.com (unknown [172.19.163.235])
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4YY1gZ4RN1z4f3jss
+	for <bpf@vger.kernel.org>; Wed, 15 Jan 2025 17:59:38 +0800 (CST)
 Received: from mail02.huawei.com (unknown [10.116.40.252])
-	by mail.maildlp.com (Postfix) with ESMTP id F05211A14DA
+	by mail.maildlp.com (Postfix) with ESMTP id CD1491A0CC2
 	for <bpf@vger.kernel.org>; Wed, 15 Jan 2025 17:59:53 +0800 (CST)
 Received: from ultra.huawei.com (unknown [10.90.53.71])
-	by APP3 (Coremail) with SMTP id _Ch0CgAHWcMYh4dnLOEBBA--.46150S4;
+	by APP3 (Coremail) with SMTP id _Ch0CgAHWcMYh4dnLOEBBA--.46150S2;
 	Wed, 15 Jan 2025 17:59:53 +0800 (CST)
 From: Pu Lehui <pulehui@huaweicloud.com>
 To: bpf@vger.kernel.org
@@ -40,12 +39,10 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Alan Maguire <alan.maguire@oracle.com>,
 	Pu Lehui <pulehui@huawei.com>,
 	Pu Lehui <pulehui@huaweicloud.com>
-Subject: [PATCH bpf v2 3/4] libbpf: Fix incorrect traversal end type ID when marking BTF_IS_EMBEDDED
-Date: Wed, 15 Jan 2025 10:02:40 +0000
-Message-Id: <20250115100241.4171581-3-pulehui@huaweicloud.com>
+Subject: [PATCH bpf v2 1/4] selftests/bpf: Fix btf leak on new btf alloc failure in btf_distill test
+Date: Wed, 15 Jan 2025 10:02:38 +0000
+Message-Id: <20250115100241.4171581-1-pulehui@huaweicloud.com>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20250115100241.4171581-1-pulehui@huaweicloud.com>
-References: <20250115100241.4171581-1-pulehui@huaweicloud.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -53,57 +50,59 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_Ch0CgAHWcMYh4dnLOEBBA--.46150S4
-X-Coremail-Antispam: 1UD129KBjvJXoW7AFy7AFW8GF18WrW7Gw17KFg_yoW8GFykpF
-	47G3y8Kw1rJw4Iqw1vg3WFyay3Gw4Sq3yjkrWqgw4FvFs0gwn8KF4xZFs5Ar4fWr48t3y7
-	ZFZI9ryY9w1kAr7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUm014x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_Jryl82xGYIkIc2
-	x26xkF7I0E14v26ryj6s0DM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0
-	Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j6F4UJw
-	A2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq3wAS
-	0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2
-	IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0
-	Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628vn2kIc2
-	xKxwCY1x0262kKe7AKxVWUtVW8ZwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWU
-	JVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67
-	kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY
-	6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0x
-	vEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVj
-	vjDU0xZFpf9x0JUQXo7UUUUU=
+X-CM-TRANSID:_Ch0CgAHWcMYh4dnLOEBBA--.46150S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7Zr1rAw4xZrWfGr1DGrWkCrg_yoW8Xr48pa
+	y0q34akFySg3W7tay8ZFWIgFW8WF1kX3yakF17Kwn5ArWrJFykXrs7Kay5G3ZagrWFvr45
+	Zw1xKFs5Aw48Cw7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUU9Y14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+	1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+	JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+	CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+	2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+	W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2
+	Y2ka0xkIwI1lc7CjxVAaw2AFwI0_Jw0_GFyl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x
+	0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2
+	zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF
+	4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWU
+	CwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCT
+	nIWIevJa73UjIFyTuYvjfUonmRUUUUU
 X-CM-SenderInfo: psxovxtxl6x35dzhxuhorxvhhfrp/
 
 From: Pu Lehui <pulehui@huawei.com>
 
-When redirecting the split BTF to the vmlinux base BTF, we need to mark
-the distilled base struct/union members of split BTF structs/unions in
-id_map with BTF_IS_EMBEDDED. This indicates that these types must match
-both name and size later. Therefore, we need to traverse the entire
-split BTF, which involves traversing type IDs from nr_dist_base_types to
-nr_types. However, the current implementation uses an incorrect
-traversal end type ID, so let's correct it.
+Fix btf leak on new btf alloc failure in btf_distill test.
 
-Fixes: 19e00c897d50 ("libbpf: Split BTF relocation")
+Fixes: affdeb50616b ("selftests/bpf: Extend distilled BTF tests to cover BTF relocation")
 Signed-off-by: Pu Lehui <pulehui@huawei.com>
 ---
-v2: make commit description more sense.
+v2: newly discovered bugfix.
 
- tools/lib/bpf/btf_relocate.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/testing/selftests/bpf/prog_tests/btf_distill.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/tools/lib/bpf/btf_relocate.c b/tools/lib/bpf/btf_relocate.c
-index b72f83e15156..53d1f3541bce 100644
---- a/tools/lib/bpf/btf_relocate.c
-+++ b/tools/lib/bpf/btf_relocate.c
-@@ -212,7 +212,7 @@ static int btf_relocate_map_distilled_base(struct btf_relocate *r)
- 	 * need to match both name and size, otherwise embedding the base
- 	 * struct/union in the split type is invalid.
- 	 */
--	for (id = r->nr_dist_base_types; id < r->nr_split_types; id++) {
-+	for (id = r->nr_dist_base_types; id < r->nr_dist_base_types + r->nr_split_types; id++) {
- 		err = btf_mark_embedded_composite_type_ids(r, id);
- 		if (err)
- 			goto done;
+diff --git a/tools/testing/selftests/bpf/prog_tests/btf_distill.c b/tools/testing/selftests/bpf/prog_tests/btf_distill.c
+index ca84726d5ac1..b72b966df77b 100644
+--- a/tools/testing/selftests/bpf/prog_tests/btf_distill.c
++++ b/tools/testing/selftests/bpf/prog_tests/btf_distill.c
+@@ -385,7 +385,7 @@ static void test_distilled_base_missing_err(void)
+ 		"[2] INT 'int' size=8 bits_offset=0 nr_bits=64 encoding=SIGNED");
+ 	btf5 = btf__new_empty();
+ 	if (!ASSERT_OK_PTR(btf5, "empty_reloc_btf"))
+-		return;
++		goto cleanup;
+ 	btf__add_int(btf5, "int", 4, BTF_INT_SIGNED);   /* [1] int */
+ 	VALIDATE_RAW_BTF(
+ 		btf5,
+@@ -478,7 +478,7 @@ static void test_distilled_base_multi_err2(void)
+ 		"[1] INT 'int' size=4 bits_offset=0 nr_bits=32 encoding=SIGNED");
+ 	btf5 = btf__new_empty();
+ 	if (!ASSERT_OK_PTR(btf5, "empty_reloc_btf"))
+-		return;
++		goto cleanup;
+ 	btf__add_int(btf5, "int", 4, BTF_INT_SIGNED);   /* [1] int */
+ 	btf__add_int(btf5, "int", 4, BTF_INT_SIGNED);   /* [2] int */
+ 	VALIDATE_RAW_BTF(
 -- 
 2.34.1
 
