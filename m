@@ -1,48 +1,46 @@
 Received: from mx0b-0016f401.pphosted.com (mx0b-0016f401.pphosted.com [67.231.156.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C043622CBDC;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C03CB1547E2;
 	Thu, 16 Jan 2025 19:11:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.156.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737054720; cv=none; b=oFiMWB/O5FeX19D/n8gPDQlJGhcblP6ARTkcrzbcUWjo41Y912c6YUCvOmjU70QOmlcwl26f0jnqMbmOKSzQIoDuiqxz8ajJd657jnS+qiEYgRsZOZW0nMkdDxpuufWiKgViJIS+He3yQ326RYJAM1MqYDeDQ/PZATLFQeKJzEM=
+	t=1737054720; cv=none; b=M8zmAg79NKmOWJ7wisfIGZMqSHDi4njz1ISyKri8aMwe1+M95CgGreXPDiRnr9Yoofc1xwgbHkddnyX4fJfGcfhWOhwi6ArqLLH7piNIbDuiWRK6BK7sZIWcm0ciP7VM+5O5t639I55fQCFBXTNPcTtL9h4I7FXj6QlSN3g3QDc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1737054720; c=relaxed/simple;
-	bh=KQRLjCL80LspFuD73s/fJNROwZ35qu7TF4XWedkgf2g=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=FYukaL6w4TV68kDeTeOmGX8Sp3r1VgxK6Dkiu+JR9YdktgJwxVBUuqNcT0STEuyF4v9ThQM/uPiLyLsk5gPz/e08rVZa+/8Y3euiuRBJFZXbjLausm6aslhk/LppRK1xqe6IAOd9uaEr+q6J96corLMzOoh07JalHalRid/EK2Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marvell.com; spf=pass smtp.mailfrom=marvell.com; dkim=pass (2048-bit key) header.d=marvell.com header.i=@marvell.com header.b=OOtSFwok; arc=none smtp.client-ip=67.231.156.173
+	bh=Eu5cnF1JduLc3kQde9BZUGpflVrfUoGrIcrRDwbbDtg=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=ScekfQeOtjiNWMI2p4kUVTj+mlv3gLCqZdN8MaETZuyPceXNL8U1zrF7TBF/dSdCTx+paA7xCzpkxBqXKxNoNGcpbXetWxZ93yoltCpbJR5i5nlBaC/0qS6my9GknETYOEV9KITdXUoTzkM8LjMo5lDPByrsbzTp9JYNI/dnQBU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marvell.com; spf=pass smtp.mailfrom=marvell.com; dkim=pass (2048-bit key) header.d=marvell.com header.i=@marvell.com header.b=PZOYBG+w; arc=none smtp.client-ip=67.231.156.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marvell.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=marvell.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=marvell.com header.i=@marvell.com header.b="OOtSFwok"
-Received: from pps.filterd (m0431383.ppops.net [127.0.0.1])
-	by mx0b-0016f401.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 50GGAsJ5031247;
-	Thu, 16 Jan 2025 11:11:40 -0800
+	dkim=pass (2048-bit key) header.d=marvell.com header.i=@marvell.com header.b="PZOYBG+w"
+Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
+	by mx0b-0016f401.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 50GFdhAU030715;
+	Thu, 16 Jan 2025 11:11:26 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pfpt0220; bh=K
-	jfkt9Wnnk6nh/2EsEGZjSOfC5dO9pMd+Lh48lopMeo=; b=OOtSFwok10i0znX7R
-	Hg+BxzHwPMVQRfAlRABl+60JfG/PcW/4Bhcos7RW46dfvyZJchOuCKVcJeON1771
-	uwcxeGytKEeFba6ucblHEtWZZPafBwgohMmWDI8dSn5jMw38Isp1hr0uEQbXTTD+
-	Bc2OjB4WHECXgkavfl7Vws8+IYthLd4lI2PGMeSLeXp5W/H13KLQLUw5cwfCvNPb
-	/CC8E4UJDrtdz1VrJZD81X1b1M8Ns2bsjx9+p+ZSuGP+3uFDgWvU2sv5I/cnQgVw
-	hTxkWsphM+KdHuMbD81fF5FmMkr3Wq+eSuni9uuF12meu4yQTxMfcsC+cceDQwXh
-	pWh5g==
+	cc:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=pfpt0220; bh=P+UDXuftbBdTKRrlDUzQllR
+	vTWLrrqnSr5XDjT3EWiM=; b=PZOYBG+wV6qWOpiWUkLyV0IVOwq7AyrWWXiKoHc
+	y2jrvkkgh3o2rt3TMUNNk/4/IDg90XuwPDZxgWTAFFsqFX+d82/b+NRM2RcS0363
+	G/Ex99kz/WZIs2QfCTQfK/OO7LP64XqN96AXLYukVVrYGomUz3kuEmTfgOxGG8kz
+	WeQH6dwpoTcAwadOReQptd6/nTdE8CZpFv2cLFApC6stf1bI470UQjHJpgJEPXUf
+	AioAr9R8Gx1N7VbS/uDN1Uys3kkaPSdNkSB1Y8EEuGcUTJXZs4KNLjzsOgGC0bp6
+	Jbf0JMaW3dWKxv7wIJ2NerP207oYAKfUeYeJo0Rl2l1NZPg==
 Received: from dc5-exch05.marvell.com ([199.233.59.128])
-	by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 4475dd0dyd-1
+	by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 4474xvrg7c-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 16 Jan 2025 11:11:40 -0800 (PST)
+	Thu, 16 Jan 2025 11:11:25 -0800 (PST)
 Received: from DC5-EXCH05.marvell.com (10.69.176.209) by
  DC5-EXCH05.marvell.com (10.69.176.209) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.4; Thu, 16 Jan 2025 11:11:38 -0800
+ 15.2.1544.4; Thu, 16 Jan 2025 11:11:24 -0800
 Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH05.marvell.com
  (10.69.176.209) with Microsoft SMTP Server id 15.2.1544.4 via Frontend
- Transport; Thu, 16 Jan 2025 11:11:38 -0800
+ Transport; Thu, 16 Jan 2025 11:11:24 -0800
 Received: from localhost.localdomain (unknown [10.28.36.166])
-	by maili.marvell.com (Postfix) with ESMTP id 05A623F7088;
-	Thu, 16 Jan 2025 11:11:32 -0800 (PST)
+	by maili.marvell.com (Postfix) with ESMTP id 1B1DD3F7088;
+	Thu, 16 Jan 2025 11:11:18 -0800 (PST)
 From: Suman Ghosh <sumang@marvell.com>
 To: <horms@kernel.org>, <sgoutham@marvell.com>, <gakula@marvell.com>,
         <sbhatta@marvell.com>, <hkelam@marvell.com>, <davem@davemloft.net>,
@@ -53,12 +51,10 @@ To: <horms@kernel.org>, <sgoutham@marvell.com>, <gakula@marvell.com>,
         <andrew+netdev@lunn.ch>, <ast@kernel.org>, <daniel@iogearbox.net>,
         <bpf@vger.kernel.org>
 CC: Suman Ghosh <sumang@marvell.com>
-Subject: [net-next PATCH v4 2/6] octeontx2-pf: Add AF_XDP non-zero copy support
-Date: Fri, 17 Jan 2025 00:41:12 +0530
-Message-ID: <20250116191116.3357181-3-sumang@marvell.com>
+Subject: [net-next PATCH v4 0/6] Add af_xdp support for cn10k
+Date: Fri, 17 Jan 2025 00:41:10 +0530
+Message-ID: <20250116191116.3357181-1-sumang@marvell.com>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20250116191116.3357181-1-sumang@marvell.com>
-References: <20250116191116.3357181-1-sumang@marvell.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -67,50 +63,71 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-Proofpoint-GUID: fyKtG5ug0NNMzjrVNREjfgbdu4rBAPg1
-X-Proofpoint-ORIG-GUID: fyKtG5ug0NNMzjrVNREjfgbdu4rBAPg1
+X-Proofpoint-ORIG-GUID: 7WkqeT7bV7L33b6yRfRqDRWrbb98-AJf
+X-Proofpoint-GUID: 7WkqeT7bV7L33b6yRfRqDRWrbb98-AJf
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
  definitions=2025-01-16_08,2025-01-16_01,2024-11-22_01
 
-For XDP, page_pool APIs are getting used now. But the memory type was
-not getting set due to which XDP_REDIRECT and hence AF_XDP was not
-working. This patch ads the memory type MEM_TYPE_PAGE_POOL as the memory
-model of the XDP program.
+This patchset includes changes to support AF_XDP for cn10k chipsets. Both
+non-zero copy and zero copy will be supported after these changes. Also,
+the RSS will be reconfigured once a particular receive queue is
+added/removed to/from AF_XDP support.
 
-Fixes: 06059a1a9a4a ("octeontx2-pf: Add XDP support to netdev PF")
-Signed-off-by: Suman Ghosh <sumang@marvell.com>
----
- drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+Patch #1: octeontx2-pf: Don't unmap page pool buffer used by XDP
 
-diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c
-index 2b49bfec7869..161cf33ef89e 100644
---- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c
-+++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c
-@@ -1047,6 +1047,7 @@ static int otx2_cq_init(struct otx2_nic *pfvf, u16 qidx)
- 	int err, pool_id, non_xdp_queues;
- 	struct nix_aq_enq_req *aq;
- 	struct otx2_cq_queue *cq;
-+	struct otx2_pool *pool;
- 
- 	cq = &qset->cq[qidx];
- 	cq->cq_idx = qidx;
-@@ -1055,8 +1056,13 @@ static int otx2_cq_init(struct otx2_nic *pfvf, u16 qidx)
- 		cq->cq_type = CQ_RX;
- 		cq->cint_idx = qidx;
- 		cq->cqe_cnt = qset->rqe_cnt;
--		if (pfvf->xdp_prog)
-+		if (pfvf->xdp_prog) {
-+			pool = &qset->pool[qidx];
- 			xdp_rxq_info_reg(&cq->xdp_rxq, pfvf->netdev, qidx, 0);
-+			xdp_rxq_info_reg_mem_model(&cq->xdp_rxq,
-+						   MEM_TYPE_PAGE_POOL,
-+						   pool->page_pool);
-+		}
- 	} else if (qidx < non_xdp_queues) {
- 		cq->cq_type = CQ_TX;
- 		cq->cint_idx = qidx - pfvf->hw.rx_queues;
+Patch #2: octeontx2-pf: Add AF_XDP non-zero copy support
+
+Patch #3: octeontx2-pf: AF_XDP zero copy receive support
+
+Patch #4: octeontx2-pf: Reconfigure RSS table after enabling AF_XDP
+zerocopy on rx queue
+
+Patch #5: octeontx2-pf: Prepare for AF_XDP transmit
+
+Patch #6: octeontx2-pf: AF_XDP zero copy transmit support
+
+Geetha sowjanya (1):
+  octeontx2-pf: Don't unmap page pool buffer used by XDP
+
+Hariprasad Kelam (2):
+  octeontx2-pf: Prepare for AF_XDP
+  octeontx2-pf: AF_XDP zero copy transmit support
+
+Suman Ghosh (6):
+  octeontx2-pf: Add AF_XDP non-zero copy support
+  octeontx2-pf: AF_XDP zero copy receive support
+  octeontx2-pf: Reconfigure RSS table after enabling AF_XDP zerocopy on
+    rx queue
+
+v4 changes:
+- Addressed minor comments from Paolo regarding adding fixes tag in patch#2
+  and removed one unnecessary NULL check from patch#3
+
+v3 changes:
+- Rearrenged patch ordering to fix individual patch compilation issue
+- Fixed un-initialized variable declaration and reverse x-mas tree issue
+  pointed by Simon
+
+v2 changes:
+- Addressed minor review comments from Simon regrading smatch warnings
+
+ .../ethernet/marvell/octeontx2/nic/Makefile   |   2 +-
+ .../ethernet/marvell/octeontx2/nic/cn10k.c    |   6 +-
+ .../marvell/octeontx2/nic/otx2_common.c       | 120 ++++++++--
+ .../marvell/octeontx2/nic/otx2_common.h       |  17 +-
+ .../marvell/octeontx2/nic/otx2_ethtool.c      |   6 +-
+ .../ethernet/marvell/octeontx2/nic/otx2_pf.c  |  33 ++-
+ .../marvell/octeontx2/nic/otx2_txrx.c         | 183 +++++++++++---
+ .../marvell/octeontx2/nic/otx2_txrx.h         |   9 +
+ .../ethernet/marvell/octeontx2/nic/otx2_vf.c  |  12 +-
+ .../ethernet/marvell/octeontx2/nic/otx2_xsk.c | 225 ++++++++++++++++++
+ .../ethernet/marvell/octeontx2/nic/otx2_xsk.h |  24 ++
+ .../ethernet/marvell/octeontx2/nic/qos_sq.c   |   2 +-
+ 12 files changed, 558 insertions(+), 81 deletions(-)
+ create mode 100644 drivers/net/ethernet/marvell/octeontx2/nic/otx2_xsk.c
+ create mode 100644 drivers/net/ethernet/marvell/octeontx2/nic/otx2_xsk.h
+
 -- 
 2.25.1
 
