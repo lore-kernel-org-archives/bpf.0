@@ -1,48 +1,47 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FDF42416AF;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A087B241A03;
 	Thu, 16 Jan 2025 20:21:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737058875; cv=none; b=BbsyMKfMx8RggdfiPMPsdUNx6CTsTqurbpSiggBnDiOYesdQ3ojSV7iC6FEXeXZcpZwMWRIZxbz08sDS/nsbwUPuYibnVVJ2+IyQV+quNrX2aRbHjT+lO6tagb50O0NEPcxI9rkHuB7N+3WWp+XDAmIRE84iRhEODPMAy/1vYyo=
+	t=1737058875; cv=none; b=ppNl5cJfiukTPoPbevSmMpKnUkNTaadZPKK9w5lzSYAuBYLedjl+1kbujgeJ6AjSGsGRQLQAXagvI7z0gLlt5GVkXbYcIR+sNimIPML24yF8QQASQDJ/m9f5uUCuOnCqKMiOovs7hEX5UL9vGGM5dh2rWYiDeMCKeRGZ39JrPqU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1737058875; c=relaxed/simple;
-	bh=DmfpKQXf6Ml/a8ehOKAWLG+3urxxzFu0N5hVWDZFayA=;
+	bh=/Xhoj1WJzPcxvG0UU8IeYEawtU/PRon6+wnm3gf46G8=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=XQh5Za8+o8dPNzezgTJ4HVKDBsYslbUv/aa/eyNZYEXDv2pjOg9qHWio40KEoR5wcJMNwW7dOWwXxfLkD6qV9UWcX1sfFGDgtnr8/ezS3ZTqyoRBmKfmEgJsvyvPMruWPGmkxnLJ3epTJj7pXqdxCe1tPmJ8oJ1eg9QYknUrzss=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=edf4wwcf; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=VWnbRqGSpn0D02P5EcYgffuh8vh9Bi8U1l8LBSlVX1Z1iR/1UfViExXMX8F2MPRfoseTMtnKg7KJ8sGouYkOdXjZutxdUqzb12uTJeVg18CpsoBEWMzSxGc7QBqQc+tahvhpAOI3Vc19z1gpeZpw6V+7YhLlFlCMZotyp24A37k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aDLOf/rC; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="edf4wwcf"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3AFDBC4CEF0;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aDLOf/rC"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 540A2C4CEE5;
 	Thu, 16 Jan 2025 20:21:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1737058875;
-	bh=DmfpKQXf6Ml/a8ehOKAWLG+3urxxzFu0N5hVWDZFayA=;
+	bh=/Xhoj1WJzPcxvG0UU8IeYEawtU/PRon6+wnm3gf46G8=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=edf4wwcfBkb+rCeXf6T/mMuM46j60Q89UKL3uTwDlSycRStc5UkVGaAKHNyBKk5vn
-	 JD6NRqhQKf/WGMuhTIdFn7hbUZaPzbdWlIWMpqQsT3avC61uvqTCKHmlyHYEvEYmKK
-	 DTpHJoqVTNaJ6UHVB/TjCX18HPlolowoAUhsWFHv5QaGoY8DX6WlRrIRgW0aQk6bmk
-	 OEUx8YpO/zW94evKWjjq0XqnOwuC4KU2NflRkIQ0DRFNYhVxM6DlFAaPUuS1L8G9p3
-	 m6uomfx3To1cw2Hgva63FzRhgvSEzqlT4DXrU5b2AK5XlIfG896sXCCtYivY8TP49g
-	 fBv5hTsrlEZ4Q==
+	b=aDLOf/rCYlfXUz6FMqGiB6jX5wg4YE7Zj9F03ZjSMrGsGwAwGbY4VFUNO93R58SLe
+	 ZQxOVb64FMQiFZHKU9+z2YXhdmgrvY/1/j7eBXTaqTkZzVUIoyOteSCSEOC1eg8c/t
+	 L1OLYbpBoy5WeB4zUKnVeyysR/d3YGp2YHMxir6m+au2wa3wl/VioD+Q22jI3hq2Kn
+	 fn7tOUeLWmhtxhQ3I2UFt1ewc/ycIkA+LZDjuGYXtroOdOw4QsLtFcmaV7VyiVpLfv
+	 W84oyKffe0Uzi4UpCp3pWuzghg1Q4TwzfUrPLs7hfyIbS/eBeuOjBa6liTNR6f6XIH
+	 fGmpi3kwNsZeg==
 Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-	id 918B6CE37D2; Thu, 16 Jan 2025 12:21:14 -0800 (PST)
+	id 98972CE37D7; Thu, 16 Jan 2025 12:21:14 -0800 (PST)
 From: "Paul E. McKenney" <paulmck@kernel.org>
 To: rcu@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org,
 	kernel-team@meta.com,
 	rostedt@goodmis.org,
 	"Paul E. McKenney" <paulmck@kernel.org>,
-	syzbot+16a19b06125a2963eaee@syzkaller.appspotmail.com,
 	Alexei Starovoitov <ast@kernel.org>,
 	Andrii Nakryiko <andrii@kernel.org>,
 	Peter Zijlstra <peterz@infradead.org>,
 	Kent Overstreet <kent.overstreet@linux.dev>,
 	bpf@vger.kernel.org
-Subject: [PATCH rcu 07/17] srcu: Force synchronization for srcu_get_delay()
-Date: Thu, 16 Jan 2025 12:21:02 -0800
-Message-Id: <20250116202112.3783327-7-paulmck@kernel.org>
+Subject: [PATCH rcu 10/17] srcu: Pull pointer-to-integer conversion into __srcu_ptr_to_ctr()
+Date: Thu, 16 Jan 2025 12:21:05 -0800
+Message-Id: <20250116202112.3783327-10-paulmck@kernel.org>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <826c8527-d6ba-46c5-bb89-4625750cbeed@paulmck-laptop>
 References: <826c8527-d6ba-46c5-bb89-4625750cbeed@paulmck-laptop>
@@ -54,18 +53,11 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Currently, srcu_get_delay() can be called concurrently, for example,
-by a CPU that is the first to request a new grace period and the CPU
-processing the current grace period.  Although concurrent access is
-harmless, it unnecessarily expands the state space.  Additionally,
-all calls to srcu_get_delay() are from slow paths.
+This commit abstracts the srcu_read_lock*() pointer-to-integer conversion
+into a new __srcu_ptr_to_ctr().  This will be used in rcutorture for
+testing an srcu_read_lock_fast() that returns a pointer rather than
+an integer.
 
-This commit therefore protects all calls to srcu_get_delay() with
-ssp->srcu_sup->lock, which is already held on the invocation from the
-srcu_funnel_gp_start() function.  While in the area, this commit also
-adds a lockdep_assert_held() to srcu_get_delay() itself.
-
-Reported-by: syzbot+16a19b06125a2963eaee@syzkaller.appspotmail.com
 Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 Cc: Alexei Starovoitov <ast@kernel.org>
 Cc: Andrii Nakryiko <andrii@kernel.org>
@@ -73,56 +65,59 @@ Cc: Peter Zijlstra <peterz@infradead.org>
 Cc: Kent Overstreet <kent.overstreet@linux.dev>
 Cc: <bpf@vger.kernel.org>
 ---
- kernel/rcu/srcutree.c | 11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
+ include/linux/srcutree.h | 9 ++++++++-
+ kernel/rcu/srcutree.c    | 4 ++--
+ 2 files changed, 10 insertions(+), 3 deletions(-)
 
+diff --git a/include/linux/srcutree.h b/include/linux/srcutree.h
+index e29cc57eac81d..f41bb3a55a048 100644
+--- a/include/linux/srcutree.h
++++ b/include/linux/srcutree.h
+@@ -211,6 +211,13 @@ void synchronize_srcu_expedited(struct srcu_struct *ssp);
+ void srcu_barrier(struct srcu_struct *ssp);
+ void srcu_torture_stats_print(struct srcu_struct *ssp, char *tt, char *tf);
+ 
++// Converts a per-CPU pointer to an ->srcu_ctrs[] array element to that
++// element's index.
++static inline bool __srcu_ptr_to_ctr(struct srcu_struct *ssp, struct srcu_ctr __percpu *scpp)
++{
++	return scpp - &ssp->sda->srcu_ctrs[0];
++}
++
+ /*
+  * Counts the new reader in the appropriate per-CPU element of the
+  * srcu_struct.  Returns an index that must be passed to the matching
+@@ -228,7 +235,7 @@ static inline int __srcu_read_lock_lite(struct srcu_struct *ssp)
+ 	RCU_LOCKDEP_WARN(!rcu_is_watching(), "RCU must be watching srcu_read_lock_lite().");
+ 	this_cpu_inc(scp->srcu_locks.counter); /* Y */
+ 	barrier(); /* Avoid leaking the critical section. */
+-	return scp - &ssp->sda->srcu_ctrs[0];
++	return __srcu_ptr_to_ctr(ssp, scp);
+ }
+ 
+ /*
 diff --git a/kernel/rcu/srcutree.c b/kernel/rcu/srcutree.c
-index dfc98e69accaf..46e4cdaa1786e 100644
+index 973e49d04f4f1..4643a8ed7e326 100644
 --- a/kernel/rcu/srcutree.c
 +++ b/kernel/rcu/srcutree.c
-@@ -648,6 +648,7 @@ static unsigned long srcu_get_delay(struct srcu_struct *ssp)
- 	unsigned long jbase = SRCU_INTERVAL;
- 	struct srcu_usage *sup = ssp->srcu_sup;
+@@ -753,7 +753,7 @@ int __srcu_read_lock(struct srcu_struct *ssp)
  
-+	lockdep_assert_held(&ACCESS_PRIVATE(ssp->srcu_sup, lock));
- 	if (srcu_gp_is_expedited(ssp))
- 		jbase = 0;
- 	if (rcu_seq_state(READ_ONCE(sup->srcu_gp_seq))) {
-@@ -675,9 +676,13 @@ static unsigned long srcu_get_delay(struct srcu_struct *ssp)
- void cleanup_srcu_struct(struct srcu_struct *ssp)
- {
- 	int cpu;
-+	unsigned long delay;
- 	struct srcu_usage *sup = ssp->srcu_sup;
+ 	this_cpu_inc(scp->srcu_locks.counter);
+ 	smp_mb(); /* B */  /* Avoid leaking the critical section. */
+-	return scp - &ssp->sda->srcu_ctrs[0];
++	return __srcu_ptr_to_ctr(ssp, scp);
+ }
+ EXPORT_SYMBOL_GPL(__srcu_read_lock);
  
--	if (WARN_ON(!srcu_get_delay(ssp)))
-+	spin_lock_irq_rcu_node(ssp->srcu_sup);
-+	delay = srcu_get_delay(ssp);
-+	spin_unlock_irq_rcu_node(ssp->srcu_sup);
-+	if (WARN_ON(!delay))
- 		return; /* Just leak it! */
- 	if (WARN_ON(srcu_readers_active(ssp)))
- 		return; /* Just leak it! */
-@@ -1101,7 +1106,9 @@ static bool try_check_zero(struct srcu_struct *ssp, int idx, int trycount)
- {
- 	unsigned long curdelay;
+@@ -783,7 +783,7 @@ int __srcu_read_lock_nmisafe(struct srcu_struct *ssp)
  
-+	spin_lock_irq_rcu_node(ssp->srcu_sup);
- 	curdelay = !srcu_get_delay(ssp);
-+	spin_unlock_irq_rcu_node(ssp->srcu_sup);
+ 	atomic_long_inc(&scp->srcu_locks);
+ 	smp_mb__after_atomic(); /* B */  /* Avoid leaking the critical section. */
+-	return scpp - &ssp->sda->srcu_ctrs[0];
++	return __srcu_ptr_to_ctr(ssp, scpp);
+ }
+ EXPORT_SYMBOL_GPL(__srcu_read_lock_nmisafe);
  
- 	for (;;) {
- 		if (srcu_readers_active_idx_check(ssp, idx))
-@@ -1854,7 +1861,9 @@ static void process_srcu(struct work_struct *work)
- 	ssp = sup->srcu_ssp;
- 
- 	srcu_advance_state(ssp);
-+	spin_lock_irq_rcu_node(ssp->srcu_sup);
- 	curdelay = srcu_get_delay(ssp);
-+	spin_unlock_irq_rcu_node(ssp->srcu_sup);
- 	if (curdelay) {
- 		WRITE_ONCE(sup->reschedule_count, 0);
- 	} else {
 -- 
 2.40.1
 
