@@ -1,322 +1,138 @@
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.5])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AFEE822B5B5;
-	Thu, 16 Jan 2025 14:08:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.5
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03D4724A7C9
+	for <bpf@vger.kernel.org>; Thu, 16 Jan 2025 14:40:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737036499; cv=none; b=gI+Hr+o+qfqfeq79ZyoKg10j8h13y39ERK9ngh80uKpDKNF12J1o6qjOegHew7V/MQjnBCNAmj0efjdp4mqNswVBUAswhSeSVj3szUQm2CKLajEHhMWhwBAxzRNfxIiI4DuOVikLe6E8hPF2fhK1R6ttOLnNCtrK+3N1zyl1r8A=
+	t=1737038443; cv=none; b=iIlQhqE2rhlLF1Vvu7BgtQ4/iydpHjBHKlD0T5GqPs9pwWvrPd5ULdtLVpyYZ9IELMae46ArBClAOoCA2Z//LQ0gNn1YTNKoEMbFyQirgb2b+8VOEOZPn/+zdniOD6MfsAatRZUR5V03zz882losXx1gJfjkh1DM+LiQzp+dYgE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737036499; c=relaxed/simple;
-	bh=NSZxgEEnYo4Ufbsw5XRzzlXlXyPfYSIDsx2iFz4XNg4=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=QNHg6GfIqD5trod3Bg7Y4+lTQw+0l31DyHOFr9HvYMXS04tv7Ngy4K02CS73sN8BRKoogZPI7zI1L4Ch5WUf81U/gbYN/ksUSwJBIdU8zq6FFuDL2K4Ns51V+S4GsZSJAAtSwawshDeu/qysYYBXWFgm6iXt8KUTUUP2+t0B1mo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=jGtj/hrb; arc=none smtp.client-ip=220.197.31.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+	s=arc-20240116; t=1737038443; c=relaxed/simple;
+	bh=njqXd/uQ+QT9aanmRxZO+r+o7uxJnuiyyh1zBELECRM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=V8JdcHw42ZE/LS1764Cd8QNHAqxAxoQURWrh6VHK4NhAfcNmVJ7GTdAswvFB/NDYl6FTHRelZsKA/f+5QibxaVy/m2Q+Bl4pjkQi6hsbNihBOUy61uDhcKH4lTJCfBxb8dktIi2luvwlBJaN2jK9q2WP8srGO767RId6AfSQRak=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=h9wdClW8; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="jGtj/hrb"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:Subject:Date:Message-ID:MIME-Version; bh=lus7n
-	XwCrJp6Yqu6exBguj1FRhZPoHxYKR7jSlkD8X0=; b=jGtj/hrbsBWia+OHb5gUV
-	OV0W3Qi+kyhlwEucPdIe4jIGX5dZDmOO1321DcN8XssA05WnxnJ/SPBVeLGG5pZy
-	FxBjjcP2sB97oTib/yTRQOD06AnG7qt4PD1NRG/c3dATX6zk+fZNq8NjguLBBwaz
-	372twt6mIWi3AQtmJwOm6w=
-Received: from localhost.localdomain (unknown [])
-	by gzga-smtp-mtada-g1-2 (Coremail) with SMTP id _____wD3d5IwEolnR5IwGg--.20972S4;
-	Thu, 16 Jan 2025 22:06:08 +0800 (CST)
-From: Jiayuan Chen <mrpre@163.com>
-To: bpf@vger.kernel.org,
-	jakub@cloudflare.com,
-	john.fastabend@gmail.com
-Cc: netdev@vger.kernel.org,
-	martin.lau@linux.dev,
-	ast@kernel.org,
-	edumazet@google.com,
-	davem@davemloft.net,
-	dsahern@kernel.org,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	linux-kernel@vger.kernel.org,
-	song@kernel.org,
-	andrii@kernel.org,
-	mhal@rbox.co,
-	yonghong.song@linux.dev,
-	daniel@iogearbox.net,
-	xiyou.wangcong@gmail.com,
-	horms@kernel.org,
-	corbet@lwn.net,
-	eddyz87@gmail.com,
-	cong.wang@bytedance.com,
-	shuah@kernel.org,
-	mykolal@fb.com,
-	jolsa@kernel.org,
-	haoluo@google.com,
-	sdf@fomichev.me,
-	kpsingh@kernel.org,
-	linux-doc@vger.kernel.org,
-	Jiayuan Chen <mrpre@163.com>
-Subject: [PATCH bpf v7 2/5] bpf: fix wrong copied_seq calculation
-Date: Thu, 16 Jan 2025 22:05:28 +0800
-Message-ID: <20250116140531.108636-3-mrpre@163.com>
-X-Mailer: git-send-email 2.43.5
-In-Reply-To: <20250116140531.108636-1-mrpre@163.com>
-References: <20250116140531.108636-1-mrpre@163.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="h9wdClW8"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1737038441;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Cb/9KjaC//7ekSA5D4ZTqkLvXMQfEqyfvg4jgXEsaAk=;
+	b=h9wdClW8mTvZly8svVEK18uKCZhykPeO8p5nohdh4pvh/JwT2qiqK1YsHbgQo7uo5Ajpr0
+	hhGGuwLfDfs6w/h7o/sSva7TJwve8SWoDcrzpNvxTTZ9Kp2aidUU2+424PmnY/6Ru2TlPB
+	e74UViLnpV8Zck5kq/IpRvjj3tlWKF4=
+Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-341-G7yyzW9yO2WCYMiQJsup1g-1; Thu,
+ 16 Jan 2025 09:40:37 -0500
+X-MC-Unique: G7yyzW9yO2WCYMiQJsup1g-1
+X-Mimecast-MFC-AGG-ID: G7yyzW9yO2WCYMiQJsup1g
+Received: from mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.40])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 3DCF419560AA;
+	Thu, 16 Jan 2025 14:40:33 +0000 (UTC)
+Received: from dhcp-27-174.brq.redhat.com (unknown [10.45.224.118])
+	by mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with SMTP id 55A0619560BF;
+	Thu, 16 Jan 2025 14:40:23 +0000 (UTC)
+Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
+	oleg@redhat.com; Thu, 16 Jan 2025 15:40:08 +0100 (CET)
+Date: Thu, 16 Jan 2025 15:39:57 +0100
+From: Oleg Nesterov <oleg@redhat.com>
+To: Eyal Birger <eyal.birger@gmail.com>
+Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+	Jiri Olsa <olsajiri@gmail.com>, Aleksa Sarai <cyphar@cyphar.com>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	linux-kernel <linux-kernel@vger.kernel.org>,
+	linux-trace-kernel <linux-trace-kernel@vger.kernel.org>,
+	BPF-dev-list <bpf@vger.kernel.org>,
+	Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Borislav Petkov <bp@alien8.de>, X86 ML <x86@kernel.org>,
+	Linux API <linux-api@vger.kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+	"rostedt@goodmis.org" <rostedt@goodmis.org>, rafi@rbk.io,
+	Shmulik Ladkani <shmulik.ladkani@gmail.com>
+Subject: Re: Crash when attaching uretprobes to processes running in Docker
+Message-ID: <20250116143956.GD21801@redhat.com>
+References: <20250114143313.GA29305@redhat.com>
+ <Z4Z7OkrtXBauaLcm@krava>
+ <20250114172519.GB29305@redhat.com>
+ <Z4eBs0-kJ3iVZjXL@krava>
+ <20250115150607.GA11980@redhat.com>
+ <CAADnVQJjroiR0SRp69f1NbomEH-riw53e_-TioqT4aEt3GSKGg@mail.gmail.com>
+ <20250115184011.GA21801@redhat.com>
+ <CAHsH6Gu1kXZ=m3eoTeZcZ9n=n2scxw7z074PnY5oTsXfTqZ=vQ@mail.gmail.com>
+ <20250115190304.GB21801@redhat.com>
+ <CAHsH6Gtd5kYPife3hK+uKafjBMx=-23UzvQgnOnqNDzSZgHyqw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wD3d5IwEolnR5IwGg--.20972S4
-X-Coremail-Antispam: 1Uf129KBjvJXoWxKryrKFWrGFyUKw4rurWxZwb_yoWfGF18pF
-	1kA3yrCF17GFy7uwn3AF97Gr1agw4rKFW7Cr18u3y3Zrs7Kr1fXFyrKF1ayFW5Kr45Cr13
-	Jr4UGwsxCwnrAa7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0pE-eOgUUUUU=
-X-CM-SenderInfo: xpus2vi6rwjhhfrp/1tbiDwPWp2eJEGskogAAsu
+In-Reply-To: <CAHsH6Gtd5kYPife3hK+uKafjBMx=-23UzvQgnOnqNDzSZgHyqw@mail.gmail.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.40
 
-'sk->copied_seq' was updated in the tcp_eat_skb() function when the
-action of a BPF program was SK_REDIRECT. For other actions, like SK_PASS,
-the update logic for 'sk->copied_seq' was moved to
-tcp_bpf_recvmsg_parser() to ensure the accuracy of the 'fionread' feature.
+On 01/15, Eyal Birger wrote:
+>
+> On Wed, Jan 15, 2025 at 11:03 AM Oleg Nesterov <oleg@redhat.com> wrote:
+> >
+> > On 01/15, Eyal Birger wrote:
+> > >
+> > > --- a/kernel/seccomp.c
+> > > +++ b/kernel/seccomp.c
+> > > @@ -1359,6 +1359,9 @@ int __secure_computing(const struct seccomp_data *sd)
+> > >         this_syscall = sd ? sd->nr :
+> > >                 syscall_get_nr(current, current_pt_regs());
+> > >
+> > > +       if (this_syscall == __NR_uretprobe)
+> > > +               return 0;
+> > > +
+> >
+> > Yes, this is what I meant. But we need the new arch-dependent helper.
+>
+> Do you mean because __NR_uretprobe is not defined for other architectures?
 
-It works for a single stream_verdict scenario, as it also modified
-'sk_data_ready->sk_psock_verdict_data_ready->tcp_read_skb'
-to remove updating 'sk->copied_seq'.
+Yes, and see below,
 
-However, for programs where both stream_parser and stream_verdict are
-active(strparser purpose), tcp_read_sock() was used instead of
-tcp_read_skb() (sk_data_ready->strp_data_ready->tcp_read_sock)
-tcp_read_sock() now still update 'sk->copied_seq', leading to duplicated
-updates.
+> Is there an existing helper? I wasn't able to find one...
 
-In summary, for strparser + SK_PASS, copied_seq is redundantly calculated
-in both tcp_read_sock() and tcp_bpf_recvmsg_parser().
+No,
 
-The issue causes incorrect copied_seq calculations, which prevent
-correct data reads from the recv() interface in user-land.
+> If not, would it just make sense to just wrap this check in
+> #ifdef __NR_uretprobe ?
 
-We do not want to add new proto_ops to implement a new version of
-tcp_read_sock, as this would introduce code complexity [1].
+Given that we need a simple fix for -stable, I won't argue.
+Up to seccomp maintainers.
 
-We add new callback for strparser for customized read operation, also as
-a wrapper function it provides abstraction use psock.
+But please note that this_syscall == __NR_uretprobe can be false
+positive if is_compat_task().
 
-[1]: https://lore.kernel.org/bpf/20241218053408.437295-1-mrpre@163.com
-Fixes: e5c6de5fa025 ("bpf, sockmap: Incorrectly handling copied_seq")
-Suggested-by: Jakub Sitnicki <jakub@cloudflare.com>
-Signed-off-by: Jiayuan Chen <mrpre@163.com>
----
- include/linux/skmsg.h |  4 ++++
- include/net/tcp.h     |  3 +++
- net/core/skmsg.c      | 23 +++++++++++++++++++++
- net/ipv4/tcp.c        | 29 +++++++++++++++++++++-----
- net/ipv4/tcp_bpf.c    | 47 +++++++++++++++++++++++++++++++++++++++++++
- 5 files changed, 101 insertions(+), 5 deletions(-)
+__NR_uretprobe == __NR_ia32_rt_tgsigqueueinfo, so I guess we need
 
-diff --git a/include/linux/skmsg.h b/include/linux/skmsg.h
-index 2cbe0c22a32f..c9343eeac8b3 100644
---- a/include/linux/skmsg.h
-+++ b/include/linux/skmsg.h
-@@ -91,6 +91,10 @@ struct sk_psock {
- 	struct sk_psock_progs		progs;
- #if IS_ENABLED(CONFIG_BPF_STREAM_PARSER)
- 	struct strparser		strp;
-+	int (*read_sock)(struct sock *sk, read_descriptor_t *desc,
-+			 sk_read_actor_t recv_actor);
-+	u32				copied_seq;
-+	u32				ingress_bytes;
- #endif
- 	struct sk_buff_head		ingress_skb;
- 	struct list_head		ingress_msg;
-diff --git a/include/net/tcp.h b/include/net/tcp.h
-index e9b37b76e894..88e55e62023c 100644
---- a/include/net/tcp.h
-+++ b/include/net/tcp.h
-@@ -729,6 +729,9 @@ void tcp_get_info(struct sock *, struct tcp_info *);
- /* Read 'sendfile()'-style from a TCP socket */
- int tcp_read_sock(struct sock *sk, read_descriptor_t *desc,
- 		  sk_read_actor_t recv_actor);
-+int tcp_read_sock_noack(struct sock *sk, read_descriptor_t *desc,
-+			sk_read_actor_t recv_actor, bool noack,
-+			u32 *copied_seq);
- int tcp_read_skb(struct sock *sk, skb_read_actor_t recv_actor);
- struct sk_buff *tcp_recv_skb(struct sock *sk, u32 seq, u32 *off);
- void tcp_read_done(struct sock *sk, size_t len);
-diff --git a/net/core/skmsg.c b/net/core/skmsg.c
-index 61f3f3d4e528..6695659d3447 100644
---- a/net/core/skmsg.c
-+++ b/net/core/skmsg.c
-@@ -549,6 +549,9 @@ static int sk_psock_skb_ingress_enqueue(struct sk_buff *skb,
- 			return num_sge;
- 	}
- 
-+#if IS_ENABLED(CONFIG_BPF_STREAM_PARSER)
-+	psock->ingress_bytes += len;
-+#endif
- 	copied = len;
- 	msg->sg.start = 0;
- 	msg->sg.size = copied;
-@@ -1092,6 +1095,25 @@ static int sk_psock_strp_read_done(struct strparser *strp, int err)
- 	return err;
- }
- 
-+static int sk_psock_strp_read_sock(struct strparser *strp,
-+				   read_descriptor_t *desc,
-+				   sk_read_actor_t recv_actor)
-+{
-+	struct sock *sk = strp->sk;
-+	struct socket *sock = sk->sk_socket;
-+	struct sk_psock *psock;
-+	int rv = 0;
-+
-+	rcu_read_lock();
-+	psock = sk_psock(sk);
-+	if (likely(psock && psock->read_sock))
-+		rv = psock->read_sock(sk, desc, recv_actor);
-+	else if (sock && sock->ops && sock->ops->read_sock)
-+		rv = sock->ops->read_sock(sk, desc, recv_actor);
-+	rcu_read_unlock();
-+	return rv;
-+}
-+
- static int sk_psock_strp_parse(struct strparser *strp, struct sk_buff *skb)
- {
- 	struct sk_psock *psock = container_of(strp, struct sk_psock, strp);
-@@ -1136,6 +1158,7 @@ int sk_psock_init_strp(struct sock *sk, struct sk_psock *psock)
- 
- 	static const struct strp_callbacks cb = {
- 		.rcv_msg	= sk_psock_strp_read,
-+		.read_sock	= sk_psock_strp_read_sock,
- 		.read_sock_done	= sk_psock_strp_read_done,
- 		.parse_msg	= sk_psock_strp_parse,
- 	};
-diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
-index 0d704bda6c41..285678d8ce07 100644
---- a/net/ipv4/tcp.c
-+++ b/net/ipv4/tcp.c
-@@ -1565,12 +1565,13 @@ EXPORT_SYMBOL(tcp_recv_skb);
-  *	  or for 'peeking' the socket using this routine
-  *	  (although both would be easy to implement).
-  */
--int tcp_read_sock(struct sock *sk, read_descriptor_t *desc,
--		  sk_read_actor_t recv_actor)
-+static int __tcp_read_sock(struct sock *sk, read_descriptor_t *desc,
-+			   sk_read_actor_t recv_actor, bool noack,
-+			   u32 *copied_seq)
- {
- 	struct sk_buff *skb;
- 	struct tcp_sock *tp = tcp_sk(sk);
--	u32 seq = tp->copied_seq;
-+	u32 seq = *copied_seq;
- 	u32 offset;
- 	int copied = 0;
- 
-@@ -1624,9 +1625,12 @@ int tcp_read_sock(struct sock *sk, read_descriptor_t *desc,
- 		tcp_eat_recv_skb(sk, skb);
- 		if (!desc->count)
- 			break;
--		WRITE_ONCE(tp->copied_seq, seq);
-+		WRITE_ONCE(*copied_seq, seq);
- 	}
--	WRITE_ONCE(tp->copied_seq, seq);
-+	WRITE_ONCE(*copied_seq, seq);
-+
-+	if (noack)
-+		goto out;
- 
- 	tcp_rcv_space_adjust(sk);
- 
-@@ -1635,10 +1639,25 @@ int tcp_read_sock(struct sock *sk, read_descriptor_t *desc,
- 		tcp_recv_skb(sk, seq, &offset);
- 		tcp_cleanup_rbuf(sk, copied);
- 	}
-+out:
- 	return copied;
- }
-+
-+int tcp_read_sock(struct sock *sk, read_descriptor_t *desc,
-+		  sk_read_actor_t recv_actor)
-+{
-+	return __tcp_read_sock(sk, desc, recv_actor, false,
-+			       &tcp_sk(sk)->copied_seq);
-+}
- EXPORT_SYMBOL(tcp_read_sock);
- 
-+int tcp_read_sock_noack(struct sock *sk, read_descriptor_t *desc,
-+			sk_read_actor_t recv_actor, bool noack,
-+			u32 *copied_seq)
-+{
-+	return __tcp_read_sock(sk, desc, recv_actor, noack, copied_seq);
-+}
-+
- int tcp_read_skb(struct sock *sk, skb_read_actor_t recv_actor)
- {
- 	struct sk_buff *skb;
-diff --git a/net/ipv4/tcp_bpf.c b/net/ipv4/tcp_bpf.c
-index 47f65b1b70ca..6dcde3506a9b 100644
---- a/net/ipv4/tcp_bpf.c
-+++ b/net/ipv4/tcp_bpf.c
-@@ -646,6 +646,47 @@ static int tcp_bpf_assert_proto_ops(struct proto *ops)
- 	       ops->sendmsg  == tcp_sendmsg ? 0 : -ENOTSUPP;
- }
- 
-+#if IS_ENABLED(CONFIG_BPF_STREAM_PARSER)
-+static int tcp_bpf_strp_read_sock(struct sock *sk, read_descriptor_t *desc,
-+				  sk_read_actor_t recv_actor)
-+{
-+	struct sk_psock *psock;
-+	struct tcp_sock *tp;
-+	int copied = 0;
-+
-+	tp = tcp_sk(sk);
-+	rcu_read_lock();
-+	psock = sk_psock(sk);
-+	if (WARN_ON(!psock)) {
-+		desc->error = -EINVAL;
-+		goto out;
-+	}
-+
-+	psock->ingress_bytes = 0;
-+	/* We could easily add copied_seq and noack into desc then call
-+	 * ops->read_sock without calling symbol directly. But unfortunately
-+	 * most descriptors used by other modules are not inited with zero.
-+	 * Also it not work by replacing ops->read_sock without introducing
-+	 * new ops as ops itself is located in rodata segment.
-+	 */
-+	copied = tcp_read_sock_noack(sk, desc, recv_actor, true,
-+				     &psock->copied_seq);
-+	if (copied < 0)
-+		goto out;
-+	/* recv_actor may redirect skb to another socket(SK_REDIRECT) or
-+	 * just put skb into ingress queue of current socket(SK_PASS).
-+	 * For SK_REDIRECT, we need 'ack' the frame immediately but for
-+	 * SK_PASS, the 'ack' was delay to tcp_bpf_recvmsg_parser()
-+	 */
-+	tp->copied_seq = psock->copied_seq - psock->ingress_bytes;
-+	tcp_rcv_space_adjust(sk);
-+	__tcp_cleanup_rbuf(sk, copied - psock->ingress_bytes);
-+out:
-+	rcu_read_unlock();
-+	return copied;
-+}
-+#endif /* CONFIG_BPF_STREAM_PARSER */
-+
- int tcp_bpf_update_proto(struct sock *sk, struct sk_psock *psock, bool restore)
- {
- 	int family = sk->sk_family == AF_INET6 ? TCP_BPF_IPV6 : TCP_BPF_IPV4;
-@@ -681,6 +722,12 @@ int tcp_bpf_update_proto(struct sock *sk, struct sk_psock *psock, bool restore)
- 
- 	/* Pairs with lockless read in sk_clone_lock() */
- 	sock_replace_proto(sk, &tcp_bpf_prots[family][config]);
-+#if IS_ENABLED(CONFIG_BPF_STREAM_PARSER)
-+	if (psock->progs.stream_parser && psock->progs.stream_verdict) {
-+		psock->copied_seq = tcp_sk(sk)->copied_seq;
-+		psock->read_sock = tcp_bpf_strp_read_sock;
-+	}
-+#endif
- 	return 0;
- }
- EXPORT_SYMBOL_GPL(tcp_bpf_update_proto);
--- 
-2.43.5
+	#ifdef CONFIG_X86_64
+		if (this_syscall == __NR_uretprobe && !in_ia32_syscall())
+			return 0;
+	#endif
+
+I don't think we need to worry about the X86_X32 tasks...
+
+Oleg.
 
