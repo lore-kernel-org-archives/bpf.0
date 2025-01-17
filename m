@@ -1,176 +1,118 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38C121FAC4A
-	for <bpf@vger.kernel.org>; Fri, 17 Jan 2025 09:54:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0B3A1FC118
+	for <bpf@vger.kernel.org>; Fri, 17 Jan 2025 10:06:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737107664; cv=none; b=u0zApcS0Bwjlz+mKOpQ1S58ydowfGWXzs/zybeBaENSugMIiJBquzdkb/7sm4jUBFS3QGYrCGpwTNcImnwV3YnDZPrxzBueu6TEyKAecENa6YDlqHV4R/pCCaePwmF24Wt8fLydCyDdKwUT3vpZnTSyeIf6CfMeaklKukoxtLxM=
+	t=1737108376; cv=none; b=ecy5b4tUhLiI58yEHygvFLOPLcVD/cj9ftFb0fT+H0YgiAroDZ0c59X8saDnJsP4GQyNFOpR1HqJq8zhB7NAqnMTkgZ6RI/maTwExrOBFdPOqP3Kb0flH1lPQPiKVPQD6SoJjTKg4xZjDnO6QvFb50kV+cNmZxLdOhg660wEYq8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737107664; c=relaxed/simple;
-	bh=dfiy2R/0rK2WNQBFJ4B8wz0dhd7gEAJUhvpkWIIsvfg=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=WqAMeCQLRbMS3TAjlkZ6XuJ324yVa6IRg3Pxikh4heyrowRTxgAu5nAvgFPkxlrhWlG5KaKlxmpoEpR6EREQjgcbx1BbQrONPAjFZHAKUENOtTRnrSF//qJ8wotZwe/8JMoG9xeZ88pUR4ZQ9oD5kM7uk6xVSECmkY7lWjHI8nw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=MEM462nk; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="MEM462nk"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1737107661;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=L9Oe7BkLz3ZQnhnrUC9eWHjE3nyj6wgCJoWV2O/5t40=;
-	b=MEM462nkotuKIWlejchotO6NXtiSxbY2f+TAC6c5+Z9PfH5Lb1HdPpuw4rFsZ7yI+E4z+t
-	ckw2Y2Skz/2QRCw9jeT3my9NnYPKwtznNUmjCxYEl8hXte6fxyaftJS1xGmxyZn8DwdnPI
-	xsxXCOp+hABm1DeoEeZxMhiyP7y1CyQ=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-642-GLZ3RTjzMCm-umOTxyqM-Q-1; Fri, 17 Jan 2025 04:54:16 -0500
-X-MC-Unique: GLZ3RTjzMCm-umOTxyqM-Q-1
-X-Mimecast-MFC-AGG-ID: GLZ3RTjzMCm-umOTxyqM-Q
-Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-4361fc2b2d6so9630285e9.3
-        for <bpf@vger.kernel.org>; Fri, 17 Jan 2025 01:54:16 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1737107655; x=1737712455;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=L9Oe7BkLz3ZQnhnrUC9eWHjE3nyj6wgCJoWV2O/5t40=;
-        b=tI8B1i7TaOg4KqhOMib16c+SvRi+6GTknHW7raf7+O3oxfrJSTHwmibQZQN472ith7
-         qTpIgWIXhBGDGLpxzax1v6h6CSpXih68M/PY1kg2lMiowbBvBvE9eeZQK9HbGtn6zfqY
-         ADeamruo/bwnF725dNrEk6LWWVvGBoqdl+RfdjydauzWiHFnOgZ1PBmXHYm9ogaMu+wo
-         IC+NcF2o8PcXCyyNLrYse9tkCZOURJ3VLsVzIyCE/67cXpXqEtA24dD2DkGjF5a9urep
-         QsVku026JJoxKaEe2MXZDrZLF5KYoWxFgYySAjYgrZbZ4r8YbnP2EaxiMrsWIrXbI5f8
-         xCBA==
-X-Forwarded-Encrypted: i=1; AJvYcCUfG8XSRTdblGUs1BD5gX1VEaFKCBQ/RYzuoOoa7ORqOKtlGR9GwRc9/r9Af2nptgS70v4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxS0LzaCUiI2jwXaXBwMDvXYQQn93z0emb85LM3SANrvqNtKahZ
-	rtbRZQBPJFaNjytJqNu3xh907uZIP+v0RhuEXJonsjmLjG37Hr7RK2sJYfbcU0hnLma4yObUZQ0
-	kNMJh8HP/MoWItp8kdr42hAAeXRLFr8kNIQnDotNTd+j77jFKoQ==
-X-Gm-Gg: ASbGnctI1oJk8laOox5a1MUtD2FB2RBmXQvwrX4WcD+SlBIPXytKc6KvNl5d21PCQJb
-	0m3lTkYBKbWBIJCPF/+nRYZEQecSGDojG8icmcAdNq8chEqW3JmgB7LCVBobn0LjeprhoDvQPid
-	pT/7w75eQSqKdzhHg2d1ND6O8rzkMuZprQtPQXFFyLKgO3W/YT7hXVbNCXtf8bSpmhQ66Cw8DUT
-	ZRs0XwfkdniI8+9+4ASY7FDflA8U8qNmEBm5QgDX+S3C/vVJrDu19Pf2FFgDJJdKGmRkiYkUDsc
-	kUvhVjTYYxEL6QL2Ci0ZNWcb/tYek5hw9D3/d9hdfw==
-X-Received: by 2002:a05:600c:450d:b0:436:840b:261c with SMTP id 5b1f17b1804b1-438914340afmr16340035e9.19.1737107655105;
-        Fri, 17 Jan 2025 01:54:15 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IFuw6rUkDZiEIMePly7ic4RGfvY46wjcWihk2kMpcZz3D30VqRFOYeHlJ+bekZM5WnBbSAhfQ==
-X-Received: by 2002:a05:600c:450d:b0:436:840b:261c with SMTP id 5b1f17b1804b1-438914340afmr16338925e9.19.1737107654599;
-        Fri, 17 Jan 2025 01:54:14 -0800 (PST)
-Received: from vschneid-thinkpadt14sgen2i.remote.csb (213-44-141-166.abo.bbox.fr. [213.44.141.166])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43890420412sm28393455e9.18.2025.01.17.01.54.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Jan 2025 01:54:14 -0800 (PST)
-From: Valentin Schneider <vschneid@redhat.com>
-To: Sean Christopherson <seanjc@google.com>
-Cc: linux-kernel@vger.kernel.org, x86@kernel.org,
- virtualization@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
- loongarch@lists.linux.dev, linux-riscv@lists.infradead.org,
- linux-perf-users@vger.kernel.org, xen-devel@lists.xenproject.org,
- kvm@vger.kernel.org, linux-arch@vger.kernel.org, rcu@vger.kernel.org,
- linux-hardening@vger.kernel.org, linux-mm@kvack.org,
- linux-kselftest@vger.kernel.org, bpf@vger.kernel.org,
- bcm-kernel-feedback-list@broadcom.com, Peter Zijlstra
- <peterz@infradead.org>, Nicolas Saenz Julienne <nsaenzju@redhat.com>,
- Juergen Gross <jgross@suse.com>, Ajay Kaher <ajay.kaher@broadcom.com>,
- Alexey Makhalov <alexey.amakhalov@broadcom.com>, Russell King
- <linux@armlinux.org.uk>, Catalin Marinas <catalin.marinas@arm.com>, Will
- Deacon <will@kernel.org>, Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui
- <kernel@xen0n.name>, Paul Walmsley <paul.walmsley@sifive.com>, Palmer
- Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, Thomas
- Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav
- Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, "H.
- Peter Anvin" <hpa@zytor.com>, Arnaldo Carvalho de Melo <acme@kernel.org>,
- Namhyung Kim <namhyung@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
- Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa
- <jolsa@kernel.org>, Ian Rogers <irogers@google.com>, Adrian Hunter
- <adrian.hunter@intel.com>, Kan Liang <kan.liang@linux.intel.com>, Boris
- Ostrovsky <boris.ostrovsky@oracle.com>, Josh Poimboeuf
- <jpoimboe@kernel.org>, Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
- Paolo Bonzini <pbonzini@redhat.com>, Andy Lutomirski <luto@kernel.org>,
- Arnd Bergmann <arnd@arndb.de>, Frederic Weisbecker <frederic@kernel.org>,
- "Paul E. McKenney" <paulmck@kernel.org>, Jason Baron <jbaron@akamai.com>,
- Steven Rostedt <rostedt@goodmis.org>, Ard Biesheuvel <ardb@kernel.org>,
- Neeraj Upadhyay <neeraj.upadhyay@kernel.org>, Joel Fernandes
- <joel@joelfernandes.org>, Josh Triplett <josh@joshtriplett.org>, Boqun
- Feng <boqun.feng@gmail.com>, Uladzislau Rezki <urezki@gmail.com>, Mathieu
- Desnoyers <mathieu.desnoyers@efficios.com>, Lai Jiangshan
- <jiangshanlai@gmail.com>, Zqiang <qiang.zhang1211@gmail.com>, Juri Lelli
- <juri.lelli@redhat.com>, Clark Williams <williams@redhat.com>, Yair
- Podemsky <ypodemsk@redhat.com>, Tomas Glozar <tglozar@redhat.com>, Vincent
- Guittot <vincent.guittot@linaro.org>, Dietmar Eggemann
- <dietmar.eggemann@arm.com>, Ben Segall <bsegall@google.com>, Mel Gorman
- <mgorman@suse.de>, Kees Cook <kees@kernel.org>, Andrew Morton
- <akpm@linux-foundation.org>, Christoph Hellwig <hch@infradead.org>, Shuah
- Khan <shuah@kernel.org>, Sami Tolvanen <samitolvanen@google.com>, Miguel
- Ojeda <ojeda@kernel.org>, Alice Ryhl <aliceryhl@google.com>, "Mike
- Rapoport (Microsoft)" <rppt@kernel.org>, Samuel Holland
- <samuel.holland@sifive.com>, Rong Xu <xur@google.com>, Geert Uytterhoeven
- <geert@linux-m68k.org>, Yosry Ahmed <yosryahmed@google.com>, "Kirill A.
- Shutemov" <kirill.shutemov@linux.intel.com>, "Masami Hiramatsu (Google)"
- <mhiramat@kernel.org>, Jinghao Jia <jinghao7@illinois.edu>, Luis
- Chamberlain <mcgrof@kernel.org>, Randy Dunlap <rdunlap@infradead.org>,
- Tiezhu Yang <yangtiezhu@loongson.cn>
-Subject: Re: [PATCH v4 25/30] context_tracking,x86: Defer kernel text
- patching IPIs
-In-Reply-To: <Z4bbwE8yfg349gBx@google.com>
-References: <20250114175143.81438-1-vschneid@redhat.com>
- <20250114175143.81438-26-vschneid@redhat.com>
- <Z4bTlZkqihaAyGb4@google.com> <Z4bbwE8yfg349gBx@google.com>
-Date: Fri, 17 Jan 2025 10:54:11 +0100
-Message-ID: <xhsmh8qr9hikc.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
+	s=arc-20240116; t=1737108376; c=relaxed/simple;
+	bh=6o10SZRDc5p07gjMhZv7/S2ZOo9knqa4RQ2yI/MOSN0=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=qmhnFuIZkMgWaEVmTIWWMfs1zzRC3/gusRRpr70274LjdnTja0XKQTYDCr9ugTbK2kqwL7TT5mIccJ4FNSpszxZAs8Ovw8+lVGbMNBpZx7SN4uRNZwnHBE+l5m0eCtrLmFkPESAMgZoq8F+b2rmQTS2ld15abTvb2b4U+3KRJsQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.216])
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4YZFjm73KDz4f3lVX
+	for <bpf@vger.kernel.org>; Fri, 17 Jan 2025 18:05:48 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.128])
+	by mail.maildlp.com (Postfix) with ESMTP id ACD191A1A2A
+	for <bpf@vger.kernel.org>; Fri, 17 Jan 2025 18:06:10 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.175.124.27])
+	by APP4 (Coremail) with SMTP id gCh0CgBHrGCNK4pnQRDPBA--.48008S5;
+	Fri, 17 Jan 2025 18:06:10 +0800 (CST)
+From: Hou Tao <houtao@huaweicloud.com>
+To: bpf@vger.kernel.org
+Cc: Martin KaFai Lau <martin.lau@linux.dev>,
+	Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Hao Luo <haoluo@google.com>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Jiri Olsa <jolsa@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+	houtao1@huawei.com,
+	xukuohai@huawei.com
+Subject: [PATCH bpf-next v3 1/5] bpf: Free special fields after unlock in htab_lru_map_delete_node()
+Date: Fri, 17 Jan 2025 18:18:12 +0800
+Message-Id: <20250117101816.2101857-2-houtao@huaweicloud.com>
+X-Mailer: git-send-email 2.29.2
+In-Reply-To: <20250117101816.2101857-1-houtao@huaweicloud.com>
+References: <20250117101816.2101857-1-houtao@huaweicloud.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:gCh0CgBHrGCNK4pnQRDPBA--.48008S5
+X-Coremail-Antispam: 1UD129KBjvJXoW7uF4UXw17Jr45WF4fJr4xJFb_yoW8XrWkpa
+	n3Gay3Gw18Zr1q9a95tF4vgry5Cw4fGw47Kry8GFyFy3W3XasFgw4aqryftFyaqrWkArna
+	vrZYqry5tryUCrDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUPFb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUGw
+	A2048vs2IY020Ec7CjxVAFwI0_Gr0_Xr1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
+	w2x7M28EF7xvwVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
+	W8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v2
+	6rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMc
+	Ij6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_
+	Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AFwI
+	0_Jw0_GFyl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG
+	67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MI
+	IYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E
+	14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJV
+	W8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxU2HGQ
+	DUUUU
+X-CM-SenderInfo: xkrx3t3r6k3tpzhluzxrxghudrp/
 
-On 14/01/25 13:48, Sean Christopherson wrote:
-> On Tue, Jan 14, 2025, Sean Christopherson wrote:
->> On Tue, Jan 14, 2025, Valentin Schneider wrote:
->> > +/**
->> > + * is_kernel_noinstr_text - checks if the pointer address is located in the
->> > + *                    .noinstr section
->> > + *
->> > + * @addr: address to check
->> > + *
->> > + * Returns: true if the address is located in .noinstr, false otherwise.
->> > + */
->> > +static inline bool is_kernel_noinstr_text(unsigned long addr)
->> > +{
->> > +	return addr >= (unsigned long)__noinstr_text_start &&
->> > +	       addr < (unsigned long)__noinstr_text_end;
->> > +}
->>
->> This doesn't do the right thing for modules, which matters because KVM can be
->> built as a module on x86, and because context tracking understands transitions
->> to GUEST mode, i.e. CPUs that are running in a KVM guest will be treated as not
->> being in the kernel, and thus will have IPIs deferred.  If KVM uses a static key
->> or branch between guest_state_enter_irqoff() and guest_state_exit_irqoff(), the
->> patching code won't wait for CPUs to exit guest mode, i.e. KVM could theoretically
->> use the wrong static path.
->>
->> I don't expect this to ever cause problems in practice, because patching code in
->> KVM's VM-Enter/VM-Exit path that has *functional* implications, while CPUs are
->> actively running guest code, would be all kinds of crazy.  But I do think we
->> should plug the hole.
->>
->> If this issue is unique to KVM, i.e. is not a generic problem for all modules (I
->> assume module code generally isn't allowed in the entry path, even via NMI?), one
->> idea would be to let KVM register its noinstr section for text poking.
->
-> Another idea would be to track which keys/branches are tagged noinstr, i.e. generate
-> the information at compile time instead of doing lookups at runtime.  The biggest
-> downside I can think of is that it would require plumbing in the information to
-> text_poke_bp_batch().
+From: Hou Tao <houtao1@huawei.com>
 
-IIUC that's what I went for in v3:
+When bpf_timer is used in LRU hash map, calling check_and_free_fields()
+in htab_lru_map_delete_node() will invoke bpf_timer_cancel_and_free() to
+free the bpf_timer. If the timer is running on other CPUs,
+hrtimer_cancel() will invoke hrtimer_cancel_wait_running() to spin on
+current CPU to wait for the completion of the hrtimer callback.
 
-https://lore.kernel.org/lkml/20241119153502.41361-11-vschneid@redhat.com
+Considering that the deletion has already acquired a raw-spin-lock
+(bucket lock). To reduce the time holding the bucket lock, move the
+invocation of check_and_free_fields() out of bucket lock. However,
+because htab_lru_map_delete_node() is invoked with LRU raw spin lock
+being held, the freeing of special fields still happens in a locked
+scope.
 
-but, modules notwithstanding, simply checking if the patched instruction is
-in .noinstr was a lot neater.
+Signed-off-by: Hou Tao <houtao1@huawei.com>
+---
+ kernel/bpf/hashtab.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
+index 40095dda891d3..963cccb01daae 100644
+--- a/kernel/bpf/hashtab.c
++++ b/kernel/bpf/hashtab.c
+@@ -824,13 +824,14 @@ static bool htab_lru_map_delete_node(void *arg, struct bpf_lru_node *node)
+ 	hlist_nulls_for_each_entry_rcu(l, n, head, hash_node)
+ 		if (l == tgt_l) {
+ 			hlist_nulls_del_rcu(&l->hash_node);
+-			check_and_free_fields(htab, l);
+ 			bpf_map_dec_elem_count(&htab->map);
+ 			break;
+ 		}
+ 
+ 	htab_unlock_bucket(htab, b, tgt_l->hash, flags);
+ 
++	if (l == tgt_l)
++		check_and_free_fields(htab, l);
+ 	return l == tgt_l;
+ }
+ 
+-- 
+2.29.2
 
