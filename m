@@ -1,161 +1,169 @@
-Received: from mail-oo1-f44.google.com (mail-oo1-f44.google.com [209.85.161.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A86A6200100;
-	Fri, 17 Jan 2025 13:36:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FE071FFC65
+	for <bpf@vger.kernel.org>; Fri, 17 Jan 2025 13:44:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737121008; cv=none; b=OpZofyoJXxuG1FDa2B8TLpCjzQ4LvyBo8l68TH0aEdk77rszjTT5uWgdzCNpaTqAzsqElpW786oqphf+cUySF6GkYTuJvoJlhZrK/k8mTRorfuB2LxBKaOkTeVivGk1FUwOqY89XFCdcITY68wbi0wYiBXwsEIFPX7Jez8Y9elw=
+	t=1737121501; cv=none; b=r/r6d+5AEQXMEnJtR4JhiEkFLftTdqtkt8XEmKBH29xB7PsJVuUTZHKIHdnSOnJ0aGzDjGKE6Kh0QoBDUhh1mpRuAzhZSq0GTqSTCF3dgqWU2tMi2ztk16JNXzMhqGsnLtsy9znATXTS6iBy6vgX6e/s2IXBuT7w+BFUJQVVXHU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737121008; c=relaxed/simple;
-	bh=ykoOYP5A9GqLIO8ujgXlxd/k2bw6vl/rJwrKvkpumwo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=TnAqrEWBLnDbWnS1w4ozJHkkkJX9gBR4qivHqdiCdCdpMnF3pR7AbDC9c/Dh3+JBKKeqtiw98ufkEGKIlI9UCP7kqF7k+PdBOvNEXZXF76X0X4vAmCdlmdNABiTc+cR+1eUechYYYRbv4ykjyPlilSqSX+S38HQYUR5lyWzroHE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SxINPgMm; arc=none smtp.client-ip=209.85.161.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1737121501; c=relaxed/simple;
+	bh=3uGThAIZZrxCJ1Zag/yc29l3qlAKBV2/uT4Bw7pXLWs=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=AHZ4VqeoRmPdhYAC8UL475I81bUNRVHVjhoYbGQdE59w9Ttco2QRZLz8VZRz9c7sCCq8DPk0pxnCmhbfEZEFPaxhbhcLC93pBMGiJwoutpJG/7oTogYqCwSqRUseeYzNOEXsIa/3Qx8SSS4k/PAucBF+h28ZFxvwjYZa76CchRE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=MZHV+9J1; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SxINPgMm"
-Received: by mail-oo1-f44.google.com with SMTP id 006d021491bc7-5f321876499so1141403eaf.1;
-        Fri, 17 Jan 2025 05:36:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1737121006; x=1737725806; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=iT6JakgGMnf6JWUAg95lo0Hdan+g6MjCBqiydljWY8k=;
-        b=SxINPgMmG7YLCk24d+zUggLplNQry9HoTOwKAbMbWrbQakYgGtnR7uSik0j9NXfqjB
-         4PpXdCHXbbeeVQq+VaNbSCBvKOlic3OG1TvNlgyct+5wwi25Tdk9oWGkvZYTWu7rkMBH
-         RnWTkHdT27B1c9uRKSRtXRyJvc8YP4ORYCyiovF/VnZNW+ISnIkWxlmJJG8fugsj/+8i
-         wW+p6vJsBNQB/7e/hYjRCOOGmXRjcrjlZ+CKlMcfQBTS7sbp6z2gw8PysCQ3i5f6K5zP
-         BGnlwuUxCJuTiHdXdrvQmr2/19nV1YrS8nIO/1Fb7DSfgt6BwB63+eGc3rJeD2YyWgBu
-         Fh3Q==
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="MZHV+9J1"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1737121498;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=HEKKhsO2kOL/qF9SHnIE9a8dcD47/tUh4wLid3vzvOo=;
+	b=MZHV+9J1aUgCppsgpkJpQvMYzSoG8bhifFYQCfj/9s39EQl3oZJe672ABRiEOX8cuePG88
+	3H4b1jduRVI2XTe2rKcWYkNV8UBEftukh2MH9GB4kpf3dz+QS0I7nla6c06YGeayOfRZVY
+	03On0hJE0BKuZFwayCxYqjEIo6cGR24=
+Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
+ [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-563-9cGfgnHQNAmFsq32DG90cQ-1; Fri, 17 Jan 2025 08:44:57 -0500
+X-MC-Unique: 9cGfgnHQNAmFsq32DG90cQ-1
+X-Mimecast-MFC-AGG-ID: 9cGfgnHQNAmFsq32DG90cQ
+Received: by mail-qt1-f199.google.com with SMTP id d75a77b69052e-4675c482d6cso43607461cf.2
+        for <bpf@vger.kernel.org>; Fri, 17 Jan 2025 05:44:57 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1737121006; x=1737725806;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=iT6JakgGMnf6JWUAg95lo0Hdan+g6MjCBqiydljWY8k=;
-        b=RuV7Ojr9pk6KGdHm0aavXEttmH8H/Q9qywJZyHB8IYm0x/udCgqw9kd4Yhv5O8MqyU
-         p9Mh67Dp9IicpWUDXBZ5VDeX2EGw4G7VIYGXloYwhdYygqyqJ6fDb0+yz5sG8xrLeh1s
-         0uVoS1/YWCPpiQYuvpyPuBfpvx6b+gakuvqe91PuA3L0vCV6e6GPFvBxm4lQD1AWwvuW
-         0WH6l9u0vQWvplz0y0zeHhl3vXOtiMhlxMtdE1Uq9ifLcRal1ppC8H+yXxcY6n1MfHSC
-         lVf+t4rMxkz+QL+mpkNAOXc0vlI7jTNsKfsZTxRdGTBBwNg4hT7GvexzMDuB/TF5TTAh
-         A8Rw==
-X-Forwarded-Encrypted: i=1; AJvYcCVnzmOWxpuf/kddiuJ2uv+oQPH2GH5aUTYvs9NoTIwVb73iS7bLTYL1PIdhk4sNqi1tIxyTcIkfroOt@vger.kernel.org, AJvYcCVxaVA6nP7I0AqasCekxYk317OinA2+mLLzZpBMTUs3ryI2z043eE4ux30F1a2rFcPCQ+o=@vger.kernel.org, AJvYcCWdOgmuke28C4AVsOEGY5y6n6IEsMfoloAZH+lvZ5DGLjg6WfhjrDCRqEHvsPuu6R1B9GNfBfm0so0PDmt9@vger.kernel.org, AJvYcCWq+QAc/o4J5Vx1mVJUo9q32Sflwtuhz7XWeoFduZNdjWK4WWtbDPl4I0QzDXp7AP4TedGlRylo@vger.kernel.org, AJvYcCXQM2icEZZHVgl3/4DmzFtowqNHNfZpOe8xbO29IiW8kxEAqi5Qh/aI9f/X0+5jdU55E604yV5nuifi9go6koFgAn7Z@vger.kernel.org
-X-Gm-Message-State: AOJu0YyAatkwXzX1YSjvR6hTy7+PZdFByykqGIkYzt60SJoRFcyWoX7b
-	45T2evYrmb7Tl9vPzM+TPaPqeG2AiNOqKWTWvy8s/r/iPBo68pLc3799+6+yasfPAlEHa8RFedz
-	JZeG8XQ7IdEhYUTSCJa6s/iQQU30=
-X-Gm-Gg: ASbGncvReyTe/rvHytM9qDMJvgjPm7g/GEWha2ZKD9FIEWaYfu/CB0IbLPX4C/xI4m8
-	jTFfCdMM1EI67z7zf+3coLmj5IjnVzRJhZU2DAg==
-X-Google-Smtp-Source: AGHT+IFvad+ZXGCoxHtM0gw/gElj7za0zj2PpUGCXThzkgXaHc8LVmM4fMDPZpqOAat3utTHabdLcbeS11L77l1I0c0=
-X-Received: by 2002:a05:6870:2a47:b0:29f:a6e2:4108 with SMTP id
- 586e51a60fabf-2b1869b0fa6mr6727343fac.2.1737121005718; Fri, 17 Jan 2025
- 05:36:45 -0800 (PST)
+        d=1e100.net; s=20230601; t=1737121496; x=1737726296;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=HEKKhsO2kOL/qF9SHnIE9a8dcD47/tUh4wLid3vzvOo=;
+        b=oFeGIs8ZdWYraxkVSBrUhXmU2txUjhDY2+TyVEi2vYcic48oLPlTFW/B1IjfgNjffc
+         E+W1pcpDijCLAFsUx05g8o8xuNhTUPSSseNmMD266nyCESWWV/Gq0TTXYU9Fav46Q6N5
+         341+tQ5sbTi8k87DwpjvTn7gOCQ/ObUy+Z7+rArCwBeZlYCOBF4Z3kjc99riqKD/Y0Mf
+         zHS66vNEOWs+QIs+Ls69yPJ2yLgsGLc61zl/kW3tkrC3iRz3cd4HgkGo8ej+tynkhrF2
+         NVu6EpKaZR6jz7yeDe0cZp7RTNlN2eJh7un1WrJdr7UeJIvvgOMQQkH37tjE1AULi+id
+         5OdA==
+X-Forwarded-Encrypted: i=1; AJvYcCU56bRCtUNq8y/fHz2Gn97ZVtO1K6wgV5a5bkNlMsLQi54KA98R3d8cIdIuEDdU6fLt/o0=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx/LfuEi+KIxrojle6lyWOMJBqmjCm7owxcCoBgj6kLbX8rTLPT
+	bdKQvBk3st1Xdg0aXNe4vzmX46o/tVUIS00JV+WJr2CflpviK1yn913Tm1ulez1PllqDGuNWeUx
+	DjcoVZC/CL9IlPpoUbjN80UJZyUDIVhF7na8d+mVUZUTTGKkClQ==
+X-Gm-Gg: ASbGncsmN+uiP0RCZyE3+gN9SncniBtnM63fcfLa5Zd1hHW/lzCeHZqaS7POrrHFksk
+	ejohmpzzWy4NbsCL+5urcX1PV2YijFjRG9+rhWtUg7J6Mbjs/UazEh4vh5+KjzNawaX3/hoLBMJ
+	EkwUahOKTtBhxqQmPqlgI8e+aUesr/t6rDGNzEmiRnL5guNjjLahw8ClXs7cN96vMc6SjgjOo32
+	X2zqqsEek5AgPqCLi6XXqdKL74C7n5iSvawUgA1u1cKWroPZ6aeM//JbECzSDB7p7QLojxO+v22
+	xhxFbOfc1v+oZ4NHa4Rb+6u6hQnIgvf1oF48Pf5fgYZn47+mP+9j7xw=
+X-Received: by 2002:a05:622a:1387:b0:467:674d:237f with SMTP id d75a77b69052e-46e12ad5f7bmr40518851cf.11.1737121496626;
+        Fri, 17 Jan 2025 05:44:56 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IHmIl4MCDkHkFsxi8fUyXS99BtrKRZsY+6w06Ii3eQgKuqou3xcsKirOxy10aWGIFujuL9O5w==
+X-Received: by 2002:a05:622a:1387:b0:467:674d:237f with SMTP id d75a77b69052e-46e12ad5f7bmr40518371cf.11.1737121496270;
+        Fri, 17 Jan 2025 05:44:56 -0800 (PST)
+Received: from vschneid-thinkpadt14sgen2i.remote.csb (213-44-141-166.abo.bbox.fr. [213.44.141.166])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-46e1042ef63sm11228641cf.71.2025.01.17.05.44.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Jan 2025 05:44:55 -0800 (PST)
+From: Valentin Schneider <vschneid@redhat.com>
+To: Dave Hansen <dave.hansen@intel.com>, linux-kernel@vger.kernel.org,
+ x86@kernel.org, virtualization@lists.linux.dev,
+ linux-arm-kernel@lists.infradead.org, loongarch@lists.linux.dev,
+ linux-riscv@lists.infradead.org, linux-perf-users@vger.kernel.org,
+ xen-devel@lists.xenproject.org, kvm@vger.kernel.org,
+ linux-arch@vger.kernel.org, rcu@vger.kernel.org,
+ linux-hardening@vger.kernel.org, linux-mm@kvack.org,
+ linux-kselftest@vger.kernel.org, bpf@vger.kernel.org,
+ bcm-kernel-feedback-list@broadcom.com
+Cc: Peter Zijlstra <peterz@infradead.org>, Juergen Gross <jgross@suse.com>,
+ Ajay Kaher <ajay.kaher@broadcom.com>, Alexey Makhalov
+ <alexey.amakhalov@broadcom.com>, Russell King <linux@armlinux.org.uk>,
+ Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
+ Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>, Paul
+ Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>,
+ Albert Ou <aou@eecs.berkeley.edu>, Thomas Gleixner <tglx@linutronix.de>,
+ Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, Dave
+ Hansen <dave.hansen@linux.intel.com>, "H. Peter Anvin" <hpa@zytor.com>,
+ Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim
+ <namhyung@kernel.org>, Mark Rutland <mark.rutland@arm.com>, Alexander
+ Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa
+ <jolsa@kernel.org>, Ian Rogers <irogers@google.com>, Adrian Hunter
+ <adrian.hunter@intel.com>, "Liang, Kan" <kan.liang@linux.intel.com>, Boris
+ Ostrovsky <boris.ostrovsky@oracle.com>, Josh Poimboeuf
+ <jpoimboe@kernel.org>, Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+ Sean Christopherson <seanjc@google.com>, Paolo Bonzini
+ <pbonzini@redhat.com>, Andy Lutomirski <luto@kernel.org>, Arnd Bergmann
+ <arnd@arndb.de>, Frederic Weisbecker <frederic@kernel.org>, "Paul E.
+ McKenney" <paulmck@kernel.org>, Jason Baron <jbaron@akamai.com>, Steven
+ Rostedt <rostedt@goodmis.org>, Ard Biesheuvel <ardb@kernel.org>, Neeraj
+ Upadhyay <neeraj.upadhyay@kernel.org>, Joel Fernandes
+ <joel@joelfernandes.org>, Josh Triplett <josh@joshtriplett.org>, Boqun
+ Feng <boqun.feng@gmail.com>, Uladzislau Rezki <urezki@gmail.com>, Mathieu
+ Desnoyers <mathieu.desnoyers@efficios.com>, Lai Jiangshan
+ <jiangshanlai@gmail.com>, Zqiang <qiang.zhang1211@gmail.com>, Juri Lelli
+ <juri.lelli@redhat.com>, Clark Williams <williams@redhat.com>, Yair
+ Podemsky <ypodemsk@redhat.com>, Tomas Glozar <tglozar@redhat.com>, Vincent
+ Guittot <vincent.guittot@linaro.org>, Dietmar Eggemann
+ <dietmar.eggemann@arm.com>, Ben Segall <bsegall@google.com>, Mel Gorman
+ <mgorman@suse.de>, Kees Cook <kees@kernel.org>, Andrew Morton
+ <akpm@linux-foundation.org>, Christoph Hellwig <hch@infradead.org>, Shuah
+ Khan <shuah@kernel.org>, Sami Tolvanen <samitolvanen@google.com>, Miguel
+ Ojeda <ojeda@kernel.org>, Alice Ryhl <aliceryhl@google.com>, "Mike
+ Rapoport (Microsoft)" <rppt@kernel.org>, Samuel Holland
+ <samuel.holland@sifive.com>, Rong Xu <xur@google.com>, Nicolas Saenz
+ Julienne <nsaenzju@redhat.com>, Geert Uytterhoeven <geert@linux-m68k.org>,
+ Yosry Ahmed <yosryahmed@google.com>, "Kirill A. Shutemov"
+ <kirill.shutemov@linux.intel.com>, "Masami Hiramatsu (Google)"
+ <mhiramat@kernel.org>, Jinghao Jia <jinghao7@illinois.edu>, Luis
+ Chamberlain <mcgrof@kernel.org>, Randy Dunlap <rdunlap@infradead.org>,
+ Tiezhu Yang <yangtiezhu@loongson.cn>
+Subject: Re: [PATCH v4 26/30] x86,tlb: Make __flush_tlb_global()
+ noinstr-compliant
+In-Reply-To: <52311c3d-83cf-4dc4-bbcb-5fbca8eb249c@intel.com>
+References: <20250114175143.81438-1-vschneid@redhat.com>
+ <20250114175143.81438-27-vschneid@redhat.com>
+ <52311c3d-83cf-4dc4-bbcb-5fbca8eb249c@intel.com>
+Date: Fri, 17 Jan 2025 14:44:42 +0100
+Message-ID: <xhsmh5xmdh7w5.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250117005539.325887-1-eyal.birger@gmail.com>
- <20250117013927.GB2610@redhat.com> <20250117170229.f1e1a9f03a8547d31cd875db@kernel.org>
-In-Reply-To: <20250117170229.f1e1a9f03a8547d31cd875db@kernel.org>
-From: Eyal Birger <eyal.birger@gmail.com>
-Date: Fri, 17 Jan 2025 05:36:34 -0800
-X-Gm-Features: AbW1kvbmNpeFCohqRZCOjNCkMbLk4tbkvbKDcf6UHeDZf44yJqqbEtRACKxLRMY
-Message-ID: <CAHsH6Gtbo39pVjVWbPfSjePPyFYVLWJq9m3HLWgDGp1orvD+GA@mail.gmail.com>
-Subject: Re: [PATCH] seccomp: passthrough uretprobe systemcall without filtering
-To: Masami Hiramatsu <mhiramat@kernel.org>
-Cc: Oleg Nesterov <oleg@redhat.com>, kees@kernel.org, luto@amacapital.net, wad@chromium.org, 
-	andrii@kernel.org, jolsa@kernel.org, alexei.starovoitov@gmail.com, 
-	olsajiri@gmail.com, cyphar@cyphar.com, songliubraving@fb.com, yhs@fb.com, 
-	john.fastabend@gmail.com, peterz@infradead.org, tglx@linutronix.de, 
-	bp@alien8.de, daniel@iogearbox.net, ast@kernel.org, andrii.nakryiko@gmail.com, 
-	rostedt@goodmis.org, rafi@rbk.io, shmulik.ladkani@gmail.com, 
-	bpf@vger.kernel.org, linux-api@vger.kernel.org, 
-	linux-trace-kernel@vger.kernel.org, x86@kernel.org, 
-	linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
 
-On Fri, Jan 17, 2025 at 12:02=E2=80=AFAM Masami Hiramatsu <mhiramat@kernel.=
-org> wrote:
+On 14/01/25 13:45, Dave Hansen wrote:
+> On 1/14/25 09:51, Valentin Schneider wrote:
+>> +	cr4 = this_cpu_read(cpu_tlbstate.cr4);
+>> +	asm volatile("mov %0,%%cr4": : "r" (cr4 ^ X86_CR4_PGE) : "memory");
+>> +	asm volatile("mov %0,%%cr4": : "r" (cr4) : "memory");
+>> +	/*
+>> +	 * In lieu of not having the pinning crap, hard fail if CR4 doesn't
+>> +	 * match the expected value. This ensures that anybody doing dodgy gets
+>> +	 * the fallthrough check.
+>> +	 */
+>> +	BUG_ON(cr4 != this_cpu_read(cpu_tlbstate.cr4));
 >
-> On Fri, 17 Jan 2025 02:39:28 +0100
-> Oleg Nesterov <oleg@redhat.com> wrote:
+> Let's say someone managed to write to cpu_tlbstate.cr4 where they
+> cleared one of the pinned bits.
 >
-> > On 01/16, Eyal Birger wrote:
-> > >
-> > > Fixes: ff474a78cef5 ("uprobe: Add uretprobe syscall to speed up retur=
-n probe")
-> > > Reported-by: Rafael Buchbinder <rafi@rbk.io>
-> > > Link: https://lore.kernel.org/lkml/CAHsH6Gs3Eh8DFU0wq58c_LF8A4_+o6z45=
-6J7BidmcVY2AqOnHQ@mail.gmail.com/
-> > > Cc: stable@vger.kernel.org
-> > ...
-> > > @@ -1359,6 +1359,11 @@ int __secure_computing(const struct seccomp_da=
-ta *sd)
-> > >     this_syscall =3D sd ? sd->nr :
-> > >             syscall_get_nr(current, current_pt_regs());
-> > >
-> > > +#ifdef CONFIG_X86_64
-> > > +   if (unlikely(this_syscall =3D=3D __NR_uretprobe) && !in_ia32_sysc=
-all())
-> > > +           return 0;
-> > > +#endif
-> >
-> > Acked-by: Oleg Nesterov <oleg@redhat.com>
-> >
-> >
-> > A note for the seccomp maintainers...
-> >
-> > I don't know what do you think, but I agree in advance that the very fa=
-ct this
-> > patch adds "#ifdef CONFIG_X86_64" into __secure_computing() doesn't loo=
-k nice.
-> >
+> Before this patch, CR4 pinning would WARN_ONCE() about it pretty quickly
+> and also reset the cleared bits.
 >
-> Indeed. in_ia32_syscall() depends arch/x86 too.
-> We can add an inline function like;
+> After this patch, the first native_flush_tlb_global() can clear pinned
+> bits, at least until native_write_cr4() gets called the next time. That
+> seems like it'll undermine CR4 pinning at least somewhat.
 >
-> ``` uprobes.h
-> static inline bool is_uprobe_syscall(int syscall)
-> {
->         // arch_is_uprobe_syscall check can be replaced by Kconfig,
->         // something like CONFIG_ARCH_URETPROBE_SYSCALL.
-> #ifdef arch_is_uprobe_syscall
->         return arch_is_uprobe_syscall(syscall)
-> #else
->         return false;
-> #endif
-> }
-> ```
-> and
-> ``` arch/x86/include/asm/uprobes.h
-> #define arch_is_uprobe_syscall(syscall) \
->         (IS_ENABLED(CONFIG_X86_64) && syscall =3D=3D __NR_uretprobe && !i=
-n_ia32_syscall())
-> ```
 
-Notice it'll need to be enclosed in ifdef CONFIG_X86_64 as __NR_uretprobe
-isn't defined otherwise so the IS_ENABLED isn't needed.
+The BUG_ON() should still catch any pinned bit mishandling, however...
 
+> What keeps native_write_cr4() from being noinstr-compliant now? Is it
+> just the WARN_ONCE()?
 >
-> > The problem is that we need a simple patch for -stable which fixes the =
-real
-> > problem. We can cleanup this logic later, I think.
->
-> Hmm, at least we should make it is_uprobe_syscall() in uprobes.h so that
-> do not pollute the seccomp subsystem with #ifdef.
 
-I like this approach.
+I don't think that's even an issue since __WARN_printf() wraps the print in
+instrumentation_{begin,end}(). In v3 I made native_write_cr4() noinstr and
+added a non-noinstr wrapper to be used in existing callsites.
 
-Notice it does add a couple of includes that weren't there before:
-- arch/x86/include/asm/uprobes.h would include asm/unistd.h
-- seccomp.c would include linux/uprobes.h
+AFAICT if acceptable we could make the whole thing noinstr and stick with
+that; Peter, is there something I missed that made you write the handmade
+noinstr CR4 RMW?
 
-So it's a less "trivial" patch... If that's ok I can repost with these
-changes.
-
-Eyal.
