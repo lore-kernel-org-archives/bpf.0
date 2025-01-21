@@ -1,39 +1,39 @@
 Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 826011F1520;
-	Tue, 21 Jan 2025 10:22:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8A951F193D;
+	Tue, 21 Jan 2025 10:22:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.193
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737454949; cv=none; b=Wm/KF31A3Ajf28qyaCVakH7oLu9rLd+Sx31E1LCRcTzEwEAfx89aJry8oXxUCrbeUi+bXq3IudWDrUyOnSGxQLpfxCYBYYmizUQ6qqy46V31yStZRRYol6puSjYTRnaIIhfmB3hG3psP6toT3cSzrtpTl7VvElGQ64NMvQv14jc=
+	t=1737454950; cv=none; b=fGt88XDAv2zJfgVEI2AGPvHB3abXfRFNXmbilMcmYmRvDCYDoEz0WZv0aIsUyH2+j6tVcgyep1jAVhwJvVeW6aO4+KAuOTVxssG+Z+a3H9rf82pWgbVuZw0Nz2IZeqffXU/azFFIVyMSdfSLiZJVm601x1LZ9dIdW6lEg57DlaE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737454949; c=relaxed/simple;
-	bh=Tg8M5cDmTjCtJDNBj9IXmsB9LswH3wfAHbSlZTOJ3sE=;
+	s=arc-20240116; t=1737454950; c=relaxed/simple;
+	bh=qTZdAVqTCVeAqEizvFVaev31Vb5y2TYBJi728gKqK4E=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=sPMD88hQiQ88GX8rAtat1YzXXT/uzGr8iw1Thh4HJDyOYBSWmr5tqoZkvBWcYCobu+5S4C/q7rVlTsVC3CMsc55echUZy/PIs6QHIswnlp9Jm/uwhU08+QnO3bqpm4RefjVbBuGU6lTbGNawDqUipGvx7bryST/wuGMS6+jELdI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=kwe6O+C4; arc=none smtp.client-ip=217.70.183.193
+	 In-Reply-To:To:Cc; b=uauS5oZcf9zyi+AEeNGOiGBmqq7J+r6AejEIU4P/nyhCdGhzSaSZv46h82hlI5QZf5RVYc/H/Yaok2DIxYk/ZBS0iEN8bXlX4Ns67Hz1dguod+I6iYEgtPaFnxPQ1/fgWofUTQlWiGEM/Y5+aEwn7JJZel02LRmrV7ebWHFID34=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=FXvhedEX; arc=none smtp.client-ip=217.70.183.193
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="kwe6O+C4"
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 1D57024000B;
-	Tue, 21 Jan 2025 10:22:23 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="FXvhedEX"
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 53A8524001A;
+	Tue, 21 Jan 2025 10:22:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1737454944;
+	t=1737454946;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=zuPUMiL4noPLXhbJcS0szRr9m4xTROwgDoOzcYvBj3w=;
-	b=kwe6O+C4TMVQD9wJSzcW/+PiSZnHnosUJP6mBuy+G9pFJq16C9w9EdHKsRj29eGi43ern3
-	8ZrCUS1wJR9ztBNq3oGYQ2NKZF2d8iaLzbKrrWbSVEFf8BQF2663x6+tgxGTSHImfrXT5X
-	5PqtELUIj6ZgIPqrjpdB7O1Z1zNslhQo6H/OVH3znmDHPQNgCTXiw0BFpANJ+rdEuSecu0
-	zxoNjzxFTwVNPTosPIzlPKOd5tTqK54RPuXR7hsQv3XtHJ+X7aCRtlXmBnD0NfDSRbCuJ5
-	SySggH9aWbFZQeQjSTHcM7BaCZprNxEAaImxYdjxafFShz1NqJF4o2DIxX12tQ==
+	bh=j+Xkf/WzzwJ3LU071pjuWxrwQ79eZhQK0SANIpM2J8A=;
+	b=FXvhedEXUOeRFPE34/q/6gMUqndSNpGrX5LQvS0KInw2kW2O1JHjeuunF5YW9ip9lnEDj0
+	YUOhFXC/vlqTsUaIMi8t37cFdYP3C1x8PCkaW+RG2ZbUiW07A8hVyPZULPVL0ZOW+n2gKR
+	8yG1pibt8k0p5DcmtX7Dxk1kQrlMvxVUubOkuBzjkSNoOVI2oNvLrdUw9NB3/lpDRjnvjg
+	XQh19kwRd/Yxeg8FGceMNwbGzonh2gAu1DXWLycQZI8nbFqr3m9oqz2DCI3NpbNq27D7UR
+	VitPjv2gqSwH68p9+zJIdHHvf5OmqYMfPsCTWNh0rvIqbYoimjcMfLtA7Q2mjQ==
 From: "Bastien Curutchet (eBPF Foundation)" <bastien.curutchet@bootlin.com>
-Date: Tue, 21 Jan 2025 11:22:19 +0100
-Subject: [PATCH bpf-next 05/10] selftests/bpf: test_xdp_veth: Add XDP flags
- to prog_configuration
+Date: Tue, 21 Jan 2025 11:22:21 +0100
+Subject: [PATCH bpf-next 07/10] selftests/bpf: Optionally select
+ broadcasting flags
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -42,7 +42,7 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250121-redirect-multi-v1-5-b215e35ff505@bootlin.com>
+Message-Id: <20250121-redirect-multi-v1-7-b215e35ff505@bootlin.com>
 References: <20250121-redirect-multi-v1-0-b215e35ff505@bootlin.com>
 In-Reply-To: <20250121-redirect-multi-v1-0-b215e35ff505@bootlin.com>
 To: Alexei Starovoitov <ast@kernel.org>, 
@@ -65,70 +65,84 @@ Cc: Alexis Lothore <alexis.lothore@bootlin.com>,
 X-Mailer: b4 0.14.2
 X-GND-Sasl: bastien.curutchet@bootlin.com
 
-XDP flags are hardcoded to 0 at attachment.
+Broadcasting flags are hardcoded for each kind for protocol.
 
-Add flags attributes to the struct prog_configuration to allow flag
-modifications for each test case.
+Create a redirect_flags map that allows to select the broadcasting flags
+to use in the bpf_redirect_map(). The protocol ID is used as a key.
+Set the old hardcoded values as default if the map isn't filled by the
+BPF caller.
 
 Signed-off-by: Bastien Curutchet (eBPF Foundation) <bastien.curutchet@bootlin.com>
 ---
- tools/testing/selftests/bpf/prog_tests/test_xdp_veth.c | 14 ++++++++++++--
- 1 file changed, 12 insertions(+), 2 deletions(-)
+ .../selftests/bpf/progs/xdp_redirect_multi_kern.c  | 41 +++++++++++++++-------
+ 1 file changed, 29 insertions(+), 12 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/test_xdp_veth.c b/tools/testing/selftests/bpf/prog_tests/test_xdp_veth.c
-index b2b4f6958940f7bce66953568d18fb10e12130e5..0aa1583b741b15f573bbb979b2047a0109070544 100644
---- a/tools/testing/selftests/bpf/prog_tests/test_xdp_veth.c
-+++ b/tools/testing/selftests/bpf/prog_tests/test_xdp_veth.c
-@@ -77,6 +77,8 @@ static struct veth_configuration net_config[VETH_PAIRS_COUNT] = {
- struct prog_configuration {
- 	char local_name[PROG_NAME_MAX_LEN]; /* BPF prog to attach to local_veth */
- 	char remote_name[PROG_NAME_MAX_LEN]; /* BPF prog to attach to remote_veth */
-+	u32 local_flags; /* XDP flags to use on local_veth */
-+	u32 remote_flags; /* XDP flags to use on remote_veth */
- };
+diff --git a/tools/testing/selftests/bpf/progs/xdp_redirect_multi_kern.c b/tools/testing/selftests/bpf/progs/xdp_redirect_multi_kern.c
+index 97b26a30b59a758f5a5f2152af509acef80031ce..bc2945ed8a8017021c2792671b4de9aa4928a3e4 100644
+--- a/tools/testing/selftests/bpf/progs/xdp_redirect_multi_kern.c
++++ b/tools/testing/selftests/bpf/progs/xdp_redirect_multi_kern.c
+@@ -34,6 +34,14 @@ struct {
+ 	__uint(max_entries, 128);
+ } mac_map SEC(".maps");
  
- static int attach_programs_to_veth_pair(struct bpf_object **objs, size_t nb_obj,
-@@ -106,7 +108,8 @@ static int attach_programs_to_veth_pair(struct bpf_object **objs, size_t nb_obj,
- 	if (!ASSERT_NEQ(interface, 0, "non zero interface index"))
- 		return -1;
++/* map to store redirect flags for each protocol*/
++struct {
++	__uint(type, BPF_MAP_TYPE_HASH);
++	__type(key, __u16);
++	__type(value, __u64);
++	__uint(max_entries, 16);
++} redirect_flags SEC(".maps");
++
+ SEC("xdp")
+ int xdp_redirect_map_multi_prog(struct xdp_md *ctx)
+ {
+@@ -41,25 +49,34 @@ int xdp_redirect_map_multi_prog(struct xdp_md *ctx)
+ 	void *data = (void *)(long)ctx->data;
+ 	int if_index = ctx->ingress_ifindex;
+ 	struct ethhdr *eth = data;
++	__u64 *flags_from_map;
+ 	__u16 h_proto;
+ 	__u64 nh_off;
++	__u64 flags;
  
--	ret = bpf_xdp_attach(interface, bpf_program__fd(local_prog), 0, NULL);
-+	ret = bpf_xdp_attach(interface, bpf_program__fd(local_prog),
-+			     prog[index].local_flags, NULL);
- 	if (!ASSERT_OK(ret, "attach xdp program to local veth"))
- 		return -1;
+ 	nh_off = sizeof(*eth);
+ 	if (data + nh_off > data_end)
+ 		return XDP_DROP;
  
-@@ -120,7 +123,8 @@ static int attach_programs_to_veth_pair(struct bpf_object **objs, size_t nb_obj,
- 		return -1;
- 	}
+-	h_proto = eth->h_proto;
+-
+-	/* Using IPv4 for (BPF_F_BROADCAST | BPF_F_EXCLUDE_INGRESS) testing */
+-	if (h_proto == bpf_htons(ETH_P_IP))
+-		return bpf_redirect_map(&map_all, 0,
+-					BPF_F_BROADCAST | BPF_F_EXCLUDE_INGRESS);
+-	/* Using IPv6 for none flag testing */
+-	else if (h_proto == bpf_htons(ETH_P_IPV6))
+-		return bpf_redirect_map(&map_all, if_index, 0);
+-	/* All others for BPF_F_BROADCAST testing */
+-	else
+-		return bpf_redirect_map(&map_all, 0, BPF_F_BROADCAST);
++	h_proto = bpf_htons(eth->h_proto);
++
++	flags_from_map = bpf_map_lookup_elem(&redirect_flags, &h_proto);
++
++	/* Default flags for IPv4 : (BPF_F_BROADCAST | BPF_F_EXCLUDE_INGRESS) */
++	if (h_proto == ETH_P_IP) {
++		flags = flags_from_map ? *flags_from_map : BPF_F_BROADCAST | BPF_F_EXCLUDE_INGRESS;
++		return bpf_redirect_map(&map_all, 0, flags);
++	}
++	/* Default flags for IPv6 : 0 */
++	if (h_proto == ETH_P_IPV6) {
++		flags = flags_from_map ? *flags_from_map : 0;
++		return bpf_redirect_map(&map_all, if_index, flags);
++	}
++	/* Default flags for others BPF_F_BROADCAST : 0 */
++	else {
++		flags = flags_from_map ? *flags_from_map : BPF_F_BROADCAST;
++		return bpf_redirect_map(&map_all, 0, flags);
++	}
+ }
  
--	ret = bpf_xdp_attach(interface, bpf_program__fd(remote_prog), 0, NULL);
-+	ret = bpf_xdp_attach(interface, bpf_program__fd(remote_prog),
-+			     prog[index].remote_flags, NULL);
- 	if (!ASSERT_OK(ret, "attach xdp program to remote veth")) {
- 		close_netns(nstoken);
- 		return -1;
-@@ -187,14 +191,20 @@ void test_xdp_veth_redirect(void)
- 		{
- 			.local_name = "xdp_redirect_map_0",
- 			.remote_name = "xdp_dummy_prog",
-+			.local_flags = 0,
-+			.remote_flags = 0,
- 		},
- 		{
- 			.local_name = "xdp_redirect_map_1",
- 			.remote_name = "xdp_tx",
-+			.local_flags = 0,
-+			.remote_flags = 0,
- 		},
- 		{
- 			.local_name = "xdp_redirect_map_2",
- 			.remote_name = "xdp_dummy_prog",
-+			.local_flags = 0,
-+			.remote_flags = 0,
- 		}
- 	};
- 	struct bpf_object *bpf_objs[VETH_REDIRECT_SKEL_NB];
+ /* The following 2 progs are for 2nd devmap prog testing */
 
 -- 
 2.47.1
