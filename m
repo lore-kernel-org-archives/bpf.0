@@ -1,204 +1,163 @@
-Received: from fhigh-a3-smtp.messagingengine.com (fhigh-a3-smtp.messagingengine.com [103.168.172.154])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f171.google.com (mail-il1-f171.google.com [209.85.166.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60B5B1A8F7A;
-	Tue, 21 Jan 2025 04:35:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.154
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B439FA55;
+	Tue, 21 Jan 2025 05:09:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737434137; cv=none; b=GmClSL3FaDLIhLNlwt9hL1kINettp2iJ1nBQypv9m4eYL716RJDa/3osyaA5LyrhA+8c4MuzhtSw2PP7eU9rXBXd/8dpqBVdkdPCkMoDutI7QKGznVGVSGD6vlEahhmkg1ILOjKrnWI9jWFRtPs2HJHZvAQbqmkSGRQ2pah7KfM=
+	t=1737436155; cv=none; b=JlnSUzunTSv5H36+L2Q8YcqFd/LQ02CeJNPvYBGY71Tx+jXW6wwVuvNKxmVUNGAQDOGkwqnboPWkBOhpt+MDfJxlFaPLv6uyR/NRIT/7x0ZEOTygvl21sKzASFS1npj7dEE0PTtsUrlQNm9c8lc2i8swP1MRLyNph5BZrEINWAA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737434137; c=relaxed/simple;
-	bh=eVM7SdtXCFlUVH4oy/Vkcn3phtLYk4plrqvtCWZRjUY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=X6DNZmNiCyEdGU3spfW8dmQSq56JR/TRTo9O6vGOmO/w0aNKEZQZn6wS3upoK64Ewy7KGMdYbDKKedC45NyQ9Jz4CnXxgH4PWYtjtW9N6+tsR0H+2OpRC/WiHipd3h+AychiE/y2bC3rmvliTTZTV9QeUxAiD+vVrN+PDx/EDco=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dxuuu.xyz; spf=pass smtp.mailfrom=dxuuu.xyz; dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b=ZLc7tUfQ; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=SSAL5ixW; arc=none smtp.client-ip=103.168.172.154
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dxuuu.xyz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dxuuu.xyz
+	s=arc-20240116; t=1737436155; c=relaxed/simple;
+	bh=Mpfwg8Y/Q/+cD9ry0PP+5YwfNW9+Cak+CUzG7cR8D38=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=rCdpAnYffwsWQme/aV28K/JDskur431DQxahx73ZK129J7Wr2YiMUPoFpI6yZ3Um7wzK4wQP4nH9erLG8twBQNz7DAHGc2LPyVXplnZO9t3wrX8fVEOJBM45FItKsxqv2iI9M+1sm7+jyeC+2oERG+dZepFXNQqKkHy6iT/Iriw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mUVapJcm; arc=none smtp.client-ip=209.85.166.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b="ZLc7tUfQ";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="SSAL5ixW"
-Received: from phl-compute-01.internal (phl-compute-01.phl.internal [10.202.2.41])
-	by mailfhigh.phl.internal (Postfix) with ESMTP id A922111401CA;
-	Mon, 20 Jan 2025 23:35:34 -0500 (EST)
-Received: from phl-mailfrontend-01 ([10.202.2.162])
-  by phl-compute-01.internal (MEProxy); Mon, 20 Jan 2025 23:35:34 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
-	:cc:content-transfer-encoding:content-type:date:date:from:from
-	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=fm1; t=1737434134; x=
-	1737520534; bh=rLsYj07eT2ZgMjURoHuQghZV4EHGquLJkQ6YJEcpFpQ=; b=Z
-	Lc7tUfQPfpSIDE8rmrR+JI286lmvZbFvC7/2tLp5A4KswkXteX53qnyliP27Khqi
-	BvoJs1MIsDeBWDOFl1LlbxV5a800IwK4AJ+tqaxyarxP79BoojTgwPk1jdQAnUlE
-	dohhjMzi6ObQDST56uaDrQRB/YMc0ITThtttt/ZulCBXuNf9LhUuz80TGEo2nrJP
-	/LbhzNDF5RGeg20zRGJnfrxs0nyAx4kHksn8uA+BCLj49NQ+gbAL6D3MlxR73QTK
-	tMXsQSFF8qx3swCgQfr/63FM9z203NxCAol9NeY5RTuOjf+qikj7LrrtUGdM31p/
-	/Dv2Pg6oJe9afcXryDM3Q==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:date:date:feedback-id:feedback-id:from:from
-	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to:x-me-proxy:x-me-sender
-	:x-me-sender:x-sasl-enc; s=fm2; t=1737434134; x=1737520534; bh=r
-	LsYj07eT2ZgMjURoHuQghZV4EHGquLJkQ6YJEcpFpQ=; b=SSAL5ixWDnss6aW2j
-	9DjM2r9L33oINZKhHGk2cxZpvCzOC//HeN0DiWxB47CnZeiGa1NTPxsG+MHt3DmI
-	ELa64sZU9c4g6iqhdKoyuDFfm9O2i/wCjt3Spb4YBibnv1XXyDkdwU9SkdeN8lwu
-	8N/Z8V1WpJ5SSBhCFKuHZO5PfRr7iWVdIdeBySeuGGP7yc5MaxKCwdxZ+O4oep35
-	x+723wcbr5Xjll6LkoNAu3NecFL6oe++ivCzbK+0IXsxvY4XgBdaD26D8Mjc1jJm
-	QG8cgusjbGIvehFczGXwX/7bePtomfErTiU58FPPHzrfJz5dcuj1h/V8lT1UjR+C
-	Q/goQ==
-X-ME-Sender: <xms:FiSPZ8rxXepHUV-1ZAzC_SJRX2O3cf2HgJ6kLfMIVAB28KLEhZh48Q>
-    <xme:FiSPZyqLaYsCuzRyhr_5Z6RKYFtuXrhd3EydS4xdHeIW3RzHYh0DCMg0_15EV7w1T
-    FJSWQx70QMIl2JoRg>
-X-ME-Received: <xmr:FiSPZxNVEN38IhmJetSoTM8UQ0xu9H8XcFsRF5fufpTFV-_OkMfNCeYBqfZ7GIeMlFNcFGncQb9DD5RFvXtt_dYRM5Smn9r69_emyRxO13AGthntmQ_8>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefuddrudejtddgjeefucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
-    rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucgfrhhlucfvnfffucdlje
-    dtmdenucfjughrpefhvfevufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpeff
-    rghnihgvlhcuighuuceougiguhesugiguhhuuhdrgiihiieqnecuggftrfgrthhtvghrnh
-    epgfefgfegjefhudeikedvueetffelieefuedvhfehjeeljeejkefgffeghfdttdetnecu
-    vehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepugiguhesug
-    iguhhuuhdrgiihiidpnhgspghrtghpthhtohepudegpdhmohguvgepshhmthhpohhuthdp
-    rhgtphhtthhopegurghnihgvlhesihhoghgvrghrsghogidrnhgvthdprhgtphhtthhope
-    grshhtsehkvghrnhgvlhdrohhrghdprhgtphhtthhopegrnhgurhhiiheskhgvrhhnvghl
-    rdhorhhgpdhrtghpthhtohepmhgrrhhtihhnrdhlrghusehlihhnuhigrdguvghvpdhrtg
-    hpthhtohepvgguugihiiekjeesghhmrghilhdrtghomhdprhgtphhtthhopehsohhnghes
-    khgvrhhnvghlrdhorhhgpdhrtghpthhtohephihonhhghhhonhhgrdhsohhngheslhhinh
-    hugidruggvvhdprhgtphhtthhopehjohhhnhdrfhgrshhtrggsvghnugesghhmrghilhdr
-    tghomhdprhgtphhtthhopehkphhsihhnghhhsehkvghrnhgvlhdrohhrgh
-X-ME-Proxy: <xmx:FiSPZz63yvglGUyB5ce0ig1yptSG_WiS_nEQbnBMutxJYAMGr8QuNg>
-    <xmx:FiSPZ759XfwNWDGVcj7wCY3ai2RbRH5UHuaS_pz3e6pmwR0NHy9qmQ>
-    <xmx:FiSPZzja1aKTGeBBGb1NIpPUc0EzI4zdC0GflaaEd-S23kozGJ-u1w>
-    <xmx:FiSPZ17LWaUzepP38INLjXbzJh0jLIjPaSMf8lhE_i-WJcNoeWkGFA>
-    <xmx:FiSPZ6RLQr49-kyONtxZLXbqMcXznfm3vGKKW88lmhSKvxGtEqTP46KO>
-Feedback-ID: i6a694271:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 20 Jan 2025 23:35:32 -0500 (EST)
-From: Daniel Xu <dxu@dxuuu.xyz>
-To: daniel@iogearbox.net,
-	ast@kernel.org,
-	andrii@kernel.org
-Cc: martin.lau@linux.dev,
-	eddyz87@gmail.com,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	john.fastabend@gmail.com,
-	kpsingh@kernel.org,
-	sdf@fomichev.me,
-	haoluo@google.com,
-	jolsa@kernel.org,
-	bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next 3/3] bpf: arraymap: Skip boundscheck during inlining when possible
-Date: Mon, 20 Jan 2025 21:35:12 -0700
-Message-ID: <7bfb3b6b1d3400d03fd9b7a7e15586c826449c71.1737433945.git.dxu@dxuuu.xyz>
-X-Mailer: git-send-email 2.47.1
-In-Reply-To: <cover.1737433945.git.dxu@dxuuu.xyz>
-References: <cover.1737433945.git.dxu@dxuuu.xyz>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mUVapJcm"
+Received: by mail-il1-f171.google.com with SMTP id e9e14a558f8ab-3cf880d90bdso7616905ab.3;
+        Mon, 20 Jan 2025 21:09:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1737436153; x=1738040953; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=cJQfRyC3Wsudpzv9LLtI4oTXgl7XjBx9DhB6xX5CRmA=;
+        b=mUVapJcmbPWOBCQ0mv1EiZNNpGKVLFq0RUnwZ9ZWNPy9LIZuGmkrZSh+3CKqs/dTH2
+         nbJ0t2CfuC5GWfjlBH0fSRh9WZfrL5CFPYvonCrczluNx9NSjh4pWvcbCWM5rsVC0uLV
+         93RUTYJI1padj22Ec4Drq1czjc0H2zyt04jkdM9jMC5BrbIdv4LBobzu7wWZ22YTe0jk
+         fQUnktTq/ID25HAu9/8LW3tGDth8G2usYXH6k/+f/c0oKbiCzIYhkDpwnxlsOXmB8UvH
+         PQzctDUKnPIIKoKYH6UswRk8zqYvU408d9nWIt1y5KwQ0FDW7uXN+fnodEv+gDbFGNNA
+         G9bw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1737436153; x=1738040953;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=cJQfRyC3Wsudpzv9LLtI4oTXgl7XjBx9DhB6xX5CRmA=;
+        b=eryiJPb+zTpMaXL8WBCzyOp7U+yCHbUrsyT+HTV77E2p/C8mAZ3PdIF/ROAeiZEcmD
+         iwk2c0qQ4KXckIo/wvg/quA2grC1Sg2qlXCphZ6e6Aqz+LaGmJXfQPAfw1Zo1G5BmX1n
+         3YlV0LfAEkQmOgMX5+B6DJp0w9FeUTgN9dUivSVSCRX//0/m8e15InvziFjz/yqNcvEy
+         dV1WqfF0v/V0y8yzngamXiznvWXa4Sz7w0m5SSK4dmMv4/PDrDHs0Odm8BbLVd/oO10O
+         LVdrOFX4u/LJCd4J1L+rScVlanqWHPhHSJHUoJhP7sgr/qMRPoFQgIOR9KTkANXxbPWP
+         khAA==
+X-Forwarded-Encrypted: i=1; AJvYcCWNbox1m4LfC5nqP10mZ+PVnxFNC9FJqzydB/Tay+nSMETtmkaQrYtKW6wBL4qySWGcR7Gs5B0=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxsbxs1wbrosdYTPm6aT22TQCO7N2B5F7ekHAeJdluvlUUdQxBM
+	58xQJI8fJhau2tthE0EgMlYE/fX5MYaCjLJkGnT+cPc9ViTYhvOVo4jxlAlXwxWCtrJHPXwMD6e
+	zkBxapgsIr3gBkZk+cb4w70eK0dw=
+X-Gm-Gg: ASbGncumJ5wJ2hbEklG9BuBMOMs/MA8bTVCVgntzTFasPjnScdBWkTDmwPm5Gf2atMX
+	25yoplceqmzkAdh71ZfWIilJITiWpsm66vxWdP2sYV9PAG6sT2Jc=
+X-Google-Smtp-Source: AGHT+IE08hPon2t7JQWZ73xzkucKDLJ54/L0vyFfsq41RSDlrT3eZ3yA5ijWsa93jHwNsPWITrVQHFtBIQsiaJKbASI=
+X-Received: by 2002:a05:6e02:148f:b0:3cf:6c4f:396f with SMTP id
+ e9e14a558f8ab-3cf7447c7cfmr125236365ab.15.1737436152686; Mon, 20 Jan 2025
+ 21:09:12 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20250121012901.87763-1-kerneljasonxing@gmail.com> <20250121012901.87763-3-kerneljasonxing@gmail.com>
+In-Reply-To: <20250121012901.87763-3-kerneljasonxing@gmail.com>
+From: Jason Xing <kerneljasonxing@gmail.com>
+Date: Tue, 21 Jan 2025 13:08:36 +0800
+X-Gm-Features: AbW1kvYarHVuBxdCmtWDJVlNxImYh8P0fsc9x69htjnLMINBztSjTf-Mq-C2Uq4
+Message-ID: <CAL+tcoBzgjPn1Gmw9NdL0rXhomMJka=s0yvCpc=7GY+DP=AKmA@mail.gmail.com>
+Subject: Re: [RFC PATCH net-next v6 02/13] net-timestamp: prepare for
+ timestamping callbacks use
+To: davem@davemloft.net, edumazet@google.com, kuba@kernel.org, 
+	pabeni@redhat.com, dsahern@kernel.org, willemdebruijn.kernel@gmail.com, 
+	willemb@google.com, ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, 
+	martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org, 
+	yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org, 
+	sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org, horms@kernel.org
+Cc: bpf@vger.kernel.org, netdev@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-For regular arraymaps and percpu arraymaps, if the lookup is known to be
-inbounds, the inlined bounds check can be omitted. One fewer jump puts less
-pressure on the branch predictor. While it probably won't affect real
-workloads much, we can basically get this for free. So might as well -
-free wins are nice.
+On Tue, Jan 21, 2025 at 9:29=E2=80=AFAM Jason Xing <kerneljasonxing@gmail.c=
+om> wrote:
+>
+> Later, I would introduce four callback points to report information
+> to user space based on this patch.
+>
+> As to skb initialization here, people can follow these three steps
+> as below to fetch the shared info from the exported skb in the bpf
+> prog:
+> 1. skops_kern =3D bpf_cast_to_kern_ctx(skops);
+> 2. skb =3D skops_kern->skb;
+> 3. shinfo =3D bpf_core_cast(skb->head + skb->end, struct skb_shared_info)=
+;
+>
+> More details can be seen in the last selftest patch of the series.
+>
+> Signed-off-by: Jason Xing <kerneljasonxing@gmail.com>
+> ---
+>  include/net/sock.h |  7 +++++++
+>  net/core/sock.c    | 13 +++++++++++++
+>  2 files changed, 20 insertions(+)
+>
+> diff --git a/include/net/sock.h b/include/net/sock.h
+> index 7916982343c6..6f4d54faba92 100644
+> --- a/include/net/sock.h
+> +++ b/include/net/sock.h
+> @@ -2923,6 +2923,13 @@ int sock_set_timestamping(struct sock *sk, int opt=
+name,
+>                           struct so_timestamping timestamping);
+>
+>  void sock_enable_timestamps(struct sock *sk);
+> +#if defined(CONFIG_CGROUP_BPF)
+> +void bpf_skops_tx_timestamping(struct sock *sk, struct sk_buff *skb, int=
+ op);
+> +#else
+> +static inline void bpf_skops_tx_timestamping(struct sock *sk, struct sk_=
+buff *skb, int op)
+> +{
+> +}
+> +#endif
+>  void sock_no_linger(struct sock *sk);
+>  void sock_set_keepalive(struct sock *sk);
+>  void sock_set_priority(struct sock *sk, u32 priority);
+> diff --git a/net/core/sock.c b/net/core/sock.c
+> index eae2ae70a2e0..e165163521dc 100644
+> --- a/net/core/sock.c
+> +++ b/net/core/sock.c
+> @@ -948,6 +948,19 @@ int sock_set_timestamping(struct sock *sk, int optna=
+me,
+>         return 0;
+>  }
+>
 
-JIT diff for regular arraymap (x86-64):
+Oops, I accidentally remove the following protection:
+#if defined(CONFIG_CGROUP_BPF)
+> +void bpf_skops_tx_timestamping(struct sock *sk, struct sk_buff *skb, int=
+ op)
+> +{
+> +       struct bpf_sock_ops_kern sock_ops;
+> +
+> +       memset(&sock_ops, 0, offsetof(struct bpf_sock_ops_kern, temp));
+> +       sock_ops.op =3D op;
+> +       sock_ops.is_fullsock =3D 1;
+> +       sock_ops.sk =3D sk;
+> +       bpf_skops_init_skb(&sock_ops, skb, 0);
+> +       /* Timestamping bpf extension supports only TCP and UDP full sock=
+et */
+> +       __cgroup_bpf_run_filter_sock_ops(sk, &sock_ops, CGROUP_SOCK_OPS);
+> +}
 
-     ; val = bpf_map_lookup_elem(&map_array, &key);
-    -  22:   movabsq $-131387164803072, %rdi
-    +  22:   movabsq $-131387246749696, %rdi
-       2c:   addq    $472, %rdi
-       33:   movl    (%rsi), %eax
-    -  36:   cmpq    $2, %rax
-    -  3a:   jae     0x45
-    -  3c:   imulq   $48, %rax, %rax
-    -  40:   addq    %rdi, %rax
-    -  43:   jmp     0x47
-    -  45:   xorl    %eax, %eax
-    -  47:   movl    $4, %edi
-    +  36:   imulq   $48, %rax, %rax
-    +  3a:   addq    %rdi, %rax
-    +  3d:   jmp     0x41
-    +  3f:   xorl    %eax, %eax
-    +  41:   movl    $4, %edi
+And here:
+#endif
 
-JIT diff for percpu arraymap (x86-64):
+I'll add them in the next version.
 
-     ; val = bpf_map_lookup_elem(&map_array_pcpu, &key);
-    -  22:   movabsq $-131387183532032, %rdi
-    +  22:   movabsq $-131387273779200, %rdi
-       2c:   addq    $472, %rdi
-       33:   movl    (%rsi), %eax
-    -  36:   cmpq    $2, %rax
-    -  3a:   jae     0x52
-    -  3c:   shlq    $3, %rax
-    -  40:   addq    %rdi, %rax
-    -  43:   movq    (%rax), %rax
-    -  47:   addq    %gs:170664, %rax
-    -  50:   jmp     0x54
-    -  52:   xorl    %eax, %eax
-    -  54:   movl    $4, %edi
-    +  36:   shlq    $3, %rax
-    +  3a:   addq    %rdi, %rax
-    +  3d:   movq    (%rax), %rax
-    +  41:   addq    %gs:170664, %rax
-    +  4a:   jmp     0x4e
-    +  4c:   xorl    %eax, %eax
-    +  4e:   movl    $4, %edi
+Thanks,
+Jason
 
-Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
----
- kernel/bpf/arraymap.c | 24 ++++++++++++++----------
- 1 file changed, 14 insertions(+), 10 deletions(-)
-
-diff --git a/kernel/bpf/arraymap.c b/kernel/bpf/arraymap.c
-index 8dbdceeead95..7385104dc0d0 100644
---- a/kernel/bpf/arraymap.c
-+++ b/kernel/bpf/arraymap.c
-@@ -221,11 +221,13 @@ static int array_map_gen_lookup(struct bpf_map *map,
- 
- 	*insn++ = BPF_ALU64_IMM(BPF_ADD, map_ptr, offsetof(struct bpf_array, value));
- 	*insn++ = BPF_LDX_MEM(BPF_W, ret, index, 0);
--	if (!map->bypass_spec_v1) {
--		*insn++ = BPF_JMP_IMM(BPF_JGE, ret, map->max_entries, 4);
--		*insn++ = BPF_ALU32_IMM(BPF_AND, ret, array->index_mask);
--	} else {
--		*insn++ = BPF_JMP_IMM(BPF_JGE, ret, map->max_entries, 3);
-+	if (!inbounds) {
-+		if (!map->bypass_spec_v1) {
-+			*insn++ = BPF_JMP_IMM(BPF_JGE, ret, map->max_entries, 4);
-+			*insn++ = BPF_ALU32_IMM(BPF_AND, ret, array->index_mask);
-+		} else {
-+			*insn++ = BPF_JMP_IMM(BPF_JGE, ret, map->max_entries, 3);
-+		}
- 	}
- 
- 	if (is_power_of_2(elem_size)) {
-@@ -269,11 +271,13 @@ static int percpu_array_map_gen_lookup(struct bpf_map *map,
- 	*insn++ = BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, offsetof(struct bpf_array, pptrs));
- 
- 	*insn++ = BPF_LDX_MEM(BPF_W, BPF_REG_0, BPF_REG_2, 0);
--	if (!map->bypass_spec_v1) {
--		*insn++ = BPF_JMP_IMM(BPF_JGE, BPF_REG_0, map->max_entries, 6);
--		*insn++ = BPF_ALU32_IMM(BPF_AND, BPF_REG_0, array->index_mask);
--	} else {
--		*insn++ = BPF_JMP_IMM(BPF_JGE, BPF_REG_0, map->max_entries, 5);
-+	if (!inbounds) {
-+		if (!map->bypass_spec_v1) {
-+			*insn++ = BPF_JMP_IMM(BPF_JGE, BPF_REG_0, map->max_entries, 6);
-+			*insn++ = BPF_ALU32_IMM(BPF_AND, BPF_REG_0, array->index_mask);
-+		} else {
-+			*insn++ = BPF_JMP_IMM(BPF_JGE, BPF_REG_0, map->max_entries, 5);
-+		}
- 	}
- 
- 	*insn++ = BPF_ALU64_IMM(BPF_LSH, BPF_REG_0, 3);
--- 
-2.47.1
-
+> +
+>  void sock_set_keepalive(struct sock *sk)
+>  {
+>         lock_sock(sk);
+> --
+> 2.43.5
+>
