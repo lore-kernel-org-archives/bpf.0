@@ -1,176 +1,166 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from EUR03-AM7-obe.outbound.protection.outlook.com (mail-am7eur03olkn2040.outbound.protection.outlook.com [40.92.59.40])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2E6A1F4280
-	for <bpf@vger.kernel.org>; Tue, 21 Jan 2025 15:07:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737472044; cv=none; b=bi2Aec0cgd4Gr6HLkftAZNqdkDGcYNtyxmG9RXxA3QuKx5ozhcz0GWQs6cqjBlUva/0n/xFZBBwQWJgbSmNKNmHPsyNfh4lXLkFupNqANHX1+SNpIIQqrigKvRyeU3EVF9+sx6MQM5KlNezmXzqzRoUc0h1qtUk9e/dyMq3rxsY=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737472044; c=relaxed/simple;
-	bh=tiZRx3B2HMuqovxcLXfDoQxoFVQ/Mn4COLH9Vv01p5Y=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=XuR26bn0gA6h7Exh4UuTpkoNhWsYZAtpF+Lb3tZycdt/B5+eyI4zBIiGTt0cM7RSSn8Y7sRuYlvdu1kWACPVmrV/0xs98WiG/KtWX1FjCXIgUJ0GX6SIWafu/5Mjn2yayP//9ZAfk7pzvfKMX4v+0r8f0fx7Y0lFCyyAP5rR5uM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=gZGsKlqC; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D219623A9;
+	Tue, 21 Jan 2025 15:20:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.92.59.40
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1737472856; cv=fail; b=Q4+1ewnbfO+kmGrp9I/GmqCsWIv1bCGsypKDxl1E75Ez6ZQR3iGuQ89ygNfZg/Rwok4DbJZM1l3P3/ijdzCvCuyH3n/SJBChBupbXmwIhgKfOUp18Sm6p3ujz6C29gprjlqEKsUyyjBm03UyRQltZVEji7bTxcAkta5OFHvfHc8=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1737472856; c=relaxed/simple;
+	bh=gOBR+x1ileBf2rjvyqghSd0fRPwnzwaEbFED9yjsTrw=;
+	h=Message-ID:Date:Subject:From:To:Cc:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=YuyCb/lreVYolrMZzBXzBV7iDT7TGn4Nj7EI/R/PFIFyxtJwqNFjZRbXs8TE4KBT+3fnyEr/AQ4uwUiP5I6wGxAitaFZHp8XaiL4OvZaWUbmIBU5fwB1xk842SXA3sKy+rj2+kRv1mMHlf4sHcWOZbkztBfosCVBjAa4A9fZJMc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com; spf=pass smtp.mailfrom=outlook.com; dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b=eWQEqiIM; arc=fail smtp.client-ip=40.92.59.40
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=outlook.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="gZGsKlqC"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1737472041;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=DjbE/E9Mq2/nisrHRajqDYH+16MtQm8zpmU3v3KEuJI=;
-	b=gZGsKlqCKa6tSlqafz0r4I1KFjxfvoLrthiazdUR2LrfXZNZfKF/QVvDzb9WHEGxLwk8re
-	6p4sWstLE5u4u+y3HQGPthEmdv+nlHdwUbNGS3Kk0bLLv5PV8oy0i2buP9NFp0NcpSWYdv
-	qq3+nMTgw5l0BB8b8D1H04CH1x0x0lg=
-Received: from mail-pl1-f200.google.com (mail-pl1-f200.google.com
- [209.85.214.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-350-ql1KL0eCMPSFNCvDtqPmSA-1; Tue, 21 Jan 2025 10:07:20 -0500
-X-MC-Unique: ql1KL0eCMPSFNCvDtqPmSA-1
-X-Mimecast-MFC-AGG-ID: ql1KL0eCMPSFNCvDtqPmSA
-Received: by mail-pl1-f200.google.com with SMTP id d9443c01a7336-21650d4612eso35129335ad.2
-        for <bpf@vger.kernel.org>; Tue, 21 Jan 2025 07:07:20 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1737472039; x=1738076839;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=DjbE/E9Mq2/nisrHRajqDYH+16MtQm8zpmU3v3KEuJI=;
-        b=oLh3ocF/VrsWi2mqSvLivlIOLY7YscVBV1hyJQXeXMP/aP/m/9So2e2G557djuXuLL
-         EmdvecT2d8RcTeY5JO/0/YASt9Vz01OgzR9ATJXhssAza3WJ/LRnkupMzwu4FQiAe5DR
-         dbsRr8JfWm1BJKFcn5ZxSATYimswWBn0BCknjgG1s80usqUwjw1qBEahykLRNhgfwBR7
-         iONkZqMZXgVt3wA62gLkMj+5RNAOOpcrmuOyEOPZqknddRvJoOco0VKCC5VjN79c9iom
-         nkVt/SGDPTu24+9wNRWzoXgfQ/gK4o0a28MolxeBwLYab93790j5xH3u0S8BucmoR16i
-         hiQQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUQkp69ACOL/kkO64KTrSGIPg6QB2iuQvVZ0RhpOGYwvmEP2gymNHNpuSy1n9FBFoPy6zM=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy95qDzrrsoIJUjOL9nrmVO2zXPeNN/Z+4usxHCgj9HWCRI3+RJ
-	Wm1Q+zW+oQWnPVLZbvGtcsdttnfi4Cbow2jFaBKRt8IkkIR/qYLO1TygjcjxqC7c792NjiKVujg
-	SWQ77IFo7ueR6R5Y7n8orv4Rr/xKZh11rVgndNKXSWhYwyCI7cw==
-X-Gm-Gg: ASbGncu66cTbhaTpzerDbo3Dcflu3PY7c7WX3qitlHcvDP+0PuHVdSsfTl6gnUla5r0
-	/OCtEh98Y0SVasQWSfoldgNPWN+ak1seuMD2yzn9uDMs+wThq+ZEpCTdMmrjbcGYumMMuQPRFb0
-	f7acuEAxiHEMHFVRqwCmk2qs3aFsCuTStb5anqkS8LEzavNJFqsPgjDF80r4X+0THD9CFe8MPkj
-	Q0G80uSDptslPCKo1yfJzKGfmKSzHJJhKySSyVXkKuYS3bvBwB5SA439tNNAZ0oPrSov6Qf8ert
-	2Wx8R0zUemAnj0KqKVENmL3HHes4P51UOV0=
-X-Received: by 2002:a17:903:2290:b0:216:5e6e:68cb with SMTP id d9443c01a7336-21c3540d18cmr272622785ad.16.1737472039416;
-        Tue, 21 Jan 2025 07:07:19 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IGljEPOvi4LdYIJi1m/mh0EvC9Vvtm5uevEGtJyjU6lfXNp5gADbbEg1zX0Q/7CjZDObORDaQ==
-X-Received: by 2002:a17:903:2290:b0:216:5e6e:68cb with SMTP id d9443c01a7336-21c3540d18cmr272622365ad.16.1737472039096;
-        Tue, 21 Jan 2025 07:07:19 -0800 (PST)
-Received: from kernel-devel.local (fp6fd8f7a1.knge301.ap.nuro.jp. [111.216.247.161])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21c2ce9efe3sm79066215ad.20.2025.01.21.07.07.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Jan 2025 07:07:18 -0800 (PST)
-From: Shigeru Yoshida <syoshida@redhat.com>
-To: ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	martin.lau@linux.dev,
-	eddyz87@gmail.com,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	john.fastabend@gmail.com,
-	kpsingh@kernel.org,
-	sdf@fomichev.me,
-	haoluo@google.com,
-	jolsa@kernel.org
-Cc: davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	horms@kernel.org,
-	hawk@kernel.org,
-	lorenzo@kernel.org,
-	toke@redhat.com,
-	bpf@vger.kernel.org,
-	netdev@vger.kernel.org,
-	stfomichev@gmail.com,
-	Shigeru Yoshida <syoshida@redhat.com>
-Subject: [PATCH bpf v2 2/2] selftests/bpf: Adjust data size to have ETH_HLEN
-Date: Wed, 22 Jan 2025 00:06:43 +0900
-Message-ID: <20250121150643.671650-2-syoshida@redhat.com>
-X-Mailer: git-send-email 2.48.1
-In-Reply-To: <20250121150643.671650-1-syoshida@redhat.com>
-References: <20250121150643.671650-1-syoshida@redhat.com>
+	dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b="eWQEqiIM"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=rHHITXXlPWRXYvrm5v+FawOWJ/2IvMlAqhG4wRQXGY1E63dtR+TEpF1fIG9Fu1agsSSR/Rqf4hgspFs+QA3y2Dj04Db5PIckFv6c5KviQDfXqFfXPsTFAiF4t8ce1uiIOGcGV1Xs9vA2nROMss2ipFl6w6YNHDufLV32GZ/spual8PVVCtjdRW4KeS5InBjcugOyo/rO8CA8L9acsaPLm36wFfqJPwcNjShmFO74oaoxPO69TmaOW0k+hAheKt+zVaBtGXLf0qyAG84Tn7yW/SNFWTOpzFbU83RELszW2NurTAIPzlSVmzcwjtFYcedhHSs2DmORpF9kWJF4Vb+jDA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=nF9pnd/FhAHOMhWcYQgh93fJVZ0SfWpgTzmyOX/guQs=;
+ b=fAVwRuorv6AquOTJ63V2T6D5tk6WVKum+mVWqF5lck0o3wFm4txmc/UfkBAj7PYC+1Ah5Q6bAJrcFoZAPPRgIwi0KqaA/D1iB7FXsDoJNdn5LZaVcQG4HyqwLA8JX4dZTLbPI83djL3r7oBDgcXh9Dai28tEPhTLmw+ndhyivxwmaBOqc0zt7BPMiIm9nLuHBp8RvXlt5OmSeB2NLMPaUKtnehAoVpzOsomoB2T55TdZzHnTy+mD/U6eX9BWdYgzwNp6pMLjbnXR09kqdEHsdSpJxsIjI95Hhn4dxTUmREqY8Al3O6xMDhcZFAQdUEB7JV0TlEeBjRypV2ZHbvIBEw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=nF9pnd/FhAHOMhWcYQgh93fJVZ0SfWpgTzmyOX/guQs=;
+ b=eWQEqiIM0l1WTt+K49efx8Sk0kvYIFhGyY9BblE0LeU//rQUUoilVUn6wYcAw24/hUOthmZUpfoc8H4DjSb7bCeF0gkCrMyup/iFqTEdrO0C2wfVe3oARbiEFySbNm7XuOLPvfQl5K9bkzcD3Ge/KPGhBVa5iWYYBtefPPjNL1gZtUTFfZu4EONf6G4uABTHu7ws4qHnnhznalFsBqc/qCHww/y5xaY5RwmXwi9ashZq4lqDqMNBZecBm2D8tOSoz16VCTN4E2tK0dxlz/Y1B18zqvBU7+ukolFXC2zoNvDwm3ANaGdDv+Ec0IFOuObgPqmwCZ5tz1RiVtu7WDiYCA==
+Received: from AM6PR03MB5080.eurprd03.prod.outlook.com (2603:10a6:20b:90::20)
+ by AM9PR03MB7630.eurprd03.prod.outlook.com (2603:10a6:20b:411::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8377.16; Tue, 21 Jan
+ 2025 15:20:51 +0000
+Received: from AM6PR03MB5080.eurprd03.prod.outlook.com
+ ([fe80::a16:9eb8:6868:f6d8]) by AM6PR03MB5080.eurprd03.prod.outlook.com
+ ([fe80::a16:9eb8:6868:f6d8%3]) with mapi id 15.20.8356.020; Tue, 21 Jan 2025
+ 15:20:51 +0000
+Message-ID:
+ <AM6PR03MB508081D38D00CD4AC299A8FB99E62@AM6PR03MB5080.eurprd03.prod.outlook.com>
+Date: Tue, 21 Jan 2025 15:20:50 +0000
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v7 0/5] bpf: Add open-coded style process file
+ iterator and bpf_fget_task() kfunc
+From: Juntong Deng <juntong.deng@outlook.com>
+To: ast@kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com,
+ andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
+ yonghong.song@linux.dev, kpsingh@kernel.org, sdf@fomichev.me,
+ haoluo@google.com, jolsa@kernel.org, memxor@gmail.com, snorcht@gmail.com,
+ brauner@kernel.org
+Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-fsdevel@vger.kernel.org
+References: <AM6PR03MB508004527B8B38AAF18D763399E62@AM6PR03MB5080.eurprd03.prod.outlook.com>
+Content-Language: en-US
+In-Reply-To: <AM6PR03MB508004527B8B38AAF18D763399E62@AM6PR03MB5080.eurprd03.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: LO4P123CA0331.GBRP123.PROD.OUTLOOK.COM
+ (2603:10a6:600:18c::12) To AM6PR03MB5080.eurprd03.prod.outlook.com
+ (2603:10a6:20b:90::20)
+X-Microsoft-Original-Message-ID:
+ <e0eebb99-7ec8-4810-a2d6-b64926b2550b@outlook.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AM6PR03MB5080:EE_|AM9PR03MB7630:EE_
+X-MS-Office365-Filtering-Correlation-Id: df7c3f56-6b67-4abb-3e8b-08dd3a2f30cd
+X-Microsoft-Antispam:
+	BCL:0;ARA:14566002|19110799003|8060799006|5072599009|6090799003|15080799006|461199028|3412199025|41001999003|440099028;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?VHQyRnREa3hMRm0wblBUVWE5NGZpWmhlMGc5UVd2RWRhR2VFTzZJSzdITVNI?=
+ =?utf-8?B?VjVPQytNMUs5UFI2R2NqYmJuZFFETk40OGhyWlpWSUo2Qk1QMW5ySWtMN1Vo?=
+ =?utf-8?B?Vk9GbmNQcnpVKytHY3BWUG1pSHc4QWdiMnhnMG5KaUpTNGFjalZMR0dreXQz?=
+ =?utf-8?B?T0pDUU5BRng0MU5SUFhwQ2phVkV5Vk1mSnJOM05sWEVPUG1IRDc3dUFSa05w?=
+ =?utf-8?B?ZkNIVi9TSXMwRTBnaHFEbkVjS2pRdENzT0Z6RzJNNVVscGN3aGRGSjJYM0Ft?=
+ =?utf-8?B?MVVlSFVvcEVtNm5xNEJHYnRxcGxZYzBVY1ByUjdUUVVFWmdpdFRCc0NpcGZN?=
+ =?utf-8?B?M3EweEVWdmpVUHdJRHJjVXNRUTc5VkMxY1liS2hpSkhnL0RVdHlnMUJBaFAw?=
+ =?utf-8?B?S1J2c1FRT3FUdVVGdUhYUCt1THRCdTZmSElNK1Z1MlBKaGRncEtXTWV1RE5k?=
+ =?utf-8?B?MW5lR2Z4SEFlbHhxQXM1dWtxSS8rbzI3NWZlODVFT0xhTm16ZHVObFRvWm01?=
+ =?utf-8?B?MzA2Y2FzY3ZZYWRkZXA2OEhDdEQ4Q05XNENmOU9vYmcwdFZKbk1hSnpEYjhK?=
+ =?utf-8?B?cHBmaFFDNGRnL2NwL25xOGFCWi9CaXBmZ0d1aVFBejJ1TWc4MTdSM1lscENw?=
+ =?utf-8?B?UmdQbVdBcVdpTlZkSnJ4ajBFU0VNK0lOeWF6SEV3dWVLQzJ0N2NnUmJTbExL?=
+ =?utf-8?B?cndqcVQ4OFJJaUhIZU5TOEJNNVJEbG1GM3R4alJlZFhPdHZ2YW0rZTRyblVM?=
+ =?utf-8?B?Y2M3dHBJOXE4Ti9PZS9HMFFHVk1qTHBlUG1MSm02aTl6VnBPS0l4dmFkYzho?=
+ =?utf-8?B?OW5wbXZ6bkVnOTl1TjYwdEhMMXJFZlhsM0J0WXVOeldxSHpnU01WcDJyc3ZO?=
+ =?utf-8?B?ZEE0K0ZTeThOdXp6VkRGZE0wUGE3bSt0cytQNytQYUUwVVl0SXoyQlg0TjYw?=
+ =?utf-8?B?NXFXbWRPSW5DNE1aWHJpMi9pN0hYN2NyZTIyVnN5NFVCbUt1aEQvZDFwb2RH?=
+ =?utf-8?B?MG42KzFNNU9ic1NKbGYzUnNlL0xRQlBpNGI0QlBTNkQzckc0aFQxLzNOeE5z?=
+ =?utf-8?B?NmVvQzZ3UFVwTUk5ZlV2TXoxdXdLeGUzUzUxT0xpZE1JVDcxdG1lR1kweU5P?=
+ =?utf-8?B?WkZudjM0bGxaK01zMnBCWE45dFp4eTJPSlAzTE5xeDBNaFZQNXZvNmFwOWFy?=
+ =?utf-8?B?QkZVM0xsem5xWm1ZZkJBV1oveUc1WmRxWUZWWld1ZTFYREYyOXpXbGpjcHVY?=
+ =?utf-8?B?RGRYNGh1bUJxTWxOYjlFRGhkNFpwd3BId3NQSGNLYXdQazRTV0J3MEE4QjdN?=
+ =?utf-8?B?RkpQekZZRmgvbzJGVCtCY2pyOXc1WG1tUFVORERhNU5ldStJaEwxSC9WR1Zt?=
+ =?utf-8?B?K2doanBCOXFDbkJqMGRSdkdSalIxR21QeDgzUm1xMlVubHdlMjB4SEtTVEZL?=
+ =?utf-8?B?d0puYzBvU3dYUGc1M3Y0U3F5STJBanVONlc3WXR6UEFlWEdrK0F6VFl5ZUpF?=
+ =?utf-8?Q?bCAGrg=3D?=
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?N0VzamsxRHFQdTJyNTRPenRrcDRBVUg0OHZ6Y2xqaE5TdVl0cExIT0NWbE10?=
+ =?utf-8?B?MXFRUk1kYzY5VVRvVi9WajlMbTRLcUZQYVNXUktPcTl2c2wraStYMlV3bHR1?=
+ =?utf-8?B?UGVqZnAwNVNEbUN2TmFtVUhRTXBwSUtKcjdaSHgra080NlJSRWo1UXVicGFL?=
+ =?utf-8?B?SmNMeGhkdzliUlFuYTJmOHQyNWkrVDVhYWRNeDRrUitTMHc5MGtxWThlR29D?=
+ =?utf-8?B?cHFCK1hmK2NxNmFyMndjbFNLMmxDamZoSHlGeXVaMnBGSERiS3hBbGVFODky?=
+ =?utf-8?B?RTZXQkpqMmFIS3ljclhNZitjWEowOVZTemo5ZGJYZG03b0VpTm1QNVI1SWky?=
+ =?utf-8?B?OHp2eXNXK2RoL3VUNXdWcHdvaTRFTG0ra2ZhWlhlMGlsTys3YkNxK1VpNEJs?=
+ =?utf-8?B?dGVOVVZNeS9pS1VmbE9nOFJ1TzJTV29tUjVNTzRyelM0OW1HbUFPZGFPTElP?=
+ =?utf-8?B?aGJsWnUvdzZ4eStxN3RRTXZITldjRWgzTVFvNGFRdXpIaUd0andsRXFnbTdr?=
+ =?utf-8?B?SFRkS2s1dzhSbHlLczBzTDJRdW1lVVJxQkdyV0RCSjJybDVkOVozTkVieitV?=
+ =?utf-8?B?ZjdVaGJISnBaSytxaUZQL29JbytWUEMrcEhxdjZ2Mmp4Z0hEWXlHUXZSVTFX?=
+ =?utf-8?B?REpJSnFGbnZzL1orSEo4NVVNc3RNb3ZoSUk1OWQrdk1na0hBVTRMV3cvajhB?=
+ =?utf-8?B?NWRpMGIzek96d0QrVUpTS1Q0emJ2azZoMjRDTWlnWjBYc1F4SXhLSFcvUmx6?=
+ =?utf-8?B?L0R6R1dnaFcvS1k1UWprTGRJMzA2U1RaZWdaV0p0S1liNUdGOVdReHgvSDJh?=
+ =?utf-8?B?V24xRTBQUWl0ek9EaVFiQnIxVG8xOGs2US9XTE5DdmNiZnJVclRhQTNqVVA0?=
+ =?utf-8?B?YWFRbFBKWks1NG9jUUIzUU1oZlNBLzRlS3ZDTUpLUU40ZmltakVxUWRqcG4x?=
+ =?utf-8?B?U0Y0MVFocTV2K3M0WlhQNDZlRnpWY3kzU2dHOW1MTy9TM2JKZlpFQVVQZ3FI?=
+ =?utf-8?B?SFdTOXprUzQxZzY5SHZJRmdwWHdxTTY5RzRpalZyTXNZU2JqQURFaUtkTDht?=
+ =?utf-8?B?Q0xlZ0JNRkNXS2dBeVA3M2RTdjZPSXFsaURHWVBvQU45QVhCTXlqUU9Kbmpy?=
+ =?utf-8?B?amI4MURvUGM5YmIzUkVLWTlpanNEQ1h6WW0xS0gwQmRxT2RZMW1mOGlpWDJa?=
+ =?utf-8?B?VmFVUm1vR1hXVndqb01GTEhwYkxFRW1WZVEvMXlFUXllUERlcjUra0xTS0Ey?=
+ =?utf-8?B?UnExUFBYQWdhQXVKWEE4WEZQNzI3dHFDYWRYYllyOEZRQUJURExzci85Nm05?=
+ =?utf-8?B?SzVqa2dPUTRManU2Skw0MlUwbUNOVjlXZUdKTk1FbHlNQnEwRnczZzdIc2JK?=
+ =?utf-8?B?S293Yk1GWG9iTldibUFpNjlseThHZVRnK2VGYktEUkZ4SEloN09aQm5BN0ZY?=
+ =?utf-8?B?UmpSYVZaaHJULzZFMWxNalhHUkk4cHQrVFBOdUxBYlR6ZTRFbXlBUit4NnFh?=
+ =?utf-8?B?OHFHZzRwZWViVVpmUUpxRWhhRHZCSUdhQ0I5ck9OeGRmR0hZMGd5S1lSVGFQ?=
+ =?utf-8?B?UVVXanJDNGVtcGZhN3BpWk5SWTJZVGhjZzZlWEp5T1g3T0E0WXZjZ2lpN20y?=
+ =?utf-8?B?dDNDcFdNaTAwaHdlMUJLZVdENHpGd2QxaHdBb1k3WFg5NGgyNENYUHFZb3By?=
+ =?utf-8?Q?tq0C/w8uF4PZw1jycnkx?=
+X-OriginatorOrg: outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: df7c3f56-6b67-4abb-3e8b-08dd3a2f30cd
+X-MS-Exchange-CrossTenant-AuthSource: AM6PR03MB5080.eurprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Jan 2025 15:20:51.6980
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg:
+	00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR03MB7630
 
-The function bpf_test_init() now returns an error if user_size
-(.data_size_in) is less than ETH_HLEN, causing the tests to
-fail. Adjust the data size to ensure it meets the requirement of
-ETH_HLEN.
+I noticed that the errors in Kernel CI
 
-Signed-off-by: Shigeru Yoshida <syoshida@redhat.com>
----
- .../testing/selftests/bpf/prog_tests/xdp_cpumap_attach.c  | 4 ++--
- .../testing/selftests/bpf/prog_tests/xdp_devmap_attach.c  | 8 ++++----
- 2 files changed, 6 insertions(+), 6 deletions(-)
+progs/iters_task_file.c: In function ‘test_bpf_iter_task_file’:
+   progs/iters_task_file.c:43:33: error: taking address of expression of 
+type ‘void’ [-Werror]
+      43 |         if (item->file->f_op != &pipefifo_fops) {
+         |                                 ^
+   progs/iters_task_file.c:59:33: error: taking address of expression of 
+type ‘void’ [-Werror]
+      59 |         if (item->file->f_op != &pipefifo_fops) {
+         |                                 ^
+   progs/iters_task_file.c:75:33: error: taking address of expression of 
+type ‘void’ [-Werror]
+      75 |         if (item->file->f_op != &socket_file_ops) {
+         |                                 ^
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_cpumap_attach.c b/tools/testing/selftests/bpf/prog_tests/xdp_cpumap_attach.c
-index c7f74f068e78..df27535995af 100644
---- a/tools/testing/selftests/bpf/prog_tests/xdp_cpumap_attach.c
-+++ b/tools/testing/selftests/bpf/prog_tests/xdp_cpumap_attach.c
-@@ -52,10 +52,10 @@ static void test_xdp_with_cpumap_helpers(void)
- 	ASSERT_EQ(info.id, val.bpf_prog.id, "Match program id to cpumap entry prog_id");
- 
- 	/* send a packet to trigger any potential bugs in there */
--	char data[10] = {};
-+	char data[ETH_HLEN] = {};
- 	DECLARE_LIBBPF_OPTS(bpf_test_run_opts, opts,
- 			    .data_in = &data,
--			    .data_size_in = 10,
-+			    .data_size_in = sizeof(data),
- 			    .flags = BPF_F_TEST_XDP_LIVE_FRAMES,
- 			    .repeat = 1,
- 		);
-diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_devmap_attach.c b/tools/testing/selftests/bpf/prog_tests/xdp_devmap_attach.c
-index 27ffed17d4be..461ab18705d5 100644
---- a/tools/testing/selftests/bpf/prog_tests/xdp_devmap_attach.c
-+++ b/tools/testing/selftests/bpf/prog_tests/xdp_devmap_attach.c
-@@ -23,7 +23,7 @@ static void test_xdp_with_devmap_helpers(void)
- 	__u32 len = sizeof(info);
- 	int err, dm_fd, dm_fd_redir, map_fd;
- 	struct nstoken *nstoken = NULL;
--	char data[10] = {};
-+	char data[ETH_HLEN] = {};
- 	__u32 idx = 0;
- 
- 	SYS(out_close, "ip netns add %s", TEST_NS);
-@@ -58,7 +58,7 @@ static void test_xdp_with_devmap_helpers(void)
- 	/* send a packet to trigger any potential bugs in there */
- 	DECLARE_LIBBPF_OPTS(bpf_test_run_opts, opts,
- 			    .data_in = &data,
--			    .data_size_in = 10,
-+			    .data_size_in = sizeof(data),
- 			    .flags = BPF_F_TEST_XDP_LIVE_FRAMES,
- 			    .repeat = 1,
- 		);
-@@ -158,7 +158,7 @@ static void test_xdp_with_devmap_helpers_veth(void)
- 	struct nstoken *nstoken = NULL;
- 	__u32 len = sizeof(info);
- 	int err, dm_fd, dm_fd_redir, map_fd, ifindex_dst;
--	char data[10] = {};
-+	char data[ETH_HLEN] = {};
- 	__u32 idx = 0;
- 
- 	SYS(out_close, "ip netns add %s", TEST_NS);
-@@ -208,7 +208,7 @@ static void test_xdp_with_devmap_helpers_veth(void)
- 	/* send a packet to trigger any potential bugs in there */
- 	DECLARE_LIBBPF_OPTS(bpf_test_run_opts, opts,
- 			    .data_in = &data,
--			    .data_size_in = 10,
-+			    .data_size_in = sizeof(data),
- 			    .flags = BPF_F_TEST_XDP_LIVE_FRAMES,
- 			    .repeat = 1,
- 		);
--- 
-2.48.1
+These errors are caused by -Werror (treat all warnings as errors).
 
+In this test case, we do need to get the address of void type.
