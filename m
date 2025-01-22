@@ -1,62 +1,60 @@
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+Received: from mail-qk1-f179.google.com (mail-qk1-f179.google.com [209.85.222.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA62521519C;
-	Wed, 22 Jan 2025 17:14:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D767C2153DE;
+	Wed, 22 Jan 2025 17:14:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737566057; cv=none; b=X68buiL/yLrxBt6+3Ze9ye7NSS49RGG3/xaQZlNFdVEXSadlBKJrhcEzjRct/TJtGutVtv7aP/Ygwj8YsqqiO0DzlV3cLteU0ZOQ7jIvy5G6ebPVElmy47999t7wjz8rw/x2du75lBngdCIQTMoWs34mLT1ye98lMhiz027VYgk=
+	t=1737566061; cv=none; b=kri6uJO/eOeCXr4ahpJAu/7MUDQRSCVW/f8f5xeTL/7mlrbRpMJ8htPSadLU/AlB20MwwyJ94VJMho+B+JDCH8pqTH52jnAtHlPejGB/mnJq9JNqlzY+WpaGwID8y8Y1K+aHLRBpRrlRiuM3KZl+7LoONliZLmxXSCS3L8PDbSI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737566057; c=relaxed/simple;
-	bh=/soEHN2xtVU1gtwSpLHJpj49L3qPGrxuc0AMAZvmUNs=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=D3cJPV0iM3tpjfySoSo/dnTbU+oEJoeQmRbDWHGwWLB6HFIviNYs0cZ+abUdr1fV+8Hpg3BICXYEt5HZBBlRXscri0XVZYGr4ut7zZlSlJkITkKH7H0T7ASgxvsxkCSQ2KwHevUdomQEycR8qR/ExlrbxU0ts6xMNpgyqa76SVY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eWbi/EPH; arc=none smtp.client-ip=209.85.214.169
+	s=arc-20240116; t=1737566061; c=relaxed/simple;
+	bh=tDh/mOS6P7ygFbCpjoHq826cKO7iE1Bzif0WualZ6Ik=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=h+uFE8sJkRKn0U7o8D7MJZEfUTptrbyil2AKXNkxGQZPDg4sFJnSS/cSQx3+iXhRlqBd/GmFOpJx9HyhdyozLRbr3Ji9T1WtdWiaQ19dTkUmOe90kpY5myTtTSvrI4/gV2qX1ZWHWtd0mSmfEgcKbEPNZSlRJ7ZRwnjMMFZuZ1o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZTPQlP0s; arc=none smtp.client-ip=209.85.222.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eWbi/EPH"
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-21670dce0a7so150147985ad.1;
-        Wed, 22 Jan 2025 09:14:15 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZTPQlP0s"
+Received: by mail-qk1-f179.google.com with SMTP id af79cd13be357-7be6fdeee35so421521285a.1;
+        Wed, 22 Jan 2025 09:14:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1737566055; x=1738170855; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=nE070qqGZGw6mDAzzE1IWQug1apufvChvMUY0TYHWLU=;
-        b=eWbi/EPHuS8CInm65PGSO8C1MGk+u6CE845Im4sG9Yoc/vXiQewcPC7gysNU1v3eyc
-         +fpecWBFmNtbJ1IYfR5bm/xFumq2CEQMolGrF6kG8VCMeypvvLiQkhtoJgObmO2RR4EI
-         ZCZdcWvvxq6ua3yjuMqOSY6YXNi4iiFjUzxVd1hAtMv7eWiEPHcZEUq9f3dluz6SJHsf
-         sME9VO7b42MDijaIlhSw8AwY+JuFp/AbWn+YY3hTlolsDVhYEwJJYrNwFySZPwHy6UcA
-         e1CnT9ev9uJdh4RwC2NktAnhInqbH3x81SoC6YGR1abWVCxIpfsgOjrnehVvde1vBLyP
-         CLlw==
+        d=gmail.com; s=20230601; t=1737566059; x=1738170859; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=7zINL8i15bfcigl3lUWFYKL/YF1uNpTwZIKUV5mY0Z8=;
+        b=ZTPQlP0spN3T7k0O9l6liok4uo8yyqsKd9y53kcjA5eNRsk8NIaeENE51wLQ/obLwO
+         HDmFrUejQkChPXPn/e0TXKOT8PICsTc3e89aldehNHS9cFR4UGWE+NnjQ5QVjjaKiemj
+         EYrhbVAekQDavKMknDZ09deGwhhX0yFrEGY+RXpWdNIdb+6wMHSTo00PaZlQBLysq44V
+         gH0GSAMmtVX4yxBUdHUyj3fBrsFPDuSFRM+7Qk7G+PRCA1rflS42eYluBHFqXlp9dQX7
+         E5ebGhmWfy54Z8zh6GgL39a5xIf0rH5VtoSVWF8gWawLxovCSq6m+xfvlrCgALaHK0FO
+         GDhw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1737566055; x=1738170855;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=nE070qqGZGw6mDAzzE1IWQug1apufvChvMUY0TYHWLU=;
-        b=g3qNxmJrzXZK+n0kW6v38gp9KU7UFbTpGKueThkRKoTglPL7VA3nrd4HaxvfLNefgN
-         hpHVpoEklXxS4wvL6fKb3Gn9+MGlt/i6Re+fpJ7aX1Pd5b6oVI/0xyclCZcrZmuM9iEC
-         PkDHziybHwRmsmkOzw7OwMUSRwLnFD0Rxu6J0wKzXYHf1iCTLrfOhlqsra9g8VKrJZlZ
-         /b/IsEzh+V+hrd2yRplQybHuV9KlzRbQXasgz5FsQlodIiBc2FsL5Cbi4839Iu2dhWwL
-         4tnnCbvL0zZptQXjRMjUolUzLIPpxsktuvheFJFnMDlgPc6bCK9k82s9j/gzLlgQbS0e
-         55EA==
-X-Forwarded-Encrypted: i=1; AJvYcCWULOZdjrdsQ7QKrLFtD5x1pPcEMTCdcQs5K3K6Zmjkqc+KpvD8JLcdSxP1eIHU1IQa232hPOWtcT01Obk=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywwm8Xovd18IfZgf9PFxGRSAatq0JWbNuC/68XyQnZ+kdOHoa3r
-	gf20DMad1c7wjZwC/JOSYHO8lVSe5y2htFBxjXX8UL7uQo2ZSTvm
-X-Gm-Gg: ASbGnctHEYoYaN08bzl5cUu+d5Y3MyFwsB0x/EZNZKekHjqCgRVKQFfUybgOzkeuTnU
-	/2lI2FgNj0zvmBoTd/N0FPEeAyBI2YCpgp0PK4E2FBlrzk+EPzZr4zOc5uH1m4ZLA1jzYli1A0v
-	YS8mB9ShQH7au7NBPr+ZwDMTHdhfySuoqNc6gSYef5O2hAWv/CeABDIsGVdO9YkcBH7bHPbTjGj
-	hWhOlkBP3yQ8H1jauC84QGZebSgsNojtXUlFhT+ydH1LZDXJ1gEjRGVrrbI+o1X0G/SQ82xIpyX
-	l1k=
-X-Google-Smtp-Source: AGHT+IG8EHOsbJUTujLQ/fOnmzsKPjbbzIgMHmktLEEWzk4ajFxIv5SGEihVGmS7wYpdwaa2IoWQ8Q==
-X-Received: by 2002:a17:902:f54e:b0:215:72aa:693f with SMTP id d9443c01a7336-21c352de455mr290597865ad.9.1737566054861;
-        Wed, 22 Jan 2025 09:14:14 -0800 (PST)
+        d=1e100.net; s=20230601; t=1737566059; x=1738170859;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=7zINL8i15bfcigl3lUWFYKL/YF1uNpTwZIKUV5mY0Z8=;
+        b=N2wGv5azi1LF3GEhsfu4hsDJcpUfOkUsZlQANkIGvMVJfmLn5Ae8eY6SP6plMqOdeo
+         C1kYCNirk/hm4K5fgyM7yEmjnAyoNhOrxGnoHccl+/OWPWkogCMgAlwwhJB6ALIKTrlE
+         d0R6wb5CR1Lj28UP6IF7YaEUpjbVPfQa5o6vHMXv5oH/pa6bBPjZQGeWQ8j0eHH63u0O
+         Ye6SpNYGyHIXJPJTcENAFOc+isagx61SN1V9KgdAucJqTGqOwwC3RDpDHQvPjZcLZJam
+         nqJ+sbPkFe5LqrJc/gSzUguA1XwgL+di0hWOnPmZA338efBit+dew8f23V1cTkGmd/4Q
+         asNA==
+X-Forwarded-Encrypted: i=1; AJvYcCVd/fpdCiRs/t4N4r2wSEkXZvdeiVfusSe9r4FRsbmanWODFG80pN2A4Fy+HnJtHrm+Ksb0zIuOyGtkIWo=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy2etAFr8vSFGIPFkiKiJ1PtC+8rs+6fSYMgLCTTiGOaleC+qu9
+	yLEatOcKUMIplLZC/JHNcyWmEs8ZT7ELzPqdb0L/Ya5jNTCw7g/OqyDRzU1O
+X-Gm-Gg: ASbGnct3j7sVcNhyaDC3tnWJO24pSTn8pH0CqVSufbTn/j+o1/OrWRlY15FG0/DWFYB
+	xE9wLLsK3f/eBZCwpJ/tx1sLnHhrFGPRM6TjVnXrTuFbxOWI1xE8WOdjnI+LVSTF71nvo0rO4GT
+	POf1AiuaGqQsjEDWOQ0XoRD9zUKTHB711URnJKlMveP2WWRaLA130d7YXdCW0A3snjC58GlXlXE
+	BDuM6oziyv+wnFWv32We6oKtUryOnrp0nSQH4HH3etyf3GSkDx2VIwYJPj3C437Ry2a+jn/ETAB
+	J5g=
+X-Google-Smtp-Source: AGHT+IFPh+gbWNP7KkDyRef18vWnid2Fs5yl4acqrLJWBC8Fd66kqTR+46Dgv0A5im8o6EE0p6JUqw==
+X-Received: by 2002:a05:6a00:1a94:b0:725:ea30:aafc with SMTP id d2e1a72fcca58-72daf929f5cmr24289570b3a.5.1737566047372;
+        Wed, 22 Jan 2025 09:14:07 -0800 (PST)
 Received: from localhost ([117.147.90.29])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21c2d4215dfsm98585685ad.248.2025.01.22.09.14.13
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-72dab814520sm11150913b3a.49.2025.01.22.09.14.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Jan 2025 09:14:14 -0800 (PST)
+        Wed, 22 Jan 2025 09:14:06 -0800 (PST)
 From: Tao Chen <chen.dylane@gmail.com>
 To: ast@kernel.org,
 	daniel@iogearbox.net,
@@ -68,12 +66,10 @@ To: ast@kernel.org,
 Cc: bpf@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Tao Chen <chen.dylane@gmail.com>
-Subject: [RFC PATCH bpf-next 2/2] selftests/bpf: Add libbpf_probe_bpf_kfunc API selftests
-Date: Thu, 23 Jan 2025 01:13:59 +0800
-Message-Id: <20250122171359.232791-3-chen.dylane@gmail.com>
+Subject: [RFC PATCH bpf-next 0/2] Add prog_kfunc feature probe
+Date: Thu, 23 Jan 2025 01:13:57 +0800
+Message-Id: <20250122171359.232791-1-chen.dylane@gmail.com>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20250122171359.232791-1-chen.dylane@gmail.com>
-References: <20250122171359.232791-1-chen.dylane@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -82,51 +78,21 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add selftests for prog_kfunc feature probing.
+More and more kfunc functions are being added to the kernel.
+Different prog types have different restrictions when using kfunc.
+Therefore, prog_kfunc probe is added to check whether it is supported,
+and the use of this api will be added to bpftool later.
 
-Signed-off-by: Tao Chen <chen.dylane@gmail.com>
----
- .../selftests/bpf/prog_tests/libbpf_probes.c  | 30 +++++++++++++++++++
- 1 file changed, 30 insertions(+)
+Tao Chen (2):
+  libbpf: Add libbpf_probe_bpf_kfunc API
+  selftests/bpf: Add libbpf_probe_bpf_kfunc API selftests
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/libbpf_probes.c b/tools/testing/selftests/bpf/prog_tests/libbpf_probes.c
-index 4ed46ed58a7b..5f94971649db 100644
---- a/tools/testing/selftests/bpf/prog_tests/libbpf_probes.c
-+++ b/tools/testing/selftests/bpf/prog_tests/libbpf_probes.c
-@@ -126,3 +126,33 @@ void test_libbpf_probe_helpers(void)
- 		ASSERT_EQ(res, d->supported, buf);
- 	}
- }
-+
-+void test_libbpf_probe_kfuncs(void)
-+{
-+	int ret, kfunc_id;
-+	char kfunc[64] = "bpf_cpumask_create";
-+	struct btf *btf;
-+
-+	btf = btf__parse("/sys/kernel/btf/vmlinux", NULL);
-+	if (!ASSERT_OK_PTR(btf, "btf_parse"))
-+		return;
-+
-+	kfunc_id = btf__find_by_name_kind(btf, kfunc, BTF_KIND_FUNC);
-+	if (!ASSERT_GT(kfunc_id, 0, kfunc))
-+		goto cleanup;
-+	/* prog BPF_PROG_TYPE_SYSCALL supports kfunc bpf_cpumask_create */
-+	ret = libbpf_probe_bpf_kfunc(BPF_PROG_TYPE_SYSCALL, kfunc_id, NULL);
-+	ASSERT_EQ(ret, 1, kfunc);
-+
-+	/* prog BPF_PROG_TYPE_KPROBE does not support kfunc bpf_cpumask_create */
-+	ret = libbpf_probe_bpf_kfunc(BPF_PROG_TYPE_KPROBE, kfunc_id, NULL);
-+	ASSERT_EQ(ret, 0, kfunc);
-+
-+	/* invalid prog type */
-+	ret = libbpf_probe_bpf_kfunc(100000, kfunc_id, NULL);
-+	if (!ASSERT_LE(ret, 0, "invalid prog type:100000"))
-+		goto cleanup;
-+
-+cleanup:
-+	btf__free(btf);
-+}
+ tools/lib/bpf/libbpf.h                        | 16 ++++++++-
+ tools/lib/bpf/libbpf.map                      |  1 +
+ tools/lib/bpf/libbpf_probes.c                 | 36 +++++++++++++++++++
+ .../selftests/bpf/prog_tests/libbpf_probes.c  | 30 ++++++++++++++++
+ 4 files changed, 82 insertions(+), 1 deletion(-)
+
 -- 
 2.43.0
 
