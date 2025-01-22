@@ -1,27 +1,28 @@
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.5])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E3BB21F7914;
-	Wed, 22 Jan 2025 10:11:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.5
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.4])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A2C81F7914;
+	Wed, 22 Jan 2025 10:11:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737540695; cv=none; b=rgx/c62FI6Eld7wL41pz6+CEzxUSiU7MyBs+vrqqh6HP7ruX99o9BzZ/0yNar8lgexOUVuPD50/8GIaBi9foxVYMhlQIenSJT+OtUy3EdtTFCzCfavw+bgfetM0pS0dC6UV2XpBKS9ZtxiGTpQHDhRxJ/CchTowM2gp4MvVTW2A=
+	t=1737540703; cv=none; b=gmgLuJ/8aW+qMvwmrMP10R4X2U1sil6bxM9wXWWhclXqb6YOhmjXyOWEirVtQDBJuAdAOQKbpwysLvcpTfzOF0hCEKGpnYMgfwTGFOXDg2rVGwoU9qI2ut/tlKdCZCyZ78BCyaEiWU0YTF7BwzlC/vZ9qO2QRuPDjyDWpf3EVBs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737540695; c=relaxed/simple;
-	bh=nKWu84r5RQKGBqm5xElMSa7RfxVJ2SqHd74Gi/uAVuc=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Kp1FtTeBwC5OQziVYKOwkfCBvnHhSTlivX8/QFiL1+7DpFVMFx1K68p3/o7R0rie1B0q4YpkrQAlPo9EdK827n1uKZ2kOhJmBb+9puU0c9rxKbr/nemr+MeTFEJAnysQOR0w8/HOKiBWK3RSHtn0L05pNbCmL9BadE8Pu3Yv9yU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=TTbd3Pd0; arc=none smtp.client-ip=220.197.31.5
+	s=arc-20240116; t=1737540703; c=relaxed/simple;
+	bh=6p0ZNiaedPTstsjUOKB/bKroZewqExukBImhrr1HPaE=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=O7ZMFzn0Hr6N0FFyxeqqKY6mAoeHxrdOGrTnpGG04b2zvtUneq3iRjy0YcBtaRO0kk1UoFEabSluRlZ9uHfzx6F1hUxA799ACSZNIRCqMtk3BgCWZo749wEv+6xF9airaIcDA3EDOPnUg/cRxwp5mwrfr/fzD3mAvv57xTei8tk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=NmhQaMN2; arc=none smtp.client-ip=117.135.210.4
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="TTbd3Pd0"
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="NmhQaMN2"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:Subject:Date:Message-ID:MIME-Version:
-	Content-Type; bh=QWWYmC4TDSJZjNRxBuhFocor1RdCIg5ChEjlLlaKCnE=;
-	b=TTbd3Pd0dveYS7fHJATPaag2gs30E4nPLyWYVMolF8pHbrYMPef9j+M9Qj2Nrv
-	XTvDgj5Qg9wDCvaP0c3/V1L9QfxleGnfRMMxzF0L6W6Y+tP23cN1XMuXHayj0Gx9
-	lZJd78gN0AczG1xChg2EwdZ4pg2nbtCJKh5PWE+QLkk3Q=
+	s=s110527; h=From:Subject:Date:Message-ID:MIME-Version; bh=QfD0x
+	ORTJ6sdWkpnFOeE2wnXCWQvBYF6SlJ27tlulQ4=; b=NmhQaMN2bVMWQH2mkJTxF
+	e6LCWMYTylebD+llO5dZTdCTgSEv4rnJiN0psi1YhUbzC5pAIDB4uhiTInscJKu7
+	zMnF5K45iibe5Ez1AKwXNpW1I5LefNq4C2LToEsw8zIcmYFhFGRBnNypooXbX4O3
+	ovxmfjO/nImXUuKKj1lQRk=
 Received: from localhost.localdomain (unknown [47.252.33.72])
-	by gzsmtp3 (Coremail) with SMTP id PigvCgAHUcjUw5Bn_UIhKA--.64788S2;
-	Wed, 22 Jan 2025 18:09:36 +0800 (CST)
+	by gzsmtp3 (Coremail) with SMTP id PigvCgAHUcjUw5Bn_UIhKA--.64788S6;
+	Wed, 22 Jan 2025 18:10:23 +0800 (CST)
 From: Jiayuan Chen <mrpre@163.com>
 To: bpf@vger.kernel.org,
 	jakub@cloudflare.com,
@@ -54,100 +55,58 @@ Cc: netdev@vger.kernel.org,
 	linux-doc@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	Jiayuan Chen <mrpre@163.com>
-Subject: [PATCH bpf v9 0/5] bpf: fix wrong copied_seq calculation and add tests
-Date: Wed, 22 Jan 2025 18:09:12 +0800
-Message-ID: <20250122100917.49845-1-mrpre@163.com>
+Subject: [PATCH bpf v9 4/5] selftests/bpf: fix invalid flag of recv()
+Date: Wed, 22 Jan 2025 18:09:16 +0800
+Message-ID: <20250122100917.49845-5-mrpre@163.com>
 X-Mailer: git-send-email 2.43.5
+In-Reply-To: <20250122100917.49845-1-mrpre@163.com>
+References: <20250122100917.49845-1-mrpre@163.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:PigvCgAHUcjUw5Bn_UIhKA--.64788S2
-X-Coremail-Antispam: 1Uf129KBjvJXoWxWFyrGFyfXw4kuryDAFyxKrg_yoW5ZrWfpa
-	ykC34rGr47tFyxZws7A3yIqF4Fgw4rGay5KF1Fq3yfZF4jkryjvrs29F1aqr98GrWY9F1U
-	Cr13Wr4Y934UAFDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0z_pnQ7UUUUU=
-X-CM-SenderInfo: xpus2vi6rwjhhfrp/xtbBDwjcp2eQr31LCwACsb
+X-CM-TRANSID:PigvCgAHUcjUw5Bn_UIhKA--.64788S6
+X-Coremail-Antispam: 1Uf129KBjvJXoW7KF4DCF45tFW5tFy5Xr1UWrg_yoW8GF1kpa
+	40y34YkFWSvF1aqa1kJrsruF4rGr98Xws0kF4DWry8Ar1kJrn2qF4xKay5tFn7WrZ3Z34r
+	Zwn3KFWrWw48WwUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zEYFAQUUUUU=
+X-CM-SenderInfo: xpus2vi6rwjhhfrp/xtbBDxrcp2eQus6v2AAAsa
 
-A previous commit described in this topic
-http://lore.kernel.org/bpf/20230523025618.113937-9-john.fastabend@gmail.com
-directly updated 'sk->copied_seq' in the tcp_eat_skb() function when the
-action of a BPF program was SK_REDIRECT. For other actions, like SK_PASS,
-the update logic for 'sk->copied_seq' was moved to
-tcp_bpf_recvmsg_parser() to ensure the accuracy of the 'fionread' feature.
+SOCK_NONBLOCK flag is only effective during socket creation, not during
+recv. Use MSG_DONTWAIT instead.
 
-That commit works for a single stream_verdict scenario, as it also
-modified 'sk_data_ready->sk_psock_verdict_data_ready->tcp_read_skb'
-to remove updating 'sk->copied_seq'.
-
-However, for programs where both stream_parser and stream_verdict are
-active (strparser purpose), tcp_read_sock() was used instead of
-tcp_read_skb() (sk_data_ready->strp_data_ready->tcp_read_sock).
-tcp_read_sock() now still updates 'sk->copied_seq', leading to duplicated
-updates.
-
-In summary, for strparser + SK_PASS, copied_seq is redundantly calculated
-in both tcp_read_sock() and tcp_bpf_recvmsg_parser().
-
-The issue causes incorrect copied_seq calculations, which prevent
-correct data reads from the recv() interface in user-land.
-
-Also we added test cases for bpf + strparser and separated them from
-sockmap_basic, as strparser has more encapsulation and parsing
-capabilities compared to sockmap.
-
+Signed-off-by: Jiayuan Chen <mrpre@163.com>
 ---
-V8 -> v9
-https://lore.kernel.org/bpf/20250121050707.55523-1-mrpre@163.com/
-Fixed some issues suggested by Jakub Sitnicki.
+ tools/testing/selftests/bpf/prog_tests/sockmap_basic.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-V7 -> V8
-https://lore.kernel.org/bpf/20250116140531.108636-1-mrpre@163.com/
-Avoid using add read_sock to psock. (Jakub Sitnicki)
-Avoid using warpper function to check whether strparser is supported.
-
-V3 -> V7:
-https://lore.kernel.org/bpf/20250109094402.50838-1-mrpre@163.com/
-https://lore.kernel.org/bpf/20241218053408.437295-1-mrpre@163.com/
-Avoid introducing new proto_ops. (Jakub Sitnicki).
-Add more edge test cases for strparser + bpf.
-Fix patchwork fail of test cases code.
-Fix psock fetch without rcu lock.
-Move code of modifying to tcp_bpf.c.
-
-V1 -> V3:
-https://lore.kernel.org/bpf/20241209152740.281125-1-mrpre@163.com/
-Fix patchwork fail by adding Fixes tag.
-Save skb data offset for ENOMEM. (John Fastabend)
----
-
-Jiayuan Chen (5):
-  strparser: add read_sock callback
-  bpf: fix wrong copied_seq calculation
-  bpf: disable non stream socket for strparser
-  selftests/bpf: fix invalid flag of recv()
-  selftests/bpf: add strparser test for bpf
-
- Documentation/networking/strparser.rst        |   9 +-
- include/linux/skmsg.h                         |   2 +
- include/net/strparser.h                       |   2 +
- include/net/tcp.h                             |   8 +
- net/core/skmsg.c                              |   7 +
- net/core/sock_map.c                           |   5 +-
- net/ipv4/tcp.c                                |  29 +-
- net/ipv4/tcp_bpf.c                            |  36 ++
- net/strparser/strparser.c                     |  11 +-
- .../selftests/bpf/prog_tests/sockmap_basic.c  |  59 +--
- .../selftests/bpf/prog_tests/sockmap_strp.c   | 454 ++++++++++++++++++
- .../selftests/bpf/progs/test_sockmap_strp.c   |  53 ++
- 12 files changed, 610 insertions(+), 65 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/sockmap_strp.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_sockmap_strp.c
-
+diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
+index 884ad87783d5..0c51b7288978 100644
+--- a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
++++ b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
+@@ -522,8 +522,8 @@ static void test_sockmap_skb_verdict_shutdown(void)
+ 	if (!ASSERT_EQ(err, 1, "epoll_wait(fd)"))
+ 		goto out_close;
+ 
+-	n = recv(c1, &b, 1, SOCK_NONBLOCK);
+-	ASSERT_EQ(n, 0, "recv_timeout(fin)");
++	n = recv(c1, &b, 1, MSG_DONTWAIT);
++	ASSERT_EQ(n, 0, "recv(fin)");
+ out_close:
+ 	close(c1);
+ 	close(p1);
+@@ -628,7 +628,7 @@ static void test_sockmap_skb_verdict_fionread(bool pass_prog)
+ 	ASSERT_EQ(avail, expected, "ioctl(FIONREAD)");
+ 	/* On DROP test there will be no data to read */
+ 	if (pass_prog) {
+-		recvd = recv_timeout(c1, &buf, sizeof(buf), SOCK_NONBLOCK, IO_TIMEOUT_SEC);
++		recvd = recv_timeout(c1, &buf, sizeof(buf), MSG_DONTWAIT, IO_TIMEOUT_SEC);
+ 		ASSERT_EQ(recvd, sizeof(buf), "recv_timeout(c0)");
+ 	}
+ 
 -- 
 2.43.5
 
