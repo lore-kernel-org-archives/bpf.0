@@ -1,98 +1,225 @@
-Received: from mail-qk1-f179.google.com (mail-qk1-f179.google.com [209.85.222.179])
+Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D767C2153DE;
-	Wed, 22 Jan 2025 17:14:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CA421369B4;
+	Wed, 22 Jan 2025 17:17:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737566061; cv=none; b=kri6uJO/eOeCXr4ahpJAu/7MUDQRSCVW/f8f5xeTL/7mlrbRpMJ8htPSadLU/AlB20MwwyJ94VJMho+B+JDCH8pqTH52jnAtHlPejGB/mnJq9JNqlzY+WpaGwID8y8Y1K+aHLRBpRrlRiuM3KZl+7LoONliZLmxXSCS3L8PDbSI=
+	t=1737566233; cv=none; b=HN5qX9PQHrpnto5/hjSgaSLa8eQlBPKT5G961pAkPlHXtyk1FGHit/DAshxtUri2L0Fx5bvTM4/ELYgwE9OSjZjHFwFwpFfwem0zgcAulppXZS52NfV19uKt0QSNzKnWrmJ9fYQA9LcyukOxeprfR1pVocEI5zCIA5uiW1rQLcw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737566061; c=relaxed/simple;
-	bh=tDh/mOS6P7ygFbCpjoHq826cKO7iE1Bzif0WualZ6Ik=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=h+uFE8sJkRKn0U7o8D7MJZEfUTptrbyil2AKXNkxGQZPDg4sFJnSS/cSQx3+iXhRlqBd/GmFOpJx9HyhdyozLRbr3Ji9T1WtdWiaQ19dTkUmOe90kpY5myTtTSvrI4/gV2qX1ZWHWtd0mSmfEgcKbEPNZSlRJ7ZRwnjMMFZuZ1o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZTPQlP0s; arc=none smtp.client-ip=209.85.222.179
+	s=arc-20240116; t=1737566233; c=relaxed/simple;
+	bh=o1SE3o3NcZUVY/hmBRha3xtrviGaumM9KPn/dAGuTFk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=QPALcrurHa+hSdXZBvfFMCXO5VwzZAi6mJapAvxu2LhGlKau7NEESWeD6OYsEu9KyvOMEkSeewRI6M5BqSFaDpeAGB2CtoJv6MDjEUBwilBtcgucmsf7x1G9B9eF6g2Rpsr/3kLwDjPt4/440jX7zlHqb+Wb4DNel/7JwwhhFxU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=F+oEs/Py; arc=none smtp.client-ip=209.85.216.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZTPQlP0s"
-Received: by mail-qk1-f179.google.com with SMTP id af79cd13be357-7be6fdeee35so421521285a.1;
-        Wed, 22 Jan 2025 09:14:19 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="F+oEs/Py"
+Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-2ef760a1001so99537a91.0;
+        Wed, 22 Jan 2025 09:17:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1737566059; x=1738170859; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=7zINL8i15bfcigl3lUWFYKL/YF1uNpTwZIKUV5mY0Z8=;
-        b=ZTPQlP0spN3T7k0O9l6liok4uo8yyqsKd9y53kcjA5eNRsk8NIaeENE51wLQ/obLwO
-         HDmFrUejQkChPXPn/e0TXKOT8PICsTc3e89aldehNHS9cFR4UGWE+NnjQ5QVjjaKiemj
-         EYrhbVAekQDavKMknDZ09deGwhhX0yFrEGY+RXpWdNIdb+6wMHSTo00PaZlQBLysq44V
-         gH0GSAMmtVX4yxBUdHUyj3fBrsFPDuSFRM+7Qk7G+PRCA1rflS42eYluBHFqXlp9dQX7
-         E5ebGhmWfy54Z8zh6GgL39a5xIf0rH5VtoSVWF8gWawLxovCSq6m+xfvlrCgALaHK0FO
-         GDhw==
+        d=gmail.com; s=20230601; t=1737566231; x=1738171031; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=gFCVPvzzCocOSj8lSB1mfBdT82DT1p+MPx9OjvYvaR0=;
+        b=F+oEs/Pyob0UjEyYbUJ7b0LWFxqk0BsDzJMcmqoEvmieb+0AUBSatVQVh6GQHDzDB4
+         O1e9c+9bqlyy3wgtgvwIGGfdZ900KN7D1U6KnqUiu1dc1kopCO4eoxtTdyrMYgtWo9nl
+         NkYVinvhuggjBYoqHGMC1JVxfE9zxlh5mHx2fxdLH8m0G1pa2gbBiYBefP+1FYeeiHM1
+         U31OVehyRDCySW7yahEFHa14Zsd/rWHZF2p6hNk2q8nlsQ3lBncF+2/YE3J6fXMja5r8
+         byImxHe5tuEoWtO+ODy5VVp9KXMOw/AA84KHZkpAP9fD3ycVPv1R3fyvbVs7ewiCWSDb
+         5xhw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1737566059; x=1738170859;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=7zINL8i15bfcigl3lUWFYKL/YF1uNpTwZIKUV5mY0Z8=;
-        b=N2wGv5azi1LF3GEhsfu4hsDJcpUfOkUsZlQANkIGvMVJfmLn5Ae8eY6SP6plMqOdeo
-         C1kYCNirk/hm4K5fgyM7yEmjnAyoNhOrxGnoHccl+/OWPWkogCMgAlwwhJB6ALIKTrlE
-         d0R6wb5CR1Lj28UP6IF7YaEUpjbVPfQa5o6vHMXv5oH/pa6bBPjZQGeWQ8j0eHH63u0O
-         Ye6SpNYGyHIXJPJTcENAFOc+isagx61SN1V9KgdAucJqTGqOwwC3RDpDHQvPjZcLZJam
-         nqJ+sbPkFe5LqrJc/gSzUguA1XwgL+di0hWOnPmZA338efBit+dew8f23V1cTkGmd/4Q
-         asNA==
-X-Forwarded-Encrypted: i=1; AJvYcCVd/fpdCiRs/t4N4r2wSEkXZvdeiVfusSe9r4FRsbmanWODFG80pN2A4Fy+HnJtHrm+Ksb0zIuOyGtkIWo=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy2etAFr8vSFGIPFkiKiJ1PtC+8rs+6fSYMgLCTTiGOaleC+qu9
-	yLEatOcKUMIplLZC/JHNcyWmEs8ZT7ELzPqdb0L/Ya5jNTCw7g/OqyDRzU1O
-X-Gm-Gg: ASbGnct3j7sVcNhyaDC3tnWJO24pSTn8pH0CqVSufbTn/j+o1/OrWRlY15FG0/DWFYB
-	xE9wLLsK3f/eBZCwpJ/tx1sLnHhrFGPRM6TjVnXrTuFbxOWI1xE8WOdjnI+LVSTF71nvo0rO4GT
-	POf1AiuaGqQsjEDWOQ0XoRD9zUKTHB711URnJKlMveP2WWRaLA130d7YXdCW0A3snjC58GlXlXE
-	BDuM6oziyv+wnFWv32We6oKtUryOnrp0nSQH4HH3etyf3GSkDx2VIwYJPj3C437Ry2a+jn/ETAB
-	J5g=
-X-Google-Smtp-Source: AGHT+IFPh+gbWNP7KkDyRef18vWnid2Fs5yl4acqrLJWBC8Fd66kqTR+46Dgv0A5im8o6EE0p6JUqw==
-X-Received: by 2002:a05:6a00:1a94:b0:725:ea30:aafc with SMTP id d2e1a72fcca58-72daf929f5cmr24289570b3a.5.1737566047372;
-        Wed, 22 Jan 2025 09:14:07 -0800 (PST)
-Received: from localhost ([117.147.90.29])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-72dab814520sm11150913b3a.49.2025.01.22.09.14.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Jan 2025 09:14:06 -0800 (PST)
-From: Tao Chen <chen.dylane@gmail.com>
-To: ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	haoluo@google.com,
-	jolsa@kernel.org,
-	qmo@kernel.org
-Cc: bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Tao Chen <chen.dylane@gmail.com>
-Subject: [RFC PATCH bpf-next 0/2] Add prog_kfunc feature probe
-Date: Thu, 23 Jan 2025 01:13:57 +0800
-Message-Id: <20250122171359.232791-1-chen.dylane@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        d=1e100.net; s=20230601; t=1737566231; x=1738171031;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=gFCVPvzzCocOSj8lSB1mfBdT82DT1p+MPx9OjvYvaR0=;
+        b=WWbeUQpwAebWFAUH5ecySh9ANcKqrVa0jI407PAJXruUgdZRPWRNxu0PlgchR4gaOB
+         ykNXkaf3LJIjDHeuJDCJy4PHNT71kFIKDbHqI1w9if4QAhfgIHRVphKMAWeMlZJbrYPy
+         zetKRAtXY/fs2L4+DPEVwBA3I+53q1GR0zpvcWCvklEic+n3A7VmSIQzvZ+Hvs78PQrk
+         lKk1DZfMYnM6p1p2JfJmc59qOxc89pG3xNwmu8uYuJfZ7uV5pJewT8K/xtqdztDjS4CJ
+         D5s06k4qe1UVxbN5BpOnYcsSvJJbqfolXOjryCziJoyVkrNEi42AxzUglClucWfFGAdy
+         ATkA==
+X-Forwarded-Encrypted: i=1; AJvYcCUx/rankgafe8k97rzEUzy70NfVq8tio0S6kYkwkvWUzN+9nUukq7fX+RurkAXdy98PAfs=@vger.kernel.org, AJvYcCVKCN8zfFOOhjOBqyVavqpESeO87ivID2h3q4rpYBIfdvs04g2qCykzeWYS/nzcH4YbhXIJd9TzoJafmg==@vger.kernel.org, AJvYcCVKwfF6bG9kgmQWMdhl3YE6YRaLq9QLEq1PLkJLvvvJqcl3hJ9+NJO5h3cHTiw/4DvpVd7zp3TV@vger.kernel.org, AJvYcCXW4dveTUXyhF3G3PYBETze2Ch9HzEWgjuiOu8ZOB5j00p39D6o4r9tST0XeqCC5pWKr6UD/GzAHzBnow==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwK98E6JI84Op7m3lc6IXSYTOz9Ah8L4ERf46b6lvxeh/0OxikM
+	z3m4U65bhX5ZO/fVIBPmmogkaiQFOe9xvL7hZ4IVff65Jt6+jO/jchyM2ECjEUkMi23B46tAkkR
+	xKv2ikDWLA0cFZlUXXerVfm2gXfU=
+X-Gm-Gg: ASbGncu2KqbgZWpWTAPRoFyyOpHc5N8AQJg3W/tidYBeAtHNWZ7e2VQ1q65U709SI3o
+	h6aSKBiLZv2Va9mDtLMZldDzv2zEXBVP/I292rO9QKX6KejewKEzCVOz7AfvRELygKJQ=
+X-Google-Smtp-Source: AGHT+IHTvHTC++TojYxC/UgWgVuinh02AQWbyRQC6b5Z9w3BtCafMdo3/RyX2E4nRXqJ2H6wOGvd5dmMFKUFBshJkuA=
+X-Received: by 2002:a05:6a00:2184:b0:72a:8cc8:34aa with SMTP id
+ d2e1a72fcca58-72daf88b65dmr33962621b3a.0.1737566230650; Wed, 22 Jan 2025
+ 09:17:10 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20250116074442.79304-1-alibuda@linux.alibaba.com>
+ <20250116074442.79304-5-alibuda@linux.alibaba.com> <CAEf4BzZvxqiQ2J1XQMm-ZDBjSsmtJJk6-_RbexPk9vWxAO=ksw@mail.gmail.com>
+ <20250122024327.GA81479@j66a10360.sqa.eu95>
+In-Reply-To: <20250122024327.GA81479@j66a10360.sqa.eu95>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Wed, 22 Jan 2025 09:16:58 -0800
+X-Gm-Features: AbW1kvZiku1BiieaalyxZJhB_Vt4Hw2HwinTvpys0Vs7Ip41IhYFnB8AF6RUhzc
+Message-ID: <CAEf4Bzabc+83abj7gP0h0sCxp-Bajqhm0bdAyn1Gn5bNi5nNXg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v6 4/5] libbpf: fix error when st-prefix_ops and
+ ops from differ btf
+To: "D. Wythe" <alibuda@linux.alibaba.com>
+Cc: kgraul@linux.ibm.com, wenjia@linux.ibm.com, jaka@linux.ibm.com, 
+	ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev, 
+	pabeni@redhat.com, song@kernel.org, sdf@google.com, haoluo@google.com, 
+	yhs@fb.com, edumazet@google.com, john.fastabend@gmail.com, kpsingh@kernel.org, 
+	jolsa@kernel.org, guwen@linux.alibaba.com, kuba@kernel.org, 
+	davem@davemloft.net, netdev@vger.kernel.org, linux-s390@vger.kernel.org, 
+	linux-rdma@vger.kernel.org, bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-More and more kfunc functions are being added to the kernel.
-Different prog types have different restrictions when using kfunc.
-Therefore, prog_kfunc probe is added to check whether it is supported,
-and the use of this api will be added to bpftool later.
+On Tue, Jan 21, 2025 at 6:43=E2=80=AFPM D. Wythe <alibuda@linux.alibaba.com=
+> wrote:
+>
+> On Fri, Jan 17, 2025 at 10:36:50AM -0800, Andrii Nakryiko wrote:
+> > On Wed, Jan 15, 2025 at 11:45=E2=80=AFPM D. Wythe <alibuda@linux.alibab=
+a.com> wrote:
+> > >
+> > > When a struct_ops named xxx_ops was registered by a module, and
+> > > it will be used in both built-in modules and the module itself,
+> > > so that the btf_type of xxx_ops will be present in btf_vmlinux
+> > > instead of in btf_mod, which means that the btf_type of
+> > > bpf_struct_ops_xxx_ops and xxx_ops will not be in the same btf.
+> > >
+> > > Here are four possible case:
+> > >
+> > > +--------+---------------+-------------+-----------------------------=
+----+
+> > > |        | st_ops_xxx_ops| xxx_ops     |                             =
+    |
+> > > +--------+---------------+-------------+-----------------------------=
+----+
+> > > | case 0 | btf_vmlinux   | bft_vmlinux | be used and reg only in vmli=
+nux |
+> > > +--------+---------------+-------------+-----------------------------=
+----+
+> > > | case 1 | btf_vmlinux   | bpf_mod     | INVALID                     =
+    |
+> > > +--------+---------------+-------------+-----------------------------=
+----+
+> > > | case 2 | btf_mod       | btf_vmlinux | reg in mod but be used both =
+in  |
+> > > |        |               |             | vmlinux and mod.            =
+    |
+> > > +--------+---------------+-------------+-----------------------------=
+----+
+> > > | case 3 | btf_mod       | btf_mod     | be used and reg only in mod =
+    |
+> > > +--------+---------------+-------------+-----------------------------=
+----+
+> > >
+> > > At present, cases 0, 1, and 3 can be correctly identified, because
+> > > +       if (ret < 0 || ret >=3D sizeof(stname))
+> > > +               return -ENAMETOOLONG;
+> >
+> > see preexisting snprintf() above, we don't really handle truncation
+> > errors explicitly, they are extremely unlikely and not expected at
+> > all, and worst case nothing will be found and user will get some
+> > -ENOENT or something like that eventually. I'd drop this extra error
+> > checking and keep it streamlines, similar to tname
+> >
+>
+> Sounds reasonable to me. I will remove the explicit error checks in the
+> next version.
+>
+> > > +
+> > > +       /* Look for the corresponding "map_value" type that will be u=
+sed
+> > > +        * in map_update(BPF_MAP_TYPE_STRUCT_OPS) first, figure out t=
+he btf
+> > > +        * and the mod_btf.
+> > > +        * For example, find "struct bpf_struct_ops_tcp_congestion_op=
+s".
+> > > +        */
+> > > +       kern_vtype_id =3D find_ksym_btf_id(obj, stname, BTF_KIND_STRU=
+CT,
+> > >                                         &btf, mod_btf);
+> >
+> > nit: if this fits under 100 characters, keep it single line
+> >
+> > > +       if (kern_vtype_id < 0) {
+> > > +               pr_warn("struct_ops init_kern: struct %s is not found=
+ in kernel BTF\n",
+> > > +                               stname);
+> >
+> > same nit about preserving single-line statements as much as possible,
+> > they are much easier to read
+>
+> None of them exceed 100 lines. Usually, I would check patches with 85 lin=
+es limitations,
+> but since 100 lines is acceptable, we can modify it to a single line here=
+ for
+> better readability.
+>
+> And thanks very much for your suggestion, I plan to fix these style
+> issues in next versions with you ack, is this okay for you?
 
-Tao Chen (2):
-  libbpf: Add libbpf_probe_bpf_kfunc API
-  selftests/bpf: Add libbpf_probe_bpf_kfunc API selftests
+yep, sgtm
 
- tools/lib/bpf/libbpf.h                        | 16 ++++++++-
- tools/lib/bpf/libbpf.map                      |  1 +
- tools/lib/bpf/libbpf_probes.c                 | 36 +++++++++++++++++++
- .../selftests/bpf/prog_tests/libbpf_probes.c  | 30 ++++++++++++++++
- 4 files changed, 82 insertions(+), 1 deletion(-)
-
--- 
-2.43.0
-
+>
+> Best wishes,
+> D. Wythe
+> >
+> > > +               return kern_vtype_id;
+> > > +       }
+> > > +       kern_vtype =3D btf__type_by_id(btf, kern_vtype_id);
+> > > +
+> > > +       kern_type_id =3D btf__find_by_name_kind(btf, tname, BTF_KIND_=
+STRUCT);
+> > >         if (kern_type_id < 0) {
+> > >                 pr_warn("struct_ops init_kern: struct %s is not found=
+ in kernel BTF\n",
+> > >                         tname);
+> > > @@ -1020,20 +1039,6 @@ find_struct_ops_kern_types(struct bpf_object *=
+obj, const char *tname_raw,
+> > >         }
+> > >         kern_type =3D btf__type_by_id(btf, kern_type_id);
+> > >
+> > > -       /* Find the corresponding "map_value" type that will be used
+> > > -        * in map_update(BPF_MAP_TYPE_STRUCT_OPS).  For example,
+> > > -        * find "struct bpf_struct_ops_tcp_congestion_ops" from the
+> > > -        * btf_vmlinux.
+> > > -        */
+> > > -       kern_vtype_id =3D find_btf_by_prefix_kind(btf, STRUCT_OPS_VAL=
+UE_PREFIX,
+> > > -                                               tname, BTF_KIND_STRUC=
+T);
+> > > -       if (kern_vtype_id < 0) {
+> > > -               pr_warn("struct_ops init_kern: struct %s%s is not fou=
+nd in kernel BTF\n",
+> > > -                       STRUCT_OPS_VALUE_PREFIX, tname);
+> > > -               return kern_vtype_id;
+> > > -       }
+> > > -       kern_vtype =3D btf__type_by_id(btf, kern_vtype_id);
+> > > -
+> > >         /* Find "struct tcp_congestion_ops" from
+> > >          * struct bpf_struct_ops_tcp_congestion_ops {
+> > >          *      [ ... ]
+> > > @@ -1046,8 +1051,8 @@ find_struct_ops_kern_types(struct bpf_object *o=
+bj, const char *tname_raw,
+> > >                         break;
+> > >         }
+> > >         if (i =3D=3D btf_vlen(kern_vtype)) {
+> > > -               pr_warn("struct_ops init_kern: struct %s data is not =
+found in struct %s%s\n",
+> > > -                       tname, STRUCT_OPS_VALUE_PREFIX, tname);
+> > > +               pr_warn("struct_ops init_kern: struct %s data is not =
+found in struct %s\n",
+> > > +                       tname, stname);
+> > >                 return -EINVAL;
+> > >         }
+> > >
+> > > --
+> > > 2.45.0
+> > >
