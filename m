@@ -1,264 +1,137 @@
-Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05olkn2053.outbound.protection.outlook.com [40.92.90.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71B4B1C232B;
-	Wed, 22 Jan 2025 21:20:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.92.90.53
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737580819; cv=fail; b=Q2KLh6uFkF68flhIBUSI1z44HR8afimE3dx7bdBerIAw/IbDUOXjAhSr58GxsiabqyLFTHSSdH1NWYNnyrN5PLRsCkIGCX2l2n6Z6Pzk1VVujCq3cCTYIvNWT080SaAeoWqx0k4mmCL5a4Ug/2Y9BwwNWLAlzrUDkvFqIpS5a94=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737580819; c=relaxed/simple;
-	bh=CIZ9eS9It80sTonjvA7hJ+7Iy8pSMwIIsHYMWkqZreQ=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=dJu+nm9R/HYWKp9Cml5IROmdjvKIy/vMttT5xafFTZScRbTiiEqevgTTWV9H00FPymxxmngHImBm+AzAdB3utGEFZa5oItBS4snqDYyNzf4WMWE/iWzwuesaIFauBGS+XpEHsm7khUSZw5idx/E4DyHi2cfIAOJgs8QhyvL3WCE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com; spf=pass smtp.mailfrom=outlook.com; dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b=kAUfsASU; arc=fail smtp.client-ip=40.92.90.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=outlook.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4AB71C5D61
+	for <bpf@vger.kernel.org>; Wed, 22 Jan 2025 21:52:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1737582780; cv=none; b=ipT3A5Z8ZS93/UQs2Fs62r+9/Qn2V9ZPQyDDwx7y2BVkMuAaT3B2BC/ctPJsG6QvcPJfuvv+b7JMI3/vsLVXSyn9w9X2Xq0DaTPeW0LMYDnkUlCPH48agquheFVUiWbw/n9UxkQXTP1h+gGBAA+RVOcEOkAQcEG4YYa2bAzWLKM=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1737582780; c=relaxed/simple;
+	bh=W+/zUCXG69NoiJf3QZS5QVQEK/s/6uTInBFBs8Mv3E8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=YlVgzt2T8pnCccj18rmD1jDhUA3uvmHag4pI0QPLWBTQiSWJfVRchCuOR797B2VwNvPXwW5Fw9RZuZjJHCTV53ySi6zPkX9CMGN/NuV/3cUIwpkBVKZGHyBe9V/UiMGnWKyifjCO7qI9rdVEvcajx48RETcmKmy97H4kTsO+7VY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=be96s8Jp; arc=none smtp.client-ip=209.85.214.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b="kAUfsASU"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=Do1RRYJO0K7RRwbF0hoBqw3i+jHQhWShjAE4Dv/mPRUyAJjRU14AD0EunXhv62pvCgbGSzCHrQLLank60vI2lxuFx552H+4+vfXDBJf/0Noo1Pj71FWBvawxToLu85RmDeLubFTrE++z5XhiJPxQ4FsVlUI5QRhfXTFqwxlWvgVQwpR+VGJDlFAQCRn9G440+JJA6dR/KxkdudHSLA2/uqI6R7udIXXz067SxTLjKwQABIxNlAE7GpBSeQs/ey7ztvW8taf7td3+k80ExO0sPq6/0ITGAyU2xFYhrr2SuWgxBtSs16W+HptxQfxqXhlDMaqPfOK3c9GVmtHNJLhePQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=B/U5c1y+kmLOAfmgL/3z3e58QItDL9nNUU0K8q/9qMk=;
- b=ScjSWfe5pbgo1dYKgVETktf0mJrOVchjpjVBaJEg4/lR9aFz6VafRy9c/bnmHaE7AO1r4PxsYkDgLRresqNFas9Gp//jazbEUfSsosGPgf7sPVW0Ophwxeh9L9dwZZlvkYcusB1pDxXBjPEOhVvjcjXpCTOvcMH6K5Nu0J253gzyU3kugwwDGCRzKVsiXhbYNK+tiOSN82ZnfaVKkyxx9telYwFWi50cUUdP0qxPbRQAlrmvP9W7FXGvPJrQVP6RGUaIo/xU7HPiYp3cGl6r2WobQhRR72jQGuxmgsgeBCYKT55k87bu7GV8x+sNnTn7YPp5fqaYUDIZrLZh+39hJg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=B/U5c1y+kmLOAfmgL/3z3e58QItDL9nNUU0K8q/9qMk=;
- b=kAUfsASUoL0eWfVzgIpxCplE2fawTDNEFrjAXjz+QnWK1qcUggltmpnpN3yxuCli9RgHmki9O+H+JDQUPuKSaaDcRSI/YMOqlLOeBmBEbpCAFuL6gbZOkXTVOWZg7vnKq1SPIj9LI5WGbfJuCD5PW7eHxs/xZwXLIVgJZi0dQZKUA2uak4a3KmnxhY6jewXJ1irSlUvGHGAGsvPawgY35RBYOCzO+NOBKkuvb2Q0ZIQLhljOBsf5IH02t/LHhdCeipghhSorjDz0MetqqItZRtc47HZ2l0FtoTm/EDYAozfNWd2E9g0u5Jn5rKI4Jjo8pJ+TudEWuFHXtfXoYi9mzA==
-Received: from AM6PR03MB5080.eurprd03.prod.outlook.com (2603:10a6:20b:90::20)
- by AM9PR03MB7900.eurprd03.prod.outlook.com (2603:10a6:20b:437::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8377.16; Wed, 22 Jan
- 2025 21:20:12 +0000
-Received: from AM6PR03MB5080.eurprd03.prod.outlook.com
- ([fe80::a16:9eb8:6868:f6d8]) by AM6PR03MB5080.eurprd03.prod.outlook.com
- ([fe80::a16:9eb8:6868:f6d8%3]) with mapi id 15.20.8356.020; Wed, 22 Jan 2025
- 21:20:12 +0000
-Message-ID:
- <AM6PR03MB50804F40EA53A4EF22E4FEC999E12@AM6PR03MB5080.eurprd03.prod.outlook.com>
-Date: Wed, 22 Jan 2025 21:20:08 +0000
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v7 4/5] bpf: Make fs kfuncs available for SYSCALL
- program type
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>,
- John Fastabend <john.fastabend@gmail.com>,
- Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
- <martin.lau@linux.dev>, Eddy Z <eddyz87@gmail.com>,
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
- KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
- Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, snorcht@gmail.com,
- Christian Brauner <brauner@kernel.org>, bpf <bpf@vger.kernel.org>,
- LKML <linux-kernel@vger.kernel.org>,
- Linux-Fsdevel <linux-fsdevel@vger.kernel.org>
-References: <AM6PR03MB508004527B8B38AAF18D763399E62@AM6PR03MB5080.eurprd03.prod.outlook.com>
- <AM6PR03MB50806C5D9B5314E55D4204A499E62@AM6PR03MB5080.eurprd03.prod.outlook.com>
- <CAADnVQLk6w+AkpoWERoid54xZh_FeiV0q1_sVU2o-oMBkP2Y7w@mail.gmail.com>
- <AM6PR03MB5080CDA2F6336B1BA2FDF2C199E12@AM6PR03MB5080.eurprd03.prod.outlook.com>
- <CAADnVQKkaWkSHLapcUe83YQcmhO+S=2w+1rB_NzUbt=TOW9WFw@mail.gmail.com>
-Content-Language: en-US
-From: Juntong Deng <juntong.deng@outlook.com>
-In-Reply-To: <CAADnVQKkaWkSHLapcUe83YQcmhO+S=2w+1rB_NzUbt=TOW9WFw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: LO2P265CA0450.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:e::30) To AM6PR03MB5080.eurprd03.prod.outlook.com
- (2603:10a6:20b:90::20)
-X-Microsoft-Original-Message-ID:
- <5ac5b6eb-261d-41a9-bc76-f356f7c5467c@outlook.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="be96s8Jp"
+Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-21bc1512a63so3175895ad.1
+        for <bpf@vger.kernel.org>; Wed, 22 Jan 2025 13:52:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1737582778; x=1738187578; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3WGLzZ0m5VTEG7U3PVKDe3p8gkg3ZZFPZucf8BYG4mA=;
+        b=be96s8JpcVTQcrNO0d0bR1tQsps0ox0RrdACT6yRmEWiuOQS/0/Hruf4437jK2eOxw
+         E0lZ3TH9FvRTDe1oyKOX54biQG297KBGEBvkItV7GPDPYPl6+K7eptveA87HCvBGBCJr
+         CO7hXdZT1pLQoxosOTtgk13zLjfyhLxIkKkxSv1PBqeJGxwLr1SKUs2Wgszgsgylwsow
+         855nHuXzCnIoNIrPaKP0GNk8xMqhHWLBPzuNcJV7kkb/qNIYGoEpCwYGrzeJ9KGFf+ja
+         iAuGelGKYvNE0SImQTa8kbCDmU1+oGyxpMFqfy9wTDcCSmNTMHUvFhsDWUIqOmAAqlyA
+         y4Sg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1737582778; x=1738187578;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=3WGLzZ0m5VTEG7U3PVKDe3p8gkg3ZZFPZucf8BYG4mA=;
+        b=W4k1IMGjyvd7hdrqsa/NiE1CIMzcBAkhh3l2SqKDuLgbuYedNRxEPLUwSUTpT9YBco
+         zzf70ZD3Ov+2LGxtThOc3SnkraN5xq5L8kTvMsueQ2v0edCd05dqlNlXuzkNb7setPFL
+         7dIXlH1SQTQlCO2HAr55MrciLF8FuhXayPEEovxK94I39nCvtxpV7AEskfpwytZg9cYQ
+         1BUURyyLynBKNYQT6sS09RbDqS3P/OHyuioB7h2mnBMlTktDNZMaJuE1cFvBBvFEC4pg
+         jUSg+/flWTmVBPJk5kBBFrQFH03K2Mh7hi9SYk9xhCsRdhUbWrMyC9NeF3qDZio91zPn
+         yq1g==
+X-Forwarded-Encrypted: i=1; AJvYcCWPBRJ3R0W76FDEIJbucltEwCsxIITnM1HGraA9sji7SyCENtE2rbqz+DUlPEAGQWFSLD4=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx4LwFeAqOjMg+6nqHj8iKWf10m2y5g/EcdPqf3TxLbuvYWgUKE
+	3HCKAoX5Q+eHXYCg+cZ9Rw5LK3pcNuzT7YY7V5HlalAznjSt7Vu0skS46ToyqIndQ+Tqpxm88v+
+	+fBxIizbH1bl0dx0EpaqgAb6aljaGvA==
+X-Gm-Gg: ASbGnctw41Sg8TH1BxlzF/PZtfz3yH0TcvV2fu14jLewT/8fIoxhrUTjU/H47l0M5Tb
+	F6kRar8s+G9TIyTRAg/MN3jjxgE2aKomY584m/zog8rOwF5YTt2EfXJKEhxXvy0Aqc3E=
+X-Google-Smtp-Source: AGHT+IEkQXirpXegomIa3NpywpevCcu3MXdDP8S8i4wweCowJu9ckC4+nPPuZ9RX+d1k87mAvfsTqRGn3DrOnlX1I/s=
+X-Received: by 2002:a05:6a20:a11d:b0:1e0:cc4a:caab with SMTP id
+ adf61e73a8af0-1eb214de542mr33132818637.19.1737582777794; Wed, 22 Jan 2025
+ 13:52:57 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AM6PR03MB5080:EE_|AM9PR03MB7900:EE_
-X-MS-Office365-Filtering-Correlation-Id: 87a13e99-fc9f-4ada-07a5-08dd3b2a8c63
-X-Microsoft-Antispam:
-	BCL:0;ARA:14566002|6090799003|8060799006|19110799003|5072599009|461199028|15080799006|440099028|41001999003|3412199025;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?bzVLcHdpam1DcjJ0T09VNDJNdFRwZGpOZVVjVmpXVWIraFBYUTgyVW9heEtn?=
- =?utf-8?B?dnE5ajNld1N3M3RUZnIrUXFMT2NDUUM3WUdlb3RJQ3Bsc3pSOXoyVGVkaE95?=
- =?utf-8?B?SS85dWVEeWR1UnB5V1dOUTg0Mmp6RlkvSlNkb2tjaDB4ak5yd1JyVXJ2WjMv?=
- =?utf-8?B?bjlJNStjUXFaajFWY0t4UkJlUkM2bHJFaXZPVUFLdk1pcER3dm9pZnQ5c1Vo?=
- =?utf-8?B?S1dPZTJZVFZLSFNtbnJKWjZnV1h3RDZWSjVmQldhZnBHTlhmTWduREhyNS9i?=
- =?utf-8?B?akFQVU4zSDJ3ZWxTWEdtRzFSNis3ZWZFdHpRcmZta0xYdSsvQWJLaitReEFK?=
- =?utf-8?B?RWN1cEVnM2pQaC9rL3drV1I5UERobFRoWHpGeUoxS0JQQkFnRnFmRnZGakpv?=
- =?utf-8?B?TW9IcnYrdERWa25HRnJ5K3hqOEh6VEdtUzNuVTNBNC9keUY2UTBqMGNRM1Nn?=
- =?utf-8?B?L2lQMEFpWlZoTVdCajhQMjJ1cndOVWdqTm5waEFQZUsvV3RSSlZQSWl0Wlph?=
- =?utf-8?B?Ykh2aTZUSm9lOURGT0VTbEo0bVRNNGRkcHA2MHZRNnBIc1RqOXY2elBkMEFH?=
- =?utf-8?B?aXdCRjY3N0w3czNBejBxOEFhN1JvZUFSbjNYRXVncENOMVRreXJYbFhPbTlE?=
- =?utf-8?B?d29yZjRDMGcxbVM0K2tzUzJ2R2RBZENFcEZvdkZFTi81dkVIdmJwWHBDZVhB?=
- =?utf-8?B?a3Rhbjg3UTlkTjJ4SnFXcnpOSDN0czRFVEdZSnhFaVUvUTNGYkpTaUlEblVU?=
- =?utf-8?B?dHRXMzUwZk92YUEvaGpxenU2bmk5dEUrTlMrTGVQNkpRWlZrV2hHd2hQd3BO?=
- =?utf-8?B?TUZ4elZzSE8vM0o3bHFDRnF3eDRzRTBnMmZsa3VLcDJyQWU2bWtNSkVTenNJ?=
- =?utf-8?B?RDVsTjQ4ZnEzVFRnRkZnVUpUck53VXhUdjQraWU0cWRzVW1yVHlhM3orcUlU?=
- =?utf-8?B?NjZjYzV2Si9vZjI2V2cvdElCYkFxR09RVUEyZmJmNEM5OXJJMS8xb1UrQlFU?=
- =?utf-8?B?QWxNU3NocUNYNVpXcGNKdTF2VXNyMmxnaWlnR3JOZWxRYTZOTUtxNTRxenZP?=
- =?utf-8?B?MnlBY2hGZGFRQStQVmhBOGZwS0JsOUt1a1RXWExtRkNvUm9pcDVkODdpUmI1?=
- =?utf-8?B?Vk1jV2hhSGhUZnNDWUJBeCt2L1A4R1dTWHJtckt2aWVuM2dmN0F6VEl1WVJR?=
- =?utf-8?B?Tlhha21jakhLMVUxS1dXclZNbGJ3VWdtb2FjL0FISHVvb2dSOWJ5WFhMU0tn?=
- =?utf-8?B?REdqNG93YVRITC9VdGg3UnRqN204U3BaVTZGMmZ3RVRqVzZ0aHovS01HTWRD?=
- =?utf-8?B?bFZNcFVZOFA5WjJVdVZud2diVlRLdVVDTzF5bkFaYkpIRHA3elFOMkFEK3JF?=
- =?utf-8?B?cVZUTTF1ZHdDQzhBVGtoZnpaQVkvenYwQ3cxWmZKQ1ZRTXVDUWt1dGpXVG5J?=
- =?utf-8?B?SjdPdmd2K2FhZmo0OGV4Z0MvOVpaS2plUitERTEwcXU3RnNjMUlBajRKbW1u?=
- =?utf-8?Q?VeATVY=3D?=
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?S0JvNlk1RTBiSTlDSmNxa213WGdEU0t4QmZvbTYwKzFjNStTVFJmUGJTR0lG?=
- =?utf-8?B?R0NlUkNBcTZrcGZtTVJZWW5WZVNCa05vbERLZzhpZklxblRSNHMvdTlidFQv?=
- =?utf-8?B?dWV6WkdmNExCVTdna25xS2dmM3NxVERWNWQyaFVKVEVVdXBGdFVXNytnQ1B1?=
- =?utf-8?B?TnBFaStsOG8valVpMDc3dE5ZbkdJUmNKTzBEUktwZldwamdLK3R4UHk4N1FJ?=
- =?utf-8?B?a1pNL2s0T1NyakRzbWR2eGU4bHBKR1NoYkQ5bGFjR1c4M1dMMnF2Tm5Ga25z?=
- =?utf-8?B?cSs5Uno0T0VOSjFYbHhFSDFZbVAxOUhXcjc5MTlSZDE1Y2xYdXFqYWNNWXYx?=
- =?utf-8?B?d3JaYU1UdS9QQlRqNVIzRVhrYU1sd3JGWHRzeHlNTG8vR29WakR0STZTejNB?=
- =?utf-8?B?dEVlRXRRU3pQQ01sTTR5ZmE3OHhwaEk3SUdxRDU1V3YwSG1MRlVwZTFjZzRU?=
- =?utf-8?B?dUd2UTl2MnZuUk5zdkNHMHh3TzBDNXliYjNuUmVIc3VoenErNXBrYXVVbE41?=
- =?utf-8?B?MlNrR1lldXBRU0grZEJiMFpvSTdwWm9RMmlIODNqUnBzMXZ3SFo3aS9Xdis5?=
- =?utf-8?B?cTNnQWRQRytKRHY2SHBQNldIa29ZVHFSYTJGMHdlUENvd0VYd2ptVlVsMkRr?=
- =?utf-8?B?WG9sdldWMjlNV002SUk5dGliRFFGbW1LVkVJYUxERmRXNHNCTm1jQisvWlZ0?=
- =?utf-8?B?R2drYU9FUDk3V2F3eERVdU9neDdRR1p6VWo0UTh1V0xFVnYwTHFzMDFJa0lG?=
- =?utf-8?B?UXdTRTA2dG50eHNLM0FMV2w4UGEyMzN1SzZDWVEwNjBYbTU2dUk3bTBnUytm?=
- =?utf-8?B?WnBwcVczMi92dzJwUlZ5Qk83cm1YRW1hckNEZWNydkZWL0RlS3FtajIxTFpk?=
- =?utf-8?B?Q0dCTXFOMHhqWmhVS09ab1kxRWR1R1ZlUjhLZjlvRDA5UXgzVDlBVjdhMFBI?=
- =?utf-8?B?LzhVMWpMNjZKYWVYSC9ZU0huS2dOejNFYzUrMFhNOTFnZURhWDhiWC91Zkg3?=
- =?utf-8?B?QUxYSW8yYy82cnVzVlZUbmRSNHdpUzl2cWlrZG1YRHdYeU5iRmFJL2pqVW5a?=
- =?utf-8?B?ekYrTWx2d2pDMDdWbVlkR0t6dnJ3SGhBcDdhRHJpb0wyVEpiWjR1aFlIUlJV?=
- =?utf-8?B?NFRLVlQvTVE2SmFXWDBqSGFUbXNGSVFyWXMybm85djllK25wR3Q3Z3M4dk1l?=
- =?utf-8?B?eENVMTJnQkNXTjBmM3lyMkd0MmVwbFYvSVlsRzBOcU4weS96NWY2QWNJNk5X?=
- =?utf-8?B?TmR4QW4vWmVDblNjN0l1MU1La2R1Q0wwYTFjWllVQ2V1OXpSLzJHMWVSaU5j?=
- =?utf-8?B?MlJWTno3WW9qSC9PamFyVnRVTmlkdFBxaHVnTHc5WkwzdXRoMGZQZ045RTkz?=
- =?utf-8?B?UHNkc3RzNEFXcmN1YmV1SjBya25mTU9YclJvZUhyajJzcjNIZ2NRYkducFlG?=
- =?utf-8?B?MG5RdGRGTnhjNE1YZHNBNWFHOGZseEdzNkllakNtRTI3S0xSMlpGRlBWTTZT?=
- =?utf-8?B?Wlk3UWhhTzAvNUkzVlpKYVBFQ2JTOTBIZUhsQmh4ZFFwMzhkWkJXWmw0S1hW?=
- =?utf-8?B?Z1JpVXlreVBqTTdQaHZDd1dzaU1ybHVkUjE2QlRMSVcwNzhDYXVBMFZ0VjNR?=
- =?utf-8?B?TDFHeFl3YW82OVdqWlM0V1haYnQ1SjhtRFZCczNOVFBMQ2h2ZGhJN0hZUGlz?=
- =?utf-8?Q?gKvndU/HMLbjdUCZWig6?=
-X-OriginatorOrg: outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 87a13e99-fc9f-4ada-07a5-08dd3b2a8c63
-X-MS-Exchange-CrossTenant-AuthSource: AM6PR03MB5080.eurprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Jan 2025 21:20:10.9455
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg:
-	00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR03MB7900
+References: <20250122025308.2717553-1-ihor.solodrai@pm.me> <87msfjhy3v.fsf@oracle.com>
+In-Reply-To: <87msfjhy3v.fsf@oracle.com>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Wed, 22 Jan 2025 13:52:45 -0800
+X-Gm-Features: AWEUYZnhQ9SLrzK_0W-ugW40jsK1rROV01jFcGvqfOaQzDHpLGJNNKukorfFTiI
+Message-ID: <CAEf4BzbVxbtpRnAo2PqrF0n7-B28p59KPvozXuEuPpTZYA9=7g@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 0/5] BTF: arbitrary __attribute__ encoding
+To: "Jose E. Marchesi" <jose.marchesi@oracle.com>
+Cc: Ihor Solodrai <ihor.solodrai@pm.me>, bpf@vger.kernel.org, andrii@kernel.org, 
+	ast@kernel.org, daniel@iogearbox.net, eddyz87@gmail.com, mykolal@fb.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 2025/1/22 17:59, Alexei Starovoitov wrote:
-> On Wed, Jan 22, 2025 at 5:34 AM Juntong Deng <juntong.deng@outlook.com> wrote:
->>
->> On 2025/1/22 00:43, Alexei Starovoitov wrote:
->>> On Tue, Jan 21, 2025 at 5:09 AM Juntong Deng <juntong.deng@outlook.com> wrote:
->>>>
->>>> Currently fs kfuncs are only available for LSM program type, but fs
->>>> kfuncs are generic and useful for scenarios other than LSM.
->>>>
->>>> This patch makes fs kfuncs available for SYSCALL program type.
->>>>
->>>> Signed-off-by: Juntong Deng <juntong.deng@outlook.com>
->>>> ---
->>>>    fs/bpf_fs_kfuncs.c                                 | 14 ++++++--------
->>>>    .../selftests/bpf/progs/verifier_vfs_reject.c      | 10 ----------
->>>>    2 files changed, 6 insertions(+), 18 deletions(-)
->>>>
->>>> diff --git a/fs/bpf_fs_kfuncs.c b/fs/bpf_fs_kfuncs.c
->>>> index 4a810046dcf3..8a7e9ed371de 100644
->>>> --- a/fs/bpf_fs_kfuncs.c
->>>> +++ b/fs/bpf_fs_kfuncs.c
->>>> @@ -26,8 +26,6 @@ __bpf_kfunc_start_defs();
->>>>     * acquired by this BPF kfunc will result in the BPF program being rejected by
->>>>     * the BPF verifier.
->>>>     *
->>>> - * This BPF kfunc may only be called from BPF LSM programs.
->>>> - *
->>>>     * Internally, this BPF kfunc leans on get_task_exe_file(), such that calling
->>>>     * bpf_get_task_exe_file() would be analogous to calling get_task_exe_file()
->>>>     * directly in kernel context.
->>>> @@ -49,8 +47,6 @@ __bpf_kfunc struct file *bpf_get_task_exe_file(struct task_struct *task)
->>>>     * passed to this BPF kfunc. Attempting to pass an unreferenced file pointer, or
->>>>     * any other arbitrary pointer for that matter, will result in the BPF program
->>>>     * being rejected by the BPF verifier.
->>>> - *
->>>> - * This BPF kfunc may only be called from BPF LSM programs.
->>>>     */
->>>>    __bpf_kfunc void bpf_put_file(struct file *file)
->>>>    {
->>>> @@ -70,8 +66,6 @@ __bpf_kfunc void bpf_put_file(struct file *file)
->>>>     * reference, or else the BPF program will be outright rejected by the BPF
->>>>     * verifier.
->>>>     *
->>>> - * This BPF kfunc may only be called from BPF LSM programs.
->>>> - *
->>>>     * Return: A positive integer corresponding to the length of the resolved
->>>>     * pathname in *buf*, including the NUL termination character. On error, a
->>>>     * negative integer is returned.
->>>> @@ -184,7 +178,8 @@ BTF_KFUNCS_END(bpf_fs_kfunc_set_ids)
->>>>    static int bpf_fs_kfuncs_filter(const struct bpf_prog *prog, u32 kfunc_id)
->>>>    {
->>>>           if (!btf_id_set8_contains(&bpf_fs_kfunc_set_ids, kfunc_id) ||
->>>> -           prog->type == BPF_PROG_TYPE_LSM)
->>>> +           prog->type == BPF_PROG_TYPE_LSM ||
->>>> +           prog->type == BPF_PROG_TYPE_SYSCALL)
->>>>                   return 0;
->>>>           return -EACCES;
->>>>    }
->>>> @@ -197,7 +192,10 @@ static const struct btf_kfunc_id_set bpf_fs_kfunc_set = {
->>>>
->>>>    static int __init bpf_fs_kfuncs_init(void)
->>>>    {
->>>> -       return register_btf_kfunc_id_set(BPF_PROG_TYPE_LSM, &bpf_fs_kfunc_set);
->>>> +       int ret;
->>>> +
->>>> +       ret = register_btf_kfunc_id_set(BPF_PROG_TYPE_LSM, &bpf_fs_kfunc_set);
->>>> +       return ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_SYSCALL, &bpf_fs_kfunc_set);
->>>>    }
->>>>
->>>>    late_initcall(bpf_fs_kfuncs_init);
->>>> diff --git a/tools/testing/selftests/bpf/progs/verifier_vfs_reject.c b/tools/testing/selftests/bpf/progs/verifier_vfs_reject.c
->>>> index d6d3f4fcb24c..5aab75fd2fa5 100644
->>>> --- a/tools/testing/selftests/bpf/progs/verifier_vfs_reject.c
->>>> +++ b/tools/testing/selftests/bpf/progs/verifier_vfs_reject.c
->>>> @@ -148,14 +148,4 @@ int BPF_PROG(path_d_path_kfunc_invalid_buf_sz, struct file *file)
->>>>           return 0;
->>>>    }
->>>>
->>>> -SEC("fentry/vfs_open")
->>>> -__failure __msg("calling kernel function bpf_path_d_path is not allowed")
->>>> -int BPF_PROG(path_d_path_kfunc_non_lsm, struct path *path, struct file *f)
->>>> -{
->>>> -       /* Calling bpf_path_d_path() from a non-LSM BPF program isn't permitted.
->>>> -        */
->>>> -       bpf_path_d_path(path, buf, sizeof(buf));
->>>> -       return 0;
->>>> -}
->>>
->>> A leftover from previous versions?
->>> This test should still be rejected by the verifier.
->>
->> Thanks for your reply.
->>
->> Not a leftover.
->>
->> bpf_path_d_path can be called from SYSCALL program type, not only LSM
->> program type, so it seems a bit weird to keep this test case?
-> 
-> How is it weird?
-> How is this related to syscall prog?
-> It's a check that fentry prog cannot call it.
+On Wed, Jan 22, 2025 at 3:44=E2=80=AFAM Jose E. Marchesi
+<jose.marchesi@oracle.com> wrote:
+>
+>
+> > This patch series extends BPF Type Format (BTF) to support arbitrary
+> > __attribute__ encoding.
+> >
+> > Setting the kind_flag to 1 in BTF type tags and decl tags now changes
+> > the meaning for the encoded tag, in particular with respect to
+> > btf_dump in libbpf.
+> >
+> > If the kflag is set, then the string encoded by the tag represents the
+> > full attribute-list of an attribute specifier [1].
+>
+> Why is extending BTF necessary for this?  Type and declaration tags
+> contain arbitrary strings, and AFAIK you can have more than one type tag
 
-Sorry, I misunderstood this test case.
+Because currently TYPE_TAG(some_string) is
+__attribute__((btf_type_tag("some_string"))).
 
-This test case is used to test the filtering for aliases.
+That btf_type_tag() attribute name is hard-coded in the semantics of
+current TYPE_TAG (and DECL_TAG as well). So here Ihor is generalizing
+this to be __attribute__((some_string)).
 
-I will keep it in the next version.
+> associated with a single type or declaration.  Why coupling the
+> interpretation of the contents of the string with the transport format?
+>
+> Something like "cattribute:always_inline".
+
+I think that ship has sailed. We didn't define any extra semantics for
+any sort of "prefix:" part of TYPE_TAG's string, and I'm not sure we
+want to retroactively define anything like that at this point.
+
+What is exactly the problem with using kflag=3D1? Keep in mind, at least
+initially, this is meant for tools like pahole and bpftool, not
+GCC/Clang itself, to augment BTF with extra annotations (like
+preserve_access_index attribute that is added when generating
+vmlinux.h).
+
+>
+> > This feature will allow extending tools such as pahole and bpftool to
+> > capture and use more granular type information, and make it easier to
+> > manage compatibility between clang and gcc BPF compilers.
+> >
+> > [1] https://gcc.gnu.org/onlinedocs/gcc-13.2.0/gcc/Attribute-Syntax.html
+> >
+> > Ihor Solodrai (5):
+> >   libbpf: introduce kflag for type_tags and decl_tags in BTF
+> >   libbpf: check the kflag of type tags in btf_dump
+> >   selftests/bpf: add a btf_dump test for type_tags
+> >   bpf: allow kind_flag for BTF type and decl tags
+> >   selftests/bpf: add a BTF verification test for kflagged type_tag
+> >
+> >  Documentation/bpf/btf.rst                     |  27 +++-
+> >  kernel/bpf/btf.c                              |   7 +-
+> >  tools/include/uapi/linux/btf.h                |   3 +-
+> >  tools/lib/bpf/btf.c                           |  87 +++++++---
+> >  tools/lib/bpf/btf.h                           |   3 +
+> >  tools/lib/bpf/btf_dump.c                      |   5 +-
+> >  tools/lib/bpf/libbpf.map                      |   2 +
+> >  tools/testing/selftests/bpf/prog_tests/btf.c  |  23 ++-
+> >  .../selftests/bpf/prog_tests/btf_dump.c       | 148 +++++++++++++-----
+> >  tools/testing/selftests/bpf/test_btf.h        |   6 +
+> >  10 files changed, 234 insertions(+), 77 deletions(-)
