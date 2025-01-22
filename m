@@ -1,28 +1,28 @@
-Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.4])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A2C81F7914;
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.2])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DEF68211294;
 	Wed, 22 Jan 2025 10:11:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.4
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.2
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737540703; cv=none; b=gmgLuJ/8aW+qMvwmrMP10R4X2U1sil6bxM9wXWWhclXqb6YOhmjXyOWEirVtQDBJuAdAOQKbpwysLvcpTfzOF0hCEKGpnYMgfwTGFOXDg2rVGwoU9qI2ut/tlKdCZCyZ78BCyaEiWU0YTF7BwzlC/vZ9qO2QRuPDjyDWpf3EVBs=
+	t=1737540705; cv=none; b=ZbfEsspyVgbfFopa/2geaCllkQ7FgpjJVbhkHvYL8++mEgq8xR/1rNNpJOGVhUfWDMcPowaWFcKaJxgbo6uKMR1a4Arb8njXD01/P6FeoGSogGyx3Kvssl1C/rxBr+N00GytcrInYTLOMeB1L4tnHf3hd4zboHQuNbFaRAM4ZHU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737540703; c=relaxed/simple;
-	bh=6p0ZNiaedPTstsjUOKB/bKroZewqExukBImhrr1HPaE=;
+	s=arc-20240116; t=1737540705; c=relaxed/simple;
+	bh=z6Urh4wc14X05JB3h9mGWagV2qSr0pIR99APQ4T4mVg=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=O7ZMFzn0Hr6N0FFyxeqqKY6mAoeHxrdOGrTnpGG04b2zvtUneq3iRjy0YcBtaRO0kk1UoFEabSluRlZ9uHfzx6F1hUxA799ACSZNIRCqMtk3BgCWZo749wEv+6xF9airaIcDA3EDOPnUg/cRxwp5mwrfr/fzD3mAvv57xTei8tk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=NmhQaMN2; arc=none smtp.client-ip=117.135.210.4
+	 MIME-Version; b=e9wEKOTxUWbC5vz6vPCkJzUAH0ooGNdwVbp5Itx/ymV9gp4jgUSn2RHbJV2/ROdjYf2JoLKIIfgq03Bf5h1racrWNHceTUFjxN9U9ImY/xQNmYl1iPNUhmYI7UFwdW/WWKJgb9CDrtkcKGMDqX244G3cMp0Rq7uFrp9U3HiPueg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=XyF6iPtq; arc=none smtp.client-ip=117.135.210.2
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="NmhQaMN2"
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="XyF6iPtq"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:Subject:Date:Message-ID:MIME-Version; bh=QfD0x
-	ORTJ6sdWkpnFOeE2wnXCWQvBYF6SlJ27tlulQ4=; b=NmhQaMN2bVMWQH2mkJTxF
-	e6LCWMYTylebD+llO5dZTdCTgSEv4rnJiN0psi1YhUbzC5pAIDB4uhiTInscJKu7
-	zMnF5K45iibe5Ez1AKwXNpW1I5LefNq4C2LToEsw8zIcmYFhFGRBnNypooXbX4O3
-	ovxmfjO/nImXUuKKj1lQRk=
+	s=s110527; h=From:Subject:Date:Message-ID:MIME-Version; bh=QyFc5
+	uhHFtEAQ0FPGz0v1oE7DiUl7c1R1dxohQo/yV4=; b=XyF6iPtq1RXmEIdJubl+y
+	DmnDNLeEGPAGH6Bv2kKeq+/YgSMBTCPa7ZmXPBUlV+GjjEMuOXjnvlv5rnf7cdEr
+	vY376xi2nFn5B4BMi+MXiRs6aeUCsl/OC6c2gDufxtiWiURExVI134CL/NwZjXgc
+	mcSFZ0OV7+DfUxosy4z+Kc=
 Received: from localhost.localdomain (unknown [47.252.33.72])
-	by gzsmtp3 (Coremail) with SMTP id PigvCgAHUcjUw5Bn_UIhKA--.64788S6;
-	Wed, 22 Jan 2025 18:10:23 +0800 (CST)
+	by gzsmtp3 (Coremail) with SMTP id PigvCgAHUcjUw5Bn_UIhKA--.64788S3;
+	Wed, 22 Jan 2025 18:09:47 +0800 (CST)
 From: Jiayuan Chen <mrpre@163.com>
 To: bpf@vger.kernel.org,
 	jakub@cloudflare.com,
@@ -55,9 +55,9 @@ Cc: netdev@vger.kernel.org,
 	linux-doc@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	Jiayuan Chen <mrpre@163.com>
-Subject: [PATCH bpf v9 4/5] selftests/bpf: fix invalid flag of recv()
-Date: Wed, 22 Jan 2025 18:09:16 +0800
-Message-ID: <20250122100917.49845-5-mrpre@163.com>
+Subject: [PATCH bpf v9 1/5] strparser: add read_sock callback
+Date: Wed, 22 Jan 2025 18:09:13 +0800
+Message-ID: <20250122100917.49845-2-mrpre@163.com>
 X-Mailer: git-send-email 2.43.5
 In-Reply-To: <20250122100917.49845-1-mrpre@163.com>
 References: <20250122100917.49845-1-mrpre@163.com>
@@ -68,44 +68,98 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:PigvCgAHUcjUw5Bn_UIhKA--.64788S6
-X-Coremail-Antispam: 1Uf129KBjvJXoW7KF4DCF45tFW5tFy5Xr1UWrg_yoW8GF1kpa
-	40y34YkFWSvF1aqa1kJrsruF4rGr98Xws0kF4DWry8Ar1kJrn2qF4xKay5tFn7WrZ3Z34r
-	Zwn3KFWrWw48WwUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zEYFAQUUUUU=
-X-CM-SenderInfo: xpus2vi6rwjhhfrp/xtbBDxrcp2eQus6v2AAAsa
+X-CM-TRANSID:PigvCgAHUcjUw5Bn_UIhKA--.64788S3
+X-Coremail-Antispam: 1Uf129KBjvJXoWxAFW7Jr17KF4fXw15uw4DJwb_yoW5Zw18pF
+	nxCayxWr47tFy8uan3Jr97KrWqgr1rKayUCFyFq34SyF4kGryYqFyFkr4jyF1UGr4rZFWU
+	KrsxWr4avr1DZaUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0piAnY7UUUUU=
+X-CM-SenderInfo: xpus2vi6rwjhhfrp/xtbBDwjcp2eQr31LCwAEsd
 
-SOCK_NONBLOCK flag is only effective during socket creation, not during
-recv. Use MSG_DONTWAIT instead.
+Added a new read_sock handler, allowing users to customize read operations
+instead of relying on the native socket's read_sock.
 
 Signed-off-by: Jiayuan Chen <mrpre@163.com>
 ---
- tools/testing/selftests/bpf/prog_tests/sockmap_basic.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ Documentation/networking/strparser.rst |  9 ++++++++-
+ include/net/strparser.h                |  2 ++
+ net/strparser/strparser.c              | 11 +++++++++--
+ 3 files changed, 19 insertions(+), 3 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
-index 884ad87783d5..0c51b7288978 100644
---- a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
-+++ b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
-@@ -522,8 +522,8 @@ static void test_sockmap_skb_verdict_shutdown(void)
- 	if (!ASSERT_EQ(err, 1, "epoll_wait(fd)"))
- 		goto out_close;
+diff --git a/Documentation/networking/strparser.rst b/Documentation/networking/strparser.rst
+index 6cab1f74ae05..7f623d1db72a 100644
+--- a/Documentation/networking/strparser.rst
++++ b/Documentation/networking/strparser.rst
+@@ -112,7 +112,7 @@ Functions
+ Callbacks
+ =========
  
--	n = recv(c1, &b, 1, SOCK_NONBLOCK);
--	ASSERT_EQ(n, 0, "recv_timeout(fin)");
-+	n = recv(c1, &b, 1, MSG_DONTWAIT);
-+	ASSERT_EQ(n, 0, "recv(fin)");
- out_close:
- 	close(c1);
- 	close(p1);
-@@ -628,7 +628,7 @@ static void test_sockmap_skb_verdict_fionread(bool pass_prog)
- 	ASSERT_EQ(avail, expected, "ioctl(FIONREAD)");
- 	/* On DROP test there will be no data to read */
- 	if (pass_prog) {
--		recvd = recv_timeout(c1, &buf, sizeof(buf), SOCK_NONBLOCK, IO_TIMEOUT_SEC);
-+		recvd = recv_timeout(c1, &buf, sizeof(buf), MSG_DONTWAIT, IO_TIMEOUT_SEC);
- 		ASSERT_EQ(recvd, sizeof(buf), "recv_timeout(c0)");
- 	}
+-There are six callbacks:
++There are seven callbacks:
+ 
+     ::
+ 
+@@ -182,6 +182,13 @@ There are six callbacks:
+     the length of the message. skb->len - offset may be greater
+     then full_len since strparser does not trim the skb.
+ 
++    ::
++
++	int (*read_sock)(struct strparser *strp, read_descriptor_t *desc,
++                     sk_read_actor_t recv_actor);
++
++    The read_sock callback is used by strparser instead of
++    sock->ops->read_sock, if provided.
+     ::
+ 
+ 	int (*read_sock_done)(struct strparser *strp, int err);
+diff --git a/include/net/strparser.h b/include/net/strparser.h
+index 41e2ce9e9e10..0a83010b3a64 100644
+--- a/include/net/strparser.h
++++ b/include/net/strparser.h
+@@ -43,6 +43,8 @@ struct strparser;
+ struct strp_callbacks {
+ 	int (*parse_msg)(struct strparser *strp, struct sk_buff *skb);
+ 	void (*rcv_msg)(struct strparser *strp, struct sk_buff *skb);
++	int (*read_sock)(struct strparser *strp, read_descriptor_t *desc,
++			 sk_read_actor_t recv_actor);
+ 	int (*read_sock_done)(struct strparser *strp, int err);
+ 	void (*abort_parser)(struct strparser *strp, int err);
+ 	void (*lock)(struct strparser *strp);
+diff --git a/net/strparser/strparser.c b/net/strparser/strparser.c
+index 8299ceb3e373..95696f42647e 100644
+--- a/net/strparser/strparser.c
++++ b/net/strparser/strparser.c
+@@ -347,7 +347,10 @@ static int strp_read_sock(struct strparser *strp)
+ 	struct socket *sock = strp->sk->sk_socket;
+ 	read_descriptor_t desc;
+ 
+-	if (unlikely(!sock || !sock->ops || !sock->ops->read_sock))
++	if (unlikely(!sock || !sock->ops))
++		return -EBUSY;
++
++	if (unlikely(!strp->cb.read_sock && !sock->ops->read_sock))
+ 		return -EBUSY;
+ 
+ 	desc.arg.data = strp;
+@@ -355,7 +358,10 @@ static int strp_read_sock(struct strparser *strp)
+ 	desc.count = 1; /* give more than one skb per call */
+ 
+ 	/* sk should be locked here, so okay to do read_sock */
+-	sock->ops->read_sock(strp->sk, &desc, strp_recv);
++	if (strp->cb.read_sock)
++		strp->cb.read_sock(strp, &desc, strp_recv);
++	else
++		sock->ops->read_sock(strp->sk, &desc, strp_recv);
+ 
+ 	desc.error = strp->cb.read_sock_done(strp, desc.error);
+ 
+@@ -468,6 +474,7 @@ int strp_init(struct strparser *strp, struct sock *sk,
+ 	strp->cb.unlock = cb->unlock ? : strp_sock_unlock;
+ 	strp->cb.rcv_msg = cb->rcv_msg;
+ 	strp->cb.parse_msg = cb->parse_msg;
++	strp->cb.read_sock = cb->read_sock;
+ 	strp->cb.read_sock_done = cb->read_sock_done ? : default_read_sock_done;
+ 	strp->cb.abort_parser = cb->abort_parser ? : strp_abort_strp;
  
 -- 
 2.43.5
