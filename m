@@ -1,189 +1,110 @@
-Received: from dediextern.your-server.de (dediextern.your-server.de [85.10.215.232])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 705F51C5D4D
-	for <bpf@vger.kernel.org>; Thu, 23 Jan 2025 16:23:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=85.10.215.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AAD61386DA
+	for <bpf@vger.kernel.org>; Thu, 23 Jan 2025 16:38:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737649444; cv=none; b=YEsaEADBa07O1xX75sb8+doINcSTT6VpyvRQQuXjFX6eLmGpwIOREw7QPvl2SmNgp6AvR7563sKpnvLQCS0jOYedjcQOAG9VHE7eYyz+HYXFUrZqfkYGxeWK3k3PufaF6c2q+Iav4EmbKsbyanEsvDs1y9egS50QFVJSZcpx0yQ=
+	t=1737650302; cv=none; b=HrQhSJvHbRKnY6jr/e5eNplMNUrqJ4IP6qKkZ5PdeAad0QF2irY8RkFUhlB48gNZ+jtXOkSnTOPn4gQU62IiezseHdr+z4uwSeUWQKMZHi6fVW67etZ9gz4k7R931v90fJOQMK/QkIC6iZmCdXZOBslzrjaPPjn8qrlhJJFS3xM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737649444; c=relaxed/simple;
-	bh=UmKaijHwJDO0AKXaqq1BZSfBtmzjB5zSUjBPv/pLVAo=;
-	h=Message-ID:Date:MIME-Version:From:To:Cc:Subject:Content-Type; b=BIv4lDRXpxMSVsWQUK6okXJciFHYGS16ZqdWpE9tYrA3cyTd0t+zmeWvnIOOa+YgbjhJvC9Q/Kzq7JLDGn7yHT7Nj8UMd4mtvRUE/Gg6YO4eqi4xuMM0ZBDPgJRPaH4GfAodn5LomDGObUujzWTtf9Zn0EmylxKZLnapiDK1Pf0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hetzner-cloud.de; spf=pass smtp.mailfrom=hetzner-cloud.de; arc=none smtp.client-ip=85.10.215.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hetzner-cloud.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hetzner-cloud.de
-Received: from sslproxy03.your-server.de ([88.198.220.132])
-	by dediextern.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <marcus.wichelmann@hetzner-cloud.de>)
-	id 1tazfT-0004Em-FP; Thu, 23 Jan 2025 17:02:55 +0100
-Received: from [2a0d:3344:1523:1f10:f118:b2d4:edbb:54af]
-	by sslproxy03.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <marcus.wichelmann@hetzner-cloud.de>)
-	id 1tazfT-000PE6-0p;
-	Thu, 23 Jan 2025 17:02:55 +0100
-Message-ID: <dae862ec-43b5-41a0-8edf-46c59071cdda@hetzner-cloud.de>
-Date: Thu, 23 Jan 2025 17:02:54 +0100
+	s=arc-20240116; t=1737650302; c=relaxed/simple;
+	bh=fQllFcMWAPgxJPO9jl9X9/ja7J1uVtN03bRxkZfZpQk=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=QZ0rYeqRMbpjbhF4mWFXaEoGwHoUy7TutlJ71e2m3V79OVGV6ShAjAb+YJiMI+tVmfcXoyQXGMxYjipCJprIHAwlxowgjbFTEUbkk+MBe1PDuf7rigAh9teS0vbh7ZDsyc0oy3afYy+EAeXqQ8J+cW/WjKroaQLOr0IP5gvMseM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=hjDq7i+y; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="hjDq7i+y"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1737650299;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=8Gp4Lqmck0xLIjlUYaNawF6i7JeDue6Z19dmeCYgLeo=;
+	b=hjDq7i+ySg482akgV7MoKDZdwAnnEalYKL6/Zfdx+E6X1KF8daphu7K+4ZBOmPl8fj29lf
+	b1WIbD1s+ftPpPQWgY7R4YaLFdeSVB0qpMcTaAtZIXCi17yJo5C3wOEkC3GDZqdfF1H+CY
+	C29e5TUbttEJMTOWSCOSzSKEaPxk5tM=
+Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
+ [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-262-JUuCQRo-O_Gs7kP2Ecbg0g-1; Thu, 23 Jan 2025 11:38:17 -0500
+X-MC-Unique: JUuCQRo-O_Gs7kP2Ecbg0g-1
+X-Mimecast-MFC-AGG-ID: JUuCQRo-O_Gs7kP2Ecbg0g
+Received: by mail-ej1-f71.google.com with SMTP id a640c23a62f3a-aa69e84128aso106164966b.1
+        for <bpf@vger.kernel.org>; Thu, 23 Jan 2025 08:38:17 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1737650296; x=1738255096;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=8Gp4Lqmck0xLIjlUYaNawF6i7JeDue6Z19dmeCYgLeo=;
+        b=alX12ZwGeaRd5+YqO70BAdwqJgUmYS0gWB0YT2RCBy3XwviTQQxquaiPeSbG6wW/zS
+         Oeynnz2+XBpHWC2fR2Jysw1hWpsB5ZF4ukOEe+Qw2ssPjDkLKqthnZk7Zucvy7yGEGc8
+         5A+Dv8LRVDSGj10JgaqqcrGomSjif3C86vrCq1+dCiXwCIrhFsYCo3raFZT4ybpoICRO
+         +OybQhsAvgtBftsiAvy17lUIEy+ID5pCENUFqNofDU6jsP7WR4X8nNw8NX+gwwZ0GrSg
+         KWCI2jwkVFvTUU7lkIKkjEiAPeNzgl7Fg4lMSgleNlkxTIgm/zpfPaY6lejR1AoYqQWj
+         S6QQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXdomSZR0EwAH0DngNDKX91W1v64OBeGqBZ4DlFEw/g3DdLPQinkipYB7iZ89NlfKbES2k=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwWbQivSOjJS2NAJKhnbmJlSW9wc1MnJccvQm4ZGIHlATbXni8t
+	QLUg8mP+xG3lkYx6UTKCdm8Pgy23EzJT3LEpDPzFBDN8xitIIt7VrHROXy5ukTUzafmTqAnurDh
+	fHK9BC2EeZKROgKVjUJj+coB5AFDBEPbkrbbsfGNE954+/wGGZw==
+X-Gm-Gg: ASbGncsyDp828FjTgUWOYZ6qZQUG70uiwoJHCRv8/FNFCb/CZV1P9Npg7A3U9EXz6Xb
+	U5cFaWjIE5IRS9bVAPvxdnQxWjNYJgfdFIMAg4MMX1QhsjmoM3rAq7z2CA/4j5OV+ROUSWjeaPq
+	vfiUJVUyTcPYgO54alFRIu8u9B8tnv4yh1CTsaMIijrLdXzHN71SCNxHWrJTNBcBnbC2jdVmHNk
+	fJ0ZtwNsUPcUzvvftLS3Lcnbrl2J8VZa4KfbCrZqJYQl/Fe+F/h29Khw8pq9F2r5sb81SV2ElxX
+	Jr2ot1qlEXzIYTtLylg=
+X-Received: by 2002:a17:907:6ea1:b0:aa6:89b9:e9c6 with SMTP id a640c23a62f3a-ab38b111647mr1889989566b.21.1737650296515;
+        Thu, 23 Jan 2025 08:38:16 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IGeseCJzIERzaXWgZcksOt2phO/IlkO0qodKrzTiLkTNIPsYlBA/4wPbBOANdU3ADTZbVrmMQ==
+X-Received: by 2002:a17:907:6ea1:b0:aa6:89b9:e9c6 with SMTP id a640c23a62f3a-ab38b111647mr1889988166b.21.1737650296152;
+        Thu, 23 Jan 2025 08:38:16 -0800 (PST)
+Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ab384f87d86sm1091662966b.146.2025.01.23.08.38.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Jan 2025 08:38:15 -0800 (PST)
+Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
+	id 9BD13180A83C; Thu, 23 Jan 2025 17:38:14 +0100 (CET)
+From: Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+To: Marcus Wichelmann <marcus.wichelmann@hetzner-cloud.de>, bpf@vger.kernel.org
+Cc: Stanislav Fomichev <sdf@google.com>
+Subject: Re: RX metadata kfuncs cause kernel panic with XDP generic mode
+In-Reply-To: <dae862ec-43b5-41a0-8edf-46c59071cdda@hetzner-cloud.de>
+References: <dae862ec-43b5-41a0-8edf-46c59071cdda@hetzner-cloud.de>
+X-Clacks-Overhead: GNU Terry Pratchett
+Date: Thu, 23 Jan 2025 17:38:14 +0100
+Message-ID: <87msfhqydl.fsf@toke.dk>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Content-Language: en-US
-From: Marcus Wichelmann <marcus.wichelmann@hetzner-cloud.de>
-Autocrypt: addr=marcus.wichelmann@hetzner-cloud.de; keydata=
- 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
- wySmewx3h/yfMh0aFxHhvLPxrO2IEQ==
-To: bpf@vger.kernel.org
-Cc: Stanislav Fomichev <sdf@google.com>,
- =?UTF-8?Q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-Subject: RX metadata kfuncs cause kernel panic with XDP generic mode
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Authenticated-Sender: marcus.wichelmann@hetzner-cloud.de
-X-Virus-Scanned: Clear (ClamAV 1.0.7/27527/Thu Jan 23 10:44:17 2025)
+Content-Type: text/plain
 
-Hey there,
+Marcus Wichelmann <marcus.wichelmann@hetzner-cloud.de> writes:
 
-while taking a closer look at how the RX metadata kfuncs are implemented in the mlx5 and ice drivers,
-I suspected a bug and, after testing, could in fact produce a NULL pointer dereference.
+> There is probably a check missing somewhere that prevents the use of
+> these kfuncs in the scope of do_xdp_generic?
 
-The mlx5 driver implements the RX metadata kfuncs like, for example, bpf_xdp_metadata_rx_vlan_tag by
-casting the xdp_md pointer from the function argument to an mlx5e_xdp_buff pointer. This is needed to
-get access to the packet metadata. See mlx5e_xdp_rx_vlan_tag for example. The ice driver works similarly.
+Heh, yeah, we should definitely block device-bound programs from being
+attached in generic mode. Something like the below, I guess. Care to
+test that out?
 
-This is fine, because normally these drivers always create a full mlx5e_xdp_buff struct when allocating
-the xdp_buff struct. But when a device-bound XDP program is attached to the mlx5 netdevice in generic mode,
-the xdp_buff is not allocated by the mlx5 driver but as a part of the do_xdp_generic implementation.
+-Toke
 
-Now, when a packet comes in and the XDP program tries to call one of these kfuncs, the kfunc implementation
-will try to dereference pointers inside the mlx5e_xdp_buff struct which is not fully allocated, leading to a
-NULL pointer dereference.
-
-There is probably a check missing somewhere that prevents the use of these kfuncs in the scope of
-do_xdp_generic? Or may there be another way to implement the RX metadata kfuncs in the driver that does not
-involve casting the xdp_buff pointer?
-
-Here is how this can be reproduced:
-
-
-eBPF program:
-
-#include <bpf.h>
-
-extern int bpf_xdp_metadata_rx_vlan_tag(
-     const struct xdp_md *ctx, __be16 *vlan_proto, __u16 *vlan_tci) __ksym;
-
-SEC("xdp")
-int ingress(struct xdp_md *ctx) {
-   __be16 vlan_proto;
-   __u16 vlan_tci;
-   if (bpf_xdp_metadata_rx_vlan_tag(ctx, &vlan_proto, &vlan_tci) != 0) {
-     return XDP_ABORTED;
-   }
-
-   return XDP_DROP;
-}
-
-char _license[] SEC("license") = "GPL";
-
-
-Load and attach it as a device-bound program to a mlx5 NIC in XDP-generic mode:
-
-# bpftool prog load crash.o /sys/fs/bpf/crash xdpmeta_dev mlx5-conx5-1
-# bpftool net attach xdpgeneric pinned /sys/fs/bpf/crash dev mlx5-conx5-1
-
-Then make sure a packet is coming in on that NIC port so the XDP program gets called:
-
-# ping -I mlx5-conx5-2 1.1.1.1
-
-In my testing environment, mlx5-conx5-2 and mlx5-conx5-1 are directly connected.
-
-Kernel output:
-
-Unable to handle kernel NULL pointer dereference at virtual address 000000000000001d
-Mem abort info:
-   ESR = 0x0000000096000004
-   EC = 0x25: DABT (current EL), IL = 32 bits
-   SET = 0, FnV = 0
-   EA = 0, S1PTW = 0
-   FSC = 0x04: level 0 translation fault
-Data abort info:
-   ISV = 0, ISS = 0x00000004, ISS2 = 0x00000000
-   CM = 0, WnR = 0, TnD = 0, TagAccess = 0
-   GCS = 0, Overlay = 0, DirtyBit = 0, Xs = 0
-user pgtable: 4k pages, 48-bit VAs, pgdp=000008035e557000
-[000000000000001d] pgd=0000000000000000, p4d=0000000000000000
-
-This was reproduced with Linux 6.12 mainline (adc2186).
-
--- 
-Best regards,
-Marcus Wichelmann
-Linux Networking Specialist
-Team SDN
-
-______________________________
-
-Hetzner Cloud GmbH
-Feringastraße 12A
-85774 Unterföhring
-Germany
-
-Phone: +49 89 381690 150
-E-Mail: marcus.wichelmann@hetzner-cloud.de
-
-Handelsregister München HRB 226782
-Geschäftsführer: Sebastian Färber, Markus Kalmuk
-
-------------------
-For information on the processing of your personal
-data in the context of this contact, please see
-https://hetzner-cloud.de/datenschutz
-------------------
+diff --git a/net/core/dev.c b/net/core/dev.c
+index afa2282f2604..c1fa68264989 100644
+--- a/net/core/dev.c
++++ b/net/core/dev.c
+@@ -9924,6 +9924,10 @@ static int dev_xdp_attach(struct net_device *dev, struct netlink_ext_ack *extack
+                        NL_SET_ERR_MSG(extack, "Program bound to different device");
+                        return -EINVAL;
+                }
++               if (bpf_prog_is_dev_bound(new_prog->aux) && mode == XDP_MODE_SKB) {
++                       NL_SET_ERR_MSG(extack, "Can't attach device-bound programs in generic mode");
++                       return -EINVAL;
++               }
+                if (new_prog->expected_attach_type == BPF_XDP_DEVMAP) {
+                        NL_SET_ERR_MSG(extack, "BPF_XDP_DEVMAP programs can not be attached to a device");
+                        return -EINVAL;
 
