@@ -1,135 +1,70 @@
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5665113E02D;
-	Fri, 24 Jan 2025 14:44:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C0A41CEAC1;
+	Fri, 24 Jan 2025 15:26:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737729897; cv=none; b=PF5ORb3m1znEVJa5v44FjOEzLS0WDEGeKXvWNd+R8qFQD2rHRN4Y0V+NWf7nm7IbCv4V86sIpoJQN6WKSqpmKJmO8FC6aR7oVITSRHCOFUuUe3M38G3R3zE24WM4LZVm901O3T3xCSacDNVwKXm1SO3Tyyafg3IuMJXkhK+tU8k=
+	t=1737732415; cv=none; b=mpgLgDtfMSNcpD6geyCr+5jqccaGRKqXTJ1UwmfMnA9QC6fjlR1lUbMzjfba+SzVcllPEbu7W4YfjTTFphK+oS9Bn0l/Aag3qBrMH8PDLYp0BpctqKMV7x6LaBwDb+1XGTcumhig+lTy2y4R9CA84p0DfQkb+flMCmodqP6oGzA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737729897; c=relaxed/simple;
-	bh=mA+mJ3mi7U7MaBJ2e8eOvpTBae6TTDkQcLJH6uMnwVY=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=iX15mmoVH3A5FzICnkra3B7jBRUl7RCPThy10F1u+jaChI7qPO4vjah80WWzPBZKzWPGtHwxLPeLS8IxXr5+QeQickdgzZc9Jc8w4uvT/pxu1JlsS56OJqRO5KLBEtTflkKdJWpTJufUJhXaw9N+G5/jE3pOjqUTKgCmc7vSMyw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bsywawv6; arc=none smtp.client-ip=209.85.214.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bsywawv6"
-Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-2167141dfa1so40693345ad.1;
-        Fri, 24 Jan 2025 06:44:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1737729895; x=1738334695; darn=vger.kernel.org;
-        h=references:in-reply-to:message-id:date:subject:cc:to:from:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=ee6/s1dz0eBpIOdllXaYw2eJ26q2sLNmUw5j+eAKmRQ=;
-        b=bsywawv6OLTPl46v1N6l+8evgWFSkUSYT48ciDuu2cLqpY3NIKiVwxMye2OA2RbO9o
-         OpbLSrCda8+AnQt9pwQUvYXLxHhPeh01xI/MkLIBfr4biyEU7idR2bYoi2aP/fBdmxsO
-         A795C9S5KgIDMzLO4DmgLihwazUDBO2ozKGaC2xJqFBYSj+fw/HvkE4DSD5+61JR/sL9
-         BsfJJRfdkVCXTXUPv2f3KQTVDEosJvekSIzZllZ1WoEhrLetG9pQjZ7yGjH9Va+1irUR
-         tDXSY0yZX9HdM4wtRAYPKUSDVzYQngl3wTBSYG/vpyY7fV7N6eEXhn31VJ1MWI8uydMJ
-         mRnQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1737729895; x=1738334695;
-        h=references:in-reply-to:message-id:date:subject:cc:to:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ee6/s1dz0eBpIOdllXaYw2eJ26q2sLNmUw5j+eAKmRQ=;
-        b=nvLVyQnXw07zf7RTpdX/edCSpiLZwWOLAbj18laPLHmWxvSy1iWFpIrXc9ZripgBMk
-         NZhPabRkq8J2JyjYwISyB9nx7mtVCPCsdCovh80YbPzgpPOu/h8msrI8KCti4bSVCPye
-         vuWLePS0f926DuZP7HHsjdkbU93kTI9Y7TsISw9n7k70UJ0AgmTTBTrZKHJmmA+kWP7b
-         /3X2YScz5ofjpAU2j06dr06XbL7m0En4ZGg1JcBaPXgpObbjtxOzPUfIp+VsvG2RCH9A
-         qv55+ckS1R0i9iMBwd0LKXSfQo9xzluq/tfOuwxR+0gtDUf5VLOIYVQUXajJmOrClgzQ
-         8dow==
-X-Forwarded-Encrypted: i=1; AJvYcCX2b0OYtvS9bFuirDuvBr81Ku6Jr3pUTWbAUFdjPLjiJ135n8gGA35MfIHfgBSJKCvn95lJrXy5OXGteqA=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx+RoTh6Hx/2qvQeSH0DWPr8bD56NDsHCMvg8D0YRHtjhB8sXKK
-	gUUO6/5upmUXY5rqO0seRdFcINqiKPN3Pyvq01FpwYKUAQTzMETRlC1gkQ==
-X-Gm-Gg: ASbGncs1WOsumGNeSHgHA8zTti1i37QyyoTu3w+Yk42GGlCIxGO06ssPIIkEisgwtjc
-	G379cv+Vc2ADJjn7X+8n7X/25J+BGAHFP1KoPdDz3aum+MYP1HkkoGyqSU0729BhTkOpP2NQO6S
-	HcM/GEVNOqxqPLA305/t6ASYk+jt0XDS/51k1dwecuIS2kRdgRYBzw3sEJmViNwHkqiJTV54hwD
-	UywP/g13PsSOY141h+31FEkxtJDUR0+3vadWBdGcchW6CkIfmTCxhRU+r3SWalYq62z2Mapp6S8
-	5DWPT9GciUK7k+gb
-X-Google-Smtp-Source: AGHT+IH+i5jAJ/35LDWNtXq0uPzLgLIWCnWOwGJ8aR6m5MTuRVT1Unz5NY7NLNA7hiuaeCLuIK+F+A==
-X-Received: by 2002:a17:902:db0d:b0:216:1079:82bb with SMTP id d9443c01a7336-21da4a9d43bmr61970975ad.19.1737729895336;
-        Fri, 24 Jan 2025 06:44:55 -0800 (PST)
-Received: from localhost ([111.229.209.227])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21da414d905sm17054255ad.180.2025.01.24.06.44.54
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Fri, 24 Jan 2025 06:44:54 -0800 (PST)
-From: Tao Chen <chen.dylane@gmail.com>
-To: ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	haoluo@google.com,
-	jolsa@kernel.org,
-	qmo@kernel.org
-Cc: bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	chen.dylane@gmail.com
-Subject: [PATCH bpf-next v3 3/3] selftests/bpf: Add libbpf_probe_bpf_kfunc API selftests
-Date: Fri, 24 Jan 2025 22:44:11 +0800
-Message-Id: <20250124144411.13468-4-chen.dylane@gmail.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20250124144411.13468-1-chen.dylane@gmail.com>
-References: <20250124144411.13468-1-chen.dylane@gmail.com>
+	s=arc-20240116; t=1737732415; c=relaxed/simple;
+	bh=AgT+TKrcpd+6Khw9eLQ2rx4VQh9+UqGgZnONhArutv4=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=VVUzCZl2DL1xDuSAWKoUOG5qTWEE2wKWTZdMBwnijLufon7z3SaltJ3GEUYx1izL8tR/kgJedEuLW8baixMhHGDIkziLR5CP14xZa+JBv7vRW9VlkXn39LuksYtp16eF3jU7rPwAQURuhFqmobPs9F4jp3CgXoOE/PbpwUA5sA0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3DF4C4CED2;
+	Fri, 24 Jan 2025 15:26:52 +0000 (UTC)
+Date: Fri, 24 Jan 2025 10:27:02 -0500
+From: Steven Rostedt <rostedt@goodmis.org>
+To: Liao Chang <liaochang1@huawei.com>
+Cc: <mhiramat@kernel.org>, <oleg@redhat.com>, <peterz@infradead.org>,
+ <mingo@redhat.com>, <acme@kernel.org>, <namhyung@kernel.org>,
+ <mark.rutland@arm.com>, <alexander.shishkin@linux.intel.com>,
+ <jolsa@kernel.org>, <irogers@google.com>, <adrian.hunter@intel.com>,
+ <kan.liang@linux.intel.com>, <andrii.nakryiko@gmail.com>,
+ <linux-kernel@vger.kernel.org>, <linux-trace-kernel@vger.kernel.org>,
+ <linux-perf-users@vger.kernel.org>, <bpf@vger.kernel.org>
+Subject: Re: [PATCH v5 1/2] uprobes: Remove redundant spinlock in
+ uprobe_deny_signal()
+Message-ID: <20250124102702.6ff0ccc5@gandalf.local.home>
+In-Reply-To: <20250124093826.2123675-2-liaochang1@huawei.com>
+References: <20250124093826.2123675-1-liaochang1@huawei.com>
+	<20250124093826.2123675-2-liaochang1@huawei.com>
+X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Add selftests for prog_kfunc feature probing.
- ./test_progs -t libbpf_probe_kfuncs
- #153     libbpf_probe_kfuncs:OK
- Summary: 1/0 PASSED, 0 SKIPPED, 0 FAILED
+On Fri, 24 Jan 2025 09:38:25 +0000
+Liao Chang <liaochang1@huawei.com> wrote:
 
-Signed-off-by: Tao Chen <chen.dylane@gmail.com>
----
- .../selftests/bpf/prog_tests/libbpf_probes.c  | 35 +++++++++++++++++++
- 1 file changed, 35 insertions(+)
+> Since clearing a bit in thread_info is an atomic operation, the spinlock
+> is redundant and can be removed, reducing lock contention is good for
+> performance.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/libbpf_probes.c b/tools/testing/selftests/bpf/prog_tests/libbpf_probes.c
-index 4ed46ed58a7b..d9d69941f694 100644
---- a/tools/testing/selftests/bpf/prog_tests/libbpf_probes.c
-+++ b/tools/testing/selftests/bpf/prog_tests/libbpf_probes.c
-@@ -126,3 +126,38 @@ void test_libbpf_probe_helpers(void)
- 		ASSERT_EQ(res, d->supported, buf);
- 	}
- }
-+
-+void test_libbpf_probe_kfuncs(void)
-+{
-+	int ret, kfunc_id;
-+	char *kfunc = "bpf_cpumask_create";
-+	struct btf *btf;
-+
-+	btf = btf__parse("/sys/kernel/btf/vmlinux", NULL);
-+	if (!ASSERT_OK_PTR(btf, "btf_parse"))
-+		return;
-+
-+	kfunc_id = btf__find_by_name_kind(btf, kfunc, BTF_KIND_FUNC);
-+	if (!ASSERT_GT(kfunc_id, 0, kfunc))
-+		goto cleanup;
-+
-+	/* prog BPF_PROG_TYPE_SYSCALL supports kfunc bpf_cpumask_create */
-+	ret = libbpf_probe_bpf_kfunc(BPF_PROG_TYPE_SYSCALL, kfunc_id, 0, NULL);
-+	ASSERT_EQ(ret, 1, kfunc);
-+
-+	/* prog BPF_PROG_TYPE_KPROBE does not support kfunc bpf_cpumask_create */
-+	ret = libbpf_probe_bpf_kfunc(BPF_PROG_TYPE_KPROBE, kfunc_id, 0, NULL);
-+	ASSERT_EQ(ret, 0, kfunc);
-+
-+	/* invalid kfunc id */
-+	ret = libbpf_probe_bpf_kfunc(BPF_PROG_TYPE_KPROBE, -1, 0, NULL);
-+	ASSERT_EQ(ret, 0, "invalid kfunc id:-1");
-+
-+	/* invalid prog type */
-+	ret = libbpf_probe_bpf_kfunc(100000, kfunc_id, 0, NULL);
-+	if (!ASSERT_LE(ret, 0, "invalid prog type:100000"))
-+		goto cleanup;
-+
-+cleanup:
-+	btf__free(btf);
-+}
--- 
-2.43.0
+Although this patch is probably fine, the change log suggests a dangerous
+precedence. Just because clearing a flag is atomic, that alone does not
+guarantee that it doesn't need spin locks around it.
 
+There may be another path that tests the flag within a spin lock, and then
+does a bunch of work assuming that the flag does not change while it is
+doing that work. That other path would require a spin lock around the
+clearing of the flag elsewhere.
+
+I don't know this code well enough to know if this has that scenario, and
+seeing the Acked-by from Oleg, I'm assuming it does not. But in any case,
+the change log needs to give a better rationale for removing a spin lock than
+just "clearing a flag atomically doesn't need a spin lock"!
+
+-- Steve
+
+
+> 
+> Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> Acked-by: Oleg Nesterov <oleg@redhat.com>
+> Signed-off-by: Liao Chang <liaochang1@huawei.com>
