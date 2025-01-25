@@ -1,180 +1,128 @@
-Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
+Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 268172582;
-	Sat, 25 Jan 2025 05:25:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B73E5207A0E
+	for <bpf@vger.kernel.org>; Sat, 25 Jan 2025 06:52:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737782712; cv=none; b=EOV7n+hz5fEtVask7POf8B/NMyzfYd8CfCHCeE8q6zNtcmtsN5MxhTJCgArHhXQRUvSoOIrCJi87rx03N/gkHoUaIlLZQkjPANegRWVuzJRYzQoYz+aPaSaHL+kp4EIjfCbCxZVKe2Kohj4sv7VKLSF2Gx7XjovWGE+kSwhUVqQ=
+	t=1737787968; cv=none; b=LvESOIhAWk77Nwk9j1wjMmvrQyIqVv+pCQjnyxX1mp+bgXhgQRJNXQf9hB5be3qXlCJhPFHjTN9DbujcVxbQp059ER8jobvILLlUQTkKcjJSiJY1VtRnp9lwgep6av94f2j+tw4H9+UMTpAXzP3Edadebuw91MW8snkwnM0aisw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737782712; c=relaxed/simple;
-	bh=7GaXwBaMTNz7QsHoI0hOmYJ3MRj/002l/EBAzzP+oYc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Mpngt8l2UnY4N3orTXMeKK4UAmnp+oGfvnW7SbfcyRrq10YI/3VLlmb6l86x5YzK6N/6ucG6/3jCxJAQNHi0hNOqHnwD5RcJjJUpPx5L02tZXtqyIyslNQd4jZJyIfFw/NSBagnU4UnbsQPeXFBnCKZELUkEG+xycBkdKvEu0R8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WnzrRrOQ; arc=none smtp.client-ip=209.85.216.43
+	s=arc-20240116; t=1737787968; c=relaxed/simple;
+	bh=2xk4GflnDVL/9cCJ4tZAWRvfzkJapFZbVQNV2R3lpqE=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=afkR6t7fsLqENB3jCA3hnYd3QI9G0HUGgiOYxDWW4JK5faNqq3jcfPqjHi4pacHP5nMlPiZKUuXv/MMngkqoaWk6Wj+6qcu+1girMgTdHxdmknHYmPvoG2fpLN/gyYv+vxianQKOfM6kPn4VR6uqB0MeGemsYDwSVW+lNPrarqk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dmfc80PZ; arc=none smtp.client-ip=209.85.214.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WnzrRrOQ"
-Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-2f43d17b0e3so5211915a91.0;
-        Fri, 24 Jan 2025 21:25:10 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dmfc80PZ"
+Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-21661be2c2dso49412905ad.1
+        for <bpf@vger.kernel.org>; Fri, 24 Jan 2025 22:52:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1737782710; x=1738387510; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=xSSTIOL0i8k8ok3WPoUFyCTMS5T9Rt15wlkg9Dm8NG4=;
-        b=WnzrRrOQsLaqvIOwtwjPqYTZHgIkt6XKtWBujo+Igocp+FXnsEVWNO9AI5jn7G55yM
-         Xi3xxBKutL+Ygrc/aw72S+Nh/VtMObaM7xFejm1526EASAV5yOYUqMPpKe8xeKtye6GS
-         7kDkbEax/R6uo66WkPg03BcziuBniEVzQa72jY4eHGh2B91k39TYQUPrPQhhodXaaJgU
-         nColPYmJCeJ/c6aI7FqzP1GuTxQwNItkJEbzxB38iLxucOk4O21QiQ+hETBUAPcqewfn
-         twQEYfSYhPCx6lfRFmP90/wZigpI/7AHPqB96ONQrtD+EIT0Sw1TxX06YoMtb4kiNZ35
-         lHDQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1737782710; x=1738387510;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1737787966; x=1738392766; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=xSSTIOL0i8k8ok3WPoUFyCTMS5T9Rt15wlkg9Dm8NG4=;
-        b=xTQ3kOmjuay7sk6KQ2Fjl7O6ZXrIkH7p+Jg2o2gEE0ITdTY+jyevBkPGxYuxScg9PB
-         WYu+UyTiAQLreITieMcLpRpkqlexnG0PtQL9P2muiq39nTQvfHNCAqM3OFk+jdn9oNlT
-         Ea2F9YiT7OyFwvdOUlQ2s+fa1BN7+q9ifhLMTQkfKpO9V7qAWqj6qSilNc+80oZEcZZ2
-         vkRH6qsomMmgAcGDBsN85S5DrzpjtN2lF90lRShpyPgfFZ04zhhhj670aVBGh8E/RR4U
-         U1OssqwWJCzGUSDvTDqr/jvdqzD8eo0GlVughq3h0e/3vVl9zcrFrzCot/6d2JQBgjmy
-         1PLw==
-X-Forwarded-Encrypted: i=1; AJvYcCWranDp627rUDgo/qWkgKF9fosaRj3DwvzCTtc789GkwQ3U5OmC8a4wqS3JQhGPQcbmcqNtxYU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzKkLdbbdPQF367WP2bXLF0ubSrtivxdsohNlqVZCLF/hUThbEs
-	WJjKOMB15j64N/mZdzvkzIu9HLGqBzpoOMuFnyaL6BGia9TYUXRR
-X-Gm-Gg: ASbGncuS/gCtuz6XNLBSvASXcnYpDXn8mR2wHrRqG8WTltYlqQlPxyFm99agdjMOLTG
-	ojjudp5tM22BBA0qy9pq4Mz5VpEAHv5bVfbLTDmFZUSoQfaH+ke82t9EXFrABb7whDMqZPwDvJK
-	P3b5U0Gh5Gdxbff6oa1Q4T358KDFgbfSb8ChUeQFrGPKbcJEihTvL7nWK6Rw06FdkBWS+0RQ7IO
-	BG6Jev2PvNUkP13pzRMAdlB2+CgnElrqTF39UjzEm/AO+F3WKH4OspMukIyo4Yn+omNHwd3u8Tq
-	VOmkeA==
-X-Google-Smtp-Source: AGHT+IFq/aJZjajPErKiYz+/prB7gSGb5LGY157NzZABtyZKeFWx7pwWYjUCU4p2pqdMjjNIQGmg3g==
-X-Received: by 2002:a17:90a:e18f:b0:2ee:ad18:b309 with SMTP id 98e67ed59e1d1-2f782c674c1mr43610792a91.3.1737782710082;
-        Fri, 24 Jan 2025 21:25:10 -0800 (PST)
-Received: from gmail.com ([98.97.36.130])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2f7ffa82ce5sm2684408a91.42.2025.01.24.21.25.07
+        bh=qxCiKUpxc8BoGcMZmcC1U9yhSr1dOPJaybAPqf44sMw=;
+        b=dmfc80PZtj++i/tsVkDbX/J+pF97YPxtDftvVtXUxz2ISEPd8hZyY8xUQrmHwn8BRm
+         3DIreXCm4InIbxypm81C8nW17e1QhQyf+bGBuuZwypRtyXROk3BNhCraqQNmM85LKfEi
+         0btjH1YJ6b997rPk4Rd4IO81YGlutt/0y6F7J6qf30onr/drYgL5sLwwUdQSElxbGE52
+         Xizb9WmhYcXQ77OQ2e1Ymvz2JI1Ux0m4JBAKB/scOKCpOL3/iYKjEsWzOXLk1Js0H0+O
+         b0iI0CtM95xFJEXoZO7OW5EKG5UWIRsfcEGv+j5dHTynPii7IVg45wJaDLh96T7uWuym
+         IHEw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1737787966; x=1738392766;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=qxCiKUpxc8BoGcMZmcC1U9yhSr1dOPJaybAPqf44sMw=;
+        b=MiFVCrwZyLYaalW6LkYD8BsLfjf7LsWZlekjvj7iXkcdvwSM58JmNBGJLL9tlMHdA9
+         /Bg2s37MS2tTUXA2yylip3AVsb6k/77hU+e3OXkpkbfpBqt9yITOVQAiLmJzq9RxXQsi
+         XjTlpTfyHAxTETTX0H5ociuLJ14kTUPLQgJHSZG4SW33O2eJrcNnOo+7KRqWfEgr4CY1
+         V1VBxf1mVS1gg2oR0yDDNCYmPyo/900C86Vc2Qe0Fb8vFb7Zt7XBqyQr/38SAaxolqDt
+         YQZ1LFxO3MCaI2S6ULSdLCyEi0cT8ewBR0XAW9Bbm7B4YMu8PFnWB4Uqepf33+Itqzos
+         5iEw==
+X-Forwarded-Encrypted: i=1; AJvYcCWBQZtgpe/UIS72hxqxl0Eya55RCKsNZ+eh+NI/rpTdUZOpYj4+i2HAmjBgOZgfkGuc5Qw=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz/2JKqRBmH5O5QGOeUXhmj+bEA5JfHmplcWJC/rHBKD8SGrEhw
+	WLdiGyZGZxwGtgG1m/l+3deUQ3VZEu5Ds8u0blSDgDjPFQL1jqK0
+X-Gm-Gg: ASbGncv7xwdS9naHxoY+IXmFllTaead/aGa40mcXH5uA2G5c4wUyIMDqTOF3Hf0CPL4
+	UREwScHutxgfcvCT71JecPPPVFCzSIykuQpUi8CzvK/8RQxiXnJzg+b5A1cZGvB8fiMdhsobpvW
+	xv14GKnc+0H4Q2ZW4/wDxeGhIB+a8YxwAQoE3O6pGuf2a2+kO0xEDe1QjAYtnqrjdOG3oz2/DMK
+	gHYi8HRhxRt0HJqUp8TIlGXKEN2QMLg56aUp2Zjq0stB/Pvgry5ZMEvfjNcd5MRfr9DITUDUNi0
+	JwGNevjU8JWgKynnO6Hmhniov5HmTT48izw+rUVCxPu3quiI
+X-Google-Smtp-Source: AGHT+IHDw43KbdiGICtI3iCJjOJEZlTD4A9c7Xei30IHy67e9XIg6IVNDSkIHRhaBn7mOsB65WnKMQ==
+X-Received: by 2002:a17:903:174c:b0:215:4394:40b5 with SMTP id d9443c01a7336-21c355dc59fmr467606705ad.43.1737787965926;
+        Fri, 24 Jan 2025 22:52:45 -0800 (PST)
+Received: from localhost.localdomain (69-172-146-21.cable.teksavvy.com. [69.172.146.21])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21da413f28csm26492735ad.136.2025.01.24.22.52.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Jan 2025 21:25:09 -0800 (PST)
-Date: Fri, 24 Jan 2025 21:24:48 -0800
-From: John Fastabend <john.fastabend@gmail.com>
-To: Jiayuan Chen <mrpre@163.com>
-Cc: bpf@vger.kernel.org, borisp@nvidia.com, kuba@kernel.org, 
-	davem@davemloft.net, edumazet@google.com, pabeni@redhat.com, horms@kernel.org, 
-	andrii@kernel.org, eddyz87@gmail.com, mykolal@fb.com, ast@kernel.org, 
-	daniel@iogearbox.net, martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev, 
-	kpsingh@kernel.org, sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org, 
-	shuah@kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH bpf v1 1/2] bpf: fix ktls panic
-Message-ID: <gkx7axo3mau4jb7ojsdl4lwrtkuxsbnozplupscl3vvl3zfqg5@qnc5qfwzcwlj>
-References: <20250123171552.57345-1-mrpre@163.com>
- <20250123171552.57345-2-mrpre@163.com>
+        Fri, 24 Jan 2025 22:52:45 -0800 (PST)
+From: Tony Ambardar <tony.ambardar@gmail.com>
+X-Google-Original-From: Tony Ambardar <itugrok@yahoo.com>
+To: shivam.tiwari00021@gmail.com
+Cc: Tony Ambardar <tony.ambardar@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	bpf@vger.kernel.org
+Subject: [PATCH bpf v1] libbpf: fix accessing BTF.ext core_relo header
+Date: Fri, 24 Jan 2025 22:52:36 -0800
+Message-Id: <20250125065236.2603346-1-itugrok@yahoo.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <CALz0HOrGei1UTAkceBZqPjGkY=6pRhpjt=b63bhhgPjF7_E9Gg@mail.gmail.com>
+References: <CALz0HOrGei1UTAkceBZqPjGkY=6pRhpjt=b63bhhgPjF7_E9Gg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250123171552.57345-2-mrpre@163.com>
+Content-Transfer-Encoding: 8bit
 
-On 2025-01-24 01:15:51, Jiayuan Chen wrote:
-> [ 2172.936997] ------------[ cut here ]------------
-> [ 2172.936999] kernel BUG at lib/iov_iter.c:629!
-> ......
-> [ 2172.944996] PKRU: 55555554
-> [ 2172.945155] Call Trace:
-> [ 2172.945299]  <TASK>
-> [ 2172.945428]  ? die+0x36/0x90
-> [ 2172.945601]  ? do_trap+0xdd/0x100
-> [ 2172.945795]  ? iov_iter_revert+0x178/0x180
-> [ 2172.946031]  ? iov_iter_revert+0x178/0x180
-> [ 2172.946267]  ? do_error_trap+0x7d/0x110
-> [ 2172.946499]  ? iov_iter_revert+0x178/0x180
-> [ 2172.946736]  ? exc_invalid_op+0x50/0x70
-> [ 2172.946961]  ? iov_iter_revert+0x178/0x180
-> [ 2172.947197]  ? asm_exc_invalid_op+0x1a/0x20
-> [ 2172.947446]  ? iov_iter_revert+0x178/0x180
-> [ 2172.947683]  ? iov_iter_revert+0x5c/0x180
-> [ 2172.947913]  tls_sw_sendmsg_locked.isra.0+0x794/0x840
-> [ 2172.948206]  tls_sw_sendmsg+0x52/0x80
-> [ 2172.948420]  ? inet_sendmsg+0x1f/0x70
-> [ 2172.948634]  __sys_sendto+0x1cd/0x200
-> [ 2172.948848]  ? find_held_lock+0x2b/0x80
-> [ 2172.949072]  ? syscall_trace_enter+0x140/0x270
-> [ 2172.949330]  ? __lock_release.isra.0+0x5e/0x170
-> [ 2172.949595]  ? find_held_lock+0x2b/0x80
-> [ 2172.949817]  ? syscall_trace_enter+0x140/0x270
-> [ 2172.950211]  ? lockdep_hardirqs_on_prepare+0xda/0x190
-> [ 2172.950632]  ? ktime_get_coarse_real_ts64+0xc2/0xd0
-> [ 2172.951036]  __x64_sys_sendto+0x24/0x30
-> [ 2172.951382]  do_syscall_64+0x90/0x170
-> ......
-> 
-> After calling bpf_exec_tx_verdict(), the size of msg_pl->sg may increase,
-> e.g., when the BPF program executes bpf_msg_push_data().
-> 
-> If the BPF program sets cork_bytes and sg.size is smaller than cork_bytes,
-> it will return -ENOSPC and attempt to roll back to the non-zero copy
-> logic. However, during rollback, msg->msg_iter is reset, but since
-> msg_pl->sg.size has been increased, subsequent executions will exceed the
-> actual size of msg_iter.
-> '''
-> iov_iter_revert(&msg->msg_iter, msg_pl->sg.size - orig_size);
-> '''
-> 
-> The changes in this commit are based on the following considerations:
-> 
-> 1. When cork_bytes is set, rolling back to non-zero copy logic is
-> pointless and can directly go to zero-copy logic.
-> 
-> 2. Suppose sg.size is initially 5, and we push it to 100, setting
-> apply_bytes to 7. Then, 98 bytes of data are sent out, leaving 2 bytes to
-> be processed. The rollback logic cannot determine which data has been
-> processed and which hasn't.
+From: Tony Ambardar <tony.ambardar@gmail.com>
 
-This is the error path we are talking about correct?
+Update btf_ext_parse_info() to ensure the core_relo header is present
+before reading its fields. This avoids a potential buffer read overflow
+reported by the OSS Fuzz project.
 
-        if (msg->cork_bytes && msg->cork_bytes > msg->sg.size &&
-            !enospc && !full_record) {
-                err = -ENOSPC;
-                goto out_err;
-        }
+Fixes: cf579164e9ea ("libbpf: Support BTF.ext loading and output in either endianness")
+Link: https://issues.oss-fuzz.com/issues/388905046
+Signed-off-by: Tony Ambardar <tony.ambardar@gmail.com>
+---
+ tools/lib/bpf/btf.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-> 
-> This current change is based on the principle of minimal modification,
-> which won't make things worse. If we still encounter similar panic
-> further, we can consider a more comprehensive solution.
-> 
-> Fixes: fcb14cb1bdac ("new iov_iter flavour - ITER_UBUF")
-> Fixes: d3b18ad31f93 ("tls: add bpf support to sk_msg handling")
-> Signed-off-by: Jiayuan Chen <mrpre@163.com>
-> ---
->  net/tls/tls_sw.c | 8 ++++++--
->  1 file changed, 6 insertions(+), 2 deletions(-)
-> 
-> diff --git a/net/tls/tls_sw.c b/net/tls/tls_sw.c
-> index 7bcc9b4408a2..b3cae4dd4f49 100644
-> --- a/net/tls/tls_sw.c
-> +++ b/net/tls/tls_sw.c
-> @@ -1120,9 +1120,13 @@ static int tls_sw_sendmsg_locked(struct sock *sk, struct msghdr *msg,
->  					num_async++;
->  				else if (ret == -ENOMEM)
->  					goto wait_for_memory;
-> -				else if (ctx->open_rec && ret == -ENOSPC)
-> +				else if (ctx->open_rec && ret == -ENOSPC) {
-> +					if (msg_pl->cork_bytes) {
-> +						ret = 0;
-> +						goto send_end;
-> +					}
+diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
+index 48c66f3a9200..560b519f820e 100644
+--- a/tools/lib/bpf/btf.c
++++ b/tools/lib/bpf/btf.c
+@@ -3015,8 +3015,6 @@ static int btf_ext_parse_info(struct btf_ext *btf_ext, bool is_native)
+ 		.desc = "line_info",
+ 	};
+ 	struct btf_ext_sec_info_param core_relo = {
+-		.off = btf_ext->hdr->core_relo_off,
+-		.len = btf_ext->hdr->core_relo_len,
+ 		.min_rec_size = sizeof(struct bpf_core_relo),
+ 		.ext_info = &btf_ext->core_relo_info,
+ 		.desc = "core_relo",
+@@ -3034,6 +3032,8 @@ static int btf_ext_parse_info(struct btf_ext *btf_ext, bool is_native)
+ 	if (btf_ext->hdr->hdr_len < offsetofend(struct btf_ext_header, core_relo_len))
+ 		return 0; /* skip core relos parsing */
+ 
++	core_relo.off = btf_ext->hdr->core_relo_off;
++	core_relo.len = btf_ext->hdr->core_relo_len;
+ 	err = btf_ext_parse_sec_info(btf_ext, &core_relo, is_native);
+ 	if (err)
+ 		return err;
+-- 
+2.34.1
 
-The app will lose bytes here I suspect if we return copied == try_to_copy then
-no error makes it to the user?
-
-Could we return delta from bpf_exec_tx_verdict and then we can calculate
-the correct number of bytes to revert? I'll need to check but its not
-clear to me if BPF program pushes data that the right thing is done with
-delta there now.
-
-Thanks for looking into this.
