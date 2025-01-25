@@ -1,28 +1,28 @@
 Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5958E2080C6
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 594D31DC19D
 	for <bpf@vger.kernel.org>; Sat, 25 Jan 2025 10:59:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737802758; cv=none; b=Fq9tTth5MrUV7Lcul3KuoKZ3Kn4ry/0RJqNRvVb0k+QR7uq0hRKg+nh6cuFPL6XboFOtoUt0Tq+7CMmVeqCmK1i0JJiNBOWBtDH5Z2X8IjPlOo7OFjfww6ttmD72wnN5yGvqDtTb5qn4O97QZN+jAoxYQCfAi8AOcg2ctXngFu0=
+	t=1737802758; cv=none; b=cUK2yS6Rsac15Lpsyy6Z50G+EdrQK11tuMbk8DxrotFp7a8XT8K1XdMuC96hUH8KBfgjyChNQpY7Ud8YdpGq5uCg6LqMbleN+9hiKdqWJEBc/r/5EW230g+uOiE8zINIqTm/2PDZjeOzzvUUDejZC9WJXXNLRpBZX7kfnV/wLnc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1737802758; c=relaxed/simple;
-	bh=//YszhtXQfCRe3+h1puwzTokjXnMv4ll9xEFrM2/b4w=;
+	bh=jBplyqZdnFCgADA3WUMNE6quuYaRCA+wfWU2lJCY9D4=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=AwQOVxpfqpYCEcRk7LoDWgZcslVD6DGdGDvHx9OoAU4+33IDAbhmK+YzupXeKJC3RYbXUcfj1sIh8R4XSAuTQspjzWMJoPaviEqKB42cspJ2JJMDd5nwY7GxqiCPpDY0laCxG5tB6q8MNg4eYCCbNX8rmelKLboGJ7rozTuTaCU=
+	 MIME-Version; b=XSIJ9p/cjOyROqT0+SZsf2HRJAlxbi8nslSeHhTNXOlBf9GfrzyvZf8Jfza/7H+ZR5fgxJsLmxWUN8TvHD/m3NM8tYMe5WMFqKJVnY65FIVcZDbYNr9dW85IUPvqckXHe2rKvFe4frQo2JlpgG36gY3PWGLu35/+hjMSLqSfV2A=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.93.142])
-	by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4YgBWC5YCGz4f3jXt
-	for <bpf@vger.kernel.org>; Sat, 25 Jan 2025 18:58:47 +0800 (CST)
+Received: from mail.maildlp.com (unknown [172.19.163.235])
+	by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4YgBWH3qYHz4f3jXn
+	for <bpf@vger.kernel.org>; Sat, 25 Jan 2025 18:58:51 +0800 (CST)
 Received: from mail02.huawei.com (unknown [10.116.40.128])
-	by mail.maildlp.com (Postfix) with ESMTP id 80A121A1059
-	for <bpf@vger.kernel.org>; Sat, 25 Jan 2025 18:59:08 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTP id 45E251A06E6
+	for <bpf@vger.kernel.org>; Sat, 25 Jan 2025 18:59:12 +0800 (CST)
 Received: from huaweicloud.com (unknown [10.175.124.27])
-	by APP4 (Coremail) with SMTP id gCh0CgBXul7zw5Rn79XHBw--.24605S13;
-	Sat, 25 Jan 2025 18:59:08 +0800 (CST)
+	by APP4 (Coremail) with SMTP id gCh0CgBXul7zw5Rn79XHBw--.24605S19;
+	Sat, 25 Jan 2025 18:59:12 +0800 (CST)
 From: Hou Tao <houtao@huaweicloud.com>
 To: bpf@vger.kernel.org
 Cc: Martin KaFai Lau <martin.lau@linux.dev>,
@@ -40,9 +40,9 @@ Cc: Martin KaFai Lau <martin.lau@linux.dev>,
 	Dan Carpenter <dan.carpenter@linaro.org>,
 	houtao1@huawei.com,
 	xukuohai@huawei.com
-Subject: [PATCH bpf-next v2 09/20] bpf: Support map key with dynptr in verifier
-Date: Sat, 25 Jan 2025 19:10:58 +0800
-Message-Id: <20250125111109.732718-10-houtao@huaweicloud.com>
+Subject: [PATCH bpf-next v2 15/20] bpf: Support get_next_key operation for dynptr key in hash map
+Date: Sat, 25 Jan 2025 19:11:04 +0800
+Message-Id: <20250125111109.732718-16-houtao@huaweicloud.com>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20250125111109.732718-1-houtao@huaweicloud.com>
 References: <20250125111109.732718-1-houtao@huaweicloud.com>
@@ -53,10 +53,10 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:gCh0CgBXul7zw5Rn79XHBw--.24605S13
-X-Coremail-Antispam: 1UD129KBjvJXoW3ArWxXw48Cr4DJryxZw1fJFb_yoW3ZF1kpF
-	4kG3s3Wr4kKr4IvwsrtFsrAFy5Kw1Iqw47CrWrK3y0yF95XrZ09Fy0kFyUur13trZ8Ca47
-	Jw1qqFZxZw1UAFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+X-CM-TRANSID:gCh0CgBXul7zw5Rn79XHBw--.24605S19
+X-Coremail-Antispam: 1UD129KBjvJXoWxXF1UXryxGFWfCw48WrW8tFb_yoWrKF47pF
+	18G397Xr40kF4qqF45Wan2vw4ayr1Igw10kFykKas7GFnrWr97Zw18tFW0kryYyFZrJr4r
+	tr4jqa4Y9ws5JrDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
 	9KBjDU0xBIdaVrnRJUUUPvb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
 	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAV
 	Cq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0
@@ -67,254 +67,155 @@ X-Coremail-Antispam: 1UD129KBjvJXoW3ArWxXw48Cr4DJryxZw1fJFb_yoW3ZF1kpF
 	z7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2
 	AFwI0_Jw0_GFyl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAq
 	x4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6r
-	W5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2IY6xkF
+	W5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Gr0_Xr1lIxAIcVC0I7IYx2IY6xkF
 	7I0E14v26r4UJVWxJr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14
-	v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuY
+	v26r4j6F4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuY
 	vjxUF9NVUUUUU
 X-CM-SenderInfo: xkrx3t3r6k3tpzhluzxrxghudrp/
 
 From: Hou Tao <houtao1@huawei.com>
 
-The patch basically does the following three things to enable dynptr key
-for bpf map:
-
-1) Only allow PTR_TO_STACK typed register for dynptr key
-The main reason is that bpf_dynptr can only be defined in the stack, so
-for dynptr key only PTR_TO_STACK typed register is allowed. bpf_dynptr
-could also be represented by CONST_PTR_TO_DYNPTR typed register (e.g.,
-in callback func or subprog), but it is not supported now.
-
-2) Only allow fixed-offset for PTR_TO_STACK register
-Variable-offset for PTR_TO_STACK typed register is disallowed, because
-it is impossible to check whether or not the stack access is aligned
-with BPF_REG_SIZE and is matched with the location of dynptr or
-non-dynptr part in the map key.
-
-3) Check the layout of the stack content is matched with the btf_record
-Firstly check the start offset of the stack access is aligned with
-BPF_REG_SIZE, then check the offset and the size of dynptr/non-dynptr
-parts in the stack range is consistent with the btf_record of the map
-key.
+It firstly passed the key_record to htab_map_hash() and
+lookup_nulls_eleme_raw() to find the target key, then it uses
+htab_copy_dynptr_key() helper to copy from the target key to the next
+key used for output.
 
 Signed-off-by: Hou Tao <houtao1@huawei.com>
 ---
- kernel/bpf/verifier.c | 170 ++++++++++++++++++++++++++++++++++++++++--
- 1 file changed, 164 insertions(+), 6 deletions(-)
+ kernel/bpf/hashtab.c | 55 ++++++++++++++++++++++++++++++--------------
+ 1 file changed, 38 insertions(+), 17 deletions(-)
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 290b9b93017c0..4e8531f246e8a 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -7705,9 +7705,90 @@ static int allow_uninitialized_stack_range(struct bpf_verifier_env *env, int reg
- 	return 1;
+diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
+index f3ec2b32b59b8..74962a461d091 100644
+--- a/kernel/bpf/hashtab.c
++++ b/kernel/bpf/hashtab.c
+@@ -970,7 +970,8 @@ static bool htab_lru_map_delete_node(void *arg, struct bpf_lru_node *node)
+ 	return l == tgt_l;
  }
  
-+struct dynptr_key_state {
-+	const struct btf_record *rec;
-+	const struct btf_field *cur_dynptr;
-+	bool valid_dynptr_id;
-+	int cur_dynptr_id;
-+};
-+
-+static int init_dynptr_key_state(struct bpf_verifier_env *env, const struct btf_record *rec,
-+				 struct dynptr_key_state *state)
-+{
-+	unsigned int i;
-+
-+	/* Find the first dynptr in the dynptr-key */
-+	for (i = 0; i < rec->cnt; i++) {
-+		if (rec->fields[i].type == BPF_DYNPTR)
-+			break;
-+	}
-+	if (i >= rec->cnt) {
-+		verbose(env, "verifier bug: dynptr not found\n");
-+		return -EFAULT;
-+	}
-+
-+	state->rec = rec;
-+	state->cur_dynptr = &rec->fields[i];
-+	state->valid_dynptr_id = false;
-+
-+	return 0;
-+}
-+
-+static int check_dynptr_key_access(struct bpf_verifier_env *env, struct dynptr_key_state *state,
-+				   struct bpf_reg_state *reg, u8 stype, int offset)
-+{
-+	const struct btf_field *dynptr = state->cur_dynptr;
-+
-+	/* Non-dynptr part before a dynptr or non-dynptr part after
-+	 * the last dynptr.
-+	 */
-+	if (offset < dynptr->offset || offset >= dynptr->offset + dynptr->size) {
-+		if (stype == STACK_DYNPTR) {
-+			verbose(env,
-+				"dynptr-key expects non-dynptr at offset %d cur_dynptr_offset %u\n",
-+				offset, dynptr->offset);
-+			return -EACCES;
-+		}
-+	} else {
-+		if (stype != STACK_DYNPTR) {
-+			verbose(env,
-+				"dynptr-key expects dynptr at offset %d cur_dynptr_offset %u\n",
-+				offset, dynptr->offset);
-+			return -EACCES;
-+		}
-+
-+		/* A dynptr is composed of parts from two dynptrs */
-+		if (state->valid_dynptr_id && reg->id != state->cur_dynptr_id) {
-+			verbose(env, "malformed dynptr-key at offset %d cur_dynptr_offset %u\n",
-+				offset, dynptr->offset);
-+			return -EACCES;
-+		}
-+		if (!state->valid_dynptr_id) {
-+			state->valid_dynptr_id = true;
-+			state->cur_dynptr_id = reg->id;
-+		}
-+
-+		if (offset == dynptr->offset + dynptr->size - 1) {
-+			const struct btf_record *rec = state->rec;
-+			unsigned int i;
-+
-+			for (i = dynptr - rec->fields + 1; i < rec->cnt; i++) {
-+				if (rec->fields[i].type == BPF_DYNPTR) {
-+					state->cur_dynptr = &rec->fields[i];
-+					state->valid_dynptr_id = false;
-+					break;
-+				}
-+			}
-+		}
-+	}
-+
-+	return 0;
-+}
-+
- static int check_stack_range_initialized(struct bpf_verifier_env *env, int regno,
- 					 int min_off, int max_off, int access_size,
--					 enum bpf_access_type type)
-+					 enum bpf_access_type type,
-+					 struct dynptr_key_state *dynkey)
+-static int htab_copy_dynptr_key(struct bpf_htab *htab, void *dst_key, const void *key, u32 key_size)
++static int htab_copy_dynptr_key(struct bpf_htab *htab, void *dst_key, const void *key, u32 key_size,
++				bool copy_in)
  {
- 	struct bpf_reg_state *reg = reg_state(env, regno);
- 	struct bpf_func_state *state = func(env, reg);
-@@ -7730,6 +7811,8 @@ static int check_stack_range_initialized(struct bpf_verifier_env *env, int regno
- 		stype = &state->stack[spi].slot_type[slot % BPF_REG_SIZE];
- 		if (*stype == STACK_MISC)
- 			goto mark;
-+		if (dynkey && *stype == STACK_DYNPTR)
-+			goto mark;
- 		if ((*stype == STACK_ZERO) ||
- 		    (*stype == STACK_INVALID && env->allow_uninit_stack)) {
- 			if (clobber) {
-@@ -7762,6 +7845,15 @@ static int check_stack_range_initialized(struct bpf_verifier_env *env, int regno
- 		}
- 		return -EACCES;
- mark:
-+		if (dynkey) {
-+			int err = check_dynptr_key_access(env, dynkey,
-+							  &state->stack[spi].spilled_ptr,
-+							  *stype, i - min_off);
-+
-+			if (err)
-+				return err;
-+		}
-+
- 		/* reading any byte out of 8-byte 'spill_slot' will cause
- 		 * the whole slot to be marked as 'read'
- 		 *
-@@ -7813,7 +7905,60 @@ static int check_stack_range_access(struct bpf_verifier_env *env, int regno, int
- 	if (err > 0)
- 		return 0;
+ 	const struct btf_record *rec = htab->map.key_record;
+ 	struct bpf_dynptr_kern *dst_kptr;
+@@ -995,22 +996,32 @@ static int htab_copy_dynptr_key(struct bpf_htab *htab, void *dst_key, const void
  
--	return check_stack_range_initialized(env, regno, min_off, max_off, access_size, type);
-+	return check_stack_range_initialized(env, regno, min_off, max_off, access_size, type, NULL);
-+}
-+
-+static int check_dynkey_stack_access_offset(struct bpf_verifier_env *env, int regno, int off)
-+{
-+	struct bpf_reg_state *reg = reg_state(env, regno);
-+
-+	if (!tnum_is_const(reg->var_off)) {
-+		verbose(env, "R%d variable offset prohibited for dynptr-key\n", regno);
-+		return -EACCES;
-+	}
-+
-+	off = reg->var_off.value + off;
-+	if (off % BPF_REG_SIZE) {
-+		verbose(env, "R%d misaligned offset %d for dynptr-key\n", regno, off);
-+		return -EACCES;
-+	}
-+
-+	return 0;
-+}
-+
-+/* It is almost the same as check_stack_range_access(), except the following
-+ * things:
-+ * (1) no need to check whether access_size is zero (due to non-zero key_size)
-+ * (2) disallow uninitialized stack range
-+ * (3) need BPF_REG_SIZE-aligned access with fixed-size offset
-+ * (4) need to check whether the layout of bpf_dynptr part and non-bpf_dynptr
-+ *     part in the stack range is the same as the layout of dynptr key
-+ */
-+static int check_dynkey_stack_range_access(struct bpf_verifier_env *env, int regno, int off,
-+					   int access_size, struct bpf_call_arg_meta *meta)
-+{
-+	enum bpf_access_type type = BPF_READ;
-+	struct dynptr_key_state dynkey;
-+	int err, min_off, max_off;
-+
-+	err = check_stack_access_within_bounds(env, regno, off, access_size, type);
-+	if (err)
-+		return err;
-+
-+	err = check_dynkey_stack_access_offset(env, regno, off);
-+	if (err)
-+		return err;
-+
-+	err = get_stack_access_range(env, regno, off, &min_off, &max_off);
-+	if (err)
-+		return err;
-+
-+	err = init_dynptr_key_state(env, meta->map_ptr->key_record, &dynkey);
-+	if (err)
-+		return err;
-+
-+	return check_stack_range_initialized(env, regno, min_off, max_off, access_size, type,
-+					     &dynkey);
+ 		/* Doesn't support nullified dynptr in map key */
+ 		kptr = key + field->offset;
+-		if (!kptr->data) {
++		if (copy_in && !kptr->data) {
+ 			err = -EINVAL;
+ 			goto out;
+ 		}
+ 		len = __bpf_dynptr_size(kptr);
+ 		data = __bpf_dynptr_data(kptr, len);
+ 
+-		dst_data = bpf_mem_alloc(&htab->dynptr_ma, len);
+-		if (!dst_data) {
+-			err = -ENOMEM;
+-			goto out;
+-		}
++		dst_kptr = dst_key + field->offset;
++		if (copy_in) {
++			dst_data = bpf_mem_alloc(&htab->dynptr_ma, len);
++			if (!dst_data) {
++				err = -ENOMEM;
++				goto out;
++			}
++			bpf_dynptr_init(dst_kptr, dst_data, BPF_DYNPTR_TYPE_LOCAL, 0, len);
++		} else {
++			dst_data = __bpf_dynptr_data_rw(dst_kptr, len);
++			if (!dst_data) {
++				err = -ENOSPC;
++				goto out;
++			}
+ 
++			if (__bpf_dynptr_size(dst_kptr) > len)
++				bpf_dynptr_set_size(dst_kptr, len);
++		}
+ 		memcpy(dst_data, data, len);
+-		dst_kptr = dst_key + field->offset;
+-		bpf_dynptr_init(dst_kptr, dst_data, BPF_DYNPTR_TYPE_LOCAL, 0, len);
+ 
+ 		offset = field->offset + field->size;
+ 	}
+@@ -1021,7 +1032,7 @@ static int htab_copy_dynptr_key(struct bpf_htab *htab, void *dst_key, const void
+ 	return 0;
+ 
+ out:
+-	for (; i > 0; i--) {
++	for (; i > 0 && copy_in; i--) {
+ 		field = &rec->fields[i - 1];
+ 		if (field->type != BPF_DYNPTR)
+ 			continue;
+@@ -1032,10 +1043,22 @@ static int htab_copy_dynptr_key(struct bpf_htab *htab, void *dst_key, const void
+ 	return err;
  }
  
- static int check_helper_mem_access(struct bpf_verifier_env *env, int regno,
-@@ -9383,13 +9528,26 @@ static int check_func_arg(struct bpf_verifier_env *env, u32 arg,
- 			verbose(env, "invalid map_ptr to access map->key\n");
- 			return -EACCES;
- 		}
++static inline int htab_copy_next_key(struct bpf_htab *htab, void *next_key, const void *key,
++				     u32 key_size)
++{
++	if (!bpf_map_has_dynptr_key(&htab->map)) {
++		memcpy(next_key, key, key_size);
++		return 0;
++	}
 +
- 		key_size = meta->map_ptr->key_size;
--		err = check_helper_mem_access(env, regno, key_size, BPF_READ, false, NULL);
-+		/* Only allow PTR_TO_STACK for dynptr-key */
-+		if (bpf_map_has_dynptr_key(meta->map_ptr)) {
-+			if (base_type(reg->type) != PTR_TO_STACK) {
-+				verbose(env, "map dynptr-key requires stack ptr but got %s\n",
-+					reg_type_str(env, reg->type));
-+				return -EACCES;
-+			}
-+			err = check_dynkey_stack_range_access(env, regno, reg->off, key_size, meta);
-+		} else {
-+			err = check_helper_mem_access(env, regno, key_size, BPF_READ, false, NULL);
-+			if (!err) {
-+				meta->const_map_key = get_constant_map_key(env, reg, key_size);
-+				if (meta->const_map_key < 0 && meta->const_map_key != -EOPNOTSUPP)
-+					err = meta->const_map_key;
-+			}
-+		}
- 		if (err)
- 			return err;
--		meta->const_map_key = get_constant_map_key(env, reg, key_size);
--		if (meta->const_map_key < 0 && meta->const_map_key != -EOPNOTSUPP)
--			return meta->const_map_key;
- 		break;
- 	case ARG_PTR_TO_MAP_VALUE:
- 		if (type_may_be_null(arg_type) && register_is_null(reg))
++	return htab_copy_dynptr_key(htab, next_key, key, key_size, false);
++}
++
+ /* Called from syscall */
+ static int htab_map_get_next_key(struct bpf_map *map, void *key, void *next_key)
+ {
+ 	struct bpf_htab *htab = container_of(map, struct bpf_htab, map);
++	const struct btf_record *key_record = map->key_record;
+ 	struct hlist_nulls_head *head;
+ 	struct htab_elem *l, *next_l;
+ 	u32 hash, key_size;
+@@ -1048,12 +1071,12 @@ static int htab_map_get_next_key(struct bpf_map *map, void *key, void *next_key)
+ 	if (!key)
+ 		goto find_first_elem;
+ 
+-	hash = htab_map_hash(key, key_size, htab->hashrnd, NULL);
++	hash = htab_map_hash(key, key_size, htab->hashrnd, key_record);
+ 
+ 	head = select_bucket(htab, hash);
+ 
+ 	/* lookup the key */
+-	l = lookup_nulls_elem_raw(head, hash, key, key_size, htab->n_buckets, NULL);
++	l = lookup_nulls_elem_raw(head, hash, key, key_size, htab->n_buckets, key_record);
+ 
+ 	if (!l)
+ 		goto find_first_elem;
+@@ -1064,8 +1087,7 @@ static int htab_map_get_next_key(struct bpf_map *map, void *key, void *next_key)
+ 
+ 	if (next_l) {
+ 		/* if next elem in this hash list is non-zero, just return it */
+-		memcpy(next_key, next_l->key, key_size);
+-		return 0;
++		return htab_copy_next_key(htab, next_key, next_l->key, key_size);
+ 	}
+ 
+ 	/* no more elements in this hash list, go to the next bucket */
+@@ -1082,8 +1104,7 @@ static int htab_map_get_next_key(struct bpf_map *map, void *key, void *next_key)
+ 					  struct htab_elem, hash_node);
+ 		if (next_l) {
+ 			/* if it's not empty, just return it */
+-			memcpy(next_key, next_l->key, key_size);
+-			return 0;
++			return htab_copy_next_key(htab, next_key, next_l->key, key_size);
+ 		}
+ 	}
+ 
+@@ -1263,7 +1284,7 @@ static struct htab_elem *alloc_htab_elem(struct bpf_htab *htab, void *key,
+ 	if (bpf_map_has_dynptr_key(&htab->map)) {
+ 		int copy_err;
+ 
+-		copy_err = htab_copy_dynptr_key(htab, l_new->key, key, key_size);
++		copy_err = htab_copy_dynptr_key(htab, l_new->key, key, key_size, true);
+ 		if (copy_err) {
+ 			bpf_mem_cache_free(&htab->ma, l_new);
+ 			l_new = ERR_PTR(copy_err);
 -- 
 2.29.2
 
