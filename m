@@ -1,38 +1,38 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 690F42EB10;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DC86206F21;
 	Sat, 25 Jan 2025 08:30:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737793828; cv=none; b=r2AzcQa5wO/uqDGCiYto9U3cJ3M99HIebxv4RvJdSigUdxgAbf8sHYpBT7FpdCh7OdtVcZyAagOHMDmHosxHceoyg/Z6JmoGhFgS+yhjHP3fSGaH5O37iZWUrgGL6EWJBLWcwNdkGdyDqZx6OAsLiQmB0FPrHyk9IvLyLTEBWcI=
+	t=1737793828; cv=none; b=C71S1W3oEKWlssVxgjlNd7DRzUiUqhDJO+tKFdkUChpjCUur5SkFVCDOiMgy88cHZfIKjWqm0ZknxKjETv/KWPOQvVRqszEk9qvAruEE9rVunDbGzfiXwzAjtmZKNYgLvsd2hlul334tKtkR+II5r+ohyFCOY5wRbou1sjPmZMI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1737793828; c=relaxed/simple;
-	bh=P5XuJJND0nKhLbsM46EPq1luRqpUiyBNf0HrYROsyE0=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=keRhTSosjAiwE4d+n2wMpiFJpde8AsLKh5DrYqNBCNGxg0SuVnB1Hcm1SvdK1CAJz3ES3TgCCN5653q0rfLlY6zr3dWz4dPH8PUM/nwv71+w7eED2uVTwbkLgbpaHVrL7lhYOSB00ZUVeiWfKMAalGWLwVh7Jnm/tNa7D2ep5Zw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=useGx/Wg; arc=none smtp.client-ip=10.30.226.201
+	bh=PyRhaQiSnZLjeNlZTzgwUCTGU9Zv+fo1gZ0pY6cwY5A=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=MQ4AeGC4mt40v0KmGe/Zjlk4R/vxrzLO+s+DoDalgA/GOFMZ2TZ5y0NEH0KRJrIboz0Av3dxm2ZTmU/AA99zT7qEGxd9witxHWl3vs6Lp4xXXDkYJnDKXI6RO4zupa0Ls0H2OkrPT0zpNNMtEuxKf6U+Xo0dap1PjJYMKjHrWGI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=E9PlLrUp; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="useGx/Wg"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id C890BC4CED6;
-	Sat, 25 Jan 2025 08:30:27 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="E9PlLrUp"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 28110C4CEEB;
+	Sat, 25 Jan 2025 08:30:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1737793827;
-	bh=P5XuJJND0nKhLbsM46EPq1luRqpUiyBNf0HrYROsyE0=;
-	h=From:Subject:Date:To:Cc:Reply-To:From;
-	b=useGx/WgDLm9SjiJn/oBJl95SvVEwfQjYspjb6ZwCbaVe7vOr+nWfHx2ev6c0vv0T
-	 hEjB0W42O4AT9uS/d5EQbEC84zdMEeLhmVTz+fJJ9S+YfPRftVENQqTqfWuzHLceyN
-	 LGVVpuDGvnuAUr4wh1uAKQmXaN5mc6BrJj2g6QxPbdAps8DNgVScOCVyGC1G6KMIdF
-	 73I2+VA7ZsQBwApqy4Np6CNy4NN9iGWDOk9M24jsKxOHCr+2oDC2K2uOuCuJpW0nbq
-	 TQMlcCFjDpSSPCWezTcj7uEFuD7kBPU1pXRc/ouCYU0Z4sZt6UoeeYK8LQ92rRkyXJ
-	 di00bEhhQYfhg==
+	s=k20201202; t=1737793828;
+	bh=PyRhaQiSnZLjeNlZTzgwUCTGU9Zv+fo1gZ0pY6cwY5A=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
+	b=E9PlLrUpOgzuaiemYFGgsHCq71K44WdedOABpmUvE0T2oaXJjYZQ7kqs3Hqeoo91Y
+	 egXzmza/s0NjuoBNGzwqjtZf8hVTYqz+b0+1K7iCCcU/uG7gIbwN2slNIAqc07oNo0
+	 eJGauI24yOucx8H9hAm1dOhuLRfipKqyWHaHZP5QwmXlJ5yPyX7hz8RxQ3fEdjkz4P
+	 6sR16xicHtVcv1r398AV2o1xpFMx0+deacOxH++tcVCWFSVVJ7N2PG8zVJwUVTUZgU
+	 5Eme/f5GLTY8nvnRbi74Pv9/q+mtRUtBVutviCZn41BxMq6F9YYsO4IxGxl0hib9w8
+	 SUkiDeKbzGxRQ==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ACFBAC0218C;
-	Sat, 25 Jan 2025 08:30:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1BA73C0218D;
+	Sat, 25 Jan 2025 08:30:28 +0000 (UTC)
 From: Levi Zim via B4 Relay <devnull+rsworktech.outlook.com@kernel.org>
-Subject: [PATCH bpf-next v2 0/7] bpf: Add probe_read_{kernel,user}_dynptr
- and copy_from_user_dynptr
-Date: Sat, 25 Jan 2025 16:29:47 +0800
-Message-Id: <20250125-bpf_dynptr_probe-v2-0-c42c87f97afe@outlook.com>
+Date: Sat, 25 Jan 2025 16:29:50 +0800
+Subject: [PATCH bpf-next v2 3/7] bpf: Implement bpf_copy_from_user_dynptr
+ helper
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -41,11 +41,9 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAPuglGcC/2WNQQ7CIBREr9L8tZh+CkZdeQ/TNIWCJSqfADZtm
- t5d0rhzOXkzb1ZIJjqT4FqtEM3kkiNfAj9UoMfePwxzQ8nAay5r5IKpYLth8SHHLkRShvVKnBs
- tpbDYQ5mFaKybd+UdSpt5M2doCxldyhSX/WvCnf+08l87IauZbrRCjvZ0kXijT34RPY+a3tBu2
- /YF9/MfKbwAAAA=
-X-Change-ID: 20250124-bpf_dynptr_probe-ab483c554f1a
+Message-Id: <20250125-bpf_dynptr_probe-v2-3-c42c87f97afe@outlook.com>
+References: <20250125-bpf_dynptr_probe-v2-0-c42c87f97afe@outlook.com>
+In-Reply-To: <20250125-bpf_dynptr_probe-v2-0-c42c87f97afe@outlook.com>
 To: Alexei Starovoitov <ast@kernel.org>, 
  Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
  Martin KaFai Lau <martin.lau@linux.dev>, 
@@ -63,21 +61,21 @@ Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
  Andrii Nakryiko <andrii.nakryiko@gmail.com>, 
  Levi Zim <rsworktech@outlook.com>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1817;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4919;
  i=rsworktech@outlook.com; h=from:subject:message-id;
- bh=P5XuJJND0nKhLbsM46EPq1luRqpUiyBNf0HrYROsyE0=;
- b=owEBbQKS/ZANAwAIAW87mNQvxsnYAcsmYgBnlKEV+2sHhhlq/K1lAjunTXgA/d6rjPlDg3JGN
- cK3kw69poiJAjMEAAEIAB0WIQQolnD5HDY18KF0JEVvO5jUL8bJ2AUCZ5ShFQAKCRBvO5jUL8bJ
- 2HMwEADXmP+76DbBZ1IBtrqom4sXAe3aKiLOE3MIMuPQWiQqfaBzvDlhcm+cP3A05rzQ0sxvd+S
- MweuoGiHO51Xsegd0Mck/++847sj46LXAJXboCymenzgCqIYA/GCGLLpBe1OBFNJQCEnwVDcKjL
- t9/sPk6m724f1fNkZepcBuqLQBoJ6+/no7GPo2+lGN4lsU9PYnX7PAmSU0N14iJORNCvjotTK1R
- P7oSHqYpNDiq2iEx7u403QwHsUkO3lyXJA8feoOSFROi9xgCu7wR7OysANs9xZ1tvYY0789vteG
- 6XmxZay2c2iRUhxa2qt6PCxaVgZZxIAOCVgLxJr0nYXOKVAZ7V6k1/bUTZ73ZyAoH1ONu582X9O
- DNVgjqLBwZvgOTapoM+ifeWqzB5s2GBYfIRIZQZiz34RayCUP6SCTh5zfzx48X33MIZ7ZtA9Kcy
- 1hkKXNwTgyt9NgJFUQ6++BJ38/3RnREvZACz5TgoZ94+u8KQSuubmfK8CIkIoCabslRiDoc86ts
- O8WR3uE7ov+nBf1JXr7xnfjdl6hDnGXiGCBB0YhbAHvd9cvHb1GpaBWu2o/2kA4GgAUlBXwvCla
- htZkOf35wa8+pHPDK9Ybrx9tcmLjbZ7aFzIWdKRlpRv4+8nf/i8IijlBK9FUkBmgkQWgbQ+ycVj
- n3iArCud3OgaGdQ==
+ bh=PbsS7Vpr6USg1jk+KBsoBiOuzmKNN5IGam682v3+Quo=;
+ b=owEBbQKS/ZANAwAIAW87mNQvxsnYAcsmYgBnlKEcWhxtdmFMeS8e/j2IAS0TMUqjsi0v1GWCl
+ kfWJnx3yfKJAjMEAAEIAB0WIQQolnD5HDY18KF0JEVvO5jUL8bJ2AUCZ5ShHAAKCRBvO5jUL8bJ
+ 2NIOEACF2vYKdtugfPkki7eYCvJ3omVjfA4rb1wl39Hq/qNTHLWNz+/Gvhm2ZrdyAaLaDrMWbFw
+ 1Yhz9cbOPBTTCnaouVLGUHY6rFse1euFPZWduj1RCzNsdvsXHOyfGH0J6BMeXEMUeWNYPx3ttEP
+ VpVe+XlWkhR3VHfLZvafAdgpjs/4NWstbC5AfFrrVxddA3e7zzlYqWX3nSx7Pz0aj5I+FVyYGL7
+ AH+/k4kScAiW0Zg3ztHF4KT9Zs4+j5kOuEGVh5PbWKMtWAucK7OPy+Ex37P7xZYBRBT3KbOGVsx
+ zJMsn13Hz1DMZRaoZYs058VWLUm03dXkQe1SyrjFmRlURNdmSWiEl8CiYF5iUUK2Q0viniy1+0E
+ AENGF5oWU+MXGtXZrZrJJmqZIOyvxsD7yeuVRoraqzkzNEFTFUVd/YUXBOYha+pNmDnpQQmvTJW
+ WrYfhYiZvMlbb5r4hVCPcpcC/9UDqEg04O1pHgDCqqdgTNwheZ37i8NdNMeo+5fAtX5Zsz5bSN2
+ kXq49mID7+PqiJNGMGD5JKj3vn/NVEl0oRAwx/DVx+WUD85bbbn0nYBo6bABdRJHjwvDf60/iNY
+ sCxSUOlPs398GNnM+ztvdA8dtpasLLWmiGJXczA1njfLrozvjSNG65Ioi5jexf+mPPggBi60hVj
+ aDVlGDi7FYxYZpw==
 X-Developer-Key: i=rsworktech@outlook.com; a=openpgp;
  fpr=17AADD6726DDC58B8EE5881757670CCFA42CCF0A
 X-Endpoint-Received: by B4 Relay for rsworktech@outlook.com/default with
@@ -85,45 +83,139 @@ X-Endpoint-Received: by B4 Relay for rsworktech@outlook.com/default with
 X-Original-From: Levi Zim <rsworktech@outlook.com>
 Reply-To: rsworktech@outlook.com
 
-This series introduce the dynptr counterpart of the
-bpf_probe_read_{kernel,user} helpers and bpf_copy_from_user helper.
+From: Levi Zim <rsworktech@outlook.com>
 
-These helpers are helpful for reading variable-length data from kernel
-memory into dynptr without going through an intermediate buffer.
+This patch add a helper function bpf_copy_from_user_dynptr:
 
-Link: https://lore.kernel.org/bpf/MEYP282MB2312CFCE5F7712FDE313215AC64D2@MEYP282MB2312.AUSP282.PROD.OUTLOOK.COM/
-Suggested-by: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+bpf_copy_from_user_dynptr(const struct bpf_dynptr *dst, u32 offset,
+	u32 size, const void *user_ptr, u64 flags)
+
+It is useful for reading variable-length data from kernel memory into
+dynptr.
+
 Signed-off-by: Levi Zim <rsworktech@outlook.com>
 ---
-Changes in v2:
-- Add missing bpf-next prefix. I forgot it in the initial series. Sorry
-  about that.
-- Link to v1: https://lore.kernel.org/r/20250125-bpf_dynptr_probe-v1-0-c3cb121f6951@outlook.com
+ include/linux/bpf.h      |  1 +
+ include/uapi/linux/bpf.h | 17 +++++++++++++++++
+ kernel/bpf/helpers.c     | 42 ++++++++++++++++++++++++++++++++++++++++++
+ kernel/trace/bpf_trace.c |  2 ++
+ 4 files changed, 62 insertions(+)
 
----
-Levi Zim (7):
-      bpf: Implement bpf_probe_read_kernel_dynptr helper
-      bpf: Implement bpf_probe_read_user_dynptr helper
-      bpf: Implement bpf_copy_from_user_dynptr helper
-      tools headers UAPI: Update tools's copy of bpf.h header
-      selftests/bpf: probe_read_kernel_dynptr test
-      selftests/bpf: probe_read_user_dynptr test
-      selftests/bpf: copy_from_user_dynptr test
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 9d5ae8b4b7d82c4523bf0ab041d4b76bf134a106..d0412eaf63d69c0e437575c77008548edc692335 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -3357,6 +3357,7 @@ extern const struct bpf_func_proto bpf_get_retval_proto;
+ extern const struct bpf_func_proto bpf_user_ringbuf_drain_proto;
+ extern const struct bpf_func_proto bpf_cgrp_storage_get_proto;
+ extern const struct bpf_func_proto bpf_cgrp_storage_delete_proto;
++extern const struct bpf_func_proto bpf_copy_from_user_dynptr_proto;
+ 
+ const struct bpf_func_proto *tracing_prog_func_proto(
+   enum bpf_func_id func_id, const struct bpf_prog *prog);
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index d7d7a9ddd5dca07ba89d81ba77101a704af3163b..f92cf809b50bc393d54eb0e8de2e1ce2a39e95d0 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -5835,6 +5835,22 @@ union bpf_attr {
+  *		support this helper, or if *flags* is not 0.
+  *
+  *		Or other negative errors on failure reading user space memory.
++ *
++ * long bpf_copy_from_user_dynptr(const struct bpf_dynptr *dst, u32 offset, u32 size, const void *user_ptr, u64 flags)
++ *	Description
++ *		Read *size* bytes from user space address *user_ptr* and store
++ *		the data in *dst* starting from *offset*.
++ *		This is a wrapper of **copy_from_user**\ ().
++ *		*flags* is currently unused.
++ *	Return
++ *		0 on success.
++ *
++ *		**-E2BIG** if *offset* + *len* exceeds the length of *src*'s data
++ *
++ *		**-EINVAL** if *src* is an invalid dynptr or doesn't support this
++ *		support this helper, or if *flags* is not 0.
++ *
++ *		Or other negative errors on failure reading user space memory.
+  */
+ #define ___BPF_FUNC_MAPPER(FN, ctx...)			\
+ 	FN(unspec, 0, ##ctx)				\
+@@ -6051,6 +6067,7 @@ union bpf_attr {
+ 	FN(cgrp_storage_delete, 211, ##ctx)		\
+ 	FN(probe_read_kernel_dynptr, 212, ##ctx)		\
+ 	FN(probe_read_user_dynptr, 213, ##ctx)		\
++	FN(copy_from_user_dynptr, 214, ##ctx)		\
+ 	/* */
+ 
+ /* backwards-compatibility macros for users of __BPF_FUNC_MAPPER that don't
+diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+index ac563d09082e7c721999d7de035aabc000206a29..d756c80596315bd07fe6e71885b61efc8cb2ef4f 100644
+--- a/kernel/bpf/helpers.c
++++ b/kernel/bpf/helpers.c
+@@ -676,6 +676,48 @@ const struct bpf_func_proto bpf_copy_from_user_proto = {
+ 	.arg3_type	= ARG_ANYTHING,
+ };
+ 
++BPF_CALL_5(bpf_copy_from_user_dynptr, const struct bpf_dynptr_kern *, dst,
++	u32, offset, u32, size, const void __user *, user_ptr, u32, flags)
++{
++	enum bpf_dynptr_type type;
++	int err;
++
++	if (!dst->data || __bpf_dynptr_is_rdonly(dst))
++		return -EINVAL;
++
++	err = bpf_dynptr_check_off_len(dst, offset, size);
++	if (err)
++		return err;
++
++	type = bpf_dynptr_get_type(dst);
++
++	switch (type) {
++	case BPF_DYNPTR_TYPE_LOCAL:
++	case BPF_DYNPTR_TYPE_RINGBUF:
++		if (flags)
++			return -EINVAL;
++		return ____bpf_copy_from_user(dst->data + dst->offset + offset, size, user_ptr);
++	case BPF_DYNPTR_TYPE_SKB:
++	case BPF_DYNPTR_TYPE_XDP:
++		return -EINVAL;
++	default:
++		WARN_ONCE(true, "%s: unknown dynptr type %d\n", __func__, type);
++		return -EFAULT;
++	}
++}
++
++const struct bpf_func_proto bpf_copy_from_user_dynptr_proto = {
++	.func		= bpf_copy_from_user_dynptr,
++	.gpl_only	= false,
++	.might_sleep	= true,
++	.ret_type	= RET_INTEGER,
++	.arg1_type	= ARG_PTR_TO_DYNPTR | MEM_RDONLY,
++	.arg2_type	= ARG_ANYTHING,
++	.arg3_type	= ARG_ANYTHING,
++	.arg4_type	= ARG_ANYTHING,
++	.arg5_type	= ARG_ANYTHING,
++};
++
+ BPF_CALL_5(bpf_copy_from_user_task, void *, dst, u32, size,
+ 	   const void __user *, user_ptr, struct task_struct *, tsk, u64, flags)
+ {
+diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+index d9f704c1342773c74b2414be4adfc8271d6d364d..424931925fe3b02db083bc19cc64e19918b40c5a 100644
+--- a/kernel/trace/bpf_trace.c
++++ b/kernel/trace/bpf_trace.c
+@@ -1598,6 +1598,8 @@ bpf_tracing_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+ 		return &bpf_copy_from_user_proto;
+ 	case BPF_FUNC_copy_from_user_task:
+ 		return &bpf_copy_from_user_task_proto;
++	case BPF_FUNC_copy_from_user_dynptr:
++		return &bpf_copy_from_user_dynptr_proto;
+ 	case BPF_FUNC_snprintf_btf:
+ 		return &bpf_snprintf_btf_proto;
+ 	case BPF_FUNC_per_cpu_ptr:
 
- include/linux/bpf.h                                |   3 +
- include/uapi/linux/bpf.h                           |  49 ++++++++++
- kernel/bpf/helpers.c                               |  53 ++++++++++-
- kernel/trace/bpf_trace.c                           |  72 ++++++++++++++
- tools/include/uapi/linux/bpf.h                     |  49 ++++++++++
- tools/testing/selftests/bpf/prog_tests/dynptr.c    |  45 ++++++++-
- tools/testing/selftests/bpf/progs/dynptr_success.c | 106 +++++++++++++++++++++
- 7 files changed, 374 insertions(+), 3 deletions(-)
----
-base-commit: d0d106a2bd21499901299160744e5fe9f4c83ddb
-change-id: 20250124-bpf_dynptr_probe-ab483c554f1a
-
-Best regards,
 -- 
-Levi Zim <rsworktech@outlook.com>
+2.48.1
 
 
