@@ -1,28 +1,28 @@
-Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 595321E7C11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DD4F2080D5
 	for <bpf@vger.kernel.org>; Sat, 25 Jan 2025 10:59:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737802758; cv=none; b=k3Ouzl2skD5Obroe+f4myyfcLI4PtMp+i3SV2KAyp6MpCQxWOjLekEa+B4KlO+sjwvvVrGeAYs+fAv8DzpGOvUQjke3v1jjXK2HIrWCS2FHDytkYe+gl2/sfIH1B+sBTfPVc92EO8iBRDP6raL3RFrqyh/FWUuEceIMlcVIWHsU=
+	t=1737802759; cv=none; b=aUlYhuIDZbsODxcXFirYR+vTvp1btoAJDY0NgJd5Wd4bucnaP9OgVLdXTWIGYzg3nn2tpWdZzMhh5TmmU+7DaLKv17nvEQF7FKoE0bvUMRjgMzGjtZgaK+t+xq7gX2W1q9ik4fsqPk967h4naMU2WXwOfZYGC3QdzmIBoPfSi+c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737802758; c=relaxed/simple;
-	bh=mwYKdUUMyj0/U/n5kcjeHBbZ0RUeugD2XSUCrzWKN7s=;
+	s=arc-20240116; t=1737802759; c=relaxed/simple;
+	bh=C7E77lpN0p3OmwTwsJjbKwwA8xf2a4zDSTlEkugFLBY=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=SBMncrJTnw/uwtPQaUeNiYsHSaryeaRO+iS4wYsBuBBSplnQFsZKsurQ99XDyYlQ/0E4oLKOjwmrYQpv+iCKWQHeqVj5d8oQIDmq5/ej+8eR77DCenwOS7TEKOUoLr088yTSYmBW3u1rdnvBNuKC4xK092aBf7VwIfTTkdtQ7EI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
+	 MIME-Version; b=Co0SNibn2ZMoaU7UDMAgiLT8/3P4oujHpXkBdE75qj0l5ah+G+60wiqPOJmBrPE1/EMIxJ26T6d9+dC2UGuwmuFG5PdobxunFMgz4TqraC1xW4s1dvGCw0xosJuhY1bvMLDWacRvI3iubDpPjIKh4jhJOcGFmCCPG6QxCo0koH0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.216])
-	by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4YgBWC158vz4f3jXp
-	for <bpf@vger.kernel.org>; Sat, 25 Jan 2025 18:58:47 +0800 (CST)
+Received: from mail.maildlp.com (unknown [172.19.93.142])
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4YgBWF0J3Qz4f3kvf
+	for <bpf@vger.kernel.org>; Sat, 25 Jan 2025 18:58:49 +0800 (CST)
 Received: from mail02.huawei.com (unknown [10.116.40.128])
-	by mail.maildlp.com (Postfix) with ESMTP id DD68F1A166C
-	for <bpf@vger.kernel.org>; Sat, 25 Jan 2025 18:59:07 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTP id 0F5F51A1085
+	for <bpf@vger.kernel.org>; Sat, 25 Jan 2025 18:59:11 +0800 (CST)
 Received: from huaweicloud.com (unknown [10.175.124.27])
-	by APP4 (Coremail) with SMTP id gCh0CgBXul7zw5Rn79XHBw--.24605S12;
-	Sat, 25 Jan 2025 18:59:07 +0800 (CST)
+	by APP4 (Coremail) with SMTP id gCh0CgBXul7zw5Rn79XHBw--.24605S17;
+	Sat, 25 Jan 2025 18:59:10 +0800 (CST)
 From: Hou Tao <houtao@huaweicloud.com>
 To: bpf@vger.kernel.org
 Cc: Martin KaFai Lau <martin.lau@linux.dev>,
@@ -40,9 +40,9 @@ Cc: Martin KaFai Lau <martin.lau@linux.dev>,
 	Dan Carpenter <dan.carpenter@linaro.org>,
 	houtao1@huawei.com,
 	xukuohai@huawei.com
-Subject: [PATCH bpf-next v2 08/20] bpf: Split check_stack_range_initialized() into small functions
-Date: Sat, 25 Jan 2025 19:10:57 +0800
-Message-Id: <20250125111109.732718-9-houtao@huaweicloud.com>
+Subject: [PATCH bpf-next v2 13/20] bpf: Support basic operations for dynptr key in hash map
+Date: Sat, 25 Jan 2025 19:11:02 +0800
+Message-Id: <20250125111109.732718-14-houtao@huaweicloud.com>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20250125111109.732718-1-houtao@huaweicloud.com>
 References: <20250125111109.732718-1-houtao@huaweicloud.com>
@@ -53,323 +53,645 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:gCh0CgBXul7zw5Rn79XHBw--.24605S12
-X-Coremail-Antispam: 1UD129KBjvJXoW3KF1fGw15XryrJFWrCrWUtwb_yoWDtFy5pr
-	s7Wa9rCr4kKay8Xa12v3ZrAFy5CrWvqrWUC345ta4xZr1rur90gFyvqFyjvr1fCrZ2kw1x
-	KF1vvrZrAw4DZaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUPvb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAV
-	Cq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0
-	rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267
-	AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E
-	14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7
-	xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Y
-	z7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2
-	AFwI0_Jw0_GFyl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAq
-	x4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6r
-	W5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2IY6xkF
-	7I0E14v26r4UJVWxJr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14
-	v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuY
-	vjxUF9NVUUUUU
+X-CM-TRANSID:gCh0CgBXul7zw5Rn79XHBw--.24605S17
+X-Coremail-Antispam: 1UD129KBjvAXoWfZFWrAr48JF4fKF4Dur47twb_yoW8ur1xto
+	WfW3y3CFW8GF4xt3ykWFs2g3WkX3WDJayUJw4aqrs8Wa1a9r4YkryxCF4fKay5XF15tF10
+	g340yasxur4rXr4rn29KB7ZKAUJUUUU8529EdanIXcx71UUUUU7v73VFW2AGmfu7bjvjm3
+	AaLaJ3UjIYCTnIWjp_UUUOY7kC6x804xWl14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK
+	8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_JF
+	0E3s1l82xGYIkIc2x26xkF7I0E14v26ryj6s0DM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vE
+	j48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxV
+	AFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x02
+	67AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I
+	80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCj
+	c4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4
+	kS14v26r1q6r43MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E
+	5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZV
+	WrXwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r4j6ryUMIIF0xvE2Ix0cI8IcVCY
+	1x0267AKxVW8Jr0_Cr1UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67
+	AKxVW8JVWxJwCI42IY6I8E87Iv6xkF7I0E14v26r4UJVWxJrUvcSsGvfC2KfnxnUUI43ZE
+	Xa7IU1aLvJUUUUU==
 X-CM-SenderInfo: xkrx3t3r6k3tpzhluzxrxghudrp/
 
 From: Hou Tao <houtao1@huawei.com>
 
-It is a preparatory patch for supporting map key with bpf_dynptr in
-verifier. The patch splits check_stack_range_initialized() into multiple
-small functions and the following patch will reuse these functions to
-check whether the access of stack range which contains bpf_dynptr is
-valid or not.
+The patch supports lookup, update, delete and lookup_delete operations
+for hash map with dynptr map. There are two major differences between
+the implementation of normal hash map and dynptr-keyed hash map:
 
-Beside the splitting of check_stack_range_initialized(), the patch also
-changes its name to check_stack_range_access() to better reflect its
-purpose, because the function also allows uninitialized stack range.
+1) dynptr-keyed hash map doesn't support pre-allocation.
+The reason is that the dynptr in map key is allocated dynamically
+through bpf mem allocator. The length limitation for these dynptrs is
+4088 bytes now. Because there dynptrs are allocated dynamically, the
+consumption of memory will be smaller compared with normal hash map when
+there are big differences between the length of these dynptrs.
+
+2) the freed element in dynptr-key map will not be reused immediately
+For normal hash map, the freed element may be reused immediately by the
+newly-added element, so the lookup may return an incorrect result due to
+element deletion and element reuse. However dynptr-key map could not do
+that, there are pointers (dynptrs) in the map key and the updates of
+these dynptrs are not atomic: both the address and the length of the
+dynptr will be updated. If the element is reused immediately, the access
+of the dynptr in the freed element may incur invalid memory access due
+to the mismatch between the address and the size of dynptr, so reuse the
+freed element after one RCU grace period.
+
+Beside the differences above, dynptr-keyed hash map also needs to handle
+the maybe-nullified dynptr in the map key.
+
+After the support of dynptr key in hash map, the performance of lookup
+and update/delete operations in map_perf_test degrades a lot. Marking
+lookup_nulls_elem_raw() and lookup_elem_raw() as always_inline will
+narrow the gap from 21%/7% to 4%/2%. Therefore, the patch also adds
+always_inline for these two hot functions. The following lines show the
+detailed performance numbers:
+
+before patch:
+0:hash_map_perf kmalloc 693450 events per sec
+0:hash_lookup 89366531 lookups per sec
+
+after patch (without always_inline):
+0:hash_map_perf kmalloc 650396 events per sec
+0:hash_lookup 73961003 lookups per sec
+
+after patch:
+0:hash_map_perf kmalloc 665317 events per sec
+0:hash_lookup 87842644 lookups per sec
 
 Signed-off-by: Hou Tao <houtao1@huawei.com>
 ---
- kernel/bpf/verifier.c | 209 ++++++++++++++++++++++++------------------
- 1 file changed, 121 insertions(+), 88 deletions(-)
+ kernel/bpf/hashtab.c | 288 ++++++++++++++++++++++++++++++++++++++-----
+ 1 file changed, 259 insertions(+), 29 deletions(-)
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 74525392714e2..290b9b93017c0 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -791,7 +791,7 @@ static void invalidate_dynptr(struct bpf_verifier_env *env, struct bpf_func_stat
- 	 * While we don't allow reading STACK_INVALID, it is still possible to
- 	 * do <8 byte writes marking some but not all slots as STACK_MISC. Then,
- 	 * helpers or insns can do partial read of that part without failing,
--	 * but check_stack_range_initialized, check_stack_read_var_off, and
-+	 * but check_stack_range_access, check_stack_read_var_off, and
- 	 * check_stack_read_fixed_off will do mark_reg_read for all 8-bytes of
- 	 * the slot conservatively. Hence we need to prevent those liveness
- 	 * marking walks.
-@@ -5301,11 +5301,11 @@ enum bpf_access_src {
- 	ACCESS_HELPER = 2,  /* the access is performed by a helper */
- };
+diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
+index bb64eb83ec608..f3ec2b32b59b8 100644
+--- a/kernel/bpf/hashtab.c
++++ b/kernel/bpf/hashtab.c
+@@ -88,6 +88,7 @@ struct bpf_htab {
+ 	struct bpf_map map;
+ 	struct bpf_mem_alloc ma;
+ 	struct bpf_mem_alloc pcpu_ma;
++	struct bpf_mem_alloc dynptr_ma;
+ 	struct bucket *buckets;
+ 	void *elems;
+ 	union {
+@@ -425,6 +426,7 @@ static int htab_map_alloc_check(union bpf_attr *attr)
+ 	bool percpu_lru = (attr->map_flags & BPF_F_NO_COMMON_LRU);
+ 	bool prealloc = !(attr->map_flags & BPF_F_NO_PREALLOC);
+ 	bool zero_seed = (attr->map_flags & BPF_F_ZERO_SEED);
++	bool dynptr_in_key = (attr->map_flags & BPF_INT_F_DYNPTR_IN_KEY);
+ 	int numa_node = bpf_map_attr_numa_node(attr);
  
--static int check_stack_range_initialized(struct bpf_verifier_env *env,
--					 int regno, int off, int access_size,
--					 bool zero_size_allowed,
--					 enum bpf_access_type type,
--					 struct bpf_call_arg_meta *meta);
-+static int check_stack_range_access(struct bpf_verifier_env *env,
-+				    int regno, int off, int access_size,
-+				    bool zero_size_allowed,
-+				    enum bpf_access_type type,
-+				    struct bpf_call_arg_meta *meta);
+ 	BUILD_BUG_ON(offsetof(struct htab_elem, fnode.next) !=
+@@ -438,6 +440,14 @@ static int htab_map_alloc_check(union bpf_attr *attr)
+ 	    !bpf_map_flags_access_ok(attr->map_flags))
+ 		return -EINVAL;
  
- static struct bpf_reg_state *reg_state(struct bpf_verifier_env *env, int regno)
- {
-@@ -5336,8 +5336,8 @@ static int check_stack_read_var_off(struct bpf_verifier_env *env,
- 
- 	/* Note that we pass a NULL meta, so raw access will not be permitted.
- 	 */
--	err = check_stack_range_initialized(env, ptr_regno, off, size,
--					    false, BPF_READ, NULL);
-+	err = check_stack_range_access(env, ptr_regno, off, size,
-+				       false, BPF_READ, NULL);
- 	if (err)
- 		return err;
- 
-@@ -7625,44 +7625,13 @@ static int check_atomic(struct bpf_verifier_env *env, int insn_idx, struct bpf_i
- 	return 0;
- }
- 
--/* When register 'regno' is used to read the stack (either directly or through
-- * a helper function) make sure that it's within stack boundary and, depending
-- * on the access type and privileges, that all elements of the stack are
-- * initialized.
-- *
-- * 'off' includes 'regno->off', but not its dynamic part (if any).
-- *
-- * All registers that have been spilled on the stack in the slots within the
-- * read offsets are marked as read.
-- */
--static int check_stack_range_initialized(
--		struct bpf_verifier_env *env, int regno, int off,
--		int access_size, bool zero_size_allowed,
--		enum bpf_access_type type, struct bpf_call_arg_meta *meta)
-+static int get_stack_access_range(struct bpf_verifier_env *env, int regno, int off,
-+				  int *min_off, int *max_off)
- {
- 	struct bpf_reg_state *reg = reg_state(env, regno);
--	struct bpf_func_state *state = func(env, reg);
--	int err, min_off, max_off, i, j, slot, spi;
--	/* Some accesses can write anything into the stack, others are
--	 * read-only.
--	 */
--	bool clobber = false;
--
--	if (access_size == 0 && !zero_size_allowed) {
--		verbose(env, "invalid zero-sized read\n");
--		return -EACCES;
--	}
--
--	if (type == BPF_WRITE)
--		clobber = true;
--
--	err = check_stack_access_within_bounds(env, regno, off, access_size, type);
--	if (err)
--		return err;
--
- 
- 	if (tnum_is_const(reg->var_off)) {
--		min_off = max_off = reg->var_off.value + off;
-+		*min_off = *max_off = reg->var_off.value + off;
- 	} else {
- 		/* Variable offset is prohibited for unprivileged mode for
- 		 * simplicity since it requires corresponding support in
-@@ -7677,49 +7646,76 @@ static int check_stack_range_initialized(
- 				regno, tn_buf);
- 			return -EACCES;
- 		}
--		/* Only initialized buffer on stack is allowed to be accessed
--		 * with variable offset. With uninitialized buffer it's hard to
--		 * guarantee that whole memory is marked as initialized on
--		 * helper return since specific bounds are unknown what may
--		 * cause uninitialized stack leaking.
--		 */
--		if (meta && meta->raw_mode)
--			meta = NULL;
- 
--		min_off = reg->smin_value + off;
--		max_off = reg->smax_value + off;
-+		*min_off = reg->smin_value + off;
-+		*max_off = reg->smax_value + off;
- 	}
- 
--	if (meta && meta->raw_mode) {
--		/* Ensure we won't be overwriting dynptrs when simulating byte
--		 * by byte access in check_helper_call using meta.access_size.
--		 * This would be a problem if we have a helper in the future
--		 * which takes:
--		 *
--		 *	helper(uninit_mem, len, dynptr)
--		 *
--		 * Now, uninint_mem may overlap with dynptr pointer. Hence, it
--		 * may end up writing to dynptr itself when touching memory from
--		 * arg 1. This can be relaxed on a case by case basis for known
--		 * safe cases, but reject due to the possibilitiy of aliasing by
--		 * default.
--		 */
--		for (i = min_off; i < max_off + access_size; i++) {
--			int stack_off = -i - 1;
-+	return 0;
-+}
- 
--			spi = __get_spi(i);
--			/* raw_mode may write past allocated_stack */
--			if (state->allocated_stack <= stack_off)
--				continue;
--			if (state->stack[spi].slot_type[stack_off % BPF_REG_SIZE] == STACK_DYNPTR) {
--				verbose(env, "potential write to dynptr at off=%d disallowed\n", i);
--				return -EACCES;
--			}
--		}
--		meta->access_size = access_size;
--		meta->regno = regno;
-+static int allow_uninitialized_stack_range(struct bpf_verifier_env *env, int regno,
-+					   int min_off, int max_off, int access_size,
-+					   struct bpf_call_arg_meta *meta)
-+{
-+	struct bpf_reg_state *reg = reg_state(env, regno);
-+	struct bpf_func_state *state = func(env, reg);
-+	int i, stack_off, spi;
-+
-+	/* Disallow uninitialized buffer on stack */
-+	if (!meta || !meta->raw_mode)
-+		return 0;
-+
-+	/* Only initialized buffer on stack is allowed to be accessed
-+	 * with variable offset. With uninitialized buffer it's hard to
-+	 * guarantee that whole memory is marked as initialized on
-+	 * helper return since specific bounds are unknown what may
-+	 * cause uninitialized stack leaking.
-+	 */
-+	if (!tnum_is_const(reg->var_off))
- 		return 0;
-+
-+	/* Ensure we won't be overwriting dynptrs when simulating byte
-+	 * by byte access in check_helper_call using meta.access_size.
-+	 * This would be a problem if we have a helper in the future
-+	 * which takes:
-+	 *
-+	 *	helper(uninit_mem, len, dynptr)
-+	 *
-+	 * Now, uninint_mem may overlap with dynptr pointer. Hence, it
-+	 * may end up writing to dynptr itself when touching memory from
-+	 * arg 1. This can be relaxed on a case by case basis for known
-+	 * safe cases, but reject due to the possibilitiy of aliasing by
-+	 * default.
-+	 */
-+	for (i = min_off; i < max_off + access_size; i++) {
-+		stack_off = -i - 1;
-+		spi = __get_spi(i);
-+		/* raw_mode may write past allocated_stack */
-+		if (state->allocated_stack <= stack_off)
-+			continue;
-+		if (state->stack[spi].slot_type[stack_off % BPF_REG_SIZE] == STACK_DYNPTR) {
-+			verbose(env, "potential write to dynptr at off=%d disallowed\n", i);
-+			return -EACCES;
-+		}
- 	}
-+	meta->access_size = access_size;
-+	meta->regno = regno;
-+
-+	return 1;
-+}
-+
-+static int check_stack_range_initialized(struct bpf_verifier_env *env, int regno,
-+					 int min_off, int max_off, int access_size,
-+					 enum bpf_access_type type)
-+{
-+	struct bpf_reg_state *reg = reg_state(env, regno);
-+	struct bpf_func_state *state = func(env, reg);
-+	int i, j, slot, spi;
-+	/* Some accesses can write anything into the stack, others are
-+	 * read-only.
-+	 */
-+	bool clobber = type == BPF_WRITE;
- 
- 	for (i = min_off; i < max_off + access_size; i++) {
- 		u8 *stype;
-@@ -7768,19 +7764,58 @@ static int check_stack_range_initialized(
- mark:
- 		/* reading any byte out of 8-byte 'spill_slot' will cause
- 		 * the whole slot to be marked as 'read'
--		 */
--		mark_reg_read(env, &state->stack[spi].spilled_ptr,
--			      state->stack[spi].spilled_ptr.parent,
--			      REG_LIVE_READ64);
--		/* We do not set REG_LIVE_WRITTEN for stack slot, as we can not
-+		 *
-+		 * We do not set REG_LIVE_WRITTEN for stack slot, as we can not
- 		 * be sure that whether stack slot is written to or not. Hence,
- 		 * we must still conservatively propagate reads upwards even if
- 		 * helper may write to the entire memory range.
- 		 */
-+		mark_reg_read(env, &state->stack[spi].spilled_ptr,
-+			      state->stack[spi].spilled_ptr.parent,
-+			      REG_LIVE_READ64);
- 	}
-+
- 	return 0;
- }
- 
-+/* When register 'regno' is used to read the stack (either directly or through
-+ * a helper function) make sure that it's within stack boundary and, depending
-+ * on the access type and privileges, that all elements of the stack are
-+ * initialized.
-+ *
-+ * 'off' includes 'regno->off', but not its dynamic part (if any).
-+ *
-+ * All registers that have been spilled on the stack in the slots within the
-+ * read offsets are marked as read.
-+ */
-+static int check_stack_range_access(struct bpf_verifier_env *env, int regno, int off,
-+				    int access_size, bool zero_size_allowed,
-+				    enum bpf_access_type type, struct bpf_call_arg_meta *meta)
-+{
-+	int err, min_off, max_off;
-+
-+	if (access_size == 0 && !zero_size_allowed) {
-+		verbose(env, "invalid zero-sized read\n");
-+		return -EACCES;
++	if (dynptr_in_key) {
++		if (percpu || lru || prealloc || !attr->map_extra)
++			return -EINVAL;
++		if ((attr->map_extra >> 32) || bpf_dynptr_check_size(attr->map_extra) ||
++		    bpf_mem_alloc_check_size(percpu, attr->map_extra))
++			return -E2BIG;
 +	}
 +
-+	err = check_stack_access_within_bounds(env, regno, off, access_size, type);
-+	if (err)
-+		return err;
+ 	if (!lru && percpu_lru)
+ 		return -EINVAL;
+ 
+@@ -482,6 +492,7 @@ static struct bpf_map *htab_map_alloc(union bpf_attr *attr)
+ 	 */
+ 	bool percpu_lru = (attr->map_flags & BPF_F_NO_COMMON_LRU);
+ 	bool prealloc = !(attr->map_flags & BPF_F_NO_PREALLOC);
++	bool dynptr_in_key = (attr->map_flags & BPF_INT_F_DYNPTR_IN_KEY);
+ 	struct bpf_htab *htab;
+ 	int err, i;
+ 
+@@ -598,6 +609,11 @@ static struct bpf_map *htab_map_alloc(union bpf_attr *attr)
+ 			if (err)
+ 				goto free_map_locked;
+ 		}
++		if (dynptr_in_key) {
++			err = bpf_mem_alloc_init(&htab->dynptr_ma, 0, false);
++			if (err)
++				goto free_map_locked;
++		}
+ 	}
+ 
+ 	return &htab->map;
+@@ -610,6 +626,7 @@ static struct bpf_map *htab_map_alloc(union bpf_attr *attr)
+ 	for (i = 0; i < HASHTAB_MAP_LOCK_COUNT; i++)
+ 		free_percpu(htab->map_locked[i]);
+ 	bpf_map_area_free(htab->buckets);
++	bpf_mem_alloc_destroy(&htab->dynptr_ma);
+ 	bpf_mem_alloc_destroy(&htab->pcpu_ma);
+ 	bpf_mem_alloc_destroy(&htab->ma);
+ free_elem_count:
+@@ -620,13 +637,55 @@ static struct bpf_map *htab_map_alloc(union bpf_attr *attr)
+ 	return ERR_PTR(err);
+ }
+ 
+-static inline u32 htab_map_hash(const void *key, u32 key_len, u32 hashrnd)
++static inline u32 __htab_map_hash(const void *key, u32 key_len, u32 hashrnd)
+ {
+ 	if (likely(key_len % 4 == 0))
+ 		return jhash2(key, key_len / 4, hashrnd);
+ 	return jhash(key, key_len, hashrnd);
+ }
+ 
++static u32 htab_map_dynptr_hash(const void *key, u32 key_len, u32 hashrnd,
++				const struct btf_record *rec)
++{
++	unsigned int i, cnt = rec->cnt;
++	unsigned int hash = hashrnd;
++	unsigned int offset = 0;
 +
-+	err = get_stack_access_range(env, regno, off, &min_off, &max_off);
-+	if (err)
-+		return err;
++	for (i = 0; i < cnt; i++) {
++		const struct btf_field *field = &rec->fields[i];
++		const struct bpf_dynptr_kern *kptr;
++		unsigned int len;
 +
-+	err = allow_uninitialized_stack_range(env, regno, min_off, max_off, access_size, meta);
-+	if (err < 0)
-+		return err;
-+	if (err > 0)
-+		return 0;
++		if (field->type != BPF_DYNPTR)
++			continue;
 +
-+	return check_stack_range_initialized(env, regno, min_off, max_off, access_size, type);
++		/* non-dynptr part ? */
++		if (offset < field->offset)
++			hash = jhash(key + offset, field->offset - offset, hash);
++
++		/* Skip nullified dynptr */
++		kptr = key + field->offset;
++		if (kptr->data) {
++			len = __bpf_dynptr_size(kptr);
++			hash = jhash(__bpf_dynptr_data(kptr, len), len, hash);
++		}
++		offset = field->offset + field->size;
++	}
++
++	if (offset < key_len)
++		hash = jhash(key + offset, key_len - offset, hash);
++
++	return hash;
 +}
 +
- static int check_helper_mem_access(struct bpf_verifier_env *env, int regno,
- 				   int access_size, enum bpf_access_type access_type,
- 				   bool zero_size_allowed,
-@@ -7834,10 +7869,8 @@ static int check_helper_mem_access(struct bpf_verifier_env *env, int regno,
- 					   access_size, zero_size_allowed,
- 					   max_access);
- 	case PTR_TO_STACK:
--		return check_stack_range_initialized(
--				env,
--				regno, reg->off, access_size,
--				zero_size_allowed, access_type, meta);
-+		return check_stack_range_access(env, regno, reg->off, access_size,
-+						zero_size_allowed, access_type, meta);
- 	case PTR_TO_BTF_ID:
- 		return check_ptr_to_btf_access(env, regs, regno, reg->off,
- 					       access_size, BPF_READ, -1);
++static inline u32 htab_map_hash(const void *key, u32 key_len, u32 hashrnd,
++				const struct btf_record *rec)
++{
++	if (likely(!rec))
++		return __htab_map_hash(key, key_len, hashrnd);
++	return htab_map_dynptr_hash(key, key_len, hashrnd, rec);
++}
++
+ static inline struct bucket *__select_bucket(struct bpf_htab *htab, u32 hash)
+ {
+ 	return &htab->buckets[hash & (htab->n_buckets - 1)];
+@@ -637,15 +696,68 @@ static inline struct hlist_nulls_head *select_bucket(struct bpf_htab *htab, u32
+ 	return &__select_bucket(htab, hash)->head;
+ }
+ 
++static bool is_same_dynptr_key(const void *key, const void *tgt, unsigned int key_size,
++			       const struct btf_record *rec)
++{
++	unsigned int i, cnt = rec->cnt;
++	unsigned int offset = 0;
++
++	for (i = 0; i < cnt; i++) {
++		const struct btf_field *field = &rec->fields[i];
++		const struct bpf_dynptr_kern *kptr, *tgt_kptr;
++		const void *data, *tgt_data;
++		unsigned int len;
++
++		if (field->type != BPF_DYNPTR)
++			continue;
++
++		if (offset < field->offset &&
++		    memcmp(key + offset, tgt + offset, field->offset - offset))
++			return false;
++
++		/*
++		 * For a nullified dynptr in the target key, __bpf_dynptr_size()
++		 * will return 0, and there will be no match for the target key.
++		 */
++		kptr = key + field->offset;
++		tgt_kptr = tgt + field->offset;
++		len = __bpf_dynptr_size(kptr);
++		if (len != __bpf_dynptr_size(tgt_kptr))
++			return false;
++
++		data = __bpf_dynptr_data(kptr, len);
++		tgt_data = __bpf_dynptr_data(tgt_kptr, len);
++		if (memcmp(data, tgt_data, len))
++			return false;
++
++		offset = field->offset + field->size;
++	}
++
++	if (offset < key_size &&
++	    memcmp(key + offset, tgt + offset, key_size - offset))
++		return false;
++
++	return true;
++}
++
++static inline bool htab_is_same_key(const void *key, const void *tgt, unsigned int key_size,
++				    const struct btf_record *rec)
++{
++	if (likely(!rec))
++		return !memcmp(key, tgt, key_size);
++	return is_same_dynptr_key(key, tgt, key_size, rec);
++}
++
+ /* this lookup function can only be called with bucket lock taken */
+-static struct htab_elem *lookup_elem_raw(struct hlist_nulls_head *head, u32 hash,
+-					 void *key, u32 key_size)
++static __always_inline struct htab_elem *lookup_elem_raw(struct hlist_nulls_head *head, u32 hash,
++							 void *key, u32 key_size,
++							 const struct btf_record *record)
+ {
+ 	struct hlist_nulls_node *n;
+ 	struct htab_elem *l;
+ 
+ 	hlist_nulls_for_each_entry_rcu(l, n, head, hash_node)
+-		if (l->hash == hash && !memcmp(&l->key, key, key_size))
++		if (l->hash == hash && htab_is_same_key(l->key, key, key_size, record))
+ 			return l;
+ 
+ 	return NULL;
+@@ -655,16 +767,17 @@ static struct htab_elem *lookup_elem_raw(struct hlist_nulls_head *head, u32 hash
+  * the unlikely event when elements moved from one bucket into another
+  * while link list is being walked
+  */
+-static struct htab_elem *lookup_nulls_elem_raw(struct hlist_nulls_head *head,
+-					       u32 hash, void *key,
+-					       u32 key_size, u32 n_buckets)
++static __always_inline struct htab_elem *lookup_nulls_elem_raw(struct hlist_nulls_head *head,
++							       u32 hash, void *key,
++							       u32 key_size, u32 n_buckets,
++							       const struct btf_record *record)
+ {
+ 	struct hlist_nulls_node *n;
+ 	struct htab_elem *l;
+ 
+ again:
+ 	hlist_nulls_for_each_entry_rcu(l, n, head, hash_node)
+-		if (l->hash == hash && !memcmp(&l->key, key, key_size))
++		if (l->hash == hash && htab_is_same_key(l->key, key, key_size, record))
+ 			return l;
+ 
+ 	if (unlikely(get_nulls_value(n) != (hash & (n_buckets - 1))))
+@@ -681,6 +794,7 @@ static struct htab_elem *lookup_nulls_elem_raw(struct hlist_nulls_head *head,
+ static void *__htab_map_lookup_elem(struct bpf_map *map, void *key)
+ {
+ 	struct bpf_htab *htab = container_of(map, struct bpf_htab, map);
++	const struct btf_record *record;
+ 	struct hlist_nulls_head *head;
+ 	struct htab_elem *l;
+ 	u32 hash, key_size;
+@@ -689,12 +803,13 @@ static void *__htab_map_lookup_elem(struct bpf_map *map, void *key)
+ 		     !rcu_read_lock_bh_held());
+ 
+ 	key_size = map->key_size;
++	record = map->key_record;
+ 
+-	hash = htab_map_hash(key, key_size, htab->hashrnd);
++	hash = htab_map_hash(key, key_size, htab->hashrnd, record);
+ 
+ 	head = select_bucket(htab, hash);
+ 
+-	l = lookup_nulls_elem_raw(head, hash, key, key_size, htab->n_buckets);
++	l = lookup_nulls_elem_raw(head, hash, key, key_size, htab->n_buckets, record);
+ 
+ 	return l;
+ }
+@@ -784,6 +899,26 @@ static int htab_lru_map_gen_lookup(struct bpf_map *map,
+ 	return insn - insn_buf;
+ }
+ 
++static void htab_free_dynptr_key(struct bpf_htab *htab, void *key)
++{
++	const struct btf_record *record = htab->map.key_record;
++	unsigned int i, cnt = record->cnt;
++
++	for (i = 0; i < cnt; i++) {
++		const struct btf_field *field = &record->fields[i];
++		struct bpf_dynptr_kern *kptr;
++
++		if (field->type != BPF_DYNPTR)
++			continue;
++
++		/* It may be accessed concurrently, so don't overwrite
++		 * the kptr.
++		 */
++		kptr = key + field->offset;
++		bpf_mem_free_rcu(&htab->dynptr_ma, kptr->data);
++	}
++}
++
+ static void check_and_free_fields(struct bpf_htab *htab,
+ 				  struct htab_elem *elem)
+ {
+@@ -835,6 +970,68 @@ static bool htab_lru_map_delete_node(void *arg, struct bpf_lru_node *node)
+ 	return l == tgt_l;
+ }
+ 
++static int htab_copy_dynptr_key(struct bpf_htab *htab, void *dst_key, const void *key, u32 key_size)
++{
++	const struct btf_record *rec = htab->map.key_record;
++	struct bpf_dynptr_kern *dst_kptr;
++	const struct btf_field *field;
++	unsigned int i, cnt, offset;
++	int err;
++
++	offset = 0;
++	cnt = rec->cnt;
++	for (i = 0; i < cnt; i++) {
++		const struct bpf_dynptr_kern *kptr;
++		unsigned int len;
++		const void *data;
++		void *dst_data;
++
++		field = &rec->fields[i];
++		if (field->type != BPF_DYNPTR)
++			continue;
++
++		if (offset < field->offset)
++			memcpy(dst_key + offset, key + offset, field->offset - offset);
++
++		/* Doesn't support nullified dynptr in map key */
++		kptr = key + field->offset;
++		if (!kptr->data) {
++			err = -EINVAL;
++			goto out;
++		}
++		len = __bpf_dynptr_size(kptr);
++		data = __bpf_dynptr_data(kptr, len);
++
++		dst_data = bpf_mem_alloc(&htab->dynptr_ma, len);
++		if (!dst_data) {
++			err = -ENOMEM;
++			goto out;
++		}
++
++		memcpy(dst_data, data, len);
++		dst_kptr = dst_key + field->offset;
++		bpf_dynptr_init(dst_kptr, dst_data, BPF_DYNPTR_TYPE_LOCAL, 0, len);
++
++		offset = field->offset + field->size;
++	}
++
++	if (offset < key_size)
++		memcpy(dst_key + offset, key + offset, key_size - offset);
++
++	return 0;
++
++out:
++	for (; i > 0; i--) {
++		field = &rec->fields[i - 1];
++		if (field->type != BPF_DYNPTR)
++			continue;
++
++		dst_kptr = dst_key + field->offset;
++		bpf_mem_free(&htab->dynptr_ma, dst_kptr->data);
++	}
++	return err;
++}
++
+ /* Called from syscall */
+ static int htab_map_get_next_key(struct bpf_map *map, void *key, void *next_key)
+ {
+@@ -851,12 +1048,12 @@ static int htab_map_get_next_key(struct bpf_map *map, void *key, void *next_key)
+ 	if (!key)
+ 		goto find_first_elem;
+ 
+-	hash = htab_map_hash(key, key_size, htab->hashrnd);
++	hash = htab_map_hash(key, key_size, htab->hashrnd, NULL);
+ 
+ 	head = select_bucket(htab, hash);
+ 
+ 	/* lookup the key */
+-	l = lookup_nulls_elem_raw(head, hash, key, key_size, htab->n_buckets);
++	l = lookup_nulls_elem_raw(head, hash, key, key_size, htab->n_buckets, NULL);
+ 
+ 	if (!l)
+ 		goto find_first_elem;
+@@ -896,11 +1093,27 @@ static int htab_map_get_next_key(struct bpf_map *map, void *key, void *next_key)
+ 
+ static void htab_elem_free(struct bpf_htab *htab, struct htab_elem *l)
+ {
++	bool dynptr_in_key = bpf_map_has_dynptr_key(&htab->map);
++
++	if (dynptr_in_key)
++		htab_free_dynptr_key(htab, l->key);
++
+ 	check_and_free_fields(htab, l);
+ 
+ 	if (htab->map.map_type == BPF_MAP_TYPE_PERCPU_HASH)
+ 		bpf_mem_cache_free(&htab->pcpu_ma, l->ptr_to_pptr);
+-	bpf_mem_cache_free(&htab->ma, l);
++
++	/*
++	 * For dynptr key, the update of dynptr in the key is not atomic:
++	 * both the pointer and the size are updated. If the element is reused
++	 * immediately, the access of the dynptr key during lookup procedure may
++	 * incur invalid memory access due to mismatch between the size and the
++	 * data pointer, so reuse the element after one RCU GP.
++	 */
++	if (dynptr_in_key)
++		bpf_mem_cache_free_rcu(&htab->ma, l);
++	else
++		bpf_mem_cache_free(&htab->ma, l);
+ }
+ 
+ static void htab_put_fd_value(struct bpf_htab *htab, struct htab_elem *l)
+@@ -1047,7 +1260,19 @@ static struct htab_elem *alloc_htab_elem(struct bpf_htab *htab, void *key,
+ 		}
+ 	}
+ 
+-	memcpy(l_new->key, key, key_size);
++	if (bpf_map_has_dynptr_key(&htab->map)) {
++		int copy_err;
++
++		copy_err = htab_copy_dynptr_key(htab, l_new->key, key, key_size);
++		if (copy_err) {
++			bpf_mem_cache_free(&htab->ma, l_new);
++			l_new = ERR_PTR(copy_err);
++			goto dec_count;
++		}
++	} else {
++		memcpy(l_new->key, key, key_size);
++	}
++
+ 	if (percpu) {
+ 		if (prealloc) {
+ 			pptr = htab_elem_get_ptr(l_new, key_size);
+@@ -1103,6 +1328,7 @@ static long htab_map_update_elem(struct bpf_map *map, void *key, void *value,
+ 				 u64 map_flags)
+ {
+ 	struct bpf_htab *htab = container_of(map, struct bpf_htab, map);
++	const struct btf_record *key_record = map->key_record;
+ 	struct htab_elem *l_new = NULL, *l_old;
+ 	struct hlist_nulls_head *head;
+ 	unsigned long flags;
+@@ -1120,7 +1346,7 @@ static long htab_map_update_elem(struct bpf_map *map, void *key, void *value,
+ 
+ 	key_size = map->key_size;
+ 
+-	hash = htab_map_hash(key, key_size, htab->hashrnd);
++	hash = htab_map_hash(key, key_size, htab->hashrnd, key_record);
+ 
+ 	b = __select_bucket(htab, hash);
+ 	head = &b->head;
+@@ -1130,7 +1356,7 @@ static long htab_map_update_elem(struct bpf_map *map, void *key, void *value,
+ 			return -EINVAL;
+ 		/* find an element without taking the bucket lock */
+ 		l_old = lookup_nulls_elem_raw(head, hash, key, key_size,
+-					      htab->n_buckets);
++					      htab->n_buckets, key_record);
+ 		ret = check_flags(htab, l_old, map_flags);
+ 		if (ret)
+ 			return ret;
+@@ -1151,7 +1377,7 @@ static long htab_map_update_elem(struct bpf_map *map, void *key, void *value,
+ 	if (ret)
+ 		return ret;
+ 
+-	l_old = lookup_elem_raw(head, hash, key, key_size);
++	l_old = lookup_elem_raw(head, hash, key, key_size, key_record);
+ 
+ 	ret = check_flags(htab, l_old, map_flags);
+ 	if (ret)
+@@ -1238,7 +1464,7 @@ static long htab_lru_map_update_elem(struct bpf_map *map, void *key, void *value
+ 
+ 	key_size = map->key_size;
+ 
+-	hash = htab_map_hash(key, key_size, htab->hashrnd);
++	hash = __htab_map_hash(key, key_size, htab->hashrnd);
+ 
+ 	b = __select_bucket(htab, hash);
+ 	head = &b->head;
+@@ -1258,7 +1484,7 @@ static long htab_lru_map_update_elem(struct bpf_map *map, void *key, void *value
+ 	if (ret)
+ 		goto err_lock_bucket;
+ 
+-	l_old = lookup_elem_raw(head, hash, key, key_size);
++	l_old = lookup_elem_raw(head, hash, key, key_size, NULL);
+ 
+ 	ret = check_flags(htab, l_old, map_flags);
+ 	if (ret)
+@@ -1307,7 +1533,7 @@ static long __htab_percpu_map_update_elem(struct bpf_map *map, void *key,
+ 
+ 	key_size = map->key_size;
+ 
+-	hash = htab_map_hash(key, key_size, htab->hashrnd);
++	hash = __htab_map_hash(key, key_size, htab->hashrnd);
+ 
+ 	b = __select_bucket(htab, hash);
+ 	head = &b->head;
+@@ -1316,7 +1542,7 @@ static long __htab_percpu_map_update_elem(struct bpf_map *map, void *key,
+ 	if (ret)
+ 		return ret;
+ 
+-	l_old = lookup_elem_raw(head, hash, key, key_size);
++	l_old = lookup_elem_raw(head, hash, key, key_size, NULL);
+ 
+ 	ret = check_flags(htab, l_old, map_flags);
+ 	if (ret)
+@@ -1362,7 +1588,7 @@ static long __htab_lru_percpu_map_update_elem(struct bpf_map *map, void *key,
+ 
+ 	key_size = map->key_size;
+ 
+-	hash = htab_map_hash(key, key_size, htab->hashrnd);
++	hash = htab_map_hash(key, key_size, htab->hashrnd, NULL);
+ 
+ 	b = __select_bucket(htab, hash);
+ 	head = &b->head;
+@@ -1382,7 +1608,7 @@ static long __htab_lru_percpu_map_update_elem(struct bpf_map *map, void *key,
+ 	if (ret)
+ 		goto err_lock_bucket;
+ 
+-	l_old = lookup_elem_raw(head, hash, key, key_size);
++	l_old = lookup_elem_raw(head, hash, key, key_size, NULL);
+ 
+ 	ret = check_flags(htab, l_old, map_flags);
+ 	if (ret)
+@@ -1428,6 +1654,7 @@ static long htab_lru_percpu_map_update_elem(struct bpf_map *map, void *key,
+ static long htab_map_delete_elem(struct bpf_map *map, void *key)
+ {
+ 	struct bpf_htab *htab = container_of(map, struct bpf_htab, map);
++	const struct btf_record *key_record = map->key_record;
+ 	struct hlist_nulls_head *head;
+ 	struct bucket *b;
+ 	struct htab_elem *l;
+@@ -1440,7 +1667,7 @@ static long htab_map_delete_elem(struct bpf_map *map, void *key)
+ 
+ 	key_size = map->key_size;
+ 
+-	hash = htab_map_hash(key, key_size, htab->hashrnd);
++	hash = htab_map_hash(key, key_size, htab->hashrnd, key_record);
+ 	b = __select_bucket(htab, hash);
+ 	head = &b->head;
+ 
+@@ -1448,7 +1675,7 @@ static long htab_map_delete_elem(struct bpf_map *map, void *key)
+ 	if (ret)
+ 		return ret;
+ 
+-	l = lookup_elem_raw(head, hash, key, key_size);
++	l = lookup_elem_raw(head, hash, key, key_size, key_record);
+ 	if (l)
+ 		hlist_nulls_del_rcu(&l->hash_node);
+ 	else
+@@ -1476,7 +1703,7 @@ static long htab_lru_map_delete_elem(struct bpf_map *map, void *key)
+ 
+ 	key_size = map->key_size;
+ 
+-	hash = htab_map_hash(key, key_size, htab->hashrnd);
++	hash = __htab_map_hash(key, key_size, htab->hashrnd);
+ 	b = __select_bucket(htab, hash);
+ 	head = &b->head;
+ 
+@@ -1484,7 +1711,7 @@ static long htab_lru_map_delete_elem(struct bpf_map *map, void *key)
+ 	if (ret)
+ 		return ret;
+ 
+-	l = lookup_elem_raw(head, hash, key, key_size);
++	l = lookup_elem_raw(head, hash, key, key_size, NULL);
+ 
+ 	if (l)
+ 		hlist_nulls_del_rcu(&l->hash_node);
+@@ -1581,6 +1808,7 @@ static void htab_map_free(struct bpf_map *map)
+ 	bpf_map_free_elem_count(map);
+ 	free_percpu(htab->extra_elems);
+ 	bpf_map_area_free(htab->buckets);
++	bpf_mem_alloc_destroy(&htab->dynptr_ma);
+ 	bpf_mem_alloc_destroy(&htab->pcpu_ma);
+ 	bpf_mem_alloc_destroy(&htab->ma);
+ 	if (htab->use_percpu_counter)
+@@ -1617,6 +1845,7 @@ static int __htab_map_lookup_and_delete_elem(struct bpf_map *map, void *key,
+ 					     bool is_percpu, u64 flags)
+ {
+ 	struct bpf_htab *htab = container_of(map, struct bpf_htab, map);
++	const struct btf_record *key_record;
+ 	struct hlist_nulls_head *head;
+ 	unsigned long bflags;
+ 	struct htab_elem *l;
+@@ -1625,8 +1854,9 @@ static int __htab_map_lookup_and_delete_elem(struct bpf_map *map, void *key,
+ 	int ret;
+ 
+ 	key_size = map->key_size;
++	key_record = map->key_record;
+ 
+-	hash = htab_map_hash(key, key_size, htab->hashrnd);
++	hash = htab_map_hash(key, key_size, htab->hashrnd, key_record);
+ 	b = __select_bucket(htab, hash);
+ 	head = &b->head;
+ 
+@@ -1634,7 +1864,7 @@ static int __htab_map_lookup_and_delete_elem(struct bpf_map *map, void *key,
+ 	if (ret)
+ 		return ret;
+ 
+-	l = lookup_elem_raw(head, hash, key, key_size);
++	l = lookup_elem_raw(head, hash, key, key_size, key_record);
+ 	if (!l) {
+ 		ret = -ENOENT;
+ 		goto out_unlock;
 -- 
 2.29.2
 
