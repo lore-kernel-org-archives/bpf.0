@@ -1,37 +1,38 @@
-Received: from mout.perfora.net (mout.perfora.net [74.208.4.197])
+Received: from mout.perfora.net (mout.perfora.net [74.208.4.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0780A1553AA
-	for <bpf@vger.kernel.org>; Sun, 26 Jan 2025 16:39:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.208.4.197
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 630AC15CD46
+	for <bpf@vger.kernel.org>; Sun, 26 Jan 2025 16:45:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.208.4.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737909558; cv=none; b=hwEMGJi4AF5EHuSN+cm7xxo8YSvhMGyE/Uyt3hVlGRkZnlpp0130WjIEl/ijxWGrfhhsQbszBx6A2gpLlLpLPBS5ppOm/QEUir6Ag87M1G+f/UoMOySbqNPW3pYG+V2vu2giDOF/mrXbUyELhFF4HL6eAz4prePbh6eZjE+gzpo=
+	t=1737909904; cv=none; b=cLzu5kL9MqtTuw1hQPCbvoHcIYF/V0x8ERVxWMTypr4imgiPjjF9jvWLhId5yBV/5o5A0qXEY5Xw/WTXqkuU6GXGOLvkB8EsNVDQVg2Tdeb/PTzlAOoNUCPpmeKDLZDRzgUaB2fLe/+zt1SsXZIRcJPsbE7XQc25Vj6WeuzMnJI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737909558; c=relaxed/simple;
-	bh=9D85DV3lgPWy3EeDetLGNFfsU8kVPL/Pw5F7M7d2Urk=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=JmzR08So1qCUfCpRQ/X7sMG4uoCzZjeVsvmm1biYxpex6qOlOj6IY3N0+d9SINHgbCZ+sME7/2GXpKR09vJi9AECfuXv7M05BcMaJfYKnOnOcBpkq5GuHuXdMJs3WBVLCHWZI9q2s7GRdbSWgUXat08e+WCVMn1YVebjnVRHqmk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=jordanrome.com; spf=pass smtp.mailfrom=jordanrome.com; dkim=pass (2048-bit key) header.d=jordanrome.com header.i=linux@jordanrome.com header.b=SotmuTQp; arc=none smtp.client-ip=74.208.4.197
+	s=arc-20240116; t=1737909904; c=relaxed/simple;
+	bh=2NQFRqjEfpotVZ3Q1enwFzoWwPj9Bx/64TC0OWvDNXo=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=XTN172nkExZmWvwbeOgDhEFt9dGR6Ox7QlnK2jJpmVPwTRdMpdUjI/qTSR8xUBbeUa9PnM3RfgQmk2rPsy3Hn6SFuto/WcSeNgYUtkc71nRpGp9GaTW3J0WJO0nhXeiAblzI9RUn26osBrUvnz/DUIB9Hi2NJYzBixQp24Yt9q8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=jordanrome.com; spf=pass smtp.mailfrom=jordanrome.com; dkim=pass (2048-bit key) header.d=jordanrome.com header.i=linux@jordanrome.com header.b=2duWYsGv; arc=none smtp.client-ip=74.208.4.194
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=jordanrome.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=jordanrome.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=jordanrome.com header.i=linux@jordanrome.com header.b="SotmuTQp"
+	dkim=pass (2048-bit key) header.d=jordanrome.com header.i=linux@jordanrome.com header.b="2duWYsGv"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=jordanrome.com;
-	s=s1-ionos; t=1737909544; x=1738514344; i=linux@jordanrome.com;
-	bh=WQqKKWz7ABhutvWGSnvN5g84wY9U59VZp9TK3/MXkQg=;
-	h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:
-	 MIME-Version:Content-Transfer-Encoding:cc:
+	s=s1-ionos; t=1737909901; x=1738514701; i=linux@jordanrome.com;
+	bh=HG7NmkGE4Q8UUQeNmJUgfaTIop0wi3oa5KvZ9qE7040=;
+	h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:In-Reply-To:
+	 References:MIME-Version:Content-Transfer-Encoding:cc:
 	 content-transfer-encoding:content-type:date:from:message-id:
 	 mime-version:reply-to:subject:to;
-	b=SotmuTQp6p9oe61i0QmsNyV44YyPzPm/r4fyWLx+1jgckxYbu2wW0wg/pz/YNLOI
-	 9nUp8lXNsmJQoSYPmvlxPTWk593vl/G21YZg0Y7pi6VsH4Z9ku2vG85QZT0EhiR8m
-	 4fpNJMtCo/0vvvIbe3us/lSo3sKnpRiVceZCRg5NpEQgC3uCVXxi7xoxfhcSbNlnn
-	 uzjhGbufZzqDeZtTrzcj0R0s6UTJ5WCm0HHKzqssaDv+NwbDt0Ir2as6ihEQ9p+4o
-	 v3KQKePRzdQH3bK3n+Gp15eUQQVjLw1SyvzK4PHo6yETWqSqyVTVQXl/d6oXqJg+F
-	 wRgwXxiNllNXFysSdQ==
+	b=2duWYsGvTwgLHy1CvS8LVp31PNmLNUAKX4r49wMnI4ShhYRLhFyYgzeUt/gWVRHR
+	 FMefwlTXcnm+gqtsqnSl87vX+LbIDXyeLj01RoU2PbMXX1SsBhtoQrOGqXbmY0hkS
+	 /PhjEFuU07V+jWh2qPrchTUOTqcb+iOJ9k/evAyZLNC1JS5P5wx/yc79CsA5SO4nh
+	 zpFl11h+NWeazXhmuaUWv+b5KVW3pgTr6FbFv+1+7YbAcjJiCDdjBUZU7UdB/y8jL
+	 Ev0Sq8d9wT326NiN7UFISv3mBUc6qAn6ZaURJh8IVNh6ruAE6ahoihe290AtdnVo+
+	 HWJTyY45a+IX6QgSwQ==
 X-UI-Sender-Class: 55c96926-9e95-11ee-ae09-1f7a4046a0f6
-Received: from localhost ([69.171.251.6]) by mrelay.perfora.net (mreueus002
- [74.208.5.2]) with ESMTPSA (Nemesis) id 0LoWNw-1t0JCv3K1a-00iRAw; Sun, 26 Jan
- 2025 17:39:03 +0100
+Received: from localhost ([69.171.251.2]) by mrelay.perfora.net (mreueus003
+ [74.208.5.2]) with ESMTPSA (Nemesis) id 0MTRw1-1u10Wz345v-00TJiA; Sun, 26 Jan
+ 2025 17:39:14 +0100
 From: Jordan Rome <linux@jordanrome.com>
 To: bpf@vger.kernel.org
 Cc: linux-mm@kvack.org,
@@ -42,10 +43,12 @@ Cc: linux-mm@kvack.org,
 	Andrew Morton <akpm@linux-foundation.org>,
 	Shakeel Butt <shakeel.butt@linux.dev>,
 	Alexander Potapenko <glider@google.com>
-Subject: [bpf-next v5 1/3] mm: add copy_remote_vm_str
-Date: Sun, 26 Jan 2025 08:38:55 -0800
-Message-ID: <20250126163857.410463-1-linux@jordanrome.com>
+Subject: [bpf-next v5 3/3] selftests/bpf: Add tests for bpf_copy_from_user_task_str
+Date: Sun, 26 Jan 2025 08:38:57 -0800
+Message-ID: <20250126163857.410463-3-linux@jordanrome.com>
 X-Mailer: git-send-email 2.43.5
+In-Reply-To: <20250126163857.410463-1-linux@jordanrome.com>
+References: <20250126163857.410463-1-linux@jordanrome.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -53,269 +56,341 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:mw4ISjNDeWsksWR4vWQ24w3F7PImn8YBiiD09AIq01XKohTzUzi
- ct03kS7aIUuRvvD1HoClOAH8/fUprAlc1i/vt18QjPFRPGhcr/eHxSF3a78iRNgm7ifrGSw
- uga4l9dFfErE/HgjZ1p33CTxwfVUfHyPfxixsBG5WaP8z2EZVvUu461KPrpQ8j70hnocm/Y
- DAME1ZYSbcNRzUtM/VYvw==
+X-Provags-ID: V03:K1:Y4ImCJYxkXxhv//QeM5S0+v+VgqZgGrUJJbbP1K2SrS3OmxE8XW
+ oPYBfrXtJyay6rHriTTPP76O1o9PFV+g13N7bIbvycqUPKx63sc4wywhBimmZ2leMJ1VXfh
+ rIgWmJMaWqxitLinPL+BBEa+d/FDcFgmmpG8wIkljcNmv6jW6kD+d25CpW71bwsq0QfXQ5p
+ tqDgRJZxiZzukzNdEANnQ==
 X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:1cTmql1GcGY=;9muYWIYUMt27NL+sb4Wf6AvVdYa
- fQzmY4srFsOgMGccHYmFmxbXE+UKd8LQ9kb4PUoLu6ubCRECrZeZmvpixjAM7FNW7Wxp7DiJT
- SUhpVkIKNekOO+8t6ze28S7HU5mLbh2bWCyK95uSLYfpSXCecRLpOcg5euk+nW1ZJrcMlNDS6
- wYWzXkf8wR7l0+1W3YNERMMaDrVDlNCEIVJ+V5ruJgs2LCdVFRsoanRCol1IXRrTd5kggUBDe
- nI8kxYavJbYiahv5km5G9SMztq0hLqYpBSglH3ZOce/wVc6JPCwslSmfSXNcewE680YT+o1Mk
- /sWLGzNDIFoQwXdgApGxPIZJroYQQdkRrV/uf7S5xaGL8LDGDE6Sb71KGINin/o/Z4XWk2pTu
- o56LxH+9N3OfdvhqdZf3m1uP7L4Ttzb3/wsxgFvKfLZWv3RpM02NvIUaMUrJy5v7vwnk/yjb4
- COkE28hPvbhurB8qNQT9w0Ensa9rc99WZPY5I8990GgEk4g0WAQD2x/rq7WJvyZsNFxThsMt3
- 1pO3HlnhCDEyQzMoukkdTaXa6epiBgBKsyMoSSRD1VRDYWc5jkAPy8oKro9L+l/AjmEIJ2OmR
- 3ngO4g1QoQgUXb8BrB1QVdVso9DIfj6Rozu0DD/PJHR5jSTGzESC8sq5S3ho4l4YGox/JU8os
- ftEJEz6A0RYH+9Jf/DCDNwu7QY29XvQ9YmMfBnCoWgorLRx/HpgaBGsFwLgdDio65xNNbhEmf
- 7FkdbffekrS6twmX4ZI/eFE9xqsb+2F4JTK2J2PpITLmdSeBcanhXruGYoEBdPjBaUFZ3vBUG
- JKkLP8NskSrtI6Q8emOY5Y3o6GeddFdfU8U/nJHbBeN6zGTQp+FAAs5V/es/yXBDtXXdjmH5I
- DIiminQGIwlj90i1lYrk4QPdwhzsoxi+5KutvZJn1IvYUosEn1R4aYBIisA6WTXTusA5V6QH+
- 7GiAWAJBwsOM1E9ylJM4V3vaZ1ut7v1Xu2IUyrrOgkxG+vAMUyS1tLZGUM7192uCRCnYLo2L8
- a352UZs9znlJRIbdDL4sr9pF1Dg52bj5l7sz2imRk0hU2e9hl1Sl/ljx6W5iT29+kg4bYHa3V
- XnQ0toJLc3nyRZmJgrSlm55vOKswUTn+WQcLJHSC+AbbEDxOZJyw==
+UI-OutboundReport: notjunk:1;M01:P0:kkPpcPWVE5c=;uxBbgaJc7zTp5lhf94m1J2hB9Kx
+ cZHD2lzFU1onw25J9BK95razrPJX68mhuU5Ufdhth8QeFjA0IfyJJtxqU7hre9uHiQlC2Ybvp
+ tviLGnvuBxxosmT72Rai/0h5pDCDs92jXM8JbuxWI7L96HmC4K35HCGygg+p1lBVDD9EwYjKk
+ 77mHBMi2BfLq7T8EiqIhCe7mHXU0AZGg6Ko+xi/A3wkk6EfHQM/7KGQs9O9V0NtSlho93aWzT
+ gAdmthwrXfrh7mCZeGsRfE+LIxMxBCAF0kheqojK1pXmvjYP7PaR6t612XTiCUgGElSHoSTYm
+ n/zVLXEGrYYLxV+ikTvsKabTLwxJ4OsGG3JxUdHxQOCBFH0OuSu9e5/UUerny3PnF6BF7+V2J
+ Hxn1RI9/bdjcclmuhdO0vKqvLuB6OKMQ1/8XkN5mTqYNXx2uhrKY/0Z4d+SIzoRB73XR8qJky
+ jvWBHZvqN2GO4hf3lyWS1bLqtGKlV0RvIfr0I+znahWXNCMl5FyhnmErhz1oUhlsr+kTv5FQi
+ tOJxaCd2rjJe2XbNa0nkMpAc/IahwwWIjosvDWHmom9uRPlWL5GoqhTmUyrzUlGHklW8lG3sh
+ 0ntpSBZNVTSAJQaWRiOyd2R2tLDk9J0uq4Md1aDAOWzJjdhAzKiXbg5lbTR05rWVflWE8UEwV
+ D8dNIc+kUiWS1A85twKNwsAtvORGNpB7Rb7QMEzcPgP1YzI4uevfRMRr1o0M9XLiG0CRpMrBe
+ 8h9OT0VChbzqSN704/fnObH6OAGBaQ1cUO7oKNeKssCMZ+y8UPIMdZT9+PskuA604HyHXcS/R
+ aSYfylm4tD6ExYhb1TUlWOSEWTqrMHpbksAyFLrmBFHqbrtMMEW5t0m2jAI4SLSw8xl+GelQo
+ 7zcvEzvglyHy49k5Qz1GKiDrn51wsJNClJ4fvQvokyeXxOe7/a+dCJwoii4+3KVz09lK24dcm
+ ZHs++DdpE/Ix6o0pajY5KjhGviE8ELP+f/DyxhQORHvvjyQbl+WySD/No8pc/KC3xIltINvy1
+ 3u8P2OU08SxCSx7bEFxm0z86sLgMFtql99FXlQRnHlhohKdb1b2NC/yd9lqBjTGzNDxKY1DYG
+ Fl/o7h2GTbHeb89vYQpyOpJEbP651qJ4nnl9xPQ29RpoQ/w5Lqew==
 
-Similar to `access_process_vm` but specific to strings.
-Also chunks reads by page and utilizes `strscpy`
-for handling null termination.
+This adds tests for both the happy path and the
+error path (with and without the BPF_F_PAD_ZEROS flag).
 
 Signed-off-by: Jordan Rome <linux@jordanrome.com>
 =2D--
- include/linux/mm.h |   3 ++
- mm/memory.c        | 118 +++++++++++++++++++++++++++++++++++++++++++++
- mm/nommu.c         |  67 +++++++++++++++++++++++++
- 3 files changed, 188 insertions(+)
+ .../selftests/bpf/prog_tests/bpf_iter.c       |  68 +++++++++++
+ .../selftests/bpf/prog_tests/read_vsyscall.c  |   1 +
+ .../selftests/bpf/progs/bpf_iter_tasks.c      | 110 ++++++++++++++++++
+ .../selftests/bpf/progs/read_vsyscall.c       |  11 +-
+ 4 files changed, 188 insertions(+), 2 deletions(-)
 
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index f02925447e59..f3a05b3eb2f2 100644
-=2D-- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -2485,6 +2485,9 @@ extern int access_process_vm(struct task_struct *tsk=
-, unsigned long addr,
- extern int access_remote_vm(struct mm_struct *mm, unsigned long addr,
- 		void *buf, int len, unsigned int gup_flags);
+diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_iter.c b/tools/tes=
+ting/selftests/bpf/prog_tests/bpf_iter.c
+index 6f1bfacd7375..add4a18c33bd 100644
+=2D-- a/tools/testing/selftests/bpf/prog_tests/bpf_iter.c
++++ b/tools/testing/selftests/bpf/prog_tests/bpf_iter.c
+@@ -323,19 +323,87 @@ static void test_task_pidfd(void)
+ static void test_task_sleepable(void)
+ {
+ 	struct bpf_iter_tasks *skel;
++	int pid, status, err, data_pipe[2], finish_pipe[2], c;
++	char *test_data =3D NULL;
++	char *test_data_long =3D NULL;
++	char *data[2];
++
++	if (!ASSERT_OK(pipe(data_pipe), "data_pipe") ||
++	    !ASSERT_OK(pipe(finish_pipe), "finish_pipe"))
++		return;
 
-+extern int copy_remote_vm_str(struct task_struct *tsk, unsigned long addr=
+ 	skel =3D bpf_iter_tasks__open_and_load();
+ 	if (!ASSERT_OK_PTR(skel, "bpf_iter_tasks__open_and_load"))
+ 		return;
+
++	pid =3D fork();
++	if (!ASSERT_GE(pid, 0, "fork"))
++		return;
++
++	if (pid =3D=3D 0) {
++		/* child */
++		close(data_pipe[0]);
++		close(finish_pipe[1]);
++
++		test_data =3D malloc(sizeof(char) * 10);
++		strncpy(test_data, "test_data", 10);
++		test_data[9] =3D '\0';
++
++		test_data_long =3D malloc(sizeof(char) * 5000);
++		for (int i =3D 0; i < 5000; ++i) {
++			if (i % 2 =3D=3D 0)
++				test_data_long[i] =3D 'b';
++			else
++				test_data_long[i] =3D 'a';
++		}
++		test_data_long[4999] =3D '\0';
++
++		data[0] =3D test_data;
++		data[1] =3D test_data_long;
++
++		write(data_pipe[1], &data, sizeof(data));
++
++		/* keep child alive until after the test */
++		err =3D read(finish_pipe[0], &c, 1);
++		if (err !=3D 1)
++			exit(-1);
++
++		close(data_pipe[1]);
++		close(finish_pipe[0]);
++		_exit(0);
++	}
++
++	/* parent */
++	close(data_pipe[1]);
++	close(finish_pipe[0]);
++
++	err =3D read(data_pipe[0], &data, sizeof(data));
++	ASSERT_EQ(err, sizeof(data), "read_check");
++
++	skel->bss->user_ptr =3D data[0];
++	skel->bss->user_ptr_long =3D data[1];
++	skel->bss->pid =3D pid;
++
+ 	do_dummy_read(skel->progs.dump_task_sleepable);
+
+ 	ASSERT_GT(skel->bss->num_expected_failure_copy_from_user_task, 0,
+ 		  "num_expected_failure_copy_from_user_task");
+ 	ASSERT_GT(skel->bss->num_success_copy_from_user_task, 0,
+ 		  "num_success_copy_from_user_task");
++	ASSERT_GT(skel->bss->num_expected_failure_copy_from_user_task_str, 0,
++		  "num_expected_failure_copy_from_user_task_str");
++	ASSERT_GT(skel->bss->num_success_copy_from_user_task_str, 0,
++		  "num_success_copy_from_user_task_str");
+
+ 	bpf_iter_tasks__destroy(skel);
++
++	write(finish_pipe[1], &c, 1);
++	err =3D waitpid(pid, &status, 0);
++	ASSERT_EQ(err, pid, "waitpid");
++	ASSERT_EQ(status, 0, "zero_child_exit");
++
++	close(data_pipe[0]);
++	close(finish_pipe[1]);
+ }
+
+ static void test_task_stack(void)
+diff --git a/tools/testing/selftests/bpf/prog_tests/read_vsyscall.c b/tool=
+s/testing/selftests/bpf/prog_tests/read_vsyscall.c
+index c7b9ba8b1d06..a8d1eaa67020 100644
+=2D-- a/tools/testing/selftests/bpf/prog_tests/read_vsyscall.c
++++ b/tools/testing/selftests/bpf/prog_tests/read_vsyscall.c
+@@ -24,6 +24,7 @@ struct read_ret_desc {
+ 	{ .name =3D "copy_from_user", .ret =3D -EFAULT },
+ 	{ .name =3D "copy_from_user_task", .ret =3D -EFAULT },
+ 	{ .name =3D "copy_from_user_str", .ret =3D -EFAULT },
++	{ .name =3D "copy_from_user_task_str", .ret =3D -EFAULT },
+ };
+
+ void test_read_vsyscall(void)
+diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_tasks.c b/tools/te=
+sting/selftests/bpf/progs/bpf_iter_tasks.c
+index bc10c4e4b4fa..d28d642a64c3 100644
+=2D-- a/tools/testing/selftests/bpf/progs/bpf_iter_tasks.c
++++ b/tools/testing/selftests/bpf/progs/bpf_iter_tasks.c
+@@ -9,6 +9,13 @@ char _license[] SEC("license") =3D "GPL";
+ uint32_t tid =3D 0;
+ int num_unknown_tid =3D 0;
+ int num_known_tid =3D 0;
++void *user_ptr =3D 0;
++void *user_ptr_long =3D 0;
++uint32_t pid =3D 0;
++
++static char big_str1[5000];
++static char big_str2[5005];
++static char big_str3[4996];
+
+ SEC("iter/task")
+ int dump_task(struct bpf_iter__task *ctx)
+@@ -35,7 +42,9 @@ int dump_task(struct bpf_iter__task *ctx)
+ }
+
+ int num_expected_failure_copy_from_user_task =3D 0;
++int num_expected_failure_copy_from_user_task_str =3D 0;
+ int num_success_copy_from_user_task =3D 0;
++int num_success_copy_from_user_task_str =3D 0;
+
+ SEC("iter.s/task")
+ int dump_task_sleepable(struct bpf_iter__task *ctx)
+@@ -44,6 +53,9 @@ int dump_task_sleepable(struct bpf_iter__task *ctx)
+ 	struct task_struct *task =3D ctx->task;
+ 	static const char info[] =3D "    =3D=3D=3D END =3D=3D=3D";
+ 	struct pt_regs *regs;
++	char task_str1[10] =3D "aaaaaaaaaa";
++	char task_str2[10], task_str3[10];
++	char task_str4[20] =3D "aaaaaaaaaaaaaaaaaaaa";
+ 	void *ptr;
+ 	uint32_t user_data =3D 0;
+ 	int ret;
+@@ -78,8 +90,106 @@ int dump_task_sleepable(struct bpf_iter__task *ctx)
+ 		BPF_SEQ_PRINTF(seq, "%s\n", info);
+ 		return 0;
+ 	}
++
+ 	++num_success_copy_from_user_task;
+
++	/* Read an invalid pointer and ensure we get an error */
++	ptr =3D NULL;
++	ret =3D bpf_copy_from_user_task_str((char *)task_str1, sizeof(task_str1)=
+, ptr, task, 0);
++	if (ret >=3D 0 || task_str1[9] !=3D 'a') {
++		BPF_SEQ_PRINTF(seq, "%s\n", info);
++		return 0;
++	}
++
++	/* Read an invalid pointer and ensure we get error with pad zeros flag *=
+/
++	ptr =3D NULL;
++	ret =3D bpf_copy_from_user_task_str((char *)task_str1, sizeof(task_str1)=
 ,
-+		void *buf, int len, unsigned int gup_flags);
-+
- long get_user_pages_remote(struct mm_struct *mm,
- 			   unsigned long start, unsigned long nr_pages,
- 			   unsigned int gup_flags, struct page **pages,
-diff --git a/mm/memory.c b/mm/memory.c
-index 398c031be9ba..e1ed5095b258 100644
-=2D-- a/mm/memory.c
-+++ b/mm/memory.c
-@@ -6714,6 +6714,124 @@ int access_process_vm(struct task_struct *tsk, uns=
-igned long addr,
- }
- EXPORT_SYMBOL_GPL(access_process_vm);
-
-+/*
-+ * Copy a string from another process's address space as given in mm.
-+ * If there is any error return -EFAULT.
-+ */
-+static int __copy_remote_vm_str(struct mm_struct *mm, unsigned long addr,
-+			      void *buf, int len, unsigned int gup_flags)
-+{
-+	void *old_buf =3D buf;
-+	int err =3D 0;
-+
-+	if (mmap_read_lock_killable(mm))
-+		return -EFAULT;
-+
-+	/* Untag the address before looking up the VMA */
-+	addr =3D untagged_addr_remote(mm, addr);
-+
-+	/* Avoid triggering the temporary warning in __get_user_pages */
-+	if (!vma_lookup(mm, addr)) {
-+		err =3D -EFAULT;
-+		goto out;
++					  ptr, task, BPF_F_PAD_ZEROS);
++	if (ret >=3D 0 || task_str1[9] !=3D '\0') {
++		BPF_SEQ_PRINTF(seq, "%s\n", info);
++		return 0;
 +	}
 +
-+	while (len) {
-+		int bytes, offset, retval;
-+		void *maddr;
-+		struct page *page;
-+		struct vm_area_struct *vma =3D NULL;
++	++num_expected_failure_copy_from_user_task_str;
 +
-+		page =3D get_user_page_vma_remote(mm, addr, gup_flags, &vma);
-+
-+		if (IS_ERR(page)) {
-+			/*
-+			 * Treat as a total failure for now until we decide how
-+			 * to handle the CONFIG_HAVE_IOREMAP_PROT case and
-+			 * stack expansion.
-+			 */
-+			err =3D -EFAULT;
-+			goto out;
-+		}
-+
-+		bytes =3D len;
-+		offset =3D addr & (PAGE_SIZE - 1);
-+		if (bytes > PAGE_SIZE - offset)
-+			bytes =3D PAGE_SIZE - offset;
-+
-+		maddr =3D kmap_local_page(page);
-+		retval =3D strscpy(buf, maddr + offset, bytes);
-+		unmap_and_put_page(page, maddr);
-+
-+		if (retval > -1) {
-+			/* Found the end of the string */
-+			buf +=3D retval;
-+			goto out;
-+		}
-+
-+		retval =3D bytes - 1;
-+		buf +=3D retval;
-+
-+		if (bytes =3D=3D len)
-+			goto out;
-+
-+		/*
-+		 * Because strscpy always NUL terminates we need to
-+		 * copy the last byte in the page if we are going to
-+		 * load more pages
-+		 */
-+		addr +=3D retval;
-+		len -=3D retval;
-+		copy_from_user_page(vma,
-+				page,
-+				addr,
-+				buf,
-+				maddr + (PAGE_SIZE - 1),
-+				1);
-+		len -=3D 1;
-+		buf +=3D 1;
-+		addr +=3D 1;
++	/* Same length as the string */
++	ret =3D bpf_copy_from_user_task_str((char *)task_str2, 10, user_ptr, tas=
+k, 0);
++	/* only need to do the task pid check once */
++	if (bpf_strncmp(task_str2, 10, "test_data\0") !=3D 0 || ret !=3D 10 || t=
+ask->tgid !=3D pid) {
++		BPF_SEQ_PRINTF(seq, "%s\n", info);
++		return 0;
 +	}
 +
-+out:
-+	mmap_read_unlock(mm);
-+	if (err)
-+		return err;
++	/* Shorter length than the string */
++	ret =3D bpf_copy_from_user_task_str((char *)task_str3, 2, user_ptr, task=
+, 0);
++	if (bpf_strncmp(task_str3, 2, "t\0") !=3D 0 || ret !=3D 2) {
++		BPF_SEQ_PRINTF(seq, "%s\n", info);
++		return 0;
++	}
 +
-+	return buf - old_buf;
-+}
++	/* Longer length than the string */
++	ret =3D bpf_copy_from_user_task_str((char *)task_str4, 20, user_ptr, tas=
+k, 0);
++	if (bpf_strncmp(task_str4, 10, "test_data\0") !=3D 0 || ret !=3D 10
++	    || task_str4[sizeof(task_str4) - 1] !=3D 'a') {
++		BPF_SEQ_PRINTF(seq, "%s\n", info);
++		return 0;
++	}
 +
-+/**
-+ * copy_remote_vm_str - copy a string from another process's address spac=
-e.
-+ * @tsk:	the task of the target address space
-+ * @addr:	start address to read from
-+ * @buf:	destination buffer
-+ * @len:	number of bytes to copy
-+ * @gup_flags:	flags modifying lookup behaviour
-+ *
-+ * The caller must hold a reference on @mm.
-+ *
-+ * Return: number of bytes copied from @addr (source) to @buf (destinatio=
-n);
-+ * not including the trailing NUL. On any error, return -EFAULT.
-+ */
-+int copy_remote_vm_str(struct task_struct *tsk, unsigned long addr,
-+		void *buf, int len, unsigned int gup_flags)
-+{
-+	struct mm_struct *mm;
-+	int ret;
++	/* Longer length than the string with pad zeros flag */
++	ret =3D bpf_copy_from_user_task_str((char *)task_str4, 20, user_ptr, tas=
+k, BPF_F_PAD_ZEROS);
++	if (bpf_strncmp(task_str4, 10, "test_data\0") !=3D 0 || ret !=3D 10
++	    || task_str4[sizeof(task_str4) - 1] !=3D '\0') {
++		BPF_SEQ_PRINTF(seq, "%s\n", info);
++		return 0;
++	}
 +
-+	mm =3D get_task_mm(tsk);
-+	if (!mm)
-+		return -EFAULT;
++	/* Longer length than the string past a page boundary */
++	ret =3D bpf_copy_from_user_task_str(big_str1, 5000, user_ptr, task, 0);
++	if (bpf_strncmp(big_str1, 10, "test_data\0") !=3D 0 || ret !=3D 10) {
++		BPF_SEQ_PRINTF(seq, "%s\n", info);
++		return 0;
++	}
 +
-+	ret =3D __copy_remote_vm_str(mm, addr, buf, len, gup_flags);
++	/* String that crosses a page boundary */
++	ret =3D bpf_copy_from_user_task_str(big_str1, 5000, user_ptr_long, task,=
+ BPF_F_PAD_ZEROS);
++	if (bpf_strncmp(big_str1, 4, "baba") !=3D 0 || ret !=3D 5000
++	    || bpf_strncmp(big_str1 + 4996, 4, "bab\0") !=3D 0) {
++		BPF_SEQ_PRINTF(seq, "%s\n", info);
++		return 0;
++	}
 +
-+	mmput(mm);
-+
-+	return ret;
-+}
-+EXPORT_SYMBOL_GPL(copy_remote_vm_str);
-+
- /*
-  * Print the name of a VMA.
-  */
-diff --git a/mm/nommu.c b/mm/nommu.c
-index 9cb6e99215e2..ce24ea829c73 100644
-=2D-- a/mm/nommu.c
-+++ b/mm/nommu.c
-@@ -1701,6 +1701,73 @@ int access_process_vm(struct task_struct *tsk, unsi=
-gned long addr, void *buf, in
- }
- EXPORT_SYMBOL_GPL(access_process_vm);
-
-+/*
-+ * Copy a string from another process's address space as given in mm.
-+ * If there is any error return -EFAULT.
-+ */
-+static int __copy_remote_vm_str(struct mm_struct *mm, unsigned long addr,
-+			      void *buf, int len)
-+{
-+	int ret;
-+	struct vm_area_struct *vma;
-+
-+	if (mmap_read_lock_killable(mm))
-+		return -EFAULT;
-+
-+	/* the access must start within one of the target process's mappings */
-+	vma =3D find_vma(mm, addr);
-+	if (vma) {
-+		/* don't overrun this mapping */
-+		if (addr + len >=3D vma->vm_end)
-+			len =3D vma->vm_end - addr;
-+
-+		/* only read mappings where it is permitted */
-+		if (vma->vm_flags & VM_MAYREAD) {
-+			ret =3D strscpy(buf, (char *)addr, len);
-+			if (ret < 0)
-+				ret =3D len - 1;
++	for (int i =3D 0; i < 4999; ++i) {
++		if (i % 2 =3D=3D 0) {
++			if (big_str1[i] !=3D 'b') {
++				BPF_SEQ_PRINTF(seq, "%s\n", info);
++				return 0;
++			}
 +		} else {
-+			ret =3D -EFAULT;
++			if (big_str1[i] !=3D 'a') {
++				BPF_SEQ_PRINTF(seq, "%s\n", info);
++				return 0;
++			}
 +		}
-+	} else {
-+		ret =3D -EFAULT;
 +	}
 +
-+	mmap_read_unlock(mm);
-+	return ret;
-+}
++	/* Longer length than the string that crosses a page boundary */
++	ret =3D bpf_copy_from_user_task_str(big_str2, 5005, user_ptr_long, task,=
+ BPF_F_PAD_ZEROS);
++	if (bpf_strncmp(big_str2, 4, "baba") !=3D 0 || ret !=3D 5000
++	    || bpf_strncmp(big_str2 + 4996, 5, "bab\0\0") !=3D 0) {
++		BPF_SEQ_PRINTF(seq, "%s\n", info);
++		return 0;
++	}
 +
-+/**
-+ * copy_remote_vm_str - copy a string from another process's address spac=
-e.
-+ * @tsk:	the task of the target address space
-+ * @addr:	start address to read from
-+ * @buf:	destination buffer
-+ * @len:	number of bytes to copy
-+ * @gup_flags:	flags modifying lookup behaviour (unused)
-+ *
-+ * The caller must hold a reference on @mm.
-+ *
-+ * Return: number of bytes copied from @addr (source) to @buf (destinatio=
-n);
-+ * not including the trailing NUL. On any error, return -EFAULT.
-+ */
-+int copy_remote_vm_str(struct task_struct *tsk, unsigned long addr,
-+		void *buf, int len, unsigned int gup_flags)
-+{
-+	struct mm_struct *mm;
-+	int ret;
++	/* Shorter length than the string that crosses a page boundary */
++	ret =3D bpf_copy_from_user_task_str(big_str3, 4996, user_ptr_long, task,=
+ 0);
++	if (bpf_strncmp(big_str3, 4, "baba") !=3D 0 || ret !=3D 4996
++	    || bpf_strncmp(big_str3 + 4992, 4, "bab\0") !=3D 0) {
++		BPF_SEQ_PRINTF(seq, "%s\n", info);
++		return 0;
++	}
 +
-+	mm =3D get_task_mm(tsk);
-+	if (!mm)
-+		return -EFAULT;
++	++num_success_copy_from_user_task_str;
 +
-+	ret =3D __copy_remote_vm_str(mm, addr, buf, len);
-+
-+	mmput(mm);
-+
-+	return ret;
-+}
-+EXPORT_SYMBOL_GPL(copy_remote_vm_str);
-+
- /**
-  * nommu_shrink_inode_mappings - Shrink the shared mappings on an inode
-  * @inode: The inode to check
+ 	if (ctx->meta->seq_num =3D=3D 0)
+ 		BPF_SEQ_PRINTF(seq, "    tgid      gid     data\n");
+
+diff --git a/tools/testing/selftests/bpf/progs/read_vsyscall.c b/tools/tes=
+ting/selftests/bpf/progs/read_vsyscall.c
+index 39ebef430059..395591374d4f 100644
+=2D-- a/tools/testing/selftests/bpf/progs/read_vsyscall.c
++++ b/tools/testing/selftests/bpf/progs/read_vsyscall.c
+@@ -8,14 +8,16 @@
+
+ int target_pid =3D 0;
+ void *user_ptr =3D 0;
+-int read_ret[9];
++int read_ret[10];
+
+ char _license[] SEC("license") =3D "GPL";
+
+ /*
+- * This is the only kfunc, the others are helpers
++ * These are the kfuncs, the others are helpers
+  */
+ int bpf_copy_from_user_str(void *dst, u32, const void *, u64) __weak __ks=
+ym;
++int bpf_copy_from_user_task_str(void *dst, u32, const void *,
++				struct task_struct *, u64) __weak __ksym;
+
+ SEC("fentry/" SYS_PREFIX "sys_nanosleep")
+ int do_probe_read(void *ctx)
+@@ -47,6 +49,11 @@ int do_copy_from_user(void *ctx)
+ 	read_ret[7] =3D bpf_copy_from_user_task(buf, sizeof(buf), user_ptr,
+ 					      bpf_get_current_task_btf(), 0);
+ 	read_ret[8] =3D bpf_copy_from_user_str((char *)buf, sizeof(buf), user_pt=
+r, 0);
++	read_ret[9] =3D bpf_copy_from_user_task_str((char *)buf,
++						  sizeof(buf),
++						  user_ptr,
++						  bpf_get_current_task_btf(),
++						  0);
+
+ 	return 0;
+ }
 =2D-
 2.43.5
 
