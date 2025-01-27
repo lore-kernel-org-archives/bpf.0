@@ -1,367 +1,192 @@
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from DU2PR03CU002.outbound.protection.outlook.com (mail-northeuropeazolkn19012032.outbound.protection.outlook.com [52.103.32.32])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 872421DF98F
-	for <bpf@vger.kernel.org>; Mon, 27 Jan 2025 23:49:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738021781; cv=none; b=TKOCfxskZjjKdiIGlzUyMvI7aeupe3tm4/sDAYioNICXbRBCjRrIdbyVfOtVo3cIAw/iz2e8G6wAYn730Rgxrs3rvh1348PXmMooqHsIKGzQmr+p6AW84pwVjrIqWwZ45bek6f3Uq3trVhw5QImJAquLTk03CnMi+do5vE4Ubxw=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738021781; c=relaxed/simple;
-	bh=o45tQZUfrUdxId/JYTlRJTsxh//wUXoiQCi9FSvXTO4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=i1Ln46XSa5gZML43ePqnA3oJhf17rP2iOZXuMmEPoGgOTa3khbz9d2cX/jgc6ZvYtR62qRYIRs7SvH3CqCnjscBDvBK53LrhgXLtLMTcyxUFqs+0Ke2PXORDT2vLlkId5kmyWLDOIw4kDQXKQK6QlYD0mSRAD6LelbVznTkHF7A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JPWfaWtE; arc=none smtp.client-ip=209.85.214.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F642481A3;
+	Mon, 27 Jan 2025 23:50:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.103.32.32
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1738021832; cv=fail; b=PwbiXQouXzA9AcxsUV+Wtwnvm8wuTpBaijURhV4QG4QH6X7LUGjTxuqs85eK60HbsMKIt+SeP7gyQRBCSHTRlSS4q7ksx8+3/zh2TQEsv+N+oWwJZeuRk5Dq2Nc403rG+Umdb97wuQQdnQStXfbYBLQY/XgNJspYDcva74CJbrg=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1738021832; c=relaxed/simple;
+	bh=KIxnMIr3pjygOZQfnbAT4gl8laW2esmTBi9+dragCrw=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=qyKEfkw5UdxfiCXZlqGCvFhg39+PGfhxMhYw+fPHewKNvQ7zxY7x0ftm6qPqVsckyD8Tc/MgSW+wP8WNXVcqJ+gC91cBGPmrMHXgj3YZPXz5kQGpVHvC95Q/c4rduzVmxZmiiSr/ASU4I83cZ7Dx68RSIq+v9JyeWmdhBxQd2Q0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com; spf=pass smtp.mailfrom=outlook.com; dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b=OEObYzw+; arc=fail smtp.client-ip=52.103.32.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=outlook.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JPWfaWtE"
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-21661be2c2dso86080225ad.1
-        for <bpf@vger.kernel.org>; Mon, 27 Jan 2025 15:49:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1738021779; x=1738626579; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ueR0tPBW9KSxuoTyiD1vKriJZY51qUX5OjKQE+zjGUU=;
-        b=JPWfaWtEd/tL9lsvkxBoppn5aDOxVbTgBiQC14KWm4vz3WdSsCTLEYZcHmvh8RQ3bA
-         qzLa3yHx+a+Cmg4h8gpWPnHI/8TjiM9CfGk1jiMsxxm6dUODHzrxFjy44tbEDMNB/wiY
-         q79yNPpln8ZSDqNo56lFgGQhZgOvEwlWLRptIQ28W7jZOkZZWlc9UhM/tibvebIux0Q4
-         AxY8t7ssZ0yQXfbS+KIpxbMhtvogjBjp+I3GtO6fcm5YkfwbUStjdbcSUGvutb+WanZi
-         uPJD39FFJV96vJ19XquAHbkgN76PhHwGGBj9FvbZkoNCE8bzCl72AhJemcqeoc+CqCQr
-         YFHg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738021779; x=1738626579;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ueR0tPBW9KSxuoTyiD1vKriJZY51qUX5OjKQE+zjGUU=;
-        b=B7jkV02lIpxmOxa+4eBiyV9Bpgba8faPwXpylPNgSTdxad/0yJOIn04fD0QeqfC6r6
-         B1z7T8/IczsiiIMVxckPd3SOTmrqyrNoBVD85brj8wDytCvrwg/f53umVLZat495vJCy
-         1xix+AN2ilvTAz4r1i5gYJE/FQaiaPRgOKIXAVLjmFo2aAGCoCJJcQ0DS664RfQDYAER
-         yYqbXs4/KfT9cIQeR5U13aoLrScD72bhU5oBfznWxiH1H9wjhdRf5a0JgiNQ2cxz3UuX
-         LCLzrKkPz/KznhSPHCBtoDYRO+z0rwEJBEodbXHciJR+JGc8AzHS8gBCKDE67HnwHq3A
-         QYSA==
-X-Gm-Message-State: AOJu0Yz6Xzm19t8NKSR4ZgVWJ57oK1Y5HKlm5gjsMZ4p89JWiGeulVCh
-	8GsQz7zpy3v/0yz43JkpxrM/HQlBNAl+O7wKhvxOJdkw0//d9jWiDa8tfdzaEBII6XY6JUnquZv
-	ITifo5Dzlr0x8gX8+Trt+bKqXvwZQefyi
-X-Gm-Gg: ASbGncv5A7FYm/AMKND698JNMkmUu3jJZNuQgkQdC3roAcjc4umMg5NzEhl6voVWabM
-	yQRy9UKJVFS6ZmNNAdNmLwWfuFG0jL2ZUKp/Y5dZ3CNKue4zr36o2p1W0bdCmPSkBjbr0KlwYUe
-	DuGA==
-X-Google-Smtp-Source: AGHT+IHUaEzOgwZ9VsLKfy//45nNHaXYoE+7SaUf9Ik1aHtWcYDGPxfO2EfONss8QkU/5iEL1A7JbZzvU2MkbCeOKVI=
-X-Received: by 2002:a05:6a20:432a:b0:1e1:dbfd:582b with SMTP id
- adf61e73a8af0-1eb21498454mr61557416637.15.1738021778638; Mon, 27 Jan 2025
- 15:49:38 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b="OEObYzw+"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=ITnYjV0/49MRt3Xtwbho0oLkempRkAdT0KBONE+hOWIZ3LkRAxkUxTCwJuaT0cS6T0E0OmhgEE/mZrYt/Ix5F8org/hByNGKqRmkCdHNYhnjkesgPukDke5lpw0dhuJ5rPt30I4QjCV3TvSFAvhw2nPClGOXwtbUWS3Ib3g1okXPFbbSywqXD54CvGzotoIcab4u8dZuO4b+6bO1VpsE07q2/4YN9xfsV4gaHxsm6jicZSU4mK5ZlArQu2ZBs1jbUK4vTdESs4Wf/uNzlw6WVkm9lw75Sz2qku9X5BCesWaoxO1OcQXTSv/Ne6AkpH2Au5O8B/J29iqs01v6qt/U/Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=QRVV0jX1KjzggGbvz87UhS2xPIc9n8VFZ0MWXdCk1fc=;
+ b=kkY1qAgX66GkUa3Nii4DhL+zff564/Krzg8VpOMpXP1JU+Cp3DVXz71n6jH+o/BMs+ikCXxMhiKV4kjfOOhEfwqrhYJp6umeIo+UTDmHRv1FISzt14q/vohuSq42ml8DFka+1S8fIkqSZUEZuetmRUNxvelBIOpTxnPdPQty7xA+QJmX8Oq1FomY8gc9EIqfoLDMv+rfrs+TJXJVuUU68gOTsj3+FspjaCfjUA10f5Orm4KIyVxyt4QrtyTj9V2OcSGL7CIhFAycWjI64yOQiXcf2i8ldJESqdc4Z+DzB0z/qn/UOwle06l0Fq6i7Ta/2XB5ocuCFJBN2qxxX2DlXQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=QRVV0jX1KjzggGbvz87UhS2xPIc9n8VFZ0MWXdCk1fc=;
+ b=OEObYzw+6UlwYlhQy1TL24f3GDmD9mFYtKisb1A5hG1wixiYC87U0cKz7PgHf4OXfEvN9MP4YF0bkmo7kXtmiteV7mqcBPKHOUcH7+O5+VAmO8S+VxrXHTPaLq27WNFREHa0TIk8jmWKVSWQvNMd4HdA4J6XJSqY2oavkwpI/ibgHP1J2/IQOnzSo4I7r5dZhdeBCnMVTB+2AloLf7jkR5Z3XGoAni03igBSCT/wO7Krpb7DAZt74HBGfYdDt6x1Hq9ZPsU0EKl0x8mTGfVwfdPicc/XS5mJ0QBMIUksEshDkFpNbHF2PJa7NFjtCGCsSHpgZxmFt86RJeRtFjsGyw==
+Received: from AM6PR03MB5080.eurprd03.prod.outlook.com (2603:10a6:20b:90::20)
+ by AM0PR03MB6209.eurprd03.prod.outlook.com (2603:10a6:20b:156::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8377.22; Mon, 27 Jan
+ 2025 23:50:27 +0000
+Received: from AM6PR03MB5080.eurprd03.prod.outlook.com
+ ([fe80::a16:9eb8:6868:f6d8]) by AM6PR03MB5080.eurprd03.prod.outlook.com
+ ([fe80::a16:9eb8:6868:f6d8%3]) with mapi id 15.20.8377.021; Mon, 27 Jan 2025
+ 23:50:27 +0000
+From: Juntong Deng <juntong.deng@outlook.com>
+To: ast@kernel.org,
+	daniel@iogearbox.net,
+	john.fastabend@gmail.com,
+	andrii@kernel.org,
+	martin.lau@linux.dev,
+	eddyz87@gmail.com,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	kpsingh@kernel.org,
+	sdf@fomichev.me,
+	haoluo@google.com,
+	jolsa@kernel.org,
+	memxor@gmail.com,
+	snorcht@gmail.com,
+	brauner@kernel.org
+Cc: bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org
+Subject: [PATCH bpf-next v9 3/5] bpf: Add bpf_fget_task() kfunc
+Date: Mon, 27 Jan 2025 23:46:52 +0000
+Message-ID:
+ <AM6PR03MB5080E08EED5A43DD5468CD3299EC2@AM6PR03MB5080.eurprd03.prod.outlook.com>
+X-Mailer: git-send-email 2.39.5
+In-Reply-To: <AM6PR03MB50801990BD93BFA2297A123599EC2@AM6PR03MB5080.eurprd03.prod.outlook.com>
+References: <AM6PR03MB50801990BD93BFA2297A123599EC2@AM6PR03MB5080.eurprd03.prod.outlook.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: LO3P265CA0018.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:bb::23) To AM6PR03MB5080.eurprd03.prod.outlook.com
+ (2603:10a6:20b:90::20)
+X-Microsoft-Original-Message-ID:
+ <20250127234654.89332-3-juntong.deng@outlook.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250126163857.410463-1-linux@jordanrome.com>
-In-Reply-To: <20250126163857.410463-1-linux@jordanrome.com>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Mon, 27 Jan 2025 15:49:26 -0800
-X-Gm-Features: AWEUYZmWRoBNB8YI2CD-wENTn8_oIOE4M9dDV8NWvdwiDbEqTrCDTir_FC6BJ5k
-Message-ID: <CAEf4BzYcDefO=9esaMJVYzkMYdBDuRO5XwsTt4gR68nvfQcZPw@mail.gmail.com>
-Subject: Re: [bpf-next v5 1/3] mm: add copy_remote_vm_str
-To: Jordan Rome <linux@jordanrome.com>
-Cc: bpf@vger.kernel.org, linux-mm@kvack.org, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Kernel Team <kernel-team@fb.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, Shakeel Butt <shakeel.butt@linux.dev>, 
-	Alexander Potapenko <glider@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AM6PR03MB5080:EE_|AM0PR03MB6209:EE_
+X-MS-Office365-Filtering-Correlation-Id: 37a8d3a1-6486-4766-ecf4-08dd3f2d6018
+X-Microsoft-Antispam:
+	BCL:0;ARA:14566002|8060799006|19110799003|5072599009|15080799006|461199028|440099028|3412199025|41001999003;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?iotGClZvXE0tkLIIAFZlLK2HaMc+YneKzZAYyS6DK0Fvtvu7Axs/LtUrGQVu?=
+ =?us-ascii?Q?rkKsZrccNNvNNADy0UhjzMkvgEymyagJE4mDP2eyyA0edSzvtkWVQJE+GJEL?=
+ =?us-ascii?Q?ZDxjTnhDAnJky3gpWqJxjOEFw6mIY7EwiXHduSHPsLcCCPZwENIA1wzYaHmk?=
+ =?us-ascii?Q?HSujvdYOsTrq+rrJYIhIMQzoW/kwC488atO6tzh/sla30GFylCgdfDHxo7d2?=
+ =?us-ascii?Q?/wDzWGuG27gd39e+8SRS9LXzetEMxFSO8WgGztuuTGGjLOyazRpLqBgwH/az?=
+ =?us-ascii?Q?/5ok+h4tzqmykiqj1xJ4YDg2QyXIi9V2aT08uZQny12abj/DerhjkKQxBMPo?=
+ =?us-ascii?Q?V8xATbx7JIsbdDV+sOv4rhanG+NnB9fD6cRSQdbg6hACtd6mNH8uutJSRTAK?=
+ =?us-ascii?Q?sAAp8mz/ydW/I6CUafwnlxORoiUak9FADtWnxEnhTc3VH7jL13l3XkzFnX4Q?=
+ =?us-ascii?Q?qPMfbVd+rK9qmuUCzwmbgk7bBDQZppvfS5PHWied9w/A5Lh9Nsv82iDvok0i?=
+ =?us-ascii?Q?NxXj4RMn10va/ev2s9jXHys85fDDvUWbCWxcqr/TrcUVEUSGlh+rRMu4d2pg?=
+ =?us-ascii?Q?lRLHf2yKW0OCf7FtJWKnHyINJzWtQm4RXZQBhxLMHld1EmBoLMDCJclz3lzD?=
+ =?us-ascii?Q?eWlrFwqH8CXGd0lHiQpR7brg57ENaItAN57DWK62Ru7590aKzqlwT14yFzl4?=
+ =?us-ascii?Q?npyWUf/1OUWCX9EaPf7QhSBiH+8LuXVIT4Vd+ySTl8/bWH3K7AH1okp9JGU7?=
+ =?us-ascii?Q?pts7riEuP26Zm3OZ3ErP22XwWMWOpI3AKRaxfTieOO8uSTk1CheIMM5mzqB0?=
+ =?us-ascii?Q?75ctLDw/jvl+VJXrY8F+riIiScja/KOtPvzqDGAQWhE1PJ8lQfIxfNcYy8yF?=
+ =?us-ascii?Q?2ePs5pVhvmwEH/BV7iwUJHR04wswJSVC/+kd0opH1gnIknQivktCwA39zLk1?=
+ =?us-ascii?Q?kY2TBDRojSHsTkcGRup+OkSXylN6QqVUpSuqtlNSa++SCUGBdVgtUkWkFr4J?=
+ =?us-ascii?Q?kd/MCABy3LLtrOXN3zxHi1xSqcWmtHe8c8nw0C2TU71dOGv7efI1ae7P56uz?=
+ =?us-ascii?Q?Kvdu2AhIV+WkV/gt9mA3Z6zH3yA+xw=3D=3D?=
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?VkvINoUzDLH2/UmU0pqUnbl06ub+2UzLo/hy3d/5lTEmA4Bg/qLx1VgFWur0?=
+ =?us-ascii?Q?fH3WdlSFcJ7PsicU+0rENV8NKV+v9Qb7i0uNtqpv7MeQ8KcW2EbIxAAGzPq6?=
+ =?us-ascii?Q?VNc5vJT86KKJ3wXQ21MI4tw7zoV4X1j2nK+011vqZCvDFAVYYbUIVvktfy9w?=
+ =?us-ascii?Q?9jj5cDjjKhJ9tH4L45hjfaKqgbDt/VrnOrskUHT0zwZGo2y4orMQesszstUm?=
+ =?us-ascii?Q?s/pAsL39mX73oX8qxvjpu22SX3nxMuMvc7GYe+Deui0YUJk6IZrSFtjU8NC1?=
+ =?us-ascii?Q?NGOd/gRuqgF62HcTEkQkninVpLAUsPbLHd4U0o/MKUD53+3RnpCbXEOhBH9E?=
+ =?us-ascii?Q?KU5tg/4VOWSB89NTRsSHD0hLdXdl3vXlWwiatcs402TB92TizkLBuovr5BWX?=
+ =?us-ascii?Q?IaijN6TYqpT/T5bejGFY3wasC12+8NPpOuAl5iUqWd1eXFfgFDMUbeUfic5C?=
+ =?us-ascii?Q?M1G7vav32OcLe8QEcENWa39KXzxROSbCfb0UzpDY1p+CynJzXDzN1rRmo4AS?=
+ =?us-ascii?Q?38uKk4gXtg0D23ajCl40b0kix25qgaPSIK2KZK1hOrZRHd6/zsZfwS4YYEg8?=
+ =?us-ascii?Q?BX31tC2cBU5G/F5iK1JrbwjpXCQypwTlojjvBa27RZGJMKci8BATB4QXtdTo?=
+ =?us-ascii?Q?RyAdi/Ob15+jJ4osLYVIwGQFzrzQ6gLBYv8gf5dTB3GEq8KPMbDvz4w2Xvtf?=
+ =?us-ascii?Q?9rL8cffo4gGthrNVULXMfB5mBo872386tOaarah6RI9f/1uTeI/4rKckJc2o?=
+ =?us-ascii?Q?TnKQzdfglvDQm+SJUtLXNXAhBew4OJZ+utNUUI3CfkQfHfoizG3u3LChC8eG?=
+ =?us-ascii?Q?FNKpIQONVBe6FTwI7IAPFuFZccXtScja/o8wrMq+Vi81fFxvpW8lepcbu+De?=
+ =?us-ascii?Q?luLc+pvU5GPYjfseknrdITN3oyvhOcBrcJUD0TJmTc+aagrCgN2WLpQadaiL?=
+ =?us-ascii?Q?oxkWi8CMJRkFlwuQgB4txlK+gHGxhDUkYoKP/krkrVYKuOxc7rusznGbqdWv?=
+ =?us-ascii?Q?gsDFuNlM78EjDAlHv0EdpOuUJrgRnXFZY77tNyMeYncYwoOlFvTNSx73bOtA?=
+ =?us-ascii?Q?PLBUz8pXKzFgD/H6ITvdRyownObwHksl4McZHkvP0k9ZJg+OWVE9R7+C5oX0?=
+ =?us-ascii?Q?zuLYxyxROcGu1FYSNur78Gswi4t5J5i8/Z6QGNUeisPEwlI7V3RNFbxFZ1Bc?=
+ =?us-ascii?Q?TUtUSCW07GhRxkoF3O7IgIy5/wDQHCLZerXlDzF1MML6NWBiV0mFK2F+yfvv?=
+ =?us-ascii?Q?Qxxt5zmm1jRjZLS9rWuo?=
+X-OriginatorOrg: outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 37a8d3a1-6486-4766-ecf4-08dd3f2d6018
+X-MS-Exchange-CrossTenant-AuthSource: AM6PR03MB5080.eurprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Jan 2025 23:50:27.7160
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg:
+	00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR03MB6209
 
-On Sun, Jan 26, 2025 at 8:39=E2=80=AFAM Jordan Rome <linux@jordanrome.com> =
-wrote:
->
-> Similar to `access_process_vm` but specific to strings.
-> Also chunks reads by page and utilizes `strscpy`
-> for handling null termination.
->
-> Signed-off-by: Jordan Rome <linux@jordanrome.com>
-> ---
->  include/linux/mm.h |   3 ++
->  mm/memory.c        | 118 +++++++++++++++++++++++++++++++++++++++++++++
->  mm/nommu.c         |  67 +++++++++++++++++++++++++
->  3 files changed, 188 insertions(+)
->
-> diff --git a/include/linux/mm.h b/include/linux/mm.h
-> index f02925447e59..f3a05b3eb2f2 100644
-> --- a/include/linux/mm.h
-> +++ b/include/linux/mm.h
-> @@ -2485,6 +2485,9 @@ extern int access_process_vm(struct task_struct *ts=
-k, unsigned long addr,
->  extern int access_remote_vm(struct mm_struct *mm, unsigned long addr,
->                 void *buf, int len, unsigned int gup_flags);
->
-> +extern int copy_remote_vm_str(struct task_struct *tsk, unsigned long add=
-r,
-> +               void *buf, int len, unsigned int gup_flags);
-> +
->  long get_user_pages_remote(struct mm_struct *mm,
->                            unsigned long start, unsigned long nr_pages,
->                            unsigned int gup_flags, struct page **pages,
-> diff --git a/mm/memory.c b/mm/memory.c
-> index 398c031be9ba..e1ed5095b258 100644
-> --- a/mm/memory.c
-> +++ b/mm/memory.c
-> @@ -6714,6 +6714,124 @@ int access_process_vm(struct task_struct *tsk, un=
-signed long addr,
->  }
->  EXPORT_SYMBOL_GPL(access_process_vm);
->
-> +/*
-> + * Copy a string from another process's address space as given in mm.
-> + * If there is any error return -EFAULT.
-> + */
-> +static int __copy_remote_vm_str(struct mm_struct *mm, unsigned long addr=
-,
-> +                             void *buf, int len, unsigned int gup_flags)
-> +{
-> +       void *old_buf =3D buf;
-> +       int err =3D 0;
-> +
-> +       if (mmap_read_lock_killable(mm))
-> +               return -EFAULT;
-> +
-> +       /* Untag the address before looking up the VMA */
-> +       addr =3D untagged_addr_remote(mm, addr);
-> +
-> +       /* Avoid triggering the temporary warning in __get_user_pages */
-> +       if (!vma_lookup(mm, addr)) {
-> +               err =3D -EFAULT;
-> +               goto out;
-> +       }
-> +
-> +       while (len) {
-> +               int bytes, offset, retval;
-> +               void *maddr;
-> +               struct page *page;
-> +               struct vm_area_struct *vma =3D NULL;
-> +
-> +               page =3D get_user_page_vma_remote(mm, addr, gup_flags, &v=
-ma);
-> +
-> +               if (IS_ERR(page)) {
-> +                       /*
-> +                        * Treat as a total failure for now until we deci=
-de how
-> +                        * to handle the CONFIG_HAVE_IOREMAP_PROT case an=
-d
-> +                        * stack expansion.
-> +                        */
-> +                       err =3D -EFAULT;
-> +                       goto out;
-> +               }
-> +
-> +               bytes =3D len;
-> +               offset =3D addr & (PAGE_SIZE - 1);
-> +               if (bytes > PAGE_SIZE - offset)
-> +                       bytes =3D PAGE_SIZE - offset;
-> +
-> +               maddr =3D kmap_local_page(page);
-> +               retval =3D strscpy(buf, maddr + offset, bytes);
-> +               unmap_and_put_page(page, maddr);
-> +
-> +               if (retval > -1) {
+This patch adds bpf_fget_task() kfunc.
 
-nit: retval >=3D 0 is more conventional, -1 has no special meaning here
-(it's -EPERM, if anything), zero does
+bpf_fget_task() is used to get a pointer to the struct file
+corresponding to the task file descriptor. Note that this function
+acquires a reference to struct file.
 
-> +                       /* Found the end of the string */
-> +                       buf +=3D retval;
-> +                       goto out;
-> +               }
-> +
-> +               retval =3D bytes - 1;
-> +               buf +=3D retval;
-> +
-> +               if (bytes =3D=3D len)
-> +                       goto out;
-> +
-> +               /*
-> +                * Because strscpy always NUL terminates we need to
-> +                * copy the last byte in the page if we are going to
-> +                * load more pages
-> +                */
-> +               addr +=3D retval;
-> +               len -=3D retval;
-> +               copy_from_user_page(vma,
-> +                               page,
-> +                               addr,
-> +                               buf,
-> +                               maddr + (PAGE_SIZE - 1),
-> +                               1);
+Signed-off-by: Juntong Deng <juntong.deng@outlook.com>
+---
+ fs/bpf_fs_kfuncs.c | 18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
 
-just realized, you've already unmap_and_put_page(), and yet you are
-trying to access it here again. Seems like you'll need to delay that
-unmap_and_put
+diff --git a/fs/bpf_fs_kfuncs.c b/fs/bpf_fs_kfuncs.c
+index 3fe9f59ef867..4a810046dcf3 100644
+--- a/fs/bpf_fs_kfuncs.c
++++ b/fs/bpf_fs_kfuncs.c
+@@ -152,6 +152,23 @@ __bpf_kfunc int bpf_get_file_xattr(struct file *file, const char *name__str,
+ 	return bpf_get_dentry_xattr(dentry, name__str, value_p);
+ }
+ 
++/**
++ * bpf_fget_task() - Get a pointer to the struct file corresponding to
++ * the task file descriptor
++ *
++ * Note that this function acquires a reference to struct file.
++ *
++ * @task: the specified struct task_struct
++ * @fd: the file descriptor
++ *
++ * @returns the corresponding struct file pointer if found,
++ * otherwise returns NULL
++ */
++__bpf_kfunc struct file *bpf_fget_task(struct task_struct *task, unsigned int fd)
++{
++	return fget_task(task, fd);
++}
++
+ __bpf_kfunc_end_defs();
+ 
+ BTF_KFUNCS_START(bpf_fs_kfunc_set_ids)
+@@ -161,6 +178,7 @@ BTF_ID_FLAGS(func, bpf_put_file, KF_RELEASE)
+ BTF_ID_FLAGS(func, bpf_path_d_path, KF_TRUSTED_ARGS)
+ BTF_ID_FLAGS(func, bpf_get_dentry_xattr, KF_SLEEPABLE | KF_TRUSTED_ARGS)
+ BTF_ID_FLAGS(func, bpf_get_file_xattr, KF_SLEEPABLE | KF_TRUSTED_ARGS)
++BTF_ID_FLAGS(func, bpf_fget_task, KF_ACQUIRE | KF_TRUSTED_ARGS | KF_RET_NULL)
+ BTF_KFUNCS_END(bpf_fs_kfunc_set_ids)
+ 
+ static int bpf_fs_kfuncs_filter(const struct bpf_prog *prog, u32 kfunc_id)
+-- 
+2.39.5
 
-also, stylistical nit: you have tons of short arguments, keep them on
-smaller number of lines, it's taking way too much vertical space for
-what it is
-
-Also, I was worried about non-zero terminated buf here. It still can
-happen if subsequent get_user_page_vma_remote() fails and we exit
-early, but we'll end up returning -EFAULT, so perhaps that's not a
-problem. On the other hand, it's trivial to do buf[1] =3D '\0'; to keep
-that buf always zero-terminated, so maybe I'd do that... And if we do
-buf[0] =3D '\0'; at the very beginning, we can document that
-copy_remote_vm_str() leaves valid zero-terminated buffer of whatever
-it managed to read before EFAULT, which isn't a bad property that
-basically comes for free, no?
-
-pw-bot: cr
-
-> +               len -=3D 1;
-> +               buf +=3D 1;
-> +               addr +=3D 1;
-> +       }
-> +
-> +out:
-> +       mmap_read_unlock(mm);
-> +       if (err)
-> +               return err;
-> +
-> +       return buf - old_buf;
-> +}
-> +
-> +/**
-> + * copy_remote_vm_str - copy a string from another process's address spa=
-ce.
-> + * @tsk:       the task of the target address space
-> + * @addr:      start address to read from
-> + * @buf:       destination buffer
-> + * @len:       number of bytes to copy
-> + * @gup_flags: flags modifying lookup behaviour
-> + *
-> + * The caller must hold a reference on @mm.
-> + *
-> + * Return: number of bytes copied from @addr (source) to @buf (destinati=
-on);
-> + * not including the trailing NUL. On any error, return -EFAULT.
-
-"On success, leaves a properly NUL-terminated buffer." (or if we do
-adjustments I suggested above we can even say "Even on error will
-leave properly NUL-terminated buffer with contents that was
-successfully read before -EFAULT", or something along those lines).
-
-> + */
-> +int copy_remote_vm_str(struct task_struct *tsk, unsigned long addr,
-> +               void *buf, int len, unsigned int gup_flags)
-> +{
-> +       struct mm_struct *mm;
-> +       int ret;
-> +
-> +       mm =3D get_task_mm(tsk);
-> +       if (!mm)
-> +               return -EFAULT;
-> +
-> +       ret =3D __copy_remote_vm_str(mm, addr, buf, len, gup_flags);
-> +
-> +       mmput(mm);
-> +
-> +       return ret;
-> +}
-> +EXPORT_SYMBOL_GPL(copy_remote_vm_str);
-> +
->  /*
->   * Print the name of a VMA.
->   */
-> diff --git a/mm/nommu.c b/mm/nommu.c
-> index 9cb6e99215e2..ce24ea829c73 100644
-> --- a/mm/nommu.c
-> +++ b/mm/nommu.c
-> @@ -1701,6 +1701,73 @@ int access_process_vm(struct task_struct *tsk, uns=
-igned long addr, void *buf, in
->  }
->  EXPORT_SYMBOL_GPL(access_process_vm);
->
-> +/*
-> + * Copy a string from another process's address space as given in mm.
-> + * If there is any error return -EFAULT.
-> + */
-> +static int __copy_remote_vm_str(struct mm_struct *mm, unsigned long addr=
-,
-> +                             void *buf, int len)
-> +{
-> +       int ret;
-> +       struct vm_area_struct *vma;
-> +
-> +       if (mmap_read_lock_killable(mm))
-> +               return -EFAULT;
-> +
-> +       /* the access must start within one of the target process's mappi=
-ngs */
-> +       vma =3D find_vma(mm, addr);
-> +       if (vma) {
-> +               /* don't overrun this mapping */
-> +               if (addr + len >=3D vma->vm_end)
-
-Should we worry about overflows here? check_add_overflow() maybe?
-
-> +                       len =3D vma->vm_end - addr;
-> +
-> +               /* only read mappings where it is permitted */
-> +               if (vma->vm_flags & VM_MAYREAD) {
-> +                       ret =3D strscpy(buf, (char *)addr, len);
-> +                       if (ret < 0)
-> +                               ret =3D len - 1;
-> +               } else {
-> +                       ret =3D -EFAULT;
-> +               }
-> +       } else {
-> +               ret =3D -EFAULT;
-> +       }
-> +
-
-nit: might be cleaner to have `ret =3D -EFAULT;` before `if (vma)` and
-only set ret on success/overflow?
-
-> +       mmap_read_unlock(mm);
-> +       return ret;
-> +}
-> +
-> +/**
-> + * copy_remote_vm_str - copy a string from another process's address spa=
-ce.
-> + * @tsk:       the task of the target address space
-> + * @addr:      start address to read from
-> + * @buf:       destination buffer
-> + * @len:       number of bytes to copy
-> + * @gup_flags: flags modifying lookup behaviour (unused)
-> + *
-> + * The caller must hold a reference on @mm.
-> + *
-> + * Return: number of bytes copied from @addr (source) to @buf (destinati=
-on);
-> + * not including the trailing NUL. On any error, return -EFAULT.
-> + */
-> +int copy_remote_vm_str(struct task_struct *tsk, unsigned long addr,
-> +               void *buf, int len, unsigned int gup_flags)
-> +{
-> +       struct mm_struct *mm;
-> +       int ret;
-> +
-> +       mm =3D get_task_mm(tsk);
-> +       if (!mm)
-> +               return -EFAULT;
-> +
-> +       ret =3D __copy_remote_vm_str(mm, addr, buf, len);
-> +
-> +       mmput(mm);
-> +
-> +       return ret;
-> +}
-> +EXPORT_SYMBOL_GPL(copy_remote_vm_str);
-> +
->  /**
->   * nommu_shrink_inode_mappings - Shrink the shared mappings on an inode
->   * @inode: The inode to check
-> --
-> 2.43.5
->
->
