@@ -1,139 +1,181 @@
-Received: from mail-qv1-f51.google.com (mail-qv1-f51.google.com [209.85.219.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF4A01DF987
-	for <bpf@vger.kernel.org>; Wed, 29 Jan 2025 17:34:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B63011E04BE;
+	Wed, 29 Jan 2025 17:39:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738172060; cv=none; b=UsKsYIi2iVyGnHwHhx9Z1nENNfuy8voW4lykgy0Fgt+I2Cwx8d15p3PNOgWh4yYOkQF0NpNq0Mw8CqQRrcdCEWcgrtBICQG1Juyq093b6Jjp8nv1bDUYVguePBp2UIcip6VXBZw4jwAlaatlaWsb1gu9J6CgnP1nnQnzhitNUZw=
+	t=1738172365; cv=none; b=mls5JlNtTbo+QNGORbl+3mDIlZf+lAEfCB9RAHU7nucjyxZCnXblWOnxxjO6HnZxk31/MzSI+Sdqv/Mkl23V9aThHSgNIcViKxQP1kSxIOZc0uh5j/oCF4WEVxF/bolHMnzoNMKKKeJ3mK9/3dP++i8YjXyZ0Xq/w6jNWtIQOa8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738172060; c=relaxed/simple;
-	bh=zGljS/9FhfUb47+VGIh8ikTRIRMMgOhXhmPgPUZSEIw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HF4mucosrc6EMCkCWLvN7O2MaZo2hKhZUiLSVmkAvwv05yfOaJmsgRNSoZ3gvtAW7D3KQ3sPEjdJUNbcRKjfDfNxdPKvr4UpL8OY/qFUkW2z6+7UdILOB5aor58xZ33unxxn6+MpzW3wLCVeXIaCK51NNttmdvjJ2k79U5tmGbo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fastly.com; spf=pass smtp.mailfrom=fastly.com; dkim=pass (1024-bit key) header.d=fastly.com header.i=@fastly.com header.b=kYZqUmTd; arc=none smtp.client-ip=209.85.219.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fastly.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fastly.com
+	s=arc-20240116; t=1738172365; c=relaxed/simple;
+	bh=tm9z92Tyd3NRl4GzuFEN85tCt2NQbLxHfOBfSXqmLqg=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=ZVCzvzkzA/cYXAbqGKPJbwXg0ny2DRj091TqHYcw3s9Jzr9L8JqAzdkswSS3qLXylloSBjRgFxjoDq+7l8fb64tRcYIbpdCyHhR5T6uJLnLC7ZzDB660uFIwgx6ihlkc66MjOTFt/DZFHCVKFFf3Oi9kMNiVe7S/qODKrRwY8TA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cN8X7ixM; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=fastly.com header.i=@fastly.com header.b="kYZqUmTd"
-Received: by mail-qv1-f51.google.com with SMTP id 6a1803df08f44-6dcd4f1aaccso105784156d6.2
-        for <bpf@vger.kernel.org>; Wed, 29 Jan 2025 09:34:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fastly.com; s=google; t=1738172058; x=1738776858; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references
-         :mail-followup-to:message-id:subject:cc:to:from:date:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=GoQDpS1qfePfDFzhVnadb3EAh/sAqIsSZHWqGtMfdWk=;
-        b=kYZqUmTdziQYxynReb2cOavmQh9Jbl2OPXXLWAvTm018EAB5qFGONw5033h0NrQ6Wj
-         FXzIO/y3Oq4mCBQdTi7sGutH/TecQgxbOpfIMmom7EFgQtNYt8qNgpzNX/0vWXFVHDgt
-         f95BWMSqFtTfLlUo/DxgNQuJc+bUBUo7flIb4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738172058; x=1738776858;
-        h=in-reply-to:content-disposition:mime-version:references
-         :mail-followup-to:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=GoQDpS1qfePfDFzhVnadb3EAh/sAqIsSZHWqGtMfdWk=;
-        b=Lq2Fg9PhJufMLdUgD/N4luM3H2iHAoo2jnvEWP/AmFP3A6QwJzSaV/3xxIAtw0WVni
-         xBNJDGZA86Vdx88K0TUseObj0t6f0ee7qXoCC//3imwr1X0zrFLBS6OGwzpwazMg5jBT
-         BqzAf4fwxzPYp4IyqBFa+18LPp33JsRpqqpU1NUA2SGV03KmQgtC0zaP+MHB292t1dKe
-         SB0S5rl3qJAigQGv63sro1HZfMMEReOwjiyKPXBlI1kIA2iiIjaN7kiukEKhjjr5cDdW
-         0v7+lpUYZe+lxXnH3Sqxv04Ox175E0x4LxYdMZ258w+1ljp0zLLZ0XvmI/C4mgHjSHcN
-         QIbw==
-X-Forwarded-Encrypted: i=1; AJvYcCXHH/Km3IubUbcDd9F849TAfcSFfI4w18DJwsApd83ZWiDg/KRq6Q2b6PjhjaDvKwgb0hs=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy4yvHvq24EA7R9VAhv0VPnapLRLdeIOw+0FU/sWRQzRww6ZNj3
-	4Gwn5rXQHcDL1MhF9xxbWoCL/o0rlsphHlDVC7eZy39DE6JCQ/7eWlw/vnaLaCo=
-X-Gm-Gg: ASbGncv+R3glqdUlIHf6qV7qcS46CbtttxUoh4UxC2uO6CcVEQao/pgvBAV7WobVU81
-	gguUi7Rr0GhgGj3dq1rhANNibTejpifgZWAFIRE9em1PcYVn6HjYMGb79TKjgFO2rVqFWMHxhat
-	1SCAmS7p5FaCgAkHeJUCXK3We11NCkowPPJQr4TC+WrvYKX2E1p2qzq0uhG31yevMGWyKXKq0If
-	8Q0myfj16VF9IAqmEBHcqQtaCGuYycEv3QWkvlhkBpL6NfDa02jq1SF6LzYuCdGQCs421NGmC1A
-	B7ZONRzKDNhCDn0TxHn9YZenHda8m6L8y+MKlVKvkiKkq3Har1RALQ==
-X-Google-Smtp-Source: AGHT+IF4BBG8e6/7GOvUoRvTwqooHavsdcNd1DktR9rvgjZFPh+v5/6zznBp3CHsRrcIltj/YWsCgg==
-X-Received: by 2002:a05:6214:1307:b0:6d4:e0a:230e with SMTP id 6a1803df08f44-6e243bbba57mr62866726d6.16.1738172057768;
-        Wed, 29 Jan 2025 09:34:17 -0800 (PST)
-Received: from LQ3V64L9R2 (ool-44c5a22e.dyn.optonline.net. [68.197.162.46])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6e20525aabcsm56814206d6.58.2025.01.29.09.34.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Jan 2025 09:34:17 -0800 (PST)
-Date: Wed, 29 Jan 2025 12:34:15 -0500
-From: Joe Damato <jdamato@fastly.com>
-To: netdev@vger.kernel.org
-Cc: sridhar.samudrala@intel.com, Alexei Starovoitov <ast@kernel.org>,
-	Amritha Nambiar <amritha.nambiar@intel.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"open list:XDP (eXpress Data Path):Keyword:(?:b|_)xdp(?:b|_)" <bpf@vger.kernel.org>,
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cN8X7ixM"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3CAA6C4CEE4;
+	Wed, 29 Jan 2025 17:39:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1738172365;
+	bh=tm9z92Tyd3NRl4GzuFEN85tCt2NQbLxHfOBfSXqmLqg=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=cN8X7ixMMDSVpTaeIMp29MOxLREgALMK2u9F4VlYyFaobmQu5QdG/L0XuG1tEr40p
+	 YoPVkZiOo4cjemjzj1JoyGHTPf+uf5XqJZdiDz5+rYvwP9uF36oIZgQI8hp/YADmbx
+	 UN2OqCDhvtU+QQG0pJ+l+07jLLzCSUpRuuJyHk+27N0kGd4MEhOkp1Fq0zIpxQ3w3J
+	 tHMlIO7AjOvol/Wer+MeSiKYyir89/hVoNggaP/tgRwz+tQBrOOAVAEGBxVCl49PY9
+	 dijr4MgzmzxItduwnvhwCKfQtWsVt2EGWMEerIRAJik8PlZXCdULZov9OZCdkIJO2B
+	 9Z/WX3XqPSvcw==
+Received: from mchehab by mail.kernel.org with local (Exim 4.98)
+	(envelope-from <mchehab+huawei@kernel.org>)
+	id 1tdC26-00000004SdU-3ekY;
+	Wed, 29 Jan 2025 18:39:22 +0100
+From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+To: Jonathan Corbet <corbet@lwn.net>,
+	Linux Doc Mailing List <linux-doc@vger.kernel.org>
+Cc: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+	"Mauro Carvalho Chehab" <mchehab+huawei@kernel.org>,
+	Alexei Starovoitov <mchehab+huawei@kernel.org>,
+	Andrii Nakryiko <mchehab+huawei@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
-	"David S. Miller" <davem@davemloft.net>,
-	Donald Hunter <donald.hunter@gmail.com>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <mchehab+huawei@kernel.org>,
 	John Fastabend <john.fastabend@gmail.com>,
-	open list <linux-kernel@vger.kernel.org>,
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
-	Martin Karsten <mkarsten@uwaterloo.ca>,
-	Mina Almasry <almasrymina@google.com>,
-	Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
-	Simon Horman <horms@kernel.org>,
+	KP Singh <mchehab+huawei@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Mykola Lysenko <mykolal@fb.com>,
+	Shuah Khan <mchehab+huawei@kernel.org>,
+	Song Liu <mchehab+huawei@kernel.org>,
 	Stanislav Fomichev <sdf@fomichev.me>,
-	Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-Subject: Re: [RFC net-next 0/2] netdevgenl: Add an xsk attribute to queues
-Message-ID: <Z5pml3Hn3m3Km7Yk@LQ3V64L9R2>
-Mail-Followup-To: Joe Damato <jdamato@fastly.com>, netdev@vger.kernel.org,
-	sridhar.samudrala@intel.com, Alexei Starovoitov <ast@kernel.org>,
-	Amritha Nambiar <amritha.nambiar@intel.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"open list:XDP (eXpress Data Path):Keyword:(?:b|_)xdp(?:b|_)" <bpf@vger.kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	"David S. Miller" <davem@davemloft.net>,
-	Donald Hunter <donald.hunter@gmail.com>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	open list <linux-kernel@vger.kernel.org>,
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
-	Martin Karsten <mkarsten@uwaterloo.ca>,
-	Mina Almasry <almasrymina@google.com>,
-	Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
-	Simon Horman <horms@kernel.org>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-References: <20250129172431.65773-1-jdamato@fastly.com>
+	Yonghong Song <yonghong.song@linux.dev>,
+	bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH 5/6] tools: selftests/bpf: test_bpftool_synctypes: escape raw symbols
+Date: Wed, 29 Jan 2025 18:39:07 +0100
+Message-ID: <12d8c07cc7bcea017f67774741f9a59d04c2f20d.1738171937.git.mchehab+huawei@kernel.org>
+X-Mailer: git-send-email 2.48.1
+In-Reply-To: <cover.1738171937.git.mchehab+huawei@kernel.org>
+References: <cover.1738171937.git.mchehab+huawei@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250129172431.65773-1-jdamato@fastly.com>
+Content-Transfer-Encoding: 8bit
+Sender: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 
-On Wed, Jan 29, 2025 at 05:24:23PM +0000, Joe Damato wrote:
-> Greetings:
-> 
-> This is an attempt to followup on something Jakub asked me about [1],
-> adding an xsk attribute to queues and more clearly documenting which
-> queues are linked to NAPIs...
-> 
-> But:
-> 
-> 1. I couldn't pick a good "thing" to expose as "xsk", so I chose 0 or 1.
->    Happy to take suggestions on what might be better to expose for the
->    xsk queue attribute.
-> 
-> 2. I create a silly C helper program to create an XDP socket in order to
->    add a new test to queues.py. I'm not particularly good at python
->    programming, so there's probably a better way to do this. Notably,
->    python does not seem to have a socket.AF_XDP, so I needed the C
->    helper to make a socket and bind it to a queue to perform the test.
-> 
-> Tested this on my mlx5 machine and the test seems to pass.
+Modern Python versions complain about usage of "\" inside normal
+strings, as they should use r-string notation.
 
-I should have been slightly more specific, I ran queues.py two ways:
+Change the annotations there to avoid such warnings:
 
-1. By setting NETIF= to my mlx5 NIC
-2. By just running queues.py (without NETIF) set (which I presume
-   uses netdevsim)
+	tools/testing/selftests/bpf/test_bpftool_synctypes.py:319: SyntaxWarning: invalid escape sequence '\w' pattern = re.compile('([\w-]+) ?(?:\||}[ }\]"])')
 
-The test passes in both cases.
+Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+---
+ .../selftests/bpf/test_bpftool_synctypes.py   | 30 +++++++++----------
+ 1 file changed, 15 insertions(+), 15 deletions(-)
+
+diff --git a/tools/testing/selftests/bpf/test_bpftool_synctypes.py b/tools/testing/selftests/bpf/test_bpftool_synctypes.py
+index 0ed67b6b31dd..81f286991012 100755
+--- a/tools/testing/selftests/bpf/test_bpftool_synctypes.py
++++ b/tools/testing/selftests/bpf/test_bpftool_synctypes.py
+@@ -66,7 +66,7 @@ class ArrayParser(BlockParser):
+ 
+     def __init__(self, reader, array_name):
+         self.array_name = array_name
+-        self.start_marker = re.compile(f'(static )?const bool {self.array_name}\[.*\] = {{\n')
++        self.start_marker = re.compile(fr'(static )?const bool {self.array_name}\[.*\] = {{\n')
+         super().__init__(reader)
+ 
+     def search_block(self):
+@@ -80,7 +80,7 @@ class ArrayParser(BlockParser):
+         Parse a block and return data as a dictionary. Items to extract must be
+         on separate lines in the file.
+         """
+-        pattern = re.compile('\[(BPF_\w*)\]\s*= (true|false),?$')
++        pattern = re.compile(r'\[(BPF_\w*)\]\s*= (true|false),?$')
+         entries = set()
+         while True:
+             line = self.reader.readline()
+@@ -177,9 +177,9 @@ class FileExtractor(object):
+ 
+         @enum_name: name of the enum to parse
+         """
+-        start_marker = re.compile(f'enum {enum_name} {{\n')
+-        pattern = re.compile('^\s*(BPF_\w+),?(\s+/\*.*\*/)?$')
+-        end_marker = re.compile('^};')
++        start_marker = re.compile(fr'enum {enum_name} {{\n')
++        pattern = re.compile(r'^\s*(BPF_\w+),?(\s+/\*.*\*/)?$')
++        end_marker = re.compile(r'^};')
+         parser = BlockParser(self.reader)
+         parser.search_block(start_marker)
+         return parser.parse(pattern, end_marker)
+@@ -226,8 +226,8 @@ class FileExtractor(object):
+ 
+         @block_name: name of the blog to parse, 'TYPE' in the example
+         """
+-        start_marker = re.compile(f'\*{block_name}\* := {{')
+-        pattern = re.compile('\*\*([\w/-]+)\*\*')
++        start_marker = re.compile(fr'\*{block_name}\* := {{')
++        pattern = re.compile(r'\*\*([\w/-]+)\*\*')
+         end_marker = re.compile('}\n')
+         return self.__get_description_list(start_marker, pattern, end_marker)
+ 
+@@ -245,8 +245,8 @@ class FileExtractor(object):
+ 
+         @block_name: name of the blog to parse, 'TYPE' in the example
+         """
+-        start_marker = re.compile(f'"\s*{block_name} := {{')
+-        pattern = re.compile('([\w/]+) [|}]')
++        start_marker = re.compile(fr'"\s*{block_name} := {{')
++        pattern = re.compile(r'([\w/]+) [|}]')
+         end_marker = re.compile('}')
+         return self.__get_description_list(start_marker, pattern, end_marker)
+ 
+@@ -264,8 +264,8 @@ class FileExtractor(object):
+ 
+         @macro: macro starting the block, 'HELP_SPEC_OPTIONS' in the example
+         """
+-        start_marker = re.compile(f'"\s*{macro}\s*" [|}}]')
+-        pattern = re.compile('([\w-]+) ?(?:\||}[ }\]])')
++        start_marker = re.compile(fr'"\s*{macro}\s*" [|}}]')
++        pattern = re.compile(r'([\w-]+) ?(?:\||}[ }\]])')
+         end_marker = re.compile('}\\\\n')
+         return self.__get_description_list(start_marker, pattern, end_marker)
+ 
+@@ -284,7 +284,7 @@ class FileExtractor(object):
+         @block_name: name of the blog to parse, 'TYPE' in the example
+         """
+         start_marker = re.compile(f'local {block_name}=\'')
+-        pattern = re.compile('(?:.*=\')?([\w/]+)')
++        pattern = re.compile(r'(?:.*=\')?([\w/]+)')
+         end_marker = re.compile('\'$')
+         return self.__get_description_list(start_marker, pattern, end_marker)
+ 
+@@ -316,7 +316,7 @@ class MainHeaderFileExtractor(SourceFileExtractor):
+             {'-p', '-d', '--pretty', '--debug', '--json', '-j'}
+         """
+         start_marker = re.compile(f'"OPTIONS :=')
+-        pattern = re.compile('([\w-]+) ?(?:\||}[ }\]"])')
++        pattern = re.compile(r'([\w-]+) ?(?:\||}[ }\]"])')
+         end_marker = re.compile('#define')
+ 
+         parser = InlineListParser(self.reader)
+@@ -338,8 +338,8 @@ class ManSubstitutionsExtractor(SourceFileExtractor):
+ 
+             {'-p', '-d', '--pretty', '--debug', '--json', '-j'}
+         """
+-        start_marker = re.compile('\|COMMON_OPTIONS\| replace:: {')
+-        pattern = re.compile('\*\*([\w/-]+)\*\*')
++        start_marker = re.compile(r'\|COMMON_OPTIONS\| replace:: {')
++        pattern = re.compile(r'\*\*([\w/-]+)\*\*')
+         end_marker = re.compile('}$')
+ 
+         parser = InlineListParser(self.reader)
+-- 
+2.48.1
+
