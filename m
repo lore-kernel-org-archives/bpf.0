@@ -1,245 +1,188 @@
-Received: from mail-ot1-f48.google.com (mail-ot1-f48.google.com [209.85.210.48])
+Received: from mail-oo1-f48.google.com (mail-oo1-f48.google.com [209.85.161.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DB6028EB;
-	Wed, 29 Jan 2025 17:28:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0771F149C50
+	for <bpf@vger.kernel.org>; Wed, 29 Jan 2025 17:32:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738171682; cv=none; b=Gd9Uz7/lBQ4eCNMLoS4pqVJz1TTLv4UreQ/hTdlBWnbjn6avBOcPDTHfubfZXU7KubxyC++me1j+mQE+NvzOCOXrYdVN7M6FP27iE0K5uNDE7SzZ7jt84m0Two5oGKMZ7/RRWR1+BjmIcjNTlSW4rSBAopAZhBtYSBo5Ib3ulqM=
+	t=1738171966; cv=none; b=lnGuArpye3mAiRYKX3mZNWwDQnAEBcJ6V2m66V8Ugj/tlMQSU6eV18vb+/5y46DXVinJoP6Uq5pd1OhQqcxVh/qB28mQqTLNZ7eHqvVISs9UgH2oCStVZjNAjY04DU42sMyJS5Tn7s8WZkHjyP+LX3LZ9nGn4PrN3peiGTW1Nww=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738171682; c=relaxed/simple;
-	bh=yZW1QwC+l0JQ5TqrVAhLNEjfHoq71wxzLMEz3t23Kf4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=qDFEPIY+Z6G28J/lbnz0lfouV5tTnirgNKSCGL+goaHLaG/Vw6GPKw51Xoy8YByskOi6NcN1OjuSSuUmb5MQeYGmD1Cww9SqUFy1c+dJ818tU6eWyr/YV99keigmAEYlmH1w1DwegUoalF3wsVnfvvyT/jh9HAWQnrNXabXTaY0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BPw+KBPd; arc=none smtp.client-ip=209.85.210.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1738171966; c=relaxed/simple;
+	bh=bzI2HF00fiDQjFXMHdTBDTNovNNwt3zxrGTPuK/4xm4=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=rnWjMqXb4TD3PVTU2GGoQ6+k/r2jIhh0xZdMzWBPlns5G4Pwoksr5a20SYmB4MKGA/T39ozkk7Jqnh1x79a4Yi6Ulcvd8yN2ZdYZNCFjUx8akMnYNgui3Hv+WGOhUuq3MBv3+IArnWf9AV1ivnT4bsKqcGUs8F2GDEg1OqIj7vE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=SQHcc07h; arc=none smtp.client-ip=209.85.161.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=broadcom.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BPw+KBPd"
-Received: by mail-ot1-f48.google.com with SMTP id 46e09a7af769-71e2aa8d5e3so3780935a34.2;
-        Wed, 29 Jan 2025 09:28:00 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="SQHcc07h"
+Received: by mail-oo1-f48.google.com with SMTP id 006d021491bc7-5fc0c06e1deso166523eaf.1
+        for <bpf@vger.kernel.org>; Wed, 29 Jan 2025 09:32:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1738171679; x=1738776479; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=broadcom.com; s=google; t=1738171964; x=1738776764; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=H9DYF2bVd2WYr3RnZr8LmxQYUCwZNVcKB83e7JFc1AU=;
-        b=BPw+KBPdX9lVBePQBkwJTz90LP6xd8PDwtsQmSvFrN8xmd/GQO8XG+cgmlc6T6t5/J
-         5ijCOybrg0cepi3l1YTRLGh89lJ7/1QLkPyHUkoqvinek/BZiYz3JHMHbXn4i8xdfcTa
-         2En3kl+W40vioR4dmj3kICA7dK2Kw43OVmuItpD4eAL/h0cF9s6syH/LGuQP1e/kIDnQ
-         bz0vCNrLoBsCyjLf2yPRCkFch6w3Cizug3uKuexcaHD8h+MBnC20HgwJbGsZwT3R60Ga
-         hEDMhrZ5qCWTKr0+UQXKRzcPH4rjwv7KOYd9Tf5tHWFIAX9Zd+rT3+oRXZ9SVJnviP+v
-         fk8g==
+        bh=+mmqNHhmNdxqC4g8IfZMWhVXE5QHm3xsHzzSXQvlgXs=;
+        b=SQHcc07hsid9ukcKvxFdI1BTp5rBtFyJBC5nH0X+/JMyzpi0dLSOfG+AN1p1wU5MA6
+         krznTPLO6uXGEA4cR9Mey7xHJRyEyjoxwRWY2RZ+FX3iUFRwQUycrS5yKX17Nc4rpHxn
+         NVwd+sGA7nWCgEqGhkKvCH7LBmeA1KOHu+uwo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738171679; x=1738776479;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1738171964; x=1738776764;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=H9DYF2bVd2WYr3RnZr8LmxQYUCwZNVcKB83e7JFc1AU=;
-        b=P6Bo6ivhEPea1eOcj2H9b5hoy02SlHFyFC9fR3w62+mKopSgrhOxGw4j0+0ADkK0sS
-         w0FSkMLEJmg3qSio69Ek6N+PqwrGzn6B9DS82lPzuBTQ4WMLaQfARfQxO6hHBI9Wrmx4
-         RCtAEc4RmHeTbUsxNdePWfHR8tFVGKwQeRKAvHrMT1b84Pu3j95YP/lB4eoSine3Fbzl
-         sY6MWzV7XutObdCCuQI6o7ZZmXnM+yAqA+OPk3Vj4MkNCo+0uy84PioIT13ZNroy8JRY
-         KgOJajfJMGY9ZQT9A/CPpGXdX4hALtSBGbK6yBTWxt3sU8q+9ORIrHCcWKx1ZJ9t0EWA
-         K6zQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWyV+LDbBFJfnFjhwKHN5HY4/9HZsWm61pzil7YB2TlARAjK4yFQPf5eJSHwTdZYFavqq8=@vger.kernel.org, AJvYcCX+4ur8V3G3JZQBCg48x6BsbtTUQNsvzZm9n/aZRIIYh+yGTii91ufKDNi0rMYY4rYAQ+5ZDO29+R2yh/7T@vger.kernel.org, AJvYcCXknOL39obAFKT1MdCPWsze1nCFfs2E/kaET8827NwGShyAmTIKkVc1e/Exo831dfynyY8zYFCMAaQf@vger.kernel.org, AJvYcCXlBeiragPKzcDjXx9XMUBAmAgW1VAOwWTYZgME5Bzwr3bCiKphtYTtQUMQG9JU0LPFnnwjY6OK@vger.kernel.org, AJvYcCXsfzakpYXrJs+zZGufs7Z0Hs6McMJSXrFcSqXh/dD4OFmHBsypSU/G1I3enkUkY98Rs1pp8mG9MC9NTZenLlzQR0Wl@vger.kernel.org
-X-Gm-Message-State: AOJu0YyGtVJB+oFPhwXWotRDWIev1Xci0Lj/2o1NFY64NY0dS2LFEXvX
-	OZkCKLdwajRz4zu93czkYMn8BX3coqATbFeytECSSJe8MzdBlXPBy14tHoDVFro59rNlNPwpOpI
-	II92OLtcJBy2p5jOMOfT8BoAvnxw=
-X-Gm-Gg: ASbGncslzMp22MgbT+5Z0mPfbTQxMqxusnRffi3QP0TGLYSwJQQ6yA+WXujPL1q9v7/
-	d6yIcMgIZt4AzEYEsVQ37/l5E1PVB36O0563+6uFI5rMOKCIi2CKWG6kVDoQbzgGX0mHtnp8xAu
-	l0zEKvUtw=
-X-Google-Smtp-Source: AGHT+IF1pXcGoJP6dVTYq0ejDryQaqkzioP0ZZgGSRGq8urNRacRLo/NAEqFz4POQb6pGT8s0i/QpSW2hsT7dCKY1jE=
-X-Received: by 2002:a05:6871:8112:b0:29e:6ae2:442 with SMTP id
- 586e51a60fabf-2b32f45dbdcmr2149959fac.32.1738171679347; Wed, 29 Jan 2025
- 09:27:59 -0800 (PST)
+        bh=+mmqNHhmNdxqC4g8IfZMWhVXE5QHm3xsHzzSXQvlgXs=;
+        b=gpFjBBQ9WwtpyFpJfdjGfcY2b1ZhOMctGgADuug7ovu6O46o9KCB6UQgMZS89iBisw
+         ge5+aRT6CdAB/G1g+jWbOKmvPV09Yz3W6T8FWH0ZxfYTNe1/eOcnFJ7GqCQusZUavt7l
+         PqC6ykX/sv/AeQScGT9ODxmHAlBQ6+3/HV2V0TV3Q2znpe3w6lmyMz09SweKqIy2XECz
+         q+Oh7OyFxtpIQqLxMC+25twoCiP/GSoAMlQPEKW4y2Vl7wvazlA0ZwALpPG/tw/bPzVI
+         VkXCPGKenDyZKIvRngdkiR3FyJuPjpIRxTuqY31KG5j4BnZ/XTLuMKjXqorfXM8GXK/s
+         6rrw==
+X-Forwarded-Encrypted: i=1; AJvYcCWUMr/PZVLymuip1eF/DT/OrxPHDMdWbTHg0jOKGb1uSE3a6/lL1Q4frBTFlpEKzQDXik0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzUcok/DvFFkIg/EALJgP4mJzIPfhfsE9shzlPpEf+YDEufUmKE
+	jEYRS2jbh4C/SmAeboTE2ldvJ/I5bpmx2LjP7pnYamp6I0tM3nL7ToW3M0TXlg==
+X-Gm-Gg: ASbGncvZbXYA9y1i3frc9GBerVU6uMvzcFfA34S4cpg5z7nKRY/bpAWFM5abOdzLWWv
+	CtbcdV0koHmbM9pNh2QLbr0BCLPBZPynzKSu8VVPnZd7r9pvG1ubKQsFj2NxMwvFlGYHl/xrv2L
+	SVLZGxryMcu0KlMvAJpt8Vq5TLhZ4B9qVRxSaYHLGEqA42e0FCJq9axl25AZln9UmVEg9DWe1iX
+	hgGAuhrGoYDqYITatGPGK8eAaEwPDauLXB6XEnJm+rZYoWyO32dGcca0aqu2a1CuIJRZqbYDKtb
+	Eo+ohSnfPab1HFLbUzHtAIo5TtPKpXwAHmMnTw8b6IfjFUKHoVeZWw6z9JFtDdvzQgfQ80iPv2k
+	ZiMbVem8tu5GNWx7vZgKqOLkrPO6D
+X-Google-Smtp-Source: AGHT+IFFBOio0yS/W6+Ih6T9hzMuo5ZubUZrMuApePYc4nO6eAq1BblChDvzYJG9wtKlB2BVi3YxWg==
+X-Received: by 2002:a05:6820:810a:b0:5fa:4c16:e641 with SMTP id 006d021491bc7-5fc00297daamr2598155eaf.3.1738171964013;
+        Wed, 29 Jan 2025 09:32:44 -0800 (PST)
+Received: from sankartest7x-virtual-machine.lvn.broadcom.net ([192.19.161.250])
+        by smtp.gmail.com with ESMTPSA id 006d021491bc7-5fa8b5296e5sm3623678eaf.7.2025.01.29.09.32.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Jan 2025 09:32:42 -0800 (PST)
+From: Sankararaman Jayaraman <sankararaman.jayaraman@broadcom.com>
+To: kuba@kernel.org
+Cc: alexanderduyck@fb.com,
+	alexandr.lobakin@intel.com,
+	andrew+netdev@lunn.ch,
+	ast@kernel.org,
+	bcm-kernel-feedback-list@broadcom.com,
+	bpf@vger.kernel.org,
+	daniel@iogearbox.net,
+	davem@davemloft.net,
+	edumazet@google.com,
+	hawk@kernel.org,
+	john.fastabend@gmail.com,
+	netdev@vger.kernel.org,
+	pabeni@redhat.com,
+	ronak.doshi@broadcom.com,
+	sankararaman.jayaraman@broadcom.com,
+	u9012063@gmail.com
+Subject: [PATCH net] vmxnet3: Fix tx queue race condition with XDP
+Date: Wed, 29 Jan 2025 23:04:15 +0530
+Message-Id: <20250129173414.147705-1-sankararaman.jayaraman@broadcom.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20250127143635.623dc3b0@kernel.org>
+References: <20250127143635.623dc3b0@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250128145806.1849977-1-eyal.birger@gmail.com> <202501281634.7F398CEA87@keescook>
-In-Reply-To: <202501281634.7F398CEA87@keescook>
-From: Eyal Birger <eyal.birger@gmail.com>
-Date: Wed, 29 Jan 2025 09:27:49 -0800
-X-Gm-Features: AWEUYZmCw0iV7STxf7CnZJL9uiMoGQeT-yPO8VpRtz--JZkEalZYokGfejTEU88
-Message-ID: <CAHsH6Gsv3DB0O5oiEDsf2+Go4O1+tnKm-Ab0QPyohKSaroSxxA@mail.gmail.com>
-Subject: Re: [PATCH v2] seccomp: passthrough uretprobe systemcall without filtering
-To: Kees Cook <kees@kernel.org>
-Cc: luto@amacapital.net, wad@chromium.org, oleg@redhat.com, 
-	mhiramat@kernel.org, andrii@kernel.org, jolsa@kernel.org, 
-	alexei.starovoitov@gmail.com, olsajiri@gmail.com, cyphar@cyphar.com, 
-	songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com, 
-	peterz@infradead.org, tglx@linutronix.de, bp@alien8.de, daniel@iogearbox.net, 
-	ast@kernel.org, andrii.nakryiko@gmail.com, rostedt@goodmis.org, rafi@rbk.io, 
-	shmulik.ladkani@gmail.com, bpf@vger.kernel.org, linux-api@vger.kernel.org, 
-	linux-trace-kernel@vger.kernel.org, x86@kernel.org, 
-	linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Hi,
+If XDP traffic runs on a CPU which is greater than or equal to
+the number of the Tx queues of the NIC, then vmxnet3_xdp_get_tq()
+always picks up queue 0 for transmission as it uses reciprocal scale
+instead of simple modulo operation.
 
-Thanks for the review!
+vmxnet3_xdp_xmit() and vmxnet3_xdp_xmit_frame() use the above
+returned queue without any locking which can lead to race conditions
+when multiple XDP xmits run in parallel on different CPU's.
 
-On Tue, Jan 28, 2025 at 5:41=E2=80=AFPM Kees Cook <kees@kernel.org> wrote:
->
-> On Tue, Jan 28, 2025 at 06:58:06AM -0800, Eyal Birger wrote:
-> > Note: uretprobe isn't supported in i386 and __NR_ia32_rt_tgsigqueueinfo
-> > uses the same number as __NR_uretprobe so the syscall isn't forced in t=
-he
-> > compat bitmap.
->
-> So a 64-bit tracer cannot use uretprobe on a 32-bit process? Also is
-> uretprobe strictly an x86_64 feature?
->
+This patch uses a simple module scheme when the current CPU equals or
+exceeds the number of Tx queues on the NIC. It also adds locking in
+vmxnet3_xdp_xmit() and vmxnet3_xdp_xmit_frame() functions.
 
-My understanding is that they'd be able to do so, but use the int3 trap
-instead of the uretprobe syscall.
+Fixes: 54f00cce1178 ("vmxnet3: Add XDP support.")
+Signed-off-by: Sankararaman Jayaraman <sankararaman.jayaraman@broadcom.com>
+Signed-off-by: Ronak Doshi <ronak.doshi@broadcom.com>
+---
+ drivers/net/vmxnet3/vmxnet3_xdp.c | 14 ++++++++++++--
+ 1 file changed, 12 insertions(+), 2 deletions(-)
 
-> > [...]
-> > diff --git a/kernel/seccomp.c b/kernel/seccomp.c
-> > index 385d48293a5f..23b594a68bc0 100644
-> > --- a/kernel/seccomp.c
-> > +++ b/kernel/seccomp.c
-> > @@ -734,13 +734,13 @@ seccomp_prepare_user_filter(const char __user *us=
-er_filter)
-> >
-> >  #ifdef SECCOMP_ARCH_NATIVE
-> >  /**
-> > - * seccomp_is_const_allow - check if filter is constant allow with giv=
-en data
-> > + * seccomp_is_filter_const_allow - check if filter is constant allow w=
-ith given data
-> >   * @fprog: The BPF programs
-> >   * @sd: The seccomp data to check against, only syscall number and arc=
-h
-> >   *      number are considered constant.
-> >   */
-> > -static bool seccomp_is_const_allow(struct sock_fprog_kern *fprog,
-> > -                                struct seccomp_data *sd)
-> > +static bool seccomp_is_filter_const_allow(struct sock_fprog_kern *fpro=
-g,
-> > +                                       struct seccomp_data *sd)
-> >  {
-> >       unsigned int reg_value =3D 0;
-> >       unsigned int pc;
-> > @@ -812,6 +812,21 @@ static bool seccomp_is_const_allow(struct sock_fpr=
-og_kern *fprog,
-> >       return false;
-> >  }
-> >
-> > +static bool seccomp_is_const_allow(struct sock_fprog_kern *fprog,
-> > +                                struct seccomp_data *sd)
-> > +{
-> > +#ifdef __NR_uretprobe
-> > +     if (sd->nr =3D=3D __NR_uretprobe
-> > +#ifdef SECCOMP_ARCH_COMPAT
-> > +         && sd->arch !=3D SECCOMP_ARCH_COMPAT
-> > +#endif
->
-> I don't like this because it's not future-proof enough. __NR_uretprobe
-> may collide with other syscalls at some point.
+diff --git a/drivers/net/vmxnet3/vmxnet3_xdp.c b/drivers/net/vmxnet3/vmxnet3_xdp.c
+index 1341374a4588..e3f94b3374f9 100644
+--- a/drivers/net/vmxnet3/vmxnet3_xdp.c
++++ b/drivers/net/vmxnet3/vmxnet3_xdp.c
+@@ -28,7 +28,7 @@ vmxnet3_xdp_get_tq(struct vmxnet3_adapter *adapter)
+ 	if (likely(cpu < tq_number))
+ 		tq = &adapter->tx_queue[cpu];
+ 	else
+-		tq = &adapter->tx_queue[reciprocal_scale(cpu, tq_number)];
++		tq = &adapter->tx_queue[cpu % tq_number];
+ 
+ 	return tq;
+ }
+@@ -124,6 +124,7 @@ vmxnet3_xdp_xmit_frame(struct vmxnet3_adapter *adapter,
+ 	u32 buf_size;
+ 	u32 dw2;
+ 
++	spin_lock(&tq->tx_lock);
+ 	dw2 = (tq->tx_ring.gen ^ 0x1) << VMXNET3_TXD_GEN_SHIFT;
+ 	dw2 |= xdpf->len;
+ 	ctx.sop_txd = tq->tx_ring.base + tq->tx_ring.next2fill;
+@@ -134,6 +135,7 @@ vmxnet3_xdp_xmit_frame(struct vmxnet3_adapter *adapter,
+ 
+ 	if (vmxnet3_cmd_ring_desc_avail(&tq->tx_ring) == 0) {
+ 		tq->stats.tx_ring_full++;
++		spin_unlock(&tq->tx_lock);
+ 		return -ENOSPC;
+ 	}
+ 
+@@ -142,8 +144,10 @@ vmxnet3_xdp_xmit_frame(struct vmxnet3_adapter *adapter,
+ 		tbi->dma_addr = dma_map_single(&adapter->pdev->dev,
+ 					       xdpf->data, buf_size,
+ 					       DMA_TO_DEVICE);
+-		if (dma_mapping_error(&adapter->pdev->dev, tbi->dma_addr))
++		if (dma_mapping_error(&adapter->pdev->dev, tbi->dma_addr)) {
++			spin_unlock(&tq->tx_lock);
+ 			return -EFAULT;
++		}
+ 		tbi->map_type |= VMXNET3_MAP_SINGLE;
+ 	} else { /* XDP buffer from page pool */
+ 		page = virt_to_page(xdpf->data);
+@@ -182,6 +186,7 @@ vmxnet3_xdp_xmit_frame(struct vmxnet3_adapter *adapter,
+ 	dma_wmb();
+ 	gdesc->dword[2] = cpu_to_le32(le32_to_cpu(gdesc->dword[2]) ^
+ 						  VMXNET3_TXD_GEN);
++	spin_unlock(&tq->tx_lock);
+ 
+ 	/* No need to handle the case when tx_num_deferred doesn't reach
+ 	 * threshold. Backend driver at hypervisor side will poll and reset
+@@ -226,6 +231,7 @@ vmxnet3_xdp_xmit(struct net_device *dev,
+ 	struct vmxnet3_adapter *adapter = netdev_priv(dev);
+ 	struct vmxnet3_tx_queue *tq;
+ 	int i;
++	struct netdev_queue *nq;
+ 
+ 	if (unlikely(test_bit(VMXNET3_STATE_BIT_QUIESCED, &adapter->state)))
+ 		return -ENETDOWN;
+@@ -236,6 +242,9 @@ vmxnet3_xdp_xmit(struct net_device *dev,
+ 	if (tq->stopped)
+ 		return -ENETDOWN;
+ 
++	nq = netdev_get_tx_queue(adapter->netdev, tq->qid);
++
++	__netif_tx_lock(nq, smp_processor_id());
+ 	for (i = 0; i < n; i++) {
+ 		if (vmxnet3_xdp_xmit_frame(adapter, frames[i], tq, true)) {
+ 			tq->stats.xdp_xmit_err++;
+@@ -243,6 +252,7 @@ vmxnet3_xdp_xmit(struct net_device *dev,
+ 		}
+ 	}
+ 	tq->stats.xdp_xmit += i;
++	__netif_tx_unlock(nq);
+ 
+ 	return i;
+ }
+-- 
+2.25.1
 
-I'm not sure I got this point.
-
-> And if __NR_uretprobe_32
-> is ever implemented, the seccomp logic will be missing. I think this
-> will work now and in the future:
->
-> #ifdef __NR_uretprobe
-> # ifdef SECCOMP_ARCH_COMPAT
->         if (sd->arch =3D=3D SECCOMP_ARCH_COMPAT) {
-> #  ifdef __NR_uretprobe_32
->                 if (sd->nr =3D=3D __NR_uretprobe_32)
->                         return true;
-> #  endif
->         } else
-> # endif
->         if (sd->nr =3D=3D __NR_uretprobe)
->                 return true;
-> #endif
-
-I don't know if implementing uretprobe syscall for compat binaries is
-planned or makes sense - I'd appreciate Jiri's and others opinion on that.
-That said, I don't mind adding this code for the sake of future proofing.
-
->
-> Instead of doing a function rename dance, I think you can just stick
-> the above into seccomp_is_const_allow() after the WARN().
-
-My motivation for the renaming dance was that you mentioned we might add
-new syscalls to this as well, so I wanted to avoid cluttering the existing
-function which seems to be well defined.
-
->
-> Also please add a KUnit tests to cover this in
-> tools/testing/selftests/seccomp/seccomp_bpf.c
-
-I think this would mean that this test suite would need to run as
-privileged. Is that Ok? or maybe it'd be better to have a new suite?
-
-> With at least these cases combinations below. Check each of:
->
->         - not using uretprobe passes
->         - using uretprobe passes (and validates that uretprobe did work)
->
-> in each of the following conditions:
->
->         - default-allow filter
->         - default-block filter
->         - filter explicitly blocking __NR_uretprobe and nothing else
->         - filter explicitly allowing __NR_uretprobe (and only other
->           required syscalls)
-
-Ok.
-
->
-> Hm, is uretprobe expected to work on mips? Because if so, you'll need to
-> do something similar to the mode1 checking in the !SECCOMP_ARCH_NATIVE
-> version of seccomp_cache_check_allow().
-
-I don't know if uretprobe syscall is expected to run on mips. Personally
-I'd avoid adding this dead code.
-
->
-> (You can see why I really dislike having policy baked into seccomp!)
-
-I definitely understand :)
-
->
-> > +        )
-> > +             return true;
-> > +#endif
-> > +
-> > +     return seccomp_is_filter_const_allow(fprog, sd);
-> > +}
-> > +
-> >  static void seccomp_cache_prepare_bitmap(struct seccomp_filter *sfilte=
-r,
-> >                                        void *bitmap, const void *bitmap=
-_prev,
-> >                                        size_t bitmap_size, int arch)
-> > @@ -1023,6 +1038,9 @@ static inline void seccomp_log(unsigned long sysc=
-all, long signr, u32 action,
-> >   */
-> >  static const int mode1_syscalls[] =3D {
-> >       __NR_seccomp_read, __NR_seccomp_write, __NR_seccomp_exit, __NR_se=
-ccomp_sigreturn,
-> > +#ifdef __NR_uretprobe
-> > +     __NR_uretprobe,
-> > +#endif
->
-> It'd be nice to update mode1_syscalls_32 with __NR_uretprobe_32 even
-> though it doesn't exist. (Is it _never_ planned to be implemented?) But
-> then, maybe the chances of a compat mode1 seccomp process running under
-> uretprobe is vanishingly small.
-
-It seems to me very unlikely. BTW, when I tested the "strict" mode change
-my program was killed by seccomp. The reason wasn't the uretprobe syscall
-(which I added to the list), it was actually the exit_group syscall which
-libc uses instead of the exit syscall.
-
-Thanks again,
-Eyal.
