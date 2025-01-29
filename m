@@ -1,178 +1,114 @@
-Received: from mail.ietf.org (mail.ietf.org [50.223.129.194])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8A1B18C31
-	for <bpf@vger.kernel.org>; Wed, 29 Jan 2025 02:15:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=50.223.129.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 225B0DDD2;
+	Wed, 29 Jan 2025 02:17:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738116957; cv=none; b=r6vdv08VKZrZvq4k8XnAEs8LzhNX0A3bLj7GPFRTqQBCHBFvLJRBoszIHpDfR3gf8L/jQz1dsG1kdZmZhaysRX0nQctkJSRWVtQp/thXGCGNo/cwz7hpLUEcTiT0v+iUqKTTJdjQ6TFJkWiC5ob49MnfLIcNxBi1gSEx9o1m8k8=
+	t=1738117057; cv=none; b=G6a4YWq1VBaHuwKHzHHwkDb16U96chXfYIDEIcjm2Q8T1uO9fB1RGmBAgC3zYzO4sQTvx0uhCG/ntrRxyi970/VTRFkUo8q4dw0bJgM9FJLQ6hxNCT0SeEWCTeshdoz3W3g2fQf/sDU39VGsibgzyJt/j5fPnLnpVGC+7C1ddSw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738116957; c=relaxed/simple;
-	bh=JfjE4Nuzc0ERvp7gWZd4mPNRIZrTOOONHFk2jNBOekM=;
-	h=MIME-Version:Date:Content-Type:From:Message-ID:To:In-Reply-To:
-	 References:CC:Subject; b=t2Iukv5kLLc+j/A531lYJJVbjpZtwzF8VgT9YNxqKo55nIS6CWLks3yNXreJq4DjbwLq0A33BFdur5FCxCwhe+D16CL9+qJmSNmpKgsUy5eQA/KihoGcDugYHHrS1wbG5MQ8aGQXJO9CyIq/terif3BLTQiSsaDq6j+r7M/0aTI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=ietf.org; dkim=pass (1024-bit key) header.d=ietf.org header.i=@ietf.org header.b=cemsClvi; dkim=pass (1024-bit key) header.d=ietf.org header.i=@ietf.org header.b=cemsClvi; dkim=fail (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=AnTFkeq3 reason="signature verification failed"; arc=none smtp.client-ip=50.223.129.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ietf.org
+	s=arc-20240116; t=1738117057; c=relaxed/simple;
+	bh=L/7rpkCRjrjLUYXMCzO9/+2F2CRM8/XcJAntFkoNsbU=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=X9snFC6AYcGd2c6BYxXpWKy4OLtBTnIZqnueQ4AW6Dy2UZ6SlcBKKQSo1V1Im1ipsG0p2sxkhb8rHXO2t6Tvo/BoiyU28/Hpd2pVzxioh1v8//Qtsnc5EGPGC/a0WVG9VqXv7C5DUiqe0E1VzoR3AHjzGGRCbleSflxsbL1HAP4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jQPwlPMD; arc=none smtp.client-ip=209.85.214.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ietf.org header.i=@ietf.org header.b="cemsClvi";
-	dkim=pass (1024-bit key) header.d=ietf.org header.i=@ietf.org header.b="cemsClvi";
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="AnTFkeq3"
-Received: from ietfa.amsl.com (localhost [IPv6:::1])
-	by ietfa.amsl.com (Postfix) with ESMTP id 4C012C1D6FCC
-	for <bpf@vger.kernel.org>; Tue, 28 Jan 2025 18:09:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ietf.org; s=ietf1;
-	t=1738116592; bh=JfjE4Nuzc0ERvp7gWZd4mPNRIZrTOOONHFk2jNBOekM=;
-	h=Date:From:To:In-Reply-To:References:CC:Subject:List-Id:
-	 List-Archive:List-Help:List-Owner:List-Post:List-Subscribe:
-	 List-Unsubscribe;
-	b=cemsClviN7/kasX0i5XSI4zv5aZghXrkyJIX091vy1zH0u4RSL3V7pYIPgy1H1FJD
-	 FoiBFh/ZtQI+9wmB3jvpZ/TgmdusmJXzKgQ4OjqDTVKX/hgDsNlYlcd4141XbZSQjB
-	 F/oreOx1618On7C31pumReW+5t8Cjxp0r1TZig9k=
-X-Mailbox-Line: From bpf-bounces+bpf=vger.kernel.org@ietf.org  Tue Jan 28 18:09:52 2025
-Received: from ietfa.amsl.com (localhost [IPv6:::1])
-	by ietfa.amsl.com (Postfix) with ESMTP id 31C4EC1D6219
-	for <bpf@vger.kernel.org>; Tue, 28 Jan 2025 18:09:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ietf.org; s=ietf1;
-	t=1738116592; bh=JfjE4Nuzc0ERvp7gWZd4mPNRIZrTOOONHFk2jNBOekM=;
-	h=Date:From:To:In-Reply-To:References:CC:Subject:List-Id:
-	 List-Archive:List-Help:List-Owner:List-Post:List-Subscribe:
-	 List-Unsubscribe;
-	b=cemsClviN7/kasX0i5XSI4zv5aZghXrkyJIX091vy1zH0u4RSL3V7pYIPgy1H1FJD
-	 FoiBFh/ZtQI+9wmB3jvpZ/TgmdusmJXzKgQ4OjqDTVKX/hgDsNlYlcd4141XbZSQjB
-	 F/oreOx1618On7C31pumReW+5t8Cjxp0r1TZig9k=
-Received: from localhost (localhost [127.0.0.1])
-	by ietfa.amsl.com (Postfix) with ESMTP id 1F76CC16940B
-	for <bpf@ietfa.amsl.com>; Tue, 28 Jan 2025 18:07:59 -0800 (PST)
-X-Virus-Scanned: amavisd-new at amsl.com
-X-Spam-Flag: NO
-X-Spam-Score: -2.104
-X-Spam-Level: 
-Authentication-Results: ietfa.amsl.com (amavisd-new); dkim=pass (1024-bit key)
-	header.d=linux.dev
-Received: from mail.ietf.org ([50.223.129.194])
-	by localhost (ietfa.amsl.com [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id mpeOWYJQOAJE for <bpf@ietfa.amsl.com>;
-	Tue, 28 Jan 2025 18:07:54 -0800 (PST)
-Received: from out-186.mta0.migadu.com (out-186.mta0.migadu.com
- [91.218.175.186])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by ietfa.amsl.com (Postfix) with ESMTPS id A401DC1840EA
-	for <bpf@ietf.org>; Tue, 28 Jan 2025 18:07:53 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jQPwlPMD"
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-219f8263ae0so116807445ad.0;
+        Tue, 28 Jan 2025 18:17:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1738117055; x=1738721855; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=L/7rpkCRjrjLUYXMCzO9/+2F2CRM8/XcJAntFkoNsbU=;
+        b=jQPwlPMD12Kxlju8goy4NSn1Bq+fUo/+UhV8TyZNjXibaTkTdjbDZNEHjwk3gtKE/d
+         y+DCdRMK7KfgyggW5A0wkfwR4nmV44BYvZnAk8Yvw+R9fv/cYIFT3VAMB5G3LIJmdQJM
+         6z4wlp1SROLemKJkyMaD7iRemEGGYIm3VklUuLgW+Afa+3HrYr3Yvc9UO3c29//m+ImT
+         ktIw1Pk79PnAB7vnmsnSqce30Scj1foru1/cDYiQr1zUfvulFpjleOyQtcJpMrUlVMHc
+         uxn6WaWMb7MLwABhNkv8BoycmdXmp85bkuCU7IfKqWAi4rm7brB7NVYDhijdQnj9bz0X
+         /75Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1738117055; x=1738721855;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=L/7rpkCRjrjLUYXMCzO9/+2F2CRM8/XcJAntFkoNsbU=;
+        b=HC5wFv60t0ASDM8JAyNVKVLZ1AmcX5fbqPU1mTDaX6oZhqQpz+1f6X4Mtg49NryUcx
+         Te5JMKQkfRfxURaLOZ263VUTlFIcfpTxKSUWH39CFVFGgS9X/HwCGfm9iE3D4AC8nepV
+         79bC6nQaUs4rZ4Xmhujmn4t0pSW2pj3AscDUZGtGkw5PelnTi/wDotJgDP0Xsgb2ihpI
+         qNwsQBjUEYT1b7CDv7rKOLcQyvBXdSJqdEmC13ywxZFfT51YfrIre28/1pIfGXnpfeM9
+         7BUacgw7K5K0PGERJISU9t5yfEGKdHchGOV5sOhxRf2ns0/7iPTRgeqq0oYkRZpNZDt+
+         NtiA==
+X-Forwarded-Encrypted: i=1; AJvYcCUJ2bgGBC1tYyuyzHwYgSXxfvmM/MGGWiz9tXBEhIZxUG/GMfTDbvftwIftm0NOgSxbMYE=@vger.kernel.org, AJvYcCWexYgupcaNxL2lYSaQMqCDSXAlyS8EfMY6IID/X5JWbBKfA1hSrN9MD3+C9t3vPupXuawed//ePgC/+yNs@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy9QOFwyzVhTWdJ8mojlDljGriGf6CpSvZ7krgsiGHDuN0ggi96
+	WxIN/0rfEUreEFKzO4Q7Lj08q0Iw8Q+U6xBwdmAYOQrBoK3+ypRO
+X-Gm-Gg: ASbGncuatpN0345kzvpfGEfEBrrbluMpf31yRdVQMXs8rVRlhL+Xyruz0S1hYzvg/si
+	A0cNv7z5Io8C1zzD+5BHfeykU7tTyXpvy5musY2Zkjj4h4KRJFFi0ERz39WpKgiWB4xyOyxLtgZ
+	0D4qlWPWc2Zt0R/TCEAzATHRNfcT4TIHkL88xsTq118M1TOejC5cTF5VOcF7J6Y0KM+iRIz1FBa
+	HCbavzAybhP9kb6GnuCT6AsGoJvdCa2MZ3Fqr+WmaD+GUamDxWjt//PWgE/HIaYmb8b3umSJAjO
+	J6D5QlbzW8sz
+X-Google-Smtp-Source: AGHT+IHuAK5Hv9o5X/1iIXi7Nk/IsYkAIpLhfpe0mnp0C3ElcAbj2ipHe69cLEPwepZTcfn4AV2G1w==
+X-Received: by 2002:a17:902:d551:b0:216:5556:8b46 with SMTP id d9443c01a7336-21dd7e0728fmr22399605ad.49.1738117055220;
+        Tue, 28 Jan 2025 18:17:35 -0800 (PST)
+Received: from [192.168.0.235] ([38.34.87.7])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-ac495d590e0sm9005157a12.51.2025.01.28.18.17.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Jan 2025 18:17:34 -0800 (PST)
+Message-ID: <6c7a14503338699fa99a4cf13f1e2b0abbfc9dfb.camel@gmail.com>
+Subject: Re: [PATCH bpf-next v1 7/8] selftests/bpf: Add selftests for
+ load-acquire and store-release instructions
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Ihor Solodrai <ihor.solodrai@linux.dev>, Peilin Ye
+ <yepeilin@google.com>, 	bpf@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org
+Cc: bpf@ietf.org, Xu Kuohai <xukuohai@huaweicloud.com>, David Vernet	
+ <void@manifault.com>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann	
+ <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, Martin KaFai
+ Lau	 <martin.lau@linux.dev>, Song Liu <song@kernel.org>, Yonghong Song	
+ <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, KP
+ Singh	 <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo	
+ <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, Jonathan Corbet	
+ <corbet@lwn.net>, "Paul E. McKenney" <paulmck@kernel.org>, Puranjay Mohan	
+ <puranjay@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>, Will
+ Deacon	 <will@kernel.org>, Quentin Monnet <qmo@kernel.org>, Mykola Lysenko	
+ <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>, Josh Don
+ <joshdon@google.com>,  Barret Rhoden <brho@google.com>, Neel Natu
+ <neelnatu@google.com>, Benjamin Segall <bsegall@google.com>, 
+	linux-kernel@vger.kernel.org
+Date: Tue, 28 Jan 2025 18:17:29 -0800
+In-Reply-To: <bda935ed074d3151d9afe02df06f026b8ea30690@linux.dev>
+References: <cover.1737763916.git.yepeilin@google.com>
+	 <3f2de7c6e5d2def7bdfb091347c1dacea0915974.1737763916.git.yepeilin@google.com>
+	 <131a817f7f2749e78e527a251ca7971588cf62f8.camel@gmail.com>
+	 <bda935ed074d3151d9afe02df06f026b8ea30690@linux.dev>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.54.2 (3.54.2-1.fc41) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1738116467;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=vxFwu5R7sxps9teXeOqSJ8ZpqQ5AyDlKfsho2IFEN1o=;
-	b=AnTFkeq3b6TXFV6Ogt+Be6Mxklk3mFNdKxoBTZMKGjv6z+kBP4niiHFyeIBStgFb7sVpbT
-	oOwaxOX7a5wNxuuCCkE6tjzYZd1dMMsCcTK6c3H9dcSb7ufLnFXhrKmmT5fk/ewLKEaj5v
-	1cVaY9C0o3MvHlI9WMsie9posK2fu+M=
-Date: Wed, 29 Jan 2025 02:07:45 +0000
-Content-Type: text/plain; charset="utf-8"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and
- include these headers.
-From: "Ihor Solodrai" <ihor.solodrai@linux.dev>
-Message-ID: <bda935ed074d3151d9afe02df06f026b8ea30690@linux.dev>
-TLS-Required: No
-To: "Eduard Zingerman" <eddyz87@gmail.com>, "Peilin Ye"
- <yepeilin@google.com>, bpf@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org
-In-Reply-To: <131a817f7f2749e78e527a251ca7971588cf62f8.camel@gmail.com>
-References: <cover.1737763916.git.yepeilin@google.com>
- <3f2de7c6e5d2def7bdfb091347c1dacea0915974.1737763916.git.yepeilin@google.com>
- <131a817f7f2749e78e527a251ca7971588cf62f8.camel@gmail.com>
-X-Migadu-Flow: FLOW_OUT
-Message-ID-Hash: K7OY6ONTQJFWARVQOA4HZL7FWQRQ2QCE
-X-Message-ID-Hash: K7OY6ONTQJFWARVQOA4HZL7FWQRQ2QCE
-X-MailFrom: ihor.solodrai@linux.dev
-X-Mailman-Rule-Misses: dmarc-mitigation; no-senders; approved; emergency;
- loop; banned-address; member-moderation; nonmember-moderation; administrivia;
- implicit-dest; max-recipients; max-size; news-moderation; no-subject;
- digests; suspicious-header
-CC: bpf@ietf.org, Xu Kuohai <xukuohai@huaweicloud.com>,
- David Vernet <void@manifault.com>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai  Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP  Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
- "Paul E. McKenney" <paulmck@kernel.org>,
- Puranjay Mohan <puranjay@kernel.org>,
- Catalin Marinas <catalin.marinas@arm.com>, Will  Deacon <will@kernel.org>,
- Quentin Monnet <qmo@kernel.org>, Mykola Lysenko <mykolal@fb.com>,
- Shuah Khan <shuah@kernel.org>, Josh Don <joshdon@google.com>,
- Barret Rhoden <brho@google.com>, Neel Natu <neelnatu@google.com>,
- Benjamin Segall <bsegall@google.com>, linux-kernel@vger.kernel.org
-X-Mailman-Version: 3.3.9rc6
-Precedence: list
-Subject: =?utf-8?q?=5BBpf=5D_Re=3A_=5BPATCH_bpf-next_v1_7/8=5D_selftests/bpf=3A_Add_s?=
- =?utf-8?q?elftests_for_load-acquire_and_store-release_instructions?=
-Archived-At: 
- <https://mailarchive.ietf.org/arch/msg/bpf/Ni5Q5q6DoPYjd9xA2INKvc3H7wY>
-List-Archive: <https://mailarchive.ietf.org/arch/browse/bpf>
-List-Help: <mailto:bpf-request@ietf.org?subject=help>
-List-Owner: <mailto:bpf-owner@ietf.org>
-List-Post: <mailto:bpf@ietf.org>
-X-Mailman-Copy: yes
-Content-Transfer-Encoding: base64
-Message-ID: <20250129020745.PbFlK7QOfQPfAxMuIfpvWJiz1T87u73F0iRRAC6smZ8@z>
 
-SmFudWFyeSAyOCwgMjAyNSBhdCA1OjA2IFBNLCAiRWR1YXJkIFppbmdlcm1hbiIgPGVkZHl6ODdA
-Z21haWwuY29tPiB3cm90ZToNCg0KDQoNCj4gDQo+IE9uIFNhdCwgMjAyNS0wMS0yNSBhdCAwMjox
-OSArMDAwMCwgUGVpbGluIFllIHdyb3RlOg0KPiANCj4gPiANCj4gPiBBZGQgc2V2ZXJhbCAuL3Rl
-c3RfcHJvZ3MgdGVzdHM6DQo+ID4gDQo+ID4gIA0KPiA+IA0KPiA+ICAtIGF0b21pY3MvbG9hZF9h
-Y3F1aXJlDQo+ID4gDQo+ID4gIC0gYXRvbWljcy9zdG9yZV9yZWxlYXNlDQo+ID4gDQo+ID4gIC0g
-YXJlbmFfYXRvbWljcy9sb2FkX2FjcXVpcmUNCj4gPiANCj4gPiAgLSBhcmVuYV9hdG9taWNzL3N0
-b3JlX3JlbGVhc2UNCj4gPiANCj4gPiAgLSB2ZXJpZmllcl9sb2FkX2FjcXVpcmUvKg0KPiA+IA0K
-PiA+ICAtIHZlcmlmaWVyX3N0b3JlX3JlbGVhc2UvKg0KPiA+IA0KPiA+ICAtIHZlcmlmaWVyX3By
-ZWNpc2lvbi9icGZfbG9hZF9hY3F1aXJlDQo+ID4gDQo+ID4gIC0gdmVyaWZpZXJfcHJlY2lzaW9u
-L2JwZl9zdG9yZV9yZWxlYXNlDQo+ID4gDQo+ID4gIA0KPiA+IA0KPiA+ICBUaGUgbGFzdCB0d28g
-dGVzdHMgYXJlIGFkZGVkIHRvIGNoZWNrIGlmIGJhY2t0cmFja19pbnNuKCkgaGFuZGxlcyB0aGUN
-Cj4gPiANCj4gPiAgbmV3IGluc3RydWN0aW9ucyBjb3JyZWN0bHkuDQo+ID4gDQo+ID4gIA0KPiA+
-IA0KPiA+ICBBZGRpdGlvbmFsbHksIHRoZSBsYXN0IHRlc3QgYWxzbyBtYWtlcyBzdXJlIHRoYXQg
-dGhlIHZlcmlmaWVyDQo+ID4gDQo+ID4gICJyZW1lbWJlcnMiIHRoZSB2YWx1ZSAoaW4gc3JjX3Jl
-Zykgd2Ugc3RvcmUtcmVsZWFzZSBpbnRvIGUuZy4gYSBzdGFjaw0KPiA+IA0KPiA+ICBzbG90LiBG
-b3IgZXhhbXBsZSwgaWYgd2UgdGFrZSBhIGxvb2sgYXQgdGhlIHRlc3QgcHJvZ3JhbToNCj4gPiAN
-Cj4gPiAgDQo+ID4gDQo+ID4gICMwOiAicjEgPSA4OyINCj4gPiANCj4gPiAgIzE6ICJzdG9yZV9y
-ZWxlYXNlKCh1NjQgKikocjEwIC0gOCksIHIxKTsiDQo+ID4gDQo+ID4gICMyOiAicjEgPSAqKHU2
-NCAqKShyMTAgLSA4KTsiDQo+ID4gDQo+ID4gICMzOiAicjIgPSByMTA7Ig0KPiA+IA0KPiA+ICAj
-NDogInIyICs9IHIxOyIgLyogbWFya19wcmVjaXNlICovDQo+ID4gDQo+ID4gICM1OiAicjAgPSAw
-OyINCj4gPiANCj4gPiAgIzY6ICJleGl0OyINCj4gPiANCj4gPiAgDQo+ID4gDQo+ID4gIEF0ICMx
-LCBpZiB0aGUgdmVyaWZpZXIgZG9lc24ndCByZW1lbWJlciB0aGF0IHdlIHdyb3RlIDggdG8gdGhl
-IHN0YWNrLA0KPiA+IA0KPiA+ICB0aGVuIGxhdGVyIGF0ICM0IHdlIHdvdWxkIGJlIGFkZGluZyBh
-biB1bmJvdW5kZWQgc2NhbGFyIHZhbHVlIHRvIHRoZQ0KPiA+IA0KPiA+ICBzdGFjayBwb2ludGVy
-LCB3aGljaCB3b3VsZCBjYXVzZSB0aGUgcHJvZ3JhbSB0byBiZSByZWplY3RlZDoNCj4gPiANCj4g
-PiAgDQo+ID4gDQo+ID4gIFZFUklGSUVSIExPRzoNCj4gPiANCj4gPiAgPT09PT09PT09PT09PQ0K
-PiA+IA0KPiA+ICAuLi4NCj4gPiANCj4gPiAgbWF0aCBiZXR3ZWVuIGZwIHBvaW50ZXIgYW5kIHJl
-Z2lzdGVyIHdpdGggdW5ib3VuZGVkIG1pbiB2YWx1ZSBpcyBub3QgYWxsb3dlZA0KPiA+IA0KPiA+
-ICANCj4gPiANCj4gPiAgQWxsIG5ldyB0ZXN0cyBkZXBlbmQgb24gdGhlIHByZS1kZWZpbmVkIF9f
-QlBGX0ZFQVRVUkVfTE9BRF9BQ1FfU1RPUkVfUkVMDQo+ID4gDQo+ID4gIGZlYXR1cmUgbWFjcm8s
-IHdoaWNoIGltcGxpZXMgLW1jcHU+PXY0Lg0KPiA+IA0KPiANCj4gVGhpcyByZXN0cmljdGlvbiB3
-b3VsZCBtZWFuIHRoYXQgdGVzdHMgYXJlIHNraXBwZWQgb24gQlBGIENJLCBhcyBpdA0KPiANCj4g
-Y3VycmVudGx5IHJ1bnMgdXNpbmcgbGx2bSAxNyBhbmQgMTguIEluc3RlYWQsIEkgc3VnZ2VzdCB1
-c2luZyBzb21lDQoNCkVkdWFyZCwgaWYgdGhpcyBmZWF0dXJlIHJlcXVpcmVzIGEgcGFydGljdWxh
-ciB2ZXJzaW9uIG9mIExMVk0sIGl0J3MNCm5vdCBkaWZmaWN1bHQgdG8gYWRkIGEgY29uZmlndXJh
-dGlvbiBmb3IgaXQgdG8gQlBGIENJLg0KDQpXaGV0aGVyIHdlIHdhbnQgdG8gZG8gaXQgaXMgYW4g
-b3BlbiBxdWVzdGlvbiB0aG91Z2guIElzc3VlcyBtYXkgY29tZQ0KdXAgd2l0aCBvdGhlciB0ZXN0
-cyB3aGVuIG5ld2VyIExMVk0gaXMgdXNlZC4NCg0KPiANCj4gbWFjcm8gaGlkaW5nIGFuIGlubGlu
-ZSBhc3NlbWJseSBhcyBiZWxvdzoNCj4gDQo+ICBhc20gdm9sYXRpbGUgKCIuOGJ5dGUgJVtpbnNu
-XTsiDQo+IA0KPiAgOg0KPiANCj4gIDogW2luc25dImkiKCoobG9uZyAqKSYoQlBGX1JBV19JTlNO
-KC4uLikpKQ0KPiANCj4gIDogLyogY29ycmVjdCBjbG9iYmVycyBoZXJlICovKTsNCj4gDQo+IFNl
-ZSB0aGUgdXNhZ2Ugb2YgdGhlIF9faW1tX2luc24oKSBtYWNybyBpbiB0aGUgdGVzdCBzdWl0ZS4N
-Cj4gDQo+IEFsc28sICJCUEZfQVRPTUlDIGxvYWRzIGZyb20gUiVkICVzIGlzIG5vdCBhbGxvd2Vk
-XG4iIGFuZA0KPiANCj4gICJCUEZfQVRPTUlDIHN0b3JlcyBpbnRvIFIlZCAlcyBpcyBub3QgYWxs
-b3dlZFxuIg0KPiANCj4gc2l0dWF0aW9ucyBhcmUgbm90IHRlc3RlZC4NCj4gDQo+IFsuLi5dDQo+
-IA0KPiA+IA0KPiANCj4gWy4uLl0NCj4NCg0KLS0gCkJwZiBtYWlsaW5nIGxpc3QgLS0gYnBmQGll
-dGYub3JnClRvIHVuc3Vic2NyaWJlIHNlbmQgYW4gZW1haWwgdG8gYnBmLWxlYXZlQGlldGYub3Jn
-Cg==
+On Wed, 2025-01-29 at 02:07 +0000, Ihor Solodrai wrote:
+
+[...]
+
+> > This restriction would mean that tests are skipped on BPF CI, as it
+> >=20
+> > currently runs using llvm 17 and 18. Instead, I suggest using some
+>=20
+> Eduard, if this feature requires a particular version of LLVM, it's
+> not difficult to add a configuration for it to BPF CI.
+>=20
+> Whether we want to do it is an open question though. Issues may come
+> up with other tests when newer LLVM is used.
+
+These changes have not landed yet and would be in llvm main for some time.
+The workaround is straightforward and I don't see a reason to add more jobs=
+ to CI.
+
