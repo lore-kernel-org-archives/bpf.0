@@ -1,74 +1,149 @@
-Received: from out-177.mta0.migadu.com (out-177.mta0.migadu.com [91.218.175.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f202.google.com (mail-pl1-f202.google.com [209.85.214.202])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81EF643166
-	for <bpf@vger.kernel.org>; Wed, 29 Jan 2025 00:21:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13A22155316
+	for <bpf@vger.kernel.org>; Wed, 29 Jan 2025 00:24:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738110114; cv=none; b=D3JpY8MnNSc9pgmWrm74LNebWYph8ReXoLv6SEm/VHHpbuzP6xrVZRlxbfbkutnURA9CkxXWsTuViyJp+9zgP3nNckCIs0A30yp5s75UtCB1TAKJeHNLckKwZYyJXcysSqLCo2jdsmCmGX9WTWsQ+jXtGgZQSpcdp8oSIlCivR0=
+	t=1738110280; cv=none; b=X7LXCfwlzj2dlpIoEvzN5AYDJgvWUGmyl/bpXAaCnrWOkcTpawVRNCISNTKkwco4aDeTTmpez2Hhf3ABj43/9QZF6VZfFSMtcbo5jCATp4WGwr2qeFWNuQawCsVCV42EwdORNu1WeDb7jKtD7FOyhrLaQpHYJXO3nG39MITYTlk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738110114; c=relaxed/simple;
-	bh=X/S05OkSZ33+fQ/7xP3Oh5JzmgDDcSvL7PrkokrwUkQ=;
-	h=MIME-Version:Date:Content-Type:From:Message-ID:Subject:To; b=jk79nd027kbZ0TQ1EX4+/kkIXFUIGYu0Lq3K2Uzw44fXdrSmiZlfdDaxwM71uMXX+2fiJJk/3z2TVOXvgtvDqTFYmQlK7av0JExveiOlr2WFMkWnR0gMJHSThlMWGH+Ure4XJuhn5TYDZblZ7NsBVpwGHJwnVWNYjr5y2vmGGDk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=lYa59KTl; arc=none smtp.client-ip=91.218.175.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1738110280; c=relaxed/simple;
+	bh=Tye1ZieSPZQmo1mo8HoGA/TZnzVuj35yU1agRawQNig=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=VKmCwmRupLE6bok6UaF5M9nNNpHaI9/XstfzAmvE1G5laO5p4pf6rIthsVFEtEhqYdXquDFmvLBBWZylpHFaKGGId7QSGEL2zL5U+ePZtH0yRZ81W0NhQZRgT0T8ES/igNAQ2I0j+B2OpS/bH7IcW3J9BZrQJ9a15BBZKo+mNf8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ctshao.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=GsGmjapE; arc=none smtp.client-ip=209.85.214.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--ctshao.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="lYa59KTl"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="GsGmjapE"
+Received: by mail-pl1-f202.google.com with SMTP id d9443c01a7336-2166e907b5eso114970535ad.3
+        for <bpf@vger.kernel.org>; Tue, 28 Jan 2025 16:24:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1738110277; x=1738715077; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=Ss8IRXPQuROgaPFI2n/Tn6B8Bw+CUwUeulj0ny/+twg=;
+        b=GsGmjapEEJ/0wGZtTJxA+D1u9QFOr1MF34ClDsqzNCV0X6lsB6sY3j8m8p60OWDK6R
+         9u4SY+WKn6d+OilWjmXBPsP7xDZfZcXCOmCsz1uE3RkgjKK/YpSXVIoe7DqPp4D7hGgQ
+         rqQ5s0rqeIkVeRvjk8JnQmrI6/acMBTBx4UWJNWsPiMk4w/1RmL+6WyaXLIZyjf6e05O
+         fJ047JFb7n7W4B9ys9K38Z2wRGinzt+UVqoLc9+sArv4XrnZO8vL8SWUPWvBhqHrOqq2
+         OB/vS22OmNhzIRgLGHTQ3iuwFWQ9mF+y4g/nbcKq8zJq8/bSrODIMiLGmU7vcUCcy1Ol
+         feLA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1738110277; x=1738715077;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Ss8IRXPQuROgaPFI2n/Tn6B8Bw+CUwUeulj0ny/+twg=;
+        b=h1Tmkb/2eOJ6LuUlW/BWvT4nKpZ689hP2SnoTEJEqdTEkJGMj1G0GzmXYLAJGk89Wo
+         bt/TF2evb0ExjbOJ1zOVkq/zDsKByqJegHN9Lc7UNv+6t+JGQzGjp4iu9aUTh2QsH5aR
+         mqKQqLi63ssP2zzMwZTYsyzkNE56Oo046scH86jnSSIPNw/XMMZxjvyyu/p0KC/6wEmK
+         M+tK+RuenyKLTIDdsP7Dy4XJ1HGC8508qezFEsWJDQ72pgBPfqaYR//AGeXdp+eUmqhR
+         ieyaxM4VXEzwHVQhpSDhiWBxN8uQvB/yC/cj8J0iQA15vPVVqrbX1oe2wY41Li9rbTX6
+         f6WQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWrE9A6GcdQr9AfJ/Odk3zLkuIzPv6lL7JW5YozU0FjzT/FB/r2FSDglQk1w814zmYa1vo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxJv2lUH2ck+ssF8hJlvHPCIN3vP6Q/rI8Irxcago6gMON+BdHB
+	B8nwpLOafXqG41rxn0huFzWvheQLS2Z+Ppuf4F5DKCQQVG+zvBgm1cvEUz9GpoKEfVZqTQtxrwE
+	Ddw==
+X-Google-Smtp-Source: AGHT+IECz3VTxLM4O986OseoNSxZB/C8h78XB8HxPSOGl8b2+z2HK2SySwPs7DImzJI+zObNWYsOE+c8sYo=
+X-Received: from pgbcl4.prod.google.com ([2002:a05:6a02:984:b0:a88:3e2b:cada])
+ (user=ctshao job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a20:6a0e:b0:1e2:2e4:689a
+ with SMTP id adf61e73a8af0-1ed7a6e183bmr1992091637.41.1738110277341; Tue, 28
+ Jan 2025 16:24:37 -0800 (PST)
+Date: Tue, 28 Jan 2025 16:14:56 -0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1738110104;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=I46f/Rd0R5jaB8YDQCGB0uktDK3SIZJUjy8XsFnAFJ8=;
-	b=lYa59KTlcMO4mtuXDJ5xTOtZTOYg2ZluR7nKVLAJvjb2End6Jer0Db0l0377Is4blcHqsS
-	RL5eNQePUWhvaYN8GnvIYmhlBTPj/OQmit1NYmXejTGPOEs4Ue1Z5njKwwb+SSno7VlEzx
-	MWuZfenTp/tuLeMFqdmypl3g1wUVjE4=
-Date: Wed, 29 Jan 2025 00:21:43 +0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: "Ihor Solodrai" <ihor.solodrai@linux.dev>
-Message-ID: <3fb44500b87b0f1d8360bc7a1f3ae972d3c5282f@linux.dev>
-TLS-Required: No
-Subject: selftests/sched_ext: testing on BPF CI
-To: "Tejun Heo" <tj@kernel.org>, "David Vernet" <void@manifault.com>, "Andrea
- Righi" <arighi@nvidia.com>, "Changwoo Min" <changwoo@igalia.com>, "Alexei
- Starovoitov" <ast@kernel.org>, bpf@vger.kernel.org,
- linux-kernel@vger.kernel.org
-X-Migadu-Flow: FLOW_OUT
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.48.1.262.g85cc9f2d1e-goog
+Message-ID: <20250129001905.619859-1-ctshao@google.com>
+Subject: [PATCH v3 0/5] Tracing contention lock owner call stack
+From: Chun-Tse Shao <ctshao@google.com>
+To: linux-kernel@vger.kernel.org
+Cc: Chun-Tse Shao <ctshao@google.com>, peterz@infradead.org, mingo@redhat.com, 
+	acme@kernel.org, namhyung@kernel.org, mark.rutland@arm.com, 
+	alexander.shishkin@linux.intel.com, jolsa@kernel.org, irogers@google.com, 
+	adrian.hunter@intel.com, kan.liang@linux.intel.com, nathan@kernel.org, 
+	ndesaulniers@google.com, morbo@google.com, justinstitt@google.com, 
+	linux-perf-users@vger.kernel.org, bpf@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Tejun, Andrea.
+For perf lock contention, the current owner tracking (-o option) only
+works with per-thread mode (-t option). Enabling call stack mode for
+owner can be useful for diagnosing why a system running slow in
+lock contention.
 
-I tested a couple of variants of bpf-next + sched_ext source tree,
-just sharing the results.
+Example output:
+  $ sudo ~/linux/tools/perf/perf lock con -abvo -Y mutex -E16 perf bench sched pipe
+   ...
+   contended   total wait     max wait     avg wait         type   caller
 
-I found a working state: BPF CI pipeline ran successfully twice
-(that's 8 build + run of selftests/sched_ext/runner in total).
+         171      1.55 ms     20.26 us      9.06 us        mutex   pipe_read+0x57
+                          0xffffffffac6318e7  pipe_read+0x57
+                          0xffffffffac623862  vfs_read+0x332
+                          0xffffffffac62434b  ksys_read+0xbb
+                          0xfffffffface604b2  do_syscall_64+0x82
+                          0xffffffffad00012f  entry_SYSCALL_64_after_hwframe+0x76
+          36    193.71 us     15.27 us      5.38 us        mutex   pipe_write+0x50
+                          0xffffffffac631ee0  pipe_write+0x50
+                          0xffffffffac6241db  vfs_write+0x3bb
+                          0xffffffffac6244ab  ksys_write+0xbb
+                          0xfffffffface604b2  do_syscall_64+0x82
+                          0xffffffffad00012f  entry_SYSCALL_64_after_hwframe+0x76
+           4     51.22 us     16.47 us     12.80 us        mutex   do_epoll_wait+0x24d
+                          0xffffffffac691f0d  do_epoll_wait+0x24d
+                          0xffffffffac69249b  do_epoll_pwait.part.0+0xb
+                          0xffffffffac693ba5  __x64_sys_epoll_pwait+0x95
+                          0xfffffffface604b2  do_syscall_64+0x82
+                          0xffffffffad00012f  entry_SYSCALL_64_after_hwframe+0x76
+           2     20.88 us     11.95 us     10.44 us        mutex   do_epoll_wait+0x24d
+                          0xffffffffac691f0d  do_epoll_wait+0x24d
+                          0xffffffffac693943  __x64_sys_epoll_wait+0x73
+                          0xfffffffface604b2  do_syscall_64+0x82
+                          0xffffffffad00012f  entry_SYSCALL_64_after_hwframe+0x76
+           1      7.33 us      7.33 us      7.33 us        mutex   do_epoll_ctl+0x6c1
+                          0xffffffffac692e01  do_epoll_ctl+0x6c1
+                          0xffffffffac6937e0  __x64_sys_epoll_ctl+0x70
+                          0xfffffffface604b2  do_syscall_64+0x82
+                          0xffffffffad00012f  entry_SYSCALL_64_after_hwframe+0x76
+           1      6.64 us      6.64 us      6.64 us        mutex   do_epoll_ctl+0x3d4
+                          0xffffffffac692b14  do_epoll_ctl+0x3d4
+                          0xffffffffac6937e0  __x64_sys_epoll_ctl+0x70
+                          0xfffffffface604b2  do_syscall_64+0x82
+                          0xffffffffad00012f  entry_SYSCALL_64_after_hwframe+0x76
 
-Working state requires most patches between sched_ext/master and
-sched_ext/for-6.14-fixes [1], and also the patch
-  "tools/sched_ext: Receive updates from SCX repo" [2]
+  === owner stack trace ===
 
-On plain bpf-next the dsp_local_on test fails [3].
-Without the patch [2] there is a build error [4]: missing
-SCX_ENUM_INIT definition.
+           3     31.24 us     15.27 us     10.41 us        mutex   pipe_read+0x348
+                          0xffffffffac631bd8  pipe_read+0x348
+                          0xffffffffac623862  vfs_read+0x332
+                          0xffffffffac62434b  ksys_read+0xbb
+                          0xfffffffface604b2  do_syscall_64+0x82
+                          0xffffffffad00012f  entry_SYSCALL_64_after_hwframe+0x76
+  ...
 
-We probably don't want to enable selftests/sched_ext on BPF CI with
-that many "temporary" patches. I suggest to wait until all of this is
-merged upstream.
+v3: Edit based on Namhyung's review.
 
-You can check the full list of patches here:
-https://github.com/kernel-patches/vmtest/pull/332/files
+v2: Fix logic deficit in patch 2/4.
+Chun-Tse Shao (4):
+  perf lock: Add bpf maps for owner stack tracing
+  perf lock: Retrieve owner callstack in bpf program
+  perf lock: Make rb_tree helper functions generic
+  perf lock: Report owner stack in usermode
+Chun-Tse Shao (5):
+  perf lock: Add bpf maps for owner stack tracing
+  perf lock: Retrieve owner callstack in bpf program
+  perf lock: Make rb_tree helper functions generic
+  perf lock: Report owner stack in usermode
+  perf lock: Update documentation for -o option in contention mode
 
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/tj/sched_ext.git/log/=
-?h=3Dfor-6.14-fixes
-[2] https://lore.kernel.org/all/Z1ucTqJP8IeIXZql@slm.duckdns.org/
-[3] https://github.com/kernel-patches/vmtest/actions/runs/13019837022
-[4] https://github.com/kernel-patches/vmtest/actions/runs/13020458479
+ tools/perf/builtin-lock.c                     |  60 +++-
+ tools/perf/util/bpf_lock_contention.c         |  70 ++++-
+ .../perf/util/bpf_skel/lock_contention.bpf.c  | 277 +++++++++++++++++-
+ tools/perf/util/bpf_skel/lock_data.h          |   7 +
+ tools/perf/util/lock-contention.h             |   7 +
+ 5 files changed, 398 insertions(+), 23 deletions(-)
+
+--
+2.48.1.262.g85cc9f2d1e-goog
+
