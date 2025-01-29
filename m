@@ -1,35 +1,55 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 390FC19F487;
-	Tue, 28 Jan 2025 23:40:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C475543166;
+	Wed, 29 Jan 2025 00:17:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738107606; cv=none; b=DT6IntyJ6/QjnWXsJTsvMfdnpIgnQ2aG2924iN2kzS1jr6n4BnDjdsGrpIifPNYwiEFuGLkZ7+farqAmDq+4UShiPpuqmoovnnHJQNryzKyk+7i4F6dVA+9v3UVafHfz3/KijtxcQTwHRSRA5sFTPpm5ykyUUjPK0PuUX0WE57w=
+	t=1738109874; cv=none; b=dZyGBqsguICjf5ZNLZb00t/5eVp19xx4OhqE/kSwUYjlQwRT5OdIZt5C5qu/e5e7j4fATk11R4K5i0KfLq1tyrl+j5P/2/nl5Fl4vzZFI5oB4XUI2KhtmxCqO/16NwbGZ2l+o5SoaTwhxQ9jOFYSBArl71BmMrsB/6bRWjbgmYU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738107606; c=relaxed/simple;
-	bh=7QiyKQhvRCym3RsM9UE+ktbELDJ7OQRGE29MzYgiipk=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=PX+ALB6CQ5+i+iS0Z3cxENzRXp06djLYKkQ5pe1VYkXtjItv1f8Ztp4pt+C8qai+bzxHtTQxS+1/ZadjBhcM9eSpGTXfE45hVRA1zJtDlygiWX7iElIR2gkxCJMu7gia7xtPRikXlUXz1Eeh0akwBWkrfLasXGuIDR5vvJnRQpA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Yq+Rc1gU; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1738109874; c=relaxed/simple;
+	bh=rhcPxDE/hGrU4tf9/2EyzDn71kVa3O0+HXsB6rQX/xg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=aVnzb/G+R1Tq+yka/FC6aHwL6U/OWLeK8280Xwwrrfjkky4JL3j348TPiCFl09auNOIFF8e+XGz9ZQWhdKFK/G7v+wAcTdHpwHQOMGCQ8QLXXW0qV7rsL4wRFEGdUyj0gC/tVuCFkmfjcX5CyW1xu7UmcJcst8oWAnQuZrwbnls=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XMQr51eX; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Yq+Rc1gU"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97257C4CED3;
-	Tue, 28 Jan 2025 23:40:05 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XMQr51eX"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7FF80C4CED3;
+	Wed, 29 Jan 2025 00:17:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1738107605;
-	bh=7QiyKQhvRCym3RsM9UE+ktbELDJ7OQRGE29MzYgiipk=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=Yq+Rc1gUS1emh6w74UQ24kFf3Dgwp02XRmB9BiZcQn4G6hNpBHtnKfK32wyO3S+Q6
-	 uGMdGAl3HZphxE2x+Vc7yKqrr1aQ7Q0vli8U+hlBuJm4CCFLdxckSdg0IA9xRyjg1o
-	 O/JbOsXsoT/HwWjX7nKrcwqzSJ9Q/omo2J3ZY7M5KEKXe5+vjWb/vVyCBAkIeC/z0M
-	 l6untPovv2AiitUD2idMc6N20XMfnzhqCW4Nxyk/XuegzQo+maCUSLwa60HFw6iDiH
-	 YP9bYEOVrAWV9ULn6BqVIiLxPZByrKlftnds504S2BXp3SPx2qc0e4B93FYkcF8n2r
-	 TDOZSgEVsXk3A==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id AECFF380AA66;
-	Tue, 28 Jan 2025 23:40:32 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20201202; t=1738109874;
+	bh=rhcPxDE/hGrU4tf9/2EyzDn71kVa3O0+HXsB6rQX/xg=;
+	h=From:To:Cc:Subject:Date:From;
+	b=XMQr51eXkbgeqEBNx86SM3BNnHtKhdZ+DwW0CQw3KFQaBJU4p+Xa/y4x+vBGlceeM
+	 J8T/UOk/6HEc6WyfirILBWGMo/CidLMIuS/xexztcRoWWEtQNmQUHwRfVNuGJ6c2mk
+	 ebLST4lm8SjTzlGN5/d4TE5OW1pnRPVn1+L1VCOelReXoCWC+tPyLieXsFo1soWERW
+	 rBy6NjICdHHW8f6yVqVzWn8fgdhOpd/1YZQbmzOEYoz7YgvuKb8GrCiqBLsb130PUe
+	 MJXcGsFpKLnYoOd6jUFngLM5O+hh5dVbLmGpqzVg68ot6KJamoPW9CRdVpFjkk7T1p
+	 JtL10Th6zOpwA==
+From: Andrii Nakryiko <andrii@kernel.org>
+To: linux-mm@kvack.org,
+	akpm@linux-foundation.org,
+	linux-fsdevel@vger.kernel.org,
+	brauner@kernel.org,
+	viro@zeniv.linux.org.uk
+Cc: linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org,
+	kernel-team@meta.com,
+	rostedt@goodmis.org,
+	peterz@infradead.org,
+	mingo@kernel.org,
+	linux-trace-kernel@vger.kernel.org,
+	linux-perf-users@vger.kernel.org,
+	shakeel.butt@linux.dev,
+	rppt@kernel.org,
+	liam.howlett@oracle.com,
+	surenb@google.com,
+	kees@kernel.org,
+	jannh@google.com,
+	Andrii Nakryiko <andrii@kernel.org>
+Subject: [PATCH] docs,procfs: document /proc/PID/* access permission checks
+Date: Tue, 28 Jan 2025 16:17:47 -0800
+Message-ID: <20250129001747.759990-1-andrii@kernel.org>
+X-Mailer: git-send-email 2.43.5
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -37,45 +57,37 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf v1] selftests/bpf: Fix runqslower cross-endian build
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <173810763150.3959643.12245006244269731702.git-patchwork-notify@kernel.org>
-Date: Tue, 28 Jan 2025 23:40:31 +0000
-References: <20250125071423.2603588-1-itugrok@yahoo.com>
-In-Reply-To: <20250125071423.2603588-1-itugrok@yahoo.com>
-To: Tony Ambardar <tony.ambardar@gmail.com>
-Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
- andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
- yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
- sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org, mykolal@fb.com,
- shuah@kernel.org, nathan@kernel.org, ndesaulniers@google.com,
- morbo@google.com, justinstitt@google.com, linux-kselftest@vger.kernel.org
 
-Hello:
+Add a paragraph explaining what sort of capabilities a process would
+need to read procfs data for some other process. Also mention that
+reading data for its own process doesn't require any extra permissions.
 
-This patch was applied to bpf/bpf-next.git (master)
-by Andrii Nakryiko <andrii@kernel.org>:
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+---
+ Documentation/filesystems/proc.rst | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-On Fri, 24 Jan 2025 23:14:23 -0800 you wrote:
-> From: Tony Ambardar <tony.ambardar@gmail.com>
-> 
-> The runqslower binary from a cross-endian build currently fails to run
-> because the included skeleton has host endianness. Fix this by passing the
-> target BPF endianness to the runqslower sub-make.
-> 
-> Fixes: 5a63c33d6f00 ("selftests/bpf: Support cross-endian building")
-> Signed-off-by: Tony Ambardar <tony.ambardar@gmail.com>
-> 
-> [...]
-
-Here is the summary with links:
-  - [bpf,v1] selftests/bpf: Fix runqslower cross-endian build
-    https://git.kernel.org/bpf/bpf-next/c/c03320a6768c
-
-You are awesome, thank you!
+diff --git a/Documentation/filesystems/proc.rst b/Documentation/filesystems/proc.rst
+index 09f0aed5a08b..0e7825bb1e3a 100644
+--- a/Documentation/filesystems/proc.rst
++++ b/Documentation/filesystems/proc.rst
+@@ -128,6 +128,16 @@ process running on the system, which is named after the process ID (PID).
+ The link  'self'  points to  the process reading the file system. Each process
+ subdirectory has the entries listed in Table 1-1.
+ 
++A process can read its own information from /proc/PID/* with no extra
++permissions. When reading /proc/PID/* information for other processes, reading
++process is required to have either CAP_SYS_PTRACE capability with
++PTRACE_MODE_READ access permissions, or, alternatively, CAP_PERFMON
++capability. This applies to all read-only information like `maps`, `environ`,
++`pagemap`, etc. The only exception is `mem` file due to its read-write nature,
++which requires CAP_SYS_PTRACE capabilities with more elevated
++PTRACE_MODE_ATTACH permissions; CAP_PERFMON capability does not grant access
++to /proc/PID/mem for other processes.
++
+ Note that an open file descriptor to /proc/<pid> or to any of its
+ contained files or subdirectories does not prevent <pid> being reused
+ for some other process in the event that <pid> exits. Operations on
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.43.5
 
