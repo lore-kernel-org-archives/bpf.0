@@ -1,194 +1,196 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from fout-a6-smtp.messagingengine.com (fout-a6-smtp.messagingengine.com [103.168.172.149])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDE0228EB;
-	Wed, 29 Jan 2025 16:19:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26E101DE892;
+	Wed, 29 Jan 2025 16:47:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.149
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738167569; cv=none; b=K6ZXkCa6FvrRRx45ew/+4I0fv2d90yQkbZmPmXXVXjduNPECCes6nqUrmppH3b8nSV8uMR4S47oMklJsWUD3sC6gIWyj97TeWH9SFYNyLT8HGE0v29a4xIT0BgC6gkj2ybibkgnLt7sNi+gVtxWMaeCAiD1T063PzfeFyjJAtLI=
+	t=1738169226; cv=none; b=WTLmu8diIpKCWg158PfS3Z+zYnhmlCycAGj4MS/ZESnhnM5ixG1Gxj8ENnnapNw42SpYlLZXMmgKeYdT68NP7wCZD/fULFEWySzFZTFRiK1Rzl6B+KK6AMZ+SSWmVOcDI1xLVAOuB08CJ2uQ4TbDoFyUJuT7q8Fq7/SY+2MD2hA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738167569; c=relaxed/simple;
-	bh=VQ1tE7auwykWHFaAWlmFtxRv+H5gTV+mb3VLluuo+bU=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=lqzadzTRERZY+E6SIv5+4fNfw0TM3HQpyCZ0D5wRZh29RYk6+9gxQ91aCn25YVkydcXJRbVoZwhcCOUT4Dlu6XLQRkJaDp5ImK5cFc8o2LT9/xJklj00KwyAE4bmHYDo79ZRlrH0Qa8MZZY0EaqOL0pA5w9aR2ooiaLe3HqL7bw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=n/4WzsGK; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1738169226; c=relaxed/simple;
+	bh=r1nG52j9rH5FCWzEjjRLiGuF+MRwAEw2xmFk2SM8rMs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Us0YviHC1gJfiYIjk8Ax7ZOdMgLgTQ6IVHONVuCRT7POZ6Mjjs/MzibJsNbfZ7w1mBEzdUPO5ahFezyU8WNwnzKKWd4ifmRwG1GmhgRPNX1a00lQbFJS1CF6Bkhj3Jg0loIVGqdUYZMWpiKnJOiMwaQZFAO/vlk5BkBp0kl6DBQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dxuuu.xyz; spf=pass smtp.mailfrom=dxuuu.xyz; dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b=U9hDD9mF; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=LBrTDyEr; arc=none smtp.client-ip=103.168.172.149
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dxuuu.xyz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dxuuu.xyz
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="n/4WzsGK"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DDB92C4CED1;
-	Wed, 29 Jan 2025 16:19:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1738167568;
-	bh=VQ1tE7auwykWHFaAWlmFtxRv+H5gTV+mb3VLluuo+bU=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=n/4WzsGK81F59SkkUMb+WMCMS5ZHaRbmeLw6ahJDhfCBABA4a6KVBCSwK9uQe2dCx
-	 x0mNRgNXoAzA3H2ahKHYKJqAKXXN8MREVyvIrV0GgJAcoI7h6gX9LHdjLTxtClMSx4
-	 EddIHSjyw6wAz2IS3Q+EeK4Ip3z4ZZbwoD7CtalDQ7OeIU8gJmPRFPLhFO6904UeOL
-	 pbOtP49em5EsHn7LjmGJCQd4vKS5POHzZdHn43fsshTYlLqDnGfVcMwX7Xp0QR2BJT
-	 vmSJuwnOZQMB3s3i2xEUR2Vvxazeak0N6s9PY8c7YRZAkNftTuLHW4TgGq2APSSIua
-	 GqdW/Bxq24vdQ==
-Date: Wed, 29 Jan 2025 17:19:22 +0100
-From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-To: Jonathan Corbet <corbet@lwn.net>
-Cc: Linux Doc Mailing List <linux-doc@vger.kernel.org>, Greg Kroah-Hartman
- <gregkh@linuxfoundation.org>, linux-kernel@vger.kernel.org,
- bpf@vger.kernel.org, coresight@lists.linaro.org,
- linux-arm-kernel@lists.infradead.org, linux-block@vger.kernel.org,
- linux-f2fs-devel@lists.sourceforge.net, linux-hardening@vger.kernel.org,
- linux-iio@vger.kernel.org, linux-media@vger.kernel.org,
- linux-pm@vger.kernel.org, linux-usb@vger.kernel.org,
- linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
- workflows@vger.kernel.org
-Subject: Re: [RFC v2 00/38] Improve ABI documentation generation
-Message-ID: <20250129171922.4322c338@foz.lan>
-In-Reply-To: <87a5b96296.fsf@trenco.lwn.net>
-References: <cover.1738020236.git.mchehab+huawei@kernel.org>
-	<87h65i7e87.fsf@trenco.lwn.net>
-	<20250129164157.3c7c072d@foz.lan>
-	<87a5b96296.fsf@trenco.lwn.net>
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+	dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b="U9hDD9mF";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="LBrTDyEr"
+Received: from phl-compute-09.internal (phl-compute-09.phl.internal [10.202.2.49])
+	by mailfout.phl.internal (Postfix) with ESMTP id 397321380B1F;
+	Wed, 29 Jan 2025 11:47:02 -0500 (EST)
+Received: from phl-mailfrontend-01 ([10.202.2.162])
+  by phl-compute-09.internal (MEProxy); Wed, 29 Jan 2025 11:47:02 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm2; t=1738169222;
+	 x=1738255622; bh=hxHNdS7WS0R6RbySdyoltquzgKovzLwAMtD/wCqj+rw=; b=
+	U9hDD9mFL2aSc9BQcw/Eqm3mgMLVqKE0fkRF7wL98R0gWrMtIA+by/gvelFG7lHO
+	hJ3F2jFIliIi294xipHz/raU3hKqp8SSaqFoIKg4FhxH0yM4GC95FsQvfCRKcxdv
+	b5Pk3rMvyuKDqh7aL/nwmoD6z9q9exZD/Dsvqic9mZaoprgBECqUm8EKagK19EAM
+	mhK07xmum4wk9WzYjE3ZZoxoHfKhQiDZ+jKo06chwqheq8fq9s1l49uie8Tqu1uZ
+	J5MrZBQcGCVnLVUMBWDbYZgs8263ihd349OYhUDi0MzZv2bfafWpPDbYMuQoo2wB
+	gHzb9GVl4eEWlnaHcMa7AQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1738169222; x=
+	1738255622; bh=hxHNdS7WS0R6RbySdyoltquzgKovzLwAMtD/wCqj+rw=; b=L
+	BrTDyEr5ZzhuSGtRlzjV/kcWlY1/DbnWnvXZsjbyVBmk6FwtWvErNCB0FBWm6cYs
+	Is8UogEGm+G1Ba5CVQD2P2xLCdTKVQJ+7d33yUgO70QwX7axY1yaS/1pW3nhRW8c
+	+xajFw57brgHltQ2ClZxyucqbx2gboGmuGy5lRrQlwY8ZyknIuZf1JZ6jfNACGCq
+	NRS+3qMoCAEII4l5eTWKElte1t/zePostkJtHNczwPFPuST+Mr2/231ZmQpj0igJ
+	55IMC7VbDAFw0Ez8ebSJE1khCF6U8tm3BGR48z/qIrg1hKPjSwW7J5fRXm4tyvoT
+	odca5uM/I78dRaIVHAx+w==
+X-ME-Sender: <xms:hFuaZwv57J0VT4o0lStYEjEsIMnEQKLce7_rYEMcsYnmWYy0EqZ3nQ>
+    <xme:hFuaZ9cHwI3r-xyNnmnj59HyVm7n-z86IH-nvz0RX6PcJYliRnyDtS3yNYdo7WMkw
+    WYPH_Bw6Kdc2z_WnA>
+X-ME-Received: <xmr:hFuaZ7zYYoXKBcC6BCyCfCvGe-ZFP_Nf35O9-Kr2o4Nj2BmqFHfnTpg4iVaf0qSSr1CW7Xk9AZdj55ihAHHrQclUpvTioY-yu1frTkS3Ds8J8g>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdefhedvucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
+    rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnh
+    htshculddquddttddmnegfrhhlucfvnfffucdlvdefmdenucfjughrpeffhffvvefukfhf
+    gggtugfgjgestheksfdttddtjeenucfhrhhomhepffgrnhhivghlucgiuhcuoegugihuse
+    gugihuuhhurdighiiiqeenucggtffrrghtthgvrhhnpeffudfhgfduheeuieeivdehgfej
+    udegueevheevgeehfeekieduhffhheelvdfgudenucffohhmrghinhepkhgvrhhnvghlrd
+    horhhgpdhgihhthhhusgdrtghomhenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgr
+    mhepmhgrihhlfhhrohhmpegugihusegugihuuhhurdighiiipdhnsggprhgtphhtthhope
+    efuddpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepihhrohhgvghrshesghhoohhg
+    lhgvrdgtohhmpdhrtghpthhtohepphgvthgvrhiisehinhhfrhgruggvrggurdhorhhgpd
+    hrtghpthhtohepmhhinhhgohesrhgvughhrghtrdgtohhmpdhrtghpthhtoheprggtmhgv
+    sehkvghrnhgvlhdrohhrghdprhgtphhtthhopehnrghmhhihuhhngheskhgvrhhnvghlrd
+    horhhgpdhrtghpthhtohepmhgrrhhkrdhruhhtlhgrnhgusegrrhhmrdgtohhmpdhrtghp
+    thhtoheprghlvgigrghnuggvrhdrshhhihhshhhkihhnsehlihhnuhigrdhinhhtvghlrd
+    gtohhmpdhrtghpthhtohepjhholhhsrgeskhgvrhhnvghlrdhorhhgpdhrtghpthhtohep
+    rggurhhirghnrdhhuhhnthgvrhesihhnthgvlhdrtghomh
+X-ME-Proxy: <xmx:hFuaZzOcArRnJ_FJ2Vtn3w4gjlBNtLTx_BUQIRwVR7OWoh7EY_xPwQ>
+    <xmx:hFuaZw8YunJUVdW1yEsxaLGkCqypTU7cNXui_uO6NFoi3lDJMWrYtQ>
+    <xmx:hFuaZ7VUlLvYdM80h17oLgxKy8vHudbw9MEJPiZuaSMdhquZYuMCgA>
+    <xmx:hFuaZ5dAvKH0Im2uZFBvUm1c-P7MuDcfAIml-ERSoFM30wZOMrh9tg>
+    <xmx:hluaZx5kTHbOJ_5lvg0et1AUXGoEdBrEL0XCC_Pmhe3ubgBgLy734eYg>
+Feedback-ID: i6a694271:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 29 Jan 2025 11:46:57 -0500 (EST)
+Date: Wed, 29 Jan 2025 09:46:56 -0700
+From: Daniel Xu <dxu@dxuuu.xyz>
+To: Ian Rogers <irogers@google.com>
+Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
+ 	Arnaldo Carvalho de Melo <acme@kernel.org>,
+ Namhyung Kim <namhyung@kernel.org>, 	Mark Rutland <mark.rutland@arm.com>,
+ Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+ 	Jiri Olsa <jolsa@kernel.org>, Adrian Hunter <adrian.hunter@intel.com>,
+ 	Kan Liang <kan.liang@linux.intel.com>,
+ Nathan Chancellor <nathan@kernel.org>,
+ 	Nick Desaulniers <ndesaulniers@google.com>,
+ Bill Wendling <morbo@google.com>, 	Justin Stitt <justinstitt@google.com>,
+ Aditya Gupta <adityag@linux.ibm.com>,
+ 	"Steinar H. Gunderson" <sesse@google.com>,
+ Charlie Jenkins <charlie@rivosinc.com>,
+ 	Changbin Du <changbin.du@huawei.com>,
+ "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
+ 	James Clark <james.clark@linaro.org>, Kajol Jain <kjain@linux.ibm.com>,
+ 	Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
+ Li Huafei <lihuafei1@huawei.com>, 	Dmitry Vyukov <dvyukov@google.com>,
+ Andi Kleen <ak@linux.intel.com>,
+ 	Chaitanya S Prakash <chaitanyas.prakash@arm.com>,
+ linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+ 	llvm@lists.linux.dev, Song Liu <song@kernel.org>, bpf@vger.kernel.org
+Subject: Re: [PATCH v3 13/18] perf build: Remove libbfd support
+Message-ID: <jgxfnphfo3nzlfipnuuzdlfc4ehbr2tnh2evz3mdhynd6wvrsu@fcz6vrvepybb>
+References: <20250122174308.350350-1-irogers@google.com>
+ <20250122174308.350350-14-irogers@google.com>
+ <gnwmibvjtwboisw7uv32bdo4ziw4qzgwzvndqg2czpa6vp4olv@44n36ndbwobc>
+ <CAP-5=fW9nM9zoQ5SQOq2HQfkougRotm=EBw99cvGDOpD=giK2g@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAP-5=fW9nM9zoQ5SQOq2HQfkougRotm=EBw99cvGDOpD=giK2g@mail.gmail.com>
 
-Em Wed, 29 Jan 2025 08:58:13 -0700
-Jonathan Corbet <corbet@lwn.net> escreveu:
-
-> Mauro Carvalho Chehab <mchehab+huawei@kernel.org> writes:
-> 
-> > So, I'm proposing to change the minimal requirements to:
-> > 	- Sphinx 3.4.3;
-> > 	- Python 3.9
+On Tue, Jan 28, 2025 at 05:40:44PM -0800, Ian Rogers wrote:
+> On Tue, Jan 28, 2025 at 4:31 PM Daniel Xu <dxu@dxuuu.xyz> wrote:
 > >
-> > By setting Sphinx minimal version to 3.4.3, we can get rid of all
-> > Sphinx backward-compatible code.  
+> > Hi Ian,
+> >
+> > On Wed, Jan 22, 2025 at 09:43:03AM -0800, Ian Rogers wrote:
+> > > libbfd is license incompatible with perf and building requires the
+> > > BUILD_NONDISTRO=1 build flag. Remove the code to simplify the code
+> > > base.
+> > >
+> > > Signed-off-by: Ian Rogers <irogers@google.com>
+> > > ---
+> > >  tools/perf/Documentation/perf-check.txt |   1 -
+> > >  tools/perf/Makefile.config              |  38 +---
+> > >  tools/perf/builtin-check.c              |   1 -
+> > >  tools/perf/tests/Build                  |   1 -
+> > >  tools/perf/tests/builtin-test.c         |   1 -
+> > >  tools/perf/tests/pe-file-parsing.c      | 101 ----------
+> > >  tools/perf/tests/tests.h                |   1 -
+> > >  tools/perf/util/demangle-cxx.cpp        |  13 +-
+> > >  tools/perf/util/disasm_bpf.c            | 166 ----------------
+> > >  tools/perf/util/srcline.c               | 243 +-----------------------
+> > >  tools/perf/util/symbol-elf.c            |  86 +--------
+> > >  tools/perf/util/symbol.c                | 135 -------------
+> > >  tools/perf/util/symbol.h                |   4 -
+> > >  13 files changed, 7 insertions(+), 784 deletions(-)
+> > >  delete mode 100644 tools/perf/tests/pe-file-parsing.c
+> >
+> > [..]
+> >
+> > I was briefly investigating why the centos build of perf was not
+> > demangling rust v0 symbols [0]. From looking at the rust issue [1], it
+> > appears the rust team somehow delivered support for v0 demangling
+> > through libbfd. The code itself looked a bit odd (relying on cxx
+> > demangle to run first?), but that's a separate thing.
 > 
-> That's certainly a nice thought.
+> There is still C++ demangling support by way of cxxabi:
+> https://git.kernel.org/pub/scm/linux/kernel/git/perf/perf-tools-next.git/tree/tools/perf/util/demangle-cxx.cpp?h=perf-tools-next#n44
+> that was in libstdc++ (GNU) and libcxx (LLVM) when I looked.
 > 
-> With regard to Python ... are all reasonable distributions at 3.9 at
-> least?  CentOS 9 seems to be there, and Debian beyond it.  So probably
-> that is a reasonable floor to set?
+> > The centos build does not build with libbfd for the license issues you
+> > mentioned. So your change probably won't regress any distro use cases.
+> > But it does remove support for motivated users who don't have
+> > re-distribution requirements.
+> >
+> > But since this patchset came up first in my search, I thought it'd be
+> > good to mention that someone probably needs to add v0 support to
+> > tools/perf/util/demangle-rust.c.
+> 
+> So I don't see any libbfd dependencies in demangle-rust.c:
+> https://git.kernel.org/pub/scm/linux/kernel/git/perf/perf-tools-next.git/tree/tools/perf/util/demangle-rust.c?h=perf-tools-next#n8
+> Unusually we don't have any tests on the Rust demangling, we do for
+> Java and OCaml:
+> https://git.kernel.org/pub/scm/linux/kernel/git/perf/perf-tools-next.git/tree/tools/perf/tests/demangle-java-test.c?h=perf-tools-next
+> https://git.kernel.org/pub/scm/linux/kernel/git/perf/perf-tools-next.git/tree/tools/perf/tests/demangle-ocaml-test.c?h=perf-tools-next
+> 
+> Reading a bit more it seems that previous libiberty was coming to the
+> rescue by way of C++ demangling. I'll see if I can write a demangler
+> by way of lex and yacc.
 
-I didn't check, but those are the current minimal versions above 3.5 for
-what we have at the Kernel tree[1]:
+Cool :)
 
-            !2, 3.10     tools/net/sunrpc/xdrgen/generators/__init__.py
-            !2, 3.10     tools/net/sunrpc/xdrgen/generators/program.py
-            !2, 3.10     tools/net/sunrpc/xdrgen/subcmds/source.py
-            !2, 3.10     tools/net/sunrpc/xdrgen/xdr_ast.py
-            !2, 3.10     tools/power/cpupower/bindings/python/test_raw_pylibcpupower.py
-            !2, 3.9      tools/testing/selftests/net/rds/test.py
-            !2, 3.9      tools/net/ynl/ethtool.py
-            !2, 3.9      tools/net/ynl/cli.py
-            !2, 3.9      scripts/checktransupdate.py
-            !2, 3.8      tools/testing/selftests/tc-testing/plugin-lib/nsPlugin.py
-            !2, 3.8      tools/testing/selftests/hid/tests/base.py
-            !2, 3.7      tools/testing/selftests/turbostat/smi_aperf_mperf.py
-            !2, 3.7      tools/testing/selftests/turbostat/defcolumns.py
-            !2, 3.7      tools/testing/selftests/turbostat/added_perf_counters.py
-            !2, 3.7      tools/testing/selftests/hid/tests/conftest.py
-            !2, 3.7      tools/testing/kunit/qemu_config.py
-            !2, 3.7      tools/testing/kunit/kunit_tool_test.py
-            !2, 3.7      tools/testing/kunit/kunit.py
-            !2, 3.7      tools/testing/kunit/kunit_parser.py
-            !2, 3.7      tools/testing/kunit/kunit_kernel.py
-            !2, 3.7      tools/testing/kunit/kunit_json.py
-            !2, 3.7      tools/testing/kunit/kunit_config.py
-            !2, 3.7      tools/perf/scripts/python/gecko.py
-            !2, 3.7      scripts/rust_is_available_test.py
-            !2, 3.7      scripts/bpf_doc.py
-            !2, 3.6      tools/writeback/wb_monitor.py
-            !2, 3.6      tools/workqueue/wq_monitor.py
-            !2, 3.6      tools/workqueue/wq_dump.py
-            !2, 3.6      tools/usb/p9_fwd.py
-            !2, 3.6      tools/tracing/rtla/sample/timerlat_load.py
-            !2, 3.6      tools/testing/selftests/net/openvswitch/ovs-dpctl.py
-            !2, 3.6      tools/testing/selftests/net/nl_netdev.py
-            !2, 3.6      tools/testing/selftests/net/lib/py/ynl.py
-            !2, 3.6      tools/testing/selftests/net/lib/py/utils.py
-            !2, 3.6      tools/testing/selftests/net/lib/py/nsim.py
-            !2, 3.6      tools/testing/selftests/net/lib/py/netns.py
-            !2, 3.6      tools/testing/selftests/net/lib/py/ksft.py
-            !2, 3.6      tools/testing/selftests/kselftest/ksft.py
-            !2, 3.6      tools/testing/selftests/hid/tests/test_tablet.py
-            !2, 3.6      tools/testing/selftests/hid/tests/test_sony.py
-            !2, 3.6      tools/testing/selftests/hid/tests/test_multitouch.py
-            !2, 3.6      tools/testing/selftests/hid/tests/test_mouse.py
-            !2, 3.6      tools/testing/selftests/hid/tests/base_gamepad.py
-            !2, 3.6      tools/testing/selftests/hid/tests/base_device.py
-            !2, 3.6      tools/testing/selftests/drivers/net/stats.py
-            !2, 3.6      tools/testing/selftests/drivers/net/shaper.py
-            !2, 3.6      tools/testing/selftests/drivers/net/queues.py
-            !2, 3.6      tools/testing/selftests/drivers/net/ping.py
-            !2, 3.6      tools/testing/selftests/drivers/net/lib/py/remote_ssh.py
-            !2, 3.6      tools/testing/selftests/drivers/net/lib/py/load.py
-            !2, 3.6      tools/testing/selftests/drivers/net/lib/py/__init__.py
-            !2, 3.6      tools/testing/selftests/drivers/net/lib/py/env.py
-            !2, 3.6      tools/testing/selftests/drivers/net/hw/rss_ctx.py
-            !2, 3.6      tools/testing/selftests/drivers/net/hw/pp_alloc_fail.py
-            !2, 3.6      tools/testing/selftests/drivers/net/hw/nic_performance.py
-            !2, 3.6      tools/testing/selftests/drivers/net/hw/nic_link_layer.py
-            !2, 3.6      tools/testing/selftests/drivers/net/hw/lib/py/linkconfig.py
-            !2, 3.6      tools/testing/selftests/drivers/net/hw/lib/py/__init__.py
-            !2, 3.6      tools/testing/selftests/drivers/net/hw/devmem.py
-            !2, 3.6      tools/testing/selftests/drivers/net/hw/devlink_port_split.py
-            !2, 3.6      tools/testing/selftests/drivers/net/hw/csum.py
-            !2, 3.6      tools/testing/selftests/devices/probe/test_discoverable_devices.py
-            !2, 3.6      tools/testing/selftests/bpf/test_bpftool_synctypes.py
-            !2, 3.6      tools/testing/selftests/bpf/generate_udp_fragments.py
-            !2, 3.6      tools/testing/kunit/run_checks.py
-            !2, 3.6      tools/testing/kunit/kunit_printer.py
-            !2, 3.6      tools/sched_ext/scx_show_state.py
-            !2, 3.6      tools/perf/tests/shell/lib/perf_metric_validation.py
-            !2, 3.6      tools/perf/tests/shell/lib/perf_json_output_lint.py
-            !2, 3.6      tools/perf/scripts/python/parallel-perf.py
-            !2, 3.6      tools/perf/scripts/python/flamegraph.py
-            !2, 3.6      tools/perf/scripts/python/arm-cs-trace-disasm.py
-            !2, 3.6      tools/perf/pmu-events/models.py
-            !2, 3.6      tools/perf/pmu-events/metric_test.py
-            !2, 3.6      tools/perf/pmu-events/metric.py
-            !2, 3.6      tools/perf/pmu-events/jevents.py
-            !2, 3.6      tools/net/ynl/ynl-gen-rst.py
-            !2, 3.6      tools/net/ynl/ynl-gen-c.py
-            !2, 3.6      tools/net/ynl/lib/ynl.py
-            !2, 3.6      tools/net/ynl/lib/nlspec.py
-            !2, 3.6      tools/crypto/tcrypt/tcrypt_speed_compare.py
-            !2, 3.6      tools/cgroup/iocost_monitor.py
-            !2, 3.6      tools/cgroup/iocost_coef_gen.py
-            !2, 3.6      scripts/make_fit.py
-            !2, 3.6      scripts/macro_checker.py
-            !2, 3.6      scripts/get_abi.py
-            !2, 3.6      scripts/generate_rust_analyzer.py
-            !2, 3.6      scripts/gdb/linux/timerlist.py
-            !2, 3.6      scripts/gdb/linux/pgtable.py
-            !2, 3.6      scripts/clang-tools/run-clang-tools.py
-            !2, 3.6      Documentation/sphinx/automarkup.py
+> If we have a v0 standard one is there any
+> value in the existing demangler or legacy demangling? It seems this
+> has been broken for the best part of 5 years.
 
-[1] Checked with:
-	vermin -v $(git ls-files *.py)
+I believe the "legacy" symbol format is still the rust default. So
+probably can't remove that. Looks like there's some desire to change
+that, probably probably not very soon [0].
 
-    Please notice that vermin is not perfect: my script passed as version 3.6
-    because the f-string check there didn't verify f-string improvements over
-    time. Still, it is a quick way to check that our current minimal version
-    is not aligned with reality.
- 
-Btw, vermin explains what is requiring more at the scripts. For instance:
-
-	$ vermin -vv scripts/checktransupdate.py
-	...
-	!2, 3.9      /new_devel/v4l/docs/scripts/checktransupdate.py
-	  'argparse' module requires 2.7, 3.2
-	  'argparse.BooleanOptionalAction' member requires !2, 3.9
-	  'datetime' module requires 2.3, 3.0
-	  'datetime.datetime.strptime' member requires 2.5, 3.0
-	  'logging' module requires 2.3, 3.0
-	  'logging.StreamHandler' member requires 2.6, 3.0
-	  'os.path.relpath' member requires 2.6, 3.0
-	  f-strings require !2, 3.6
+That probably also explains why nobody reported the breakage - only very
+cool kids are using v0 scheme currently.
 
 Thanks,
-Mauro
+Daniel
+
+
+[0]: https://github.com/rust-lang/rust/pull/89917
