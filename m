@@ -1,183 +1,101 @@
-Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
+Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4ED9F1C1F07
-	for <bpf@vger.kernel.org>; Thu, 30 Jan 2025 11:24:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A86921BC065;
+	Thu, 30 Jan 2025 11:24:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738236249; cv=none; b=ic4sP+rWTb5qNJ5WtTX45kpmeJ99z4/rQYFR1G/66B29E5JotHIvV+bWfsHCeVUgK/W+JKRvRGLO+NCv3Z9sg4DBs5TMsC6P5gzvd4xcpWACr0Vp2LNNJzA5Hv/Qvv6bEwF7ijh46qdNA0bZZhHmGTvOuvQsfAmM4fBwG3g89Lk=
+	t=1738236249; cv=none; b=JdTI7itO1r6G+5A5j81G3+xUKGpXZOCZmhf/9kuJ993BGSsVTX2fk+ohyQ+/d0a26titABF93t1buUOyJLxWHJf8ks/wtumed1xhCVxIsLzyFh+sOVaRDe6aV0aV6I14vYulnMsVF2u2piK9/6Pmwb5srTLBEmfTS3iIQvofPhc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1738236249; c=relaxed/simple;
-	bh=V745EBPtWfO/KlVgeT/flSnTLJNcnFiunDgLtlkuRng=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=unxJ8QnolsZPKRf+xjLHCdAr9CMSrh5xsLDhPU0DnbYXuPfpCrVWiNxWt7y3Ol6kxZPkLmJTksi3DXPV750vcQrY79LD6AK6vs2VNsGWaXJ9g9DAjxprIfhBF0R08aBHS+58H6csRB0bCJhAn1KPUPZn+fUXTs++MPoRP1BFeG4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=siteground.com; spf=pass smtp.mailfrom=siteground.com; dkim=pass (1024-bit key) header.d=siteground.com header.i=@siteground.com header.b=wc1nIB3J; arc=none smtp.client-ip=209.85.221.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=siteground.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=siteground.com
+	bh=wDl2kfGArafP0t3yD1cDiGvh5wGA0nD57PSF/Ozc0fU=;
+	h=From:To:Cc:Subject:In-Reply-To:Date:Message-ID:References:
+	 MIME-Version:Content-Type; b=cs7iKwVZWv1vDOAoAF9xl9BZFgbRnHjtfWWwOniHxTgzFBYBDCB5SfWpe3H6mYk+I4lgHNVDtaYyzWWdosMiQTsBqfCqMDcinq4W5jREVZV+LbXkl5eJF7mHXAOCvd3iPU024E/XixNmFWPxdKHGGlyMGE+S15PCjfUbGhFLmOw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gsQspPtZ; arc=none smtp.client-ip=209.85.128.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=siteground.com header.i=@siteground.com header.b="wc1nIB3J"
-Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-385e27c75f4so563679f8f.2
-        for <bpf@vger.kernel.org>; Thu, 30 Jan 2025 03:24:06 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gsQspPtZ"
+Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-4361815b96cso4447655e9.1;
+        Thu, 30 Jan 2025 03:24:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=siteground.com; s=google; t=1738236245; x=1738841045; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=LYWhsyq+R/1EI1JInTggJWtmiRl2dMfBFoFdGnxFB5w=;
-        b=wc1nIB3JMyPE5chLqcxm9fbYKd9vVDI/vbhJ5CIwAZ2oqGJr8lj/iqEf2Km5YR/AEJ
-         kbpUuavIEFnaujhR/b4eX7Tchy+2BevA+VuPfdGlfvppn+SRgOeFGEzGcwhCvRV4kz3R
-         c6P1BGZbyWatT8O4n2CKSYjUemRx0MJJpcdmQ=
+        d=gmail.com; s=20230601; t=1738236244; x=1738841044; darn=vger.kernel.org;
+        h=mime-version:user-agent:references:message-id:date:in-reply-to
+         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=0Id92T0AVX6JDwaxiz3z7oRBD6wW+GTifuBoqUY0sTA=;
+        b=gsQspPtZ81aBimV9bj/pdPd8nM6yfXJ8NADl+XtoGPZt1NXM5W2TbNm0yJUG6BQa8S
+         kJuI2A6nDUXH9XoCVZNcOwjwwTmYmHKA5bxs8oAw8VX86pQXQAsF48ySHqhPust3b2YN
+         0JY+rv+WXJNHcbWY9LBTIhabj9RqVOg1dMyp2oa82KWBD/yu8ow8xk2X/2CB3D5QUO4F
+         S7mlBQ6gRd0fbzVNijIFrgVlk2aezeNHC2Yzk2OZW54qgko5wJDOuC9UH2589o4hyXgU
+         gxwCRSfsPmLYkgCrmkjzXGLu4mMjAqo3F8bbr4tB9rZiK6gkSNttHOtip5S3C7Hazy1i
+         k2Ug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738236245; x=1738841045;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=LYWhsyq+R/1EI1JInTggJWtmiRl2dMfBFoFdGnxFB5w=;
-        b=M6BTRBmPOq8+tGYUfY2Q54bac78xbR9DTgzZ0sN/rxUiobOs6eFq1/8CimVu2qUk4l
-         St4h88YReg/Pq3omd3JM5yDZmg4tio/C7eoswHGETJTUKulQbI+3cX0Zp5p1rP1FYc7x
-         2/mCUn4wBH5QYlpE7djq7alE0s7R+y3MlqLCYNcCGnx+mYAUBOKT1bcuHMYfAD0d4cIK
-         wi1pqg3tmjfANII81DdiXHaUkMyLba1aV6uOqIhTbIxPcpRlHc6lBDL4I1Zdq4RGlKeg
-         lHjmRYzE8xqY90/JO+JvpI0EkupNtfCUPudUrH9sL7jJj9782aEJW2d9VPY3KyaGclnB
-         Dcsw==
-X-Gm-Message-State: AOJu0YwauAQFcZfqIN4pG/DXt7jRsUOPvDk6e6CPbfwqT00L6p/XydVE
-	7s2UsmefxwrazV3SVYCevsm8EB0VBMfb6aG7JKbY3vWj+uw7zTAqZs7IaGIs6uSzwiaMot3kN29
-	8+T4=
-X-Gm-Gg: ASbGncupE2ngeHkna/9GJ7SQbit/3xZ/wZ1a5HZd1/cAbqBo0mI0met0k16TaJ/gpK4
-	ioe/GiIOsOGM7kt2oQrTWOWwIkd99xRaEhEtQj0WIVZeyx4b1XhQmLiEY3FrEfckDtw0oRQVkMf
-	1WGRFuT+/SKPN0qED7pPaQjxRWOpcYQE7+Ne3iLNyaOsmpfCIu8xIYU+f3sn8uXkWsGOMSenJwq
-	BwITMAIymlAoimOxku4d9Q6CwRVHk8w/qVfuT9rzmVSFf1CLwP9adpuOnhno8XS8GHFpeUbvWjb
-	VGAqNFs90HXKkzdOdBxlBmrqWNMCdGETns+w8rACkYN9Nk9g1vsvlVU=
-X-Google-Smtp-Source: AGHT+IE6E9y1qbeZwqYyFKuJAaMuNalusb+mJc8UfE0nLv4MdMrq+YCk19kqDOzVpa6EWB0eP2nfQA==
-X-Received: by 2002:a05:6000:18a9:b0:385:df6d:6fc7 with SMTP id ffacd0b85a97d-38c51b5efb4mr6535840f8f.25.1738236245551;
-        Thu, 30 Jan 2025 03:24:05 -0800 (PST)
-Received: from localhost.localdomain ([85.196.187.226])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38c5c1b51e1sm1678981f8f.77.2025.01.30.03.24.04
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Thu, 30 Jan 2025 03:24:05 -0800 (PST)
-From: Dimitar Kanaliev <dimitar.kanaliev@siteground.com>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Song Liu <song@kernel.org>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Mykola Lysenko <mykolal@fb.com>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Shung-Hsi Yu <shung-hsi.yu@suse.com>,
-	Dimitar Kanaliev <dimitar.kanaliev@siteground.com>
-Subject: [PATCH v0 3/3] selftests/bpf: Extend tests with more coverage for sign extension
-Date: Thu, 30 Jan 2025 13:23:42 +0200
-Message-Id: <20250130112342.69843-4-dimitar.kanaliev@siteground.com>
-X-Mailer: git-send-email 2.39.3 (Apple Git-146)
-In-Reply-To: <20250130112342.69843-1-dimitar.kanaliev@siteground.com>
-References: <20250130112342.69843-1-dimitar.kanaliev@siteground.com>
+        d=1e100.net; s=20230601; t=1738236244; x=1738841044;
+        h=mime-version:user-agent:references:message-id:date:in-reply-to
+         :subject:cc:to:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0Id92T0AVX6JDwaxiz3z7oRBD6wW+GTifuBoqUY0sTA=;
+        b=MLBZ5AAwACWnGzvAjUzQu+mrKXOtv2EeHNNrO++WELB5Ofu1AiViAcaQhgS9vR+XeU
+         LoOhQpdEh5rn5Duv7ooAFwuhpYFNfYwItaagYY07oepf1xX59pHD8DDAy4D5BG19pvch
+         69fTR98XJEg8nqH0+3Ft9Hikph1q9HpfxQ/JX/hGZfDDHqGiylipJMhk00zVJg4cQk7L
+         F6kHHrCNaMajBEYv/fbYWWwSKNSixzTLu0FR/Ukxl7lcyYhVT7kHrtS95IVXNWp8P+Ga
+         8Fx+kpiWOczYUuPTQjaud0sk1J8XhURgB0rB+jyHOTBW2/Je0PfISiMMbRuVSg5nmqcX
+         y7qA==
+X-Forwarded-Encrypted: i=1; AJvYcCUgPXzyinkNz6DxIOK7lUP3B15wVgWJRAwnGFMGorx2qWm+xF8evWC8xvp19y2S8ghhOZA=@vger.kernel.org, AJvYcCWLJHOJ0NzTAGO061tTm/TPFJiQfN7DxTTTIu9hDBrIr0N7ho/9iqZ0LbdB80TiSq3lYOvuh1oHcuLeqS7E@vger.kernel.org, AJvYcCXzi80VCHmIY+Bewu15DtrVc3D5lnezUoTi+ztelujOlDN5VW6ZJNwYyO8jzCl4/vCdMDWUaHd/T2wD@vger.kernel.org
+X-Gm-Message-State: AOJu0YzE8J5oRE3p78IiqfmkpZpyfAD0ujDjlsbwILWeX1OFuC45MOkE
+	/n9MXr9ZGzGxT0kZzmdOrCshbc/LLFTWLh+h9Tj5EuZmvKT69stHhKO1CA==
+X-Gm-Gg: ASbGncv3UeEDJOnUKylOljseL3QUc0IkzHrLmgd2Rt5+Od7j1Hxs3ypnG8yASTYaEg3
+	2HEQf4kfuci/BLELPisAPL8MPgNi+qdgLIXyBMh4MGFnfrQW/tyrZ5j/IYN8OM6rumD73Dt3BkZ
+	k5BdXGCezWUcpRNnyKvLvnXHDJ3oz1EiszXFCFfld4btvD47iuPINAx98eQVSyy52kBfAr4/DbW
+	4g1pQQoOB1HeEUiForKlY+U3LtvZjnW5jVwsS9VdnjagCdxbAdOtZRBtAsTPv/w+riOA9vxAMzY
+	uwEyddreNwKJtxFfS0z5fdCewG15
+X-Google-Smtp-Source: AGHT+IGn3W76KCgmgMIkQT/WdD1sCcWCm5LqI+wFsAmXytxdLRcHtMo25bA2WjiLnRFQbbwNF4GiZg==
+X-Received: by 2002:a05:600c:3494:b0:434:a315:19c with SMTP id 5b1f17b1804b1-438dc3a85b3mr56757135e9.3.1738236244282;
+        Thu, 30 Jan 2025 03:24:04 -0800 (PST)
+Received: from imac ([2a02:8010:60a0:0:846f:7c2d:e5a5:73a3])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-438d75de282sm49377315e9.2.2025.01.30.03.24.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Jan 2025 03:24:03 -0800 (PST)
+From: Donald Hunter <donald.hunter@gmail.com>
+To: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Cc: Linux Doc Mailing List <linux-doc@vger.kernel.org>,  "Jonathan Corbet"
+ <corbet@lwn.net>,  linux-kernel@vger.kernel.org,  Bill Wendling
+ <morbo@google.com>,  Justin Stitt <justinstitt@google.com>,  Nick
+ Desaulniers <ndesaulniers@google.com>,  bpf@vger.kernel.org,
+  llvm@lists.linux.dev,  workflows@vger.kernel.org
+Subject: Re: [RFC 0/6] Raise the bar with regards to Python and Sphinx
+ requirements
+In-Reply-To: <cover.1738166451.git.mchehab+huawei@kernel.org> (Mauro Carvalho
+	Chehab's message of "Wed, 29 Jan 2025 17:09:31 +0100")
+Date: Thu, 30 Jan 2025 09:33:30 +0000
+Message-ID: <m2zfj87ij9.fsf@gmail.com>
+References: <cover.1738166451.git.mchehab+huawei@kernel.org>
+User-Agent: Gnus/5.13 (Gnus v5.13)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 
-This commit adds a few more tests related to tnum_scast that explicitly
-check cases with known / unknown sign bit, as well as values that cross
-zero (going from negative to positive).
+Mauro Carvalho Chehab <mchehab+huawei@kernel.org> writes:
 
-Signed-off-by: Dimitar Kanaliev <dimitar.kanaliev@siteground.com>
----
- .../selftests/bpf/progs/verifier_movsx.c      | 73 +++++++++++++++++++
- 1 file changed, 73 insertions(+)
+> This series comes after https://lore.kernel.org/linux-doc/87a5b96296.fsf@trenco.lwn.net/T/#t
+> It  increases the minimal requirements for Sphinx and Python.
+>
+> Sphinx release dates:
+>
+> 	Release 2.4.0 (released Feb 09, 2020)
+> 	Release 2.4.4 (released Mar 05, 2020) (current minimal requirement)
+> 	Release 3.4.0 (released Dec 20, 2020)
+> 	Release 3.4.3 (released Jan 08, 2021)
+>
+> 	(https://www.sphinx-doc.org/en/master/changes/index.html)
 
-diff --git a/tools/testing/selftests/bpf/progs/verifier_movsx.c b/tools/testing/selftests/bpf/progs/verifier_movsx.c
-index 994bbc346d25..20abeec09dee 100644
---- a/tools/testing/selftests/bpf/progs/verifier_movsx.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_movsx.c
-@@ -327,6 +327,79 @@ label_%=: 	                                        \
- 	: __clobber_all);
- }
- 
-+SEC("socket")
-+__description("MOV64SX, S8, unknown value")
-+__success __success_unpriv __retval(1)
-+__naked void mov64sx_s8_unknown(void)
-+{
-+	asm volatile ("                                      \
-+	call %[bpf_get_prandom_u32];                         \
-+	r1 = r0;                                             \
-+	r1 &= 0xFF;      			             \
-+	r1 = (s8)r1;  					     \
-+	if r1 s>= -128 goto l0_%=;                           \
-+	r0 = 0;                                              \
-+	exit;                                                \
-+l0_%=:                                                       \
-+	if r1 s<= 127 goto l1_%=;                            \
-+	r0 = 0;                                              \
-+	exit;                                                \
-+l1_%=:                                                       \
-+	r0 = 1;                                              \
-+	exit;                                                \
-+"	:
-+	: __imm(bpf_get_prandom_u32)
-+	: __clobber_all);
-+}
-+
-+SEC("socket")
-+	__description("MOV64SX, S8, sign bit unknown")
-+	__success __success_unpriv __retval(1)
-+__naked void mov64sx_s8_sign_unknown(void)
-+{
-+	asm volatile ("                                      \
-+	call %[bpf_get_prandom_u32];                         \
-+	r1 = r0;                                             \
-+	r1 &= 0x7F;                 			     \
-+	r1 |= 0x80;        				     \
-+	r1 = (s8)r1;       				     \
-+	if r1 s>= -128 goto l0_%=;                           \
-+	r0 = 0;                                              \
-+	exit;                                                \
-+l0_%=:                                                       \
-+	if r1 s<= 127 goto l1_%=;                            \
-+	r0 = 0;                                              \
-+	exit;                                                \
-+l1_%=:                                                       \
-+	r0 = 1;                                              \
-+	exit;                                                \
-+	"   :
-+	: __imm(bpf_get_prandom_u32)
-+	: __clobber_all);
-+}
-+
-+SEC("socket")
-+	__description("MOV64SX, S8, value crossing zero")
-+	__success __success_unpriv __retval(1)
-+__naked void mov64sx_s8_cross_zero(void)
-+{
-+	asm volatile ("                                      \
-+	call %[bpf_get_prandom_u32];                         \
-+	r1 = r0;                                             \
-+	r1 &= 0xFF;      			             \
-+	r1 = (s8)r1;             			     \
-+	if r1 s> -10 goto l0_%=;                             \
-+	if r1 s< 10 goto l0_%=;                              \
-+	r0 = 0;                                              \
-+	exit;                                                \
-+l0_%=:                                               	     \
-+	r0 = 1;                                              \
-+	exit;                                                \
-+	"   :
-+	: __imm(bpf_get_prandom_u32)
-+	: __clobber_all);
-+}
-+
- #else
- 
- SEC("socket")
--- 
-2.43.0
+It's worth mentioning here that my fix for the C performance regression
+landed in Sphinx 7.4.0. All versions from 3.0.0 to 7.3.x are much slower
+for building the kernel docs. See #12162 here:
+
+https://www.sphinx-doc.org/en/master/changes/7.4.html#id7
 
