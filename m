@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28F661F1504;
-	Thu, 30 Jan 2025 19:03:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EBAF1F150F;
+	Thu, 30 Jan 2025 19:03:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738263800; cv=none; b=H20Z7fTlb27nkiJfmrLgbKc/AKBulraVRJE9DDjbZqaggyOYrmHYoVV8TyvH+T+yraeBdQvB86haQrQY+0NXBaqGC8Gt92rtXLoDt3lGFXFXQYnQgyrVJrPJWa5NMwMbRhMyBgQxgojEPhrIkFmDPoZ8MGc1I12pgmoEqrPsbcE=
+	t=1738263800; cv=none; b=Ccz8Rivs3dW5aj6HpxIjvxnHdUvEraUFMxPWu4u8bP0WeBVwRbXUPTHs31Sp1FYtDHFx20k1SBPy/Fttucgp/C1CRxRimzJeHW/802N7KNL9ri+HTiQncAJpUJSKPFjNu8cm3gZnZArTWZPkLJC44uAwo+t3q5h0cH4eGWoqK/s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1738263800; c=relaxed/simple;
-	bh=SkUVKqjw0WvQtf+SfCmutLxRl7zCrBQzPzWYoA+XivA=;
+	bh=9ylMe2EoR3K55pq1MMAtt4TlBFgPxi0PeDYU9p9rAaw=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=bRFDk8T7A1G0AsqNgQWs5wRNqX2rb7Yk+FCAF62U3Om/c7PTIgP0VtI6ovx+F9Aa5rpJ9YVrAy3IBWblNknZ+YoXoISwCtNNvDZy1olMN+4YIxlJEDx3fr+MR1MGGLSz4K78lUwQyrsWBmTOmUTyAMerZBqG/dGcX3pDoverb1Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OS6xS4ac; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=oHrkfkSNy+33Kd7Kic4JQcTXW4JqLGycWe9rJ+Sqd1WEdE8kSGsavuqfeY9nuU6FYTjNKlMakP6Qlh+1yC47zqEcgEpXZlfGz7LuLx9LUVkALfdhFXpgtxj3CulrkJ4TcrNBjA3G/pCd9jlLflHb3YVIX6RRpyC6C/8Er2Fp/wE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jNUQ0k0a; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OS6xS4ac"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BEB06C113CF;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jNUQ0k0a"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9FFF0C4CEE4;
 	Thu, 30 Jan 2025 19:03:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1738263799;
-	bh=SkUVKqjw0WvQtf+SfCmutLxRl7zCrBQzPzWYoA+XivA=;
+	bh=9ylMe2EoR3K55pq1MMAtt4TlBFgPxi0PeDYU9p9rAaw=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=OS6xS4acMqdnO7P+wLHcO2rqe7zKb4QNs0dmAfQcPUs3Dw1zmCwK5rRpEz1anNIuE
-	 7sifKsR+CVdGHqtgzRiPXnTFpHE1uiIHT/dmdIeCAsp6GHUC2A02J17e0tyLCorePi
-	 iuGk8zAiE89tkricbNJQHwSWR10fKVPQz2YAfKxXzwET7SHVEzaPBybeBAtx/N/ekN
-	 IJMgyJIfIkj/lhm/3HQFjPaTaBq5OSIApNt9mh2R5DmNqi/pE/Mrm9fpV4AyU7Z9Rg
-	 ZPFWkIjC9dz/CDIBgmdOIVMkqFYV6QiFsfAqI0de0CByoQPfbApJHaHZCWsLHKZAqE
-	 YPwTyPPRgZVrg==
+	b=jNUQ0k0aNjY98yiPL2AIzZV3lYsYhvwZgX4Fp4FiTA3Wh93FaghAakR0Xer5Dvf9g
+	 885T9UYCWM3RpopGmPJ5pOk+WxOk/h8ca2yaeIj1VpE0wmwo+n6mBx2imm24+UePOM
+	 zePqn6lUEFyi5Tqd9h80IStFHqyspnyvOAiRSqEEYUHJaDRGMOIJF3feOzaY7Geh5b
+	 RY5CnOIzus2wAIqMmmyP7t55eletOI+XbRhlh5t2MeO+GNMG6/SLrBWST48KACuU0j
+	 1NM2vmRAaYvg/I3qPBsHpQU+OctuZxosQwhUhz7fFCNU/9L6n9ZwLN2ps1+rD8+LKY
+	 zt4F50muSUjfg==
 Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-	id 04825CE3805; Thu, 30 Jan 2025 11:03:19 -0800 (PST)
+	id F25ADCE37FA; Thu, 30 Jan 2025 11:03:18 -0800 (PST)
 From: "Paul E. McKenney" <paulmck@kernel.org>
 To: rcu@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org,
@@ -39,9 +39,9 @@ Cc: linux-kernel@vger.kernel.org,
 	Peter Zijlstra <peterz@infradead.org>,
 	Kent Overstreet <kent.overstreet@linux.dev>,
 	bpf@vger.kernel.org
-Subject: [PATCH rcu v2] 14/20] rcutorture: Add ability to test srcu_read_{,un}lock_fast()
-Date: Thu, 30 Jan 2025 11:03:11 -0800
-Message-Id: <20250130190317.1652481-14-paulmck@kernel.org>
+Subject: [PATCH rcu v2] 12/20] srcu: Move SRCU Tree/Tiny definitions from srcu.h
+Date: Thu, 30 Jan 2025 11:03:09 -0800
+Message-Id: <20250130190317.1652481-12-paulmck@kernel.org>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <1034ef54-b6b3-42bb-9bd8-4c37c164950d@paulmck-laptop>
 References: <1034ef54-b6b3-42bb-9bd8-4c37c164950d@paulmck-laptop>
@@ -53,8 +53,10 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This commit permits rcutorture to test srcu_read_{,un}lock_fast(), which
-is specified by the rcutorture.reader_flavor=0x8 kernel boot parameter.
+There are a couple of definitions under "#ifdef CONFIG_TINY_SRCU"
+in include/linux/srcu.h.  There is no point in them being there,
+so this commit moves them to include/linux/srcutiny.h and
+include/linux/srcutree.c, thus eliminating that #ifdef.
 
 Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 Cc: Alexei Starovoitov <ast@kernel.org>
@@ -63,43 +65,65 @@ Cc: Peter Zijlstra <peterz@infradead.org>
 Cc: Kent Overstreet <kent.overstreet@linux.dev>
 Cc: <bpf@vger.kernel.org>
 ---
- kernel/rcu/rcutorture.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ include/linux/srcu.h     | 10 +---------
+ include/linux/srcutiny.h |  3 +++
+ include/linux/srcutree.h |  1 +
+ 3 files changed, 5 insertions(+), 9 deletions(-)
 
-diff --git a/kernel/rcu/rcutorture.c b/kernel/rcu/rcutorture.c
-index 1d2de50fb5d6..1bd3eaa0b8e7 100644
---- a/kernel/rcu/rcutorture.c
-+++ b/kernel/rcu/rcutorture.c
-@@ -677,6 +677,7 @@ static void srcu_get_gp_data(int *flags, unsigned long *gp_seq)
- static int srcu_torture_read_lock(void)
- {
- 	int idx;
-+	struct srcu_ctr __percpu *scp;
- 	int ret = 0;
+diff --git a/include/linux/srcu.h b/include/linux/srcu.h
+index 505f5bdce444..2bd0e24e9b55 100644
+--- a/include/linux/srcu.h
++++ b/include/linux/srcu.h
+@@ -52,6 +52,7 @@ int init_srcu_struct(struct srcu_struct *ssp);
+ #define SRCU_READ_FLAVOR_SLOWGP	SRCU_READ_FLAVOR_LITE
+ 						// Flavors requiring synchronize_rcu()
+ 						// instead of smp_mb().
++void __srcu_read_unlock(struct srcu_struct *ssp, int idx) __releases(ssp);
  
- 	if ((reader_flavor & SRCU_READ_FLAVOR_NORMAL) || !(reader_flavor & SRCU_READ_FLAVOR_ALL)) {
-@@ -694,6 +695,12 @@ static int srcu_torture_read_lock(void)
- 		WARN_ON_ONCE(idx & ~0x1);
- 		ret += idx << 2;
- 	}
-+	if (reader_flavor & SRCU_READ_FLAVOR_FAST) {
-+		scp = srcu_read_lock_fast(srcu_ctlp);
-+		idx = __srcu_ptr_to_ctr(srcu_ctlp, scp);
-+		WARN_ON_ONCE(idx & ~0x1);
-+		ret += idx << 3;
-+	}
- 	return ret;
+ #ifdef CONFIG_TINY_SRCU
+ #include <linux/srcutiny.h>
+@@ -64,15 +65,6 @@ int init_srcu_struct(struct srcu_struct *ssp);
+ void call_srcu(struct srcu_struct *ssp, struct rcu_head *head,
+ 		void (*func)(struct rcu_head *head));
+ void cleanup_srcu_struct(struct srcu_struct *ssp);
+-int __srcu_read_lock(struct srcu_struct *ssp) __acquires(ssp);
+-void __srcu_read_unlock(struct srcu_struct *ssp, int idx) __releases(ssp);
+-#ifdef CONFIG_TINY_SRCU
+-#define __srcu_read_lock_lite __srcu_read_lock
+-#define __srcu_read_unlock_lite __srcu_read_unlock
+-#else // #ifdef CONFIG_TINY_SRCU
+-int __srcu_read_lock_lite(struct srcu_struct *ssp) __acquires(ssp);
+-void __srcu_read_unlock_lite(struct srcu_struct *ssp, int idx) __releases(ssp);
+-#endif // #else // #ifdef CONFIG_TINY_SRCU
+ void synchronize_srcu(struct srcu_struct *ssp);
+ 
+ #define SRCU_GET_STATE_COMPLETED 0x1
+diff --git a/include/linux/srcutiny.h b/include/linux/srcutiny.h
+index 6b1a7276aa4c..07a0c4489ea2 100644
+--- a/include/linux/srcutiny.h
++++ b/include/linux/srcutiny.h
+@@ -71,6 +71,9 @@ static inline int __srcu_read_lock(struct srcu_struct *ssp)
+ 	return idx;
  }
  
-@@ -719,6 +726,8 @@ srcu_read_delay(struct torture_random_state *rrsp, struct rt_read_seg *rtrsp)
- static void srcu_torture_read_unlock(int idx)
++#define __srcu_read_lock_lite __srcu_read_lock
++#define __srcu_read_unlock_lite __srcu_read_unlock
++
+ static inline void synchronize_srcu_expedited(struct srcu_struct *ssp)
  {
- 	WARN_ON_ONCE((reader_flavor && (idx & ~reader_flavor)) || (!reader_flavor && (idx & ~0x1)));
-+	if (reader_flavor & SRCU_READ_FLAVOR_FAST)
-+		srcu_read_unlock_fast(srcu_ctlp, __srcu_ctr_to_ptr(srcu_ctlp, (idx & 0x8) >> 3));
- 	if (reader_flavor & SRCU_READ_FLAVOR_LITE)
- 		srcu_read_unlock_lite(srcu_ctlp, (idx & 0x4) >> 2);
- 	if (reader_flavor & SRCU_READ_FLAVOR_NMI)
+ 	synchronize_srcu(ssp);
+diff --git a/include/linux/srcutree.h b/include/linux/srcutree.h
+index 55fa400624bb..ef3065c0cadc 100644
+--- a/include/linux/srcutree.h
++++ b/include/linux/srcutree.h
+@@ -207,6 +207,7 @@ struct srcu_struct {
+ #define DEFINE_SRCU(name)		__DEFINE_SRCU(name, /* not static */)
+ #define DEFINE_STATIC_SRCU(name)	__DEFINE_SRCU(name, static)
+ 
++int __srcu_read_lock(struct srcu_struct *ssp) __acquires(ssp);
+ void synchronize_srcu_expedited(struct srcu_struct *ssp);
+ void srcu_barrier(struct srcu_struct *ssp);
+ void srcu_torture_stats_print(struct srcu_struct *ssp, char *tt, char *tf);
 -- 
 2.40.1
 
