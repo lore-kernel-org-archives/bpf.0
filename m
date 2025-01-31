@@ -1,39 +1,39 @@
 Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1342A1C07FA;
-	Fri, 31 Jan 2025 07:22:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DD931C4A3D;
+	Fri, 31 Jan 2025 07:22:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738308124; cv=none; b=pienYYK9Owg+YPhLNNiAWWUKfyTlBa3OhkUHUOk1VXlU3J7zVu4djdshy6Tiztf4/OY2OV3OxFSYFOUBLgWIVajnyBX4TcWsLDFxvNAdwlmV3YQCNBF72OUy9RHk2ENFE9gmXsFEjot+NZRXQqfr8tGSf8uzlE3SoOylMPDjJwg=
+	t=1738308126; cv=none; b=dZklI15icTxwn13flfxoGoLjLficERF040SAopGYpg4KkwE5yMoVUVmoJc5TTWEiJSyAkiFcSQ3s1CgDnHk2Cow0cfWlY3UebxVHHaSM0MpKAyKsfBUOnFrdWnOz8cBBSPpDXEz9eUxpLSAFpU6ny06JSDQGvOMqVvQPx1fwt+k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738308124; c=relaxed/simple;
-	bh=e4dtfdj6ndHoj5BDFTIcZ3TEKw/bQJqIXLwgaFQHmcU=;
+	s=arc-20240116; t=1738308126; c=relaxed/simple;
+	bh=cpzaPriXiNa6GsB/zm4P9ijLrdMEk0S9GbLGl2ngfyU=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=X2wV1CVBqDSqgu5zv3MX/v5wknSXUG8jky216REDEHUtiNNR2Wg3kR6qpDCEBTQiXAARMytQkj64OPAcrqA2qVqsNpyYJ78q+g4ewpSYVIrIdNsy6VTv8+Hf7p1b8sV1MKpNFjYjIkFoKbKsdmQdJCYBu3i3vf4MeGKjVzIfqWc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=iwqhvRyC; arc=none smtp.client-ip=217.70.183.199
+	 In-Reply-To:To:Cc; b=RC57htMQ7nbm0kLsSlMZZ3wroMl0TWx1FmcBltfmx0Ig4uf9c/OSVLzpQcUKgbRXk+MIPSTA4aL9fNYPqjjbLFm8L8jp9l3UQ8GDbSeywkqe+h+7NUUMmmE5eg/eZ3E8BLnqWlqUJXkIcIeUZQgmKHeheabBhgzefWSF6t8NjlE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=ZMgAm5uB; arc=none smtp.client-ip=217.70.183.199
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="iwqhvRyC"
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 3DFC7442DE;
-	Fri, 31 Jan 2025 07:21:58 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="ZMgAm5uB"
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 9449A4326D;
+	Fri, 31 Jan 2025 07:22:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1738308119;
+	t=1738308121;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=t3Es4N7zV/v2iQFhRk+AY1Ow9t3y8tMpKwMJH+j+5yk=;
-	b=iwqhvRyCyta4oGWbLKcKGasIZQ3WaQpVAQ/K4s2t5XZxLwSggiqOIrLE9jQ99UCy9e1vSV
-	cvnZ5kv+clqu+CfsEisyQ4D20ePds2+38Ikyp2L36tmaYkjP8Vnl/L4uLBYin2XF77jzXC
-	gKUNIQuTkHk8R5oGAst/WsdnBZCaqTX13ZxUtHrPkFWG2acJmHQFuIwk4e+yVvAkyGb1oW
-	rwHF5nfF1Q57C6AU2oR0xSSp6pUrW/F2+wJQ7n01MTRZfun9nNPjC60QMWQxS+Kh1xXlt+
-	DnHWGTffY3aviKL1ngIIID/DxSW0WNXdCkc54OsBySk9xXlasLX7qdUBRotj/A==
+	bh=6urteomlTkTofaxgiJIeYJqv2agIUHLmeEqsHLPYNTk=;
+	b=ZMgAm5uBpSk2XuL38aTvdLAjjiSvcR31H7e+39PhRnnx5EtdbJuvMI4wsyYDxay8wUgqkz
+	MS6gI5FLIxfj4YgG8lSEAbFNNSeKKjHhlLXRF9wj9UD+LaSqvnX8/17G3Xtq3gDiy2KJR2
+	4K+4wjb7HD9W1TMJDGA5Q68PVfXqEUzPr3lfozmdL5wuvqZGN7lMvYYsMK+J9ptIqR49yR
+	PelFjMZpFQhuu/KOTgkDOLvbG03idTLy32dZBAC7sV+MVrvwnYSY2FEsqp9UCHI8qapGNE
+	jDq3n2T9iTfzpGmhmqIoaliYNgf2lfSqAV9vUeijqj7sHkCCUEQdxRIZViW8NA==
 From: "Bastien Curutchet (eBPF Foundation)" <bastien.curutchet@bootlin.com>
-Date: Fri, 31 Jan 2025 08:21:50 +0100
-Subject: [PATCH bpf-next v4 11/14] selftests/bpf: Optionally select
- broadcasting flags
+Date: Fri, 31 Jan 2025 08:21:52 +0100
+Subject: [PATCH bpf-next v4 13/14] selftests/bpf: test_xdp_veth: Add XDP
+ program on egress test
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -42,7 +42,7 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250131-redirect-multi-v4-11-970b33678512@bootlin.com>
+Message-Id: <20250131-redirect-multi-v4-13-970b33678512@bootlin.com>
 References: <20250131-redirect-multi-v4-0-970b33678512@bootlin.com>
 In-Reply-To: <20250131-redirect-multi-v4-0-970b33678512@bootlin.com>
 To: Alexei Starovoitov <ast@kernel.org>, 
@@ -69,85 +69,218 @@ X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdekudegucetufdoteggodetrfd
  hhlvgdrtghomhdprhgtphhtthhopegurghnihgvlhesihhoghgvrghrsghogidrnhgvthdprhgtphhtthhopegrlhgvgihishdrlhhothhhohhrvgessghoohhtlhhinhdrtghomhdprhgtphhtthhopehnvghtuggvvhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehshhhurghhsehkvghrnhgvlhdrohhrgh
 X-GND-Sasl: bastien.curutchet@bootlin.com
 
-Broadcasting flags are hardcoded for each kind for protocol.
+XDP programs loaded on egress is tested by test_xdp_redirect_multi.sh
+but not by the test_progs framework.
 
-Create a redirect_flags map that allows to select the broadcasting flags
-to use in the bpf_redirect_map(). The protocol ID is used as a key.
-Set the old hardcoded values as default if the map isn't filled by the
-BPF caller.
+Add a test case in test_xdp_veth.c to test the XDP program on egress.
+Use the same BPF program than test_xdp_redirect_multi.sh that replaces
+the source MAC address by one provided through a BPF map.
+Use a BPF program that stores the source MAC of received packets in a
+map to check the test results.
 
 Acked-by: Stanislav Fomichev <sdf@fomichev.me>
 Signed-off-by: Bastien Curutchet (eBPF Foundation) <bastien.curutchet@bootlin.com>
 ---
- .../selftests/bpf/progs/xdp_redirect_multi_kern.c  | 41 +++++++++++++++-------
- 1 file changed, 29 insertions(+), 12 deletions(-)
+ .../selftests/bpf/prog_tests/test_xdp_veth.c       | 125 +++++++++++++++++++++
+ .../testing/selftests/bpf/progs/xdp_redirect_map.c |  40 +++++++
+ 2 files changed, 165 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/progs/xdp_redirect_multi_kern.c b/tools/testing/selftests/bpf/progs/xdp_redirect_multi_kern.c
-index 97b26a30b59a758f5a5f2152af509acef80031ce..bc2945ed8a8017021c2792671b4de9aa4928a3e4 100644
---- a/tools/testing/selftests/bpf/progs/xdp_redirect_multi_kern.c
-+++ b/tools/testing/selftests/bpf/progs/xdp_redirect_multi_kern.c
-@@ -34,6 +34,14 @@ struct {
- 	__uint(max_entries, 128);
- } mac_map SEC(".maps");
- 
-+/* map to store redirect flags for each protocol*/
-+struct {
-+	__uint(type, BPF_MAP_TYPE_HASH);
-+	__type(key, __u16);
-+	__type(value, __u64);
-+	__uint(max_entries, 16);
-+} redirect_flags SEC(".maps");
-+
- SEC("xdp")
- int xdp_redirect_map_multi_prog(struct xdp_md *ctx)
- {
-@@ -41,25 +49,34 @@ int xdp_redirect_map_multi_prog(struct xdp_md *ctx)
- 	void *data = (void *)(long)ctx->data;
- 	int if_index = ctx->ingress_ifindex;
- 	struct ethhdr *eth = data;
-+	__u64 *flags_from_map;
- 	__u16 h_proto;
- 	__u64 nh_off;
-+	__u64 flags;
- 
- 	nh_off = sizeof(*eth);
- 	if (data + nh_off > data_end)
- 		return XDP_DROP;
- 
--	h_proto = eth->h_proto;
--
--	/* Using IPv4 for (BPF_F_BROADCAST | BPF_F_EXCLUDE_INGRESS) testing */
--	if (h_proto == bpf_htons(ETH_P_IP))
--		return bpf_redirect_map(&map_all, 0,
--					BPF_F_BROADCAST | BPF_F_EXCLUDE_INGRESS);
--	/* Using IPv6 for none flag testing */
--	else if (h_proto == bpf_htons(ETH_P_IPV6))
--		return bpf_redirect_map(&map_all, if_index, 0);
--	/* All others for BPF_F_BROADCAST testing */
--	else
--		return bpf_redirect_map(&map_all, 0, BPF_F_BROADCAST);
-+	h_proto = bpf_htons(eth->h_proto);
-+
-+	flags_from_map = bpf_map_lookup_elem(&redirect_flags, &h_proto);
-+
-+	/* Default flags for IPv4 : (BPF_F_BROADCAST | BPF_F_EXCLUDE_INGRESS) */
-+	if (h_proto == ETH_P_IP) {
-+		flags = flags_from_map ? *flags_from_map : BPF_F_BROADCAST | BPF_F_EXCLUDE_INGRESS;
-+		return bpf_redirect_map(&map_all, 0, flags);
-+	}
-+	/* Default flags for IPv6 : 0 */
-+	if (h_proto == ETH_P_IPV6) {
-+		flags = flags_from_map ? *flags_from_map : 0;
-+		return bpf_redirect_map(&map_all, if_index, flags);
-+	}
-+	/* Default flags for others BPF_F_BROADCAST : 0 */
-+	else {
-+		flags = flags_from_map ? *flags_from_map : BPF_F_BROADCAST;
-+		return bpf_redirect_map(&map_all, 0, flags);
-+	}
+diff --git a/tools/testing/selftests/bpf/prog_tests/test_xdp_veth.c b/tools/testing/selftests/bpf/prog_tests/test_xdp_veth.c
+index 8afe2d797e871f202a865903e92e95a0c5af74c5..94e8d34f1a897befe6edc73cc638f55b7a6b814a 100644
+--- a/tools/testing/selftests/bpf/prog_tests/test_xdp_veth.c
++++ b/tools/testing/selftests/bpf/prog_tests/test_xdp_veth.c
+@@ -30,6 +30,8 @@
+  *          -> echo request received by all except veth11
+  *     - IPv4 ping : BPF_F_BROADCAST
+  *          -> echo request received by all veth
++ * - [test_xdp_veth_egress]:
++ *     - all src mac should be the magic mac
+  *
+  *    veth11             veth22              veth33
+  *  (XDP_PASS)         (XDP_PASS)          (XDP_PASS)
+@@ -400,6 +402,117 @@ static void xdp_veth_broadcast_redirect(u32 attach_flags, u64 redirect_flags)
+ 	cleanup_network(net_config);
  }
  
- /* The following 2 progs are for 2nd devmap prog testing */
++#define VETH_EGRESS_SKEL_NB	3
++static void xdp_veth_egress(u32 flags)
++{
++	struct prog_configuration prog_cfg[VETH_PAIRS_COUNT] = {
++		{
++			.local_name = "xdp_redirect_map_all_prog",
++			.remote_name = "xdp_dummy_prog",
++			.local_flags = flags,
++			.remote_flags = flags,
++		},
++		{
++			.local_name = "xdp_redirect_map_all_prog",
++			.remote_name = "store_mac_1",
++			.local_flags = flags,
++			.remote_flags = flags,
++		},
++		{
++			.local_name = "xdp_redirect_map_all_prog",
++			.remote_name = "store_mac_2",
++			.local_flags = flags,
++			.remote_flags = flags,
++		}
++	};
++	const char magic_mac[6] = { 0xAA, 0xBB, 0xCC, 0xDD, 0xEE, 0xFF};
++	struct xdp_redirect_multi_kern *xdp_redirect_multi_kern;
++	struct veth_configuration net_config[VETH_PAIRS_COUNT];
++	struct bpf_object *bpf_objs[VETH_EGRESS_SKEL_NB];
++	struct xdp_redirect_map *xdp_redirect_map;
++	struct bpf_devmap_val devmap_val = {};
++	int mac_map, egress_map, res_map;
++	struct xdp_dummy *xdp_dummy;
++	int err;
++	int i;
++
++	xdp_dummy = xdp_dummy__open_and_load();
++	if (!ASSERT_OK_PTR(xdp_dummy, "xdp_dummy__open_and_load"))
++		return;
++
++	xdp_redirect_multi_kern = xdp_redirect_multi_kern__open_and_load();
++	if (!ASSERT_OK_PTR(xdp_redirect_multi_kern, "xdp_redirect_multi_kern__open_and_load"))
++		goto destroy_xdp_dummy;
++
++	xdp_redirect_map = xdp_redirect_map__open_and_load();
++	if (!ASSERT_OK_PTR(xdp_redirect_map, "xdp_redirect_map__open_and_load"))
++		goto destroy_xdp_redirect_multi_kern;
++
++	if (!ASSERT_OK(create_network(net_config), "create network"))
++		goto destroy_xdp_redirect_map;
++
++	mac_map = bpf_map__fd(xdp_redirect_multi_kern->maps.mac_map);
++	if (!ASSERT_OK_FD(mac_map, "open mac_map"))
++		goto destroy_xdp_redirect_map;
++
++	egress_map = bpf_map__fd(xdp_redirect_multi_kern->maps.map_egress);
++	if (!ASSERT_OK_FD(egress_map, "open map_egress"))
++		goto destroy_xdp_redirect_map;
++
++	devmap_val.bpf_prog.fd = bpf_program__fd(xdp_redirect_multi_kern->progs.xdp_devmap_prog);
++
++	bpf_objs[0] = xdp_dummy->obj;
++	bpf_objs[1] = xdp_redirect_multi_kern->obj;
++	bpf_objs[2] = xdp_redirect_map->obj;
++	for (i = 0; i < VETH_PAIRS_COUNT; i++) {
++		int ifindex = if_nametoindex(net_config[i].local_veth);
++
++		SYS(destroy_xdp_redirect_map,
++		    "ip -n %s neigh add %s lladdr 00:00:00:00:00:01 dev %s",
++		    net_config[i].namespace, IP_NEIGH, net_config[i].remote_veth);
++
++		if (attach_programs_to_veth_pair(bpf_objs, VETH_REDIRECT_SKEL_NB,
++						 net_config, prog_cfg, i))
++			goto destroy_xdp_redirect_map;
++
++		err = bpf_map_update_elem(mac_map, &ifindex, magic_mac, 0);
++		if (!ASSERT_OK(err, "bpf_map_update_elem"))
++			goto destroy_xdp_redirect_map;
++
++		devmap_val.ifindex = ifindex;
++		err = bpf_map_update_elem(egress_map, &ifindex, &devmap_val, 0);
++		if (!ASSERT_OK(err, "bpf_map_update_elem"))
++			goto destroy_xdp_redirect_map;
++	}
++
++	SYS_NOFAIL("ip netns exec %s ping %s -i 0.1 -c 4 -W1 > /dev/null ",
++		    net_config[0].namespace, IP_NEIGH);
++
++	res_map = bpf_map__fd(xdp_redirect_map->maps.rx_mac);
++	if (!ASSERT_OK_FD(res_map, "open rx_map"))
++		goto destroy_xdp_redirect_map;
++
++	for (i = 0; i < 2; i++) {
++		u32 key = i;
++		u64 res;
++
++		err = bpf_map_lookup_elem(res_map, &key, &res);
++		if (!ASSERT_OK(err, "get MAC res"))
++			goto destroy_xdp_redirect_map;
++
++		ASSERT_STRNEQ((const char *)&res, magic_mac, ETH_ALEN, "compare mac");
++	}
++
++destroy_xdp_redirect_map:
++	xdp_redirect_map__destroy(xdp_redirect_map);
++destroy_xdp_redirect_multi_kern:
++	xdp_redirect_multi_kern__destroy(xdp_redirect_multi_kern);
++destroy_xdp_dummy:
++	xdp_dummy__destroy(xdp_dummy);
++
++	cleanup_network(net_config);
++}
++
+ void test_xdp_veth_redirect(void)
+ {
+ 	if (test__start_subtest("0"))
+@@ -434,3 +547,15 @@ void test_xdp_veth_broadcast_redirect(void)
+ 		xdp_veth_broadcast_redirect(XDP_FLAGS_SKB_MODE,
+ 					    BPF_F_BROADCAST | BPF_F_EXCLUDE_INGRESS);
+ }
++
++void test_xdp_veth_egress(void)
++{
++	if (test__start_subtest("0/egress"))
++		xdp_veth_egress(0);
++
++	if (test__start_subtest("DRV_MODE/egress"))
++		xdp_veth_egress(XDP_FLAGS_DRV_MODE);
++
++	if (test__start_subtest("SKB_MODE/egress"))
++		xdp_veth_egress(XDP_FLAGS_SKB_MODE);
++}
+diff --git a/tools/testing/selftests/bpf/progs/xdp_redirect_map.c b/tools/testing/selftests/bpf/progs/xdp_redirect_map.c
+index 14385df71d7fc40c3b0ee5c6ea0760d0e7336d71..3b8b4e0cdd071b0ce885a1f42d55da5257cf38c2 100644
+--- a/tools/testing/selftests/bpf/progs/xdp_redirect_map.c
++++ b/tools/testing/selftests/bpf/progs/xdp_redirect_map.c
+@@ -77,4 +77,44 @@ int xdp_count_2(struct xdp_md *xdp)
+ 	return xdp_count(xdp, 2);
+ }
+ 
++struct {
++	__uint(type, BPF_MAP_TYPE_ARRAY);
++	__uint(max_entries, 2);
++	__type(key, __u32);
++	__type(value, __be64);
++} rx_mac SEC(".maps");
++
++static int store_mac(struct xdp_md *xdp, __u32 id)
++{
++	void *data_end = (void *)(long)xdp->data_end;
++	void *data = (void *)(long)xdp->data;
++	struct ethhdr *eth = data;
++	__u32 key = id;
++	__be64 mac = 0;
++
++	if (data + sizeof(*eth) > data_end)
++		return XDP_DROP;
++
++	/* Only store IPv4 MAC to avoid being polluted by IPv6 packets */
++	if (eth->h_proto == bpf_htons(ETH_P_IP)) {
++		__builtin_memcpy(&mac, eth->h_source, ETH_ALEN);
++		bpf_map_update_elem(&rx_mac, &key, &mac, 0);
++		bpf_printk("%s - %x", __func__, mac);
++	}
++
++	return XDP_PASS;
++}
++
++SEC("xdp")
++int store_mac_1(struct xdp_md *xdp)
++{
++	return store_mac(xdp, 0);
++}
++
++SEC("xdp")
++int store_mac_2(struct xdp_md *xdp)
++{
++	return store_mac(xdp, 1);
++}
++
+ char _license[] SEC("license") = "GPL";
 
 -- 
 2.48.1
