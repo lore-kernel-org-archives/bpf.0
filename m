@@ -1,46 +1,46 @@
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68D021F2379;
-	Fri, 31 Jan 2025 18:54:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77F491F2C25;
+	Fri, 31 Jan 2025 18:54:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738349676; cv=none; b=auC/sdZs/XTDAf45O8INQn3HIL/Tu9Ur/Qbu1kxXEQr4CB8Di31ATF0paH/SQbNpKcD7JY4KuRaWSq7fhd8hki3Yz88DdaykryuoKoZ0zcWa4oQfwKag75c1L6qGPqR6oy+K2HnaG7EHhifv3L7J/DzFcPxQ9ps7G1lE1YFMv+A=
+	t=1738349677; cv=none; b=VHOJ82mLTV9L/85EVtvSYVrmv2oA1IiXtBIn7igUoXnSHM5Gp3XswsPKxnZPJR3MLZwrpFIrjwRQS+VXiddQvKLeq0jZ4ZcUrJm01fsTUiVn3C97CHpb50e5t0nXNOx2GXnI5oSrWTd4YgkubVbuHsNlKewGHTr1WEpnefMyFgM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738349676; c=relaxed/simple;
-	bh=IaqDlxrLJT7VxPUWzoRmV5hVO7mUVEW2ku4xiY9svlU=;
+	s=arc-20240116; t=1738349677; c=relaxed/simple;
+	bh=sy3DW62W/WxwoDoeUAVeTvp1JDb2vzivKpRkpYTUvt0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=tXwNqIty/NHOsgmy8Uc1/q2EYqc4TT3ka3w9RLsIcmKx48NudQzwVIyjjn8oTAmqttcLEvV5AjVQ96GzVkrTqIE3q5nlGHa7YPitrM5G5TWyMKXLvdG/F5thpzQIUT8y198t4YtYaPvQaCnQvzYv5SWPVtIqfthPRWtEB61puPs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dStYr5ZW; arc=none smtp.client-ip=192.198.163.18
+	 MIME-Version; b=cgPqabQyIiuo/V8D1XEjk/438i85QfWoi7z4yFT1LG/y6PYsOotdMuutk9cnsxvu1TwFuB4DBjrBOVMnjZJSFtgIUd3hP/gZJbLPLKx6Ybq0esPUMJhf5TG3TfOLY6GUQpU+VK5hwalYW66pM5OD7uCxkD9qxOLX4Bgh92+uFOI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WpDkoNwd; arc=none smtp.client-ip=192.198.163.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dStYr5ZW"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WpDkoNwd"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1738349674; x=1769885674;
+  t=1738349675; x=1769885675;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=IaqDlxrLJT7VxPUWzoRmV5hVO7mUVEW2ku4xiY9svlU=;
-  b=dStYr5ZWrq0G1DI1kGqoxGK0KPqdpx5caqfd2E3YMlfqAA7y9SyZbQvY
-   fePx9yYN0ukNgeKNa/YX9YeNOwpZFqICN6+KxsL9Vg409MqscE7VdmGN0
-   1VlFFjQyegGdz30VNuVjVkqJ1Hw4eo8v8ZxNrhWwbZQVaza0iTwVV10wx
-   2w05m9HDsqheZ/2ow1Q29giryvFu8hMNvk0G06yJYSLGecuWQEOrkvq6o
-   iTRVvb5VCjNAjTTDa9gMHqj46EoPuqU+ZI94dT9ROj+SHgzJqaSwVW3HG
-   29vFVE+GECjIfQHVL8V6tKKA4+9rKoczv2TTGq6lup9879Q1VBE7fZ0z/
-   Q==;
-X-CSE-ConnectionGUID: M+nUx/uvRPCUMG/LyFJqGA==
-X-CSE-MsgGUID: oFurwX14Qp246CjTJUlTtQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11332"; a="38163427"
+  bh=sy3DW62W/WxwoDoeUAVeTvp1JDb2vzivKpRkpYTUvt0=;
+  b=WpDkoNwdM7rgwDy4fYkjH2gxlryOucvTt7XbZeYOKdPHGNjYEntidarX
+   352Xx4Gsz7mCvqu3Fh4cKHsHSSHl+rjLZALMpjW0/FEXxcOcCVftglijX
+   7hKALArOMyr3iv4mdun8l0I2qVUAiYfEDs5qqF52sMiuRcWqSt57/ZD4P
+   qrKDbLuOBmV3KZDXq9CFbZV7x0ca6KvL3Zc2vzoFqmt9nh4kHtVkV5Jd0
+   yg/nlvF/ngGxpwX9+ionIf6bqs4Dn5D7n4TV+Sloo8WutvsqRdcKdYLet
+   F2pzBdnXWVj6zCANWUjyp8ZnjnTYtGgVLrC22w3jZC4z1ThKPuk1FGaoJ
+   w==;
+X-CSE-ConnectionGUID: QA/qKxG3Q3+7C7zC0wQb4A==
+X-CSE-MsgGUID: p2k53WUOQ7yL6T+L+NLQLg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11332"; a="38163434"
 X-IronPort-AV: E=Sophos;i="6.13,249,1732608000"; 
-   d="scan'208";a="38163427"
+   d="scan'208";a="38163434"
 Received: from orviesa007.jf.intel.com ([10.64.159.147])
   by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2025 10:54:25 -0800
-X-CSE-ConnectionGUID: olH1dUI7Q6KCnWKfnE49mw==
-X-CSE-MsgGUID: WzEm42KlTo27Ng9B4xp2QQ==
+X-CSE-ConnectionGUID: 1fu71MmkShGnnw2est6YCQ==
+X-CSE-MsgGUID: oP8Lx1RwRD26Zrc4psXuaQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="110149720"
+   d="scan'208";a="110149724"
 Received: from anguy11-upstream.jf.intel.com ([10.166.9.133])
   by orviesa007.jf.intel.com with ESMTP; 31 Jan 2025 10:54:23 -0800
 From: Tony Nguyen <anthony.l.nguyen@intel.com>
@@ -64,9 +64,9 @@ Cc: Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
 	xudu@redhat.com,
 	jmaxwell@redhat.com,
 	Chandan Kumar Rout <chandanx.rout@intel.com>
-Subject: [PATCH net 1/3] ice: put Rx buffers after being done with current frame
-Date: Fri, 31 Jan 2025 10:54:11 -0800
-Message-ID: <20250131185415.3741532-2-anthony.l.nguyen@intel.com>
+Subject: [PATCH net 3/3] ice: stop storing XDP verdict within ice_rx_buf
+Date: Fri, 31 Jan 2025 10:54:13 -0800
+Message-ID: <20250131185415.3741532-4-anthony.l.nguyen@intel.com>
 X-Mailer: git-send-email 2.47.1
 In-Reply-To: <20250131185415.3741532-1-anthony.l.nguyen@intel.com>
 References: <20250131185415.3741532-1-anthony.l.nguyen@intel.com>
@@ -80,173 +80,266 @@ Content-Transfer-Encoding: 8bit
 
 From: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
 
-Introduce a new helper ice_put_rx_mbuf() that will go through gathered
-frags from current frame and will call ice_put_rx_buf() on them. Current
-logic that was supposed to simplify and optimize the driver where we go
-through a batch of all buffers processed in current NAPI instance turned
-out to be broken for jumbo frames and very heavy load that was coming
-from both multi-thread iperf and nginx/wrk pair between server and
-client. The delay introduced by approach that we are dropping is simply
-too big and we need to take the decision regarding page
-recycling/releasing as quick as we can.
+Idea behind having ice_rx_buf::act was to simplify and speed up the Rx
+data path by walking through buffers that were representing cleaned HW
+Rx descriptors. Since it caused us a major headache recently and we
+rolled back to old approach that 'puts' Rx buffers right after running
+XDP prog/creating skb, this is useless now and should be removed.
 
-While at it, address an error path of ice_add_xdp_frag() - we were
-missing buffer putting from day 1 there.
+Get rid of ice_rx_buf::act and related logic. We still need to take care
+of a corner case where XDP program releases a particular fragment.
 
-As a nice side effect we get rid of annoying and repetitive three-liner:
+Make ice_run_xdp() to return its result and use it within
+ice_put_rx_mbuf().
 
-	xdp->data = NULL;
-	rx_ring->first_desc = ntc;
-	rx_ring->nr_frags = 0;
-
-by embedding it within introduced routine.
-
-Fixes: 1dc1a7e7f410 ("ice: Centrallize Rx buffer recycling")
-Reported-and-tested-by: Xu Du <xudu@redhat.com>
+Fixes: 2fba7dc5157b ("ice: Add support for XDP multi-buffer on Rx side")
 Reviewed-by: Przemek Kitszel <przemyslaw.kitszel@intel.com>
 Reviewed-by: Simon Horman <horms@kernel.org>
-Co-developed-by: Jacob Keller <jacob.e.keller@intel.com>
-Signed-off-by: Jacob Keller <jacob.e.keller@intel.com>
 Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
 Tested-by: Chandan Kumar Rout <chandanx.rout@intel.com> (A Contingent Worker at Intel)
 Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
 ---
- drivers/net/ethernet/intel/ice/ice_txrx.c | 79 ++++++++++++++---------
- 1 file changed, 50 insertions(+), 29 deletions(-)
+ drivers/net/ethernet/intel/ice/ice_txrx.c     | 62 +++++++++++--------
+ drivers/net/ethernet/intel/ice/ice_txrx.h     |  1 -
+ drivers/net/ethernet/intel/ice/ice_txrx_lib.h | 43 -------------
+ 3 files changed, 36 insertions(+), 70 deletions(-)
 
 diff --git a/drivers/net/ethernet/intel/ice/ice_txrx.c b/drivers/net/ethernet/intel/ice/ice_txrx.c
-index 5d2d7736fd5f..e173d9c98988 100644
+index cf46bcf143b4..9c9ea4c1b93b 100644
 --- a/drivers/net/ethernet/intel/ice/ice_txrx.c
 +++ b/drivers/net/ethernet/intel/ice/ice_txrx.c
-@@ -1103,6 +1103,49 @@ ice_put_rx_buf(struct ice_rx_ring *rx_ring, struct ice_rx_buf *rx_buf)
- 	rx_buf->page = NULL;
+@@ -527,15 +527,14 @@ int ice_setup_rx_ring(struct ice_rx_ring *rx_ring)
+  * @xdp: xdp_buff used as input to the XDP program
+  * @xdp_prog: XDP program to run
+  * @xdp_ring: ring to be used for XDP_TX action
+- * @rx_buf: Rx buffer to store the XDP action
+  * @eop_desc: Last descriptor in packet to read metadata from
+  *
+  * Returns any of ICE_XDP_{PASS, CONSUMED, TX, REDIR}
+  */
+-static void
++static u32
+ ice_run_xdp(struct ice_rx_ring *rx_ring, struct xdp_buff *xdp,
+ 	    struct bpf_prog *xdp_prog, struct ice_tx_ring *xdp_ring,
+-	    struct ice_rx_buf *rx_buf, union ice_32b_rx_flex_desc *eop_desc)
++	    union ice_32b_rx_flex_desc *eop_desc)
+ {
+ 	unsigned int ret = ICE_XDP_PASS;
+ 	u32 act;
+@@ -574,7 +573,7 @@ ice_run_xdp(struct ice_rx_ring *rx_ring, struct xdp_buff *xdp,
+ 		ret = ICE_XDP_CONSUMED;
+ 	}
+ exit:
+-	ice_set_rx_bufs_act(xdp, rx_ring, ret);
++	return ret;
  }
  
-+/**
-+ * ice_put_rx_mbuf - ice_put_rx_buf() caller, for all frame frags
-+ * @rx_ring: Rx ring with all the auxiliary data
-+ * @xdp: XDP buffer carrying linear + frags part
-+ * @xdp_xmit: XDP_TX/XDP_REDIRECT verdict storage
-+ * @ntc: a current next_to_clean value to be stored at rx_ring
-+ *
-+ * Walk through gathered fragments and satisfy internal page
-+ * recycle mechanism; we take here an action related to verdict
-+ * returned by XDP program;
-+ */
-+static void ice_put_rx_mbuf(struct ice_rx_ring *rx_ring, struct xdp_buff *xdp,
-+			    u32 *xdp_xmit, u32 ntc)
-+{
-+	u32 nr_frags = rx_ring->nr_frags + 1;
-+	u32 idx = rx_ring->first_desc;
-+	u32 cnt = rx_ring->count;
-+	struct ice_rx_buf *buf;
-+	int i;
+ /**
+@@ -860,10 +859,8 @@ ice_add_xdp_frag(struct ice_rx_ring *rx_ring, struct xdp_buff *xdp,
+ 		xdp_buff_set_frags_flag(xdp);
+ 	}
+ 
+-	if (unlikely(sinfo->nr_frags == MAX_SKB_FRAGS)) {
+-		ice_set_rx_bufs_act(xdp, rx_ring, ICE_XDP_CONSUMED);
++	if (unlikely(sinfo->nr_frags == MAX_SKB_FRAGS))
+ 		return -ENOMEM;
+-	}
+ 
+ 	__skb_fill_page_desc_noacc(sinfo, sinfo->nr_frags++, rx_buf->page,
+ 				   rx_buf->page_offset, size);
+@@ -1075,12 +1072,12 @@ ice_construct_skb(struct ice_rx_ring *rx_ring, struct xdp_buff *xdp)
+ 				rx_buf->page_offset + headlen, size,
+ 				xdp->frame_sz);
+ 	} else {
+-		/* buffer is unused, change the act that should be taken later
+-		 * on; data was copied onto skb's linear part so there's no
++		/* buffer is unused, restore biased page count in Rx buffer;
++		 * data was copied onto skb's linear part so there's no
+ 		 * need for adjusting page offset and we can reuse this buffer
+ 		 * as-is
+ 		 */
+-		rx_buf->act = ICE_SKB_CONSUMED;
++		rx_buf->pagecnt_bias++;
+ 	}
+ 
+ 	if (unlikely(xdp_buff_has_frags(xdp))) {
+@@ -1133,29 +1130,34 @@ ice_put_rx_buf(struct ice_rx_ring *rx_ring, struct ice_rx_buf *rx_buf)
+  * @xdp: XDP buffer carrying linear + frags part
+  * @xdp_xmit: XDP_TX/XDP_REDIRECT verdict storage
+  * @ntc: a current next_to_clean value to be stored at rx_ring
++ * @verdict: return code from XDP program execution
+  *
+  * Walk through gathered fragments and satisfy internal page
+  * recycle mechanism; we take here an action related to verdict
+  * returned by XDP program;
+  */
+ static void ice_put_rx_mbuf(struct ice_rx_ring *rx_ring, struct xdp_buff *xdp,
+-			    u32 *xdp_xmit, u32 ntc)
++			    u32 *xdp_xmit, u32 ntc, u32 verdict)
+ {
+ 	u32 nr_frags = rx_ring->nr_frags + 1;
+ 	u32 idx = rx_ring->first_desc;
+ 	u32 cnt = rx_ring->count;
++	u32 post_xdp_frags = 1;
+ 	struct ice_rx_buf *buf;
+ 	int i;
+ 
+-	for (i = 0; i < nr_frags; i++) {
++	if (unlikely(xdp_buff_has_frags(xdp)))
++		post_xdp_frags += xdp_get_shared_info_from_buff(xdp)->nr_frags;
 +
-+	for (i = 0; i < nr_frags; i++) {
++	for (i = 0; i < post_xdp_frags; i++) {
+ 		buf = &rx_ring->rx_buf[idx];
+ 
+-		if (buf->act & (ICE_XDP_TX | ICE_XDP_REDIR)) {
++		if (verdict & (ICE_XDP_TX | ICE_XDP_REDIR)) {
+ 			ice_rx_buf_adjust_pg_offset(buf, xdp->frame_sz);
+-			*xdp_xmit |= buf->act;
+-		} else if (buf->act & ICE_XDP_CONSUMED) {
++			*xdp_xmit |= verdict;
++		} else if (verdict & ICE_XDP_CONSUMED) {
+ 			buf->pagecnt_bias++;
+-		} else if (buf->act == ICE_XDP_PASS) {
++		} else if (verdict == ICE_XDP_PASS) {
+ 			ice_rx_buf_adjust_pg_offset(buf, xdp->frame_sz);
+ 		}
+ 
+@@ -1164,6 +1166,17 @@ static void ice_put_rx_mbuf(struct ice_rx_ring *rx_ring, struct xdp_buff *xdp,
+ 		if (++idx == cnt)
+ 			idx = 0;
+ 	}
++	/* handle buffers that represented frags released by XDP prog;
++	 * for these we keep pagecnt_bias as-is; refcount from struct page
++	 * has been decremented within XDP prog and we do not have to increase
++	 * the biased refcnt
++	 */
++	for (; i < nr_frags; i++) {
 +		buf = &rx_ring->rx_buf[idx];
-+
-+		if (buf->act & (ICE_XDP_TX | ICE_XDP_REDIR)) {
-+			ice_rx_buf_adjust_pg_offset(buf, xdp->frame_sz);
-+			*xdp_xmit |= buf->act;
-+		} else if (buf->act & ICE_XDP_CONSUMED) {
-+			buf->pagecnt_bias++;
-+		} else if (buf->act == ICE_XDP_PASS) {
-+			ice_rx_buf_adjust_pg_offset(buf, xdp->frame_sz);
-+		}
-+
 +		ice_put_rx_buf(rx_ring, buf);
-+
 +		if (++idx == cnt)
 +			idx = 0;
 +	}
-+
-+	xdp->data = NULL;
-+	rx_ring->first_desc = ntc;
-+	rx_ring->nr_frags = 0;
-+}
-+
- /**
-  * ice_clean_rx_irq - Clean completed descriptors from Rx ring - bounce buf
-  * @rx_ring: Rx descriptor ring to transact packets on
-@@ -1120,7 +1163,6 @@ int ice_clean_rx_irq(struct ice_rx_ring *rx_ring, int budget)
- 	unsigned int total_rx_bytes = 0, total_rx_pkts = 0;
- 	unsigned int offset = rx_ring->rx_offset;
- 	struct xdp_buff *xdp = &rx_ring->xdp;
--	u32 cached_ntc = rx_ring->first_desc;
+ 
+ 	xdp->data = NULL;
+ 	rx_ring->first_desc = ntc;
+@@ -1190,9 +1203,9 @@ int ice_clean_rx_irq(struct ice_rx_ring *rx_ring, int budget)
  	struct ice_tx_ring *xdp_ring = NULL;
  	struct bpf_prog *xdp_prog = NULL;
  	u32 ntc = rx_ring->next_to_clean;
-@@ -1128,7 +1170,6 @@ int ice_clean_rx_irq(struct ice_rx_ring *rx_ring, int budget)
++	u32 cached_ntu, xdp_verdict;
+ 	u32 cnt = rx_ring->count;
  	u32 xdp_xmit = 0;
- 	u32 cached_ntu;
+-	u32 cached_ntu;
  	bool failure;
--	u32 first;
  
  	xdp_prog = READ_ONCE(rx_ring->xdp_prog);
- 	if (xdp_prog) {
-@@ -1190,6 +1231,7 @@ int ice_clean_rx_irq(struct ice_rx_ring *rx_ring, int budget)
+@@ -1255,7 +1268,7 @@ int ice_clean_rx_irq(struct ice_rx_ring *rx_ring, int budget)
  			xdp_prepare_buff(xdp, hard_start, offset, size, !!offset);
  			xdp_buff_clear_frags_flag(xdp);
  		} else if (ice_add_xdp_frag(rx_ring, xdp, rx_buf, size)) {
-+			ice_put_rx_mbuf(rx_ring, xdp, NULL, ntc);
+-			ice_put_rx_mbuf(rx_ring, xdp, NULL, ntc);
++			ice_put_rx_mbuf(rx_ring, xdp, NULL, ntc, ICE_XDP_CONSUMED);
  			break;
  		}
  		if (++ntc == cnt)
-@@ -1205,9 +1247,8 @@ int ice_clean_rx_irq(struct ice_rx_ring *rx_ring, int budget)
+@@ -1266,13 +1279,13 @@ int ice_clean_rx_irq(struct ice_rx_ring *rx_ring, int budget)
+ 			continue;
+ 
+ 		ice_get_pgcnts(rx_ring);
+-		ice_run_xdp(rx_ring, xdp, xdp_prog, xdp_ring, rx_buf, rx_desc);
+-		if (rx_buf->act == ICE_XDP_PASS)
++		xdp_verdict = ice_run_xdp(rx_ring, xdp, xdp_prog, xdp_ring, rx_desc);
++		if (xdp_verdict == ICE_XDP_PASS)
+ 			goto construct_skb;
  		total_rx_bytes += xdp_get_buff_len(xdp);
  		total_rx_pkts++;
  
--		xdp->data = NULL;
--		rx_ring->first_desc = ntc;
--		rx_ring->nr_frags = 0;
-+		ice_put_rx_mbuf(rx_ring, xdp, &xdp_xmit, ntc);
-+
+-		ice_put_rx_mbuf(rx_ring, xdp, &xdp_xmit, ntc);
++		ice_put_rx_mbuf(rx_ring, xdp, &xdp_xmit, ntc, xdp_verdict);
+ 
  		continue;
  construct_skb:
- 		if (likely(ice_ring_uses_build_skb(rx_ring)))
-@@ -1221,14 +1262,11 @@ int ice_clean_rx_irq(struct ice_rx_ring *rx_ring, int budget)
- 			if (unlikely(xdp_buff_has_frags(xdp)))
- 				ice_set_rx_bufs_act(xdp, rx_ring,
- 						    ICE_XDP_CONSUMED);
--			xdp->data = NULL;
--			rx_ring->first_desc = ntc;
--			rx_ring->nr_frags = 0;
--			break;
+@@ -1283,12 +1296,9 @@ int ice_clean_rx_irq(struct ice_rx_ring *rx_ring, int budget)
+ 		/* exit if we failed to retrieve a buffer */
+ 		if (!skb) {
+ 			rx_ring->ring_stats->rx_stats.alloc_page_failed++;
+-			rx_buf->act = ICE_XDP_CONSUMED;
+-			if (unlikely(xdp_buff_has_frags(xdp)))
+-				ice_set_rx_bufs_act(xdp, rx_ring,
+-						    ICE_XDP_CONSUMED);
++			xdp_verdict = ICE_XDP_CONSUMED;
  		}
--		xdp->data = NULL;
--		rx_ring->first_desc = ntc;
--		rx_ring->nr_frags = 0;
-+		ice_put_rx_mbuf(rx_ring, xdp, &xdp_xmit, ntc);
-+
-+		if (!skb)
-+			break;
+-		ice_put_rx_mbuf(rx_ring, xdp, &xdp_xmit, ntc);
++		ice_put_rx_mbuf(rx_ring, xdp, &xdp_xmit, ntc, xdp_verdict);
  
- 		stat_err_bits = BIT(ICE_RX_FLEX_DESC_STATUS0_RXE_S);
- 		if (unlikely(ice_test_staterr(rx_desc->wb.status_error0,
-@@ -1257,23 +1295,6 @@ int ice_clean_rx_irq(struct ice_rx_ring *rx_ring, int budget)
- 		total_rx_pkts++;
- 	}
+ 		if (!skb)
+ 			break;
+diff --git a/drivers/net/ethernet/intel/ice/ice_txrx.h b/drivers/net/ethernet/intel/ice/ice_txrx.h
+index cb347c852ba9..806bce701df3 100644
+--- a/drivers/net/ethernet/intel/ice/ice_txrx.h
++++ b/drivers/net/ethernet/intel/ice/ice_txrx.h
+@@ -201,7 +201,6 @@ struct ice_rx_buf {
+ 	struct page *page;
+ 	unsigned int page_offset;
+ 	unsigned int pgcnt;
+-	unsigned int act;
+ 	unsigned int pagecnt_bias;
+ };
  
--	first = rx_ring->first_desc;
--	while (cached_ntc != first) {
--		struct ice_rx_buf *buf = &rx_ring->rx_buf[cached_ntc];
+diff --git a/drivers/net/ethernet/intel/ice/ice_txrx_lib.h b/drivers/net/ethernet/intel/ice/ice_txrx_lib.h
+index 79f960c6680d..6cf32b404127 100644
+--- a/drivers/net/ethernet/intel/ice/ice_txrx_lib.h
++++ b/drivers/net/ethernet/intel/ice/ice_txrx_lib.h
+@@ -5,49 +5,6 @@
+ #define _ICE_TXRX_LIB_H_
+ #include "ice.h"
+ 
+-/**
+- * ice_set_rx_bufs_act - propagate Rx buffer action to frags
+- * @xdp: XDP buffer representing frame (linear and frags part)
+- * @rx_ring: Rx ring struct
+- * act: action to store onto Rx buffers related to XDP buffer parts
+- *
+- * Set action that should be taken before putting Rx buffer from first frag
+- * to the last.
+- */
+-static inline void
+-ice_set_rx_bufs_act(struct xdp_buff *xdp, const struct ice_rx_ring *rx_ring,
+-		    const unsigned int act)
+-{
+-	u32 sinfo_frags = xdp_get_shared_info_from_buff(xdp)->nr_frags;
+-	u32 nr_frags = rx_ring->nr_frags + 1;
+-	u32 idx = rx_ring->first_desc;
+-	u32 cnt = rx_ring->count;
+-	struct ice_rx_buf *buf;
 -
--		if (buf->act & (ICE_XDP_TX | ICE_XDP_REDIR)) {
--			ice_rx_buf_adjust_pg_offset(buf, xdp->frame_sz);
--			xdp_xmit |= buf->act;
--		} else if (buf->act & ICE_XDP_CONSUMED) {
--			buf->pagecnt_bias++;
--		} else if (buf->act == ICE_XDP_PASS) {
--			ice_rx_buf_adjust_pg_offset(buf, xdp->frame_sz);
--		}
+-	for (int i = 0; i < nr_frags; i++) {
+-		buf = &rx_ring->rx_buf[idx];
+-		buf->act = act;
 -
--		ice_put_rx_buf(rx_ring, buf);
--		if (++cached_ntc >= cnt)
--			cached_ntc = 0;
+-		if (++idx == cnt)
+-			idx = 0;
 -	}
- 	rx_ring->next_to_clean = ntc;
- 	/* return up to cleaned_count buffers to hardware */
- 	failure = ice_alloc_rx_bufs(rx_ring, ICE_RX_DESC_UNUSED(rx_ring));
+-
+-	/* adjust pagecnt_bias on frags freed by XDP prog */
+-	if (sinfo_frags < rx_ring->nr_frags && act == ICE_XDP_CONSUMED) {
+-		u32 delta = rx_ring->nr_frags - sinfo_frags;
+-
+-		while (delta) {
+-			if (idx == 0)
+-				idx = cnt - 1;
+-			else
+-				idx--;
+-			buf = &rx_ring->rx_buf[idx];
+-			buf->pagecnt_bias--;
+-			delta--;
+-		}
+-	}
+-}
+-
+ /**
+  * ice_test_staterr - tests bits in Rx descriptor status and error fields
+  * @status_err_n: Rx descriptor status_error0 or status_error1 bits
 -- 
 2.47.1
 
