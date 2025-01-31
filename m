@@ -1,45 +1,46 @@
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62CD184E1C;
-	Fri, 31 Jan 2025 18:54:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABE6F1F12E5;
+	Fri, 31 Jan 2025 18:54:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738349673; cv=none; b=iQZOf9e9xG4043W4foi3q3nMk89mq80g1dAv2/fqHBjtqQyEBS8t664/QByPNg/aSGeqSmexHhg4xLw1FznBrS330EeW8NdzrEGwRnsao1PXIDc6Jb/nXIH1jWuBD89n7RRSuujqcWE0wEMQCXFn06qYM/iwJ/M1cE6npgE/cVs=
+	t=1738349675; cv=none; b=lKqjazAt6/DFFS1VQZFYktaxko9TMpNBcHtVBzTwRUVNFF7iprU2wy4633gKODgZKXWObCNDB/2mOVQUwRWHvAabDlXFfqyLEAz9ErleyggvwRYfBGtmDJbpcHvgAuhVzQkWMR1weP/1ayw63E/5cIDrekzgpysiyqaGtQFHRLA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738349673; c=relaxed/simple;
-	bh=2ZH1fSzAviT3nmz3hzJ8ThSlJfLChWeBhesQfGX3UTk=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=eikEwZ+6KaIiCIPSBE5hrOxTsL+JyVJqe4k8XkehEuS2uM+TJJzaKtV8ka9i6n5fj2oTLycqbNua+MAVjzcA+dtY077kvykE9bVsEYdhCTeLDLtZIbh7adiM+wXeHQhQb+j9s83jMLQz7H3vK4gMRd/YbQiKv3fQNVH/cDrf49E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=U7hcT5hP; arc=none smtp.client-ip=192.198.163.18
+	s=arc-20240116; t=1738349675; c=relaxed/simple;
+	bh=rgVQbtWIks3iWTbytfkRjsT4ii5dCBR0+KEICAY4jwY=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=eQTnWlaBv1mfvVTxBYvDLjpZe3KgjL9f8C1Ql4tDZGbe7lS3oBYsP/jsd7538XZvD+MejtaqNrRVaaCHzuyulu7TxSG8i40pdp3qNWAWjwtB7VGLmYfeGLQW7FWjF4b4kcDfPFq6HN78kJth916ycnrPWQmquZHGpxTu2jxtuTg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XLyQoPBz; arc=none smtp.client-ip=192.198.163.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="U7hcT5hP"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XLyQoPBz"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1738349671; x=1769885671;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=2ZH1fSzAviT3nmz3hzJ8ThSlJfLChWeBhesQfGX3UTk=;
-  b=U7hcT5hPKjjh0+57A4sSFvxu47V7CYF07567Zfq44cJtcihTJCqZ8q6z
-   0JdzuQz1r2yD+BzSYIVWEaUSTXAufU85S4iEZ1KTDeBRA9FsYcPGb4nrU
-   hxH/bTNnOA6ZeEQ+2cLIAsFuDZyQSJaBrMLTxONatEPWIpZVmxaNxGZMe
-   dMuPfjXwiEErpcZGRau0SdaY3Wo2JRsdrZg97A7RyeL+i4fq/Qts2VtLj
-   jbAYUi40n3prB4apPO/I+FSjUSOXzbUc09t+W754XRMe14bBM9CqFQZnX
-   T1P0ZFeL2gX62NVve5961iCaPU3VU3937D4JwOzVxG6hzMGhePS/UDrLi
-   A==;
-X-CSE-ConnectionGUID: kg43JS6GRsiBuN/NBaR2qQ==
-X-CSE-MsgGUID: Z5PKRJ+WSUGeJzQnd5fVjg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11332"; a="38163409"
+  t=1738349674; x=1769885674;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=rgVQbtWIks3iWTbytfkRjsT4ii5dCBR0+KEICAY4jwY=;
+  b=XLyQoPBzraZTmzk8L9HgSrP6DZGpFOSEVEyducIJ3zBBZkysbVAS7rkU
+   8dnChZmJ+scK2A458TsSjXm3nnIJvQ6WP/KRzynQ/CpZnmtEOiUzMhIoQ
+   oTGqcthTzu8hDU9JWuLjbBq58pZeKqTGnUN1bTD8ES3nrwtDr2l1D7Pui
+   6mfk1clh3Rjc8nwrBEUoBtZbf8NbdlIYRdDKiFFTFh0yRPnfLBmaH2XAN
+   PXJx+zlcqeyGFtEVOixtHXlLKTHClsBriHZ6BjtX3Uea6rdU7rRWFNXgI
+   v4fgTfRUWmaOCHQgo60IzDsUiga3SR8jDC8hyJfspd4rCI31LztLhVcYL
+   w==;
+X-CSE-ConnectionGUID: 477qBg0dQmK2+xv6yf2ZKQ==
+X-CSE-MsgGUID: fCN91iQwTTuXU5HMxL1QPQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11332"; a="38163418"
 X-IronPort-AV: E=Sophos;i="6.13,249,1732608000"; 
-   d="scan'208";a="38163409"
+   d="scan'208";a="38163418"
 Received: from orviesa007.jf.intel.com ([10.64.159.147])
   by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jan 2025 10:54:25 -0800
-X-CSE-ConnectionGUID: UVr9HECrQiKrnHfVn9VMrw==
-X-CSE-MsgGUID: PVVSud1dR62b2PO3qv4GJw==
+X-CSE-ConnectionGUID: qyLy044ZSeW9tbPwt/3n9w==
+X-CSE-MsgGUID: FxmeFDznR2iOLwdoic3hlQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="110149719"
+   d="scan'208";a="110149722"
 Received: from anguy11-upstream.jf.intel.com ([10.166.9.133])
   by orviesa007.jf.intel.com with ESMTP; 31 Jan 2025 10:54:23 -0800
 From: Tony Nguyen <anthony.l.nguyen@intel.com>
@@ -49,8 +50,8 @@ To: davem@davemloft.net,
 	edumazet@google.com,
 	andrew+netdev@lunn.ch,
 	netdev@vger.kernel.org
-Cc: Tony Nguyen <anthony.l.nguyen@intel.com>,
-	maciej.fijalkowski@intel.com,
+Cc: Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+	anthony.l.nguyen@intel.com,
 	magnus.karlsson@intel.com,
 	przemyslaw.kitszel@intel.com,
 	jacob.e.keller@intel.com,
@@ -61,11 +62,14 @@ Cc: Tony Nguyen <anthony.l.nguyen@intel.com>,
 	bpf@vger.kernel.org,
 	horms@kernel.org,
 	xudu@redhat.com,
-	jmaxwell@redhat.com
-Subject: [PATCH net 0/3][pull request] ice: fix Rx data path for heavy 9k MTU traffic
-Date: Fri, 31 Jan 2025 10:54:10 -0800
-Message-ID: <20250131185415.3741532-1-anthony.l.nguyen@intel.com>
+	jmaxwell@redhat.com,
+	Chandan Kumar Rout <chandanx.rout@intel.com>
+Subject: [PATCH net 2/3] ice: gather page_count()'s of each frag right before XDP prog call
+Date: Fri, 31 Jan 2025 10:54:12 -0800
+Message-ID: <20250131185415.3741532-3-anthony.l.nguyen@intel.com>
 X-Mailer: git-send-email 2.47.1
+In-Reply-To: <20250131185415.3741532-1-anthony.l.nguyen@intel.com>
+References: <20250131185415.3741532-1-anthony.l.nguyen@intel.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -74,79 +78,91 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Maciej Fijalkowski says:
+From: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
 
-This patchset fixes a pretty nasty issue that was reported by RedHat
-folks which occurred after ~30 minutes (this value varied, just trying
-here to state that it was not observed immediately but rather after a
-considerable longer amount of time) when ice driver was tortured with
-jumbo frames via mix of iperf traffic executed simultaneously with
-wrk/nginx on client/server sides (HTTP and TCP workloads basically).
+If we store the pgcnt on few fragments while being in the middle of
+gathering the whole frame and we stumbled upon DD bit not being set, we
+terminate the NAPI Rx processing loop and come back later on. Then on
+next NAPI execution we work on previously stored pgcnt.
 
-The reported splats were spanning across all the bad things that can
-happen to the state of page - refcount underflow, use-after-free, etc.
-One of these looked as follows:
+Imagine that second half of page was used actively by networking stack
+and by the time we came back, stack is not busy with this page anymore
+and decremented the refcnt. The page reuse algorithm in this case should
+be good to reuse the page but given the old refcnt it will not do so and
+attempt to release the page via page_frag_cache_drain() with
+pagecnt_bias used as an arg. This in turn will result in negative refcnt
+on struct page, which was initially observed by Xu Du.
 
-[ 2084.019891] BUG: Bad page state in process swapper/34  pfn:97fcd0
-[ 2084.025990] page:00000000a60ee772 refcount:-1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x97fcd0
-[ 2084.035462] flags: 0x17ffffc0000000(node=0|zone=2|lastcpupid=0x1fffff)
-[ 2084.041990] raw: 0017ffffc0000000 dead000000000100 dead000000000122 0000000000000000
-[ 2084.049730] raw: 0000000000000000 0000000000000000 ffffffffffffffff 0000000000000000
-[ 2084.057468] page dumped because: nonzero _refcount
-[ 2084.062260] Modules linked in: bonding tls sunrpc intel_rapl_msr intel_rapl_common intel_uncore_frequency intel_uncore_frequency_common i10nm_edac nfit libnvdimm x86_pkg_temp_thermal intel_powerclamp coretemp kvm_intel kvm mgag200 irqd
-[ 2084.137829] CPU: 34 PID: 0 Comm: swapper/34 Kdump: loaded Not tainted 5.14.0-427.37.1.el9_4.x86_64 #1
-[ 2084.147039] Hardware name: Dell Inc. PowerEdge R750/0216NK, BIOS 1.13.2 12/19/2023
-[ 2084.154604] Call Trace:
-[ 2084.157058]  <IRQ>
-[ 2084.159080]  dump_stack_lvl+0x34/0x48
-[ 2084.162752]  bad_page.cold+0x63/0x94
-[ 2084.166333]  check_new_pages+0xb3/0xe0
-[ 2084.170083]  rmqueue_bulk+0x2d2/0x9e0
-[ 2084.173749]  ? ktime_get+0x35/0xa0
-[ 2084.177159]  rmqueue_pcplist+0x13b/0x210
-[ 2084.181081]  rmqueue+0x7d3/0xd40
-[ 2084.184316]  ? xas_load+0x9/0xa0
-[ 2084.187547]  ? xas_find+0x183/0x1d0
-[ 2084.191041]  ? xa_find_after+0xd0/0x130
-[ 2084.194879]  ? intel_iommu_iotlb_sync_map+0x89/0xe0
-[ 2084.199759]  get_page_from_freelist+0x11f/0x530
-[ 2084.204291]  __alloc_pages+0xf2/0x250
-[ 2084.207958]  ice_alloc_rx_bufs+0xcc/0x1c0 [ice]
-[ 2084.212543]  ice_clean_rx_irq+0x631/0xa20 [ice]
-[ 2084.217111]  ice_napi_poll+0xdf/0x2a0 [ice]
-[ 2084.221330]  __napi_poll+0x27/0x170
-[ 2084.224824]  net_rx_action+0x233/0x2f0
-[ 2084.228575]  __do_softirq+0xc7/0x2ac
-[ 2084.232155]  __irq_exit_rcu+0xa1/0xc0
-[ 2084.235821]  common_interrupt+0x80/0xa0
-[ 2084.239662]  </IRQ>
-[ 2084.241768]  <TASK>
+Therefore, move the page count storage from ice_get_rx_buf() to a place
+where we are sure that whole frame has been collected, but before
+calling XDP program as it internally can also change the page count of
+fragments belonging to xdp_buff.
 
-The fix is mostly about reverting what was done in commit 1dc1a7e7f410
-("ice: Centrallize Rx buffer recycling") followed by proper timing on
-page_count() storage and then removing the ice_rx_buf::act related logic
-(which was mostly introduced for purposes from cited commit).
-
-Special thanks to Xu Du for providing reproducer and Jacob Keller for
-initial extensive analysis.
+Fixes: ac0753391195 ("ice: Store page count inside ice_rx_buf")
+Reported-and-tested-by: Xu Du <xudu@redhat.com>
+Reviewed-by: Przemek Kitszel <przemyslaw.kitszel@intel.com>
+Reviewed-by: Simon Horman <horms@kernel.org>
+Co-developed-by: Jacob Keller <jacob.e.keller@intel.com>
+Signed-off-by: Jacob Keller <jacob.e.keller@intel.com>
+Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Tested-by: Chandan Kumar Rout <chandanx.rout@intel.com> (A Contingent Worker at Intel)
+Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
 ---
-IWL: https://lore.kernel.org/intel-wired-lan/20250123150118.583039-1-maciej.fijalkowski@intel.com/
+ drivers/net/ethernet/intel/ice/ice_txrx.c | 27 ++++++++++++++++++++++-
+ 1 file changed, 26 insertions(+), 1 deletion(-)
 
-The following are changes since commit c2933b2befe25309f4c5cfbea0ca80909735fd76:
-  Merge tag 'net-6.14-rc1' of git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net
-and are available in the git repository at:
-  git://git.kernel.org/pub/scm/linux/kernel/git/tnguy/net-queue 100GbE
-
-Maciej Fijalkowski (3):
-  ice: put Rx buffers after being done with current frame
-  ice: gather page_count()'s of each frag right before XDP prog call
-  ice: stop storing XDP verdict within ice_rx_buf
-
- drivers/net/ethernet/intel/ice/ice_txrx.c     | 150 ++++++++++++------
- drivers/net/ethernet/intel/ice/ice_txrx.h     |   1 -
- drivers/net/ethernet/intel/ice/ice_txrx_lib.h |  43 -----
- 3 files changed, 103 insertions(+), 91 deletions(-)
-
+diff --git a/drivers/net/ethernet/intel/ice/ice_txrx.c b/drivers/net/ethernet/intel/ice/ice_txrx.c
+index e173d9c98988..cf46bcf143b4 100644
+--- a/drivers/net/ethernet/intel/ice/ice_txrx.c
++++ b/drivers/net/ethernet/intel/ice/ice_txrx.c
+@@ -924,7 +924,6 @@ ice_get_rx_buf(struct ice_rx_ring *rx_ring, const unsigned int size,
+ 	struct ice_rx_buf *rx_buf;
+ 
+ 	rx_buf = &rx_ring->rx_buf[ntc];
+-	rx_buf->pgcnt = page_count(rx_buf->page);
+ 	prefetchw(rx_buf->page);
+ 
+ 	if (!size)
+@@ -940,6 +939,31 @@ ice_get_rx_buf(struct ice_rx_ring *rx_ring, const unsigned int size,
+ 	return rx_buf;
+ }
+ 
++/**
++ * ice_get_pgcnts - grab page_count() for gathered fragments
++ * @rx_ring: Rx descriptor ring to store the page counts on
++ *
++ * This function is intended to be called right before running XDP
++ * program so that the page recycling mechanism will be able to take
++ * a correct decision regarding underlying pages; this is done in such
++ * way as XDP program can change the refcount of page
++ */
++static void ice_get_pgcnts(struct ice_rx_ring *rx_ring)
++{
++	u32 nr_frags = rx_ring->nr_frags + 1;
++	u32 idx = rx_ring->first_desc;
++	struct ice_rx_buf *rx_buf;
++	u32 cnt = rx_ring->count;
++
++	for (int i = 0; i < nr_frags; i++) {
++		rx_buf = &rx_ring->rx_buf[idx];
++		rx_buf->pgcnt = page_count(rx_buf->page);
++
++		if (++idx == cnt)
++			idx = 0;
++	}
++}
++
+ /**
+  * ice_build_skb - Build skb around an existing buffer
+  * @rx_ring: Rx descriptor ring to transact packets on
+@@ -1241,6 +1265,7 @@ int ice_clean_rx_irq(struct ice_rx_ring *rx_ring, int budget)
+ 		if (ice_is_non_eop(rx_ring, rx_desc))
+ 			continue;
+ 
++		ice_get_pgcnts(rx_ring);
+ 		ice_run_xdp(rx_ring, xdp, xdp_prog, xdp_ring, rx_buf, rx_desc);
+ 		if (rx_buf->act == ICE_XDP_PASS)
+ 			goto construct_skb;
 -- 
 2.47.1
 
