@@ -1,163 +1,106 @@
-Received: from mslow3.mail.gandi.net (mslow3.mail.gandi.net [217.70.178.249])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A012205503;
-	Mon,  3 Feb 2025 13:30:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.178.249
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B817212B09
+	for <bpf@vger.kernel.org>; Mon,  3 Feb 2025 14:26:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738589420; cv=none; b=Vt64WLC66JsNNVLaBaU/8oidRTCUJCPf6yTYv6vPsEdDQVJa/ZoPTwQ3rZlRrm9T6gGRlmuAMEuVFbyb95cIWGg0vcUqYDVRJsJMVF46K8OOe9fx9bJylfg/KAjuI2ZCLT0XNovU4F1pFI+1vIwFpug7Vp2iMuxJTcxhw5Nrpqs=
+	t=1738592797; cv=none; b=sLJCCJB0dWNcTNOg+UGs5a+VCF06j1JaoAOdGPvsXc+uABb3dIann83fVmS/FHE5BOJNfbTYdnu2Gp5+HQ1wRDYqsPhk8Qg4wuRR6OD6CgmN2b5p/Z+UFBRmZ/vCoJ/Ak2GdCbBvvcLnp5cg2blY2BEZ1qJtk+d963MYZhxJKL4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738589420; c=relaxed/simple;
-	bh=UHsxuptmb3xV5kDfCGAfaTxvZvdoOS9QghuWlrwnouQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=f28t2Cx/DaNV8NWHKjwDZqbMt784o5tA6iqO6n/Uyjw26MKIq05nOqzPbVs6/JIZ28iGMecoBMOTph6RxAgzQBEqk5U/J2BX6VpoHIrAZK3ooteZLpa+a2MJpkffAOpux+6Gr7QyL6LAj7Pa47BHD1IPUYp2wZzR+N5we3sxWHY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=DqMZGUJK; arc=none smtp.client-ip=217.70.178.249
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+	s=arc-20240116; t=1738592797; c=relaxed/simple;
+	bh=Tj7tRy4kZnsxFzQuBtc04+Ahrz10XdqH0zrjX5oVM6o=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=bRHnRfRi751IoFETna6CrmTjzQUHv8HpBiweuYPr2xUc+6TU6s9o/GKeZ4WmjaZbENgn/XaHFGNAeuZYQ1NgLfhMt9lBkUOsUyrNqx9u1vkm/TfF9tRixWFrduGuEzgL83YBuSQOqNHYdELaGfEg/8zKn/rFKxdwIds4n1dez+c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=AhHsSeis; arc=none smtp.client-ip=209.85.218.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="DqMZGUJK"
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
-	by mslow3.mail.gandi.net (Postfix) with ESMTP id D04C1583DE9;
-	Mon,  3 Feb 2025 12:59:18 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 639374328A;
-	Mon,  3 Feb 2025 12:59:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1738587550;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=kud0vb2rndObrFVvKzvzQHf1HyyWb9BxitskvcdGEnE=;
-	b=DqMZGUJKFTNXDmN2A3VAGBpAWNbvfP5Hrg1MTSGoA43JU0pawR054fEAdXBsaUttAA7kJ0
-	6tA80lf1b0vhwJo6yMTUqTVzP74pLAhkNRasL8pvbLX7Q6fReJHm9cZqEghk4gLv8Hh/+Q
-	v2AaME9sZsUS4NHfE06In9Z8nQeH9V8JoIo+eKJAKSOfgaOpTvTpk4fBhpoWkMyEIPCUJI
-	vSiFfLyecBMxpQqHOiiul21J4dWefaoPzzUPNa4bho2v5A0jfFGIO3Zq5vENRruJ9bKr2V
-	QENSUuOIXtH9r7MYcOCD/P7StfFmPGU6tudk3AUKlG79PG9cM/Pgdx5MM4LT1g==
-Message-ID: <1b2965bc-87d6-4b44-bf7d-e491a08d89cd@bootlin.com>
-Date: Mon, 3 Feb 2025 13:59:08 +0100
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="AhHsSeis"
+Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-ab34a170526so705023166b.0
+        for <bpf@vger.kernel.org>; Mon, 03 Feb 2025 06:26:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1738592793; x=1739197593; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=wApwa+Vg7pEhvhJZMOtchLW1Qtniq1LAppbarYJzbvQ=;
+        b=AhHsSeisaNRxfF5kpEuWH/NuGkEEpv1vnTj7ov8dvc4SOqrwanUdq0cerpIrAIY5KO
+         e0xLN3NncTQKdHp+2y51NgGmv9ulwc6s6YlQvvC8sEwYzXjrmDPfW1P5sJZJVDo2DO7a
+         6Lu7iex/hWVl/LNtRHc9nk1a6ySPHTG1l0ZTCGB9wcC1cOHKHvB92C8kPHmpY1ukj9la
+         tpeIMaAJAJis7ibRRLXp8njUjDeCMVKXbSKJVW26O/Tr+nSQrg8bmJLV9r5TKEVm9HkD
+         0sdyYVw94J5FrQwbw/TXiWME1NugDiPTG57lSyJ2gwt/zJu1Q3tSraQUpYQTCABsq4U6
+         osOA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1738592793; x=1739197593;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wApwa+Vg7pEhvhJZMOtchLW1Qtniq1LAppbarYJzbvQ=;
+        b=hkPmmDpsbzyPCX+z0rFBWgcs0m7f/xEkAqmvn4iGX6r9qUjjwZAysQrMGg417rIluu
+         m6O+Vv1N8R0fAGWnlteT1zUNFIgQyeRQPG8lU16RRDfjwQiHhwHMUPK7ULvdjKb0RPI1
+         W6KDH95VrqHvWi/YJv6G7V3wiumD7TVU7n1MsWf68RdXtMoSf2bApobqYVT9ag7uemTh
+         MYoHenX8doWro+iQsvtiW8qX0/ZAgtHrz2lTiu++Z87ZwknhyOjsEQIar/gAD9dusqSb
+         7RDAvN6Zt4sizk/vuxPxWQyRptffY/prkggw1SChuLeGLqxK3ygOpOzflsu7Fph2hz1o
+         nvFg==
+X-Forwarded-Encrypted: i=1; AJvYcCW4z/BWlfxzeh+APVm3QEQlk9Acic9jIR0/GDCWwB/UKbDAIo2RUj6Dc41wKppgv0Gjj3A=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyhx7EzNksR6or+sjmSfiAev7Eez3ngrqGneKD6H8rogxB+sUO2
+	nyPQ2DfuzRmyl8pqveoEdUeZuWbWb6b37R7nU9/J5m+r2bQGkdUpNtnluQP+v6Q=
+X-Gm-Gg: ASbGncsN6OCKUh1pXzJ1hJ1ZAeCK+usE+0JrWTUWhiSWyBuqPx38j9Ch75oVdwv4sky
+	/7p491c9MuAxJrDZ9305+TIPDtKviXjMLD0T8oBbskMwBbcoAhMeTcdPcgvehSMZTlf4oBvjgjT
+	hKVd2uDS9AVF4m+DgZkdpNuDn43Z8CnpNzYQr6WMu8x6ijVoeNotoC3N+VroIPNB8/8iaN3LFKd
+	QjGHfLILn7md8ZcFKU4hrGaLYVuDIvT0gHGf540vSOEmMRz+zpid1ripSNyMipHyObgHCEU6HMb
+	v1sEkw==
+X-Google-Smtp-Source: AGHT+IEMvqFtWMQcGcbew8g5CbtS87OK4kOUrbaUT5fxc6WJnZS+Qe69TNruF9V9SFX0gjEEIeYYSg==
+X-Received: by 2002:a17:907:6eab:b0:ab2:ea29:a2 with SMTP id a640c23a62f3a-ab6cfe11e85mr2509321666b.48.1738592793317;
+        Mon, 03 Feb 2025 06:26:33 -0800 (PST)
+Received: from localhost ([193.86.92.181])
+        by smtp.gmail.com with UTF8SMTPSA id a640c23a62f3a-ab706ce9a53sm509134266b.72.2025.02.03.06.26.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 Feb 2025 06:26:33 -0800 (PST)
+Date: Mon, 3 Feb 2025 15:26:32 +0100
+From: Michal Hocko <mhocko@suse.com>
+To: lsf-pc@lists.linuxfoundation.org
+Cc: linux-scsi@vger.kernel.org, linux-ide@vger.kernel.org,
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-nvme@lists.infradead.org, linux-block@vger.kernel.org,
+	linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+	bpf@vger.kernel.org
+Subject: Re: REMINDER - LSF/MM/BPF: 2025: Call for Proposals
+Message-ID: <Z6DSGOsqjw1ahIYi@tiehlicka>
+References: <Z4pwZkf3px21OVJm@tiehlicka>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v4 12/14] selftests/bpf: test_xdp_veth: Add XDP
- broadcast redirection tests
-To: Martin KaFai Lau <martin.lau@linux.dev>
-Cc: Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, "David S. Miller"
- <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
- Jesper Dangaard Brouer <hawk@kernel.org>,
- John Fastabend <john.fastabend@gmail.com>,
- Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
- KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
- Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
- Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
- Alexis Lothore <alexis.lothore@bootlin.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, netdev@vger.kernel.org,
- bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20250131-redirect-multi-v4-0-970b33678512@bootlin.com>
- <20250131-redirect-multi-v4-12-970b33678512@bootlin.com>
- <bba86a91-e945-4ab2-825e-b915216ba3c7@linux.dev>
-Content-Language: en-US
-From: Bastien Curutchet <bastien.curutchet@bootlin.com>
-In-Reply-To: <bba86a91-e945-4ab2-825e-b915216ba3c7@linux.dev>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddujeeiiecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepkfffgggfuffvvehfhfgjtgfgsehtkeertddtvdejnecuhfhrohhmpeeurghsthhivghnucevuhhruhhttghhvghtuceosggrshhtihgvnhdrtghurhhuthgthhgvthessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepvdeiueejvdevvedvtdekteejieeuvdfgjefgvddtvdevjeegleeufeekteevkedvnecukfhppeeltddrkeelrdduieefrdduvdejnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepledtrdekledrudeifedruddvjedphhgvlhhopegludelvddrudeikedrtddrudegngdpmhgrihhlfhhrohhmpegsrghsthhivghnrdgtuhhruhhttghhvghtsegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopedvfedprhgtphhtthhopehmrghrthhinhdrlhgruheslhhinhhugidruggvvhdprhgtphhtthhopegrshhtsehkvghrnhgvlhdrohhrghdprhgtphhtthhopegurghnihgvlhesihhoghgvrghrsghogidrnhgvthdprhgtphhtthhopegurghvvghmsegurghvvghmlhhofhhtrdhnvghtpdhrtghpthhtohepkhhusggrsehkvghrnhgvlhdrohhrghdprhgtphhtt
- hhopehhrgifkheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepjhhohhhnrdhfrghsthgrsggvnhgusehgmhgrihhlrdgtohhmpdhrtghpthhtoheprghnughrihhisehkvghrnhgvlhdrohhrgh
-X-GND-Sasl: bastien.curutchet@bootlin.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Z4pwZkf3px21OVJm@tiehlicka>
 
-Hi Martin,
-
-On 2/1/25 2:33 AM, Martin KaFai Lau wrote:
-> On 1/30/25 11:21 PM, Bastien Curutchet (eBPF Foundation) wrote:
->> +#define BROADCAST_REDIRECT_SKEL_NB    2
->> +static void xdp_veth_broadcast_redirect(u32 attach_flags, u64
-
-[...]
-
->> +
->> +    group_map = bpf_map__fd(xdp_redirect_multi_kern->maps.map_all);
->> +    if (!ASSERT_OK_FD(group_map, "open map_all"))
->> +        goto destroy_xdp_redirect_map;
->> +
->> +    flags_map = bpf_map__fd(xdp_redirect_multi_kern- 
->> >maps.redirect_flags);
->> +    if (!ASSERT_OK_FD(group_map, "open map_all"))
->> +        goto destroy_xdp_redirect_map;
->> +
->> +    err = bpf_map_update_elem(flags_map, &protocol, &redirect_flags, 
->> BPF_NOEXIST);
->> +    if (!ASSERT_OK(err, "init IP count"))
->> +        goto destroy_xdp_redirect_map;
->> +
->> +    cnt_map = bpf_map__fd(xdp_redirect_map->maps.rxcnt);
->> +    if (!ASSERT_OK_FD(cnt_map, "open rxcnt map"))
->> +        goto destroy_xdp_redirect_map;
->> +
->> +    bpf_objs[0] = xdp_redirect_multi_kern->obj;
->> +    bpf_objs[1] = xdp_redirect_map->obj;
->> +    for (i = 0; i < VETH_PAIRS_COUNT; i++) {
->> +        int ifindex = if_nametoindex(net_config[i].local_veth);
->> +
->> +        if (attach_programs_to_veth_pair(bpf_objs, 
->> BROADCAST_REDIRECT_SKEL_NB,
->> +                         net_config, prog_cfg, i))
->> +            goto destroy_xdp_redirect_map;
->> +
->> +        SYS(destroy_xdp_redirect_map,
->> +            "ip -n %s neigh add %s lladdr 00:00:00:00:00:01 dev %s",
->> +            net_config[i].namespace, IP_NEIGH, 
->> net_config[i].remote_veth);
->> +
->> +        devmap_val.ifindex = ifindex;
->> +        err = bpf_map_update_elem(group_map, &ifindex, &devmap_val, 0);
+On Fri 17-01-25 15:59:51, Michal Hocko wrote:
+> Hi,
+> this is a friendly reminder for LSF/MM/BPF Call for proposals - you can
+> find the original announcement here: https://lore.kernel.org/all/Z1wQcKKw14iei0Va@tiehlicka/T/#u.
 > 
-> I ran this test in a loop and failed at this line permanently (errno 
-> E2BIG -7) after enough iterations. I believe the problem is the 
-> group_map (aka "map_all" in the BPF program) has a max_entries 1024 and 
-> ifindex can go beyond 1024 after some "./test_progs" iterations. 
-> Understood that it is likely an existing assumption in the "map_all" 
-> definition but it needs to be addressed first before moving to test_progs.
+> Please also note you need to fill out the following Google form to
+> request attendance and suggest any topics for discussion:
 > 
->> +        if (!ASSERT_OK(err, "bpf_map_update_elem"))
->> +            goto destroy_xdp_redirect_map;
->> +
->> +    }
->> +
-
-[...]
-
->> diff --git a/tools/testing/selftests/bpf/progs/xdp_redirect_map.c b/ 
->> tools/testing/selftests/bpf/progs/xdp_redirect_map.c
->> index 
->> 682dda8dabbc9abbb5d1b0b22dd5f81124142e79..14385df71d7fc40c3b0ee5c6ea0760d0e7336d71 100644
->> --- a/tools/testing/selftests/bpf/progs/xdp_redirect_map.c
->> +++ b/tools/testing/selftests/bpf/progs/xdp_redirect_map.c
->> @@ -1,7 +1,11 @@
->>   // SPDX-License-Identifier: GPL-2.0
->> +#include <linux/if_ether.h>
->> +#include <linux/ip.h>
+>           https://forms.gle/xXvQicSFeFKjayxB9
 > 
-> I have compiler error complaining about __always_inline not defined. 
-> Likely ordering issue and environment specific. Regardless, I believe 
-> the ip.h is unnecessary, so better clean it up.
-> 
-> I am going to land the patch 1-10 and change the cover letter a little 
-> to reflect the fact that patch 11-14 will be a followup. Please post the 
-> remaining patches after fixing the bpf_map_update_elem issue. Thanks.
-> 
+> The deadline to do that is Feb 1st!
 
-Ok thank you, I plan to solve this issue by using a dedicated namespace 
-instead of the root namespace so the index won't be incremented every 
-time `test_progs` is launched.
-I'll send the new iteration once tested on my side.
+The deadline has passed but if you forgot or this slipped through then
+no worries you can still apply but please do so ASAP. We are going
+through all applications these days and will try to send invitations
+ASAP so that people can start planning their travel.
 
-Best regards,
-Bastien
+Let me also remind that all the topics that are to be scheduled should
+be posted to the mailing list (CCing track specific and lsf-pc mailing
+lists). 
+
+Let us know if you have any questions!
+
+Thanks!
+-- 
+Michal Hocko
+SUSE Labs
