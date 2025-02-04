@@ -1,95 +1,71 @@
-Received: from mail-oi1-f173.google.com (mail-oi1-f173.google.com [209.85.167.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33BAB200CB;
-	Tue,  4 Feb 2025 02:44:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BB7DEC4;
+	Tue,  4 Feb 2025 02:45:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738637062; cv=none; b=K8f09+6jAWu25zJ2RqrVr6wOnc9eil+T+pUIvB21cFdMalpNzC8O/Lh89uQbpWapuw4eK9FEi8Lpi1wVD07QLJ3plKMcj7Uz7gVd2HvbGoImnSqlVlIdUPpvQFJ+2Ks768sEjS3Wq9akjh+CclWoQp4aBcB7WePkiBsibn30bWY=
+	t=1738637125; cv=none; b=PPb7uNweq/LerSFtk7HNe88teCe0g62S60hAOMhyA0zjEVT8QJKzmhPq+Iz4yzs8tvMQ15XOHqCScnA2O7qlqBxFvFTYOcF2IZw3A7kPhJJbtbqJVHeTg429+xw97SD/ykk1TL3mtv3b5KhD8e89+gHZ82pPJzcHROL+WJzdg78=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738637062; c=relaxed/simple;
-	bh=Glanpff95vQzVMip8aO/lmyFWW5870LbGQOGXLTzi7c=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=MPiYRM1Ixl7bgGs/DVxF4FgAqg3GhNGBMaKU9YT9RRe7gf3VxCJ6FT0MYtWA/NepkmUytAN5zFxu0tJp2QNfLwR1zhpqqeZmGwqIFC3zjklX5apkfkNVyhsBCL63/6gaEdtjsSQ7fkfRwRfUMpLo3Zv87CAvI9toHI6g7lElKIU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NTFnzIpp; arc=none smtp.client-ip=209.85.167.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1738637125; c=relaxed/simple;
+	bh=m1RF4XomatnHgBjWRolxSQEe+b9UxVhiLunv8jNDikg=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=TStLOroHaHkUHlpUX1qr/VyuL6TnfCOkCapOssyjyN+G7ZYVerE9aVKR8aeQJ3He61CpdG87/XHpuNnSUojFysOisyNGDKkE4yjIW5hKsXo5sHDqWfpRCrwHrb3IOLwWZgC3S1FrX/W0zkTyHty2XmPOofx+Q0/5XIiZSTqu7Ng=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZqTz8KL3; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NTFnzIpp"
-Received: by mail-oi1-f173.google.com with SMTP id 5614622812f47-3eb939021bfso2358393b6e.3;
-        Mon, 03 Feb 2025 18:44:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1738637060; x=1739241860; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Glanpff95vQzVMip8aO/lmyFWW5870LbGQOGXLTzi7c=;
-        b=NTFnzIppbDe9/q0s1V5TRvMf/59+VjqJhc0yMnSqwBO9N5pv9iNrE6gx9CAX2nFLij
-         Ua3sdHfxMFBGz1sllafSRzG6Vqd+yDkX/it1GeMrx4GoTaQYZptejpY1oaP8rT0uNJic
-         7N15ww+fYWxFZ0LHIdEpRZWLfpGf5x/KeBbbUVbOiz8y02I9lIc0BRWhjL8LG+kdB7wo
-         GNIjOWcDRMG//x16PrWy0gXiEDqCgd09M7ULPpDNKeFfQvhaWnCCOOHY1Q89A3f6dGx/
-         uAXSDMlcrlI9eQrkUoKm/oa8a9rTVgR3ejEthPLZj35UG8Jhint0+2u/gOcTVI68AG+c
-         EKeQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738637060; x=1739241860;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Glanpff95vQzVMip8aO/lmyFWW5870LbGQOGXLTzi7c=;
-        b=ZRCZ5kXwbF8JU542QA+0iUCqajGYJCO4IscwA7JDeKNzzrT82vINitaOuGguUg21PT
-         xePypWbCGA8QBRRY1N+c/Vb2b6pmqftJsSQ9gqNubdOcXFPm8QrxcFGrJ3H8JiKypsOK
-         tFo+c8ZiBVa/iK5poLDb3Uedk4bycz0y89FNabfbq9wUV1fgOAwzBQFN7NTEwZ5iEe6b
-         YbN/0NlkFCC+wRIc9DIWjrUghjjdXtiRCiOrllbps9BTNGyewj4jbyVbKHuxZlkdFVzh
-         EiXYvMgza+tBLqUO0SnR26ZIx/vrsn3vVtUxLzIvmoXVOg3awZ2/qcu+tbQNoiSQy4tH
-         YvUg==
-X-Forwarded-Encrypted: i=1; AJvYcCW+FrEQsS4lYF2Us2mk4fXNBIUQlsQpqjVzMbNYcr/CZwIdiDo5MLtn9vwinlycKNmBtQk=@vger.kernel.org, AJvYcCXJHO1jl5XcEabsp2OICFBjxzcR9kuVMP6LQNKp5V+LY8ZVzdVPApQAcETpyi6AgWsImMSSsMp/3XTCvZweOg==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzl6J7HppkuW+Wh8dvrRWfAuhLTfYOBxVlofh6ajf7zYbmyw7vr
-	VLwmuH2RsN7I/poIeZb5RpLzDo9BU/j7L/MXl7or6pai5Qd81+1bJ6Ho+8zUS2WjmOggKrl57Uo
-	evUJ3G6nAQAtkYTFQbFmQ4M8QW4k=
-X-Gm-Gg: ASbGncsi7HQxdUzqvMTgAAjJrBPdvBdPXwYluM7E7Z++ENs68LGfKldL0pMNVHRk8sP
-	m8jssrsY0BMo3gmkmE3MWRqzGx6nOXQ/mNsqtlTZLmHjS9pw5cgnu+53mi+uxmyxij2Uj4vBhSj
-	hCQVFGER3dXt/JdeVxXMAWIWthkCW/kg==
-X-Google-Smtp-Source: AGHT+IHOgQJXQSZ9jWo+h9SCRdfzLjJXoj310pYAX+1aN/PS2dRu/J1lBt9JeovhFZKSaoKeK4G1QnV6ZNzcxR2sCik=
-X-Received: by 2002:a05:6808:1a2a:b0:3ea:64cc:4954 with SMTP id
- 5614622812f47-3f323b2577emr17790248b6e.35.1738637060077; Mon, 03 Feb 2025
- 18:44:20 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZqTz8KL3"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84801C4CEE0;
+	Tue,  4 Feb 2025 02:45:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1738637125;
+	bh=m1RF4XomatnHgBjWRolxSQEe+b9UxVhiLunv8jNDikg=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=ZqTz8KL3istERH4xwphDzrfoZYgWr9C5/vynap/0hC3pIYpCfmWtYuZoF81jC371M
+	 Sz6ZlD8FHJi6zB0fMdfeCyqkdrU5L0fWrCAi4/19OX/VxUymYI8DzsyyFKDKwbmAzp
+	 g1YGLvGFsUewcLX05TjNepbo4+a60+nqCVtNoL0ZP6mo++LWhvsM4S08vT1OR401WF
+	 60+fj4Zy0k/RTQC1CmPNs+QvQIEepUlwW8lSS78xpF3UhmKeOhCnRUYCLM7wfgjnr+
+	 aM+HEwQSfrP9sJS5WpgfcOrnRSSostqQ5dkkTKHEcTfsfuCuSV90dk5nj+nhBaVzMQ
+	 r4SVzsRGphPPg==
+Date: Mon, 3 Feb 2025 18:45:23 -0800
+From: Jakub Kicinski <kuba@kernel.org>
+To: Joe Damato <jdamato@fastly.com>
+Cc: netdev@vger.kernel.org, Andrew Lunn <andrew+netdev@lunn.ch>, "David S.
+ Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Paolo
+ Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>, Alexei
+ Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Jesper Dangaard Brouer <hawk@kernel.org>, John Fastabend
+ <john.fastabend@gmail.com>, linux-kernel@vger.kernel.org (open list),
+ linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK),
+ bpf@vger.kernel.org (open list:XDP (eXpress Data
+ Path):Keyword:(?:\b|_)xdp(?:\b|_))
+Subject: Re: [PATCH net-next v2 2/2] selftests: drv-net: Test queue xsk
+ attribute
+Message-ID: <20250203184523.5676eae6@kernel.org>
+In-Reply-To: <20250203185828.19334-3-jdamato@fastly.com>
+References: <20250203185828.19334-1-jdamato@fastly.com>
+	<20250203185828.19334-3-jdamato@fastly.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: Aryan Kaushik <aryankaushik666@gmail.com>
-Date: Tue, 4 Feb 2025 02:44:08 +0000
-X-Gm-Features: AWEUYZk51vUEhdDA62v6Ss40NReWsBosUWIM_FnRvrGBK40QaBymEaN9fsRTOls
-Message-ID: <CAHnJ_vh6_EF-4N9ARvp9e5B2VXY-jwAnV+KhpUvfzP7j=Nx90w@mail.gmail.com>
-Subject: LSF/MM + BPF ATTEND - Topic 3 for discussion
-To: lsf-pc@lists.linux-foundation.org
-Cc: linux-mm@kvack.org, linux-fsdevel@vger.kernel.org, bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Hi Team
+On Mon,  3 Feb 2025 18:58:23 +0000 Joe Damato wrote:
+> +/**
+> + * this is a simple helper program that creates an XDP socket and does the
+> + * minimum necessary to get bind() to succeed.
+> + *
+> + * this test program is not intended to actually process packets, but could be
+> + * extended in the future if that is actually needed.
+> + *
+> + * it is used by queues.py to ensure the xsk netlinux attribute is set
+> + * correctly.
+> + */
 
-hope this email finds you well.
-
-Topic: Integrating Persistent Memory into Existing Storage Architectures
-
-Description: Persistent memory bridges the gap between traditional
-storage and DRAM, offering high-speed, non-volatile storage.
-However, its integration into existing storage architectures presents
-challenges in terms of data consistency, access mechanisms, and
-performance tuning.
-This session would explore how to optimize storage systems to take
-full advantage of persistent memory, including filesystem
-modifications and hybrid memory management approaches.
-
-My Contribution: I have been researching ways to optimize storage
-performance, and I=E2=80=99m particularly interested in how persistent memo=
-ry
-can be effectively integrated into current Linux storage stacks.
-I=E2=80=99d like to discuss potential solutions for data consistency and
-performance enhancements when using persistent memory.
-
-Please feel free to share your insight on the topic.
-
-Best Regards
-Aryan Kaushik
+code lgtm, one more nit: could you replace /** -> /*
+Our scripts thinks this is kdoc and complain.
+-- 
+pw-bot: cr
