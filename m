@@ -1,186 +1,377 @@
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2062.outbound.protection.outlook.com [40.107.244.62])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5033520C490;
-	Tue,  4 Feb 2025 11:07:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.244.62
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738667270; cv=fail; b=DdG6KiWUF5RivQGeU4d3dgpE3TLMEcHbxtJZBPXiXeTtHK/qpLty6NG947/YlmUGv19UZYQOvXs155kcI6uLmF/XzZgtqpUeek8qK4HHSTIVIUxbXvgC9uac1+Jl7KLCjw8U6Gs2YH6Mzu57fYilV5i27koO2HPrE6eUwQdlfTo=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738667270; c=relaxed/simple;
-	bh=xonwUbA0AUW/8ATJZqhYWL5iGmR1k3sM7RWMA+tCjp0=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=XIDcsdH6K61tR0ouBq5gRetD4HnDDNpjhr35bMOcG3gdSTrmk8U2644m7YcrolISzMjlQYbMTbIlDf8VFd4fjvtXgrv/dHOVeQEc8XmMpos35yXVYh7UviSfonfpOr6jn2utOhPiJNr6L0qi0QL6Nen+3kzsC8KC6GXLDq2YKZs=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=K11egZr/; arc=fail smtp.client-ip=40.107.244.62
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF3FC20F074
+	for <bpf@vger.kernel.org>; Tue,  4 Feb 2025 12:29:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1738672191; cv=none; b=pQpLTHZ9u6KQplTCLx7Tuh+YApzXddjg1xhAFDtlFfDWpn1kuYqxDf8J+YGGDK52uu+VxddjZS7pbomzaM9ZdYFj96nc0V1a0hXXeDRtr3+HA5qzA4AqrSitAV9B/8Il8I0dea767cUnRq4xwP4qY3KV9XQTdWB5PoYJYbbHMZ4=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1738672191; c=relaxed/simple;
+	bh=jYQIB/FyKU0Z4mzWv5Ik32DKdBZBTOs3Gr/Ucmtzoco=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=j3lnauurZbou9kzhBS8FTo7ZEHpjg9eDZxpdQRu7308XqOIw6K0hJjtGVllyfYGpiF+OgQdiSs26ma9oZSmPqn0mIZzWDvCxnrBNgW7qTS7CrVPv2XEPimPSTrUOB2XLhLctsuX0BP3/w7CMMxmyNTCNlDvtaHJ6J8Y5pCd94+I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MKUxwoXh; arc=none smtp.client-ip=209.85.128.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="K11egZr/"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=iFf9X2SHx7gx+dwZ7iGR2GPyYW+WnjCQj6huG7/39zADsVscvPCG/wI+I0yGc9DRKjaiHFmXBmANcWIZml5OuHIlS5JvK6ch5P8zYGpxIFi9eLcj4/jqJTrKVSzKes4s+LFErBOkOceX/RaTcTVfpOD/dr99N55aLxXeke19wGlNTmpxWRe2dZucsCKwAvpXoNqsPg5aXDLS/g/yFpw1gPDMydjH8VpGsBy/9x89YuZow11llmne8rfLCj/ZEJ3WG1nkop+YM50+Vs9PrEik1Z+jBDApr+oL1RMs1rh/439Fuc9Id9l6zMS4Y2GQdFZKRrtHQiSm+U5N2qK3d+UaYg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=1fOckC9dX2KZEetfa/W25Tvjz0+kovc+JJ50PYOFsoo=;
- b=LtM3rjltRTeoDn2/tM+Ovo3sSNn/w1WaM4gn0UxuOzdhZIEU3lx9mvj4Wt5iS5nvGUlsQTsgJyWYkaK5JkJf4kCnsB+ok4jXyk5Tvyi2w01TB11FAdZbnjsymHbLqkzhbEzFoBbiLQNyN49hNQlGBBHLckGzhb6FT2KNNQ+RPxwxEoVNIrpDTfDnGTdbeWJq2f2kUP6MvPih8qS3r6u9uM9JdfBk2d6h9G3t9Q7kM57gqnsJmLmZutQA+bJYSL0zvsh33L6kjdGYJOwSj/I9PebboLwweKVS5G/cjHzMjKhXZp83j2cka3an1H8Mq21xKz45q09KQTn8J3RKwQJD6w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=davemloft.net smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=1fOckC9dX2KZEetfa/W25Tvjz0+kovc+JJ50PYOFsoo=;
- b=K11egZr/YCYZg5mxshZ+U6jhP+yUCajaEkMNRevCAPST6oV8IzOleekJjMIoRVSL7CriSDGP4DmkG3ee9V3KhmlEgwPLPZWj5CYMGErHqTCfCaAhh1MR32C8paOkU19dq2NMeKpcBmE7breg2bR3T/CxoiXWMP+dA8IbwoPb+jLzRtQHFLu5ZlJHePH+VvwVGDJGD2iO44ZLxSJY2fblyYJfXHoPiaAiyN4u+gipPcdE84OV4gC4LdrabsKXu3jU9BonwwHZi6e00klJSPHq7CfzVyXneYDlDntGLSy0ZMAYj+4O+2wYDZBteDui0eXI/HZH/RCDf4Fj7/5MzzCd1w==
-Received: from CH2PR04CA0011.namprd04.prod.outlook.com (2603:10b6:610:52::21)
- by PH7PR12MB9221.namprd12.prod.outlook.com (2603:10b6:510:2e8::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8398.24; Tue, 4 Feb
- 2025 11:07:46 +0000
-Received: from CH3PEPF00000010.namprd04.prod.outlook.com
- (2603:10b6:610:52:cafe::b) by CH2PR04CA0011.outlook.office365.com
- (2603:10b6:610:52::21) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.8398.24 via Frontend Transport; Tue,
- 4 Feb 2025 11:07:46 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- CH3PEPF00000010.mail.protection.outlook.com (10.167.244.41) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.8398.14 via Frontend Transport; Tue, 4 Feb 2025 11:07:46 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Tue, 4 Feb 2025
- 03:07:35 -0800
-Received: from fedora.mtl.com (10.126.231.35) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.14; Tue, 4 Feb
- 2025 03:07:27 -0800
-From: Petr Machata <petrm@nvidia.com>
-To: "David S. Miller" <davem@davemloft.net>, Eric Dumazet
-	<edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
-	<pabeni@redhat.com>, Andrew Lunn <andrew+netdev@lunn.ch>,
-	<netdev@vger.kernel.org>
-CC: Amit Cohen <amcohen@nvidia.com>, Ido Schimmel <idosch@nvidia.com>, "Petr
- Machata" <petrm@nvidia.com>, Alexei Starovoitov <ast@kernel.org>, "Daniel
- Borkmann" <daniel@iogearbox.net>, Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>, <bpf@vger.kernel.org>,
-	<mlxsw@nvidia.com>
-Subject: [PATCH net-next 12/12] mlxsw: Validate local port from CQE in PCI code
-Date: Tue, 4 Feb 2025 12:05:07 +0100
-Message-ID: <0bd312ed629e85a044725080b9f33403bb51ae41.1738665783.git.petrm@nvidia.com>
-X-Mailer: git-send-email 2.48.1
-In-Reply-To: <cover.1738665783.git.petrm@nvidia.com>
-References: <cover.1738665783.git.petrm@nvidia.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MKUxwoXh"
+Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-4361e89b6daso37946035e9.3
+        for <bpf@vger.kernel.org>; Tue, 04 Feb 2025 04:29:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1738672187; x=1739276987; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=JzsIw3ZWXC0QC3FjNMfj/os8fYOct5DeRn8bPKhGFSc=;
+        b=MKUxwoXhzIij3iTHjdcTgDco5yTrhaG3cNMUdNY/8YDpzQ6IeNUmk3kKgQn53m4B/t
+         EVi9Uhtoy3MNkG8Iu0tqnzsuqdxBUFA4OxmMTrFiPUwWtKuWh0NfUHb33KnIqB5neX1T
+         GucmpgxfGgwKeZ2TMJwpMD4O3Q4mIHPf7EWOdJxLnt182DVz1YHdiSG3Mc9/cz1k5hNj
+         didfREYGxGKr3JXxf0Bg5YK8iL7CcQ1pkKp0yovY0pwL6PU2+VpxQJGfLE+MbXo52aOB
+         gnyKWl/9vBDwQnLIGiYQmyrq4DKiupgjBsZpQPuJL5BJHVZhivuF7r6F7ySyuMPaProP
+         wDeg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1738672187; x=1739276987;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=JzsIw3ZWXC0QC3FjNMfj/os8fYOct5DeRn8bPKhGFSc=;
+        b=F8Tv7kD2fk8EboYFIpERj90yC48K101mnyxA2C15JMB4R2iSPfjo4EQX+51asXi4Qd
+         +IvYvKKGLO9hKj6jSK96PcUGBLLl9x3iqv5SQVaejT3SLGwunfwjimnE4uLgKc+iZgdo
+         tp3kp6Tx2pO6fedvEkZZP7ERMnhANkjN8f2LWcZP55z0RHewK/tYLwV8NvijZzVoGXOA
+         984VOvuONSRZGCJVslM0N2XiK7JxuYFvMXq3Lp/HoUMRflwXhoHmQGYBUFk0mTWtQKPL
+         56+fqKMwgJEj4mhPSlCj/REYbp1Qjxpoism5fp3cG6ZGnF5aINarNWT3/KBhI4l7dkOW
+         YGug==
+X-Forwarded-Encrypted: i=1; AJvYcCWbaQ4qWECqhXpWa79a7kx2Ltaf+1pjIpN1g/C6nXADoe9THFmoObYgtg1fwhsPdD0kbes=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyp+V/CYbIs82xXYc00l0UGbiUr5KpRCtbZlnewipy1+7NzZ5Vh
+	sJA8Z1F/EvZ0XUCCOsx3NsR5YZiwkrNHB5/O4KZXEJYxbwfWFqn8XoDb6g==
+X-Gm-Gg: ASbGnctj1RnSBs3iU9sT2uk+MUG372+mSf1JWCaMrFCwoC9Qd9d76PEhxWvVO6xb/bT
+	wQPzzK1yKtnkB2A7d3+cdN2EOIjztdtIl1o6srajk9BosK9A8OApo3XlXgQwyI94QOjAOuR2yNT
+	qK8bQholCjGK6OczEOV/EiR9hETQtadHbTAiuH+yik/1l1hsNaLZfehk7hqThZ//8nz652PZxEA
+	N/VqYPoJ1gWEY5WTn2u4YqxQe3X+SMACsBJ23Qz8kvggc6UtZ+B8WZDwIXhUBSc16+l932rABU6
+	ij6O90J53ZDeuSCEVPzv4YZc5k35nXLJpPzbZEv/dPPVvwqfCXUBuC51mI9BPvEy73BBKoaUgui
+	gg43okfSrkOE=
+X-Google-Smtp-Source: AGHT+IE49iOIJPTTE9oMNCGcGnOzr0VgB8UeZCYifIXEz6AU6brr0ksW0YjcE0CNPzSzRtqt8nYp4A==
+X-Received: by 2002:a05:6000:188b:b0:385:f2a2:50df with SMTP id ffacd0b85a97d-38c5195f498mr22051412f8f.27.1738672186780;
+        Tue, 04 Feb 2025 04:29:46 -0800 (PST)
+Received: from [192.168.0.18] (cpc158789-hari22-2-0-cust468.20-2.cable.virginm.net. [86.26.115.213])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38c5c102d00sm15992316f8f.32.2025.02.04.04.29.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 04 Feb 2025 04:29:46 -0800 (PST)
+Message-ID: <59150228-6d24-4a54-b36e-9ecdfadd4e8e@gmail.com>
+Date: Tue, 4 Feb 2025 12:29:45 +0000
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: rnnvmail203.nvidia.com (10.129.68.9) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CH3PEPF00000010:EE_|PH7PR12MB9221:EE_
-X-MS-Office365-Filtering-Correlation-Id: efdc2a29-e944-4a7e-60dc-08dd450c27b0
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|7416014|376014|36860700013|82310400026;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?UEoeQCWdxyeGXHQYPNpm78DnOIYFXEE3WzoEUgNY85U1mWb8nf/wvWDiNvM5?=
- =?us-ascii?Q?L4N+bzCU6eka4qRpsACKub1+pSAAqz0gMFaRWj+oTwwIns6gKjU6GxB5nZ9Y?=
- =?us-ascii?Q?hNJpuJJTxBgpf6vGrMX1ZAPPngyHCbyq4IB94YnU3wLPm5GKLvUBe0efXU4g?=
- =?us-ascii?Q?L87L0T2GXDGPvSc66TYPmNL5Sll1sucEPfMGBtvjnq+dzuLiEePeoKk9uNu2?=
- =?us-ascii?Q?Hyxx/GM+9CY3i3GxH8rc72zZ+scNjFOgmCTbjh21IIbp/yX3nf4jJ39QnwqU?=
- =?us-ascii?Q?GQgHddRE4P67S9t7nEmxwQGbfZniwsWlqsanb547hxnumumZeXGJZ4g2KpUV?=
- =?us-ascii?Q?3zOGwLW2lzsx8fdvmmX63y97eP/mVCGbKUlk6s7yF6K1l2BAhn9J2dTg2VhW?=
- =?us-ascii?Q?Cncef+jEuQ2AY6kSPDgW7XfwIbX5E6CLbRuIZTxXERMZ5jz2tsQHQu8F37IZ?=
- =?us-ascii?Q?rRILyany+6GLCNzi7wgzZ3l4ykuQR83uhYQnRs1ei9zFQImCQGOP30YOY+ui?=
- =?us-ascii?Q?b/n0FqN0GTHNBNSY7EBv0XnnrSw96BJusgKxW1aorr8FH5K4HV21Tbbz8rZY?=
- =?us-ascii?Q?+/1l7nhDFxoMtx3yZNEAFgVU7vvDfZyzm7MMmMQnoLdpSyXGxFWBYRJWsop0?=
- =?us-ascii?Q?J1WxPMNGOFrMBgV9wGm1gMTmfmybI8VOr+lNgfiu69yiiFXqbfxtSXmP/PpI?=
- =?us-ascii?Q?7rYDHySiCHAP/Pc9qWo3u3Bh43BEhesu2WK1ziiaZZdy9dar6WAETu9KHdZi?=
- =?us-ascii?Q?fQqYLH+0vuXryQvA5ZFa+LZhe7gwNA6WmwDUVCyydAOuDDBAbXpQfnRLEWiz?=
- =?us-ascii?Q?nniaBQOypUmfvbJt2QoKE68hK+TdIjSUSNEPSyagFzY52XHknDsImY7Nk4jx?=
- =?us-ascii?Q?Pjc+qHcaqrFq3bsmHK0MGsHWeZcblfzqk6ouiv7oJaZFChq/47T4qDMARJmN?=
- =?us-ascii?Q?ZpKpmnu4ycgIVUx2/Aw+mcP2SF7iYWE9cpqVk+wFeFf/XoBArewIXYUMeWQE?=
- =?us-ascii?Q?l0RFCxNzXcVtQ/jsQNxJj9mIbxxMNzc1DQfDRldpW0prOAN1B+loyevBG+KK?=
- =?us-ascii?Q?zaHVzzIXO/9aghWc2s7Af1u2GtsWNYHQH9E+XJKbVlaENV21mgmlOky7EYSU?=
- =?us-ascii?Q?AyiofBfKyTeVkXxwedyTT5RrjT0VTj7wFHYwMEGGTu0G152GV4gajGgWMrOS?=
- =?us-ascii?Q?fW7o2Q4wkGrFxJhQTouR6VbtQj1kD5lJkWDOgZBfCM6kmRQyOg8+5XHGdLo+?=
- =?us-ascii?Q?6/BRPyyZjsvCfF4J6Sk5KLubl5X1QD5WZgfE1JckgeaQSbpC0atkLkbsrxKy?=
- =?us-ascii?Q?6YQpVTL3W27SsD8P2GEXcPjD4PlvQdCF62a+gCgx3M+FCHWCraJCkG2ybLlq?=
- =?us-ascii?Q?8iKlNtcrOj7gNiH9X1uQn3j8JBfZeslhbNP5jreTvM4JHu99bjfHwZ9lK5VX?=
- =?us-ascii?Q?CRO1VD6ZG72O1BxpP5uXyL0w5IqBq9jdCO2rFz8MDnPiEVs6XlOYzBXAhWN9?=
- =?us-ascii?Q?jRIWj+wjZar9CKk=3D?=
-X-Forefront-Antispam-Report:
-	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230040)(1800799024)(7416014)(376014)(36860700013)(82310400026);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Feb 2025 11:07:46.2711
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: efdc2a29-e944-4a7e-60dc-08dd450c27b0
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	CH3PEPF00000010.namprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB9221
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next] selftests/bpf: implement setting global
+ variables in veristat
+To: Eduard Zingerman <eddyz87@gmail.com>, bpf@vger.kernel.org,
+ ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net, kafai@meta.com,
+ kernel-team@meta.com
+Cc: Mykyta Yatsenko <yatsenko@meta.com>
+References: <20250203164002.128321-1-mykyta.yatsenko5@gmail.com>
+ <9d42c86be3a8057054ffb1e7f7c6af09d5a5d767.camel@gmail.com>
+Content-Language: en-US
+From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
+In-Reply-To: <9d42c86be3a8057054ffb1e7f7c6af09d5a5d767.camel@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-From: Amit Cohen <amcohen@nvidia.com>
-
-Currently, there is a check in core code to validate that the received
-local port does not exceed number of ports in the switch. Next patch will
-have to validate it also in PCI, before accessing the pci_ports array.
-There is no reason to check it twice, so move this check to PCI code.
-
-Note that 'mlxsw_pci->max_ports' and 'mlxsw_core->max_ports' store the same
-value, which is read from firmware.
-
-Signed-off-by: Amit Cohen <amcohen@nvidia.com>
-Reviewed-by: Ido Schimmel <idosch@nvidia.com>
-Signed-off-by: Petr Machata <petrm@nvidia.com>
----
- drivers/net/ethernet/mellanox/mlxsw/core.c | 3 +--
- drivers/net/ethernet/mellanox/mlxsw/pci.c  | 3 +++
- 2 files changed, 4 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/net/ethernet/mellanox/mlxsw/core.c b/drivers/net/ethernet/mellanox/mlxsw/core.c
-index 628530e01b19..962283bbfe18 100644
---- a/drivers/net/ethernet/mellanox/mlxsw/core.c
-+++ b/drivers/net/ethernet/mellanox/mlxsw/core.c
-@@ -2959,8 +2959,7 @@ void mlxsw_core_skb_receive(struct mlxsw_core *mlxsw_core, struct sk_buff *skb,
- 	const struct mlxsw_rx_listener *rxl;
- 	bool found = false;
- 
--	if ((rx_info->trap_id >= MLXSW_TRAP_ID_MAX) ||
--	    (rx_info->local_port >= mlxsw_core->max_ports))
-+	if (rx_info->trap_id >= MLXSW_TRAP_ID_MAX)
- 		goto drop;
- 
- 	rcu_read_lock();
-diff --git a/drivers/net/ethernet/mellanox/mlxsw/pci.c b/drivers/net/ethernet/mellanox/mlxsw/pci.c
-index b560c21fd3ef..778493b21318 100644
---- a/drivers/net/ethernet/mellanox/mlxsw/pci.c
-+++ b/drivers/net/ethernet/mellanox/mlxsw/pci.c
-@@ -845,6 +845,9 @@ static void mlxsw_pci_cqe_rdq_handle(struct mlxsw_pci *mlxsw_pci,
- 		rx_info.local_port = mlxsw_pci_cqe_system_port_get(cqe);
- 	}
- 
-+	if (rx_info.local_port >= mlxsw_pci->max_ports)
-+		goto out;
-+
- 	err = mlxsw_pci_rx_pkt_info_init(q->pci, elem_info, byte_count,
- 					 &rx_pkt_info);
- 	if (err)
--- 
-2.47.0
-
+On 03/02/2025 22:56, Eduard Zingerman wrote:
+> On Mon, 2025-02-03 at 16:40 +0000, Mykyta Yatsenko wrote:
+>> From: Mykyta Yatsenko <yatsenko@meta.com>
+>>
+>> To better verify some complex BPF programs we'd like to preset global
+>> variables.
+>> This patch introduces CLI argument `--set-global-vars` to veristat, that
+>> allows presetting values to global variables defined in BPF program. For
+>> example:
+>>
+>> prog.c:
+>> ```
+>> enum Enum { ELEMENT1 = 0, ELEMENT2 = 5 };
+>> const volatile __s64 a = 5;
+>> const volatile __u8 b = 5;
+>> const volatile enum Enum c = ELEMENT2;
+>> const volatile bool d = false;
+>>
+>> char arr[4] = {0};
+>>
+>> SEC("tp_btf/sched_switch")
+>> int BPF_PROG(...)
+>> {
+>> 	bpf_printk("%c\n", arr[a]);
+>> 	bpf_printk("%c\n", arr[b]);
+>> 	bpf_printk("%c\n", arr[c]);
+>> 	bpf_printk("%c\n", arr[d]);
+>> 	return 0;
+>> }
+>> ```
+>> By default verification of the program fails:
+>> ```
+>> ./veristat prog.bpf.o
+>> ```
+>> By presetting global variables, we can make verification pass:
+>> ```
+>> ./veristat wq.bpf.o  --set-global-vars "a = 0; b = 1; c = 2; d = 3;"
+>> ```
+>>
+>> Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
+>> ---
+> This is super useful, thank you!
+> Maybe also add an ability to read variables list from a file?
+> (e.g. using -g @file-name syntax as in -f).
+>
+> Worked fine for my small example, but failed to affect an object file
+> with multiple programs, see below.
+>
+> Also, given that it is non-trivial to see if variable had indeed been set,
+> I think it would be useful to add a selftest that does
+> system("./veristat -l7 -v -g ...") and matches log output to check that
+> values are set correctly, e.g. I used the following simple test:
+>
+> 	const volatile u8  _u8  = 0;
+> 	const volatile u16 _u16 = 0;
+> 	const volatile u32 _u32 = 0;
+> 	const volatile u64 _u64 = 0;
+> 	const volatile s8  _s8  = 0;
+> 	const volatile s16 _s16 = 0;
+> 	const volatile s32 _s32 = 0;
+> 	const volatile s64 _s64 = 0;
+>
+> 	SEC("socket")
+> 	int test_globals(void *ctx)
+> 	{
+> 		volatile unsigned long cnt;
+> 		cnt = _u8;
+> 		cnt = _u16;
+> 		cnt = _u32;
+> 		cnt = _u64;
+> 		cnt = _s8;
+> 		cnt = _s16;
+> 		cnt = _s32;
+> 		cnt = _s64;
+> 		return cnt;
+> 	}
+>
+>>   tools/testing/selftests/bpf/veristat.c | 189 +++++++++++++++++++++++++
+>>   1 file changed, 189 insertions(+)
+> [...]
+>
+>> @@ -1292,6 +1312,169 @@ static int process_prog(const char *filename, struct bpf_object *obj, struct bpf
+>>   	return 0;
+>>   };
+>>   
+>> +static int parse_var_presets(char *expr, struct var_preset *presets, int capacity, int *size)
+>> +{
+>> +	char *state;
+>> +	char *next;
+>> +	int i = 0;
+>> +
+>> +	while ((next = strtok_r(i ? NULL : expr, ";", &state))) {
+>> +		char *eq_ptr = strchr(next, '=');
+>> +		char *name_ptr = next;
+>> +		char *name_end = eq_ptr - 1;
+>> +		char *val_ptr = eq_ptr + 1;
+>> +
+>> +		if (!eq_ptr)
+>> +			continue;
+> Nit: error message here?
+>
+>> +
+>> +		if (i >= capacity) {
+>> +			fprintf(stderr, "Too many global variable presets\n");
+>> +			return -EINVAL;
+>> +		}
+>> +		while (isspace(*name_ptr))
+>> +			++name_ptr;
+>> +		while (isspace(*name_end))
+>> +			--name_end;
+>> +
+>> +		*(name_end + 1) = '\0';
+>> +		presets[i].name = strdup(name_ptr);
+>> +		errno = 0;
+>> +		presets[i].value = strtoll(val_ptr, NULL, 10);
+> Nit: using base of 0 would allow to specify values either as decimals or in hex
+>       (using '0x' prefix).
+>
+>> +		if (errno == ERANGE) {
+>> +			errno = 0;
+>> +			presets[i].value = strtoull(val_ptr, NULL, 10);
+>> +		}
+>> +		if (errno) {
+>> +			fprintf(stderr, "Could not parse integer value %s\n", val_ptr);
+>> +			return -EINVAL;
+>> +		}
+>> +		++i;
+>> +	}
+>> +	*size = i;
+>> +	return 0;
+>> +}
+>> +
+>> +static bool is_signed_type(const struct btf_type *type)
+>> +{
+>> +	if (btf_is_int(type))
+> Nit: enums could be signed as well.
+>
+>> +		return btf_int_encoding(type) & BTF_INT_SIGNED;
+>> +	return true;
+>> +}
+>> +
+>> +static const struct btf_type *var_base_type(const struct btf *btf, const struct btf_type *type)
+>> +{
+>> +	switch (btf_kind(type)) {
+>> +	case BTF_KIND_VAR:
+>> +	case BTF_KIND_TYPE_TAG:
+>> +	case BTF_KIND_CONST:
+>> +	case BTF_KIND_VOLATILE:
+>> +	case BTF_KIND_RESTRICT:
+>> +	case BTF_KIND_TYPEDEF:
+>> +	case BTF_KIND_DECL_TAG:
+>> +		return var_base_type(btf, btf__type_by_id(btf, type->type));
+>> +	}
+>> +	return type;
+>> +}
+>> +
+>> +static bool is_preset_supported(const struct btf_type *t)
+>> +{
+>> +	return btf_is_int(t) || btf_is_enum(t) || btf_is_enum64(t);
+>> +}
+>> +
+>> +static int set_global_var(struct bpf_object *obj, struct btf *btf, const struct btf_type *t,
+>> +			  struct bpf_map *map, struct btf_var_secinfo *sinfo, long long new_val)
+>> +{
+>> +	const struct btf_type *base_type;
+>> +	void *ptr;
+>> +	size_t size;
+>> +
+>> +	base_type = var_base_type(btf, t);
+>> +	if (!is_preset_supported(base_type)) {
+>> +		fprintf(stderr, "Setting global variable for btf kind %d is not supported\n",
+>> +			btf_kind(base_type));
+>> +		return -EINVAL;
+>> +	}
+>> +
+>> +	/* Check if value fits into the target variable size */
+>> +	if  (sinfo->size < sizeof(new_val)) {
+>> +		bool is_signed = is_signed_type(base_type);
+>> +		__u32 unsigned_bits = sinfo->size * 8 - (is_signed ? 1 : 0);
+>> +		long long max_val = 1ll << unsigned_bits;
+>> +
+>> +		if (new_val >= max_val || new_val < -max_val) {
+>> +			fprintf(stderr,
+>> +				"Variable %s value %lld is out of range [%lld; %lld]\n",
+>> +				btf__name_by_offset(btf, t->name_off), new_val,
+>> +				is_signed ? -max_val : 0, max_val - 1);
+>> +			return -EINVAL;
+>> +		}
+>> +	}
+>> +
+>> +	ptr = (void *)bpf_map__initial_value(map, &size);
+>> +	if (!ptr || (sinfo->offset + sinfo->size > size))
+>> +		return -EINVAL;
+>> +
+>> +	memcpy(ptr + sinfo->offset, &new_val, sinfo->size);
+> will this work for big endian?
+>
+>> +	return 0;
+>> +}
+>> +
+>> +static int set_global_vars(struct bpf_object *obj, struct var_preset *presets, int npresets)
+>> +{
+>> +	struct btf_var_secinfo *sinfo;
+>> +	const char *sec_name;
+>> +	const struct btf_type *type;
+>> +	struct bpf_map *map;
+>> +	struct btf *btf;
+>> +	int i, j, k, n, cnt, err, preset_cnt = 0;
+>> +
+>> +	if (npresets == 0)
+>> +		return 0;
+>> +
+>> +	btf = bpf_object__btf(obj);
+>> +	if (!btf)
+>> +		return -EINVAL;
+>> +
+>> +	cnt = btf__type_cnt(btf);
+>> +	for (i  = 0; i != cnt; ++i) {
+>> +		type = btf__type_by_id(btf, i);
+>> +
+>> +		if (!btf_is_datasec(type))
+>> +			continue;
+>> +
+>> +		sinfo = btf_var_secinfos(type);
+>> +		sec_name = btf__name_by_offset(btf, type->name_off);
+>> +		map = bpf_object__find_map_by_name(obj, sec_name);
+>> +		if (!map)
+>> +			continue;
+>> +
+>> +		n = btf_vlen(type);
+>> +		for (j = 0; j < n; ++j, ++sinfo) {
+>> +			const struct btf_type *var_type = btf__type_by_id(btf, sinfo->type);
+>> +			const char *var_name = btf__name_by_offset(btf, var_type->name_off);
+>> +
+>> +			if (!btf_is_var(var_type))
+>> +				continue;
+>> +
+>> +			for (k = 0; k < npresets; ++k) {
+>> +				if (strcmp(var_name, presets[k].name) != 0)
+>> +					continue;
+>> +
+>> +				err = set_global_var(obj, btf, var_type, map, sinfo,
+>> +						     presets[k].value);
+>> +				if (err)
+>> +					return err;
+>> +
+>> +				preset_cnt++;
+>> +				break;
+>> +			}
+>> +		}
+>> +	}
+>> +	if (preset_cnt != npresets)
+>> +		fprintf(stderr, "Some global variable presets have not been applied\n");
+> Nit: it would be nice to print which ones were not set.
+>
+>> +
+>> +	return 0;
+>> +}
+>> +
+>>   static int process_obj(const char *filename)
+>>   {
+>>   	const char *base_filename = basename(strdupa(filename));
+>> @@ -1338,6 +1521,12 @@ static int process_obj(const char *filename)
+>>   		prog_cnt++;
+>>   	}
+>>   
+>> +	err = set_global_vars(obj, env.presets, env.npresets);
+>> +	if (err) {
+>> +		fprintf(stderr, "Failed to set global variables\n");
+>> +		goto cleanup;
+>> +	}
+>> +
+>>   	if (prog_cnt == 1) {
+>>   		prog = bpf_object__next_program(obj, NULL);
+>>   		bpf_program__set_autoload(prog, true);
+> Same needs to happen for the loop below when prog_cnt != 1, e.g.:
+>
+> @@ -1544,6 +1544,12 @@ static int process_obj(const char *filename)
+>                          goto cleanup;
+>                  }
+>   
+> +               err = set_global_vars(tobj, env.presets, env.npresets);
+> +               if (err) {
+> +                       fprintf(stderr, "Failed to set global variables\n");
+> +                       goto cleanup;
+> +               }
+> +
+>                  lprog = NULL;
+>                  bpf_object__for_each_program(tprog, tobj) {
+>                          const char *tprog_name = bpf_program__name(tprog);
+>
+> Or, better yet, get rid of the `prog_cnt == 1` special case.
+>
+Thanks for the suggestions, make sense, going to address in v2.
