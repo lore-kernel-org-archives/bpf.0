@@ -1,119 +1,185 @@
-Received: from mx0b-00206402.pphosted.com (mx0b-00206402.pphosted.com [148.163.152.16])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B5A31DAC95;
-	Wed,  5 Feb 2025 16:36:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.152.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7AA71519AB;
+	Wed,  5 Feb 2025 16:46:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738773388; cv=none; b=Vv9lO7D7hmk+yrk5qnJQnKNH0zwi3ZZSrQqX0Ce8XNagW1Sx9UzWD7stdNQgB4vDrpO/rqOyg4Xv0wDLjzPcY13H+DiVFPhwbknt3NTFdYIWwrXYPNEQmHOdtS+Q7XAJSb6PQ+mXzS2QHP8yl4r//KblKT9yoVW2XFGDRD7tm44=
+	t=1738774001; cv=none; b=eHLCECsW5dsDKoy9KaVNVMbyjeB7bsicRI6+ImSkOOEXrfawqvFqPWhBLyi9icqYKM676ry9nf2sCAsUY05Dc6ypljLKdSjozE/NEIoiQgvdGZszufvDhrArRG0jpSMt/bHUhjdSslZsjroN/fBP3c7DXBxkYcJ5BKlB0D6us0A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738773388; c=relaxed/simple;
-	bh=KQAjdNXPn0DfadHsCm5XjQMXRiXHNgA7KxiZn4px+3o=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=XRN1k6SwbqPu8djkomJyb0EyCRP6d5ISSuhqfMktTtYuxgrUOgUcbiReyXFvhHMY19WiEIyb9dd4UMMEk97If2qQeQa0N8jIZhBkPQR9SGffDwqODFW5E0/kqyQPgYXfT3+arvCVUuehY/t3xPRc/h9zqieLThb3fkB+akjL4tw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com; spf=pass smtp.mailfrom=crowdstrike.com; dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b=YHeV919j; arc=none smtp.client-ip=148.163.152.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=crowdstrike.com
+	s=arc-20240116; t=1738774001; c=relaxed/simple;
+	bh=lNl3cMZ49Ye+khNV6iGbebkzq5dSCQpcGg6AmHDeBYE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=pqQKYPXU2qMiDMUpBOBR3mqUWNMXEditNJu4DGpGRiFgAVjfA6dIz/FxtOuuZD+pcyZ6bdtnL9sQAoXFxDgr3aua6dj2qoCziLOR98a8urwUUKH8ASvi4hOet4txs0SGeS8GwgIUglZt5xbF0NZivnbEQQLdDVfCQYXRC2GfzHQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Oj/DoVm9; arc=none smtp.client-ip=198.175.65.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b="YHeV919j"
-Received: from pps.filterd (m0354655.ppops.net [127.0.0.1])
-	by mx0b-00206402.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 515FQCIx024083;
-	Wed, 5 Feb 2025 16:00:04 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crowdstrike.com;
-	 h=cc:content-id:content-transfer-encoding:content-type:date
-	:from:in-reply-to:message-id:mime-version:references:subject:to;
-	 s=default; bh=KQAjdNXPn0DfadHsCm5XjQMXRiXHNgA7KxiZn4px+3o=; b=Y
-	HeV919jwJAKBcZ9DZYoJZ746xXdNm2KJ++Nw6WaGqiiyhKDtNfUghTJeY3x/Qdm1
-	lPWXA1t9+oHuXjf8cHgfQFjGwqxzeOhJpV7fzoOSniIPt31uwiTe9145bBzlynWl
-	B1pDyp8D9OLUl38VgOHHHQ6QiUTE1GZrTm2iPvXQWn2qZgzIj2tDY+wM8LyHho4a
-	R945pTtGxTRlhDd7gTWdJiB7wjhwB1X8KYVltOhU6bPZ38VBLAVH1J2HUE5ZgN2x
-	8zqbBuD1EX58SrGkQJNzczp6kffEQ1lN8YnFH2Yzu5PuqFNAnOAaorTzcWLBaXnE
-	q545s4quSSUrqQNnRl2VA==
-Received: from mail.crowdstrike.com (dragosx.crowdstrike.com [208.42.231.60] (may be forged))
-	by mx0b-00206402.pphosted.com (PPS) with ESMTPS id 44mammg3t0-2
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 05 Feb 2025 16:00:04 +0000 (GMT)
-Received: from 04WPEXCH006.crowdstrike.sys (10.100.11.70) by
- 04WPEXCH005.crowdstrike.sys (10.100.11.69) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.9; Wed, 5 Feb 2025 16:00:00 +0000
-Received: from 04WPEXCH006.crowdstrike.sys ([fe80::a97d:6ad:c239:d138]) by
- 04WPEXCH006.crowdstrike.sys ([fe80::a97d:6ad:c239:d138%11]) with mapi id
- 15.02.1544.009; Wed, 5 Feb 2025 16:00:00 +0000
-From: Martin Kelly <martin.kelly@crowdstrike.com>
-To: "rostedt@goodmis.org" <rostedt@goodmis.org>
-CC: "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        "masahiroy@kernel.org"
-	<masahiroy@kernel.org>,
-        "zhengyejian1@huawei.com" <zhengyejian1@huawei.com>,
-        "torvalds@linux-foundation.org" <torvalds@linux-foundation.org>,
-        "mhiramat@kernel.org" <mhiramat@kernel.org>,
-        "mathieu.desnoyers@efficios.com"
-	<mathieu.desnoyers@efficios.com>,
-        "akpm@linux-foundation.org"
-	<akpm@linux-foundation.org>,
-        "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>,
-        "nathan@kernel.org" <nathan@kernel.org>,
-        "nicolas@fjasle.eu" <nicolas@fjasle.eu>,
-        "christophe.leroy@csgroup.eu"
-	<christophe.leroy@csgroup.eu>,
-        "mark.rutland@arm.com" <mark.rutland@arm.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "linux-trace-kernel@vger.kernel.org" <linux-trace-kernel@vger.kernel.org>,
-        "linux-kbuild@vger.kernel.org" <linux-kbuild@vger.kernel.org>,
-        "jpoimboe@redhat.com" <jpoimboe@redhat.com>
-Subject: Re: Re: [PATCH v2 16/16] scripts/sorttable: ftrace: Do not add weak
- functions to available_filter_functions
-Thread-Topic: Re: [PATCH v2 16/16] scripts/sorttable: ftrace: Do not add weak
- functions to available_filter_functions
-Thread-Index: AQHbd+cCrpRl49KJ0EiNa9urqmBbFA==
-Date: Wed, 5 Feb 2025 16:00:00 +0000
-Message-ID: <c4c7f0931742c8636a82f2ae3b3c492c93266c93.camel@crowdstrike.com>
-References: <20250102232609.529842248@goodmis.org>
-	 <20250102232651.347490863@goodmis.org>
-	 <aba52935dc06a1fe69f05309f5d9828a297ad787.camel@crowdstrike.com>
-	 <20250204193559.1f87b4ea@gandalf.local.home>
-In-Reply-To: <20250204193559.1f87b4ea@gandalf.local.home>
-Accept-Language: en-US, en-GB
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-x-disclaimer: USA
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <E0BB0A2C680BEB4980905CE6486592F2@crowdstrike.sys>
-Content-Transfer-Encoding: base64
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Oj/DoVm9"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1738773999; x=1770309999;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=lNl3cMZ49Ye+khNV6iGbebkzq5dSCQpcGg6AmHDeBYE=;
+  b=Oj/DoVm9yiqFbyVck1PDWarl2UEYgQS3fJg/9jtfH8rzfmTd1FMjsb8k
+   yJlmMzW3sKAdWEeK/Gw5DFMuCQkgqq+g9iFeDtDydIVqSrVm0CZhtMc0m
+   Z9j5aRsZAIqMx4ZItNHyKQQWNch+p1r9wKUZW0VS6ekD1ay+ypE+Q8ZGv
+   6ekC4FaGmn3GCs8k2evaG19yGgsEJSPAHJS0DrotgwGABPqf/+PLGaYhR
+   MURfDsqIl1H/OyiBlB3N8Kjuq+0b0OcmfZT4iIo/uS/92xDUumDQtS/+A
+   tnk3n/P72IdOIsBSn9aG5enuarn/4zzWEAfKTcuhlLGByj19ai6bCX8jM
+   A==;
+X-CSE-ConnectionGUID: tOmld9sQTcKCj112/FMrJQ==
+X-CSE-MsgGUID: n+vEhrOGTQe5sUa2sAe2oA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11336"; a="50741059"
+X-IronPort-AV: E=Sophos;i="6.13,262,1732608000"; 
+   d="scan'208";a="50741059"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Feb 2025 08:39:39 -0800
+X-CSE-ConnectionGUID: vq9J6RJwQ7mbwTzjqOddHA==
+X-CSE-MsgGUID: SxZ/5j0WQAeRMUyP9PRAAQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.13,262,1732608000"; 
+   d="scan'208";a="110741549"
+Received: from newjersey.igk.intel.com ([10.102.20.203])
+  by orviesa009.jf.intel.com with ESMTP; 05 Feb 2025 08:39:35 -0800
+From: Alexander Lobakin <aleksander.lobakin@intel.com>
+To: Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>
+Cc: Alexander Lobakin <aleksander.lobakin@intel.com>,
+	Lorenzo Bianconi <lorenzo@kernel.org>,
+	Daniel Xu <dxu@dxuuu.xyz>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	=?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@kernel.org>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	netdev@vger.kernel.org,
+	bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH net-next v4 0/8] bpf: cpumap: enable GRO for XDP_PASS frames
+Date: Wed,  5 Feb 2025 17:36:01 +0100
+Message-ID: <20250205163609.3208829-1-aleksander.lobakin@intel.com>
+X-Mailer: git-send-email 2.48.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Proofpoint-ORIG-GUID: 6e_pcGkFVcXTbb8vvYC3lg2INop8zK62
-X-Authority-Analysis: v=2.4 cv=NvQrc9dJ c=1 sm=1 tr=0 ts=67a38b04 cx=c_pps a=1d8vc5iZWYKGYgMGCdbIRA==:117 a=1d8vc5iZWYKGYgMGCdbIRA==:17 a=xqWC_Br6kY4A:10 a=EjBHVkixTFsA:10 a=IkcTkHD0fZMA:10 a=T2h4t0Lz3GQA:10 a=pl6vuDidAAAA:8 a=lqAKrMhzrGgqgS63txUA:9
- a=QEXdDO2ut3YA:10
-X-Proofpoint-GUID: 6e_pcGkFVcXTbb8vvYC3lg2INop8zK62
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2025-02-05_06,2025-02-05_03,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 phishscore=0
- bulkscore=0 priorityscore=1501 mlxscore=0 clxscore=1015 impostorscore=0
- malwarescore=0 lowpriorityscore=0 adultscore=0 spamscore=0 mlxlogscore=949
- classifier=spam authscore=0 authtc=n/a authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.19.0-2501170000
- definitions=main-2502050124
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-T24gVHVlLCAyMDI1LTAyLTA0IGF0IDE5OjM1IC0wNTAwLCBTdGV2ZW4gUm9zdGVkdCB3cm90ZToN
-Cj4gT24gV2VkLCA1IEZlYiAyMDI1IDAwOjEzOjI2ICswMDAwDQo+IE1hcnRpbiBLZWxseSA8bWFy
-dGluLmtlbGx5QGNyb3dkc3RyaWtlLmNvbT4gd3JvdGU6DQo+IA0KPiA+IEknbSBub3QgbmVjZXNz
-YXJpbHkgYSBxdWFsaWZpZWQgcmV2aWV3ZXIgZm9yIHRoaXMgcGF0Y2gsIGJ1dCBJJ20NCj4gPiB2
-ZXJ5DQo+ID4gaW50ZXJlc3RlZCBpbiBzZWVpbmcgaXQgb3IgYSBzaW1pbGFyIHNvbHV0aW9uIGdl
-dCBtZXJnZWQsIGFzIHRoZQ0KPiA+IGltcGFjdA0KPiA+IHdoZW4gaXQgaGl0cyBpcyBzaWduaWZp
-Y2FudCAoc2lsZW50IGZhaWx1cmUpIGFuZCBub3QgZWFzeSB0byBkZXRlY3QNCj4gPiBvcg0KPiA+
-IHdvcmsgYXJvdW5kLiBJcyB0aGVyZSBhbnkgb2JzdGFjbGUgbGVmdCBpbiBnZXR0aW5nIHRoaXMg
-b25lIG1lcmdlZA0KPiA+IG90aGVyIHRoYW4gZnVydGhlciByZXZpZXdzPw0KPiANCj4gQSB2ZXJz
-aW9uIG9mIHRoZSBwYXRjaGVzIDEtMTQgd2FzIG1lcmdlZCB0aGlzIG1lcmdlIHdpbmRvdywgd2l0
-aCBzb21lDQo+IHR3ZWFrcy4gSSBwbGFuIG9uIHJlYmFzaW5nIHBhdGNoZXMgMTUgYW5kIDE2IG9u
-IHRvcCBvZiB0aGF0IGFuZA0KPiByZXN1Ym1pdHRpbmcuIEkganVzdCBoYXZlIHNvbWUgb3RoZXIg
-dGhpbmdzIEknbSBmaW5pc2hpbmcgdXAuDQo+IA0KPiBUaGFua3MsDQo+IA0KPiAtLSBTdGV2ZQ0K
-DQpBd2Vzb21lLCB0aGFua3MhDQo=
+Several months ago, I had been looking through my old XDP hints tree[0]
+to check whether some patches not directly related to hints can be sent
+standalone. Roughly at the same time, Daniel appeared and asked[1] about
+GRO for cpumap from that tree.
+
+Currently, cpumap uses its own kthread which processes cpumap-redirected
+frames by batches of 8, without any weighting (but with rescheduling
+points). The resulting skbs get passed to the stack via
+netif_receive_skb_list(), which means no GRO happens.
+Even though we can't currently pass checksum status from the drivers,
+in many cases GRO performs better than the listified Rx without the
+aggregation, confirmed by tests.
+
+In order to enable GRO in cpumap, we need to do the following:
+
+* patches 1-2: decouple the GRO struct from the NAPI struct and allow
+  using it out of a NAPI entity within the kernel core code;
+* patch 3: switch cpumap from netif_receive_skb_list() to
+  gro_receive_skb().
+
+Additional improvements:
+
+* patch 4: optimize XDP_PASS in cpumap by using arrays instead of linked
+  lists;
+* patch 5-6: introduce and use function do get skbs from the NAPI percpu
+  caches by bulks, not one at a time;
+* patch 7-8: use that function in veth as well and remove the one that
+  was now superseded by it.
+
+My trafficgen UDP GRO tests, small frame sizes:
+
+                GRO off    GRO on
+baseline        2.7        N/A       Mpps
+patch 3         2.3        4         Mpps
+patch 8         2.4        4.7       Mpps
+
+1...3 diff      -17        +48       %
+1...8 diff      -11        +74       %
+
+Daniel reported from +14%[2] to +18%[3] of throughput in neper's TCP RR
+tests. On my system however, the same test gave me up to +100%.
+
+Note that there's a series from Lorenzo[4] which achieves the same, but
+in a different way. During the discussions, the approach using a
+standalone GRO instance was preferred over the threaded NAPI.
+
+[0] https://github.com/alobakin/linux/tree/xdp_hints
+[1] https://lore.kernel.org/bpf/cadda351-6e93-4568-ba26-21a760bf9a57@app.fastmail.com
+[2] https://lore.kernel.org/bpf/merfatcdvwpx2lj4j2pahhwp4vihstpidws3jwljwazhh76xkd@t5vsh4gvk4mh
+[3] https://lore.kernel.org/bpf/yzda66wro5twmzpmjoxvy4si5zvkehlmgtpi6brheek3sj73tj@o7kd6nurr3o6
+[4] https://lore.kernel.org/bpf/20241130-cpumap-gro-v1-0-c1180b1b5758@kernel.org
+
+Alexander Lobakin (8):
+  net: gro: decouple GRO from the NAPI layer
+  net: gro: expose GRO init/cleanup to use outside of NAPI
+  bpf: cpumap: switch to GRO from netif_receive_skb_list()
+  bpf: cpumap: reuse skb array instead of a linked list to chain skbs
+  net: skbuff: introduce napi_skb_cache_get_bulk()
+  bpf: cpumap: switch to napi_skb_cache_get_bulk()
+  veth: use napi_skb_cache_get_bulk() instead of xdp_alloc_skb_bulk()
+  xdp: remove xdp_alloc_skb_bulk()
+
+ include/linux/netdevice.h                  |  26 ++--
+ include/linux/skbuff.h                     |   1 +
+ include/net/busy_poll.h                    |  11 +-
+ include/net/gro.h                          |  38 ++++--
+ include/net/xdp.h                          |   1 -
+ drivers/net/ethernet/brocade/bna/bnad.c    |   1 +
+ drivers/net/ethernet/cortina/gemini.c      |   1 +
+ drivers/net/veth.c                         |   3 +-
+ drivers/net/wwan/t7xx/t7xx_hif_dpmaif_rx.c |   1 +
+ kernel/bpf/cpumap.c                        | 146 +++++++++++++--------
+ net/core/dev.c                             |  77 +++--------
+ net/core/gro.c                             | 101 +++++++++-----
+ net/core/skbuff.c                          |  62 +++++++++
+ net/core/xdp.c                             |  10 --
+ 14 files changed, 299 insertions(+), 180 deletions(-)
+
+---
+From v3[5]:
+* series:
+  * rebase on top of the latest net-next;
+  * pick RBs from Toke;
+* 1:
+  * reduce possible false sharing of napi_struct (now gro_node is
+    placed precisely at 64 byte offset, was 56);
+  * pick Acked-by from Jakub;
+* 2: RB from Jakub;
+* 3: move the assignment out of the condition check :p (Jakub).
+
+From v2[6]:
+* 1: remove napi_id duplication in both &gro_node and &napi_struct by
+     using a tagged struct group. The most efficient approach I've
+     found so far: no additional branches, no inline expansion, no tail
+     calls / double calls, saves 8 bytes of &napi_struct in comparison
+     with v2 (Jakub, Paolo, me);
+* 4: improve and streamline skb allocation fails (-1 branch per frame),
+     skip more code for skb-only batches.
+
+From v1[7]:
+* use a standalone GRO instance instead of the threaded NAPI (Jakub);
+* rebase and send to net-next as it's now more networking than BPF.
+
+[5] https://lore.kernel.org/netdev/20250115151901.2063909-1-aleksander.lobakin@intel.com
+[6] https://lore.kernel.org/netdev/20250107152940.26530-1-aleksander.lobakin@intel.com
+[7] https://lore.kernel.org/bpf/20240830162508.1009458-1-aleksander.lobakin@intel.com
+-- 
+2.48.1
+
