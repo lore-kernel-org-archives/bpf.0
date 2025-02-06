@@ -1,62 +1,62 @@
-Received: from mail-wm1-f65.google.com (mail-wm1-f65.google.com [209.85.128.65])
+Received: from mail-wr1-f65.google.com (mail-wr1-f65.google.com [209.85.221.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E42092288D3;
-	Thu,  6 Feb 2025 10:54:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.65
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB62922B5A1;
+	Thu,  6 Feb 2025 10:54:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.65
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738839284; cv=none; b=M5TbOVQcwMHX1BWL7R1kOPKGmIQI5u0MI3uww6eT5hGy18FylNHb14FKlCuAHdDVjKr3QrfCauM9znx+b92FZFLsgrMOnUfaeqLWojLN6XaYTuWtkFdk7B3i6NWEJwXQb0s5ynI4PK+pXH/Wfml+zMctaV//yyGhxmyK+3ssjcM=
+	t=1738839287; cv=none; b=eFPcQS+MTuLUNFGRy+ex+C6ZoCkHQicxrAQjps0E+9+/LJ2pHM1GSf6I9zGYbhwGSJrG0UFIB+R6O+EGNQ08O02dmKOKZflZVGxlig9N2aVMWY1uz2eD+OHoGeGqs2Jakxa5xJR3XbKRPqZ9lo8igxu64tifltT028uts4a8RNk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738839284; c=relaxed/simple;
-	bh=WHhXMqIdalfkSexlY5e1BRqspbIYdrDmDQT3rX3AKP8=;
+	s=arc-20240116; t=1738839287; c=relaxed/simple;
+	bh=AVuKKIzjLnum/Q8Jp3BllOKRS5yuVDUgY1U4pKev08I=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=WbhUv8r2jzKsbygWGjzYox31gOJ6rwwPv6r4+iQZtuVBOsLffa7VKe5QLubEQ9GUoDnxQik65wcZUnMliHIhV+o/9r+UQPrsyn0PLKa9iGuJ9OGa0mowDp0o3fsCC8oetLQ234IWScYu/qUA7J/yhL5Wf14aRjDr68khVg3kOb8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ExLgXyzM; arc=none smtp.client-ip=209.85.128.65
+	 MIME-Version; b=t1c2adQ4yiI4nBEZHB5N+Se4FILwXXpw9N6iES/lhYJmXb59PI5WR8LrmLBB/UHyzNDbkNH20mfwepgIZJKXM2kYQnIESupkcl0+/Ytr/1Gqm0vc+aOvnQWk5dPZdgjLVgJnf1IoK36LtiiXMqR5xOGFtYRPPTY1pphKkFdmlmE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WSuA37w3; arc=none smtp.client-ip=209.85.221.65
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ExLgXyzM"
-Received: by mail-wm1-f65.google.com with SMTP id 5b1f17b1804b1-43618283dedso7147175e9.3;
-        Thu, 06 Feb 2025 02:54:42 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WSuA37w3"
+Received: by mail-wr1-f65.google.com with SMTP id ffacd0b85a97d-38a25d4b9d4so349100f8f.0;
+        Thu, 06 Feb 2025 02:54:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1738839281; x=1739444081; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1738839283; x=1739444083; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=OWs3GXRlx91qlbus5IlQPX+xUrucb3RvojJ3Jxtdv6A=;
-        b=ExLgXyzMQ3wJtmyTQ3ChOhzAAOyDLmcgPnS3WhOqqdWSXUCGFGTRo04vhiwW3hQB7V
-         Xh+3RkprZZmmuXtC8GYwcS9Srz6h16Mx19lymY0nN9LuAQHqgxqdPh4ECMBmmRmNchYF
-         /WB61kCz4eGTDLuJWT1T9yUxY1DWKV+PdPOIvWOHqY8R/sLIb+KJhqJwJ9V6y8dksyQp
-         DAFxt0AxZTtekA+Lq6w5u8ue0YNQMIqn5B6l7qRt7niG+hjnimWJgaPzc20B3f+P2RIU
-         8AlqZ89NgfGHmGRABK0HYnTvp+KUhxHNMoL3j1HpJ92EyDqGr0iC0sql38HXwGLH+faW
-         D2Uw==
+        bh=joZkmdV/dAzLK1UShpkitp+TG0brsNHWZrt+dWRUiK4=;
+        b=WSuA37w3iQ+yB/rwMCM+67sVm6lGfW45a51GseFHpNXoOKH+Jo0iHT4g7IAlNbePQY
+         5nw2WQ6egFILejeK6r/gfw+4LBSxXlOTkawXRm0fBsIlfRumKtRjGPEu6YhCAtC0mz5C
+         mTg2jpQ2Mtm1oPZSRaKGHIajFHdzK9yjVoo3lc/DE9Y5P7nDLd2VL3wxJOBesACZC3K5
+         dXVeJvymHqddqAsoEfkVlpcLIPLBjLmkVV8lFnlmPCfanpvPkL8Dnju6IUArwQiFr5EA
+         SoswNGCtMaF2emC6/h6hYUXnCyb5jIrAnZERKcC8h2jLB2vIRFi4ODL1Xb6uJu8wtD4m
+         wphQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738839281; x=1739444081;
+        d=1e100.net; s=20230601; t=1738839283; x=1739444083;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=OWs3GXRlx91qlbus5IlQPX+xUrucb3RvojJ3Jxtdv6A=;
-        b=CAi0ayEmAuAzMysbobT3eqcBPAtIWkG+NiRqonbqqhpcYAe847xxs1qk3cx8N9ORKC
-         OE5MgDJsgqs6erkQWXqmpSgOShLmQWMz5FKQFFS2Un9naee8uINUMM/IN2c0hHrjIM97
-         p3yLYZ9cPEqSZ3HyWr7DCb0rXl9y5X7gqMy4Z4xllHfkOJfzCmsbByHyQa97GljYohSZ
-         TxHXV3Xq4nraiQ/nE/Zkyw7LNwB/q0K/zTtDgDu9oG1JyBrrsJkRLePkLC8FlSuDjo/B
-         8FcGcqQElKW8TXdKRoaFljyVT7SXruG8G35AIvnhLE53dQTHIykK6k4S9FNrDpJseIYM
-         io0Q==
-X-Forwarded-Encrypted: i=1; AJvYcCUdmPVf1wTZmETKeGXLccQldUkbJW0cCyGJi8RWl/b5/+jFybcShZlSPGH+yd3ok9RVQmZr7lvU1XmFEFI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwcXQTapmcczyNg34+gQ9CGhTHsMIBxgm/18kxBtnKjR0VB26ZS
-	jWw/lZWL17fRuoU0td8/fTsQJHi8k9aJKDcXmy9G9fE9s3glOgS4eBXPzc680hY=
-X-Gm-Gg: ASbGncvw3KyZRUEZF+4CHEpVmNMDwy14aWq0FcTrOO6HhGM1RYxeV6mcpsCv3XkrqRw
-	RLCIK1wpQdv+nLwyxwlkcGhtiwP0S4ulzgeGKh6znxCaWI3JIqXfLWtss6AA2bTzN2sNDpzyoEs
-	KhyXiBpBMufbqDyeS/ZZF4bsddy1q5J3cd0kSCPoTTGLCoJoxe5Kob4OBmAlAWhw8DPQuiLrP+Y
-	XwPHSUif9VRVKc0ILfxhlAUg+dfyW39FlUWV01jRueik3WfJ/CUG6cJRI2D0STXRwlca+V0pezG
-	MsPpBQ==
-X-Google-Smtp-Source: AGHT+IHeU2y2+7O/uQKeXcLLdS77pnq5NJz5kvWtZprZ6uplDLOI4uMkvBsICSMk+DCJ+KCjzZMlhA==
-X-Received: by 2002:a05:600c:5114:b0:435:32e:8270 with SMTP id 5b1f17b1804b1-4390d43d8ecmr61035955e9.14.1738839280667;
-        Thu, 06 Feb 2025 02:54:40 -0800 (PST)
-Received: from localhost ([2a03:2880:31ff:1b::])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38dbde0fd23sm1381770f8f.71.2025.02.06.02.54.39
+        bh=joZkmdV/dAzLK1UShpkitp+TG0brsNHWZrt+dWRUiK4=;
+        b=Rx5rGPDBpKDuHZU0oMxodgw++mI7/b167yVTx+r7bZkQ8AHq0n9ooNrqbOWj89PvBt
+         oxVIafCs+EdrAJji5tqfVGoFr0qF3xHWcM5da+z7nRut8Tq0oe4wHmKaCAtdVIWAFPHE
+         SReBlY7pG7HOAPQFdFl8VcbbPkkY76yixtE6T9e3VV5KIVaebZ3y6I75846Iz5sJ107h
+         S6PfdaV9yf/XdX9taWrR+e5VWwzvjnseowlJs4Li2JG2zkRXh4kSYaakJj/QXr5hX5WY
+         vxjDr/48U/4gzSAoKx+iJY9SnOKaxruD6EnZTRWuB/DYxEwLjsXs6n8lsdNM+rwmC5X8
+         WNFw==
+X-Forwarded-Encrypted: i=1; AJvYcCVVrNQc/NYRgD5BuyVtQxKsjGYJRjRP4mZVHlywPHdl/ZgdIlycgqiMO2/97V/CCr8K3wdtQgH7UcjnNrc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwM5h/Q6r2gVqgTBU3FCMKtHm7UgF4d4qijOMlV8XkogGhAGflG
+	cQn55cOOtAq/pSIyvWs3rcPVPkmVlAu9mTYLvXl+5BhJ2qhJlNrMDvq0UL1ns8g=
+X-Gm-Gg: ASbGncutHC0avuJEaSpzQDw9WESpi/m2SWCpqtUCyEibuMUWwotuMN6xOLWBPT3V18h
+	PB/7rQv/Z8SDKS5TxzdENkMrpPFicg2MKunqOFO3CCDkpsEeUsdhsOqGpt4UT/AJTYki6EF5T+7
+	L81snTGeu8naqYbn8sb5Bo8npLL8duyIakfJFpODrtS3P95j2yIxWy70G8DnIQzSCdb+QLadUO7
+	AGGUJVFEnNNaEgVng5XN0PCL9GOdFw9v8uKDJ/0MXK8x0YqUHw6P1ejjq2TWP2QT2kerFfXOkbV
+	p8Z7vA==
+X-Google-Smtp-Source: AGHT+IFy0RXuexUHa3kfjyL19mkyb1nAWPyntJqslgT3n34npIvK+M2FW7T6Phh8AkNO/tuBPU7EAg==
+X-Received: by 2002:a05:6000:1886:b0:385:db39:2cf with SMTP id ffacd0b85a97d-38db48b9e8emr4235856f8f.12.1738839283504;
+        Thu, 06 Feb 2025 02:54:43 -0800 (PST)
+Received: from localhost ([2a03:2880:31ff:1d::])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38dbdd35e9esm1390719f8f.25.2025.02.06.02.54.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Feb 2025 02:54:40 -0800 (PST)
+        Thu, 06 Feb 2025 02:54:42 -0800 (PST)
 From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To: bpf@vger.kernel.org,
 	linux-kernel@vger.kernel.org
@@ -76,9 +76,9 @@ Cc: Barret Rhoden <brho@google.com>,
 	Dohyun Kim <dohyunkim@google.com>,
 	linux-arm-kernel@lists.infradead.org,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v2 03/26] locking: Allow obtaining result of arch_mcs_spin_lock_contended
-Date: Thu,  6 Feb 2025 02:54:11 -0800
-Message-ID: <20250206105435.2159977-4-memxor@gmail.com>
+Subject: [PATCH bpf-next v2 05/26] rqspinlock: Add rqspinlock.h header
+Date: Thu,  6 Feb 2025 02:54:13 -0800
+Message-ID: <20250206105435.2159977-6-memxor@gmail.com>
 X-Mailer: git-send-email 2.43.5
 In-Reply-To: <20250206105435.2159977-1-memxor@gmail.com>
 References: <20250206105435.2159977-1-memxor@gmail.com>
@@ -88,39 +88,72 @@ List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1052; h=from:subject; bh=WHhXMqIdalfkSexlY5e1BRqspbIYdrDmDQT3rX3AKP8=; b=owEBbQKS/ZANAwAIAUzgyIZIvxHKAcsmYgBnpJRkvzlsIk8Mh+hFnelZKKgCgtqU9iOBLKbPXk+b Hr7ixKqJAjMEAAEIAB0WIQRLvip+Buz51YI8YRFM4MiGSL8RygUCZ6SUZAAKCRBM4MiGSL8RypWCD/ 9a6wXeJpwHCx6Ry/+60+90gq49Vx2iM0Ni2K5/JZ/w1SQ1K45M6aFIB7872eGf0XNmEL8eeYRcg6ky oIbxfK6Dz0h4c4cjezC6IO7ADwiRf1nt9gfi3HEwqdWIzBMac9NGH1ITZzTSB9FZuAkqXAfpZZq0iW l9L7JT2bKDalL+4TjYIHnpQaWg+MzdyiUwK9daJqckornGM5bI4UFqkTtWU74gzcj9I8Ww9UAJmZll /0oSi0NI558EvQj/JozkqtizlLGWLPs8WdwyXca/O84yRKYAhzPQZ+Ebe9SP1IcoorQstTzGtBQLkN zeZqTP0CpGFfPZy9B3ND9iBY7eJQQxB2h2yT74z85HkKKEjc2v0asUqBT4vT+B5nCPzdr638w7FtGe emuAf5iymDVjVyVtnlOV9UV5465nfpUZv9DqAwksMUOVSc3qvTgbKcDN4XsiSIJPYVu+XDqiFZqx3Y WlVVJyTFe+L+QnTVi8xn2N/fICy+rFILllPSBpOso5O/9KXfpcu9vnaCtViVPakzRGJqLFeOjxAQNd hQxMdvz26zEoWX77OknnGmg7FcT6xSJ9eFK4uTMlDQbiikiPsGIMVPxVutFarPkQs5maZ7giuy1hnE iy/9siJLZmE3DRYLv0bOoj+wxlb6+yk1cnr9VBCzo9XnhvUEn57+U1QY9opw==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2297; h=from:subject; bh=AVuKKIzjLnum/Q8Jp3BllOKRS5yuVDUgY1U4pKev08I=; b=owEBbQKS/ZANAwAIAUzgyIZIvxHKAcsmYgBnpJRkAUSLUoqJ61KHJqVww5VkHo5XuLe/f7xDpkMh vShNwMCJAjMEAAEIAB0WIQRLvip+Buz51YI8YRFM4MiGSL8RygUCZ6SUZAAKCRBM4MiGSL8RyoE9EA ChWskn+IPkSTn/DMBwsfvx6EWqIgzdLCOdPnNCPTWMG8F+qUgNrWq+hnY2AEcF0ceG8KE69wHJ0cLI VBN9DG6qMLro8x1voPjPdK+aL1HAKDexxzJsUGqXzwcJ7tvBu+6aJto1dqMnI/iAjErkVXhTfeeDnQ HE8Vc8ft+nREngcb+k2A3S+vnI7cNgZyEtUXn3mX+4C1e0siL9PCKWRbCj7Dd8CIyhr+I6iVZdwGNy fYfSZBupBuq5C4yvcYeJ8shIaV3bkO04VogVyYLEi/QVP8pKyI8R+EBtKWqigsXI6383C8YLtrbQGd 6GU/QIqvFWawk/4RAnRUbHrfbE0pEX9aYKhgNEqv6/kqUCtYlJg+UsJtP63tthsVPkwsBYSzNyoHbB 0DutHelI8e77l5BQjjBxlxrXXTwKwflGFaPet1F3lFUu5Cq2PuJNvOGpz9xnFAi/8jxZY9QaxMKAUg Xr5iqvWwjk83bjYdoRMl/jswMGFWaFmpSrDUvrXM43JJVq/Jip610cxzOu92F+nVn1lWFbMEC4Bpva mhfxqax6cnPG6vhnjpN4uowxGnWFTJUwdYsICJWIXeHdbiXs3WJOtEvcwisb0n3r1F6T8NtLM+7Mdu KrBmyKQ6ZIowge2wnwHfNovFg8fEt4LhwMndrwjiFM78K91D7w+iuxRUPVLw==
 X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=4BBE2A7E06ECF9D5823C61114CE0C88648BF11CA
 Content-Transfer-Encoding: 8bit
 
-To support upcoming changes that require inspecting the return value
-once the conditional waiting loop in arch_mcs_spin_lock_contended
-terminates, modify the macro to preserve the result of
-smp_cond_load_acquire. This enables checking the return value as needed,
-which will help disambiguate the MCS node’s locked state in future
-patches.
+This header contains the public declarations usable in the rest of the
+kernel for rqspinlock.
+
+Let's also type alias qspinlock to rqspinlock_t to ensure consistent use
+of the new lock type. We want to remove dependence on the qspinlock type
+in later patches as we need to provide a test-and-set fallback, hence
+begin abstracting away from now onwards.
 
 Reviewed-by: Barret Rhoden <brho@google.com>
 Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 ---
- kernel/locking/mcs_spinlock.h | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ include/asm-generic/rqspinlock.h | 19 +++++++++++++++++++
+ kernel/locking/rqspinlock.c      |  3 ++-
+ 2 files changed, 21 insertions(+), 1 deletion(-)
+ create mode 100644 include/asm-generic/rqspinlock.h
 
-diff --git a/kernel/locking/mcs_spinlock.h b/kernel/locking/mcs_spinlock.h
-index 16160ca8907f..5c92ba199b90 100644
---- a/kernel/locking/mcs_spinlock.h
-+++ b/kernel/locking/mcs_spinlock.h
-@@ -24,9 +24,7 @@
-  * spinning, and smp_cond_load_acquire() provides that behavior.
-  */
- #define arch_mcs_spin_lock_contended(l)					\
--do {									\
--	smp_cond_load_acquire(l, VAL);					\
--} while (0)
-+	smp_cond_load_acquire(l, VAL)
- #endif
+diff --git a/include/asm-generic/rqspinlock.h b/include/asm-generic/rqspinlock.h
+new file mode 100644
+index 000000000000..54860b519571
+--- /dev/null
++++ b/include/asm-generic/rqspinlock.h
+@@ -0,0 +1,19 @@
++/* SPDX-License-Identifier: GPL-2.0-or-later */
++/*
++ * Resilient Queued Spin Lock
++ *
++ * (C) Copyright 2024 Meta Platforms, Inc. and affiliates.
++ *
++ * Authors: Kumar Kartikeya Dwivedi <memxor@gmail.com>
++ */
++#ifndef __ASM_GENERIC_RQSPINLOCK_H
++#define __ASM_GENERIC_RQSPINLOCK_H
++
++#include <linux/types.h>
++
++struct qspinlock;
++typedef struct qspinlock rqspinlock_t;
++
++extern void resilient_queued_spin_lock_slowpath(rqspinlock_t *lock, u32 val);
++
++#endif /* __ASM_GENERIC_RQSPINLOCK_H */
+diff --git a/kernel/locking/rqspinlock.c b/kernel/locking/rqspinlock.c
+index caaa7c9bbc79..18eb9ef3e908 100644
+--- a/kernel/locking/rqspinlock.c
++++ b/kernel/locking/rqspinlock.c
+@@ -23,6 +23,7 @@
+ #include <asm/byteorder.h>
+ #include <asm/qspinlock.h>
+ #include <trace/events/lock.h>
++#include <asm/rqspinlock.h>
  
- #ifndef arch_mcs_spin_unlock_contended
+ /*
+  * Include queued spinlock definitions and statistics code
+@@ -127,7 +128,7 @@ static __always_inline u32  __pv_wait_head_or_lock(struct qspinlock *lock,
+  * contended             :    (*,x,y) +--> (*,0,0) ---> (*,0,1) -'  :
+  *   queue               :         ^--'                             :
+  */
+-void __lockfunc resilient_queued_spin_lock_slowpath(struct qspinlock *lock, u32 val)
++void __lockfunc resilient_queued_spin_lock_slowpath(rqspinlock_t *lock, u32 val)
+ {
+ 	struct mcs_spinlock *prev, *next, *node;
+ 	u32 old, tail;
 -- 
 2.43.5
 
