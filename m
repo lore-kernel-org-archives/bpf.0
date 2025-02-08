@@ -1,116 +1,175 @@
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2985118FDAE;
-	Fri,  7 Feb 2025 23:50:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68D3DA23;
+	Sat,  8 Feb 2025 00:04:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738972246; cv=none; b=qAiNt1AENWKl+231ZaDbFpljbM1GzhCg7fTl1WzqCq3fJmWjhKLmZEMduZTbwYr6c2lBdlTPnAmcqfzFMcb7BhhroIuPdR/udtGLoIJYkenA7z5FysQJOenqd3DX1WdyPE+cEDe4SUJCFyLZa0YMxyJpNq/Cr3b3scOEiucnjIs=
+	t=1738973043; cv=none; b=jOZOGrU3/I/NYmevCjFyV+eOrIr9Kil1CC0voxY/j2tXA9kb7nr+hiAwKuvs4+fG2bc0Kjqx02oDTPHhZEsIauU0eIJEg/73dPxvmUDL4mB54nmRIApD786GfygqEHNSsaNwzZmKiaMTb2x+jZerOxue7VTDK1M4AO5I9pKVLA8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738972246; c=relaxed/simple;
-	bh=CYB3FSNwFShTpdPawetKpiJWckc8LHuMIECqtzbzRuA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=p6qRm/xna1Ll1YZsrnx3Vt394WlEHaQDEPE7N5ptZoW0pdVELzRyVEm7egITs0RsNp8o9dY/jSBEJUBO9GgpUNnzs9OTFbNIU7LS8gOlp8YDjslrEOEnsdthfoZNIPM8FMIn1FsO/Y0vRLZiX26OTVyUiU1kXHLqx/96Nt6tjwA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=c7Zyw6rK; arc=none smtp.client-ip=209.85.221.41
+	s=arc-20240116; t=1738973043; c=relaxed/simple;
+	bh=2STvfBkzSCvzpdSOGbhHw9/tYsaPc4yptm9r05vncu4=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=hLfHuuGsN5Oy9h8rsLmlidmwuEdk2mfIo7vHrZaY0mfj58m+bLqc4axyK1meP9Oy5rizLdcSO0kt9AMbw8vp0JCz0saKiWzlqlqnKCplsQMLcdwpeBQwNH0RWVzKty/NmVLKRvIb1mj6veDtb+JBM6zhgkgivTF/mWVmaNQ+eSg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SeIuooAg; arc=none smtp.client-ip=209.85.221.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="c7Zyw6rK"
-Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-38dc6d55ebaso918466f8f.1;
-        Fri, 07 Feb 2025 15:50:43 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SeIuooAg"
+Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-38dd4e26e79so6884f8f.1;
+        Fri, 07 Feb 2025 16:04:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1738972242; x=1739577042; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=USgMOjHrfaLirLOT5WzrXhmwlLjtY2e3GvXtshzzQDE=;
-        b=c7Zyw6rK1Lzqm4hzIYaSpqj4hgXLU2DimUsrbrNZ71qd57zMBowm0Y4A+3scX+fAq2
-         MwEyA+CWGuYQSw3ZuH6MgMrzrZvVafX+TfM3BRL3yAJMU9BxOw+Q94sAFW/qP2YHZxl2
-         seUswpuFiuWr3BDJV16MwR7IxGpcgrOR6e9T6qbE5Yokt2uBt+Kf2j9LeoSZ/dDgESjq
-         CE/NX0DuuP1vE6RNdmKiv7KxICtciiiGYbytk0eux8eMfMa4KUW/0cEJC5dpOY0o7Ynt
-         p2WCAu7fySol75OSiO1WxrFud2Ld+M7jyLo0NmwIOT2nSAFGrcO8/Y+FCnJGS8Vg5Dtg
-         hBtg==
+        d=gmail.com; s=20230601; t=1738973040; x=1739577840; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=QvLyhY6owKPW2I6LIaEqsveAbrbpfjuOOZhRQN2NfTg=;
+        b=SeIuooAgeWjw7EA4GFBtLECVv7ZWJEkBvN0vw1zkwE06WHb9dnKiUnZqwEQ+au/QuH
+         eThZtVt9D5EO3a9aGIqMZNSTUws8XCAWSzzuVRUuIH2nJj94obvWZdfImrpZ+0+uS8mY
+         YWE8WGHgvVwylhivg3/JxR/0YdBGzU+JRPIK12oyfR74IlfQIodsF8CgFefBaWxJrcZB
+         nHrvX45f50PihLgcUBblfo3O9NniC5oOAzebHYaReAPIcmxpb5Fkphcwodle3DWWXASa
+         2qQuu3KMl5xt2jBy6f5VOnZMzNCTi9AALkGFU/tPFGx66ZGEQUbALXH3/ocL4B1nMKrf
+         1xAg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738972242; x=1739577042;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=USgMOjHrfaLirLOT5WzrXhmwlLjtY2e3GvXtshzzQDE=;
-        b=obuQgRcUcgjO/cSUpxhY6y7T0tlkJ+oaI8dPMfZ3mKGCJDzN9n7mRD71uoQ6grucM4
-         J0V+HLYz8Yw1uHOb4bJzJ+d7l2pzl45pLmB3US5qnV0tTtbq0uL4St5YHyYJ8BrZXX98
-         cH/VetV60beG4X1dFx0DXEK/tg43loYHklWG5PU7mYAWgVVkawBw6PmrME2pnbR1XM7l
-         32g5SG22vOrwWboHFu7EKgIaIk7UJhGN4rnB4UOqYXo9+RXoQ9PlezLIixJs/DpGxzoF
-         Ng44vMnT9x+OYdWmrJSh+sjwh6JhDXPg+hRkXG/KJL3mw0QmnaS2w81I7NJB5CraVRxo
-         +SIQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUJnnGlUd5zYTyKQp8QDwssZkdWozw5k1jW6yMLjsKtjZQaZU5fNPic+99pGIBC08bVJy7i6vICEx8iTBju@vger.kernel.org, AJvYcCVAJHZU1bH+C7IAV8KCwF8d1y4eR4C7CSoFHQzTts6mGh2f7G52W8TajqLEYcM0xzDVEcV3FZqfZdAq5lYx@vger.kernel.org, AJvYcCVsLvsiQ/ap+750f8zGVeiZx3gdhctlyBkgVQ53xlphmfT3vaCYhb1zre3jUqR/k/QinX4JNKYhhidTHw==@vger.kernel.org, AJvYcCX2hPF8lq3zyy7ODfO+lpa8WYnkaM3VwglU7WIfBG44jMF3bZfKIR9eJbf7BAR+NaDPnGIFrxm86VKbOKQuqjVh@vger.kernel.org, AJvYcCXkPUxSaNxjeJ8ZSeHYyZZkq88iD2eeZtzAfSzwVxICAknBDI+08XHRs2NTjlL6oM/ULHY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxEvUb6DbfPl5n+yGWkWum+uT3nnZmbklg6IyfPcUY4ArhyR2wL
-	NIi00J/6GsynPUzihJ0YWZA6bWiQaJJaa5FmVYop13kXxrDY3QvSwrCQNLhrMZDwVObo6pkA5yA
-	E+mkCpyBGirrt/7rWu58Il4Ys+OQ=
-X-Gm-Gg: ASbGncvQrjZWg7pBiwFvt1dU/9YKESrsoIZu5biw0bqINe8WVgblcmo2xTYSLyUI3U4
-	ncwYrNitYPx7ObQ8p8hn/VVL/npQ27xSb+MthLBCKGXAOl+E3naSoSQue+ntgPRRS8fmnKYxQFY
-	8s0nmm1Tgv+di+6YF0cpfPvA741MY4
-X-Google-Smtp-Source: AGHT+IGdgzDpsGso08/WhacNlqhvHR4fHBB/5Nz0HBLIhyrzc3k6+vYm1v3vC1IFWO2rgyWwA0J32kxp6cJzNPaPo+I=
-X-Received: by 2002:a05:6000:1865:b0:38d:c0c0:b410 with SMTP id
- ffacd0b85a97d-38dc960e4d7mr3988849f8f.0.1738972242115; Fri, 07 Feb 2025
- 15:50:42 -0800 (PST)
+        d=1e100.net; s=20230601; t=1738973040; x=1739577840;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=QvLyhY6owKPW2I6LIaEqsveAbrbpfjuOOZhRQN2NfTg=;
+        b=saKdoZzthahwm6jGaWlSDaDwEdFVEh/45WdTCkB6mxUOnxoIQuVmJDT+nrjs3E9fc8
+         6ZceqQl9ylTewGhRf21tsHubHmvepPzYHe3JBTtehcwcf59ya3I9so+5Z39pTsgh+r3l
+         i4P2W3fsOaj6KswWMjgACpVHHbxzeI6qtedo1btMVg4aUlh+uPgxsTnwBiNNCQvXRcI3
+         y6uV+kCDVOersXpk2PrQEwvbzjAeTsA0zHkWyp8xLYrLDom+T6L/yvKp9nl9ROQgEARj
+         AxBKOIk99QIFwijJixGQKfCQBZ9QpEUm6YbWj+oFe9cI4Rcprx7DGu40nINuqN9+9S7s
+         gH6A==
+X-Forwarded-Encrypted: i=1; AJvYcCVGUCZPMDeDY5lHs5I4ripI6JjSEgbU7gHZu2UYvRLqqDGDMFyk5geDGtrSTLGFnpvEElkIRBHDAtDeqZwi@vger.kernel.org, AJvYcCVL4zDGHXndcbsdF4ptjhPk5KTkanNwburi6J1ET78H8AT2vzY4ogGdlz2GCuJZJZEDX54=@vger.kernel.org, AJvYcCVZ9qPcG9kvv0fsepu5DzsLzCW7XxzgydF6n08oUzTZsNSvWYaP5fdQgOgw6xQFi8vn/vhsdx1K4EZ+@vger.kernel.org, AJvYcCWP4zm3rpIGhKNFO6ot6PSgzmYvOV79zpGcKoaQA6yzOkiHWKCBGbW/7B72Z2b20el5BijHsd/R1KjLQnStUyqzRksD@vger.kernel.org
+X-Gm-Message-State: AOJu0YxKeC+PUArwzNz8MVVUGUgG1oIYnFeLN7JBnFL33hJaDehXLrjR
+	dom1YYAE9KxmGEyvMBXTNG0g9D0AV8z8rNXNDkqz/FzTjIsjwwmV
+X-Gm-Gg: ASbGncubVX5FEUjb6rHVjQgpDil+HxEfoAeFkGhMiIgEHFT5CFB5BxbZK83Qzl+9/cJ
+	RTxpwfrI0GUIHYaP6+s+A9LcENbRZuX2EMDyJ/5MSvMf7FHsujALn20XOcjKoBBDKCnqIunQj/s
+	lD3QpJwmZS9yy72PQkBUcoCrcVXg9+EXBnmbcx2PpkNWt6jm4LMMwW5bgTXlv9axp8JXFSyWUP0
+	GyNfAX0jHg4K3X+HlI6+2t+dAEQ5ILTk5EAZ+iAXuuVbDYFBjEnjhEW92eXEHuFIXVAHcFsJdD5
+	i8LJQ26IR3aFEfEGJb2bBdo6
+X-Google-Smtp-Source: AGHT+IGxECD89hAn1Ixdo4SeJV1zmM5RTDj2Hth3O4byoRJgQoykCw9yET/1VT7lC1auRqJvXra1/Q==
+X-Received: by 2002:a05:6000:4021:b0:38c:1362:41b5 with SMTP id ffacd0b85a97d-38dc8d91f2amr3316788f8f.6.1738973039365;
+        Fri, 07 Feb 2025 16:03:59 -0800 (PST)
+Received: from krava (85-193-35-212.rib.o2.cz. [85.193.35.212])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4391dc9ff64sm68170485e9.9.2025.02.07.16.03.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 07 Feb 2025 16:03:58 -0800 (PST)
+From: Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date: Sat, 8 Feb 2025 01:03:55 +0100
+To: Jann Horn <jannh@google.com>
+Cc: Eyal Birger <eyal.birger@gmail.com>, kees@kernel.org,
+	luto@amacapital.net, wad@chromium.org, oleg@redhat.com,
+	mhiramat@kernel.org, andrii@kernel.org,
+	alexei.starovoitov@gmail.com, olsajiri@gmail.com, cyphar@cyphar.com,
+	songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
+	peterz@infradead.org, tglx@linutronix.de, bp@alien8.de,
+	daniel@iogearbox.net, ast@kernel.org, andrii.nakryiko@gmail.com,
+	rostedt@goodmis.org, rafi@rbk.io, shmulik.ladkani@gmail.com,
+	bpf@vger.kernel.org, linux-api@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org, x86@kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 0/2] seccomp: pass uretprobe system call through
+ seccomp
+Message-ID: <Z6afa2Z4IYlIAbJ2@krava>
+References: <20250202162921.335813-1-eyal.birger@gmail.com>
+ <CAG48ez1Pj6MT=RV-sogtNbw7WLLmCrC-3TkNfRjpcCif8iNGkA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250207012045.2129841-1-stephen.s.brennan@oracle.com> <20250207012045.2129841-3-stephen.s.brennan@oracle.com>
-In-Reply-To: <20250207012045.2129841-3-stephen.s.brennan@oracle.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Fri, 7 Feb 2025 15:50:31 -0800
-X-Gm-Features: AWEUYZkFsykde3fyEMInELSdBVAKmObvfOG_wL5GI8Zt-4AF2wq8l2htXaP5ptM
-Message-ID: <CAADnVQLiyezBW34dhkwZw+mWmkFAYMZUdHbOa4uYCdPbgS10SQ@mail.gmail.com>
-Subject: Re: [PATCH 2/2] btf: Add the option to include global variable types
-To: Stephen Brennan <stephen.s.brennan@oracle.com>
-Cc: Masahiro Yamada <masahiroy@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
-	Nicolas Schier <nicolas@fjasle.eu>, Kees Cook <kees@kernel.org>, KP Singh <kpsingh@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Sami Tolvanen <samitolvanen@google.com>, 
-	Eduard Zingerman <eddyz87@gmail.com>, linux-arch <linux-arch@vger.kernel.org>, 
-	Stanislav Fomichev <sdf@fomichev.me>, Kent Overstreet <kent.overstreet@linux.dev>, 
-	Pasha Tatashin <pasha.tatashin@soleen.com>, Jiri Olsa <jolsa@kernel.org>, 
-	John Fastabend <john.fastabend@gmail.com>, Jann Horn <jannh@google.com>, 
-	Ard Biesheuvel <ardb@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, Hao Luo <haoluo@google.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, 
-	Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Arnd Bergmann <arnd@arndb.de>, Nathan Chancellor <nathan@kernel.org>, linux-debuggers@vger.kernel.org, 
-	Alexei Starovoitov <ast@kernel.org>, Song Liu <song@kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
-	bpf <bpf@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAG48ez1Pj6MT=RV-sogtNbw7WLLmCrC-3TkNfRjpcCif8iNGkA@mail.gmail.com>
 
-On Thu, Feb 6, 2025 at 5:21=E2=80=AFPM Stephen Brennan
-<stephen.s.brennan@oracle.com> wrote:
-> When the feature was implemented in pahole, my measurements indicated
-> that vmlinux BTF size increased by about 25.8%, and module BTF size
-> increased by 53.2%. Due to these increases, the feature is implemented
-> behind a new config option, allowing users sensitive to increased memory
-> usage to disable it.
->
+On Fri, Feb 07, 2025 at 04:27:09PM +0100, Jann Horn wrote:
+> On Sun, Feb 2, 2025 at 5:29 PM Eyal Birger <eyal.birger@gmail.com> wrote:
+> > uretprobe(2) is an performance enhancement system call added to improve
+> > uretprobes on x86_64.
+> >
+> > Confinement environments such as Docker are not aware of this new system
+> > call and kill confined processes when uretprobes are attached to them.
+> 
+> FYI, you might have similar issues with Syscall User Dispatch
+> (https://docs.kernel.org/admin-guide/syscall-user-dispatch.html) and
+> potentially also with ptrace-based sandboxes, depending on what kinda
+> processes you inject uprobes into. For Syscall User Dispatch, there is
+> already precedent for a bypass based on instruction pointer (see
+> syscall_user_dispatch()).
+> 
+> > Since uretprobe is a "kernel implementation detail" system call which is
+> > not used by userspace application code directly, pass this system call
+> > through seccomp without forcing existing userspace confinement environments
+> > to be changed.
+> 
+> This makes me feel kinda uncomfortable. The purpose of seccomp() is
+> that you can create a process that is as locked down as you want; you
+> can use it for some light limits on what a process can do (like in
+> Docker), or you can use it to make a process that has access to
+> essentially nothing except read(), write() and exit_group(). Even
+> stuff like restart_syscall() and rt_sigreturn() is not currently
+> excepted from that.
+> 
+> I guess your usecase is a little special in that you were already
+> calling from userspace into the kernel with SWBP before, which is also
+> not subject to seccomp; and the syscall is essentially an
+> arch-specific hack to make the SWBP a little faster.
+> 
+> If we do this, we should at least ensure that there is absolutely no
+> way for anything to happen in sys_uretprobe when no uretprobes are
+> configured for the process - the first check in the syscall
+> implementation almost does that, but the implementation could be a bit
+> stricter. It checks for "regs->ip != trampoline_check_ip()", but if no
+> uprobe region exists for the process, trampoline_check_ip() returns
+> `-1 + (uretprobe_syscall_check - uretprobe_trampoline_entry)`. So
+> there is a userspace instruction pointer near the bottom of the
+> address space that is allowed to call into the syscall if uretprobes
+> are not set up. Though the mmap minimum address restrictions will
+> typically prevent creating mappings there, and
+> uprobe_handle_trampoline() will SIGILL us if we get that far without a
+> valid uretprobe.
 
-...
-> +config DEBUG_INFO_BTF_GLOBAL_VARS
-> +       bool "Generate BTF type information for all global variables"
-> +       default y
-> +       depends on DEBUG_INFO_BTF && PAHOLE_VERSION >=3D 128
-> +       help
-> +         Include type information for all global variables in the BTF. T=
-his
-> +         increases the size of the BTF information, which increases memo=
-ry
-> +         usage at runtime. With global variable types available, runtime
-> +         debugging and tracers may be able to provide more detail.
+nice catch, I think change below should fix that
 
-This is not a solution.
-Even if it's changed to 'default n' distros will enable it
-like they enable everything and will suffer a regression.
+thanks,
+jirka
 
-We need to add a new module like vmlinux_btf.ko that will contain
-this additional BTF data. For global vars and everything else we might need=
-.
 
-pw-bot: cr
+---
+diff --git a/arch/x86/kernel/uprobes.c b/arch/x86/kernel/uprobes.c
+index 0c74a4d4df65..9b8837d8f06e 100644
+--- a/arch/x86/kernel/uprobes.c
++++ b/arch/x86/kernel/uprobes.c
+@@ -368,19 +368,21 @@ void *arch_uretprobe_trampoline(unsigned long *psize)
+ 	return &insn;
+ }
+ 
+-static unsigned long trampoline_check_ip(void)
++static unsigned long trampoline_check_ip(unsigned long tramp)
+ {
+-	unsigned long tramp = uprobe_get_trampoline_vaddr();
+-
+ 	return tramp + (uretprobe_syscall_check - uretprobe_trampoline_entry);
+ }
+ 
+ SYSCALL_DEFINE0(uretprobe)
+ {
+ 	struct pt_regs *regs = task_pt_regs(current);
+-	unsigned long err, ip, sp, r11_cx_ax[3];
++	unsigned long err, ip, sp, r11_cx_ax[3], tramp;
++
++	tramp = uprobe_get_trampoline_vaddr();
++	if (tramp == -1)
++		goto sigill;
+ 
+-	if (regs->ip != trampoline_check_ip())
++	if (regs->ip != trampoline_check_ip(tramp))
+ 		goto sigill;
+ 
+ 	err = copy_from_user(r11_cx_ax, (void __user *)regs->sp, sizeof(r11_cx_ax));
