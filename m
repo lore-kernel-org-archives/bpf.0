@@ -1,197 +1,144 @@
-Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
+Received: from mail-ed1-f66.google.com (mail-ed1-f66.google.com [209.85.208.66])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9764C130A7D;
-	Sat,  8 Feb 2025 02:40:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3AAA32913;
+	Sat,  8 Feb 2025 03:04:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.66
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738982421; cv=none; b=uC3D/v/hgWpdhAyifVlnnaYFI3V2bgsqwwsQHT4kBvLgzGdogcXdBG9zTTrXvvricDest/LxLvtKAqY7Qw8DF2Hgm3hmkDZUz1DsfG4Ux19ZXyX33XiBggqTYvVUjk5pLMyF4LhmQAeBdJImob0FpgkN5sn639cquU1b/KYiSfk=
+	t=1738983858; cv=none; b=K95WHaVvGKpfeL5RJ/+sI5iks7v+pQVE0mzkOO7GcVSDTseAWBdKXaayg4AE15sO+/GJBK9L9k8jjyYG9eqa5065DA/zYmVXc7QrZhJD0E7niDcVPFvifuENwtTT5W3B1gE2i02YByoPPNMYJWjq/yG2N3gi7k4co9zU4XM1tsQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738982421; c=relaxed/simple;
-	bh=CCE6g8psB7pQeEuzmbEF/71KvxZ14BfzQFajZKgBMGs=;
+	s=arc-20240116; t=1738983858; c=relaxed/simple;
+	bh=HxxbTdmm+TibAeqgcfMjuxXWZL7KynZF8XeEc08iYBY=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=VedKq6puwScfk5QIEhOPlVKtpF2U98XistaC/+qXyIkAzz9K7sYADrX2i/1ivYCozncCjEAGcjwh0jnY5qaaTBTDwV3G6rjFLGm4WXQFI8lQgtSoYgJuykLsIRq24oAMIlWTuzrqXcyQ+X7UyzevmT5AtG3qbL6RtDfrGBgXATU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Oi41XOjH; arc=none smtp.client-ip=209.85.221.51
+	 To:Cc:Content-Type; b=DOIQcsDoErkuZQrL3BEH2LSa3vFZUtIEibx8BauLEUq0Vbv6fpF4kblTvfGjuMpsSFXY9Nl35yFp97atxGAQ+8HqCJdLV78Pv3gi0zqkV6/LKtj8BaD5uwTl92l9Bmn2pIwU89KJvdryMHeLWm4J7gievo+8nJIDJkAr5XIvkeM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BZcvAdk1; arc=none smtp.client-ip=209.85.208.66
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Oi41XOjH"
-Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-38dc627eba6so1318885f8f.2;
-        Fri, 07 Feb 2025 18:40:19 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BZcvAdk1"
+Received: by mail-ed1-f66.google.com with SMTP id 4fb4d7f45d1cf-5de5bf41652so554000a12.1;
+        Fri, 07 Feb 2025 19:04:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1738982418; x=1739587218; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1738983853; x=1739588653; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=srkQrrAnpadY8PLhAHZbzX0FKCYiY7EBmJzK416d56s=;
-        b=Oi41XOjHdJj7Bqg8mETz/wN831agW//j9DtIRdYjsYfJ72yKTZ2uXAasqvEqOPVVih
-         8I64K/Z8geDrVh+YbQJ4XXelLqCTM2NoDP5kxa7USVNFgA3HO4B355Oc6FehH/qFt8NL
-         4Fqxx5lc40bP7D3VQgmfLoCuS+mF/3doTeVhIvyvf3yy6X2k+/JxsXHLbsXEjjgCDwrN
-         JlvI75Y0aOkHYHgEw60+WPwkY/ahBBrJ9hkpDONGsCCG4yfuGqaKF4Sd2kIAKP7Xeos2
-         3tPIU1JodWuJu0CWYqBWKi0ZhKxdSLMzoG2VLl12PWTF80EssWXWLHbhoj7AT7gG73+E
-         6jBQ==
+        bh=yjC+K99sHuLBC1SWOWdiNm+irY8tDwRsTBF9CpEJdmk=;
+        b=BZcvAdk1ZLjIcO5NOYQj+Rvj1pM7U2iwc5vzGebDNZ2ZmnD2hEtVewpSioxSJ1icmF
+         wnK8AtITxz0xRuIDyKNmgxvXOdNnh8LqPe+vcgSV+B1WaydFhWTsAUFy6gwpBda5+Oki
+         XKQXs1lxp5N87LJ49Yd/Ev66kBKRFbwTlGzesd/LNmUR7C7embJeoXYSpkg0psewYaKI
+         Udrexng+94U0nULkCY8FE4d36kPyptqxdz/cH/s/8TDKx8ucWFA6FclQNgu3w7Mc8byr
+         E5GQMheaxGWzRrXe9iRHtgE6legmosCcI/mAJsvsTHJwAJyU6lQfTvcUWPRzFlVT19/d
+         D+Rg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738982418; x=1739587218;
+        d=1e100.net; s=20230601; t=1738983853; x=1739588653;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=srkQrrAnpadY8PLhAHZbzX0FKCYiY7EBmJzK416d56s=;
-        b=a0JWc+IQFBbwcM8oSt6+QkcsBGoK3KDN4BruxaCpXVDgdCvR2XQAqa6KCYqVEDGpSF
-         vEM19CL9dBqtbWNgqvzNnrDgcCYeOhQXSDYKamjmpb5v0pwqLxFcb7+0M0migllnAAZc
-         0oFKp/gudWrb1G39mMPMgjn7Y8jL9Albi6snIQDofwZZlZhyz215pDpkSO0Ch5+lB+xg
-         SDOEOTXjTGfd9adPkZxvZGYNyprCfYjXGti2f26Yv3jSmr5ncmeWSgw3zpqri3LdLK8+
-         xX1Fh8rqov+grdSJIQkhiF7XbWUQO6SPa5+jvEZ8cyzM006xY59GbbRKligIojQG/0cN
-         825w==
-X-Forwarded-Encrypted: i=1; AJvYcCVLUxiDdtcUpsB2v7FTWpO8+WyNGtB6mF88PwqekCBxTfbndGynbxkC2eo8ZiVthUH7f/o=@vger.kernel.org, AJvYcCVWnj1u0nVRs0ijcWtCUFVw7+kw3BHjZml1bRvPr9StiLUGwMMvwGXJ7H0z1/fTg+m78zl5kwjugoLEIuyN@vger.kernel.org
-X-Gm-Message-State: AOJu0YxwOHALcrMNY8dm+BU6zzvTZKaKtViVcRS5AOTteGs/xMjFyiWW
-	Sd0XH0f/RFppgH5lpcizwZZX2hOm2TIyKr8iEcecorTRVFXsquRPZrYuHOqcpz3wZqcKfc9YGRH
-	JEldfTEYrzH2pyBWQlQ87+71cdlY=
-X-Gm-Gg: ASbGncvNZkkkBnSu8Bill58r3XtADpAVUDwRE8X8BtMmIvUiNPlJbQUd2do6OTpsm5W
-	ALCmMGSoph0B4k9Dg2R8MV0SH0Pj+aJ5kRxn6iRoIc5Y0Qv2YIyOpVbu/B6788VH84jDsaczaTr
-	sW7RG0IHdZWEVKIeNVumNALSqeFv8e
-X-Google-Smtp-Source: AGHT+IEfhXFVKhUN2y1oi1TXHVdQ8x25Bg0Z/m21MOgikvbJIRkYv4XSKVjjcuzA74IMRgxZ+h4RSWQtz1ci/1yxZcE=
-X-Received: by 2002:a05:6000:154f:b0:38b:d7d2:12f6 with SMTP id
- ffacd0b85a97d-38dc8d98e9amr3557767f8f.2.1738982417610; Fri, 07 Feb 2025
- 18:40:17 -0800 (PST)
+        bh=yjC+K99sHuLBC1SWOWdiNm+irY8tDwRsTBF9CpEJdmk=;
+        b=BTF/i3vuOevOFF/tXhWljm4H0CQwU4X6xCLJCAWmamb+ZsBv8pieLWvh8aEXQGhkpk
+         Gdvd3iSACrgWYWZ/g+SkN8PdkhtcKM6q92cbufwy973oEt9lKyHPMsGHxJ8qQEHK9T9j
+         +1sFdwWDtoqss3XgcDVJzyAZR5cTTlrbXY8B2kVQc4OjlV2iOxP7pNAdXO0DFoaqWuVO
+         iR7aR/f92VsqJP5TCRMgyOQB5JGt86fT4eH9OIG3/9fFMGdQW+e9BXlpav+pInIGPRyO
+         tqnNGXG3b+ezfrxYaYxEp4nRAIGr8oeecDZQ53rJvaODCALxpx1qtIjHZhTTXQaEfYgj
+         r70g==
+X-Forwarded-Encrypted: i=1; AJvYcCVVzsqMoPbiVdA74vJ2RszWAgq48YaGBSyyfwjpkINbLlFZGRmMDXCFNftX1oi+DgTR+RdHLaz8vwFmgVc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyO2zt8RSuFjsMcFWbDzFGoicVKSZqu1KsRu8Vs28p2Cz310ocP
+	JcUG5pxLfEM0b+++n4nwC2yTfeE9xIn0WCdzqav5M7yjIK502bLPFmD9ETEGHkHI3vKm6+NgEcy
+	MUARtlIBzgzyHRVs257y2uRorwYQ=
+X-Gm-Gg: ASbGnct6jOr+m8bRpCkMUUUNj4bwPPSKw/CPAMbAIW10sbHO3Vnyj7dBWx/DrBlcv/P
+	ANAnMRNyu2aSBWIXoAnfCKuO4C9LnCqX4lCGF1rW7iBqEUt7rQzOtgObDhhC/pEWURt8jiFE9eB
+	Y=
+X-Google-Smtp-Source: AGHT+IEpffqioYc8FzNyaf4qBzxtDg8xfAqMVbDjSBfvR4Oecfrwg3Vz7TAhEDmRxRydbVIiW+4rwwYQefd9K+hSBv4=
+X-Received: by 2002:a05:6402:194b:b0:5dc:7fbe:730d with SMTP id
+ 4fb4d7f45d1cf-5de44fe9d71mr7386616a12.6.1738983853264; Fri, 07 Feb 2025
+ 19:04:13 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <AM6PR03MB5080392CC36DB66E8EA202DE99F42@AM6PR03MB5080.eurprd03.prod.outlook.com>
- <CAADnVQLb--LzFmXZPLPa5V+cD1A9YzTnZSgno9ftcA4-GGTi8w@mail.gmail.com> <AM6PR03MB508011599420DB53480E8BF799F72@AM6PR03MB5080.eurprd03.prod.outlook.com>
-In-Reply-To: <AM6PR03MB508011599420DB53480E8BF799F72@AM6PR03MB5080.eurprd03.prod.outlook.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Fri, 7 Feb 2025 18:40:06 -0800
-X-Gm-Features: AWEUYZlY5Cx47GrscuSXW8CNNyK9yWTnCSrStL43MJmsPS9ntY6SNnwBBCv6kDs
-Message-ID: <CAADnVQ+7RvuGsbnpeyMrZPKypKeUSULx42Gvmc9J_gnnkPffdA@mail.gmail.com>
-Subject: Re: [RFC] bpf: Rethinking BPF safety, BPF open-coded iterators, and
- possible improvements (runtime protection)
-To: Juntong Deng <juntong.deng@outlook.com>
-Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	John Fastabend <john.fastabend@gmail.com>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eddy Z <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
-	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, snorcht@gmail.com, 
-	Christian Brauner <brauner@kernel.org>, bpf <bpf@vger.kernel.org>, 
-	LKML <linux-kernel@vger.kernel.org>
+References: <20250206105435.2159977-1-memxor@gmail.com> <20250206105435.2159977-12-memxor@gmail.com>
+ <CAADnVQL=E3F5-Uwa5_508e+OKzLnLGJGtAMhv1WW8kHobzBMgQ@mail.gmail.com>
+In-Reply-To: <CAADnVQL=E3F5-Uwa5_508e+OKzLnLGJGtAMhv1WW8kHobzBMgQ@mail.gmail.com>
+From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Date: Sat, 8 Feb 2025 04:03:37 +0100
+X-Gm-Features: AWEUYZmo5Th1l7iYtvIDvAaFSUXU6ssq4vkO0stPQeynM7x5qg3kIxSA0EMK9Fs
+Message-ID: <CAP01T77XaGH=EDc=m2uL6gLWCM8jm5ycPgmZavXnThpDF6bY8g@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 11/26] rqspinlock: Add deadlock detection and recovery
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
+	Linus Torvalds <torvalds@linux-foundation.org>, Peter Zijlstra <peterz@infradead.org>, 
+	Will Deacon <will@kernel.org>, Waiman Long <llong@redhat.com>, Alexei Starovoitov <ast@kernel.org>, 
+	Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Martin KaFai Lau <martin.lau@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+	"Paul E. McKenney" <paulmck@kernel.org>, Tejun Heo <tj@kernel.org>, Barret Rhoden <brho@google.com>, 
+	Josh Don <joshdon@google.com>, Dohyun Kim <dohyunkim@google.com>, 
+	linux-arm-kernel <linux-arm-kernel@lists.infradead.org>, Kernel Team <kernel-team@meta.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Feb 4, 2025 at 4:40=E2=80=AFPM Juntong Deng <juntong.deng@outlook.c=
-om> wrote:
+On Sat, 8 Feb 2025 at 02:54, Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
 >
-> On 2025/2/4 23:59, Alexei Starovoitov wrote:
-> > On Tue, Feb 4, 2025 at 11:35=E2=80=AFPM Juntong Deng <juntong.deng@outl=
-ook.com> wrote:
-> >>
-> >> This discussion comes from the patch series open-coded BPF file
-> >> iterator, which was Nack-ed and thus ended [0].
-> >>
-> >> Thanks for the feedback from Christian, Linus, and Al, all very helpfu=
-l.
-> >>
-> >> The problems encountered in this patch series may also be encountered =
-in
-> >> other BPF open-coded iterators to be added in the future, or in other
-> >> BPF usage scenarios.
-> >>
-> >> So maybe this is a good opportunity for us to discuss all of this and
-> >> rethink BPF safety, BPF open coded iterators, and possible improvement=
-s.
-> >>
-> >> [0]:
-> >> https://lore.kernel.org/bpf/AM6PR03MB50801990BD93BFA2297A123599EC2@AM6=
-PR03MB5080.eurprd03.prod.outlook.com/T/#t
-> >>
-> >> What do we expect from BPF safety?
-> >> ----------------------------------
-> >>
-> >> Christian points out the important fact that BPF programs can hold
-> >> references for a long time and cause weird issues.
-> >>
-> >> This is an inherent flaw in BPF. Since the addition of bpf_loop and
-> >> BPF open-code iterators, the myth that BPF is "absolutely" safe has
-> >> been broken.
-> >>
-> >> The BPF verifier is a static verifier and has no way of knowing how
-> >> long a BPF program will actually run.
-> >>
-> >> For example, the following BPF program can freeze your computer, but
-> >> can pass the BPF verifier smoothly.
-> >>
-> >> SEC("raw_tp/sched_switch")
-> >> int BPF_PROG(on_switch)
-> >> {
-> >>          struct bpf_iter_num it;
-> >>          int *v;
-> >>          bpf_iter_num_new(&it, 0, 100000);
-> >>          while ((v =3D bpf_iter_num_next(&it))) {
-> >>                  struct bpf_iter_num it2;
-> >>                  bpf_iter_num_new(&it2, 0, 100000);
-> >>                  while ((v =3D bpf_iter_num_next(&it2))) {
-> >>                          bpf_printk("BPF Bomb\n");
-> >>                  }
-> >>                  bpf_iter_num_destroy(&it2);
-> >>          }
-> >>          bpf_iter_num_destroy(&it);
-> >>          return 0;
-> >> }
-> >>
-> >> This BPF program runs a huge loop at each schedule.
-> >>
-> >> bpf_iter_num_new is a common iterator that we can use in almost any
-> >> context, including LSM, sched-ext, tracing, etc.
-> >>
-> >> We can run large, long loops on any critical code path and freeze the
-> >> system, since the BPF verifier has no way of knowing how long the
-> >> iteration will run.
+> On Thu, Feb 6, 2025 at 2:54=E2=80=AFAM Kumar Kartikeya Dwivedi <memxor@gm=
+ail.com> wrote:
 > >
-> > This is completely orthogonal to the issue that Christian explained.
+> > +/*
+> > + * It is possible to run into misdetection scenarios of AA deadlocks o=
+n the same
+> > + * CPU, and missed ABBA deadlocks on remote CPUs when this function po=
+ps entries
+> > + * out of order (due to lock A, lock B, unlock A, unlock B) pattern. T=
+he correct
+> > + * logic to preserve right entries in the table would be to walk the a=
+rray of
+> > + * held locks and swap and clear out-of-order entries, but that's too
+> > + * complicated and we don't have a compelling use case for out of orde=
+r unlocking.
+> > + *
+> > + * Therefore, we simply don't support such cases and keep the logic si=
+mple here.
+> > + */
 >
-> Thanks for your reply!
+> The comment looks obsolete from the old version of this patch.
+> Patch 25 is now enforces the fifo order in the verifier
+> and code review will do the same for use of res_spin_lock()
+> in bpf internals. So pls drop the comment or reword.
 >
-> Completely orthogonal? Sorry, I may have some misunderstandings.
 
-...
+Ok.
 
-> program runs a huge loop at each schedule
+> > +static __always_inline void release_held_lock_entry(void)
+> > +{
+> > +       struct rqspinlock_held *rqh =3D this_cpu_ptr(&rqspinlock_held_l=
+ocks);
+> > +
+> > +       if (unlikely(rqh->cnt > RES_NR_HELD))
+> > +               goto dec;
+> > +       WRITE_ONCE(rqh->locks[rqh->cnt - 1], NULL);
+> > +dec:
+> > +       this_cpu_dec(rqspinlock_held_locks.cnt);
+>
+> ..
+> > +        * We don't have a problem if the dec and WRITE_ONCE above get =
+reordered
+> > +        * with each other, we either notice an empty NULL entry on top=
+ (if dec
+> > +        * succeeds WRITE_ONCE), or a potentially stale entry which can=
+not be
+> > +        * observed (if dec precedes WRITE_ONCE).
+> > +        */
+> > +       smp_wmb();
+>
+> since smp_wmb() is needed to address ordering weakness vs try_cmpxchg_acq=
+uire()
+> would it make sense to move it before this_cpu_dec() to address
+> the 2nd part of the harmless race as well?
 
-You've discovered bpf iterators and said, rephrasing,
-"loops can take a long time" and concluded with:
-"This is an inherent flaw in BPF".
-
-This kind of rhetoric is not helpful.
-People that wanted to abuse bpf powers could have done it 10 years
-ago without iterators, loops, etc.
-One could create a hash map and populate it with collisions
-and long per bucket link lists. Though we have random seed with enough
-persistence hashtab becomes slow.
-Then just do bpf_map_lookup_elem() from the prog.
-This was a known issue that is gradually being fixed.
-
-> Could you please share a link to the patch? I am curious how we can
-> fix this.
-
-There is no "fix" for the iterator. There is no single patch either.
-The issues were discussed over many _years_ in LPC and LSFMM.
-Exception logic was a step to fixing it.
-Now we will do "exceptions part 2" or will rip out exceptions completely
-and go with "fast execute" approach.
-When either approach works we can add a watchdog (and other mechanisms)
-to cancel program execution.
-Unlike user space there is no easy way to sigkill bpf prog.
-We have to free up all resources cleanly.
-
-> Yes, I am willing to help, so I included a "Possible improvements"
-> section.
-
-With rants like "inherent flaw in BPF" it's hard to take
-your offer of help seriously.
-
-> I am also working on another patch about filters that we discussed
-> earlier, although it still needs some time.
-
-Pls focus on landing that first.
+So you mean, even if the dec gets ordered with inc, the other side is
+bound to notice a NULL entry and not a stale entry, and we'll ensure
+the NULL write is always visible before the dec.
+Sounds like it should also work, I will think over it for a bit and
+probably make this change (and perhaps likewise on the unlock side).
