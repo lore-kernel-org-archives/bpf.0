@@ -1,34 +1,34 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D78E4256D
-	for <bpf@vger.kernel.org>; Sat,  8 Feb 2025 02:30:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C938A41;
+	Sat,  8 Feb 2025 02:40:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738981804; cv=none; b=rzHUJoQvgm4R6PcyE4iQhInAb2BxNa1jAhmulc9veylWr2gK8DB81g0E9KhIDtDpPglZJUaFicK90hWdT1pUZpBCR/+fiQ4KWr0tnuH1nMLMRlPMifHQgwQio72Myyin6IZ6lbM+4jGkrDMvzUL8CyUp7g97L/7+VB1d9PncTa8=
+	t=1738982403; cv=none; b=lAds0x/HkHLOarzJfINoj1uOg6fNugD8nVQVcI3ckGBYZ9+NHzYWzeXaxMhNUW5FptR0hdDSoTqpAQ4diH6S8+GtWOVCw5JnJne4FYm+kFDlYcBrbbL770G1zOV6pVot9MfXFwwU2Ae3USWfUJo6vLtRqFlbPIKLhhdJSDzdYA8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738981804; c=relaxed/simple;
-	bh=65OfUyZP+85ViCNr+Ib1kj8VYCetzh5ziUrDROCnMbg=;
+	s=arc-20240116; t=1738982403; c=relaxed/simple;
+	bh=nXoEqWHBPCVYJy4H+Qn1jOOPHX5V1O3quc6H6Jx6YXM=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=OuzzpDCrglyOMxwAlccHdDrnGXmQMVo+zFTVGrZkwy9TWbwtAEvaDxk5vq3uH1i+68Z5f1WwEnL2H0azDwuPdGZJWzQQg4pWU98575o6HRMyFmujCxU5+l+NS0fsX1D8yvKxeaLnja+PZQrgItBZ2Z8SEYLkc6W8/F9Nu7vFJV0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OUXOl/uU; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=boc8D5XVosu9s/XhqRbM1XyCk+YEqjFQKHF+/Lqk7ASyvFM7MQcKyew+XB/V4nYGogYxswgFnqIYDO9MglR9QgiIdWNpvLum/jY0xQW+DOvwyWNU/VAo6OZl9woeCCZ5e9+nzTDgjoW89mlfYXc6vbhBB2+bZ7nQXbbAy86Vfk8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=H2OB7y+k; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OUXOl/uU"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43A21C4CED1;
-	Sat,  8 Feb 2025 02:30:03 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="H2OB7y+k"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C57CAC4CED1;
+	Sat,  8 Feb 2025 02:40:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1738981803;
-	bh=65OfUyZP+85ViCNr+Ib1kj8VYCetzh5ziUrDROCnMbg=;
+	s=k20201202; t=1738982402;
+	bh=nXoEqWHBPCVYJy4H+Qn1jOOPHX5V1O3quc6H6Jx6YXM=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=OUXOl/uUP1AEjHavS0mIbRPPXUylPL9LIa2Scav1QCpAxFeKqHZlXrgI59djtmzkC
-	 EzYN1EQVoGYKJKUA7T5ne9KQMWsHeCtITkserk/AMEE5+HgVZxxwvk4IQ610Q9rjlK
-	 pTbhLz3hbBABBpDVjNhd44f6DDRC4CY3/ojm0vq1agC4VuA6jmXQpFkQmveygZdt+X
-	 awfs6pKmtA6dUl6yB5CbQiU4aWyqVEWL5e6xCp0So1qrWxXmMOuaqZbi+l9FJsHHsz
-	 YNbyQgW7ifwM/nbcMqDv4KP++jcmI3WZoQAIOKKEqdqsjPOsU74jWXM2Kvobc/HeBP
-	 +/jQmVRmnxUSg==
+	b=H2OB7y+kevkx1sAEtp4Rw58i2jkZx+Zy5bImDjORI9XKkDQ+sWn9ZjGx/XJg8lJ1N
+	 yxCN0kra2cC68Mxra4uoqrOca7cjoh0RpqaoAceVylXSK1XzoFkI4+B3b0UDORJe/o
+	 cnTsFjkQM8L1jF8t8if0DRerXUu1Ye5ftwMY2teFrHbQNeTiERs9UfWoHp/4Ah3dvb
+	 14+3iuJ5rjY3xQvW1v+hK8nq1xdA4V6e8E1WwOxzm7Fy+jL4llm/+J2UZZUrovMSM8
+	 P4xd8ZItQlbb9wy27T1QsFGqHAMaWRC2LpeMkZBWbqeZ+agxisRbiuQlJNiPfZa0r2
+	 2Cz/BU9+VYKHw==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 712DA380AAF5;
-	Sat,  8 Feb 2025 02:30:32 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id EBABF380AAF5;
+	Sat,  8 Feb 2025 02:40:31 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -37,39 +37,41 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next] bpf: define KF_ARENA_* flags for bpf_arena kfuncs
+Subject: Re: [PATCH bpf-next] selftests/bpf: Remove with_addr.sh and
+ with_tunnels.sh
 From: patchwork-bot+netdevbpf@kernel.org
 Message-Id: 
- <173898183127.2461149.14441400262793958042.git-patchwork-notify@kernel.org>
-Date: Sat, 08 Feb 2025 02:30:31 +0000
-References: <20250206003148.2308659-1-ihor.solodrai@linux.dev>
-In-Reply-To: <20250206003148.2308659-1-ihor.solodrai@linux.dev>
-To: Ihor Solodrai <ihor.solodrai@linux.dev>
-Cc: bpf@vger.kernel.org, andrii@kernel.org, ast@kernel.org,
- daniel@iogearbox.net, eddyz87@gmail.com, mykolal@fb.com, kernel-team@meta.com
+ <173898243078.2462994.9706001313685951312.git-patchwork-notify@kernel.org>
+Date: Sat, 08 Feb 2025 02:40:30 +0000
+References: <20250204-with-v1-1-387a42118cd4@bootlin.com>
+In-Reply-To: <20250204-with-v1-1-387a42118cd4@bootlin.com>
+To: Bastien Curutchet (eBPF Foundation) <bastien.curutchet@bootlin.com>
+Cc: andrii@kernel.org, eddyz87@gmail.com, mykolal@fb.com, ast@kernel.org,
+ daniel@iogearbox.net, martin.lau@linux.dev, song@kernel.org,
+ yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
+ sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org, shuah@kernel.org,
+ thomas.petazzoni@bootlin.com, alexis.lothore@bootlin.com,
+ linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
 
 Hello:
 
 This patch was applied to bpf/bpf-next.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
+by Martin KaFai Lau <martin.lau@kernel.org>:
 
-On Wed,  5 Feb 2025 16:31:48 -0800 you wrote:
-> bpf_arena_alloc_pages() and bpf_arena_free_pages() work with the
-> bpf_arena pointers [1], which is indicated by the __arena macro in the
-> kernel source code:
+On Tue, 04 Feb 2025 11:59:43 +0100 you wrote:
+> Those two scripts were used by test_flow_dissector.sh to setup/cleanup
+> the network topology before/after the tests. test_flow_dissector.sh
+> have been deleted by commit 63b37657c5fd ("selftests/bpf: remove
+> test_flow_dissector.sh") so they aren't used anywhere now.
 > 
->     #define __arena __attribute__((address_space(1)))
-> 
-> However currently this information is absent from the debug data in
-> the vmlinux binary. As a consequence, bpf_arena_* kfuncs declarations
-> in vmlinux.h (produced by bpftool) do not match prototypes expected by
-> the BPF programs attempting to use these functions.
+> Remove the two unused scripts and their Makefile entries.
 > 
 > [...]
 
 Here is the summary with links:
-  - [bpf-next] bpf: define KF_ARENA_* flags for bpf_arena kfuncs
-    https://git.kernel.org/bpf/bpf-next/c/ea145d530a2d
+  - [bpf-next] selftests/bpf: Remove with_addr.sh and with_tunnels.sh
+    https://git.kernel.org/bpf/bpf-next/c/9b6cdaf2ac85
 
 You are awesome, thank you!
 -- 
