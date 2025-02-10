@@ -1,333 +1,160 @@
-Received: from mout.perfora.net (mout.perfora.net [74.208.4.197])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8FBF24FC04
-	for <bpf@vger.kernel.org>; Mon, 10 Feb 2025 22:23:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.208.4.197
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08A7024C69B;
+	Mon, 10 Feb 2025 22:28:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739226187; cv=none; b=Xll5PJoEuz8QgLdPcNOJbNWjbdKi6s/Kjc7c8rX6lY/w1WDWRgOcuEQF3YLiE5uy/zEgLSQiTFYRFyGeKVdSF+bOyQ6Txi1fp8i/qk4TVoSifC/BSrcM0GSadn3lk9mu57VesOzRShUH61B6FvtidtX3zWM8ZvJD1FSghJ4GHkY=
+	t=1739226497; cv=none; b=sDkfnOLnX3uuCTuTvx1PFbjLl7bnr4OH/1QyVcWn7Rg49p2kISVLqUIs1+JAmGb8SvXGwV3INdeCyzbVpRD6tX+9B4VIvaoyS6yzWz2ACMxFC6dhsIKeJndYRQ0/zIS+Runc2dw1cJ+BI42c95HPcGt+qT+QDzyHo15nXGQfzSw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739226187; c=relaxed/simple;
-	bh=WT7HP68O1A9Zm2bD5YYyOvYtoFFKZZgls2mVbLJYVEI=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=T6I9fOkK8SCEgcdFRoT5ZPqhWOjonIxuPlDiyXb8CiNEPY9CrtLdsJv9AoZsMg9+lO/AUI8eXvl3PpC0kqnbR6wYgouJmDv7MiLvLBNSMqoWtFqMjQUxS3oVbKIIxTXEyk7K3rDP7Jdyu2Lb4v1Eg+wgmx6fg0oaTHd2jccHr5Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=jordanrome.com; spf=pass smtp.mailfrom=jordanrome.com; dkim=pass (2048-bit key) header.d=jordanrome.com header.i=linux@jordanrome.com header.b=KQPbXFaJ; arc=none smtp.client-ip=74.208.4.197
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=jordanrome.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=jordanrome.com
+	s=arc-20240116; t=1739226497; c=relaxed/simple;
+	bh=ndLubKwFBHWtlTDCPdx1r2RbDgFfGS3iAmUDE2AS1Vw=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=bKXA1OaXbhjq+JD3dYhGK24FidqAkQvtwxFP7NeZu2vwslz+0quOrwMVZmc10adrYvRnKzmsj8kH9+NGhSH5f9OSUWJ1fCiQY/ZU+xCxpDyhN7I0AH2Ucg9+FSAdyVgBF6YVSdN8G0+Dpnmlb2nxZ/E6Q9MnCNNDe+759wiTB64=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZhoEDTaB; arc=none smtp.client-ip=209.85.128.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=jordanrome.com header.i=linux@jordanrome.com header.b="KQPbXFaJ"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=jordanrome.com;
-	s=s1-ionos; t=1739226182; x=1739830982; i=linux@jordanrome.com;
-	bh=yJJHtP6Ybd5+FScfldyOtf8Z7tbm+0cUAU9G4HHYpKQ=;
-	h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:
-	 MIME-Version:Content-Transfer-Encoding:cc:
-	 content-transfer-encoding:content-type:date:from:message-id:
-	 mime-version:reply-to:subject:to;
-	b=KQPbXFaJ2ImZ9tq6yf/Ydxeqb6UA/QNEXo+Ysj4zaGyANpxuZAEFyMtcDCjPbnb9
-	 YC0mO2KV8X64l6wiAH2Ru7o/25/ILKKRMlmPa5CutRPIZEfEG8lV2Wlh3p3WCjXaz
-	 W3DftzzK/p+Km/1EnsYsigtR5lSAxnQK8nH57ncja+iBHCX4qqndD+fM34FesJksW
-	 oHeJxy6h19jFq2h9NSvHTivBYwFd9aksMuQF2YtdvBWhrouk/tvyiVC1kIVd+ugJK
-	 dNMxOiHSVe0ixFrGTkunOjkfUc5lHLXI9Z6mD+PlUfbl42IIxEiNGcPURT4ACLWAT
-	 pdyNR49xfmsrwUUVnA==
-X-UI-Sender-Class: 55c96926-9e95-11ee-ae09-1f7a4046a0f6
-Received: from localhost ([69.171.251.115]) by mrelay.perfora.net (mreueus004
- [74.208.5.2]) with ESMTPSA (Nemesis) id 1MsZaJ-1tNb9Q017L-00vbnZ; Mon, 10 Feb
- 2025 23:16:31 +0100
-From: Jordan Rome <linux@jordanrome.com>
-To: bpf@vger.kernel.org
-Cc: linux-mm@kvack.org,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Kernel Team <kernel-team@fb.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Shakeel Butt <shakeel.butt@linux.dev>,
-	Alexander Potapenko <glider@google.com>
-Subject: [bpf-next v7 1/3] mm: add copy_remote_vm_str
-Date: Mon, 10 Feb 2025 14:16:24 -0800
-Message-ID: <20250210221626.2098522-1-linux@jordanrome.com>
-X-Mailer: git-send-email 2.43.5
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZhoEDTaB"
+Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-436345cc17bso33993285e9.0;
+        Mon, 10 Feb 2025 14:28:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1739226494; x=1739831294; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qkWWMjBJ1/YRt3lwgOfr2tNA5D2acLgDBlTp/Ye7Oa8=;
+        b=ZhoEDTaBXqehH8mcLxQAJ+MlyetSpm6uDuUpb+RX7HFB7qOCdZZv4uvK6GPaDYCeQp
+         2mSEo/6ok3aDLG9+DuWNZQSHqFibw0N+HY/VlJco1VVnPcM5UFxuGbsXbUHTJz5EE0X4
+         eIlvskZCxsCzK4tOzWS7KmEjFVK2nTe9mx6hubyal4PqJVdZSEqVW7OSeKd9NyJT2ijZ
+         MzJRNOpepCZQ1868xWtE5rLFBrb6/8Wp/VlP5KaNDSRSECDrEKkcKNnFZjVNnOpor+kU
+         xOgiXYtRuhfmhC2vL0nMoHB18Jq9soqo8o4MC1YgUhzu6oES/+mByRdUIsGjOhAHSFWg
+         /tGg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1739226494; x=1739831294;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=qkWWMjBJ1/YRt3lwgOfr2tNA5D2acLgDBlTp/Ye7Oa8=;
+        b=Q2RqAuTJTW7dRtu/fgwUJemHOZdePj6xVrI0k7GfyCh9SAgyHtVjFVFr2IT6Uuj6yH
+         h5kBbG5eZY0nbfLBQkfSeZDSieTjNJ2/pElMPYMczGDagiUfX/dUO8J2Fo3uMEDH3wzG
+         rZK/01uzQkVgXMQDrlbB3eszId+mKqbAJr7W62NRmYMJ0jgtmp4YaZD1NGJf4ykvkcQH
+         ziMYnBmoe4g7wxt/Xyrq4e9/mv7u98M4EWm2KptsjB4AVsL7wbHH777I6uTgDwgKZ4qr
+         VAxN/x6+s8JtlK5s/5a+3k/xBVmeDrLbn1w6gO3Y1951WKxIuYxKZKQ++tLy+CX+a85n
+         45pA==
+X-Forwarded-Encrypted: i=1; AJvYcCVtHYv6+1ERM5iWfoFfGi5gru7V2dRbVoHuLNIiX+F3e70cg/I1SnEWEVh0P7bJ68z/JCQ=@vger.kernel.org, AJvYcCXeMhqmgulTOWQUxUcwSo9uf9CggIsyFQjpxf7zwVf8KuoMu5xNZlD/FExlFx75ZyhuWd9q1lYy@vger.kernel.org, AJvYcCXzC6vzdXgh1Q7szSLg6GiIg2HgjCvLqxq+qbw8bljMTb1J06nI7rVu395PNsLNpXnyjBexdeCb8NlrHMH6@vger.kernel.org
+X-Gm-Message-State: AOJu0YxE2nOOni+76oB1qFqns6f4pZ5N0nfK8JF9LFhn9TAn1+jT4wSk
+	H7w87V9fYJyLn0Ipe0C/UFapOU8VihU5jIRlkqhPsK22Mceskl2QUMrW/Q==
+X-Gm-Gg: ASbGncvNPdJXUAsQMMg4o1pZ0JdaWfCbL6SPyF51Bm92HltlDEHjAK68YmtMlWm+Wre
+	j02oye2vSG2H1brr2pNqVTfbckBR1X4ruOZOIIc9LhtiSXak7lsbj5sV9CEFRFL6o/BXVGc44T+
+	+WPBSO8w3KCsD6XyLgge0h/+kDGblioj3eA2vSOmgpkqY0QNZ5WiT12lVxNgRFqFzZodf5ab4Hi
+	6k8tYZdjc2FvlTIKiTIo2A4mWZTZ/l3oLn8lh5/uojv3Ei47jNSEJowbmt46jcvcFn2iJumX0xe
+	tbZZdVBQJ+J1sDyKnb6dtmtYYEJfb4J9RaSUjSuYuB0FA+WRQxa1/w==
+X-Google-Smtp-Source: AGHT+IHN7gLlSgITrNkUYlErBuW/66QbgQ6hSOX+j8FGt+/mR40pZI3bKrEQ0DY8izu56Um9ILmDrg==
+X-Received: by 2002:a05:600c:cce:b0:434:f131:1e64 with SMTP id 5b1f17b1804b1-4394c815898mr12942205e9.9.1739226493939;
+        Mon, 10 Feb 2025 14:28:13 -0800 (PST)
+Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38dc0c5a894sm12940620f8f.95.2025.02.10.14.28.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Feb 2025 14:28:13 -0800 (PST)
+Date: Mon, 10 Feb 2025 22:28:12 +0000
+From: David Laight <david.laight.linux@gmail.com>
+To: Alexander Lobakin <aleksander.lobakin@intel.com>
+Cc: Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
+ <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Jakub Kicinski
+ <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Alexei Starovoitov
+ <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, John Fastabend
+ <john.fastabend@gmail.com>, Andrii Nakryiko <andrii@kernel.org>, "Jose E.
+ Marchesi" <jose.marchesi@oracle.com>, Toke =?UTF-8?B?SMO4aWxhbmQtSsO4cmdl?=
+ =?UTF-8?B?bnNlbg==?= <toke@redhat.com>, Magnus Karlsson
+ <magnus.karlsson@intel.com>, Maciej Fijalkowski
+ <maciej.fijalkowski@intel.com>, Przemek Kitszel
+ <przemyslaw.kitszel@intel.com>, Jason Baron <jbaron@akamai.com>, Casey
+ Schaufler <casey@schaufler-ca.com>, Nathan Chancellor <nathan@kernel.org>,
+ bpf@vger.kernel.org, netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next 2/4] i40e: use generic unrolled_count() macro
+Message-ID: <20250210222812.1d0479a4@pumpkin>
+In-Reply-To: <20250206182630.3914318-3-aleksander.lobakin@intel.com>
+References: <20250206182630.3914318-1-aleksander.lobakin@intel.com>
+	<20250206182630.3914318-3-aleksander.lobakin@intel.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:QNjPbdBmC6RgFhoMhi+mCZ4fNXpSAQszghe/PMKyIZTi/DfAfXf
- w7He5TL2nFLQABaNZqxupI7lA055F6UPvNK4p0YMNMT/M+dH8hbX+86FBWrdqurL6a3EBNx
- UJD3iOy09SzWgKSVQc18fTop5DM/yC1/DU2v7xFECrjFgJBKjY9dWeWnrpBz6Hgx24UHGGz
- m6Yf1klZNJmcSdXy0tQlg==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:CE02gEmrzPw=;P1hDF+hlgSCPtQGLWF0A7lEYrG8
- FSeoBhJMTES3Yc+jWJ2Kvq2TWby8fC7gL7a+r252q17DrCUaXM0LtwJMyT5+xSPc8rV2xhqxR
- d7a4xkcV1uE1CWIS5LoN9vH+P6GEr0fLxXvAPhQT2lZontmtIbgryKocls9vTnAIGuBWo27jM
- ++Qxwn/GWlVelrLJogMmWrIHnRNUZ+DGBfwKFrCQsM/sTU2pL/zjdTGyvoOuFp3046aYJbxM8
- YTXWIHJWXOXJsq4jLQ1TiKAjsLIkEwnRM+ORwytUU0ci13xk6Bp1skBBzO13PMrmLSlJmfZkS
- CZk53K9S+28dYPoN87oxyWRgyHrISnwPpN3fXjTrpmy5hubDQPEbniq79F2GURG3o7z2mL0hS
- TCdG2zVFtdhSNclCQxEZv9YVtI3qtbQX97zfzyU8TayfeZCvl7BpIgErlwH0v84WGiPXKY+TG
- 0cy9fa3RrhCoi2/qzvmiHObXAy7ufKRmQVcdKDotcO3WoZ6loTshfEJIz6mp06bQZVQ5Tuvel
- BcDuBynzghqW02Tg+CmxWlFs23Gb2gm9/BX1v09kk5enNeMqA/Ml6vkHZTTIBHU4xE0AFqOCI
- qLtJB7ItDF9JVArGx/digvT6mGXeXcJe5YzOZBJ8Iao7ORbjHrMgPSqA//yJpVLAGjo4bl5h5
- bJrAm0MH1ZvI5aKA4n7IcjXg/b0bELt2k4SYIyCIwl3eN3iFDzh6KGH3JwdzM0g1nJTDBRLFM
- AByBwpIr/zUoGTgL8hZKGv5TTc6wsUXd2XpfGxG+Epz/V+up8729nGpyzSy1N3cwd5L0PJUA/
- qm/SOBr2Plf23Xv7yruBzV/gI8VMVLEhRjtv/NO5W6KPGfdfi8vc6Ry9EXIT03K/7g7lVv8lc
- jfOFpLfNW1euj8Xm81hxmwPK4Z5bQqRtP1JKas0dJ+CEgUqgbYA6gT9uDlS4EOokpvzBLznvf
- hADDjeuKx40AOGRSZrjr76tnrhzA97STduwf0aYcJzaKc2PLQuQ/gEzjA9HPaOqJSuCwagPfj
- /2AtFN2TY5q4nlyHTxXQSZQx3kMmiy6SVA29eITt9AeG4oq3S6IxGXv9zkOJDf58YMVs/iE5M
- CBIx2BeZgQLPm3myoiKss1lARZNosfk6ds2qITPd/YfcjdzaWEc9kZ7833RAQbG3amosHt4+5
- XcZ4IZTBhM7dtUL4KdB7x+bRrSFrHNJtPy86bdIHHGqaMnDTfxafKiKccCF0wabhmSk0n3HJa
- DtCxqM5VIeyJ7i5ZZ/8/yAW1UBvjjKv81S2oBQNDuYyQxFzDb8MlnFJ3LTCtxrmJg+of2Z8lB
- 9Ib0PRbdw4rFeXDbdcMXs+EUvJ8EieZ+A1c/jiQtv4jLQI=
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Similar to `access_process_vm` but specific to strings.
-Also chunks reads by page and utilizes `strscpy`
-for handling null termination.
+On Thu,  6 Feb 2025 19:26:27 +0100
+Alexander Lobakin <aleksander.lobakin@intel.com> wrote:
 
-Signed-off-by: Jordan Rome <linux@jordanrome.com>
-=2D--
- include/linux/mm.h |   3 ++
- mm/memory.c        | 119 +++++++++++++++++++++++++++++++++++++++++++++
- mm/nommu.c         |  73 +++++++++++++++++++++++++++
- 3 files changed, 195 insertions(+)
+> i40e, as well as ice, has a custom loop unrolling macro for unrolling
+> Tx descriptors filling on XSk xmit.
+> Replace i40e defs with generic unrolled_count(), which is also more
+> convenient as it allows passing defines as its argument, not hardcoded
+> values, while the loop declaration will still be a usual for-loop.
+..
+>  #define PKTS_PER_BATCH 4
+>  
+> -#ifdef __clang__
+> -#define loop_unrolled_for _Pragma("clang loop unroll_count(4)") for
+> -#elif __GNUC__ >= 8
+> -#define loop_unrolled_for _Pragma("GCC unroll 4") for
+> -#else
+> -#define loop_unrolled_for for
+> -#endif
+...
+> @@ -529,7 +530,8 @@ static void i40e_xmit_pkt_batch(struct i40e_ring *xdp_ring, struct xdp_desc *des
+>  	dma_addr_t dma;
+>  	u32 i;
+>  
+> -	loop_unrolled_for(i = 0; i < PKTS_PER_BATCH; i++) {
+> +	unrolled_count(PKTS_PER_BATCH)
+> +	for (i = 0; i < PKTS_PER_BATCH; i++) {
+>  		u32 cmd = I40E_TX_DESC_CMD_ICRC | xsk_is_eop_desc(&desc[i]);
+>  
+>  		dma = xsk_buff_raw_get_dma(xdp_ring->xsk_pool, desc[i].addr);
 
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index 7b1068ddcbb7..aee23d84ce01 100644
-=2D-- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -2486,6 +2486,9 @@ extern int access_process_vm(struct task_struct *tsk=
-, unsigned long addr,
- extern int access_remote_vm(struct mm_struct *mm, unsigned long addr,
- 		void *buf, int len, unsigned int gup_flags);
+The rest of that code is:
 
-+extern int copy_remote_vm_str(struct task_struct *tsk, unsigned long addr=
-,
-+		void *buf, int len, unsigned int gup_flags);
-+
- long get_user_pages_remote(struct mm_struct *mm,
- 			   unsigned long start, unsigned long nr_pages,
- 			   unsigned int gup_flags, struct page **pages,
-diff --git a/mm/memory.c b/mm/memory.c
-index 539c0f7c6d54..e9d8584a7f56 100644
-=2D-- a/mm/memory.c
-+++ b/mm/memory.c
-@@ -6803,6 +6803,125 @@ int access_process_vm(struct task_struct *tsk, uns=
-igned long addr,
- }
- EXPORT_SYMBOL_GPL(access_process_vm);
 
-+/*
-+ * Copy a string from another process's address space as given in mm.
-+ * If there is any error return -EFAULT.
-+ */
-+static int __copy_remote_vm_str(struct mm_struct *mm, unsigned long addr,
-+			      void *buf, int len, unsigned int gup_flags)
-+{
-+	void *old_buf =3D buf;
-+	int err =3D 0;
-+
-+	*(char *)buf =3D '\0';
-+
-+	if (mmap_read_lock_killable(mm))
-+		return -EFAULT;
-+
-+	/* Untag the address before looking up the VMA */
-+	addr =3D untagged_addr_remote(mm, addr);
-+
-+	/* Avoid triggering the temporary warning in __get_user_pages */
-+	if (!vma_lookup(mm, addr)) {
-+		err =3D -EFAULT;
-+		goto out;
-+	}
-+
-+	while (len) {
-+		int bytes, offset, retval;
-+		void *maddr;
-+		struct page *page;
-+		struct vm_area_struct *vma =3D NULL;
-+
-+		page =3D get_user_page_vma_remote(mm, addr, gup_flags, &vma);
-+
-+		if (IS_ERR(page)) {
-+			/*
-+			 * Treat as a total failure for now until we decide how
-+			 * to handle the CONFIG_HAVE_IOREMAP_PROT case and
-+			 * stack expansion.
-+			 */
-+			*(char *)buf =3D '\0';
-+			err =3D -EFAULT;
-+			goto out;
-+		}
-+
-+		bytes =3D len;
-+		offset =3D addr & (PAGE_SIZE - 1);
-+		if (bytes > PAGE_SIZE - offset)
-+			bytes =3D PAGE_SIZE - offset;
-+
-+		maddr =3D kmap_local_page(page);
-+		retval =3D strscpy(buf, maddr + offset, bytes);
-+
-+		if (retval >=3D 0) {
-+			/* Found the end of the string */
-+			buf +=3D retval;
-+			unmap_and_put_page(page, maddr);
-+			break;
-+		}
-+
-+		buf +=3D bytes - 1;
-+		/*
-+		 * Because strscpy always NUL terminates we need to
-+		 * copy the last byte in the page if we are going to
-+		 * load more pages
-+		 */
-+		if (bytes !=3D len) {
-+			addr +=3D bytes - 1;
-+			copy_from_user_page(vma, page, addr, buf,
-+					maddr + (PAGE_SIZE - 1), 1);
-+
-+			buf +=3D 1;
-+			addr +=3D 1;
-+		}
-+		len -=3D bytes;
-+
-+		unmap_and_put_page(page, maddr);
-+	}
-+
-+out:
-+	mmap_read_unlock(mm);
-+	if (err)
-+		return err;
-+
-+	return buf - old_buf;
-+}
-+
-+/**
-+ * copy_remote_vm_str - copy a string from another process's address spac=
-e.
-+ * @tsk:	the task of the target address space
-+ * @addr:	start address to read from
-+ * @buf:	destination buffer
-+ * @len:	number of bytes to copy
-+ * @gup_flags:	flags modifying lookup behaviour
-+ *
-+ * The caller must hold a reference on @mm.
-+ *
-+ * Return: number of bytes copied from @addr (source) to @buf (destinatio=
-n);
-+ * not including the trailing NUL. Always guaranteed to leave NUL-termina=
-ted
-+ * buffer. On any error, return -EFAULT.
-+ */
-+int copy_remote_vm_str(struct task_struct *tsk, unsigned long addr,
-+		void *buf, int len, unsigned int gup_flags)
-+{
-+	struct mm_struct *mm;
-+	int ret;
-+
-+	mm =3D get_task_mm(tsk);
-+	if (!mm) {
-+		*(char *)buf =3D '\0';
-+		return -EFAULT;
-+	}
-+
-+	ret =3D __copy_remote_vm_str(mm, addr, buf, len, gup_flags);
-+
-+	mmput(mm);
-+
-+	return ret;
-+}
-+EXPORT_SYMBOL_GPL(copy_remote_vm_str);
-+
- /*
-  * Print the name of a VMA.
-  */
-diff --git a/mm/nommu.c b/mm/nommu.c
-index baa79abdaf03..ec3bfcb35215 100644
-=2D-- a/mm/nommu.c
-+++ b/mm/nommu.c
-@@ -1708,6 +1708,79 @@ int access_process_vm(struct task_struct *tsk, unsi=
-gned long addr, void *buf, in
- }
- EXPORT_SYMBOL_GPL(access_process_vm);
+		tx_desc = I40E_TX_DESC(xdp_ring, ntu++);
+		tx_desc->buffer_addr = cpu_to_le64(dma);
+		tx_desc->cmd_type_offset_bsz = build_ctob(cmd, 0, desc[i].len, 0);
 
-+/*
-+ * Copy a string from another process's address space as given in mm.
-+ * If there is any error return -EFAULT.
-+ */
-+static int __copy_remote_vm_str(struct mm_struct *mm, unsigned long addr,
-+			      void *buf, int len)
-+{
-+	unsigned long addr_end;
-+	struct vm_area_struct *vma;
-+	int ret =3D -EFAULT;
-+
-+	*(char *)buf =3D '\0';
-+
-+	if (mmap_read_lock_killable(mm))
-+		return ret;
-+
-+	/* the access must start within one of the target process's mappings */
-+	vma =3D find_vma(mm, addr);
-+	if (!vma)
-+		goto out;
-+
-+	if (check_add_overflow(addr, len, &addr_end))
-+		goto out;
-+	/* don't overrun this mapping */
-+	if (addr_end > vma->vm_end)
-+		len =3D vma->vm_end - addr;
-+
-+	/* only read mappings where it is permitted */
-+	if (vma->vm_flags & VM_MAYREAD) {
-+		ret =3D strscpy(buf, (char *)addr, len);
-+		if (ret < 0)
-+			ret =3D len - 1;
-+	}
-+
-+out:
-+	mmap_read_unlock(mm);
-+	return ret;
-+}
-+
-+/**
-+ * copy_remote_vm_str - copy a string from another process's address spac=
-e.
-+ * @tsk:	the task of the target address space
-+ * @addr:	start address to read from
-+ * @buf:	destination buffer
-+ * @len:	number of bytes to copy
-+ * @gup_flags:	flags modifying lookup behaviour (unused)
-+ *
-+ * The caller must hold a reference on @mm.
-+ *
-+ * Return: number of bytes copied from @addr (source) to @buf (destinatio=
-n);
-+ * not including the trailing NUL. Always guaranteed to leave NUL-termina=
-ted
-+ * buffer. On any error, return -EFAULT.
-+ */
-+int copy_remote_vm_str(struct task_struct *tsk, unsigned long addr,
-+		void *buf, int len, unsigned int gup_flags)
-+{
-+	struct mm_struct *mm;
-+	int ret;
-+
-+	mm =3D get_task_mm(tsk);
-+	if (!mm) {
-+		*(char *)buf =3D '\0';
-+		return -EFAULT;
-+	}
-+
-+	ret =3D __copy_remote_vm_str(mm, addr, buf, len);
-+
-+	mmput(mm);
-+
-+	return ret;
-+}
-+EXPORT_SYMBOL_GPL(copy_remote_vm_str);
-+
- /**
-  * nommu_shrink_inode_mappings - Shrink the shared mappings on an inode
-  * @inode: The inode to check
-=2D-
-2.43.5
+		*total_bytes += desc[i].len;
+	}
+
+	xdp_ring->next_to_use = ntu;
+}
+
+static void i40e_fill_tx_hw_ring(struct i40e_ring *xdp_ring, struct xdp_desc *descs, u32 nb_pkts,
+				 unsigned int *total_bytes)
+{
+	u32 batched, leftover, i;
+
+	batched = nb_pkts & ~(PKTS_PER_BATCH - 1);
+	leftover = nb_pkts & (PKTS_PER_BATCH - 1);
+	for (i = 0; i < batched; i += PKTS_PER_BATCH)
+		i40e_xmit_pkt_batch(xdp_ring, &descs[i], total_bytes);
+	for (i = batched; i < batched + leftover; i++)
+		i40e_xmit_pkt(xdp_ring, &descs[i], total_bytes);
+}
+
+If it isn't a silly question why all the faffing with unrolling?
+It isn't as though the loop body is trivial - it contains real function calls.
+Unrolling loops is so 1980s - unless you are trying to get the absolute
+max performance from a very short loop and need to unroll once (maybe twice)
+to get enough spare instruction execution slots to run the loop control
+code in parallel with the body.
+
+In this case it looks like the 'batched' loop contains an inlined copy of
+the function called for the remainder.
+I can't see anything else.
+You'd probably gain more by getting rid of the 'int *total bytes' and using
+the function return value - that is what it is fot.
+
+	David
 
