@@ -1,26 +1,27 @@
-Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.3])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 648F613AA53
-	for <bpf@vger.kernel.org>; Mon, 10 Feb 2025 07:36:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.3
+Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.5])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F0EF1A3159
+	for <bpf@vger.kernel.org>; Mon, 10 Feb 2025 07:36:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739172965; cv=none; b=Pj+CbzMtEb0YNERtuCK7XSqwdCdLwH8eTWFFutNr7tsbdNoFHbHOR91HHSxIgIh0kcdwohhCtw6qnc87bkNSLd4IiobSU//DX3Hux0Fo2lUhvzBunE6Buj74YubWDXYps1fszHalvWquNpe1GdwNYozAHP1MPst/D/HCNWG2hYI=
+	t=1739172966; cv=none; b=g8muTeDD9IfQ5sBa5IAsOBXhEgCq/EfGHPn22f/XHIHvK1VQrGGSIehcIQG1lDjKIV5i3WcigrGJ8Lserf51nYiegfPb4yVktAZPyQqzLBDj+0SUA2r0sqfqXDEBG01QXEzhboJlDAwrJfIKj7vmUbB4b0ExIfiUdKIGEPPiDdw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739172965; c=relaxed/simple;
-	bh=CjdRfzNR9OSPBWlghAaxoBRFRRDdiNm+u7mKY6c4/O0=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=N+alC2g7T9l0QJ1RNAqP3jEPNpM1X/7gBYHFpEyBO1gjUeZCx8L0bQDK3XN8pxOfN+kXR44Idl865paWRGkZQVo4zFrkcLfFNkVBaFqW6FAS5R68Lilp29mUryBzWpMZZ6SVpFoCpXQcoO+NHYEdujGK0vNDzzvx4fI1yKKn5nM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=IcVOWgm5; arc=none smtp.client-ip=117.135.210.3
+	s=arc-20240116; t=1739172966; c=relaxed/simple;
+	bh=X0NDo99JUIhQgCkXEGpBHD1c4bE5QBncu5qCdxZUJq0=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=EFFXkF8MYXzK3xc/k6nRCSEMeiRFY0RlrXLtXICP/4Vpc+N8/MnuEYsK3yoteqoEdCwiwZekceOl1D7MgBZGhXh4fRwBz9cvxvkNjDbf6+6N0z2d1xLeoH+Ph4h6DHLUaEVD4lEc1MygUQCrudmxa0xlCYKavOtqW9AMXUA62+4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=cKiyXK/U; arc=none smtp.client-ip=220.197.31.5
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="IcVOWgm5"
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="cKiyXK/U"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=o8McU
-	quDMMRW3+IRH3a3lXESxJ1rYxSK0uZzGxD6vyU=; b=IcVOWgm59tQc9Ie7DkYKa
-	X4gVBqVIrn4CYqC6kUwGFoyoGZX+QBAsiFR8g4fPjigFoR6l30T2mC5THSd3K17g
-	P4sRMOfIP2Bzoe2Dr/Vgz4joiiSwK83YNRxZk463b25ycnSusGXn9umsukYoDZ6z
-	pRCzuNvNJRXbcqIgCzFgeo=
+	s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=hjvZs
+	QtBjoXdIYM1DEU6F0kCZ75RAR5nAAaL09pCXmg=; b=cKiyXK/UyHTXuZ82fgys5
+	/UaExHwrAcAf+C/1Au1u2udRtfNuSQvyH9+T7WFbza2hbS8RtPN6BNFPZMZbNw+Y
+	0HLisuOeu2Xr5rcIjRioIp76ey6FXVphUo3EStUhpP/kiIKe6ydM+Azu9YjYQedM
+	hM2Sxo5Ap0DC3Bf5vu7+qE=
 Received: from localhost.localdomain (unknown [])
-	by gzga-smtp-mtada-g0-4 (Coremail) with SMTP id _____wCHQY03rKlnG_C_LA--.33048S2;
+	by gzga-smtp-mtada-g0-4 (Coremail) with SMTP id _____wCHQY03rKlnG_C_LA--.33048S4;
 	Mon, 10 Feb 2025 15:35:20 +0800 (CST)
 From: Feng Yang <yangfeng59949@163.com>
 To: bpf@vger.kernel.org
@@ -35,10 +36,12 @@ Cc: martin.lau@linux.dev,
 	sdf@fomichev.me,
 	haoluo@google.com,
 	jolsa@kernel.org
-Subject: [PATCH 1/3] Revert "tcp: Use skb__nullable in trace_tcp_send_reset"
-Date: Mon, 10 Feb 2025 15:35:07 +0800
-Message-Id: <20250210073509.232007-1-yangfeng59949@163.com>
+Subject: [PATCH 3/3] Revert "bpf: Support __nullable argument suffix for tp_btf"
+Date: Mon, 10 Feb 2025 15:35:09 +0800
+Message-Id: <20250210073509.232007-3-yangfeng59949@163.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20250210073509.232007-1-yangfeng59949@163.com>
+References: <20250210073509.232007-1-yangfeng59949@163.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -46,68 +49,106 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wCHQY03rKlnG_C_LA--.33048S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW7Zr47ZFWkZFyUXFW5Gr4fuFg_yoW8Cr18pa
-	1DC3s29r4kKrWY9w1fZr4DZr13Z3s3uryYkFWUWw4ayw1rtryrJF4Utr42yr95A3y2krZF
-	qwnF9ry8C3WUZFUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07UD-BiUUUUU=
-X-CM-SenderInfo: p1dqww5hqjkmqzuzqiywtou0bp/1tbiwhPveGeppbhVdAABs1
+X-CM-TRANSID:_____wCHQY03rKlnG_C_LA--.33048S4
+X-Coremail-Antispam: 1Uf129KBjvJXoWxXr48Ww15AFy7CF4fZw4DCFg_yoW5Cw1xpF
+	13JF9rAr4IqFW7uF18AFs5ury5Jws5W3y7KrWkJw1Fyr17ZrnYqa13Kr1xZ34ayFWUG340
+	vF13urW0qw47ZFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07j7sqJUUUUU=
+X-CM-SenderInfo: p1dqww5hqjkmqzuzqiywtou0bp/1tbiGB7veGepq0oTmwAAs2
 
 From: Feng Yang <yangfeng@kylinos.cn>
 
 This commit 838a10bd2ebf 
 ("bpf: Augment raw_tp arguments with PTR_MAYBE_NULL") 
 has already resolved the issue, so we can roll back these patches.
-This reverts commit edd3f6f7588c713477e1299c38c84dcd91a7f148.
+This reverts commit 8aeaed21befc90f27f4fca6dd190850d97d2e9e3.
 
 Signed-off-by: Feng Yang <yangfeng@kylinos.cn>
 ---
- include/trace/events/tcp.h | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ kernel/bpf/btf.c      |  3 ---
+ kernel/bpf/verifier.c | 36 ++++--------------------------------
+ 2 files changed, 4 insertions(+), 35 deletions(-)
 
-diff --git a/include/trace/events/tcp.h b/include/trace/events/tcp.h
-index a27c4b619dff..1c8bd8e186b8 100644
---- a/include/trace/events/tcp.h
-+++ b/include/trace/events/tcp.h
-@@ -91,10 +91,10 @@ DEFINE_RST_REASON(FN, FN)
- TRACE_EVENT(tcp_send_reset,
+diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+index 9433b6467bbe..e66f98b493d0 100644
+--- a/kernel/bpf/btf.c
++++ b/kernel/bpf/btf.c
+@@ -6683,9 +6683,6 @@ bool btf_ctx_access(int off, int size, enum bpf_access_type type,
+ 	if (prog_args_trusted(prog))
+ 		info->reg_type |= PTR_TRUSTED;
  
- 	TP_PROTO(const struct sock *sk,
--		 const struct sk_buff *skb__nullable,
-+		 const struct sk_buff *skb,
- 		 const enum sk_rst_reason reason),
+-	if (btf_param_match_suffix(btf, &args[arg], "__nullable"))
+-		info->reg_type |= PTR_MAYBE_NULL;
+-
+ 	if (prog->expected_attach_type == BPF_TRACE_RAW_TP) {
+ 		struct btf *btf = prog->aux->attach_btf;
+ 		const struct btf_type *t;
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 9971c03adfd5..3c40b5b18f46 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -28,8 +28,6 @@
+ #include <linux/cpumask.h>
+ #include <linux/bpf_mem_alloc.h>
+ #include <net/xdp.h>
+-#include <linux/trace_events.h>
+-#include <linux/kallsyms.h>
  
--	TP_ARGS(sk, skb__nullable, reason),
-+	TP_ARGS(sk, skb, reason),
+ #include "disasm.h"
  
- 	TP_STRUCT__entry(
- 		__field(const void *, skbaddr)
-@@ -106,7 +106,7 @@ TRACE_EVENT(tcp_send_reset,
- 	),
- 
- 	TP_fast_assign(
--		__entry->skbaddr = skb__nullable;
-+		__entry->skbaddr = skb;
- 		__entry->skaddr = sk;
- 		/* Zero means unknown state. */
- 		__entry->state = sk ? sk->sk_state : 0;
-@@ -118,13 +118,13 @@ TRACE_EVENT(tcp_send_reset,
- 			const struct inet_sock *inet = inet_sk(sk);
- 
- 			TP_STORE_ADDR_PORTS(__entry, inet, sk);
--		} else if (skb__nullable) {
--			const struct tcphdr *th = (const struct tcphdr *)skb__nullable->data;
-+		} else if (skb) {
-+			const struct tcphdr *th = (const struct tcphdr *)skb->data;
- 			/*
- 			 * We should reverse the 4-tuple of skb, so later
- 			 * it can print the right flow direction of rst.
- 			 */
--			TP_STORE_ADDR_PORTS_SKB(skb__nullable, th, entry->daddr, entry->saddr);
-+			TP_STORE_ADDR_PORTS_SKB(skb, th, entry->daddr, entry->saddr);
+@@ -22509,13 +22507,11 @@ int bpf_check_attach_target(struct bpf_verifier_log *log,
+ {
+ 	bool prog_extension = prog->type == BPF_PROG_TYPE_EXT;
+ 	bool prog_tracing = prog->type == BPF_PROG_TYPE_TRACING;
+-	char trace_symbol[KSYM_SYMBOL_LEN];
+ 	const char prefix[] = "btf_trace_";
+-	struct bpf_raw_event_map *btp;
+ 	int ret = 0, subprog = -1, i;
+ 	const struct btf_type *t;
+ 	bool conservative = true;
+-	const char *tname, *fname;
++	const char *tname;
+ 	struct btf *btf;
+ 	long addr = 0;
+ 	struct module *mod = NULL;
+@@ -22655,34 +22651,10 @@ int bpf_check_attach_target(struct bpf_verifier_log *log,
+ 			return -EINVAL;
  		}
- 		__entry->reason = reason;
- 	),
+ 		tname += sizeof(prefix) - 1;
+-
+-		/* The func_proto of "btf_trace_##tname" is generated from typedef without argument
+-		 * names. Thus using bpf_raw_event_map to get argument names.
+-		 */
+-		btp = bpf_get_raw_tracepoint(tname);
+-		if (!btp)
++		t = btf_type_by_id(btf, t->type);
++		if (!btf_type_is_ptr(t))
++			/* should never happen in valid vmlinux build */
+ 			return -EINVAL;
+-		fname = kallsyms_lookup((unsigned long)btp->bpf_func, NULL, NULL, NULL,
+-					trace_symbol);
+-		bpf_put_raw_tracepoint(btp);
+-
+-		if (fname)
+-			ret = btf_find_by_name_kind(btf, fname, BTF_KIND_FUNC);
+-
+-		if (!fname || ret < 0) {
+-			bpf_log(log, "Cannot find btf of tracepoint template, fall back to %s%s.\n",
+-				prefix, tname);
+-			t = btf_type_by_id(btf, t->type);
+-			if (!btf_type_is_ptr(t))
+-				/* should never happen in valid vmlinux build */
+-				return -EINVAL;
+-		} else {
+-			t = btf_type_by_id(btf, ret);
+-			if (!btf_type_is_func(t))
+-				/* should never happen in valid vmlinux build */
+-				return -EINVAL;
+-		}
+-
+ 		t = btf_type_by_id(btf, t->type);
+ 		if (!btf_type_is_func_proto(t))
+ 			/* should never happen in valid vmlinux build */
 -- 
 2.43.0
 
