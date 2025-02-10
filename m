@@ -1,369 +1,399 @@
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+Received: from mout.perfora.net (mout.perfora.net [74.208.4.197])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBBF41C5D6A;
-	Mon, 10 Feb 2025 22:15:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.177.32
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739225722; cv=fail; b=r1Dx5gn17V+4SL5U970s7Xozfzx+EutecXqz/NSsIgx5HHrWQp4lKYoN6QnAhBAq/PnJEq6Mb/eu70KgdTMLfX3k3zeYnyDintWX4KRE9QRLzhmEISMjotlyvgA4S8w1Giip0xlXgwrrmvup5igmG48N4eo81sjbvwvCqJn8jkk=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739225722; c=relaxed/simple;
-	bh=30KO+B0bzB7cdFWa28+lGok80W4QGfhzsJKsWdO7xKE=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=Q7Z624pqT2mc7AYN7SBBWtdr9FTf8DlSRlekBnMC+QB5QY0ET4GcEjoTnHjr48HlrBegDB30rGXg+5sjWug2W/SMV5ROTJbv6rHnoKatqKAPqmc8MeLBf95Ei2AJraMigb0O2iVcgBHmnw0JX2dWjkTl1iM2Y8ewBx3GVeBSQNM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=By1jdniy; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=j+SydXpX; arc=fail smtp.client-ip=205.220.177.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DEC8264609
+	for <bpf@vger.kernel.org>; Mon, 10 Feb 2025 22:22:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.208.4.197
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1739226174; cv=none; b=mmMMl6XQNRFE/Iv2bzg9E3g/A2r2+JQ+7VZtEeYmOXnAIbVxJDnXaNfHmk87bp1eax8eLf6lBHI2tK56Ra34ny9oj0YF8HmYB5YckZ3k9t2+ymd2eiUaRfkkLeV5BhAdpo3RcF4wU5wrAIqr8FFEfJr17ssdNl5zOK+6PoPWQ2U=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1739226174; c=relaxed/simple;
+	bh=sC2j8xRGHe7nr+QNZ5ZANfcvHGfTRLLs3oKofC73OZw=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=m8knAp5nkCKC029ltXuLDb3Uj9M1327KeQ3WkV7GQbYe9iFScaGK9Ve5Kd/iW+fRMu1jIybbvsuJ7Wv9Abxa1EFGDfhcpb8vUu6BaEAd6ZMC8USXpZ7la+fH7vyXCJjRek9daU2dHdaXnY2I3RUfD05PaI7TejWG0VKM1vs6hsM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=jordanrome.com; spf=pass smtp.mailfrom=jordanrome.com; dkim=pass (2048-bit key) header.d=jordanrome.com header.i=linux@jordanrome.com header.b=tf4ri1w2; arc=none smtp.client-ip=74.208.4.197
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=jordanrome.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=jordanrome.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="By1jdniy";
-	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="j+SydXpX"
-Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 51AKMiUs024192;
-	Mon, 10 Feb 2025 22:15:10 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=
-	corp-2023-11-20; bh=dwz+UQrCVEMoiNY0DdFfdA7nytF0USkUF73ULF8CaMw=; b=
-	By1jdniykxXiQAb377aE9z5FPTmb9KH4/fahgn3PYYXE2nHNkSsDoaQ2Xyxa8ahN
-	TqWGl8Bf5duvHeChgIk5Vlm9ot7/IT9m4OWpyspdKDSsPmTPQ63x7OyusO3fo3aq
-	8F7ZZfKDRuZtaOEfu2grCwcluwpLFMgdui6CJeO0b4PeqUtT2u1SxazZvmo8QJ/q
-	QBB4oyFmSUsUHRTwqND0MeWNYbqngUv9gl8i0Ab70eseza1xmlWasUKfCfY8BeR1
-	imuQPy0tPICdNYg6c3SJ4P3U33jCNPQUsf9G26znC10cP7MIHtl/yuW5nITUCPz5
-	I0g0Zmi6+hu3hakY1EK0Mw==
-Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 44p0qym3s8-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 10 Feb 2025 22:15:09 +0000 (GMT)
-Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 51ALPJFv002665;
-	Mon, 10 Feb 2025 22:15:09 GMT
-Received: from nam04-dm6-obe.outbound.protection.outlook.com (mail-dm6nam04lp2042.outbound.protection.outlook.com [104.47.73.42])
-	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 44nwq81a83-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 10 Feb 2025 22:15:09 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=RQEe4rBFLMHhRMmPFjO1BIckPQwWkGdRMlkcxOTn/y33aiOlSvdPYYz84HklnckpbabwnZjCqsrDzQprqCY6ikXdQwb9gJpwTc0mmm6q4PjpR5XW2InMBLzpJOreumY1c2ckbD6IR79ynPw5ljpfYsm2N51CW1zCmUuuhXjHLbjS8KMzHvUosnNahIa/UhNNbmgsH4s6Ol1bxnSkU0cdNYhi/jZwBg8BnY8Nb2ESaAnj7w/W4dbhP1WtjKvnfgnG2dodCcNCmIauLwX8/N2waeRYM8HNuxYQuM7D4xvi63SDdlFAORZwZsMSZ+oAjFmRWnyCUWa3EI1/79HyyG4Ldg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=dwz+UQrCVEMoiNY0DdFfdA7nytF0USkUF73ULF8CaMw=;
- b=jXmmFPYCEPuTqQZMntI7veyI9EBUV03xu9EzlbLL+U4LctJ8NJKZmxRZANWz+LM3vxnoxCN9PrC0LPF+keu5MPuu906CD035Mp2xnrln9UxpT4xfgYIkYekLXaV7B59ZJ8bS519WSguqhoaMsU4jbiPi5Mcv/4CUSo1MyFZVBwt0QMUOmocpcmBC1oPbH/VDjbuAnm9hxBkjMKdkk7LQVh+rnqB+1qqXP+gkqXU6xTs5Ff7eMP3zbgxApyh82MOhT5EcravsfGWSxthMHaeSrrB4fQuHcBsPxc/4YC6tG4+robb4Lwt2o3pW1B3i9XCN/wheOK/NkjGtT7wurN+8kw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=dwz+UQrCVEMoiNY0DdFfdA7nytF0USkUF73ULF8CaMw=;
- b=j+SydXpXQXYDkyoblqNS802fG8kGV5XWaip6SayYmnYsWS6ewjHGY4y3K20lrTlT3kjSjCMQ1sGp1xKQwT8KmrsuqvhsGGeXwgeNfxhtr70OEhsuvIyt9lT4ENFWnibnCUY4Hv7FcLgNnjTrBQrMlCVhMX0ZDwogfVbrZeStKB4=
-Received: from BLAPR10MB5267.namprd10.prod.outlook.com (2603:10b6:208:30e::22)
- by PH0PR10MB4616.namprd10.prod.outlook.com (2603:10b6:510:34::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8422.18; Mon, 10 Feb
- 2025 22:15:06 +0000
-Received: from BLAPR10MB5267.namprd10.prod.outlook.com
- ([fe80::682b:c879:9f97:a34f]) by BLAPR10MB5267.namprd10.prod.outlook.com
- ([fe80::682b:c879:9f97:a34f%4]) with mapi id 15.20.8422.015; Mon, 10 Feb 2025
- 22:15:06 +0000
-Message-ID: <f2b54a36-cea3-4729-bc5b-8524a5be50fa@oracle.com>
-Date: Mon, 10 Feb 2025 22:11:35 +0000
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH dwarves 2/3] btf_encoder: emit type tags for bpf_arena
- pointers
-To: Ihor Solodrai <ihor.solodrai@linux.dev>, dwarves@vger.kernel.org,
-        bpf@vger.kernel.org
-Cc: acme@kernel.org, ast@kernel.org, andrii@kernel.org, eddyz87@gmail.com,
-        mykolal@fb.com, kernel-team@meta.com
-References: <20250207021442.155703-1-ihor.solodrai@linux.dev>
- <20250207021442.155703-3-ihor.solodrai@linux.dev>
-Content-Language: en-GB
-From: Alan Maguire <alan.maguire@oracle.com>
-In-Reply-To: <20250207021442.155703-3-ihor.solodrai@linux.dev>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: LO2P265CA0250.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:8a::22) To BLAPR10MB5267.namprd10.prod.outlook.com
- (2603:10b6:208:30e::22)
+	dkim=pass (2048-bit key) header.d=jordanrome.com header.i=linux@jordanrome.com header.b="tf4ri1w2"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=jordanrome.com;
+	s=s1-ionos; t=1739226168; x=1739830968; i=linux@jordanrome.com;
+	bh=LhJJH5WuMX5aq6LX3M5eXAA/nYkW+PydFm8hbRxet3Y=;
+	h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:In-Reply-To:
+	 References:MIME-Version:Content-Transfer-Encoding:cc:
+	 content-transfer-encoding:content-type:date:from:message-id:
+	 mime-version:reply-to:subject:to;
+	b=tf4ri1w2C/qJmnvGD1iSsNWkNnlIa+yLWezihtXNGXR06x5Tn1Dkap1yUqo91LOM
+	 Y7SZ0lLbvK9Izi6fUNOU8eXEfctnrcrShtX6P0fyn1tBi4XRru9TxBsD7P710u/PF
+	 iuFEh2+j7dDjpwJ6oKL26tnIMCQ23M1SyVlqfdoPww3eec4Hj/5eK5H/IxTZAENUi
+	 cg0QMgC34ClUUGEuBGFJzfwEjqupcEzN3i4mKqXHxVDf3mbmWmuJFLRPQLAlmvqh1
+	 u0oxBVsIj0o43+Q9eNLXdIZUg0PjPuFfY3KWR9S0Z84BvJFJ0J4tKGVGCiAd3p590
+	 OW6+iQx809EMTlzjgw==
+X-UI-Sender-Class: 55c96926-9e95-11ee-ae09-1f7a4046a0f6
+Received: from localhost ([69.171.251.8]) by mrelay.perfora.net (mreueus003
+ [74.208.5.2]) with ESMTPSA (Nemesis) id 0MXJY3-1tw4Xl2evN-00WYTR; Mon, 10 Feb
+ 2025 23:16:40 +0100
+From: Jordan Rome <linux@jordanrome.com>
+To: bpf@vger.kernel.org
+Cc: linux-mm@kvack.org,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Kernel Team <kernel-team@fb.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Shakeel Butt <shakeel.butt@linux.dev>,
+	Alexander Potapenko <glider@google.com>
+Subject: [bpf-next v7 3/3] selftests/bpf: Add tests for bpf_copy_from_user_task_str
+Date: Mon, 10 Feb 2025 14:16:26 -0800
+Message-ID: <20250210221626.2098522-3-linux@jordanrome.com>
+X-Mailer: git-send-email 2.43.5
+In-Reply-To: <20250210221626.2098522-1-linux@jordanrome.com>
+References: <20250210221626.2098522-1-linux@jordanrome.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BLAPR10MB5267:EE_|PH0PR10MB4616:EE_
-X-MS-Office365-Filtering-Correlation-Id: 93fe5f67-342d-47e3-4772-08dd4a205fee
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|366016|10070799003|1800799024|7053199007;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?YUJwcVppOGRtei9kNG9qVkk1VkhQZmtnczh0Y3VQUzBmTGluNENUcjB1dXFv?=
- =?utf-8?B?UkI1RkVRbElLekZ6QThZYlZQdThZMTBZVS83b1ZDb2J2Zi9Wa0lnSnN2SjFV?=
- =?utf-8?B?dENxUWoyL1ZVMFp4OXUrRzNxWnEwcktCSk9KbktyN3lEeWpGWlM1cUZ0Y3hw?=
- =?utf-8?B?bFJkek9ySTEyS001R1hKeGhnKzZ0aGYxa2ZvbnBBN3ZrQnNiQ0dzck5UOGNk?=
- =?utf-8?B?M0RWc3Frc1R3VWN4bEZJVzA4OUNlS0ZYL0VRcWlyZ1JkMFJCcVZ2VjM5QWdO?=
- =?utf-8?B?VHNuRlpJUWsrVWduZEtDdFJiYnl3aDIxZitWelZGQXg0SG5ZWStCVWRDY0hB?=
- =?utf-8?B?T20wQXd6K2pWbjJFSmkvUlB1eEQySVlnVjBQV2psbE1FaVVkaDRxSU1lZnBz?=
- =?utf-8?B?QlBrdGYvSVBMaWNmcmVxdjFiRUltdHFwSTVWTDdadWNKNW9xaFloVlNPV1Vu?=
- =?utf-8?B?bU9jT0JpOFdqWW1rMkhNZTlOQWQ1K3BoaDdOaENGclZKT0Q1VUxGZGVyeElT?=
- =?utf-8?B?ZTc5ZENzeU9PWk53TGdoR0FiQnVQeHlMRXBVNExSMEhKMUc3aStwMmpGSWhB?=
- =?utf-8?B?QTM3ekszSXJFOWtTa1RybjlVN2lBR3k0aVV1dkJtTGN4RVhreDAxakFqTmVa?=
- =?utf-8?B?MThHV2orb3NDaVRGbThqbzlTL1BGTnJEZ1VDdURFb0JKQzN6YlNxV1JEaDBx?=
- =?utf-8?B?UEt1SUhKbk9YMWJBckVSSDRCWHNyUTNzSlkrb1p2d3JGRGJ6c080Y3h0L3RH?=
- =?utf-8?B?dXJUSzNyUnYyaXNyM3pZWnRrd3kzb0RweEVjSkpQbUQvNHZKWElId05Ca0Q3?=
- =?utf-8?B?N0xPazN1dzJxZHUydnYrcE1PaW5LbTM4QnhkVHZjYnV6b2l1REsyOVJMSVRD?=
- =?utf-8?B?SEpXUGNCN2ozeTNwRzZKZTRpN250QlBjV05ualJYcnFLL2VPaWFua0pJTUdU?=
- =?utf-8?B?QUVGcDBsMlVpRGxBTHpBbkVSUVJ2allIKzVob2pIeWhub1hlQW1DZFh1ZUp2?=
- =?utf-8?B?R1lWNVdjeGFOZTRZNnNHWUtudGt4cWtYZk0vY29IeXBaRGVzRENOVS9XV0Ex?=
- =?utf-8?B?b0VEbTdPeU1tTURNditEUkEvZzVqMVlhcUNPeDJ5aUcyM0FCQ0RLUml2ZjVz?=
- =?utf-8?B?ZmtmRk9aRHpTL1VOcG1lOVZxZHc4c0tGT08rZkhKWUNrbGFPVmt5cCs1SkRT?=
- =?utf-8?B?ZlVpZHBXVUpIQmlzWWJSVkphVWxhZFBFTHdEZGYyTUxvM1NlbGpOSE13Y3py?=
- =?utf-8?B?QlRkUzU4ZDlrNWliUm9YWnNQWUVCcjg0c1hBNnV3eFdyalNBVlBlaXJUeWdS?=
- =?utf-8?B?a2krQ0MxY0s4QjJMdGk0WThyTXlmTWdxKzhkTjJlZHdteHpzNWRxdkhVVUIr?=
- =?utf-8?B?azI2eGkxWjYvd21vclRLblIxOFEwZFhNZGlnakVZcGowaVFaOTFDd3RCdnBY?=
- =?utf-8?B?bWM2MFNoY2M3R09iRDdOakk0Zk5nRE5oVmVVN1VXakh0OENiWXlERUViQlN6?=
- =?utf-8?B?YTNlMStHMmFicEZ1M05NTW1aUkxqVis1UWhIeDdoT2pwUGdybWlSaTdsNjN2?=
- =?utf-8?B?NThtRU85NkUvaThleEprdXFtSHc4UHczTTJRSVVtekhKdEcybkZhMGhhWGdD?=
- =?utf-8?B?alRkeUpsREhxZ3hvV1RmM3YyMCszOEVKUWtESFRwdWRkQkJxbUE5blRNU0xK?=
- =?utf-8?B?bmNpVlJya0huS3hRT0ZSUGZnSHAzQzBDZjlXQkk3Mi9VVkpxZkc5ZEtUZEtW?=
- =?utf-8?B?ZFZUelhhdjlpSjVOY2krTE1vUDhhSXR2N2hZUTJWUXFMSGR1RnR1SmhENjJ0?=
- =?utf-8?B?OG1PVXJQM3RYVm9UTFVJMHdXT0VUdGg4RkJ5ZHFUYXNDbFg2TWZJQVhKcjc2?=
- =?utf-8?Q?RbMDnP66O0H4X?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BLAPR10MB5267.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(366016)(10070799003)(1800799024)(7053199007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?WmNIZjVFa0FGN1pJMEFqNU9vV1k1clVraGxzS0JZbTJzWjE3N2ZIQ2o4OU1I?=
- =?utf-8?B?dlBObnpIcTdBd0J5eTE4SlFnMlEybHJVVEJmMFpGNERsdml3bmdsdVFCNHkw?=
- =?utf-8?B?OHZDa2UrdVp3eENZa0R6Zks5czl0NlJ3TjNLd0NtaGFtazRuZ1hUTVBGNTZR?=
- =?utf-8?B?bzFiS2s2akZQblhybDUwWWQ3U1ZQSWNkSW1YVkMxWGxzbFNZZUxBdlV1bC9O?=
- =?utf-8?B?NnZ6dGlJOG9RbStGaXZ0aGVPKzFWWGNITDFBNDQxVXlJMnVZZ00ybUNHM1ha?=
- =?utf-8?B?OGZJWjRwT1M0TnlRbXpVTmVtMHBxTGUrdUp1aHkwcGduVFBFS0FkUEE2S2lF?=
- =?utf-8?B?dzk0aGRFV3MrWENXQkp2QU9QTHpGbUhXZ2t2TWEzMFMxSEpNd0w3aXl0d1dp?=
- =?utf-8?B?aFNFQ0pwUzRYZEI1RWRrUlF0cVY1WTNaUTRvdE9uZE9hVXFZRkZ0aTFZYWRl?=
- =?utf-8?B?NHRTczBBWWRJQzNkSGRoOXBrcGVYSk9CWk40QXZKVjZlaW1ScjNCNUhub25E?=
- =?utf-8?B?OWczVTZydFdianRKWVNwVGlNYVJ1Q1ZxbUtRYnR0VEp3RUpCbHZLVTZTeTk1?=
- =?utf-8?B?L0doamlNZElXQnFTT2JyaEQ1SjBnaXBrY3dOZ3pCRmZVZ1JFUUk1cmMzeDY2?=
- =?utf-8?B?eHhFa2hKK3gxNmZBYXBtWXg3YlBCdFEzSEk4Y2ZlR0RTVnNRM3lFY2p3eGoz?=
- =?utf-8?B?L2hLUXdJUUFtVDR1czhpK2x3cjhvYUFrUFUyYk9aNms2aGpwbmVhYkh6dW1K?=
- =?utf-8?B?cmJJdDZtWHVmcFc0VWM0YjJ5dzRxeStoVVZFY1ZzZ1ZrTllFWXB1QWpCK2dm?=
- =?utf-8?B?bXJzL3o5ZG5jZjcwU1lKRHlaRXlYUDBFTkcxRTh5VnBYakx2QmhNNWR0TjNx?=
- =?utf-8?B?R2ZiSTlvc0R4OHhoZGRyRWFEblV5bU4xaTNSbnVwcWpFQ1JsckR0ZXErbkky?=
- =?utf-8?B?Z3puU2hVWVprL1BiUFZRT1A2d1JTSTRiS2pmYVdoVGVISUhJbmlwRk81SVMv?=
- =?utf-8?B?c1lOKzg2bytrTGk1d2xWMVhGZ3c4TmFBMnVNekw3cEhaTUlibnd5SkVERnF0?=
- =?utf-8?B?SmRYcHNYdTh6Z1c0cXVjeUdZNExkVW4wK3JzanBQQTRiZE1Vc0RLeTJHTVlr?=
- =?utf-8?B?ZFN3bHowMTR5cnhUKzlQZ0J3TTJEYWZ2VTlyL2g3MTMrVEFvVWVxUWM0cWRK?=
- =?utf-8?B?MzJlVXVhVW84S0VuK0puNmNhUktRdnB0NWJWSFY3NEw5ckFqSnZzZW15Mmtl?=
- =?utf-8?B?VW9TdUVIejMyZ3Z1OFJNNkVuVlpZR3hYRTZNUHB1OVQweWxnb0IvUmFPTC9n?=
- =?utf-8?B?U3VZM2N0dGlRQVN5T3lGYjhhZVFrZXdFbVFoc0pBYlJQc2Zub2x1bmpaWUVj?=
- =?utf-8?B?ZHpKbTRUWTNkcG1RcUxtQnpNanJwTjlxaVBOUUd0NytJZHFHRUpvSWpQYSt6?=
- =?utf-8?B?dFdGbGVPTStRODJKOVZQMno3eWZzYzI2ZTAyVHFNZGFtT0JZWENvUE1LSGc1?=
- =?utf-8?B?SjlhT0V4YzZGOS9OV0dDWk1BbUlRbUFQeS90NFJZMXp4Tkc3YmU0MUozS3dz?=
- =?utf-8?B?RThFUWhINm5vc0lhU0tLUURCSkd2Z1Q0QkFtUXJEeDN3VTErUEcvb2l6Tm1x?=
- =?utf-8?B?QVY4eGNsSnEwRG9Md1RkM2tEbG1JS3l5WVV5bjdaRE92ODQzYkVPN2ZjM2h5?=
- =?utf-8?B?Qkp1Yk1iWnJVV2lwNXQ2NXJrRVZaVzRocjJITmhIZVVXY3h1VWNDYWZpK0Ir?=
- =?utf-8?B?QWJwMGNUR2kreXRJajV4emc3Ym9RWnNpTk1IWnpYaTIvM0t0UTJKWGxNUkhE?=
- =?utf-8?B?S1J1V3NVcEtwTzE1QmVCckdCUHo1d1BJeXN3YzU4RStOQkxySFZCdmt4SGtR?=
- =?utf-8?B?dnpYMWIrdm5QbUZNajNOejhKSGdRNlVLQ3lqRWxvVG1OdU03YXVZM29WVE5L?=
- =?utf-8?B?YU9DeC9hQmhFRkdUemt6cEVjVUlKZ3RldE4yd1IzTGNIOWFLWTNkZ3AzWXBz?=
- =?utf-8?B?dkVGWW1MalhXb05TUkNPRGtVS3ZWUG52aTRITzRIZ2VIaUtuMHZ4U2Z0ZlVE?=
- =?utf-8?B?a003eXhERkJlY2Y0UlNoRkkrZ1hGc2V1YkV1ZSt3MGdiOXYxZ2JEc3RaNVF3?=
- =?utf-8?B?RHZKd2EreXZjelBLMUM4R1FOUEdUaFBnejRsQ3NncHBQWkNpRitPWitwSVdC?=
- =?utf-8?B?QUVyL2VOcWRPRDk3KzlNenJnV0NQNU1QaS9RakwyWGpNVnRTWWtOOWd0eWxi?=
- =?utf-8?B?USsyVjIwajhxMUM0aGlXdThLSkJ3PT0=?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
-	Q5QbvM2tm0EMD/up5L7Q+FguDnkab3mhECuTNyh5VL4KM5NQthvQqmphgNh6utOVAxyrTpqbnl8CtKT2FEhCfddWV1fJ5f4LrSMMVpUjV3i1zFBAsck1cp1EnshprDnRTdq7AxQ+QdSJdWbTAqN87WiUtLqZpyyZ1kB8xv6KwC2p2VOPYoiSNmp/z7lqE+0CdMH3IMHAFdsUkmYtsT/04KCZdMcb9TKIPM3dbFER2dquOyP/LPKYqo9ijR20o0hLFeRV8MgwOvPGwAwHtUzmHbmeAxel1oqbag0ZprHwfs1bs4J6FdI0NNr95rcz5zwieLKB+OvBJGViIGQpiCynp4VI2w8nCOlQ/QiIcykJmFjskzV4fdusY05z5Aoawn/PuxFujBFHrDX1kpmWv+ged0rprYmd9wTAU5llszEsdvwr/rBOCImtV1rdeu/psLF2HR8bpEF4x88LkXLwuxAz0GIY3+mRl0sYzTH6kNvd93WQ6pT6UHIzrOgah0xcelgRUEyYnEpzkCK4u7Ty2NuCPKNOqQxbfTUQKnrF/3j5dEGph+1DWyS1Wgi61+HZYB8YYKDeZOVxtRDA1uotRglyoyp/NQJIxboWTR26Na5oWJ4=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 93fe5f67-342d-47e3-4772-08dd4a205fee
-X-MS-Exchange-CrossTenant-AuthSource: BLAPR10MB5267.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Feb 2025 22:15:06.6756
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: m6RtNaJmivLLWY5hn89ospGMtP6/fxVWwxDAbstNZWhnj2gohGJ1PZXAJ5O/hesvJT2FoqahICsvqMfA69IkgQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR10MB4616
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2025-02-10_11,2025-02-10_01,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 mlxscore=0 mlxlogscore=999
- phishscore=0 bulkscore=0 malwarescore=0 adultscore=0 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2501170000
- definitions=main-2502100175
-X-Proofpoint-ORIG-GUID: VGXLpQYRE990pnV4r3aSs5Xe6HsdR6sO
-X-Proofpoint-GUID: VGXLpQYRE990pnV4r3aSs5Xe6HsdR6sO
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:rodj2MYcuAbXFChH1oH6zsmF7imrjIQv8jjEaoyBkAjNHKmW9ts
+ 1bmnnXCS0Wvj7gGViaayE/+897AdXvzD6W8sNnWtz3CmIAQsbB+guqKq/c+gFcqWPZMd0ei
+ +ebdl9g75+L6TdDY4HP5u6J7wmX68ZPgmgKKSqmutCaReZCPYlOV7qEVYF7yZoBhrzkwHgj
+ gixScR+f+Xo3trU4r6RiQ==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:EQfHNllidnE=;F9Ne9M5Bcb+F6FKfhZTBVCmfKyp
+ eQwgHIERzRPN82Ng3bTDDPnoCw8U74vOrwakGPApdFqL4HhcqiwOkaXfICmDjIK+h3l8KV0dl
+ AVOHUT62+h7ohEfAwHPuN+kW19GUm8miFSphuPN6pWhZWG9LEBYOREx+H1a+DyWM/3DijPS8j
+ PWVQ/UkceUrL95OLf3EoimfAj070Ui8P2g5m3DMkdBg4kD27dN4M70uGv1rM8LZVq4dcX2qBw
+ Rd6k8J9vLrQFU+I49SspJm4bwG2Pw4j+X8qtNZYlVCgGgEb/NtCTAXIUjHTSeFWYH4h+E+yie
+ GL6v9xCOQBkbtOci1WxDFh8WxrJPm4VlLIOd/JWBiNRtEFP6Q/19tZxaBrRHyiCoYvAkx5mPS
+ eyAdHZKaUD3lNBRfs9FASkP1AgCIO8E0h93D8b+j11gzqeo+Zr/WbJvKp452xG4klJ5COXnF7
+ YGPKMWnATYR5bBKHfaXQqCu2bq/0vU22K7wbpuPyJ78Ys8fbjJP4N6JLnKUrjkhiJstymkSPe
+ 4isbbvTPqc/Pf0/OUWElOd0TYX15kWYSzwAJfnPK7UKU7TGtgbAukX31xfdmbjWeiq23kJLm0
+ 9bpxM7me+mhEutN/HzhZN9fU0dFGGoWYHLygEC6hrzBWxGmZJku4AEMJ4AojluQPbLFkT7Ipw
+ XQ3dN60mVEx8SvL1ywLZULrgNDJ6UDHaJ6fLqo7qk7r6BoZNofKYNMLw4PKZO7TdyHzikdxhi
+ 6yDKMSKJIdbFiI+2dmdqYBsxzhtq5VVJ+2YHLmla6GD3fAMrL1QC4A3+CichGMYWpBheaYndU
+ HUTsr+KM/v3pOTYUtI8t9lhRLTLPNnWR8OCb61/0UQx9XRLyfIfaVGp5mqlvVIOuFvzJ65c+/
+ Q0p0scwsjQt/DkxHVP+WPLnaXAXZCGdVgLJxQFbahqytoVxJLtXtogQhd9DpBXggZLpJj0z4/
+ tZxDcXcBzRF0O1ozE9S3dvA7YXpwlYQpXlDQAqW20lQ+U6LOpdnBqfR4fH4Gh4Mo2khu6zxsc
+ PYLSUVjWaJRVDLhl7kfhIfq53sTDB5eZCIPxfW9ZfMSmiMn5Ttx2+EtxAG8gvX5+s/UKV3NMr
+ OT/A5HJW/9M5RQfbppa2Iy/ngnRbBXhZw/Z94mPmqnXAAc/MQV8kY2/a6BZITBwFQjzMOXWxe
+ G5GDx+YwiNT2M20vUxx1Hjt47HLhEHYAtg2BuR1CaUiK3rsSS1pE0iUJSS8Bq6AjE/Xsrqt8q
+ Km+cggIGcQBskbzEkeLCzboIILNEaUJ4DR0Mx7Q8/f7dbL2efMHsMwrtlA0cPVxkaOdRBdHTE
+ zRSmSw2ICW0epxnTRiI0l08FOWJyVl6RHRyvm7/C9wd31I=
 
-On 07/02/2025 02:14, Ihor Solodrai wrote:
-> When adding a kfunc prototype to BTF, check for the flags indicating
-> bpf_arena pointers and emit a type tag encoding
-> __attribute__((address_space(1))) for them. This also requires
-> updating BTF type ids in the btf_encoder_func_state, which is done as
-> a side effect in the tagging functions.
-> 
-> This feature depends on recent update in libbpf, supporting arbitrarty
-> attribute encoding [1].
-> 
-> [1] https://lore.kernel.org/bpf/20250130201239.1429648-1-ihor.solodrai@linux.dev/
-> 
-> Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
+This adds tests for both the happy path and the
+error path (with and without the BPF_F_PAD_ZEROS flag).
 
-a few minor issues below, but
+Signed-off-by: Jordan Rome <linux@jordanrome.com>
+=2D--
+ .../selftests/bpf/prog_tests/bpf_iter.c       |  68 +++++++++++
+ .../selftests/bpf/prog_tests/read_vsyscall.c  |   1 +
+ .../selftests/bpf/progs/bpf_iter_tasks.c      | 110 ++++++++++++++++++
+ .../selftests/bpf/progs/read_vsyscall.c       |  11 +-
+ 4 files changed, 188 insertions(+), 2 deletions(-)
 
-Reviewed-by: Alan Maguire <alan.maguire@oracle.com>
+diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_iter.c b/tools/tes=
+ting/selftests/bpf/prog_tests/bpf_iter.c
+index 6f1bfacd7375..add4a18c33bd 100644
+=2D-- a/tools/testing/selftests/bpf/prog_tests/bpf_iter.c
++++ b/tools/testing/selftests/bpf/prog_tests/bpf_iter.c
+@@ -323,19 +323,87 @@ static void test_task_pidfd(void)
+ static void test_task_sleepable(void)
+ {
+ 	struct bpf_iter_tasks *skel;
++	int pid, status, err, data_pipe[2], finish_pipe[2], c;
++	char *test_data =3D NULL;
++	char *test_data_long =3D NULL;
++	char *data[2];
++
++	if (!ASSERT_OK(pipe(data_pipe), "data_pipe") ||
++	    !ASSERT_OK(pipe(finish_pipe), "finish_pipe"))
++		return;
 
-> ---
->  btf_encoder.c | 97 ++++++++++++++++++++++++++++++++++++++++++++++++++-
->  1 file changed, 96 insertions(+), 1 deletion(-)
-> 
-> diff --git a/btf_encoder.c b/btf_encoder.c
-> index e9f4baf..d7837c2 100644
-> --- a/btf_encoder.c
-> +++ b/btf_encoder.c
-> @@ -40,7 +40,13 @@
->  #define BTF_SET8_KFUNCS		(1 << 0)
->  #define BTF_KFUNC_TYPE_TAG	"bpf_kfunc"
->  #define BTF_FASTCALL_TAG       "bpf_fastcall"
-> -#define KF_FASTCALL            (1 << 12)
-> +#define BPF_ARENA_ATTR         "address_space(1)"
-> +
-> +/* kfunc flags, see include/linux/btf.h in the kernel source */
-> +#define KF_FASTCALL   (1 << 12)
-> +#define KF_ARENA_RET  (1 << 13)
-> +#define KF_ARENA_ARG1 (1 << 14)
-> +#define KF_ARENA_ARG2 (1 << 15)
->  
->  struct btf_id_and_flag {
->  	uint32_t id;
-> @@ -743,6 +749,91 @@ static int32_t btf_encoder__tag_type(struct btf_encoder *encoder, uint32_t tag_t
->  	return encoder->type_id_off + tag_type;
->  }
->  
-> +static inline struct kfunc_info* btf_encoder__kfunc_by_name(struct btf_encoder *encoder, const char *name) {
-> +	struct kfunc_info *kfunc;
-> +
-> +	list_for_each_entry(kfunc, &encoder->kfuncs, node) {
-> +		if (strcmp(kfunc->name, name) == 0)
-> +			return kfunc;
-> +	}
-> +	return NULL;
-> +}
-> +
+ 	skel =3D bpf_iter_tasks__open_and_load();
+ 	if (!ASSERT_OK_PTR(skel, "bpf_iter_tasks__open_and_load"))
+ 		return;
 
-above function is only used within #if statement below, right? Should
-probably move it there to avoid warnings.
++	pid =3D fork();
++	if (!ASSERT_GE(pid, 0, "fork"))
++		return;
++
++	if (pid =3D=3D 0) {
++		/* child */
++		close(data_pipe[0]);
++		close(finish_pipe[1]);
++
++		test_data =3D malloc(sizeof(char) * 10);
++		strncpy(test_data, "test_data", 10);
++		test_data[9] =3D '\0';
++
++		test_data_long =3D malloc(sizeof(char) * 5000);
++		for (int i =3D 0; i < 5000; ++i) {
++			if (i % 2 =3D=3D 0)
++				test_data_long[i] =3D 'b';
++			else
++				test_data_long[i] =3D 'a';
++		}
++		test_data_long[4999] =3D '\0';
++
++		data[0] =3D test_data;
++		data[1] =3D test_data_long;
++
++		write(data_pipe[1], &data, sizeof(data));
++
++		/* keep child alive until after the test */
++		err =3D read(finish_pipe[0], &c, 1);
++		if (err !=3D 1)
++			exit(-1);
++
++		close(data_pipe[1]);
++		close(finish_pipe[0]);
++		_exit(0);
++	}
++
++	/* parent */
++	close(data_pipe[1]);
++	close(finish_pipe[0]);
++
++	err =3D read(data_pipe[0], &data, sizeof(data));
++	ASSERT_EQ(err, sizeof(data), "read_check");
++
++	skel->bss->user_ptr =3D data[0];
++	skel->bss->user_ptr_long =3D data[1];
++	skel->bss->pid =3D pid;
++
+ 	do_dummy_read(skel->progs.dump_task_sleepable);
 
-> +#if LIBBPF_MAJOR_VERSION >= 1 && LIBBPF_MINOR_VERSION >= 6
-> +static int btf_encoder__tag_bpf_arena_ptr(struct btf *btf, int ptr_id)
-> +{
-> +	const struct btf_type *ptr;
-> +	int tagged_type_id;
-> +
-> +	ptr = btf__type_by_id(btf, ptr_id);
-> +	if (!btf_is_ptr(ptr))
-> +		return -EINVAL;
-> +
-> +	tagged_type_id = btf__add_type_attr(btf, BPF_ARENA_ATTR, ptr->type);
-> +	if (tagged_type_id < 0)
-> +		return tagged_type_id;
-> +
-> +	return btf__add_ptr(btf, tagged_type_id);
-> +}
-> +
-> +static int btf_encoder__tag_bpf_arena_arg(struct btf *btf, struct btf_encoder_func_state *state, int idx)
-> +{
-> +	int id;
-> +
-> +	if (state->nr_parms <= idx)
-> +		return -EINVAL;
-> +
-> +	id = btf_encoder__tag_bpf_arena_ptr(btf, state->parms[idx].type_id);
-> +	if (id < 0) {
-> +		btf__log_err(btf, BTF_KIND_TYPE_TAG, BPF_ARENA_ATTR, true, id,
-> +			"Error adding BPF_ARENA_ATTR for an argument of kfunc '%s'", state->elf->name);
+ 	ASSERT_GT(skel->bss->num_expected_failure_copy_from_user_task, 0,
+ 		  "num_expected_failure_copy_from_user_task");
+ 	ASSERT_GT(skel->bss->num_success_copy_from_user_task, 0,
+ 		  "num_success_copy_from_user_task");
++	ASSERT_GT(skel->bss->num_expected_failure_copy_from_user_task_str, 0,
++		  "num_expected_failure_copy_from_user_task_str");
++	ASSERT_GT(skel->bss->num_success_copy_from_user_task_str, 0,
++		  "num_success_copy_from_user_task_str");
 
-nit: since we call this for arguments + return value, should we reflect
-that in the function name/error message? maybe pass in the KF_ARENA_*
-flag or something?
+ 	bpf_iter_tasks__destroy(skel);
++
++	write(finish_pipe[1], &c, 1);
++	err =3D waitpid(pid, &status, 0);
++	ASSERT_EQ(err, pid, "waitpid");
++	ASSERT_EQ(status, 0, "zero_child_exit");
++
++	close(data_pipe[0]);
++	close(finish_pipe[1]);
+ }
 
-> +		return id;
-> +	}
-> +	state->parms[idx].type_id = id;
-> +
-> +	return id;
-> +}
-> +
-> +static int btf_encoder__add_bpf_arena_type_tags(struct btf_encoder *encoder, struct btf_encoder_func_state *state)
-> +{
-> +	struct kfunc_info *kfunc = NULL;
-> +	int ret_type_id;
-> +	int err = 0;
-> +
-> +	if (!state || !state->elf || !state->elf->kfunc)
-> +		goto out;
-> +
-> +	kfunc = btf_encoder__kfunc_by_name(encoder, state->elf->name);
-> +	if (!kfunc)
-> +		goto out;
-> +
-> +	if (KF_ARENA_RET & kfunc->flags) {
-> +		ret_type_id = btf_encoder__tag_bpf_arena_ptr(encoder->btf, state->ret_type_id);
-> +		if (ret_type_id < 0) {
-> +			btf__log_err(encoder->btf, BTF_KIND_TYPE_TAG, BPF_ARENA_ATTR, true, ret_type_id,
-> +				"Error adding BPF_ARENA_ATTR for return type of kfunc '%s'", state->elf->name);
-> +			err = ret_type_id;
-> +			goto out;
-> +		}
-> +		state->ret_type_id = ret_type_id;
-> +	}
-> +
-> +	if (KF_ARENA_ARG1 & kfunc->flags) {
-> +		err = btf_encoder__tag_bpf_arena_arg(encoder->btf, state, 0);
-> +		if (err < 0)
-> +			goto out;
-> +	}
-> +
-> +	if (KF_ARENA_ARG2 & kfunc->flags) {
-> +		err = btf_encoder__tag_bpf_arena_arg(encoder->btf, state, 1);
-> +		if (err < 0)
-> +			goto out;
-> +	}
-> +out:
-> +	return err;
+ static void test_task_stack(void)
+diff --git a/tools/testing/selftests/bpf/prog_tests/read_vsyscall.c b/tool=
+s/testing/selftests/bpf/prog_tests/read_vsyscall.c
+index c7b9ba8b1d06..a8d1eaa67020 100644
+=2D-- a/tools/testing/selftests/bpf/prog_tests/read_vsyscall.c
++++ b/tools/testing/selftests/bpf/prog_tests/read_vsyscall.c
+@@ -24,6 +24,7 @@ struct read_ret_desc {
+ 	{ .name =3D "copy_from_user", .ret =3D -EFAULT },
+ 	{ .name =3D "copy_from_user_task", .ret =3D -EFAULT },
+ 	{ .name =3D "copy_from_user_str", .ret =3D -EFAULT },
++	{ .name =3D "copy_from_user_task_str", .ret =3D -EFAULT },
+ };
 
-not sure we need goto outs here; there are no resources to free etc so
-we can just return err/return 0 where appropriate.
+ void test_read_vsyscall(void)
+diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_tasks.c b/tools/te=
+sting/selftests/bpf/progs/bpf_iter_tasks.c
+index bc10c4e4b4fa..966ee5a7b066 100644
+=2D-- a/tools/testing/selftests/bpf/progs/bpf_iter_tasks.c
++++ b/tools/testing/selftests/bpf/progs/bpf_iter_tasks.c
+@@ -9,6 +9,13 @@ char _license[] SEC("license") =3D "GPL";
+ uint32_t tid =3D 0;
+ int num_unknown_tid =3D 0;
+ int num_known_tid =3D 0;
++void *user_ptr =3D 0;
++void *user_ptr_long =3D 0;
++uint32_t pid =3D 0;
++
++static char big_str1[5000];
++static char big_str2[5005];
++static char big_str3[4996];
 
-> +}
-> +#endif // LIBBPF_MAJOR_VERSION >= 1 && LIBBPF_MINOR_VERSION >= 6
-> +
->  static int32_t btf_encoder__add_func_proto(struct btf_encoder *encoder, struct ftype *ftype,
->  					   struct btf_encoder_func_state *state)
->  {
-> @@ -762,6 +853,10 @@ static int32_t btf_encoder__add_func_proto(struct btf_encoder *encoder, struct f
->  		nr_params = ftype->nr_parms + (ftype->unspec_parms ? 1 : 0);
->  		type_id = btf_encoder__tag_type(encoder, ftype->tag.type);
->  	} else if (state) {
-> +#if LIBBPF_MAJOR_VERSION >= 1 && LIBBPF_MINOR_VERSION >= 6
-> +		if (btf_encoder__add_bpf_arena_type_tags(encoder, state) < 0)
+ SEC("iter/task")
+ int dump_task(struct bpf_iter__task *ctx)
+@@ -35,7 +42,9 @@ int dump_task(struct bpf_iter__task *ctx)
+ }
 
-kind of a nit I guess, but I think it might be clearer to make explicit
-the work we only have to do for kfuncs, i.e.
+ int num_expected_failure_copy_from_user_task =3D 0;
++int num_expected_failure_copy_from_user_task_str =3D 0;
+ int num_success_copy_from_user_task =3D 0;
++int num_success_copy_from_user_task_str =3D 0;
 
-		if (state->elf && state->elf->kfunc) {
-			/* do kfunc-specific work like arena ptr tag */
+ SEC("iter.s/task")
+ int dump_task_sleepable(struct bpf_iter__task *ctx)
+@@ -44,6 +53,9 @@ int dump_task_sleepable(struct bpf_iter__task *ctx)
+ 	struct task_struct *task =3D ctx->task;
+ 	static const char info[] =3D "    =3D=3D=3D END =3D=3D=3D";
+ 	struct pt_regs *regs;
++	char task_str1[10] =3D "aaaaaaaaaa";
++	char task_str2[10], task_str3[10];
++	char task_str4[20] =3D "aaaaaaaaaaaaaaaaaaaa";
+ 	void *ptr;
+ 	uint32_t user_data =3D 0;
+ 	int ret;
+@@ -78,8 +90,106 @@ int dump_task_sleepable(struct bpf_iter__task *ctx)
+ 		BPF_SEQ_PRINTF(seq, "%s\n", info);
+ 		return 0;
+ 	}
++
+ 	++num_success_copy_from_user_task;
 
-		}
++	/* Read an invalid pointer and ensure we get an error */
++	ptr =3D NULL;
++	ret =3D bpf_copy_from_user_task_str((char *)task_str1, sizeof(task_str1)=
+, ptr, task, 0);
++	if (ret >=3D 0 || task_str1[9] !=3D 'a' || task_str1[0] !=3D '\0') {
++		BPF_SEQ_PRINTF(seq, "%s\n", info);
++		return 0;
++	}
++
++	/* Read an invalid pointer and ensure we get error with pad zeros flag *=
+/
++	ptr =3D NULL;
++	ret =3D bpf_copy_from_user_task_str((char *)task_str1, sizeof(task_str1)=
+,
++					  ptr, task, BPF_F_PAD_ZEROS);
++	if (ret >=3D 0 || task_str1[9] !=3D '\0' || task_str1[0] !=3D '\0') {
++		BPF_SEQ_PRINTF(seq, "%s\n", info);
++		return 0;
++	}
++
++	++num_expected_failure_copy_from_user_task_str;
++
++	/* Same length as the string */
++	ret =3D bpf_copy_from_user_task_str((char *)task_str2, 10, user_ptr, tas=
+k, 0);
++	/* only need to do the task pid check once */
++	if (bpf_strncmp(task_str2, 10, "test_data\0") !=3D 0 || ret !=3D 10 || t=
+ask->tgid !=3D pid) {
++		BPF_SEQ_PRINTF(seq, "%s\n", info);
++		return 0;
++	}
++
++	/* Shorter length than the string */
++	ret =3D bpf_copy_from_user_task_str((char *)task_str3, 2, user_ptr, task=
+, 0);
++	if (bpf_strncmp(task_str3, 2, "t\0") !=3D 0 || ret !=3D 2) {
++		BPF_SEQ_PRINTF(seq, "%s\n", info);
++		return 0;
++	}
++
++	/* Longer length than the string */
++	ret =3D bpf_copy_from_user_task_str((char *)task_str4, 20, user_ptr, tas=
+k, 0);
++	if (bpf_strncmp(task_str4, 10, "test_data\0") !=3D 0 || ret !=3D 10
++	    || task_str4[sizeof(task_str4) - 1] !=3D 'a') {
++		BPF_SEQ_PRINTF(seq, "%s\n", info);
++		return 0;
++	}
++
++	/* Longer length than the string with pad zeros flag */
++	ret =3D bpf_copy_from_user_task_str((char *)task_str4, 20, user_ptr, tas=
+k, BPF_F_PAD_ZEROS);
++	if (bpf_strncmp(task_str4, 10, "test_data\0") !=3D 0 || ret !=3D 10
++	    || task_str4[sizeof(task_str4) - 1] !=3D '\0') {
++		BPF_SEQ_PRINTF(seq, "%s\n", info);
++		return 0;
++	}
++
++	/* Longer length than the string past a page boundary */
++	ret =3D bpf_copy_from_user_task_str(big_str1, 5000, user_ptr, task, 0);
++	if (bpf_strncmp(big_str1, 10, "test_data\0") !=3D 0 || ret !=3D 10) {
++		BPF_SEQ_PRINTF(seq, "%s\n", info);
++		return 0;
++	}
++
++	/* String that crosses a page boundary */
++	ret =3D bpf_copy_from_user_task_str(big_str1, 5000, user_ptr_long, task,=
+ BPF_F_PAD_ZEROS);
++	if (bpf_strncmp(big_str1, 4, "baba") !=3D 0 || ret !=3D 5000
++	    || bpf_strncmp(big_str1 + 4996, 4, "bab\0") !=3D 0) {
++		BPF_SEQ_PRINTF(seq, "%s\n", info);
++		return 0;
++	}
++
++	for (int i =3D 0; i < 4999; ++i) {
++		if (i % 2 =3D=3D 0) {
++			if (big_str1[i] !=3D 'b') {
++				BPF_SEQ_PRINTF(seq, "%s\n", info);
++				return 0;
++			}
++		} else {
++			if (big_str1[i] !=3D 'a') {
++				BPF_SEQ_PRINTF(seq, "%s\n", info);
++				return 0;
++			}
++		}
++	}
++
++	/* Longer length than the string that crosses a page boundary */
++	ret =3D bpf_copy_from_user_task_str(big_str2, 5005, user_ptr_long, task,=
+ BPF_F_PAD_ZEROS);
++	if (bpf_strncmp(big_str2, 4, "baba") !=3D 0 || ret !=3D 5000
++	    || bpf_strncmp(big_str2 + 4996, 5, "bab\0\0") !=3D 0) {
++		BPF_SEQ_PRINTF(seq, "%s\n", info);
++		return 0;
++	}
++
++	/* Shorter length than the string that crosses a page boundary */
++	ret =3D bpf_copy_from_user_task_str(big_str3, 4996, user_ptr_long, task,=
+ 0);
++	if (bpf_strncmp(big_str3, 4, "baba") !=3D 0 || ret !=3D 4996
++	    || bpf_strncmp(big_str3 + 4992, 4, "bab\0") !=3D 0) {
++		BPF_SEQ_PRINTF(seq, "%s\n", info);
++		return 0;
++	}
++
++	++num_success_copy_from_user_task_str;
++
+ 	if (ctx->meta->seq_num =3D=3D 0)
+ 		BPF_SEQ_PRINTF(seq, "    tgid      gid     data\n");
 
-I know the function has checks for this internally but I think it makes
-it a bit clearer that it's only needed for a small subset of functions,
-what do you think?
+diff --git a/tools/testing/selftests/bpf/progs/read_vsyscall.c b/tools/tes=
+ting/selftests/bpf/progs/read_vsyscall.c
+index 39ebef430059..395591374d4f 100644
+=2D-- a/tools/testing/selftests/bpf/progs/read_vsyscall.c
++++ b/tools/testing/selftests/bpf/progs/read_vsyscall.c
+@@ -8,14 +8,16 @@
 
+ int target_pid =3D 0;
+ void *user_ptr =3D 0;
+-int read_ret[9];
++int read_ret[10];
 
-> +			return -1;
-> +#endif
->  		encoder = state->encoder;
->  		btf = state->encoder->btf;
->  		nr_params = state->nr_parms;
+ char _license[] SEC("license") =3D "GPL";
+
+ /*
+- * This is the only kfunc, the others are helpers
++ * These are the kfuncs, the others are helpers
+  */
+ int bpf_copy_from_user_str(void *dst, u32, const void *, u64) __weak __ks=
+ym;
++int bpf_copy_from_user_task_str(void *dst, u32, const void *,
++				struct task_struct *, u64) __weak __ksym;
+
+ SEC("fentry/" SYS_PREFIX "sys_nanosleep")
+ int do_probe_read(void *ctx)
+@@ -47,6 +49,11 @@ int do_copy_from_user(void *ctx)
+ 	read_ret[7] =3D bpf_copy_from_user_task(buf, sizeof(buf), user_ptr,
+ 					      bpf_get_current_task_btf(), 0);
+ 	read_ret[8] =3D bpf_copy_from_user_str((char *)buf, sizeof(buf), user_pt=
+r, 0);
++	read_ret[9] =3D bpf_copy_from_user_task_str((char *)buf,
++						  sizeof(buf),
++						  user_ptr,
++						  bpf_get_current_task_btf(),
++						  0);
+
+ 	return 0;
+ }
+=2D-
+2.43.5
+
