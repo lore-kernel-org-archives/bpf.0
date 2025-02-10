@@ -1,158 +1,107 @@
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.4])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 790E81A3159
-	for <bpf@vger.kernel.org>; Mon, 10 Feb 2025 07:36:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.4
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25E2E1ADC86
+	for <bpf@vger.kernel.org>; Mon, 10 Feb 2025 07:38:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739172989; cv=none; b=NPx//YHKjuZM2eLHhEJPNU4/wPBlgjeiwR59jQbodcGWF8JP3+a/Nlj2rz75jFfQ1q18CY0qrwyeE7D9v1ymmrV04RaZfabtFX52QUMhdmuZ+MyWMbCjG+XBgVntukhRdP32YL/lMfabtoayaGy5omS++EQ2ute34WhNbfMNi7o=
+	t=1739173096; cv=none; b=TKc9DNBM8UU8X1vsnJzNXL7IhYdyt8xGiiy5/8SLct8nxwrIIPiF7V8yU2nK+W9WUyQbAWGUk13XdwWqRRwej7sQ+T0O6FkGg5nvkFSBPLV6L8tQyvHlnLb1B45JrsKOTNFMPxjCGC4pLiOFI1hQGBcdZA1LJUslMi1s6MirqwU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739172989; c=relaxed/simple;
-	bh=gzvzffTMcxnH+4ciLp9im4w+VoQB2/Wmwi86stA29lc=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=DM8DZ4o7KMbPEIZsSbVrSmHdJxzgJURdl7iQ6xJTsgsMQW6+TJpSRyEpLR0YNBJRmlbjkYcGU7g/y6rRBvudFIBgo+yeiUwx2w0Kh8nW0AfYrmJcPcfCCMIbS3lDcwKOvOQHFFbItzAbmUuczJQXtI5/3VR2h0s0SM5X9mUSgvw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=dXlZGBiJ; arc=none smtp.client-ip=220.197.31.4
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+	s=arc-20240116; t=1739173096; c=relaxed/simple;
+	bh=aa+yDfbuXkbFiCT4dMy5mVXFmy7/LfkweX8PXy5FnG8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=W0M7H4efGeRkazU+D6gPYJem9Z286mhxjpPFERRgskC6Ouk++dRBH+sa9NEllL8UsGL6/FRfZe65Wxe4fED4vY0mGmwO1e9r5kbhpMYL3z2i3ERJTPvxw7CjeFIRtye48D3wKZEpCAXkSPOWWNLHXyXdJbSM7jBjgi4xH2iOe64=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EBD7Io96; arc=none smtp.client-ip=209.85.128.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="dXlZGBiJ"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=Gv7ga
-	OMPgUpUYoe51vE9rUDxHe9ia0GPkm5LkmURdSw=; b=dXlZGBiJaimvnxNk9d366
-	AUeiZ28ENkMT872/iQVsX1+GoJFg9yu1NNdJuIH0Sv2s1Lq7/G6kGKQJZxnWW689
-	JEx/irg15yDCRrkihmkpR5j2k/3MQAh1ZP9gHuoaBczXh5rogE1Oot8y1RSvVrkF
-	lSYk87Z6tCJflcA1JOCUXQ=
-Received: from localhost.localdomain (unknown [])
-	by gzga-smtp-mtada-g0-4 (Coremail) with SMTP id _____wCHQY03rKlnG_C_LA--.33048S3;
-	Mon, 10 Feb 2025 15:35:20 +0800 (CST)
-From: Feng Yang <yangfeng59949@163.com>
-To: bpf@vger.kernel.org
-Cc: martin.lau@linux.dev,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	kpsingh@kernel.org,
-	sdf@fomichev.me,
-	haoluo@google.com,
-	jolsa@kernel.org
-Subject: [PATCH 2/3] Revert "selftests/bpf: Add test for __nullable suffix in tp_btf"
-Date: Mon, 10 Feb 2025 15:35:08 +0800
-Message-Id: <20250210073509.232007-2-yangfeng59949@163.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20250210073509.232007-1-yangfeng59949@163.com>
-References: <20250210073509.232007-1-yangfeng59949@163.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EBD7Io96"
+Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-4394345e4d5so4108965e9.0
+        for <bpf@vger.kernel.org>; Sun, 09 Feb 2025 23:38:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1739173093; x=1739777893; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0WVx6P8+xc1y2bWX2S2s0Ch0U+hucKJhPXo+wkWufCA=;
+        b=EBD7Io960pp1Pg12NzUREF7eW8Lnl89K2gSg5iPOMFiV3TcKRpGT8H8mlt4jbbGGQp
+         iVohkAnhZeLG4wkC0ty8A0ldca5I8aiSmrgv4uY74haK9IO2WMxyi9HVNnu7UulcUedh
+         VjHmKVcU6qIeKDtiTu0WSPYAmAz9rLEi4bOdZXHyabFZDhKoYBeZTSy2p35Wkqivk1bA
+         KYkccQRIFUtUyF5/CYQ6N3W/o+GbZGGpGAUT+eZpuq7zl2Lf+2QakOkWv3XegBEsDVID
+         tT9ERSy+D+awCUUzwtzkvUN8wcSKosWkeMiaPdWnbw22TeDQJZ4ekgPvkk5wDb1rHubp
+         m+GQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1739173093; x=1739777893;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=0WVx6P8+xc1y2bWX2S2s0Ch0U+hucKJhPXo+wkWufCA=;
+        b=kE8BcLGnz5uH+gGaO1MUyLo2tJnA7rd3K5PyZJD5ZPBWmpGEN9b7px/wM2pIefKHHF
+         MBYSxvgn+v8GW/JxMYdZQyF7kUWVJgruHvSCeObD/SImeE9JOE0WsNGPf3v8++CGKOiI
+         8bg7Wf5rCYTUGF+310wWiQIC8etFS418ugVunJq8xzHBfRRKtiIczmA0hxHfKZpmtiai
+         PUr/fD4wgHJjRi/VKBNEuCpPSPGMtjry+4dG32+IweY4sUTSihVew+xPSL15QBsX+I9V
+         INfvuT/7QvO27ZvhsAcxodS2OltkaWGtANVs+BTefmqWoF7ykZTW1m5Le0QEWlS2get3
+         PlTg==
+X-Gm-Message-State: AOJu0Yx53YhddEkN4WRTrUKdzqH9fU2pzbvFXJ5s2/enDnmQRKiVKzwu
+	7M7f3LRcCCOpUkk5Mezrwhi6B/Pl6nTDJb9UNfrDt/DD5pa8aNbp5QSrtXdtQLV1fDcPvCrY6/W
+	ofh53Gru8leeN+URWK5p6NMmXB5Y=
+X-Gm-Gg: ASbGncu53Q3owZVTnuP/7mlFA6SGCq6O1eHzWQYy2hkyV3GhsSUkOQBDsKi9zk6YMBX
+	tv5FFRxObbk73w24t0ZhCq0O/r2fIhYaWsMOBIM6tWSIgof4DIX2S6m5CbjJurYkg6cXbmkXjnI
+	1KZCRC9O9lbgbGLOSwMdZJ31gbAKLx
+X-Google-Smtp-Source: AGHT+IHzpyrZRBwF37KYAFCc8OOs9F+4IppJtkKQY5hm0+HexFrafz+jzB8wCGJ67UTQCX7SUZbkyXy/WBrXSBlacDA=
+X-Received: by 2002:a05:6000:1448:b0:38b:da31:3e3e with SMTP id
+ ffacd0b85a97d-38dc90ee504mr9150809f8f.28.1739173093192; Sun, 09 Feb 2025
+ 23:38:13 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wCHQY03rKlnG_C_LA--.33048S3
-X-Coremail-Antispam: 1Uf129KBjvJXoWxXr48try8tw43Kry8trWUArb_yoWrGFy7pa
-	s7A34jyF4IkF4jqF18CF47WF4Fyws3ZrWUAF18Grn8Z34xJa4jqF1xKF18tF95Z39Yvrs5
-	Zwn7KF9xCa1xX3JanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jwKsUUUUUU=
-X-CM-SenderInfo: p1dqww5hqjkmqzuzqiywtou0bp/1tbiTQnveGepqRU+BgAAsZ
+References: <20250210073509.232007-1-yangfeng59949@163.com> <20250210073509.232007-3-yangfeng59949@163.com>
+In-Reply-To: <20250210073509.232007-3-yangfeng59949@163.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Sun, 9 Feb 2025 23:38:01 -0800
+X-Gm-Features: AWEUYZky_1rAF4l_zfSvKXS8QqrCvBumUhZjdXJ5lT5WIXD_bIXilQfHMyAwVNE
+Message-ID: <CAADnVQKPnUwiQtPSRXEU7uFLJsh+esCnVDpOizJhuB+MsR+6xQ@mail.gmail.com>
+Subject: Re: [PATCH 3/3] Revert "bpf: Support __nullable argument suffix for tp_btf"
+To: Feng Yang <yangfeng59949@163.com>
+Cc: bpf <bpf@vger.kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Eddy Z <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
+	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: Feng Yang <yangfeng@kylinos.cn>
+On Sun, Feb 9, 2025 at 11:35=E2=80=AFPM Feng Yang <yangfeng59949@163.com> w=
+rote:
+>
+> From: Feng Yang <yangfeng@kylinos.cn>
+>
+> This commit 838a10bd2ebf
+> ("bpf: Augment raw_tp arguments with PTR_MAYBE_NULL")
+> has already resolved the issue, so we can roll back these patches.
+> This reverts commit 8aeaed21befc90f27f4fca6dd190850d97d2e9e3.
+>
+> Signed-off-by: Feng Yang <yangfeng@kylinos.cn>
+> ---
+>  kernel/bpf/btf.c      |  3 ---
+>  kernel/bpf/verifier.c | 36 ++++--------------------------------
+>  2 files changed, 4 insertions(+), 35 deletions(-)
+>
+> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+> index 9433b6467bbe..e66f98b493d0 100644
+> --- a/kernel/bpf/btf.c
+> +++ b/kernel/bpf/btf.c
+> @@ -6683,9 +6683,6 @@ bool btf_ctx_access(int off, int size, enum bpf_acc=
+ess_type type,
+>         if (prog_args_trusted(prog))
+>                 info->reg_type |=3D PTR_TRUSTED;
+>
+> -       if (btf_param_match_suffix(btf, &args[arg], "__nullable"))
+> -               info->reg_type |=3D PTR_MAYBE_NULL;
+> -
 
-This commit 838a10bd2ebf 
-("bpf: Augment raw_tp arguments with PTR_MAYBE_NULL") 
-has already resolved the issue, so we can roll back these patches.
-This reverts commit 2060f07f861a237345922023e9347a204c0795af.
-
-Signed-off-by: Feng Yang <yangfeng@kylinos.cn>
----
- .../bpf/prog_tests/tp_btf_nullable.c          | 14 -----------
- .../bpf/progs/test_tp_btf_nullable.c          | 24 -------------------
- .../bpf/test_kmods/bpf_testmod-events.h       |  6 -----
- .../selftests/bpf/test_kmods/bpf_testmod.c    |  2 --
- 4 files changed, 46 deletions(-)
- delete mode 100644 tools/testing/selftests/bpf/prog_tests/tp_btf_nullable.c
- delete mode 100644 tools/testing/selftests/bpf/progs/test_tp_btf_nullable.c
-
-diff --git a/tools/testing/selftests/bpf/prog_tests/tp_btf_nullable.c b/tools/testing/selftests/bpf/prog_tests/tp_btf_nullable.c
-deleted file mode 100644
-index accc42e01f8a..000000000000
---- a/tools/testing/selftests/bpf/prog_tests/tp_btf_nullable.c
-+++ /dev/null
-@@ -1,14 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0
--
--#include <test_progs.h>
--#include "test_tp_btf_nullable.skel.h"
--
--void test_tp_btf_nullable(void)
--{
--	if (!env.has_testmod) {
--		test__skip();
--		return;
--	}
--
--	RUN_TESTS(test_tp_btf_nullable);
--}
-diff --git a/tools/testing/selftests/bpf/progs/test_tp_btf_nullable.c b/tools/testing/selftests/bpf/progs/test_tp_btf_nullable.c
-deleted file mode 100644
-index 39ff06f2c834..000000000000
---- a/tools/testing/selftests/bpf/progs/test_tp_btf_nullable.c
-+++ /dev/null
-@@ -1,24 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0
--
--#include "vmlinux.h"
--#include <bpf/bpf_helpers.h>
--#include <bpf/bpf_tracing.h>
--#include "../test_kmods/bpf_testmod.h"
--#include "bpf_misc.h"
--
--SEC("tp_btf/bpf_testmod_test_nullable_bare")
--__failure __msg("R1 invalid mem access 'trusted_ptr_or_null_'")
--int BPF_PROG(handle_tp_btf_nullable_bare1, struct bpf_testmod_test_read_ctx *nullable_ctx)
--{
--	return nullable_ctx->len;
--}
--
--SEC("tp_btf/bpf_testmod_test_nullable_bare")
--int BPF_PROG(handle_tp_btf_nullable_bare2, struct bpf_testmod_test_read_ctx *nullable_ctx)
--{
--	if (nullable_ctx)
--		return nullable_ctx->len;
--	return 0;
--}
--
--char _license[] SEC("license") = "GPL";
-diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod-events.h b/tools/testing/selftests/bpf/test_kmods/bpf_testmod-events.h
-index aeef86b3da74..a565681ec057 100644
---- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod-events.h
-+++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod-events.h
-@@ -34,12 +34,6 @@ DECLARE_TRACE(bpf_testmod_test_write_bare,
- 	TP_ARGS(task, ctx)
- );
- 
--/* Used in bpf_testmod_test_read() to test __nullable suffix */
--DECLARE_TRACE(bpf_testmod_test_nullable_bare,
--	TP_PROTO(struct bpf_testmod_test_read_ctx *ctx__nullable),
--	TP_ARGS(ctx__nullable)
--);
--
- struct sk_buff;
- 
- DECLARE_TRACE(bpf_testmod_test_raw_tp_null,
-diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-index cc9dde507aba..f1582d431b61 100644
---- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-+++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-@@ -431,8 +431,6 @@ bpf_testmod_test_read(struct file *file, struct kobject *kobj,
- 	if (bpf_testmod_loop_test(101) > 100)
- 		trace_bpf_testmod_test_read(current, &ctx);
- 
--	trace_bpf_testmod_test_nullable_bare(NULL);
--
- 	/* Magic number to enable writable tp */
- 	if (len == 64) {
- 		struct bpf_testmod_test_writable_ctx writable = {
--- 
-2.43.0
-
+Nack.
+This is still useful and necessary.
