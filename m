@@ -1,154 +1,98 @@
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from szxga07-in.huawei.com (szxga07-in.huawei.com [45.249.212.35])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1044922E409;
-	Mon, 10 Feb 2025 13:47:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B2FD17BB6;
+	Mon, 10 Feb 2025 13:48:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.35
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739195261; cv=none; b=KRY6Mj29BYutz+dzUbrd1WUEVsvludNpYPWF6/69SNV0OxcP4Bd8NB5dqegqZsMkkZxudT/Deg86IqjFb///5MIzd4RPUhe/sZJteHg81FKxwuKlk2fr/jfpQnc+U0FQ1TO0eTCysMkJOCW4I72ttLrZVQtH9yrzgn8Cxgy1D0M=
+	t=1739195314; cv=none; b=CMtE/RvUTbe1urXSbsIkq6zkxtP2oygyxhkoVtBcMmLWpKdh2VBx0bbYY0P1TiselGug4++BkbzgYz/vZIz5/E27dFrzTCqeZb0sVaSB2o6o9JGoZ0ekEAouFkSY8xE7F/EIa4QNynRaeCGeSef1/vOlsToMPqRGC8w0QyUBozA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739195261; c=relaxed/simple;
-	bh=B1fxvcIsrUPtR4V25wkD07PW9OG1KrwliD8bNYnrJg8=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Omqwd/OM5SUnmuURXgKpNXkNAMzMc+4jpUuO11ly9So2VHYkTabz2kUFtRLq3BBt0i3Zh3q9WyaG6RVYESfselTAJbme9XKwJBPI1rXDSx0IARnzHrIWW4VTYvdbrwSBRHS0qy9N3eAQKctrbSsVaB0yMIor19z6j6+/rJ2PBLY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=O2x7STB3; arc=none smtp.client-ip=209.85.128.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="O2x7STB3"
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-4393dc02b78so8227955e9.3;
-        Mon, 10 Feb 2025 05:47:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1739195258; x=1739800058; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Afi6OLWALZHDRnl8260ApL7mj2gU/552a1e0gMmwBKE=;
-        b=O2x7STB3aVZcEgNR54N88URwZDtoZytxZqvxGlGJSoqGPApYv6FrdNlythF+G+C8sA
-         QlYi+N6v8fNWuy9Yyz5U8Dosk1OGk1IzAIxDVaJV8kZebB6L7BaN3qalLpSPpTR23pG4
-         GNp8ZW50Y6Xfa2+6V2cJZgXrRqmdkyuJYIRuI5iA3tD0eQJrGI/yeEkAZurlUTESbBR0
-         7by6qWI4voQ0P/+u3xP3VLzDuLShxKwVAItzSfLbQuUYgnHTlffIK7rdMqq08alSo/3q
-         LpRJnT8DPUGYdc4VNUOjy/efvhzCIl3Gh1TywMVRFLI0x+RJJM0nJ8Gw670XpeeVRflz
-         AabQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739195258; x=1739800058;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Afi6OLWALZHDRnl8260ApL7mj2gU/552a1e0gMmwBKE=;
-        b=MZx2f2YPN59x04ixJkl/ZrIhIVFmAVZnE5LmFIT+709rEtYHZHo7yru53rn9xh/LRj
-         YRNAQR3cDd1HQBrrjClfIiOOdjWp4vTZpwYNSkqYlPypiWqM8EjCuZsd1qFW6FzjewH2
-         MMXDvrAO5rEiuRvx+HOlFmJ3cmOJnI5/c9Xo3tU6Xf95Ea9Ai/uk0eFAOsdQX+4o2q86
-         499Pj7Ekr2JB4ZQm62l/C7LAcQk4CsIpE+GBE5M7G3XGNTN4TShFcD0wKjG+du7qHPQ+
-         jPNhtj93eO5M6OYF+DwZAg1U70n6uBC//1dd67fX7stzNfHBhACQfVbwlEWgnmUYv+A2
-         qX4A==
-X-Forwarded-Encrypted: i=1; AJvYcCUaf3XuuZPQ93kQvmn/iHWFIlI1Ab7/w9Sg4SfK3UtV1kctNE1yIGparFcQpQTxw8Tv9Wg=@vger.kernel.org, AJvYcCVm1PyBLjtOdgkzm+WtzuiiFdnLHbDn1TLamUdJ8WXRZrRZGNZL4R6OIZj9wVVTCsxIYcK6L8YXRYAa6no3@vger.kernel.org
-X-Gm-Message-State: AOJu0YwZurVXdx57zjy/DfuVyM/BL55+DrLkSV6ihjMwzEoLuSTIeNN5
-	X6X3ZJKurtHn7fAx1hWl+2pfQuDTlLLnyzwhUBhZZyixbRg18g4M
-X-Gm-Gg: ASbGncvl3ILrZJnvhg//EgaYHPNFXzwoyDXGOobo4kN1FdY03TkBMISHoE9mWORaSe0
-	wQQSWPSeGgJO6COk9K4KXTrsGCkn+hS/EghwwHO1Llonz/R6T1ocN4OGTdVbeIjQ9bCOWWpFPKr
-	nM+vupiMBaN25xk6k1umrygtdLEZjBIaDbfw7LWyUEvyiSwdFd3+4dVLiayHWExYgxlAeLpqgDB
-	VZ/uFOtYQl6K6veHDaR+A1LZAe/0XZFqSL90g8fy4oCg7dib4Q42dKhlYX/QVfdrWAajLm/ohWJ
-	/g==
-X-Google-Smtp-Source: AGHT+IEIGgrfsFEzcZ3ndLtPC2SgfSsCz2RE9BRnoC1XfJExm3D+xUYOpBIpHCzruSDfrK0U4WHcHw==
-X-Received: by 2002:a05:6000:1865:b0:38c:5d42:1529 with SMTP id ffacd0b85a97d-38dc9491b8emr10256410f8f.36.1739195258108;
-        Mon, 10 Feb 2025 05:47:38 -0800 (PST)
-Received: from krava ([173.38.220.45])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38dbde0fd0dsm12271591f8f.75.2025.02.10.05.47.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Feb 2025 05:47:36 -0800 (PST)
-From: Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Mon, 10 Feb 2025 14:47:34 +0100
-To: Tao Chen <chen.dylane@gmail.com>
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-	eddyz87@gmail.com, haoluo@google.com, qmo@kernel.org,
-	bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Tao Chen <dylane.chen@didiglobal.com>
-Subject: Re: [PATCH bpf-next v5 3/4] libbpf: Add libbpf_probe_bpf_kfunc API
-Message-ID: <Z6oDdiKkBy7McK-2@krava>
-References: <20250210055945.27192-1-chen.dylane@gmail.com>
- <20250210055945.27192-4-chen.dylane@gmail.com>
+	s=arc-20240116; t=1739195314; c=relaxed/simple;
+	bh=pxuktho1cH+/a8gafDR/2L4T0jul+ZuYmlp0zh3lz9o=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=IFaGmGKE4vq6plvEewj//j43gYTDRKzGu5Cg3sS4JMxiTW78jjYsHbeg07oupFtKGQL24Fif180+WJ2/a5CgK7AVTllUwMv5i+hrtW0lmd3tIVVYHYJw2abTkKAi9zM6+w2B7sdwqcNFoUpZ7/J/G49La31mwdLs8r/K/dXZSLc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.35
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.163.44])
+	by szxga07-in.huawei.com (SkyGuard) with ESMTP id 4Ys5RB2V7hz1V6Xt;
+	Mon, 10 Feb 2025 21:44:38 +0800 (CST)
+Received: from dggemv705-chm.china.huawei.com (unknown [10.3.19.32])
+	by mail.maildlp.com (Postfix) with ESMTPS id 69FDD140156;
+	Mon, 10 Feb 2025 21:48:22 +0800 (CST)
+Received: from kwepemn200003.china.huawei.com (7.202.194.126) by
+ dggemv705-chm.china.huawei.com (10.3.19.32) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.11; Mon, 10 Feb 2025 21:48:22 +0800
+Received: from localhost.localdomain (10.175.101.6) by
+ kwepemn200003.china.huawei.com (7.202.194.126) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.11; Mon, 10 Feb 2025 21:48:20 +0800
+From: zhangmingyi <zhangmingyi5@huawei.com>
+To: <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
+	<martin.lau@linux.dev>, <song@kernel.org>, <yhs@fb.com>,
+	<john.fastabend@gmail.com>, <kpsingh@kernel.org>, <sdf@google.com>,
+	<haoluo@google.com>, <jolsa@kernel.org>
+CC: <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>, <yanan@huawei.com>,
+	<wuchangye@huawei.com>, <xiesongyang@huawei.com>, <liuxin350@huawei.com>,
+	<liwei883@huawei.com>, <tianmuyang@huawei.com>, <zhangmingyi5@huawei.com>
+Subject: [PATCH v2 0/2] bpf-next: Introduced to support the ULP to get or set sockets
+Date: Mon, 10 Feb 2025 21:45:48 +0800
+Message-ID: <20250210134550.3189616-1-zhangmingyi5@huawei.com>
+X-Mailer: git-send-email 2.33.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250210055945.27192-4-chen.dylane@gmail.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ kwepemn200003.china.huawei.com (7.202.194.126)
 
-On Mon, Feb 10, 2025 at 01:59:44PM +0800, Tao Chen wrote:
+From: Mingyi Zhang <zhangmingyi5@huawei.com>
 
-SNIP
+We want call bpf_setsockopt to replace the kernel module in the TCP_ULP
+case. The purpose is to customize the behavior in connect and sendmsg
+after the user-defined ko file is loaded. We have an open source
+community project kmesh (kmesh.net). Based on this, we refer to some
+processes of tcp fastopen to implement delayed connet and perform HTTP
+DNAT when sendmsg.In this case, we need to parse HTTP packets in the
+bpf program and set TCP_ULP for the specified socket.
 
-> diff --git a/tools/lib/bpf/libbpf_probes.c b/tools/lib/bpf/libbpf_probes.c
-> index e142130cb83c..53f1196394bf 100644
-> --- a/tools/lib/bpf/libbpf_probes.c
-> +++ b/tools/lib/bpf/libbpf_probes.c
-> @@ -433,6 +433,54 @@ static bool can_probe_prog_type(enum bpf_prog_type prog_type)
->  	return true;
->  }
->  
-> +int libbpf_probe_bpf_kfunc(enum bpf_prog_type prog_type, int kfunc_id, int btf_fd,
-> +			   const void *opts)
-> +{
-> +	struct bpf_insn insns[] = {
-> +		BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, BPF_PSEUDO_KFUNC_CALL, 1, kfunc_id),
-> +		BPF_EXIT_INSN(),
-> +	};
-> +	const size_t insn_cnt = ARRAY_SIZE(insns);
-> +	char buf[4096];
-> +	int fd_array[2] = {-1};
-> +	int ret;
-> +
-> +	if (opts)
-> +		return libbpf_err(-EINVAL);
-> +
-> +	if (!can_probe_prog_type(prog_type))
-> +		return -EOPNOTSUPP;
-> +
-> +	if (btf_fd >= 0) {
-> +		fd_array[1] = btf_fd;
-> +	} else if (btf_fd == -1) {
-> +		/* insn.off = 0, means vmlinux btf */
-> +		insns[0].off = 0;
-> +	} else {
-> +		return libbpf_err(-EINVAL);
-> +	}
-> +
-> +	buf[0] = '\0';
-> +	ret = probe_prog_load(prog_type, insns, insn_cnt, btf_fd >= 0 ? fd_array : NULL,
-> +			      0, buf, sizeof(buf));
+Note that tcp_getsockopt and tcp_setsockopt support TCP_ULP, while
+bpf_getsockopt and bpf_setsockopt do not support TCP_ULP.
+I'm not sure why there is such a difference, but I noticed that
+tcp_setsockopt is called in bpf_setsockopt.I think we can add the
+handling of this case.
 
-hum, you pass fd_array_cnt as 0, which IIUC will work properly
+Change list:
+- v1 -> v2:
+  - modified the do_tcp_setsockopt(TCP_ULP) process by referring to
+  section do_tcp_setsockopt(TCP_CONGESTION), avoid sleep
+  - The selftest case is modified. An independent file is selected
+  for the test to avoid affecting the original file in setget_sockopt.c
+  - fixed some formatting errors, such as Signed and Subject
 
-but I guess then we don't need to have fd_array_cnt argument in
-probe_prog_load if all callers pass 0 ?
+Revisions:
+- v1
+  https://lore.kernel.org/bpf/20250127090724.3168791-1-zhangmingyi5@huawei.com/
 
-jirka
+Mingyi Zhang (2):
+  bpf-next: Introduced to support the ULP to get or set sockets
+  bpf-next: selftest for TCP_ULP in bpf_setsockopt
 
-> +	if (ret < 0)
-> +		return libbpf_err(ret);
-> +
-> +	/* If BPF verifier recognizes BPF kfunc but it's not supported for
-> +	 * given BPF program type, it will emit "calling kernel function
-> +	 * bpf_cpumask_create is not allowed", if the kfunc id is invalid,
-> +	 * it will emit "kernel btf_id 4294967295 is not a function". If btf fd
-> +	 * invalid in module btf, it will emit "invalid module BTF fd specified" or
-> +	 * "negative offset disallowed for kernel module function call"
-> +	 */
-> +	if (ret == 0 && (strstr(buf, "not allowed") || strstr(buf, "not a function") ||
-> +			(strstr(buf, "invalid module BTF fd")) ||
-> +			(strstr(buf, "negative offset disallowed"))))
-> +		return 0;
-> +
-> +	return 1; /* assume supported */
-> +}
-> +
->  int libbpf_probe_bpf_helper(enum bpf_prog_type prog_type, enum bpf_func_id helper_id,
->  			    const void *opts)
->  {
-> -- 
-> 2.43.0
-> 
+ include/net/tcp.h                             |  2 +-
+ net/core/filter.c                             |  1 +
+ net/ipv4/tcp.c                                |  2 +-
+ net/ipv4/tcp_ulp.c                            | 28 +++----
+ net/mptcp/subflow.c                           |  2 +-
+ .../bpf/prog_tests/setget_sockopt_tcp_ulp.c   | 78 +++++++++++++++++++
+ .../bpf/progs/setget_sockopt_tcp_ulp.c        | 33 ++++++++
+ 7 files changed, 130 insertions(+), 16 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/setget_sockopt_tcp_ulp.c
+ create mode 100644 tools/testing/selftests/bpf/progs/setget_sockopt_tcp_ulp.c
+
+-- 
+2.43.0
+
