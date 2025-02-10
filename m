@@ -1,61 +1,61 @@
 Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E87325A333;
-	Mon, 10 Feb 2025 17:44:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33EB5257ACE;
+	Mon, 10 Feb 2025 17:44:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739209449; cv=none; b=Tt31W51KHaPxwVdTChpfGhAlgUrM7NiRmP4OMQlBCNKoi5Ml7jJdrQEGZX90StC0ZeeZ99pSwJsCUhstE/zqTluCGaw+uNfcAWx92MiPKzvFpb4MHBaXZ23nlF2CjWbWfp4OeV/B7dGWZrwy3YZ9VAvAG9CQsHXW4pWixiQIL5w=
+	t=1739209450; cv=none; b=QEqwLAesS+m8xBt12JP/2WNYH2BSvgtf9XIfqgPcyJKi5b+DQWpGdLM0kBphctddye76xRzxJUlOmbBlVTB9gCkQ1eDkNyNWZWHekp1xdptNPr0uGJf2efAd2e96ArrhMCLbNlZy+GusX6+Pi5v6l+zwhDdEXgOhyluuL1Q10x8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739209449; c=relaxed/simple;
-	bh=wecBTFOKU/7DDslMJtQcO1DcEyTkzBNNAGp1ShemhsA=;
+	s=arc-20240116; t=1739209450; c=relaxed/simple;
+	bh=sVVkbk0Gn1THhmgFQQYZXWJ516ceqWV7SjuSKbWsCVg=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=dzMNcHJx9+/kLpJojG5Tyr0tAvKADgKe0Pzqtfau5yRXuWywU4U6t1N+W8Iuk9hGHPXB3MU79yaSfORFHdBZf9soHSWNkBDX2XPNb7IaFZdd6iIDTFwqhOEp3TtkhbPWh3/BAG3ZIkOS2y716/AEim9a8NQvNS+HJReYaG/jxQM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FMfc0qdW; arc=none smtp.client-ip=209.85.216.51
+	 MIME-Version; b=eJgQAForLUlK1dmB2jvTmgUx5iJjmg3nTSaq03N+J4+vK3eMsimO5Cn2sUhZo9T9xOqgup6wT0jflmGKGvFeGOvQfRcPC9SHelD3WwlRs6FZXjkBYJ4Rl82AJypKfN7dbRg9qL825povtDnWT5JFwPUuDkRU9p/AeG6/njzcHKM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OrgBZ2H9; arc=none smtp.client-ip=209.85.216.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FMfc0qdW"
-Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-2fa21145217so7203950a91.3;
-        Mon, 10 Feb 2025 09:44:07 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OrgBZ2H9"
+Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-2fa40c0bab2so4582396a91.0;
+        Mon, 10 Feb 2025 09:44:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1739209447; x=1739814247; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1739209448; x=1739814248; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=EeAP7Bc6x9e9oxdbqzfBkmCuQiCzPgcgtTAZRyBQYU8=;
-        b=FMfc0qdWD+p5k4WEwNzpibwFZeHxuq8nyNM+t9BiTNWGQhVXR7YNNDlERaMAjnsMxt
-         1YBobMq/qUIEqrTr9jBgplQIgjIwCd30bKB6jLJTmnPM+4Yml/pqdm5d/F6bkrtgSN55
-         DesTmJ1vV//UtirZyRT/1cm0dYPq3RJmvtfYhScDSgfKZqGelwW2JkEqwhKpgXZpqz8O
-         YJiaOKC1zNULB+WFKyofegegLhBsF7t/uQtSGqkhqlowDTREBLQXz3G8TpCN8w7b2pyY
-         ZKyTf/F3/ReOPxqPk0KR0TShohiVifr7PnabgJsdvvH+Xeie6h3Iz+5jMGgiBo9sSRMW
-         ZyWA==
+        bh=tCot4AmKUdSjbCpz+84y1dF8CcLEygWZ6VcGHROBKi0=;
+        b=OrgBZ2H9xgqfRzwspedh5cy7sxDwbimO7B/BppDOsiwahGWgIF92V6TDXQftrymsgZ
+         GYuflqUMwIjBBKfLSrsStv/0HCCnLY11o3owE/1D/svRcMQb0jDgu6fZfbgIt9Wim3od
+         DcwgBKENGU4Z33EB+eQ8zcy//tStSZc6Jw5W7FEyJ8teXq7FAG1/Ybcl7hgs5/hihG9g
+         2RzKMadEI/dN3sLbRTGvWsPrNlFxs4hO+Cljrd7FDQijEKmM1H60XBMmSkrrzQVDJxT8
+         WQnlEl0rZEzKSeNfDfpAZRZdO5rMua8qaTcS9n4DXNU6wEw3cWYdvMaecd8tS2u3nOjH
+         10Iw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739209447; x=1739814247;
+        d=1e100.net; s=20230601; t=1739209448; x=1739814248;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=EeAP7Bc6x9e9oxdbqzfBkmCuQiCzPgcgtTAZRyBQYU8=;
-        b=RR4WAuwRkLGOsM+nIEsQHGzhe5qaVrbBU0sm1zvGulnp5uNAZcZlGyNo5VGmEqfAB7
-         3y8xi6drujzHJ2NWNzqD9NdPDZpdIuYG1FRSwlfw2m9ZAVLg1KoyJN8luj4Pk2/hN19H
-         iTmMMvyFZ5n5tkw3rh/f8bdjlIDTvUZfpt0JtVD0ZtFd/mdIes93qeQfrgAXR8Ej7cXO
-         4NGjQvciY1ZLU0TRViOmlC4WzJh4zd3OD9L4hQ12R0pCBIX9+QRd4TZxhgDcs1kR4dsJ
-         tbSnHxprAk0RJUKaXEQSrXp4zKrx+nHZsq0XV9FEH0pIEisqqzI2T7QOE7hqwH853878
-         xUww==
-X-Gm-Message-State: AOJu0YweVOMCI8pWegTnHufWIbdBtk9YbHHcAXlX2rqt1oblSWPR2Dcc
-	ODKBMOWVwvPOQ0QCDH4vlrCp2wWZsBl4dUzCGHQE5ajPqn/dwpZNO68zO3Uw
-X-Gm-Gg: ASbGncvI3HZAQUJI4zBMbI5tivaxvpLz/QVLoEobKfdarhGdd82D9wPDk/PNRBzKjTf
-	4ZltLp6Jv2X4YAqQj1xlIO+cxE3hePhI0UEhX4cG7nK7sZ+nq7gStAdDj4w4pkgc4VGDmT2T7LW
-	wL14zPabINGwRRho79TO4fWgJceAyohfO5I3W0/gYgo8A1eoD8qyKBlc9otnkFDDklBPL0Bwe5x
-	e0EtcCllg6o/8eRVDmcYiWtgaj3K03XqMbrIEXevzPGYSFPE3yH+wfG6pZUC5HtVNArrYbL9PpQ
-	WIEswJBQGXP8sFNNMZcK0Ozjag7gMdglB+WgrDQYNhZjOeEBUb7WDTmKobXFdkUT7A==
-X-Google-Smtp-Source: AGHT+IFhTVSIxmKwGH9dmYlhO4Vcd30EKVWJYTknTtHvOBBkOa6UXK/veI/brVLTkmTkXzklbNy0Ew==
-X-Received: by 2002:a17:90b:2d8c:b0:2fa:2124:8782 with SMTP id 98e67ed59e1d1-2fa243db995mr22985231a91.25.1739209445174;
-        Mon, 10 Feb 2025 09:44:05 -0800 (PST)
+        bh=tCot4AmKUdSjbCpz+84y1dF8CcLEygWZ6VcGHROBKi0=;
+        b=CSK6bi4PbXgTgg6eoDwLp76ZgXf5VjwTlcEVkH+syuD+QyBX3Mo4dkGggOOMweIhDi
+         qvebENqx5BsON06bw7guk5NUnuT0lZsr//3Z/jwVGW3z6C7qZd/tr71zdouM97QQ0FrX
+         U2pKgexMN6p+QodAFLCuK9CtR9TuXsIUsRtHBkEtcJ0m+h32wC50FLuZcz1A4k9eXrJu
+         miSPEOo8dZxUjFmD1VIktspvEMhXH0tMZZRCuzK1XVrvI6ZjD5OZ6874NvJBjGiC245F
+         PbAddW8k+gROy7ajO3vsnuB1Oo5P1Et+dRVdXne7qTkOFRl712WaqsrSznvy594maexn
+         yfxQ==
+X-Gm-Message-State: AOJu0YzUkutGR6w+UHYbiW1AD8FWgVuVRdVkKw6fUc79wWvssR0SYFX6
+	KF2X18L5JWEPdAcP9Y7Wjcb9fxU2siqC9FxGIpc+7Evf6BhwJh79KvmD6Kul
+X-Gm-Gg: ASbGncte6f8VXJ7UFj+raCZUW2VXapUvSkKQaY3UKEImZJfOfK5pWB93Mugqxs9fuEK
+	VpmsFXOeDgmocpGFnL4f6/JBpygG8+CHy6r5xr6CdQ3opbqr7J9xIn3ClHDHioRLCl38bCmuTUk
+	68Vt6HSH027uwcmOhXHddVu2Gbl9H5XKWBSedXXeEkSz+XbNoZZpZnuhBUBUrxYC7SuiHM6uhjr
+	AtOCEBdfhCZElohGCfEI9AH+N/BLovLWga5Nmba6sMBTCwCKgyd6vBDvNM+nWhUfIvy2D4FGd6J
+	Lvngi178pHa4qc5L2xUNvlF+/Gw90vzwmLzis1/e0Rr3Udt+ZnMeTxVqXbY7vXqeTA==
+X-Google-Smtp-Source: AGHT+IGOQqcef8+uXJOslKW4MqjO0+yfdJIEKy/ckO4RYPSE7YgsLhAZhQKf734vkt/D81RganGRcg==
+X-Received: by 2002:a17:90b:350b:b0:2fa:228d:5af3 with SMTP id 98e67ed59e1d1-2fa24271b0bmr24427087a91.15.1739209448573;
+        Mon, 10 Feb 2025 09:44:08 -0800 (PST)
 Received: from localhost.localdomain (c-76-146-13-146.hsd1.wa.comcast.net. [76.146.13.146])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2fa3fb55dcasm5554961a91.4.2025.02.10.09.44.04
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2fa3fb55dcasm5554961a91.4.2025.02.10.09.44.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Feb 2025 09:44:04 -0800 (PST)
+        Mon, 10 Feb 2025 09:44:08 -0800 (PST)
 From: Amery Hung <ameryhung@gmail.com>
 To: netdev@vger.kernel.org
 Cc: bpf@vger.kernel.org,
@@ -77,9 +77,9 @@ Cc: bpf@vger.kernel.org,
 	yepeilin.cs@gmail.com,
 	ameryhung@gmail.com,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v4 16/19] libbpf: Support creating and destroying qdisc
-Date: Mon, 10 Feb 2025 09:43:30 -0800
-Message-ID: <20250210174336.2024258-17-ameryhung@gmail.com>
+Subject: [PATCH bpf-next v4 19/19] selftests/bpf: Test attaching bpf qdisc to mq and non root
+Date: Mon, 10 Feb 2025 09:43:33 -0800
+Message-ID: <20250210174336.2024258-20-ameryhung@gmail.com>
 X-Mailer: git-send-email 2.47.1
 In-Reply-To: <20250210174336.2024258-1-ameryhung@gmail.com>
 References: <20250210174336.2024258-1-ameryhung@gmail.com>
@@ -91,103 +91,121 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Amery Hung <amery.hung@bytedance.com>
+Until we are certain that existing classful qdiscs work with bpf qdisc,
+make sure we don't allow attaching a bpf qdisc to non root. Meanwhile,
+attaching to mq is allowed.
 
-Extend struct bpf_tc_hook with handle, qdisc name and a new attach type,
-BPF_TC_QDISC, to allow users to add or remove any qdisc specified in
-addition to clsact.
-
-Signed-off-by: Amery Hung <amery.hung@bytedance.com>
+Signed-off-by: Amery Hung <ameryhung@gmail.com>
 ---
- tools/lib/bpf/libbpf.h  |  5 ++++-
- tools/lib/bpf/netlink.c | 20 +++++++++++++++++---
- 2 files changed, 21 insertions(+), 4 deletions(-)
+ tools/testing/selftests/bpf/config            |  1 +
+ .../selftests/bpf/prog_tests/bpf_qdisc.c      | 75 +++++++++++++++++++
+ 2 files changed, 76 insertions(+)
 
-diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
-index 3020ee45303a..12c81e6da219 100644
---- a/tools/lib/bpf/libbpf.h
-+++ b/tools/lib/bpf/libbpf.h
-@@ -1270,6 +1270,7 @@ enum bpf_tc_attach_point {
- 	BPF_TC_INGRESS = 1 << 0,
- 	BPF_TC_EGRESS  = 1 << 1,
- 	BPF_TC_CUSTOM  = 1 << 2,
-+	BPF_TC_QDISC   = 1 << 3,
- };
- 
- #define BPF_TC_PARENT(a, b) 	\
-@@ -1284,9 +1285,11 @@ struct bpf_tc_hook {
- 	int ifindex;
- 	enum bpf_tc_attach_point attach_point;
- 	__u32 parent;
-+	__u32 handle;
-+	const char *qdisc;
- 	size_t :0;
- };
--#define bpf_tc_hook__last_field parent
-+#define bpf_tc_hook__last_field qdisc
- 
- struct bpf_tc_opts {
- 	size_t sz;
-diff --git a/tools/lib/bpf/netlink.c b/tools/lib/bpf/netlink.c
-index 68a2def17175..c997e69d507f 100644
---- a/tools/lib/bpf/netlink.c
-+++ b/tools/lib/bpf/netlink.c
-@@ -529,9 +529,9 @@ int bpf_xdp_query_id(int ifindex, int flags, __u32 *prog_id)
+diff --git a/tools/testing/selftests/bpf/config b/tools/testing/selftests/bpf/config
+index 6b0cab55bd2d..3201a962b3dc 100644
+--- a/tools/testing/selftests/bpf/config
++++ b/tools/testing/selftests/bpf/config
+@@ -74,6 +74,7 @@ CONFIG_NET_MPLS_GSO=y
+ CONFIG_NET_SCH_BPF=y
+ CONFIG_NET_SCH_FQ=y
+ CONFIG_NET_SCH_INGRESS=y
++CONFIG_NET_SCH_HTB=y
+ CONFIG_NET_SCHED=y
+ CONFIG_NETDEVSIM=y
+ CONFIG_NETFILTER=y
+diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_qdisc.c b/tools/testing/selftests/bpf/prog_tests/bpf_qdisc.c
+index 7e8e3170e6b6..5d4fa5ad40e1 100644
+--- a/tools/testing/selftests/bpf/prog_tests/bpf_qdisc.c
++++ b/tools/testing/selftests/bpf/prog_tests/bpf_qdisc.c
+@@ -86,6 +86,77 @@ static void test_fq(void)
+ 	bpf_qdisc_fq__destroy(fq_skel);
  }
  
- 
--typedef int (*qdisc_config_t)(struct libbpf_nla_req *req);
-+typedef int (*qdisc_config_t)(struct libbpf_nla_req *req, const struct bpf_tc_hook *hook);
- 
--static int clsact_config(struct libbpf_nla_req *req)
-+static int clsact_config(struct libbpf_nla_req *req, const struct bpf_tc_hook *hook)
- {
- 	req->tc.tcm_parent = TC_H_CLSACT;
- 	req->tc.tcm_handle = TC_H_MAKE(TC_H_CLSACT, 0);
-@@ -539,6 +539,16 @@ static int clsact_config(struct libbpf_nla_req *req)
- 	return nlattr_add(req, TCA_KIND, "clsact", sizeof("clsact"));
- }
- 
-+static int qdisc_config(struct libbpf_nla_req *req, const struct bpf_tc_hook *hook)
++static void test_qdisc_attach_to_mq(void)
 +{
-+	const char *qdisc = OPTS_GET(hook, qdisc, NULL);
++	DECLARE_LIBBPF_OPTS(bpf_tc_hook, hook,
++			    .attach_point = BPF_TC_QDISC,
++			    .parent = TC_H_MAKE(1 << 16, 1),
++			    .handle = 0x11 << 16,
++			    .qdisc = "bpf_fifo");
++	struct bpf_qdisc_fifo *fifo_skel;
++	struct bpf_link *link;
++	int err;
 +
-+	req->tc.tcm_parent = OPTS_GET(hook, parent, TC_H_ROOT);
-+	req->tc.tcm_handle = OPTS_GET(hook, handle, 0);
++	fifo_skel = bpf_qdisc_fifo__open_and_load();
++	if (!ASSERT_OK_PTR(fifo_skel, "bpf_qdisc_fifo__open_and_load"))
++		return;
 +
-+	return nlattr_add(req, TCA_KIND, qdisc, strlen(qdisc) + 1);
++	link = bpf_map__attach_struct_ops(fifo_skel->maps.fifo);
++	if (!ASSERT_OK_PTR(link, "bpf_map__attach_struct_ops")) {
++		bpf_qdisc_fifo__destroy(fifo_skel);
++		return;
++	}
++
++	SYS(out, "ip link add veth0 type veth peer veth1");
++	hook.ifindex = if_nametoindex("veth0");
++	SYS(out, "tc qdisc add dev veth0 root handle 1: mq");
++
++	err = bpf_tc_hook_create(&hook);
++	ASSERT_OK(err, "attach qdisc");
++
++	bpf_tc_hook_destroy(&hook);
++
++	SYS(out, "tc qdisc delete dev veth0 root mq");
++out:
++	bpf_link__destroy(link);
++	bpf_qdisc_fifo__destroy(fifo_skel);
 +}
 +
- static int attach_point_to_config(struct bpf_tc_hook *hook,
- 				  qdisc_config_t *config)
++static void test_qdisc_attach_to_non_root(void)
++{
++	DECLARE_LIBBPF_OPTS(bpf_tc_hook, hook, .ifindex = LO_IFINDEX,
++			    .attach_point = BPF_TC_QDISC,
++			    .parent = TC_H_MAKE(1 << 16, 1),
++			    .handle = 0x11 << 16,
++			    .qdisc = "bpf_fifo");
++	struct bpf_qdisc_fifo *fifo_skel;
++	struct bpf_link *link;
++	int err;
++
++	fifo_skel = bpf_qdisc_fifo__open_and_load();
++	if (!ASSERT_OK_PTR(fifo_skel, "bpf_qdisc_fifo__open_and_load"))
++		return;
++
++	link = bpf_map__attach_struct_ops(fifo_skel->maps.fifo);
++	if (!ASSERT_OK_PTR(link, "bpf_map__attach_struct_ops")) {
++		bpf_qdisc_fifo__destroy(fifo_skel);
++		return;
++	}
++
++	SYS(out, "tc qdisc add dev lo root handle 1: htb");
++	SYS(out_del_htb, "tc class add dev lo parent 1: classid 1:1 htb rate 75Kbit");
++
++	err = bpf_tc_hook_create(&hook);
++	if (!ASSERT_ERR(err, "attach qdisc"))
++		bpf_tc_hook_destroy(&hook);
++
++out_del_htb:
++	SYS(out, "tc qdisc delete dev lo root htb");
++out:
++	bpf_link__destroy(link);
++	bpf_qdisc_fifo__destroy(fifo_skel);
++}
++
+ void test_bpf_qdisc(void)
  {
-@@ -552,6 +562,9 @@ static int attach_point_to_config(struct bpf_tc_hook *hook,
- 		return 0;
- 	case BPF_TC_CUSTOM:
- 		return -EOPNOTSUPP;
-+	case BPF_TC_QDISC:
-+		*config = &qdisc_config;
-+		return 0;
- 	default:
- 		return -EINVAL;
- 	}
-@@ -596,7 +609,7 @@ static int tc_qdisc_modify(struct bpf_tc_hook *hook, int cmd, int flags)
- 	req.tc.tcm_family  = AF_UNSPEC;
- 	req.tc.tcm_ifindex = OPTS_GET(hook, ifindex, 0);
+ 	struct netns_obj *netns;
+@@ -98,6 +169,10 @@ void test_bpf_qdisc(void)
+ 		test_fifo();
+ 	if (test__start_subtest("fq"))
+ 		test_fq();
++	if (test__start_subtest("attach to mq"))
++		test_qdisc_attach_to_mq();
++	if (test__start_subtest("attach to non root"))
++		test_qdisc_attach_to_non_root();
  
--	ret = config(&req);
-+	ret = config(&req, hook);
- 	if (ret < 0)
- 		return ret;
- 
-@@ -639,6 +652,7 @@ int bpf_tc_hook_destroy(struct bpf_tc_hook *hook)
- 	case BPF_TC_INGRESS:
- 	case BPF_TC_EGRESS:
- 		return libbpf_err(__bpf_tc_detach(hook, NULL, true));
-+	case BPF_TC_QDISC:
- 	case BPF_TC_INGRESS | BPF_TC_EGRESS:
- 		return libbpf_err(tc_qdisc_delete(hook));
- 	case BPF_TC_CUSTOM:
+ 	netns_free(netns);
+ }
 -- 
 2.47.1
 
