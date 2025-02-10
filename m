@@ -1,74 +1,58 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36B911C3C01;
-	Mon, 10 Feb 2025 09:53:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B380C1C3C0F;
+	Mon, 10 Feb 2025 09:53:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739181213; cv=none; b=GXj2jZXy/C6w0AyKgPiAMmavY8GFc1txq9dIOva53iZvCzr1e7FqxpBEjFoUAtM5mHZBj1YZnYXJGWRkXo5mmReG+oMxVmgV1R6OJQt6ws5KXiwPQi2AV+X/XJxSccFGowYfPebN76JKJob+axzmxubGVssf+1wAAzYAwdYgi24=
+	t=1739181214; cv=none; b=Wwpph1lPc9OEuElqZdu9fk8s1wvdjA7jQUp6n8tF0ahx/iTszOcPvdFbc/lZo4nEqVJHzJGxR93uO4KmQJ0sLo+yFIKUIFjzhug3UcdH+EqUa+F9KBGFEACGA66RfmCE5FyjL68xOUJ0nDl5fL9sZj8CcVyqCOKfJhpJSzFm5CI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739181213; c=relaxed/simple;
-	bh=Cs4DIpiDZFbONHrR/b3pzJ9QiKq0CYJfxV6A+hW40Tk=;
+	s=arc-20240116; t=1739181214; c=relaxed/simple;
+	bh=bOvDRrgXH6phjEcMFiDdEDrs3Vrvfib1N+WLCTV+ORk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=EbK8icaDTpLMOC3qYr20NyAXHIEQokhNRaQMDWi+CNXHbxtVtX56ir4D14f2YNsuHzf6vibeAzxQ+KhOZ1MturgJQWLgYErrYdvqWn7Fg9ecU70iw9s0EmGjgp5sk/Vre7Hy8Wxfw9rVtSJjKpfaOj7JYmtqAGKTqajv4U2NYbo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fxyEoupx; arc=none smtp.client-ip=198.175.65.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=fDY8bdfCeUtDvaJcuUjina+ZA/9wmTg1co3kBKc/YfIHDYvfnwj3ZbXtQ4C1EDToyn9F/5olyDyuKp6cGErOUwc8K7zoo6eJJsNNZ4Bb+kxO6CAtQnbRJkKt5SbQPCKP/0wFQrb0KpTBNj0vbHferEqmmpgK9ZxJB1fNCNjJ+i8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=CLZ+s75h; arc=none smtp.client-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fxyEoupx"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1739181213; x=1770717213;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Cs4DIpiDZFbONHrR/b3pzJ9QiKq0CYJfxV6A+hW40Tk=;
-  b=fxyEoupx4fA85MGKyd2pTKekjRTlCeRH1ZHoahsYpwz50pgOOvzSbERv
-   ZvAlnLItE2AEWT9br+5eoCobhKwbRgyFWE1cYuMiRNnIE2sW3tscfq8VF
-   bV6vSBY0j4aXp1HHCxtHgh478t8VzkVCPwZ/Pq6MaDe4KnCovtjsRMSbZ
-   4lezSgboFXguynMSiVXaveoDrtt4WAMXdFFI8M8pOaFtjQIWAYHhwVp4x
-   7SphqXc/qsoRZKoDI+nodDn3lgaMuImrlZCj+ZHl4s30Fu+3tLLrvCVNK
-   EysqYnNE9XkwC3F4v0TQ2GuFEjbz9Ug+qUwmr8t0Fnw8Vo+ZSSMs4W2oE
-   w==;
-X-CSE-ConnectionGUID: ag4Sww0XQZSC4tI1SJVJ5g==
-X-CSE-MsgGUID: Tl7OP7tQQV6YZPA8XXXGxw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11340"; a="43414892"
-X-IronPort-AV: E=Sophos;i="6.13,274,1732608000"; 
-   d="scan'208";a="43414892"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2025 01:53:31 -0800
-X-CSE-ConnectionGUID: k8qiI+q8Tpa/U0n5AhEbdQ==
-X-CSE-MsgGUID: Km2MynZTS2S3HcHczkCaFw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
-   d="scan'208";a="117077825"
-Received: from mev-dev.igk.intel.com ([10.237.112.144])
-  by ORVIESA003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2025 01:53:24 -0800
-Date: Mon, 10 Feb 2025 10:49:49 +0100
-From: Michal Swiatkowski <michal.swiatkowski@linux.intel.com>
-To: Tariq Toukan <tariqt@nvidia.com>
-Cc: "David S. Miller" <davem@davemloft.net>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Eric Dumazet <edumazet@google.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>, netdev@vger.kernel.org,
-	Saeed Mahameed <saeedm@nvidia.com>, Gal Pressman <gal@nvidia.com>,
-	Leon Romanovsky <leonro@nvidia.com>,
-	Simon Horman <horms@kernel.org>,
-	Donald Hunter <donald.hunter@gmail.com>,
-	Jiri Pirko <jiri@resnulli.us>, Jonathan Corbet <corbet@lwn.net>,
-	Leon Romanovsky <leon@kernel.org>,
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="CLZ+s75h"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=s8Mwq3rMEa8CkQmRNyS/s+cyYunNKj5Wlg7L/VvKRhc=; b=CLZ+s75h+0rfLi/5P96AEUisat
+	9NPxjkymmufjZFkx2Qg00zQQknhLs2i3RWzR0OV3cfSvk8UZ2iNO7RyvW3jRZv2JIIOz4lXzn3QVh
+	ZNrDBOu/UUC9HIStKK5n1QPCExb86xogvlwW1BxGRgYd29njnz1IoJ6qvC6jwIcptojfr7zGkCuiX
+	L5EYdA5eo6pvF+yymPngVl7yx2b7U2eKoTgvku7tnnRqvaO1ddnhBLxFDG7iT8bKgmu5hZO4FTkYz
+	223I67HaSLf8Qkq/NyJ+v5J74UdJE6Gb/S9K+gjdzNIWqBvmOs5h9xJyBCIgXvDIbYxNhafSsSAuU
+	UgJjc69g==;
+Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
+	by casper.infradead.org with esmtpsa (Exim 4.98 #2 (Red Hat Linux))
+	id 1thQTl-0000000FThV-2RSc;
+	Mon, 10 Feb 2025 09:53:25 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 2DFFA300318; Mon, 10 Feb 2025 10:53:25 +0100 (CET)
+Date: Mon, 10 Feb 2025 10:53:24 +0100
+From: Peter Zijlstra <peterz@infradead.org>
+To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Ankur Arora <ankur.a.arora@oracle.com>,
+	Linus Torvalds <torvalds@linux-foundation.org>,
+	Will Deacon <will@kernel.org>, Waiman Long <llong@redhat.com>,
 	Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Richard Cochran <richardcochran@gmail.com>,
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-rdma@vger.kernel.org, bpf@vger.kernel.org,
-	William Tu <witu@nvidia.com>, Bodong Wang <bodong@nvidia.com>
-Subject: Re: [PATCH net-next 07/15] net/mlx5e: reduce rep rxq depth to 256
- for ECPF
-Message-ID: <Z6nLtN5rn68kY4i0@mev-dev.igk.intel.com>
-References: <20250209101716.112774-1-tariqt@nvidia.com>
- <20250209101716.112774-8-tariqt@nvidia.com>
+	Martin KaFai Lau <martin.lau@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	"Paul E. McKenney" <paulmck@kernel.org>, Tejun Heo <tj@kernel.org>,
+	Barret Rhoden <brho@google.com>, Josh Don <joshdon@google.com>,
+	Dohyun Kim <dohyunkim@google.com>,
+	linux-arm-kernel@lists.infradead.org, kernel-team@meta.com
+Subject: Re: [PATCH bpf-next v2 17/26] rqspinlock: Hardcode cond_acquire
+ loops to asm-generic implementation
+Message-ID: <20250210095324.GG10324@noisy.programming.kicks-ass.net>
+References: <20250206105435.2159977-1-memxor@gmail.com>
+ <20250206105435.2159977-18-memxor@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -77,74 +61,25 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250209101716.112774-8-tariqt@nvidia.com>
+In-Reply-To: <20250206105435.2159977-18-memxor@gmail.com>
 
-On Sun, Feb 09, 2025 at 12:17:08PM +0200, Tariq Toukan wrote:
-> From: William Tu <witu@nvidia.com>
+On Thu, Feb 06, 2025 at 02:54:25AM -0800, Kumar Kartikeya Dwivedi wrote:
+> Currently, for rqspinlock usage, the implementation of
+> smp_cond_load_acquire (and thus, atomic_cond_read_acquire) are
+> susceptible to stalls on arm64, because they do not guarantee that the
+> conditional expression will be repeatedly invoked if the address being
+> loaded from is not written to by other CPUs. When support for
+> event-streams is absent (which unblocks stuck WFE-based loops every
+> ~100us), we may end up being stuck forever.
 > 
-> By experiments, a single queue representor netdev consumes kernel
-> memory around 2.8MB, and 1.8MB out of the 2.8MB is due to page
-> pool for the RXQ. Scaling to a thousand representors consumes 2.8GB,
-> which becomes a memory pressure issue for embedded devices such as
-> BlueField-2 16GB / BlueField-3 32GB memory.
+> This causes a problem for us, as we need to repeatedly invoke the
+> RES_CHECK_TIMEOUT in the spin loop to break out when the timeout
+> expires.
 > 
-> Since representor netdevs mostly handles miss traffic, and ideally,
-> most of the traffic will be offloaded, reduce the default non-uplink
-> rep netdev's RXQ default depth from 1024 to 256 if mdev is ecpf eswitch
-> manager. This saves around 1MB of memory per regular RQ,
-> (1024 - 256) * 2KB, allocated from page pool.
+> Hardcode the implementation to the asm-generic version in rqspinlock.c
+> until support for smp_cond_load_acquire_timewait [0] lands upstream.
 > 
-> With rxq depth of 256, the netlink page pool tool reports
-> $./tools/net/ynl/cli.py --spec Documentation/netlink/specs/netdev.yaml \
-> 	 --dump page-pool-get
->  {'id': 277,
->   'ifindex': 9,
->   'inflight': 128,
->   'inflight-mem': 786432,
->   'napi-id': 775}]
-> 
-> This is due to mtu 1500 + headroom consumes half pages, so 256 rxq
-> entries consumes around 128 pages (thus create a page pool with
-> size 128), shown above at inflight.
-> 
-> Note that each netdev has multiple types of RQs, including
-> Regular RQ, XSK, PTP, Drop, Trap RQ. Since non-uplink representor
-> only supports regular rq, this patch only changes the regular RQ's
-> default depth.
-> 
-> Signed-off-by: William Tu <witu@nvidia.com>
-> Reviewed-by: Bodong Wang <bodong@nvidia.com>
-> Reviewed-by: Saeed Mahameed <saeedm@nvidia.com>
-> Signed-off-by: Tariq Toukan <tariqt@nvidia.com>
-> ---
->  drivers/net/ethernet/mellanox/mlx5/core/en_rep.c | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_rep.c b/drivers/net/ethernet/mellanox/mlx5/core/en_rep.c
-> index fdff9fd8a89e..da399adc8854 100644
-> --- a/drivers/net/ethernet/mellanox/mlx5/core/en_rep.c
-> +++ b/drivers/net/ethernet/mellanox/mlx5/core/en_rep.c
-> @@ -65,6 +65,7 @@
->  #define MLX5E_REP_PARAMS_DEF_LOG_SQ_SIZE \
->  	max(0x7, MLX5E_PARAMS_MINIMUM_LOG_SQ_SIZE)
->  #define MLX5E_REP_PARAMS_DEF_NUM_CHANNELS 1
-> +#define MLX5E_REP_PARAMS_DEF_LOG_RQ_SIZE 0x8
->  
->  static const char mlx5e_rep_driver_name[] = "mlx5e_rep";
->  
-> @@ -855,6 +856,8 @@ static void mlx5e_build_rep_params(struct net_device *netdev)
->  
->  	/* RQ */
->  	mlx5e_build_rq_params(mdev, params);
-> +	if (!mlx5e_is_uplink_rep(priv) && mlx5_core_is_ecpf(mdev))
-> +		params->log_rq_mtu_frames = MLX5E_REP_PARAMS_DEF_LOG_RQ_SIZE;
->  
->  	/* If netdev is already registered (e.g. move from nic profile to uplink,
->  	 * RTNL lock must be held before triggering netdev notifiers.
 
-Thanks for detailed commit message.
-
-Reviewed-by: Michal Swiatkowski <michal.swiatkowski@linux.intel.com>
-
-> -- 
-> 2.45.0
+*sigh*.. this patch should go *before* patch 8. As is that's still
+horribly broken and I was WTF-ing because your 0/n changelog said you
+fixed it.
