@@ -1,174 +1,145 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+Received: from out-189.mta0.migadu.com (out-189.mta0.migadu.com [91.218.175.189])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 045742E628;
-	Mon, 10 Feb 2025 09:51:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BE0A1C3C01
+	for <bpf@vger.kernel.org>; Mon, 10 Feb 2025 09:52:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.189
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739181067; cv=none; b=rJb4nmAbfekHXNOZf3CjBHniI77uAxDnAUDVvS5iqRpv1pIEKHkW8s/jr0qff09JHyMyEVf6V6pDVVkpoJUlNFkffNrN6YIIAhHeZJwaNp13DE/WLOAhKmaYTduiL7qv12C/S4RPMFOM3FfkfGCa0x5RoHQtvn+Ll/0n/PhLAak=
+	t=1739181138; cv=none; b=a+AtPV6g6miNdEQVVh4C2E39TsOh8OayMe8xP2QcjRMEp/R47WpxHiSTx0IHgDe0+QXLjJBBmtflnO8RALo5IrDXhvQCflnqZGEu5s3ETdrAcxfpzFSjMnOQobYrLQwkcXWfapelMJew/wzeSLMCOsCR4JF5Ls7lIf7BQyXpJXU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739181067; c=relaxed/simple;
-	bh=L/47NT1D33AXwhb7bm+RpJCwbuPNbjYzSmLMznvjFWw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ObhMYx9gh23jvTv45/YpdxSGr2aU2ol5nMFxujV6WbMHKUzo6is4MPofJFYc9iI9+ZXBJJC26NDmJpxV/RZpfqv7krDSGIbpvyEqW/omlL3flt1jgeFABNdqIBk9baDvMlgHA4QzvFm/9RP7G1tLZ20ut6NGfFtr94bc5CLvHas=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QWMoJ5gO; arc=none smtp.client-ip=192.198.163.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1739181138; c=relaxed/simple;
+	bh=P60Kw+OR6zriXJSiWU6Hv8qIi6HKuFYjIN/3vPgnxBY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=EObcZ5ceg/FxNV3JYW9MQ2Bt4XbbemJUk6F2iTUvChDfYK7IMpZ694CaIiAy/WADRQTu4KDVCJVTitPgIrLhTtePgFzQUx2AEz2/ylh3BWmotZzfrPA8BIoH8f/EAw/B4QEF4lWvXtvqhfgbfKh1d2SeKfjKUaKIJrGQhrUBBd4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=e88z9G9o; arc=none smtp.client-ip=91.218.175.189
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QWMoJ5gO"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1739181066; x=1770717066;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=L/47NT1D33AXwhb7bm+RpJCwbuPNbjYzSmLMznvjFWw=;
-  b=QWMoJ5gOmbr1ei3AfxJZ4WdPbw+/zj46qq2SJQzE77gqegORRziW9XSX
-   U9XsF4iJMNQ/DRQoiwzePgZenCMvdcub3rH0bZLmZ7JPwEaTYGNQz1l4T
-   QQrrLbiKfpd1VKfjnuEZf726n+5prXwYwiKOcHo0+JcYl5HeudUH0wPTI
-   brNxxrOksP7X1w/O9ggNNUlA5sBK3RmrVNosJfsZTZHOiAn+N3LSdGjVp
-   g7/CV9PbUqlND9uDLiq4nVT6NsaFEo3B45Z3c51YedstqJ2FmEiXLvpk2
-   kb7JkAqoe94c5qYXuRMM+YA0j6T51SfHeR0JPXBNWQJ6c4pggwmcknku0
-   Q==;
-X-CSE-ConnectionGUID: MykdgzrHTvirkLw2jCF5HQ==
-X-CSE-MsgGUID: B5JxyzdJTW2g8mTyNl9kEw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11340"; a="42595860"
-X-IronPort-AV: E=Sophos;i="6.13,274,1732608000"; 
-   d="scan'208";a="42595860"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2025 01:51:05 -0800
-X-CSE-ConnectionGUID: xmjUZU8AToy/ZXqkagaATg==
-X-CSE-MsgGUID: Q/eVqaqlQgO8mCvrCPpGMA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.13,274,1732608000"; 
-   d="scan'208";a="112777594"
-Received: from mev-dev.igk.intel.com ([10.237.112.144])
-  by fmviesa009-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2025 01:51:00 -0800
-Date: Mon, 10 Feb 2025 10:47:26 +0100
-From: Michal Swiatkowski <michal.swiatkowski@linux.intel.com>
-To: Tariq Toukan <tariqt@nvidia.com>
-Cc: "David S. Miller" <davem@davemloft.net>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Eric Dumazet <edumazet@google.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>, netdev@vger.kernel.org,
-	Saeed Mahameed <saeedm@nvidia.com>, Gal Pressman <gal@nvidia.com>,
-	Leon Romanovsky <leonro@nvidia.com>,
-	Simon Horman <horms@kernel.org>,
-	Donald Hunter <donald.hunter@gmail.com>,
-	Jiri Pirko <jiri@resnulli.us>, Jonathan Corbet <corbet@lwn.net>,
-	Leon Romanovsky <leon@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Richard Cochran <richardcochran@gmail.com>,
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-rdma@vger.kernel.org, bpf@vger.kernel.org,
-	William Tu <witu@nvidia.com>
-Subject: Re: [PATCH net-next 06/15] net/mlx5e: reduce the max log mpwrq sz
- for ECPF and reps
-Message-ID: <Z6nLLsMa4njyLrIV@mev-dev.igk.intel.com>
-References: <20250209101716.112774-1-tariqt@nvidia.com>
- <20250209101716.112774-7-tariqt@nvidia.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="e88z9G9o"
+Message-ID: <cab242ad-a557-430f-a466-7816811aea5e@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1739181133;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ibN7Jj0+hwmBjtQoAuQl+WQFsKbvCJchMXagUxPNO2E=;
+	b=e88z9G9owdctVh8azehu8uqhgL0HL7jrcKXakHsuAKh7mULX+KyEjGMYXZDNaVlMeJnVHf
+	vd1isdGATbkAlBbLxkOL8eSyORA686prhzXf8R5MK5NaXHW0JbHSzP6x06Iqxw/CR/tTUf
+	/DS0SozQ33arSTuBZq1pNS0Plw54q5A=
+Date: Mon, 10 Feb 2025 17:52:04 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250209101716.112774-7-tariqt@nvidia.com>
+Subject: Re: [PATCH bpf-next 4/4] selftests/bpf: Add a case to test global
+ percpu data
+Content-Language: en-US
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+ andrii@kernel.org, yonghong.song@linux.dev, song@kernel.org,
+ eddyz87@gmail.com, qmo@kernel.org, dxu@dxuuu.xyz, kernel-patches-bot@fb.com
+References: <20250127162158.84906-1-leon.hwang@linux.dev>
+ <20250127162158.84906-5-leon.hwang@linux.dev>
+ <CAEf4BzYXCQi4HMvegMmsx-ppxprwNVyKohJgka8gY_B+gMy+mQ@mail.gmail.com>
+ <8e25e1e9-37a0-4d4c-8af9-c2d5e12af65f@linux.dev>
+ <CAEf4BzYeKcaYH8ZYpMo0XRyS4UYWaSZB5bMJ6FK0pUX1SUmgqg@mail.gmail.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Leon Hwang <leon.hwang@linux.dev>
+In-Reply-To: <CAEf4BzYeKcaYH8ZYpMo0XRyS4UYWaSZB5bMJ6FK0pUX1SUmgqg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On Sun, Feb 09, 2025 at 12:17:07PM +0200, Tariq Toukan wrote:
-> From: William Tu <witu@nvidia.com>
-> 
-> For the ECPF and representors, reduce the max MPWRQ size from 256KB (18)
-> to 128KB (17). This prepares the later patch for saving representor
-> memory.
-> 
-> With Striding RQ, there is a minimum of 4 MPWQEs. So with 128KB of max
-> MPWRQ size, the minimal memory is 4 * 128KB = 512KB. When creating page
-> pool, consider 1500 mtu, the minimal page pool size will be 512KB/4KB =
-> 128 pages = 256 rx ring entries (2 entries per page).
-> 
-> Before this patch, setting RX ringsize (ethtool -G rx) to 256 causes
-> driver to allocate page pool size more than it needs due to max MPWRQ
-> is 256KB (18). Ex: 4 * 256KB = 1MB, 1MB/4KB = 256 pages, but actually
-> 128 pages is good enough. Reducing the max MPWRQ to 128KB fixes the
-> limitation.
-> 
-> Signed-off-by: William Tu <witu@nvidia.com>
-> Signed-off-by: Tariq Toukan <tariqt@nvidia.com>
-> ---
->  drivers/net/ethernet/mellanox/mlx5/core/en.h      |  2 --
->  .../net/ethernet/mellanox/mlx5/core/en/params.c   | 15 +++++++++++----
->  2 files changed, 11 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en.h b/drivers/net/ethernet/mellanox/mlx5/core/en.h
-> index 979fc56205e1..534fdd27c8de 100644
-> --- a/drivers/net/ethernet/mellanox/mlx5/core/en.h
-> +++ b/drivers/net/ethernet/mellanox/mlx5/core/en.h
-> @@ -95,8 +95,6 @@ struct page_pool;
->  #define MLX5_MPWRQ_DEF_LOG_STRIDE_SZ(mdev) \
->  	MLX5_MPWRQ_LOG_STRIDE_SZ(mdev, order_base_2(MLX5E_RX_MAX_HEAD))
->  
-> -#define MLX5_MPWRQ_MAX_LOG_WQE_SZ 18
-> -
->  /* Keep in sync with mlx5e_mpwrq_log_wqe_sz.
->   * These are theoretical maximums, which can be further restricted by
->   * capabilities. These values are used for static resource allocations and
-> diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en/params.c b/drivers/net/ethernet/mellanox/mlx5/core/en/params.c
-> index 64b62ed17b07..e37d4c202bba 100644
-> --- a/drivers/net/ethernet/mellanox/mlx5/core/en/params.c
-> +++ b/drivers/net/ethernet/mellanox/mlx5/core/en/params.c
-> @@ -10,6 +10,9 @@
->  #include <net/page_pool/types.h>
->  #include <net/xdp_sock_drv.h>
->  
-> +#define MLX5_MPWRQ_MAX_LOG_WQE_SZ 18
-> +#define MLX5_REP_MPWRQ_MAX_LOG_WQE_SZ 17
-> +
->  static u8 mlx5e_mpwrq_min_page_shift(struct mlx5_core_dev *mdev)
->  {
->  	u8 min_page_shift = MLX5_CAP_GEN_2(mdev, log_min_mkey_entity_size);
-> @@ -103,18 +106,22 @@ u8 mlx5e_mpwrq_log_wqe_sz(struct mlx5_core_dev *mdev, u8 page_shift,
->  			  enum mlx5e_mpwrq_umr_mode umr_mode)
->  {
->  	u8 umr_entry_size = mlx5e_mpwrq_umr_entry_size(umr_mode);
-> -	u8 max_pages_per_wqe, max_log_mpwqe_size;
-> +	u8 max_pages_per_wqe, max_log_wqe_size_calc;
-> +	u8 max_log_wqe_size_cap;
->  	u16 max_wqe_size;
->  
->  	/* Keep in sync with MLX5_MPWRQ_MAX_PAGES_PER_WQE. */
->  	max_wqe_size = mlx5e_get_max_sq_aligned_wqebbs(mdev) * MLX5_SEND_WQE_BB;
->  	max_pages_per_wqe = ALIGN_DOWN(max_wqe_size - sizeof(struct mlx5e_umr_wqe),
->  				       MLX5_UMR_FLEX_ALIGNMENT) / umr_entry_size;
-> -	max_log_mpwqe_size = ilog2(max_pages_per_wqe) + page_shift;
-> +	max_log_wqe_size_calc = ilog2(max_pages_per_wqe) + page_shift;
-> +
-> +	WARN_ON_ONCE(max_log_wqe_size_calc < MLX5E_ORDER2_MAX_PACKET_MTU);
->  
-> -	WARN_ON_ONCE(max_log_mpwqe_size < MLX5E_ORDER2_MAX_PACKET_MTU);
-> +	max_log_wqe_size_cap = mlx5_core_is_ecpf(mdev) ?
-> +			   MLX5_REP_MPWRQ_MAX_LOG_WQE_SZ : MLX5_MPWRQ_MAX_LOG_WQE_SZ;
->  
-> -	return min_t(u8, max_log_mpwqe_size, MLX5_MPWRQ_MAX_LOG_WQE_SZ);
-> +	return min_t(u8, max_log_wqe_size_calc, max_log_wqe_size_cap);
 
-Changing the variable name looks like uneccessary complication, as it is
-still used for the same purpouse.
 
-I remember there were some patches to devlink for supporting changing
-the representor parameters. Is it sth different or you decided to only
-change the default value to fix the memory problem? (sorry, maybe I miss
-the devlink series).
+On 8/2/25 03:48, Andrii Nakryiko wrote:
+> On Fri, Feb 7, 2025 at 2:00 AM Leon Hwang <leon.hwang@linux.dev> wrote:
+>>
+>>
+>>
+>> On 6/2/25 08:09, Andrii Nakryiko wrote:
+>>> On Mon, Jan 27, 2025 at 8:22 AM Leon Hwang <leon.hwang@linux.dev> wrote:
+>>>>
 
-Anyway, looks fine, thanks:
-Reviewed-by: Michal Swiatkowski <michal.swiatkowski@linux.intel.com>
+[...]
 
->  }
->  
->  u8 mlx5e_mpwrq_pages_per_wqe(struct mlx5_core_dev *mdev, u8 page_shift,
-> -- 
-> 2.45.0
+>>>> +void test_global_percpu_data_init(void)
+>>>> +{
+>>>> +       struct test_global_percpu_data *skel = NULL;
+>>>> +       u64 *percpu_data = NULL;
+>>>
+>>> there is that test_global_percpu_data__percpu type you are declaring
+>>> in the BPF skeleton, right? We should try using it here.
+>>>
+>>
+>> No. bpftool does not generate test_global_percpu_data__percpu. The
+>> struct for global variables is embedded into skeleton struct.
+>>
+>> Should we generate type for global variables?
+> 
+> we already have custom skeleton-specific type for .data, .rodata,
+> .bss, so we should provide one for .percpu as well, yes
+> 
+
+Yes, I've generated it. But it should not add '__aligned(8)' to it. Or
+bpf_map__set_initial_value() will fails because the aligned size is
+different from the actual spec's value size.
+
+If the actual value size is not __aligned(8), how should we lookup
+element from percpu_array map?
+
+The doc[0] does not provide a good practice for this case.
+
+[0] https://docs.kernel.org/bpf/map_array.html#bpf-map-type-percpu-array
+
+>>
+>>> And for that array access, we should make sure that it's __aligned(8),
+>>> so indexing by CPU index works correctly.
+>>>
+>>
+>> Ack.
+>>
+>>> Also, you define per-CPU variable as int, but here it is u64, what's
+>>> up with that?
+>>>
+>>
+>> Like __aligned(8), it's to make sure 8-bytes aligned. It's better to use
+>> __aligned(8).
+> 
+> It's hacky, and it won't work correctly on big-endian architectures.
+> But you shouldn't need that if we have a struct representing this
+> .percpu memory image. Just make sure that struct has 8 byte alignment
+> (from bpftool side during skeleton generation, probably).
+> 
+> [...]
+> 
+>>> at least one of BPF programs (don't remember which one, could be
+>>> raw_tp) supports specifying CPU index to run on, it would be nice to
+>>> loop over CPUs, triggering BPF program on each one and filling per-CPU
+>>> variable with current CPU index. Then we can check that all per-CPU
+>>> values have expected values.
+>>>
+>>
+>> Do you mean prog_tests/perf_buffer.c::trigger_on_cpu()?
+>>
+> 
+> No, look at `cpu` field of `struct bpf_test_run_opts`. We should have
+> a selftest using it, so you can work backwards from that.
+> 
+
+By referencing raw_tp, which uses `opts.cpu`, if use it to test global
+percpu data, it will fail to test on non-zero CPU, because
+bpf_prog_test_run_skb() disallows setting `opts.cpu`.
+
+Then, when `setaffinity` like perf_buffer.c::trigger_on_cpu(), it's OK
+to run the adding selftests on all CPUs.
+
+So, should I use `setaffinity` or change the bpf prog type from tc to
+raw_tp to use `opts.cpu`?
+
+Thanks,
+Leon
+
