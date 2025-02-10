@@ -1,47 +1,72 @@
-Received: from szxga04-in.huawei.com (szxga04-in.huawei.com [45.249.212.190])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF8D9225A25;
-	Mon, 10 Feb 2025 13:48:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.190
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00D58221DA9
+	for <bpf@vger.kernel.org>; Mon, 10 Feb 2025 13:51:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739195316; cv=none; b=FHF/8TyhR9nv+DmxXAUHsTizgMUndVSh9vw3feWm2GtAvc+8F5oLUgzm78NZEjDDY2VaRBVGzwSX4Q6+EGeyh3yan6NUvXneYYzw7a28OyNRUf351AcFVzyYPzTLRls855KS2+OubE04nVIo5JA5fj19WRAESPOVMFxDkLPaeo0=
+	t=1739195505; cv=none; b=p9zssp3+QIhgIK/L6zPesz0SVM8F0fAqJlIY64eIF5U3gHED7c4W53U00TIuiGlryeuzIL2K9X5NR0edXyvLTjlDZScyZsordHpHjHWzhA0SYJTNyyfEwhmRZdHhK7wQMg5l4uZypvVttB9VQcN1w8n6jr78rNTmoA1D6e/5heE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739195316; c=relaxed/simple;
-	bh=N99ZGav6k1lM+YsIFsqbv9nxpIHKc6sAHd6Faaoohhk=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=A99KECovLF4FEYSCqStr5nNhu3AuKg951g4GLCHHDvOje1rbRGrJ6LYQQstggYx43nQ1iWRktlVty0xrGdtBqpSDsAE73lruL+ZM1dm8XHX/53SyTGv9TbwBiXjrhn3rmWW8S0F4V+E6YKT4VNV/YYh03sYME/u9XcCsr/rD2XQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.190
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.88.163])
-	by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4Ys5RL6FkTz2FdL9;
-	Mon, 10 Feb 2025 21:44:46 +0800 (CST)
-Received: from dggemv712-chm.china.huawei.com (unknown [10.1.198.32])
-	by mail.maildlp.com (Postfix) with ESMTPS id 5EE1718001B;
-	Mon, 10 Feb 2025 21:48:30 +0800 (CST)
-Received: from kwepemn200003.china.huawei.com (7.202.194.126) by
- dggemv712-chm.china.huawei.com (10.1.198.32) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Mon, 10 Feb 2025 21:48:30 +0800
-Received: from localhost.localdomain (10.175.101.6) by
- kwepemn200003.china.huawei.com (7.202.194.126) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Mon, 10 Feb 2025 21:48:28 +0800
-From: zhangmingyi <zhangmingyi5@huawei.com>
-To: <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
-	<martin.lau@linux.dev>, <song@kernel.org>, <yhs@fb.com>,
-	<john.fastabend@gmail.com>, <kpsingh@kernel.org>, <sdf@google.com>,
-	<haoluo@google.com>, <jolsa@kernel.org>
-CC: <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>, <yanan@huawei.com>,
-	<wuchangye@huawei.com>, <xiesongyang@huawei.com>, <liuxin350@huawei.com>,
-	<liwei883@huawei.com>, <tianmuyang@huawei.com>, <zhangmingyi5@huawei.com>
-Subject: [PATCH v2 2/2] bpf-next: selftest for TCP_ULP in bpf_setsockopt
-Date: Mon, 10 Feb 2025 21:45:50 +0800
-Message-ID: <20250210134550.3189616-3-zhangmingyi5@huawei.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20250210134550.3189616-1-zhangmingyi5@huawei.com>
-References: <20250210134550.3189616-1-zhangmingyi5@huawei.com>
+	s=arc-20240116; t=1739195505; c=relaxed/simple;
+	bh=Tf9r450ChA5z9HI79CiH14U1PithgzqkmbHEdUT6r4w=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Bziz+yllnYR5RLRTfGtNbr1bfoBfahHj+1dXAJkm1siDmW5rgR08tW+AZcq9/j8gbZHHR0psStj5R+SxxYkftnx6W4QtC6PguRybpE+jSuf/y9VKZmskjZfZYL9cytP7kv+10heH02j8wMiWFuSQNekZZnt+Rg+qoCR47aeVMFc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TyYpB4GQ; arc=none smtp.client-ip=209.85.208.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TyYpB4GQ"
+Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-5de6e26d4e4so2880130a12.1
+        for <bpf@vger.kernel.org>; Mon, 10 Feb 2025 05:51:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1739195502; x=1739800302; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=T6CkdA9Qi7r4Gc4LfLuQhDzXTrre/TCohh7LjRlmHtk=;
+        b=TyYpB4GQvCwrcAKO+FTJ+Xpzujohkq2UxYKwVeCJ2XPmiosS7Rn4XG79NjXxF5xVp7
+         FBbArZuwXN4Dfngy88PkHxfSxvnMoe0DAuAE2HZIJdfw8+hk5FcNxXJqk6RFIzVasvRb
+         VkasH1QciXi/ns3mI8SktM0/volaGipkkYfiGb+TQkzMDaPHFGaTa5p616dsh3RtGWpN
+         N3suqBiV404on9oyJd5QWCig1ZYmp9DozIwh2IJeSnYxkSx1PrkWMhmg9Nv2SLWeJsSx
+         smhtM0ITBSc2CWVlbG0f1kQUZ38L+4kfhjgkJXJBWS0brLhsS80/q+swlls4wIS1BA/K
+         z2tg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1739195502; x=1739800302;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=T6CkdA9Qi7r4Gc4LfLuQhDzXTrre/TCohh7LjRlmHtk=;
+        b=f7YgSOysY27GvmB61Fuhy4zLZh13sK5aPJ90Y6t8T8IMrnHRT/hxpREkxUP+6vHbU/
+         PHS0OQTK96p4orQlqkwiiPJkYrcCR1ra4SvshV2wjE9aTWrZIqixniyOcFs6+XMsaMP7
+         YpLVYwY+mD3KpPhGBs1nqW38qySrftoFYJTtoJbCCLzqIOblYK9UtVbDPObgOSMWXIPS
+         Q+3eNulxwtKydf3mCPnN0EbfYkGc2jeQ3xnJKUXlCPnKX4iGzjLCwIdW1micifqBpWjN
+         Mydg0gKVqG62Azvi5ASz9imJUUFe0iooUirN66KLqz/C3CoKM+aeu+ynYg4jNDf2mpYu
+         1AVg==
+X-Gm-Message-State: AOJu0Yxoq8zb+s5aDFAjnxEwov+kCxVaYELwlv5gmplk4FY3fB3msjOi
+	vUrjviXTxJIXjElJD1Jkco8TBgDgtOofrzosadq5qhcHxovne3+ImBp8zQ==
+X-Gm-Gg: ASbGncuEwbFaAQjslVePKh1qhl6do9pOByZAo/mA9f45NUkNot7T4WQOlLFxPKtiPA6
+	mLpOAm1CLBvf1FiUC3/NVvlT1hVBQdQR3bi9NGlrJtoIVF6zpQzhvyZYK5TvUUAPziNcMe2yVaq
+	pIB7jn4E2DTHDYO2ACtwfG6PurYH17WyrDdsviDzse/yEy5eAKWK/uCWRoVNrcbjYoO+AwtgftR
+	dKkyLJs1PRfgv3yaQgOYhfSeRz0uutYY8er8UHnN8UC4Jfix39otHbDX6f0sXtR6SqVioTS75Fi
+	kILh+0kucoqh3HMQuJC9684HDfm/
+X-Google-Smtp-Source: AGHT+IGT8AkuYaY+3klCxjCfw/FyUgsZDdt15wYpZSkOokXLbkRS2dN7b1vV5KT8DyqJaeREN4oitw==
+X-Received: by 2002:a17:907:9628:b0:ab7:5fcd:d4e4 with SMTP id a640c23a62f3a-ab789c3ada8mr1695309366b.41.1739195501905;
+        Mon, 10 Feb 2025 05:51:41 -0800 (PST)
+Received: from msi-laptop.thefacebook.com ([2620:10d:c092:400::5:db8c])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ab7732e71f1sm878261566b.92.2025.02.10.05.51.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Feb 2025 05:51:41 -0800 (PST)
+From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
+To: bpf@vger.kernel.org,
+	ast@kernel.org,
+	andrii@kernel.org,
+	daniel@iogearbox.net,
+	kafai@meta.com,
+	kernel-team@meta.com,
+	eddyz87@gmail.com
+Cc: Mykyta Yatsenko <yatsenko@meta.com>
+Subject: [PATCH bpf-next v2 0/2] selftests/bpf: implement setting global variables in veristat
+Date: Mon, 10 Feb 2025 13:51:27 +0000
+Message-ID: <20250210135129.719119-1-mykyta.yatsenko5@gmail.com>
+X-Mailer: git-send-email 2.48.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -49,149 +74,25 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- kwepemn200003.china.huawei.com (7.202.194.126)
 
-From: Mingyi Zhang <zhangmingyi5@huawei.com>
+From: Mykyta Yatsenko <yatsenko@meta.com>
 
-We try to use bpf_set/getsockopt to set/get TCP_ULP in sockops, and "tls"
-need connect is established.To avoid impacting other test cases, I have
-written a separate test case file.
+To better verify some complex BPF programs by veristat, it would be useful
+to preset global variables. This patch set implements this functionality
+and introduces tests for veristat.
 
-Signed-off-by: Mingyi Zhang <zhangmingyi5@huawei.com>
-Signed-off-by: Xin Liu <liuxin350@huawei.com>
----
- .../bpf/prog_tests/setget_sockopt_tcp_ulp.c   | 78 +++++++++++++++++++
- .../bpf/progs/setget_sockopt_tcp_ulp.c        | 33 ++++++++
- 2 files changed, 111 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/setget_sockopt_tcp_ulp.c
- create mode 100644 tools/testing/selftests/bpf/progs/setget_sockopt_tcp_ulp.c
+Mykyta Yatsenko (2):
+  selftests/bpf: implement setting global variables in veristat
+  selftests/bpf: introduce veristat test
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/setget_sockopt_tcp_ulp.c b/tools/testing/selftests/bpf/prog_tests/setget_sockopt_tcp_ulp.c
-new file mode 100644
-index 000000000000..748da2c7d255
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/setget_sockopt_tcp_ulp.c
-@@ -0,0 +1,78 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) Meta Platforms, Inc. and affiliates. */
-+
-+#define _GNU_SOURCE
-+#include <net/if.h>
-+
-+#include "test_progs.h"
-+#include "network_helpers.h"
-+
-+#include "setget_sockopt_tcp_ulp.skel.h"
-+
-+#define CG_NAME "/setget-sockopt-tcp-ulp-test"
-+
-+static const char addr4_str[] = "127.0.0.1";
-+static const char addr6_str[] = "::1";
-+static struct setget_sockopt_tcp_ulp *skel;
-+static int cg_fd;
-+
-+static int create_netns(void)
-+{
-+	if (!ASSERT_OK(unshare(CLONE_NEWNET), "create netns"))
-+		return -1;
-+	if (!ASSERT_OK(system("ip link set dev lo up"), "set lo up"))
-+		return -1;
-+	return 0;
-+}
-+
-+static int modprobe_tls(void)
-+{
-+	if (!ASSERT_OK(system("modprobe tls"), "tls modprobe failed"))
-+		return -1;
-+	return 0;
-+}
-+
-+static void test_tcp_ulp(int family)
-+{
-+	struct setget_sockopt_tcp_ulp__bss *bss = skel->bss;
-+	int sfd, cfd;
-+
-+	memset(bss, 0, sizeof(*bss));
-+	sfd = start_server(family, SOCK_STREAM,
-+			   family == AF_INET6 ? addr6_str : addr4_str, 0, 0);
-+	if (!ASSERT_GE(sfd, 0, "start_server"))
-+		return;
-+
-+	cfd = connect_to_fd(sfd, 0);
-+	if (!ASSERT_GE(cfd, 0, "connect_to_fd_server")) {
-+		close(sfd);
-+		return;
-+	}
-+	close(sfd);
-+	close(cfd);
-+
-+	ASSERT_EQ(bss->nr_tcp_ulp, 3, "nr_tcp_ulp");
-+}
-+
-+void test_setget_sockopt_tcp_ulp(void)
-+{
-+	cg_fd = test__join_cgroup(CG_NAME);
-+	if (cg_fd < 0)
-+		return;
-+	if (create_netns() && modprobe_tls())
-+		goto done;
-+	skel = setget_sockopt_tcp_ulp__open();
-+	if (!ASSERT_OK_PTR(skel, "open skel"))
-+		goto done;
-+	if (!ASSERT_OK(setget_sockopt_tcp_ulp__load(skel), "load skel"))
-+		goto done;
-+	skel->links.skops_sockopt_tcp_ulp =
-+		bpf_program__attach_cgroup(skel->progs.skops_sockopt_tcp_ulp, cg_fd);
-+	if (!ASSERT_OK_PTR(skel->links.skops_sockopt_tcp_ulp, "attach_cgroup"))
-+		goto done;
-+	test_tcp_ulp(AF_INET);
-+	test_tcp_ulp(AF_INET6);
-+done:
-+	setget_sockopt_tcp_ulp__destroy(skel);
-+	close(cg_fd);
-+}
-diff --git a/tools/testing/selftests/bpf/progs/setget_sockopt_tcp_ulp.c b/tools/testing/selftests/bpf/progs/setget_sockopt_tcp_ulp.c
-new file mode 100644
-index 000000000000..bd1009766463
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/setget_sockopt_tcp_ulp.c
-@@ -0,0 +1,33 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) Meta Platforms, Inc. and affiliates. */
-+
-+#include "vmlinux.h"
-+#include "bpf_tracing_net.h"
-+#include <bpf/bpf_helpers.h>
-+
-+int nr_tcp_ulp;
-+
-+SEC("sockops")
-+int skops_sockopt_tcp_ulp(struct bpf_sock_ops *skops)
-+{
-+	static const char target_ulp[] = "tls";
-+	char verify_ulp[sizeof(target_ulp)];
-+
-+	switch (skops->op) {
-+	case BPF_SOCK_OPS_ACTIVE_ESTABLISHED_CB:
-+		if (bpf_setsockopt(skops, IPPROTO_TCP, TCP_ULP, (void *)target_ulp,
-+							sizeof(target_ulp)) != 0)
-+			return 1;
-+		nr_tcp_ulp++;
-+		if (bpf_getsockopt(skops, IPPROTO_TCP, TCP_ULP, verify_ulp,
-+							sizeof(verify_ulp)) != 0)
-+			return 1;
-+		nr_tcp_ulp++;
-+		if (bpf_strncmp(verify_ulp, sizeof(target_ulp), "tls") != 0)
-+			return 1;
-+		nr_tcp_ulp++;
-+	}
-+	return 1;
-+}
-+
-+char _license[] SEC("license") = "GPL";
-\ No newline at end of file
+ tools/testing/selftests/bpf/Makefile          |   1 +
+ .../selftests/bpf/prog_tests/test_veristat.c  | 120 +++++++
+ .../selftests/bpf/progs/set_global_vars.c     |  47 +++
+ tools/testing/selftests/bpf/veristat.c        | 319 +++++++++++++++++-
+ 4 files changed, 475 insertions(+), 12 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/test_veristat.c
+ create mode 100644 tools/testing/selftests/bpf/progs/set_global_vars.c
+
 -- 
-2.43.0
+2.48.1
 
