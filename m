@@ -1,58 +1,74 @@
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B380C1C3C0F;
-	Mon, 10 Feb 2025 09:53:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73A551C4A0E;
+	Mon, 10 Feb 2025 09:54:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739181214; cv=none; b=Wwpph1lPc9OEuElqZdu9fk8s1wvdjA7jQUp6n8tF0ahx/iTszOcPvdFbc/lZo4nEqVJHzJGxR93uO4KmQJ0sLo+yFIKUIFjzhug3UcdH+EqUa+F9KBGFEACGA66RfmCE5FyjL68xOUJ0nDl5fL9sZj8CcVyqCOKfJhpJSzFm5CI=
+	t=1739181286; cv=none; b=lMzv1kiJsKJPDr52rzeyB0LdQ18y1sO3xPZ+lqMkWXyE72rtn+XcZEDPRoibNLFKJBOxmW26X5Fl3CkB7NC3Y3MExJbz33J0qIeeijVvwOqDb83jf4w6lqXq1u78MmxGTww56wqf0JVqey5jgovBxvE2U3fWLOWHXEw61cuZNhY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739181214; c=relaxed/simple;
-	bh=bOvDRrgXH6phjEcMFiDdEDrs3Vrvfib1N+WLCTV+ORk=;
+	s=arc-20240116; t=1739181286; c=relaxed/simple;
+	bh=ho9n3VcfJkszLgQBZ71Nls4seClP+D2Y17joOZ6Dau0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fDY8bdfCeUtDvaJcuUjina+ZA/9wmTg1co3kBKc/YfIHDYvfnwj3ZbXtQ4C1EDToyn9F/5olyDyuKp6cGErOUwc8K7zoo6eJJsNNZ4Bb+kxO6CAtQnbRJkKt5SbQPCKP/0wFQrb0KpTBNj0vbHferEqmmpgK9ZxJB1fNCNjJ+i8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=CLZ+s75h; arc=none smtp.client-ip=90.155.50.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+	 Content-Type:Content-Disposition:In-Reply-To; b=exkExM+CTYGiWaYNysdhV5vpqD/AlePoP7su3MAm7xj4QZYXGTZXMZyupadp1KsoeyNf3so/DEkivwvG7d3CwvyJOe06xtqW3j8VdlJpttBsyZWpq+03KCPPlcryjAv3fGBjfDkYXe9nlsiEBHjTbJSGsDsdteYCc9N/p5+5s48=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZoCYTq3D; arc=none smtp.client-ip=192.198.163.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="CLZ+s75h"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=s8Mwq3rMEa8CkQmRNyS/s+cyYunNKj5Wlg7L/VvKRhc=; b=CLZ+s75h+0rfLi/5P96AEUisat
-	9NPxjkymmufjZFkx2Qg00zQQknhLs2i3RWzR0OV3cfSvk8UZ2iNO7RyvW3jRZv2JIIOz4lXzn3QVh
-	ZNrDBOu/UUC9HIStKK5n1QPCExb86xogvlwW1BxGRgYd29njnz1IoJ6qvC6jwIcptojfr7zGkCuiX
-	L5EYdA5eo6pvF+yymPngVl7yx2b7U2eKoTgvku7tnnRqvaO1ddnhBLxFDG7iT8bKgmu5hZO4FTkYz
-	223I67HaSLf8Qkq/NyJ+v5J74UdJE6Gb/S9K+gjdzNIWqBvmOs5h9xJyBCIgXvDIbYxNhafSsSAuU
-	UgJjc69g==;
-Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
-	by casper.infradead.org with esmtpsa (Exim 4.98 #2 (Red Hat Linux))
-	id 1thQTl-0000000FThV-2RSc;
-	Mon, 10 Feb 2025 09:53:25 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 2DFFA300318; Mon, 10 Feb 2025 10:53:25 +0100 (CET)
-Date: Mon, 10 Feb 2025 10:53:24 +0100
-From: Peter Zijlstra <peterz@infradead.org>
-To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Ankur Arora <ankur.a.arora@oracle.com>,
-	Linus Torvalds <torvalds@linux-foundation.org>,
-	Will Deacon <will@kernel.org>, Waiman Long <llong@redhat.com>,
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZoCYTq3D"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1739181284; x=1770717284;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ho9n3VcfJkszLgQBZ71Nls4seClP+D2Y17joOZ6Dau0=;
+  b=ZoCYTq3D2HtrRlS1qjz1lnrEIUUlggNsCdARqjSzAwBiZuL51ncOn7mW
+   bu3zCQ9/KtvZPkvaAjt9siLd8BzZ317djkS751SZeV6NTHp5HaPoii9Y8
+   xNqOQvorZbx9Ptz/aTJ5IrHzmswrRqh9eM+pJIw7jjBjKNZvVOuC6wdqO
+   Phzj6KlZHOxgtqhZAvwyfoAQ6hrLAtu2//QvsbtbGk5rEkjoNbfd2qpFQ
+   kTzYyoUmEqtaez7opa7PjgJFTO5axlxlUBkbPBTwMBM3VXnuA5L8sJBly
+   qZP1eBXbeDobwsjPF2gGmzwt02oWHcZCROPON1QEBPNvkeNI1OOSA6tpR
+   A==;
+X-CSE-ConnectionGUID: 3ciKh5CGQy+TqSzQO75toQ==
+X-CSE-MsgGUID: rriZIlVATjKobi0U4tgHvQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11340"; a="50392912"
+X-IronPort-AV: E=Sophos;i="6.13,274,1732608000"; 
+   d="scan'208";a="50392912"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2025 01:54:43 -0800
+X-CSE-ConnectionGUID: suYm/ui8Qh6NIvYsBsUajg==
+X-CSE-MsgGUID: x2SrYlPpQQyEY6kS13ph6w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.13,274,1732608000"; 
+   d="scan'208";a="111977801"
+Received: from mev-dev.igk.intel.com ([10.237.112.144])
+  by fmviesa006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2025 01:54:38 -0800
+Date: Mon, 10 Feb 2025 10:51:02 +0100
+From: Michal Swiatkowski <michal.swiatkowski@linux.intel.com>
+To: Tariq Toukan <tariqt@nvidia.com>
+Cc: "David S. Miller" <davem@davemloft.net>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Eric Dumazet <edumazet@google.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>, netdev@vger.kernel.org,
+	Saeed Mahameed <saeedm@nvidia.com>, Gal Pressman <gal@nvidia.com>,
+	Leon Romanovsky <leonro@nvidia.com>,
+	Simon Horman <horms@kernel.org>,
+	Donald Hunter <donald.hunter@gmail.com>,
+	Jiri Pirko <jiri@resnulli.us>, Jonathan Corbet <corbet@lwn.net>,
+	Leon Romanovsky <leon@kernel.org>,
 	Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
-	Martin KaFai Lau <martin.lau@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	"Paul E. McKenney" <paulmck@kernel.org>, Tejun Heo <tj@kernel.org>,
-	Barret Rhoden <brho@google.com>, Josh Don <joshdon@google.com>,
-	Dohyun Kim <dohyunkim@google.com>,
-	linux-arm-kernel@lists.infradead.org, kernel-team@meta.com
-Subject: Re: [PATCH bpf-next v2 17/26] rqspinlock: Hardcode cond_acquire
- loops to asm-generic implementation
-Message-ID: <20250210095324.GG10324@noisy.programming.kicks-ass.net>
-References: <20250206105435.2159977-1-memxor@gmail.com>
- <20250206105435.2159977-18-memxor@gmail.com>
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Richard Cochran <richardcochran@gmail.com>,
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-rdma@vger.kernel.org, bpf@vger.kernel.org,
+	William Tu <witu@nvidia.com>, Daniel Jurgens <danielj@nvidia.com>
+Subject: Re: [PATCH net-next 08/15] net/mlx5e: set the tx_queue_len for
+ pfifo_fast
+Message-ID: <Z6nMBi26yyFjQQJK@mev-dev.igk.intel.com>
+References: <20250209101716.112774-1-tariqt@nvidia.com>
+ <20250209101716.112774-9-tariqt@nvidia.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -61,25 +77,41 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250206105435.2159977-18-memxor@gmail.com>
+In-Reply-To: <20250209101716.112774-9-tariqt@nvidia.com>
 
-On Thu, Feb 06, 2025 at 02:54:25AM -0800, Kumar Kartikeya Dwivedi wrote:
-> Currently, for rqspinlock usage, the implementation of
-> smp_cond_load_acquire (and thus, atomic_cond_read_acquire) are
-> susceptible to stalls on arm64, because they do not guarantee that the
-> conditional expression will be repeatedly invoked if the address being
-> loaded from is not written to by other CPUs. When support for
-> event-streams is absent (which unblocks stuck WFE-based loops every
-> ~100us), we may end up being stuck forever.
+On Sun, Feb 09, 2025 at 12:17:09PM +0200, Tariq Toukan wrote:
+> From: William Tu <witu@nvidia.com>
 > 
-> This causes a problem for us, as we need to repeatedly invoke the
-> RES_CHECK_TIMEOUT in the spin loop to break out when the timeout
-> expires.
+> By default, the mq netdev creates a pfifo_fast qdisc. On a
+> system with 16 core, the pfifo_fast with 3 bands consumes
+> 16 * 3 * 8 (size of pointer) * 1024 (default tx queue len)
+> = 393KB. The patch sets the tx qlen to representor default
+> value, 128 (1<<MLX5E_REP_PARAMS_DEF_LOG_SQ_SIZE), which
+> consumes 16 * 3 * 8 * 128 = 49KB, saving 344KB for each
+> representor at ECPF.
 > 
-> Hardcode the implementation to the asm-generic version in rqspinlock.c
-> until support for smp_cond_load_acquire_timewait [0] lands upstream.
+> Signed-off-by: William Tu <witu@nvidia.com>
+> Reviewed-by: Daniel Jurgens <danielj@nvidia.com>
+> Signed-off-by: Tariq Toukan <tariqt@nvidia.com>
+> ---
+>  drivers/net/ethernet/mellanox/mlx5/core/en_rep.c | 2 ++
+>  1 file changed, 2 insertions(+)
 > 
+> diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_rep.c b/drivers/net/ethernet/mellanox/mlx5/core/en_rep.c
+> index da399adc8854..07f38f472a27 100644
+> --- a/drivers/net/ethernet/mellanox/mlx5/core/en_rep.c
+> +++ b/drivers/net/ethernet/mellanox/mlx5/core/en_rep.c
+> @@ -889,6 +889,8 @@ static void mlx5e_build_rep_netdev(struct net_device *netdev,
+>  	netdev->ethtool_ops = &mlx5e_rep_ethtool_ops;
+>  
+>  	netdev->watchdog_timeo    = 15 * HZ;
+> +	if (mlx5_core_is_ecpf(mdev))
+> +		netdev->tx_queue_len = 1 << MLX5E_REP_PARAMS_DEF_LOG_SQ_SIZE;
+>  
+>  #if IS_ENABLED(CONFIG_MLX5_CLS_ACT)
+>  	netdev->hw_features    |= NETIF_F_HW_TC;
 
-*sigh*.. this patch should go *before* patch 8. As is that's still
-horribly broken and I was WTF-ing because your 0/n changelog said you
-fixed it.
+Reviewed-by: Michal Swiatkowski <michal.swiatkowski@linux.intel.com>
+
+> -- 
+> 2.45.0
