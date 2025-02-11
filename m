@@ -1,108 +1,140 @@
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75573264628;
-	Mon, 10 Feb 2025 23:45:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71A7D380;
+	Tue, 11 Feb 2025 00:01:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739231129; cv=none; b=n/JM6va4QcEYWBbdtTqZMjo2EIZ5acFdGZNnpKkTtT2G6N51uFyMMPv2BD0DwsnuNTFND8flcuR9INxhReiep38yJz/RdbBNK0uxvDWvktqhxG557NFuP1c+JtMeok0cNsUXCcYvElLW2PjgYgjozNkKcmCYurrEajrNWSjOW/Y=
+	t=1739232064; cv=none; b=ia2sn+vLnJ1BGnIbMKPUkyz9SogH+1WNXwF0rCLt3FHk+Qn/oQCQ0KKxwaVAyAYvLtenOrcGxP7GIkWlchgA0f+9uzTLc2IzrUQinDXw5PS4O5OJKdpXSrU/FUhVror136OgMq52jnbnBe3s0mx3EDaYwBFfXWeLXRr8wAIXyYo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739231129; c=relaxed/simple;
-	bh=ixkef8jOB0P+lJ6IyV80P3LNYVwYTiglb+MKur84g6M=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=ESwxIPeaubSe8vXb+hnC8+o93nE7SlrTOc2cPMTTqRTOINFsXiXsMx/k95sRbyIIhQ0VS5V34C4cuUjnIn19150f/FGMhIIgHEABc+mR7+TygqruM8bmCafRbmsbcxzLzqeYpUDASYYrn5OGaR5vMkM1eklj/kpisJAOc79f1t0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aH0i68go; arc=none smtp.client-ip=209.85.214.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1739232064; c=relaxed/simple;
+	bh=KJAXYKFfcDTkKPOe7RLg/h85JfAGZ7OLrRd3HvGoHPo=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
+	 In-Reply-To:Content-Type; b=rVp6f8oNEkdAOKEuOK/QYyVuSl2PWPl2Wq0jDzbAQojPiMmCxVGOUbKnmYrCpx8MMn1xMfjtWrYzlM3oM42IA1f1DV/lS12+GJ4p75d5shUW9wceqxJQth64dpTNGtxY4x4BcpMNQxhwiHWBILcFL/CgPTXvXPK2sFAbNvezRfQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Bo6HhKy4; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aH0i68go"
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-21f48ebaadfso81614785ad.2;
-        Mon, 10 Feb 2025 15:45:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1739231127; x=1739835927; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=52lUjiDSJtE5pfFjZXgC0f64Wn3Nt/2DnZ14fk120UY=;
-        b=aH0i68goicT0wSSsk9EvAXP+mzAfsfU/3twSYEenk20AZ0jVBHk2CkSCbDBls99JwW
-         t3krxMH6N1NISRaFgxzbvq8DFebZIpkbHVec9ryGgdnPb7BBN6INYMX+TNwcfwHcuLB2
-         PgvOr6xtwGnrilmu8peqEEudZys6xle38aFmOswVKIEI7+2cBJ0OW3c6pS7fdq4FzGcQ
-         Q2Q12nlaipGqIAC38VtcHrfi7J1dsCXO42tp4O5SacSp5RI3m7pKv3flK+PzUD6ATvvt
-         VQQ3W8Oe7Oo0AFNijr10hH+KtZOairC3ZS45EIKKd+gKksKd04MWJi5jVqP864Ahm6mO
-         RrOQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739231127; x=1739835927;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=52lUjiDSJtE5pfFjZXgC0f64Wn3Nt/2DnZ14fk120UY=;
-        b=T2IuhL29SQl+WuAqsion+pVo/MKYjG+vXh4bypJCnU53yMZLCSCJfO4uTL3bFH645H
-         Q6K7vW0iNAbHU9dWWaDRCnXv+gA1XQkPBi28A9gi3pF0EosVs/kArYMausSmLgEC5AhT
-         pi99WM/P6atNaQr7mII8+Ixa5/3KKndXBAFVARw5JgjNnFXmHTluFR/jskb/rnwuX70H
-         6MTt3kiiJoCjHdVFmcZwGpkplyCIJmjDlGcLoYzNblYZjr+3dioiOt/LFcSYjP8wDnj0
-         kIYvO8P9XxvoUHMPwLjlo/kl8j/J2Ae2UnRFdvpo11muOMDdrQ/vO/t75t3GWT1aEWMQ
-         lZ9Q==
-X-Forwarded-Encrypted: i=1; AJvYcCUL91YmbswEywnRF6vrLmOdYTShAA23v5econB01LajZEjNjl21v3I+19GrYcGf67b6lP8=@vger.kernel.org, AJvYcCVyMDBqaXyNl+zfE0IaJjOn5zNoQ4FsjrhFMHLrFQpqfx2wxSPO+HCiQoYw4VrJ1Q/E01Ue9rPLIpSlMXVU@vger.kernel.org
-X-Gm-Message-State: AOJu0YydAxtLJsdml6/mdX6fyTNw5xXUxgTO1t2aN2ERxMFH9YCRZdVB
-	//nRkrYoLzt/FUKgnGM6O+1DhlOwHuVElOFYIoHb7+Ccw1mMFCkA
-X-Gm-Gg: ASbGncuMieLTV08XsyRljfToV9HmNW//+BZ4Jp8DuqPy7O/kjsSmqYptdhzZrrHv4BQ
-	dfUl75cdLZUtA5mo6YndornI952OGn061akZzNnhCViOo9d90WQmp8k3EXMC0fwFURRKK2z4jvT
-	G37O6BraBlgp68ZJ3okWQpOjRRbMh5MxBEk2ydxkWwo3SjtQo0xFdc+L/HU5ItBxFDtxgwPu7j7
-	U5tOn9E9PolHsMxVX70e0nmkuB7Owh2p8ijVb3/xVxMN9bNFJhHQ2rLUpo+Xv2zH84VyHuADJBk
-	HOfQPti2rKXV
-X-Google-Smtp-Source: AGHT+IFr87HMc3rAIs7T2MJZdH+iBcNx057eedhM1fSNyi8duQq+MXuumgo05Ysb+cZouGZ01IpR+Q==
-X-Received: by 2002:a05:6a00:6ca3:b0:730:9801:d3e2 with SMTP id d2e1a72fcca58-7309801e1c2mr6542542b3a.8.1739231127553;
-        Mon, 10 Feb 2025 15:45:27 -0800 (PST)
-Received: from [192.168.0.235] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7307c5b3a99sm4324202b3a.54.2025.02.10.15.45.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Feb 2025 15:45:27 -0800 (PST)
-Message-ID: <5029add95e4dc77a3b28bb9869260af290ffc6ea.camel@gmail.com>
-Subject: Re: [PATCH bpf-next v2 3/9] bpf/verifier: Factor out
- check_load_mem() and check_store_reg()
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Peilin Ye <yepeilin@google.com>, bpf@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org
-Cc: bpf@ietf.org, Xu Kuohai <xukuohai@huaweicloud.com>, David Vernet	
- <void@manifault.com>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann	
- <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, Martin KaFai
- Lau	 <martin.lau@linux.dev>, Song Liu <song@kernel.org>, Yonghong Song	
- <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, KP
- Singh	 <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo	
- <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, Jonathan Corbet	
- <corbet@lwn.net>, "Paul E. McKenney" <paulmck@kernel.org>, Puranjay Mohan	
- <puranjay@kernel.org>, Ilya Leoshkevich <iii@linux.ibm.com>, Heiko Carstens
-	 <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, Catalin Marinas	
- <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Quentin Monnet	
- <qmo@kernel.org>, Mykola Lysenko <mykolal@fb.com>, Shuah Khan
- <shuah@kernel.org>,  Ihor Solodrai <ihor.solodrai@linux.dev>, Yingchi Long
- <longyingchi24s@ict.ac.cn>, Josh Don <joshdon@google.com>,  Barret Rhoden
- <brho@google.com>, Neel Natu <neelnatu@google.com>, Benjamin Segall
- <bsegall@google.com>, 	linux-kernel@vger.kernel.org
-Date: Mon, 10 Feb 2025 15:45:21 -0800
-In-Reply-To: <363538659933fb2e289d937d81fc8eecb284ea7b.1738888641.git.yepeilin@google.com>
-References: <cover.1738888641.git.yepeilin@google.com>
-	 <363538659933fb2e289d937d81fc8eecb284ea7b.1738888641.git.yepeilin@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.54.3 (3.54.3-1.fc41) 
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Bo6HhKy4"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EACA0C4CED1;
+	Tue, 11 Feb 2025 00:00:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1739232063;
+	bh=KJAXYKFfcDTkKPOe7RLg/h85JfAGZ7OLrRd3HvGoHPo=;
+	h=Date:From:Subject:To:Cc:References:In-Reply-To:From;
+	b=Bo6HhKy4FsJamOKzCtjqK8uo3ZdPNN7akmZSAOEg1QBxFGF+Ia49S7UgP5MLfHEw6
+	 VV13dCI0D8/e+E3yeKI7FJknC423IhA3c+FCZMiuXff703v5eLHiF+vI+WrSf6uV/Z
+	 E4GRMlzSd17XEfk39LXUf8ByV/zJydc+A7dQkD9nFG1g0yTm47zdcqcPbN+1LxXaAD
+	 xLEbWuk6mUpoG0mikMzcpi58EbTNuqx5ozW/aIUDnR2AL86oA4ZOx9MYiUj1S7PpHM
+	 Ywl98ZAAtikOMJ1qz9yTuXtvfoM0Vg+UhFXqGMJpzuAsVLPrKkAyYr8jYReK+/cMjD
+	 kT8e776dGaSjA==
+Message-ID: <21f98687-f715-449c-86f0-c095ea499450@kernel.org>
+Date: Tue, 11 Feb 2025 00:00:49 +0000
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+From: Quentin Monnet <qmo@kernel.org>
+Subject: Re: [PATCH v2 2/2] tools: Remove redundant quiet setup
+To: Charlie Jenkins <charlie@rivosinc.com>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
+ <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
+ Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Peter Zijlstra <peterz@infradead.org>,
+ Ingo Molnar <mingo@redhat.com>, Arnaldo Carvalho de Melo <acme@kernel.org>,
+ Namhyung Kim <namhyung@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
+ Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+ Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>,
+ "Rafael J. Wysocki" <rafael@kernel.org>,
+ Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>,
+ Lukasz Luba <lukasz.luba@arm.com>, Josh Poimboeuf <jpoimboe@kernel.org>,
+ Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+ Jiri Kosina <jikos@kernel.org>, Benjamin Tissoires <bentiss@kernel.org>,
+ Steven Rostedt <rostedt@goodmis.org>
+Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-perf-users@vger.kernel.org, linux-pm@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-input@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org
+References: <20250210-quiet_tools-v2-0-b2f18cbf72af@rivosinc.com>
+ <20250210-quiet_tools-v2-2-b2f18cbf72af@rivosinc.com>
+Content-Language: en-GB
+In-Reply-To: <20250210-quiet_tools-v2-2-b2f18cbf72af@rivosinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Fri, 2025-02-07 at 02:05 +0000, Peilin Ye wrote:
-> Extract BPF_LDX and most non-atomic BPF_STX instruction handling logic
-> in do_check() into helper functions to be used later.  While we are
-> here, make that comment about "reserved fields" more specific.
->=20
-> Suggested-by: Eduard Zingerman <eddyz87@gmail.com>
-> Signed-off-by: Peilin Ye <yepeilin@google.com>
+2025-02-10 10:34 UTC-0800 ~ Charlie Jenkins <charlie@rivosinc.com>
+> Q is exported from Makefile.include so it is not necessary to manually
+> set it.
+> 
+> Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
 > ---
+>  tools/arch/arm64/tools/Makefile           |  6 ------
+>  tools/bpf/Makefile                        |  6 ------
+>  tools/bpf/bpftool/Documentation/Makefile  |  6 ------
+>  tools/bpf/bpftool/Makefile                |  6 ------
+>  tools/bpf/resolve_btfids/Makefile         |  2 --
+>  tools/bpf/runqslower/Makefile             |  5 +----
+>  tools/lib/bpf/Makefile                    | 13 -------------
+>  tools/lib/perf/Makefile                   | 13 -------------
+>  tools/lib/thermal/Makefile                | 13 -------------
+>  tools/objtool/Makefile                    |  6 ------
+>  tools/testing/selftests/bpf/Makefile.docs |  6 ------
+>  tools/testing/selftests/hid/Makefile      |  2 --
+>  tools/thermal/lib/Makefile                | 13 -------------
+>  tools/tracing/latency/Makefile            |  6 ------
+>  tools/tracing/rtla/Makefile               |  6 ------
+>  tools/verification/rv/Makefile            |  6 ------
+>  16 files changed, 1 insertion(+), 114 deletions(-)
+> 
 
-Acked-by: Eduard Zingerman <eddyz87@gmail.com>
 
 [...]
 
+
+> diff --git a/tools/bpf/bpftool/Documentation/Makefile b/tools/bpf/bpftool/Documentation/Makefile
+> index 4315652678b9f2e27e48b7815f3b9ddc70a57165..bf843f328812e10dd65a73f355f74e6825ad95b9 100644
+> --- a/tools/bpf/bpftool/Documentation/Makefile
+> +++ b/tools/bpf/bpftool/Documentation/Makefile
+> @@ -5,12 +5,6 @@ INSTALL ?= install
+>  RM ?= rm -f
+>  RMDIR ?= rmdir --ignore-fail-on-non-empty
+>  
+> -ifeq ($(V),1)
+> -  Q =
+> -else
+> -  Q = @
+> -endif
+> -
+>  prefix ?= /usr/local
+>  mandir ?= $(prefix)/man
+>  man8dir = $(mandir)/man8
+> diff --git a/tools/bpf/bpftool/Makefile b/tools/bpf/bpftool/Makefile
+> index dd9f3ec842017f1dd24054bf3a0986d546811dc4..6ea4823b770cbbe7fd9eb7da79956cc1dae1f204 100644
+> --- a/tools/bpf/bpftool/Makefile
+> +++ b/tools/bpf/bpftool/Makefile
+> @@ -7,12 +7,6 @@ srctree := $(patsubst %/,%,$(dir $(srctree)))
+>  srctree := $(patsubst %/,%,$(dir $(srctree)))
+>  endif
+>  
+> -ifeq ($(V),1)
+> -  Q =
+> -else
+> -  Q = @
+> -endif
+> -
+>  BPF_DIR = $(srctree)/tools/lib/bpf
+>  
+>  ifneq ($(OUTPUT),)
+
+
+This is OK from bpftool's side, the GitHub mirror has a Makefile.include
+included from both main and doc Makefiles, and where I can move this
+definition.
+
+Acked-by: Quentin Monnet <qmo@kernel.org>
+
+Thanks
