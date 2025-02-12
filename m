@@ -1,119 +1,176 @@
-Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-00206402.pphosted.com (mx0b-00206402.pphosted.com [148.163.152.16])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 737001FFC59
-	for <bpf@vger.kernel.org>; Wed, 12 Feb 2025 22:31:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEE6221324C;
+	Wed, 12 Feb 2025 22:32:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.152.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739399518; cv=none; b=B7IIDCVJj0KcHbaDP4/TAjN5eqdpB5eP440Jh9TPQed6kQ8k5l5Ejv0BvttE6hb/Y6w1W/rMx9w3+gwUI/GxkMn7vJ8EbNllGWKn5YV+3llj5YIU/7CkRH7kAwCl1LtGxEP2MGmA9HZvq5V0mK6zi/tYEWPxoFL1WzgHlNR0tnA=
+	t=1739399523; cv=none; b=XjvShPEeTgb6FMBftZkVJE2bqv8RR/LmNCOgV/oQCIIuWX2Ww7Zt1maiokH9RxxyDpxKQoP3iQlbYO6iBVJc+yJC5NRJNZmvHUbE2KEs8Km/hAm0XbvTQAWRv2hLOLPdCa026Kj1kUdcBizTrVhcx4DpWM45nXmgIfkPm2GMSUY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739399518; c=relaxed/simple;
-	bh=9xYAmC7Odj+wcG5scUKb2hxhqBVZwbTv98XQABN1UOE=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=S65D5pvnGbmCHHUTW6kWNJoARz4rD+QXqZouaowBF5Ah9TYgDhSugZKC/WBlNfgq/jWb6Jpj/ITpoDEGV3P6S3tj+fIopOLbHTWChE73a0K/Il46+RnHpCwymF39islL3xkBQ+RiSAJ80Jqzgf6U1D9Bu9ZFfKd2saMoHdaQLwE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ctshao.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=sLT1C2rD; arc=none smtp.client-ip=209.85.216.73
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--ctshao.bounces.google.com
+	s=arc-20240116; t=1739399523; c=relaxed/simple;
+	bh=sZ76WPaDy8nPLEmdLdS4bFskJzP4b3MihXK0mHdyZm0=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=qsfSQtYGbGW48yDelnwqFQ6u2ndaD/zTbQlBAKres0oJwuYq+En5KHxwBQcS/mWIfUgVPLJIWiWcbCgb97xJsYtDGets73GaeXqqHy6rZGLnstpmeQyQMMRydrYJMvbVBV/y2CIQrGAZcr1DO1JNTlouZzqZou2WPqtln3l7KAw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com; spf=pass smtp.mailfrom=crowdstrike.com; dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b=fzhJwN12; arc=none smtp.client-ip=148.163.152.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=crowdstrike.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="sLT1C2rD"
-Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-2fa228b4151so536769a91.1
-        for <bpf@vger.kernel.org>; Wed, 12 Feb 2025 14:31:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1739399517; x=1740004317; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=P4u0lqhDVCs3kWFzXSRSy88eSlq3hW173Ud7Yk2USkk=;
-        b=sLT1C2rDOEyzzLjEjuaRckKwaQ00FSPM7NcwXHLowCOWOBl7jqp258G7LJ6nhbMS3N
-         3KCYLouS3RjIFHy+L6x32LYG/wvm4gdvQ92X3Lmf7eeRZvMcIMZUiPFq1iHrpdJM7sj+
-         /1Vq/Ul3gknf1Q9T1DviNgGoT67r/Dxz8Ce4oOBWyvjPqeLT2+ihOMXr6AXpngEJjxPL
-         om5whT5SD6ile3O21yTz2NxFZLQTTgjVruCtLeSUCT7bXdF2X9OD+6lf8AEH+0pi6oo0
-         n7IvgLC7MsPON58ug2Ah5HAjyUAdwUGb0kwtbZGAo2PibTzeWSmYid8jA/Yqd8zmavmg
-         2hIQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739399517; x=1740004317;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=P4u0lqhDVCs3kWFzXSRSy88eSlq3hW173Ud7Yk2USkk=;
-        b=qDxPfJziMZdb3m6LzQsI0aA0xHjMaCDd47wmSbZ6CwYzsmRE1wYAe9zejMOPLkQwAY
-         Lf4bvWZv7WSu3JLilKoeCSmAGDPJucJ6VfgbRxRAhdeuAf+qF14VrAjVpjHskN0xs/DK
-         qW/h7WD17nxRSqcmvwyf4dp58Exs8TfUMiA4ubqU1rhDg+esUVuRwQMukWWcYc+iCJSh
-         R+4dj6VU+1qGIt2lanBmfY1zDtPUXqJ3Ufkb9Ql6+8+k6L2/NLiefSxZtnyoG0q3jHsw
-         i0M6P3wDb2BTGiSZntS/ZDiehLYp1bnUyHzzBYCZB3r3WmYj/FDLs1+UytbdxDUXbujh
-         7n5Q==
-X-Forwarded-Encrypted: i=1; AJvYcCVObRsZ1n8nHy+cnwQkm4H7fx/YLPazukB/FhTuofEHkDf2osVnXdrwwwo5stlgCZrwjQ8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxUJ87D8xY6n6FPY6NL2W9Cp2NP/iCim1p3GawFvdO21Y44jxMw
-	6/oy5gY39wrHtoGD3BibB7DjywZ20Rzl4Cy1j0IOKl8Zdnf1ozLehVCwLmmCjgT35QsMEztmoP0
-	f8g==
-X-Google-Smtp-Source: AGHT+IHCkcBnyBvA5rBqb0nlmu6y/i7b8JGoyzx+WFgpOL9irq8xmcP/AfVCc/JAi46e7AZbhgN0hE+xX1s=
-X-Received: from pjbpt6.prod.google.com ([2002:a17:90b:3d06:b0:2ef:7af4:5e8e])
- (user=ctshao job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:4c04:b0:2fa:f8d:65e7
- with SMTP id 98e67ed59e1d1-2fbf5bb574fmr8098207a91.2.1739399516973; Wed, 12
- Feb 2025 14:31:56 -0800 (PST)
-Date: Wed, 12 Feb 2025 14:24:56 -0800
-In-Reply-To: <20250212222859.2086080-1-ctshao@google.com>
+	dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b="fzhJwN12"
+Received: from pps.filterd (m0354653.ppops.net [127.0.0.1])
+	by mx0b-00206402.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 51CMFw2c010600;
+	Wed, 12 Feb 2025 22:31:23 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crowdstrike.com;
+	 h=cc:content-id:content-transfer-encoding:content-type:date
+	:from:in-reply-to:message-id:mime-version:references:subject:to;
+	 s=default; bh=sZ76WPaDy8nPLEmdLdS4bFskJzP4b3MihXK0mHdyZm0=; b=f
+	zhJwN12YsrfK21DtDVSk5pbmc0lvWmu8KAB9J3QQJLBC+T6xQJp28KiUEhwYyOfY
+	2WE5QlNyWsprV1MOJP2MLzTgzROR8bnTWstsq8xJhlkamcOC73LnrdNdQBVrhVI5
+	Tl2yBLTyisRjlXmpSQMZehJfHX5ynLxoXKpjVYpM2p/53Mbh/kq/++wbr2YL0NiE
+	kRfBJo0AQHysw5+yp9/gHK8FodK2BQtsePIqeHXC9ibKP8klKyQto1q+YH9jUi5Z
+	+PrRk8MpdKLBnE4+B82OyxBfvvUhv3LrI+x5GeXPfJcImadOtsqC7xJxN9IJyda9
+	mvwd8foTCUruQZ1fSpHrA==
+Received: from mail.crowdstrike.com (dragosx.crowdstrike.com [208.42.231.60] (may be forged))
+	by mx0b-00206402.pphosted.com (PPS) with ESMTPS id 44s49kg6db-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 12 Feb 2025 22:31:23 +0000 (GMT)
+Received: from 04WPEXCH006.crowdstrike.sys (10.100.11.70) by
+ 04WPEXCH007.crowdstrike.sys (10.100.11.74) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.9; Wed, 12 Feb 2025 22:31:21 +0000
+Received: from 04WPEXCH006.crowdstrike.sys ([fe80::a97d:6ad:c239:d138]) by
+ 04WPEXCH006.crowdstrike.sys ([fe80::a97d:6ad:c239:d138%11]) with mapi id
+ 15.02.1544.009; Wed, 12 Feb 2025 22:31:21 +0000
+From: Martin Kelly <martin.kelly@crowdstrike.com>
+To: "andrii.nakryiko@gmail.com" <andrii.nakryiko@gmail.com>
+CC: "mykolal@fb.com" <mykolal@fb.com>, "shuah@kernel.org" <shuah@kernel.org>,
+        "eddyz87@gmail.com" <eddyz87@gmail.com>,
+        "song@kernel.org" <song@kernel.org>,
+        Mark Fontana <mark.fontana@crowdstrike.com>,
+        "john.fastabend@gmail.com"
+	<john.fastabend@gmail.com>,
+        "yonghong.song@linux.dev"
+	<yonghong.song@linux.dev>,
+        "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>,
+        "andrii@kernel.org" <andrii@kernel.org>,
+        "kpsingh@kernel.org" <kpsingh@kernel.org>,
+        "martin.lau@linux.dev"
+	<martin.lau@linux.dev>,
+        "ast@kernel.org" <ast@kernel.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        "sdf@fomichev.me"
+	<sdf@fomichev.me>,
+        "daniel@iogearbox.net" <daniel@iogearbox.net>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "Slava
+ Imameev" <slava.imameev@crowdstrike.com>,
+        "jolsa@kernel.org"
+	<jolsa@kernel.org>,
+        "haoluo@google.com" <haoluo@google.com>
+Subject: Re: Re: Re: Re: [PATCH 2/2] libbpf: BPF programs dynamic loading and
+ attaching
+Thread-Topic: Re: Re: Re: [PATCH 2/2] libbpf: BPF programs dynamic loading and
+ attaching
+Thread-Index: AQHbfZ3XBT9ZxQOU7kGKxsu7YttsEQ==
+Date: Wed, 12 Feb 2025 22:31:21 +0000
+Message-ID: <7727e5d4f035c04d03ba274ad8b7fb8bc7da696c.camel@crowdstrike.com>
+References: <20250122215206.59859-1-slava.imameev@crowdstrike.com>
+	 <20250122215206.59859-2-slava.imameev@crowdstrike.com>
+	 <CAEf4Bzajxh4xvg-aCaBhLQdNOZdhwceYUD2UsCcWku4ZBca_Hw@mail.gmail.com>
+	 <8831ed8fa183f76fefd71244360fa0ca35b11910.camel@crowdstrike.com>
+	 <CAEf4BzYWe0KCzA4-qwAGp5n_ydJ0_zyLSO=Crr_vewFHzZ0t6Q@mail.gmail.com>
+	 <e55a1441252079e73b2abdf3635efcebda6b47c1.camel@crowdstrike.com>
+	 <CAEf4BzZ8H0nQMEMaDGMfyngb15zMFEduy_R_ajakrdjGGtiOQA@mail.gmail.com>
+In-Reply-To: <CAEf4BzZ8H0nQMEMaDGMfyngb15zMFEduy_R_ajakrdjGGtiOQA@mail.gmail.com>
+Accept-Language: en-US, en-GB
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+x-disclaimer: USA
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <458A786FEBBE5D46BBF6F0C11E1BF9B6@crowdstrike.sys>
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20250212222859.2086080-1-ctshao@google.com>
-X-Mailer: git-send-email 2.48.1.502.g6dc24dfdaf-goog
-Message-ID: <20250212222859.2086080-6-ctshao@google.com>
-Subject: [PATCH v5 5/5] perf lock: Update documentation for -o option in
- contention mode
-From: Chun-Tse Shao <ctshao@google.com>
-To: linux-kernel@vger.kernel.org
-Cc: Chun-Tse Shao <ctshao@google.com>, peterz@infradead.org, mingo@redhat.com, 
-	acme@kernel.org, namhyung@kernel.org, mark.rutland@arm.com, 
-	alexander.shishkin@linux.intel.com, jolsa@kernel.org, irogers@google.com, 
-	adrian.hunter@intel.com, kan.liang@linux.intel.com, 
-	linux-perf-users@vger.kernel.org, bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+X-Authority-Analysis: v=2.4 cv=ULMnHDfy c=1 sm=1 tr=0 ts=67ad213b cx=c_pps a=1d8vc5iZWYKGYgMGCdbIRA==:117 a=1d8vc5iZWYKGYgMGCdbIRA==:17 a=xqWC_Br6kY4A:10 a=EjBHVkixTFsA:10 a=IkcTkHD0fZMA:10 a=T2h4t0Lz3GQA:10 a=P-IC7800AAAA:8 a=7-tEzCSxO2EtVtJZZDcA:9
+ a=QEXdDO2ut3YA:10 a=d3PnA9EDa4IxuAV0gXij:22
+X-Proofpoint-ORIG-GUID: ntqav-D13SItNR8cRYkViUiO4pWKFj-C
+X-Proofpoint-GUID: ntqav-D13SItNR8cRYkViUiO4pWKFj-C
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-02-12_07,2025-02-11_01,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 spamscore=0
+ impostorscore=0 mlxlogscore=999 adultscore=0 phishscore=0
+ priorityscore=1501 bulkscore=0 suspectscore=0 lowpriorityscore=0
+ clxscore=1015 mlxscore=0 classifier=spam authscore=0 authtc=n/a authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2501170000
+ definitions=main-2502120159
 
-This patch also decouple -o with -t, and shows warning to notify the new
-behavior for -ov.
-
-Signed-off-by: Chun-Tse Shao <ctshao@google.com>
----
- tools/perf/builtin-lock.c | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
-
-diff --git a/tools/perf/builtin-lock.c b/tools/perf/builtin-lock.c
-index 3dc100cf30ef..e16bda6ce525 100644
---- a/tools/perf/builtin-lock.c
-+++ b/tools/perf/builtin-lock.c
-@@ -1817,7 +1817,7 @@ static void print_contention_result(struct lock_contention *con)
- 			break;
- 	}
- 
--	if (con->owner && con->save_callstack) {
-+	if (con->owner && con->save_callstack && verbose > 0) {
- 		struct rb_root root = RB_ROOT;
- 
- 		if (symbol_conf.field_sep)
-@@ -1978,6 +1978,11 @@ static int check_lock_contention_options(const struct option *options,
- 		}
- 	}
- 
-+	if (show_lock_owner && !show_thread_stats) {
-+		pr_warning("Now -o try to show owner's callstack instead of pid and comm.\n");
-+		pr_warning("Please use -t option too to keep the old behavior.\n");
-+	}
-+
- 	return 0;
- }
- 
-@@ -2569,7 +2574,8 @@ int cmd_lock(int argc, const char **argv)
- 		     "Filter specific address/symbol of locks", parse_lock_addr),
- 	OPT_CALLBACK('S', "callstack-filter", NULL, "NAMES",
- 		     "Filter specific function in the callstack", parse_call_stack),
--	OPT_BOOLEAN('o', "lock-owner", &show_lock_owner, "show lock owners instead of waiters"),
-+	OPT_BOOLEAN('o', "lock-owner", &show_lock_owner, "show lock owners instead of waiters.\n"
-+		"\t\t\tThis option can be combined with -t, which shows owner's per thread lock stats, or -v, which shows owner's stacktrace"),
- 	OPT_STRING_NOEMPTY('x', "field-separator", &symbol_conf.field_sep, "separator",
- 		   "print result in CSV format with custom separator"),
- 	OPT_BOOLEAN(0, "lock-cgroup", &show_lock_cgroups, "show lock stats by cgroup"),
--- 
-2.48.1.502.g6dc24dfdaf-goog
-
+T24gTW9uLCAyMDI1LTAyLTEwIGF0IDE2OjA2IC0wODAwLCBBbmRyaWkgTmFrcnlpa28gd3JvdGU6
+DQo+ID4gVHJhY2tpbmcgYXNzb2NpYXRlZCBtYXBzIGZvciBhIHByb2dyYW0gaXMgbm90IG5lY2Vz
+c2FyeS4gQXMgbG9uZyBhcw0KPiA+IHRoZSBsYXN0IEJQRiBwcm9ncmFtIHVzaW5nIHRoZSBCUEYg
+bWFwIGlzIHVubG9hZGVkLCB0aGUga2VybmVsIHdpbGwNCj4gPiBhdXRvbWF0aWNhbGx5IGZyZWUg
+bm90LWFueW1vcmUtcmVmZXJlbmNlZCBCUEYgbWFwLiBOb3RlIHRoYXQNCj4gPiBicGZfb2JqZWN0
+IGl0c2VsZiB3aWxsIGtlZXAgRkRzIGZvciBCUEYgbWFwcywgc28geW91J2QgbmVlZCB0byBtYWtl
+DQo+ID4gc3VyZSB0byBkbyBicGZfb2JqZWN0X19jbG9zZSgpIHRvIHJlbGVhc2UgdGhvc2UgcmVm
+ZXJlbmNlcy4NCj4gPiANCj4gPiBCdXQgaWYgeW91IGFyZSBnb2luZyB0byBhc2sgdG8gcmUtY3Jl
+YXRlIEJQRiBtYXBzIG5leHQgdGltZSBCUEYNCj4gPiBwcm9ncmFtIGlzIGxvYWRlZC4uLiBXZWxs
+LCBJJ2xsIHNheSB5b3UgYXJlIGFza2luZyBmb3IgYSBiaXQgdG9vID4NCj4gPiBtdWNoLA0KPiA+
+IHRiaC4gSWYgeW91IHdhbnQgdG8gYmUgKnRoYXQqIHNvcGhpc3RpY2F0ZWQsIGl0IHNob3VsZG4n
+dCBiZSB0b28NCj4gPiBoYXJkDQo+ID4gZm9yIHlvdSB0byBnZXQgYWxsIHRoaXMgaW5mb3JtYXRp
+b24gZnJvbSBCUEYgcHJvZ3JhbSdzDQo+ID4gaW5zdHJ1Y3Rpb25zLg0KPiA+IA0KDQpXZSByZWFs
+bHkgYXJlIHRoYXQgc29waGlzdGljYXRlZCAoc2VlIGJlbG93IGZvciBtb3JlIGRldGFpbHMpLiBX
+ZSBjb3VsZA0Kc2NhbiBwcm9ncmFtIGluc3RydWN0aW9ucywgYnV0IHdlJ2QgdGhlbiB0aWUgb3Vy
+IGxvZ2ljIHRvIEJQRg0KaW1wbGVtZW50YXRpb24gZGV0YWlscyBhbmQgZHVwbGljYXRlIGxvZ2lj
+IGFscmVhZHkgcHJlc2VudCBpbiBsaWJicGYNCihodHRwczovL2VsaXhpci5ib290bGluLmNvbS9s
+aW51eC92Ni4xMy4yL3NvdXJjZS90b29scy9saWIvYnBmL2xpYmJwZi5jI0w2MDg3DQopLiBPYnZp
+b3VzbHkgdGhpcyAqY2FuKiBiZSBkb25lIGJ1dCBpdCdzIG5vdCBhdCBhbGwgaWRlYWwgZnJvbSBh
+bg0KYXBwbGljYXRpb24gcGVyc3BlY3RpdmUuDQoNCg0KPiA+ID4gPiANCj4gPiBicGZfb2JqZWN0
+IGlzIHRoZSB1bml0IG9mIGNvaGVyZW5jZSBpbiBsaWJicGYsIHNvIEkgZG9uJ3Qgc2VlIHVzDQo+
+ID4gcmVmY291bnRpbmcgbWFwcyBiZXR3ZWVuIGJwZl9vYmplY3RzLiBLZXJuZWwgaXMgZG9pbmcg
+cmVmY291bnRpbmcNCj4gPiBiYXNlZCBvbiBGRHMsIHNvIHNlZSBpZiB5b3UgY2FuIHVzZSB0aGF0
+Lg0KPiA+IA0KDQpJIGNhbiB1bmRlcnN0YW5kIHRoYXQuIFRoYXQgc2FpZCwgSSB0aGluayBpZiB0
+aGVyZSdzIG5vIGxvZ2ljIGFjcm9zcw0Kb2JqZWN0cywgYW5kIGJwZl9vYmplY3QgYWNjZXNzIGlz
+IG5vdCB0aHJlYWQtc2FmZSwgaXQgcHV0cyB1cyBpbnRvIGENCnRvdWdoIHNpdHVhdGlvbjoNCi0g
+Q29tcGxleCByZWZjb3VudGluZywgY29kZSBzY2FubmluZywgZXRjIHRvIGtlZXAgY29uc2lzdGVu
+Y3kgd2hlbg0KbWFuaXB1bGF0aW5nIG1hcHMgdXNlZCBieSBtdWx0aXBsZSBwcm9ncmFtcy4NCi0g
+UGFyYWxsZWwgbG9hZGluZyBub3QgYmVpbmcgd2VsbC1iYWxhbmNlZCwgaWYgd2Ugc3BsaXQgcHJv
+Z3JhbXMgYWNyb3NzDQpvYmplY3RzLg0KDQpXZSBjb3VsZCBhbHRlcm5hdGl2ZWx5IHdyaXRlIG91
+ciBvd24gY3VzdG9tIGxvYWRlciwgYnV0IHRoZW4gd2XigJlkIGhhdmUNCnRvIGR1cGxpY2F0ZSBt
+dWNoIG9mIHRoZSB1c2VmdWwgbG9naWMgdGhhdCBsaWJicGYgYWxyZWFkeSBpbXBsZW1lbnRzOg0K
+c2tlbGV0b24gZ2VuZXJhdGlvbiwgbWFwL3Byb2dyYW0gYXNzb2NpYXRpb24sIGVtYmVkZGluZyBw
+cm9ncmFtcyBpbnRvDQpFTEZzLCBsb2FkaW5nIGxvZ2ljIGFuZCBrZXJuZWwgcHJvYmluZywgZXRj
+LiBXZeKAmWQgbGlrZSBzb21lIHdheSB0bw0KaGFuZGxlIGR5bmFtaWMvcGFyYWxsZWwgbG9hZGlu
+ZyB3aXRob3V0IGhhdmluZyB0byByZXBsaWNhdGUgYWxsIHRoZQ0KYWR2YW50YWdlcyBsaWJicGYg
+Z3JhbnRzIHVzLg0KDQo+ID4gDQo+ID4gDQo+ID4gSXMgMTAwIGp1c3QgYSBuaWNlbHkgbG9va2lu
+ZyByYXRoZXIgbGFyZ2UgbnVtYmVyLCBvciBkbyB5b3UgcmVhbGx5DQo+ID4gaGF2ZSAxMDAgZGlm
+ZmVyZW50IEJQRiBwcm9ncmFtcz8gV2h5IHNvIG1hbnkgYW5kIGFyZSB0aGV5IHJlYWxseQ0KPiA+
+IGFsbA0KPiA+IHVuaXF1ZT8NCj4gPiANCj4gPiBBc2tpbmcgYmVjYXVzZSBpZiBpdCdzIGp1c3Qg
+YSB3YXkgdG8gYXR0YWNoIEJQRiBwcm9ncmFtIGRvaW5nIG1vcmUNCj4gPiBvcg0KPiA+IGxlc3Mg
+dW5pZm9ybSBzZXQgb2YgYWN0aW9ucyBmb3IgZGlmZmVyZW50IGhvb2tzLCB0aGVuIHBlcmhhcHMg
+dGhlcmUNCj4gPiBhcmUgYmV0dGVyIHdheXMgdG8gZG8gdGhpcyB3aXRob3V0IGhhdmluZyB0byBk
+dXBsaWNhdGluZyBCUEYNCj4gPiBwcm9ncmFtcw0KPiA+IHNvIG11Y2ggKGxpa2UgQlBGIGNvb2tp
+ZSwgbXVsdGkta3Byb2JlcywgZXRjLCBldGMpDQoNCjEwMCBpcyBub3QgYW4gYXJiaXRyYXJ5IG51
+bWJlcjsgd2UgaGF2ZSB0aGF0IGFuZCBoaWdoZXIgKH4yMDAgaXMgYSBnb29kDQpjdXJyZW50IGVz
+dGltYXRlLCBhbmQgdGhhdCBncm93cyBhcyBuZXcgcHJvZHVjdCBmZWF0dXJlcyBhcmUgYWRkZWQp
+Lg0KVGhlIHByb2dyYW1zIGFyZSByZWFsbHkgZG9pbmcgZGlmZmVyZW50IHRoaW5ncy4gV2UgYWxz
+byBoYXZlIHRvIHN1cHBvcnQNCmEgd2lkZSByYW5nZSBvZiBrZXJuZWxzLCBoYW5kbGluZyBjYXNl
+cyBsaWtlOiAib24gdGhpcyBrZXJuZWwgcmFuZ2UsDQp0cmFtcG9saW5lcyBhcmVuJ3Qgc3VwcG9y
+dGVkLCBzbyB1c2Uga3JldHByb2JlcyB3aXRoIGEgY29udGV4dCBtYXAgZm9yDQpmdW5jdGlvbiBh
+cmdzIGluc3RlYWQgb2YgZmV4aXQsIGJ1dCBvbiBuZXdlciBrZXJuZWxzIGp1c3QgdXNlIGFuIGZl
+eGl0DQpob29rLiINCg0KVGhlIHVzZSBjYXNlIGhlcmUgaXMgdGhhdCBvdXIgc2VjdXJpdHkgbW9u
+aXRvcmluZyBhZ2VudCBsZXZlcmFnZXMgZUJQRg0KYXMgaXRzIGZvdW5kYXRpb25hbCB0ZWNobm9s
+b2d5IHRvIGdhdGhlciB0ZWxlbWV0cnkgZnJvbSB0aGUga2VybmVsLiBBcw0KcGFydCBvZiB0aGF0
+LCB3ZSBob29rIG1hbnkgZGlmZmVyZW50IGtlcm5lbCBzdWJzeXN0ZW1zIChwcm9jZXNzLA0KbWVt
+b3J5LCBmaWxlc3lzdGVtLCBuZXR3b3JrLCBldGMpLCB0eWluZyB0aGVtIHRvZ2V0aGVyIGFuZCB0
+cmFja2luZw0Kd2l0aCBtYXBzLiBTbyB3ZSBsZWdpdGltYXRlbHkgaGF2ZSBhIHZlcnkgbGFyZ2Ug
+bnVtYmVyIG9mIHByb2dyYW1zIGFsbA0KZG9pbmcgZGlmZmVyZW50IHdvcmsuIEZvciBwcm9kdWN0
+cyBvZiB0aGlzIHNjYWxlLCBpdCBpbmNyZWFzZXMgc2VjdXJpdHkNCmFuZCBwZXJmb3JtYW5jZSB0
+byBsb2FkIHRoaXMgc2V0IG9mIHByb2dyYW1zIGFuZCB0aGVpciBtYXBzIGluIGFuDQpvcHRpbWl6
+ZWQsIHBhcmFsbGVsIGZhc2hpb24gYW5kIHN1YnNlcXVlbnRseSBjaGFuZ2UgdGhlIGxvYWRlZCBz
+ZXQgb2YNCnByb2dyYW1zIGFuZCBtYXBzIGR5bmFtaWNhbGx5IHdpdGhvdXQgZGlzdHVyYmluZyB0
+aGUgcmVzdCBvZiB0aGUNCmFwcGxpY2F0aW9uLg0K
