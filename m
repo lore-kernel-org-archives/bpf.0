@@ -1,61 +1,164 @@
-Received: from out-188.mta0.migadu.com (out-188.mta0.migadu.com [91.218.175.188])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f74.google.com (mail-pj1-f74.google.com [209.85.216.74])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF5A32063DE
-	for <bpf@vger.kernel.org>; Wed, 12 Feb 2025 22:25:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.188
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9125C21019E
+	for <bpf@vger.kernel.org>; Wed, 12 Feb 2025 22:29:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739399161; cv=none; b=PUlkeLQsS0NBjdGF3xNMsiX4wFzKKJb1AS4tjG92mVF5PVGLzTJmlkG59piL4l7pSLB45n1+hYLxyHiXxT7Vy1Chhp9lMLYAFALieW3iEc2CE9U5Aq9VhHLl/UxJxtLhV66VxJfMOnL9z1NwVcHF0M+2kMpZN/4JeND2SOulvxU=
+	t=1739399346; cv=none; b=Ui+t1KVkHX7bQH96r7twu8QLUq+9b6GK7N1uZmrbCSppVm9tM9EAHFW31Uw2+b1r1lsQ7lefRtnKjUxTFPm61po6z62+2FH8ynbxHK/pXkqHlDBURsseGXmXOtJJ8ReDjaA032YJ2sHdiM6k3RXH4H1L89H9K6Iqc8DaJfhAgoM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739399161; c=relaxed/simple;
-	bh=uKV3KqsynzdIb/LMoWcY3A8YZP96ipksOMa35TqOjCk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=illD4rqk2yAbXjiiUW9Ycfbq+OYyDBp0X7tEElW2ZzPujp/bdgnPRMoTc+FkiIO3oN5+Jr1ej12qwc+RFUlyNYPUu6RvROyWkPL4Q2MCxtGwi7KHNMbxNqPtKIJ/tGBB1IYlBKGhSHIi6ihS7wJ2B1T86aXPXKdsJvJA+1hm1bM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=SrLRpXJ5; arc=none smtp.client-ip=91.218.175.188
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1739399346; c=relaxed/simple;
+	bh=vrXQBzZLHyWqS64CTDiirsBQO9JgZrbt74ofDZ59COY=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=BmDdgqZROOS0U5gycDqMpNLcT96NeZ/kzmBqANJ9U/eVUc3fEoeM35VHEOrPlOJfOE7wmpsQ+w2PxA57E6eDNGhp0fhbk86hwOlpGBSqGbHSOZYrC3RstT9DDLydyTKYouAm8D4KnFdUvI1Pzy13V6NmGH1LVfmk53DP/2o17hc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ctshao.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=luCO68Ut; arc=none smtp.client-ip=209.85.216.74
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--ctshao.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="SrLRpXJ5"
-Date: Wed, 12 Feb 2025 14:25:53 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1739399157;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=m9HBBII1nXU+thEECyzJU0uguy9bFF7mdhp10qRQOVI=;
-	b=SrLRpXJ5qzKU1iqI2AZ8397DntehUUTtddlftErTwaaLdtlyqgP3yJ8Ykuen0u/8MqpGG3
-	wYtYQhblm+6QR9WCspKZg36XGWtVAbXid4H7tW21PyaMQsQlBpvhdEWdyeufy6FKDXCBtm
-	feXOnRziB+3+heC0wg0EWC9OQ4x7YfA=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Shakeel Butt <shakeel.butt@linux.dev>
-To: Jordan Rome <linux@jordanrome.com>
-Cc: bpf@vger.kernel.org, linux-mm@kvack.org, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Kernel Team <kernel-team@fb.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, Alexander Potapenko <glider@google.com>
-Subject: Re: [bpf-next v7 1/3] mm: add copy_remote_vm_str
-Message-ID: <rkor47tohikmgixexi46mpalttxud7k2n5gidqbxoqzhwkjkas@rdl4dzndjz47>
-References: <20250210221626.2098522-1-linux@jordanrome.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="luCO68Ut"
+Received: by mail-pj1-f74.google.com with SMTP id 98e67ed59e1d1-2fc0bc05b36so734645a91.3
+        for <bpf@vger.kernel.org>; Wed, 12 Feb 2025 14:29:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1739399344; x=1740004144; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=Ops18fMc+NWzGSM8vJwyhsQmNBMs6kMxdvy3bOSxpxk=;
+        b=luCO68UtekvwfoCXDjQOwav+xU0DGiNE3MoO5frc8qL6hstfKyg7p4IvrBpHbIqBec
+         uvhIlmIxYhaag+qEKwMzhqYRWjV+oLMCznlCHqVQKxqc2h11imilYF6qdCoGOgLKDvge
+         gWhRyLr4na+XPldHXYRbT1VzL7j8vrldt94Ro8qEyRGJvtb95CM+ETS3nshAPyLvHnVJ
+         q8jp4J7DJw4waoT+gH0RrsueKZVKE0UiFiEJliV9dV+H7P+rP9hF9AyL6nmwJ29y46Lz
+         CfY6STH8A21tdBS2YtvE5miTlveL/9T1hISUIGwP2gKrMnz00ARui6jwKWrqviOWvRaa
+         L/Og==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1739399344; x=1740004144;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Ops18fMc+NWzGSM8vJwyhsQmNBMs6kMxdvy3bOSxpxk=;
+        b=ONHH6JGib/SmnH8HgQAoroOkqH/wXEX8HDDaxkY63WRIpXcOlKZO+bKD6etWtA3+fF
+         5VwLhmW4qPczllydrMBUPVukfMBeuAz1fOcaMCgrxBRo8foMF74XHVpH7ZqTcVHaOFnW
+         y6/2wAAe4FYVVGgIkL9i4nGmEBjDvLPXKynLkXMfnPN3fPRLTnl0hLKTar0LcGhQCqtr
+         1XvnqIXJqE6Rsst3/QraATlJabd3ttjG8L6zKA1LIV3aFx9FdSYJQv6ufWKlMLIrTufv
+         M0mpL3qjz3u12q4HLkGLmae2K7rzA1EIQitTTQxbFZqyE1VCsBPmwsix21iGtADvnTz7
+         pw+A==
+X-Forwarded-Encrypted: i=1; AJvYcCXpqSSZ8O/yIAO0j3/im51uFDhSVb0M+IcfdBGEuz92uY1s4o4fzgPsCcNJLFfblBIioCE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxGHdrLMgu7CjK18h3bifXfbbwh9BOBoX0zSY7rFkJcU8Y6fieU
+	9wUDdwgDH4nTEmoYb4KiRfCCfZ09xVhHtL3bRdAka57q7cihw2sZOGG64mRgUADYI0/TD+8FpCT
+	r+Q==
+X-Google-Smtp-Source: AGHT+IF3ZXoEyE4KPjh18j6I0r1uGq7qRrUlWVGa2SDtefltt/F2NlHzYljpGmfH3tjOGVfJWZFHSk9U+0o=
+X-Received: from pjbpl10.prod.google.com ([2002:a17:90b:268a:b0:2fc:11a0:c53f])
+ (user=ctshao job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90a:e183:b0:2ee:d63f:d71
+ with SMTP id 98e67ed59e1d1-2fbf5bec92bmr8716045a91.14.1739399343897; Wed, 12
+ Feb 2025 14:29:03 -0800 (PST)
+Date: Wed, 12 Feb 2025 14:24:51 -0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250210221626.2098522-1-linux@jordanrome.com>
-X-Migadu-Flow: FLOW_OUT
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.48.1.502.g6dc24dfdaf-goog
+Message-ID: <20250212222859.2086080-1-ctshao@google.com>
+Subject: [PATCH v5 0/5] Tracing contention lock owner call stack
+From: Chun-Tse Shao <ctshao@google.com>
+To: linux-kernel@vger.kernel.org
+Cc: Chun-Tse Shao <ctshao@google.com>, peterz@infradead.org, mingo@redhat.com, 
+	acme@kernel.org, namhyung@kernel.org, mark.rutland@arm.com, 
+	alexander.shishkin@linux.intel.com, jolsa@kernel.org, irogers@google.com, 
+	adrian.hunter@intel.com, kan.liang@linux.intel.com, 
+	linux-perf-users@vger.kernel.org, bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On Mon, Feb 10, 2025 at 02:16:24PM -0800, Jordan Rome wrote:
-> Similar to `access_process_vm` but specific to strings.
-> Also chunks reads by page and utilizes `strscpy`
-> for handling null termination.
-> 
-> Signed-off-by: Jordan Rome <linux@jordanrome.com>
+For perf lock contention, the current owner tracking (-o option) only
+works with per-thread mode (-t option). Enabling call stack mode for
+owner can be useful for diagnosing why a system running slow in
+lock contention.
 
-If you decide to send a newer version, my request would be to add some
-more text in the commit message particularly on the motivation.
-Otherwise this looks good to me.
+Example output:
+  $ sudo ~/linux/tools/perf/perf lock con -abvo -Y mutex -E16 perf bench sched pipe
+   ...
+   contended   total wait     max wait     avg wait         type   caller
 
-Reviewed-by: Shakeel Butt <shakeel.butt@linux.dev>
+         171      1.55 ms     20.26 us      9.06 us        mutex   pipe_read+0x57
+                          0xffffffffac6318e7  pipe_read+0x57
+                          0xffffffffac623862  vfs_read+0x332
+                          0xffffffffac62434b  ksys_read+0xbb
+                          0xfffffffface604b2  do_syscall_64+0x82
+                          0xffffffffad00012f  entry_SYSCALL_64_after_hwframe+0x76
+          36    193.71 us     15.27 us      5.38 us        mutex   pipe_write+0x50
+                          0xffffffffac631ee0  pipe_write+0x50
+                          0xffffffffac6241db  vfs_write+0x3bb
+                          0xffffffffac6244ab  ksys_write+0xbb
+                          0xfffffffface604b2  do_syscall_64+0x82
+                          0xffffffffad00012f  entry_SYSCALL_64_after_hwframe+0x76
+           4     51.22 us     16.47 us     12.80 us        mutex   do_epoll_wait+0x24d
+                          0xffffffffac691f0d  do_epoll_wait+0x24d
+                          0xffffffffac69249b  do_epoll_pwait.part.0+0xb
+                          0xffffffffac693ba5  __x64_sys_epoll_pwait+0x95
+                          0xfffffffface604b2  do_syscall_64+0x82
+                          0xffffffffad00012f  entry_SYSCALL_64_after_hwframe+0x76
+           2     20.88 us     11.95 us     10.44 us        mutex   do_epoll_wait+0x24d
+                          0xffffffffac691f0d  do_epoll_wait+0x24d
+                          0xffffffffac693943  __x64_sys_epoll_wait+0x73
+                          0xfffffffface604b2  do_syscall_64+0x82
+                          0xffffffffad00012f  entry_SYSCALL_64_after_hwframe+0x76
+           1      7.33 us      7.33 us      7.33 us        mutex   do_epoll_ctl+0x6c1
+                          0xffffffffac692e01  do_epoll_ctl+0x6c1
+                          0xffffffffac6937e0  __x64_sys_epoll_ctl+0x70
+                          0xfffffffface604b2  do_syscall_64+0x82
+                          0xffffffffad00012f  entry_SYSCALL_64_after_hwframe+0x76
+           1      6.64 us      6.64 us      6.64 us        mutex   do_epoll_ctl+0x3d4
+                          0xffffffffac692b14  do_epoll_ctl+0x3d4
+                          0xffffffffac6937e0  __x64_sys_epoll_ctl+0x70
+                          0xfffffffface604b2  do_syscall_64+0x82
+                          0xffffffffad00012f  entry_SYSCALL_64_after_hwframe+0x76
+
+  === owner stack trace ===
+
+           3     31.24 us     15.27 us     10.41 us        mutex   pipe_read+0x348
+                          0xffffffffac631bd8  pipe_read+0x348
+                          0xffffffffac623862  vfs_read+0x332
+                          0xffffffffac62434b  ksys_read+0xbb
+                          0xfffffffface604b2  do_syscall_64+0x82
+                          0xffffffffad00012f  entry_SYSCALL_64_after_hwframe+0x76
+  ...
+
+v5:
+  Move duplicated code into function.
+  Remove code to retrieve undesired callstack at the end of `contention_end()`.
+  Other minor fix based on Namhyung's review.
+
+v4: lore.kernel.org/20250130052510.860318-1-ctshao@google.com
+  Use `__sync_fetch_and_add()` to generate owner stackid automatically.
+  Use `__sync_fetch_and_add(..., -1)` to workaround compiler error from
+    `__sync_fetch_and_sub()`
+  Remove unnecessary include headers.
+  Dedicate on C-style comment.
+  Other minor fix based on Namhyung's review.
+
+v3: lore.kernel.org/20250129001905.619859-1-ctshao@google.com
+  Rename/shorten multiple variables.
+  Implement owner stackid.
+  Add description for lock function return code in `contention_end()`.
+  Other minor fix based on Namhyung's review.
+
+v2: lore.kernel.org/20250113052220.2105645-1-ctshao@google.com
+  Fix logic deficit in v1 patch 2/4.
+
+v1: lore.kernel.org/20250110051346.1507178-1-ctshao@google.com
+
+Chun-Tse Shao (5):
+  perf lock: Add bpf maps for owner stack tracing
+  perf lock: Retrieve owner callstack in bpf program
+  perf lock: Make rb_tree helper functions generic
+  perf lock: Report owner stack in usermode
+  perf lock: Update documentation for -o option in contention mode
+
+ tools/perf/builtin-lock.c                     |  59 +++-
+ tools/perf/util/bpf_lock_contention.c         |  68 ++++-
+ .../perf/util/bpf_skel/lock_contention.bpf.c  | 251 +++++++++++++++++-
+ tools/perf/util/bpf_skel/lock_data.h          |   7 +
+ tools/perf/util/lock-contention.h             |   7 +
+ 5 files changed, 367 insertions(+), 25 deletions(-)
+
+--
+2.48.1.502.g6dc24dfdaf-goog
+
