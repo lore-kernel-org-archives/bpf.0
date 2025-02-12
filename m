@@ -1,133 +1,136 @@
-Received: from out162-62-58-211.mail.qq.com (out162-62-58-211.mail.qq.com [162.62.58.211])
+Received: from out162-62-57-137.mail.qq.com (out162-62-57-137.mail.qq.com [162.62.57.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40AE420ADD5;
-	Wed, 12 Feb 2025 11:34:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.62.58.211
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C5102046B5;
+	Wed, 12 Feb 2025 12:52:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.62.57.137
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739360087; cv=none; b=siCYMA1n51Em8JpuTHk/OPKf+2BJQdKTqKV+hgtcj05uF626BKLGq0Sc1B7URS1s8B01G3rtKb3hMBRtXbxdvA5J+boVTj0OL/8+iBFpDhwSHdn95WSYZMZDOS4sQG+FpYJ65mM41o276ax9pPmTgNUBqD/GwYruCWZfCI7Sv0U=
+	t=1739364743; cv=none; b=hMWR0f7z0J+zKPwUN+UKMevUL9hZukRbKzvJ7+kGuaytHXkrheeie/70GnnyeYnDVz9OuOG0FHEdzLb6Qnejc3dnrGII5WIJM5xt3XkTTojtfOkLK47saeyLI/fcrHr5cIaSZo7nLCFvZZSj5HCkO2MsXPyZZL2wiurw0I+1Xxc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739360087; c=relaxed/simple;
-	bh=qs5Wg9SnP8mEJT2fiF2C/Eoai2zy1zMKwiASuaSkzfc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=qvCwskpvMqggmlIlgyZoQSQVV/y69QBAjFBp0NQWbhF8+YWXkNqwk9YzRZNWi1NVvN9F9WAH573oIz3qJwEGJjSVbjpU88vVdoCXDBTLYeRx4hfeK5KRR8k6f1TR7eEaUZDcQ8tG0/dsnkpe0toDzSW3H6oDwxnqBGg+JgVwtBU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com; spf=pass smtp.mailfrom=foxmail.com; dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b=YwG/L8Zm; arc=none smtp.client-ip=162.62.58.211
+	s=arc-20240116; t=1739364743; c=relaxed/simple;
+	bh=0HUJCUu1wgMcgDDTi7Bg/sYak+QPi7iL6RR8eCGvuUM=;
+	h=Message-ID:From:To:Cc:Subject:Date:MIME-Version; b=iGGWjDV7quwpi3PELMdnY2thArirOPwwfvq8GfWCbZsQs66sLIUUXaTE4iR/7WA/07oQhKRpyuenH54cK8CBMxjg1W5AbaLY7Z73R0/iCLAqTZZ/8svtM62EjvpUXjlSXwhr+qwbn2tdnDJFqWFErKqDw+lYQJ7Q8+jA1QrAdGg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com; spf=pass smtp.mailfrom=foxmail.com; dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b=RnqjVrAS; arc=none smtp.client-ip=162.62.57.137
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foxmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b="YwG/L8Zm"
+	dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b="RnqjVrAS"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-	s=s201512; t=1739360073;
-	bh=nwRHhE+bRUftoQ1/jLksgCEVYIY2pDq9KLzXdnmSp3U=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=YwG/L8ZmeCT1ABjP14ZLErvxv4AVAr54R1I5ErwTsbPguAwKy86WG5Mo6tntX/t/c
-	 HvOjHwRvVTg0nRyubK4lSuH3XBdtlYI2sPXr+sAF1r2yuLtYjKmmcckH9+1tuO+hYZ
-	 hpARMqCKZV41+RYyWXLoYmuHWalWizgl74QzaXR8=
-Received: from [10.56.52.9] ([39.156.73.10])
+	s=s201512; t=1739364726;
+	bh=+XIDPqjGUvxmjKTI7q2+Nz1Yuu2Dud+hxdGsctS0pCM=;
+	h=From:To:Cc:Subject:Date;
+	b=RnqjVrAS5ToUAMZ4e/ATqtEkPmwTFWL50N/eICCOaGWR2nGcwxX+0Dz/JR2muHLqJ
+	 LxPI+vG6m7gSJzEHOJUzTi6scc8Imauk61Ud+KGSZ5eJahyDt6EqZmXg74pC++TGnq
+	 MsAUWPcpDxI27GAlsLkLOJL/SxTwdnZz/k6TbydY=
+Received: from f41.lan ([240e:305:1b95:d110:7285:c2ff:fe86:1af4])
 	by newxmesmtplogicsvrszc13-0.qq.com (NewEsmtp) with SMTP
-	id 57BBE49D; Wed, 12 Feb 2025 19:21:59 +0800
-X-QQ-mid: xmsmtpt1739359319t3ljxopxl
-Message-ID: <tencent_1256C865894AC1EBCFA804628181A1105A06@qq.com>
-X-QQ-XMAILINFO: NEq0i4SycP3baJ3pc8FIBFkmo5DKSXBnhJ8IAkxguBuES4K9CeJ8ynh7lxBtj4
-	 tdOwlx9sX6oq5tHvYLDd/ES6Pt4C9UDhlczptCubyPfaFoTzc4Eg0Pbla4UQLdPpYi6uRDFmzC6Z
-	 I5lFtBu0LsMURqpGTUHRJ9WX7PtFFrGe5iPRgAGglw3NEST+8Fc1t9ww6HZ5rALAlfMZaeqEe5Rd
-	 /yJzlYAY6P8p+ABuYOcMCU5Qu/EnpY1VTjI+3qevPj/Knr4oMEV8I2rW0rCIrPQsR48c6LozFKc7
-	 gPImMSd8FcbT/k1gCFV1L+5ucilrzovCWg7lYz8bIiol2MxAYHohw7Hto7agYCxfnnRLDtOMxpPP
-	 J3tJU0IR4yo7RomTzSRlR3usmUnupnwzsvk4XprcZS9wvWMPwXna5p5rw+J7lb2q9dKp8XfkKT5X
-	 lOE6dKpPQqOzd0+B8XQ1X7tAqiaSp+mtsx9JYmr6sOqi/xgegv3pyEP2w9tN09OFG943XBQym/Xw
-	 LFCNLs5umM5CtHEdHhfa4HsmCLmsXfepDm5eYXs7xE6rMqeCa7lxm0+T6OZ1+MzuWMlJhmA/Fc/b
-	 74046CBWl/ZFQwiWaSC4iMP9BCbdcsT/zBp8Ez2UV8Ga10T6Jg+56AqsTTiNw/FqnydWYpuZJwyh
-	 2MaI7s7Km9r4fmgia7Rh3qnfFpAZeki81pheJMYIFAl2ElxdU3me8RSJ0vulFc12wqpNeifHKW7s
-	 frp6x0mx0edY4H9Aedm39D6ibdbhm2tq2OPKs9f+fM9qU7W9IlmwZxKy4KG5uHhvVqulNnqqEVaQ
-	 W+r80A+4QZfdNKAJgU1jVnjOx+hUO8kfCdQNAX2bogMtoVUwTA7iu1siVOVzkhijVoUgu10/5Uyc
-	 XdXq7kUNDaa4wJ8i6R/KtEVzfuV52ohHH3IMSbnHX3xWj9/Mecqfo86W/I3RfLwz7u6phfVZp8Cl
-	 HCzHCuhxo=
-X-QQ-XMRINFO: Mp0Kj//9VHAxr69bL5MkOOs=
-X-OQ-MSGID: <0ee5dea2-591d-4a3f-b785-e2ebf21802a2@foxmail.com>
-Date: Wed, 12 Feb 2025 19:21:59 +0800
+	id B758387A; Wed, 12 Feb 2025 20:45:53 +0800
+X-QQ-mid: xmsmtpt1739364353tcm46gffh
+Message-ID: <tencent_B44B3A95F0D7C2512DC40D831DA1FA2C9907@qq.com>
+X-QQ-XMAILINFO: N2bAIxLK0elnyafZvAS7NlnEeBNBU/rEwUIhb3bMQDt445BhsBLzRZX+Y/XPhu
+	 daivaUk+OV7owFM2QKnC/yqkalI6HNlPutLjgFrFWAsRYcNLdtuTSPkUKapeyd7z1yCKP6ehXYu2
+	 o+u86QgQd102TcsTdtIMD6ZtOU5V2dwYZaryuO5fKPT6BuLfdXzVKAyah7OrQ1fWoIAdsEBGmH4K
+	 bhJ819uxIIEhL+Tp3MJQqovaQGu0jAp/+gsM+bWtxVfcSY7qPAAHEn8cismo9SOTYh/DKwJrJyMd
+	 TofmE45VkmdLXh+S4wyedoXG3S/8zO3ojBDLuUQiz9ChX56OF5Oa/1Kf3uZg8S+Mpd4FkausBwDo
+	 AITFU2CAEOKGeQ4tbhq3Abo+YhwEGRW1GYvwJSEOzxCPYaloEDVXBzYcpKSmv4ScUra9CjxkZdZ3
+	 atyj0QTyhgKzo5SS8WGe4/8wgP5u9kQqDEqPSBrXYRMy9RgvWmkeP8jg6f6/tzoXIH6YeJuKiqL7
+	 qzTs0PxvqfycTokxh8CV2ZMBD4G18eyIb0rSlLtSESPMa/RbiRvrB64dtlHqVO3wa/+LsJCfneDa
+	 O2Som2NC9dHTis5Q/77BL9AjKkseuEmV6rRasW2txq1Z0s8+nB+iOIhcN1wtDLTPa3vgEftCW71B
+	 hxjI9jutCxvYCPBhmeob3KuMQ4PWjDpzMXh6R6QSpK5p64szp5Tf2cX5THaYu7TannLbv/yonjR3
+	 IgBsVG253+ccraaB+m9vK9nyM8Ktxf8itC4zGkIXlqe9nxu5cLSq2PHHs5E4lE8yqAgYPdcGzxrw
+	 9rdsH4Y5k0oaRWSY1xN6C/sloc43k0GnbH6d+rjl7l+DTWXAcD/LilkccLVmXDvakOxT34U5uz2Z
+	 7sBY6alEgm+BWvp/xAMA/TtyRieVZYVObBpsUklNEf0B9AS82UAKDVtmZaKHpEeDyppUTxTZZkH5
+	 TA1ZjMVOp02Ohzs9j2ctGEl0M6nxFHeqOxA/g+CTNp6BkByfVD6mmZOlFDAa4mEgyc5XMBEyw=
+X-QQ-XMRINFO: OWPUhxQsoeAVDbp3OJHYyFg=
+From: Rong Tao <rtoax@foxmail.com>
+To: andrii@kernel.org,
+	qmo@kernel.org,
+	ast@kernel.org
+Cc: rongtao@cestc.cn,
+	rtoax@foxmail.com,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	bpf@vger.kernel.org (open list:BPF [TOOLING] (bpftool)),
+	linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH bpf-next v4] bpftool: Check map name length when map create
+Date: Wed, 12 Feb 2025 20:45:52 +0800
+X-OQ-MSGID: <20250212124552.9247-1-rtoax@foxmail.com>
+X-Mailer: git-send-email 2.48.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next] bpftool: bash-completion: Add nopasswd sudo
- prefix for bpftool
-To: Quentin Monnet <qmo@kernel.org>, ast@kernel.org, daniel@iogearbox.net,
- andrii@kernel.org
-Cc: rongtao@cestc.cn, Rong Tao <rongtao@cestc.cn>,
- Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
- <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Tao Chen <chen.dylane@gmail.com>,
- Mykyta Yatsenko <yatsenko@meta.com>, Daniel Xu <dxu@dxuuu.xyz>,
- "open list:BPF [TOOLING] (bpftool)" <bpf@vger.kernel.org>,
- open list <linux-kernel@vger.kernel.org>
-References: <tencent_515567355C0AA854BDA68C3A219A18040B0A@qq.com>
- <97fd1bbb-1261-4af5-9321-27353547dbf7@kernel.org>
-Content-Language: en-US
-From: Rong Tao <rtoax@foxmail.com>
-In-Reply-To: <97fd1bbb-1261-4af5-9321-27353547dbf7@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
+From: Rong Tao <rongtao@cestc.cn>
 
-On 2/12/25 19:00, Quentin Monnet wrote:
-> 2025-02-12 18:14 UTC+0800 ~ Rong Tao <rtoax@foxmail.com>
->> From: Rong Tao <rongtao@cestc.cn>
->>
->> In the bpftool script of bash-completion, many bpftool commands require
->> superuser privileges to execute. Otherwise, Operation not permission will
->> be displayed. Here, we check whether ordinary users are exempt from
->> entering the sudo password. If so, we need to add the sudo prefix to the
->> bpftool command to be executed. In this way, we can obtain the correct
->> command completion content instead of the wrong one.
->>
->> For example, when updating array_of_maps, the wrong 'hex' is completed:
->>
->>      $ sudo bpftool map update name arr_maps key 0 0 0 0 value [tab]
->>      $ sudo bpftool map update name arr_maps key 0 0 0 0 value hex
->>
->> However, what we need is "id name pinned". Similarly, there is the same
->> problem in getting the map 'name' and 'id':
->>
->>      $ sudo bpftool map show name [tab] < get nothing
->>      $ sudo bpftool map show id [tab]   < get nothing
->>
->> This commit fixes the issue.
->>
->>      $ sudo bpftool map update name arr_maps key 0 0 0 0 value [tab]
->>      id      name    pinned
->>
->>      $ sudo bpftool map show name
->>      arr_maps         cgroup_hash      inner_arr1       inner_arr2
->>
->>      $ sudo bpftool map show id
->>      11    1383  4091  4096
->>
->> Signed-off-by: Rong Tao <rongtao@cestc.cn>
-> Hi, thanks for the patch.
->
-> I agree it's annoying to have a partially-working completion for
-> non-root users, however, I don't feel very comfortable introducing calls
-> to "sudo" in bash completion, without the user noticing. For what it's
-> worth, I searched other bash completion files (from
-> https://github.com/scop/bash-completion/) and I can't find any of them
-> running sudo to help complete commands, so it doesn't seem to be
-> something usual in completion. I think I'd rather keep the current state
-> (or fix the first example to have the right keywords displayed but
-> without running sudo).
+The size of struct bpf_map::name is BPF_OBJ_NAME_LEN (16).
 
-Thanks for the reply.
+bpf(2) {
+  map_create() {
+    bpf_obj_name_cpy(map->name, attr->map_name, sizeof(attr->map_name));
+  }
+}
 
-Using sudo to perform bash-completion is indeed not a perfect solution. 
-However, using "bpftool map show" to obtain map information may be the 
-only way, and this operation requires CAP_ADMIN, which may be a 
-compromise. There is no other way.
+When specifying a map name using bpftool map create name, no error is
+reported if the name length is greater than 15.
 
-Rong Tao
+    $ sudo bpftool map create /sys/fs/bpf/12345678901234567890 \
+        type array key 4 value 4 entries 5 name 12345678901234567890
 
+Users will think that 12345678901234567890 is legal, but this name cannot
+be used to index a map.
+
+    $ sudo bpftool map show name 12345678901234567890
+    Error: can't parse name
+
+    $ sudo bpftool map show
+    ...
+    1249: array  name 123456789012345  flags 0x0
+    	key 4B  value 4B  max_entries 5  memlock 304B
+
+    $ sudo bpftool map show name 123456789012345
+    1249: array  name 123456789012345  flags 0x0
+    	key 4B  value 4B  max_entries 5  memlock 304B
+
+The map name provided in the command line is truncated, but no warning is
+reported. This submission checks the length of the map name.
+
+Reviewed-by: Quentin Monnet <qmo@kernel.org>
+Signed-off-by: Rong Tao <rongtao@cestc.cn>
+---
+v3: https://lore.kernel.org/lkml/tencent_AF066A426F591F977D2A73AF00A34A883808@qq.com/
+v2: https://lore.kernel.org/lkml/tencent_26592A2BAF08A3A688A50600421559929708@qq.com/
+v1: https://lore.kernel.org/lkml/tencent_1C4444032C2188ACD04B4995B0D78F510607@qq.com/
+---
+ tools/bpf/bpftool/map.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/tools/bpf/bpftool/map.c b/tools/bpf/bpftool/map.c
+index ed4a9bd82931..81cc668b4b05 100644
+--- a/tools/bpf/bpftool/map.c
++++ b/tools/bpf/bpftool/map.c
+@@ -1270,6 +1270,10 @@ static int do_create(int argc, char **argv)
+ 		} else if (is_prefix(*argv, "name")) {
+ 			NEXT_ARG();
+ 			map_name = GET_ARG();
++			if (strlen(map_name) > BPF_OBJ_NAME_LEN - 1) {
++				p_info("Warning: map name is longer than %u characters, it will be truncated.",
++				      BPF_OBJ_NAME_LEN - 1);
++			}
+ 		} else if (is_prefix(*argv, "key")) {
+ 			if (parse_u32_arg(&argc, &argv, &key_size,
+ 					  "key size"))
+-- 
+2.48.1
 
