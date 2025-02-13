@@ -1,46 +1,46 @@
-Received: from mailtransmit04.runbox.com (mailtransmit04.runbox.com [185.226.149.37])
+Received: from mailtransmit05.runbox.com (mailtransmit05.runbox.com [185.226.149.38])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2950921D3E9;
-	Thu, 13 Feb 2025 11:59:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.37
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6DA6221706;
+	Thu, 13 Feb 2025 11:59:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.38
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739447991; cv=none; b=LEisWqw2VLAIsdvU9o/RCDC3hHe4VH2H5Q8bU/w/tNRfV90KVhiVI7nghPfKxp6gnuJf6wcsjqpio0sFTaN5RBkwzOBlnB3DlKtblPRC1RIquFmwI4KEREZqXVKpkHp+dHH7xTq3wntJvOSJYukaMFMyNNKq9w/uVOLablu02B0=
+	t=1739447993; cv=none; b=Kjqabf0qmA/gRbc4Y1v18o2aQNSyjXmtd2ZHsDOjqVZppzbwgY6vznNeRfv/eQWD0nBpMq9rZF7O99gsqbk3ARMiJiQIqdeEzFi6zwAqJLcnD7PmBcS+SNUviW4lWiDMH7IdpJVKIV81qPPBLWY61HME5Hk9UA0mktbeTCvna6s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739447991; c=relaxed/simple;
-	bh=AgqMjjNbwR/rGUp16uYuuHiq7uxRpbA1lSBA5QQ6jG0=;
+	s=arc-20240116; t=1739447993; c=relaxed/simple;
+	bh=diI8kyiYTniTU0Xe8e7BeDAadyWzqAaR19wnpNARev8=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=rDRfqZmUiQYt0B5Ryw+YG24xrXBNYJiZEzEwIssU7U36MW3koIOX7OKLrwdCdthlFR/oK7h4rHjzsCANje8nJ/1xX4U1zxUyvhwmktWI3NdLKaZDmlMKk23XvUhkSIjHkvpdkMi0/DEB+owhytflL9XjAaX3rGcDQEiwFrplNrs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co; spf=pass smtp.mailfrom=rbox.co; dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b=Oeo1ZBAc; arc=none smtp.client-ip=185.226.149.37
+	 In-Reply-To:To:Cc; b=dOgZbidPTiX9kfTYm5GceJ8zHyfTCfi/p7sIRv74wSRkcK+RTIed+pHqo8fWHE7+swaAArWzEvpcIT222cCoTgWBOzxbZN+zjTxZrrajFaOZpG1zxJwoIctnV9/Bv7Dkd4dt6LO7UBMcI16AyvMivtQcyHuV2pi6TN/mMW/77Nc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co; spf=pass smtp.mailfrom=rbox.co; dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b=Z0oSvblp; arc=none smtp.client-ip=185.226.149.38
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rbox.co
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b="Oeo1ZBAc"
+	dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b="Z0oSvblp"
 Received: from mailtransmit03.runbox ([10.9.9.163] helo=aibo.runbox.com)
-	by mailtransmit04.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+	by mailtransmit05.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
 	(Exim 4.93)
 	(envelope-from <mhal@rbox.co>)
-	id 1tiXsX-002Rrz-Md; Thu, 13 Feb 2025 12:59:37 +0100
+	id 1tiXsa-002IJY-5M; Thu, 13 Feb 2025 12:59:40 +0100
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=rbox.co;
 	s=selector1; h=Cc:To:In-Reply-To:References:Message-Id:
 	Content-Transfer-Encoding:Content-Type:MIME-Version:Subject:Date:From;
-	bh=DGliLGKzq9wpcv6AZT/6cTkNf9EzA7dLex82sUHi5Xs=; b=Oeo1ZBAc7Vue4PNHWNVsdCtmAv
-	7PyA7ZlTHnpirr/3vnvpakxVGdRIuJcZ6B8ctv00GR+iojzwDRivu6GPSsCrjSj6oDrRLy+ZXJUBd
-	zuHveLfUBDi2MYKRat1OFknAJB5bmUGXYmVvSO0ZmxNGdgODbazthMIdY8vrSg1zSQs6nNW/6vtUa
-	+pJaoye1J/wxqWMBjiDOlkUHZeICMPAMq+rqIhWfiFemVc7cXyAgpykJwXop3aAo2mUxLD3xoy9mP
-	k+jV5b3XmH5rrgDcRB6eA0Y/b82lc8ksXsJ40JQ4Rd7hBgOgQZ/xazHlsapXutLdZjlT4HlwCW9WA
-	zT/x/6UQ==;
+	bh=mjDeIQ/pGHjWGPnZsYZ5+UIGfRQ2k6pi8wwfapisHgc=; b=Z0oSvblpMI7OOYn7T+KThhrCye
+	Ps7+vAqGhdQ7BeH2KO1NNIfEVKf33Uu3tPoYvv9xVS61ZUeRqPNafljhxxIXOCNA3yyj4Af5tCg4+
+	qnSgZkFR1oOkDo7dmaDfH5XYLdllSpTEbDyyTcTeNCgwZNrJaqcIZY7lfFznBk2DCZ7GtnCto2C2X
+	T05i6ln1u/nkdClbDm/HafdBYSH4KaNKP0/UnkP9rFiIPe+Mbtvbxenno7x4bxLH2A5LRkLRbsMdN
+	kQhYcifMHtGz1UC0urZBdGNQY324e7z2qefl+tSdYrwNmOXb7ypFrpQ+U2AZZocxP+EpABfoP73au
+	fCj+xGhA==;
 Received: from [10.9.9.72] (helo=submission01.runbox)
 	by mailtransmit03.runbox with esmtp (Exim 4.86_2)
 	(envelope-from <mhal@rbox.co>)
-	id 1tiXsX-0004r4-7Y; Thu, 13 Feb 2025 12:59:37 +0100
+	id 1tiXsZ-0004rA-ML; Thu, 13 Feb 2025 12:59:39 +0100
 Received: by submission01.runbox with esmtpsa  [Authenticated ID (604044)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
 	(Exim 4.93)
-	id 1tiXsA-008u87-89; Thu, 13 Feb 2025 12:59:14 +0100
+	id 1tiXsC-008u87-Pg; Thu, 13 Feb 2025 12:59:16 +0100
 From: Michal Luczaj <mhal@rbox.co>
-Date: Thu, 13 Feb 2025 12:58:49 +0100
-Subject: [PATCH net 1/4] sockmap, vsock: For connectible sockets allow only
- connected
+Date: Thu, 13 Feb 2025 12:58:51 +0100
+Subject: [PATCH net 3/4] selftest/bpf: Adapt vsock_delete_on_close to
+ sockmap rejecting unconnected
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -49,7 +49,7 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250213-vsock-listen-sockmap-nullptr-v1-1-994b7cd2f16b@rbox.co>
+Message-Id: <20250213-vsock-listen-sockmap-nullptr-v1-3-994b7cd2f16b@rbox.co>
 References: <20250213-vsock-listen-sockmap-nullptr-v1-0-994b7cd2f16b@rbox.co>
 In-Reply-To: <20250213-vsock-listen-sockmap-nullptr-v1-0-994b7cd2f16b@rbox.co>
 To: John Fastabend <john.fastabend@gmail.com>, 
@@ -73,56 +73,79 @@ Cc: netdev@vger.kernel.org, bpf@vger.kernel.org,
  Michal Luczaj <mhal@rbox.co>
 X-Mailer: b4 0.14.2
 
-sockmap expects all vsocks to have a transport assigned, which is expressed
-in vsock_proto::psock_update_sk_prot(). However, there is an edge case
-where an unconnected (connectible) socket may lose its previously assigned
-transport. This is handled with a NULL check in the vsock/BPF recv path.
+Commit 515745445e92 ("selftest/bpf: Add test for vsock removal from sockmap
+on close()") added test that checked if proto::close() callback was invoked
+on AF_VSOCK socket release. I.e. it verified that a close()d vsock does
+indeed get removed from the sockmap.
 
-Another design detail is that listening vsocks are not supposed to have any
-transport assigned at all. Which implies they are not supported by the
-sockmap. But this is complicated by the fact that a socket, before
-switching to TCP_LISTEN, may have had some transport assigned during a
-failed connect() attempt. Hence, we may end up with a listening vsock in a
-sockmap, which blows up quickly:
+It was done simply by creating a socket pair and attempting to replace a
+close()d one with its peer. Since, due to a recent change, sockmap does not
+allow updating index with a non-established connectible vsock, redo it with
+a freshly established one.
 
-KASAN: null-ptr-deref in range [0x0000000000000120-0x0000000000000127]
-CPU: 7 UID: 0 PID: 56 Comm: kworker/7:0 Not tainted 6.14.0-rc1+
-Workqueue: vsock-loopback vsock_loopback_work
-RIP: 0010:vsock_read_skb+0x4b/0x90
-Call Trace:
- sk_psock_verdict_data_ready+0xa4/0x2e0
- virtio_transport_recv_pkt+0x1ca8/0x2acc
- vsock_loopback_work+0x27d/0x3f0
- process_one_work+0x846/0x1420
- worker_thread+0x5b3/0xf80
- kthread+0x35a/0x700
- ret_from_fork+0x2d/0x70
- ret_from_fork_asm+0x1a/0x30
-
-For connectible sockets, instead of relying solely on the state of
-vsk->transport, tell sockmap to only allow those representing established
-connections. This aligns with the behaviour for AF_INET and AF_UNIX.
-
-Fixes: 634f1a7110b4 ("vsock: support sockmap")
 Signed-off-by: Michal Luczaj <mhal@rbox.co>
 ---
- net/core/sock_map.c | 3 +++
- 1 file changed, 3 insertions(+)
+ .../selftests/bpf/prog_tests/sockmap_basic.c       | 40 ++++++++++++----------
+ 1 file changed, 22 insertions(+), 18 deletions(-)
 
-diff --git a/net/core/sock_map.c b/net/core/sock_map.c
-index f1b9b3958792cd599efcb591742874e9b3f4a76b..2f1be9baad0578e2202b5cf79616b6e814c1ed54 100644
---- a/net/core/sock_map.c
-+++ b/net/core/sock_map.c
-@@ -541,6 +541,9 @@ static bool sock_map_sk_state_allowed(const struct sock *sk)
- 		return (1 << sk->sk_state) & (TCPF_ESTABLISHED | TCPF_LISTEN);
- 	if (sk_is_stream_unix(sk))
- 		return (1 << sk->sk_state) & TCPF_ESTABLISHED;
-+	if (sk_is_vsock(sk) &&
-+	    (sk->sk_type == SOCK_STREAM || sk->sk_type == SOCK_SEQPACKET))
-+		return (1 << sk->sk_state) & TCPF_ESTABLISHED;
- 	return true;
+diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
+index 884ad87783d59ef3d1ca84c3a542f3f8670cd463..21793d8c79e12b6e607f59ecebb26448c310044b 100644
+--- a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
++++ b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
+@@ -111,31 +111,35 @@ static void test_sockmap_create_update_free(enum bpf_map_type map_type)
+ 
+ static void test_sockmap_vsock_delete_on_close(void)
+ {
+-	int err, c, p, map;
+-	const int zero = 0;
+-
+-	err = create_pair(AF_VSOCK, SOCK_STREAM, &c, &p);
+-	if (!ASSERT_OK(err, "create_pair(AF_VSOCK)"))
+-		return;
++	int map, c, p, err, zero = 0;
+ 
+ 	map = bpf_map_create(BPF_MAP_TYPE_SOCKMAP, NULL, sizeof(int),
+ 			     sizeof(int), 1, NULL);
+-	if (!ASSERT_GE(map, 0, "bpf_map_create")) {
+-		close(c);
+-		goto out;
+-	}
++	if (!ASSERT_OK_FD(map, "bpf_map_create"))
++		return;
+ 
+-	err = bpf_map_update_elem(map, &zero, &c, BPF_NOEXIST);
+-	close(c);
+-	if (!ASSERT_OK(err, "bpf_map_update"))
+-		goto out;
++	err = create_pair(AF_VSOCK, SOCK_STREAM, &c, &p);
++	if (!ASSERT_OK(err, "create_pair"))
++		goto close_map;
+ 
+-	err = bpf_map_update_elem(map, &zero, &p, BPF_NOEXIST);
++	if (xbpf_map_update_elem(map, &zero, &c, BPF_NOEXIST))
++		goto close_socks;
++
++	xclose(c);
++	xclose(p);
++
++	err = create_pair(AF_VSOCK, SOCK_STREAM, &c, &p);
++	if (!ASSERT_OK(err, "create_pair"))
++		goto close_map;
++
++	err = bpf_map_update_elem(map, &zero, &c, BPF_NOEXIST);
+ 	ASSERT_OK(err, "after close(), bpf_map_update");
+ 
+-out:
+-	close(p);
+-	close(map);
++close_socks:
++	xclose(c);
++	xclose(p);
++close_map:
++	xclose(map);
  }
  
+ static void test_skmsg_helpers(enum bpf_map_type map_type)
 
 -- 
 2.48.1
