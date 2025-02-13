@@ -1,157 +1,245 @@
-Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.2])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE12628A2C0;
-	Thu, 13 Feb 2025 16:42:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.2
+Received: from 69-171-232-180.mail-mxout.facebook.com (69-171-232-180.mail-mxout.facebook.com [69.171.232.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B299A28A2DB
+	for <bpf@vger.kernel.org>; Thu, 13 Feb 2025 16:48:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=69.171.232.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739464936; cv=none; b=O3FMX8kyaqtk9TdzbXuhzafld07dug6h30hzfq9S4/IrEJ1z+NeqLLsPD8IqSo7BL7aLYuEfEE9RJA4Kppb6ZGx35YWNIvi4U7XwIfmFmWh6kHtnqHfpusokbyeDnIK5H+ZZ7fPeZGfCTuh4Y+ekXrBOai1LdZtbtKkeSocrqNo=
+	t=1739465308; cv=none; b=emwZzaUP9V8B3oqT7xVg/hbzz2XqRPV13qyd4GY8B3wnHAjQ9u690hQ0KQbeFqsdH9Tqr7h9N70J8eFscWNspgK+LMeytLL/yomRg3ioucUSz6+yMcsfW+WTRn5fIYAxnMXN3iRft0aDrpxl3gUVTetwLqbOtyf6DdIIZOyQwyA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739464936; c=relaxed/simple;
-	bh=GkO9HmjvOTJ0ZPDlsu+YTrBtFVic8WD0JxwiQXrnw0Q=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=IXYgYjfmya26JGSYICchoIztlmPe7HOa+iWEJuce06UkDQJGRIdtbUxUc0VEpONzySprwnW6wSzpnT0BjKQuQmgUYytVwIYltjff34a3u/S12fewik/f+28Eiw8kh17L1h7S/SCRnBriDzeU2ltjpLz7vE0FT+c0Hajg3c0g990=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=H/g+Z0mS; arc=none smtp.client-ip=117.135.210.2
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="H/g+Z0mS"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=Date:From:Subject:Message-ID:MIME-Version:
-	Content-Type; bh=kJYJ4WQmevIeooYV/M12sRbQvWoP2EVopPPIaXE8IPQ=;
-	b=H/g+Z0mSAYjIhcHr5Q3mUv3lnPYvlMEJhot30gjQA0Ycjc997U4W1AEnhG/hCD
-	k7XRN6tt1IXQEw9Dusp5EVU/eLkbbfWKtBq5vysLE1NIk4DaQROV4oyaXx8XhGF7
-	9iiFmTnFgVuIRZ0L0IEQiHCWuBiJKeV8j4/zP3x6RTff4=
-Received: from iZj6c3ewsy61ybpk7hrb16Z (unknown [])
-	by gzga-smtp-mtada-g1-0 (Coremail) with SMTP id _____wAn2wauIK5nAC5IMA--.18613S2;
-	Fri, 14 Feb 2025 00:41:21 +0800 (CST)
-Date: Fri, 14 Feb 2025 00:41:18 +0800
-From: Jiayuan Chen <mrpre@163.com>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	John Fastabend <john.fastabend@gmail.com>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eddy Z <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
-	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>
-Subject: Re: [PATCH bpf-next v2 3/3] selftests/bpf: Add selftest for may_goto
-Message-ID: <tlpmq4lu7e26jz7q6ry4gfws7mebviff3k75hk7aqzwcqndjgp@7y6es4u4uha6>
-References: <20250213131214.164982-1-mrpre@163.com>
- <20250213131214.164982-4-mrpre@163.com>
- <CAADnVQKRKD1hxZ+rXQk5Af2my8vK_2OvQ7x6Xn58edYVkOpDxA@mail.gmail.com>
+	s=arc-20240116; t=1739465308; c=relaxed/simple;
+	bh=Xysqaq9szONXRtVupRuxzfLjySfwAQ3drwc3UKjbI+8=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=HHEoJLAgJYya4iHrtoc/CSqRpbMqOu52CzzFen3FFbxeom9NbCnahVUIv6rx8ZTSYcGpmvXdnemD0e1gjPP7h1Ikt3IRFCo6O3vtHlSNxfJiwJLCMhpXvlCEPhtKJuusbnmm33mUAiR4VNeNNejiFjcqMoTwiVKCSoNBuLz6sh4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=69.171.232.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
+Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
+	id 20E0E88A003; Thu, 13 Feb 2025 08:48:17 -0800 (PST)
+From: Yonghong Song <yonghong.song@linux.dev>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	kernel-team@fb.com,
+	Martin KaFai Lau <martin.lau@kernel.org>
+Subject: [PATCH bpf-next v3 2/2] selftests/bpf: Add selftests allowing cgroup prog pre-ordering
+Date: Thu, 13 Feb 2025 08:48:17 -0800
+Message-ID: <20250213164817.2669096-1-yonghong.song@linux.dev>
+X-Mailer: git-send-email 2.43.5
+In-Reply-To: <20250213164812.2668578-1-yonghong.song@linux.dev>
+References: <20250213164812.2668578-1-yonghong.song@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAADnVQKRKD1hxZ+rXQk5Af2my8vK_2OvQ7x6Xn58edYVkOpDxA@mail.gmail.com>
-X-CM-TRANSID:_____wAn2wauIK5nAC5IMA--.18613S2
-X-Coremail-Antispam: 1Uf129KBjvJXoWxArWUuF4rCFW3Jr1rur13twb_yoW5CFy8pa
-	s7WasakF1kX3W7K3WxXFsruFyrJan7Jr1rCr1Iqr1rCF1DKr97WF42kFy5Kr4Syr4kZw1a
-	vFWIv3sxGw4kJ3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07UiVysUUUUU=
-X-CM-SenderInfo: xpus2vi6rwjhhfrp/1tbiWwXyp2euGxvBbAAAsv
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Feb 13, 2025 at 08:04:05AM -0800, Alexei Starovoitov wrote:
-> On Thu, Feb 13, 2025 at 5:13 AM Jiayuan Chen <mrpre@163.com> wrote:
-> >
-> > Add test cases to ensure the maximum stack size can be properly limited to
-> > 512.
-> >
-> > Test result:
-> > echo "0" > /proc/sys/net/core/bpf_jit_enable
-> > ./test_progs -t verifier_stack_ptr
-> > verifier_stack_ptr/PTR_TO_STACK stack size 512 with may_goto with jit:SKIP
-> > verifier_stack_ptr/PTR_TO_STACK stack size 512 with may_goto without jit:OK
-> >
-> > echo "1" > /proc/sys/net/core/bpf_jit_enable
-> > verifier_stack_ptr/PTR_TO_STACK stack size 512 with may_goto with jit:OK
-> > verifier_stack_ptr/PTR_TO_STACK stack size 512 with may_goto without jit:SKIP
-> 
-> echo '0|1' is not longer necessary ?
-> The commit log seems obsolete?
-> 
-> pw-bot: cr
+Add a few selftests with cgroup prog pre-ordering.
 
-It looks like the problem only arises when CONFIG_BPF_JIT_ALWAYS_ON is
-turned off, and we're only restricting the stack size when
-prog->jit_requested is false. To test this, I simulated different
-scenarios by echoing '0' or '1' to see how the program would behave when
-jit_requested is enabled or disabled.
+Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
+---
+ .../bpf/prog_tests/cgroup_preorder.c          | 128 ++++++++++++++++++
+ .../selftests/bpf/progs/cgroup_preorder.c     |  41 ++++++
+ 2 files changed, 169 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/cgroup_preorde=
+r.c
+ create mode 100644 tools/testing/selftests/bpf/progs/cgroup_preorder.c
 
-As expected, when I echoed '0', the program failed verification, and when
-I echoed '1', it ran smoothly.
-
-Thanks
-> 
-> > Signed-off-by: Jiayuan Chen <mrpre@163.com>
-> > ---
-> >  .../selftests/bpf/progs/verifier_stack_ptr.c  | 50 +++++++++++++++++++
-> >  1 file changed, 50 insertions(+)
-> >
-> > diff --git a/tools/testing/selftests/bpf/progs/verifier_stack_ptr.c b/tools/testing/selftests/bpf/progs/verifier_stack_ptr.c
-> > index 417c61cd4b19..8ffe5a01d140 100644
-> > --- a/tools/testing/selftests/bpf/progs/verifier_stack_ptr.c
-> > +++ b/tools/testing/selftests/bpf/progs/verifier_stack_ptr.c
-> > @@ -481,4 +481,54 @@ l1_%=:     r0 = 42;                                        \
-> >         : __clobber_all);
-> >  }
-> >
-> > +SEC("socket")
-> > +__description("PTR_TO_STACK stack size > 512")
-> > +__failure __msg("invalid write to stack R1 off=-520 size=8")
-> > +__naked void stack_check_size_gt_512(void)
-> > +{
-> > +       asm volatile (
-> > +       "r1 = r10;"
-> > +       "r1 += -520;"
-> > +       "r0 = 42;"
-> > +       "*(u64*)(r1 + 0) = r0;"
-> > +       "exit;"
-> > +       ::: __clobber_all);
-> > +}
-> > +
-> > +#ifdef __BPF_FEATURE_MAY_GOTO
-> > +SEC("socket")
-> > +__description("PTR_TO_STACK stack size 512 with may_goto with jit")
-> > +__use_jit()
-> > +__success __retval(42)
-> > +__naked void stack_check_size_512_with_may_goto_jit(void)
-> > +{
-> > +       asm volatile (
-> > +       "r1 = r10;"
-> > +       "r1 += -512;"
-> > +       "r0 = 42;"
-> > +       "*(u32*)(r1 + 0) = r0;"
-> > +       "may_goto l0_%=;"
-> > +       "r2 = 100;"
-> > +"l0_%=:        exit;"
-> > +       ::: __clobber_all);
-> > +}
-> > +
-> > +SEC("socket")
-> > +__description("PTR_TO_STACK stack size 512 with may_goto without jit")
-> > +__use_interp()
-> > +__failure __msg("stack size 520(extra 8) is too large")
-> > +__naked void stack_check_size_512_with_may_goto(void)
-> > +{
-> > +       asm volatile (
-> > +       "r1 = r10;"
-> > +       "r1 += -512;"
-> > +       "r0 = 42;"
-> > +       "*(u32*)(r1 + 0) = r0;"
-> > +       "may_goto l0_%=;"
-> > +       "r2 = 100;"
-> > +"l0_%=:        exit;"
-> > +       ::: __clobber_all);
-> > +}
-> > +#endif
-> > +
-> >  char _license[] SEC("license") = "GPL";
-> > --
-> > 2.47.1
-> >
+diff --git a/tools/testing/selftests/bpf/prog_tests/cgroup_preorder.c b/t=
+ools/testing/selftests/bpf/prog_tests/cgroup_preorder.c
+new file mode 100644
+index 000000000000..d4d583872fa2
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/cgroup_preorder.c
+@@ -0,0 +1,128 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2025 Meta Platforms, Inc. and affiliates. */
++#include <test_progs.h>
++#include "cgroup_helpers.h"
++#include "cgroup_preorder.skel.h"
++
++static int run_getsockopt_test(int cg_parent, int cg_child, int sock_fd,=
+ bool all_preorder)
++{
++	LIBBPF_OPTS(bpf_prog_attach_opts, opts);
++	enum bpf_attach_type prog_c_atype, prog_c2_atype, prog_p_atype, prog_p2=
+_atype;
++	int prog_c_fd, prog_c2_fd, prog_p_fd, prog_p2_fd;
++	struct cgroup_preorder *skel =3D NULL;
++	struct bpf_program *prog;
++	__u8 *result, buf;
++	socklen_t optlen;
++	int err =3D 0;
++
++	skel =3D cgroup_preorder__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "cgroup_preorder__open_and_load"))
++		return 0;
++
++	buf =3D 0x00;
++	err =3D setsockopt(sock_fd, SOL_IP, IP_TOS, &buf, 1);
++	if (!ASSERT_OK(err, "setsockopt"))
++		goto close_skel;
++
++	opts.flags =3D BPF_F_ALLOW_MULTI;
++	if (all_preorder)
++		opts.flags |=3D BPF_F_PREORDER;
++	prog =3D skel->progs.child;
++	prog_c_fd =3D bpf_program__fd(prog);
++	prog_c_atype =3D bpf_program__expected_attach_type(prog);
++	err =3D bpf_prog_attach_opts(prog_c_fd, cg_child, prog_c_atype, &opts);
++	if (!ASSERT_OK(err, "bpf_prog_attach_opts-child"))
++		goto close_skel;
++
++	opts.flags =3D BPF_F_ALLOW_MULTI | BPF_F_PREORDER;
++	prog =3D skel->progs.child_2;
++	prog_c2_fd =3D bpf_program__fd(prog);
++	prog_c2_atype =3D bpf_program__expected_attach_type(prog);
++	err =3D bpf_prog_attach_opts(prog_c2_fd, cg_child, prog_c2_atype, &opts=
+);
++	if (!ASSERT_OK(err, "bpf_prog_attach_opts-child_2"))
++		goto detach_child;
++
++	optlen =3D 1;
++	err =3D getsockopt(sock_fd, SOL_IP, IP_TOS, &buf, &optlen);
++	if (!ASSERT_OK(err, "getsockopt"))
++		goto detach_child_2;
++
++	result =3D skel->bss->result;
++	if (all_preorder)
++		ASSERT_TRUE(result[0] =3D=3D 1 && result[1] =3D=3D 2, "child only");
++	else
++		ASSERT_TRUE(result[0] =3D=3D 2 && result[1] =3D=3D 1, "child only");
++
++	skel->bss->idx =3D 0;
++	memset(result, 0, 4);
++
++	opts.flags =3D BPF_F_ALLOW_MULTI;
++	if (all_preorder)
++		opts.flags |=3D BPF_F_PREORDER;
++	prog =3D skel->progs.parent;
++	prog_p_fd =3D bpf_program__fd(prog);
++	prog_p_atype =3D bpf_program__expected_attach_type(prog);
++	err =3D bpf_prog_attach_opts(prog_p_fd, cg_parent, prog_p_atype, &opts)=
+;
++	if (!ASSERT_OK(err, "bpf_prog_attach_opts-parent"))
++		goto detach_child_2;
++
++	opts.flags =3D BPF_F_ALLOW_MULTI | BPF_F_PREORDER;
++	prog =3D skel->progs.parent_2;
++	prog_p2_fd =3D bpf_program__fd(prog);
++	prog_p2_atype =3D bpf_program__expected_attach_type(prog);
++	err =3D bpf_prog_attach_opts(prog_p2_fd, cg_parent, prog_p2_atype, &opt=
+s);
++	if (!ASSERT_OK(err, "bpf_prog_attach_opts-parent_2"))
++		goto detach_parent;
++
++	err =3D getsockopt(sock_fd, SOL_IP, IP_TOS, &buf, &optlen);
++	if (!ASSERT_OK(err, "getsockopt"))
++		goto detach_parent_2;
++
++	if (all_preorder)
++		ASSERT_TRUE(result[0] =3D=3D 3 && result[1] =3D=3D 4 && result[2] =3D=3D=
+ 1 && result[3] =3D=3D 2,
++			    "parent and child");
++	else
++		ASSERT_TRUE(result[0] =3D=3D 4 && result[1] =3D=3D 2 && result[2] =3D=3D=
+ 1 && result[3] =3D=3D 3,
++			    "parent and child");
++
++detach_parent_2:
++	ASSERT_OK(bpf_prog_detach2(prog_p2_fd, cg_parent, prog_p2_atype),
++		  "bpf_prog_detach2-parent_2");
++detach_parent:
++	ASSERT_OK(bpf_prog_detach2(prog_p_fd, cg_parent, prog_p_atype),
++		  "bpf_prog_detach2-parent");
++detach_child_2:
++	ASSERT_OK(bpf_prog_detach2(prog_c2_fd, cg_child, prog_c2_atype),
++		  "bpf_prog_detach2-child_2");
++detach_child:
++	ASSERT_OK(bpf_prog_detach2(prog_c_fd, cg_child, prog_c_atype),
++		  "bpf_prog_detach2-child");
++close_skel:
++	cgroup_preorder__destroy(skel);
++	return err;
++}
++
++void test_cgroup_preorder(void)
++{
++	int cg_parent =3D -1, cg_child =3D -1, sock_fd =3D -1;
++
++	cg_parent =3D test__join_cgroup("/parent");
++	if (!ASSERT_GE(cg_parent, 0, "join_cgroup /parent"))
++		goto out;
++
++	cg_child =3D test__join_cgroup("/parent/child");
++	if (!ASSERT_GE(cg_child, 0, "join_cgroup /parent/child"))
++		goto out;
++
++	sock_fd =3D socket(AF_INET, SOCK_STREAM, 0);
++	if (!ASSERT_GE(sock_fd, 0, "socket"))
++		goto out;
++
++	ASSERT_OK(run_getsockopt_test(cg_parent, cg_child, sock_fd, false), "ge=
+tsockopt_test_1");
++	ASSERT_OK(run_getsockopt_test(cg_parent, cg_child, sock_fd, true), "get=
+sockopt_test_2");
++
++out:
++	close(sock_fd);
++	close(cg_child);
++	close(cg_parent);
++}
+diff --git a/tools/testing/selftests/bpf/progs/cgroup_preorder.c b/tools/=
+testing/selftests/bpf/progs/cgroup_preorder.c
+new file mode 100644
+index 000000000000..4ef6202baa0a
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/cgroup_preorder.c
+@@ -0,0 +1,41 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2025 Meta Platforms, Inc. and affiliates. */
++#include <vmlinux.h>
++#include <bpf/bpf_helpers.h>
++
++char _license[] SEC("license") =3D "GPL";
++
++unsigned int idx;
++__u8 result[4];
++
++SEC("cgroup/getsockopt")
++int child(struct bpf_sockopt *ctx)
++{
++	if (idx < 4)
++		result[idx++] =3D 1;
++	return 1;
++}
++
++SEC("cgroup/getsockopt")
++int child_2(struct bpf_sockopt *ctx)
++{
++	if (idx < 4)
++		result[idx++] =3D 2;
++	return 1;
++}
++
++SEC("cgroup/getsockopt")
++int parent(struct bpf_sockopt *ctx)
++{
++	if (idx < 4)
++		result[idx++] =3D 3;
++	return 1;
++}
++
++SEC("cgroup/getsockopt")
++int parent_2(struct bpf_sockopt *ctx)
++{
++	if (idx < 4)
++		result[idx++] =3D 4;
++	return 1;
++}
+--=20
+2.43.5
 
