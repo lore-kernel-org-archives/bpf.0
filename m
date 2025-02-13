@@ -1,45 +1,45 @@
 Received: from mailtransmit04.runbox.com (mailtransmit04.runbox.com [185.226.149.37])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CA80207679;
-	Thu, 13 Feb 2025 11:59:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0ACAE2153C1;
+	Thu, 13 Feb 2025 11:59:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.37
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739447984; cv=none; b=Esqx3T8A7aPPBm8kCK0G/484nMVAFlEjvzTTYEg/6gCrOTGqkvvheqitX/bW0Jue75giKy/v/JNWbLgMZnjRhqNzCXtYIy+2L7fkHWKaZmBxq9SUQCdgePanDyo9yawQlDNg87TqrPnmO7pK2iJSSzbnnzhpPdZOCQTjmH2bqzs=
+	t=1739447985; cv=none; b=oWfqDh3kXKmJBK35wvW7+jjquclboKP8qO+8t2mkZYDe0QHttOVpHBIvfWtxwG+9eVhaK6Q4rUFs1P8UTHnjmY3bTnx5KB1gXG78XHCRzQESOKd2hIKIx+Z1DxZdWc2l50xvDlZLV8+YI4OPULM8fe8QCQl/p9e+HO2lIUM7AT8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739447984; c=relaxed/simple;
-	bh=M6xHy0PaBRNYWRNxSZCbYoFZj0B7Im/gkJxtcK2w4P0=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=CjtxCgOQLwC8OtbALr1zXjIYWwYBE4SHpHFHivuXiEtwFOwgqEvMaKB8YTDhoRlNlOxMo4hak44z7o6we/m18wwvkp11/nIBo9V8FnEiXAVHImN1gp5XBNjHJY+dZv6dtsE2Gt5pdHvgniuv/oeXiJspb+CG6Q9VBhNMYRyEfsA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co; spf=pass smtp.mailfrom=rbox.co; dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b=Km/QdEei; arc=none smtp.client-ip=185.226.149.37
+	s=arc-20240116; t=1739447985; c=relaxed/simple;
+	bh=k3ooq/tPLxGI5j0iWVBIg57+0TwNUN2jW4JEV+uka7Y=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=bL3g9VHNu0Ym/66HGd5chrabfRjkfEfe2EQ8eG2WScm1bgXnq8OR8S3I8UuWSYQg/UlXkuXkZGDbW2X7rgTrUdyw96cCpww+/2LJiH84oLdXoUBtYuwILyQjYxq/00qGFXaUbHMRVTWHy+u47fa32QJwys24ji10GtXSocEMNV8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co; spf=pass smtp.mailfrom=rbox.co; dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b=GJLthJdz; arc=none smtp.client-ip=185.226.149.37
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rbox.co
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b="Km/QdEei"
-Received: from mailtransmit02.runbox ([10.9.9.162] helo=aibo.runbox.com)
+	dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b="GJLthJdz"
+Received: from mailtransmit03.runbox ([10.9.9.163] helo=aibo.runbox.com)
 	by mailtransmit04.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
 	(Exim 4.93)
 	(envelope-from <mhal@rbox.co>)
-	id 1tiXsR-002RrJ-Bp; Thu, 13 Feb 2025 12:59:31 +0100
+	id 1tiXsS-002RrQ-7P; Thu, 13 Feb 2025 12:59:32 +0100
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=rbox.co;
-	s=selector1; h=Cc:To:Content-Transfer-Encoding:Content-Type:MIME-Version:
-	Message-Id:Date:Subject:From; bh=MJxuBFt87kX2zvCd0qkdSTjP0KE9NQ09/Go+P1LdO8w=
-	; b=Km/QdEeiW+wJfB4HcnZ2vizgg/6ZsEd0R+Pywlq4RCj+ZvmL6z3AM1JTpsS4x10JeH+agLY7j
-	Ex5xZz8bOLyFybbpkSq2TENG9IldBecrzVsvY1GY0d7AI85SacJw9mS/X3oKkwDKd34h6zgve6ZFx
-	3IBaiegUy+RyaIAK8lktwkrVChpg784HWhoJFmZvLPjry+1Ap/eqbdpN+UqYOw6UCfYEgMKWxSES+
-	zcBJAknGqs5GZJ3/Xuw9kGF+sPydmyEHwFN/Yk+Za5Ql/K6cJW94n03x5AzIVvXV17YP5nFcCn5/4
-	sjiMO0kaBTQ7fHxY6oS31NDSVWU/mKPAm6fb1A==;
+	s=selector1; h=Cc:To:In-Reply-To:References:Message-Id:
+	Content-Transfer-Encoding:Content-Type:MIME-Version:Subject:Date:From;
+	bh=CXjrF5RXl5vKdD++OqwBGF6JpHNxnq4V5zQkMrNsoPc=; b=GJLthJdzSbUxCXWp19l1Bwos1V
+	ONGYv5AQznyCJI/sJAgolMq6hAYGvDDhfEeDYOE3qO+sxf+2hyHMUhayZHGUtmK4MzCvShM9lKk4/
+	5UZdTphDC9VuyYxM0jzfMfpiUUnvUPYpFcxndNkBlpbI2rVO0TNyd6an3G8Ee7Ulq11LlGUptYEF8
+	6XfIzwEO3FwXoeIptF3b+8kDtvZcsxLPWvakke/qMcqnT5w9kkXR2KrmwcJD4akM6OziVkgu8dotK
+	ADJE0uQ7NA3iBwLg0Qw5E+HncJhCIuqOH1VcFCqRCXTnX0E23sEAaijq4hwGloCzdBVKbVQyVoIJq
+	e7uhWWbw==;
 Received: from [10.9.9.72] (helo=submission01.runbox)
-	by mailtransmit02.runbox with esmtp (Exim 4.86_2)
+	by mailtransmit03.runbox with esmtp (Exim 4.86_2)
 	(envelope-from <mhal@rbox.co>)
-	id 1tiXsP-0005H5-NV; Thu, 13 Feb 2025 12:59:29 +0100
+	id 1tiXsR-0004qj-Mt; Thu, 13 Feb 2025 12:59:31 +0100
 Received: by submission01.runbox with esmtpsa  [Authenticated ID (604044)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
 	(Exim 4.93)
-	id 1tiXs9-008u87-0O; Thu, 13 Feb 2025 12:59:13 +0100
+	id 1tiXsB-008u87-HQ; Thu, 13 Feb 2025 12:59:15 +0100
 From: Michal Luczaj <mhal@rbox.co>
-Subject: [PATCH net 0/4] sockmap, vsock: For connectible sockets allow only
- connected
-Date: Thu, 13 Feb 2025 12:58:48 +0100
-Message-Id: <20250213-vsock-listen-sockmap-nullptr-v1-0-994b7cd2f16b@rbox.co>
+Date: Thu, 13 Feb 2025 12:58:50 +0100
+Subject: [PATCH net 2/4] vsock/bpf: Warn on socket without transport
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -48,10 +48,9 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAHjerWcC/x3MywrCMBBG4Vcps3YgCVgvryIuQvzVwTgNmbQIp
- e9udHe+zVnJUAVG52GlikVMJu3wu4HSM+oDLLduCi7sXfCOF5vSi7NYg/Kv37GwzjmXVhkjjiH
- Fw2n0nvqiVNzl899fSNHoum1f0a+gwHMAAAA=
-X-Change-ID: 20250210-vsock-listen-sockmap-nullptr-e6e82ca79611
+Message-Id: <20250213-vsock-listen-sockmap-nullptr-v1-2-994b7cd2f16b@rbox.co>
+References: <20250213-vsock-listen-sockmap-nullptr-v1-0-994b7cd2f16b@rbox.co>
+In-Reply-To: <20250213-vsock-listen-sockmap-nullptr-v1-0-994b7cd2f16b@rbox.co>
 To: John Fastabend <john.fastabend@gmail.com>, 
  Jakub Sitnicki <jakub@cloudflare.com>, Eric Dumazet <edumazet@google.com>, 
  Kuniyuki Iwashima <kuniyu@amazon.com>, Paolo Abeni <pabeni@redhat.com>, 
@@ -73,50 +72,45 @@ Cc: netdev@vger.kernel.org, bpf@vger.kernel.org,
  Michal Luczaj <mhal@rbox.co>
 X-Mailer: b4 0.14.2
 
-Series deals with one more case of vsock surprising BPF/sockmap by being
-inconsistency about (having an) assigned transport.
+In the spirit of commit 91751e248256 ("vsock: prevent null-ptr-deref in
+vsock_*[has_data|has_space]"), armorize the "impossible" cases with a
+warning.
 
-KASAN: null-ptr-deref in range [0x0000000000000120-0x0000000000000127]
-CPU: 7 UID: 0 PID: 56 Comm: kworker/7:0 Not tainted 6.14.0-rc1+
-Workqueue: vsock-loopback vsock_loopback_work
-RIP: 0010:vsock_read_skb+0x4b/0x90
-Call Trace:
- sk_psock_verdict_data_ready+0xa4/0x2e0
- virtio_transport_recv_pkt+0x1ca8/0x2acc
- vsock_loopback_work+0x27d/0x3f0
- process_one_work+0x846/0x1420
- worker_thread+0x5b3/0xf80
- kthread+0x35a/0x700
- ret_from_fork+0x2d/0x70
- ret_from_fork_asm+0x1a/0x30
-
-This bug, similarly to commit f6abafcd32f9 ("vsock/bpf: return early if
-transport is not assigned"), could be fixed with a single NULL check. But
-instead, let's explore another approach: take a hint from
-vsock_bpf_update_proto() and teach sockmap to accept only vsocks that are
-already connected (no risk of transport being dropped or reassigned). At
-the same time straight reject the listeners (vsock listening sockets do not
-carry any transport anyway). This way BPF does not have to worry about
-vsk->transport becoming NULL.
-
+Fixes: 634f1a7110b4 ("vsock: support sockmap")
 Signed-off-by: Michal Luczaj <mhal@rbox.co>
 ---
-Michal Luczaj (4):
-      sockmap, vsock: For connectible sockets allow only connected
-      vsock/bpf: Warn on socket without transport
-      selftest/bpf: Adapt vsock_delete_on_close to sockmap rejecting unconnected
-      selftest/bpf: Add vsock test for sockmap rejecting unconnected
+ net/vmw_vsock/af_vsock.c  | 3 +++
+ net/vmw_vsock/vsock_bpf.c | 2 +-
+ 2 files changed, 4 insertions(+), 1 deletion(-)
 
- net/core/sock_map.c                                |  3 +
- net/vmw_vsock/af_vsock.c                           |  3 +
- net/vmw_vsock/vsock_bpf.c                          |  2 +-
- .../selftests/bpf/prog_tests/sockmap_basic.c       | 70 ++++++++++++++++------
- 4 files changed, 59 insertions(+), 19 deletions(-)
----
-base-commit: 9c01a177c2e4b55d2bcce8a1f6bdd1d46a8320e3
-change-id: 20250210-vsock-listen-sockmap-nullptr-e6e82ca79611
+diff --git a/net/vmw_vsock/af_vsock.c b/net/vmw_vsock/af_vsock.c
+index 53a081d49d28ac1c04e7f8057c8a55e7b73cc131..7e3db87ae4333cf63327ec105ca99253569bb9fe 100644
+--- a/net/vmw_vsock/af_vsock.c
++++ b/net/vmw_vsock/af_vsock.c
+@@ -1189,6 +1189,9 @@ static int vsock_read_skb(struct sock *sk, skb_read_actor_t read_actor)
+ {
+ 	struct vsock_sock *vsk = vsock_sk(sk);
+ 
++	if (WARN_ON_ONCE(!vsk->transport))
++		return -ENODEV;
++
+ 	return vsk->transport->read_skb(vsk, read_actor);
+ }
+ 
+diff --git a/net/vmw_vsock/vsock_bpf.c b/net/vmw_vsock/vsock_bpf.c
+index f201d9eca1df2f8143638cf7a4d08671e8368c11..07b96d56f3a577af71021b1b8132743554996c4f 100644
+--- a/net/vmw_vsock/vsock_bpf.c
++++ b/net/vmw_vsock/vsock_bpf.c
+@@ -87,7 +87,7 @@ static int vsock_bpf_recvmsg(struct sock *sk, struct msghdr *msg,
+ 	lock_sock(sk);
+ 	vsk = vsock_sk(sk);
+ 
+-	if (!vsk->transport) {
++	if (WARN_ON_ONCE(!vsk->transport)) {
+ 		copied = -ENODEV;
+ 		goto out;
+ 	}
 
-Best regards,
 -- 
-Michal Luczaj <mhal@rbox.co>
+2.48.1
 
