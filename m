@@ -1,257 +1,141 @@
-Received: from 69-171-232-181.mail-mxout.facebook.com (69-171-232-181.mail-mxout.facebook.com [69.171.232.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B295928A2B0
-	for <bpf@vger.kernel.org>; Thu, 13 Feb 2025 16:48:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=69.171.232.181
+Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.4])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D26C728A2A5;
+	Thu, 13 Feb 2025 17:04:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739465308; cv=none; b=U7yDExvcgnpnHwbbCGDkwRvzRA6UQZQxwM2SDgYRtOM3PN6P7UJpiVJo9T+VNfvGwiGKBsxfDVJErIgQrXe6NmRVfpgXSdt8nFieJ3jPnJ+vx2/XIE2cJCOZ7wdbTv2NANpUd1Bz3F8PjZgb0F7tRSxn+6BdWPH3BuoxFu86LNg=
+	t=1739466243; cv=none; b=GH21qlJkk7+GPyU2Xy2iQG2FHlhG4FiZYBtyRanztKYr2brS4zf+jtgRLCkrtAQbKZlkn7M/wALoA0TThMaBIisAjyKjMxy31mRFwqF/kEdZHdClsp5k4R1qeKejkuukD3CWe6fMFdruFcF2dJbVkLtHiLWgCss7VREGe+Rd3GM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739465308; c=relaxed/simple;
-	bh=TT1u6+NOgkJuEq5HE20+sRp3KZMRvxRSjUOXl8jpe5Y=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Z0lqlcbidX+wVRioKsWAKr5ZTg6yMKUtJifugnSzC5mmFmcoXvgA0KLw5b8LeEWdPnBFPn+vUWl+p3abPO/YYfpwOeHr/BXRvgsUY4Lxo0X/HrevarhJ9DhRBcDyY6yagG8ILZY55uSuGx0807SJnxTJOSrQRi4B/YmaNNv83Wk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=69.171.232.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
-Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
-	id 0D1F7889FE1; Thu, 13 Feb 2025 08:48:12 -0800 (PST)
-From: Yonghong Song <yonghong.song@linux.dev>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	kernel-team@fb.com,
-	Martin KaFai Lau <martin.lau@kernel.org>
-Subject: [PATCH bpf-next v3 1/2] bpf: Allow pre-ordering for bpf cgroup progs
-Date: Thu, 13 Feb 2025 08:48:12 -0800
-Message-ID: <20250213164812.2668578-1-yonghong.song@linux.dev>
-X-Mailer: git-send-email 2.43.5
+	s=arc-20240116; t=1739466243; c=relaxed/simple;
+	bh=pwYagKv24qCrVWptNTz9ll8gBbuAPxwglYcScbxO3vo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=XuTf+buVEwZQ180hbe2uCTJNCOF6Ug1pgKRLxSYPGXy7pvxvMABMLSPnpbASYx+P6XVGKgNrxn1puMWqUQw16OJb10TQzwnjopufAqftAsW4LjeYb0alhilX1JO48lKbjQBri9cT5Vnqa95+pSndtaTSAve6cFVm8+DxUGLbGRU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=TrCxnxIh; arc=none smtp.client-ip=220.197.31.4
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="TrCxnxIh"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=Date:From:Subject:Message-ID:MIME-Version:
+	Content-Type; bh=cIEJc0/6NZ6IBFRoZ8UFnbtt9VEgUoZ4eneWY8Zk3MI=;
+	b=TrCxnxIhKRcKLEF2CYpvbv8DJk1ZZ4hquDisY3hyFqzzSkY4uvwBzuMb+zU57d
+	T0V2FDaJV6yakYKM45boapK3oaWlU2XM6B8iBGTT42d1F1P082TUKYO2VVBaUInn
+	zQxENpfMQhgwNVMqpvYAxxfS62F+3lF6//Tf6WSCRzfHY=
+Received: from iZj6c3ewsy61ybpk7hrb16Z (unknown [8.217.230.114])
+	by gzsmtp5 (Coremail) with SMTP id QCgvCgD3JeuxJa5nWZdJNw--.31319S2;
+	Fri, 14 Feb 2025 01:02:43 +0800 (CST)
+Date: Fri, 14 Feb 2025 01:02:41 +0800
+From: Jiayuan Chen <mrpre@163.com>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	John Fastabend <john.fastabend@gmail.com>, Andrii Nakryiko <andrii@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Eddy Z <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
+	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>, 
+	syzbot+d2a2c639d03ac200a4f1@syzkaller.appspotmail.com
+Subject: Re: [PATCH bpf-next v2 1/3] bpf: Fix array bounds error with may_goto
+Message-ID: <2ec2qjrwsdvdyr2wdo3gakv4hsikmvrhc47k3kii7nzj2e5tfm@zeiedp7wy3kj>
+References: <20250213131214.164982-1-mrpre@163.com>
+ <20250213131214.164982-2-mrpre@163.com>
+ <CAADnVQ++goV=Yi=dhXNa5F-h0o7uSNEGiPHh0ArODt3TaEeeQg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAADnVQ++goV=Yi=dhXNa5F-h0o7uSNEGiPHh0ArODt3TaEeeQg@mail.gmail.com>
+X-CM-TRANSID:QCgvCgD3JeuxJa5nWZdJNw--.31319S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWxWryftry5WryUuw13WF17KFg_yoW5Xw43pF
+	WDKa4UAF4DJw48t3s8CF40vr43JF4xtrn0kr43X348uF4UWFWkC3WUKa9Y934fXrn7Jw1x
+	AF4Uurn3CFyay37anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07UNYFZUUUUU=
+X-CM-SenderInfo: xpus2vi6rwjhhfrp/xtbBDwXyp2euIJizyAAAsV
 
-Currently for bpf progs in a cgroup hierarchy, the effective prog array
-is computed from bottom cgroup to upper cgroups (post-ordering). For
-example, the following cgroup hierarchy
-    root cgroup: p1, p2
-        subcgroup: p3, p4
-have BPF_F_ALLOW_MULTI for both cgroup levels.
-The effective cgroup array ordering looks like
-    p3 p4 p1 p2
-and at run time, progs will execute based on that order.
+On Thu, Feb 13, 2025 at 08:02:55AM -0800, Alexei Starovoitov wrote:
+> On Thu, Feb 13, 2025 at 5:13 AM Jiayuan Chen <mrpre@163.com> wrote:
+> >
+> > may_goto uses an additional 8 bytes on the stack, which causes the
+> > interpreters[] array to go out of bounds when calculating index by
+> > stack_size.
+> >
+> > 1. If a BPF program is rewritten, re-evaluate the stack size. For non-JIT
+> > cases, reject loading directly.
+> >
+> > 2. For non-JIT cases, calculating interpreters[idx] may still cause
+> > out-of-bounds array access, and just warn about it.
+> >
+> > 3. For jit_requested cases, the execution of bpf_func also needs to be
+> > warned. So Move the definition of function __bpf_prog_ret0_warn out of
+> > the macro definition CONFIG_BPF_JIT_ALWAYS_ON
+> >
+[...]
+> > ---
+> >  EVAL6(PROG_NAME_LIST, 224, 256, 288, 320, 352, 384)
+> >  EVAL4(PROG_NAME_LIST, 416, 448, 480, 512)
+> >  };
+> > +
+> > +#define MAX_INTERPRETERS_CALLBACK (sizeof(interpreters) / sizeof(*interpreters))
+> 
+> There is ARRAY_SIZE macro.
+Thanks, I will use it.
+> 
+> >  #undef PROG_NAME_LIST
+> >  #define PROG_NAME_LIST(stack_size) PROG_NAME_ARGS(stack_size),
+> >  static __maybe_unused
+> > @@ -2290,17 +2293,18 @@ void bpf_patch_call_args(struct bpf_insn *insn, u32 stack_depth)
+> >         insn->code = BPF_JMP | BPF_CALL_ARGS;
+> >  }
+> >  #endif
+> > -#else
+> > +#endif
+> > +
+> >  static unsigned int __bpf_prog_ret0_warn(const void *ctx,
+> >                                          const struct bpf_insn *insn)
+> >  {
+> >         /* If this handler ever gets executed, then BPF_JIT_ALWAYS_ON
+> > -        * is not working properly, so warn about it!
+> > +        * is not working properly, or interpreter is being used when
+> > +        * prog->jit_requested is not 0, so warn about it!
+> >          */
+> >         WARN_ON_ONCE(1);
+> >         return 0;
+> >  }
+> > -#endif
+> >
+> >  bool bpf_prog_map_compatible(struct bpf_map *map,
+> >                              const struct bpf_prog *fp)
+> > @@ -2380,8 +2384,14 @@ static void bpf_prog_select_func(struct bpf_prog *fp)
+> >  {
+> >  #ifndef CONFIG_BPF_JIT_ALWAYS_ON
+> >         u32 stack_depth = max_t(u32, fp->aux->stack_depth, 1);
+> > +       u32 idx = (round_up(stack_depth, 32) / 32) - 1;
+> >
+> > -       fp->bpf_func = interpreters[(round_up(stack_depth, 32) / 32) - 1];
+> > +       if (!fp->jit_requested) {
+> 
+> I don't think above check is necessary.
+> Why not just
+> if (WARN_ON_ONCE(idx >= ARRAY_SIZE(interpreters)))
+>   fp->bpf_func = __bpf_prog_ret0_warn;
+> else
+>   fp->bpf_func = interpreters[idx];
+> 
 
-But in some cases, it is desirable to have root prog executes earlier tha=
-n
-children progs (pre-ordering). For example,
-  - prog p1 intends to collect original pkt dest addresses.
-  - prog p3 will modify original pkt dest addresses to a proxy address fo=
-r
-    security reason.
-The end result is that prog p1 gets proxy address which is not what it
-wants. Putting p1 to every child cgroup is not desirable either as it
-will duplicate itself in many child cgroups. And this is exactly a use ca=
-se
-we are encountering in Meta.
+When jit_requested is set 1, the stack_depth can still go above 512,
+and we'd end up executing this function, where the index calculation would
+overflow, triggering an array out-of-bounds warning from USCAN or WAR().
 
-To fix this issue, let us introduce a flag BPF_F_PREORDER. If the flag
-is specified at attachment time, the prog has higher priority and the
-ordering with that flag will be from top to bottom (pre-ordering).
-For example, in the above example,
-    root cgroup: p1, p2
-        subcgroup: p3, p4
-Let us say p2 and p4 are marked with BPF_F_PREORDER. The final
-effective array ordering will be
-    p2 p4 p3 p1
-
-Suggested-by: Andrii Nakryiko <andrii@kernel.org>
-Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
----
- include/linux/bpf-cgroup.h     |  1 +
- include/uapi/linux/bpf.h       |  1 +
- kernel/bpf/cgroup.c            | 33 +++++++++++++++++++++++++--------
- kernel/bpf/syscall.c           |  3 ++-
- tools/include/uapi/linux/bpf.h |  1 +
- 5 files changed, 30 insertions(+), 9 deletions(-)
-
-diff --git a/include/linux/bpf-cgroup.h b/include/linux/bpf-cgroup.h
-index 7fc69083e745..9de7adb68294 100644
---- a/include/linux/bpf-cgroup.h
-+++ b/include/linux/bpf-cgroup.h
-@@ -111,6 +111,7 @@ struct bpf_prog_list {
- 	struct bpf_prog *prog;
- 	struct bpf_cgroup_link *link;
- 	struct bpf_cgroup_storage *storage[MAX_BPF_CGROUP_STORAGE_TYPE];
-+	u32 flags;
- };
-=20
- int cgroup_bpf_inherit(struct cgroup *cgrp);
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index fff6cdb8d11a..beac5cdf2d2c 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -1207,6 +1207,7 @@ enum bpf_perf_event_type {
- #define BPF_F_BEFORE		(1U << 3)
- #define BPF_F_AFTER		(1U << 4)
- #define BPF_F_ID		(1U << 5)
-+#define BPF_F_PREORDER		(1U << 6)
- #define BPF_F_LINK		BPF_F_LINK /* 1 << 13 */
-=20
- /* If BPF_F_STRICT_ALIGNMENT is used in BPF_PROG_LOAD command, the
-diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
-index 46e5db65dbc8..31d33058174c 100644
---- a/kernel/bpf/cgroup.c
-+++ b/kernel/bpf/cgroup.c
-@@ -369,7 +369,7 @@ static struct bpf_prog *prog_list_prog(struct bpf_pro=
-g_list *pl)
- /* count number of elements in the list.
-  * it's slow but the list cannot be long
-  */
--static u32 prog_list_length(struct hlist_head *head)
-+static u32 prog_list_length(struct hlist_head *head, int *preorder_cnt)
- {
- 	struct bpf_prog_list *pl;
- 	u32 cnt =3D 0;
-@@ -377,6 +377,8 @@ static u32 prog_list_length(struct hlist_head *head)
- 	hlist_for_each_entry(pl, head, node) {
- 		if (!prog_list_prog(pl))
- 			continue;
-+		if (preorder_cnt && (pl->flags & BPF_F_PREORDER))
-+			(*preorder_cnt)++;
- 		cnt++;
- 	}
- 	return cnt;
-@@ -400,7 +402,7 @@ static bool hierarchy_allows_attach(struct cgroup *cg=
-rp,
-=20
- 		if (flags & BPF_F_ALLOW_MULTI)
- 			return true;
--		cnt =3D prog_list_length(&p->bpf.progs[atype]);
-+		cnt =3D prog_list_length(&p->bpf.progs[atype], NULL);
- 		WARN_ON_ONCE(cnt > 1);
- 		if (cnt =3D=3D 1)
- 			return !!(flags & BPF_F_ALLOW_OVERRIDE);
-@@ -423,12 +425,12 @@ static int compute_effective_progs(struct cgroup *c=
-grp,
- 	struct bpf_prog_array *progs;
- 	struct bpf_prog_list *pl;
- 	struct cgroup *p =3D cgrp;
--	int cnt =3D 0;
-+	int i, cnt =3D 0, preorder_cnt =3D 0, fstart, bstart, init_bstart;
-=20
- 	/* count number of effective programs by walking parents */
- 	do {
- 		if (cnt =3D=3D 0 || (p->bpf.flags[atype] & BPF_F_ALLOW_MULTI))
--			cnt +=3D prog_list_length(&p->bpf.progs[atype]);
-+			cnt +=3D prog_list_length(&p->bpf.progs[atype], &preorder_cnt);
- 		p =3D cgroup_parent(p);
- 	} while (p);
-=20
-@@ -439,20 +441,34 @@ static int compute_effective_progs(struct cgroup *c=
-grp,
- 	/* populate the array with effective progs */
- 	cnt =3D 0;
- 	p =3D cgrp;
-+	fstart =3D preorder_cnt;
-+	bstart =3D preorder_cnt - 1;
- 	do {
- 		if (cnt > 0 && !(p->bpf.flags[atype] & BPF_F_ALLOW_MULTI))
- 			continue;
-=20
-+		init_bstart =3D bstart;
- 		hlist_for_each_entry(pl, &p->bpf.progs[atype], node) {
- 			if (!prog_list_prog(pl))
- 				continue;
-=20
--			item =3D &progs->items[cnt];
-+			if (pl->flags & BPF_F_PREORDER) {
-+				item =3D &progs->items[bstart];
-+				bstart--;
-+			} else {
-+				item =3D &progs->items[fstart];
-+				fstart++;
-+			}
- 			item->prog =3D prog_list_prog(pl);
- 			bpf_cgroup_storages_assign(item->cgroup_storage,
- 						   pl->storage);
- 			cnt++;
- 		}
-+
-+		/* reverse pre-ordering progs at this cgroup level */
-+		for (i =3D 0; i < (init_bstart - bstart)/2; i++)
-+			swap(progs->items[init_bstart - i], progs->items[bstart + 1 + i]);
-+
- 	} while ((p =3D cgroup_parent(p)));
-=20
- 	*array =3D progs;
-@@ -663,7 +679,7 @@ static int __cgroup_bpf_attach(struct cgroup *cgrp,
- 		 */
- 		return -EPERM;
-=20
--	if (prog_list_length(progs) >=3D BPF_CGROUP_MAX_PROGS)
-+	if (prog_list_length(progs, NULL) >=3D BPF_CGROUP_MAX_PROGS)
- 		return -E2BIG;
-=20
- 	pl =3D find_attach_entry(progs, prog, link, replace_prog,
-@@ -698,6 +714,7 @@ static int __cgroup_bpf_attach(struct cgroup *cgrp,
-=20
- 	pl->prog =3D prog;
- 	pl->link =3D link;
-+	pl->flags =3D flags;
- 	bpf_cgroup_storages_assign(pl->storage, storage);
- 	cgrp->bpf.flags[atype] =3D saved_flags;
-=20
-@@ -1073,7 +1090,7 @@ static int __cgroup_bpf_query(struct cgroup *cgrp, =
-const union bpf_attr *attr,
- 							      lockdep_is_held(&cgroup_mutex));
- 			total_cnt +=3D bpf_prog_array_length(effective);
- 		} else {
--			total_cnt +=3D prog_list_length(&cgrp->bpf.progs[atype]);
-+			total_cnt +=3D prog_list_length(&cgrp->bpf.progs[atype], NULL);
- 		}
- 	}
-=20
-@@ -1105,7 +1122,7 @@ static int __cgroup_bpf_query(struct cgroup *cgrp, =
-const union bpf_attr *attr,
- 			u32 id;
-=20
- 			progs =3D &cgrp->bpf.progs[atype];
--			cnt =3D min_t(int, prog_list_length(progs), total_cnt);
-+			cnt =3D min_t(int, prog_list_length(progs, NULL), total_cnt);
- 			i =3D 0;
- 			hlist_for_each_entry(pl, progs, node) {
- 				prog =3D prog_list_prog(pl);
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index c420edbfb7c8..18de4d301368 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -4168,7 +4168,8 @@ static int bpf_prog_attach_check_attach_type(const =
-struct bpf_prog *prog,
- #define BPF_F_ATTACH_MASK_BASE	\
- 	(BPF_F_ALLOW_OVERRIDE |	\
- 	 BPF_F_ALLOW_MULTI |	\
--	 BPF_F_REPLACE)
-+	 BPF_F_REPLACE |	\
-+	 BPF_F_PREORDER)
-=20
- #define BPF_F_ATTACH_MASK_MPROG	\
- 	(BPF_F_REPLACE |	\
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bp=
-f.h
-index fff6cdb8d11a..beac5cdf2d2c 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -1207,6 +1207,7 @@ enum bpf_perf_event_type {
- #define BPF_F_BEFORE		(1U << 3)
- #define BPF_F_AFTER		(1U << 4)
- #define BPF_F_ID		(1U << 5)
-+#define BPF_F_PREORDER		(1U << 6)
- #define BPF_F_LINK		BPF_F_LINK /* 1 << 13 */
-=20
- /* If BPF_F_STRICT_ALIGNMENT is used in BPF_PROG_LOAD command, the
---=20
-2.43.5
+> > +               WARN_ON_ONCE(idx >= MAX_INTERPRETERS_CALLBACK);
+> > +               fp->bpf_func = interpreters[idx];
+> > +       } else {
+> > +               fp->bpf_func = __bpf_prog_ret0_warn;
+> >                         stack_depth_extra = 0;
+> > --
+> > 2.47.1
+> >
 
