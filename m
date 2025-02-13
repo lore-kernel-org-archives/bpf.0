@@ -1,161 +1,173 @@
-Received: from mail-qk1-f170.google.com (mail-qk1-f170.google.com [209.85.222.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mout.perfora.net (mout.perfora.net [74.208.4.196])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 754AB5684;
-	Thu, 13 Feb 2025 15:09:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EECE91411DE
+	for <bpf@vger.kernel.org>; Thu, 13 Feb 2025 15:21:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.208.4.196
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739459363; cv=none; b=qj9hXHqSq7kMtkhW0KPpSQPfOlB4tk03wSb05URdvLrHyYSGX9pFfg+1Y3BJ1zgjCzaLY5rfu7JButVOeMFRvPM2y5QmTYjOhjvCg8j0oOTup5J5uzTqAlYHvPJA1xnad0geVkM6E4nXKN+Od/Zw1+ENiqcEro4nug8UWcpNn50=
+	t=1739460110; cv=none; b=PMHagqxVDeNj1OJertlUG2FviLPLPfTA5hP56F07sbiaD8L8l2jzEM66dL8pT0KnCSui/5sW6RBpYdG45K3D2JUJPK2hrzBesLb0liOXIaA7QZk7kpZeG+flEuA6Cgd7etYzky4sq/viabP0U5f5qFeLM2HLbMkISGc3p3ZEzMA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739459363; c=relaxed/simple;
-	bh=IdZEyjiKkZI/1pqJFXXoSC+azr1RfKtky1xv5mMmHg4=;
-	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 Mime-Version:Content-Type; b=QGVl4cgZ8bP4JzXWbcAKW2RLXyegiQ9X7jTDIPQcw1crbwsY65gzTm4mAFsB0+/Zw5s9MEhQgfoqWxDNIXjEqwq3TqAWHL9MSOw6jXsHb/f/x/6Yx44Mu9ysTEYYqMV5iFGqATfc+5DjyLnNiCCMzU3LNPtFcmtH2cH8z1Gxthw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gTIKdcm4; arc=none smtp.client-ip=209.85.222.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1739460110; c=relaxed/simple;
+	bh=yfxROexsgY7ktRVyxOd10OXp2cS+inHpzuy9B75v+d4=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=sm+6rx9p/Z63mepiEARccSEAh2cIndF/QK70u3TJYwV4vPyXUgi8PVKvniGTEvrsR1/h7qZO94c5OzJGHdGmucFewu4k+yUU8o084dvrt+0fvBXrajMEeE1K9WeuZ55/v8ZHdboIo21X8ICz7wYmWXbIuVaH/JA/aIwpipAAo9U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=jordanrome.com; spf=pass smtp.mailfrom=jordanrome.com; dkim=pass (2048-bit key) header.d=jordanrome.com header.i=linux@jordanrome.com header.b=CwR/Zc7z; arc=none smtp.client-ip=74.208.4.196
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=jordanrome.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=jordanrome.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gTIKdcm4"
-Received: by mail-qk1-f170.google.com with SMTP id af79cd13be357-7be49f6b331so94450085a.1;
-        Thu, 13 Feb 2025 07:09:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1739459360; x=1740064160; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=B2dha7925JQRUD+dKqDxU48OayQdmawGC+OQkEXNRWU=;
-        b=gTIKdcm4ViPVXwx5o1gfuUfk+PGYBNN5MiN4t9TpGU+/Gi/js+0BQ/03O7l2MPdO7a
-         SUVGWNcfQrXkq5ZwPhLPiT743KRz2NQk5cdd8C/kOAswz721fihcUZJSmjTz//VKaG/b
-         kkTA/a6f1IuyWMD2BwtKYmFbYq0A464ccU1KFRBluZOSqB+cncVpBx0IQmV6YCnUaSOh
-         qGQQwTC2yB4OsPaYvFa11k/Jv70vMAz2cbsS0hrjZPGA/NYY820Myp8Oddt+Eon7Jiz4
-         npKPGDUwEpqfbktyHDrCTYA7pHNjvlgwjFSMCd8yQdisjwNiO4hd5A0UMAXR369ATkZ0
-         TmwQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739459360; x=1740064160;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=B2dha7925JQRUD+dKqDxU48OayQdmawGC+OQkEXNRWU=;
-        b=P7hBIvfilKlchLP8SKoEnpR9+OTu8ByX2dO6MsJd9xhGG+VEzCxlVZBkcpbi5StIZS
-         s2u/E8iMx3wh3CsXIHU2HZEAlAFC5pm121IZdX6kc34Pr/qsMApQalfrpMgtFI5a0HK6
-         nqn9gGB5kkBeTM9tPtbCVOjWufqeIFTTAj68r3GTDh1A7Yh6cn4AeWdMLqKv6/6GoAoa
-         ZPSsI4vig5SpDnvtFoYP1CEp5YAS42E26KkGuEU2V0UD/tTU22RtvMpzmqQRayOw6Gh0
-         H64tFlswiIUG8ktdDppCKv0Cdz3Bu6jkDQ4gYWJbUPcxAhn6eE27/DtIIorav51nuVqC
-         NCxw==
-X-Forwarded-Encrypted: i=1; AJvYcCV1BYli5jTsgIACTdN0oXd1L5pBtF4K7dT0dnOHj0dmz+GIWXuspB8dLa0X+Xl1W+SRByo=@vger.kernel.org, AJvYcCVIHtIy30coVPsPai28dfw88LxoTL7Z5FC5r5/YMV4H7qJ76ZBfw/sl8dZqnPhrVHvBLn46TCyY@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy1q5lFzxyP6BR/DZTqGqOCXm3SffGaScuA8nXnCSMh8RFNGtfG
-	j+uXgjFyxI5pgCheCTiaI80BePxtjGhVCMTe2TcG3Y0KLb2iL2GL
-X-Gm-Gg: ASbGncvn5NU4oJlDOn8mP0TQ6SIAvlBmw5cT24Dn3zaDaU22zAjXwJV9ttvqqlPEOI/
-	dxcR+QGaOxbuqfGk7H/lAoeUXgjIdNaCo/RITDhX7+A3ec0Tt/JyNTPchT4a2xZjD3nW7rI5vEu
-	Xph5SOsgCUB9Ugu8Qf2xMhq7TdXejQWaaqwS5/kxR8D1yHvjLQZlScxQq0cyjCP9Tjvxw9/qDOt
-	YW4XeHsqfu+QEvxVDdRn4LqatSQmd3x26Lw3x7A153T8k3NmXUsvJpeIkzeXLLdvKAhremOUTeh
-	OrwccdZDS8i78v49z1xVhq1mCF46Fg0PXPFMISoDKMBPgns59eZyDSw/1uKKwSU=
-X-Google-Smtp-Source: AGHT+IHjOXMgBbY6J+GWiif+HmFmwCJy+rZEzcZlh7LI9fV/MGv+P68o9eEMOZgrM6bupXCReyhRFg==
-X-Received: by 2002:a05:620a:4089:b0:7b6:6642:b5f0 with SMTP id af79cd13be357-7c06fc57c9bmr1114129985a.11.1739459359842;
-        Thu, 13 Feb 2025 07:09:19 -0800 (PST)
-Received: from localhost (15.60.86.34.bc.googleusercontent.com. [34.86.60.15])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-7c07c6081aasm99412385a.27.2025.02.13.07.09.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Feb 2025 07:09:19 -0800 (PST)
-Date: Thu, 13 Feb 2025 10:09:18 -0500
-From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-To: Jason Xing <kerneljasonxing@gmail.com>, 
- Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Cc: davem@davemloft.net, 
- edumazet@google.com, 
- kuba@kernel.org, 
- pabeni@redhat.com, 
- dsahern@kernel.org, 
- willemb@google.com, 
- ast@kernel.org, 
- daniel@iogearbox.net, 
- andrii@kernel.org, 
- martin.lau@linux.dev, 
- eddyz87@gmail.com, 
- song@kernel.org, 
- yonghong.song@linux.dev, 
- john.fastabend@gmail.com, 
- kpsingh@kernel.org, 
- sdf@fomichev.me, 
- haoluo@google.com, 
- jolsa@kernel.org, 
- shuah@kernel.org, 
- ykolal@fb.com, 
- bpf@vger.kernel.org, 
- netdev@vger.kernel.org
-Message-ID: <67ae0b1ed4a6f_24be4529484@willemb.c.googlers.com.notmuch>
-In-Reply-To: <CAL+tcoA9mi7yfHKf+PGhgjWE0NSrZp44ok+u5v4kOUycSnnbfw@mail.gmail.com>
-References: <20250212061855.71154-1-kerneljasonxing@gmail.com>
- <20250212061855.71154-10-kerneljasonxing@gmail.com>
- <67acbdb3be6b5_1bcd3029470@willemb.c.googlers.com.notmuch>
- <CAL+tcoA-5noB0rfHwU=FxANd9yifADFoq-vGkkzW=ZJ=BOnGUA@mail.gmail.com>
- <CAL+tcoA9mi7yfHKf+PGhgjWE0NSrZp44ok+u5v4kOUycSnnbfw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v10 09/12] bpf: add BPF_SOCK_OPS_TS_ACK_OPT_CB
- callback
+	dkim=pass (2048-bit key) header.d=jordanrome.com header.i=linux@jordanrome.com header.b="CwR/Zc7z"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=jordanrome.com;
+	s=s1-ionos; t=1739460097; x=1740064897; i=linux@jordanrome.com;
+	bh=QaM92VVJ8sVRDEhsj6U41D+q2njMPqo34UDqJs8UQDM=;
+	h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:In-Reply-To:
+	 References:MIME-Version:Content-Transfer-Encoding:cc:
+	 content-transfer-encoding:content-type:date:from:message-id:
+	 mime-version:reply-to:subject:to;
+	b=CwR/Zc7zCuTY4OsXyO6Qmd74qGjuvjIS1OE0pRFormT09eJ4CxF+EiqJjfRs8OG/
+	 nKA8n9gaIpXpndrne0Wk/vN3FGF3SK3SdjlTIbJq9umQYo8EwIKTEsRqVJlcYLZtL
+	 MfYeiXJhNt7vGvz0HVneNUowxpvkY/GwI98IlhGcOCSAKEBXb/JGx16NSoCaggyOk
+	 6oHck8x4w5A8Yb0FCt98qyqLfQG+E1inzXFsYj4COHsi/tZlo23eAVqjyoAwLslhB
+	 QJDZ2MSQSlohfaanP/C+LpuWUg2H5354T5cUDc+9iXkoGfDNV4+7S29tuueqYcBTO
+	 ccT15K6cD7soGrHstA==
+X-UI-Sender-Class: 55c96926-9e95-11ee-ae09-1f7a4046a0f6
+Received: from localhost ([69.171.251.115]) by mrelay.perfora.net (mreueus003
+ [74.208.5.2]) with ESMTPSA (Nemesis) id 0MH1qm-1tdhEB1qtO-00DXUA; Thu, 13 Feb
+ 2025 16:21:37 +0100
+From: Jordan Rome <linux@jordanrome.com>
+To: bpf@vger.kernel.org
+Cc: linux-mm@kvack.org,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Kernel Team <kernel-team@fb.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Shakeel Butt <shakeel.butt@linux.dev>,
+	Alexander Potapenko <glider@google.com>
+Subject: [bpf-next v8 2/3] bpf: Add bpf_copy_from_user_task_str kfunc
+Date: Thu, 13 Feb 2025 07:21:24 -0800
+Message-ID: <20250213152125.1837400-2-linux@jordanrome.com>
+X-Mailer: git-send-email 2.43.5
+In-Reply-To: <20250213152125.1837400-1-linux@jordanrome.com>
+References: <20250213152125.1837400-1-linux@jordanrome.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
+MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:M2HqTh52VzVoW28hZaqWA8+HYrSAYL9Nms0h4Rw5isAfIEJewQ1
+ twyuDCDsOcjnxNjxwbS9qKv/fJhN7ZDKDK2BJjFIyaIk2tgWwJdDxaIpFxUVZa3FH9CcQjh
+ DQQ3eS6f6v9yds5bNQ2yO2mUtp/zc9gpi8KpG/TOcd5EaXnvIUwcr4aXwi4SQYtZD45Kwpt
+ /QVaH9FcwHfNLezznwm9g==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:XFeo8jdd6/k=;jZRp5DXm0QPSSXAQxaDXmup3ZT0
+ zR+/WroUAQFWUZCBDkVgG/V2UASfi8OoDYhzGkS89SVYOWfD0xltc0B5XkK9TXS/lRDRy6Azi
+ d6/6O0yjD9XkWd/ZDJhVK0UuyM8MVolFgm/opRcqVBbCafACwiriTEvobZAYvxGMAgu2tvVHb
+ iGOHV5cDB+1EINtc/Numz+kf4qFr9tSgL2ieceUJ2NeLZEFoDsV6panrVEsjcfXMI+maPd8Nk
+ ohg4ygLEDE7MWuVpgQCrwxwXiCPc8TYJGzvjaDv0wVyb3bOTDFkZrxyTBL6Z1evwjUAcqB/EJ
+ U0LvKowLd7lJ8YcOADqYf9lTmEszlnV6pBGboNZ0A55ElQpxjA5mPOu+vTZNVopspo3YLmRMa
+ Wz8RlzOjlDXyTlRxglb3hNJaEHBPOAM+Q2j+ZQrGOZmEifmq5GnwAJ+6KYtrLeWPuhQJKI/ve
+ fGgSVS50GyrpsTgQrZ5r9CzkUtDCK/J2pctHqRwdInw8Q5X0Tf5MVVgFV/2iCpzBxWms0UgNv
+ yG+ybmgcV3pFRyRR4rbROm/VS5MQk78eqHzyDWlaB0H1+XxaLEAVCjht9ZK9mzGhwGEaV+JBr
+ mlXO76Lroz3roGJf2TucOPu/ofHoCAldH4Yz7q8wRE7eN79t15h12Ox9AgqJ41MtYDZEIjIvD
+ Bg1Xe/Mcqh8hDsYId7c9+sXTQ3kSRpLryCZ++8kdj1d4lldbTjZvpfU1apX6qhq0m3ycCdgZc
+ NVNJj7qDXm0RwwAL0Wf/hZarWP8IyzAxrl0JMFoykAcnwjZhAiGEjv7FVcIph4KmmPnC//5AC
+ k2IqMvXnTpREpcPu+rhu78eW1UAkv/fs3FmDuHDKJzYmbsvUcr26gPS+y01jf7F1GX37v7tPn
+ 41RgAHATAPKRQTXDAQmNGCL2dj0VGovS3l7q+ibKBFFRdQP5xy9vGbT9/jrw56um6XwyhBv9Z
+ NnHjFml9xzg4HSaEOk9r5EftwPCSUHFTS8hH0gJvuUdBQxa+vIDBOjIZtvl+hMNQgfEXX50UX
+ AHm+YY8LMZMf3p7cMQW4o8YS6UvxphNXNWLWDKT26+AcP27V64Kc87tJFjFFya9QacsQmwhmJ
+ zAWE6sAHdtZ1+UCxigmvTsQgqmGee5Fmdn6C4dacWuDvheioCAmfp7urnGJVPtAaZTVMFCv/4
+ fFKIq1RgGJZ7rLPUOJvXXqDpZ8ow0tt31xXuun+pYQcQBUv4aYJbF98uB+AaqBIVMFrIj5c1L
+ HpNlzRy5ifc3FXnKRUarCsHsxMJnK/JQE7aYrl5j+oYjVHweOXbq4ZSUG4zd7M3/iR8Iknupx
+ ylp1H4qd45vpxQqEvYXZnXGCUQSbdmY69DUwoul7ff13FjLV3Pcw+HFXC06mvh7wTMa
 
-Jason Xing wrote:
-> On Thu, Feb 13, 2025 at 8:07=E2=80=AFAM Jason Xing <kerneljasonxing@gma=
-il.com> wrote:
-> >
-> > On Wed, Feb 12, 2025 at 11:26=E2=80=AFPM Willem de Bruijn
-> > <willemdebruijn.kernel@gmail.com> wrote:
-> > >
-> > > Jason Xing wrote:
-> > > > Support the ACK case for bpf timestamping.
-> > > >
-> > > > Add a new sock_ops callback, BPF_SOCK_OPS_TS_ACK_OPT_CB. This
-> > > > callback will occur at the same timestamping point as the user
-> > > > space's SCM_TSTAMP_ACK. The BPF program can use it to get the
-> > > > same SCM_TSTAMP_ACK timestamp without modifying the user-space
-> > > > application.
-> > > >
-> > > > This patch extends txstamp_ack to two bits: 1 stands for
-> > > > SO_TIMESTAMPING mode, 2 bpf extension.
-> > > >
-> > > > Signed-off-by: Jason Xing <kerneljasonxing@gmail.com>
-> > > > ---
-> > > >  include/net/tcp.h              | 6 ++++--
-> > > >  include/uapi/linux/bpf.h       | 5 +++++
-> > > >  net/core/skbuff.c              | 5 ++++-
-> > > >  net/dsa/user.c                 | 2 +-
-> > > >  net/ipv4/tcp.c                 | 2 +-
-> > > >  net/socket.c                   | 2 +-
-> > > >  tools/include/uapi/linux/bpf.h | 5 +++++
-> > > >  7 files changed, 21 insertions(+), 6 deletions(-)
-> > >
-> > > > diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
-> > > > index 0d704bda6c41..aa080f7ccea4 100644
-> > > > --- a/net/ipv4/tcp.c
-> > > > +++ b/net/ipv4/tcp.c
-> > > > @@ -488,7 +488,7 @@ static void tcp_tx_timestamp(struct sock *sk,=
- struct sockcm_cookie *sockc)
-> > > >
-> > > >               sock_tx_timestamp(sk, sockc, &shinfo->tx_flags);
-> > > >               if (tsflags & SOF_TIMESTAMPING_TX_ACK)
-> > > > -                     tcb->txstamp_ack =3D 1;
-> > > > +                     tcb->txstamp_ack =3D TSTAMP_ACK_SK;
-> > >
-> > > Similar to the BPF code, should this by |=3D TSTAMP_ACK_SK?
-> > >
-> > > Does not matter in practice if the BPF setter can never precede thi=
-s.
-> >
-> > I gave the same thought on this too. We've already fixed the position=
+This new kfunc will be able to copy a string
+from another process's/task's address space.
+This is similar to `bpf_copy_from_user_str`
+but accepts a `struct task_struct*` argument.
 
-> > and order (of using socket timestamping and bpf timestamping).
-> >
-> > I have no strong preference. If you insist, I can surely adjust it.
-> =
+Acked-by: Andrii Nakryiko <andrii@kernel.org>
+Signed-off-by: Jordan Rome <linux@jordanrome.com>
+=2D--
+ kernel/bpf/helpers.c | 48 ++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 48 insertions(+)
 
-> I updated it in the next version locally :)
+diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+index f27ce162427a..a33f72a4c31f 100644
+=2D-- a/kernel/bpf/helpers.c
++++ b/kernel/bpf/helpers.c
+@@ -3082,6 +3082,53 @@ __bpf_kfunc void bpf_local_irq_restore(unsigned lon=
+g *flags__irq_flag)
+ 	local_irq_restore(*flags__irq_flag);
+ }
 
-Great. I was going to say that I do prefer this.=
++/**
++ * bpf_copy_from_user_task_str() - Copy a string from an task's address s=
+pace
++ * @dst:             Destination address, in kernel space.  This buffer m=
+ust be
++ *                   at least @dst__sz bytes long.
++ * @dst__sz:         Maximum number of bytes to copy, includes the traili=
+ng NUL.
++ * @unsafe_ptr__ign: Source address in the task's address space.
++ * @tsk:             The task whose address space will be used
++ * @flags:           The only supported flag is BPF_F_PAD_ZEROS
++ *
++ * Copies a NUL terminated string from a task's address space to @dst__sz
++ * buffer. If user string is too long this will still ensure zero termina=
+tion
++ * in the @dst__sz buffer unless buffer size is 0.
++ *
++ * If BPF_F_PAD_ZEROS flag is set, memset the tail of @dst__sz to 0 on su=
+ccess
++ * and memset all of @dst__sz on failure.
++ *
++ * Return: The number of copied bytes on success including the NUL termin=
+ator.
++ * A negative error code on failure.
++ */
++__bpf_kfunc int bpf_copy_from_user_task_str(void *dst,
++					    u32 dst__sz,
++					    const void __user *unsafe_ptr__ign,
++					    struct task_struct *tsk,
++					    u64 flags)
++{
++	int ret;
++
++	if (unlikely(flags & ~BPF_F_PAD_ZEROS))
++		return -EINVAL;
++
++	if (unlikely(!dst__sz))
++		return 0;
++
++	ret =3D copy_remote_vm_str(tsk, (unsigned long)unsafe_ptr__ign, dst, dst=
+__sz, 0);
++
++	if (ret < 0) {
++		if (flags & BPF_F_PAD_ZEROS)
++			memset(dst, 0, dst__sz);
++		return ret;
++	}
++
++	if (flags & BPF_F_PAD_ZEROS)
++		memset(dst + ret, 0, dst__sz - ret);
++
++	return ret + 1;
++}
++
+ __bpf_kfunc_end_defs();
+
+ BTF_KFUNCS_START(generic_btf_ids)
+@@ -3174,6 +3221,7 @@ BTF_ID_FLAGS(func, bpf_iter_bits_new, KF_ITER_NEW)
+ BTF_ID_FLAGS(func, bpf_iter_bits_next, KF_ITER_NEXT | KF_RET_NULL)
+ BTF_ID_FLAGS(func, bpf_iter_bits_destroy, KF_ITER_DESTROY)
+ BTF_ID_FLAGS(func, bpf_copy_from_user_str, KF_SLEEPABLE)
++BTF_ID_FLAGS(func, bpf_copy_from_user_task_str, KF_SLEEPABLE)
+ BTF_ID_FLAGS(func, bpf_get_kmem_cache)
+ BTF_ID_FLAGS(func, bpf_iter_kmem_cache_new, KF_ITER_NEW | KF_SLEEPABLE)
+ BTF_ID_FLAGS(func, bpf_iter_kmem_cache_next, KF_ITER_NEXT | KF_RET_NULL |=
+ KF_SLEEPABLE)
+=2D-
+2.43.5
+
