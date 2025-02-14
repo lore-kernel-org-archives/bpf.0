@@ -1,154 +1,87 @@
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.2])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D3BC151983;
-	Fri, 14 Feb 2025 09:19:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.2
+Received: from out30-132.freemail.mail.aliyun.com (out30-132.freemail.mail.aliyun.com [115.124.30.132])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C228A21B182;
+	Fri, 14 Feb 2025 09:22:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.132
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739524764; cv=none; b=gcQfCGdKTsrL8c22Y5Q7MKn82O1t+AHrxOEyPa4bcBHyBk8gPuoWb5nHpPrW3y43J5DTwMHku7+94ykxkkmHw5MdDZgldkBzsO3MSy4E1AEIson4xIuRR2HWXHkum+TVxwRl7n+vTWNVhW0uKssROWPAUtork7Lq2gYyA2lIjgA=
+	t=1739524938; cv=none; b=J6/Ci0jHb5h7gbDvJKTl/1jDtbpOiD+cA/HZ870tSlmpSGletXSxac5ID1GKu4J/C63SCKCYqd6n2voEq9z3q9Nh8C2VVIEcFh/1e5xa3eIOfEKswSEaRzBZ5Qy11ZNc4aW90a5IBnvAqpjH/ZpdDqA4yxzoZZ1akA0BC09E/Vk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739524764; c=relaxed/simple;
-	bh=wCiyGuzsv0qzNUZNGK2dP+8gN6WNl5hPvC4Wka3d4VU=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=BQRehj6alhlAtoBbq5rvpMLDk9SwHpRsijC5vulDlMjyQ28JLb8FI+MPzAyf/JeTUCDsZ8NECz3xDclr9JJBrtA4JHWqqHBK3d4IfgaYo6vZJafLI2yOUPL5pHQ9PpdpWEs6CUGTP+MRPFTGLjHqMgRJ7jIU7CPpZNpzHnLju9s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=Xl071xm4; arc=none smtp.client-ip=220.197.31.2
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+	s=arc-20240116; t=1739524938; c=relaxed/simple;
+	bh=pQjK/iwCJO75ufgOTvx8cDDg/C9fbt+wixPYVCFqHfU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=S450BJE/MMDCRqmSeqdiyFVqlo/cI5YLzH/zFDHikUwKv40YfsOr8umNwLdwAv3Q/ljLExCFiqidzFknrIMBe8zCdb+zBSVRxJRo8VUYVmeCNO7+qE/2fqKvDrGIMQ5Cwx9RWw7XOTH6N8VNxnR3J1E42Ybk24rZruVnGk08ogI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=nXvwb20R; arc=none smtp.client-ip=115.124.30.132
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="Xl071xm4"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:Subject:Date:Message-ID:MIME-Version; bh=SZIFN
-	LYoju6FGXz8RR91JXoF2TdJdvV5yUujWlpr1Fg=; b=Xl071xm4OJr6vkc25sQqj
-	x9O1UQJ6637H4MtVj10rBCUOezj+VIM3Xu+I9cBwC/JOG5Lz573UW3OmCCTQyWd+
-	SVd0QvX1aIgc03FjEHXh2egfy8+M2ZPHuJYZOjID7kpmeKkrZq/pSh5bLsrJ7Gv0
-	nQSakaE7F+DDnBf2TIRrcM=
-Received: from localhost.localdomain (unknown [])
-	by gzga-smtp-mtada-g0-4 (Coremail) with SMTP id _____wD3N0RjCq9nqR1PMA--.3071S3;
-	Fri, 14 Feb 2025 17:18:31 +0800 (CST)
-From: Jiayuan Chen <mrpre@163.com>
-To: bpf@vger.kernel.org,
-	ast@kernel.org
-Cc: linux-kselftest@vger.kernel.org,
-	daniel@iogearbox.net,
-	john.fastabend@gmail.com,
-	andrii@kernel.org,
-	martin.lau@linux.dev,
-	eddyz87@gmail.com,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	kpsingh@kernel.org,
-	sdf@fomichev.me,
-	haoluo@google.com,
-	jolsa@kernel.org,
-	mykolal@fb.com,
-	shuah@kernel.org,
-	Jiayuan Chen <mrpre@163.com>,
-	syzbot+d2a2c639d03ac200a4f1@syzkaller.appspotmail.com
-Subject: [PATCH bpf-next v3 1/3] bpf: Fix array bounds error with may_goto
-Date: Fri, 14 Feb 2025 17:18:21 +0800
-Message-ID: <20250214091823.46042-2-mrpre@163.com>
-X-Mailer: git-send-email 2.47.1
-In-Reply-To: <20250214091823.46042-1-mrpre@163.com>
-References: <20250214091823.46042-1-mrpre@163.com>
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="nXvwb20R"
+DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux.alibaba.com; s=default;
+	t=1739524931; h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
+	bh=+D9V3WWQDBd/ZszSS/N9OZirb9lKepZNme5vqrAR1sQ=;
+	b=nXvwb20RU9oNju8SMnPYRFheTB/8zBCFsKKq2yFEhpV8H8EOrpVtT2FkvDhEogd18ikpKNiHOhFgv71Z5xTwUTH/gMaqPOxI2FOvBO1iK/JpimA3gKJqAvpBIpUdXJh6naB28EV3fyHckDrILbH/HF0SAP7G0nDMu0wrzv7zOmg=
+Received: from localhost(mailfrom:alibuda@linux.alibaba.com fp:SMTPD_---0WPQIbTz_1739524929 cluster:ay36)
+          by smtp.aliyun-inc.com;
+          Fri, 14 Feb 2025 17:22:09 +0800
+Date: Fri, 14 Feb 2025 17:22:09 +0800
+From: "D. Wythe" <alibuda@linux.alibaba.com    >
+To: "D. Wythe" <alibuda@linux.alibaba.com>, wenjia@linux.ibm.com,
+	jaka@linux.ibm.com
+Cc: kgraul@linux.ibm.com, wenjia@linux.ibm.com, jaka@linux.ibm.com,
+	ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+	martin.lau@linux.dev, pabeni@redhat.com, song@kernel.org,
+	sdf@google.com, haoluo@google.com, yhs@fb.com, edumazet@google.com,
+	john.fastabend@gmail.com, kpsingh@kernel.org, jolsa@kernel.org,
+	guwen@linux.alibaba.com, kuba@kernel.org, davem@davemloft.net,
+	netdev@vger.kernel.org, linux-s390@vger.kernel.org,
+	linux-rdma@vger.kernel.org, bpf@vger.kernel.org
+Subject: Re: [PATCH bpf-next v7 0/6] net/smc: Introduce smc_ops
+Message-ID: <20250214092209.GA88970@j66a10360.sqa.eu95>
+References: <20250123015942.94810-1-alibuda@linux.alibaba.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wD3N0RjCq9nqR1PMA--.3071S3
-X-Coremail-Antispam: 1Uf129KBjvJXoWxJw1xZFyxKr4rJw4rAF45trb_yoW5ZFWfpF
-	s8KFW3Cr48Ja1I93sxAFWxur45Jrs5ta17GanrJ340qF4jqFWkuF15KFyrXryaqrn7Ka1r
-	uF1j9r9xtw1Uu3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zEcTmxUUUUU=
-X-CM-SenderInfo: xpus2vi6rwjhhfrp/xtbBDwfzp2evCS8bhQAAss
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250123015942.94810-1-alibuda@linux.alibaba.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
 
-may_goto uses an additional 8 bytes on the stack, which causes the
-interpreters[] array to go out of bounds when calculating index by
-stack_size.
+On Thu, Jan 23, 2025 at 09:59:36AM +0800, D. Wythe wrote:
+> This patch aims to introduce BPF injection capabilities for SMC and
+> includes a self-test to ensure code stability.
+> 
+> Since the SMC protocol isn't ideal for every situation, especially
+> short-lived ones, most applications can't guarantee the absence of
+> such scenarios. Consequently, applications may need specific strategies
+> to decide whether to use SMC. For example, an application might limit SMC
+> usage to certain IP addresses or ports.
+> 
+> To maintain the principle of transparent replacement, we want applications
+> to remain unaffected even if they need specific SMC strategies. In other
+> words, they should not require recompilation of their code.
+> 
+> Additionally, we need to ensure the scalability of strategy implementation.
+> While using socket options or sysctl might be straightforward, it could
+> complicate future expansions.
+> 
+> Fortunately, BPF addresses these concerns effectively. Users can write
+> their own strategies in eBPF to determine whether to use SMC, and they can
+> easily modify those strategies in the future.
 
-1. If a BPF program is rewritten, re-evaluate the stack size. For non-JIT
-cases, reject loading directly.
+Hi smc folks, @Wenjia @Ian
 
-2. For non-JIT cases, calculating interpreters[idx] may still cause
-out-of-bounds array access, and just warn about it.
+Is there any feedback regarding this patches ? This series of code has
+gone through multiple rounds of community reviews. However, the parts
+related to SMC, including the new sysctl and ops name, really needs
+your input and acknowledgment.
 
-3. For jit_requested cases, the execution of bpf_func also needs to be
-warned. So move the definition of function __bpf_prog_ret0_warn out of
-the macro definition CONFIG_BPF_JIT_ALWAYS_ON.
+Additionally, this series includes a bug fix for SMC, which is easily
+reproducible in the BPF CI tests.
 
-Reported-by: syzbot+d2a2c639d03ac200a4f1@syzkaller.appspotmail.com
-Closes: https://lore.kernel.org/bpf/0000000000000f823606139faa5d@google.com/
-Fixes: 011832b97b311 ("bpf: Introduce may_goto instruction")
-Signed-off-by: Jiayuan Chen <mrpre@163.com>
----
- kernel/bpf/core.c     | 19 +++++++++++++++----
- kernel/bpf/verifier.c |  7 +++++++
- 2 files changed, 22 insertions(+), 4 deletions(-)
-
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index da729cbbaeb9..a0200fbbace9 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -2290,17 +2290,18 @@ void bpf_patch_call_args(struct bpf_insn *insn, u32 stack_depth)
- 	insn->code = BPF_JMP | BPF_CALL_ARGS;
- }
- #endif
--#else
-+#endif
-+
- static unsigned int __bpf_prog_ret0_warn(const void *ctx,
- 					 const struct bpf_insn *insn)
- {
- 	/* If this handler ever gets executed, then BPF_JIT_ALWAYS_ON
--	 * is not working properly, so warn about it!
-+	 * is not working properly, or interpreter is being used when
-+	 * prog->jit_requested is not 0, so warn about it!
- 	 */
- 	WARN_ON_ONCE(1);
- 	return 0;
- }
--#endif
- 
- bool bpf_prog_map_compatible(struct bpf_map *map,
- 			     const struct bpf_prog *fp)
-@@ -2380,8 +2381,18 @@ static void bpf_prog_select_func(struct bpf_prog *fp)
- {
- #ifndef CONFIG_BPF_JIT_ALWAYS_ON
- 	u32 stack_depth = max_t(u32, fp->aux->stack_depth, 1);
-+	u32 idx = (round_up(stack_depth, 32) / 32) - 1;
- 
--	fp->bpf_func = interpreters[(round_up(stack_depth, 32) / 32) - 1];
-+	/* may_goto may cause stack size > 512, leading to idx out-of-bounds.
-+	 * But for non-JITed programs, we don't need bpf_func, so no bounds
-+	 * check needed.
-+	 */
-+	if (!fp->jit_requested &&
-+	    !WARN_ON_ONCE(idx >= ARRAY_SIZE(interpreters))) {
-+		fp->bpf_func = interpreters[idx];
-+	} else {
-+		fp->bpf_func = __bpf_prog_ret0_warn;
-+	}
- #else
- 	fp->bpf_func = __bpf_prog_ret0_warn;
- #endif
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 9971c03adfd5..fcd302904ba0 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -21882,6 +21882,13 @@ static int do_misc_fixups(struct bpf_verifier_env *env)
- 		if (subprogs[cur_subprog + 1].start == i + delta + 1) {
- 			subprogs[cur_subprog].stack_depth += stack_depth_extra;
- 			subprogs[cur_subprog].stack_extra = stack_depth_extra;
-+
-+			stack_depth = subprogs[cur_subprog].stack_depth;
-+			if (stack_depth > MAX_BPF_STACK && !prog->jit_requested) {
-+				verbose(env, "stack size %d(extra %d) is too large\n",
-+					stack_depth, stack_depth_extra);
-+				return -EINVAL;
-+			}
- 			cur_subprog++;
- 			stack_depth = subprogs[cur_subprog].stack_depth;
- 			stack_depth_extra = 0;
--- 
-2.47.1
+Thanks,
+D. Wythe
 
