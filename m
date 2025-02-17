@@ -1,195 +1,282 @@
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2052.outbound.protection.outlook.com [40.107.92.52])
+Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05olkn2081.outbound.protection.outlook.com [40.92.91.81])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF4EB4EB51;
-	Mon, 17 Feb 2025 17:27:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.92.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 191ED229B05;
+	Mon, 17 Feb 2025 17:27:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.92.91.81
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739813241; cv=fail; b=Xndx7UVGoy/mJ8AUesYO8LaLRnKRzCUBwaFgWapDivI7ZiIh70kEP2ofOuQi29wpR6oTGu3enmj8O5LpzU3Fyq/nEy8mizKeVtn/CEIfst0x1/WsEOcQsOxzNR0XZvX6dwBOeQ76dA8FxchhQbiZDe1n3mylr8q5X/bcqmYVrGo=
+	t=1739813272; cv=fail; b=d+rOqzufUEg9hYy4G76zNybMkAAy4f2CgjenusEjDDeDMqB+8dB0DqPW0BilprfDmc04aFJ5EAqOUQw8MyEbsbmEKl1oH/XRqz43lNyAyL7XkNoZASV8y5p96wguBpo5v673C9TnLatXOeuLSnLn+ZRIzQJih0jR0vUbLtd2xf0=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739813241; c=relaxed/simple;
-	bh=umDUISRXG4cqZKxhfA03W+VHEM3jDXl/n1Nygv7B28U=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=dK8YP1iAZUEi1CKMgujuZPBD+2iJVIxhTiTHfVgr0gDtixZeQGtEb8Nr/s5sm83uoXYo4BHNzD/nu5UR5mKSRBgqwAfEdSOf4mELQlW6UTJtuCR9+E1I7Zj8sUNBO1OYnWbkfi1R8Z37bVYe5QaWYMQbRmC/yvk8WOaR9ZlbDKw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=TVJVjtrr; arc=fail smtp.client-ip=40.107.92.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	s=arc-20240116; t=1739813272; c=relaxed/simple;
+	bh=Y/g6qXI2dFspDb7A2+0na/3GmlOt7ZpwEfzakNGPoqo=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=T+deys6EzszLEXLwEFWJPLBMSiiOJ4CSkU9ISD9Kdo3ws/H8NI4fGyyPGlo6m0y9tCfq4wkLS85Gh0YIZOonbiQj+hX7yHeDjEflTCm+Bcryw6GJteswnef94ks7PL79LmIKmBVx+1yqraIg7tJeLfiO33Mxq6k3ZpdZZA3PdNo=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com; spf=pass smtp.mailfrom=outlook.com; dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b=iNG6cM3d; arc=fail smtp.client-ip=40.92.91.81
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=outlook.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="TVJVjtrr"
+	dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b="iNG6cM3d"
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=qSXzed0pXm7UZ/eoMEIOO2Ish9hw3BWKN6DIRaRqLNI0NgdInnutGUGiBL/TApxlQxqUHrKDew0fMv9aT5jRjxhgvjNq6riZe6xX+5mdW+rs3aeXrPZryAPESDBDAeHowQJVqqH+cVWhuRepQecaeR1fGd3ZKxVbluGsuxmGj19ONNWsOMAZUWkMK64o/AAEgyITUnJYj8a4ukveabKsPYhXyWdvESCK5ZTj/9zlV0QVn5Z8tXOEZvTcNx614wsp0Q5q94KsOWMsVwm7OzXffRTdbCj0h94x7SpRXBuLvYHYxTLKA1YbvsgvnxSo7KLxrpOyMZembao3FclMSMSXBA==
+ b=H9VF8BEBnyFB+LHZrNo3yxWuT9By4dqARSu20XH7TjY2X5pxO0Q67DoxlDycIGbanghqLLtURl+RXokHV/IT1sdUxThCn1xl+AJGQ1HXCqGUmCBsF0eyY4Ax8UAHqFUpdqNDv9iTqciAPaRnbQ9SPSh08TJikb+1lkSCXP6bCAl2pK1tPPAmEcLyfZjolPpnCKADfpGUwK91sT/96ldYO7v3hIIQ+ES54LqIKnSp/A5qy05gOkTqHKtQ7FW0ZZUUWgF5+wy7+hv+mHphN0ULQ04PpV5sQB+QD1Lxir8pgGQtXmdWAnCSZbKn3cquK00bKoytEUkEwZGagaG9f6yoMQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=sYWZkqK+tW+K+Pq7VB7QdRR6KjsqI/2LYUkN/s1Ps3w=;
- b=DWSQkq68wUuDqxfPvFdGiuP8iGsWv+4IVy9Rs2kzLv1hTYG1zsH9gDViTLQdSAeGgAPtuTPBhPT53KtxBfPixiE2as8Iggu9Wcb239hifM1hK9DYBmKPFxC/3x7ieSALNcR946CzS1I+99jiqsuPXkhgPNJUSfTUT5+ES6Qng13MXnwPC4SN1KUdyI0jWOTWTKxOFUWL4HZJo3HIenTmJm+WlrldVImmWp4b6JS0Ee8bnOQVXdd2tlwtrTfxteHTcbJA/JTV0NsmUy4RBr5h6ilz/atOEjGPLuGXaDaS5VlXo5SoMmuaP9K3TeVb3GDcQ5CPL6+bnroBVHass7tjMw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
+ bh=4Kc6JLowibTlb9Z3Kq57oZKxBJCZwTi9sKmJoBW8kx4=;
+ b=CsvHuhuLSNd6WpUFwCdRXPSOBnKhxFWTj+G80E/9tN1pALj+R5ie7qJQErIiI0YPdV9mogvlvEajb4vRzcykZw301M9nhwHG+lVYBbinhb83qCoxdx40StTHjrfsU1fF9r/mnAEMsZeIT8XOi0Z9TOy0AvhpoePSxq+ecaVBvBd/sqkBM1aNWOXhv/UBLh/b/eyTMfcMtvRrVwXwfIPr1/ltxuiFw6oCB2i9TxlquiTUDVKyc+tCIhnorNtPa2A6HF09YDirFsx6grTduv6YNfL7iZARw32UXjPMYtHaepzrSKa2cb/kKOb4UFTzcLFxJ0zGZqNrYtUjbIxLkxybCA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
+ s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=sYWZkqK+tW+K+Pq7VB7QdRR6KjsqI/2LYUkN/s1Ps3w=;
- b=TVJVjtrrqNStSLilbWetDk/0O9wVNnMnW84IiyHf2b0LEBKd8+YeGiOIMWmNKSr1aKYcakJG5hj9iw5i1DpQFrfCUos2JE/eUQcatXizXBlvoNmxF66ajL3NUCamqDIkTDSEmXlyy+7CSEdmily2RhF8cu+5dDiQ8pTuXuPYGiXC19OBi/9nBVkUXJ2Vf88r8uEbKczt2MQkfHn8Ta83x+G2EZ+AmvlFV3wSUHxBTvDhUQmRQZXUsnnxnCgbfw8SsHcLEKnhmtk/P5Ja5SYAeFnFZe9w9cS5jsVehFutNs9MXkGolvqgCdISjURy/Y0eB5SRyw0xtGqF4vFyOfHRLg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from CY5PR12MB6405.namprd12.prod.outlook.com (2603:10b6:930:3e::17)
- by BY5PR12MB4164.namprd12.prod.outlook.com (2603:10b6:a03:207::13) with
+ bh=4Kc6JLowibTlb9Z3Kq57oZKxBJCZwTi9sKmJoBW8kx4=;
+ b=iNG6cM3dHJ2uRup6ZoMYxaTprOOMvt6VzTiRCFuDZYlwCIZ8OMPP5plKqFNPlx+H46R4GFYORBRVIQofj/7nEcZ3y3TWxqQEedVSq+NzWZyMljCLM0AyJur/fI3KV3YD8D0/QGavKSKzi4FjKcg92PrU3ObGnmI0vg7bW/VRSWEPPY4dzCBNcgzPySL91uVn3GWCGkEC1kaRqQ4BnkidAq+A3LmmWU9Aqf/cbHiQokaMfGwNLeWDmrZ+x5kkynh8l7AcSj6fHe4+JMIPHYtunSgmv3mfFwyEl5mqEtkotzqZatm5qgc+iekgu9E8CLXotQpePV62K74tsiBjRqICkg==
+Received: from AM6PR03MB5080.eurprd03.prod.outlook.com (2603:10a6:20b:90::20)
+ by DBAPR03MB6613.eurprd03.prod.outlook.com (2603:10a6:10:19b::5) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8445.19; Mon, 17 Feb
- 2025 17:27:15 +0000
-Received: from CY5PR12MB6405.namprd12.prod.outlook.com
- ([fe80::2119:c96c:b455:53b5]) by CY5PR12MB6405.namprd12.prod.outlook.com
- ([fe80::2119:c96c:b455:53b5%7]) with mapi id 15.20.8445.017; Mon, 17 Feb 2025
- 17:27:15 +0000
-Date: Mon, 17 Feb 2025 18:27:10 +0100
-From: Andrea Righi <arighi@nvidia.com>
-To: Yury Norov <yury.norov@gmail.com>
-Cc: Tejun Heo <tj@kernel.org>, David Vernet <void@manifault.com>,
-	Changwoo Min <changwoo@igalia.com>, Ingo Molnar <mingo@redhat.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Juri Lelli <juri.lelli@redhat.com>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-	Valentin Schneider <vschneid@redhat.com>,
-	Joel Fernandes <joel@joelfernandes.org>, Ian May <ianm@nvidia.com>,
-	bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 8/8] sched_ext: idle: Introduce node-aware idle cpu kfunc
- helpers
-Message-ID: <Z7NxboD4_G7HVAlf@gpd3>
-References: <20250214194134.658939-1-arighi@nvidia.com>
- <20250214194134.658939-9-arighi@nvidia.com>
- <Z6-1mQMBhq4OOlvB@thinkpad>
- <Z7M8h8jGEPoPmmiT@gpd3>
- <Z7Nww_e-aHXsfXcS@thinkpad>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Z7Nww_e-aHXsfXcS@thinkpad>
-X-ClientProxiedBy: FR4P281CA0370.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:f8::16) To CY5PR12MB6405.namprd12.prod.outlook.com
- (2603:10b6:930:3e::17)
+ 2025 17:27:46 +0000
+Received: from AM6PR03MB5080.eurprd03.prod.outlook.com
+ ([fe80::a16:9eb8:6868:f6d8]) by AM6PR03MB5080.eurprd03.prod.outlook.com
+ ([fe80::a16:9eb8:6868:f6d8%5]) with mapi id 15.20.8445.016; Mon, 17 Feb 2025
+ 17:27:46 +0000
+From: Juntong Deng <juntong.deng@outlook.com>
+To: ast@kernel.org,
+	daniel@iogearbox.net,
+	john.fastabend@gmail.com,
+	andrii@kernel.org,
+	martin.lau@linux.dev,
+	eddyz87@gmail.com,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	kpsingh@kernel.org,
+	sdf@fomichev.me,
+	haoluo@google.com,
+	jolsa@kernel.org,
+	memxor@gmail.com,
+	snorcht@gmail.com
+Cc: bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [RFC PATCH bpf-next 2/3] bpf: Add bpf_runtime_kfunc_tracing_hook
+Date: Mon, 17 Feb 2025 17:23:49 +0000
+Message-ID:
+ <AM6PR03MB5080A03B62901EA2AF9C78AC99FB2@AM6PR03MB5080.eurprd03.prod.outlook.com>
+X-Mailer: git-send-email 2.39.5
+In-Reply-To: <AM6PR03MB50804A5BF211E94A5DF8F66699FB2@AM6PR03MB5080.eurprd03.prod.outlook.com>
+References: <AM6PR03MB50804A5BF211E94A5DF8F66699FB2@AM6PR03MB5080.eurprd03.prod.outlook.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: LO4P265CA0024.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:2ae::19) To AM6PR03MB5080.eurprd03.prod.outlook.com
+ (2603:10a6:20b:90::20)
+X-Microsoft-Original-Message-ID:
+ <20250217172350.56184-2-juntong.deng@outlook.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+X-MS-Exchange-MessageSentRepresentingType: 1
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY5PR12MB6405:EE_|BY5PR12MB4164:EE_
-X-MS-Office365-Filtering-Correlation-Id: 0a173386-eac3-4eed-fce1-08dd4f78521e
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|7416014|376014|366016;
+X-MS-TrafficTypeDiagnostic: AM6PR03MB5080:EE_|DBAPR03MB6613:EE_
+X-MS-Office365-Filtering-Correlation-Id: af192bcd-3b9d-4441-58fd-08dd4f7864c7
+X-Microsoft-Antispam:
+	BCL:0;ARA:14566002|5072599009|19110799003|15080799006|8060799006|461199028|440099028|3412199025|41001999003;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?Q/bIo/52BcGbBommSFCff6b2fgdgA+gzhWN66IFerPTRoiAB6GcJgq/PGnZ3?=
- =?us-ascii?Q?ikMBrDcqkQAOKbbqEFPzoyO8dB1q69or51MbIOFQDUhokurfQ0RvtkI9gllh?=
- =?us-ascii?Q?vY3MKqMf15nu62z3laTLlLyiQTT7b38RwpdyjT9iQUdAnacPPsc7oIM/fNcP?=
- =?us-ascii?Q?nw86c6ewfQFDB4LTY+CtVzi5KkkyWpbkJL9BDNoykfK8eGajODjaus6a6Bh+?=
- =?us-ascii?Q?zGpA1WStyAOOvbUFyUslytTrJug88+P4s74KBw4K2J96TwfME3KoBeVlJfv9?=
- =?us-ascii?Q?j73fAPreiQXOqt0bijqc31wYY6Z4vweT8HY2W0oqKlUZ4KC4OHmmqSOSDJJ8?=
- =?us-ascii?Q?wZOB8xrik050WXeD2vQPFp2weLjC8ljCAMWsaQW+V84Nv2axmiXojTrd4Qq3?=
- =?us-ascii?Q?jUPn7Ee7j0uPBXfTI1BC3tptyn6AXy47c1egF8jb8EN1Jiunl4ECGUihUje+?=
- =?us-ascii?Q?z6F45Ae488eJE6EXG5PBtAvbuAUaps1UZl0GbZmHj28zSjn4bPX4LIaf/mBN?=
- =?us-ascii?Q?0YxPKF419ELt8MnXcd98KeWO/Xjk38XVEi8KfFA0eXFz/y4OsphqnFrt+Q9c?=
- =?us-ascii?Q?uf62lGRlCNrm9jEuom5s4/9gsxS73/EM7n1iSjhc7fKchxySZNHkvZ7rbHf7?=
- =?us-ascii?Q?s8PQ29wVqQsOfhz0Eho7srWZBsr794ng6eO7uw9QHqqVsQqsA3SbulVSh3MG?=
- =?us-ascii?Q?t3KztZoIN5jGVzl0ttkVj7nLH5FqtrjPH4gnwlYqvBbvBvdZkM15hs3H5csM?=
- =?us-ascii?Q?owA5YWISRiNrvdcfDNtRmtmceHboR29tsHO1+QpBGZa9ozvFERf3MT5la8Ru?=
- =?us-ascii?Q?OS4DrvDgYQISGeUBlI/AjXMT/BuBVcEbhg+LkGNcluL6Kq4gj2/l01U5mpb5?=
- =?us-ascii?Q?pKb/2z++/vRUtD4fDf9FryF2E5LnYmd1eyZK6XxGr88Ec57JYL9s0EM2UNGP?=
- =?us-ascii?Q?cV8l4XA4zDxIX/sniHsygb1SKfOC+s5H5ugaisf7o5gKWeVQ+XAiVSE0tF0u?=
- =?us-ascii?Q?pK0AdSK+RGwtCoBSkz8RDqiJzwKU+ThUlihwont0rag3lxPQKGaG0bVjKUYt?=
- =?us-ascii?Q?+SXRCcePUIhQQKzsgcfNZ3Tt+M88ej8S1M17uDEMU93s31DiwrZ0LUh4PaDT?=
- =?us-ascii?Q?rjZm7su8ZJipeFQfoFPnu2N2s7FUXxcB30k0NidvtRhA4RIxvHWe1Cwl2Pxs?=
- =?us-ascii?Q?RNpxa+LvOz9W8goFfSvW7skV5tpLOPQRIb6BIMNkHphvfqaKuuMOMoCRtp9/?=
- =?us-ascii?Q?3zSkJ71ZE0R/OHasR968Hf4/KnNROEJu7EBf4aqmbgT0KPdci08vFmGmhSmA?=
- =?us-ascii?Q?5m4bnxmsaNk87RqocmTegczM4Jwtyh8vQrnx7tFuHtGaChmAsOOdz+RJATgw?=
- =?us-ascii?Q?xI5ppyMVZqg1wcNIAT+PNwNAtD04?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY5PR12MB6405.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(7416014)(376014)(366016);DIR:OUT;SFP:1101;
+	=?us-ascii?Q?X9IvEg28ukM7lLkThR5RwZH7iHOhlOjR0f4ZO9gVWoseSs1Dq0g2+PVzD8Kk?=
+ =?us-ascii?Q?vD7rATCIwXscO0SZ4R+1n+W1+OgplGsOPGk7G9wqV9h7rxxKRXPq4J1Qjy8W?=
+ =?us-ascii?Q?D/1R+EACc5meRt7eBhw4gKdXJuiG0FZrBttL/qkItenvghsb6HkXNr0sD/+C?=
+ =?us-ascii?Q?VUhYH59WawxPNyJCYW2Vb3lMBVitUh3La5oRln24wZZUP84EOUdKBDPXNn7+?=
+ =?us-ascii?Q?UbisbzI1T8c7lmitK8MQbw266OkMfHaZNrO2CjhcB522uV6LqIU1tSdxpF3+?=
+ =?us-ascii?Q?Heo3jMrgsWm4DnWP3vsNc/Na519bhRAQthJkP1mSu+j0yV2My97bvLBKl0w2?=
+ =?us-ascii?Q?n0dT6N39OIcz0DoqM6xU51OtikHtw2uD92+CiaNru7ufLwJ2Vwa5eK0wBvnR?=
+ =?us-ascii?Q?lq53mH2d+ZsJWiOl4kjxRgE8tbSZoBziSf9xvLrOfR6owO1hFmgCOlPNctAW?=
+ =?us-ascii?Q?k2avP2kkMWg3N8dsNOlQM4M6btheHmemRahgQ2SNc0w4h/3TReNt85ILzrZW?=
+ =?us-ascii?Q?JrQgj/EZ6yOAR2qrwjSeFlB8VVmugbzFjN+CyXwoMdyt8QGIkTJE/qZZHhXw?=
+ =?us-ascii?Q?lnZ/1mIAPDXXt70EwWHImw0ZtQaeUa1HzlmGEfvPvp7OcK4Me5Gq4670PQSc?=
+ =?us-ascii?Q?/64Ugzlv1NjRJMe608iOu4PjxKR66ryqKbyq/o7RlHKW2syHpFtbngJrn9ny?=
+ =?us-ascii?Q?CfDJZNsnCz2kiCjq4D2ipmNM/zkkHMA26xyoGkaLU2hQgssYOfJYQ1glvwIz?=
+ =?us-ascii?Q?3fbrFXoMBCumSUQV50johjXXeLOGG0va6ZGqBxxosDL4BIBPF4wmqK/tkz3C?=
+ =?us-ascii?Q?rWlaQGj0EI/oyFwrmNJfOZOsMxpX6jG2Em9GD8zYEZtXaQph/X3chbWNnnUy?=
+ =?us-ascii?Q?VE7RtlAyG2/3xpHNfqxcAoZEIhMG9mGFVI26Jx8aGsfHii675wgrWiKAOqYs?=
+ =?us-ascii?Q?PRXXeOOcYKlMUY7zH54QieK8B/4T3mfVR/b/O8+8Fcu+P2m8I+X6ajBd7cJ+?=
+ =?us-ascii?Q?Xk3ZhVgk0fVWMmzo3iGmj1r24Cfakys0IEAsMw6qMD/Wy9xawvfAqw3H1nnd?=
+ =?us-ascii?Q?xxi4gwTievknYQmet/lo4sfQlCaByA=3D=3D?=
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?AUfKKDpFzOQMEl9QTMd0+ADDIdzIgUIUMOWDwTPjjWWzw4ZSH1zr8tgCp9ff?=
- =?us-ascii?Q?Umsf3yM9+UGAel9bk1TJg4z/NJovHH+c7aXZXshUDP+Hq66KfYVv4ti6oL4J?=
- =?us-ascii?Q?4dZVUWp8mqooumocz73ENz8l/vNjEyVhSfSBxbywjc7I7svOGwEJxqDDO0qt?=
- =?us-ascii?Q?6LwuZkIKFDJaZRN6hePImk+kBvnOXyJ87XA9gzvEcNH0AOIbqM8J/n0WWn92?=
- =?us-ascii?Q?WuluFntLKIXE955ecRlgt/elgLFsX8Qfq0bK0CFpyasBBvYaEjxneg4ujqAA?=
- =?us-ascii?Q?9HmuIifrVmnobkcYwU1CwgFeLeTmTOdoUMoSVIdF5PbDc+G7lPdlH4PaJTFT?=
- =?us-ascii?Q?hIcd7z3wSOv4gz43+kqwwaoEEcrf1bc1JJ4nSNyyIDXSj2uBGVNUPSOFgA1a?=
- =?us-ascii?Q?YHXyJ3SGWYA9+/3yoSMvwfoh0P1tus/LSNQradtPbyysNb8B6AiSc3U4yMBs?=
- =?us-ascii?Q?/pVYce2kD/bXCUeAWnRZK55UlPIiAtIMY1AeIy7Z7m42e6xOCBodFZQTMXtb?=
- =?us-ascii?Q?Gl+p8dXUPCKL+i14PfgCHmnCpPfJ6WTJGPiFkrZZYdFKppxama9wQZDtvYfy?=
- =?us-ascii?Q?mY9UUimQf6uyOeJxFE77av1qWgdHFJQ9WxgUSdEgtPO6DUWVCjvl2ZOwBQxr?=
- =?us-ascii?Q?a27F24XJ34Ni3Yu1EZ0oAN8cQQr0NN+JS1eKO7Qim/5qzVe1A+74gU1As5aZ?=
- =?us-ascii?Q?G+mkaH5ryc+1N26EVJ9gJaCCCWFAWg69gA6hYr+eHnH0JwjxF13+V8QcmSi7?=
- =?us-ascii?Q?v4uCighPEnqMfWMrssKDcl5z4Dgvawnn/fBp+L8EA9zGvvXLd2StHlxZ5tdn?=
- =?us-ascii?Q?1GJBVMfgujpKA8cSSCHA8KQwQRg4cTefYM16LQ9TFrbG/4pd3Npt7+IVGtlv?=
- =?us-ascii?Q?VdyCbIehZcj26MWZ58atwipyd/V7M8y4cfyd6YhNzzF9AhWAFl844g72Mnod?=
- =?us-ascii?Q?3PddKTc4AbtP6n2g56uN28VckhOBCGlw7qQaHr94NI1QW/l/xhAZRLLVONS9?=
- =?us-ascii?Q?nVetrc4cCqjQAmwtng7gZ+IDyVHehWMsw6cbvpIEG0BoAkUAMAkcDog4twi4?=
- =?us-ascii?Q?SOX9u4C7C7z/KuF+zKDeNkwt67uRkgM6pOOisFe6nGAV5o3xGXvKKWqzQR41?=
- =?us-ascii?Q?FKismVEMva/Fw7SSSiP/8Ers9BsLFIce0dOjswuXTef6lLJn+gpKOFaYYRuf?=
- =?us-ascii?Q?WF2h/LbKj0Qbk6Hk8s1J32oSkhaNkRbQ22gQBLRalXJQWweWGROvC0QMpWkv?=
- =?us-ascii?Q?BxKsMv52U4fxOHZ5LFoy2Jw5vrmWgIMSLqFqDDeBh/mrbtyZS6APsZ19wu9A?=
- =?us-ascii?Q?1cbvIjPurdeC4OTb6smjSe1qXEgc9YoZSrqAxpEV4ZY1yvVBtL2JCMEry+Iq?=
- =?us-ascii?Q?DHikUiBAL0Jf7u84rED9baUyh07e5ZDghBXS8RcZHxHNDmybOf1ypWL9x3hu?=
- =?us-ascii?Q?//TJfKlTv6PbzO3t3aXM9Djd8Vgq+4mizEUTBoWtg+BxLQEFpSezavPXphQl?=
- =?us-ascii?Q?sK3LWTITSMQ/BOm2/sCGscYz8ndRkZqKuYeQ7Ogld2ySwpebfNdJqMIL+L71?=
- =?us-ascii?Q?Z5LP3cXKV/sZa6qLMHU7kjS7896mbBdGoqZyG2gR?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0a173386-eac3-4eed-fce1-08dd4f78521e
-X-MS-Exchange-CrossTenant-AuthSource: CY5PR12MB6405.namprd12.prod.outlook.com
+	=?us-ascii?Q?Ve4eTiIgLzT0HuEQVrcFTduu7PQjFk0LlZcjC1NXhCNBmGKXhMwU3qK0a+Yc?=
+ =?us-ascii?Q?pSQoRXPEouJW1IEDHQYAlynW021ZqDZh+cmOTHLjpCWf9bLTi4rpNTB08z3A?=
+ =?us-ascii?Q?2PG4D2bykamHDbXOLFh664Nyp4zKp4i4cRSX17lRl9D1gyElJiA7iFDmxhXM?=
+ =?us-ascii?Q?UDhXDfx2KsLBy2WbrCTiBTGONSOz0D5OiS2wzHE6BNIXvZ+UgQGYttLdLuE1?=
+ =?us-ascii?Q?mdcToJKpyfpErUaSaNBveWIzOB0F2moGw7+b0x5FOnXRe2xoWvNx4KLPBev2?=
+ =?us-ascii?Q?wIUHFl01sJ/xl76a73uJeqVxNP+hXd0awUh0nUyUNdhLqiPPiiD25tCmYRIl?=
+ =?us-ascii?Q?BAwmo5kwOPkUE5M52xkv7dPqs7VWXn6tS3ZlUPyBK6uMseztYDFy8clYf5Bb?=
+ =?us-ascii?Q?FB/0Nen7i0aJXPSQItUqCG9Ks3x10tRcVFTKByzGK13PfWorU+aPp6ZllZ2K?=
+ =?us-ascii?Q?0Prbo6BOK8gzZ/C2TXV3r/bmEw+bMr3sQN87tm+sQtzdJ4v3t11Cun0VH1Mm?=
+ =?us-ascii?Q?DxTYBeEqfhz0RvL7l5wxxum0uupkbMDZq8mfvKQ+ki1NotYDtvgPBu3UPhPh?=
+ =?us-ascii?Q?v5QJhLPi2+us3pceTQMY7Puv3Bli+pxGLnsjRHoJjq5C1zNMhwUdxLOAxFD8?=
+ =?us-ascii?Q?jMxQpwCeya27V2wDrqrq80s7hV+RUT+Bu7LbeL6FkQZH0TEPNgBSv9RKvAxs?=
+ =?us-ascii?Q?Rw34DmcJofE10B0A6yZaLOt1VjetAIDXyaBsUJuNp7P4v5+0VXy+/XPxhj89?=
+ =?us-ascii?Q?hpp/RFSNYfvRD15It3oqvZgq1OLNEDH9t4FmryeuELGZDDKxXlZENKl8S2uZ?=
+ =?us-ascii?Q?GNHLH0vF2stcsnkUfNXuZt6opfgaD6xwFNuYvDnXcuXm5pHsfQxsxQhd985U?=
+ =?us-ascii?Q?7Y2lX4x4ihQMTKPHZLV99D5sKEZRwr9bgigEXXkk95X2d09pOk2cJcRn3EF2?=
+ =?us-ascii?Q?LTP7Oc9xwEqyn2LlCUUE4TLAG2sB28olJh8a9bod55JZ9Apx5BnOh50Ih1vX?=
+ =?us-ascii?Q?bST0Kz1wrIYPfOA/2WmA45mDK/9JnHcY+NKtB2679nRnsbflDRApYl70Z1Ua?=
+ =?us-ascii?Q?5ljwR/bq5jqhTVWCwJl7fO45zC6mnh8e1nS8a41cM9ScOMguzjjdcpYj9t7f?=
+ =?us-ascii?Q?uLbWg50TTGGD452zrxa7YqeXWcKHRmJzfZ7ld7eR6JDFSbBjQaqyhhLT9Yxf?=
+ =?us-ascii?Q?x0E2nRkCp9Udi1uDmhAC49PqkZiKvjUGVMunFnBIbKZWSIIrWjRnEbSEPL7O?=
+ =?us-ascii?Q?Gr0XlDoSeQd5quwDWRrV?=
+X-OriginatorOrg: outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: af192bcd-3b9d-4441-58fd-08dd4f7864c7
+X-MS-Exchange-CrossTenant-AuthSource: AM6PR03MB5080.eurprd03.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Feb 2025 17:27:15.0356
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Feb 2025 17:27:46.7779
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: /Ti8ZpogRAeEISgQ1UUgy7bNKm+6bF0xdeF0L94yQC91t5zWVaUQwdPqGphOOc+ephCPmWuJCOVCAUt0VndTrQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4164
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg:
+	00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBAPR03MB6613
 
-On Mon, Feb 17, 2025 at 12:24:19PM -0500, Yury Norov wrote:
-> On Mon, Feb 17, 2025 at 02:41:27PM +0100, Andrea Righi wrote:
-> > On Fri, Feb 14, 2025 at 04:28:57PM -0500, Yury Norov wrote:
-> > > On Fri, Feb 14, 2025 at 08:40:07PM +0100, Andrea Righi wrote:
-> > ...
-> > > > +/**
-> > > > + * scx_bpf_get_idle_cpumask_node - Get a referenced kptr to the
-> > > > + * idle-tracking per-CPU cpumask of a target NUMA node.
-> > > > + *
-> > > > + * Returns an empty cpumask if idle tracking is not enabled, if @node is
-> > > > + * not valid, or running on a UP kernel. In this case the actual error will
-> > > > + * be reported to the BPF scheduler via scx_ops_error().
-> > > > + */
-> > > > +__bpf_kfunc const struct cpumask *scx_bpf_get_idle_cpumask_node(int node)
-> > > > +{
-> > > > +	node = validate_node(node);
-> > > > +	if (node < 0)
-> > > > +		return cpu_none_mask;
-> > > > +
-> > > > +#ifdef CONFIG_SMP
-> > > > +	return idle_cpumask(node)->cpu;
-> > > > +#else
-> > > > +	return cpu_none_mask;
-> > > > +#endif
-> > > 
-> > > Here you need to check for SMP at the beginning. That way you can
-> > > avoid calling validate_node() if SMP is disabled.
-> > 
-> > As mentioned in the other email, I'm not sure if we want to skip
-> > validate_node() in the UP case.
-> > 
-> > I guess the question is: should we completely ignore the node argument,
-> > since it doesn't make sense in the UP case, or should we still validate it,
-> > given that node == 0 is still valid in this scenario?
-> 
-> Ok, I see. You don't promote the error from validate_node(), but you
-> print something inside.
+This patch adds the bpf_runtime_kfunc_tracing_hook.
 
-Right, it calls scx_ops_error() inside, that prints the error and also
-forces the active BPF scheduler to exit (it's like an exception for the BPF
-scheduler basically).
+When a bpf program is in BPF debug mode, all calls to kfuncs and helpers
+will be installed with bpf_runtime_kfunc_tracing_hook.
 
--Andrea
+The arguments, return value, and timestamp of this call are recorded in
+bpf_runtime_kfunc_tracing_hook.
+
+Since this is a proof of concept, I output the information to the
+tracing ring buffer directly in bpf_runtime_kfunc_tracing_hook.
+
+In actual implementation, bpf_runtime_kfunc_tracing_hook should only be
+responsible for recording information. Parsing and outputting
+information should be done in another thread to avoid affecting the
+performance of the bpf program.
+
+Signed-off-by: Juntong Deng <juntong.deng@outlook.com>
+---
+ arch/x86/net/bpf_jit_comp.c |  2 +-
+ include/linux/btf.h         |  4 ++-
+ kernel/bpf/btf.c            | 72 ++++++++++++++++++++++++++++++++++++-
+ 3 files changed, 75 insertions(+), 3 deletions(-)
+
+diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+index da579e835731..93714ec975e2 100644
+--- a/arch/x86/net/bpf_jit_comp.c
++++ b/arch/x86/net/bpf_jit_comp.c
+@@ -2198,7 +2198,7 @@ st:			if (is_imm8(insn->off))
+ 				ip += 2;
+ 			}
+ 			ip += x86_call_depth_emit_accounting(&prog, func, ip);
+-			runtime_hook = select_bpf_runtime_hook(func);
++			runtime_hook = select_bpf_runtime_hook(func, bpf_prog);
+ 			if (runtime_hook) {
+ 				emit_mov_imm64(&prog, X86_REG_R9, (long)func >> 32,
+ 					       (u32) (long)func);
+diff --git a/include/linux/btf.h b/include/linux/btf.h
+index 46681181e2bc..c4195479d0c1 100644
+--- a/include/linux/btf.h
++++ b/include/linux/btf.h
+@@ -571,7 +571,9 @@ void *bpf_runtime_acquire_hook(void *arg1, void *arg2, void *arg3,
+ 			       void *arg4, void *arg5, void *arg6);
+ void bpf_runtime_release_hook(void *arg1, void *arg2, void *arg3,
+ 			      void *arg4, void *arg5, void *arg6);
+-void *select_bpf_runtime_hook(void *kfunc);
++void *bpf_runtime_kfunc_tracing_hook(void *arg1, void *arg2, void *arg3,
++				     void *arg4, void *arg5, void *arg6);
++void *select_bpf_runtime_hook(void *kfunc, struct bpf_prog *bpf_prog);
+ const struct btf_type *btf_type_by_id(const struct btf *btf, u32 type_id);
+ void btf_set_base_btf(struct btf *btf, const struct btf *base_btf);
+ int btf_relocate(struct btf *btf, const struct btf *base_btf, __u32 **map_ids);
+diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+index 917d91494d00..4d114d2739ac 100644
+--- a/kernel/bpf/btf.c
++++ b/kernel/bpf/btf.c
+@@ -9740,12 +9740,82 @@ void bpf_runtime_release_hook(void *arg1, void *arg2, void *arg3,
+ 	print_bpf_active_refs();
+ }
+ 
+-void *select_bpf_runtime_hook(void *kfunc)
++void *bpf_runtime_kfunc_tracing_hook(void *arg1, void *arg2, void *arg3,
++				    void *arg4, void *arg5, void *arg6 /* kfunc addr */)
++{
++	char kfunc_name[KSYM_SYMBOL_LEN], helper_proto_name[KSYM_SYMBOL_LEN];
++	const void *args[5] = {arg1, arg2, arg3, arg4, arg5};
++	const struct btf_type *kfunc_type, *kfunc_proto;
++	struct bpf_func_proto *helper_proto;
++	int i, vlen = 0, index = 0;
++	unsigned long rem_usec;
++	bpf_kfunc_t kfunc;
++	bool return_void;
++	void *kfunc_ret;
++	struct btf *btf;
++	char str[300];
++	u32 kfunc_id;
++	u64 ts_nsec;
++
++	kfunc = (bpf_kfunc_t)arg6;
++	kfunc_ret = kfunc(arg1, arg2, arg3, arg4, arg5);
++	ts_nsec = ktime_get_ns();
++
++	/* In actual implementation, the following part should be executed in
++	 * another thread to avoid affecting the performance of the bpf program.
++	 */
++	rem_usec = do_div(ts_nsec, NSEC_PER_SEC) / 1000;
++	sprint_symbol_no_offset(kfunc_name, (unsigned long)kfunc);
++	sprintf(helper_proto_name, "%s_proto", kfunc_name);
++	helper_proto = (struct bpf_func_proto *)kallsyms_lookup_name(helper_proto_name);
++	if (helper_proto) {
++		for (i = 0; i < 5; i++) {
++			if (helper_proto->arg_type[i] == ARG_DONTCARE)
++				break;
++			vlen = i + 1;
++		}
++		return_void = helper_proto->ret_type == RET_VOID ? true : false;
++	} else {
++		btf = bpf_get_btf_vmlinux();
++		kfunc_id = btf_find_by_name_kind(btf, kfunc_name, BTF_KIND_FUNC);
++		if (kfunc_id < 0)
++			return kfunc_ret;
++
++		kfunc_type = btf_type_by_id(btf, kfunc_id);
++		kfunc_proto = btf_type_by_id(btf, kfunc_type->type);
++		vlen = btf_type_vlen(kfunc_proto);
++		return_void = kfunc_proto->type == 0 ? true : false;
++	}
++
++	memset(str, 0, sizeof(str));
++	index += sprintf(str + index, "%s", "(");
++	for (i = 0; i < vlen; i++) {
++		if (i == vlen - 1)
++			index += sprintf(str + index, "%lx", (unsigned long)args[i]);
++		else
++			index += sprintf(str + index, "%lx,", (unsigned long)args[i]);
++	}
++
++	if (return_void)
++		sprintf(str + index, "%s", ")");
++	else
++		sprintf(str + index, ") = %lx", (unsigned long)kfunc_ret);
++
++	trace_printk("[%lu.%06lu] %s%s\n",
++		     (unsigned long)ts_nsec, rem_usec, kfunc_name, str);
++
++	return kfunc_ret;
++}
++
++void *select_bpf_runtime_hook(void *kfunc, struct bpf_prog *bpf_prog)
+ {
+ 	struct btf_struct_kfunc *struct_kfunc, dummy_key;
+ 	struct btf_struct_kfunc_tab *tab;
+ 	struct btf *btf;
+ 
++	if (bpf_prog->debug_mode)
++		return bpf_runtime_kfunc_tracing_hook;
++
+ 	btf = bpf_get_btf_vmlinux();
+ 	dummy_key.kfunc_addr = (unsigned long)kfunc;
+ 
+-- 
+2.39.5
+
