@@ -1,100 +1,124 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from lelvem-ot01.ext.ti.com (lelvem-ot01.ext.ti.com [198.47.23.234])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1346B23958C;
-	Tue, 18 Feb 2025 11:10:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED17E9479;
+	Tue, 18 Feb 2025 12:29:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.23.234
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739877001; cv=none; b=N+1SbgJhVnftM8q/DQ0fW0GhWmnjakfRGg1CXreIY1Ydv8zk3sEBEAYENG/ozwRXTfoUkgk+3mBm865PDmQgZNnPVOPO7Xoftsy/MJ7+73Gn00dBsMIUuw2TMaYssuBLDH3Ak6I7rsKlHLf24ypeWZr5KiZvIEOEkID1OntRXEg=
+	t=1739881753; cv=none; b=Wums2w867m61NE+1zp9jhiX7fK+S8yJ7Vi+BBbS57vCG9p3XX3I40JTTWq+xXIGUjwTbcVT85C4Cjya18dlADKYtAKjpyM3kB+4c/B8hMjPf5Qve8bT9+kpSZsRBdAr0njt4yKyStg3y8zo9Ruo2cIhWCNlYn0aMqUbNCLELSIQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739877001; c=relaxed/simple;
-	bh=yxYYlJBoiZm+umfoO+u20ai1V04G+CgdbT+PHgCEfM8=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=nfeMLl1TttbAsdwVCMxX02USOCiUjN6KtxozRbEYvd4L9uD8uHorHzqYL3p5rGkXLZZiYOXlILyFpw6IBLBuP9P/zfaoyb+QqA4lBTR5tG97YXEPeD6XTslFnR068U4IdfCYL/0BxngjbzU3XW55c4RfB+NoPTxkUGF+z8ofIPc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DpItD0sM; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1739881753; c=relaxed/simple;
+	bh=efmpp9iVcKx6fv05L3Xyb5BwKMnnItOAh1S/HkWfiVE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=WrohTGnTW20xE2/+6/KtPGL7jlRlBFEmJR8XnJWLuRlJc0lLgZ1Gxyq+MFVXPM7lEi3xIINXLD+avjHDNhim9JGhbcWUPQULsZyUP2MMKPxoMel8YrHWVf6rvY2o1h7H6LaslY49uNfNypfmpuTmRe7wJZrA0v2W1zKbzoj0seU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=EWO1en5z; arc=none smtp.client-ip=198.47.23.234
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DpItD0sM"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75F11C4CEE2;
-	Tue, 18 Feb 2025 11:10:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1739877000;
-	bh=yxYYlJBoiZm+umfoO+u20ai1V04G+CgdbT+PHgCEfM8=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=DpItD0sMWHXYQNVy/EjKjs76cbZCsDuh9CDiri4uN4Ds6S+fYWRqlMmR5M1XKVxQf
-	 xGHxZ/4gGYHpLsw8+hr8Svn8sjsa0J1xjrxs1FIxiYjBELDBqNvNw9qzzsV1fw25AQ
-	 RRc1nJqHGK4nA1t5CJjvNCsxf5fsDrpHaUCEZ/HgNcckkOSIVRcJn9utGI4sOoknH/
-	 +PMGrnA2mTjzjSTCw5ko/s5aUumDemFkslTWJAy/jxCPs49cGcDDdpobzn75nQwbcC
-	 I+ATTEvyBngsenxjVzg59qPQmPX7PPQ46I8XW7wRP12705bpGpgiwR7/HC5QRRBL4g
-	 qF99VaZh4kEEQ==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id EB759380AA7E;
-	Tue, 18 Feb 2025 11:10:31 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="EWO1en5z"
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+	by lelvem-ot01.ext.ti.com (8.15.2/8.15.2) with ESMTPS id 51ICSafl1670795
+	(version=TLSv1.2 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 18 Feb 2025 06:28:36 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+	s=ti-com-17Q1; t=1739881716;
+	bh=SGEjmL6AiEaHGdfRsy6AnNrW7FJmxRmggnhRMW4Zow0=;
+	h=Date:Subject:To:CC:References:From:In-Reply-To;
+	b=EWO1en5zq8n48cQ7K/SNm/cWwkLYpAsYEFSKDuKUnCZqj/sR5zBrFl5R/+ERQ5hYN
+	 SY8+qykzvzgQq0iUOjy7WUSJ3azkEvoD+cd4lJgbUW1seHxtZrtAgUc9C7VRoVGJQR
+	 NYP0saM4W5NLD+Y2FkRiRjHC5HQZx7wk7GF5d+Jw=
+Received: from DLEE115.ent.ti.com (dlee115.ent.ti.com [157.170.170.26])
+	by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 51ICSacM070600
+	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+	Tue, 18 Feb 2025 06:28:36 -0600
+Received: from DLEE107.ent.ti.com (157.170.170.37) by DLEE115.ent.ti.com
+ (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Tue, 18
+ Feb 2025 06:28:35 -0600
+Received: from lelvsmtp6.itg.ti.com (10.180.75.249) by DLEE107.ent.ti.com
+ (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Tue, 18 Feb 2025 06:28:35 -0600
+Received: from [172.24.20.199] (lt9560gk3.dhcp.ti.com [172.24.20.199])
+	by lelvsmtp6.itg.ti.com (8.15.2/8.15.2) with ESMTP id 51ICSSYE102530;
+	Tue, 18 Feb 2025 06:28:28 -0600
+Message-ID: <94425bfd-7f2b-4fc4-86f8-a56e56173d22@ti.com>
+Date: Tue, 18 Feb 2025 17:58:27 +0530
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [EXTERNAL] Re: [PATCH net-next v2 1/3] net: ti: icssg-prueth: Use
+ page_pool API for RX buffer allocation
+To: Diogo Ivo <diogo.ivo@siemens.com>, Roger Quadros <rogerq@kernel.org>,
+        <danishanwar@ti.com>, <pabeni@redhat.com>, <kuba@kernel.org>,
+        <edumazet@google.com>, <davem@davemloft.net>, <andrew+netdev@lunn.ch>
+CC: <bpf@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <u.kleine-koenig@baylibre.com>, <krzysztof.kozlowski@linaro.org>,
+        <dan.carpenter@linaro.org>, <schnelle@linux.ibm.com>,
+        <glaroque@baylibre.com>, <rdunlap@infradead.org>,
+        <jan.kiszka@siemens.com>, <john.fastabend@gmail.com>,
+        <hawk@kernel.org>, <daniel@iogearbox.net>, <ast@kernel.org>,
+        <srk@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>
+References: <20250210103352.541052-1-m-malladi@ti.com>
+ <20250210103352.541052-2-m-malladi@ti.com>
+ <152b032e-fcd9-4d49-8154-92a475c0670c@kernel.org>
+ <615a2e1f-5ee5-4d80-a499-8ff06596a2fc@ti.com>
+ <c8bdd93d-5690-4b8a-819f-853756b57a71@siemens.com>
+Content-Language: en-US
+From: "Malladi, Meghana" <m-malladi@ti.com>
+In-Reply-To: <c8bdd93d-5690-4b8a-819f-853756b57a71@siemens.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net 0/4] sockmap, vsock: For connectible sockets allow only
- connected
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <173987703076.4044275.12767164064897444183.git-patchwork-notify@kernel.org>
-Date: Tue, 18 Feb 2025 11:10:30 +0000
-References: <20250213-vsock-listen-sockmap-nullptr-v1-0-994b7cd2f16b@rbox.co>
-In-Reply-To: <20250213-vsock-listen-sockmap-nullptr-v1-0-994b7cd2f16b@rbox.co>
-To: Michal Luczaj <mhal@rbox.co>
-Cc: john.fastabend@gmail.com, jakub@cloudflare.com, edumazet@google.com,
- kuniyu@amazon.com, pabeni@redhat.com, willemb@google.com,
- davem@davemloft.net, kuba@kernel.org, horms@kernel.org, sgarzare@redhat.com,
- mst@redhat.com, bobby.eshleman@bytedance.com, ast@kernel.org,
- daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev,
- eddyz87@gmail.com, song@kernel.org, yonghong.song@linux.dev,
- kpsingh@kernel.org, sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org,
- mykolal@fb.com, shuah@kernel.org, netdev@vger.kernel.org,
- bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org
+X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
 
-Hello:
+Hi Diogo,
 
-This series was applied to netdev/net.git (main)
-by Paolo Abeni <pabeni@redhat.com>:
-
-On Thu, 13 Feb 2025 12:58:48 +0100 you wrote:
-> Series deals with one more case of vsock surprising BPF/sockmap by being
-> inconsistency about (having an) assigned transport.
+On 2/18/2025 5:54 PM, Diogo Ivo wrote:
+> Hi Meghana, On 2/18/25 10: 10 AM, Malladi, Meghana wrote: > On 2/12/2025 
+> 7: 26 PM, Roger Quadros wrote: >> Can we get rid of SKB entirely from 
+> the management channel code? >> The packet received on this channel is 
+> never passed to
+> ZjQcmQRYFpfptBannerStart
+> This message was sent from outside of Texas Instruments.
+> Do not click links or open attachments unless you recognize the source 
+> of this email and know the content is safe.
+> Report Suspicious
+> <https://us-phishalarm-ewt.proofpoint.com/EWT/v1/G3vK! 
+> uvdgfB3F_Ow7QIXEnBKj3ybYT8I9yL0CM5RLkel44YW99zMeqk_TnCBkOwR0q45N5dLjtBz49EalJyUJ1-U1lPk6DIBve_3-$>
+> ZjQcmQRYFpfptBannerEnd
 > 
-> KASAN: null-ptr-deref in range [0x0000000000000120-0x0000000000000127]
-> CPU: 7 UID: 0 PID: 56 Comm: kworker/7:0 Not tainted 6.14.0-rc1+
-> Workqueue: vsock-loopback vsock_loopback_work
-> RIP: 0010:vsock_read_skb+0x4b/0x90
-> Call Trace:
->  sk_psock_verdict_data_ready+0xa4/0x2e0
->  virtio_transport_recv_pkt+0x1ca8/0x2acc
->  vsock_loopback_work+0x27d/0x3f0
->  process_one_work+0x846/0x1420
->  worker_thread+0x5b3/0xf80
->  kthread+0x35a/0x700
->  ret_from_fork+0x2d/0x70
->  ret_from_fork_asm+0x1a/0x30
+> Hi Meghana,
 > 
-> [...]
+> On 2/18/25 10:10 AM, Malladi, Meghana wrote:
+>> On 2/12/2025 7:26 PM, Roger Quadros wrote:
+>>> Can we get rid of SKB entirely from the management channel code?
+>>> The packet received on this channel is never passed to user space so
+>>> I don't see why SKB is required.
+>>>
+>> 
+>> Yes I do agree with you on the fact the SKB here is not passed to the 
+>> network stack, hence this is redundant. But honestly I am not sure how 
+>> that can be done, because the callers of this function access skb->data
+>> from the skb which is returned and the same can't be done with page (how 
+>> to pass the same data using page?)
+>> Also as you are aware we are not currently supporting SR1 devices 
+>> anymore, hence I don't have any SR1 devices handy to test these changes 
+>> and ensure nothing is broken if I remove SKB entirely.
+> 
+> I have some SR1 devices available and would be happy to test these
+> proposed changes in case they are feasible.
+> 
 
-Here is the summary with links:
-  - [net,1/4] sockmap, vsock: For connectible sockets allow only connected
-    https://git.kernel.org/netdev/net/c/8fb5bb169d17
-  - [net,2/4] vsock/bpf: Warn on socket without transport
-    https://git.kernel.org/netdev/net/c/857ae05549ee
-  - [net,3/4] selftest/bpf: Adapt vsock_delete_on_close to sockmap rejecting unconnected
-    https://git.kernel.org/netdev/net/c/8350695bfb16
-  - [net,4/4] selftest/bpf: Add vsock test for sockmap rejecting unconnected
-    https://git.kernel.org/netdev/net/c/85928e9c4363
+That's awesome. Once the changes have been aligned with Roger, I will 
+share the changes with you for testing before posting v3. Thanks for 
+your support.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+> Best regards,
+> Diogo
+> 
 
