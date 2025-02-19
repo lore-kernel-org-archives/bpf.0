@@ -1,226 +1,98 @@
-Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38D2A1B87F1;
-	Wed, 19 Feb 2025 06:23:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B885F1B86CC
+	for <bpf@vger.kernel.org>; Wed, 19 Feb 2025 06:29:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739946224; cv=none; b=LbAq7dudiOicWFa37MZZuJV6i9XytPQEFFiK7DVNMbMr9ZmrjZ2yi2IVsgHAph4mwdgCWsnBuZj5VeDlRHAnLkY0/FmoE6nAjeCfDv20lb/oupa/vnWto6eJcmivgAv9o5kugL9QeH7i50Ju0JYjXqGaTA+L0plq/U98LE6fe48=
+	t=1739946575; cv=none; b=S9BOatIms4I9ulO42Rr5V90UoNitRCn7G4Qav1K6A0L1hoFL7QLMDoruEHgnvZ+ATwae8a3R6zC/Rp13aB/tM4d5nIMwhZVYnNVnl7JDxKuWkLvK+iLtvUkIvCxY8GoU3K0CYn6EXztKxHtMxneVWxl4gPQOceBV6Pns6XL1xMA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739946224; c=relaxed/simple;
-	bh=g4fn69USjubabP/aaFEa1yeWpIt4/bfFB1okdWo3Dp8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=kgGBCMQJIscgqqG0GK2dAPW02xbn99sHCaFDdpO2RbbBjZby80zgFANhOkHxdoR39RIyDIYqbjN/pqR6gbNbCsdl+duBHy95K/KgxrhikJcx5vcuNykwbuAb8DNsnxfknDlhMB2W+tUlRIhxPYab0wJN9rOk82v0Yo2TWRjiGmw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TNZ0cu5z; arc=none smtp.client-ip=209.85.216.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TNZ0cu5z"
-Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-2fc0026eb79so11935957a91.0;
-        Tue, 18 Feb 2025 22:23:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1739946222; x=1740551022; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=kzuJPp/o5P7UYg2+VQ3VISzpITM/125GEB4688KsCm0=;
-        b=TNZ0cu5z7J3G2FTVQPTY/DKuWxKF+Oty+nZL8bJIPDwFHXNLUFFmtiB4Q2Fv76zgc+
-         O9pLN6OXG0YT0Nd8hRNNCoaV/rbh+/RhT4bD+IaHki6PjLt1Q+4uqcp/t9+q2HoHj+uB
-         7W+wNcGFXfd8XGQsbQIp8zooGKFfEe5GGVursqkpVfiS1/qqY3xwkm35DQaf+Rsj9yQl
-         B3fY8OTqUkvfcJVPqFFLPGq7jYCmmtkC0Lj3jPnhdPaF0ZzzCPYfV/3XxFeQ9ZZ+b04j
-         sn/J7ePoIFFJavHh6B3rCJqW1TvzSWPcw8xuZ4Qwyq0EhLef3X22vloCVMyAA1txHGvv
-         3/DA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739946222; x=1740551022;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=kzuJPp/o5P7UYg2+VQ3VISzpITM/125GEB4688KsCm0=;
-        b=NS0Jvj6pP36j07lyYLvmdWjhV/ZqZbMbVM8E4qsVtgoPZgMoI1/bTEfivVxU0xj+Yc
-         9QS6sQ0/J+f2YGgH3duAqFOGYAkJRn0Em+pUnwRkMK2aM4G6Ek3N1PoP7e55rS5WeXmu
-         btt55YzsfcygiOS0FR9Vi4a1FwXXQwnZqH6Qci4aZLc2nKusBD3uHoSQ4RJHuacaQAMN
-         hQnkLw/Qh6hWpSr1lfdY8RzwlLAIFpV/DWISkg9Jp4HQ3j63eYrk0XA0kMEzwITeAJNC
-         hxvvuHD5oTDYfu54Ao85cIMXVQ1IG/i1si+Mwx00fOrtbLdxFx798rId7nOryq+MPue7
-         TniQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXwyD5cPyi+7+bLvS2jyrLaBc0d3bknluEXWlbj6iuxsmISHqDRDLw1IiX0Zy0KM1XNeL0ami7W9H6o3kI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwmIwuCuNLp3lLMxUMpAJNw04YMo1iGLrJgVboD4Ov2usPk/BAG
-	1kVqij26CBqfbvQRDt6y7+HTi6AvcXDHFePjAvi0Z6ASG7FORaZf
-X-Gm-Gg: ASbGncu+TxXZSc71Gx4qyopr9d9BOU0rvaPowlNb5FGXJkGFKNBe+1+zTyZG7iNhmWp
-	Mg34nzqDxnSqH3JFJPtDfGPePyGmUKpUiqo2JrXJLEGcDBuwBV8V/EkUWMRfRNSYJGW+3YPDbLO
-	f4ErSopIkr81BRt/tb2830YA1qGxIHMlERAJP8qTO61yD8dn2JyxDbf2suDP9agKBhYOlW+stAv
-	iz93xyCPtAbW8QE4u8uWP+pMSYEuGGji6rjHPuMjaUeoqwQuwznnCSxLBnFLAPprvZoX2zImrli
-	qvSVFMixNkzT2YMVbO36i5KcefwKKq4Jiw==
-X-Google-Smtp-Source: AGHT+IHo/5/0ht8pdeC7qkzHv8YfKPz7ny4UAySp7z6Qsjptp8w1VopWzNuBH4QsBsSGagjgNKBLfA==
-X-Received: by 2002:a17:90b:3886:b0:2ee:edae:75e with SMTP id 98e67ed59e1d1-2fcb5a17cdamr3728032a91.13.1739946222233;
-        Tue, 18 Feb 2025 22:23:42 -0800 (PST)
-Received: from [172.23.161.38] ([183.134.211.52])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-220d53674b1sm98752675ad.98.2025.02.18.22.23.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 18 Feb 2025 22:23:41 -0800 (PST)
-Message-ID: <9df12336-ca00-4d45-a832-24203c334df7@gmail.com>
-Date: Wed, 19 Feb 2025 14:23:35 +0800
+	s=arc-20240116; t=1739946575; c=relaxed/simple;
+	bh=WVS4gMqTbtue7p1bajbWHcqjNe76LT9sju+K0EsgjBs=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=enVyDu8VRufLi/9pzzh675cKB6C1UMoU71VWRKJC0wqaMVEQEYd7qhN1m6gbHbvv0V+ZBMgR3+bgj0Lk2dbg/w7aycdOqWSUrUTUjuKrZUUKPp70dEV8fzxtlikkkjt1G5z+o7z4RtoYugSFTsIvaoN32Wob6iL5bw+UcoNTHLU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=none smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.93.142])
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4YyRLT3WKDz4f3jtD
+	for <bpf@vger.kernel.org>; Wed, 19 Feb 2025 14:29:05 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.75])
+	by mail.maildlp.com (Postfix) with ESMTP id C17B51A0D9D
+	for <bpf@vger.kernel.org>; Wed, 19 Feb 2025 14:29:21 +0800 (CST)
+Received: from ultra.huawei.com (unknown [10.90.53.71])
+	by APP2 (Coremail) with SMTP id Syh0CgBXYmU+erVnK7z_EA--.41413S2;
+	Wed, 19 Feb 2025 14:29:19 +0800 (CST)
+From: Pu Lehui <pulehui@huaweicloud.com>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Alan Maguire <alan.maguire@oracle.com>,
+	Pu Lehui <pulehui@huawei.com>,
+	Pu Lehui <pulehui@huaweicloud.com>
+Subject: [PATCH bpf-next] kbuild, bpf: Correct pahole version that supports distilled base btf feature
+Date: Wed, 19 Feb 2025 06:31:13 +0000
+Message-Id: <20250219063113.706600-1-pulehui@huaweicloud.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] libbpf: Wrap libbpf API direct err with libbpf_err
-To: Eduard Zingerman <eddyz87@gmail.com>, ast@kernel.org,
- daniel@iogearbox.net, andrii@kernel.org, haoluo@google.com,
- jolsa@kernel.org, qmo@kernel.org
-Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20250214141717.26847-1-chen.dylane@gmail.com>
- <88f0c25cc981f958e46d51560fbf6db7136a3fa0.camel@gmail.com>
-From: Tao Chen <chen.dylane@gmail.com>
-In-Reply-To: <88f0c25cc981f958e46d51560fbf6db7136a3fa0.camel@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:Syh0CgBXYmU+erVnK7z_EA--.41413S2
+X-Coremail-Antispam: 1UD129KBjvdXoW7Gr1UtFyUGFW5tw13Ar1UJrb_yoWDZrX_Cr
+	Z3KFWIg3yrGrsFqw4UJFW5Xr1jqr9akFs5Zw1xG3W7Zwn8KFZ5GFs3G34F9a12qay3WFyr
+	AF1UZF1jq3W7KjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+	9fnUUIcSsGvfJTRUUUb3xFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+	6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+	A2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr0_
+	Gr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s
+	0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xII
+	jxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr
+	1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E8cxa
+	n2IY04v7MxkF7I0En4kS14v26r1q6r43MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4
+	AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE
+	17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMI
+	IF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4l
+	IxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvf
+	C2KfnxnUUI43ZEXa7VUbGQ6JUUUUU==
+X-CM-SenderInfo: psxovxtxl6x35dzhxuhorxvhhfrp/
 
-在 2025/2/19 10:08, Eduard Zingerman 写道:
-> On Fri, 2025-02-14 at 22:17 +0800, Tao Chen wrote:
->> Just wrap the direct err with libbpf_err, keep consistency
->> with other APIs.
->>
->> Signed-off-by: Tao Chen <chen.dylane@gmail.com>
->> ---
-> 
-> While at it, I've noticed two more places that need libbpf_err() calls.
-> Could you please check the following locations:
-> 
-> bpf_map__set_value_size:
->    return -EOPNOTSUPP;       tools/lib/bpf/libbpf.c:10309
->    return err;               tools/lib/bpf/libbpf.c:10317
+From: Pu Lehui <pulehui@huawei.com>
 
-Will change it. Thanks
+pahole commit [0] of supporting distilled base btf feature released on
+pahole v1.28 rather than v1.26. So let's correct this.
 
-> 
-> ?
-> 
-> Other than that, I agree with changes in this patch.
-> 
-> Acked-by: Eduard Zingerman <eddyz87@gmail.com>
-> 
-> [...]
-> 
+Link: https://git.kernel.org/pub/scm/devel/pahole/pahole.git/commit/?id=c7b1f6a29ba1 [0]
+Signed-off-by: Pu Lehui <pulehui@huawei.com>
+---
+ scripts/Makefile.btf | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-I use a simple script, other places may also should be added:
-
-9727 line: return NUL; (API:libbpf_bpf_attach_type_str)
-9735 line: return NULL; (API: libbpf_bpf_link_type_str)
-9743 line: return NULL; (API: libbpf_bpf_map_type_str)
-9751 line: return NULL; (API: libbpf_bpf_prog_type_str)
-10151 line: return NULL; (API: bpf_map__name)
-10458 line: return NULL; (API: bpf_object__prev_map)
-
------------------------------------------------
-#!/bin/python3
-import re
-
-LIBBPF_PATH="tools/lib/bpf/"
-
-def process_functions(file_path, target_functions):
-     """
-     find return err fix
-     Args:
-         file_path: like libbpf.c btf.c etc.
-         target_functions: libbpf APIS
-     """
-     with open(file_path, 'r') as file:
-         lines = file.readlines()
-
-     function_info = {func: {'start': None, 'end': None, 'code': []} for 
-func in target_functions}
-
-     in_target_function = False
-     current_function = None
-
-     for i, line in enumerate(lines):
-         # check the start line
-         for func in target_functions:
-             if re.search(re.escape(func) + r'\s*\(', line):
-                 if ' __' in line:
-                     continue
-                 if '=' in line:
-                     continue
-                 if 'if' in line:
-                     continue
-                 if ';' in line:
-                     continue
-                 if '*' in func:
-                     continue
-                 in_target_function = True
-                 current_function = func
-                 function_info[func]['start'] = i
-                 function_info[func]['code'].append(line)
-                 break
-
-         # check return err in target function
-         if in_target_function and current_function:
-             function_info[current_function]['code'].append(line)
-             if re.search(r'\breturn\b', line):
-                 # check return
-                 if not re.search(r'\breturn\s+0\b', line):  # return 0 
-ignore
-                     if not re.search(r'libbpf_err|libbpf_ptr', line):
-                         print(f"code should fix at {i + 1} line: 
-{line.strip()} (API: {current_function})")
-
-             # check function end line
-             if re.search(r'}', line):
-                 function_info[current_function]['end'] = i
-                 in_target_function = False
-                 current_function = None  # Reset for the next function
-
-
-def extract_libbpf_apis(map_file):
-     """
-     extract APIS from libbpf.map
-     Args:
-         map_file (str): libbpf.map。
-     Returns:
-         list: libbpf APIs。
-     """
-     functions = []
-     inside_global_section = False
-
-     with open(map_file, 'r') as f:
-         for line in f:
-             line = line.strip()
-             if ';' in line and 'LIBBPF' not in line:
-                 functions.append(line.replace(';',''))
-
-     return functions
-
-map_file = "tools/lib/bpf/libbpf.map"
-input_files = ["libbpf.c",
-                "btf.c",
-                "bpf_prog_linfo.c",
-                "btf_dump.c",
-                "btf_iter.c",
-                "btf_relocate.c",
-                "elf.c",
-                "features.c",
-                "gen_loader.c",
-                "hashmap.c",
-                "libbpf_probes.c",
-                "linker.c",
-                "netlink.c",
-                "nlattr.c",
-                "relo_core.c",
-                "usdt.c",
-                "zip.c",
-                "str_error.c",
-                "strset.c"]
-
-target_functions = extract_libbpf_apis(map_file)
-print(f"Target functions extracted: {target_functions}")
-
-for input_file in input_files:
-     print(f"===========check file:{input_file}=============")
-     process_functions(LIBBPF_PATH + input_file, target_functions)
-
+diff --git a/scripts/Makefile.btf b/scripts/Makefile.btf
+index c3cbeb13de50..fbaaec2187e5 100644
+--- a/scripts/Makefile.btf
++++ b/scripts/Makefile.btf
+@@ -24,7 +24,7 @@ else
+ pahole-flags-$(call test-ge, $(pahole-ver), 126)  = -j$(JOBS) --btf_features=encode_force,var,float,enum64,decl_tag,type_tag,optimized_func,consistent_func,decl_tag_kfuncs
+ 
+ ifneq ($(KBUILD_EXTMOD),)
+-module-pahole-flags-$(call test-ge, $(pahole-ver), 126) += --btf_features=distilled_base
++module-pahole-flags-$(call test-ge, $(pahole-ver), 128) += --btf_features=distilled_base
+ endif
+ 
+ endif
 -- 
-Best Regards
-Dylane Chen
+2.34.1
+
