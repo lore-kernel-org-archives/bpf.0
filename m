@@ -1,281 +1,105 @@
-Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99DD11A841F
-	for <bpf@vger.kernel.org>; Wed, 19 Feb 2025 21:46:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7C3B286280
+	for <bpf@vger.kernel.org>; Wed, 19 Feb 2025 22:17:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740001620; cv=none; b=kQdp2LK9cyn/MEhzPaIOokOtwAboIMMEzB5DW+VquXwZ38lJYF8BWcRGitMzrprtFcO8Y6NR9V2qlbxfEooh16B6ExjcXQP8RwXW5R/2deL4UwirHK2r5J8wo/lJ4B1EkYJIZVRhz+mssm4wPEKEJoCPJkqjl9/1jF55YeUS+Ss=
+	t=1740003427; cv=none; b=EQZChxznzNBsvMa+erfpQJ3q0cz8DgoSIvLMovLNY4OHdxwu8L3dZ8vrqVYTzgU7SKeoKd1MgPltsFeyhbjWeVcT/9NVy9Y0QsOSFjt8RiVDmg+2+a0TYmxKXdPIXFSHaQPjQasxYM1a3B9E+f6gNV2ApBZqCVRwrLOXlfmYJpQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740001620; c=relaxed/simple;
-	bh=spD2IPWHJbNfrqj6V6dM25YSx0bpjkKaL8KOXqwmYUg=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=TctdveGO+0R3MaiL1FaNC24Co9kU6KSTWp9vDiQxGVUQVhTttOMysdRLwEfFWIj8vh2+IPodaNl0uEMkSFfRb8gqHScm4JD43ULxFrDCUXTqVuetkZBNZ/MoT7mcizhKh0wKT9N+yZ6shPxotUonLLpxaJhgAiXeHzpcnHO6qfY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ctshao.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=c1eWa90s; arc=none smtp.client-ip=209.85.216.73
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--ctshao.bounces.google.com
+	s=arc-20240116; t=1740003427; c=relaxed/simple;
+	bh=NTym6u2Y0dxRJ7bcuVVcMlXTapfPORlFjAZy6LBIVe8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=KLJArQcuDe2nIKVEPxEsaXObJ/RsIVUwLaRgRdM4klkXcf9gz9R8pGZX3xVKwYzNY1W9vQyu65bPkEdAxK605rL+XjcieyRs9aZCepStt7E0EqGJIV0rZWMZxqcnRIOunt3tcgUB80mtQkLDlX0/QXMNiJH46z5u//eI3zfU2J8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LVmYhgU4; arc=none smtp.client-ip=209.85.128.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="c1eWa90s"
-Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-2fbfa786aa4so626024a91.0
-        for <bpf@vger.kernel.org>; Wed, 19 Feb 2025 13:46:58 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LVmYhgU4"
+Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-43998deed24so2281505e9.2
+        for <bpf@vger.kernel.org>; Wed, 19 Feb 2025 14:17:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1740001618; x=1740606418; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=OkPOCIzCxbN6rf/sOEoHDE1WwJEvz8ihPapEp19yOIo=;
-        b=c1eWa90s9ERsbaiZYM38IPbBNQIPqdj3ImaIOqntQI5ADcOBq7CUDSRbhKZ60PdtAJ
-         aB+mhMNTwlieI7YaAPGrRhM1NSaSoiD4yRnNwDK6UBs2oSP0jO9YBSEiF4hz2Z/9CkdB
-         BvpQPwGDE/HUWo8jYvHhtNHJntOP+hMfq8jA8B2eKwh17yr9nw1z1I16z6gTNqPwECUU
-         D5LIxsvFlu/4aFp16SeGqJjxzW5eL8l0P5A52cB4DffTN0JVRcb1ZvHdEP/759VEimxO
-         cbpNSBhQck6wF93zk1IXiXlyaxmipxDtnXDGMNTyWtenMGCWQcDSGBNyP84JB3Y2wHmp
-         qYSg==
+        d=gmail.com; s=20230601; t=1740003424; x=1740608224; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=NTym6u2Y0dxRJ7bcuVVcMlXTapfPORlFjAZy6LBIVe8=;
+        b=LVmYhgU405quy1nPjRl17WWefOoNMODF6iICA4f7tyOlUl2uG/VQAqR9LpjCILyRox
+         BbfNpmNSBfoNlrFQ2chbt+YYVw7jWiUnFu5zkpg2gmKVJAx5W6t15BQQKAUZECTuiXwR
+         fnaZim8f5oAGB8MQMxn2rmlfOzBwdnPPfV1ayzHUVFDU6UO663yYUcaPycio7l/t/6kx
+         iS2doYik1kQ747oV0AjWJf+jkOcRtRgKXhYRiVVOw/WTx86ewZiNHV2rBbuYm6HD/B0r
+         PDscFMUlicFeKEci+WXv3rJmcglPJAx0oKPu+cCR4EPSkbb7rIPd1tdxct9Dja9CqSei
+         Qc0Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740001618; x=1740606418;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=OkPOCIzCxbN6rf/sOEoHDE1WwJEvz8ihPapEp19yOIo=;
-        b=Yl8YlK9dy+bTaTPcXvlG8rAnEOBdP2oG/X0MypwPEEQwI0iYyaxvoF9KyksiI4Pbsq
-         Gh6iBYz551K9TBuZq5F7pHffAlsr0VS7dlPsOzAk/9+Tvyx6M7bEB7fvt3Z5nvEJu620
-         dbR75KZHg06F7n9zxWid3YaRtRvNKZF+nyZNb8QOCD9eCXVo9egtZHcijjCduLQUNc97
-         llRufXHUR9IPiJqg4VaRogiN5q+YzzZnRGLJlm1lruj8NGoFWg+8FJ/XMLsRWEaFGq7B
-         4V8HE1bGoCaLX+elzXs22kJ/r2C0Krq13wt0tKcetTYrlJntlLMwfylv+fEyvcPpBHme
-         jMXA==
-X-Forwarded-Encrypted: i=1; AJvYcCXSlSRKqr7FVMEkN3QGYY3tRfykoKrOW9TIQBu/u5pV/hwRrd7vPZ2DrnP2X7iDDbLx/fk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxN5YL5ix/V5l8nbErFyvhSIsHXy/5b2eIhrBWjd3zE624HNW+5
-	CIuGvzPTOqkozdXmhKwnTpyRXzV5h3HXiM78KpQrHBdPQpNqb02i83fjMQBIejhjdtxcHyZQG+a
-	niQ==
-X-Google-Smtp-Source: AGHT+IFGsQ/ogkH6Qc8tr0rSOEGSPQyrMKMzjcxJTwdValwJTShzBiJFZhHTH8RKTn3adEgMSV+4z8lxcII=
-X-Received: from pjtd4.prod.google.com ([2002:a17:90b:44:b0:2fb:fa62:d40])
- (user=ctshao job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90a:d498:b0:2fa:9c9:20a3
- with SMTP id 98e67ed59e1d1-2fccbfd9f9amr1540053a91.0.1740001617948; Wed, 19
- Feb 2025 13:46:57 -0800 (PST)
-Date: Wed, 19 Feb 2025 13:40:03 -0800
-In-Reply-To: <20250219214400.3317548-1-ctshao@google.com>
+        d=1e100.net; s=20230601; t=1740003424; x=1740608224;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=NTym6u2Y0dxRJ7bcuVVcMlXTapfPORlFjAZy6LBIVe8=;
+        b=DKG12Pdr9ohkRReFO14AYJxeZ83OsLaJ21dAx2/ibt9DQ4blBUV/v4of7sB1xplnmQ
+         S1IFi6tnQcrvR7GxDtn4t+JYjfyvSVNN4VF+Fi4sAEgPcElexgTGPudHJQBI+tb0svNN
+         FBXnmsuYBNwZeVxqP/krlbFm6gFzteXkY3G/30fAYq0bs9rLnk7KtWoS5+YcKbzxC5XC
+         iognFk+hW7XOUyrmLKpsUXfDiXrOpexdpXTcC4a2xj55UmuRBn7myjJdorsOlFc20XN+
+         mLSukcowu/+NuitwEOIY8afuwH1c7hZepEiMGEKbTuymeY41si8f7gjsP9nPDcZPMqlA
+         MDRQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU1Klg2fEgA3hrlIeH1TtZkxuJKKIBc+Mh9SxJNMJk+wJxjpX8uK4HKSsu3KCv+6FesLv8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwYVdoCL6SpB/G42T6kUguQnzUEaj5HYx68pcV1FEIpzCclHG9K
+	0d+eepKHfLK9JtU+ve+5IpNsq4DIo8nUUA/z1UzhGRdjVdMyIje1Wibfa6Kgu1MbwF9RDC5uTY5
+	wEhETr0wqLXU/iRA29n40r8PiZY8=
+X-Gm-Gg: ASbGnct2Xy2S/tQtNn0i7mJXoW6EnhUB5PICod1aFZGER8q1JlVRkrulsWLe40eKSlk
+	LsLLe520BoLUbShW1isqPm0zVN/ZBbqI6IBhvKmHnE2M6sXUBCnwD1bdRdV+GLJAqz7Lkm6XZiC
+	nZefpREKfTJ4zqR4ThTNR+oDg5cD7c
+X-Google-Smtp-Source: AGHT+IH5XhysPuDS2tpnyojz/Pd9HzGWsvqd+Y6kEfq2mGSHaaOvzgg6JAR/B2QqMh1gOEmkZbpKRKPGAsIDlhVDQU0=
+X-Received: by 2002:a05:600c:1c9e:b0:439:88bb:d013 with SMTP id
+ 5b1f17b1804b1-43988bbd395mr125732545e9.7.1740003423777; Wed, 19 Feb 2025
+ 14:17:03 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20250219214400.3317548-1-ctshao@google.com>
-X-Mailer: git-send-email 2.48.1.601.g30ceb7b040-goog
-Message-ID: <20250219214400.3317548-5-ctshao@google.com>
-Subject: [PATCH v6 4/4] perf lock: Report owner stack in usermode
-From: Chun-Tse Shao <ctshao@google.com>
-To: linux-kernel@vger.kernel.org
-Cc: Chun-Tse Shao <ctshao@google.com>, peterz@infradead.org, mingo@redhat.com, 
-	acme@kernel.org, namhyung@kernel.org, mark.rutland@arm.com, 
-	alexander.shishkin@linux.intel.com, jolsa@kernel.org, irogers@google.com, 
-	adrian.hunter@intel.com, kan.liang@linux.intel.com, nick.forrington@arm.com, 
-	linux-perf-users@vger.kernel.org, bpf@vger.kernel.org
+MIME-Version: 1.0
+References: <20250219125117.1956939-1-memxor@gmail.com> <20250219125117.1956939-2-memxor@gmail.com>
+ <CAP01T76aV+2Y-U79Csf4+-scG92jc2ZwJUhDC1MQcx1ZJ4vwkw@mail.gmail.com> <c947f2bc7348c62810e398f9a8322abf5ae27ac6.camel@gmail.com>
+In-Reply-To: <c947f2bc7348c62810e398f9a8322abf5ae27ac6.camel@gmail.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Wed, 19 Feb 2025 14:16:52 -0800
+X-Gm-Features: AWEUYZlWzj9hwPE-pRG4BBy3Vutei3LksNUPJdhGxnD_Ae9gadEFz3_izyuM91M
+Message-ID: <CAADnVQ+Zr_5--xH-6QV7Odp1bCT-p0091YwCzh4hO2HWjOv=dg@mail.gmail.com>
+Subject: Re: [RFC PATCH bpf-next v1 1/2] bpf: Explore PTR_TO_STACK as R0 for bpf_dynptr_slice_rdwr
+To: Eduard Zingerman <eddyz87@gmail.com>
+Cc: Kumar Kartikeya Dwivedi <memxor@gmail.com>, bpf <bpf@vger.kernel.org>, 
+	Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai Lau <martin.lau@kernel.org>, kkd@meta.com, 
+	Kernel Team <kernel-team@meta.com>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-This patch parses `owner_lock_stat` into a RB tree, enabling ordered
-reporting of owner lock statistics with stack traces. It also updates
-the documentation for the `-o` option in contention mode, decouples `-o`
-from `-t`, and issues a warning to inform users about the new behavior
-of `-ov`.
+On Wed, Feb 19, 2025 at 1:20=E2=80=AFPM Eduard Zingerman <eddyz87@gmail.com=
+> wrote:
+>
+> On Wed, 2025-02-19 at 13:56 +0100, Kumar Kartikeya Dwivedi wrote:
+>
+> [...]
+>
+> > It also leads to veristat regression (+80-100% in states) in two selfte=
+sts.
+> >
+> > We probably want to avoid doing push_stack due to the states increase,
+> > and instead mark the stack slot instead whenever the returned
+> > PTR_TO_MEM is used for writing, but we'll have to keep remarking
+> > whenever writes happen, so it requires stashing some stack slot state
+> > in the register.
+> > The other option is invalidating the returned PTR_TO_MEM when the
+> > buffer on the stack is written to (i.e. the stack location gets
+> > reused).
+>
+> Would it be wrong, to always consider r0 to be a pointer to stack if
+> buffer is provided? It's like modelling the PTR_TO_MEM with some
+> additional precision.
+>
+> Otherwise, I think push_stack() is fine, as it keeps implementation simpl=
+e.
 
-Example output:
-  $ sudo ~/linux/tools/perf/perf lock con -abvo -Y mutex-spin -E3 perf bench sched pipe
-  ...
-   contended   total wait     max wait     avg wait         type   caller
-
-         171      1.55 ms     20.26 us      9.06 us        mutex   pipe_read+0x57
-                          0xffffffffac6318e7  pipe_read+0x57
-                          0xffffffffac623862  vfs_read+0x332
-                          0xffffffffac62434b  ksys_read+0xbb
-                          0xfffffffface604b2  do_syscall_64+0x82
-                          0xffffffffad00012f  entry_SYSCALL_64_after_hwframe+0x76
-          36    193.71 us     15.27 us      5.38 us        mutex   pipe_write+0x50
-                          0xffffffffac631ee0  pipe_write+0x50
-                          0xffffffffac6241db  vfs_write+0x3bb
-                          0xffffffffac6244ab  ksys_write+0xbb
-                          0xfffffffface604b2  do_syscall_64+0x82
-                          0xffffffffad00012f  entry_SYSCALL_64_after_hwframe+0x76
-           4     51.22 us     16.47 us     12.80 us        mutex   do_epoll_wait+0x24d
-                          0xffffffffac691f0d  do_epoll_wait+0x24d
-                          0xffffffffac69249b  do_epoll_pwait.part.0+0xb
-                          0xffffffffac693ba5  __x64_sys_epoll_pwait+0x95
-                          0xfffffffface604b2  do_syscall_64+0x82
-                          0xffffffffad00012f  entry_SYSCALL_64_after_hwframe+0x76
-
-  === owner stack trace ===
-
-           3     31.24 us     15.27 us     10.41 us        mutex   pipe_read+0x348
-                          0xffffffffac631bd8  pipe_read+0x348
-                          0xffffffffac623862  vfs_read+0x332
-                          0xffffffffac62434b  ksys_read+0xbb
-                          0xfffffffface604b2  do_syscall_64+0x82
-                          0xffffffffad00012f  entry_SYSCALL_64_after_hwframe+0x76
-  ...
-
-Signed-off-by: Chun-Tse Shao <ctshao@google.com>
----
- tools/perf/Documentation/perf-lock.txt |  6 +--
- tools/perf/builtin-lock.c              | 22 +++++++++-
- tools/perf/util/bpf_lock_contention.c  | 58 ++++++++++++++++++++++++++
- tools/perf/util/lock-contention.h      |  7 ++++
- 4 files changed, 88 insertions(+), 5 deletions(-)
-
-diff --git a/tools/perf/Documentation/perf-lock.txt b/tools/perf/Documentation/perf-lock.txt
-index d3793054f7d3..255e4f3e9d2b 100644
---- a/tools/perf/Documentation/perf-lock.txt
-+++ b/tools/perf/Documentation/perf-lock.txt
-@@ -140,7 +140,6 @@ CONTENTION OPTIONS
- --use-bpf::
- 	Use BPF program to collect lock contention stats instead of
- 	using the input data.
--
- -a::
- --all-cpus::
-         System-wide collection from all CPUs.
-@@ -179,8 +178,9 @@ CONTENTION OPTIONS
- 
- -o::
- --lock-owner::
--	Show lock contention stat by owners.  Implies --threads and
--	requires --use-bpf.
-+	Show lock contention stat by owners. This option can be combined with -t,
-+	which shows owner's per thread lock stats, or -v, which shows owner's
-+	stacktrace. Requires --use-bpf.
- 
- -Y::
- --type-filter=<value>::
-diff --git a/tools/perf/builtin-lock.c b/tools/perf/builtin-lock.c
-index 9bebc186286f..34cffa3c7cad 100644
---- a/tools/perf/builtin-lock.c
-+++ b/tools/perf/builtin-lock.c
-@@ -1817,6 +1817,22 @@ static void print_contention_result(struct lock_contention *con)
- 			break;
- 	}
- 
-+	if (con->owner && con->save_callstack && verbose > 0) {
-+		struct rb_root root = RB_ROOT;
-+
-+		if (symbol_conf.field_sep)
-+			fprintf(lock_output, "# owner stack trace:\n");
-+		else
-+			fprintf(lock_output, "\n=== owner stack trace ===\n\n");
-+		while ((st = pop_owner_stack_trace(con)))
-+			insert_to(&root, st, compare);
-+
-+		while ((st = pop_from(&root))) {
-+			print_lock_stat(con, st);
-+			zfree(st);
-+		}
-+	}
-+
- 	if (print_nr_entries) {
- 		/* update the total/bad stats */
- 		while ((st = pop_from_result())) {
-@@ -1962,8 +1978,10 @@ static int check_lock_contention_options(const struct option *options,
- 		}
- 	}
- 
--	if (show_lock_owner)
--		show_thread_stats = true;
-+	if (show_lock_owner && !show_thread_stats) {
-+		pr_warning("Now -o try to show owner's callstack instead of pid and comm.\n");
-+		pr_warning("Please use -t option too to keep the old behavior.\n");
-+	}
- 
- 	return 0;
- }
-diff --git a/tools/perf/util/bpf_lock_contention.c b/tools/perf/util/bpf_lock_contention.c
-index 76542b86e83f..226ec7a06ab1 100644
---- a/tools/perf/util/bpf_lock_contention.c
-+++ b/tools/perf/util/bpf_lock_contention.c
-@@ -549,6 +549,64 @@ static const char *lock_contention_get_name(struct lock_contention *con,
- 	return name_buf;
- }
- 
-+struct lock_stat *pop_owner_stack_trace(struct lock_contention *con)
-+{
-+	int stacks_fd, stat_fd;
-+	u64 *stack_trace = NULL;
-+	s32 stack_id;
-+	struct contention_key ckey = {};
-+	struct contention_data cdata = {};
-+	size_t stack_size = con->max_stack * sizeof(*stack_trace);
-+	struct lock_stat *st = NULL;
-+
-+	stacks_fd = bpf_map__fd(skel->maps.owner_stacks);
-+	stat_fd = bpf_map__fd(skel->maps.owner_stat);
-+	if (!stacks_fd || !stat_fd)
-+		goto out_err;
-+
-+	stack_trace = zalloc(stack_size);
-+	if (stack_trace == NULL)
-+		goto out_err;
-+
-+	if (bpf_map_get_next_key(stacks_fd, NULL, stack_trace))
-+		goto out_err;
-+
-+	bpf_map_lookup_elem(stacks_fd, stack_trace, &stack_id);
-+	ckey.stack_id = stack_id;
-+	bpf_map_lookup_elem(stat_fd, &ckey, &cdata);
-+
-+	st = zalloc(sizeof(struct lock_stat));
-+	if (!st)
-+		goto out_err;
-+
-+	st->name = strdup(stack_trace[0] ? lock_contention_get_name(con, NULL, stack_trace, 0) :
-+					   "unknown");
-+	if (!st->name)
-+		goto out_err;
-+
-+	st->flags = cdata.flags;
-+	st->nr_contended = cdata.count;
-+	st->wait_time_total = cdata.total_time;
-+	st->wait_time_max = cdata.max_time;
-+	st->wait_time_min = cdata.min_time;
-+	st->callstack = stack_trace;
-+
-+	if (cdata.count)
-+		st->avg_wait_time = cdata.total_time / cdata.count;
-+
-+	bpf_map_delete_elem(stacks_fd, stack_trace);
-+	bpf_map_delete_elem(stat_fd, &ckey);
-+
-+	return st;
-+
-+out_err:
-+	if (stack_trace)
-+		free(stack_trace);
-+	if (st)
-+		free(st);
-+	return NULL;
-+}
-+
- int lock_contention_read(struct lock_contention *con)
- {
- 	int fd, stack, err = 0;
-diff --git a/tools/perf/util/lock-contention.h b/tools/perf/util/lock-contention.h
-index a09f7fe877df..97fd33c57f17 100644
---- a/tools/perf/util/lock-contention.h
-+++ b/tools/perf/util/lock-contention.h
-@@ -168,6 +168,8 @@ int lock_contention_stop(void);
- int lock_contention_read(struct lock_contention *con);
- int lock_contention_finish(struct lock_contention *con);
- 
-+struct lock_stat *pop_owner_stack_trace(struct lock_contention *con);
-+
- #else  /* !HAVE_BPF_SKEL */
- 
- static inline int lock_contention_prepare(struct lock_contention *con __maybe_unused)
-@@ -187,6 +189,11 @@ static inline int lock_contention_read(struct lock_contention *con __maybe_unuse
- 	return 0;
- }
- 
-+struct lock_stat *pop_owner_stack_trace(struct lock_contention *con)
-+{
-+	return NULL;
-+}
-+
- #endif  /* HAVE_BPF_SKEL */
- 
- #endif  /* PERF_LOCK_CONTENTION_H */
--- 
-2.48.1.601.g30ceb7b040-goog
-
+Discussed plenty of options offline with Kumar.
+The next step is to experiment returning PTR_TO_STACK with mem_size.
