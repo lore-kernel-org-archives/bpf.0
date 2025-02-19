@@ -1,98 +1,77 @@
-Received: from mx2.nandakumar.co.in (mx2.nandakumar.co.in [51.79.255.56])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBBDB85C5E
-	for <bpf@vger.kernel.org>; Wed, 19 Feb 2025 15:21:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=51.79.255.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 760A185C5E;
+	Wed, 19 Feb 2025 15:21:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739978499; cv=none; b=OIRMpVfvkBd4ZyQsqwgY1ka+hbx8dJyOwXUU7K/FoUtHx6UZt9KaEbjFtJzi/N4Xx7r22hXP7tctIj6/9WS7/v9vl19vFJ49Vt4Vr2pA6FqqEjo8cvQ4E0WiOaQlT77BoM+9xLQINQjIMmxP3TCc6r7GoyYIphDN3oqkxljAvz4=
+	t=1739978519; cv=none; b=btjLN5IVQFU9sftt+q15/W2egIiRc2S7CtfkA0HOY3/lEhW3wMO4amz3iDJIfuSF7okohFAlh+EHfP2fQ7HQ/y4TOqohcq86R/RjXlvTNmipYgciqq9zXVvIoHCc4GdbT3usQdnFXkBmC2uzlvRbCKsBEABlZ2AlnaQk5saJIfA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739978499; c=relaxed/simple;
-	bh=sK+MecelaSnVojmlopjXkf2BHHSFjPEj5E1bFoKG9Xo=;
-	h=Message-ID:Date:MIME-Version:To:From:Subject:Content-Type; b=qNswHZO7KKIbioZZoQZxRoBmIRMLbIfjcfPMzIrE8XnPolt4Dv0psu1I7JxEYX1/FSZ8GGy8LWQbyB5xThsYTAHC5kAgI2bW2tevgosmnVRN38JwJUzQsBmMkp2qKlrCmbMnAb72fe4ot7ShZEyHYuk8+koPR2jShtue5T2uEGg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nandakumar.co.in; spf=pass smtp.mailfrom=nandakumar.co.in; dkim=pass (2048-bit key) header.d=nandakumar.co.in header.i=@nandakumar.co.in header.b=gtDuF2g7; arc=none smtp.client-ip=51.79.255.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nandakumar.co.in
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nandakumar.co.in
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nandakumar.co.in header.i=@nandakumar.co.in header.b="gtDuF2g7"
-Received: from [192.168.29.70] (unknown [49.47.194.30])
-	by mx2.nandakumar.co.in (Postfix) with ESMTPSA id E528943581
-	for <bpf@vger.kernel.org>; Wed, 19 Feb 2025 15:13:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=nandakumar.co.in;
-	s=feb22; t=1739978036;
-	bh=sK+MecelaSnVojmlopjXkf2BHHSFjPEj5E1bFoKG9Xo=;
-	h=Date:To:From:Subject:From;
-	b=gtDuF2g7v5bnnaC38C3ai1HtTuqPrerSNDlmQG6ShVrfspi5uaFp6TqOtcTsOYfkR
-	 NTjVI9B70++3IF9Ex8ws+JO7J/bwcqcEJUQjNnxnV/3kTGX76WWmFaHQk/MEMpohNg
-	 Dq9P2AD6gU+3j3qvLQKUCfQI8F3CKQoRWixO1Gz3zBxFoYqHP9qAvmcaVvO5xzDk7J
-	 /q/c36XHh629EbeLAqLaxHLkgtjtu/ATO56hzSaSaSDo7zuczxeuPs0+Q5lhd82hie
-	 izC4Ps7PgcFwThQObh8FSTcn7qM6xbOPScOBuG/Y8CVnu5JFJ5dRDCrlLAZquvwrSM
-	 6uwd3j3grzJnA==
-Message-ID: <fd84552e-be67-4a01-9d08-903e9481b8d3@nandakumar.co.in>
-Date: Wed, 19 Feb 2025 20:43:53 +0530
+	s=arc-20240116; t=1739978519; c=relaxed/simple;
+	bh=6PhGFUTZ7jEy7Fueq9ZKSMRknajhNZU7gjTbXc05EUQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=C6KZAUJvOcrh/taEmtS+XfNARZhIgfOYBPKUpwRGOSRDYdbcPXHBsvhNjKeHcY0XC3py8nquHL0SH4s3amo2WjCFkboTsUkU+lXim/9L8HkhWYySztNvgEUoRadEhyIScFm2fppaPngyaxuSdLJhKxj8SqykVXr99nH6SIMcKCo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 871CBC4CED1;
+	Wed, 19 Feb 2025 15:21:56 +0000 (UTC)
+Date: Wed, 19 Feb 2025 10:22:20 -0500
+From: Steven Rostedt <rostedt@goodmis.org>
+To: Heiko Carstens <hca@linux.ibm.com>
+Cc: linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+ linux-kbuild@vger.kernel.org, bpf <bpf@vger.kernel.org>,
+ linux-arm-kernel@lists.infradead.org, linux-s390@vger.kernel.org, Masami
+ Hiramatsu <mhiramat@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Andrew Morton
+ <akpm@linux-foundation.org>, Peter Zijlstra <peterz@infradead.org>, Linus
+ Torvalds <torvalds@linux-foundation.org>, Masahiro Yamada
+ <masahiroy@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Nicolas
+ Schier <nicolas@fjasle.eu>, Zheng Yejian <zhengyejian1@huawei.com>, Martin
+ Kelly <martin.kelly@crowdstrike.com>, Christophe Leroy
+ <christophe.leroy@csgroup.eu>, Josh Poimboeuf <jpoimboe@redhat.com>,
+ Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
+ Vasily Gorbik <gor@linux.ibm.com>, Alexander Gordeev
+ <agordeev@linux.ibm.com>
+Subject: Re: [PATCH v4 0/6] scripts/sorttable: ftrace: Remove place holders
+ for weak functions in available_filter_functions
+Message-ID: <20250219102220.3b79ec5e@gandalf.local.home>
+In-Reply-To: <20250218145836.7740B3b-hca@linux.ibm.com>
+References: <20250217153401.022858448@goodmis.org>
+	<20250218145836.7740B3b-hca@linux.ibm.com>
+X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: bpf@vger.kernel.org
-Content-Language: en-US
-From: Nandakumar Edamana <nandakumar@nandakumar.co.in>
-Subject: Out-of-bound read suspected in libbpf.c
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-I think I've come across an out-of-bound read in libbpf.c that could 
-result in
-potential information leak (or crash). I wanted to test it myself, but
-unfortunately it will take a while for me to set up things. So, let me just
-describe it and submit a candidate patch.
+On Tue, 18 Feb 2025 15:58:36 +0100
+Heiko Carstens <hca@linux.ibm.com> wrote:
 
-Codebase at: commit 6537cfb395f352782918d8ee7b7f10ba2cc3cbf2 (HEAD -> 
-master, origin/master, origin/HEAD)
-File: ./tools/lib/bpf/libbpf.c
-Function: set_kcfg_value_str
+> Hi Steven,
+> 
+> > This series removes the place holder __ftrace_invalid_address___ from
+> > the available_filter_functions file.
+> > 
+> > The rewriting of the sorttable.c code to make it more manageable
+> > has already been merged:
+> > 
+> >   https://git.kernel.org/torvalds/c/c0e75905caf368e19aab585d20151500e750de89
+> > 
+> > Now this is only for getting rid of the ftrace invalid function place holders.  
+> 
+> Since you asked me to test this on s390: seems to work with
+> HAVE_BUILDTIME_MCOUNT_SORT enabled; the ftrace selftests still
+> work as before.
 
-The first subscripted read of `value` (which is untrusted, IIUC) at line 
-2108
-(`value[len - 1]`) is safe because `set_kcfg_value_str` is called only after
-making sure `value` is at least one character long (although not a good 
-practice
-in long-term). The problem is at the strip-quotes part. Here, `len -= 2` is
-performed, possibly thinking `value` is at least two characters long, 
-since the
-caller makes sure `value` has an opening quote and this function
-(`set_kcfg_value_str) has a check `if (value[len - 1] != '"')` for the 
-closing
-quote. But the problem is, both the opening and closing quotes could be the
-same. More specifically, `value` could be a string that consists of a single
-quote alone, and it could pass all these tests. Then `len` underflows, 
-resulting
-in a wrap-around since it is of type `size_t`. The next branch
-`if (len >= ext->kcfg.sz)` will possibly reduce the value of `len`, but will
-still be greater than `strlen(value)`, making `memcpy()` at 2122 read
-out-of-bound.
+Great!
 
-Suggested change:
+I'm guessing by just adding the support in s390 with what is upstream as
+well as what is in my for-next would work? You can just add that for the
+next merge window then.
 
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 194809da5172..1cc87dbd015d 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -2106,7 +2106,7 @@ static int set_kcfg_value_str(struct extern_desc 
-*ext, char *ext_val,
-         }
+Expect this code to be in linux-next later this week.
 
-         len = strlen(value);
--       if (value[len - 1] != '"') {
-+       if (len < 2 || value[len - 1] != '"') {
-                 pr_warn("extern (kcfg) '%s': invalid string config '%s'\n",
-                         ext->name, value);
-                 return -EINVAL;
-
--- 
-Nandakumar Edamana
-https://nandakumar.org/
-
+-- Steve
