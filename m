@@ -1,180 +1,129 @@
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f182.google.com (mail-il1-f182.google.com [209.85.166.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB2DC1EB1B9;
-	Thu, 20 Feb 2025 23:11:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFD0A1E9B01;
+	Thu, 20 Feb 2025 23:18:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740093107; cv=none; b=A5jL8sKeIp4QWEFqPGNVmDuzdVDBbj4whxdwrB5MTeKPtYfZ7uyM/d36h4GJYtLs5yX5ATftpyw5iKgaJEUF/k4YSQDRL0Wq2ntgwxovnjyDHLRU7ypqerf3jWF9m228A4a3U+6cfJEDKdj/dMVlzfA/G6p77LT/pBkvFNhNVEY=
+	t=1740093485; cv=none; b=HI6QD6O8vndCl5Y5W7FZf2c24if7TKbk8rqAJnOs9HnTl266jtzTj3onINr+O1TLEAiaUtVwRYwSw5BtMFtVcDMwm/Iu/VbuQ9EcQeCnXndZH5703NziSehkCI5OhpKhWJDJbAlA4vfT3atPOH+ongUVs2v8W8k0gLs0L+urkug=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740093107; c=relaxed/simple;
-	bh=R0Fj56QDGOJyhVVHZjrG1Af8PrPuFhmH/B5G0gjo4Y8=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=hyuFsD/kK35lFGaQNt71SDvKmJ30NvW4/hNBPSoY0HY8gQfcf2CYXfOWNB+G7uuvCBCxlCYvckG1AY7uAcB1dbOUjGLRTt4D6oCZES5xjraHsHDCtIkws0rfIA0xfWWnjmlEumLYUyIIaSZjRg8JfKPZT0mTLE9aN1fGLd4x6oU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=Lj45DVaq; arc=none smtp.client-ip=213.133.104.62
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
+	s=arc-20240116; t=1740093485; c=relaxed/simple;
+	bh=kwkDA91WNx1hJwv0tU5mATRh9LuWrnMoNtvfhgBqVjw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=egKRqii2C9ZF0/7v0PobmkQw9caqvvRBaFRKzcBOMs6en8nzNEbUo6cM2kiZGiHlOdlmdr+WrqhkJ22P5HR8Xualcebox6s64tKDg+CwsVCXSmuIni70Zw8bkCvVNtyCEojnPnFMxrVTbTsVCQ/71xcnBGvTwjy/tnQE+HIO9jo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UgZ5htHo; arc=none smtp.client-ip=209.85.166.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="Lj45DVaq"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:MIME-Version:
-	Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:In-Reply-To:References;
-	bh=JYy9jYhd6Up0RBcecZv1pGyDC9oApGZN2T90sAZAV0A=; b=Lj45DVaq5dFkoib6vMaBPlT969
-	dGF6QZnqPgz4jklW4WIxoiHU68jAliEwKutCpf+lhq+jMIi66OtB4Um/HAkkDMmgaZooPIbRgQJzt
-	8kv0rlq6EDmhWckG5BkCEtDGXjgi4fvmQUGLFcjEgqVxfhR32yrLph6O97XV66Ookucd+ql7RsUqk
-	3A8gKhz0nIRbx5DhDuuInhIg/QWrK6a9tONGY8ycAcmaH6L6loKgRhyCnspxDCNIuswTUsvBkEKDW
-	EJO8JMwZe3RG2RvJHOD7dhF8v5p4ap6ACk+njV86VDvrckzHbxNTkSLzklrYQbTEziK4InitECHgg
-	Agfe4evA==;
-Received: from 50.249.197.178.dynamic.cust.swisscom.net ([178.197.249.50] helo=localhost)
-	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96.2)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1tlFQC-0001UG-0F;
-	Thu, 20 Feb 2025 23:53:32 +0100
-From: Daniel Borkmann <daniel@iogearbox.net>
-To: torvalds@linux-foundation.org
-Cc: bpf@vger.kernel.org,
-	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	alexei.starovoitov@gmail.com,
-	andrii@kernel.org,
-	daniel@iogearbox.net,
-	martin.lau@kernel.org
-Subject: [GIT PULL] bpf for v6.14-rc4
-Date: Thu, 20 Feb 2025 23:53:31 +0100
-Message-ID: <20250220225331.46335-1-daniel@iogearbox.net>
-X-Mailer: git-send-email 2.43.0
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UgZ5htHo"
+Received: by mail-il1-f182.google.com with SMTP id e9e14a558f8ab-3d04932a36cso14164315ab.1;
+        Thu, 20 Feb 2025 15:18:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1740093483; x=1740698283; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=kwkDA91WNx1hJwv0tU5mATRh9LuWrnMoNtvfhgBqVjw=;
+        b=UgZ5htHopVif7IRbUaTAG8GmVDZYnwKtDcKCFSV1NJPoQKSlj95jGscs82T7+Px5r0
+         uS7A0OmJYpbv4ZoBf23fgUZ6OUBT0MqTh3eJZs+szuHTrIge5Yhon/5zUh43ENTk6F2w
+         iNd0TQ3w0g9emNA5iIYl/lFO9YMbJbu4hYQkz7SkqpV3FFkv9DCEVWnE0xP58ZYsTYck
+         otwXmMib+EXneqiYJX6MSZRAtl4TAf80adKzrPHpG8YclWpKmEy3YLEGtsu+6ugTxlLZ
+         1sAm/V5peTl4VshSIfWdJdaVY/DOvgQUHrYC1MVEI1raCVVQxTR1EDH9zHo3Bd1mEUzk
+         otLg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1740093483; x=1740698283;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=kwkDA91WNx1hJwv0tU5mATRh9LuWrnMoNtvfhgBqVjw=;
+        b=jVSyT2y/+TCoOHxW8oUJDjDsbqcsAnA3Hx26Uv8DsaxRIvMBysXJyPeYgB1MlF84DJ
+         TOye8rCoGyIeczCTWYMa+FN06l0SpTX1Nk1lMzAvgeK0/T0pjknET81U6ZqoIj7y2ACL
+         kbi4Cx8KBke4CnBJtdCqQJdiak8Y7D9GwodrgJ82KgQ3iM1T2MXIzjM09HTNdnfjPKCo
+         QXAHcdN4hDZPz42ESiBADtWpQ31sch5znHc1VAg8IlSXofPu3DX19toUTH7NMZZOSHCb
+         WvTqyLqgBpRv2/4+vuRK5ZIv9NsSTecGbzwmujmLLnUXce84Lyn44GbopH5vhQyPu0tR
+         a8Lw==
+X-Forwarded-Encrypted: i=1; AJvYcCUFx6AnF1ri9epKt9olfXofFl4D6Mu1TWIl9Nu/JHOrcrAm0QJKWPp++C5i9C74n259NDE=@vger.kernel.org, AJvYcCUeUh55CnJmwn0eUGVOy/sr/4AFae+YrSb1o7TTX7aHvXX+YAJPP+953cnAGdqrGUaxPe73ajEI@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx4dp/+tQ0sBh2q1yvNHuX/O7kbbd+MM7Qc13n46I4Ifpdj7srl
+	WI78fjxitr6KSjvjGNqpQtOTr9PunSi838XasEakuCuaprdyVsFECAW6wYtu0zwFjMzYsXmKB9a
+	Z6TlJIQOucqbFd61+Xzo5isx4C/4=
+X-Gm-Gg: ASbGnct7VbiNpWw2EhfvmfZZ3PeazTZv0P7GS8bIZaasWtLqFnB/UlYyweTIWcNO52o
+	o3nyiwzhf3qFC6Rf3iUzGkfRngtwKRRn+YPejn4UlD9i6Ixr1/Z+2YoMmuG5Gyuebr4EI+KY=
+X-Google-Smtp-Source: AGHT+IHfTFE+H0VF0wwBzQ8FtsfRVw8uONb+h+M1VmzYS1kQ6StUAi76egFtamcAe+SYCS1OSWq441Qp+uK2j6JW1ik=
+X-Received: by 2002:a05:6e02:20cd:b0:3cf:ceac:37e1 with SMTP id
+ e9e14a558f8ab-3d2cae8a97amr9033985ab.11.1740093482944; Thu, 20 Feb 2025
+ 15:18:02 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 1.0.7/27555/Thu Feb 20 10:43:53 2025)
+References: <20250220072940.99994-1-kerneljasonxing@gmail.com>
+ <67b74b0ca099e_261ab62945f@willemb.c.googlers.com.notmuch> <04bfac2e-e28d-45eb-a715-59ac4b58aca8@linux.dev>
+In-Reply-To: <04bfac2e-e28d-45eb-a715-59ac4b58aca8@linux.dev>
+From: Jason Xing <kerneljasonxing@gmail.com>
+Date: Fri, 21 Feb 2025 07:17:26 +0800
+X-Gm-Features: AWEUYZm9VUr1NqLHB7c5tfdlseTZ3JXSYJHGtVxYnguB1w-U9ijKk_E375kb96c
+Message-ID: <CAL+tcoCK1H0-gV4Vi0=gCmq8QoDLtihFijbsspODcprh3Dbo3w@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v13 00/12] net-timestamp: bpf extension to equip
+ applications transparently
+To: Martin KaFai Lau <martin.lau@linux.dev>
+Cc: Willem de Bruijn <willemdebruijn.kernel@gmail.com>, davem@davemloft.net, 
+	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, dsahern@kernel.org, 
+	willemb@google.com, ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, 
+	eddyz87@gmail.com, song@kernel.org, yonghong.song@linux.dev, 
+	john.fastabend@gmail.com, kpsingh@kernel.org, sdf@fomichev.me, 
+	haoluo@google.com, jolsa@kernel.org, shuah@kernel.org, ykolal@fb.com, 
+	bpf@vger.kernel.org, netdev@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Linus,
+On Fri, Feb 21, 2025 at 7:02=E2=80=AFAM Martin KaFai Lau <martin.lau@linux.=
+dev> wrote:
+>
+> On 2/20/25 7:32 AM, Willem de Bruijn wrote:
+> > Jason Xing wrote:
+> >> "Timestamping is key to debugging network stack latency. With
+> >> SO_TIMESTAMPING, bugs that are otherwise incorrectly assumed to be
+> >> network issues can be attributed to the kernel." This is extracted
+> >> from the talk "SO_TIMESTAMPING: Powering Fleetwide RPC Monitoring"
+> >> addressed by Willem de Bruijn at netdevconf 0x17).
+> >>
+> >> There are a few areas that need optimization with the consideration of
+> >> easier use and less performance impact, which I highlighted and mainly
+> >> discussed at netconf 2024 with Willem de Bruijn and John Fastabend:
+> >> uAPI compatibility, extra system call overhead, and the need for
+> >> application modification. I initially managed to solve these issues
+> >> by writing a kernel module that hooks various key functions. However,
+> >> this approach is not suitable for the next kernel release. Therefore,
+> >> a BPF extension was proposed. During recent period, Martin KaFai Lau
+> >> provides invaluable suggestions about BPF along the way. Many thanks
+> >> here!
+> >>
+> >> This series adds the BPF networking timestamping infrastructure throug=
+h
+> >> reusing most of the tx timestamping callback that is currently enabled
+> >> by the SO_TIMESTAMPING.. This series also adds TX timestamping support
+> >> for TCP. The RX timestamping and UDP support will be added in the futu=
+re.
+>
+> Thanks for working on this BPF feature. Applied.
 
-The following changes since commit 05dbaf8dd8bf537d4b4eb3115ab42a5fb40ff1f5:
+Thanks Martin for sharing invaluable and precious knowledge on BPF design !=
+!!
+Thanks Willem for great effort on suggesting from the insightful
+perspective of the networking area !!!
 
-  Merge tag 'x86-urgent-2025-01-28' of git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip (2025-01-28 14:32:03 -0800)
+>
+> > This series addresses all my feedback.
+> >
+> > The timestamping patches all have my Reviewed-by.
+>
+> Thanks to Willem and other reviewers for their input in this long thread =
+across
+> many revisions.
 
-are available in the Git repository at:
+Thanks everyone from the bottom of my heart :)
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git tags/bpf-fixes
-
-for you to fetch changes up to dbf7cc560007c8624ba42bbda369eca2973fc2da:
-
-  Merge branch 'bpf-skip-non-exist-keys-in-generic_map_lookup_batch' (2025-02-18 17:27:38 -0800)
-
-----------------------------------------------------------------
-BPF fixes:
-
-- Fix a soft-lockup in BPF arena_map_free on 64k page size
-  kernels (Alan Maguire)
-
-- Fix a missing allocation failure check in BPF verifier's
-  acquire_lock_state (Kumar Kartikeya Dwivedi)
-
-- Fix a NULL-pointer dereference in trace_kfree_skb by adding
-  kfree_skb to the raw_tp_null_args set (Kuniyuki Iwashima)
-
-- Fix a deadlock when freeing BPF cgroup storage (Abel Wu)
-
-- Fix a syzbot-reported deadlock when holding BPF map's
-  freeze_mutex (Andrii Nakryiko)
-
-- Fix a use-after-free issue in bpf_test_init when
-  eth_skb_pkt_type is accessing skb data not containing an
-  Ethernet header (Shigeru Yoshida)
-
-- Fix skipping non-existing keys in generic_map_lookup_batch
-  (Yan Zhai)
-
-- Several BPF sockmap fixes to address incorrect TCP copied_seq
-  calculations, which prevented correct data reads from recv(2)
-  in user space (Jiayuan Chen)
-
-- Two fixes for BPF map lookup nullness elision (Daniel Xu)
-
-- Fix a NULL-pointer dereference from vmlinux BTF lookup in
-  bpf_sk_storage_tracing_allowed (Jared Kangas)
-
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-
-----------------------------------------------------------------
-Abel Wu (1):
-      bpf: Fix deadlock when freeing cgroup storage
-
-Alan Maguire (1):
-      bpf: Fix softlockup in arena_map_free on 64k page kernel
-
-Alexei Starovoitov (2):
-      Merge branch 'bpf-some-fixes-for-nullness-elision'
-      Merge branch 'bpf-skip-non-exist-keys-in-generic_map_lookup_batch'
-
-Andrii Nakryiko (2):
-      bpf: unify VM_WRITE vs VM_MAYWRITE use in BPF map mmaping logic
-      bpf: avoid holding freeze_mutex during mmap operation
-
-Daniel Xu (3):
-      bpf: verifier: Do not extract constant map keys for irrelevant maps
-      bpf: selftests: Test constant key extraction on irrelevant maps
-      bpf: verifier: Disambiguate get_constant_map_key() errors
-
-Jared Kangas (1):
-      bpf: Remove unnecessary BTF lookups in bpf_sk_storage_tracing_allowed
-
-Jiayuan Chen (5):
-      strparser: Add read_sock callback
-      bpf: Fix wrong copied_seq calculation
-      bpf: Disable non stream socket for strparser
-      selftests/bpf: Fix invalid flag of recv()
-      selftests/bpf: Add strparser test for bpf
-
-Kumar Kartikeya Dwivedi (1):
-      bpf: Handle allocation failure in acquire_lock_state
-
-Kuniyuki Iwashima (1):
-      net: Add rx_skb of kfree_skb to raw_tp_null_args[].
-
-Martin KaFai Lau (1):
-      Merge branch 'bpf-fix-wrong-copied_seq-calculation-and-add-tests'
-
-Shigeru Yoshida (2):
-      bpf, test_run: Fix use-after-free issue in eth_skb_pkt_type()
-      selftests/bpf: Adjust data size to have ETH_HLEN
-
-Yan Zhai (2):
-      bpf: skip non exist keys in generic_map_lookup_batch
-      selftests: bpf: test batch lookup on array of maps with holes
-
- Documentation/networking/strparser.rst             |   9 +-
- include/linux/skmsg.h                              |   2 +
- include/net/strparser.h                            |   2 +
- include/net/tcp.h                                  |   8 +
- kernel/bpf/arena.c                                 |   2 +-
- kernel/bpf/bpf_cgrp_storage.c                      |   2 +-
- kernel/bpf/btf.c                                   |   2 +
- kernel/bpf/ringbuf.c                               |   4 -
- kernel/bpf/syscall.c                               |  43 +-
- kernel/bpf/verifier.c                              |  31 +-
- net/bpf/test_run.c                                 |   5 +-
- net/core/bpf_sk_storage.c                          |  13 +-
- net/core/skmsg.c                                   |   7 +
- net/core/sock_map.c                                |   5 +-
- net/ipv4/tcp.c                                     |  29 +-
- net/ipv4/tcp_bpf.c                                 |  36 ++
- net/strparser/strparser.c                          |  11 +-
- .../selftests/bpf/map_tests/map_in_map_batch_ops.c |  62 ++-
- .../selftests/bpf/prog_tests/sockmap_basic.c       |  59 +--
- .../selftests/bpf/prog_tests/sockmap_strp.c        | 454 +++++++++++++++++++++
- .../selftests/bpf/prog_tests/xdp_cpumap_attach.c   |   4 +-
- .../selftests/bpf/prog_tests/xdp_devmap_attach.c   |   8 +-
- .../selftests/bpf/progs/test_sockmap_strp.c        |  53 +++
- .../selftests/bpf/progs/verifier_array_access.c    |  15 +
- 24 files changed, 726 insertions(+), 140 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/sockmap_strp.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_sockmap_strp.c
+Thanks,
+Jason
