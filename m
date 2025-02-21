@@ -1,207 +1,240 @@
-Received: from mail-ej1-f66.google.com (mail-ej1-f66.google.com [209.85.218.66])
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D47AA2AE69
-	for <bpf@vger.kernel.org>; Fri, 21 Feb 2025 00:37:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.66
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4ADB179F2
+	for <bpf@vger.kernel.org>; Fri, 21 Feb 2025 00:42:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740098259; cv=none; b=UirF7wtcytKwUwpUtCZuiKiVBVZU3VBXumyp2U42c7TNkRDfL0kYdoHCJ5qEG3sKqVtWbaHENwcoLJWsI6NFEG1Yrqte1eapxhQWr2L2jrZsz8KC0k6ygE9Q9dyTMKbZfPvQ22sFQN+0GzeikJPFBxCUsP3t0k9k4w8TTHJEp9E=
+	t=1740098540; cv=none; b=ZeVzxwUJFf3aKbJcCvbII/Rg66v/fod5chPIg5BDrHCJumIPpnHkkHJd1WpkUZ1KnFuF52tbTxUupG5ZLp2P0yMLl4zDlWO4UnexU4YgjfNE6/qjYlOgn/EpY11cb2PO8EN6qjwKgr6KoBxgJ5Ka8MB7F8ty31niOiKIAluV+2I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740098259; c=relaxed/simple;
-	bh=FaVNtZrnIS4USkc7RR4pZdU7F+BU1jWiv6ca/kvqeBc=;
+	s=arc-20240116; t=1740098540; c=relaxed/simple;
+	bh=JVyYELs/aZSUOLuatREFRLpvus6SMDudoL8g1OGvpNs=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=jFuLRD/INhxlrGs1yqSAQNn1OEqzBSD+OfIY9Gc1RMSdYniQ1uvuGko5BmTgofdfZ0IJqkZeg/TZ/t9VW888sTbJ2JzrSKikMCLv2UBRU93eBEEVy00HUJB+QLNy3UkUrzw/tGLVE39npp61oUEeKxUWRDbbhEHi+NO/8K1WiUA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KUYyQnrP; arc=none smtp.client-ip=209.85.218.66
+	 To:Cc:Content-Type; b=GxfPbvMJE4s9AiY+rGfOaplOVXvILY/sz5HHhYFGihrtAikOFDc6W5h61VsCFtRcYoJzN59f/HjI9nI42hET0C+Vyi9Q760tLUJsQfwyYE9ZdnDJvJ7JGhR+9OSh1ksVc2LIRRUsHAGNBlrd5f0pepRCXQahBFcc9xiitzUEx9w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WwNHRVZ7; arc=none smtp.client-ip=209.85.214.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KUYyQnrP"
-Received: by mail-ej1-f66.google.com with SMTP id a640c23a62f3a-aaf0f1adef8so318430466b.3
-        for <bpf@vger.kernel.org>; Thu, 20 Feb 2025 16:37:37 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WwNHRVZ7"
+Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-2210d92292eso45314175ad.1
+        for <bpf@vger.kernel.org>; Thu, 20 Feb 2025 16:42:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1740098256; x=1740703056; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1740098538; x=1740703338; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=SQlxSTRPYXEpf16bnFGhwwqkS7lDQSzSPQpTGKsgFYg=;
-        b=KUYyQnrPJ/KIgaGuUWC8zvhtD55HLIvQpfP2j4W3djaElx9GPNheK6DOBb/QcE5jaR
-         p4q7fNGJbBKkzF2a/MzJbClFEiFnEBdAjJ1MCzBiSwq/xzAcsl+1zlGhOiBtwiGoE/ez
-         5ANZbs5MZCnR9RRscTQ9rGT7XZA1dPdRTpAnTfUX3XWLqY/jjukd312EL7uW6nTwWKtn
-         uKxVwmk/uofYfSxjrf7YSJ+siiIqQJZMLoBkV7ohuYwA9PoszkWer76g0Jn413PfBmxQ
-         zVWdpTgmKXyFfkqD4NZ/Zv9GplpKBcAF58Dn+7LBFjbtCgLDqnJCC7r5DqZuOy67ifTG
-         bnFw==
+        bh=FcjTsnP4fwZNj4scJrUPrWQPt+w9NuoOTmBlcRxKZ6Q=;
+        b=WwNHRVZ79qLdBvDpgY81wtFd5lUqpvvU2glaojZb/4viVNEn/IXQTH16Qkzp98N0bD
+         x8NQkC+DhZOJBJaQWC0H5Hn/Y5X4Y7+luVagL9BJfYjBwzMQp9sR/GPNM6HhnnSniZ/T
+         mRCJN6oj8rJJXHDcyqdRvJxdgpEhyliTWRrLauT3WzjpUTje++CrFtO6GovBX7dd5oR6
+         LWUsvgv5yJPaNTeudqwvamuL4XTtj0BNmftG/F+p8ubD4lEPqNhrOs0mGMQsLf/xMRhu
+         XUCXLyyng6bedkP9i82xMjKB6Kr5xoT2tKafviGKQNsmajR6VurWk/ArAgPVFYPNff0a
+         TsuA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740098256; x=1740703056;
+        d=1e100.net; s=20230601; t=1740098538; x=1740703338;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=SQlxSTRPYXEpf16bnFGhwwqkS7lDQSzSPQpTGKsgFYg=;
-        b=UqiX3EsBazv0FYhQRUsiVuu1cLi3zmPxVhlqYpc2cL5dp/zQeK8eFaQNUc5Ku0bsp2
-         lsQnQdvAcZLgu0lIxcmVbX/e0Bov0kl1lOdtdUsSLuiNtuYg8XItym+aEPiHB2WXBlI3
-         UZwzbq+cu7fxIXi0OaCmwjrm3/QSdfOex/NEPG07Fhq2WcvskVaAIcN66VQPUpVlKhmY
-         xyuJKzvZzI88gjRy+m9SfwNjXeOavXHi8O8fyq2hDtHTwHSDd5r2MTd97NLTZcUsM7nH
-         kPjnh4juDXG0WXIByZ4mKz574olG8tAcw42ienjL4GFoMRLXIVq0bxSW63trI19VmrcV
-         wJ5A==
-X-Forwarded-Encrypted: i=1; AJvYcCUcbJ96qLUdal6K/91AFyvYU208EdZQtQMacdO0mZwDyoa8VSOpYBO0mzUnIH+pwNq+whc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyYjduWTpoTlwoUhZT/+unqbrQBKSxUf5Efks16xwna+IUGkpP0
-	c+RooT3Y2SzuZz46oFu7F9FalUBy/AIn/h/16eR8yttyocnBDT5JV7I6nkvMINhdtvpwAWIK36L
-	g1p9eOxv10q6WIZ6lGkjC2Iil18w=
-X-Gm-Gg: ASbGnctsZPGGax7jIKWyLtSzA3o/IpOQ0Pl0TO55gFYsq9ib0mDdRT9WsmcWM9kQZhe
-	M6L2Vthdf2nHlHQ+3eF3Ww3K//7Y0C54XtQspHyovYJhf1DWdYpC1EGgo0dOKI8MAIeMWqNePov
-	qg2pUDWYorcJfsEynlvA==
-X-Google-Smtp-Source: AGHT+IEW7ipWsGH1lTm25R55MqPx1boWjckwilJ102ztC5jqg5+qWxj2tVvamC0IkSlBzKHFqcWh462Eb8D3LDa62aU=
-X-Received: by 2002:a17:906:7956:b0:ab2:b84b:2dab with SMTP id
- a640c23a62f3a-abc09ab8f13mr135313766b.30.1740098255914; Thu, 20 Feb 2025
- 16:37:35 -0800 (PST)
+        bh=FcjTsnP4fwZNj4scJrUPrWQPt+w9NuoOTmBlcRxKZ6Q=;
+        b=jj2aMnHXaX02VKTc8aiAjXSc5bIVmncxER71kJDuQR/CLhqR4R/0BUyD3CVepQBTvD
+         Ogv1TfsKgyY9FUQs0dPjGoJjWoFWD7NeV8+oEWYmZa+W2/l6Jw8yb1cLWi+dtRfqfpjZ
+         BLOxb+HUbvg8HVhd7950LxeYQSXEAHWQFlmNI1FOXGyTlY1d5bz9Y6D+EcaTE4ie9AUz
+         CRi3mjAkq9su7kSgZEWZWKhHB05dz4sKJXw4FPKGhF2Rob1lbXyHUD55N+PSzsNZtOUH
+         jfgjlQ8gJu2pzOsVrY9do5seApHxL1DLVOA19g0IvMstOrWJ+MmN5daa2FjcZE2qq+JC
+         QQDg==
+X-Gm-Message-State: AOJu0Yykv8XecyoAGL/PQVV0fRBb9QKGToZSAGPZFlbe5FFyfIGnhJGD
+	5N9m6qSo3JAy4+7kq07gC76/j9woR+EehXSUXJbbSfJ5ga6iaZQFBu+5wk84FbtjPL5jVgGl92P
+	qGyQQZqDbNdOzb2/MfFuAAMhctypr2Vof
+X-Gm-Gg: ASbGncs8OrGS/hCazWY2+zEh6J+bkjGxZAYbXCWBrl3OqyH3C1O1KyBS2H37r9DNbqO
+	w3s835g8ZQ6ojbp4pU7KRO4cvy0u3LaTe7xR62iL5EvFvSXN02FOkfJS1mVhv/3GXyUf74kLG1R
+	x5mvNRYKdp9Dsq
+X-Google-Smtp-Source: AGHT+IHb+5xYXVrCN/gNCBehCqmGKUylMoXs6fm6CUHGFb5VpuOHl5tlN7L/GrrNa7YBpV6EmrdJSVZ/JzW0h3RSpJg=
+X-Received: by 2002:a17:902:d4d0:b0:21f:6a22:b294 with SMTP id
+ d9443c01a7336-2219ff5f93bmr23636425ad.28.1740098538426; Thu, 20 Feb 2025
+ 16:42:18 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250219125117.1956939-1-memxor@gmail.com> <20250219125117.1956939-2-memxor@gmail.com>
- <CAADnVQ+TBG+yAxtY1Q5D6HnhbvgusUVrzyRm7-8oF7wYw+Nqfw@mail.gmail.com>
- <CAP01T74tZudfS8huoz=sP4UkEgs5ipkz9Qjf=6XNVzJvGOFLgQ@mail.gmail.com>
- <CAEf4BzbyF3aWdE0Uk0KtdeYwmEYSahfpZk=vK-JhhZ-Bgb55ZQ@mail.gmail.com>
- <CAP01T76=Twha0twPgzO8Un6--e3cX1PMFEtu1jHVS_7iQzOcfQ@mail.gmail.com> <CAEf4Bzbny7VFufpMq6RZJ1_poYsAFw89tpmKHhMSbTNb2=PsBg@mail.gmail.com>
-In-Reply-To: <CAEf4Bzbny7VFufpMq6RZJ1_poYsAFw89tpmKHhMSbTNb2=PsBg@mail.gmail.com>
-From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Date: Fri, 21 Feb 2025 01:36:59 +0100
-X-Gm-Features: AWEUYZnxkwdTJQ8DBNRFuzKke7aOpcA2mUfFMbA5b0NhIvpv36PjyBv2veSypDg
-Message-ID: <CAP01T77PkyNSweQ8SAoaxc7zO8eL66UX0HgjwAX7Q9rqatCgKw@mail.gmail.com>
-Subject: Re: [RFC PATCH bpf-next v1 1/2] bpf: Explore PTR_TO_STACK as R0 for bpf_dynptr_slice_rdwr
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>, bpf <bpf@vger.kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai Lau <martin.lau@kernel.org>, 
-	Eduard Zingerman <eddyz87@gmail.com>, kkd@meta.com, Kernel Team <kernel-team@meta.com>
+References: <20250218190027.135888-1-mykyta.yatsenko5@gmail.com> <20250218190027.135888-3-mykyta.yatsenko5@gmail.com>
+In-Reply-To: <20250218190027.135888-3-mykyta.yatsenko5@gmail.com>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Thu, 20 Feb 2025 16:42:06 -0800
+X-Gm-Features: AWEUYZmhv9Qd4PUBCsxYqpJryZ_ZNTasMqvp0v4awCyV0-7hvhL0h0dpQECojaI
+Message-ID: <CAEf4BzbV_J5JXtkSE0Lfp31T01rZgLjVwi6-fhD3Y_DaDDtx9w@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 2/3] bpf/helpers: introduce bpf_dynptr_copy kfunc
+To: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
+Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org, 
+	daniel@iogearbox.net, kafai@meta.com, kernel-team@meta.com, eddyz87@gmail.com, 
+	Mykyta Yatsenko <yatsenko@meta.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, 21 Feb 2025 at 01:27, Andrii Nakryiko <andrii.nakryiko@gmail.com> w=
-rote:
+On Tue, Feb 18, 2025 at 11:01=E2=80=AFAM Mykyta Yatsenko
+<mykyta.yatsenko5@gmail.com> wrote:
 >
-> On Thu, Feb 20, 2025 at 7:41=E2=80=AFAM Kumar Kartikeya Dwivedi
-> <memxor@gmail.com> wrote:
-> >
-> > On Thu, 20 Feb 2025 at 01:13, Andrii Nakryiko <andrii.nakryiko@gmail.co=
-m> wrote:
-> > >
-> > > On Wed, Feb 19, 2025 at 10:10=E2=80=AFAM Kumar Kartikeya Dwivedi
-> > > <memxor@gmail.com> wrote:
-> > > >
-> > > > On Wed, 19 Feb 2025 at 18:41, Alexei Starovoitov
-> > > > <alexei.starovoitov@gmail.com> wrote:
-> > > > >
-> > > > > On Wed, Feb 19, 2025 at 4:51=E2=80=AFAM Kumar Kartikeya Dwivedi
-> > > > > <memxor@gmail.com> wrote:
-> > > > > >
-> > > > > > For the bpf_dynptr_slice_rdwr kfunc, the verifier may return a =
-pointer
-> > > > > > to the underlying packet (if the requested slice is linear), or=
- copy out
-> > > > > > the data to the buffer passed into the kfunc. The verifier perf=
-orms
-> > > > > > symbolic execution assuming the returned value is a PTR_TO_MEM =
-of a
-> > > > > > certain size (passed into the kfunc), and ensures reads and wri=
-tes are
-> > > > > > within bounds.
-> > > > >
-> > > > > sounds like
-> > > > > check_kfunc_mem_size_reg() -> check_mem_size_reg() ->
-> > > > > check_helper_mem_access()
-> > > > >    case PTR_TO_STACK:
-> > > > >       check_stack_range_initialized()
-> > > > >          clobber =3D true
-> > > > >              if (clobber) {
-> > > > >                   __mark_reg_unknown(env, &state->stack[spi].spil=
-led_ptr);
-> > > > >
-> > > > > is somehow broken?
-> > > > >
-> > > > > ohh. It might be:
-> > > > > || !is_kfunc_arg_optional(meta->btf, buff_arg)
-> > > > >
-> > > > > This bit is wrong then.
-> > > > > When arg is not-null check_kfunc_mem_size_reg() should be called.
-> > > > > The PTR_TO_STACK abuse is a small subset of issues
-> > > > > if check_kfunc_mem_size_reg() is indeed not called.
-> > > >
-> > > > The condition looks ok to me.
-> > > >
-> > > > The condition to do check_mem_size_reg is !null || !opt.
-> > > > So when it's null, and it's opt, it will be skipped.
-> > > > When it's null, and it's not opt, the check will happen.
-> > > > When arg is not-null, the said function is called, opt does not mat=
-ter then.
-> > > > So the stack slots are marked misc.
-> > > >
-> > > > In our case we're not passing a NULL pointer in the selftest.
-> > > >
-> > > > The problem occurs once we spill to that slot _after_ the call, and
-> > > > then do a write through returned mem pointer.
-> > > >
-> > > > The final few lines from the selftest do the dirty thing, where r0 =
-is
-> > > > aliasing fp-8, and r1 =3D 0.
-> > > >
-> > > > + *(u64 *)(r10 - 8) =3D r8; \
-> > > > + *(u64 *)(r0 + 0) =3D r1; \
-> > > > + r8 =3D *(u64 *)(r10 - 8); \
-> > > > + r0 =3D *(u64 *)(r8 + 0); \
-> > > >
-> > > > The write through r0 must re-mark the stack, but the verifier doesn=
-'t
-> > > > know it's pointing to the stack.
-> > > > push_stack was the conceptually cleaner/simpler fix, but it apparen=
-tly
-> > > > isn't good enough.
-> > > >
-> > > > Remarking the stack on write to PTR_TO_MEM, or invalidating PTR_TO_=
-MEM
-> > > > when r8 is spilled to fp-8 first time after the call are two option=
-s.
-> > > > Both have some concerns (first, the misaligned stack access is not
-> > > > caught, second PTR_TO_MEM may outlive stack frame).
-> > >
-> > > Reading the description of the problem my first instinct was to have
-> > > stack slots with associated obj_ref_id for such cases and when
-> > > something writes into that stack slot, invalidate everything with tha=
-t
-> > > obj_ref_id. So that's probably what you mean by invalidating
-> > > PTR_TO_MEM, right?
-> > >
-> > > Not sure I understand what "PTR_TO_STACK with mem_size" (that Alexei
-> > > mentioned in another email) means, though, so hard to compare.
-> > >
-> >
-> > Invalidation is certainly one option. The one Alexei mentioned was
-> > where we discussed bounding how much data can be read through the
-> > PTR_TO_STACK (similar to PTR_TO_MEM), and mark r0 as PTR_TO_STACK.
-> > This ends up combining the constraints of both types of pointers (it
-> > may as well be called PTR_TO_STACK_OR_MEM) without forking paths.
+> From: Mykyta Yatsenko <yatsenko@meta.com>
 >
-> Yeah, PTR_TO_STACK_OR_MEM would be more precise. But how does that
-> help with this problem? Not sure I follow the idea of the solution
-> (but I can wait for patches to be posted).
+> Introducing bpf_dynptr_copy kfunc allowing copying data from one dynptr t=
+o
+> another. This functionality is useful in scenarios such as capturing XDP
+> data to a ring buffer.
+> The implementation consists of 4 branches:
+>   * A fast branch for contiguous buffer capacity in both source and
+> destination dynptrs
+>   * 3 branches utilizing __bpf_dynptr_read and __bpf_dynptr_write to copy
+> data to/from non-contiguous buffer
+>
+> Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
+> ---
+>  kernel/bpf/helpers.c  | 37 +++++++++++++++++++++++++++++++++++++
+>  kernel/bpf/verifier.c |  3 +++
+>  2 files changed, 40 insertions(+)
 
-The reason for push_stack was to ensure writes through the returned
-pointer take effect on stack state.
-By keeping it PTR_TO_STACK, we get that behavior.
-However, in the other path of this patch, the verifier would verify
-the pointer as PTR_TO_MEM, with a bounded mem_size.
-Thus it would not allow writing beyond a certain size.
-If we simply set r0 to PTR_TO_STACK now, it would possibly allow going
-beyond the size that was passed to kfunc.
-E.g. say buffer was fp-24 and size was 8, we can also modify fp-8
-through it and not just fp-16.
-Adding an additional mem_size field and checking it (when set) for
-PTR_TO_STACK allows us to ensure we cannot write beyond 8 bytes
-through r0=3Dfp-24.
+This is surprisingly nicely compact and terse, I really like this! See
+some nits below, and yes, let's add doc-comment as Eduard suggested.
 
-I hope this is clearer.
+pw-bot: cr
 
 >
-> >
-> [...]
+> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+> index 2833558c3009..ac5fbdfc504d 100644
+> --- a/kernel/bpf/helpers.c
+> +++ b/kernel/bpf/helpers.c
+> @@ -2770,6 +2770,42 @@ __bpf_kfunc int bpf_dynptr_clone(const struct bpf_=
+dynptr *p,
+>         return 0;
+>  }
+>
+> +__bpf_kfunc int bpf_dynptr_copy(struct bpf_dynptr *dst_ptr, u32 dst_off,
+> +                               struct bpf_dynptr *src_ptr, u32 src_off, =
+u32 size)
+> +{
+> +       struct bpf_dynptr_kern *dst =3D (struct bpf_dynptr_kern *)dst_ptr=
+;
+> +       struct bpf_dynptr_kern *src =3D (struct bpf_dynptr_kern *)src_ptr=
+;
+> +       __u8 *src_slice, *dst_slice;
+
+let's use `void *`, both memmove and bpf_dynptr_{write,read} uses
+`void *` throughout
+
+> +       int err =3D 0;
+
+I'm not sure we want to thread through this err, see below
+
+> +
+> +       src_slice =3D bpf_dynptr_slice(src_ptr, src_off, NULL, size);
+> +       dst_slice =3D bpf_dynptr_slice_rdwr(dst_ptr, dst_off, NULL, size)=
+;
+> +
+> +       if (src_slice && dst_slice) {
+> +               memmove(dst_slice, src_slice, size);
+
+return 0;
+
+> +       } else if (src_slice) {
+> +               err =3D __bpf_dynptr_write(dst, dst_off, src_slice, size,=
+ 0);
+
+return __bpf_dynptr_write(...)
+
+> +       } else if (dst_slice) {
+> +               err =3D __bpf_dynptr_read(dst_slice, size, src, src_off, =
+0);
+
+ditto, direct return
+
+> +       } else {
+> +               u32 off =3D 0;
+> +               char buf[256];
+> +
+> +               if (bpf_dynptr_check_off_len(dst, dst_off, size) ||
+> +                   bpf_dynptr_check_off_len(src, src_off, size))
+> +                       return -E2BIG;
+
+see, you are doing direct return here (but inconsistent with the rest of lo=
+gic)
+
+> +
+> +               while (err =3D=3D 0 && off < size) {
+
+just while (off < size), because...
+
+> +                       u32 chunk_sz =3D min(sizeof(buf), size - off);
+
+this might trigger warning about type mismatch (size_t vs u32), so
+probably best to be explicit: `min_t(u32, sizeof(buf), size - off);`
+
+> +
+> +                       err =3D err ?: __bpf_dynptr_read(buf, chunk_sz, s=
+rc, src_off + off, 0);
+> +                       err =3D err ?: __bpf_dynptr_write(dst, dst_off + =
+off, buf, chunk_sz, 0);
+
+I'd keep this a bit more conventional with just
+
+
+err =3D __bpf_dynptr_read(...);
+if (err)
+    return err;
+err =3D __bpf_dynptr_write(...);
+if (err)
+    return err;
+
+off +=3D chunk_sz;
+
+
+Nothing wrong or incorrect with how you wrote it, but somehow feels a
+bit more typical to do it this way.
+
+> +                       off +=3D chunk_sz;
+> +               }
+> +       }
+> +       return err;
+> +}
+> +
+>  __bpf_kfunc void *bpf_cast_to_kern_ctx(void *obj)
+>  {
+>         return obj;
+> @@ -3174,6 +3210,7 @@ BTF_ID_FLAGS(func, bpf_dynptr_is_null)
+>  BTF_ID_FLAGS(func, bpf_dynptr_is_rdonly)
+>  BTF_ID_FLAGS(func, bpf_dynptr_size)
+>  BTF_ID_FLAGS(func, bpf_dynptr_clone)
+> +BTF_ID_FLAGS(func, bpf_dynptr_copy)
+>  #ifdef CONFIG_NET
+>  BTF_ID_FLAGS(func, bpf_modify_return_test_tp)
+>  #endif
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index e7bc74171c99..3c567bfcc582 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -11781,6 +11781,7 @@ enum special_kfunc_type {
+>         KF_bpf_dynptr_slice,
+>         KF_bpf_dynptr_slice_rdwr,
+>         KF_bpf_dynptr_clone,
+> +       KF_bpf_dynptr_copy,
+>         KF_bpf_percpu_obj_new_impl,
+>         KF_bpf_percpu_obj_drop_impl,
+>         KF_bpf_throw,
+> @@ -11819,6 +11820,7 @@ BTF_ID(func, bpf_dynptr_from_xdp)
+>  BTF_ID(func, bpf_dynptr_slice)
+>  BTF_ID(func, bpf_dynptr_slice_rdwr)
+>  BTF_ID(func, bpf_dynptr_clone)
+> +BTF_ID(func, bpf_dynptr_copy)
+>  BTF_ID(func, bpf_percpu_obj_new_impl)
+>  BTF_ID(func, bpf_percpu_obj_drop_impl)
+>  BTF_ID(func, bpf_throw)
+> @@ -11857,6 +11859,7 @@ BTF_ID_UNUSED
+>  BTF_ID(func, bpf_dynptr_slice)
+>  BTF_ID(func, bpf_dynptr_slice_rdwr)
+>  BTF_ID(func, bpf_dynptr_clone)
+> +BTF_ID(func, bpf_dynptr_copy)
+>  BTF_ID(func, bpf_percpu_obj_new_impl)
+>  BTF_ID(func, bpf_percpu_obj_drop_impl)
+>  BTF_ID(func, bpf_throw)
+> --
+> 2.48.1
+>
