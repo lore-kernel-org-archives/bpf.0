@@ -1,147 +1,101 @@
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0A6F7494;
-	Sat, 22 Feb 2025 07:19:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.187
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D71A746434;
+	Sat, 22 Feb 2025 09:18:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.255
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740208774; cv=none; b=PPjmr5SfCOdQB/hd+pnikGrIxQ3Kd4FINq28Nw8VoJb9lpir1KekZrPoerRn5mwz7VPtN4ALvFY3v5SO0pf8GhJVWeoOUj2SRYMtAHlJyxQs19AWx74WnoDKkncnCH1FSw8eAELeq1V8qRFfxL6h/8bEPCRXdg7VPSpzXNwlFvQ=
+	t=1740215903; cv=none; b=A/sQ24DM+Rs4fW84zfv+Q+BrYyDvcXxP6tfIc9qbh/PWU2SSsivn7JQH796L8NLr2/Vu1H4NUZEuWRYY9VnVGURFTOBaamZVt8tVTO2DRruCJWs7W+QCqUQ3bolHIS4PAbPbq7D6szyQKOEpZWWFBHKXtnb9bpA7islZf4g8S50=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740208774; c=relaxed/simple;
-	bh=R5+4K/Nzsi5fbnQc0W9jCxIEubmmJjFdB88aAxqxfu4=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:CC:References:
-	 In-Reply-To:Content-Type; b=bBGUPKogrHrAOHemJpl+KK7xRxKV33rElJ6ts6dqHaiHBHyOFsuJXwzK3COkMJvnAFVGT64wu01bxzN3uVlpp8d4HnqMQj7k/UuIYnj9mq0uPXbX0b/zDSS+hhI5PngDrF5n1ME1qH9SHwIK95y5mAl4bX10NfGq/VQ57JJigvQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.187
+	s=arc-20240116; t=1740215903; c=relaxed/simple;
+	bh=Mk6WuBoS1O12+dATtOsdWAT4h5ydjVAjz1XhAIFEwiY=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=NsaTNq4+ZzezWp7jomDzH0i12zG4JFeb0aXkWrDj1P3cw4gbX4YDoXGG2tK7ISTts63zZ9xQmVll+s6MOnuooUxVIA3dohGjzhqlHZ9gXzYhTOM7AdUzNJ2WpVOIC0IhJAs8scamo1qu9SDz7ueA8d0z3DJzYNrY8rK4J49Onbg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.255
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.163.174])
-	by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Z0JDw3nVGzvWpS;
-	Sat, 22 Feb 2025 15:15:44 +0800 (CST)
-Received: from kwepemk500005.china.huawei.com (unknown [7.202.194.90])
-	by mail.maildlp.com (Postfix) with ESMTPS id 20EC4140154;
-	Sat, 22 Feb 2025 15:19:27 +0800 (CST)
-Received: from [10.174.179.234] (10.174.179.234) by
- kwepemk500005.china.huawei.com (7.202.194.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Sat, 22 Feb 2025 15:19:25 +0800
-Message-ID: <ef999493-cac0-68bb-2684-97da0fb8b583@huawei.com>
-Date: Sat, 22 Feb 2025 15:19:24 +0800
+Received: from mail.maildlp.com (unknown [172.19.88.105])
+	by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4Z0Lrq1NGSz1GDfB;
+	Sat, 22 Feb 2025 17:13:31 +0800 (CST)
+Received: from kwepemg200005.china.huawei.com (unknown [7.202.181.32])
+	by mail.maildlp.com (Postfix) with ESMTPS id 0A055140336;
+	Sat, 22 Feb 2025 17:18:11 +0800 (CST)
+Received: from huawei.com (10.175.101.6) by kwepemg200005.china.huawei.com
+ (7.202.181.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Sat, 22 Feb
+ 2025 17:18:09 +0800
+From: Wang Liang <wangliang74@huawei.com>
+To: <bjorn@kernel.org>, <magnus.karlsson@intel.com>,
+	<maciej.fijalkowski@intel.com>, <jonathan.lemon@gmail.com>,
+	<davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+	<pabeni@redhat.com>, <horms@kernel.org>, <ast@kernel.org>,
+	<daniel@iogearbox.net>, <hawk@kernel.org>, <john.fastabend@gmail.com>
+CC: <yuehaibing@huawei.com>, <zhangchangzhong@huawei.com>,
+	<wangliang74@huawei.com>, <netdev@vger.kernel.org>, <bpf@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>
+Subject: [PATCH net] xsk: fix __xsk_generic_xmit() error code when cq is full
+Date: Sat, 22 Feb 2025 17:30:07 +0800
+Message-ID: <20250222093007.3607691-1-wangliang74@huawei.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH -next v2] uprobes: fix two zero old_folio bugs in
- __replace_page()
-From: Tong Tiangen <tongtiangen@huawei.com>
-To: Oleg Nesterov <oleg@redhat.com>
-CC: David Hildenbrand <david@redhat.com>, Andrew Morton
-	<akpm@linux-foundation.org>, Peter Zijlstra <peterz@infradead.org>, Ingo
- Molnar <mingo@redhat.com>, Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Namhyung Kim <namhyung@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa
-	<jolsa@kernel.org>, Peter Xu <peterx@redhat.com>, Ian Rogers
-	<irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, "Liang, Kan"
-	<kan.liang@linux.intel.com>, Masami Hiramatsu <mhiramat@kernel.org>,
-	<linux-perf-users@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linux-mm@kvack.org>, <linux-trace-kernel@vger.kernel.org>,
-	<bpf@vger.kernel.org>, <wangkefeng.wang@huawei.com>, Guohanjun
-	<guohanjun@huawei.com>
-References: <20250221015056.1269344-1-tongtiangen@huawei.com>
- <20250221152841.GA24705@redhat.com>
- <46a48eb4-5245-81ba-9779-ace8f162c31b@huawei.com>
-In-Reply-To: <46a48eb4-5245-81ba-9779-ace8f162c31b@huawei.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- kwepemk500005.china.huawei.com (7.202.194.90)
+Content-Type: text/plain
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ kwepemg200005.china.huawei.com (7.202.181.32)
 
+When the cq reservation is failed, the error code is not set which is
+initialized to zero in __xsk_generic_xmit(). That means the packet is not
+send successfully but sendto() return ok.
 
+Set the error code and make xskq_prod_reserve_addr()/xskq_prod_reserve()
+return values more meaningful when the queue is full.
 
-在 2025/2/22 10:37, Tong Tiangen 写道:
-> 
-> 
-> 在 2025/2/21 23:28, Oleg Nesterov 写道:
->> On 02/21, Tong Tiangen wrote:
->>>
->>> --- a/kernel/events/uprobes.c
->>> +++ b/kernel/events/uprobes.c
->>> @@ -506,6 +506,11 @@ int uprobe_write_opcode(struct arch_uprobe 
->>> *auprobe, struct mm_struct *mm,
->>>       if (ret <= 0)
->>>           goto put_old;
->>>
->>> +    if (is_zero_page(old_page)) {
->>> +        ret = -EINVAL;
->>> +        goto put_old;
->>> +    }
->>
->> I agree with David, the subject looks a bit misleading.
->>
->> And. I won't insist, this is cosmetic, but if you send V2 please consider
->> moving the "verify_opcode()" check down, after the 
->> is_zero_page/PageCompound
->> checks.
->>
->> Oleg.
-> 
-> OK, check the validity of the old page first and modify the subject in
-> v3 .
-> 
-> Thanks.
+Signed-off-by: Wang Liang <wangliang74@huawei.com>
+---
+ net/xdp/xsk.c       | 3 ++-
+ net/xdp/xsk_queue.h | 4 ++--
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-I'm going to add a new patch to moving the "verify_opcode()" check down
-, IIUC that "!PageAnon(old_page)" below also needs to be moved together,
-and as David said this can be triggered by user space, so delete the use
-  of "WARN", as follows:
+diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
+index 89d2bef96469..7d0d2f40ca57 100644
+--- a/net/xdp/xsk.c
++++ b/net/xdp/xsk.c
+@@ -802,7 +802,8 @@ static int __xsk_generic_xmit(struct sock *sk)
+ 		 * if there is space in it. This avoids having to implement
+ 		 * any buffering in the Tx path.
+ 		 */
+-		if (xsk_cq_reserve_addr_locked(xs->pool, desc.addr))
++		err = xsk_cq_reserve_addr_locked(xs->pool, desc.addr);
++		if (err)
+ 			goto out;
+ 
+ 		skb = xsk_build_skb(xs, &desc);
+diff --git a/net/xdp/xsk_queue.h b/net/xdp/xsk_queue.h
+index 46d87e961ad6..ac90b7fcc027 100644
+--- a/net/xdp/xsk_queue.h
++++ b/net/xdp/xsk_queue.h
+@@ -371,7 +371,7 @@ static inline void xskq_prod_cancel_n(struct xsk_queue *q, u32 cnt)
+ static inline int xskq_prod_reserve(struct xsk_queue *q)
+ {
+ 	if (xskq_prod_is_full(q))
+-		return -ENOSPC;
++		return -ENOBUFS;
+ 
+ 	/* A, matches D */
+ 	q->cached_prod++;
+@@ -383,7 +383,7 @@ static inline int xskq_prod_reserve_addr(struct xsk_queue *q, u64 addr)
+ 	struct xdp_umem_ring *ring = (struct xdp_umem_ring *)q->ring;
+ 
+ 	if (xskq_prod_is_full(q))
+-		return -ENOSPC;
++		return -ENOBUFS;
+ 
+ 	/* A, matches D */
+ 	ring->desc[q->cached_prod++ & q->ring_mask] = addr;
+-- 
+2.34.1
 
-
-@@ -502,20 +502,16 @@ int uprobe_write_opcode(struct arch_uprobe 
-*auprobe, struct mm_struct *mm,
-         if (IS_ERR(old_page))
-                 return PTR_ERR(old_page);
-
--       ret = verify_opcode(old_page, vaddr, &opcode);
--       if (ret <= 0)
-+       ret = -EINVAL;
-+       if (is_zero_page(old_page))
-                 goto put_old;
-
--       if (is_zero_page(old_page)) {
--               ret = -EINVAL;
-+       if (!is_register && (PageCompound(old_page) || !PageAnon(old_page)))
-                 goto put_old;
--       }
-
--       if (WARN(!is_register && PageCompound(old_page),
--                "uprobe unregister should never work on compound 
-page\n")) {
--               ret = -EINVAL;
-+       ret = verify_opcode(old_page, vaddr, &opcode);
-+       if (ret <= 0)
-                 goto put_old;
--       }
-
-         /* We are going to replace instruction, update ref_ctr. */
-         if (!ref_ctr_updated && uprobe->ref_ctr_offset) {
-@@ -526,10 +522,6 @@ int uprobe_write_opcode(struct arch_uprobe 
-*auprobe, struct mm_struct *mm,
-                 ref_ctr_updated = 1;
-         }
-
--       ret = 0;
--       if (!is_register && !PageAnon(old_page))
--               goto put_old;
--
-         ret = anon_vma_prepare(vma);
-
-Thanks.
-> 
->>
->>
->> .
-> 
-> .
