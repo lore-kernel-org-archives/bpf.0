@@ -1,137 +1,194 @@
-Received: from out-188.mta1.migadu.com (out-188.mta1.migadu.com [95.215.58.188])
+Received: from mx-rz-1.rrze.uni-erlangen.de (mx-rz-1.rrze.uni-erlangen.de [131.188.11.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2808F242911
-	for <bpf@vger.kernel.org>; Mon, 24 Feb 2025 20:32:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.188
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFCAA25A359;
+	Mon, 24 Feb 2025 20:37:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=131.188.11.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740429180; cv=none; b=n0cD0ZODaSX8Eh6fxnst38ILKH/vj/P9zUZKzf117RmotIm42271C7aAmIf45+PArK+VGRIDJcbeME7IaFzJ3BWhVpkvBj0nLzkE6TttVaTdo0QG5K/D+HKo1UxZ+EX4DfZNDm2/dTBw7fwSK0DqFhxMXSJf+pU0MIw5dSIBbMg=
+	t=1740429481; cv=none; b=Rofwe0Q94diiOLiWU3z/aRp66awIpDHmhtS28OZP+Zjl/ssWFkTP++R2UisdW0o+x4nV7FZxjulqJSSOo1cjC59JhMlG+BKrGVCAXMdfYgspC7NBwo6QGRuGuoe6EETQsMitbMwTaqj8dTD4BdV+h43+DXilK7nymyGdG4Q78uI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740429180; c=relaxed/simple;
-	bh=etP+jzyAqpPEG3Vf6eXnty+6IGotKPVghFs9zlvql68=;
-	h=MIME-Version:Date:Content-Type:From:Message-ID:Subject:To:Cc:
-	 In-Reply-To:References; b=L6j78NWrRwrhhg1hEPHJ8ExZX1UKP8EdYfRIG3GFIj4pBS29BaLoDyKlDoK4D5PedcO3l6PJz+nrD1ljdVO+ZCCTdGl4RVyDfW3BqDWbsqBZ3/ayo0eyBMUTo6HtL5bhApwWiQcv5GexTmRjB6kFDTkvXmcWAnGlLp5E9bvu68Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=lLy4iBwf; arc=none smtp.client-ip=95.215.58.188
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1740429481; c=relaxed/simple;
+	bh=FLCDMUK4i/z/Ua8ga5kkGdpo/wCS9V0hc9fimsti8QY=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=d03sfkH3aUg1Nh2PNMwQstcqOV+CCm69h5+ZqsDlUIUo0Ptoo2tl1jWDCucQTTX4gimbCoxkmDczLLNALhOMLTBYkN8e+gtc+EHKm0gngNvbmdtf3QaFzrXJL1CWXIn1rIgKDJRy2BJnARHctf/KQ7KN9N+3f2Hn5XFGiX1KV9M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fau.de; spf=pass smtp.mailfrom=fau.de; dkim=pass (2048-bit key) header.d=fau.de header.i=@fau.de header.b=fOxu1qXI; arc=none smtp.client-ip=131.188.11.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fau.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fau.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="lLy4iBwf"
+	dkim=pass (2048-bit key) header.d=fau.de header.i=@fau.de header.b="fOxu1qXI"
+Received: from mx-rz-smart.rrze.uni-erlangen.de (mx-rz-smart.rrze.uni-erlangen.de [IPv6:2001:638:a000:1025::1e])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-rz-1.rrze.uni-erlangen.de (Postfix) with ESMTPS id 4Z1sxY6QrJz8sjf;
+	Mon, 24 Feb 2025 21:37:53 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fau.de; s=fau-2021;
+	t=1740429474; bh=UA+X6mmVUTj+Fwy2eA0enXAYeNRDahzcxnhY2l62vxg=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From:To:CC:
+	 Subject;
+	b=fOxu1qXIDDJ7OxnH9V4Rd9zBejolTzZGr7/1mmYmxJHP0MTpwO5bzQ3iUKYn6puUY
+	 1kKJx7c96Cj2O9jlsjqCxs82GuMeH9ZyH7bWQCUI9Yk//1gubDZAiVqQAeSetUd08C
+	 4XjwTqdyeUbV/rzcH92zwVe8YeExDMhnoSiSAC4ftnFWCITRTi2271O9GgJEoebHAJ
+	 C+Nj0/Ku56dySKBhegP7mtZN8BWCVvo2vqeKTbnHnf2lLWNPA3wdFTbzW9hR+0tWrF
+	 j/CVz/hfMMOhXV8/9AXBdNhL+jcDHt2pu5JB9BT3eZ7tspt3il/jWGYm9i0XuOccN7
+	 OJsdiG5XIoDVA==
+X-Virus-Scanned: amavisd-new at boeck1.rrze.uni-erlangen.de (RRZE)
+X-RRZE-Flag: Not-Spam
+X-RRZE-Submit-IP: 2001:9e8:362e:e00:55a6:11d5:2473:17a9
+Received: from luis-tp.fritz.box (unknown [IPv6:2001:9e8:362e:e00:55a6:11d5:2473:17a9])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: U2FsdGVkX18cE53wlyYjOUljqa4wuvt/kwPDr4UAD6I=)
+	by smtp-auth.uni-erlangen.de (Postfix) with ESMTPSA id 4Z1sxV5pgkz8slY;
+	Mon, 24 Feb 2025 21:37:50 +0100 (CET)
+From: Luis Gerhorst <luis.gerhorst@fau.de>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Puranjay Mohan <puranjay@kernel.org>,
+	Xu Kuohai <xukuohai@huaweicloud.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Mykola Lysenko <mykolal@fb.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Luis Gerhorst <luis.gerhorst@fau.de>,
+	Henriette Herzog <henriette.herzog@rub.de>,
+	Cupertino Miranda <cupertino.miranda@oracle.com>,
+	Matan Shachnai <m.shachnai@gmail.com>,
+	Dimitar Kanaliev <dimitar.kanaliev@siteground.com>,
+	Shung-Hsi Yu <shung-hsi.yu@suse.com>,
+	Daniel Xu <dxu@dxuuu.xyz>,
+	bpf@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Cc: Maximilian Ott <ott@cs.fau.de>,
+	Milan Stephan <milan.stephan@fau.de>
+Subject: [RFC PATCH 1/9] bpf/arm64: Unset bypass_spec_v4() instead of ignoring BPF_NOSPEC
+Date: Mon, 24 Feb 2025 21:36:11 +0100
+Message-ID: <20250224203619.594724-2-luis.gerhorst@fau.de>
+X-Mailer: git-send-email 2.48.1
+In-Reply-To: <20250224203619.594724-1-luis.gerhorst@fau.de>
+References: <20250224203619.594724-1-luis.gerhorst@fau.de>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1740429176;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Lcitdbk5nXbKmSN2/Gnvz1PsxeBLnhooDHJLa5fB4/8=;
-	b=lLy4iBwf6L4MURHnozUqfGQK7fV1XrvGbRpeNYGyDee9G0Vt6g8OJDLL07Lny/SjTn0egC
-	dGTgxLnKWuyCaIFHtAwNCn0rRZVm9vfY5B2Z7jo16LEJzZ9r2dhDRtUjXsgqAOHS6m2315
-	YqydIcA+zKrQ7aPjxujxJsiCBcLvZB8=
-Date: Mon, 24 Feb 2025 20:32:53 +0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: "Ihor Solodrai" <ihor.solodrai@linux.dev>
-Message-ID: <f3b456f90256379d583f58e0d6fe2492d46eb866@linux.dev>
-TLS-Required: No
-Subject: Re: [PATCH bpf-next v3 0/4] btf_encoder: emit type tags for
- bpf_arena pointers
-To: "Alan Maguire" <alan.maguire@oracle.com>, andrii@kernel.org
-Cc: acme@kernel.org, ast@kernel.org, eddyz87@gmail.com, mykolal@fb.com,
- kernel-team@meta.com, bpf@vger.kernel.org, dwarves@vger.kernel.org
-In-Reply-To: <221ce8b6-fab9-4f63-813b-6bd83dddf1a6@oracle.com>
-References: <20250219210520.2245369-1-ihor.solodrai@linux.dev>
- <221ce8b6-fab9-4f63-813b-6bd83dddf1a6@oracle.com>
-X-Migadu-Flow: FLOW_OUT
+Content-Transfer-Encoding: 8bit
 
-On 2/21/25 6:47 AM, Alan Maguire wrote:
-> On 19/02/2025 21:05, Ihor Solodrai wrote:
->> This patch series implements emitting appropriate BTF type tags for
->> argument and return types of kfuncs marked with KF_ARENA_* flags.
->>
->> For additional context see the description of BPF patch
->> "bpf: define KF_ARENA_* flags for bpf_arena kfuncs" [1].
->>
->> The feature depends on recent changes in libbpf [2].
->>
->> [1] https://lore.kernel.org/bpf/20250206003148.2308659-1-ihor.solodrai=
-@linux.dev/
->> [2] https://lore.kernel.org/bpf/20250130201239.1429648-1-ihor.solodrai=
-@linux.dev/
->>
->
-> hi Ihor, just realized that given that this change depends on recent
-> libbpf changes, we should look at updating the series to include a patc=
-h
-> updating our libbpf subproject checkpoint commit for libbpf to get thos=
-e
-> changes for the case where the libbpf submodule is built (the default
-> these days). We should probably have a patch (pahole: sync with
-> libbpf-1.6) to cover this. An example of a subproject commit patch can
-> be found at
->
-> https://lore.kernel.org/dwarves/20240729111317.140816-2-alan.maguire@or=
-acle.com/
->
-> However I don't think those bpf-next libbpf changes have been synced
-> with the github libbpf repo yet. If the next libbf sync won't be for a
-> while, I don't think this has to block this work - we could just note
-> that it needs to explicitly be built with latest v1.6 via shared librar=
-y
-> for testing purposes in the interim - but if there's a sync planned soo=
-n
-> it'd be great to roll that in too.
+This changes the semantics of BPF_NOSPEC to always insert a speculation
+barrier. If this is not needed on some architecture, bypass_spec_v4()
+should instead return true.
 
-Hi Alan. I've just submitted a PR to sync libbpf with upstream.
-https://github.com/libbpf/libbpf/pull/886
+Consequently, sanitize_stack_spill is renamed to nospec_result.
 
-Will add a subproject commit patch.
+This later allows us to rely on BPF_NOSPEC from v4 to reduce complexity
+of Spectre v1 verification.
 
-Andrii suggested pahole could use __weak declarations of libbpf API
-and detect if they are linked at runtime. This way it's not necessary
-to check for libbpf version. There are just a few places where we
-currently do that.
+Signed-off-by: Luis Gerhorst <luis.gerhorst@fau.de>
+Acked-by: Henriette Herzog <henriette.herzog@rub.de>
+Cc: Maximilian Ott <ott@cs.fau.de>
+Cc: Milan Stephan <milan.stephan@fau.de>
+---
+ arch/arm64/net/bpf_jit_comp.c | 10 +---------
+ include/linux/bpf.h           | 14 +++++++++++++-
+ include/linux/bpf_verifier.h  |  2 +-
+ kernel/bpf/verifier.c         |  4 ++--
+ 4 files changed, 17 insertions(+), 13 deletions(-)
 
-What do you think if I add patches for that too?
+diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
+index 8446848edddb..18370a45e8f2 100644
+--- a/arch/arm64/net/bpf_jit_comp.c
++++ b/arch/arm64/net/bpf_jit_comp.c
+@@ -1508,15 +1508,7 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx,
+ 
+ 	/* speculation barrier */
+ 	case BPF_ST | BPF_NOSPEC:
+-		/*
+-		 * Nothing required here.
+-		 *
+-		 * In case of arm64, we rely on the firmware mitigation of
+-		 * Speculative Store Bypass as controlled via the ssbd kernel
+-		 * parameter. Whenever the mitigation is enabled, it works
+-		 * for all of the kernel code with no need to provide any
+-		 * additional instructions.
+-		 */
++		/* TODO: emit(A64_SB) */
+ 		break;
+ 
+ 	/* ST: *(size *)(dst + off) = imm */
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index f3f50e29d639..bd2a2c5f519e 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -2423,7 +2423,19 @@ static inline bool bpf_bypass_spec_v1(const struct bpf_token *token)
+ 
+ static inline bool bpf_bypass_spec_v4(const struct bpf_token *token)
+ {
+-	return cpu_mitigations_off() || bpf_token_capable(token, CAP_PERFMON);
++#ifdef ARM64
++	/* In case of arm64, we rely on the firmware mitigation of Speculative
++	 * Store Bypass as controlled via the ssbd kernel parameter. Whenever
++	 * the mitigation is enabled, it works for all of the kernel code with
++	 * no need to provide any additional instructions. Therefore, skip
++	 * inserting nospec insns against Spectre v4 if arm64
++	 * spectre_v4_mitigations_on/dynamic() is true.
++	 */
++	bool spec_v4 = arm64_get_spectre_v4_state() == SPECTRE_VULNERABLE;
++#else
++	bool spec_v4 = true;
++#endif
++	return !spec_v4 || cpu_mitigations_off() || bpf_token_capable(token, CAP_PERFMON);
+ }
+ 
+ int bpf_map_new_fd(struct bpf_map *map, int flags);
+diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+index 32c23f2a3086..2af09d75c7cd 100644
+--- a/include/linux/bpf_verifier.h
++++ b/include/linux/bpf_verifier.h
+@@ -561,7 +561,7 @@ struct bpf_insn_aux_data {
+ 	u64 map_key_state; /* constant (32 bit) key tracking for maps */
+ 	int ctx_field_size; /* the ctx field size for load insn, maybe 0 */
+ 	u32 seen; /* this insn was processed by the verifier at env->pass_cnt */
+-	bool sanitize_stack_spill; /* subject to Spectre v4 sanitation */
++	bool nospec_result; /* ensure following insns from executing speculatively */
+ 	bool zext_dst; /* this insn zero extends dst reg */
+ 	bool needs_zext; /* alu op needs to clear upper bits */
+ 	bool storage_get_func_atomic; /* bpf_*_storage_get() with atomic memory alloc */
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 60611df77957..5be3bd38f540 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -4904,7 +4904,7 @@ static int check_stack_write_fixed_off(struct bpf_verifier_env *env,
+ 		}
+ 
+ 		if (sanitize)
+-			env->insn_aux_data[insn_idx].sanitize_stack_spill = true;
++			env->insn_aux_data[insn_idx].nospec_result = true;
+ 	}
+ 
+ 	err = destroy_if_dynptr_stack_slot(env, state, spi);
+@@ -20445,7 +20445,7 @@ static int convert_ctx_accesses(struct bpf_verifier_env *env)
+ 		}
+ 
+ 		if (type == BPF_WRITE &&
+-		    env->insn_aux_data[i + delta].sanitize_stack_spill) {
++		    env->insn_aux_data[i + delta].nospec_result) {
+ 			struct bpf_insn patch[] = {
+ 				*insn,
+ 				BPF_ST_NOSPEC(),
+-- 
+2.48.1
 
-Thanks.
-
->
-> Thanks!
->
-> Alan
->
->  > v2->v3:
->>   * Nits in patch #1
->>
->> v1->v2:
->>   * Rewrite patch #1 refactoring btf_encoder__tag_kfuncs(): now the
->>     post-processing step is removed entirely, and kfuncs are tagged in
->>     btf_encoder__add_func().
->>   * Nits and renames in patch #2
->>   * Add patch #4 editing man pages
->>
->> v2: https://lore.kernel.org/dwarves/20250212201552.1431219-1-ihor.solo=
-drai@linux.dev/
->> v1: https://lore.kernel.org/dwarves/20250207021442.155703-1-ihor.solod=
-rai@linux.dev/
->>
->> Ihor Solodrai (4):
->>   btf_encoder: refactor btf_encoder__tag_kfuncs()
->>   btf_encoder: emit type tags for bpf_arena pointers
->>   pahole: introduce --btf_feature=3Dattributes
->>   man-pages: describe attributes and remove reproducible_build
->>
->>  btf_encoder.c      | 279 +++++++++++++++++++++++---------------------=
--
->>  dwarves.h          |   1 +
->>  man-pages/pahole.1 |   7 +-
->>  pahole.c           |  11 ++
->>  4 files changed, 158 insertions(+), 140 deletions(-)
->>
->
