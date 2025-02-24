@@ -1,144 +1,170 @@
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
+Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 918C6198A38
-	for <bpf@vger.kernel.org>; Mon, 24 Feb 2025 18:47:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4F2426139E
+	for <bpf@vger.kernel.org>; Mon, 24 Feb 2025 18:49:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740422826; cv=none; b=l4QjCo5peB7TSR0vNQf9Izi+Efz7zllrQwUVkgAgY11GSJPyM8cGdJ80IG/FRgJIjSSxxlTyJn/7mZ1e/QSsVDcDxqoH27oT1NwjMkHpr3ZhF9HTpKGEjvyWsS3izpJqvgYDYs/gjyR7wswEY99nnKLswTHB2qIAN38kFs3VfD8=
+	t=1740422948; cv=none; b=oTMKUdzQeQ3rj8WrKKZq1wA+QQ6hAMgyVWAZEbsyoApVaRi0tk/DVOfDwjs1K7nzc/0N30lN8oYhPnURJvgoWLlinovQJ/0HvaWGk5iXgaT/UZ8fTos7uz8NJ63aF8w9cP5mAhLRPRrW+xbIaGHZJFqXlfVpBFEOuDCtclichrc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740422826; c=relaxed/simple;
-	bh=P8wIH/9ecutcrHu56mM8k9urk+HpnwlChUuGdoA7U4s=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=iq0lhPiUNq02Y4B8vDMI7aJw96fW2Og5Gu9cJ+elR51hZ2yNtBvnhdlMrvpOwdjDMJH6sEo2sL/6mL7NT7IgnczxtU1ojUtbGZ0QzrcalcQ3TBTxc1yahoJRVdmj8IaO6kvvvDxhKKWreog0XJPbi71whc6R+fyR9jyNG5CzEsI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MPR75QMw; arc=none smtp.client-ip=209.85.221.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1740422948; c=relaxed/simple;
+	bh=74JojcKdHl/EpDCHf6Xu0uuEZWIvtDlOXXKO2IldiT8=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=e5gWhpFxCIdB4MEmzsLvXiH2dWO2vmx9RCmpOVY9XTTpLqFqFFIdYsYtBenp1V42dJcrEo2TGyGHTTUqpKUTk+K3d+APbNm+JgHVm2RJSHNMfUQj3S2k0hHupPcbgyChKrcyaSl6CEFJgxQ50m+Nz5b34QD4yvT9JfnQ1P+yzEo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ctshao.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=SeVZs6hk; arc=none smtp.client-ip=209.85.216.73
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--ctshao.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MPR75QMw"
-Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-38f22fe889aso4249160f8f.3
-        for <bpf@vger.kernel.org>; Mon, 24 Feb 2025 10:47:04 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="SeVZs6hk"
+Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-2fc1a70935fso9866975a91.1
+        for <bpf@vger.kernel.org>; Mon, 24 Feb 2025 10:49:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1740422823; x=1741027623; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Jjer69476fXdQgjvSYyLKClwSOlF5QTqcGFir0xEKFA=;
-        b=MPR75QMwO8wldKLYyaTRlaOah1bVntI3w6+6fne+bYYLJchxgwA0xjFbu1CuzbIsEK
-         Y4pyPcL2Z52qhF74HHLWFYAU8Hrfyz8Ci1MIXcyyg1WtUVQ0ZnjlVW19wqp8J4GCF7st
-         anuudJaXXcGegMCehKsqkvZz2Fqsy1fFXacJ0XyPjd9GVC/2FVUfSPxpdZSXairECFD+
-         e23hQciMHPzBLi4i2OZspXlfhTsYiN9iwbII7lo4DSxsRhkwI8o5+J5QF14fC5pKBxbd
-         /kFWsOoGeFbjXSnrQqR7Y4SbZYRddR77K9Jd23OQXOiNBeBspHgV//TF+HZ/l9NfRYkJ
-         qgNg==
+        d=google.com; s=20230601; t=1740422946; x=1741027746; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=CnndUuEB756xO1Q16p27boNl6XOa0JiJyfWgT2SGCx4=;
+        b=SeVZs6hkNvTXAvL2hTosWkHjG+xGaQ4Pa7ncQjLNeyPR1EhIQzyxq+cArn9yLbjBEl
+         XKsAUBjaN/7r48VjFkRAjaHqHv5Wc9tq3kDh+QoS0pJN31vJAqvDX9C5UScsQTngvI2g
+         8D2VbzVXFiGq0bwV/BMnyComlCaY/+Qk0MM8v8P3vsVtZT+1owBwiYR9GBEqWNRZK2//
+         2TL3IuIfRACSlvT29SdE7bebFEde/t7VsNaLeOGlzDzPtM7UhmxFCE1girV32k/hhEql
+         hzREFVER9rcqysK7mZUoURTgj4M61qWk1gjnPWRHnZEPCqQEphzAnaNfRV+5oSgG4s8U
+         kC4g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740422823; x=1741027623;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Jjer69476fXdQgjvSYyLKClwSOlF5QTqcGFir0xEKFA=;
-        b=nGJSEGfYRqaSDfcSiz9zik18NjOGG/60yduDEqwzPses1vbeapb6RMz9JBncSDVSM9
-         szZtiCtn2wlkL21WrOvB0xjqYvKh5HX52HiYQo1WDF3yHhiTjbtHBoYV89xY+07OlYk7
-         v4cXljiLDZDMmQcpM5tjhngzZYxkodGVswwptzlfSVOGpOUY7WAet0AtF/CAm36bWKfF
-         96UPk6NBT/DLEWYLC2lRbqKF1Pkz9gNQ1R9TF3Ux6/i/Cvm9xErVZBluN+tD3DIyjgok
-         LmFnKtwrM0hSN//Gnx2TxsH8uun5Gh/WvlgsJCAueSHmbhXz+kmH78kc7LKJmIS06A+H
-         Bm+A==
-X-Forwarded-Encrypted: i=1; AJvYcCX5guJCZn0ulyXapeQXLBAYVcE3W4+VHFznJkLy2QvEUOusFmNRo/rg/GR24EGQrmPGuCw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxG8EBaCXvEh28fKJ/hKsRxA0syFKf3SYJfb+ZXGBp2yaokcU32
-	vnaM3w5Q6mGEIK4YWr+Osrjr3smd+sqg+fcHoiAPUNcJnRSs4WFO
-X-Gm-Gg: ASbGncvfQltk2WloQlQeVof2W0LRecN36PHeHlduxKOf06jTyBVkzXl7vtEa/GahNu1
-	nTCHxQ9f26ylj8nA01WHNk8+WlLBxKLqA7HDmyriMu7Kyr+bpBdGx2UqaT2Znpo78ngE5OfHg0z
-	Avh85vSkk6k/QLXfwfvGiXdnnRaeOYozN0gQjO8ZcBSIyaDdexNRGbKloSghsme3aCGZTJ+B/lU
-	LT4br1RtTB2EdUmSvCgmdTpg4fd7kYLUwj9bTEd91t26fLyc86A5j50xD91DuvkKX/VBXQkcpIv
-	QByL7s/iTxqH5SrxVtg8E1b2CdbXwXQoIrbc7bU=
-X-Google-Smtp-Source: AGHT+IGnp79TGzLNiybv1beS4iybyAIWQwYxtQalhUZGS2LAtsCjXk7zs8CElagRTdFr3J3b2Scq6w==
-X-Received: by 2002:a05:6000:18ad:b0:38f:32ab:d4f4 with SMTP id ffacd0b85a97d-390cc5f58admr194748f8f.4.1740422822613;
-        Mon, 24 Feb 2025 10:47:02 -0800 (PST)
-Received: from f (cst-prg-14-58.cust.vodafone.cz. [46.135.14.58])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-abed205728esm3920766b.144.2025.02.24.10.46.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Feb 2025 10:47:01 -0800 (PST)
-Date: Mon, 24 Feb 2025 19:46:52 +0100
-From: Mateusz Guzik <mjguzik@gmail.com>
-To: Shakeel Butt <shakeel.butt@linux.dev>
-Cc: Vlastimil Babka <vbabka@suse.cz>, lsf-pc@lists.linux-foundation.org, 
-	linux-mm@kvack.org, bpf <bpf@vger.kernel.org>, Christoph Lameter <cl@linux.com>, 
-	David Rientjes <rientjes@google.com>, Hyeonggon Yoo <42.hyeyoo@gmail.com>, 
-	"Uladzislau Rezki (Sony)" <urezki@gmail.com>, Alexei Starovoitov <ast@kernel.org>
-Subject: Re: [LSF/MM/BPF TOPIC] SLUB allocator, mainly the sheaves caching
- layer
-Message-ID: <svy4dxxdgbt4mnapfrqod7c2imufgb4daao7id3j5p7tgeok4j@jtknbmybpqsg>
-References: <14422cf1-4a63-4115-87cb-92685e7dd91b@suse.cz>
- <e2fz26kcbni37rp2rdqvac7mljvrglvtzmkivfpsnibubu3g3t@blz27xo4honn>
+        d=1e100.net; s=20230601; t=1740422946; x=1741027746;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=CnndUuEB756xO1Q16p27boNl6XOa0JiJyfWgT2SGCx4=;
+        b=QwIInTdY1tSZDsvS3QTuvvNarhjPbUtuRlcKtspbiA723qCAkMQQQvqy/w/1eGCkr7
+         6Fld3ynk63MB1T7xKC7h63x/XpDnfTDUttUAnpF14U7MQQoe06jZmZrqaooLHFptYoIa
+         +ce1UR4sarj8GsVANmEvbPcmSkA++8iyOvtuklJuiPHzDRRH3nFbp2nCCzHTLSOzIuUq
+         CIKO8QY+XUrZ4YShHOwg05bZa3cmqAAkfJKKHK2zwpHgMo3IhV+jG1jPJTomrpvhSpTJ
+         3D/tP+UTxW7o4HeV8LQDXYuEOIOiKNuco7YYGRR/nTj6nhlIjuLU6gia2vWEjxPoarXg
+         aiwQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVCwyDYYlZ+3jofRgFe/fGce8Yz8Nd9BJ0GimOLcKg67KO7pcBpbgLYSVst6JTbTmANvlY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzyTlPlaznBtQQQgoyPePnOS3x/6aEVOsBr1GBD22XU9BTR4KRa
+	EwfjWP4HnDb7HXvbdHYPy+HQiLGo4U8upVaT80+9SNFXUgZQSA5YbItkSEzmvWQFxRfMWSrTvTp
+	yFw==
+X-Google-Smtp-Source: AGHT+IHidTbqQGszkaQeLrt6isD19oKxaBJglHjyeZLSObSL4hEpX/goqPsS0DROoMvOTwsNky25bcu2qHs=
+X-Received: from pjbpv2.prod.google.com ([2002:a17:90b:3c82:b0:2f8:49ad:406c])
+ (user=ctshao job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:3bc4:b0:2ee:f80c:6884
+ with SMTP id 98e67ed59e1d1-2fe68d066a5mr347766a91.33.1740422946130; Mon, 24
+ Feb 2025 10:49:06 -0800 (PST)
+Date: Mon, 24 Feb 2025 10:42:47 -0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <e2fz26kcbni37rp2rdqvac7mljvrglvtzmkivfpsnibubu3g3t@blz27xo4honn>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.48.1.658.g4767266eb4-goog
+Message-ID: <20250224184742.4144931-1-ctshao@google.com>
+Subject: [PATCH v7 0/4] Tracing contention lock owner call stack
+From: Chun-Tse Shao <ctshao@google.com>
+To: linux-kernel@vger.kernel.org
+Cc: Chun-Tse Shao <ctshao@google.com>, peterz@infradead.org, mingo@redhat.com, 
+	acme@kernel.org, namhyung@kernel.org, mark.rutland@arm.com, 
+	alexander.shishkin@linux.intel.com, jolsa@kernel.org, irogers@google.com, 
+	adrian.hunter@intel.com, kan.liang@linux.intel.com, nick.forrington@arm.com, 
+	linux-perf-users@vger.kernel.org, bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On Mon, Feb 24, 2025 at 10:02:09AM -0800, Shakeel Butt wrote:
-> What about pre-memcg-charged sheaves? We had to disable memcg charging
-> of some kernel allocations and I think sheaves can help in reenabling
-> it.
+For perf lock contention, the current owner tracking (-o option) only
+works with per-thread mode (-t option). Enabling call stack mode for
+owner can be useful for diagnosing why a system running slow in
+lock contention.
 
-It has been several months since last I looked at memcg, so details are
-fuzzy and I don't have time to refresh everything.
+Example output:
+  $ sudo ~/linux/tools/perf/perf lock con -abvo -Y mutex -E16 perf bench sched pipe
+   ...
+   contended   total wait     max wait     avg wait         type   caller
 
-However, if memory serves right the primary problem was the irq on/off
-trip associated with them (sometimes happening twice, second time with
-refill_obj_stock()).
+         171      1.55 ms     20.26 us      9.06 us        mutex   pipe_read+0x57
+                          0xffffffffac6318e7  pipe_read+0x57
+                          0xffffffffac623862  vfs_read+0x332
+                          0xffffffffac62434b  ksys_read+0xbb
+                          0xfffffffface604b2  do_syscall_64+0x82
+                          0xffffffffad00012f  entry_SYSCALL_64_after_hwframe+0x76
+          36    193.71 us     15.27 us      5.38 us        mutex   pipe_write+0x50
+                          0xffffffffac631ee0  pipe_write+0x50
+                          0xffffffffac6241db  vfs_write+0x3bb
+                          0xffffffffac6244ab  ksys_write+0xbb
+                          0xfffffffface604b2  do_syscall_64+0x82
+                          0xffffffffad00012f  entry_SYSCALL_64_after_hwframe+0x76
+           4     51.22 us     16.47 us     12.80 us        mutex   do_epoll_wait+0x24d
+                          0xffffffffac691f0d  do_epoll_wait+0x24d
+                          0xffffffffac69249b  do_epoll_pwait.part.0+0xb
+                          0xffffffffac693ba5  __x64_sys_epoll_pwait+0x95
+                          0xfffffffface604b2  do_syscall_64+0x82
+                          0xffffffffad00012f  entry_SYSCALL_64_after_hwframe+0x76
+           2     20.88 us     11.95 us     10.44 us        mutex   do_epoll_wait+0x24d
+                          0xffffffffac691f0d  do_epoll_wait+0x24d
+                          0xffffffffac693943  __x64_sys_epoll_wait+0x73
+                          0xfffffffface604b2  do_syscall_64+0x82
+                          0xffffffffad00012f  entry_SYSCALL_64_after_hwframe+0x76
+           1      7.33 us      7.33 us      7.33 us        mutex   do_epoll_ctl+0x6c1
+                          0xffffffffac692e01  do_epoll_ctl+0x6c1
+                          0xffffffffac6937e0  __x64_sys_epoll_ctl+0x70
+                          0xfffffffface604b2  do_syscall_64+0x82
+                          0xffffffffad00012f  entry_SYSCALL_64_after_hwframe+0x76
+           1      6.64 us      6.64 us      6.64 us        mutex   do_epoll_ctl+0x3d4
+                          0xffffffffac692b14  do_epoll_ctl+0x3d4
+                          0xffffffffac6937e0  __x64_sys_epoll_ctl+0x70
+                          0xfffffffface604b2  do_syscall_64+0x82
+                          0xffffffffad00012f  entry_SYSCALL_64_after_hwframe+0x76
 
-I think the real fix(tm) would recognize only some allocations need
-interrupt safety -- as in some slabs should not be allowed to be used
-outside of the process context. This is somewhat what sheaves is doing,
-but can be applied without fronting the current kmem caching mechanism.
-This may be a tough sell and even then it plays whackamole with patching
-up all consumers.
+  === owner stack trace ===
 
-Suppose it is not an option.
+           3     31.24 us     15.27 us     10.41 us        mutex   pipe_read+0x348
+                          0xffffffffac631bd8  pipe_read+0x348
+                          0xffffffffac623862  vfs_read+0x332
+                          0xffffffffac62434b  ksys_read+0xbb
+                          0xfffffffface604b2  do_syscall_64+0x82
+                          0xffffffffad00012f  entry_SYSCALL_64_after_hwframe+0x76
+  ...
+v7:
+  Remove duplicate contention records.
 
-Then there are 2 ways that I considered.
+v6: lore.kernel.org/20250219214400.3317548-1-ctshao@google.com
+  Free allocated memory in error patch.
+  Add description in man page.
 
-The easiest splits memcg accounting for irq and process level -- similar
-to what localtry thing is doing. this would only cost preemption off/on
-trip in the common case and a branch on the current state. But suppose
-this is a no-go as well.
+v5: lore.kernel.org/20250212222859.2086080-1-ctshao@google.com
+  Move duplicated code into function.
+  Remove code to retrieve undesired callstack at the end of `contention_end()`.
+  Other minor fix based on Namhyung's review.
 
-My primary idea was using hand-rolled sequence counters and local 8-byte
-cmpxchg (*without* the lock prefix, also not to be confused with 16-byte
-used by the current slub fast path). Should this work, it would be
-significantly faster than irq trips. 
+v4: lore.kernel.org/20250130052510.860318-1-ctshao@google.com
+  Use `__sync_fetch_and_add()` to generate owner stackid automatically.
+  Use `__sync_fetch_and_add(..., -1)` to workaround compiler error from
+    `__sync_fetch_and_sub()`
+  Remove unnecessary include headers.
+  Dedicate on C-style comment.
+  Other minor fix based on Namhyung's review.
 
-The irq thing is there only to facilitate several fields being updated
-or memcg itself getting replaced in an atomic manner for process vs
-interrupt context.
+v3: lore.kernel.org/20250129001905.619859-1-ctshao@google.com
+  Rename/shorten multiple variables.
+  Implement owner stackid.
+  Add description for lock function return code in `contention_end()`.
+  Other minor fix based on Namhyung's review.
 
-The observation is that all values which are getting updated are 4
-bytes. Then perhaps an additional counter can be added next to each one
-so that an 8-byte cmpxchg is going to fail should an irq swoop in and
-change stuff from under us.
+v2: lore.kernel.org/20250113052220.2105645-1-ctshao@google.com
+  Fix logic deficit in v1 patch 2/4.
 
-The percpu state would have a sequence counter associated with the
-assigned memcg_stock_pcp. The memcg_stock_pcp object would have the same
-value replicated inside for every var which can be updated in the fast
-path.
+v1: lore.kernel.org/20250110051346.1507178-1-ctshao@google.com
 
-Then the fast path would only succeed if the value read off from per-cpu
-did not change vs what's in the stock thing.
+Chun-Tse Shao (4):
+  perf lock: Add bpf maps for owner stack tracing
+  perf lock: Retrieve owner callstack in bpf program
+  perf lock: Make rb_tree helper functions generic
+  perf lock: Report owner stack in usermode
 
-Any change to memcg_stock_pcp (e.g., rolling up bytes after passing the
-page size threshold) would disable interrupts and modify all these
-counters.
+ tools/perf/Documentation/perf-lock.txt        |   5 +-
+ tools/perf/builtin-lock.c                     |  56 +++-
+ tools/perf/util/bpf_lock_contention.c         |  71 ++++-
+ .../perf/util/bpf_skel/lock_contention.bpf.c  | 245 +++++++++++++++++-
+ tools/perf/util/bpf_skel/lock_data.h          |   7 +
+ tools/perf/util/lock-contention.h             |   7 +
+ 6 files changed, 365 insertions(+), 26 deletions(-)
 
-There is some more work needed to make sure the stock obj can be safely
-swapped out for a new one and not accidentally have a value which lines
-up with the prevoius one, I don't remember what I had for that (and yes,
-I recognize a 4 byte value will invariably roll over and *in principle*
-a conflict will be possible).
+--
+2.48.1.658.g4767266eb4-goog
 
-This is a rough outline since Vlasta keeps prodding me about it.
-
-That said, maybe someone will have a better idea. The above is up for
-grabs if someone wants to do it, I can't commit to looking at it.
