@@ -1,120 +1,102 @@
-Received: from out-180.mta1.migadu.com (out-180.mta1.migadu.com [95.215.58.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 717C2266584
-	for <bpf@vger.kernel.org>; Mon, 24 Feb 2025 17:00:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3407B26658F
+	for <bpf@vger.kernel.org>; Mon, 24 Feb 2025 17:00:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740416403; cv=none; b=QZw+oastG5+8vyf3ngHiUBk4zfhmKMSb3z+Man1wdKK5fDxpo5nR5JykY1Qq64AznLYzIgCJqQACHiDvj2CSnqN0ein3U/xZvo0auuYTOaLItRDEVR8nx9k2iRe98/IFQLGuFTu0z8l2r4j3/+W6m+OGER5oKqvWN5Ql3NduZKI=
+	t=1740416408; cv=none; b=ffIYmZrfMTSRJi8+kYFQU6H6RSfP84BDGzs9HiiOrqm0HnsI7xUd9UoPY4BQNBwhmhSiC1FXdkTMLtEYThbHGPIbdUyCUKrnjAy0W3yni9OX6iePDWeWBlvmeBuKTLXeTH6o9P5EYlBTj4j8+ZGk1FDA0FA+3J2meDyvNQ9QbDo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740416403; c=relaxed/simple;
-	bh=jm9V/uGdHxg5OBS/aN+olvdgGrxxL3p39+/oZgyyRrw=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=AN1CFp0x0icGTIZvaq07xjqx7ljCf1NxjPdT1p8ar0w8ipzrTH9xkeOP+noCbuTaBYMhaAt2pkYCbimoTcccRJDqkx/nEepWbruWWeDK0ofadxOO6WPfx4dQaPPcxirCXBqZF8B/p978MEaa5HQVVcWuoNLEMjKXIpxJ5GilkLw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=VRQ7d5UD; arc=none smtp.client-ip=95.215.58.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1740416408; c=relaxed/simple;
+	bh=H/eMT60CoAji4F4FxwCqPtUx6hQMzPO26wSo7Scx9oE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=dwy2QfiFw4m6Wb42eG/BaKdexVLA4mxsRK3H/At5+0DWpzMo4v8rEnIae3epI2JDpdJIyNyIEIAJNdoD5R0on3X6Ahtb91K1sHnUct7pgnxeHzB3mrCATyB4FSchkbajF82FmEML5pZamifT8Wp4TqMiVWV9SfP4RRqv6FtTCeM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=blackwall.org; spf=none smtp.mailfrom=blackwall.org; dkim=pass (2048-bit key) header.d=blackwall-org.20230601.gappssmtp.com header.i=@blackwall-org.20230601.gappssmtp.com header.b=GAfWaG1X; arc=none smtp.client-ip=209.85.208.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=blackwall.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=blackwall.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="VRQ7d5UD"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1740416399;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=sXImHF+AatB2zWehHEZzkP3DgCbk67G0CTnxuxdEVxE=;
-	b=VRQ7d5UDZQ1lPbaD4QY3raHMG/CkJGI/nZfTYxApXF6OrKHQmK48OXXrKmvPgzvdYXI1p4
-	Y8+Q7CoALwE6/jjdTZzmW+QWELQVwm0QjdIJlgFTjRqaXIxo9c5EmE2ubWNA1pl/HGOmpR
-	KcwJSvVpL3KJkZJ+HVK9i5AvoqMmKDg=
-From: Tao Chen <chen.dylane@linux.dev>
-To: ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	haoluo@google.com,
-	jolsa@kernel.org,
-	qmo@kernel.org
-Cc: bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	chen.dylane@gmail.com,
-	Tao Chen <chen.dylane@linux.dev>,
-	Tao Chen <dylane.chen@didiglobal.com>
-Subject: [PATCH bpf-next v8 1/5] libbpf: Extract prog load type check from libbpf_probe_bpf_helper
-Date: Tue, 25 Feb 2025 00:59:08 +0800
-Message-Id: <20250224165912.599068-2-chen.dylane@linux.dev>
-In-Reply-To: <20250224165912.599068-1-chen.dylane@linux.dev>
-References: <20250224165912.599068-1-chen.dylane@linux.dev>
+	dkim=pass (2048-bit key) header.d=blackwall-org.20230601.gappssmtp.com header.i=@blackwall-org.20230601.gappssmtp.com header.b="GAfWaG1X"
+Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-5dca468c5e4so8335897a12.1
+        for <bpf@vger.kernel.org>; Mon, 24 Feb 2025 09:00:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=blackwall-org.20230601.gappssmtp.com; s=20230601; t=1740416404; x=1741021204; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=NNWih9tGwSww/JPegbyk7ztiO19aEjAHfJHbiibWT5Y=;
+        b=GAfWaG1XraXegzjXe6MF5r/F9scDCaRIdSXos9sfgXrP6/xv0o9mv5rCO/E76k9E4Y
+         lIVHazip91fCEj/n1sGbIblqSh096MBLsY0sAN+jYRF5fR3NEcezIO/Q09GmOgGxEpnJ
+         HIqx20UNLqhTvcILJKzF644XYkMfu+sXfGpqA9Xm60klM1eRxSuBbUOVPbcrMJiaOroK
+         0Hm82Fx11mnnC3KvrpMVR0z1016zM6eJ/kmrWtvmgw6xS+0Faa9/xEABpESAMFU661wa
+         +vx3Z1eXfZ1XFSBv8CJEMoKsTeSSTdg1U0StRk0PXjBQQD/SwVDGh2kzSIlO3SGbNM5r
+         PFFA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1740416404; x=1741021204;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=NNWih9tGwSww/JPegbyk7ztiO19aEjAHfJHbiibWT5Y=;
+        b=TLpTWHTqvSyKK3a4ST5rI+nkQcOsC8uUcKhOtYmNM2KaPAuF6PdIkVtSGmStd7ygm6
+         cd1O/Z4WwRreedyRogrmj6B0nAV6IEj8tOEK/iCi22J8OkrZB+W696k7l8fjf6PK7Ssa
+         byIUHLjLtyk6BLU0QIfTnF9Z9F1rH5nH0hixhOQf8GByFR2OyB4FsOrHJmG4jmlRwzN2
+         zGmeWxoz745d0T2iVQGqU6R5zRRC6vm50SsMhWGKfQ9QXoS4/4CZY8qvQzC4kfIPZRIw
+         deR9MIGOHw9oakHfivudCo6y453Sq3kKOJfAgkmg/KIJVIa8OLA/wmu2as+6HhiP6eWZ
+         USuQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUfqbrOgEeMKj2afTvdrKXbIMI7c+RwoohXHjltSdgzORsK+izMndxnKG/AE9kr1erxof4=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyl91DDKG5jSsgBHr5KFOR3tgTnkB4nDI/BHQZD57ITe8d6JhGj
+	I53vlwWZ8blqiYJlun1+YIuutQAIpObNGrRgMh5YkjKHKhpOFqBRKKQhueWtjsc=
+X-Gm-Gg: ASbGncsZSPkyIWYnKI6v16aJIA1l58PmqShDSfdVMqWtgKFEVUiDPIxp90V41V6E3R6
+	RZpKXyvYvJPkBvyD1rpV9kkTsr1o49nXo2Xv+dO3oPUXN6Dwvv8AWNV5ENLoJ7vTvG2ruf9Qqqd
+	xrnjmf8gOVoykKOcFWWK8EAKRGtVNGj3j0Z9oxioKbgIlvH6ZT6f8nsyojJvmifzVSEHR//F3XD
+	QpgK6jBr7Ey5LDaPypXEojvz3NJsOLQp8V8ETTva7Bhb88eqeAX2Wvc1/BeFsVPOltIr578JO03
+	GGVMRARxV09qkgyL+KFuemv2+gKS9uMiY/YOhUhelv0R41AI9DDbFqQqew==
+X-Google-Smtp-Source: AGHT+IEwsqOsw++yT+0bFX5SCBK/HWfbV4FpqmVLjfqG5YZq6RgAGIJsGwljpC8gwz0YwsGCV5s/DQ==
+X-Received: by 2002:a17:907:6095:b0:ab7:e73a:f2c8 with SMTP id a640c23a62f3a-abc09a97a2cmr1333363866b.26.1740416404255;
+        Mon, 24 Feb 2025 09:00:04 -0800 (PST)
+Received: from [192.168.0.205] (78-154-15-142.ip.btc-net.bg. [78.154.15.142])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-abbc9ff4fcdsm1213817766b.87.2025.02.24.09.00.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 24 Feb 2025 09:00:03 -0800 (PST)
+Message-ID: <e8b6465a-3b32-4ec1-907a-414a6e5a10c1@blackwall.org>
+Date: Mon, 24 Feb 2025 19:00:02 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH iproute2-next v2] ip: link: netkit: Support scrub options
+To: Jordan Rife <jordan@jrife.io>, Daniel Borkmann <daniel@iogearbox.net>
+Cc: netdev@vger.kernel.org, bpf@vger.kernel.org, stephen@networkplumber.org,
+ dsahern@kernel.org
+References: <20250224164903.138865-1-jordan@jrife.io>
+Content-Language: en-US
+From: Nikolay Aleksandrov <razor@blackwall.org>
+In-Reply-To: <20250224164903.138865-1-jordan@jrife.io>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Extract prog load type check part from libbpf_probe_bpf_helper
-suggested by Andrii, which will be used in both
-libbpf_probe_bpf_{helper, kfunc}.
+On 2/24/25 18:49, Jordan Rife wrote:
+> Add "scrub" option to configure IFLA_NETKIT_SCRUB and
+> IFLA_NETKIT_PEER_SCRUB when setting up a link. Add "scrub" and
+> "peer scrub" to device details as well when printing.
+> 
+> $ sudo ./ip/ip link add jordan type netkit scrub default peer scrub none
+> $ ./ip/ip -details link show jordan
+> 43: jordan@nk0: <BROADCAST,MULTICAST,NOARP,M-DOWN> mtu 1500 qdisc noop state DOWN mode DEFAULT group default qlen 1000
+>     link/ether 00:00:00:00:00:00 brd ff:ff:ff:ff:ff:ff promiscuity 0 allmulti 0 minmtu 68 maxmtu 65535
+>     netkit mode l3 type primary policy forward peer policy forward scrub default peer scrub none numtxqueues 1 numrxqueues 1 gso_max_size 65536 gso_max_segs 65535 tso_max_size 524280 tso_max_segs 65535 gro_max_size 65536 gso_ipv4_max_size 65536 gro_ipv4_max_size 65536
+> 
+> v1->v2: Added some spaces around "scrub SCRUB" in the help message.
+> 
+> Link: https://lore.kernel.org/netdev/20241004101335.117711-1-daniel@iogearbox.net/
+> 
+> Signed-off-by: Jordan Rife <jordan@jrife.io>
+> ---
+>  ip/iplink_netkit.c | 46 +++++++++++++++++++++++++++++++++++++++++++++-
+>  1 file changed, 45 insertions(+), 1 deletion(-)
+> 
 
-Cc: Tao Chen <dylane.chen@didiglobal.com>
-Reviewed-by: Jiri Olsa <jolsa@kernel.org>
-Reviewed-by: Eduard Zingerman <eddyz87@gmail.com>
-Signed-off-by: Tao Chen <chen.dylane@linux.dev>
----
- tools/lib/bpf/libbpf_probes.c | 31 +++++++++++++++++++------------
- 1 file changed, 19 insertions(+), 12 deletions(-)
-
-diff --git a/tools/lib/bpf/libbpf_probes.c b/tools/lib/bpf/libbpf_probes.c
-index 9dfbe7750f56..a48a557314f6 100644
---- a/tools/lib/bpf/libbpf_probes.c
-+++ b/tools/lib/bpf/libbpf_probes.c
-@@ -413,6 +413,23 @@ int libbpf_probe_bpf_map_type(enum bpf_map_type map_type, const void *opts)
- 	return libbpf_err(ret);
- }
- 
-+static bool can_probe_prog_type(enum bpf_prog_type prog_type)
-+{
-+	/* we can't successfully load all prog types to check for BPF helper
-+	 * and kfunc support.
-+	 */
-+	switch (prog_type) {
-+	case BPF_PROG_TYPE_TRACING:
-+	case BPF_PROG_TYPE_EXT:
-+	case BPF_PROG_TYPE_LSM:
-+	case BPF_PROG_TYPE_STRUCT_OPS:
-+		return false;
-+	default:
-+		break;
-+	}
-+	return true;
-+}
-+
- int libbpf_probe_bpf_helper(enum bpf_prog_type prog_type, enum bpf_func_id helper_id,
- 			    const void *opts)
- {
-@@ -427,18 +444,8 @@ int libbpf_probe_bpf_helper(enum bpf_prog_type prog_type, enum bpf_func_id helpe
- 	if (opts)
- 		return libbpf_err(-EINVAL);
- 
--	/* we can't successfully load all prog types to check for BPF helper
--	 * support, so bail out with -EOPNOTSUPP error
--	 */
--	switch (prog_type) {
--	case BPF_PROG_TYPE_TRACING:
--	case BPF_PROG_TYPE_EXT:
--	case BPF_PROG_TYPE_LSM:
--	case BPF_PROG_TYPE_STRUCT_OPS:
--		return -EOPNOTSUPP;
--	default:
--		break;
--	}
-+	if (!can_probe_prog_type(prog_type))
-+		return libbpf_err(-EOPNOTSUPP);
- 
- 	buf[0] = '\0';
- 	ret = probe_prog_load(prog_type, insns, insn_cnt, buf, sizeof(buf));
--- 
-2.43.0
+Acked-by: Nikolay Aleksandrov <razor@blackwall.org>
 
