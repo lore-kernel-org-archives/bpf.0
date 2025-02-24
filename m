@@ -1,15 +1,16 @@
 Received: from dediextern.your-server.de (dediextern.your-server.de [85.10.215.232])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 997A823BCED;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9973E23BCEA;
 	Mon, 24 Feb 2025 15:29:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=85.10.215.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740410984; cv=none; b=XiGeOFibbbGxxTp0A5hMsthwwQQtxOY0SeUKztHv4+JX9nRFDCIRQytTEJnZ0Nskf65dbeS/ciwQOUJEHK2cfxwwW1oDuy33PSjXeSxJAo3E3rppg+jiX39AtgRNFm5YWNaFvfjtZ9ccu/PqrqKR3/CEZeCQwK9tRXtlrHtG4Ts=
+	t=1740410984; cv=none; b=KYvb5poL7qQpeCMV+TcgJ4xS10NakK7Ns1bdmVGnvb0kkuAo1ELqXnNebOFl6N2dvtHJRRWNBPvuTF7SIboJmuGeSmBPa7wAy9nbg3yyVjDye2UgORCGrE60HcUEurXit4zFaBxe3vSwp5pywx3zxxc/uYpplWnS8zFymw+0DOY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1740410984; c=relaxed/simple;
-	bh=EEKXb2X93vFkM9nakFVbWhilY+DabOqF5cOX3onCBAI=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=KaK3H3KTZ2BaZvIQ8CQValmmCXFuKHFNIncRc0QZePfBuM6i7hKgU5EsqwLtBiU+Bt7Qauwh+pAzNns+5DwWttpZtSAS7PFo0vVpQTG4vd3OBBVXURa7IemC2LSMpizK68p5tiRRzrjYRP6NWQ9hRpIu7y+ZoKy6xpppauzg7S8=
+	bh=riH3QIs5pbvGJv1C6PfdADXMONR4L91TV2bzn26/NZM=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=KDajG7DBoT28U0OE6HWapEaGgQVo51pSKGWwvJ04fvUY7p4doWqEkvWvIQZdDqKgFt+2Hwv1CMDJTq7MQL3zVLMwL6y2UwYZrtFTb6BKsglVoTjC00FmzQUXbvZn1Et+U0D0NMrI4wKX9wZTO5QMsFDVh9gZc+X3Qy7wSvqlhFs=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hetzner-cloud.de; spf=pass smtp.mailfrom=hetzner-cloud.de; arc=none smtp.client-ip=85.10.215.232
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hetzner-cloud.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hetzner-cloud.de
@@ -17,12 +18,12 @@ Received: from sslproxy01.your-server.de ([78.46.139.224])
 	by dediextern.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.94.2)
 	(envelope-from <marcus.wichelmann@hetzner-cloud.de>)
-	id 1tmaOQ-000A29-JS; Mon, 24 Feb 2025 16:29:14 +0100
+	id 1tmaOQ-000A2D-TI; Mon, 24 Feb 2025 16:29:14 +0100
 Received: from [78.47.5.107] (helo=sdn-nic-test01..)
 	by sslproxy01.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.96)
 	(envelope-from <marcus.wichelmann@hetzner-cloud.de>)
-	id 1tmaOQ-0005Hj-0v;
+	id 1tmaOQ-0005Hj-21;
 	Mon, 24 Feb 2025 16:29:14 +0100
 From: Marcus Wichelmann <marcus.wichelmann@hetzner-cloud.de>
 To: netdev@vger.kernel.org,
@@ -51,12 +52,13 @@ Cc: willemdebruijn.kernel@gmail.com,
 	jolsa@kernel.org,
 	shuah@kernel.org,
 	hawk@kernel.org,
-	marcus.wichelmann@hetzner-cloud.de,
-	Willem de Bruijn <willemb@google.com>
-Subject: [PATCH bpf-next v3 0/6] XDP metadata support for tun driver
-Date: Mon, 24 Feb 2025 15:29:03 +0000
-Message-ID: <20250224152909.3911544-1-marcus.wichelmann@hetzner-cloud.de>
+	marcus.wichelmann@hetzner-cloud.de
+Subject: [PATCH bpf-next v3 3/6] selftests/bpf: move open_tuntap to network helpers
+Date: Mon, 24 Feb 2025 15:29:06 +0000
+Message-ID: <20250224152909.3911544-4-marcus.wichelmann@hetzner-cloud.de>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20250224152909.3911544-1-marcus.wichelmann@hetzner-cloud.de>
+References: <20250224152909.3911544-1-marcus.wichelmann@hetzner-cloud.de>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -67,59 +69,125 @@ Content-Transfer-Encoding: 8bit
 X-Authenticated-Sender: marcus.wichelmann@hetzner-cloud.de
 X-Virus-Scanned: Clear (ClamAV 1.0.7/27559/Mon Feb 24 10:44:14 2025)
 
-Hi,
-
-thank you for your reviw. As promised, here is V3 of this patch series.
-
-I noticed that the updated selftests were flaky sometimes due to the kernel
-networking stack sending IPv6 multicast listener reports on the created
-test interfaces.
-This can be seen here:
-https://github.com/kernel-patches/bpf/actions/runs/13449071153/job/37580497963
-
-Setting the NOARP flag on the interfaces should fix this race condition.
-
-Successful pipeline:
-https://github.com/kernel-patches/bpf/actions/runs/13500667544
+To test the XDP metadata functionality of the tun driver, it's necessary
+to create a new tap device first. A helper function for this already
+exists in lwt_helpers.h. Move it to the common network helpers header,
+so it can be reused in other tests.
 
 Signed-off-by: Marcus Wichelmann <marcus.wichelmann@hetzner-cloud.de>
-Acked-by: Jason Wang <jasowang@redhat.com>
-Reviewed-by: Willem de Bruijn <willemb@google.com>
-
 ---
+ tools/testing/selftests/bpf/network_helpers.c | 28 ++++++++++++++++++
+ tools/testing/selftests/bpf/network_helpers.h |  3 ++
+ .../selftests/bpf/prog_tests/lwt_helpers.h    | 29 -------------------
+ 3 files changed, 31 insertions(+), 29 deletions(-)
 
-v3:
-- change the condition to handle xdp_buffs without metadata support, as
-  suggested by Willem de Bruijn <willemb@google.com>
-- add clarifying comment why that condition is needed
-- set NOARP flag in selftests to ensure that the kernel does not send
-  packets on the test interfaces that may interfere with the tests
-
-v2: https://lore.kernel.org/bpf/20250217172308.3291739-1-marcus.wichelmann@hetzner-cloud.de/
-- submit against bpf-next subtree
-- split commits and improved commit messages
-- remove redundant metasize check and add clarifying comment instead
-- use max() instead of ternary operator
-- add selftest for metadata support in the tun driver
-
-v1: https://lore.kernel.org/all/20250130171614.1657224-1-marcus.wichelmann@hetzner-cloud.de/
-
-Marcus Wichelmann (6):
-  net: tun: enable XDP metadata support
-  net: tun: enable transfer of XDP metadata to skb
-  selftests/bpf: move open_tuntap to network helpers
-  selftests/bpf: refactor xdp_context_functional test and bpf program
-  selftests/bpf: add test for XDP metadata support in tun driver
-  selftests/bpf: fix file descriptor assertion in open_tuntap helper
-
- drivers/net/tun.c                             |  28 ++-
- tools/testing/selftests/bpf/network_helpers.c |  28 +++
- tools/testing/selftests/bpf/network_helpers.h |   3 +
- .../selftests/bpf/prog_tests/lwt_helpers.h    |  29 ----
- .../bpf/prog_tests/xdp_context_test_run.c     | 163 ++++++++++++++++--
- .../selftests/bpf/progs/test_xdp_meta.c       |  56 +++---
- 6 files changed, 230 insertions(+), 77 deletions(-)
-
+diff --git a/tools/testing/selftests/bpf/network_helpers.c b/tools/testing/selftests/bpf/network_helpers.c
+index 737a952dcf80..e1cfa1b37754 100644
+--- a/tools/testing/selftests/bpf/network_helpers.c
++++ b/tools/testing/selftests/bpf/network_helpers.c
+@@ -565,6 +565,34 @@ void close_netns(struct nstoken *token)
+ 	free(token);
+ }
+ 
++int open_tuntap(const char *dev_name, bool need_mac)
++{
++	int err = 0;
++	struct ifreq ifr;
++	int fd = open("/dev/net/tun", O_RDWR);
++
++	if (!ASSERT_GT(fd, 0, "open(/dev/net/tun)"))
++		return -1;
++
++	ifr.ifr_flags = IFF_NO_PI | (need_mac ? IFF_TAP : IFF_TUN);
++	strncpy(ifr.ifr_name, dev_name, IFNAMSIZ - 1);
++	ifr.ifr_name[IFNAMSIZ - 1] = '\0';
++
++	err = ioctl(fd, TUNSETIFF, &ifr);
++	if (!ASSERT_OK(err, "ioctl(TUNSETIFF)")) {
++		close(fd);
++		return -1;
++	}
++
++	err = fcntl(fd, F_SETFL, O_NONBLOCK);
++	if (!ASSERT_OK(err, "fcntl(O_NONBLOCK)")) {
++		close(fd);
++		return -1;
++	}
++
++	return fd;
++}
++
+ int get_socket_local_port(int sock_fd)
+ {
+ 	struct sockaddr_storage addr;
+diff --git a/tools/testing/selftests/bpf/network_helpers.h b/tools/testing/selftests/bpf/network_helpers.h
+index 9f6e05d886c5..99d1417c1d8b 100644
+--- a/tools/testing/selftests/bpf/network_helpers.h
++++ b/tools/testing/selftests/bpf/network_helpers.h
+@@ -8,6 +8,7 @@
+ typedef __u16 __sum16;
+ #include <linux/if_ether.h>
+ #include <linux/if_packet.h>
++#include <linux/if_tun.h>
+ #include <linux/ip.h>
+ #include <linux/ipv6.h>
+ #include <linux/ethtool.h>
+@@ -98,6 +99,8 @@ int send_recv_data(int lfd, int fd, uint32_t total_bytes);
+ int make_netns(const char *name);
+ int remove_netns(const char *name);
+ 
++int open_tuntap(const char *dev_name, bool need_mac);
++
+ /**
+  * append_tid() - Append thread ID to the given string.
+  *
+diff --git a/tools/testing/selftests/bpf/prog_tests/lwt_helpers.h b/tools/testing/selftests/bpf/prog_tests/lwt_helpers.h
+index fb1eb8c67361..ccec0fcdabc1 100644
+--- a/tools/testing/selftests/bpf/prog_tests/lwt_helpers.h
++++ b/tools/testing/selftests/bpf/prog_tests/lwt_helpers.h
+@@ -5,7 +5,6 @@
+ 
+ #include <time.h>
+ #include <net/if.h>
+-#include <linux/if_tun.h>
+ #include <linux/icmp.h>
+ 
+ #include "test_progs.h"
+@@ -37,34 +36,6 @@ static inline int netns_delete(void)
+ 	return system("ip netns del " NETNS ">/dev/null 2>&1");
+ }
+ 
+-static int open_tuntap(const char *dev_name, bool need_mac)
+-{
+-	int err = 0;
+-	struct ifreq ifr;
+-	int fd = open("/dev/net/tun", O_RDWR);
+-
+-	if (!ASSERT_GT(fd, 0, "open(/dev/net/tun)"))
+-		return -1;
+-
+-	ifr.ifr_flags = IFF_NO_PI | (need_mac ? IFF_TAP : IFF_TUN);
+-	strncpy(ifr.ifr_name, dev_name, IFNAMSIZ - 1);
+-	ifr.ifr_name[IFNAMSIZ - 1] = '\0';
+-
+-	err = ioctl(fd, TUNSETIFF, &ifr);
+-	if (!ASSERT_OK(err, "ioctl(TUNSETIFF)")) {
+-		close(fd);
+-		return -1;
+-	}
+-
+-	err = fcntl(fd, F_SETFL, O_NONBLOCK);
+-	if (!ASSERT_OK(err, "fcntl(O_NONBLOCK)")) {
+-		close(fd);
+-		return -1;
+-	}
+-
+-	return fd;
+-}
+-
+ #define ICMP_PAYLOAD_SIZE     100
+ 
+ /* Match an ICMP packet with payload len ICMP_PAYLOAD_SIZE */
 -- 
 2.43.0
 
