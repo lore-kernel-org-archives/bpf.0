@@ -1,161 +1,173 @@
-Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 618411C84B2;
-	Mon, 24 Feb 2025 22:24:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A31A1FC7E0;
+	Mon, 24 Feb 2025 22:24:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740435845; cv=none; b=jw//SbyX+maoBuZioddCCCVbCOwHAa8KFJUCd3meX8eF4XUXRsKT7ittWtwZtIegB4UJqQywo9gqmK/9/sH0gx2gscYjFG2GEXyTGobTC54pysStQfu08rLSJkR7m0j192USGKyDcJWZZ5CXmjtaq/D8LP0XQUemDdfv55gBfJk=
+	t=1740435872; cv=none; b=U9i7ICCVxSB2/eJuFWnLKF5XMoJeNovISrSXA+nrlAdOdxfBcQOr4TsgmLg33fwkby5FSs7N0ZECc5qsQYQU7BGN4DfYgQBSb79Ko2AZHMlySDxxuWXyeSRINxaSldcREjlGKS9GBEBnQ0Y0UCWlPZDPR74T8I9IKULuwBFjBb8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740435845; c=relaxed/simple;
-	bh=RleCzBh8U7CWXchF6M/strmw5lVX4woIgA5/3lEkHY4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ozemN+/vfbQwF6oqAuWTBnfB3NTPHsnkWb2WjrrL1gWLqaF7zfgzUfYMZmGu8yi5+MfOXQy1GhGAoGJ5yjP9VsT9PNXoE+Pe00l5uLGjzrI790zQsY85557l7pR6frCI7orOqeS+vc9BXlD0GFRTeC5Zr10GCcJKaCTH+Yx6lnA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KhoUI8Co; arc=none smtp.client-ip=209.85.216.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1740435872; c=relaxed/simple;
+	bh=zeoycR9oJIvshsvmElPOgnL5CAwyhvnlZN86Qa02vbA=;
+	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
+	 MIME-Version:Content-Type; b=ue9lvT/uBFDjcnQhBlEOfrxdz4qhoKriSPmKOnnNukOgpN8UyX3WWtdSB9kQC/rpwjgiJXo8kVGT9XR8v5NpOcA2pUFQNBqjGQTpmYCcqBIMUeyo+RX/dy0Q28z7Yh0Cdz7c3egokX9GZfYvBH2eNrdzdNafwd3xv1nOesD8Mqo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=ozIDGTPs; arc=none smtp.client-ip=198.137.202.136
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KhoUI8Co"
-Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-2fc4418c0b9so7565859a91.0;
-        Mon, 24 Feb 2025 14:24:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1740435843; x=1741040643; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=MfHCBXHfDYNvL2XmQthYrd9nOUEVpQRM5+FexNDF7vk=;
-        b=KhoUI8CobUWxs5RzeEu1n/8l+a/MLDKkJdydRMLJdcD00CP2hCDXa/sxd68zeaA+Ud
-         HvVI/P0oJ4pvCnQ4ZYiybje8e39+mZGYtSdvY1PKcYGocjQ1F9Xx5SSOkDb9vNdqtFoz
-         xkA6MDPXZ5fNnycfY0VRESw8iPpRK0fkl2yi7W15wvvuJSPO5T6Haf2Nrwjh9Qn+mPNe
-         tE1I9XSJrCVJA8EfnNBAWeLza1HqGVKmqYNJtoACJdoK2O3nEvh1byUH+WEixsokgbEE
-         mjqes3hZFDUq7uA+K5hNQP+oj7iOKUZBtI//AgyR4OqqA6FA79I+jieRl7nlXLJXw5Jr
-         7f9w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740435843; x=1741040643;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=MfHCBXHfDYNvL2XmQthYrd9nOUEVpQRM5+FexNDF7vk=;
-        b=QHRCk81zkZEE+uXVkIyG3DEpCFQvLqowf9QCikZdefQvnyHREav7w5KPlo6JxRu4rX
-         EUqOxcqry+fS/woGm8i8KgsJzdlQ0E2aYMy9NxD5/b/4I1jCuXxAstZ6jCakhr9my9Cw
-         azMFk4OC1tKatS9a/IWWr4/yB8zzShdt0IdeXoYxuSd2ni/yKOXwB64a3UATjTiA523V
-         AePAHkcOt18/+GMB6kkxYNjMZuNDWCyzHi8G14r2WvGuVrm8bPO0qbG5j+rEluWvKrId
-         Xej74db09va4h6Fpw/PEcuzDBQqAirQ+wLVA5ewGKVouo4Th/Jq2UuBX3MjR0rCyK3Ha
-         KUDw==
-X-Forwarded-Encrypted: i=1; AJvYcCUAqaE+A+oI4Zgp/z4xV3bC6AHLe4cde6hJ9crNH5DRNfvJ4Ad0Y1OwQA0kHe1GfN8CVusTPuEFU7W528RC@vger.kernel.org, AJvYcCUYSAVuWgm06m0QmRx5Xj7LC1Bdf2C09Emzl5ghBnlRHSEJV0xg7Pfj9v5WJqNeiQQbWd0=@vger.kernel.org, AJvYcCXTHg17qdgf+TC2AnUFYJyuHn2je5JqHeqk+jdlaBOB1GQDeWP0N0bIfbWqKoCrSjYbd4e73HiByVLF1xFPln1LWlh8@vger.kernel.org
-X-Gm-Message-State: AOJu0YykDFOgpfXyQn82oUvfZIWW1HoJ4CqeU+6lg6mQ58EEo/1Ddgmm
-	xvuP65Bxtwf//apGRBaYpGZFwppmaZYq/Q1itp3NjWfK84jb3F3Lg5L5wMK6rxgmIL4jV9lQ6uN
-	KxtM2s3luTAhTYuX7TYHFGNu5OgE=
-X-Gm-Gg: ASbGnctowCXj57SRw4atLFwimUgn3w7YhiuX4bwtlWYmdTucfvOKlEQTJAkneD1PA4N
-	YqFCYNKpK7f5czW4H9R8Q4m5zIzn+YAqT6o5KmOK8KHzaJKrz6hfS6dr9t2ExXaoX/SCF4kGT15
-	vmwWudbQYrdUWONaVk8ZGxx6w=
-X-Google-Smtp-Source: AGHT+IHsSKy0T7sdcs4I2FEkuaNkK7bILTKkVn2wt0nhnlEcx+SvEXfJ4UMs9iDgKxGsLFd8VjPkE5dVXO8KtBx5rUk=
-X-Received: by 2002:a17:90b:2b8f:b0:2ee:d63f:d8f with SMTP id
- 98e67ed59e1d1-2fce78abc52mr24475660a91.13.1740435843616; Mon, 24 Feb 2025
- 14:24:03 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="ozIDGTPs"
+Received: from [127.0.0.1] ([76.133.66.138])
+	(authenticated bits=0)
+	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 51OMLFn9936187
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
+	Mon, 24 Feb 2025 14:21:15 -0800
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 51OMLFn9936187
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
+	s=2025021701; t=1740435678;
+	bh=5y6QG8ugMZ9OSeEQQS3XKHClehNKu6IU395FCDCL8FQ=;
+	h=Date:From:To:CC:Subject:In-Reply-To:References:From;
+	b=ozIDGTPsS/eMemS9AsjAyI4wW35RmD+flU4K02cgRllCs1/EXoq/zU8D0Tj+XR7s7
+	 MZg8YLCegaqa2yDyfMJvQGv6t1kOvN+0q04sz5ZxYB9YM677zH/ZIZY6vdUkX4NcwW
+	 oWm3ILA+YRJqBweAX9swGouBRul9ocwk3Q4qIuvrww8+7C/Rb1K/Ta0mh5A75CR1rh
+	 llGqPQI+Pf0RG87x37cpP0mls9qUS/4UTdrDt6e6zhpWuYAFbE/uu9ouHgosTRW+LS
+	 bO/GR8jYaz6trMtVFpY/lvVshl8fmlaN9/CCCKUp5lafSOK9eftKm/xvIxMal4//D3
+	 SjMlyohWFvQfg==
+Date: Mon, 24 Feb 2025 14:21:13 -0800
+From: "H. Peter Anvin" <hpa@zytor.com>
+To: Yury Norov <yury.norov@gmail.com>
+CC: Uros Bizjak <ubizjak@gmail.com>, Kuan-Wei Chiu <visitorckw@gmail.com>,
+        tglx@linutronix.de, Ingo Molnar <mingo@redhat.com>, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, jk@ozlabs.org,
+        joel@jms.id.au, eajames@linux.ibm.com, andrzej.hajda@intel.com,
+        neil.armstrong@linaro.org, rfoss@kernel.org,
+        maarten.lankhorst@linux.intel.com, mripard@kernel.org,
+        tzimmermann@suse.de, airlied@gmail.com, simona@ffwll.ch,
+        dmitry.torokhov@gmail.com, mchehab@kernel.org, awalls@md.metrocast.net,
+        hverkuil@xs4all.nl, miquel.raynal@bootlin.com, richard@nod.at,
+        vigneshr@ti.com, louis.peens@corigine.com, andrew+netdev@lunn.ch,
+        davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
+        parthiban.veerasooran@microchip.com, arend.vanspriel@broadcom.com,
+        johannes@sipsolutions.net, gregkh@linuxfoundation.org,
+        jirislaby@kernel.org, akpm@linux-foundation.org, mingo@kernel.org,
+        alistair@popple.id.au, linux@rasmusvillemoes.dk,
+        Laurent.pinchart@ideasonboard.com, jonas@kwiboo.se,
+        jernej.skrabec@gmail.com, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, linux-fsi@lists.ozlabs.org,
+        dri-devel@lists.freedesktop.org, linux-input@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-mtd@lists.infradead.org,
+        oss-drivers@corigine.com, netdev@vger.kernel.org,
+        linux-wireless@vger.kernel.org, brcm80211@lists.linux.dev,
+        brcm80211-dev-list.pdl@broadcom.com, linux-serial@vger.kernel.org,
+        bpf@vger.kernel.org, jserv@ccns.ncku.edu.tw,
+        Yu-Chun Lin <eleanor15x@gmail.com>
+Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_03/17=5D_x86=3A_Replace_open-c?=
+ =?US-ASCII?Q?oded_parity_calculation_with_parity8=28=29?=
+User-Agent: K-9 Mail for Android
+In-Reply-To: <Z7zv-c4A76jeMAKf@thinkpad>
+References: <20250223164217.2139331-1-visitorckw@gmail.com> <20250223164217.2139331-4-visitorckw@gmail.com> <d080a2d6-9ec7-1c86-4cf4-536400221f68@gmail.com> <e0b1c299-7f19-4453-a1ce-676068601213@zytor.com> <Z7zv-c4A76jeMAKf@thinkpad>
+Message-ID: <68F1ED19-B0C2-4E78-B504-2F7C040ACC0A@zytor.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241024044159.3156646-1-andrii@kernel.org> <20241024044159.3156646-3-andrii@kernel.org>
- <20250224-impressive-onyx-boa-36e85d@leitao>
-In-Reply-To: <20250224-impressive-onyx-boa-36e85d@leitao>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Mon, 24 Feb 2025 14:23:51 -0800
-X-Gm-Features: AQ5f1JpfI7abF10iTCDj7j_zg8l0eSl_hAPcLgNgy53Fx-Uv0srnK7x4gcTeuPk
-Message-ID: <CAEf4BzbupJe10k0MROG5iZq6cYu6PRoN3sHhNK=L7eDLOULvNQ@mail.gmail.com>
-Subject: Re: [PATCH v3 tip/perf/core 2/2] uprobes: SRCU-protect uretprobe
- lifetime (with timeout)
-To: Breno Leitao <leitao@debian.org>
-Cc: Andrii Nakryiko <andrii@kernel.org>, linux-trace-kernel@vger.kernel.org, 
-	peterz@infradead.org, oleg@redhat.com, rostedt@goodmis.org, 
-	mhiramat@kernel.org, mingo@kernel.org, bpf@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, jolsa@kernel.org, paulmck@kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain;
+ charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Feb 24, 2025 at 4:23=E2=80=AFAM Breno Leitao <leitao@debian.org> wr=
-ote:
+On February 24, 2025 2:17:29 PM PST, Yury Norov <yury=2Enorov@gmail=2Ecom> =
+wrote:
+>On Mon, Feb 24, 2025 at 01:55:28PM -0800, H=2E Peter Anvin wrote:
+>> On 2/24/25 07:24, Uros Bizjak wrote:
+>> >=20
+>> >=20
+>> > On 23=2E 02=2E 25 17:42, Kuan-Wei Chiu wrote:
+>> > > Refactor parity calculations to use the standard parity8() helper=
+=2E This
+>> > > change eliminates redundant implementations and improves code
+>> > > efficiency=2E
+>> >=20
+>> > The patch improves parity assembly code in bootflag=2Eo from:
+>> >=20
+>> >  =C2=A0 58:=C2=A0=C2=A0=C2=A0 89 de=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0 mov=C2=A0=C2=A0=C2=A0 %ebx,%esi
+>> >  =C2=A0 5a:=C2=A0=C2=A0=C2=A0 b9 08 00 00 00=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 mov=C2=A0=C2=A0=C2=A0 $0x8,%ecx
+>> >  =C2=A0 5f:=C2=A0=C2=A0=C2=A0 31 d2=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0 xor=C2=A0=C2=A0=C2=A0 %edx,%edx
+>> >  =C2=A0 61:=C2=A0=C2=A0=C2=A0 89 f0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0 mov=C2=A0=C2=A0=C2=A0 %esi,%eax
+>> >  =C2=A0 63:=C2=A0=C2=A0=C2=A0 89 d7=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0 mov=C2=A0=C2=A0=C2=A0 %edx,%edi
+>> >  =C2=A0 65:=C2=A0=C2=A0=C2=A0 40 d0 ee=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 shr=C2=
+=A0=C2=A0=C2=A0 %sil
+>> >  =C2=A0 68:=C2=A0=C2=A0=C2=A0 83 e0 01=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 and=C2=
+=A0=C2=A0=C2=A0 $0x1,%eax
+>> >  =C2=A0 6b:=C2=A0=C2=A0=C2=A0 31 c2=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0 xor=C2=A0=C2=A0=C2=A0 %eax,%edx
+>> >  =C2=A0 6d:=C2=A0=C2=A0=C2=A0 83 e9 01=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 sub=C2=
+=A0=C2=A0=C2=A0 $0x1,%ecx
+>> >  =C2=A0 70:=C2=A0=C2=A0=C2=A0 75 ef=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0 jne=C2=A0=C2=A0=C2=A0 61 <sbf_init+0x51>
+>> >  =C2=A0 72:=C2=A0=C2=A0=C2=A0 39 c7=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0 cmp=C2=A0=C2=A0=C2=A0 %eax,%edi
+>> >  =C2=A0 74:=C2=A0=C2=A0=C2=A0 74 7f=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0 je=C2=A0=C2=A0=C2=A0=C2=A0 f5 <sbf_init+0xe5>
+>> >  =C2=A0 76:
+>> >=20
+>> > to:
+>> >=20
+>> >  =C2=A0 54:=C2=A0=C2=A0=C2=A0 89 d8=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0 mov=C2=A0=C2=A0=C2=A0 %ebx,%eax
+>> >  =C2=A0 56:=C2=A0=C2=A0=C2=A0 ba 96 69 00 00=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 mov=C2=A0=C2=A0=C2=A0 $0x6996,%edx
+>> >  =C2=A0 5b:=C2=A0=C2=A0=C2=A0 c0 e8 04=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 shr=C2=
+=A0=C2=A0=C2=A0 $0x4,%al
+>> >  =C2=A0 5e:=C2=A0=C2=A0=C2=A0 31 d8=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0 xor=C2=A0=C2=A0=C2=A0 %ebx,%eax
+>> >  =C2=A0 60:=C2=A0=C2=A0=C2=A0 83 e0 0f=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 and=C2=
+=A0=C2=A0=C2=A0 $0xf,%eax
+>> >  =C2=A0 63:=C2=A0=C2=A0=C2=A0 0f a3 c2=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 bt=C2=A0=
+=C2=A0=C2=A0=C2=A0 %eax,%edx
+>> >  =C2=A0 66:=C2=A0=C2=A0=C2=A0 73 64=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0 jae=C2=A0=C2=A0=C2=A0 cc <sbf_init+0xbc>
+>> >  =C2=A0 68:
+>> >=20
+>> > which is faster and smaller (-10 bytes) code=2E
+>> >=20
+>>=20
+>> Of course, on x86, parity8() and parity16() can be implemented very sim=
+ply:
+>>=20
+>> (Also, the parity functions really ought to return bool, and be flagged
+>> __attribute_const__=2E)
 >
-> Hello Andrii,
+>There was a discussion regarding return type when parity8() was added=2E
+>The integer type was taken over bool with a sort of consideration that
+>bool should be returned as an answer to some question, like parity_odd()=
+=2E
 >
-> On Wed, Oct 23, 2024 at 09:41:59PM -0700, Andrii Nakryiko wrote:
-> >
-> > +static struct uprobe* hprobe_expire(struct hprobe *hprobe, bool get)
-> > +{
-> > +     enum hprobe_state hstate;
-> > +
-> > +     /*
-> > +      * return_instance's hprobe is protected by RCU.
-> > +      * Underlying uprobe is itself protected from reuse by SRCU.
-> > +      */
-> > +     lockdep_assert(rcu_read_lock_held() && srcu_read_lock_held(&uretp=
-robes_srcu));
->
-> I am hitting this warning in d082ecbc71e9e ("Linux 6.14-rc4") on
-> aarch64. I suppose this might happen on x86 as well, but I haven't
-> tested.
->
->         WARNING: CPU: 28 PID: 158906 at kernel/events/uprobes.c:768 hprob=
-e_expire (kernel/events/uprobes.c:825)
->
->         Call trace:
->         hprobe_expire (kernel/events/uprobes.c:825) (P)
->         uprobe_copy_process (kernel/events/uprobes.c:691 kernel/events/up=
-robes.c:2103 kernel/events/uprobes.c:2142)
->         copy_process (kernel/fork.c:2636)
->         kernel_clone (kernel/fork.c:2815)
->         __arm64_sys_clone (kernel/fork.c:? kernel/fork.c:2926 kernel/fork=
-.c:2926)
->         invoke_syscall (arch/arm64/kernel/syscall.c:35 arch/arm64/kernel/=
-syscall.c:49)
->         do_el0_svc (arch/arm64/kernel/syscall.c:139 arch/arm64/kernel/sys=
-call.c:151)
->         el0_svc (arch/arm64/kernel/entry-common.c:165 arch/arm64/kernel/e=
-ntry-common.c:178 arch/arm64/kernel/entry-common.c:745)
->         el0t_64_sync_handler (arch/arm64/kernel/entry-common.c:797)
->         el0t_64_sync (arch/arm64/kernel/entry.S:600)
->
-> I broke down that warning, and the problem is on related to
-> rcu_read_lock_held(), since RCU read lock does not seem to be held in
-> this path.
->
-> Reading this code, RCU read lock seems to protect old hprobe, which
-> doesn't seem so.
->
-> I am wondering if we need to protect it properly, something as:
->
->         @@ -2089,7 +2092,9 @@ static int dup_utask(struct task_struct *t,=
- struct uprobe_task *o_utask)
->                                 return -ENOMEM;
->
->                         /* if uprobe is non-NULL, we'll have an extra ref=
-count for uprobe */
->         +               rcu_read_lock();
->                         uprobe =3D hprobe_expire(&o->hprobe, true);
->         +               rcu_write_lock();
->
+>To me it's not a big deal=2E We can switch to boolean and describe in
+>comment what the 'true' means for the parity() function=2E
 
-I think this is not good enough. rcu_read_lock/unlock should be around
-the entire for loop, because, technically, that return_instance can be
-freed before we even get to hprobe_expire.
-
-So, just like we have guard(srcu)(&uretprobes_srcu); we should have
-guard(rcu)();
-
-Except, there is that kmemdup() hidden inside dup_return_instance(),
-so we can't really do that.
-
-So that leaves us with an option to split memory allocation and
-initialization. Number of return instances can't grow (but can
-shrink), so we can first count them, allocate memory. Then do another
-iteration to do hprobe_expire().
-
-I'll try to send a patch some time in the next day or two, but maybe
-someone has some better ideas meanwhile.
-
->                         /*
->                         * New utask will have stable properly refcounted =
-uprobe or
+Bool is really the single-bit type, and gives the compiler more informatio=
+n=2E You could argue that the function really should be called parity_odd*(=
+) in general, but that's kind of excessive IMO=2E
