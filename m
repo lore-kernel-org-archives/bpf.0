@@ -1,16 +1,16 @@
 Received: from dediextern.your-server.de (dediextern.your-server.de [85.10.215.232])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9973E23BCEA;
-	Mon, 24 Feb 2025 15:29:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E168623BCE6;
+	Mon, 24 Feb 2025 15:29:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=85.10.215.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740410984; cv=none; b=KYvb5poL7qQpeCMV+TcgJ4xS10NakK7Ns1bdmVGnvb0kkuAo1ELqXnNebOFl6N2dvtHJRRWNBPvuTF7SIboJmuGeSmBPa7wAy9nbg3yyVjDye2UgORCGrE60HcUEurXit4zFaBxe3vSwp5pywx3zxxc/uYpplWnS8zFymw+0DOY=
+	t=1740410985; cv=none; b=MBI7vw3KmpC2+8xbPe/72PzCWF5rH1LJdVcKqTWd4MUfz21S6nki8cqoZ2EJCI9e+2RQAkUyajJyfgkxZTT8LI/YxVc1BUtSNLG74TFcXsYD++GRLCdSQx4RvuPhA/+5+SIQS7mpI6FI0DQh4AXpuF4Gxz1i371jNee/zX1IlGw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740410984; c=relaxed/simple;
-	bh=riH3QIs5pbvGJv1C6PfdADXMONR4L91TV2bzn26/NZM=;
+	s=arc-20240116; t=1740410985; c=relaxed/simple;
+	bh=NcHDqjzWG/qYaN9wvTfHIj1chXsS8nmwjtfsRAogfgo=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=KDajG7DBoT28U0OE6HWapEaGgQVo51pSKGWwvJ04fvUY7p4doWqEkvWvIQZdDqKgFt+2Hwv1CMDJTq7MQL3zVLMwL6y2UwYZrtFTb6BKsglVoTjC00FmzQUXbvZn1Et+U0D0NMrI4wKX9wZTO5QMsFDVh9gZc+X3Qy7wSvqlhFs=
+	 MIME-Version; b=YMHv5YBUfAjfvRZL/EPMse1LRMco4DIw2TyNxmcdmIFJuLPemESTCLHHn3m4524CBpC/gJSMm3fq77ltVRlj3gDQM9sy6XradnBSYeWNEXZijpHdyVNKHk7Dp+kKsaz0pXSpU06EIz9X1YZ9YhB1++7VGsmNVWnhlCp+C+Qo8Tc=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hetzner-cloud.de; spf=pass smtp.mailfrom=hetzner-cloud.de; arc=none smtp.client-ip=85.10.215.232
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hetzner-cloud.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hetzner-cloud.de
@@ -18,12 +18,12 @@ Received: from sslproxy01.your-server.de ([78.46.139.224])
 	by dediextern.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.94.2)
 	(envelope-from <marcus.wichelmann@hetzner-cloud.de>)
-	id 1tmaOQ-000A2D-TI; Mon, 24 Feb 2025 16:29:14 +0100
+	id 1tmaOQ-000A2A-LD; Mon, 24 Feb 2025 16:29:14 +0100
 Received: from [78.47.5.107] (helo=sdn-nic-test01..)
 	by sslproxy01.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.96)
 	(envelope-from <marcus.wichelmann@hetzner-cloud.de>)
-	id 1tmaOQ-0005Hj-21;
+	id 1tmaOQ-0005Hj-1H;
 	Mon, 24 Feb 2025 16:29:14 +0100
 From: Marcus Wichelmann <marcus.wichelmann@hetzner-cloud.de>
 To: netdev@vger.kernel.org,
@@ -53,9 +53,9 @@ Cc: willemdebruijn.kernel@gmail.com,
 	shuah@kernel.org,
 	hawk@kernel.org,
 	marcus.wichelmann@hetzner-cloud.de
-Subject: [PATCH bpf-next v3 3/6] selftests/bpf: move open_tuntap to network helpers
-Date: Mon, 24 Feb 2025 15:29:06 +0000
-Message-ID: <20250224152909.3911544-4-marcus.wichelmann@hetzner-cloud.de>
+Subject: [PATCH bpf-next v3 1/6] net: tun: enable XDP metadata support
+Date: Mon, 24 Feb 2025 15:29:04 +0000
+Message-ID: <20250224152909.3911544-2-marcus.wichelmann@hetzner-cloud.de>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20250224152909.3911544-1-marcus.wichelmann@hetzner-cloud.de>
 References: <20250224152909.3911544-1-marcus.wichelmann@hetzner-cloud.de>
@@ -69,125 +69,68 @@ Content-Transfer-Encoding: 8bit
 X-Authenticated-Sender: marcus.wichelmann@hetzner-cloud.de
 X-Virus-Scanned: Clear (ClamAV 1.0.7/27559/Mon Feb 24 10:44:14 2025)
 
-To test the XDP metadata functionality of the tun driver, it's necessary
-to create a new tap device first. A helper function for this already
-exists in lwt_helpers.h. Move it to the common network helpers header,
-so it can be reused in other tests.
+Enable the support for the bpf_xdp_adjust_meta helper function for XDP
+buffers initialized by the tun driver. This allows to reserve a metadata
+area that is useful to pass any information from one XDP program to
+another one, for example when using tail-calls.
+
+Whether this helper function can be used in an XDP program depends on
+how the xdp_buff was initialized. Most net drivers initialize the
+xdp_buff in a way, that allows bpf_xdp_adjust_meta to be used. In case
+of the tun driver, this is currently not the case.
+
+There are two code paths in the tun driver that lead to a
+bpf_prog_run_xdp and where metadata support should be enabled:
+
+1. tun_build_skb, which is called by tun_get_user and is used when
+   writing packets from userspace into the device. In this case, the
+   xdp_buff created in tun_build_skb has no support for
+   bpf_xdp_adjust_meta and calls of that helper function result in
+   ENOTSUPP.
+
+   For this code path, it's sufficient to set the meta_valid argument of
+   the xdp_prepare_buff call. The reserved headroom is large enough
+   already.
+
+2. tun_xdp_one, which is called by tun_sendmsg which again is called by
+   other drivers (e.g. vhost_net). When the TUN_MSG_PTR mode is used,
+   another driver may pass a batch of xdp_buffs to the tun driver. In
+   this case, that other driver is the one initializing the xdp_buff.
+
+   See commit 043d222f93ab ("tuntap: accept an array of XDP buffs
+   through sendmsg()") for details.
+
+   For now, the vhost_net driver is the only one using TUN_MSG_PTR and
+   it already initializes the xdp_buffs with metadata support and
+   sufficient headroom. But the tun driver disables it again, so the
+   xdp_set_data_meta_invalid call has to be removed.
 
 Signed-off-by: Marcus Wichelmann <marcus.wichelmann@hetzner-cloud.de>
 ---
- tools/testing/selftests/bpf/network_helpers.c | 28 ++++++++++++++++++
- tools/testing/selftests/bpf/network_helpers.h |  3 ++
- .../selftests/bpf/prog_tests/lwt_helpers.h    | 29 -------------------
- 3 files changed, 31 insertions(+), 29 deletions(-)
+ drivers/net/tun.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/network_helpers.c b/tools/testing/selftests/bpf/network_helpers.c
-index 737a952dcf80..e1cfa1b37754 100644
---- a/tools/testing/selftests/bpf/network_helpers.c
-+++ b/tools/testing/selftests/bpf/network_helpers.c
-@@ -565,6 +565,34 @@ void close_netns(struct nstoken *token)
- 	free(token);
- }
+diff --git a/drivers/net/tun.c b/drivers/net/tun.c
+index acf96f262488..4ec8fbd93c8d 100644
+--- a/drivers/net/tun.c
++++ b/drivers/net/tun.c
+@@ -1709,7 +1709,7 @@ static struct sk_buff *tun_build_skb(struct tun_struct *tun,
+ 		u32 act;
  
-+int open_tuntap(const char *dev_name, bool need_mac)
-+{
-+	int err = 0;
-+	struct ifreq ifr;
-+	int fd = open("/dev/net/tun", O_RDWR);
-+
-+	if (!ASSERT_GT(fd, 0, "open(/dev/net/tun)"))
-+		return -1;
-+
-+	ifr.ifr_flags = IFF_NO_PI | (need_mac ? IFF_TAP : IFF_TUN);
-+	strncpy(ifr.ifr_name, dev_name, IFNAMSIZ - 1);
-+	ifr.ifr_name[IFNAMSIZ - 1] = '\0';
-+
-+	err = ioctl(fd, TUNSETIFF, &ifr);
-+	if (!ASSERT_OK(err, "ioctl(TUNSETIFF)")) {
-+		close(fd);
-+		return -1;
-+	}
-+
-+	err = fcntl(fd, F_SETFL, O_NONBLOCK);
-+	if (!ASSERT_OK(err, "fcntl(O_NONBLOCK)")) {
-+		close(fd);
-+		return -1;
-+	}
-+
-+	return fd;
-+}
-+
- int get_socket_local_port(int sock_fd)
- {
- 	struct sockaddr_storage addr;
-diff --git a/tools/testing/selftests/bpf/network_helpers.h b/tools/testing/selftests/bpf/network_helpers.h
-index 9f6e05d886c5..99d1417c1d8b 100644
---- a/tools/testing/selftests/bpf/network_helpers.h
-+++ b/tools/testing/selftests/bpf/network_helpers.h
-@@ -8,6 +8,7 @@
- typedef __u16 __sum16;
- #include <linux/if_ether.h>
- #include <linux/if_packet.h>
-+#include <linux/if_tun.h>
- #include <linux/ip.h>
- #include <linux/ipv6.h>
- #include <linux/ethtool.h>
-@@ -98,6 +99,8 @@ int send_recv_data(int lfd, int fd, uint32_t total_bytes);
- int make_netns(const char *name);
- int remove_netns(const char *name);
+ 		xdp_init_buff(&xdp, buflen, &tfile->xdp_rxq);
+-		xdp_prepare_buff(&xdp, buf, pad, len, false);
++		xdp_prepare_buff(&xdp, buf, pad, len, true);
  
-+int open_tuntap(const char *dev_name, bool need_mac);
-+
- /**
-  * append_tid() - Append thread ID to the given string.
-  *
-diff --git a/tools/testing/selftests/bpf/prog_tests/lwt_helpers.h b/tools/testing/selftests/bpf/prog_tests/lwt_helpers.h
-index fb1eb8c67361..ccec0fcdabc1 100644
---- a/tools/testing/selftests/bpf/prog_tests/lwt_helpers.h
-+++ b/tools/testing/selftests/bpf/prog_tests/lwt_helpers.h
-@@ -5,7 +5,6 @@
+ 		act = bpf_prog_run_xdp(xdp_prog, &xdp);
+ 		if (act == XDP_REDIRECT || act == XDP_TX) {
+@@ -2467,7 +2467,6 @@ static int tun_xdp_one(struct tun_struct *tun,
+ 		}
  
- #include <time.h>
- #include <net/if.h>
--#include <linux/if_tun.h>
- #include <linux/icmp.h>
+ 		xdp_init_buff(xdp, buflen, &tfile->xdp_rxq);
+-		xdp_set_data_meta_invalid(xdp);
  
- #include "test_progs.h"
-@@ -37,34 +36,6 @@ static inline int netns_delete(void)
- 	return system("ip netns del " NETNS ">/dev/null 2>&1");
- }
- 
--static int open_tuntap(const char *dev_name, bool need_mac)
--{
--	int err = 0;
--	struct ifreq ifr;
--	int fd = open("/dev/net/tun", O_RDWR);
--
--	if (!ASSERT_GT(fd, 0, "open(/dev/net/tun)"))
--		return -1;
--
--	ifr.ifr_flags = IFF_NO_PI | (need_mac ? IFF_TAP : IFF_TUN);
--	strncpy(ifr.ifr_name, dev_name, IFNAMSIZ - 1);
--	ifr.ifr_name[IFNAMSIZ - 1] = '\0';
--
--	err = ioctl(fd, TUNSETIFF, &ifr);
--	if (!ASSERT_OK(err, "ioctl(TUNSETIFF)")) {
--		close(fd);
--		return -1;
--	}
--
--	err = fcntl(fd, F_SETFL, O_NONBLOCK);
--	if (!ASSERT_OK(err, "fcntl(O_NONBLOCK)")) {
--		close(fd);
--		return -1;
--	}
--
--	return fd;
--}
--
- #define ICMP_PAYLOAD_SIZE     100
- 
- /* Match an ICMP packet with payload len ICMP_PAYLOAD_SIZE */
+ 		act = bpf_prog_run_xdp(xdp_prog, xdp);
+ 		ret = tun_xdp_act(tun, xdp_prog, xdp, act);
 -- 
 2.43.0
 
