@@ -1,559 +1,229 @@
-Received: from mx-rz-3.rrze.uni-erlangen.de (mx-rz-3.rrze.uni-erlangen.de [131.188.11.22])
+Received: from out-182.mta1.migadu.com (out-182.mta1.migadu.com [95.215.58.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B7B9263F57;
-	Mon, 24 Feb 2025 20:57:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=131.188.11.22
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2C29EEA9
+	for <bpf@vger.kernel.org>; Mon, 24 Feb 2025 20:59:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740430665; cv=none; b=n6Hp2ovCCa2esDKI9U9aBK0MKjIfymjgC2hmTExRMlKwaedxMn8iX/HCJv8y/KctY2QXxESssdly5cvYn9vUCpO3wjPbc4h/vfQ6axXwCw29dDKCEkvS3B73dG0qsvjJ9yWQgVcvg5JsrzgDRRo8xqZhSAkSSD5ZU5E3qNzVouk=
+	t=1740430791; cv=none; b=fiXDA7PQD89zdkbzi7yYqXQW2N7LCb3GGPFjOvx31oPs+qeCMQ858xe0Zr4OXMMVHnXhSEmw0RmqcKJg5qsvjCsgkBowA8wd4lhgQ+JnRnIWgs0muA0fPIJGlhtj3YFDN6rSeK6yDdJd1EoMt6IkoVTOpT/u3exjZFS6j6m2lPM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740430665; c=relaxed/simple;
-	bh=to/48DNPW3gCzRBhAfMnQUvviygMbEx4KoLPC/ytuYM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=O8XbupW8aRcfD2LlI6QnNYQyoMC1gZFwFXVwncoYeQQ7hEENgNtg25BcDRfcnpslRbLq8+6BkG9ys+lgKT81Bzk9cY+WJPJWFnJq/8yZHGs0Los5QcPj17UqZ91Sa+gJlA0OGw60glZIPppIAJlPcaUUdV49qcINIka1+uUxmh8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fau.de; spf=pass smtp.mailfrom=fau.de; dkim=pass (2048-bit key) header.d=fau.de header.i=@fau.de header.b=AXu0HTTT; arc=none smtp.client-ip=131.188.11.22
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fau.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fau.de
+	s=arc-20240116; t=1740430791; c=relaxed/simple;
+	bh=JmOFnQli1+t7Y5w4XAOvzeQhqk7JPapeRB8Nl9ukDsM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=UXbyGbe+RWHhgvIAQ5+C8OyVjRu/cqGCDHb/Z3on7xhOnGb0ASwbeG/dRJ1xTuCeLUG06JR7lKWLWgZDWs9zM4aa4UEKe/fgbRy1RR/EPsxwNf5ZUJHb6CZD8ErN8Q4bDMqmeatVqcxEL8OXMKnPrXB7AIgjLBZmNNh19oFLER8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=OK5Vs1CC; arc=none smtp.client-ip=95.215.58.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fau.de header.i=@fau.de header.b="AXu0HTTT"
-Received: from mx-rz-smart.rrze.uni-erlangen.de (mx-rz-smart.rrze.uni-erlangen.de [IPv6:2001:638:a000:1025::1e])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-rz-3.rrze.uni-erlangen.de (Postfix) with ESMTPS id 4Z1t9K596dz1xvD;
-	Mon, 24 Feb 2025 21:48:05 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fau.de; s=fau-2021;
-	t=1740430085; bh=g/QslQRd7T/eMz2UV3zj/05aMr89MUrVwbYpFn8MyEk=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From:To:CC:
-	 Subject;
-	b=AXu0HTTTvt92ADDSomCGmy6tE+1vGSEEhq9YZ9yGQGMpTecfSuypFtuQD31ESAYqd
-	 TCp4/2GWnAXdX30c94yC3RnVxk57YoFhXvLtdqXDfprTXmo2DrXU/S9uT/Zqa6ieCi
-	 nzh7j5WRTUMXkQQ0/Z5rHrmiNgQ3wYnmkPtG93qzkjhDilXFetHnIpXU91FYLTTWJ8
-	 KVXtq0+kPt51HAIhmUPv/FoD+nQhIe7+37cVw7+W/BYZpas3EU97YPbUn+4C5lFD8c
-	 9/ZEijPffF2VFrPlSumdi7iGzsRRQNIc7/8hEGVQLyhnjeJ1hd7sDYHBeqRGmEknEL
-	 9dCXJIpM0Xc4w==
-X-Virus-Scanned: amavisd-new at boeck2.rrze.uni-erlangen.de (RRZE)
-X-RRZE-Flag: Not-Spam
-X-RRZE-Submit-IP: 2001:9e8:362e:e00:55a6:11d5:2473:17a9
-Received: from luis-tp.fritz.box (unknown [IPv6:2001:9e8:362e:e00:55a6:11d5:2473:17a9])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: U2FsdGVkX1/Gixsbac+DBJZG0+bMYw0cqG0a5yzPrYU=)
-	by smtp-auth.uni-erlangen.de (Postfix) with ESMTPSA id 4Z1t9F3pp3z1xsg;
-	Mon, 24 Feb 2025 21:48:01 +0100 (CET)
-From: Luis Gerhorst <luis.gerhorst@fau.de>
-To: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Puranjay Mohan <puranjay@kernel.org>,
-	Xu Kuohai <xukuohai@huaweicloud.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Mykola Lysenko <mykolal@fb.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Luis Gerhorst <luis.gerhorst@fau.de>,
-	Henriette Herzog <henriette.herzog@rub.de>,
-	Cupertino Miranda <cupertino.miranda@oracle.com>,
-	Matan Shachnai <m.shachnai@gmail.com>,
-	Dimitar Kanaliev <dimitar.kanaliev@siteground.com>,
-	Shung-Hsi Yu <shung-hsi.yu@suse.com>,
-	Daniel Xu <dxu@dxuuu.xyz>,
-	bpf@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Cc: Maximilian Ott <ott@cs.fau.de>,
-	Milan Stephan <milan.stephan@fau.de>
-Subject: [RFC PATCH 5/9] bpf: Fall back to nospec if v1 verification fails
-Date: Mon, 24 Feb 2025 21:47:44 +0100
-Message-ID: <20250224204744.599963-1-luis.gerhorst@fau.de>
-X-Mailer: git-send-email 2.48.1
-In-Reply-To: <20250224203619.594724-1-luis.gerhorst@fau.de>
-References: <20250224203619.594724-1-luis.gerhorst@fau.de>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="OK5Vs1CC"
+Message-ID: <aec4ff8a-1cdf-43ba-ba76-7ed7911d0367@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1740430787;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=zGqFujWnpzKmhRe9+LQwBMTyo3n9fcOzu0IsQrPGaGo=;
+	b=OK5Vs1CCs+nwSg9KBXumnSF2ZfuGoyo31o39zIdEYR67uJiiTbNDvdkLFFthrblj0azzHE
+	H+aiqLQCMr04zH0L5ptW5MxdI4upehrB7Ewc/4KiB+gfVRuHntEmWu+vBCFljoi71akiAh
+	Pe1TRP4zoJ2DIJfBeiWH04NtuD8WYsw=
+Date: Mon, 24 Feb 2025 12:59:42 -0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Subject: Re: [PATCH bpf-next v3 1/2] bpf: Allow pre-ordering for bpf cgroup
+ progs
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+ Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ kernel-team@fb.com, Martin KaFai Lau <martin.lau@kernel.org>
+References: <20250213164812.2668578-1-yonghong.song@linux.dev>
+ <CAEf4Bza-Wz6Tsi=h9hwFg1TGbjsYMBi4BDGEnqtMjSj_GpOFNQ@mail.gmail.com>
+Content-Language: en-GB
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <CAEf4Bza-Wz6Tsi=h9hwFg1TGbjsYMBi4BDGEnqtMjSj_GpOFNQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-This implements the core of the series and causes the verifier to fall
-back to mitigating Spectre v1 using speculation barriers. The approach
-was presented at LPC'24:
-  https://lpc.events/event/18/contributions/1954/ ("Mitigating
-  Spectre-PHT using Speculation Barriers in Linux eBPF")
-and RAID'24:
-  https://arxiv.org/pdf/2405.00078 ("VeriFence: Lightweight and Precise
-  Spectre Defenses for Untrusted Linux Kernel Extensions")
 
-In the tests, some are now successful where we previously had a
-false-positive (i.e., rejection). Change them to reflect where the
-nospec should be inserted (as comment) and modify the error message if
-the nospec is able to mitigate a problem that previously shadowed
-another problem.
 
-Briefly went through all the occurrences of EPERM, EINVAL, and EACCESS
-in the verifier in order to validate that catching them like this makes
-sense.
+On 2/24/25 10:41 AM, Andrii Nakryiko wrote:
+> On Thu, Feb 13, 2025 at 8:48 AM Yonghong Song <yonghong.song@linux.dev> wrote:
+>> Currently for bpf progs in a cgroup hierarchy, the effective prog array
+>> is computed from bottom cgroup to upper cgroups (post-ordering). For
+>> example, the following cgroup hierarchy
+>>      root cgroup: p1, p2
+>>          subcgroup: p3, p4
+>> have BPF_F_ALLOW_MULTI for both cgroup levels.
+>> The effective cgroup array ordering looks like
+>>      p3 p4 p1 p2
+>> and at run time, progs will execute based on that order.
+>>
+>> But in some cases, it is desirable to have root prog executes earlier than
+>> children progs (pre-ordering). For example,
+>>    - prog p1 intends to collect original pkt dest addresses.
+>>    - prog p3 will modify original pkt dest addresses to a proxy address for
+>>      security reason.
+>> The end result is that prog p1 gets proxy address which is not what it
+>> wants. Putting p1 to every child cgroup is not desirable either as it
+>> will duplicate itself in many child cgroups. And this is exactly a use case
+>> we are encountering in Meta.
+>>
+>> To fix this issue, let us introduce a flag BPF_F_PREORDER. If the flag
+>> is specified at attachment time, the prog has higher priority and the
+>> ordering with that flag will be from top to bottom (pre-ordering).
+>> For example, in the above example,
+>>      root cgroup: p1, p2
+>>          subcgroup: p3, p4
+>> Let us say p2 and p4 are marked with BPF_F_PREORDER. The final
+>> effective array ordering will be
+>>      p2 p4 p3 p1
+>>
+>> Suggested-by: Andrii Nakryiko <andrii@kernel.org>
+>> Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
+>> ---
+>>   include/linux/bpf-cgroup.h     |  1 +
+>>   include/uapi/linux/bpf.h       |  1 +
+>>   kernel/bpf/cgroup.c            | 33 +++++++++++++++++++++++++--------
+>>   kernel/bpf/syscall.c           |  3 ++-
+>>   tools/include/uapi/linux/bpf.h |  1 +
+>>   5 files changed, 30 insertions(+), 9 deletions(-)
+>>
+> LGTM, see one suggestion below, but it doesn't change the essence
+>
+> Acked-by: Andrii Nakryiko <andrii@kernel.org>
+>
+>> diff --git a/include/linux/bpf-cgroup.h b/include/linux/bpf-cgroup.h
+>> index 7fc69083e745..9de7adb68294 100644
+>> --- a/include/linux/bpf-cgroup.h
+>> +++ b/include/linux/bpf-cgroup.h
+>> @@ -111,6 +111,7 @@ struct bpf_prog_list {
+>>          struct bpf_prog *prog;
+>>          struct bpf_cgroup_link *link;
+>>          struct bpf_cgroup_storage *storage[MAX_BPF_CGROUP_STORAGE_TYPE];
+>> +       u32 flags;
+>>   };
+>>
+>>   int cgroup_bpf_inherit(struct cgroup *cgrp);
+>> diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+>> index fff6cdb8d11a..beac5cdf2d2c 100644
+>> --- a/include/uapi/linux/bpf.h
+>> +++ b/include/uapi/linux/bpf.h
+>> @@ -1207,6 +1207,7 @@ enum bpf_perf_event_type {
+>>   #define BPF_F_BEFORE           (1U << 3)
+>>   #define BPF_F_AFTER            (1U << 4)
+>>   #define BPF_F_ID               (1U << 5)
+>> +#define BPF_F_PREORDER         (1U << 6)
+>>   #define BPF_F_LINK             BPF_F_LINK /* 1 << 13 */
+>>
+>>   /* If BPF_F_STRICT_ALIGNMENT is used in BPF_PROG_LOAD command, the
+>> diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
+>> index 46e5db65dbc8..31d33058174c 100644
+>> --- a/kernel/bpf/cgroup.c
+>> +++ b/kernel/bpf/cgroup.c
+>> @@ -369,7 +369,7 @@ static struct bpf_prog *prog_list_prog(struct bpf_prog_list *pl)
+>>   /* count number of elements in the list.
+>>    * it's slow but the list cannot be long
+>>    */
+>> -static u32 prog_list_length(struct hlist_head *head)
+>> +static u32 prog_list_length(struct hlist_head *head, int *preorder_cnt)
+>>   {
+>>          struct bpf_prog_list *pl;
+>>          u32 cnt = 0;
+>> @@ -377,6 +377,8 @@ static u32 prog_list_length(struct hlist_head *head)
+>>          hlist_for_each_entry(pl, head, node) {
+>>                  if (!prog_list_prog(pl))
+>>                          continue;
+>> +               if (preorder_cnt && (pl->flags & BPF_F_PREORDER))
+>> +                       (*preorder_cnt)++;
+>>                  cnt++;
+>>          }
+>>          return cnt;
+>> @@ -400,7 +402,7 @@ static bool hierarchy_allows_attach(struct cgroup *cgrp,
+>>
+>>                  if (flags & BPF_F_ALLOW_MULTI)
+>>                          return true;
+>> -               cnt = prog_list_length(&p->bpf.progs[atype]);
+>> +               cnt = prog_list_length(&p->bpf.progs[atype], NULL);
+>>                  WARN_ON_ONCE(cnt > 1);
+>>                  if (cnt == 1)
+>>                          return !!(flags & BPF_F_ALLOW_OVERRIDE);
+>> @@ -423,12 +425,12 @@ static int compute_effective_progs(struct cgroup *cgrp,
+>>          struct bpf_prog_array *progs;
+>>          struct bpf_prog_list *pl;
+>>          struct cgroup *p = cgrp;
+>> -       int cnt = 0;
+>> +       int i, cnt = 0, preorder_cnt = 0, fstart, bstart, init_bstart;
+>>
+>>          /* count number of effective programs by walking parents */
+>>          do {
+>>                  if (cnt == 0 || (p->bpf.flags[atype] & BPF_F_ALLOW_MULTI))
+>> -                       cnt += prog_list_length(&p->bpf.progs[atype]);
+>> +                       cnt += prog_list_length(&p->bpf.progs[atype], &preorder_cnt);
+>>                  p = cgroup_parent(p);
+>>          } while (p);
+>>
+>> @@ -439,20 +441,34 @@ static int compute_effective_progs(struct cgroup *cgrp,
+>>          /* populate the array with effective progs */
+>>          cnt = 0;
+>>          p = cgrp;
+>> +       fstart = preorder_cnt;
+>> +       bstart = preorder_cnt - 1;
+>>          do {
+>>                  if (cnt > 0 && !(p->bpf.flags[atype] & BPF_F_ALLOW_MULTI))
+>>                          continue;
+>>
+>> +               init_bstart = bstart;
+>>                  hlist_for_each_entry(pl, &p->bpf.progs[atype], node) {
+>>                          if (!prog_list_prog(pl))
+>>                                  continue;
+>>
+>> -                       item = &progs->items[cnt];
+>> +                       if (pl->flags & BPF_F_PREORDER) {
+>> +                               item = &progs->items[bstart];
+>> +                               bstart--;
+>> +                       } else {
+>> +                               item = &progs->items[fstart];
+>> +                               fstart++;
+>> +                       }
+>>                          item->prog = prog_list_prog(pl);
+>>                          bpf_cgroup_storages_assign(item->cgroup_storage,
+>>                                                     pl->storage);
+>>                          cnt++;
+>>                  }
+>> +
+>> +               /* reverse pre-ordering progs at this cgroup level */
+>> +               for (i = 0; i < (init_bstart - bstart)/2; i++)
+>> +                       swap(progs->items[init_bstart - i], progs->items[bstart + 1 + i]);
+> nit: this is a bit mind-bending to read and verify, let's do it a bit
+> more bullet-proof way:
+>
+> for (i = bstart + 1, j = init_bstart; i < j; i++, j--)
+>      swap(progs->items[i], progs->items[j]);
+>
+> ?
 
-Signed-off-by: Luis Gerhorst <luis.gerhorst@fau.de>
-Acked-by: Henriette Herzog <henriette.herzog@rub.de>
-Cc: Maximilian Ott <ott@cs.fau.de>
-Cc: Milan Stephan <milan.stephan@fau.de>
----
- include/linux/bpf_verifier.h                  |  1 +
- kernel/bpf/core.c                             | 17 ++--
- kernel/bpf/verifier.c                         | 77 ++++++++++++++++---
- .../selftests/bpf/progs/verifier_and.c        |  3 +-
- .../selftests/bpf/progs/verifier_bounds.c     | 30 ++++----
- .../selftests/bpf/progs/verifier_movsx.c      |  6 +-
- .../selftests/bpf/progs/verifier_unpriv.c     |  3 +-
- .../bpf/progs/verifier_value_ptr_arith.c      | 11 ++-
- 8 files changed, 108 insertions(+), 40 deletions(-)
+Sound good to me. Will send v4 soon.
 
-diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index 2af09d75c7cd..7c289e3bf18d 100644
---- a/include/linux/bpf_verifier.h
-+++ b/include/linux/bpf_verifier.h
-@@ -561,6 +561,7 @@ struct bpf_insn_aux_data {
- 	u64 map_key_state; /* constant (32 bit) key tracking for maps */
- 	int ctx_field_size; /* the ctx field size for load insn, maybe 0 */
- 	u32 seen; /* this insn was processed by the verifier at env->pass_cnt */
-+	bool nospec; /* do not execute this instruction speculatively */
- 	bool nospec_result; /* ensure following insns from executing speculatively */
- 	bool zext_dst; /* this insn zero extends dst reg */
- 	bool needs_zext; /* alu op needs to clear upper bits */
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index da729cbbaeb9..d2971bc8e5c7 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -2099,14 +2099,15 @@ static u64 ___bpf_prog_run(u64 *regs, const struct bpf_insn *insn)
- #undef COND_JMP
- 	/* ST, STX and LDX*/
- 	ST_NOSPEC:
--		/* Speculation barrier for mitigating Speculative Store Bypass.
--		 * In case of arm64, we rely on the firmware mitigation as
--		 * controlled via the ssbd kernel parameter. Whenever the
--		 * mitigation is enabled, it works for all of the kernel code
--		 * with no need to provide any additional instructions here.
--		 * In case of x86, we use 'lfence' insn for mitigation. We
--		 * reuse preexisting logic from Spectre v1 mitigation that
--		 * happens to produce the required code on x86 for v4 as well.
-+		/* Speculation barrier for mitigating Speculative Store Bypass,
-+		 * Bounds-Check Bypass, and Type Confusion. In case of arm64, we
-+		 * rely on the firmware mitigation as controlled via the ssbd
-+		 * kernel parameter. Whenever the mitigation is enabled, it
-+		 * works for all of the kernel code with no need to provide any
-+		 * additional instructions here. In case of x86, we use 'lfence'
-+		 * insn for mitigation. We reuse preexisting logic from Spectre
-+		 * v1 mitigation that happens to produce the required code on
-+		 * x86 for v4 as well.
- 		 */
- 		barrier_nospec();
- 		CONT;
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 03e27b012af3..aee49f8da0c1 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -1914,6 +1914,17 @@ static int pop_stack(struct bpf_verifier_env *env, int *prev_insn_idx,
- 	return 0;
- }
- 
-+static bool error_recoverable_with_nospec(int err)
-+{
-+	/* Should only return true for non-fatal errors that are allowed to
-+	 * occur during speculative verification. For these we can insert a
-+	 * nospec and the program might still be accepted. Do not include
-+	 * something like ENOMEM because it is likely to re-occur for the next
-+	 * architectural path once it has been recovered-from in all speculative
-+	 * paths. */
-+	return err == -EPERM || err == -EACCES || err == -EINVAL;
-+}
-+
- static struct bpf_verifier_state *push_stack(struct bpf_verifier_env *env,
- 					     int insn_idx, int prev_insn_idx,
- 					     bool speculative)
-@@ -19252,16 +19263,7 @@ static int do_check(struct bpf_verifier_env *env)
- 					else
- 						verbose(env, "%d: safe\n", env->insn_idx);
- 				}
--				err = process_bpf_exit(env, &prev_insn_idx, pop_log,
--						       &do_print_state);
--				if (err == CHECK_NEXT_INSN) {
--					continue;
--				} else if (err == ALL_PATHS_CHECKED) {
--					break;
--				} else if (err) {
--					WARN_ON_ONCE(err > 0);
--					return err;
--				}
-+				goto nospec_or_safe_state_found;
- 			}
- 		}
- 
-@@ -19315,17 +19317,47 @@ static int do_check(struct bpf_verifier_env *env)
- 		sanitize_mark_insn_seen(env);
- 		prev_insn_idx = env->insn_idx;
- 
-+		if (state->speculative && cur_aux(env)->nospec) {
-+			/* Reduce verification complexity by only simulating
-+			 * speculative paths until we reach a nospec.
-+			 */
-+			goto nospec_or_safe_state_found;
-+		}
-+
- 		err = do_check_insn(env, insn, pop_log, &do_print_state, regs, state,
- 				    &prev_insn_idx);
- 		if (err == CHECK_NEXT_INSN) {
- 			continue;
- 		} else if (err == ALL_PATHS_CHECKED) {
- 			break;
-+		} else if (error_recoverable_with_nospec(err) && state->speculative) {
-+			WARN_ON_ONCE(env->bypass_spec_v1);
-+			WARN_ON_ONCE(env->cur_state != state);
-+
-+			/* Prevent this speculative path from ever reaching the
-+			 * insn that would have been unsafe to execute.
-+			 */
-+			cur_aux(env)->nospec = true;
-+
-+			goto nospec_or_safe_state_found;
- 		} else if (err) {
- 			WARN_ON_ONCE(err > 0);
- 			return err;
- 		}
- 
-+		if (state->speculative && cur_aux(env)->nospec_result) {
-+			/* Reduce verification complexity by stopping spec.
-+			 * verification when nospec is encountered.
-+			 */
-+nospec_or_safe_state_found:
-+			err = process_bpf_exit(env, &prev_insn_idx, pop_log, &do_print_state);
-+			if (err == CHECK_NEXT_INSN)
-+				continue;
-+			else if (err == ALL_PATHS_CHECKED)
-+				break;
-+			return err;
-+		}
-+
- 		env->insn_idx++;
- 	}
- 
-@@ -20447,6 +20479,28 @@ static int convert_ctx_accesses(struct bpf_verifier_env *env)
- 		bpf_convert_ctx_access_t convert_ctx_access;
- 		u8 mode;
- 
-+		if (env->insn_aux_data[i + delta].nospec) {
-+			struct bpf_insn patch[] = {
-+				BPF_ST_NOSPEC(),
-+				*insn,
-+			};
-+
-+			cnt = ARRAY_SIZE(patch);
-+			new_prog = bpf_patch_insn_data(env, i + delta, patch, cnt);
-+			if (!new_prog)
-+				return -ENOMEM;
-+
-+			delta    += cnt - 1;
-+			env->prog = new_prog;
-+			insn      = new_prog->insnsi + i + delta;
-+			/* This can not be easily merged with the
-+			 * nospec_result-case, because an insn may require a
-+			 * nospec before and after itself. Therefore also do not
-+			 * 'continue' here but potentially apply further
-+			 * patching to insn. *insn should equal patch[1] now.
-+			 */
-+		}
-+
- 		if (insn->code == (BPF_LDX | BPF_MEM | BPF_B) ||
- 		    insn->code == (BPF_LDX | BPF_MEM | BPF_H) ||
- 		    insn->code == (BPF_LDX | BPF_MEM | BPF_W) ||
-@@ -20495,6 +20549,9 @@ static int convert_ctx_accesses(struct bpf_verifier_env *env)
- 
- 		if (type == BPF_WRITE &&
- 		    env->insn_aux_data[i + delta].nospec_result) {
-+			/* nospec_result is only used to mitigate Spectre v4 and
-+			 * to limit verification-time for Spectre v1.
-+			 */
- 			struct bpf_insn patch[] = {
- 				*insn,
- 				BPF_ST_NOSPEC(),
-diff --git a/tools/testing/selftests/bpf/progs/verifier_and.c b/tools/testing/selftests/bpf/progs/verifier_and.c
-index e97e518516b6..98bafce6d8f3 100644
---- a/tools/testing/selftests/bpf/progs/verifier_and.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_and.c
-@@ -85,7 +85,7 @@ l0_%=:	r0 = r0;					\
- 
- SEC("socket")
- __description("check known subreg with unknown reg")
--__success __failure_unpriv __msg_unpriv("R1 !read_ok")
-+__success __success_unpriv
- __retval(0)
- __naked void known_subreg_with_unknown_reg(void)
- {
-@@ -96,6 +96,7 @@ __naked void known_subreg_with_unknown_reg(void)
- 	r0 &= 0xFFFF1234;				\
- 	/* Upper bits are unknown but AND above masks out 1 zero'ing lower bits */\
- 	if w0 < 1 goto l0_%=;				\
-+	/* unpriv: nospec (inserted to prevent `R1 !read_ok'`) */\
- 	r1 = *(u32*)(r1 + 512);				\
- l0_%=:	r0 = 0;						\
- 	exit;						\
-diff --git a/tools/testing/selftests/bpf/progs/verifier_bounds.c b/tools/testing/selftests/bpf/progs/verifier_bounds.c
-index 0eb33bb801b5..0488ef05a7a4 100644
---- a/tools/testing/selftests/bpf/progs/verifier_bounds.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_bounds.c
-@@ -620,7 +620,7 @@ l1_%=:	exit;						\
- 
- SEC("socket")
- __description("bounds check mixed 32bit and 64bit arithmetic. test1")
--__success __failure_unpriv __msg_unpriv("R0 invalid mem access 'scalar'")
-+__success __success_unpriv
- __retval(0)
- __naked void _32bit_and_64bit_arithmetic_test1(void)
- {
-@@ -636,6 +636,7 @@ __naked void _32bit_and_64bit_arithmetic_test1(void)
- 	if w1 > 2 goto l0_%=;				\
- 	goto l1_%=;					\
- l0_%=:	/* invalid ldx if bounds are lost above */	\
-+	/* unpriv: nospec (inserted to prevent `R0 invalid mem access 'scalar'`) */\
- 	r0 = *(u64*)(r0 - 1);				\
- l1_%=:	exit;						\
- "	::: __clobber_all);
-@@ -643,7 +644,7 @@ l1_%=:	exit;						\
- 
- SEC("socket")
- __description("bounds check mixed 32bit and 64bit arithmetic. test2")
--__success __failure_unpriv __msg_unpriv("R0 invalid mem access 'scalar'")
-+__success __success_unpriv
- __retval(0)
- __naked void _32bit_and_64bit_arithmetic_test2(void)
- {
-@@ -660,6 +661,7 @@ __naked void _32bit_and_64bit_arithmetic_test2(void)
- 	if r1 > r2 goto l0_%=;				\
- 	goto l1_%=;					\
- l0_%=:	/* invalid ldx if bounds are lost above */	\
-+	/* unpriv: nospec (inserted to prevent `R0 invalid mem access 'scalar'`) */\
- 	r0 = *(u64*)(r0 - 1);				\
- l1_%=:	exit;						\
- "	::: __clobber_all);
-@@ -691,8 +693,7 @@ l0_%=:	r0 = 0;						\
- 
- SEC("socket")
- __description("bounds check for reg = 0, reg xor 1")
--__success __failure_unpriv
--__msg_unpriv("R0 min value is outside of the allowed memory range")
-+__success __success_unpriv
- __retval(0)
- __naked void reg_0_reg_xor_1(void)
- {
-@@ -708,6 +709,7 @@ __naked void reg_0_reg_xor_1(void)
- l0_%=:	r1 = 0;						\
- 	r1 ^= 1;					\
- 	if r1 != 0 goto l1_%=;				\
-+	/* unpriv: nospec (inserted to prevent `R0 min value is outside of the allowed memory range`) */\
- 	r0 = *(u64*)(r0 + 8);				\
- l1_%=:	r0 = 0;						\
- 	exit;						\
-@@ -719,8 +721,7 @@ l1_%=:	r0 = 0;						\
- 
- SEC("socket")
- __description("bounds check for reg32 = 0, reg32 xor 1")
--__success __failure_unpriv
--__msg_unpriv("R0 min value is outside of the allowed memory range")
-+__success __success_unpriv
- __retval(0)
- __naked void reg32_0_reg32_xor_1(void)
- {
-@@ -736,6 +737,7 @@ __naked void reg32_0_reg32_xor_1(void)
- l0_%=:	w1 = 0;						\
- 	w1 ^= 1;					\
- 	if w1 != 0 goto l1_%=;				\
-+	/* unpriv: nospec (inserted to prevent `R0 min value is outside of the allowed memory range`) */\
- 	r0 = *(u64*)(r0 + 8);				\
- l1_%=:	r0 = 0;						\
- 	exit;						\
-@@ -747,8 +749,7 @@ l1_%=:	r0 = 0;						\
- 
- SEC("socket")
- __description("bounds check for reg = 2, reg xor 3")
--__success __failure_unpriv
--__msg_unpriv("R0 min value is outside of the allowed memory range")
-+__success __success_unpriv
- __retval(0)
- __naked void reg_2_reg_xor_3(void)
- {
-@@ -764,6 +765,7 @@ __naked void reg_2_reg_xor_3(void)
- l0_%=:	r1 = 2;						\
- 	r1 ^= 3;					\
- 	if r1 > 0 goto l1_%=;				\
-+	/* unpriv: nospec (inserted to prevent `R0 min value is outside of the allowed memory range`) */\
- 	r0 = *(u64*)(r0 + 8);				\
- l1_%=:	r0 = 0;						\
- 	exit;						\
-@@ -829,8 +831,7 @@ l1_%=:	r0 = 0;						\
- 
- SEC("socket")
- __description("bounds check for reg > 0, reg xor 3")
--__success __failure_unpriv
--__msg_unpriv("R0 min value is outside of the allowed memory range")
-+__success __success_unpriv
- __retval(0)
- __naked void reg_0_reg_xor_3(void)
- {
-@@ -843,7 +844,8 @@ __naked void reg_0_reg_xor_3(void)
- 	call %[bpf_map_lookup_elem];			\
- 	if r0 != 0 goto l0_%=;				\
- 	exit;						\
--l0_%=:	r1 = *(u64*)(r0 + 0);				\
-+l0_%=:	/* unpriv: nospec (inserted to prevent `R0 min value is outside of the allowed memory range`) */\
-+	r1 = *(u64*)(r0 + 0);				\
- 	if r1 <= 0 goto l1_%=;				\
- 	r1 ^= 3;					\
- 	if r1 >= 0 goto l1_%=;				\
-@@ -858,8 +860,7 @@ l1_%=:	r0 = 0;						\
- 
- SEC("socket")
- __description("bounds check for reg32 > 0, reg32 xor 3")
--__success __failure_unpriv
--__msg_unpriv("R0 min value is outside of the allowed memory range")
-+__success __success_unpriv
- __retval(0)
- __naked void reg32_0_reg32_xor_3(void)
- {
-@@ -872,7 +873,8 @@ __naked void reg32_0_reg32_xor_3(void)
- 	call %[bpf_map_lookup_elem];			\
- 	if r0 != 0 goto l0_%=;				\
- 	exit;						\
--l0_%=:	r1 = *(u64*)(r0 + 0);				\
-+l0_%=:	/* unpriv: nospec (inserted to prevent `R0 min value is outside of the allowed memory range`) */\
-+	r1 = *(u64*)(r0 + 0);				\
- 	if w1 <= 0 goto l1_%=;				\
- 	w1 ^= 3;					\
- 	if w1 >= 0 goto l1_%=;				\
-diff --git a/tools/testing/selftests/bpf/progs/verifier_movsx.c b/tools/testing/selftests/bpf/progs/verifier_movsx.c
-index 994bbc346d25..5de9bcbe7425 100644
---- a/tools/testing/selftests/bpf/progs/verifier_movsx.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_movsx.c
-@@ -245,7 +245,7 @@ l0_%=:							\
- SEC("socket")
- __description("MOV32SX, S8, var_off not u32_max, positive after s8 extension")
- __success __retval(0)
--__failure_unpriv __msg_unpriv("frame pointer is read only")
-+__success_unpriv
- __naked void mov64sx_s32_varoff_2(void)
- {
- 	asm volatile ("					\
-@@ -257,6 +257,7 @@ __naked void mov64sx_s32_varoff_2(void)
- 	w0 = 0;						\
- 	exit;						\
- l0_%=:							\
-+	/* nospec (inserted to prevent `frame pointer is read only`) */\
- 	r10 = 1;					\
- 	exit;						\
- "	:
-@@ -267,7 +268,7 @@ l0_%=:							\
- SEC("socket")
- __description("MOV32SX, S8, var_off not u32_max, negative after s8 extension")
- __success __retval(0)
--__failure_unpriv __msg_unpriv("frame pointer is read only")
-+__success_unpriv
- __naked void mov64sx_s32_varoff_3(void)
- {
- 	asm volatile ("					\
-@@ -280,6 +281,7 @@ __naked void mov64sx_s32_varoff_3(void)
- 	w0 = 0;						\
- 	exit;						\
- l0_%=:							\
-+	/* nospec (inserted to prevent `frame pointer is read only`) */\
- 	r10 = 1;					\
- 	exit;						\
- "	:
-diff --git a/tools/testing/selftests/bpf/progs/verifier_unpriv.c b/tools/testing/selftests/bpf/progs/verifier_unpriv.c
-index a4a5e2071604..af35365558ce 100644
---- a/tools/testing/selftests/bpf/progs/verifier_unpriv.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_unpriv.c
-@@ -572,7 +572,7 @@ l0_%=:	exit;						\
- 
- SEC("socket")
- __description("alu32: mov u32 const")
--__success __failure_unpriv __msg_unpriv("R7 invalid mem access 'scalar'")
-+__success __success_unpriv
- __retval(0)
- __naked void alu32_mov_u32_const(void)
- {
-@@ -581,6 +581,7 @@ __naked void alu32_mov_u32_const(void)
- 	w7 &= 1;					\
- 	w0 = w7;					\
- 	if r0 == 0 goto l0_%=;				\
-+	/* unpriv: nospec (inserted to prevent `R7 invalid mem access 'scalar'`) */\
- 	r0 = *(u64*)(r7 + 0);				\
- l0_%=:	exit;						\
- "	::: __clobber_all);
-diff --git a/tools/testing/selftests/bpf/progs/verifier_value_ptr_arith.c b/tools/testing/selftests/bpf/progs/verifier_value_ptr_arith.c
-index 5ba6e53571c8..01a238e3047e 100644
---- a/tools/testing/selftests/bpf/progs/verifier_value_ptr_arith.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_value_ptr_arith.c
-@@ -398,7 +398,7 @@ l2_%=:	r0 = 1;						\
- 
- SEC("socket")
- __description("map access: mixing value pointer and scalar, 1")
--__success __failure_unpriv __msg_unpriv("R2 pointer comparison prohibited")
-+__success __failure_unpriv __msg_unpriv("R2 tried to add from different maps, paths or scalars, pointer arithmetic with it prohibited for !root")
- __retval(0)
- __naked void value_pointer_and_scalar_1(void)
- {
-@@ -433,6 +433,7 @@ l2_%=:	/* common instruction */			\
- l3_%=:	/* branch B */					\
- 	r0 = 0x13371337;				\
- 	/* verifier follows fall-through */		\
-+	/* unpriv: nospec (inserted to prevent `R2 pointer comparison prohibited`) */\
- 	if r2 != 0x100000 goto l4_%=;			\
- 	r0 = 0;						\
- 	exit;						\
-@@ -450,7 +451,7 @@ l4_%=:	/* fake-dead code; targeted from branch A to	\
- 
- SEC("socket")
- __description("map access: mixing value pointer and scalar, 2")
--__success __failure_unpriv __msg_unpriv("R0 invalid mem access 'scalar'")
-+__success __failure_unpriv __msg_unpriv("R2 tried to add from different maps, paths or scalars, pointer arithmetic with it prohibited for !root")
- __retval(0)
- __naked void value_pointer_and_scalar_2(void)
- {
-@@ -466,6 +467,7 @@ __naked void value_pointer_and_scalar_2(void)
- 	if r0 != 0 goto l0_%=;				\
- 	exit;						\
- l0_%=:	/* load some number from the map into r1 */	\
-+	/* unpriv: nospec (inserted to prevent `R0 invalid mem access 'scalar'`) */\
- 	r1 = *(u8*)(r0 + 0);				\
- 	/* depending on r1, branch: */			\
- 	if r1 == 0 goto l1_%=;				\
-@@ -1296,11 +1298,12 @@ l0_%=:	r0 = 1;						\
- 
- SEC("socket")
- __description("map access: value_ptr -= unknown scalar, 2")
--__success __failure_unpriv
--__msg_unpriv("R0 pointer arithmetic of map value goes out of range")
-+__success __success_unpriv
- __retval(1)
- __naked void value_ptr_unknown_scalar_2_2(void)
- {
-+	/* unpriv: nospec inserted by verifier to mitigate 'R0 pointer
-+	 * arithmetic of map value goes out of range'. */
- 	asm volatile ("					\
- 	r1 = 0;						\
- 	*(u64*)(r10 - 8) = r1;				\
--- 
-2.48.1
+>
+>> +
+>>          } while ((p = cgroup_parent(p)));
+>>
+>>          *array = progs;
+>> @@ -663,7 +679,7 @@ static int __cgroup_bpf_attach(struct cgroup *cgrp,
+>>                   */
+>>                  return -EPERM;
+>>
+>> -       if (prog_list_length(progs) >= BPF_CGROUP_MAX_PROGS)
+>> +       if (prog_list_length(progs, NULL) >= BPF_CGROUP_MAX_PROGS)
+>>                  return -E2BIG;
+>>
+>>          pl = find_attach_entry(progs, prog, link, replace_prog,
+
+[...]
 
