@@ -1,64 +1,44 @@
-Received: from dediextern.your-server.de (dediextern.your-server.de [85.10.215.232])
+Received: from out-179.mta1.migadu.com (out-179.mta1.migadu.com [95.215.58.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22EC12561D1;
-	Mon, 24 Feb 2025 15:29:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=85.10.215.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FAF213D26B
+	for <bpf@vger.kernel.org>; Mon, 24 Feb 2025 15:34:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740410987; cv=none; b=RmHdSAKWLmqA1lRroHfq5ij2N6pevWUzH9UnG76neeOWX6EM1a++YfbDwMQthWCPgx9nFkCX/QTeCqV/o50upvaX00J1pK7Czgg2aiQRSAKyI6YnlnX5R9eut38uwvwL9qekJ8tuvBF51h0eyoY+cs6QXo8wvW/zanGsmaQ97JY=
+	t=1740411282; cv=none; b=NbNNeSqr4SmHuTZ5w6E0o++gEtxtGSMyUbVchmSMQiR0FOpCUxoEcN7XeCOIaMPSAzkwObXafBDr/DyYSByGpTHA5p1A5QFPc+w2FwN9fk8HrZK3XUyagUJ0SS2DD4wsnSCuvmixWywiRuJE2ssnjepi6Uc8FYCMMmaaWZvyW9M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740410987; c=relaxed/simple;
-	bh=Bz9QAvk0n62OqPIRtmIU+QS9wEusbclae33SDw6IB54=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=rcdxB7kg1Xzo4rYpnwIjWkLV2jCqdVzOaFzx+B1syffxHj4sZhBPjcsc7J+oASV02FEP35oHWyMYqDl8Ga6bTpBrQ7tiE2GvP9VTXZqZs+IpDhdskUKU25512gHc55zKA7NvCccGNg+XKLWBpeH0V4F963JNywISekHbpG+EwkM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hetzner-cloud.de; spf=pass smtp.mailfrom=hetzner-cloud.de; arc=none smtp.client-ip=85.10.215.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hetzner-cloud.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hetzner-cloud.de
-Received: from sslproxy01.your-server.de ([78.46.139.224])
-	by dediextern.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <marcus.wichelmann@hetzner-cloud.de>)
-	id 1tmaOR-000A2H-3P; Mon, 24 Feb 2025 16:29:15 +0100
-Received: from [78.47.5.107] (helo=sdn-nic-test01..)
-	by sslproxy01.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <marcus.wichelmann@hetzner-cloud.de>)
-	id 1tmaOQ-0005Hj-2m;
-	Mon, 24 Feb 2025 16:29:14 +0100
-From: Marcus Wichelmann <marcus.wichelmann@hetzner-cloud.de>
-To: netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Cc: willemdebruijn.kernel@gmail.com,
-	jasowang@redhat.com,
-	andrew+netdev@lunn.ch,
-	davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	mykolal@fb.com,
-	ast@kernel.org,
+	s=arc-20240116; t=1740411282; c=relaxed/simple;
+	bh=oGAXwbtbi7BVHwOB0s54f/sqDdObG3B2K+cxxb2TsOk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=lyTC/8J8fZtgK9FEs6aii6yzdXFWQGcgZ8hz31TY9iSLdyHbd6yMddAzrGlYJNaPIomkZ81d0HJRoslavr5ZFFoPG2KmQpkaY92dy+j5XLnI41YDvvol1VjBZZBIW3+bTJ4qjdQGisU3Jj9dImTSoYw9rdUYj36Y5okNRZph56o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=mw3sMGP2; arc=none smtp.client-ip=95.215.58.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="mw3sMGP2"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1740411277;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=AH2ViVqIJIpQPEeyXNmpj3QM1LI7DWlAvUcdY/DIMR0=;
+	b=mw3sMGP2gGpsEN22NuTqlZ9ZRBNJU0uniAKIlxJA4dCv4tywFwXvz50lcMLgLbIw9Hy6Dl
+	+AaTUrCZFMfRLnrkqiJkqPoanaFYIwXdLAINoOmd9oO9f10UC1LXC38riJZGCmuA41oktn
+	xRxPxNIkSAPamj4kx+v7PePOIGNrvq0=
+From: Leon Hwang <leon.hwang@linux.dev>
+To: bpf@vger.kernel.org
+Cc: ast@kernel.org,
 	daniel@iogearbox.net,
-	martin.lau@linux.dev,
-	song@kernel.org,
+	andrii@kernel.org,
 	yonghong.song@linux.dev,
-	john.fastabend@gmail.com,
-	kpsingh@kernel.org,
-	sdf@fomichev.me,
-	haoluo@google.com,
-	jolsa@kernel.org,
-	shuah@kernel.org,
-	hawk@kernel.org,
-	marcus.wichelmann@hetzner-cloud.de
-Subject: [PATCH bpf-next v3 5/6] selftests/bpf: add test for XDP metadata support in tun driver
-Date: Mon, 24 Feb 2025 15:29:08 +0000
-Message-ID: <20250224152909.3911544-6-marcus.wichelmann@hetzner-cloud.de>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20250224152909.3911544-1-marcus.wichelmann@hetzner-cloud.de>
-References: <20250224152909.3911544-1-marcus.wichelmann@hetzner-cloud.de>
+	song@kernel.org,
+	eddyz87@gmail.com,
+	me@manjusaka.me,
+	leon.hwang@linux.dev,
+	kernel-patches-bot@fb.com
+Subject: [PATCH bpf-next v4 0/4] bpf: Improve error reporting for freplace attachment failure
+Date: Mon, 24 Feb 2025 23:33:48 +0800
+Message-ID: <20250224153352.64689-1-leon.hwang@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -66,102 +46,59 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Authenticated-Sender: marcus.wichelmann@hetzner-cloud.de
-X-Virus-Scanned: Clear (ClamAV 1.0.7/27559/Mon Feb 24 10:44:14 2025)
+X-Migadu-Flow: FLOW_OUT
 
-Add a selftest that creates a tap device, attaches XDP and TC programs,
-writes a packet with a test payload into the tap device and checks the
-test result. This test ensures that the XDP metadata support in the tun
-driver is enabled and that the metadata size is correctly passed to the
-skb.
+This patch series improves error reporting for BPF_LINK_CREATE when
+attaching freplace programs. Inspired by the discussion in
+"[PATCH bpf-next v2] bpf: Add bpf_check_attach_target_with_klog method to
+output failure logs to kernel"[0], this series enhances that freplace
+attachment failure returns meaningful logs to userspace, aiding debugging.
 
-See the previous commit ("selftests/bpf: refactor xdp_context_functional
-test and bpf program") for details about the test design.
+Patch breakdown:
+1. bpf, verifier: Add missing newline of bpf_log in bpf_check_attach_target
+    * Add the missing newline in
+      bpf_log(log, "Target program bound device mismatch").
+2. bpf: Improve error reporting for freplace attachment failure
+    * Extends BPF_LINK_CREATE to report detailed log.
+3. bpf, libbpf: Capture error message of freplace attachment failure
+    * Modifies libbpf to capture freplace attachment failure log.
+4. selftests/bpf: Add test case for freplace attachment failure log
+    * Introduces a selftest to validate error reporting.
 
-Signed-off-by: Marcus Wichelmann <marcus.wichelmann@hetzner-cloud.de>
----
- .../bpf/prog_tests/xdp_context_test_run.c     | 64 +++++++++++++++++++
- 1 file changed, 64 insertions(+)
+Links:
+[0] https://lore.kernel.org/bpf/CAEf4BzbbyojuFSS7xQ3+jZb=dHzOaZfMbtT+WnypW2LPwOUwRw@mail.gmail.com/
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_context_test_run.c b/tools/testing/selftests/bpf/prog_tests/xdp_context_test_run.c
-index 4043f220d7c0..60aad6bd8882 100644
---- a/tools/testing/selftests/bpf/prog_tests/xdp_context_test_run.c
-+++ b/tools/testing/selftests/bpf/prog_tests/xdp_context_test_run.c
-@@ -8,6 +8,7 @@
- #define TX_NAME "veth1"
- #define TX_NETNS "xdp_context_tx"
- #define RX_NETNS "xdp_context_rx"
-+#define TAP_NAME "tap0"
- 
- #define TEST_PAYLOAD_LEN 32
- static const __u8 test_payload[TEST_PAYLOAD_LEN] = {
-@@ -251,3 +252,66 @@ void test_xdp_context_veth(void)
- 	netns_free(tx_ns);
- }
- 
-+void test_xdp_context_tuntap(void)
-+{
-+	LIBBPF_OPTS(bpf_tc_hook, tc_hook, .attach_point = BPF_TC_INGRESS);
-+	LIBBPF_OPTS(bpf_tc_opts, tc_opts, .handle = 1, .priority = 1);
-+	struct test_xdp_meta *skel = NULL;
-+	__u8 packet[sizeof(struct ethhdr) + TEST_PAYLOAD_LEN];
-+	int tap_fd = -1;
-+	int tap_ifindex;
-+	int ret;
-+
-+	tap_fd = open_tuntap(TAP_NAME, true);
-+	if (!ASSERT_GE(tap_fd, 0, "open_tuntap"))
-+		goto close;
-+
-+	/* By default, Linux sends IPv6 multicast listener reports which
-+	 * interfere with this test. Set the IFF_NOARP flag to ensure
-+	 * silence on the interface.
-+	 */
-+	SYS(close, "ip link set dev " TAP_NAME " arp off");
-+	SYS(close, "ip link set dev " TAP_NAME " up");
-+
-+	skel = test_xdp_meta__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "open and load skeleton"))
-+		goto close;
-+
-+	tap_ifindex = if_nametoindex(TAP_NAME);
-+	if (!ASSERT_GE(tap_ifindex, 0, "if_nametoindex"))
-+		goto close;
-+
-+	tc_hook.ifindex = tap_ifindex;
-+	ret = bpf_tc_hook_create(&tc_hook);
-+	if (!ASSERT_OK(ret, "bpf_tc_hook_create"))
-+		goto close;
-+
-+	tc_opts.prog_fd = bpf_program__fd(skel->progs.ing_cls);
-+	ret = bpf_tc_attach(&tc_hook, &tc_opts);
-+	if (!ASSERT_OK(ret, "bpf_tc_attach"))
-+		goto close;
-+
-+	ret = bpf_xdp_attach(tap_ifindex, bpf_program__fd(skel->progs.ing_xdp),
-+			     0, NULL);
-+	if (!ASSERT_GE(ret, 0, "bpf_xdp_attach"))
-+		goto close;
-+
-+	/* The ethernet header is not relevant for this test and doesn't need to
-+	 * be meaningful.
-+	 */
-+	struct ethhdr eth = { 0 };
-+
-+	memcpy(packet, &eth, sizeof(eth));
-+	memcpy(packet + sizeof(eth), test_payload, TEST_PAYLOAD_LEN);
-+
-+	ret = write(tap_fd, packet, sizeof(packet));
-+	if (!ASSERT_EQ(ret, sizeof(packet), "write packet"))
-+		goto close;
-+
-+	assert_test_result(skel);
-+
-+close:
-+	if (tap_fd >= 0)
-+		close(tap_fd);
-+	test_xdp_meta__destroy(skel);
-+}
+Changes:
+v3 -> v4:
+  * Add libbpf API bpf_program__attach_freplace_opts() to use users'
+    supplied log buffer.
+
+v2: https://lore.kernel.org/bpf/20240725051511.57112-1-me@manjusaka.me/
+v2 -> v3:
+  * Address comment from Andrii:
+    * Report back the reason for declining freplace attachment instead of
+      logging in dmesg.
+
+Leon Hwang (4):
+  bpf, verifier: Add missing newline of bpf_log in
+    bpf_check_attach_target
+  bpf: Improve error reporting for freplace attachment failure
+  bpf, libbpf: Capture error message of freplace attachment failure
+  selftests/bpf: Add test case for freplace attachment failure log
+
+ include/uapi/linux/bpf.h                      |  2 +
+ kernel/bpf/syscall.c                          | 51 ++++++++++++++++---
+ kernel/bpf/verifier.c                         |  2 +-
+ tools/include/uapi/linux/bpf.h                |  2 +
+ tools/lib/bpf/bpf.c                           |  6 ++-
+ tools/lib/bpf/bpf.h                           |  2 +
+ tools/lib/bpf/libbpf.c                        | 29 +++++++++--
+ tools/lib/bpf/libbpf.h                        | 14 +++++
+ tools/lib/bpf/libbpf.map                      |  1 +
+ .../bpf/prog_tests/tracing_link_attach_log.c  | 48 +++++++++++++++++
+ 10 files changed, 143 insertions(+), 14 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/tracing_link_attach_log.c
+
 -- 
-2.43.0
+2.47.1
 
