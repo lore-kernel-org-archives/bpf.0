@@ -1,192 +1,158 @@
-Received: from out-181.mta1.migadu.com (out-181.mta1.migadu.com [95.215.58.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDB93264A7B
-	for <bpf@vger.kernel.org>; Mon, 24 Feb 2025 17:02:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59AF7260A5E;
+	Mon, 24 Feb 2025 17:12:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740416577; cv=none; b=PTKmgRr5wqRGbf2zcjdmgW3p/TGp+QwcJ3IINuhkktnZpweXGkLe97UDiiWm7AI/EUuV8eVhBGV6sFYH5liFiKJHkec5KToF+mNONyARBJXlr7J419xxRaFZsVUQV/4fw5/1PWAl0JHY8IntpFPHypCsyKksRZ1h7OV3b7lU2dA=
+	t=1740417154; cv=none; b=lHJXOo+y6IqHhnF6gIOEjady0B0G/hHJLsGLUGCm7FNxyXwWlvrkNe7wwPYaLcl3XNwOmdgW4JaNd4tCTNKKe7wMx73ycyvo6wdKrfaCvzWTRKh+dGUZvGKkrACoggqmlNQynCUtzQxDrOccy2q2D7ziXnartOuGpF3PW+4wiF0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740416577; c=relaxed/simple;
-	bh=e1HU03QaEH/WJqwMrSHwDYP8oWlp/FRk7I/D+9cATTo=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=anxNUEGVZL/kse+IrteziPjAHBRpyWytHcAi2Ealcb8MPCuZz1jfvLfcsl5uhgExYlslW0xsoi1uyhuiqF4q2ADY4ILiBZuFLp/YaRU+I7jQnTzoO99szVOLZx6NO5jH4ESQ9lw7as2fZrwwo3nlH/njZaU3tMcrOunss5CZhSk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=lpDm5H4s; arc=none smtp.client-ip=95.215.58.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1740417154; c=relaxed/simple;
+	bh=INCTVpEiHnc/oIKx9E4dIa9hFE2BQCY6HgP+mcwRRT0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=W0j9NcViaISwKirVf5i9+jT0QV58paFjJTzK1sQNV1iKD1lUaPTEItJlVY848DwHgQxS2tPkn8lrPP3ax7PjSOLlFU7WWLu/e38517Hm3gQaUahbpgJO5MOF1cRisFZc6yhNXXtpWkWvz72adQNNw7HLWuUrwSUPL6oYUx8hJV0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LAxOmcAC; arc=none smtp.client-ip=209.85.214.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="lpDm5H4s"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1740416573;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=qiQKTOacPogCTZt2sF84QiGnZvXEsGlrdkRpybzF4+0=;
-	b=lpDm5H4sJdnzN0FVGveCI+7jrxzFfbnhmXhpxW3Nnuhh6TdXNlMAdIcXDFOXlU/7+yYqRC
-	kg744NhFn8Epzua9iaUK3upeY8Ab4LxungmSXp5/ewmkDWRmAHr4VDpyOQurVCcO/LyXAP
-	P5CH5gjfz8nr0fvspiPu0PQ08IjrGzs=
-From: Tao Chen <chen.dylane@linux.dev>
-To: ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	haoluo@google.com,
-	jolsa@kernel.org,
-	qmo@kernel.org
-Cc: bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	chen.dylane@gmail.com,
-	Tao Chen <chen.dylane@linux.dev>,
-	Tao Chen <dylane.chen@didiglobal.com>
-Subject: [PATCH bpf-next v8 5/5] selftests/bpf: Add libbpf_probe_bpf_kfunc API selftests
-Date: Tue, 25 Feb 2025 00:59:12 +0800
-Message-Id: <20250224165912.599068-6-chen.dylane@linux.dev>
-In-Reply-To: <20250224165912.599068-1-chen.dylane@linux.dev>
-References: <20250224165912.599068-1-chen.dylane@linux.dev>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LAxOmcAC"
+Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-220c8cf98bbso11563205ad.1;
+        Mon, 24 Feb 2025 09:12:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1740417152; x=1741021952; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=TlqcvofmGggiBiv0CE7G1YH/4SRW4duxvdw0TO81nSE=;
+        b=LAxOmcACcMgm6BQWO9ZvIyHVb5WSurpcb554CHYiV0Bluz0tqxeIifj3C7gG4f9Vpw
+         VN0vYlN5mSVcZxrCdI16vklZHc7/6xDoCvL+I+EgWKfW8SYyewkFDpJwFxcx+2S2b4x3
+         P8oQqJZbHCoHeXGmQxv8aiGEZtazJXn0ZPWm1Q/bizyasPHtE28Nkw1h77rsJgJboKQ4
+         36wa2+9GzXimb69s0H/Z61nO/7TrNdl48hxKvoqInBDYDhU1f07YgF88deDOTLbM7sqf
+         fVb513sQ5uKfD519tXDM6MI5z4Em8ofa1zNs/GI22jJqu+uffYg2bIMNrKjsfBn/LiC4
+         GRMA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1740417152; x=1741021952;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=TlqcvofmGggiBiv0CE7G1YH/4SRW4duxvdw0TO81nSE=;
+        b=Q06WDhIogxl+pYFdIDvEjEB5tUJFMzEVlTrQTvhkBIvB6m+FSAKPJlsDyT5wYndbvP
+         gMRVHeuDMueChyeBgZ/rt3SX+K7dAc2QqnC7eFEPKf+PndmKfM5w+aPUEVJdftkXhW6A
+         b/GZlTzBxBlvQVdfxzDtuT1sNoyJkkHu8aNBUnHj52O0Dl4/jZZgKFuS67py/T0k5Jjl
+         lSxnjwW32cg+dABaRbpDm5186/M6CdCak+7xQ3Ufcw/ofZFSXxgv8SxxXn+XbGb+lBQ/
+         F8DDi7dS3Z9/kCgQWDxn80YyXN1wYwi+cB7EqKgrzBsw1ldi8e1lQICk96RM9d/kS23R
+         5udA==
+X-Forwarded-Encrypted: i=1; AJvYcCU+ZzC0o63Dp6WFsY+oVfSo4kov7LAe5kZbEurbW9VgNX2PiyJTYV7WnNYewkWFuZDHj5I=@vger.kernel.org, AJvYcCWGWtWI9+VXWUBqyf/CioCO+uwT8L/pGpUHG49C6UVgwMaKWLKf88ZVRZuneHSm/SUSvf+qOoj2qLN/xkX/xWZy@vger.kernel.org, AJvYcCWYlO3vaB8037KFUTeo0PZ3bbmO9sieFLkyuHlpZpqnr6Jfzyga2MT07ID1AvppO4eoRwAFIfoeX04efCDJ@vger.kernel.org
+X-Gm-Message-State: AOJu0YyrQ11CnJiGJb0diZ8tYN+Y2ExMdBmpFLzFuTzs3Qpt2KIIAWzu
+	M4Ur4tFnyxv/nBGPc1GGETd7YrBny/Y2nyebFVWxXgWkf97yqgE=
+X-Gm-Gg: ASbGncv2cKhhbpCqrltexjUOW/j+mdGXYsNZzDzuT8h+Iljf9TFayR8cLMIIXzpCUaN
+	/2ghu4Xncq6ytIkLaz9okn95FNeAjOdnKqwlu88+gJ9YkdhvLfU7tDTQJRpFz8fvwhqiDoT1CHv
+	PXezLDTKz4g7E5hKKc0CD3CVtG153w5jDA7Abe7+3G6k/YZcVqUhGF8ypjbf58eS1pzcmb5n69v
+	sZLMC2PJBpJlvh49rqMVum/OKsnxZlVnPSB+nsuuCBXpycLrVKBqXunPwA7/P9QJwCdDLAtg8c1
+	CtddmFeujaTR1l+W5X6WT9wz6A==
+X-Google-Smtp-Source: AGHT+IEn9JgospvuGafyt2PK7wawjv6RYzjXoajKoNOMWXmzMfR7NyYhQJKwd1T2G5qAEYY1RFGtgA==
+X-Received: by 2002:a17:902:e88d:b0:21d:dfae:300b with SMTP id d9443c01a7336-221a0ec46ffmr231562035ad.10.1740417152537;
+        Mon, 24 Feb 2025 09:12:32 -0800 (PST)
+Received: from localhost ([2601:646:9e00:f56e:123b:cea3:439a:b3e3])
+        by smtp.gmail.com with UTF8SMTPSA id d9443c01a7336-220d53490c2sm184364335ad.47.2025.02.24.09.12.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Feb 2025 09:12:32 -0800 (PST)
+Date: Mon, 24 Feb 2025 09:12:31 -0800
+From: Stanislav Fomichev <stfomichev@gmail.com>
+To: Marcus Wichelmann <marcus.wichelmann@hetzner-cloud.de>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	willemdebruijn.kernel@gmail.com, jasowang@redhat.com,
+	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
+	kuba@kernel.org, pabeni@redhat.com, andrii@kernel.org,
+	eddyz87@gmail.com, mykolal@fb.com, ast@kernel.org,
+	daniel@iogearbox.net, martin.lau@linux.dev, song@kernel.org,
+	yonghong.song@linux.dev, john.fastabend@gmail.com,
+	kpsingh@kernel.org, sdf@fomichev.me, haoluo@google.com,
+	jolsa@kernel.org, shuah@kernel.org, hawk@kernel.org
+Subject: Re: [PATCH bpf-next v3 4/6] selftests/bpf: refactor
+ xdp_context_functional test and bpf program
+Message-ID: <Z7yof3pafRsMwBrf@mini-arch>
+References: <20250224152909.3911544-1-marcus.wichelmann@hetzner-cloud.de>
+ <20250224152909.3911544-5-marcus.wichelmann@hetzner-cloud.de>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20250224152909.3911544-5-marcus.wichelmann@hetzner-cloud.de>
 
-Add selftests for prog_kfunc feature probing.
+On 02/24, Marcus Wichelmann wrote:
+> The existing XDP metadata test works by creating a veth pair and
+> attaching XDP & TC programs that drop the packet when the condition of
+> the test isn't fulfilled. The test then pings through the veth pair and
+> succeeds when the ping comes through.
+> 
+> While this test works great for a veth pair, it is hard to replicate for
+> tap devices to test the XDP metadata support of them. A similar test for
+> the tun driver would either involve logic to reply to the ping request,
+> or would have to capture the packet to check if it was dropped or not.
+> 
+> To make the testing of other drivers easier while still maximizing code
+> reuse, this commit refactors the existing xdp_context_functional test to
+> use a test_result map. Instead of conditionally passing or dropping the
+> packet, the TC program is changed to copy the received metadata into the
+> value of that single-entry array map. Tests can then verify that the map
+> value matches the expectation.
+> 
+> This testing logic is easy to adapt to other network drivers as the only
+> remaining requirement is that there is some way to send a custom
+> Ethernet packet through it that triggers the XDP & TC programs.
+> 
+> The payload of the Ethernet packet is used as the test data that is
+> expected to be passed as metadata from the XDP to the TC program and
+> written to the map. It has a fixed size of 32 bytes which is a
+> reasonalbe size that should be supported by both drivers. Additional
+> packet headers are not necessary for the test and were therefore skipped
+> to keep the testing code short.
+> 
+> Signed-off-by: Marcus Wichelmann <marcus.wichelmann@hetzner-cloud.de>
+> ---
+>  .../bpf/prog_tests/xdp_context_test_run.c     | 99 +++++++++++++++----
+>  .../selftests/bpf/progs/test_xdp_meta.c       | 56 ++++++-----
+>  2 files changed, 112 insertions(+), 43 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_context_test_run.c b/tools/testing/selftests/bpf/prog_tests/xdp_context_test_run.c
+> index 937da9b7532a..4043f220d7c0 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/xdp_context_test_run.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/xdp_context_test_run.c
+> @@ -4,13 +4,19 @@
+>  #include "test_xdp_context_test_run.skel.h"
+>  #include "test_xdp_meta.skel.h"
+>  
+> -#define TX_ADDR "10.0.0.1"
+> -#define RX_ADDR "10.0.0.2"
+>  #define RX_NAME "veth0"
+>  #define TX_NAME "veth1"
+>  #define TX_NETNS "xdp_context_tx"
+>  #define RX_NETNS "xdp_context_rx"
+>  
+> +#define TEST_PAYLOAD_LEN 32
+> +static const __u8 test_payload[TEST_PAYLOAD_LEN] = {
+> +	0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08,
+> +	0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x18,
+> +	0x21, 0x22, 0x23, 0x24, 0x25, 0x26, 0x27, 0x28,
+> +	0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38,
+> +};
+> +
+>  void test_xdp_context_error(int prog_fd, struct bpf_test_run_opts opts,
+>  			    __u32 data_meta, __u32 data, __u32 data_end,
+>  			    __u32 ingress_ifindex, __u32 rx_queue_index,
+> @@ -112,15 +118,66 @@ void test_xdp_context_test_run(void)
+>  	test_xdp_context_test_run__destroy(skel);
+>  }
+>  
+> -void test_xdp_context_functional(void)
 
- ./test_progs -t libbpf_probe_kfuncs
- #153     libbpf_probe_kfuncs:OK
- Summary: 1/0 PASSED, 0 SKIPPED, 0 FAILED
+[..]
 
-Cc: Tao Chen <dylane.chen@didiglobal.com>
-Reviewed-by: Jiri Olsa <jolsa@kernel.org>
-Reviewed-by: Eduard Zingerman <eddyz87@gmail.com>
-Signed-off-by: Tao Chen <chen.dylane@linux.dev>
----
- .../selftests/bpf/prog_tests/libbpf_probes.c  | 111 ++++++++++++++++++
- 1 file changed, 111 insertions(+)
+> +int send_test_packet(int ifindex)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/libbpf_probes.c b/tools/testing/selftests/bpf/prog_tests/libbpf_probes.c
-index 4ed46ed58a7b..d8f5475a94ce 100644
---- a/tools/testing/selftests/bpf/prog_tests/libbpf_probes.c
-+++ b/tools/testing/selftests/bpf/prog_tests/libbpf_probes.c
-@@ -126,3 +126,114 @@ void test_libbpf_probe_helpers(void)
- 		ASSERT_EQ(res, d->supported, buf);
- 	}
- }
-+
-+static int module_btf_fd(char *module)
-+{
-+	int fd, err;
-+	__u32 id = 0, len;
-+	struct bpf_btf_info info;
-+	char name[64];
-+
-+	while (true) {
-+		err = bpf_btf_get_next_id(id, &id);
-+		if (err)
-+			return -1;
-+
-+		fd = bpf_btf_get_fd_by_id(id);
-+		if (fd < 0) {
-+			if (errno == ENOENT)
-+				continue;
-+			return -1;
-+		}
-+		len = sizeof(info);
-+		memset(&info, 0, sizeof(info));
-+		info.name = ptr_to_u64(name);
-+		info.name_len = sizeof(name);
-+		err = bpf_btf_get_info_by_fd(fd, &info, &len);
-+		if (err) {
-+			close(fd);
-+			return -1;
-+		}
-+		/* find target module BTF */
-+		if (!strcmp(name, module))
-+			break;
-+
-+		close(fd);
-+	}
-+
-+	return fd;
-+}
-+
-+void test_libbpf_probe_kfuncs(void)
-+{
-+	int ret, kfunc_id, fd;
-+	char *kfunc = "bpf_cpumask_create";
-+	struct btf *vmlinux_btf = NULL;
-+	struct btf *module_btf = NULL;
-+
-+	vmlinux_btf = btf__parse("/sys/kernel/btf/vmlinux", NULL);
-+	if (!ASSERT_OK_PTR(vmlinux_btf, "btf_parse"))
-+		return;
-+
-+	kfunc_id = btf__find_by_name_kind(vmlinux_btf, kfunc, BTF_KIND_FUNC);
-+	if (!ASSERT_GT(kfunc_id, 0, kfunc))
-+		goto cleanup;
-+
-+	/* prog BPF_PROG_TYPE_SYSCALL supports kfunc bpf_cpumask_create */
-+	ret = libbpf_probe_bpf_kfunc(BPF_PROG_TYPE_SYSCALL, kfunc_id, -1, NULL);
-+	if (!ASSERT_EQ(ret, 1, "kfunc in vmlinux support"))
-+		goto cleanup;
-+
-+	/* prog BPF_PROG_TYPE_KPROBE does not support kfunc bpf_cpumask_create */
-+	ret = libbpf_probe_bpf_kfunc(BPF_PROG_TYPE_KPROBE, kfunc_id, -1, NULL);
-+	if (!ASSERT_EQ(ret, 0, "kfunc in vmlinux not suuport"))
-+		goto cleanup;
-+
-+	ret = libbpf_probe_bpf_kfunc(BPF_PROG_TYPE_KPROBE, -1, -1, NULL);
-+	if (!ASSERT_EQ(ret, 0, "invalid kfunc id:-1"))
-+		goto cleanup;
-+
-+	ret = libbpf_probe_bpf_kfunc(100000, kfunc_id, -1, NULL);
-+	if (!ASSERT_ERR(ret, "invalid prog type:100000"))
-+		goto cleanup;
-+
-+	if (!env.has_testmod)
-+		goto cleanup;
-+
-+	module_btf = btf__load_module_btf("bpf_testmod", vmlinux_btf);
-+	if (!ASSERT_OK_PTR(module_btf, "load module BTF"))
-+		goto cleanup;
-+
-+	kfunc_id = btf__find_by_name(module_btf, "bpf_kfunc_call_test1");
-+	if (!ASSERT_GT(kfunc_id, 0, "func not found"))
-+		goto cleanup;
-+
-+	fd = module_btf_fd("bpf_testmod");
-+	if (!ASSERT_GE(fd, 0, "module BTF fd"))
-+		goto cleanup;
-+
-+	/* prog BPF_PROG_TYPE_SYSCALL supports kfunc bpf_kfunc_call_test1 in bpf_testmod */
-+	ret = libbpf_probe_bpf_kfunc(BPF_PROG_TYPE_SYSCALL, kfunc_id, fd, NULL);
-+	if (!ASSERT_EQ(ret, 1, "kfunc in module BTF support"))
-+		goto cleanup_fd;
-+
-+	/* prog BPF_PROG_TYPE_KPROBE does not support kfunc bpf_kfunc_call_test1
-+	 * in bpf_testmod
-+	 */
-+	ret = libbpf_probe_bpf_kfunc(BPF_PROG_TYPE_KPROBE, kfunc_id, fd, NULL);
-+	if (!ASSERT_EQ(ret, 0, "kfunc in module BTF not support"))
-+		goto cleanup_fd;
-+
-+	ret = libbpf_probe_bpf_kfunc(BPF_PROG_TYPE_SYSCALL, -1, fd, NULL);
-+	if (!ASSERT_EQ(ret, 0, "invalid kfunc id in module BTF"))
-+		goto cleanup_fd;
-+
-+	ret = libbpf_probe_bpf_kfunc(BPF_PROG_TYPE_SYSCALL, kfunc_id, 100, NULL);
-+	ASSERT_EQ(ret, 0, "invalid BTF fd in module BTF");
-+
-+cleanup_fd:
-+	close(fd);
-+cleanup:
-+	btf__free(vmlinux_btf);
-+	btf__free(module_btf);
-+}
--- 
-2.43.0
-
+nit: static? same for assert_test_result below
