@@ -1,173 +1,146 @@
-Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A31A1FC7E0;
-	Mon, 24 Feb 2025 22:24:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A01D1FFC7F
+	for <bpf@vger.kernel.org>; Mon, 24 Feb 2025 22:24:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740435872; cv=none; b=U9i7ICCVxSB2/eJuFWnLKF5XMoJeNovISrSXA+nrlAdOdxfBcQOr4TsgmLg33fwkby5FSs7N0ZECc5qsQYQU7BGN4DfYgQBSb79Ko2AZHMlySDxxuWXyeSRINxaSldcREjlGKS9GBEBnQ0Y0UCWlPZDPR74T8I9IKULuwBFjBb8=
+	t=1740435896; cv=none; b=dXsj2J+EnUn3yyui1V8bqs3t6sfVlBvA23TezqKRaFfwCIVi8ABKLh+cxrBTexeU9Ma/gABPR4w1JHUuXVjLwJa5iIOsswpT730xV8y2LMZshLh42K22o4iP8Lh3vlnzl6R51HCZW3tm9jZmVxNwvN0Z14IZSwTni4CKp1tNCi0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740435872; c=relaxed/simple;
-	bh=zeoycR9oJIvshsvmElPOgnL5CAwyhvnlZN86Qa02vbA=;
-	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
-	 MIME-Version:Content-Type; b=ue9lvT/uBFDjcnQhBlEOfrxdz4qhoKriSPmKOnnNukOgpN8UyX3WWtdSB9kQC/rpwjgiJXo8kVGT9XR8v5NpOcA2pUFQNBqjGQTpmYCcqBIMUeyo+RX/dy0Q28z7Yh0Cdz7c3egokX9GZfYvBH2eNrdzdNafwd3xv1nOesD8Mqo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=ozIDGTPs; arc=none smtp.client-ip=198.137.202.136
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
+	s=arc-20240116; t=1740435896; c=relaxed/simple;
+	bh=2hOIMx0YHyPBMMszN05lP00pXRkB5dnS8qkzV3CloeE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=LJ7en8F0ynY2ocHGsVSSAQ770hDtXUm3pMoBuLZ6FPVR7ZTiimY5NanWgbVkHHlslayzD+EknBQlTkxKJP6UaFGCfq7YEGbjnkqn2H86rsA8JkKMCuyrUZ6525Cv3lMGffkbRqjplJBWKJ1gNZGsI4p9VX8rO8EjOQtyg4lQXqc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KzewT5pn; arc=none smtp.client-ip=209.85.214.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="ozIDGTPs"
-Received: from [127.0.0.1] ([76.133.66.138])
-	(authenticated bits=0)
-	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 51OMLFn9936187
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
-	Mon, 24 Feb 2025 14:21:15 -0800
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 51OMLFn9936187
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
-	s=2025021701; t=1740435678;
-	bh=5y6QG8ugMZ9OSeEQQS3XKHClehNKu6IU395FCDCL8FQ=;
-	h=Date:From:To:CC:Subject:In-Reply-To:References:From;
-	b=ozIDGTPsS/eMemS9AsjAyI4wW35RmD+flU4K02cgRllCs1/EXoq/zU8D0Tj+XR7s7
-	 MZg8YLCegaqa2yDyfMJvQGv6t1kOvN+0q04sz5ZxYB9YM677zH/ZIZY6vdUkX4NcwW
-	 oWm3ILA+YRJqBweAX9swGouBRul9ocwk3Q4qIuvrww8+7C/Rb1K/Ta0mh5A75CR1rh
-	 llGqPQI+Pf0RG87x37cpP0mls9qUS/4UTdrDt6e6zhpWuYAFbE/uu9ouHgosTRW+LS
-	 bO/GR8jYaz6trMtVFpY/lvVshl8fmlaN9/CCCKUp5lafSOK9eftKm/xvIxMal4//D3
-	 SjMlyohWFvQfg==
-Date: Mon, 24 Feb 2025 14:21:13 -0800
-From: "H. Peter Anvin" <hpa@zytor.com>
-To: Yury Norov <yury.norov@gmail.com>
-CC: Uros Bizjak <ubizjak@gmail.com>, Kuan-Wei Chiu <visitorckw@gmail.com>,
-        tglx@linutronix.de, Ingo Molnar <mingo@redhat.com>, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, jk@ozlabs.org,
-        joel@jms.id.au, eajames@linux.ibm.com, andrzej.hajda@intel.com,
-        neil.armstrong@linaro.org, rfoss@kernel.org,
-        maarten.lankhorst@linux.intel.com, mripard@kernel.org,
-        tzimmermann@suse.de, airlied@gmail.com, simona@ffwll.ch,
-        dmitry.torokhov@gmail.com, mchehab@kernel.org, awalls@md.metrocast.net,
-        hverkuil@xs4all.nl, miquel.raynal@bootlin.com, richard@nod.at,
-        vigneshr@ti.com, louis.peens@corigine.com, andrew+netdev@lunn.ch,
-        davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
-        parthiban.veerasooran@microchip.com, arend.vanspriel@broadcom.com,
-        johannes@sipsolutions.net, gregkh@linuxfoundation.org,
-        jirislaby@kernel.org, akpm@linux-foundation.org, mingo@kernel.org,
-        alistair@popple.id.au, linux@rasmusvillemoes.dk,
-        Laurent.pinchart@ideasonboard.com, jonas@kwiboo.se,
-        jernej.skrabec@gmail.com, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, linux-fsi@lists.ozlabs.org,
-        dri-devel@lists.freedesktop.org, linux-input@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-mtd@lists.infradead.org,
-        oss-drivers@corigine.com, netdev@vger.kernel.org,
-        linux-wireless@vger.kernel.org, brcm80211@lists.linux.dev,
-        brcm80211-dev-list.pdl@broadcom.com, linux-serial@vger.kernel.org,
-        bpf@vger.kernel.org, jserv@ccns.ncku.edu.tw,
-        Yu-Chun Lin <eleanor15x@gmail.com>
-Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_03/17=5D_x86=3A_Replace_open-c?=
- =?US-ASCII?Q?oded_parity_calculation_with_parity8=28=29?=
-User-Agent: K-9 Mail for Android
-In-Reply-To: <Z7zv-c4A76jeMAKf@thinkpad>
-References: <20250223164217.2139331-1-visitorckw@gmail.com> <20250223164217.2139331-4-visitorckw@gmail.com> <d080a2d6-9ec7-1c86-4cf4-536400221f68@gmail.com> <e0b1c299-7f19-4453-a1ce-676068601213@zytor.com> <Z7zv-c4A76jeMAKf@thinkpad>
-Message-ID: <68F1ED19-B0C2-4E78-B504-2F7C040ACC0A@zytor.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KzewT5pn"
+Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-220d39a5627so75810785ad.1
+        for <bpf@vger.kernel.org>; Mon, 24 Feb 2025 14:24:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1740435893; x=1741040693; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=tOjfXKHDxcuwJhHm4kiw0BtSS6O6QVSRcZtlOfD9NrM=;
+        b=KzewT5pnE/WBB8k4f8vkGUvOUVtiJEFOEU3khAUIWDXHhkyBG01vt+pNQMF14OfIY7
+         TPxlCJNZrREXW0AUgvwizR7/sE6BfYEjLlOaLVYVb++UG1Y03MriGuVqjLA+t9pW3oVY
+         pbwNwKKQZWJMgdwQGhXbrOeTnlkR1ci/I+RhZtuiPCohk3dfsNeLouMGL6AHiBZWIoPU
+         +yyA5a6hxO45IHLXAcjBfr5Jw/Fu9ll8kAYMS1FD2kvGvdfzXQBkpA73kZ7o/a5MRCMN
+         KcctsFXOdMNiwrzIbPgdKt8LThRgEHpPKI+GmzwRjyJmmYYZ42y/lvh6OYhpzq7+OPjj
+         5cXA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1740435893; x=1741040693;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=tOjfXKHDxcuwJhHm4kiw0BtSS6O6QVSRcZtlOfD9NrM=;
+        b=RywlcE3FjRS4GVRjQDyT2aP+lNy3j6u9sm8XwQnJlYX+ima0Lo/DL1D647iH8lYzn5
+         qc/ORrMJ2um1KsJoiw1yYIyuVhOgxmiVUIHKfG7fMz//fuZPCGn+HVlVBdFQ1ogd8RWY
+         kWd9xAhRy1RZy+wBLpPWgdSwQiPIQ0TdBKm6mausB3e7LTHoq8saVka5MX9ZN1ZoAOa6
+         aYMmNo23bYDKAN6gj2ntYEFr6WWPF4912lUhe83lEPRj29j0/TF7NWy0YkUMbwMi3rrW
+         9H9wlBDtq5jF3pXhzZNXnc+lnaizk8tW82eHpnylL40gMsK+Ok2dtJS60jmVTyi1I0dO
+         VXyA==
+X-Forwarded-Encrypted: i=1; AJvYcCW6iqI4h0kSrUjrA4JsKbmwwHSDuf5yMkp0IMk7Rlu2XTEgH1tDkxv3AfU50i8D1nSsffs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwCXFgrq9/ILnQ2zEWn5iAmiTWU1iVrzMZlvdsP0COfSjxL63/M
+	Zgem/GPfPTvUPpdGaiYcjKPLCoAhuStkmHOXhqNKX08ZwchYF1YRSy0E1gQ7hlZhiZ4TePFQxAn
+	rcB30kw7VLpaqKODoCgZNoOaVL74=
+X-Gm-Gg: ASbGncs8a5EXEAPdywfD4Tlqy2zwfvjoZOeghHMW7/Z8NVMX5LS1tHvcBqroF41VhgK
+	5JQygIQOELyPY7e8Pv3Qgdsi4qlgmusPl6jUIN1Z4fDZUs+6PfyfpEf9OTQ5s5r91KngGfP//Pi
+	k8X17Dx3qvaauvomNT6HIb2bE=
+X-Google-Smtp-Source: AGHT+IHPPngTvL/qI7e3PIt6e+2qWCbHNW9Ux73ZDD6J41EAQfAZ5fQGVKUs3dGojknAD17I0RivosRWmeOW9NOyWTU=
+X-Received: by 2002:a17:90b:3806:b0:2ea:7fd8:9dc1 with SMTP id
+ 98e67ed59e1d1-2fce78b972emr28238268a91.18.1740435891245; Mon, 24 Feb 2025
+ 14:24:51 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
+References: <20250219063113.706600-1-pulehui@huaweicloud.com>
+ <CAEf4BzYJLKZpuEsbU-A1s7wtpG0YQKUHG3QDaQoDH8B+VY0oSQ@mail.gmail.com> <abf6baeb-ac7a-44da-8c00-a0bb409760df@huawei.com>
+In-Reply-To: <abf6baeb-ac7a-44da-8c00-a0bb409760df@huawei.com>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Mon, 24 Feb 2025 14:24:39 -0800
+X-Gm-Features: AQ5f1JqKWt6Amu6xD-6mTcnmCeMYKMBXwYQq1bFIjhNpn5CmeMTwXIA32oHojgg
+Message-ID: <CAEf4BzaZRq+x3C=s3cFw2NH=E=e3xdv844Uk_UWVxxFZAOCzDQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] kbuild, bpf: Correct pahole version that
+ supports distilled base btf feature
+To: Pu Lehui <pulehui@huawei.com>
+Cc: Pu Lehui <pulehui@huaweicloud.com>, Alan Maguire <alan.maguire@oracle.com>, 
+	bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On February 24, 2025 2:17:29 PM PST, Yury Norov <yury=2Enorov@gmail=2Ecom> =
-wrote:
->On Mon, Feb 24, 2025 at 01:55:28PM -0800, H=2E Peter Anvin wrote:
->> On 2/24/25 07:24, Uros Bizjak wrote:
->> >=20
->> >=20
->> > On 23=2E 02=2E 25 17:42, Kuan-Wei Chiu wrote:
->> > > Refactor parity calculations to use the standard parity8() helper=
-=2E This
->> > > change eliminates redundant implementations and improves code
->> > > efficiency=2E
->> >=20
->> > The patch improves parity assembly code in bootflag=2Eo from:
->> >=20
->> >  =C2=A0 58:=C2=A0=C2=A0=C2=A0 89 de=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0 mov=C2=A0=C2=A0=C2=A0 %ebx,%esi
->> >  =C2=A0 5a:=C2=A0=C2=A0=C2=A0 b9 08 00 00 00=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 mov=C2=A0=C2=A0=C2=A0 $0x8,%ecx
->> >  =C2=A0 5f:=C2=A0=C2=A0=C2=A0 31 d2=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0 xor=C2=A0=C2=A0=C2=A0 %edx,%edx
->> >  =C2=A0 61:=C2=A0=C2=A0=C2=A0 89 f0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0 mov=C2=A0=C2=A0=C2=A0 %esi,%eax
->> >  =C2=A0 63:=C2=A0=C2=A0=C2=A0 89 d7=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0 mov=C2=A0=C2=A0=C2=A0 %edx,%edi
->> >  =C2=A0 65:=C2=A0=C2=A0=C2=A0 40 d0 ee=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 shr=C2=
-=A0=C2=A0=C2=A0 %sil
->> >  =C2=A0 68:=C2=A0=C2=A0=C2=A0 83 e0 01=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 and=C2=
-=A0=C2=A0=C2=A0 $0x1,%eax
->> >  =C2=A0 6b:=C2=A0=C2=A0=C2=A0 31 c2=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0 xor=C2=A0=C2=A0=C2=A0 %eax,%edx
->> >  =C2=A0 6d:=C2=A0=C2=A0=C2=A0 83 e9 01=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 sub=C2=
-=A0=C2=A0=C2=A0 $0x1,%ecx
->> >  =C2=A0 70:=C2=A0=C2=A0=C2=A0 75 ef=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0 jne=C2=A0=C2=A0=C2=A0 61 <sbf_init+0x51>
->> >  =C2=A0 72:=C2=A0=C2=A0=C2=A0 39 c7=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0 cmp=C2=A0=C2=A0=C2=A0 %eax,%edi
->> >  =C2=A0 74:=C2=A0=C2=A0=C2=A0 74 7f=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0 je=C2=A0=C2=A0=C2=A0=C2=A0 f5 <sbf_init+0xe5>
->> >  =C2=A0 76:
->> >=20
->> > to:
->> >=20
->> >  =C2=A0 54:=C2=A0=C2=A0=C2=A0 89 d8=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0 mov=C2=A0=C2=A0=C2=A0 %ebx,%eax
->> >  =C2=A0 56:=C2=A0=C2=A0=C2=A0 ba 96 69 00 00=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 mov=C2=A0=C2=A0=C2=A0 $0x6996,%edx
->> >  =C2=A0 5b:=C2=A0=C2=A0=C2=A0 c0 e8 04=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 shr=C2=
-=A0=C2=A0=C2=A0 $0x4,%al
->> >  =C2=A0 5e:=C2=A0=C2=A0=C2=A0 31 d8=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0 xor=C2=A0=C2=A0=C2=A0 %ebx,%eax
->> >  =C2=A0 60:=C2=A0=C2=A0=C2=A0 83 e0 0f=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 and=C2=
-=A0=C2=A0=C2=A0 $0xf,%eax
->> >  =C2=A0 63:=C2=A0=C2=A0=C2=A0 0f a3 c2=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 bt=C2=A0=
-=C2=A0=C2=A0=C2=A0 %eax,%edx
->> >  =C2=A0 66:=C2=A0=C2=A0=C2=A0 73 64=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0 jae=C2=A0=C2=A0=C2=A0 cc <sbf_init+0xbc>
->> >  =C2=A0 68:
->> >=20
->> > which is faster and smaller (-10 bytes) code=2E
->> >=20
->>=20
->> Of course, on x86, parity8() and parity16() can be implemented very sim=
-ply:
->>=20
->> (Also, the parity functions really ought to return bool, and be flagged
->> __attribute_const__=2E)
+On Mon, Feb 24, 2025 at 4:16=E2=80=AFAM Pu Lehui <pulehui@huawei.com> wrote=
+:
 >
->There was a discussion regarding return type when parity8() was added=2E
->The integer type was taken over bool with a sort of consideration that
->bool should be returned as an answer to some question, like parity_odd()=
-=2E
 >
->To me it's not a big deal=2E We can switch to boolean and describe in
->comment what the 'true' means for the parity() function=2E
+>
+> On 2025/2/21 8:30, Andrii Nakryiko wrote:
+> > On Tue, Feb 18, 2025 at 10:29=E2=80=AFPM Pu Lehui <pulehui@huaweicloud.=
+com> wrote:
+> >>
+> >> From: Pu Lehui <pulehui@huawei.com>
+> >>
+> >> pahole commit [0] of supporting distilled base btf feature released on
+> >> pahole v1.28 rather than v1.26. So let's correct this.
+> >>
+> >> Link: https://git.kernel.org/pub/scm/devel/pahole/pahole.git/commit/?i=
+d=3Dc7b1f6a29ba1 [0]
+> >> Signed-off-by: Pu Lehui <pulehui@huawei.com>
+> >> ---
+> >>   scripts/Makefile.btf | 2 +-
+> >>   1 file changed, 1 insertion(+), 1 deletion(-)
+> >>
+> >> diff --git a/scripts/Makefile.btf b/scripts/Makefile.btf
+> >> index c3cbeb13de50..fbaaec2187e5 100644
+> >> --- a/scripts/Makefile.btf
+> >> +++ b/scripts/Makefile.btf
+> >> @@ -24,7 +24,7 @@ else
+> >>   pahole-flags-$(call test-ge, $(pahole-ver), 126)  =3D -j$(JOBS) --bt=
+f_features=3Dencode_force,var,float,enum64,decl_tag,type_tag,optimized_func=
+,consistent_func,decl_tag_kfuncs
+> >>
+> >>   ifneq ($(KBUILD_EXTMOD),)
+> >> -module-pahole-flags-$(call test-ge, $(pahole-ver), 126) +=3D --btf_fe=
+atures=3Ddistilled_base
+> >> +module-pahole-flags-$(call test-ge, $(pahole-ver), 128) +=3D --btf_fe=
+atures=3Ddistilled_base
+> >>   endif
+> >
+> > Alan,
+> >
+> > Is this correct? Can you please check and ack? Thanks!
+>
+> Maybe Alan doesn't have time to reply at the moment. We can use the
+> following command to check that in pahole.git:
+>
+> $ git name-rev c7b1f6a29ba1
+> c7b1f6a29ba1 tags/v1.28~73
 
-Bool is really the single-bit type, and gives the compiler more informatio=
-n=2E You could argue that the function really should be called parity_odd*(=
-) in general, but that's kind of excessive IMO=2E
+
+yep, I was a bit lazy to search for specific commit ;)
+
+I like this command, though:
+
+$ git tag --contains c7b1f6a29ba1
+v1.28
+v1.29
+
+regardless, applied to bpf-next, thanks
+
+>
+> >
+> >>
+> >>   endif
+> >> --
+> >> 2.34.1
+> >>
