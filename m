@@ -1,141 +1,161 @@
-Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09A2217BEBF;
-	Mon, 24 Feb 2025 22:21:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 618411C84B2;
+	Mon, 24 Feb 2025 22:24:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740435704; cv=none; b=ApmMSTs03OD8WXnZ07mP6W/3NdLCf02oTZddxQJFYlzuOOXYsKv15Nv7tZfMhugydw7YUE/szIvtbDH9OmIkhu/JkePrWxw+gqlu+ErAXfiWZ8Pj6WXtVgyRAa6vdgpAHL3j5tIzWneA2Kk+MvZRwDveG/1Uw4gT1U3jHYhFWuI=
+	t=1740435845; cv=none; b=jw//SbyX+maoBuZioddCCCVbCOwHAa8KFJUCd3meX8eF4XUXRsKT7ittWtwZtIegB4UJqQywo9gqmK/9/sH0gx2gscYjFG2GEXyTGobTC54pysStQfu08rLSJkR7m0j192USGKyDcJWZZ5CXmjtaq/D8LP0XQUemDdfv55gBfJk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740435704; c=relaxed/simple;
-	bh=e+uzfqSHYhHZcuzfPhk6HcqcLJmcDZSMxuGGONwFE44=;
-	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
-	 MIME-Version:Content-Type; b=cwAtEdS8Qn+RUTbkEK9lccKZtwLakJBvxZ8ri7Hx8HhBbQg0a8CGkqHeYcBS8gyAvwsumbggYOXzpoKqcaMMA6Aqpo+fa2HmDqJD+Qk1HtTBJrkLxCNVlG99wNFcvOYFOxNPt3CvO5naNHyZoSMRKhBNqyRCqIA24smFa3LBBDg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=LBCMVcF1; arc=none smtp.client-ip=198.137.202.136
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
+	s=arc-20240116; t=1740435845; c=relaxed/simple;
+	bh=RleCzBh8U7CWXchF6M/strmw5lVX4woIgA5/3lEkHY4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ozemN+/vfbQwF6oqAuWTBnfB3NTPHsnkWb2WjrrL1gWLqaF7zfgzUfYMZmGu8yi5+MfOXQy1GhGAoGJ5yjP9VsT9PNXoE+Pe00l5uLGjzrI790zQsY85557l7pR6frCI7orOqeS+vc9BXlD0GFRTeC5Zr10GCcJKaCTH+Yx6lnA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KhoUI8Co; arc=none smtp.client-ip=209.85.216.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="LBCMVcF1"
-Received: from [127.0.0.1] ([76.133.66.138])
-	(authenticated bits=0)
-	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 51OMIJ9V935362
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
-	Mon, 24 Feb 2025 14:18:19 -0800
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 51OMIJ9V935362
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
-	s=2025021701; t=1740435502;
-	bh=QVRdF3EAXIHa/WOpzueNrjkWna1IYk5vm0KLQKRBt1g=;
-	h=Date:From:To:CC:Subject:In-Reply-To:References:From;
-	b=LBCMVcF1JBUzSpFQa0NclgZSN1lbJ6R8l4P7gV/GP3OfWksuvJSk8UFAnCLrz2stD
-	 zfBgNKQ/2LRfu2C7llD7zbNpCRWed6pOnPU5J/rmByu17lskqRa2z1Rn4bMzv0Gtrp
-	 RsTWuEFZFH9XaV0gR9XSqUCDQaZHojh1ozgY06ibIOO0Yqru+WPUEv+njgn02D+BSb
-	 AxrPR7FbBtmmBrmKcGPInLjOvNUJ+QE9Q87mz2O2DxJyDTSANU+Lg2qd0d24d46W8Q
-	 acNifs2uoGssEaapuK60oCfTN5FpL6SRf+yCzsC/DVfUihJLjByLPlr8GNKX3Z4pU9
-	 0NfLcLSzqxqfw==
-Date: Mon, 24 Feb 2025 14:18:17 -0800
-From: "H. Peter Anvin" <hpa@zytor.com>
-To: Uros Bizjak <ubizjak@gmail.com>
-CC: Kuan-Wei Chiu <visitorckw@gmail.com>, tglx@linutronix.de,
-        Ingo Molnar <mingo@redhat.com>, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, jk@ozlabs.org,
-        joel@jms.id.au, eajames@linux.ibm.com, andrzej.hajda@intel.com,
-        neil.armstrong@linaro.org, rfoss@kernel.org,
-        maarten.lankhorst@linux.intel.com, mripard@kernel.org,
-        tzimmermann@suse.de, airlied@gmail.com, simona@ffwll.ch,
-        dmitry.torokhov@gmail.com, mchehab@kernel.org, awalls@md.metrocast.net,
-        hverkuil@xs4all.nl, miquel.raynal@bootlin.com, richard@nod.at,
-        vigneshr@ti.com, louis.peens@corigine.com, andrew+netdev@lunn.ch,
-        davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
-        parthiban.veerasooran@microchip.com, arend.vanspriel@broadcom.com,
-        johannes@sipsolutions.net, gregkh@linuxfoundation.org,
-        jirislaby@kernel.org, yury.norov@gmail.com, akpm@linux-foundation.org,
-        mingo@kernel.org, alistair@popple.id.au, linux@rasmusvillemoes.dk,
-        Laurent.pinchart@ideasonboard.com, jonas@kwiboo.se,
-        jernej.skrabec@gmail.com, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, linux-fsi@lists.ozlabs.org,
-        dri-devel@lists.freedesktop.org, linux-input@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-mtd@lists.infradead.org,
-        oss-drivers@corigine.com, netdev@vger.kernel.org,
-        linux-wireless@vger.kernel.org, brcm80211@lists.linux.dev,
-        brcm80211-dev-list.pdl@broadcom.com, linux-serial@vger.kernel.org,
-        bpf@vger.kernel.org, jserv@ccns.ncku.edu.tw,
-        Yu-Chun Lin <eleanor15x@gmail.com>
-Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_03/17=5D_x86=3A_Replace_open-c?=
- =?US-ASCII?Q?oded_parity_calculation_with_parity8=28=29?=
-User-Agent: K-9 Mail for Android
-In-Reply-To: <CAFULd4a_AnP4iqgQs7a6xAsnUFL8oZXxFcAWLmZFMm6MPF_zDQ@mail.gmail.com>
-References: <20250223164217.2139331-1-visitorckw@gmail.com> <20250223164217.2139331-4-visitorckw@gmail.com> <d080a2d6-9ec7-1c86-4cf4-536400221f68@gmail.com> <e0b1c299-7f19-4453-a1ce-676068601213@zytor.com> <CAFULd4a_AnP4iqgQs7a6xAsnUFL8oZXxFcAWLmZFMm6MPF_zDQ@mail.gmail.com>
-Message-ID: <B5E017BC-8BE4-482A-B1A2-3F3074968B56@zytor.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KhoUI8Co"
+Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-2fc4418c0b9so7565859a91.0;
+        Mon, 24 Feb 2025 14:24:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1740435843; x=1741040643; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=MfHCBXHfDYNvL2XmQthYrd9nOUEVpQRM5+FexNDF7vk=;
+        b=KhoUI8CobUWxs5RzeEu1n/8l+a/MLDKkJdydRMLJdcD00CP2hCDXa/sxd68zeaA+Ud
+         HvVI/P0oJ4pvCnQ4ZYiybje8e39+mZGYtSdvY1PKcYGocjQ1F9Xx5SSOkDb9vNdqtFoz
+         xkA6MDPXZ5fNnycfY0VRESw8iPpRK0fkl2yi7W15wvvuJSPO5T6Haf2Nrwjh9Qn+mPNe
+         tE1I9XSJrCVJA8EfnNBAWeLza1HqGVKmqYNJtoACJdoK2O3nEvh1byUH+WEixsokgbEE
+         mjqes3hZFDUq7uA+K5hNQP+oj7iOKUZBtI//AgyR4OqqA6FA79I+jieRl7nlXLJXw5Jr
+         7f9w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1740435843; x=1741040643;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=MfHCBXHfDYNvL2XmQthYrd9nOUEVpQRM5+FexNDF7vk=;
+        b=QHRCk81zkZEE+uXVkIyG3DEpCFQvLqowf9QCikZdefQvnyHREav7w5KPlo6JxRu4rX
+         EUqOxcqry+fS/woGm8i8KgsJzdlQ0E2aYMy9NxD5/b/4I1jCuXxAstZ6jCakhr9my9Cw
+         azMFk4OC1tKatS9a/IWWr4/yB8zzShdt0IdeXoYxuSd2ni/yKOXwB64a3UATjTiA523V
+         AePAHkcOt18/+GMB6kkxYNjMZuNDWCyzHi8G14r2WvGuVrm8bPO0qbG5j+rEluWvKrId
+         Xej74db09va4h6Fpw/PEcuzDBQqAirQ+wLVA5ewGKVouo4Th/Jq2UuBX3MjR0rCyK3Ha
+         KUDw==
+X-Forwarded-Encrypted: i=1; AJvYcCUAqaE+A+oI4Zgp/z4xV3bC6AHLe4cde6hJ9crNH5DRNfvJ4Ad0Y1OwQA0kHe1GfN8CVusTPuEFU7W528RC@vger.kernel.org, AJvYcCUYSAVuWgm06m0QmRx5Xj7LC1Bdf2C09Emzl5ghBnlRHSEJV0xg7Pfj9v5WJqNeiQQbWd0=@vger.kernel.org, AJvYcCXTHg17qdgf+TC2AnUFYJyuHn2je5JqHeqk+jdlaBOB1GQDeWP0N0bIfbWqKoCrSjYbd4e73HiByVLF1xFPln1LWlh8@vger.kernel.org
+X-Gm-Message-State: AOJu0YykDFOgpfXyQn82oUvfZIWW1HoJ4CqeU+6lg6mQ58EEo/1Ddgmm
+	xvuP65Bxtwf//apGRBaYpGZFwppmaZYq/Q1itp3NjWfK84jb3F3Lg5L5wMK6rxgmIL4jV9lQ6uN
+	KxtM2s3luTAhTYuX7TYHFGNu5OgE=
+X-Gm-Gg: ASbGnctowCXj57SRw4atLFwimUgn3w7YhiuX4bwtlWYmdTucfvOKlEQTJAkneD1PA4N
+	YqFCYNKpK7f5czW4H9R8Q4m5zIzn+YAqT6o5KmOK8KHzaJKrz6hfS6dr9t2ExXaoX/SCF4kGT15
+	vmwWudbQYrdUWONaVk8ZGxx6w=
+X-Google-Smtp-Source: AGHT+IHsSKy0T7sdcs4I2FEkuaNkK7bILTKkVn2wt0nhnlEcx+SvEXfJ4UMs9iDgKxGsLFd8VjPkE5dVXO8KtBx5rUk=
+X-Received: by 2002:a17:90b:2b8f:b0:2ee:d63f:d8f with SMTP id
+ 98e67ed59e1d1-2fce78abc52mr24475660a91.13.1740435843616; Mon, 24 Feb 2025
+ 14:24:03 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
+References: <20241024044159.3156646-1-andrii@kernel.org> <20241024044159.3156646-3-andrii@kernel.org>
+ <20250224-impressive-onyx-boa-36e85d@leitao>
+In-Reply-To: <20250224-impressive-onyx-boa-36e85d@leitao>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Mon, 24 Feb 2025 14:23:51 -0800
+X-Gm-Features: AQ5f1JpfI7abF10iTCDj7j_zg8l0eSl_hAPcLgNgy53Fx-Uv0srnK7x4gcTeuPk
+Message-ID: <CAEf4BzbupJe10k0MROG5iZq6cYu6PRoN3sHhNK=L7eDLOULvNQ@mail.gmail.com>
+Subject: Re: [PATCH v3 tip/perf/core 2/2] uprobes: SRCU-protect uretprobe
+ lifetime (with timeout)
+To: Breno Leitao <leitao@debian.org>
+Cc: Andrii Nakryiko <andrii@kernel.org>, linux-trace-kernel@vger.kernel.org, 
+	peterz@infradead.org, oleg@redhat.com, rostedt@goodmis.org, 
+	mhiramat@kernel.org, mingo@kernel.org, bpf@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, jolsa@kernel.org, paulmck@kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On February 24, 2025 2:08:05 PM PST, Uros Bizjak <ubizjak@gmail=2Ecom> wrot=
-e:
->On Mon, Feb 24, 2025 at 10:56=E2=80=AFPM H=2E Peter Anvin <hpa@zytor=2Eco=
-m> wrote:
->>
->> On 2/24/25 07:24, Uros Bizjak wrote:
->> >
->> >
->> > On 23=2E 02=2E 25 17:42, Kuan-Wei Chiu wrote:
->> >> Refactor parity calculations to use the standard parity8() helper=2E=
- This
->> >> change eliminates redundant implementations and improves code
->> >> efficiency=2E
->> >
->> > The patch improves parity assembly code in bootflag=2Eo from:
->> >
->> >    58:    89 de                    mov    %ebx,%esi
->> >    5a:    b9 08 00 00 00           mov    $0x8,%ecx
->> >    5f:    31 d2                    xor    %edx,%edx
->> >    61:    89 f0                    mov    %esi,%eax
->> >    63:    89 d7                    mov    %edx,%edi
->> >    65:    40 d0 ee                 shr    %sil
->> >    68:    83 e0 01                 and    $0x1,%eax
->> >    6b:    31 c2                    xor    %eax,%edx
->> >    6d:    83 e9 01                 sub    $0x1,%ecx
->> >    70:    75 ef                    jne    61 <sbf_init+0x51>
->> >    72:    39 c7                    cmp    %eax,%edi
->> >    74:    74 7f                    je     f5 <sbf_init+0xe5>
->> >    76:
->> >
->> > to:
->> >
->> >    54:    89 d8                    mov    %ebx,%eax
->> >    56:    ba 96 69 00 00           mov    $0x6996,%edx
->> >    5b:    c0 e8 04                 shr    $0x4,%al
->> >    5e:    31 d8                    xor    %ebx,%eax
->> >    60:    83 e0 0f                 and    $0xf,%eax
->> >    63:    0f a3 c2                 bt     %eax,%edx
->> >    66:    73 64                    jae    cc <sbf_init+0xbc>
->> >    68:
->> >
->> > which is faster and smaller (-10 bytes) code=2E
->> >
->>
->> Of course, on x86, parity8() and parity16() can be implemented very sim=
-ply:
->>
->> (Also, the parity functions really ought to return bool, and be flagged
->> __attribute_const__=2E)
->>
->> static inline __attribute_const__ bool _arch_parity8(u8 val)
->> {
->>         bool parity;
->>         asm("and %0,%0" : "=3D@ccnp" (parity) : "q" (val));
+On Mon, Feb 24, 2025 at 4:23=E2=80=AFAM Breno Leitao <leitao@debian.org> wr=
+ote:
 >
->asm("test %0,%0" : "=3D@ccnp" (parity) : "q" (val));
+> Hello Andrii,
 >
->because we are interested only in flags=2E
+> On Wed, Oct 23, 2024 at 09:41:59PM -0700, Andrii Nakryiko wrote:
+> >
+> > +static struct uprobe* hprobe_expire(struct hprobe *hprobe, bool get)
+> > +{
+> > +     enum hprobe_state hstate;
+> > +
+> > +     /*
+> > +      * return_instance's hprobe is protected by RCU.
+> > +      * Underlying uprobe is itself protected from reuse by SRCU.
+> > +      */
+> > +     lockdep_assert(rcu_read_lock_held() && srcu_read_lock_held(&uretp=
+robes_srcu));
 >
->Uros=2E
+> I am hitting this warning in d082ecbc71e9e ("Linux 6.14-rc4") on
+> aarch64. I suppose this might happen on x86 as well, but I haven't
+> tested.
+>
+>         WARNING: CPU: 28 PID: 158906 at kernel/events/uprobes.c:768 hprob=
+e_expire (kernel/events/uprobes.c:825)
+>
+>         Call trace:
+>         hprobe_expire (kernel/events/uprobes.c:825) (P)
+>         uprobe_copy_process (kernel/events/uprobes.c:691 kernel/events/up=
+robes.c:2103 kernel/events/uprobes.c:2142)
+>         copy_process (kernel/fork.c:2636)
+>         kernel_clone (kernel/fork.c:2815)
+>         __arm64_sys_clone (kernel/fork.c:? kernel/fork.c:2926 kernel/fork=
+.c:2926)
+>         invoke_syscall (arch/arm64/kernel/syscall.c:35 arch/arm64/kernel/=
+syscall.c:49)
+>         do_el0_svc (arch/arm64/kernel/syscall.c:139 arch/arm64/kernel/sys=
+call.c:151)
+>         el0_svc (arch/arm64/kernel/entry-common.c:165 arch/arm64/kernel/e=
+ntry-common.c:178 arch/arm64/kernel/entry-common.c:745)
+>         el0t_64_sync_handler (arch/arm64/kernel/entry-common.c:797)
+>         el0t_64_sync (arch/arm64/kernel/entry.S:600)
+>
+> I broke down that warning, and the problem is on related to
+> rcu_read_lock_held(), since RCU read lock does not seem to be held in
+> this path.
+>
+> Reading this code, RCU read lock seems to protect old hprobe, which
+> doesn't seem so.
+>
+> I am wondering if we need to protect it properly, something as:
+>
+>         @@ -2089,7 +2092,9 @@ static int dup_utask(struct task_struct *t,=
+ struct uprobe_task *o_utask)
+>                                 return -ENOMEM;
+>
+>                         /* if uprobe is non-NULL, we'll have an extra ref=
+count for uprobe */
+>         +               rcu_read_lock();
+>                         uprobe =3D hprobe_expire(&o->hprobe, true);
+>         +               rcu_write_lock();
 >
 
-Same thing, really, but yes, using test is cleaner=2E
+I think this is not good enough. rcu_read_lock/unlock should be around
+the entire for loop, because, technically, that return_instance can be
+freed before we even get to hprobe_expire.
+
+So, just like we have guard(srcu)(&uretprobes_srcu); we should have
+guard(rcu)();
+
+Except, there is that kmemdup() hidden inside dup_return_instance(),
+so we can't really do that.
+
+So that leaves us with an option to split memory allocation and
+initialization. Number of return instances can't grow (but can
+shrink), so we can first count them, allocate memory. Then do another
+iteration to do hprobe_expire().
+
+I'll try to send a patch some time in the next day or two, but maybe
+someone has some better ideas meanwhile.
+
+>                         /*
+>                         * New utask will have stable properly refcounted =
+uprobe or
