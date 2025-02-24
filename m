@@ -1,172 +1,154 @@
-Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95DAD2192EB;
-	Mon, 24 Feb 2025 13:34:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 211021A29A;
+	Mon, 24 Feb 2025 14:01:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740404079; cv=none; b=D61tis13biS1TpE05nLBy9dEs5CXrIiGtlZ+RB6lDOiF2t0HlGAzcvbeiVVGVU2CCGejA628nYJJoCFFlVCsg+DgkinHf+6Eq242eDtu/ECVSStIxb/bWA+3TiOtzpWs5P18PG4hHyS2UCzNFiPfVwVofqaAvl8cyBYdjw4eE2o=
+	t=1740405718; cv=none; b=h4bXzDiavAS03kykrCU4WxxBKprOwen3lDqHneQPRanNCq/Qby6Fw2aqN5+/A8vgCbPEi9TY8RuLpGfMKD9lhjJD8fBzQENSBlIeSrq3N6ven9ORu4r+bZuUFaiq6z5JiXZ99qr8NCV4xNgAvI8c3HZFN9qZc00r7i2HglpfqF0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740404079; c=relaxed/simple;
-	bh=qKTv7i9UlJGQGohAN6G2hXNKurAdQm5fSABB4QmmjxI=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=IF/24xrDwahvUNO1mHuVVWMecjjBORmBCjLZDpM31m0nWcmBV830caIJ574+HABb1v/h8zQ77R9BL7/g2uCT3iSlYmAXV2ClBVyWY7BDzKEj2mm8AVb9cMAiv6kWSU0GRsIBjrDkFIPaO80o5yqfx7wB40gpv3YvbT5BraGuCjQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=b3Vnd94C; arc=none smtp.client-ip=209.85.221.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1740405718; c=relaxed/simple;
+	bh=XpLkgpXiELKYDF5SxtkwlqDt74f1mFK/7OQcFGFEGXU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=GYd5G/lS8ajonA7wBKBsobDresUhujBHyqw1UfPO6iLF9Lk0Qxnft5vREwKgHuRTPwaK6IMNqQknMGghVTwhmPejTAdalzeudOkbKYRgEiIu7fj+rH/qQZ9YIo0wQcZh0Oj5REumF0rXsc+TUAk9NYkOQ08zDwdnd3PJQxkHugc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lYXkNJbp; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="b3Vnd94C"
-Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-388cae9eb9fso2261532f8f.3;
-        Mon, 24 Feb 2025 05:34:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1740404076; x=1741008876; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=OAg+3nWpCX28gp0yop3cTi7eprtgpHgYieQoEXp/Zxw=;
-        b=b3Vnd94Czp22iPPbmF1QjAipNC/mjrMwD0kY/y1TN9tkLtO545t+gXG6bkecLBW3YV
-         X+oDZlaP6Xl5R6b9DWG903WYIw1CPl7l+TSzM2uisR+yNB1iP0PQAQRJoMU6B0nN2HKH
-         J/tfQ0el5pOnj1G4UCDCOkHar23j3z5sVjZixuZSQWPMeSJENfAsLuygifsEUxD5YlQH
-         srNUC+fEpKmlLEQXS5vTZEZU/jHvyShwtg9j124Gs2uSpmtCoR8SpxtOlFF+007WZAK9
-         uqC2ygnjY/ZG8hz7N6Ch4yi2gor/VV8T6e3tJv+Ph2J6mxXIuewSWzdoTEL/7nl5M0Uq
-         ugag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740404076; x=1741008876;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=OAg+3nWpCX28gp0yop3cTi7eprtgpHgYieQoEXp/Zxw=;
-        b=e7cKMhGpwcE+ZC+iJioT9judghM38yENB+tI2zRs0ywJ3yVuoZuDsZhlneRho6Q7wz
-         8+5CzdPPWjVby35SJNAu0BPMqQfVDZtfqFsRp83AyqJxdQK9V9S6vjR8TNWfJTa4MlWS
-         Vtuq2g3gcybgQcFWQbvMJGrUkvEMQZP5Mb7+G/QXdrlIwDX7wvlwYgYYjZy4HGoe+jHq
-         PGwq2f8c6aayDJaHS9D3arcZ/M9sSBVOPjrqasPHn1moGV5pDINkF8I1l4KbM8a6KLat
-         AeMSb9hMYGgekWt0E/V7Zu62Pk2vpoV6Fqv4B4jc5Udj3eNQ5u1lhFdzQtiRocXqJr3l
-         NF9w==
-X-Forwarded-Encrypted: i=1; AJvYcCUSZHMamAxdObwlu+553UP0KoAx7qxf2HCtPF3WXXIlucsY75TLUYwIradYXlznVATN5TPKJIfX@vger.kernel.org, AJvYcCUVUpYCVCWR5y0LWZKmtP5yLuJ6FOk8M7kpqlJ1sU6TLR7c/i/sMs25qKXmOS/OeqqBrSwEpxVmGHoeYCY=@vger.kernel.org, AJvYcCV0WvZdj+PhPEl3168XSO0ERTZLZLmi3jK8JH7N+QRlA3xQUSVI3OmU+1bbuQ/5VzgPFZDTt4mJhStelrc=@vger.kernel.org, AJvYcCVTiw83QFXvut+KB0EEZ+ElPZk/tPiCeUrOlgW9jIj2hBTCHiF0nIyte3DuZcS0fCQzCz5ssXZmK+Z5CyCQ@vger.kernel.org, AJvYcCVtZPuaHfEcTEKkKI+0jQyDK1Bkg/GHrJ/S1EyBY1oLRDN0e5BQ+Bq6EAawWjUGmygPDBjlUgY+M3rBYtnduDs=@vger.kernel.org, AJvYcCWS6FaGPdavjkXGQIo5JeOxFxiY1a1T5Iy3MWlRjDitY/fkalmRDKfQI8OUONbyoN8Xn5eZyhadjnC1YGFm@vger.kernel.org, AJvYcCWj5D78JXhBDANAVeQrJgSmEEO72bhG2TYl3JM6RrySaED8574udSkyVliMu/gbFG/y2vA=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx60hqBGYKOnp+F+DK9f19+6OCEDNpvBy0vFBmyujKLHd/mJIUV
-	WmOf7Ll7qSQ0ZScbclUcclZxPEaHOo09G+Ivnsnwhs7iCrMklbxy
-X-Gm-Gg: ASbGncvya1YKaExg/UFr4ZM/sC2A6TyckrL/HnHbyqjZw4h5Wd1D+RB/81+LoEt/Cx/
-	h0GaoqsxIff7GsoN6L/ijoiZ88O27GFaAfJUsXA0fhSa9a2mFfnVFYDDQmlyOcAPWlZvyREd9Po
-	jfp9+NIC0biKjrHBJG6fmFWALDdGgQCmCSL3YDJuucg8JJIf5HRJ+dURKfAs0tjDPqdfz9u/+2o
-	eybWR5zEeZ3KhLcUiJLzgWOjXqP4Fno8gVFlzYq8ueXuhpvYu+3lLq/NpXdku3Wm4xMPI3jayZ4
-	nxiB9KnCHvy+Z4eKjZo8wCBo/pV1Osha5t89Q6x86d9oo4p4YkRSKzK4PZtkRZ4T
-X-Google-Smtp-Source: AGHT+IHAk3Wvwyk1vqkRenvO3RPC8nmIGBVFBN9gj/vKmwdIoVhq2/WUUPGNh8lDJR1/QVDS5j7zIQ==
-X-Received: by 2002:a05:6000:144a:b0:38f:4d40:358 with SMTP id ffacd0b85a97d-38f6e7587c5mr11099286f8f.9.1740404075459;
-        Mon, 24 Feb 2025 05:34:35 -0800 (PST)
-Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38f74817cbdsm9492882f8f.68.2025.02.24.05.34.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Feb 2025 05:34:35 -0800 (PST)
-Date: Mon, 24 Feb 2025 13:34:31 +0000
-From: David Laight <david.laight.linux@gmail.com>
-To: Jiri Slaby <jirislaby@kernel.org>
-Cc: Kuan-Wei Chiu <visitorckw@gmail.com>, tglx@linutronix.de,
- mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
- x86@kernel.org, jk@ozlabs.org, joel@jms.id.au, eajames@linux.ibm.com,
- andrzej.hajda@intel.com, neil.armstrong@linaro.org, rfoss@kernel.org,
- maarten.lankhorst@linux.intel.com, mripard@kernel.org, tzimmermann@suse.de,
- airlied@gmail.com, simona@ffwll.ch, dmitry.torokhov@gmail.com,
- mchehab@kernel.org, awalls@md.metrocast.net, hverkuil@xs4all.nl,
- miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
- louis.peens@corigine.com, andrew+netdev@lunn.ch, davem@davemloft.net,
- edumazet@google.com, pabeni@redhat.com,
- parthiban.veerasooran@microchip.com, arend.vanspriel@broadcom.com,
- johannes@sipsolutions.net, gregkh@linuxfoundation.org,
- yury.norov@gmail.com, akpm@linux-foundation.org, hpa@zytor.com,
- alistair@popple.id.au, linux@rasmusvillemoes.dk,
- Laurent.pinchart@ideasonboard.com, jonas@kwiboo.se,
- jernej.skrabec@gmail.com, kuba@kernel.org, linux-kernel@vger.kernel.org,
- linux-fsi@lists.ozlabs.org, dri-devel@lists.freedesktop.org,
- linux-input@vger.kernel.org, linux-media@vger.kernel.org,
- linux-mtd@lists.infradead.org, oss-drivers@corigine.com,
- netdev@vger.kernel.org, linux-wireless@vger.kernel.org,
- brcm80211@lists.linux.dev, brcm80211-dev-list.pdl@broadcom.com,
- linux-serial@vger.kernel.org, bpf@vger.kernel.org, jserv@ccns.ncku.edu.tw,
- Yu-Chun Lin <eleanor15x@gmail.com>
-Subject: Re: [PATCH 02/17] bitops: Add generic parity calculation for u64
-Message-ID: <20250224133431.2c38213f@pumpkin>
-In-Reply-To: <bde62fee-4617-4db7-b92c-59fb958c4ca6@kernel.org>
-References: <20250223164217.2139331-1-visitorckw@gmail.com>
-	<20250223164217.2139331-3-visitorckw@gmail.com>
-	<bde62fee-4617-4db7-b92c-59fb958c4ca6@kernel.org>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lYXkNJbp"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A66E9C4CED6;
+	Mon, 24 Feb 2025 14:01:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1740405717;
+	bh=XpLkgpXiELKYDF5SxtkwlqDt74f1mFK/7OQcFGFEGXU=;
+	h=From:To:Cc:Subject:Date:From;
+	b=lYXkNJbpmdYak0n71ruHvVVAKdFDI8TB2d6m+zAiq8acBEoZCzJIyImTOCSy37sfU
+	 zYpSf1sRVyqABIszvEbLpniyKTIZo0rE8cbdcK+gYauaInF9Q5WrXb53B5sC5r1tWs
+	 sokznkCri8ApSZJooF9DMteKFPRue4GwGdTMh16u4NFJDqjrIOO65SgzrkU3k4ZTP5
+	 4qWIqcXKkky40Fb4kXenN5P2SLXxqkhzBNaVsxYTSmCHR/bmupreugggO3JbhjH2Ul
+	 vfF+JhGMNIhlnmesKtIZXXVVa8bhoiOEW0B7bENGFK6tKIn3grwWyjHEzc/ab12jm9
+	 7KMYR0v1KM5Kg==
+From: Jiri Olsa <jolsa@kernel.org>
+To: Oleg Nesterov <oleg@redhat.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Andrii Nakryiko <andrii@kernel.org>
+Cc: bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org,
+	x86@kernel.org,
+	Song Liu <songliubraving@fb.com>,
+	Yonghong Song <yhs@fb.com>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Hao Luo <haoluo@google.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Alan Maguire <alan.maguire@oracle.com>,
+	David Laight <David.Laight@ACULAB.COM>,
+	=?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <thomas@t-8ch.de>
+Subject: [PATCH RFCv2 00/18] uprobes: Add support to optimize usdt probes on x86_64
+Date: Mon, 24 Feb 2025 15:01:32 +0100
+Message-ID: <20250224140151.667679-1-jolsa@kernel.org>
+X-Mailer: git-send-email 2.48.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Mon, 24 Feb 2025 08:09:43 +0100
-Jiri Slaby <jirislaby@kernel.org> wrote:
+hi,
+this patchset adds support to optimize usdt probes on top of 5-byte
+nop instruction.
 
-> On 23. 02. 25, 17:42, Kuan-Wei Chiu wrote:
-> > Several parts of the kernel open-code parity calculations using
-> > different methods. Add a generic parity64() helper implemented with the
-> > same efficient approach as parity8().
-> > 
-> > Co-developed-by: Yu-Chun Lin <eleanor15x@gmail.com>
-> > Signed-off-by: Yu-Chun Lin <eleanor15x@gmail.com>
-> > Signed-off-by: Kuan-Wei Chiu <visitorckw@gmail.com>
-> > ---
-> >   include/linux/bitops.h | 22 ++++++++++++++++++++++
-> >   1 file changed, 22 insertions(+)
-> > 
-> > diff --git a/include/linux/bitops.h b/include/linux/bitops.h
-> > index fb13dedad7aa..67677057f5e2 100644
-> > --- a/include/linux/bitops.h
-> > +++ b/include/linux/bitops.h
-> > @@ -281,6 +281,28 @@ static inline int parity32(u32 val)
-> >   	return (0x6996 >> (val & 0xf)) & 1;
-> >   }
-> >   
-> > +/**
-> > + * parity64 - get the parity of an u64 value
-> > + * @value: the value to be examined
-> > + *
-> > + * Determine the parity of the u64 argument.
-> > + *
-> > + * Returns:
-> > + * 0 for even parity, 1 for odd parity
-> > + */
-> > +static inline int parity64(u64 val)
-> > +{
-> > +	/*
-> > +	 * One explanation of this algorithm:
-> > +	 * https://funloop.org/codex/problem/parity/README.html
-> > +	 */
-> > +	val ^= val >> 32;  
-> 
-> Do we need all these implementations? Can't we simply use parity64() for 
-> any 8, 16 and 32-bit values too? I.e. have one parity().
+The generic approach (optimize all uprobes) is hard due to emulating
+possible multiple original instructions and its related issues. The
+usdt case, which stores 5-byte nop seems much easier, so starting
+with that.
 
-I'm not sure you can guarantee that the compiler will optimise away
-the unnecessary operations.
+The basic idea is to replace breakpoint exception with syscall which
+is faster on x86_64. For more details please see changelog of patch 8.
 
-But:
-static inline int parity64(u64 val)
-{
-	return parity32(val ^ (val >> 32))
-}
+The run_bench_uprobes.sh benchmark triggers uprobe (on top of different
+original instructions) in a loop and counts how many of those happened
+per second (the unit below is million loops).
 
-should be ok.
-It will also work on x86-32 where parity32() can just check the parity flag.
-Although you are unlikely to manage to use the the PF the xor sets.
+There's big speed up if you consider current usdt implementation
+(uprobe-nop) compared to proposed usdt (uprobe-nop5):
 
-	David
+  # ./benchs/run_bench_uprobes.sh 
 
-> 
-> > +	val ^= val >> 16;
-> > +	val ^= val >> 8;
-> > +	val ^= val >> 4;
-> > +	return (0x6996 >> (val & 0xf)) & 1;
-> > +}
-> > +
-> >   /**
-> >    * __ffs64 - find first set bit in a 64 bit word
-> >    * @word: The 64 bit word  
-> 
-> 
+          usermode-count :  818.386 ± 1.886M/s
+          syscall-count  :    8.923 ± 0.003M/s
+  -->     uprobe-nop     :    3.086 ± 0.005M/s
+          uprobe-push    :    2.751 ± 0.001M/s
+          uprobe-ret     :    1.481 ± 0.000M/s
+  -->     uprobe-nop5    :    4.016 ± 0.002M/s
+          uretprobe-nop  :    1.712 ± 0.008M/s
+          uretprobe-push :    1.616 ± 0.001M/s
+          uretprobe-ret  :    1.052 ± 0.000M/s
+          uretprobe-nop5 :    2.015 ± 0.000M/s
 
+
+rfc v2 changes:
+- make uretprobe work properly with optimized uprobe
+- make the uprobe optimized code x86_64 specific [Peter]
+- rework the verify function logic, using it now as callback
+- fix find_nearest_page to include [PAGE_SIZE, ... ] area [Andrii]
+- try lockless vma lookup in in_uprobe_trampoline [Peter]
+- do per partes instructions update using int3 like in text_poke_bp_batch [David]
+- map uprobe trampoline via single global page [Thomas]
+- keep track of uprobes per mm_struct
+
+pending todo (follow ups):
+- use PROCMAP_QUERY in tests
+- alloc 'struct uprobes_state' for mm_struct only when needed [Andrii]
+- seccomp change for new uprobe syscall (same as for uretprobe)
+
+thanks,
+jirka
+
+
+---
+Jiri Olsa (18):
+      uprobes: Rename arch_uretprobe_trampoline function
+      uprobes: Make copy_from_page global
+      uprobes: Move ref_ctr_offset update out of uprobe_write_opcode
+      uprobes: Add uprobe_write function
+      uprobes: Add nbytes argument to uprobe_write_opcode
+      uprobes: Add orig argument to uprobe_write and uprobe_write_opcode
+      uprobes: Add swbp argument to arch_uretprobe_hijack_return_addr
+      uprobes/x86: Add uprobe syscall to speed up uprobe
+      uprobes/x86: Add mapping for optimized uprobe trampolines
+      uprobes/x86: Add mm_uprobe objects to track uprobes within mm
+      uprobes/x86: Add support to emulate nop5 instruction
+      uprobes/x86: Add support to optimize uprobes
+      selftests/bpf: Reorg the uprobe_syscall test function
+      selftests/bpf: Use 5-byte nop for x86 usdt probes
+      selftests/bpf: Add uprobe/usdt syscall tests
+      selftests/bpf: Add hit/attach/detach race optimized uprobe test
+      selftests/bpf: Add uprobe syscall sigill signal test
+      selftests/bpf: Add 5-byte nop uprobe trigger bench
+
+ arch/arm/probes/uprobes/core.c                              |   4 +-
+ arch/arm64/kernel/probes/uprobes.c                          |   2 +-
+ arch/csky/kernel/probes/uprobes.c                           |   2 +-
+ arch/loongarch/kernel/uprobes.c                             |   2 +-
+ arch/mips/kernel/uprobes.c                                  |   2 +-
+ arch/powerpc/kernel/uprobes.c                               |   2 +-
+ arch/riscv/kernel/probes/uprobes.c                          |   2 +-
+ arch/s390/kernel/uprobes.c                                  |   2 +-
+ arch/sparc/kernel/uprobes.c                                 |   2 +-
+ arch/x86/entry/syscalls/syscall_64.tbl                      |   1 +
+ arch/x86/include/asm/uprobes.h                              |   6 ++
+ arch/x86/kernel/uprobes.c                                   | 530 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-
+ include/linux/syscalls.h                                    |   2 +
+ include/linux/uprobes.h                                     |  23 +++-
+ kernel/events/uprobes.c                                     | 147 +++++++++++++++++--------
+ kernel/fork.c                                               |   1 +
+ kernel/sys_ni.c                                             |   1 +
+ tools/testing/selftests/bpf/bench.c                         |  12 +++
+ tools/testing/selftests/bpf/benchs/bench_trigger.c          |  42 ++++++++
+ tools/testing/selftests/bpf/benchs/run_bench_uprobes.sh     |   2 +-
+ tools/testing/selftests/bpf/prog_tests/uprobe_syscall.c     | 342 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++---
+ tools/testing/selftests/bpf/progs/uprobe_syscall_executed.c |  34 +++++-
+ tools/testing/selftests/bpf/sdt.h                           |   9 +-
+ 23 files changed, 1093 insertions(+), 79 deletions(-)
