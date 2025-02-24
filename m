@@ -1,37 +1,37 @@
-Received: from mx-rz-3.rrze.uni-erlangen.de (mx-rz-3.rrze.uni-erlangen.de [131.188.11.22])
+Received: from mx-rz-2.rrze.uni-erlangen.de (mx-rz-2.rrze.uni-erlangen.de [131.188.11.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7DDA15530B;
-	Mon, 24 Feb 2025 20:56:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=131.188.11.22
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 189E22571D5;
+	Mon, 24 Feb 2025 20:57:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=131.188.11.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740430571; cv=none; b=CXIbN01Ojc5HS5aw7bNCT6gp6k+zaDVGrYwxTQh8mHfXtHTXvhUojL/+hAupeWbTsmHAghX8gemKrQgMc6goHJZTKDwNfUwEto8jD2tpI2n7FWc8MMLppL7eUIhJZo8/MOzUiFvFxQj1NmrRAnAe83HY1QMSY5kz+kU7UXrPLnM=
+	t=1740430660; cv=none; b=DoF5z3mCVVTRH0xjCx42uD/vEecAOLpgMW5QWWFG+EbnxIAQZma/mgo0542uDhTecbbE/QqOqczn/wh4eipw+NJSR7KkrFUXfbPCBYREV8v5u2AC/soJT3dCp6kissct5GwkBCfotfo+zC9NREXaQ6QAgQPzEdmbspIAO1H0UUE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740430571; c=relaxed/simple;
-	bh=G2R+4zBK2XNgOp27aKcemTfQxRPqn+Iuj3gTm+PbWzg=;
+	s=arc-20240116; t=1740430660; c=relaxed/simple;
+	bh=HrmvwTWpn5n1CzrT3EDp8o4aF7uF5RvxV6TmYeOdK74=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=bVGYH4u9kdHCPFzg1LMYXVz4odb7vnyNXwAEWxuALNLd3TKinbIqFBWZsXh/U2Qk6NY34tLgtiiAcX0rXbbc5Ej25FTekPm4Pz/h1KVpPLTWqaGQZ38QJ17yO+pjDCOgd7vXHPstkSC6SK+K8HJCujKed20ImSfdwYRqNYQqnWE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fau.de; spf=pass smtp.mailfrom=fau.de; dkim=pass (2048-bit key) header.d=fau.de header.i=@fau.de header.b=VBz27iFe; arc=none smtp.client-ip=131.188.11.22
+	 MIME-Version; b=rAhKojL6yLat3duxGATN6EyqkI1CIORAhZsNYHwx2zx9hLsJYkJBKuimeiqbqAPOiV37/LKQ5E+UdP1QXzFAxM/0tl+vevW3J3kJqV7UnpMEOyJkelJuQaFr0oDjYz4Br5U0L9oQjL7MtKJyf8V9wLE9/9/ARG943BswF7FzEQY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fau.de; spf=pass smtp.mailfrom=fau.de; dkim=pass (2048-bit key) header.d=fau.de header.i=@fau.de header.b=RQq+Vao+; arc=none smtp.client-ip=131.188.11.21
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fau.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fau.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fau.de header.i=@fau.de header.b="VBz27iFe"
+	dkim=pass (2048-bit key) header.d=fau.de header.i=@fau.de header.b="RQq+Vao+"
 Received: from mx-rz-smart.rrze.uni-erlangen.de (mx-rz-smart.rrze.uni-erlangen.de [IPv6:2001:638:a000:1025::1e])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-rz-3.rrze.uni-erlangen.de (Postfix) with ESMTPS id 4Z1tLb49BCz1yGC;
-	Mon, 24 Feb 2025 21:56:07 +0100 (CET)
+	by mx-rz-2.rrze.uni-erlangen.de (Postfix) with ESMTPS id 4Z1tFf5crpzPk37;
+	Mon, 24 Feb 2025 21:51:50 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fau.de; s=fau-2021;
-	t=1740430567; bh=2BQBum0b+goVLWKOB5pP1qFxnwHGOEafoy0dXVVkvmU=;
+	t=1740430310; bh=kvy8pMBbespZCbzbmu0HDRH5R4O0XEcnwpvumMvHIxY=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From:To:CC:
 	 Subject;
-	b=VBz27iFe8NNq49wBZmryw9HmEFok7g1z2q6l0ozlxvs9AkuDNXPdLgbgaX3sqffDU
-	 8DHUdy9+240p6SGlmxUcvGd/Qo4B2gak61ZcI/cCaHw0Wq4Y7AIW7OwJk5oLZKTNPt
-	 OvmWi8qsHbIyFb72pAN6KWy9bq0+KIxO2xF/+14q6hARwaLW+Z97YlLP6TikjG2T+H
-	 gLXXv7aIheddE5dlNgm1Be3lVsAY5n5/Xwe7i0XkDFlNcRvaUot1HNM8fVXjmJ2+xo
-	 VA9DpVmINSgN2JxKtszaCHn8enpPdG6i8Y+bAKScQ84jRvJDA8aAHFou7cMWv62tzC
-	 x2it928aFrEhQ==
+	b=RQq+Vao+4qLDFC5sbfr57GurugVAIXaKDDKH2428KRI2n+xlti+v8Hvi4EFYA7xYn
+	 2ShcgNsfT2qh+QvrSO4rFmO18qTHFukRcRlmeZs42r/7P0a7eGJqMVllt+C/1jSJeS
+	 Mhc+Xfz7Y/anM4E1x4KGyNbImimo5BfJa3uRi0uhEudeWf3S/fgqkgGFWsVufbr3uD
+	 G9Ol/ON3dVDA3q5Jtqec3tFHbIqjP9yENYZfRJJQMQm+xD3nn7wsXQHi/kbTYkPDeD
+	 m4bDg5DJQCIbVFHTsR12wrg2SKP/57fWi340Y7Bf0H4R/8LREbMRrKisBy1ha+eSvQ
+	 yhJQrnXHz3RhA==
 X-Virus-Scanned: amavisd-new at boeck4.rrze.uni-erlangen.de (RRZE)
 X-RRZE-Flag: Not-Spam
 X-RRZE-Submit-IP: 2001:9e8:362e:e00:55a6:11d5:2473:17a9
@@ -39,9 +39,9 @@ Received: from luis-tp.fritz.box (unknown [IPv6:2001:9e8:362e:e00:55a6:11d5:2473
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	(Authenticated sender: U2FsdGVkX19+GcG1tOFk8oN3zZR4EziXRkcgB3+AFaA=)
-	by smtp-auth.uni-erlangen.de (Postfix) with ESMTPSA id 4Z1tLX25k5z1xyq;
-	Mon, 24 Feb 2025 21:56:04 +0100 (CET)
+	(Authenticated sender: U2FsdGVkX19nm2yitpZ/QBRPp/+B0uDrTFhMmeKLhng=)
+	by smtp-auth.uni-erlangen.de (Postfix) with ESMTPSA id 4Z1tFb5g1jzPjjs;
+	Mon, 24 Feb 2025 21:51:47 +0100 (CET)
 From: Luis Gerhorst <luis.gerhorst@fau.de>
 To: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
@@ -60,6 +60,8 @@ To: Alexei Starovoitov <ast@kernel.org>,
 	Catalin Marinas <catalin.marinas@arm.com>,
 	Will Deacon <will@kernel.org>,
 	Mykola Lysenko <mykolal@fb.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Luis Gerhorst <luis.gerhorst@fau.de>,
 	Henriette Herzog <henriette.herzog@rub.de>,
 	Cupertino Miranda <cupertino.miranda@oracle.com>,
 	Matan Shachnai <m.shachnai@gmail.com>,
@@ -70,12 +72,11 @@ To: Alexei Starovoitov <ast@kernel.org>,
 	linux-arm-kernel@lists.infradead.org,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Cc: Luis Gerhorst <luis.gerhorst@fau.de>,
-	Maximilian Ott <ott@cs.fau.de>,
+Cc: Maximilian Ott <ott@cs.fau.de>,
 	Milan Stephan <milan.stephan@fau.de>
-Subject: [RFC PATCH 9/9] bpf: Cut speculative path verification short
-Date: Mon, 24 Feb 2025 21:55:56 +0100
-Message-ID: <20250224205556.608574-1-luis.gerhorst@fau.de>
+Subject: [RFC PATCH 6/9] bpf: Allow nospec-protected var-offset stack access
+Date: Mon, 24 Feb 2025 21:51:41 +0100
+Message-ID: <20250224205141.606149-1-luis.gerhorst@fau.de>
 X-Mailer: git-send-email 2.48.1
 In-Reply-To: <20250224203619.594724-1-luis.gerhorst@fau.de>
 References: <20250224203619.594724-1-luis.gerhorst@fau.de>
@@ -87,58 +88,55 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This trades verification complexity for runtime overheads due to the
-nospec inserted because of the EINVAL.
-
-With increased limits this allows applying mitigations to large BPF
-progs such as the Parca Continuous Profiler's prog. However, this
-requires a jump-seq limit of 256k. In any case, the same principle
-should apply to smaller programs therefore include it even if the limit
-stays at 8k for now. Most programs in "VeriFence: Lightweight and
-Precise Spectre Defenses for Untrusted Linux Kernel
-Extensions" (https://arxiv.org/pdf/2405.00078) only require a limit of
-32k.
+Insert a nospec before the access to prevent it from ever using a index
+that is subject to speculative scalar-confusion.
 
 Signed-off-by: Luis Gerhorst <luis.gerhorst@fau.de>
 Acked-by: Henriette Herzog <henriette.herzog@rub.de>
 Cc: Maximilian Ott <ott@cs.fau.de>
 Cc: Milan Stephan <milan.stephan@fau.de>
 ---
- kernel/bpf/verifier.c | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+ kernel/bpf/verifier.c | 15 ++++++++-------
+ 1 file changed, 8 insertions(+), 7 deletions(-)
 
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 033780578966..bde4ae1ea637 100644
+index aee49f8da0c1..06c2f929d602 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -187,6 +187,7 @@ struct bpf_verifier_stack_elem {
- };
+@@ -7638,6 +7638,8 @@ static int check_atomic(struct bpf_verifier_env *env, int insn_idx, struct bpf_i
+ 	return 0;
+ }
  
- #define BPF_COMPLEXITY_LIMIT_JMP_SEQ	8192
-+#define BPF_COMPLEXITY_LIMIT_SPEC_V1_VERIFICATION	(BPF_COMPLEXITY_LIMIT_JMP_SEQ / 2)
- #define BPF_COMPLEXITY_LIMIT_STATES	64
- 
- #define BPF_MAP_KEY_POISON	(1ULL << 63)
-@@ -1933,6 +1934,19 @@ static struct bpf_verifier_state *push_stack(struct bpf_verifier_env *env,
- 	struct bpf_verifier_stack_elem *elem;
- 	int err;
- 
-+	if (!env->bypass_spec_v1 &&
-+	    cur->speculative &&
-+	    env->stack_size > BPF_COMPLEXITY_LIMIT_SPEC_V1_VERIFICATION) {
-+		/* Avoiding nested speculative path verification because we are
-+		 * close to exceeding the jump sequence complexity limit. Will
-+		 * instead insert a speculation barrier which will impact
-+		 * performace. To improve performance, authors should reduce the
-+		 * program's complexity. Barrier will be inserted in
-+		 * do_check().
-+		 */
-+		return ERR_PTR(-EINVAL);
-+	}
++static struct bpf_insn_aux_data *cur_aux(struct bpf_verifier_env *env);
 +
- 	elem = kzalloc(sizeof(struct bpf_verifier_stack_elem), GFP_KERNEL);
- 	if (!elem) {
- 		err = -ENOMEM;
+ /* When register 'regno' is used to read the stack (either directly or through
+  * a helper function) make sure that it's within stack boundary and, depending
+  * on the access type and privileges, that all elements of the stack are
+@@ -7677,18 +7679,17 @@ static int check_stack_range_initialized(
+ 	if (tnum_is_const(reg->var_off)) {
+ 		min_off = max_off = reg->var_off.value + off;
+ 	} else {
+-		/* Variable offset is prohibited for unprivileged mode for
++		/* Variable offset requires a nospec for unprivileged mode for
+ 		 * simplicity since it requires corresponding support in
+ 		 * Spectre masking for stack ALU.
+ 		 * See also retrieve_ptr_limit().
+ 		 */
+ 		if (!env->bypass_spec_v1) {
+-			char tn_buf[48];
+-
+-			tnum_strn(tn_buf, sizeof(tn_buf), reg->var_off);
+-			verbose(env, "R%d variable offset stack access prohibited for !root, var_off=%s\n",
+-				regno, tn_buf);
+-			return -EACCES;
++			/* Allow the access, but prevent it from using a
++			 * speculative offset using a nospec before the
++			 * dereference op.
++			 */
++			cur_aux(env)->nospec = true;
+ 		}
+ 		/* Only initialized buffer on stack is allowed to be accessed
+ 		 * with variable offset. With uninitialized buffer it's hard to
 -- 
 2.48.1
 
