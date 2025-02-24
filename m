@@ -1,102 +1,107 @@
-Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-175.mta1.migadu.com (out-175.mta1.migadu.com [95.215.58.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3407B26658F
-	for <bpf@vger.kernel.org>; Mon, 24 Feb 2025 17:00:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E8152673A3
+	for <bpf@vger.kernel.org>; Mon, 24 Feb 2025 17:02:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740416408; cv=none; b=ffIYmZrfMTSRJi8+kYFQU6H6RSfP84BDGzs9HiiOrqm0HnsI7xUd9UoPY4BQNBwhmhSiC1FXdkTMLtEYThbHGPIbdUyCUKrnjAy0W3yni9OX6iePDWeWBlvmeBuKTLXeTH6o9P5EYlBTj4j8+ZGk1FDA0FA+3J2meDyvNQ9QbDo=
+	t=1740416555; cv=none; b=lSPO6kWIp++BQH1TgeER7mBGIX9gB2+0gO/ubWDe3Vc1/1tNlPQ5lbdBgBr5nvy9JxwaMjkDvVCph6KFS30Uo4megs+TZ3vhUFVxCHNkuxXe+iCQ9BV0jUPKA/SW9kB7TMBKPMzFketscxVpX8n+85pk4108o+pg86ubXxFS1GY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740416408; c=relaxed/simple;
-	bh=H/eMT60CoAji4F4FxwCqPtUx6hQMzPO26wSo7Scx9oE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=dwy2QfiFw4m6Wb42eG/BaKdexVLA4mxsRK3H/At5+0DWpzMo4v8rEnIae3epI2JDpdJIyNyIEIAJNdoD5R0on3X6Ahtb91K1sHnUct7pgnxeHzB3mrCATyB4FSchkbajF82FmEML5pZamifT8Wp4TqMiVWV9SfP4RRqv6FtTCeM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=blackwall.org; spf=none smtp.mailfrom=blackwall.org; dkim=pass (2048-bit key) header.d=blackwall-org.20230601.gappssmtp.com header.i=@blackwall-org.20230601.gappssmtp.com header.b=GAfWaG1X; arc=none smtp.client-ip=209.85.208.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=blackwall.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=blackwall.org
+	s=arc-20240116; t=1740416555; c=relaxed/simple;
+	bh=aG8o/kahVF1tm5V+3pDDlV1oJXm/dksJNGytP15/dhA=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=S18s6P8rR5k1o+fgUGlybUtc7lbOif4ZmwDfWdTBFXzh2rsmeIzDnx2HZJ3MUhZdGb90xEkIFLQJZNlLAM3GvxlLfqJ5ZEP8dbxZAslcAt+LJz8G4tDs7kUlHrH0yGGJDny05SIp+IGb9HQHmyz/4COsiXsedzrUqnWNGdwGfZk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=lKSG3ALO; arc=none smtp.client-ip=95.215.58.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=blackwall-org.20230601.gappssmtp.com header.i=@blackwall-org.20230601.gappssmtp.com header.b="GAfWaG1X"
-Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-5dca468c5e4so8335897a12.1
-        for <bpf@vger.kernel.org>; Mon, 24 Feb 2025 09:00:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=blackwall-org.20230601.gappssmtp.com; s=20230601; t=1740416404; x=1741021204; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=NNWih9tGwSww/JPegbyk7ztiO19aEjAHfJHbiibWT5Y=;
-        b=GAfWaG1XraXegzjXe6MF5r/F9scDCaRIdSXos9sfgXrP6/xv0o9mv5rCO/E76k9E4Y
-         lIVHazip91fCEj/n1sGbIblqSh096MBLsY0sAN+jYRF5fR3NEcezIO/Q09GmOgGxEpnJ
-         HIqx20UNLqhTvcILJKzF644XYkMfu+sXfGpqA9Xm60klM1eRxSuBbUOVPbcrMJiaOroK
-         0Hm82Fx11mnnC3KvrpMVR0z1016zM6eJ/kmrWtvmgw6xS+0Faa9/xEABpESAMFU661wa
-         +vx3Z1eXfZ1XFSBv8CJEMoKsTeSSTdg1U0StRk0PXjBQQD/SwVDGh2kzSIlO3SGbNM5r
-         PFFA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740416404; x=1741021204;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=NNWih9tGwSww/JPegbyk7ztiO19aEjAHfJHbiibWT5Y=;
-        b=TLpTWHTqvSyKK3a4ST5rI+nkQcOsC8uUcKhOtYmNM2KaPAuF6PdIkVtSGmStd7ygm6
-         cd1O/Z4WwRreedyRogrmj6B0nAV6IEj8tOEK/iCi22J8OkrZB+W696k7l8fjf6PK7Ssa
-         byIUHLjLtyk6BLU0QIfTnF9Z9F1rH5nH0hixhOQf8GByFR2OyB4FsOrHJmG4jmlRwzN2
-         zGmeWxoz745d0T2iVQGqU6R5zRRC6vm50SsMhWGKfQ9QXoS4/4CZY8qvQzC4kfIPZRIw
-         deR9MIGOHw9oakHfivudCo6y453Sq3kKOJfAgkmg/KIJVIa8OLA/wmu2as+6HhiP6eWZ
-         USuQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUfqbrOgEeMKj2afTvdrKXbIMI7c+RwoohXHjltSdgzORsK+izMndxnKG/AE9kr1erxof4=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyl91DDKG5jSsgBHr5KFOR3tgTnkB4nDI/BHQZD57ITe8d6JhGj
-	I53vlwWZ8blqiYJlun1+YIuutQAIpObNGrRgMh5YkjKHKhpOFqBRKKQhueWtjsc=
-X-Gm-Gg: ASbGncsZSPkyIWYnKI6v16aJIA1l58PmqShDSfdVMqWtgKFEVUiDPIxp90V41V6E3R6
-	RZpKXyvYvJPkBvyD1rpV9kkTsr1o49nXo2Xv+dO3oPUXN6Dwvv8AWNV5ENLoJ7vTvG2ruf9Qqqd
-	xrnjmf8gOVoykKOcFWWK8EAKRGtVNGj3j0Z9oxioKbgIlvH6ZT6f8nsyojJvmifzVSEHR//F3XD
-	QpgK6jBr7Ey5LDaPypXEojvz3NJsOLQp8V8ETTva7Bhb88eqeAX2Wvc1/BeFsVPOltIr578JO03
-	GGVMRARxV09qkgyL+KFuemv2+gKS9uMiY/YOhUhelv0R41AI9DDbFqQqew==
-X-Google-Smtp-Source: AGHT+IEwsqOsw++yT+0bFX5SCBK/HWfbV4FpqmVLjfqG5YZq6RgAGIJsGwljpC8gwz0YwsGCV5s/DQ==
-X-Received: by 2002:a17:907:6095:b0:ab7:e73a:f2c8 with SMTP id a640c23a62f3a-abc09a97a2cmr1333363866b.26.1740416404255;
-        Mon, 24 Feb 2025 09:00:04 -0800 (PST)
-Received: from [192.168.0.205] (78-154-15-142.ip.btc-net.bg. [78.154.15.142])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-abbc9ff4fcdsm1213817766b.87.2025.02.24.09.00.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 24 Feb 2025 09:00:03 -0800 (PST)
-Message-ID: <e8b6465a-3b32-4ec1-907a-414a6e5a10c1@blackwall.org>
-Date: Mon, 24 Feb 2025 19:00:02 +0200
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="lKSG3ALO"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1740416552;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=7PGzrKBqkUWVbwyFTBIov9XC7SmgDrzD5PuL2n2Yx4M=;
+	b=lKSG3ALOVcqBH1KgzjTr1euc/9OJwGCjz5RM3AN/1TuYVq8tQBSbRo91P3booy2s4BDbiU
+	HtOhUDXeT3cwhignhs5lYMWWfo5Q480JdYieUP+7uIT13jyqEVFRJ6eoTBjA8PuAixSfnZ
+	Ikp/S5ya+lttt1/bBwv6sOpVkVxg1mc=
+From: Tao Chen <chen.dylane@linux.dev>
+To: ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	haoluo@google.com,
+	jolsa@kernel.org,
+	qmo@kernel.org
+Cc: bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	chen.dylane@gmail.com,
+	Tao Chen <chen.dylane@linux.dev>,
+	Tao Chen <dylane.chen@didiglobal.com>
+Subject: [PATCH bpf-next v8 2/5] libbpf: Init fd_array when prog probe load
+Date: Tue, 25 Feb 2025 00:59:09 +0800
+Message-Id: <20250224165912.599068-3-chen.dylane@linux.dev>
+In-Reply-To: <20250224165912.599068-1-chen.dylane@linux.dev>
+References: <20250224165912.599068-1-chen.dylane@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH iproute2-next v2] ip: link: netkit: Support scrub options
-To: Jordan Rife <jordan@jrife.io>, Daniel Borkmann <daniel@iogearbox.net>
-Cc: netdev@vger.kernel.org, bpf@vger.kernel.org, stephen@networkplumber.org,
- dsahern@kernel.org
-References: <20250224164903.138865-1-jordan@jrife.io>
-Content-Language: en-US
-From: Nikolay Aleksandrov <razor@blackwall.org>
-In-Reply-To: <20250224164903.138865-1-jordan@jrife.io>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On 2/24/25 18:49, Jordan Rife wrote:
-> Add "scrub" option to configure IFLA_NETKIT_SCRUB and
-> IFLA_NETKIT_PEER_SCRUB when setting up a link. Add "scrub" and
-> "peer scrub" to device details as well when printing.
-> 
-> $ sudo ./ip/ip link add jordan type netkit scrub default peer scrub none
-> $ ./ip/ip -details link show jordan
-> 43: jordan@nk0: <BROADCAST,MULTICAST,NOARP,M-DOWN> mtu 1500 qdisc noop state DOWN mode DEFAULT group default qlen 1000
->     link/ether 00:00:00:00:00:00 brd ff:ff:ff:ff:ff:ff promiscuity 0 allmulti 0 minmtu 68 maxmtu 65535
->     netkit mode l3 type primary policy forward peer policy forward scrub default peer scrub none numtxqueues 1 numrxqueues 1 gso_max_size 65536 gso_max_segs 65535 tso_max_size 524280 tso_max_segs 65535 gro_max_size 65536 gso_ipv4_max_size 65536 gro_ipv4_max_size 65536
-> 
-> v1->v2: Added some spaces around "scrub SCRUB" in the help message.
-> 
-> Link: https://lore.kernel.org/netdev/20241004101335.117711-1-daniel@iogearbox.net/
-> 
-> Signed-off-by: Jordan Rife <jordan@jrife.io>
-> ---
->  ip/iplink_netkit.c | 46 +++++++++++++++++++++++++++++++++++++++++++++-
->  1 file changed, 45 insertions(+), 1 deletion(-)
-> 
+fd_array used to store module btf fd, which will
+be used for kfunc probe in module btf.
 
-Acked-by: Nikolay Aleksandrov <razor@blackwall.org>
+Cc: Tao Chen <dylane.chen@didiglobal.com>
+Reviewed-by: Jiri Olsa <jolsa@kernel.org>
+Reviewed-by: Eduard Zingerman <eddyz87@gmail.com>
+Signed-off-by: Tao Chen <chen.dylane@linux.dev>
+---
+ tools/lib/bpf/libbpf_probes.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
+
+diff --git a/tools/lib/bpf/libbpf_probes.c b/tools/lib/bpf/libbpf_probes.c
+index a48a557314f6..de2b1205b436 100644
+--- a/tools/lib/bpf/libbpf_probes.c
++++ b/tools/lib/bpf/libbpf_probes.c
+@@ -102,12 +102,13 @@ __u32 get_kernel_version(void)
+ 
+ static int probe_prog_load(enum bpf_prog_type prog_type,
+ 			   const struct bpf_insn *insns, size_t insns_cnt,
+-			   char *log_buf, size_t log_buf_sz)
++			   int *fd_array, char *log_buf, size_t log_buf_sz)
+ {
+ 	LIBBPF_OPTS(bpf_prog_load_opts, opts,
+ 		.log_buf = log_buf,
+ 		.log_size = log_buf_sz,
+ 		.log_level = log_buf ? 1 : 0,
++		.fd_array = fd_array,
+ 	);
+ 	int fd, err, exp_err = 0;
+ 	const char *exp_msg = NULL;
+@@ -214,7 +215,7 @@ int libbpf_probe_bpf_prog_type(enum bpf_prog_type prog_type, const void *opts)
+ 	if (opts)
+ 		return libbpf_err(-EINVAL);
+ 
+-	ret = probe_prog_load(prog_type, insns, insn_cnt, NULL, 0);
++	ret = probe_prog_load(prog_type, insns, insn_cnt, NULL, NULL, 0);
+ 	return libbpf_err(ret);
+ }
+ 
+@@ -448,7 +449,7 @@ int libbpf_probe_bpf_helper(enum bpf_prog_type prog_type, enum bpf_func_id helpe
+ 		return libbpf_err(-EOPNOTSUPP);
+ 
+ 	buf[0] = '\0';
+-	ret = probe_prog_load(prog_type, insns, insn_cnt, buf, sizeof(buf));
++	ret = probe_prog_load(prog_type, insns, insn_cnt, NULL, buf, sizeof(buf));
+ 	if (ret < 0)
+ 		return libbpf_err(ret);
+ 
+-- 
+2.43.0
 
