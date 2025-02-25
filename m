@@ -1,153 +1,195 @@
-Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9DAC199FA2
-	for <bpf@vger.kernel.org>; Tue, 25 Feb 2025 17:19:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E972919992D;
+	Tue, 25 Feb 2025 17:24:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740503984; cv=none; b=PtHx4dZkeR+RQ550PKYrZl4jKjHPbtERKcdujmjDHqqd2HTBEDRdaYQh08kn1meNxJGL0LorSfKMeLJLkVkkLe/3egvfCOYOoQaM+JyTqs+cejjNQL0GyVv0OKqRM1XQVPNiJtD4oXohfmhU9hb0wKPs6zvzMs+XnB4isuMI+fE=
+	t=1740504275; cv=none; b=Uyn9ZXkPZA1eI40ETyBpq86dsuRuj8ayoAp9hhd5biuHGldClTcNjIvXLMRKpIoyjArI62U2DDtjb0H1O07+eyHwe0ZKDwjz3R08JFiepB1ACE+R3Wkz+nPnD9ja88+Khzzs3b+t43+EKBtE9TccTSl5+b5l/ZTjafLMdQy7JJE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740503984; c=relaxed/simple;
-	bh=rRzDH5VwHUbYzNaKz4X7qPAPozuChwn+B5mTuDo9t7U=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Qc9wo5zo4ApwgGv/0b3fXVBiLZz+dwBVWblEFuI0i4u0VKWjq+ESB+ULYQ7kI70o08bmAYHHia2qie1gBoPq20oV/RuflLY9QQ3n8K0N17FyWez50dUJ6/sCjashXkRnxAr8GoTBSgud7YV6MsTCRaV0d1ZOOzU/L4i3RqkmMtk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fMQfWGp+; arc=none smtp.client-ip=209.85.216.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1740504275; c=relaxed/simple;
+	bh=B/JrfUv3KwTKpWmCJzL/AjBVf2xTESkAGarMss+veZo=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=qG/Z8ZjsjA73A7kb9ortfwq0xeZ5ld0GyyA3/iXLMXgLUKk3IV+WA4uhEmWGAWIzjvvUnP1PQd91V2AZtcFRs1PaLCHXvZk2vLnmPrVghABzbBIFlm6h3jgdmaFczX4OdtjwpeFB9s+pNqVvOYwnPyPvfXkPD9tjzzgul79gFi0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mNrPqVYG; arc=none smtp.client-ip=198.175.65.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fMQfWGp+"
-Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-2f9b9c0088fso53132a91.0
-        for <bpf@vger.kernel.org>; Tue, 25 Feb 2025 09:19:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1740503981; x=1741108781; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5AfgbnJpVuARMkT2ZqK6ljnDXLLTHFtPPfWBf9VVHoA=;
-        b=fMQfWGp+u/jO+pLqq7jD26YmJkIXI5ZBarV5VTsG58IkyxGK+FgKqAiK74JxsfnjNn
-         nQXiywTaCl8iu3FzuL+kfdNDMeSxaURAUoSjDrwRnfy60k8jIrKmJmu1Nkjc1ERMRaO6
-         +g7AqetSUazMimgepvpATcXTwPqdFVJHBFL7PzfG0Vn+XfjUJ+C33G2NHsxVZ3xL7CR/
-         ebeFvnZKJFHdCBBEGbKLGV1BZ5DFQoCe/cJ0nWRWG8vjyAZgKQkXMGxV89srtnZPSn8D
-         T7JYhRJOMfcTNc5MRI3T9c4qL66xZj6hS8ZhA4eGu+NEkY8FAe3D1LIhqLtO8FEyztJt
-         keNw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740503981; x=1741108781;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=5AfgbnJpVuARMkT2ZqK6ljnDXLLTHFtPPfWBf9VVHoA=;
-        b=SXwn3+xnqdneRpJDw6g69hjGLdDm3nwoMtOKUJeHaonF8an6XUos4Eqm9/WslFatkz
-         jkqpd2xhf+0vDiGuKh4XxG3x7dvEntdWr3r/oDQO1ZvC9msi/TPtFZ+nehj9vtByuKZe
-         Q7d1ZXqVfx4ZtISW7WWnSpOrtzXXfAIiuAUSjph2ndQTW3NWXi72sxNYyyuW313q+bw8
-         e8l9o+J+8a8rr3nQXG0Yu3e8eKF0DlT5f0O6KwxRrhtdwuICLw1AHrM2Ci8JuiBoQTTA
-         YT9EY2dpMcNr6GN3NjHgs3sKlsiXwPFjtgvuBzGlijIZ4gvdqKsHGVCjWU9Ddv2shIbK
-         0IMA==
-X-Forwarded-Encrypted: i=1; AJvYcCWxOaALpAW9SDEE8UOiWpuIXxqj9ewqJVoEOOS0DPKBG8IVhgqLZDnqjFRoCyjdh1ogPho=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw0Ijouo0uR30fwAyb+V+0lLG16fXWN0WsPZQMOkHHslH5yC7Q7
-	hAxLzH0BUgZGlyqDbw2O5am/031y/w+ZQNx8Bf9wHXisPWhd0k+aH2W39ECT0C2JUonRZ61FoEo
-	QDtG2E/pvJeBKrSAheJK3N9i1LFM=
-X-Gm-Gg: ASbGncsx6JAWAQNJec0DinUNDujcIego/chrb+rRugB1B4TYvmfqRu6CdrNqWlXijly
-	SKBMNup3tJXJdujffHe3X4eCy0fTlWHvHPziypba+4sv6RvnCrA356t5bI/qHXOR4/FuwVp7QO5
-	W0NCqS8tEnO1Yzd1nx8/Y5ElY=
-X-Google-Smtp-Source: AGHT+IGdHeehGBhhEEGguVdVY3FRD3dp2xQ4h5X6YYI0HD/5woaJJGQ9El0/tdy0r5JX1hX0jMY2a4Wk02QAYSzbJPs=
-X-Received: by 2002:a17:90b:3ec3:b0:2fa:603e:905c with SMTP id
- 98e67ed59e1d1-2fccc0f96d4mr37738776a91.2.1740503981103; Tue, 25 Feb 2025
- 09:19:41 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mNrPqVYG"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1740504274; x=1772040274;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=B/JrfUv3KwTKpWmCJzL/AjBVf2xTESkAGarMss+veZo=;
+  b=mNrPqVYGkkGV8ID9q63m+pl+jamljxbjXVx/k3O6QTauuZDjzrAoOYci
+   8+EUizUDycoS2TzgpVhdK2t8nWgQLsvzARBKghXCdPAPpnUVaY+qJ0Cbu
+   A5r9Tw1ZMp/MI9BmeYSu70AN7glIA3NBkFhAYWcTiY2E0SdMzX+aJsC0G
+   ObsgrPOCqSyZ4hkYR8Y+h8CF9SCNMgNVIZBCj6zgxutBhIEBZrCOpzo1I
+   RyVVG7wnJzZ/GyTvL1Kb7K4hLFcPOywZnIvnnKlCbXvag1ECVPRdwe2nm
+   UATQ3B+IP08BFQWUG1kM8q5LjQGL5TaPflCt55qwx27VwATUEm4nd4Nrg
+   A==;
+X-CSE-ConnectionGUID: 3nPStewYS+2tgKpq12BCpA==
+X-CSE-MsgGUID: UFSdZOT6RvCS9c/PGe4wBg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11356"; a="44974069"
+X-IronPort-AV: E=Sophos;i="6.13,314,1732608000"; 
+   d="scan'208";a="44974069"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Feb 2025 09:24:33 -0800
+X-CSE-ConnectionGUID: /AipXs/wT5m2Nz4zUlmAKw==
+X-CSE-MsgGUID: G7BmK6lzTtSyLuXseDSgdA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.13,314,1732608000"; 
+   d="scan'208";a="116256857"
+Received: from newjersey.igk.intel.com ([10.102.20.203])
+  by fmviesa006.fm.intel.com with ESMTP; 25 Feb 2025 09:24:29 -0800
+From: Alexander Lobakin <aleksander.lobakin@intel.com>
+To: Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>
+Cc: Alexander Lobakin <aleksander.lobakin@intel.com>,
+	Lorenzo Bianconi <lorenzo@kernel.org>,
+	Daniel Xu <dxu@dxuuu.xyz>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	=?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@kernel.org>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	netdev@vger.kernel.org,
+	bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH net-next v5 0/8] bpf: cpumap: enable GRO for XDP_PASS frames
+Date: Tue, 25 Feb 2025 18:17:42 +0100
+Message-ID: <20250225171751.2268401-1-aleksander.lobakin@intel.com>
+X-Mailer: git-send-email 2.48.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250224153352.64689-1-leon.hwang@linux.dev> <20250224153352.64689-3-leon.hwang@linux.dev>
- <CAADnVQKOeKfxL_3tCw1xWNS1CpXz-6pVUG-1UWhZwpPjRy+32A@mail.gmail.com>
- <CAEf4BzaE+sRmnPMN_ePQ1sa7wHuRNn9zktu85Z5=BRyyVEXM=A@mail.gmail.com> <f6a428a0-9016-4c38-b03f-f47504d08826@linux.dev>
-In-Reply-To: <f6a428a0-9016-4c38-b03f-f47504d08826@linux.dev>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Tue, 25 Feb 2025 09:19:28 -0800
-X-Gm-Features: AWEUYZl380CkMLX5jnFF9hZla5Ug-u-zeavoBht2ZSLHjN7p9eDPixH9dfG56Ic
-Message-ID: <CAEf4BzYQuX_+sz+0jsD_YHdoH7S4ROja28nhQH4ixzDcyW94PA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v4 2/4] bpf: Improve error reporting for freplace
- attachment failure
-To: Leon Hwang <leon.hwang@linux.dev>
-Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>, bpf <bpf@vger.kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, Song Liu <song@kernel.org>, 
-	Eddy Z <eddyz87@gmail.com>, Manjusaka <me@manjusaka.me>, kernel-patches-bot@fb.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Tue, Feb 25, 2025 at 5:59=E2=80=AFAM Leon Hwang <leon.hwang@linux.dev> w=
-rote:
->
->
->
-> On 2025/2/25 06:08, Andrii Nakryiko wrote:
-> > On Mon, Feb 24, 2025 at 11:41=E2=80=AFAM Alexei Starovoitov
-> > <alexei.starovoitov@gmail.com> wrote:
-> >>
-> >> On Mon, Feb 24, 2025 at 7:34=E2=80=AFAM Leon Hwang <leon.hwang@linux.d=
-ev> wrote:
-> >>>
-> >>> @@ -3539,7 +3540,7 @@ static int bpf_tracing_prog_attach(struct bpf_p=
-rog *prog,
-> >>>                  */
-> >>>                 struct bpf_attach_target_info tgt_info =3D {};
-> >>>
-> >>> -               err =3D bpf_check_attach_target(NULL, prog, tgt_prog,=
- btf_id,
-> >>> +               err =3D bpf_check_attach_target(log, prog, tgt_prog, =
-btf_id,
-> >>>                                               &tgt_info);
-> >>
-> >> I still don't like this uapi addition.
-> >>
-> >> It only helps a rare corner case of freplace usage:
-> >>                 /* If there is no saved target, or the specified targe=
-t is
-> >>                  * different from the destination specified at load ti=
-me, we
-> >>                  * need a new trampoline and a check for compatibility
-> >>                  */
-> >>
-> >> If it was useful in more than one case we could consider it,
-> >> but uapi addition for a single rare use, is imo wrong trade off.
-> >
-> > Agreed. I think the idea of verbose log is useful for bpf() syscall,
-> > given how complicated some of its conditions are. But it should be
-> > done more generically, ideally at syscall (or at least the entire BPF
-> > command) level, not for one particular kind of link.
-> >
->
-> Cool!
->
-> But, how can we achieve it?
+Several months ago, I had been looking through my old XDP hints tree[0]
+to check whether some patches not directly related to hints can be sent
+standalone. Roughly at the same time, Daniel appeared and asked[1] about
+GRO for cpumap from that tree.
 
-There is no *elegant* way to do this, but I think we could retrofit
-this as extra common bpf_attrs into existing bpf() syscall. Something
-along the lines of:
+Currently, cpumap uses its own kthread which processes cpumap-redirected
+frames by batches of 8, without any weighting (but with rescheduling
+points). The resulting skbs get passed to the stack via
+netif_receive_skb_list(), which means no GRO happens.
+Even though we can't currently pass checksum status from the drivers,
+in many cases GRO performs better than the listified Rx without the
+aggregation, confirmed by tests.
 
-struct bpf_common_attr {
-    __u64 log_buf;
-    __u32 log_size;
-}
+In order to enable GRO in cpumap, we need to do the following:
 
-#define BPF_COMMON_ATTRS 0x80000000
+* patches 1-2: decouple the GRO struct from the NAPI struct and allow
+  using it out of a NAPI entity within the kernel core code;
+* patch 3: switch cpumap from netif_receive_skb_list() to
+  gro_receive_skb().
 
-static int __sys_bpf(enum bpf_cmd cmd, bpfptr_t uattr, unsigned int
-size, bpfptr_t uattr_common, unsigned int size_common)
-{
-    if (cmd & BPF_COMMON_ATTRS) {
-        cmd &=3D ~BPF_COMMON_ATTRS;
-        /* read out bpf_common_attr from uattr_common */
-    }
-}
+Additional improvements:
 
+* patch 4: optimize XDP_PASS in cpumap by using arrays instead of linked
+  lists;
+* patch 5-6: introduce and use function do get skbs from the NAPI percpu
+  caches by bulks, not one at a time;
+* patch 7-8: use that function in veth as well and remove the one that
+  was now superseded by it.
 
-i.e., we add two extra arguments to bpf() syscall, but only look at
-them if we have an extra flag set in cmd.
+My trafficgen UDP GRO tests, small frame sizes:
 
->
-> Thanks,
-> Leon
->
+                GRO off    GRO on
+baseline        2.7        N/A       Mpps
+patch 3         2.3        4         Mpps
+patch 8         2.4        4.7       Mpps
+
+1...3 diff      -17        +48       %
+1...8 diff      -11        +74       %
+
+Daniel reported from +14%[2] to +18%[3] of throughput in neper's TCP RR
+tests. On my system however, the same test gave me up to +100%.
+
+Note that there's a series from Lorenzo[4] which achieves the same, but
+in a different way. During the discussions, the approach using a
+standalone GRO instance was preferred over the threaded NAPI.
+
+[0] https://github.com/alobakin/linux/tree/xdp_hints
+[1] https://lore.kernel.org/bpf/cadda351-6e93-4568-ba26-21a760bf9a57@app.fastmail.com
+[2] https://lore.kernel.org/bpf/merfatcdvwpx2lj4j2pahhwp4vihstpidws3jwljwazhh76xkd@t5vsh4gvk4mh
+[3] https://lore.kernel.org/bpf/yzda66wro5twmzpmjoxvy4si5zvkehlmgtpi6brheek3sj73tj@o7kd6nurr3o6
+[4] https://lore.kernel.org/bpf/20241130-cpumap-gro-v1-0-c1180b1b5758@kernel.org
+
+Alexander Lobakin (8):
+  net: gro: decouple GRO from the NAPI layer
+  net: gro: expose GRO init/cleanup to use outside of NAPI
+  bpf: cpumap: switch to GRO from netif_receive_skb_list()
+  bpf: cpumap: reuse skb array instead of a linked list to chain skbs
+  net: skbuff: introduce napi_skb_cache_get_bulk()
+  bpf: cpumap: switch to napi_skb_cache_get_bulk()
+  veth: use napi_skb_cache_get_bulk() instead of xdp_alloc_skb_bulk()
+  xdp: remove xdp_alloc_skb_bulk()
+
+ include/linux/netdevice.h                  |  37 ++++--
+ include/linux/skbuff.h                     |   1 +
+ include/net/busy_poll.h                    |  12 +-
+ include/net/gro.h                          |  38 ++++--
+ include/net/xdp.h                          |   1 -
+ drivers/net/ethernet/brocade/bna/bnad.c    |   1 +
+ drivers/net/ethernet/cortina/gemini.c      |   1 +
+ drivers/net/veth.c                         |   3 +-
+ drivers/net/wwan/t7xx/t7xx_hif_dpmaif_rx.c |   1 +
+ kernel/bpf/cpumap.c                        | 146 +++++++++++++--------
+ net/core/dev.c                             |  79 ++++-------
+ net/core/gro.c                             | 103 ++++++++++-----
+ net/core/skbuff.c                          |  62 +++++++++
+ net/core/xdp.c                             |  10 --
+ 14 files changed, 315 insertions(+), 180 deletions(-)
+
+---
+From v4[5]:
+* 1:
+  * use standalone struct gro_node instead of struct_group() again,
+    this time make napi_struct::napi_id purely control path and use
+    cached napi_id from gro_node on hotpath (Eric, Jakub).
+    For napi_struct::napi_id, reuse one already existing padding,
+    so that the structure size didn't change;
+  * rebase on top of the latest net-next.
+
+From v3[6]:
+* series:
+  * rebase on top of the latest net-next;
+  * pick RBs from Toke;
+* 1:
+  * reduce possible false sharing of napi_struct (now gro_node is
+    placed precisely at 64 byte offset, was 56);
+  * pick Acked-by from Jakub;
+* 2: RB from Jakub;
+* 3: move the assignment out of the condition check :p (Jakub).
+
+From v2[7]:
+* 1: remove napi_id duplication in both &gro_node and &napi_struct by
+     using a tagged struct group. The most efficient approach I've
+     found so far: no additional branches, no inline expansion, no tail
+     calls / double calls, saves 8 bytes of &napi_struct in comparison
+     with v2 (Jakub, Paolo, me);
+* 4: improve and streamline skb allocation fails (-1 branch per frame),
+     skip more code for skb-only batches.
+
+From v1[8]:
+* use a standalone GRO instance instead of the threaded NAPI (Jakub);
+* rebase and send to net-next as it's now more networking than BPF.
+
+[5] https://lore.kernel.org/netdev/20250205163609.3208829-1-aleksander.lobakin@intel.com
+[6] https://lore.kernel.org/netdev/20250115151901.2063909-1-aleksander.lobakin@intel.com
+[7] https://lore.kernel.org/netdev/20250107152940.26530-1-aleksander.lobakin@intel.com
+[8] https://lore.kernel.org/bpf/20240830162508.1009458-1-aleksander.lobakin@intel.com
+-- 
+2.48.1
+
