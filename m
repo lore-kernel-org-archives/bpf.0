@@ -1,134 +1,174 @@
-Received: from out-170.mta1.migadu.com (out-170.mta1.migadu.com [95.215.58.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f179.google.com (mail-qk1-f179.google.com [209.85.222.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6ED1E271269
-	for <bpf@vger.kernel.org>; Tue, 25 Feb 2025 14:40:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CC1F2686B3;
+	Tue, 25 Feb 2025 14:55:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740494429; cv=none; b=gIfoOeGfZGLr36zDdu3kZKGo++Ihh/HsoXt/lcz2hlztKhrlePyD7ulSRL/tiOh97xNhLOFKiP+gZ3LUDUqJMavt4vikOU8n6bB0uJ+NfTFBiZJCH7uDIKGuq51MtysRulUVF8sSGQ6JL/q/JXlMSBbitd3uyYfKJuBmfFaebkc=
+	t=1740495332; cv=none; b=HGOOvyfmiW4UD98DKy7dg7R2yXswmpE2PboULqQgCIIhVs0uLH8e9tUQnElZpjPDutTmGzjGAid3zYSmkm0UnDams01mHar20UNG9mlWe9asr3Vx4RDKdm7QDRebqw97l3J7dkXYzZQYcTVEHkXUxmReKqBXBDs6iYA2KjpvD5U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740494429; c=relaxed/simple;
-	bh=Gcu0/y2YMP2LlNhJAtEESlhx/D3SReNbDRxbsrVxZnM=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=qSVi+u9UDPT1YSDuyUmO7zcWrLGwWyD16NHzAGM0EHn+i+/Yw/ZIKCh/iKiugQ4skINCe/k4yS2UjHDHaUtcp3XMDSDY84LvA0aPyc3+jLy+puluzsGAXrFkG0zyVFsqmSDOAaIVv/G+DEiPAVILo6Fmf8M1PsnTgHR0tamKrFA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=O/xgNeZU; arc=none smtp.client-ip=95.215.58.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1740495332; c=relaxed/simple;
+	bh=r/ZZoZr2ULO+NtzPA4njXHi/b/AtJLxzrOEJzxEhTEk=;
+	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
+	 Mime-Version:Content-Type; b=S+fbNZd/r8RWGCqhPZh1g+1P/2MFb8g1y7OutIdboJ6YbOFr1gdhfXH9xIFrj5M6imHSYoWgJzIMXx9drv8NrO1pNGuCeGJ00fX1HjSD8+QpjSqRfiihoqrgDNE3C6lQjEQriMpSpFzs5hQ8OPx+ILqsNVwqGOmF+NHLBpWXRc0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OcpfU73g; arc=none smtp.client-ip=209.85.222.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="O/xgNeZU"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1740494415;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=RLRUQ6K3ZxrvBuZuKZAonhzQHThtxFHbpTnpSZBjIXA=;
-	b=O/xgNeZU7zk6zS7kTLRt0naInEXik3C/Jeirb8KGy2+4zmAONIGQJAXkW1OLlKpAGI9LVJ
-	/HBQmNyVhxSpxfKe3kk0YTr/L7SvFijVqO2uGQ29nrDGKr6ebZmLFylSpVoIkay66mSfA9
-	1o4QNWsBxZ2ieE1FJYnin6QLGnP6eUs=
-From: Jiayuan Chen <jiayuan.chen@linux.dev>
-To: horms@kernel.org,
-	kuba@kernel.org
-Cc: bpf@vger.kernel.org,
-	netdev@vger.kernel.org,
-	andrew+netdev@lunn.ch,
-	davem@davemloft.net,
-	edumazet@google.com,
-	pabeni@redhat.com,
-	ricardo@marliere.net,
-	viro@zeniv.linux.org.uk,
-	dmantipov@yandex.ru,
-	aleksander.lobakin@intel.com,
-	linux-ppp@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	mrpre@163.com,
-	Jiayuan Chen <jiayuan.chen@linux.dev>,
-	Paul Mackerras <paulus@samba.org>
-Subject: [PATCH net-next 0/1] ppp: Fix KMSAN uninit-value warning with bpf
-Date: Tue, 25 Feb 2025 22:40:03 +0800
-Message-ID: <20250225144004.277169-1-jiayuan.chen@linux.dev>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OcpfU73g"
+Received: by mail-qk1-f179.google.com with SMTP id af79cd13be357-7c2303a56d6so227492985a.3;
+        Tue, 25 Feb 2025 06:55:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1740495330; x=1741100130; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=hjv1BVttWy8yEf+ech4rBoic+lPnV1nxxM8d9pp6mDA=;
+        b=OcpfU73g187VXJUQSlVKjrMQCgHwblswuei4zVS2NgXEQ83pxB3lIY/rwISqaFbft1
+         RZMgjRuLyqHBN9CjAwlc3dXd2lc5eIhaVki/vFZSrf7C9sRzo98CM72/5nPkidq/IirI
+         fHFDPgQYWBgllyHwSxA+cRF4sGEtKMVx7mCbJsGJHWDs6DeaXO345nlZZ2kg5yQIxtig
+         BUdfvZgLh7Cp4AQLiMh8G5bvz39GGY/fsUCLYIgSypCAc3hR5f1hGppWHlnFBgq4pGiZ
+         P8PKwn2/sNH7jYj0AfGurF95D232LKonJZANxVRbl6U8k61e6GdVIdMoUa7BmKy7IDC7
+         CnqA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1740495330; x=1741100130;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=hjv1BVttWy8yEf+ech4rBoic+lPnV1nxxM8d9pp6mDA=;
+        b=Ml7p+5Ncgw+A3EPjvNG1nvi68WXisoRfxtvErWDmKEIgqdv1lbxdMctehWxADGEkoE
+         BIlLvF6cTU/RqR3+wLeamBuaws1BF0Zo8KvNKFKRg+d6sl4T/jQWdy3xlS/Mm7DBzavW
+         70bYlTdm4jcgsUgBatnpVxMmhRtB3lo3VmBrxYubS1is3YQl2LpZErhA6FC9b2lOh7gb
+         pkZPsX4cUuHeue4SnrvjBAMDuXya+IYnQGtImQOe2cvaa904xemdQDGqTEKCG3vkRgW9
+         ok78agWyMfeeEctQZnQYiwiGxs1IWl8n9nJ3i4YB6g5mQfkdXvjkYsvAadG5SHT5jQIs
+         E9tQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVbZxPW65Bqb2JsIaAXsRYLCfRzMGsAgvbG0MHumTy0dFJbOnWs05j8HbBsOOzczfPx6ln5rkUX@vger.kernel.org, AJvYcCWzh6tvm9HVns6TpZ+YADSZZVr3pmEylVkPac+AihT6TKAGzfvFniV9DZfuZbVSZFiLOTUxqLcA969hWppM@vger.kernel.org, AJvYcCX4X0bj9/8sNyI5OiYxYpPBojbOTYtBig6WbrulE8QhRL+KBQkI/NDSHwy0jvRYJyL1Z8U=@vger.kernel.org, AJvYcCXFdlnsTzgyLAy3F4Hq/HwREP9imqL61hpwklMoAzx0YIOnOYeOJ1cIc1z1xt+8rrP9gKlZGeSzC4kSbr36tsOZ@vger.kernel.org
+X-Gm-Message-State: AOJu0YwW5uOwp9jGcZ+a9JB6wGosCczYiR8VnUSpI70lWdNwsHyyTy4N
+	IU7WGjHtvXQMFj5VOCU0uWf6ciVWiWxSi0CKyJaB1z7loNldvp9G
+X-Gm-Gg: ASbGncsQiZa8ahrECZYQRZ9rqV8alKjOtMWghzyLOkO9ttC5wypI8sxADLscOFiyWti
+	7uWxQW2Moutr8lpiQe5hhCJg6HxYvgA2LL3LYOSFmL4Y7eZANzCX0HgKviT9dM/huGRj7XsfVP5
+	KnhbXrBPWQEd0MiD5QNtfqRQZVJJQHAqpuxBObThNAU6G4dMrSclwPd80bbAaAV2KJLuP1H+jpU
+	MEKPXJ+hZUCXIzsQkjz2Rq6jGyjDuNox1Bh64i4iWhQbQ3NOOO75G3bPtumhIWMCIXFfnJdCX98
+	KBxS0zBpkPk4v/rED9sgdmrUDTfmprNlscn53vQwr6xlQnGws9IUP6CEhGpqnCdlYvUNQqkrJHA
+	llUI=
+X-Google-Smtp-Source: AGHT+IGjv2NvDrduope8pvx/36i17irAfSvtdZpt+ljFP0O7tK4Zc2qgfkUk4vwB434o/1wqwg4SIA==
+X-Received: by 2002:a05:620a:800b:b0:7c0:c264:6737 with SMTP id af79cd13be357-7c0cf8b015emr2386412885a.4.1740495329747;
+        Tue, 25 Feb 2025 06:55:29 -0800 (PST)
+Received: from localhost (234.207.85.34.bc.googleusercontent.com. [34.85.207.234])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-7c23c2c2925sm115007585a.61.2025.02.25.06.55.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Feb 2025 06:55:29 -0800 (PST)
+Date: Tue, 25 Feb 2025 09:55:28 -0500
+From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+To: Marcus Wichelmann <marcus.wichelmann@hetzner-cloud.de>, 
+ netdev@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, 
+ bpf@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org
+Cc: willemdebruijn.kernel@gmail.com, 
+ jasowang@redhat.com, 
+ andrew+netdev@lunn.ch, 
+ davem@davemloft.net, 
+ edumazet@google.com, 
+ kuba@kernel.org, 
+ pabeni@redhat.com, 
+ andrii@kernel.org, 
+ eddyz87@gmail.com, 
+ mykolal@fb.com, 
+ ast@kernel.org, 
+ daniel@iogearbox.net, 
+ martin.lau@linux.dev, 
+ song@kernel.org, 
+ yonghong.song@linux.dev, 
+ john.fastabend@gmail.com, 
+ kpsingh@kernel.org, 
+ sdf@fomichev.me, 
+ haoluo@google.com, 
+ jolsa@kernel.org, 
+ shuah@kernel.org, 
+ hawk@kernel.org, 
+ marcus.wichelmann@hetzner-cloud.de, 
+ Willem de Bruijn <willemb@google.com>
+Message-ID: <67bdd9e0c54d9_2474a12947d@willemb.c.googlers.com.notmuch>
+In-Reply-To: <20250224152909.3911544-1-marcus.wichelmann@hetzner-cloud.de>
+References: <20250224152909.3911544-1-marcus.wichelmann@hetzner-cloud.de>
+Subject: Re: [PATCH bpf-next v3 0/6] XDP metadata support for tun driver
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: 7bit
 
-Syzbot caught an "KMSAN: uninit-value" warning [1], which is caused by the
-ppp driver not initializing a 2-byte header when using socket filters.
+Marcus Wichelmann wrote:
+> Hi,
+> 
+> thank you for your reviw. As promised, here is V3 of this patch series.
+> 
+> I noticed that the updated selftests were flaky sometimes due to the kernel
+> networking stack sending IPv6 multicast listener reports on the created
+> test interfaces.
+> This can be seen here:
+> https://github.com/kernel-patches/bpf/actions/runs/13449071153/job/37580497963
+> 
+> Setting the NOARP flag on the interfaces should fix this race condition.
+> 
+> Successful pipeline:
+> https://github.com/kernel-patches/bpf/actions/runs/13500667544
+> 
+> Signed-off-by: Marcus Wichelmann <marcus.wichelmann@hetzner-cloud.de>
+> Acked-by: Jason Wang <jasowang@redhat.com>
+> Reviewed-by: Willem de Bruijn <willemb@google.com>
 
-Here's a detailed explanation:
+Please don't add tags, unless a person has explicitly added them.
 
-The following code can generate a PPP filter BPF program:
-'''
-struct bpf_program fp;
-pcap_t *handle;
-handle = pcap_open_dead(DLT_PPP_PPPD, 65535);
-pcap_compile(handle, &fp, "ip and outbound", 0, 0);
-bpf_dump(&fp, 1);
-'''
-Its output is:
-'''
-(000) ldh [2]
-(001) jeq #0x21 jt 2 jf 5
-(002) ldb [0]
-(003) jeq #0x1 jt 4 jf 5
-(004) ret #65535
-(005) ret #0
-'''
+And they are only sticky when the code has not been changed since
+they added them.
 
-wen can find similar code at the following link:
-https://github.com/ppp-project/ppp/blob/master/pppd/options.c#L1680
-The maintainer of this code repository is also the original maintainer
-of the ppp driver.
+These are only in the cover letter, so not picked up. But for future
+revisions and patches.
 
+I'll take a closer look at the actual patches in a bit.
+ 
+> ---
+> 
+> v3:
+> - change the condition to handle xdp_buffs without metadata support, as
+>   suggested by Willem de Bruijn <willemb@google.com>
+> - add clarifying comment why that condition is needed
+> - set NOARP flag in selftests to ensure that the kernel does not send
+>   packets on the test interfaces that may interfere with the tests
+> 
+> v2: https://lore.kernel.org/bpf/20250217172308.3291739-1-marcus.wichelmann@hetzner-cloud.de/
+> - submit against bpf-next subtree
+> - split commits and improved commit messages
+> - remove redundant metasize check and add clarifying comment instead
+> - use max() instead of ternary operator
+> - add selftest for metadata support in the tun driver
+> 
+> v1: https://lore.kernel.org/all/20250130171614.1657224-1-marcus.wichelmann@hetzner-cloud.de/
+> 
+> Marcus Wichelmann (6):
+>   net: tun: enable XDP metadata support
+>   net: tun: enable transfer of XDP metadata to skb
+>   selftests/bpf: move open_tuntap to network helpers
+>   selftests/bpf: refactor xdp_context_functional test and bpf program
+>   selftests/bpf: add test for XDP metadata support in tun driver
+>   selftests/bpf: fix file descriptor assertion in open_tuntap helper
+> 
+>  drivers/net/tun.c                             |  28 ++-
+>  tools/testing/selftests/bpf/network_helpers.c |  28 +++
+>  tools/testing/selftests/bpf/network_helpers.h |   3 +
+>  .../selftests/bpf/prog_tests/lwt_helpers.h    |  29 ----
+>  .../bpf/prog_tests/xdp_context_test_run.c     | 163 ++++++++++++++++--
+>  .../selftests/bpf/progs/test_xdp_meta.c       |  56 +++---
+>  6 files changed, 230 insertions(+), 77 deletions(-)
+> 
+> -- 
+> 2.43.0
+> 
 
-3. Current problem
-The problem is that the skb->data generated by ppp_write() starts from the
-'Protocol' field.
-
-But the BPF program skips 2 bytes of data and then reads the 'Protocol'
-field to determine if it's an IP packet just like the comment in
-'drivers/net/ppp/ppp_generic.c':
-/* the filter instructions are constructed assuming
-   a four-byte PPP header on each packet */
-
-In the current PPP driver implementation, to correctly use the BPF filter
-program, a 2-byte header is added, after running the socket filter, it's
-restored:
-'''
-1768 *(u8 *)skb_push(skb, 2) = 1;
-1770 bpf_prog_run()
-1782 skb_pull(skb, 2);
-'''
-
-The issue is that only the first byte indicating direction is initialized,
-while the second byte is not initialized. For normal BPF programs
-generated by libpcap, uninitialized data won't be used, so it's not a
-problem.
-
-However, for carefully crafted BPF programs, such as those generated by
-syzkaller [2], which start reading from offset 0, the uninitialized data
-will be used and caught by KMSAN.
-
-4. Fix
-The fix is simple: initialize the entire 2-byte header.
-
-Cc: Paul Mackerras <paulus@samba.org>
-
-[1] https://syzkaller.appspot.com/bug?extid=853242d9c9917165d791
-[2] https://syzkaller.appspot.com/text?tag=ReproC&x=11994913980000
-
----
-v3 -> v4: Use macro instead.
-
-Jiayuan Chen (1):
-  ppp: Fix KMSAN warning by initializing 2-byte header
-
- drivers/net/ppp/ppp_generic.c | 17 +++++++++++++----
- 1 file changed, 13 insertions(+), 4 deletions(-)
-
--- 
-2.47.1
 
